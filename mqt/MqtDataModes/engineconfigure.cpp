@@ -1,11 +1,59 @@
 #include <QSettings>
 #include <QFileDialog>
 
+
+#include "MinosRPC.h"
 #include "dmmainwindow.h"
 #include "fileutils.h"
 #include "engineconfigure.h"
 #include "ui_engineconfigure.h"
 
+/*static*/ void EngineConfigure::setEnginePath(QString engine, QString path)
+{
+    QSettings settings("./Configuration/DataModes.ini", QSettings::IniFormat);
+    QString eStr = QString("engines/");
+    settings.setValue(eStr + engine, path);
+}
+
+/*static*/ QString EngineConfigure::getEnginePath(QString engine)
+{
+    QSettings settings("./Configuration/DataModes.ini", QSettings::IniFormat);
+    QString eStr = QString("engines/");
+    QString m = settings.value(eStr + engine).toString();
+
+    return m;
+}
+/*static*/ void EngineConfigure::setAppPath(QString engine, QString path)
+{
+    QSettings settings("./Configuration/DataModes.ini", QSettings::IniFormat);
+    QString appName = MinosRPC::getMinosRPC()->getAppName();
+    settings.setValue(appName + "/" + engine, path);
+}
+
+/*static*/ QString EngineConfigure::getAppPath(QString engine)
+{
+    QSettings settings("./Configuration/DataModes.ini", QSettings::IniFormat);
+    QString appName = MinosRPC::getMinosRPC()->getAppName();
+    QString m = settings.value(appName + "/" + engine).toString();
+
+    return m;
+}
+
+/*static*/ QString EngineConfigure::getAppCurrent()
+{
+    QSettings settings("./Configuration/DataModes.ini", QSettings::IniFormat);
+    QString appName = MinosRPC::getMinosRPC()->getAppName();
+    QString m = settings.value(appName + "/current").toString();
+
+    return m;
+}
+
+/*static*/ void EngineConfigure::setAppCurrent(QString engine)
+{
+    QSettings settings("./Configuration/DataModes.ini", QSettings::IniFormat);
+    QString appName = MinosRPC::getMinosRPC()->getAppName();
+    settings.setValue(appName + "/current", engine);
+}
 
 EngineConfigure::EngineConfigure(DMMainWindow *parent) :
     QDialog(parent),
@@ -17,32 +65,29 @@ EngineConfigure::EngineConfigure(DMMainWindow *parent) :
     ui->MMVARIRX->addItems(mainWindow->inputDevices);
     ui->MMVARITX->addItems(mainWindow->outputDevices);
 
-    QSettings settings;
-    QString eStr = QString("dataModes/engines/");
-
     // MMVARI.ocx Has to be alongside the executable, BUT
     // we need to configure the MMVARI sound card!
 
     QString m = QCoreApplication::applicationDirPath() + "/MMVARI.ocx";
     ui->mmvariEdit->setText(m);
-
-    m = settings.value(eStr + "MMVARI/input").toString();
+    m = getAppPath(DMMainWindow::mmvari + "/input");
     ui->MMVARIRX->setCurrentText(m);
 
-    m = settings.value(eStr + "MMVARI/output").toString();
+    m = getAppPath(DMMainWindow::mmvari + "/output");
     ui->MMVARITX->setCurrentText(m);
 
+    // Other engines have their own soundcard configuration
 
-    m = settings.value(eStr + "2Tone").toString();
+    m = getEnginePath(DMMainWindow::twotone);
     ui->twotoneEdit->setText(m);
 
-    m = settings.value(eStr + "MMTTY").toString();
+    m = getEnginePath(DMMainWindow::mmtty);
     ui->mmttyEdit->setText(m);
 
-    m = settings.value(eStr + "FLDigi").toString();
+    m = getEnginePath(DMMainWindow::fldigi);
     ui->fldigiEdit->setText(m);
 
-    m = settings.value(eStr + "Gritty").toString();
+    m = getEnginePath(DMMainWindow::gritty);
     ui->grittyEdit->setText(m);
 }
 
@@ -50,13 +95,9 @@ EngineConfigure::~EngineConfigure()
 {
     delete ui;
 }
-
 void EngineConfigure::doBrowse(QString key, QLineEdit *edit)
 {
-    QSettings settings;
-    QString eStr = QString("dataModes/engines/") + key;
-
-    QString fname = settings.value(eStr).toString();
+    QString fname = getEnginePath(key);
 
     QString InitialDir = GetCurrentDir();
     if (!fname.isEmpty())
@@ -81,40 +122,37 @@ void EngineConfigure::doBrowse(QString key, QLineEdit *edit)
 
 void EngineConfigure::on_mmttyBrowse_clicked()
 {
-    doBrowse("MMTTY", ui->mmttyEdit);
+    doBrowse(DMMainWindow::mmtty, ui->mmttyEdit);
 }
 
 
 void EngineConfigure::on_twotoneBrowse_clicked()
 {
-    doBrowse("2Tone", ui->twotoneEdit);
+    doBrowse(DMMainWindow::twotone, ui->twotoneEdit);
 }
 
 
 void EngineConfigure::on_fldigiBrowse_clicked()
 {
-    doBrowse("FLDigi", ui->fldigiEdit);
+    doBrowse(DMMainWindow::fldigi, ui->fldigiEdit);
 }
 
 void EngineConfigure::on_grittyBrowse_clicked()
 {
-    doBrowse("Gritty", ui->grittyEdit);
+    doBrowse(DMMainWindow::gritty, ui->grittyEdit);
 }
 
 
 void EngineConfigure::on_OKButton_clicked()
 {
-    QSettings settings;
-    QString eStr = QString("dataModes/engines/");
+    //setEnginePath(DMMainWindow::mmvari, ui->mmvariEdit->text());
+    setAppPath(DMMainWindow::mmvari + "/input", ui->MMVARIRX->currentText());
+    setAppPath(DMMainWindow::mmvari + "/output", ui->MMVARITX->currentText());
 
-    //settings.setValue(eStr + "MMVARI", ui->mmvariEdit->text());
-    settings.setValue(eStr + "MMVARI/input", ui->MMVARIRX->currentText());
-    settings.setValue(eStr + "MMVARI/output", ui->MMVARITX->currentText());
-
-    settings.setValue(eStr + "MMTTY", ui->mmttyEdit->text());
-    settings.setValue(eStr + "2Tone", ui->twotoneEdit->text());
-    settings.setValue(eStr + "FLDigi", ui->fldigiEdit->text());
-    settings.setValue(eStr + "Gritty", ui->grittyEdit->text());
+    setEnginePath(DMMainWindow::mmtty, ui->mmttyEdit->text());
+    setEnginePath(DMMainWindow::twotone, ui->twotoneEdit->text());
+    setEnginePath(DMMainWindow::fldigi, ui->fldigiEdit->text());
+    setEnginePath(DMMainWindow::gritty, ui->grittyEdit->text());
 
     accept();
 }

@@ -63,17 +63,11 @@
      <string>Engine</string>
     </property>
    </widget>
-   <widget class="QMenu" name="menuConfigure">
-    <property name="title">
-     <string>Configure</string>
-    </property>
-   </widget>
    <widget class="QMenu" name="menuClear">
     <property name="title">
      <string>Clear</string>
     </property>
    </widget>
-   <addaction name="menuConfigure"/>
    <addaction name="menuEngine"/>
    <addaction name="menuClear"/>
   </widget>

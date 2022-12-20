@@ -1,5 +1,6 @@
 #include <QSettings>
 #include <QTimer>
+#include <QFileSystemWatcher>
 
 #ifdef Q_OS_WIN
 #include <windows.h>
@@ -16,6 +17,7 @@
 #include "rxbuffer.h"
 #include "RPCCommandConstants.h"
 #include "ServerEvent.h"
+#include "delayedaction.h"
 
 #include "dmmainwindow.h"
 #include "ui_dmmainwindow.h"
@@ -27,31 +29,31 @@ To Do
 Analysis and colouring of callsigns etc
 ? callsign stack
 
-Frequency following and notification
+Frequency following and notification - can we even do this?
 
-TX - select which app/window does TX, and drive it,
-get TX text from Minos and send it
+PSK as well as RTTY; any other modes? (FLDigi supports lots!) and its configuration
+Mode selection from logger? RY and PS modes (RSGB required). Cabrillo just has "DG", Reg1Test just has
+7 - RTTY-MGM
 
-Collection of QSO parts and transfer to Minos
-
-TX messages and their maintenance
-
-F keys - do we implement here or in Minos Logger?
-Here allows stand-alone use...
-Pass F keys from any of our windows to Minos
-(which will then trigger TX messages)
-
-PSK as well as RTTY; any other modes? (FLDigi supports lots!)
-
-configuration and running multiple copies of engines
-
-auto-start "my" engine on load
+Contest definitions will give us RY/PS (don't know about BARTG!). How do we set the engine correctly?
 
 MMVARI - buttons and menu
 
 FLDigi - read characters
 
+configuration and running multiple copies of engines - each app should have its own set of INI files
+app name in ini file section
+
+
 */
+
+const QString DMMainWindow::mmvari = "MMVARI";
+const QString DMMainWindow::mmtty = "MMTTY";
+const QString DMMainWindow::twotone = "2Tone";
+const QString DMMainWindow::gritty = "Gritty";
+const QString DMMainWindow::fldigi = "FLDigi";
+const QString DMMainWindow::test = "Test";
+
 
 DMMainWindow::DMMainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -127,16 +129,22 @@ DMMainWindow::DMMainWindow(QWidget *parent)
 
     clearAction = newAction("Clear Decodes", ui->menuClear, &DMMainWindow::onMenuClear);
 
-#ifdef Q_OS_WIN
-    actionMMVARI = newCheckableAction("MMVARI", ui->menuEngine, &DMMainWindow::onActionMMVARI_triggered);
-    action2Tone = newCheckableAction("2Tone", ui->menuEngine, &DMMainWindow::onAction2Tone_triggered);
-    actionMMTTY = newCheckableAction("MMTTY", ui->menuEngine, &DMMainWindow::onActionMMTTY_triggered);
-    actionGritty = newCheckableAction("Gritty", ui->menuEngine, &DMMainWindow::onActionGritty_triggered);
-#endif
-    actionFLDigi = newCheckableAction("FLDigi", ui->menuEngine, &DMMainWindow::onActionFLDigi_triggered);
-    actionTest = newCheckableAction("Test", ui->menuEngine, &DMMainWindow::onActionTest_triggered);
+    actionConfigure_Engines = newAction(QT_TR_NOOP("Configure Engines"), ui->menuEngine, &DMMainWindow::onActionConfigure_Engines_triggered);
 
-    actionConfigure_Engines = newAction(QT_TR_NOOP("Configure Engines"), ui->menuConfigure, &DMMainWindow::onActionConfigure_Engines_triggered);
+    ui->menuEngine->addSeparator();
+
+#ifdef Q_OS_WIN
+    QString exePath = QCoreApplication::applicationDirPath() + QString("/MMVARI.ocx");
+    EngineConfigure::setEnginePath(mmvari, exePath);
+
+    actionMMVARI = newCheckableAction(mmvari, ui->menuEngine, &DMMainWindow::onActionMMVARI_triggered);
+    action2Tone = newCheckableAction(twotone, ui->menuEngine, &DMMainWindow::onAction2Tone_triggered);
+    actionMMTTY = newCheckableAction(mmtty, ui->menuEngine, &DMMainWindow::onActionMMTTY_triggered);
+    actionGritty = newCheckableAction(gritty, ui->menuEngine, &DMMainWindow::onActionGritty_triggered);
+#endif
+    actionFLDigi = newCheckableAction(fldigi, ui->menuEngine, &DMMainWindow::onActionFLDigi_triggered);
+    actionTest = newCheckableAction(test, ui->menuEngine, &DMMainWindow::onActionTest_triggered);
+
 
     checkEnginesAvailable();
 
@@ -145,16 +153,60 @@ DMMainWindow::DMMainWindow(QWidget *parent)
     {
         ui->sendercb->setChecked(true);
     }
+    qfsw = new QFileSystemWatcher(this);
+    qfsw->addPath("./Configuration/DataModes.ini");
+    connect(qfsw, &QFileSystemWatcher::fileChanged, this, &DMMainWindow::iniFileChanged);
+
+    startPreviousEngine();
 }
 
 DMMainWindow::~DMMainWindow()
 {
     delete ui;
 }
+void DMMainWindow::startPreviousEngine()
+{
+    // If you do this in the constructor, the menu stops responding
+    // so delay it until the event loop is running
+
+    delayedAction(this, [=]()
+    {
+        QString active = EngineConfigure::getAppCurrent();
+
+#ifdef Q_OS_WIN
+        if (active == mmvari)
+        {
+            onActionMMVARI_triggered(true);
+        }
+        else if (active == mmtty)
+        {
+            onActionMMTTY_triggered(true);
+        }
+        else if (active == twotone)
+        {
+            onAction2Tone_triggered(true);
+        }
+        else if (active == gritty)
+        {
+            onActionGritty_triggered(true);
+        }
+        else
+#endif
+        if (active == fldigi)
+        {
+            onActionFLDigi_triggered(true);
+        }
+        else if (active == test)
+        {
+            onActionTest_triggered(true);
+        }
+    }
+    );
+}
 
 void DMMainWindow::on_routerCall(bool err, QSharedPointer<MinosRPCObj>mro, const QString from )
 {
-    trace( "DM callback from " + from + ( err ? ":Error" : ":Normal" ) );
+    trace( "router callback from " + from + ( err ? ":Error" : ":Normal" ) );
 
     if ( !err )
     {
@@ -211,34 +263,36 @@ void DMMainWindow::on_notify(AnalysePubSubNotify an, const QString from )
     }
 }
 
+void DMMainWindow::iniFileChanged()
+{
+    // as other sister apps may have changed it
+    checkEnginesAvailable();
+}
+
 
 void DMMainWindow::checkEnginesAvailable()
 {
-    QSettings settings;
-    QString eStr = QString("dataModes/engines/");
-
-    //QString m = QCoreApplication::applicationDirPath() + "/MMVARI.ocx";
     QString m;
     bool b = false;
 
 #ifdef Q_OS_WIN
-    m = settings.value(eStr + "MMVARI").toString();
+    m = EngineConfigure::getEnginePath(mmvari);
     b = FileExists(m);
     actionMMVARI->setEnabled(b);
 
-    m = settings.value(eStr + "2Tone").toString();
+    m = EngineConfigure::getEnginePath(twotone);
     b = FileExists(m);
     action2Tone->setEnabled(b);
 
-    m = settings.value(eStr + "MMTTY").toString();
+    m = EngineConfigure::getEnginePath(mmtty);
     b = FileExists(m);
     actionMMTTY->setEnabled(b);
 
-    m = settings.value(eStr + "Gritty").toString();
+    m = EngineConfigure::getEnginePath(gritty);
     b = FileExists(m);
     actionGritty->setEnabled(b);
 #endif
-    m = settings.value(eStr + "FLDigi").toString();
+    m = EngineConfigure::getEnginePath(fldigi);
     b = FileExists(m);
     actionFLDigi->setEnabled(b);
 
@@ -353,7 +407,7 @@ void DMMainWindow::showEvent(QShowEvent *event)
 
 
 }
-void DMMainWindow::closeAllEngines()
+void DMMainWindow::closeAllEngines(bool clearCurrent)
 {
 #ifdef Q_OS_WIN
 
@@ -400,90 +454,118 @@ void DMMainWindow::closeAllEngines()
         testFrame = nullptr;
         actionTest->setChecked(false);
     }
+    if (clearCurrent)
+    {
+        EngineConfigure::setAppCurrent(QString());
+    }
 }
 #ifdef Q_OS_WIN
 
-void DMMainWindow::onActionMMVARI_triggered(bool /*checked*/)
+void DMMainWindow::onActionMMVARI_triggered(bool checked)
 {
-    closeAllEngines();
+    closeAllEngines(true);
+
+    if (!checked)
+    {
+        return;
+    }
 
     trace("Select MMVARI Engine");
 
-    QSettings settings;
-    QString eStr = QString("dataModes/engines/");
-    QString exePath = QCoreApplication::applicationDirPath() + QString("/MMVARI.ocx");
-    QString m = settings.value(eStr + "MMVARI", exePath).toString();
+    QString m = EngineConfigure::getEnginePath(mmvari);
 
-    actionMMVARI->setChecked(true);
-
-    QString idev = settings.value(eStr + "MMVARI/input").toString();
+    QString idev = EngineConfigure::getEnginePath(mmvari + "/input");
     int inId = deviceIds[idev];
 
-    QString odev = settings.value(eStr + "MMVARI/output").toString();
+    QString odev = EngineConfigure::getEnginePath(mmvari + "/output");
     int outId = deviceIds[odev];
 
-
     mmvariFrame = new MMVARIFrame(this, dynamic_cast<QVBoxLayout *>(ui->centralwidget->layout()), ui->sendEdit, m, inId, outId);
+    actionMMVARI->setChecked(true);
+    EngineConfigure::setAppCurrent(mmvari);
 }
 
-void DMMainWindow::onActionMMTTY_triggered(bool /*checked*/)
+void DMMainWindow::onActionMMTTY_triggered(bool checked)
 {
-    closeAllEngines();
+    closeAllEngines(true);
+
+    if (!checked)
+    {
+        return;
+    }
+
     trace("Select MMTTY Engine");
 
-    QSettings settings;
-    QString eStr = QString("dataModes/engines/");
-    QString m = settings.value(eStr + "MMTTY").toString();
+    QString m = EngineConfigure::getEnginePath(mmtty);
 
     mmttyFrame = new MMTTYFrame(false, ui->sendEdit, m);
     actionMMTTY->setChecked(true);
+    EngineConfigure::setAppCurrent(mmtty);
 }
 
-void DMMainWindow::onAction2Tone_triggered(bool /*checked*/)
+void DMMainWindow::onAction2Tone_triggered(bool checked)
 {
-    closeAllEngines();
+    closeAllEngines(true);
+
+    if (!checked)
+    {
+        return;
+    }
+
     trace("Select 2Tone Engine");
 
-    QSettings settings;
-    QString eStr = QString("dataModes/engines/");
-    QString m = settings.value(eStr + "2Tone").toString();
+    QString m = EngineConfigure::getEnginePath(twotone);
 
     mmttyFrame = new MMTTYFrame(false, ui->sendEdit, m);
     action2Tone->setChecked(true);
+    EngineConfigure::setAppCurrent(twotone);
 }
 #endif
 void DMMainWindow::onActionFLDigi_triggered(bool /*checked*/)
 {
-    closeAllEngines();
+    closeAllEngines(true);
     trace("Select FLDigi Engine");
-    QSettings settings;
-    QString eStr = QString("dataModes/engines/");
-    QString m = settings.value(eStr + "FLDigi").toString();
+
+    QString m = EngineConfigure::getEnginePath(fldigi);
 
     fldigiFrame = new FLDigiFrame(this, ui->sendEdit, m);
+    actionFLDigi->setChecked(true);
+    EngineConfigure::setAppCurrent(fldigi);
 }
 
-void DMMainWindow::onActionTest_triggered(bool /*checked*/)
+void DMMainWindow::onActionTest_triggered(bool checked)
 {
-    closeAllEngines();
-    QSettings settings;
-    QString eStr = QString("dataModes/engines/");
-    QString m = settings.value(eStr + "Test").toString();
+    closeAllEngines(true);
+
+    if (!checked)
+    {
+        return;
+    }
+
+    QString m = EngineConfigure::getEnginePath(test);
 
     testFrame = new TestFrame(this, ui->sendEdit, m);
+    actionTest->setChecked(true);
+    EngineConfigure::setAppCurrent(test);
 }
 #ifdef Q_OS_WIN
 
-void DMMainWindow::onActionGritty_triggered(bool /*checked*/)
+void DMMainWindow::onActionGritty_triggered(bool checked)
 {
-    closeAllEngines();
+    closeAllEngines(true);
+
+    if (!checked)
+    {
+        return;
+    }
+
     trace("Select Gritty Engine");
 
-    QSettings settings;
-    QString eStr = QString("dataModes/engines/");
-    QString m = settings.value(eStr + "Gritty").toString();
+    QString m = EngineConfigure::getEnginePath(gritty);
 
     grittyFrame = new GrittyFrame(this, ui->sendEdit, m);
+    actionGritty->setChecked(true);
+    EngineConfigure::setAppCurrent(gritty);
 }
 #endif
 void DMMainWindow::onActionExit_triggered()
@@ -492,8 +574,7 @@ void DMMainWindow::onActionExit_triggered()
 }
 void DMMainWindow::doCloseEvent()
 {
-    closeAllEngines();
-
+    closeAllEngines(false);
 
     LogTimer.stop();
 
@@ -584,6 +665,8 @@ void DMMainWindow::on_sendercb_stateChanged(int /*arg1*/)
         settings.setValue("Sender", me);
 
         rpc->publish(rpcConstants::DMCat, rpcConstants::DMSender, me, psPublished);
+
+        ui->sendercb->setEnabled(false);    // you aren't allowed to uncheck it yourself
     }
     else
     {
@@ -591,6 +674,7 @@ void DMMainWindow::on_sendercb_stateChanged(int /*arg1*/)
         settings.setValue("Sender", QString());
         rpc->publish(rpcConstants::DMCat, rpcConstants::DMSender, "not" + me, psRevoked);
 
+        ui->sendercb->setEnabled(true);    // you aren't allowed to uncheck it yourself
     }
 }
 

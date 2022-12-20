@@ -18,6 +18,19 @@ public:
     explicit EngineConfigure(DMMainWindow *parent = nullptr);
     ~EngineConfigure();
 
+
+    static QString getEnginePath(QString engine);
+
+    static void setEnginePath(QString engine, QString path);
+
+    static QString getAppPath(QString engine);
+
+    static void setAppPath(QString engine, QString path);
+
+    static QString getAppCurrent();
+
+    static void setAppCurrent(QString engine);
+
 private slots:
     void on_mmttyBrowse_clicked();
 

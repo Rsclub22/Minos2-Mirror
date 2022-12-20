@@ -21,6 +21,8 @@ namespace Ui { class DMMainWindow; }
 QT_END_NAMESPACE
 
 class RtAudio;
+class QFileSystemWatcher;
+
 class DMMainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -28,6 +30,13 @@ class DMMainWindow : public QMainWindow
 public:
     DMMainWindow(QWidget *parent = nullptr);
     virtual ~DMMainWindow() override;
+
+    static const QString mmvari;
+    static const QString mmtty;
+    static const QString twotone;
+    static const QString gritty;
+    static const QString fldigi;
+    static const QString test;
 
     QString router;
 
@@ -39,10 +48,13 @@ public:
 
     QMap<QString, int> deviceIds;
 
+    void startPreviousEngine();
+
 private:
     Ui::DMMainWindow *ui;
     StdInReader *stdinReader = new StdInReader(this);
     QString me;
+    QFileSystemWatcher *qfsw = nullptr;
 
     QMap<QAction *, const char *> actionList;
     QMap<QMenu *, const char *> menuList;
@@ -73,7 +85,7 @@ private:
     FLDigiFrame *fldigiFrame = nullptr;
     TestFrame *testFrame = nullptr;
 
-    void closeAllEngines();
+    void closeAllEngines(bool clearCurrent);
 
     virtual void closeEvent(QCloseEvent *event) override;
     virtual void resizeEvent(QResizeEvent *event) override;
@@ -123,5 +135,7 @@ private slots:
     void on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString from);
     void on_sendercb_stateChanged(int arg1);
     void on_notify(AnalysePubSubNotify an, const QString from);
+    void iniFileChanged();
+
 };
 #endif // DMMAINWINDOW_H
