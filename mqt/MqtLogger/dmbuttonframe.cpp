@@ -101,9 +101,16 @@ void DMButtonFrame::sandPChanged(bool s)
 }
 void DMButtonFrame::showFButtons(bool s)
 {
-    for (int i = 0; i < 12; i++)
+    if (fButtons.size() == 24)
     {
-        fButtons[i]->setText(fkeys["Digi"][i + (s?12:0)].first);
+        for (int i = 0; i < 12; i++)
+        {
+            fButtons[i]->setText(fkeys["Digi"][i + (s?12:0)].first);
+        }
+    }
+    else
+    {
+        mShowMessage(tr("Not enough key definitions in %1").arg(fkeyFileName), this);
     }
 }
 QString DMButtonFrame::parseFKeyMessage(QString mess)
