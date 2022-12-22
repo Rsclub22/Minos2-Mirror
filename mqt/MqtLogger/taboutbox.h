@@ -44,6 +44,7 @@ private slots:
     void on_manageSets_clicked();
     void on_ageSpinner_valueChanged(int arg1);
     void on_ageCb_stateChanged(int arg1);
+    void on_appSelectButton_clicked();
 };
 
 #endif // TABOUTBOX_H

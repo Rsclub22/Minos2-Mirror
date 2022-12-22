@@ -282,3 +282,10 @@ void TAboutBox::on_ageCb_stateChanged(int /*arg1*/)
     TContestApp::getContestApp() ->loggerBundle.flushProfile();
 }
 
+
+void TAboutBox::on_appSelectButton_clicked()
+{
+    StartConfigManager manageApps( this, true);   // when managing sets, include autostart
+    manageApps.exec();
+}
+

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>649</width>
+    <width>865</width>
     <height>300</height>
    </rect>
   </property>
@@ -63,8 +63,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>607</width>
-            <height>128</height>
+            <width>819</width>
+            <height>100</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_5">
@@ -105,8 +105,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>607</width>
-            <height>128</height>
+            <width>819</width>
+            <height>100</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_6">
@@ -304,6 +304,13 @@
       <widget class="QPushButton" name="AppsButton">
        <property name="text">
         <string>Apps</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="appSelectButton">
+       <property name="text">
+        <string>...</string>
        </property>
       </widget>
      </item>
