@@ -27,11 +27,6 @@ DMButtonFrame::DMButtonFrame(QWidget *parent) :
 
     TContestApp::getContestApp() ->loggerBundle.getStringProfile( elpDigiFunctionKeyFile, fkeyFileName );
 
-    parseFKeyFile(fkeyFileName, "Digi");
-    qfsw = new QFileSystemWatcher(this);
-    qfsw->addPath(fkeyFileName);
-    connect(qfsw, &QFileSystemWatcher::fileChanged, this, &DMButtonFrame::fkeyFileChanged);
-
     fButtons << ui->F1Button << ui->F2Button << ui->F3Button << ui->F4Button << ui->F5Button << ui->F6Button;
     fButtons << ui->F7Button << ui->F8Button << ui->F9Button << ui->F10Button << ui->F11Button << ui->F12Button;
 
@@ -52,6 +47,11 @@ DMButtonFrame::~DMButtonFrame()
 void DMButtonFrame::DMSender(QString s)
 {
     dataSender = s;
+
+    fkeyFileChanged();
+    qfsw = new QFileSystemWatcher(this);
+    qfsw->addPath(fkeyFileName);
+    connect(qfsw, &QFileSystemWatcher::fileChanged, this, &DMButtonFrame::fkeyFileChanged);
 }
 void DMButtonFrame::fkeyFileChanged()
 {
@@ -76,7 +76,7 @@ void DMButtonFrame::fKey(int key)
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
     if (tslf->getContest() == ct)
     {
-        if (key >= Qt::Key_F1 && key <= Qt::Key_F12)
+        if (key >= Qt::Key_F1 && key <= Qt::Key_F12 && fkeys["Digi"].size() == 24)
         {
             int spoffset = tslf->GJVQSOLogFrame->getSandP()?12:0;
             QPair<QString, QString> mess = fkeys["Digi"][key - Qt::Key_F1 + spoffset];
@@ -101,15 +101,21 @@ void DMButtonFrame::sandPChanged(bool s)
 }
 void DMButtonFrame::showFButtons(bool s)
 {
-    if (fButtons.size() == 24)
+    if (fkeys["Digi"].size() == 24)
     {
         for (int i = 0; i < 12; i++)
         {
             fButtons[i]->setText(fkeys["Digi"][i + (s?12:0)].first);
         }
     }
-    else
+    else if (fkeys["Digi"].size() == 0)
     {
+        for (int i = 0; i < 12; i++)
+        {
+            fButtons[i]->setText(QString("F%1").arg(i, 1));
+        }
+    }
+    else {
         mShowMessage(tr("Not enough key definitions in %1").arg(fkeyFileName), this);
     }
 }
@@ -335,15 +341,12 @@ void DMButtonFrame::on_chooseButton_clicked()
     if (!fkeyFileName.isEmpty())
     {
         TContestApp::getContestApp() ->loggerBundle.setStringProfile( elpDigiFunctionKeyFile, fkeyFileName );
-        parseFKeyFile(fkeyFileName, "Digi");
 
         ui->nameLabel->setText(tr("Data Modes Buttons from %1").arg(fkeyFileName));
 
-        TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
-        bool sandp = tslf->GJVQSOLogFrame->getSandP();
-        showFButtons(sandp);
-
         qfsw->removePath(lastf);
+
+        fkeyFileChanged();
         qfsw->addPath(fkeyFileName);
     }
 }

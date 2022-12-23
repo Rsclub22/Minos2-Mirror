@@ -44,6 +44,13 @@ FLDigi - read characters
 configuration and running multiple copies of engines - each app should have its own set of INI files
 app name in ini file section
 
+How do we arrange the DMButtonFrame not to load unless we have mqtDataModes connections?
+- only load when we find providers
+
+Send button texts to all DM apps, they then display them as well
+
+? Make buttons invisible (and F keys inactive) until we have somewhere to send them
+
 
 */
 
