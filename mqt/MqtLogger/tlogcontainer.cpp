@@ -506,7 +506,6 @@ void TLogContainer::setupMenus()
     CorrectDateTimeAction = newAction(QT_TR_NOOP("Correct Date/Time..."), ui->menuTools, &TLogContainer::CorrectDateTimeActionExecute);
     ui->menuTools->addSeparator();
 
-    CheckUpdatesAction = newAction(QT_TR_NOOP("Check For Updates..."), ui->menuTools, &TLogContainer::CheckUpdatesActionExecute);
     OptionsAction = newAction(QT_TR_NOOP("Options..."), ui->menuTools, &TLogContainer::OptionsActionExecute);
 
     AdvancedOptionsAction = newAction(QT_TR_NOOP("Advanced Options..."), ui->menuTools, &TLogContainer::AdvancedOptionsActionExecute);
@@ -554,6 +553,7 @@ void TLogContainer::setupMenus()
     newAction( QT_TR_NOOP("Cancel"), &TabPopup, &TLogContainer::CancelClick);
 
     HelpAction = newAction(QT_TR_NOOP("Help..."), ui->menuHelp, &TLogContainer::HelpActionExecute);
+    CheckUpdatesAction = newAction(QT_TR_NOOP("Check For Updates..."), ui->menuHelp, &TLogContainer::CheckUpdatesActionExecute);
     HelpAboutAction = newAction(QT_TR_NOOP("About..."), ui->menuHelp, &TLogContainer::HelpAboutActionExecute);
 }
 

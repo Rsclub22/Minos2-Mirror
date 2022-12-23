@@ -44,22 +44,34 @@ QMAKE_MANIFEST += $$PWD/MqtDataModes.exe.manifest
 SOURCES += \
     MMTTYFrame.cpp \
     MMVARIFrame.cpp \
-    mmvarilib.cpp \
-    grittyframe.cpp \
+    grittyframe.cpp
 
+
+lessThan(QT_MAJOR_VERSION, 6) {
+    SOURCES += mmvarilib5.cpp
+} else {
+    SOURCES += mmvarilib6.cpp
+}
 HEADERS += \
     MMTTYFrame.h \
     MMTTY_N1MM.h \
     MMVARIFrame.h \
-    mmvarilib.h \
-    grittyframe.h \
+    grittyframe.h
+
+
+lessThan(QT_MAJOR_VERSION, 6) {
+    HEADERS += mmvarilib5.h
+} else {
+    HEADERS += mmvarilib6.h
+}
 
 FORMS += \
     MMTTYFrame.ui \
     MMVARIFrame.ui \
-    grittyframe.ui \
+    grittyframe.ui
 
-LIBS += -lwinmm}
+LIBS += -lwinmm
+}
 
 win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../maia/release/ -lmaia
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../maia/debug/ -lmaia

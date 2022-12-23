@@ -13,9 +13,13 @@ QT       += network
 QT       += help
 
 win32: {
-lessThan(QT_MAJOR_VERSION, 6) {
-    QT += qml
-    QT += quick
+versionAtLeast(QT_VERSION, 6.5.0){
+QT += qml
+QT += quick
+}
+lessThan(QT_VERSION, 6.0.0) {
+QT += qml
+QT += quick
 }
 }
 
@@ -235,8 +239,10 @@ FORMS += \
     locatorinputdialog.ui \
     qsomapframe.ui
 
-lessThan(QT_MAJOR_VERSION, 6) {
-RESOURCES += \
-    QSOView/qml.qrc
+versionAtLeast(QT_VERSION, 6.5.0){
+RESOURCES += QSOView/qml.qrc
+}
+lessThan(QT_VERSION, 6.0.0) {
+RESOURCES += QSOView/qml.qrc
 }
 

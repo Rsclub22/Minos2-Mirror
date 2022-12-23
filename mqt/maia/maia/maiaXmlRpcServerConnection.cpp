@@ -203,13 +203,23 @@ bool MaiaXmlRpcServerConnection::invokeMethodWithVariants(QObject *obj,
 		argTypes += args[n].typeName();
 
 	// get return type
-	int metatype = 0;
+#if QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
+    QMetaType metatype;
 	QByteArray retTypeName = getReturnType(obj->metaObject(), method, argTypes);
 	if(!retTypeName.isEmpty()  && retTypeName != "QVariant") {
-		metatype = QMetaType::type(retTypeName.data());
-		if(metatype == 0) // lookup failed
+        metatype = QMetaType::fromName(retTypeName.data());
+        if(!metatype.isValid()) // lookup failed
 			return false;
 	}
+#else
+    int metatype = 0;
+    QByteArray retTypeName = getReturnType(obj->metaObject(), method, argTypes);
+    if(!retTypeName.isEmpty()  && retTypeName != "QVariant") {
+        metatype = QMetaType::type(retTypeName.data());
+        if(metatype == 0) // lookup failed
+            return false;
+    }
+#endif
 
 	QGenericArgument arg[10];
 	for(int n = 0; n < args.count(); ++n)
@@ -217,7 +227,11 @@ bool MaiaXmlRpcServerConnection::invokeMethodWithVariants(QObject *obj,
 
 	QGenericReturnArgument retarg;
 	QVariant retval;
-	if(metatype != 0 && retTypeName != "void") {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
+    if(metatype.id( )!= 0 && retTypeName != "void") {
+#else
+    if(metatype != 0 && retTypeName != "void") {
+#endif
 		retval = QVariant(metatype, (const void *)0);
 		retarg = QGenericReturnArgument(retval.typeName(), retval.data());
 	} else { /* QVariant */

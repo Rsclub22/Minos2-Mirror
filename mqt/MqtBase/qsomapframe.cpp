@@ -3,7 +3,7 @@
 #include <math.h>
 
 #ifdef Q_OS_WIN
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0) || QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
 #include <QQmlApplicationEngine>
 #include <QQuickView>
 #include <QQuickItem>
@@ -26,7 +26,7 @@ QSOMapFrame::QSOMapFrame(QWidget *parent) :
     ui(new Ui::QSOMapFrame)
 {
 #ifdef Q_OS_WIN
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0) || QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
     // This makes the resources accessible from the main executable
     Q_INIT_RESOURCE(qml);
 #endif
@@ -46,7 +46,7 @@ QSOMapFrame::~QSOMapFrame()
 void QSOMapFrame::startMap()
 {
 #ifdef Q_OS_WIN
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)  || QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
     // make a reference to the QML window available to C++
 
     QLayout *qvb = layout();
@@ -98,7 +98,7 @@ void QSOMapFrame::onQmlClicked(QVariant /*v*/)
 //   QString bearing = gc[2].toString();
 
 #ifdef Q_OS_WIN
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0) || QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
 //   qDebug() << latitude << " " << longitude << " " << bearing;
 #endif
 #endif

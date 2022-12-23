@@ -16,7 +16,11 @@
 #pragma GCC diagnostic ignored "-Wold-style-cast"
 #endif
 // as we don't want to change mmvarilib.h...
-#include "mmvarilib.h"
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#include "mmvarilib5.h"
+#else
+#include "mmvarilib6.h"
+#endif
 #if !defined (_MSC_VER)
 #pragma GCC diagnostic pop
 #endif

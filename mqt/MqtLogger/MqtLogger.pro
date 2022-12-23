@@ -15,9 +15,13 @@ QT       += charts
 QT       += serialport
 
 win32: {
-lessThan(QT_MAJOR_VERSION, 6) {
-    QT += qml
-    QT += quick
+versionAtLeast(QT_VERSION, 6.5.0){
+QT += qml
+QT += quick
+}
+lessThan(QT_VERSION, 6.0.0) {
+QT += qml
+QT += quick
 }
 }
 

@@ -91,16 +91,23 @@ class MyNativeEventFilter: public QAbstractNativeEventFilter
     HWND hWnd;
     uint msgNo;
 public:
-    MyNativeEventFilter(MMTTYFrame *m, uint hWnd, uint msgid):m(m), hWnd(HWND(hWnd)), msgNo(msgid)
-    {}
+    MyNativeEventFilter(MMTTYFrame *m, WId phWnd, uint msgid):m(m), msgNo(msgid)
+    {
+        hWnd = reinterpret_cast<HWND>(phWnd);
+    }
+#if QT_VERSION < QT_VERSION_CHECK(6, 5, 0)
     virtual bool nativeEventFilter(const QByteArray &/*eventType*/, void *message, long *result ) Q_DECL_OVERRIDE
+#else
+    virtual bool nativeEventFilter(const QByteArray &/*eventType*/, void *message, qintptr *result)  Q_DECL_OVERRIDE
+#endif
     {
         MSG *msg = static_cast<MSG *>(message);
         if( msg->message == msgNo)
         {
             if ( hWnd == msg->hwnd)
             {
-                m->msgEventFilter(msg, result);
+                long res = *result;
+                m->msgEventFilter(msg, &res);
                 return true;
             }
         }
