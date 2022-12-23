@@ -38,6 +38,8 @@ DMButtonFrame::DMButtonFrame(QWidget *parent) :
     }
 
     ui->nameLabel->setText(tr("Data Modes Buttons from %1").arg(fkeyFileName));
+
+    ui->FButtonFrame->setVisible(false);
 }
 
 DMButtonFrame::~DMButtonFrame()
@@ -101,12 +103,15 @@ void DMButtonFrame::sandPChanged(bool s)
 }
 void DMButtonFrame::showFButtons(bool s)
 {
+    ui->FButtonFrame->setVisible(false);
+
     if (fkeys["Digi"].size() == 24)
     {
         for (int i = 0; i < 12; i++)
         {
             fButtons[i]->setText(fkeys["Digi"][i + (s?12:0)].first);
         }
+        ui->FButtonFrame->setVisible(true);
     }
     else if (fkeys["Digi"].size() == 0)
     {
