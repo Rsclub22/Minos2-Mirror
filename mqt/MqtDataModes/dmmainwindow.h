@@ -60,6 +60,9 @@ private:
     QMap<QMenu *, const char *> menuList;
     QAction *clearAction;
 
+    QVector<QPushButton *> fButtons;
+
+
 #ifdef Q_OS_WIN
     QAction *actionMMVARI;
     QAction *actionMMTTY;
@@ -98,6 +101,9 @@ private:
     QAction *newCheckableAction(const char *text, QMenu *m, void (DMMainWindow::*slotparam)(bool));
     QAction *newCheckableAction(const QString text, QMenu *m, void (DMMainWindow::*slotparam)(bool));
     void checkEnginesAvailable();
+    virtual bool eventFilter(QObject *obj, QEvent *event) override;
+
+    bool doKeyPressEvent(QKeyEvent *event);
 protected:
     virtual void showEvent(QShowEvent *) override;
 
@@ -105,6 +111,7 @@ private slots:
     void LogTimerTimer();
 
     void onStdInRead(QString cmd);
+
 
 #ifdef Q_OS_WIN
 
@@ -136,6 +143,10 @@ private slots:
     void on_sendercb_stateChanged(int arg1);
     void on_notify(AnalysePubSubNotify an, const QString from);
     void iniFileChanged();
+
+    void fButtonClicked();
+
+    void fKey(int key);
 
 };
 #endif // DMMAINWINDOW_H

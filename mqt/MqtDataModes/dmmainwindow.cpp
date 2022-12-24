@@ -1,6 +1,13 @@
 #include <QSettings>
 #include <QTimer>
 #include <QFileSystemWatcher>
+#include <QKeyEvent>
+
+#include <QJsonDocument>
+#include <QJsonParseError>
+#include <QJsonObject>
+#include <QJsonArray>
+
 
 #ifdef Q_OS_WIN
 #include <windows.h>
@@ -44,14 +51,6 @@ FLDigi - read characters
 configuration and running multiple copies of engines - each app should have its own set of INI files
 app name in ini file section
 
-How do we arrange the DMButtonFrame not to load unless we have mqtDataModes connections?
-- only load when we find providers
-
-Send button texts to all DM apps, they then display them as well
-
-? Make buttons invisible (and F keys inactive) until we have somewhere to send them
-
-
 */
 
 const QString DMMainWindow::mmvari = "MMVARI";
@@ -67,6 +66,8 @@ DMMainWindow::DMMainWindow(QWidget *parent)
     , ui(new Ui::DMMainWindow)
 {
     ui->setupUi(this);
+
+    ui->FButtonFrame->setVisible(false);
 
     connect(RxBuffer::getRxBuffer(), &RxBuffer::newCharacter, this, &DMMainWindow::onNewCharacter);
     connect(ui->rxChars, &DataPainter::wordSelected, this, &DMMainWindow::wordSelected);
@@ -119,9 +120,10 @@ DMMainWindow::DMMainWindow(QWidget *parent)
     QStringList sv = {rpcConstants::DMSender};
     rpc->findProviders(rpcConstants::DMCat, sv);
 
+    router = MinosConfig::getMinosConfig()->getThisRouterName();
+
     QString a = rpc->getAppName();
-    QString station = MinosConfig::getMinosConfig()->getThisRouterName();
-    me = a + "@" + station;
+    me = a + "@" + router;
 
     createCloseEvent();
 
@@ -163,6 +165,19 @@ DMMainWindow::DMMainWindow(QWidget *parent)
     qfsw = new QFileSystemWatcher(this);
     qfsw->addPath("./Configuration/DataModes.ini");
     connect(qfsw, &QFileSystemWatcher::fileChanged, this, &DMMainWindow::iniFileChanged);
+
+
+    fButtons << ui->F1Button << ui->F2Button << ui->F3Button << ui->F4Button << ui->F5Button << ui->F6Button;
+    fButtons << ui->F7Button << ui->F8Button << ui->F9Button << ui->F10Button << ui->F11Button << ui->F12Button;
+
+    int i = Qt::Key_F1;
+    for (auto b: qAsConst(fButtons))
+    {
+        b->setProperty("KeyNo", i++);
+        connect(b, &QPushButton::clicked, this, &DMMainWindow::fButtonClicked);
+    }
+
+    installEventFilter(this);
 
     startPreviousEngine();
 }
@@ -265,6 +280,31 @@ void DMMainWindow::on_notify(AnalysePubSubNotify an, const QString from )
             {
                 ui->sendercb->setChecked(false);
                 ui->sendEdit->clear();
+            }
+        }
+        if ( an.getCategory() == rpcConstants::DMCat && key == rpcConstants::DMFKeys)
+        {
+            QJsonParseError err;
+            QJsonDocument json = QJsonDocument::fromJson(value.toUtf8(), &err);
+            if (!err.error)
+            {
+                if( json.isArray())
+                {
+                    int i = 0;
+                    QJsonArray keyarray = json.array();
+                    for (auto const &k: qAsConst(keyarray))
+                    {
+                        if (i >= 12)
+                        {
+                            break;
+                        }
+                        QJsonObject ko = k.toObject();
+                        QString f = ko.value(QString("F%1").arg(i + 1)).toString();
+                        fButtons[i]->setText(f);
+                        i++;
+                    }
+                    ui->FButtonFrame->setVisible(true);
+                }
             }
         }
     }
@@ -685,3 +725,47 @@ void DMMainWindow::on_sendercb_stateChanged(int /*arg1*/)
     }
 }
 
+void DMMainWindow::fButtonClicked()
+{
+    QPushButton *b = dynamic_cast<QPushButton *>(sender());
+    int kno = b->property("KeyNo").toInt();
+    fKey(kno);
+}
+
+void DMMainWindow::fKey(int key)
+{
+    RPCGeneralClient rpc(rpcConstants::DMKeyPress);
+    QSharedPointer<RPCParam>st(new RPCParamStruct);
+    st->addMember( key, rpcConstants::DMFKey );
+    rpc.getCallArgs() ->addParam( st );
+    rpc.queueCall( rpcConstants::loggerApp + "@" + router );
+
+}
+bool DMMainWindow::eventFilter(QObject */*obj*/, QEvent *event)
+{
+    if (event->type() == QEvent::KeyPress)
+    {
+        QKeyEvent *ke = dynamic_cast<QKeyEvent *>(event);
+        return doKeyPressEvent(ke);
+    }
+    return false;
+}
+bool DMMainWindow::doKeyPressEvent( QKeyEvent* event )
+{
+    if (!event)
+        return false;
+
+    int Key = event->key();
+
+//    Qt::KeyboardModifiers mods = event->modifiers();
+//    bool shift = mods & Qt::ShiftModifier;
+//    bool ctrl = mods & Qt::ControlModifier;
+//    bool alt = mods & Qt::AltModifier;
+
+    if (Key >= Qt::Key_F1 && Key <= Qt::Key_F12)
+    {
+        fKey(Key);
+        return true;
+    }
+    return false;
+}

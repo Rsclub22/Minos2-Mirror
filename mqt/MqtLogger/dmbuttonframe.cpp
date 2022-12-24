@@ -1,3 +1,7 @@
+#include <QJsonDocument>
+#include <QJsonParseError>
+#include <QJsonObject>
+#include <QJsonArray>
 #include <QTextStream>
 #include <QPushButton>
 #include <QFileDialog>
@@ -23,7 +27,7 @@ DMButtonFrame::DMButtonFrame(QWidget *parent) :
 
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::fKey, this, &DMButtonFrame::fKey);
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::SandPChanged, this, &DMButtonFrame::sandPChanged);
-    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::DMSender, this, &DMButtonFrame::DMSender);
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::DMMess, this, &DMButtonFrame::DMMess);
 
     TContestApp::getContestApp() ->loggerBundle.getStringProfile( elpDigiFunctionKeyFile, fkeyFileName );
 
@@ -46,14 +50,17 @@ DMButtonFrame::~DMButtonFrame()
 {
     delete ui;
 }
-void DMButtonFrame::DMSender(QString s)
+void DMButtonFrame::DMMess(AnalysePubSubNotify an)
 {
-    dataSender = s;
+    if (an.getKey() == rpcConstants::DMSender)
+    {
+        dataSender = an.getValue();
 
-    fkeyFileChanged();
-    qfsw = new QFileSystemWatcher(this);
-    qfsw->addPath(fkeyFileName);
-    connect(qfsw, &QFileSystemWatcher::fileChanged, this, &DMButtonFrame::fkeyFileChanged);
+        fkeyFileChanged();
+        qfsw = new QFileSystemWatcher(this);
+        qfsw->addPath(fkeyFileName);
+        connect(qfsw, &QFileSystemWatcher::fileChanged, this, &DMButtonFrame::fkeyFileChanged);
+    }
 }
 void DMButtonFrame::fkeyFileChanged()
 {
@@ -67,19 +74,19 @@ void DMButtonFrame::fButtonClicked()
 {
     QPushButton *b = dynamic_cast<QPushButton *>(sender());
     int kno = b->property("KeyNo").toInt();
-    fKey(kno);
+    fKey(ct, kno);
 }
 void DMButtonFrame::setContest(BaseContestLog *c)
 {
     ct = c;
 }
-void DMButtonFrame::fKey(int key)
+void DMButtonFrame::fKey(BaseContestLog *c, int key)
 {
-    TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
-    if (tslf->getContest() == ct)
+    if (c == ct)
     {
         if (key >= Qt::Key_F1 && key <= Qt::Key_F12 && fkeys["Digi"].size() == 24)
         {
+            TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
             int spoffset = tslf->GJVQSOLogFrame->getSandP()?12:0;
             QPair<QString, QString> mess = fkeys["Digi"][key - Qt::Key_F1 + spoffset];
 
@@ -104,6 +111,7 @@ void DMButtonFrame::sandPChanged(bool s)
 void DMButtonFrame::showFButtons(bool s)
 {
     ui->FButtonFrame->setVisible(false);
+    MinosRPC *rpc = MinosRPC::getMinosRPC();
 
     if (fkeys["Digi"].size() == 24)
     {
@@ -112,6 +120,11 @@ void DMButtonFrame::showFButtons(bool s)
             fButtons[i]->setText(fkeys["Digi"][i + (s?12:0)].first);
         }
         ui->FButtonFrame->setVisible(true);
+
+        QString fkeys = getFKeysString();
+
+        rpc->publish( rpcConstants::DMCat, rpcConstants::DMFKeys, fkeys, psPublished );
+
     }
     else if (fkeys["Digi"].size() == 0)
     {
@@ -119,9 +132,11 @@ void DMButtonFrame::showFButtons(bool s)
         {
             fButtons[i]->setText(QString("F%1").arg(i, 1));
         }
+        rpc->publish( rpcConstants::DMCat, rpcConstants::DMFKeys, "", psRevoked );
     }
     else {
         mShowMessage(tr("Not enough key definitions in %1").arg(fkeyFileName), this);
+        rpc->publish( rpcConstants::DMCat, rpcConstants::DMFKeys, "", psRevoked );
     }
 }
 QString DMButtonFrame::parseFKeyMessage(QString mess)
@@ -356,3 +371,21 @@ void DMButtonFrame::on_chooseButton_clicked()
     }
 }
 
+QString DMButtonFrame::getFKeysString() const
+{
+    QJsonArray ja;
+    for (int i = 0; i < 12; i++)
+    {
+        QString val = fButtons[i]->text();
+
+        QJsonObject jv;
+        jv.insert(QString("F%1").arg(i + 1), val);
+
+        ja.append(jv);
+    }
+    QJsonDocument json(ja);
+
+    QString message(json.toJson(QJsonDocument::Compact));
+    return message;
+
+}

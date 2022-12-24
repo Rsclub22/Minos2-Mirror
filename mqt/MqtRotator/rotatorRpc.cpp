@@ -41,12 +41,6 @@ void RotatorRpc::publishAntennaList(QString ants)
 }
 
 
-void RotatorRpc::publishPresetList(QString presets)
-{
-    MinosRPC *rpc = MinosRPC::getMinosRPC();
-    rpc->publish( rpcConstants::RotatorCategory, rpcConstants::rotPresetList, presets, psPublished );
-}
-
 void RotatorRpc::on_notify( AnalysePubSubNotify an, const QString from )
 {
    trace( "Rot Rpc: Notify callback from " + from + ( !an.getOK() ? ":Error" : ":Normal" ) );

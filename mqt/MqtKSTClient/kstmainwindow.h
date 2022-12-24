@@ -18,6 +18,9 @@ QT_END_NAMESPACE
 
 extern QStringList services;
 
+class RemoteLogs;
+class MonitoredLog;
+
 class KSTMainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -91,6 +94,9 @@ class KSTMainWindow : public QMainWindow
     UpperCaseValidator ucValidator;
 
     bool mouseInMessages = false;
+
+    RemoteLogs *remoteLogs = nullptr;
+
 
     void closeEvent(QCloseEvent *event) override;
 
@@ -227,6 +233,13 @@ private slots:
     void on_clearMeepFiltersButton_clicked();
 
     void on_loggerPushButton_clicked();
+
+    void onSyncNeeded();
+    void onNewLog(MonitoredLog *ml);
+    void onNewStanzas(MonitoredLog *l);
+    void onNewLastContact(MonitoredLog *l);
+    void onContactChanged(MonitoredLog *l);
+    void on_logsButton_clicked();
 
 private:
     Ui::KSTMainWindow *ui;

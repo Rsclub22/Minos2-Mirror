@@ -1,6 +1,7 @@
 #ifndef DMBUTTONFRAME_H
 #define DMBUTTONFRAME_H
 
+#include "AnalysePubSubNotify.h"
 #include <QFrame>
 #include <QMap>
 #include <QVector>
@@ -26,7 +27,7 @@ public:
     QString parseFKeyMessage(QString mess);
     void parseFKeyFile(QString sfname, QString mode);
 private slots:
-    void fKey(int key);
+    void fKey(BaseContestLog *c, int key);
     void sandPChanged(bool);
     void fButtonClicked();
     void on_stopButton_clicked();
@@ -40,7 +41,7 @@ private slots:
     void on_chooseButton_clicked();
 
     void fkeyFileChanged();
-    void DMSender(QString s);
+    void  DMMess(AnalysePubSubNotify an);
 private:
     Ui::DMButtonFrame *ui;
     BaseContestLog *ct = nullptr;
@@ -54,6 +55,7 @@ private:
     QString dataSender;
 
     void showFButtons(bool s);
+    QString getFKeysString() const;
 };
 
 #endif // DMBUTTONFRAME_H

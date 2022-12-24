@@ -892,7 +892,7 @@ void TSendDM::on_notify( AnalysePubSubNotify an, const QString from )
             }
             else if ( an.getCategory() == rpcConstants::DMCat)
             {
-                MinosLoggerEvents::SendDMSender(an.getValue());
+                MinosLoggerEvents::SendDMMess(an);
             }
         }
         else if (an.getState() == psRevoked)
@@ -1063,7 +1063,7 @@ void TSendDM::on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, const QSt
         else if (call == rpcConstants::DMKeyPress)
         {
             QSharedPointer<RPCParam> psKey;
-            if ( args->getStructArgMember( 0, "Key", psKey ))
+            if ( args->getStructArgMember( 0, rpcConstants::DMFKey, psKey ))
             {
                 int key;
                 psKey->getInt(key);

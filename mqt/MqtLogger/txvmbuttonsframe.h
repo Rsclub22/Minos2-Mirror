@@ -12,6 +12,7 @@
 
 class QToolButton;
 class QMenu;
+class BaseContestLog;
 
 namespace Ui {
 class TxVmButtonsFrame;
@@ -91,6 +92,7 @@ public:
     void setRadioName(const QString radName);
     int getCwMemType(PubSubName psn);
     void setMode(const QString m);
+    void setContest(BaseContestLog *);
 signals:
 
     void pttStatus(bool);
@@ -101,6 +103,8 @@ private:
 
     QSharedPointer<VoiceKeyerBase> txVoiceKeyer;
     VoiceKeyerFactory* voiceKeyerFactory;
+
+    BaseContestLog *ct = nullptr;
 
     QTimer *extKeyerConnectTimer = nullptr;
     //QList<QShortcut *> shortCutKeyList;
@@ -160,7 +164,7 @@ private slots:
     void onRepeatPauseTimerTimeout();
     void onVmStopClicked();
     void onMsgDurTimerTimeout();
-    void fKey(int e);
+    void fKey(BaseContestLog *c, int e);
 
 
     void onRemoteConfigChanged();

@@ -12,6 +12,7 @@
 #include <QItemSelection>
 #include <QKeyEvent>
 
+#include "AnalysePubSubNotify.h"
 #include "MatchCollection.h"
 #include "baseconstants.h"
 #include "rigmemcommondata.h"
@@ -66,7 +67,7 @@ signals:
    void QSOMargins();
    void showAuxHeaders();
    void bandMapLimitsChanged();
-   void fKey(int e);
+   void fKey(BaseContestLog *c, int e);
    void redrawQSOMap(bool grid, bool lines);
 
    void BrgStrToRot(QString);
@@ -107,7 +108,7 @@ signals:
    void callsignLookup(BaseContestLog *l, QString c);
    void ResendSpotsFromClusterCommand(resendFrameId, QString, QString, QString);
    void SandPChanged(bool);
-   void DMSender(QString);
+   void DMMess(AnalysePubSubNotify);
 public:
    static MinosLoggerEvents mle;
 
@@ -186,9 +187,9 @@ public:
 
     static void SendRedrawQSOMap(bool grid, bool lines);
 
-    static void SendFKey(int event);
+    static void SendFKey(BaseContestLog *c, int event);
     static void SendSandPChanged(bool);
-    static void SendDMSender(QString);
+    static void SendDMMess(AnalysePubSubNotify);
 };
 //---------------------------------------------------------------------------
 #endif

@@ -663,6 +663,13 @@ when user selected</string>
        </widget>
       </item>
       <item>
+       <widget class="QPushButton" name="logsButton">
+        <property name="text">
+         <string>Logs</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QPushButton" name="clearButton">
         <property name="text">
          <string>Clear Messages</string>

@@ -253,6 +253,7 @@ void TSingleLogFrame::createScreenComponents()
     txVmButtonsFrame = new TxVmButtonsFrame(this);
     txVmButtonsFrame->setObjectName(QStringLiteral("txVmButtonsFrame"));
     txVmButtonsFrame->setVisible(false);
+    txVmButtonsFrame->setContest(contest);
 
     bandSwitchFrame = new BandSwitchFrame(this);
     bandSwitchFrame->setObjectName(QStringLiteral("bandSwitchFrame"));
@@ -433,7 +434,7 @@ void TSingleLogFrame::clearScreenLayout(bool clearAllTabs)
     FKHRigControlFrame->setContest(nullptr);
     runButtonsFrame->setContest(nullptr);
     bandSwitchFrame->setContest(nullptr);
-    //txVmButtonsFrame
+    txVmButtonsFrame->setContest(nullptr);
     FKHRotControlFrame->setContest(nullptr);
     rotPresets->setContest(nullptr);
     // CribSheet
@@ -689,6 +690,7 @@ void TSingleLogFrame::buildRow(ContestPage *cp, SCRow &scrow, int &auxInstance, 
                 case sctTxVmButtons:
                 {
                     elementScrollArea->setWidget(txVmButtonsFrame);
+                    txVmButtonsFrame->setContest(ct);
                     break;
                 }
                 case sctRotControl:

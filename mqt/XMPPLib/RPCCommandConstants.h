@@ -216,5 +216,7 @@ static const QString DMWord               {"DMWord"};
 static const QString DMKeyPress           {"DMKeyPress"};
 static const QString DMTransmit           {"DMTransmit"};
 static const QString DMStopTransmit       {"DMStopTransmit"};
+static const QString DMFKeys              {"DMFKeys"};
+static const QString DMFKey               {"DMFKey"};
 }
 #endif // RPCCOMMANDRCONSTANTS_H

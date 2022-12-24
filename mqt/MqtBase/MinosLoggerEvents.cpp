@@ -125,18 +125,18 @@ void MinosLoggerEvents::sendBandmapLimitsChanged()
     emit mle.bandMapLimitsChanged();
 }
 
-void MinosLoggerEvents::SendFKey(int event)
+void MinosLoggerEvents::SendFKey(BaseContestLog *c, int event)
 {
-    emit mle.fKey(event);
+    emit mle.fKey(c, event);
 }
 
 void MinosLoggerEvents::SendSandPChanged(bool s)
 {
     emit mle.SandPChanged(s);
 }
-void MinosLoggerEvents::SendDMSender(QString s)
+void MinosLoggerEvents::SendDMMess(AnalysePubSubNotify an)
 {
-    emit mle.DMSender(s);
+    emit mle.DMMess(an);
 }
 //---------------------------------------------------------------------------
 void MinosLoggerEvents::SendMainRaised()

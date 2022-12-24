@@ -397,7 +397,7 @@ bool QSOLogFrame::doKeyPressEvent( QKeyEvent* event )
         if (Key >= Qt::Key_F1 && Key <= Qt::Key_F12)
         {
             // key may be for keyer or Digi Macro use
-            MinosLoggerEvents::SendFKey(event->key());
+            MinosLoggerEvents::SendFKey(contest, event->key());
             return true;
         }
     }
@@ -1082,7 +1082,7 @@ void QSOLogFrame::DMKey(int key)
     else if (key >= Qt::Key_F1 && key <= Qt::Key_F12)
     {
         // key may be for keyer or Digi Macro use
-        MinosLoggerEvents::SendFKey(key);
+        MinosLoggerEvents::SendFKey(contest, key);
         return;
     }
 
