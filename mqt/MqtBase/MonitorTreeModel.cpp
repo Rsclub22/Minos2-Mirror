@@ -1,17 +1,16 @@
-#include "MatchThread.h"
 #include "MonitoredLog.h"
-#include "MonitoringFrame.h"
-#include "MonitorMain.h"
+#include "MonitorTreeModel.h"
 
 //=============================================================================================
-TreeNode::TreeNode(NodeType sn, TreeNode *parent, QString name, MonitorMain *mm):
-    ntype(sn), NodeName(name), parentItem(parent), mlog(nullptr), monmain(mm)
+TreeNode::TreeNode(NodeType sn, TreeNode *parent, QString name):
+    ntype(sn), NodeName(name), parentItem(parent), mlog(nullptr)
 {
     if (parent)
         parent->nodes.push_back(this);
 }
-TreeNode::TreeNode(NodeType sn, TreeNode *parent, QSharedPointer<MonitoredLog> log, MonitorMain *mm):
-    ntype(sn), NodeName(log->getDisplayName()), hintString(log->getPublishedName()), parentItem(parent), mlog(log), monmain(mm)
+TreeNode::TreeNode(NodeType sn, TreeNode *parent, QSharedPointer<MonitoredLog> log):
+    ntype(sn), NodeName(log->getDisplayName()), hintString(log->getPublishedName()), parentItem(parent),
+    mlog(log)
 {
     if (parent)
         parent->nodes.push_back(this);

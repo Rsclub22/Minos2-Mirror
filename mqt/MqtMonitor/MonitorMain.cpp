@@ -304,7 +304,7 @@ void MonitorMain::syncStations()
    {
       syncstat = false;
 
-      TreeNode *root = new RootTreeNode(this);
+      TreeNode *root = new RootTreeNode();
       for ( auto s = remoteLogs->stationList.begin(); s != remoteLogs->stationList.end(); s++ )
       {
           // clang complains that snode may leak - but if gets taken over by the tree

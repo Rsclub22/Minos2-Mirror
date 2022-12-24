@@ -37,6 +37,7 @@ SOURCES += \
     BandList.cpp \
     CacheSelection.cpp \
     ConfigurationOption.cpp \
+    MonitorTreeModel.cpp \
     MonitoredContestLog.cpp \
     MonitoredLog.cpp \
     StartConfigManager.cpp \
@@ -128,6 +129,7 @@ HEADERS += \
     AntennaState.h \
     BandList.h \
     ConfigurationOption.h \
+    MonitorTreeModel.h \
     MonitoredContestLog.h \
     MonitoredLog.h \
     StartConfigManager.h \

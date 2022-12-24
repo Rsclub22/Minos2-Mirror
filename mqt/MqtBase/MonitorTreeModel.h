@@ -4,7 +4,6 @@
 #include <QSharedPointer>
 #include <QAbstractItemModel>
 
-class MonitorMain;
 class MonitoredLog;
 
 
@@ -21,10 +20,8 @@ protected:
     QSharedPointer< MonitoredLog> mlog;
 
 public:
-    MonitorMain *monmain;
-
-    TreeNode(NodeType sn, TreeNode *parent, QString name, MonitorMain *mm);
-    TreeNode(NodeType sn, TreeNode *parent, QSharedPointer< MonitoredLog> log, MonitorMain *mm);
+    TreeNode(NodeType sn, TreeNode *parent, QString name);
+    TreeNode(NodeType sn, TreeNode *parent, QSharedPointer< MonitoredLog> log);
     virtual ~TreeNode();
 
     virtual NodeType GetNodeType() const
@@ -63,7 +60,7 @@ public:
 class RootTreeNode:public TreeNode
 {
 public:
-    RootTreeNode(MonitorMain *mm):TreeNode(entRoot, nullptr, "Root", mm)
+    RootTreeNode():TreeNode(entRoot, nullptr, "Root")
     {
 
     }
@@ -72,7 +69,7 @@ public:
 class RouterTreeNode:public TreeNode
 {
 public:
-    RouterTreeNode(TreeNode *parent, QString name):TreeNode(entRouter, parent, name, parent->monmain)
+    RouterTreeNode(TreeNode *parent, QString name):TreeNode(entRouter, parent, name)
     {
     }
     virtual QString data( int column );
@@ -81,7 +78,7 @@ class LogTreeNode:public TreeNode
 {
     Q_OBJECT
 public:
-    LogTreeNode(TreeNode *parent,QSharedPointer< MonitoredLog> log):TreeNode(entLog, parent, log, parent->monmain)
+    LogTreeNode(TreeNode *parent,QSharedPointer< MonitoredLog> log):TreeNode(entLog, parent, log)
     {
     }
     virtual QString data( int column );

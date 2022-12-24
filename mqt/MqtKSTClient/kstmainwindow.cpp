@@ -4,6 +4,7 @@
 
 #include "AppStartup.h"
 #include "MShowMessageDlg.h"
+#include "MonitoredLog.h"
 #include "cutils.h"
 #include "callsign.h"
 #include "kstconfigure.h"
@@ -17,6 +18,7 @@
 #include "RPCCommandConstants.h"
 
 #include "kstmainwindow.h"
+#include "remotelogs.h"
 #include "ui_kstmainwindow.h"
 
 QStringList services =
@@ -315,6 +317,12 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
 #ifndef Q_OS_WIN
     ui->loggerPushButton->setVisible(false);
 #endif
+
+    remoteLogs = new RemoteLogs;
+
+    connect(remoteLogs, &RemoteLogs::syncNeeded, this, &KSTMainWindow::onSyncNeeded);
+    connect(remoteLogs, &RemoteLogs::newMonitoredLog, this, &KSTMainWindow::onNewLog);
+
 
 }
 
@@ -1915,6 +1923,58 @@ void KSTMainWindow::on_loggerPushButton_clicked()
     QString router = MinosConfig::getMinosConfig( )->getThisRouterName();
     RPCGeneralClient rpc(rpcConstants::loggerTakeFocus);
     rpc.queueCall( rpcConstants::loggerApp + "@" + router );
+
+}
+//---------------------------------------------------------------------------
+// callback slots from RPC in MonitoredLog
+void KSTMainWindow::onNewStanzas(MonitoredLog *)
+{
+    trace("OnNewStanzas");
+//    MonitoringFrame *frame = l->getFrame();
+//    if (frame)
+//    {
+//        frame->newStanzas = true;
+//    }
+}
+void KSTMainWindow::onNewLastContact(MonitoredLog *)
+{
+    trace("onNewLastContact");
+//    MonitoringFrame *frame = l->getFrame();
+//    if (l->getContest()->lastInserted >= 0)
+//    {
+//        QSharedPointer<BaseContact> bct = l->getContest()->pcontactAt(l->getContest()->lastInserted);
+//        frame->qsoModel.insertRows(l->getContest()->lastInserted, 1, QModelIndex());
+//        l->getContest()->lastInserted = -1;
+
+//        frame->on_AfterLogContact(l->getContest(), bct);
+//    }
+}
+void KSTMainWindow::onContactChanged(MonitoredLog *)
+{
+    trace("onContactChanged");
+//    // change to a contact; we need a full rescan to understand it
+//    MonitoringFrame *frame = l->getFrame();
+//    frame->qsoModel.changeRow(l->getContest()->lastInserted);
+//    frame->rescanNeeded = true;
+}
+
+//=================================================================
+// callback slots from RemoteLogs
+
+void KSTMainWindow::onSyncNeeded()
+{
+    //syncstat = true;
+}
+
+void KSTMainWindow::onNewLog(MonitoredLog *ml)
+{
+    connect(ml, &MonitoredLog::newStanzas, this, &KSTMainWindow::onNewStanzas);
+    connect(ml, &MonitoredLog::newLastContact, this, &KSTMainWindow::onNewLastContact);
+    connect(ml, &MonitoredLog::contactChanged, this, &KSTMainWindow::onContactChanged);
+}
+
+void KSTMainWindow::on_logsButton_clicked()
+{
 
 }
 

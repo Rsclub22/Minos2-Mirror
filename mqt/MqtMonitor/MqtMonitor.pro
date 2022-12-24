@@ -25,7 +25,6 @@ TEMPLATE = app
 win32:RC_ICONS += ../MinosMonitor.ico
 
 SOURCES += \
-    MonitorTreeModel.cpp \
         main.cpp \
         MonitorMain.cpp \
     MonitoringFrame.cpp \
@@ -33,7 +32,6 @@ SOURCES += \
 
 HEADERS += \
         MonitorMain.h \
-    MonitorTreeModel.h \
     MonitoringFrame.h \
     MonitorParameters.h
 
