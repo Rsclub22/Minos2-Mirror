@@ -87,6 +87,8 @@ QString LogTreeNode::data(int column)
         QString state;
         if (mlog->getFrame())
             state = tr("Monitoring");
+        else if (mlog->enabled())
+            state = tr("Enabled");
         return state;
     }
     return "";

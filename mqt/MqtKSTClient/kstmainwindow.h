@@ -20,6 +20,7 @@ extern QStringList services;
 
 class RemoteLogs;
 class MonitoredLog;
+class MonitoredLogs;
 
 class KSTMainWindow : public QMainWindow
 {
@@ -234,16 +235,14 @@ private slots:
 
     void on_loggerPushButton_clicked();
 
-    void onSyncNeeded();
-    void onNewLog(MonitoredLog *ml);
-    void onNewStanzas(MonitoredLog *l);
-    void onNewLastContact(MonitoredLog *l);
-    void onContactChanged(MonitoredLog *l);
     void on_logsButton_clicked();
 
 private:
     Ui::KSTMainWindow *ui;
     StdInReader *stdinReader = new StdInReader(this);
+
+    MonitoredLogs* ml = nullptr;
+
     void clearConnection();
     void checkActive();
     void resetVectors(QCheckBox *cb, QRadioButton *rb, int c, QStringList &s, QVector<int> &v, QVector<int> &a);
