@@ -22,6 +22,7 @@ QT_END_NAMESPACE
 
 class RtAudio;
 class QFileSystemWatcher;
+class QPushButton;
 
 class DMMainWindow : public QMainWindow
 {
