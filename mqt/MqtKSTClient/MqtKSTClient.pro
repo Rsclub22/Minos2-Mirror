@@ -18,10 +18,10 @@ SOURCES += \
     kstcallgridmodel.cpp \
     kstconfigure.cpp \
     kstmessagegridmodel.cpp \
+    kstmonitoredlogs.cpp \
     kstplanesmodel.cpp \
     main.cpp \
-    kstmainwindow.cpp \
-    monitoredlogs.cpp
+    kstmainwindow.cpp
 
 HEADERS += \
     KSTMinosParameters.h \
@@ -31,11 +31,11 @@ HEADERS += \
     kstconfigure.h \
     kstmainwindow.h \
     kstmessagegridmodel.h \
-    kstplanesmodel.h \
-    monitoredlogs.h
+    kstmonitoredlogs.h \
+    kstplanesmodel.h
 
 FORMS += \
     changename.ui \
     kstconfigure.ui \
     kstmainwindow.ui \
-    monitoredlogs.ui
+    kstmonitoredlogs.ui

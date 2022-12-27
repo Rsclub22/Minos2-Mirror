@@ -38,10 +38,6 @@ MonitorMain::MonitorMain(QWidget *parent) :
 
     MultLists::getMultLists(); // make sure everything is loaded
 
-    treeModel = new MonitorTreeModel();
-    ui->monitorTree->setModel(treeModel);
-    ui->monitorTree->header()->show();
-
     monitorTimer = new QTimer();
 
     connect(monitorTimer, &QTimer::timeout, this, &MonitorMain::on_monitorTimeout);
@@ -49,10 +45,10 @@ MonitorMain::MonitorMain(QWidget *parent) :
     monitorTimer->start(100);
 
     /*MinosRPC *rpc =*/ MinosRPC::getMinosRPC(getAppStartupName(), true);
-    remoteLogs = new RemoteLogs;
 
-    connect(remoteLogs, &RemoteLogs::syncNeeded, this, &MonitorMain::onSyncNeeded);
-    connect(remoteLogs, &RemoteLogs::newMonitoredLog, this, &MonitorMain::onNewLog);
+    connect(ui->monitorTree->getRemoteLogs(), &RemoteLogs::newMonitoredLog, this, &MonitorMain::onNewLog);
+    connect(ui->monitorTree, &MonitoredLogs::logStarted, this, &MonitorMain::onLogStarted);
+    connect(ui->monitorTree, &MonitoredLogs::logClosed, this, &MonitorMain::onLogClosed);
 
     QByteArray state;
 
@@ -110,9 +106,7 @@ MonitorMain::MonitorMain(QWidget *parent) :
 MonitorMain::~MonitorMain()
 {
     delete ui;
-    remoteLogs->closeAll();
     delete MultLists::getMultLists();
-    delete remoteLogs;
 }
 void MonitorMain::closeEvent(QCloseEvent *event)
 {
@@ -187,7 +181,7 @@ void MonitorMain::on_searchSplitter_splitterMoved(int /*pos*/, int /*index*/)
 
 void MonitorMain::closeTab(MonitoringFrame *cttab)
 {
-    for ( auto const &s: qAsConst(remoteLogs->stationList) )
+    for ( auto const &s: qAsConst(ui->monitorTree->getRemoteLogs()->stationList) )
     {
         for ( auto const &l: qAsConst(s->slotList) )
         {
@@ -196,11 +190,11 @@ void MonitorMain::closeTab(MonitoringFrame *cttab)
                 // take it out of the slot list and close it
                 // and we need to redo the list
 
-                remoteLogs->closeLog(l.data());
+                ui->monitorTree->getRemoteLogs()->closeLog(l.data());
 
                 ui->contestPageControl->removeTab(ui->contestPageControl->indexOf(cttab));
                 delete cttab;
-                syncstat = true;
+                //syncstat = true;
                 return;
             }
         }
@@ -251,6 +245,19 @@ void MonitorMain::on_closeMonitoredLog()
 {
     closeTab(findCurrentLogFrame());
 }
+void MonitorMain::onLogStarted(QSharedPointer<MonitoredLog> ml)
+{
+    addSlot( ml );
+//    sel->setLog(ml);
+}
+void MonitorMain::onLogClosed(QSharedPointer<MonitoredLog> l)
+{
+    MonitoringFrame *cttab = l->getFrame();
+    if (cttab)
+    {
+       closeTab(cttab);
+    }
+}
 //---------------------------------------------------------------------------
 // callback slots from RPC in MonitoredLog
 void MonitorMain::onNewStanzas(MonitoredLog *l)
@@ -286,42 +293,11 @@ void MonitorMain::onContactChanged(MonitoredLog *l)
 //=================================================================
 // callback slots from RemoteLogs
 
-void MonitorMain::onSyncNeeded()
-{
-    syncstat = true;
-}
-
 void MonitorMain::onNewLog(MonitoredLog *ml)
 {
     connect(ml, &MonitoredLog::newStanzas, this, &MonitorMain::onNewStanzas);
     connect(ml, &MonitoredLog::newLastContact, this, &MonitorMain::onNewLastContact);
     connect(ml, &MonitoredLog::contactChanged, this, &MonitorMain::onContactChanged);
-}
-//=================================================================
-void MonitorMain::syncStations()
-{
-  if ( syncstat )
-   {
-      syncstat = false;
-
-      TreeNode *root = new RootTreeNode();
-      for ( auto s = remoteLogs->stationList.begin(); s != remoteLogs->stationList.end(); s++ )
-      {
-          // clang complains that snode may leak - but if gets taken over by the tree
-          TreeNode *snode = new RouterTreeNode(root, s.key().app + "@" + s.key().routerName);
-          for ( auto const &l: qAsConst(s.value()->slotList) )
-          {
-              /*TreeNode *lnode =*/ new LogTreeNode(snode, l);
-          }
-      }
-      treeModel->setRoot(root);
-      int rc = treeModel->rowCount();
-      for(int i = 0; i < rc; i++)
-      {
-        ui->monitorTree->setFirstColumnSpanned( i, QModelIndex(), true );
-      }
-      ui->monitorTree->expandAll();
-   }
 }
 void MonitorMain::addSlot(  QSharedPointer< MonitoredLog>ct )
 {
@@ -377,36 +353,6 @@ void MonitorMain::on_monitorTimeout()
           close();
        }
     }
-    for ( auto const &s: qAsConst(remoteLogs->stationList) )
-    {
-
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-        for (QVector< QSharedPointer<MonitoredLog> >::const_iterator l = s->slotList.begin(); l != s->slotList.end(); l++)
-#else
-        for (QVector< QSharedPointer<MonitoredLog> >::iterator l = s->slotList.begin(); l != s->slotList.end(); l++)
-#endif
-       {
-          if ((*l)->getState() == psRevoked)
-          {
-             MonitoringFrame *cttab = findContestPage( (*l)->getContest() );
-             closeTab(cttab);
-             // take it out of the slot list and close it
-             // and we need to redo the list
-             s->slotList.erase(l);
-             syncstat = true;
-             break;             // as we have changed the list - don't continue
-
-          }
-          else
-          {
-             (*l)->checkMonitor();
-          }
-       }
-       if (syncstat)
-       {
-          syncStations();
-       }
-    }
     static int ticks = 0;
     if (ticks++ > 10)
     {
@@ -422,7 +368,7 @@ void MonitorMain::on_monitorTimeout()
 }
 void MonitorMain::testAutoStart()
 {
-    for ( auto const &s: qAsConst(remoteLogs->stationList) )
+    for ( auto const &s: qAsConst(ui->monitorTree->getRemoteLogs()->stationList) )
     {
        for ( auto &ml: s->slotList )
        {
@@ -432,8 +378,6 @@ void MonitorMain::testAutoStart()
                 {
                     ml->startMonitor();
                     addSlot( ml );
-                    //sel->setLog(ml);
-                    syncstat = true;
                 }
             }
        }
@@ -468,64 +412,6 @@ void MonitorMain::on_monitorTree_clicked(const QModelIndex &index)
             }
         }
 
-    }
-}
-
-void MonitorMain::on_monitorTree_doubleClicked(const QModelIndex &index)
-{
-    // apply double click to node MonitorTreeClickNode
-    TreeNode * sel = static_cast< TreeNode *>(index.internalPointer());
-
-    if (!sel)
-    {
-       return;
-    }
-    if ( sel->GetNodeType() != entLog )
-    {
-       // station
-    }
-    else
-    {
-        RouterTreeNode *tn = static_cast< RouterTreeNode *>(index.parent().internalPointer());
-        QString pn = tn->data(0);
-
-        QStringList sl = pn.split('@');
-        if (sl.count() != 2)
-        {
-            return;
-        }
-        QString s = sl[1] + "/" + sl[0] + "/xxx";
-        Provider p(s);
-        MonitoredStation *ms = remoteLogs->stationList[ p ];
-       if (!ms)
-       {
-           return;
-       }
-       // log
-       if (sel->childNumber() >= ms->slotList.count())
-       {
-           return;
-       }
-      QSharedPointer< MonitoredLog> ml = ms ->slotList[ sel->childNumber()];
-      if (!ml)
-      {
-          return;
-      }
-      if ( !ml->enabled() )
-      {
-         ml->startMonitor();
-         addSlot( ml );
-         //sel->setLog(ml);
-         syncstat = true;
-      }
-      else
-      {
-         MonitoringFrame *cttab = findContestPage( ml->getContest() );
-         if ( cttab )
-         {
-            ui->contestPageControl->setCurrentWidget(cttab);
-         }
-      }
     }
 }
 

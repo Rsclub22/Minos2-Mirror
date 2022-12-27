@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>MonitoredLogs</class>
- <widget class="QDialog" name="MonitoredLogs">
+ <class>KSTMonitoredLogs</class>
+ <widget class="QDialog" name="KSTMonitoredLogs">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,24 +11,11 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Monitored Logs</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="QTreeView" name="monitorTree">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-       <horstretch>1</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="focusPolicy">
-      <enum>Qt::NoFocus</enum>
-     </property>
-     <attribute name="headerVisible">
-      <bool>false</bool>
-     </attribute>
-    </widget>
+    <widget class="MonitoredLogs" name="treeView"/>
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
@@ -46,9 +33,9 @@
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="OKButton">
+      <widget class="QPushButton" name="hideButton">
        <property name="text">
-        <string>OK</string>
+        <string>Hide</string>
        </property>
       </widget>
      </item>
@@ -56,6 +43,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>MonitoredLogs</class>
+   <extends>QTreeView</extends>
+   <header>monitoredlogs.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

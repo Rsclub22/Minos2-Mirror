@@ -1,19 +1,21 @@
+#include <QTimer>
 #include "AppStartup.h"
 #include "MTrace.h"
+#include "MonitorTreeModel.h"
 #include "MonitoredLog.h"
 #include "monitoredlogs.h"
-#include "MonitorTreeModel.h"
+#include "remotelogs.h"
 #include "ui_monitoredlogs.h"
 
 MonitoredLogs::MonitoredLogs(QWidget *parent) :
-    QDialog(parent),
+    QTreeView(parent),
     ui(new Ui::MonitoredLogs)
 {
     ui->setupUi(this);
 
     treeModel = new MonitorTreeModel();
-    ui->monitorTree->setModel(treeModel);
-    ui->monitorTree->header()->show();
+    setModel(treeModel);
+    header()->show();
 
     monitorTimer = new QTimer();
 
@@ -25,15 +27,15 @@ MonitoredLogs::MonitoredLogs(QWidget *parent) :
     remoteLogs = new RemoteLogs;
 
     connect(remoteLogs, &RemoteLogs::syncNeeded, this, &MonitoredLogs::onSyncNeeded);
-    connect(remoteLogs, &RemoteLogs::newMonitoredLog, this, &MonitoredLogs::onNewLog);
 
-
+    connect(this, &QTreeView::doubleClicked, this, &MonitoredLogs::onMonitorTree_doubleClicked);
 }
 
 MonitoredLogs::~MonitoredLogs()
 {
     delete ui;
 }
+
 void MonitoredLogs::on_monitorTimeout()
 {
 
@@ -48,8 +50,7 @@ void MonitoredLogs::on_monitorTimeout()
        {
           if ((*l)->getState() == psRevoked)
           {
-             //MonitoringFrame *cttab = findContestPage( (*l)->getContest() );
-             //closeTab(cttab);
+              emit logClosed(*l);
              // take it out of the slot list and close it
              // and we need to redo the list
              s->slotList.erase(l);
@@ -67,6 +68,11 @@ void MonitoredLogs::on_monitorTimeout()
           syncStations();
        }
     }
+}
+
+RemoteLogs *MonitoredLogs::getRemoteLogs() const
+{
+    return remoteLogs;
 }
 
 void MonitoredLogs::syncStations()
@@ -89,12 +95,12 @@ void MonitoredLogs::syncStations()
       int rc = treeModel->rowCount();
       for(int i = 0; i < rc; i++)
       {
-        ui->monitorTree->setFirstColumnSpanned( i, QModelIndex(), true );
+        setFirstColumnSpanned( i, QModelIndex(), true );
       }
-      ui->monitorTree->expandAll();
+      expandAll();
    }
 }
-void MonitoredLogs::on_monitorTree_doubleClicked(const QModelIndex &index)
+void MonitoredLogs::onMonitorTree_doubleClicked(const QModelIndex &index)
 {
     // apply double click to node MonitorTreeClickNode
     TreeNode * sel = static_cast< TreeNode *>(index.internalPointer());
@@ -140,6 +146,7 @@ void MonitoredLogs::on_monitorTree_doubleClicked(const QModelIndex &index)
           //addSlot( ml );
           //sel->setLog(ml);
           syncstat = true;
+          emit logStarted(ml);
        }
     }
 }
@@ -151,49 +158,3 @@ void MonitoredLogs::onSyncNeeded()
 {
     syncstat = true;
 }
-
-void MonitoredLogs::onNewLog(MonitoredLog *ml)
-{
-    connect(ml, &MonitoredLog::newStanzas, this, &MonitoredLogs::onNewStanzas);
-    connect(ml, &MonitoredLog::newLastContact, this, &MonitoredLogs::onNewLastContact);
-    connect(ml, &MonitoredLog::contactChanged, this, &MonitoredLogs::onContactChanged);
-}
-//---------------------------------------------------------------------------
-// callback slots from RPC in MonitoredLog
-void MonitoredLogs::onNewStanzas(MonitoredLog *l)
-{
-    trace("OnNewStanzas");
-//    MonitoringFrame *frame = l->getFrame();
-//    if (frame)
-//    {
-//        frame->newStanzas = true;
-//    }
-}
-void MonitoredLogs::onNewLastContact(MonitoredLog *l)
-{
-    trace("onNewLastContact");
-//    MonitoringFrame *frame = l->getFrame();
-//    if (l->getContest()->lastInserted >= 0)
-//    {
-//        QSharedPointer<BaseContact> bct = l->getContest()->pcontactAt(l->getContest()->lastInserted);
-//        frame->qsoModel.insertRows(l->getContest()->lastInserted, 1, QModelIndex());
-//        l->getContest()->lastInserted = -1;
-
-//        frame->on_AfterLogContact(l->getContest(), bct);
-//    }
-}
-void MonitoredLogs::onContactChanged(MonitoredLog *l)
-{
-    trace("onContactChanged");
-//    // change to a contact; we need a full rescan to understand it
-//    MonitoringFrame *frame = l->getFrame();
-//    frame->qsoModel.changeRow(l->getContest()->lastInserted);
-//    frame->rescanNeeded = true;
-}
-
-
-void MonitoredLogs::on_OKButton_clicked()
-{
-    hide();
-}
-

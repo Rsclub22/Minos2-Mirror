@@ -1773,6 +1773,7 @@ void TLogContainer::selectSession(QString sessName)
     if (sessName.isEmpty())
         return;
 
+    trace(QString("selectSession %1").arg(sessName));
     TContestApp *app = TContestApp::getContestApp();
     app->suppressWritePreload = true;
 

@@ -6,6 +6,7 @@
 #include <QMenu>
 
 #include "ScreenContact.h"
+#include "monitoredlogs.h"
 #include "remotelogs.h"
 #include "MonitoredLog.h"
 #include "MonitoringFrame.h"
@@ -46,7 +47,6 @@ public:
 private slots:
     void on_monitorTimeout();
 
-    void on_monitorTree_doubleClicked(const QModelIndex &index);
     void on_monitorSplitter_splitterMoved(int /*pos*/, int /*index*/);
     void on_closeMonitoredLog();
     void on_contestPageControl_customContextMenuRequested(const QPoint &pos);
@@ -67,7 +67,6 @@ private slots:
 
     void on_monitorTree_clicked(const QModelIndex &index);
 
-    void onSyncNeeded();
     void onNewLog(MonitoredLog *m);
 
     void onNewStanzas(MonitoredLog *m);
@@ -76,6 +75,9 @@ private slots:
     void on_showGridcb_stateChanged(int arg1);
 
     void on_showLinescb_stateChanged(int arg1);
+
+    void onLogStarted(QSharedPointer<MonitoredLog>);
+    void onLogClosed(QSharedPointer<MonitoredLog>);
 
 private:
     Ui::MonitorMain *ui;
@@ -87,13 +89,7 @@ private:
 
     StdInReader *stdinReader = new StdInReader(this);
 
-    RemoteLogs *remoteLogs = nullptr;
-
-    MonitorTreeModel *treeModel;
-
     QTimer *monitorTimer;
-
-    bool syncstat = false;
 
     QAction *newAction(const QString &text, QMenu *m, void (MonitorMain::*slotparam)() );
     virtual void closeEvent(QCloseEvent *event) override;
@@ -102,7 +98,6 @@ private:
     virtual void changeEvent( QEvent* e ) override;
     virtual bool eventFilter(QObject *obj, QEvent *event) override;
 
-    void syncStations();
     void addSlot(QSharedPointer<MonitoredLog> ct );
     MonitoringFrame *findCurrentLogFrame();
     MonitoringFrame *findContestPage( BaseContestLog *ct );

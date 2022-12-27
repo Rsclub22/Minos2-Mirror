@@ -15,6 +15,7 @@ bool MonitoredLogCmp::operator()(QSharedPointer<MonitoredLog> s1) const
 MonitoredLog::MonitoredLog(MonitoredStation *s) : QObject()
   , station(s)
 {
+    qRegisterMetaType<QSharedPointer<MonitoredLog> >("MonitoredLog");
 }
 MonitoredLog::~MonitoredLog()
 {

@@ -51,7 +51,7 @@
           <widget class="QWidget" name="layoutWidget">
            <layout class="QVBoxLayout" name="verticalLayout_3">
             <item>
-             <widget class="QTreeView" name="monitorTree">
+             <widget class="MonitoredLogs" name="monitorTree">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                 <horstretch>1</horstretch>
@@ -229,6 +229,11 @@
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
+  <customwidget>
+   <class>MonitoredLogs</class>
+   <extends>QTreeView</extends>
+   <header>monitoredlogs.h</header>
+  </customwidget>
   <customwidget>
    <class>MinosSplitter</class>
    <extends>QSplitter</extends>

@@ -16,6 +16,8 @@ QT_BEGIN_NAMESPACE
 namespace Ui { class KSTMainWindow; }
 QT_END_NAMESPACE
 
+class KSTMonitoredLogs;
+
 extern QStringList services;
 
 class RemoteLogs;
@@ -241,7 +243,7 @@ private:
     Ui::KSTMainWindow *ui;
     StdInReader *stdinReader = new StdInReader(this);
 
-    MonitoredLogs* ml = nullptr;
+    KSTMonitoredLogs* ml = nullptr;
 
     void clearConnection();
     void checkActive();

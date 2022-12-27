@@ -84,6 +84,7 @@ SOURCES += \
     minosqlabel.cpp \
     minostablewidget.cpp \
     MinosTestImport.cpp \
+    monitoredlogs.cpp \
     monitoredstation.cpp \
     mults.cpp \
     MultsImpl.cpp \
@@ -178,6 +179,7 @@ HEADERS += \
     minosqlabel.h \
     minostablewidget.h \
     MinosTestImport.h \
+    monitoredlogs.h \
     monitoredstation.h \
     mults.h \
     MultsImpl.h \
@@ -234,6 +236,7 @@ FORMS += \
     StartConfigManager.ui \
     StatisticsDisplay.ui \
     minoskeyboard.ui \
+    monitoredlogs.ui \
     rotpresetdialog.ui \
     StartConfig.ui \
     helpbrowser.ui \
