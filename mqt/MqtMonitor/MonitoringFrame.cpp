@@ -14,8 +14,10 @@ MonitoringFrame::MonitoringFrame(MonitorMain *parent) :
     ui(new Ui::MonitoringFrame)
 {
     ui->setupUi(this);
-
-
+}
+MonitoringFrame::~MonitoringFrame()
+{
+    delete ui;
 }
 void MonitoringFrame::viewColumn()
 {
@@ -65,10 +67,6 @@ void MonitoringFrame::onQSOTable_sectionMoved(int, int, int)
 void MonitoringFrame::onQSOTable_sectionResized(int, int , int)
 {
     saveQSOTableColumns();
-}
-MonitoringFrame::~MonitoringFrame()
-{
-    delete ui;
 }
 void MonitoringFrame::initialise( BaseContestLog * pcontest )
 {

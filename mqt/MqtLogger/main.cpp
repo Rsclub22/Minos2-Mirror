@@ -20,11 +20,9 @@
 //#include <crtdbg.h>
 #endif // _MSC_VER
 
-#ifndef NDEBUG
 #ifdef Q_OS_WIN
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0) || QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
 QSharedPointer<QQmlApplicationEngine> appQmlEngine;
-#endif
 #endif
 #endif
 
@@ -51,15 +49,6 @@ int main(int argc, char *argv[])
             }
             return appError;
         }
-#ifndef NDEBUG
-#ifdef Q_OS_WIN
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-    // We must have a QCoreApplication before we do this
-    // And we do this now so that the QML debugger can connect
-        appQmlEngine = QSharedPointer<QQmlApplicationEngine>(new QQmlApplicationEngine());
-#endif
-#endif
-#endif
         appStartup(rpcConstants::loggerApp);
 
 #ifdef Q_OS_ANDROID
@@ -91,7 +80,7 @@ int main(int argc, char *argv[])
         }
 #ifndef NDEBUG
 #ifdef Q_OS_WIN
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0) || QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
     appQmlEngine.clear();
 #endif
 #endif

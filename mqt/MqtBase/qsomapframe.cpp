@@ -8,6 +8,9 @@
 #include <QQuickView>
 #include <QQuickItem>
 #include <QQmlContext>
+
+extern QSharedPointer<QQmlApplicationEngine> appQmlEngine;
+
 #endif
 #endif
 
@@ -53,17 +56,26 @@ void QSOMapFrame::startMap()
 
     if (!qvb)
     {
-        QQmlApplicationEngine* engine = new QQmlApplicationEngine(this);
+        qvb = new QVBoxLayout(this);
+
+        if (!appQmlEngine)
+        {
+
+    // We must have a QCoreApplication before we do this
+    // And we do this now so that the QML debugger can connect
+        appQmlEngine = QSharedPointer<QQmlApplicationEngine>(new QQmlApplicationEngine());
+
+        }
+        //QQmlApplicationEngine* engine = new QQmlApplicationEngine(qvb);
 
         QmlCppLink* linkObject = new QmlCppLink(ct);
         QVariant vl;
         vl.setValue(linkObject);
 
-        engine->rootContext()->setContextProperty("QmlCppLink", vl);
+        appQmlEngine->rootContext()->setContextProperty("QmlCppLink", vl);
 
-        qvb = new QVBoxLayout(this);
 
-        QQuickView *view = new QQuickView(engine, nullptr);
+        QQuickView *view = new QQuickView(appQmlEngine.data(), nullptr);
         view->setSource(QUrl("qrc:/qsoview.qml"));
 
         QWidget *container = QWidget::createWindowContainer(view);
