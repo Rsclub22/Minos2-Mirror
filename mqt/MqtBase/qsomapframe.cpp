@@ -46,6 +46,22 @@ QSOMapFrame::~QSOMapFrame()
 {
     delete ui;
 }
+void QSOMapFrame::setContest(BaseContestLog *c, bool grid, bool lines)
+{
+    // NB maps that aren't displayed never get ct set
+
+    ct = c;
+    if (c)
+    {
+        startMap();
+
+        doRedraw(c, grid, lines);
+    }
+    else
+    {
+        stopMap();
+    }
+}
 void QSOMapFrame::startMap()
 {
 #ifdef Q_OS_WIN
@@ -115,8 +131,12 @@ void QSOMapFrame::onQmlClicked(QVariant /*v*/)
 #endif
 #endif
 }
-void QSOMapFrame::doRedraw(BaseContestLog *c, bool grid, bool lines)
+void QSOMapFrame::doRedraw(BaseContestLog *ctest, bool grid, bool lines)
 {
+    if (ct == nullptr || ctest != ct)
+    {
+        return;
+    }
     emit drawGrid(grid);
     emit drawLines(lines);
 
@@ -130,7 +150,7 @@ void QSOMapFrame::doRedraw(BaseContestLog *c, bool grid, bool lines)
 
     locs.clear();
 
-    for ( auto const &c: qAsConst(c->ctList ))
+    for ( auto const &c: qAsConst(ct->ctList ))
     {
         QSharedPointer<BaseContact> cct = c.wt;
 
@@ -147,23 +167,9 @@ void QSOMapFrame::doRedraw(BaseContestLog *c, bool grid, bool lines)
     }
 }
 
-void QSOMapFrame::setContest(BaseContestLog *c, bool grid, bool lines)
-{
-    ct = c;
-    if (c)
-    {
-        startMap();
-
-        doRedraw(c, grid, lines);
-    }
-    else
-    {
-        stopMap();
-    }
-}
 void QSOMapFrame::on_AfterLogContact(const BaseContestLog *c, const QSharedPointer<BaseContact> lct)
 {
-    if (ct == c && !ct->isReadOnly())
+    if (ct != nullptr && ct == c && !ct->isReadOnly())
     {
         if ( lct->notValidContact() )
             return;
@@ -224,10 +230,13 @@ void QSOMapFrame::on_AfterLogContact(const BaseContestLog *c, const QSharedPoint
 
 void QSOMapFrame::on_redrawQSOMap(bool grid, bool lines)
 {
-    // clear map, redraw home and all QSOs
+    if (ct != nullptr)
+    {
+        // clear map, redraw home and all QSOs
 
-    emit clearAll();
+        emit clearAll();
 
-    doRedraw(ct, grid, lines);
+        doRedraw(ct, grid, lines);
+    }
 }
 

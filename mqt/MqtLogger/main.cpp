@@ -78,11 +78,9 @@ int main(int argc, char *argv[])
         {
             appError = a.exec();
         }
-#ifndef NDEBUG
 #ifdef Q_OS_WIN
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0) || QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
     appQmlEngine.clear();
-#endif
 #endif
 #endif
         delete w;
