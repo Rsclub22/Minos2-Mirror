@@ -15,7 +15,7 @@ set QtTools=C:\Qt\Tools\mingw810_32\bin
 set QtKit=C:\Qt\5.15.2\mingw81_32\bin
 set QtOpenSSL="C:\Qt\Tools\OpenSSL\Win_x86\bin"
 set QtLicenses="C:\Qt\Licenses"
-set HamlibPath="C:\Projects\hamlib-w32-4.5.1"
+set HamlibPath="C:\Projects\hamlib-w32-4.5.2"
 
 if exist %QtKit% goto kitInstalled
 
@@ -61,6 +61,7 @@ cd installFiles
 
 mkdir Configuration
 mkdir Configuration\Cluster
+mkdir Configuration\FunctionKeyMessages
 mkdir Lists
 mkdir Logs
 mkdir Bin
@@ -70,6 +71,7 @@ mkdir Help
 copy %MROOT%\%builddir%\MqtAppStarter\release\MqtAppStarter.exe Bin
 copy %MROOT%\%builddir%\MqtChat\release\MqtChat.exe Bin
 copy %MROOT%\%builddir%\MqtCluster\release\MqtCluster.exe Bin
+copy %MROOT%\%builddir%\MqtCluster\release\MqtDataModes.exe Bin
 REM copy %MROOT%\%builddir%\MqtControl\release\MqtControl.exe Bin
 REM copy %MROOT%\%builddir%\MqtKeyer\release\MqtKeyer.exe Bin
 copy %MROOT%\%builddir%\MqtKSTClient\release\MqtKSTClient.exe Bin
@@ -115,11 +117,12 @@ cd ../Bin
 windeployqt.exe MqtAppStarter.exe
 windeployqt.exe MqtChat.exe
 windeployqt.exe MqtCluster.exe
+windeployqt.exe MqtDataModes.exe
 REM windeployqt.exe MqtControl.exe
 REM windeployqt.exe MqtKeyer.exe
 windeployqt.exe MqtKSTClient.exe
-windeployqt.exe MqtLogger.exe
-windeployqt.exe MqtMonitor.exe
+windeployqt.exe --qmldir %MROOT%/mqt/MqtBase/QSOView MqtLogger.exe
+windeployqt.exe --qmldir %MROOT%/mqt/MqtBase/QSOView MqtMonitor.exe
 windeployqt.exe MqtQrzServer.exe
 windeployqt.exe MqtRigControl.exe
 windeployqt.exe MqtRigRecorder.exe
@@ -131,7 +134,7 @@ REM bin\translations now exists... we can build our translations
 
 @ECHO OFF
 for %%i in (en_GB fr_FR) do (
-  for %%j in (MqtAppStarter MqtChat MqtCluster MqtKSTClient MqtLogger MqtMonitor MqtQrzServer MqtRigControl MqtRigRecorder MqtRigSync MqtRotator MqtServer) do (
+  for %%j in (MqtAppStarter MqtChat MqtCluster MqtDataModes MqtKSTClient MqtLogger MqtMonitor MqtQrzServer MqtRigControl MqtRigRecorder MqtRigSync MqtRotator MqtServer) do (
   lconvert -verbose -o translations\%%j_%%i.qm ^
   %MROOT%\%builddir%\MqtUtils\release\minos_%%i.qm ^
   %MROOT%\%builddir%\TinyXML\release\minos_%%i.qm ^
