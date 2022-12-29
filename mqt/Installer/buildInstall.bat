@@ -71,7 +71,7 @@ mkdir Help
 copy %MROOT%\%builddir%\MqtAppStarter\release\MqtAppStarter.exe Bin
 copy %MROOT%\%builddir%\MqtChat\release\MqtChat.exe Bin
 copy %MROOT%\%builddir%\MqtCluster\release\MqtCluster.exe Bin
-copy %MROOT%\%builddir%\MqtCluster\release\MqtDataModes.exe Bin
+copy %MROOT%\%builddir%\MqtDataModes\release\MqtDataModes.exe Bin
 REM copy %MROOT%\%builddir%\MqtControl\release\MqtControl.exe Bin
 REM copy %MROOT%\%builddir%\MqtKeyer\release\MqtKeyer.exe Bin
 copy %MROOT%\%builddir%\MqtKSTClient\release\MqtKSTClient.exe Bin
