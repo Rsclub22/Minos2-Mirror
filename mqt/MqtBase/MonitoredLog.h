@@ -42,6 +42,8 @@ class MonitoredLog : public QObject
 
       MonitoredStation *station = nullptr;
 
+      QSet<Callsign> callsigns;
+
    public:
       MonitoredLog(MonitoredStation *);
       ~MonitoredLog();
@@ -95,6 +97,8 @@ class MonitoredLog : public QObject
 
       bool getManualClose() const;
       void setManualClose(bool newManualClose);
+      QSet<Callsign> getCallsigns() const;
+
 private slots:
       void on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString from);
 

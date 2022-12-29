@@ -1,6 +1,7 @@
 #ifndef CALLSIGN_H
 #define CALLSIGN_H
 
+#include "MapWrapper.h"
 #include "minositem.h"
 
 #define CS_OK 0
@@ -23,7 +24,7 @@ class Callsign
       QString body;  // <ctt> (gjv) [CTT]main body
       QString suffix; // <mm> (p) [P]trailer
 
-      QString realCall; // the actual calsign, stripped of decorations
+      QString realCall; // the actual callsign, stripped of decorations
       QString wpxPrefix;
 
       Callsign( );
@@ -39,6 +40,10 @@ class Callsign
           return !(rhs == *this);
       }
       bool operator<( const Callsign& rhs ) const;
+      qHashRet qHash() const
+      {
+          return ::qHash(realCall);
+      }
 
       bool isUK() const;
 
@@ -85,5 +90,6 @@ private:
       bool isValidStructure();
       static bool isValidStructure( const QString &prefix,  const QString &number,  const QString &body );
 };
+extern qHashRet qHash(const Callsign &cs);
 
 #endif // CALLSIGN_H

@@ -2,6 +2,7 @@
 #include "MinosRPC.h"
 #include "RPCCommandConstants.h"
 #include "MinosTestImport.h"
+#include "contacts.h"
 #include "monitoredstation.h"
 #include "MonitoredContestLog.h"
 #include "MonitoredLog.h"
@@ -68,6 +69,11 @@ void MonitoredLog::getLogStanza( int stanza )
     rpc.queueCall( rpcConstants::loggerApp + "@" + router );
 }
 
+QSet<Callsign> MonitoredLog::getCallsigns() const
+{
+    return callsigns;
+}
+
 bool MonitoredLog::getManualClose() const
 {
     return manualClose;
@@ -131,7 +137,7 @@ void MonitoredLog::checkMonitor()
 {
     // here we need to check that we haven't got any gaps in the received log
     // and re-request the lot as necessary
-   if ( !contest || !frame || state != psPublished )
+   if ( !contest || /*!frame ||*/ state != psPublished )
    {
       return ;
    }
@@ -217,11 +223,26 @@ void MonitoredLog::on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, cons
                                 {
                                     // new last contact; import will have checked it
                                     emit newLastContact(this);
+
+                                    // and add callsign to callsign set
+
+                                    Callsign ncall = contest->pcontactAt(contest->lastInserted)->cs;
+                                    callsigns.insert(ncall);
+
+                                    bool wkd = callsigns.contains(ncall);
+                                    trace(QString("Call %1 added to %2 success? &3").arg(ncall.getFullCall()).arg(logName).arg(wkd));
                                 }
                                 else
                                 {
                                     // change to a contact; we need a full rescan to understand it
                                     emit contactChanged(this);
+
+                                    // rescan log and recreate callsign set
+                                    callsigns.clear();
+                                    for(const auto &cct: qAsConst(contest->ctList))
+                                    {
+                                        callsigns.insert(cct.wt->cs);
+                                    }
                                 }
                             }
                             return ;

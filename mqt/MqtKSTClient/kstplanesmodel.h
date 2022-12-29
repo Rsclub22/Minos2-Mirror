@@ -3,6 +3,7 @@
 
 #include <QAbstractItemModel>
 #include "airscoutlink.h"
+#include "remotelogs.h"
 
 enum PlaneColumns {eplcCall, eplcCategory, eplcDistance, eplcPotential, eplcMinutes, eplcMax};
 

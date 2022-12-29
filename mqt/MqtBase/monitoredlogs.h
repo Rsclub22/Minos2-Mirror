@@ -29,8 +29,6 @@ public:
     explicit MonitoredLogs(QWidget *parent);
     ~MonitoredLogs();
 
-    RemoteLogs *getRemoteLogs() const;
-
 private slots:
     void onMonitorTree_doubleClicked(const QModelIndex &index);
     void onSyncNeeded();

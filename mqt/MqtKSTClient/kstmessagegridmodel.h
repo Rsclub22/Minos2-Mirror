@@ -4,7 +4,9 @@
 #include <QAbstractItemModel>
 #include <QSortFilterProxyModel>
 #include <QDateTime>
+#include "callsign.h"
 #include "htmldelegate.h"
+#include "remotelogs.h"
 
 
 enum ChatColumns {eccChat = 0, eccDTG, eccCall, eccName, eccOther, eccText, eccMaxColumn};
@@ -17,10 +19,10 @@ public:
     int chat = -1;
     QDateTime dtg;
     QString fullLine;
-    QString call;
+    Callsign call;
     int distance = -1;
     QString name;
-    QString otherCall;
+    Callsign otherCall;
     int otherDistance = -1;
     QString message;
 
@@ -83,6 +85,8 @@ class KstMessageGridSortFilterModel: public QSortFilterProxyModel
 {
     QStringList filterStrings;
     int chatFilter = 0;
+
+
     bool isFiltered() const
     {
         return !filterStrings.isEmpty() || chatFilter != 0;

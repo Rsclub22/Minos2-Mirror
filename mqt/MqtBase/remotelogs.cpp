@@ -29,6 +29,30 @@ void RemoteLogs::closeAll()
 {
     stationList.clear();
 }
+
+bool RemoteLogs::hasWorked(const Callsign &cs)
+{
+    for ( auto const &s: qAsConst(stationList) )
+    {
+
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+        for (QVector< QSharedPointer<MonitoredLog> >::const_iterator l = s->slotList.begin(); l != s->slotList.end(); l++)
+#else
+        for (QVector< QSharedPointer<MonitoredLog> >::iterator l = s->slotList.begin(); l != s->slotList.end(); l++)
+#endif
+       {
+            if ((*l)->getState() != psRevoked)
+            {
+                bool worked = (*l)->getCallsigns().contains(cs);
+                if (worked)
+                {
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
 void RemoteLogs::on_provider(Provider provider, QString /*cat*/)
 {
     stationList[provider] = new MonitoredStation;

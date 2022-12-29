@@ -6,6 +6,7 @@
 
 #include "AnalysePubSubNotify.h"
 #include "MinosRPC.h"
+#include "callsign.h"
 #include "monitoredstation.h"
 
 class RemoteLogs : public QObject
@@ -15,8 +16,16 @@ public:
     QMap<Provider, MonitoredStation *> stationList;
 
     RemoteLogs();
+
+    static RemoteLogs *getRemoteLogs()
+    {
+        static RemoteLogs rl;
+        return &rl;
+    }
     void closeLog(MonitoredLog *);
     void closeAll();
+
+    bool hasWorked(const Callsign &);
 private:
     QString localRouterName;
 

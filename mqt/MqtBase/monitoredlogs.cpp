@@ -24,7 +24,7 @@ MonitoredLogs::MonitoredLogs(QWidget *parent) :
     monitorTimer->start(100);
 
     /*MinosRPC *rpc =*/ MinosRPC::getMinosRPC(getAppStartupName(), true);
-    remoteLogs = new RemoteLogs;
+    remoteLogs = RemoteLogs::getRemoteLogs();
 
     connect(remoteLogs, &RemoteLogs::syncNeeded, this, &MonitoredLogs::onSyncNeeded);
 
@@ -68,11 +68,6 @@ void MonitoredLogs::on_monitorTimeout()
           syncStations();
        }
     }
-}
-
-RemoteLogs *MonitoredLogs::getRemoteLogs() const
-{
-    return remoteLogs;
 }
 
 void MonitoredLogs::syncStations()

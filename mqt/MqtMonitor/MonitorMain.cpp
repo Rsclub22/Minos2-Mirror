@@ -46,7 +46,7 @@ MonitorMain::MonitorMain(QWidget *parent) :
 
     /*MinosRPC *rpc =*/ MinosRPC::getMinosRPC(getAppStartupName(), true);
 
-    connect(ui->monitorTree->getRemoteLogs(), &RemoteLogs::newMonitoredLog, this, &MonitorMain::onNewLog);
+    connect(RemoteLogs::getRemoteLogs(), &RemoteLogs::newMonitoredLog, this, &MonitorMain::onNewLog);
     connect(ui->monitorTree, &MonitoredLogs::logStarted, this, &MonitorMain::onLogStarted);
     connect(ui->monitorTree, &MonitoredLogs::logClosed, this, &MonitorMain::onLogClosed);
 
@@ -181,7 +181,7 @@ void MonitorMain::on_searchSplitter_splitterMoved(int /*pos*/, int /*index*/)
 
 void MonitorMain::closeTab(MonitoringFrame *cttab)
 {
-    for ( auto const &s: qAsConst(ui->monitorTree->getRemoteLogs()->stationList) )
+    for ( auto const &s: qAsConst(RemoteLogs::getRemoteLogs()->stationList) )
     {
         for ( auto const &l: qAsConst(s->slotList) )
         {
@@ -190,7 +190,7 @@ void MonitorMain::closeTab(MonitoringFrame *cttab)
                 // take it out of the slot list and close it
                 // and we need to redo the list
 
-                ui->monitorTree->getRemoteLogs()->closeLog(l.data());
+                RemoteLogs::getRemoteLogs()->closeLog(l.data());
 
                 ui->contestPageControl->removeTab(ui->contestPageControl->indexOf(cttab));
                 delete cttab;
@@ -368,7 +368,7 @@ void MonitorMain::on_monitorTimeout()
 }
 void MonitorMain::testAutoStart()
 {
-    for ( auto const &s: qAsConst(ui->monitorTree->getRemoteLogs()->stationList) )
+    for ( auto const &s: qAsConst(RemoteLogs::getRemoteLogs()->stationList) )
     {
        for ( auto &ml: s->slotList )
        {

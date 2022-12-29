@@ -451,3 +451,8 @@ bool Callsign::operator<( const Callsign& rhs ) const
     return ret < 0;
 }
 
+
+uint qHash(const Callsign &cs)
+{
+    return cs.qHash();
+}
