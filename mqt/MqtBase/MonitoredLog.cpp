@@ -230,7 +230,6 @@ void MonitoredLog::on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, cons
                                     callsigns.insert(ncall);
 
                                     bool wkd = callsigns.contains(ncall);
-                                    trace(QString("Call %1 added to %2 success? &3").arg(ncall.getFullCall()).arg(logName).arg(wkd));
                                 }
                                 else
                                 {

@@ -16,6 +16,7 @@ set QtKit=C:\Qt\5.15.2\mingw81_32\bin
 set QtOpenSSL="C:\Qt\Tools\OpenSSL\Win_x86\bin"
 set QtLicenses="C:\Qt\Licenses"
 set HamlibPath="C:\Projects\hamlib-w32-4.5.2"
+set MMVARIPath="C:\Ham\MMVARI"
 
 if exist %QtKit% goto kitInstalled
 
@@ -83,6 +84,8 @@ copy %MROOT%\%builddir%\MqtRigRecorder\release\MqtRigRecorder.exe Bin
 copy %MROOT%\%builddir%\MqtRigSync\release\MqtRigSync.exe Bin
 copy %MROOT%\%builddir%\MqtRotator\release\MqtRotator.exe Bin
 copy %MROOT%\%builddir%\MqtServer\release\MqtServer.exe Bin
+
+copy %MMVARIPath%\MMVARI.ocx Bin
 
 copy %HamlibPath%\bin\*.dll Bin
 copy %HamlibPath%\bin\*.exe Bin
