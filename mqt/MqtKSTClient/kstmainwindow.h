@@ -254,6 +254,7 @@ private:
     void setMeepFilters();
     void scrollMeepToBotton();
     void scrollMesToBottom();
+    void testAutoStart();
 };
 
 extern KSTMainWindow *mainWindow;

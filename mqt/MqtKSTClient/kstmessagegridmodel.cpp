@@ -115,7 +115,7 @@ QVariant KstMessageGridModel::data( const QModelIndex &index, int role ) const
             QString call = crec->call.getFullCall();
             if (worked)
             {
-                QString col = HtmlFontColour(Qt::lightGray);
+                QString col = HtmlFontColour(Qt::gray);
                 call = col + call;
             }
 
@@ -131,7 +131,7 @@ QVariant KstMessageGridModel::data( const QModelIndex &index, int role ) const
             QString call = crec->otherCall.getFullCall();
             if (worked)
             {
-                QString col = HtmlFontColour(Qt::lightGray);
+                QString col = HtmlFontColour(Qt::gray);
                 call = col + call;
             }
 
