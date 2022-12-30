@@ -379,8 +379,25 @@ void KSTMainWindow::CloseTimerTimer(  )
          close();
       }
    }
+   testAutoStart();
 }
-void KSTMainWindow::onNewLog(MonitoredLog *ml)
+void KSTMainWindow::testAutoStart()
+{
+    for ( auto const &s: qAsConst(RemoteLogs::getRemoteLogs()->stationList) )
+    {
+       for ( auto &ml: s->slotList )
+       {
+            if (!ml->enabled())
+            {
+                if (ml->testAutoStart())
+                {
+                    ml->startMonitor();
+                }
+            }
+       }
+    }
+
+}void KSTMainWindow::onNewLog(MonitoredLog *ml)
 {
     connect(ml, &MonitoredLog::newStanzas, this, &KSTMainWindow::onNewStanzas, Qt::QueuedConnection);
 }
