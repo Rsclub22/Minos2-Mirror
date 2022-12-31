@@ -24,7 +24,6 @@
 #include <QTimer>
 
 #include "StdInReader.h"
-#include "clustercommon.h"
 #include "qrzServerCommon.h"
 
 QT_BEGIN_NAMESPACE
@@ -139,9 +138,6 @@ private slots:
     void LogTimerTimer();
     void onConfigure();
     void onStdInRead(QString cmd);
-
-    void clusterClientServerList(QVector<ClusterServer> serverList);
-
 
     void onClusterQrzMessage(QrzServerMessage qrzRequest);
     void handleQrzRequests();

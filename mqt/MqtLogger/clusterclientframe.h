@@ -34,6 +34,7 @@ enum ClusterTabIndex {DXSPOT_TAB, SEARCH_TAB, CALLSIGN_TAB, LOCATOR_TAB};
 class ClusterClientFrame;
 class BaseContestLog;
 class QTableView;
+class BaseContact;
 
 class DxSpotSortFilterProxyModel : public QSortFilterProxyModel
 {
@@ -284,9 +285,8 @@ private:
     bool readLessGreaterThanDistanceFlag();
 private slots:
 
-    void on_AfterLogContact(BaseContestLog *c, Callsign cs, QString loc);
+    void on_AfterLogContact(BaseContestLog *c, QSharedPointer<BaseContact> lct);
 
-    void clusterClientServerList(QVector<ClusterServer>);
     void dxSpots(QVector<ClusterMessage>);
     void filterButtonSelected();
     void purgeSpots();
@@ -297,7 +297,6 @@ private slots:
     void memoryActionSelected();
     void clearSpotActionSelected();
     void clearAllSpotsActionSelected();
-    void delayed_afterLogContact(BaseContestLog *c, Callsign cs, QString loc);
     void onDxSpotViewClicked(const QModelIndex &);
     void onSearchSpotViewClicked(const QModelIndex &);
     void onCallsignSpotViewClicked(const QModelIndex &index);

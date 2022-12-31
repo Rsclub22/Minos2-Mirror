@@ -212,7 +212,6 @@ protected:
 
 private slots:
 
-     void clusterClientServerList(QVector<ClusterServer>);
      void dxSpots(QVector<ClusterMessage>);
 
 

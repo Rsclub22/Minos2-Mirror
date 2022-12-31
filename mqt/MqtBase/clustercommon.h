@@ -8,7 +8,6 @@
 #include <QSharedPointer>
 
 #include "BandList.h"
-#include "PublishState.h"
 
 class QCheckBox;
 class QLineEdit;
@@ -200,17 +199,6 @@ QString getMode(checkModeAgainstFreq* modeBandPlan, Frequency freq, const QStrin
 bool getBand(QVector<QSharedPointer<BandInfo> > &bands, Frequency fr, QString &band, QString &bandType);
 
 bool extractDxLocFromNodeFlag(QString locFlagMsg);
-
-class ClusterServer
-{
-public:
-    QString routerName;
-    QString app;
-    QString publisherProgram;
-    PublishState state;
-};
-
-
 
 class ClusterMessage
 {

@@ -1,3 +1,4 @@
+#include "spotbasedata.h"
 #include <QVBoxLayout>
 #include <QTimer>
 #include <math.h>
@@ -16,10 +17,15 @@ extern QSharedPointer<QQmlApplicationEngine> appQmlEngine;
 
 #include <QMouseEvent>
 
+#include "MTrace.h"
+#include "calcs.h"
 #include "contacts.h"
 #include "latlong.h"
 #include "contest.h"
 #include "MinosLoggerEvents.h"
+#include "MinosParameters.h"
+#include "clusterClientServer.h"
+#include "spotbasedata.h"
 #include "qmlcpplink.h"
 #include "qsomapframe.h"
 #include "ui_qsomapframe.h"
@@ -39,6 +45,8 @@ QSOMapFrame::QSOMapFrame(QWidget *parent) :
 
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::AfterLogContactToBandmap, this, &QSOMapFrame::on_AfterLogContact, Qt::UniqueConnection);
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::redrawQSOMap, this, &QSOMapFrame::on_redrawQSOMap, Qt::QueuedConnection);
+
+    connect (ClusterClientServer::getClusterClientServer(), &ClusterClientServer::dxSpot, this, &QSOMapFrame::dxSpots);
 
 }
 
@@ -102,6 +110,7 @@ void QSOMapFrame::startMap()
         // connect the C++ callSig signal to the QML slot
 
         connect(this, SIGNAL(callSig(QVariant)), qmlObj, SLOT(newCall(QVariant)), Qt::UniqueConnection);
+        connect(this, SIGNAL(spotSig(QVariant)), qmlObj, SLOT(newSpot(QVariant)), Qt::UniqueConnection);
         connect(this, SIGNAL(homeSig(QVariant)), qmlObj, SLOT(newHome(QVariant)), Qt::UniqueConnection);
 
         connect(this, SIGNAL(drawLines(QVariant)), qmlObj, SLOT(setDrawLines(QVariant)), Qt::UniqueConnection);
@@ -184,6 +193,7 @@ void QSOMapFrame::on_AfterLogContact(const BaseContestLog *c, const QSharedPoint
         {
             return;
         }
+
         double lat = raddeg(lct->lat);
         double lon = raddeg(lct->lon);
 
@@ -237,6 +247,99 @@ void QSOMapFrame::on_redrawQSOMap(bool grid, bool lines)
         emit clearAll();
 
         doRedraw(ct, grid, lines);
+    }
+}
+
+//---------------------- Cluster Spots -------------------------------------
+
+void QSOMapFrame::drawSpot(QSharedPointer<BandmapSpotData> bsd)
+{
+    if (ct != nullptr)
+    {
+        if (bsd->getDxCall().getValRes() != CS_OK)    // duplicate?
+        {
+            return;
+        }
+
+        QString loc = bsd->getDxLocator();
+        if (loc.isEmpty())
+        {
+            return;
+        }
+        double slat;
+        double slon;
+        /*char v =*/ lonlat( loc, slon, slat, MinosParameters::getMinosParameters() ->getAllowLoc4());
+
+        double lat = raddeg(slat);
+        double lon = raddeg(slon);
+
+        bool fourLoc = (loc.length() == 4);
+
+        int n = 0;
+        if (locs.contains(loc))
+        {
+            n = locs[loc];
+            locs[loc] = ++n;
+
+        }
+        else
+        {
+            n = 1;
+            locs[loc] = n;
+        }
+        if (fourLoc)
+        {
+            if (lat < 0)
+            {
+                lat = lat - 1;
+            }
+            lat = std::round(lat) + 0.75;
+            if (lon < 0)
+            {
+                lon = lon -1;
+            }
+            lon = std::round(lon);
+            int ilon = lon;
+            lon = lon - ilon%2 + 0.25  + 0.1 * n;
+
+        }
+
+        QStringList callInfo; // [callsign, latitude, longitude]
+
+        callInfo << bsd->getDxCall().getFullCall();
+        callInfo << QString::number(lat);
+        callInfo << QString::number(lon);
+        callInfo << loc;
+        emit spotSig(callInfo);
+    }
+}
+void QSOMapFrame::dxSpots(QVector<ClusterMessage> spotMsg)
+{
+    // if contest is protected, or no map showing, ignore
+    if (ct && !ct->isReadOnly())
+    {
+        //get spot Message from queue
+        for (int i = 0; i < spotMsg.count(); i++)
+        {
+            ClusterMessage msg = spotMsg[i];
+            trace(QString("retrieve cluster spot from queue - spot = %1 for loggeruuid = %2, this contest uuid = %3").arg(msg.getMessage(), msg.getLoggerUuid(), ct->uuid));
+
+            // if loggerUuid is empty, message is for all frames
+            if ((msg.getLoggerUuid().isEmpty() || msg.getLoggerUuid() == ct->uuid) && (msg.getFrameId() == resendFrameId::BANDMAP_CLIENT || msg.getFrameId() == resendFrameId::ALL_CLIENTS))
+            {
+                if (msg.getMessage().contains(DXSPOT) || msg.getMessage().contains(RESENTSPOT))
+                {
+                    qlonglong timeToLive = 0;
+                    trace(QString("Spot for this loggeruuid = %1, add to queue").arg(ct->uuid));
+                    QSharedPointer<BandmapSpotData> sp = stringToDxSpot(msg.getMessage(), ct, timeToLive);
+                    if (sp)
+                    {
+                        spotQueue += sp;
+                        drawSpot(sp);
+                    }
+                }
+            }
+        }
     }
 }
 

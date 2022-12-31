@@ -36,7 +36,6 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
     radioStatusIndicatorToggle(false);
     ui->radioStatusMsg->clear();
 
-    connect (ClusterClientServer::getClusterClientServer(), &ClusterClientServer::ClusterServerList, this, &BandmapClientFrame::clusterClientServerList);
     connect (ClusterClientServer::getClusterClientServer(), &ClusterClientServer::dxSpot, this, &BandmapClientFrame::dxSpots);
 
     bandmapDataModel = new BandmapDataModel();
@@ -792,15 +791,6 @@ bool BandmapClientFrame::isFreqLegal(const Frequency &freq, const QString band, 
 }
 
 //---------------------- Cluster Spots -------------------------------------
-
-void BandmapClientFrame::clusterClientServerList(QVector<ClusterServer> serverList)
-{
-    for ( QVector<ClusterServer>::iterator i = serverList.begin(); i != serverList.end(); i++ )
-    {
-        QString state = QString(clusterStateList[(*i).state]) + " " + (*i).app + "\r\n";
-        traceMsg(QString("bandmapClientServerList - state = %1").arg(state));
-    }
-}
 
 void BandmapClientFrame::dxSpots(QVector<ClusterMessage> spotMsg)
 {

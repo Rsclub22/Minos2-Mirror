@@ -1,12 +1,14 @@
 #ifndef QSOMAPFRAME_H
 #define QSOMAPFRAME_H
 
+#include "clustercommon.h"
 #include "contacts.h"
 #include <QFrame>
 #include <QVariant>
 
 class BaseContestLog;
 class QTimer;
+class BandmapSpotData;
 
 namespace Ui {
 class QSOMapFrame;
@@ -29,12 +31,19 @@ private:
 
     QMap <QString, int> locs;
 
+    // cluster spots
+    QVector<QSharedPointer<BandmapSpotData> > spotQueue;
+    bool clusterServerConnected = false;
+
+
     void startMap();
     void stopMap();
     void doRedraw(BaseContestLog *c, bool grid, bool lines);
+    void drawSpot(QSharedPointer<BandmapSpotData>);
 
 signals:
     void callSig(QVariant stringList);
+    void spotSig(QVariant stringList);
     void homeSig(QVariant stringList);
 
     void drawLines(QVariant dl);
@@ -43,6 +52,7 @@ signals:
 
 private slots:
     void onQmlClicked(QVariant v);
+    void dxSpots(QVector<ClusterMessage> spotMsg);
 public slots:
     void on_AfterLogContact(const BaseContestLog *c, const QSharedPointer<BaseContact> lct);
     void on_redrawQSOMap(bool grid, bool lines);

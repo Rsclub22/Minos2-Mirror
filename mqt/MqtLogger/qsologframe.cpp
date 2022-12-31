@@ -2805,7 +2805,7 @@ void QSOLogFrame::logScreenEntry( )
 
    MinosLoggerEvents::SendAfterLogContact(ct);  // in logScreenEntry, current or edit
 
-   MinosLoggerEvents::SendAfterLogContactToCluster(ct, lct->cs, lct->loc.getLoc());
+   MinosLoggerEvents::SendAfterLogContactToCluster(ct, lct);
 
    MinosLoggerEvents::SendAfterLogContactToBandmap(ct, lct );
 

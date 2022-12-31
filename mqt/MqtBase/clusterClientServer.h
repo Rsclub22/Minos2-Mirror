@@ -40,7 +40,6 @@ private slots:
     void on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString &from);
 
 signals:
-    void ClusterServerList(QVector<ClusterServer>);
     void dxSpot(QVector<ClusterMessage>);
 
 };

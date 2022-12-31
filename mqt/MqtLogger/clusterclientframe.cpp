@@ -20,7 +20,6 @@
 #include "htmldelegate.h"
 #include "tlogcontainer.h"
 #include "SendRPCDM.h"
-#include "delayedaction.h"
 #include "calcs.h"
 #include "MTrace.h"
 #include "clusterClientServer.h"
@@ -83,7 +82,6 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     checkNewFilters = new QTimer(this);
     connect (checkNewFilters, &QTimer::timeout, this, [=](){checkSavedFilters();});
 
-    connect (ClusterClientServer::getClusterClientServer(), &ClusterClientServer::ClusterServerList, this, &ClusterClientFrame::clusterClientServerList);
     connect (ClusterClientServer::getClusterClientServer(), &ClusterClientServer::dxSpot, this, &ClusterClientFrame::dxSpots);
 
     connect (purgeTimer, &QTimer::timeout, this, [=](){purgeSpots();});
@@ -235,27 +233,6 @@ void ClusterClientFrame::on_resendClusterSpots()
         MinosLoggerEvents::SendRequestResendSpotsToClusterServer(resendFrameId::CLUSTER_CLIENT, RESEND_ALL_SPOTS, contestBandStr, ct->uuid);
     }
 }
-
-
-
-
-
-
-void ClusterClientFrame::delayed_afterLogContact(BaseContestLog *c, Callsign cs, QString loc)
-{
-    // delay the search of the spots until the contact logging should have finished
-    // and the screen been redrawn, or a lot of spots slows things down too much
-
-    delayedAction(this, [=]()
-    {
-        // NB a lambda function
-        on_AfterLogContact(c, cs, loc);
-    }
-    , 50
-    );
-}
-
-
 
 void ClusterClientFrame::setupDXSpotView()
 {
@@ -675,16 +652,6 @@ void ClusterClientFrame::sendBrgToRot(QString brg)
 
 
 //---------------------------------------------------------------------------
-void ClusterClientFrame::clusterClientServerList(QVector<ClusterServer> serverList)
-{
-
-    for ( auto const &s: serverList )
-    {
-        QString state = QString(clusterStateList[s.state]) + " " + s.app + "\r\n";
-        traceMsg(QString("clusterClientServerList - state = %1").arg(state));
-        //ui->StationList->addItem( state );
-    }
-}
 
 void ClusterClientFrame::dxSpots(QVector<ClusterMessage> spotMsg)
 {
@@ -1456,7 +1423,7 @@ void ClusterClientFrame::onSearchEditingFinished()
 }
 
 
-void ClusterClientFrame::on_AfterLogContact( BaseContestLog *c, Callsign cs, QString loc)
+void ClusterClientFrame::on_AfterLogContact( BaseContestLog *c, QSharedPointer<BaseContact> lct)
 {
       bool worked = false;
       if (c && ct == c)
@@ -1469,7 +1436,7 @@ void ClusterClientFrame::on_AfterLogContact( BaseContestLog *c, Callsign cs, QSt
               {
               QString callsign = dxSpotDataModel->data(dxSpotDataModel->index(spotNumber, DXSPOT_CALL_COL_NUM,  QModelIndex()), DataStoredRole).toString();
 
-              if (cs.realCall == callsign)
+              if (lct->cs.realCall == callsign)
               {
                   dxSpotDataModel->setData(dxSpotDataModel->index(spotNumber, DXSPOT_CALL_WORKED_COL_NUM,  QModelIndex()), true, DataStoredRole);
                   worked = true;
@@ -1479,7 +1446,7 @@ void ClusterClientFrame::on_AfterLogContact( BaseContestLog *c, Callsign cs, QSt
 
               QString locator = dxSpotDataModel->data(dxSpotDataModel->index(spotNumber, DXLOC_COL_NUM,  QModelIndex()), DataStoredRole).toString();
 
-              if (loc.mid(0,4) == locator.mid(0, 4) )
+              if (lct->loc.getLoc().mid(0,4) == locator.mid(0, 4) )
               {
                   dxSpotDataModel->setData(dxSpotDataModel->index(spotNumber, DXLOC_WORKED_COL_NUM,  QModelIndex()), true, DataStoredRole);
                   worked = true;

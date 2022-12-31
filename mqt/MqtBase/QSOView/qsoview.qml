@@ -169,6 +169,20 @@ MapPolyline
         mapOfEurope.addMapItem(cm)
 
     }
+    function addSpot(coord, callsign, loc)
+    // Add the new callsign at coord to the map
+    {
+        var cm = Qt.createQmlObject('SpotMarker {}', mapOfEurope)
+        cm.callsign = callsign
+        cm.coordinate = coord
+        cm.locator = loc;
+
+
+        //Can we determine if this will overlap anything, and then offset it?
+
+        mapOfEurope.addMapItem(cm)
+
+    }
 
     function addHome(coord, callsign, loc)
     // Add the new callsign at coord to the map
@@ -210,6 +224,20 @@ MapPolyline
         }
     }
 
+    function newSpot(callInfo)
+    // slot to receive signal spotSig(QVariant)
+    // callInfo is a QStringList ["callsign", "latitude", "longitude"]
+    {
+        //console.log(callInfo)
+        var call = callInfo[0]
+        var coord = QtPositioning.coordinate(callInfo[1], callInfo[2])
+        var loc = callInfo[3]
+        addSpot(coord, call, loc)
+        if (showLines)
+        {
+            drawSpotLine(QtPositioning.coordinate(homeLat, homeLon), coord)
+        }
+    }
 
     function drawLine(hcoord, ccoord)
     {
@@ -228,7 +256,23 @@ MapPolyline
 
         mapOfEurope.addMapItem(line)
     }
+    function drawSpotLine(hcoord, ccoord)
+    {
+        var line = Qt.createQmlObject(
+'import QtQuick 2.15
+import QtLocation 5.15
 
+MapPolyline
+{
+    id: mline
+    line.color: "blue"
+    line.width: 1
+}', mapOfEurope)
+        line.addCoordinate(hcoord);
+        line.addCoordinate(ccoord);
+
+        mapOfEurope.addMapItem(line)
+    }
     function setDrawLines(dl)
     {
         showLines = dl
