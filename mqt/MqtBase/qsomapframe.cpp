@@ -252,7 +252,7 @@ void QSOMapFrame::on_redrawQSOMap(bool grid, bool lines)
 
 //---------------------- Cluster Spots -------------------------------------
 
-void QSOMapFrame::drawSpot(QSharedPointer<BandmapSpotData> bsd)
+void QSOMapFrame::drawSpot(QSharedPointer<ClusterSpotData> bsd)
 {
     if (ct != nullptr)
     {
@@ -331,7 +331,7 @@ void QSOMapFrame::dxSpots(QVector<ClusterMessage> spotMsg)
                 {
                     qlonglong timeToLive = 0;
                     trace(QString("Spot for this loggeruuid = %1, add to queue").arg(ct->uuid));
-                    QSharedPointer<BandmapSpotData> sp = stringToDxSpot(msg.getMessage(), ct, timeToLive);
+                    QSharedPointer<ClusterSpotData> sp = stringToDxSpot(msg.getMessage(), ct, timeToLive);
                     if (sp)
                     {
                         spotQueue += sp;

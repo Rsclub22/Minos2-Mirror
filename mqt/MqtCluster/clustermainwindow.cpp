@@ -997,7 +997,7 @@ void ClusterMainWindow::parseDX(const QString txt)
 
 
 
-void ClusterMainWindow::processNewSpot(const QSharedPointer<ClusterSpotData> newSpot)
+void ClusterMainWindow::processNewSpot(QSharedPointer<ClusterSpotData> newSpot)
 {
 
     QString msg = QString("ProcessNewSpot: DX de %1 %2 %3 %4 %5").arg(newSpot->getDxCallStr(), newSpot->getFreq().traceStr(),
@@ -1074,7 +1074,7 @@ void ClusterMainWindow::processNewSpot(const QSharedPointer<ClusterSpotData> new
 
 
         trace(QString("ProcessNewSpot: Add spot for display callsign = %1, rxTime = %2").arg(newSpot->getDxCallStr()).arg(newSpot->getRxTime()));
-        spotsList.append(QSharedPointer<ClusterSpotData>( new ClusterSpotData(newSpot)));
+        spotsList.append(newSpot);
 
     }
     else

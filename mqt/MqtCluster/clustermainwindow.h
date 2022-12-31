@@ -452,7 +452,7 @@ private:
 
 
 
-    void processNewSpot(const QSharedPointer<ClusterSpotData> newSpot);
+    void processNewSpot(QSharedPointer<ClusterSpotData> newSpot);
     int getQrzReply(QString &line);
 
 

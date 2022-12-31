@@ -797,9 +797,6 @@ void ClusterClientFrame::addDxSpotToTable(const QString spot)
             newSpot->setDxPropMode(spotlist[DXPROPMODE]);
             newSpot->setSpotComment(spotlist[SPOTCOMMENT]);
 
-            dxSpotDataModel->rowData = newSpot;
-
-
             // if spot has been resent or is a ShowDx spot requested by a command or restart of server
             if (resentSpot || spotlist[DX_CLUSTER_SPOT_TYPE] == clusterSpotType::SHOW_DXSPOT_TYPE)
             {
@@ -811,6 +808,7 @@ void ClusterClientFrame::addDxSpotToTable(const QString spot)
             }
 
 
+            dxSpotDataModel->rowData = newSpot;
 
             dxSpotDataModel->insertRows(dxSpotDataModel->rowCount(), 1);
             traceMsg(QString("addDxSpotToTable: adding %1 to cluster data table").arg(spotlist[DXCALL]));
@@ -836,7 +834,7 @@ bool ClusterClientFrame::checkspotExists(QSharedPointer<ClusterSpotData> spotDat
 
     for (int i = 0; i < dxSpotDataModel->rowCount(); i++)
     {
-        if (*dxSpotDataModel->getSpotData(i) == *spotData)
+        if (dxSpotDataModel->getSpotData(i)->sameSpotAs(spotData))
         {
             trace(QString("Spot Call = %1, already in display, skip").arg(spotData->getDxCall().realCall));
             return true;

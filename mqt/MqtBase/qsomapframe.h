@@ -8,7 +8,7 @@
 
 class BaseContestLog;
 class QTimer;
-class BandmapSpotData;
+class ClusterSpotData;
 
 namespace Ui {
 class QSOMapFrame;
@@ -32,14 +32,14 @@ private:
     QMap <QString, int> locs;
 
     // cluster spots
-    QVector<QSharedPointer<BandmapSpotData> > spotQueue;
+    QVector<QSharedPointer<ClusterSpotData> > spotQueue;
     bool clusterServerConnected = false;
 
 
     void startMap();
     void stopMap();
     void doRedraw(BaseContestLog *c, bool grid, bool lines);
-    void drawSpot(QSharedPointer<BandmapSpotData>);
+    void drawSpot(QSharedPointer<ClusterSpotData>);
 
 signals:
     void callSig(QVariant stringList);

@@ -217,19 +217,20 @@ void MonitoredLog::on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, cons
                             l ->processLogStanza( stanza, stanzaData );
 
                             BaseContestLog *contest = l->getContest();
-                            if (contest->lastInserted >= 0)
+                            int li = contest->lastInserted;
+                            if (li >= 0)
                             {
-                                if ( contest->lastInserted == contest->ctList.count() - 1)
+                                if ( li== contest->ctList.count() - 1)
                                 {
-                                    // new last contact; import will have checked it
-                                    emit newLastContact(this);
-
                                     // and add callsign to callsign set
 
-                                    Callsign ncall = contest->pcontactAt(contest->lastInserted)->cs;
+                                    Callsign ncall = contest->pcontactAt(li)->cs;
                                     callsigns.insert(ncall);
 
-                                    bool wkd = callsigns.contains(ncall);
+                                    // new last contact; import will have checked it
+                                    // IT CAN MODIFY lastInserted to -1!
+                                    emit newLastContact(this);
+
                                 }
                                 else
                                 {

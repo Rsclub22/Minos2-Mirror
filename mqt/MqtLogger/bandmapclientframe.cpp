@@ -809,7 +809,7 @@ void BandmapClientFrame::dxSpots(QVector<ClusterMessage> spotMsg)
                 if (msg.getMessage().contains(DXSPOT) || msg.getMessage().contains(RESENTSPOT))
                 {
                     traceMsg(QString("Spot for this loggeruuid = %1, add to queue").arg(ct->uuid));
-                    QSharedPointer<BandmapSpotData> sp = stringToDxSpot(msg.getMessage());
+                    QSharedPointer<ClusterSpotData> sp = stringToDxSpot(msg.getMessage());
                     if (sp)
                     {
                         spotQueue += sp;
@@ -827,9 +827,9 @@ void BandmapClientFrame::timerCheckNewBandMapSpots()
         checkNewBandMapSpots();
     }
 }
-QSharedPointer<BandmapSpotData> BandmapClientFrame::stringToDxSpot(QString spot)
+QSharedPointer<ClusterSpotData> BandmapClientFrame::stringToDxSpot(QString spot)
 {
-    QSharedPointer<BandmapSpotData> res;
+    QSharedPointer<ClusterSpotData> res;
     QDateTime spotDateTime = QDateTime::currentDateTimeUtc();
 
     QStringList sl;
@@ -918,7 +918,7 @@ QSharedPointer<BandmapSpotData> BandmapClientFrame::stringToDxSpot(QString spot)
 
             traceMsg(QString("Add Cluster Spot to Bandmap %1, %2, %3, %4").arg(spotlist[DXCALL], spotlist[DXFREQ], spotlist[DXMODESTR], spotlist[DXLOCATOR]));
 
-            res = QSharedPointer<BandmapSpotData>(new BandmapSpotData(bandmapSpotType::CLUSTER));
+            res = QSharedPointer<ClusterSpotData>(new ClusterSpotData(bandmapSpotType::CLUSTER));
 
             res->setRxTime(rxTime);
             res->setSpotDateTime(spotDateTime);
@@ -1002,7 +1002,7 @@ void BandmapClientFrame::checkNewBandMapSpots()
 
 }
 
-void BandmapClientFrame::addDxSpotToBandmapTable(QSharedPointer<BandmapSpotData>  spot)
+void BandmapClientFrame::addDxSpotToBandmapTable(QSharedPointer<ClusterSpotData>  spot)
 {
     if (!checkSpotInTable(spot))
     {
@@ -1019,7 +1019,7 @@ void BandmapClientFrame::addDxSpotToBandmapTable(QSharedPointer<BandmapSpotData>
 }
 //======================================================================================
 // log spots
-void BandmapClientFrame::addLogSpotToBandmapTable(QSharedPointer<BandmapSpotData>  spot)
+void BandmapClientFrame::addLogSpotToBandmapTable(QSharedPointer<ClusterSpotData>  spot)
 {
     // is it a CQ Freq Spot
     if (spot->getSpotType() == bandmapSpotType::CQ)
@@ -1051,7 +1051,7 @@ void BandmapClientFrame::addLogSpotToBandmapTable(QSharedPointer<BandmapSpotData
             QString band = spot->getBand();
             for (int row = 0; row < bandmapDataModel->rowCount(); row++)
             {
-                QSharedPointer<BandmapSpotData> bsd = bandmapDataModel->getBandmapDataRow(row);
+                QSharedPointer<ClusterSpotData> bsd = bandmapDataModel->getBandmapDataRow(row);
 
                 const Callsign &savedCs = bsd->getDxCall();
                 QString savedBand = bsd->getBand();
@@ -1118,7 +1118,7 @@ void BandmapClientFrame::addLogSpotToBandmapTable(QSharedPointer<BandmapSpotData
             //Check for existing spots for this call; move them rather than make new
             for (int row = 0; row < bandmapDataModel->rowCount(); row++)
             {
-                QSharedPointer<BandmapSpotData> bsd = bandmapDataModel->getBandmapDataRow(row);
+                QSharedPointer<ClusterSpotData> bsd = bandmapDataModel->getBandmapDataRow(row);
 
                 const Callsign &savedCall = bsd->getDxCall();
                 QString savedBand = bsd->getBand();
@@ -1248,7 +1248,7 @@ void BandmapClientFrame::addLogSpotToBandmapTable(QSharedPointer<BandmapSpotData
     }
 }
 
-void BandmapClientFrame::addRemoveCQSpot(QSharedPointer<BandmapSpotData>  spot)
+void BandmapClientFrame::addRemoveCQSpot(QSharedPointer<ClusterSpotData>  spot)
 {
     if (!spot->getRunModeOn())
     {
@@ -1304,7 +1304,7 @@ void BandmapClientFrame::addRemoveCQSpot(QSharedPointer<BandmapSpotData>  spot)
     }
 }
 
-bool BandmapClientFrame::checkSpotInTable(QSharedPointer<BandmapSpotData> spot)
+bool BandmapClientFrame::checkSpotInTable(QSharedPointer<ClusterSpotData> spot)
 {
     Callsign dxCallsign = spot->getDxCall();
     Frequency dxFreq = spot->getFreq();
@@ -1314,7 +1314,7 @@ bool BandmapClientFrame::checkSpotInTable(QSharedPointer<BandmapSpotData> spot)
         // check for repeat call
         for (int row = 0; row < bandmapDataModel->rowCount(); row++)
         {
-            QSharedPointer<BandmapSpotData> bsd = bandmapDataModel->getBandmapDataRow(row);
+            QSharedPointer<ClusterSpotData> bsd = bandmapDataModel->getBandmapDataRow(row);
 
             Callsign rowCall = bsd->getDxCall();
             if (dxCallsign == rowCall)
@@ -1841,7 +1841,7 @@ void BandmapClientFrame::on_AfterLogContact(BaseContestLog *c, QSharedPointer<Ba
                  .arg(cs.getFullCall(), freq.traceStr(), loc, brg, logModeStr));
 
 
-        QSharedPointer<BandmapSpotData> spot(new BandmapSpotData(bandmapSpotType::LOGGED));
+        QSharedPointer<ClusterSpotData> spot(new ClusterSpotData(bandmapSpotType::LOGGED));
         spot->setCallsign(cs);
         spot->setDxLocator(loc);
         spot->setDxBrg(brg);
@@ -1896,7 +1896,7 @@ void BandmapClientFrame::setCQFreq()
 
         getBand(bands, freq, logBandStr, logBandType);
 
-        QSharedPointer<BandmapSpotData> spot(new BandmapSpotData(bandmapSpotType::CQ));
+        QSharedPointer<ClusterSpotData> spot(new ClusterSpotData(bandmapSpotType::CQ));
         spot->setDxCall("???");
         spot->setDxLocator("");
         spot->setDxBrg("");
@@ -1929,7 +1929,7 @@ void BandmapClientFrame::setBandmapMarkFreq(Frequency _freq, QString mode)
             logModeStr = getMode(modeBandPlan, _freq, logBandStr);
         }
 
-        QSharedPointer<BandmapSpotData> spot( new BandmapSpotData(bandmapSpotType::MARKED));
+        QSharedPointer<ClusterSpotData> spot( new ClusterSpotData(bandmapSpotType::MARKED));
         spot->setDxCall("???");
         spot->setDxLocator("");
         spot->setDxBrg("");
@@ -1963,7 +1963,7 @@ void BandmapClientFrame::setBandmapSaveFreq(QString cs, Frequency _freq, QString
             logModeStr = getMode(modeBandPlan, _freq, logBandStr);
         }
 
-        QSharedPointer<BandmapSpotData> spot(new BandmapSpotData(bandmapSpotType::SAVED));
+        QSharedPointer<ClusterSpotData> spot(new ClusterSpotData(bandmapSpotType::SAVED));
         spot->setDxCall(cs);
         spot->setDxLocator(loc);
         spot->setDxBrg(brg);

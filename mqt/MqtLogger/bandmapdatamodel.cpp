@@ -65,7 +65,7 @@ QVariant BandmapDataModel::data(const QModelIndex &index, int role) const
             return QVariant();
         }
 
-        QSharedPointer<BandmapSpotData> bandmapSpot = bandmapData.at(row);
+        QSharedPointer<ClusterSpotData> bandmapSpot = bandmapData.at(row);
 
         QString d;
         switch (col)
@@ -161,7 +161,7 @@ QVariant BandmapDataModel::data(const QModelIndex &index, int role) const
     if (role == BMP_DataStoredRole)
     {
 
-        QSharedPointer<BandmapSpotData> bandmapSpot = bandmapData.at(index.row());
+        QSharedPointer<ClusterSpotData> bandmapSpot = bandmapData.at(index.row());
 
         QVariant d;
         switch (col)
@@ -267,7 +267,7 @@ bool BandmapDataModel::setData(const QModelIndex & index, const QVariant & value
     if (index.isValid() && role == BMP_DataStoredRole)
     {
 
-        QSharedPointer<BandmapSpotData> bandmapSpot = bandmapData.value(row);
+        QSharedPointer<ClusterSpotData> bandmapSpot = bandmapData.value(row);
 
         switch (col)
         {
@@ -366,7 +366,7 @@ void BandmapDataModel::sortBandmapModel()
     TContestApp::getContestApp()->loggerBundle.getBoolProfile(elpBandmapInvert, invertBandmap);
 
     std::sort(bandmapData.begin(), bandmapData.end(),
-              [=](const QSharedPointer<BandmapSpotData> a, const QSharedPointer<BandmapSpotData> b)->bool
+              [=](const QSharedPointer<ClusterSpotData> a, const QSharedPointer<ClusterSpotData> b)->bool
                 {
                     if (a->getFreq() == b->getFreq())
                     {
@@ -414,7 +414,7 @@ bool BandmapDataModel::removeRows(int _row, int count, const QModelIndex &parent
 
     for (int row = _row + count - 1; row > (_row - 1); row--)
     {
-        QSharedPointer<BandmapSpotData> spotData = bandmapData[row];
+        QSharedPointer<ClusterSpotData> spotData = bandmapData[row];
         bandmapData.removeAt(row);
     }
     endRemoveRows();
@@ -430,7 +430,7 @@ bool BandmapDataModel::removeColumns(int column, int count, const QModelIndex &p
     return true;
 }
 
-QSharedPointer<BandmapSpotData> BandmapDataModel::getBandmapDataRow(int row)
+QSharedPointer<ClusterSpotData> BandmapDataModel::getBandmapDataRow(int row)
 {
     return bandmapData[row];
 }
@@ -458,7 +458,7 @@ bool BandmapSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIn
     if (!cgm || sourceRow >= cgm->rowCount())
         return false;
 
-    QSharedPointer<BandmapSpotData> spotData = cgm->getBandmapDataRow(sourceRow);
+    QSharedPointer<ClusterSpotData> spotData = cgm->getBandmapDataRow(sourceRow);
 
 
     QString call = spotData->getDxCall().getFullCall();
@@ -490,8 +490,8 @@ bool BandmapSortFilterProxyModel::lessThan(const QModelIndex &left,
     int lrow = left.row();
     int rrow = right.row();
 
-    QSharedPointer<BandmapSpotData> spotData1 = cgm->getBandmapDataRow(lrow);
-    QSharedPointer<BandmapSpotData> spotData2 = cgm->getBandmapDataRow(rrow);
+    QSharedPointer<ClusterSpotData> spotData1 = cgm->getBandmapDataRow(lrow);
+    QSharedPointer<ClusterSpotData> spotData2 = cgm->getBandmapDataRow(rrow);
 
     Frequency ws1 = spotData1->getFreq();
     Frequency ws2 = spotData2->getFreq();

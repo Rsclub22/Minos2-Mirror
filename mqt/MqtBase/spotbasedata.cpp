@@ -11,229 +11,30 @@
 /////////////////////////////////////////////////////////////////////////////
 
 
+#include "clustercommon.h"
+#include "contacts.h"
+#include "contest.h"
+#include "MinosParameters.h"
+#include "calcs.h"
+#include "MTrace.h"
+
 #include "spotbasedata.h"
-
-SpotBaseData::SpotBaseData()
-{
-    clear();
-}
-
-
-SpotBaseData::SpotBaseData(const QSharedPointer<SpotBaseData> sdp)
-{
-    rxTime = sdp->rxTime;
-    clusterSpotType= sdp->clusterSpotType;
-    spotDateTime = sdp->spotDateTime;
-    band = sdp->band;
-    bandType = sdp->bandType;
-    mode = sdp->mode;
-    dxCall = sdp->dxCall;
-    dxCallValidateCode = sdp->dxCallValidateCode;
-    freq = sdp->freq;
-    dxLocator = sdp->dxLocator;
-    spotterCall = sdp->spotterCall;
-    spotterCallValidateCode = sdp->spotterCallValidateCode;
-    spotterLocator = sdp->spotterLocator;
-    dxPropMode = sdp->dxPropMode;
-    spotComment = sdp->spotComment;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-SpotBaseData::SpotBaseData(const SpotBaseData &sdp)
-{
-    rxTime = sdp.rxTime;
-    clusterSpotType = sdp.clusterSpotType;
-    spotDateTime = sdp.spotDateTime;
-    band = sdp.band;
-    bandType = sdp.bandType;
-    mode = sdp.mode;
-    dxCall = sdp.dxCall;
-    dxCallValidateCode = sdp.dxCallValidateCode;
-    freq = sdp.freq;
-    dxLocator = sdp.dxLocator;
-    spotterCall = sdp.spotterCall;
-    spotterCallValidateCode = sdp.spotterCallValidateCode;
-    spotterLocator = sdp.spotterLocator;
-    dxPropMode = sdp.dxPropMode;
-    spotComment = sdp.spotComment;
-}
-
-
-
-
-void SpotBaseData::clear()
-{
-    rxTime = 0;
-    clusterSpotType.clear();
-    spotDateTime = QDateTime();
-    band.clear();
-    bandType.clear();
-    mode.clear();
-    freq.clear();
-    dxCall = Callsign();
-    dxCallValidateCode = 0;
-    dxLocator.clear();
-    spotterCall = Callsign();
-    spotterCallValidateCode = 0;
-    spotterLocator.clear();
-    dxPropMode.clear();
-    spotComment.clear();
-
-}
-
-
-// --------------------------------------------------------------------------------------------
-
-
-ClusterSpotBaseData::ClusterSpotBaseData()
-{
-    clear();
-
-}
-
-
-ClusterSpotBaseData::ClusterSpotBaseData(const ClusterSpotBaseData &cpd)
-{
-    dxLocatorIsFromNode = cpd.dxLocatorIsFromNode;
-    askQrzFailed = cpd.askQrzFailed;
-    dxDist = cpd.dxDist;
-    dxBrg = cpd.dxBrg;
-    dxCallWorked = cpd.dxCallWorked;
-    dxLocatorWorked = cpd.dxLocatorWorked;
-    sentToMemory = cpd.sentToMemory;
-}
-
-ClusterSpotBaseData::ClusterSpotBaseData(const QSharedPointer<ClusterSpotBaseData> cpd)
-{
-    dxLocatorIsFromNode = cpd->dxLocatorIsFromNode;
-    askQrzFailed = cpd->askQrzFailed;
-    dxDist = cpd->dxDist;
-    dxBrg = cpd->dxBrg;
-    dxCallWorked = cpd->dxCallWorked;
-    dxLocatorWorked = cpd->dxLocatorWorked;
-    sentToMemory = cpd->sentToMemory;
-}
-
-
-
-
-void ClusterSpotBaseData::clear()
-{
-
-    dxLocatorIsFromNode = false;
-    askQrzFailed = false;
-    dxDist.clear();
-    dxBrg.clear();
-    dxCallWorked = false;
-    dxLocatorWorked = false;
-    sentToMemory = false;
-}
-
-
-
-//--------------------------------------------------------------------------------
-
 
 ClusterSpotData::ClusterSpotData()
 {
-    clear();
-
 }
-
-void ClusterSpotData::clear()
+//ClusterSpotData::ClusterSpotData(const ClusterSpotData &sdp)
+//{
+//    *this = sdp;
+//}
+ClusterSpotData::ClusterSpotData(bandmapSpotType::SPOT_TYPE spotType_)
 {
-    SpotBaseData::clear();
-    ClusterSpotBaseData::clear();
+    spotType = spotType_;
 }
-
-ClusterSpotData::ClusterSpotData(const ClusterSpotData &csd) : SpotBaseData(csd), ClusterSpotBaseData(csd)
+// --------------------------------------------------------------------------------------------
+bool ClusterSpotData::sameSpotAs(QSharedPointer<ClusterSpotData> cpd)
 {
-    dxLocatorIsFromNode = csd.dxLocatorIsFromNode;
-    askQrzFailed = csd.askQrzFailed;
-    dxDist = csd.dxDist;
-    dxBrg = csd.dxBrg;
-    dxCallWorked = csd.dxCallWorked;
-    dxLocatorWorked = csd.sentToMemory;
-}
-
-ClusterSpotData::ClusterSpotData(const QSharedPointer<ClusterSpotData> csd) : SpotBaseData(csd), ClusterSpotBaseData(csd)
-{
-    dxLocatorIsFromNode = csd->dxLocatorIsFromNode;
-    askQrzFailed = csd->askQrzFailed;
-    dxDist = csd->dxDist;
-    dxBrg = csd->dxBrg;
-    dxCallWorked = csd->dxCallWorked;
-    dxLocatorWorked = csd->sentToMemory;
-}
-
-
-ClusterSpotData& ClusterSpotData::operator = (const ClusterSpotData& csd)
-{
-    rxTime = csd.rxTime;
-    clusterSpotType = csd.clusterSpotType;
-    spotDateTime = csd.spotDateTime;
-    band = csd.band;
-    bandType = csd.bandType;
-    mode = csd.mode;
-    dxCall = csd.dxCall;
-    dxCallValidateCode = csd.dxCallValidateCode;
-    freq = csd.freq;
-    dxLocator = csd.dxLocator;
-    spotterCall = csd.spotterCall;
-    spotterCallValidateCode = csd.spotterCallValidateCode;
-    dxPropMode = csd.dxPropMode;
-    spotComment = csd.spotComment;
-    dxLocatorIsFromNode = csd.dxLocatorIsFromNode;
-    askQrzFailed = csd.askQrzFailed;
-    dxDist = csd.dxDist;
-    dxBrg = csd.dxBrg;
-    dxCallWorked = csd.dxCallWorked;
-    dxLocatorWorked = csd.sentToMemory;
-
-    return *this;
-
-}
-
-QSharedPointer<ClusterSpotData> ClusterSpotData::operator = (const QSharedPointer<ClusterSpotData> csd)
-{
-    rxTime = csd->rxTime;
-    clusterSpotType = csd->clusterSpotType;
-    spotDateTime = csd->spotDateTime;
-    band = csd->band;
-    bandType = csd->bandType;
-    mode = csd->mode;
-    dxCall = csd->dxCall;
-    dxCallValidateCode = csd->dxCallValidateCode;
-    freq = csd->freq;
-    dxLocator = csd->dxLocator;
-    spotterCall = csd->spotterCall;
-    spotterCallValidateCode = csd->spotterCallValidateCode;
-    dxPropMode = csd->dxPropMode;
-    spotComment = csd->spotComment;
-    dxLocatorIsFromNode = csd->dxLocatorIsFromNode;
-    askQrzFailed = csd->askQrzFailed;
-    dxDist = csd->dxDist;
-    dxBrg = csd->dxBrg;
-    dxCallWorked = csd->dxCallWorked;
-    dxLocatorWorked = csd->sentToMemory;
-
-    return QSharedPointer<ClusterSpotData>(this);
-
-}
-
-
-bool ClusterSpotData::operator==(const QSharedPointer<ClusterSpotData> cpd) const
-{
+    // to say two spots are the same we don't need a full equality operator
     return rxTime == cpd->rxTime &&
             clusterSpotType == cpd->clusterSpotType &&
             spotDateTime == cpd->spotDateTime &&
@@ -241,206 +42,23 @@ bool ClusterSpotData::operator==(const QSharedPointer<ClusterSpotData> cpd) cons
             bandType == cpd->bandType &&
             mode == cpd->mode &&
             dxCall == cpd->dxCall &&
-            dxCallValidateCode == cpd->dxCallValidateCode &&
             freq == cpd->freq &&
             dxLocator == cpd->dxLocator &&
             spotterCall == cpd->spotterCall &&
-            spotterCallValidateCode == cpd->spotterCallValidateCode &&
             dxPropMode == cpd->dxPropMode &&
             spotComment == cpd->spotComment &&
-            dxLocatorIsFromNode == cpd->dxLocatorIsFromNode &&
-            askQrzFailed == cpd->askQrzFailed &&
-            dxDist == cpd->dxDist &&
-            dxBrg == cpd->dxBrg &&
             dxCallWorked == cpd->dxCallWorked &&
             dxLocatorWorked == cpd->sentToMemory;
 }
 
-
-bool ClusterSpotData::operator==(const ClusterSpotData &cpd) const
-{
-    return rxTime == cpd.rxTime &&
-            clusterSpotType == cpd.clusterSpotType &&
-            spotDateTime == cpd.spotDateTime &&
-            band == cpd.band &&
-            bandType == cpd.bandType &&
-            mode == cpd.mode &&
-            dxCall == cpd.dxCall &&
-            dxCallValidateCode == cpd.dxCallValidateCode &&
-            freq == cpd.freq &&
-            dxLocator == cpd.dxLocator &&
-            spotterCall == cpd.spotterCall &&
-            spotterCallValidateCode == cpd.spotterCallValidateCode &&
-            dxPropMode == cpd.dxPropMode &&
-            spotComment == cpd.spotComment &&
-            dxLocatorIsFromNode == cpd.dxLocatorIsFromNode &&
-            askQrzFailed == cpd.askQrzFailed &&
-            dxDist == cpd.dxDist &&
-            dxBrg == cpd.dxBrg &&
-            dxCallWorked == cpd.dxCallWorked &&
-            dxLocatorWorked == cpd.sentToMemory;
-}
-
-bool ClusterSpotData::operator!=(const QSharedPointer<ClusterSpotData> cpd) const
-{
-
-    return  rxTime != cpd->rxTime ||
-            clusterSpotType != cpd->clusterSpotType ||
-            spotDateTime != cpd->spotDateTime ||
-            band != cpd->band ||
-            bandType != cpd->bandType ||
-            mode != cpd->mode ||
-            dxCall != cpd->dxCall ||
-            dxCallValidateCode != cpd->dxCallValidateCode ||
-            freq != cpd->freq ||
-            dxLocator != cpd->dxLocator ||
-            spotterCall != cpd->spotterCall ||
-            spotterCallValidateCode != cpd->spotterCallValidateCode ||
-            dxPropMode != cpd->dxPropMode ||
-            spotComment != cpd->spotComment ||
-            dxLocatorIsFromNode != cpd->dxLocatorIsFromNode ||
-            askQrzFailed != cpd->askQrzFailed ||
-            dxDist != cpd->dxDist ||
-            dxBrg != cpd->dxBrg ||
-            dxCallWorked != cpd->dxCallWorked ||
-            dxLocatorWorked != cpd->sentToMemory;
-}
-
-bool ClusterSpotData::operator!=(const ClusterSpotData &cpd) const
-{
-
-    return  rxTime != cpd.rxTime ||
-            clusterSpotType != cpd.clusterSpotType ||
-            spotDateTime != cpd.spotDateTime ||
-            band != cpd.band ||
-            bandType != cpd.bandType ||
-            mode != cpd.mode ||
-            dxCall != cpd.dxCall ||
-            dxCallValidateCode != cpd.dxCallValidateCode ||
-            freq != cpd.freq ||
-            dxLocator != cpd.dxLocator ||
-            spotterCall != cpd.spotterCall ||
-            spotterCallValidateCode != cpd.spotterCallValidateCode ||
-            dxPropMode != cpd.dxPropMode ||
-            spotComment != cpd.spotComment ||
-            dxLocatorIsFromNode != cpd.dxLocatorIsFromNode ||
-            askQrzFailed != cpd.askQrzFailed ||
-            dxDist != cpd.dxDist ||
-            dxBrg != cpd.dxBrg ||
-            dxCallWorked != cpd.dxCallWorked ||
-            dxLocatorWorked != cpd.sentToMemory;
-}
-
-
 //---------------------------------------------------------------------------
 
-
-BandmapSpotData::BandmapSpotData(bandmapSpotType::SPOT_TYPE spotType_)
-{
-    clear();
-    spotType = spotType_;
-}
-
-
-BandmapSpotData::BandmapSpotData(const BandmapSpotData &bsd) : SpotBaseData(bsd), ClusterSpotBaseData(bsd)
-{
-    runModeOn = bsd.runModeOn;
-    offRunFreq = bsd.offRunFreq;
-    cqResponse = bsd.cqResponse;
-    district = bsd.district;
-    districtWorked = bsd.districtWorked;
-    rotBrg = bsd.rotBrg;
-    rotConnected = bsd.rotConnected;
-    isSelected = bsd.isSelected;
-    spotType = bsd.spotType;
-}
-
-void BandmapSpotData::clear()
-{
-    SpotBaseData::clear();
-    ClusterSpotBaseData::clear();
-    runModeOn = false;
-    offRunFreq = false;
-    cqResponse = false;
-    district.clear();
-    districtWorked = false;
-    rotBrg.clear();
-    rotConnected =false;
-    isSelected = false;
-    spotType = bandmapSpotType::SPOT_TYPE::NONE;
-}
-bool BandmapSpotData::operator==(const BandmapSpotData &bsd) const
-{
-    return rxTime == bsd.rxTime &&
-            clusterSpotType == bsd.clusterSpotType &&
-            spotDateTime == bsd.spotDateTime &&
-            band == bsd.band &&
-            bandType == bsd.bandType &&
-            mode == bsd.mode &&
-            dxCall == bsd.dxCall &&
-            dxCallValidateCode == bsd.dxCallValidateCode &&
-            freq == bsd.freq &&
-            dxLocator == bsd.dxLocator &&
-            spotterCall == bsd.spotterCall &&
-            spotterCallValidateCode == bsd.spotterCallValidateCode &&
-            dxPropMode == bsd.dxPropMode &&
-            spotComment == bsd.spotComment &&
-            dxLocatorIsFromNode == bsd.dxLocatorIsFromNode &&
-            askQrzFailed == bsd.askQrzFailed &&
-            dxDist == bsd.dxDist &&
-            dxBrg == bsd.dxBrg &&
-            dxCallWorked == bsd.dxCallWorked &&
-            dxLocatorWorked == bsd.sentToMemory &&
-            runModeOn == bsd.runModeOn &&
-            offRunFreq == bsd.offRunFreq &&
-            cqResponse == bsd.cqResponse &&
-            district == bsd.district &&
-            districtWorked == bsd.districtWorked &&
-            rotBrg == bsd.rotBrg &&
-            rotConnected == bsd.rotConnected &&
-            isSelected == bsd.isSelected &&
-            spotType == bsd.spotType;
-}
-
-bool BandmapSpotData::operator!=(const BandmapSpotData &bsd) const
-{
-    return  rxTime != bsd.rxTime ||
-            clusterSpotType != bsd.clusterSpotType ||
-            spotDateTime != bsd.spotDateTime ||
-            band != bsd.band ||
-            bandType != bsd.bandType ||
-            mode != bsd.mode ||
-            dxCall != bsd.dxCall ||
-            dxCallValidateCode != bsd.dxCallValidateCode ||
-            freq != bsd.freq ||
-            dxLocator != bsd.dxLocator ||
-            spotterCall != bsd.spotterCall ||
-            spotterCallValidateCode != bsd.spotterCallValidateCode ||
-            dxPropMode != bsd.dxPropMode ||
-            spotComment != bsd.spotComment ||
-            dxLocatorIsFromNode != bsd.dxLocatorIsFromNode ||
-            askQrzFailed != bsd.askQrzFailed ||
-            dxDist != bsd.dxDist ||
-            dxBrg != bsd.dxBrg ||
-            dxCallWorked != bsd.dxCallWorked ||
-            dxLocatorWorked != bsd.sentToMemory ||
-            runModeOn != bsd.runModeOn ||
-            offRunFreq != bsd.offRunFreq ||
-            cqResponse != bsd.cqResponse ||
-            district != bsd.district ||
-            districtWorked != bsd.districtWorked ||
-            rotBrg != bsd.rotBrg ||
-            rotConnected != bsd.rotConnected ||
-            isSelected != bsd.isSelected ||
-            spotType != bsd.spotType;
-}
-
-QString BandmapSpotData::spotName()
+QString ClusterSpotData::spotName()
 {
     return spotName(spotType);
 }
 
-/*static*/ QString BandmapSpotData::spotName(bandmapSpotType::SPOT_TYPE _spotType)
+/*static*/ QString ClusterSpotData::spotName(bandmapSpotType::SPOT_TYPE _spotType)
 {
     switch(_spotType)
     {
@@ -473,3 +91,195 @@ QString BandmapSpotData::spotName()
     };
 
 }
+//======================================================================================================
+void calcSpotDistanceBearing(BaseContestLog *ct, const QString& _locator, double* distance, int* bearing)
+{
+    bool locValid = true;
+    QString locator = _locator;
+    double latitude;
+    double longitude;
+    double dist;
+    int brg = 0;
+
+    if (ct && !locator.isEmpty())
+    {
+        if (locator.size() == 4)
+        {
+            locator.append("MM");
+        }
+
+        int locValres = lonlat( locator, longitude, latitude, MinosParameters::getMinosParameters() ->getAllowLoc4() );
+        if ( ( locValres ) != LOC_OK )
+        {
+            locValid = false;
+        }
+        if (locValid)
+        {
+            ct->disbeara(longitude, latitude, dist, brg);
+            *distance = dist;
+            *bearing = brg;
+        }
+    }
+}
+void checkSpotWorked(BaseContestLog *ct, const Callsign &mcs, const QString &locator, const Frequency &freq, bool* callWorked, bool* locatorWorked)
+{
+    bool callfound = false;
+    bool locfound = false;
+    if (ct && !ct->isReadOnly())
+    {
+        for ( LogIterator i = ct->ctList.begin(); i != ct->ctList.end(); i++ )
+        {
+            if ((*i).wt->notValidContact() )
+            {
+                continue;
+            }
+
+            if (ct->isHF())
+            {
+                QSharedPointer<BandInfo> bandChanged = ct->checkBandChange(freq, (*i).wt->frequency.getValue().str());
+                if (bandChanged)
+                {
+                    continue;
+                }
+            }
+            if (!callfound)
+            {
+                if ((*i).wt->cs == mcs)
+                {
+                    *callWorked = true;
+                    callfound = true;
+                }
+            }
+
+            if (!locator.isEmpty())
+            {
+                QString loc = locator.mid(0,4);
+                if ((*i).wt->loc.getLoc().mid(0,4) == loc)
+                {
+                    *locatorWorked = true;
+                    locfound = true;
+                }
+            }
+
+            if (callfound && locfound)
+            {
+                return;
+            }
+        }
+    }
+}
+
+QSharedPointer<ClusterSpotData> stringToDxSpot(QString spot, BaseContestLog *ct, qlonglong &timeToLive)
+{
+    QSharedPointer<ClusterSpotData> res;
+    QDateTime spotDateTime = QDateTime::currentDateTimeUtc();
+
+    QStringList sl;
+    if (spot.contains(DXSPOT))
+    {
+       sl = spot.split(DXSPOT);
+    }
+    else if (spot.contains(RESENTSPOT))
+    {
+       sl = spot.split(RESENTSPOT);
+    }
+    if (sl.count() == 2)
+    {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+        QStringList spotlist = sl[1].split(':', Qt::KeepEmptyParts);
+#else
+        QStringList spotlist = sl[1].split(':', QString::KeepEmptyParts);
+#endif
+
+        if (spotlist.count() == TTLVALUE +1)
+        {
+            bool ok = false;
+            int ttl = spotlist[TTLVALUE].toInt(&ok);
+            if (ok)
+            {
+                if (ttl >= MIN_TTL && ttl <= MAX_TTL)
+                {
+                    timeToLive = ttl * 60; // seconds
+                }
+            }
+
+            //-------------------------------------------------------
+
+            //timeToLive = 120; // for testing.....
+
+            //--------------------------------------------------------
+
+            // check to see if spot is for this contest band
+
+            QString band = spotlist[DXBANDSTR];
+            QString bandlist = ct->contestBands.getValue();
+            if (bandlist == allHF)
+            {
+                BandList &blist = BandList::getBandList();
+                QSharedPointer<BandInfo>  bi;
+                bool bandOK = blist.findBand(band, bi);
+                if (!bandOK || bi->getType() != HF_BANDTYPE)
+                {
+                   return res;
+                }
+
+            }
+            else if (spotlist[DXBANDSTR] != ct->currentBand.getValue())
+            {
+                return res;  // not for this contest band
+            }
+
+            // check to see if call or locator worked
+            bool callWorked = false;
+            bool locWorked = false;
+
+            Callsign cs;
+            cs.setFullCall(spotlist[DXCALL]);
+            checkSpotWorked(ct, cs, spotlist[DXLOCATOR], spotlist[DXFREQ], &callWorked, &locWorked);
+
+            QString distance;
+            QString bearing;
+            if (!spotlist[DXLOCATOR].isEmpty())
+            {
+                double dist = 0;
+                int brg = 0;
+                calcSpotDistanceBearing(ct, spotlist[DXLOCATOR], &dist, &brg);
+                distance = QString::number(static_cast< int> ( dist));
+                bearing =  QString::number(brg);
+            }
+
+            bool dxLocFromNodeFlag = extractDxLocFromNodeFlag(spotlist[DXLOC_FROM_NODE_FLAG]);
+
+            spotDateTime = QDateTime::fromString(spotlist[SPOTDATETIME], "yyyyMMMddHHmmss" );
+            spotDateTime.setTimeSpec(Qt::UTC);
+            if (!spotDateTime.isValid())
+            {
+                spotDateTime = QDateTime::currentDateTimeUtc();
+            }
+            qint64 rxTime = spotDateTime.toMSecsSinceEpoch() / 1000;
+
+            trace(QString("Add Cluster Spot to Bandmap %1, %2, %3, %4").arg(spotlist[DXCALL], spotlist[DXFREQ], spotlist[DXMODESTR], spotlist[DXLOCATOR]));
+
+            res = QSharedPointer<ClusterSpotData>(new ClusterSpotData(bandmapSpotType::CLUSTER));
+
+            res->setRxTime(rxTime);
+            res->setSpotDateTime(spotDateTime);
+            res->setFreq(spotlist[DXFREQ]);
+            res->setBand(spotlist[DXBANDSTR]);
+            res->setMode(spotlist[DXMODESTR]);
+            res->setDxCall(spotlist[DXCALL]);
+            res->setDxCallWorked(callWorked);
+            res->setDxLocator(spotlist[DXLOCATOR]);
+            res->setDxLocatorIsFromNode(dxLocFromNodeFlag);
+            res->setDxLocatorWorked(locWorked);
+            res->setDxDist(distance);
+            res->setDxBrg(bearing);
+            res->setSpotterCall(spotlist[SPOTCALL]);
+            res->setSpotterLocator(spotlist[SPOTLOCATOR]);
+            res->setSpotComment(spotlist[SPOTCOMMENT]);
+            res->setSpotType(bandmapSpotType::SPOT_TYPE::CLUSTER);
+       }
+    }
+    return res;
+}
+

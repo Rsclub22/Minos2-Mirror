@@ -19,6 +19,8 @@
 #include "callsign.h"
 #include "frequency.h"
 
+class BaseContestLog;
+
 namespace bandmapSpotType {
 
 enum SPOT_TYPE {NONE, CLUSTER, CLUSTER_MARKED, LOGGED, MARKED, SAVED, CQ, DELETED};
@@ -32,15 +34,15 @@ const QString SHOW_DXSPOT_TYPE = "showDxSpotType";
 
 }
 
-class SpotBaseData
+class ClusterSpotData
 {
+    Q_DECLARE_TR_FUNCTIONS(ClusterSpotData)
 public:
-    SpotBaseData();
+    ClusterSpotData();
 
-    SpotBaseData(const SpotBaseData &sdp);
-    SpotBaseData(const QSharedPointer<SpotBaseData> sdp);
+    ClusterSpotData(bandmapSpotType::SPOT_TYPE spotType_);
 
-    void clear();
+    bool sameSpotAs(QSharedPointer<ClusterSpotData> cpd);
 
     void setClusterSpotType(const QString clusterSpotType_){clusterSpotType = clusterSpotType_;}
     QString getClusterSpotType()const {return clusterSpotType;}
@@ -94,15 +96,12 @@ public:
     void setDxCall(const QString dxCall_)
     {
         dxCall.setFullCall(dxCall_);
-
-        dxCallValidateCode = dxCall.getValRes();
     }
 
     void setCallsign(const Callsign &cs){dxCall = cs;}
 
     const Callsign &getDxCall() const {return dxCall;}
     QString getDxCallStr() const {return dxCall.getFullCall();}
-    int getDxCallValidateCode() const {return dxCallValidateCode;}
 
 
     void setFreq(const Frequency freq_){freq = freq_;}
@@ -129,51 +128,12 @@ public:
     void setSpotterCall(const QString spotterCall_)
     {
         spotterCall.setFullCall(spotterCall_);
-        spotterCallValidateCode = spotterCall.getValRes();
     }
     Callsign getSpotterCall()const {return spotterCall;}
     QString getSpotterCallStr() const {return spotterCall.getFullCall();}
 
-    int getSpotterCallValidateCode() const {return spotterCallValidateCode;}
-
     void setSpotComment(const QString spotComment_){spotComment = spotComment_.trimmed();}
     QString getSpotComment() const {return spotComment;}
-
-
-
-
-protected:
-
-    qint64 rxTime;
-    QDateTime spotDateTime;
-    QString clusterSpotType;
-    QString band;
-    QString bandType;
-    QString mode;
-    Callsign dxCall;
-    int dxCallValidateCode;
-    Frequency freq;
-    QString dxLocator;
-    Callsign spotterCall;
-    int spotterCallValidateCode;
-    QString spotterLocator;
-    QString dxPropMode;
-    QString spotComment;
-
-
-};
-
-//---------------------------------------------------------------------
-
-class ClusterSpotBaseData
-{
-
-public:
-    ClusterSpotBaseData();
-    ClusterSpotBaseData(const ClusterSpotBaseData &sdp);
-    ClusterSpotBaseData(const QSharedPointer<ClusterSpotBaseData> cpd);
-
-    ClusterSpotBaseData &operator =(const ClusterSpotBaseData &cpd);
 
 
     void setDxLocatorIsFromNode(const bool dxLocatorIsFromNode_){dxLocatorIsFromNode = dxLocatorIsFromNode_;}
@@ -199,71 +159,6 @@ public:
 
     void setSentToMemory(const bool sentToMemory_){sentToMemory = sentToMemory_;}
     bool getSentToMemory()const {return sentToMemory;}
-
-
-
-    void clear();
-
-
-
-protected:
-
-
-    bool dxLocatorIsFromNode;
-    bool askQrzFailed;
-    QString dxDist;
-    QString dxBrg;
-    bool dxCallWorked;
-    bool dxLocatorWorked;
-    bool sentToMemory;
-
-};
-
-
-//-------------------------------------------------------------------------
-
-
-class ClusterSpotData: public SpotBaseData, public ClusterSpotBaseData
-{
-public:
-
-    ClusterSpotData();
-    ClusterSpotData(const ClusterSpotData &csd);
-    ClusterSpotData(const QSharedPointer<ClusterSpotData> csd);
-
-    ClusterSpotData &operator =(const ClusterSpotData &csd);
-    QSharedPointer<ClusterSpotData> operator =(const QSharedPointer<ClusterSpotData> csd);
-
-    bool operator ==(const ClusterSpotData &csd) const;
-    bool operator ==(const QSharedPointer<ClusterSpotData> cpd) const;
-
-    bool operator !=(const ClusterSpotData &csd) const;
-    bool operator !=(const QSharedPointer<ClusterSpotData> cpd) const;
-
-    void clear();
-
-
-
-
-
-
-
-};
-
-//---------------------------------------------------------------------
-
-
-class BandmapSpotData: public SpotBaseData, public ClusterSpotBaseData
-{
-    Q_DECLARE_TR_FUNCTIONS(BandmapSpotData)
-public:
-    BandmapSpotData(bandmapSpotType::SPOT_TYPE spotType_);
-    BandmapSpotData(const BandmapSpotData &sdp);
-
-    bool operator ==(const BandmapSpotData &bsd) const;
-    bool operator !=(const BandmapSpotData &bsd) const;
-
-    void clear();
 
     bool getRunModeOn()const{return runModeOn;}
     void setRunModeOn(bool _runModeOn){runModeOn = _runModeOn;}
@@ -295,21 +190,48 @@ public:
 
     bool getCqResponse() const {return cqResponse;}
     void setCqResponse(bool value) {cqResponse = value;}
-
 private:
 
-    bool runModeOn;
-    bool offRunFreq;
-    bool cqResponse;
-    QString district;
-    bool districtWorked;
-    QString rotBrg;
-    bool rotConnected;
-    bool isSelected;
-    bandmapSpotType::SPOT_TYPE spotType;
+    // from SpotBaseData
 
+    qint64 rxTime = 0;
+    QDateTime spotDateTime;
+    QString clusterSpotType;
+    QString band;
+    QString bandType;
+    QString mode;
+    Callsign dxCall;
+    Frequency freq;
+    QString dxLocator;
+    Callsign spotterCall;
+    QString spotterLocator;
+    QString dxPropMode;
+    QString spotComment;
+
+    // from ClusterSpotBaseData
+    bool dxLocatorIsFromNode = false;
+    bool askQrzFailed = false;
+    QString dxDist;
+    QString dxBrg;
+    bool dxCallWorked = false;
+    bool dxLocatorWorked = false;
+    bool sentToMemory = false;
+
+    // from BandmapSpotData, to allow QSOs to be modelled as spots
+
+    bool runModeOn = false;
+    bool offRunFreq = false;
+    bool cqResponse = false;
+    QString district;
+    bool districtWorked = false;
+    QString rotBrg;
+    bool rotConnected = false;
+    bool isSelected = false;
+    bandmapSpotType::SPOT_TYPE spotType = bandmapSpotType::SPOT_TYPE::NONE;
 };
 
-
+extern void calcSpotDistanceBearing(BaseContestLog *ct, const QString& _locator, double* distance, int* bearing);
+extern void checkSpotWorked(BaseContestLog *ct, const Callsign &mcs, const QString &locator, const Frequency &freq, bool* callWorked, bool* locatorWorked);
+extern QSharedPointer<ClusterSpotData> stringToDxSpot(QString spot, BaseContestLog *ct, qlonglong &timeToLive);
 
 #endif // SPOTBASEDATA_H
