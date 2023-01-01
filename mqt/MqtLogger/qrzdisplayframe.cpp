@@ -5,17 +5,11 @@
 #include "tsinglelogframe.h"
 #include "ui_qrzdisplayframe.h"
 #include "minosqlabel.h"
-#include "MinosParameters.h"
-#include "calcs.h"
 #include "MTrace.h"
 
 #include "qrzdisplayframe.h"
 
 const int PINGTIMER_DURATION = 10000;
-
-
-
-
 
 QrzDisplayFrame::QrzDisplayFrame(QWidget *parent) :
     QFrame(parent),
@@ -176,7 +170,7 @@ void QrzDisplayFrame::onLoggerQrzReply(QrzCallsignData cd, QString qrzReplyState
             {
                 distance = 0;
                 bearing = 0;
-                calcSpotDistanceBearing(cd.getQra(), &distance, &bearing);
+                ct->calcDistanceBearing(cd.getQra(), &distance, &bearing);
 
                 ui->distanceText->setText(QString::number(distance));
                 if (bearing >= 0 && bearing <= 360)
@@ -200,41 +194,6 @@ void QrzDisplayFrame::onLoggerQrzReply(QrzCallsignData cd, QString qrzReplyState
             ui->callsignText->setText(cd.getCallsign());
             setQrzMessageText(qrzReplyState);
 
-        }
-    }
-
-
-
-}
-
-
-
-void QrzDisplayFrame::calcSpotDistanceBearing(const QString& _locator, double* distance, int* bearing)
-{
-    bool locValid = true;
-    QString locator = _locator;
-    double latitude;
-    double longitude;
-    double dist;
-    int brg = 0;
-
-    if (ct && !locator.isEmpty())
-    {
-        if (locator.size() == 4)
-         {
-             locator.append("MM");
-         }
-
-        int locValres = lonlat( locator, longitude, latitude, MinosParameters::getMinosParameters() ->getAllowLoc4() );
-        if ( ( locValres ) != LOC_OK )
-        {
-            locValid = false;
-        }
-        if (locValid)
-        {
-            ct->disbeara(longitude, latitude, dist, brg);
-            *distance = dist;
-            *bearing = brg;
         }
     }
 }

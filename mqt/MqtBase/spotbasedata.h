@@ -230,8 +230,6 @@ private:
     bandmapSpotType::SPOT_TYPE spotType = bandmapSpotType::SPOT_TYPE::NONE;
 };
 
-extern void calcSpotDistanceBearing(BaseContestLog *ct, const QString& _locator, double* distance, int* bearing);
-extern void checkSpotWorked(BaseContestLog *ct, const Callsign &mcs, const QString &locator, const Frequency &freq, bool* callWorked, bool* locatorWorked);
 extern QSharedPointer<ClusterSpotData> stringToDxSpot(QString spot, BaseContestLog *ct, qlonglong &timeToLive);
 
 #endif // SPOTBASEDATA_H

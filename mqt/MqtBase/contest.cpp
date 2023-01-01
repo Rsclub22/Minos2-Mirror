@@ -618,6 +618,36 @@ int BaseContestLog::CalcCentres( const QString &qscalcloc, int &brg ) const
    }
    return static_cast<int>(dist);
 }
+void BaseContestLog::calcDistanceBearing(const QString& _locator, double* distance, int* bearing)
+{
+    bool locValid = true;
+    QString locator = _locator;
+    double latitude;
+    double longitude;
+    double dist;
+    int brg = 0;
+
+    if (!locator.isEmpty())
+    {
+        if (locator.size() == 4)
+        {
+            locator.append("MM");
+        }
+
+        int locValres = lonlat( locator, longitude, latitude, MinosParameters::getMinosParameters() ->getAllowLoc4() );
+        if ( ( locValres ) != LOC_OK )
+        {
+            locValid = false;
+        }
+        if (locValid)
+        {
+            disbeara(longitude, latitude, dist, brg);
+            *distance = dist;
+            *bearing = brg;
+        }
+    }
+}
+
 void BaseContestLog::getMatchText( CheckableContact *pct, QString &disp, const BaseContestLog *const ct ) const
 {
    if ( DupSheet.isCurDup( pct ) )
@@ -1838,6 +1868,54 @@ QSharedPointer<BandInfo> BaseContestLog::checkBandChange(Frequency targetFreq, F
     }
     return nb;
 }
+void BaseContestLog::checkSpotWorked(const Callsign &mcs, const QString &locator, const Frequency &freq, bool* callWorked, bool* locatorWorked)
+{
+    bool callfound = false;
+    bool locfound = false;
+    if (isReadOnly())
+    {
+        for ( LogIterator i = ctList.begin(); i != ctList.end(); i++ )
+        {
+            if ((*i).wt->notValidContact() )
+            {
+                continue;
+            }
+
+            if (isHF())
+            {
+                QSharedPointer<BandInfo> bandChanged = checkBandChange(freq, (*i).wt->frequency.getValue().str());
+                if (bandChanged)
+                {
+                    continue;
+                }
+            }
+            if (!callfound)
+            {
+                if ((*i).wt->cs == mcs)
+                {
+                    *callWorked = true;
+                    callfound = true;
+                }
+            }
+
+            if (!locator.isEmpty())
+            {
+                QString loc = locator.mid(0,4);
+                if ((*i).wt->loc.getLoc().mid(0,4) == loc)
+                {
+                    *locatorWorked = true;
+                    locfound = true;
+                }
+            }
+
+            if (callfound && locfound)
+            {
+                return;
+            }
+        }
+    }
+}
+
 //====================================================================
 ContestScore::ContestScore(BaseContestLog *ct)
 {

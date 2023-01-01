@@ -12,10 +12,7 @@
 
 
 #include "clustercommon.h"
-#include "contacts.h"
 #include "contest.h"
-#include "MinosParameters.h"
-#include "calcs.h"
 #include "MTrace.h"
 
 #include "spotbasedata.h"
@@ -23,10 +20,6 @@
 ClusterSpotData::ClusterSpotData()
 {
 }
-//ClusterSpotData::ClusterSpotData(const ClusterSpotData &sdp)
-//{
-//    *this = sdp;
-//}
 ClusterSpotData::ClusterSpotData(bandmapSpotType::SPOT_TYPE spotType_)
 {
     spotType = spotType_;
@@ -92,82 +85,6 @@ QString ClusterSpotData::spotName()
 
 }
 //======================================================================================================
-void calcSpotDistanceBearing(BaseContestLog *ct, const QString& _locator, double* distance, int* bearing)
-{
-    bool locValid = true;
-    QString locator = _locator;
-    double latitude;
-    double longitude;
-    double dist;
-    int brg = 0;
-
-    if (ct && !locator.isEmpty())
-    {
-        if (locator.size() == 4)
-        {
-            locator.append("MM");
-        }
-
-        int locValres = lonlat( locator, longitude, latitude, MinosParameters::getMinosParameters() ->getAllowLoc4() );
-        if ( ( locValres ) != LOC_OK )
-        {
-            locValid = false;
-        }
-        if (locValid)
-        {
-            ct->disbeara(longitude, latitude, dist, brg);
-            *distance = dist;
-            *bearing = brg;
-        }
-    }
-}
-void checkSpotWorked(BaseContestLog *ct, const Callsign &mcs, const QString &locator, const Frequency &freq, bool* callWorked, bool* locatorWorked)
-{
-    bool callfound = false;
-    bool locfound = false;
-    if (ct && !ct->isReadOnly())
-    {
-        for ( LogIterator i = ct->ctList.begin(); i != ct->ctList.end(); i++ )
-        {
-            if ((*i).wt->notValidContact() )
-            {
-                continue;
-            }
-
-            if (ct->isHF())
-            {
-                QSharedPointer<BandInfo> bandChanged = ct->checkBandChange(freq, (*i).wt->frequency.getValue().str());
-                if (bandChanged)
-                {
-                    continue;
-                }
-            }
-            if (!callfound)
-            {
-                if ((*i).wt->cs == mcs)
-                {
-                    *callWorked = true;
-                    callfound = true;
-                }
-            }
-
-            if (!locator.isEmpty())
-            {
-                QString loc = locator.mid(0,4);
-                if ((*i).wt->loc.getLoc().mid(0,4) == loc)
-                {
-                    *locatorWorked = true;
-                    locfound = true;
-                }
-            }
-
-            if (callfound && locfound)
-            {
-                return;
-            }
-        }
-    }
-}
 
 QSharedPointer<ClusterSpotData> stringToDxSpot(QString spot, BaseContestLog *ct, qlonglong &timeToLive)
 {
@@ -235,7 +152,7 @@ QSharedPointer<ClusterSpotData> stringToDxSpot(QString spot, BaseContestLog *ct,
 
             Callsign cs;
             cs.setFullCall(spotlist[DXCALL]);
-            checkSpotWorked(ct, cs, spotlist[DXLOCATOR], spotlist[DXFREQ], &callWorked, &locWorked);
+            ct->checkSpotWorked(cs, spotlist[DXLOCATOR], spotlist[DXFREQ], &callWorked, &locWorked);
 
             QString distance;
             QString bearing;
@@ -243,7 +160,7 @@ QSharedPointer<ClusterSpotData> stringToDxSpot(QString spot, BaseContestLog *ct,
             {
                 double dist = 0;
                 int brg = 0;
-                calcSpotDistanceBearing(ct, spotlist[DXLOCATOR], &dist, &brg);
+                ct->calcDistanceBearing(spotlist[DXLOCATOR], &dist, &brg);
                 distance = QString::number(static_cast< int> ( dist));
                 bearing =  QString::number(brg);
             }

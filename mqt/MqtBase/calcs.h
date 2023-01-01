@@ -11,6 +11,7 @@
 #define CalcsH 
 #include <QString>
 
+class BaseContestLog;
 //----------------------------------------------------------------------------
 extern int normBrg( int mbear );
 extern int varBrg( int mbear );

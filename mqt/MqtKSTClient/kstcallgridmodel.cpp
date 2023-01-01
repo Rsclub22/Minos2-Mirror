@@ -2,8 +2,6 @@
 #include "contest.h"
 #include "kstmainwindow.h"
 #include "cutils.h"
-#include "MinosParameters.h"
-#include "calcs.h"
 
 // kst2me sort by
 // new before old
@@ -104,21 +102,12 @@ void KstCallGridModel::checkDistBear(QSharedPointer<KstUser> crec) const
 {
     if (crec->distance < 0)
     {
-        double dist = 0.0;
-        int brg;
-        double longitude = 0.0;
-        double latitude = 0.0;
-
         BaseContestLog cnt(false);
         cnt.myloc.setLoc( locator );
         cnt.validateLoc();
-
-        if ( lonlat( crec->loc.toUpper(), longitude, latitude, MinosParameters::getMinosParameters() ->getAllowLoc4() ) == LOC_OK )
-        {
-            cnt.disbeara( longitude, latitude, dist, brg );
-            crec->distance = static_cast<int>(dist);
-            crec->bearing = brg;
-        }
+        double dist = 0.0;
+        cnt.calcDistanceBearing(crec->loc, &dist, &crec->bearing);
+        crec->distance = static_cast< int> ( dist);
     }
 }
 QVariant KstCallGridModel::data( const QModelIndex &index, int role ) const

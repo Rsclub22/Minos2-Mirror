@@ -19,7 +19,6 @@
 #include "delayedaction.h"
 #include "rigutils.h"
 #include "MTrace.h"
-#include "calcs.h"
 
 #include "bandmapclientframe.h"
 #include "ui_bandmapclientframe.h"
@@ -893,7 +892,7 @@ QSharedPointer<ClusterSpotData> BandmapClientFrame::stringToDxSpot(QString spot)
 
             Callsign cs;
             cs.setFullCall(spotlist[DXCALL]);
-            checkSpotWorked(cs, spotlist[DXLOCATOR], spotlist[DXFREQ], &callWorked, &locWorked);
+            ct->checkSpotWorked(cs, spotlist[DXLOCATOR], spotlist[DXFREQ], &callWorked, &locWorked);
 
             QString distance;
             QString bearing;
@@ -901,7 +900,7 @@ QSharedPointer<ClusterSpotData> BandmapClientFrame::stringToDxSpot(QString spot)
             {
                 double dist = 0;
                 int brg = 0;
-                calcSpotDistanceBearing(spotlist[DXLOCATOR], &dist, &brg);
+                ct->calcDistanceBearing(spotlist[DXLOCATOR], &dist, &brg);
                 distance = QString::number(static_cast< int> ( dist));
                 bearing =  QString::number(brg);
             }
@@ -1101,7 +1100,7 @@ void BandmapClientFrame::addLogSpotToBandmapTable(QSharedPointer<ClusterSpotData
                 // check to see if call or locator worked
                 bool callWorked = false;
                 bool locWorked = false;
-                checkSpotWorked(call, loc, spot->getFreq(), &callWorked, &locWorked);
+                ct->checkSpotWorked(call, loc, spot->getFreq(), &callWorked, &locWorked);
                 if (locWorked)
                 {
                     spot->setDxLocatorWorked(true);
@@ -1164,7 +1163,7 @@ void BandmapClientFrame::addLogSpotToBandmapTable(QSharedPointer<ClusterSpotData
                             {
                                 double dist = 0;
                                 int brg = 0;
-                                calcSpotDistanceBearing(spot->getDxLocator(), &dist, &brg);
+                                ct->calcDistanceBearing(spot->getDxLocator(), &dist, &brg);
                                 distance = QString::number(static_cast<int>(dist));
                             }
                             QString rotBrg;
@@ -1215,7 +1214,7 @@ void BandmapClientFrame::addLogSpotToBandmapTable(QSharedPointer<ClusterSpotData
         {
             double dist = 0;
             int brg = 0;
-            calcSpotDistanceBearing(spot->getDxLocator(), &dist, &brg);
+            ct->calcDistanceBearing(spot->getDxLocator(), &dist, &brg);
             distance = QString::number(static_cast<int>(dist));
         }
 
@@ -1355,85 +1354,6 @@ bool BandmapClientFrame::checkSpotInTable(QSharedPointer<ClusterSpotData> spot)
         }
     }
     return true;
-}
-
-void BandmapClientFrame::checkSpotWorked(const Callsign &mcs, const QString &locator, const Frequency &freq, bool* callWorked, bool* locatorWorked)
-{
-    bool callfound = false;
-    bool locfound = false;
-    if (ct && !ct->isReadOnly())
-    {
-        for ( LogIterator i = ct->ctList.begin(); i != ct->ctList.end(); i++ )
-        {
-            if ((*i).wt->notValidContact() )
-            {
-                continue;
-            }
-
-            if (ct->isHF())
-            {
-                QSharedPointer<BandInfo> bandChanged = ct->checkBandChange(freq, (*i).wt->frequency.getValue().str());
-                if (bandChanged)
-                {
-                    continue;
-                }
-            }
-            if (!callfound)
-            {
-                if ((*i).wt->cs == mcs)
-                {
-                    *callWorked = true;
-                    callfound = true;
-                }
-            }
-
-            if (!locator.isEmpty())
-            {
-                QString loc = locator.mid(0,4);
-                if ((*i).wt->loc.getLoc().mid(0,4) == loc)
-                {
-                    *locatorWorked = true;
-                    locfound = true;
-                }
-            }
-
-            if (callfound && locfound)
-            {
-                return;
-            }
-        }
-    }
-}
-
-
-void BandmapClientFrame::calcSpotDistanceBearing(const QString& _locator, double* distance, int* bearing)
-{
-    bool locValid = true;
-    QString locator = _locator;
-    double latitude;
-    double longitude;
-    double dist;
-    int brg = 0;
-
-    if (ct && !locator.isEmpty())
-    {
-        if (locator.size() == 4)
-        {
-            locator.append("MM");
-        }
-
-        int locValres = lonlat( locator, longitude, latitude, MinosParameters::getMinosParameters() ->getAllowLoc4() );
-        if ( ( locValres ) != LOC_OK )
-        {
-            locValid = false;
-        }
-        if (locValid)
-        {
-            ct->disbeara(longitude, latitude, dist, brg);
-            *distance = dist;
-            *bearing = brg;
-        }
-    }
 }
 
 void BandmapClientFrame::setClusterServerState(QString stateMsg)

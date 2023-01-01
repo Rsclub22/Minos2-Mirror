@@ -179,8 +179,6 @@ private:
     void handleDxSpots(QVector<QString> &spotQueue);
     void clusterStatusIndicatorToggle(bool on);
     void addDxSpotToBandmapTable(QSharedPointer<ClusterSpotData> spot);
-    void calcSpotDistanceBearing(const QString &_locator, double *distance, int *bearing);
-    void checkSpotWorked(const Callsign &callsign, const QString &locator, const Frequency &freq, bool *callWorked, bool *locatorWorked);
     bool checkSpotInTable(QSharedPointer<ClusterSpotData> spot);
     void sendFreqToRig(Frequency freq);
 

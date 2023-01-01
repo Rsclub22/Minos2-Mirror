@@ -59,7 +59,6 @@ private:
 
     void clear();
 
-    void calcSpotDistanceBearing(const QString &_locator, double *distance, int *bearing);
     void setQrzMessageText(QString msg);
     void setLogonPushButtonLabelText(bool loggedOn);
 };

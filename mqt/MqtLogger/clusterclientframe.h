@@ -242,7 +242,6 @@ private:
     void sendFreqToRig(Frequency freq);
     void sendBrgToRot(QString brg);
     memoryData::memData getSpotDataToMemoryVariable(DxSpotSortFilterProxyModel*, int);
-    void calcSpotDistanceBearing(const QString &locator, double *distance, int *bearing);
 
     void sendSpotToMemory(DxSpotSortFilterProxyModel *spotProxyModel, int row);
 
@@ -307,7 +306,6 @@ private slots:
     void onLocatorSpotVertHeaderClicked(int row);
     void onCallsignSpotVertHeaderClicked(int);
     void onSearchSpotVertHeaderClicked(int row);
-    void checkSpotWorked(QString &callsign, QString &locator, bool *callWorked, bool *locatorWorked);
     void checkNewSpots();
     void checkSavedFilters();
     void mouseTimerCheckNewSpots();

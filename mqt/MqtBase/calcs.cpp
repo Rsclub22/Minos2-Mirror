@@ -7,6 +7,7 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 #include <cmath>
+#include "contest.h"
 #include "cutils.h"
 #include "locator.h"
 #include "MinosParameters.h"

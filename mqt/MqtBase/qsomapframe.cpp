@@ -1,4 +1,3 @@
-#include "spotbasedata.h"
 #include <QVBoxLayout>
 #include <QTimer>
 #include <math.h>

@@ -20,7 +20,6 @@
 #include "htmldelegate.h"
 #include "tlogcontainer.h"
 #include "SendRPCDM.h"
-#include "calcs.h"
 #include "MTrace.h"
 #include "clusterClientServer.h"
 #include "clusterclientframe.h"
@@ -754,7 +753,9 @@ void ClusterClientFrame::addDxSpotToTable(const QString spot)
 
             if (spotlist[DXBANDSTR] == contestBandStr) // if contestband matches spotband
             {
-                checkSpotWorked(spotlist[DXCALL], spotlist[DXLOCATOR], &callWorked, &locWorked);
+                Callsign cs;
+                cs.setFullCall(spotlist[DXCALL]);
+                ct->checkSpotWorked(cs, spotlist[DXLOCATOR], spotlist[DXFREQ], &callWorked, &locWorked);
             }
 
 
@@ -765,7 +766,7 @@ void ClusterClientFrame::addDxSpotToTable(const QString spot)
             QString bearing;
             if (!spotlist[DXLOCATOR].isEmpty())
             {
-                calcSpotDistanceBearing(spotlist[DXLOCATOR], &dist, &brg);
+                ct->calcDistanceBearing(spotlist[DXLOCATOR], &dist, &brg);
                 distance = QString::number(static_cast< int> ( dist));
                 bearing =  QString::number(brg);
             }
@@ -886,94 +887,6 @@ bool ClusterClientFrame::checkDbRowForMatch(qint64 incomingVal, int row, const i
     }
 
     return false;
-}
-
-void ClusterClientFrame::checkSpotWorked(QString &callsign, QString &locator, bool* callWorked, bool* locatorWorked)
-{
-    bool callfound = false;
-    bool locfound = false;
-    if (ct && !ct->isReadOnly())
-    {
-
-        Callsign mcs;
-        mcs.setFullCall(callsign);
-
-        for ( auto const &c: qAsConst( ct->ctList ))
-        {
-            if ( c.wt->notValidContact() )
-            {
-                continue;
-            }
-
-            if (!callfound)
-            {
-            if (c.wt->cs == mcs)
-            {
-                *callWorked = true;
-                    callfound = true;
-
-            }
-            }
-
-            if (!locator.isEmpty())
-            {
-                QString loc = locator.mid(0,4);
-                if (c.wt->loc.getLoc().mid(0,4) == loc)
-                {
-                    *locatorWorked = true;
-                    locfound = true;
-
-        }
-            }
-
-            if (callfound && locfound)
-            {
-                return;
-            }
-
-        }
-
-    }
-
-
-
-
-
-
-}
-
-
-void ClusterClientFrame::calcSpotDistanceBearing(const QString& _locator, double* distance, int* bearing)
-{
-    bool locValid = true;
-    QString locator = _locator;
-    double latitude;
-    double longitude;
-    double dist;
-    int brg = 0;
-
-    if (ct && !locator.isEmpty())
-    {
-        if (locator.size() == 4)
-        {
-            locator.append("MM");
-        }
-
-        int locValres = lonlat( locator, longitude, latitude, MinosParameters::getMinosParameters() ->getAllowLoc4() );
-        if ( ( locValres ) != LOC_OK )
-        {
-            locValid = false;
-        }
-        if (locValid)
-        {
-            ct->disbeara(longitude, latitude, dist, brg);
-            *distance = dist;
-            *bearing = brg;
-        }
-
-    }
-
-
 }
 
 void ClusterClientFrame::on_dxSpotViewSectionResized(int, int , int)
