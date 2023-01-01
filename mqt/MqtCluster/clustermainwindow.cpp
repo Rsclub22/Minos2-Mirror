@@ -1508,8 +1508,7 @@ void ClusterMainWindow::handlePingClusterNodeTimeout()
 
 int ClusterMainWindow::getPingTimeoutValue()
 {
-    QString filename = "./Configuration/Cluster/ClusterSettings.ini";
-    QSettings settings(filename, QSettings::IniFormat);
+    QSettings settings(CLUSTER_SETTINGS_FILE, QSettings::IniFormat);
     settings.beginGroup("PingTimeout");
     int timeout = settings.value("PingTimeout", 60000).toInt();
     settings.endGroup();
@@ -2866,9 +2865,7 @@ void ClusterMainWindow::setHfFilterControlsVisible()
 
 void ClusterMainWindow::saveEnableStartEndScriptFileFlags()
 {
-    QString fileName = CLUSTER_SETTINGS_FILE;
-
-    QSettings config(fileName, QSettings::IniFormat);
+    QSettings config(CLUSTER_SETTINGS_FILE, QSettings::IniFormat);
 
     config.beginGroup("CommandFile");
 
@@ -2888,9 +2885,7 @@ void ClusterMainWindow::saveEnableStartEndScriptFileFlags()
 
 void ClusterMainWindow::saveBandFilterOnSaveFlag()
 {
-    QString fileName = CLUSTER_SETTINGS_FILE;
-
-    QSettings config(fileName, QSettings::IniFormat);
+    QSettings config(CLUSTER_SETTINGS_FILE, QSettings::IniFormat);
 /*
     config.beginGroup("General");
     if (band)
@@ -3113,11 +3108,9 @@ void ClusterMainWindow::handleStatusTimer()
 
 bool ClusterMainWindow::getUseQrzForQraFlag()
 {
-    bool useQrzFlag;
-    QString fileName = CLUSTER_SETTINGS_FILE;
-    QSettings config(fileName, QSettings::IniFormat);
+    QSettings config(CLUSTER_SETTINGS_FILE, QSettings::IniFormat);
     config.beginGroup("UseQRZServer");
-    useQrzFlag =  config.value("enableGetQraFromQrz", false).toBool();
+    bool useQrzFlag =  config.value("enableGetQraFromQrz", false).toBool();
     config.endGroup();
 
     return useQrzFlag;
