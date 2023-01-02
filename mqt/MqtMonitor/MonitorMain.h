@@ -37,6 +37,8 @@ public:
 
     bool QSOGrid = true;
     bool QSOLines = true;
+    bool mapShowSpots = true;
+    int clusterDistanceLimit = 0;
 
     void closeTab(MonitoringFrame *tab);
 
@@ -78,6 +80,10 @@ private slots:
 
     void onLogStarted(QSharedPointer<MonitoredLog>);
     void onLogClosed(QSharedPointer<MonitoredLog>);
+
+    void on_mapShowSpots_stateChanged(int arg1);
+
+    void on_clusterDistanceLimit_valueChanged(int arg1);
 
 private:
     Ui::MonitorMain *ui;

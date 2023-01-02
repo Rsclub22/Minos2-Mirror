@@ -116,6 +116,8 @@ BundleFile::BundleFile( PROFILES p )
 
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpShowQSOMapGrid, "ShowQSOMapGrid", true, QT_TR_NOOP("Show QSO Map Grid"), QT_TR_NOOP("Show QSO Map Grid"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpShowQSOMapLines, "ShowQSOMapLines", true, QT_TR_NOOP("Show QSO Map Lines"), QT_TR_NOOP("Show QSO Map Lines"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpMapShowCluster, "MapShowCluster", true, QT_TR_NOOP("Show Cluster spots on map"), QT_TR_NOOP("Show Cluster spots on map"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpMapClusterDistance, "MapClusterDistance", 0, QT_TR_NOOP("Limit Cluster spot distance on map"), QT_TR_NOOP("Limit Cluster spot distance on map"), false ) ) );
 
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpAddBandMapTuningEnable , "addBandmapTuningENABLE", ADD_TUNING_BANDMAP_FREQ_DEFAULT_ENABLED, QT_TR_NOOP("Add to Bandmap tuning enabled"), QT_TR_NOOP("Add to Bandmap tuning enabled"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpAddBandMapTuningTolerance , "addBandmapTuningTolerance", ADD_TUNING_BANDMAP_FREQ_DEFAULT_TOLERANCE, QT_TR_NOOP("Add to Bandmap tuning tolerance"), QT_TR_NOOP("Add to Bandmap tuning tolerance"), false ) ) );

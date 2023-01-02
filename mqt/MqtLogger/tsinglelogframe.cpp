@@ -448,7 +448,7 @@ void TSingleLogFrame::clearScreenLayout(bool clearAllTabs)
     wsjtxFrame->setContest(nullptr);
     clusterControlFrame->setContest(nullptr);
     bandmapControlFrame->setContest(nullptr);
-    qsoMapFrame->setContest(nullptr, false, false);
+    qsoMapFrame->setContest(nullptr, false, false, false, 0);
     dmButtonFrame->setContest(nullptr);
 
     setBandmapLoaded(false);
@@ -788,7 +788,13 @@ void TSingleLogFrame::buildRow(ContestPage *cp, SCRow &scrow, int &auxInstance, 
                     bool lines;
                     TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpShowQSOMapLines, lines );
 
-                    qsoMapFrame->setContest(ct, grid, lines);
+                    bool spots;
+                    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpMapShowCluster, spots );
+
+                    int sd;
+                    TContestApp::getContestApp() ->loggerBundle.getIntProfile( elpMapClusterDistance, sd );
+
+                    qsoMapFrame->setContest(ct, grid, lines, spots, sd);
                     break;
                 }
                 case sctDMButtons:

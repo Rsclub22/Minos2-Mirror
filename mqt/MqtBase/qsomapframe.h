@@ -1,10 +1,11 @@
 #ifndef QSOMAPFRAME_H
 #define QSOMAPFRAME_H
 
-#include "clustercommon.h"
-#include "contacts.h"
 #include <QFrame>
 #include <QVariant>
+
+#include "clustercommon.h"
+#include "contacts.h"
 
 class BaseContestLog;
 class QTimer;
@@ -22,7 +23,7 @@ public:
     explicit QSOMapFrame(QWidget *parent = nullptr);
     ~QSOMapFrame();
 
-    void setContest(BaseContestLog *, bool grid, bool lines);
+    void setContest(BaseContestLog *, bool grid, bool lines, bool spots, int spotDistance);
 
 private:
     Ui::QSOMapFrame *ui;
@@ -31,14 +32,19 @@ private:
 
     QMap <QString, int> locs;
 
+    bool drawSpots = true;
+    int spotDistance = 0;
+
     // cluster spots
     QVector<QSharedPointer<ClusterSpotData> > spotQueue;
     bool clusterServerConnected = false;
 
+    qlonglong timeToLive = 0;
+    QTimer *purgeTimer = nullptr;
 
     void startMap();
     void stopMap();
-    void doRedraw(BaseContestLog *c, bool grid, bool lines);
+    void doRedraw(BaseContestLog *c, bool grid, bool lines, bool spots, int spotDistance);
     void drawSpot(QSharedPointer<ClusterSpotData>);
 
 signals:
@@ -53,9 +59,10 @@ signals:
 private slots:
     void onQmlClicked(QVariant v);
     void dxSpots(QVector<ClusterMessage> spotMsg);
+    void purgeSpots();
 public slots:
     void on_AfterLogContact(const BaseContestLog *c, const QSharedPointer<BaseContact> lct);
-    void on_redrawQSOMap(bool grid, bool lines);
+    void on_redrawQSOMap(bool grid, bool lines, bool spots, int sd);
 
 };
 

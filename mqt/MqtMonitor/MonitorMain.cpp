@@ -101,6 +101,11 @@ MonitorMain::MonitorMain(QWidget *parent) :
     ui->showGridcb->setChecked(QSOGrid);
     QSOLines = settings.value("showQSOLines", true).toBool();
     ui->showLinescb->setChecked(QSOLines);
+
+    mapShowSpots = settings.value("mapShowSpots", true).toBool();
+    ui->mapShowSpots->setChecked(mapShowSpots);
+    clusterDistanceLimit = settings.value("clusterDistanceLimit", 0).toInt();
+    ui->clusterDistanceLimit->setValue(clusterDistanceLimit);
 }
 
 MonitorMain::~MonitorMain()
@@ -474,7 +479,7 @@ void MonitorMain::on_showGridcb_stateChanged(int /*arg1*/)
     QSettings settings;
     QSOGrid = ui->showGridcb->isChecked();
     settings.setValue("showQSOGrid", QSOGrid);
-    MinosLoggerEvents::SendRedrawQSOMap(QSOGrid, QSOLines);
+    MinosLoggerEvents::SendRedrawQSOMap(QSOGrid, QSOLines, mapShowSpots, clusterDistanceLimit);
 }
 
 
@@ -483,6 +488,24 @@ void MonitorMain::on_showLinescb_stateChanged(int /*arg1*/)
     QSettings settings;
     QSOLines = ui->showLinescb->isChecked();
     settings.setValue("showQSOLines", QSOLines);
-    MinosLoggerEvents::SendRedrawQSOMap(QSOGrid, QSOLines);
+    MinosLoggerEvents::SendRedrawQSOMap(QSOGrid, QSOLines, mapShowSpots, clusterDistanceLimit);
+}
+
+
+void MonitorMain::on_mapShowSpots_stateChanged(int /*arg1*/)
+{
+    QSettings settings;
+    mapShowSpots = ui->mapShowSpots->isChecked();
+    settings.setValue("mapShowSpots", mapShowSpots);
+    MinosLoggerEvents::SendRedrawQSOMap(QSOGrid, QSOLines, mapShowSpots, clusterDistanceLimit);
+}
+
+
+void MonitorMain::on_clusterDistanceLimit_valueChanged(int /*arg1*/)
+{
+    QSettings settings;
+    clusterDistanceLimit = ui->clusterDistanceLimit->value();
+    settings.setValue("clusterDistanceLimit", clusterDistanceLimit);
+    MinosLoggerEvents::SendRedrawQSOMap(QSOGrid, QSOLines, mapShowSpots, clusterDistanceLimit);
 }
 

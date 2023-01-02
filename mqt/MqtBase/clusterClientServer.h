@@ -27,7 +27,6 @@ public:
     virtual ~ClusterClientServer();
     static ClusterClientServer  *getClusterClientServer();
 
-    void setLoggerUuid(QString uuid);
 private:
     static ClusterClientServer *clusterClientServer;
     QTimer SyncTimer;

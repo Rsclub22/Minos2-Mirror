@@ -47,13 +47,16 @@ QSOMapFrame::QSOMapFrame(QWidget *parent) :
 
     connect (ClusterClientServer::getClusterClientServer(), &ClusterClientServer::dxSpot, this, &QSOMapFrame::dxSpots);
 
+    purgeTimer = new QTimer(this);
+    connect (purgeTimer, &QTimer::timeout, this, &QSOMapFrame::purgeSpots);
+    purgeTimer->start(PURGE_TIME);
 }
 
 QSOMapFrame::~QSOMapFrame()
 {
     delete ui;
 }
-void QSOMapFrame::setContest(BaseContestLog *c, bool grid, bool lines)
+void QSOMapFrame::setContest(BaseContestLog *c, bool grid, bool lines, bool spots, int spotDistance)
 {
     // NB maps that aren't displayed never get ct set
 
@@ -62,7 +65,7 @@ void QSOMapFrame::setContest(BaseContestLog *c, bool grid, bool lines)
     {
         startMap();
 
-        doRedraw(c, grid, lines);
+        doRedraw(c, grid, lines, spots, spotDistance);
     }
     else
     {
@@ -139,14 +142,18 @@ void QSOMapFrame::onQmlClicked(QVariant /*v*/)
 #endif
 #endif
 }
-void QSOMapFrame::doRedraw(BaseContestLog *ctest, bool grid, bool lines)
+void QSOMapFrame::doRedraw(BaseContestLog *ctest, bool grid, bool lines, bool spots, int sd)
 {
+    //trace(QString("grid %1 lines %2 spots %3 sd %4").arg(grid).arg(lines).arg(spots).arg(sd));
     if (ct == nullptr || ctest != ct)
     {
         return;
     }
     emit drawGrid(grid);
     emit drawLines(lines);
+
+    drawSpots = spots;
+    spotDistance = sd;
 
     QStringList callInfo; // [callsign, latitude, longitude]
 
@@ -172,6 +179,11 @@ void QSOMapFrame::doRedraw(BaseContestLog *ctest, bool grid, bool lines)
 
 
         on_AfterLogContact(ct, cct);
+    }
+
+    for( auto const &s: qAsConst(spotQueue))
+    {
+        drawSpot(s);
     }
 }
 
@@ -237,7 +249,7 @@ void QSOMapFrame::on_AfterLogContact(const BaseContestLog *c, const QSharedPoint
     }
 }
 
-void QSOMapFrame::on_redrawQSOMap(bool grid, bool lines)
+void QSOMapFrame::on_redrawQSOMap(bool grid, bool lines, bool spots, int sd)
 {
     if (ct != nullptr)
     {
@@ -245,7 +257,7 @@ void QSOMapFrame::on_redrawQSOMap(bool grid, bool lines)
 
         emit clearAll();
 
-        doRedraw(ct, grid, lines);
+        doRedraw(ct, grid, lines, spots, sd);
     }
 }
 
@@ -253,7 +265,7 @@ void QSOMapFrame::on_redrawQSOMap(bool grid, bool lines)
 
 void QSOMapFrame::drawSpot(QSharedPointer<ClusterSpotData> bsd)
 {
-    if (ct != nullptr)
+    if (drawSpots && ct != nullptr)
     {
         if (bsd->getDxCall().getValRes() != CS_OK)    // duplicate?
         {
@@ -265,6 +277,16 @@ void QSOMapFrame::drawSpot(QSharedPointer<ClusterSpotData> bsd)
         {
             return;
         }
+
+        int bearing = 0;
+        double distance = 0.0;
+        ct->calcDistanceBearing(loc, &distance, &bearing);
+
+        if (distance > spotDistance)
+        {
+            return;
+        }
+
         double slat;
         double slon;
         /*char v =*/ lonlat( loc, slon, slat, MinosParameters::getMinosParameters() ->getAllowLoc4());
@@ -328,7 +350,6 @@ void QSOMapFrame::dxSpots(QVector<ClusterMessage> spotMsg)
             {
                 if (msg.getMessage().contains(DXSPOT) || msg.getMessage().contains(RESENTSPOT))
                 {
-                    qlonglong timeToLive = 0;
                     trace(QString("Spot for this loggeruuid = %1, add to queue").arg(ct->uuid));
                     QSharedPointer<ClusterSpotData> sp = stringToDxSpot(msg.getMessage(), ct, timeToLive);
                     if (sp)
@@ -338,6 +359,26 @@ void QSOMapFrame::dxSpots(QVector<ClusterMessage> spotMsg)
                     }
                 }
             }
+        }
+    }
+}
+void QSOMapFrame::purgeSpots()
+{
+    if (timeToLive > 0)
+    {
+        if (spotQueue.count() > 0)
+        {
+           int idx = spotQueue.count() - 1;
+           while (idx >= 0 && spotQueue.count() > 0)
+           {
+               if (spotTimedOut(spotQueue[idx]->getRxTime(), timeToLive))
+               {
+                   trace(QString("purged spot = %1, count %2").arg(spotQueue[idx]->getDxCall().getFullCall()).arg(spotQueue.count()));
+
+                   spotQueue.remove(idx);
+               }
+               idx--;
+           }
         }
     }
 }

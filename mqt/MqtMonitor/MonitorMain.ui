@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>615</width>
-    <height>595</height>
+    <width>827</width>
+    <height>627</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -71,7 +71,7 @@
               <property name="title">
                <string>Search Parameters</string>
               </property>
-              <layout class="QVBoxLayout" name="verticalLayout_2">
+              <layout class="QVBoxLayout" name="verticalLayout_5">
                <item>
                 <layout class="QHBoxLayout" name="horizontalLayout_4">
                  <item>
@@ -133,28 +133,89 @@
                  </property>
                 </widget>
                </item>
+              </layout>
+             </widget>
+            </item>
+            <item>
+             <widget class="QGroupBox" name="groupBox">
+              <property name="title">
+               <string>QSO Map</string>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_2">
                <item>
-                <widget class="QGroupBox" name="groupBox">
-                 <property name="title">
-                  <string>QSO Map</string>
-                 </property>
-                 <layout class="QHBoxLayout" name="horizontalLayout">
-                  <item>
-                   <widget class="QCheckBox" name="showGridcb">
-                    <property name="text">
-                     <string>Show Grid</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QCheckBox" name="showLinescb">
-                    <property name="text">
-                     <string>Show Lines</string>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
-                </widget>
+                <layout class="QHBoxLayout" name="horizontalLayout">
+                 <item>
+                  <widget class="QCheckBox" name="showGridcb">
+                   <property name="text">
+                    <string>Show Grid</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QCheckBox" name="showLinescb">
+                   <property name="text">
+                    <string>Show Lines</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <layout class="QHBoxLayout" name="horizontalLayout_6"/>
+                 </item>
+                </layout>
+               </item>
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_5">
+                 <item>
+                  <widget class="QCheckBox" name="mapShowSpots">
+                   <property name="text">
+                    <string>Show spots</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <spacer name="horizontalSpacer">
+                   <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>40</width>
+                     <height>20</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="label_4">
+                   <property name="text">
+                    <string>Dist Limit</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QSpinBox" name="clusterDistanceLimit">
+                   <property name="maximum">
+                    <number>100000</number>
+                   </property>
+                   <property name="singleStep">
+                    <number>100</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <spacer name="horizontalSpacer_2">
+                   <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>40</width>
+                     <height>20</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                </layout>
                </item>
               </layout>
              </widget>
@@ -221,7 +282,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>615</width>
+     <width>827</width>
      <height>24</height>
     </rect>
    </property>
@@ -230,15 +291,15 @@
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>MonitoredLogs</class>
-   <extends>QTreeView</extends>
-   <header>monitoredlogs.h</header>
-  </customwidget>
-  <customwidget>
    <class>MinosSplitter</class>
    <extends>QSplitter</extends>
    <header>minossplitter.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>MonitoredLogs</class>
+   <extends>QTreeView</extends>
+   <header>monitoredlogs.h</header>
   </customwidget>
   <customwidget>
    <class>MatchThisFrame</class>

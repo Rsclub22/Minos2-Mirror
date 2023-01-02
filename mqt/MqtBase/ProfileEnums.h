@@ -63,6 +63,8 @@ enum LOGGERPROFILE {
     elpShowAuxHeaders,
     elpShowQSOMapGrid,
     elpShowQSOMapLines,
+    elpMapShowCluster,
+    elpMapClusterDistance,
 
     elpAgeProtectContests,
     elpAgeToProtectContests,

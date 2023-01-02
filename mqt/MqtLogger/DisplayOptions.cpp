@@ -37,6 +37,10 @@ void DisplayOptions::initialise()
 
     ShowQSOMapGrid.initialise(&TContestApp::getContestApp() ->loggerBundle, elpShowQSOMapGrid, ui->QSOMapShowGrid);
     ShowQSOMapLines.initialise(&TContestApp::getContestApp() ->loggerBundle, elpShowQSOMapLines, ui->QSOMapShowLines);
+
+    MapShowCluster.initialise(&TContestApp::getContestApp() ->loggerBundle, elpMapShowCluster, ui->mapShowCluster);
+    MapClusterDistance.initialise(&TContestApp::getContestApp() ->loggerBundle, elpMapClusterDistance, ui->mapClusterDistance);
+
 #ifndef Q_OS_WIN
     ui->separateIconsCb->hide();
 #endif
@@ -165,9 +169,17 @@ void DisplayOptions::finalise()
     bool gchanged = ShowQSOMapGrid.finalise();
     bool lchanged = ShowQSOMapLines.finalise();
 
-    if (gchanged || lchanged)
+    bool mscchanged = MapShowCluster.finalise();
+    bool mcdchanged = MapClusterDistance.finalise();
+
+
+    if (gchanged || lchanged || mscchanged || mcdchanged)
     {
-        MinosLoggerEvents::SendRedrawQSOMap(ShowQSOMapGrid.value(), ShowQSOMapLines.value());
+        MinosLoggerEvents::SendRedrawQSOMap(ShowQSOMapGrid.value(),
+                                            ShowQSOMapLines.value(),
+                                            MapShowCluster.value(),
+                                            MapClusterDistance.iValue()
+                                            );
     }
 
     MinosLoggerEvents::SendShowAuxHeaders();

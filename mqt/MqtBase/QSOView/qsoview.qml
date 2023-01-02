@@ -198,7 +198,7 @@ MapPolyline
 
     function newHome(callInfo)
     // slot to receive signal callSig(QVariant)
-    // callInfo is a QStringList ["callsign", "latitude", "longitude"]
+    // callInfo is a QStringList ["callsign", "latitude", "longitude", "loc"]
     {
         mapOfEurope.clearMapItems();
         var call = callInfo[0]
@@ -211,7 +211,7 @@ MapPolyline
     }
     function newCall(callInfo)
     // slot to receive signal callSig(QVariant)
-    // callInfo is a QStringList ["callsign", "latitude", "longitude"]
+    // callInfo is a QStringList ["callsign", "latitude", "longitude", "loc"]
     {
         //console.log(callInfo)
         var call = callInfo[0]
@@ -226,7 +226,7 @@ MapPolyline
 
     function newSpot(callInfo)
     // slot to receive signal spotSig(QVariant)
-    // callInfo is a QStringList ["callsign", "latitude", "longitude"]
+    // callInfo is a QStringList ["callsign", "latitude", "longitude", "loc"]
     {
         //console.log(callInfo)
         var call = callInfo[0]

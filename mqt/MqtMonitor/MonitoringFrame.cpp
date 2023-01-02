@@ -163,7 +163,9 @@ void MonitoringFrame::on_mapButton_clicked()
         BaseContestLog *ct = getContest();
         bool grid = monitorMain->QSOGrid;
         bool lines = monitorMain->QSOLines;
-        qsoMapFrame->setContest(ct, grid, lines);
+        bool spots = monitorMain->mapShowSpots;
+        int sd = monitorMain->clusterDistanceLimit;
+        qsoMapFrame->setContest(ct, grid, lines, spots, sd );
         ui->logFrame->layout()->addWidget(qsoMapFrame);
         ui->logFrame->layout()->removeWidget(ui->QSOTable);
 

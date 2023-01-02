@@ -68,7 +68,7 @@ signals:
    void showAuxHeaders();
    void bandMapLimitsChanged();
    void fKey(BaseContestLog *c, int e);
-   void redrawQSOMap(bool grid, bool lines);
+   void redrawQSOMap(bool grid, bool lines, bool cluster, int cldist);
 
    void BrgStrToRot(QString);
    void FreqToRig(Frequency);
@@ -185,7 +185,7 @@ public:
     static void SendShowAuxHeaders();
     static void sendBandmapLimitsChanged();
 
-    static void SendRedrawQSOMap(bool grid, bool lines);
+    static void SendRedrawQSOMap(bool grid, bool lines, bool cluster, int cldist);
 
     static void SendFKey(BaseContestLog *c, int event);
     static void SendSandPChanged(bool);
