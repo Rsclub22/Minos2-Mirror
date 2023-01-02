@@ -177,8 +177,11 @@ QSharedPointer<ClusterSpotData> stringToDxSpot(QString spot, BaseContestLog *ct,
 
             trace(QString("Add Cluster Spot to Bandmap %1, %2, %3, %4").arg(spotlist[DXCALL], spotlist[DXFREQ], spotlist[DXMODESTR], spotlist[DXLOCATOR]));
 
-            res = QSharedPointer<ClusterSpotData>(new ClusterSpotData(bandmapSpotType::CLUSTER));
+            QString cst = spotlist[DX_CLUSTER_SPOT_TYPE];
 
+            res = QSharedPointer<ClusterSpotData>(new ClusterSpotData());
+
+            res->setClusterSpotType(cst);
             res->setRxTime(rxTime);
             res->setSpotDateTime(spotDateTime);
             res->setFreq(spotlist[DXFREQ]);

@@ -808,7 +808,7 @@ void BandmapClientFrame::dxSpots(QVector<ClusterMessage> spotMsg)
                 if (msg.getMessage().contains(DXSPOT) || msg.getMessage().contains(RESENTSPOT))
                 {
                     traceMsg(QString("Spot for this loggeruuid = %1, add to queue").arg(ct->uuid));
-                    QSharedPointer<ClusterSpotData> sp = stringToDxSpot(msg.getMessage());
+                    QSharedPointer<ClusterSpotData> sp = stringToDxSpot(msg.getMessage(), ct, timeToLive);
                     if (sp)
                     {
                         spotQueue += sp;
@@ -825,119 +825,6 @@ void BandmapClientFrame::timerCheckNewBandMapSpots()
     {
         checkNewBandMapSpots();
     }
-}
-QSharedPointer<ClusterSpotData> BandmapClientFrame::stringToDxSpot(QString spot)
-{
-    QSharedPointer<ClusterSpotData> res;
-    QDateTime spotDateTime = QDateTime::currentDateTimeUtc();
-
-    QStringList sl;
-    if (spot.contains(DXSPOT))
-    {
-       sl = spot.split(DXSPOT);
-    }
-    else if (spot.contains(RESENTSPOT))
-    {
-       sl = spot.split(RESENTSPOT);
-    }
-    if (sl.count() == 2)
-    {
-#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
-        QStringList spotlist = sl[1].split(':', Qt::KeepEmptyParts);
-#else
-        QStringList spotlist = sl[1].split(':', QString::KeepEmptyParts);
-#endif
-
-        if (spotlist.count() == TTLVALUE +1)
-        {
-            bool ok = false;
-            int ttl = spotlist[TTLVALUE].toInt(&ok);
-            if (ok)
-            {
-                if (ttl >= MIN_TTL && ttl <= MAX_TTL)
-                {
-                    timeToLive = ttl * 60; // seconds
-                }
-            }
-
-            //-------------------------------------------------------
-
-            //timeToLive = 120; // for testing.....
-
-            //--------------------------------------------------------
-
-            // check to see if spot is for this contest band
-
-            QString band = spotlist[DXBANDSTR];
-            QString bandlist = ct->contestBands.getValue();
-            if (bandlist == allHF)
-            {
-                BandList &blist = BandList::getBandList();
-                QSharedPointer<BandInfo>  bi;
-                bool bandOK = blist.findBand(band, bi);
-                if (!bandOK || bi->getType() != HF_BANDTYPE)
-                {
-                   return res;
-                }
-
-            }
-            else if (spotlist[DXBANDSTR] != contestBandStr)
-            {
-                return res;  // not for this contest band
-            }
-
-            // check to see if call or locator worked
-            bool callWorked = false;
-            bool locWorked = false;
-
-            Callsign cs;
-            cs.setFullCall(spotlist[DXCALL]);
-            ct->checkSpotWorked(cs, spotlist[DXLOCATOR], spotlist[DXFREQ], &callWorked, &locWorked);
-
-            QString distance;
-            QString bearing;
-            if (!spotlist[DXLOCATOR].isEmpty())
-            {
-                double dist = 0;
-                int brg = 0;
-                ct->calcDistanceBearing(spotlist[DXLOCATOR], &dist, &brg);
-                distance = QString::number(static_cast< int> ( dist));
-                bearing =  QString::number(brg);
-            }
-
-            bool dxLocFromNodeFlag = extractDxLocFromNodeFlag(spotlist[DXLOC_FROM_NODE_FLAG]);
-
-            spotDateTime = QDateTime::fromString(spotlist[SPOTDATETIME], "yyyyMMMddHHmmss" );
-            spotDateTime.setTimeSpec(Qt::UTC);
-            if (!spotDateTime.isValid())
-            {
-                spotDateTime = QDateTime::currentDateTimeUtc();
-            }
-            qint64 rxTime = spotDateTime.toMSecsSinceEpoch() / 1000;
-
-            traceMsg(QString("Add Cluster Spot to Bandmap %1, %2, %3, %4").arg(spotlist[DXCALL], spotlist[DXFREQ], spotlist[DXMODESTR], spotlist[DXLOCATOR]));
-
-            res = QSharedPointer<ClusterSpotData>(new ClusterSpotData(bandmapSpotType::CLUSTER));
-
-            res->setRxTime(rxTime);
-            res->setSpotDateTime(spotDateTime);
-            res->setFreq(spotlist[DXFREQ]);
-            res->setBand(spotlist[DXBANDSTR]);
-            res->setMode(spotlist[DXMODESTR]);
-            res->setDxCall(spotlist[DXCALL]);
-            res->setDxCallWorked(callWorked);
-            res->setDxLocator(spotlist[DXLOCATOR]);
-            res->setDxLocatorIsFromNode(dxLocFromNodeFlag);
-            res->setDxLocatorWorked(locWorked);
-            res->setDxDist(distance);
-            res->setDxBrg(bearing);
-            res->setSpotterCall(spotlist[SPOTCALL]);
-            res->setSpotterLocator(spotlist[SPOTLOCATOR]);
-            res->setSpotComment(spotlist[SPOTCOMMENT]);
-            res->setSpotType(bandmapSpotType::SPOT_TYPE::CLUSTER);
-       }
-    }
-    return res;
 }
 void BandmapClientFrame::checkNewBandMapSpots()
 {

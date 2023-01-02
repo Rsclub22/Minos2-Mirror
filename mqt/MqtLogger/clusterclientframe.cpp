@@ -708,114 +708,29 @@ void ClusterClientFrame::handleDxSpots(QVector<QString> &spotQueue)
 
 void ClusterClientFrame::addDxSpotToTable(const QString spot)
 {
+    bool resentSpot = spot.contains(RESENTSPOT);
 
     traceMsg(QString("addDXSpotToTable: %1").arg(spot));
-    QDateTime spotDateTime = QDateTime::currentDateTimeUtc();
+    QSharedPointer<ClusterSpotData> newSpot = stringToDxSpot(spot, ct, timeToLive);
 
-    bool resentSpot = false;
-
-    QStringList sl;
-    if (spot.contains(DXSPOT))
+    if (newSpot)
     {
-      sl = spot.split(DXSPOT);
-    }
-    else if (spot.contains(RESENTSPOT))
-    {
-        resentSpot = true;
-        sl = spot.split(RESENTSPOT);
-    }
-
-    if (sl.count() == 2)
-    {
-#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
-        QStringList spotlist = sl[1].split(':', Qt::KeepEmptyParts);
-#else
-        QStringList spotlist = sl[1].split(':', QString::KeepEmptyParts);
-#endif
-
-        if (spotlist.count() == TTLVALUE +1)
+        // if spot has been resent or is a ShowDx spot requested by a command or restart of server
+        if (resentSpot || newSpot->getClusterSpotType() == clusterSpotType::SHOW_DXSPOT_TYPE)
         {
-
-            bool ok = false;
-            int ttl = spotlist[TTLVALUE].toInt(&ok);
-            if (ok)
+            if (checkspotExists(newSpot))
             {
-                if (ttl >= MIN_TTL && ttl <= MAX_TTL)
-                {
-                    timeToLive = ttl * 60; // seconds
-                }
+                traceMsg(QString("addDxSpotToTable: spot already exists in table, discard Call = %1, Freq: %2").arg(newSpot->getDxCall().getFullCall(), newSpot->getFreq().traceStr()));
+                return;     // spot exists in table
             }
+        }
 
 
-            // check to see if call or locator worked
-            bool callWorked = false;
-            bool locWorked = false;
+        dxSpotDataModel->rowData = newSpot;
 
-            if (spotlist[DXBANDSTR] == contestBandStr) // if contestband matches spotband
-            {
-                Callsign cs;
-                cs.setFullCall(spotlist[DXCALL]);
-                ct->checkSpotWorked(cs, spotlist[DXLOCATOR], spotlist[DXFREQ], &callWorked, &locWorked);
-            }
-
-
-
-            double dist = 0;
-            int brg = 0;
-            QString distance;
-            QString bearing;
-            if (!spotlist[DXLOCATOR].isEmpty())
-            {
-                ct->calcDistanceBearing(spotlist[DXLOCATOR], &dist, &brg);
-                distance = QString::number(static_cast< int> ( dist));
-                bearing =  QString::number(brg);
-            }
-
-            bool dxLocFromNodeFlag = extractDxLocFromNodeFlag(spotlist[DXLOC_FROM_NODE_FLAG]);
-
-            spotDateTime = QDateTime::fromString(spotlist[SPOTDATETIME], "yyyyMMMddHHmmss" );
-            spotDateTime.setTimeSpec(Qt::UTC);
-            qint64 rxTime = spotDateTime.toMSecsSinceEpoch()/1000;
-
-            QSharedPointer<ClusterSpotData> newSpot(new ClusterSpotData());
-
-
-            newSpot->setRxTime(rxTime);
-            newSpot->setSpotDateTime(spotDateTime);
-            newSpot->setFreq(spotlist[DXFREQ]);
-            newSpot->setBand(spotlist[DXBANDSTR]);
-            newSpot->setBandType(spotlist[DXBANDTYPE]);
-            newSpot->setMode(spotlist[DXMODESTR]);
-            newSpot->setDxCall(spotlist[DXCALL]);
-            newSpot->setDxCallWorked(callWorked);
-            newSpot->setDxLocator(spotlist[DXLOCATOR]);
-            newSpot->setDxLocatorIsFromNode(dxLocFromNodeFlag);
-            newSpot->setDxLocatorWorked(locWorked);
-            newSpot->setDxDist(distance);
-            newSpot->setDxBrg(bearing);
-            newSpot->setSpotterCall(spotlist[SPOTCALL]);
-            newSpot->setSpotterLocator(spotlist[SPOTLOCATOR]);
-            newSpot->setDxPropMode(spotlist[DXPROPMODE]);
-            newSpot->setSpotComment(spotlist[SPOTCOMMENT]);
-
-            // if spot has been resent or is a ShowDx spot requested by a command or restart of server
-            if (resentSpot || spotlist[DX_CLUSTER_SPOT_TYPE] == clusterSpotType::SHOW_DXSPOT_TYPE)
-            {
-                if (checkspotExists(newSpot))
-                {
-                    traceMsg(QString("addDxSpotToTable: spot already exists in table, discard Call = %1, Freq: %2").arg(newSpot->getDxCall().getFullCall(), newSpot->getFreq().traceStr()));
-                    return;     // spot exists in table
-                }
-            }
-
-
-            dxSpotDataModel->rowData = newSpot;
-
-            dxSpotDataModel->insertRows(dxSpotDataModel->rowCount(), 1);
-            traceMsg(QString("addDxSpotToTable: adding %1 to cluster data table").arg(spotlist[DXCALL]));
-       }
+        dxSpotDataModel->insertRows(dxSpotDataModel->rowCount(), 1);
+        traceMsg(QString("addDxSpotToTable: adding %1 to cluster data table").arg(newSpot->getDxCall().getFullCall()));
     }
-
 }
 
 bool ClusterClientFrame::readLessGreaterThanDistanceFlag()
