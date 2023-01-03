@@ -822,7 +822,7 @@ void TSendDM::notifyRotChanges()
 void TSendDM::on_notify( AnalysePubSubNotify an, const QString from )
 {
     // PubSub notifications
-    traceMsg( "Notify callback from " + from + ( !an.getOK() ? ":Error " : ":Normal " ) +  an.getPublisherProgram() + "@" + an.getPublisherRouter());
+    //traceMsg( "Notify callback from " + from + ( !an.getOK() ? ":Error " : ":Normal " ) +  an.getPublisherProgram() + "@" + an.getPublisherRouter());
 
     if ( an.getOK())
     {
@@ -962,8 +962,8 @@ void TSendDM::on_notify( AnalysePubSubNotify an, const QString from )
 void TSendDM::on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString from )
 {
     // responds to pull calls from the monitoring client
-    traceMsg( "request callback from " + from + ( err ? ":Error" : ":Normal" ) );
-    traceMsg("method is " + mro->getMethodName());
+    //traceMsg( "request callback from " + from + ( err ? ":Error" : ":Normal" ) );
+    //traceMsg("method is " + mro->getMethodName());
 
     // need to check "from" is correct
     if ( !err )

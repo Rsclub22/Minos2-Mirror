@@ -175,7 +175,7 @@ QSharedPointer<ClusterSpotData> stringToDxSpot(QString spot, BaseContestLog *ct,
             }
             qint64 rxTime = spotDateTime.toMSecsSinceEpoch() / 1000;
 
-            trace(QString("Add Cluster Spot to Bandmap %1, %2, %3, %4").arg(spotlist[DXCALL], spotlist[DXFREQ], spotlist[DXMODESTR], spotlist[DXLOCATOR]));
+            trace(QString("Create Cluster Spot %1, %2, %3, %4").arg(spotlist[DXCALL], spotlist[DXFREQ], spotlist[DXMODESTR], spotlist[DXLOCATOR]));
 
             QString cst = spotlist[DX_CLUSTER_SPOT_TYPE];
 

@@ -338,9 +338,9 @@ void QrzDisplayServerRpc::sendCallsignFromLoggerToQrzServer(QString callsign, QS
 }
 
 
-void QrzDisplayServerRpc::on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString from )
+void QrzDisplayServerRpc::on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString /*from*/ )
 {
-    trace(QString("[QrzDisplayServer]  on_serverCall - Message from %1").arg(from));
+    //trace(QString("[QrzDisplayServer]  on_serverCall - Message from %1").arg(from));
     if ( !err )
     {
 

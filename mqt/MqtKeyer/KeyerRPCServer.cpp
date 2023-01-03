@@ -143,7 +143,7 @@ void KeyerServer::publishVUMeter(unsigned int rmsLevel, unsigned int peakLevel, 
 //---------------------------------------------------------------------------
 void KeyerServer::on_routerCall(bool err, QSharedPointer<MinosRPCObj>mro, const QString from )
 {
-    trace( "Keyer callback from " + from + ( err ? ":Error" : ":Normal" ) );
+    //trace( "Keyer callback from " + from + ( err ? ":Error" : ":Normal" ) );
 
     if ( !err )
     {
@@ -215,9 +215,9 @@ void KeyerServer::on_routerCall(bool err, QSharedPointer<MinosRPCObj>mro, const 
     }
 }
 //---------------------------------------------------------------------------
-void KeyerServer::on_notify(AnalysePubSubNotify an, const QString from )
+void KeyerServer::on_notify(AnalysePubSubNotify an, const QString /*from*/ )
 {
-   trace( "Notify callback from " + from + ( !an.getOK() ? ":Error" : ":Normal" ) );
+   //trace( "Notify callback from " + from + ( !an.getOK() ? ":Error" : ":Normal" ) );
 
 
    // called whenever line changes

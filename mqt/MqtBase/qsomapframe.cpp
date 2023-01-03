@@ -246,6 +246,15 @@ void QSOMapFrame::on_AfterLogContact(const BaseContestLog *c, const QSharedPoint
         callInfo << QString::number(lon);
         callInfo << loc;
         emit callSig(callInfo);
+
+        for( auto const &s: qAsConst(spotQueue))
+        {
+            if (s->getDxCall() == lct->cs)
+            {
+                s->setSpotType(bandmapSpotType::DELETED);
+            }
+        }
+
     }
 }
 
@@ -346,7 +355,9 @@ void QSOMapFrame::dxSpots(QVector<ClusterMessage> spotMsg)
             trace(QString("retrieve cluster spot from queue - spot = %1 for loggeruuid = %2, this contest uuid = %3").arg(msg.getMessage(), msg.getLoggerUuid(), ct->uuid));
 
             // if loggerUuid is empty, message is for all frames
-            if ((msg.getLoggerUuid().isEmpty() || msg.getLoggerUuid() == ct->uuid) && (msg.getFrameId() == resendFrameId::BANDMAP_CLIENT || msg.getFrameId() == resendFrameId::ALL_CLIENTS))
+            if ((msg.getLoggerUuid().isEmpty() || msg.getLoggerUuid() == ct->uuid)
+                    && (msg.getFrameId() == resendFrameId::BANDMAP_CLIENT
+                        || msg.getFrameId() == resendFrameId::ALL_CLIENTS))
             {
                 if (msg.getMessage().contains(DXSPOT) || msg.getMessage().contains(RESENTSPOT))
                 {
@@ -354,10 +365,30 @@ void QSOMapFrame::dxSpots(QVector<ClusterMessage> spotMsg)
                     QSharedPointer<ClusterSpotData> sp = stringToDxSpot(msg.getMessage(), ct, timeToLive);
                     if (sp)
                     {
-                        spotQueue += sp;
-                        drawSpot(sp);
+                        bool fromNode = sp->getDxLocatorIsFromNode();
+                        bool wkd = sp->getDxCallWorked();
+                        bool locEmpty = sp->getDxLocator().isEmpty();
+                        if (!fromNode && !wkd && !locEmpty)
+                        {
+                            trace(QString("draw cluster spot spot = %1").arg(msg.getMessage()));
+                            spotQueue += sp;
+                            drawSpot(sp);
+                        }
+                        else
+                        {
+                            trace(QString("don't draw cluster spot spot = %1 FN %2 WKD %3 LE %4")
+                                  .arg(msg.getMessage())
+                                  .arg(fromNode)
+                                  .arg(wkd)
+                                  .arg(locEmpty)
+                                  );
+                        }
                     }
                 }
+            }
+            else
+            {
+                trace("Not for this contest");
             }
         }
     }
@@ -371,7 +402,8 @@ void QSOMapFrame::purgeSpots()
            int idx = spotQueue.count() - 1;
            while (idx >= 0 && spotQueue.count() > 0)
            {
-               if (spotTimedOut(spotQueue[idx]->getRxTime(), timeToLive))
+               if (spotTimedOut(spotQueue[idx]->getRxTime(), timeToLive)
+                       || spotQueue[idx]->getSpotType() == bandmapSpotType::DELETED)
                {
                    trace(QString("purged spot = %1, count %2").arg(spotQueue[idx]->getDxCall().getFullCall()).arg(spotQueue.count()));
 

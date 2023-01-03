@@ -222,9 +222,9 @@ void ControlMain::linesChangedEvent( )
     }
 }
 //---------------------------------------------------------------------------
-void ControlMain::on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString from )
+void ControlMain::on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString /*from*/ )
 {
-   trace( "control callback from " + from + ( err ? ":Error" : ":Normal" ) );
+   //trace( "control callback from " + from + ( err ? ":Error" : ":Normal" ) );
 
    if ( !err )
    {
@@ -375,16 +375,16 @@ void setLines(bool PTTOut, bool PTTIn, bool L1, bool L2, bool L3, bool L4, bool 
    controlMain->setT1(T1);
    controlMain->setT2(T2);
 }
-void ControlMain::on_notify( AnalysePubSubNotify an, const QString from )
+void ControlMain::on_notify( AnalysePubSubNotify an, const QString /*from*/ )
 {
     // PubSub notifications
-    trace( "Notify callback from " + from + ( !an.getOK() ? ":Error " : ":Normal " ) +  an.getPublisherProgram() + "@" + an.getPublisherRouter());
+    //trace( "Notify callback from " + from + ( !an.getOK() ? ":Error " : ":Normal " ) +  an.getPublisherProgram() + "@" + an.getPublisherRouter());
 
     if ( an.getOK())
     {
         if ( an.getState() == psPublished)
         {
-            trace(QString("SendRPC category %1 key %2").arg(an.getCategory()).arg(an.getKey()));
+            trace(QString("SendRPC category %1 key %2").arg(an.getCategory(), an.getKey()));
             if ( an.getCategory() == rpcConstants::rigStateCategory)
             {
                 rigCache.setStateString(an);

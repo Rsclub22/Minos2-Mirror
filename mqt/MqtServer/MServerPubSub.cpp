@@ -819,7 +819,7 @@ void buildSubscribedTree(QTreeWidget *tree)
 
 void TPubSubMain::publishCallback( bool err, QSharedPointer<MinosRPCObj>mro, const QString &from )
 {
-   trace( "Publish callback from " + from + ( err ? ":Error" : ":Normal" ) );
+   //trace( "Publish callback from " + from + ( err ? ":Error" : ":Normal" ) );
 
    if ( !err )
    {
@@ -855,7 +855,7 @@ void TPubSubMain::publishCallback( bool err, QSharedPointer<MinosRPCObj>mro, con
 
 void TPubSubMain::subscribeCallback(bool err, QSharedPointer<MinosRPCObj> mro, const QString &from )
 {
-   trace( "Client Subscribe callback from " + from + ( err ? ":Error" : ":Normal" ) );
+   //trace( "Client Subscribe callback from " + from + ( err ? ":Error" : ":Normal" ) );
    if ( !err )
    {
       QSharedPointer<RPCParam>st(new RPCParamStruct);
@@ -878,7 +878,7 @@ void TPubSubMain::subscribeCallback(bool err, QSharedPointer<MinosRPCObj> mro, c
 
 void TPubSubMain::remoteSubscribeCallback( bool err, QSharedPointer<MinosRPCObj>mro, const QString &from )
 {
-   trace( "Remote Subscribe callback from " + from + ( err ? ":Error" : ":Normal" ) );
+   //trace( "Remote Subscribe callback from " + from + ( err ? ":Error" : ":Normal" ) );
    if ( !err )
    {
       QSharedPointer<RPCParam>st(new RPCParamStruct);
@@ -911,7 +911,7 @@ void TPubSubMain::remoteSubscribeCallback( bool err, QSharedPointer<MinosRPCObj>
 
 void TPubSubMain::routerSubscribeCallback(bool err, QSharedPointer<MinosRPCObj> mro, const QString &from )
 {
-   trace( "router Subscribe callback from " + from + ( err ? ":Error" : ":Normal" ) );
+   //trace( "router Subscribe callback from " + from + ( err ? ":Error" : ":Normal" ) );
    if ( !err )
    {
       QSharedPointer<RPCParam>st(new RPCParamStruct);
@@ -939,7 +939,7 @@ void TPubSubMain::routerSubscribeCallback(bool err, QSharedPointer<MinosRPCObj> 
 void TPubSubMain::notifyCallback( bool err, QSharedPointer<MinosRPCObj> /*mro*/, const QString &from )
 {
    // response to pubsub calls
-   trace( "Notify callback from " + from + ( err ? ":Error" : ":Normal" ) );
+   //trace( "Notify callback from " + from + ( err ? ":Error" : ":Normal" ) );
 }
 //---------------------------------------------------------------------------
 
@@ -950,7 +950,7 @@ void TPubSubMain::routerNotifyCallback(bool err, QSharedPointer<MinosRPCObj> mro
    // we need to pass it on to any of our subscribers who are interested
    // in this event from this router
    // But why aren't we sending a result?
-   trace( "PubSub Notify callback from " + from + ( err ? ":Error" : ":Normal" ) );
+   //trace( "PubSub Notify callback from " + from + ( err ? ":Error" : ":Normal" ) );
    AnalysePubSubNotify an( err, mro );
 
    if ( an.getOK() )

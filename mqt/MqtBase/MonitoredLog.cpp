@@ -168,7 +168,6 @@ void MonitoredLog::processLogStanza( int stanza, const QString &stanzaData )
 }
 void MonitoredLog::on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString from )
 {
-    trace( "MonitoredLog router callback from " + from + ( err ? ":Error" : ":Normal" ) );
     if ( !err )
     {
         // This will return stanza id, pubname, and stanza content

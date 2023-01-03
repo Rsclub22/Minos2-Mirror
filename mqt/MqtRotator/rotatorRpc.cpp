@@ -41,9 +41,9 @@ void RotatorRpc::publishAntennaList(QString ants)
 }
 
 
-void RotatorRpc::on_notify( AnalysePubSubNotify an, const QString from )
+void RotatorRpc::on_notify( AnalysePubSubNotify an, const QString /*from*/ )
 {
-   trace( "Rot Rpc: Notify callback from " + from + ( !an.getOK() ? ":Error" : ":Normal" ) );
+   //trace( "Rot Rpc: Notify callback from " + from + ( !an.getOK() ? ":Error" : ":Normal" ) );
 
    // called whenever soemthing we subscribe to changes
    if ( an.getOK() )
@@ -57,9 +57,9 @@ void RotatorRpc::on_notify( AnalysePubSubNotify an, const QString from )
    }
 }
 //---------------------------------------------------------------------------
-void RotatorRpc::on_routerCall(bool err, QSharedPointer<MinosRPCObj>mro, const QString from )
+void RotatorRpc::on_routerCall(bool err, QSharedPointer<MinosRPCObj>mro, const QString /*from*/ )
 {
-    trace( "Rot RPC: rotator callback from " + from + ( err ? ":Error" : ":Normal" ) );
+    //trace( "Rot RPC: rotator callback from " + from + ( err ? ":Error" : ":Normal" ) );
 
     if ( !err )
     {

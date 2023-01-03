@@ -102,9 +102,9 @@ void RigControlRpc::publishListChangedRadioNames(QVector<QSharedPointer<RadioNam
 
 
 
-void RigControlRpc::on_notify( AnalysePubSubNotify an, const QString from )
+void RigControlRpc::on_notify( AnalysePubSubNotify an, const QString /*from*/ )
 {
-    trace( "Notify callback from " + from + ( !an.getOK() ? ":Error" : ":Normal" ) );
+    //trace( "Notify callback from " + from + ( !an.getOK() ? ":Error" : ":Normal" ) );
 
     // called whenever soemthing we subscribe to changes
     if ( an.getOK() )
@@ -130,9 +130,9 @@ void RigControlRpc::on_notify( AnalysePubSubNotify an, const QString from )
     }
 }
 //---------------------------------------------------------------------------
-void RigControlRpc::on_routerCall( bool err, QSharedPointer<MinosRPCObj>mro, const QString from )
+void RigControlRpc::on_routerCall( bool err, QSharedPointer<MinosRPCObj>mro, const QString /*from*/ )
 {
-    trace("Rig RPC: Rigcontrol callback from " + from + ( err ? ":Error" : ":Normal" ) );
+    //trace("Rig RPC: Rigcontrol callback from " + from + ( err ? ":Error" : ":Normal" ) );
 
     if ( !err )
     {

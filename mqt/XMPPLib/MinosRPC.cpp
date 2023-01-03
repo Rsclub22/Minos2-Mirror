@@ -202,7 +202,7 @@ void MinosRPC::routerNotify( AnalysePubSubNotify &an)
 }
 void MinosRPC::notifyCallback( bool err, QSharedPointer<MinosRPCObj>mro, const QString &from )
 {
-   trace( "MinosRPC Notify callback from " + from + ( err ? ":Error" : ":Normal" ) );
+   //trace( "MinosRPC Notify callback from " + from + ( err ? ":Error" : ":Normal" ) );
 
    AnalysePubSubNotify an( err, mro );
    routerNotify(an );
@@ -278,7 +278,7 @@ void MinosRPC::notifyCallback( bool err, QSharedPointer<MinosRPCObj>mro, const Q
 //---------------------------------------------------------------------------
 void MinosRPC::routerCallback( bool err, QSharedPointer<MinosRPCObj>mro, const QString &from )
 {
-   trace( "rpc  callback from " + from + ( err ? ":Error" : ":Normal" ) );
+   //trace( "rpc  callback from " + from + ( err ? ":Error" : ":Normal" ) );
 
    emit routerCall(err, mro, from);
 }

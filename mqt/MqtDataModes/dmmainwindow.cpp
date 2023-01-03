@@ -226,10 +226,8 @@ void DMMainWindow::startPreviousEngine()
     );
 }
 
-void DMMainWindow::on_routerCall(bool err, QSharedPointer<MinosRPCObj>mro, const QString from )
+void DMMainWindow::on_routerCall(bool err, QSharedPointer<MinosRPCObj>mro, const QString /*from*/ )
 {
-    trace( "router callback from " + from + ( err ? ":Error" : ":Normal" ) );
-
     if ( !err )
     {
         QString call = mro->getMethodName();
@@ -259,10 +257,10 @@ void DMMainWindow::on_routerCall(bool err, QSharedPointer<MinosRPCObj>mro, const
         }
     }
 }
-void DMMainWindow::on_notify(AnalysePubSubNotify an, const QString from )
+void DMMainWindow::on_notify(AnalysePubSubNotify an, const QString /*from*/ )
 {
     // pubsub notify
-    trace( "Notify callback from " + from + ( !an.getOK() ? ":Error" : ":Normal" ) );
+    //trace( "Notify callback from " + from + ( !an.getOK() ? ":Error" : ":Normal" ) );
 
     if ( an.getOK() )
     {

@@ -87,9 +87,9 @@ void Clusterrpc::askQrzServerForQra(QString dxCall, QString spotterCall)
 }
 
 
-void Clusterrpc::on_routerCall( bool err, QSharedPointer<MinosRPCObj>mro, const QString from )
+void Clusterrpc::on_routerCall( bool err, QSharedPointer<MinosRPCObj>mro, const QString /*from*/ )
 {
-   trace( "Cluster RPC: callback from " + from + ( err ? ":Error" : ":Normal" ) );
+   //trace( "Cluster RPC: callback from " + from + ( err ? ":Error" : ":Normal" ) );
 
    if ( !err )
    {
@@ -159,7 +159,7 @@ void Clusterrpc::on_routerCall( bool err, QSharedPointer<MinosRPCObj>mro, const 
                       clusterFrameId->getInt(frameId);
 
 
-                      trace(QString("Cluster RPC: resendspots command to cluster = %1, bandmask = %2, from loggerUuid = %3, frameId %4").arg(cmd).arg(bandMask).arg(logUuid).arg(frameId));
+                      trace(QString("Cluster RPC: resendspots command to cluster = %1, bandmask = %2, from loggerUuid = %3, frameId %4").arg(cmd, bandMask, logUuid).arg(frameId));
                       emit resendSpotToClients(frameId, logUuid, cmd, bandMask);
 
                   }
