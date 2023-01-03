@@ -210,16 +210,19 @@ void MonitoredLog::on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, cons
                     {
                         if (l && l->getPublishedName() == logName )
                         {
+                            contest->lastInserted = -1;
                             emit newStanzas(this);
 
                             trace( "||" + stanzaData + "||" );
                             l ->processLogStanza( stanza, stanzaData );
 
                             BaseContestLog *contest = l->getContest();
+
                             int li = contest->lastInserted;
-                            if (li >= 0)
+                           // if (li >= 0)
                             {
-                                if ( li== contest->ctList.count() - 1)
+                                int ctc = contest->ctList.count();
+                                if ( li >= 0 && li == ctc - 1)
                                 {
                                     // and add callsign to callsign set
 

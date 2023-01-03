@@ -911,7 +911,7 @@ QString BaseContestLog::scanContact(QSharedPointer<BaseContact> nct, QDateTime  
     // check for duplicates; accumulate the current points score
 
 
-    if ( DupSheet.checkCurDup( this, nct->getLogSequence(), 0, true ) )    // check for dup, insert it if required
+    if ( DupSheet.checkCurDup( nct.data(), nct->getLogSequence(), true ) )    // check for dup, insert it if required
        nct->cs.setValRes( ERR_DUPCS);
 
     nct->bearing = -1;		// force a recalc

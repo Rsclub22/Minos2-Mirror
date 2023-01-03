@@ -142,13 +142,16 @@ void QSOMapFrame::onQmlClicked(QVariant /*v*/)
 #endif
 #endif
 }
-void QSOMapFrame::doRedraw(BaseContestLog *ctest, bool grid, bool lines, bool spots, int sd)
+void QSOMapFrame::doRedraw(const BaseContestLog *ctest, bool grid, bool lines, bool spots, int sd)
 {
-    //trace(QString("grid %1 lines %2 spots %3 sd %4").arg(grid).arg(lines).arg(spots).arg(sd));
+    trace(QString("doRedraw grid %1 lines %2 spots %3 sd %4").arg(grid).arg(lines).arg(spots).arg(sd));
     if (ct == nullptr || ctest != ct)
     {
         return;
     }
+    bdrawGrid = grid;
+    bdrawLines = lines;
+
     emit drawGrid(grid);
     emit drawLines(lines);
 
@@ -169,16 +172,20 @@ void QSOMapFrame::doRedraw(BaseContestLog *ctest, bool grid, bool lines, bool sp
     {
         QSharedPointer<BaseContact> cct = c.wt;
 
+        trace(QString("doRedraw %1 %2 %3").arg(cct->cs.getFullCall()).arg(cct->cs.getValRes()).arg(cct->loc.getLoc()));
+
         if ( cct->notValidContact() )
+        {
+            trace("Not valid");
            continue;
+        }
 
         if (cct->cs.getValRes() != CS_OK)    // duplicate?
         {
             continue;
         }
 
-
-        on_AfterLogContact(ct, cct);
+        showContact(ct, cct);
     }
 
     for( auto const &s: qAsConst(spotQueue))
@@ -186,8 +193,7 @@ void QSOMapFrame::doRedraw(BaseContestLog *ctest, bool grid, bool lines, bool sp
         drawSpot(s);
     }
 }
-
-void QSOMapFrame::on_AfterLogContact(const BaseContestLog *c, const QSharedPointer<BaseContact> lct)
+void QSOMapFrame::showContact(const BaseContestLog *c, const QSharedPointer<BaseContact> lct)
 {
     if (ct != nullptr && ct == c && !ct->isReadOnly())
     {
@@ -204,9 +210,14 @@ void QSOMapFrame::on_AfterLogContact(const BaseContestLog *c, const QSharedPoint
         {
             return;
         }
+        trace(QString("showContact %1 %2 %3").arg(lct->cs.getFullCall()).arg(lct->cs.getValRes()).arg(lct->loc.getLoc()));
 
-        double lat = raddeg(lct->lat);
-        double lon = raddeg(lct->lon);
+        double slat;
+        double slon;
+        /*char v =*/ lonlat( loc, slon, slat, MinosParameters::getMinosParameters() ->getAllowLoc4());
+
+        double lat = raddeg(slat);
+        double lon = raddeg(slon);
 
         bool fourLoc = (loc.length() == 4);
 
@@ -239,6 +250,11 @@ void QSOMapFrame::on_AfterLogContact(const BaseContestLog *c, const QSharedPoint
 
         }
 
+        if (lct->cs.getFullCall() == "PA5Y")
+        {
+            int a = 0;
+            a++;
+        }
         QStringList callInfo; // [callsign, latitude, longitude]
 
         callInfo << lct->cs.getFullCall();
@@ -256,6 +272,23 @@ void QSOMapFrame::on_AfterLogContact(const BaseContestLog *c, const QSharedPoint
         }
 
     }
+
+}
+void QSOMapFrame::on_AfterLogContact(const BaseContestLog *c, const QSharedPointer<BaseContact> lct)
+{
+    if (ct != nullptr && ct == c && !ct->isReadOnly())
+    {
+        if (!lct || lct->getHistory().size() > 1)
+        {
+            emit clearAll();
+            locs.clear();
+            doRedraw(c, bdrawGrid, bdrawLines, drawSpots, spotDistance);
+        }
+        else
+        {
+            showContact(c, lct);
+        }
+    }
 }
 
 void QSOMapFrame::on_redrawQSOMap(bool grid, bool lines, bool spots, int sd)
@@ -265,6 +298,7 @@ void QSOMapFrame::on_redrawQSOMap(bool grid, bool lines, bool spots, int sd)
         // clear map, redraw home and all QSOs
 
         emit clearAll();
+        locs.clear();
 
         doRedraw(ct, grid, lines, spots, sd);
     }

@@ -32,6 +32,8 @@ private:
 
     QMap <QString, int> locs;
 
+    bool bdrawGrid = true;
+    bool bdrawLines = true;
     bool drawSpots = true;
     int spotDistance = 0;
 
@@ -44,9 +46,10 @@ private:
 
     void startMap();
     void stopMap();
-    void doRedraw(BaseContestLog *c, bool grid, bool lines, bool spots, int spotDistance);
+    void doRedraw(const BaseContestLog *c, bool grid, bool lines, bool spots, int spotDistance);
     void drawSpot(QSharedPointer<ClusterSpotData>);
 
+    void showContact(const BaseContestLog *c, const QSharedPointer<BaseContact> lct);
 signals:
     void callSig(QVariant stringList);
     void spotSig(QVariant stringList);

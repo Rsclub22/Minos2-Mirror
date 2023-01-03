@@ -145,6 +145,13 @@ void MonitoringFrame::on_monitorTimeout()
             getContest()->DupSheet.clear();
             getContest()->scanContest();  // this is MUCH too often... timer is 100ms!
             rescanNeeded = false;
+
+            if (qsoMapFrame)
+            {
+                QSharedPointer<BaseContact> lct;
+                qsoMapFrame->on_AfterLogContact(getContest(), lct);
+            }
+
         }
         setScore();
 
