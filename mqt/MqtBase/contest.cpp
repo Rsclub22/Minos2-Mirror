@@ -1872,7 +1872,7 @@ void BaseContestLog::checkSpotWorked(const Callsign &mcs, const QString &locator
 {
     bool callfound = false;
     bool locfound = false;
-    if (isReadOnly())
+    if (!isReadOnly())
     {
         for ( LogIterator i = ctList.begin(); i != ctList.end(); i++ )
         {
@@ -1898,7 +1898,7 @@ void BaseContestLog::checkSpotWorked(const Callsign &mcs, const QString &locator
                 }
             }
 
-            if (!locator.isEmpty())
+            if (!locfound && !locator.isEmpty())
             {
                 QString loc = locator.mid(0,4);
                 if ((*i).wt->loc.getLoc().mid(0,4) == loc)

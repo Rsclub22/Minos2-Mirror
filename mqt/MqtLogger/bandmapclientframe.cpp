@@ -896,7 +896,9 @@ void BandmapClientFrame::addDxSpotToBandmapTable(QSharedPointer<ClusterSpotData>
     }
 
     traceMsg(QString("Add Cluster Spot to Bandmap %1, %2, %3, %4, dxLocatorIsFromNode = %5")
-             .arg(spot->getDxCall().getFullCall(), spot->getFreq().traceStr(), (spot->getMode(), spot->getDxLocatorWorked(), spot->getDxLocatorIsFromNode() ? "true" : "false"))
+             .arg(spot->getDxCall().getFullCall(), spot->getFreq().traceStr(), spot->getMode())
+                  .arg(spot->getDxLocatorWorked())
+             .arg(spot->getDxLocatorIsFromNode() ? "true" : "false")
                   );
 
     bandmapDataModel->rowData.push_back(spot);
@@ -995,6 +997,9 @@ void BandmapClientFrame::addLogSpotToBandmapTable(QSharedPointer<ClusterSpotData
                 if (callWorked)
                 {
                     spot->setDxCallWorked(true);
+
+                    // If we worked the call, we better have also worked their locator...
+                    spot->setDxLocatorWorked(true);
                 }
             }
         }
@@ -1031,44 +1036,46 @@ void BandmapClientFrame::addLogSpotToBandmapTable(QSharedPointer<ClusterSpotData
                         bsd->setDxCallWorked(spot->getDxCallWorked());
                         bsd->setDxLocatorWorked(spot->getDxLocatorWorked());
 
-                        // override the call - it may now be /P (or not /P), etc
-                        bsd->setCallsign(spot->getDxCall());
-
-                        QString exchange = spot->getDistrict();
-                        if (!exchange.isEmpty())
+                        if (savedSpotType != bandmapSpotType::LOGGED)
                         {
-                            bsd->setDistrict(exchange);
-                        }
-                        QString loc = spot->getDxLocator();
+                            // override the call - it may now be /P (or not /P), etc
 
-                        if (!loc.isEmpty())
-                        {
-                            // and override the loc - it may now be provided or changed
-                            QString distance;
+                            // BUT don't override what is already logged - edit the QSO
+                            // to achieve that
 
-                            if (!spot->getDxLocator().isEmpty())
-                            {
-                                double dist = 0;
-                                int brg = 0;
-                                ct->calcDistanceBearing(spot->getDxLocator(), &dist, &brg);
-                                distance = QString::number(static_cast<int>(dist));
-                            }
-                            QString rotBrg;
-                            if (rotatorConnected)
-                            {
-                                rotBrg = curRotBearing;   // get rotator bearing
-                            }
-                            else
-                            {
-                                rotBrg = "0";
-                            }
-                            bsd->setDxLocator(loc);
+                            bsd->setCallsign(spot->getDxCall());
 
-                            // what was this for? we never add the spot!
-//                            bandmapDataModel->rowData->setDxDist(distance);
-//                            bandmapDataModel->rowData->setDxBrg(spot->getDxBrg());
-//                            bandmapDataModel->rowData->setRotBrg(rotBrg);
-//                            bandmapDataModel->rowData->setRotConnected(rotatorConnected);
+                            QString exchange = spot->getDistrict();
+                            if (!exchange.isEmpty())
+                            {
+                                bsd->setDistrict(exchange);
+                            }
+                            QString loc = spot->getDxLocator();
+
+                            if (!loc.isEmpty())
+                            {
+                                // and override the loc - it may now be provided or changed
+                                QString distance;
+
+                                if (!spot->getDxLocator().isEmpty())
+                                {
+                                    double dist = 0;
+                                    int brg = 0;
+                                    ct->calcDistanceBearing(spot->getDxLocator(), &dist, &brg);
+                                    distance = QString::number(static_cast<int>(dist));
+                                }
+                                QString rotBrg;
+                                if (rotatorConnected)
+                                {
+                                    rotBrg = curRotBearing;   // get rotator bearing
+                                }
+                                else
+                                {
+                                    rotBrg = "0";
+                                }
+                                bsd->setDxLocator(loc);
+
+                            }
                         }
                         bandmapDataModel->sortModel();
                         bandmapView->bandmapUpdate(true);
@@ -1080,7 +1087,8 @@ void BandmapClientFrame::addLogSpotToBandmapTable(QSharedPointer<ClusterSpotData
                     else if  (savedSpotType == bandmapSpotType::SAVED
                               || savedSpotType == bandmapSpotType::CLUSTER)
                     {
-                        // overwrite saved or cluster spots from logged or saved spots; delete existing and later it will be re-added
+                        // overwrite saved or cluster spots from logged or saved spots;
+                        // delete existing and later it will be re-added
                         traceMsg(QString("AddLogSpot Callsign removed - %1").arg(savedCall.getFullCall()));
                         bsd->setSpotType(bandmapSpotType::DELETED);
                     }

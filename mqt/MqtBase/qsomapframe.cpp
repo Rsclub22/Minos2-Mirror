@@ -144,7 +144,7 @@ void QSOMapFrame::onQmlClicked(QVariant /*v*/)
 }
 void QSOMapFrame::doRedraw(const BaseContestLog *ctest, bool grid, bool lines, bool spots, int sd)
 {
-    trace(QString("doRedraw grid %1 lines %2 spots %3 sd %4").arg(grid).arg(lines).arg(spots).arg(sd));
+    trace(QString("QSOMapFrame doRedraw grid %1 lines %2 spots %3 sd %4").arg(grid).arg(lines).arg(spots).arg(sd));
     if (ct == nullptr || ctest != ct)
     {
         return;
@@ -172,11 +172,8 @@ void QSOMapFrame::doRedraw(const BaseContestLog *ctest, bool grid, bool lines, b
     {
         QSharedPointer<BaseContact> cct = c.wt;
 
-        trace(QString("doRedraw %1 %2 %3").arg(cct->cs.getFullCall()).arg(cct->cs.getValRes()).arg(cct->loc.getLoc()));
-
         if ( cct->notValidContact() )
         {
-            trace("Not valid");
            continue;
         }
 
@@ -210,7 +207,6 @@ void QSOMapFrame::showContact(const BaseContestLog *c, const QSharedPointer<Base
         {
             return;
         }
-        trace(QString("showContact %1 %2 %3").arg(lct->cs.getFullCall()).arg(lct->cs.getValRes()).arg(lct->loc.getLoc()));
 
         double slat;
         double slon;
@@ -250,11 +246,6 @@ void QSOMapFrame::showContact(const BaseContestLog *c, const QSharedPointer<Base
 
         }
 
-        if (lct->cs.getFullCall() == "PA5Y")
-        {
-            int a = 0;
-            a++;
-        }
         QStringList callInfo; // [callsign, latitude, longitude]
 
         callInfo << lct->cs.getFullCall();
@@ -278,6 +269,24 @@ void QSOMapFrame::on_AfterLogContact(const BaseContestLog *c, const QSharedPoint
 {
     if (ct != nullptr && ct == c && !ct->isReadOnly())
     {
+        Callsign dxCallsign = lct->cs;
+        Frequency dxFreq = lct->frequency.getValue();
+
+        if (spotQueue.count() != 0)
+        {
+            // check for repeat call
+            for (int row = 0; row < spotQueue.count(); row++)
+            {
+                QSharedPointer<ClusterSpotData> bsd = spotQueue[row];
+
+                Callsign rowCall = bsd->getDxCall();
+
+                if (dxCallsign == rowCall)
+                {
+                    bsd->setSpotType(bandmapSpotType::DELETED);
+                }
+            }
+        }
         if (!lct || lct->getHistory().size() > 1)
         {
             emit clearAll();
@@ -312,6 +321,11 @@ void QSOMapFrame::drawSpot(QSharedPointer<ClusterSpotData> bsd)
     {
         if (bsd->getDxCall().getValRes() != CS_OK)    // duplicate?
         {
+            return;
+        }
+        if (bsd->getSpotType() == bandmapSpotType::DELETED)
+        {
+            trace(QString("QSOMapFrame::drawSpot Deleted %1").arg(bsd->getDxCallStr()));
             return;
         }
 
@@ -377,6 +391,42 @@ void QSOMapFrame::drawSpot(QSharedPointer<ClusterSpotData> bsd)
         emit spotSig(callInfo);
     }
 }
+bool QSOMapFrame::checkSpotInTable(QSharedPointer<ClusterSpotData> spot)
+{
+    Callsign dxCallsign = spot->getDxCall();
+    Frequency dxFreq = spot->getFreq();
+
+    if (spotQueue.count() != 0)
+    {
+        // check for repeat call
+        for (int row = 0; row < spotQueue.count(); row++)
+        {
+            QSharedPointer<ClusterSpotData> bsd = spotQueue[row];
+
+            Callsign rowCall = bsd->getDxCall();
+            bandmapSpotType::SPOT_TYPE spotType = bsd->getSpotType();
+
+            if (dxCallsign == rowCall)
+            {
+                if ( spotType == bandmapSpotType::LOGGED || spotType == bandmapSpotType::SAVED
+                     || spotType == bandmapSpotType::CLUSTER_MARKED)
+                {
+                    return false; // don't save this spot to the spot list
+
+                }
+                else if (spotType == bandmapSpotType::CLUSTER)
+                {
+                    // yes, remove old spot
+                    trace(QString("CheckSpot In Table Remove - Cluster Spot %1").arg(rowCall.getFullCall()));
+                    bsd->setSpotType(bandmapSpotType::DELETED);
+                    // and this spot will be used instead
+                }
+            }
+        }
+    }
+    return true;
+}
+
 void QSOMapFrame::dxSpots(QVector<ClusterMessage> spotMsg)
 {
     // if contest is protected, or no map showing, ignore
@@ -397,26 +447,28 @@ void QSOMapFrame::dxSpots(QVector<ClusterMessage> spotMsg)
                 {
                     trace(QString("Spot for this loggeruuid = %1, add to queue").arg(ct->uuid));
                     QSharedPointer<ClusterSpotData> sp = stringToDxSpot(msg.getMessage(), ct, timeToLive);
-                    if (sp)
+                    if (!sp || !checkSpotInTable(sp))
                     {
-                        bool fromNode = sp->getDxLocatorIsFromNode();
-                        bool wkd = sp->getDxCallWorked();
-                        bool locEmpty = sp->getDxLocator().isEmpty();
-                        if (!fromNode && !wkd && !locEmpty)
-                        {
-                            trace(QString("draw cluster spot spot = %1").arg(msg.getMessage()));
-                            spotQueue += sp;
-                            drawSpot(sp);
-                        }
-                        else
-                        {
-                            trace(QString("don't draw cluster spot spot = %1 FN %2 WKD %3 LE %4")
-                                  .arg(msg.getMessage())
-                                  .arg(fromNode)
-                                  .arg(wkd)
-                                  .arg(locEmpty)
-                                  );
-                        }
+                        continue; // spot logged or marked and moved
+                    }
+
+                    bool fromNode = sp->getDxLocatorIsFromNode();
+                    bool wkd = sp->getDxCallWorked();
+                    bool locEmpty = sp->getDxLocator().isEmpty();
+                    if (!fromNode && !wkd && !locEmpty)
+                    {
+                        trace(QString("draw cluster spot spot = %1").arg(msg.getMessage()));
+                        spotQueue += sp;
+                        drawSpot(sp);
+                    }
+                    else
+                    {
+                        trace(QString("don't draw cluster spot spot = %1 FN %2 WKD %3 LE %4")
+                              .arg(msg.getMessage())
+                              .arg(fromNode)
+                              .arg(wkd)
+                              .arg(locEmpty)
+                              );
                     }
                 }
             }
@@ -429,23 +481,28 @@ void QSOMapFrame::dxSpots(QVector<ClusterMessage> spotMsg)
 }
 void QSOMapFrame::purgeSpots()
 {
-    if (timeToLive > 0)
+    bool needRedraw = false;
+    if (spotQueue.count() > 0)
     {
-        if (spotQueue.count() > 0)
-        {
-           int idx = spotQueue.count() - 1;
-           while (idx >= 0 && spotQueue.count() > 0)
+       int idx = spotQueue.count() - 1;
+       while (idx >= 0 && spotQueue.count() > 0)
+       {
+           if ((timeToLive > 0 && spotTimedOut(spotQueue[idx]->getRxTime(), timeToLive))
+                   || spotQueue[idx]->getSpotType() == bandmapSpotType::DELETED)
            {
-               if (spotTimedOut(spotQueue[idx]->getRxTime(), timeToLive)
-                       || spotQueue[idx]->getSpotType() == bandmapSpotType::DELETED)
-               {
-                   trace(QString("purged spot = %1, count %2").arg(spotQueue[idx]->getDxCall().getFullCall()).arg(spotQueue.count()));
-
-                   spotQueue.remove(idx);
-               }
-               idx--;
+               QString pcall = spotQueue[idx]->getDxCall().getFullCall();
+               spotQueue.remove(idx);
+               trace(QString("QSOMapFrame purged spot = %1, count %2").arg(pcall).arg(spotQueue.count()));
+               needRedraw = true;
            }
-        }
+           idx--;
+       }
+    }
+    if (needRedraw)
+    {
+        emit clearAll();
+        locs.clear();
+        doRedraw(ct, bdrawGrid, bdrawLines, drawSpots, spotDistance);
     }
 }
 

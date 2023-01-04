@@ -50,6 +50,7 @@ private:
     void drawSpot(QSharedPointer<ClusterSpotData>);
 
     void showContact(const BaseContestLog *c, const QSharedPointer<BaseContact> lct);
+    bool checkSpotInTable(QSharedPointer<ClusterSpotData> spot);
 signals:
     void callSig(QVariant stringList);
     void spotSig(QVariant stringList);

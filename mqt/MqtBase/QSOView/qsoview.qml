@@ -284,7 +284,6 @@ MapPolyline
     function clearAll()
     {
         mapOfEurope.clearMapItems();
-        mapOfEurope.clearData()
     }
 }
 
