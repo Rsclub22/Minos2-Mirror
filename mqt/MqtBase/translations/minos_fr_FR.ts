@@ -1242,22 +1242,6 @@ Attention: &quot;.&quot; pas &quot;,&quot;<byte value="xd"/>
         <translation>à droite</translation>
     </message>
     <message>
-        <source>Zoom In</source>
-        <translation type="vanished">Zoom avant</translation>
-    </message>
-    <message>
-        <source>Down</source>
-        <translation type="vanished">Vers le bas</translation>
-    </message>
-    <message>
-        <source>Zoom Out</source>
-        <translation type="vanished">Zoom arrière</translation>
-    </message>
-    <message>
-        <source>Up</source>
-        <translation type="vanished">En haut</translation>
-    </message>
-    <message>
         <location filename="../helpbrowser.cpp" line="85"/>
         <source>Choose</source>
         <translation>Choisir</translation>
@@ -1738,7 +1722,7 @@ Attention: &quot;.&quot; pas &quot;,&quot;<byte value="xd"/>
         <location filename="../cutils.cpp" line="794"/>
         <source>Reset Columns</source>
         <comment>createColumnsMenu</comment>
-        <translation type="unfinished"></translation>
+        <translation>Réinitialiser les colonnes</translation>
     </message>
 </context>
 <context>
@@ -2012,50 +1996,34 @@ Entrer une autre direction SVP</translation>
 </context>
 <context>
     <name>StatisticsDiplay</name>
-    <message>
-        <source>Contest Statistice</source>
-        <translation type="vanished">Statistiques aux concours</translation>
-    </message>
-    <message>
-        <source>Slot length(minutes)</source>
-        <translation type="vanished">Durée de fente (minutes)</translation>
-    </message>
-    <message>
-        <source>Recalc</source>
-        <translation type="vanished">Recalculer</translation>
-    </message>
-    <message>
-        <source>Close</source>
-        <translation type="vanished">Fermer</translation>
-    </message>
 </context>
 <context>
     <name>StatisticsDisplay</name>
     <message>
         <location filename="../StatisticsDisplay.cpp" line="195"/>
         <source>ALL</source>
-        <translation type="unfinished">Tous [Context?]
+        <translation>Tous [Context?]
 </translation>
     </message>
     <message>
         <location filename="../StatisticsDisplay.ui" line="14"/>
         <source>Contest Statistics</source>
-        <translation type="unfinished"></translation>
+        <translation>Statistiques aux concours</translation>
     </message>
     <message>
         <location filename="../StatisticsDisplay.ui" line="38"/>
         <source>Slot length(minutes)</source>
-        <translation type="unfinished">Durée de fente (minutes)</translation>
+        <translation>Durée de fente (minutes)</translation>
     </message>
     <message>
         <location filename="../StatisticsDisplay.ui" line="68"/>
         <source>Recalc</source>
-        <translation type="unfinished">Recalculer</translation>
+        <translation>Recalculer</translation>
     </message>
     <message>
         <location filename="../StatisticsDisplay.ui" line="78"/>
         <source>Close</source>
-        <translation type="unfinished">Fermer</translation>
+        <translation>Fermer</translation>
     </message>
 </context>
 <context>

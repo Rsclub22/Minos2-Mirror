@@ -372,7 +372,7 @@ Veuillez les supprimer et configurer les rotateurs à nouveau</translation>
     <message>
         <location filename="../rotatormainwindow.ui" line="221"/>
         <source>Reconnect</source>
-        <translation type="unfinished"></translation>
+        <translation>Rebrancher</translation>
     </message>
     <message>
         <location filename="../rotatormainwindow.ui" line="233"/>

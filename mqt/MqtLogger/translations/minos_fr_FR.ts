@@ -374,27 +374,27 @@ Le mode calculé est %2</translation>
     <message>
         <location filename="../checkupdates.ui" line="14"/>
         <source>Check for Minos Updates</source>
-        <translation type="unfinished"></translation>
+        <translation>Vérifier les mises à jour Minos</translation>
     </message>
     <message>
         <location filename="../checkupdates.ui" line="36"/>
         <source>Go to Minos Downloads</source>
-        <translation type="unfinished"></translation>
+        <translation>Accéder aux téléchargements Minos</translation>
     </message>
     <message>
         <location filename="../checkupdates.ui" line="73"/>
         <source>Close</source>
-        <translation type="unfinished">Fermer</translation>
+        <translation>Fermer</translation>
     </message>
     <message>
         <location filename="../checkupdates.cpp" line="59"/>
         <source>This Minos version is %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Cette version de Minos est %1</translation>
     </message>
     <message>
         <location filename="../checkupdates.cpp" line="60"/>
         <source>Latest release Minos version is %1</source>
-        <translation type="unfinished"></translation>
+        <translation>La dernière version de Minos est %1</translation>
     </message>
 </context>
 <context>
@@ -3733,7 +3733,7 @@ Non - Ignorer les modifications</translation>
     <message>
         <location filename="../ScreenConfigElement.cpp" line="35"/>
         <source>QSO Map</source>
-        <translation type="unfinished"></translation>
+        <translation>Carte QSO</translation>
     </message>
     <message>
         <location filename="../ScreenConfigElement.cpp" line="36"/>
@@ -4923,7 +4923,7 @@ n&apos;existe pas; télécharger les derniers calendriers&#xa0;?</translation>
     <message>
         <location filename="../tlogcontainer.cpp" line="509"/>
         <source>Check For Updates...</source>
-        <translation type="unfinished"></translation>
+        <translation>Vérifier les mises à jour...</translation>
     </message>
     <message>
         <location filename="../tlogcontainer.cpp" line="548"/>
@@ -5544,18 +5544,6 @@ Last %8 Mins: %9 QSO %10 pts %11 mults<byte value="xd"/>
         <translation>%1 %2 - Nouveau</translation>
     </message>
     <message>
-        <source>Voice Memory Button %1</source>
-        <translation type="vanished">Mémoire de voix %1</translation>
-    </message>
-    <message>
-        <source>Are you sure you want to clear this Button?</source>
-        <translation type="vanished">Voulez-vous vraiment effacer ce bouton&#xa0;?</translation>
-    </message>
-    <message>
-        <source>Click save to clear, cancel to ignore</source>
-        <translation type="vanished">Cliquer sur enregistrer pour effacer, annuler pour ignorer</translation>
-    </message>
-    <message>
         <location filename="../txvmbuttonsframe.cpp" line="890"/>
         <source>Rig Voice Keyer Available</source>
         <translation>Mémoire de voix disponible</translation>
@@ -5676,7 +5664,7 @@ Through</source>
     <message>
         <location filename="../txVmExternalButtonDialog.cpp" line="56"/>
         <source>Makeup Gain (db)</source>
-        <translation>[Context?] </translation>
+        <translation type="unfinished">[Context?] </translation>
     </message>
     <message>
         <location filename="../txVmExternalButtonDialog.cpp" line="89"/>
@@ -5878,15 +5866,11 @@ Through</source>
     <message>
         <location filename="../txvmrigsetupdialog.ui" line="57"/>
         <source>Switch to CW Mode and then Restore Current Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Changer en Mode CW, puis restaurer le Mode Actuel</translation>
     </message>
 </context>
 <context>
     <name>TxVoiceMemButton</name>
-    <message>
-        <source>&amp;Read</source>
-        <translation type="vanished">&amp;Lire</translation>
-    </message>
     <message>
         <location filename="../txvmbuttonsframe.cpp" line="1049"/>
         <source>&amp;New</source>
@@ -5896,10 +5880,6 @@ Through</source>
         <location filename="../txvmbuttonsframe.cpp" line="1050"/>
         <source>&amp;Edit</source>
         <translation>&amp;Modifier</translation>
-    </message>
-    <message>
-        <source>&amp;Clear</source>
-        <translation type="vanished">&amp;Effacer</translation>
     </message>
 </context>
 <context>

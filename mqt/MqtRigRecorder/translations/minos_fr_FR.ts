@@ -11,21 +11,17 @@
     <message>
         <location filename="../rcmainwindow.ui" line="208"/>
         <source>Input Channel for Left</source>
-        <translation type="unfinished"></translation>
+        <translation>Canal d&apos;entrée gauche</translation>
     </message>
     <message>
         <location filename="../rcmainwindow.ui" line="222"/>
         <source>Input Channel for Right</source>
-        <translation type="unfinished"></translation>
+        <translation>Canal d&apos;entrée droit</translation>
     </message>
     <message>
         <location filename="../rcmainwindow.ui" line="281"/>
         <source>Mono</source>
         <translation>Mono</translation>
-    </message>
-    <message>
-        <source>Input Channel</source>
-        <translation type="vanished">Canal d&apos;entrée</translation>
     </message>
     <message>
         <location filename="../rcmainwindow.ui" line="236"/>
@@ -41,10 +37,6 @@
         <location filename="../rcmainwindow.ui" line="257"/>
         <source>File Rotation Interval (minutes)</source>
         <translation>Intervalle de rotation des fichiers (minutes)</translation>
-    </message>
-    <message>
-        <source>Auto Start</source>
-        <translation type="vanished">Démarrage automatique</translation>
     </message>
     <message>
         <location filename="../rcmainwindow.ui" line="288"/>

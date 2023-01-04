@@ -846,10 +846,6 @@ Veuillez les supprimer et configurer à nouveau les radios</translation>
 </translation>
     </message>
     <message>
-        <source>Data bits = %1</source>
-        <translation type="vanished">Bits de données = %1</translation>
-    </message>
-    <message>
         <location filename="../rigcontrolmainwindow.cpp" line="4663"/>
         <source>Stop bits = %1
 </source>
@@ -1424,14 +1420,6 @@ Corriger les entrées du convertisseur SVP.</translation>
         <location filename="../rigsetupform.ui" line="482"/>
         <source>Start Minos RigCtld</source>
         <translation>Démarrer Minos RigCtld</translation>
-    </message>
-    <message>
-        <source>Supported Native Bands on Radio</source>
-        <translation type="vanished">Bandes natives supportées par la radio</translation>
-    </message>
-    <message>
-        <source>Please select a band or add transverters</source>
-        <translation type="vanished">Sélectionner une bande ou ajouter des transverters SVP</translation>
     </message>
     <message>
         <location filename="../rigsetupform.ui" line="568"/>
