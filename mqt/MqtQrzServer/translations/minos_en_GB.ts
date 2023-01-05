@@ -97,32 +97,32 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qrzservermainwindow.cpp" line="669"/>
+        <location filename="../qrzservermainwindow.cpp" line="656"/>
         <source>Callsign received from logger - %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qrzservermainwindow.cpp" line="674"/>
+        <location filename="../qrzservermainwindow.cpp" line="661"/>
         <source>Callsign received from cluster - %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qrzservermainwindow.cpp" line="684"/>
+        <location filename="../qrzservermainwindow.cpp" line="671"/>
         <source>Callsign is valid - %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qrzservermainwindow.cpp" line="690"/>
+        <location filename="../qrzservermainwindow.cpp" line="677"/>
         <source>Ask QRZ for callsign - %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qrzservermainwindow.cpp" line="698"/>
+        <location filename="../qrzservermainwindow.cpp" line="685"/>
         <source>Callsign is invalid - %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qrzservermainwindow.cpp" line="743"/>
+        <location filename="../qrzservermainwindow.cpp" line="730"/>
         <source>Connected</source>
         <translation type="unfinished"></translation>
     </message>
@@ -145,7 +145,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qrzserverrpc.cpp" line="239"/>
+        <location filename="../qrzserverrpc.cpp" line="237"/>
         <source>%1 changed state to %2</source>
         <translation type="unfinished"></translation>
     </message>
