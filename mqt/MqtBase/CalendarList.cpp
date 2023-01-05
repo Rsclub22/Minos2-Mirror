@@ -141,11 +141,11 @@ bool CalendarYear::downloadFile ( bool showError, QWidget *parent )
             QFile file( getPath() );
             file.open( QIODevice::WriteOnly );
             file.write( data );
-            trace ( "HTPP Get of " + calendarURL + " OK size " + QString::number(data.size()) );
+            trace ( "HTTP Get of " + calendarURL + " OK size " + QString::number(data.size()) );
         }
         else
         {
-           trace ( "HTPP Get of " + calendarURL + " failed - zero length data returned with attribute " + QString::number(raw));
+           trace ( "HTTP Get of " + calendarURL + " failed - zero length data returned with attribute " + QString::number(raw));
            if (data.size() > 0)
            {
                trace(data);
@@ -156,10 +156,10 @@ bool CalendarYear::downloadFile ( bool showError, QWidget *parent )
     }
     else
     {
-        trace ( QString( "HTPP Get of " ) + calendarURL + " failed: " + reply->errorString() );
+        trace ( QString( "HTTP Get of " ) + calendarURL + " failed: " + reply->errorString() );
         if ( showError )
         {
-            mShowMessage ( QString( "HTPP Get of " ) + calendarURL + " failed: " + reply->errorString(), parent );
+            mShowMessage ( QString( "HTTP Get of " ) + calendarURL + " failed: " + reply->errorString(), parent );
         }
     }
     return false;

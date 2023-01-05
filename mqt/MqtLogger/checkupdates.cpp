@@ -104,12 +104,12 @@ QString CheckUpdates::downloadFile ( )
         QByteArray data = reply->readAll();
         if (raw == 200 && data.size() > 0)
         {
-            trace ( "HTPP Get of " + sfUrl + " OK size " + QString::number(data.size()) );
+            trace ( "HTTP Get of " + sfUrl + " OK size " + QString::number(data.size()) );
             return data;
         }
         else
         {
-           trace ( "HTPP Get of " + sfUrl + " failed - zero length data returned with attribute " + QString::number(raw));
+           trace ( "HTTP Get of " + sfUrl + " failed - zero length data returned with attribute " + QString::number(raw));
            if (data.size() > 0)
            {
                trace(data);
@@ -120,8 +120,8 @@ QString CheckUpdates::downloadFile ( )
     }
     else
     {
-        trace ( QString( "HTPP Get of " ) + sfUrl + " failed: " + reply->errorString() );
-        mShowMessage ( QString( "HTPP Get of " ) + sfUrl + " failed: " + reply->errorString(), this );
+        trace ( QString( "HTTP Get of " ) + sfUrl + " failed: " + reply->errorString() );
+        mShowMessage ( QString( "HTTP Get of " ) + sfUrl + " failed: " + reply->errorString(), this );
     }
     return QString();
 }
