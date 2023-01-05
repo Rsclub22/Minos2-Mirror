@@ -2,6 +2,7 @@
 #define CalendarListH 
 //---------------------------------------------------------------------------
 #include "Calendar.h"
+#include <QSslError>
 extern int calendarFormYear;
 #define LOWYEAR -1
 #define LOWURLYEAR -1
@@ -9,8 +10,9 @@ extern int calendarFormYear;
 
 extern QString calendarNameString[];
 
-class CalendarYear
+class CalendarYear:public QObject
 {
+    Q_OBJECT
         virtual QString getSite() = 0;
         QString yearString()
         {
@@ -38,6 +40,8 @@ class CalendarYear
         CalType type;
         virtual QString getPath();
         virtual QString getURL();
+private slots:
+        void ignoreSslErrors(const QList<QSslError> &errors);
 };
 class HFCalendarYear : public CalendarYear
 {

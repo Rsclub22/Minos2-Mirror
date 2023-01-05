@@ -318,6 +318,7 @@ void TCalendarForm::downloadFiles()
 {
     if (!QSslSocket::supportsSsl())
     {
+        // NB MSVC 2015 redistributable may be needed for OpenSSL
         mShowMessage(tr("Something is wrong - SSL not supported on this system.")
                      , this);
 
