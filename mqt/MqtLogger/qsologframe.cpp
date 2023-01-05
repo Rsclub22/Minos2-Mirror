@@ -2803,11 +2803,7 @@ void QSOLogFrame::logScreenEntry( )
 
    killPartial();
 
-   MinosLoggerEvents::SendAfterLogContact(ct);  // in logScreenEntry, current or edit
-
-   MinosLoggerEvents::SendAfterLogContactToCluster(ct, lct);
-
-   MinosLoggerEvents::SendAfterLogContactToBandmap(ct, lct );
+   MinosLoggerEvents::SendAfterLogContact(ct, lct);  // in logScreenEntry, current or edit
 
    if (!edit)
    {

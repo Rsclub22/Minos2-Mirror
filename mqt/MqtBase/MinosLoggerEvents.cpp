@@ -57,20 +57,11 @@ void MinosLoggerEvents::SendReportOverstrike(bool ov, BaseContestLog *c)
     emit mle.ReportOverstrike(ov, c);
 }
 //---------------------------------------------------------------------------
-void MinosLoggerEvents::SendAfterLogContact(BaseContestLog *ct)
+void MinosLoggerEvents::SendAfterLogContact(BaseContestLog *ct, QSharedPointer<BaseContact> lct)
 {
-    emit mle.AfterLogContact(ct);
+    emit mle.AfterLogContact(ct, lct);
 }
-//---------------------------------------------------------------------------
-void MinosLoggerEvents::SendAfterLogContactToCluster(BaseContestLog *ct, QSharedPointer<BaseContact> lct)
-{
-    emit mle.AfterLogContactToCluster(ct, lct);
-}
-//---------------------------------------------------------------------------
-void MinosLoggerEvents::SendAfterLogContactToBandmap(BaseContestLog *ct, QSharedPointer<BaseContact> lct)
-{
-    emit mle.AfterLogContactToBandmap(ct, lct);
-}
+
 //---------------------------------------------------------------------------
 void MinosLoggerEvents::SendAfterSelectContact(QSharedPointer<BaseContact> lct, BaseContestLog *c)
 {

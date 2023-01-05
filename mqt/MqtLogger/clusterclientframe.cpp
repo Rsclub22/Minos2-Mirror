@@ -123,7 +123,7 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     connect( clearSpotAction, &QAction::triggered, this, [=](){clearSpotActionSelected();});
     connect( clearAllSpotsAction, &QAction::triggered, this, [=](){clearAllSpotsActionSelected();});
 
-    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::AfterLogContactToCluster, this, &ClusterClientFrame::on_AfterLogContact);
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::AfterLogContact, this, &ClusterClientFrame::on_AfterLogContact);
 
     ui->searchLineEdit->setValidator(&ucValidator);
     connect(ui->searchLineEdit, &QLineEdit::editingFinished, this, [=](){onSearchEditingFinished();});

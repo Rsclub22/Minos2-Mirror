@@ -1203,7 +1203,11 @@ void TLogContainer::AppendAdifActionExecute()
         ct->commonSave( false );
         ct->scanContest();          // after append ADIF file, required
         //ct->validateLoc();
-        MinosLoggerEvents::SendAfterLogContact(ct);          // after append ADIF file
+        for ( int i = spoint; i != ct->ctList.count(); i++ )
+        {
+            QSharedPointer<BaseContact> bct = ct->pcontactAt(i);
+            MinosLoggerEvents::SendAfterLogContact(ct, bct);          // after append ADIF file
+        }
         TSingleLogFrame * tslf = LogContainer ->findContest( ct );
 
         tslf->updateTrees();

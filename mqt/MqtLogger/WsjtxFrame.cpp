@@ -212,9 +212,12 @@ void WsjtxFrame::log_ADIF(QString const& id, QByteArray const& ADIF)
         trace( "Failed to append ADIF from " + id );
         return;
     }
+    QSharedPointer<BaseContact> bct;
     for ( int i = spoint; i < ct->ctList.count(); i++ )
     {
-        QSharedPointer<BaseContact> bct = ct->pcontactAt(i);
+        // do we ever get multiple QSOs in one ADIF? I don't think so...
+        // not at least as sent from WSJT-X et al!
+        bct = ct->pcontactAt(i);
         if (bct->loc.getLoc().isEmpty())
         {
             Callsign cs = bct->cs;
@@ -226,8 +229,12 @@ void WsjtxFrame::log_ADIF(QString const& id, QByteArray const& ADIF)
     }
     ct->commonSave( false );
     ct->scanContest();      // after ADIF logged, could we do a single QSO scan? But this is only every few seconds
+    for ( int i = spoint; i != ct->ctList.count(); i++ )
+    {
+        QSharedPointer<BaseContact> bct = ct->pcontactAt(i);
+        MinosLoggerEvents::SendAfterLogContact(ct, bct); // after ADIF logged "last contact"
+    }
 
-    MinosLoggerEvents::SendAfterLogContact(ct); // after ADIF logged "last contact"
     TSingleLogFrame * tslf = LogContainer ->findContest( ct );
 
     tslf->updateTrees();    // (log_ADIF complete redraw of QSO model...

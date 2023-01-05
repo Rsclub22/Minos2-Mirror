@@ -91,7 +91,7 @@ int TQSOEditDlg::exec()
 
     int ret = QDialog::exec();
 
-    MinosLoggerEvents::SendAfterLogContact(contest);    // after QSO edited
+    MinosLoggerEvents::SendAfterLogContact(contest, fct);    // after QSO edited
 
     return ret;
 }
