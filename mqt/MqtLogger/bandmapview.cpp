@@ -1093,7 +1093,6 @@ void BandmapView::drawBandMapSpots()
                         return a->getSpotMarkerPtr()->y() < b->getSpotMarkerPtr()->y();
                     }
                   );
-        trace("sort finished");
         int miny = listOfMarkers[0]->getSpotMarkerCoord().y() - fontHeight;
         int maxy = listOfMarkers[listOfMarkers.size() - 1]->getSpotMarkerCoord().y() + fontHeight;
 

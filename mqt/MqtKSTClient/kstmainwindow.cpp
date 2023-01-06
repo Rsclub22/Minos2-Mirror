@@ -320,7 +320,7 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
 #ifndef Q_OS_WIN
     ui->loggerPushButton->setVisible(false);
 #endif
-    ml = new KSTMonitoredLogs(this);
+    ml = new KSTMonitoredLogs();
     connect(RemoteLogs::getRemoteLogs(), &RemoteLogs::newMonitoredLog, this, &KSTMainWindow::onNewLog);
 
 }
@@ -365,6 +365,10 @@ void KSTMainWindow::closeEvent(QCloseEvent *event)
     QSettings settings;
     settings.setValue("geometry/Main", saveGeometry());
     trace("KSTMainWindow Closing");
+
+    delete ml;
+    ml =nullptr;
+
     QWidget::closeEvent(event);
 }
 void KSTMainWindow::CloseTimerTimer(  )
