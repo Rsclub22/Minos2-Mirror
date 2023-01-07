@@ -12,15 +12,9 @@ QT       += widgets
 QT       += network
 QT       += help
 
-win32: {
-versionAtLeast(QT_VERSION, 6.5.0){
+equals(INC_MAP, 1): {
 QT += qml
 QT += quick
-}
-lessThan(QT_VERSION, 6.0.0) {
-QT += qml
-QT += quick
-}
 }
 
 TARGET = MqtBase
@@ -244,10 +238,7 @@ FORMS += \
     locatorinputdialog.ui \
     qsomapframe.ui
 
-versionAtLeast(QT_VERSION, 6.5.0){
-RESOURCES += QSOView/qml.qrc
-}
-lessThan(QT_VERSION, 6.0.0) {
+equals(INC_MAP, 1): {
 RESOURCES += QSOView/qml.qrc
 }
 

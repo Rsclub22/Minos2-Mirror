@@ -18,6 +18,17 @@ CONFIG += c++11
 DEFINES += TIXML_USE_STL
 DEFINES += NOMINMAX
 
+win32: {
+versionAtLeast(QT_VERSION, 6.5.0){
+INC_MAP = 1
+DEFINES += INC_MAP
+}
+lessThan(QT_VERSION, 6.0.0) {
+INC_MAP = 1
+DEFINES += INC_MAP
+}
+}
+
 *g++*:CONFIG(release, debug|release): QMAKE_CXXFLAGS_WARN_ON += -Wno-reorder -Wold-style-cast -DNDEBUG  -Winvalid-pch
 else:*g++*:CONFIG(debug, debug|release):QMAKE_CXXFLAGS_WARN_ON += -Wno-reorder -Wold-style-cast  -Winvalid-pch
 

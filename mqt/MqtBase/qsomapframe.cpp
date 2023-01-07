@@ -1,9 +1,4 @@
-#include <QVBoxLayout>
-#include <QTimer>
-#include <math.h>
-
-#ifdef Q_OS_WIN
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0) || QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
+#ifdef INC_MAP
 #include <QQmlApplicationEngine>
 #include <QQuickView>
 #include <QQuickItem>
@@ -12,9 +7,11 @@
 extern QSharedPointer<QQmlApplicationEngine> appQmlEngine;
 
 #endif
-#endif
 
 #include <QMouseEvent>
+#include <QVBoxLayout>
+#include <QTimer>
+#include <math.h>
 
 #include "MTrace.h"
 #include "calcs.h"
@@ -33,11 +30,9 @@ QSOMapFrame::QSOMapFrame(QWidget *parent) :
     QFrame(parent),
     ui(new Ui::QSOMapFrame)
 {
-#ifdef Q_OS_WIN
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0) || QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
+#ifdef INC_MAP
     // This makes the resources accessible from the main executable
     Q_INIT_RESOURCE(qml);
-#endif
 #endif
 
     ui->setupUi(this);
@@ -74,8 +69,7 @@ void QSOMapFrame::setContest(BaseContestLog *c, bool grid, bool lines, bool spot
 }
 void QSOMapFrame::startMap()
 {
-#ifdef Q_OS_WIN
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)  || QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
+#ifdef INC_MAP
     // make a reference to the QML window available to C++
 
     QLayout *qvb = layout();
@@ -122,7 +116,6 @@ void QSOMapFrame::startMap()
         connect(qmlObj, SIGNAL(qmlSignal(QVariant)), this, SLOT(onQmlClicked(QVariant)), Qt::UniqueConnection);
     }
 #endif
-#endif
 }
 void QSOMapFrame::stopMap()
 {
@@ -136,10 +129,8 @@ void QSOMapFrame::onQmlClicked(QVariant /*v*/)
 //   QString longitude = gc[1].toString();
 //   QString bearing = gc[2].toString();
 
-#ifdef Q_OS_WIN
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0) || QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
+#ifdef INC_MAP
 //   qDebug() << latitude << " " << longitude << " " << bearing;
-#endif
 #endif
 }
 void QSOMapFrame::doRedraw(const BaseContestLog *ctest, bool grid, bool lines, bool spots, int sd)

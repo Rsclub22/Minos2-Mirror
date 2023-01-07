@@ -14,15 +14,9 @@ QT       += help
 QT       += charts
 QT       += serialport
 
-win32: {
-versionAtLeast(QT_VERSION, 6.5.0){
+equals(INC_MAP, 1): {
 QT += qml
 QT += quick
-}
-lessThan(QT_VERSION, 6.0.0) {
-QT += qml
-QT += quick
-}
 }
 
 
