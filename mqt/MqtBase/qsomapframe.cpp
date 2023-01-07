@@ -288,14 +288,14 @@ void QSOMapFrame::showContact(const BaseContestLog *c, const QSharedPointer<Base
             {
                 lat = lat - 1;
             }
-            lat = std::round(lat) + 0.75;
+            lat = std::round(lat) + 0.5;  // offset from square edge
             if (lon < 0)
             {
                 lon = lon -1;
             }
             lon = std::round(lon);
             int ilon = lon;
-            lon = lon - ilon%2 + 0.25  + 0.1 * n;
+            lon = lon - ilon%2 + 1 + 0.1 * n; // offset from square edge
 
         }
 
@@ -427,14 +427,14 @@ void QSOMapFrame::drawSpot(QSharedPointer<ClusterSpotData> bsd)
             {
                 lat = lat - 1;
             }
-            lat = std::round(lat) + 0.75;
+            lat = std::round(lat) + 0.5;  // offset from square centre
             if (lon < 0)
             {
                 lon = lon -1;
             }
             lon = std::round(lon);
             int ilon = lon;
-            lon = lon - ilon%2 + 0.25  + 0.1 * n;
+            lon = lon - ilon%2 + 1  + 0.1 * n;   // offset from square centre
 
         }
 
