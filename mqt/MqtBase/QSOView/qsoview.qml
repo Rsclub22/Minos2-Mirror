@@ -16,12 +16,6 @@ Frame {
     property string homeLat: "0.0"
     property string homeLon: "0.0"
 
-    // Define Visible Region of map to include Ireland
-    property variant topLeftEurope: QtPositioning.coordinate(60.5, -11.0)
-    property variant bottomRightEurope: QtPositioning.coordinate(45.0, 12.0)
-    property variant viewOfEurope:
-        QtPositioning.rectangle(topLeftEurope, bottomRightEurope)
-
     Map {
         id: mapOfEurope
         anchors.centerIn: parent;
@@ -30,13 +24,9 @@ Frame {
             name: "osm"
         }
 
-        // Set (Initial) Visible Region of map
-        visibleRegion: viewOfEurope
-
         ToolTip.text: calcToolTip()
         ToolTip.visible: hovered && mapMouse.containsMouse
         ToolTip.delay: 1000
-
 
         MouseArea {
             id: mapMouse
@@ -47,7 +37,7 @@ Frame {
                 let hcoord = QtPositioning.coordinate(homeLat, homeLon)
                 let cc = mapOfEurope.toCoordinate(Qt.point(mouse.x,mouse.y));
                 let b = hcoord.azimuthTo(cc)
-                let gc = [cc.latitude, cc.longitude, b];
+                let gc = ["Pressed", cc.latitude, cc.longitude, b];
                 qmlSignal(gc);
             }
             onPositionChanged: {
@@ -56,7 +46,17 @@ Frame {
                 ToolTip.x = mapMouse.mouseX
 
             }
-            }
+        }
+
+        onCenterChanged: {
+            let gc = ["CentreChanged", center.latitude, center.longitude];
+            qmlSignal(gc)
+        }
+
+        onZoomLevelChanged: {
+            let gc = ["ZoomChanged", zoomLevel]
+            qmlSignal(gc)
+        }
 
     } // end map
 
@@ -201,12 +201,22 @@ MapPolyline
     // callInfo is a QStringList ["callsign", "latitude", "longitude", "loc"]
     {
         mapOfEurope.clearMapItems();
-        var call = callInfo[0]
 
-        homeLat = callInfo[1];
-        homeLon = callInfo[2];
+        var monitor = callInfo[0]
+
+        var zoom = callInfo[1]
+        var clat = callInfo[2]
+        var clon = callInfo[3]
+
+        mapOfEurope.center = QtPositioning.coordinate(clat, clon)
+        mapOfEurope.zoomLevel = zoom
+
+        var call = callInfo[4]
+
+        homeLat = callInfo[5];
+        homeLon = callInfo[6];
         var hcoord = QtPositioning.coordinate(homeLat, homeLon)
-        var loc = callInfo[3]
+        var loc = callInfo[7]
         addHome(hcoord, call, loc)
     }
     function newCall(callInfo)

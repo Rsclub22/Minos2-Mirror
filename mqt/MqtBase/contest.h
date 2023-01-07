@@ -194,6 +194,10 @@ class BaseContestLog: public BaseLogList
       MinosStringItem<QString> currentOp1;         // current main op
       MinosStringItem<QString> currentOp2;         // current second op
 
+      MinosStringItem<QString> zoomLevel;
+
+      MinosStringItem<QString> centreLat;
+      MinosStringItem<QString> centreLon;
 
       // dirty info is only relevant when it is being editted
       // but needs to stay with the data

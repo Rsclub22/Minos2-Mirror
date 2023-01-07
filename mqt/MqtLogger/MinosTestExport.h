@@ -50,6 +50,7 @@ class MinosTestExport
       void exportBandmapFilter(QSharedPointer<QFile> expfd);
       void exportAllClusterFilters(QSharedPointer<QFile> expfd );
       void writeFile(QSharedPointer<QFile> minosContestFile, QString s);
+      void exportQSOMap(QSharedPointer<QFile> expfd);
 public:
       MinosTestExport( LoggerContestLog * const ct );
       MinosTestExport( );

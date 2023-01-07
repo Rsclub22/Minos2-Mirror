@@ -23,7 +23,7 @@ public:
     explicit QSOMapFrame(QWidget *parent = nullptr);
     ~QSOMapFrame();
 
-    void setContest(BaseContestLog *, bool grid, bool lines, bool spots, int spotDistance);
+    void setContest(BaseContestLog *, bool monitor, bool grid, bool lines, bool spots, int spotDistance);
 
 private:
     Ui::QSOMapFrame *ui;
@@ -32,6 +32,7 @@ private:
 
     QMap <QString, int> locs;
 
+    bool bmonitor = false;
     bool bdrawGrid = true;
     bool bdrawLines = true;
     bool drawSpots = true;
@@ -61,9 +62,10 @@ signals:
     void clearAll();
 
 private slots:
-    void onQmlClicked(QVariant v);
+    void onQmlSignal(QVariant v);
     void dxSpots(QVector<ClusterMessage> spotMsg);
     void purgeSpots();
+    void saveParams();
 public slots:
     void on_AfterLogContact(const BaseContestLog *c, const QSharedPointer<BaseContact> lct);
     void on_redrawQSOMap(bool grid, bool lines, bool spots, int sd);

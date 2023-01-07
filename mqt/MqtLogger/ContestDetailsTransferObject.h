@@ -118,6 +118,11 @@ private:
     MinosStringItem<QString> currentOp1;         // current main op - derived from contacts
     MinosStringItem<QString> currentOp2;         // current second op - derived from contacts
 
+    MinosStringItem<QString> zoomLevel;
+
+    MinosStringItem<QString> centreLat;
+    MinosStringItem<QString> centreLon;
+
     OperatorList oplist;
 
     QString opsQSO1;

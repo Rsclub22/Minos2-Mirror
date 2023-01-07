@@ -163,6 +163,33 @@ void MinosTestExport::exportQTH(QSharedPointer<QFile> expfd )
       delete st;
    }
 }
+//if (methodName == "MinosQSOMap")
+//{
+//    mt->getStructArgMemberValue( "zoom", zoomLevel);
+//    mt->getStructArgMemberValue( "lat", centreLat);
+//    mt->getStructArgMemberValue( "lon", centreLon);
+//}
+void MinosTestExport::exportQSOMap( QSharedPointer<QFile> expfd )
+{
+    RPCParamStruct * st = new RPCParamStruct;
+    makeHeader( st, 1 );
+
+    bool dirty = false;
+    ct->zoomLevel.addIfDirty( st, "zoom", dirty );
+    ct->centreLat.addIfDirty( st, "lat", dirty );
+    ct->centreLon.addIfDirty( st, "lon", dirty );
+
+    if ( dirty )
+    {
+       sendRequest( expfd, "MinosQSOMap", st );
+    }
+    else
+    {
+       delete st;
+    }
+
+}
+
 void MinosTestExport::exportEntry( QSharedPointer<QFile> expfd )
 {
    RPCParamStruct * st = new RPCParamStruct;
@@ -569,6 +596,7 @@ int MinosTestExport::exportAllDetails(QSharedPointer<QFile> minosContestFile, bo
    exportStackDisplay(minosContestFile);
    exportClusterFilter(minosContestFile);
    exportBandmapFilter(minosContestFile);
+   exportQSOMap(minosContestFile);
 
    return exp_stanzaCount;
 }
@@ -593,6 +621,8 @@ int MinosTestExport::exportTest( QSharedPointer<QFile> expfd, int mindump, int m
    exportBundles( expfd );
    exportAllMemories(expfd);
    exportClusterFilter(expfd);
+   exportQSOMap(expfd);
+
 
    bool inDump = false;
    for(auto const &dct: qAsConst(ct->ctList))

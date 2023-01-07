@@ -158,6 +158,10 @@ void ContestDetailsTransferObject::getFromContest(LoggerContestLog *ct)
 
     bearingOffset = ct->bearingOffset;
 
+    zoomLevel = ct->zoomLevel;
+    centreLat = ct->centreLat;
+    centreLon = ct->centreLon;
+
     currentOp1 = ct->currentOp1;
     currentOp2 = ct->currentOp2;
 
@@ -273,6 +277,10 @@ void ContestDetailsTransferObject::setToContest(LoggerContestLog *ct)
     ct->DTGEnd = DTGEnd;
 
     ct->bearingOffset = bearingOffset;
+
+    ct->zoomLevel = zoomLevel;
+    ct->centreLat = centreLat;
+    ct->centreLon = centreLon;
 
     ct->currentOp1 = currentOp1;
     ct->currentOp2 = currentOp2;

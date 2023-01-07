@@ -172,7 +172,7 @@ void MonitoringFrame::on_mapButton_clicked()
         bool lines = monitorMain->QSOLines;
         bool spots = monitorMain->mapShowSpots;
         int sd = monitorMain->clusterDistanceLimit;
-        qsoMapFrame->setContest(ct, grid, lines, spots, sd );
+        qsoMapFrame->setContest(ct, true, grid, lines, spots, sd );
         ui->logFrame->layout()->addWidget(qsoMapFrame);
         ui->logFrame->layout()->removeWidget(ui->QSOTable);
 

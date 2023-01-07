@@ -44,6 +44,7 @@ QSOMapFrame::QSOMapFrame(QWidget *parent) :
 
     purgeTimer = new QTimer(this);
     connect (purgeTimer, &QTimer::timeout, this, &QSOMapFrame::purgeSpots);
+    connect (purgeTimer, &QTimer::timeout, this, &QSOMapFrame::saveParams);
     purgeTimer->start(PURGE_TIME);
 }
 
@@ -51,13 +52,14 @@ QSOMapFrame::~QSOMapFrame()
 {
     delete ui;
 }
-void QSOMapFrame::setContest(BaseContestLog *c, bool grid, bool lines, bool spots, int spotDistance)
+void QSOMapFrame::setContest(BaseContestLog *c, bool monitor, bool grid, bool lines, bool spots, int spotDistance)
 {
     // NB maps that aren't displayed never get ct set
 
     ct = c;
     if (c)
     {
+        bmonitor = monitor;
         startMap();
 
         doRedraw(c, grid, lines, spots, spotDistance);
@@ -113,7 +115,7 @@ void QSOMapFrame::startMap()
         connect(this, SIGNAL(drawGrid(QVariant)), qmlObj, SLOT(setDrawGrid(QVariant)), Qt::UniqueConnection);
         connect(this, SIGNAL(clearAll()), qmlObj, SLOT(clearAll()), Qt::UniqueConnection);
 
-        connect(qmlObj, SIGNAL(qmlSignal(QVariant)), this, SLOT(onQmlClicked(QVariant)), Qt::UniqueConnection);
+        connect(qmlObj, SIGNAL(qmlSignal(QVariant)), this, SLOT(onQmlSignal(QVariant)), Qt::UniqueConnection);
     }
 #endif
 }
@@ -122,16 +124,48 @@ void QSOMapFrame::stopMap()
     QLayout *lo = layout();
     delete lo;
 }
-void QSOMapFrame::onQmlClicked(QVariant /*v*/)
+void QSOMapFrame::onQmlSignal(QVariant v)
 {
-//   QList<QVariant> gc = v.toList();
-//   QString latitude = gc[0].toString();
-//   QString longitude = gc[1].toString();
-//   QString bearing = gc[2].toString();
+   QList<QVariant> gc = v.toList();
+
+   QString reason = gc[0].toString();
+   if (reason == "Pressed")
+   {
+//   QString latitude = gc[1].toString();
+//   QString longitude = gc[2].toString();
+//   QString bearing = gc[3].toString();
 
 #ifdef INC_MAP
 //   qDebug() << latitude << " " << longitude << " " << bearing;
 #endif
+   }
+   else if (reason == "ZoomChanged")
+   {
+        ct->zoomLevel.setValue(gc[1].toString());
+        trace(QString("ZoomChanged qmlSignal %1").arg(ct->zoomLevel.getValue()));
+
+   }
+   else if (reason == "CentreChanged")
+   {
+       ct->centreLat.setValue( gc[1].toString());
+       ct->centreLon.setValue(gc[2].toString());
+       trace(QString("CentreChanged qmlSignal %1 %2").arg(ct->centreLat.getValue(), ct->centreLon.getValue()));
+
+   }
+   else
+   {
+       trace(QString("Unknown qmlSignal %1").arg(reason));
+   }
+}
+void QSOMapFrame::saveParams()
+{
+    if (!bmonitor)
+    {
+        if (ct->zoomLevel.isDirty() || ct->centreLat.isDirty() || ct->centreLon.isDirty())
+        {
+            ct->commonSave(false);
+        }
+    }
 }
 void QSOMapFrame::doRedraw(const BaseContestLog *ctest, bool grid, bool lines, bool spots, int sd)
 {
@@ -151,6 +185,34 @@ void QSOMapFrame::doRedraw(const BaseContestLog *ctest, bool grid, bool lines, b
 
     QStringList callInfo; // [callsign, latitude, longitude]
 
+    callInfo << QString(bmonitor?"Monitor":"Logger");
+    if (bmonitor)
+    {
+        callInfo << "5";
+        callInfo << QString::number(raddeg(ct->odna));
+        callInfo << QString::number(raddeg(ct->odea));
+    }
+    else
+    {
+        if (ct->zoomLevel.getValue().isEmpty())
+        {
+            callInfo << "5";
+        }
+        else
+        {
+            callInfo << ct->zoomLevel.getValue();
+        }
+        if (ct->centreLat.getValue().isEmpty())
+        {
+            callInfo << QString::number(raddeg(ct->odna));
+            callInfo << QString::number(raddeg(ct->odea));
+        }
+        else
+        {
+            callInfo << ct->centreLat.getValue();
+            callInfo << ct->centreLon.getValue();
+        }
+    }
     callInfo << ct->mycall.getFullCall();
     callInfo << QString::number(raddeg(ct->odna));
     callInfo << QString::number(raddeg(ct->odea));
@@ -260,21 +322,24 @@ void QSOMapFrame::on_AfterLogContact(const BaseContestLog *c, const QSharedPoint
 {
     if (ct != nullptr && ct == c && !ct->isReadOnly())
     {
-        Callsign dxCallsign = lct->cs;
-        Frequency dxFreq = lct->frequency.getValue();
-
-        if (spotQueue.count() != 0)
+        if (lct)
         {
-            // check for repeat call
-            for (int row = 0; row < spotQueue.count(); row++)
+            Callsign dxCallsign = lct->cs;
+            Frequency dxFreq = lct->frequency.getValue();
+
+            if (spotQueue.count() != 0)
             {
-                QSharedPointer<ClusterSpotData> bsd = spotQueue[row];
-
-                Callsign rowCall = bsd->getDxCall();
-
-                if (dxCallsign == rowCall)
+                // check for repeat call
+                for (int row = 0; row < spotQueue.count(); row++)
                 {
-                    bsd->setSpotType(bandmapSpotType::DELETED);
+                    QSharedPointer<ClusterSpotData> bsd = spotQueue[row];
+
+                    Callsign rowCall = bsd->getDxCall();
+
+                    if (dxCallsign == rowCall)
+                    {
+                        bsd->setSpotType(bandmapSpotType::DELETED);
+                    }
                 }
             }
         }
