@@ -364,7 +364,14 @@ void DMButtonFrame::on_chooseButton_clicked()
 
         ui->nameLabel->setText(tr("Data Modes Buttons from %1").arg(fkeyFileName));
 
-        qfsw->removePath(lastf);
+        if (qfsw)
+        {
+            qfsw->removePath(lastf);
+        }
+        else
+        {
+            qfsw = new QFileSystemWatcher(this);
+        }
 
         fkeyFileChanged();
         qfsw->addPath(fkeyFileName);

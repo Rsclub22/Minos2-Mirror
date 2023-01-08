@@ -104,7 +104,7 @@ public:
         MSG *msg = static_cast<MSG *>(message);
         if( msg->message == msgNo)
         {
-            if ( hWnd == msg->hwnd)
+            if (result && hWnd == msg->hwnd)
             {
                 long res = *result;
                 m->msgEventFilter(msg, &res);
