@@ -2219,15 +2219,33 @@ void QSOLogFrame::setOtherMode()
     QString mlist = contest->modeList.getValue();
     QStringList sl = mlist.split('|');
 
-    QString cmode = ui->ModeComboBoxGJV->currentText();
     bool otherVisible = true;
-    ui->ModeButton->setText("");
-    for (auto &sm: sl)
+    QString cmode = ui->ModeComboBoxGJV->currentText();
+
+    if (cmode == "RY")
     {
-        if (sm != cmode)
+        if (mlist.contains("PS"))
         {
-            ui->ModeButton->setText(sm);
-            break;
+            ui->ModeButton->setText("PS");
+        }
+    }
+    else if (cmode == "PS")
+    {
+        if (mlist.contains("RY"))
+        {
+            ui->ModeButton->setText("RY");
+        }
+    }
+    else
+    {
+        ui->ModeButton->setText("");
+        for (auto &sm: sl)
+        {
+            if (sm != cmode)
+            {
+                ui->ModeButton->setText(sm);
+                break;
+            }
         }
     }
     QString otherMode = ui->ModeButton->text();
@@ -2254,22 +2272,24 @@ void QSOLogFrame::setMode(QString m)
 
     // make sure the mode button shows the correct "flip" value
 
-
-   if (ui->ModeComboBoxGJV->currentText() == hamlibData::CW || ui->ModeComboBoxGJV->currentText() == hamlibData::MGM)
-   {
-      ui->ModeButton->setText(oldMode);
-   }
-   else
-   {
-      ui->ModeButton->setText(hamlibData::CW);
-   }
+    if (ui->ModeComboBoxGJV->currentText() == hamlibData::CW
+            || ui->ModeComboBoxGJV->currentText() == hamlibData::MGM
+            || ui->ModeComboBoxGJV->currentText() == "RY"
+            || ui->ModeComboBoxGJV->currentText() == "PS"
+            )
+    {
+        ui->ModeButton->setText(oldMode);
+    }
+    else
+    {
+        ui->ModeButton->setText(hamlibData::CW);
+    }
 
     ui->MGMSubModeFrame->setVisible(ui->ModeComboBoxGJV->currentText() == hamlibData::MGM);
 }
 //---------------------------------------------------------------------------
 void QSOLogFrame::setFreq(Frequency f)
 {
-    //xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
     if (contest && curFreq != f)
     {
         BandList &blist = BandList::getBandList();

@@ -42,8 +42,6 @@ ContestDetails::ContestDetails(QWidget *parent) :
     ui->BonusComboBox->addItem(tr("UKAC Bonuses (B4)"));
     ui->BonusComboBox->addItem(tr("NAC Bonuses"));
 
-    //setModes();
-
     for ( int i = 0; i < 24; i++ )
     {
         QString cbText = QString("%1:").arg(i, 2, 10, QChar('0'));
@@ -1066,7 +1064,6 @@ void ContestDetails::setDetails( const IndividualContest &ic )
        ui->PPQSORB->setChecked(true);
        break;
    }
-//   setDetails();
 }
 void ContestDetails::setModes()
 {
@@ -1078,6 +1075,10 @@ void ContestDetails::setModes()
                     + "|" + hamlibData::FM
                     + "|" + hamlibData::MGM
                     ;
+        if (contestTransferObject->isHF())
+        {
+            modeString += "| RY|PS";
+        }
 
     }
     else
