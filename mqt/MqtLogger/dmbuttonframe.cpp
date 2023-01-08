@@ -16,6 +16,7 @@
 #include "dmbuttonframe.h"
 #include "tlogcontainer.h"
 #include "tsinglelogframe.h"
+#include "MTrace.h"
 
 #include "ui_dmbuttonframe.h"
 
@@ -185,21 +186,6 @@ QString DMButtonFrame::parseFKeyMessage(QString mess)
                 {
                     txMess += serials;
                 }
-                else if (macro == "TX")
-                {
-                    // switch to TX
-                    // should happen automatically in the engine?
-                }
-                else if (macro == "RX")
-                {
-                    // switch to RX
-                    // should happen automatically in the engine?
-                }
-                else if (macro == "CQ")
-                {
-                    // switch to CQ (run mode?)
-
-                }
                 else if (macro == "EXCH")
                 {
                     // This is whatever exchange is required
@@ -233,19 +219,6 @@ QString DMButtonFrame::parseFKeyMessage(QString mess)
                 {
                     txMess += ct->myloc.getLoc();
                 }
-                else if (macro == "NAME")
-                {
-                    // we don't currently know our name
-                }
-                else if (macro == "RUN")
-                {
-                    // switch to run mode
-                }
-                else if (macro == "S&P")
-                {
-                    // switch to S&P mode
-
-                }
                 else if (macro == "SPACE")
                 {
                     txMess += ' ';
@@ -258,7 +231,7 @@ QString DMButtonFrame::parseFKeyMessage(QString mess)
                 {
                     txMess += QDateTime::currentDateTimeUtc().toString("HHmm");
                 }
-                else if (macro == "ENTER")
+                else if (macro == "LOG")
                 {
                     // simulate "Enter" key
                     // This may well log the contact, leaving nothing
@@ -271,9 +244,21 @@ QString DMButtonFrame::parseFKeyMessage(QString mess)
                     // wipe QSO - like ESC key
                     tslf->GJVQSOLogFrame->doGJVCancelButton_clicked();
                 }
+                else if (macro == "CALLFIELD")
+                {
+                    tslf->GJVQSOLogFrame->selectCallField();
+                }
+                else if (macro == "SERIALFIELD")
+                {
+                    tslf->GJVQSOLogFrame->selectSnRxField();
+                }
+                else if (macro == "EXCHANGEFIELD")
+                {
+                    tslf->GJVQSOLogFrame->selectExchField();
+                }
                 else
                 {
-                    mShowMessage(tr("Message <%1> contains unknown macro {%2}").arg(mess).arg(macro), this);
+                    trace(QString("Message <%1> contains unknown macro {%2}").arg(mess, macro));
                 }
             }
         }

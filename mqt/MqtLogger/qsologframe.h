@@ -47,6 +47,11 @@ public:
     void lgTraceerr( int err );
 
     virtual void selectField( QWidget *v );
+
+    virtual void selectCallField();
+    virtual void selectSnRxField();
+    virtual void selectExchField();
+
     virtual void initialise();
     virtual void setContest(BaseContestLog * contest);
     virtual void setTimeStyles();

@@ -16,32 +16,32 @@
 ###################
 #   RUN Messages
 ###################
-F1 Run CQ,{TX}{ENTER}CQ CQ TEST {MYCALL} {MYCALL} {RX}
-F2 Run Exch,{TX}{ENTER}! {SENTRST} {EXCH} {EXCH} ! {RX}
-F3 Run TU,{TX}{ENTER}! TU de {MYCALL} QRZ? {RX}
-F4 {MYCALL},{TX} {MYCALL} {RX}
-F5 His Call,{TX} ! {RX}
+F1 Run CQ,CQ CQ TEST {MYCALL} {MYCALL} {CALLFIELD}
+F2 Run Exch,! {SENTRST} {EXCH} {EXCH} ! {SERIALFIELD}
+F3 Run TU,{LOG}! TU de {MYCALL} QRZ? {CALLFIELD} 
+F4 {MYCALL}, {MYCALL} 
+F5 His Call, ! 
 F6 Spare,
-F7 My Exch,{TX}{ENTER}{SENTRST} {EXCH} {EXCH} {RX}
-F8 Agn?,{TX}{ENTER}agn? agn? {RX}
-F9 Spare,
-F10 Spare,
-F11 Spare,
+F7 My Exch,{SENTRST} {EXCH} {EXCH} 
+F8 Agn?,agn? agn? 
+F9 Log, {LOG},
+F10 Call Field,{CALLFIELD}
+F11 Serial Field,{SERIALFIELD}
 F12 Wipe,{WIPE}
 #
 ###################
 #   S&P Messages
 ###################
 # "&" doubled, displays one "&" in the button label
-F1 S&&P CQ,{TX} CQ TEST {MYCALL} {MYCALL} CQ {RX}
-F2 S&&P Exch,{TX}{ENTER}! {SENTRST} {EXCH} {EXCH} {MYCALL} {RX}
-F3 S&&P TU,{TX}{ENTER}! TU de {MYCALL} {RX}
-F4 S&&P Call Him,{TX}{ENTER}! de {MYCALL} {MYCALL} {RX}
-F5 His Call,{TX} ! {RX}
-F6 {MYCALL},{TX} {MYCALL} {RX}
-F7 My Exch,{TX}{ENTER}{SENTRST} {EXCH} {EXCH} {RX}
-F8 Agn?,{TX}{ENTER}agn? agn? {RX}
-F9 Spare,
-F10 Spare,
-F11 Spare,
+F1 S&&P CQ, CQ TEST {MYCALL} {MYCALL} CQ {CALLFIELD}
+F2 S&&P Exch,! {SENTRST} {EXCH} {EXCH} {MYCALL} 
+F3 S&&P TU,{ENTER}! TU de {MYCALL}{LOG} 
+F4 S&&P Call Him,! de {MYCALL} {MYCALL} 
+F5 His Call, ! 
+F6 {MYCALL}, {MYCALL} 
+F7 My Exch,{SENTRST} {EXCH} {EXCH} 
+F8 Agn?,agn? agn? 
+F9 Log, {LOG},
+F10 Call Field,{CALLFIELD}
+F11 Serial Field,{SERIALFIELD}
 F12 Wipe,{WIPE}

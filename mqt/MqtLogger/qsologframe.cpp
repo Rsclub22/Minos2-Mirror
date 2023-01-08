@@ -1937,6 +1937,30 @@ void QSOLogFrame::selectField( QWidget *v )
         current = v;
     }
 }
+
+void QSOLogFrame::selectCallField()
+{
+    selectField(ui->CallsignFrame->getTextEditEdit());
+}
+void QSOLogFrame::selectSnRxField()
+{
+    if (ui->SerRxFrame->isVisible())
+    {
+        selectField(ui->SerRxFrame->getTextEditEdit());
+    }
+    else
+    {
+        selectExchField();
+    }
+}
+void QSOLogFrame::selectExchField()
+{
+    if (ui->QTHFrame->isVisible())
+    {
+        selectField(ui->QTHFrame->getTextEditEdit());
+    }
+}
+
 //==============================================================================
 // check for embedded space or empty number
 
