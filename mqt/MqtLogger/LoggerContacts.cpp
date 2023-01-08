@@ -48,7 +48,7 @@ void ContestContact::getPrintFileText( QString &sdest, short maxlen )
    }
    else
    {
-      makestrings( clp->serialMandatoryField.getValue() );
+      makestrings( clp->serialMandatoryField.getValue() || clp->asymmetricMult.getValue() );
 
       QString exp_buff;
 
@@ -283,7 +283,7 @@ void ContestContact::getReg1TestText(QString &sdest , bool noSerials)
    }
    sdest += ';';
 
-   if (noSerials || !contest->serialMandatoryField.getValue())
+   if (noSerials || (!contest->serialMandatoryField.getValue() && !contest->asymmetricMult.getValue()))
    {
     // no data
    }
@@ -303,7 +303,7 @@ void ContestContact::getReg1TestText(QString &sdest , bool noSerials)
    }
    sdest += ';';
 
-   if (noSerials || !contest->serialMandatoryField.getValue())
+   if (noSerials || (!contest->serialMandatoryField.getValue() && !contest->asymmetricMult.getValue()))
    {
     // no data
    }
@@ -431,7 +431,7 @@ QSO:  3799 PH 1999-03-06 0712 HC8N           59 700    N5KO           59 CA     
     {
         outstr += getCabrilloField(reps.getValue(), 3);
     }
-    if (lcl->serialMandatoryField.getValue())
+    if (lcl->serialMandatoryField.getValue() || lcl->asymmetricMult.getValue())
     {
         QString ssbuff;
         int ss = serials.getValue().toInt();
@@ -542,7 +542,7 @@ QString ContestContact::getADIFLine()
 
     if (contest->RSTMandatoryField.getValue())
         outstr += makeADIFField( "RST_SENT", reps.getValue() );
-    if (contest->serialMandatoryField.getValue())
+    if (contest->serialMandatoryField.getValue() || contest->asymmetricMult.getValue())
     {
         outstr += makeADIFField( "STX", serials.getValue() );
     }

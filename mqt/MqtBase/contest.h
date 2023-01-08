@@ -174,6 +174,7 @@ class BaseContestLog: public BaseLogList
       MinosItem<bool> GLocMult;                 // G locs only mults
       MinosItem<bool> districtMult;             // postcodes
       MinosItem<int>  otherMult;                // type of "other" mult
+      MinosItem<bool> asymmetricMult;            // TX S/N, RX serial or mult
 
       MinosItem<bool> M7Mults;                  // loc mults, but more for G locs
 

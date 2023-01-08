@@ -141,6 +141,7 @@ void ContestDetailsTransferObject::getFromContest(LoggerContestLog *ct)
     GLocMult = ct->GLocMult;
     districtMult = ct->districtMult;
     otherMult = ct->otherMult;
+    asymmetricMult = ct->asymmetricMult;
 
     M7Mults = ct->M7Mults;
 
@@ -261,6 +262,7 @@ void ContestDetailsTransferObject::setToContest(LoggerContestLog *ct)
     ct->GLocMult = GLocMult;
     ct->districtMult = districtMult;
     ct->otherMult = otherMult;
+    ct->asymmetricMult = asymmetricMult;
 
     ct->M7Mults = M7Mults;
 

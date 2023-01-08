@@ -159,7 +159,7 @@ void QSOMapFrame::onQmlSignal(QVariant v)
 }
 void QSOMapFrame::saveParams()
 {
-    if (!bmonitor)
+    if (!bmonitor && ct)
     {
         if (ct->zoomLevel.isDirty() || ct->centreLat.isDirty() || ct->centreLon.isDirty())
         {

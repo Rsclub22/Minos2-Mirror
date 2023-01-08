@@ -69,7 +69,7 @@ void ScreenContact::initialise(BaseContestLog *ct , bool rInit)
         }
         if (hf)
         {
-             if (mode == hamlibData::CW)
+             if (mode == hamlibData::CW || mode == "RY" || mode == "PS")
              {
                  repr = "599" ;
                  reps = "599" ;

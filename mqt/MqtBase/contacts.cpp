@@ -420,7 +420,7 @@ void BaseContact::getText(QString &dest, const BaseContestLog * const curcon, bo
    else
    {
       // if contest requires a serial
-      makestrings( curcon ->serialMandatoryField.getValue() );
+      makestrings( curcon ->serialMandatoryField.getValue() || curcon->asymmetricMult.getValue() );
 
       contactBuffs.qthbuff = extraText.getValue().left( 100 );
 

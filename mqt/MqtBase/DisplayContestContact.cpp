@@ -57,7 +57,7 @@ DisplayContestContact::DisplayContestContact( BaseContestLog * ct, bool time_now
        }
        if (hf)
        {
-            if (curMode == hamlibData::CW)
+            if (curMode == hamlibData::CW || curMode == "RY" || curMode == "PS")
             {
                 repr.setInitialValue( "599" );
                 reps.setInitialValue( "599" );

@@ -2443,12 +2443,12 @@ void QSOLogFrame::updateQSODisplay()
    ui->RSTTxFrame->setEnabled(notProtected && contest->RSTMandatoryField.getValue());
    ui->RSTTxFrame->setVisible(contest->RSTMandatoryField.getValue());
    ui->SerTxFrame->setEnabled(notProtected && contest->serialMandatoryField.getValue());
-   ui->SerTxFrame->setVisible(contest->serialMandatoryField.getValue());
+   ui->SerTxFrame->setVisible(contest->serialMandatoryField.getValue() || contest->asymmetricMult.getValue());
 
    ui->RSTRxFrame->setEnabled(notProtected && contest->RSTMandatoryField.getValue());
    ui->RSTRxFrame->setVisible(contest->RSTMandatoryField.getValue());
-   ui->SerRxFrame->setEnabled(notProtected && contest->serialMandatoryField.getValue());
-   ui->SerRxFrame->setVisible(contest->serialMandatoryField.getValue());
+   ui->SerRxFrame->setEnabled(notProtected && contest->serialMandatoryField.getValue() && !contest->asymmetricMult.getValue());
+   ui->SerRxFrame->setVisible(contest->serialMandatoryField.getValue() && !contest->asymmetricMult.getValue());
 
    bool locman = contest->locatorMandatoryField.getValue();
    ui->LocFrame->getTextEditEdit()->setEnabled(locman);  // loc remains enabled in protected to enable searching
@@ -2464,7 +2464,7 @@ void QSOLogFrame::updateQSODisplay()
        r = 20;
    }
    int s = 0;
-   if (contest->serialMandatoryField.getValue())
+   if (contest->serialMandatoryField.getValue() || contest->asymmetricMult.getValue())
    {
        s = 20;
    }
@@ -2763,7 +2763,10 @@ void QSOLogFrame::logScreenEntry( )
         tslf->QSOTable->model()->insertRows(contest->ctList.count(), 1, QModelIndex());
    }
 
-   if ( screenContact.mode.compare( hamlibData::MGM, Qt::CaseInsensitive ) != 0 )
+   if ( screenContact.mode.compare( hamlibData::MGM, Qt::CaseInsensitive ) != 0
+        && screenContact.mode.compare( "RY", Qt::CaseInsensitive ) != 0
+        && screenContact.mode.compare( "PS", Qt::CaseInsensitive ) != 0
+                )
    {
        bool contactmodeCW = ( screenContact.reps.size() == 3 && screenContact.repr.size() == 3 );
        bool curmodeCW = ( screenContact.mode.compare( hamlibData::CW, Qt::CaseInsensitive ) == 0 );

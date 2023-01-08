@@ -57,6 +57,7 @@ BaseContestLog::BaseContestLog(bool hf)
   locMult.setValue( false );
   GLocMult.setValue(false);
   otherMult.setValue(0);
+  asymmetricMult.setValue(false);
   M7Mults.setValue(false);
   usesBonus.setValue(false);
   scoreMode.setValue( PPKM );
@@ -302,6 +303,7 @@ void BaseContestLog::clearDirty()
    GLocMult.clearDirty();
    districtMult.clearDirty();
    otherMult.clearDirty();
+   asymmetricMult.clearDirty();
 
    M7Mults.clearDirty();
    usesBonus.clearDirty();
@@ -348,6 +350,7 @@ void BaseContestLog::setDirty()
    GLocMult.setDirty();
    districtMult.setDirty();
    otherMult.setDirty();
+   asymmetricMult.setDirty();
 
    M7Mults.setDirty();
    usesBonus.setDirty();
@@ -1460,6 +1463,8 @@ void BaseContestLog::processMinosStanza( const QString &methodName, MinosTestImp
       mt->getStructArgMemberValue( "NonGCtryMult", nonGCountryMult );
       mt->getStructArgMemberValue( "locMult", locMult );
       mt->getStructArgMemberValue( "OtherMultType", otherMult);
+      mt->getStructArgMemberValue( "AsymmetricMult", asymmetricMult);
+
       mt->getStructArgMemberValue( "GLocMult", GLocMult );
       mt->getStructArgMemberValue( "QTHReq", otherExchange );
       mt->getStructArgMemberValue( "QTHOpt", otherOptionalExchange );

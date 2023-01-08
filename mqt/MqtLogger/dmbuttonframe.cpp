@@ -203,12 +203,12 @@ QString DMButtonFrame::parseFKeyMessage(QString mess)
                     // to be able to do this properly
 
                     bool needSpace = false;
-                    if (ct->serialMandatoryField.getValue())
+                    if (ct->serialMandatoryField.getValue() || ct->asymmetricMult.getValue())
                     {
                         txMess += sc->serials;
                         needSpace = true;
                     }
-                    if (ct->otherExchange.getValue() || ct->otherOptionalExchange.getValue())
+                    if (!ct->asymmetricMult.getValue() && (ct->otherExchange.getValue() || ct->otherOptionalExchange.getValue()))
                     {
                         QString exch = ct->location.getValue();
                         if (!exch.isEmpty())
