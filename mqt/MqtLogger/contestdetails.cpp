@@ -1077,7 +1077,7 @@ void ContestDetails::setModes()
                     ;
         if (contestTransferObject->isHF())
         {
-            modeString += "| RY|PS";
+            modeString += "|RY|PS";
         }
 
     }
