@@ -146,6 +146,11 @@ QString DMButtonFrame::parseFKeyMessage(QString mess)
     tslf->GJVQSOLogFrame->getScreenEntry();
     ScreenContact *sc = &tslf->GJVQSOLogFrame->screenContact;
 
+    // data is taken now; an {ENTER} may log the call, and clear it
+    QString call = sc->cs.getFullCall();
+    QString serials = sc->serials;
+    QString reps = sc->reps;
+
     QString txMess;
 
     // and parse the message
@@ -159,11 +164,11 @@ QString DMButtonFrame::parseFKeyMessage(QString mess)
         }
         else if (c == '#')
         {
-            txMess += sc->serials;
+            txMess += serials;
         }
         else if (c == '!')
         {
-            txMess += sc->cs.getFullCall();
+            txMess += call;
         }
         else if (c == '{')
         {
@@ -178,15 +183,17 @@ QString DMButtonFrame::parseFKeyMessage(QString mess)
                 }
                 else if (macro == "CALL")
                 {
-                    txMess += sc->cs.getFullCall();
+                    txMess += serials;
                 }
                 else if (macro == "TX")
                 {
                     // switch to TX
+                    // should happen automatically in the engine?
                 }
                 else if (macro == "RX")
                 {
                     // switch to RX
+                    // should happen automatically in the engine?
                 }
                 else if (macro == "CQ")
                 {
@@ -205,13 +212,13 @@ QString DMButtonFrame::parseFKeyMessage(QString mess)
                     bool needSpace = false;
                     if (ct->serialMandatoryField.getValue() || ct->asymmetricMult.getValue())
                     {
-                        txMess += sc->serials;
+                        txMess += serials;
                         needSpace = true;
                     }
                     if (!ct->asymmetricMult.getValue() && (ct->otherExchange.getValue() || ct->otherOptionalExchange.getValue()))
                     {
                         QString exch = ct->location.getValue();
-                        if (!exch.isEmpty())
+                        if (!exch.isEmpty() && exch != "-")
                         {
                             if (needSpace)
                             {
@@ -232,7 +239,7 @@ QString DMButtonFrame::parseFKeyMessage(QString mess)
                 }
                 else if (macro == "RUN")
                 {
-                    // switch to run mode?
+                    // switch to run mode
                 }
                 else if (macro == "S&P")
                 {
@@ -245,7 +252,7 @@ QString DMButtonFrame::parseFKeyMessage(QString mess)
                 }
                 else if (macro == "SENTRST")
                 {
-                    txMess += sc->reps;
+                    txMess += reps;
                 }
                 else if (macro == "TIME2")
                 {
