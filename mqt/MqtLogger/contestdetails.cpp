@@ -1341,7 +1341,7 @@ QWidget * ContestDetails::getDetails( )
         }
     }
     contestTransferObject->location.setValue( ui->ExchangeEdit->text() );
-    contestTransferObject->scoreMode.setValue( static_cast< SCOREMODE > (ui->PPQSORB->isChecked()?1:0) );  // combo
+    contestTransferObject->scoreMode.setValue( static_cast< SCOREMODE > (ui->PPQSORB->isChecked()?PPQSO:PPKM) );  // combo
 
     if (ui->NonGCtryMult->isChecked())
     {

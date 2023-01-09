@@ -13,7 +13,7 @@ QStringList testData = {
 
 };
 
-TestFrame::TestFrame(QWidget *parent, QLineEdit *sendEdit, QString fname) :
+TestFrame::TestFrame(QWidget *parent, QLineEdit */*sendEdit*/, QString /*fname*/) :
     QFrame(parent),
     ui(new Ui::TestFrame)
 {

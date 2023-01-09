@@ -936,7 +936,7 @@ void TPubSubMain::routerSubscribeCallback(bool err, QSharedPointer<MinosRPCObj> 
 
 // callback for responses to notify messages
 
-void TPubSubMain::notifyCallback( bool err, QSharedPointer<MinosRPCObj> /*mro*/, const QString &from )
+void TPubSubMain::notifyCallback( bool /*err*/, QSharedPointer<MinosRPCObj> /*mro*/, const QString &/*from*/ )
 {
    // response to pubsub calls
    //trace( "Notify callback from " + from + ( err ? ":Error" : ":Normal" ) );
@@ -945,7 +945,7 @@ void TPubSubMain::notifyCallback( bool err, QSharedPointer<MinosRPCObj> /*mro*/,
 
 // this we get when we get a subscribe notification from a remote router
 
-void TPubSubMain::routerNotifyCallback(bool err, QSharedPointer<MinosRPCObj> mro, const QString &from )
+void TPubSubMain::routerNotifyCallback(bool err, QSharedPointer<MinosRPCObj> mro, const QString &/*from*/ )
 {
    // we need to pass it on to any of our subscribers who are interested
    // in this event from this router
