@@ -13,6 +13,23 @@
 #include "contestdetails.h"
 #include "ui_contestdetails.h"
 
+
+enum ExchangeTypes {
+    etNoExchange,
+    etPostCode,
+    etOther,
+    etOptional,
+    etMandatory,
+    etAsymmetric
+};
+
+enum BonusTypes {
+    btNone,
+    btB2,
+    btB4,
+    btNAC
+};
+
 ContestDetails::ContestDetails(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::ContestDetails),
@@ -30,7 +47,7 @@ ContestDetails::ContestDetails(QWidget *parent) :
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
-    ui->ExchangeComboBox->addItem(tr("No Exchange Required"));
+    ui->ExchangeComboBox->addItem(tr("No Exchange Required") );
     ui->ExchangeComboBox->addItem(tr("PostCode Multipliers"));
     ui->ExchangeComboBox->addItem(tr("Other Exchange Multiplier"));
     ui->ExchangeComboBox->addItem(tr("Optional Exchange Multiplier"));
@@ -197,36 +214,36 @@ void ContestDetails::setExchangeComboBox()
     if ( contestTransferObject->districtMult.getValue() )
     {
         // PostCode Multipliers
-        ui->ExchangeComboBox->setCurrentIndex( 1);
+        ui->ExchangeComboBox->setCurrentIndex( etPostCode);
     }
     else
         if ( otherExchange && !otherOptional && otherMult > 0 && !asymmetricMult )
         {
             // Other Exchange Multiplier
-            ui->ExchangeComboBox->setCurrentIndex( 2);
+            ui->ExchangeComboBox->setCurrentIndex( etOther);
         }
         else
             if ( otherExchange && otherOptional && otherMult > 0 && !asymmetricMult )
             {
                 // Optional Exchange Multiplier
-                ui->ExchangeComboBox->setCurrentIndex( 3);
+                ui->ExchangeComboBox->setCurrentIndex( etOptional);
             }
             else
                 if ( otherExchange && otherOptional && otherMult <= 0 && !asymmetricMult )
                 {
                     // Exchange Required (no multiplier)
-                    ui->ExchangeComboBox->setCurrentIndex( 4);
+                    ui->ExchangeComboBox->setCurrentIndex( etMandatory);
                 }
                 else
                     if ( otherExchange && !otherOptional && otherMult > 0 && asymmetricMult )
                     {
                         // Exchange Required (no multiplier)
-                        ui->ExchangeComboBox->setCurrentIndex( 5);
+                        ui->ExchangeComboBox->setCurrentIndex( etAsymmetric);
                     }
                     else
                     {
                         // No Exchange Required
-                        ui->ExchangeComboBox->setCurrentIndex( 0);
+                        ui->ExchangeComboBox->setCurrentIndex( etNoExchange);
                     }
 }
 
@@ -418,10 +435,10 @@ void ContestDetails::setDetails(  )
 
    switch (contestTransferObject->scoreMode.getValue())
    {
-   case 0:
+   case PPKM:
        ui->commencedKRB->setChecked(true);
        break;
-   case 1:
+   case PPQSO:
        ui->PPQSORB->setChecked(true);
        break;
    }
@@ -439,18 +456,18 @@ void ContestDetails::setDetails(  )
    if (usesBonus)
    {
        if (bonusType == "B2")
-           ui->BonusComboBox->setCurrentIndex(1);
+           ui->BonusComboBox->setCurrentIndex(btB2);
        else if (bonusType == "B4")
-           ui->BonusComboBox->setCurrentIndex(2);
+           ui->BonusComboBox->setCurrentIndex(btB4);
        else if (bonusType == "NAC")
-           ui->BonusComboBox->setCurrentIndex(3);
+           ui->BonusComboBox->setCurrentIndex(btNAC);
        else
-           ui->BonusComboBox->setCurrentIndex(0);
+           ui->BonusComboBox->setCurrentIndex(btNone);
 
    }
    else
    {
-       ui->BonusComboBox->setCurrentIndex(0);
+       ui->BonusComboBox->setCurrentIndex(btNone);
    }
 
    ui->LocatorMult->setChecked(contestTransferObject->locMult.getValue()) ;
@@ -1012,15 +1029,15 @@ void ContestDetails::setDetails( const IndividualContest &ic )
    bool UKACBonus = contestTransferObject->usesBonus.getValue();
    if (!UKACBonus)
    {
-       ui->BonusComboBox->setCurrentIndex(0);
+       ui->BonusComboBox->setCurrentIndex(btNone);
    }
    else
    {
        QString bonusType = contestTransferObject->bonusType.getValue();
        if (bonusType == "B2")
-            ui->BonusComboBox->setCurrentIndex(1);
+            ui->BonusComboBox->setCurrentIndex(btB2);
        if (bonusType == "B4")
-            ui->BonusComboBox->setCurrentIndex(2);
+            ui->BonusComboBox->setCurrentIndex(btB4);
    }
 
    contestTransferObject->modeList.setValue(setMode);
@@ -1172,7 +1189,9 @@ void ContestDetails::focusChange(QObject * /*obj*/, bool in, QFocusEvent * /*eve
             ui->PowerEdit->setStyleSheet(ssLineEditOK);
         }
 
-        if ( ui->ExchangeComboBox->currentIndex() != 0 && ui->ExchangeEdit->text().trimmed().isEmpty() )
+        if ( ui->ExchangeComboBox->currentIndex() != etNoExchange
+             && ui->ExchangeComboBox->currentIndex() != etAsymmetric
+             && ui->ExchangeEdit->text().trimmed().isEmpty() )
         {
             ui->ExchangeEdit->setStyleSheet(ssLineEditFrRedBkRed);
         }
@@ -1290,7 +1309,9 @@ QWidget * ContestDetails::getDetails( )
             nextD = ui->LocatorEdit;
         }
     }
-    if ( ui->ExchangeComboBox->currentIndex() != 0 && ui->ExchangeEdit->text().trimmed().isEmpty() )
+    if ( ui->ExchangeComboBox->currentIndex() != etNoExchange
+         && ui->ExchangeComboBox->currentIndex() != etAsymmetric
+         && ui->ExchangeEdit->text().trimmed().isEmpty() )
     {
         if (!nextD)
         {
@@ -1337,21 +1358,21 @@ QWidget * ContestDetails::getDetails( )
     contestTransferObject->locMult.setValue( ui->LocatorMult->isChecked() ) ;   // bool
     contestTransferObject->GLocMult.setValue( ui->GLocMult->isChecked() ) ;   // bool
     contestTransferObject->M7Mults.setValue( ui->M7LocatorMults->isChecked() ) ;   // bool
-    contestTransferObject->usesBonus.setValue(ui->BonusComboBox->currentIndex() >= 1);
+    contestTransferObject->usesBonus.setValue(ui->BonusComboBox->currentIndex() > btNone);
 
     if (contestTransferObject->usesBonus.getValue())
     {
         int bt = ui->BonusComboBox->currentIndex();
 
-        if (bt == 1)
+        if (bt == btB2)
         {
             contestTransferObject->bonusType.setValue("B2");
         }
-        else if (bt == 2)
+        else if (bt == btB4)
         {
             contestTransferObject->bonusType.setValue("B4");
         }
-        else if (bt == 3)
+        else if (bt == btNAC)
         {
             contestTransferObject->bonusType.setValue("NAC");
         }
@@ -1434,7 +1455,7 @@ QWidget * ContestDetails::getDetails( )
    */
     switch ( ui->ExchangeComboBox->currentIndex() )
     {
-    case 0:     //No Exchange Required
+    case etNoExchange:     //No Exchange Required
         contestTransferObject->otherExchange.setValue( false );
         contestTransferObject->otherOptionalExchange.setValue( false );
         contestTransferObject->districtMult.setValue( false );
@@ -1442,7 +1463,7 @@ QWidget * ContestDetails::getDetails( )
         contestTransferObject->asymmetricMult.setValue(false);
         break;
 
-    case 1:     //PostCode Multipliers
+    case etPostCode:     //PostCode Multipliers
         contestTransferObject->otherExchange.setValue( true );
         contestTransferObject->otherOptionalExchange.setValue( false );
         contestTransferObject->districtMult.setValue( true );
@@ -1450,7 +1471,7 @@ QWidget * ContestDetails::getDetails( )
         contestTransferObject->asymmetricMult.setValue(false);
         break;
 
-    case 2:     //Other Exchange Multiplier
+    case etOther:     //Other Exchange Multiplier
         contestTransferObject->otherExchange.setValue( true );
         contestTransferObject->otherOptionalExchange.setValue( false );
         contestTransferObject->districtMult.setValue( false );
@@ -1458,7 +1479,7 @@ QWidget * ContestDetails::getDetails( )
         contestTransferObject->asymmetricMult.setValue(false);
         break;
 
-    case 3:     //Optional Exchange Multiplier
+    case etOptional:     //Optional Exchange Multiplier
         contestTransferObject->otherExchange.setValue( false );
         contestTransferObject->otherOptionalExchange.setValue( true );
         contestTransferObject->districtMult.setValue( false );
@@ -1466,7 +1487,7 @@ QWidget * ContestDetails::getDetails( )
         contestTransferObject->asymmetricMult.setValue(false);
         break;
 
-    case 4:     //Exchange Required (no multiplier)
+    case etMandatory:     //Exchange Required (no multiplier)
         contestTransferObject->otherExchange.setValue( true );
         contestTransferObject->otherOptionalExchange.setValue( false );
         contestTransferObject->districtMult.setValue( false );
@@ -1474,7 +1495,7 @@ QWidget * ContestDetails::getDetails( )
         contestTransferObject->asymmetricMult.setValue(false);
         break;
 
-    case 5:     //Asymmetric
+    case etAsymmetric:     //Asymmetric
         contestTransferObject->otherExchange.setValue( true );
         contestTransferObject->otherOptionalExchange.setValue( false );
         contestTransferObject->districtMult.setValue( false );
@@ -1781,7 +1802,7 @@ void ContestDetails::on_DXCCMult_clicked()
     {
        ui->NonGCtryMult->setChecked(false);
     }
-    ui->BonusComboBox->setCurrentIndex(0);
+    ui->BonusComboBox->setCurrentIndex(btNone);
     noMultRipple = false;
 }
 
@@ -1796,7 +1817,7 @@ void ContestDetails::on_NonGCtryMult_clicked()
     {
        ui->DXCCMult->setChecked(false);
     }
-    ui->BonusComboBox->setCurrentIndex(0);
+    ui->BonusComboBox->setCurrentIndex(btNone);
     noMultRipple = false;
 }
 
@@ -1814,7 +1835,7 @@ void ContestDetails::on_LocatorMult_clicked()
        ui->M7LocatorMults->setChecked(false);
 
     }
-    ui->BonusComboBox->setCurrentIndex(0);
+    ui->BonusComboBox->setCurrentIndex(btNone);
     noMultRipple = false;
 }
 
@@ -1830,7 +1851,7 @@ void ContestDetails::on_GLocMult_clicked()
        ui->LocatorMult->setChecked(true);
        ui->M7LocatorMults->setChecked(false);
     }
-    ui->BonusComboBox->setCurrentIndex(0);
+    ui->BonusComboBox->setCurrentIndex(btNone);
     noMultRipple = false;
 }
 
@@ -1848,7 +1869,7 @@ void ContestDetails::on_M7LocatorMults_clicked()
        ui->NonGCtryMult->setChecked(false);
        ui->DXCCMult->setChecked(false);
     }
-    ui->BonusComboBox->setCurrentIndex(0);
+    ui->BonusComboBox->setCurrentIndex(btNone);
     noMultRipple = false;
 }
 void ContestDetails::on_BonusComboBox_currentIndexChanged(int /*index*/)
@@ -1909,23 +1930,6 @@ void ContestDetails::bundleChanged()
 
 void ContestDetails::on_MGMCheckBox_stateChanged(int)
 {
-//    if (ui->MGMCheckBox->isChecked())
-//    {
-//        noMultRipple = true;
-
-//        ui->LocatorMult->setChecked(true);
-//        ui->GLocMult->setChecked(false);
-//        ui->NonGCtryMult->setChecked(false);
-//        ui->DXCCMult->setChecked(false);
-//        ui->M7LocatorMults->setChecked(false);
-
-//        ui->commencedKRB->setChecked(true);
-//        ui->BonusComboBox->setCurrentIndex(0);
-
-//        ui->SerialField->setChecked(false);
-
-//        noMultRipple = false;
-//    }
     enableControls();
 }
 QString ContestDetails::getSelectedAntenna()

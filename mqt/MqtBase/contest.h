@@ -36,6 +36,8 @@ class ContestScore;
 class MinosTestImport;
 class BaseContestLog;
 
+enum SCOREMODE {PPKM, PPQSO};
+
 class DupContact
 {
    public:
@@ -70,8 +72,6 @@ class dupsheet
       dupsheet();
       ~dupsheet();
 };
-
-enum SCOREMODE {PPKM, PPQSO};
 
 typedef QMap < MapWrapper<BaseContact>, MapWrapper<BaseContact> > LogList;
 typedef LogList::iterator LogIterator;
