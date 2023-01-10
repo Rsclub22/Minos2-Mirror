@@ -139,7 +139,7 @@ QVariant KstCallGridModel::data( const QModelIndex &index, int role ) const
             QString col;
             if (worked)
             {
-                col = HtmlFontColour(Qt::gray);
+                col = HtmlFontColour(Qt::darkGray);
                 call = col + call + HtmlFontColour(Qt::black);
             }
 
