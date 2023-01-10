@@ -17,7 +17,7 @@ AnalysePubSubNotify::AnalysePubSubNotify(bool err, QSharedPointer<MinosRPCObj> m
       RPCArgs *args = mro->getCallArgs();
       if (
               // NB publisher is initiated by the "from" from the publisher
-              // and persists with the publihe entity
+              // and persists with the published entity
          args->getStructArgMember( 0, "Publisher", psPublisher )
          && args->getStructArgMember( 0, "Server", psRouter )
          && args->getStructArgMember( 0, "Category", psCategory )

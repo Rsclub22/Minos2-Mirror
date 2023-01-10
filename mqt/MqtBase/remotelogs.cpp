@@ -63,7 +63,7 @@ void RemoteLogs::on_notify(AnalysePubSubNotify an, const QString /*from*/ )
 {
     // pubsub notify
 
-    //trace( "Notify callback from " + from + ( !an.getOK() ? ":Error" : ":Normal" ) );
+    //trace( "RemoteLogs on_notify from " + from + ( !an.getOK() ? ":Error" : ":Normal" ) );
 
     if ( an.getOK() )
     {
@@ -73,7 +73,7 @@ void RemoteLogs::on_notify(AnalysePubSubNotify an, const QString /*from*/ )
 
         if ( an.getCategory() == rpcConstants::monitorLogCategory )
         {
-            QString router = an.getRouter();
+            QString router = an.getPublisherRouter();
             if ( router.size() == 0 )
             {
                 // it is for us...
