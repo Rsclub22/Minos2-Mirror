@@ -5,6 +5,7 @@
 #include <QMap>
 #include <QString>
 #include <QDateTime>
+#include <QVector>
 
 enum CalType {ectVHF, ectHF, ectMwave, ectVHFOther, ectHFOther, ectHFBARTG};
 extern QMap<QString, QString> contestNameMap;
