@@ -227,8 +227,9 @@ MapPolyline
         var call = callInfo[0]
         var coord = QtPositioning.coordinate(callInfo[1], callInfo[2])
         var loc = callInfo[3]
+        var doDrawLine = callInfo[4] === String("true")
         addCall(coord, call, loc)
-        if (showLines)
+        if (showLines && doDrawLine)
         {
             drawLine(QtPositioning.coordinate(homeLat, homeLon), coord)
         }
@@ -242,8 +243,9 @@ MapPolyline
         var call = callInfo[0]
         var coord = QtPositioning.coordinate(callInfo[1], callInfo[2])
         var loc = callInfo[3]
+        var doDrawLine = callInfo[4] === String("true")
         addSpot(coord, call, loc)
-        if (showLines)
+        if (showLines && doDrawLine)
         {
             drawSpotLine(QtPositioning.coordinate(homeLat, homeLon), coord)
         }

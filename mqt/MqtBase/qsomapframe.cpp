@@ -243,6 +243,74 @@ void QSOMapFrame::doRedraw(const BaseContestLog *ctest, bool grid, bool lines, b
         drawSpot(s);
     }
 }
+QPair<double, double> QSOMapFrame::calcPosition(QString loc, bool &drawLine)
+{
+    double slat;
+    double slon;
+    /*char v =*/ lonlat( loc, slon, slat, MinosParameters::getMinosParameters() ->getAllowLoc4());
+
+    double lat = raddeg(slat);
+    double lon = raddeg(slon);
+
+    bool fourLoc = (loc.length() == 4);
+
+    int n = 0;
+    if (locs.contains(loc))
+    {
+        n = locs[loc];
+        locs[loc] = ++n;
+
+    }
+    else
+    {
+        n = 1;
+        locs[loc] = n;
+    }
+    if (fourLoc)
+    {
+        if (lon < 0)
+        {
+            lon = lon -1;
+        }
+        lon = std::round(lon);
+        int ilon = lon;
+        lon = lon - ilon%2 + 1; // offset from square edge
+
+        if (lat < 0)
+        {
+            lat = lat - 1;
+        }
+        lat = std::round(lat) + 0.5;  // offset from square edge
+
+        // now offset from the centre position
+
+        if (n > 1)
+        {
+            n -= 1;
+            QPair<int, int> offsets[] = {
+                {0, 1},
+                {1, 1},
+                {1, 0},
+                {1, -1},
+                {0, -1},
+                {-1, -1},
+                {-1, 0},
+                {-1, 1}
+            };
+
+            int offset = n%8;
+            int mult = (n + 7)/8;
+            lon += 0.1 * mult * offsets[offset].first;
+            lat += 0.1 * mult * offsets[offset].second;
+            drawLine = false;
+        }
+        else
+        {
+            drawLine = true;
+        }
+    }
+    return QPair<double, double>(lat, lon);
+}
 void QSOMapFrame::showContact(const BaseContestLog *c, const QSharedPointer<BaseContact> lct)
 {
     if (ct != nullptr && ct == c && !ct->isReadOnly())
@@ -260,51 +328,16 @@ void QSOMapFrame::showContact(const BaseContestLog *c, const QSharedPointer<Base
         {
             return;
         }
-
-        double slat;
-        double slon;
-        /*char v =*/ lonlat( loc, slon, slat, MinosParameters::getMinosParameters() ->getAllowLoc4());
-
-        double lat = raddeg(slat);
-        double lon = raddeg(slon);
-
-        bool fourLoc = (loc.length() == 4);
-
-        int n = 0;
-        if (locs.contains(loc))
-        {
-            n = locs[loc];
-            locs[loc] = ++n;
-
-        }
-        else
-        {
-            n = 1;
-            locs[loc] = n;
-        }
-        if (fourLoc)
-        {
-            if (lat < 0)
-            {
-                lat = lat - 1;
-            }
-            lat = std::round(lat) + 0.5;  // offset from square edge
-            if (lon < 0)
-            {
-                lon = lon -1;
-            }
-            lon = std::round(lon);
-            int ilon = lon;
-            lon = lon - ilon%2 + 1 + 0.1 * n; // offset from square edge
-
-        }
+        bool drawLine = true;
+        QPair<double, double> pos = calcPosition(loc, drawLine);
 
         QStringList callInfo; // [callsign, latitude, longitude]
 
         callInfo << lct->cs.getFullCall();
-        callInfo << QString::number(lat);
-        callInfo << QString::number(lon);
+        callInfo << QString::number(pos.first);
+        callInfo << QString::number(pos.second);
         callInfo << loc;
+        callInfo << (drawLine?"true":"false");
         emit callSig(callInfo);
 
         for( auto const &s: qAsConst(spotQueue))
@@ -399,51 +432,16 @@ void QSOMapFrame::drawSpot(QSharedPointer<ClusterSpotData> bsd)
         {
             return;
         }
-
-        double slat;
-        double slon;
-        /*char v =*/ lonlat( loc, slon, slat, MinosParameters::getMinosParameters() ->getAllowLoc4());
-
-        double lat = raddeg(slat);
-        double lon = raddeg(slon);
-
-        bool fourLoc = (loc.length() == 4);
-
-        int n = 0;
-        if (locs.contains(loc))
-        {
-            n = locs[loc];
-            locs[loc] = ++n;
-
-        }
-        else
-        {
-            n = 1;
-            locs[loc] = n;
-        }
-        if (fourLoc)
-        {
-            if (lat < 0)
-            {
-                lat = lat - 1;
-            }
-            lat = std::round(lat) + 0.5;  // offset from square centre
-            if (lon < 0)
-            {
-                lon = lon -1;
-            }
-            lon = std::round(lon);
-            int ilon = lon;
-            lon = lon - ilon%2 + 1  + 0.1 * n;   // offset from square centre
-
-        }
+        bool drawLine = true;
+        QPair<double, double> pos = calcPosition(loc, drawLine);
 
         QStringList callInfo; // [callsign, latitude, longitude]
 
         callInfo << bsd->getDxCall().getFullCall();
-        callInfo << QString::number(lat);
-        callInfo << QString::number(lon);
+        callInfo << QString::number(pos.first);
+        callInfo << QString::number(pos.second);
         callInfo << loc;
+        callInfo << (drawLine?"true":"false");
         emit spotSig(callInfo);
     }
 }
