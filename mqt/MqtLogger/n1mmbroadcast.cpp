@@ -55,6 +55,7 @@ void N1MMBroadcast::configure()
     {
         contactsPort = 12060;
     }
+
     if (contactsSelect)
     {
         setAddress(contactsAddr, contactsHost);
@@ -75,6 +76,22 @@ void N1MMBroadcast::configure()
     if (extCSSelect)
     {
         setAddress(extCSAddr, extCSHost);
+    }
+    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpextSpotsSelect, spotsSelect );
+    TContestApp::getContestApp() ->loggerBundle.getStringProfile( elpextSpotsAddr, spotsAddr );
+    TContestApp::getContestApp() ->loggerBundle.getIntProfile( elpextSpotsPort, temp );
+    spotsPort = static_cast<quint16>(temp);
+    if (spotsAddr.isEmpty())
+    {
+        spotsAddr = "127.0.0.1";
+    }
+    if (spotsPort == 0)
+    {
+        spotsPort = 12060;
+    }
+    if (spotsSelect)
+    {
+        setAddress(spotsAddr, spotsHost);
     }
 
     TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpwsjtxRbSelect, wsjtxRbSelect );
@@ -175,8 +192,11 @@ void N1MMBroadcast::dxSpots(QSharedPointer<ClusterSpotData> spotMsg)
     // We also need purged spots and altered spots; these all come from bandmap
     // we may need to have bandmap enabled when not shown for all this to work
 
-    QString sp = genSpotsStanza(spotMsg);
-    bc.writeDatagram(sp.toUtf8(), spotsHost, spotsPort);
+    if (spotsSelect)
+    {
+        QString sp = genSpotsStanza(spotMsg);
+        bc.writeDatagram(sp.toUtf8(), spotsHost, spotsPort);
+    }
 }
 
 void N1MMBroadcast::wsjtxDatagram(int, QByteArray *datagram)
@@ -356,9 +376,11 @@ QString N1MMBroadcast::genSpotsStanza(QSharedPointer<ClusterSpotData> spotMsg)
     QString cb;
     double freq = c->getAdifFreqBand(spotMsg.data()->getFreq(), cb);
 
-    // freq sent is only to the tens digit...
-    freq = floor(freq/10.0);
-    QString sfreq = QString::number(freq, 'f', 0).remove('.');
+    // freq sent is KHz
+    freq = freq/1000.0;
+    QString sfreq = QString::number(freq, 'f', 3);
+    QDateTime  dt = spotMsg.data()->getSpotDateTime();
+    QString d = dt.toString("yyyy-MM-dd HH:mm:ss");
 
     QString xml = QString("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n")
             + "<spot>\n"
@@ -367,7 +389,7 @@ QString N1MMBroadcast::genSpotsStanza(QSharedPointer<ClusterSpotData> spotMsg)
                    + makeTag("dxcall", spotMsg.data()->getDxCallStr())                         //        <StationName>PHONE-15M</StationName>
                    + makeTag("frequency", sfreq)
                    + makeTag("spottercall", spotMsg.data()->getSpotterCallStr())
-                   + makeTag("timestamp", spotMsg.data()->getSpotTime())       //        <timestamp>2016-04-10 16:17:41</timestamp>
+                   + makeTag("timestamp", d)       //        <timestamp>2016-04-10 16:17:41</timestamp>
                    + makeTag("action", "add")
                    + makeTag("mode", spotMsg.data()->getMode())
                    + makeTag("comment", spotMsg.data()->getSpotComment())

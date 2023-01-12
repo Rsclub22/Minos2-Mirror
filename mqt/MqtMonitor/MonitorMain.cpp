@@ -291,9 +291,13 @@ void MonitorMain::onContactChanged(MonitoredLog *l)
 {
     trace("onContactChanged");
     // change to a contact; we need a full rescan to understand it
-    MonitoringFrame *frame = l->getFrame();
-    frame->qsoModel.changeRow(l->getContest()->lastInserted);
-    frame->rescanNeeded = true;
+    int lc = l->getContest()->lastInserted;
+    if (lc >= 0)
+    {
+        MonitoringFrame *frame = l->getFrame();
+        frame->qsoModel.changeRow(lc);
+        frame->rescanNeeded = true;
+    }
 }
 //=================================================================
 // callback slots from RemoteLogs
