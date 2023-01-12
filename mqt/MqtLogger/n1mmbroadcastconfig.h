@@ -27,6 +27,7 @@ private:
 
     ConfigurationOption contactsSelect;
     ConfigurationOption extCSSelect;
+    ConfigurationOption extSpotsSelect;
     ConfigurationOption ADIFSelect;
 
 };

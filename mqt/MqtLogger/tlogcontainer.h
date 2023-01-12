@@ -42,7 +42,7 @@ public:
     ~TLogContainer() override;
 
     TSendDM *sendDM;
-    N1MMBroadcast n1mmBroadcast;
+    N1MMBroadcast *n1mmBroadcast = nullptr;
 
     void selectContest(BaseContestLog *pc, QSharedPointer<BaseContact> pct );
     bool show(int argc, char *argv[]);

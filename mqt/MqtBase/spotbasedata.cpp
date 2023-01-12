@@ -19,6 +19,7 @@
 
 ClusterSpotData::ClusterSpotData()
 {
+    qRegisterMetaType< QSharedPointer<ClusterSpotData> > ( "QSharedPointer<ClusterSpotData>" );
 }
 ClusterSpotData::ClusterSpotData(bandmapSpotType::SPOT_TYPE spotType_)
 {

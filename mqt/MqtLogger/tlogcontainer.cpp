@@ -240,8 +240,11 @@ bool TLogContainer::show(int argc, char *argv[])
     }
     TContestApp::getContestApp()->setPreloadComplete();
     sendDM->subscribeApps();
-
-    n1mmBroadcast.configure();
+    if (!n1mmBroadcast)
+    {
+        n1mmBroadcast = new N1MMBroadcast();
+    }
+    n1mmBroadcast->configure();
     WsjtxServer::getWsjtxServer()->start();
 
     return true;

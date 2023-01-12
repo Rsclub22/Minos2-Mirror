@@ -732,7 +732,6 @@ bool ContestContact::minosSave(QSharedPointer<BaseContact> tct )
 }
 bool ContestContact::GJVsave( GJVParams &gp )
 {
-   const QString nulc;
    QString temp;
    buffpt = 0;
 

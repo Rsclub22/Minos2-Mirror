@@ -17,6 +17,7 @@
 #include "baseconstants.h"
 #include "rigmemcommondata.h"
 #include "clustercommon.h"
+#include "spotbasedata.h"
 //---------------------------------------------------------------------------
 class BaseContestLog;
 class LoggerContestLog;
@@ -107,6 +108,7 @@ signals:
    void ResendSpotsFromClusterCommand(resendFrameId, QString, QString, QString);
    void SandPChanged(bool);
    void DMMess(AnalysePubSubNotify);
+   void broadcastSpots(QSharedPointer<ClusterSpotData>);
 public:
    static MinosLoggerEvents mle;
 
@@ -186,6 +188,7 @@ public:
     static void SendFKey(BaseContestLog *c, int event);
     static void SendSandPChanged(bool);
     static void SendDMMess(AnalysePubSubNotify);
+    static void SendBroadcastSpot(QSharedPointer<ClusterSpotData>);
 };
 //---------------------------------------------------------------------------
 #endif

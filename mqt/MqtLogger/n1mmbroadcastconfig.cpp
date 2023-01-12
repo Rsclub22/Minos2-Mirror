@@ -30,6 +30,8 @@ void N1MMBroadcastConfig::initialise()
     int contactsPort;
     QString extCSAddr;
     int extCSPort;
+    QString extSpotsAddr;
+    int extSpotsPort;
     QString ADIFAddr;
     int ADIFPort;
 
@@ -44,6 +46,12 @@ void N1MMBroadcastConfig::initialise()
     TContestApp::getContestApp() ->loggerBundle.getIntProfile( elpextCSPort, extCSPort );
     ui->extCSAddr->setText(extCSAddr);
     ui->extCSPort->setText(QString::number(extCSPort));
+
+    extSpotsSelect.initialise(&TContestApp::getContestApp() ->loggerBundle, elpextSpotsSelect,  ui->spotsSelect );
+    TContestApp::getContestApp() ->loggerBundle.getStringProfile( elpextSpotsAddr, extSpotsAddr );
+    TContestApp::getContestApp() ->loggerBundle.getIntProfile( elpextSpotsPort, extSpotsPort );
+    ui->spotsAddr->setText(extSpotsAddr);
+    ui->spotsPort->setText(QString::number(extSpotsPort));
 
     ADIFSelect.initialise(&TContestApp::getContestApp() ->loggerBundle, elpADIFSelect,  ui->ADIFSelect );
     TContestApp::getContestApp() ->loggerBundle.getStringProfile( elpADIFAddr, ADIFAddr );
@@ -74,11 +82,17 @@ void N1MMBroadcastConfig::finalise()
     TContestApp::getContestApp() ->loggerBundle.setStringProfile( elpextCSAddr, extCSAddr );
     TContestApp::getContestApp() ->loggerBundle.setIntProfile( elpextCSPort, extCSPort );
 
+    extSpotsSelect.finalise();
+    QString spotsAddr = ui->spotsAddr->text();
+    int spotsPort = ui->spotsPort->text().toInt();
+    TContestApp::getContestApp() ->loggerBundle.setStringProfile( elpextSpotsAddr, spotsAddr );
+    TContestApp::getContestApp() ->loggerBundle.setIntProfile( elpextSpotsPort, spotsPort );
+
     ADIFSelect.finalise();
     QString ADIFAddr = ui->ADIFAddr->text();
     int ADIFPort = ui->ADIFPort->text().toInt();
     TContestApp::getContestApp() ->loggerBundle.setStringProfile( elpADIFAddr, ADIFAddr );
     TContestApp::getContestApp() ->loggerBundle.setIntProfile( elpADIFPort, ADIFPort );
 
-    LogContainer->n1mmBroadcast.configure();
+    LogContainer->n1mmBroadcast->configure();
 }

@@ -812,6 +812,7 @@ void BandmapClientFrame::dxSpots(QVector<ClusterMessage> spotMsg)
                     if (sp)
                     {
                         spotQueue += sp;
+                        MinosLoggerEvents::SendBroadcastSpot(sp);
                     }
                 }
             }
@@ -902,6 +903,8 @@ void BandmapClientFrame::addDxSpotToBandmapTable(QSharedPointer<ClusterSpotData>
                   );
 
     bandmapDataModel->rowData.push_back(spot);
+
+    MinosLoggerEvents::SendBroadcastSpot(spot);
 
     bandmapDataModel->insertRows(bandmapDataModel->rowCount(), 1);
 }
