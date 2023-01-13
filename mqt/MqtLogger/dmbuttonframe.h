@@ -41,7 +41,8 @@ private slots:
     void on_chooseButton_clicked();
 
     void fkeyFileChanged();
-    void  DMMess(AnalysePubSubNotify an);
+    void DMMess(AnalysePubSubNotify an);
+    void onModeChange(QString mode);
 private:
     Ui::DMButtonFrame *ui;
     BaseContestLog *ct = nullptr;

@@ -20,6 +20,7 @@ public:
     ~GrittyFrame();
 
     void sendCharacters(const QString &);
+    void sendMode(QString);
 
     void closeFrame();
 

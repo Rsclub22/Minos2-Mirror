@@ -174,7 +174,12 @@ GrittyFrame::~GrittyFrame()
 
 void GrittyFrame::sendCharacters(const QString &)
 {
+    // Gritty doesn't transmit
+}
 
+void GrittyFrame::sendMode(QString)
+{
+    // Gritty is RTTY only
 }
 void GrittyFrame::closeFrame()
 {

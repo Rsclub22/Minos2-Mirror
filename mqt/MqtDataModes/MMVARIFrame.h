@@ -39,6 +39,7 @@ public:
     ~MMVARIFrame();
 
     void sendCharacters(const QString &);
+    void sendMode(QString);
 
 private:
     Ui::MMVARIFrame *ui;

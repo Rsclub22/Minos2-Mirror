@@ -305,6 +305,34 @@ void DMMainWindow::on_notify(AnalysePubSubNotify an, const QString /*from*/ )
                 }
             }
         }
+        if ( an.getCategory() == rpcConstants::DMCat && key == rpcConstants::DMMode)
+        {
+            // send the new mode to our engine
+
+#ifdef Q_OS_WIN
+
+            if (mmvariFrame)
+            {
+                mmvariFrame->sendMode(value);
+            }
+            if (mmttyFrame)
+            {
+                mmttyFrame->sendMode(value);
+            }
+            if (grittyFrame)
+            {
+                grittyFrame->sendMode(value);
+            }
+#endif
+            if (fldigiFrame)
+            {
+                fldigiFrame->sendMode(value);
+            }
+            if (testFrame)
+            {
+                testFrame->sendMode(value);
+            }
+        }
     }
 }
 
@@ -528,6 +556,7 @@ void DMMainWindow::onActionMMVARI_triggered(bool checked)
     mmvariFrame = new MMVARIFrame(this, dynamic_cast<QVBoxLayout *>(ui->centralwidget->layout()), ui->sendEdit, m, inId, outId);
     actionMMVARI->setChecked(true);
     EngineConfigure::setAppCurrent(mmvari);
+    ui->sendFrame->setVisible(true);
 }
 
 void DMMainWindow::onActionMMTTY_triggered(bool checked)
@@ -546,6 +575,7 @@ void DMMainWindow::onActionMMTTY_triggered(bool checked)
     mmttyFrame = new MMTTYFrame(false, ui->sendEdit, m);
     actionMMTTY->setChecked(true);
     EngineConfigure::setAppCurrent(mmtty);
+    ui->sendFrame->setVisible(true);
 }
 
 void DMMainWindow::onAction2Tone_triggered(bool checked)
@@ -564,6 +594,7 @@ void DMMainWindow::onAction2Tone_triggered(bool checked)
     mmttyFrame = new MMTTYFrame(false, ui->sendEdit, m);
     action2Tone->setChecked(true);
     EngineConfigure::setAppCurrent(twotone);
+    ui->sendFrame->setVisible(true);
 }
 #endif
 void DMMainWindow::onActionFLDigi_triggered(bool /*checked*/)
@@ -576,6 +607,7 @@ void DMMainWindow::onActionFLDigi_triggered(bool /*checked*/)
     fldigiFrame = new FLDigiFrame(this, ui->sendEdit, m);
     actionFLDigi->setChecked(true);
     EngineConfigure::setAppCurrent(fldigi);
+    ui->sendFrame->setVisible(true);
 }
 
 void DMMainWindow::onActionTest_triggered(bool checked)
@@ -592,6 +624,7 @@ void DMMainWindow::onActionTest_triggered(bool checked)
     testFrame = new TestFrame(this, ui->sendEdit, m);
     actionTest->setChecked(true);
     EngineConfigure::setAppCurrent(test);
+    ui->sendFrame->setVisible(true);
 }
 #ifdef Q_OS_WIN
 
@@ -611,6 +644,10 @@ void DMMainWindow::onActionGritty_triggered(bool checked)
     grittyFrame = new GrittyFrame(this, ui->sendEdit, m);
     actionGritty->setChecked(true);
     EngineConfigure::setAppCurrent(gritty);
+
+    ui->sendFrame->setVisible(false);
+    ui->sendercb->setChecked(false);
+
 }
 #endif
 void DMMainWindow::onActionExit_triggered()

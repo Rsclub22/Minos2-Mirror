@@ -245,6 +245,18 @@ void MMVARIFrame::sendCharacters(const QString &sendData)
         mmvari->setBReqRX(true);    // return to RX when buffer empty
     }
 }
+
+void MMVARIFrame::sendMode(QString m)
+{
+    if (m == "PS")
+    {
+        modeCombo->setCurrentText("bpsk");
+    }
+    if (m == "RY")
+    {
+        modeCombo->setCurrentText("rtty-L");
+    }
+}
 QMenu *MMVARIFrame::newMenu(QMenu *m, const char *text)
 {
     QMenu *menu = m->addMenu(tr(text));

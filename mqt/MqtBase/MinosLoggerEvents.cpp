@@ -134,6 +134,11 @@ void MinosLoggerEvents::SendBroadcastSpot(QSharedPointer<ClusterSpotData> sd)
 {
     emit mle.broadcastSpots(sd);
 }
+
+void MinosLoggerEvents::SendModeChange(QString mode)
+{
+    emit mle.modeChange(mode);
+}
 //---------------------------------------------------------------------------
 void MinosLoggerEvents::SendMainRaised()
 {

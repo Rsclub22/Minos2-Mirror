@@ -22,6 +22,7 @@ public:
     ~MMTTYFrame();
 
     void sendCharacters(const QString &);
+    void sendMode(QString);
 
     void closeFrame();
 

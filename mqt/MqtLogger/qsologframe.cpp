@@ -2735,6 +2735,7 @@ void QSOLogFrame::on_ModeButton_clicked()
         // send mode change to radio
         emit sendModeControl(ui->ModeButton->text());
     }
+    MinosLoggerEvents::SendModeChange(ui->ModeButton->text());
 
     QString myOldMode = ui->ModeComboBoxGJV->currentText();
     ui->ModeComboBoxGJV->setCurrentText(ui->ModeButton->text());
@@ -3401,10 +3402,24 @@ void QSOLogFrame::on_ModeComboBoxGJV_activated(int index)
         // send mode change to radio
         if (isRadioLoaded() && radioConnected && !radioError)
         {
-
             qsoLogModeFlag = true;  // stop updates from radio here
-            emit sendModeControl(mode);
+
+            //  We may not want to do this... We'll see!
+            if (mode == "PS")
+            {
+                emit sendModeControl(hamlibData::USB);
+
+            }
+            else if (mode == "RY")
+            {
+                emit sendModeControl(hamlibData::LSB);
+            }
+            else
+            {
+                emit sendModeControl(mode);
+            }
         }
+        MinosLoggerEvents::SendModeChange(mode);    // this will e.g. set the RTTY/PSK engines correctly
     }
 
     if (ui->ModeComboBoxGJV->currentText() == hamlibData::CW || ui->ModeComboBoxGJV->currentText() == hamlibData::MGM)

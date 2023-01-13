@@ -101,6 +101,44 @@ void FLDigiFrame::sendCharacters(const QString &s)
 
 }
 
+void FLDigiFrame::sendMode(QString m)
+{
+    if (m == "RY")
+    {
+        QVariantList args;
+
+        args.clear();
+        args << "LSB";
+        rpcClient->call("rig.set_mode", args,
+           this, SLOT(myResponseMethod(QVariant&)),
+           this, SLOT(myFaultResponse(int, const QString &)));
+
+        args.clear();
+        args << QString("RTTY");
+        rpcClient->call("modem.set_by_name", args,
+           this, SLOT(myResponseMethod(QVariant&)),
+           this, SLOT(myFaultResponse(int, const QString &)));
+
+    }
+    if (m == "PS")
+    {
+        QVariantList args;
+
+        args.clear();
+        args << "USB";
+        rpcClient->call("rig.set_mode", args,
+           this, SLOT(myResponseMethod(QVariant&)),
+           this, SLOT(myFaultResponse(int, const QString &)));
+
+        args.clear();
+        args << QString("BPSK63");
+        rpcClient->call("modem.set_by_name", args,
+           this, SLOT(myResponseMethod(QVariant&)),
+           this, SLOT(myFaultResponse(int, const QString &)));
+
+    }
+}
+
 void FLDigiFrame::closeFrame()
 {
     if (fldigiProcess)
@@ -126,14 +164,6 @@ void FLDigiFrame::on_started()
     trace("FLDigi:on_started");
 
     QVariantList args;
-
-//    rpcClient->call("fldigi.name_version", args,
-//       this, SLOT(myResponseMethod(QVariant&)),
-//       this, SLOT(myFaultResponse(int, const QString &)));
-
-//    rpcClient->call("main.rx", args,
-//       this, SLOT(myResponseMethod(QVariant&)),
-//       this, SLOT(myFaultResponse(int, const QString &)));
 
     args.clear();
     args << "USB";

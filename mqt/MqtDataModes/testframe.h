@@ -21,6 +21,8 @@ public:
     ~TestFrame();
 
     void sendCharacters(const QString &);
+    void sendMode(QString);
+
     void closeFrame();
 
 

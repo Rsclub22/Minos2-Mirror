@@ -109,6 +109,7 @@ signals:
    void SandPChanged(bool);
    void DMMess(AnalysePubSubNotify);
    void broadcastSpots(QSharedPointer<ClusterSpotData>);
+   void modeChange(QString);
 public:
    static MinosLoggerEvents mle;
 
@@ -189,6 +190,7 @@ public:
     static void SendSandPChanged(bool);
     static void SendDMMess(AnalysePubSubNotify);
     static void SendBroadcastSpot(QSharedPointer<ClusterSpotData>);
+    static void SendModeChange(QString);
 };
 //---------------------------------------------------------------------------
 #endif

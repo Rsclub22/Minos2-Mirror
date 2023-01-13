@@ -29,6 +29,7 @@ DMButtonFrame::DMButtonFrame(QWidget *parent) :
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::fKey, this, &DMButtonFrame::fKey);
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::SandPChanged, this, &DMButtonFrame::sandPChanged);
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::DMMess, this, &DMButtonFrame::DMMess);
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::modeChange, this, &DMButtonFrame::onModeChange);
 
     TContestApp::getContestApp() ->loggerBundle.getStringProfile( elpDigiFunctionKeyFile, fkeyFileName );
 
@@ -63,6 +64,12 @@ void DMButtonFrame::DMMess(AnalysePubSubNotify an)
         connect(qfsw, &QFileSystemWatcher::fileChanged, this, &DMButtonFrame::fkeyFileChanged);
     }
 }
+
+void DMButtonFrame::onModeChange(QString mode)
+{
+    MinosRPC *rpc = MinosRPC::getMinosRPC();
+    rpc->publish( rpcConstants::DMCat, rpcConstants::DMMode, mode, psPublished );
+}
 void DMButtonFrame::fkeyFileChanged()
 {
     parseFKeyFile(fkeyFileName, "Digi");
@@ -80,6 +87,11 @@ void DMButtonFrame::fButtonClicked()
 void DMButtonFrame::setContest(BaseContestLog *c)
 {
     ct = c;
+    if (ct)
+    {
+        QString mode = ct->currentMode.getValue();
+        onModeChange(mode);
+    }
 }
 void DMButtonFrame::fKey(BaseContestLog *c, int key)
 {

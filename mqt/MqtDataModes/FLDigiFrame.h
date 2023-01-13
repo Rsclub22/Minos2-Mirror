@@ -22,6 +22,7 @@ public:
     ~FLDigiFrame();
 
     void sendCharacters(const QString &);
+    void sendMode(QString);
     void closeFrame();
 
 private:

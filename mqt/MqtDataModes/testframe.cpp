@@ -42,6 +42,19 @@ void TestFrame::sendCharacters(const QString &toSend)
     mShowMessage(toSend, this);
 }
 
+void TestFrame::sendMode(QString mode)
+{
+    QString nm = "New mode set: " +  mode;
+    bool newLine = true;
+    for (auto c:qAsConst(nm))
+    {
+        RXChar rxch(c, newLine, 0);
+        newLine = false;
+        RxBuffer::getRxBuffer()->addChar(rxch);
+    }
+
+}
+
 void TestFrame::closeFrame()
 {
 

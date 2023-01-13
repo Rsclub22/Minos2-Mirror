@@ -175,6 +175,12 @@ void MMTTYFrame::sendCharacters(const QString &sendData)
     }
 }
 
+void MMTTYFrame::sendMode(QString)
+{
+    // MMTTY is RTTY only
+    // 2Tone is RTTY only
+}
+
 void MMTTYFrame::closeFrame()
 {
     if (rttyProcess)
