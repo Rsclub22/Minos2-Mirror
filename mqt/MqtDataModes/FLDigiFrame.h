@@ -35,6 +35,7 @@ private:
 
     void createProcess();
 
+    void addText(const QString &t);
 private slots:
     void on_finished(int err, QProcess::ExitStatus exitStatus);
     void on_error(QProcess::ProcessError error);
@@ -43,6 +44,8 @@ private slots:
     void on_started();
 
     void myResponseMethod(QVariant&);
+    void myTxResponseMethod(QVariant&);
+    void myRxResponseMethod(QVariant&);
     void myFaultResponse(int, const QString &);
 
     void onGetTimer();

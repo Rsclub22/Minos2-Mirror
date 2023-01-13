@@ -1,4 +1,4 @@
-#include "MTrace.h"
+//#include "MTrace.h"
 
 #include "rxbuffer.h"
 
@@ -119,7 +119,7 @@ int RxLine::deleteChars(int n, RXChar &lastDeleted)
         lastDeleted = rxLine[curCol];
         rxLine.remove(curCol);
         n--;
-        trace(QString("Remove char <%1> newline == %2").arg(lastDeleted.getCh()).arg(lastDeleted.getNewLine()));
+        //trace(QString("Remove char <%1> newline == %2").arg(lastDeleted.getCh()).arg(lastDeleted.getNewLine()));
         if (lastDeleted.getNewLine())
         {
             break;
@@ -150,28 +150,28 @@ void RxBuffer::addChar(RXChar &c)
 
     if (c.getCh() == '\n' || c.getCh() == '\r')
     {
-        trace("Add newline character");
+        //trace("Add newline character");
         c = RXChar(' ', true, 0);
     }
     if (c.getNewLine())
     {
-        trace(QString("Implement newline from line %1").arg(curLine));
+        //trace(QString("Implement newline from line %1").arg(curLine));
         curLine++;
         if (curLine >= buffSize)
         {
             curLine = 0;
         }
         buff[curLine].reset();
-        trace(QString("clear line %1").arg(curLine));
+        //trace(QString("clear line %1").arg(curLine));
         if (curLine + 1 < buffSize)
         {
             buff[curLine + 1].reset();
-            trace(QString("clear line %1").arg(curLine + 1));
+            //trace(QString("clear line %1").arg(curLine + 1));
         }
     }
 
     buff[curLine].addChar(c);
-    trace(QString("Add character <%1> %2 on line %3").arg(c.getCh()).arg(int(c.getCh().toLatin1())).arg(curLine));
+    //trace(QString("Add character <%1> %2 on line %3").arg(c.getCh()).arg(int(c.getCh().toLatin1())).arg(curLine));
 
     emit newCharacter();
 }
@@ -213,7 +213,7 @@ void RxBuffer::deleteChars(int n)
         }
         if (n > 0)
         {
-            trace(QString("delete %1 characters curLine is %2").arg(n).arg(curLine));
+            //trace(QString("delete %1 characters curLine is %2").arg(n).arg(curLine));
             while (n > 0)
             {
                 RXChar lastDeleted;  // but if there is more than one char...
@@ -232,7 +232,7 @@ void RxBuffer::deleteChars(int n)
                     {
                         curLine = buffSize - 1;
                     }
-                    trace(QString("back one line to %1").arg(curLine));
+                    //trace(QString("back one line to %1").arg(curLine));
                 }
             }
         }

@@ -6,6 +6,12 @@
 #include "FLDigiFrame.h"
 #include "ui_FLDigiFrame.h"
 
+// look in C:\projects\fldigi-fldigi\src\network\xmlrpc.cxx
+// for the RPC commands
+// Big list at the end - look for
+
+// #define METHOD_LIST
+
 void FLDigiFrame::createProcess()
 {
     // N1MM command line
@@ -56,12 +62,42 @@ void FLDigiFrame::onGetTimer()
 {
     QVariantList args;
     rpcClient->call("rx.get_data", args,
+       this, SLOT(myRxResponseMethod(QVariant&)),
+       this, SLOT(myFaultResponse(int, const QString &)));
+
+    rpcClient->call("tx.get_data", args,
+       this, SLOT(myTxResponseMethod(QVariant&)),
+       this, SLOT(myFaultResponse(int, const QString &)));
+}
+void FLDigiFrame::sendCharacters(const QString &s)
+{
+    trace(QString("FLDigi::sendCharacters %1").arg(s));
+    // main.tx sets tx on
+    // main.tx_rx "Sets normal Rx/Tx switching."
+
+    // main.abort kills the TX
+
+    // Then there are: )which all use params 0
+
+//    text.add_tx
+
+    // These all apply to the text widget
+//    text.add_tx_queu
+//    text.add_tx_bytes
+//    text.clear_tx
+    QVariantList args;
+    args << s.toLatin1().data();
+
+    rpcClient->call("text.add_tx_queu", args,
        this, SLOT(myResponseMethod(QVariant&)),
        this, SLOT(myFaultResponse(int, const QString &)));
 
-}
-void FLDigiFrame::sendCharacters(const QString &)
-{
+    args.clear();
+    rpcClient->call("main.tx", args,
+       this, SLOT(myResponseMethod(QVariant&)),
+       this, SLOT(myFaultResponse(int, const QString &)));
+
+    addText("Tx: ");
 
 }
 
@@ -111,8 +147,21 @@ void FLDigiFrame::on_started()
        this, SLOT(myResponseMethod(QVariant&)),
        this, SLOT(myFaultResponse(int, const QString &)));
 
+    rpcClient->call("main.tx_rx", args,
+       this, SLOT(myResponseMethod(QVariant&)),
+       this, SLOT(myFaultResponse(int, const QString &)));
 }
+void FLDigiFrame::addText(const QString &t)
+{
+    bool newLine = true;
+    for(const auto &s:qAsConst(t))
+    {
+        RXChar rxch(s, newLine, 0);
+        newLine = false;
+        RxBuffer::getRxBuffer()->addChar(rxch);
+    }
 
+}
 void FLDigiFrame::myResponseMethod(QVariant &v)
 {
     //int type = v.userType();
@@ -122,14 +171,16 @@ void FLDigiFrame::myResponseMethod(QVariant &v)
 
         if (!s.isEmpty())
         {
-            trace(QString("Response %1").arg(s));
+            //trace(QString("Response %1").arg(s));
 
+            addText("Response: ");
             for (auto c:qAsConst(s))
             {
                 RXChar rxch(c, false, 0);
                 RxBuffer::getRxBuffer()->addChar(rxch);
             }
-
+            RXChar rxch(' ', true, 0);
+            RxBuffer::getRxBuffer()->addChar(rxch);
         }
     }
     else if (v.canConvert<QStringList>())
@@ -138,7 +189,7 @@ void FLDigiFrame::myResponseMethod(QVariant &v)
 
         for(const auto &s:qAsConst(sl))
         {
-            trace(QString("Response %1").arg(s));
+            //trace(QString("Response %1").arg(s));
             bool newLine = true;
             for (auto c:qAsConst(s))
             {
@@ -148,6 +199,76 @@ void FLDigiFrame::myResponseMethod(QVariant &v)
             }
         }
     }
+}
+
+void FLDigiFrame::myTxResponseMethod(QVariant &v)
+{
+    if (v.canConvert<QString>())
+    {
+        QString s = v.toString();
+
+        if (!s.isEmpty())
+        {
+            //trace(QString("Response %1").arg(s));
+
+            for (auto c:qAsConst(s))
+            {
+                RXChar rxch(c, false, 0);
+                RxBuffer::getRxBuffer()->addChar(rxch);
+            }
+        }
+    }
+    else if (v.canConvert<QStringList>())
+    {
+        QStringList sl = v.toStringList();
+
+        for(const auto &s:qAsConst(sl))
+        {
+            //trace(QString("Response %1").arg(s));
+            bool newLine = true;
+            for (auto c:qAsConst(s))
+            {
+                RXChar rxch(c, newLine, 0);
+                newLine = false;
+                RxBuffer::getRxBuffer()->addChar(rxch);
+            }
+        }
+    }
+}
+void FLDigiFrame::myRxResponseMethod(QVariant &v)
+{
+    if (v.canConvert<QString>())
+    {
+        QString s = v.toString();
+
+        if (!s.isEmpty())
+        {
+            //trace(QString("Response %1").arg(s));
+
+            for (auto c:qAsConst(s))
+            {
+                RXChar rxch(c, false, 0);
+                RxBuffer::getRxBuffer()->addChar(rxch);
+            }
+        }
+    }
+    else if (v.canConvert<QStringList>())
+    {
+        QStringList sl = v.toStringList();
+
+        for(const auto &s:qAsConst(sl))
+        {
+            //trace(QString("Response %1").arg(s));
+            bool newLine = true;
+            for (auto c:qAsConst(s))
+            {
+                RXChar rxch(c, newLine, 0);
+                newLine = false;
+                RxBuffer::getRxBuffer()->addChar(rxch);
+            }
+        }
+    }
+
 }
 
 void FLDigiFrame::myFaultResponse(int n, const QString &s)
