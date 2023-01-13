@@ -346,7 +346,8 @@ QString N1MMBroadcast::genSpotsStanza(QSharedPointer<ClusterSpotData> spotMsg)
 //        <statuslist>single mult</statuslist>
 //    </spot>
 
-//    The Spot Data packet contains all spots processed by the program whether from Telnet (including RBN), Logging QSOs, or local spotting.
+//    The Spot Data packet contains all spots processed by the program whether from Telnet
+//    (including RBN), Logging QSOs, or local spotting.
 //    The values for action are:
 
 //    add
@@ -372,15 +373,16 @@ QString N1MMBroadcast::genSpotsStanza(QSharedPointer<ClusterSpotData> spotMsg)
 //    status – dupe, mult etc. See above for values
 //    timestamp – the time of the spot
 
-    BaseContestLog *c = MinosParameters::getMinosParameters() ->getCurrentContest();
-    QString cb;
-    double freq = c->getAdifFreqBand(spotMsg.data()->getFreq(), cb);
+    Frequency f= spotMsg.data()->getFreq();
 
+    double freq = f.toInt64();
     // freq sent is KHz
     freq = freq/1000.0;
     QString sfreq = QString::number(freq, 'f', 3);
     QDateTime  dt = spotMsg.data()->getSpotDateTime();
-    QString d = dt.toString("yyyy-MM-dd HH:mm:ss");
+    dtg dg(false);
+    dg.setDateTime(dt);
+    QString d = dg.getN1mmDTG();
 
     QString xml = QString("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n")
             + "<spot>\n"

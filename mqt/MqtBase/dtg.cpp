@@ -547,4 +547,16 @@ void dtg::setTime(QTime tdt)
     qdatetime.setTimeSpec(Qt::UTC);
 }
 
+void dtg::setDateTime(QDateTime tdt)
+{
+    QString d = tdt.toString("yyMMdd");
+    sdate.setValue(d);
+
+    QString t = tdt.toString("HHmmss");
+    stime.setValue(t);
+
+    qdatetime = tdt;
+    qdatetime.setTimeSpec(Qt::UTC);
+}
+
 
