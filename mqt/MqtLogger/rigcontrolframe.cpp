@@ -1163,7 +1163,6 @@ void RigControlFrame::setRadioName(QString radNam, bool fromStartRigControl)
                             traceMsg(QString("setRadioName: saved mode is empty - revert to contest mode = %1").arg(m));
 
                         }
-
                         traceMsg(QString("setRadioName: sending radioName = %1, mode = %2").arg(radioName).arg(m));
                         emit selectRadio(radioName, contestBand, sendFreq, m.remove(':'));  // send radio and previous mode.
                     }

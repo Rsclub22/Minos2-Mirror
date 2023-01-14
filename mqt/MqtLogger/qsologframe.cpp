@@ -2731,11 +2731,13 @@ void QSOLogFrame::on_ModeButton_clicked()
 {
     if (isRadioLoaded() && radioConnected && !radioError)
     {
+        QString mode = ui->ModeButton->text();
         qsoLogModeFlag = true;  // stop updates from rigcontrol
         // send mode change to radio
-        emit sendModeControl(ui->ModeButton->text());
+        emit sendModeControl(mode);
+
     }
-    MinosLoggerEvents::SendModeChange(ui->ModeButton->text());
+    MinosLoggerEvents::SendModeChange(mode);
 
     QString myOldMode = ui->ModeComboBoxGJV->currentText();
     ui->ModeComboBoxGJV->setCurrentText(ui->ModeButton->text());
@@ -3390,7 +3392,8 @@ void QSOLogFrame::on_InsertAfterButton_clicked()
 void QSOLogFrame::on_ModeComboBoxGJV_activated(int index)
 {
 
-    if (ui->ModeComboBoxGJV->currentText() == mode)
+    QString cmode = ui->ModeComboBoxGJV->currentText();
+    if (cmode == mode)
         return;
     oldMode = mode;
     QString mlist = contest->modeList.getValue();
@@ -3404,17 +3407,7 @@ void QSOLogFrame::on_ModeComboBoxGJV_activated(int index)
         {
             qsoLogModeFlag = true;  // stop updates from radio here
 
-            //  We may not want to do this... We'll see!
-            if (mode == "PS")
-            {
-                emit sendModeControl(hamlibData::USB);
-
-            }
-            else if (mode == "RY")
-            {
-                emit sendModeControl(hamlibData::LSB);
-            }
-            else
+            if( cmode != "RY" && cmode != "PS")
             {
                 emit sendModeControl(mode);
             }
@@ -3422,7 +3415,7 @@ void QSOLogFrame::on_ModeComboBoxGJV_activated(int index)
         MinosLoggerEvents::SendModeChange(mode);    // this will e.g. set the RTTY/PSK engines correctly
     }
 
-    if (ui->ModeComboBoxGJV->currentText() == hamlibData::CW || ui->ModeComboBoxGJV->currentText() == hamlibData::MGM)
+    if (cmode == hamlibData::CW || cmode == hamlibData::MGM || cmode == "RY" || cmode == "PS")
     {
        ui->ModeButton->setText(oldMode);
     }
@@ -3430,7 +3423,7 @@ void QSOLogFrame::on_ModeComboBoxGJV_activated(int index)
     {
        ui->ModeButton->setText(hamlibData::CW);
     }
-    if (ui->ModeComboBoxGJV->currentText() == hamlibData::MGM)
+    if (cmode == hamlibData::MGM)
     {
         if (ui->RSTTxFrame->getTextEditEdit()->text().trimmed() == "5")
         {
@@ -3441,7 +3434,7 @@ void QSOLogFrame::on_ModeComboBoxGJV_activated(int index)
             ui->RSTRxFrame->getTextEditEdit()->clear();
         }
     }
-    ui->MGMSubModeFrame->setVisible(ui->ModeComboBoxGJV->currentText() == hamlibData::MGM);
+    ui->MGMSubModeFrame->setVisible(cmode == hamlibData::MGM);
 }
 
 void QSOLogFrame::on_ValidateError (int mess_no )

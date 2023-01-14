@@ -84,7 +84,12 @@ void BandSelButtons::onBandSelButtonPressed(QToolButton* button)
 
     MinosLoggerEvents::SendContestBandChanged(ct);
 
-    freq = presetFreqs.getLastFreq(convertModeForPresets(curMode), band);
+    QString m = curMode;
+    if (m == "RY" || m == "PS")
+    {
+        m = "PH";
+    }
+    freq = presetFreqs.getLastFreq(convertModeForPresets(m), band);
     emit sendPresetFreq(freq);
 }
 
@@ -339,9 +344,14 @@ QString BandSelButtons::convertModeForPresets(const QString mode)
 }
 
 
-Frequency BandSelButtons::getPresetFreq(const QString band, const QString mode)
+Frequency BandSelButtons::getPresetFreq(const QString band, const QString m)
 {
     Frequency f;
+    QString mode = m;
+    if (mode == "RY" || mode == "PS")
+    {
+        mode = "PH";
+    }
     if (presetFreqs.contains(convertModeForPresets(mode), band))
     {
          f = presetFreqs.getPresetFreq(convertModeForPresets(mode), band);

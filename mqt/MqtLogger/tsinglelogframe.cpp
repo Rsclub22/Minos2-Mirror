@@ -1831,7 +1831,7 @@ void TSingleLogFrame::on_SetMode(QString m)
             m = "PH:";
         }
     }
-    if (sCurMode != m)
+    //if (sCurMode != m)
     {
         if ( this == LogContainer->getCurrentLogFrame() )
         {

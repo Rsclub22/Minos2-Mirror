@@ -375,8 +375,14 @@ void TSendDM::changeRigSelectionTo(const PubSubName &name, const QString &band, 
     }
     sendRigSelection(name, band, freq, mode, uuid);
 }
-void TSendDM::sendRigSelection(const PubSubName &s, const QString &band, const Frequency &freq, const QString &mode, const QString &uuid)
+void TSendDM::sendRigSelection(const PubSubName &s, const QString &band, const Frequency &freq, const QString &m, const QString &uuid)
 {
+    QString mode = m;
+    if (mode == "RY" || mode == "PS")
+    {
+        mode = QString();
+    }
+
     rigCache.setSelected(s, loggerUuid, uuid);
     rigCache.setLogMode(s, mode);
     rigCache.setLogFreq(s, freq);
@@ -470,6 +476,10 @@ void TSendDM::sendRigTxCwMessage(TSingleLogFrame *tslf, const QString &msg)
 
 void TSendDM::sendRigControlMode(TSingleLogFrame *tslf,const QString &mode)
 {
+    if (mode == "RY" || mode == "PS")
+    {
+        return;
+    }
     PubSubName rigSelected = rigCache.getSelected(loggerUuid);
     rigCache.setLogMode(rigSelected, mode);
     RPCGeneralClient rpc(rpcConstants::rigControlMethod);

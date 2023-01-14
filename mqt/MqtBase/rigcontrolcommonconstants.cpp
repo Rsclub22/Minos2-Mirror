@@ -26,7 +26,11 @@ void PresetFreq::clear()
 bool PresetFreq::isDirty(const QString mode, const QString band)
 {
     QMap<QString, StoredPresetFreqs>*  mspf = modePresetFreqList[mode];
-    return mspf->value(band).presetFreq.isDirty();
+    if (mspf)
+    {
+        return mspf->value(band).presetFreq.isDirty();
+    }
+    return false;
 }
 
 void PresetFreq::clearDirty()
@@ -43,7 +47,11 @@ void PresetFreq::clearDirty()
 Frequency PresetFreq::getPresetFreq(const QString mode, const QString band)
 {
    QMap<QString, StoredPresetFreqs>*  mspf = modePresetFreqList[mode];
-   return mspf->value(band).presetFreq.getValue();
+   if(mspf)
+   {
+        return mspf->value(band).presetFreq.getValue();
+   }
+   return Frequency();
 }
 
 
@@ -51,7 +59,11 @@ Frequency PresetFreq::getLastFreq(const QString mode, const QString band)
 {
 
     QMap<QString, StoredPresetFreqs>*  mspf = modePresetFreqList[mode];
-    return mspf->value(band).lastFreq;
+    if (mspf)
+    {
+        return mspf->value(band).lastFreq;
+    }
+    return Frequency();
 }
 
 

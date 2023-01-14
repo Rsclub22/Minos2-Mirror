@@ -257,7 +257,7 @@ void MinosRPC::notifyCallback( bool err, QSharedPointer<MinosRPCObj>mro, const Q
            }
        }
 
-       trace(QString("notificationOK is %1").arg(notificationOK));
+       //trace(QString("notificationOK is %1").arg(notificationOK));
        for (const auto &s:qAsConst(routerSubs))
        {
            //trace(QString("Category %1 s %2").arg(category).arg(s));

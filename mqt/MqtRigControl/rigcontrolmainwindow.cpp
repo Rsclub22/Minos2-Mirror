@@ -3016,7 +3016,7 @@ void RigControlMainWindow::setMode(QString mode, VFO vfo)
         getRadioInfo(false);
 
         cmdLockOn();      // lock get radio info
-        logMessage(QString("SetMode: Mode Requested = %1, vfo = %2").arg(mode).arg(vfoToStr(vfo)));
+        logMessage(QString("SetMode: Mode Requested = %1, vfo = %2").arg(mode, vfoToStr(vfo)));
         mode = mode.left(mode.indexOf(":"));
         if (mode == "PH")
         {
@@ -3052,6 +3052,15 @@ void RigControlMainWindow::setMode(QString mode, VFO vfo)
                 mode = "LSB";
             }
         }
+        if (mode == "PS")
+        {
+            mode = "USB";
+        }
+        else
+            if (mode == "RY")
+            {
+                mode = "LSB";
+            }
         MODE mCode = rigcommon::convertQStringToMode(mode);
 
         if (radioCommsOK)
