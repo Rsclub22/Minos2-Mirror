@@ -163,6 +163,7 @@ MMTTYFrame::~MMTTYFrame()
 
 void MMTTYFrame::sendCharacters(const QString &sendData)
 {
+    trace(QString("Sending data %1").arg(sendData));
     if (sendData.isEmpty())
     {
         ::PostMessage(mttyHWnd, uMSG_MMTTY, RXM_PTT, 0);    // PTT off immediate
@@ -229,23 +230,27 @@ void MMTTYFrame::msgEventFilter(MSG *msg, long */*result*/ )
         {
             if (l == 1 && !txState)
             {
+                trace("Switch to TX");
                 txState = true;
                 RXChar rxch('T', true, 0);
                 RxBuffer::getRxBuffer()->addChar(rxch);
-                RXChar rxch2('X', true, 0);
+                RXChar rxch2('X', false, 0);
                 RxBuffer::getRxBuffer()->addChar(rxch2);
+                RXChar rxch3(' ', false, 0);
+                RxBuffer::getRxBuffer()->addChar(rxch3);
 
             }
             else if (l == 0 && txState)
             {
+                trace("Switch to RX");
                 txState = false;
 
                 RXChar rxch('R', true, 0);
                 RxBuffer::getRxBuffer()->addChar(rxch);
-                RXChar rxch2('X', true, 0);
+                RXChar rxch2('X', false, 0);
                 RxBuffer::getRxBuffer()->addChar(rxch2);
-
-
+                RXChar rxch3(' ', false, 0);
+                RxBuffer::getRxBuffer()->addChar(rxch3);
             }
         }
             break;

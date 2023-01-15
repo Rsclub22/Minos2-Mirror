@@ -59,6 +59,8 @@ void DMButtonFrame::DMMess(AnalysePubSubNotify an)
     {
         dataSender = an.getValue();
 
+        trace(QString("Datasender set to %1").arg(dataSender));
+
         fkeyFileChanged();
         qfsw = new QFileSystemWatcher(this);
         qfsw->addPath(fkeyFileName);

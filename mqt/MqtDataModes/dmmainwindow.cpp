@@ -686,6 +686,7 @@ void DMMainWindow::doCloseEvent()
 
 void DMMainWindow::on_sendButton_clicked()
 {
+    // This should use signal/slot
     QString data = ui->sendEdit->text().trimmed();
 
     // empty data means stop transmitting
@@ -818,3 +819,11 @@ bool DMMainWindow::doKeyPressEvent( QKeyEvent* event )
     }
     return false;
 }
+
+void DMMainWindow::on_stopButton_clicked()
+{
+    trace("Stop button clicked");
+    ui->sendEdit->clear();
+    on_sendButton_clicked();
+}
+

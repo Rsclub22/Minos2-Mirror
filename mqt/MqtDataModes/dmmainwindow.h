@@ -151,5 +151,6 @@ private slots:
 
     void fKey(int key);
 
+    void on_stopButton_clicked();
 };
 #endif // DMMAINWINDOW_H
