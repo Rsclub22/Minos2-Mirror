@@ -581,7 +581,7 @@ void DMMainWindow::onActionMMTTY_triggered(bool checked)
 
     QString m = EngineConfigure::getEnginePath(mmtty);
 
-    mmttyFrame = new MMTTYFrame(false, ui->sendEdit, m);
+    mmttyFrame = new MMTTYFrame(this, false, ui->sendEdit, m);
     actionMMTTY->setChecked(true);
     EngineConfigure::setAppCurrent(mmtty);
     ui->sendFrame->setVisible(true);
@@ -601,7 +601,7 @@ void DMMainWindow::onAction2Tone_triggered(bool checked)
 
     QString m = EngineConfigure::getEnginePath(twotone);
 
-    mmttyFrame = new MMTTYFrame(false, ui->sendEdit, m);
+    mmttyFrame = new MMTTYFrame(this, false, ui->sendEdit, m);
     action2Tone->setChecked(true);
     EngineConfigure::setAppCurrent(twotone);
     ui->sendFrame->setVisible(true);

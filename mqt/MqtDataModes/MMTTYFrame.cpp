@@ -130,8 +130,8 @@ public:
 //    t = new QWidget(this);
 //}
 
-MMTTYFrame::MMTTYFrame( bool twoTone, QLineEdit *sendEdit, QString fname) :
-    QFrame(nullptr),
+MMTTYFrame::MMTTYFrame(QWidget *parent, bool twoTone, QLineEdit *sendEdit, QString fname) :
+    QFrame(parent),
     ui(new Ui::MMTTYFrame),
     fname(fname),
     sendEdit(sendEdit),
