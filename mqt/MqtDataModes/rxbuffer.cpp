@@ -179,7 +179,7 @@ void RxBuffer::addChar(RXChar &c)
 void RxBuffer::reset()
 {
     curLine = 0;
-    for(auto l:qAsConst(buff))
+    for(auto &l:buff)
     {
         l.reset();
     }
