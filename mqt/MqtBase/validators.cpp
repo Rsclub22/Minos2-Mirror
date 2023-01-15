@@ -179,7 +179,7 @@ bool Validator::validate(const QString &str, ScreenContact &screenContact )
 
        case vtRST:
        {
-           QString curmode = screenContact.mode;
+           QString curmode = screenContact.mode.getValue();
            if (curmode == hamlibData::MGM)
            {
                return str.trimmed().length() >= 1;

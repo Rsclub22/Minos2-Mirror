@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>532</width>
-    <height>165</height>
+    <width>552</width>
+    <height>185</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -36,42 +36,42 @@
         <item>
          <widget class="QPushButton" name="F1Button">
           <property name="text">
-           <string>PushButton</string>
+           <string>...</string>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QPushButton" name="F2Button">
           <property name="text">
-           <string>PushButton</string>
+           <string>...</string>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QPushButton" name="F3Button">
           <property name="text">
-           <string>PushButton</string>
+           <string>...</string>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QPushButton" name="F4Button">
           <property name="text">
-           <string>PushButton</string>
+           <string>...</string>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QPushButton" name="F5Button">
           <property name="text">
-           <string>PushButton</string>
+           <string>...</string>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QPushButton" name="F6Button">
           <property name="text">
-           <string>PushButton</string>
+           <string>...</string>
           </property>
          </widget>
         </item>
@@ -82,42 +82,42 @@
         <item>
          <widget class="QPushButton" name="F7Button">
           <property name="text">
-           <string>PushButton</string>
+           <string>...</string>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QPushButton" name="F8Button">
           <property name="text">
-           <string>PushButton</string>
+           <string>...</string>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QPushButton" name="F9Button">
           <property name="text">
-           <string>PushButton</string>
+           <string>...</string>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QPushButton" name="F10Button">
           <property name="text">
-           <string>PushButton</string>
+           <string>...</string>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QPushButton" name="F11Button">
           <property name="text">
-           <string>PushButton</string>
+           <string>...</string>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QPushButton" name="F12Button">
           <property name="text">
-           <string>PushButton</string>
+           <string>...</string>
           </property>
          </widget>
         </item>

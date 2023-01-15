@@ -896,7 +896,7 @@ void RigControlFrame::getDetails(memoryData::memData &logData)
     logData.locator = sc.loc.getLoc();
     if (curMode.isEmpty())
     {
-        logData.mode = sc.mode;
+        logData.mode = sc.mode.getValue();
     }
     else
     {

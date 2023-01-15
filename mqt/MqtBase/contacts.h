@@ -95,6 +95,7 @@ public:
     QSharedPointer<CountryEntry> ctryMult;
 
     MinosFrequencyItem<Frequency> frequency;
+    MinosStringItem<QString> mode;
 
     int bearing = -1;
     bool QSOValid =false;
@@ -197,7 +198,6 @@ class BaseContact: public CheckableContact
 
       dtg updtime;      //CONTAIN MinosItem
 
-      MinosStringItem<QString> mode;
       MinosStringItem<QString> mgmSubmode;
       MinosStringItem<QString> reps;
       MinosStringItem<QString> serials;

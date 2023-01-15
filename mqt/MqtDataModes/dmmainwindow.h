@@ -39,6 +39,8 @@ public:
     static const QString fldigi;
     static const QString test;
 
+    QString baseTitle;
+
     QString router;
 
     unsigned int inChannels = 0;

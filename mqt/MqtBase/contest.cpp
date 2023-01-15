@@ -1271,11 +1271,17 @@ bool DupContact::operator<( const DupContact& rhs ) const
    QString b1;
    QString b2;
 
+   QString m1;
+   QString m2;
+
    c1 = &dct->cs;
    dct->contest->getTxFreqBand(dct->frequency.getValue(), b1);
+   m1 = dct->mode.getValue();
 
    c2 = &rhs.dct->cs;
    rhs.dct->contest->getTxFreqBand(rhs.dct->frequency.getValue(), b2);
+   m2 = rhs.dct->mode.getValue();
+
 
    if (!c1 || !c2)
    {
@@ -1283,7 +1289,13 @@ bool DupContact::operator<( const DupContact& rhs ) const
    }
 
    if (*c1 == *c2)
+   {
+       if (b1 == b2)
+       {
+           return m1 < m2;
+       }
        return b1 < b2;
+   }
 
    return (*c1 < *c2);
 }
@@ -1300,7 +1312,16 @@ bool DupContact::operator==( const DupContact& rhs ) const
     c2 = &rhs.dct->cs;
     rhs.dct->contest->getTxFreqBand(rhs.dct->frequency.getValue(), b2);
 
-   return (c1 && c2 && *c1 == *c2 && b1 == b2);
+    if (dct->contest->isHF())
+    {
+        QString m1 = dct->mode.getValue();
+        QString m2 = rhs.dct->mode.getValue();
+        return (c1 && c2 && *c1 == *c2 && b1 == b2 && m1 == m2);
+    }
+    else
+    {
+        return (c1 && c2 && *c1 == *c2 && b1 == b2);
+    }
 }
 bool DupContact::operator!=( const DupContact& rhs ) const
 {

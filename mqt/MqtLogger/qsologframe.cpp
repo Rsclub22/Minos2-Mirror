@@ -1391,7 +1391,7 @@ void QSOLogFrame::getScreenEntry()
    {
        screenContact.cqResponse = runButtonOnFlag && !radioOffRunFreq;
    }
-   screenContact.mode = ui->ModeComboBoxGJV->currentText().trimmed();
+   screenContact.mode.setValue(ui->ModeComboBoxGJV->currentText().trimmed());
    screenContact.mgmSubmode = ui->MGMSubModeEdit->text().trimmed();
 
    unsigned short cf = screenContact.contactFlags.getValue();
@@ -1457,7 +1457,7 @@ void QSOLogFrame::showScreenEntry( )
 
       if (mode.isEmpty()) // use contest mode
       {
-        setMode(temp.mode.trimmed());
+        setMode(temp.mode.getValue());
       }
       else
       {
@@ -2013,8 +2013,8 @@ void QSOLogFrame::doAutofill()
 
    //rst sent (autofill S9)
 
-   fillRst( ui->RSTTxFrame->getTextEditEdit(), vcct->reps, vcct->mode );
-   fillRst( ui->RSTRxFrame->getTextEditEdit(), vcct->repr, vcct->mode );
+   fillRst( ui->RSTTxFrame->getTextEditEdit(), vcct->reps, vcct->mode.getValue() );
+   fillRst( ui->RSTRxFrame->getTextEditEdit(), vcct->repr, vcct->mode.getValue() );
    fillExchange( ui->QTHFrame->getTextEditEdit(), vcct->extraText.getValue());
 }
 //==============================================================================
@@ -2763,25 +2763,28 @@ void QSOLogFrame::modeSentFromRig(QString m)
     }
     QString newMode = mlist[0];
 
-    if (contest && contest->modeList.getValue().contains(newMode))
+    if (mode != "PS" && mode != "RY")
     {
-        oldMode = ui->ModeComboBoxGJV->currentText();
-        if (newMode != oldMode)
+        if (contest && contest->modeList.getValue().contains(newMode))
         {
-            // set index to new mode
-            ui->ModeComboBoxGJV->setCurrentIndex(ui->ModeComboBoxGJV->findText( newMode));
-            mode = newMode;
+            oldMode = ui->ModeComboBoxGJV->currentText();
+            if (newMode != oldMode)
+            {
+                // set index to new mode
+                ui->ModeComboBoxGJV->setCurrentIndex(ui->ModeComboBoxGJV->findText( newMode));
+                mode = newMode;
 
-            // ensure flip mode is shown on mode button
-            if (ui->ModeComboBoxGJV->currentText() == hamlibData::CW || ui->ModeComboBoxGJV->currentText() == hamlibData::MGM)
-            {
-               ui->ModeButton->setText(oldMode);
+                // ensure flip mode is shown on mode button
+                if (ui->ModeComboBoxGJV->currentText() == hamlibData::CW || ui->ModeComboBoxGJV->currentText() == hamlibData::MGM)
+                {
+                   ui->ModeButton->setText(oldMode);
+                }
+                else
+                {
+                   ui->ModeButton->setText(hamlibData::CW);
+                }
+                ui->MGMSubModeFrame->setVisible(ui->ModeComboBoxGJV->currentText() == hamlibData::MGM);
             }
-            else
-            {
-               ui->ModeButton->setText(hamlibData::CW);
-            }
-            ui->MGMSubModeFrame->setVisible(ui->ModeComboBoxGJV->currentText() == hamlibData::MGM);
         }
     }
 }
@@ -2804,19 +2807,19 @@ void QSOLogFrame::logScreenEntry( )
    QSharedPointer<BaseContact> lct = selectedContact;
    if (!lct)
    {
-        lct = ct->addContact( ctmax, 0, false, false, screenContact.mode, screenContact.mgmSubmode, dtg(true), curFreq );	// "current" doesn't get flag, don't save ContestLog yet
+        lct = ct->addContact( ctmax, 0, false, false, screenContact.mode.getValue(), screenContact.mgmSubmode, dtg(true), curFreq );	// "current" doesn't get flag, don't save ContestLog yet
 
         TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
         tslf->QSOTable->model()->insertRows(contest->ctList.count(), 1, QModelIndex());
    }
 
-   if ( screenContact.mode.compare( hamlibData::MGM, Qt::CaseInsensitive ) != 0
-        && screenContact.mode.compare( "RY", Qt::CaseInsensitive ) != 0
-        && screenContact.mode.compare( "PS", Qt::CaseInsensitive ) != 0
+   if ( screenContact.mode.getValue().compare( hamlibData::MGM, Qt::CaseInsensitive ) != 0
+        && screenContact.mode.getValue().compare( "RY", Qt::CaseInsensitive ) != 0
+        && screenContact.mode.getValue().compare( "PS", Qt::CaseInsensitive ) != 0
                 )
    {
        bool contactmodeCW = ( screenContact.reps.size() == 3 && screenContact.repr.size() == 3 );
-       bool curmodeCW = ( screenContact.mode.compare( hamlibData::CW, Qt::CaseInsensitive ) == 0 );
+       bool curmodeCW = ( screenContact.mode.getValue().compare( hamlibData::CW, Qt::CaseInsensitive ) == 0 );
 
        if ( !edit && contactmodeCW != curmodeCW )
        {
@@ -2825,14 +2828,14 @@ void QSOLogFrame::logScreenEntry( )
           {
              if ( MinosParameters::getMinosParameters() ->yesNoMessage( this, tr("Change mode to CW?") ) )
              {
-                screenContact.mode = hamlibData::CW;
+                screenContact.mode.setValue(hamlibData::CW);
              }
           }
           else
           {
              if ( MinosParameters::getMinosParameters() ->yesNoMessage( this, tr("Change mode to USB?") ) )
              {
-                screenContact.mode = hamlibData::USB;
+                screenContact.mode.setValue(hamlibData::USB);
              }
           }
        }
@@ -3608,7 +3611,7 @@ void QSOLogFrame::setPlaceholders(QStringList nearMatches)
             scc.initialise(contest, false);
             scc.cs.setFullCall(n[1]);
             scc.loc.setLoc(n[2]);
-            scc.mode = n[3];
+            scc.mode.setValue(n[3]);
 
             scc.timeOn = dtg(true);
             scc.timeOff = dtg(true);
@@ -3709,7 +3712,7 @@ void QSOLogFrame::getLogDetails(memoryData::memData &logData, int& callRes)
     logData.callsign = screenContact.cs.getFullCall();
     logData.freq = curFreq;
     logData.locator = screenContact.loc.getLoc();
-    logData.mode = screenContact.mode;
+    logData.mode = screenContact.mode.getValue();
     logData.exchange = screenContact.extraText.getValue();
     if (screenContact.loc.getLoc().isEmpty())
     {

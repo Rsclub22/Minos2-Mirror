@@ -60,14 +60,16 @@ const QString DMMainWindow::gritty = "Gritty";
 const QString DMMainWindow::fldigi = "FLDigi";
 const QString DMMainWindow::test = "Test";
 
-
 DMMainWindow::DMMainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::DMMainWindow)
 {
+    baseTitle = tr("Minos Data Modes");
+
+    setWindowTitle(baseTitle);
     ui->setupUi(this);
 
-    ui->FButtonFrame->setVisible(false);
+    ui->FButtonFrame->setEnabled(false);
 
     connect(RxBuffer::getRxBuffer(), &RxBuffer::newCharacter, this, &DMMainWindow::onNewCharacter);
     connect(ui->rxChars, &DataPainter::wordSelected, this, &DMMainWindow::wordSelected);
@@ -174,6 +176,7 @@ DMMainWindow::DMMainWindow(QWidget *parent)
     for (auto b: qAsConst(fButtons))
     {
         b->setProperty("KeyNo", i++);
+        b->setText("");
         connect(b, &QPushButton::clicked, this, &DMMainWindow::fButtonClicked);
     }
 
@@ -245,7 +248,10 @@ void DMMainWindow::on_routerCall(bool err, QSharedPointer<MinosRPCObj>mro, const
                     if (psMess->getString(pmess))
                     {
                         ui->sendEdit->setText(pmess);
-                        on_sendButton_clicked();
+                        if (!pmess.isEmpty())
+                        {
+                            on_sendButton_clicked();
+                        }
                     }
                 }
             }
@@ -301,7 +307,7 @@ void DMMainWindow::on_notify(AnalysePubSubNotify an, const QString /*from*/ )
                         fButtons[i]->setText(f);
                         i++;
                     }
-                    ui->FButtonFrame->setVisible(true);
+                    ui->FButtonFrame->setEnabled(true);
                 }
             }
         }
@@ -531,6 +537,7 @@ void DMMainWindow::closeAllEngines(bool clearCurrent)
     {
         EngineConfigure::setAppCurrent(QString());
     }
+    setWindowTitle(baseTitle);
 }
 #ifdef Q_OS_WIN
 
@@ -557,6 +564,8 @@ void DMMainWindow::onActionMMVARI_triggered(bool checked)
     actionMMVARI->setChecked(true);
     EngineConfigure::setAppCurrent(mmvari);
     ui->sendFrame->setVisible(true);
+    setWindowTitle(baseTitle + " " + mmvari);
+
 }
 
 void DMMainWindow::onActionMMTTY_triggered(bool checked)
@@ -576,6 +585,7 @@ void DMMainWindow::onActionMMTTY_triggered(bool checked)
     actionMMTTY->setChecked(true);
     EngineConfigure::setAppCurrent(mmtty);
     ui->sendFrame->setVisible(true);
+    setWindowTitle(baseTitle + " " + mmtty);
 }
 
 void DMMainWindow::onAction2Tone_triggered(bool checked)
@@ -595,6 +605,7 @@ void DMMainWindow::onAction2Tone_triggered(bool checked)
     action2Tone->setChecked(true);
     EngineConfigure::setAppCurrent(twotone);
     ui->sendFrame->setVisible(true);
+    setWindowTitle(baseTitle + " " + twotone);
 }
 #endif
 void DMMainWindow::onActionFLDigi_triggered(bool /*checked*/)
@@ -608,6 +619,7 @@ void DMMainWindow::onActionFLDigi_triggered(bool /*checked*/)
     actionFLDigi->setChecked(true);
     EngineConfigure::setAppCurrent(fldigi);
     ui->sendFrame->setVisible(true);
+    setWindowTitle(baseTitle + " " + fldigi);
 }
 
 void DMMainWindow::onActionTest_triggered(bool checked)
@@ -625,6 +637,7 @@ void DMMainWindow::onActionTest_triggered(bool checked)
     actionTest->setChecked(true);
     EngineConfigure::setAppCurrent(test);
     ui->sendFrame->setVisible(true);
+    setWindowTitle(baseTitle + " " + test);
 }
 #ifdef Q_OS_WIN
 
@@ -647,6 +660,7 @@ void DMMainWindow::onActionGritty_triggered(bool checked)
 
     ui->sendFrame->setVisible(false);
     ui->sendercb->setChecked(false);
+    setWindowTitle(baseTitle + " " + gritty);
 
 }
 #endif

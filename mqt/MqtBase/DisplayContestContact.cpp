@@ -191,7 +191,7 @@ bool DisplayContestContact::ne(const ScreenContact &mct) const
    if ( mct.contactFlags.getValue() != contactFlags.getValue() )
       return true; // i.e. not equal
 
-   if ( strcmpsp( mct.mode, mode.getValue() ) )
+   if ( strcmpsp( mct.mode.getValue(), mode.getValue() ) )
       return true; // i.e. not equal
 
    if ( strcmpsp( mct.mgmSubmode, mgmSubmode.getValue() ) )
@@ -456,6 +456,9 @@ QString DisplayContestContact::getField( int ACol, const BaseContestLog *const c
             break;
          case egBand:
             clp->getTxFreqBand(frequency.getValue(), res);
+            break;
+         case egMode:
+            res = mode.getValue();
             break;
          case egCall:
             res = cs.getFullCall();

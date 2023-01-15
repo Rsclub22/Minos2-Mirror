@@ -111,6 +111,8 @@ Sample messages
 
 {"MessageType":"mtUserClick","Pos":0,"Word":"FP\/KV1J", "Kind":"ctCall", "Shift":["ssCtrl", "ssLeft"]}   */
 
+
+// When frequency changes gritty says " QSX nnnn Hz"
 void GrittyFrame::createProcess()
 {
     // we need to modify the gritty INI file with the correct details - port, USB/LSB, etc

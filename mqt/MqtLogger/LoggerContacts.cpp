@@ -417,6 +417,10 @@ QSO:  3799 PH 1999-03-06 0712 HC8N           59 700    N5KO           59 CA     
         smode = "PH";
     else if (smode == hamlibData::MGM)
         smode = "DG";
+    else if (smode == "RY")
+        smode = "RY";
+    else if (smode == "PS")
+        smode = "PS";
     else
         smode = "CW";
 

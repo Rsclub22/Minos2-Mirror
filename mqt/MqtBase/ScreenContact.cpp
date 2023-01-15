@@ -37,8 +37,8 @@ void ScreenContact::initialise(BaseContestLog *ct , bool rInit)
     int ms = 0;
     if ( clp )
     {
-        mode = clp->currentMode.getValue();
-        if (mode == hamlibData::MGM)
+        mode = clp->currentMode;
+        if (mode.getValue() == hamlibData::MGM)
         {
             // don't clear submode - keep the old one
         }
@@ -49,7 +49,7 @@ void ScreenContact::initialise(BaseContestLog *ct , bool rInit)
         ms = clp->maxSerial + 1;
     }
 
-    if (mode != hamlibData::MGM)
+    if (mode.getValue() != hamlibData::MGM)
     {
         QString cb = clp->currentBand.getValue().trimmed();
         BandList &blist = BandList::getBandList();
@@ -69,7 +69,8 @@ void ScreenContact::initialise(BaseContestLog *ct , bool rInit)
         }
         if (hf)
         {
-             if (mode == hamlibData::CW || mode == "RY" || mode == "PS")
+            QString m = mode.getValue();
+             if (m == hamlibData::CW || m == "RY" || m == "PS")
              {
                  repr = "599" ;
                  reps = "599" ;
@@ -180,7 +181,7 @@ void ScreenContact::copyFromArg( QSharedPointer<BaseContact> cct )
 
     contactScore = cct->contactScore;
     bearing = cct->bearing;
-    mode = cct->mode.getValue();
+    mode = cct->mode;
     mgmSubmode = cct->mgmSubmode.getValue();
     cqResponse = cct->cqResponse.getValue();
 }

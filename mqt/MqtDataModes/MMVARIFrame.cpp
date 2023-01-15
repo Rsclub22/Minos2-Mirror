@@ -7,6 +7,8 @@
 #include "MMVARIFrame.h"
 #include "ui_MMVARIFrame.h"
 
+// we already report on the TX/RX frequencies!
+// either pallette of sensitivity are rubbish - not seeoing signals
 MMVARIFrame::MMVARIFrame(QWidget *parent, QVBoxLayout *cwl, QLineEdit *sendEdit, QString fname, int inId, int outId) :
     QFrame(parent),
     ui(new Ui::MMVARIFrame),

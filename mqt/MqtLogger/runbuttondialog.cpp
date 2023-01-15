@@ -82,7 +82,7 @@ void RunButtonDialog::setLogData(memoryData::memData* ldata, int buttonNumber, L
     QString m = ldata->mode;
     if (m.isEmpty())
     {
-        logdata->mode = sc.mode;
+        logdata->mode = sc.mode.getValue();
     }
 
     ui->modecb->setCurrentText(ldata->mode);

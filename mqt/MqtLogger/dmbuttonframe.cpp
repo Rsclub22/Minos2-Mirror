@@ -40,12 +40,13 @@ DMButtonFrame::DMButtonFrame(QWidget *parent) :
     for (auto b: qAsConst(fButtons))
     {
         b->setProperty("KeyNo", i++);
+        b->setText("");
         connect(b, &QPushButton::clicked, this, &DMButtonFrame::fButtonClicked);
     }
 
     ui->nameLabel->setText(tr("Data Modes Buttons from %1").arg(fkeyFileName));
 
-    ui->FButtonFrame->setVisible(false);
+    ui->FButtonFrame->setEnabled(false);
 }
 
 DMButtonFrame::~DMButtonFrame()
@@ -123,7 +124,7 @@ void DMButtonFrame::sandPChanged(bool s)
 }
 void DMButtonFrame::showFButtons(bool s)
 {
-    ui->FButtonFrame->setVisible(false);
+    ui->FButtonFrame->setEnabled(false);
     MinosRPC *rpc = MinosRPC::getMinosRPC();
 
     if (fkeys["Digi"].size() == 24)
@@ -132,7 +133,7 @@ void DMButtonFrame::showFButtons(bool s)
         {
             fButtons[i]->setText(fkeys["Digi"][i + (s?12:0)].first);
         }
-        ui->FButtonFrame->setVisible(true);
+        ui->FButtonFrame->setEnabled(true);
 
         QString fkeys = getFKeysString();
 
