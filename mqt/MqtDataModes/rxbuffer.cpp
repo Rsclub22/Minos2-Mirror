@@ -166,6 +166,13 @@ void RxBuffer::addChar(RXChar &c)
         if (curLine + 1 < buffSize)
         {
             buff[curLine + 1].reset();
+
+            RXChar ulc = RXChar('_', false, 0);
+
+            for (int i = 0; i < 40; i++)
+            {
+                buff[curLine + 1].addChar(ulc);
+            }
             //trace(QString("clear line %1").arg(curLine + 1));
         }
     }

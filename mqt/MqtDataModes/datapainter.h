@@ -15,6 +15,7 @@ public:
     explicit DPGraphicsTextItem(QGraphicsItem *parent = nullptr);
     explicit DPGraphicsTextItem(const QString &text, QGraphicsItem *parent = nullptr);
     virtual ~DPGraphicsTextItem();
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr);
 
 protected:
 

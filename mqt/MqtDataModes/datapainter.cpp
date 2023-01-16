@@ -7,6 +7,8 @@
 #include <QAbstractTextDocumentLayout>
 #include <QGraphicsSceneEvent>
 
+#include <QStyleOption>
+
 #include "rxbuffer.h"
 #include "datapainter.h"
 
@@ -22,6 +24,16 @@ DPGraphicsTextItem::DPGraphicsTextItem(const QString &text, QGraphicsItem *paren
 
 DPGraphicsTextItem::~DPGraphicsTextItem()
 {}
+void DPGraphicsTextItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
+{
+    QStyleOptionGraphicsItem opt(*option);
+
+    // Remove the selection style state, to prevent the dotted line from being drawn.
+    opt.state = QStyle::State_None;
+
+     // Call the parent to do the actual text drawing
+    QGraphicsTextItem::paint(painter, &opt, widget);
+}
 
 void DPGraphicsTextItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
