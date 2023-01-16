@@ -29,6 +29,8 @@
 #include "dmmainwindow.h"
 #include "ui_dmmainwindow.h"
 
+DMMainWindow *mainWindow = nullptr;
+
 /*
 
 To Do
@@ -65,6 +67,8 @@ DMMainWindow::DMMainWindow(QWidget *parent)
     , ui(new Ui::DMMainWindow)
 {
     ui->setupUi(this);
+
+    mainWindow = this;
 
     ui->FButtonFrame->setEnabled(false);
     ui->variFrame->setVisible(false);
@@ -118,8 +122,14 @@ DMMainWindow::DMMainWindow(QWidget *parent)
     connect(rpc, &MinosRPC::notify, this, &DMMainWindow::on_notify);
     //connect(rpc, &MinosRPC::provider, this, &DMMainWindow::on_provider);
 
-    QStringList sv = {rpcConstants::DMSender};
-    rpc->findProviders(rpcConstants::DMCat, sv);
+    QStringList svr = {rpcConstants::rigControlCategory
+                      ,rpcConstants::rigDetailsCategory
+                      ,rpcConstants::rigStateCategory
+                     };
+    rpc->initialiseRouters(svr);
+
+    QStringList svs = {rpcConstants::DMSender};
+    rpc->findProviders(rpcConstants::DMCat, svs);
 
     router = MinosConfig::getMinosConfig()->getThisRouterName();
 
@@ -185,6 +195,8 @@ DMMainWindow::DMMainWindow(QWidget *parent)
     setWindowTitle(getAppStartupName() + ": " + baseTitle);
 
     startPreviousEngine();
+
+    mainRig = getRig();
 }
 
 DMMainWindow::~DMMainWindow()
@@ -244,15 +256,21 @@ void DMMainWindow::on_routerCall(bool err, QSharedPointer<MinosRPCObj>mro, const
             if (args)
             {
                 QSharedPointer<RPCParam> psMess;
-                if (args->getStructArgMember(0, rpcConstants::DMTransmit, psMess))
+                QSharedPointer<RPCParam> piCarr;
+
+                if (
+                        args->getStructArgMember(0, rpcConstants::DMTransmit, psMess)
+                        && args->getStructArgMember(0, rpcConstants::DMCarrier, piCarr)
+                        )
                 {
                     QString pmess;
-                    if (psMess->getString(pmess))
+                    int carr;
+                    if (psMess->getString(pmess) && piCarr->getInt(carr))
                     {
                         ui->sendEdit->setText(pmess);
                         if (!pmess.isEmpty())
                         {
-                            on_sendButton_clicked();
+                            doSendButton_clicked(pmess, carr);
                         }
                     }
                 }
@@ -261,14 +279,14 @@ void DMMainWindow::on_routerCall(bool err, QSharedPointer<MinosRPCObj>mro, const
         else if (call == rpcConstants::DMStopTransmit)
         {
             ui->sendEdit->clear();
-            on_sendButton_clicked();
+            doSendButton_clicked("", 0);
         }
     }
 }
-void DMMainWindow::on_notify(AnalysePubSubNotify an, const QString /*from*/ )
+void DMMainWindow::on_notify(AnalysePubSubNotify an, const QString from )
 {
     // pubsub notify
-    //trace( "Notify callback from " + from + ( !an.getOK() ? ":Error" : ":Normal" ) );
+    trace( "Notify callback from " + from + ( !an.getOK() ? ":Error" : ":Normal" ) );
 
     if ( an.getOK() )
     {
@@ -288,7 +306,7 @@ void DMMainWindow::on_notify(AnalysePubSubNotify an, const QString /*from*/ )
                 ui->sendEdit->clear();
             }
         }
-        if ( an.getCategory() == rpcConstants::DMCat && key == rpcConstants::DMFKeys)
+        else if ( an.getCategory() == rpcConstants::DMCat && key == rpcConstants::DMFKeys)
         {
             QJsonParseError err;
             QJsonDocument json = QJsonDocument::fromJson(value.toUtf8(), &err);
@@ -313,7 +331,7 @@ void DMMainWindow::on_notify(AnalysePubSubNotify an, const QString /*from*/ )
                 }
             }
         }
-        if ( an.getCategory() == rpcConstants::DMCat && key == rpcConstants::DMMode)
+        else if ( an.getCategory() == rpcConstants::DMCat && key == rpcConstants::DMMode)
         {
             // send the new mode to our engine
 
@@ -341,7 +359,76 @@ void DMMainWindow::on_notify(AnalysePubSubNotify an, const QString /*from*/ )
                 testFrame->sendMode(value);
             }
         }
+        else if ( an.getCategory() == rpcConstants::rigStateCategory)
+        {
+            rigCache.setStateString(an);
+        }
+        else if ( an.getCategory() == rpcConstants::rigDetailsCategory)
+        {
+            rigCache.setDetailsString(an);
+        }
+        else if ( an.getCategory() == rpcConstants::rigControlCategory && an.getKey() == rpcConstants::rigControlRadioList )
+        {
+            rigCache.addRigList(an.getValue());
+
+            ui->mainRigComboBox->clear();
+
+            QStringList cb = populateRig();
+            ui->mainRigComboBox->clear();
+            ui->mainRigComboBox->addItems(cb);
+            ui->mainRigComboBox->setCurrentText(mainRig.toString());
+        }
+
+        RigState &selState = rigCache.getState(mainRig);
+
+        if (selState.radioMode().isDirty() || selState.radioFreq().isDirty())
+        {
+            QString rigMode = selState.radioMode().getValue().remove(":");
+            ui->rigMode->setText(rigMode);
+            Frequency rigFreq = selState.radioFreq().getValue();
+            ui->rigFreq->setText(rigFreq.pretty_frequency_MHz_string());
+
+            emit rigModeFreq(rigMode, rigFreq);
+
+            // NB on RTTY the "real" frewquncy is the "mark" frequency
+            // so using LSB the frequency is rigfreq - markfreq
+
+            // PSK63 is easier - (USB)rigFreq + tone offset
+
+            trace(QString("main frequency changed to %1").arg(rigFreq.traceStr()));
+
+            selState.clearDirty();
+        }
+
     }
+}
+QStringList DMMainWindow::populateRig()
+{
+    QStringList cb;
+    cb.append("");
+    for (const auto &r: qAsConst(rigCache.getRigList()))
+    {
+        if (!r.isEmpty() )
+        {
+            cb.append( r.toString());
+        }
+    }
+    cb.removeDuplicates();
+    cb.sort();
+    return cb;
+}
+void DMMainWindow::configureRig(const QString s)
+{
+    QSettings config;
+
+    config.setValue("Rig", s);
+}
+
+QString DMMainWindow::getRig()
+{
+    QSettings config;
+
+    return config.value("Rig").toString();
 }
 
 void DMMainWindow::iniFileChanged()
@@ -691,35 +778,15 @@ void DMMainWindow::doCloseEvent()
 
 void DMMainWindow::on_sendButton_clicked()
 {
-    // This should use signal/slot
     QString data = ui->sendEdit->text().trimmed();
 
-    // empty data means stop transmitting
-#ifdef Q_OS_WIN
-
-    if (mmvariFrame)
-    {
-        mmvariFrame->sendCharacters(data);
-    }
-    if (mmttyFrame)
-    {
-        mmttyFrame->sendCharacters(data);
-    }
-    if (grittyFrame)
-    {
-        grittyFrame->sendCharacters(data);
-    }
-#endif
-    if (fldigiFrame)
-    {
-        fldigiFrame->sendCharacters(data);
-    }
-    if (testFrame)
-    {
-        testFrame->sendCharacters(data);
-    }
+    doSendButton_clicked(data, 0);
 }
+void DMMainWindow::doSendButton_clicked(QString d, int c)
+{
+    emit sendCharacters(d, c);
 
+}
 void DMMainWindow::onActionConfigure_Engines_triggered()
 {
     EngineConfigure ec(this);
@@ -739,7 +806,7 @@ void DMMainWindow::onMenuClear()
     onNewCharacter();
 }
 
-void DMMainWindow::wordSelected(QString word)
+void DMMainWindow::wordSelected(QString word, int carrier)
 {
 // word has been clicked on the datapainter; we need to send it
 // on to the logger
@@ -751,7 +818,8 @@ void DMMainWindow::wordSelected(QString word)
 
         RPCGeneralClient rpc(rpcConstants::DMWord);
         QSharedPointer<RPCParam>st(new RPCParamStruct);
-        st->addMember( word, "Word" );
+        st->addMember( word, rpcConstants::DMWord );
+        st->addMember( carrier, rpcConstants::DMCarrier );
         rpc.getCallArgs() ->addParam( st );
         rpc.queueCall( rpcConstants::loggerApp + "@" + router );
     }
@@ -829,6 +897,13 @@ void DMMainWindow::on_stopButton_clicked()
 {
     trace("Stop button clicked");
     ui->sendEdit->clear();
-    on_sendButton_clicked();
+    doSendButton_clicked("", 0);
+}
+
+
+void DMMainWindow::on_mainRigComboBox_activated(const QString &psn)
+{
+    mainRig = psn;
+    configureRig(psn);
 }
 

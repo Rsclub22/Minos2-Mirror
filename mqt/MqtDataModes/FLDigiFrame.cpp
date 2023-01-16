@@ -2,6 +2,7 @@
 
 #include "MTrace.h"
 #include "rxbuffer.h"
+#include "dmmainwindow.h"
 
 #include "FLDigiFrame.h"
 #include "ui_FLDigiFrame.h"
@@ -41,6 +42,9 @@ FLDigiFrame::FLDigiFrame(QWidget *parent, QLineEdit *sendEdit, QString fname) :
 {
     ui->setupUi(this);
 
+    connect(mainWindow, &DMMainWindow::sendCharacters, this, &FLDigiFrame::onSendCharacters);
+    connect(mainWindow, &DMMainWindow::rigModeFreq, this, &FLDigiFrame::onRigModeFreq);
+
     rpcClient = new MaiaXmlRpcClient(QUrl("http://localhost:7362"), this);
 
     createProcess();
@@ -58,9 +62,30 @@ FLDigiFrame::~FLDigiFrame()
     delete ui;
     delete rpcClient;
 }
+void FLDigiFrame::onSendCharacters(QString data, int c)
+{
+    sendCharacters(data, c);
+}
+
+void FLDigiFrame::onRigModeFreq(QString, Frequency f)
+{
+    QVariantList args;
+    args << f.str();
+
+    rpcClient->call("rig.set_frequency", args,
+       this, SLOT(myRxResponseMethod(QVariant&)),
+       this, SLOT(myFaultResponse(int, const QString &)));
+
+}
 void FLDigiFrame::onGetTimer()
 {
     QVariantList args;
+
+
+    rpcClient->call("modem.get_carrier", args,
+       this, SLOT(myCarrierResponseMethod(QVariant&)),
+       this, SLOT(myFaultResponse(int, const QString &)));
+
     rpcClient->call("rx.get_data", args,
        this, SLOT(myRxResponseMethod(QVariant&)),
        this, SLOT(myFaultResponse(int, const QString &)));
@@ -69,11 +94,11 @@ void FLDigiFrame::onGetTimer()
        this, SLOT(myTxResponseMethod(QVariant&)),
        this, SLOT(myFaultResponse(int, const QString &)));
 }
-void FLDigiFrame::sendCharacters(const QString &s)
+void FLDigiFrame::sendCharacters(const QString &s, int carrier)
 {
-    trace(QString("FLDigi::sendCharacters %1").arg(s));
+    trace(QString("FLDigi::sendCharacters %1 %2").arg(s).arg(carrier));
     // main.tx sets tx on
-    // main.tx_rx "Sets normal Rx/Tx switching."
+    // main.rx_tx "Sets normal Rx/Tx switching."
 
     // main.abort kills the TX
 
@@ -86,18 +111,38 @@ void FLDigiFrame::sendCharacters(const QString &s)
 //    text.add_tx_bytes
 //    text.clear_tx
     QVariantList args;
-    args << s.toLatin1().data();
 
-    rpcClient->call("text.add_tx_queu", args,
-       this, SLOT(myResponseMethod(QVariant&)),
-       this, SLOT(myFaultResponse(int, const QString &)));
+    if (carrier > 0)
+    {
+        args << carrier;
+        rpcClient->call("modem.set_carrier", args,
+           this, SLOT(myResponseMethod(QVariant&)),
+           this, SLOT(myFaultResponse(int, const QString &)));
+    }
 
-    args.clear();
-    rpcClient->call("main.tx", args,
-       this, SLOT(myResponseMethod(QVariant&)),
-       this, SLOT(myFaultResponse(int, const QString &)));
+    if (s.size())
+    {
+        args.clear();
+        args << s.toLatin1().data();
+        rpcClient->call("text.add_tx_queu", args,
+           this, SLOT(myResponseMethod(QVariant&)),
+           this, SLOT(myFaultResponse(int, const QString &)));
 
-    addText("Tx: ");
+        args.clear();
+        rpcClient->call("main.tx", args,
+           this, SLOT(myResponseMethod(QVariant&)),
+           this, SLOT(myFaultResponse(int, const QString &)));
+
+        addText("Tx: ");
+    }
+    else
+    {
+        args.clear();
+        rpcClient->call("main.abort", args,
+           this, SLOT(myResponseMethod(QVariant&)),
+           this, SLOT(myFaultResponse(int, const QString &)));
+
+    }
 
 }
 
@@ -177,7 +222,7 @@ void FLDigiFrame::on_started()
        this, SLOT(myResponseMethod(QVariant&)),
        this, SLOT(myFaultResponse(int, const QString &)));
 
-    rpcClient->call("main.tx_rx", args,
+    rpcClient->call("main.rx_tx", args,
        this, SLOT(myResponseMethod(QVariant&)),
        this, SLOT(myFaultResponse(int, const QString &)));
 }
@@ -186,12 +231,14 @@ void FLDigiFrame::addText(const QString &t)
     bool newLine = true;
     for(const auto &s:qAsConst(t))
     {
-        RXChar rxch(s, newLine, 0);
+        RXChar rxch(s, newLine, 0, carrier);
         newLine = false;
         RxBuffer::getRxBuffer()->addChar(rxch);
     }
 
 }
+
+
 void FLDigiFrame::myResponseMethod(QVariant &v)
 {
     //int type = v.userType();
@@ -201,15 +248,17 @@ void FLDigiFrame::myResponseMethod(QVariant &v)
 
         if (!s.isEmpty())
         {
-            //trace(QString("Response %1").arg(s));
+            trace(QString("Response %1").arg(s));
 
+            bool nl = true;
             addText("Response: ");
             for (auto c:qAsConst(s))
             {
-                RXChar rxch(c, false, 0);
+                RXChar rxch(c, nl, 0, carrier);
+                nl = false;
                 RxBuffer::getRxBuffer()->addChar(rxch);
             }
-            RXChar rxch(' ', true, 0);
+            RXChar rxch(' ', true, 0, carrier);
             RxBuffer::getRxBuffer()->addChar(rxch);
         }
     }
@@ -219,14 +268,39 @@ void FLDigiFrame::myResponseMethod(QVariant &v)
 
         for(const auto &s:qAsConst(sl))
         {
-            //trace(QString("Response %1").arg(s));
+            trace(QString("Response %1").arg(s));
             bool newLine = true;
             for (auto c:qAsConst(s))
             {
-                RXChar rxch(c, newLine, 0);
+                RXChar rxch(c, newLine, 0, carrier);
                 newLine = false;
                 RxBuffer::getRxBuffer()->addChar(rxch);
             }
+        }
+    }
+}
+
+void FLDigiFrame::myCarrierResponseMethod(QVariant &v)
+{
+    if (v.canConvert<QString>())
+    {
+        QString s = v.toString();
+
+        if (!s.isEmpty())
+        {
+            trace(QString("Carrier 1 %1").arg(s));
+            carrier = s.toInt();
+
+        }
+    }
+    else if (v.canConvert<QStringList>())
+    {
+        QStringList sl = v.toStringList();
+
+        for(const auto &s:qAsConst(sl))
+        {
+            trace(QString("Carrier 2 %1").arg(s));
+            carrier = s.toInt();
         }
     }
 }
@@ -239,11 +313,12 @@ void FLDigiFrame::myTxResponseMethod(QVariant &v)
 
         if (!s.isEmpty())
         {
-            //trace(QString("Response %1").arg(s));
-
+            trace(QString("TXResponse %1").arg(s));
+            bool newLine = true;
             for (auto c:qAsConst(s))
             {
-                RXChar rxch(c, false, 0);
+                RXChar rxch(c, newLine, 0, carrier);
+                newLine = false;
                 RxBuffer::getRxBuffer()->addChar(rxch);
             }
         }
@@ -254,11 +329,11 @@ void FLDigiFrame::myTxResponseMethod(QVariant &v)
 
         for(const auto &s:qAsConst(sl))
         {
-            //trace(QString("Response %1").arg(s));
+            trace(QString("TXResponse %1").arg(s));
             bool newLine = true;
             for (auto c:qAsConst(s))
             {
-                RXChar rxch(c, newLine, 0);
+                RXChar rxch(c, newLine, 0, carrier);
                 newLine = false;
                 RxBuffer::getRxBuffer()->addChar(rxch);
             }
@@ -273,11 +348,11 @@ void FLDigiFrame::myRxResponseMethod(QVariant &v)
 
         if (!s.isEmpty())
         {
-            //trace(QString("Response %1").arg(s));
+            trace(QString("RXResponse %1").arg(s));
 
             for (auto c:qAsConst(s))
             {
-                RXChar rxch(c, false, 0);
+                RXChar rxch(c, false, 0, carrier);
                 RxBuffer::getRxBuffer()->addChar(rxch);
             }
         }
@@ -288,11 +363,11 @@ void FLDigiFrame::myRxResponseMethod(QVariant &v)
 
         for(const auto &s:qAsConst(sl))
         {
-            //trace(QString("Response %1").arg(s));
+            trace(QString("RXResponse %1").arg(s));
             bool newLine = true;
             for (auto c:qAsConst(s))
             {
-                RXChar rxch(c, newLine, 0);
+                RXChar rxch(c, newLine, 0, carrier);
                 newLine = false;
                 RxBuffer::getRxBuffer()->addChar(rxch);
             }

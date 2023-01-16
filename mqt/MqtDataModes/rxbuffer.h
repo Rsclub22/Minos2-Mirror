@@ -12,9 +12,10 @@ class RXChar
     bool valid = false;
     int deleteCount = 0;
     bool dirty = false;
+    int carrier = 0;
 public:
     RXChar();
-    RXChar(QChar c, bool nl, int dc);
+    RXChar(QChar c, bool nl, int dc, int carr);
 
     QChar getCh() const;
     void setCh(const QChar &newCh);
@@ -24,6 +25,8 @@ public:
     void setNewLine(bool newNewLine = true);
     bool getDirty() const;
     void setDirty(bool newDirty);
+    int getCarrier() const;
+    void setCarrier(int newCarrier);
 };
 //=================================================
 

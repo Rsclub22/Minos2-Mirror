@@ -10,6 +10,7 @@
 #include <QLineEdit>
 #include <QTextEdit>
 
+#include "frequency.h"
 
 #if !defined (_MSC_VER)
 #pragma GCC diagnostic push
@@ -38,12 +39,13 @@ public:
     explicit MMVARIFrame(QWidget *parent, QFrame *cwl, QLineEdit *sendEdit, int inId, int outId);
     ~MMVARIFrame();
 
-    void sendCharacters(const QString &);
+    void sendCharacters(const QString &, int c);
     void sendMode(QString);
 
 private:
     Ui::MMVARIFrame *ui;
 
+    int carrier = 0;
     QFrame *pframe = nullptr;
     QHBoxLayout *mmvariHb = nullptr;
     QVBoxLayout* mvb = nullptr;
@@ -84,6 +86,8 @@ private:
     QAction *newCheckableAction(const QString text, QMenu *m, void (MMVARIFrame::*slotparam)(bool) );
 
 private slots:
+    void onSendCharacters(QString, int);
+    void onRigModeFreq(QString, Frequency);
     void onATC(bool checked);
     void onModeComboChanged(const QString &m);
     void onSpeedComboChanged(const QString &s);

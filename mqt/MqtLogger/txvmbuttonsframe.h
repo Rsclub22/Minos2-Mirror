@@ -164,7 +164,7 @@ private slots:
     void onRepeatPauseTimerTimeout();
     void onVmStopClicked();
     void onMsgDurTimerTimeout();
-    void fKey(BaseContestLog *c, int e);
+    void fKey(BaseContestLog *c, int e, int);
 
 
     void onRemoteConfigChanged();

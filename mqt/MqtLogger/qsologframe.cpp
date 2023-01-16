@@ -397,7 +397,7 @@ bool QSOLogFrame::doKeyPressEvent( QKeyEvent* event )
         if (Key >= Qt::Key_F1 && Key <= Qt::Key_F12)
         {
             // key may be for keyer or Digi Macro use
-            MinosLoggerEvents::SendFKey(contest, event->key());
+            MinosLoggerEvents::SendFKey(contest, event->key(), carrier);
             return true;
         }
     }
@@ -1054,10 +1054,17 @@ void QSOLogFrame::selectFirstInvalid()
 
 }
 
-void QSOLogFrame::rxDMWord(QString rxWord)
+void QSOLogFrame::rxDMWord(QString rxWord, int carr)
 {
+    // we now need to preserve this carrier so we can send it back on transmit
+    // and also put rig + carrier into the QSO frequency
     QLineEdit *ed = dynamic_cast<QLineEdit *>( current );
     ed->setText(rxWord);
+
+    if (carr != 0)
+    {
+        carrier = carr;
+    }
 
     if ( !valid( cmCheckValid ) )   // make sure all single and cross field
     {
@@ -1082,7 +1089,7 @@ void QSOLogFrame::DMKey(int key)
     else if (key >= Qt::Key_F1 && key <= Qt::Key_F12)
     {
         // key may be for keyer or Digi Macro use
-        MinosLoggerEvents::SendFKey(contest, key);
+        MinosLoggerEvents::SendFKey(contest, key, carrier);
         return;
     }
 
@@ -2729,9 +2736,9 @@ void QSOLogFrame::doGJVEditChange( QObject *Sender )
 
 void QSOLogFrame::on_ModeButton_clicked()
 {
+    mode = ui->ModeButton->text();
     if (isRadioLoaded() && radioConnected && !radioError)
     {
-        QString mode = ui->ModeButton->text();
         qsoLogModeFlag = true;  // stop updates from rigcontrol
         // send mode change to radio
         emit sendModeControl(mode);
@@ -2741,7 +2748,7 @@ void QSOLogFrame::on_ModeButton_clicked()
 
     QString myOldMode = ui->ModeComboBoxGJV->currentText();
     ui->ModeComboBoxGJV->setCurrentText(ui->ModeButton->text());
-    mode = ui->ModeButton->text();
+
     oldMode = myOldMode;
     ui->ModeButton->setText(oldMode);
     ui->MGMSubModeFrame->setVisible(ui->ModeComboBoxGJV->currentText() == hamlibData::MGM);

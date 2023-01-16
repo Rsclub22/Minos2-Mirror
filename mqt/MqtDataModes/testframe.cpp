@@ -1,7 +1,9 @@
-#include "testframe.h"
 #include "MShowMessageDlg.h"
 #include "rxbuffer.h"
 #include "MTrace.h"
+#include "dmmainwindow.h"
+
+#include "testframe.h"
 #include "ui_testframe.h"
 
 QStringList testData = {
@@ -18,6 +20,8 @@ TestFrame::TestFrame(QWidget *parent, QLineEdit */*sendEdit*/, QString /*fname*/
     ui(new Ui::TestFrame)
 {
     ui->setupUi(this);
+    connect(mainWindow, &DMMainWindow::sendCharacters, this, &TestFrame::onSendCharacters);
+    connect(mainWindow, &DMMainWindow::rigModeFreq, this, &TestFrame::onRigModeFreq);
 
     for(const auto &s:qAsConst(testData))
     {
@@ -25,7 +29,7 @@ TestFrame::TestFrame(QWidget *parent, QLineEdit */*sendEdit*/, QString /*fname*/
         bool newLine = true;
         for (auto c:qAsConst(s))
         {
-            RXChar rxch(c, newLine, 0);
+            RXChar rxch(c, newLine, 0, carrier);
             newLine = false;
             RxBuffer::getRxBuffer()->addChar(rxch);
         }
@@ -36,8 +40,16 @@ TestFrame::~TestFrame()
 {
     delete ui;
 }
+void TestFrame::onSendCharacters(QString data, int c)
+{
+    sendCharacters(data, c);
+}
 
-void TestFrame::sendCharacters(const QString &toSend)
+void TestFrame::onRigModeFreq(QString, Frequency)
+{
+
+}
+void TestFrame::sendCharacters(const QString &toSend, int carrier)
 {
     mShowMessage(toSend, this);
 }
@@ -48,7 +60,7 @@ void TestFrame::sendMode(QString mode)
     bool newLine = true;
     for (auto c:qAsConst(nm))
     {
-        RXChar rxch(c, newLine, 0);
+        RXChar rxch(c, newLine, 0, carrier);
         newLine = false;
         RxBuffer::getRxBuffer()->addChar(rxch);
     }

@@ -7,6 +7,7 @@
 
 #include <QProcess>
 
+#include "frequency.h"
 #include "maiaXmlRpcClient.h"
 
 namespace Ui {
@@ -21,7 +22,7 @@ public:
     explicit FLDigiFrame(QWidget *parent,  QLineEdit *sendEdit, QString fname);
     ~FLDigiFrame();
 
-    void sendCharacters(const QString &);
+    void sendCharacters(const QString &, int carrier);
     void sendMode(QString);
     void closeFrame();
 
@@ -33,11 +34,14 @@ private:
     bool fldigiActive = false;
     QString fname;
     QTimer *getTimer;
+    int carrier = 0;
 
     void createProcess();
 
     void addText(const QString &t);
 private slots:
+    void onSendCharacters(QString, int);
+    void onRigModeFreq(QString, Frequency);
     void on_finished(int err, QProcess::ExitStatus exitStatus);
     void on_error(QProcess::ProcessError error);
     void on_readyReadStandardError();
@@ -45,6 +49,7 @@ private slots:
     void on_started();
 
     void myResponseMethod(QVariant&);
+    void myCarrierResponseMethod(QVariant&);
     void myTxResponseMethod(QVariant&);
     void myRxResponseMethod(QVariant&);
     void myFaultResponse(int, const QString &);

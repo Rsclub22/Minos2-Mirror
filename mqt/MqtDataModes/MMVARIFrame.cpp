@@ -4,6 +4,7 @@
 #include "MTrace.h"
 #include "cutils.h"
 #include "rxbuffer.h"
+#include "dmmainwindow.h"
 #include "MMVARIFrame.h"
 #include "ui_MMVARIFrame.h"
 
@@ -18,6 +19,9 @@ MMVARIFrame::MMVARIFrame(QWidget *parent, QFrame *cwl,
     pframe(cwl)
 {
     ui->setupUi(this);
+
+    connect(mainWindow, &DMMainWindow::sendCharacters, this, &MMVARIFrame::onSendCharacters);
+    connect(mainWindow, &DMMainWindow::rigModeFreq, this, &MMVARIFrame::onRigModeFreq);
 
     // NB - the OCX MUST be alongside the executable, not in the"runtime" directory (if that is different)
     // so e.g. when debugging, in
@@ -195,8 +199,9 @@ MMVARIFrame::MMVARIFrame(QWidget *parent, QFrame *cwl,
 
     mmview->setWType(MMVARILib::MMVX_VIEWTYPE::viewtypeFFT);
     mmview->setWWidthFreq(3000);    // frequency span in spectrum window
-    mmview->setDwFreqHz(14100000);  // tranciever frequency
-    mmview->setBLSB(false);
+
+    //*********************
+    mmview->setBLSB(true);
 
     mmvari->setBActive(true);
 
@@ -205,6 +210,8 @@ MMVARIFrame::MMVARIFrame(QWidget *parent, QFrame *cwl,
 
 MMVARIFrame::~MMVARIFrame()
 {
+    // This is complicated as we want to get rid of all controls
+    // when we switch engines, and rebuild them when MMVARI is selected again
     if (mmvari)
     {
         mmvari->setBActive(false);
@@ -247,7 +254,17 @@ MMVARIFrame::~MMVARIFrame()
     delete ui;
 }
 
-void MMVARIFrame::sendCharacters(const QString &sendData)
+void MMVARIFrame::onSendCharacters(QString data, int c)
+{
+    sendCharacters(data, c);
+}
+
+void MMVARIFrame::onRigModeFreq(QString, Frequency f)
+{
+    mmview->setDwFreqHz(f.toInt64());  // tranciever frequency
+
+}
+void MMVARIFrame::sendCharacters(const QString &sendData, int c)
 {
     //    wTxState As Integer (ReadOnly)
     //    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -264,6 +281,7 @@ void MMVARIFrame::sendCharacters(const QString &sendData)
     }
     else
     {
+        mmvari->setWTxCarrier(c);
         mmvari->setBAddStartCR(true);
         mmvari->setBAddStopCR(true);
         mmvari->SendText(sendData);
@@ -276,10 +294,12 @@ void MMVARIFrame::sendMode(QString m)
 {
     if (m == "PS")
     {
+        mmview->setBLSB(false);
         modeCombo->setCurrentText("bpsk");
     }
     if (m == "RY")
     {
+        mmview->setBLSB(true);
         modeCombo->setCurrentText("rtty-L");
     }
 }
@@ -348,6 +368,14 @@ void MMVARIFrame::onModeComboChanged(const QString &m)
 
     if (m.contains("rtty"))
     {
+        if (m.contains("rtty_L", Qt::CaseInsensitive))
+        {
+            mmview->setBLSB(true);
+        }
+        else
+        {
+            mmview->setBLSB(false);
+        }
         speedCombo->addItem("45.45");
         speedCombo->addItem("75");
 
@@ -355,6 +383,8 @@ void MMVARIFrame::onModeComboChanged(const QString &m)
     }
     else
     {
+        mmview->setBLSB(false);
+
         speedCombo->addItem("31.25");
         speedCombo->addItem("62.5");
 
@@ -439,6 +469,7 @@ void MMVARIFrame::OnTxCarrier(int txc)
 void MMVARIFrame::OnRxCarrier(int /*rxChannel*/, int rxc)
 {
     rxCarrier->setText(QString("Rx %1").arg(rxc));
+    carrier = rxc;
 }
 
 void MMVARIFrame::OnSpeed(int /*rxChannel*/, double dblSpeed)
@@ -471,7 +502,7 @@ void MMVARIFrame::OnRxChar(int /*rxChannel*/, QString strChar, int /*wChar*/)
 
     for (auto c:strChar)
     {
-        RXChar rxch(c, false, 0);
+        RXChar rxch(c, false, 0, carrier);
         RxBuffer::getRxBuffer()->addChar(rxch);
     }
 }
@@ -535,11 +566,11 @@ void MMVARIFrame::OnDrawWave(int , int &, int &)
 {
     if (mmview)
     {
-        mmview->DrawWave(mmvariWnd);
+        //mmview->DrawWave(mmvariWnd);
     }
     if (mmview2)
     {
-        mmview2->DrawWave(mmvariWnd);
+        //mmview2->DrawWave(mmvariWnd);
     }
 }
 void MMVARIFrame::OnPTT(int )
@@ -567,24 +598,50 @@ void MMVARIFrame::OnTxState(int a)
         txButton->setText("TX");
         txButton->setChecked(false);
         rxButton->setChecked(true);
+
+        RXChar rxch('T', true, 0, carrier);
+        RxBuffer::getRxBuffer()->addChar(rxch);
+        RXChar rxch2('X', false, 0, carrier);
+        RxBuffer::getRxBuffer()->addChar(rxch2);
+        RXChar rxch3(' ', false, 0, carrier);
+        RxBuffer::getRxBuffer()->addChar(rxch3);
+
     }
     else if (a == 1)
     {
-        txButton->setText("TX");
+        txButton->setText("RX");
         txButton->setChecked(true);
         rxButton->setChecked(false);
+        RXChar rxch('R', true, 0, carrier);
+        RxBuffer::getRxBuffer()->addChar(rxch);
+        RXChar rxch2('X', false, 0, carrier);
+        RxBuffer::getRxBuffer()->addChar(rxch2);
+        RXChar rxch3(' ', false, 0, carrier);
+        RxBuffer::getRxBuffer()->addChar(rxch3);
     }
     else if (a == 2 || a == 3)
     {
         txButton->setText("Wait");
         txButton->setChecked(true);
         rxButton->setChecked(false);
+        RXChar rxch('W', true, 0, carrier);
+        RxBuffer::getRxBuffer()->addChar(rxch);
+        RXChar rxch2('T', false, 0, carrier);
+        RxBuffer::getRxBuffer()->addChar(rxch2);
+        RXChar rxch3(' ', false, 0, carrier);
+        RxBuffer::getRxBuffer()->addChar(rxch3);
     }
     else if (a == 4)
     {
         txButton->setText("Tone");
         txButton->setChecked(true);
         rxButton->setChecked(false);
+        RXChar rxch('T', true, 0, carrier);
+        RxBuffer::getRxBuffer()->addChar(rxch);
+        RXChar rxch2('N', false, 0, carrier);
+        RxBuffer::getRxBuffer()->addChar(rxch2);
+        RXChar rxch3(' ', false, 0, carrier);
+        RxBuffer::getRxBuffer()->addChar(rxch3);
     }
 
 

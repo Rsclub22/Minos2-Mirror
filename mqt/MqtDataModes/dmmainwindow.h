@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QTimer>
 
+#include "RigCache.h"
 #include "StdInReader.h"
 #include "XMPPRPCObj.h"
 #include "AnalysePubSubNotify.h"
@@ -66,6 +67,8 @@ private:
     QVector<QPushButton *> fButtons;
 
     QString appName;
+    RigCache rigCache;
+    PubSubName mainRig;
 
 #ifdef Q_OS_WIN
     QAction *actionMMVARI;
@@ -108,9 +111,16 @@ private:
     virtual bool eventFilter(QObject *obj, QEvent *event) override;
 
     bool doKeyPressEvent(QKeyEvent *event);
+    QStringList populateRig();
+    void configureRig(const QString s);
+    QString getRig();
+    void doSendButton_clicked(QString d, int c);
 protected:
     virtual void showEvent(QShowEvent *) override;
 
+signals:
+    void rigModeFreq(QString, Frequency);
+    void sendCharacters(QString, int);
 private slots:
     void LogTimerTimer();
 
@@ -140,7 +150,7 @@ private slots:
 
     void onNewCharacter();
 
-    void wordSelected(QString);
+    void wordSelected(QString, int carrier);
 
     void onMenuClear();
     void on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString from);
@@ -153,5 +163,8 @@ private slots:
     void fKey(int key);
 
     void on_stopButton_clicked();
+    void on_mainRigComboBox_activated(const QString &psn);
 };
+extern DMMainWindow *mainWindow;
+
 #endif // DMMAINWINDOW_H

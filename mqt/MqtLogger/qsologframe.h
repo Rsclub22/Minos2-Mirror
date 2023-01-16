@@ -99,7 +99,7 @@ public:
 
     void transferFromQrz(QString callsign, QString locator, QString name);
     void selectFirstInvalid();
-    void rxDMWord(QString rxWord);
+    void rxDMWord(QString rxWord, int carrier);
     void DMKey(int key);
     bool getSandP();
 private:
@@ -114,6 +114,8 @@ private:
 
     bool oldTimeOK;
     QString timerSS;
+
+    int carrier = 0;
 
     void EditControlEnter( QObject *Sender, QFocusEvent *event );
     void EditControlExit( QObject *Sender );

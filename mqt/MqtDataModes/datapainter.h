@@ -13,17 +13,18 @@ class DPGraphicsTextItem: public QGraphicsTextItem
     Q_OBJECT
 public:
     explicit DPGraphicsTextItem(QGraphicsItem *parent = nullptr);
-    explicit DPGraphicsTextItem(const QString &text, QGraphicsItem *parent = nullptr);
+    explicit DPGraphicsTextItem(const QString &text, int r, QGraphicsItem *parent = nullptr);
     virtual ~DPGraphicsTextItem();
-    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr);
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
 
 protected:
 
+    int row = -1;
     virtual void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
 
 signals:
 
-    void wordSelected(QString);
+    void wordSelected(QString, int);
 
 };
 
@@ -39,7 +40,7 @@ public:
 
 signals:
 
-    void wordSelected(QString);
+    void wordSelected(QString, int);
 
 private:
     QGraphicsScene *scene;

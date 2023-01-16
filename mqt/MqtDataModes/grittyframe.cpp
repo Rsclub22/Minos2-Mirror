@@ -8,7 +8,8 @@
 
 #include "MTrace.h"
 #include "delayedaction.h"
-
+#include "frequency.h"
+#include "dmmainwindow.h"
 #include "rxbuffer.h"
 
 #include "grittyframe.h"
@@ -112,7 +113,7 @@ Sample messages
 {"MessageType":"mtUserClick","Pos":0,"Word":"FP\/KV1J", "Kind":"ctCall", "Shift":["ssCtrl", "ssLeft"]}   */
 
 
-// When frequency changes gritty says " QSX nnnn Hz"
+// When frequency changes gritty says " QSX nnnn Hz" - on the main display
 void GrittyFrame::createProcess()
 {
     // we need to modify the gritty INI file with the correct details - port, USB/LSB, etc
@@ -142,6 +143,8 @@ GrittyFrame::GrittyFrame(QWidget *parent, QLineEdit *sendEdit, QString fname) :
 
 {
     ui->setupUi(this);
+    connect(mainWindow, &DMMainWindow::sendCharacters, this, &GrittyFrame::onSendCharacters);
+    connect(mainWindow, &DMMainWindow::rigModeFreq, this, &GrittyFrame::onRigModeFreq);
 
     // start gritty
     createProcess();
@@ -173,8 +176,16 @@ GrittyFrame::~GrittyFrame()
 {
     delete ui;
 }
+void GrittyFrame::onSendCharacters(QString data, int carrier)
+{
+    sendCharacters(data, carrier);
+}
 
-void GrittyFrame::sendCharacters(const QString &)
+void GrittyFrame::onRigModeFreq(QString, Frequency)
+{
+
+}
+void GrittyFrame::sendCharacters(const QString &, int)
 {
     // Gritty doesn't transmit
 }
@@ -359,7 +370,7 @@ void GrittyFrame::analyseGrittyMessage(QString m)
 
                 for (auto c:qAsConst(ch))
                 {
-                    RXChar rxch(c, newLine, deleteCount);
+                    RXChar rxch(c, newLine, deleteCount, carrier);
                     RxBuffer::getRxBuffer()->addChar(rxch);
                 }
                 trace("End of decode");

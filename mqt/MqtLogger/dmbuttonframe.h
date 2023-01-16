@@ -27,7 +27,7 @@ public:
     QString parseFKeyMessage(QString mess);
     void parseFKeyFile(QString sfname, QString mode);
 private slots:
-    void fKey(BaseContestLog *c, int key);
+    void fKey(BaseContestLog *c, int key, int carr);
     void sandPChanged(bool);
     void fButtonClicked();
     void on_stopButton_clicked();

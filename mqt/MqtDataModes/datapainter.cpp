@@ -15,11 +15,11 @@
 // Each line of the display is one of these
 
 DPGraphicsTextItem::DPGraphicsTextItem(QGraphicsItem *parent):
-    QGraphicsTextItem(parent)
+    QGraphicsTextItem(parent), row(-1)
 {}
 
-DPGraphicsTextItem::DPGraphicsTextItem(const QString &text, QGraphicsItem *parent):
-    QGraphicsTextItem(text, parent)
+DPGraphicsTextItem::DPGraphicsTextItem(const QString &text, int r, QGraphicsItem *parent):
+    QGraphicsTextItem(text, parent), row(r)
 {}
 
 DPGraphicsTextItem::~DPGraphicsTextItem()
@@ -44,10 +44,17 @@ void DPGraphicsTextItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
     c.select(QTextCursor::WordUnderCursor);
     setTextCursor(c);
 
+    int cfreq = 0;
+    if (cp < RxBuffer::getRxBuffer()->getRxLine(row)->size())
+    {
+        cfreq = RxBuffer::getRxBuffer()->getCharAt(row, cp).getCarrier();
+    }
+
+
     QString sel = c.selectedText();
     if (!sel.isEmpty())
     {
-        emit wordSelected(c.selectedText());
+        emit wordSelected(c.selectedText(), cfreq);
     }
 }
 
@@ -71,8 +78,9 @@ DataPainter::DataPainter(QWidget *parent)
     int l = RxBuffer::getRxBuffer()->getLines();
     for (int i = 0; i < l; i++)
     {
-        DPGraphicsTextItem *ti =  new DPGraphicsTextItem(QString());
-        connect(ti, &DPGraphicsTextItem::wordSelected, this, [this](QString s){emit wordSelected(s);});
+        DPGraphicsTextItem *ti =  new DPGraphicsTextItem(QString(), i);
+        connect(ti, &DPGraphicsTextItem::wordSelected, this, [this](QString s, int carr)
+                {emit wordSelected(s, carr);});
         ti->setFont(ff);
         scene->addItem(ti);
         ti->setPos(0, yoffset);

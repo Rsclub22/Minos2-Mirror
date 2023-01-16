@@ -1,6 +1,7 @@
 #ifndef MMTTYFRAME_H
 #define MMTTYFRAME_H
 
+#include "frequency.h"
 #include <QFrame>
 #include <QDialog>
 #include <QTextEdit>
@@ -21,7 +22,7 @@ public:
     explicit MMTTYFrame(QWidget *parent, bool twoTone, QLineEdit *sendEdit, QString fname);
     ~MMTTYFrame();
 
-    void sendCharacters(const QString &);
+    void sendCharacters(const QString &, int carrier);
     void sendMode(QString);
 
     void closeFrame();
@@ -44,6 +45,7 @@ private:
     bool txState = false;
     bool twoToneActive = false;
     bool mmttyActive = false;
+    int carrier = 0;
 
     HWND getTempHwnd()
     {
@@ -59,6 +61,8 @@ private:
     void createProcess();
 private slots:
 
+    void onSendCharacters(QString, int);
+    void onRigModeFreq(QString, Frequency);
     void on_finished(int err, QProcess::ExitStatus exitStatus);
     void on_error(QProcess::ProcessError error);
     void on_readyReadStandardError();

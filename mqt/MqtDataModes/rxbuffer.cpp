@@ -12,18 +12,29 @@ void RXChar::setDirty(bool newDirty)
     dirty = newDirty;
 }
 
+int RXChar::getCarrier() const
+{
+    return carrier;
+}
+
+void RXChar::setCarrier(int newCarrier)
+{
+    carrier = newCarrier;
+}
+
 RXChar::RXChar()
 {
 
 }
 
-RXChar::RXChar(QChar c, bool nl, int dc)
+RXChar::RXChar(QChar c, bool nl, int dc, int carr)
 {
     ch = c;
     newLine = nl;
     deleteCount = dc;
     valid = true;
     dirty = true;
+    carrier = carr;
 }
 
 QChar RXChar::getCh() const
@@ -151,7 +162,7 @@ void RxBuffer::addChar(RXChar &c)
     if (c.getCh() == '\n' || c.getCh() == '\r')
     {
         //trace("Add newline character");
-        c = RXChar(' ', true, 0);
+        c = RXChar(' ', true, 0, 0);
     }
     if (c.getNewLine())
     {
@@ -167,7 +178,7 @@ void RxBuffer::addChar(RXChar &c)
         {
             buff[curLine + 1].reset();
 
-            RXChar ulc = RXChar('_', false, 0);
+            RXChar ulc = RXChar('_', false, 0, 0);
 
             for (int i = 0; i < 40; i++)
             {

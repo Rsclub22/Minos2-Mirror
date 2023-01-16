@@ -116,9 +116,9 @@ void MinosLoggerEvents::sendBandmapLimitsChanged()
     emit mle.bandMapLimitsChanged();
 }
 
-void MinosLoggerEvents::SendFKey(BaseContestLog *c, int event)
+void MinosLoggerEvents::SendFKey(BaseContestLog *c, int event, int carrier)
 {
-    emit mle.fKey(c, event);
+    emit mle.fKey(c, event, carrier);
 }
 
 void MinosLoggerEvents::SendSandPChanged(bool s)

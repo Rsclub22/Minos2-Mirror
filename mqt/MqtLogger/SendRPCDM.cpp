@@ -1058,15 +1058,22 @@ void TSendDM::on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, const QSt
             // word received from DataModes app
             // pass it on to the current contest
             QSharedPointer<RPCParam> psrxWord;
-            if ( args->getStructArgMember( 0, "Word", psrxWord ))
+            QSharedPointer<RPCParam> psrxCarrier;
+            if (
+                    args->getStructArgMember( 0, rpcConstants::DMWord, psrxWord )
+                    && args->getStructArgMember( 0, rpcConstants::DMCarrier, psrxCarrier )
+                 )
             {
                 QString rxWord;
                 psrxWord->getString(rxWord);
 
+                int carrier;
+                psrxCarrier->getInt(carrier);
+
                 TSingleLogFrame * lf = LogContainer->getCurrentLogFrame();
                 if ( lf )
                 {
-                    lf->GJVQSOLogFrame->rxDMWord(rxWord);
+                    lf->GJVQSOLogFrame->rxDMWord(rxWord, carrier);
                 }
             }
         }

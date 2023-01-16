@@ -85,7 +85,7 @@ void DMButtonFrame::fButtonClicked()
 {
     QPushButton *b = dynamic_cast<QPushButton *>(sender());
     int kno = b->property("KeyNo").toInt();
-    fKey(ct, kno);
+    fKey(ct, kno, 0);
 }
 void DMButtonFrame::setContest(BaseContestLog *c)
 {
@@ -96,7 +96,7 @@ void DMButtonFrame::setContest(BaseContestLog *c)
         onModeChange(mode);
     }
 }
-void DMButtonFrame::fKey(BaseContestLog *c, int key)
+void DMButtonFrame::fKey(BaseContestLog *c, int key, int carr)
 {
     if (c == ct)
     {
@@ -113,6 +113,7 @@ void DMButtonFrame::fKey(BaseContestLog *c, int key)
             RPCGeneralClient rpc(rpcConstants::DMTransmit);
             QSharedPointer<RPCParam>st(new RPCParamStruct);
             st->addMember( toSend, rpcConstants::DMTransmit );
+            st->addMember(carr, rpcConstants::DMCarrier);
             rpc.getCallArgs() ->addParam( st );
             rpc.queueCall( dataSender );
 

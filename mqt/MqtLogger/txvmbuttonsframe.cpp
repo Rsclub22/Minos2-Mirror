@@ -997,7 +997,7 @@ void TxVmButtonsFrame::setPttStatusIndicatorOnOff(bool on)
     }
 
 }
-void TxVmButtonsFrame::fKey(BaseContestLog *c, int key)
+void TxVmButtonsFrame::fKey(BaseContestLog *c, int key, int /*carrier*/)
 {
     // FKey event received by log frame (or ctrl/FKey)
     if (ct == c)
