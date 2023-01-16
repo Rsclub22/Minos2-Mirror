@@ -1,11 +1,12 @@
+#include <QStandardItemModel>
+#include <QListView>
+
 #include "MMessageDialog.h"
 #include "ScreenConfigFile.h"
 #include "ScreenConfigScreen.h"
 #include "ScreenConfigRow.h"
-#include <QStandardItemModel>
-#include <QListView>
 #include "MTrace.h"
-
+#include "cutils.h"
 #include "ScreenConfigElement.h"
 #include "ui_ScreenConfigElement.h"
 
@@ -70,36 +71,6 @@ QString ScreenConfigElement::getTrScreenHint(SCType t)
     return tr(getRawScreenHint(t));
 }
 
-void ScreenConfigElement::eraseLayout(QLayout * layout)
-{
-    while(layout->count() > 0)
-    {
-        QLayoutItem *item = layout->takeAt(0);
-
-        QWidget* widget = item->widget();
-        if(widget)
-        {
-            delete widget;
-        }
-        else
-        {
-            QLayout * layout = item->layout();
-            if (layout)
-            {
-                eraseLayout(layout);
-            }
-            else
-            {
-                QSpacerItem * si = item->spacerItem();
-                if (si)
-                {
-                    delete si;
-                }
-            }
-        }
-        delete item;
-    }
-}
 bool ScreenConfigElement::getIsSplitElement() const
 {
     return isSplitElement;

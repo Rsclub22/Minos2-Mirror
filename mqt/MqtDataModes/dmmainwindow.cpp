@@ -70,6 +70,7 @@ DMMainWindow::DMMainWindow(QWidget *parent)
     ui->setupUi(this);
 
     ui->FButtonFrame->setEnabled(false);
+    ui->variFrame->setVisible(false);
 
     connect(RxBuffer::getRxBuffer(), &RxBuffer::newCharacter, this, &DMMainWindow::onNewCharacter);
     connect(ui->rxChars, &DataPainter::wordSelected, this, &DMMainWindow::wordSelected);
@@ -488,6 +489,7 @@ void DMMainWindow::showEvent(QShowEvent *event)
 }
 void DMMainWindow::closeAllEngines(bool clearCurrent)
 {
+    ui->variFrame->setVisible(false);
 #ifdef Q_OS_WIN
 
     if (mmvariFrame)
@@ -552,7 +554,7 @@ void DMMainWindow::onActionMMVARI_triggered(bool checked)
 
     trace("Select MMVARI Engine");
 
-    QString m = EngineConfigure::getEnginePath(mmvari);
+    ui->variFrame->setVisible(true);
 
     QString idev = EngineConfigure::getEnginePath(mmvari + "/input");
     int inId = deviceIds[idev];
@@ -560,7 +562,7 @@ void DMMainWindow::onActionMMVARI_triggered(bool checked)
     QString odev = EngineConfigure::getEnginePath(mmvari + "/output");
     int outId = deviceIds[odev];
 
-    mmvariFrame = new MMVARIFrame(this, dynamic_cast<QVBoxLayout *>(ui->centralwidget->layout()), ui->sendEdit, m, inId, outId);
+    mmvariFrame = new MMVARIFrame(this, ui->variFrame, ui->sendEdit, inId, outId);
     actionMMVARI->setChecked(true);
     EngineConfigure::setAppCurrent(mmvari);
     ui->sendFrame->setVisible(true);

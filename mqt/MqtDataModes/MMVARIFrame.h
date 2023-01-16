@@ -25,7 +25,7 @@
 #pragma GCC diagnostic pop
 #endif
 
-
+class QSplitter;
 namespace Ui {
 class MMVARIFrame;
 }
@@ -35,7 +35,7 @@ class MMVARIFrame : public QFrame
     Q_OBJECT
 
 public:
-    explicit MMVARIFrame(QWidget *parent, QVBoxLayout *cwl, QLineEdit *sendEdit, QString fname, int inId, int outId);
+    explicit MMVARIFrame(QWidget *parent, QFrame *cwl, QLineEdit *sendEdit, int inId, int outId);
     ~MMVARIFrame();
 
     void sendCharacters(const QString &);
@@ -43,6 +43,10 @@ public:
 
 private:
     Ui::MMVARIFrame *ui;
+
+    QFrame *pframe = nullptr;
+    QHBoxLayout *mmvariHb = nullptr;
+    QVBoxLayout* mvb = nullptr;
 
     QString fname;
     int mmvariWnd;

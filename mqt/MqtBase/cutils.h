@@ -145,4 +145,5 @@ void createColumnsMenu(QMenu &menu, QAbstractItemModel *hdrModel,  QWidget *p, s
 void createColumnsMenu(QMenu &menu, QHeaderView *h, QWidget *p, std::function<void()> pred);
 void comboSetUniqueNames(QStringList nameList, QComboBox *cb);
 
+void clearLayout(QLayout *layout);
 #endif

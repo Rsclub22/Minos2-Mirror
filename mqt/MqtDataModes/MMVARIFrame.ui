@@ -1,6 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>MMVARIFrame</class>
- <widget name="MMVARIFrame" class="QFrame">
+ <widget class="QFrame" name="MMVARIFrame">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -13,4 +14,6 @@
    <string>Frame</string>
   </property>
  </widget>
+ <resources/>
+ <connections/>
 </ui>

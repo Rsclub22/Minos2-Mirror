@@ -1,19 +1,21 @@
 #include <QMenuBar>
 #include <QMenu>
-
+#include <QSplitter>
 #include "MTrace.h"
-
+#include "cutils.h"
 #include "rxbuffer.h"
 #include "MMVARIFrame.h"
 #include "ui_MMVARIFrame.h"
 
 // we already report on the TX/RX frequencies!
 // either pallette of sensitivity are rubbish - not seeoing signals
-MMVARIFrame::MMVARIFrame(QWidget *parent, QVBoxLayout *cwl, QLineEdit *sendEdit, QString fname, int inId, int outId) :
+MMVARIFrame::MMVARIFrame(QWidget *parent, QFrame *cwl,
+                         QLineEdit *sendEdit,
+                         int inId, int outId) :
     QFrame(parent),
     ui(new Ui::MMVARIFrame),
-    fname(fname),
-    sendEdit(sendEdit)
+    sendEdit(sendEdit),
+    pframe(cwl)
 {
     ui->setupUi(this);
 
@@ -35,9 +37,7 @@ MMVARIFrame::MMVARIFrame(QWidget *parent, QVBoxLayout *cwl, QLineEdit *sendEdit,
     mmlevel = new MMVARILib::XMMVLvl(this);
     mmlevel->setControl("{438EF93A-939D-4B6B-93A7-DF09049B8514}");
 
-
     mmvariVb = new QVBoxLayout(this);
-    cwl->insertWidget(0, this);
 
     //====================================================================
     // N1MM also has BPF, ATC, FFT, Multi-Channel RX menus
@@ -68,48 +68,48 @@ MMVARIFrame::MMVARIFrame(QWidget *parent, QVBoxLayout *cwl, QLineEdit *sendEdit,
 
     QHBoxLayout *mmvariButtons = new QHBoxLayout();
 
-    txButton = new QPushButton(this);
+    txButton = new QPushButton();
     txButton->setCheckable(true);
     txButton->setText("TX");
     mmvariButtons->addWidget(txButton);
     connect(txButton, &QPushButton::clicked, this, &MMVARIFrame::txButtonClicked);
 
-    rxButton = new QPushButton(this);
+    rxButton = new QPushButton();
     rxButton->setCheckable(true);
     rxButton->setText("RX");
     rxButton->setChecked(true);
     mmvariButtons->addWidget(rxButton);
     connect(rxButton, &QPushButton::clicked, this, &MMVARIFrame::rxButtonClicked);
 
-    afcButton = new QPushButton(this);
+    afcButton = new QPushButton();
     afcButton->setCheckable(true);
     afcButton->setText("AFC");
     mmvariButtons->addWidget(afcButton);
     connect(afcButton, &QPushButton::clicked, this, &MMVARIFrame::afcButtonClicked);
 
-    netButton = new QPushButton(this);
+    netButton = new QPushButton();
     netButton->setCheckable(true);
     netButton->setText("NET");
     mmvariButtons->addWidget(netButton);
     connect(netButton, &QPushButton::clicked, this, &MMVARIFrame::netButtonClicked);
 
-    alignButton = new QPushButton(this);
+    alignButton = new QPushButton();
     alignButton->setText("Align");
     mmvariButtons->addWidget(alignButton);
     connect(alignButton, &QPushButton::clicked, this, &MMVARIFrame::alignButtonClicked);
 
 
-    modeCombo = new QComboBox(this);
+    modeCombo = new QComboBox();
     mmvariButtons->addWidget(modeCombo);
 
     speedCombo = new QComboBox(this);
     mmvariButtons->addWidget(speedCombo);
 
-    rxCarrier = new QLabel(this);
+    rxCarrier = new QLabel();
     mmvariButtons->addWidget(rxCarrier);
-    txCarrier = new QLabel(this);
+    txCarrier = new QLabel();
     mmvariButtons->addWidget(txCarrier);
-    snLabel = new QLabel(this);
+    snLabel = new QLabel();
     mmvariButtons->addWidget(snLabel);
 
     mmvariButtons->addItem(new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum));
@@ -131,17 +131,17 @@ MMVARIFrame::MMVARIFrame(QWidget *parent, QVBoxLayout *cwl, QLineEdit *sendEdit,
 
     //====================================================================
     // and finally the spectrum and level controls
-    QHBoxLayout *mmvariHb = new QHBoxLayout();
+    mmvariHb = new QHBoxLayout();
     mmvariHb->addWidget(mmlevel, 1);
 
-    QVBoxLayout* mvb = new QVBoxLayout();
+    mvb = new QVBoxLayout();
     mvb->addWidget(mmview);
     mvb->addWidget(mmview2);
-    mmvariVb->addLayout(mmvariHb);
-
     mmvariHb->addLayout(mvb, 20);
 
-//    wType As Integer
+    mmvariVb->addLayout(mmvariHb);
+
+    //    wType As Integer
 //    ~~~~~~~~~~~~~~~~
 //    This property defines the display content.
 //        0=viewtypeFFT		Specturm
@@ -200,6 +200,7 @@ MMVARIFrame::MMVARIFrame(QWidget *parent, QVBoxLayout *cwl, QLineEdit *sendEdit,
 
     mmvari->setBActive(true);
 
+    cwl->setLayout(mmvariVb);
 }
 
 MMVARIFrame::~MMVARIFrame()
@@ -208,18 +209,41 @@ MMVARIFrame::~MMVARIFrame()
     {
         mmvari->setBActive(false);
 
-        mmview->clear();
-        mmview = nullptr;
-
-        mmview2->clear();
-        mmview2 = nullptr;
-
-        mmlevel->clear();
-        mmlevel = nullptr;
+        while (mmvariHb->count())
+        {
+            QLayoutItem *l = mmvariHb->takeAt(0);
+            QWidget *w = l->widget();
+            if (w && w == mmlevel)
+            {
+                mmlevel->clear();
+                mmlevel = nullptr;
+            }
+        }
+        while (mvb->count())
+        {
+            QLayoutItem *l = mvb->takeAt(0);
+            QWidget *w = l->widget();
+            if (w && w == mmview)
+            {
+                mmview->clear();
+                mmview = nullptr;
+            }
+            else if (w && w == mmview2)
+            {
+                mmview2->clear();
+                mmview2 = nullptr;
+            }
+        }
+        delete mvb;
 
         mmvari->clear();
         mmvari = nullptr;
     }
+    QLayout *l = pframe->layout();
+
+
+    clearLayout(l);
+    delete l;
     delete ui;
 }
 
