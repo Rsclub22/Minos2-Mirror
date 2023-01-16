@@ -276,9 +276,6 @@ private:
     QSharedPointer<HtmlDelegate> dxSpotViewDelegate;
     QSharedPointer<HtmlDelegate> sentSpotViewDelegate;
 
-
-
-    QString appName;
     QLabel* status;
     QString rawStatus;
 

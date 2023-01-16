@@ -65,6 +65,7 @@ private:
 
     QVector<QPushButton *> fButtons;
 
+    QString appName;
 
 #ifdef Q_OS_WIN
     QAction *actionMMVARI;

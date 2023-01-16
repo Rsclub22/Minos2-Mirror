@@ -64,9 +64,6 @@ DMMainWindow::DMMainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::DMMainWindow)
 {
-    baseTitle = tr("Minos Data Modes");
-
-    setWindowTitle(baseTitle);
     ui->setupUi(this);
 
     ui->FButtonFrame->setEnabled(false);
@@ -115,7 +112,8 @@ DMMainWindow::DMMainWindow(QWidget *parent)
 
     connect(stdinReader, &StdInReader::stdinLine, this, &DMMainWindow::onStdInRead);
 
-    MinosRPC *rpc = MinosRPC::getMinosRPC(getAppStartupName());
+    appName = getAppStartupName();
+    MinosRPC *rpc = MinosRPC::getMinosRPC(appName);
     connect(rpc, &MinosRPC::routerCall, this, &DMMainWindow::on_routerCall);
     connect(rpc, &MinosRPC::notify, this, &DMMainWindow::on_notify);
     //connect(rpc, &MinosRPC::provider, this, &DMMainWindow::on_provider);
@@ -182,6 +180,9 @@ DMMainWindow::DMMainWindow(QWidget *parent)
     }
 
     installEventFilter(this);
+
+    baseTitle = tr("Minos Data Modes");
+    setWindowTitle(getAppStartupName() + ": " + baseTitle);
 
     startPreviousEngine();
 }
@@ -468,7 +469,8 @@ void DMMainWindow::changeEvent( QEvent* e )
             i.key()->setText(tr(i.value()));
         }
         ui->retranslateUi(this);
-        setWindowTitle(tr("Minos Data Modes App"));
+        baseTitle = tr("Minos Data Modes");
+        setWindowTitle(getAppStartupName() + ": " + baseTitle);
     }
     QMainWindow::changeEvent(e);
 
@@ -539,7 +541,7 @@ void DMMainWindow::closeAllEngines(bool clearCurrent)
     {
         EngineConfigure::setAppCurrent(QString());
     }
-    setWindowTitle(baseTitle);
+    setWindowTitle(getAppStartupName() + ": " + baseTitle);
 }
 #ifdef Q_OS_WIN
 
@@ -566,7 +568,8 @@ void DMMainWindow::onActionMMVARI_triggered(bool checked)
     actionMMVARI->setChecked(true);
     EngineConfigure::setAppCurrent(mmvari);
     ui->sendFrame->setVisible(true);
-    setWindowTitle(baseTitle + " " + mmvari);
+
+    setWindowTitle(getAppStartupName() + ": " + baseTitle + ": " + mmvari);
 
 }
 
@@ -587,7 +590,7 @@ void DMMainWindow::onActionMMTTY_triggered(bool checked)
     actionMMTTY->setChecked(true);
     EngineConfigure::setAppCurrent(mmtty);
     ui->sendFrame->setVisible(true);
-    setWindowTitle(baseTitle + " " + mmtty);
+    setWindowTitle(getAppStartupName() + ": " + baseTitle + ": " + mmtty);
 }
 
 void DMMainWindow::onAction2Tone_triggered(bool checked)
@@ -607,7 +610,7 @@ void DMMainWindow::onAction2Tone_triggered(bool checked)
     action2Tone->setChecked(true);
     EngineConfigure::setAppCurrent(twotone);
     ui->sendFrame->setVisible(true);
-    setWindowTitle(baseTitle + " " + twotone);
+    setWindowTitle(getAppStartupName() + ": " + baseTitle + ": " + twotone);
 }
 #endif
 void DMMainWindow::onActionFLDigi_triggered(bool /*checked*/)
@@ -621,7 +624,7 @@ void DMMainWindow::onActionFLDigi_triggered(bool /*checked*/)
     actionFLDigi->setChecked(true);
     EngineConfigure::setAppCurrent(fldigi);
     ui->sendFrame->setVisible(true);
-    setWindowTitle(baseTitle + " " + fldigi);
+    setWindowTitle(getAppStartupName() + ": " + baseTitle + ": " + fldigi);
 }
 
 void DMMainWindow::onActionTest_triggered(bool checked)
@@ -639,7 +642,7 @@ void DMMainWindow::onActionTest_triggered(bool checked)
     actionTest->setChecked(true);
     EngineConfigure::setAppCurrent(test);
     ui->sendFrame->setVisible(true);
-    setWindowTitle(baseTitle + " " + test);
+    setWindowTitle(getAppStartupName() + ": " + baseTitle + ": " + test);
 }
 #ifdef Q_OS_WIN
 
@@ -662,7 +665,7 @@ void DMMainWindow::onActionGritty_triggered(bool checked)
 
     ui->sendFrame->setVisible(false);
     ui->sendercb->setChecked(false);
-    setWindowTitle(baseTitle + " " + gritty);
+    setWindowTitle(getAppStartupName() + ": " + baseTitle + ": " + gritty);
 
 }
 #endif
