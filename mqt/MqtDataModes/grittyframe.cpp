@@ -15,6 +15,8 @@
 #include "grittyframe.h"
 #include "ui_grittyframe.h"
 
+const int grittyPort = 7502;
+
 /*
 You can run multiple instances of GRITTY, e.g., to decode two
 audio streams in the SO2R mode. To allow each instance have its
@@ -132,7 +134,7 @@ void GrittyFrame::createProcess()
     connect (grittyProcess, &QProcess::readyReadStandardError, this, &GrittyFrame::on_readyReadStandardError);
     connect (grittyProcess, &QProcess::readyReadStandardOutput, this, &GrittyFrame::on_readyReadStandardOutput);
 
-    QStringList engineOpts = {"--wo"/*, "--home-dir C:/temp"*/};
+    QStringList engineOpts = {"--wo"/*, "--home-dir C:/temp"*/, "port=" + QString::number(grittyPort)};
     grittyProcess->start(fname, engineOpts, QProcess::ReadWrite);
 }
 GrittyFrame::GrittyFrame(QWidget *parent, QLineEdit *sendEdit, QString fname) :
@@ -167,7 +169,7 @@ GrittyFrame::GrittyFrame(QWidget *parent, QLineEdit *sendEdit, QString fname) :
        && grittyClient->state() != QAbstractSocket::ClosingState
        && grittyClient->state() != QAbstractSocket::HostLookupState)
     {
-        grittyClient->connectToHost("127.0.0.1", 7500);
+        grittyClient->connectToHost("127.0.0.1", grittyPort);
     }
     grittyActive = true;
 }
