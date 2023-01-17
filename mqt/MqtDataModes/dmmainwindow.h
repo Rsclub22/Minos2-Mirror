@@ -50,7 +50,8 @@ public:
     QStringList inputDevices;
     QStringList outputDevices;
 
-    QMap<QString, int> deviceIds;
+    QMap<QString, int> inDeviceIds;
+    QMap<QString, int> outDeviceIds;
 
     void startPreviousEngine();
 

@@ -134,7 +134,11 @@ void GrittyFrame::createProcess()
     connect (grittyProcess, &QProcess::readyReadStandardError, this, &GrittyFrame::on_readyReadStandardError);
     connect (grittyProcess, &QProcess::readyReadStandardOutput, this, &GrittyFrame::on_readyReadStandardOutput);
 
-    QStringList engineOpts = {"--wo"/*, "--home-dir C:/temp"*/, "port=" + QString::number(grittyPort)};
+    QStringList engineOpts = {"--wo",
+                              /*"--home-dir C:/temp",*/
+                              /*"ini=\"InI file path\"",*/
+                              "port=" + QString::number(grittyPort),
+                              "caption=\"Gritty Engine for Minos\""};
     grittyProcess->start(fname, engineOpts, QProcess::ReadWrite);
 }
 GrittyFrame::GrittyFrame(QWidget *parent, QLineEdit *sendEdit, QString fname) :

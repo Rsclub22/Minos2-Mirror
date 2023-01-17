@@ -80,7 +80,7 @@ DMMainWindow::DMMainWindow(QWidget *parent)
     inChannels = devs;
     QString defname = tr("Default Device");
     inputDevices.append(defname);
-    deviceIds[defname] = -1;
+    inDeviceIds[defname] = -1;
     for (UINT dev = 0; dev < devs; dev++) {
         WAVEINCAPS caps = {};
         MMRESULT mmr = waveInGetDevCaps(dev, &caps, sizeof(caps));
@@ -90,13 +90,13 @@ DMMainWindow::DMMainWindow(QWidget *parent)
 
         QString name = QString::fromWCharArray(caps.szPname);
         inputDevices.append(name);
-        deviceIds[name] = dev;
+        inDeviceIds[name] = dev;
         trace( "input device = "  + QString::number(dev) +  " " + name);
     }
     devs = waveOutGetNumDevs();
     outChannels = devs;
     outputDevices.append(defname);
-    deviceIds[defname] = -1;        // repeated...
+    outDeviceIds[defname] = -1;        // repeated...
     for (UINT dev = 0; dev < devs; dev++) {
         WAVEOUTCAPS caps = {};
         MMRESULT mmr = waveOutGetDevCaps(dev, &caps, sizeof(caps));
@@ -106,7 +106,7 @@ DMMainWindow::DMMainWindow(QWidget *parent)
         }
         QString name = QString::fromWCharArray(caps.szPname);
         outputDevices.append(name);
-        deviceIds[name] = dev;
+        outDeviceIds[name] = dev;
         trace( "output device = "  + QString::number(dev) +  " " + name);
     }
 
@@ -645,11 +645,11 @@ void DMMainWindow::onActionMMVARI_triggered(bool checked)
 
     ui->variFrame->setVisible(true);
 
-    QString idev = EngineConfigure::getEnginePath(mmvari + "/input");
-    int inId = deviceIds[idev];
+    QString idev = EngineConfigure::getAppPath(mmvari + "/input");
+    int inId = inDeviceIds[idev];
 
-    QString odev = EngineConfigure::getEnginePath(mmvari + "/output");
-    int outId = deviceIds[odev];
+    QString odev = EngineConfigure::getAppPath(mmvari + "/output");
+    int outId = outDeviceIds[odev];
 
     mmvariFrame = new MMVARIFrame(this, ui->variFrame, ui->sendEdit, inId, outId);
     actionMMVARI->setChecked(true);
