@@ -276,7 +276,7 @@ void GrittyFrame::connected()
 
         QString txString = "{\"Command\":\"cmdRequestMessageTypes\",\"Arguments\":"
         "[\"mtSystemInfo\",\"mtSettings\",\"mtErrorMessage\","
-        "\"mtCorrChar\",\"mtCallStack\", \"mtUserClick\"]}\n";
+        "\"mtRawChar\",\"mtCorrChar\",\"mtCallStack\", \"mtUserClick\"]}\n";
         qint64 res = grittyClient->write(txString.toLocal8Bit());
         trace(QString("%1 bytes written; %2").arg(res).arg(txString));
     }, 250);

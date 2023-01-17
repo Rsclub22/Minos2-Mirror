@@ -192,6 +192,8 @@ MMVARIFrame::MMVARIFrame(QWidget *parent, QFrame *cwl,
 
     QString devs = QString("%1,%2").arg(inId).arg(outId);
 
+    trace(QString("MMVARI devs selection %1").arg(devs));
+
     mmvari->setStrSoundID(devs);
 
     mmvari->setStrMode(0, modeCombo->currentText());

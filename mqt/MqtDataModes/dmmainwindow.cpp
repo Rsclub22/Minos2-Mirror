@@ -91,7 +91,7 @@ DMMainWindow::DMMainWindow(QWidget *parent)
         QString name = QString::fromWCharArray(caps.szPname);
         inputDevices.append(name);
         deviceIds[name] = dev;
-        trace( "input device = "  + QString::number(devs) +  " " + name);
+        trace( "input device = "  + QString::number(dev) +  " " + name);
     }
     devs = waveOutGetNumDevs();
     outChannels = devs;
@@ -107,7 +107,7 @@ DMMainWindow::DMMainWindow(QWidget *parent)
         QString name = QString::fromWCharArray(caps.szPname);
         outputDevices.append(name);
         deviceIds[name] = dev;
-        trace( "output device = "  + QString::number(devs) +  " " + name);
+        trace( "output device = "  + QString::number(dev) +  " " + name);
     }
 
 #endif
