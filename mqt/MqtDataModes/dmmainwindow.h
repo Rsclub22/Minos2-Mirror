@@ -122,6 +122,7 @@ protected:
 signals:
     void rigModeFreq(QString, Frequency);
     void sendCharacters(QString, int);
+
 private slots:
     void LogTimerTimer();
 

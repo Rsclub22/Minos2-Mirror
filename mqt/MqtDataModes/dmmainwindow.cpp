@@ -335,29 +335,7 @@ void DMMainWindow::on_notify(AnalysePubSubNotify an, const QString from )
         {
             // send the new mode to our engine
 
-#ifdef Q_OS_WIN
-
-            if (mmvariFrame)
-            {
-                mmvariFrame->sendMode(value);
-            }
-            if (mmttyFrame)
-            {
-                mmttyFrame->sendMode(value);
-            }
-            if (grittyFrame)
-            {
-                grittyFrame->sendMode(value);
-            }
-#endif
-            if (fldigiFrame)
-            {
-                fldigiFrame->sendMode(value);
-            }
-            if (testFrame)
-            {
-                testFrame->sendMode(value);
-            }
+            emit rigModeFreq(value, Frequency());
         }
         else if ( an.getCategory() == rpcConstants::rigStateCategory)
         {

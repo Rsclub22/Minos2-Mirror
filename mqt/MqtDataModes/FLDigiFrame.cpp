@@ -67,15 +67,18 @@ void FLDigiFrame::onSendCharacters(QString data, int c)
     sendCharacters(data, c);
 }
 
-void FLDigiFrame::onRigModeFreq(QString, Frequency f)
+void FLDigiFrame::onRigModeFreq(QString m, Frequency f)
 {
     QVariantList args;
-    args << f.str();
+    if (!f.isClear())
+    {
+        args << f.str();
 
-    rpcClient->call("rig.set_frequency", args,
-       this, SLOT(myRxResponseMethod(QVariant&)),
-       this, SLOT(myFaultResponse(int, const QString &)));
-
+        rpcClient->call("rig.set_frequency", args,
+           this, SLOT(myRxResponseMethod(QVariant&)),
+           this, SLOT(myFaultResponse(int, const QString &)));
+    }
+    sendMode(m);
 }
 void FLDigiFrame::onGetTimer()
 {
@@ -114,7 +117,14 @@ void FLDigiFrame::sendCharacters(const QString &s, int carrier)
 
     if (carrier > 0)
     {
-        args << carrier;
+        if (mode == "RY")
+        {
+            args << carrier + 170/2;
+        }
+        else
+        {
+            args << carrier;
+        }
         rpcClient->call("modem.set_carrier", args,
            this, SLOT(myResponseMethod(QVariant&)),
            this, SLOT(myFaultResponse(int, const QString &)));
@@ -150,6 +160,9 @@ void FLDigiFrame::sendMode(QString m)
 {
     if (m == "RY")
     {
+        mode = "RY";
+        carrierOffset = 170/2;
+
         QVariantList args;
 
         args.clear();
@@ -167,6 +180,8 @@ void FLDigiFrame::sendMode(QString m)
     }
     if (m == "PS")
     {
+        mode = "PS";
+        carrierOffset = 0;
         QVariantList args;
 
         args.clear();
@@ -289,7 +304,7 @@ void FLDigiFrame::myCarrierResponseMethod(QVariant &v)
         if (!s.isEmpty())
         {
             trace(QString("Carrier 1 %1").arg(s));
-            carrier = s.toInt();
+            carrier = s.toInt() - carrierOffset;
 
         }
     }
@@ -300,7 +315,7 @@ void FLDigiFrame::myCarrierResponseMethod(QVariant &v)
         for(const auto &s:qAsConst(sl))
         {
             trace(QString("Carrier 2 %1").arg(s));
-            carrier = s.toInt();
+            carrier = s.toInt() - carrierOffset;
         }
     }
 }

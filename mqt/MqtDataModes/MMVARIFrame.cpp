@@ -284,6 +284,7 @@ void MMVARIFrame::sendCharacters(const QString &sendData, int c)
     else
     {
         mmvari->setWTxCarrier(c);
+        mmvari->setWRxCarrier(0, c);
         mmvari->setBAddStartCR(true);
         mmvari->setBAddStopCR(true);
         mmvari->SendText(sendData);
@@ -471,7 +472,7 @@ void MMVARIFrame::OnTxCarrier(int txc)
 void MMVARIFrame::OnRxCarrier(int /*rxChannel*/, int rxc)
 {
     rxCarrier->setText(QString("Rx %1").arg(rxc));
-    carrier = rxc;
+    carrier = rxc - 170/2;
 }
 
 void MMVARIFrame::OnSpeed(int /*rxChannel*/, double dblSpeed)

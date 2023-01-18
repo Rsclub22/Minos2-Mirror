@@ -35,6 +35,8 @@ private:
     QString fname;
     QTimer *getTimer;
     int carrier = 0;
+    QString mode;
+    int carrierOffset = 0;
 
     void createProcess();
 
