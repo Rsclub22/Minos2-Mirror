@@ -812,7 +812,6 @@ void BandmapClientFrame::dxSpots(QVector<ClusterMessage> spotMsg)
                     if (sp)
                     {
                         spotQueue += sp;
-                        MinosLoggerEvents::SendBroadcastSpot(sp);
                     }
                 }
             }
@@ -918,6 +917,7 @@ void BandmapClientFrame::addLogSpotToBandmapTable(QSharedPointer<ClusterSpotData
         addRemoveCQSpot(spot);
         trace("BandmapView::bandmapUpdate() addRemoveCQSpot");
         bandmapView->bandmapUpdate(true);
+        MinosLoggerEvents::SendBroadcastSpot(spot);
         return;
     }
 
@@ -940,6 +940,8 @@ void BandmapClientFrame::addLogSpotToBandmapTable(QSharedPointer<ClusterSpotData
         {
             Callsign loggedCall = spot->getDxCall();
             QString band = spot->getBand();
+            QString loc = spot->getDxLocator();
+
             for (int row = 0; row < bandmapDataModel->rowCount(); row++)
             {
                 QSharedPointer<ClusterSpotData> bsd = bandmapDataModel->getBandmapDataRow(row);
@@ -957,15 +959,20 @@ void BandmapClientFrame::addLogSpotToBandmapTable(QSharedPointer<ClusterSpotData
                     bandmapSpotType::SPOT_TYPE savedSpotType = bsd->getSpotType();
                     if (savedSpotType == bandmapSpotType::LOGGED || savedSpotType == bandmapSpotType::SAVED)
                     {
+                        if (loc.isEmpty())
+                        {
+                            loc = bsd->getDxLocator();
+                            spot->setDxLocator(loc);
+                        }
                         // delete the old logged/saved entry, add the new one
                         bsd->setSpotType(bandmapSpotType::DELETED);
+                        MinosLoggerEvents::SendBroadcastSpot(bsd);
                         continue;
                     }
                     bsd->setDxCallWorked(true);
                 }
 
                 // update worked locators
-                QString loc = spot->getDxLocator();
                 if (!loc.isEmpty())
                 {
                     QString locMajor = loc.mid(0,4);
@@ -1142,6 +1149,7 @@ void BandmapClientFrame::addLogSpotToBandmapTable(QSharedPointer<ClusterSpotData
 
         bandmapDataModel->rowData.push_back(spot);
 
+        MinosLoggerEvents::SendBroadcastSpot(spot);
     }
 }
 

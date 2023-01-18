@@ -3,6 +3,7 @@
 #include "checkmodeagainstfreq.h"
 #include "BandList.h"
 #include "MTrace.h"
+#include "rigcontrolcommonconstants.h"
 
 const char * clusterStateList[] =
 {
@@ -394,6 +395,14 @@ void BandmapClientFilterSettings::setModeFilter(QString mode, bool setting)
 
 bool BandmapClientFilterSettings::getModeFilter(QString mode)
 {
+    if (mode == "PS")
+    {
+        mode = hamlibData::PKTUSB;
+    }
+    else if (mode == "RY")
+    {
+        mode = hamlibData::RTTY;
+    }
     if (mode == "PH")
     {
         if (modeFilterFlag.getModeFilter("USB"))

@@ -379,24 +379,46 @@ QString N1MMBroadcast::genSpotsStanza(QSharedPointer<ClusterSpotData> spotMsg)
     // freq sent is KHz
     freq = freq/1000.0;
     QString sfreq = QString::number(freq, 'f', 3);
+
     QDateTime  dt = spotMsg.data()->getSpotDateTime();
     dtg dg(false);
     dg.setDateTime(dt);
-    QString d = dg.getN1mmDTG();
+    QString ts = dg.getN1mmDTG();
 
+    QString adddel = "add";
+    QString status;
+    bandmapSpotType::SPOT_TYPE st = spotMsg->getSpotType();
+    // enum SPOT_TYPE {NONE, CLUSTER, CLUSTER_MARKED, LOGGED, MARKED, SAVED, CQ, DELETED};
+
+    if (st == bandmapSpotType::CQ)
+    {
+        status = "cq";
+    }
+    else if (st == bandmapSpotType::LOGGED)
+    {
+        status = "new qso";
+    }
+    else if (st == bandmapSpotType::DELETED)
+    {
+        adddel = "delete";
+    }
+    else
+    {
+        status = "busy";
+    }
     QString xml = QString("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n")
             + "<spot>\n"
                    + makeTag("app", "Minos")
-                   + makeTag("StationName", "")                         //        <StationName>PHONE-15M</StationName>
-                   + makeTag("dxcall", spotMsg.data()->getDxCallStr())                         //        <StationName>PHONE-15M</StationName>
+                   + makeTag("StationName", "")                         // <StationName>PHONE-15M</StationName>
+                   + makeTag("dxcall", spotMsg.data()->getDxCallStr())
                    + makeTag("frequency", sfreq)
                    + makeTag("spottercall", spotMsg.data()->getSpotterCallStr())
-                   + makeTag("timestamp", d)       //        <timestamp>2016-04-10 16:17:41</timestamp>
-                   + makeTag("action", "add")
+                   + makeTag("timestamp", ts)
+                   + makeTag("action", adddel)
                    + makeTag("mode", spotMsg.data()->getMode())
                    + makeTag("comment", spotMsg.data()->getSpotComment())
-                   + makeTag("status", "busy")
-                   + makeTag("statuslist", "busy")
+                   + makeTag("status", status)
+                   + makeTag("statuslist", status)
             + "</spot>\n";
 
     return xml;
