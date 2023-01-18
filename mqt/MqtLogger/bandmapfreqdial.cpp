@@ -11,6 +11,7 @@
 #include "MTrace.h"
 #include "ContestApp.h"
 #include "bandmapfreqdial.h"
+#include "tlogcontainer.h"
 
 BandmapFreqDial::BandmapFreqDial(int _width, int _height):
     height(_height),
@@ -68,9 +69,16 @@ void BandmapFreqDial::setCursorColour(QColor colour)
 
 QRectF BandmapFreqDial::boundingRect() const
 {
-    int fontHeight = getFontHeight();
-    int fbh = getFullBandHeight(contestBandFlow, contestBandFhigh);
-    return QRectF(0, 0, dialWidth, fbh + fontHeight );
+    if (LogContainer->isLoggerClosing())
+    {
+        return QRectF(0, 0, 1, 1);
+    }
+    else
+    {
+        int fontHeight = getFontHeight();
+        int fbh = getFullBandHeight(contestBandFlow, contestBandFhigh);
+        return QRectF(0, 0, dialWidth, fbh + fontHeight );
+    }
 }
 
 void BandmapFreqDial::changeBoundingRect(int /*height*/, int width)
