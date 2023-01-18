@@ -182,7 +182,8 @@ void MMTTYFrame::sendCharacters(const QString &sendData, int carrier)
     }
     else
     {
-        ::PostMessage(mttyHWnd, uMSG_MMTTY, RXM_SETMARK, carrier);
+        ::PostMessage(mttyHWnd, uMSG_MMTTY, RXM_SETMARK, carrier - 170/2);
+        ::PostMessage(mttyHWnd, uMSG_MMTTY, RXM_SETSPACE, carrier + 170/2);
         ::PostMessage(mttyHWnd, uMSG_MMTTY, RXM_PTT, 2);
         for(auto c:sendData)
         {
@@ -272,7 +273,7 @@ void MMTTYFrame::msgEventFilter(MSG *msg, long */*result*/ )
         case TXM_BAUD:
             break;
         case TXM_MARK:
-            carrier = l;
+            carrier = l + 170/2;
             break;
         case TXM_SPACE:
             break;
