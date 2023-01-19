@@ -256,7 +256,7 @@ void PresetFreq::readSettings(const QVector<QSharedPointer<BandInfo> > &bands)
     {
         Frequency fl;
         QString band = bi->uk;
-        QSharedPointer<ModeInfo> mi = bi->findMode("MGM");
+        QSharedPointer<ModeInfo> mi = bi->findMode(hamlibData::MGM);
         fl = mi?mi->fcLow1:bi->fcLow;
         QString mf = config.value(band, fl.str()).toString();
         bool excludedFreq = false;
