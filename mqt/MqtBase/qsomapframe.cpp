@@ -131,13 +131,12 @@ void QSOMapFrame::onQmlSignal(QVariant v)
    QString reason = gc[0].toString();
    if (reason == "Pressed")
    {
-//   QString latitude = gc[1].toString();
-//   QString longitude = gc[2].toString();
-//   QString bearing = gc[3].toString();
+       //   QString latitude = gc[1].toString();
+       //   QString longitude = gc[2].toString();
+       //   qDebug() << latitude << " " << longitude << " " << bearing;
 
-#ifdef INC_MAP
-//   qDebug() << latitude << " " << longitude << " " << bearing;
-#endif
+       QString bearing = QString::number(gc[3].toInt());
+       MinosLoggerEvents::SendBrgStrToRot(bearing);
    }
    else if (reason == "ZoomChanged")
    {
