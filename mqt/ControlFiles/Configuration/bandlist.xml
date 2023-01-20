@@ -42,26 +42,40 @@ Non-contest bands
     <Exclude flow='3650' fhigh='3700'/>
     </Mode>
     <Mode type='MGM' flow='3570' fclow1='3570' fchigh1='3590' fhigh='3590'/>
+    <Mode type='RY' flow='3580' fclow1='3580' fchigh1='3615' fhigh='3615'/>
+    <Mode type='PS' flow='3580' fclow1='3580' fchigh1='3615' fhigh='3615'/>
 </Band>
 <Band type='HF'    flow='7000'   fhigh='7200'   unit='K' wlen='40m'    UK='7 MHz'    Reg1Test=''        ADIF='40m'    Cabrillo='7000'  Colour='blue'>
     <Mode type='CW' flow='7000' fclow1='7000' fchigh1='7040' fhigh='7040'/>
     <Mode type='LSB' flow='7050' fclow1='7060' fchigh1='7100' fclow2='7130' fchigh2='7200' fhigh='7200'/>
     <Mode type='MGM' flow='7053' fclow1='7053' fchigh1='7100' fhigh='7100'/>
+    <Mode type='RY' flow='7040' fclow1='7040' fchigh1='7125' fhigh='7125'/>
+    <Mode type='PS' flow='7040' fclow1='7040' fchigh1='7125' fhigh='7125'/>
 </Band>
 <Band type='HF'    flow='14000'  fhigh='14350'  unit='K' wlen='20m'    UK='14 MHz'   Reg1Test=''        ADIF='20m'    Cabrillo='14000' Colour='teal'>
     <Mode type='CW' flow='14000' fclow1='14000' fchigh1='14060' fhigh='14070'/>
     <Mode type='USB' flow='14101' fclow1='14125' fchigh1='14300' fhigh='14350'/>
     <Mode type='MGM' flow='14070' fclow1='14070' fchigh1='14079' fhigh='14079'/>
+    <Mode type='RY' flow='14070' fclow1='14070' fchigh1='14125' fhigh='14125'>
+    <Exclude flow='14099' fhigh='14101'/>
+    </Mode>
+    <Mode type='PS' flow='14070' fclow1='14070' fchigh1='14125' fhigh='14125'>
+    <Exclude flow='14099' fhigh='14101'/>
+    </Mode>
 </Band>
 <Band type='HF'    flow='21000'  fhigh='21450'  unit='K' wlen='15m'    UK='21 MHz'   Reg1Test=''        ADIF='15m'    Cabrillo='21000' Colour='purple'>
     <Mode type='CW' flow='21000' fclow1='21000' fchigh1='21070' fhigh='21070'/>
     <Mode type='USB' flow='21151' fclow1='21151' fchigh1='21450' fhigh='21450'/>
     <Mode type='MGM' flow='21070' fclow1='21070' fchigh1='21090' fhigh='21090'/>
+    <Mode type='RY' flow='21070' fclow1='21070' fchigh1='21148' fhigh='21148'/>
+    <Mode type='PS' flow='21070' fclow1='21070' fchigh1='21148' fhigh='21148'/>
 </Band>
 <Band type='HF'    flow='28000'  fhigh='29700'  unit='K' wlen='10m'    UK='28 MHz'   Reg1Test=''        ADIF='10m'    Cabrillo='28000' Colour='navy'>
     <Mode type='CW' flow='28000' fclow1='28000' fchigh1='28070' fhigh='28070'/>
     <Mode type='USB' flow='28320' fclow1='28320' fchigh1='29000' fhigh='29000'/>
     <Mode type='MGM' flow='28070' fclow1='28070' fchigh1='28120' fhigh='28120'/>
+    <Mode type='RY' flow='28070' fclow1='28070' fchigh1='28189' fhigh='28189'/>
+    <Mode type='PS' flow='28070' fclow1='28070' fchigh1='28189' fhigh='28189'/>
 </Band>
 <Band type='VHF'   flow='50000'  fhigh='52000'  unit='K' wlen='6m'     UK='50 MHz'   Reg1Test='50 MHz'  ADIF='6m'     Cabrillo='50'    Colour='red'>
     <Mode type='CW' flow='50030' fclow1='50030' fchigh1='50100' fhigh='50100'/>
@@ -104,9 +118,9 @@ Non-contest bands
     <Mode type='MGM' flow='1296150' fclow1='1296150' fchigh1='1296400' fhigh='1296400'/>
 </Band>
 <Band type='MWave' flow='2300000'   fhigh='2302000'   unit='K' wlen='13cm'   UK='2300 MHz' Reg1Test='2,3 GHz' ADIF='13cm'   Cabrillo='2.3G'  Colour='teal'>
-    <Mode type='CW' flow='2300000' fclow1='2300000' fchigh1='2300400'fhigh='2302000'/>
-    <Mode type='USB' flow='2300000' fclow1='2300000' fchigh1='2300400'fhigh='2302000'/>
-    <Mode type='MGM' flow='2300000' fclow1='2300000' fchigh1='2300400'fhigh='2302000'/>
+    <Mode type='CW' flow='2300000' fclow1='2300000' fchigh1='2300400' fhigh='2302000'/>
+    <Mode type='USB' flow='2300000' fclow1='2300000' fchigh1='2300400' fhigh='2302000'/>
+    <Mode type='MGM' flow='2300000' fclow1='2300000' fchigh1='2300400' fhigh='2302000'/>
 </Band>
 <Band type='MWave' flow='2310000'   fhigh='2450000'   unit='K' wlen='13cm'   UK='2320 MHz' Reg1Test='2,3 GHz' ADIF='13cm'   Cabrillo='2.3G'  Colour='navy'>
     <Mode type='CW' flow='2320000' fclow1='2320800' fchigh1='2320800' fhigh='2320800'/>
