@@ -27,6 +27,8 @@ BandSelButtons::BandSelButtons(const QVector<QSharedPointer<BandInfo> > &_bands,
     presetFreqs.copyAllPrevFreqToLastFreqByMode(freqPresetData::PRESET_MODE_CW, bands);
     presetFreqs.copyAllPrevFreqToLastFreqByMode(freqPresetData::PRESET_MODE_PHONE, bands);
     presetFreqs.copyAllPrevFreqToLastFreqByMode(freqPresetData::PRESET_MODE_MGM, bands);
+    presetFreqs.copyAllPrevFreqToLastFreqByMode(freqPresetData::PRESET_MODE_RTTY, bands);
+    presetFreqs.copyAllPrevFreqToLastFreqByMode(freqPresetData::PRESET_MODE_PSK, bands);
 
     // availHFBands is those available in logger
     // we gt Rig Control's isdea later
@@ -85,10 +87,6 @@ void BandSelButtons::onBandSelButtonPressed(QToolButton* button)
     MinosLoggerEvents::SendContestBandChanged(ct);
 
     QString m = curMode;
-    if (m == "RY" || m == "PS")
-    {
-        m = "PH";
-    }
     freq = presetFreqs.getLastFreq(convertModeForPresets(m), band);
     emit sendPresetFreq(freq);
 }
@@ -335,7 +333,7 @@ void BandSelButtons::setContestBand(QString contestBand_)
 
 QString BandSelButtons::convertModeForPresets(const QString mode)
 {
-    if (mode == hamlibData::USB || mode == hamlibData::LSB || mode == hamlibData::FM  || mode == "PH")
+    if (mode == hamlibData::USB || mode == hamlibData::LSB || mode == hamlibData::FM  || mode == hamlibData::PH)
     {
         return "PHONE";
     }
@@ -348,13 +346,10 @@ Frequency BandSelButtons::getPresetFreq(const QString band, const QString m)
 {
     Frequency f;
     QString mode = m;
-    if (mode == "RY" || mode == "PS")
+    QString cmode = convertModeForPresets(mode);
+    if (presetFreqs.contains(cmode, band))
     {
-        mode = "PH";
-    }
-    if (presetFreqs.contains(convertModeForPresets(mode), band))
-    {
-         f = presetFreqs.getPresetFreq(convertModeForPresets(mode), band);
+         f = presetFreqs.getPresetFreq(cmode, band);
     }
 
     return f;

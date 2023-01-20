@@ -1462,7 +1462,11 @@ void BandmapClientFrame::setMode(QString mode)
 
     if (!mode.isEmpty())
     {
-        if (mode.contains(':') && mode.contains(hamlibData::MGM))
+        if (mode.contains(':')
+                && (mode.contains(hamlibData::MGM)
+                    || mode.contains(hamlibData::PSK)
+                    || mode.contains(hamlibData::RY))
+        )
         {
             QStringList ml = mode.split(':');
             if (ml.count() == 2)

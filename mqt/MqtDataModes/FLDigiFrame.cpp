@@ -1,6 +1,7 @@
 #include <QDateTime>
 
 #include "MTrace.h"
+#include "rigcontrolcommonconstants.h"
 #include "rxbuffer.h"
 #include "dmmainwindow.h"
 
@@ -117,7 +118,7 @@ void FLDigiFrame::sendCharacters(const QString &s, int carrier)
 
     if (carrier > 0)
     {
-        if (mode == "RY")
+        if (mode == hamlibData::RY)
         {
             args << carrier + 170/2;
         }
@@ -158,9 +159,9 @@ void FLDigiFrame::sendCharacters(const QString &s, int carrier)
 
 void FLDigiFrame::sendMode(QString m)
 {
-    if (m == "RY")
+    if (m == hamlibData::RY)
     {
-        mode = "RY";
+        mode = hamlibData::RY;
         carrierOffset = 170/2;
 
         QVariantList args;
@@ -178,9 +179,9 @@ void FLDigiFrame::sendMode(QString m)
            this, SLOT(myFaultResponse(int, const QString &)));
 
     }
-    if (m == "PS")
+    if (m == hamlibData::PSK)
     {
-        mode = "PS";
+        mode = hamlibData::PSK;
         carrierOffset = 0;
         QVariantList args;
 

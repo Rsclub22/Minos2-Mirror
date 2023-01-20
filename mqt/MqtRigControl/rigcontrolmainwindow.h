@@ -168,6 +168,8 @@ public:
      curOtherFreq = Frequency(0);
      selTransverterNum = NO_TRANSVERTER_NUM;
      mgmModeFlag = false;
+     RTTYModeFlag = false;
+     PSKModeFlag = false;
      radioRitOn = false;
      ritEnable = false;
      ritMaxKHzFreq = MAX_RITFREQ;
@@ -178,7 +180,6 @@ public:
      curVol = 0;
      curSignalStrength = 0;
      curPttStatus = false;
-
   }
 
   RigCapabilities rigCap;
@@ -200,6 +201,10 @@ public:
   QString curModeStr;
   bool mgmModeFlag;
   QStringList mgmModes;
+  bool RTTYModeFlag;
+  QStringList RTTYModes;
+  bool PSKModeFlag;
+  QStringList PSKModes;
   bool radioRitOn;
   ShortFreq rRitFreq;
   bool ritEnable;

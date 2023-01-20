@@ -70,7 +70,7 @@ void ScreenContact::initialise(BaseContestLog *ct , bool rInit)
         if (hf)
         {
             QString m = mode.getValue();
-             if (m == hamlibData::CW || m == "RY" || m == "PS")
+             if (m == hamlibData::CW || m == hamlibData::RY || m == hamlibData::PSK)
              {
                  repr = "599" ;
                  reps = "599" ;

@@ -107,17 +107,20 @@ void RigControlRpc::on_notify( AnalysePubSubNotify an, const QString /*from*/ )
     //trace( "Notify callback from " + from + ( !an.getOK() ? ":Error" : ":Normal" ) );
 
     // called whenever soemthing we subscribe to changes
+
     if ( an.getOK() )
     {
         if ( an.getState() == psPublished)
         {
             if ( an.getCategory() == rpcConstants::rigControlCategory && an.getKey() == rpcConstants::rigControlChangeList )
             {
+                // In this case, ANOTHER rig control program has published when it made changes
+                // and we need to take note of the changes
+
                 MinosRPC *rpc = MinosRPC::getMinosRPC();
 
                 QString publisherRouter = an.getPublisherRouter();
                 QString publisherProgram = an.getPublisherProgram();
-                QString changeList = an.getValue();
 
                 QString s = MinosConfig::getMinosConfig()->getThisRouterName();
 

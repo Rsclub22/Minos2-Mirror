@@ -395,21 +395,21 @@ void BandmapClientFilterSettings::setModeFilter(QString mode, bool setting)
 
 bool BandmapClientFilterSettings::getModeFilter(QString mode)
 {
-    if (mode == "PS")
+    if (mode == hamlibData::PSK)
     {
-        mode = hamlibData::PKTUSB;
+        mode = PSK31_MODE;
     }
-    else if (mode == "RY")
+    else if (mode == hamlibData::RY)
     {
-        mode = hamlibData::RTTY;
+        mode = RTTY_MODE;
     }
-    if (mode == "PH")
+    if (mode == hamlibData::PH)
     {
-        if (modeFilterFlag.getModeFilter("USB"))
+        if (modeFilterFlag.getModeFilter(USB_MODE))
         {
             return true;
         }
-        if (modeFilterFlag.getModeFilter("LSB"))
+        if (modeFilterFlag.getModeFilter(LSB_MODE))
         {
             return true;
         }

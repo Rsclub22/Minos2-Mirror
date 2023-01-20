@@ -1088,15 +1088,12 @@ void ContestDetails::setModes()
     if (!contestTransferObject || contestTransferObject->modeList.getValue().isEmpty())
     {
         modeString = hamlibData::CW
-                     + "|" + (contestTransferObject->isHF()?"PH":hamlibData::USB)
+                     + "|" + (contestTransferObject->isHF()?hamlibData::PH:hamlibData::USB)
                     + "|" + hamlibData::FM
                     + "|" + hamlibData::MGM
+                    + "|" + hamlibData::RY
+                    + "|" + hamlibData::PSK
                     ;
-        if (contestTransferObject->isHF())
-        {
-            modeString += "|RY|PS";
-        }
-
     }
     else
     {

@@ -100,6 +100,62 @@ void RadioSettingDialog::initialise()
             }
         }
     }
+    //===========================================================================================================
+    {
+        QGridLayout *layout = new QGridLayout();
+        ui->RTTYPresetFrame->setLayout(layout);
+
+        int row = 0;
+        int col = 0;
+
+        for (const auto &b: qAsConst(bands))
+        {
+            QLineEdit *qle = new QLineEdit();
+            RTTYPresetLineEditList << qle;
+            connect(qle, &QLineEdit::editingFinished, this, [=]() {onRTTYPresetLineEditingFinished(b->name(), qle);});
+
+
+            QLabel *qlel = new QLabel();
+            qlel->setText(b->uk);
+
+            layout->addWidget(qlel, row, col);
+            layout->addWidget(qle, row, col + 1);
+            col += 2;
+            if (col%6 == 0)
+            {
+                row++;
+                col = 0;
+            }
+        }
+    }
+    //===========================================================================================================
+    {
+        QGridLayout *layout = new QGridLayout();
+        ui->PSKPresetFrame->setLayout(layout);
+
+        int row = 0;
+        int col = 0;
+
+        for (const auto &b: qAsConst(bands))
+        {
+            QLineEdit *qle = new QLineEdit();
+            PSKPresetLineEditList << qle;
+            connect(qle, &QLineEdit::editingFinished, this, [=]() {onPSKPresetLineEditingFinished(b->name(), qle);});
+
+
+            QLabel *qlel = new QLabel();
+            qlel->setText(b->uk);
+
+            layout->addWidget(qlel, row, col);
+            layout->addWidget(qle, row, col + 1);
+            col += 2;
+            if (col%6 == 0)
+            {
+                row++;
+                col = 0;
+            }
+        }
+    }
 
     //===========================================================================================================
     {
@@ -208,6 +264,16 @@ bool RadioSettingDialog::check()
     for (int i = 0; i < phonePresetLineEditList.size(); i++)
     {
         getFreq(phonePresetLineEditList[i], i);
+
+    }
+    for (int i = 0; i < RTTYPresetLineEditList.size(); i++)
+    {
+        getFreq(RTTYPresetLineEditList[i], i);
+
+    }
+    for (int i = 0; i < PSKPresetLineEditList.size(); i++)
+    {
+        getFreq(PSKPresetLineEditList[i], i);
 
     }
     for (int i = 0; i < mgmPresetLineEditList.size(); i++)
@@ -334,6 +400,38 @@ void RadioSettingDialog::onPhonePresetLineEditingFinished(QString bandName, QLin
     }
 }
 
+void RadioSettingDialog::onRTTYPresetLineEditingFinished(QString bandName, QLineEdit *le)
+{
+    if (!checking)
+    {
+        QString freq = le->text().trimmed().remove( QRegularExpression("^[0]*"));
+        if (valInputFreq(freq, tr("Invalid RTTY Preset Frequency for %1").arg(bandName)))
+        {
+           freq = convertFreqToFullDigit(freq).remove('.');
+
+           // check in band
+           QString mode = freqPresetData::PRESET_MODE_RTTY;
+           checkInBand(Frequency(freq), bandName, mode);
+        }
+    }
+}
+
+void RadioSettingDialog::onPSKPresetLineEditingFinished(QString bandName, QLineEdit *le)
+{
+    if (!checking)
+    {
+        QString freq = le->text().trimmed().remove( QRegularExpression("^[0]*"));
+        if (valInputFreq(freq, tr("Invalid PSK Preset Frequency for %1").arg(bandName)))
+        {
+           freq = convertFreqToFullDigit(freq).remove('.');
+
+           // check in band
+           QString mode = freqPresetData::PRESET_MODE_PSK;
+           checkInBand(Frequency(freq), bandName, mode);
+        }
+    }
+}
+
 void RadioSettingDialog::onMgmPresetLineEditingFinished(QString bandName, QLineEdit *le)
 {
     if (!checking)
@@ -373,6 +471,14 @@ void RadioSettingDialog::getFreq(QLineEdit* f_box, int band)
        else if (phonePresetLineEditList.contains(f_box))
        {
            mode = freqPresetData::PRESET_MODE_PHONE;
+       }
+       else if (RTTYPresetLineEditList.contains(f_box))
+       {
+           mode = freqPresetData::PRESET_MODE_RTTY;
+       }
+       else if (PSKPresetLineEditList.contains(f_box))
+       {
+           mode = freqPresetData::PRESET_MODE_PSK;
        }
        else
        {
@@ -521,6 +627,18 @@ void RadioSettingDialog::loadSettingsToDialog()
     {
 
         phonePresetLineEditList[i]->setText(presetFreq.getPresetFreq(freqPresetData::PRESET_MODE_PHONE, bands[i].data()->uk).convertFreqStrDispSingleNoTrailZero());
+    }
+
+    for (int i = 0; i < RTTYPresetLineEditList.count(); i++)
+    {
+
+        RTTYPresetLineEditList[i]->setText(presetFreq.getPresetFreq(freqPresetData::PRESET_MODE_RTTY, bands[i].data()->uk).convertFreqStrDispSingleNoTrailZero());
+    }
+
+    for (int i = 0; i < PSKPresetLineEditList.count(); i++)
+    {
+
+        PSKPresetLineEditList[i]->setText(presetFreq.getPresetFreq(freqPresetData::PRESET_MODE_PSK, bands[i].data()->uk).convertFreqStrDispSingleNoTrailZero());
     }
 
     for (int i = 0; i < mgmPresetLineEditList.count(); i++)

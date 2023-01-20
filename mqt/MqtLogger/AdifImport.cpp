@@ -167,11 +167,19 @@ void ADIFImport::ADIFImportFieldDecode(QString Fieldname, int FieldLength, QStri
           }
           else if (temp == "SSB")
           {
-              aqso->mode.setValue("PH");
+              aqso->mode.setValue(hamlibData::PH);
           }
           else if (temp == hamlibData::FM)
           {
               aqso->mode.setValue(temp);
+          }
+          else if (temp == "RTTY")
+          {
+              aqso->mode.setValue(hamlibData::RY);
+          }
+          else if (temp == "PSK")
+          {
+              aqso->mode.setValue(hamlibData::PSK);
           }
           else
           {

@@ -1831,17 +1831,14 @@ void TSingleLogFrame::on_SetMode(QString m)
             m = "PH:";
         }
     }
-    //if (sCurMode != m)
+    if ( this == LogContainer->getCurrentLogFrame() )
     {
-        if ( this == LogContainer->getCurrentLogFrame() )
-        {
-            sCurMode = m;
-            FKHRigControlFrame->setMode(m);
-            GJVQSOLogFrame->modeSentFromRig(m);
-            txVmButtonsFrame->setMode(m);
-            bandmapControlFrame->setMode(m);
-            bandmapControlFrame->checkLegalFrequencies(sCurFreq);
-        }
+        sCurMode = m;
+        FKHRigControlFrame->setMode(m);
+        GJVQSOLogFrame->modeSentFromRig(m);
+        txVmButtonsFrame->setMode(m);
+        bandmapControlFrame->setMode(m);
+        bandmapControlFrame->checkLegalFrequencies(sCurFreq);
     }
 }
 
@@ -2091,7 +2088,9 @@ void TSingleLogFrame::sendRadioFreq(Frequency freq)
 
         if (bandChanged)
         {
-            LogContainer->sendDM->sendRigControlMode(this, sCurMode);
+            QStringList ms = sCurMode.split(":");
+            QString m = ms[0];
+            LogContainer->sendDM->sendRigControlMode(this, m);
         }
 
     }
@@ -2104,7 +2103,11 @@ void TSingleLogFrame::sendBandToRig(QString band)
         trace("sendKeyerStop from TSingleLogFrame::sendBandToRig");
         sendKeyerStop();    // don't keep calling while tuning!
         LogContainer->sendDM->sendRigControlBand(this, band);
-        LogContainer->sendDM->sendRigControlMode(this, sCurMode);
+
+        QStringList ms = sCurMode.split(":");
+        QString m = ms[0];
+
+        LogContainer->sendDM->sendRigControlMode(this, m);
 
     }
 }

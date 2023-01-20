@@ -2250,21 +2250,20 @@ void QSOLogFrame::setOtherMode()
     QString mlist = contest->modeList.getValue();
     QStringList sl = mlist.split('|');
 
-    bool otherVisible = true;
     QString cmode = ui->ModeComboBoxGJV->currentText();
 
-    if (cmode == "RY")
+    if (cmode == hamlibData::RY)
     {
-        if (mlist.contains("PS"))
+        if (mlist.contains(hamlibData::PSK))
         {
-            ui->ModeButton->setText("PS");
+            ui->ModeButton->setText(hamlibData::PSK);
         }
     }
-    else if (cmode == "PS")
+    else if (cmode == hamlibData::PSK)
     {
-        if (mlist.contains("RY"))
+        if (mlist.contains(hamlibData::RY))
         {
-            ui->ModeButton->setText("RY");
+            ui->ModeButton->setText(hamlibData::RY);
         }
     }
     else
@@ -2279,6 +2278,7 @@ void QSOLogFrame::setOtherMode()
             }
         }
     }
+    bool otherVisible = true;
     QString otherMode = ui->ModeButton->text();
     if (otherMode.isEmpty() || otherMode == cmode)
     {
@@ -2305,8 +2305,8 @@ void QSOLogFrame::setMode(QString m)
 
     if (ui->ModeComboBoxGJV->currentText() == hamlibData::CW
             || ui->ModeComboBoxGJV->currentText() == hamlibData::MGM
-            || ui->ModeComboBoxGJV->currentText() == "RY"
-            || ui->ModeComboBoxGJV->currentText() == "PS"
+            || ui->ModeComboBoxGJV->currentText() == hamlibData::RY
+            || ui->ModeComboBoxGJV->currentText() == hamlibData::PSK
             )
     {
         ui->ModeButton->setText(oldMode);
@@ -2770,28 +2770,25 @@ void QSOLogFrame::modeSentFromRig(QString m)
     }
     QString newMode = mlist[0];
 
-    if (mode != "PS" && mode != "RY")
+    if (contest && contest->modeList.getValue().contains(newMode))
     {
-        if (contest && contest->modeList.getValue().contains(newMode))
+        oldMode = ui->ModeComboBoxGJV->currentText();
+        if (newMode != oldMode)
         {
-            oldMode = ui->ModeComboBoxGJV->currentText();
-            if (newMode != oldMode)
-            {
-                // set index to new mode
-                ui->ModeComboBoxGJV->setCurrentIndex(ui->ModeComboBoxGJV->findText( newMode));
-                mode = newMode;
+            // set index to new mode
+            ui->ModeComboBoxGJV->setCurrentIndex(ui->ModeComboBoxGJV->findText( newMode));
+            mode = newMode;
 
-                // ensure flip mode is shown on mode button
-                if (ui->ModeComboBoxGJV->currentText() == hamlibData::CW || ui->ModeComboBoxGJV->currentText() == hamlibData::MGM)
-                {
-                   ui->ModeButton->setText(oldMode);
-                }
-                else
-                {
-                   ui->ModeButton->setText(hamlibData::CW);
-                }
-                ui->MGMSubModeFrame->setVisible(ui->ModeComboBoxGJV->currentText() == hamlibData::MGM);
+            // ensure flip mode is shown on mode button
+            if (ui->ModeComboBoxGJV->currentText() == hamlibData::CW || ui->ModeComboBoxGJV->currentText() == hamlibData::MGM)
+            {
+               ui->ModeButton->setText(oldMode);
             }
+            else
+            {
+               ui->ModeButton->setText(hamlibData::CW);
+            }
+            ui->MGMSubModeFrame->setVisible(ui->ModeComboBoxGJV->currentText() == hamlibData::MGM);
         }
     }
 }
@@ -2821,8 +2818,8 @@ void QSOLogFrame::logScreenEntry( )
    }
 
    if ( screenContact.mode.getValue().compare( hamlibData::MGM, Qt::CaseInsensitive ) != 0
-        && screenContact.mode.getValue().compare( "RY", Qt::CaseInsensitive ) != 0
-        && screenContact.mode.getValue().compare( "PS", Qt::CaseInsensitive ) != 0
+        && screenContact.mode.getValue().compare( hamlibData::RY, Qt::CaseInsensitive ) != 0
+        && screenContact.mode.getValue().compare( hamlibData::PSK, Qt::CaseInsensitive ) != 0
                 )
    {
        bool contactmodeCW = ( screenContact.reps.size() == 3 && screenContact.repr.size() == 3 );
@@ -3416,16 +3413,12 @@ void QSOLogFrame::on_ModeComboBoxGJV_activated(int index)
         if (isRadioLoaded() && radioConnected && !radioError)
         {
             qsoLogModeFlag = true;  // stop updates from radio here
-
-            if( cmode != "RY" && cmode != "PS")
-            {
-                emit sendModeControl(mode);
-            }
+            emit sendModeControl(mode);
         }
         MinosLoggerEvents::SendModeChange(mode);    // this will e.g. set the RTTY/PSK engines correctly
     }
 
-    if (cmode == hamlibData::CW || cmode == hamlibData::MGM || cmode == "RY" || cmode == "PS")
+    if (cmode == hamlibData::CW || cmode == hamlibData::MGM || cmode == hamlibData::RY || cmode == hamlibData::PSK)
     {
        ui->ModeButton->setText(oldMode);
     }

@@ -375,14 +375,8 @@ void TSendDM::changeRigSelectionTo(const PubSubName &name, const QString &band, 
     }
     sendRigSelection(name, band, freq, mode, uuid);
 }
-void TSendDM::sendRigSelection(const PubSubName &s, const QString &band, const Frequency &freq, const QString &m, const QString &uuid)
+void TSendDM::sendRigSelection(const PubSubName &s, const QString &band, const Frequency &freq, const QString &mode, const QString &uuid)
 {
-    QString mode = m;
-    if (mode == "RY" || mode == "PS")
-    {
-        mode = QString();
-    }
-
     rigCache.setSelected(s, loggerUuid, uuid);
     rigCache.setLogMode(s, mode);
     rigCache.setLogFreq(s, freq);
@@ -406,6 +400,7 @@ void TSendDM::sendRigSelection(const PubSubName &s, const QString &band, const F
 
 void TSendDM::sendRigControlFreq(TSingleLogFrame *tslf, const Frequency &freq)
 {
+    traceMsg(QString("SendRigControlFreq = %1 uuid = %2").arg(freq.traceStr(), tslf->getContest()->uuid));
 
     PubSubName rigSelected = rigCache.getSelected(loggerUuid);
     rigCache.setLogFreq(rigSelected, freq);
@@ -418,11 +413,12 @@ void TSendDM::sendRigControlFreq(TSingleLogFrame *tslf, const Frequency &freq)
     rpc.getCallArgs() ->addParam( st );
 
     rpc.queueCall( rigSelected );
-    traceMsg(QString("SendRigControlFreq = %1 uuid = %2").arg(freq.traceStr(), tslf->getContest()->uuid));
 }
 
 void TSendDM::sendRigControlBand(TSingleLogFrame *tslf, const QString &band)
 {
+    traceMsg(QString("SendRigControlBand = %1 uuid = %2").arg(band, tslf->getContest()->uuid));
+
     PubSubName rigSelected = rigCache.getSelected(loggerUuid);
     rigCache.setLogBand(rigSelected, band);
     RPCGeneralClient rpc(rpcConstants::rigControlMethod);
@@ -434,7 +430,6 @@ void TSendDM::sendRigControlBand(TSingleLogFrame *tslf, const QString &band)
     rpc.getCallArgs() ->addParam( st );
 
     rpc.queueCall( rigSelected );
-    traceMsg(QString("SendRigControlBand = %1 uuid = %2").arg(band, tslf->getContest()->uuid));
 }
 
 
@@ -458,6 +453,7 @@ void TSendDM::sendRigTxVoiceMessage(TSingleLogFrame *tslf, const QString &msgNum
 
 void TSendDM::sendRigTxCwMessage(TSingleLogFrame *tslf, const QString &msg)
 {
+    traceMsg(QString("SendRigTxCwMessage = %1 uuid = %2").arg(msg, tslf->getContest()->uuid));
 
     PubSubName rigSelected = rigCache.getSelected(loggerUuid);
     rigCache.setCwTxMessage(rigSelected, msg);
@@ -470,16 +466,13 @@ void TSendDM::sendRigTxCwMessage(TSingleLogFrame *tslf, const QString &msg)
     rpc.getCallArgs() ->addParam( st );
 
     rpc.queueCall( rigSelected );
-    traceMsg(QString("SendRigTxCwMessage = %1 uuid = %2").arg(msg, tslf->getContest()->uuid));
 }
 
 
 void TSendDM::sendRigControlMode(TSingleLogFrame *tslf,const QString &mode)
 {
-    if (mode == "RY" || mode == "PS")
-    {
-        return;
-    }
+    traceMsg(QString("SendRigControlMode = %1 uuid = %2").arg(mode, tslf->getContest()->uuid));
+
     PubSubName rigSelected = rigCache.getSelected(loggerUuid);
     rigCache.setLogMode(rigSelected, mode);
     RPCGeneralClient rpc(rpcConstants::rigControlMethod);
@@ -491,9 +484,6 @@ void TSendDM::sendRigControlMode(TSingleLogFrame *tslf,const QString &mode)
     rpc.getCallArgs() ->addParam( st );
 
     rpc.queueCall( rigSelected );
-
-    traceMsg(QString("SendRigControlMode = %1 uuid = %2").arg(mode, tslf->getContest()->uuid));
-
 }
 
 

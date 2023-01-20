@@ -84,6 +84,14 @@ void PresetFreq::setPresetFreq(const QString mode, const QString band, const QSt
     {
         mspf = &mgmFreqPresets;
     }
+    else if (mode == freqPresetData::PRESET_MODE_RTTY)
+    {
+        mspf = &rttyFreqPresets;
+    }
+    else if (mode == freqPresetData::PRESET_MODE_PSK)
+    {
+        mspf = &pskFreqPresets;
+    }
 
 
     if (mspf)
@@ -119,6 +127,14 @@ void PresetFreq::setLastFreq(const QString mode, const QString band, const QStri
          {
              mspf = &mgmFreqPresets;
          }
+         else if (mode == freqPresetData::PRESET_MODE_RTTY)
+         {
+             mspf = &rttyFreqPresets;
+         }
+         else if (mode == freqPresetData::PRESET_MODE_PSK)
+         {
+             mspf = &pskFreqPresets;
+         }
 
          if (mspf)
          {
@@ -152,6 +168,14 @@ void PresetFreq::setLastFreq(const QString mode, const QString band, const Frequ
         else if (mode == freqPresetData::PRESET_MODE_MGM)
         {
             mspf = &mgmFreqPresets;
+        }
+        else if (mode == freqPresetData::PRESET_MODE_RTTY)
+        {
+            mspf = &rttyFreqPresets;
+        }
+        else if (mode == freqPresetData::PRESET_MODE_PSK)
+        {
+            mspf = &pskFreqPresets;
         }
 
         if (mspf)
@@ -197,6 +221,14 @@ bool PresetFreq::contains(QString mode, QString band)
         else if (mode == freqPresetData::PRESET_MODE_MGM)
         {
             return modeTrue && mgmFreqPresets.contains(band);
+        }
+        else if (mode == freqPresetData::PRESET_MODE_RTTY)
+        {
+            return modeTrue && rttyFreqPresets.contains(band);
+        }
+        else if (mode == freqPresetData::PRESET_MODE_PSK)
+        {
+            return modeTrue && pskFreqPresets.contains(band);
         }
     }
 
@@ -266,6 +298,44 @@ void PresetFreq::readSettings(const QVector<QSharedPointer<BandInfo> > &bands)
             fl = f;
         }
         setPresetFreq(freqPresetData::PRESET_MODE_MGM, band, fl.str());
+    }
+
+    config.endGroup();
+    config.beginGroup(freqPresetData::PRESET_MODE_RTTY);
+
+    for (const auto &bi: bands)
+    {
+        Frequency fl;
+        QString band = bi->uk;
+        QSharedPointer<ModeInfo> mi = bi->findMode(hamlibData::RY);
+        fl = mi?mi->fcLow1:bi->fcLow;
+        QString mf = config.value(band, fl.str()).toString();
+        bool excludedFreq = false;
+        Frequency f(mf);
+        if (mi && mi->isFreqOK(f, excludedFreq))
+        {
+            fl = f;
+        }
+        setPresetFreq(freqPresetData::PRESET_MODE_RTTY, band, fl.str());
+    }
+
+    config.endGroup();
+    config.beginGroup(freqPresetData::PRESET_MODE_PSK);
+
+    for (const auto &bi: bands)
+    {
+        Frequency fl;
+        QString band = bi->uk;
+        QSharedPointer<ModeInfo> mi = bi->findMode(hamlibData::PSK);
+        fl = mi?mi->fcLow1:bi->fcLow;
+        QString mf = config.value(band, fl.str()).toString();
+        bool excludedFreq = false;
+        Frequency f(mf);
+        if (mi && mi->isFreqOK(f, excludedFreq))
+        {
+            fl = f;
+        }
+        setPresetFreq(freqPresetData::PRESET_MODE_PSK, band, fl.str());
     }
 
     config.endGroup();

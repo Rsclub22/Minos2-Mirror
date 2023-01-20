@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>244</width>
+    <width>294</width>
     <height>328</height>
    </rect>
   </property>
@@ -17,7 +17,7 @@
    <item alignment="Qt::AlignLeft">
     <widget class="QTabWidget" name="bandmapFilterTab">
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="modeTab">
       <attribute name="title">
@@ -106,7 +106,7 @@
          <item row="5" column="1">
           <widget class="QCheckBox" name="psk31ModeChkBox">
            <property name="text">
-            <string>PSK31</string>
+            <string>PSK31/63</string>
            </property>
           </widget>
          </item>

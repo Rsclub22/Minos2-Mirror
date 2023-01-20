@@ -164,12 +164,7 @@ void MinosTestExport::exportQTH(QSharedPointer<QFile> expfd )
       delete st;
    }
 }
-//if (methodName == "MinosQSOMap")
-//{
-//    mt->getStructArgMemberValue( "zoom", zoomLevel);
-//    mt->getStructArgMemberValue( "lat", centreLat);
-//    mt->getStructArgMemberValue( "lon", centreLon);
-//}
+
 void MinosTestExport::exportQSOMap( QSharedPointer<QFile> expfd )
 {
     RPCParamStruct * st = new RPCParamStruct;
@@ -424,7 +419,7 @@ void MinosTestExport::exportClusterFilter(QSharedPointer<QFile> expfd)
              st->addMember(clusterFilter.getValue().getIgnoreEmptyDistanceFlag(b->name()), igedistIni);
         }
 
-        st->addMember(clusterFilter.getValue().getModeFilter("NONE"), "modeFilterNONE");
+        st->addMember(clusterFilter.getValue().getModeFilter("NONE"), "modeFilterNONEMODE");
         st->addMember(clusterFilter.getValue().getModeFilter(hamlibData::CW), "modeFilterCW");
         st->addMember(clusterFilter.getValue().getModeFilter(hamlibData::LSB), "modeFilterLSBMODE");
         st->addMember(clusterFilter.getValue().getModeFilter(hamlibData::USB), "modeFilterUSBMODE");

@@ -58,6 +58,8 @@ private slots:
 
     void onCwPresetLineEditingFinished(QString bandName, QLineEdit *le);
     void onPhonePresetLineEditingFinished(QString bandName, QLineEdit *le);
+    void onRTTYPresetLineEditingFinished(QString bandName, QLineEdit *le);
+    void onPSKPresetLineEditingFinished(QString bandName, QLineEdit *le);
     void onMgmPresetLineEditingFinished(QString bandName, QLineEdit *le);
 
     void onBandSwLineEditingFinished();
@@ -80,6 +82,10 @@ private:
     QList<QLineEdit*> cwPresetLineEditList;
 
     QList<QLineEdit*> phonePresetLineEditList;
+
+    QList<QLineEdit*> RTTYPresetLineEditList;
+
+    QList<QLineEdit*> PSKPresetLineEditList;
 
     QList<QLineEdit*> mgmPresetLineEditList;
 

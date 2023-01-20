@@ -193,6 +193,8 @@ void scatParams::clear()
     rigCtldNetworkAdd.clear();
     rigCtldNetworkPort.clear();
     mgmMode = hamlibData::USB;
+    rttyMode = hamlibData::LSB;
+    pskMode = hamlibData::USB;
     antSwitchAvail = false;
     ritSupported = false;
 
@@ -246,6 +248,8 @@ bool scatParams::compareEqual(QSharedPointer <scatParams> radParams)
         rigCtldNetworkAdd == radParams->rigCtldNetworkAdd &&
         rigCtldNetworkPort == radParams->rigCtldNetworkPort &&
         mgmMode == radParams->mgmMode &&
+        rttyMode == radParams->rttyMode &&
+        pskMode == radParams->pskMode &&
         antSwitchAvail == radParams->antSwitchAvail &&
         ritSupported == radParams->ritSupported &&
 
@@ -304,6 +308,8 @@ bool scatParams::compareNotEqual(const QSharedPointer<scatParams> radParams)
             rigCtldNetworkAdd != radParams->rigCtldNetworkAdd ||
             rigCtldNetworkPort != radParams->rigCtldNetworkPort ||
             mgmMode != radParams->mgmMode ||
+            rttyMode != radParams->rttyMode ||
+            pskMode != radParams->pskMode ||
             antSwitchAvail != radParams->antSwitchAvail ||
             ritSupported != radParams->ritSupported ||
 
@@ -400,6 +406,8 @@ void scatParams::scatParamsCopy(const QSharedPointer<scatParams> srce)
     rigCtldNetworkAdd = srce->rigCtldNetworkAdd;
     rigCtldNetworkPort = srce->rigCtldNetworkPort;
     mgmMode = srce->mgmMode;
+    rttyMode = srce->rttyMode;
+    pskMode = srce->pskMode;
     antSwitchAvail = srce->antSwitchAvail;
     ritSupported = srce->ritSupported;
 

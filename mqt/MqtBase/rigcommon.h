@@ -259,6 +259,8 @@ public:
   QString rigCtldNetworkAdd;
   QString rigCtldNetworkPort;
   QString mgmMode = hamlibData::USB;
+  QString rttyMode = hamlibData::LSB;
+  QString pskMode = hamlibData::USB;
   bool antSwitchAvail = false;
   bool ritSupported = false;
 
@@ -271,12 +273,7 @@ public:
   QStringList radioSupBands;  // bands supported by radio
   QStringList radioTransSupBands; // band supported by radio and transverters
 
-
   EnableDisableCatFeature enableDisableCatFeature;
-
-
-
-
 };
 
 
@@ -286,11 +283,7 @@ public:
     rigcommon();
     static MODE convertQStringToMode(QString modeStr);
     static QString convertModeToQString(MODE m);
-
 };
-
-
-
 
 void fillPortsInfo(QComboBox* comportSel);
 void getListOfComports(QStringList &listOfAvailComports);

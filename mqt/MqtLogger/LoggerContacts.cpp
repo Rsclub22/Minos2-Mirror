@@ -274,7 +274,13 @@ void ContestContact::getReg1TestText(QString &sdest , bool noSerials)
             if ( smode.compare( hamlibData::MGM ) == 0 )
                sdest += "7";
              else
-                sdest += "0";
+                if ( smode.compare( hamlibData::RY ) == 0 )
+                   sdest += "7";
+                 else
+                    if ( smode.compare( hamlibData::PSK ) == 0 )
+                       sdest += "7";
+                     else
+                        sdest += "0";
    sdest += ';';
 
    if (contest->RSTMandatoryField.getValue())
@@ -413,13 +419,13 @@ QSO:  3799 PH 1999-03-06 0712 HC8N           59 700    N5KO           59 CA     
     outstr += getCabrilloField(contest->getCabrilloFreqBand(frequency.getValue()), 5);
 
     QString smode = mode.getValue().toUpper();
-    if (smode == hamlibData::USB || smode == hamlibData::LSB || smode == hamlibData::FM || smode == "PH")
+    if (smode == hamlibData::USB || smode == hamlibData::LSB || smode == hamlibData::FM || smode == hamlibData::PH)
         smode = "PH";
     else if (smode == hamlibData::MGM)
         smode = "DG";
-    else if (smode == "RY")
+    else if (smode == hamlibData::RY)
         smode = "RY";
-    else if (smode == "PS")
+    else if (smode == hamlibData::PSK)
         smode = "PS";
     else
         smode = "CW";

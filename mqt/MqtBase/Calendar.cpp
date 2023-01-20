@@ -912,6 +912,15 @@ bool Calendar::parseContest ( TiXmlElement * tix )
                                                                                 {
                                                                                    mode = hamlibData::FM;
                                                                                 }
+                                                                                if (mode == "RY")
+                                                                                {
+                                                                                   mode = hamlibData::RY;
+                                                                                }
+                                                                                if (mode == "PS")
+                                                                                {
+                                                                                   mode = hamlibData::PSK;
+                                                                                }
+
                                                                                 if (mode == "[A-Z][A-Z]")
                                                                                 {
                                                                                     mode = "MGM";

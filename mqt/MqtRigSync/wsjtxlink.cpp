@@ -94,7 +94,7 @@ void WsjtxLink::update_status (QString const& /*id*/, Frequency f, QString const
     mode = pmode;
     subMode = sub_mode;
 
-    if (mode != hamlibData::USB && mode != hamlibData::LSB && mode != hamlibData::CW && mode != "PH")
+    if (mode != hamlibData::USB && mode != hamlibData::LSB && mode != hamlibData::CW && mode != hamlibData::PH)
     {
         mode = hamlibData::USB;
     }

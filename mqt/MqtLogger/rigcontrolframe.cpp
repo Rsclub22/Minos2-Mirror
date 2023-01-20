@@ -949,7 +949,7 @@ void RigControlFrame::noRadioSetMode(QString m)
 
 void RigControlFrame::setFreqStepCombo(QString mode)
 {
-    if (mode == "PH")
+    if (mode == hamlibData::PH)
     {
         ui->freqStepCombo->clear();
         ui->freqStepCombo->addItems(PH_TUNING_STEPS);
@@ -966,6 +966,18 @@ void RigControlFrame::setFreqStepCombo(QString mode)
         ui->freqStepCombo->clear();
         ui->freqStepCombo->addItems(FM_TUNING_STEPS);
         ui->freqStepCombo->setCurrentIndex(FM_DEFAULT_STEP);
+    }
+    else if (mode == hamlibData::RY)
+    {
+        ui->freqStepCombo->clear();
+        ui->freqStepCombo->addItems(RY_TUNING_STEPS);
+        ui->freqStepCombo->setCurrentIndex(RY_DEFAULT_STEP);
+    }
+    else if (mode == hamlibData::PSK)
+    {
+        ui->freqStepCombo->clear();
+        ui->freqStepCombo->addItems(PSK_TUNING_STEPS);
+        ui->freqStepCombo->setCurrentIndex(PSK_DEFAULT_STEP);
     }
     else if (mode == hamlibData::CW)
     {
@@ -1004,7 +1016,7 @@ double RigControlFrame::getStepFreqFromComboText(const QString step)
     }
     else
     {
-        if (curMode == hamlibData::USB || curMode == hamlibData::LSB || curMode == hamlibData::FM || curMode == "PH")
+        if (curMode == hamlibData::USB || curMode == hamlibData::LSB || curMode == hamlibData::FM || curMode == hamlibData::PH)
         {
             stepF = sl[0].toDouble() * 1000;
         }
@@ -1030,7 +1042,10 @@ void RigControlFrame::setMode(QString m)
             ui->modelbl->setText(mode[0]);
             curMode = mode[0];
             tslf->bandSwitchFrame->setMode(curMode);
-            if (mode[0] == hamlibData::MGM)
+            if (mode[0] == hamlibData::MGM
+                    || mode[0] == hamlibData::RY
+                    || mode[0] == hamlibData::PSK
+                    )
             {
                 mgmLabelVisible(true);
                 ui->mgmLbl->setText(mode[1]);
@@ -1147,7 +1162,11 @@ void RigControlFrame::setRadioName(QString radNam, bool fromStartRigControl)
                         QString m = curMode;
 
                         traceMsg(QString("setRadioName: SavedCurMode = %1").arg(curMode));
-                        if (m.contains(':') && m.contains(hamlibData::MGM))
+                        if (m.contains(':') &&
+                                (m.contains(hamlibData::MGM)
+                                || m.contains(hamlibData::RY)
+                                || m.contains(hamlibData::PSK))
+                                )
                         {
                             QStringList ml = m.split(':');
                             if (ml.count() == 2)
@@ -1283,7 +1302,7 @@ void RigControlFrame::setRadioFreq( Frequency &freqToSend, bool &fromStartRigCon
            if (bandOK)
            {
                QString mode = ct->currentMode.getValue();
-               if (mode == "PH")
+               if (mode == hamlibData::PH)
                {
                    Frequency modeTestFreq = bi->fLow;
                    if (modeTestFreq > Frequency(10000000)) // over 10MHz is USB
@@ -2166,7 +2185,7 @@ void RigControlFrame::on_resetBandFreqButton_clicked()
     if (bandOK)
     {
         QString mode = ct->currentMode.getValue();
-        if (mode == "PH")
+        if (mode == hamlibData::PH)
         {
             Frequency modeTestFreq = bi->fLow;
             if (modeTestFreq > Frequency(10000000)) // over 10MHz is USB

@@ -432,7 +432,7 @@ void TxVmButtonsFrame::readActionSelected(int buttonNumber)
         if(curMode != rigcommon::convertModeToQString(MODE::USB)
                 && curMode != rigcommon::convertModeToQString(MODE::LSB)
                 && curMode != rigcommon::convertModeToQString(MODE::FM)
-                && curMode != "PH")
+                && curMode != hamlibData::PH)
         {
             trace(QString("Mode needs to be a phone type for rigcontrol Voice Message, current mode = %1").arg(curMode));
             return;
