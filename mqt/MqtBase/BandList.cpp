@@ -667,12 +667,9 @@ bool BandList::isFreqOK(const Frequency &f, const QString &band, const QString &
             excludedFreq = excludedF;
             return fOk;
         }
-        if (bi->modes.size() == 0)
+        if (f >= bi->fcLow && f <= bi->fcHigh)
         {
-            if (f >= bi->fcLow && f <= bi->fcHigh)
-            {
-                return true;
-            }
+            return true;
         }
     }
     return false;
