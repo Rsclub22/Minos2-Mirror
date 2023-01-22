@@ -3,17 +3,27 @@
 #include <QMessageBox>
 #include <QSettings>
 #include <QThread>
+
+#ifdef Q_OS_WIN
+#include <windows.h>
+//#include <tlhelp32.h>
+#endif
+
+#ifdef Q_OS_UNIX
+#include <unistd.h>
+#endif
+
 #include "singleapplication.h"
 #include "SecondInstall.h"
 
 #define TIME_OUT                (500)    // 500ms
 #define TEST_TIME_OUT           (10)    // 10ms
 
-SingleApplication::SingleApplication(QString routerName, int &argc, char **argv)
+SingleApplication::SingleApplication(QString appName, int &argc, char **argv)
     :QApplication(argc, argv)
     , _isRunning(false)
     , _localServer(nullptr),
-    _routerName(routerName)
+    _appName(appName)
 {
 
 
@@ -36,11 +46,12 @@ bool SingleApplication::isRunning() {
 void SingleApplication::_newLocalConnection() {
     QLocalSocket *socket = _localServer->nextPendingConnection();
     if(socket) {
+        sendPid(socket);
         if (socket->waitForReadyRead(2*TIME_OUT))
         {
             QByteArray dataread = socket->read(1024);
-            QString d = QString(dataread);
-            emit argsReceived(d);
+            pid = QString(dataread);
+            emit argsReceived(pid);
         }
         delete socket;
     }
@@ -54,10 +65,11 @@ void SingleApplication::_newLocalConnection() {
 void SingleApplication::_initLocalConnection() {
     _isRunning = false;
 
-    if (testRunning(_routerName, TIME_OUT))
+    bool running = testRunning(_appName, TIME_OUT, pid);
+    if (running)
     {
         fprintf(stderr, "%s already running.\n",
-                _routerName.toLocal8Bit().constData());
+                _appName.toLocal8Bit().constData());
         _isRunning = true;
         // Other treatments, such as: the start-up parameters are sent to the server
         return;
@@ -66,13 +78,18 @@ void SingleApplication::_initLocalConnection() {
     //Failed to connect to server, create a
     _newLocalServer();
 }
-bool SingleApplication::testRunning(QString name, int timeout)
+bool SingleApplication::testRunning(QString name, int timeout, QString &pid)
 {
     QLocalSocket socket;
     socket.connectToServer(name);
     if(socket.waitForConnected((timeout > 0)?timeout:TEST_TIME_OUT))
     {
-        return true;
+        if (socket.waitForReadyRead(2*TIME_OUT))
+        {
+            QByteArray dataread = socket.read(1024);
+            pid = QString(dataread);
+        }
+         return true;
     }
     return false;
 }
@@ -84,11 +101,11 @@ void SingleApplication::_newLocalServer()
 {
     _localServer = new QLocalServer(this);
     connect(_localServer, &QLocalServer::newConnection, this, &SingleApplication::_newLocalConnection);
-    if(!_localServer->listen(_routerName)) {
+    if(!_localServer->listen(_appName)) {
         // The monitor failure, may beWhen a program crashes, residual process service led, removal
         if(_localServer->serverError() == QAbstractSocket::AddressInUseError) {
-            QLocalServer::removeServer(_routerName); // <-- A key
-            _localServer->listen(_routerName); // Listen again
+            QLocalServer::removeServer(_appName); // <-- A key
+            _localServer->listen(_appName); // Listen again
         }
     }
 }
@@ -104,12 +121,27 @@ void SingleApplication::clearRegistry()
 void SingleApplication::sendArgs()
 {
     QLocalSocket  *socket = new QLocalSocket;
-    socket->connectToServer(_routerName);
+    socket->connectToServer(_appName);
     if(socket->waitForConnected(TIME_OUT))
     {
-        QString args = arguments()[1];
+        QStringList sl = arguments();
+        QString args = sl[1];
         socket->write(args.toLatin1().data());
         socket->waitForBytesWritten(TIME_OUT);
-        socket->deleteLater();
     }
+    socket->deleteLater();
 }
+
+void SingleApplication::sendPid(QLocalSocket *socket)
+{
+    QString spid;
+#ifdef Q_OS_WIN
+    unsigned long pid = GetCurrentProcessId();
+    spid = QString::number(pid);
+#else
+    pid_t pid = getpid();
+    spid = QString::number(pid);
+#endif
+    socket->write(spid.toLatin1().data());
+}
+
