@@ -677,10 +677,11 @@ void BandmapClientFrame::setContest(BaseContestLog *c)
 
         if (!contest->bandmapFilterSettingsExist)       // have settings been saved before?
         {
+            // no, save current mode filter for this contest
             readDefaultDistanceFilterSettings(&filterSettings);
 
             //set current mode
-            if (contestModeStr == hamlibData::MGM)       //  have mode settings been saved before?
+            if (contestModeStr == hamlibData::MGM)
             {
                 for (auto &m: mgmModes)
                 {
@@ -688,13 +689,16 @@ void BandmapClientFrame::setContest(BaseContestLog *c)
 
                 }
             }
+            else if (contestModeStr == hamlibData::PH)
+            {
+                filterSettings.setModeFilter(hamlibData::USB, true);
+                filterSettings.setModeFilter(hamlibData::LSB, true);
+            }
             else if (contestMode >= 0)
             {
-                // no, save current mode filter for this contest
                 filterSettings.setModeFilter(contestModeStr, true);
             }
 
-            //filterSetup->saveBandmapFilterToContest();
             contest->saveBandmapFilter(filterSettings);
         }
         else
@@ -718,6 +722,10 @@ void BandmapClientFrame::readDefaultDistanceFilterSettings(BandmapClientFilterSe
     config.beginGroup("Default Distance");
 
     filterSettings->setDistanceFilter(config.value(defaultDistIniNames.getDefaultDistIniName(contestBandStr).defaultDistanceName, DEFAULT_FILTER_DISTANCE).toInt());
+    if (ct->isHF())
+    {
+        filterSettings->setIgnoreDistanceFlag(true);
+    }
 
     config.endGroup();
 }
@@ -748,6 +756,7 @@ void BandmapClientFrame::getBandLimitsFromBandListXML()
 
 int BandmapClientFrame::getModeOffSet(QString contestModeStr)
 {
+    //clusterModes doesn't have "PH"!
     int i = 0;
     while(i != clusterModes.count())
     {
@@ -1163,6 +1172,8 @@ void BandmapClientFrame::addRemoveCQSpot(QSharedPointer<ClusterSpotData>  spot)
             bandmapSpotType::SPOT_TYPE savedSpotType = static_cast<bandmapSpotType::SPOT_TYPE>(bandmapDataModel->data(bandmapDataModel->index(row, SPOT_TYPE_COL_NUM ),  BMP_DataStoredRole).toInt());
             if (savedSpotType == bandmapSpotType::CQ)
             {
+                QSharedPointer<ClusterSpotData> bsd = bandmapDataModel->getBandmapDataRow(row);
+                MinosLoggerEvents::SendBroadcastSpot(bsd, true);
                 bandmapDataModel->setData(bandmapDataModel->index(row, SPOT_TYPE_COL_NUM ), bandmapSpotType::DELETED, BMP_DataStoredRole);
             }
         }

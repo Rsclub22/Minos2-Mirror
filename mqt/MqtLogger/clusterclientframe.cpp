@@ -942,7 +942,7 @@ void ClusterClientFrame::setContest(BaseContestLog *c)
                 filterSettings.setBandFilter(contestBandStr, true);    // set cluster filter to current band - can be overidden
 
 
-                if (contestModeStr == hamlibData::MGM)       //  have mode settings been saved before?
+                if (contestModeStr == hamlibData::MGM)
                 {
 
                     for (auto &m:mgmModes)
@@ -951,9 +951,13 @@ void ClusterClientFrame::setContest(BaseContestLog *c)
                     }
 
                 }
+                else if (contestModeStr == hamlibData::PH)
+                {
+                    filterSettings.setModeFilter(hamlibData::USB, true);
+                    filterSettings.setModeFilter(hamlibData::LSB, true);
+                }
                 else
                 {
-                    // no, save current mode filter for this contest
                     filterSettings.setModeFilter(contestModeStr, true);
                 }
 
