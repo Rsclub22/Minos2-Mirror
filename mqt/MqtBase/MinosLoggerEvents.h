@@ -108,7 +108,7 @@ signals:
    void ResendSpotsFromClusterCommand(resendFrameId, QString, QString, QString);
    void SandPChanged(bool);
    void DMMess(AnalysePubSubNotify);
-   void broadcastSpots(QSharedPointer<ClusterSpotData>);
+   void broadcastSpots(QSharedPointer<ClusterSpotData>, bool delSpot);
    void modeChange(QString);
 public:
    static MinosLoggerEvents mle;
@@ -189,7 +189,7 @@ public:
     static void SendFKey(BaseContestLog *c, int event, int carrier);
     static void SendSandPChanged(bool);
     static void SendDMMess(AnalysePubSubNotify);
-    static void SendBroadcastSpot(QSharedPointer<ClusterSpotData>);
+    static void SendBroadcastSpot(QSharedPointer<ClusterSpotData>, bool delSpot = false);
     static void SendModeChange(QString);
 };
 //---------------------------------------------------------------------------

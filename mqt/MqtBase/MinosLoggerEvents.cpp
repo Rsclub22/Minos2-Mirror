@@ -130,9 +130,9 @@ void MinosLoggerEvents::SendDMMess(AnalysePubSubNotify an)
     emit mle.DMMess(an);
 }
 
-void MinosLoggerEvents::SendBroadcastSpot(QSharedPointer<ClusterSpotData> sd)
+void MinosLoggerEvents::SendBroadcastSpot(QSharedPointer<ClusterSpotData> sd, bool delSpot)
 {
-    emit mle.broadcastSpots(sd);
+    emit mle.broadcastSpots(sd, delSpot);
 }
 
 void MinosLoggerEvents::SendModeChange(QString mode)

@@ -40,7 +40,7 @@ class N1MMBroadcast:public QObject
     
     QString genDeleteStanza(QSharedPointer<BaseContact> tct);
 
-    QString genSpotsStanza(QSharedPointer<ClusterSpotData> spotMsg);
+    QString genSpotsStanza(QSharedPointer<ClusterSpotData> spotMsg, bool delSpot);
 public:
     N1MMBroadcast();
 
@@ -51,7 +51,7 @@ private slots:
     void afterQSOSaved(BaseContestLog *c, QSharedPointer<BaseContact> tct);
     void wsjtxDatagram(int, QByteArray *);
     void callsignLookup(BaseContestLog *, QString);
-    void dxSpots(QSharedPointer<ClusterSpotData> spotMsg);
+    void dxSpots(QSharedPointer<ClusterSpotData> spotMsg, bool delSpot);
 };
 
 #endif // N1MMBROADCAST_H

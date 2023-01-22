@@ -184,7 +184,7 @@ void N1MMBroadcast::afterQSOSaved(BaseContestLog *c, QSharedPointer<BaseContact>
         bc.writeDatagram((header + adif).toUtf8(), ADIFHost, ADIFPort);
     }
 }
-void N1MMBroadcast::dxSpots(QSharedPointer<ClusterSpotData> spotMsg)
+void N1MMBroadcast::dxSpots(QSharedPointer<ClusterSpotData> spotMsg, bool delSpot)
 {
     // afterQSOSaved gives us QSOs as spots
     // this gives us direct spots
@@ -194,7 +194,7 @@ void N1MMBroadcast::dxSpots(QSharedPointer<ClusterSpotData> spotMsg)
 
     if (spotsSelect)
     {
-        QString sp = genSpotsStanza(spotMsg);
+        QString sp = genSpotsStanza(spotMsg, delSpot);
         bc.writeDatagram(sp.toUtf8(), spotsHost, spotsPort);
     }
 }
@@ -329,7 +329,7 @@ QString N1MMBroadcast::genContactStanza(QString type, BaseContestLog *b, QShared
     return xml;
 
 }
-QString N1MMBroadcast::genSpotsStanza(QSharedPointer<ClusterSpotData> spotMsg)
+QString N1MMBroadcast::genSpotsStanza(QSharedPointer<ClusterSpotData> spotMsg, bool delSpot)
 {
 //    <?xml version="1.0" encoding="utf-8"?>
 //    <spot>
@@ -386,6 +386,8 @@ QString N1MMBroadcast::genSpotsStanza(QSharedPointer<ClusterSpotData> spotMsg)
     QString ts = dg.getN1mmDTG();
 
     QString adddel = "add";
+    QString comment = spotMsg.data()->getSpotComment();
+    QString dxcall = spotMsg.data()->getDxCallStr();
     QString status;
     bandmapSpotType::SPOT_TYPE st = spotMsg->getSpotType();
     // enum SPOT_TYPE {NONE, CLUSTER, CLUSTER_MARKED, LOGGED, MARKED, SAVED, CQ, DELETED};
@@ -393,6 +395,7 @@ QString N1MMBroadcast::genSpotsStanza(QSharedPointer<ClusterSpotData> spotMsg)
     if (st == bandmapSpotType::CQ)
     {
         status = "cq";
+        comment = tr("CQ frequency");
     }
     else if (st == bandmapSpotType::LOGGED)
     {
@@ -406,17 +409,21 @@ QString N1MMBroadcast::genSpotsStanza(QSharedPointer<ClusterSpotData> spotMsg)
     {
         status = "busy";
     }
+    if (delSpot)
+    {
+        adddel = "delete";
+    }
     QString xml = QString("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n")
             + "<spot>\n"
                    + makeTag("app", "Minos")
                    + makeTag("StationName", "")                         // <StationName>PHONE-15M</StationName>
-                   + makeTag("dxcall", spotMsg.data()->getDxCallStr())
+                   + makeTag("dxcall", dxcall)
                    + makeTag("frequency", sfreq)
                    + makeTag("spottercall", spotMsg.data()->getSpotterCallStr())
                    + makeTag("timestamp", ts)
                    + makeTag("action", adddel)
                    + makeTag("mode", spotMsg.data()->getMode())
-                   + makeTag("comment", spotMsg.data()->getSpotComment())
+                   + makeTag("comment", comment)
                    + makeTag("status", status)
                    + makeTag("statuslist", status)
             + "</spot>\n";
