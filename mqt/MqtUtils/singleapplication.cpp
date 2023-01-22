@@ -68,8 +68,8 @@ void SingleApplication::_initLocalConnection() {
     bool running = testRunning(_appName, TIME_OUT, pid);
     if (running)
     {
-        fprintf(stderr, "%s already running.\n",
-                _appName.toLocal8Bit().constData());
+        fprintf(stderr, "%s already running, PID %s.\n",
+                _appName.toLocal8Bit().constData(), pid.toLocal8Bit().constData());
         _isRunning = true;
         // Other treatments, such as: the start-up parameters are sent to the server
         return;
