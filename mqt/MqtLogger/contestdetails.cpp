@@ -1536,7 +1536,7 @@ QWidget * ContestDetails::getNextFocus()
    {
       return ui->CallsignEdit;
    }
-   if (contestTransferObject->locatorMandatoryField.getValue() && ui->LocatorEdit->text().trimmed().isEmpty() )
+   if (ui->LocatorEdit->text().trimmed().isEmpty() )
    {
       return ui->LocatorEdit;
    }
