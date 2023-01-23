@@ -162,7 +162,7 @@ void StackedInfoFrame::setTabVisibility()
         ui->tabbar->setVisible(false);
         return;
     }
-    bool setTabsVisible = (contest->contestBands.getValue() == allHF);
+    bool setTabsVisible = (contest->isHF());
 
     QString a = ui->infoCombo->currentText();
 
@@ -378,7 +378,7 @@ void StackedInfoFrame::clearContestInFrame(BaseContestLog *ct)
 
 void StackedInfoFrame::onContestBandChanged(BaseContestLog *ct)
 {
-    if (ct && contest == ct && contest->contestBands.getValue() == allHF)
+    if (ct && contest == ct && contest->isHF())
     {
         for (int i = 0; i < ui->tabbar->count(); i++)
         {

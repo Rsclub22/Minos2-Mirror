@@ -131,7 +131,7 @@ QSharedPointer<ClusterSpotData> stringToDxSpot(QString spot, BaseContestLog *ct,
 
             QString band = spotlist[DXBANDSTR];
             QString bandlist = ct->contestBands.getValue();
-            if (bandlist == allHF)
+            if (ct->isHF())
             {
                 BandList &blist = BandList::getBandList();
                 QSharedPointer<BandInfo>  bi;

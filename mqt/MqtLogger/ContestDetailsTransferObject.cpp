@@ -132,6 +132,8 @@ void ContestDetailsTransferObject::getFromContest(LoggerContestLog *ct)
 
     contestBands = ct->contestBands;
     currentBand = ct->currentBand;
+    bandsList = ct->bandsList;
+
     hfContest = ct->hfContest;
     otherExchange = ct->otherExchange;
     otherOptionalExchange = ct->otherOptionalExchange;
@@ -253,6 +255,7 @@ void ContestDetailsTransferObject::setToContest(LoggerContestLog *ct)
 
     ct->contestBands = contestBands;
     ct->currentBand = currentBand;
+    ct->bandsList = bandsList;
     ct->hfContest = hfContest;
     ct->otherOptionalExchange = otherOptionalExchange;
     ct->otherExchange = otherExchange;

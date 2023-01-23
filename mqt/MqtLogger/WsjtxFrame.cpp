@@ -616,7 +616,7 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
     if (bandOK)
     {
         QString cb = ct->contestBands.getValue().trimmed();
-        if (cb == allHF)
+        if (ct->isHF())
         {
             cb = bi->uk;
             if (bi->getType() == HF_BANDTYPE)

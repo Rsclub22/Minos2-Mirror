@@ -839,7 +839,7 @@ void TLogContainer::FileNewActionExecute(bool hf)
    if ( band.size() )
    {
       suggestedfName += '_';
-      suggestedfName += band;
+      suggestedfName += band.replace('-', '_').replace('/','_');
    }
    QString nameBase = suggestedfName;
    int fnum = 1;

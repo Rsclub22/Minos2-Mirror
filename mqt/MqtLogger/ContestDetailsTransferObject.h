@@ -89,6 +89,7 @@ private:
 
     MinosStringItem<QString> contestBands;
     MinosStringItem<QString> currentBand;
+    MinosStringItem<QString> bandsList;
     MinosItem<bool> hfContest;
     MinosItem<bool> otherExchange;
     MinosItem<bool> otherOptionalExchange;

@@ -46,6 +46,8 @@ private:
    FocusWatcher *allowLoc4FW;
    FocusWatcher *allowLoc8FW;
 
+   QMap<QString, QCheckBox*> allBandChkBoxMap;
+
    QWidget * getNextFocus();
    void setDetails( const IndividualContest &ic );
    void setDetails( );
@@ -63,6 +65,7 @@ private:
    QString getSelectedAntenna();
    void setSelectedAntenna(QString s);
 
+   void setBandBoxes(QString bandStr, QString bandsList);
 public Q_SLOTS:
    virtual void accept() override;
    virtual void reject() override;

@@ -164,6 +164,7 @@ class BaseContestLog: public BaseLogList
 
       MinosStringItem<QString> contestBands;
       MinosStringItem<QString> currentBand;
+      MinosStringItem<QString> bandsList;
 
       MinosItem<bool> otherExchange;            // exchange field is required (also required for postcodes)
       MinosItem<bool> otherOptionalExchange;    // but exchange is not mandatory

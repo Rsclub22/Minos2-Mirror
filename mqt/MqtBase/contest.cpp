@@ -294,6 +294,7 @@ void BaseContestLog::clearDirty()
    modeList.clearDirty();
    contestBands.clearDirty();
    currentBand.clearDirty();
+   bandsList.clearDirty();
    hfContest.clearDirty();
    otherExchange.clearDirty();
    otherOptionalExchange.clearDirty();
@@ -341,6 +342,7 @@ void BaseContestLog::setDirty()
    modeList.setDirty();
    contestBands.setDirty();
    currentBand.setDirty();
+   bandsList.setDirty();
    hfContest.setDirty();
    otherExchange.setDirty();
    otherOptionalExchange.setDirty();
@@ -1449,6 +1451,7 @@ void BaseContestLog::processMinosStanza( const QString &methodName, MinosTestImp
       {
           currentBand.setValue(contestBands);
       }
+      mt->getStructArgMemberValue( "bandsList", bandsList );
 
       bool isHfContest = isHF();
       mt->getStructArgMemberValue( "hf", hfContest);
@@ -1881,7 +1884,7 @@ int BaseContestLog::getCountriesWorked(const QString &band, const QString &item 
 QSharedPointer<BandInfo> BaseContestLog::checkBandChange(Frequency targetFreq, Frequency refFreq)
 {
     QSharedPointer<BandInfo>  nb;
-    if (contestBands.getValue() == allHF)
+    if (isHF())
     {
         BandList &bl = BandList::getBandList();
         QSharedPointer<BandInfo>  b1;

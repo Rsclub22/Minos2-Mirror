@@ -122,12 +122,35 @@ void BandSelButtons::setButtonsToBandType()
     setAllButtonsOff();
     setAllButtonsVisible(false);
 
+    if (!ct)
+    {
+        return;
+    }
+
     for (int i = 0; i < availHfBands.count(); i++)
     {
         QToolButton *t = findToolButton(availHfBands[i]);
         if (t)
         {
             t->setVisible(true);
+        }
+    }
+
+    QStringList bll = ct->bandsList.getValue().split(";");
+    for(const auto &bs: qAsConst(bll))
+    {
+        QStringList bsl = bs.split(" ");
+        if (bsl.count() == 3)
+        {
+            QString btn = bsl[0] + " " + bsl[1];
+            QToolButton *t = findToolButton(btn);
+            if (t )
+            {
+                if (bsl[2] == "0")
+                {
+                    t->setVisible(false);
+                }
+            }
         }
     }
 
@@ -325,7 +348,7 @@ void BandSelButtons::setContest(BaseContestLog *contest)
 void BandSelButtons::setContestBand(QString contestBand_)
 {
     contestBand = contestBand_;
-    if (ct && ct->contestBands.getValue() == allHF)
+    if (ct && ct->isHF())
     {
         selectButtonGroupAndActiveBand(contestBand_);
     }
