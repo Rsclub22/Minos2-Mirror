@@ -74,7 +74,7 @@ TLogContainer::TLogContainer(QWidget *parent) :
     // make the tab control fill the window
     ui->centralWidget->layout()->setContentsMargins(0,0,0,0);
 
-    setWindowTitle(tr("Minos Contest Logger"));
+    setCaption(QString());
 
     setupMenus();
 
@@ -385,7 +385,7 @@ void TLogContainer::changeEvent( QEvent* e )
             i.key()->setText(tr(i.value()));
         }
         ui->retranslateUi(this);
-        setWindowTitle(tr("Minos Contest Logger"));
+        setCaption(QString());
     }
     QMainWindow::changeEvent(e);
 }
@@ -2191,14 +2191,19 @@ void TLogContainer::selectContest( BaseContestLog *pc)
 //---------------------------------------------------------------------------
 void TLogContainer::setCaption(QString captionToSet)
 {
-   if ( windowTitle().length() )
+   if ( captionToSet.length() )
    {
       if ( captionToSet != windowTitle() )
          setWindowTitle(captionToSet);
    }
    else
-      if ( windowTitle() != tr("Minos contest Logger Application") )
-         setWindowTitle(tr("Minos contest Logger Application"));
+   {
+      QString trs = tr("Minos contest Logger Application");
+      if ( windowTitle() != trs )
+      {
+         setWindowTitle(trs);
+      }
+   }
 }
 //---------------------------------------------------------------------------
 TSingleLogFrame *TLogContainer::findContest(const QString &pubname )
