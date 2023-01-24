@@ -244,7 +244,7 @@ void KeyerMain::changeEvent( QEvent* e )
 }
 bool KeyerMain::writeConfig(bool force)
 {
-    masterConfig.traceConfig();
+    //masterConfig.traceConfig();
     bool ret = true;
     static QString old;
     QString conf = masterConfig.makeConfig(QJsonDocument::Compact, force, true);

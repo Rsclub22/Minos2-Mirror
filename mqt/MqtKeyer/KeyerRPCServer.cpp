@@ -245,11 +245,13 @@ void KeyerServer::on_notify(AnalysePubSubNotify an, const QString /*from*/ )
                 QString value = an.getValue();
                 if (value.isEmpty())
                 {
+                    trace("Set sendSliders and sendKeyers false");
                     sendSliders = false;
                     sendMeters = false;
                 }
                 else
                 {
+                    trace("Set sendSliders and sendKeyers true");
                     sendSliders = true;
                     sendMeters = true;
                     metersSeq++;
@@ -283,6 +285,7 @@ void KeyerServer::on_notify(AnalysePubSubNotify an, const QString /*from*/ )
       {
           if (an.getCategory() == rpcConstants::KeyerConfigCategory && an.getKey() == rpcConstants::keyerSendMS)
           {
+              trace("Set sendSliders and sendKeyers false");
               sendSliders = false;
               sendMeters = false;
           }
