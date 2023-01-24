@@ -917,6 +917,11 @@ void TSendDM::on_notify( AnalysePubSubNotify an, const QString /*from*/ )
             {
                 rotatorCache.setStateDisconnected(an);
             }
+            else if (an.getCategory() == rpcConstants::KeyerCategory)
+            {
+                keyerApp = PubSubName();
+
+            }
         }
         else if (an.getState() == psNotConnected)
         {
