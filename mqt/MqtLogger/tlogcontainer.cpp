@@ -2198,7 +2198,7 @@ void TLogContainer::setCaption(QString captionToSet)
    }
    else
    {
-      QString trs = tr("Minos contest Logger Application");
+      QString trs = tr("Minos Contest Logger Application");
       if ( windowTitle() != trs )
       {
          setWindowTitle(trs);
