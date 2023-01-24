@@ -920,6 +920,7 @@ void TSendDM::on_notify( AnalysePubSubNotify an, const QString /*from*/ )
             else if (an.getCategory() == rpcConstants::KeyerCategory)
             {
                 keyerApp = PubSubName();
+                LogContainer->setCaption(QString());
 
             }
         }
