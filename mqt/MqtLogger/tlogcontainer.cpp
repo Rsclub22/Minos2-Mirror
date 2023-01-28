@@ -836,10 +836,14 @@ void TLogContainer::FileNewActionExecute(bool hf)
       suggestedfName += QDate::currentDate().toString( "yyyy_MM_dd" );
    }
    QString band = c->contestBands.getValue();
+   if (band == allHF)
+   {
+       band = tr("All HF");
+   }
    if ( band.size() )
    {
       suggestedfName += '_';
-      suggestedfName += band.replace('-', '_').replace('/','_');
+      suggestedfName += band.replace('-', '_').replace('/','_').replace(' ','_');
    }
    QString nameBase = suggestedfName;
    int fnum = 1;

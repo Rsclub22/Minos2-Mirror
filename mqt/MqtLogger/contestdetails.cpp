@@ -612,7 +612,14 @@ void ContestDetails::setBandBoxes(QString bandStr, QString bandsList)
 
     if (contestTransferObject->isHF())
     {
-        ui->BandComboBox->addItem( bandStr );
+        if (bandStr.isEmpty())
+        {
+            ui->BandComboBox->addItem( trAllHf );
+        }
+        else
+        {
+            ui->BandComboBox->addItem( bandStr );
+        }
     }
 
     for (auto const &b: qAsConst(blist.bandList))

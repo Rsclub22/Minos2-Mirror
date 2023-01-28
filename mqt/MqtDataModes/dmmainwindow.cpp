@@ -361,7 +361,7 @@ void DMMainWindow::on_notify(AnalysePubSubNotify an, const QString from )
 
         if (selState.radioMode().isDirty() || selState.radioFreq().isDirty())
         {
-            QString rigMode = selState.radioMode().getValue().remove(":");
+            QString rigMode = selState.radioMode().getValue();
             ui->rigMode->setText(rigMode);
             Frequency rigFreq = selState.radioFreq().getValue();
             ui->rigFreq->setText(rigFreq.pretty_frequency_MHz_string());
