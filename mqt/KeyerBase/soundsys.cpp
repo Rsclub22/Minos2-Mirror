@@ -206,22 +206,6 @@ RtAudioSoundSystem::~RtAudioSoundSystem()
 {
    passThroughEnabled = false;
    closedown();
-//   stopDMA();
-
-//   wThread->terminated = true;
-//   wThread->wakeAll();
-//   wThread->wait();
-//   try
-//   {
-//      // Stop the stream.
-//      audio->stopStream();
-//   }
-//   catch ( RtAudioError& error )
-//   {
-//       trace(error.getMessage().c_str());
-//   }
-//   delete audio;
-//   delete wThread;
 
    free_bw_band_pass(micfilter1);
    free_bw_band_pass(micfilter2);
