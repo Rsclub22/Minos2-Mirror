@@ -52,6 +52,7 @@ public:
 
     int getMode(VFO vfo, MODE &mode) override;
     int setMode(VFO vfo, MODE mode) override;
+    bool modeSupported(MODE mode, Frequency f) override;
 
     bool supportVolControl(int rigNumber) override;
     int setVolume(VFO vfo, float val) override;

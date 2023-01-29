@@ -42,6 +42,7 @@ public:
     virtual int setMode(VFO vfo, MODE mode) = 0;
     //virtual QString convertModeQStr(MODE mode) = 0;
     //virtual MODE convertQStrMode(QString mode) = 0;
+    virtual bool modeSupported(MODE mode, Frequency f) = 0;
 
     virtual bool supportVolControl(int rigNumber) = 0;
     virtual int setVolume(VFO vfo, float val) = 0;
