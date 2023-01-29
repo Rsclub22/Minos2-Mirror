@@ -114,24 +114,20 @@ int audioCallback2( void */*outputBuffer*/, void *inputBuffer,
 //==============================================================================
 RRRtAudioSoundSystem::RRRtAudioSoundSystem()
 {
-    try
-    {
-       audio = new RtAudio();
+   audio = new RtAudio();
 
-       wThread = new RRRiffWriter(this);
-       wThread->start();
+   wThread = new RRRiffWriter(this);
+   wThread->start();
 
-       unsigned int defInput = audio->getDefaultInputDevice();
-       unsigned int devices = audio->getDeviceCount();
-       RtAudio::DeviceInfo info;
-       for ( unsigned int i=0; i<devices; i++ )
+   unsigned int defInput = audio->getDefaultInputDevice();
+
+   std::vector<unsigned int> devices = audio->getDeviceIds();
+
+   RtAudio::DeviceInfo info;
+   for ( unsigned int i=0; i<devices.size(); i++ )
+   {
+       info = audio->getDeviceInfo( devices[i] );
        {
-         info = audio->getDeviceInfo( i );
-         if ( info.probed == true )
-         {
-           trace( "device = "  + QString::number(i) +  " " + info.name.c_str());
-           trace( "Maximum output channels = " + QString::number(info.outputChannels) + " Maximum input channels = " + QString::number(info.inputChannels));
-
            QString buff("Sample rates: ");
            for (auto r:info.sampleRates)
            {
@@ -143,25 +139,22 @@ RRRtAudioSoundSystem::RRRtAudioSoundSystem()
                buff += pref + QString::number(r) + pref + " ";
            }
            trace(buff);
-         }
-         if (i == defInput)
-         {
-             inChannels = info.inputChannels;
-         }
-         if (info.inputChannels)
-         {
-             inputDevices.append(info.name.c_str());
-         }
-         deviceIds[QString(info.name.c_str())] = i;
+
+           trace( "device = "  + QString::number(i) +  " " + info.name.c_str());
+           trace( "Maximum output channels = " + QString::number(info.outputChannels) + " Maximum input channels = " + QString::number(info.inputChannels));
        }
-       trace( "Default input channels = " + QString::number(inChannels));
-    }
-    catch (RtAudioError &error)
-    {
-       // Handle the exception here
-       trace(error.getMessage().c_str());
-       audio = nullptr;
-    }
+       if (devices[i] == defInput)
+       {
+           inChannels = info.inputChannels;
+           trace("(Default input)");
+       }
+       if (info.inputChannels)
+       {
+           inputDevices.append(info.name.c_str());
+       }
+       deviceIds[QString(info.name.c_str())] = devices[i];
+   }
+   trace( "Default input channels = " + QString::number(inChannels));
 }
 void RRRtAudioSoundSystem::stop()
 {
@@ -170,17 +163,11 @@ void RRRtAudioSoundSystem::stop()
     wThread->terminated = true;
     bufferNotEmpty.wakeAll();
     wThread->wait();
-    try
+
+    if (audio->isStreamRunning())
     {
-        if (audio->isStreamRunning())
-        {
-           // Stop the stream.
-           audio->stopStream();
-        }
-    }
-    catch ( RtAudioError& error )
-    {
-        trace(error.getMessage().c_str());
+       // Stop the stream.
+       audio->stopStream();
     }
 }
 void RRRtAudioSoundSystem::closedown()
@@ -222,18 +209,46 @@ void RRRtAudioSoundSystem::setVUCallBack2( VUCallBack cb )
 
 bool RRRtAudioSoundSystem::initialise( QString ind, QString ind2)
 {
-    try
+    if (!audio)
     {
-        if (!audio)
+        audio = new RtAudio();
+    }
+    RtAudio::StreamParameters inParams;
+    RtAudio::StreamOptions soptions;
+
+    unsigned int bufferFrames = FRAMESAMPLES;
+
+    inParams.deviceId = deviceIds[ind];
+    inParams.firstChannel = 0;
+    inParams.nChannels = inChannels;
+
+    soptions.flags = 0;
+    soptions.numberOfBuffers = FRAMES;
+    soptions.priority = 0;
+    soptions.streamName = "";
+
+    audio->openStream(nullptr,
+                      &inParams,
+                      RTAUDIO_SINT16, sampleRate,
+                      &bufferFrames, ::audioCallback,
+                      static_cast<void *>(this),
+                      &soptions
+                      );
+    audio->startStream();
+    trace(QString("Audio stream %1 %2 opened OK").arg(deviceIds[ind]).arg(ind));
+
+    if (!ind2.isEmpty())
+    {
+        if (!audio2)
         {
-            audio = new RtAudio();
+            audio2 = new RtAudio();
         }
         RtAudio::StreamParameters inParams;
         RtAudio::StreamOptions soptions;
 
         unsigned int bufferFrames = FRAMESAMPLES;
 
-        inParams.deviceId = deviceIds[ind];
+        inParams.deviceId = deviceIds[ind2];
         inParams.firstChannel = 0;
         inParams.nChannels = inChannels;
 
@@ -242,51 +257,16 @@ bool RRRtAudioSoundSystem::initialise( QString ind, QString ind2)
         soptions.priority = 0;
         soptions.streamName = "";
 
-        audio->openStream(nullptr,
+        audio2->openStream(nullptr,
                           &inParams,
                           RTAUDIO_SINT16, sampleRate,
-                          &bufferFrames, ::audioCallback,
+                          &bufferFrames, ::audioCallback2,
                           static_cast<void *>(this),
                           &soptions
                           );
-        audio->startStream();
-        trace(QString("Audio stream %1 %2 opened OK").arg(deviceIds[ind]).arg(ind));
 
-        if (!ind2.isEmpty())
-        {
-            if (!audio2)
-            {
-                audio2 = new RtAudio();
-            }
-            RtAudio::StreamParameters inParams;
-            RtAudio::StreamOptions soptions;
-
-            unsigned int bufferFrames = FRAMESAMPLES;
-
-            inParams.deviceId = deviceIds[ind2];
-            inParams.firstChannel = 0;
-            inParams.nChannels = inChannels;
-
-            soptions.flags = 0;
-            soptions.numberOfBuffers = FRAMES;
-            soptions.priority = 0;
-            soptions.streamName = "";
-
-            audio2->openStream(nullptr,
-                              &inParams,
-                              RTAUDIO_SINT16, sampleRate,
-                              &bufferFrames, ::audioCallback2,
-                              static_cast<void *>(this),
-                              &soptions
-                              );
-
-            audio2->startStream();
-            trace(QString("Audio stream %1 %2 opened OK").arg(deviceIds[ind2]).arg(ind2));
-        }
-    }
-    catch (RtAudioError &error)
-    {
-        trace(error.getMessage().c_str());
+        audio2->startStream();
+        trace(QString("Audio stream %1 %2 opened OK").arg(deviceIds[ind2]).arg(ind2));
     }
 
     return true;

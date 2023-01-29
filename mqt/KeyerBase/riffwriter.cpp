@@ -1,7 +1,29 @@
+#include <QDataStream>
+
 #include "soundsys.h"
 #include "riffwriter.h"
 
 #define RINGBUFFERSIZE 1024
+
+QDataStream & operator>>(QDataStream &in, BuffHeader &ff)
+{
+    in  >> ff.sequence;
+    in >> ff.tnow;
+    in >> ff.rms;
+    in >> ff.ptt;
+    in >> ff.frameCount;
+    return in;
+}
+
+QDataStream & operator<<(QDataStream &out, const BuffHeader &base)
+{
+    out << base.sequence;
+    out << base.tnow;
+    out << base.rms;
+    out << base.ptt;
+    out << base.frameCount;
+    return out;
+}
 
 InBuff::InBuff()
 {
@@ -49,9 +71,9 @@ void RiffWriter::run()
         }
         mutex.unlock();
 
-        if (inBuffs[writeIndex%RINGBUFFERSIZE].frameCount > 0)
+        if (inBuffs[writeIndex%RINGBUFFERSIZE].bh.frameCount > 0)
         {
-            ss->writeDataToFile(inBuffs[writeIndex%RINGBUFFERSIZE].buff, inBuffs[writeIndex%RINGBUFFERSIZE].frameCount);
+            ss->writeDataToFile(inBuffs[writeIndex%RINGBUFFERSIZE].buff, inBuffs[writeIndex%RINGBUFFERSIZE].bh.frameCount);
             mutex.lock();
             ++writeIndex;
 
@@ -106,7 +128,7 @@ void RiffWriter::copyBuffer(int16_t *inStageBuffer, int nFrames)
         return;
     }
 
-    inBuffs[recIndex % RINGBUFFERSIZE].frameCount = nFrames;
+    inBuffs[recIndex % RINGBUFFERSIZE].bh.frameCount = nFrames;
     memcpy(inBuffs[recIndex % RINGBUFFERSIZE].buff, inStageBuffer, nFrames * 4);
 
     mutex.lock();
@@ -136,7 +158,7 @@ void RiffWriter::finishInput()
 
     mutex.unlock();
 
-    inBuffs[recIndex%RINGBUFFERSIZE].frameCount = 0;  // mark to close
+    inBuffs[recIndex%RINGBUFFERSIZE].bh.frameCount = 0;  // mark to close
 
     mutex.lock();
     ++recIndex;
