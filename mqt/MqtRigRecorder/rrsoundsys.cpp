@@ -14,13 +14,13 @@
 #include <QtEndian>
 #include <QtMath>
 #include <numeric>
-#include <QtCore>
-#include <cstring>
+#include <QWaitCondition>
+#include <QMutex>
 
 #include "fileutils.h"
 #include "MTrace.h"
 #include "rrsoundsys.h"
-#include "riff.h"
+
 #if !defined (_MSC_VER)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-result"
@@ -50,12 +50,12 @@ static int writeIndex = 0;
 
 bool closeFlag = false;
 
-RiffWriter::RiffWriter(RtAudioSoundSystem *parent) : QThread(parent), ss(parent), terminated(false)
+RRRiffWriter::RRRiffWriter(RRRtAudioSoundSystem *parent) : QThread(parent), ss(parent), terminated(false)
 {
 }
-RiffWriter::~RiffWriter(){}
+RRRiffWriter::~RRRiffWriter(){}
 
-void RiffWriter::run()
+void RRRiffWriter::run()
 {
     for (;;)
     {
@@ -99,7 +99,7 @@ int audioCallback( void */*outputBuffer*/, void *inputBuffer,
                                 RtAudioStreamStatus status,
                                 void *userData )
 {
-    RtAudioSoundSystem *qss = static_cast<RtAudioSoundSystem *>(userData);
+    RRRtAudioSoundSystem *qss = static_cast<RRRtAudioSoundSystem *>(userData);
     return qss->audioCallback(inputBuffer, nFrames, streamTime, status, 1);
 }
 int audioCallback2( void */*outputBuffer*/, void *inputBuffer,
@@ -108,17 +108,17 @@ int audioCallback2( void */*outputBuffer*/, void *inputBuffer,
                                 RtAudioStreamStatus status,
                                 void *userData )
 {
-    RtAudioSoundSystem *qss = static_cast<RtAudioSoundSystem *>(userData);
+    RRRtAudioSoundSystem *qss = static_cast<RRRtAudioSoundSystem *>(userData);
     return qss->audioCallback(inputBuffer, nFrames, streamTime, status, 2);
 }
 //==============================================================================
-RtAudioSoundSystem::RtAudioSoundSystem()
+RRRtAudioSoundSystem::RRRtAudioSoundSystem()
 {
     try
     {
        audio = new RtAudio();
 
-       wThread = new RiffWriter(this);
+       wThread = new RRRiffWriter(this);
        wThread->start();
 
        unsigned int defInput = audio->getDefaultInputDevice();
@@ -163,7 +163,7 @@ RtAudioSoundSystem::RtAudioSoundSystem()
        audio = nullptr;
     }
 }
-void RtAudioSoundSystem::stop()
+void RRRtAudioSoundSystem::stop()
 {
     stopDMA();
 
@@ -183,7 +183,7 @@ void RtAudioSoundSystem::stop()
         trace(error.getMessage().c_str());
     }
 }
-void RtAudioSoundSystem::closedown()
+void RRRtAudioSoundSystem::closedown()
 {
     if (audio2)
     {
@@ -207,20 +207,20 @@ void RtAudioSoundSystem::closedown()
     }
 }
 
-RtAudioSoundSystem::~RtAudioSoundSystem()
+RRRtAudioSoundSystem::~RRRtAudioSoundSystem()
 {
    closedown();
 }
-void RtAudioSoundSystem::setVUCallBack( VUCallBack cb )
+void RRRtAudioSoundSystem::setVUCallBack( VUCallBack cb )
 {
    WinVUCallback = cb;
 }
-void RtAudioSoundSystem::setVUCallBack2( VUCallBack cb )
+void RRRtAudioSoundSystem::setVUCallBack2( VUCallBack cb )
 {
    WinVUCallback2 = cb;
 }
 
-bool RtAudioSoundSystem::initialise( QString ind, QString ind2)
+bool RRRtAudioSoundSystem::initialise( QString ind, QString ind2)
 {
     try
     {
@@ -292,31 +292,31 @@ bool RtAudioSoundSystem::initialise( QString ind, QString ind2)
     return true;
 }
 
-unsigned int RtAudioSoundSystem::setRate(unsigned int rate)
+unsigned int RRRtAudioSoundSystem::setRate(unsigned int rate)
 {
    sampleRate = rate;
    return sampleRate;
 }
 
-void RtAudioSoundSystem::setRecordLevel(int l)
+void RRRtAudioSoundSystem::setRecordLevel(int l)
 {
     // input levels are dB, so the actual multiplier is 10**(level/10)
     // BUT level is already * 10, so we need /100
     recordMult = qPow(10, l/100.0);
 }
-void RtAudioSoundSystem::setRecordLevel2(int l)
+void RRRtAudioSoundSystem::setRecordLevel2(int l)
 {
     // input levels are dB, so the actual multiplier is 10**(level/10)
     // BUT level is already * 10, so we need /100
     recordMult2 = qPow(10, l/100.0);
 }
 
-void RtAudioSoundSystem::setMono(bool s)
+void RRRtAudioSoundSystem::setMono(bool s)
 {
     mono = s;
 }
 
-int RtAudioSoundSystem::audioCallback( void *inputBuffer,
+int RRRtAudioSoundSystem::audioCallback( void *inputBuffer,
                                 unsigned int nFrames,
                                 double /*streamTime*/,
                                 RtAudioStreamStatus status,
@@ -483,12 +483,12 @@ int RtAudioSoundSystem::audioCallback( void *inputBuffer,
 
     return 0;
 }
-void RtAudioSoundSystem::startInput()
+void RRRtAudioSoundSystem::startInput()
 {
     inputEnabled = true;
 }
 
-void RtAudioSoundSystem::stopInput()
+void RRRtAudioSoundSystem::stopInput()
 {
     inputEnabled = false;
      mutex.lock();
@@ -504,7 +504,7 @@ void RtAudioSoundSystem::stopInput()
      bufferNotEmpty.wakeAll();
      mutex.unlock();
 }
-bool RtAudioSoundSystem::startInput( QString fname , int ct, bool continuation)
+bool RRRtAudioSoundSystem::startInput( QString fname , int ct, bool continuation)
 {
     // open fname, assign a text(?)
     // startInput() will also be called later
@@ -567,7 +567,7 @@ bool RtAudioSoundSystem::startInput( QString fname , int ct, bool continuation)
     return false;
 }
 
-void RtAudioSoundSystem::writeDataToFile(void *inp, unsigned int nFrames)
+void RRRtAudioSoundSystem::writeDataToFile(void *inp, unsigned int nFrames)
 {
     // data arrives here; we need to write it to the (already open) file,
 
@@ -578,7 +578,7 @@ void RtAudioSoundSystem::writeDataToFile(void *inp, unsigned int nFrames)
 
         DDCRET ret = outWave->WriteData ( q, nFrames * 2 );   // size is numdata
 
-        std::memset(inp, 0, nFrames * 4); // clear to zero so that mono/mixing will work
+        memset(inp, 0, nFrames * 4); // clear to zero so that mono/mixing will work
         if ( ret != DDC_SUCCESS )
         {
             return;
@@ -598,7 +598,7 @@ void RtAudioSoundSystem::writeDataToFile(void *inp, unsigned int nFrames)
 }
 
 //==============================================================================
-bool RtAudioSoundSystem::startDMA( const QString &fname, int ct )
+bool RRRtAudioSoundSystem::startDMA( const QString &fname, int ct )
 {
     cycleTime = ct;
     baseName = fname;
@@ -611,7 +611,7 @@ bool RtAudioSoundSystem::startDMA( const QString &fname, int ct )
     startInput();
     return true;
 }
-void RtAudioSoundSystem::stopDMA()
+void RRRtAudioSoundSystem::stopDMA()
 {
     if (inputEnabled)
     {

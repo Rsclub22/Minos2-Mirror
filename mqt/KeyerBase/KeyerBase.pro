@@ -34,6 +34,7 @@ SOURCES += \
     keyerBase.cpp \
     levelmeter.cpp \
     riff.cpp \
+    riffwriter.cpp \
     sbdriver.cpp \
     soundsys.cpp
 
@@ -60,6 +61,7 @@ HEADERS += \
     keyerlog.h \
     levelmeter.h \
     riff.h \
+    riffwriter.h \
     sbdriver.h \
     soundsys.h
 

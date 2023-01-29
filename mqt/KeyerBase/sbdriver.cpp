@@ -8,7 +8,6 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include "MShowMessageDlg.h"
-#include "riff.h"
 #include "cutils.h"
 #include "keyerBase.h"
 #include "keyerlog.h"

@@ -9,68 +9,15 @@
 #ifndef soundsysH
 #define soundsysH
 
-#include <QThread>
-#include <QMutex>
-#include <QWaitCondition>
-
 #include "riff.h"
 #include "SimpleComp.h"
 #include "CompressorParams.h"
 #include "adis_filter.h"
 
-
+class RiffWriter;
 class RtAudioSoundSystem;
-#if !defined (_MSC_VER)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-result"
-#pragma GCC diagnostic ignored "-Wold-style-cast"
-#endif
-// as we don't want to change rtaudio.h...
-#include "RtAudio.h"
-#if !defined (_MSC_VER)
-#pragma GCC diagnostic pop
-#endif
+class RtAudio;
 
-#define FRAMES 16
-#define FRAMESAMPLES 256
-#define RINGBUFFERSIZE 1024
-
-class InBuff
-{
-public:
-    unsigned int frameCount;
-    int16_t buff[FRAMESAMPLES * 2];
-};
-
-class RiffWriter : public QThread
-{
-    Q_OBJECT
-
-     RtAudioSoundSystem *ss;
-
-     QWaitCondition bufferNotEmpty;
-     QWaitCondition bufferNotFull;
-     QMutex mutex;
-
-     InBuff inBuffs[RINGBUFFERSIZE];
-     int recIndex = -1;
-     int writeIndex = -1;
-
-
-public:
-     bool terminated;
-    RiffWriter(RtAudioSoundSystem *parent = nullptr) ;
-    virtual ~RiffWriter() override;
-
-    virtual void run() Q_DECL_OVERRIDE;
-
-    void startInput();
-    void wakeAll();
-
-    void copyBuffer(int16_t *inStageBuffer, int nFrames);
-    void finishInput();
-
-};
 class RtAudioSoundSystem: public QObject
 {
     Q_OBJECT

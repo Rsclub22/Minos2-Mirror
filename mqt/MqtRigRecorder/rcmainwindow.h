@@ -53,7 +53,7 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-    RtAudioSoundSystem rass;
+    RRRtAudioSoundSystem rass;
 
     QDateTime tstart;
     QDateTime tend;
