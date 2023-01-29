@@ -3076,11 +3076,16 @@ void RigControlMainWindow::setMode(QString mode, VFO vfo)
             }
             else
             {
-                logMessage(QString("SetMode: Change Error Code = %1, Mode = %2").arg(QString::number(retCode), rigcommon::convertModeToQString(mCode)).arg(rigcommon::convertModeToQString(mCode)));
+                logMessage(QString("SetMode: Change Error Code = %1, Mode = %2")
+                           .arg(QString::number(retCode), rigcommon::convertModeToQString(mCode)));
 
                 if (radio->modeSupported(mCode, rigStateDetails->rfrequency))
                 {
                     radioError(retCode, tr("Set Mode"));
+                }
+                else
+                {
+                    logMessage(QString("Mode not sopported by radio"));
                 }
             }
 

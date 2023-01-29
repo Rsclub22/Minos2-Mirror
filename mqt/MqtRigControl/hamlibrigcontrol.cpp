@@ -489,7 +489,7 @@ bool HamlibRigControl::modeSupported(MODE mode, Frequency f)
     const freq_range_t  *fr = getFreqRange(my_rig, f);
     rmode_t rm = mapMode(mode);
 
-    bool supported = (fr->modes & rm) != 0;
+    bool supported = fr && ((fr->modes & rm) != 0);
     return supported;
 }
 
