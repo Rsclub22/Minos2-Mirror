@@ -14,6 +14,7 @@
 
 #include <math.h>
 #include "ContestApp.h"
+#include "MShowMessageDlg.h"
 #include "tlogcontainer.h"
 #include "tsinglelogframe.h"
 #include "SendRPCDM.h"
@@ -1604,8 +1605,10 @@ void RigControlFrame::setRadioState(QString s)
            QStringList sl = s.split(':');
            if (sl.count() == 2)
            {
-               ui->rigState->setText(HtmlFontColour(Qt::red) + tr("Error: %1").arg(sl[1]));
+               QString errMess = tr("Error: %1").arg(sl[1]);
+               ui->rigState->setText(HtmlFontColour(Qt::red) + errMess);
                emit radioHasError(sl[1]);
+               mShowMessage(errMess, this);
            }
         }
         else if (s == RIG_STATUS_CONNECTED)

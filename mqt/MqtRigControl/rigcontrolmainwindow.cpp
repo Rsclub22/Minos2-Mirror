@@ -1246,7 +1246,7 @@ int RigControlMainWindow::openRigCtldRadio(bool localRigCtld)
     if (retCode < 0)
     {
         radio->closeRig();
-        logMessage(QString("openRigCtldRadio: Error Opening Radio %1, Error Code = %2").arg(currentRadio.rigModel).arg(QString::number(retCode)));
+        logMessage(QString("openRigCtldRadio: Error Opening Radio %1, Error Code = %2").arg(currentRadio.rigModel, QString::number(retCode)));
         radioError(retCode, tr("RigCtld Open Radio"));
         return OPEN_FAILED;
     }
@@ -1332,7 +1332,7 @@ int RigControlMainWindow::openRadio()
         return OPEN_FAILED;
     }
 
-    logMessage(QString("Open Radio: Opening Radio %1 PortType %2").arg(currentRadio.radioName).arg(hamlibData::portTypeList[currentRadio.portType]));
+    logMessage(QString("Open Radio: Opening Radio %1 PortType %2").arg(currentRadio.radioName, hamlibData::portTypeList[currentRadio.portType]));
     showStatusMessage(tr("Opening Radio: %1").arg(currentRadio.radioName));
 
     if (currentRadio.portType == RigCapConstants::PortType::serial)
@@ -3076,8 +3076,7 @@ void RigControlMainWindow::setMode(QString mode, VFO vfo)
             }
             else
             {
-                logMessage(QString("SetMode: Change Error Code = %1, Mode = %2")
-                           .arg(QString::number(retCode), rigcommon::convertModeToQString(mCode)));
+                logMessage(QString("SetMode: Change Error Code = %1, Mode = %2").arg(QString::number(retCode), rigcommon::convertModeToQString(mCode)).arg(rigcommon::convertModeToQString(mCode)));
 
                 if (radio->modeSupported(mCode, rigStateDetails->rfrequency))
                 {
@@ -3085,10 +3084,13 @@ void RigControlMainWindow::setMode(QString mode, VFO vfo)
                 }
                 else
                 {
-                    logMessage(QString("Mode not sopported by radio"));
+                    logMessage(QString("Mode not supported by radio"));
+                    if(appName.size() > 0)
+                    {
+                        sendStatusToLogError(tr("%1 not supported by radio").arg(mode));
+                    }
                 }
             }
-
         }
         else
         {
@@ -3517,7 +3519,8 @@ void RigControlMainWindow::sendRitFreqLogger(const ShortFreq &ritFreq)
         PubSubName psname(currentRadio.radioName);
         msg->rigCache.setRadioRitFreq(psname, ritFreq);
         //msg->rigCache.publish();
-        logMessage(QString("Send Rit freq to logger = %1 psn=%2").arg(convertRitFreqToStr(ritFreq, rigStateDetails->ritKHzFlag)).arg(psname.toString()));
+        logMessage(QString("Send Rit freq to logger = %1 psn=%2")
+                   .arg(convertRitFreqToStr(ritFreq, rigStateDetails->ritKHzFlag), psname.toString()));
 
     }
 }
@@ -3947,7 +3950,7 @@ void RigControlMainWindow::addBandListToRigCache(const QString radioName, const 
 
         PubSubName psname(radioName);
         QString bandList = supBandList.join(":");
-        logMessage(QString("Add bandlist to rigcache for radio %1 = %2").arg(radioName).arg(bandList));
+        logMessage(QString("Add bandlist to rigcache for radio %1 = %2").arg(radioName, bandList));
         msg->rigCache.setBandList(psname, bandList);
 
     }
@@ -3998,7 +4001,7 @@ void RigControlMainWindow::sendStatusToLogDisConnected()
 void RigControlMainWindow::sendStatusToLogError(QString errMsg)
 {
     logMessage(QString("Send error status to logger - %1").arg(errMsg));
-    sendStatusLogger(QString("%1:%2").arg(tr(RIG_STATUS_ERROR)).arg(errMsg));
+    sendStatusLogger(QString("%1:%2").arg(tr(RIG_STATUS_ERROR),errMsg));
 }
 
 void RigControlMainWindow::sendRadioSwitchCompleteToLogger()
@@ -5110,7 +5113,8 @@ void RigControlMainWindow::setTxRxIndOnOff(bool state)
 void RigControlMainWindow::selFreqClicked()
 {
     // check freq valid format
-    QString f = ui->freqInputBox->text().trimmed().remove( QRegularExpression("^[0]*"));
+    static QRegularExpression re("^[0]*");
+    QString f = ui->freqInputBox->text().trimmed().remove( re);
 
     if (valInputFreq(f, tr("Invalid freq!")))
     {
