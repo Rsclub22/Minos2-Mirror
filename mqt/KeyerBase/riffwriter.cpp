@@ -1,10 +1,32 @@
 #include "soundsys.h"
 #include "riffwriter.h"
 
-RiffWriter::RiffWriter(RtAudioSoundSystem *parent) : QThread(parent), ss(parent), terminated(false)
+#define RINGBUFFERSIZE 1024
+
+InBuff::InBuff()
 {
 }
-RiffWriter::~RiffWriter(){}
+
+InBuff::~InBuff()
+{
+    delete [] buff;
+}
+
+RiffWriter::RiffWriter(RtAudioSoundSystem *parent, int bufferFrames) :
+    QThread(parent), bufferFrames(bufferFrames), ss(parent), terminated(false)
+{
+    inBuffs = new InBuff[RINGBUFFERSIZE];
+
+    for(int i = 0; i < RINGBUFFERSIZE; i++)
+    {
+        inBuffs[i].buff = new int16_t[bufferFrames * 2];
+    }
+
+}
+RiffWriter::~RiffWriter()
+{
+    delete [] inBuffs;
+}
 
 void RiffWriter::run()
 {
@@ -122,3 +144,4 @@ void RiffWriter::finishInput()
     bufferNotEmpty.wakeAll();   // say there is room for input
     mutex.unlock();
 }
+

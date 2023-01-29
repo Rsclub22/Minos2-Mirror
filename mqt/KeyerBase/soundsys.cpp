@@ -27,6 +27,7 @@
 #include "soundsys.h"
 
 #define FRAMES 16
+#define FRAMESAMPLES 256
 
 /*static*/
 //==============================================================================
@@ -105,11 +106,6 @@ bool RtAudioSoundSystem::initialise( QString ind, QString outd  )
     {
         audio = new RtAudio();
     }
-    if (!wThread)
-    {
-        wThread = new RiffWriter(this);
-        wThread->start();
-    }
     micCompressor.setSampleRate(sampleRate);
     micCompressor.setWindow(10);       // milliseconds
     micCompressor.setThresh( -10 );
@@ -176,6 +172,12 @@ bool RtAudioSoundSystem::initialise( QString ind, QString outd  )
                           &soptions
                           );
         trace("Audio stream opened OK");
+
+        if (!wThread)
+        {
+            wThread = new RiffWriter(this, bufferFrames);
+            wThread->start();
+        }
 
         audio->startStream();
     }

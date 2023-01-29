@@ -9,16 +9,15 @@
 #include <unistd.h>
 #endif
 
-#define FRAMESAMPLES 256
-#define RINGBUFFERSIZE 1024
-
 class RtAudioSoundSystem;
 
 class InBuff
 {
 public:
-    unsigned int frameCount;
-    int16_t buff[FRAMESAMPLES * 2];
+    InBuff();
+    ~InBuff();
+    unsigned int frameCount = 0;
+    int16_t *buff = nullptr;
 };
 
 class RiffWriter : public QThread
@@ -31,14 +30,15 @@ class RiffWriter : public QThread
      QWaitCondition bufferNotFull;
      QMutex mutex;
 
-     InBuff inBuffs[RINGBUFFERSIZE];
+     int bufferFrames ;
+     InBuff *inBuffs;
      int recIndex = -1;
      int writeIndex = -1;
 
 
 public:
      bool terminated;
-    RiffWriter(RtAudioSoundSystem *parent = nullptr) ;
+    RiffWriter(RtAudioSoundSystem *parent, int bufferFrames) ;
     virtual ~RiffWriter() override;
 
     virtual void run() Q_DECL_OVERRIDE;
