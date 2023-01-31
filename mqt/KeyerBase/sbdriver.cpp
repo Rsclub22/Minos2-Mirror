@@ -525,9 +525,15 @@ const dvkFile *SoundSystemDriver::getFile(int fno)
 
     return nullptr;
 }
+
+void SoundSystemDriver::setSampleRate(unsigned int r)
+{
+    rate = r;
+    soundSystem->setRate(r);
+}
 SoundSystemDriver::SoundSystemDriver()
 {
-   soundSystem = RtAudioSoundSystem::createSoundSystem();
+    soundSystem = RtAudioSoundSystem::createSoundSystem();
    connect(soundSystem, &RtAudioSoundSystem::interruptOK, this, &SoundSystemDriver::interruptOK);
    connect(soundSystem, &RtAudioSoundSystem::ssOutputFinished, this, &SoundSystemDriver::outputFinished);
    connect(soundSystem, &RtAudioSoundSystem::actionQueueFinished, this, &SoundSystemDriver::actionQueueFinished);

@@ -130,32 +130,47 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../KeyerMain.ui" line="385"/>
+        <location filename="../KeyerMain.ui" line="387"/>
+        <source>Audio Input</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../KeyerMain.ui" line="394"/>
+        <source>Audio Output</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../KeyerMain.ui" line="401"/>
+        <source>IP Port</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../KeyerMain.ui" line="470"/>
         <source>Setup Script (alsactl)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../KeyerMain.ui" line="397"/>
+        <location filename="../KeyerMain.ui" line="482"/>
         <source>...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../KeyerMain.ui" line="423"/>
+        <location filename="../KeyerMain.ui" line="508"/>
         <source>Save Alsa Config</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../KeyerMain.ui" line="430"/>
+        <location filename="../KeyerMain.ui" line="515"/>
         <source>Restore Alsa Config</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../KeyerMain.ui" line="477"/>
+        <location filename="../KeyerMain.ui" line="562"/>
         <source>Metering</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../KeyerMain.ui" line="484"/>
+        <location filename="../KeyerMain.ui" line="569"/>
         <source>Input</source>
         <translation type="unfinished"></translation>
     </message>
@@ -208,22 +223,27 @@ Through</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../KeyerMain.cpp" line="359"/>
+        <location filename="../KeyerMain.cpp" line="168"/>
+        <source>Remote IP Client</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../KeyerMain.cpp" line="378"/>
         <source>Push PTT to Commence Recording</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../KeyerMain.cpp" line="510"/>
+        <location filename="../KeyerMain.cpp" line="529"/>
         <source>Alsa Control Files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../KeyerMain.cpp" line="511"/>
+        <location filename="../KeyerMain.cpp" line="530"/>
         <source>All Files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../KeyerMain.cpp" line="514"/>
+        <location filename="../KeyerMain.cpp" line="533"/>
         <source>File for mixer setup</source>
         <translation type="unfinished"></translation>
     </message>

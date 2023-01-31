@@ -165,7 +165,7 @@ void IPSystem::doStart()
     {
         listen();
     }
-    else
+    else if (!host.isNull())
     {
         if (bc)
         {

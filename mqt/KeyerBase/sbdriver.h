@@ -102,6 +102,7 @@ public:
       bool play;  /* Play or record */
 
       unsigned int rate = 0;   /* rate in Hertz -- this gets reset to nearest available value */
+      void setSampleRate(unsigned int r);
 
       void setVolumeMults(int record, int replay, int passThrough, const CompressorParams &compression, bool df, bool dc);
 

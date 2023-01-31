@@ -122,6 +122,8 @@ static const QString KeyerCategory       ("Keyer");
 static const QString KeyerConfigCategory ("KeyerConfig");
 static const QString keyerReport         ("Report");
 
+static const QString keyerProxyApp       {"mqtKeyerProxy"};
+
 // Control
 static const QString controlApp         ("mqtControl");
 static const QString lineControlCategory ("LineControl");

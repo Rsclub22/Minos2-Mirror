@@ -107,62 +107,35 @@ bool RtAudioSoundSystem::initialise( QString ind, QString outd, QString port  )
     {
         audio = new RtAudio();
     }
-    micCompressor.setSampleRate(sampleRate);
-    micCompressor.setWindow(10);       // milliseconds
-    micCompressor.setThresh( -10 );
-    micCompressor.setRatio( 0.1 );
-    micCompressor.setAttack( 1.0 );     // 1ms seems like a good look-ahead to me
-    micCompressor.setRelease( 10.0 ); // 10ms release is good
-    micCompressor.initRuntime();
 
-    replayCompressor.setSampleRate(sampleRate);
-    replayCompressor.setWindow(10);       // milliseconds
-    replayCompressor.setThresh( -10 );
-    replayCompressor.setRatio( 0.1 );
-    replayCompressor.setAttack( 1.0 );     // 1ms seems like a good look-ahead to me
-    replayCompressor.setRelease( 10.0 ); // 10ms release is good
-    replayCompressor.initRuntime();
-
-    micfilter1 = create_bw_band_pass_filter(4, 48000, 100, 3000);   // order, sampling freq, lower half power, upper half power
-    micfilter2 = create_bw_band_pass_filter(4, 48000, 100, 3000);   // order, sampling freq, lower half power, upper half power
-
-    replayfilter1 = create_bw_band_pass_filter(4, 48000, 100, 3000);   // order, sampling freq, lower half power, upper half power
-    replayfilter2 = create_bw_band_pass_filter(4, 48000, 100, 3000);   // order, sampling freq, lower half power, upper half power
-
-
-    bool ip = false;
+    bool oip = false;
     RtAudio::StreamParameters outParams;
     RtAudio::StreamParameters inParams;
     RtAudio::StreamOptions soptions;
 
     unsigned int bufferFrames = FRAMESAMPLES;
 
-    if (outd.isEmpty())
+    if (deviceIds.contains(outd))
     {
-        outParams.deviceId = audio->getDefaultOutputDevice();
+        outParams.deviceId = deviceIds[outd];
     }
     else
     {
-        if (deviceIds.contains(outd))
-        {
-            outParams.deviceId = deviceIds[outd];
-        }
-        else
-        {
-            // IP device
-            ip = true;
-        }
+        // IP device
+        oip = true;
     }
+
     outParams.firstChannel = 0;
     outParams.nChannels = outChannels;
 
-    if (ind.isEmpty())
+    bool iip = false;
+    if (deviceIds.contains(ind))
     {
-        inParams.deviceId = audio->getDefaultInputDevice();
+        inParams.deviceId = deviceIds[ind];
     }
     else
     {
-        inParams.deviceId = deviceIds[ind];
+        iip = true;
     }
     inParams.firstChannel = 0;
     inParams.nChannels = inChannels;
@@ -172,8 +145,8 @@ bool RtAudioSoundSystem::initialise( QString ind, QString outd, QString port  )
     soptions.priority = 0;
     soptions.streamName = "";
 
-    audio->openStream(ip?nullptr:&outParams,
-                      &inParams,
+    audio->openStream(oip?nullptr:&outParams,
+                      iip?nullptr:&inParams,
                       RTAUDIO_SINT16, sampleRate,
                       &bufferFrames, ::audioCallback,
                       static_cast<void *>(this),
@@ -181,6 +154,32 @@ bool RtAudioSoundSystem::initialise( QString ind, QString outd, QString port  )
                       );
     trace("Audio stream opened OK");
 
+    if (!iip)
+    {
+        micCompressor.setSampleRate(sampleRate);
+        micCompressor.setWindow(10);       // milliseconds
+        micCompressor.setThresh( -10 );
+        micCompressor.setRatio( 0.1 );
+        micCompressor.setAttack( 1.0 );     // 1ms seems like a good look-ahead to me
+        micCompressor.setRelease( 10.0 ); // 10ms release is good
+        micCompressor.initRuntime();
+
+        replayCompressor.setSampleRate(sampleRate);
+        replayCompressor.setWindow(10);       // milliseconds
+        replayCompressor.setThresh( -10 );
+        replayCompressor.setRatio( 0.1 );
+        replayCompressor.setAttack( 1.0 );     // 1ms seems like a good look-ahead to me
+        replayCompressor.setRelease( 10.0 ); // 10ms release is good
+        replayCompressor.initRuntime();
+
+        micfilter1 = create_bw_band_pass_filter(4, 48000, 100, 3000);   // order, sampling freq, lower half power, upper half power
+        micfilter2 = create_bw_band_pass_filter(4, 48000, 100, 3000);   // order, sampling freq, lower half power, upper half power
+
+        replayfilter1 = create_bw_band_pass_filter(4, 48000, 100, 3000);   // order, sampling freq, lower half power, upper half power
+        replayfilter2 = create_bw_band_pass_filter(4, 48000, 100, 3000);   // order, sampling freq, lower half power, upper half power
+
+
+    }
     if (!dataBuffer)
     {
         dataBuffer = new IPADataBuffer(this);
@@ -194,7 +193,9 @@ bool RtAudioSoundSystem::initialise( QString ind, QString outd, QString port  )
         //connect(ipSystem, &IPSystem::sequenceCount, this, &MainWindow::onSequenceCount);
         connect(this, &RtAudioSoundSystem::soundAvailable, this, &RtAudioSoundSystem::onSoundAvailable, Qt::QueuedConnection);
 
-        ipSystem->initialise(true, dataBuffer, QHostAddress(), port.toInt());
+        // iip also means data receiver
+
+        ipSystem->initialise(!iip, dataBuffer, QHostAddress(), port.toInt());
         ipSystem->doStart();
     }
     if (!wThread)
@@ -316,6 +317,8 @@ int RtAudioSoundSystem::audioCallback(void *outputBuffer, void *inputBuffer,
     // NB if there is no outputBuffer and we are reading a file then no InterruptOK
     // gets sent - so the play gets killed quite quickly
     InBuff *inBuff = nullptr;
+    InBuff *outBuff = nullptr;
+
     if (outputBuffer == nullptr)
     {
         inBuff = dataBuffer->getNextInputBuffer();
@@ -327,13 +330,23 @@ int RtAudioSoundSystem::audioCallback(void *outputBuffer, void *inputBuffer,
         }
 
     }
+    if (inputBuffer == nullptr)
+    {
+        outBuff = dataBuffer->getNextOutputBuffer();
+        if (outBuff)
+        {
+
+            inputBuffer = outBuff->buff;
+        }
+
+    }
 
     if (outputBuffer != nullptr && nFrames > 0)
     {
         memset(outputBuffer, 0, nFrames * 2 * outChannels);   // 2 bytes, 2 channels
     }
 
-    if (inputBuffer && nFrames)
+    if (!outBuff && inputBuffer && nFrames)
     {
         // ALWAYS apply compressor to input, so it continues to adapt
         int16_t * q = reinterpret_cast<  int16_t * > ( inputBuffer );
@@ -431,6 +444,12 @@ int RtAudioSoundSystem::audioCallback(void *outputBuffer, void *inputBuffer,
         emit setVU( static_cast<unsigned int>(maxvol),
                       static_cast<unsigned int>(rmsval),
                       nFrames );
+    }
+    if (outBuff != nullptr)
+    {
+        memcpy(outputBuffer, outBuff->buff, outBuff->bh.frameCount * 2 * outChannels);
+
+        dataBuffer->unlockNextOutput();
     }
     if (inBuff != nullptr)
     {

@@ -4,59 +4,67 @@
 <context>
     <name>DMMainWindow</name>
     <message>
-        <location filename="../dmmainwindow.ui" line="14"/>
+        <location filename="../dmmainwindow.cpp" line="194"/>
+        <location filename="../dmmainwindow.cpp" line="537"/>
         <source>Minos Data Modes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dmmainwindow.ui" line="30"/>
+        <location filename="../dmmainwindow.ui" line="46"/>
         <source>Make this sender</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dmmainwindow.ui" line="44"/>
+        <location filename="../dmmainwindow.ui" line="60"/>
         <source>Send</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dmmainwindow.ui" line="58"/>
-        <location filename="../dmmainwindow.ui" line="65"/>
-        <location filename="../dmmainwindow.ui" line="72"/>
-        <location filename="../dmmainwindow.ui" line="79"/>
-        <location filename="../dmmainwindow.ui" line="86"/>
-        <location filename="../dmmainwindow.ui" line="93"/>
-        <location filename="../dmmainwindow.ui" line="104"/>
-        <location filename="../dmmainwindow.ui" line="111"/>
-        <location filename="../dmmainwindow.ui" line="118"/>
-        <location filename="../dmmainwindow.ui" line="125"/>
-        <location filename="../dmmainwindow.ui" line="132"/>
-        <location filename="../dmmainwindow.ui" line="139"/>
-        <source>PushButton</source>
+        <location filename="../dmmainwindow.ui" line="67"/>
+        <source>Stop</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dmmainwindow.ui" line="161"/>
+        <location filename="../dmmainwindow.ui" line="86"/>
+        <source>Current Radio</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dmmainwindow.ui" line="100"/>
+        <location filename="../dmmainwindow.ui" line="107"/>
+        <location filename="../dmmainwindow.ui" line="135"/>
+        <location filename="../dmmainwindow.ui" line="142"/>
+        <location filename="../dmmainwindow.ui" line="149"/>
+        <location filename="../dmmainwindow.ui" line="156"/>
+        <location filename="../dmmainwindow.ui" line="163"/>
+        <location filename="../dmmainwindow.ui" line="170"/>
+        <location filename="../dmmainwindow.ui" line="181"/>
+        <location filename="../dmmainwindow.ui" line="188"/>
+        <location filename="../dmmainwindow.ui" line="195"/>
+        <location filename="../dmmainwindow.ui" line="202"/>
+        <location filename="../dmmainwindow.ui" line="209"/>
+        <location filename="../dmmainwindow.ui" line="216"/>
+        <source>...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dmmainwindow.ui" line="242"/>
         <source>Engine</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dmmainwindow.ui" line="166"/>
+        <location filename="../dmmainwindow.ui" line="247"/>
         <source>Clear</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dmmainwindow.cpp" line="77"/>
+        <location filename="../dmmainwindow.cpp" line="81"/>
         <source>Default Device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dmmainwindow.cpp" line="141"/>
+        <location filename="../dmmainwindow.cpp" line="152"/>
         <source>Configure Engines</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../dmmainwindow.cpp" line="436"/>
-        <source>Minos Data Modes App</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -150,7 +158,7 @@
 <context>
     <name>MMVARIFrame</name>
     <message>
-        <location filename="../MMVARIFrame.ui" line="13"/>
+        <location filename="../MMVARIFrame.ui" line="14"/>
         <source>Frame</source>
         <translation type="unfinished"></translation>
     </message>
