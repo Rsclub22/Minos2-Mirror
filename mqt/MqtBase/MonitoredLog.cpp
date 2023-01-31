@@ -17,6 +17,9 @@ MonitoredLog::MonitoredLog(MonitoredStation *s) : QObject()
   , station(s)
 {
     qRegisterMetaType<QSharedPointer<MonitoredLog> >("MonitoredLog");
+
+    MinosRPC *rpc = MinosRPC::validMinosRPC();
+    connect(rpc, &MinosRPC::routerCall, this, &MonitoredLog::on_routerCall);
 }
 MonitoredLog::~MonitoredLog()
 {
@@ -28,10 +31,6 @@ MonitoredLog::~MonitoredLog()
 }
 void MonitoredLog::initialise(const QString &prouter, const QString &name )
 {
-    MinosRPC *rpc = MinosRPC::validMinosRPC();
-
-    connect(rpc, &MinosRPC::routerCall, this, &MonitoredLog::on_routerCall);
-
    publishedName = name;
    router = prouter;
 
@@ -206,49 +205,46 @@ void MonitoredLog::on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, cons
                     QString ss = sl[1] + "/" + sl[0] + "/xxx";
                     Provider p(ss);
 
-                    for ( auto const &l: qAsConst(station->slotList) )
+                    if (publishedName == logName )
                     {
-                        if (l && l->getPublishedName() == logName )
+                        contest->lastInserted = -1;
+                        emit newStanzas(this);
+
+                        trace( "||" + stanzaData + "||" );
+                        processLogStanza( stanza, stanzaData );
+
+                        BaseContestLog *contest = getContest();
+
+                        int li = contest->lastInserted;
+                       // if (li >= 0)
                         {
-                            contest->lastInserted = -1;
-                            emit newStanzas(this);
-
-                            trace( "||" + stanzaData + "||" );
-                            l ->processLogStanza( stanza, stanzaData );
-
-                            BaseContestLog *contest = l->getContest();
-
-                            int li = contest->lastInserted;
-                           // if (li >= 0)
+                            int ctc = contest->ctList.count();
+                            if ( li >= 0 && li == ctc - 1)
                             {
-                                int ctc = contest->ctList.count();
-                                if ( li >= 0 && li == ctc - 1)
+                                // and add callsign to callsign set
+
+                                Callsign ncall = contest->pcontactAt(li)->cs;
+                                callsigns.insert(ncall);
+
+                                // new last contact; import will have checked it
+                                // IT CAN MODIFY lastInserted to -1!
+                                emit newLastContact(this);
+
+                            }
+                            else
+                            {
+                                // change to a contact; we need a full rescan to understand it
+                                emit contactChanged(this);
+
+                                // rescan log and recreate callsign set
+                                callsigns.clear();
+                                for(const auto &cct: qAsConst(contest->ctList))
                                 {
-                                    // and add callsign to callsign set
-
-                                    Callsign ncall = contest->pcontactAt(li)->cs;
-                                    callsigns.insert(ncall);
-
-                                    // new last contact; import will have checked it
-                                    // IT CAN MODIFY lastInserted to -1!
-                                    emit newLastContact(this);
-
-                                }
-                                else
-                                {
-                                    // change to a contact; we need a full rescan to understand it
-                                    emit contactChanged(this);
-
-                                    // rescan log and recreate callsign set
-                                    callsigns.clear();
-                                    for(const auto &cct: qAsConst(contest->ctList))
-                                    {
-                                        callsigns.insert(cct.wt->cs);
-                                    }
+                                    callsigns.insert(cct.wt->cs);
                                 }
                             }
-                            return ;
                         }
+                        return ;
                     }
                 }
             }
