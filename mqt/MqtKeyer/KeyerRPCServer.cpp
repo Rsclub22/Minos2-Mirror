@@ -140,6 +140,11 @@ void KeyerServer::publishVUMeter(unsigned int rmsLevel, unsigned int peakLevel, 
     if (sendMeters)
         KS->doPublishVUMeter(rmsLevel, peakLevel, numSamples, metersSeq);
 }
+void KeyerServer::publishIPDetail(QString port)
+{
+    checkConnection();
+    RPCPubSub::publish(rpcConstants::KeyerCategory, rpcConstants::keyerListen, port, psPublished);
+}
 //---------------------------------------------------------------------------
 void KeyerServer::on_routerCall(bool err, QSharedPointer<MinosRPCObj>mro, const QString from )
 {

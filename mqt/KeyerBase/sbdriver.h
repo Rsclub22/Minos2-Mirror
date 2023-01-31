@@ -12,6 +12,8 @@
 #include <QVector>
 #include "CompressorParams.h"
 
+const QString DEFAULT_PORT( "7799" );
+
 class dvkFile
 {
    public:
@@ -125,10 +127,12 @@ public:
       void startTone2();
       void createCWBuffer( const char *message, int speed, int tone );
 
-      bool initialise(QString ind, QString outd);
-      bool sbdvp_init(QString ind, QString outd, QString &errmess, unsigned int rate, int pipTone, int pipVolume, int pipLength );
+      bool initialise(QString ind, QString outd, QString port);
+      bool sbdvp_init(QString ind, QString outd, QString port, QString &errmess, unsigned int rate, int pipTone, int pipVolume, int pipLength );
       QStringList getInputDevices();
+      QString getDefaultInputDevice();
       QStringList getOutputDevices();
+      QString getDefaultOutputDevice();
       void closedown();
 private slots:
       void interruptOK();

@@ -17,6 +17,8 @@
 class RiffWriter;
 class RtAudioSoundSystem;
 class RtAudio;
+class IPADataBuffer;
+class IPSystem;
 
 class RtAudioSoundSystem: public QObject
 {
@@ -24,11 +26,14 @@ class RtAudioSoundSystem: public QObject
 
 private slots:
 
+    void onSoundAvailable();
 signals:
     void interruptOK();
     void ssOutputFinished();
     void actionQueueFinished();
     void setVU(unsigned int a, unsigned int b, unsigned int c);
+    void soundAvailable();
+
 
 protected:
     void readFromFile(void *outputBuffer, unsigned int nFrames, int16_t &maxvol, qreal &rmsval);
@@ -40,12 +45,15 @@ public:
     bool doBWFilter = true;
     bool doCompression = true;
 
-    bool initialise(QString ind , QString outd);
+    bool initialise(QString ind , QString outd, QString port);
     void stop();
     void closedown();
 
     QStringList inputDevices;
     QStringList outputDevices;
+
+    QString defaultInput;
+    QString defaultOutput;
 
     unsigned int setRate(unsigned int rate);
 
@@ -74,6 +82,8 @@ public:
     WaveFile *outWave = nullptr;
     void writeDataToFile(void *inp, unsigned int nFrames);
     RiffWriter *wThread = nullptr;
+    IPADataBuffer *dataBuffer = nullptr;
+    IPSystem *ipSystem = nullptr;
 
     int audioCallback( void *outputBuffer, void *inputBuffer,
                                     unsigned int nFrames,

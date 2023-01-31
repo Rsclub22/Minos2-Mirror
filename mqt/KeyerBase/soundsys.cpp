@@ -11,7 +11,10 @@
 #include <QtEndian>
 #include <QtMath>
 #include "keyerlog.h"
+#include "inbuff.h"
 #include "riffwriter.h"
+#include "databuffer.h"
+#include "ipsystem.h"
 
 #if !defined (_MSC_VER)
 #pragma GCC diagnostic push
@@ -67,11 +70,13 @@ RtAudioSoundSystem::RtAudioSoundSystem()
        {
            inChannels = info.inputChannels;
            trace("(Default input)");
+           defaultInput = info.name.c_str();
        }
        if (devices[i] == defOutput)
        {
            outChannels = info.outputChannels;
            trace("(Default output)");
+           defaultOutput = info.name.c_str();
        }
        if (info.inputChannels)
        {
@@ -96,7 +101,7 @@ RtAudioSoundSystem::~RtAudioSoundSystem()
    free_bw_band_pass(replayfilter2);
 
 }
-bool RtAudioSoundSystem::initialise( QString ind, QString outd  )
+bool RtAudioSoundSystem::initialise( QString ind, QString outd, QString port  )
 {
     if (!audio)
     {
@@ -125,6 +130,7 @@ bool RtAudioSoundSystem::initialise( QString ind, QString outd  )
     replayfilter2 = create_bw_band_pass_filter(4, 48000, 100, 3000);   // order, sampling freq, lower half power, upper half power
 
 
+    bool ip = false;
     RtAudio::StreamParameters outParams;
     RtAudio::StreamParameters inParams;
     RtAudio::StreamOptions soptions;
@@ -137,7 +143,15 @@ bool RtAudioSoundSystem::initialise( QString ind, QString outd  )
     }
     else
     {
-        outParams.deviceId = deviceIds[outd];
+        if (deviceIds.contains(outd))
+        {
+            outParams.deviceId = deviceIds[outd];
+        }
+        else
+        {
+            // IP device
+            ip = true;
+        }
     }
     outParams.firstChannel = 0;
     outParams.nChannels = outChannels;
@@ -158,7 +172,7 @@ bool RtAudioSoundSystem::initialise( QString ind, QString outd  )
     soptions.priority = 0;
     soptions.streamName = "";
 
-    audio->openStream(&outParams,
+    audio->openStream(ip?nullptr:&outParams,
                       &inParams,
                       RTAUDIO_SINT16, sampleRate,
                       &bufferFrames, ::audioCallback,
@@ -167,6 +181,22 @@ bool RtAudioSoundSystem::initialise( QString ind, QString outd  )
                       );
     trace("Audio stream opened OK");
 
+    if (!dataBuffer)
+    {
+        dataBuffer = new IPADataBuffer(this);
+        dataBuffer->setBuffers(bufferFrames);
+        dataBuffer->startInput();
+    }
+
+    if (!ipSystem)
+    {
+        ipSystem = IPSystem::createIPSystem();
+        //connect(ipSystem, &IPSystem::sequenceCount, this, &MainWindow::onSequenceCount);
+        connect(this, &RtAudioSoundSystem::soundAvailable, this, &RtAudioSoundSystem::onSoundAvailable, Qt::QueuedConnection);
+
+        ipSystem->initialise(true, dataBuffer, QHostAddress(), port.toInt());
+        ipSystem->doStart();
+    }
     if (!wThread)
     {
         wThread = new RiffWriter(this, bufferFrames);
@@ -175,6 +205,13 @@ bool RtAudioSoundSystem::initialise( QString ind, QString outd  )
 
     audio->startStream();
     return true;
+}
+void RtAudioSoundSystem::onSoundAvailable()
+{
+    if (ipSystem)
+    {
+        while(ipSystem->tryOutput()){}
+    }
 }
 void RtAudioSoundSystem::stop()
 {
@@ -204,6 +241,9 @@ void RtAudioSoundSystem::closedown()
 
         delete wThread;
         wThread = nullptr;
+
+        delete dataBuffer;
+        dataBuffer = nullptr;
     }
 }
 
@@ -270,6 +310,23 @@ int RtAudioSoundSystem::audioCallback(void *outputBuffer, void *inputBuffer,
         trace("Stream output underflow detected.");
     }
 
+    // If no outputBuffer, we may be sending IP; if so we need to get the outputBuffer
+    // from the IPDataBuffer to be filled
+
+    // NB if there is no outputBuffer and we are reading a file then no InterruptOK
+    // gets sent - so the play gets killed quite quickly
+    InBuff *inBuff = nullptr;
+    if (outputBuffer == nullptr)
+    {
+        inBuff = dataBuffer->getNextInputBuffer();
+        if (inBuff)
+        {
+            inBuff->bh.frameCount = nFrames;
+
+            outputBuffer = inBuff->buff;
+        }
+
+    }
 
     if (outputBuffer != nullptr && nFrames > 0)
     {
@@ -374,6 +431,11 @@ int RtAudioSoundSystem::audioCallback(void *outputBuffer, void *inputBuffer,
         emit setVU( static_cast<unsigned int>(maxvol),
                       static_cast<unsigned int>(rmsval),
                       nFrames );
+    }
+    if (inBuff != nullptr)
+    {
+        dataBuffer->unlockNextInput();
+        emit soundAvailable();
     }
 
     /*

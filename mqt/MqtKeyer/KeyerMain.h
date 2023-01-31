@@ -101,6 +101,10 @@ private slots:
 
     void on_doCompression_stateChanged(int arg1);
 
+    void on_inputCombo_activated(int index);
+
+    void on_outputCombo_activated(int index);
+
 private:
     void syncSetLines();
     QTimer lineTimer;

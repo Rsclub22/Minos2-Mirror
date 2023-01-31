@@ -952,7 +952,13 @@ void sbKeyer::sbTickEvent()           // this will often be an interrupt routine
 bool sbKeyer::sbInitialise( unsigned int rate, int pipTone, int pipVolume, int pipLength )
 {
    QString errmess;
-   if ( !SoundSystemDriver::getSbDriver() ->sbdvp_init("", "", errmess, rate, pipTone, pipVolume, pipLength  ) )
+   QSettings settings;
+
+   QString currentInput = settings.value("inputDevice", SoundSystemDriver::getSbDriver()->getDefaultInputDevice()).toString();
+   QString currentOutput = settings.value("outputDevice", SoundSystemDriver::getSbDriver()->getDefaultOutputDevice()).toString();
+   QString port = settings.value("SenderPort", DEFAULT_PORT).toString();
+
+   if ( !SoundSystemDriver::getSbDriver() ->sbdvp_init(currentInput, currentOutput, port, errmess, rate, pipTone, pipVolume, pipLength  ) )
    {
       trace( "sbdvp_init failed! " + errmess );
       return false;

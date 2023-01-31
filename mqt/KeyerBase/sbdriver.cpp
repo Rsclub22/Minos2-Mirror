@@ -264,13 +264,13 @@ void SoundSystemDriver::closedown()
 {
     soundSystem->closedown();
 }
-bool SoundSystemDriver::initialise(QString ind, QString outd)
+bool SoundSystemDriver::initialise(QString ind, QString outd, QString port)
 {
-    bool ret = soundSystem->initialise(ind, outd);
+    bool ret = soundSystem->initialise(ind, outd, port);
     return ret;
 }
 
-bool SoundSystemDriver::sbdvp_init( QString ind, QString outd, QString &errmess, unsigned int srate, int pipTone, int pipVolume, int pipLength )
+bool SoundSystemDriver::sbdvp_init( QString ind, QString outd, QString port, QString &errmess, unsigned int srate, int pipTone, int pipVolume, int pipLength )
 {
    // should be done from config when the sb is defined as in use.
 
@@ -291,7 +291,7 @@ bool SoundSystemDriver::sbdvp_init( QString ind, QString outd, QString &errmess,
 
       rate = soundSystem->setRate(srate);
 
-      if ( !soundSystem->initialise( ind, outd ) )
+      if ( !soundSystem->initialise( ind, outd, port ) )
          return false;
 
       emit ptt(false);
@@ -333,10 +333,17 @@ QStringList SoundSystemDriver::getInputDevices()
 {
     return soundSystem->inputDevices;
 }
-
+QString SoundSystemDriver::getDefaultInputDevice()
+{
+    return soundSystem->defaultInput;
+}
 QStringList SoundSystemDriver::getOutputDevices()
 {
     return soundSystem->outputDevices;
+}
+QString SoundSystemDriver::getDefaultOutputDevice()
+{
+    return soundSystem->defaultOutput;
 }
 
 

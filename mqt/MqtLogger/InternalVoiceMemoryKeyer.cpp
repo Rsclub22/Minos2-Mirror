@@ -59,7 +59,7 @@ void InternalVoiceMemoryKeyer::voiceKeyerInit(int &numButtons)
     numButtons = settings.value("Common/NumButtons", VOICEKEYER_MAX_NUMBUTTONS).toInt();
 
     QString errmess;
-    if ( !SoundSystemDriver::getSbDriver() ->sbdvp_init( indev, outdev, errmess, 48000, 0, 0, 0 ) )
+    if ( !SoundSystemDriver::getSbDriver() ->sbdvp_init( indev, outdev, "", errmess, 48000, 0, 0, 0 ) )
     {
        trace( "sbdvp_init failed! " + errmess );
     }

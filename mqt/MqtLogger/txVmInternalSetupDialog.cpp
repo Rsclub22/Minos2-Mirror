@@ -101,7 +101,7 @@ void txVmInternalSetupDialog::inChannelCB_currentTextChanged(const QString &arg1
 
     trace("About to re-initialise audio");
     SoundSystemDriver::getSbDriver()->closedown();
-    SoundSystemDriver::getSbDriver()->initialise(ui->inChannelCB->currentText(), ui->outChannelCB->currentText());
+    SoundSystemDriver::getSbDriver()->initialise(ui->inChannelCB->currentText(), ui->outChannelCB->currentText(), "");
 }
 
 void txVmInternalSetupDialog::outChannelCB_currentTextChanged(const QString &arg1)
@@ -111,5 +111,5 @@ void txVmInternalSetupDialog::outChannelCB_currentTextChanged(const QString &arg
     settings.setValue(outdevKey, arg1);
     trace("About to re-initialise audio");
     SoundSystemDriver::getSbDriver()->closedown();
-    SoundSystemDriver::getSbDriver()->initialise(ui->inChannelCB->currentText(), ui->outChannelCB->currentText());
+    SoundSystemDriver::getSbDriver()->initialise(ui->inChannelCB->currentText(), ui->outChannelCB->currentText(), "");
 }

@@ -31,6 +31,9 @@ SOURCES += \
     SliderSpinner.cpp \
     VKMixer.cpp \
     WaveShowDialog.cpp \
+    databuffer.cpp \
+    inbuff.cpp \
+    ipsystem.cpp \
     keyerBase.cpp \
     levelmeter.cpp \
     riff.cpp \
@@ -55,7 +58,10 @@ HEADERS += \
     SliderSpinner.h \
     VKMixer.h \
     WaveShowDialog.h \
+    databuffer.h \
     ddc.h \
+    inbuff.h \
+    ipsystem.h \
     keyctrl.h \
     keyerBase.h \
     keyerlog.h \

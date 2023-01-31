@@ -1,38 +1,10 @@
 #include <QDataStream>
 
+#include "inbuff.h"
 #include "soundsys.h"
 #include "riffwriter.h"
 
 #define RINGBUFFERSIZE 1024
-
-QDataStream & operator>>(QDataStream &in, BuffHeader &ff)
-{
-    in  >> ff.sequence;
-    in >> ff.tnow;
-    in >> ff.rms;
-    in >> ff.ptt;
-    in >> ff.frameCount;
-    return in;
-}
-
-QDataStream & operator<<(QDataStream &out, const BuffHeader &base)
-{
-    out << base.sequence;
-    out << base.tnow;
-    out << base.rms;
-    out << base.ptt;
-    out << base.frameCount;
-    return out;
-}
-
-InBuff::InBuff()
-{
-}
-
-InBuff::~InBuff()
-{
-    delete [] buff;
-}
 
 RiffWriter::RiffWriter(RtAudioSoundSystem *parent, int bufferFrames) :
     QThread(parent), bufferFrames(bufferFrames), ss(parent), terminated(false)

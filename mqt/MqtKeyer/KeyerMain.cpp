@@ -158,6 +158,22 @@ KeyerMain::KeyerMain(QWidget *parent) :
 
     connect(SoundSystemDriver::getSbDriver(), &SoundSystemDriver::setVU, this, &KeyerMain::doSetVU);
 
+    QStringList inputList = SoundSystemDriver::getSbDriver()->getInputDevices();
+    QStringList outputList = SoundSystemDriver::getSbDriver()->getOutputDevices();
+
+    ui->inputCombo->addItems(inputList);
+    QString currentInput = settings.value("inputDevice", SoundSystemDriver::getSbDriver()->getDefaultInputDevice()).toString();
+    ui->inputCombo->setCurrentText(currentInput);
+
+    ui->outputCombo->addItem(tr("Remote IP Client"));
+    ui->outputCombo->addItems(outputList);
+    QString currentOutput = settings.value("outputDevice", SoundSystemDriver::getSbDriver()->getDefaultOutputDevice()).toString();
+    ui->outputCombo->setCurrentText(currentOutput);
+
+    QString port = settings.value("SenderPort", DEFAULT_PORT).toString();
+    ui->portEdit->setText(port);
+    ui->portEdit->setValidator(new QIntValidator(0, 0xffff, this));
+
     commonPort * cp = loadKeyers();
     connect(cp, &commonPort::lcallback, this, &KeyerMain::lcallback);
 
@@ -208,6 +224,9 @@ KeyerMain::KeyerMain(QWidget *parent) :
         ui->keyCombo->addItem(QString::number(i));
     }
     ui->keyCombo->setCurrentIndex(0);
+    ui->KeyerTabs->setCurrentIndex(0);
+
+    KeyerServer::publishIPDetail(port);
 }
 KeyerMain::~KeyerMain()
 {
@@ -733,5 +752,30 @@ void KeyerMain::on_doCompression_stateChanged(int )
     masterConfig.compression.doCompression = ui->doCompression->isChecked();
     setVolumeMults();
     writeConfig(false);
+}
+
+
+void KeyerMain::on_inputCombo_activated(int /*index*/)
+{
+    QSettings settings;
+    settings.setValue("inputDevice", ui->inputCombo->currentText());
+    trace("About to re-initialise audio");
+    SoundSystemDriver::getSbDriver()->closedown();
+    SoundSystemDriver::getSbDriver()->initialise(
+                ui->inputCombo->currentText()
+                , ui->outputCombo->currentText()
+                , ui->portEdit->text());
+}
+
+
+void KeyerMain::on_outputCombo_activated(int /*index*/)
+{
+    QSettings settings;
+    settings.setValue("outputDevice", ui->outputCombo->currentText());
+    trace("About to re-initialise audio");
+    SoundSystemDriver::getSbDriver()->closedown();
+    SoundSystemDriver::getSbDriver()->initialise(ui->inputCombo->currentText()
+                                                 , ui->outputCombo->currentText()
+                                                 , ui->portEdit->text());
 }
 
