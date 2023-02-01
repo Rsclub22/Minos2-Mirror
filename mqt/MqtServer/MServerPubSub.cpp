@@ -13,7 +13,9 @@
 #include "MServer.h"
 #include "MTrace.h"
 #include "MServerPubSub.h"
+#include "minoslistener.h"
 #include "qcoreapplication.h"
+#include "serverThread.h"
 
 extern bool closeApp;
 
@@ -264,6 +266,7 @@ void Subscriber::SendTo ( const PublishedKey &pk )
    // local - no router
    st->addMember( QString(""), "Server" );
    st->addMember( pk.getPubId(), "Publisher" );
+   st->addMember( QString("127.0.0.1"), "PublisherIP");
    st->addMember( pk.getPubCat() ->getCategory(), "Category" );
    st->addMember( pk.getPubKey(), "Key" );
    st->addMember( pk.getPubValue(), "Value" );
@@ -279,9 +282,13 @@ void RemoteSubscriber::SendTo ( const PublishedKey &pk )
    RPCClientNotifyClient rnc( nullptr );
    QSharedPointer<RPCParam>st(new RPCParamStruct);
 
+   MinosRouterListener *msl = MinosRouterListener::getListener();
+
+   MinosRouterConnection *mcc = msl->findConnection(router);
    // router is remote router name (as published)
    st->addMember( router, "Server" );
    st->addMember( pk.getPubId(), "Publisher" );
+   st->addMember( QString(mcc?mcc->myAddr.toString():""), "PublisherIP" );
    st->addMember( pk.getPubCat() ->getCategory(), "Category" );
    st->addMember( pk.getPubKey(), "Key" );
    st->addMember( pk.getPubValue(), "Value" );
