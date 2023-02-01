@@ -10,6 +10,7 @@ AnalysePubSubNotify::AnalysePubSubNotify(bool err, QSharedPointer<MinosRPCObj> m
    {
       QSharedPointer<RPCParam> psPublisher;
       QSharedPointer<RPCParam> psRouter;
+      QSharedPointer<RPCParam> psPublisherIP;
       QSharedPointer<RPCParam> psCategory;
       QSharedPointer<RPCParam> psKey;
       QSharedPointer<RPCParam> psValue;
@@ -19,6 +20,7 @@ AnalysePubSubNotify::AnalysePubSubNotify(bool err, QSharedPointer<MinosRPCObj> m
               // NB publisher is initiated by the "from" from the publisher
               // and persists with the published entity
          args->getStructArgMember( 0, "Publisher", psPublisher )
+         && args->getStructArgMember( 0, "PublisherIP", psPublisherIP )
          && args->getStructArgMember( 0, "Server", psRouter )
          && args->getStructArgMember( 0, "Category", psCategory )
          && args->getStructArgMember( 0, "Key", psKey )
@@ -28,8 +30,10 @@ AnalysePubSubNotify::AnalysePubSubNotify(bool err, QSharedPointer<MinosRPCObj> m
       {
          int stemp;
          QString pub;
+         QString pubIp;
          if (
             psPublisher->getString(pub) &&
+            psPublisherIP->getString(pubIp) &&
             psRouter->getString( router ) &&
             psCategory->getString( category ) &&
             psKey->getString( key ) &&

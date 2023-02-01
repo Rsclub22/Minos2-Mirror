@@ -10,6 +10,7 @@ class AnalysePubSubNotify
 {
       QString publisherProgram;
       QString publisherRouter;
+      QString publisherIP;
       QString router;
       QString category;
       QString key;
@@ -27,6 +28,10 @@ class AnalysePubSubNotify
       QString getPublisherRouter() const
       {
          return publisherRouter;
+      }
+      QString getPublisherIP() const
+      {
+         return publisherIP;
       }
       QString getRouter() const
       {
