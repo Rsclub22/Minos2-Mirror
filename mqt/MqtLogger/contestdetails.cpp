@@ -512,7 +512,10 @@ void ContestDetails::setBandBoxes(QString bandStr, QString bandsList)
     QSharedPointer<BandInfo>  bi;
 
     bandOK = blist.findBand(bandStr, bi);
-
+    if (bandOK)
+    {
+        bandStr = bi->uk;
+    }
     ui->HFFrame->setVisible(contestTransferObject->isHF());
 
     if (contestTransferObject->isHF())
@@ -546,7 +549,6 @@ void ContestDetails::setBandBoxes(QString bandStr, QString bandsList)
 
         if (bandOK)
         {
-            bandStr = bi->uk;
             if (allBandChkBoxMap.contains(bandStr))
             {
                 allBandChkBoxMap[bandStr]->setChecked(true);
