@@ -288,7 +288,7 @@ void RemoteSubscriber::SendTo ( const PublishedKey &pk )
    // router is remote router name (as published)
    st->addMember( router, "Server" );
    st->addMember( pk.getPubId(), "Publisher" );
-   st->addMember( QString(mcc?mcc->myAddr.toString():""), "PublisherIP" );
+   st->addMember( QString(mcc?mcc->connectHost.toString():""), "PublisherIP" );
    st->addMember( pk.getPubCat() ->getCategory(), "Category" );
    st->addMember( pk.getPubKey(), "Key" );
    st->addMember( pk.getPubValue(), "Value" );
