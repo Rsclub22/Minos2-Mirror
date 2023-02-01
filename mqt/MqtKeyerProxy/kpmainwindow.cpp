@@ -7,6 +7,10 @@
 #include "kprpcserver.h"
 #include "sbdriver.h"
 
+#ifdef Q_OS_UNIX
+#include <unistd.h>
+#endif
+
 #include "kpmainwindow.h"
 #include "ui_kpmainwindow.h"
 
