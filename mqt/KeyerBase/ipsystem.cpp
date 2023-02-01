@@ -5,7 +5,6 @@
 #include <QTimer>
 
 #include <QDebug>
-#include <sysinfoapi.h>
 
 #include "MTrace.h"
 #include "inbuff.h"
@@ -240,7 +239,7 @@ int IPSystem::tryOutput()
                 buffHeader.frameCount = inBuff->bh.frameCount;
                 buffHeader.rms = inBuff->bh.rms;
                 buffHeader.sequence = sequence++;
-                buffHeader.tnow = GetTickCount();
+                buffHeader.tnow = QDateTime::currentMSecsSinceEpoch();
                 os << buffHeader;
 
                 os << buff;
