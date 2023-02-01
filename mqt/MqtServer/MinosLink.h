@@ -108,6 +108,7 @@ class MinosCommonConnection: public QObject
       virtual void sendCloseSocket( )
       {}
       QString getClientRouter() const;
+      void setClientRouter(QString s){clientRouter = s;}
 
       QString getClientUser() const;
 
