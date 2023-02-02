@@ -55,6 +55,7 @@ AnalysePubSubNotify::AnalysePubSubNotify(bool err, QSharedPointer<MinosRPCObj> m
                 publisherRouter = MinosConfig::getMinosConfig()->getThisRouterName();
             }
             publisherProgram = p[0];
+            publisherIP = pubIp;
             state = static_cast<PublishState>(stemp);
             OK = true;
          }

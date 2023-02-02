@@ -266,7 +266,7 @@ void Subscriber::SendTo ( const PublishedKey &pk )
    // local - no router
    st->addMember( QString(""), "Server" );
    st->addMember( pk.getPubId(), "Publisher" );
-   st->addMember( QString("127.0.0.1"), "PublisherIP");
+   st->addMember( QString("Subscriber::SendTo"), "PublisherIP");
    st->addMember( pk.getPubCat() ->getCategory(), "Category" );
    st->addMember( pk.getPubKey(), "Key" );
    st->addMember( pk.getPubValue(), "Value" );
@@ -286,9 +286,19 @@ void RemoteSubscriber::SendTo ( const PublishedKey &pk )
 
    MinosRouterConnection *mcc = msl->findConnection(router);
    // router is remote router name (as published)
+   // The publisher IP is only available if there is a direct
+   // connection - i.e. that router is connected to us
+   // If it is "bridged" by a third router (e.g. across
+   // subnets using multi-homing, such as one pair on WiFi and
+   // the overlapping pair on cable connection) then
+   // it won't be available.
+
+   // Used (initially) so that a keyer proxy can make a direct connection
+   // to a keyer to pass audio; there may be other use cases
+
    st->addMember( router, "Server" );
    st->addMember( pk.getPubId(), "Publisher" );
-   st->addMember( QString(mcc?mcc->connectHost.toString():""), "PublisherIP" );
+   st->addMember( QString(mcc?mcc->connectHost.toString():QString("RemoteSubscriber::SendTo server %1").arg(router)), "PublisherIP" );
    st->addMember( pk.getPubCat() ->getCategory(), "Category" );
    st->addMember( pk.getPubKey(), "Key" );
    st->addMember( pk.getPubValue(), "Value" );
@@ -300,7 +310,7 @@ void RemoteSubscriber::SendTo ( const PublishedKey &pk )
 //---------------------------------------------------------------------------
 void RouterSubscriber::SendTo ( const PublishedKey &pk )
 {
-   // Build the stanza, and send it to the subid
+   // Build the stanza, and send it to the subid, which should be the clients router
    RPCRouterNotifyClient rnc( nullptr );
    QSharedPointer<RPCParam>st(new RPCParamStruct);
 
@@ -319,6 +329,7 @@ void RouterSubscriber::SendTo ( const PublishedKey &pk )
 
    st->addMember( router, "Server" );
    st->addMember( pk.getPubId(), "Publisher" );
+   st->addMember( QString("RouterSubscriber::SendTo server %1").arg(srouter), "PublisherIP");        // don't fill in the IP - yet
    st->addMember( sCategory, "Category" );
    st->addMember( pk.getPubKey(), "Key" );
    st->addMember( pk.getPubValue() , "Value" );

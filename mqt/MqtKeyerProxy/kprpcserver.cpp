@@ -60,8 +60,9 @@ void KPRPCServer::on_notify(AnalysePubSubNotify an, const QString /*from*/ )
           {
               if (an.getKey() == rpcConstants::keyerListen)
               {
+                    QString ip = an.getPublisherIP();
                     QString port = an.getValue();
-                    mShowMessage(port, 0);
+                    mShowMessage(ip + ":" + port, 0);
               }
           }
 
