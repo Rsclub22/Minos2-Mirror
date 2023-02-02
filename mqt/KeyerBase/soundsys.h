@@ -33,6 +33,7 @@ signals:
     void actionQueueFinished();
     void setVU(unsigned int a, unsigned int b, unsigned int c);
     void soundAvailable();
+    void sequenceCount(qint64);
 
 
 protected:
@@ -45,7 +46,7 @@ public:
     bool doBWFilter = true;
     bool doCompression = true;
 
-    bool initialise(QString ind , QString outd, QString port);
+    bool initialise(QString ind , QString outd, QString host, QString port);
     void stop();
     void closedown();
 

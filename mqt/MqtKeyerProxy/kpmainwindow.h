@@ -10,6 +10,8 @@ QT_BEGIN_NAMESPACE
 namespace Ui { class KPMainWindow; }
 QT_END_NAMESPACE
 
+class KPRPCServer;
+
 class KPMainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -23,6 +25,9 @@ private:
     QProcess *runner = nullptr;
     QTimer CloseTimer;
     StdInReader *stdinReader = new StdInReader(this);
+    KPRPCServer *kpc = nullptr;
+    QString host;
+    QString port;
 
     void runAlsaScript(const QString &alsaFileName, const QString &command);
 
@@ -48,5 +53,7 @@ private slots:
 
     void on_outputCombo_activated(int);
     void CloseTimerTimer();
+    void onNewHost(QString h, QString p);
+    void onSequenceCount(qint64);
 };
 #endif // KPMAINWINDOW_H

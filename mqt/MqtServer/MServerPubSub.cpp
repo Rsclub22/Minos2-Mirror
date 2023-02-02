@@ -303,7 +303,7 @@ void RemoteSubscriber::SendTo ( const PublishedKey &pk )
 
    st->addMember( router, "Server" );
    st->addMember( pk.getPubId(), "Publisher" );
-   st->addMember( QString(srv?srv->host.toString():router), "PublisherIP" );
+   st->addMember( QString(srv?srv->host.toString():QString()), "PublisherIP" ); // no srv implies it is us!
    st->addMember( pk.getPubCat() ->getCategory(), "Category" );
    st->addMember( pk.getPubKey(), "Key" );
    st->addMember( pk.getPubValue(), "Value" );

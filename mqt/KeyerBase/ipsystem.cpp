@@ -171,6 +171,7 @@ void IPSystem::doStart()
             bc->deleteLater();
             bc = nullptr;
         }
+        trace(QString("Connecting to h %1 p%2").arg(host.toString()).arg(port));
         bc = new QTcpSocket();
         connect(bc, &QAbstractSocket::readyRead, this, &IPSystem::onReadyRead);
         connect(bc, &QTcpSocket::connected, this, &IPSystem::connected);

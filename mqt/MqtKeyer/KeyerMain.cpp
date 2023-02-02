@@ -764,6 +764,7 @@ void KeyerMain::on_inputCombo_activated(int /*index*/)
     SoundSystemDriver::getSbDriver()->initialise(
                 ui->inputCombo->currentText()
                 , ui->outputCombo->currentText()
+                , ""
                 , ui->portEdit->text());
 }
 
@@ -776,6 +777,7 @@ void KeyerMain::on_outputCombo_activated(int /*index*/)
     SoundSystemDriver::getSbDriver()->closedown();
     SoundSystemDriver::getSbDriver()->initialise(ui->inputCombo->currentText()
                                                  , ui->outputCombo->currentText()
+                                                 , ""
                                                  , ui->portEdit->text());
 }
 

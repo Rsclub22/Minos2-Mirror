@@ -101,7 +101,7 @@ RtAudioSoundSystem::~RtAudioSoundSystem()
    free_bw_band_pass(replayfilter2);
 
 }
-bool RtAudioSoundSystem::initialise( QString ind, QString outd, QString port  )
+bool RtAudioSoundSystem::initialise( QString ind, QString outd, QString host, QString port  )
 {
     if (!audio)
     {
@@ -190,12 +190,12 @@ bool RtAudioSoundSystem::initialise( QString ind, QString outd, QString port  )
     if (!ipSystem)
     {
         ipSystem = IPSystem::createIPSystem();
-        //connect(ipSystem, &IPSystem::sequenceCount, this, &MainWindow::onSequenceCount);
+        connect(ipSystem, &IPSystem::sequenceCount, this, &RtAudioSoundSystem::sequenceCount);
         connect(this, &RtAudioSoundSystem::soundAvailable, this, &RtAudioSoundSystem::onSoundAvailable, Qt::QueuedConnection);
 
         // iip also means data receiver
 
-        ipSystem->initialise(!iip, dataBuffer, QHostAddress(), port.toInt());
+        ipSystem->initialise(!iip, dataBuffer, QHostAddress(host), port.toInt());
         ipSystem->doStart();
     }
     if (!wThread)
@@ -245,6 +245,9 @@ void RtAudioSoundSystem::closedown()
 
         delete dataBuffer;
         dataBuffer = nullptr;
+
+        delete ipSystem;
+        ipSystem = nullptr;
     }
 }
 

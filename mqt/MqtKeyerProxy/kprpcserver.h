@@ -15,6 +15,8 @@ class KPRPCServer:public QObject
 public:
     KPRPCServer();
     ~KPRPCServer() override;
+signals:
+    void newHost(QString, QString);
 private slots:
       void on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString from );
       void on_notify(AnalysePubSubNotify an, const QString from );

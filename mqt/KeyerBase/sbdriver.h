@@ -128,8 +128,8 @@ public:
       void startTone2();
       void createCWBuffer( const char *message, int speed, int tone );
 
-      bool initialise(QString ind, QString outd, QString port);
-      bool sbdvp_init(QString ind, QString outd, QString port, QString &errmess, unsigned int rate, int pipTone, int pipVolume, int pipLength );
+      bool initialise(QString ind, QString outd, QString host, QString port);
+      bool sbdvp_init(QString ind, QString outd, QString host, QString port, QString &errmess, unsigned int rate, int pipTone, int pipVolume, int pipLength );
       QStringList getInputDevices();
       QString getDefaultInputDevice();
       QStringList getOutputDevices();
@@ -145,5 +145,7 @@ signals:
       void ptt(bool);
       void recpbFinished();
       void setVU(unsigned int a, unsigned int b, unsigned int c);
+      void sequenceCount(qint64);
+
 };
 #endif

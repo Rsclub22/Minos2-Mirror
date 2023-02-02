@@ -142,7 +142,6 @@ void MinosRouterConnection::setFromId( MinosId &id, RPCRequest *req )
 //==============================================================================
 void MinosRouterConnection::sendAction( XStanza *a )
 {
-    trace("MinosRouterConnection::sendAction");
    // use the stanza to send itself
    a->setNextId();   // only happens if no Id already
 

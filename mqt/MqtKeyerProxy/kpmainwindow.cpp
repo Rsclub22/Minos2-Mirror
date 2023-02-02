@@ -1,8 +1,6 @@
 #include <QFileDialog>
-#include "AppStartup.h"
 #include "LogEvents.h"
 #include "MTrace.h"
-#include "MinosRPC.h"
 #include "fileutils.h"
 #include "kprpcserver.h"
 #include "sbdriver.h"
@@ -24,8 +22,8 @@ KPMainWindow::KPMainWindow(QWidget *parent)
     ui->setupUi(this);
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-    KPRPCServer *kpc = new KPRPCServer();
-    Q_UNUSED(kpc)
+    kpc = new KPRPCServer();
+    connect(kpc, &KPRPCServer::newHost, this, &KPMainWindow::onNewHost);
 
     QSettings settings;
     QByteArray geometry = settings.value("KeyerProxyMain/geometry").toByteArray();
@@ -54,14 +52,18 @@ KPMainWindow::KPMainWindow(QWidget *parent)
     ui->portEdit->setValidator(new QIntValidator(0, 0xffff, this));
 
     SoundSystemDriver::getSbDriver()->setSampleRate( 22050);
+    connect(SoundSystemDriver::getSbDriver(), &SoundSystemDriver::sequenceCount, this, &KPMainWindow::onSequenceCount);
+
     SoundSystemDriver::getSbDriver()->initialise("IP"
                                                  , ui->outputCombo->currentText()
+                                                 , host
                                                  , ui->portEdit->text());
 }
 
 KPMainWindow::~KPMainWindow()
 {
     delete ui;
+    delete kpc;
 }
 void KPMainWindow::CloseTimerTimer()
 {
@@ -220,5 +222,18 @@ void KPMainWindow::on_outputCombo_activated(int /*index*/)
     SoundSystemDriver::getSbDriver()->closedown();
     SoundSystemDriver::getSbDriver()->initialise("IP"
                                                  , ui->outputCombo->currentText()
+                                                 , host
                                                  , ui->portEdit->text());
+}
+void KPMainWindow::onNewHost(QString h, QString p)
+{
+    SoundSystemDriver::getSbDriver()->closedown();
+    SoundSystemDriver::getSbDriver()->initialise("IP"
+                                                 , ui->outputCombo->currentText()
+                                                 , h
+                                                 , p);
+}
+void KPMainWindow::onSequenceCount(qint64 s)
+{
+    ui->seqLabel->setText(QString::number(s));
 }

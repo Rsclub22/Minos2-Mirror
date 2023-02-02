@@ -264,13 +264,13 @@ void SoundSystemDriver::closedown()
 {
     soundSystem->closedown();
 }
-bool SoundSystemDriver::initialise(QString ind, QString outd, QString port)
+bool SoundSystemDriver::initialise(QString ind, QString outd, QString host, QString port)
 {
-    bool ret = soundSystem->initialise(ind, outd, port);
+    bool ret = soundSystem->initialise(ind, outd, host, port);
     return ret;
 }
 
-bool SoundSystemDriver::sbdvp_init( QString ind, QString outd, QString port, QString &errmess, unsigned int srate, int pipTone, int pipVolume, int pipLength )
+bool SoundSystemDriver::sbdvp_init( QString ind, QString outd, QString host, QString port, QString &errmess, unsigned int srate, int pipTone, int pipVolume, int pipLength )
 {
    // should be done from config when the sb is defined as in use.
 
@@ -291,7 +291,7 @@ bool SoundSystemDriver::sbdvp_init( QString ind, QString outd, QString port, QSt
 
       rate = soundSystem->setRate(srate);
 
-      if ( !soundSystem->initialise( ind, outd, port ) )
+      if ( !soundSystem->initialise( ind, outd, host, port ) )
          return false;
 
       emit ptt(false);
@@ -538,6 +538,8 @@ SoundSystemDriver::SoundSystemDriver()
    connect(soundSystem, &RtAudioSoundSystem::ssOutputFinished, this, &SoundSystemDriver::outputFinished);
    connect(soundSystem, &RtAudioSoundSystem::actionQueueFinished, this, &SoundSystemDriver::actionQueueFinished);
    connect(soundSystem, &RtAudioSoundSystem::setVU, this, &SoundSystemDriver::doSetVU);
+   connect(soundSystem, &RtAudioSoundSystem::sequenceCount, this, &SoundSystemDriver::sequenceCount);
+
 }
 SoundSystemDriver::~SoundSystemDriver()
 {

@@ -958,7 +958,7 @@ bool sbKeyer::sbInitialise( unsigned int rate, int pipTone, int pipVolume, int p
    QString currentOutput = settings.value("outputDevice", SoundSystemDriver::getSbDriver()->getDefaultOutputDevice()).toString();
    QString port = settings.value("SenderPort", DEFAULT_PORT).toString();
 
-   if ( !SoundSystemDriver::getSbDriver() ->sbdvp_init(currentInput, currentOutput, port, errmess, rate, pipTone, pipVolume, pipLength  ) )
+   if ( !SoundSystemDriver::getSbDriver() ->sbdvp_init(currentInput, currentOutput, QString(), port, errmess, rate, pipTone, pipVolume, pipLength  ) )
    {
       trace( "sbdvp_init failed! " + errmess );
       return false;

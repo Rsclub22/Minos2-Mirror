@@ -126,7 +126,6 @@ QString MinosCommonConnection::makeJid()
 }
 bool MinosCommonConnection::sendRaw ( const TIXML_STRING xmlstr )
 {
-    trace("MinosCommonConnection::sendRaw");
    size_t xmllen = xmlstr.length();
    if ( xmllen )
    {
