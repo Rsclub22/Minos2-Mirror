@@ -9,6 +9,7 @@
 //---------------------------------------------------------------------------
 #include <QHeaderView>
 #include "AnalysePubSubNotify.h"
+#include "MServerZConf.h"
 #include "PubSubServer.h"
 #include "MServer.h"
 #include "MTrace.h"
@@ -282,9 +283,13 @@ void RemoteSubscriber::SendTo ( const PublishedKey &pk )
    RPCClientNotifyClient rnc( nullptr );
    QSharedPointer<RPCParam>st(new RPCParamStruct);
 
-   MinosRouterListener *msl = MinosRouterListener::getListener();
+   Router *srv = nullptr;
+   QVector<Router *>::iterator srvi = findStation( router );
+   if (srvi != routerList.end())
+   {
+       srv = *srvi;
+   }
 
-   MinosRouterConnection *mcc = msl->findConnection(router);
    // router is remote router name (as published)
    // The publisher IP is only available if there is a direct
    // connection - i.e. that router is connected to us
@@ -298,7 +303,7 @@ void RemoteSubscriber::SendTo ( const PublishedKey &pk )
 
    st->addMember( router, "Server" );
    st->addMember( pk.getPubId(), "Publisher" );
-   st->addMember( QString(mcc?mcc->connectHost.toString():router), "PublisherIP" );
+   st->addMember( QString(srv?srv->host.toString():router), "PublisherIP" );
    st->addMember( pk.getPubCat() ->getCategory(), "Category" );
    st->addMember( pk.getPubKey(), "Key" );
    st->addMember( pk.getPubValue(), "Value" );
