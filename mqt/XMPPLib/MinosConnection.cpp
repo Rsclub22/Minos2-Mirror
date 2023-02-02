@@ -220,6 +220,7 @@ void MinosAppConnection::on_readyRead()
 
 void MinosAppConnection::sendAction( XStanza *a )
 {
+    trace("MinosAppConnection::sendAction");
    if ( connected )
    {
       a->setNextId();   // only happens if no Id already

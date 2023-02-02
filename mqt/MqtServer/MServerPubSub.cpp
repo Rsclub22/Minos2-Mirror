@@ -266,7 +266,7 @@ void Subscriber::SendTo ( const PublishedKey &pk )
    // local - no router
    st->addMember( QString(""), "Server" );
    st->addMember( pk.getPubId(), "Publisher" );
-   st->addMember( QString("Subscriber::SendTo"), "PublisherIP");
+   st->addMember( QString(), "PublisherIP");        // localhost I hope
    st->addMember( pk.getPubCat() ->getCategory(), "Category" );
    st->addMember( pk.getPubKey(), "Key" );
    st->addMember( pk.getPubValue(), "Value" );
@@ -298,7 +298,7 @@ void RemoteSubscriber::SendTo ( const PublishedKey &pk )
 
    st->addMember( router, "Server" );
    st->addMember( pk.getPubId(), "Publisher" );
-   st->addMember( QString(mcc?mcc->connectHost.toString():QString("RemoteSubscriber::SendTo server %1").arg(router)), "PublisherIP" );
+   st->addMember( QString(mcc?mcc->connectHost.toString():router), "PublisherIP" );
    st->addMember( pk.getPubCat() ->getCategory(), "Category" );
    st->addMember( pk.getPubKey(), "Key" );
    st->addMember( pk.getPubValue(), "Value" );
@@ -329,7 +329,7 @@ void RouterSubscriber::SendTo ( const PublishedKey &pk )
 
    st->addMember( router, "Server" );
    st->addMember( pk.getPubId(), "Publisher" );
-   st->addMember( QString("RouterSubscriber::SendTo server %1").arg(srouter), "PublisherIP");        // don't fill in the IP - yet
+   st->addMember( srouter, "PublisherIP");        // don't fill in the IP - yet
    st->addMember( sCategory, "Category" );
    st->addMember( pk.getPubKey(), "Key" );
    st->addMember( pk.getPubValue() , "Value" );
