@@ -27,6 +27,7 @@ class RtAudioSoundSystem: public QObject
 private slots:
 
     void onSoundAvailable();
+    void onPTTState(bool);
 signals:
     void interruptOK();
     void ssOutputFinished();
@@ -34,6 +35,7 @@ signals:
     void setVU(unsigned int a, unsigned int b, unsigned int c);
     void soundAvailable();
     void sequenceCount(qint64);
+    void ptt(bool);
 
 
 protected:
@@ -134,6 +136,8 @@ private:
     QByteArray m_buffer;
     QByteArray p_buffer;
     unsigned long pipDelayBytes = 0;
+
+    bool pttState = false;
 
 };
 

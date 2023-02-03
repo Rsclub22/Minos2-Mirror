@@ -4,6 +4,7 @@ include($$PWD/../mqtapplibs.pri)
 
 QT       += core gui network
 QT       += widgets
+QT       += serialport
 
 TARGET = MqtKeyerProxy
 TEMPLATE = app
@@ -17,9 +18,11 @@ win32{DEFINES += __WINDOWS_DS__}
 
 SOURCES += main.cpp\
             kpmainwindow.cpp \
-            kprpcserver.cpp
+            kprpcserver.cpp \
+            serialPTT.cpp
 
 HEADERS += kpmainwindow.h \
-    kprpcserver.h
+    kprpcserver.h \
+    serialPTT.h
 
 FORMS += kpmainwindow.ui

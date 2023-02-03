@@ -1,9 +1,14 @@
+#include <QtSerialPort/QSerialPort>
+#include <QtSerialPort/QSerialPortInfo>
 #include <QFileDialog>
 #include "LogEvents.h"
+#include "MShowMessageDlg.h"
 #include "MTrace.h"
+#include "cutils.h"
 #include "fileutils.h"
 #include "kprpcserver.h"
 #include "sbdriver.h"
+#include "serialPTT.h"
 
 #ifdef Q_OS_UNIX
 #include <unistd.h>
@@ -40,6 +45,22 @@ KPMainWindow::KPMainWindow(QWidget *parent)
 
     runAlsaScript(alsaFileName, alsaRestore);
 
+    fillPortsInfo(ui->spCombo);
+
+    bool senabled = settings.value("PTTEnabled").toBool();
+    QString serialPort = settings.value("PTTPort").toString();
+    bool rts = settings.value("PTTRTS").toBool();
+    bool dtr = settings.value("PTTDTR").toBool();
+
+    inPTTConfig = true;
+    ui->serialPTTEnable->setChecked(senabled);
+    ui->spCombo->setCurrentText(serialPort);
+    ui->rts->setChecked(rts);
+    ui->dtr->setChecked(dtr);
+    inPTTConfig = false;
+
+
+
     QStringList outputList = SoundSystemDriver::getSbDriver()->getOutputDevices();
 
     ui->outputCombo->addItem(tr("Remote IP Client"));
@@ -58,6 +79,11 @@ KPMainWindow::KPMainWindow(QWidget *parent)
                                                  , ui->outputCombo->currentText()
                                                  , host
                                                  , ui->portEdit->text());
+    connect(SoundSystemDriver::getSbDriver(), &SoundSystemDriver::setVU, this, &KPMainWindow::doSetVU);
+    connect(SoundSystemDriver::getSbDriver(), &SoundSystemDriver::ptt, this, &KPMainWindow::doPTT);
+
+    //We need a PTT indicator
+    //We need to implement PTT from Keyer and into here, and to radio
 }
 
 KPMainWindow::~KPMainWindow()
@@ -65,7 +91,39 @@ KPMainWindow::~KPMainWindow()
     delete ui;
     delete kpc;
 }
-void KPMainWindow::CloseTimerTimer()
+void KPMainWindow::fillPortsInfo(QComboBox* comportSel)
+{
+    comportSel->clear();
+
+    QString description;
+    QString manufacturer;
+    QString serialNumber;
+
+    comportSel->addItem("");
+
+    QList<QSerialPortInfo> availablePorts = QSerialPortInfo::availablePorts();
+    for (auto const &info: qAsConst(availablePorts))
+    {
+        QStringList list;
+        description = info.description();
+        manufacturer = info.manufacturer();
+#if QT_VERSION > QT_VERSION_CHECK(5, 3, 0)
+        serialNumber = info.serialNumber();
+#endif
+        list << info.portName()
+             << (!description.isEmpty() ? description : QString())
+             << (!manufacturer.isEmpty() ? manufacturer : QString())
+             << (!serialNumber.isEmpty() ? serialNumber : QString())
+             << info.systemLocation()
+             << (info.vendorIdentifier() ? QString::number(info.vendorIdentifier(), 16) : QString())
+             << (info.productIdentifier() ? QString::number(info.productIdentifier(), 16) : QString());
+
+
+        comportSel->addItem(list.first(), list);
+
+    }
+
+}void KPMainWindow::CloseTimerTimer()
 {
     static bool closed = false;
     if ( !closed )
@@ -237,3 +295,108 @@ void KPMainWindow::onSequenceCount(qint64 s)
 {
     ui->seqLabel->setText(QString::number(s));
 }
+void KPMainWindow::doSetVU( unsigned int ppeakvol, unsigned int prmsvol ,unsigned int psamples)
+{
+    ui->levelMeter->levelChanged( ppeakvol / 32768.0, prmsvol / 32768.0, psamples );
+}
+bool KPMainWindow::openSerialPort()
+{
+    QSettings settings;
+
+    bool senabled = settings.value("PTTEnabled").toBool();
+
+    if (senabled && !sp)
+    {
+        sp = new SerialPTT(this);
+    }
+    if (senabled)
+    {
+        if (!sp->isOpen())
+        {
+            QString serialPort = settings.value("PTTPort").toString();
+            bool rts = settings.value("PTTRTS").toBool();
+            bool dtr = settings.value("PTTDTR").toBool();
+
+            if (!sp->openComport(serialPort, rts, dtr))
+            {
+                mShowMessage(sp->error(), this);
+                return false;
+            }
+        }
+    }
+    return sp && sp->isOpen();
+}
+void KPMainWindow::doPTT(bool s)
+{
+    if (openSerialPort())
+    {
+        if (pttState != s)
+        {
+            if (s)
+            {
+                ui->pttLabel->setText(HtmlFontColour(Qt::red) + QString("PTT"));
+            }
+            else
+            {
+                ui->pttLabel->setText(HtmlFontColour(Qt::blue) + QString("PTT"));
+            }
+            pttState = s;
+
+            if (sp->isOpen())
+            {
+                sp->setPTT(s);
+            }
+        }
+    }
+}
+void KPMainWindow::saveSerialSettings()
+{
+    if (!inPTTConfig)
+    {
+        QString serialPort = ui->spCombo->currentText();
+        bool rts = ui->rts->isChecked();
+        bool dtr = ui->dtr->isChecked();
+        bool senabled = ui->serialPTTEnable->isChecked();
+
+        QSettings settings;
+        settings.setValue("PTTEnabled", senabled);
+        settings.setValue("PTTPort", serialPort);
+        settings.setValue("PTTRTS", rts);
+        settings.setValue("PTTDTR", dtr);
+
+        if (sp)
+        {
+            sp->setRtsDtr(rts, dtr);
+        }
+    }
+}
+void KPMainWindow::on_spCombo_activated(int /*index*/)
+{
+    saveSerialSettings();
+}
+
+
+void KPMainWindow::on_dtr_clicked()
+{
+    saveSerialSettings();
+}
+
+
+void KPMainWindow::on_rts_clicked()
+{
+    saveSerialSettings();
+}
+
+
+void KPMainWindow::on_serialPTTEnable_stateChanged(int /*arg1*/)
+{
+    saveSerialSettings();
+
+}
+
+
+void KPMainWindow::on_pushButton_clicked()
+{
+    doPTT(!pttState);
+}
+

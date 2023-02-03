@@ -140,6 +140,8 @@ private slots:
       void outputFinished();
       void actionQueueFinished();
       void doSetVU(unsigned int a, unsigned int b, unsigned int c);
+      void onPTTState(bool);
+
 
 signals:
       void ptt(bool);

@@ -214,6 +214,11 @@ void RtAudioSoundSystem::onSoundAvailable()
         while(ipSystem->tryOutput()){}
     }
 }
+
+void RtAudioSoundSystem::onPTTState(bool b)
+{
+    pttState = b;
+}
 void RtAudioSoundSystem::stop()
 {
     stopDMA();
@@ -327,6 +332,7 @@ int RtAudioSoundSystem::audioCallback(void *outputBuffer, void *inputBuffer,
         inBuff = dataBuffer->getNextInputBuffer();
         if (inBuff)
         {
+            inBuff->bh.ptt = pttState;
             inBuff->bh.frameCount = nFrames;
 
             outputBuffer = inBuff->buff;
@@ -340,6 +346,12 @@ int RtAudioSoundSystem::audioCallback(void *outputBuffer, void *inputBuffer,
         {
 
             inputBuffer = outBuff->buff;
+            bool ptts = outBuff->bh.ptt;
+            if (ptts != pttState)
+            {
+                pttState = ptts;
+                emit ptt(ptts);
+            }
         }
 
     }
@@ -425,14 +437,17 @@ int RtAudioSoundSystem::audioCallback(void *outputBuffer, void *inputBuffer,
 
             sqaccum += sample * sample;
         }
+        qreal rmsval = sqrt(sqaccum/nFrames);
         if (inputEnabled || passThroughEnabled)
         {
-            qreal rmsval = sqrt(sqaccum/nFrames);
             emit setVU( static_cast<unsigned int>(maxvol),
                           static_cast<unsigned int>(rmsval),
                           nFrames );
         }
-
+        if (outBuff != nullptr)
+        {
+            outBuff->bh.rms = rmsval;
+        }
         if (inputEnabled)
         {
             wThread->copyBuffer(inStageBuffer, nFrames);

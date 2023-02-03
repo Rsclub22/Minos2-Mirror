@@ -582,6 +582,11 @@ void SoundSystemDriver::doSetVU(unsigned int a, unsigned int b, unsigned int c)
 {
     emit setVU(a, b, c);
 }
+
+void SoundSystemDriver::onPTTState(bool s)
+{
+    emit ptt(s);
+}
 //==============================================================================
 void SoundSystemDriver::initTone1( int t1 )
 {

@@ -11,6 +11,8 @@ namespace Ui { class KPMainWindow; }
 QT_END_NAMESPACE
 
 class KPRPCServer;
+class QComboBox;
+class SerialPTT;
 
 class KPMainWindow : public QMainWindow
 {
@@ -29,6 +31,12 @@ private:
     QString host;
     QString port;
 
+    bool pttState = false;
+
+    SerialPTT *sp = nullptr;
+
+    bool inPTTConfig = false;
+
     void runAlsaScript(const QString &alsaFileName, const QString &command);
 
     virtual void closeEvent(QCloseEvent *event) override;
@@ -36,6 +44,9 @@ private:
     virtual void moveEvent(QMoveEvent *event) override;
     virtual void changeEvent( QEvent* e ) override;
 
+    void fillPortsInfo(QComboBox *comportSel);
+    void saveSerialSettings();
+    bool openSerialPort();
 private slots:
     void on_setupBrowseButton_clicked();
 
@@ -55,5 +66,12 @@ private slots:
     void CloseTimerTimer();
     void onNewHost(QString h, QString p);
     void onSequenceCount(qint64);
+    void doSetVU(unsigned int ppeakvol, unsigned int prmsvol, unsigned int psamples);
+    void doPTT(bool);
+    void on_spCombo_activated(int index);
+    void on_dtr_clicked();
+    void on_rts_clicked();
+    void on_serialPTTEnable_stateChanged(int arg1);
+    void on_pushButton_clicked();
 };
 #endif // KPMAINWINDOW_H
