@@ -362,7 +362,7 @@ int RtAudioSoundSystem::audioCallback(void *outputBuffer, void *inputBuffer,
         memset(outputBuffer, 0, nFrames * 2 * outChannels);   // 2 bytes, 2 channels
     }
 
-    if (!replayBuff && inputBuffer && nFrames)
+    if (!replayBuff && inputBuffer && !outputEnabled && nFrames)
     {
         // ALWAYS apply compressor to input, so it continues to adapt
         int16_t * q = reinterpret_cast<  int16_t * > ( inputBuffer );
@@ -464,6 +464,12 @@ int RtAudioSoundSystem::audioCallback(void *outputBuffer, void *inputBuffer,
         emit setVU( static_cast<unsigned int>(maxvol),
                       static_cast<unsigned int>(rmsval),
                       nFrames );
+
+        if (recordBuff != nullptr)
+        {
+            recordBuff->bh.rms = rmsval;
+            recordBuff->bh.peak = maxvol;
+        }
     }
     if (replayBuff != nullptr)
     {
