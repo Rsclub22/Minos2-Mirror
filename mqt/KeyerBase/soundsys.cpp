@@ -465,19 +465,19 @@ int RtAudioSoundSystem::audioCallback(void *outputBuffer, void *inputBuffer,
                       static_cast<unsigned int>(rmsval),
                       nFrames );
     }
-    if (recordBuff != nullptr)
-    {
-        memcpy(outputBuffer, recordBuff->buff, recordBuff->bh.frameCount * 2 * outChannels);
-
-        dataBuffer->unlockNextOutput();
-        emit setVU( recordBuff->bh.peak ,
-                      recordBuff->bh.rms,
-                      nFrames );
-    }
     if (replayBuff != nullptr)
     {
+        memcpy(outputBuffer, replayBuff->buff, replayBuff->bh.frameCount * 2 * outChannels);
+
+        dataBuffer->unlockNextOutput();
+        emit setVU( replayBuff->bh.peak ,
+                      replayBuff->bh.rms,
+                      nFrames );
+    }
+    if (recordBuff != nullptr)
+    {
         dataBuffer->unlockNextInput();
-        emit soundAvailable();
+        emit soundAvailable();  // to IP; try to send it
     }
 
     /*
