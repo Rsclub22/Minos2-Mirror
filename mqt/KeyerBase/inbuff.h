@@ -9,6 +9,7 @@ public:
     qint64 sequence = 0;
     qint64 tnow = 0;
     qint32 rms = 0;
+    qint32 peak = 0;
     qint16 frameCount = 0;
     bool ptt = false;
 

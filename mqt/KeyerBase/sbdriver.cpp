@@ -539,6 +539,9 @@ SoundSystemDriver::SoundSystemDriver()
    connect(soundSystem, &RtAudioSoundSystem::actionQueueFinished, this, &SoundSystemDriver::actionQueueFinished);
    connect(soundSystem, &RtAudioSoundSystem::setVU, this, &SoundSystemDriver::doSetVU);
    connect(soundSystem, &RtAudioSoundSystem::sequenceCount, this, &SoundSystemDriver::sequenceCount);
+   connect(soundSystem, &RtAudioSoundSystem::ptt, this, &SoundSystemDriver::onPTTState);
+
+   connect(this, ptt, soundSystem, &RtAudioSoundSystem::onPTTState);
 
 }
 SoundSystemDriver::~SoundSystemDriver()

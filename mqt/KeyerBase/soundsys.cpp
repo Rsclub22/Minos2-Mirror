@@ -324,29 +324,30 @@ int RtAudioSoundSystem::audioCallback(void *outputBuffer, void *inputBuffer,
 
     // NB if there is no outputBuffer and we are reading a file then no InterruptOK
     // gets sent - so the play gets killed quite quickly
-    InBuff *inBuff = nullptr;
-    InBuff *outBuff = nullptr;
+
+    InBuff *replayBuff = nullptr;   // output from ringbuffer - send to audio. inputBuffer should be null
+    InBuff *recordBuff = nullptr;   //audio to record into ringbuffer. outputBuffer should be null
 
     if (outputBuffer == nullptr)
     {
-        inBuff = dataBuffer->getNextInputBuffer();
-        if (inBuff)
+        recordBuff = dataBuffer->getNextInputBuffer();
+        if (recordBuff)
         {
-            inBuff->bh.ptt = pttState;
-            inBuff->bh.frameCount = nFrames;
+            recordBuff->bh.ptt = pttState;
+            recordBuff->bh.frameCount = nFrames;
 
-            outputBuffer = inBuff->buff;
+            outputBuffer = recordBuff->buff;
         }
 
     }
     if (inputBuffer == nullptr)
     {
-        outBuff = dataBuffer->getNextOutputBuffer();
-        if (outBuff)
+        replayBuff = dataBuffer->getNextOutputBuffer();
+        if (replayBuff)
         {
 
-            inputBuffer = outBuff->buff;
-            bool ptts = outBuff->bh.ptt;
+            inputBuffer = replayBuff->buff;
+            bool ptts = replayBuff->bh.ptt;
             if (ptts != pttState)
             {
                 pttState = ptts;
@@ -361,7 +362,7 @@ int RtAudioSoundSystem::audioCallback(void *outputBuffer, void *inputBuffer,
         memset(outputBuffer, 0, nFrames * 2 * outChannels);   // 2 bytes, 2 channels
     }
 
-    if (!outBuff && inputBuffer && nFrames)
+    if (!replayBuff && inputBuffer && nFrames)
     {
         // ALWAYS apply compressor to input, so it continues to adapt
         int16_t * q = reinterpret_cast<  int16_t * > ( inputBuffer );
@@ -444,9 +445,10 @@ int RtAudioSoundSystem::audioCallback(void *outputBuffer, void *inputBuffer,
                           static_cast<unsigned int>(rmsval),
                           nFrames );
         }
-        if (outBuff != nullptr)
+        if (recordBuff != nullptr)
         {
-            outBuff->bh.rms = rmsval;
+            recordBuff->bh.rms = rmsval;
+            recordBuff->bh.peak = maxvol;
         }
         if (inputEnabled)
         {
@@ -463,13 +465,16 @@ int RtAudioSoundSystem::audioCallback(void *outputBuffer, void *inputBuffer,
                       static_cast<unsigned int>(rmsval),
                       nFrames );
     }
-    if (outBuff != nullptr)
+    if (recordBuff != nullptr)
     {
-        memcpy(outputBuffer, outBuff->buff, outBuff->bh.frameCount * 2 * outChannels);
+        memcpy(outputBuffer, recordBuff->buff, recordBuff->bh.frameCount * 2 * outChannels);
 
         dataBuffer->unlockNextOutput();
+        emit setVU( recordBuff->bh.peak ,
+                      recordBuff->bh.rms,
+                      nFrames );
     }
-    if (inBuff != nullptr)
+    if (replayBuff != nullptr)
     {
         dataBuffer->unlockNextInput();
         emit soundAvailable();

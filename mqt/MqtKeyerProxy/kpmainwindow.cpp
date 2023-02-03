@@ -82,6 +82,8 @@ KPMainWindow::KPMainWindow(QWidget *parent)
     connect(SoundSystemDriver::getSbDriver(), &SoundSystemDriver::setVU, this, &KPMainWindow::doSetVU);
     connect(SoundSystemDriver::getSbDriver(), &SoundSystemDriver::ptt, this, &KPMainWindow::doPTT);
 
+    connect()
+
     //We need a PTT indicator
     //We need to implement PTT from Keyer and into here, and to radio
 }

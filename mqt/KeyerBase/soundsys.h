@@ -27,6 +27,7 @@ class RtAudioSoundSystem: public QObject
 private slots:
 
     void onSoundAvailable();
+public slots:
     void onPTTState(bool);
 signals:
     void interruptOK();
