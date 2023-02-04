@@ -304,6 +304,7 @@ int RtAudioSoundSystem::audioCallback(void *outputBuffer, void *inputBuffer,
     {
         return 0;
     }
+    if (outputBuffer == nullptr && !ipSystem->sending)
     callbacks++;
 #if defined (_MSC_VER)
     int16_t *inStageBuffer = new int16_t[nFrames * 2];

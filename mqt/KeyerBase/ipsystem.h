@@ -24,6 +24,7 @@ public:
 
     bool terminated = true;
     bool receiving = false;
+    bool sending = false;
 
     bool isListening() const;
     void setListening(bool newListening);
@@ -44,6 +45,8 @@ private:
     qint64 sequence = 0;
     bool listening = false;
     qint16 _pendingPacketSize = 0;
+
+    int sends = 0;
 
 private slots:
 
