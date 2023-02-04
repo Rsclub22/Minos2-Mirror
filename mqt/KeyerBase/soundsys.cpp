@@ -300,6 +300,13 @@ int RtAudioSoundSystem::audioCallback(void *outputBuffer, void *inputBuffer,
                                 double /*streamTime*/,
                                 unsigned int status )
 {
+    static qint64 stime = QDateTime::currentMSecsSinceEpoch();
+    qint64 tnow = QDateTime::currentMSecsSinceEpoch();
+
+    static qreal cbacks = 0.0;
+    cbacks += 1;
+    qreal msecsPerCallback = (tnow - stime)/cbacks;
+
     if (inputBuffer == nullptr && !ipSystem->receiving)
     {
         return 0;
