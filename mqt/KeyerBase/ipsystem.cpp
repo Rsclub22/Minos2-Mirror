@@ -61,7 +61,8 @@ void IPSystem::onReadyRead()
             QByteArray buf;
             sockStream >> buf;
 
-            if (buffHeader.sequence > sequence)
+            // As we are now TCP we should never get out of sequence packets
+ //           if (buffHeader.sequence > sequence)
             {
                 sequence = buffHeader.sequence;
                 InBuff *inBuff = dataBuffer->getNextInputBuffer();
