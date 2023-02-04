@@ -2,6 +2,7 @@
 #define KPMAINWINDOW_H
 
 #include "StdInReader.h"
+#include "vudata.h"
 #include <QMainWindow>
 #include <QProcess>
 #include <QTimer>
@@ -66,7 +67,7 @@ private slots:
     void CloseTimerTimer();
     void onNewHost(QString h, QString p);
     void onSequenceCount(qint64);
-    void doSetVU(unsigned int ppeakvol, unsigned int prmsvol, unsigned int psamples, qint64 d, int e);
+    void doSetVU(vudata);
     void doPTT(bool);
     void on_spCombo_activated(int index);
     void on_dtr_clicked();

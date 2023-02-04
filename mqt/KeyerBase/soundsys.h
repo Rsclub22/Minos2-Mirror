@@ -13,6 +13,7 @@
 #include "SimpleComp.h"
 #include "CompressorParams.h"
 #include "adis_filter.h"
+#include "vudata.h"
 
 class RiffWriter;
 class RtAudioSoundSystem;
@@ -33,7 +34,7 @@ signals:
     void interruptOK();
     void ssOutputFinished();
     void actionQueueFinished();
-    void setVU(unsigned int a, unsigned int b, unsigned int c, qint64 d, int e);
+    void setVU(vudata);
     void soundAvailable();
     void sequenceCount(qint64);
     void ptt(bool);
@@ -101,6 +102,10 @@ private:
     unsigned int outChannels = 0;
 
     QMap<QString, int> deviceIds;
+
+    int dropped = 0;
+    int missed = 0;
+    int callbacks = 0;
 
     chunkware_simple::SimpleCompRms micCompressor;
     chunkware_simple::SimpleCompRms replayCompressor;

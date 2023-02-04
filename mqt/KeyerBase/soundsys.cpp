@@ -191,7 +191,8 @@ bool RtAudioSoundSystem::initialise( QString ind, QString outd, QString host, QS
     {
         ipSystem = IPSystem::createIPSystem();
         connect(ipSystem, &IPSystem::sequenceCount, this, &RtAudioSoundSystem::sequenceCount);
-        connect(this, &RtAudioSoundSystem::soundAvailable, this, &RtAudioSoundSystem::onSoundAvailable, Qt::QueuedConnection);
+        connect(this, &RtAudioSoundSystem::soundAvailable, this, &RtAudioSoundSystem::onSoundAvailable
+                , static_cast<Qt::ConnectionType>(Qt::UniqueConnection|Qt::QueuedConnection));
 
         // iip also means data receiver
 
@@ -299,6 +300,11 @@ int RtAudioSoundSystem::audioCallback(void *outputBuffer, void *inputBuffer,
                                 double /*streamTime*/,
                                 unsigned int status )
 {
+    if (inputBuffer == nullptr && !ipSystem->receiving)
+    {
+        return 0;
+    }
+    callbacks++;
 #if defined (_MSC_VER)
     int16_t *inStageBuffer = new int16_t[nFrames * 2];
 #else
@@ -343,6 +349,13 @@ int RtAudioSoundSystem::audioCallback(void *outputBuffer, void *inputBuffer,
     if (inputBuffer == nullptr)
     {
         replayBuff = dataBuffer->getNextOutputBuffer();
+        while (dataBuffer->buffered() > 10)
+        {
+            dropped++;
+            dataBuffer->unlockNextOutput();
+            // pick up the latest frame
+            replayBuff = dataBuffer->getNextOutputBuffer();
+        }
         if (replayBuff)
         {
 
@@ -353,6 +366,10 @@ int RtAudioSoundSystem::audioCallback(void *outputBuffer, void *inputBuffer,
                 pttState = ptts;
                 emit ptt(ptts);
             }
+        }
+        else
+        {
+            missed++;
         }
 
     }
@@ -442,9 +459,12 @@ int RtAudioSoundSystem::audioCallback(void *outputBuffer, void *inputBuffer,
         qreal rmsval = sqrt(sqaccum/nFrames);
         if (inputEnabled || passThroughEnabled)
         {
-            emit setVU( static_cast<unsigned int>(maxvol),
-                          static_cast<unsigned int>(rmsval),
-                          nFrames, 0, 0 );
+            vudata v;
+            v.blocks = nFrames;
+            v.peak = maxvol;
+            v.rms = rmsval;
+
+            emit setVU( v );
         }
         if (recordBuff != nullptr)
         {
@@ -462,21 +482,31 @@ int RtAudioSoundSystem::audioCallback(void *outputBuffer, void *inputBuffer,
         qreal rmsval = 0.0;
         readFromFile(outputBuffer, nFrames, maxvol, rmsval);
 
-        emit setVU( static_cast<unsigned int>(maxvol),
-                      static_cast<unsigned int>(rmsval),
-                      nFrames, 0, 0 );
+        vudata v;
+        v.blocks = nFrames;
+        v.peak = maxvol;
+        v.rms = rmsval;
+
+        emit setVU( v );
     }
     if (replayBuff != nullptr)
     {
         memcpy(outputBuffer, replayBuff->buff, replayBuff->bh.frameCount * 2 * outChannels);
 
         qint64 delay = QDateTime::currentMSecsSinceEpoch() - replayBuff->bh.tnow;
-        int buffered = dataBuffer->buffered();
+        //int buffered = dataBuffer->buffered();
 
         dataBuffer->unlockNextOutput();
-        emit setVU( replayBuff->bh.peak ,
-                      replayBuff->bh.rms,
-                      nFrames, delay, buffered );
+        vudata v;
+        v.blocks = nFrames;
+        v.peak = replayBuff->bh.peak;
+        v.rms = replayBuff->bh.rms;
+        v.delay = delay;
+        v.dropped = dropped;
+        v.callbacks = callbacks;
+        v.missed = missed;
+
+        emit setVU( v );
     }
     if (recordBuff != nullptr)
     {
@@ -504,7 +534,7 @@ void RtAudioSoundSystem::stopOutput()
     trace("stopOutput");
     outputEnabled = false;
     emit ssOutputFinished();
-    emit setVU(0, 0, 0, 0, 0);
+    emit setVU(vudata());
 }
 void RtAudioSoundSystem::startInput()
 {
@@ -770,7 +800,7 @@ void RtAudioSoundSystem::stopDMA()
     playingFile = false;
     recordingFile = false;
     passThrough = true;
-    emit setVU( 0, 0, 0, 0, 0 );
+    emit setVU( vudata() );
 }
 bool RtAudioSoundSystem::startMicPassThrough()
 {
@@ -784,6 +814,6 @@ bool RtAudioSoundSystem::stopMicPassThrough()
     trace("stopMicPassThrough");
 
     passThroughEnabled = false;
-    emit setVU( 0, 0, 0, 0, 0 );
+    emit setVU( vudata() );
     return true;
 }

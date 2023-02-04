@@ -37,6 +37,7 @@ void IPSystem::onReadyRead()
     // This appears to be in the GUI thread
     while(bc && bc->bytesAvailable())
     {
+        receiving = true;
         QDataStream sockStream(bc);
         sockStream.setVersion(QDataStream::Qt_5_2);
 

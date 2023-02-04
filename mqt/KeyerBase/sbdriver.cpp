@@ -541,7 +541,7 @@ SoundSystemDriver::SoundSystemDriver()
    connect(soundSystem, &RtAudioSoundSystem::sequenceCount, this, &SoundSystemDriver::sequenceCount);
    connect(soundSystem, &RtAudioSoundSystem::ptt, this, &SoundSystemDriver::onPTTState);
 
-   connect(this, ptt, soundSystem, &RtAudioSoundSystem::onPTTState);
+   connect(this, &SoundSystemDriver::ptt, soundSystem, &RtAudioSoundSystem::onPTTState);
 
 }
 SoundSystemDriver::~SoundSystemDriver()
@@ -581,9 +581,9 @@ void SoundSystemDriver::actionQueueFinished()
         sba->queueFinished();
      }
 }
-void SoundSystemDriver::doSetVU(unsigned int a, unsigned int b, unsigned int c, qint64 d, int e)
+void SoundSystemDriver::doSetVU(vudata v)
 {
-    emit setVU(a, b, c, d, e);
+    emit setVU(v);
 }
 
 void SoundSystemDriver::onPTTState(bool s)

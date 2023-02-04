@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include "voicekeyerbase.h"
+#include "vudata.h"
 
 namespace Ui {
 class TxVmInternalButtonDialog;
@@ -16,7 +17,7 @@ public:
     explicit TxVmInternalButtonDialog(QWidget *parent = nullptr);
     ~TxVmInternalButtonDialog();
 
-    void doSetVU(unsigned int peakvol, unsigned int rmsvol, unsigned int samples, qint64 delay, int buffered);
+    void doSetVU(vudata v);
     void setVmData(VoiceKeyerParams* vmData);
 private slots:
     void on_okButtonCicked();

@@ -11,6 +11,7 @@
 #include <QObject>
 #include <QVector>
 #include "CompressorParams.h"
+#include "vudata.h"
 
 const QString DEFAULT_PORT( "7799" );
 
@@ -139,14 +140,14 @@ private slots:
       void interruptOK();
       void outputFinished();
       void actionQueueFinished();
-      void doSetVU(unsigned int a, unsigned int b, unsigned int c, qint64 d, int e);
+      void doSetVU(vudata);
       void onPTTState(bool);
 
 
 signals:
       void ptt(bool);
       void recpbFinished();
-      void setVU(unsigned int a, unsigned int b, unsigned int c, qint64 d, int e);
+      void setVU(vudata);
       void sequenceCount(qint64);
 
 };

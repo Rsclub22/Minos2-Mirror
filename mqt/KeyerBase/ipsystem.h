@@ -23,6 +23,7 @@ public:
     void dostop();
 
     bool terminated = true;
+    bool receiving = false;
 
     bool isListening() const;
     void setListening(bool newListening);

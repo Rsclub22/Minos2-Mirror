@@ -39,7 +39,8 @@ SOURCES += \
     riff.cpp \
     riffwriter.cpp \
     sbdriver.cpp \
-    soundsys.cpp
+    soundsys.cpp \
+    vudata.cpp
 
 HEADERS += \
     ../filter_c/adis_filter.h \
@@ -69,7 +70,8 @@ HEADERS += \
     riff.h \
     riffwriter.h \
     sbdriver.h \
-    soundsys.h
+    soundsys.h \
+    vudata.h
 
 # Default rules for deployment.
 unix {
