@@ -7,7 +7,7 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 #include "MTrace.h"
-
+#include <QDateTime>
 #include <QtEndian>
 #include <QtMath>
 #include "keyerlog.h"
