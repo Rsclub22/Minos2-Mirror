@@ -72,7 +72,7 @@ KPMainWindow::KPMainWindow(QWidget *parent)
     ui->portEdit->setText(port);
     ui->portEdit->setValidator(new QIntValidator(0, 0xffff, this));
 
-    SoundSystemDriver::getSbDriver()->setSampleRate( 22050);
+    SoundSystemDriver::getSbDriver()->setSampleRate( 48000);
     connect(SoundSystemDriver::getSbDriver(), &SoundSystemDriver::sequenceCount, this, &KPMainWindow::onSequenceCount);
 
     SoundSystemDriver::getSbDriver()->initialise("IP"
