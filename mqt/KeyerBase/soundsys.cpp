@@ -362,7 +362,8 @@ int RtAudioSoundSystem::audioCallback(void *outputBuffer, void *inputBuffer,
         memset(outputBuffer, 0, nFrames * 2 * outChannels);   // 2 bytes, 2 channels
     }
 
-    if (!replayBuff && inputBuffer && nFrames)
+    // if we are reading from IP or a file, compression etc was done earlier
+    if (!replayBuff && inputBuffer && !outputEnabled && nFrames)
     {
         // ALWAYS apply compressor to input, so it continues to adapt
         int16_t * q = reinterpret_cast<  int16_t * > ( inputBuffer );
