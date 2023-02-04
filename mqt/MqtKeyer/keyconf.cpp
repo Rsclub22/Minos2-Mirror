@@ -120,7 +120,7 @@ void KeyerConfigure::SetKeyers( TiXmlElement *e )
          if ( GetStringAttribute( c, "name", name ) == TIXML_SUCCESS )
          {
              int temp;
-            GetIntAttribute( c, "sampleRate", temp, 22050);
+            GetIntAttribute( c, "sampleRate", temp, 48000);
             sampleRate = static_cast<unsigned int>(temp);
             GetIntAttribute( c, "pipTone", PipTone, 1000 );
             GetIntAttribute( c, "pipLength", PipLength, 250 );

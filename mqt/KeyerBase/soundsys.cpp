@@ -152,7 +152,7 @@ bool RtAudioSoundSystem::initialise( QString ind, QString outd, QString host, QS
                       static_cast<void *>(this),
                       &soptions
                       );
-    trace(QString("Audio stream opened OK. Buffers = %1").arg(soptions.numberOfBuffers));
+    trace(QString("Audio stream opened OK. Buffers = %1 bufferFrames %2").arg(soptions.numberOfBuffers).arg(bufferFrames));
 
     if (!iip)
     {
@@ -306,6 +306,9 @@ int RtAudioSoundSystem::audioCallback(void *outputBuffer, void *inputBuffer,
     static qreal cbacks = 0.0;
     cbacks += 1;
     qreal msecsPerCallback = (tnow - stime)/cbacks;
+    int sr = audio->getStreamSampleRate();
+
+    qreal actual = (256 * 1000)/msecsPerCallback;
 
     if (inputBuffer == nullptr && !ipSystem->receiving)
     {
