@@ -581,9 +581,9 @@ void SoundSystemDriver::actionQueueFinished()
         sba->queueFinished();
      }
 }
-void SoundSystemDriver::doSetVU(unsigned int a, unsigned int b, unsigned int c)
+void SoundSystemDriver::doSetVU(unsigned int a, unsigned int b, unsigned int c, qint64 d, int e)
 {
-    emit setVU(a, b, c);
+    emit setVU(a, b, c, d, e);
 }
 
 void SoundSystemDriver::onPTTState(bool s)

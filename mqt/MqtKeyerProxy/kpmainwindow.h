@@ -66,7 +66,7 @@ private slots:
     void CloseTimerTimer();
     void onNewHost(QString h, QString p);
     void onSequenceCount(qint64);
-    void doSetVU(unsigned int ppeakvol, unsigned int prmsvol, unsigned int psamples);
+    void doSetVU(unsigned int ppeakvol, unsigned int prmsvol, unsigned int psamples, qint64 d, int e);
     void doPTT(bool);
     void on_spCombo_activated(int index);
     void on_dtr_clicked();

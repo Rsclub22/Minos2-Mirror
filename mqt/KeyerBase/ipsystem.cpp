@@ -238,7 +238,9 @@ int IPSystem::tryOutput()
 
                 BuffHeader buffHeader;
                 buffHeader.frameCount = inBuff->bh.frameCount;
+                buffHeader.ptt = inBuff->bh.ptt;
                 buffHeader.rms = inBuff->bh.rms;
+                buffHeader.peak = inBuff->bh.peak;
                 buffHeader.sequence = sequence++;
                 buffHeader.tnow = QDateTime::currentMSecsSinceEpoch();
                 os << buffHeader;

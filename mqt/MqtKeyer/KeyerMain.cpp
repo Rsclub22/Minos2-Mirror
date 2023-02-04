@@ -45,7 +45,7 @@ void KeyerMain::doSliders(int rec, int rep, int pass, CompressorParams comp)
 
     inVolChangeCount--;
 }
-void KeyerMain::doSetVU( unsigned int ppeakvol, unsigned int prmsvol ,unsigned int psamples)
+void KeyerMain::doSetVU( unsigned int ppeakvol, unsigned int prmsvol ,unsigned int psamples, qint64 delay, int buffered)
 {
     if (!kmInhibitCallbacks)
     {
@@ -354,7 +354,7 @@ void KeyerMain::lineTimerTimer( )
        KeyerServer::publishSliders(recordFrame->getIntValue(), replayFrame->getIntValue(), passthroughFrame->getIntValue(), masterConfig.compression);
        if (VKMixer::GetVKMixer()->GetCurrentMixerSet() == emsPassThroughNoPTT)
        {
-           doSetVU(0, 0, 0);    // make sure the metering goes to zero when nothing is happening
+           doSetVU(0, 0, 0, 0, 0);    // make sure the metering goes to zero when nothing is happening
        }
        KeyerServer::publishVUMeter(rmsvol, peakvol, samples);
        rmsvol = 0;

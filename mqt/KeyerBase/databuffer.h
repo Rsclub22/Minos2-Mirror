@@ -33,6 +33,8 @@ public:
 
     void unlockNextOutput();
     InBuff *getNextOutputBuffer();
+
+    int buffered(){return recIndex - writeIndex;}
 };
 
 #endif // DATABUFFER_H

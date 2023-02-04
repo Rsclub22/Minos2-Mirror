@@ -33,7 +33,7 @@ signals:
     void interruptOK();
     void ssOutputFinished();
     void actionQueueFinished();
-    void setVU(unsigned int a, unsigned int b, unsigned int c);
+    void setVU(unsigned int a, unsigned int b, unsigned int c, qint64 d, int e);
     void soundAvailable();
     void sequenceCount(qint64);
     void ptt(bool);

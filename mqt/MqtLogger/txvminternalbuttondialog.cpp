@@ -10,7 +10,7 @@
 static bool txvmIntInhibitCallbacks = false;
 
 static TxVmInternalButtonDialog *txvmbd = nullptr;
-void TxVmInternalButtonDialog::doSetVU(unsigned int peakvol, unsigned int rmsvol , unsigned int samples)
+void TxVmInternalButtonDialog::doSetVU(unsigned int peakvol, unsigned int rmsvol , unsigned int samples, qint64 delay, int buffered)
 {
     if (!txvmIntInhibitCallbacks)
         ui->levelMeter->levelChanged( peakvol / 32768.0, rmsvol / 32768.0, samples );

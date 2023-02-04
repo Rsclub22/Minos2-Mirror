@@ -218,6 +218,20 @@
          </widget>
         </item>
         <item>
+         <widget class="QLabel" name="delayLabel">
+          <property name="text">
+           <string>delay</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="bufferedLabel">
+          <property name="text">
+           <string>buffered</string>
+          </property>
+         </widget>
+        </item>
+        <item>
          <spacer name="horizontalSpacer_2">
           <property name="orientation">
            <enum>Qt::Horizontal</enum>

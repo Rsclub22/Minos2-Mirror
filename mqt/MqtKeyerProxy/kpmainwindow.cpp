@@ -295,9 +295,15 @@ void KPMainWindow::onSequenceCount(qint64 s)
 {
     ui->seqLabel->setText(QString::number(s));
 }
-void KPMainWindow::doSetVU( unsigned int ppeakvol, unsigned int prmsvol ,unsigned int psamples)
+void KPMainWindow::doSetVU( unsigned int ppeakvol, unsigned int prmsvol ,unsigned int psamples, qint64 delay, int buffered)
 {
     ui->levelMeter->levelChanged( ppeakvol / 32768.0, prmsvol / 32768.0, psamples );
+
+    // delay is in nanoseconds
+
+    delay = delay/1000000.0;    // millisecs
+    ui->delayLabel->setText(QString::number(delay));
+    ui->bufferedLabel->setText(QString::number(buffered));
 }
 bool KPMainWindow::openSerialPort()
 {

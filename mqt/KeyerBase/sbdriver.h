@@ -139,14 +139,14 @@ private slots:
       void interruptOK();
       void outputFinished();
       void actionQueueFinished();
-      void doSetVU(unsigned int a, unsigned int b, unsigned int c);
+      void doSetVU(unsigned int a, unsigned int b, unsigned int c, qint64 d, int e);
       void onPTTState(bool);
 
 
 signals:
       void ptt(bool);
       void recpbFinished();
-      void setVU(unsigned int a, unsigned int b, unsigned int c);
+      void setVU(unsigned int a, unsigned int b, unsigned int c, qint64 d, int e);
       void sequenceCount(qint64);
 
 };

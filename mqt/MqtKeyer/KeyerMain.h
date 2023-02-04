@@ -70,7 +70,7 @@ private slots:
 
     void onPTT(bool);
 
-    void doSetVU(unsigned int peakvol, unsigned int rmsvol , unsigned int samples );
+    void doSetVU(unsigned int peakvol, unsigned int rmsvol , unsigned int samples, qint64 delay, int buffered );
     void lcallback( bool pPTT, bool pPTTRef, bool pL1Ref, bool pL2Ref, int lmode );
 
     void doSliders(int, int, int, CompressorParams comp);

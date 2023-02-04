@@ -141,7 +141,7 @@ bool RtAudioSoundSystem::initialise( QString ind, QString outd, QString host, QS
     inParams.nChannels = inChannels;
 
     soptions.flags = 0;
-    soptions.numberOfBuffers = FRAMES;
+    soptions.numberOfBuffers = RTAUDIO_MINIMIZE_LATENCY;
     soptions.priority = 0;
     soptions.streamName = "";
 
@@ -152,7 +152,7 @@ bool RtAudioSoundSystem::initialise( QString ind, QString outd, QString host, QS
                       static_cast<void *>(this),
                       &soptions
                       );
-    trace("Audio stream opened OK");
+    trace(QString("Audio stream opened OK. Buffers = %1").arg(soptions.numberOfBuffers));
 
     if (!iip)
     {
@@ -443,7 +443,7 @@ int RtAudioSoundSystem::audioCallback(void *outputBuffer, void *inputBuffer,
         {
             emit setVU( static_cast<unsigned int>(maxvol),
                           static_cast<unsigned int>(rmsval),
-                          nFrames );
+                          nFrames, 0, 0 );
         }
         if (recordBuff != nullptr)
         {
@@ -463,16 +463,19 @@ int RtAudioSoundSystem::audioCallback(void *outputBuffer, void *inputBuffer,
 
         emit setVU( static_cast<unsigned int>(maxvol),
                       static_cast<unsigned int>(rmsval),
-                      nFrames );
+                      nFrames, 0, 0 );
     }
     if (replayBuff != nullptr)
     {
         memcpy(outputBuffer, replayBuff->buff, replayBuff->bh.frameCount * 2 * outChannels);
 
+        qint64 delay = QDateTime::currentMSecsSinceEpoch() - replayBuff->bh.tnow;
+        int buffered = dataBuffer->buffered();
+
         dataBuffer->unlockNextOutput();
         emit setVU( replayBuff->bh.peak ,
                       replayBuff->bh.rms,
-                      nFrames );
+                      nFrames, delay, buffered );
     }
     if (recordBuff != nullptr)
     {
@@ -500,7 +503,7 @@ void RtAudioSoundSystem::stopOutput()
     trace("stopOutput");
     outputEnabled = false;
     emit ssOutputFinished();
-    emit setVU(0, 0, 0);
+    emit setVU(0, 0, 0, 0, 0);
 }
 void RtAudioSoundSystem::startInput()
 {
@@ -766,7 +769,7 @@ void RtAudioSoundSystem::stopDMA()
     playingFile = false;
     recordingFile = false;
     passThrough = true;
-    emit setVU( 0, 0, 0 );
+    emit setVU( 0, 0, 0, 0, 0 );
 }
 bool RtAudioSoundSystem::startMicPassThrough()
 {
@@ -780,6 +783,6 @@ bool RtAudioSoundSystem::stopMicPassThrough()
     trace("stopMicPassThrough");
 
     passThroughEnabled = false;
-    emit setVU( 0, 0, 0 );
+    emit setVU( 0, 0, 0, 0, 0 );
     return true;
 }
