@@ -189,7 +189,9 @@ void IPSystem::doStart()
 void IPSystem::connected()
 {
     trace("Socket connected");
-    // all OK, nothing to do hear
+    // all OK, nothing to do here
+
+    sending = true;
 }
 void IPSystem::disconnected()
 {
@@ -251,6 +253,7 @@ int IPSystem::tryOutput()
                 os.device()->seek(0);
                 os << static_cast<qint16>(nm.size() - sizeof(qint16));
 
+                sends++;
                 nbytes = bc->write(nm);
                 if (nbytes == 0)
                 {
