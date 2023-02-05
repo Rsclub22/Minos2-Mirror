@@ -114,20 +114,24 @@ int audioCallback2( void */*outputBuffer*/, void *inputBuffer,
 //==============================================================================
 RRRtAudioSoundSystem::RRRtAudioSoundSystem()
 {
-   audio = new RtAudio();
+    try
+    {
+       audio = new RtAudio();
 
-   wThread = new RRRiffWriter(this);
-   wThread->start();
+       wThread = new RRRiffWriter(this);
+       wThread->start();
 
-   unsigned int defInput = audio->getDefaultInputDevice();
-
-   std::vector<unsigned int> devices = audio->getDeviceIds();
-
-   RtAudio::DeviceInfo info;
-   for ( unsigned int i=0; i<devices.size(); i++ )
-   {
-       info = audio->getDeviceInfo( devices[i] );
+       unsigned int defInput = audio->getDefaultInputDevice();
+       unsigned int devices = audio->getDeviceCount();
+       RtAudio::DeviceInfo info;
+       for ( unsigned int i=0; i<devices; i++ )
        {
+         info = audio->getDeviceInfo( i );
+         if ( info.probed == true )
+         {
+           trace( "device = "  + QString::number(i) +  " " + info.name.c_str());
+           trace( "Maximum output channels = " + QString::number(info.outputChannels) + " Maximum input channels = " + QString::number(info.inputChannels));
+
            QString buff("Sample rates: ");
            for (auto r:info.sampleRates)
            {
@@ -139,22 +143,26 @@ RRRtAudioSoundSystem::RRRtAudioSoundSystem()
                buff += pref + QString::number(r) + pref + " ";
            }
            trace(buff);
-
-           trace( "device = "  + QString::number(i) +  " " + info.name.c_str());
-           trace( "Maximum output channels = " + QString::number(info.outputChannels) + " Maximum input channels = " + QString::number(info.inputChannels));
+         }
+         if (i == defInput)
+         {
+             inChannels = info.inputChannels;
+             trace("(Default input)");
+         }
+         if (info.inputChannels)
+         {
+             inputDevices.append(info.name.c_str());
+         }
+         deviceIds[QString(info.name.c_str())] = i;
        }
-       if (devices[i] == defInput)
-       {
-           inChannels = info.inputChannels;
-           trace("(Default input)");
-       }
-       if (info.inputChannels)
-       {
-           inputDevices.append(info.name.c_str());
-       }
-       deviceIds[QString(info.name.c_str())] = devices[i];
-   }
-   trace( "Default input channels = " + QString::number(inChannels));
+       trace( "Default input channels = " + QString::number(inChannels));
+    }
+    catch (RtAudioError &error)
+    {
+       // Handle the exception here
+       trace(error.getMessage().c_str());
+       audio = nullptr;
+    }
 }
 void RRRtAudioSoundSystem::stop()
 {
