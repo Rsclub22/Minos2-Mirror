@@ -14,10 +14,8 @@ INCLUDEPATH += ../MqtBase
 INCLUDEPATH += ../XMPPLib
 INCLUDEPATH += ../TinyXML
 
-
-
 unix:!macos{DEFINES += __LINUX_ALSA__}
-win32{DEFINES += __WINDOWS_DS__}
+win32{DEFINES += __WINDOWS_WASAPI__}
 
 SOURCES += \
     ../filter_c/adis_filter.c \

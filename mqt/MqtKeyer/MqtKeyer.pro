@@ -14,9 +14,6 @@ TEMPLATE = app
 
 win32:RC_ICONS += ../MinosKeyer.ico
 
-unix:!macos{DEFINES += __LINUX_ALSA__}
-win32{DEFINES += __WINDOWS_DS__}
-
 SOURCES += main.cpp\
         KeyerMain.cpp \
     keyerAbout.cpp \

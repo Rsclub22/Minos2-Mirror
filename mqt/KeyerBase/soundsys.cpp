@@ -163,13 +163,21 @@ bool RtAudioSoundSystem::initialise( QString ind, QString outd, QString host, QS
     soptions.priority = 0;
     soptions.streamName = "";
 
-    audio->openStream(oip?nullptr:&outParams,
+    try
+    {
+        audio->openStream(oip?nullptr:&outParams,
                       iip?nullptr:&inParams,
                       RTAUDIO_SINT16, sampleRate,
                       &bufferFrames, ::audioCallback,
                       static_cast<void *>(this),
                       &soptions
                       );
+    } catch (RtAudioError &error)
+    {
+        trace(error.getMessage().c_str());
+        return false;
+    }
+
     trace(QString("Audio stream opened OK. Buffers = %1 bufferFrames %2").arg(soptions.numberOfBuffers).arg(bufferFrames));
 
     if (!iip)
