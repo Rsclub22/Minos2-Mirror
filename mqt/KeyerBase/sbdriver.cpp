@@ -289,6 +289,10 @@ bool SoundSystemDriver::sbdvp_init( QString ind, QString outd, QString host, QSt
 
       // should be in each sound class
 
+      if (rate > 0)
+      {
+            srate = rate;
+      }
       rate = soundSystem->setRate(srate);
 
       if ( !soundSystem->initialise( ind, outd, host, port ) )

@@ -106,6 +106,8 @@ private:
     int dropped = 0;
     int missed = 0;
     int callbacks = 0;
+    qint64 stime = QDateTime::currentMSecsSinceEpoch();
+    qreal cbacks = 0.0;
 
     chunkware_simple::SimpleCompRms micCompressor;
     chunkware_simple::SimpleCompRms replayCompressor;

@@ -61,6 +61,8 @@ void KeyerMain::doSetVU( vudata v)
         }
         samples += v.blocks;
         ui->levelMeter->levelChanged( peakvol / 32768.0, rmsvol / 32768.0, samples );
+
+        ui->actualRate->setText(QString::number(v.actual));
     }
 }
 
@@ -169,6 +171,17 @@ KeyerMain::KeyerMain(QWidget *parent) :
     ui->outputCombo->addItems(outputList);
     QString currentOutput = settings.value("outputDevice", SoundSystemDriver::getSbDriver()->getDefaultOutputDevice()).toString();
     ui->outputCombo->setCurrentText(currentOutput);
+
+    QStringList sampleRates =  {
+            "4000", "5512", "8000", "9600", "11025", "16000", "22050",
+            "32000", "44100", "48000", "88200", "96000", "176400", "192000"
+          };
+
+
+    ui->sampleRate->addItems(sampleRates);
+    QString sr = settings.value("sampleRate", 0).toString();
+    ui->sampleRate->setCurrentText(sr);
+    SoundSystemDriver::getSbDriver()->setSampleRate(sr.toInt());
 
     QString port = settings.value("SenderPort", DEFAULT_PORT).toString();
     ui->portEdit->setText(port);
@@ -775,6 +788,20 @@ void KeyerMain::on_outputCombo_activated(int /*index*/)
     settings.setValue("outputDevice", ui->outputCombo->currentText());
     trace("About to re-initialise audio");
     SoundSystemDriver::getSbDriver()->closedown();
+    SoundSystemDriver::getSbDriver()->initialise(ui->inputCombo->currentText()
+                                                 , ui->outputCombo->currentText()
+                                                 , ""
+                                                 , ui->portEdit->text());
+}
+
+
+void KeyerMain::on_sampleRate_activated(int /*index*/)
+{
+    QSettings settings;
+    settings.setValue("sampleRate", ui->sampleRate->currentText());
+    trace("About to re-initialise audio");
+    SoundSystemDriver::getSbDriver()->closedown();
+    SoundSystemDriver::getSbDriver()->setSampleRate(ui->sampleRate->currentText().toInt());
     SoundSystemDriver::getSbDriver()->initialise(ui->inputCombo->currentText()
                                                  , ui->outputCombo->currentText()
                                                  , ""

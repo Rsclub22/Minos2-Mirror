@@ -106,6 +106,8 @@ private slots:
 
     void on_outputCombo_activated(int index);
 
+    void on_sampleRate_activated(int index);
+
 private:
     void syncSetLines();
     QTimer lineTimer;

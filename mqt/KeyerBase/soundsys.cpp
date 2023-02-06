@@ -65,6 +65,18 @@ RtAudioSoundSystem::RtAudioSoundSystem()
            trace( "device = "  + QString::number(i) +  " " + info.name.c_str());
            trace( "Maximum output channels = " + QString::number(info.outputChannels) + " Maximum input channels = " + QString::number(info.inputChannels));
          }
+         QString buff("Sample rates: ");
+         for (auto r:info.sampleRates)
+         {
+             QString pref;
+             if (r == info.preferredSampleRate)
+             {
+                 pref = "**";
+             }
+             buff += pref + QString::number(r) + pref + " ";
+         }
+         trace(buff);
+
          if (i == defInput)
          {
              inChannels = info.inputChannels;
@@ -265,6 +277,12 @@ void RtAudioSoundSystem::closedown()
 
 unsigned int RtAudioSoundSystem::setRate(unsigned int rate)
 {
+    dropped = 0;
+    missed = 0;
+    callbacks = 0;
+    stime = 0;
+    cbacks = 0.0;
+
    sampleRate = rate;
    return sampleRate;
 }
@@ -306,10 +324,12 @@ int RtAudioSoundSystem::audioCallback(void *outputBuffer, void *inputBuffer,
                                 double /*streamTime*/,
                                 unsigned int status )
 {
-    static qint64 stime = QDateTime::currentMSecsSinceEpoch();
     qint64 tnow = QDateTime::currentMSecsSinceEpoch();
+    if (stime == 0)
+    {
+        stime = tnow;
+    }
 
-    static qreal cbacks = 0.0;
     cbacks += 1;
     qreal msecsPerCallback = (tnow - stime)/cbacks;
     int sr = audio->getStreamSampleRate();
@@ -318,10 +338,13 @@ int RtAudioSoundSystem::audioCallback(void *outputBuffer, void *inputBuffer,
 
     if (inputBuffer == nullptr && !ipSystem->receiving)
     {
+        vudata v;
+        v.actual = actual;
+
+        emit setVU( v );
         return 0;
     }
-    if (outputBuffer == nullptr && !ipSystem->sending)
-    callbacks++;
+
 #if defined (_MSC_VER)
     int16_t *inStageBuffer = new int16_t[nFrames * 2];
 #else
@@ -332,6 +355,7 @@ int RtAudioSoundSystem::audioCallback(void *outputBuffer, void *inputBuffer,
     {
         return 0;   // no data
     }
+    callbacks++;
 
     if ( status == RTAUDIO_INPUT_OVERFLOW)
     {
@@ -480,6 +504,7 @@ int RtAudioSoundSystem::audioCallback(void *outputBuffer, void *inputBuffer,
             v.blocks = nFrames;
             v.peak = maxvol;
             v.rms = rmsval;
+            v.actual = actual;
 
             emit setVU( v );
         }
@@ -503,6 +528,7 @@ int RtAudioSoundSystem::audioCallback(void *outputBuffer, void *inputBuffer,
         v.blocks = nFrames;
         v.peak = maxvol;
         v.rms = rmsval;
+        v.actual = actual;
 
         emit setVU( v );
     }
@@ -522,6 +548,7 @@ int RtAudioSoundSystem::audioCallback(void *outputBuffer, void *inputBuffer,
         v.dropped = dropped;
         v.callbacks = callbacks;
         v.missed = missed;
+        v.actual = actual;
 
         emit setVU( v );
     }

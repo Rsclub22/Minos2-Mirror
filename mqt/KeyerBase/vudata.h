@@ -14,6 +14,8 @@ public:
     int callbacks = 0;
     int dropped = 0;
     int missed = 0;
+
+    int actual = 0;
 };
 
 #endif // VUDATA_H
