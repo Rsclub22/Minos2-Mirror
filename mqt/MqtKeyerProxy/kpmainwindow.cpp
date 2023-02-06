@@ -291,6 +291,12 @@ void KPMainWindow::onNewHost(QString h, QString p, QString s)
                                                  , ui->outputCombo->currentText()
                                                  , h
                                                  , p);
+
+    QLabel *sbLabel = new QLabel( "" );
+    statusBar() ->addWidget( sbLabel, 6 );
+
+    sbLabel->setText(QString("%1:%2 %3").arg(h, p, s));
+
 }
 void KPMainWindow::onSequenceCount(qint64 s)
 {
@@ -325,7 +331,7 @@ bool KPMainWindow::openSerialPort()
 
             if (!sp->openComport(serialPort, rts, dtr))
             {
-                mShowMessage(sp->error(), this);
+                mShowMessage(tr("Open COM port %1 failed: %2").arg(serialPort, sp->error()), this);
                 return false;
             }
         }
