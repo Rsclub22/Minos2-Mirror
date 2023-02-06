@@ -63,6 +63,10 @@ void KPRPCServer::on_notify(AnalysePubSubNotify an, const QString /*from*/ )
                     QString ip = an.getPublisherIP();
                     QString v = an.getValue();
                     QStringList sl = v.split("|");
+                    if (sl.size() == 1)
+                    {
+                        sl.append("22050");
+                    }
                     emit newHost(ip, sl[0], sl[1]);
               }
           }
