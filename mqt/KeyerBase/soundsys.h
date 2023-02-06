@@ -9,6 +9,7 @@
 #ifndef soundsysH
 #define soundsysH
 
+#include <QDateTime>
 #include "riff.h"
 #include "SimpleComp.h"
 #include "CompressorParams.h"
