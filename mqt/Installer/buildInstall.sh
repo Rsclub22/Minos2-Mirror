@@ -89,7 +89,7 @@ if [[ "$OSTYPE" == "darwin"* ]] ; then 		#MacOS
 	cp -r $DIR/$BUILDDIR/MqtChat/MqtChat.app Bin
 	cp -r $DIR/$BUILDDIR/MqtCluster/MqtCluster.app Bin
 	cp -r $DIR/$BUILDDIR/MqtControl/MqtControl.app Bin
-	cp -r $DIR/$BUILDDIR/MqtControl/MqtDataModes.app Bin
+	cp -r $DIR/$BUILDDIR/MqtDataModes/MqtDataModes.app Bin
 	cp -r $DIR/$BUILDDIR/MqtKeyer/MqtKeyer.app Bin
 	cp -r $DIR/$BUILDDIR/MqtKeyerProxy/MqtKeyerProxy.app Bin
 	cp -r $DIR/$BUILDDIR/MqtKSTClient/MqtKSTClient.app Bin
@@ -107,7 +107,7 @@ else
 	cp $DIR/$BUILDDIR/MqtChat/MqtChat Bin
 	cp $DIR/$BUILDDIR/MqtCluster/MqtCluster Bin
 	cp $DIR/$BUILDDIR/MqtControl/MqtControl Bin
-	cp $DIR/$BUILDDIR/MqtControl/MqtDataModes Bin
+	cp $DIR/$BUILDDIR/MqtDataModes/MqtDataModes Bin
 	cp $DIR/$BUILDDIR/MqtKeyer/MqtKeyer Bin
 	cp $DIR/$BUILDDIR/MqtKeyerProxy/MqtKeyerProxy Bin
 	cp $DIR/$BUILDDIR/MqtKSTClient/MqtKSTClient Bin
