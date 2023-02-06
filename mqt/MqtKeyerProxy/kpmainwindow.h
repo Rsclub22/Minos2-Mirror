@@ -65,7 +65,7 @@ private slots:
 
     void on_outputCombo_activated(int);
     void CloseTimerTimer();
-    void onNewHost(QString h, QString p);
+    void onNewHost(QString h, QString p, QString s);
     void onSequenceCount(qint64);
     void doSetVU(vudata);
     void doPTT(bool);

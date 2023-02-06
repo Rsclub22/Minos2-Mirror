@@ -332,9 +332,8 @@ int RtAudioSoundSystem::audioCallback(void *outputBuffer, void *inputBuffer,
 
     cbacks += 1;
     qreal msecsPerCallback = (tnow - stime)/cbacks;
-    int sr = audio->getStreamSampleRate();
-
     qreal actual = (256 * 1000)/msecsPerCallback;
+   // return 0;
 
     if (inputBuffer == nullptr && !ipSystem->receiving)
     {
@@ -344,7 +343,6 @@ int RtAudioSoundSystem::audioCallback(void *outputBuffer, void *inputBuffer,
         emit setVU( v );
         return 0;
     }
-
 #if defined (_MSC_VER)
     int16_t *inStageBuffer = new int16_t[nFrames * 2];
 #else

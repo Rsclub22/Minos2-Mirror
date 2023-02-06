@@ -538,14 +538,14 @@ void SoundSystemDriver::setSampleRate(unsigned int r)
 SoundSystemDriver::SoundSystemDriver()
 {
     soundSystem = RtAudioSoundSystem::createSoundSystem();
-   connect(soundSystem, &RtAudioSoundSystem::interruptOK, this, &SoundSystemDriver::interruptOK);
-   connect(soundSystem, &RtAudioSoundSystem::ssOutputFinished, this, &SoundSystemDriver::outputFinished);
-   connect(soundSystem, &RtAudioSoundSystem::actionQueueFinished, this, &SoundSystemDriver::actionQueueFinished);
-   connect(soundSystem, &RtAudioSoundSystem::setVU, this, &SoundSystemDriver::doSetVU);
-   connect(soundSystem, &RtAudioSoundSystem::sequenceCount, this, &SoundSystemDriver::sequenceCount);
-   connect(soundSystem, &RtAudioSoundSystem::ptt, this, &SoundSystemDriver::onPTTState);
+   connect(soundSystem, &RtAudioSoundSystem::interruptOK, this, &SoundSystemDriver::interruptOK, Qt::QueuedConnection);
+   connect(soundSystem, &RtAudioSoundSystem::ssOutputFinished, this, &SoundSystemDriver::outputFinished, Qt::QueuedConnection);
+   connect(soundSystem, &RtAudioSoundSystem::actionQueueFinished, this, &SoundSystemDriver::actionQueueFinished, Qt::QueuedConnection);
+   connect(soundSystem, &RtAudioSoundSystem::setVU, this, &SoundSystemDriver::doSetVU, Qt::QueuedConnection);
+   connect(soundSystem, &RtAudioSoundSystem::sequenceCount, this, &SoundSystemDriver::sequenceCount, Qt::QueuedConnection);
+   connect(soundSystem, &RtAudioSoundSystem::ptt, this, &SoundSystemDriver::onPTTState, Qt::QueuedConnection);
 
-   connect(this, &SoundSystemDriver::ptt, soundSystem, &RtAudioSoundSystem::onPTTState);
+   connect(this, &SoundSystemDriver::ptt, soundSystem, &RtAudioSoundSystem::onPTTState, Qt::QueuedConnection);
 
 }
 SoundSystemDriver::~SoundSystemDriver()

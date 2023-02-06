@@ -283,9 +283,10 @@ void KPMainWindow::on_outputCombo_activated(int /*index*/)
                                                  , host
                                                  , ui->portEdit->text());
 }
-void KPMainWindow::onNewHost(QString h, QString p)
+void KPMainWindow::onNewHost(QString h, QString p, QString s)
 {
     SoundSystemDriver::getSbDriver()->closedown();
+    SoundSystemDriver::getSbDriver()->setSampleRate(s.toInt());
     SoundSystemDriver::getSbDriver()->initialise("IP"
                                                  , ui->outputCombo->currentText()
                                                  , h

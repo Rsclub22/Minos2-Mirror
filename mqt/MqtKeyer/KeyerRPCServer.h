@@ -37,7 +37,7 @@ class KeyerServer:public QObject
       static void publishConfig(const QString &config);
       static void publishSliders(int rec, int replay, int passthrough, CompressorParams &comp);
       static void publishVUMeter(unsigned int rmsLevel, unsigned int peakLevel, unsigned int numSamples);
-      static void publishIPDetail(QString port);
+      static void publishIPDetail(QString port, QString sampleRate);
 
       bool getState( const QString &line );
 

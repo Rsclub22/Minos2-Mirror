@@ -1,3 +1,4 @@
+#include "MShowMessageDlg.h"
 #include  <QtGlobal>
 #ifdef Q_OS_UNIX
 #include <unistd.h>
@@ -172,7 +173,7 @@ KeyerMain::KeyerMain(QWidget *parent) :
     QString currentOutput = settings.value("outputDevice", SoundSystemDriver::getSbDriver()->getDefaultOutputDevice()).toString();
     ui->outputCombo->setCurrentText(currentOutput);
 
-    QStringList sampleRates =  {
+    QStringList sampleRates =  {"0",
             "4000", "5512", "8000", "9600", "11025", "16000", "22050",
             "32000", "44100", "48000", "88200", "96000", "176400", "192000"
           };
@@ -239,7 +240,8 @@ KeyerMain::KeyerMain(QWidget *parent) :
     ui->keyCombo->setCurrentIndex(0);
     ui->KeyerTabs->setCurrentIndex(0);
 
-    KeyerServer::publishIPDetail(port);
+    sr = QString::number(SoundSystemDriver::getSbDriver()->rate);
+    KeyerServer::publishIPDetail(port, sr);
 }
 KeyerMain::~KeyerMain()
 {
@@ -799,6 +801,11 @@ void KeyerMain::on_sampleRate_activated(int /*index*/)
 {
     QSettings settings;
     settings.setValue("sampleRate", ui->sampleRate->currentText());
+
+    if (ui->sampleRate->currentText() == "0")
+    {
+        mShowMessage("The keyer will restart to set sample rate to \"0\"""", this);
+    }
     trace("About to re-initialise audio");
     SoundSystemDriver::getSbDriver()->closedown();
     SoundSystemDriver::getSbDriver()->setSampleRate(ui->sampleRate->currentText().toInt());
