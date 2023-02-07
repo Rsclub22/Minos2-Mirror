@@ -146,6 +146,7 @@ private slots:
 
 signals:
       void ptt(bool);
+      void passPTT(bool);
       void recpbFinished();
       void setVU(vudata);
       void sequenceCount(qint64);

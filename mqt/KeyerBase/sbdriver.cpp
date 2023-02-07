@@ -545,8 +545,7 @@ SoundSystemDriver::SoundSystemDriver()
    connect(soundSystem, &RtAudioSoundSystem::sequenceCount, this, &SoundSystemDriver::sequenceCount, Qt::QueuedConnection);
    connect(soundSystem, &RtAudioSoundSystem::ptt, this, &SoundSystemDriver::onPTTState, Qt::QueuedConnection);
 
-   connect(this, &SoundSystemDriver::ptt, soundSystem, &RtAudioSoundSystem::onPTTState, Qt::QueuedConnection);
-
+   connect(this, &SoundSystemDriver::passPTT, soundSystem, &RtAudioSoundSystem::passPTT, Qt::QueuedConnection);
 }
 SoundSystemDriver::~SoundSystemDriver()
 {

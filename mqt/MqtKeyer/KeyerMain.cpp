@@ -62,9 +62,8 @@ void KeyerMain::doSetVU( vudata v)
         }
         samples += v.blocks;
         ui->levelMeter->levelChanged( peakvol / 32768.0, rmsvol / 32768.0, samples );
-
-        ui->actualRate->setText(QString::number(v.actual));
     }
+    actualRate = v.actual;  // update on timer
 }
 
 KeyerJson *getMasterConfig()
@@ -79,6 +78,10 @@ void KeyerMain::setLines(bool PTTOut, bool PTTIn, bool L1, bool L2, int lmode )
     L1Ref = L1;
     L2Ref = L2;
     linesMode = lmode;
+
+    //We need to pass down from here to soundsys, etc - PTTOut particularly
+
+    emit SoundSystemDriver::getSbDriver()->passPTT(PTT);
 }
 void KeyerMain::syncSetLines()
 {
@@ -376,6 +379,7 @@ void KeyerMain::lineTimerTimer( )
        peakvol = 0;
        samples = 0;
    }
+   ui->actualRate->setText(QString::number(actualRate));
 }
 void KeyerMain::CaptionTimerTimer( )
 {
@@ -804,10 +808,11 @@ void KeyerMain::on_sampleRate_activated(int /*index*/)
 
     if (ui->sampleRate->currentText() == "0")
     {
-        mShowMessage("The keyer will restart to set sample rate to \"0\"""", this);
+        mShowMessage(tr("Restart to set sample rate to \"0\""""), this);
+        exit(0);
     }
+
     trace("About to re-initialise audio");
-    SoundSystemDriver::getSbDriver()->closedown();
     SoundSystemDriver::getSbDriver()->setSampleRate(ui->sampleRate->currentText().toInt());
     SoundSystemDriver::getSbDriver()->initialise(ui->inputCombo->currentText()
                                                  , ui->outputCombo->currentText()

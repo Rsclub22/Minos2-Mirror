@@ -30,7 +30,7 @@ private slots:
 
     void onSoundAvailable();
 public slots:
-    void onPTTState(bool);
+    void passPTT(bool b);
 signals:
     void interruptOK();
     void ssOutputFinished();

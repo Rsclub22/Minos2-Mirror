@@ -142,6 +142,8 @@ private:
     qint16 peakvol = 0;
     int samples = 0;
 
+    qreal actualRate = 0.0;
+
     QProcess *runner;
 
     void setVolumeMults();

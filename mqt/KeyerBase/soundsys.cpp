@@ -242,7 +242,7 @@ void RtAudioSoundSystem::onSoundAvailable()
     }
 }
 
-void RtAudioSoundSystem::onPTTState(bool b)
+void RtAudioSoundSystem::passPTT(bool b)
 {
     pttState = b;
 }
