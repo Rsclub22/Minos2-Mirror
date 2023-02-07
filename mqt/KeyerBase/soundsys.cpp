@@ -428,8 +428,9 @@ int RtAudioSoundSystem::audioCallback(void *outputBuffer, void *inputBuffer,
         memset(outputBuffer, 0, nFrames * 2 * outChannels);   // 2 bytes, 2 channels
     }
 
-    // if we are reading from IP or a file, compression etc was done earlier
-    if (!replayBuff && inputBuffer && !outputEnabled && nFrames)
+    // if we are reading from IP compression etc was done earlier
+    // If we are reading from a file, replayCompressor is applied in readFromFile()
+    if (!replayBuff && inputBuffer && !outputEnabled && nFrames && outputBuffer)
     {
         // ALWAYS apply compressor to input, so it continues to adapt
         int16_t * q = reinterpret_cast<  int16_t * > ( inputBuffer );
@@ -449,8 +450,8 @@ int RtAudioSoundSystem::audioCallback(void *outputBuffer, void *inputBuffer,
 
             if (passThroughEnabled)
             {
-                // this is happening to INPUT i.e. on passthrough/recording
-                // NOT on replay
+                // don't compress while recording
+                // then passthrough and replay will be compressed similarly
 
                 double ds1 = s1/32768.0;
                 double ds2 = s2/32768.0;
@@ -540,7 +541,7 @@ int RtAudioSoundSystem::audioCallback(void *outputBuffer, void *inputBuffer,
 
         emit setVU( v );
     }
-    if (replayBuff != nullptr)
+    if (replayBuff != nullptr)  // playing from IP
     {
         memcpy(outputBuffer, replayBuff->buff, replayBuff->bh.frameCount * 2 * outChannels);
 
@@ -570,7 +571,9 @@ int RtAudioSoundSystem::audioCallback(void *outputBuffer, void *inputBuffer,
    To continue normal stream operation, the RtAudioCallback function
    should return a value of zero.  To stop the stream and drain the
    output buffer, the function should return a value of one.  To abort
-   the stream immediately, the client should return a value of two.      */
+   the stream immediately, the client should return a value of two.
+   */
+
     return 0;
 }
 
