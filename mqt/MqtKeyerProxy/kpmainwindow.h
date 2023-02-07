@@ -14,6 +14,7 @@ QT_END_NAMESPACE
 class KPRPCServer;
 class QComboBox;
 class SerialPTT;
+class QLabel;
 
 class KPMainWindow : public QMainWindow
 {
@@ -29,13 +30,15 @@ private:
     QTimer CloseTimer;
     StdInReader *stdinReader = new StdInReader(this);
     KPRPCServer *kpc = nullptr;
-    QString host;
-    QString port;
+
+    QString oldHost;
+    QString oldPort;
+    QString oldRate;
 
     bool pttState = false;
 
     SerialPTT *sp = nullptr;
-
+    QLabel *sbLabel = nullptr;
     bool inPTTConfig = false;
 
     void runAlsaScript(const QString &alsaFileName, const QString &command);

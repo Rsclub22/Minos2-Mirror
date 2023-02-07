@@ -250,10 +250,12 @@ void RtAudioSoundSystem::stop()
 {
     stopDMA();
 
-    wThread->terminated = true;
-    wThread->wakeAll();
-    wThread->wait();
-
+    if (wThread)
+    {
+        wThread->terminated = true;
+        wThread->wakeAll();
+        wThread->wait();
+    }
     if (audio->isStreamRunning())
     {
        // Stop the stream.

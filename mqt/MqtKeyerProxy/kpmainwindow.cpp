@@ -68,19 +68,19 @@ KPMainWindow::KPMainWindow(QWidget *parent)
     QString currentOutput = settings.value("outputDevice", SoundSystemDriver::getSbDriver()->getDefaultOutputDevice()).toString();
     ui->outputCombo->setCurrentText(currentOutput);
 
-    QString port = settings.value("SenderPort", DEFAULT_PORT).toString();
-    ui->portEdit->setText(port);
-    ui->portEdit->setValidator(new QIntValidator(0, 0xffff, this));
+//    QString port = settings.value("SenderPort", DEFAULT_PORT).toString();
+//    ui->portEdit->setText(port);
+//    ui->portEdit->setValidator(new QIntValidator(0, 0xffff, this));
 
-    SoundSystemDriver::getSbDriver()->setSampleRate( 48000);
-    connect(SoundSystemDriver::getSbDriver(), &SoundSystemDriver::sequenceCount, this, &KPMainWindow::onSequenceCount);
+//    SoundSystemDriver::getSbDriver()->setSampleRate( 48000);
 
-    SoundSystemDriver::getSbDriver()->initialise("IP"
-                                                 , ui->outputCombo->currentText()
-                                                 , host
-                                                 , ui->portEdit->text());
-    connect(SoundSystemDriver::getSbDriver(), &SoundSystemDriver::setVU, this, &KPMainWindow::doSetVU);
-    connect(SoundSystemDriver::getSbDriver(), &SoundSystemDriver::ptt, this, &KPMainWindow::doPTT);
+//    SoundSystemDriver::getSbDriver()->initialise("IP"
+//                                                 , ui->outputCombo->currentText()
+//                                                 , host
+//                                                 , ui->portEdit->text());
+//    connect(SoundSystemDriver::getSbDriver(), &SoundSystemDriver::sequenceCount, this, &KPMainWindow::onSequenceCount);
+//    connect(SoundSystemDriver::getSbDriver(), &SoundSystemDriver::setVU, this, &KPMainWindow::doSetVU);
+//    connect(SoundSystemDriver::getSbDriver(), &SoundSystemDriver::ptt, this, &KPMainWindow::doPTT);
 
     //We need a PTT indicator
     //We need to implement PTT from Keyer and into here, and to radio
@@ -276,15 +276,31 @@ void KPMainWindow::on_outputCombo_activated(int /*index*/)
 {
     QSettings settings;
     settings.setValue("outputDevice", ui->outputCombo->currentText());
-    trace("About to re-initialise audio");
-    SoundSystemDriver::getSbDriver()->closedown();
-    SoundSystemDriver::getSbDriver()->initialise("IP"
-                                                 , ui->outputCombo->currentText()
-                                                 , host
-                                                 , ui->portEdit->text());
+
+    mShowMessage(tr("Restart to set output to %1").arg(ui->outputCombo->currentText()), this);
 }
 void KPMainWindow::onNewHost(QString h, QString p, QString s)
 {
+    // we don't want to do this every time... Not if the connection
+    // is already good
+
+    if (oldHost.isEmpty() && oldPort.isEmpty() && oldRate.isEmpty())
+    {
+        oldHost = h;
+        oldPort = p;
+        oldRate = s;
+    }
+    else if (h != oldHost || p != oldPort || s != oldRate)
+    {
+        mShowMessage(tr("Restarting as host/port/rate has changed"), this);
+        exit(0);
+    }
+    else
+    {
+        return; // all is the same, so do nothing
+    }
+
+
     SoundSystemDriver::getSbDriver()->closedown();
     SoundSystemDriver::getSbDriver()->setSampleRate(s.toInt());
     SoundSystemDriver::getSbDriver()->initialise("IP"
@@ -292,9 +308,15 @@ void KPMainWindow::onNewHost(QString h, QString p, QString s)
                                                  , h
                                                  , p);
 
-    QLabel *sbLabel = new QLabel( "" );
-    statusBar() ->addWidget( sbLabel, 6 );
+    connect(SoundSystemDriver::getSbDriver(), &SoundSystemDriver::sequenceCount, this, &KPMainWindow::onSequenceCount, Qt::UniqueConnection);
+    connect(SoundSystemDriver::getSbDriver(), &SoundSystemDriver::setVU, this, &KPMainWindow::doSetVU, Qt::UniqueConnection);
+    connect(SoundSystemDriver::getSbDriver(), &SoundSystemDriver::ptt, this, &KPMainWindow::doPTT, Qt::UniqueConnection);
 
+    if (!sbLabel)
+    {
+        sbLabel = new QLabel( "" );
+        statusBar() ->addWidget( sbLabel, 6 );
+    }
     sbLabel->setText(QString("%1:%2 %3").arg(h, p, s));
 
 }
