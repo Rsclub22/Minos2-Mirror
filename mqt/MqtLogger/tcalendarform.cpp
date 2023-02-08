@@ -1,3 +1,4 @@
+#include "MTrace.h"
 #include "MMessageDialog.h"
 #include "MShowMessageDlg.h"
 #include "fileutils.h"
@@ -316,6 +317,7 @@ void TCalendarForm::FormShow ( )
 }
 void TCalendarForm::downloadFiles()
 {
+    trace(tr("OpenSSL version built is is %1").arg(QSslSocket::sslLibraryBuildVersionString()));
     if (!QSslSocket::supportsSsl())
     {
         // NB MSVC 2015 redistributable may be needed for OpenSSL
