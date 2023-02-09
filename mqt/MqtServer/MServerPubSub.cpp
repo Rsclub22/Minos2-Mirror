@@ -283,8 +283,11 @@ void RemoteSubscriber::SendTo ( const PublishedKey &pk )
    RPCClientNotifyClient rnc( nullptr );
    QSharedPointer<RPCParam>st(new RPCParamStruct);
 
+   // router is the server that the message came from, NOT necessarily the originator
+
+   QString pubRouter = pk.getPubId().split("@")[0];
    Router *srv = nullptr;
-   QVector<Router *>::iterator srvi = findStation( router );
+   QVector<Router *>::iterator srvi = findStation( pubRouter );
    if (srvi != routerList.end())
    {
        srv = *srvi;
