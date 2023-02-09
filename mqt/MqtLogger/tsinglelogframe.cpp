@@ -322,34 +322,48 @@ void TSingleLogFrame::createScreenComponents()
 
     CribSheet->setFrameShape(QFrame::NoFrame);
     CribSheet->setFrameShadow(QFrame::Plain);
-    CribSheet->setLineWidth(1);
-    CribSheet->setMidLineWidth(1);
+    CribSheet->setLineWidth(0);
+    CribSheet->setMidLineWidth(0);
+
+    MinosSplitter *cribSplitter = new MinosSplitter(CribSheet);
+    cribSplitter->setObjectName(QStringLiteral("cribSplitter"));
+    //cribSplitter->setContentsMargins(10, 0, 5, 0);
+    cribSplitter->setOrientation(Qt::Vertical);
+
     QVBoxLayout *verticalLayout_5 = new QVBoxLayout(CribSheet);
     verticalLayout_5->setSpacing(0);
     verticalLayout_5->setObjectName(QStringLiteral("verticalLayout_5"));
-    verticalLayout_5->setContentsMargins(10, 0, 5, 0);
+    verticalLayout_5->setContentsMargins(0, 0, 0, 0);
 
     CurrentBandLabel = new QLabel(CribSheet);
     CurrentBandLabel->setObjectName(QStringLiteral("CurrentBandLabel"));
     CurrentBandLabel->setFrameShape(QFrame::NoFrame);
-    CurrentBandLabel->setLineWidth(2);
-    CurrentBandLabel->setMidLineWidth(2);
+    CurrentBandLabel->setFrameShadow(QFrame::Plain);
+    CurrentBandLabel->setLineWidth(0);
+    CurrentBandLabel->setMidLineWidth(0);
     CurrentBandLabel->setTextFormat(Qt::RichText);
     CurrentBandLabel->setWordWrap(true);
 
     CurrentBandLabel->setFrameStyle(QFrame::Panel | QFrame::Raised);
 
-    verticalLayout_5->addWidget(CurrentBandLabel);
+//    verticalLayout_5->addWidget(CurrentBandLabel);
+    cribSplitter->addWidget(CurrentBandLabel);
 
     NextContactDetailsLabel = new QLabel(CribSheet);
     NextContactDetailsLabel->setObjectName(QStringLiteral("NextContactDetailsLabel"));
     NextContactDetailsLabel->setFrameShape(QFrame::NoFrame);
-    NextContactDetailsLabel->setLineWidth(2);
-    NextContactDetailsLabel->setMidLineWidth(2);
+    NextContactDetailsLabel->setFrameShadow(QFrame::Plain);
+    NextContactDetailsLabel->setLineWidth(0);
+    NextContactDetailsLabel->setMidLineWidth(0);
     NextContactDetailsLabel->setTextFormat(Qt::RichText);
     NextContactDetailsLabel->setWordWrap(true);
-    verticalLayout_5->addWidget(NextContactDetailsLabel);
-    verticalLayout_5->addSpacerItem(new QSpacerItem(40, 20, QSizePolicy::Minimum, QSizePolicy::Expanding));
+//    verticalLayout_5->addWidget(NextContactDetailsLabel);
+//    verticalLayout_5->addSpacerItem(new QSpacerItem(40, 20, QSizePolicy::Minimum, QSizePolicy::Expanding));
+
+    cribSplitter->addWidget(NextContactDetailsLabel);
+
+    verticalLayout_5->addWidget(cribSplitter);
+    cribSplitter->setSizes({1, 100});
 
     CribSheet->setVisible(false);
 
