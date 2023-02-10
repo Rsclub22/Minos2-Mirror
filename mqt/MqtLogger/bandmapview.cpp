@@ -1417,6 +1417,16 @@ void BandmapView::assembleSpotMsg(int row, QString& markerMsg)
     QString bLineStart = "";
     QString bLineEnd = "";
 
+    Frequency mfreq = cFreq;
+    if (dxMode.compare( hamlibData::RY, Qt::CaseInsensitive ) == 0)
+    {
+         mfreq = mfreq + Frequency(2125);
+    }
+    if (dxMode.compare( hamlibData::PSK, Qt::CaseInsensitive ) == 0)
+    {
+        mfreq = mfreq - Frequency(1500);
+    }
+
     int offset = std::abs(freq - cFreq);
     if (offset < 1000 )
     {

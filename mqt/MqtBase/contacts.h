@@ -95,6 +95,7 @@ public:
     QSharedPointer<CountryEntry> ctryMult;
 
     MinosFrequencyItem<Frequency> frequency;
+    Frequency markOffset;
     MinosStringItem<QString> mode;
 
     int bearing = -1;

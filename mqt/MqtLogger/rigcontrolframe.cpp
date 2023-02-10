@@ -858,6 +858,16 @@ void RigControlFrame::transferDetails(memoryData::memData &m)
              .arg(m.freq.traceStr(), curFreq.traceStr(), m.mode, curMode));
     if (isRadioLoaded())
     {
+        Frequency mfreq = m.freq;
+        if (m.mode.compare( hamlibData::RY, Qt::CaseInsensitive ) == 0)
+        {
+             mfreq = mfreq - Frequency(2125);
+        }
+        if (m.mode.compare( hamlibData::PSK, Qt::CaseInsensitive ) == 0)
+        {
+            mfreq = mfreq + Frequency(1500);
+        }
+
         if (radioConnected && !radioError)
         {
             ui->freqInput->clearFocus();

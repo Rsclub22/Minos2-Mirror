@@ -115,7 +115,7 @@ private:
     bool oldTimeOK;
     QString timerSS;
 
-    int carrier = 0;
+    int markOffset = 0;
 
     void EditControlEnter( QObject *Sender, QFocusEvent *event );
     void EditControlExit( QObject *Sender );

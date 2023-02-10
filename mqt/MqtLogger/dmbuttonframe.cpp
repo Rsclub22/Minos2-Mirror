@@ -253,6 +253,7 @@ QString DMButtonFrame::parseFKeyMessage(QString mess)
                     // This may well log the contact, leaving nothing
                     // useful in screenContact
                     // which is why N1MM has various "last contact" macros
+
                     tslf->GJVQSOLogFrame->doGJVOKButton_clicked();
                 }
                 else if (macro == "WIPE")

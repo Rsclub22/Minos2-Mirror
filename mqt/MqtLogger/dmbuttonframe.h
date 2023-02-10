@@ -2,6 +2,7 @@
 #define DMBUTTONFRAME_H
 
 #include "AnalysePubSubNotify.h"
+#include "frequency.h"
 #include <QFrame>
 #include <QMap>
 #include <QVector>

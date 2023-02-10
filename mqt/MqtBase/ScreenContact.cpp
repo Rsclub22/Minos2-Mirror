@@ -110,6 +110,7 @@ void ScreenContact::initialise(BaseContestLog *ct , bool rInit)
     contactFlags.setValue(0);
     forcedMult.setValue(QString());
     frequency.setValue(Frequency());
+    markOffset.clear();
     rotatorHeading = "";
     rigName = "";
     QSOValid = false;
@@ -161,6 +162,7 @@ void ScreenContact::copyFromArg( QSharedPointer<BaseContact> cct )
     multCount = cct->multCount;
     forcedMult = cct->forcedMult;
     frequency = cct->frequency;
+    markOffset = cct->markOffset;
     rotatorHeading = cct->rotatorHeading.getValue();
     rigName = cct->rigName.getValue();
     bonus = cct->bonus;
@@ -213,6 +215,7 @@ void ScreenContact::copyFromArg( ScreenContact &cct )
     multCount = cct.multCount;
     forcedMult = cct.forcedMult;
     frequency = cct.frequency;
+    markOffset = cct.markOffset;
     rotatorHeading = cct.rotatorHeading;
     rigName = cct.rigName;
     bonus = cct.bonus;

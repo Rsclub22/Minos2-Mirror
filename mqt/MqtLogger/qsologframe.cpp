@@ -397,7 +397,7 @@ bool QSOLogFrame::doKeyPressEvent( QKeyEvent* event )
         if (Key >= Qt::Key_F1 && Key <= Qt::Key_F12)
         {
             // key may be for keyer or Digi Macro use
-            MinosLoggerEvents::SendFKey(contest, event->key(), carrier);
+            MinosLoggerEvents::SendFKey(contest, event->key(), markOffset);
             return true;
         }
     }
@@ -1063,7 +1063,7 @@ void QSOLogFrame::rxDMWord(QString rxWord, int carr)
 
     if (carr != 0)
     {
-        carrier = carr;
+        markOffset = carr;
     }
 
     if ( !valid( cmCheckValid ) )   // make sure all single and cross field
@@ -1089,7 +1089,7 @@ void QSOLogFrame::DMKey(int key)
     else if (key >= Qt::Key_F1 && key <= Qt::Key_F12)
     {
         // key may be for keyer or Digi Macro use
-        MinosLoggerEvents::SendFKey(contest, key, carrier);
+        MinosLoggerEvents::SendFKey(contest, key, markOffset);
         return;
     }
 
@@ -1380,6 +1380,7 @@ void QSOLogFrame::getScreenEntry()
 
    QString comments = ui->commentsFrame->getTextEditEdit()->text().trimmed();
    screenContact.comments.setValue(comments);
+   screenContact.markOffset = markOffset;
    if (edit)
    {
        screenContact.rigName = ui->radioEdit->text().trimmed();
@@ -2849,6 +2850,17 @@ void QSOLogFrame::logScreenEntry( )
    screenContact.op2 = ct->currentOp2.getValue();
 
    lct->copyFromArg( screenContact );
+   if (screenContact.mode.getValue().compare( hamlibData::RY, Qt::CaseInsensitive ) == 0)
+   {
+        Frequency corrected = screenContact.frequency.getValue() - screenContact.markOffset;
+        lct->frequency.setValue(corrected);
+   }
+   if (screenContact.mode.getValue().compare( hamlibData::PSK, Qt::CaseInsensitive ) == 0)
+   {
+       Frequency corrected = screenContact.frequency.getValue() + screenContact.markOffset;
+       lct->frequency.setValue(corrected);
+   }
+
    lct->timeOn.setDirty();
    lct->timeOff.setDirty(); // As we may have created the contact with the same time as the screen contact
                          // This then becomes "not dirty", so we end up not saving the dtg.
