@@ -172,6 +172,11 @@ void RxBuffer::addChar(RXChar &c)
         {
             curLine = 0;
         }
+        if (buff[curLine].size() > 0)
+        {
+            backLines.push_back(buff[curLine]);
+        }
+
         buff[curLine].reset();
         //trace(QString("clear line %1").arg(curLine));
         if (curLine + 1 < buffSize)
@@ -219,6 +224,16 @@ int RxBuffer::charCount() const
         n += l.size();
     }
     return n;
+}
+
+const RxLine *RxBuffer::getBackLine(int l) const
+{
+    return &backLines[l];
+}
+
+int RxBuffer::getBackLines() const
+{
+    return backLines.size();
 }
 void RxBuffer::deleteChars(int n)
 {

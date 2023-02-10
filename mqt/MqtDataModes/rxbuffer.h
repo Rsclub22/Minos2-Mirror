@@ -54,6 +54,8 @@ class RxBuffer: public QObject
 {
     Q_OBJECT
 private:
+    QVector< RxLine > backLines;
+
     QVector< RxLine > buff;
     int curLine = 0;
 
@@ -78,6 +80,9 @@ public:
     int getCols(int line) const;
 
     int charCount() const;
+
+    const RxLine *getBackLine(int) const;
+    int getBackLines() const;
 
 
 signals:
