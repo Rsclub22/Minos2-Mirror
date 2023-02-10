@@ -264,6 +264,7 @@ void Subscriber::SendTo ( const PublishedKey &pk )
    RPCClientNotifyClient rnc( nullptr );
    QSharedPointer<RPCParam>st(new RPCParamStruct);
 
+   trace(QString("Subscriber::SendTo router %1").arg(pk.getPubId()));
    // local - no router
    st->addMember( QString(""), "Server" );
    st->addMember( pk.getPubId(), "Publisher" );
@@ -279,13 +280,15 @@ void Subscriber::SendTo ( const PublishedKey &pk )
 //---------------------------------------------------------------------------
 void RemoteSubscriber::SendTo ( const PublishedKey &pk )
 {
-   // Build the stanza, and send it to the subid
+    trace(QString("RemoteSubscriber::SendTo  router %1").arg(pk.getPubId()));
+
+    // Build the stanza, and send it to the subid
    RPCClientNotifyClient rnc( nullptr );
    QSharedPointer<RPCParam>st(new RPCParamStruct);
 
    // router is the server that the message came from, NOT necessarily the originator
 
-   QString pubRouter = pk.getPubId().split("@")[0];
+   QString pubRouter = pk.getPubId().split("@")[1];
    Router *srv = nullptr;
    QVector<Router *>::iterator srvi = findStation( pubRouter );
    if (srvi != routerList.end())
@@ -318,6 +321,7 @@ void RemoteSubscriber::SendTo ( const PublishedKey &pk )
 //---------------------------------------------------------------------------
 void RouterSubscriber::SendTo ( const PublishedKey &pk )
 {
+    trace(QString("RouterSubscriber::SendTo  router %1").arg(pk.getPubId()));
    // Build the stanza, and send it to the subid, which should be the clients router
    RPCRouterNotifyClient rnc( nullptr );
    QSharedPointer<RPCParam>st(new RPCParamStruct);
