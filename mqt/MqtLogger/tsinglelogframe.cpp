@@ -327,7 +327,6 @@ void TSingleLogFrame::createScreenComponents()
 
     MinosSplitter *cribSplitter = new MinosSplitter(CribSheet);
     cribSplitter->setObjectName(QStringLiteral("cribSplitter"));
-    //cribSplitter->setContentsMargins(10, 0, 5, 0);
     cribSplitter->setOrientation(Qt::Vertical);
 
     QVBoxLayout *verticalLayout_5 = new QVBoxLayout(CribSheet);
@@ -337,28 +336,16 @@ void TSingleLogFrame::createScreenComponents()
 
     CurrentBandLabel = new QLabel(CribSheet);
     CurrentBandLabel->setObjectName(QStringLiteral("CurrentBandLabel"));
-    CurrentBandLabel->setFrameShape(QFrame::NoFrame);
-    CurrentBandLabel->setFrameShadow(QFrame::Plain);
-    CurrentBandLabel->setLineWidth(0);
-    CurrentBandLabel->setMidLineWidth(0);
     CurrentBandLabel->setTextFormat(Qt::RichText);
     CurrentBandLabel->setWordWrap(true);
 
-    CurrentBandLabel->setFrameStyle(QFrame::Panel | QFrame::Raised);
-
-//    verticalLayout_5->addWidget(CurrentBandLabel);
     cribSplitter->addWidget(CurrentBandLabel);
 
     NextContactDetailsLabel = new QLabel(CribSheet);
     NextContactDetailsLabel->setObjectName(QStringLiteral("NextContactDetailsLabel"));
-    NextContactDetailsLabel->setFrameShape(QFrame::NoFrame);
-    NextContactDetailsLabel->setFrameShadow(QFrame::Plain);
-    NextContactDetailsLabel->setLineWidth(0);
-    NextContactDetailsLabel->setMidLineWidth(0);
     NextContactDetailsLabel->setTextFormat(Qt::RichText);
     NextContactDetailsLabel->setWordWrap(true);
-//    verticalLayout_5->addWidget(NextContactDetailsLabel);
-//    verticalLayout_5->addSpacerItem(new QSpacerItem(40, 20, QSizePolicy::Minimum, QSizePolicy::Expanding));
+    NextContactDetailsLabel->setAlignment(Qt::AlignTop);
 
     cribSplitter->addWidget(NextContactDetailsLabel);
 
