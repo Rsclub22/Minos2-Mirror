@@ -38,6 +38,10 @@ private:
     bool drawSpots = true;
     int spotDistance = 0;
 
+    QString mCentreLat;
+    QString mCentreLon;
+    QString mZoom;
+
     // cluster spots
     QVector<QSharedPointer<ClusterSpotData> > spotQueue;
     bool clusterServerConnected = false;

@@ -83,9 +83,9 @@ void QSOMapFrame::startMap()
         if (!appQmlEngine)
         {
 
-    // We must have a QCoreApplication before we do this
-    // And we do this now so that the QML debugger can connect
-        appQmlEngine = QSharedPointer<QQmlApplicationEngine>(new QQmlApplicationEngine());
+            // We must have a QCoreApplication before we do this
+            // And we do this now so that the QML debugger can connect
+            appQmlEngine = QSharedPointer<QQmlApplicationEngine>(new QQmlApplicationEngine());
 
         }
         //QQmlApplicationEngine* engine = new QQmlApplicationEngine(qvb);
@@ -126,35 +126,50 @@ void QSOMapFrame::stopMap()
 }
 void QSOMapFrame::onQmlSignal(QVariant v)
 {
-   QList<QVariant> gc = v.toList();
+    QList<QVariant> gc = v.toList();
 
-   QString reason = gc[0].toString();
-   if (reason == "Pressed")
-   {
-       //   QString latitude = gc[1].toString();
-       //   QString longitude = gc[2].toString();
-       //   qDebug() << latitude << " " << longitude << " " << bearing;
+    QString reason = gc[0].toString();
+    if (reason == "Pressed")
+    {
+        //   QString latitude = gc[1].toString();
+        //   QString longitude = gc[2].toString();
+        //   qDebug() << latitude << " " << longitude << " " << bearing;
 
-       QString bearing = QString::number(gc[3].toInt());
-       MinosLoggerEvents::SendBrgStrToRot(bearing);
-   }
-   else if (reason == "ZoomChanged")
-   {
-        ct->zoomLevel.setValue(gc[1].toString());
+        QString bearing = QString::number(gc[3].toInt());
+        MinosLoggerEvents::SendBrgStrToRot(bearing);
+    }
+    else if (reason == "ZoomChanged")
+    {
+        if (bmonitor)
+        {
+            mZoom = gc[1].toString();
+        }
+        else
+        {
+            ct->zoomLevel.setValue(gc[1].toString());
+        }
         trace(QString("ZoomChanged qmlSignal %1").arg(ct->zoomLevel.getValue()));
 
-   }
-   else if (reason == "CentreChanged")
-   {
-       ct->centreLat.setValue( gc[1].toString());
-       ct->centreLon.setValue(gc[2].toString());
-       trace(QString("CentreChanged qmlSignal %1 %2").arg(ct->centreLat.getValue(), ct->centreLon.getValue()));
+    }
+    else if (reason == "CentreChanged")
+    {
+        if (bmonitor)
+        {
+            mCentreLat = gc[1].toString();
+            mCentreLon = gc[2].toString();
+        }
+        else
+        {
+            ct->centreLat.setValue( gc[1].toString());
+            ct->centreLon.setValue(gc[2].toString());
+        }
+        trace(QString("CentreChanged qmlSignal %1 %2").arg(ct->centreLat.getValue(), ct->centreLon.getValue()));
 
-   }
-   else
-   {
-       trace(QString("Unknown qmlSignal %1").arg(reason));
-   }
+    }
+    else
+    {
+        trace(QString("Unknown qmlSignal %1").arg(reason));
+    }
 }
 void QSOMapFrame::saveParams()
 {
@@ -184,12 +199,38 @@ void QSOMapFrame::doRedraw(const BaseContestLog *ctest, bool grid, bool lines, b
 
     QStringList callInfo; // [callsign, latitude, longitude]
 
+    //    var monitor = callInfo[0]
+
+    //    var zoom = callInfo[1]
+    //    var clat = callInfo[2]
+    //    var clon = callInfo[3]
+
+    //    mapOfEurope.center = QtPositioning.coordinate(clat, clon)
+    //    mapOfEurope.zoomLevel = zoom
+
+    //    var call = callInfo[4]
+
+    //    homeLat = callInfo[5];
+    //    homeLon = callInfo[6];
+    //    var hcoord = QtPositioning.coordinate(homeLat, homeLon)
+    //    var loc = callInfo[7]
+
     callInfo << QString(bmonitor?"Monitor":"Logger");
     if (bmonitor)
     {
-        callInfo << "5";
-        callInfo << QString::number(raddeg(ct->odna));
-        callInfo << QString::number(raddeg(ct->odea));
+        if (mZoom.isEmpty())
+        {
+            mZoom = 5;
+        }
+        callInfo << mZoom;
+
+        if (mCentreLat.isEmpty())
+        {
+            mCentreLat = QString::number(raddeg(ct->odna));
+            mCentreLon = QString::number(raddeg(ct->odea));
+        }
+        callInfo << mCentreLat;
+        callInfo << mCentreLon;
     }
     else
     {
@@ -226,7 +267,7 @@ void QSOMapFrame::doRedraw(const BaseContestLog *ctest, bool grid, bool lines, b
 
         if ( cct->notValidContact() )
         {
-           continue;
+            continue;
         }
 
         if (cct->cs.getValRes() != CS_OK)    // duplicate?
@@ -537,19 +578,19 @@ void QSOMapFrame::purgeSpots()
     bool needRedraw = false;
     if (spotQueue.count() > 0)
     {
-       int idx = spotQueue.count() - 1;
-       while (idx >= 0 && spotQueue.count() > 0)
-       {
-           if ((timeToLive > 0 && spotTimedOut(spotQueue[idx]->getRxTime(), timeToLive))
-                   || spotQueue[idx]->getSpotType() == bandmapSpotType::DELETED)
-           {
-               QString pcall = spotQueue[idx]->getDxCall().getFullCall();
-               spotQueue.remove(idx);
-               trace(QString("QSOMapFrame purged spot = %1, count %2").arg(pcall).arg(spotQueue.count()));
-               needRedraw = true;
-           }
-           idx--;
-       }
+        int idx = spotQueue.count() - 1;
+        while (idx >= 0 && spotQueue.count() > 0)
+        {
+            if ((timeToLive > 0 && spotTimedOut(spotQueue[idx]->getRxTime(), timeToLive))
+                    || spotQueue[idx]->getSpotType() == bandmapSpotType::DELETED)
+            {
+                QString pcall = spotQueue[idx]->getDxCall().getFullCall();
+                spotQueue.remove(idx);
+                trace(QString("QSOMapFrame purged spot = %1, count %2").arg(pcall).arg(spotQueue.count()));
+                needRedraw = true;
+            }
+            idx--;
+        }
     }
     if (needRedraw)
     {
