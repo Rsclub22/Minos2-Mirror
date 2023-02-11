@@ -103,7 +103,7 @@ void RxLine::reset()
     curCol = 0;
 }
 
-int RxLine::size() const
+int RxLine::charCount() const
 {
     return rxLine.size();
 }
@@ -138,6 +138,16 @@ int RxLine::deleteChars(int n, RXChar &lastDeleted)
     }
     return n;
 }
+
+QString RxLine::toString()
+{
+    QString res;
+    for (int i = 0; i < charCount(); i++)
+    {
+        res.append(rxLine[i].getCh());
+    }
+    return res;
+}
 //=================================================
 RxBuffer::RxBuffer()
 {
@@ -151,7 +161,7 @@ int RxBuffer::getLines() const
 
 int RxBuffer::getCols(int line) const
 {
-    return buff[line].size();
+    return buff[line].charCount();
 }
 
 void RxBuffer::addChar(RXChar &c)
@@ -167,14 +177,22 @@ void RxBuffer::addChar(RXChar &c)
     if (c.getNewLine())
     {
         //trace(QString("Implement newline from line %1").arg(curLine));
+
+        int nextLine = curLine + 2;
+        if (nextLine >= buffSize)
+        {
+            nextLine = 0;
+        }
+        if (buff[nextLine].charCount() > 0)
+        {
+            QString line = buff[nextLine].toString();
+            emit newBackLine(line);
+        }
+
         curLine++;
         if (curLine >= buffSize)
         {
             curLine = 0;
-        }
-        if (buff[curLine].size() > 0)
-        {
-            backLines.push_back(buff[curLine]);
         }
 
         buff[curLine].reset();
@@ -207,10 +225,14 @@ void RxBuffer::reset()
         l.reset();
     }
 }
+RxLine *RxBuffer::getRxLine(int l)
+{
+    return &buff[l];
+}
 
 RXChar RxBuffer::getCharAt(int line, int col) const
 {
-    if (line < buffSize && col < buff[line].size())
+    if (line < buffSize && col < buff[line].charCount())
     {
         return buff[line].getCharAt(col);
     }
@@ -221,19 +243,9 @@ int RxBuffer::charCount() const
     int n = 0;
     for (const auto &l:buff)
     {
-        n += l.size();
+        n += l.charCount();
     }
     return n;
-}
-
-const RxLine *RxBuffer::getBackLine(int l) const
-{
-    return &backLines[l];
-}
-
-int RxBuffer::getBackLines() const
-{
-    return backLines.size();
 }
 void RxBuffer::deleteChars(int n)
 {
@@ -271,9 +283,3 @@ void RxBuffer::deleteChars(int n)
         }
     }
 }
-
-RxLine *RxBuffer::getRxLine(int l)
-{
-    return &buff[l];
-}
-

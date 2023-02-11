@@ -75,6 +75,7 @@ DMMainWindow::DMMainWindow(QWidget *parent)
 
     connect(RxBuffer::getRxBuffer(), &RxBuffer::newCharacter, this, &DMMainWindow::onNewCharacter);
     connect(ui->rxChars, &DataPainter::wordSelected, this, &DMMainWindow::wordSelected);
+    connect(RxBuffer::getRxBuffer(), &RxBuffer::newBackLine, this, &DMMainWindow::onNewBackLine);
 #ifdef Q_OS_WIN
     UINT devs = waveInGetNumDevs();
     inChannels = devs;
@@ -197,6 +198,9 @@ DMMainWindow::DMMainWindow(QWidget *parent)
     startPreviousEngine();
 
     mainRig = getRig();
+
+    ui->backData->setVisible(false);
+    ui->backDataButton->setText(tr("Show Back Data"));
 }
 
 DMMainWindow::~DMMainWindow()
@@ -548,6 +552,12 @@ void DMMainWindow::onStdInRead(QString cmd)
         close();
     }
 }
+
+void DMMainWindow::onNewBackLine(QString s)
+{
+    ui->backData->addItem(s);
+    ui->backData->scrollToBottom();
+}
 void DMMainWindow::showEvent(QShowEvent *event)
 {
     QMainWindow::showEvent(event);
@@ -883,5 +893,19 @@ void DMMainWindow::on_mainRigComboBox_activated(const QString &psn)
 {
     mainRig = psn;
     configureRig(psn);
+}
+
+void DMMainWindow::on_backDataButton_clicked()
+{
+    if (ui->backData->isVisible())
+    {
+        ui->backDataButton->setText(tr("Show Back Data"));
+        ui->backData->setVisible(false);
+    }
+    else
+    {
+        ui->backDataButton->setText(tr("Hide Back Data"));
+        ui->backData->setVisible(true);
+    }
 }
 

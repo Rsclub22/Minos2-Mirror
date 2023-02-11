@@ -9,6 +9,7 @@
 namespace Ui {
 class TestFrame;
 }
+class QTimer;
 
 class TestFrame : public QFrame
 {
@@ -16,6 +17,7 @@ class TestFrame : public QFrame
 
 public:
     QLineEdit *sendEdit = nullptr;
+    QTimer *testTimer = nullptr;
 
     int carrier = 0;
 
@@ -30,6 +32,7 @@ private slots:
     void onSendCharacters(QString, int c);
     void onRigModeFreq(QString, Frequency);
 
+    void onTimeout();
 private:
     Ui::TestFrame *ui;
 };

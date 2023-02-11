@@ -45,7 +45,7 @@ void DPGraphicsTextItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
     setTextCursor(c);
 
     int cfreq = 0;
-    if (cp < RxBuffer::getRxBuffer()->getRxLine(row)->size())
+    if (cp < RxBuffer::getRxBuffer()->getRxLine(row)->charCount())
     {
         cfreq = RxBuffer::getRxBuffer()->getCharAt(row, cp).getCarrier();
     }
@@ -59,6 +59,18 @@ void DPGraphicsTextItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 }
 
 //==========================================================================
+DPGraphicsTextItem * DataPainter::createNewLine(int r, int yoffset)
+{
+    DPGraphicsTextItem *ti =  new DPGraphicsTextItem(QString(), r);
+    connect(ti, &DPGraphicsTextItem::wordSelected, this, [this](QString s, int carr)
+            {emit wordSelected(s, carr);});
+    ti->setFont(ff);
+    scene->addItem(ti);
+    ti->setPos(0, yoffset);
+    ti->setTextInteractionFlags(Qt::TextSelectableByMouse | Qt::TextEditable | Qt::TextEditorInteraction);
+    ti->setFlags(QGraphicsItem::ItemIsFocusable | QGraphicsItem::ItemIsSelectable | ti->flags());
+    return ti;
+}
 DataPainter::DataPainter(QWidget *parent)
     : QGraphicsView{parent}
 {
@@ -78,14 +90,7 @@ DataPainter::DataPainter(QWidget *parent)
     int l = RxBuffer::getRxBuffer()->getLines();
     for (int i = 0; i < l; i++)
     {
-        DPGraphicsTextItem *ti =  new DPGraphicsTextItem(QString(), i);
-        connect(ti, &DPGraphicsTextItem::wordSelected, this, [this](QString s, int carr)
-                {emit wordSelected(s, carr);});
-        ti->setFont(ff);
-        scene->addItem(ti);
-        ti->setPos(0, yoffset);
-        ti->setTextInteractionFlags(Qt::TextSelectableByMouse | Qt::TextEditable | Qt::TextEditorInteraction);
-        ti->setFlags(QGraphicsItem::ItemIsFocusable | QGraphicsItem::ItemIsSelectable | ti->flags());
+        DPGraphicsTextItem *ti =  createNewLine(i, yoffset);
         lines.push_back(ti);
         yoffset += h;
     }

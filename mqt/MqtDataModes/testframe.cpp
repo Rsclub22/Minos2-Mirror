@@ -34,11 +34,28 @@ TestFrame::TestFrame(QWidget *parent, QLineEdit */*sendEdit*/, QString /*fname*/
             RxBuffer::getRxBuffer()->addChar(rxch);
         }
     }
+
+    testTimer = new QTimer(this);
+    connect(testTimer, &QTimer::timeout, this, &TestFrame::onTimeout);
+    testTimer->start(1000);
 }
 
 TestFrame::~TestFrame()
 {
     delete ui;
+}
+void TestFrame::onTimeout()
+{
+    static int n = 0;
+    QString s = QString::number(n);
+    n++;
+    bool newLine = true;
+    for (auto c:qAsConst(s))
+    {
+        RXChar rxch(c, newLine, 0, carrier);
+        newLine = false;
+        RxBuffer::getRxBuffer()->addChar(rxch);
+    }
 }
 void TestFrame::onSendCharacters(QString data, int c)
 {

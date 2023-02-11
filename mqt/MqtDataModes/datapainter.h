@@ -47,6 +47,7 @@ private:
     QVector<QGraphicsTextItem *> lines;
     QFont ff;
 
+    DPGraphicsTextItem *createNewLine(int r, int yoffset);
 };
 
 #endif // DATAPAINTER_H

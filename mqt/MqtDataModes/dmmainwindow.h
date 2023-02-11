@@ -127,6 +127,7 @@ private slots:
     void LogTimerTimer();
 
     void onStdInRead(QString cmd);
+    void onNewBackLine(QString);
 
 
 #ifdef Q_OS_WIN
@@ -166,6 +167,7 @@ private slots:
 
     void on_stopButton_clicked();
     void on_mainRigComboBox_activated(const QString &psn);
+    void on_backDataButton_clicked();
 };
 extern DMMainWindow *mainWindow;
 

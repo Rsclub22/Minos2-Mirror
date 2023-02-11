@@ -42,11 +42,12 @@ public:
     void setDirty(bool newDirty);
     void  addChar(RXChar &c);
     void reset();
-    int size() const;
+    int charCount() const;
 
     RXChar getLastChar() const;
     RXChar getCharAt(int col) const;
     int deleteChars(int n, RXChar &lastDeleted); // return chars still to delete
+    QString toString();
 };
 //=================================================
 
@@ -54,8 +55,6 @@ class RxBuffer: public QObject
 {
     Q_OBJECT
 private:
-    QVector< RxLine > backLines;
-
     QVector< RxLine > buff;
     int curLine = 0;
 
@@ -81,12 +80,9 @@ public:
 
     int charCount() const;
 
-    const RxLine *getBackLine(int) const;
-    int getBackLines() const;
-
-
 signals:
     void newCharacter();
+    void newBackLine(QString);
 };
 
 #endif // RXBUFFER_H
