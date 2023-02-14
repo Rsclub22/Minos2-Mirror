@@ -179,6 +179,7 @@ public:
     void askStop();
 
     void forceStop();
+    void showHide(bool show);
 signals:
     void    stdOutLine(QString);
     void    allStopped();

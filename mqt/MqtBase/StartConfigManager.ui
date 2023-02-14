@@ -66,6 +66,13 @@
          </property>
         </spacer>
        </item>
+       <item>
+        <widget class="QPushButton" name="showButton">
+         <property name="text">
+          <string>Show</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </item>
      <item>

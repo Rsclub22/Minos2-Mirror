@@ -629,7 +629,25 @@ void MinosConfig::setThisRouterName( const QString &circle )
 {
    thisRouterName = circle;
 }
+void MinosConfig::showHide(bool show)
+{
+    NamedConfig &nc = configs[thisConfigName];
 
+    for ( auto const &i: qAsConst(nc.elelist ))
+    {
+        if (i->hideApp)
+        {
+            if (show)
+            {
+                i->sendCommand("ShowServers");
+            }
+            else
+            {
+                i->sendCommand("HideServers");
+            }
+        }
+    }
+}
 bool MinosConfig::getAutoStart()
 {
    NamedConfig &nc = configs[thisConfigName];

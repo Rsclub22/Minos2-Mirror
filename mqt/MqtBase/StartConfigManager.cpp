@@ -9,6 +9,8 @@
 #include "StartConfigManager.h"
 #include "ui_StartConfigManager.h"
 
+bool StartConfigManager::configHidden = true;
+
 StartConfigManager::StartConfigManager(QWidget *parent, bool showAutoStart) :
     QDialog(parent),
     ui(new Ui::StartConfigManager)
@@ -54,13 +56,24 @@ void StartConfigManager::checkEnabled()
     if (running)
     {
         ui->startStopButton->setText(tr("Stop all apps"));
+        ui->showButton->setEnabled(true);
     }
     else
     {
         ui->startStopButton->setText(tr("Start all apps"));
         ui->startStopButton->setEnabled(enable);
+        ui->showButton->setEnabled(false);
     }
-}
+    if (configHidden)
+    {
+    // show all hidden apps
+        ui->showButton->setText(tr("Show"));
+    }
+    else
+    {
+
+        ui->showButton->setText(tr("Hide"));
+    }}
 
 void StartConfigManager::showDetails()
 {
@@ -274,6 +287,26 @@ void StartConfigManager::on_startStopButton_clicked()
     {
         minosConfig->saveAll();
         minosConfig->start();
+        configHidden = true;
+        ui->showButton->setText(tr("Hide"));
         accept();
     }
 }
+
+void StartConfigManager::on_showButton_clicked()
+{
+    MinosConfig *minosConfig = MinosConfig::getMinosConfig();
+    minosConfig->showHide(configHidden);
+    configHidden = !configHidden;
+    if (configHidden)
+    {
+    // show all hidden apps
+        ui->showButton->setText(tr("Show"));
+    }
+    else
+    {
+
+        ui->showButton->setText(tr("Hide"));
+    }
+}
+
