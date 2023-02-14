@@ -68,7 +68,7 @@ void MonitoredLog::getLogStanza( int stanza )
     rpc.queueCall( rpcConstants::loggerApp + "@" + router );
 }
 
-QSet<Callsign> MonitoredLog::getCallsigns() const
+QSet<DupContact> &MonitoredLog::getCallsigns()
 {
     return callsigns;
 }
@@ -223,8 +223,7 @@ void MonitoredLog::on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, cons
                             {
                                 // and add callsign to callsign set
 
-                                Callsign ncall = contest->pcontactAt(li)->cs;
-                                callsigns.insert(ncall);
+                                callsigns.insert(DupContact(contest->pcontactAt(li).data()));
 
                                 // new last contact; import will have checked it
                                 // IT CAN MODIFY lastInserted to -1!
@@ -240,7 +239,7 @@ void MonitoredLog::on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, cons
                                 callsigns.clear();
                                 for(const auto &cct: qAsConst(contest->ctList))
                                 {
-                                    callsigns.insert(cct.wt->cs);
+                                    callsigns.insert(cct.wt.data());
                                 }
                             }
                         }

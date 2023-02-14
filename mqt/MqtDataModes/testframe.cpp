@@ -37,7 +37,7 @@ TestFrame::TestFrame(QWidget *parent, QLineEdit */*sendEdit*/, QString /*fname*/
 
     testTimer = new QTimer(this);
     connect(testTimer, &QTimer::timeout, this, &TestFrame::onTimeout);
-    testTimer->start(1000);
+//    testTimer->start(1000);
 }
 
 TestFrame::~TestFrame()

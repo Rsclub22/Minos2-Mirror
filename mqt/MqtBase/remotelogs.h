@@ -25,7 +25,8 @@ public:
     void closeLog(MonitoredLog *);
     void closeAll();
 
-    bool hasWorked(const Callsign &);
+    bool hasWorked(const Callsign &, QString band, QString mode);
+    Callsign myCall();
 private:
     QString localRouterName;
 

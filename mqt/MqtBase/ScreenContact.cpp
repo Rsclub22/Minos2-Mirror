@@ -109,7 +109,7 @@ void ScreenContact::initialise(BaseContestLog *ct , bool rInit)
     comments.setValue(QString());
     contactFlags.setValue(0);
     forcedMult.setValue(QString());
-    frequency.setValue(Frequency());
+    setFrequency(Frequency(), QString());
     markOffset.clear();
     rotatorHeading = "";
     rigName = "";
@@ -161,7 +161,7 @@ void ScreenContact::copyFromArg( QSharedPointer<BaseContact> cct )
     ctryMult = cct->ctryMult;
     multCount = cct->multCount;
     forcedMult = cct->forcedMult;
-    frequency = cct->frequency;
+    setFrequency(cct->getFrequency(), cct->band);
     markOffset = cct->markOffset;
     rotatorHeading = cct->rotatorHeading.getValue();
     rigName = cct->rigName.getValue();
@@ -214,7 +214,7 @@ void ScreenContact::copyFromArg( ScreenContact &cct )
     ctryMult = cct.ctryMult;
     multCount = cct.multCount;
     forcedMult = cct.forcedMult;
-    frequency = cct.frequency;
+    setFrequency(cct.getFrequency(), cct.band);
     markOffset = cct.markOffset;
     rotatorHeading = cct.rotatorHeading;
     rigName = cct.rigName;
@@ -276,9 +276,6 @@ void ScreenContact::score()
     {
 
         // now we want to look for mults and bonuses
-
-        QString band;
-        contest->getTxFreqBand(frequency.getValue(), band);
 
         if ( districtMult && (districtMult->country1 || cs.getFullCall().isEmpty()))
         {

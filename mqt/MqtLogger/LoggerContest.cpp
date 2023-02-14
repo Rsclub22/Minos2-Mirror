@@ -562,7 +562,7 @@ QSharedPointer<BaseContact> LoggerContestLog::addContact( int newctno, unsigned 
 
    if (!freq.isClear())
    {
-        bct->frequency.setValue(freq);
+        bct->setFrequency(freq, currentBand.getValue());
    }
 
    if (catchup)

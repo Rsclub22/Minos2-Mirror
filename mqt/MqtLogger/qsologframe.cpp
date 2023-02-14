@@ -1385,9 +1385,12 @@ void QSOLogFrame::getScreenEntry()
    {
        screenContact.rigName = ui->radioEdit->text().trimmed();
 
-       QString f = ui->frequencyEdit->text().trimmed().remove( QRegularExpression("^[0]*")); //remove leading zeros
+       static QRegularExpression qre = QRegularExpression("^[0]*");
+       QString f = ui->frequencyEdit->text().trimmed().remove( qre); //remove leading zeros
        f = convertSinglePeriodFreqToMultiPeriod(convertSinglePeriodFreqToFullDigit(f));
-       screenContact.frequency.setValue(Frequency(f));
+       QString band;
+       Frequency ff = contest->getTxFreqBand(f, band);
+       screenContact.setFrequency(ff, band);
 
        //screenContact.frequency = ui->frequencyEdit->text().trimmed();
        screenContact.rotatorHeading = ui->rotatorHeadingEdit->text().trimmed();
@@ -1451,13 +1454,13 @@ void QSOLogFrame::showScreenEntry( )
       {
           ui->radioEdit->setText(temp.rigName);
 
-          if (temp.frequency.getValue().isClear())
+          if (temp.getFrequency().getValue().isClear())
           {
               ui->frequencyEdit->clear();
           }
           else
           {
-              ui->frequencyEdit->setText(temp.frequency.getValue().convertFreqStrDispSingle());
+              ui->frequencyEdit->setText(temp.getFrequency().getValue().convertFreqStrDispSingle());
           }
           ui->rotatorHeadingEdit->setText(temp.rotatorHeading);
       }
@@ -1886,13 +1889,13 @@ bool QSOLogFrame::valid( validTypes command )
    if ( contest->isReadOnly() )
       return true;
 
-   bool pvalid = validateControls( command ); // do control validation
+   validateControls( command ); // do control validation
 
    if ( command == cmCheckValid )   // our own command!
       contactValid();
 
    // re-validate, as we may have changed things
-   pvalid = validateControls( cmValidStatus ); // look at current validity
+   bool pvalid = validateControls( cmValidStatus ); // look at current validity
 
    return pvalid;
 }
@@ -2852,13 +2855,13 @@ void QSOLogFrame::logScreenEntry( )
    lct->copyFromArg( screenContact );
    if (screenContact.mode.getValue().compare( hamlibData::RY, Qt::CaseInsensitive ) == 0)
    {
-        Frequency corrected = screenContact.frequency.getValue() - screenContact.markOffset;
-        lct->frequency.setValue(corrected);
+        Frequency corrected = screenContact.getFrequency().getValue() - screenContact.markOffset;
+        lct->setFrequency(corrected, screenContact.band);
    }
    if (screenContact.mode.getValue().compare( hamlibData::PSK, Qt::CaseInsensitive ) == 0)
    {
-       Frequency corrected = screenContact.frequency.getValue() + screenContact.markOffset;
-       lct->frequency.setValue(corrected);
+       Frequency corrected = screenContact.getFrequency().getValue() + screenContact.markOffset;
+       lct->setFrequency(corrected, screenContact.band);
    }
 
    lct->timeOn.setDirty();
@@ -2886,7 +2889,7 @@ void QSOLogFrame::logScreenEntry( )
        lastLoggedCallsign = lct->cs;
        ui->spotLastLoggedPb->setText(tr("Spot Last Logged (%1) ").arg(lct->cs.getFullCall()));
        lastLoggedLocator = lct->loc.getLoc();
-       lastLoggedFreq = lct->frequency.getValue();
+       lastLoggedFreq = lct->getFrequency().getValue();
    }
 
    if (!edit )
@@ -2914,12 +2917,15 @@ void QSOLogFrame::getScreenRigData()
     screenContact.rigName = curRadioName;
     if (!edit && !catchup && isRadioLoaded() && !curRadioName.isEmpty() && !curFreq.isClear())
     {
-        screenContact.frequency.setValue(curFreq);
+        QString band;
+        Frequency ff = contest->getTxFreqBand(curFreq, band);
+        screenContact.setFrequency(ff, band);
     }
     else
     {
         QString cb;
-        screenContact.frequency.setValue(contest->getTxFreqBand(Frequency(), cb));
+        Frequency f = contest->getTxFreqBand(Frequency(), cb);
+        screenContact.setFrequency(f, cb);
     }
 }
 void QSOLogFrame::getscreenRotatorData()
@@ -3628,7 +3634,8 @@ void QSOLogFrame::setPlaceholders(QStringList nearMatches)
             scc.timeOn = dtg(true);
             scc.timeOff = dtg(true);
             QString cb;
-            scc.frequency.setValue( contest->getTxFreqBand(Frequency(), cb));
+            Frequency f = contest->getTxFreqBand(Frequency(), cb);
+            scc.setFrequency(f, cb);
 
             scc.checkScreenContact();
             if ( scc.cs.getValRes() == ERR_DUPCS)

@@ -24,6 +24,8 @@ QT_END_NAMESPACE
 class RtAudio;
 class QFileSystemWatcher;
 class QPushButton;
+class MonitoredLog;
+class MonitoredLogs;
 
 class DMMainWindow : public QMainWindow
 {
@@ -60,6 +62,8 @@ private:
     StdInReader *stdinReader = new StdInReader(this);
     QString me;
     QFileSystemWatcher *qfsw = nullptr;
+
+    MonitoredLogs *logsTreeView = nullptr;
 
     QMap<QAction *, const char *> actionList;
     QMap<QMenu *, const char *> menuList;
@@ -116,6 +120,8 @@ private:
     void configureRig(const QString s);
     QString getRig();
     void doSendButton_clicked(QString d, int c);
+    void testAutoStart();
+    void onNewStanzas();
 protected:
     virtual void showEvent(QShowEvent *) override;
 
@@ -168,6 +174,7 @@ private slots:
     void on_stopButton_clicked();
     void on_mainRigComboBox_activated(const QString &psn);
     void on_backDataButton_clicked();
+    void onNewLog(MonitoredLog *ml);
 };
 extern DMMainWindow *mainWindow;
 

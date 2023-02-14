@@ -42,7 +42,7 @@ class MonitoredLog : public QObject
 
       MonitoredStation *station = nullptr;
 
-      QSet<Callsign> callsigns;
+      QSet<DupContact >callsigns;
 
    public:
       MonitoredLog(MonitoredStation *);
@@ -97,7 +97,7 @@ class MonitoredLog : public QObject
 
       bool getManualClose() const;
       void setManualClose(bool newManualClose);
-      QSet<Callsign> getCallsigns() const;
+      QSet<DupContact > &getCallsigns();
 
 private slots:
       void on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString from);

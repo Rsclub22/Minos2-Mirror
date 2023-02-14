@@ -20,6 +20,7 @@
 #include "MapWrapper.h"
 #include "ProfileEnums.h"
 #include "callsign.h"
+#include "contacts.h"
 #include "dtg.h"
 #include "frequency.h"
 #include "locator.h"
@@ -46,6 +47,9 @@ class DupContact
       bool operator==( const DupContact& rhs ) const;
       bool operator!=( const DupContact& rhs ) const;
 
+      qHashRet qHash() const;
+
+
       DupContact(CheckableContact *c );
       DupContact();
       ~DupContact();
@@ -53,6 +57,7 @@ class DupContact
 typedef QMap < MapWrapper<DupContact>, MapWrapper<DupContact> > DupList;
 typedef DupList::iterator DupIterator;
 //typedef DupList::const_iterator ConstDupIterator;
+extern uint qHash(const DupContact &dup);
 class dupsheet
 {
       // a dupsheet is a sorted collection of (full LoggerContestLog) ContestContact records,

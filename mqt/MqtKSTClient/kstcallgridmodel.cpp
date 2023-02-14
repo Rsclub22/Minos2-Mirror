@@ -134,7 +134,7 @@ QVariant KstCallGridModel::data( const QModelIndex &index, int role ) const
 
         case ecscCall:
         {
-            bool worked = RemoteLogs::getRemoteLogs()->hasWorked(crec->call);
+            bool worked = RemoteLogs::getRemoteLogs()->hasWorked(crec->call, "", "");
             QString call = crec->call.getFullCall();
             QString col;
             if (worked)

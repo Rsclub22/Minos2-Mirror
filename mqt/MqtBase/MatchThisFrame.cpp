@@ -64,12 +64,9 @@ void MatchThisFrame::on_MatchTreeFrame_doubleClicked(const QModelIndex &index)
 
     if ( bct )
     {
-        QString matchBand;
-        contest->getTxFreqBand(bct->frequency.getValue(), matchBand);
-
         QString currBand = contest->currentBand.getValue();
 
-        if (matchBand != currBand)
+        if (bct->band != currBand)
         {
             if ( mShowYesNoMessage(this, tr("Press \"Yes\" to transfer details, or \"No\" to edit the QSO") ) )
             {

@@ -22,7 +22,6 @@ extern QStringList services;
 
 class RemoteLogs;
 class MonitoredLog;
-class MonitoredLogs;
 
 class KSTMainWindow : public QMainWindow
 {

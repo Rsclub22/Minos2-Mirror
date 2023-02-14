@@ -9,6 +9,7 @@
 
 #include <QStyleOption>
 
+#include "cutils.h"
 #include "rxbuffer.h"
 #include "datapainter.h"
 
@@ -105,9 +106,40 @@ void DataPainter::setText()
         {
             QString rxbuff;
             int cols = RxBuffer::getRxBuffer()->getCols(i);
+            QColor colour = Qt::black;
             for (int j = 0; j < cols; j++)
             {
                 RXChar nc = RxBuffer::getRxBuffer()->getCharAt(i, j);
+                if (nc.getMyCall())
+                {
+                    colour = Qt::darkRed;
+                }
+                else if (nc.getRST())
+                {
+                    colour = Qt::darkGreen;
+                }
+                else if (nc.getSerial())
+                {
+                    colour = Qt::darkGreen;
+                }
+                else if (nc.getWorkedCall())
+                {
+                    colour = Qt::gray;
+                }
+                else if (nc.getUnworkedCall())
+                {
+                    colour = Qt::blue;
+                }
+                if (colour != Qt::black)
+                {
+                    if (nc.getCh() == QChar(' '))
+                    {
+                        colour = Qt::black;
+                    }
+                    QString cstr = HtmlFontColour(colour);
+                    rxbuff.append(cstr);
+                }
+
                 rxbuff.append(nc.getCh());
             }
             QTextCharFormat tcf;

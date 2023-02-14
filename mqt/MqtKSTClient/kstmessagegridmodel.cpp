@@ -111,7 +111,7 @@ QVariant KstMessageGridModel::data( const QModelIndex &index, int role ) const
             break;
         case eccCall:
         {
-            bool worked = RemoteLogs::getRemoteLogs()->hasWorked(crec->call);
+            bool worked = RemoteLogs::getRemoteLogs()->hasWorked(crec->call, "", "");
             QString call = crec->call.getFullCall();
             if (worked)
             {
@@ -127,7 +127,7 @@ QVariant KstMessageGridModel::data( const QModelIndex &index, int role ) const
             break;
         case eccOther:
         {
-            bool worked = RemoteLogs::getRemoteLogs()->hasWorked(crec->otherCall);
+            bool worked = RemoteLogs::getRemoteLogs()->hasWorked(crec->otherCall, "", "");
             QString call = crec->otherCall.getFullCall();
             if (worked)
             {

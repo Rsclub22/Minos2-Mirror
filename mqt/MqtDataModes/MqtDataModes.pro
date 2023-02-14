@@ -8,6 +8,7 @@ TARGET = MqtDataModes
 TEMPLATE = app
 
 SOURCES += \
+    DMMinosParameters.cpp \
     FLDigiFrame.cpp \
     datapainter.cpp \
     engineconfigure.cpp \
@@ -17,6 +18,7 @@ SOURCES += \
     testframe.cpp
 
 HEADERS += \
+    DMMinosParameters.h \
     FLDigiFrame.h \
     datapainter.h \
     dmmainwindow.h \

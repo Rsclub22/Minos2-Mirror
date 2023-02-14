@@ -1656,7 +1656,7 @@ void BandmapClientFrame::on_AfterLogContact(BaseContestLog *c, QSharedPointer<Ba
         if ( lct->notValidContact() )
             return;
 
-        Frequency freq = lct->frequency.getValue();
+        Frequency freq = lct->getFrequency().getValue();
         if (freq.isClear())
         {
             return;

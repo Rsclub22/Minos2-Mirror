@@ -22,6 +22,56 @@ void RXChar::setCarrier(int newCarrier)
     carrier = newCarrier;
 }
 
+bool RXChar::getRST() const
+{
+    return RST;
+}
+
+void RXChar::setRST(bool newRST)
+{
+    RST = newRST;
+}
+
+bool RXChar::getSerial() const
+{
+    return serial;
+}
+
+void RXChar::setSerial(bool newSerial)
+{
+    serial = newSerial;
+}
+
+bool RXChar::getMyCall() const
+{
+    return myCall;
+}
+
+void RXChar::setMyCall(bool newMyCall)
+{
+    myCall = newMyCall;
+}
+
+bool RXChar::getWorkedCall() const
+{
+    return workedCall;
+}
+
+void RXChar::setWorkedCall(bool newWorkedCall)
+{
+    workedCall = newWorkedCall;
+}
+
+bool RXChar::getUnworkedCall() const
+{
+    return unworkedCall;
+}
+
+void RXChar::setUnworkedCall(bool newUnworkedCall)
+{
+    unworkedCall = newUnworkedCall;
+}
+
 RXChar::RXChar()
 {
 
@@ -108,6 +158,28 @@ int RxLine::charCount() const
     return rxLine.size();
 }
 
+void RxLine::clearFlags()
+{
+    for(auto &c:rxLine)
+    {
+        c.setRST(false);
+        c.setCarrier(false);
+        c.setSerial(false);
+        c.setMyCall(false);
+        c.setWorkedCall(false);
+        c.setUnworkedCall(false);
+    }
+}
+
+RXChar *RxLine::getCharRef(int col)
+{
+    if (col < rxLine.size())
+    {
+        return &rxLine[col];
+    }
+    return nullptr;
+}
+
 RXChar RxLine::getLastChar() const
 {
     if (curCol > 0)
@@ -119,7 +191,11 @@ RXChar RxLine::getLastChar() const
 
 RXChar RxLine::getCharAt(int col) const
 {
-    return rxLine[col];
+    if (col < rxLine.size())
+    {
+        return rxLine[col];
+    }
+    return RXChar();
 }
 
 int RxLine::deleteChars(int n, RXChar &lastDeleted)
@@ -149,6 +225,11 @@ QString RxLine::toString()
     return res;
 }
 //=================================================
+int RxBuffer::getCurLine() const
+{
+    return curLine;
+}
+
 RxBuffer::RxBuffer()
 {
     buff.resize(buffSize);
@@ -224,6 +305,15 @@ void RxBuffer::reset()
     {
         l.reset();
     }
+}
+
+RXChar *RxBuffer::getCharRef(int line, int col)
+{
+    if (line < buffSize && col < buff[line].charCount())
+    {
+        return buff[line].getCharRef(col);
+    }
+    return nullptr;
 }
 RxLine *RxBuffer::getRxLine(int l)
 {

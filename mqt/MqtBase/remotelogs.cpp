@@ -30,7 +30,7 @@ void RemoteLogs::closeAll()
     stationList.clear();
 }
 
-bool RemoteLogs::hasWorked(const Callsign &cs)
+bool RemoteLogs::hasWorked(const Callsign &cs, QString band, QString mode)
 {
     for ( auto const &s: qAsConst(stationList) )
     {
@@ -43,7 +43,13 @@ bool RemoteLogs::hasWorked(const Callsign &cs)
        {
             if ((*l)->getState() != psRevoked)
             {
-                bool worked = (*l)->getCallsigns().contains(cs);
+                BaseContact cc((*l)->getContest(), dtg(true));
+                cc.cs = cs;
+                cc.band = band;
+                cc.mode.setValue(mode);
+                DupContact dc(&cc);
+
+                bool worked = (*l)->getCallsigns().contains(dc);
                 if (worked)
                 {
                     return true;
@@ -52,6 +58,26 @@ bool RemoteLogs::hasWorked(const Callsign &cs)
         }
     }
     return false;
+}
+
+Callsign RemoteLogs::myCall()
+{
+    for ( auto const &s: qAsConst(stationList) )
+    {
+
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+        for (QVector< QSharedPointer<MonitoredLog> >::const_iterator l = s->slotList.begin(); l != s->slotList.end(); l++)
+#else
+        for (QVector< QSharedPointer<MonitoredLog> >::iterator l = s->slotList.begin(); l != s->slotList.end(); l++)
+#endif
+       {
+            if ((*l)->getState() != psRevoked)
+            {
+                return (*l)->getContest()->mycall;
+            }
+        }
+    }
+    return Callsign();
 }
 void RemoteLogs::on_provider(Provider provider, QString /*cat*/)
 {

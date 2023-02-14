@@ -416,7 +416,7 @@ QSO:  3799 PH 1999-03-06 0712 HC8N           59 700    N5KO           59 CA     
     else
         outstr += "QSO:   ";
 
-    outstr += getCabrilloField(contest->getCabrilloFreqBand(frequency.getValue()), 5);
+    outstr += getCabrilloField(contest->getCabrilloFreqBand(getFrequency().getValue()), 5);
 
     QString smode = mode.getValue().toUpper();
     if (smode == hamlibData::USB || smode == hamlibData::LSB || smode == hamlibData::FM || smode == hamlibData::PH)
@@ -607,7 +607,7 @@ QString ContestContact::getADIFLine()
 
 
     QString cb;
-    double txfreq = contest->getAdifFreqBand(frequency.getValue(), cb);
+    double txfreq = contest->getAdifFreqBand(getFrequency().getValue(), cb);
     outstr += makeADIFField( "BAND", cb );
 
     double dfreq = txfreq/1000000.0;  // MHz

@@ -13,6 +13,12 @@ class RXChar
     int deleteCount = 0;
     bool dirty = false;
     int carrier = 0;
+
+    bool RST = false;
+    bool serial = false;
+    bool myCall = false;
+    bool workedCall = false;
+    bool unworkedCall = false;
 public:
     RXChar();
     RXChar(QChar c, bool nl, int dc, int carr);
@@ -27,6 +33,16 @@ public:
     void setDirty(bool newDirty);
     int getCarrier() const;
     void setCarrier(int newCarrier);
+    bool getRST() const;
+    void setRST(bool newRST);
+    bool getSerial() const;
+    void setSerial(bool newSerial);
+    bool getMyCall() const;
+    void setMyCall(bool newMyCall);
+    bool getWorkedCall() const;
+    void setWorkedCall(bool newWorkedCall);
+    bool getUnworkedCall() const;
+    void setUnworkedCall(bool newUnworkedCall);
 };
 //=================================================
 
@@ -43,7 +59,9 @@ public:
     void  addChar(RXChar &c);
     void reset();
     int charCount() const;
+    void clearFlags();
 
+    RXChar *getCharRef(int col);
     RXChar getLastChar() const;
     RXChar getCharAt(int col) const;
     int deleteChars(int n, RXChar &lastDeleted); // return chars still to delete
@@ -69,6 +87,7 @@ public:
     void  addChar(RXChar &c);
     void reset();
 
+    RXChar *getCharRef(int line, int col);
     RXChar getCharAt(int line, int col) const;
     void deleteChars(int n);
 
@@ -79,6 +98,8 @@ public:
     int getCols(int line) const;
 
     int charCount() const;
+
+    int getCurLine() const;
 
 signals:
     void newCharacter();

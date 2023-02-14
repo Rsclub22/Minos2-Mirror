@@ -16,7 +16,7 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout_3">
     <item>
-     <widget class="QSplitter" name="splitter">
+     <widget class="MinosSplitter" name="splitter">
       <property name="orientation">
        <enum>Qt::Vertical</enum>
       </property>
@@ -262,6 +262,12 @@
    <class>DataPainter</class>
    <extends>QGraphicsView</extends>
    <header>datapainter.h</header>
+  </customwidget>
+  <customwidget>
+   <class>MinosSplitter</class>
+   <extends>QSplitter</extends>
+   <header>minossplitter.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

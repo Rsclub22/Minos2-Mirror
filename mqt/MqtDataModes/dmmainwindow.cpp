@@ -1,3 +1,5 @@
+#include "MonitoredLog.h"
+#include "cutils.h"
 #include <QSettings>
 #include <QTimer>
 #include <QFileSystemWatcher>
@@ -25,6 +27,8 @@
 #include "RPCCommandConstants.h"
 #include "ServerEvent.h"
 #include "delayedaction.h"
+#include "remotelogs.h"
+#include "monitoredlogs.h"
 
 #include "dmmainwindow.h"
 #include "ui_dmmainwindow.h"
@@ -69,6 +73,9 @@ DMMainWindow::DMMainWindow(QWidget *parent)
     ui->setupUi(this);
 
     mainWindow = this;
+
+    logsTreeView = new MonitoredLogs(this);
+    logsTreeView->setVisible(false);
 
     ui->FButtonFrame->setEnabled(false);
     ui->variFrame->setVisible(false);
@@ -200,7 +207,9 @@ DMMainWindow::DMMainWindow(QWidget *parent)
     mainRig = getRig();
 
     ui->backData->setVisible(false);
-    ui->backDataButton->setText(tr("Show Back Data"));
+
+    connect(RemoteLogs::getRemoteLogs(), &RemoteLogs::newMonitoredLog, this, &DMMainWindow::onNewLog);
+
 }
 
 DMMainWindow::~DMMainWindow()
@@ -499,6 +508,7 @@ void DMMainWindow::LogTimerTimer()
             close();
         }
     }
+    testAutoStart();
 }
 void DMMainWindow::closeEvent(QCloseEvent *event)
 {
@@ -785,6 +795,66 @@ void DMMainWindow::onActionConfigure_Engines_triggered()
 
 void DMMainWindow::onNewCharacter()
 {
+    // we now need to parse the line for callsigns, numbers, etc
+
+    int curLine = RxBuffer::getRxBuffer()->getCurLine();
+    RxLine *rline = RxBuffer::getRxBuffer()->getRxLine(curLine);
+    rline->clearFlags();
+    QString line = rline->toString();
+    QStringList words = line.split(" ");
+    int offset = 0;
+    for(const auto &w:qAsConst(words))
+    {
+        RXChar *r = rline->getCharRef(offset);
+        if (r)
+        {
+            if (w.isEmpty())
+            {
+                offset++;
+            }
+            else if (isPureNumeric(w))
+            {
+                if (w == "599")
+                {
+                    // RST
+                    r->setRST(true);
+                }
+                else if (w.size() <= 4)
+                {
+                    // possible serial number
+                    r->setSerial(true);
+                }
+            }
+            else
+            {
+                // look for callsigns, including our own
+
+                Callsign cs;
+                int res = cs.setFullCall(w);
+                if (res == CS_OK)
+                {
+                    Callsign mycall = RemoteLogs::getRemoteLogs()->myCall();
+                    if (mycall == cs)
+                    {
+                        r->setMyCall(true);
+                    }
+                    else
+                    // look for it...
+                    if (RemoteLogs::getRemoteLogs()->hasWorked(cs, "", ""))
+                    {
+                        r->setWorkedCall(true);
+                    }
+                    else
+                    {
+                        r->setUnworkedCall(true);
+                    }
+                }
+            }
+        }
+        offset += w.size() + 1;
+    }
+
+
     ui->rxChars->setText();
 }
 
@@ -909,3 +979,27 @@ void DMMainWindow::on_backDataButton_clicked()
     }
 }
 
+void DMMainWindow::testAutoStart()
+{
+    for ( auto const &s: qAsConst(RemoteLogs::getRemoteLogs()->stationList) )
+    {
+       for ( auto &ml: s->slotList )
+       {
+            if (!ml->enabled())
+            {
+                if (ml->testAutoStart())
+                {
+                    ml->startMonitor();
+                }
+            }
+       }
+    }
+}
+void DMMainWindow::onNewLog(MonitoredLog *ml)
+{
+    connect(ml, &MonitoredLog::newStanzas, this, &DMMainWindow::onNewStanzas, Qt::QueuedConnection);
+}
+void DMMainWindow::onNewStanzas()
+{
+
+}

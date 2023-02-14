@@ -4,7 +4,6 @@
 
 #include "AppStartup.h"
 #include "MShowMessageDlg.h"
-//#include "MonitoredLog.h"
 #include "MonitoredLog.h"
 #include "cutils.h"
 #include "callsign.h"
@@ -14,14 +13,12 @@
 #include "changename.h"
 #include "LogEvents.h"
 #include "kstmonitoredlogs.h"
-//#include "monitoredlogs.h"
 #include "mults.h"
 #include "ConfigFile.h"
 #include "MinosRPC.h"
 #include "RPCCommandConstants.h"
 
 #include "kstmainwindow.h"
-//#include "remotelogs.h"
 #include "ui_kstmainwindow.h"
 
 QStringList services =
@@ -400,8 +397,8 @@ void KSTMainWindow::testAutoStart()
             }
        }
     }
-
-}void KSTMainWindow::onNewLog(MonitoredLog *ml)
+}
+void KSTMainWindow::onNewLog(MonitoredLog *ml)
 {
     connect(ml, &MonitoredLog::newStanzas, this, &KSTMainWindow::onNewStanzas, Qt::QueuedConnection);
 }

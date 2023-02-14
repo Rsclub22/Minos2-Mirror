@@ -1215,6 +1215,11 @@ void TSingleLogFrame::PublishTimerTimer(  )
    LoggerContestLog * ct = dynamic_cast<LoggerContestLog *>( contest );
    if ( ct && ct->isMinosFile() && !ct->isReadOnly())
    {
+       // We also need to publish if the times have changed
+       // although this is really a dev problem!
+
+       // BUT this looks like it should work
+
       int stanzaCount = contest->getCtStanzaCount();
       if ( lastStanzaCount != stanzaCount )
       {

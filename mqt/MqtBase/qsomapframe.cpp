@@ -398,7 +398,7 @@ void QSOMapFrame::on_AfterLogContact(const BaseContestLog *c, const QSharedPoint
         if (lct)
         {
             Callsign dxCallsign = lct->cs;
-            Frequency dxFreq = lct->frequency.getValue();
+            Frequency dxFreq = lct->getFrequency().getValue();
 
             if (spotQueue.count() != 0)
             {
