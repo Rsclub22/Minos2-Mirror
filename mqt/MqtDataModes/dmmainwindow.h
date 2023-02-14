@@ -75,6 +75,8 @@ private:
     RigCache rigCache;
     PubSubName mainRig;
 
+    QTimer *watchDog = nullptr;
+
 #ifdef Q_OS_WIN
     QAction *actionMMVARI;
     QAction *actionMMTTY;
@@ -129,6 +131,9 @@ signals:
     void rigModeFreq(QString, Frequency);
     void sendCharacters(QString, int);
 
+public slots:
+    void onTxChanged(bool);
+
 private slots:
     void LogTimerTimer();
 
@@ -175,6 +180,8 @@ private slots:
     void on_mainRigComboBox_activated(const QString &psn);
     void on_backDataButton_clicked();
     void onNewLog(MonitoredLog *ml);
+
+    void onWatchdogTimer();
 };
 extern DMMainWindow *mainWindow;
 

@@ -35,6 +35,7 @@
 
 DMMainWindow *mainWindow = nullptr;
 
+#define WATCHDOG_TIME 2000
 /*
 
 To Do
@@ -210,6 +211,8 @@ DMMainWindow::DMMainWindow(QWidget *parent)
 
     connect(RemoteLogs::getRemoteLogs(), &RemoteLogs::newMonitoredLog, this, &DMMainWindow::onNewLog);
 
+    watchDog = new QTimer(this);
+    connect(watchDog, &QTimer::timeout, this, &DMMainWindow::onWatchdogTimer);
 }
 
 DMMainWindow::~DMMainWindow()
@@ -574,6 +577,26 @@ void DMMainWindow::showEvent(QShowEvent *event)
 
 
 }
+
+void DMMainWindow::onTxChanged(bool ptt)
+{
+    // start/stop the TX watchdog
+
+    if (ptt)
+    {
+        watchDog->start(WATCHDOG_TIME);
+    }
+    else
+    {
+        watchDog->stop();
+    }
+}
+void DMMainWindow::onWatchdogTimer()
+{
+    watchDog->stop();
+    on_stopButton_clicked();
+}
+
 void DMMainWindow::closeAllEngines(bool clearCurrent)
 {
     ui->variFrame->setVisible(false);
@@ -795,6 +818,11 @@ void DMMainWindow::onActionConfigure_Engines_triggered()
 
 void DMMainWindow::onNewCharacter()
 {
+    if (watchDog->isActive())
+    {
+        watchDog->start(WATCHDOG_TIME);
+
+    }
     // we now need to parse the line for callsigns, numbers, etc
 
     int curLine = RxBuffer::getRxBuffer()->getCurLine();
@@ -999,6 +1027,7 @@ void DMMainWindow::onNewLog(MonitoredLog *ml)
 {
     connect(ml, &MonitoredLog::newStanzas, this, &DMMainWindow::onNewStanzas, Qt::QueuedConnection);
 }
+
 void DMMainWindow::onNewStanzas()
 {
 

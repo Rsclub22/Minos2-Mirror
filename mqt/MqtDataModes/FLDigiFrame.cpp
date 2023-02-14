@@ -45,6 +45,7 @@ FLDigiFrame::FLDigiFrame(QWidget *parent, QLineEdit *sendEdit, QString fname) :
 
     connect(mainWindow, &DMMainWindow::sendCharacters, this, &FLDigiFrame::onSendCharacters);
     connect(mainWindow, &DMMainWindow::rigModeFreq, this, &FLDigiFrame::onRigModeFreq);
+    connect(this, &FLDigiFrame::txChanged, mainWindow, &DMMainWindow::onTxChanged);
 
     rpcClient = new MaiaXmlRpcClient(QUrl("http://localhost:7362"), this);
 
@@ -145,6 +146,7 @@ void FLDigiFrame::sendCharacters(const QString &s, int carrier)
            this, SLOT(myFaultResponse(int, const QString &)));
 
         addText("Tx: ");
+        emit txChanged(true);
     }
     else
     {
@@ -152,7 +154,7 @@ void FLDigiFrame::sendCharacters(const QString &s, int carrier)
         rpcClient->call("main.abort", args,
            this, SLOT(myResponseMethod(QVariant&)),
            this, SLOT(myFaultResponse(int, const QString &)));
-
+        emit txChanged(false);
     }
 
 }

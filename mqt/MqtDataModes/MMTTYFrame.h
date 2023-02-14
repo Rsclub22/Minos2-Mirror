@@ -69,6 +69,9 @@ private slots:
     void on_readyReadStandardOutput();
     void on_started();
 
+signals:
+    void txChanged(bool);
+
 };
 
 #endif // MMTTYFRAME_H

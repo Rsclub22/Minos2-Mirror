@@ -142,6 +142,7 @@ MMTTYFrame::MMTTYFrame(QWidget *parent, bool twoTone, QLineEdit *sendEdit, QStri
     ui->setupUi(this);
     connect(mainWindow, &DMMainWindow::sendCharacters, this, &MMTTYFrame::onSendCharacters);
     connect(mainWindow, &DMMainWindow::rigModeFreq, this, &MMTTYFrame::onRigModeFreq);
+    connect(this, &MMTTYFrame::txChanged, mainWindow, &DMMainWindow::onTxChanged);
 
     setWindowTitle( "DI2 RX Window 1");
     t = new QWidget(this);
@@ -256,6 +257,8 @@ void MMTTYFrame::msgEventFilter(MSG *msg, long */*result*/ )
                 RXChar rxch3(' ', false, 0, carrier);
                 RxBuffer::getRxBuffer()->addChar(rxch3);
 
+                emit txChanged(true);
+
             }
             else if (l == 0 && txState)
             {
@@ -268,6 +271,7 @@ void MMTTYFrame::msgEventFilter(MSG *msg, long */*result*/ )
                 RxBuffer::getRxBuffer()->addChar(rxch2);
                 RXChar rxch3(' ', false, 0, carrier);
                 RxBuffer::getRxBuffer()->addChar(rxch3);
+                emit txChanged(false);
             }
         }
             break;

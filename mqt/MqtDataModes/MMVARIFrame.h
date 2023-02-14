@@ -121,6 +121,8 @@ private slots:
     void OnClockAdjust(int &);
     void OnError(int);
 
+signals:
+    void txChanged(bool);
 
 };
 

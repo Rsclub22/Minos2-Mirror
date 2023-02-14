@@ -23,6 +23,7 @@ MMVARIFrame::MMVARIFrame(QWidget *parent, QFrame *cwl,
 
     connect(mainWindow, &DMMainWindow::sendCharacters, this, &MMVARIFrame::onSendCharacters);
     connect(mainWindow, &DMMainWindow::rigModeFreq, this, &MMVARIFrame::onRigModeFreq);
+    connect(this, &MMVARIFrame::txChanged, mainWindow, &DMMainWindow::onTxChanged);
 
     // NB - the OCX MUST be alongside the executable, not in the"runtime" directory (if that is different)
     // so e.g. when debugging, in
@@ -606,6 +607,20 @@ void MMVARIFrame::OnTxState(int a)
         txButton->setChecked(false);
         rxButton->setChecked(true);
 
+        RXChar rxch('R', true, 0, carrier);
+        RxBuffer::getRxBuffer()->addChar(rxch);
+        RXChar rxch2('X', false, 0, carrier);
+        RxBuffer::getRxBuffer()->addChar(rxch2);
+        RXChar rxch3(' ', false, 0, carrier);
+        RxBuffer::getRxBuffer()->addChar(rxch3);
+
+        emit txChanged(false);
+    }
+    else if (a == 1)
+    {
+        txButton->setText("RX");
+        txButton->setChecked(true);
+        rxButton->setChecked(false);
         RXChar rxch('T', true, 0, carrier);
         RxBuffer::getRxBuffer()->addChar(rxch);
         RXChar rxch2('X', false, 0, carrier);
@@ -613,18 +628,7 @@ void MMVARIFrame::OnTxState(int a)
         RXChar rxch3(' ', false, 0, carrier);
         RxBuffer::getRxBuffer()->addChar(rxch3);
 
-    }
-    else if (a == 1)
-    {
-        txButton->setText("RX");
-        txButton->setChecked(true);
-        rxButton->setChecked(false);
-        RXChar rxch('R', true, 0, carrier);
-        RxBuffer::getRxBuffer()->addChar(rxch);
-        RXChar rxch2('X', false, 0, carrier);
-        RxBuffer::getRxBuffer()->addChar(rxch2);
-        RXChar rxch3(' ', false, 0, carrier);
-        RxBuffer::getRxBuffer()->addChar(rxch3);
+        emit txChanged(true);
     }
     else if (a == 2 || a == 3)
     {
@@ -637,6 +641,7 @@ void MMVARIFrame::OnTxState(int a)
         RxBuffer::getRxBuffer()->addChar(rxch2);
         RXChar rxch3(' ', false, 0, carrier);
         RxBuffer::getRxBuffer()->addChar(rxch3);
+        emit txChanged(true);
     }
     else if (a == 4)
     {
@@ -649,6 +654,7 @@ void MMVARIFrame::OnTxState(int a)
         RxBuffer::getRxBuffer()->addChar(rxch2);
         RXChar rxch3(' ', false, 0, carrier);
         RxBuffer::getRxBuffer()->addChar(rxch3);
+        emit txChanged(true);
     }
 
 

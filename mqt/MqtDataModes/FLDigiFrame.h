@@ -57,6 +57,8 @@ private slots:
     void myFaultResponse(int, const QString &);
 
     void onGetTimer();
+signals:
+    void txChanged(bool);
 };
 
 #endif // FLDIGIFRAME_H
