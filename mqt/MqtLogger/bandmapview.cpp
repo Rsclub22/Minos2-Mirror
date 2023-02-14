@@ -1420,11 +1420,11 @@ void BandmapView::assembleSpotMsg(int row, QString& markerMsg)
     Frequency mfreq = cFreq;
     if (dxMode.compare( hamlibData::RY, Qt::CaseInsensitive ) == 0)
     {
-         mfreq = mfreq + Frequency(2125);
+         mfreq = mfreq + Frequency(RTTY_MARK_OFFSET);
     }
     if (dxMode.compare( hamlibData::PSK, Qt::CaseInsensitive ) == 0)
     {
-        mfreq = mfreq - Frequency(1500);
+        mfreq = mfreq - Frequency(BPSK_OFFSET);
     }
 
     int offset = std::abs(freq - cFreq);

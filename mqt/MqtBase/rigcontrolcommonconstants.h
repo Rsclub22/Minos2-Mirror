@@ -11,7 +11,10 @@
 #include "minositem.h"
 #include "frequency.h"
 
+// Offset frequencies
 
+const int RTTY_MARK_OFFSET = 2125;
+const int BPSK_OFFSET = 1750;
 
 // Status messages sent to minos logger
 extern const char * RIG_STATUS_CONNECTED;

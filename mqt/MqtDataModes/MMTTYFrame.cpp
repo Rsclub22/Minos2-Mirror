@@ -182,8 +182,11 @@ void MMTTYFrame::sendCharacters(const QString &sendData, int carrier)
     }
     else
     {
-        ::PostMessage(mttyHWnd, uMSG_MMTTY, RXM_SETMARK, carrier);
-        ::PostMessage(mttyHWnd, uMSG_MMTTY, RXM_SETSPACE, carrier + 170);
+        if (carrier > 0)
+        {
+            ::PostMessage(mttyHWnd, uMSG_MMTTY, RXM_SETMARK, carrier);
+            ::PostMessage(mttyHWnd, uMSG_MMTTY, RXM_SETSPACE, carrier + 170);
+        }
         ::PostMessage(mttyHWnd, uMSG_MMTTY, RXM_PTT, 2);
         for(auto c:sendData)
         {

@@ -284,8 +284,11 @@ void MMVARIFrame::sendCharacters(const QString &sendData, int c)
     }
     else
     {
-        mmvari->setWTxCarrier(c);
-        mmvari->setWRxCarrier(0, c);
+        if (c > 0)
+        {
+            mmvari->setWTxCarrier(c);
+            mmvari->setWRxCarrier(0, c);
+        }
         mmvari->setBAddStartCR(true);
         mmvari->setBAddStopCR(true);
         mmvari->SendText(sendData);

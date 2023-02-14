@@ -861,11 +861,11 @@ void RigControlFrame::transferDetails(memoryData::memData &m)
         Frequency mfreq = m.freq;
         if (m.mode.compare( hamlibData::RY, Qt::CaseInsensitive ) == 0)
         {
-             mfreq = mfreq - Frequency(2125);
+             mfreq = mfreq - Frequency(RTTY_MARK_OFFSET);
         }
         if (m.mode.compare( hamlibData::PSK, Qt::CaseInsensitive ) == 0)
         {
-            mfreq = mfreq + Frequency(1500);
+            mfreq = mfreq + Frequency(BPSK_OFFSET);
         }
 
         if (radioConnected && !radioError)
