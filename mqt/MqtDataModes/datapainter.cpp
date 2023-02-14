@@ -116,7 +116,7 @@ void DataPainter::setText()
                 }
                 else if (nc.getRST())
                 {
-                    colour = Qt::darkGreen;
+                    colour = Qt::darkYellow;
                 }
                 else if (nc.getSerial())
                 {
