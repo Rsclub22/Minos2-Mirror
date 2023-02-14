@@ -220,7 +220,7 @@ void QSOMapFrame::doRedraw(const BaseContestLog *ctest, bool grid, bool lines, b
     {
         if (mZoom.isEmpty())
         {
-            mZoom = 5;
+            mZoom = "5";
         }
         callInfo << mZoom;
 
