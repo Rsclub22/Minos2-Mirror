@@ -21,6 +21,7 @@
 #include "MinosRPC.h"
 #include "RPCCommandConstants.h"
 #include "SecondInstall.h"
+#include "delayedaction.h"
 #include "qrzservermainwindow.h"
 #include "qrzserverrpc.h"
 #include "LogEvents.h"
@@ -37,15 +38,13 @@ QrzServerMainWindow::QrzServerMainWindow(QWidget *parent)
     ui->setupUi(this);
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-
+    trace("Connect to stdinRead");  // This connect doesn't appear to work for some time!
     connect(stdinReader, &StdInReader::stdinLine, this, &QrzServerMainWindow::onStdInRead);
 
     QSettings settings;
     QByteArray geometry = settings.value("geometry").toByteArray();
     if (geometry.size() > 0)
         restoreGeometry(geometry);
-
-
 
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
     appName = env.value("MQTRPCNAME", "") ;
@@ -96,7 +95,12 @@ QrzServerMainWindow::QrzServerMainWindow(QWidget *parent)
     addTextToLogWindow(tr("Note! An xml subscription is required to look up QRA data on QRZ.com"));
 
 
-    logon();
+    delayedAction(this, [=]()
+    {
+        trace("Starting logon");
+        logon();
+    }
+    );
 
 
 }
@@ -163,6 +167,7 @@ void QrzServerMainWindow::onPingStateTimerTimeout()
 
 void QrzServerMainWindow::onStdInRead(QString cmd)
 {
+    trace(QString("onStdInRead %1").arg(cmd));
     if (cmd.indexOf("Shutdown", 0, Qt::CaseInsensitive) >= 0)
     {
         close();
