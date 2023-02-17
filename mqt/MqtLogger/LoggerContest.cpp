@@ -96,6 +96,11 @@ void LoggerContestLog::clearDirty()
    sectionList.clearDirty();
    bearingOffset.clearDirty();
 
+   zoomLevel.clearDirty();
+   centreLat.clearDirty();
+   centreLon.clearDirty();
+
+
    for(auto &m:runMemories)
    {
        for (auto &r: m)
@@ -167,6 +172,11 @@ void LoggerContestLog::setDirty()
    entPhone.setDirty();
    entEMail.setDirty();
    bearingOffset.setDirty();
+
+   zoomLevel.setDirty();
+   centreLat.setDirty();
+   centreLon.setDirty();
+
 
    for(auto &m:runMemories)
    {
@@ -552,7 +562,7 @@ QSharedPointer<BaseContact> LoggerContestLog::addContact( int newctno, unsigned 
 
    if (!freq.isClear())
    {
-        bct->frequency.setValue(freq);
+        bct->setFrequency(freq, currentBand.getValue());
    }
 
    if (catchup)
@@ -1773,6 +1783,13 @@ void LoggerContestLog::processMinosStanza( const QString &methodName, MinosTestI
                                              }
                                              currentStackItemsValid = true;
                                          }
+                                        else
+                                           if (methodName == "MinosQSOMap")
+                                           {
+                                               mt->getStructArgMemberValue( "zoom", zoomLevel);
+                                               mt->getStructArgMemberValue( "lat", centreLat);
+                                               mt->getStructArgMemberValue( "lon", centreLon);
+                                           }
 }
 //====================================================================
 void LoggerContestLog::setStanza(unsigned int stanza, int stanzaStart, int stanzaEnd )

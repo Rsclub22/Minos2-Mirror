@@ -4,9 +4,8 @@
 <context>
     <name>LogTreeNode</name>
     <message>
-        <location filename="../MonitorTreeModel.cpp" line="90"/>
         <source>Monitoring</source>
-        <translation>Surveillance</translation>
+        <translation type="vanished">Surveillance</translation>
     </message>
 </context>
 <context>
@@ -37,7 +36,32 @@
         <translation>Échange</translation>
     </message>
     <message>
-        <location filename="../MonitorMain.cpp" line="93"/>
+        <location filename="../MonitorMain.ui" line="142"/>
+        <source>QSO Map</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../MonitorMain.ui" line="150"/>
+        <source>Show Grid</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../MonitorMain.ui" line="157"/>
+        <source>Show Lines</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../MonitorMain.ui" line="171"/>
+        <source>Show spots</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../MonitorMain.ui" line="191"/>
+        <source>Dist Limit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../MonitorMain.cpp" line="80"/>
         <source>Close tab</source>
         <translation>Fermer l&apos;onglet</translation>
     </message>
@@ -45,26 +69,24 @@
 <context>
     <name>MonitorTreeModel</name>
     <message>
-        <location filename="../MonitorTreeModel.cpp" line="163"/>
         <source>Contest Name</source>
-        <translation>Nom du concours</translation>
+        <translation type="vanished">Nom du concours</translation>
     </message>
     <message>
-        <location filename="../MonitorTreeModel.cpp" line="167"/>
         <source>State</source>
-        <translation>Serveurs/état</translation>
+        <translation type="vanished">Serveurs/état</translation>
     </message>
 </context>
 <context>
     <name>MonitoringFrame</name>
     <message>
         <location filename="../MonitoringFrame.ui" line="62"/>
-        <location filename="../MonitoringFrame.cpp" line="181"/>
+        <location filename="../MonitoringFrame.cpp" line="191"/>
         <source>Show Map</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MonitoringFrame.cpp" line="172"/>
+        <location filename="../MonitoringFrame.cpp" line="182"/>
         <source>Show Log</source>
         <translation type="unfinished"></translation>
     </message>

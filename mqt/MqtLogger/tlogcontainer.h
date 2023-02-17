@@ -42,7 +42,7 @@ public:
     ~TLogContainer() override;
 
     TSendDM *sendDM;
-    N1MMBroadcast n1mmBroadcast;
+    N1MMBroadcast *n1mmBroadcast = nullptr;
 
     void selectContest(BaseContestLog *pc, QSharedPointer<BaseContact> pct );
     bool show(int argc, char *argv[]);
@@ -54,7 +54,7 @@ public:
 
     QMenu TabPopup;
 
-    SerialTVSwitch *serialTVSw;
+    SerialTVSwitch *serialTVSw = nullptr;
 
     TSingleLogFrame *findContest( const QString &pubname );
     TSingleLogFrame *findContest(BaseContestLog *ct );
@@ -91,6 +91,8 @@ public:
     void selectContest(BaseContestLog *pc);
     void selectTab(int t);
 
+    void openSerialTVSwitch();
+    
 private:
     Ui::TLogContainer *ui;
 

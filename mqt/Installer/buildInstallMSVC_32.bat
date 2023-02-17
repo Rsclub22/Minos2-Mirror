@@ -77,6 +77,7 @@ copy %MROOT%\%builddir%\MqtChat\release\MqtChat.exe Bin
 copy %MROOT%\%builddir%\MqtCluster\release\MqtCluster.exe Bin
 REM copy %MROOT%\%builddir%\MqtControl\release\MqtControl.exe Bin
 REM copy %MROOT%\%builddir%\MqtKeyer\release\MqtKeyer.exe Bin
+REM copy %MROOT%\%builddir%\MqtKeyerProxy\release\MqtKeyerProxy.exe Bin
 copy %MROOT%\%builddir%\MqtKSTClient\release\MqtKSTClient.exe Bin
 copy %MROOT%\%builddir%\MqtLogger\release\MqtLogger.exe Bin
 copy %MROOT%\%builddir%\MqtMonitor\release\MqtMonitor.exe Bin
@@ -121,6 +122,7 @@ windeployqt.exe MqtChat.exe
 windeployqt.exe MqtCluster.exe
 REM windeployqt.exe MqtControl.exe
 REM windeployqt.exe MqtKeyer.exe
+REM windeployqt.exe MqtKeyerProxy.exe
 windeployqt.exe MqtKSTClient.exe
 windeployqt.exe MqtLogger.exe
 windeployqt.exe MqtMonitor.exe

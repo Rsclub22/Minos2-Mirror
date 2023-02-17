@@ -9,11 +9,14 @@
 //---------------------------------------------------------------------------
 #include <QHeaderView>
 #include "AnalysePubSubNotify.h"
+#include "MServerZConf.h"
 #include "PubSubServer.h"
 #include "MServer.h"
 #include "MTrace.h"
 #include "MServerPubSub.h"
+#include "minoslistener.h"
 #include "qcoreapplication.h"
+#include "serverThread.h"
 
 extern bool closeApp;
 
@@ -261,9 +264,11 @@ void Subscriber::SendTo ( const PublishedKey &pk )
    RPCClientNotifyClient rnc( nullptr );
    QSharedPointer<RPCParam>st(new RPCParamStruct);
 
+   trace(QString("Subscriber::SendTo router %1").arg(pk.getPubId()));
    // local - no router
    st->addMember( QString(""), "Server" );
    st->addMember( pk.getPubId(), "Publisher" );
+   st->addMember( QString(), "PublisherIP");        // localhost I hope
    st->addMember( pk.getPubCat() ->getCategory(), "Category" );
    st->addMember( pk.getPubKey(), "Key" );
    st->addMember( pk.getPubValue(), "Value" );
@@ -275,13 +280,36 @@ void Subscriber::SendTo ( const PublishedKey &pk )
 //---------------------------------------------------------------------------
 void RemoteSubscriber::SendTo ( const PublishedKey &pk )
 {
-   // Build the stanza, and send it to the subid
+    trace(QString("RemoteSubscriber::SendTo  router %1").arg(pk.getPubId()));
+
+    // Build the stanza, and send it to the subid
    RPCClientNotifyClient rnc( nullptr );
    QSharedPointer<RPCParam>st(new RPCParamStruct);
 
+   // router is the server that the message came from, NOT necessarily the originator
+
+   QString pubRouter = pk.getPubId().split("@")[1];
+   Router *srv = nullptr;
+   QVector<Router *>::iterator srvi = findStation( pubRouter );
+   if (srvi != routerList.end())
+   {
+       srv = *srvi;
+   }
+
    // router is remote router name (as published)
+   // The publisher IP is only available if there is a direct
+   // connection - i.e. that router is connected to us
+   // If it is "bridged" by a third router (e.g. across
+   // subnets using multi-homing, such as one pair on WiFi and
+   // the overlapping pair on cable connection) then
+   // it won't be available.
+
+   // Used (initially) so that a keyer proxy can make a direct connection
+   // to a keyer to pass audio; there may be other use cases
+
    st->addMember( router, "Server" );
    st->addMember( pk.getPubId(), "Publisher" );
+   st->addMember( QString(srv?srv->host.toString():QString()), "PublisherIP" ); // no srv implies it is us!
    st->addMember( pk.getPubCat() ->getCategory(), "Category" );
    st->addMember( pk.getPubKey(), "Key" );
    st->addMember( pk.getPubValue(), "Value" );
@@ -293,7 +321,8 @@ void RemoteSubscriber::SendTo ( const PublishedKey &pk )
 //---------------------------------------------------------------------------
 void RouterSubscriber::SendTo ( const PublishedKey &pk )
 {
-   // Build the stanza, and send it to the subid
+    trace(QString("RouterSubscriber::SendTo  router %1").arg(pk.getPubId()));
+   // Build the stanza, and send it to the subid, which should be the clients router
    RPCRouterNotifyClient rnc( nullptr );
    QSharedPointer<RPCParam>st(new RPCParamStruct);
 
@@ -312,6 +341,7 @@ void RouterSubscriber::SendTo ( const PublishedKey &pk )
 
    st->addMember( router, "Server" );
    st->addMember( pk.getPubId(), "Publisher" );
+   st->addMember( srouter, "PublisherIP");        // don't fill in the IP - yet
    st->addMember( sCategory, "Category" );
    st->addMember( pk.getPubKey(), "Key" );
    st->addMember( pk.getPubValue() , "Value" );
@@ -819,7 +849,7 @@ void buildSubscribedTree(QTreeWidget *tree)
 
 void TPubSubMain::publishCallback( bool err, QSharedPointer<MinosRPCObj>mro, const QString &from )
 {
-   trace( "Publish callback from " + from + ( err ? ":Error" : ":Normal" ) );
+   //trace( "Publish callback from " + from + ( err ? ":Error" : ":Normal" ) );
 
    if ( !err )
    {
@@ -855,7 +885,7 @@ void TPubSubMain::publishCallback( bool err, QSharedPointer<MinosRPCObj>mro, con
 
 void TPubSubMain::subscribeCallback(bool err, QSharedPointer<MinosRPCObj> mro, const QString &from )
 {
-   trace( "Client Subscribe callback from " + from + ( err ? ":Error" : ":Normal" ) );
+   //trace( "Client Subscribe callback from " + from + ( err ? ":Error" : ":Normal" ) );
    if ( !err )
    {
       QSharedPointer<RPCParam>st(new RPCParamStruct);
@@ -878,7 +908,7 @@ void TPubSubMain::subscribeCallback(bool err, QSharedPointer<MinosRPCObj> mro, c
 
 void TPubSubMain::remoteSubscribeCallback( bool err, QSharedPointer<MinosRPCObj>mro, const QString &from )
 {
-   trace( "Remote Subscribe callback from " + from + ( err ? ":Error" : ":Normal" ) );
+   //trace( "Remote Subscribe callback from " + from + ( err ? ":Error" : ":Normal" ) );
    if ( !err )
    {
       QSharedPointer<RPCParam>st(new RPCParamStruct);
@@ -911,7 +941,7 @@ void TPubSubMain::remoteSubscribeCallback( bool err, QSharedPointer<MinosRPCObj>
 
 void TPubSubMain::routerSubscribeCallback(bool err, QSharedPointer<MinosRPCObj> mro, const QString &from )
 {
-   trace( "router Subscribe callback from " + from + ( err ? ":Error" : ":Normal" ) );
+   //trace( "router Subscribe callback from " + from + ( err ? ":Error" : ":Normal" ) );
    if ( !err )
    {
       QSharedPointer<RPCParam>st(new RPCParamStruct);
@@ -936,21 +966,21 @@ void TPubSubMain::routerSubscribeCallback(bool err, QSharedPointer<MinosRPCObj> 
 
 // callback for responses to notify messages
 
-void TPubSubMain::notifyCallback( bool err, QSharedPointer<MinosRPCObj> /*mro*/, const QString &from )
+void TPubSubMain::notifyCallback( bool /*err*/, QSharedPointer<MinosRPCObj> /*mro*/, const QString &/*from*/ )
 {
    // response to pubsub calls
-   trace( "Notify callback from " + from + ( err ? ":Error" : ":Normal" ) );
+   //trace( "Notify callback from " + from + ( err ? ":Error" : ":Normal" ) );
 }
 //---------------------------------------------------------------------------
 
 // this we get when we get a subscribe notification from a remote router
 
-void TPubSubMain::routerNotifyCallback(bool err, QSharedPointer<MinosRPCObj> mro, const QString &from )
+void TPubSubMain::routerNotifyCallback(bool err, QSharedPointer<MinosRPCObj> mro, const QString &/*from*/ )
 {
    // we need to pass it on to any of our subscribers who are interested
    // in this event from this router
    // But why aren't we sending a result?
-   trace( "PubSub Notify callback from " + from + ( err ? ":Error" : ":Normal" ) );
+   //trace( "PubSub Notify callback from " + from + ( err ? ":Error" : ":Normal" ) );
    AnalysePubSubNotify an( err, mro );
 
    if ( an.getOK() )

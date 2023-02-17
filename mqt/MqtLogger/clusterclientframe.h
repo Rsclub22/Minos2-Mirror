@@ -34,6 +34,7 @@ enum ClusterTabIndex {DXSPOT_TAB, SEARCH_TAB, CALLSIGN_TAB, LOCATOR_TAB};
 class ClusterClientFrame;
 class BaseContestLog;
 class QTableView;
+class BaseContact;
 
 class DxSpotSortFilterProxyModel : public QSortFilterProxyModel
 {
@@ -241,7 +242,6 @@ private:
     void sendFreqToRig(Frequency freq);
     void sendBrgToRot(QString brg);
     memoryData::memData getSpotDataToMemoryVariable(DxSpotSortFilterProxyModel*, int);
-    void calcSpotDistanceBearing(const QString &locator, double *distance, int *bearing);
 
     void sendSpotToMemory(DxSpotSortFilterProxyModel *spotProxyModel, int row);
 
@@ -284,9 +284,8 @@ private:
     bool readLessGreaterThanDistanceFlag();
 private slots:
 
-    void on_AfterLogContact(BaseContestLog *c, Callsign cs, QString loc);
+    void on_AfterLogContact(BaseContestLog *c, QSharedPointer<BaseContact> lct);
 
-    void clusterClientServerList(QVector<ClusterServer>);
     void dxSpots(QVector<ClusterMessage>);
     void filterButtonSelected();
     void purgeSpots();
@@ -297,7 +296,6 @@ private slots:
     void memoryActionSelected();
     void clearSpotActionSelected();
     void clearAllSpotsActionSelected();
-    void delayed_afterLogContact(BaseContestLog *c, Callsign cs, QString loc);
     void onDxSpotViewClicked(const QModelIndex &);
     void onSearchSpotViewClicked(const QModelIndex &);
     void onCallsignSpotViewClicked(const QModelIndex &index);
@@ -308,7 +306,6 @@ private slots:
     void onLocatorSpotVertHeaderClicked(int row);
     void onCallsignSpotVertHeaderClicked(int);
     void onSearchSpotVertHeaderClicked(int row);
-    void checkSpotWorked(QString &callsign, QString &locator, bool *callWorked, bool *locatorWorked);
     void checkNewSpots();
     void checkSavedFilters();
     void mouseTimerCheckNewSpots();

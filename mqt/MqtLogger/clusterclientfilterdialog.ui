@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>461</width>
-    <height>313</height>
+    <width>498</width>
+    <height>369</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,7 +17,7 @@
    <item>
     <widget class="QTabWidget" name="ClusterClientFilterTab">
      <property name="currentIndex">
-      <number>3</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="bandsFilter">
       <attribute name="title">
@@ -446,8 +446,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>397</width>
-                <height>97</height>
+                <width>63</width>
+                <height>16</height>
                </rect>
               </property>
              </widget>
@@ -519,8 +519,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>397</width>
-                <height>97</height>
+                <width>63</width>
+                <height>16</height>
                </rect>
               </property>
              </widget>
@@ -592,8 +592,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>397</width>
-                <height>97</height>
+                <width>428</width>
+                <height>113</height>
                </rect>
               </property>
              </widget>

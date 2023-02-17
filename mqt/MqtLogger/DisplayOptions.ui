@@ -6,14 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>517</width>
-    <height>622</height>
+    <width>942</width>
+    <height>658</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Frame</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
+  <layout class="QVBoxLayout" name="verticalLayout_5">
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_7">
      <item>
@@ -103,68 +103,92 @@
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="QCheckBox" name="ReadabilityAutofillcb">
-       <property name="text">
-        <string>Signal Readability Initialise to 5</string>
-       </property>
-      </widget>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <widget class="QCheckBox" name="ReadabilityAutofillcb">
+         <property name="text">
+          <string>Signal Readability Initialise to 5</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="TabSandPActioncb">
+         <property name="text">
+          <string>Change Tab Order for S&amp;&amp;P</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="ShowAuxHeadersCheckBox">
+         <property name="text">
+          <string>Show Auxiliary Headers</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
      <item>
-      <widget class="QCheckBox" name="ReportAutofillcb">
-       <property name="text">
-        <string>Signal Report AutoFill</string>
-       </property>
-      </widget>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <widget class="QCheckBox" name="ReportAutofillcb">
+         <property name="text">
+          <string>Signal Report AutoFill</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="ShowOperatorscb">
+         <property name="text">
+          <string>Show Operators</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="expertModeCheckBox">
+         <property name="text">
+          <string>Expert mode display</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <item>
+        <spacer name="horizontalSpacer_6">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="alternateFKeysCheckBox">
+         <property name="text">
+          <string>Alternate Function Keys</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="separateIconsCb">
+         <property name="text">
+          <string>Separate Logger Icons on Taskbar</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
     </layout>
-   </item>
-   <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_6">
-     <item>
-      <widget class="QCheckBox" name="TabSandPActioncb">
-       <property name="text">
-        <string>Change Tab Order for S&amp;&amp;P</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QCheckBox" name="ShowOperatorscb">
-       <property name="text">
-        <string>Show Operators</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_12">
-     <item>
-      <widget class="QCheckBox" name="expertModeCheckBox">
-       <property name="text">
-        <string>Expert mode display</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QCheckBox" name="alternateFKeysCheckBox">
-       <property name="text">
-        <string>Alternate Function Keys</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item>
-    <widget class="QCheckBox" name="ShowAuxHeadersCheckBox">
-     <property name="text">
-      <string>Show Auxiliary Headers</string>
-     </property>
-    </widget>
    </item>
    <item>
     <widget class="QGroupBox" name="groupBox_4">
      <property name="title">
-      <string>Centre locator map</string>
+      <string>Centre Auxiliary locator map</string>
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout_13">
       <item>
@@ -207,6 +231,79 @@
         </attribute>
        </widget>
       </item>
+      <item>
+       <spacer name="horizontalSpacer_13">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="groupBox_5">
+     <property name="title">
+      <string>QSO Map Panel Options</string>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_14">
+      <item>
+       <widget class="QCheckBox" name="QSOMapShowGrid">
+        <property name="text">
+         <string>Show grid when contest has locators</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="QSOMapShowLines">
+        <property name="text">
+         <string>Draw lines to QSO partners</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="mapShowCluster">
+        <property name="text">
+         <string>Show Cluster Spots</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>Limit Cluster distance</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="mapClusterDistance">
+        <property name="maximum">
+         <number>100000</number>
+        </property>
+        <property name="singleStep">
+         <number>100</number>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer_5">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
      </layout>
     </widget>
    </item>
@@ -246,11 +343,31 @@
         </attribute>
        </widget>
       </item>
+      <item>
+       <spacer name="horizontalSpacer_14">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
      </layout>
     </widget>
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <item>
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Set List Spacing Compression Value as percentage</string>
+       </property>
+      </widget>
+     </item>
      <item>
       <widget class="QSpinBox" name="ListCompressionSpinner">
        <property name="minimum">
@@ -275,13 +392,6 @@
       </spacer>
      </item>
     </layout>
-   </item>
-   <item>
-    <widget class="QLabel" name="label">
-     <property name="text">
-      <string>Set List Spacing Compression Value as percentage</string>
-     </property>
-    </widget>
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -462,13 +572,6 @@
       </spacer>
      </item>
     </layout>
-   </item>
-   <item>
-    <widget class="QCheckBox" name="separateIconsCb">
-     <property name="text">
-      <string>Separate Logger Icons on Taskbar</string>
-     </property>
-    </widget>
    </item>
    <item>
     <spacer name="verticalSpacer">

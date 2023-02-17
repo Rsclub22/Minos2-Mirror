@@ -150,6 +150,25 @@ QString SecondInstall::getRouterEventName()
     return "MinosQtServer";
 #endif
 }
+QString SecondInstall::getSingleAppStarterName()
+{
+    switch(installation)
+    {
+    case 1:
+        return "MinosAppStarter";
+        break;
+    case 2:
+        return "MinosAppStarterBeta";
+        break;
+    default:
+        break;
+    }
+#if defined SECONDINSTALL
+    return "MinosAppStarterBeta";
+#else
+    return "MinosAppStarter";
+#endif
+}
 
 QString SecondInstall::getSingleAppLoggerDescription()
 {
@@ -188,6 +207,25 @@ QString SecondInstall::getSingleAppRouterDescription()
     return "Minos Server (Beta)";
 #else
     return "Minos Server";
+#endif
+}
+QString SecondInstall::getSingleAppStarterDescription()
+{
+    switch(installation)
+    {
+    case 1:
+        return "Minos App Starter";
+        break;
+    case 2:
+        return "Minos App Starter (Beta)";
+        break;
+    default:
+        break;
+    }
+#if defined SECONDINSTALL
+    return "Minos App Starter (Beta)";
+#else
+    return "Minos App Starter";
 #endif
 }
 

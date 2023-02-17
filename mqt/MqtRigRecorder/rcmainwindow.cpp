@@ -354,10 +354,10 @@ void MainWindow::on_contestLinkCB_stateChanged(int /*arg1*/)
     settings.setValue("ContestLink", link);
 }
 
-void MainWindow::on_notify(AnalysePubSubNotify an, const QString from )
+void MainWindow::on_notify(AnalysePubSubNotify an, const QString /*from*/ )
 {
     // pubsub notify
-    trace( "Notify callback from " + from + ( !an.getOK() ? ":Error" : ":Normal" ) );
+    //trace( "Notify callback from " + from + ( !an.getOK() ? ":Error" : ":Normal" ) );
 
     if ( an.getOK() )
     {

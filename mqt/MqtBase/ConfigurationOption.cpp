@@ -1,6 +1,8 @@
 #include <QCheckBox>
 #include <QSettings>
 #include <QLineEdit>
+#include <QSpinBox>
+
 #include "profiles.h"
 
 #include "ConfigurationOption.h"
@@ -16,6 +18,16 @@ void ConfigurationOption::initialise(SettingsBundle *pset, int popt, QCheckBox *
     cb->setChecked(bInitial);
 
 }
+void ConfigurationOption::initialise(SettingsBundle *pset, int popt, QSpinBox *psb)
+{
+    set = pset;
+    opt = popt;
+    sb = psb;
+
+    set->getIntProfile( opt, iInitial );
+    sb->setValue(iInitial);
+}
+
 
 void ConfigurationOption::initialise(QString pfileName, QString psection, QString pkey, QLineEdit *pqle, QString def)
 {
@@ -34,12 +46,25 @@ bool ConfigurationOption::finalise() const
 {
     if (set)
     {
-        bool now = cb->isChecked();
-        if (now != bInitial)
+        if (cb)
         {
-            set->setBoolProfile( opt, now );
-            set->flushProfile();
-            return true;
+            bool now = cb->isChecked();
+            if (now != bInitial)
+            {
+                set->setBoolProfile( opt, now );
+                set->flushProfile();
+                return true;
+            }
+        }
+        else if (sb)
+        {
+            int now = sb->value();
+            if (now != iInitial)
+            {
+                set->setIntProfile( opt, now );
+                set->flushProfile();
+                return true;
+            }
         }
     } else if (!fileName.isEmpty())
     {
@@ -62,4 +87,8 @@ bool ConfigurationOption::value() const
 QString ConfigurationOption::sValue() const
 {
     return qle->text().trimmed();
+}
+int ConfigurationOption::iValue() const
+{
+    return sb->value();
 }

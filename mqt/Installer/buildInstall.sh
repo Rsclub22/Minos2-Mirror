@@ -39,7 +39,7 @@ if [ $retVal -ne 0 ]; then
     exit $retVal
 fi
 
-  for j in TinyXML XMPPLib KeyerBase MqtBase MqtUtils MqtAppStarter MqtChat MqtCluster MqtKSTClient MqtLogger MqtMonitor MqtQrzServer MqtRigControl MqtRigSync MqtRigRecorder MqtRotator MqtServer
+  for j in TinyXML XMPPLib KeyerBase MqtBase MqtUtils MqtAppStarter MqtChat MqtCluster MqtDataModes MqtKeyer MqtKeyerProxy MqtKSTClient MqtLogger MqtMonitor MqtQrzServer MqtRigControl MqtRigSync MqtRigRecorder MqtRotator MqtServer
   do
     lrelease -verbose ../mqt/${j}/${j}.pro
     if [ ! -d ${j}/translations ]; then
@@ -68,7 +68,7 @@ mkdir Help
 
 for i in en_GB fr_FR
 do
-  for j in MqtAppStarter MqtChat MqtCluster MqtKSTClient MqtLogger MqtMonitor MqtQrzServer MqtRigControl MqtRigSync MqtRigRecorder MqtRotator MqtServer
+  for j in MqtAppStarter MqtChat MqtCluster MqtDataModes MqtKeyer MqtKeyerProxy MqtKSTClient MqtLogger MqtMonitor MqtQrzServer MqtRigControl MqtRigSync MqtRigRecorder MqtRotator MqtServer
   do
     lconvert -verbose -o Bin/translations/${j}_${i}.qm \
     $DIR/$BUILDDIR/MqtUtils/translations/minos_${i}.qm \
@@ -89,7 +89,9 @@ if [[ "$OSTYPE" == "darwin"* ]] ; then 		#MacOS
 	cp -r $DIR/$BUILDDIR/MqtChat/MqtChat.app Bin
 	cp -r $DIR/$BUILDDIR/MqtCluster/MqtCluster.app Bin
 	cp -r $DIR/$BUILDDIR/MqtControl/MqtControl.app Bin
+	cp -r $DIR/$BUILDDIR/MqtDataModes/MqtDataModes.app Bin
 	cp -r $DIR/$BUILDDIR/MqtKeyer/MqtKeyer.app Bin
+	cp -r $DIR/$BUILDDIR/MqtKeyerProxy/MqtKeyerProxy.app Bin
 	cp -r $DIR/$BUILDDIR/MqtKSTClient/MqtKSTClient.app Bin
 	cp -r $DIR/$BUILDDIR/MqtLogger/MqtLogger.app Bin
 	cp -r $DIR/$BUILDDIR/MqtMonitor/MqtMonitor.app Bin
@@ -105,7 +107,9 @@ else
 	cp $DIR/$BUILDDIR/MqtChat/MqtChat Bin
 	cp $DIR/$BUILDDIR/MqtCluster/MqtCluster Bin
 	cp $DIR/$BUILDDIR/MqtControl/MqtControl Bin
+	cp $DIR/$BUILDDIR/MqtDataModes/MqtDataModes Bin
 	cp $DIR/$BUILDDIR/MqtKeyer/MqtKeyer Bin
+	cp $DIR/$BUILDDIR/MqtKeyerProxy/MqtKeyerProxy Bin
 	cp $DIR/$BUILDDIR/MqtKSTClient/MqtKSTClient Bin
 	cp $DIR/$BUILDDIR/MqtLogger/MqtLogger Bin
 	cp $DIR/$BUILDDIR/MqtMonitor/MqtMonitor Bin

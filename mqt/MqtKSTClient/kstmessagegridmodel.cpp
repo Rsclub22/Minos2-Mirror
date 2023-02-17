@@ -110,14 +110,34 @@ QVariant KstMessageGridModel::data( const QModelIndex &index, int role ) const
             cell = crec->dtg.toString("HH:mm");
             break;
         case eccCall:
-            cell = crec->call;
+        {
+            bool worked = RemoteLogs::getRemoteLogs()->hasWorked(crec->call, "", "");
+            QString call = crec->call.getFullCall();
+            if (worked)
+            {
+                QString col = HtmlFontColour(Qt::darkGray);
+                call = col + call;
+            }
+
+            cell = call;
             break;
+        }
         case eccName:
             cell = crec->name;
             break;
         case eccOther:
-            cell = crec->otherCall;
+        {
+            bool worked = RemoteLogs::getRemoteLogs()->hasWorked(crec->otherCall, "", "");
+            QString call = crec->otherCall.getFullCall();
+            if (worked)
+            {
+                QString col = HtmlFontColour(Qt::darkGray);
+                call = col + call;
+            }
+
+            cell = call;
             break;
+        }
         case eccText:
             cell = crec->message;
             break;
@@ -255,11 +275,11 @@ bool KstMessageGridSortFilterModel::filterAcceptsRow(int sourceRow, const QModel
         {
             if (!filterString.isEmpty())
             {
-                if (kstmsg->call.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
+                if (kstmsg->call.getFullCall().indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
                     return true;
                 if (kstmsg->name.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
                     return true;
-                if (kstmsg->otherCall.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
+                if (kstmsg->otherCall.getFullCall().indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
                     return true;
                 if (kstmsg->message.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
                     return true;
@@ -323,11 +343,11 @@ bool KstMeepGridSortFilterModel::filterAcceptsRow(int sourceRow, const QModelInd
 
     if (!myCSfilterString.isEmpty())
     {
-        if (!showLine && kstmsg->call.indexOf(myCSfilterString, 0, Qt::CaseInsensitive) >= 0)
+        if (!showLine && kstmsg->call.getFullCall().indexOf(myCSfilterString, 0, Qt::CaseInsensitive) >= 0)
             showLine = true;
         if (!showLine && kstmsg->name.indexOf(myCSfilterString, 0, Qt::CaseInsensitive) >= 0)
             showLine = true;
-        if (!showLine && kstmsg->otherCall.indexOf(myCSfilterString, 0, Qt::CaseInsensitive) >= 0)
+        if (!showLine && kstmsg->otherCall.getFullCall().indexOf(myCSfilterString, 0, Qt::CaseInsensitive) >= 0)
             showLine = true;
         if (!showLine && kstmsg->message.indexOf(myCSfilterString, 0, Qt::CaseInsensitive) >= 0)
             showLine = true;
@@ -339,11 +359,11 @@ bool KstMeepGridSortFilterModel::filterAcceptsRow(int sourceRow, const QModelInd
         {
             if (!filterString.isEmpty())
             {
-                if (!showLine && kstmsg->call.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
+                if (!showLine && kstmsg->call.getFullCall().indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
                     showLine = true;
                 if (!showLine && kstmsg->name.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
                     showLine = true;
-                if (!showLine && kstmsg->otherCall.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
+                if (!showLine && kstmsg->otherCall.getFullCall().indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
                     showLine = true;
                 if (!showLine && kstmsg->message.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
                     showLine = true;

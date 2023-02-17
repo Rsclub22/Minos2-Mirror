@@ -82,7 +82,7 @@ void RunButtonDialog::setLogData(memoryData::memData* ldata, int buttonNumber, L
     QString m = ldata->mode;
     if (m.isEmpty())
     {
-        logdata->mode = sc.mode;
+        logdata->mode = sc.mode.getValue();
     }
 
     ui->modecb->setCurrentText(ldata->mode);
@@ -90,7 +90,7 @@ void RunButtonDialog::setLogData(memoryData::memData* ldata, int buttonNumber, L
 
     if (logdata->freq.isClear())
     {
-        logdata->freq = sc.frequency.getValue();
+        logdata->freq = sc.getFrequency().getValue();
     }
     if (logdata->freq.isClear())
     {

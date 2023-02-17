@@ -11,6 +11,9 @@
 #include <QObject>
 #include <QVector>
 #include "CompressorParams.h"
+#include "vudata.h"
+
+const QString DEFAULT_PORT( "7799" );
 
 class dvkFile
 {
@@ -100,6 +103,7 @@ public:
       bool play;  /* Play or record */
 
       unsigned int rate = 0;   /* rate in Hertz -- this gets reset to nearest available value */
+      void setSampleRate(unsigned int r);
 
       void setVolumeMults(int record, int replay, int passThrough, const CompressorParams &compression, bool df, bool dc);
 
@@ -125,20 +129,27 @@ public:
       void startTone2();
       void createCWBuffer( const char *message, int speed, int tone );
 
-      bool initialise(QString ind, QString outd);
-      bool sbdvp_init(QString ind, QString outd, QString &errmess, unsigned int rate, int pipTone, int pipVolume, int pipLength );
+      bool initialise(QString ind, QString outd, QString host, QString port);
+      bool sbdvp_init(QString ind, QString outd, QString host, QString port, QString &errmess, unsigned int rate, int pipTone, int pipVolume, int pipLength );
       QStringList getInputDevices();
+      QString getDefaultInputDevice();
       QStringList getOutputDevices();
+      QString getDefaultOutputDevice();
       void closedown();
 private slots:
       void interruptOK();
       void outputFinished();
       void actionQueueFinished();
-      void doSetVU(unsigned int a, unsigned int b, unsigned int c);
+      void doSetVU(vudata);
+      void onPTTState(bool);
+
 
 signals:
       void ptt(bool);
+      void passPTT(bool);
       void recpbFinished();
-      void setVU(unsigned int a, unsigned int b, unsigned int c);
+      void setVU(vudata);
+      void sequenceCount(qint64);
+
 };
 #endif

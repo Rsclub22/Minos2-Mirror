@@ -55,6 +55,7 @@ void MinosId::setId( const QString &s )
 // called from XMPPRPCObj instead of the one in MinosConnection
 static void serverSendAction( XStanza *a )
 {
+    trace("serverSendAction");
    // stanza has a "to" - but this is internal, so we need to dispatch it
    TIXML_STRING mess = a->getActionMessage();
 

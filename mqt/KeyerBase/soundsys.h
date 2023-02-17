@@ -9,79 +9,37 @@
 #ifndef soundsysH
 #define soundsysH
 
-#include <QThread>
-#include <QMutex>
-#include <QWaitCondition>
-
+#include <QDateTime>
 #include "riff.h"
 #include "SimpleComp.h"
 #include "CompressorParams.h"
 #include "adis_filter.h"
+#include "vudata.h"
 
-
+class RiffWriter;
 class RtAudioSoundSystem;
-#if !defined (_MSC_VER)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-result"
-#pragma GCC diagnostic ignored "-Wold-style-cast"
-#endif
-// as we don't want to change rtaudio.h...
-#include "RtAudio.h"
-#if !defined (_MSC_VER)
-#pragma GCC diagnostic pop
-#endif
+class RtAudio;
+class IPADataBuffer;
+class IPSystem;
 
-#define FRAMES 16
-#define FRAMESAMPLES 256
-#define RINGBUFFERSIZE 1024
-
-class InBuff
-{
-public:
-    unsigned int frameCount;
-    int16_t buff[FRAMESAMPLES * 2];
-};
-
-class RiffWriter : public QThread
-{
-    Q_OBJECT
-
-     RtAudioSoundSystem *ss;
-
-     QWaitCondition bufferNotEmpty;
-     QWaitCondition bufferNotFull;
-     QMutex mutex;
-
-     InBuff inBuffs[RINGBUFFERSIZE];
-     int recIndex = -1;
-     int writeIndex = -1;
-
-
-public:
-     bool terminated;
-    RiffWriter(RtAudioSoundSystem *parent = nullptr) ;
-    virtual ~RiffWriter() override;
-
-    virtual void run() Q_DECL_OVERRIDE;
-
-    void startInput();
-    void wakeAll();
-
-    void copyBuffer(int16_t *inStageBuffer, int nFrames);
-    void finishInput();
-
-};
 class RtAudioSoundSystem: public QObject
 {
     Q_OBJECT
 
 private slots:
 
+    void onSoundAvailable();
+public slots:
+    void passPTT(bool b);
 signals:
     void interruptOK();
     void ssOutputFinished();
     void actionQueueFinished();
-    void setVU(unsigned int a, unsigned int b, unsigned int c);
+    void setVU(vudata);
+    void soundAvailable();
+    void sequenceCount(qint64);
+    void ptt(bool);
+
 
 protected:
     void readFromFile(void *outputBuffer, unsigned int nFrames, int16_t &maxvol, qreal &rmsval);
@@ -93,12 +51,15 @@ public:
     bool doBWFilter = true;
     bool doCompression = true;
 
-    bool initialise(QString ind , QString outd);
+    bool initialise(QString ind , QString outd, QString host, QString port);
     void stop();
     void closedown();
 
     QStringList inputDevices;
     QStringList outputDevices;
+
+    QString defaultInput;
+    QString defaultOutput;
 
     unsigned int setRate(unsigned int rate);
 
@@ -127,6 +88,8 @@ public:
     WaveFile *outWave = nullptr;
     void writeDataToFile(void *inp, unsigned int nFrames);
     RiffWriter *wThread = nullptr;
+    IPADataBuffer *dataBuffer = nullptr;
+    IPSystem *ipSystem = nullptr;
 
     int audioCallback( void *outputBuffer, void *inputBuffer,
                                     unsigned int nFrames,
@@ -140,6 +103,12 @@ private:
     unsigned int outChannels = 0;
 
     QMap<QString, int> deviceIds;
+
+    int dropped = 0;
+    int missed = 0;
+    int callbacks = 0;
+    qint64 stime = QDateTime::currentMSecsSinceEpoch();
+    qreal cbacks = 0.0;
 
     chunkware_simple::SimpleCompRms micCompressor;
     chunkware_simple::SimpleCompRms replayCompressor;
@@ -176,6 +145,8 @@ private:
     QByteArray m_buffer;
     QByteArray p_buffer;
     unsigned long pipDelayBytes = 0;
+
+    bool pttState = false;
 
 };
 

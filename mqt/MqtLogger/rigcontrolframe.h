@@ -240,11 +240,15 @@ private:
     const QStringList MGM_TUNING_STEPS = {"100 Hz", "200 Hz", "300 Hz", "400 Hz", "500 Hz"};
     const QStringList CW_TUNING_STEPS = {"100 Hz", "200 Hz", "300 Hz", "400 Hz", "500 Hz"};
     const QStringList FM_TUNING_STEPS = {"5 KHz", "10 KHz", "12.5 KHz", "25 KHz"};
+    const QStringList RY_TUNING_STEPS = {"100 Hz", "200 Hz", "300 Hz", "400 Hz", "500 Hz"};
+    const QStringList PSK_TUNING_STEPS = {"100 Hz", "200 Hz", "300 Hz", "400 Hz", "500 Hz"};
     const int PH_DEFAULT_STEP = 1;
     const int USB_DEFAULT_STEP = 2;
     const int MGM_DEFAULT_STEP = 4;
     const int CW_DEFAULT_STEP = 4;
     const int FM_DEFAULT_STEP = 2;
+    const int RY_DEFAULT_STEP = 1;
+    const int PSK_DEFAULT_STEP = 1;
 
     QString oldRigState;
 

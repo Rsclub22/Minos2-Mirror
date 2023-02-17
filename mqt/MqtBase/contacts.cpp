@@ -26,6 +26,35 @@ CheckableContact::CheckableContact(const CheckableContact &ct) : QObject()
 }
 
 CheckableContact &CheckableContact::operator =(const CheckableContact &){return *this;}
+
+MinosFrequencyItem<Frequency> CheckableContact::getFrequency() const
+{
+    return freq;
+}
+void CheckableContact::setFrequency(MinosFrequencyItem<Frequency> f, QString b)
+{
+    freq = f;
+    band = b;
+}
+
+void CheckableContact::setFrequency(Frequency f, QString b)
+{
+    freq.setValue(f);
+    band = b;
+}
+void CheckableContact::clearFrequencyDirty()
+{
+    freq.clearDirty();
+}
+void CheckableContact::setFrequencyDirty()
+{
+    freq.setDirty();
+}
+bool CheckableContact::isFrequencyDirty()
+{
+    return freq.isDirty();
+}
+
 CheckableContact::CheckableContact(BaseContestLog * contest, dtg time_now ) : QObject()
   ,contest(contest), timeOn(time_now), timeOff(time_now)
 {
@@ -212,7 +241,7 @@ BaseContact& BaseContact::operator =( const BaseContact &ct )
    comments = ct.comments;
    contactFlags = ct.contactFlags;
    forcedMult = ct.forcedMult;
-   frequency = ct.frequency;
+   setFrequency(ct.getFrequency(), ct.band);
    rotatorHeading = ct.rotatorHeading;
    rigName = ct.rigName;
 
@@ -258,7 +287,7 @@ void BaseContact::clearDirty()
    comments.clearDirty();
    contactFlags.clearDirty();
    forcedMult.clearDirty();
-   frequency.clearDirty();
+   clearFrequencyDirty();
    rotatorHeading.clearDirty();
    rigName.clearDirty();
    op1.clearDirty();
@@ -283,7 +312,7 @@ void BaseContact::setDirty()
    comments.setDirty();
    contactFlags.setDirty();
    forcedMult.setDirty();
-   frequency.setDirty();
+   setFrequencyDirty();
    rotatorHeading.setDirty();
    rigName.setDirty();
    op1.setDirty();
@@ -420,7 +449,7 @@ void BaseContact::getText(QString &dest, const BaseContestLog * const curcon, bo
    else
    {
       // if contest requires a serial
-      makestrings( curcon ->serialMandatoryField.getValue() );
+      makestrings( curcon ->serialMandatoryField.getValue() || curcon->asymmetricMult.getValue() );
 
       contactBuffs.qthbuff = extraText.getValue().left( 100 );
 
@@ -481,7 +510,7 @@ void BaseContact::getText(QString &dest, const BaseContestLog * const curcon, bo
 
    if (forHistory)
    {
-       next = placestr(contactBuffs.buff, frequency.getValue().convertFreqStrDispSingle() + " " + tr("MHz"), next, -20);
+       next = placestr(contactBuffs.buff, getFrequency().getValue().convertFreqStrDispSingle() + " " + tr("MHz"), next, -20);
    }
 
    next = placestr( contactBuffs.buff, op1.getValue(), next, -8 );

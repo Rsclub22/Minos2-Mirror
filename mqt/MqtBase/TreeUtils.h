@@ -38,6 +38,7 @@ class GridColumn
 enum eLogGridCols {egDate,
                    egTime,
                    egBand,
+                   egMode,
                    egCall,
                    egRSTTx, egSNTx, egRSTRx, egSNRx,
                    egLoc, egBrg, egScore,

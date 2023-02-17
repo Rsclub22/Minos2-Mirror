@@ -9,6 +9,7 @@
 #include "SliderSpinner.h"
 #include "StdInReader.h"
 #include "qtimer.h"
+#include "vudata.h"
 
 namespace Ui {
 class KeyerMain;
@@ -70,7 +71,7 @@ private slots:
 
     void onPTT(bool);
 
-    void doSetVU(unsigned int peakvol, unsigned int rmsvol , unsigned int samples );
+    void doSetVU(vudata);
     void lcallback( bool pPTT, bool pPTTRef, bool pL1Ref, bool pL2Ref, int lmode );
 
     void doSliders(int, int, int, CompressorParams comp);
@@ -100,6 +101,12 @@ private slots:
     void on_doFilter_stateChanged(int arg1);
 
     void on_doCompression_stateChanged(int arg1);
+
+    void on_inputCombo_activated(int index);
+
+    void on_outputCombo_activated(int index);
+
+    void on_sampleRate_activated(int index);
 
 private:
     void syncSetLines();
@@ -131,9 +138,11 @@ private:
 
     int inVolChangeCount = 0;
 
-    unsigned int rmsvol= 0;
-    unsigned int peakvol = 0;
-    unsigned int samples = 0;
+    qreal rmsvol= 0;
+    qint16 peakvol = 0;
+    int samples = 0;
+
+    qreal actualRate = 0.0;
 
     QProcess *runner;
 

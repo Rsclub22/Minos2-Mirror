@@ -127,8 +127,7 @@ public:
     bool supportGetVoX(int rigNumber) override;
     int getVoxState(VFO vfo, bool &state) override;
 
-
-
+    bool modeSupported(MODE mode, Frequency f) override;
 private:
 
 
@@ -179,6 +178,7 @@ private:
 
 
     static bool supportVolume(int rigNumber);
+    static const freq_range_t *getFreqRange(RIG *myRig, const Frequency &freq);
 };
 
 #endif // HAMLIBRIGCONTROL_H

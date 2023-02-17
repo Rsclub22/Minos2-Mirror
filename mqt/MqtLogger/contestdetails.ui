@@ -30,8 +30,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>628</width>
-        <height>754</height>
+        <width>702</width>
+        <height>765</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_24">
@@ -917,6 +917,16 @@ Score between 4 fig loc centres</string>
             <widget class="QComboBox" name="ExchangeComboBox">
              <property name="sizeAdjustPolicy">
               <enum>QComboBox::AdjustToContents</enum>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QFrame" name="HFFrame">
+             <property name="frameShape">
+              <enum>QFrame::NoFrame</enum>
+             </property>
+             <property name="frameShadow">
+              <enum>QFrame::Plain</enum>
              </property>
             </widget>
            </item>

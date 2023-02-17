@@ -57,6 +57,40 @@ bool TLogContainer::loggerClosing = false;
 SetMemoryAction::SetMemoryAction(QString t, QObject *p):QAction(t, p)
 {}
 
+void TLogContainer::openSerialTVSwitch()
+{
+    if (!serialTVSw)
+    {
+        serialTVSw = new SerialTVSwitch();     // create local serial sw for band switching
+    }
+    else
+    {
+        serialTVSw->closeComport();
+    }
+
+    if (readEnableBandSwitchFromIni() && readEnableSerialBandSwitchFromIni())
+    {
+        trace(QString("Opening Bandswitch comport"));
+        QString comport = readSerialComportBandSwitchFromIni();
+        if (comport.isEmpty())
+        {
+            trace(QString("BandSwitch Comport is empty"));
+        }
+        else
+        {
+            if (serialTVSw->openComport(comport))
+            {
+                trace(QString("Bandswitch comport %1 opened OK").arg(comport));
+            }
+            else
+            {
+                QString errMsg = serialTVSw->error();
+                trace(QString("Bandswitch Comport failed to open = %1 Error = %2").arg(comport, errMsg));
+            }
+        }
+    }
+}
+
 TLogContainer::TLogContainer(QWidget *parent) :
     QMainWindow(parent)
   , ui(new Ui::TLogContainer)
@@ -74,7 +108,7 @@ TLogContainer::TLogContainer(QWidget *parent) :
     // make the tab control fill the window
     ui->centralWidget->layout()->setContentsMargins(0,0,0,0);
 
-    setWindowTitle(tr("Minos Contest Logger"));
+    setCaption(QString());
 
     setupMenus();
 
@@ -107,29 +141,7 @@ TLogContainer::TLogContainer(QWidget *parent) :
 
     ScreenConfigFile::getScreenConfigFile(this);  // get configs loaded
 
-    serialTVSw = new SerialTVSwitch();     // create local serial sw for band switching
-
-    if (readEnableBandSwitchFromIni() && readEnableSerialBandSwitchFromIni())
-    {
-        trace(QString("Opening Bandswitch comport"));
-        QString comport = readSerialComportBandSwitchFromIni();
-        if (comport.isEmpty())
-        {
-            trace(QString("BandSwitch Comport is empty"));
-        }
-        else
-        {
-            if (serialTVSw->openComport(comport))
-            {
-                trace(QString("Bandswitch comport %1 opened OK").arg(comport));
-            }
-            else
-            {
-                QString errMsg = serialTVSw->error();
-                trace(QString("Bandswitch Comport failed to open = %1 Error = %2").arg(comport, errMsg));
-            }
-        }
-    }
+    openSerialTVSwitch();
 
 
     contestPageControls.append(ui->contestPageControl);
@@ -240,8 +252,11 @@ bool TLogContainer::show(int argc, char *argv[])
     }
     TContestApp::getContestApp()->setPreloadComplete();
     sendDM->subscribeApps();
-
-    n1mmBroadcast.configure();
+    if (!n1mmBroadcast)
+    {
+        n1mmBroadcast = new N1MMBroadcast();
+    }
+    n1mmBroadcast->configure();
     WsjtxServer::getWsjtxServer()->start();
 
     return true;
@@ -382,7 +397,7 @@ void TLogContainer::changeEvent( QEvent* e )
             i.key()->setText(tr(i.value()));
         }
         ui->retranslateUi(this);
-        setWindowTitle(tr("Minos Contest Logger"));
+        setCaption(QString());
     }
     QMainWindow::changeEvent(e);
 }
@@ -506,7 +521,6 @@ void TLogContainer::setupMenus()
     CorrectDateTimeAction = newAction(QT_TR_NOOP("Correct Date/Time..."), ui->menuTools, &TLogContainer::CorrectDateTimeActionExecute);
     ui->menuTools->addSeparator();
 
-    CheckUpdatesAction = newAction(QT_TR_NOOP("Check For Updates..."), ui->menuTools, &TLogContainer::CheckUpdatesActionExecute);
     OptionsAction = newAction(QT_TR_NOOP("Options..."), ui->menuTools, &TLogContainer::OptionsActionExecute);
 
     AdvancedOptionsAction = newAction(QT_TR_NOOP("Advanced Options..."), ui->menuTools, &TLogContainer::AdvancedOptionsActionExecute);
@@ -554,6 +568,7 @@ void TLogContainer::setupMenus()
     newAction( QT_TR_NOOP("Cancel"), &TabPopup, &TLogContainer::CancelClick);
 
     HelpAction = newAction(QT_TR_NOOP("Help..."), ui->menuHelp, &TLogContainer::HelpActionExecute);
+    CheckUpdatesAction = newAction(QT_TR_NOOP("Check For Updates..."), ui->menuHelp, &TLogContainer::CheckUpdatesActionExecute);
     HelpAboutAction = newAction(QT_TR_NOOP("About..."), ui->menuHelp, &TLogContainer::HelpAboutActionExecute);
 }
 
@@ -777,7 +792,7 @@ void TLogContainer::onSetMemoryActionExecute()
 {
     // look in setMemoryaction
 
-    emit MinosLoggerEvents::sendSetMemory(setMemoryAction->ct, setMemoryAction->call, setMemoryAction->loc);
+    emit MinosLoggerEvents::SendSetMemory(setMemoryAction->ct, setMemoryAction->call, setMemoryAction->loc);
 }
 void TLogContainer::FileNewActionExecute(bool hf)
 {
@@ -833,10 +848,14 @@ void TLogContainer::FileNewActionExecute(bool hf)
       suggestedfName += QDate::currentDate().toString( "yyyy_MM_dd" );
    }
    QString band = c->contestBands.getValue();
+   if (band == allHF)
+   {
+       band = tr("All HF");
+   }
    if ( band.size() )
    {
       suggestedfName += '_';
-      suggestedfName += band;
+      suggestedfName += band.replace('-', '_').replace('/','_').replace(' ','_');
    }
    QString nameBase = suggestedfName;
    int fnum = 1;
@@ -1104,7 +1123,12 @@ void TLogContainer::OptionsActionExecute()
 {
     OptionsDialog od;
 
-    od.exec();
+    if (od.exec() == QDialog::Accepted)
+    {
+
+        // This is a somwhat clumsy method...
+        openSerialTVSwitch();
+    }
 }
 void TLogContainer::AdvancedOptionsActionExecute()
 {
@@ -1203,7 +1227,11 @@ void TLogContainer::AppendAdifActionExecute()
         ct->commonSave( false );
         ct->scanContest();          // after append ADIF file, required
         //ct->validateLoc();
-        MinosLoggerEvents::SendAfterLogContact(ct);          // after append ADIF file
+        for ( int i = spoint; i != ct->ctList.count(); i++ )
+        {
+            QSharedPointer<BaseContact> bct = ct->pcontactAt(i);
+            MinosLoggerEvents::SendAfterLogContact(ct, bct);          // after append ADIF file
+        }
         TSingleLogFrame * tslf = LogContainer ->findContest( ct );
 
         tslf->updateTrees();
@@ -1607,7 +1635,6 @@ void TLogContainer::updateLayoutsMenu()
 
         ScreenConfigFile &scf = ScreenConfigFile::getScreenConfigFile(this);
 
-        int j = 0;
         for(auto const &c: qAsConst(scf.configs ))
         {
             QAction *act =  new QAction(this);
@@ -1633,8 +1660,6 @@ void TLogContainer::updateLayoutsMenu()
                 act->setChecked(true);
                 lastLayoutSelected = act;
             }
-
-            j++;
         }
     }
 }
@@ -1776,6 +1801,7 @@ void TLogContainer::selectSession(QString sessName)
     if (sessName.isEmpty())
         return;
 
+    trace(QString("selectSession %1").arg(sessName));
     TContestApp *app = TContestApp::getContestApp();
     app->suppressWritePreload = true;
 
@@ -2186,14 +2212,19 @@ void TLogContainer::selectContest( BaseContestLog *pc)
 //---------------------------------------------------------------------------
 void TLogContainer::setCaption(QString captionToSet)
 {
-   if ( windowTitle().length() )
+   if ( captionToSet.length() )
    {
       if ( captionToSet != windowTitle() )
          setWindowTitle(captionToSet);
    }
    else
-      if ( windowTitle() != tr("Minos contest Logger Application") )
-         setWindowTitle(tr("Minos contest Logger Application"));
+   {
+      QString trs = tr("Minos Contest Logger Application");
+      if ( windowTitle() != trs )
+      {
+         setWindowTitle(trs);
+      }
+   }
 }
 //---------------------------------------------------------------------------
 TSingleLogFrame *TLogContainer::findContest(const QString &pubname )
@@ -2252,7 +2283,10 @@ void TLogContainer::stealFocus()
         setWindowState(ss | Qt::WindowState::WindowActive);
 
         TSingleLogFrame *tslf = getCurrentLogFrame();
-        tslf->GJVQSOLogFrame->selectFirstInvalid();
+        if (tslf)
+        {
+            tslf->GJVQSOLogFrame->selectFirstInvalid();
+        }
     });
 
 }

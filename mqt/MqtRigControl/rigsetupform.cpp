@@ -76,6 +76,8 @@ RigSetupForm::RigSetupForm(RigFactory* rigFactory_, QSharedPointer<scatParams> _
     connect(ui->pollInterval, QOverload<int>::of(&QComboBox::activated), this, &RigSetupForm::pollIntervalSelected);
     connect(ui->enableTransVert, &QCheckBox::clicked, this, &RigSetupForm::enableTransVertSelected);
     connect(ui->mgmBox, QOverload<int>::of(&QComboBox::activated), this, &RigSetupForm::mgmModeSelected);
+    connect(ui->rttyBox, QOverload<int>::of(&QComboBox::activated), this, &RigSetupForm::rttyModeSelected);
+    connect(ui->pskBox, QOverload<int>::of(&QComboBox::activated), this, &RigSetupForm::pskModeSelected);
     connect(ui->CIVlineEdit, &QLineEdit::editingFinished, this, &RigSetupForm::civAddressFinished);
 
 
@@ -121,40 +123,28 @@ RigSetupForm::~RigSetupForm()
     delete ui;
 }
 
-
-
-
-
-QSharedPointer<scatParams> RigSetupForm::getRadioData()
+QSharedPointer<scatParams> RigSetupForm::getRadioData() const
 {
     return radioData;
 }
-
 
 void RigSetupForm::setCurrentRadioName(QString name)
 {
     currentRadioName = name;
 }
 
-
 /************************ Radio Model Dialogue *********************/
 
 
 void RigSetupForm::radioModelSelected()
 {
-
     setupRadioModel(ui->radioModelBox->currentText());
-
-
-
 }
 
 
 void RigSetupForm::setupRadioModel(QString radioModel)
 {
 // need to do something is selection is empty!!!!!!!!!!!!!!!!!!!!!!!!
-
-
 
     if (radioModel != radioData->rigModel)
     {
@@ -294,7 +284,7 @@ void RigSetupForm::setupRadioModel(QString radioModel)
 
 }
 
-QString RigSetupForm::getRadioModel()
+QString RigSetupForm::getRadioModel() const
 {
     return ui->radioModelBox->currentText();
 }
@@ -383,7 +373,7 @@ void RigSetupForm::civSetToolTip()
 
 }
 
-QString RigSetupForm::getCIVAddress()
+QString RigSetupForm::getCIVAddress() const
 {
     return ui->CIVlineEdit->text();
 }
@@ -446,7 +436,7 @@ void RigSetupForm::comportSelected()
     }
 }
 
-QString RigSetupForm::getComport()
+QString RigSetupForm::getComport() const
 {
     return ui->comPortBox->currentText();
 }
@@ -489,7 +479,7 @@ void RigSetupForm::comSpeedSelected()
 }
 
 
-QString RigSetupForm::getDataSpeed()
+QString RigSetupForm::getDataSpeed() const
 {
     return ui->comSpeedBox->currentText();
 }
@@ -510,7 +500,7 @@ void RigSetupForm::comDataBitsSelected()
     }
 }
 
-QString RigSetupForm::getDataBits()
+QString RigSetupForm::getDataBits() const
 {
     return ui->comDataBitsBox->currentText();
 }
@@ -533,7 +523,7 @@ void RigSetupForm::comStopBitsSelected()
     }
 }
 
-QString RigSetupForm::getStopBits()
+QString RigSetupForm::getStopBits() const
 {
     return ui->comStopBitsBox->currentText();
 }
@@ -580,7 +570,7 @@ void RigSetupForm::comHandShakeSelected()
 }
 
 
-QString RigSetupForm::getHandshake()
+QString RigSetupForm::getHandshake() const
 {
     return ui->comHandShakeBox->currentText();
 }
@@ -699,7 +689,7 @@ void RigSetupForm::networkAddressSelected()
 
 }
 
-QString RigSetupForm::getNetAddress()
+QString RigSetupForm::getNetAddress() const
 {
     return ui->networkAddBox->text();
 }
@@ -719,7 +709,7 @@ void RigSetupForm::networkPortSelected()
 
 }
 
-QString RigSetupForm::getNetPortNum()
+QString RigSetupForm::getNetPortNum() const
 {
     return ui->netPortBox->text();
 }
@@ -729,20 +719,54 @@ void RigSetupForm::setNetPortNum(QString p)
     ui->netPortBox->setText(p);
 }
 
+/************************* RTTY Mode *********************************/
+void RigSetupForm::rttyModeSelected()
+{
+    if (ui->rttyBox->currentText() != radioData->rttyMode)
+    {
+        radioData->rttyMode = ui->rttyBox->currentText();
+    }
+}
+
+QString RigSetupForm::getRttyMode() const
+{
+    return ui->rttyBox->currentText();
+}
+
+void RigSetupForm::setRttyMode(QString p)
+{
+    ui->rttyBox->setCurrentText(p);
+}
+
+/************************* PSK Mode *********************************/
+void RigSetupForm::pskModeSelected()
+{
+    if (ui->pskBox->currentText() != radioData->pskMode)
+    {
+        radioData->pskMode = ui->pskBox->currentText();
+    }
+}
+
+QString RigSetupForm::getPskMode() const
+{
+    return ui->pskBox->currentText();
+}
+
+void RigSetupForm::setPskMode(QString p)
+{
+    ui->pskBox->setCurrentText(p);
+}
+
 /************************* MGM Mode *********************************/
-
-
-
 void RigSetupForm::mgmModeSelected()
 {
     if (ui->mgmBox->currentText() != radioData->mgmMode)
     {
         radioData->mgmMode = ui->mgmBox->currentText();
-
     }
 }
 
-QString RigSetupForm::getMgmMode()
+QString RigSetupForm::getMgmMode() const
 {
     return ui->mgmBox->currentText();
 }
@@ -764,7 +788,7 @@ void RigSetupForm::pollIntervalSelected()
     }
 }
 
-QString RigSetupForm:: getPollInterval()
+QString RigSetupForm:: getPollInterval() const
 {
     return ui->pollInterval->currentText();
 }
@@ -810,7 +834,7 @@ void RigSetupForm::enableTransVertSelected(bool /*flag*/)
 
 }
 
-bool RigSetupForm::getTransVertSelected()
+bool RigSetupForm::getTransVertSelected() const
 {
     return ui->enableTransVert->isChecked();
 }
@@ -851,7 +875,7 @@ void RigSetupForm::enableTransVertSwSel(bool /*flag*/)
 }
 
 
-bool RigSetupForm::getEnableTransVertSw()
+bool RigSetupForm::getEnableTransVertSw() const
 {
     return ui->enableTransVertSw->isChecked();
 }
@@ -891,7 +915,7 @@ void RigSetupForm::localTransVertSwSel(bool /*flag*/)
 
 }
 
-bool RigSetupForm::getEnableLocalTransVertSw()
+bool RigSetupForm::getEnableLocalTransVertSw() const
 {
     return ui->locTvConChk->isChecked();
 }
@@ -927,7 +951,7 @@ void RigSetupForm::locTVComPortSel(int /*index*/)
     }
 }
 
-QString RigSetupForm::getLocTVSwComport()
+QString RigSetupForm::getLocTVSwComport() const
 {
     return ui->locTVComPortSel->currentText();
 }
@@ -1053,7 +1077,7 @@ void RigSetupForm::rigCtldNetworkAddressSelected()
     }
 }
 
-QString RigSetupForm::getRigctldNetworkAddress()
+QString RigSetupForm::getRigctldNetworkAddress() const
 {
     return ui->rigCtldNetworkAddBox->text();
 }
@@ -1069,7 +1093,7 @@ void RigSetupForm::rigCtldNetworkPortSelected()
 }
 
 
-QString RigSetupForm::getRigctldPortNumber()
+QString RigSetupForm::getRigctldPortNumber() const
 {
     return ui->rigCtldNetPortBox->text();
 }
@@ -1103,6 +1127,8 @@ void RigSetupForm::setEnableRigDataEntry(bool enable)
     ui->forceRtsBox->setEnabled(enable);
     ui->pollInterval->setEnabled(enable);
     ui->mgmBox->setEnabled(enable);
+    ui->rttyBox->setEnabled(enable);
+    ui->pskBox->setEnabled(enable);
     ui->enableTransVert->setEnabled(enable);
 
 }
@@ -1253,15 +1279,28 @@ void RigSetupForm::fillMgmModes()
     fileName = RIG_CONFIGURATION_FILEPATH_LOGGER + MINOS_RADIO_CONFIG_FILE;
     QSettings config(fileName, QSettings::IniFormat);
     config.beginGroup("MGM_Modes");
-
-
     // this config is only ever preset at install time
     QStringList mgmModes = config.value("MgmModes", "").toStringList();
-
     config.endGroup();
 
      ui->mgmBox->clear();
      ui->mgmBox->addItems(mgmModes);
+
+     config.beginGroup("RTTY_Modes");
+     // this config is only ever preset at install time
+     QStringList rttyModes = config.value("RTTYModes", "").toStringList();
+      config.endGroup();
+
+     ui->rttyBox->clear();
+     ui->rttyBox->addItems(rttyModes);
+
+     config.beginGroup("PSK_Modes");
+     // this config is only ever preset at install time
+     QStringList pskModes = config.value("PSKModes", "").toStringList();
+
+     config.endGroup();
+     ui->pskBox->clear();
+     ui->pskBox->addItems(pskModes);
 }
 
 
@@ -2115,7 +2154,7 @@ void RigSetupForm::onPttComportSelActivated(int /*idx*/)
     }
 }
 
-bool RigSetupForm::isPttComportEqualCatComport()
+bool RigSetupForm::isPttComportEqualCatComport() const
 {
     if (radioData->comport == radioData->pttSerialPort)
     {

@@ -37,8 +37,8 @@ void ScreenContact::initialise(BaseContestLog *ct , bool rInit)
     int ms = 0;
     if ( clp )
     {
-        mode = clp->currentMode.getValue();
-        if (mode == hamlibData::MGM)
+        mode = clp->currentMode;
+        if (mode.getValue() == hamlibData::MGM)
         {
             // don't clear submode - keep the old one
         }
@@ -49,7 +49,7 @@ void ScreenContact::initialise(BaseContestLog *ct , bool rInit)
         ms = clp->maxSerial + 1;
     }
 
-    if (mode != hamlibData::MGM)
+    if (mode.getValue() != hamlibData::MGM)
     {
         QString cb = clp->currentBand.getValue().trimmed();
         BandList &blist = BandList::getBandList();
@@ -69,7 +69,8 @@ void ScreenContact::initialise(BaseContestLog *ct , bool rInit)
         }
         if (hf)
         {
-             if (mode == hamlibData::CW)
+            QString m = mode.getValue();
+             if (m == hamlibData::CW || m == hamlibData::RY || m == hamlibData::PSK)
              {
                  repr = "599" ;
                  reps = "599" ;
@@ -108,7 +109,8 @@ void ScreenContact::initialise(BaseContestLog *ct , bool rInit)
     comments.setValue(QString());
     contactFlags.setValue(0);
     forcedMult.setValue(QString());
-    frequency.setValue(Frequency());
+    setFrequency(Frequency(), QString());
+    markOffset.clear();
     rotatorHeading = "";
     rigName = "";
     QSOValid = false;
@@ -159,7 +161,8 @@ void ScreenContact::copyFromArg( QSharedPointer<BaseContact> cct )
     ctryMult = cct->ctryMult;
     multCount = cct->multCount;
     forcedMult = cct->forcedMult;
-    frequency = cct->frequency;
+    setFrequency(cct->getFrequency(), cct->band);
+    markOffset = cct->markOffset;
     rotatorHeading = cct->rotatorHeading.getValue();
     rigName = cct->rigName.getValue();
     bonus = cct->bonus;
@@ -180,7 +183,7 @@ void ScreenContact::copyFromArg( QSharedPointer<BaseContact> cct )
 
     contactScore = cct->contactScore;
     bearing = cct->bearing;
-    mode = cct->mode.getValue();
+    mode = cct->mode;
     mgmSubmode = cct->mgmSubmode.getValue();
     cqResponse = cct->cqResponse.getValue();
 }
@@ -211,7 +214,8 @@ void ScreenContact::copyFromArg( ScreenContact &cct )
     ctryMult = cct.ctryMult;
     multCount = cct.multCount;
     forcedMult = cct.forcedMult;
-    frequency = cct.frequency;
+    setFrequency(cct.getFrequency(), cct.band);
+    markOffset = cct.markOffset;
     rotatorHeading = cct.rotatorHeading;
     rigName = cct.rigName;
     bonus = cct.bonus;
@@ -272,9 +276,6 @@ void ScreenContact::score()
     {
 
         // now we want to look for mults and bonuses
-
-        QString band;
-        contest->getTxFreqBand(frequency.getValue(), band);
 
         if ( districtMult && (districtMult->country1 || cs.getFullCall().isEmpty()))
         {

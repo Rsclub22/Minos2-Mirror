@@ -14,10 +14,8 @@ INCLUDEPATH += ../MqtBase
 INCLUDEPATH += ../XMPPLib
 INCLUDEPATH += ../TinyXML
 
-
-
 unix:!macos{DEFINES += __LINUX_ALSA__}
-win32{DEFINES += __WINDOWS_DS__}
+win32{DEFINES += __WINDOWS_WASAPI__}
 
 SOURCES += \
     ../filter_c/adis_filter.c \
@@ -31,11 +29,16 @@ SOURCES += \
     SliderSpinner.cpp \
     VKMixer.cpp \
     WaveShowDialog.cpp \
+    databuffer.cpp \
+    inbuff.cpp \
+    ipsystem.cpp \
     keyerBase.cpp \
     levelmeter.cpp \
     riff.cpp \
+    riffwriter.cpp \
     sbdriver.cpp \
-    soundsys.cpp
+    soundsys.cpp \
+    vudata.cpp
 
 HEADERS += \
     ../filter_c/adis_filter.h \
@@ -54,14 +57,19 @@ HEADERS += \
     SliderSpinner.h \
     VKMixer.h \
     WaveShowDialog.h \
+    databuffer.h \
     ddc.h \
+    inbuff.h \
+    ipsystem.h \
     keyctrl.h \
     keyerBase.h \
     keyerlog.h \
     levelmeter.h \
     riff.h \
+    riffwriter.h \
     sbdriver.h \
-    soundsys.h
+    soundsys.h \
+    vudata.h
 
 # Default rules for deployment.
 unix {

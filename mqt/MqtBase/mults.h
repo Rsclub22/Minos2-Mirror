@@ -62,7 +62,7 @@ class GlistEntry
 
       QString synPrefix;
       QString dupPrefix;
-      qHashRet qHash()
+      qHashRet qHash() const
       {
           return ::qHash(synPrefix);
       }
@@ -102,7 +102,7 @@ class DistrictEntry : public MultEntry
 
       virtual QString str( bool );
       virtual void addSynonyms( QString & );
-      qHashRet qHash()
+      qHashRet qHash() const
       {
           return ::qHash(districtCode);
       }
@@ -120,7 +120,7 @@ class DistrictSynonym
       bool operator<( const DistrictSynonym& rhs ) const;
       bool operator==( const DistrictSynonym& rhs ) const;
       bool operator!=( const DistrictSynonym& rhs ) const;
-      qHashRet qHash()
+      qHashRet qHash() const
       {
           return ::qHash(synonym);
       }
@@ -147,7 +147,7 @@ class CountryEntry : public MultEntry
       bool operator<( const CountryEntry& rhs ) const;
       bool operator==( const CountryEntry& rhs ) const;
       bool operator!=( const CountryEntry& rhs ) const;
-      qHashRet qHash()
+      qHashRet qHash() const
       {
           return ::qHash(basePrefix);
       }
@@ -180,7 +180,7 @@ public:
       bool operator<( const CountrySynonym& rhs ) const;
       bool operator==( const CountrySynonym& rhs ) const;
       bool operator!=( const CountrySynonym& rhs ) const;
-      qHashRet qHash()
+      qHashRet qHash() const
       {
           return ::qHash(synPrefix);
       }

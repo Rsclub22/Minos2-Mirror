@@ -89,6 +89,7 @@ private:
 
     MinosStringItem<QString> contestBands;
     MinosStringItem<QString> currentBand;
+    MinosStringItem<QString> bandsList;
     MinosItem<bool> hfContest;
     MinosItem<bool> otherExchange;
     MinosItem<bool> otherOptionalExchange;
@@ -98,6 +99,7 @@ private:
     MinosItem<bool> GLocMult;
     MinosItem<bool> districtMult;
     MinosItem<int>  otherMult;
+    MinosItem<bool> asymmetricMult;
 
     MinosItem<bool> M7Mults;
 
@@ -117,6 +119,11 @@ private:
 
     MinosStringItem<QString> currentOp1;         // current main op - derived from contacts
     MinosStringItem<QString> currentOp2;         // current second op - derived from contacts
+
+    MinosStringItem<QString> zoomLevel;
+
+    MinosStringItem<QString> centreLat;
+    MinosStringItem<QString> centreLon;
 
     OperatorList oplist;
 

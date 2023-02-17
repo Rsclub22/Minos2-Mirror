@@ -14,8 +14,10 @@ MonitoringFrame::MonitoringFrame(MonitorMain *parent) :
     ui(new Ui::MonitoringFrame)
 {
     ui->setupUi(this);
-
-
+}
+MonitoringFrame::~MonitoringFrame()
+{
+    delete ui;
 }
 void MonitoringFrame::viewColumn()
 {
@@ -65,10 +67,6 @@ void MonitoringFrame::onQSOTable_sectionMoved(int, int, int)
 void MonitoringFrame::onQSOTable_sectionResized(int, int , int)
 {
     saveQSOTableColumns();
-}
-MonitoringFrame::~MonitoringFrame()
-{
-    delete ui;
 }
 void MonitoringFrame::initialise( BaseContestLog * pcontest )
 {
@@ -147,6 +145,13 @@ void MonitoringFrame::on_monitorTimeout()
             getContest()->DupSheet.clear();
             getContest()->scanContest();  // this is MUCH too often... timer is 100ms!
             rescanNeeded = false;
+
+            if (qsoMapFrame)
+            {
+                QSharedPointer<BaseContact> lct;
+                qsoMapFrame->on_AfterLogContact(getContest(), lct);
+            }
+
         }
         setScore();
 
@@ -162,7 +167,12 @@ void MonitoringFrame::on_mapButton_clicked()
         ui->QSOTable->setVisible(false);
 
         qsoMapFrame = new QSOMapFrame(nullptr);
-        qsoMapFrame->setContest(getContest());
+        BaseContestLog *ct = getContest();
+        bool grid = monitorMain->QSOGrid;
+        bool lines = monitorMain->QSOLines;
+        bool spots = monitorMain->mapShowSpots;
+        int sd = monitorMain->clusterDistanceLimit;
+        qsoMapFrame->setContest(ct, true, grid, lines, spots, sd );
         ui->logFrame->layout()->addWidget(qsoMapFrame);
         ui->logFrame->layout()->removeWidget(ui->QSOTable);
 

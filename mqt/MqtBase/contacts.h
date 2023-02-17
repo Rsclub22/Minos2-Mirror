@@ -94,7 +94,10 @@ public:
     QSharedPointer<DistrictEntry> districtMult;
     QSharedPointer<CountryEntry> ctryMult;
 
-    MinosFrequencyItem<Frequency> frequency;
+    Frequency markOffset;
+    MinosStringItem<QString> mode;
+
+    QString band;   // set at the same time as frequency
 
     int bearing = -1;
     bool QSOValid =false;
@@ -119,6 +122,8 @@ protected:
     virtual ~CheckableContact(){};
 
 public:
+    MinosFrequencyItem<Frequency> freq;
+
     void setLogSequence( unsigned long ul )
     {
        logSequence = ul;
@@ -151,6 +156,13 @@ public:
     bool notValidContact();
     void calcDisBear();
     int checkDistrict(int checkret);
+    MinosFrequencyItem<Frequency> getFrequency() const;
+    void setFrequency(Frequency f, QString b);
+    void setFrequency(MinosFrequencyItem<Frequency> f, QString b);
+
+    void clearFrequencyDirty();
+    void setFrequencyDirty();
+    bool isFrequencyDirty();
 };
 
 class BaseContact: public CheckableContact
@@ -197,7 +209,6 @@ class BaseContact: public CheckableContact
 
       dtg updtime;      //CONTAIN MinosItem
 
-      MinosStringItem<QString> mode;
       MinosStringItem<QString> mgmSubmode;
       MinosStringItem<QString> reps;
       MinosStringItem<QString> serials;

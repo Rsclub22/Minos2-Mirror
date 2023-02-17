@@ -254,10 +254,10 @@ void RSMainWindow::on_transfer21Button_clicked()
     }
 }
 
-void RSMainWindow::on_notify( AnalysePubSubNotify an, const QString from )
+void RSMainWindow::on_notify( AnalysePubSubNotify an, const QString /*from*/ )
 {
     // PubSub notifications
-    trace( "Notify callback from " + from + ( !an.getOK() ? ":Error" : ":Normal" ) );
+//    trace( "Notify callback from " + from + ( !an.getOK() ? ":Error" : ":Normal" ) );
 
     if ( an.getOK() )
     {
@@ -411,10 +411,10 @@ void RSMainWindow::on_notify( AnalysePubSubNotify an, const QString from )
 }
 
 //---------------------------------------------------------------------------
-void RSMainWindow::on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString from )
+void RSMainWindow::on_routerCall(bool /*err*/, QSharedPointer<MinosRPCObj> /*mro*/, const QString /*from*/ )
 {
-    trace( "router callback from " + from + ( err ? ":Error" : ":Normal" ) );
-    trace("method is " + mro->getMethodName());
+//    trace( "router callback from " + from + ( err ? ":Error" : ":Normal" ) );
+//    trace("method is " + mro->getMethodName());
 }
 //---------------------------------------------------------------------------
 

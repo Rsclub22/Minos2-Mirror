@@ -789,11 +789,11 @@ void BandmapView::clearSelectedSpotData()
     clearSpotData(selectedSpot);
 }
 
-void BandmapView::clearSpotData(BandmapSpotData &selectedSpot)
+void BandmapView::clearSpotData(ClusterSpotData &selectedSpot)
 {
     selectedSpotDataRowNum = NO_SELECTED_ROWNUM;
     selectedSpotViewRowNum = NO_SELECTED_ROWNUM;
-    selectedSpot.clear();
+    selectedSpot = ClusterSpotData();
 }
 
 void BandmapView::setSelectedSpot(int spotViewNum)
@@ -825,7 +825,7 @@ void BandmapView::clearListOfMarkers()
     listOfMarkers.clear();
 }
 
-void BandmapView::getSpotData(int &selectedSpotDataRowNum, int selectedSpotViewRowNum, BandmapSpotData &selectedSpot)
+void BandmapView::getSpotData(int &selectedSpotDataRowNum, int selectedSpotViewRowNum, ClusterSpotData &selectedSpot)
 {
     selectedSpotDataRowNum = listOfMarkers[selectedSpotViewRowNum]->getModelRowNum();
 
@@ -902,7 +902,7 @@ void BandmapView::drawBandmapSpot(int row, int &fontOffset, int markersAbove, in
 
                 }
             }
-            //QString type = BandmapSpotData::spotName(savedSpotType);
+            //QString type = ClusterSpotData::spotName(savedSpotType);
             //trace(QString("DrawBandmapSpot (above) row = %6 type = %5 curfreq %1 freq %2 syCoord %3 lastoffset %4").arg(curFreq.traceStr()).arg(f.traceStr()).arg(syCoord).arg(lastOffset).arg(type).arg(row));
 
         }
@@ -921,7 +921,7 @@ void BandmapView::drawBandmapSpot(int row, int &fontOffset, int markersAbove, in
                 syCoord = centreYCoord - fontOffset;
 
             }
-            //QString type = BandmapSpotData::spotName(savedSpotType);
+            //QString type = ClusterSpotData::spotName(savedSpotType);
             //trace(QString("DrawBandmapSpot (below) row = %6 type = %5 curfreq %1 freq %2 syCoord %3 lastoffset %4").arg(curFreq.traceStr()).arg(f.traceStr()).arg(syCoord).arg(lastOffset).arg(type).arg(row));
         }
         lastOffset = fontOffset;
@@ -1093,7 +1093,6 @@ void BandmapView::drawBandMapSpots()
                         return a->getSpotMarkerPtr()->y() < b->getSpotMarkerPtr()->y();
                     }
                   );
-        trace("sort finished");
         int miny = listOfMarkers[0]->getSpotMarkerCoord().y() - fontHeight;
         int maxy = listOfMarkers[listOfMarkers.size() - 1]->getSpotMarkerCoord().y() + fontHeight;
 
@@ -1418,6 +1417,16 @@ void BandmapView::assembleSpotMsg(int row, QString& markerMsg)
     QString bLineStart = "";
     QString bLineEnd = "";
 
+    Frequency mfreq = cFreq;
+    if (dxMode.compare( hamlibData::RY, Qt::CaseInsensitive ) == 0)
+    {
+         mfreq = mfreq + Frequency(RTTY_MARK_OFFSET);
+    }
+    if (dxMode.compare( hamlibData::PSK, Qt::CaseInsensitive ) == 0)
+    {
+        mfreq = mfreq - Frequency(BPSK_OFFSET);
+    }
+
     int offset = std::abs(freq - cFreq);
     if (offset < 1000 )
     {
@@ -1495,7 +1504,7 @@ void BandmapView::assembleToolTip(int row, Frequency freq, QString& toolTipMsg)
     QString computedMode = model()->data(model()->index(row, DXSPOT_MODE_COL_NUM), BMP_DataStoredRole).toString();
     bandmapSpotType::SPOT_TYPE spotType = static_cast<bandmapSpotType::SPOT_TYPE>(model()->data(model()->index(row, SPOT_TYPE_COL_NUM), BMP_DataStoredRole).toInt());
 
-    QString spotName = BandmapSpotData::spotName(spotType);
+    QString spotName = ClusterSpotData::spotName(spotType);
     QString spotModeMsg = tr("The computed mode is");
     if (spotType == bandmapSpotType::LOGGED)
     {

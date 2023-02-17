@@ -53,7 +53,7 @@ public:
     int isClickInRegionOfSpot(QPoint p);
 
 
-    void getSpotData(int &selectedSpotDataRowNum, int displayedSpotNum, BandmapSpotData &selectedSpot);
+    void getSpotData(int &selectedSpotDataRowNum, int displayedSpotNum, ClusterSpotData &selectedSpot);
 
     void clearSelectedSpotData();
 
@@ -61,7 +61,7 @@ public:
 
     int getSelectedSpotDataRowNum(){return selectedSpotDataRowNum;}
 
-    BandmapSpotData* getSelectedSpotDataPtr(){return &selectedSpot;}
+    ClusterSpotData* getSelectedSpotDataPtr(){return &selectedSpot;}
 
     void clearSelectedSpot();
 
@@ -150,7 +150,7 @@ private:
     void drawBandMapSpots();
     QVector<BandmapMarkerDetails*> listOfMarkers;
 
-    BandmapSpotData selectedSpot;
+    ClusterSpotData selectedSpot;
     int selectedSpotDataRowNum;
     int selectedSpotViewRowNum;
 
@@ -178,7 +178,7 @@ private:
     int getViewPortStartYCoordOnScene();
     int getViewPortEndYCoordOnScene();
     void traceMsg(QString msg);
-    void clearSpotData(BandmapSpotData &selectedSpot);
+    void clearSpotData(ClusterSpotData &selectedSpot);
     void deleteItemsFromMarkerList();
     void assembleCqToolTip(int row, Frequency freq, QString& toolTipMsg);
     void assembleCqMsg(int row, QString& markerMsg);

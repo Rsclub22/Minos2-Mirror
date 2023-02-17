@@ -99,7 +99,17 @@ QString CTYCalendarYear::getURL()
     return getSite();
 }
 //---------------------------------------------------------------------------
+void CalendarYear::ignoreSslErrors(const QList<QSslError> &errors)
+{
+// All then error ignore stuff comes from
+// https://myprogrammingnotes.com/ssltls-handshake-failed-encrypted-channel-established-sslerrors-signal-emitted.html
 
+// strangely, it only appears to have been needed on a "virgin" Windows 10 VM
+    for (const auto &e:errors)
+    {
+        trace(QString("CalendarYear::ignoreSslErrors %1").arg(e.errorString()));
+    }
+}
 //---------------------------------------------------------------------------
 bool CalendarYear::downloadFile ( bool showError, QWidget *parent )
 {
@@ -111,12 +121,19 @@ bool CalendarYear::downloadFile ( bool showError, QWidget *parent )
     QUrl qurl( calendarURL );
     QNetworkRequest qnr( qurl );
 
+    QSslConfiguration conf = qnr.sslConfiguration();
+    conf.setPeerVerifyMode(QSslSocket::VerifyNone);
+    qnr.setSslConfiguration(conf);
+
     qnr.setRawHeader( "User-Agent" , "Mozilla/4.0 (compatible;Minos2)" );
 
     QSharedPointer<QNetworkReply> reply = QSharedPointer<QNetworkReply>(m_NetworkMngr.get( qnr ));
 
+    connect( reply.data(), &QNetworkReply::sslErrors, this, &CalendarYear::ignoreSslErrors);
+
     QEventLoop loop;
-    QObject::connect( reply.data(), &QNetworkReply::finished, &loop, &QEventLoop::quit);
+    connect( reply.data(), &QNetworkReply::finished, &loop, &QEventLoop::quit);
+
     loop.exec();
 
     if ( reply->error() == QNetworkReply::NoError )
@@ -127,11 +144,15 @@ bool CalendarYear::downloadFile ( bool showError, QWidget *parent )
             QUrl redirect =  reply->attribute(QNetworkRequest::RedirectionTargetAttribute).toUrl();
 
             QNetworkRequest qnr1( redirect );
+            QSslConfiguration conf = qnr1.sslConfiguration();
+            conf.setPeerVerifyMode(QSslSocket::VerifyNone);
+            qnr1.setSslConfiguration(conf);
             qnr1.setRawHeader( "User-Agent" , "Mozilla/4.0 (compatible;Minos2)" );
 
             reply = QSharedPointer<QNetworkReply>(m_NetworkMngr.get( qnr1 ));
             QEventLoop loop;
-            QObject::connect( reply.data(), &QNetworkReply::finished, &loop, &QEventLoop::quit);
+            connect( reply.data(), &QNetworkReply::finished, &loop, &QEventLoop::quit);
+            connect( reply.data(), &QNetworkReply::sslErrors, this, &CalendarYear::ignoreSslErrors);
             loop.exec();
             raw = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
         }
@@ -141,11 +162,11 @@ bool CalendarYear::downloadFile ( bool showError, QWidget *parent )
             QFile file( getPath() );
             file.open( QIODevice::WriteOnly );
             file.write( data );
-            trace ( "HTPP Get of " + calendarURL + " OK size " + QString::number(data.size()) );
+            trace ( "HTTP Get of " + calendarURL + " OK size " + QString::number(data.size()) );
         }
         else
         {
-           trace ( "HTPP Get of " + calendarURL + " failed - zero length data returned with attribute " + QString::number(raw));
+           trace ( "HTTP Get of " + calendarURL + " failed - zero length data returned with attribute " + QString::number(raw));
            if (data.size() > 0)
            {
                trace(data);
@@ -156,10 +177,10 @@ bool CalendarYear::downloadFile ( bool showError, QWidget *parent )
     }
     else
     {
-        trace ( QString( "HTPP Get of " ) + calendarURL + " failed: " + reply->errorString() );
+        trace ( QString( "HTTP Get of " ) + calendarURL + " failed: " + reply->errorString() );
         if ( showError )
         {
-            mShowMessage ( QString( "HTPP Get of " ) + calendarURL + " failed: " + reply->errorString(), parent );
+            mShowMessage ( QString( "HTTP Get of " ) + calendarURL + " failed: " + reply->errorString(), parent );
         }
     }
     return false;

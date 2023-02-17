@@ -252,6 +252,8 @@ void RigSetupDialog::loadSettingsToTab(int tabNum, QString tabName)
 
 
     radioTab.value(tabName)->setMgmMode(availRadioData.value(tabName)->mgmMode);
+    radioTab.value(tabName)->setRttyMode(availRadioData.value(tabName)->rttyMode);
+    radioTab.value(tabName)->setPskMode(availRadioData.value(tabName)->pskMode);
 
     for (const auto &b: qAsConst(bands))
     {
@@ -1006,6 +1008,8 @@ void RigSetupDialog::saveRadioData(QSharedPointer<scatParams> radioData, QSettin
     config.setValue("netAddress", radioData->networkAdd);
     config.setValue("netPort", radioData->networkPort);
     config.setValue("mgmMode", radioData->mgmMode);
+    config.setValue("rttyMode", radioData->rttyMode);
+    config.setValue("pskMode", radioData->pskMode);
     config.setValue("enableShowCatFeatures", radioData->enableDisableCatFeature.enableDisplay);
     config.setValue("ritEnable", radioData->enableDisableCatFeature.ritEnable);
     config.setValue("sMeterEnable", radioData->enableDisableCatFeature.sMeterEnable);
@@ -1071,6 +1075,8 @@ void RigSetupDialog::getRadioSetting(QSharedPointer<scatParams> radioData, QStri
     radioData->networkAdd = config.value("netAddress", "").toString();
     radioData->networkPort = config.value("netPort", "").toString();
     radioData->mgmMode = config.value("mgmMode", hamlibData::USB).toString();
+    radioData->rttyMode = config.value("rttyMode", hamlibData::LSB).toString();
+    radioData->pskMode = config.value("pskMode", hamlibData::USB).toString();
     radioData->enableDisableCatFeature.enableDisplay = config.value("enableShowCatFeatures", false).toBool();
     radioData->enableDisableCatFeature.ritEnable = config.value("ritEnable", false).toBool();
     radioData->enableDisableCatFeature.sMeterEnable = config.value("sMeterEnable", true).toBool();

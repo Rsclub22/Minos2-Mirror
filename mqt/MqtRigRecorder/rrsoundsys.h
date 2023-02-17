@@ -31,29 +31,29 @@
 #include "riff.h"
 
 class RtAudio;
-class RtAudioSoundSystem;
+class RRRtAudioSoundSystem;
 
-class RiffWriter : public QThread
+class RRRiffWriter : public QThread
 {
     Q_OBJECT
 
-     RtAudioSoundSystem *ss;
+     RRRtAudioSoundSystem *ss;
 public:
      bool terminated;
-    RiffWriter(RtAudioSoundSystem *parent = nullptr) ;
-    virtual ~RiffWriter() override;
+    RRRiffWriter(RRRtAudioSoundSystem *parent = nullptr) ;
+    virtual ~RRRiffWriter() override;
 
     virtual void run() Q_DECL_OVERRIDE;
 
 };
 
-class RtAudioSoundSystem: public QObject
+class RRRtAudioSoundSystem: public QObject
 {
     Q_OBJECT
 
 public:
-    RtAudioSoundSystem();
-    virtual ~RtAudioSoundSystem();
+    RRRtAudioSoundSystem();
+    virtual ~RRRtAudioSoundSystem();
 
     bool initialise(QString ind, QString ind2);
     void stop();
@@ -72,7 +72,7 @@ public:
 
     WaveFile *outWave = nullptr;
     void writeDataToFile(void *inp, unsigned int nFrames);
-    RiffWriter *wThread = nullptr;
+    RRRiffWriter *wThread = nullptr;
 
     int audioCallback( void *inputBuffer,
                         unsigned int nFrames,

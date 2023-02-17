@@ -57,7 +57,7 @@ DisplayContestContact::DisplayContestContact( BaseContestLog * ct, bool time_now
        }
        if (hf)
        {
-            if (curMode == hamlibData::CW)
+            if (curMode == hamlibData::CW || curMode == hamlibData::RY || curMode == hamlibData::PSK)
             {
                 repr.setInitialValue( "599" );
                 reps.setInitialValue( "599" );
@@ -121,7 +121,7 @@ void DisplayContestContact::copyFromArg( ScreenContact &cct )
    ctryMult = cct.ctryMult;
    multCount = cct.multCount;
    forcedMult = cct.forcedMult ;
-   frequency = cct.frequency;
+   setFrequency(cct.getFrequency(), cct.band);
    rotatorHeading.setValue(cct.rotatorHeading);
    rigName.setValue(cct.rigName);
    bonus = cct.bonus;
@@ -191,7 +191,7 @@ bool DisplayContestContact::ne(const ScreenContact &mct) const
    if ( mct.contactFlags.getValue() != contactFlags.getValue() )
       return true; // i.e. not equal
 
-   if ( strcmpsp( mct.mode, mode.getValue() ) )
+   if ( strcmpsp( mct.mode.getValue(), mode.getValue() ) )
       return true; // i.e. not equal
 
    if ( strcmpsp( mct.mgmSubmode, mgmSubmode.getValue() ) )
@@ -200,7 +200,7 @@ bool DisplayContestContact::ne(const ScreenContact &mct) const
    if ( strcmpsp( mct.forcedMult.getValue(), forcedMult.getValue() ) )
       return true; // i.e. not equal
 
-   if (frequency.getValue() != mct.frequency.getValue())
+   if (getFrequency().getValue() != mct.getFrequency().getValue())
       return true; // i.e. not equal
 
    if (cqResponse.getValue() != mct.cqResponse)
@@ -238,9 +238,6 @@ int DisplayContestContact::checkContact(bool adddup)
    bool dupContact = (cs.getValRes() == ERR_DUPCS);    // calculated in CheckableContact
 
    BaseContestLog * clp = contest;
-
-   QString band;
-   contest->getTxFreqBand(frequency.getValue(), band);
 
    if ( districtMult && districtMult->country1)
    {
@@ -455,7 +452,10 @@ QString DisplayContestContact::getField( int ACol, const BaseContestLog *const c
             res = timeOff.getTime( DTGDISP );
             break;
          case egBand:
-            clp->getTxFreqBand(frequency.getValue(), res);
+            res = band;
+            break;
+         case egMode:
+            res = mode.getValue();
             break;
          case egCall:
             res = cs.getFullCall();
@@ -664,7 +664,7 @@ QString DisplayContestContact::getField( int ACol, const BaseContestLog *const c
           res = rigName.getValue();
           break;
       case egFrequency:
-          res = frequency.getValue().convertFreqStrDisp();
+          res = getFrequency().getValue().convertFreqStrDisp();
           break;
       case egRotatorHeading:
       {
@@ -761,11 +761,14 @@ void DisplayContestContact::processMinosStanza( const QString &methodName, Minos
          mt->getStructArgMemberValue( "power", contest->power );
          mt->getStructArgMemberValue( "band", contest->contestBands );
          mt->getStructArgMemberValue( "currentBand", contest->currentBand );
+         mt->getStructArgMemberValue( "bandsList", contest->bandsList );
          mt->getStructArgMemberValue( "claimedScore", contactScore );
          mt->getStructArgMemberValue( "forcedMult", forcedMult );
          if (mt->getStructArgMemberValue( "frequency", temp ))
          {
-            frequency.setValue( Frequency(temp) );
+            QString fband;
+            Frequency ff = contest->getTxFreqBand(temp, fband);
+            setFrequency( ff, fband );
          }
          mt->getStructArgMemberValue( "rotatorHeading", rotatorHeading );
          mt->getStructArgMemberValue( "rigName", rigName );

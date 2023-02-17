@@ -6,6 +6,7 @@
 #include "contest.h"
 #include "contacts.h"
 #include "LoggerContest.h"
+
 #include "n1mmbroadcast.h"
 
 N1MMBroadcast::N1MMBroadcast()
@@ -14,6 +15,7 @@ N1MMBroadcast::N1MMBroadcast()
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::wsjtxDatagram, this, &N1MMBroadcast::wsjtxDatagram);
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::callsignLookup, this, &N1MMBroadcast::callsignLookup);
 
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::broadcastSpots, this, &N1MMBroadcast::dxSpots);
 }
 bool N1MMBroadcast::setAddress(QString addr, QHostAddress &host)
 {
@@ -53,6 +55,7 @@ void N1MMBroadcast::configure()
     {
         contactsPort = 12060;
     }
+
     if (contactsSelect)
     {
         setAddress(contactsAddr, contactsHost);
@@ -73,6 +76,22 @@ void N1MMBroadcast::configure()
     if (extCSSelect)
     {
         setAddress(extCSAddr, extCSHost);
+    }
+    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpextSpotsSelect, spotsSelect );
+    TContestApp::getContestApp() ->loggerBundle.getStringProfile( elpextSpotsAddr, spotsAddr );
+    TContestApp::getContestApp() ->loggerBundle.getIntProfile( elpextSpotsPort, temp );
+    spotsPort = static_cast<quint16>(temp);
+    if (spotsAddr.isEmpty())
+    {
+        spotsAddr = "127.0.0.1";
+    }
+    if (spotsPort == 0)
+    {
+        spotsPort = 12060;
+    }
+    if (spotsSelect)
+    {
+        setAddress(spotsAddr, spotsHost);
     }
 
     TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpwsjtxRbSelect, wsjtxRbSelect );
@@ -165,6 +184,20 @@ void N1MMBroadcast::afterQSOSaved(BaseContestLog *c, QSharedPointer<BaseContact>
         bc.writeDatagram((header + adif).toUtf8(), ADIFHost, ADIFPort);
     }
 }
+void N1MMBroadcast::dxSpots(QSharedPointer<ClusterSpotData> spotMsg, bool delSpot)
+{
+    // afterQSOSaved gives us QSOs as spots
+    // this gives us direct spots
+
+    // We also need purged spots and altered spots; these all come from bandmap
+    // we may need to have bandmap enabled when not shown for all this to work
+
+    if (spotsSelect)
+    {
+        QString sp = genSpotsStanza(spotMsg, delSpot);
+        bc.writeDatagram(sp.toUtf8(), spotsHost, spotsPort);
+    }
+}
 
 void N1MMBroadcast::wsjtxDatagram(int, QByteArray *datagram)
 {
@@ -223,12 +256,13 @@ QString N1MMBroadcast::genDeleteStanza(QSharedPointer<BaseContact> tct)
 
     return xml;
 }
+
 QString N1MMBroadcast::genContactStanza(QString type, BaseContestLog *b, QSharedPointer<BaseContact> tct)
 {
     LoggerContestLog *c = dynamic_cast<LoggerContestLog *>(b);
 
     QString cb;
-    double freq = c->getAdifFreqBand(tct->frequency.getValue(), cb);
+    double freq = c->getAdifFreqBand(tct->getFrequency().getValue(), cb);
 
     // freq sent is only to the tens digit...
     freq = floor(freq/10.0);
@@ -294,4 +328,105 @@ QString N1MMBroadcast::genContactStanza(QString type, BaseContestLog *b, QShared
 
     return xml;
 
+}
+QString N1MMBroadcast::genSpotsStanza(QSharedPointer<ClusterSpotData> spotMsg, bool delSpot)
+{
+//    <?xml version="1.0" encoding="utf-8"?>
+//    <spot>
+//        <app>N1MM</app>
+//        <StationName>CONTEST-PC</StationName>
+//        <dxcall>AL3CDE</dxcall>
+//        <frequency>7061.2</frequency>
+//        <spottercall>K2PO/7-#</spottercall>
+//        <timestamp>2O20-Ol-l7 17:19:37</timestamp>
+//        <action>add</action>
+//        <mode>CW</mode>
+//        <comment>CW 9 DB 18 WPM CQ AK </comment>
+//        <status>single mult</status>
+//        <statuslist>single mult</statuslist>
+//    </spot>
+
+//    The Spot Data packet contains all spots processed by the program whether from Telnet
+//    (including RBN), Logging QSOs, or local spotting.
+//    The values for action are:
+
+//    add
+//    delete
+
+//    The values for status are:
+
+//    busy – marked by N1MM user as a frequency to note
+//    bust – a busted call (when CT1BOH tags are present)
+//    cq – the cq frequency on this band (last place F1 was pressed)
+//    dupe – duplicate contact
+//    qtc – a WAE qtc
+//    single mult – this spot is a single multiplier in this contest
+//    double mult – this spot is a double (or more) mult in this contest
+//    new qso – a logged qso (this is now a dupe by definition)
+
+
+//    StationName – the callsign shown in the station dialog
+//    dxcall – the station that is spotted
+//    spottercall – the station that spotted the call (StationName for stations worked, or spotted locally)
+//    comment – the comment from the spot
+//    action – whether this spot was added or deleted (spots are deleted when they move within a band)
+//    status – dupe, mult etc. See above for values
+//    timestamp – the time of the spot
+
+    Frequency f= spotMsg.data()->getFreq();
+
+    double freq = f.toInt64();
+    // freq sent is KHz
+    freq = freq/1000.0;
+    QString sfreq = QString::number(freq, 'f', 3);
+
+    QDateTime  dt = spotMsg.data()->getSpotDateTime();
+    dtg dg(false);
+    dg.setDateTime(dt);
+    QString ts = dg.getN1mmDTG();
+
+    QString adddel = "add";
+    QString comment = spotMsg.data()->getSpotComment();
+    QString dxcall = spotMsg.data()->getDxCallStr();
+    QString status;
+    bandmapSpotType::SPOT_TYPE st = spotMsg->getSpotType();
+    // enum SPOT_TYPE {NONE, CLUSTER, CLUSTER_MARKED, LOGGED, MARKED, SAVED, CQ, DELETED};
+
+    if (st == bandmapSpotType::CQ)
+    {
+        status = "cq";
+        comment = tr("CQ frequency");
+    }
+    else if (st == bandmapSpotType::LOGGED)
+    {
+        status = "new qso";
+    }
+    else if (st == bandmapSpotType::DELETED)
+    {
+        adddel = "delete";
+    }
+    else
+    {
+        status = "busy";
+    }
+    if (delSpot)
+    {
+        adddel = "delete";
+    }
+    QString xml = QString("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n")
+            + "<spot>\n"
+                   + makeTag("app", "Minos")
+                   + makeTag("StationName", "")                         // <StationName>PHONE-15M</StationName>
+                   + makeTag("dxcall", dxcall)
+                   + makeTag("frequency", sfreq)
+                   + makeTag("spottercall", spotMsg.data()->getSpotterCallStr())
+                   + makeTag("timestamp", ts)
+                   + makeTag("action", adddel)
+                   + makeTag("mode", spotMsg.data()->getMode())
+                   + makeTag("comment", comment)
+                   + makeTag("status", status)
+                   + makeTag("statuslist", status)
+            + "</spot>\n";
+
+    return xml;
 }

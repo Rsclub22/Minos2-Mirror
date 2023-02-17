@@ -1,3 +1,4 @@
+#include "MShowMessageDlg.h"
 #include  <QtGlobal>
 #ifdef Q_OS_UNIX
 #include <unistd.h>
@@ -45,7 +46,7 @@ void KeyerMain::doSliders(int rec, int rep, int pass, CompressorParams comp)
 
     inVolChangeCount--;
 }
-void KeyerMain::doSetVU( unsigned int ppeakvol, unsigned int prmsvol ,unsigned int psamples)
+void KeyerMain::doSetVU( vudata v)
 {
     if (!kmInhibitCallbacks)
     {
@@ -56,12 +57,13 @@ void KeyerMain::doSetVU( unsigned int ppeakvol, unsigned int prmsvol ,unsigned i
         }
         else
         {
-            rmsvol = std::max(rmsvol, prmsvol);
-            peakvol = std::max(peakvol, ppeakvol);
+            rmsvol = std::max(rmsvol, v.rms);
+            peakvol = std::max(peakvol, v.peak);
         }
-        samples += psamples;
+        samples += v.blocks;
         ui->levelMeter->levelChanged( peakvol / 32768.0, rmsvol / 32768.0, samples );
     }
+    actualRate = v.actual;  // update on timer
 }
 
 KeyerJson *getMasterConfig()
@@ -76,6 +78,10 @@ void KeyerMain::setLines(bool PTTOut, bool PTTIn, bool L1, bool L2, int lmode )
     L1Ref = L1;
     L2Ref = L2;
     linesMode = lmode;
+
+    //We need to pass down from here to soundsys, etc - PTTOut particularly
+
+    emit SoundSystemDriver::getSbDriver()->passPTT(PTT);
 }
 void KeyerMain::syncSetLines()
 {
@@ -158,6 +164,33 @@ KeyerMain::KeyerMain(QWidget *parent) :
 
     connect(SoundSystemDriver::getSbDriver(), &SoundSystemDriver::setVU, this, &KeyerMain::doSetVU);
 
+    QStringList inputList = SoundSystemDriver::getSbDriver()->getInputDevices();
+    QStringList outputList = SoundSystemDriver::getSbDriver()->getOutputDevices();
+
+    ui->inputCombo->addItems(inputList);
+    QString currentInput = settings.value("inputDevice", SoundSystemDriver::getSbDriver()->getDefaultInputDevice()).toString();
+    ui->inputCombo->setCurrentText(currentInput);
+
+    ui->outputCombo->addItem(tr("Remote IP Client"));
+    ui->outputCombo->addItems(outputList);
+    QString currentOutput = settings.value("outputDevice", SoundSystemDriver::getSbDriver()->getDefaultOutputDevice()).toString();
+    ui->outputCombo->setCurrentText(currentOutput);
+
+    QStringList sampleRates =  {"0",
+            "4000", "5512", "8000", "9600", "11025", "16000", "22050",
+            "32000", "44100", "48000", "88200", "96000", "176400", "192000"
+          };
+
+
+    ui->sampleRate->addItems(sampleRates);
+    QString sr = settings.value("sampleRate", 0).toString();
+    ui->sampleRate->setCurrentText(sr);
+    SoundSystemDriver::getSbDriver()->setSampleRate(sr.toInt());
+
+    QString port = settings.value("SenderPort", DEFAULT_PORT).toString();
+    ui->portEdit->setText(port);
+    ui->portEdit->setValidator(new QIntValidator(0, 0xffff, this));
+
     commonPort * cp = loadKeyers();
     connect(cp, &commonPort::lcallback, this, &KeyerMain::lcallback);
 
@@ -208,6 +241,10 @@ KeyerMain::KeyerMain(QWidget *parent) :
         ui->keyCombo->addItem(QString::number(i));
     }
     ui->keyCombo->setCurrentIndex(0);
+    ui->KeyerTabs->setCurrentIndex(0);
+
+    sr = QString::number(SoundSystemDriver::getSbDriver()->rate);
+    KeyerServer::publishIPDetail(port, sr);
 }
 KeyerMain::~KeyerMain()
 {
@@ -244,7 +281,7 @@ void KeyerMain::changeEvent( QEvent* e )
 }
 bool KeyerMain::writeConfig(bool force)
 {
-    masterConfig.traceConfig();
+    //masterConfig.traceConfig();
     bool ret = true;
     static QString old;
     QString conf = masterConfig.makeConfig(QJsonDocument::Compact, force, true);
@@ -335,13 +372,14 @@ void KeyerMain::lineTimerTimer( )
        KeyerServer::publishSliders(recordFrame->getIntValue(), replayFrame->getIntValue(), passthroughFrame->getIntValue(), masterConfig.compression);
        if (VKMixer::GetVKMixer()->GetCurrentMixerSet() == emsPassThroughNoPTT)
        {
-           doSetVU(0, 0, 0);    // make sure the metering goes to zero when nothing is happening
+           doSetVU(vudata());    // make sure the metering goes to zero when nothing is happening
        }
        KeyerServer::publishVUMeter(rmsvol, peakvol, samples);
        rmsvol = 0;
        peakvol = 0;
        samples = 0;
    }
+   ui->actualRate->setText(QString::number(actualRate));
 }
 void KeyerMain::CaptionTimerTimer( )
 {
@@ -733,5 +771,52 @@ void KeyerMain::on_doCompression_stateChanged(int )
     masterConfig.compression.doCompression = ui->doCompression->isChecked();
     setVolumeMults();
     writeConfig(false);
+}
+
+
+void KeyerMain::on_inputCombo_activated(int /*index*/)
+{
+    QSettings settings;
+    settings.setValue("inputDevice", ui->inputCombo->currentText());
+    trace("About to re-initialise audio");
+    SoundSystemDriver::getSbDriver()->closedown();
+    SoundSystemDriver::getSbDriver()->initialise(
+                ui->inputCombo->currentText()
+                , ui->outputCombo->currentText()
+                , ""
+                , ui->portEdit->text());
+}
+
+
+void KeyerMain::on_outputCombo_activated(int /*index*/)
+{
+    QSettings settings;
+    settings.setValue("outputDevice", ui->outputCombo->currentText());
+    trace("About to re-initialise audio");
+    SoundSystemDriver::getSbDriver()->closedown();
+    SoundSystemDriver::getSbDriver()->initialise(ui->inputCombo->currentText()
+                                                 , ui->outputCombo->currentText()
+                                                 , ""
+                                                 , ui->portEdit->text());
+}
+
+
+void KeyerMain::on_sampleRate_activated(int /*index*/)
+{
+    QSettings settings;
+    settings.setValue("sampleRate", ui->sampleRate->currentText());
+
+    if (ui->sampleRate->currentText() == "0")
+    {
+        mShowMessage(tr("Restart to set sample rate to \"0\""""), this);
+        exit(0);
+    }
+
+    trace("About to re-initialise audio");
+    SoundSystemDriver::getSbDriver()->setSampleRate(ui->sampleRate->currentText().toInt());
+    SoundSystemDriver::getSbDriver()->initialise(ui->inputCombo->currentText()
+                                                 , ui->outputCombo->currentText()
+                                                 , ""
+                                                 , ui->portEdit->text());
 }
 

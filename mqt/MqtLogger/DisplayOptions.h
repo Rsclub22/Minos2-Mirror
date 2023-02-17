@@ -36,6 +36,10 @@ private:
     ConfigurationOption ExpertMode;
     ConfigurationOption AlternateFKeys;
     ConfigurationOption ShowAuxHeaders;
+    ConfigurationOption ShowQSOMapGrid;
+    ConfigurationOption ShowQSOMapLines;
+    ConfigurationOption MapShowCluster;
+    ConfigurationOption MapClusterDistance;
 
     int lcf;
     int qff;

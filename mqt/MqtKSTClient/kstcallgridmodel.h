@@ -3,7 +3,9 @@
 
 #include <QAbstractItemModel>
 #include <QSortFilterProxyModel>
+#include "callsign.h"
 #include "htmldelegate.h"
+#include "remotelogs.h"
 
 
 enum CallColumns {ecscChat, ecscCall, ecscLoc, ecscDistance, ecscBearing, ecscAirscout, ecscName, ecscCountryPrefix, ecscCountryName, ecscMaxColumn};
@@ -13,8 +15,7 @@ class KstUser
 {
 public:
     int chat;
-    QString call;
-    QString baseCall;
+    Callsign call;
     QString loc;
     QString name;
     QString prefix;

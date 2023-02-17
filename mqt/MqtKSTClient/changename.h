@@ -2,6 +2,7 @@
 #define CHANGENAME_H
 
 #include <QDialog>
+#include "callsign.h"
 #include "qttelnet.h"
 
 namespace Ui {
@@ -23,7 +24,7 @@ public:
 
     QString KSTserverName;
     QString KSTserverPort;
-    QString myCallsign;
+    Callsign myCallsign;
     QString password;
 
     int kstChatSelection = 0;

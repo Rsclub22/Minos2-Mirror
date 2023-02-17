@@ -18,6 +18,17 @@ CONFIG += c++11
 DEFINES += TIXML_USE_STL
 DEFINES += NOMINMAX
 
+win32: {
+versionAtLeast(QT_VERSION, 6.5.0){
+INC_MAP = 1
+DEFINES += INC_MAP
+}
+lessThan(QT_VERSION, 6.0.0) {
+INC_MAP = 1
+DEFINES += INC_MAP
+}
+}
+
 *g++*:CONFIG(release, debug|release): QMAKE_CXXFLAGS_WARN_ON += -Wno-reorder -Wold-style-cast -DNDEBUG  -Winvalid-pch
 else:*g++*:CONFIG(debug, debug|release):QMAKE_CXXFLAGS_WARN_ON += -Wno-reorder -Wold-style-cast  -Winvalid-pch
 
@@ -35,8 +46,8 @@ DEFINES *= QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 
-CONFIG += lrelease
-TRANSLATIONS += translations/minos_en_GB.ts \
+CONFIG *= lrelease
+TRANSLATIONS *= translations/minos_en_GB.ts \
                 translations/minos_fr_FR.ts
 
 # Others we may want eventually

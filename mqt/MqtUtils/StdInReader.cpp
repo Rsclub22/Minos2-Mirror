@@ -33,6 +33,7 @@ void StdInReader::setShowApp(bool state)
 {
     if (qmw)
     {
+        trace(QString("setting qmw visible to %1").arg(state));
         qmw->setVisible(state);
     }
 }

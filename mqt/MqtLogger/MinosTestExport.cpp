@@ -98,6 +98,7 @@ void MinosTestExport::exportContest( QSharedPointer<QFile> expfd )
    ct->name.addIfDirty( st, "name", dirty );
    ct->contestBands.addIfDirty( st, "band", dirty );
    ct->currentBand.addIfDirty( st, "currentBand", dirty );
+   ct->bandsList.addIfDirty(st, "bandsList", dirty);
    ct->entSect.addIfDirty( st, "section", dirty );
    ct->sectionList.addIfDirty( st, "sectionList", dirty );
    if ( ct->scoreMode.isDirty() )
@@ -114,6 +115,7 @@ void MinosTestExport::exportContest( QSharedPointer<QFile> expfd )
    ct->otherExchange.addIfDirty( st, "QTHReq", dirty );
    ct->otherOptionalExchange.addIfDirty( st, "QTHOpt", dirty );
    ct->otherMult.addIfDirty(st, "OtherMultType", dirty);
+   ct->asymmetricMult.addIfDirty(st, "AsymmetricMult", dirty);
    ct->allowLoc4.addIfDirty( st, "AllowLoc4", dirty );
    ct->allowLoc8.addIfDirty( st, "AllowLoc8", dirty );
    ct->currentMode.addIfDirty(st, "currentMode", dirty);
@@ -163,6 +165,28 @@ void MinosTestExport::exportQTH(QSharedPointer<QFile> expfd )
       delete st;
    }
 }
+
+void MinosTestExport::exportQSOMap( QSharedPointer<QFile> expfd )
+{
+    RPCParamStruct * st = new RPCParamStruct;
+    makeHeader( st, 1 );
+
+    bool dirty = false;
+    ct->zoomLevel.addIfDirty( st, "zoom", dirty );
+    ct->centreLat.addIfDirty( st, "lat", dirty );
+    ct->centreLon.addIfDirty( st, "lon", dirty );
+
+    if ( dirty )
+    {
+       sendRequest( expfd, "MinosQSOMap", st );
+    }
+    else
+    {
+       delete st;
+    }
+
+}
+
 void MinosTestExport::exportEntry( QSharedPointer<QFile> expfd )
 {
    RPCParamStruct * st = new RPCParamStruct;
@@ -351,8 +375,9 @@ int MinosTestExport::exportQSO(QSharedPointer<QFile> expfd, const QSharedPointer
    ct->power.addIfDirty( st, "power", dirty );
    ct->contestBands.addIfDirty( st, "band", dirty );
    ct->currentBand.addIfDirty( st, "currentBand", dirty );
+   ct->bandsList.addIfDirty( st, "bandsList", dirty );
    lct->forcedMult.addIfDirty( st, "forcedMult", dirty );
-   lct->frequency.addIfDirty( st, "frequency", dirty );
+   lct->getFrequency().addIfDirty( st, "frequency", dirty );
    lct->rotatorHeading.addIfDirty( st, "rotatorHeading", dirty );
    lct->rigName.addIfDirty( st, "rigName", dirty );
    lct->contactScore.addIfDirty( st, "claimedScore", dirty );
@@ -396,7 +421,7 @@ void MinosTestExport::exportClusterFilter(QSharedPointer<QFile> expfd)
              st->addMember(clusterFilter.getValue().getIgnoreEmptyDistanceFlag(b->name()), igedistIni);
         }
 
-        st->addMember(clusterFilter.getValue().getModeFilter("NONE"), "modeFilterNONE");
+        st->addMember(clusterFilter.getValue().getModeFilter("NONE"), "modeFilterNONEMODE");
         st->addMember(clusterFilter.getValue().getModeFilter(hamlibData::CW), "modeFilterCW");
         st->addMember(clusterFilter.getValue().getModeFilter(hamlibData::LSB), "modeFilterLSBMODE");
         st->addMember(clusterFilter.getValue().getModeFilter(hamlibData::USB), "modeFilterUSBMODE");
@@ -569,6 +594,7 @@ int MinosTestExport::exportAllDetails(QSharedPointer<QFile> minosContestFile, bo
    exportStackDisplay(minosContestFile);
    exportClusterFilter(minosContestFile);
    exportBandmapFilter(minosContestFile);
+   exportQSOMap(minosContestFile);
 
    return exp_stanzaCount;
 }
@@ -593,6 +619,8 @@ int MinosTestExport::exportTest( QSharedPointer<QFile> expfd, int mindump, int m
    exportBundles( expfd );
    exportAllMemories(expfd);
    exportClusterFilter(expfd);
+   exportQSOMap(expfd);
+
 
    bool inDump = false;
    for(auto const &dct: qAsConst(ct->ctList))

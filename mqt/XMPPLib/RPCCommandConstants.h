@@ -116,10 +116,13 @@ static const QString keyerMeter         ("Meter");
 static const QString keyerSliders       ("Sliders");
 static const QString keyerSendConfig    ("SendConfig");
 static const QString keyerSendMS        ("SendMS");
+static const QString keyerListen        ("listen");
 
 static const QString KeyerCategory       ("Keyer");
 static const QString KeyerConfigCategory ("KeyerConfig");
 static const QString keyerReport         ("Report");
+
+static const QString keyerProxyApp       {"mqtKeyerProxy"};
 
 // Control
 static const QString controlApp         ("mqtControl");
@@ -208,5 +211,17 @@ static const QString rigCwMemType ("CwMemType");
 // KSTClient
 static const QString KSTClientApp         ("mqtKSTClient");
 
+// Data Modes
+static const QString datamodesApp         ("mqtDataModesApp");
+static const QString DMCat                {"DataModes"};
+static const QString DMSender             {"Sender"};
+static const QString DMWord               {"DMWord"};
+static const QString DMKeyPress           {"DMKeyPress"};
+static const QString DMTransmit           {"DMTransmit"};
+static const QString DMStopTransmit       {"DMStopTransmit"};
+static const QString DMFKeys              {"DMFKeys"};
+static const QString DMFKey               {"DMFKey"};
+static const QString DMMode               {"DMMode"};
+static const QString DMCarrier            {"Carrier"};
 }
 #endif // RPCCOMMANDRCONSTANTS_H

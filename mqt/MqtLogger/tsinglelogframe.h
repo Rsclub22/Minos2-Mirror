@@ -2,6 +2,7 @@
 #define TSINGLELOGFRAME_H
 
 #include "ContestPage.h"
+#include "dmbuttonframe.h"
 #include "rigmemcommondata.h"
 #include "MatchTreeFrame.h"
 #include "MatchThisFrame.h"
@@ -68,6 +69,8 @@ public:
     BandmapClientFrame *bandmapControlFrame = nullptr;
 
     QSOMapFrame *qsoMapFrame = nullptr;
+
+    DMButtonFrame *dmButtonFrame = nullptr;
 
     void buildRow(ContestPage *cp, SCRow &scrow, int &auxInstance, MinosSplitter *splitterParent);
 

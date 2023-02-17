@@ -12,11 +12,9 @@ QT       += widgets
 QT       += network
 QT       += help
 
-win32: {
-lessThan(QT_MAJOR_VERSION, 6) {
-    QT += qml
-    QT += quick
-}
+equals(INC_MAP, 1): {
+QT += qml
+QT += quick
 }
 
 TARGET = MqtBase
@@ -33,6 +31,9 @@ SOURCES += \
     BandList.cpp \
     CacheSelection.cpp \
     ConfigurationOption.cpp \
+    MonitorTreeModel.cpp \
+    MonitoredContestLog.cpp \
+    MonitoredLog.cpp \
     StartConfigManager.cpp \
     StatisticsDisplay.cpp \
     bandmapmarkerdetails.cpp \
@@ -77,13 +78,17 @@ SOURCES += \
     minosqlabel.cpp \
     minostablewidget.cpp \
     MinosTestImport.cpp \
+    monitoredlogs.cpp \
+    monitoredstation.cpp \
     mults.cpp \
     MultsImpl.cpp \
     presetbutton.cpp \
     profiles.cpp \
     qlogtabwidget.cpp \
+    qmlcpplink.cpp \
     qsomapframe.cpp \
     RigCache.cpp \
+    remotelogs.cpp \
     rigcommon.cpp \
     RigDetails.cpp \
     RigState.cpp \
@@ -119,6 +124,9 @@ HEADERS += \
     AntennaState.h \
     BandList.h \
     ConfigurationOption.h \
+    MonitorTreeModel.h \
+    MonitoredContestLog.h \
+    MonitoredLog.h \
     StartConfigManager.h \
     StatisticsDisplay.h \
     bandmapmarkerdetails.h \
@@ -165,15 +173,19 @@ HEADERS += \
     minosqlabel.h \
     minostablewidget.h \
     MinosTestImport.h \
+    monitoredlogs.h \
+    monitoredstation.h \
     mults.h \
     MultsImpl.h \
     ProfileEnums.h \
     presetbutton.h \
     profiles.h \
     qlogtabwidget.h \
+    qmlcpplink.h \
     qsomapframe.h \
     RigCache.h \
     qrzServerCommon.h \
+    remotelogs.h \
     rigRotSetupCommon.h \
     rigcommon.h \
     rigcontrolcommonconstants.h \
@@ -218,6 +230,7 @@ FORMS += \
     StartConfigManager.ui \
     StatisticsDisplay.ui \
     minoskeyboard.ui \
+    monitoredlogs.ui \
     rotpresetdialog.ui \
     StartConfig.ui \
     helpbrowser.ui \
@@ -225,8 +238,7 @@ FORMS += \
     locatorinputdialog.ui \
     qsomapframe.ui
 
-lessThan(QT_MAJOR_VERSION, 6) {
-RESOURCES += \
-    QSOView/qml.qrc
+equals(INC_MAP, 1): {
+RESOURCES += QSOView/qml.qrc
 }
 

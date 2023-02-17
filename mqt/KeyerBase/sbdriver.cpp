@@ -8,7 +8,6 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include "MShowMessageDlg.h"
-#include "riff.h"
 #include "cutils.h"
 #include "keyerBase.h"
 #include "keyerlog.h"
@@ -265,13 +264,13 @@ void SoundSystemDriver::closedown()
 {
     soundSystem->closedown();
 }
-bool SoundSystemDriver::initialise(QString ind, QString outd)
+bool SoundSystemDriver::initialise(QString ind, QString outd, QString host, QString port)
 {
-    bool ret = soundSystem->initialise(ind, outd);
+    bool ret = soundSystem->initialise(ind, outd, host, port);
     return ret;
 }
 
-bool SoundSystemDriver::sbdvp_init( QString ind, QString outd, QString &errmess, unsigned int srate, int pipTone, int pipVolume, int pipLength )
+bool SoundSystemDriver::sbdvp_init( QString ind, QString outd, QString host, QString port, QString &errmess, unsigned int srate, int pipTone, int pipVolume, int pipLength )
 {
    // should be done from config when the sb is defined as in use.
 
@@ -290,9 +289,13 @@ bool SoundSystemDriver::sbdvp_init( QString ind, QString outd, QString &errmess,
 
       // should be in each sound class
 
+      if (rate > 0)
+      {
+            srate = rate;
+      }
       rate = soundSystem->setRate(srate);
 
-      if ( !soundSystem->initialise( ind, outd ) )
+      if ( !soundSystem->initialise( ind, outd, host, port ) )
          return false;
 
       emit ptt(false);
@@ -334,10 +337,17 @@ QStringList SoundSystemDriver::getInputDevices()
 {
     return soundSystem->inputDevices;
 }
-
+QString SoundSystemDriver::getDefaultInputDevice()
+{
+    return soundSystem->defaultInput;
+}
 QStringList SoundSystemDriver::getOutputDevices()
 {
     return soundSystem->outputDevices;
+}
+QString SoundSystemDriver::getDefaultOutputDevice()
+{
+    return soundSystem->defaultOutput;
 }
 
 
@@ -519,13 +529,23 @@ const dvkFile *SoundSystemDriver::getFile(int fno)
 
     return nullptr;
 }
+
+void SoundSystemDriver::setSampleRate(unsigned int r)
+{
+    rate = r;
+    soundSystem->setRate(r);
+}
 SoundSystemDriver::SoundSystemDriver()
 {
-   soundSystem = RtAudioSoundSystem::createSoundSystem();
-   connect(soundSystem, &RtAudioSoundSystem::interruptOK, this, &SoundSystemDriver::interruptOK);
-   connect(soundSystem, &RtAudioSoundSystem::ssOutputFinished, this, &SoundSystemDriver::outputFinished);
-   connect(soundSystem, &RtAudioSoundSystem::actionQueueFinished, this, &SoundSystemDriver::actionQueueFinished);
-   connect(soundSystem, &RtAudioSoundSystem::setVU, this, &SoundSystemDriver::doSetVU);
+    soundSystem = RtAudioSoundSystem::createSoundSystem();
+   connect(soundSystem, &RtAudioSoundSystem::interruptOK, this, &SoundSystemDriver::interruptOK, Qt::QueuedConnection);
+   connect(soundSystem, &RtAudioSoundSystem::ssOutputFinished, this, &SoundSystemDriver::outputFinished, Qt::QueuedConnection);
+   connect(soundSystem, &RtAudioSoundSystem::actionQueueFinished, this, &SoundSystemDriver::actionQueueFinished, Qt::QueuedConnection);
+   connect(soundSystem, &RtAudioSoundSystem::setVU, this, &SoundSystemDriver::doSetVU, Qt::QueuedConnection);
+   connect(soundSystem, &RtAudioSoundSystem::sequenceCount, this, &SoundSystemDriver::sequenceCount, Qt::QueuedConnection);
+   connect(soundSystem, &RtAudioSoundSystem::ptt, this, &SoundSystemDriver::onPTTState, Qt::QueuedConnection);
+
+   connect(this, &SoundSystemDriver::passPTT, soundSystem, &RtAudioSoundSystem::passPTT, Qt::QueuedConnection);
 }
 SoundSystemDriver::~SoundSystemDriver()
 {
@@ -564,9 +584,14 @@ void SoundSystemDriver::actionQueueFinished()
         sba->queueFinished();
      }
 }
-void SoundSystemDriver::doSetVU(unsigned int a, unsigned int b, unsigned int c)
+void SoundSystemDriver::doSetVU(vudata v)
 {
-    emit setVU(a, b, c);
+    emit setVU(v);
+}
+
+void SoundSystemDriver::onPTTState(bool s)
+{
+    emit ptt(s);
 }
 //==============================================================================
 void SoundSystemDriver::initTone1( int t1 )

@@ -62,17 +62,17 @@ void AirScoutLink::onTimeout()
 }
 bool ASUserCompare (QSharedPointer<KstUser> i, QSharedPointer<KstUser> j)
 {
-    return i->baseCall < j->baseCall;
+    return i->call.realCall < j->call.realCall;
 }
 bool WatchEquals (QSharedPointer<KstUser> i, QSharedPointer<KstUser> j)
 {
-    return i->baseCall == j->baseCall && i->loc == j->loc;
+    return i->call.realCall == j->call.realCall && i->loc == j->loc;
 }
 bool WatchCompare (QSharedPointer<KstUser> i, QSharedPointer<KstUser> j)
 {
-    if (i->baseCall == j->baseCall)
+    if (i->call.realCall == j->call.realCall)
         return i->loc < j->loc;
-    return i->baseCall < j->baseCall;
+    return i->call.realCall < j->call.realCall;
 }
 void AirScoutLink::sendToAllBroadcast(QByteArray *packet)
 {
@@ -239,7 +239,7 @@ void AirScoutLink::onReadyRead()
                 QString dxLoc = sl[4];
 
                 QSharedPointer<KstUser> test(new KstUser());
-                test->baseCall = dxCall;
+                test->call.setFullCall(dxCall);
                 test->loc = dxLoc;
                 QSharedPointer<KstUser> user;
                 int row = 0;
@@ -306,10 +306,10 @@ void AirScoutLink::usersChanged(QSharedPointer<QVector<QSharedPointer<KstUser> >
         watchList.clear();
         for(auto const &user: qAsConst(*callVector))
         {
-            if (user->baseCall == mainWindow->getMyCallsign())
+            if (user->call == mainWindow->getMyCallsign())
                 continue;
 
-            if (user->baseCall.isEmpty() || user->loc.isEmpty())
+            if (user->call.realCall.isEmpty() || user->loc.isEmpty())
                 continue;
 
             int mind = mainWindow->getASMinDistance();
@@ -329,7 +329,7 @@ void AirScoutLink::usersChanged(QSharedPointer<QVector<QSharedPointer<KstUser> >
             QString watch = watchFreq;
             for(auto const &user: qAsConst(watchList))
             {
-                QString ent = "," + user->baseCall + "," + user->loc;
+                QString ent = "," + user->call.realCall + "," + user->loc;
                 watch.append(ent);
             }
 
@@ -353,8 +353,8 @@ void AirScoutLink::asSelected(QSharedPointer<KstUser> user)
     {
         QString watchFreq = bandFreqStrings[mainWindow->getASActiveBand()];        // band
         QString getpath = /*"\""  +*/ watchFreq + ","
-                + mainWindow->getMyCallsign() + "," + mainWindow->getMyLoc() + ","
-                + user->baseCall + "," + user->loc /*+ "\""*/;
+                + mainWindow->getMyCallsign().getFullCall() + "," + mainWindow->getMyLoc() + ","
+                + user->call.realCall + "," + user->loc /*+ "\""*/;
         sendMessage("ASSHOWPATH", getpath);
     }
 }
@@ -370,8 +370,8 @@ void AirScoutLink::asShowPath(QSharedPointer<KstUser> user, QSharedPointer<KstUs
     {
         QString watchFreq = bandFreqStrings[mainWindow->getASActiveBand()];        // band
         QString getpath = /*"\""  +*/ watchFreq + ","
-                + user->baseCall+ "," + user->loc + ","
-                + other->baseCall + "," + other->loc /*+ "\""*/;
+                + user->call.realCall+ "," + user->loc + ","
+                + other->call.realCall + "," + other->loc /*+ "\""*/;
         sendMessage("ASSHOWPATH", getpath);
     }
 }
@@ -391,8 +391,8 @@ void AirScoutLink::askNearest(int row)
 
         QSharedPointer<KstUser> user = watchList[row];
         QString getpath = /*"\""  +*/ watchFreq + ","
-                + mainWindow->getMyCallsign() + "," + mainWindow->getMyLoc() + ","
-                + user->baseCall + "," + user->loc /*+ "\""*/;
+                + mainWindow->getMyCallsign().getFullCall() + "," + mainWindow->getMyLoc() + ","
+                + user->call.realCall + "," + user->loc /*+ "\""*/;
         sendMessage("ASSETPATH", getpath);
         assetPathInProgress = true;
         trace ("assetPathInProgress = true;");

@@ -36,7 +36,8 @@ void makeRouterEvent( bool create )
 
 bool checkRouterReady()
 {
-    return SingleApplication::testRunning(SecondInstall::getSingleAppRouterName());
+    QString pid;
+    return SingleApplication::testRunning(SecondInstall::getSingleAppRouterName(), -1, pid);
 
 }
 

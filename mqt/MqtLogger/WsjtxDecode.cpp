@@ -124,7 +124,8 @@ bool decodeMessage::checkAsContact()
     scc.timeOn = dtg(true);
     scc.timeOff = dtg(true);
     QString cb;
-    scc.frequency.setValue( cc->getTxFreqBand(Frequency(), cb));
+    Frequency f = cc->getTxFreqBand(Frequency(), cb);
+    scc.setFrequency( f, cb);
 
     scc.checkScreenContact();
     csret = scc.cs.getValRes();

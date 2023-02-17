@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 // $Id$
 //
-// PROJECT NAME 		Minos Amateur Radio Control and Logging System
+// PROJECT NAME 		Minos Amateur Radio Control and Logging Systemextra
 //
 // COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2008
 //
@@ -20,6 +20,7 @@
 #include "MapWrapper.h"
 #include "ProfileEnums.h"
 #include "callsign.h"
+#include "contacts.h"
 #include "dtg.h"
 #include "frequency.h"
 #include "locator.h"
@@ -36,6 +37,8 @@ class ContestScore;
 class MinosTestImport;
 class BaseContestLog;
 
+enum SCOREMODE {PPKM, PPQSO};
+
 class DupContact
 {
    public:
@@ -44,6 +47,9 @@ class DupContact
       bool operator==( const DupContact& rhs ) const;
       bool operator!=( const DupContact& rhs ) const;
 
+      qHashRet qHash() const;
+
+
       DupContact(CheckableContact *c );
       DupContact();
       ~DupContact();
@@ -51,6 +57,7 @@ class DupContact
 typedef QMap < MapWrapper<DupContact>, MapWrapper<DupContact> > DupList;
 typedef DupList::iterator DupIterator;
 //typedef DupList::const_iterator ConstDupIterator;
+extern uint qHash(const DupContact &dup);
 class dupsheet
 {
       // a dupsheet is a sorted collection of (full LoggerContestLog) ContestContact records,
@@ -70,8 +77,6 @@ class dupsheet
       dupsheet();
       ~dupsheet();
 };
-
-enum SCOREMODE {PPKM, PPQSO};
 
 typedef QMap < MapWrapper<BaseContact>, MapWrapper<BaseContact> > LogList;
 typedef LogList::iterator LogIterator;
@@ -164,6 +169,7 @@ class BaseContestLog: public BaseLogList
 
       MinosStringItem<QString> contestBands;
       MinosStringItem<QString> currentBand;
+      MinosStringItem<QString> bandsList;
 
       MinosItem<bool> otherExchange;            // exchange field is required (also required for postcodes)
       MinosItem<bool> otherOptionalExchange;    // but exchange is not mandatory
@@ -174,6 +180,7 @@ class BaseContestLog: public BaseLogList
       MinosItem<bool> GLocMult;                 // G locs only mults
       MinosItem<bool> districtMult;             // postcodes
       MinosItem<int>  otherMult;                // type of "other" mult
+      MinosItem<bool> asymmetricMult;            // TX S/N, RX serial or mult
 
       MinosItem<bool> M7Mults;                  // loc mults, but more for G locs
 
@@ -194,6 +201,10 @@ class BaseContestLog: public BaseLogList
       MinosStringItem<QString> currentOp1;         // current main op
       MinosStringItem<QString> currentOp2;         // current second op
 
+      MinosStringItem<QString> zoomLevel;
+
+      MinosStringItem<QString> centreLat;
+      MinosStringItem<QString> centreLon;
 
       // dirty info is only relevant when it is being editted
       // but needs to stay with the data
@@ -426,6 +437,8 @@ class BaseContestLog: public BaseLogList
       QString  scanContact(QSharedPointer<BaseContact> nct, QDateTime contestStart, QDateTime contestEnd);
       
       void addToContestList(QSharedPointer<BaseContact> rct);
+      void checkSpotWorked(const Callsign &mcs, const QString &locator, const Frequency &freq, bool *callWorked, bool *locatorWorked);
+      void calcDistanceBearing(const QString &_locator, double *distance, int *bearing);
 protected:
       unsigned long nextBlock = 1;
    int ct_stanzaCount = 0;

@@ -140,7 +140,9 @@ void ADIFImport::ADIFImportFieldDecode(QString Fieldname, int FieldLength, QStri
           strcpysp( temp, FieldContent, FieldLength );
 
           Frequency freq = convertAdifStrToFreq(temp);
-          aqso->frequency.setValue(freq);
+          QString band;
+          freq = acontest->getTxFreqBand(freq, band);
+          aqso->setFrequency(freq, band);
       }
 
       if ( Fieldname.toUpper() == "COMMENT" )
@@ -167,11 +169,19 @@ void ADIFImport::ADIFImportFieldDecode(QString Fieldname, int FieldLength, QStri
           }
           else if (temp == "SSB")
           {
-              aqso->mode.setValue("PH");
+              aqso->mode.setValue(hamlibData::PH);
           }
           else if (temp == hamlibData::FM)
           {
               aqso->mode.setValue(temp);
+          }
+          else if (temp == "RTTY")
+          {
+              aqso->mode.setValue(hamlibData::RY);
+          }
+          else if (temp == "PSK")
+          {
+              aqso->mode.setValue(hamlibData::PSK);
           }
           else
           {
@@ -290,7 +300,7 @@ void ADIFImport::ADIFImportEndOfRecord( )
     {
         QSharedPointer<BaseContact> bct = test.pcontactAt(0);
 
-        if (!bct->frequency.getValue().isClear())
+        if (!bct->getFrequency().getValue().isClear())
         {
             bool ok = false;
             BandList &blist = BandList::getBandList();
@@ -302,7 +312,7 @@ void ADIFImport::ADIFImportEndOfRecord( )
 
             if (ok)
             {
-                Frequency freq = bct->frequency.getValue();
+                Frequency freq = bct->getFrequency().getValue();
                 if (freq <= bi->fHigh && freq >= bi->fLow)
                 {
                     bandOK = true;

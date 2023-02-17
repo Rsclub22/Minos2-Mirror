@@ -41,7 +41,7 @@ BaseContestLog::BaseContestLog(bool hf)
     QString h = QHostInfo::localHostName();
    uuid = /*makeUuid()*/ h + "_" + QString::number(inst++);
    bearingOffset.setValue(0);
-   currentMode.setValue( isHF()?"PH":hamlibData::USB );
+   currentMode.setValue( isHF()?hamlibData::PH:hamlibData::USB );
 
   protectedContest.setValue( false );
   allowLoc8.setValue( false );
@@ -57,6 +57,7 @@ BaseContestLog::BaseContestLog(bool hf)
   locMult.setValue( false );
   GLocMult.setValue(false);
   otherMult.setValue(0);
+  asymmetricMult.setValue(false);
   M7Mults.setValue(false);
   usesBonus.setValue(false);
   scoreMode.setValue( PPKM );
@@ -293,6 +294,7 @@ void BaseContestLog::clearDirty()
    modeList.clearDirty();
    contestBands.clearDirty();
    currentBand.clearDirty();
+   bandsList.clearDirty();
    hfContest.clearDirty();
    otherExchange.clearDirty();
    otherOptionalExchange.clearDirty();
@@ -302,6 +304,7 @@ void BaseContestLog::clearDirty()
    GLocMult.clearDirty();
    districtMult.clearDirty();
    otherMult.clearDirty();
+   asymmetricMult.clearDirty();
 
    M7Mults.clearDirty();
    usesBonus.clearDirty();
@@ -339,6 +342,7 @@ void BaseContestLog::setDirty()
    modeList.setDirty();
    contestBands.setDirty();
    currentBand.setDirty();
+   bandsList.setDirty();
    hfContest.setDirty();
    otherExchange.setDirty();
    otherOptionalExchange.setDirty();
@@ -348,6 +352,7 @@ void BaseContestLog::setDirty()
    GLocMult.setDirty();
    districtMult.setDirty();
    otherMult.setDirty();
+   asymmetricMult.setDirty();
 
    M7Mults.setDirty();
    usesBonus.setDirty();
@@ -618,6 +623,36 @@ int BaseContestLog::CalcCentres( const QString &qscalcloc, int &brg ) const
    }
    return static_cast<int>(dist);
 }
+void BaseContestLog::calcDistanceBearing(const QString& _locator, double* distance, int* bearing)
+{
+    bool locValid = true;
+    QString locator = _locator;
+    double latitude;
+    double longitude;
+    double dist;
+    int brg = 0;
+
+    if (!locator.isEmpty())
+    {
+        if (locator.size() == 4)
+        {
+            locator.append("MM");
+        }
+
+        int locValres = lonlat( locator, longitude, latitude, MinosParameters::getMinosParameters() ->getAllowLoc4() );
+        if ( ( locValres ) != LOC_OK )
+        {
+            locValid = false;
+        }
+        if (locValid)
+        {
+            disbeara(longitude, latitude, dist, brg);
+            *distance = dist;
+            *bearing = brg;
+        }
+    }
+}
+
 void BaseContestLog::getMatchText( CheckableContact *pct, QString &disp, const BaseContestLog *const ct ) const
 {
    if ( DupSheet.isCurDup( pct ) )
@@ -881,7 +916,7 @@ QString BaseContestLog::scanContact(QSharedPointer<BaseContact> nct, QDateTime  
     // check for duplicates; accumulate the current points score
 
 
-    if ( DupSheet.checkCurDup( this, nct->getLogSequence(), 0, true ) )    // check for dup, insert it if required
+    if ( DupSheet.checkCurDup( nct.data(), nct->getLogSequence(), true ) )    // check for dup, insert it if required
        nct->cs.setValRes( ERR_DUPCS);
 
     nct->bearing = -1;		// force a recalc
@@ -1228,21 +1263,25 @@ DupContact::DupContact()
 {}
 DupContact::~DupContact()
 {}
-
+uint qHash(const DupContact &dup)
+{
+    return dup.qHash();
+}
 //If HF we need to include mode and band - VHF should be single band
 bool DupContact::operator<( const DupContact& rhs ) const
 {
-   Callsign * c1 = nullptr;    // search item
-   Callsign *c2 = nullptr;    // collection item
+   Callsign * c1 = &dct->cs;  // search item
+   QString b1 = dct->band;
+   QString m1 = dct->mode.getValue();
 
-   QString b1;
-   QString b2;
+   Callsign *c2 = &rhs.dct->cs;  // collection item
+   QString b2 = rhs.dct->band;
+   QString m2 = rhs.dct->mode.getValue();
 
-   c1 = &dct->cs;
-   dct->contest->getTxFreqBand(dct->frequency.getValue(), b1);
-
-   c2 = &rhs.dct->cs;
-   rhs.dct->contest->getTxFreqBand(rhs.dct->frequency.getValue(), b2);
+   if (b2.isEmpty())
+   {
+       b2 = b1;
+   }
 
    if (!c1 || !c2)
    {
@@ -1250,41 +1289,81 @@ bool DupContact::operator<( const DupContact& rhs ) const
    }
 
    if (*c1 == *c2)
+   {
+       if (b1.isEmpty() || m1.isEmpty())
+       {
+           return false;
+       }
+       if (b1 == b2)
+       {
+           if (dct->contest->isHF())
+           {
+               return m1 < m2;
+           }
+           return false;
+       }
        return b1 < b2;
+   }
 
    return (*c1 < *c2);
 }
 bool DupContact::operator==( const DupContact& rhs ) const
 {
-   Callsign * c1 = nullptr;    // search item
-   Callsign *c2 = nullptr;    // collection item
+    Callsign * c1 = &dct->cs;  // search item
+    QString b1 = dct->band;
 
-   QString b1;
-   QString b2;
+    Callsign *c2 = &rhs.dct->cs;  // collection item
+    QString b2 = rhs.dct->band;
 
-    c1 = &dct->cs;
-    dct->contest->getTxFreqBand(dct->frequency.getValue(), b1);
-    c2 = &rhs.dct->cs;
-    rhs.dct->contest->getTxFreqBand(rhs.dct->frequency.getValue(), b2);
-
-   return (c1 && c2 && *c1 == *c2 && b1 == b2);
+    if (b2.isEmpty())
+    {
+        b2 = b1;
+    }
+    if (dct->contest->isHF())
+    {
+        QString m1 = dct->mode.getValue();
+        QString m2 = rhs.dct->mode.getValue();
+        if (b1.isEmpty() || m1.isEmpty())
+        {
+            return *c1 == *c2;
+        }
+        return (c1 && c2 && *c1 == *c2 && b1 == b2 && m1 == m2);
+    }
+    else
+    {
+        if (b1.isEmpty())
+        {
+            return *c1 == *c2;
+        }
+        return (c1 && c2 && *c1 == *c2 && b1 == b2);
+    }
 }
 bool DupContact::operator!=( const DupContact& rhs ) const
 {
    return !( *this == rhs );
 }
+
+uint DupContact::qHash() const
+{
+    // find in set works off hash values, NOT the equality operator
+    // and they aren't the same (KST has no band/mode, monitored contact has band/mode)
+
+    // BUT hash just gives a bucket to be scanned, and THEN equality should be used
+
+    return ::qHash(dct->cs.realCall);
+}
 dupsheet::dupsheet()
 {}
 dupsheet::~dupsheet()
 {
-   clear();
+    clear();
 }
 bool dupsheet::checkCurDup(CheckableContact *nct, unsigned long valpseq, bool insert )
 {
-   curdup.reset();
-   if ( nct->cs.getValRes() == CS_OK )
-   {
-      QSharedPointer<DupContact> test( new DupContact(nct) );
+    curdup.reset();
+    if ( nct->cs.getValRes() == CS_OK )
+    {
+        QSharedPointer<DupContact> test( new DupContact(nct) );
       DupIterator c = dupList.find(test);
       if ( c!= dupList.end() )
       {
@@ -1395,6 +1474,7 @@ void BaseContestLog::processMinosStanza( const QString &methodName, MinosTestImp
       {
           currentBand.setValue(contestBands);
       }
+      mt->getStructArgMemberValue( "bandsList", bandsList );
 
       bool isHfContest = isHF();
       mt->getStructArgMemberValue( "hf", hfContest);
@@ -1430,6 +1510,8 @@ void BaseContestLog::processMinosStanza( const QString &methodName, MinosTestImp
       mt->getStructArgMemberValue( "NonGCtryMult", nonGCountryMult );
       mt->getStructArgMemberValue( "locMult", locMult );
       mt->getStructArgMemberValue( "OtherMultType", otherMult);
+      mt->getStructArgMemberValue( "AsymmetricMult", asymmetricMult);
+
       mt->getStructArgMemberValue( "GLocMult", GLocMult );
       mt->getStructArgMemberValue( "QTHReq", otherExchange );
       mt->getStructArgMemberValue( "QTHOpt", otherOptionalExchange );
@@ -1441,9 +1523,11 @@ void BaseContestLog::processMinosStanza( const QString &methodName, MinosTestImp
       if (modeList.getValue().isEmpty())
       {
           QString modeString = hamlibData::CW
-                       + "|" + (isHF()?"PH":hamlibData::USB)
+                       + "|" + (isHF()?hamlibData::PH:hamlibData::USB)
                       + "|" + hamlibData::FM
                       + "|" + hamlibData::MGM
+                      + "|" + hamlibData::RY
+                      + "|" + hamlibData::PSK
                       ;
 
           modeList.setValue( modeString);
@@ -1823,7 +1907,7 @@ int BaseContestLog::getCountriesWorked(const QString &band, const QString &item 
 QSharedPointer<BandInfo> BaseContestLog::checkBandChange(Frequency targetFreq, Frequency refFreq)
 {
     QSharedPointer<BandInfo>  nb;
-    if (contestBands.getValue() == allHF)
+    if (isHF())
     {
         BandList &bl = BandList::getBandList();
         QSharedPointer<BandInfo>  b1;
@@ -1838,6 +1922,54 @@ QSharedPointer<BandInfo> BaseContestLog::checkBandChange(Frequency targetFreq, F
     }
     return nb;
 }
+void BaseContestLog::checkSpotWorked(const Callsign &mcs, const QString &locator, const Frequency &freq, bool* callWorked, bool* locatorWorked)
+{
+    bool callfound = false;
+    bool locfound = false;
+    if (!isReadOnly())
+    {
+        for ( LogIterator i = ctList.begin(); i != ctList.end(); i++ )
+        {
+            if ((*i).wt->notValidContact() )
+            {
+                continue;
+            }
+
+            if (isHF())
+            {
+                QSharedPointer<BandInfo> bandChanged = checkBandChange(freq, (*i).wt->getFrequency().getValue().str());
+                if (bandChanged)
+                {
+                    continue;
+                }
+            }
+            if (!callfound)
+            {
+                if ((*i).wt->cs == mcs)
+                {
+                    *callWorked = true;
+                    callfound = true;
+                }
+            }
+
+            if (!locfound && !locator.isEmpty())
+            {
+                QString loc = locator.mid(0,4);
+                if ((*i).wt->loc.getLoc().mid(0,4) == loc)
+                {
+                    *locatorWorked = true;
+                    locfound = true;
+                }
+            }
+
+            if (callfound && locfound)
+            {
+                return;
+            }
+        }
+    }
+}
+
 //====================================================================
 ContestScore::ContestScore(BaseContestLog *ct)
 {

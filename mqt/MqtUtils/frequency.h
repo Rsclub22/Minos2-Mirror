@@ -27,6 +27,11 @@ public:
     operator qint64() const{return f;}
     //operator double() const {return f;}
 
+    qint64 toInt64()
+    {
+        return f;
+    }
+
     QString str() const ;
     QString traceStr() const;
 

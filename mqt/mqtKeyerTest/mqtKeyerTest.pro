@@ -14,6 +14,10 @@ QT       += network
 TARGET = mqtKeyerTest
 TEMPLATE = app
 
+INCLUDEPATH += ../rtaudio
+INCLUDEPATH += ../filter_c
+INCLUDEPATH += ../Chunkware
+
 SOURCES += \
         main.cpp \
         mqtktMainWindow.cpp \

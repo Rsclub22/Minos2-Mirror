@@ -17,8 +17,10 @@ public:
     static QString getOrgName();
     static QString getSingleAppLoggerName();
     static QString getSingleAppRouterName();
+    static QString getSingleAppStarterName();
     static QString getSingleAppLoggerDescription();
     static QString getSingleAppRouterDescription();
+    static QString getSingleAppStarterDescription();
     static qint16 getClientPort();
     static qint16 getRouterPort();
     static QString getZConfName();

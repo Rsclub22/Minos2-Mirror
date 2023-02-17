@@ -1,6 +1,7 @@
 #include "ContestApp.h"
 #include "cutils.h"
 #include "contest.h"
+#include "delayedaction.h"
 #include "htmldelegate.h"
 #include "MinosLoggerEvents.h"
 #include "calcs.h"
@@ -394,7 +395,10 @@ void LocFrame::on_LocView_clicked(const QModelIndex &index)
 
      MinosLoggerEvents::SendBrgStrToRot(brgbuff);
 
-     reInitialiseLocators();
+     delayedAction(this, [=]{
+         // delay this or double click doesn't work
+         reInitialiseLocators();
+     });
 
 }
 void LocFrame::selectLastClicked()

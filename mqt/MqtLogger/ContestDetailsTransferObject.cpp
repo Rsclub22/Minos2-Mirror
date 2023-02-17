@@ -132,6 +132,8 @@ void ContestDetailsTransferObject::getFromContest(LoggerContestLog *ct)
 
     contestBands = ct->contestBands;
     currentBand = ct->currentBand;
+    bandsList = ct->bandsList;
+
     hfContest = ct->hfContest;
     otherExchange = ct->otherExchange;
     otherOptionalExchange = ct->otherOptionalExchange;
@@ -141,6 +143,7 @@ void ContestDetailsTransferObject::getFromContest(LoggerContestLog *ct)
     GLocMult = ct->GLocMult;
     districtMult = ct->districtMult;
     otherMult = ct->otherMult;
+    asymmetricMult = ct->asymmetricMult;
 
     M7Mults = ct->M7Mults;
 
@@ -157,6 +160,10 @@ void ContestDetailsTransferObject::getFromContest(LoggerContestLog *ct)
     DTGEnd = ct->DTGEnd;
 
     bearingOffset = ct->bearingOffset;
+
+    zoomLevel = ct->zoomLevel;
+    centreLat = ct->centreLat;
+    centreLon = ct->centreLon;
 
     currentOp1 = ct->currentOp1;
     currentOp2 = ct->currentOp2;
@@ -248,6 +255,7 @@ void ContestDetailsTransferObject::setToContest(LoggerContestLog *ct)
 
     ct->contestBands = contestBands;
     ct->currentBand = currentBand;
+    ct->bandsList = bandsList;
     ct->hfContest = hfContest;
     ct->otherOptionalExchange = otherOptionalExchange;
     ct->otherExchange = otherExchange;
@@ -257,6 +265,7 @@ void ContestDetailsTransferObject::setToContest(LoggerContestLog *ct)
     ct->GLocMult = GLocMult;
     ct->districtMult = districtMult;
     ct->otherMult = otherMult;
+    ct->asymmetricMult = asymmetricMult;
 
     ct->M7Mults = M7Mults;
 
@@ -273,6 +282,10 @@ void ContestDetailsTransferObject::setToContest(LoggerContestLog *ct)
     ct->DTGEnd = DTGEnd;
 
     ct->bearingOffset = bearingOffset;
+
+    ct->zoomLevel = zoomLevel;
+    ct->centreLat = centreLat;
+    ct->centreLon = centreLon;
 
     ct->currentOp1 = currentOp1;
     ct->currentOp2 = currentOp2;

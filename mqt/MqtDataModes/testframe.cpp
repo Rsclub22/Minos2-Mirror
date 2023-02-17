@@ -1,0 +1,90 @@
+#include "MShowMessageDlg.h"
+#include "rxbuffer.h"
+#include "MTrace.h"
+#include "dmmainwindow.h"
+
+#include "testframe.h"
+#include "ui_testframe.h"
+
+QStringList testData = {
+"CQ CQ BARTG G0G0GJV G0GVV TEST",
+"G0GJV DE PE1EWR PE1EWR",
+"PE1EWR 599 001 001 001 K",
+"599 020 020 020 PE1EWR",
+"PE1EWR TU G0GJV QRX BARTG"
+
+};
+
+TestFrame::TestFrame(QWidget *parent, QLineEdit */*sendEdit*/, QString /*fname*/) :
+    QFrame(parent),
+    ui(new Ui::TestFrame)
+{
+    ui->setupUi(this);
+    connect(mainWindow, &DMMainWindow::sendCharacters, this, &TestFrame::onSendCharacters);
+    connect(mainWindow, &DMMainWindow::rigModeFreq, this, &TestFrame::onRigModeFreq);
+
+    for(const auto &s:qAsConst(testData))
+    {
+        trace(QString("Response %1").arg(s));
+        bool newLine = true;
+        for (auto c:qAsConst(s))
+        {
+            RXChar rxch(c, newLine, 0, carrier);
+            newLine = false;
+            RxBuffer::getRxBuffer()->addChar(rxch);
+        }
+    }
+
+    testTimer = new QTimer(this);
+    connect(testTimer, &QTimer::timeout, this, &TestFrame::onTimeout);
+//    testTimer->start(1000);
+}
+
+TestFrame::~TestFrame()
+{
+    delete ui;
+}
+void TestFrame::onTimeout()
+{
+    static int n = 0;
+    QString s = QString::number(n);
+    n++;
+    bool newLine = true;
+    for (auto c:qAsConst(s))
+    {
+        RXChar rxch(c, newLine, 0, carrier);
+        newLine = false;
+        RxBuffer::getRxBuffer()->addChar(rxch);
+    }
+}
+void TestFrame::onSendCharacters(QString data, int c)
+{
+    sendCharacters(data, c);
+}
+
+void TestFrame::onRigModeFreq(QString, Frequency)
+{
+
+}
+void TestFrame::sendCharacters(const QString &toSend, int carrier)
+{
+    mShowMessage(toSend, this);
+}
+
+void TestFrame::sendMode(QString mode)
+{
+    QString nm = "New mode set: " +  mode;
+    bool newLine = true;
+    for (auto c:qAsConst(nm))
+    {
+        RXChar rxch(c, newLine, 0, carrier);
+        newLine = false;
+        RxBuffer::getRxBuffer()->addChar(rxch);
+    }
+
+}
+
+void TestFrame::closeFrame()
+{
+
+}

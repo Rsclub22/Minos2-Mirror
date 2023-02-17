@@ -14,6 +14,7 @@
 
 #include <math.h>
 #include "ContestApp.h"
+#include "MShowMessageDlg.h"
 #include "tlogcontainer.h"
 #include "tsinglelogframe.h"
 #include "SendRPCDM.h"
@@ -857,6 +858,16 @@ void RigControlFrame::transferDetails(memoryData::memData &m)
              .arg(m.freq.traceStr(), curFreq.traceStr(), m.mode, curMode));
     if (isRadioLoaded())
     {
+        Frequency mfreq = m.freq;
+        if (m.mode.compare( hamlibData::RY, Qt::CaseInsensitive ) == 0)
+        {
+             mfreq = mfreq - Frequency(RTTY_MARK_OFFSET);
+        }
+        if (m.mode.compare( hamlibData::PSK, Qt::CaseInsensitive ) == 0)
+        {
+            mfreq = mfreq + Frequency(BPSK_OFFSET);
+        }
+
         if (radioConnected && !radioError)
         {
             ui->freqInput->clearFocus();
@@ -896,7 +907,7 @@ void RigControlFrame::getDetails(memoryData::memData &logData)
     logData.locator = sc.loc.getLoc();
     if (curMode.isEmpty())
     {
-        logData.mode = sc.mode;
+        logData.mode = sc.mode.getValue();
     }
     else
     {
@@ -949,7 +960,7 @@ void RigControlFrame::noRadioSetMode(QString m)
 
 void RigControlFrame::setFreqStepCombo(QString mode)
 {
-    if (mode == "PH")
+    if (mode == hamlibData::PH)
     {
         ui->freqStepCombo->clear();
         ui->freqStepCombo->addItems(PH_TUNING_STEPS);
@@ -966,6 +977,18 @@ void RigControlFrame::setFreqStepCombo(QString mode)
         ui->freqStepCombo->clear();
         ui->freqStepCombo->addItems(FM_TUNING_STEPS);
         ui->freqStepCombo->setCurrentIndex(FM_DEFAULT_STEP);
+    }
+    else if (mode == hamlibData::RY)
+    {
+        ui->freqStepCombo->clear();
+        ui->freqStepCombo->addItems(RY_TUNING_STEPS);
+        ui->freqStepCombo->setCurrentIndex(RY_DEFAULT_STEP);
+    }
+    else if (mode == hamlibData::PSK)
+    {
+        ui->freqStepCombo->clear();
+        ui->freqStepCombo->addItems(PSK_TUNING_STEPS);
+        ui->freqStepCombo->setCurrentIndex(PSK_DEFAULT_STEP);
     }
     else if (mode == hamlibData::CW)
     {
@@ -1004,7 +1027,7 @@ double RigControlFrame::getStepFreqFromComboText(const QString step)
     }
     else
     {
-        if (curMode == hamlibData::USB || curMode == hamlibData::LSB || curMode == hamlibData::FM || curMode == "PH")
+        if (curMode == hamlibData::USB || curMode == hamlibData::LSB || curMode == hamlibData::FM || curMode == hamlibData::PH)
         {
             stepF = sl[0].toDouble() * 1000;
         }
@@ -1030,7 +1053,10 @@ void RigControlFrame::setMode(QString m)
             ui->modelbl->setText(mode[0]);
             curMode = mode[0];
             tslf->bandSwitchFrame->setMode(curMode);
-            if (mode[0] == hamlibData::MGM)
+            if (mode[0] == hamlibData::MGM
+                    || mode[0] == hamlibData::RY
+                    || mode[0] == hamlibData::PSK
+                    )
             {
                 mgmLabelVisible(true);
                 ui->mgmLbl->setText(mode[1]);
@@ -1147,7 +1173,11 @@ void RigControlFrame::setRadioName(QString radNam, bool fromStartRigControl)
                         QString m = curMode;
 
                         traceMsg(QString("setRadioName: SavedCurMode = %1").arg(curMode));
-                        if (m.contains(':') && m.contains(hamlibData::MGM))
+                        if (m.contains(':') &&
+                                (m.contains(hamlibData::MGM)
+                                || m.contains(hamlibData::RY)
+                                || m.contains(hamlibData::PSK))
+                                )
                         {
                             QStringList ml = m.split(':');
                             if (ml.count() == 2)
@@ -1163,7 +1193,6 @@ void RigControlFrame::setRadioName(QString radNam, bool fromStartRigControl)
                             traceMsg(QString("setRadioName: saved mode is empty - revert to contest mode = %1").arg(m));
 
                         }
-
                         traceMsg(QString("setRadioName: sending radioName = %1, mode = %2").arg(radioName).arg(m));
                         emit selectRadio(radioName, contestBand, sendFreq, m.remove(':'));  // send radio and previous mode.
                     }
@@ -1284,7 +1313,7 @@ void RigControlFrame::setRadioFreq( Frequency &freqToSend, bool &fromStartRigCon
            if (bandOK)
            {
                QString mode = ct->currentMode.getValue();
-               if (mode == "PH")
+               if (mode == hamlibData::PH)
                {
                    Frequency modeTestFreq = bi->fLow;
                    if (modeTestFreq > Frequency(10000000)) // over 10MHz is USB
@@ -1586,8 +1615,10 @@ void RigControlFrame::setRadioState(QString s)
            QStringList sl = s.split(':');
            if (sl.count() == 2)
            {
-               ui->rigState->setText(HtmlFontColour(Qt::red) + tr("Error: %1").arg(sl[1]));
+               QString errMess = tr("Error: %1").arg(sl[1]);
+               ui->rigState->setText(HtmlFontColour(Qt::red) + errMess);
                emit radioHasError(sl[1]);
+               mShowMessage(errMess, this);
            }
         }
         else if (s == RIG_STATUS_CONNECTED)
@@ -2167,7 +2198,7 @@ void RigControlFrame::on_resetBandFreqButton_clicked()
     if (bandOK)
     {
         QString mode = ct->currentMode.getValue();
-        if (mode == "PH")
+        if (mode == hamlibData::PH)
         {
             Frequency modeTestFreq = bi->fLow;
             if (modeTestFreq > Frequency(10000000)) // over 10MHz is USB

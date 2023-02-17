@@ -11,12 +11,14 @@
 #include <QSplitter>
 #include <QScrollArea>
 #include <QSettings>
+#include <QToolButton>
 #include <QMenu>
+#include <qnamespace.h>
 #include <cstring>
 
 #include "PubSubValue.h"
 #include "cutils.h"
-#include "qnamespace.h"
+#include "MTrace.h"
 #include "MinosParameters.h"
 
 const double pi = 3.141592653 ;  /* pi */
@@ -894,4 +896,64 @@ void comboSetUniqueNames(QStringList nameList, QComboBox *cb)
         cb->setItemData( i + 1, names[i].toString(), Qt::ToolTipRole );
 
     }
+}
+void clearLayout(QLayout *layout)
+{
+    trace("Enter clearLayout");
+    if (layout != nullptr)
+    {
+        while(layout->count() > 0)
+        {
+            QLayoutItem *item = layout->takeAt(0);
+
+            QWidget* widget = item->widget();
+            if(widget)
+            {
+                QWidget *f = widget;
+                QString name = f->objectName();
+                if (name.isEmpty())
+                {
+                    QToolButton *tb = dynamic_cast<QToolButton *>(f);
+                    if (tb)
+                    {
+                        name = tb->text();
+                    }
+                }
+                QWidget *p = f->parentWidget();
+                while ( p)
+                {
+                    name += " | " + p->objectName();
+                    p = p->parentWidget();
+                }
+                QString s = f->metaObject()->className() + QString(" | ") + name;
+
+                trace(s);
+                delete widget;
+            }
+            else
+            {
+                QLayout * layout = item->layout();
+                if (layout)
+                {
+                    trace(QString("Clear layout %1").arg(layout->objectName()));
+                    clearLayout(layout);
+                }
+                else
+                {
+                    QSpacerItem * si = item->spacerItem();
+                    if (si)
+                    {
+                        trace("clear spacer");
+                        //delete si;    // the spacer IS the item
+                    }
+                    else
+                    {
+                        trace("clear something!");
+                    }
+                }
+            }
+            delete item;
+        }
+    }
+    trace("Exit clearLayout");
 }

@@ -20,8 +20,6 @@
 #include "htmldelegate.h"
 #include "tlogcontainer.h"
 #include "SendRPCDM.h"
-#include "delayedaction.h"
-#include "calcs.h"
 #include "MTrace.h"
 #include "clusterClientServer.h"
 #include "clusterclientframe.h"
@@ -83,7 +81,6 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     checkNewFilters = new QTimer(this);
     connect (checkNewFilters, &QTimer::timeout, this, [=](){checkSavedFilters();});
 
-    connect (ClusterClientServer::getClusterClientServer(), &ClusterClientServer::ClusterServerList, this, &ClusterClientFrame::clusterClientServerList);
     connect (ClusterClientServer::getClusterClientServer(), &ClusterClientServer::dxSpot, this, &ClusterClientFrame::dxSpots);
 
     connect (purgeTimer, &QTimer::timeout, this, [=](){purgeSpots();});
@@ -126,7 +123,7 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     connect( clearSpotAction, &QAction::triggered, this, [=](){clearSpotActionSelected();});
     connect( clearAllSpotsAction, &QAction::triggered, this, [=](){clearAllSpotsActionSelected();});
 
-    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::AfterLogContactToCluster, this, &ClusterClientFrame::on_AfterLogContact);
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::AfterLogContact, this, &ClusterClientFrame::on_AfterLogContact);
 
     ui->searchLineEdit->setValidator(&ucValidator);
     connect(ui->searchLineEdit, &QLineEdit::editingFinished, this, [=](){onSearchEditingFinished();});
@@ -235,27 +232,6 @@ void ClusterClientFrame::on_resendClusterSpots()
         MinosLoggerEvents::SendRequestResendSpotsToClusterServer(resendFrameId::CLUSTER_CLIENT, RESEND_ALL_SPOTS, contestBandStr, ct->uuid);
     }
 }
-
-
-
-
-
-
-void ClusterClientFrame::delayed_afterLogContact(BaseContestLog *c, Callsign cs, QString loc)
-{
-    // delay the search of the spots until the contact logging should have finished
-    // and the screen been redrawn, or a lot of spots slows things down too much
-
-    delayedAction(this, [=]()
-    {
-        // NB a lambda function
-        on_AfterLogContact(c, cs, loc);
-    }
-    , 50
-    );
-}
-
-
 
 void ClusterClientFrame::setupDXSpotView()
 {
@@ -675,16 +651,6 @@ void ClusterClientFrame::sendBrgToRot(QString brg)
 
 
 //---------------------------------------------------------------------------
-void ClusterClientFrame::clusterClientServerList(QVector<ClusterServer> serverList)
-{
-
-    for ( auto const &s: serverList )
-    {
-        QString state = QString(clusterStateList[s.state]) + " " + s.app + "\r\n";
-        traceMsg(QString("clusterClientServerList - state = %1").arg(state));
-        //ui->StationList->addItem( state );
-    }
-}
 
 void ClusterClientFrame::dxSpots(QVector<ClusterMessage> spotMsg)
 {
@@ -742,114 +708,29 @@ void ClusterClientFrame::handleDxSpots(QVector<QString> &spotQueue)
 
 void ClusterClientFrame::addDxSpotToTable(const QString spot)
 {
+    bool resentSpot = spot.contains(RESENTSPOT);
 
     traceMsg(QString("addDXSpotToTable: %1").arg(spot));
-    QDateTime spotDateTime = QDateTime::currentDateTimeUtc();
+    QSharedPointer<ClusterSpotData> newSpot = stringToDxSpot(spot, ct, timeToLive);
 
-    bool resentSpot = false;
-
-    QStringList sl;
-    if (spot.contains(DXSPOT))
+    if (newSpot)
     {
-      sl = spot.split(DXSPOT);
-    }
-    else if (spot.contains(RESENTSPOT))
-    {
-        resentSpot = true;
-        sl = spot.split(RESENTSPOT);
-    }
-
-    if (sl.count() == 2)
-    {
-#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
-        QStringList spotlist = sl[1].split(':', Qt::KeepEmptyParts);
-#else
-        QStringList spotlist = sl[1].split(':', QString::KeepEmptyParts);
-#endif
-
-        if (spotlist.count() == TTLVALUE +1)
+        // if spot has been resent or is a ShowDx spot requested by a command or restart of server
+        if (resentSpot || newSpot->getClusterSpotType() == clusterSpotType::SHOW_DXSPOT_TYPE)
         {
-
-            bool ok = false;
-            int ttl = spotlist[TTLVALUE].toInt(&ok);
-            if (ok)
+            if (checkspotExists(newSpot))
             {
-                if (ttl >= MIN_TTL && ttl <= MAX_TTL)
-                {
-                    timeToLive = ttl * 60; // seconds
-                }
+                traceMsg(QString("addDxSpotToTable: spot already exists in table, discard Call = %1, Freq: %2").arg(newSpot->getDxCall().getFullCall(), newSpot->getFreq().traceStr()));
+                return;     // spot exists in table
             }
+        }
 
 
-            // check to see if call or locator worked
-            bool callWorked = false;
-            bool locWorked = false;
+        dxSpotDataModel->rowData = newSpot;
 
-            if (spotlist[DXBANDSTR] == contestBandStr) // if contestband matches spotband
-            {
-                checkSpotWorked(spotlist[DXCALL], spotlist[DXLOCATOR], &callWorked, &locWorked);
-            }
-
-
-
-            double dist = 0;
-            int brg = 0;
-            QString distance;
-            QString bearing;
-            if (!spotlist[DXLOCATOR].isEmpty())
-            {
-                calcSpotDistanceBearing(spotlist[DXLOCATOR], &dist, &brg);
-                distance = QString::number(static_cast< int> ( dist));
-                bearing =  QString::number(brg);
-            }
-
-            bool dxLocFromNodeFlag = extractDxLocFromNodeFlag(spotlist[DXLOC_FROM_NODE_FLAG]);
-
-            spotDateTime = QDateTime::fromString(spotlist[SPOTDATETIME], "yyyyMMMddHHmmss" );
-            spotDateTime.setTimeSpec(Qt::UTC);
-            qint64 rxTime = spotDateTime.toMSecsSinceEpoch()/1000;
-
-            QSharedPointer<ClusterSpotData> newSpot(new ClusterSpotData());
-
-
-            newSpot->setRxTime(rxTime);
-            newSpot->setSpotDateTime(spotDateTime);
-            newSpot->setFreq(spotlist[DXFREQ]);
-            newSpot->setBand(spotlist[DXBANDSTR]);
-            newSpot->setBandType(spotlist[DXBANDTYPE]);
-            newSpot->setMode(spotlist[DXMODESTR]);
-            newSpot->setDxCall(spotlist[DXCALL]);
-            newSpot->setDxCallWorked(callWorked);
-            newSpot->setDxLocator(spotlist[DXLOCATOR]);
-            newSpot->setDxLocatorIsFromNode(dxLocFromNodeFlag);
-            newSpot->setDxLocatorWorked(locWorked);
-            newSpot->setDxDist(distance);
-            newSpot->setDxBrg(bearing);
-            newSpot->setSpotterCall(spotlist[SPOTCALL]);
-            newSpot->setSpotterLocator(spotlist[SPOTLOCATOR]);
-            newSpot->setDxPropMode(spotlist[DXPROPMODE]);
-            newSpot->setSpotComment(spotlist[SPOTCOMMENT]);
-
-            dxSpotDataModel->rowData = newSpot;
-
-
-            // if spot has been resent or is a ShowDx spot requested by a command or restart of server
-            if (resentSpot || spotlist[DX_CLUSTER_SPOT_TYPE] == clusterSpotType::SHOW_DXSPOT_TYPE)
-            {
-                if (checkspotExists(newSpot))
-                {
-                    traceMsg(QString("addDxSpotToTable: spot already exists in table, discard Call = %1, Freq: %2").arg(newSpot->getDxCall().getFullCall(), newSpot->getFreq().traceStr()));
-                    return;     // spot exists in table
-                }
-            }
-
-
-
-            dxSpotDataModel->insertRows(dxSpotDataModel->rowCount(), 1);
-            traceMsg(QString("addDxSpotToTable: adding %1 to cluster data table").arg(spotlist[DXCALL]));
-       }
+        dxSpotDataModel->insertRows(dxSpotDataModel->rowCount(), 1);
+        traceMsg(QString("addDxSpotToTable: adding %1 to cluster data table").arg(newSpot->getDxCall().getFullCall()));
     }
-
 }
 
 bool ClusterClientFrame::readLessGreaterThanDistanceFlag()
@@ -869,7 +750,7 @@ bool ClusterClientFrame::checkspotExists(QSharedPointer<ClusterSpotData> spotDat
 
     for (int i = 0; i < dxSpotDataModel->rowCount(); i++)
     {
-        if (*dxSpotDataModel->getSpotData(i) == *spotData)
+        if (dxSpotDataModel->getSpotData(i)->sameSpotAs(spotData))
         {
             trace(QString("Spot Call = %1, already in display, skip").arg(spotData->getDxCall().realCall));
             return true;
@@ -921,94 +802,6 @@ bool ClusterClientFrame::checkDbRowForMatch(qint64 incomingVal, int row, const i
     }
 
     return false;
-}
-
-void ClusterClientFrame::checkSpotWorked(QString &callsign, QString &locator, bool* callWorked, bool* locatorWorked)
-{
-    bool callfound = false;
-    bool locfound = false;
-    if (ct && !ct->isReadOnly())
-    {
-
-        Callsign mcs;
-        mcs.setFullCall(callsign);
-
-        for ( auto const &c: qAsConst( ct->ctList ))
-        {
-            if ( c.wt->notValidContact() )
-            {
-                continue;
-            }
-
-            if (!callfound)
-            {
-            if (c.wt->cs == mcs)
-            {
-                *callWorked = true;
-                    callfound = true;
-
-            }
-            }
-
-            if (!locator.isEmpty())
-            {
-                QString loc = locator.mid(0,4);
-                if (c.wt->loc.getLoc().mid(0,4) == loc)
-                {
-                    *locatorWorked = true;
-                    locfound = true;
-
-        }
-            }
-
-            if (callfound && locfound)
-            {
-                return;
-            }
-
-        }
-
-    }
-
-
-
-
-
-
-}
-
-
-void ClusterClientFrame::calcSpotDistanceBearing(const QString& _locator, double* distance, int* bearing)
-{
-    bool locValid = true;
-    QString locator = _locator;
-    double latitude;
-    double longitude;
-    double dist;
-    int brg = 0;
-
-    if (ct && !locator.isEmpty())
-    {
-        if (locator.size() == 4)
-        {
-            locator.append("MM");
-        }
-
-        int locValres = lonlat( locator, longitude, latitude, MinosParameters::getMinosParameters() ->getAllowLoc4() );
-        if ( ( locValres ) != LOC_OK )
-        {
-            locValid = false;
-        }
-        if (locValid)
-        {
-            ct->disbeara(longitude, latitude, dist, brg);
-            *distance = dist;
-            *bearing = brg;
-        }
-
-    }
-
-
 }
 
 void ClusterClientFrame::on_dxSpotViewSectionResized(int, int , int)
@@ -1149,7 +942,7 @@ void ClusterClientFrame::setContest(BaseContestLog *c)
                 filterSettings.setBandFilter(contestBandStr, true);    // set cluster filter to current band - can be overidden
 
 
-                if (contestModeStr == hamlibData::MGM)       //  have mode settings been saved before?
+                if (contestModeStr == hamlibData::MGM)
                 {
 
                     for (auto &m:mgmModes)
@@ -1158,9 +951,13 @@ void ClusterClientFrame::setContest(BaseContestLog *c)
                     }
 
                 }
+                else if (contestModeStr == hamlibData::PH)
+                {
+                    filterSettings.setModeFilter(hamlibData::USB, true);
+                    filterSettings.setModeFilter(hamlibData::LSB, true);
+                }
                 else
                 {
-                    // no, save current mode filter for this contest
                     filterSettings.setModeFilter(contestModeStr, true);
                 }
 
@@ -1456,7 +1253,7 @@ void ClusterClientFrame::onSearchEditingFinished()
 }
 
 
-void ClusterClientFrame::on_AfterLogContact( BaseContestLog *c, Callsign cs, QString loc)
+void ClusterClientFrame::on_AfterLogContact( BaseContestLog *c, QSharedPointer<BaseContact> lct)
 {
       bool worked = false;
       if (c && ct == c)
@@ -1469,7 +1266,7 @@ void ClusterClientFrame::on_AfterLogContact( BaseContestLog *c, Callsign cs, QSt
               {
               QString callsign = dxSpotDataModel->data(dxSpotDataModel->index(spotNumber, DXSPOT_CALL_COL_NUM,  QModelIndex()), DataStoredRole).toString();
 
-              if (cs.realCall == callsign)
+              if (lct->cs.realCall == callsign)
               {
                   dxSpotDataModel->setData(dxSpotDataModel->index(spotNumber, DXSPOT_CALL_WORKED_COL_NUM,  QModelIndex()), true, DataStoredRole);
                   worked = true;
@@ -1479,7 +1276,7 @@ void ClusterClientFrame::on_AfterLogContact( BaseContestLog *c, Callsign cs, QSt
 
               QString locator = dxSpotDataModel->data(dxSpotDataModel->index(spotNumber, DXLOC_COL_NUM,  QModelIndex()), DataStoredRole).toString();
 
-              if (loc.mid(0,4) == locator.mid(0, 4) )
+              if (lct->loc.getLoc().mid(0,4) == locator.mid(0, 4) )
               {
                   dxSpotDataModel->setData(dxSpotDataModel->index(spotNumber, DXLOC_WORKED_COL_NUM,  QModelIndex()), true, DataStoredRole);
                   worked = true;
@@ -1757,7 +1554,7 @@ void ClusterClientFrame::on_clusterStatusIndicatorClicked()
             if (!clusterServerConnected && ui->statusIndicator->toolTip() != "Connected")
             {
                 trace(QString("cluster server disconnected - request reconnect"));
-                MinosLoggerEvents::sendReconnectFlagToClusterServer(true);
+                MinosLoggerEvents::SendReconnectFlagToClusterServer(true);
             }
     }
 

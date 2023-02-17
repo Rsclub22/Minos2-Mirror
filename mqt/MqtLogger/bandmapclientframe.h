@@ -113,7 +113,7 @@ private:
 
 
     // cluster spots
-    QVector<QSharedPointer<BandmapSpotData> > spotQueue;
+    QVector<QSharedPointer<ClusterSpotData> > spotQueue;
     bool clusterServerConnected = false;
 
     // CQ Frequency
@@ -123,7 +123,7 @@ private:
     bool offRunFreq = false;
 
     // spots from logger
-    QVector<QSharedPointer<BandmapSpotData> > logSpotQueue;
+    QVector<QSharedPointer<ClusterSpotData> > logSpotQueue;
 
     BandmapView *bandmapView = nullptr;
     QItemSelectionModel *selectionModel = nullptr;
@@ -165,7 +165,7 @@ private:
     QShortcut* zoomOut = nullptr;
 
 
-    BandmapSpotData contextMenuSelectedSpotData = bandmapSpotType::NONE;
+    ClusterSpotData contextMenuSelectedSpotData = bandmapSpotType::NONE;
     int contextMenuSelectedSpotDataRowNum = -1;
 
     bool purgeSpotFlag = false;
@@ -178,10 +178,8 @@ private:
     int getModeOffSet(QString contestModeStr);
     void handleDxSpots(QVector<QString> &spotQueue);
     void clusterStatusIndicatorToggle(bool on);
-    void addDxSpotToBandmapTable(QSharedPointer<BandmapSpotData> spot);
-    void calcSpotDistanceBearing(const QString &_locator, double *distance, int *bearing);
-    void checkSpotWorked(const Callsign &callsign, const QString &locator, const Frequency &freq, bool *callWorked, bool *locatorWorked);
-    bool checkSpotInTable(QSharedPointer<BandmapSpotData> spot);
+    void addDxSpotToBandmapTable(QSharedPointer<ClusterSpotData> spot);
+    bool checkSpotInTable(QSharedPointer<ClusterSpotData> spot);
     void sendFreqToRig(Frequency freq);
 
     bool event(QEvent *event) override;
@@ -192,7 +190,7 @@ private:
     void traceMsg(QString msg);
 
     void setCQFreq();
-    void addRemoveCQSpot(QSharedPointer<BandmapSpotData> spot);
+    void addRemoveCQSpot(QSharedPointer<ClusterSpotData> spot);
 
     void radioStatusIndicatorToggle(bool on);
     bool checkContestBandMatch(Frequency curFreq);
@@ -200,7 +198,6 @@ private:
     int readBandmapZoomLevel();
     void setZoomLevelLabelText(int level);
 
-    QSharedPointer<BandmapSpotData> stringToDxSpot(QString spot);
     void setTextToFrameTitle(QString text1, QString col, QString text2);
     void readDefaultDistanceFilterSettings(BandmapClientFilterSettings *filterSettings);
 
@@ -212,7 +209,6 @@ protected:
 
 private slots:
 
-     void clusterClientServerList(QVector<ClusterServer>);
      void dxSpots(QVector<ClusterMessage>);
 
 
@@ -235,7 +231,7 @@ private slots:
      void purgeSpots();
      void on_markSpotActionSelected();
      void on_unMarkSpotActionSelected();
-     void addLogSpotToBandmapTable(QSharedPointer<BandmapSpotData> spot);
+     void addLogSpotToBandmapTable(QSharedPointer<ClusterSpotData> spot);
      void mouseTimerCheckNewSpots();
      void on_FreqDisplayClicked();
 

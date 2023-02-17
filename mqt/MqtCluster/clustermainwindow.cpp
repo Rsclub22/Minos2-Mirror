@@ -15,7 +15,6 @@
 #include <QProcessEnvironment>
 #include <QHeaderView>
 #include <QTextStream>
-#include <MTrace.h>
 #include <QTableView>
 #include <QMessageBox>
 
@@ -998,7 +997,7 @@ void ClusterMainWindow::parseDX(const QString txt)
 
 
 
-void ClusterMainWindow::processNewSpot(const QSharedPointer<ClusterSpotData> newSpot)
+void ClusterMainWindow::processNewSpot(QSharedPointer<ClusterSpotData> newSpot)
 {
 
     QString msg = QString("ProcessNewSpot: DX de %1 %2 %3 %4 %5").arg(newSpot->getDxCallStr(), newSpot->getFreq().traceStr(),
@@ -1075,7 +1074,7 @@ void ClusterMainWindow::processNewSpot(const QSharedPointer<ClusterSpotData> new
 
 
         trace(QString("ProcessNewSpot: Add spot for display callsign = %1, rxTime = %2").arg(newSpot->getDxCallStr()).arg(newSpot->getRxTime()));
-        spotsList.append(QSharedPointer<ClusterSpotData>( new ClusterSpotData(newSpot)));
+        spotsList.append(newSpot);
 
     }
     else
@@ -1509,8 +1508,7 @@ void ClusterMainWindow::handlePingClusterNodeTimeout()
 
 int ClusterMainWindow::getPingTimeoutValue()
 {
-    QString filename = "./Configuration/Cluster/ClusterSettings.ini";
-    QSettings settings(filename, QSettings::IniFormat);
+    QSettings settings(CLUSTER_SETTINGS_FILE, QSettings::IniFormat);
     settings.beginGroup("PingTimeout");
     int timeout = settings.value("PingTimeout", 60000).toInt();
     settings.endGroup();
@@ -2103,6 +2101,26 @@ void ClusterMainWindow::onStdInRead(QString cmd)
     if (cmd.indexOf("Shutdown", 0, Qt::CaseInsensitive) >= 0)
     {
         close();
+    }
+}
+void ClusterMainWindow::moveEvent(QMoveEvent * event)
+{
+    QSettings settings;
+    settings.setValue(geoStr, saveGeometry());
+    QWidget::moveEvent(event);
+}
+void ClusterMainWindow::resizeEvent(QResizeEvent * event)
+{
+    QSettings settings;
+    settings.setValue(geoStr, saveGeometry());
+    QWidget::resizeEvent(event);
+}
+void ClusterMainWindow::changeEvent( QEvent* e )
+{
+    if( e->type() == QEvent::WindowStateChange )
+    {
+        QSettings settings;
+        settings.setValue(geoStr, saveGeometry());
     }
 }
 
@@ -2847,9 +2865,7 @@ void ClusterMainWindow::setHfFilterControlsVisible()
 
 void ClusterMainWindow::saveEnableStartEndScriptFileFlags()
 {
-    QString fileName = CLUSTER_SETTINGS_FILE;
-
-    QSettings config(fileName, QSettings::IniFormat);
+    QSettings config(CLUSTER_SETTINGS_FILE, QSettings::IniFormat);
 
     config.beginGroup("CommandFile");
 
@@ -2869,9 +2885,7 @@ void ClusterMainWindow::saveEnableStartEndScriptFileFlags()
 
 void ClusterMainWindow::saveBandFilterOnSaveFlag()
 {
-    QString fileName = CLUSTER_SETTINGS_FILE;
-
-    QSettings config(fileName, QSettings::IniFormat);
+    QSettings config(CLUSTER_SETTINGS_FILE, QSettings::IniFormat);
 /*
     config.beginGroup("General");
     if (band)
@@ -3094,11 +3108,9 @@ void ClusterMainWindow::handleStatusTimer()
 
 bool ClusterMainWindow::getUseQrzForQraFlag()
 {
-    bool useQrzFlag;
-    QString fileName = CLUSTER_SETTINGS_FILE;
-    QSettings config(fileName, QSettings::IniFormat);
+    QSettings config(CLUSTER_SETTINGS_FILE, QSettings::IniFormat);
     config.beginGroup("UseQRZServer");
-    useQrzFlag =  config.value("enableGetQraFromQrz", false).toBool();
+    bool useQrzFlag =  config.value("enableGetQraFromQrz", false).toBool();
     config.endGroup();
 
     return useQrzFlag;

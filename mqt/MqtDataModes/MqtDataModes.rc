@@ -1,0 +1,6 @@
+#include <WINDOWS.H>
+#include <WINGDI.H>
+#include <WINUSER.H>
+
+RT_MANIFEST "MqtDataModes.exe.manifest"
+

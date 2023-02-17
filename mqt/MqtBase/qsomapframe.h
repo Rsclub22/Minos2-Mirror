@@ -1,12 +1,15 @@
 #ifndef QSOMAPFRAME_H
 #define QSOMAPFRAME_H
 
-#include "contacts.h"
 #include <QFrame>
 #include <QVariant>
 
+#include "clustercommon.h"
+#include "contacts.h"
+
 class BaseContestLog;
 class QTimer;
+class ClusterSpotData;
 
 namespace Ui {
 class QSOMapFrame;
@@ -20,23 +23,58 @@ public:
     explicit QSOMapFrame(QWidget *parent = nullptr);
     ~QSOMapFrame();
 
-    void setContest(BaseContestLog *);
-    void closeContest();
+    void setContest(BaseContestLog *, bool monitor, bool grid, bool lines, bool spots, int spotDistance);
 
-    void on_AfterLogContact(const BaseContestLog *c, const QSharedPointer<BaseContact> lct);
 private:
     Ui::QSOMapFrame *ui;
 
     BaseContestLog *ct = nullptr;
 
+    QMap <QString, int> locs;
+
+    bool bmonitor = false;
+    bool bdrawGrid = true;
+    bool bdrawLines = true;
+    bool drawSpots = true;
+    int spotDistance = 0;
+
+    QString mCentreLat;
+    QString mCentreLon;
+    QString mZoom;
+
+    // cluster spots
+    QVector<QSharedPointer<ClusterSpotData> > spotQueue;
+    bool clusterServerConnected = false;
+
+    qlonglong timeToLive = 0;
+    QTimer *purgeTimer = nullptr;
+
     void startMap();
     void stopMap();
+    void doRedraw(const BaseContestLog *c, bool grid, bool lines, bool spots, int spotDistance);
+    void drawSpot(QSharedPointer<ClusterSpotData>);
+
+    void showContact(const BaseContestLog *c, const QSharedPointer<BaseContact> lct);
+    bool checkSpotInTable(QSharedPointer<ClusterSpotData> spot);
+    QPair<double, double> calcPosition(QString loc, bool &drawLine);
 signals:
     void callSig(QVariant stringList);
+    void spotSig(QVariant stringList);
     void homeSig(QVariant stringList);
 
+    void drawLines(QVariant dl);
+    void drawGrid(QVariant dg);
+    void clearAll();
+
 private slots:
-    void onQmlClicked(QVariant v);
+    void onQmlSignal(QVariant v);
+    void dxSpots(QVector<ClusterMessage> spotMsg);
+    void purgeSpots();
+    void saveParams();
+public slots:
+    void on_AfterLogContact(const BaseContestLog *c, const QSharedPointer<BaseContact> lct);
+    void on_redrawQSOMap(bool grid, bool lines, bool spots, int sd);
+
 };
 
 #endif // QSOMAPFRAME_H

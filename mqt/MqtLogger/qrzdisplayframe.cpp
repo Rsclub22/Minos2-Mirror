@@ -5,17 +5,11 @@
 #include "tsinglelogframe.h"
 #include "ui_qrzdisplayframe.h"
 #include "minosqlabel.h"
-#include "MinosParameters.h"
-#include "calcs.h"
 #include "MTrace.h"
 
 #include "qrzdisplayframe.h"
 
 const int PINGTIMER_DURATION = 10000;
-
-
-
-
 
 QrzDisplayFrame::QrzDisplayFrame(QWidget *parent) :
     QFrame(parent),
@@ -89,7 +83,7 @@ void QrzDisplayFrame::onCallsignTextMouseDoubleClicked()
     if (!ui->callsignText->text().isEmpty())
     {
 
-        MinosLoggerEvents::sendQRZInfoToLog(ui->callsignText->text(), ui->qraText->text(), ui->nameText->text());
+        MinosLoggerEvents::SendQRZInfoToLog(ui->callsignText->text(), ui->qraText->text(), ui->nameText->text());
     }
 
 }
@@ -99,7 +93,7 @@ void QrzDisplayFrame::onQraTextMouseDoubleClicked()
 {
     if (!ui->qraText->text().isEmpty())
     {
-        MinosLoggerEvents::sendQRZInfoToLog("" , ui->qraText->text(), "");
+        MinosLoggerEvents::SendQRZInfoToLog("" , ui->qraText->text(), "");
     }
 }
 
@@ -115,7 +109,7 @@ void QrzDisplayFrame::onNameTextMouseDoubleClicked()
 {
     if (!ui->nameText->text().isEmpty())
     {
-        MinosLoggerEvents::sendQRZInfoToLog("" , "", ui->nameText->text());
+        MinosLoggerEvents::SendQRZInfoToLog("" , "", ui->nameText->text());
     }
 }
 
@@ -176,7 +170,7 @@ void QrzDisplayFrame::onLoggerQrzReply(QrzCallsignData cd, QString qrzReplyState
             {
                 distance = 0;
                 bearing = 0;
-                calcSpotDistanceBearing(cd.getQra(), &distance, &bearing);
+                ct->calcDistanceBearing(cd.getQra(), &distance, &bearing);
 
                 ui->distanceText->setText(QString::number(distance));
                 if (bearing >= 0 && bearing <= 360)
@@ -200,41 +194,6 @@ void QrzDisplayFrame::onLoggerQrzReply(QrzCallsignData cd, QString qrzReplyState
             ui->callsignText->setText(cd.getCallsign());
             setQrzMessageText(qrzReplyState);
 
-        }
-    }
-
-
-
-}
-
-
-
-void QrzDisplayFrame::calcSpotDistanceBearing(const QString& _locator, double* distance, int* bearing)
-{
-    bool locValid = true;
-    QString locator = _locator;
-    double latitude;
-    double longitude;
-    double dist;
-    int brg = 0;
-
-    if (ct && !locator.isEmpty())
-    {
-        if (locator.size() == 4)
-         {
-             locator.append("MM");
-         }
-
-        int locValres = lonlat( locator, longitude, latitude, MinosParameters::getMinosParameters() ->getAllowLoc4() );
-        if ( ( locValres ) != LOC_OK )
-        {
-            locValid = false;
-        }
-        if (locValid)
-        {
-            ct->disbeara(longitude, latitude, dist, brg);
-            *distance = dist;
-            *bearing = brg;
         }
     }
 }
@@ -379,9 +338,9 @@ void QrzDisplayServerRpc::sendCallsignFromLoggerToQrzServer(QString callsign, QS
 }
 
 
-void QrzDisplayServerRpc::on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString from )
+void QrzDisplayServerRpc::on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString /*from*/ )
 {
-    trace(QString("[QrzDisplayServer]  on_serverCall - Message from %1").arg(from));
+    //trace(QString("[QrzDisplayServer]  on_serverCall - Message from %1").arg(from));
     if ( !err )
     {
 
@@ -543,9 +502,9 @@ void QrzDisplayServerRpc::on_routerCall(bool err, QSharedPointer<MinosRPCObj> mr
 }
 
 
-void QrzDisplayServerRpc::on_notify(AnalysePubSubNotify an, const QString /*from*/ )
+void QrzDisplayServerRpc::on_notify(AnalysePubSubNotify /*an*/, const QString /*from*/ )
 {
-    trace(QString("[QrzDisplayServer]   on_notify - routerName = %1, publisherProgram = %2, app = %3").arg(an.getPublisherRouter(), an.getPublisherProgram(), an.getKey()));
+//    trace(QString("[QrzDisplayServer]   on_notify - routerName = %1, publisherProgram = %2, app = %3").arg(an.getPublisherRouter(), an.getPublisherProgram(), an.getKey()));
 }
 
 void QrzDisplayServerRpc::on_provider(Provider, QString /*cat*/)

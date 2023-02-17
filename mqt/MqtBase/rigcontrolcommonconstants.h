@@ -11,7 +11,10 @@
 #include "minositem.h"
 #include "frequency.h"
 
+// Offset frequencies
 
+const int RTTY_MARK_OFFSET = 2125;
+const int BPSK_OFFSET = 1750;
 
 // Status messages sent to minos logger
 extern const char * RIG_STATUS_CONNECTED;
@@ -58,6 +61,10 @@ namespace hamlibData
     const QString FMN = "FMN";           // FM Narrow Kenwood ts990s
 
     const QString MGM = "MGM";           // MGM generically
+
+    const QString RY = "RY";
+    const QString PSK = "PS";
+    const QString PH = "PH";
 
 
     const QStringList portTypeList = { "RIG_PORT_NONE", "RIG_PORT_SERIAL", "RIG_PORT_NETWORK", "RIG_PORT_DEVICE",
@@ -139,6 +146,8 @@ namespace freqPresetData {
     const QString PRESET_MODE_CW = "CW";
     const QString PRESET_MODE_PHONE = "PHONE";
     const QString PRESET_MODE_MGM = "MGM";
+    const QString PRESET_MODE_RTTY = "RY";
+    const QString PRESET_MODE_PSK = "PS";
 
 }
 
@@ -189,6 +198,8 @@ private:
     QMap<QString, StoredPresetFreqs> phoneFreqPresets;
 
     QMap<QString, StoredPresetFreqs> mgmFreqPresets;
+    QMap<QString, StoredPresetFreqs> rttyFreqPresets;
+    QMap<QString, StoredPresetFreqs> pskFreqPresets;
 
 };
 
@@ -310,6 +321,8 @@ public:
         cwPresetsChanged = false;
         phonePresetsChanged = false;
         mgmPresetsChanged = false;
+        rttyPresetsChanged = false;
+        mgmPresetsChanged = false;
         enableBandSwitch = false;
         enableSerialBandSwitch = false;
         serialComport = false;
@@ -325,6 +338,8 @@ public:
         cwPresetsChanged ||
         phonePresetsChanged ||
         mgmPresetsChanged ||
+        rttyPresetsChanged ||
+        pskPresetsChanged ||
         enableBandSwitch ||
         enableSerialBandSwitch ||
         serialComport ||
@@ -339,6 +354,8 @@ public:
     bool cwPresetsChanged;
     bool phonePresetsChanged;
     bool mgmPresetsChanged;
+    bool rttyPresetsChanged;
+    bool pskPresetsChanged;
     bool enableBandSwitch;
     bool enableSerialBandSwitch;
     bool serialComport;

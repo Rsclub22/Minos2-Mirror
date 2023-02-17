@@ -393,13 +393,15 @@ bool RigControl::checkFreqValid(freq_t freq, rmode_t mode)
 
 /* ---------------------- Freq Range ---------------------------------*/
 
-
-
-
-
 bool HamlibRigControl::checkFreqRange(int rigNumber, const Frequency &freq)
 {
     RIG *myRig = rig_init(rigNumber);
+    const freq_range_t* freq_range = HamlibRigControl::getFreqRange(myRig, freq);
+    return (freq_range != nullptr)? true:false;
+}
+
+const freq_range_t* HamlibRigControl::getFreqRange(RIG *myRig, const Frequency &freq)
+{
     if (myRig)
     {
         rmode_t mode = convertQStrRmode_t(hamlibData::USB);
@@ -449,14 +451,11 @@ bool HamlibRigControl::checkFreqRange(int rigNumber, const Frequency &freq)
             freq_range = rig_get_range(myRig->caps->tx_range_list1, f, mode);
         }
 
-        return (freq_range != nullptr)? true:false;
+        return freq_range;
     }
 
 
-    return false;
-
-
-
+    return nullptr;
 }
 
 
@@ -485,7 +484,14 @@ int HamlibRigControl::setMode(VFO vfo, MODE mode)
     return rig_set_mode(my_rig, hamlibVfoNames[vfo], mapMode(mode), pb);
 }
 
+bool HamlibRigControl::modeSupported(MODE mode, Frequency f)
+{
+    const freq_range_t  *fr = getFreqRange(my_rig, f);
+    rmode_t rm = mapMode(mode);
 
+    bool supported = fr && ((fr->modes & rm) != 0);
+    return supported;
+}
 
 
 // Hamlib conversion

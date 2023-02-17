@@ -221,7 +221,7 @@
             </spacer>
            </item>
            <item>
-            <widget class="QPushButton" name="pushButton">
+            <widget class="QPushButton" name="loggerPushButton">
              <property name="text">
               <string>Logger</string>
              </property>
@@ -663,6 +663,13 @@ when user selected</string>
        </widget>
       </item>
       <item>
+       <widget class="QPushButton" name="logsButton">
+        <property name="text">
+         <string>Logs</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QPushButton" name="clearButton">
         <property name="text">
          <string>Clear Messages</string>
@@ -740,7 +747,7 @@ when user selected</string>
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="callStringButtonGroup"/>
   <buttongroup name="activeChatGroup"/>
+  <buttongroup name="callStringButtonGroup"/>
  </buttongroups>
 </ui>

@@ -334,8 +334,6 @@ bool Cabrillo::exportTest(QSharedPointer<QFile> expfd)
     if ( ltot == 0 )
        ltot = 1;
 
-    int nvalid = 0;      // valid QSOs
-    int nlines = 0;      // QSO records
     for(auto const &dct: qAsConst(ct->ctList))
     {
        QSharedPointer<BaseContact> cct = dct.wt;
@@ -345,15 +343,11 @@ bool Cabrillo::exportTest(QSharedPointer<QFile> expfd)
        if ( cct->contactFlags.getValue() & DONT_PRINT )
           continue;
 
-       nlines++;
        if ( cct->contactScore.getValue() > 0 )
        {
-          nvalid++;
           bonus += cct->bonus;
        }
     }
-    if (bonus)
-         nlocs = ct->getNlocs();
 
     QStringList remarks;
     remarks.append( ct->entCondx1.getValue() );

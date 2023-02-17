@@ -14,6 +14,7 @@ QVector<GridColumn> QSOMatchGridModel::ThisMatchTreeColumns =
 {
     GridColumn( egTime, "XXXXXXXXXX",QT_TR_NOOP( "UTC"), taLeftJustify ),               // time
     GridColumn( egBand, "XXXXXX", QT_TR_NOOP("Band"), taLeftJustify ),               // band
+    GridColumn( egMode, "XXXX", QT_TR_NOOP("Mode"), taLeftJustify ),               // mode
     GridColumn( egCall, "MMMMMMMMMMM", QT_TR_NOOP("Callsign"), taLeftJustify ),         // call
     GridColumn( egRSTTx, "599XXX", QT_TR_NOOP("RepTx"), taLeftJustify ),                 // RST
     GridColumn( egSNTx, "1234X", QT_TR_NOOP("SnTx"), taLeftJustify /*taRightJustify*/ ),   // serial
@@ -152,11 +153,11 @@ void MatchTreeFrame::doCustomContextMenuRequested()
             ListContact *lct = mc->getListContact();
             if (bct)
             {
-                MinosLoggerEvents::sendSetMemoryAction(contest, bct->cs.getFullCall(), bct->loc.getLoc());
+                MinosLoggerEvents::SendSetMemoryAction(contest, bct->cs.getFullCall(), bct->loc.getLoc());
             }
             else if (lct)
             {
-                MinosLoggerEvents::sendSetMemoryAction(contest, lct->cs.getFullCall(), lct->loc.getLoc());
+                MinosLoggerEvents::SendSetMemoryAction(contest, lct->cs.getFullCall(), lct->loc.getLoc());
             }
         }
     }

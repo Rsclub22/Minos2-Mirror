@@ -48,7 +48,7 @@ void ContestContact::getPrintFileText( QString &sdest, short maxlen )
    }
    else
    {
-      makestrings( clp->serialMandatoryField.getValue() );
+      makestrings( clp->serialMandatoryField.getValue() || clp->asymmetricMult.getValue() );
 
       QString exp_buff;
 
@@ -274,7 +274,13 @@ void ContestContact::getReg1TestText(QString &sdest , bool noSerials)
             if ( smode.compare( hamlibData::MGM ) == 0 )
                sdest += "7";
              else
-                sdest += "0";
+                if ( smode.compare( hamlibData::RY ) == 0 )
+                   sdest += "7";
+                 else
+                    if ( smode.compare( hamlibData::PSK ) == 0 )
+                       sdest += "7";
+                     else
+                        sdest += "0";
    sdest += ';';
 
    if (contest->RSTMandatoryField.getValue())
@@ -283,7 +289,7 @@ void ContestContact::getReg1TestText(QString &sdest , bool noSerials)
    }
    sdest += ';';
 
-   if (noSerials || !contest->serialMandatoryField.getValue())
+   if (noSerials || (!contest->serialMandatoryField.getValue() && !contest->asymmetricMult.getValue()))
    {
     // no data
    }
@@ -303,7 +309,7 @@ void ContestContact::getReg1TestText(QString &sdest , bool noSerials)
    }
    sdest += ';';
 
-   if (noSerials || !contest->serialMandatoryField.getValue())
+   if (noSerials || (!contest->serialMandatoryField.getValue() && !contest->asymmetricMult.getValue()))
    {
     // no data
    }
@@ -410,13 +416,17 @@ QSO:  3799 PH 1999-03-06 0712 HC8N           59 700    N5KO           59 CA     
     else
         outstr += "QSO:   ";
 
-    outstr += getCabrilloField(contest->getCabrilloFreqBand(frequency.getValue()), 5);
+    outstr += getCabrilloField(contest->getCabrilloFreqBand(getFrequency().getValue()), 5);
 
     QString smode = mode.getValue().toUpper();
-    if (smode == hamlibData::USB || smode == hamlibData::LSB || smode == hamlibData::FM || smode == "PH")
+    if (smode == hamlibData::USB || smode == hamlibData::LSB || smode == hamlibData::FM || smode == hamlibData::PH)
         smode = "PH";
     else if (smode == hamlibData::MGM)
         smode = "DG";
+    else if (smode == hamlibData::RY)
+        smode = "RY";
+    else if (smode == hamlibData::PSK)
+        smode = "PS";
     else
         smode = "CW";
 
@@ -431,7 +441,7 @@ QSO:  3799 PH 1999-03-06 0712 HC8N           59 700    N5KO           59 CA     
     {
         outstr += getCabrilloField(reps.getValue(), 3);
     }
-    if (lcl->serialMandatoryField.getValue())
+    if (lcl->serialMandatoryField.getValue() || lcl->asymmetricMult.getValue())
     {
         QString ssbuff;
         int ss = serials.getValue().toInt();
@@ -542,7 +552,7 @@ QString ContestContact::getADIFLine()
 
     if (contest->RSTMandatoryField.getValue())
         outstr += makeADIFField( "RST_SENT", reps.getValue() );
-    if (contest->serialMandatoryField.getValue())
+    if (contest->serialMandatoryField.getValue() || contest->asymmetricMult.getValue())
     {
         outstr += makeADIFField( "STX", serials.getValue() );
     }
@@ -597,7 +607,7 @@ QString ContestContact::getADIFLine()
 
 
     QString cb;
-    double txfreq = contest->getAdifFreqBand(frequency.getValue(), cb);
+    double txfreq = contest->getAdifFreqBand(getFrequency().getValue(), cb);
     outstr += makeADIFField( "BAND", cb );
 
     double dfreq = txfreq/1000000.0;  // MHz
@@ -723,7 +733,7 @@ bool ContestContact::minosSave(QSharedPointer<BaseContact> tct )
 {
    LoggerContestLog * clp = dynamic_cast<LoggerContestLog *>( contest );
    clp->minosSaveContestContact( tct );
-   MinosLoggerEvents::sendAfterQSOSaved(clp, tct);
+   MinosLoggerEvents::SendAfterQSOSaved(clp, tct);
    QSharedPointer<BaseContact> bc( new BaseContact(*this ));
    bc->updtime = dtg( true ); // update time is now
    getHistory().push_back( bc );
@@ -732,7 +742,6 @@ bool ContestContact::minosSave(QSharedPointer<BaseContact> tct )
 }
 bool ContestContact::GJVsave( GJVParams &gp )
 {
-   const QString nulc;
    QString temp;
    buffpt = 0;
 

@@ -87,7 +87,7 @@ void BandSwitchFrame::setContest(BaseContestLog *contest)
 
     if (ct)
     {
-        ui->bandSwitchButtomFrame->setVisible(ct->contestBands.getValue() == allHF);
+        ui->bandSwitchButtomFrame->setVisible(ct->isHF());
     }
 }
 

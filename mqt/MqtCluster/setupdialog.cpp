@@ -176,11 +176,7 @@ void SetupDialog::saveGeneralSettings()
         || useQrzForQraChanged)
     {
         timeToLive = ui->timeToLive->text().trimmed();
-        QString fileName = CLUSTER_SETTINGS_FILE;
-
-        QSettings config(fileName, QSettings::IniFormat);
-
-
+        QSettings config(CLUSTER_SETTINGS_FILE, QSettings::IniFormat);
 
         if (timeToLive != config.value("timeToLive", "").toString())
         {
@@ -188,9 +184,6 @@ void SetupDialog::saveGeneralSettings()
             config.setValue("timeToLive", timeToLive);
             config.endGroup();
         }
-
-
-
 
         if (sendSpotToDXCluster != config.value("enableSendToDXCluster", false).toBool())
         {
@@ -200,8 +193,6 @@ void SetupDialog::saveGeneralSettings()
             emit sendSpotToTxEnabled(sendSpotToDXCluster);
         }
 
-
-
         if (useQrzForQraFlag != config.value("enableGetQraFromQrz", false).toBool())
         {
             config.beginGroup("UseQRZServer");
@@ -209,16 +200,13 @@ void SetupDialog::saveGeneralSettings()
             config.endGroup();
 
         }
-
     }
 }
 
 
 void SetupDialog::createDefaultGeneralSettingsFile()
 {
-
-    QString fileName = CLUSTER_SETTINGS_FILE;
-    QSettings config(fileName, QSettings::IniFormat);
+    QSettings config(CLUSTER_SETTINGS_FILE, QSettings::IniFormat);
 
     config.beginGroup("Personal");
 
@@ -236,8 +224,7 @@ void SetupDialog::createDefaultGeneralSettingsFile()
 
 void SetupDialog::readGeneralSettings()
 {
-    QString fileName = CLUSTER_SETTINGS_FILE;
-    QSettings config(fileName, QSettings::IniFormat);
+    QSettings config(CLUSTER_SETTINGS_FILE, QSettings::IniFormat);
     config.beginGroup("TimeToLive");
     timeToLive = config.value("timeToLive", "").toString();
     if (timeToLive == "0")      // 0 as no purge removed.
@@ -425,11 +412,7 @@ void SetupDialog::savePersonal()
             qth = ui->qthEdit->text().trimmed();
         }
 
-
-
-        QString fileName = CLUSTER_SETTINGS_FILE;
-
-        QSettings config(fileName, QSettings::IniFormat);
+        QSettings config(CLUSTER_SETTINGS_FILE, QSettings::IniFormat);
 
         config.beginGroup("Personal");
         config.setValue("Callsign", callsign);
@@ -445,12 +428,7 @@ void SetupDialog::savePersonal()
 
 void SetupDialog::readPersonal()
 {
-
-
-    QString fileName = CLUSTER_SETTINGS_FILE;
-
-
-    QSettings config(fileName, QSettings::IniFormat);
+    QSettings config(CLUSTER_SETTINGS_FILE, QSettings::IniFormat);
 
     config.beginGroup("Personal");
 
@@ -466,9 +444,7 @@ void SetupDialog::readPersonal()
 
 void SetupDialog::saveCurrentNodeName(QString nodeName)
 {
-    QString fileName = CLUSTER_SETTINGS_FILE;
-
-    QSettings config(fileName, QSettings::IniFormat);
+    QSettings config(CLUSTER_SETTINGS_FILE, QSettings::IniFormat);
 
     config.beginGroup("CurrentNodeName");
     config.setValue("currentNodeName", nodeName);
@@ -478,10 +454,7 @@ void SetupDialog::saveCurrentNodeName(QString nodeName)
 
 QString SetupDialog::getCurrentNodeName()
 {
-    QString fileName = CLUSTER_SETTINGS_FILE;
-
-
-    QSettings config(fileName, QSettings::IniFormat);
+    QSettings config(CLUSTER_SETTINGS_FILE, QSettings::IniFormat);
 
     config.beginGroup("CurrentNodeName");
     QString currentNodeName = config.value("currentNodeName", "").toString();
@@ -494,7 +467,6 @@ QString SetupDialog::getCurrentNodeName()
 
 void SetupDialog::loadPersonalToSetupTab()
 {
-
     ui->callsignEdit->setText(callsign);
     ui->nameEdit->setText(name);
     ui->locatorEdit->setText(locator);
@@ -509,8 +481,7 @@ void SetupDialog::loadClusterListToModel()
     // ****************** need check for no ini file and empty ini file
     // get number of cluster nodes from settings ini file
 
-    QString fileName = CLUSTER_NODE_LIST_FILE;
-    QSettings settings(fileName, QSettings::IniFormat);
+    QSettings settings(CLUSTER_NODE_LIST_FILE, QSettings::IniFormat);
 
     QStringList availNodeNames = settings.childGroups();
     int numClusterNodes = availNodeNames.count();

@@ -385,8 +385,7 @@ void StatisticsDisplay::doRecalc()
         sno /= interval;
         if ( sno >= 0 && sno < contestSlots.size() )
         {
-            QString band;
-            ct->getTxFreqBand(c.wt->frequency.getValue(), band);
+            QString band = c.wt->band;
 
             if (!contestSlots[sno].modesMap.contains(band))
             {

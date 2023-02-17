@@ -3,6 +3,7 @@
 #include "BandList.h"
 #include "MMessageDialog.h"
 #include "MShowMessageDlg.h"
+#include "MinosParameters.h"
 #include "tentryoptionsform.h"
 #include "tminosbshelpform.h"
 #include "tcalendarform.h"
@@ -12,6 +13,23 @@
 
 #include "contestdetails.h"
 #include "ui_contestdetails.h"
+
+
+enum ExchangeTypes {
+    etNoExchange,
+    etPostCode,
+    etOther,
+    etOptional,
+    etMandatory,
+    etAsymmetric
+};
+
+enum BonusTypes {
+    btNone,
+    btB2,
+    btB4,
+    btNAC
+};
 
 ContestDetails::ContestDetails(QWidget *parent) :
     QDialog(parent),
@@ -30,18 +48,17 @@ ContestDetails::ContestDetails(QWidget *parent) :
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
-    ui->ExchangeComboBox->addItem(tr("No Exchange Required"));
+    ui->ExchangeComboBox->addItem(tr("No Exchange Required") );
     ui->ExchangeComboBox->addItem(tr("PostCode Multipliers"));
     ui->ExchangeComboBox->addItem(tr("Other Exchange Multiplier"));
     ui->ExchangeComboBox->addItem(tr("Optional Exchange Multiplier"));
     ui->ExchangeComboBox->addItem(tr("Exchange Required (no multiplier)"));
+    ui->ExchangeComboBox->addItem(tr("Asymmetric (TX S/N, RX exchange), Multiplier"));
 
     ui->BonusComboBox->addItem(tr("None"));
     ui->BonusComboBox->addItem(tr("UKAC Bonuses (B2)"));
     ui->BonusComboBox->addItem(tr("UKAC Bonuses (B4)"));
     ui->BonusComboBox->addItem(tr("NAC Bonuses"));
-
-    //setModes();
 
     for ( int i = 0; i < 24; i++ )
     {
@@ -104,7 +121,6 @@ ContestDetails::ContestDetails(QWidget *parent) :
     ui->NonGCtryMult->setVisible(false);
     ui->GLocMult->setVisible(false);
     ui->M7LocatorMults->setVisible(false);
-
 }
 void ContestDetails::doCloseEvent()
 {
@@ -174,6 +190,7 @@ void ContestDetails::setDetails( LoggerContestLog * pcont )
    contestTransferObject = QSharedPointer<ContestDetailsTransferObject>(new ContestDetailsTransferObject());
    contestTransferObject->getFromContest(pcont);
    sectionList = contestTransferObject->sectionList.getValue(); // the combo will then be properly set up in setDetails()
+   // and now we need to show the detail
    setDetails();
 }
 void ContestDetails::setExchangeComboBox()
@@ -185,37 +202,51 @@ void ContestDetails::setExchangeComboBox()
       Other Exchange Multiplier
       Optional Exchange Multiplier
       Exchange Required (no multiplier)
+      Asymmetric (TX S/N, RX exchange), Multiplier
+
    */
+
+    bool otherExchange = contestTransferObject->otherExchange.getValue();
+    bool otherOptional = contestTransferObject->otherOptionalExchange.getValue();
+    int otherMult = contestTransferObject->otherMult.getValue();
+
+    bool asymmetricMult = contestTransferObject->asymmetricMult.getValue();
 
     if ( contestTransferObject->districtMult.getValue() )
     {
         // PostCode Multipliers
-       ui->ExchangeComboBox->setCurrentIndex( 1);
+        ui->ExchangeComboBox->setCurrentIndex( etPostCode);
     }
     else
-       if ( contestTransferObject->otherExchange.getValue() && !contestTransferObject->otherOptionalExchange.getValue() && contestTransferObject->otherMult.getValue() > 0 )
-       {
-           // Other Exchange Multiplier
-           ui->ExchangeComboBox->setCurrentIndex( 2);
-       }
-       else
-           if (contestTransferObject->otherExchange.getValue() &&  contestTransferObject->otherOptionalExchange.getValue() && contestTransferObject->otherMult.getValue() > 0 )
-           {
-               // Optional Exchange Multiplier
-               ui->ExchangeComboBox->setCurrentIndex( 3);
-           }
-           else
-               if (contestTransferObject->otherExchange.getValue() && contestTransferObject->otherMult.getValue() <= 0 )
-               {
-                   // Exchange Required (no multiplier)
-                   ui->ExchangeComboBox->setCurrentIndex( 4);
-               }
-               else
-                   {
+        if ( otherExchange && !otherOptional && otherMult > 0 && !asymmetricMult )
+        {
+            // Other Exchange Multiplier
+            ui->ExchangeComboBox->setCurrentIndex( etOther);
+        }
+        else
+            if ( otherExchange && otherOptional && otherMult > 0 && !asymmetricMult )
+            {
+                // Optional Exchange Multiplier
+                ui->ExchangeComboBox->setCurrentIndex( etOptional);
+            }
+            else
+                if ( otherExchange && otherOptional && otherMult <= 0 && !asymmetricMult )
+                {
+                    // Exchange Required (no multiplier)
+                    ui->ExchangeComboBox->setCurrentIndex( etMandatory);
+                }
+                else
+                    if ( otherExchange && !otherOptional && otherMult > 0 && asymmetricMult )
+                    {
+                        // Exchange Required (no multiplier)
+                        ui->ExchangeComboBox->setCurrentIndex( etAsymmetric);
+                    }
+                    else
+                    {
                         // No Exchange Required
-                       ui->ExchangeComboBox->setCurrentIndex( 0);
-                   }
- }
+                        ui->ExchangeComboBox->setCurrentIndex( etNoExchange);
+                    }
+}
 
 void ContestDetails::setDetails(  )
 {
@@ -223,54 +254,7 @@ void ContestDetails::setDetails(  )
 
    ui->ContestNameEdit->setText(contestTransferObject->name.getValue());
 
-   ui->BandComboBox->clear();
-   // need to get legal bands from ContestLog
-
-   BandList &blist = BandList::getBandList();
-   if (contestTransferObject->isHF())
-   {
-       ui->BandComboBox->addItem( trAllHf );
-   }
-   for (auto const &b: qAsConst(blist.bandList))
-   {
-       if (b->enabled && b->contestAllowed)
-       {
-           if ( (contestTransferObject->isHF()) && b->getType() == HF_BANDTYPE)
-           {
-               ui->BandComboBox->addItem( b->uk );
-           }
-           if ( !contestTransferObject->isHF() && b->getType() != HF_BANDTYPE)
-           {
-               ui->BandComboBox->addItem( b->uk );
-           }
-       }
-   }
-
-   QString cb = contestTransferObject->contestBands.getValue().trimmed();
-   if (cb == allHF)
-   {
-       cb = trAllHf;
-   }
-   else
-   {
-       QSharedPointer<BandInfo>  bi;
-       bool bandOK = blist.findBand(cb, bi);
-       if (bandOK)
-       {
-           cb = bi->uk;
-       }
-   }
-   int b = ui->BandComboBox->findText( cb );        // contest
-
-   if ( b >= 0 )
-   {
-      ui->BandComboBox->setCurrentIndex( b);
-   }
-   else
-   {
-      ui->BandComboBox->setCurrentText(contestTransferObject->contestBands.getValue());
-   }
-
+   setBandBoxes(contestTransferObject->contestBands.getValue(), contestTransferObject->bandsList.getValue());
    setModes();
    if (!contestTransferObject->currentMode.getValue().isEmpty())
    {
@@ -405,10 +389,10 @@ void ContestDetails::setDetails(  )
 
    switch (contestTransferObject->scoreMode.getValue())
    {
-   case 0:
+   case PPKM:
        ui->commencedKRB->setChecked(true);
        break;
-   case 1:
+   case PPQSO:
        ui->PPQSORB->setChecked(true);
        break;
    }
@@ -426,18 +410,18 @@ void ContestDetails::setDetails(  )
    if (usesBonus)
    {
        if (bonusType == "B2")
-           ui->BonusComboBox->setCurrentIndex(1);
+           ui->BonusComboBox->setCurrentIndex(btB2);
        else if (bonusType == "B4")
-           ui->BonusComboBox->setCurrentIndex(2);
+           ui->BonusComboBox->setCurrentIndex(btB4);
        else if (bonusType == "NAC")
-           ui->BonusComboBox->setCurrentIndex(3);
+           ui->BonusComboBox->setCurrentIndex(btNAC);
        else
-           ui->BonusComboBox->setCurrentIndex(0);
+           ui->BonusComboBox->setCurrentIndex(btNone);
 
    }
    else
    {
-       ui->BonusComboBox->setCurrentIndex(0);
+       ui->BonusComboBox->setCurrentIndex(btNone);
    }
 
    ui->LocatorMult->setChecked(contestTransferObject->locMult.getValue()) ;
@@ -521,6 +505,154 @@ void ContestDetails::refreshOps()
       ui->SecondOpComboBox->setCurrentText(contestTransferObject->currentOp2.getValue());
    }
 }
+void ContestDetails::setBandBoxes(QString bandStr, QString bandsList)
+{
+    BandList &blist = BandList::getBandList();
+    bool bandOK = false;
+    QSharedPointer<BandInfo>  bi;
+
+    bandOK = blist.findBand(bandStr, bi);
+    if (bandOK)
+    {
+        bandStr = bi->uk;
+    }
+    ui->HFFrame->setVisible(contestTransferObject->isHF());
+
+    if (contestTransferObject->isHF())
+    {
+        QVBoxLayout *hfLayout = dynamic_cast<QVBoxLayout *>(ui->HFFrame->layout());
+
+        if (!hfLayout)
+        {
+            hfLayout = new QVBoxLayout();
+            ui->HFFrame->setLayout(hfLayout);
+
+            allBandChkBoxMap.clear();
+
+            for (auto const &b: qAsConst(blist.bandList))
+            {
+                if (b->getType() == HF_BANDTYPE && b->enabled && b->contestAllowed)
+                {
+                    QCheckBox *cbox = new QCheckBox();
+                    allBandChkBoxMap[b->uk] = cbox;
+
+                    cbox->setText(b->uk);
+
+                    hfLayout->addWidget(cbox);
+                }
+            }
+        }
+        for(QCheckBox *c:qAsConst(allBandChkBoxMap))
+        {
+            c->setChecked(false);
+        }
+
+        if (bandOK)
+        {
+            if (allBandChkBoxMap.contains(bandStr))
+            {
+                allBandChkBoxMap[bandStr]->setChecked(true);
+            }
+        }
+        else
+        {
+            bool bsAll = bandStr == allHF || bandStr == "All";
+            if (bandsList.isEmpty())
+            {
+                bool bs2128 = bandStr == "21/28";
+                bool bs8010 = bandStr == "80m-10m";
+                bool bs8020 = bandStr == "80m-20m";
+                bool bs8040 = bandStr == "80m-40m";
+
+                for(QCheckBox *c:qAsConst(allBandChkBoxMap))
+                {
+                    QString ctext = c->text();
+
+                    if (
+                           ((bsAll || bs2128 || bs8010)
+                            && (ctext == "21 MHz" || ctext == "28 MHz"))
+                        || ((bsAll || bs8040 || bs8020 || bs8010)
+                            && (ctext == "3.5 MHz" || ctext == "7 MHz"))
+                        || ((bsAll || bs8020 || bs8010)
+                            && (ctext == "14 MHz"))
+                        || ( bsAll
+                            && (ctext == "1.8 MHz"))
+                        )
+                    {
+                        c->setChecked(true);
+                    }
+                    else
+                    {
+                        c->setChecked(false);
+                    }
+                }
+            }
+            else
+            {
+                QStringList bll = bandsList.split(";");
+                for(const auto &bs: qAsConst(bll))
+                {
+                    QStringList bsl = bs.split(" ");
+                    if (bsl.count() == 3)
+                    {
+                        QString btn = bsl[0] + " " + bsl[1];
+                        if (allBandChkBoxMap.contains(btn))
+                        {
+                            allBandChkBoxMap[btn]->setChecked(bsl[2] == "1");
+                        }
+                    }
+                }
+
+            }
+            if (bsAll)
+            {
+                bandStr = trAllHf;
+            }
+        }
+    }
+    ui->BandComboBox->clear();
+
+    if (contestTransferObject->isHF())
+    {
+        if (bandStr.isEmpty())
+        {
+            ui->BandComboBox->addItem( trAllHf );
+        }
+        else
+        {
+            ui->BandComboBox->addItem( bandStr );
+        }
+    }
+
+    for (auto const &b: qAsConst(blist.bandList))
+    {
+        if (b->enabled  && b->contestAllowed)
+        {
+            if ( (contestTransferObject->isHF()) && b->getType() == HF_BANDTYPE)
+            {
+                ui->BandComboBox->addItem( b->uk );
+            }
+            if ( !contestTransferObject->isHF() && b->getType() != HF_BANDTYPE)
+            {
+                ui->BandComboBox->addItem( b->uk );
+            }
+        }
+    }
+    int b = ui->BandComboBox->findText( bandStr );
+
+    if ( b >= 0 )
+    {
+        ui->BandComboBox->setCurrentIndex( b);
+    }
+    else
+    {
+        if (bandOK && bi && !bi->enabled)
+        {
+            MinosParameters::getMinosParameters()->mshowMessage(tr("Band %1 is set as unwanted.").arg(bandStr));
+        }
+        ui->BandComboBox->setCurrentText(bandStr);
+    }
+}
 void ContestDetails::setDetails( const IndividualContest &ic )
 {
    setWindowTitle(tr("Details of Contest Entry - %1").arg(contestTransferObject->cfileName) );
@@ -528,30 +660,7 @@ void ContestDetails::setDetails( const IndividualContest &ic )
    ui->ContestNameEdit->setText(ic.description);                      // contest
    contestTransferObject->VHFContestName.setValue(ic.description);
 
-
-   // need to get legal bands from ContestLog
-   ui->BandComboBox->clear();
-
-
-   BandList &blist = BandList::getBandList();
-   QSharedPointer<BandInfo>  bi;
-    bool bandOK = blist.findBand(ic.reg1band, bi);
-    if (bandOK)
-    {
-        ui->BandComboBox->addItem( bi->uk );
-    }
-    else
-    {
-        if (contestTransferObject->isHF())
-        {
-            ui->BandComboBox->addItem( trAllHf );
-        }
-        else
-        {
-            ui->BandComboBox->addItem( ic.reg1band );
-        }
-    }
-    ui->BandComboBox->setCurrentIndex(0);
+    setBandBoxes(ic.reg1band, QString());
 
     contestTransferObject->RSTMandatoryField.setValue(true);
     contestTransferObject->serialMandatoryField.setValue(true);
@@ -610,6 +719,7 @@ void ContestDetails::setDetails( const IndividualContest &ic )
           contestTransferObject->otherExchange.setValue(false);
           contestTransferObject->otherOptionalExchange.setValue(false);
           contestTransferObject->otherMult.setValue(0);
+          contestTransferObject->asymmetricMult.setValue(false);
 
           contestTransferObject->M7Mults.setValue(false);
 
@@ -633,6 +743,7 @@ void ContestDetails::setDetails( const IndividualContest &ic )
           contestTransferObject->otherExchange.setValue(false);
           contestTransferObject->otherOptionalExchange.setValue(false);
           contestTransferObject->otherMult.setValue(0);
+          contestTransferObject->asymmetricMult.setValue(false);
 
           contestTransferObject->M7Mults.setValue(false);
 
@@ -656,6 +767,7 @@ void ContestDetails::setDetails( const IndividualContest &ic )
           contestTransferObject->otherExchange.setValue(false);
           contestTransferObject->otherOptionalExchange.setValue(true);  // bonus, not mult, so usual code not right
           contestTransferObject->otherMult.setValue(0);
+          contestTransferObject->asymmetricMult.setValue(false);
 
           contestTransferObject->M7Mults.setValue(false);
 
@@ -679,6 +791,7 @@ void ContestDetails::setDetails( const IndividualContest &ic )
           contestTransferObject->otherExchange.setValue(false);
           contestTransferObject->otherOptionalExchange.setValue(true);
           contestTransferObject->otherMult.setValue(0);
+          contestTransferObject->asymmetricMult.setValue(false);
 
           contestTransferObject->M7Mults.setValue(false);
 
@@ -701,6 +814,7 @@ void ContestDetails::setDetails( const IndividualContest &ic )
           contestTransferObject->otherExchange.setValue(false);
           contestTransferObject->otherOptionalExchange.setValue(false);
           contestTransferObject->otherMult.setValue(0);
+          contestTransferObject->asymmetricMult.setValue(false);
 
           contestTransferObject->M7Mults.setValue(false);
 
@@ -727,6 +841,7 @@ void ContestDetails::setDetails( const IndividualContest &ic )
           contestTransferObject->otherExchange.setValue(true);
           contestTransferObject->otherOptionalExchange.setValue(false);
           contestTransferObject->otherMult.setValue(0);
+          contestTransferObject->asymmetricMult.setValue(false);
 
           contestTransferObject->M7Mults.setValue(false);
 
@@ -750,6 +865,7 @@ void ContestDetails::setDetails( const IndividualContest &ic )
           contestTransferObject->otherExchange.setValue(false);
           contestTransferObject->otherOptionalExchange.setValue(false);
           contestTransferObject->otherMult.setValue(0);
+          contestTransferObject->asymmetricMult.setValue(false);
 
           contestTransferObject->M7Mults.setValue(false);
 
@@ -773,6 +889,7 @@ void ContestDetails::setDetails( const IndividualContest &ic )
           contestTransferObject->otherExchange.setValue(true);
           contestTransferObject->otherOptionalExchange.setValue(false);
           contestTransferObject->otherMult.setValue(0);
+          contestTransferObject->asymmetricMult.setValue(false);
 
           contestTransferObject->M7Mults.setValue(false);
 
@@ -796,6 +913,7 @@ void ContestDetails::setDetails( const IndividualContest &ic )
           contestTransferObject->otherExchange.setValue(false);
           contestTransferObject->otherOptionalExchange.setValue(false);
           contestTransferObject->otherMult.setValue(0);
+          contestTransferObject->asymmetricMult.setValue(false);
 
           contestTransferObject->M7Mults.setValue(false);
 
@@ -819,6 +937,7 @@ void ContestDetails::setDetails( const IndividualContest &ic )
           contestTransferObject->otherExchange.setValue(false);
           contestTransferObject->otherOptionalExchange.setValue(false);
           contestTransferObject->otherMult.setValue(0);
+          contestTransferObject->asymmetricMult.setValue(false);
 
           contestTransferObject->M7Mults.setValue(false);
 
@@ -842,6 +961,7 @@ void ContestDetails::setDetails( const IndividualContest &ic )
           contestTransferObject->otherExchange.setValue(false);
           contestTransferObject->otherOptionalExchange.setValue(false);
           contestTransferObject->otherMult.setValue(0);
+          contestTransferObject->asymmetricMult.setValue(false);
 
           contestTransferObject->M7Mults.setValue(false);
 
@@ -865,6 +985,7 @@ void ContestDetails::setDetails( const IndividualContest &ic )
           contestTransferObject->otherExchange.setValue(false);
           contestTransferObject->otherOptionalExchange.setValue(false);
           contestTransferObject->otherMult.setValue(0);
+          contestTransferObject->asymmetricMult.setValue(false);
 
           contestTransferObject->M7Mults.setValue(true);
 
@@ -887,6 +1008,7 @@ void ContestDetails::setDetails( const IndividualContest &ic )
            contestTransferObject->otherExchange.setValue(false);
            contestTransferObject->otherOptionalExchange.setValue(false);
            contestTransferObject->otherMult.setValue(0);
+           contestTransferObject->asymmetricMult.setValue(false);
 
            contestTransferObject->M7Mults.setValue(false);
 
@@ -909,6 +1031,7 @@ void ContestDetails::setDetails( const IndividualContest &ic )
            contestTransferObject->otherExchange.setValue(false);
            contestTransferObject->otherOptionalExchange.setValue(false);
            contestTransferObject->otherMult.setValue(0);
+           contestTransferObject->asymmetricMult.setValue(false);
 
            contestTransferObject->M7Mults.setValue(false);
 
@@ -931,6 +1054,7 @@ void ContestDetails::setDetails( const IndividualContest &ic )
           contestTransferObject->otherExchange.setValue(false);
           contestTransferObject->otherOptionalExchange.setValue(false);
           contestTransferObject->otherMult.setValue(0);
+          contestTransferObject->asymmetricMult.setValue(false);
 
           contestTransferObject->M7Mults.setValue(false);
 
@@ -984,15 +1108,15 @@ void ContestDetails::setDetails( const IndividualContest &ic )
    bool UKACBonus = contestTransferObject->usesBonus.getValue();
    if (!UKACBonus)
    {
-       ui->BonusComboBox->setCurrentIndex(0);
+       ui->BonusComboBox->setCurrentIndex(btNone);
    }
    else
    {
        QString bonusType = contestTransferObject->bonusType.getValue();
        if (bonusType == "B2")
-            ui->BonusComboBox->setCurrentIndex(1);
+            ui->BonusComboBox->setCurrentIndex(btB2);
        if (bonusType == "B4")
-            ui->BonusComboBox->setCurrentIndex(2);
+            ui->BonusComboBox->setCurrentIndex(btB4);
    }
 
    contestTransferObject->modeList.setValue(setMode);
@@ -1036,7 +1160,6 @@ void ContestDetails::setDetails( const IndividualContest &ic )
        ui->PPQSORB->setChecked(true);
        break;
    }
-//   setDetails();
 }
 void ContestDetails::setModes()
 {
@@ -1044,11 +1167,12 @@ void ContestDetails::setModes()
     if (!contestTransferObject || contestTransferObject->modeList.getValue().isEmpty())
     {
         modeString = hamlibData::CW
-                     + "|" + (contestTransferObject->isHF()?"PH":hamlibData::USB)
+                     + "|" + (contestTransferObject->isHF()?hamlibData::PH:hamlibData::USB)
                     + "|" + hamlibData::FM
                     + "|" + hamlibData::MGM
+                    + "|" + hamlibData::RY
+                    + "|" + hamlibData::PSK
                     ;
-
     }
     else
     {
@@ -1141,7 +1265,9 @@ void ContestDetails::focusChange(QObject * /*obj*/, bool in, QFocusEvent * /*eve
             ui->PowerEdit->setStyleSheet(ssLineEditOK);
         }
 
-        if ( ui->ExchangeComboBox->currentIndex() != 0 && ui->ExchangeEdit->text().trimmed().isEmpty() )
+        if ( ui->ExchangeComboBox->currentIndex() != etNoExchange
+             && ui->ExchangeComboBox->currentIndex() != etAsymmetric
+             && ui->ExchangeEdit->text().trimmed().isEmpty() )
         {
             ui->ExchangeEdit->setStyleSheet(ssLineEditFrRedBkRed);
         }
@@ -1201,6 +1327,13 @@ QWidget * ContestDetails::getDetails( )
             contestTransferObject->currentBand.setValue(cb);
         }
     }
+    QString bandsList;
+    for (auto &b:allBandChkBoxMap)
+    {
+        // we need to set something in the transfer object
+        bandsList += QString("%1 %2;").arg(b->text()).arg(b->isChecked());
+    }
+    contestTransferObject->bandsList.setValue(bandsList);
 
     if (ui->StartDateEdit->text().isEmpty())
     {
@@ -1259,7 +1392,9 @@ QWidget * ContestDetails::getDetails( )
             nextD = ui->LocatorEdit;
         }
     }
-    if ( ui->ExchangeComboBox->currentIndex() != 0 && ui->ExchangeEdit->text().trimmed().isEmpty() )
+    if ( ui->ExchangeComboBox->currentIndex() != etNoExchange
+         && ui->ExchangeComboBox->currentIndex() != etAsymmetric
+         && ui->ExchangeEdit->text().trimmed().isEmpty() )
     {
         if (!nextD)
         {
@@ -1289,7 +1424,7 @@ QWidget * ContestDetails::getDetails( )
         }
     }
     contestTransferObject->location.setValue( ui->ExchangeEdit->text() );
-    contestTransferObject->scoreMode.setValue( static_cast< SCOREMODE > (ui->PPQSORB->isChecked()?1:0) );  // combo
+    contestTransferObject->scoreMode.setValue( static_cast< SCOREMODE > (ui->PPQSORB->isChecked()?PPQSO:PPKM) );  // combo
 
     if (ui->NonGCtryMult->isChecked())
     {
@@ -1306,21 +1441,21 @@ QWidget * ContestDetails::getDetails( )
     contestTransferObject->locMult.setValue( ui->LocatorMult->isChecked() ) ;   // bool
     contestTransferObject->GLocMult.setValue( ui->GLocMult->isChecked() ) ;   // bool
     contestTransferObject->M7Mults.setValue( ui->M7LocatorMults->isChecked() ) ;   // bool
-    contestTransferObject->usesBonus.setValue(ui->BonusComboBox->currentIndex() >= 1);
+    contestTransferObject->usesBonus.setValue(ui->BonusComboBox->currentIndex() > btNone);
 
     if (contestTransferObject->usesBonus.getValue())
     {
         int bt = ui->BonusComboBox->currentIndex();
 
-        if (bt == 1)
+        if (bt == btB2)
         {
             contestTransferObject->bonusType.setValue("B2");
         }
-        else if (bt == 2)
+        else if (bt == btB4)
         {
             contestTransferObject->bonusType.setValue("B4");
         }
-        else if (bt == 3)
+        else if (bt == btNAC)
         {
             contestTransferObject->bonusType.setValue("NAC");
         }
@@ -1403,41 +1538,53 @@ QWidget * ContestDetails::getDetails( )
    */
     switch ( ui->ExchangeComboBox->currentIndex() )
     {
-    case 0:     //No Exchange Required
+    case etNoExchange:     //No Exchange Required
         contestTransferObject->otherExchange.setValue( false );
         contestTransferObject->otherOptionalExchange.setValue( false );
         contestTransferObject->districtMult.setValue( false );
         contestTransferObject->otherMult.setValue(0);
+        contestTransferObject->asymmetricMult.setValue(false);
         break;
 
-    case 1:     //PostCode Multipliers
+    case etPostCode:     //PostCode Multipliers
         contestTransferObject->otherExchange.setValue( true );
         contestTransferObject->otherOptionalExchange.setValue( false );
         contestTransferObject->districtMult.setValue( true );
         contestTransferObject->otherMult.setValue(0);
+        contestTransferObject->asymmetricMult.setValue(false);
         break;
 
-    case 2:     //Other Exchange Multiplier
+    case etOther:     //Other Exchange Multiplier
         contestTransferObject->otherExchange.setValue( true );
         contestTransferObject->otherOptionalExchange.setValue( false );
         contestTransferObject->districtMult.setValue( false );
         contestTransferObject->otherMult.setValue(1);
+        contestTransferObject->asymmetricMult.setValue(false);
         break;
 
-    case 3:     //Optional Exchange Multiplier
+    case etOptional:     //Optional Exchange Multiplier
         contestTransferObject->otherExchange.setValue( false );
         contestTransferObject->otherOptionalExchange.setValue( true );
         contestTransferObject->districtMult.setValue( false );
         contestTransferObject->otherMult.setValue(2);
+        contestTransferObject->asymmetricMult.setValue(false);
         break;
 
-    case 4:     //Exchange Required (no multiplier)
+    case etMandatory:     //Exchange Required (no multiplier)
         contestTransferObject->otherExchange.setValue( true );
         contestTransferObject->otherOptionalExchange.setValue( false );
         contestTransferObject->districtMult.setValue( false );
-        contestTransferObject->otherMult.setValue(0);
+        contestTransferObject->otherMult.setValue(1);
+        contestTransferObject->asymmetricMult.setValue(false);
         break;
 
+    case etAsymmetric:     //Asymmetric
+        contestTransferObject->otherExchange.setValue( true );
+        contestTransferObject->otherOptionalExchange.setValue( false );
+        contestTransferObject->districtMult.setValue( false );
+        contestTransferObject->otherMult.setValue(1);
+        contestTransferObject->asymmetricMult.setValue(true);
+        break;
     }
     contestTransferObject->RSTMandatoryField.setValue( ui->RSTField->isChecked() ) ;   // bool
     contestTransferObject->serialMandatoryField.setValue( ui->SerialField->isChecked() ) ;   // bool
@@ -1475,7 +1622,7 @@ QWidget * ContestDetails::getNextFocus()
    {
       return ui->CallsignEdit;
    }
-   if (contestTransferObject->locatorMandatoryField.getValue() && ui->LocatorEdit->text().trimmed().isEmpty() )
+   if (ui->LocatorEdit->text().trimmed().isEmpty() )
    {
       return ui->LocatorEdit;
    }
@@ -1738,7 +1885,7 @@ void ContestDetails::on_DXCCMult_clicked()
     {
        ui->NonGCtryMult->setChecked(false);
     }
-    ui->BonusComboBox->setCurrentIndex(0);
+    ui->BonusComboBox->setCurrentIndex(btNone);
     noMultRipple = false;
 }
 
@@ -1753,7 +1900,7 @@ void ContestDetails::on_NonGCtryMult_clicked()
     {
        ui->DXCCMult->setChecked(false);
     }
-    ui->BonusComboBox->setCurrentIndex(0);
+    ui->BonusComboBox->setCurrentIndex(btNone);
     noMultRipple = false;
 }
 
@@ -1771,7 +1918,7 @@ void ContestDetails::on_LocatorMult_clicked()
        ui->M7LocatorMults->setChecked(false);
 
     }
-    ui->BonusComboBox->setCurrentIndex(0);
+    ui->BonusComboBox->setCurrentIndex(btNone);
     noMultRipple = false;
 }
 
@@ -1787,7 +1934,7 @@ void ContestDetails::on_GLocMult_clicked()
        ui->LocatorMult->setChecked(true);
        ui->M7LocatorMults->setChecked(false);
     }
-    ui->BonusComboBox->setCurrentIndex(0);
+    ui->BonusComboBox->setCurrentIndex(btNone);
     noMultRipple = false;
 }
 
@@ -1805,7 +1952,7 @@ void ContestDetails::on_M7LocatorMults_clicked()
        ui->NonGCtryMult->setChecked(false);
        ui->DXCCMult->setChecked(false);
     }
-    ui->BonusComboBox->setCurrentIndex(0);
+    ui->BonusComboBox->setCurrentIndex(btNone);
     noMultRipple = false;
 }
 void ContestDetails::on_BonusComboBox_currentIndexChanged(int /*index*/)
@@ -1866,23 +2013,6 @@ void ContestDetails::bundleChanged()
 
 void ContestDetails::on_MGMCheckBox_stateChanged(int)
 {
-//    if (ui->MGMCheckBox->isChecked())
-//    {
-//        noMultRipple = true;
-
-//        ui->LocatorMult->setChecked(true);
-//        ui->GLocMult->setChecked(false);
-//        ui->NonGCtryMult->setChecked(false);
-//        ui->DXCCMult->setChecked(false);
-//        ui->M7LocatorMults->setChecked(false);
-
-//        ui->commencedKRB->setChecked(true);
-//        ui->BonusComboBox->setCurrentIndex(0);
-
-//        ui->SerialField->setChecked(false);
-
-//        noMultRipple = false;
-//    }
     enableControls();
 }
 QString ContestDetails::getSelectedAntenna()

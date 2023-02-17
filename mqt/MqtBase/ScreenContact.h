@@ -25,7 +25,6 @@ class ScreenContact: public CheckableContact
 
       void score();
 
-      QString mode;
       QString mgmSubmode;
       QString reps;
       QString serials;

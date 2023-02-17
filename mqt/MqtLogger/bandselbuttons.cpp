@@ -27,6 +27,8 @@ BandSelButtons::BandSelButtons(const QVector<QSharedPointer<BandInfo> > &_bands,
     presetFreqs.copyAllPrevFreqToLastFreqByMode(freqPresetData::PRESET_MODE_CW, bands);
     presetFreqs.copyAllPrevFreqToLastFreqByMode(freqPresetData::PRESET_MODE_PHONE, bands);
     presetFreqs.copyAllPrevFreqToLastFreqByMode(freqPresetData::PRESET_MODE_MGM, bands);
+    presetFreqs.copyAllPrevFreqToLastFreqByMode(freqPresetData::PRESET_MODE_RTTY, bands);
+    presetFreqs.copyAllPrevFreqToLastFreqByMode(freqPresetData::PRESET_MODE_PSK, bands);
 
     // availHFBands is those available in logger
     // we gt Rig Control's isdea later
@@ -84,7 +86,8 @@ void BandSelButtons::onBandSelButtonPressed(QToolButton* button)
 
     MinosLoggerEvents::SendContestBandChanged(ct);
 
-    freq = presetFreqs.getLastFreq(convertModeForPresets(curMode), band);
+    QString m = curMode;
+    freq = presetFreqs.getLastFreq(convertModeForPresets(m), band);
     emit sendPresetFreq(freq);
 }
 
@@ -119,12 +122,35 @@ void BandSelButtons::setButtonsToBandType()
     setAllButtonsOff();
     setAllButtonsVisible(false);
 
+    if (!ct)
+    {
+        return;
+    }
+
     for (int i = 0; i < availHfBands.count(); i++)
     {
         QToolButton *t = findToolButton(availHfBands[i]);
         if (t)
         {
             t->setVisible(true);
+        }
+    }
+
+    QStringList bll = ct->bandsList.getValue().split(";");
+    for(const auto &bs: qAsConst(bll))
+    {
+        QStringList bsl = bs.split(" ");
+        if (bsl.count() == 3)
+        {
+            QString btn = bsl[0] + " " + bsl[1];
+            QToolButton *t = findToolButton(btn);
+            if (t )
+            {
+                if (bsl[2] == "0")
+                {
+                    t->setVisible(false);
+                }
+            }
         }
     }
 
@@ -322,7 +348,7 @@ void BandSelButtons::setContest(BaseContestLog *contest)
 void BandSelButtons::setContestBand(QString contestBand_)
 {
     contestBand = contestBand_;
-    if (ct && ct->contestBands.getValue() == allHF)
+    if (ct && ct->isHF())
     {
         selectButtonGroupAndActiveBand(contestBand_);
     }
@@ -330,7 +356,7 @@ void BandSelButtons::setContestBand(QString contestBand_)
 
 QString BandSelButtons::convertModeForPresets(const QString mode)
 {
-    if (mode == hamlibData::USB || mode == hamlibData::LSB || mode == hamlibData::FM  || mode == "PH")
+    if (mode == hamlibData::USB || mode == hamlibData::LSB || mode == hamlibData::FM  || mode == hamlibData::PH)
     {
         return "PHONE";
     }
@@ -339,12 +365,14 @@ QString BandSelButtons::convertModeForPresets(const QString mode)
 }
 
 
-Frequency BandSelButtons::getPresetFreq(const QString band, const QString mode)
+Frequency BandSelButtons::getPresetFreq(const QString band, const QString m)
 {
     Frequency f;
-    if (presetFreqs.contains(convertModeForPresets(mode), band))
+    QString mode = m;
+    QString cmode = convertModeForPresets(mode);
+    if (presetFreqs.contains(cmode, band))
     {
-         f = presetFreqs.getPresetFreq(convertModeForPresets(mode), band);
+         f = presetFreqs.getPresetFreq(cmode, band);
     }
 
     return f;

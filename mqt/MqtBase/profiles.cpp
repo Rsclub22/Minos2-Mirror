@@ -47,6 +47,8 @@ BundleFile::BundleFile( PROFILES p )
         entries.push_back( QSharedPointer<ProfileEntry> (new ProfileEntry( elpQTHFile, "QTHFile", "./Configuration/QTH.ini", QT_TR_NOOP("QTH settings file"), QT_TR_NOOP("File containing QTH settings"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpLocsFile, "LocsFile", "./Configuration/LocSquares.ini", QT_TR_NOOP("Country locators file"), QT_TR_NOOP("File containing valid locators for countries"), false ) ));
 
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpDigiFunctionKeyFile, "DigiFKeyFile", "./Configuration/FunctionKeyMessages/Digi Default Messages.mc", QT_TR_NOOP("Digi Function Keys file"), QT_TR_NOOP("Digi Function Keys file"), false ) ));
+
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpDisplayFile, "DisplayFile", "./Configuration/Display.ini", QT_TR_NOOP("Display settings file"), QT_TR_NOOP("File containing saved display settings"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpDisplaySection, "DisplaySection", "Default", QT_TR_NOOP("Display file section"), QT_TR_NOOP("Section to use in display file"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpOperatorFile, "OperatorFile", "./Configuration/Operator.ini", QT_TR_NOOP("Operators file"), QT_TR_NOOP("File containing operators"), false ) ) );
@@ -83,9 +85,13 @@ BundleFile::BundleFile( PROFILES p )
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpcontactsAddr, "UDPContactsAddr", "", QT_TR_NOOP("UDP Contacts Address"), QT_TR_NOOP("UDP Contacts Address"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpcontactsPort, "UDPContactsPort", 12060, QT_TR_NOOP("UDP Contacts Port"), QT_TR_NOOP("UDP Contacts Port"), false ) ) );
 
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpextCSSelect, "UDPextCSEnabled", false, QT_TR_NOOP("UDP External Callsign Lookup Enabled"), QT_TR_NOOP("UDP External Callsign Lookup Enabled"), false ) ) );
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpextCSAddr, "UDPExtCSAddress", "", QT_TR_NOOP("UDP External Callsign Lookup Address"), QT_TR_NOOP("UDP External Callsign Lookup  Address"), false ) ) );
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpextCSPort, "UDPExtCSPort", 12060, QT_TR_NOOP("UDP External Callsign Lookup  Port"), QT_TR_NOOP("UDP External Callsign Lookup  Port"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpextCSSelect, "UDPextCSEnabled", false, QT_TR_NOOP("UDP External QSO Info Enabled"), QT_TR_NOOP("UDP External QSO Info Enabled"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpextCSAddr, "UDPExtCSAddress", "", QT_TR_NOOP("UDP External QSO Info Address"), QT_TR_NOOP("UDP External QSO Info Address"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpextCSPort, "UDPExtCSPort", 12060, QT_TR_NOOP("UDP External QSO Info Port"), QT_TR_NOOP("UDP External QSO Info Port"), false ) ) );
+
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpextSpotsSelect, "UDPextSpotsEnabled", false, QT_TR_NOOP("UDP External Spots Enabled"), QT_TR_NOOP("UDP External Spots Enabled"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpextSpotsAddr, "UDPExtSpotsAddress", "", QT_TR_NOOP("UDP External Spots Address"), QT_TR_NOOP("UDP External Spots Address"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpextSpotsPort, "UDPExtSpotsPort", 12060, QT_TR_NOOP("UDP External Spots Port"), QT_TR_NOOP("UDP External Spots Port"), false ) ) );
 
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpADIFSelect, "UDPADIFEnabled", false, QT_TR_NOOP("UDP ADIF Enabled"), QT_TR_NOOP("UDP ADIF Enabled"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpADIFAddr, "UDPADIFAddr", "", QT_TR_NOOP("UDP ADIF Address"), QT_TR_NOOP("UDP ADIF Address"), false ) ) );
@@ -104,13 +110,18 @@ BundleFile::BundleFile( PROFILES p )
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpAutoFill, "AutoFill", false, QT_TR_NOOP("Auto Fill signal report"), QT_TR_NOOP("Auto Fill signal report on return"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpShowOperateTime, "ShowOpTime", otRSGB, QT_TR_NOOP("Show Operating Time"), QT_TR_NOOP("Show Operating Time"), false ) ) );
 
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpLocMapCentre, "LocMapCentre", lmsMyLoc, QT_TR_NOOP("Locator Map Centring"), QT_TR_NOOP("Locator Map Centring"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpLocMapCentre, "LocMapCentre", lmsMyLoc, QT_TR_NOOP("Locator Map Centering"), QT_TR_NOOP("Locator Map Centering"), false ) ) );
 
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpTabforSandP, "TabforSandP", true, QT_TR_NOOP("Change Tab order for S&P"), QT_TR_NOOP("Change Tab order for S&P"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpAgeProtectContests, "AgeProtectContests", true, QT_TR_NOOP("Protect contests by age"), QT_TR_NOOP("Protect contests by age"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpAgeToProtectContests, "AgeToProtectContests", 1, QT_TR_NOOP("Days after which contests are protected"), QT_TR_NOOP("Days after which contests are protected"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpBandmapOldStyle, "OldStyleBandmap", false, QT_TR_NOOP("Old style of band map"), QT_TR_NOOP("Old style of band map"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpShowAuxHeaders, "ShowAuxHeaders", true, QT_TR_NOOP("Show Auxiliary Headers"), QT_TR_NOOP("Show Auxiliary Headers"), false ) ) );
+
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpShowQSOMapGrid, "ShowQSOMapGrid", true, QT_TR_NOOP("Show QSO Map Grid"), QT_TR_NOOP("Show QSO Map Grid"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpShowQSOMapLines, "ShowQSOMapLines", true, QT_TR_NOOP("Show QSO Map Lines"), QT_TR_NOOP("Show QSO Map Lines"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpMapShowCluster, "MapShowCluster", true, QT_TR_NOOP("Show Cluster spots on map"), QT_TR_NOOP("Show Cluster spots on map"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpMapClusterDistance, "MapClusterDistance", 0, QT_TR_NOOP("Limit Cluster spot distance on map"), QT_TR_NOOP("Limit Cluster spot distance on map"), false ) ) );
 
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpAddBandMapTuningEnable , "addBandmapTuningENABLE", ADD_TUNING_BANDMAP_FREQ_DEFAULT_ENABLED, QT_TR_NOOP("Add to Bandmap tuning enabled"), QT_TR_NOOP("Add to Bandmap tuning enabled"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpAddBandMapTuningTolerance , "addBandmapTuningTolerance", ADD_TUNING_BANDMAP_FREQ_DEFAULT_TOLERANCE, QT_TR_NOOP("Add to Bandmap tuning tolerance"), QT_TR_NOOP("Add to Bandmap tuning tolerance"), false ) ) );
@@ -160,10 +171,7 @@ BundleFile::BundleFile( PROFILES p )
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpShowContinentNA, "ShowContinentNA", false, "", "hint", false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpShowWorked, "ShowWorked", true, "", "hint", false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpShowUnworked, "ShowUnworked", false, "", "hint", false ) ) );
-
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpShowOperators, "ShowOperators", true, "", "hint", false ) ) );
-
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpEditor, "Editor", "Notepad.exe", "", QT_TR_NOOP("Default editor"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpStatisticsPeriod1, "Statistics Period 1", 10, "", QT_TR_NOOP("Statistics Period 1"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpStatisticsPeriod2, "Statistics Period 2", 60, "", QT_TR_NOOP("Statistics Period 2"), false ) ) );
 

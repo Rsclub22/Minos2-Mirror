@@ -255,11 +255,11 @@ void QSOLogFrame::on_FontChanged()
     ui->QTHFrame->getTextEditlabel()->setFont(cf);
     ui->commentsFrame->getTextEditlabel()->setFont(cf);
 
-    ui->CallsignFrame->setWidth("PA0/2E0WWW/P");
-    ui->RSTTxFrame->setWidth("599A");
-    ui->SerTxFrame->setWidth("19999");
-    ui->RSTRxFrame->setWidth("599A");
-    ui->SerRxFrame->setWidth("19999");
+    ui->CallsignFrame->setWidth("PA0/2E0WWW/MM");
+    ui->RSTTxFrame->setWidth("599AA");
+    ui->SerTxFrame->setWidth("999999");
+    ui->RSTRxFrame->setWidth("599AA");
+    ui->SerRxFrame->setWidth("999999");
     ui->LocFrame->setWidth("IO80MM99");
     ui->QTHFrame->setWidth("ABCDEF");
     ui->commentsFrame->setWidth("This is a comment");
@@ -380,7 +380,10 @@ bool QSOLogFrame::doKeyPressEvent( QKeyEvent* event )
         raise();
         return true;
     }
-    else if ( ( Key == Qt::Key_F1 || Key == Qt::Key_F2 || Key == Qt::Key_F3 || Key == Qt::Key_F4 || Key == Qt::Key_F5 || Key == Qt::Key_F6|| Key == Qt::Key_F12) )
+    else if ( ((ctrl && altFKeys) || (!ctrl && !altFKeys))
+              && ( Key == Qt::Key_F1 || Key == Qt::Key_F2 || Key == Qt::Key_F3
+                   || Key == Qt::Key_F4 || Key == Qt::Key_F5 || Key == Qt::Key_F6
+                   || Key == Qt::Key_F12) )
     {
         if (setActiveControl( &Key, mods ))
         {
@@ -394,7 +397,7 @@ bool QSOLogFrame::doKeyPressEvent( QKeyEvent* event )
         if (Key >= Qt::Key_F1 && Key <= Qt::Key_F12)
         {
             // key may be for keyer or Digi Macro use
-            MinosLoggerEvents::sendFKey(event->key());
+            MinosLoggerEvents::SendFKey(contest, event->key(), markOffset);
             return true;
         }
     }
@@ -604,6 +607,8 @@ void QSOLogFrame::setContest(BaseContestLog *pcontest)
 
     refreshOps();
     MinosLoggerEvents::SendReportOverstrike(overstrike, contest);
+    MinosLoggerEvents::SendSandPChanged(getSandP());
+
 }
 void QSOLogFrame::initialise()
 {
@@ -817,7 +822,43 @@ void QSOLogFrame::SecondOpComboBox_Exit()
        refreshOps();
     }
 }
-void QSOLogFrame::on_GJVOKButton_clicked()
+QWidget *QSOLogFrame::getNextInvalid(QWidget * &firstInvalid)
+{
+    firstInvalid = nullptr;
+    QWidget *nextInvalid = nullptr;
+    bool onCurrent = false;
+    bool pastCurrent = false;
+    for ( auto const &vcp: qAsConst(vcs) )
+    {
+       if ( !vcp ->wc->isVisible() || !vcp ->wc->isEnabled())
+       {
+          continue;
+       }
+       if ( onCurrent )
+          pastCurrent = true;
+       if ( vcp ->wc == current )
+          onCurrent = true;
+       if ( !vcp ->valid( cmValidStatus, screenContact ) )
+       {
+          if ( !firstInvalid )
+             firstInvalid = vcp ->wc;
+          if ( pastCurrent )
+          {
+             if ( !nextInvalid )
+             {
+                nextInvalid = vcp->wc;
+                break;
+             }
+          }
+       }
+    }
+
+    // make sure we go to the invalid field
+
+    QWidget *nextf = ( nextInvalid ) ? nextInvalid : firstInvalid;
+    return nextf;
+}
+void QSOLogFrame::doGJVOKButton_clicked()
 {
     if ( contest->isReadOnly() )
     {
@@ -896,38 +937,8 @@ void QSOLogFrame::on_GJVOKButton_clicked()
     if ( !valid( cmCheckValid ) )   // make sure all single and cross field
                                     // validation has been done
     {
-       QWidget * firstInvalid = nullptr;
-       QWidget *nextInvalid = nullptr;
-       bool onCurrent = false;
-       bool pastCurrent = false;
-       for ( auto const &vcp: qAsConst(vcs) )
-       {
-          if ( !vcp ->wc->isVisible() || !vcp ->wc->isEnabled())
-          {
-             continue;
-          }
-          if ( onCurrent )
-             pastCurrent = true;
-          if ( vcp ->wc == current )
-             onCurrent = true;
-          if ( !vcp ->valid( cmValidStatus, screenContact ) )
-          {
-             if ( !firstInvalid )
-                firstInvalid = vcp ->wc;
-             if ( pastCurrent )
-             {
-                if ( !nextInvalid )
-                {
-                   nextInvalid = vcp->wc;
-                   break;
-                }
-             }
-          }
-       }
-
-       // make sure we go to the invalid field
-
-       QWidget *nextf = ( nextInvalid ) ? nextInvalid : firstInvalid;
+        QWidget *firstInvalid = nullptr;
+        QWidget *nextf = getNextInvalid(firstInvalid);
 
        if (tabSandPstate && edit == false && catchup == false)
        {
@@ -1011,12 +1022,17 @@ void QSOLogFrame::on_GJVOKButton_clicked()
     }
     else
     {
-        MinosLoggerEvents::sendUpdateStats(contest);
+        MinosLoggerEvents::SendUpdateStats(contest);
         sortUnfilledCatchupTime();
     }
     return;
 
 }
+void QSOLogFrame::on_GJVOKButton_clicked()
+{
+    doGJVOKButton_clicked();
+}
+
 void QSOLogFrame::selectFirstInvalid()
 {
     getScreenEntry(); // make sure it is saved
@@ -1035,6 +1051,47 @@ void QSOLogFrame::selectFirstInvalid()
     }
 
     selectField( nullptr );
+
+}
+
+void QSOLogFrame::rxDMWord(QString rxWord, int carr)
+{
+    // we now need to preserve this carrier so we can send it back on transmit
+    // and also put rig + carrier into the QSO frequency
+    QLineEdit *ed = dynamic_cast<QLineEdit *>( current );
+    ed->setText(rxWord);
+
+    if (carr != 0)
+    {
+        markOffset = carr;
+    }
+
+    if ( !valid( cmCheckValid ) )   // make sure all single and cross field
+    {
+        QWidget *firstInvalid = nullptr;
+        QWidget *nextf = getNextInvalid(firstInvalid);
+
+        if (!nextf)
+        {
+            nextf = current;
+        }
+
+        selectField(nextf);
+    }
+}
+
+void QSOLogFrame::DMKey(int key)
+{
+    if (key == Qt::Key_Return)
+    {
+
+    }
+    else if (key >= Qt::Key_F1 && key <= Qt::Key_F12)
+    {
+        // key may be for keyer or Digi Macro use
+        MinosLoggerEvents::SendFKey(contest, key, markOffset);
+        return;
+    }
 
 }
 bool QSOLogFrame::dlgForced()
@@ -1172,7 +1229,7 @@ void QSOLogFrame::on_GJVCancelButton_clicked()
 
 void QSOLogFrame::on_MatchXferButton_clicked()
 {
-    MinosLoggerEvents::sendXferPressed(contest, baseName);
+    MinosLoggerEvents::SendXferPressed(contest, baseName);
 }
 
 void QSOLogFrame::onQTHEdit_textChanged(const QString &/*arg1*/)
@@ -1295,7 +1352,7 @@ bool QSOLogFrame::setActiveControl(int *Key , Qt::KeyboardModifiers mods)
             *Key = 0;
             return true;
         case Qt::Key_F12:
-            MinosLoggerEvents::sendXferPressed(contest, baseName);
+            MinosLoggerEvents::SendXferPressed(contest, baseName);
             *Key = 0;
             return true;
         }
@@ -1323,13 +1380,17 @@ void QSOLogFrame::getScreenEntry()
 
    QString comments = ui->commentsFrame->getTextEditEdit()->text().trimmed();
    screenContact.comments.setValue(comments);
+   screenContact.markOffset = markOffset;
    if (edit)
    {
        screenContact.rigName = ui->radioEdit->text().trimmed();
 
-       QString f = ui->frequencyEdit->text().trimmed().remove( QRegularExpression("^[0]*")); //remove leading zeros
+       static QRegularExpression qre = QRegularExpression("^[0]*");
+       QString f = ui->frequencyEdit->text().trimmed().remove( qre); //remove leading zeros
        f = convertSinglePeriodFreqToMultiPeriod(convertSinglePeriodFreqToFullDigit(f));
-       screenContact.frequency.setValue(Frequency(f));
+       QString band;
+       Frequency ff = contest->getTxFreqBand(f, band);
+       screenContact.setFrequency(ff, band);
 
        //screenContact.frequency = ui->frequencyEdit->text().trimmed();
        screenContact.rotatorHeading = ui->rotatorHeadingEdit->text().trimmed();
@@ -1341,7 +1402,7 @@ void QSOLogFrame::getScreenEntry()
    {
        screenContact.cqResponse = runButtonOnFlag && !radioOffRunFreq;
    }
-   screenContact.mode = ui->ModeComboBoxGJV->currentText().trimmed();
+   screenContact.mode.setValue(ui->ModeComboBoxGJV->currentText().trimmed());
    screenContact.mgmSubmode = ui->MGMSubModeEdit->text().trimmed();
 
    unsigned short cf = screenContact.contactFlags.getValue();
@@ -1393,13 +1454,13 @@ void QSOLogFrame::showScreenEntry( )
       {
           ui->radioEdit->setText(temp.rigName);
 
-          if (temp.frequency.getValue().isClear())
+          if (temp.getFrequency().getValue().isClear())
           {
               ui->frequencyEdit->clear();
           }
           else
           {
-              ui->frequencyEdit->setText(temp.frequency.getValue().convertFreqStrDispSingle());
+              ui->frequencyEdit->setText(temp.getFrequency().getValue().convertFreqStrDispSingle());
           }
           ui->rotatorHeadingEdit->setText(temp.rotatorHeading);
       }
@@ -1407,7 +1468,7 @@ void QSOLogFrame::showScreenEntry( )
 
       if (mode.isEmpty()) // use contest mode
       {
-        setMode(temp.mode.trimmed());
+        setMode(temp.mode.getValue());
       }
       else
       {
@@ -1545,7 +1606,7 @@ void QSOLogFrame::EditControlExit( QObject * /*Sender*/ )
 
       if (current == ui->CallsignFrame->getTextEditEdit())
       {
-          MinosLoggerEvents::sendCallsignLookup(contest, ui->CallsignFrame->getTextEditEdit()->text());
+          MinosLoggerEvents::SendCallsignLookup(contest, ui->CallsignFrame->getTextEditEdit()->text());
       }
    }
 }
@@ -1828,13 +1889,13 @@ bool QSOLogFrame::valid( validTypes command )
    if ( contest->isReadOnly() )
       return true;
 
-   bool pvalid = validateControls( command ); // do control validation
+   validateControls( command ); // do control validation
 
    if ( command == cmCheckValid )   // our own command!
       contactValid();
 
    // re-validate, as we may have changed things
-   pvalid = validateControls( cmValidStatus ); // look at current validity
+   bool pvalid = validateControls( cmValidStatus ); // look at current validity
 
    return pvalid;
 }
@@ -1887,6 +1948,30 @@ void QSOLogFrame::selectField( QWidget *v )
         current = v;
     }
 }
+
+void QSOLogFrame::selectCallField()
+{
+    selectField(ui->CallsignFrame->getTextEditEdit());
+}
+void QSOLogFrame::selectSnRxField()
+{
+    if (ui->SerRxFrame->isVisible())
+    {
+        selectField(ui->SerRxFrame->getTextEditEdit());
+    }
+    else
+    {
+        selectExchField();
+    }
+}
+void QSOLogFrame::selectExchField()
+{
+    if (ui->QTHFrame->isVisible())
+    {
+        selectField(ui->QTHFrame->getTextEditEdit());
+    }
+}
+
 //==============================================================================
 // check for embedded space or empty number
 
@@ -1939,8 +2024,8 @@ void QSOLogFrame::doAutofill()
 
    //rst sent (autofill S9)
 
-   fillRst( ui->RSTTxFrame->getTextEditEdit(), vcct->reps, vcct->mode );
-   fillRst( ui->RSTRxFrame->getTextEditEdit(), vcct->repr, vcct->mode );
+   fillRst( ui->RSTTxFrame->getTextEditEdit(), vcct->reps, vcct->mode.getValue() );
+   fillRst( ui->RSTRxFrame->getTextEditEdit(), vcct->repr, vcct->mode.getValue() );
    fillExchange( ui->QTHFrame->getTextEditEdit(), vcct->extraText.getValue());
 }
 //==============================================================================
@@ -2134,6 +2219,8 @@ bool QSOLogFrame::checkAndLogEntry()
    }
    return retval;
 }
+
+
 //---------------------------------------------------------------------------
 void QSOLogFrame::setModes()
 {
@@ -2168,16 +2255,34 @@ void QSOLogFrame::setOtherMode()
     QStringList sl = mlist.split('|');
 
     QString cmode = ui->ModeComboBoxGJV->currentText();
-    bool otherVisible = true;
-    ui->ModeButton->setText("");
-    for (auto &sm: sl)
+
+    if (cmode == hamlibData::RY)
     {
-        if (sm != cmode)
+        if (mlist.contains(hamlibData::PSK))
         {
-            ui->ModeButton->setText(sm);
-            break;
+            ui->ModeButton->setText(hamlibData::PSK);
         }
     }
+    else if (cmode == hamlibData::PSK)
+    {
+        if (mlist.contains(hamlibData::RY))
+        {
+            ui->ModeButton->setText(hamlibData::RY);
+        }
+    }
+    else
+    {
+        ui->ModeButton->setText("");
+        for (auto &sm: sl)
+        {
+            if (sm != cmode)
+            {
+                ui->ModeButton->setText(sm);
+                break;
+            }
+        }
+    }
+    bool otherVisible = true;
     QString otherMode = ui->ModeButton->text();
     if (otherMode.isEmpty() || otherMode == cmode)
     {
@@ -2202,22 +2307,24 @@ void QSOLogFrame::setMode(QString m)
 
     // make sure the mode button shows the correct "flip" value
 
-
-   if (ui->ModeComboBoxGJV->currentText() == hamlibData::CW || ui->ModeComboBoxGJV->currentText() == hamlibData::MGM)
-   {
-      ui->ModeButton->setText(oldMode);
-   }
-   else
-   {
-      ui->ModeButton->setText(hamlibData::CW);
-   }
+    if (ui->ModeComboBoxGJV->currentText() == hamlibData::CW
+            || ui->ModeComboBoxGJV->currentText() == hamlibData::MGM
+            || ui->ModeComboBoxGJV->currentText() == hamlibData::RY
+            || ui->ModeComboBoxGJV->currentText() == hamlibData::PSK
+            )
+    {
+        ui->ModeButton->setText(oldMode);
+    }
+    else
+    {
+        ui->ModeButton->setText(hamlibData::CW);
+    }
 
     ui->MGMSubModeFrame->setVisible(ui->ModeComboBoxGJV->currentText() == hamlibData::MGM);
 }
 //---------------------------------------------------------------------------
 void QSOLogFrame::setFreq(Frequency f)
 {
-    //xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
     if (contest && curFreq != f)
     {
         BandList &blist = BandList::getBandList();
@@ -2391,12 +2498,12 @@ void QSOLogFrame::updateQSODisplay()
    ui->RSTTxFrame->setEnabled(notProtected && contest->RSTMandatoryField.getValue());
    ui->RSTTxFrame->setVisible(contest->RSTMandatoryField.getValue());
    ui->SerTxFrame->setEnabled(notProtected && contest->serialMandatoryField.getValue());
-   ui->SerTxFrame->setVisible(contest->serialMandatoryField.getValue());
+   ui->SerTxFrame->setVisible(contest->serialMandatoryField.getValue() || contest->asymmetricMult.getValue());
 
    ui->RSTRxFrame->setEnabled(notProtected && contest->RSTMandatoryField.getValue());
    ui->RSTRxFrame->setVisible(contest->RSTMandatoryField.getValue());
-   ui->SerRxFrame->setEnabled(notProtected && contest->serialMandatoryField.getValue());
-   ui->SerRxFrame->setVisible(contest->serialMandatoryField.getValue());
+   ui->SerRxFrame->setEnabled(notProtected && contest->serialMandatoryField.getValue() && !contest->asymmetricMult.getValue());
+   ui->SerRxFrame->setVisible(contest->serialMandatoryField.getValue() && !contest->asymmetricMult.getValue());
 
    bool locman = contest->locatorMandatoryField.getValue();
    ui->LocFrame->getTextEditEdit()->setEnabled(locman);  // loc remains enabled in protected to enable searching
@@ -2412,7 +2519,7 @@ void QSOLogFrame::updateQSODisplay()
        r = 20;
    }
    int s = 0;
-   if (contest->serialMandatoryField.getValue())
+   if (contest->serialMandatoryField.getValue() || contest->asymmetricMult.getValue())
    {
        s = 20;
    }
@@ -2633,16 +2740,19 @@ void QSOLogFrame::doGJVEditChange( QObject *Sender )
 
 void QSOLogFrame::on_ModeButton_clicked()
 {
+    mode = ui->ModeButton->text();
     if (isRadioLoaded() && radioConnected && !radioError)
     {
         qsoLogModeFlag = true;  // stop updates from rigcontrol
         // send mode change to radio
-        emit sendModeControl(ui->ModeButton->text());
+        emit sendModeControl(mode);
+
     }
+    MinosLoggerEvents::SendModeChange(mode);
 
     QString myOldMode = ui->ModeComboBoxGJV->currentText();
     ui->ModeComboBoxGJV->setCurrentText(ui->ModeButton->text());
-    mode = ui->ModeButton->text();
+
     oldMode = myOldMode;
     ui->ModeButton->setText(oldMode);
     ui->MGMSubModeFrame->setVisible(ui->ModeComboBoxGJV->currentText() == hamlibData::MGM);
@@ -2705,16 +2815,19 @@ void QSOLogFrame::logScreenEntry( )
    QSharedPointer<BaseContact> lct = selectedContact;
    if (!lct)
    {
-        lct = ct->addContact( ctmax, 0, false, false, screenContact.mode, screenContact.mgmSubmode, dtg(true), curFreq );	// "current" doesn't get flag, don't save ContestLog yet
+        lct = ct->addContact( ctmax, 0, false, false, screenContact.mode.getValue(), screenContact.mgmSubmode, dtg(true), curFreq );	// "current" doesn't get flag, don't save ContestLog yet
 
         TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
         tslf->QSOTable->model()->insertRows(contest->ctList.count(), 1, QModelIndex());
    }
 
-   if ( screenContact.mode.compare( hamlibData::MGM, Qt::CaseInsensitive ) != 0 )
+   if ( screenContact.mode.getValue().compare( hamlibData::MGM, Qt::CaseInsensitive ) != 0
+        && screenContact.mode.getValue().compare( hamlibData::RY, Qt::CaseInsensitive ) != 0
+        && screenContact.mode.getValue().compare( hamlibData::PSK, Qt::CaseInsensitive ) != 0
+                )
    {
        bool contactmodeCW = ( screenContact.reps.size() == 3 && screenContact.repr.size() == 3 );
-       bool curmodeCW = ( screenContact.mode.compare( hamlibData::CW, Qt::CaseInsensitive ) == 0 );
+       bool curmodeCW = ( screenContact.mode.getValue().compare( hamlibData::CW, Qt::CaseInsensitive ) == 0 );
 
        if ( !edit && contactmodeCW != curmodeCW )
        {
@@ -2723,14 +2836,14 @@ void QSOLogFrame::logScreenEntry( )
           {
              if ( MinosParameters::getMinosParameters() ->yesNoMessage( this, tr("Change mode to CW?") ) )
              {
-                screenContact.mode = hamlibData::CW;
+                screenContact.mode.setValue(hamlibData::CW);
              }
           }
           else
           {
              if ( MinosParameters::getMinosParameters() ->yesNoMessage( this, tr("Change mode to USB?") ) )
              {
-                screenContact.mode = hamlibData::USB;
+                screenContact.mode.setValue(hamlibData::USB);
              }
           }
        }
@@ -2740,6 +2853,17 @@ void QSOLogFrame::logScreenEntry( )
    screenContact.op2 = ct->currentOp2.getValue();
 
    lct->copyFromArg( screenContact );
+   if (screenContact.mode.getValue().compare( hamlibData::RY, Qt::CaseInsensitive ) == 0)
+   {
+        Frequency corrected = screenContact.getFrequency().getValue() - screenContact.markOffset;
+        lct->setFrequency(corrected, screenContact.band);
+   }
+   if (screenContact.mode.getValue().compare( hamlibData::PSK, Qt::CaseInsensitive ) == 0)
+   {
+       Frequency corrected = screenContact.getFrequency().getValue() + screenContact.markOffset;
+       lct->setFrequency(corrected, screenContact.band);
+   }
+
    lct->timeOn.setDirty();
    lct->timeOff.setDirty(); // As we may have created the contact with the same time as the screen contact
                          // This then becomes "not dirty", so we end up not saving the dtg.
@@ -2751,11 +2875,7 @@ void QSOLogFrame::logScreenEntry( )
 
    killPartial();
 
-   MinosLoggerEvents::SendAfterLogContact(ct);  // in logScreenEntry, current or edit
-
-   MinosLoggerEvents::SendAfterLogContactToCluster(ct, lct->cs, lct->loc.getLoc());
-
-   MinosLoggerEvents::SendAfterLogContactToBandmap(ct, lct );
+   MinosLoggerEvents::SendAfterLogContact(ct, lct);  // in logScreenEntry, current or edit
 
    if (!edit)
    {
@@ -2769,7 +2889,7 @@ void QSOLogFrame::logScreenEntry( )
        lastLoggedCallsign = lct->cs;
        ui->spotLastLoggedPb->setText(tr("Spot Last Logged (%1) ").arg(lct->cs.getFullCall()));
        lastLoggedLocator = lct->loc.getLoc();
-       lastLoggedFreq = lct->frequency.getValue();
+       lastLoggedFreq = lct->getFrequency().getValue();
    }
 
    if (!edit )
@@ -2797,12 +2917,15 @@ void QSOLogFrame::getScreenRigData()
     screenContact.rigName = curRadioName;
     if (!edit && !catchup && isRadioLoaded() && !curRadioName.isEmpty() && !curFreq.isClear())
     {
-        screenContact.frequency.setValue(curFreq);
+        QString band;
+        Frequency ff = contest->getTxFreqBand(curFreq, band);
+        screenContact.setFrequency(ff, band);
     }
     else
     {
         QString cb;
-        screenContact.frequency.setValue(contest->getTxFreqBand(Frequency(), cb));
+        Frequency f = contest->getTxFreqBand(Frequency(), cb);
+        screenContact.setFrequency(f, cb);
     }
 }
 void QSOLogFrame::getscreenRotatorData()
@@ -3294,7 +3417,8 @@ void QSOLogFrame::on_InsertAfterButton_clicked()
 void QSOLogFrame::on_ModeComboBoxGJV_activated(int index)
 {
 
-    if (ui->ModeComboBoxGJV->currentText() == mode)
+    QString cmode = ui->ModeComboBoxGJV->currentText();
+    if (cmode == mode)
         return;
     oldMode = mode;
     QString mlist = contest->modeList.getValue();
@@ -3306,13 +3430,13 @@ void QSOLogFrame::on_ModeComboBoxGJV_activated(int index)
         // send mode change to radio
         if (isRadioLoaded() && radioConnected && !radioError)
         {
-
             qsoLogModeFlag = true;  // stop updates from radio here
             emit sendModeControl(mode);
         }
+        MinosLoggerEvents::SendModeChange(mode);    // this will e.g. set the RTTY/PSK engines correctly
     }
 
-    if (ui->ModeComboBoxGJV->currentText() == hamlibData::CW || ui->ModeComboBoxGJV->currentText() == hamlibData::MGM)
+    if (cmode == hamlibData::CW || cmode == hamlibData::MGM || cmode == hamlibData::RY || cmode == hamlibData::PSK)
     {
        ui->ModeButton->setText(oldMode);
     }
@@ -3320,7 +3444,7 @@ void QSOLogFrame::on_ModeComboBoxGJV_activated(int index)
     {
        ui->ModeButton->setText(hamlibData::CW);
     }
-    if (ui->ModeComboBoxGJV->currentText() == hamlibData::MGM)
+    if (cmode == hamlibData::MGM)
     {
         if (ui->RSTTxFrame->getTextEditEdit()->text().trimmed() == "5")
         {
@@ -3331,7 +3455,7 @@ void QSOLogFrame::on_ModeComboBoxGJV_activated(int index)
             ui->RSTRxFrame->getTextEditEdit()->clear();
         }
     }
-    ui->MGMSubModeFrame->setVisible(ui->ModeComboBoxGJV->currentText() == hamlibData::MGM);
+    ui->MGMSubModeFrame->setVisible(cmode == hamlibData::MGM);
 }
 
 void QSOLogFrame::on_ValidateError (int mess_no )
@@ -3505,12 +3629,13 @@ void QSOLogFrame::setPlaceholders(QStringList nearMatches)
             scc.initialise(contest, false);
             scc.cs.setFullCall(n[1]);
             scc.loc.setLoc(n[2]);
-            scc.mode = n[3];
+            scc.mode.setValue(n[3]);
 
             scc.timeOn = dtg(true);
             scc.timeOff = dtg(true);
             QString cb;
-            scc.frequency.setValue( contest->getTxFreqBand(Frequency(), cb));
+            Frequency f = contest->getTxFreqBand(Frequency(), cb);
+            scc.setFrequency(f, cb);
 
             scc.checkScreenContact();
             if ( scc.cs.getValRes() == ERR_DUPCS)
@@ -3606,7 +3731,7 @@ void QSOLogFrame::getLogDetails(memoryData::memData &logData, int& callRes)
     logData.callsign = screenContact.cs.getFullCall();
     logData.freq = curFreq;
     logData.locator = screenContact.loc.getLoc();
-    logData.mode = screenContact.mode;
+    logData.mode = screenContact.mode.getValue();
     logData.exchange = screenContact.extraText.getValue();
     if (screenContact.loc.getLoc().isEmpty())
     {
@@ -3844,11 +3969,19 @@ void QSOLogFrame::on_callRb_clicked()
             tslf->runButtonsFrame->setCallFreq();
         }
     }
+    MinosLoggerEvents::SendSandPChanged(getSandP());
 }
-
+void QSOLogFrame::on_SandPrb_clicked()
+{
+    MinosLoggerEvents::SendSandPChanged(getSandP());
+}
 bool QSOLogFrame::readTuneAddBandMapSetting()
 {
     bool state;
     TContestApp::getContestApp()->loggerBundle.getBoolProfile(elpAddBandMapTuningEnable, state);
     return state;
+}
+bool QSOLogFrame::getSandP()
+{
+    return ui->SandPrb->isChecked();
 }

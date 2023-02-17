@@ -140,10 +140,15 @@ void KeyerServer::publishVUMeter(unsigned int rmsLevel, unsigned int peakLevel, 
     if (sendMeters)
         KS->doPublishVUMeter(rmsLevel, peakLevel, numSamples, metersSeq);
 }
+void KeyerServer::publishIPDetail(QString port, QString sampleRate)
+{
+    checkConnection();
+    RPCPubSub::publish(rpcConstants::KeyerCategory, rpcConstants::keyerListen, port + "|" + sampleRate, psPublished);
+}
 //---------------------------------------------------------------------------
 void KeyerServer::on_routerCall(bool err, QSharedPointer<MinosRPCObj>mro, const QString from )
 {
-    trace( "Keyer callback from " + from + ( err ? ":Error" : ":Normal" ) );
+    //trace( "Keyer callback from " + from + ( err ? ":Error" : ":Normal" ) );
 
     if ( !err )
     {
@@ -215,9 +220,9 @@ void KeyerServer::on_routerCall(bool err, QSharedPointer<MinosRPCObj>mro, const 
     }
 }
 //---------------------------------------------------------------------------
-void KeyerServer::on_notify(AnalysePubSubNotify an, const QString from )
+void KeyerServer::on_notify(AnalysePubSubNotify an, const QString /*from*/ )
 {
-   trace( "Notify callback from " + from + ( !an.getOK() ? ":Error" : ":Normal" ) );
+   //trace( "Notify callback from " + from + ( !an.getOK() ? ":Error" : ":Normal" ) );
 
 
    // called whenever line changes
@@ -245,11 +250,13 @@ void KeyerServer::on_notify(AnalysePubSubNotify an, const QString from )
                 QString value = an.getValue();
                 if (value.isEmpty())
                 {
+                    trace("Set sendSliders and sendKeyers false");
                     sendSliders = false;
                     sendMeters = false;
                 }
                 else
                 {
+                    trace("Set sendSliders and sendKeyers true");
                     sendSliders = true;
                     sendMeters = true;
                     metersSeq++;
@@ -283,6 +290,7 @@ void KeyerServer::on_notify(AnalysePubSubNotify an, const QString from )
       {
           if (an.getCategory() == rpcConstants::KeyerConfigCategory && an.getKey() == rpcConstants::keyerSendMS)
           {
+              trace("Set sendSliders and sendKeyers false");
               sendSliders = false;
               sendMeters = false;
           }

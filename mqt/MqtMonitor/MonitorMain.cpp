@@ -1,5 +1,4 @@
 #include "AppStartup.h"
-#include "RPCCommandConstants.h"
 #include "contest.h"
 #include "MinosLoggerEvents.h"
 #include "ScreenContact.h"
@@ -39,29 +38,17 @@ MonitorMain::MonitorMain(QWidget *parent) :
 
     MultLists::getMultLists(); // make sure everything is loaded
 
-    treeModel = new MonitorTreeModel();
-    ui->monitorTree->setModel(treeModel);
-    ui->monitorTree->header()->show();
-
     monitorTimer = new QTimer();
 
     connect(monitorTimer, &QTimer::timeout, this, &MonitorMain::on_monitorTimeout);
 
     monitorTimer->start(100);
 
+    /*MinosRPC *rpc =*/ MinosRPC::getMinosRPC(getAppStartupName(), true);
 
-    MinosRPC *rpc = MinosRPC::getMinosRPC(getAppStartupName(), true);
-
-    MinosConfig *config = MinosConfig::getMinosConfig();
-    localRouterName = config->getThisRouterName();
-
-
-    connect(rpc, &MinosRPC::routerCall, this, &MonitorMain::on_routerCall);
-    connect(rpc, &MinosRPC::notify, this, &MonitorMain::on_notify);
-    connect(rpc, &MinosRPC::provider, this, &MonitorMain::on_provider);
-
-    QStringList sv = {rpcConstants::monitorLogCategory};
-    rpc->findProviders(rpcConstants::LoggerCategory, sv);
+    connect(RemoteLogs::getRemoteLogs(), &RemoteLogs::newMonitoredLog, this, &MonitorMain::onNewLog);
+    connect(ui->monitorTree, &MonitoredLogs::logStarted, this, &MonitorMain::onLogStarted);
+    connect(ui->monitorTree, &MonitoredLogs::logClosed, this, &MonitorMain::onLogClosed);
 
     QByteArray state;
 
@@ -91,7 +78,6 @@ MonitorMain::MonitorMain(QWidget *parent) :
     ui->contestPageControl->setContextMenuPolicy( Qt::CustomContextMenu );
 
     closeMonitoredLog = newAction(tr("Close tab"), &TabPopup, &MonitorMain::on_closeMonitoredLog);
-    newAction( "Cancel", &TabPopup, &MonitorMain::CancelClick );
 
     ui->callsignEdit->setValidator(&ucValidator);
     ui->locEdit->setValidator(&ucValidator);
@@ -111,13 +97,20 @@ MonitorMain::MonitorMain(QWidget *parent) :
 
     ui->callsignEdit->setFocus();
 
-    readPersistedLogs();
+    QSOGrid = settings.value("showQSOGrid", true).toBool();
+    ui->showGridcb->setChecked(QSOGrid);
+    QSOLines = settings.value("showQSOLines", true).toBool();
+    ui->showLinescb->setChecked(QSOLines);
+
+    mapShowSpots = settings.value("mapShowSpots", true).toBool();
+    ui->mapShowSpots->setChecked(mapShowSpots);
+    clusterDistanceLimit = settings.value("clusterDistanceLimit", 0).toInt();
+    ui->clusterDistanceLimit->setValue(clusterDistanceLimit);
 }
 
 MonitorMain::~MonitorMain()
 {
     delete ui;
-    stationList.clear();
     delete MultLists::getMultLists();
 }
 void MonitorMain::closeEvent(QCloseEvent *event)
@@ -166,27 +159,6 @@ bool MonitorMain::eventFilter(QObject * /*obj*/, QEvent *event)
     return false;
 }
 
-void MonitorMain::readPersistedLogs()
-{
-    inReadPersistedLogs = true;
-
-    // read in the persistence file
-
-    inReadPersistedLogs =false;
-}
-
-void MonitorMain::writePersistedLogs()
-{
-    if (!inReadPersistedLogs)
-    {
-        for ( auto const &s: qAsConst(stationList) )
-        {
-            for ( auto const &l: qAsConst(s->slotList) )
-            {
-            }
-        }
-    }
-}
 void MonitorMain::on_callsignEdit_textChanged(const QString &/*arg1*/)
 {
     searchChanged();
@@ -214,7 +186,7 @@ void MonitorMain::on_searchSplitter_splitterMoved(int /*pos*/, int /*index*/)
 
 void MonitorMain::closeTab(MonitoringFrame *cttab)
 {
-    for ( auto const &s: qAsConst(stationList) )
+    for ( auto const &s: qAsConst(RemoteLogs::getRemoteLogs()->stationList) )
     {
         for ( auto const &l: qAsConst(s->slotList) )
         {
@@ -222,11 +194,12 @@ void MonitorMain::closeTab(MonitoringFrame *cttab)
             {
                 // take it out of the slot list and close it
                 // and we need to redo the list
-                //treeModel->clear();
-                l->setEnabled(false);
-                l->setFrame(nullptr);
+
+                RemoteLogs::getRemoteLogs()->closeLog(l.data());
+
                 ui->contestPageControl->removeTab(ui->contestPageControl->indexOf(cttab));
                 delete cttab;
+                //syncstat = true;
                 return;
             }
         }
@@ -277,184 +250,63 @@ void MonitorMain::on_closeMonitoredLog()
 {
     closeTab(findCurrentLogFrame());
 }
-void MonitorMain::CancelClick()
+void MonitorMain::onLogStarted(QSharedPointer<MonitoredLog> ml)
 {
-    // do nothing...
+    addSlot( ml );
+//    sel->setLog(ml);
 }
-//---------------------------------------------------------------------------
-void MonitorMain::on_provider(Provider provider, QString /*cat*/)
+void MonitorMain::onLogClosed(QSharedPointer<MonitoredLog> l)
 {
-    stationList[provider] = new MonitoredStation;
-    syncstat = true;
-}
-
-void MonitorMain::on_notify(AnalysePubSubNotify an, const QString from )
-{
-    // pubsub notify
-    trace( "Notify callback from " + from + ( !an.getOK() ? ":Error" : ":Normal" ) );
-
-    if ( an.getOK() )
+    MonitoringFrame *cttab = l->getFrame();
+    if (cttab)
     {
-        PublishState state = an.getState();
-        QString key = an.getKey();          // key is minos file name
-        QString value = an.getValue();      // value is stanzacount;[band] name;start time;end time
-
-        if ( an.getCategory() == rpcConstants::monitorLogCategory )
-        {
-            QString router = an.getRouter();
-            if ( router.size() == 0 )
-            {
-                // it is for us...
-                router = localRouterName;
-            }
-
-            QString logval = router + " : " + key ;
-            trace( "ContestLog " + logval + " " + value );
-
-            MonitoredStation *stat = stationList[Provider(an)];
-
-            QVector< QSharedPointer<MonitoredLog> >::iterator log = std::find_if( stat->slotList.begin(), stat->slotList.end(), MonitoredLogCmp( key ) );
-            if (state == psPublished)
-            {
-                QStringList args = value.split(";");
-                if ( log == stat->slotList.end() )
-                {
-                    QSharedPointer<MonitoredLog> ml(new MonitoredLog());
-                    ml->initialise( router, key );
-
-
-                    if (args.count() >= 1)
-                    {
-                        trace(QString("args 0 %1 ").arg(args[0]));
-                        ml->setExpectedStanzaCount( args[0].toInt() );
-                    }
-                    if (args.count() >= 2)
-                    {
-                        trace(QString("args 1 %2").arg(args[1]));
-                        ml->setDisplayName(args[1]);
-                    }
-                    else
-                        ml->setDisplayName(key);
-
-                    ml->setState(state);
-                    stat->slotList.push_back( ml );
-                    syncstat = true;
-
-                }
-                else
-                {
-                    if (args.count() >= 1)
-                    {
-                        trace(QString("args 0 %1 ").arg(args[0]));
-                        (*log)->setExpectedStanzaCount( args[0].toInt() );
-                    }
-                    (*log)->setState(state);
-                }
-            }
-            else
-            {
-                if ( log != stat->slotList.end() )
-                {
-                    (*log)->setState(state);
-                }
-            }
-        }
+       closeTab(cttab);
     }
 }
 //---------------------------------------------------------------------------
-void MonitorMain::on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString from )
+// callback slots from RPC in MonitoredLog
+void MonitorMain::onNewStanzas(MonitoredLog *l)
 {
-    trace( "logger router callback from " + from + ( err ? ":Error" : ":Normal" ) );
-    if ( !err )
+    trace("OnNewStanzas");
+    MonitoringFrame *frame = l->getFrame();
+    if (frame)
     {
-        // This will return stanza id, pubname, and stanza content
-        QString call = mro->getMethodName();
-        if (call == rpcConstants::loggerStanzaResponse)
-        {
-
-            QSharedPointer<RPCParam> psLogName;
-            QSharedPointer<RPCParam> psStanzaData;
-            QSharedPointer<RPCParam> psStanza;
-            QSharedPointer<RPCParam> psResult;
-            RPCArgs *args = mro->getCallArgs();
-            if ( args->getStructArgMember( 0, "LogName", psLogName )
-                 && args->getStructArgMember( 0, "LoggerResult", psResult )
-                 && args->getStructArgMember( 0, "Stanza", psStanza )
-                 && args->getStructArgMember( 0, "StanzaData", psStanzaData )
-                 )
-            {
-                QString logName;
-                QString stanzaData;
-                bool result;
-                int stanza;
-
-                if ( psLogName->getString( logName ) && psStanzaData->getString( stanzaData )
-                     && psStanza->getInt( stanza ) && psResult->getBoolean( result )
-                     )
-                {
-                    trace( "Name " + logName + " stanza " + QString::number( stanza ) );
-                    // Find the matching MonitoredLog and send the stanza their for processing
-
-                    QStringList sl = from.split('@');
-                    if (sl.count() != 2)
-                    {
-                        return;
-                    }
-                    QString ss = sl[1] + "/" + sl[0] + "/xxx";
-                    Provider p(ss);
-
-                    MonitoredStation *s = stationList[p];
-
-                    for ( auto const &l: qAsConst(s->slotList) )
-                    {
-                        if (l && l->getPublishedName() == logName )
-                        {
-                            trace( "||" + stanzaData + "||" );
-                            l ->processLogStanza( stanza, stanzaData );
-                            return ;
-                        }
-                    }
-                }
-            }
-        }
+        frame->newStanzas = true;
     }
 }
-
-void MonitorMain::syncStations()
+void MonitorMain::onNewLastContact(MonitoredLog *l)
 {
-   // Here we want to subscribe to the loggers of the notified stations
-   // Shouldn't matter if we end up doing it twice
+    trace("onNewLastContact");
+    MonitoringFrame *frame = l->getFrame();
+    if (l->getContest()->lastInserted >= 0)
+    {
+        QSharedPointer<BaseContact> bct = l->getContest()->pcontactAt(l->getContest()->lastInserted);
+        frame->qsoModel.insertRows(l->getContest()->lastInserted, 1, QModelIndex());
+        l->getContest()->lastInserted = -1;
 
-   // Strictly I suppose we could ignore ourselves, but normally we won't run
-   // a full monitor on a logging computer - we need a module that can
-   // manage single stations for that.
+        frame->on_AfterLogContact(l->getContest(), bct);
+    }
+}
+void MonitorMain::onContactChanged(MonitoredLog *l)
+{
+    trace("onContactChanged");
+    // change to a contact; we need a full rescan to understand it
+    int lc = l->getContest()->lastInserted;
+    if (lc >= 0)
+    {
+        MonitoringFrame *frame = l->getFrame();
+        frame->qsoModel.changeRow(lc);
+        frame->rescanNeeded = true;
+    }
+}
+//=================================================================
+// callback slots from RemoteLogs
 
-   // And this module must make use of that single station monitor!
-
-   // Probably it is basically the "MonitoredStation" class as a model, with a viewer
-   // and maybe a controller...
-
-  if ( syncstat )
-   {
-      syncstat = false;
-
-      TreeNode *root = new RootTreeNode(this);
-      for ( auto s = stationList.begin(); s != stationList.end(); s++ )
-      {
-          TreeNode *snode = new RouterTreeNode(root, s.key().app + "@" + s.key().routerName);
-          for ( auto const &l: qAsConst(s.value()->slotList) )
-          {
-              /*TreeNode *lnode =*/ new LogTreeNode(snode, l);
-          }
-      }
-      treeModel->setRoot(root);
-      int rc = treeModel->rowCount();
-      for(int i = 0; i < rc; i++)
-      {
-        ui->monitorTree->setFirstColumnSpanned( i, QModelIndex(), true );
-      }
-      ui->monitorTree->expandAll();
-   }
+void MonitorMain::onNewLog(MonitoredLog *ml)
+{
+    connect(ml, &MonitoredLog::newStanzas, this, &MonitorMain::onNewStanzas);
+    connect(ml, &MonitoredLog::newLastContact, this, &MonitorMain::onNewLastContact);
+    connect(ml, &MonitoredLog::contactChanged, this, &MonitorMain::onContactChanged);
 }
 void MonitorMain::addSlot(  QSharedPointer< MonitoredLog>ct )
 {
@@ -472,11 +324,6 @@ void MonitorMain::addSlot(  QSharedPointer< MonitoredLog>ct )
    ui->contestPageControl->setTabToolTip(tno, ct->getPublishedName());
    f->showQSOs();
    f->setFocusPolicy(Qt::NoFocus);
-
-//   QSettings
-
-   // we need to save the list of filenames, so that when we see them again we
-   // can re-open them when we are restarted
 }
 
 MonitoringFrame *MonitorMain::findCurrentLogFrame()
@@ -504,14 +351,6 @@ MonitoringFrame *MonitorMain::findContestPage( BaseContestLog *ct )
    return nullptr;
 }
 
-bool nolog( MonitoredLog *ip )
-{
-   if ( ip == nullptr )
-      return true;
-   else
-      return false;
-}
-
 void MonitorMain::on_monitorTimeout()
 {
     static bool closed = false;
@@ -521,37 +360,6 @@ void MonitorMain::on_monitorTimeout()
        {
           closed = true;
           close();
-       }
-    }
-    for ( auto const &s: qAsConst(stationList) )
-    {
-
-//       for ( auto &l: s->slotList )
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-        for (QVector< QSharedPointer<MonitoredLog> >::const_iterator l = s->slotList.begin(); l != s->slotList.end(); l++)
-#else
-        for (QVector< QSharedPointer<MonitoredLog> >::iterator l = s->slotList.begin(); l != s->slotList.end(); l++)
-#endif
-       {
-          if ((*l)->getState() == psRevoked)
-          {
-             MonitoringFrame *cttab = findContestPage( (*l)->getContest() );
-             closeTab(cttab);
-             // take it out of the slot list and close it
-             // and we need to redo the list
-             s->slotList.erase(l);
-             syncstat = true;
-             break;             // as we have changed the list - don't continue
-
-          }
-          else
-          {
-             (*l)->checkMonitor();
-          }
-       }
-       if (syncstat)
-       {
-          syncStations();
        }
     }
     static int ticks = 0;
@@ -564,10 +372,30 @@ void MonitorMain::on_monitorTimeout()
         }
         ticks = 0;
     }
+    testAutoStart();
+
 }
-void MonitorMain::on_monitorTree_doubleClicked(const QModelIndex &index)
+void MonitorMain::testAutoStart()
 {
-    // apply double click to node MonitorTreeClickNode
+    for ( auto const &s: qAsConst(RemoteLogs::getRemoteLogs()->stationList) )
+    {
+       for ( auto &ml: s->slotList )
+       {
+            if (!ml->enabled())
+            {
+                if (ml->testAutoStart())
+                {
+                    ml->startMonitor();
+                    addSlot( ml );
+                }
+            }
+       }
+    }
+
+}
+void MonitorMain::on_monitorTree_clicked(const QModelIndex &index)
+{
+    // select the correct tab
     TreeNode * sel = static_cast< TreeNode *>(index.internalPointer());
 
     if (!sel)
@@ -578,48 +406,21 @@ void MonitorMain::on_monitorTree_doubleClicked(const QModelIndex &index)
     {
        // station
     }
-    else
+    else if (sel->getLog())
     {
-        RouterTreeNode *tn = static_cast< RouterTreeNode *>(index.parent().internalPointer());
-        QString pn = tn->data(0);
-
-        QStringList sl = pn.split('@');
-        if (sl.count() != 2)
+        MonitoringFrame *mf = sel->getLog()->getFrame();
+        int pc = ui->contestPageControl->count();
+        for ( int i = 0; i < pc; i++ )
         {
-            return;
+            QWidget *tw = ui->contestPageControl->widget(i);
+            MonitoringFrame *f = dynamic_cast<MonitoringFrame *>(tw);
+            if (f == mf)
+            {
+                ui->contestPageControl->setCurrentWidget(f);
+                break;
+            }
         }
-        QString s = sl[1] + "/" + sl[0] + "/xxx";
-        Provider p(s);
-       MonitoredStation *ms = stationList[ p ];
-       if (!ms)
-       {
-           return;
-       }
-       // log
-       if (sel->childNumber() >= ms->slotList.count())
-       {
-           return;
-       }
-      QSharedPointer< MonitoredLog> ml = ms ->slotList[ sel->childNumber()];
-      if (!ml)
-      {
-          return;
-      }
-      if ( !ml->enabled() )
-      {
-         ml->startMonitor();
-         addSlot( ml );
-         sel->setLog(ml);
-         syncstat = true;
-      }
-      else
-      {
-         MonitoringFrame *cttab = findContestPage( ml->getContest() );
-         if ( cttab )
-         {
-            ui->contestPageControl->setCurrentWidget(cttab);
-         }
-      }
+
     }
 }
 
@@ -673,5 +474,42 @@ void MonitorMain::on_contestPageControl_currentChanged(int /*index*/)
 
     searchChanged();
     ui->callsignEdit->setFocus();
+}
+
+
+
+void MonitorMain::on_showGridcb_stateChanged(int /*arg1*/)
+{
+    QSettings settings;
+    QSOGrid = ui->showGridcb->isChecked();
+    settings.setValue("showQSOGrid", QSOGrid);
+    MinosLoggerEvents::SendRedrawQSOMap(QSOGrid, QSOLines, mapShowSpots, clusterDistanceLimit);
+}
+
+
+void MonitorMain::on_showLinescb_stateChanged(int /*arg1*/)
+{
+    QSettings settings;
+    QSOLines = ui->showLinescb->isChecked();
+    settings.setValue("showQSOLines", QSOLines);
+    MinosLoggerEvents::SendRedrawQSOMap(QSOGrid, QSOLines, mapShowSpots, clusterDistanceLimit);
+}
+
+
+void MonitorMain::on_mapShowSpots_stateChanged(int /*arg1*/)
+{
+    QSettings settings;
+    mapShowSpots = ui->mapShowSpots->isChecked();
+    settings.setValue("mapShowSpots", mapShowSpots);
+    MinosLoggerEvents::SendRedrawQSOMap(QSOGrid, QSOLines, mapShowSpots, clusterDistanceLimit);
+}
+
+
+void MonitorMain::on_clusterDistanceLimit_valueChanged(int /*arg1*/)
+{
+    QSettings settings;
+    clusterDistanceLimit = ui->clusterDistanceLimit->value();
+    settings.setValue("clusterDistanceLimit", clusterDistanceLimit);
+    MinosLoggerEvents::SendRedrawQSOMap(QSOGrid, QSOLines, mapShowSpots, clusterDistanceLimit);
 }
 

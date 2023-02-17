@@ -9,6 +9,7 @@
 //---------------------------------------------------------------------------
 #include <QUuid>
 #include "MTrace.h"
+#include <QNetworkDatagram>
 #include "RPCCommandConstants.h"
 #include "SecondInstall.h"
 #include "fileutils.h"
@@ -216,17 +217,21 @@ void TZConf::onReadyRead()
     trace("TZConf::onReadyRead()");
     while (readSocket.hasPendingDatagrams())
     {
-        QByteArray buf;
-        buf.resize(static_cast<int>(readSocket.pendingDatagramSize()));
-        QHostAddress host;
-        quint16 port;
-        qint64 res = readSocket.readDatagram(buf.data(), buf.size(), &host, &port);
-        QString dg = QString(buf);
 
-        trace("Datagram received from " + host.toString() + " " + dg);
-        if (res > 0)
+
+        QNetworkDatagram dgram = readSocket.receiveDatagram();
+        //quint16 port = dgram.senderPort();
+        QHostAddress host = dgram.senderAddress();
+        QHostAddress rxAddr = dgram.destinationAddress();
+
+        QByteArray buf = dgram.data();
+        QString dgs = QString(buf);
+
+        // we don't seem to get our own receiver address here
+        trace(QString("Datagram received from %1 at %2: %3").arg(host.toString(), rxAddr.toString(), dgs));
+        if (dgs.size() > 0)
         {
-            processZConfString(dg, host, sendBeaconResponse);
+            processZConfString(dgs, host, sendBeaconResponse);
         }
     }
 }
@@ -354,6 +359,7 @@ Router *TZConf::zcPublishRouter( const QString &uuid, const QString &name,
             // we must have a server connection already
             trace("Creating MinosServerConnection zcPublishServer for " + name);
             MinosRouterConnection *msc = new MinosRouterConnection(true);
+            msc->setClientRouter(sss->station);
             msc->mConnect(sss);
             msl->addListenerSlot(msc);
         }

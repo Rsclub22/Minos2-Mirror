@@ -1,4 +1,5 @@
 #include "checkoperatingfreq.h"
+#include "rigcontrolcommonconstants.h"
 
 CheckOperatingFreq::CheckOperatingFreq()
 {
@@ -64,16 +65,16 @@ int CheckOperatingFreq::getFreqLimitsForDial(ModeFreqDetail<Frequency> &listOfFr
     QString mode(pmode);
     if (bandModeFreqList.contains(band))
     {
-        if (mode == "PH")
+        if (mode == hamlibData::PH)
         {
             auto modeTestFreq = bandModeFreqList.value(band).begin()->freq.at(0).at(0);
             if (modeTestFreq > Frequency(10000000))
             {
-                mode = "USB";
+                mode = hamlibData::USB;
             }
             else
             {
-                mode = "LSB";
+                mode = hamlibData::LSB;
             }
         }
 

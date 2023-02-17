@@ -57,6 +57,7 @@ TxVmExternalButtonDialog::TxVmExternalButtonDialog(QWidget *parent) :
     ui->compFrame->layout()->addWidget(makeUpGainFrame);
     connect(makeUpGainFrame, &SliderSpinner::valueChanged, this, &TxVmExternalButtonDialog::compressionChanged);
 
+    trace("TxVmExternalButtonDialog started");
 
     connect(LogContainer->sendDM, &TSendDM::keyerConfig, this, &TxVmExternalButtonDialog::onKeyerConfig);
     LogContainer->sendDM->publishKeyerMS(true);   // force resubscribe so we get keyer configs
@@ -64,6 +65,7 @@ TxVmExternalButtonDialog::TxVmExternalButtonDialog(QWidget *parent) :
 
 TxVmExternalButtonDialog::~TxVmExternalButtonDialog()
 {
+    trace("TxVmExternalButtonDialog finished");
     LogContainer->sendDM->publishKeyerMS(false);
     delete ui;
 }

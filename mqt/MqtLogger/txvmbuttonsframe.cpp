@@ -6,6 +6,7 @@
 #include "cutils.h"
 #include "MinosLoggerEvents.h"
 #include "MTrace.h"
+#include "contest.h"
 
 #include "txvmbuttonsframe.h"
 #include "ui_txvmbuttonsframe.h"
@@ -431,7 +432,7 @@ void TxVmButtonsFrame::readActionSelected(int buttonNumber)
         if(curMode != rigcommon::convertModeToQString(MODE::USB)
                 && curMode != rigcommon::convertModeToQString(MODE::LSB)
                 && curMode != rigcommon::convertModeToQString(MODE::FM)
-                && curMode != "PH")
+                && curMode != hamlibData::PH)
         {
             trace(QString("Mode needs to be a phone type for rigcontrol Voice Message, current mode = %1").arg(curMode));
             return;
@@ -996,23 +997,25 @@ void TxVmButtonsFrame::setPttStatusIndicatorOnOff(bool on)
     }
 
 }
-void TxVmButtonsFrame::fKey(int key)
+void TxVmButtonsFrame::fKey(BaseContestLog *c, int key, int /*carrier*/)
 {
     // FKey event received by log frame (or ctrl/FKey)
-    int mem = key - Qt::Key_F1 + 1;
-    if (mem > 10)
+    if (ct == c)
     {
+        int mem = key - Qt::Key_F1;
+        if (mem > 10)
+        {
 
+        }
+        else if (mem == 10)
+        {
+            onVmStopClicked();
+        }
+        else
+        {
+            readActionSelected(mem);
+        }
     }
-    else if (mem == 10)
-    {
-        onVmStopClicked();
-    }
-    else
-    {
-        readActionSelected(mem);
-    }
-
 }
 
 void TxVmButtonsFrame::setMode(const QString m)
@@ -1022,6 +1025,11 @@ void TxVmButtonsFrame::setMode(const QString m)
     {
         curMode = mode;
     }
+}
+
+void TxVmButtonsFrame::setContest(BaseContestLog *c)
+{
+    ct = c;
 }
 
 void TxVmButtonsFrame::sendModeToRadio(const QString m)

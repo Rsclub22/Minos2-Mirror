@@ -5,7 +5,8 @@
         <file>CallMarker.qml</file>
         <file>HomeMarker.qml</file>
         <file>qsoview.qml</file>
-        <file>mapline.qml</file>
         <file>Marker.qml</file>
+        <file>SpotMarker.qml</file>
+        <file>SpotMarker.png</file>
     </qresource>
 </RCC>

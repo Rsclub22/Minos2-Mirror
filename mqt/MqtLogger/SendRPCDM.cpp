@@ -96,8 +96,7 @@ void TSendDM::getRouterAppCatMap()
         }
         else if (i->appType == "Server")
         {
-//            routerAppCatMap[rpcConstants::LocalStationCategory].push_back(i);
-//            routerAppCatMap[rpcConstants::StationCategory].push_back(i);
+            // no action
         }
         else if (i->appType == "Cluster")
         {
@@ -106,7 +105,11 @@ void TSendDM::getRouterAppCatMap()
         }
         else if (i->appType == "KSTClient")
         {
-
+            // no action
+        }
+        else if (i->appType == "DataModes")
+        {
+            routerAppCatMap[rpcConstants::DMCat].push_back(i);
         }
     }
     rpc->setRouterAppCatMap(routerAppCatMap);
@@ -397,6 +400,7 @@ void TSendDM::sendRigSelection(const PubSubName &s, const QString &band, const F
 
 void TSendDM::sendRigControlFreq(TSingleLogFrame *tslf, const Frequency &freq)
 {
+    traceMsg(QString("SendRigControlFreq = %1 uuid = %2").arg(freq.traceStr(), tslf->getContest()->uuid));
 
     PubSubName rigSelected = rigCache.getSelected(loggerUuid);
     rigCache.setLogFreq(rigSelected, freq);
@@ -409,11 +413,12 @@ void TSendDM::sendRigControlFreq(TSingleLogFrame *tslf, const Frequency &freq)
     rpc.getCallArgs() ->addParam( st );
 
     rpc.queueCall( rigSelected );
-    traceMsg(QString("SendRigControlFreq = %1 uuid = %2").arg(freq.traceStr(), tslf->getContest()->uuid));
 }
 
 void TSendDM::sendRigControlBand(TSingleLogFrame *tslf, const QString &band)
 {
+    traceMsg(QString("SendRigControlBand = %1 uuid = %2").arg(band, tslf->getContest()->uuid));
+
     PubSubName rigSelected = rigCache.getSelected(loggerUuid);
     rigCache.setLogBand(rigSelected, band);
     RPCGeneralClient rpc(rpcConstants::rigControlMethod);
@@ -425,7 +430,6 @@ void TSendDM::sendRigControlBand(TSingleLogFrame *tslf, const QString &band)
     rpc.getCallArgs() ->addParam( st );
 
     rpc.queueCall( rigSelected );
-    traceMsg(QString("SendRigControlBand = %1 uuid = %2").arg(band, tslf->getContest()->uuid));
 }
 
 
@@ -449,6 +453,7 @@ void TSendDM::sendRigTxVoiceMessage(TSingleLogFrame *tslf, const QString &msgNum
 
 void TSendDM::sendRigTxCwMessage(TSingleLogFrame *tslf, const QString &msg)
 {
+    traceMsg(QString("SendRigTxCwMessage = %1 uuid = %2").arg(msg, tslf->getContest()->uuid));
 
     PubSubName rigSelected = rigCache.getSelected(loggerUuid);
     rigCache.setCwTxMessage(rigSelected, msg);
@@ -461,12 +466,13 @@ void TSendDM::sendRigTxCwMessage(TSingleLogFrame *tslf, const QString &msg)
     rpc.getCallArgs() ->addParam( st );
 
     rpc.queueCall( rigSelected );
-    traceMsg(QString("SendRigTxCwMessage = %1 uuid = %2").arg(msg, tslf->getContest()->uuid));
 }
 
 
 void TSendDM::sendRigControlMode(TSingleLogFrame *tslf,const QString &mode)
 {
+    traceMsg(QString("SendRigControlMode = %1 uuid = %2").arg(mode, tslf->getContest()->uuid));
+
     PubSubName rigSelected = rigCache.getSelected(loggerUuid);
     rigCache.setLogMode(rigSelected, mode);
     RPCGeneralClient rpc(rpcConstants::rigControlMethod);
@@ -478,9 +484,6 @@ void TSendDM::sendRigControlMode(TSingleLogFrame *tslf,const QString &mode)
     rpc.getCallArgs() ->addParam( st );
 
     rpc.queueCall( rigSelected );
-
-    traceMsg(QString("SendRigControlMode = %1 uuid = %2").arg(mode, tslf->getContest()->uuid));
-
 }
 
 
@@ -816,10 +819,10 @@ void TSendDM::notifyRotChanges()
     }
 }
 
-void TSendDM::on_notify( AnalysePubSubNotify an, const QString from )
+void TSendDM::on_notify( AnalysePubSubNotify an, const QString /*from*/ )
 {
     // PubSub notifications
-    traceMsg( "Notify callback from " + from + ( !an.getOK() ? ":Error " : ":Normal " ) +  an.getPublisherProgram() + "@" + an.getPublisherRouter());
+    //traceMsg( "Notify callback from " + from + ( !an.getOK() ? ":Error " : ":Normal " ) +  an.getPublisherProgram() + "@" + an.getPublisherRouter());
 
     if ( an.getOK())
     {
@@ -887,6 +890,10 @@ void TSendDM::on_notify( AnalysePubSubNotify an, const QString from )
                     emit keyerConfig(k, v);
                 }
             }
+            else if ( an.getCategory() == rpcConstants::DMCat)
+            {
+                MinosLoggerEvents::SendDMMess(an);
+            }
         }
         else if (an.getState() == psRevoked)
         {
@@ -909,6 +916,12 @@ void TSendDM::on_notify( AnalysePubSubNotify an, const QString from )
             else if ( an.getCategory() == rpcConstants::rotatorStateCategory )
             {
                 rotatorCache.setStateDisconnected(an);
+            }
+            else if (an.getCategory() == rpcConstants::KeyerCategory)
+            {
+                keyerApp = PubSubName();
+                LogContainer->setCaption(QString());
+
             }
         }
         else if (an.getState() == psNotConnected)
@@ -955,8 +968,8 @@ void TSendDM::on_notify( AnalysePubSubNotify an, const QString from )
 void TSendDM::on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString from )
 {
     // responds to pull calls from the monitoring client
-    traceMsg( "request callback from " + from + ( err ? ":Error" : ":Normal" ) );
-    traceMsg("method is " + mro->getMethodName());
+    //traceMsg( "request callback from " + from + ( err ? ":Error" : ":Normal" ) );
+    //traceMsg("method is " + mro->getMethodName());
 
     // need to check "from" is correct
     if ( !err )
@@ -969,8 +982,10 @@ void TSendDM::on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, const QSt
         QString call = mro->getMethodName();
         if (call == rpcConstants::loggerTakeFocus)
         {
-            // attempt to steal focus
+            // attempt to steal focus - but it doesn't work on Linux :(
+#ifdef Q_OS_WIN
             MinosConfigEvents::sendStealFocus();
+#endif
         }
         else if (call == rpcConstants::loggerStanzaRequest)
         {
@@ -1031,6 +1046,45 @@ void TSendDM::on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, const QSt
                         rpc.queueCall( from );
                     }
 
+                }
+            }
+        }
+        else if (call == rpcConstants::DMWord)
+        {
+            // word received from DataModes app
+            // pass it on to the current contest
+            QSharedPointer<RPCParam> psrxWord;
+            QSharedPointer<RPCParam> psrxCarrier;
+            if (
+                    args->getStructArgMember( 0, rpcConstants::DMWord, psrxWord )
+                    && args->getStructArgMember( 0, rpcConstants::DMCarrier, psrxCarrier )
+                 )
+            {
+                QString rxWord;
+                psrxWord->getString(rxWord);
+
+                int carrier;
+                psrxCarrier->getInt(carrier);
+
+                TSingleLogFrame * lf = LogContainer->getCurrentLogFrame();
+                if ( lf )
+                {
+                    lf->GJVQSOLogFrame->rxDMWord(rxWord, carrier);
+                }
+            }
+        }
+        else if (call == rpcConstants::DMKeyPress)
+        {
+            QSharedPointer<RPCParam> psKey;
+            if ( args->getStructArgMember( 0, rpcConstants::DMFKey, psKey ))
+            {
+                int key;
+                psKey->getInt(key);
+
+                TSingleLogFrame * lf = LogContainer->getCurrentLogFrame();
+                if ( lf )
+                {
+                    lf->GJVQSOLogFrame->DMKey(key);
                 }
             }
         }

@@ -11,7 +11,8 @@ TEMPLATE = app
 win32:RC_ICONS += ../MinosRecorder.ico
 
 unix:!macos{DEFINES += __LINUX_ALSA__}
-win32{DEFINES += __WINDOWS_DS__}
+win32{DEFINES += __WINDOWS_WASAPI__}
+INCLUDEPATH += ../rtaudio
 
 
 SOURCES += \

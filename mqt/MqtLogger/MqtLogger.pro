@@ -14,11 +14,9 @@ QT       += help
 QT       += charts
 QT       += serialport
 
-win32: {
-lessThan(QT_MAJOR_VERSION, 6) {
-    QT += qml
-    QT += quick
-}
+equals(INC_MAP, 1): {
+QT += qml
+QT += quick
 }
 
 
@@ -83,6 +81,7 @@ SOURCES += \
     contestdetails.cpp \
     defdirsdlg.cpp \
     districtframe.cpp \
+    dmbuttonframe.cpp \
     dxccframe.cpp \
     freqlineedit.cpp \
     locTreeFrame.cpp \
@@ -183,6 +182,7 @@ HEADERS  += \
     contestdetails.h \
     defdirsdlg.h \
     districtframe.h \
+    dmbuttonframe.h \
     dxccframe.h \
     freqlineedit.h \
     locTreeFrame.h \
@@ -253,6 +253,7 @@ FORMS    += \
     contestdetails.ui \
     defdirsdlg.ui \
     districtframe.ui \
+    dmbuttonframe.ui \
     dxccframe.ui \
     FilterFrame.ui \
     LocCalcFrame.ui \

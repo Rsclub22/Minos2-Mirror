@@ -923,6 +923,10 @@ int OmnirigControl::setMode(VFO vfo, MODE mode)
 
 }
 
+bool OmnirigControl::modeSupported(MODE /*mode*/, Frequency /*f*/)
+{
+    return true;
+}
 
 bool OmnirigControl::supportReadVfo(int rigNumber)
 {

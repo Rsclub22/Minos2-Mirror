@@ -77,14 +77,6 @@
         <translation>Affichage Waveform. </translation>
     </message>
     <message>
-        <source>Filter</source>
-        <translation type="vanished">Filtre</translation>
-    </message>
-    <message>
-        <source>Tone</source>
-        <translation type="vanished">Ton</translation>
-    </message>
-    <message>
         <location filename="../mqtktMainWindow.ui" line="67"/>
         <source>Close</source>
         <translation></translation>

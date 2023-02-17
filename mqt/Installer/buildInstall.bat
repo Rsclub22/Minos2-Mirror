@@ -16,6 +16,7 @@ set QtKit=C:\Qt\5.15.2\mingw81_32\bin
 set QtOpenSSL="C:\Qt\Tools\OpenSSL\Win_x86\bin"
 set QtLicenses="C:\Qt\Licenses"
 set HamlibPath="C:\Projects\hamlib-w32-4.5.2"
+set MMVARIPath="C:\Ham\MMVARI"
 
 if exist %QtKit% goto kitInstalled
 
@@ -61,6 +62,7 @@ cd installFiles
 
 mkdir Configuration
 mkdir Configuration\Cluster
+mkdir Configuration\FunctionKeyMessages
 mkdir Lists
 mkdir Logs
 mkdir Bin
@@ -70,8 +72,10 @@ mkdir Help
 copy %MROOT%\%builddir%\MqtAppStarter\release\MqtAppStarter.exe Bin
 copy %MROOT%\%builddir%\MqtChat\release\MqtChat.exe Bin
 copy %MROOT%\%builddir%\MqtCluster\release\MqtCluster.exe Bin
+copy %MROOT%\%builddir%\MqtDataModes\release\MqtDataModes.exe Bin
 REM copy %MROOT%\%builddir%\MqtControl\release\MqtControl.exe Bin
 REM copy %MROOT%\%builddir%\MqtKeyer\release\MqtKeyer.exe Bin
+REM copy %MROOT%\%builddir%\MqtKeyerProxy\release\MqtKeyerProxy.exe Bin
 copy %MROOT%\%builddir%\MqtKSTClient\release\MqtKSTClient.exe Bin
 copy %MROOT%\%builddir%\MqtLogger\release\MqtLogger.exe Bin
 copy %MROOT%\%builddir%\MqtMonitor\release\MqtMonitor.exe Bin
@@ -81,6 +85,8 @@ copy %MROOT%\%builddir%\MqtRigRecorder\release\MqtRigRecorder.exe Bin
 copy %MROOT%\%builddir%\MqtRigSync\release\MqtRigSync.exe Bin
 copy %MROOT%\%builddir%\MqtRotator\release\MqtRotator.exe Bin
 copy %MROOT%\%builddir%\MqtServer\release\MqtServer.exe Bin
+
+copy %MMVARIPath%\MMVARI.ocx Bin
 
 copy %HamlibPath%\bin\*.dll Bin
 copy %HamlibPath%\bin\*.exe Bin
@@ -95,6 +101,7 @@ copy %MROOT%\mqt\Help\*.* Help
 xcopy /F /Y %MROOT%\mqt\ControlFiles\Configuration .\Configuration
 xcopy /F /Y %MROOT%\mqt\ControlFiles\Configuration\WindowsFiles .\Configuration
 xcopy /F /Y %MROOT%\mqt\ControlFiles\Configuration\Cluster .\Configuration\Cluster
+xcopy /F /Y %MROOT%\mqt\ControlFiles\Configuration\FunctionKeyMessages .\Configuration\FunctionKeyMessages
 
 cd Configuration
 
@@ -114,11 +121,13 @@ cd ../Bin
 windeployqt.exe MqtAppStarter.exe
 windeployqt.exe MqtChat.exe
 windeployqt.exe MqtCluster.exe
+windeployqt.exe MqtDataModes.exe
 REM windeployqt.exe MqtControl.exe
 REM windeployqt.exe MqtKeyer.exe
+REM windeployqt.exe MqtKeyerProxy.exe
 windeployqt.exe MqtKSTClient.exe
-windeployqt.exe MqtLogger.exe
-windeployqt.exe MqtMonitor.exe
+windeployqt.exe --qmldir %MROOT%/mqt/MqtBase/QSOView MqtLogger.exe
+windeployqt.exe --qmldir %MROOT%/mqt/MqtBase/QSOView MqtMonitor.exe
 windeployqt.exe MqtQrzServer.exe
 windeployqt.exe MqtRigControl.exe
 windeployqt.exe MqtRigRecorder.exe
@@ -130,7 +139,7 @@ REM bin\translations now exists... we can build our translations
 
 @ECHO OFF
 for %%i in (en_GB fr_FR) do (
-  for %%j in (MqtAppStarter MqtChat MqtCluster MqtKSTClient MqtLogger MqtMonitor MqtQrzServer MqtRigControl MqtRigRecorder MqtRigSync MqtRotator MqtServer) do (
+  for %%j in (MqtAppStarter MqtChat MqtCluster MqtDataModes MqtKSTClient MqtLogger MqtMonitor MqtQrzServer MqtRigControl MqtRigRecorder MqtRigSync MqtRotator MqtServer) do (
   lconvert -verbose -o translations\%%j_%%i.qm ^
   %MROOT%\%builddir%\MqtUtils\release\minos_%%i.qm ^
   %MROOT%\%builddir%\TinyXML\release\minos_%%i.qm ^

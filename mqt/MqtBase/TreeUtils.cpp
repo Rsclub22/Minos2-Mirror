@@ -17,6 +17,7 @@ QVector<GridColumn> QSOGridModel::QSOTreeColumns =
       GridColumn( egDate, "XX/XX/XX", QT_TR_NOOP("Date"), taLeftJustify ),               // time
       GridColumn( egTime, "XXXXXX", QT_TR_NOOP("UTC"), taLeftJustify ),               // time
       GridColumn( egBand, "XXXXXX", QT_TR_NOOP("Band"), taLeftJustify ),               // time
+      GridColumn( egMode, "XXXX", QT_TR_NOOP("Mode"), taLeftJustify ),               // time
       GridColumn( egCall, "MMMMMMMMMMM", QT_TR_NOOP("Callsign"), taLeftJustify ),         // call
       GridColumn( egRSTTx, "599XXX", QT_TR_NOOP("RepTx"), taLeftJustify ),                 // RST
       GridColumn( egSNTx, "1234X", QT_TR_NOOP("SnTx"), taLeftJustify /*taRightJustify*/ ),   // serial
@@ -99,6 +100,8 @@ QVariant QSOGridModel::data( const QModelIndex &index, int role ) const
                  }
                  break;
               case egBand:
+                   break;
+              case egMode:
                    break;
               case egCall:
                  if ( contest->countryMult.getValue() && ct->newCtry )

@@ -1,5 +1,12 @@
 #include <QApplication>
 #include <QMessageBox>
+
+#ifdef Q_OS_WIN
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#include <QQmlApplicationEngine>
+#endif
+#endif
+
 #include "RPCCommandConstants.h"
 #include "SecondInstall.h"
 #include "singleapplication.h"
@@ -13,9 +20,13 @@
 //#include <crtdbg.h>
 #endif // _MSC_VER
 
+#ifdef INC_MAP
+QSharedPointer<QQmlApplicationEngine> appQmlEngine;
+#endif
 
 int main(int argc, char *argv[])
 {
+    QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     SecondInstall::parseSecondInstall(argc, argv);
     int appError = 1;
     {
@@ -36,7 +47,6 @@ int main(int argc, char *argv[])
             }
             return appError;
         }
-
         appStartup(rpcConstants::loggerApp);
 
 #ifdef Q_OS_ANDROID
@@ -66,6 +76,9 @@ int main(int argc, char *argv[])
         {
             appError = a.exec();
         }
+#ifdef INC_MAP
+    appQmlEngine.clear();
+#endif
         delete w;
     }
 

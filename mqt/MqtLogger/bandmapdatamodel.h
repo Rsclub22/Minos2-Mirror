@@ -44,17 +44,17 @@ public:
     bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
     bool removeColumns(int column, int count, const QModelIndex &parent = QModelIndex()) override;
 
-    QSharedPointer<BandmapSpotData> getBandmapDataRow(int row);
+    QSharedPointer<ClusterSpotData> getBandmapDataRow(int row);
 
-    QVector< QSharedPointer<BandmapSpotData> > rowData;
+    QVector< QSharedPointer<ClusterSpotData> > rowData;
 
-    QSharedPointer<BandmapSpotData> getSpotData(int row){return bandmapData[row];};
+    QSharedPointer<ClusterSpotData> getSpotData(int row){return bandmapData[row];};
 
     void sortModel();
 
 private:
 
-    QVector< QSharedPointer<BandmapSpotData>>  bandmapData;
+    QVector< QSharedPointer<ClusterSpotData>>  bandmapData;
 
 
     void sortBandmapModel();

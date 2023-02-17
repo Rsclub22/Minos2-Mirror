@@ -37,11 +37,7 @@ public:
                           const QVector<QSharedPointer<BandInfo> > _bands, QLogTabWidget* _radioTab, QWidget *parent = nullptr);
     ~RigSetupForm();
 
-
-
-
-
-    QSharedPointer<scatParams> getRadioData();
+    QSharedPointer<scatParams> getRadioData() const;
 
     QVector<QSharedPointer<BandInfo> > bands;
 
@@ -50,43 +46,49 @@ public:
 
     void addTransVertTab(int tabNum, QString tabName, bool tabChanged);
 
-    QString getRadioModel();
+    QString getRadioModel() const;
     void setRadioModel(QString m);
 
     void civSetToolTip();
-    QString getCIVAddress();
+    QString getCIVAddress() const;
     void setCIVAddress(QString v);
     void enableCIVEdit(bool enable);
 
-    QString getComport();
+    QString getComport() const;
     void setComport(QString p);
 
-    QString getDataSpeed();
+    QString getDataSpeed() const;
     void setDataSpeed(QString d);
 
     int comportAvial(QString comport);
 
-    QString getDataBits();
+    QString getDataBits() const;
     void setDataBits(QString d);
 
-    QString getStopBits();
+    QString getStopBits() const;
     void setStopBits(QString stop);
 
     void setParityBits(int b);
 
-    QString getHandshake();
+    QString getHandshake() const;
     void setHandshake(int h);
 
-    QString getNetAddress();
+    QString getNetAddress() const;
     void setNetAddress(QString netAdd);
 
-    QString getNetPortNum();
+    QString getNetPortNum() const;
     void setNetPortNum(QString p);
 
-    QString getMgmMode();
+    QString getRttyMode() const;
+    void setRttyMode(QString p);
+
+    QString getPskMode() const;
+    void setPskMode(QString p);
+
+    QString getMgmMode() const;
     void setMgmMode(QString p);
 
-    QString getPollInterval();
+    QString getPollInterval() const;
     void setPollInterval(QString i);
     void pollIntervalVisible(bool s);
 
@@ -95,7 +97,7 @@ public:
     void advancedSerialDataEntryVisible(bool v);
 
 
-    bool getTransVertSelected();
+    bool getTransVertSelected() const;
     void setTransVertSelected(bool flag);
 
     void CIVEditVisible(bool visible);
@@ -115,13 +117,13 @@ public:
     void setupRadioModel(QString radioModel);
 
     void loadTransVertTab(QString transvertName);
-    bool getEnableTransVertSw();
+    bool getEnableTransVertSw() const;
     void setEnableTransVertSw( bool b);
     void setEnableTransVertSwBoxVisible( bool visible);
-    bool getEnableLocalTransVertSw();
+    bool getEnableLocalTransVertSw() const;
     void setEnableLocalTransVertSw(bool b);
     void setEnableLocalTransVertSwVisible(bool visible);
-    QString getLocTVSwComport();
+    QString getLocTVSwComport() const;
     void setLocTVSWComportVisible(bool visible);
     void setLocTVSwComport(QString p);
 
@@ -132,9 +134,9 @@ public:
 
 
     void setCurrentRadioName(QString name);
-    QString getRigctldNetworkAddress();
+    QString getRigctldNetworkAddress() const;
     void setRigctldNetworkAddress(const QString &address);
-    QString getRigctldPortNumber();
+    QString getRigctldPortNumber() const;
     void setRigctldPortNumber(const QString &port);
     void setUseRigctldCheckbox(bool checked);
     void rigCtldItemsVisible(bool enable);
@@ -169,7 +171,7 @@ public:
     void loadEnableShowCatFeaturesBox(const RigCapabilities rigCap);
 
 
-    bool isPttComportEqualCatComport();
+    bool isPttComportEqualCatComport() const;
     void pttComportSelDisabled(bool state);
 
 
@@ -199,6 +201,8 @@ private slots:
     void networkPortSelected();
     void pollIntervalSelected();
     void mgmModeSelected();
+    void rttyModeSelected();
+    void pskModeSelected();
 
 
     void addTransVerter();

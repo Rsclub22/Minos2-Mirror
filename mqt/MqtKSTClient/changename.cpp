@@ -101,7 +101,7 @@ void ChangeName::connectToHost()
 void ChangeName::connectionEstablished()
 {
     trace("connection to ON4KST established, logging in");
-    tnclient->login(QString("%1\r\n").arg(myCallsign), QString(password) + "\r\n");
+    tnclient->login(QString("%1\r\n").arg(myCallsign.getFullCall()), QString(password) + "\r\n");
 }
 
 void ChangeName::connectionError(QAbstractSocket::SocketError error)

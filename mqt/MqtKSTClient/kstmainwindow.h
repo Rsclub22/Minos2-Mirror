@@ -16,7 +16,12 @@ QT_BEGIN_NAMESPACE
 namespace Ui { class KSTMainWindow; }
 QT_END_NAMESPACE
 
+class KSTMonitoredLogs;
+
 extern QStringList services;
+
+class RemoteLogs;
+class MonitoredLog;
 
 class KSTMainWindow : public QMainWindow
 {
@@ -50,7 +55,7 @@ class KSTMainWindow : public QMainWindow
 
     QString KSTserverName;
     QString KSTserverPort;
-    QString myCallsign;
+    Callsign myCallsign;
     QString password;
     QString firstName;
     QString recName;
@@ -92,6 +97,9 @@ class KSTMainWindow : public QMainWindow
 
     bool mouseInMessages = false;
 
+    RemoteLogs *remoteLogs = nullptr;
+
+
     void closeEvent(QCloseEvent *event) override;
 
     void sendKST(QString msg);
@@ -99,7 +107,7 @@ class KSTMainWindow : public QMainWindow
     void reconnect();
     void connectToHost();
     virtual bool eventFilter(QObject *obj, QEvent *event) override;
-    void setNameFromCall(QString call);
+    void setNameFromCall(const Callsign &call);
     void doLoginChanges();
     void setActive(int chat);
     bool doConfiguration();
@@ -124,11 +132,11 @@ public:
 
     int getASMinDistance() const;
 
-    int calcDistance(QString c);
+    int calcDistance(const Callsign &c);
 
     int getASMaxDistance() const;
 
-    QString getMyCallsign() const;
+    Callsign getMyCallsign() const;
 
     QString getMyLoc() const;
 
@@ -138,7 +146,7 @@ public:
 
     void showPlanes(QSharedPointer<KstUser> user);
 
-    QSharedPointer<KstUser> getUser(QString call);
+    QSharedPointer<KstUser> getUser(const Callsign &call);
     int getASPort() const;
 
     int getASTimeout() const;
@@ -226,11 +234,18 @@ private slots:
 
     void on_clearMeepFiltersButton_clicked();
 
-    void on_pushButton_clicked();
+    void on_loggerPushButton_clicked();
 
+    void on_logsButton_clicked();
+
+    void onNewLog(MonitoredLog *ml);
+    void onNewStanzas();
 private:
     Ui::KSTMainWindow *ui;
     StdInReader *stdinReader = new StdInReader(this);
+
+    KSTMonitoredLogs* ml = nullptr;
+
     void clearConnection();
     void checkActive();
     void resetVectors(QCheckBox *cb, QRadioButton *rb, int c, QStringList &s, QVector<int> &v, QVector<int> &a);
@@ -238,6 +253,7 @@ private:
     void setMeepFilters();
     void scrollMeepToBotton();
     void scrollMesToBottom();
+    void testAutoStart();
 };
 
 extern KSTMainWindow *mainWindow;

@@ -72,6 +72,7 @@ class MinosCommonConnection: public QObject
       bool publish_disconnect = true;
       bool fromIdSet = false;
       QHostAddress connectHost;
+      QHostAddress myAddr;
 
       MinosCommonConnection();
       virtual void initialise( ) = 0;
@@ -107,6 +108,7 @@ class MinosCommonConnection: public QObject
       virtual void sendCloseSocket( )
       {}
       QString getClientRouter() const;
+      void setClientRouter(QString s){clientRouter = s;}
 
       QString getClientUser() const;
 

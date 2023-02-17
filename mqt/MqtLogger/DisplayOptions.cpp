@@ -35,6 +35,12 @@ void DisplayOptions::initialise()
     AlternateFKeys.initialise(&TContestApp::getContestApp() ->displayBundle, edpAlternateFKeys, ui->alternateFKeysCheckBox);
     ShowAuxHeaders.initialise(&TContestApp::getContestApp() ->loggerBundle, elpShowAuxHeaders, ui->ShowAuxHeadersCheckBox);
 
+    ShowQSOMapGrid.initialise(&TContestApp::getContestApp() ->loggerBundle, elpShowQSOMapGrid, ui->QSOMapShowGrid);
+    ShowQSOMapLines.initialise(&TContestApp::getContestApp() ->loggerBundle, elpShowQSOMapLines, ui->QSOMapShowLines);
+
+    MapShowCluster.initialise(&TContestApp::getContestApp() ->loggerBundle, elpMapShowCluster, ui->mapShowCluster);
+    MapClusterDistance.initialise(&TContestApp::getContestApp() ->loggerBundle, elpMapClusterDistance, ui->mapClusterDistance);
+
 #ifndef Q_OS_WIN
     ui->separateIconsCb->hide();
 #endif
@@ -160,6 +166,23 @@ void DisplayOptions::finalise()
     {
         MinosLoggerEvents::SendShowAuxHeaders();
     }
+    bool gchanged = ShowQSOMapGrid.finalise();
+    bool lchanged = ShowQSOMapLines.finalise();
+
+    bool mscchanged = MapShowCluster.finalise();
+    bool mcdchanged = MapClusterDistance.finalise();
+
+
+    if (gchanged || lchanged || mscchanged || mcdchanged)
+    {
+        MinosLoggerEvents::SendRedrawQSOMap(ShowQSOMapGrid.value(),
+                                            ShowQSOMapLines.value(),
+                                            MapShowCluster.value(),
+                                            MapClusterDistance.iValue()
+                                            );
+    }
+
+    MinosLoggerEvents::SendShowAuxHeaders();
     SHOWOPERATINGTIME nsot = otNone;
     if (ui->otNonerb->isChecked())
     {
@@ -204,7 +227,7 @@ void DisplayOptions::finalise()
         lmc = nlmc;
 
         BaseContestLog * ct = TContestApp::getContestApp() ->getCurrentContest();
-        MinosLoggerEvents::sendRefreshStackMults(ct);
+        MinosLoggerEvents::SendRefreshStackMults(ct);
 
     }
 
@@ -213,7 +236,7 @@ void DisplayOptions::finalise()
     {
         TContestApp::getContestApp() ->setIntDisplayProfile(edpListCompression, nlcf);
         TContestApp::getContestApp() ->displayBundle.flushProfile();
-        MinosLoggerEvents::sendListCompressionChanged(nlcf/100.0);
+        MinosLoggerEvents::SendListCompressionChanged(nlcf/100.0);
         doSelectSession = true;
     }
 

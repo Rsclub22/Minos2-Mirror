@@ -39,8 +39,6 @@ public:
     bool getIsSplitElement() const;
     void setIsSplitElement(bool value);
 
-    void eraseLayout(QLayout *layout);
-
     void addRowBefore(ScreenConfigRow *r);
     void removeRow(ScreenConfigRow *r);
     void addRowAfter(ScreenConfigRow *r);

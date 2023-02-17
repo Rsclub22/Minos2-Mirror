@@ -27,7 +27,6 @@ public:
     virtual ~ClusterClientServer();
     static ClusterClientServer  *getClusterClientServer();
 
-    void setLoggerUuid(QString uuid);
 private:
     static ClusterClientServer *clusterClientServer;
     QTimer SyncTimer;
@@ -40,7 +39,6 @@ private slots:
     void on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString &from);
 
 signals:
-    void ClusterServerList(QVector<ClusterServer>);
     void dxSpot(QVector<ClusterMessage>);
 
 };

@@ -7,6 +7,7 @@
 #include "MatchThread.h"
 #include "BandList.h"
 #include "cutils.h"
+#include "dmbuttonframe.h"
 #include "fileutils.h"
 #include "qheaderview.h"
 #include "qtableview.h"
@@ -252,6 +253,7 @@ void TSingleLogFrame::createScreenComponents()
     txVmButtonsFrame = new TxVmButtonsFrame(this);
     txVmButtonsFrame->setObjectName(QStringLiteral("txVmButtonsFrame"));
     txVmButtonsFrame->setVisible(false);
+    txVmButtonsFrame->setContest(contest);
 
     bandSwitchFrame = new BandSwitchFrame(this);
     bandSwitchFrame->setObjectName(QStringLiteral("bandSwitchFrame"));
@@ -320,34 +322,35 @@ void TSingleLogFrame::createScreenComponents()
 
     CribSheet->setFrameShape(QFrame::NoFrame);
     CribSheet->setFrameShadow(QFrame::Plain);
-    CribSheet->setLineWidth(1);
-    CribSheet->setMidLineWidth(1);
+    CribSheet->setLineWidth(0);
+    CribSheet->setMidLineWidth(0);
+
+    MinosSplitter *cribSplitter = new MinosSplitter(CribSheet);
+    cribSplitter->setObjectName(QStringLiteral("cribSplitter"));
+    cribSplitter->setOrientation(Qt::Vertical);
+
     QVBoxLayout *verticalLayout_5 = new QVBoxLayout(CribSheet);
     verticalLayout_5->setSpacing(0);
     verticalLayout_5->setObjectName(QStringLiteral("verticalLayout_5"));
-    verticalLayout_5->setContentsMargins(10, 0, 5, 0);
+    verticalLayout_5->setContentsMargins(0, 0, 0, 0);
 
     CurrentBandLabel = new QLabel(CribSheet);
     CurrentBandLabel->setObjectName(QStringLiteral("CurrentBandLabel"));
-    CurrentBandLabel->setFrameShape(QFrame::NoFrame);
-    CurrentBandLabel->setLineWidth(2);
-    CurrentBandLabel->setMidLineWidth(2);
     CurrentBandLabel->setTextFormat(Qt::RichText);
     CurrentBandLabel->setWordWrap(true);
 
-    CurrentBandLabel->setFrameStyle(QFrame::Panel | QFrame::Raised);
-
-    verticalLayout_5->addWidget(CurrentBandLabel);
+    cribSplitter->addWidget(CurrentBandLabel);
 
     NextContactDetailsLabel = new QLabel(CribSheet);
     NextContactDetailsLabel->setObjectName(QStringLiteral("NextContactDetailsLabel"));
-    NextContactDetailsLabel->setFrameShape(QFrame::NoFrame);
-    NextContactDetailsLabel->setLineWidth(2);
-    NextContactDetailsLabel->setMidLineWidth(2);
     NextContactDetailsLabel->setTextFormat(Qt::RichText);
     NextContactDetailsLabel->setWordWrap(true);
-    verticalLayout_5->addWidget(NextContactDetailsLabel);
-    verticalLayout_5->addSpacerItem(new QSpacerItem(40, 20, QSizePolicy::Minimum, QSizePolicy::Expanding));
+    NextContactDetailsLabel->setAlignment(Qt::AlignTop);
+
+    cribSplitter->addWidget(NextContactDetailsLabel);
+
+    verticalLayout_5->addWidget(cribSplitter);
+    cribSplitter->setSizes({1, 100});
 
     CribSheet->setVisible(false);
 
@@ -402,6 +405,13 @@ void TSingleLogFrame::createScreenComponents()
 
     qsoMapFrame->setVisible(false);
 
+    dmButtonFrame = new DMButtonFrame(this);
+    dmButtonFrame->setObjectName(QStringLiteral("DMButtonFrame"));
+    dmButtonFrame->setFrameShape(QFrame::StyledPanel);
+    dmButtonFrame->setFrameShadow(QFrame::Raised);
+    dmButtonFrame->setContest(contest);
+
+    dmButtonFrame->setVisible(false);
 }
 void TSingleLogFrame::clearScreenLayout(bool clearAllTabs)
 {
@@ -426,7 +436,7 @@ void TSingleLogFrame::clearScreenLayout(bool clearAllTabs)
     FKHRigControlFrame->setContest(nullptr);
     runButtonsFrame->setContest(nullptr);
     bandSwitchFrame->setContest(nullptr);
-    //txVmButtonsFrame
+    txVmButtonsFrame->setContest(nullptr);
     FKHRotControlFrame->setContest(nullptr);
     rotPresets->setContest(nullptr);
     // CribSheet
@@ -440,7 +450,8 @@ void TSingleLogFrame::clearScreenLayout(bool clearAllTabs)
     wsjtxFrame->setContest(nullptr);
     clusterControlFrame->setContest(nullptr);
     bandmapControlFrame->setContest(nullptr);
-    qsoMapFrame->setContest(nullptr);
+    qsoMapFrame->setContest(nullptr, false, false, false, false, 0);
+    dmButtonFrame->setContest(nullptr);
 
     setBandmapLoaded(false);
     setQrzDisplayFrameLoaded(false);
@@ -510,6 +521,9 @@ void TSingleLogFrame::clearScreenLayout(bool clearAllTabs)
 
         qsoMapFrame->setParent(this);
         qsoMapFrame->hide();
+
+        dmButtonFrame->setParent(this);
+        dmButtonFrame->hide();
 
         if (clearAllTabs)
         {
@@ -624,6 +638,9 @@ void TSingleLogFrame::buildRow(ContestPage *cp, SCRow &scrow, int &auxInstance, 
                 elementScrollArea = new QScrollArea();
                 elementScrollArea->setWidgetResizable(true);
                 elementScrollArea->setFocusPolicy(Qt::NoFocus);
+                elementScrollArea->setFrameStyle(QStyleOptionFrame::None);
+                elementScrollArea->setFrameShadow(QFrame::Plain);
+
                 hs->addWidget(elementScrollArea);
             }
 
@@ -675,6 +692,7 @@ void TSingleLogFrame::buildRow(ContestPage *cp, SCRow &scrow, int &auxInstance, 
                 case sctTxVmButtons:
                 {
                     elementScrollArea->setWidget(txVmButtonsFrame);
+                    txVmButtonsFrame->setContest(ct);
                     break;
                 }
                 case sctRotControl:
@@ -763,7 +781,29 @@ void TSingleLogFrame::buildRow(ContestPage *cp, SCRow &scrow, int &auxInstance, 
                 {
                     elementScrollArea->setWidget(qsoMapFrame);
                     qsoMapFrame->setVisible(true);
-                    qsoMapFrame->setContest(ct);
+
+                    bool grid = false;
+                    if (ct->locatorMandatoryField.getValue())
+                    {
+                        TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpShowQSOMapGrid, grid );
+                    }
+                    bool lines;
+                    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpShowQSOMapLines, lines );
+
+                    bool spots;
+                    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpMapShowCluster, spots );
+
+                    int sd;
+                    TContestApp::getContestApp() ->loggerBundle.getIntProfile( elpMapClusterDistance, sd );
+
+                    qsoMapFrame->setContest(ct, false, grid, lines, spots, sd);
+                    break;
+                }
+                case sctDMButtons:
+                {
+                    elementScrollArea->setWidget(dmButtonFrame);
+                    dmButtonFrame->setVisible(true);
+                    dmButtonFrame->setContest(ct);
                     break;
                 }
                 case sctSplit:
@@ -938,7 +978,6 @@ void TSingleLogFrame::closeContest()
        FKHRigControlFrame->closeContest();          // this disconnects rig on last closing contest
        FKHRotControlFrame->closeContest();
        GJVQSOLogFrame->closeContest();
-       qsoMapFrame->closeContest();
        if (contest)
        {
             RPCPubSub::publish( rpcConstants::monitorLogCategory, contest->publishedName, QString::number( 0 ), psRevoked );
@@ -1177,6 +1216,11 @@ void TSingleLogFrame::PublishTimerTimer(  )
    LoggerContestLog * ct = dynamic_cast<LoggerContestLog *>( contest );
    if ( ct && ct->isMinosFile() && !ct->isReadOnly())
    {
+       // We also need to publish if the times have changed
+       // although this is really a dev problem!
+
+       // BUT this looks like it should work
+
       int stanzaCount = contest->getCtStanzaCount();
       if ( lastStanzaCount != stanzaCount )
       {
@@ -1502,7 +1546,7 @@ void TSingleLogFrame::on_AfterLogContact( BaseContestLog *ct)
 void TSingleLogFrame::refreshMults()
 {
     LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( contest );
-    MinosLoggerEvents::sendRefreshStackMults(ct);
+    MinosLoggerEvents::SendRefreshStackMults(ct);
 }
 
 void TSingleLogFrame::updateTrees()
@@ -1615,7 +1659,7 @@ void TSingleLogFrame::on_SetMemory(BaseContestLog *c, QString call, QString loc)
        {
            ct->saveRigMemory(n, logData);
 
-           MinosLoggerEvents::sendUpdateMemories(ct);
+           MinosLoggerEvents::SendUpdateMemories(ct);
        }
     }
 }
@@ -1654,7 +1698,7 @@ void TSingleLogFrame::on_dxSpotToMemory(BaseContestLog *c, memoryData::memData d
 
         ct->saveRigMemory(n, dxData);
 
-        MinosLoggerEvents::sendUpdateMemories(ct);
+        MinosLoggerEvents::SendUpdateMemories(ct);
     }
 }
 
@@ -1794,17 +1838,14 @@ void TSingleLogFrame::on_SetMode(QString m)
             m = "PH:";
         }
     }
-    if (sCurMode != m)
+    if ( this == LogContainer->getCurrentLogFrame() )
     {
-        if ( this == LogContainer->getCurrentLogFrame() )
-        {
-            sCurMode = m;
-            FKHRigControlFrame->setMode(m);
-            GJVQSOLogFrame->modeSentFromRig(m);
-            txVmButtonsFrame->setMode(m);
-            bandmapControlFrame->setMode(m);
-            bandmapControlFrame->checkLegalFrequencies(sCurFreq);
-        }
+        sCurMode = m;
+        FKHRigControlFrame->setMode(m);
+        GJVQSOLogFrame->modeSentFromRig(m);
+        txVmButtonsFrame->setMode(m);
+        bandmapControlFrame->setMode(m);
+        bandmapControlFrame->checkLegalFrequencies(sCurFreq);
     }
 }
 
@@ -1859,7 +1900,7 @@ void TSingleLogFrame::updateFreq(Frequency f)
     GJVQSOLogFrame->setFreq(f);
     bandmapControlFrame->setFreq(f);
 
-    MinosLoggerEvents::sendRigFreqChanged(f, contest);
+    MinosLoggerEvents::SendRigFreqChanged(f, contest);
 }
 
 
@@ -2054,7 +2095,9 @@ void TSingleLogFrame::sendRadioFreq(Frequency freq)
 
         if (bandChanged)
         {
-            LogContainer->sendDM->sendRigControlMode(this, sCurMode);
+            QStringList ms = sCurMode.split(":");
+            QString m = ms[0];
+            LogContainer->sendDM->sendRigControlMode(this, m);
         }
 
     }
@@ -2067,7 +2110,11 @@ void TSingleLogFrame::sendBandToRig(QString band)
         trace("sendKeyerStop from TSingleLogFrame::sendBandToRig");
         sendKeyerStop();    // don't keep calling while tuning!
         LogContainer->sendDM->sendRigControlBand(this, band);
-        LogContainer->sendDM->sendRigControlMode(this, sCurMode);
+
+        QStringList ms = sCurMode.split(":");
+        QString m = ms[0];
+
+        LogContainer->sendDM->sendRigControlMode(this, m);
 
     }
 }
