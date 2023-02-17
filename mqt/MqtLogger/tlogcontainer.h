@@ -54,7 +54,7 @@ public:
 
     QMenu TabPopup;
 
-    SerialTVSwitch *serialTVSw;
+    SerialTVSwitch *serialTVSw = nullptr;
 
     TSingleLogFrame *findContest( const QString &pubname );
     TSingleLogFrame *findContest(BaseContestLog *ct );
@@ -91,6 +91,8 @@ public:
     void selectContest(BaseContestLog *pc);
     void selectTab(int t);
 
+    void openSerialTVSwitch();
+    
 private:
     Ui::TLogContainer *ui;
 

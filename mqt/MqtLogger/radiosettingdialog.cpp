@@ -554,6 +554,10 @@ void RadioSettingDialog::saveSettings()
     saveModePresetFreqSettings(freqPresetData::PRESET_MODE_MGM, config);
 
     presetFreq.clearDirty();
+
+    saveBandSwComport();
+    saveBandSwData();
+    saveBandSwCheckBoxes();
 }
 
 

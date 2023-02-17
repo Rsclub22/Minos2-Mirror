@@ -57,6 +57,40 @@ bool TLogContainer::loggerClosing = false;
 SetMemoryAction::SetMemoryAction(QString t, QObject *p):QAction(t, p)
 {}
 
+void TLogContainer::openSerialTVSwitch()
+{
+    if (!serialTVSw)
+    {
+        serialTVSw = new SerialTVSwitch();     // create local serial sw for band switching
+    }
+    else
+    {
+        serialTVSw->closeComport();
+    }
+
+    if (readEnableBandSwitchFromIni() && readEnableSerialBandSwitchFromIni())
+    {
+        trace(QString("Opening Bandswitch comport"));
+        QString comport = readSerialComportBandSwitchFromIni();
+        if (comport.isEmpty())
+        {
+            trace(QString("BandSwitch Comport is empty"));
+        }
+        else
+        {
+            if (serialTVSw->openComport(comport))
+            {
+                trace(QString("Bandswitch comport %1 opened OK").arg(comport));
+            }
+            else
+            {
+                QString errMsg = serialTVSw->error();
+                trace(QString("Bandswitch Comport failed to open = %1 Error = %2").arg(comport, errMsg));
+            }
+        }
+    }
+}
+
 TLogContainer::TLogContainer(QWidget *parent) :
     QMainWindow(parent)
   , ui(new Ui::TLogContainer)
@@ -107,29 +141,7 @@ TLogContainer::TLogContainer(QWidget *parent) :
 
     ScreenConfigFile::getScreenConfigFile(this);  // get configs loaded
 
-    serialTVSw = new SerialTVSwitch();     // create local serial sw for band switching
-
-    if (readEnableBandSwitchFromIni() && readEnableSerialBandSwitchFromIni())
-    {
-        trace(QString("Opening Bandswitch comport"));
-        QString comport = readSerialComportBandSwitchFromIni();
-        if (comport.isEmpty())
-        {
-            trace(QString("BandSwitch Comport is empty"));
-        }
-        else
-        {
-            if (serialTVSw->openComport(comport))
-            {
-                trace(QString("Bandswitch comport %1 opened OK").arg(comport));
-            }
-            else
-            {
-                QString errMsg = serialTVSw->error();
-                trace(QString("Bandswitch Comport failed to open = %1 Error = %2").arg(comport, errMsg));
-            }
-        }
-    }
+    openSerialTVSwitch();
 
 
     contestPageControls.append(ui->contestPageControl);
@@ -1111,7 +1123,12 @@ void TLogContainer::OptionsActionExecute()
 {
     OptionsDialog od;
 
-    od.exec();
+    if (od.exec() == QDialog::Accepted)
+    {
+
+        // This is a somwhat clumsy method...
+        openSerialTVSwitch();
+    }
 }
 void TLogContainer::AdvancedOptionsActionExecute()
 {
