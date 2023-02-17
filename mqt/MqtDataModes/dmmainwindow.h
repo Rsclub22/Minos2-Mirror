@@ -119,8 +119,8 @@ private:
 
     bool doKeyPressEvent(QKeyEvent *event);
     QStringList populateRig();
-    void configureRig(const QString s);
-    QString getRig();
+//    void configureRig(const QString s);
+//    QString getRig();
     void doSendButton_clicked(QString d, int c);
     void testAutoStart();
     void onNewStanzas();

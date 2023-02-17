@@ -406,9 +406,10 @@ void TSingleLogFrame::createScreenComponents()
     qsoMapFrame->setVisible(false);
 
     dmButtonFrame = new DMButtonFrame(this);
-    dmButtonFrame->setObjectName(QStringLiteral("qsoMapFrame"));
+    dmButtonFrame->setObjectName(QStringLiteral("DMButtonFrame"));
     dmButtonFrame->setFrameShape(QFrame::StyledPanel);
     dmButtonFrame->setFrameShadow(QFrame::Raised);
+    dmButtonFrame->setContest(contest);
 
     dmButtonFrame->setVisible(false);
 }

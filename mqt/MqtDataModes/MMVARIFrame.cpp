@@ -263,9 +263,10 @@ void MMVARIFrame::onSendCharacters(QString data, int c)
     sendCharacters(data, c);
 }
 
-void MMVARIFrame::onRigModeFreq(QString, Frequency f)
+void MMVARIFrame::onRigModeFreq(QString mode, Frequency f)
 {
     mmview->setDwFreqHz(f.toInt64());  // tranciever frequency
+    sendMode(mode);
 
 }
 void MMVARIFrame::sendCharacters(const QString &sendData, int c)

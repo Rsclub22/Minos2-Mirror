@@ -205,7 +205,8 @@ DMMainWindow::DMMainWindow(QWidget *parent)
 
     startPreviousEngine();
 
-    mainRig = getRig();
+//    mainRig = getRig(); // why don't we use the logger connected rig?
+    ui->mainRigComboBox->setEnabled(false);
 
     ui->backData->setVisible(false);
 
@@ -356,6 +357,8 @@ void DMMainWindow::on_notify(AnalysePubSubNotify an, const QString from )
         else if ( an.getCategory() == rpcConstants::rigStateCategory)
         {
             rigCache.setStateString(an);
+            mainRig = rigCache.getSelected("");
+            ui->mainRigComboBox->setCurrentText(mainRig.toString());
         }
         else if ( an.getCategory() == rpcConstants::rigDetailsCategory)
         {
@@ -411,19 +414,19 @@ QStringList DMMainWindow::populateRig()
     cb.sort();
     return cb;
 }
-void DMMainWindow::configureRig(const QString s)
-{
-    QSettings config;
+//void DMMainWindow::configureRig(const QString s)
+//{
+//    QSettings config;
 
-    config.setValue("Rig", s);
-}
+//    config.setValue("Rig", s);
+//}
 
-QString DMMainWindow::getRig()
-{
-    QSettings config;
+//QString DMMainWindow::getRig()
+//{
+//    QSettings config;
 
-    return config.value("Rig").toString();
-}
+//    return config.value("Rig").toString();
+//}
 
 void DMMainWindow::iniFileChanged()
 {
@@ -989,8 +992,8 @@ void DMMainWindow::on_stopButton_clicked()
 
 void DMMainWindow::on_mainRigComboBox_activated(const QString &psn)
 {
-    mainRig = psn;
-    configureRig(psn);
+//    mainRig = psn;
+//    configureRig(psn);
 }
 
 void DMMainWindow::on_backDataButton_clicked()
