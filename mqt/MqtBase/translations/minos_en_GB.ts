@@ -4,32 +4,32 @@
 <context>
     <name>BaseContact</name>
     <message>
-        <location filename="../contacts.cpp" line="413"/>
+        <location filename="../contacts.cpp" line="442"/>
         <source>DELETED</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contacts.cpp" line="428"/>
+        <location filename="../contacts.cpp" line="457"/>
         <source>MAN</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contacts.cpp" line="431"/>
+        <location filename="../contacts.cpp" line="460"/>
         <source>DEL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contacts.cpp" line="434"/>
+        <location filename="../contacts.cpp" line="463"/>
         <source>N/S</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contacts.cpp" line="439"/>
+        <location filename="../contacts.cpp" line="468"/>
         <source>DUP</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contacts.cpp" line="484"/>
+        <location filename="../contacts.cpp" line="513"/>
         <source>MHz</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1004,12 +1004,12 @@
 <context>
     <name>ContestScore</name>
     <message>
-        <location filename="../contest.cpp" line="1970"/>
+        <location filename="../contest.cpp" line="1993"/>
         <source>Score: Qsos: %1; %2 pts :%3%4 countries%5: bonuses %6(%7) = %8</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contest.cpp" line="1983"/>
+        <location filename="../contest.cpp" line="2006"/>
         <source>Score: Qsos: %1; %2 pts :%3%4 countries%5:%6%7 districts%8:%9%10 locators %13 = %14</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1067,32 +1067,32 @@
 <context>
     <name>DisplayContestContact</name>
     <message>
-        <location filename="../DisplayContestContact.cpp" line="440"/>
+        <location filename="../DisplayContestContact.cpp" line="437"/>
         <source>DELETED</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../DisplayContestContact.cpp" line="500"/>
+        <location filename="../DisplayContestContact.cpp" line="497"/>
         <source>MAN</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../DisplayContestContact.cpp" line="570"/>
+        <location filename="../DisplayContestContact.cpp" line="567"/>
         <source>DEL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../DisplayContestContact.cpp" line="573"/>
+        <location filename="../DisplayContestContact.cpp" line="570"/>
         <source>N/S</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../DisplayContestContact.cpp" line="580"/>
+        <location filename="../DisplayContestContact.cpp" line="577"/>
         <source>DUP</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../DisplayContestContact.cpp" line="661"/>
+        <location filename="../DisplayContestContact.cpp" line="658"/>
         <source>UNFILLED CONTACT </source>
         <translation type="unfinished"></translation>
     </message>
@@ -1289,7 +1289,7 @@ The format required is (e.g.) 1296.3, 144.32 or 144.290123<byte value="xd"/>
 <context>
     <name>MatchThisFrame</name>
     <message>
-        <location filename="../MatchThisFrame.cpp" line="74"/>
+        <location filename="../MatchThisFrame.cpp" line="71"/>
         <source>Press &quot;Yes&quot; to transfer details, or &quot;No&quot; to edit the QSO</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2000,43 +2000,57 @@ Please enter another bearing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../StartConfigManager.ui" line="88"/>
+        <location filename="../StartConfigManager.ui" line="72"/>
+        <location filename="../StartConfigManager.cpp" line="70"/>
+        <location filename="../StartConfigManager.cpp" line="304"/>
+        <source>Show</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../StartConfigManager.ui" line="95"/>
         <source>Start</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../StartConfigManager.ui" line="108"/>
+        <location filename="../StartConfigManager.ui" line="115"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../StartConfigManager.ui" line="115"/>
+        <location filename="../StartConfigManager.ui" line="122"/>
         <source>OK</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../StartConfigManager.cpp" line="56"/>
+        <location filename="../StartConfigManager.cpp" line="58"/>
         <source>Stop all apps</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../StartConfigManager.cpp" line="60"/>
+        <location filename="../StartConfigManager.cpp" line="63"/>
         <source>Start all apps</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../StartConfigManager.cpp" line="140"/>
+        <location filename="../StartConfigManager.cpp" line="75"/>
+        <location filename="../StartConfigManager.cpp" line="291"/>
+        <location filename="../StartConfigManager.cpp" line="309"/>
+        <source>Hide</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../StartConfigManager.cpp" line="153"/>
         <source>Please give a new name for the layout</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../StartConfigManager.cpp" line="144"/>
+        <location filename="../StartConfigManager.cpp" line="157"/>
         <source>%1 already exists</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../StartConfigManager.cpp" line="167"/>
-        <location filename="../StartConfigManager.cpp" line="186"/>
+        <location filename="../StartConfigManager.cpp" line="180"/>
+        <location filename="../StartConfigManager.cpp" line="199"/>
         <source>new app config</source>
         <translation type="unfinished"></translation>
     </message>

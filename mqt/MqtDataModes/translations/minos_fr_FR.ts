@@ -4,67 +4,78 @@
 <context>
     <name>DMMainWindow</name>
     <message>
-        <location filename="../dmmainwindow.cpp" line="194"/>
-        <location filename="../dmmainwindow.cpp" line="537"/>
+        <location filename="../dmmainwindow.cpp" line="203"/>
+        <location filename="../dmmainwindow.cpp" line="557"/>
         <source>Minos Data Modes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dmmainwindow.ui" line="46"/>
+        <location filename="../dmmainwindow.ui" line="45"/>
         <source>Make this sender</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dmmainwindow.ui" line="60"/>
+        <location filename="../dmmainwindow.ui" line="59"/>
         <source>Send</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dmmainwindow.ui" line="67"/>
+        <location filename="../dmmainwindow.ui" line="66"/>
         <source>Stop</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dmmainwindow.ui" line="86"/>
+        <location filename="../dmmainwindow.ui" line="85"/>
         <source>Current Radio</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dmmainwindow.ui" line="100"/>
-        <location filename="../dmmainwindow.ui" line="107"/>
-        <location filename="../dmmainwindow.ui" line="135"/>
-        <location filename="../dmmainwindow.ui" line="142"/>
-        <location filename="../dmmainwindow.ui" line="149"/>
-        <location filename="../dmmainwindow.ui" line="156"/>
-        <location filename="../dmmainwindow.ui" line="163"/>
-        <location filename="../dmmainwindow.ui" line="170"/>
-        <location filename="../dmmainwindow.ui" line="181"/>
-        <location filename="../dmmainwindow.ui" line="188"/>
-        <location filename="../dmmainwindow.ui" line="195"/>
-        <location filename="../dmmainwindow.ui" line="202"/>
-        <location filename="../dmmainwindow.ui" line="209"/>
-        <location filename="../dmmainwindow.ui" line="216"/>
+        <location filename="../dmmainwindow.ui" line="99"/>
+        <location filename="../dmmainwindow.ui" line="106"/>
+        <location filename="../dmmainwindow.ui" line="141"/>
+        <location filename="../dmmainwindow.ui" line="148"/>
+        <location filename="../dmmainwindow.ui" line="155"/>
+        <location filename="../dmmainwindow.ui" line="162"/>
+        <location filename="../dmmainwindow.ui" line="169"/>
+        <location filename="../dmmainwindow.ui" line="176"/>
+        <location filename="../dmmainwindow.ui" line="187"/>
+        <location filename="../dmmainwindow.ui" line="194"/>
+        <location filename="../dmmainwindow.ui" line="201"/>
+        <location filename="../dmmainwindow.ui" line="208"/>
+        <location filename="../dmmainwindow.ui" line="215"/>
+        <location filename="../dmmainwindow.ui" line="222"/>
         <source>...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dmmainwindow.ui" line="242"/>
+        <location filename="../dmmainwindow.ui" line="126"/>
+        <location filename="../dmmainwindow.cpp" line="1003"/>
+        <source>Show Back Data</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dmmainwindow.ui" line="248"/>
         <source>Engine</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dmmainwindow.ui" line="247"/>
+        <location filename="../dmmainwindow.ui" line="253"/>
         <source>Clear</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dmmainwindow.cpp" line="81"/>
+        <location filename="../dmmainwindow.cpp" line="90"/>
         <source>Default Device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dmmainwindow.cpp" line="152"/>
+        <location filename="../dmmainwindow.cpp" line="161"/>
         <source>Configure Engines</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dmmainwindow.cpp" line="1008"/>
+        <source>Hide Back Data</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

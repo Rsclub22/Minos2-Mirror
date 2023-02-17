@@ -141,115 +141,130 @@
     </message>
     <message>
         <location filename="../KeyerMain.ui" line="401"/>
+        <source>Sample rate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../KeyerMain.ui" line="408"/>
         <source>IP Port</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../KeyerMain.ui" line="470"/>
+        <location filename="../KeyerMain.ui" line="465"/>
+        <source>TextLabel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../KeyerMain.ui" line="487"/>
         <source>Setup Script (alsactl)</source>
         <translatorcomment>Script d&apos;installation (alsactl)</translatorcomment>
         <translation>Script de configuration (alsactl)</translation>
     </message>
     <message>
-        <location filename="../KeyerMain.ui" line="482"/>
+        <location filename="../KeyerMain.ui" line="499"/>
         <source>...</source>
         <translation>...</translation>
     </message>
     <message>
-        <location filename="../KeyerMain.ui" line="508"/>
+        <location filename="../KeyerMain.ui" line="525"/>
         <source>Save Alsa Config</source>
         <translation>Enregistrer la configuration Alsa</translation>
     </message>
     <message>
-        <location filename="../KeyerMain.ui" line="515"/>
+        <location filename="../KeyerMain.ui" line="532"/>
         <source>Restore Alsa Config</source>
         <translation>Restaurer la configuration Alsa</translation>
     </message>
     <message>
-        <location filename="../KeyerMain.ui" line="562"/>
+        <location filename="../KeyerMain.ui" line="579"/>
         <source>Metering</source>
         <translation>Mesure</translation>
     </message>
     <message>
-        <location filename="../KeyerMain.ui" line="569"/>
+        <location filename="../KeyerMain.ui" line="586"/>
         <source>Input</source>
         <translation>Entrée</translation>
     </message>
     <message>
-        <location filename="../KeyerMain.cpp" line="103"/>
+        <location filename="../KeyerMain.cpp" line="109"/>
         <source>
 Record</source>
         <translation>
 Enregistrer</translation>
     </message>
     <message>
-        <location filename="../KeyerMain.cpp" line="108"/>
+        <location filename="../KeyerMain.cpp" line="114"/>
         <source>
 Replay</source>
         <translation>
 Rejouer</translation>
     </message>
     <message>
-        <location filename="../KeyerMain.cpp" line="113"/>
+        <location filename="../KeyerMain.cpp" line="119"/>
         <source>Pass
 Through</source>
         <translatorcomment>mode intermédiaire ??</translatorcomment>
         <translation>Passthrough</translation>
     </message>
     <message>
-        <location filename="../KeyerMain.cpp" line="119"/>
+        <location filename="../KeyerMain.cpp" line="125"/>
         <source>Window (ms)</source>
         <translation>Fenetre (ms)</translation>
     </message>
     <message>
-        <location filename="../KeyerMain.cpp" line="123"/>
+        <location filename="../KeyerMain.cpp" line="129"/>
         <source>Threshold (db below max)</source>
         <translation>Seuil (db inférieur au max)</translation>
     </message>
     <message>
-        <location filename="../KeyerMain.cpp" line="127"/>
+        <location filename="../KeyerMain.cpp" line="133"/>
         <source>Compression Ratio</source>
         <translation>Taux de compression</translation>
     </message>
     <message>
-        <location filename="../KeyerMain.cpp" line="131"/>
+        <location filename="../KeyerMain.cpp" line="137"/>
         <source>Attack (ms)</source>
         <translation>[Context?] </translation>
     </message>
     <message>
-        <location filename="../KeyerMain.cpp" line="135"/>
+        <location filename="../KeyerMain.cpp" line="141"/>
         <source>Release (ms)</source>
         <translation>[Context?]  </translation>
     </message>
     <message>
-        <location filename="../KeyerMain.cpp" line="139"/>
+        <location filename="../KeyerMain.cpp" line="145"/>
         <source>Makeup Gain (db)</source>
         <translation>[Context?] </translation>
     </message>
     <message>
-        <location filename="../KeyerMain.cpp" line="168"/>
+        <location filename="../KeyerMain.cpp" line="174"/>
         <source>Remote IP Client</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../KeyerMain.cpp" line="378"/>
+        <location filename="../KeyerMain.cpp" line="397"/>
         <source>Push PTT to Commence Recording</source>
         <translation>Appuyer PTT pour commencer l&apos;enregistrement</translation>
     </message>
     <message>
-        <location filename="../KeyerMain.cpp" line="529"/>
+        <location filename="../KeyerMain.cpp" line="548"/>
         <source>Alsa Control Files</source>
         <translation>Fichiers de contrôle Alsa</translation>
     </message>
     <message>
-        <location filename="../KeyerMain.cpp" line="530"/>
+        <location filename="../KeyerMain.cpp" line="549"/>
         <source>All Files</source>
         <translation>Tous les fichiers</translation>
     </message>
     <message>
-        <location filename="../KeyerMain.cpp" line="533"/>
+        <location filename="../KeyerMain.cpp" line="552"/>
         <source>File for mixer setup</source>
         <translation>Fichier pour la configuration du mixer</translation>
+    </message>
+    <message>
+        <location filename="../KeyerMain.cpp" line="811"/>
+        <source>Restart to set sample rate to &quot;0&quot;</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
