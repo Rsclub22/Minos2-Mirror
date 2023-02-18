@@ -37,44 +37,54 @@ public:
 
     }
 
+    void setDataSource(QString source_){dataSource = source_;}
+    QString getDataSource() const {return dataSource;}
+
     void setCallsign(QString callsign_){callsign = callsign_;}
-    QString getCallsign(){return callsign;}
+    QString getCallsign() const {return callsign;}
 
     void setFirstName(QString firstName_){firstName = firstName_;}
-    QString getFirstName(){return firstName;}
+    QString getFirstName() const {return firstName;}
 
     void setName(QString name_){name = name_;}
-    QString getName(){return name;}
+    QString getName() const {return name;}
 
     void setAddr1(QString addr1_){addr1 = addr1_;}
-    QString getAddr1(){return addr1;}
+    QString getAddr1() const {return addr1;}
 
     void setAddr2(QString addr2_){addr2 = addr2_;}
-    QString getAddr2(){return addr2;}
+    QString getAddr2() const {return addr2;}
 
     void setCounty(QString county_){county = county_;}
-    QString getCounty(){return county;}
+    QString getCounty() const {return county;}
 
     void setCountry(QString country_){country = country_;}
-    QString getCountry(){return country;}
+    QString getCountry() const {return country;}
 
     void setLat(QString lat_){lat = lat_;}
-    QString getLat(){return lat;}
+    QString getLat() const {return lat;}
 
     void setLon(QString lon_){lon = lon_;}
-    QString getLon(){return lon;}
+    QString getLon() const {return lon;}
 
     void setQra(QString qra_){qra = qra_;}
-    QString getQra(){return qra;}
+    QString getQra() const {return qra;}
 
     void setCqZone(QString cqZone_){cqZone = cqZone_;}
-    QString getCqZone(){return cqZone;}
+    QString getCqZone() const {return cqZone;}
 
     void setItuZone(QString ituZone_){ituZone = ituZone_;}
-    QString getItuZone(){return ituZone;}
+    QString getItuZone() const {return ituZone;}
+
+    void setModDate(QString moddate_){moddate = moddate_;}
+    QString getModDate() const {return moddate;}
+
+    void setDBDate(QString dbdate_){dbdate = dbdate_;}
+    QString getDBDate() const {return dbdate;}
 
     void clear()
     {
+        dataSource.clear();
         callsign.clear();
         firstName.clear();
         name.clear();
@@ -87,12 +97,15 @@ public:
         qra.clear();
         cqZone.clear();
         ituZone.clear();
+        moddate.clear();
+        dbdate.clear();
     }
 
 
 
 private:
 
+    QString dataSource;
     QString callsign;
     QString firstName;
     QString name;
@@ -105,6 +118,8 @@ private:
     QString qra;
     QString cqZone;
     QString ituZone;
+    QString moddate;
+    QString dbdate;
 
 };
 

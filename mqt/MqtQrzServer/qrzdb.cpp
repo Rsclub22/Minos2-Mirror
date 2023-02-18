@@ -1,0 +1,166 @@
+#include <QSqlQuery>
+#include <QSqlRecord>
+#include <QSqlError>
+#include <QVariant>
+#include "MTrace.h"
+#include "qrzdb.h"
+
+QRZDB::QRZDB(QObject *parent)
+    : QObject{parent}
+{
+    qdb = QSqlDatabase::addDatabase("QSQLITE");
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    qdb.setDatabaseName("qrzdb6");
+#else
+    qdb.setDatabaseName("qrzdb5");
+#endif
+
+    if (!qdb.open())
+    {
+       trace("Error: connection with database failed");
+    }
+    else
+    {
+       trace("Database: connection ok");
+
+       QString createQuery = "CREATE TABLE IF NOT EXISTS QRZ ("
+       "callsign TEXT PRIMARY KEY,"
+       "dataSource TEXT,"
+       "firstName TEXT,"
+       "name TEXT,"
+       "addr1 TEXT,"
+       "addr2 TEXT,"
+       "county TEXT,"
+       "country TEXT,"
+       "lat TEXT,"
+       "lon TEXT,"
+       "qra TEXT,"
+       "cqZone TEXT,"
+       "ituZone TEXT,"
+       "moddate TEXT,"
+       "dbdate TEXT"
+       ") ";
+
+          // you should check if args are ok first...
+          QSqlQuery query;
+          query.prepare(createQuery);
+          if(query.exec())
+          {
+              trace("QRZ database created successfully");
+              QSqlQuery query;
+              query.prepare("SELECT COUNT(*) FROM QRZ");
+              if (query.exec())
+              {
+                  if (query.next())
+                  {
+                      trace(QString("%1 callsign records retrieved").arg(query.value(0).toString()));
+                  }
+                  else
+                  {
+                      trace(QString("select count(*) next error:").arg(query.lastError().text()));
+                  }
+              }
+              else
+              {
+                  trace(QString("select count(*) exec error:").arg(query.lastError().text()));
+              }
+          }
+          else
+          {
+               trace(QString("create DB error:%1").arg(query.lastError().text()));
+          }
+    }
+}
+
+bool QRZDB::createRecord(const QrzCallsignData &csData)
+{
+    QSqlQuery query;
+    query.prepare(
+      "INSERT INTO QRZ "
+      "(dataSource, callsign, firstName, name, addr1, addr2, county, country, lat, lon, qra, cqZone, ituZone, moddate, dbdate)"
+      " VALUES "
+      "(:dataSource, :callsign, :firstName, :name, :addr1, :addr2, :county, :country, :lat, :lon, :qra, :cqZone, :ituZone, :moddate, :dbdate)"
+       );
+    query.bindValue(":dataSource", csData.getDataSource());
+    query.bindValue(":callsign", csData.getCallsign());
+    query.bindValue(":firstName", csData.getFirstName());
+    query.bindValue(":name", csData.getName());
+    query.bindValue(":addr1", csData.getAddr1());
+    query.bindValue(":addr2", csData.getAddr2());
+    query.bindValue(":county", csData.getCounty());
+    query.bindValue(":country", csData.getCountry());
+    query.bindValue(":lat", csData.getLat());
+    query.bindValue(":lon", csData.getLon());
+    query.bindValue(":qra", csData.getQra());
+    query.bindValue(":cqZone", csData.getCqZone());
+    query.bindValue(":ituZone", csData.getItuZone());
+    query.bindValue(":moddate", csData.getModDate());
+    query.bindValue(":dbdate", csData.getDBDate());
+    if(query.exec())
+    {
+        trace(QString("Record created for csData callsign %1").arg(csData.getCallsign()));
+        return true;
+    }
+    else
+    {
+         trace(QString("createRecord error:").arg(query.lastError().text()));
+    }
+    return false;
+}
+
+QrzCallsignData QRZDB::getRecord(const QString cs)
+{
+    QrzCallsignData csData;
+    QSqlQuery query;
+    query.prepare("SELECT * FROM QRZ WHERE callsign=(:callsign)");
+    query.bindValue(":callsign", cs);
+    if (query.exec())
+    {
+
+        int idDataSource = query.record().indexOf("dataSource");
+        int idCallsign = query.record().indexOf("callsign");
+        int idFirstName = query.record().indexOf("firstName");
+        int idname = query.record().indexOf("name");
+        int idaddr1 = query.record().indexOf("addr1");
+        int idaddr2 = query.record().indexOf("addr2");
+        int idcounty = query.record().indexOf("county");
+        int idcountry = query.record().indexOf("country");
+        int idlat = query.record().indexOf("lat");
+        int idlon = query.record().indexOf("lon");
+        int idqra = query.record().indexOf("qra");
+        int idcqZone = query.record().indexOf("cqZone");
+        int idituZone = query.record().indexOf("ituZone");
+        int idmoddate = query.record().indexOf("moddate");
+        int iddbdate = query.record().indexOf("dbdate");
+        if (query.next())
+        {
+           csData.setDataSource(query.value(idDataSource).toString());
+           csData.setCallsign(query.value(idCallsign).toString());
+           csData.setFirstName(query.value(idFirstName).toString());
+           csData.setName(query.value(idname).toString());
+           csData.setAddr1(query.value(idaddr1).toString());
+           csData.setAddr2(query.value(idaddr2).toString());
+           csData.setCounty(query.value(idcounty).toString());
+           csData.setCountry(query.value(idcountry).toString());
+           csData.setLat(query.value(idlat).toString());
+           csData.setLon(query.value(idlon).toString());
+           csData.setQra(query.value(idqra).toString());
+           csData.setCqZone(query.value(idcqZone).toString());
+           csData.setItuZone(query.value(idituZone).toString());
+           csData.setModDate(query.value(idmoddate).toString());
+           csData.setDBDate(query.value(iddbdate).toString());
+
+           trace(QString("Record retrieved for csData callsign %1").arg(csData.getCallsign()));
+
+        }
+        else
+        {
+            trace(QString("getRecord error:%1 for %2").arg(query.lastError().text(), cs));
+        }
+    }
+    else
+    {
+        trace(QString("getRecord exec error:%1 for %2").arg(query.lastError().text(), cs));
+    }
+    return csData;
+}

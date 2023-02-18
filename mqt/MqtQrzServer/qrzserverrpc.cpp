@@ -101,6 +101,7 @@ void QrzServerRpc::sendQrzResponseToLoggerDisplay(QrzCallsignData qrzCallsignDat
             RPCGeneralClient rpc(rpcConstants::qrzMethod);
             QSharedPointer<RPCParam>st(new RPCParamStruct);
             st->addMember(rpcConstants::qrzLoggerResponse, rpcConstants::paramName);
+            st->addMember( qrzCallsignData.getDataSource(), rpcConstants::qrzSource );
             st->addMember( qrzCallsignData.getCallsign(), rpcConstants::qrzDxCallsign );
             st->addMember(qrzCallsignData.getFirstName(), rpcConstants::qrzFirstName );
             st->addMember(qrzCallsignData.getName(), rpcConstants::qrzName );
@@ -113,6 +114,8 @@ void QrzServerRpc::sendQrzResponseToLoggerDisplay(QrzCallsignData qrzCallsignDat
             st->addMember(qrzCallsignData.getQra(), rpcConstants::qrzDxGrid);
             st->addMember(qrzCallsignData.getCqZone(), rpcConstants::qrzCqZone);
             st->addMember(qrzCallsignData.getItuZone(), rpcConstants::qrzItuZone);
+            st->addMember(qrzCallsignData.getModDate(), rpcConstants::qrzmoddate);
+            st->addMember(qrzCallsignData.getDBDate(), rpcConstants::qrzdbdate);
             st->addMember(state, rpcConstants::qrzDxReplyState);
             st->addMember(uuid, rpcConstants::qrzLogFrameId);
 
@@ -195,7 +198,7 @@ void QrzServerRpc::on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, cons
                 //qrzRequestsQueue.push_back(msg);
 
             }
-                    // look for message from qrz Display server
+            // look for message from qrz Display server
             else if (args->getStructArgMember(0, rpcConstants::qrzLogger, qrzLogger)
                      && args->getStructArgMember(0, rpcConstants::qrzDxCallsign, msgDxCall)
                      && args->getStructArgMember(0, rpcConstants::qrzLogFrameId, msgLogFrameId))
@@ -259,20 +262,7 @@ void QrzServerRpc::on_notify(AnalysePubSubNotify an, const QString /*from*/ )
         }
 
     }
-
 }
-
-/*
-void QrzServerRpc::SyncTimerTimer(  )
-{
-    if (qrzRequestsQueue.count())
-    {
-        //emit qrzRequestQueue(qrzRequestsQueue);
-        //qrzRequestsQueue.clear();
-    }
-}
-
-*/
 
 
 

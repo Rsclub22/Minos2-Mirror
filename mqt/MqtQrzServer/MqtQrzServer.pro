@@ -3,6 +3,7 @@ include($$PWD/../mqt.pri)
 include($$PWD/../mqtapplibs.pri)
 
 QT       += core gui network widgets
+QT       += sql
 
 TARGET = MqtQrzServer
 TEMPLATE = app
@@ -20,12 +21,14 @@ CONFIG += c++11
 SOURCES += \
     main.cpp \
     qrzconfiguredialog.cpp \
+    qrzdb.cpp \
     qrzservermainwindow.cpp \
     qrzserverminosparameters.cpp \
     qrzserverrpc.cpp
 
 HEADERS += \
     qrzconfiguredialog.h \
+    qrzdb.h \
     qrzservermainwindow.h \
     qrzserverminosparameters.h \
     qrzserverrpc.h

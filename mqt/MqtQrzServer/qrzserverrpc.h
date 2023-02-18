@@ -41,21 +41,18 @@ public:
 
 signals:
 
-    //void qrzRequestQueue(QVector<QrzServerMessage>);
     void clusterQrzMsg(QrzServerMessage);
     void loggerQrzMsg(QrzServerMessage);
 
 private:
 
     static QrzServerRpc *qrzServerRpc;
-    //QTimer SyncTimer;
 
      QVector<QrzServer> serverList;
 
 
 private slots:
 
-    //void SyncTimerTimer( );
     void on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString from);
 
     void on_notify(AnalysePubSubNotify an, const QString );

@@ -161,6 +161,7 @@ void QrzDisplayFrame::onLoggerQrzReply(QrzCallsignData cd, QString qrzReplyState
         clear();
         if (qrzReplyState.isEmpty())
         {
+            //QString source = cd.getDataSource();
             ui->callsignText->setText(cd.getCallsign());
             ui->nameText->setText(cd.getFirstName().left(20));
             ui->addr1Text->setText(cd.getAddr1().left(20));
@@ -187,6 +188,8 @@ void QrzDisplayFrame::onLoggerQrzReply(QrzCallsignData cd, QString qrzReplyState
             ui->countryText->setText(cd.getCountry());
             ui->cqZoneText->setText(cd.getCqZone());
             ui->ituZoneText->setText(cd.getItuZone());
+            ui->moddateText->setText(cd.getModDate());
+            ui->dbdateText->setText(cd.getDBDate());
         }
         else
         {
@@ -211,6 +214,8 @@ void QrzDisplayFrame::clear()
     ui->countryText->clear();
     ui->cqZoneText->clear();
     ui->ituZoneText->clear();
+    ui->moddateText->clear();
+    ui->dbdateText->clear();
     ui->qrzMessageText->clear();
 
 }
@@ -362,6 +367,7 @@ void QrzDisplayServerRpc::on_routerCall(bool err, QSharedPointer<MinosRPCObj> mr
                     trace(QString("Cluster RPC: callback from %1 paraName = %2").arg(mName, paraName));
 
                     QSharedPointer<RPCParam> msgQrzLoggerResponse;
+                    QSharedPointer<RPCParam> msgSource;
                     QSharedPointer<RPCParam> msgDxCall;
                     QSharedPointer<RPCParam> msgQrzFirstName;
                     QSharedPointer<RPCParam> msgQrzName;
@@ -374,10 +380,14 @@ void QrzDisplayServerRpc::on_routerCall(bool err, QSharedPointer<MinosRPCObj> mr
                     QSharedPointer<RPCParam> msgQrzDxGrid;
                     QSharedPointer<RPCParam> msgQrzCQZone;
                     QSharedPointer<RPCParam> msgQrzITUZone;
+                    QSharedPointer<RPCParam> msgQrzModdate;
+                    QSharedPointer<RPCParam> msgQrzDBDate;
                     QSharedPointer<RPCParam> msgQrzDxReplyState;
                     QSharedPointer<RPCParam> msgLogFrameId;
 
-                    if (args->getStructArgMember(0, rpcConstants::qrzDxCallsign, msgDxCall)
+                    if (
+                            args->getStructArgMember(0, rpcConstants::qrzSource, msgSource)
+                            && args->getStructArgMember(0, rpcConstants::qrzDxCallsign, msgDxCall)
                             && args->getStructArgMember(0, rpcConstants::qrzFirstName, msgQrzFirstName)
                             && args->getStructArgMember(0, rpcConstants::qrzName, msgQrzName)
                             && args->getStructArgMember(0, rpcConstants::qrzCounty, msgQrzCounty)
@@ -389,11 +399,17 @@ void QrzDisplayServerRpc::on_routerCall(bool err, QSharedPointer<MinosRPCObj> mr
                             && args->getStructArgMember(0, rpcConstants::qrzDxGrid, msgQrzDxGrid)
                             && args->getStructArgMember(0, rpcConstants::qrzCqZone, msgQrzCQZone)
                             && args->getStructArgMember(0, rpcConstants::qrzItuZone, msgQrzITUZone)
+                            && args->getStructArgMember(0, rpcConstants::qrzmoddate, msgQrzModdate)
+                            && args->getStructArgMember(0, rpcConstants::qrzdbdate, msgQrzDBDate)
                             && args->getStructArgMember(0, rpcConstants::qrzDxReplyState, msgQrzDxReplyState)
                             && args->getStructArgMember(0, rpcConstants::qrzLogFrameId, msgLogFrameId))
                     {
 
                         QrzCallsignData cd;
+
+                        QString source;
+                        msgSource->getString(source);
+                        cd.setDataSource(source);
 
                         QString callsign;
                         msgDxCall->getString(callsign);
@@ -442,6 +458,14 @@ void QrzDisplayServerRpc::on_routerCall(bool err, QSharedPointer<MinosRPCObj> mr
                         QString ituZone;
                         msgQrzITUZone->getString(ituZone);
                         cd.setItuZone(ituZone);
+
+                        QString moddate;
+                        msgQrzModdate->getString(moddate);
+                        cd.setModDate(moddate);
+
+                        QString dbdate;
+                        msgQrzDBDate->getString(dbdate);
+                        cd.setDBDate(dbdate);
 
                         QString dxReplyState;
                         msgQrzDxReplyState->getString(dxReplyState);

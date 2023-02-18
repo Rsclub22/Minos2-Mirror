@@ -68,6 +68,7 @@ static const QString qrzLogger     ("qrzLogger");
 static const QString qrzLogFrameId ("qrzLogFrameId");
 static const QString qrzClusterResponse ("qrzClusterResponse");
 static const QString qrzLoggerResponse ("qrzLoggerResponse");
+static const QString qrzSource         ("qrzSource");
 static const QString qrzDxCallsign   ("qrzDxCallsign");
 static const QString qrzSpotterCallsign ("qrzSpotterCallsign");
 static const QString qrzFirstName       ("qrzFirstName");
@@ -87,6 +88,8 @@ static const QString qrzServerStateMessage     ("qrzServerStateMessage");
 static const QString qrzServerState     ("qrzServerState");
 static const QString qrzDxReplyState      ("qrzDxReplyState");
 static const QString qrzSpotterReplyState      ("qrzSpotterReplyState");
+static const QString qrzmoddate           ("qrzmoddate");
+static const QString qrzdbdate            ("qrzdbdate");
 
 static const QString qrzServerLoggedOut ("qrzServerLoggedOut");
 static const QString qrzServerLoggedIn ("qrzServerLoggedIn");

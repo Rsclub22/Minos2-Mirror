@@ -22,6 +22,7 @@
 #include "RPCCommandConstants.h"
 #include "SecondInstall.h"
 #include "delayedaction.h"
+#include "qrzdb.h"
 #include "qrzservermainwindow.h"
 #include "qrzserverrpc.h"
 #include "LogEvents.h"
@@ -30,6 +31,9 @@
 
 #include "qrzconfiguredialog.h"
 #include "ui_qrzservermainwindow.h"
+
+// The QRZ XML format is described at
+// https://www.qrz.com/page/current_spec.html
 
 QrzServerMainWindow::QrzServerMainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -102,7 +106,7 @@ QrzServerMainWindow::QrzServerMainWindow(QWidget *parent)
     }
     );
 
-
+    qdb = new QRZDB(this);
 }
 
 QrzServerMainWindow::~QrzServerMainWindow()
@@ -203,6 +207,22 @@ void QrzServerMainWindow::logon()
     sendUrl(logonQrz);
 }
 
+bool QrzServerMainWindow::askDBCallsignData(QString callsign)
+{
+    Callsign cs;
+    cs.setFullCall(callsign);
+
+    qrzCallsignData = qdb->getRecord(cs.realCall);
+
+    if (cs.realCall == qrzCallsignData.getCallsign())
+    {
+        qrzCallsignData.setDataSource("DB|" + qrzCallsignData.getDataSource());
+        callsignDataReceived();
+        return true;
+    }
+    return false;
+}
+
 void QrzServerMainWindow::askCallsignData(QString callsign)
 {
     Callsign cs;
@@ -252,10 +272,11 @@ void QrzServerMainWindow::sendUrl(QString url)
         }
 
         QXmlStreamReader xmlData;
-        xmlData.addData( reply->readAll() );
+        QByteArray xml = reply->readAll();
+        xmlData.addData( xml );
         if (raw == 200)
         {
-
+            //trace(QString("XML read %1").arg(QString(xml)));
             if (xmlData.readNextStartElement())
             {
                 if (xmlData.name().contains(QString("QRZDatabase")))
@@ -271,6 +292,8 @@ void QrzServerMainWindow::sendUrl(QString url)
                         {
 
                             parseCallsignData(xmlData);
+                            qrzCallsignData.setDBDate(QDateTime::currentDateTimeUtc().toString("yyyy-MM-dd HH:mm:ss"));
+                            qdb->createRecord(qrzCallsignData);
                             callsignDataReceived();
 
                         }
@@ -487,6 +510,8 @@ void QrzServerMainWindow::parseCallsignData(QXmlStreamReader &xmlData)
 
     qrzCallsignData.clear();
 
+    qrzCallsignData.setDataSource("QRZ.com");
+
     while(xmlData.readNextStartElement())
     {
         if(xmlData.name() == QString("call"))
@@ -553,6 +578,11 @@ void QrzServerMainWindow::parseCallsignData(QXmlStreamReader &xmlData)
         {
             qrzCallsignData.setItuZone(xmlData.readElementText());
             trace(QString("Callsign Data: ituZone = %1").arg(qrzCallsignData.getItuZone()));
+        }
+        else if (xmlData.name() == QString("moddate"))
+        {
+            qrzCallsignData.setModDate(xmlData.readElementText());
+            trace(QString("Callsign Data: moddate = %1").arg(qrzCallsignData.getModDate()));
         }
         else
         {
@@ -680,11 +710,17 @@ void QrzServerMainWindow::handleQrzRequests()
                     askQrzCallsign = callsign.realCall;
 
                     // ask for qra locator
-                    addTextToLogWindow(tr("Ask QRZ for callsign - %1").arg(askQrzCallsign));
-                    trace(QString("handleQrzRequests: ask qrz data for callsign %1").arg(askQrzCallsign));
+                    addTextToLogWindow(tr("Ask QRZ DB for callsign - %1").arg(askQrzCallsign));
+                    trace(QString("handleQrzRequests: ask qrz database for callsign %1").arg(askQrzCallsign));
 
                     qrzServerStateFlags.setAskCallsignFlag(true);
-                    askCallsignData(askQrzCallsign);
+                    if (!askDBCallsignData(askQrzCallsign))
+                    {
+                        addTextToLogWindow(tr("Ask QRZ for callsign - %1").arg(askQrzCallsign));
+                        trace(QString("handleQrzRequests: ask qrz for callsign %1").arg(askQrzCallsign));
+                        askCallsignData(askQrzCallsign);
+                    }
+
                 }
                 else
                 {

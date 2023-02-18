@@ -30,6 +30,8 @@ QT_BEGIN_NAMESPACE
 namespace Ui { class QrzServerMainWindow; }
 QT_END_NAMESPACE
 
+class QRZDB;
+
 const QString QRZURL = "https://xmldata.qrz.com/xml/current/?";
 const QString AGENT = "Minos";
 
@@ -156,6 +158,7 @@ private:
     QTimer LogTimer;
     QTimer *pingStateTimer;
 
+    QRZDB *qdb = nullptr;
     QString logonCallsign;
     QString password;
 
@@ -195,5 +198,6 @@ private:
     void addToErrorTextLabel(QString message);
     void addToMessageTextLabel(QString message);
     void setQrzStatusConnected(bool state);
+    bool askDBCallsignData(QString callsign);
 };
 #endif // QRZSERVERMAINWINDOW_H
