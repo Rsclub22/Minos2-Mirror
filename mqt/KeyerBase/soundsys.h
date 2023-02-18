@@ -115,11 +115,11 @@ private:
 
     double makeUpGain = 0.0;
 
-    BWBandPass* micfilter1;
-    BWBandPass* micfilter2;
+    BWBandPass* micfilter1 = nullptr;
+    BWBandPass* micfilter2 = nullptr;
 
-    BWBandPass* replayfilter1;
-    BWBandPass* replayfilter2;
+    BWBandPass* replayfilter1 = nullptr;
+    BWBandPass* replayfilter2 = nullptr;
 
     // internal values
     unsigned int sampleRate = 0;

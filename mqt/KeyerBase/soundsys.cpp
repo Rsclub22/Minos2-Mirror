@@ -113,11 +113,17 @@ RtAudioSoundSystem::~RtAudioSoundSystem()
    passThroughEnabled = false;
    closedown();
 
-   free_bw_band_pass(micfilter1);
-   free_bw_band_pass(micfilter2);
-   free_bw_band_pass(replayfilter1);
-   free_bw_band_pass(replayfilter2);
-
+   if (micfilter1)
+   {
+       free_bw_band_pass(micfilter1);
+       micfilter1 = nullptr;
+       free_bw_band_pass(micfilter2);
+       micfilter2 = nullptr;
+       free_bw_band_pass(replayfilter1);
+       replayfilter1 = nullptr;
+       free_bw_band_pass(replayfilter2);
+       replayfilter2 = nullptr;
+    }
 }
 bool RtAudioSoundSystem::initialise( QString ind, QString outd, QString host, QString port  )
 {
