@@ -1343,7 +1343,7 @@ bool DupContact::operator!=( const DupContact& rhs ) const
    return !( *this == rhs );
 }
 
-uint DupContact::qHash() const
+qHashRet DupContact::qHash() const
 {
     // find in set works off hash values, NOT the equality operator
     // and they aren't the same (KST has no band/mode, monitored contact has band/mode)

@@ -135,7 +135,7 @@ void FLDigiFrame::sendCharacters(const QString &s, int carrier)
     if (s.size())
     {
         args.clear();
-        args << s.toLatin1().data();
+        args << QVariant(s);
         rpcClient->call("text.add_tx_queu", args,
            this, SLOT(myResponseMethod(QVariant&)),
            this, SLOT(myFaultResponse(int, const QString &)));

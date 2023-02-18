@@ -166,13 +166,13 @@ void MainWindow::onCloseTimer()
 
         if (started && tnow > tend.addSecs(60))
         {
-            trace("Stop trace by time");
+            trace("Stop record by time");
             on_stopRecButton_clicked();
         }
         else
             if (!started && tstart.addSecs(-60) < tnow && tnow < tend.addSecs(60))
             {
-                trace("Start trace by time");
+                trace("Start record by time");
                 on_startRecButton_clicked();
             }
     }

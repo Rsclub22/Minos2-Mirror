@@ -86,7 +86,7 @@ typedef struct {
  LONG dummy[2048];  // Reserved
 }COMARRAY;
 #pragma pack()  // Disable pack of structure
-static COMARRAY *pMap=NULL;
+static COMARRAY *pMap=nullptr;
 
 UINT uMSG_MMTTY = -1;
 
@@ -322,7 +322,8 @@ void MMTTYFrame::runRttyEngine(QString app, QStringList opts)
     rttyEngine = app;
     rttyEngineOpts = opts;
 
-    QString handleOpt = QString("-h%1").arg(getTempId(), 4, 16, QChar('0'));
+    int tempid = getTempId();
+    QString handleOpt = QString("-h%1").arg(tempid, 4, 16, QChar('0'));
     rttyEngineOpts.insert(0, handleOpt);
 
     LPCWSTR m = L"MMTTY";

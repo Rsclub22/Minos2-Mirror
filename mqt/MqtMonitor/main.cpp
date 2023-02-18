@@ -1,8 +1,6 @@
 #include <QApplication>
-#ifdef Q_OS_WIN
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#ifdef INC_MAP
 #include <QQmlApplicationEngine>
-#endif
 #endif
 
 #include "AppStartup.h"

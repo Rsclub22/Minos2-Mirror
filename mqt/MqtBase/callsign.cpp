@@ -452,7 +452,7 @@ bool Callsign::operator<( const Callsign& rhs ) const
 }
 
 
-uint qHash(const Callsign &cs)
+qHashRet qHash(const Callsign &cs)
 {
     return cs.qHash();
 }

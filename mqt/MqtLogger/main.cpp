@@ -1,10 +1,8 @@
 #include <QApplication>
 #include <QMessageBox>
 
-#ifdef Q_OS_WIN
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#ifdef INC_MAP
 #include <QQmlApplicationEngine>
-#endif
 #endif
 
 #include "RPCCommandConstants.h"
@@ -26,7 +24,9 @@ QSharedPointer<QQmlApplicationEngine> appQmlEngine;
 
 int main(int argc, char *argv[])
 {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+#endif
     SecondInstall::parseSecondInstall(argc, argv);
     int appError = 1;
     {

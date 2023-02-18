@@ -126,7 +126,7 @@ bool MonitoredLog::testAutoStart()
 
         if (!enabled() && !getManualClose() && tday >= sday && (eday >= tday || eday + 1 >= tday))
         {
-            trace("Start trace by time");
+            trace("Start monitor by time");
             return true;
         }
     }
