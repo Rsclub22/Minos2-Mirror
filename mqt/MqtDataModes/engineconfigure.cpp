@@ -55,6 +55,22 @@
     settings.setValue(appName + "/current", engine);
 }
 
+void EngineConfigure::setSpeed(QString mode, int speed)
+{
+    QSettings settings("./Configuration/DataModes.ini", QSettings::IniFormat);
+    QString appName = MinosRPC::getMinosRPC()->getAppName();
+    settings.setValue(appName + "/" + mode, speed);
+}
+
+int EngineConfigure::getSpeed(QString mode)
+{
+    QSettings settings("./Configuration/DataModes.ini", QSettings::IniFormat);
+    QString appName = MinosRPC::getMinosRPC()->getAppName();
+    int s = settings.value(appName + "/" + mode).toInt();
+
+    return s;
+}
+
 EngineConfigure::EngineConfigure(DMMainWindow *parent) :
     QDialog(parent),
     ui(new Ui::EngineConfigure),

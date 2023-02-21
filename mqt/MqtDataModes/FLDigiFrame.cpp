@@ -33,6 +33,8 @@ void FLDigiFrame::createProcess()
 
     QStringList engineOpts = {"--wo"/*, "--home-dir C:/temp"*/};
     fldigiProcess->start(fname, engineOpts, QProcess::ReadWrite);
+
+    connect(mainWindow, &DMMainWindow::setSpeeds, this, &FLDigiFrame::onSetSpeeds);
 }
 
 FLDigiFrame::FLDigiFrame(QWidget *parent, QLineEdit *sendEdit, QString fname) :
@@ -67,6 +69,12 @@ FLDigiFrame::~FLDigiFrame()
 void FLDigiFrame::onSendCharacters(QString data, int c)
 {
     sendCharacters(data, c);
+}
+
+void FLDigiFrame::onSetSpeeds(int b, int r)
+{
+    bpskSpeed = b;
+    rttySpeed = r;
 }
 
 void FLDigiFrame::onRigModeFreq(QString m, Frequency f)
@@ -194,7 +202,14 @@ void FLDigiFrame::sendMode(QString m)
            this, SLOT(myFaultResponse(int, const QString &)));
 
         args.clear();
-        args << QString("BPSK63");
+        if (bpskSpeed == 31)
+        {
+            args << QString("BPSK31");
+        }
+        else
+        {
+            args << QString("BPSK63");
+        }
         rpcClient->call("modem.set_by_name", args,
            this, SLOT(myResponseMethod(QVariant&)),
            this, SLOT(myFaultResponse(int, const QString &)));
@@ -234,12 +249,25 @@ void FLDigiFrame::on_started()
        this, SLOT(myResponseMethod(QVariant&)),
        this, SLOT(myFaultResponse(int, const QString &)));
 
+    trace("modem.set_by_name");
+
     args.clear();
     args << QString("RTTY");
     rpcClient->call("modem.set_by_name", args,
        this, SLOT(myResponseMethod(QVariant&)),
        this, SLOT(myFaultResponse(int, const QString &)));
 
+    trace("modem.get_name");
+    rpcClient->call("modem.get_name", args,
+       this, SLOT(myResponseMethod(QVariant&)),
+       this, SLOT(myFaultResponse(int, const QString &)));
+
+    trace("main.get_char_rates");
+    rpcClient->call("main.get_char_rates", args,
+       this, SLOT(myResponseMethod(QVariant&)),
+       this, SLOT(myFaultResponse(int, const QString &)));
+
+    trace("main.tx_rx");
     rpcClient->call("main.rx_tx", args,
        this, SLOT(myResponseMethod(QVariant&)),
        this, SLOT(myFaultResponse(int, const QString &)));

@@ -31,6 +31,10 @@ public:
 
     static void setAppCurrent(QString engine);
 
+    static void setSpeed(QString mode, int speed);
+
+    static int getSpeed(QString mode);
+
 private slots:
     void on_mmttyBrowse_clicked();
 

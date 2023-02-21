@@ -29,6 +29,8 @@ public:
 
     void closeFrame();
 private slots:
+    void onSetSpeeds(int b, int m);
+
     void onSendCharacters(QString, int c);
     void onRigModeFreq(QString, Frequency);
 

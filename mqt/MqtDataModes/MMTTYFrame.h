@@ -46,6 +46,8 @@ private:
     bool twoToneActive = false;
     bool mmttyActive = false;
     int carrier = 0;
+    int bpskSpeed = 31;
+    int rttySpeed = 45;
 
     HWND getTempHwnd()
     {
@@ -62,6 +64,8 @@ private:
 private slots:
 
     void onSendCharacters(QString, int);
+    void onSetSpeeds(int b, int m);
+
     void onRigModeFreq(QString, Frequency);
     void on_finished(int err, QProcess::ExitStatus exitStatus);
     void on_error(QProcess::ProcessError error);

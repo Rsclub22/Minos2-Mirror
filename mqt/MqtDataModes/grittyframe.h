@@ -34,7 +34,8 @@ private:
     QTcpSocket* grittyClient;
     QString msgbuf;
     int carrier = 0;
-
+    int bpskSpeed = 31;
+    int rttySpeed = 45;
 
     QString fname;
     void createProcess();
@@ -46,6 +47,8 @@ private:
     void analyseGrittyMessage(QString m);
 private slots:
     void onSendCharacters(QString, int carrier);
+    void onSetSpeeds(int b, int m);
+
     void onRigModeFreq(QString, Frequency);
     void on_finished(int err, QProcess::ExitStatus exitStatus);
     void on_error(QProcess::ProcessError error);

@@ -204,6 +204,7 @@ DMMainWindow::DMMainWindow(QWidget *parent)
     setWindowTitle(getAppStartupName() + ": " + baseTitle);
 
     startPreviousEngine();
+    checkSpeeds();
 
 //    mainRig = getRig(); // why don't we use the logger connected rig?
     ui->mainRigComboBox->setEnabled(false);
@@ -432,6 +433,7 @@ void DMMainWindow::iniFileChanged()
 {
     // as other sister apps may have changed it
     checkEnginesAvailable();
+    checkSpeeds();
 }
 
 
@@ -461,6 +463,19 @@ void DMMainWindow::checkEnginesAvailable()
     b = FileExists(m);
     actionFLDigi->setEnabled(b);
 
+}
+void DMMainWindow::checkSpeeds()
+{
+    int b = EngineConfigure::getSpeed("BPSK");
+    int r = EngineConfigure::getSpeed("RTTY");
+
+    ui->actionBPSK31->setChecked(b == 31);
+    ui->actionBPSK63->setChecked(b == 63);
+
+    ui->actionRTTY45->setChecked(r == 45);
+    ui->actionRTTY75->setChecked(r == 75);
+
+    emit setSpeeds(b, r);
 }
 QMenu *DMMainWindow::newMenu(QMenu *m, const char *text)
 {
@@ -1035,3 +1050,31 @@ void DMMainWindow::onNewStanzas()
 {
 
 }
+
+void DMMainWindow::on_actionBPSK31_triggered()
+{
+    ui->actionBPSK63->setChecked(false);
+    EngineConfigure::setSpeed("BPSK", 31);
+}
+
+
+void DMMainWindow::on_actionBPSK63_triggered()
+{
+    ui->actionBPSK31->setChecked(false);
+    EngineConfigure::setSpeed("BPSK", 63);
+}
+
+
+void DMMainWindow::on_actionRTTY45_triggered()
+{
+    ui->actionRTTY75->setChecked(false);
+    EngineConfigure::setSpeed("RTTY", 45);
+}
+
+
+void DMMainWindow::on_actionRTTY75_triggered()
+{
+    ui->actionRTTY45->setChecked(false);
+    EngineConfigure::setSpeed("RTTY", 75);
+}
+

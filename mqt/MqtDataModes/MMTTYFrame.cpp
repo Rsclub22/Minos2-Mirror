@@ -140,6 +140,7 @@ MMTTYFrame::MMTTYFrame(QWidget *parent, bool twoTone, QLineEdit *sendEdit, QStri
     twoTone(twoTone)
 {
     ui->setupUi(this);
+    connect(mainWindow, &DMMainWindow::setSpeeds, this, &MMTTYFrame::onSetSpeeds);
     connect(mainWindow, &DMMainWindow::sendCharacters, this, &MMTTYFrame::onSendCharacters);
     connect(mainWindow, &DMMainWindow::rigModeFreq, this, &MMTTYFrame::onRigModeFreq);
     connect(this, &MMTTYFrame::txChanged, mainWindow, &DMMainWindow::onTxChanged);
@@ -168,6 +169,13 @@ MMTTYFrame::~MMTTYFrame()
 void MMTTYFrame::onSendCharacters(QString data, int c)
 {
     sendCharacters(data, c);
+}
+
+void MMTTYFrame::onSetSpeeds(int b, int r)
+{
+    bpskSpeed = b;
+    rttySpeed = r;
+    ::PostMessage(mttyHWnd, uMSG_MMTTY, RXM_SETBAUD, r);
 }
 
 void MMTTYFrame::onRigModeFreq(QString, Frequency)

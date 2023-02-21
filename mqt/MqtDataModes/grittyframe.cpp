@@ -140,6 +140,7 @@ void GrittyFrame::createProcess()
                               "port=" + QString::number(grittyPort),
                               "caption=\"Gritty Engine for Minos\""};
     grittyProcess->start(fname, engineOpts, QProcess::ReadWrite);
+    connect(mainWindow, &DMMainWindow::setSpeeds, this, &GrittyFrame::onSetSpeeds);
 }
 GrittyFrame::GrittyFrame(QWidget *parent, QLineEdit *sendEdit, QString fname) :
     QFrame(parent),
@@ -185,6 +186,13 @@ GrittyFrame::~GrittyFrame()
 void GrittyFrame::onSendCharacters(QString data, int carrier)
 {
     sendCharacters(data, carrier);
+}
+
+void GrittyFrame::onSetSpeeds(int b, int r)
+{
+    bpskSpeed = b;
+    rttySpeed = r;
+
 }
 
 void GrittyFrame::onRigModeFreq(QString, Frequency)

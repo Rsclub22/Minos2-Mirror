@@ -46,6 +46,8 @@ private:
     Ui::MMVARIFrame *ui;
 
     int carrier = 0;
+    int bpskSpeed = 31;
+    int rttySpeed = 45;
     QFrame *pframe = nullptr;
     QHBoxLayout *mmvariHb = nullptr;
     QVBoxLayout* mvb = nullptr;
@@ -121,6 +123,7 @@ private slots:
     void OnClockAdjust(int &);
     void OnError(int);
 
+    void onSetSpeeds(int b, int m);
 signals:
     void txChanged(bool);
 

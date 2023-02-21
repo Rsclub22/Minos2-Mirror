@@ -21,6 +21,7 @@ MMVARIFrame::MMVARIFrame(QWidget *parent, QFrame *cwl,
 {
     ui->setupUi(this);
 
+    connect(mainWindow, &DMMainWindow::setSpeeds, this, &MMVARIFrame::onSetSpeeds);
     connect(mainWindow, &DMMainWindow::sendCharacters, this, &MMVARIFrame::onSendCharacters);
     connect(mainWindow, &DMMainWindow::rigModeFreq, this, &MMVARIFrame::onRigModeFreq);
     connect(this, &MMVARIFrame::txChanged, mainWindow, &DMMainWindow::onTxChanged);
@@ -257,6 +258,34 @@ MMVARIFrame::~MMVARIFrame()
     delete l;
     delete ui;
 }
+void MMVARIFrame::onSetSpeeds(int b, int r)
+{
+    bpskSpeed = b;
+    rttySpeed = r;
+
+    if (modeCombo->currentText() == "bpsk")
+    {
+        if (b == 31)
+        {
+            speedCombo->setCurrentText("31.25");
+        }
+        else if (b == 63)
+        {
+            speedCombo->setCurrentText("62.5");
+        }
+    }
+    else if (modeCombo->currentText() == "rtty-L")
+    {
+        if (r == 45)
+        {
+            speedCombo->setCurrentText("45.45");
+        }
+        else if (r == 75)
+        {
+            speedCombo->setCurrentText("75");
+        }
+    }
+}
 
 void MMVARIFrame::onSendCharacters(QString data, int c)
 {
@@ -387,8 +416,6 @@ void MMVARIFrame::onModeComboChanged(const QString &m)
         }
         speedCombo->addItem("45.45");
         speedCombo->addItem("75");
-
-        speedCombo->setCurrentText("45.45");
     }
     else
     {
@@ -396,9 +423,8 @@ void MMVARIFrame::onModeComboChanged(const QString &m)
 
         speedCombo->addItem("31.25");
         speedCombo->addItem("62.5");
-
-        speedCombo->setCurrentText("62.5");
     }
+    onSetSpeeds(bpskSpeed, rttySpeed);
 }
 void MMVARIFrame::onSpeedComboChanged(const QString &s)
 {

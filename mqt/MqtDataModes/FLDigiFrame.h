@@ -37,12 +37,16 @@ private:
     int carrier = 0;
     QString mode;
     int carrierOffset = 0;
+    int bpskSpeed = 31;
+    int rttySpeed = 45;
 
     void createProcess();
 
     void addText(const QString &t);
 private slots:
     void onSendCharacters(QString, int);
+    void onSetSpeeds(int b, int m);
+
     void onRigModeFreq(QString, Frequency);
     void on_finished(int err, QProcess::ExitStatus exitStatus);
     void on_error(QProcess::ProcessError error);

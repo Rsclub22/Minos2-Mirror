@@ -114,7 +114,10 @@ private:
     QAction *newAction(const char *text, QMenu *m, void (DMMainWindow::*slotparam)());
     QAction *newCheckableAction(const char *text, QMenu *m, void (DMMainWindow::*slotparam)(bool));
     QAction *newCheckableAction(const QString text, QMenu *m, void (DMMainWindow::*slotparam)(bool));
+
     void checkEnginesAvailable();
+    void checkSpeeds();
+
     virtual bool eventFilter(QObject *obj, QEvent *event) override;
 
     bool doKeyPressEvent(QKeyEvent *event);
@@ -130,6 +133,7 @@ protected:
 signals:
     void rigModeFreq(QString, Frequency);
     void sendCharacters(QString, int);
+    void setSpeeds(int b, int r);
 
 public slots:
     void onTxChanged(bool);
@@ -182,6 +186,10 @@ private slots:
     void onNewLog(MonitoredLog *ml);
 
     void onWatchdogTimer();
+    void on_actionBPSK31_triggered();
+    void on_actionBPSK63_triggered();
+    void on_actionRTTY45_triggered();
+    void on_actionRTTY75_triggered();
 };
 extern DMMainWindow *mainWindow;
 
