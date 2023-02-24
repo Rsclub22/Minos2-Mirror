@@ -12,6 +12,7 @@ SOURCES += \
     FLDigiFrame.cpp \
     datapainter.cpp \
     engineconfigure.cpp \
+    enginewindow.cpp \
     main.cpp \
     dmmainwindow.cpp \
     rxbuffer.cpp \
@@ -23,6 +24,7 @@ HEADERS += \
     datapainter.h \
     dmmainwindow.h \
     engineconfigure.h \
+    enginewindow.h \
     rxbuffer.h \
     testframe.h
 
@@ -30,6 +32,7 @@ FORMS += \
     FLDigiFrame.ui \
     dmmainwindow.ui \
     engineconfigure.ui \
+    enginewindow.ui \
     testframe.ui
 
 win32{

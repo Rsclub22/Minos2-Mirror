@@ -9,6 +9,8 @@
 #include "MMVARIFrame.h"
 #include "ui_MMVARIFrame.h"
 
+// I think we are in charge of MMVARI multiple copies - we do all the INI file stuff
+
 // we already report on the TX/RX frequencies!
 // either pallette of sensitivity are rubbish - not seeoing signals
 MMVARIFrame::MMVARIFrame(QWidget *parent, QFrame *cwl,

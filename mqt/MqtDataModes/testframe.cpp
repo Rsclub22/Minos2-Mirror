@@ -15,6 +15,8 @@ QStringList testData = {
 
 };
 
+// to run multiple copies - just do it!
+
 TestFrame::TestFrame(QWidget *parent, QLineEdit */*sendEdit*/, QString /*fname*/) :
     QFrame(parent),
     ui(new Ui::TestFrame)

@@ -71,6 +71,8 @@ private:
 
     QVector<QPushButton *> fButtons;
 
+    int instance = 0;
+
     QString appName;
     RigCache rigCache;
     PubSubName mainRig;
@@ -181,7 +183,6 @@ private slots:
     void fKey(int key);
 
     void on_stopButton_clicked();
-    void on_mainRigComboBox_activated(const QString &psn);
     void on_backDataButton_clicked();
     void onNewLog(MonitoredLog *ml);
 

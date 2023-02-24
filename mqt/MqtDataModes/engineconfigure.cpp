@@ -39,20 +39,22 @@
     return m;
 }
 
-/*static*/ QString EngineConfigure::getAppCurrent()
+/*static*/ QPair<QString, int> EngineConfigure::getAppEngine()
 {
     QSettings settings("./Configuration/DataModes.ini", QSettings::IniFormat);
     QString appName = MinosRPC::getMinosRPC()->getAppName();
-    QString m = settings.value(appName + "/current").toString();
+    QString m = settings.value(appName + "/engine").toString();
+    int i = settings.value(appName + "/instance").toInt();
 
-    return m;
+    return QPair<QString, int>(m, i);
 }
 
-/*static*/ void EngineConfigure::setAppCurrent(QString engine)
+/*static*/ void EngineConfigure::setAppEngine(QString engine, int instance)
 {
     QSettings settings("./Configuration/DataModes.ini", QSettings::IniFormat);
     QString appName = MinosRPC::getMinosRPC()->getAppName();
-    settings.setValue(appName + "/current", engine);
+    settings.setValue(appName + "/engine", engine);
+    settings.setValue(appName + "/instance", instance);
 }
 
 void EngineConfigure::setSpeed(QString mode, int speed)

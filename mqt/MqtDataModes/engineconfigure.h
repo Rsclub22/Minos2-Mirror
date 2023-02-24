@@ -27,9 +27,9 @@ public:
 
     static void setAppPath(QString engine, QString path);
 
-    static QString getAppCurrent();
+    static QPair<QString, int> getAppEngine();
 
-    static void setAppCurrent(QString engine);
+    static void setAppEngine(QString engine, int instance);
 
     static void setSpeed(QString mode, int speed);
 
