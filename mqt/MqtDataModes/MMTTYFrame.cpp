@@ -9,6 +9,7 @@
 #include "frequency.h"
 #include "rxbuffer.h"
 #include "dmmainwindow.h"
+#include "enginewindow.h"
 
 #include "MMTTYFrame.h"
 #include "ui_MMTTYFrame.h"
@@ -135,18 +136,19 @@ public:
 //    t = new QWidget(this);
 //}
 
-MMTTYFrame::MMTTYFrame(QWidget *parent, bool twoTone, QLineEdit *sendEdit, QString fname) :
+MMTTYFrame::MMTTYFrame(EngineWindow *parent, bool twoTone, QLineEdit *sendEdit, QString fname, QString /*name*/) :
     QFrame(parent),
     ui(new Ui::MMTTYFrame),
+    engineWindow(parent),
     fname(fname),
     sendEdit(sendEdit),
     twoTone(twoTone)
 {
     ui->setupUi(this);
     connect(mainWindow, &DMMainWindow::setSpeeds, this, &MMTTYFrame::onSetSpeeds);
-    connect(mainWindow, &DMMainWindow::sendCharacters, this, &MMTTYFrame::onSendCharacters);
-    connect(mainWindow, &DMMainWindow::rigModeFreq, this, &MMTTYFrame::onRigModeFreq);
-    connect(this, &MMTTYFrame::txChanged, mainWindow, &DMMainWindow::onTxChanged);
+    connect(engineWindow, &EngineWindow::sendCharactersDown, this, &MMTTYFrame::onSendCharacters);
+    connect(engineWindow, &EngineWindow::rigModeFreq, this, &MMTTYFrame::onRigModeFreq);
+    connect(this, &MMTTYFrame::txChanged, engineWindow, &EngineWindow::onTxChanged);
 
     setWindowTitle( "DI2 RX Window 1");
     t = new QWidget(this);
@@ -174,11 +176,20 @@ void MMTTYFrame::onSendCharacters(QString data, int c)
     sendCharacters(data, c);
 }
 
-void MMTTYFrame::onSetSpeeds(int b, int r)
+void MMTTYFrame::onSetSpeeds(QString b, QString r)
 {
     bpskSpeed = b;
     rttySpeed = r;
-    ::PostMessage(mttyHWnd, uMSG_MMTTY, RXM_SETBAUD, r);
+    int ir;
+    if (r.contains("45"))
+    {
+        ir = 4545;
+    }
+    else
+    {
+        ir = 7500;
+    }
+    ::PostMessage(mttyHWnd, uMSG_MMTTY, RXM_SETBAUD, ir);
 }
 
 void MMTTYFrame::onRigModeFreq(QString, Frequency)
@@ -252,7 +263,7 @@ void MMTTYFrame::msgEventFilter(MSG *msg, long */*result*/ )
         {
             QChar c = QChar(QLatin1Char(l & 0xff));
             RXChar rxch(c, false, 0, carrier);
-            RxBuffer::getRxBuffer()->addChar(rxch);
+            engineWindow->rxBuff.addChar(rxch);
         }
             break;
         case TXM_PTTEVENT:
@@ -262,11 +273,11 @@ void MMTTYFrame::msgEventFilter(MSG *msg, long */*result*/ )
                 trace("Switch to TX");
                 txState = true;
                 RXChar rxch('T', true, 0, carrier);
-                RxBuffer::getRxBuffer()->addChar(rxch);
+                engineWindow->rxBuff.addChar(rxch);
                 RXChar rxch2('X', false, 0, carrier);
-                RxBuffer::getRxBuffer()->addChar(rxch2);
+                engineWindow->rxBuff.addChar(rxch2);
                 RXChar rxch3(' ', false, 0, carrier);
-                RxBuffer::getRxBuffer()->addChar(rxch3);
+                engineWindow->rxBuff.addChar(rxch3);
 
                 emit txChanged(true);
 
@@ -277,11 +288,11 @@ void MMTTYFrame::msgEventFilter(MSG *msg, long */*result*/ )
                 txState = false;
 
                 RXChar rxch('R', true, 0, carrier);
-                RxBuffer::getRxBuffer()->addChar(rxch);
+                engineWindow->rxBuff.addChar(rxch);
                 RXChar rxch2('X', false, 0, carrier);
-                RxBuffer::getRxBuffer()->addChar(rxch2);
+                engineWindow->rxBuff.addChar(rxch2);
                 RXChar rxch3(' ', false, 0, carrier);
-                RxBuffer::getRxBuffer()->addChar(rxch3);
+                engineWindow->rxBuff.addChar(rxch3);
                 emit txChanged(false);
             }
         }

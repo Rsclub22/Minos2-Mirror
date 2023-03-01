@@ -7,18 +7,20 @@
 #include <QStringList>
 #include <QFont>
 
+class EngineWindow;
 
 class DPGraphicsTextItem: public QGraphicsTextItem
 {
     Q_OBJECT
 public:
     explicit DPGraphicsTextItem(QGraphicsItem *parent = nullptr);
-    explicit DPGraphicsTextItem(const QString &text, int r, QGraphicsItem *parent = nullptr);
+    explicit DPGraphicsTextItem(EngineWindow *e, const QString &text, int r, QGraphicsItem *parent = nullptr);
     virtual ~DPGraphicsTextItem();
     virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
 
 protected:
 
+    EngineWindow *engineWindow = nullptr;
     int row = -1;
     virtual void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
 
@@ -35,6 +37,8 @@ public:
     explicit DataPainter(QWidget *parent = nullptr);
     virtual ~DataPainter()
     {}
+    void initialise(EngineWindow *e);
+    EngineWindow *engineWindow = nullptr;
 
     void setText();
 
@@ -43,7 +47,7 @@ signals:
     void wordSelected(QString, int);
 
 private:
-    QGraphicsScene *scene;
+    QGraphicsScene *scene = nullptr;
     QVector<QGraphicsTextItem *> lines;
     QFont ff;
 

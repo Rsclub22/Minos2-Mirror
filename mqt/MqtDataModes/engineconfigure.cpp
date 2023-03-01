@@ -1,10 +1,10 @@
 #include <QSettings>
 #include <QFileDialog>
 
-
-#include "MinosRPC.h"
 #include "dmmainwindow.h"
+#include "enginewindow.h"
 #include "fileutils.h"
+
 #include "engineconfigure.h"
 #include "ui_engineconfigure.h"
 
@@ -23,54 +23,58 @@
 
     return m;
 }
-/*static*/ void EngineConfigure::setAppPath(QString engine, QString path)
+
+void EngineConfigure::setSpeed(QString mode, QString speed)
 {
     QSettings settings("./Configuration/DataModes.ini", QSettings::IniFormat);
-    QString appName = MinosRPC::getMinosRPC()->getAppName();
-    settings.setValue(appName + "/" + engine, path);
+    settings.setValue( mode, speed);
 }
 
-/*static*/ QString EngineConfigure::getAppPath(QString engine)
+QString EngineConfigure::getSpeed(QString mode)
 {
     QSettings settings("./Configuration/DataModes.ini", QSettings::IniFormat);
-    QString appName = MinosRPC::getMinosRPC()->getAppName();
-    QString m = settings.value(appName + "/" + engine).toString();
-
-    return m;
-}
-
-/*static*/ QPair<QString, int> EngineConfigure::getAppEngine()
-{
-    QSettings settings("./Configuration/DataModes.ini", QSettings::IniFormat);
-    QString appName = MinosRPC::getMinosRPC()->getAppName();
-    QString m = settings.value(appName + "/engine").toString();
-    int i = settings.value(appName + "/instance").toInt();
-
-    return QPair<QString, int>(m, i);
-}
-
-/*static*/ void EngineConfigure::setAppEngine(QString engine, int instance)
-{
-    QSettings settings("./Configuration/DataModes.ini", QSettings::IniFormat);
-    QString appName = MinosRPC::getMinosRPC()->getAppName();
-    settings.setValue(appName + "/engine", engine);
-    settings.setValue(appName + "/instance", instance);
-}
-
-void EngineConfigure::setSpeed(QString mode, int speed)
-{
-    QSettings settings("./Configuration/DataModes.ini", QSettings::IniFormat);
-    QString appName = MinosRPC::getMinosRPC()->getAppName();
-    settings.setValue(appName + "/" + mode, speed);
-}
-
-int EngineConfigure::getSpeed(QString mode)
-{
-    QSettings settings("./Configuration/DataModes.ini", QSettings::IniFormat);
-    QString appName = MinosRPC::getMinosRPC()->getAppName();
-    int s = settings.value(appName + "/" + mode).toInt();
+    QString s = settings.value( mode, 0).toString();
 
     return s;
+}
+
+bool EngineConfigure::getEngineEnabled(QString engine)
+{
+    QSettings settings("./Configuration/DataModes.ini", QSettings::IniFormat);
+    bool s = settings.value("enabled/" + engine, false).toBool();
+    return s;
+}
+
+void EngineConfigure::setEngineEnabled(QString engine, bool enabled)
+{
+    QSettings settings("./Configuration/DataModes.ini", QSettings::IniFormat);
+    settings.setValue("enabled/" + engine, enabled);
+}
+
+QString EngineConfigure::getEngineSound(QString engine, QString io)
+{
+    QSettings settings("./Configuration/DataModes.ini", QSettings::IniFormat);
+    QString s = settings.value("sound/" + engine + "/" + io).toString();
+    return s;
+}
+
+void EngineConfigure::setEngineSound(QString engine, QString io, QString s)
+{
+    QSettings settings("./Configuration/DataModes.ini", QSettings::IniFormat);
+    settings.setValue("sound/" + engine + "/" + io, s);
+}
+
+int EngineConfigure::getEnginePort(QString engine)
+{
+    QSettings settings("./Configuration/DataModes.ini", QSettings::IniFormat);
+    int p = settings.value("port/" + engine).toInt();
+    return p;
+}
+
+void EngineConfigure::setEnginePort(QString engine, int port)
+{
+    QSettings settings("./Configuration/DataModes.ini", QSettings::IniFormat);
+    settings.setValue("port/" + engine, port);
 }
 
 EngineConfigure::EngineConfigure(DMMainWindow *parent) :
@@ -80,39 +84,142 @@ EngineConfigure::EngineConfigure(DMMainWindow *parent) :
 {
     ui->setupUi(this);
 
-    ui->MMVARIRX->addItems(mainWindow->inputDevices);
-    ui->MMVARITX->addItems(mainWindow->outputDevices);
+    {
+        QSettings settings;
+        geoStr = QString("dataModes/Configuration/geometry");
+        QByteArray geometry = settings.value(geoStr).toByteArray();
+        if (geometry.size() > 0)
+            restoreGeometry(geometry);
+    }
+    ui->MMVARIRX1->addItems(mainWindow->inputDevices);
+    ui->MMVARITX1->addItems(mainWindow->outputDevices);
+    ui->MMVARIRX2->addItems(mainWindow->inputDevices);
+    ui->MMVARITX2->addItems(mainWindow->outputDevices);
 
     // MMVARI.ocx Has to be alongside the executable, BUT
     // we need to configure the MMVARI sound card!
 
     QString m = QCoreApplication::applicationDirPath() + "/MMVARI.ocx";
     ui->mmvariEdit->setText(m);
-    m = getAppPath(DMMainWindow::mmvari + "/input");
-    ui->MMVARIRX->setCurrentText(m);
 
-    m = getAppPath(DMMainWindow::mmvari + "/output");
-    ui->MMVARITX->setCurrentText(m);
+    m = getEngineSound(EngineWindow::mmvari + EngineWindow::i1, "input");
+    ui->MMVARIRX1->setCurrentText(m);
+    m = getEngineSound(EngineWindow::mmvari + EngineWindow::i2, "input");
+    ui->MMVARIRX2->setCurrentText(m);
+
+    m = getEngineSound(EngineWindow::mmvari + EngineWindow::i1, "output");
+    ui->MMVARITX1->setCurrentText(m);
+    m = getEngineSound(EngineWindow::mmvari + EngineWindow::i2, "output");
+    ui->MMVARITX2->setCurrentText(m);
+
+    bool b;
+    b = getEngineEnabled(EngineWindow::mmvari + EngineWindow::i1);
+    ui->mmvariEnable1->setChecked(b);
+    b = getEngineEnabled(EngineWindow::mmvari + EngineWindow::i2);
+    ui->mmvariEnable2->setChecked(b);
 
     // Other engines have their own soundcard configuration
 
-    m = getEnginePath(DMMainWindow::twotone);
-    ui->twotoneEdit->setText(m);
+    m = getEnginePath(EngineWindow::twotone + EngineWindow::i1);
+    ui->twotoneEdit1->setText(m);
+    m = getEnginePath(EngineWindow::twotone + EngineWindow::i2);
+    ui->twotoneEdit2->setText(m);
 
-    m = getEnginePath(DMMainWindow::mmtty);
-    ui->mmttyEdit->setText(m);
+    b = getEngineEnabled(EngineWindow::twotone + EngineWindow::i1);
+    ui->twotoneEnable1->setChecked(b);
+    b = getEngineEnabled(EngineWindow::twotone + EngineWindow::i2);
+    ui->twotoneEnable2->setChecked(b);
 
-    m = getEnginePath(DMMainWindow::fldigi);
+    m = getEnginePath(EngineWindow::mmtty + EngineWindow::i1);
+    ui->mmttyEdit1->setText(m);
+    m = getEnginePath(EngineWindow::mmtty + EngineWindow::i2);
+    ui->mmttyEdit2->setText(m);
+
+    b = getEngineEnabled(EngineWindow::mmtty + EngineWindow::i1);
+    ui->mmttyEnable1->setChecked(b);
+    b = getEngineEnabled(EngineWindow::mmtty + EngineWindow::i2);
+    ui->mmttyEnable2->setChecked(b);
+
+    m = getEnginePath(EngineWindow::fldigi + EngineWindow::i1);
     ui->fldigiEdit->setText(m);
 
-    m = getEnginePath(DMMainWindow::gritty);
+    b = getEngineEnabled(EngineWindow::fldigi + EngineWindow::i1);
+    ui->fldigiEnable1->setChecked(b);
+    b = getEngineEnabled(EngineWindow::fldigi + EngineWindow::i2);
+    ui->fldigiEnable2->setChecked(b);
+
+    m = getEnginePath(EngineWindow::gritty + EngineWindow::i1);
     ui->grittyEdit->setText(m);
+
+    b = getEngineEnabled(EngineWindow::gritty + EngineWindow::i1);
+    ui->grittyEnable1->setChecked(b);
+    b = getEngineEnabled(EngineWindow::gritty + EngineWindow::i2);
+    ui->grittyEnable2->setChecked(b);
+
+    b = getEngineEnabled(EngineWindow::test + EngineWindow::i1);
+    ui->testEnable1->setChecked(b);
+    b = getEngineEnabled(EngineWindow::test + EngineWindow::i2);
+    ui->testEnable2->setChecked(b);
+
+    int p = getEnginePort(EngineWindow::fldigi + EngineWindow::i1);
+    if (p == 0)
+    {
+        p = 7362;
+    }
+    ui->fldigiPort1->setText(QString::number(p));
+    ui->fldigiPort1->setValidator(new QIntValidator(0, 0xffff, this));
+
+    p = getEnginePort(EngineWindow::fldigi + EngineWindow::i2);
+    if (p == 0)
+    {
+        p = 7363;
+    }
+    ui->fldigiPort2->setText(QString::number(p));
+    ui->fldigiPort2->setValidator(new QIntValidator(0, 0xffff, this));
+
+    p = getEnginePort(EngineWindow::gritty + EngineWindow::i1);
+    if (p == 0)
+    {
+        p = 7502;
+    }
+    ui->grittyPort1->setText(QString::number(p));
+    ui->grittyPort1->setValidator(new QIntValidator(0, 0xffff, this));
+
+    p = getEnginePort(EngineWindow::gritty + EngineWindow::i2);
+    if (p == 0)
+    {
+        p = 7503;
+    }
+    ui->grittyPort2->setText(QString::number(p));
+    ui->grittyPort2->setValidator(new QIntValidator(0, 0xffff, this));
+
+    ui->senderCombo->addItems(EngineWindow::enginesList);
+
+    ui->rttySpeed->addItem("45.45");
+    ui->rttySpeed->addItem("75");
+    ui->rttySpeed->setCurrentText(getSpeed("RTTY"));
+
+    ui->BPSKSpeed->addItem("31.25");
+    ui->BPSKSpeed->addItem("62.5");
+    ui->BPSKSpeed->setCurrentText(getSpeed("BPSK"));
+
+
+    QSettings settings("./Configuration/DataModes.ini", QSettings::IniFormat);
+
+    m = settings.value("Sender").toString();
 }
 
 EngineConfigure::~EngineConfigure()
 {
     delete ui;
 }
+void EngineConfigure::closeEvent(QCloseEvent *event)
+{
+    QSettings settings;
+    settings.setValue(geoStr, saveGeometry());
+    QWidget::closeEvent(event);
+}
+
 void EngineConfigure::doBrowse(QString key, QLineEdit *edit)
 {
     QString fname = getEnginePath(key);
@@ -138,39 +245,78 @@ void EngineConfigure::doBrowse(QString key, QLineEdit *edit)
 
 }
 
-void EngineConfigure::on_mmttyBrowse_clicked()
+void EngineConfigure::on_mmttyBrowse1_clicked()
 {
-    doBrowse(DMMainWindow::mmtty, ui->mmttyEdit);
+    doBrowse(EngineWindow::mmtty + EngineWindow::i1, ui->mmttyEdit1);
+}
+
+void EngineConfigure::on_mmttyBrowse2_clicked()
+{
+    doBrowse(EngineWindow::mmtty + EngineWindow::i2, ui->mmttyEdit2);
 }
 
 
-void EngineConfigure::on_twotoneBrowse_clicked()
+void EngineConfigure::on_twotoneBrowse1_clicked()
 {
-    doBrowse(DMMainWindow::twotone, ui->twotoneEdit);
+    doBrowse(EngineWindow::twotone + EngineWindow::i1, ui->twotoneEdit1);
+}
+
+void EngineConfigure::on_twotoneBrowse2_clicked()
+{
+    doBrowse(EngineWindow::twotone + EngineWindow::i2, ui->twotoneEdit1);
 }
 
 
 void EngineConfigure::on_fldigiBrowse_clicked()
 {
-    doBrowse(DMMainWindow::fldigi, ui->fldigiEdit);
+    doBrowse(EngineWindow::fldigi + EngineWindow::i1, ui->fldigiEdit);
 }
 
 void EngineConfigure::on_grittyBrowse_clicked()
 {
-    doBrowse(DMMainWindow::gritty, ui->grittyEdit);
+    doBrowse(EngineWindow::gritty + EngineWindow::i1, ui->grittyEdit);
 }
 
 
 void EngineConfigure::on_OKButton_clicked()
 {
-    //setEnginePath(DMMainWindow::mmvari, ui->mmvariEdit->text());
-    setAppPath(DMMainWindow::mmvari + "/input", ui->MMVARIRX->currentText());
-    setAppPath(DMMainWindow::mmvari + "/output", ui->MMVARITX->currentText());
+    //setEnginePath(EngineWindow::mmvari, ui->mmvariEdit->text());
+    setEngineSound(EngineWindow::mmvari + EngineWindow::i1, "input", ui->MMVARIRX1->currentText());
+    setEngineSound(EngineWindow::mmvari + EngineWindow::i1, "output", ui->MMVARITX1->currentText());
 
-    setEnginePath(DMMainWindow::mmtty, ui->mmttyEdit->text());
-    setEnginePath(DMMainWindow::twotone, ui->twotoneEdit->text());
-    setEnginePath(DMMainWindow::fldigi, ui->fldigiEdit->text());
-    setEnginePath(DMMainWindow::gritty, ui->grittyEdit->text());
+    setEnginePath(EngineWindow::mmtty + EngineWindow::i1, ui->mmttyEdit1->text());
+    setEnginePath(EngineWindow::mmtty + EngineWindow::i2, ui->mmttyEdit2->text());
+    setEnginePath(EngineWindow::twotone + EngineWindow::i1, ui->twotoneEdit1->text());
+    setEnginePath(EngineWindow::twotone + EngineWindow::i2, ui->twotoneEdit2->text());
+    setEnginePath(EngineWindow::fldigi + EngineWindow::i1, ui->fldigiEdit->text());
+    setEnginePath(EngineWindow::fldigi + EngineWindow::i2, ui->fldigiEdit->text());
+    setEnginePath(EngineWindow::gritty + EngineWindow::i1, ui->grittyEdit->text());
+    setEnginePath(EngineWindow::gritty + EngineWindow::i2, ui->grittyEdit->text());
+
+    setEngineEnabled(EngineWindow::mmvari + EngineWindow::i1, ui->mmvariEnable1->isChecked());
+    setEngineEnabled(EngineWindow::mmvari + EngineWindow::i2, ui->mmvariEnable2->isChecked());
+    setEngineEnabled(EngineWindow::mmtty + EngineWindow::i1, ui->mmttyEnable1->isChecked());
+    setEngineEnabled(EngineWindow::mmtty + EngineWindow::i2, ui->mmttyEnable2->isChecked());
+    setEngineEnabled(EngineWindow::twotone + EngineWindow::i1, ui->twotoneEnable1->isChecked());
+    setEngineEnabled(EngineWindow::twotone + EngineWindow::i2, ui->twotoneEnable2->isChecked());
+    setEngineEnabled(EngineWindow::fldigi + EngineWindow::i1, ui->fldigiEnable1->isChecked());
+    setEngineEnabled(EngineWindow::fldigi + EngineWindow::i2, ui->fldigiEnable2->isChecked());
+    setEngineEnabled(EngineWindow::gritty + EngineWindow::i1, ui->grittyEnable1->isChecked());
+    setEngineEnabled(EngineWindow::gritty + EngineWindow::i2, ui->grittyEnable2->isChecked());
+    setEngineEnabled(EngineWindow::test + EngineWindow::i1, ui->testEnable1->isChecked());
+    setEngineEnabled(EngineWindow::test + EngineWindow::i2, ui->testEnable2->isChecked());
+
+    setEnginePort(EngineWindow::gritty + EngineWindow::i1, ui->grittyPort1->text().toInt());
+    setEnginePort(EngineWindow::gritty + EngineWindow::i2, ui->grittyPort2->text().toInt());
+    setEnginePort(EngineWindow::fldigi + EngineWindow::i1, ui->fldigiPort1->text().toInt());
+    setEnginePort(EngineWindow::fldigi + EngineWindow::i2, ui->fldigiPort2->text().toInt());
+
+    setSpeed("RTTY", ui->rttySpeed->currentText());
+    setSpeed("BPSK", ui->BPSKSpeed->currentText());
+
+    emit mainWindow->setSpeeds(ui->BPSKSpeed->currentText(), ui->rttySpeed->currentText());
+    QSettings settings;
+    settings.setValue(geoStr, saveGeometry());
 
     accept();
 }
@@ -179,5 +325,14 @@ void EngineConfigure::on_OKButton_clicked()
 void EngineConfigure::on_cancelButton_clicked()
 {
     reject();
+}
+
+
+void EngineConfigure::on_senderCombo_activated(int /*index*/)
+{
+    QSettings settings("./Configuration/DataModes.ini", QSettings::IniFormat);
+
+    settings.setValue("Sender", ui->senderCombo->currentText());
+
 }
 

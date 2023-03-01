@@ -1,23 +1,24 @@
 #ifndef GRITTYFRAME_H
 #define GRITTYFRAME_H
 
-#include "frequency.h"
 #include <QFrame>
 #include <QProcess>
 #include <QTcpSocket>
+#include "frequency.h"
 
 namespace Ui {
 class GrittyFrame;
 }
 class QLineEdit;
 class QTextEdit;
+class EngineWindow;
 
 class GrittyFrame : public QFrame
 {
     Q_OBJECT
 
 public:
-    explicit GrittyFrame(QWidget *parent, QLineEdit *sendEdit, QString fname);
+    explicit GrittyFrame(EngineWindow *parent, QLineEdit *sendEdit, QString fname, QString name);
     ~GrittyFrame();
 
     void sendCharacters(const QString &, int);
@@ -28,14 +29,17 @@ public:
 
 private:
     Ui::GrittyFrame *ui;
+    EngineWindow *engineWindow;
+    int grittyPort = 7502;
+
     QLineEdit *sendEdit = nullptr;
     QProcess *grittyProcess = nullptr;
     bool grittyActive = false;
     QTcpSocket* grittyClient;
     QString msgbuf;
     int carrier = 0;
-    int bpskSpeed = 31;
-    int rttySpeed = 45;
+    QString bpskSpeed;
+    QString rttySpeed;
 
     QString fname;
     void createProcess();
@@ -47,7 +51,7 @@ private:
     void analyseGrittyMessage(QString m);
 private slots:
     void onSendCharacters(QString, int carrier);
-    void onSetSpeeds(int b, int m);
+    void onSetSpeeds(QString b, QString m);
 
     void onRigModeFreq(QString, Frequency);
     void on_finished(int err, QProcess::ExitStatus exitStatus);

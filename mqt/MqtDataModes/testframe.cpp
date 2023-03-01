@@ -2,7 +2,7 @@
 #include "rxbuffer.h"
 #include "MTrace.h"
 #include "dmmainwindow.h"
-
+#include "enginewindow.h"
 #include "testframe.h"
 #include "ui_testframe.h"
 
@@ -17,13 +17,15 @@ QStringList testData = {
 
 // to run multiple copies - just do it!
 
-TestFrame::TestFrame(QWidget *parent, QLineEdit */*sendEdit*/, QString /*fname*/) :
+TestFrame::TestFrame(EngineWindow *parent, QLineEdit */*sendEdit*/, QString /*fname*/, QString /*name*/) :
     QFrame(parent),
-    ui(new Ui::TestFrame)
+    ui(new Ui::TestFrame),
+    engineWindow(parent)
 {
     ui->setupUi(this);
-    connect(mainWindow, &DMMainWindow::sendCharacters, this, &TestFrame::onSendCharacters);
-    connect(mainWindow, &DMMainWindow::rigModeFreq, this, &TestFrame::onRigModeFreq);
+    connect(mainWindow, &DMMainWindow::setSpeeds, this, &TestFrame::onSetSpeeds);
+    connect(engineWindow, &EngineWindow::sendCharactersDown, this, &TestFrame::onSendCharacters);
+    connect(engineWindow, &EngineWindow::rigModeFreq, this, &TestFrame::onRigModeFreq);
 
     for(const auto &s:qAsConst(testData))
     {
@@ -33,7 +35,7 @@ TestFrame::TestFrame(QWidget *parent, QLineEdit */*sendEdit*/, QString /*fname*/
         {
             RXChar rxch(c, newLine, 0, carrier);
             newLine = false;
-            RxBuffer::getRxBuffer()->addChar(rxch);
+            engineWindow->rxBuff.addChar(rxch);
         }
     }
 
@@ -56,7 +58,7 @@ void TestFrame::onTimeout()
     {
         RXChar rxch(c, newLine, 0, carrier);
         newLine = false;
-        RxBuffer::getRxBuffer()->addChar(rxch);
+        engineWindow->rxBuff.addChar(rxch);
     }
 }
 void TestFrame::onSendCharacters(QString data, int c)
@@ -68,7 +70,7 @@ void TestFrame::onRigModeFreq(QString, Frequency)
 {
 
 }
-void TestFrame::sendCharacters(const QString &toSend, int carrier)
+void TestFrame::sendCharacters(const QString &toSend, int /*carrier*/)
 {
     mShowMessage(toSend, this);
 }
@@ -81,7 +83,7 @@ void TestFrame::sendMode(QString mode)
     {
         RXChar rxch(c, newLine, 0, carrier);
         newLine = false;
-        RxBuffer::getRxBuffer()->addChar(rxch);
+        engineWindow->rxBuff.addChar(rxch);
     }
 
 }
@@ -91,7 +93,7 @@ void TestFrame::closeFrame()
 
 }
 
-void TestFrame::onSetSpeeds(int b, int r)
+void TestFrame::onSetSpeeds(QString b, QString r)
 {
     trace(QString("BPSK speed set to %1 RTTY speed set to %2").arg(b).arg(r));
 }

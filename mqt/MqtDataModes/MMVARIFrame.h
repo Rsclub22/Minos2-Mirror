@@ -30,13 +30,13 @@ class QSplitter;
 namespace Ui {
 class MMVARIFrame;
 }
-
+class EngineWindow;
 class MMVARIFrame : public QFrame
 {
     Q_OBJECT
 
 public:
-    explicit MMVARIFrame(QWidget *parent, QFrame *cwl, QLineEdit *sendEdit, int inId, int outId);
+    explicit MMVARIFrame(EngineWindow *parent, QFrame *cwl, QLineEdit *sendEdit, int inId, int outId, QString name);
     ~MMVARIFrame();
 
     void sendCharacters(const QString &, int c);
@@ -44,10 +44,10 @@ public:
 
 private:
     Ui::MMVARIFrame *ui;
-
+    EngineWindow *engineWindow;
     int carrier = 0;
-    int bpskSpeed = 31;
-    int rttySpeed = 45;
+    QString bpskSpeed;
+    QString rttySpeed;
     QFrame *pframe = nullptr;
     QHBoxLayout *mmvariHb = nullptr;
     QVBoxLayout* mvb = nullptr;
@@ -123,7 +123,7 @@ private slots:
     void OnClockAdjust(int &);
     void OnError(int);
 
-    void onSetSpeeds(int b, int m);
+    void onSetSpeeds(QString b, QString m);
 signals:
     void txChanged(bool);
 

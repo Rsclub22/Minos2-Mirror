@@ -78,11 +78,6 @@ private:
 
     int buffSize = 15;  // lines
 public:
-    static RxBuffer *getRxBuffer()
-    {
-        static RxBuffer buff;
-        return &buff;
-    }
     RxBuffer();
     void  addChar(RXChar &c);
     void reset();

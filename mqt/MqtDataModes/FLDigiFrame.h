@@ -9,6 +9,7 @@
 
 #include "frequency.h"
 #include "maiaXmlRpcClient.h"
+class EngineWindow;
 
 namespace Ui {
 class FLDigiFrame;
@@ -19,7 +20,7 @@ class FLDigiFrame : public QFrame
     Q_OBJECT
 
 public:
-    explicit FLDigiFrame(QWidget *parent,  QLineEdit *sendEdit, QString fname);
+    explicit FLDigiFrame(EngineWindow *parent,  QLineEdit *sendEdit, QString fname, QString name);
     ~FLDigiFrame();
 
     void sendCharacters(const QString &, int carrier);
@@ -28,6 +29,7 @@ public:
 
 private:
     Ui::FLDigiFrame *ui;
+    EngineWindow *engineWindow;
     MaiaXmlRpcClient *rpcClient = nullptr;
     QLineEdit *sendEdit = nullptr;
     QProcess *fldigiProcess = nullptr;
@@ -37,15 +39,15 @@ private:
     int carrier = 0;
     QString mode;
     int carrierOffset = 0;
-    int bpskSpeed = 31;
-    int rttySpeed = 45;
+    QString bpskSpeed;
+    QString rttySpeed;
 
     void createProcess();
 
     void addText(const QString &t);
 private slots:
     void onSendCharacters(QString, int);
-    void onSetSpeeds(int b, int m);
+    void onSetSpeeds(QString b, QString m);
 
     void onRigModeFreq(QString, Frequency);
     void on_finished(int err, QProcess::ExitStatus exitStatus);

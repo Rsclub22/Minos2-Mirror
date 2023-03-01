@@ -13,13 +13,13 @@
 namespace Ui {
 class MMTTYFrame;
 }
-
+class EngineWindow;
 class MMTTYFrame : public QFrame
 {
     Q_OBJECT
 
 public:
-    explicit MMTTYFrame(QWidget *parent, bool twoTone, QLineEdit *sendEdit, QString fname);
+    explicit MMTTYFrame(EngineWindow *parent, bool twoTone, QLineEdit *sendEdit, QString fname, QString name);
     ~MMTTYFrame();
 
     void sendCharacters(const QString &, int carrier);
@@ -31,6 +31,7 @@ public:
 
 private:
     Ui::MMTTYFrame *ui;
+    EngineWindow *engineWindow;
     QString fname;
     QWidget *t = nullptr;
 
@@ -46,8 +47,8 @@ private:
     bool twoToneActive = false;
     bool mmttyActive = false;
     int carrier = 0;
-    int bpskSpeed = 31;
-    int rttySpeed = 45;
+    QString bpskSpeed;
+    QString rttySpeed;
 
     HWND getTempHwnd()
     {
@@ -64,7 +65,7 @@ private:
 private slots:
 
     void onSendCharacters(QString, int);
-    void onSetSpeeds(int b, int m);
+    void onSetSpeeds(QString b, QString m);
 
     void onRigModeFreq(QString, Frequency);
     void on_finished(int err, QProcess::ExitStatus exitStatus);

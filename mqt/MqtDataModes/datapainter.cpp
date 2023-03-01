@@ -9,6 +9,7 @@
 
 #include <QStyleOption>
 
+#include "enginewindow.h"
 #include "cutils.h"
 #include "rxbuffer.h"
 #include "datapainter.h"
@@ -19,8 +20,8 @@ DPGraphicsTextItem::DPGraphicsTextItem(QGraphicsItem *parent):
     QGraphicsTextItem(parent), row(-1)
 {}
 
-DPGraphicsTextItem::DPGraphicsTextItem(const QString &text, int r, QGraphicsItem *parent):
-    QGraphicsTextItem(text, parent), row(r)
+DPGraphicsTextItem::DPGraphicsTextItem(EngineWindow *engineWindow, const QString &text, int r, QGraphicsItem *parent):
+    QGraphicsTextItem(text, parent), row(r), engineWindow(engineWindow)
 {}
 
 DPGraphicsTextItem::~DPGraphicsTextItem()
@@ -46,9 +47,9 @@ void DPGraphicsTextItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
     setTextCursor(c);
 
     int cfreq = 0;
-    if (cp < RxBuffer::getRxBuffer()->getRxLine(row)->charCount())
+    if (cp < engineWindow->rxBuff.getRxLine(row)->charCount())
     {
-        cfreq = RxBuffer::getRxBuffer()->getCharAt(row, cp).getCarrier();
+        cfreq = engineWindow->rxBuff.getCharAt(row, cp).getCarrier();
     }
 
 
@@ -62,7 +63,7 @@ void DPGraphicsTextItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 //==========================================================================
 DPGraphicsTextItem * DataPainter::createNewLine(int r, int yoffset)
 {
-    DPGraphicsTextItem *ti =  new DPGraphicsTextItem(QString(), r);
+    DPGraphicsTextItem *ti =  new DPGraphicsTextItem(engineWindow, QString(), r);
     connect(ti, &DPGraphicsTextItem::wordSelected, this, [this](QString s, int carr)
             {emit wordSelected(s, carr);});
     ti->setFont(ff);
@@ -75,6 +76,13 @@ DPGraphicsTextItem * DataPainter::createNewLine(int r, int yoffset)
 DataPainter::DataPainter(QWidget *parent)
     : QGraphicsView{parent}
 {
+
+}
+
+void DataPainter::initialise(EngineWindow *e)
+{
+    engineWindow = e;
+
     scene = new QGraphicsScene(this);
     setScene(scene);
 
@@ -88,28 +96,27 @@ DataPainter::DataPainter(QWidget *parent)
 
     int yoffset = 0;
 
-    int l = RxBuffer::getRxBuffer()->getLines();
+    int l = engineWindow->rxBuff.getLines();
     for (int i = 0; i < l; i++)
     {
         DPGraphicsTextItem *ti =  createNewLine(i, yoffset);
         lines.push_back(ti);
         yoffset += h;
-    }
-}
+    }}
 
 void DataPainter::setText()
 {
-    int nlines = RxBuffer::getRxBuffer()->getLines();
+    int nlines = engineWindow->rxBuff.getLines();
     for (int i = 0; i < nlines; i++)
     {
-        if (RxBuffer::getRxBuffer()->getRxLine(i)->getDirty())
+        if (engineWindow->rxBuff.getRxLine(i)->getDirty())
         {
             QString rxbuff;
-            int cols = RxBuffer::getRxBuffer()->getCols(i);
+            int cols = engineWindow->rxBuff.getCols(i);
             QColor colour = Qt::black;
             for (int j = 0; j < cols; j++)
             {
-                RXChar nc = RxBuffer::getRxBuffer()->getCharAt(i, j);
+                RXChar nc = engineWindow->rxBuff.getCharAt(i, j);
                 if (nc.getMyCall())
                 {
                     colour = Qt::darkRed;
@@ -147,7 +154,7 @@ void DataPainter::setText()
             lines[i]->textCursor().setCharFormat(tcf);
             lines[i]->setHtml(rxbuff);
 
-            RxBuffer::getRxBuffer()->getRxLine(i)->setDirty(false);
+            engineWindow->rxBuff.getRxLine(i)->setDirty(false);
         }
     }
 }

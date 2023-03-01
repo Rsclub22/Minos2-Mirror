@@ -1,9 +1,11 @@
 #include <QDateTime>
 
 #include "MTrace.h"
+#include "dmmainwindow.h"
 #include "rigcontrolcommonconstants.h"
 #include "rxbuffer.h"
-#include "dmmainwindow.h"
+#include "engineconfigure.h"
+#include "enginewindow.h"
 
 #include "FLDigiFrame.h"
 #include "ui_FLDigiFrame.h"
@@ -36,22 +38,24 @@ void FLDigiFrame::createProcess()
     QStringList engineOpts = {"--wo"/*, "--home-dir C:/temp"*/};
     fldigiProcess->start(fname, engineOpts, QProcess::ReadWrite);
 
-    connect(mainWindow, &DMMainWindow::setSpeeds, this, &FLDigiFrame::onSetSpeeds);
 }
 
-FLDigiFrame::FLDigiFrame(QWidget *parent, QLineEdit *sendEdit, QString fname) :
+FLDigiFrame::FLDigiFrame(EngineWindow *parent, QLineEdit *sendEdit, QString fname, QString name) :
     QFrame(parent),
     ui(new Ui::FLDigiFrame),
+    engineWindow(parent),
     sendEdit(sendEdit),
     fname(fname)
 {
     ui->setupUi(this);
 
-    connect(mainWindow, &DMMainWindow::sendCharacters, this, &FLDigiFrame::onSendCharacters);
-    connect(mainWindow, &DMMainWindow::rigModeFreq, this, &FLDigiFrame::onRigModeFreq);
-    connect(this, &FLDigiFrame::txChanged, mainWindow, &DMMainWindow::onTxChanged);
+    connect(mainWindow, &DMMainWindow::setSpeeds, this, &FLDigiFrame::onSetSpeeds);
+    connect(engineWindow, &EngineWindow::sendCharactersDown, this, &FLDigiFrame::onSendCharacters);
+    connect(engineWindow, &EngineWindow::rigModeFreq, this, &FLDigiFrame::onRigModeFreq);
+    connect(this, &FLDigiFrame::txChanged, engineWindow, &EngineWindow::onTxChanged);
 
-    rpcClient = new MaiaXmlRpcClient(QUrl("http://localhost:7362"), this);
+    int p = EngineConfigure::getEnginePort(name);
+    rpcClient = new MaiaXmlRpcClient(QUrl("http://localhost:" + QString::number(p)), this);
 
     createProcess();
 
@@ -73,10 +77,24 @@ void FLDigiFrame::onSendCharacters(QString data, int c)
     sendCharacters(data, c);
 }
 
-void FLDigiFrame::onSetSpeeds(int b, int r)
+void FLDigiFrame::onSetSpeeds(QString b, QString r)
 {
     bpskSpeed = b;
     rttySpeed = r;
+
+    QVariantList args;
+    args.clear();
+    if (bpskSpeed.contains("31"))
+    {
+        args << QString("BPSK31");
+    }
+    else
+    {
+        args << QString("BPSK63");
+    }
+    rpcClient->call("modem.set_by_name", args,
+       this, SLOT(myResponseMethod(QVariant&)),
+       this, SLOT(myFaultResponse(int, const QString &)));
 }
 
 void FLDigiFrame::onRigModeFreq(QString m, Frequency f)
@@ -190,6 +208,8 @@ void FLDigiFrame::sendMode(QString m)
            this, SLOT(myResponseMethod(QVariant&)),
            this, SLOT(myFaultResponse(int, const QString &)));
 
+        // How do we set RTTY speed?
+
     }
     if (m == hamlibData::PSK)
     {
@@ -204,7 +224,7 @@ void FLDigiFrame::sendMode(QString m)
            this, SLOT(myFaultResponse(int, const QString &)));
 
         args.clear();
-        if (bpskSpeed == 31)
+        if (bpskSpeed.contains("31"))
         {
             args << QString("BPSK31");
         }
@@ -281,7 +301,7 @@ void FLDigiFrame::addText(const QString &t)
     {
         RXChar rxch(s, newLine, 0, carrier);
         newLine = false;
-        RxBuffer::getRxBuffer()->addChar(rxch);
+        engineWindow->rxBuff.addChar(rxch);
     }
 
 }
@@ -304,10 +324,10 @@ void FLDigiFrame::myResponseMethod(QVariant &v)
             {
                 RXChar rxch(c, nl, 0, carrier);
                 nl = false;
-                RxBuffer::getRxBuffer()->addChar(rxch);
+                engineWindow->rxBuff.addChar(rxch);
             }
             RXChar rxch(' ', true, 0, carrier);
-            RxBuffer::getRxBuffer()->addChar(rxch);
+            engineWindow->rxBuff.addChar(rxch);
         }
     }
     else if (v.canConvert<QStringList>())
@@ -322,7 +342,7 @@ void FLDigiFrame::myResponseMethod(QVariant &v)
             {
                 RXChar rxch(c, newLine, 0, carrier);
                 newLine = false;
-                RxBuffer::getRxBuffer()->addChar(rxch);
+                engineWindow->rxBuff.addChar(rxch);
             }
         }
     }
@@ -367,7 +387,7 @@ void FLDigiFrame::myTxResponseMethod(QVariant &v)
             {
                 RXChar rxch(c, newLine, 0, carrier);
                 newLine = false;
-                RxBuffer::getRxBuffer()->addChar(rxch);
+                engineWindow->rxBuff.addChar(rxch);
             }
         }
     }
@@ -383,7 +403,7 @@ void FLDigiFrame::myTxResponseMethod(QVariant &v)
             {
                 RXChar rxch(c, newLine, 0, carrier);
                 newLine = false;
-                RxBuffer::getRxBuffer()->addChar(rxch);
+                engineWindow->rxBuff.addChar(rxch);
             }
         }
     }
@@ -401,7 +421,7 @@ void FLDigiFrame::myRxResponseMethod(QVariant &v)
             for (auto c:qAsConst(s))
             {
                 RXChar rxch(c, false, 0, carrier);
-                RxBuffer::getRxBuffer()->addChar(rxch);
+                engineWindow->rxBuff.addChar(rxch);
             }
         }
     }
@@ -417,7 +437,7 @@ void FLDigiFrame::myRxResponseMethod(QVariant &v)
             {
                 RXChar rxch(c, newLine, 0, carrier);
                 newLine = false;
-                RxBuffer::getRxBuffer()->addChar(rxch);
+                engineWindow->rxBuff.addChar(rxch);
             }
         }
     }

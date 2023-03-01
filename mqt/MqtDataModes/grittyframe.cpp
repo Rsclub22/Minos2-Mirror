@@ -8,14 +8,13 @@
 
 #include "MTrace.h"
 #include "delayedaction.h"
-#include "frequency.h"
 #include "dmmainwindow.h"
+#include "frequency.h"
 #include "rxbuffer.h"
-
+#include "enginewindow.h"
+#include "engineconfigure.h"
 #include "grittyframe.h"
 #include "ui_grittyframe.h"
-
-const int grittyPort = 7502;
 
 /*
 You can run multiple instances of GRITTY, e.g., to decode two
@@ -140,23 +139,25 @@ void GrittyFrame::createProcess()
                               "port=" + QString::number(grittyPort),
                               "caption=\"Gritty Engine for Minos\""};
     grittyProcess->start(fname, engineOpts, QProcess::ReadWrite);
-    connect(mainWindow, &DMMainWindow::setSpeeds, this, &GrittyFrame::onSetSpeeds);
+//    connect(mainWindow, &DMMainWindow::setSpeeds, this, &GrittyFrame::onSetSpeeds);
 }
-GrittyFrame::GrittyFrame(QWidget *parent, QLineEdit *sendEdit, QString fname) :
+GrittyFrame::GrittyFrame(EngineWindow *parent, QLineEdit *sendEdit, QString fname, QString name) :
     QFrame(parent),
     ui(new Ui::GrittyFrame),
+    engineWindow(parent),
     sendEdit(sendEdit),
     fname(fname)
 
 {
     ui->setupUi(this);
-    connect(mainWindow, &DMMainWindow::sendCharacters, this, &GrittyFrame::onSendCharacters);
-    connect(mainWindow, &DMMainWindow::rigModeFreq, this, &GrittyFrame::onRigModeFreq);
+    connect(mainWindow, &DMMainWindow::setSpeeds, this, &GrittyFrame::onSetSpeeds);
+    connect(engineWindow, &EngineWindow::sendCharactersDown, this, &GrittyFrame::onSendCharacters);
+    connect(engineWindow, &EngineWindow::rigModeFreq, this, &GrittyFrame::onRigModeFreq);
+
+    grittyPort = EngineConfigure::getEnginePort(name);
 
     // start gritty
     createProcess();
-
-    //and connect to it on port 7500
 
     grittyClient = new QTcpSocket(this);
 
@@ -188,7 +189,7 @@ void GrittyFrame::onSendCharacters(QString data, int carrier)
     sendCharacters(data, carrier);
 }
 
-void GrittyFrame::onSetSpeeds(int b, int r)
+void GrittyFrame::onSetSpeeds(QString b, QString r)
 {
     bpskSpeed = b;
     rttySpeed = r;
@@ -385,7 +386,7 @@ void GrittyFrame::analyseGrittyMessage(QString m)
                 for (auto c:qAsConst(ch))
                 {
                     RXChar rxch(c, newLine, deleteCount, carrier);
-                    RxBuffer::getRxBuffer()->addChar(rxch);
+                    engineWindow->rxBuff.addChar(rxch);
                 }
                 trace("End of decode");
             }

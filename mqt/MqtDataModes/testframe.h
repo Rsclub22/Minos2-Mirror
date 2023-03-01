@@ -1,10 +1,13 @@
 #ifndef TESTFRAME_H
 #define TESTFRAME_H
 
-#include "frequency.h"
-#include <QFrame>
 #include <QTextEdit>
 #include <QLineEdit>
+#include <QFrame>
+
+#include "frequency.h"
+
+class EngineWindow;
 
 namespace Ui {
 class TestFrame;
@@ -18,10 +21,11 @@ class TestFrame : public QFrame
 public:
     QLineEdit *sendEdit = nullptr;
     QTimer *testTimer = nullptr;
+    EngineWindow *engineWindow = nullptr;
 
     int carrier = 0;
 
-    explicit TestFrame(QWidget *parent, QLineEdit *sendEdit, QString fname);
+    explicit TestFrame(EngineWindow *parent, QLineEdit *sendEdit, QString fname, QString name);
     ~TestFrame();
 
     void sendCharacters(const QString &, int c);
@@ -29,7 +33,7 @@ public:
 
     void closeFrame();
 private slots:
-    void onSetSpeeds(int b, int m);
+    void onSetSpeeds(QString b, QString m);
 
     void onSendCharacters(QString, int c);
     void onRigModeFreq(QString, Frequency);

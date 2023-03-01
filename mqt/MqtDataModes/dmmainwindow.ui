@@ -6,81 +6,91 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>609</width>
-    <height>484</height>
+    <width>536</width>
+    <height>161</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string/>
+   <string>Minos Data Modes</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout_3"/>
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <spacer name="verticalSpacer">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>40</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QPushButton" name="startButton">
+        <property name="text">
+         <string>Start</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer_2">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="stopButton">
+        <property name="text">
+         <string>Stop All</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="configureButton">
+        <property name="text">
+         <string>Configure</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+   </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>609</width>
+     <width>536</width>
      <height>24</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menuEngine">
-    <property name="title">
-     <string>Engine</string>
-    </property>
-   </widget>
-   <widget class="QMenu" name="menuClear">
-    <property name="title">
-     <string>Clear</string>
-    </property>
-   </widget>
-   <widget class="QMenu" name="menuSpeeds">
-    <property name="title">
-     <string>Speeds</string>
-    </property>
-    <addaction name="actionBPSK31"/>
-    <addaction name="actionBPSK63"/>
-    <addaction name="separator"/>
-    <addaction name="actionRTTY45"/>
-    <addaction name="actionRTTY75"/>
-   </widget>
-   <addaction name="menuEngine"/>
-   <addaction name="menuClear"/>
-   <addaction name="menuSpeeds"/>
   </widget>
-  <action name="actionBPSK31">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>BPSK31</string>
-   </property>
-  </action>
-  <action name="actionBPSK63">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>BPSK63</string>
-   </property>
-  </action>
-  <action name="actionRTTY45">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>RTTY45</string>
-   </property>
-  </action>
-  <action name="actionRTTY75">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>RTTY75</string>
-   </property>
-  </action>
  </widget>
  <resources/>
  <connections/>

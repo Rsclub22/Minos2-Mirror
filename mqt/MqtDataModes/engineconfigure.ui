@@ -7,152 +7,489 @@
     <x>0</x>
     <y>0</y>
     <width>530</width>
-    <height>583</height>
+    <height>687</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Configure Engines</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_2">
+  <layout class="QVBoxLayout" name="verticalLayout_7">
    <item>
-    <layout class="QVBoxLayout" name="verticalLayout">
+    <layout class="QHBoxLayout" name="horizontalLayout_12">
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout">
-       <item>
-        <widget class="QLabel" name="label">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
-         <property name="text">
-          <string>MMVARI</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLineEdit" name="mmvariEdit">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
-        </widget>
-       </item>
-      </layout>
+      <widget class="QFrame" name="MMVARI1frame">
+       <property name="frameShape">
+        <enum>QFrame::Box</enum>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout">
+          <item>
+           <widget class="QLabel" name="label">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="text">
+             <string>MMVARI/1</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="mmvariEdit">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="mmvariEnable1">
+            <property name="text">
+             <string>Enable 1</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_6">
+          <item>
+           <widget class="QLabel" name="label_5">
+            <property name="text">
+             <string>Receive</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="MMVARIRX1"/>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_7">
+          <item>
+           <widget class="QLabel" name="label_6">
+            <property name="text">
+             <string>Transmit</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="MMVARITX1"/>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
      </item>
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_6">
-       <item>
-        <widget class="QLabel" name="label_5">
-         <property name="text">
-          <string>Receive</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QComboBox" name="MMVARIRX"/>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_7">
-       <item>
-        <widget class="QLabel" name="label_6">
-         <property name="text">
-          <string>Transmit</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QComboBox" name="MMVARITX"/>
-       </item>
-      </layout>
+      <widget class="QFrame" name="MMVARI2frame">
+       <property name="frameShape">
+        <enum>QFrame::Box</enum>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_9">
+          <item>
+           <widget class="QLabel" name="label_8">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="text">
+             <string>MMVARI/2</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="mmvariEnable2">
+            <property name="text">
+             <string>Enable 2</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_10">
+          <item>
+           <widget class="QLabel" name="label_9">
+            <property name="text">
+             <string>Receive</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="MMVARIRX2"/>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_11">
+          <item>
+           <widget class="QLabel" name="label_10">
+            <property name="text">
+             <string>Transmit</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="MMVARITX2"/>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
      </item>
     </layout>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
-     <item>
-      <widget class="QLabel" name="label_2">
-       <property name="text">
-        <string>MMTTY</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLineEdit" name="mmttyEdit"/>
-     </item>
-     <item>
-      <widget class="QToolButton" name="mmttyBrowse">
-       <property name="text">
-        <string>...</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
+    <widget class="QFrame" name="MMTTYframe">
+     <property name="frameShape">
+      <enum>QFrame::Box</enum>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_6">
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <item>
+         <widget class="QLabel" name="label_2">
+          <property name="text">
+           <string>MMTTY/1</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="mmttyEdit1"/>
+        </item>
+        <item>
+         <widget class="QToolButton" name="mmttyBrowse1">
+          <property name="text">
+           <string>...</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="mmttyEnable1">
+          <property name="text">
+           <string>Enable 1</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_13">
+        <item>
+         <widget class="QLabel" name="label_11">
+          <property name="text">
+           <string>MMTTY/2</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="mmttyEdit2"/>
+        </item>
+        <item>
+         <widget class="QToolButton" name="mmttyBrowse2">
+          <property name="text">
+           <string>...</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="mmttyEnable2">
+          <property name="text">
+           <string>Enable 2</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_3">
-     <item>
-      <widget class="QLabel" name="label_3">
-       <property name="text">
-        <string>2Tone</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLineEdit" name="twotoneEdit"/>
-     </item>
-     <item>
-      <widget class="QToolButton" name="twotoneBrowse">
-       <property name="text">
-        <string>...</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
+    <widget class="QFrame" name="twotoneframe">
+     <property name="frameShape">
+      <enum>QFrame::Box</enum>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_5">
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_3">
+        <item>
+         <widget class="QLabel" name="label_3">
+          <property name="text">
+           <string>2Tone/1</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="twotoneEdit1"/>
+        </item>
+        <item>
+         <widget class="QToolButton" name="twotoneBrowse1">
+          <property name="text">
+           <string>...</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="twotoneEnable1">
+          <property name="text">
+           <string>Enable 1</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_14">
+        <item>
+         <widget class="QLabel" name="label_12">
+          <property name="text">
+           <string>2Tone/2</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="twotoneEdit2"/>
+        </item>
+        <item>
+         <widget class="QToolButton" name="twotoneBrowse2">
+          <property name="text">
+           <string>...</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="twotoneEnable2">
+          <property name="text">
+           <string>Enable 2</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_8">
-     <item>
-      <widget class="QLabel" name="label_7">
-       <property name="text">
-        <string>Gritty</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLineEdit" name="grittyEdit"/>
-     </item>
-     <item>
-      <widget class="QToolButton" name="grittyBrowse">
-       <property name="text">
-        <string>...</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
+    <widget class="QFrame" name="grittyframe">
+     <property name="frameShape">
+      <enum>QFrame::Box</enum>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_3">
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_17">
+        <item>
+         <widget class="QLabel" name="label_7">
+          <property name="text">
+           <string>Gritty</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="grittyEdit"/>
+        </item>
+        <item>
+         <widget class="QToolButton" name="grittyBrowse">
+          <property name="text">
+           <string>...</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_4">
+        <item>
+         <widget class="QLabel" name="label_14">
+          <property name="text">
+           <string>Port 1</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="grittyPort1"/>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="grittyEnable1">
+          <property name="text">
+           <string>Enable 1</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_8">
+        <item>
+         <widget class="QLabel" name="label_15">
+          <property name="text">
+           <string>Port 2</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="grittyPort2"/>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="grittyEnable2">
+          <property name="text">
+           <string>Enable 2</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_4">
-     <item>
-      <widget class="QLabel" name="label_4">
-       <property name="text">
-        <string>FLDigi</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLineEdit" name="fldigiEdit"/>
-     </item>
-     <item>
-      <widget class="QToolButton" name="fldigiBrowse">
-       <property name="text">
-        <string>...</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
+    <widget class="QFrame" name="FLDigiframe">
+     <property name="frameShape">
+      <enum>QFrame::Box</enum>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_4">
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_16">
+        <item>
+         <widget class="QLabel" name="label_4">
+          <property name="text">
+           <string>FLDigi</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="fldigiEdit"/>
+        </item>
+        <item>
+         <widget class="QToolButton" name="fldigiBrowse">
+          <property name="text">
+           <string>...</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_19">
+        <item>
+         <widget class="QLabel" name="label_17">
+          <property name="text">
+           <string>Port 1</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="fldigiPort1"/>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="fldigiEnable1">
+          <property name="text">
+           <string>Enable 1</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_18">
+        <item>
+         <widget class="QLabel" name="label_16">
+          <property name="text">
+           <string>Port 2</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="fldigiPort2"/>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="fldigiEnable2">
+          <property name="text">
+           <string>Enable 2</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QFrame" name="testframe">
+     <property name="frameShape">
+      <enum>QFrame::Box</enum>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_15">
+      <item>
+       <widget class="QLabel" name="label_13">
+        <property name="text">
+         <string>Test</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="testEnable1">
+        <property name="text">
+         <string>Enable 1</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="testEnable2">
+        <property name="text">
+         <string>Enable 2</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer_2">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+    </widget>
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_5">
+     <item>
+      <widget class="QLabel" name="label_18">
+       <property name="text">
+        <string>Sender</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="senderCombo"/>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_19">
+       <property name="text">
+        <string>RTTY</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="rttySpeed"/>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_20">
+       <property name="text">
+        <string>BPSK</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="BPSKSpeed"/>
+     </item>
      <item>
       <spacer name="horizontalSpacer">
        <property name="orientation">
