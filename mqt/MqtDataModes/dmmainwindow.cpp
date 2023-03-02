@@ -117,6 +117,9 @@ DMMainWindow::DMMainWindow(QWidget *parent)
                      };
     rpc->initialiseRouters(svr);
 
+    QStringList svs = {};
+    rpc->findProviders(rpcConstants::DMCat, svs);
+
     // let the logger know we exist
     rpc->publish(rpcConstants::DMCat, rpcConstants::DMSender, "me", psPublished);
 
@@ -275,6 +278,7 @@ void DMMainWindow::sendPressed(QString d, int c)
     {
         if (e->engineName == m)
         {
+            trace(QString("Send <%1> to %2").arg(d, m));
             e->doSendCharacters(d, c);
             break;
         }

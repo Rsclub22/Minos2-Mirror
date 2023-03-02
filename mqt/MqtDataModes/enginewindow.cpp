@@ -18,6 +18,7 @@
 #include "remotelogs.h"
 #include "ServerEvent.h"
 #include "RPCCommandConstants.h"
+#include "RPCPubSub.h"
 
 #include "enginewindow.h"
 #include "ui_enginewindow.h"
@@ -105,11 +106,48 @@ EngineWindow::EngineWindow(QWidget *parent)
     appName = getAppStartupName();
     MinosRPC *rpc = MinosRPC::getMinosRPC(appName);
     connect(rpc, &MinosRPC::notify, this, &EngineWindow::on_notify);
+    RPCPubSub::reconnectPubSub();
 }
 
 EngineWindow::~EngineWindow()
 {
     delete ui;
+}
+void EngineWindow::selectEngine(QString name)
+{
+    closeAllEngines();
+    engineName = name;
+    setWindowTitle(name);
+    if (name.contains(mmvari))
+    {
+        selectMMVARI(name);
+    }
+    else if (name.contains(mmtty))
+    {
+        selectMMTTY(name);
+    }
+    else if (name.contains(twotone))
+    {
+        select2Tone(name);
+    }
+    else if (name.contains(gritty))
+    {
+        selectGritty(name);
+    }
+    else if (name.contains(fldigi))
+    {
+        selectFLDigi(name);
+    }
+    else if (name.contains(test))
+    {
+        selectTest(name);
+    }
+    QSettings settings;
+    geoStr = QString("dataModes/%1/geometry").arg(name);
+    QByteArray geometry = settings.value(geoStr).toByteArray();
+    if (geometry.size() > 0)
+        restoreGeometry(geometry);
+
 }
 
 void EngineWindow::closeEvent(QCloseEvent *event)
@@ -159,6 +197,7 @@ void EngineWindow::on_notify(AnalysePubSubNotify an, const QString from )
 
         if ( an.getCategory() == rpcConstants::DMCat && key == rpcConstants::DMFKeys)
         {
+            router = an.getPublisherRouter();
             QJsonParseError err;
             QJsonDocument json = QJsonDocument::fromJson(value.toUtf8(), &err);
             if (!err.error)
@@ -314,41 +353,6 @@ void EngineWindow::closeAllEngines()
         testFrame->deleteLater();
         testFrame = nullptr;
     }
-}
-void EngineWindow::selectEngine(QString name)
-{
-    closeAllEngines();
-    engineName = name;
-    if (name.contains(mmvari))
-    {
-        selectMMVARI(name);
-    }
-    else if (name.contains(mmtty))
-    {
-        selectMMTTY(name);
-    }
-    else if (name.contains(twotone))
-    {
-        select2Tone(name);
-    }
-    else if (name.contains(gritty))
-    {
-        selectGritty(name);
-    }
-    else if (name.contains(fldigi))
-    {
-        selectFLDigi(name);
-    }
-    else if (name.contains(test))
-    {
-        selectTest(name);
-    }
-    QSettings settings;
-    geoStr = QString("dataModes/%1/geometry").arg(name);
-    QByteArray geometry = settings.value(geoStr).toByteArray();
-    if (geometry.size() > 0)
-        restoreGeometry(geometry);
-
 }
 void EngineWindow::selectMMVARI(QString name)
 {
@@ -533,6 +537,8 @@ void EngineWindow::clear()
 void EngineWindow::doSendCharacters(QString d, int c)
 {
     // send on down to actual engine
+
+    ui->sendEdit->setText(d);
     emit sendCharactersDown(d, c);
 
 }

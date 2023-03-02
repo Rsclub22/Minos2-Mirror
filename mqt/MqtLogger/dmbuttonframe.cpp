@@ -57,7 +57,7 @@ void DMButtonFrame::DMMess(AnalysePubSubNotify an)
 {
     if (an.getKey() == rpcConstants::DMSender)
     {
-        dataSender = an.getValue();
+        dataSender = an.getPublisherProgram() + "@" + an.getPublisherRouter();
 
         trace(QString("Datasender set to %1").arg(dataSender));
 
