@@ -95,5 +95,5 @@ void TestFrame::closeFrame()
 
 void TestFrame::onSetSpeeds(QString b, QString r)
 {
-    trace(QString("BPSK speed set to %1 RTTY speed set to %2").arg(b).arg(r));
+    trace(QString("BPSK speed set to %1 RTTY speed set to %2").arg(b, r));
 }

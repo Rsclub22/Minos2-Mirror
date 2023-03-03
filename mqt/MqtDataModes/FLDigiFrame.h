@@ -30,6 +30,7 @@ public:
 private:
     Ui::FLDigiFrame *ui;
     EngineWindow *engineWindow;
+    QString engineName;
     MaiaXmlRpcClient *rpcClient = nullptr;
     QLineEdit *sendEdit = nullptr;
     QProcess *fldigiProcess = nullptr;

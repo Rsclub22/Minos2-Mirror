@@ -2,6 +2,7 @@
 
 #include "MTrace.h"
 #include "dmmainwindow.h"
+#include "fileutils.h"
 #include "rigcontrolcommonconstants.h"
 #include "rxbuffer.h"
 #include "engineconfigure.h"
@@ -35,7 +36,16 @@ void FLDigiFrame::createProcess()
     connect (fldigiProcess, &QProcess::readyReadStandardError, this, &FLDigiFrame::on_readyReadStandardError);
     connect (fldigiProcess, &QProcess::readyReadStandardOutput, this, &FLDigiFrame::on_readyReadStandardOutput);
 
-    QStringList engineOpts = {"--wo"/*, "--home-dir C:/temp"*/};
+    QString configDir = "./Configuration/DataModes/" + engineName;
+    CreateDir(configDir);
+    QDir dir( configDir );
+    QStringList engineOpts = {
+        "--xmlrpc-server-port", QString::number(EngineConfigure::getEnginePort(engineName)),
+        "--wo",
+        "--config-dir", dir.absolutePath(),
+//        "--config-dir \"C:\\Program Files\\Fldigi-4.1.20\"",
+        "-title", engineName
+    };
     fldigiProcess->start(fname, engineOpts, QProcess::ReadWrite);
 
 }
@@ -44,6 +54,7 @@ FLDigiFrame::FLDigiFrame(EngineWindow *parent, QLineEdit *sendEdit, QString fnam
     QFrame(parent),
     ui(new Ui::FLDigiFrame),
     engineWindow(parent),
+    engineName(name),
     sendEdit(sendEdit),
     fname(fname)
 {
@@ -244,7 +255,6 @@ void FLDigiFrame::closeFrame()
     if (fldigiProcess)
     {
         trace("About to ask engine to exit");
-//        ::PostMessage(mttyHWnd, uMSG_MMTTY, RXM_EXIT, 0);
         fldigiActive = false;
 
         QVariantList args;
@@ -281,11 +291,6 @@ void FLDigiFrame::on_started()
 
     trace("modem.get_name");
     rpcClient->call("modem.get_name", args,
-       this, SLOT(myResponseMethod(QVariant&)),
-       this, SLOT(myFaultResponse(int, const QString &)));
-
-    trace("main.get_char_rates");
-    rpcClient->call("main.get_char_rates", args,
        this, SLOT(myResponseMethod(QVariant&)),
        this, SLOT(myFaultResponse(int, const QString &)));
 
@@ -356,7 +361,7 @@ void FLDigiFrame::myCarrierResponseMethod(QVariant &v)
 
         if (!s.isEmpty())
         {
-            trace(QString("Carrier 1 %1").arg(s));
+            //trace(QString("Carrier 1 %1").arg(s));
             carrier = s.toInt() - carrierOffset;
 
         }
@@ -367,7 +372,7 @@ void FLDigiFrame::myCarrierResponseMethod(QVariant &v)
 
         for(const auto &s:qAsConst(sl))
         {
-            trace(QString("Carrier 2 %1").arg(s));
+            //trace(QString("Carrier 2 %1").arg(s));
             carrier = s.toInt() - carrierOffset;
         }
     }
