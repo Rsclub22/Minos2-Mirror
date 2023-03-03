@@ -30,6 +30,7 @@ public:
 private:
     Ui::GrittyFrame *ui;
     EngineWindow *engineWindow;
+    QString engineName;
     int grittyPort = 7502;
 
     QLineEdit *sendEdit = nullptr;

@@ -9,6 +9,7 @@
 #include "MTrace.h"
 #include "delayedaction.h"
 #include "dmmainwindow.h"
+#include "fileutils.h"
 #include "frequency.h"
 #include "rxbuffer.h"
 #include "enginewindow.h"
@@ -133,18 +134,21 @@ void GrittyFrame::createProcess()
     connect (grittyProcess, &QProcess::readyReadStandardError, this, &GrittyFrame::on_readyReadStandardError);
     connect (grittyProcess, &QProcess::readyReadStandardOutput, this, &GrittyFrame::on_readyReadStandardOutput);
 
-    QStringList engineOpts = {"--wo",
-                              /*"--home-dir C:/temp",*/
-                              /*"ini=\"InI file path\"",*/
+    QString configDir = "./Configuration/DataModes/";
+    CreateDir(configDir);
+    QDir dir( configDir );
+
+    QStringList engineOpts = {
+                              "ini=" + dir.absolutePath() + "/" + engineName + ".ini",
                               "port=" + QString::number(grittyPort),
-                              "caption=\"Gritty Engine for Minos\""};
+                              "caption=" + engineName};
     grittyProcess->start(fname, engineOpts, QProcess::ReadWrite);
-//    connect(mainWindow, &DMMainWindow::setSpeeds, this, &GrittyFrame::onSetSpeeds);
 }
 GrittyFrame::GrittyFrame(EngineWindow *parent, QLineEdit *sendEdit, QString fname, QString name) :
     QFrame(parent),
     ui(new Ui::GrittyFrame),
     engineWindow(parent),
+    engineName(name),
     sendEdit(sendEdit),
     fname(fname)
 
@@ -213,7 +217,7 @@ void GrittyFrame::closeFrame()
 {
     if (grittyProcess)
     {
-        trace("About to ask engine to exit");
+        trace(engineName + " About to ask engine to exit");
         grittyActive = false;
 
         grittyClient->close();
@@ -237,13 +241,13 @@ void GrittyFrame::closeFrame()
 
 void GrittyFrame::on_started()
 {
-    trace("Gritty:on process started");
+    trace(engineName + " on process started");
 }
 
 
 void GrittyFrame::on_finished(int err, QProcess::ExitStatus exitStatus)
 {
-    trace( "Gritty:on process finished:" + QString::number(err) + ":" + QString::number(exitStatus));
+    trace( engineName + " on process finished:" + QString::number(err) + ":" + QString::number(exitStatus));
     if (grittyProcess)
     {
         grittyProcess->closeWriteChannel();
@@ -258,7 +262,7 @@ void GrittyFrame::on_finished(int err, QProcess::ExitStatus exitStatus)
 
 void GrittyFrame::on_error(QProcess::ProcessError error)
 {
-    trace( "Gritty:on_error:" + QString::number(error));
+    trace( engineName + " on_error:" + QString::number(error));
     grittyProcess->deleteLater();
     grittyProcess = nullptr;
 }
@@ -268,7 +272,7 @@ void GrittyFrame::on_readyReadStandardError()
     if (grittyProcess)
     {
         QString r = grittyProcess->readAllStandardError();
-        trace( "Gritty:stdErr:" + r);
+        trace( engineName + " stdErr:" + r);
     }
 }
 
@@ -277,7 +281,7 @@ void GrittyFrame::on_readyReadStandardOutput()
     if (grittyProcess)
     {
         QString line = grittyProcess->readLine();
-        trace("Gritty:stdOut:" + line);
+        trace(engineName + " stdOut:" + line);
     }
 }
 //================================================================
@@ -293,18 +297,18 @@ void GrittyFrame::connected()
         "[\"mtSystemInfo\",\"mtSettings\",\"mtErrorMessage\","
         "\"mtRawChar\",\"mtCorrChar\",\"mtCallStack\", \"mtUserClick\"]}\n";
         qint64 res = grittyClient->write(txString.toLocal8Bit());
-        trace(QString("%1 bytes written; %2").arg(res).arg(txString));
+        trace(engineName + QString("%1 bytes written; %2").arg(res).arg(txString));
     }, 250);
 }
 
 void GrittyFrame::disconnected()
 {
-    trace("Gritty disconnected");
+    trace(engineName + " disconnected");
 }
 
 void GrittyFrame::connectionError(QAbstractSocket::SocketError error)
 {
-    QString msg = QString("Gritty Connection failed error %1").arg(error);
+    QString msg = QString(engineName + "Gritty Connection failed error %1").arg(error);
     trace(msg);
 }
 
@@ -318,7 +322,7 @@ void GrittyFrame::onReadyRead()
     {
         traceMsg.chop(1);
     }
-    trace(QString("messageRx: %1").arg(traceMsg));
+    trace(QString(engineName + " messageRx: %1").arg(traceMsg));
 
     // Now chop into lines and decode the JSON in each one
     msgbuf.append(msg);
@@ -388,7 +392,7 @@ void GrittyFrame::analyseGrittyMessage(QString m)
                     RXChar rxch(c, newLine, deleteCount, carrier);
                     engineWindow->rxBuff.addChar(rxch);
                 }
-                trace("End of decode");
+                trace(engineName + " End of decode");
             }
         }
     }
