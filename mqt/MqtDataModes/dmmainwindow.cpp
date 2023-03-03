@@ -232,7 +232,13 @@ void DMMainWindow::onNewStanzas()
 void DMMainWindow::on_configureButton_clicked()
 {
     EngineConfigure ec(this);
-    ec.exec();
+    if (ec.exec() == QDialog::Accepted)
+    {
+        // If a lot has changed we may need to bounce everything
+        // But for now, just broadcast speeds in case they have changed
+
+        emit setSpeeds(EngineConfigure::getSpeed("BPSK"), EngineConfigure::getSpeed("RTTY"));
+    }
 }
 
 void DMMainWindow::on_startButton_clicked()

@@ -280,6 +280,10 @@ void EngineConfigure::on_grittyBrowse_clicked()
 
 void EngineConfigure::on_OKButton_clicked()
 {
+    // We need to do some cross checks -
+    // Enable not checked when path doesn't exist (? disable until path exists) or no port specified
+    // MMTTY/2Tone - paths are different
+    // gritty/fldigi - ports are different
     //setEnginePath(EngineWindow::mmvari, ui->mmvariEdit->text());
     setEngineSound(EngineWindow::mmvari + EngineWindow::i1, "input", ui->MMVARIRX1->currentText());
     setEngineSound(EngineWindow::mmvari + EngineWindow::i1, "output", ui->MMVARITX1->currentText());
@@ -314,7 +318,6 @@ void EngineConfigure::on_OKButton_clicked()
     setSpeed("RTTY", ui->rttySpeed->currentText());
     setSpeed("BPSK", ui->BPSKSpeed->currentText());
 
-    emit mainWindow->setSpeeds(ui->BPSKSpeed->currentText(), ui->rttySpeed->currentText());
     QSettings settings;
     settings.setValue(geoStr, saveGeometry());
 
