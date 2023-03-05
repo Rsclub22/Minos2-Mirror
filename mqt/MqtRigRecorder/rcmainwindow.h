@@ -51,6 +51,7 @@ private slots:
     void on_notify(AnalysePubSubNotify an, const QString from);
     void on_contestLinkCB_stateChanged(int arg1);
 
+    void onStdInRead(QString cmd);
 private:
     Ui::MainWindow *ui;
     RRRtAudioSoundSystem rass;
