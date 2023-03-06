@@ -260,7 +260,7 @@ void EngineWindow::on_notify(AnalysePubSubNotify an, const QString from )
 
             emit rigModeFreq(rigMode, rigFreq);
 
-            // NB on RTTY the "real" frewquncy is the "mark" frequency
+            // NB on RTTY the "real" frequency is the "mark" frequency
             // so using LSB the frequency is rigfreq - markfreq
 
             // PSK63 is easier - (USB)rigFreq + tone offset
@@ -368,7 +368,7 @@ void EngineWindow::selectMMVARI(QString name)
     QString odev = EngineConfigure::getEngineSound(name, "output");
     int outId = mainWindow->outDeviceIds[odev];
 
-    mmvariFrame = new MMVARIFrame(this, ui->variFrame, ui->sendEdit, inId, outId, name);
+    mmvariFrame = new MMVARIFrame(ui->variFrame, this, ui->variFrame, ui->sendEdit, inId, outId, name);
     ui->sendFrame->setVisible(true);
 #endif
 }

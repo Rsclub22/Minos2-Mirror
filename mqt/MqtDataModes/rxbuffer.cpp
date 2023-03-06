@@ -163,7 +163,7 @@ void RxLine::clearFlags()
     for(auto &c:rxLine)
     {
         c.setRST(false);
-        c.setCarrier(false);
+        //c.setCarrier(false);
         c.setSerial(false);
         c.setMyCall(false);
         c.setWorkedCall(false);

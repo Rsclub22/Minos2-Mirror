@@ -297,6 +297,7 @@ void DMMainWindow::on_routerCall(bool err, QSharedPointer<MinosRPCObj>mro, const
     if ( !err )
     {
         QString call = mro->getMethodName();
+        trace("DMMainWindow routercall " + call);
         if (call == rpcConstants::DMTransmit)
         {
 

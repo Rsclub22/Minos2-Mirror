@@ -1043,38 +1043,39 @@ double RigControlFrame::getStepFreqFromComboText(const QString step)
 
 void RigControlFrame::setMode(QString m)
 {
-
-    traceMsg(QString("Set Mode = %1").arg(m));
-    QStringList mode = m.split(':');
-    if (mode.length() == 2 )
+    if (ct)
     {
-        if (ct->modeList.getValue().contains(mode[0]))
+        traceMsg(QString("Set Mode = %1").arg(m));
+        QStringList mode = m.split(':');
+        if (mode.length() == 2 )
         {
-            ui->modelbl->setText(mode[0]);
-            curMode = mode[0];
-            tslf->bandSwitchFrame->setMode(curMode);
-            if (mode[0] == hamlibData::MGM
-                    || mode[0] == hamlibData::RY
-                    || mode[0] == hamlibData::PSK
-                    )
+            if (ct->modeList.getValue().contains(mode[0]))
             {
-                mgmLabelVisible(true);
-                ui->mgmLbl->setText(mode[1]);
+                ui->modelbl->setText(mode[0]);
+                curMode = mode[0];
+                tslf->bandSwitchFrame->setMode(curMode);
+                if (mode[0] == hamlibData::MGM
+                        || mode[0] == hamlibData::RY
+                        || mode[0] == hamlibData::PSK
+                        )
+                {
+                    mgmLabelVisible(true);
+                    ui->mgmLbl->setText(mode[1]);
+                }
+                else
+                {
+                   mgmLabelVisible(false);
+                }
+                setFreqStepCombo(curMode);
+                return;
             }
-            else
-            {
-               mgmLabelVisible(false);
-            }
-            setFreqStepCombo(curMode);
-            return;
+
+
+            // mode not supported by minos
+            ui->modelbl->setText(HtmlFontColour(Qt::red) + "Mode Error");
         }
 
-
-        // mode not supported by minos
-        ui->modelbl->setText(HtmlFontColour(Qt::red) + "Mode Error");
     }
-
-
 }
 
 

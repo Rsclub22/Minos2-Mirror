@@ -36,7 +36,7 @@ class MMVARIFrame : public QFrame
     Q_OBJECT
 
 public:
-    explicit MMVARIFrame(EngineWindow *parent, QFrame *cwl, QLineEdit *sendEdit, int inId, int outId, QString name);
+    explicit MMVARIFrame(QWidget *parent, EngineWindow *p, QFrame *cwl, QLineEdit *sendEdit, int inId, int outId, QString name);
     ~MMVARIFrame();
 
     void sendCharacters(const QString &, int c);

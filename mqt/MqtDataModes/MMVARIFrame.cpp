@@ -14,12 +14,12 @@
 
 // we already report on the TX/RX frequencies!
 // either pallette of sensitivity are rubbish - not seeoing signals
-MMVARIFrame::MMVARIFrame(EngineWindow *parent, QFrame *cwl,
+MMVARIFrame::MMVARIFrame(QWidget *parent, EngineWindow *p, QFrame *cwl,
                          QLineEdit *sendEdit,
                          int inId, int outId, QString /*name*/) :
     QFrame(parent),
     ui(new Ui::MMVARIFrame),
-    engineWindow(parent),
+    engineWindow(p),
     sendEdit(sendEdit),
     pframe(cwl)
 {
@@ -48,7 +48,8 @@ MMVARIFrame::MMVARIFrame(EngineWindow *parent, QFrame *cwl,
     mmlevel = new MMVARILib::XMMVLvl(this);
     mmlevel->setControl("{438EF93A-939D-4B6B-93A7-DF09049B8514}");
 
-    mmvariVb = new QVBoxLayout(this);
+    mmvariVb = new QVBoxLayout();
+    setLayout(mmvariVb);
 
     //====================================================================
     // N1MM also has BPF, ATC, FFT, Multi-Channel RX menus
@@ -267,7 +268,7 @@ void MMVARIFrame::onSetSpeeds(QString b, QString r)
     bpskSpeed = b;
     rttySpeed = r;
 
-    if (modeCombo->currentText() == "bpsk")
+    if (modeCombo->currentText().contains("bpsk"))
     {
         if (b.contains("31"))
         {
@@ -278,7 +279,7 @@ void MMVARIFrame::onSetSpeeds(QString b, QString r)
             speedCombo->setCurrentText("62.5");
         }
     }
-    else if (modeCombo->currentText() == "rtty-L")
+    else if (modeCombo->currentText().contains("rtty"))
     {
         if (r.contains("45"))
         {
@@ -508,7 +509,10 @@ void MMVARIFrame::OnTxCarrier(int txc)
 void MMVARIFrame::OnRxCarrier(int /*rxChannel*/, int rxc)
 {
     rxCarrier->setText(QString("Rx %1").arg(rxc));
-    carrier = rxc - 170/2;
+    if (modeCombo->currentText().contains("rtty"))
+    {
+        carrier = rxc - 170/2;
+    }
 }
 
 void MMVARIFrame::OnSpeed(int /*rxChannel*/, double dblSpeed)
