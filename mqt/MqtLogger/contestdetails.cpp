@@ -556,7 +556,9 @@ void ContestDetails::setBandBoxes(QString bandStr, QString bandsList)
         }
         else
         {
-            bool bsAll = bandStr == allHF || bandStr == "All";
+            bool bsAll = (bandStr == allHF
+                          || bandStr == "All"
+                          || bandStr.isEmpty());
             if (bandsList.isEmpty())
             {
                 bool bs2128 = bandStr == "21/28";
@@ -614,14 +616,7 @@ void ContestDetails::setBandBoxes(QString bandStr, QString bandsList)
 
     if (contestTransferObject->isHF())
     {
-        if (bandStr.isEmpty())
-        {
-            ui->BandComboBox->addItem( trAllHf );
-        }
-        else
-        {
-            ui->BandComboBox->addItem( bandStr );
-        }
+        ui->BandComboBox->addItem( trAllHf );
     }
 
     for (auto const &b: qAsConst(blist.bandList))
@@ -2077,6 +2072,10 @@ void ContestDetails::on_BandComboBox_activated(const QString &/*arg1*/)
         if (bandOK)
         {
             hfBand = (bi->getType() == "HF");
+        }
+        if (hfBand)
+        {
+            setBandBoxes(band, QString());
         }
     }
     ui->LocatorField->setChecked(!hfBand);
