@@ -12,14 +12,14 @@ void RXChar::setDirty(bool newDirty)
     dirty = newDirty;
 }
 
-int RXChar::getCarrier() const
+int RXChar::getMarkFreq() const
 {
-    return carrier;
+    return markFreq;
 }
 
-void RXChar::setCarrier(int newCarrier)
+void RXChar::setMarkFreq(int newMFreq)
 {
-    carrier = newCarrier;
+    markFreq = newMFreq;
 }
 
 bool RXChar::getRST() const
@@ -84,7 +84,7 @@ RXChar::RXChar(QChar c, bool nl, int dc, int carr)
     deleteCount = dc;
     valid = true;
     dirty = true;
-    carrier = carr;
+    markFreq = carr;
 }
 
 QChar RXChar::getCh() const
@@ -163,7 +163,6 @@ void RxLine::clearFlags()
     for(auto &c:rxLine)
     {
         c.setRST(false);
-        //c.setCarrier(false);
         c.setSerial(false);
         c.setMyCall(false);
         c.setWorkedCall(false);

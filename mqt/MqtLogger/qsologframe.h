@@ -99,7 +99,7 @@ public:
 
     void transferFromQrz(QString callsign, QString locator, QString name);
     void selectFirstInvalid();
-    void rxDMWord(QString rxWord, int carrier);
+    void rxDMWord(QString rxWord, int markFreq);
     void DMKey(int key);
     bool getSandP();
 private:

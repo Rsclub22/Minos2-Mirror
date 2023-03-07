@@ -23,7 +23,7 @@ public:
     QTimer *testTimer = nullptr;
     EngineWindow *engineWindow = nullptr;
 
-    int carrier = 0;
+    int markFrequency = 0;
 
     explicit TestFrame(EngineWindow *parent, QLineEdit *sendEdit, QString fname, QString name);
     ~TestFrame();

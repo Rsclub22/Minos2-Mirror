@@ -188,9 +188,9 @@ GrittyFrame::~GrittyFrame()
 {
     delete ui;
 }
-void GrittyFrame::onSendCharacters(QString data, int carrier)
+void GrittyFrame::onSendCharacters(QString data, int markf)
 {
-    sendCharacters(data, carrier);
+    sendCharacters(data, markf);
 }
 
 void GrittyFrame::onSetSpeeds(QString b, QString r)
@@ -389,7 +389,8 @@ void GrittyFrame::analyseGrittyMessage(QString m)
 
                 for (auto c:qAsConst(ch))
                 {
-                    RXChar rxch(c, newLine, deleteCount, carrier);
+                    // markFrequency will be zero - we don't get it from gritty
+                    RXChar rxch(c, newLine, deleteCount, markFrequency);
                     engineWindow->rxBuff.addChar(rxch);
                 }
                 trace(engineName + " End of decode");

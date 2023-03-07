@@ -46,17 +46,17 @@ void DPGraphicsTextItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
     c.select(QTextCursor::WordUnderCursor);
     setTextCursor(c);
 
-    int cfreq = 0;
+    int mfreq = 0;
     if (cp < engineWindow->rxBuff.getRxLine(row)->charCount())
     {
-        cfreq = engineWindow->rxBuff.getCharAt(row, cp).getCarrier();
+        mfreq = engineWindow->rxBuff.getCharAt(row, cp).getMarkFreq();
     }
 
 
     QString sel = c.selectedText();
     if (!sel.isEmpty())
     {
-        emit wordSelected(c.selectedText(), cfreq);
+        emit wordSelected(c.selectedText(), mfreq);
     }
 }
 
@@ -64,8 +64,8 @@ void DPGraphicsTextItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 DPGraphicsTextItem * DataPainter::createNewLine(int r, int yoffset)
 {
     DPGraphicsTextItem *ti =  new DPGraphicsTextItem(engineWindow, QString(), r);
-    connect(ti, &DPGraphicsTextItem::wordSelected, this, [this](QString s, int carr)
-            {emit wordSelected(s, carr);});
+    connect(ti, &DPGraphicsTextItem::wordSelected, this, [this](QString s, int mfreq)
+            {emit wordSelected(s, mfreq);});
     ti->setFont(ff);
     scene->addItem(ti);
     ti->setPos(0, yoffset);

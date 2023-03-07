@@ -38,7 +38,7 @@ private:
     bool grittyActive = false;
     QTcpSocket* grittyClient;
     QString msgbuf;
-    int carrier = 0;
+    int markFrequency = 0;
     QString bpskSpeed;
     QString rttySpeed;
 
@@ -51,7 +51,7 @@ private:
 
     void analyseGrittyMessage(QString m);
 private slots:
-    void onSendCharacters(QString, int carrier);
+    void onSendCharacters(QString, int markf);
     void onSetSpeeds(QString b, QString m);
 
     void onRigModeFreq(QString, Frequency);

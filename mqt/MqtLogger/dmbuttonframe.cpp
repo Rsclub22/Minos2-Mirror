@@ -113,7 +113,7 @@ void DMButtonFrame::fKey(BaseContestLog *c, int key, int carr)
             RPCGeneralClient rpc(rpcConstants::DMTransmit);
             QSharedPointer<RPCParam>st(new RPCParamStruct);
             st->addMember( toSend, rpcConstants::DMTransmit );
-            st->addMember(carr, rpcConstants::DMCarrier);
+            st->addMember(carr, rpcConstants::DMMarkFreq);
             rpc.getCallArgs() ->addParam( st );
             rpc.queueCall( dataSender );
 

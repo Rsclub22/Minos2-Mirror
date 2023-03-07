@@ -225,6 +225,6 @@ static const QString DMStopTransmit       {"DMStopTransmit"};
 static const QString DMFKeys              {"DMFKeys"};
 static const QString DMFKey               {"DMFKey"};
 static const QString DMMode               {"DMMode"};
-static const QString DMCarrier            {"Carrier"};
+static const QString DMMarkFreq           {"DMMarkFreq"};
 }
 #endif // RPCCOMMANDRCONSTANTS_H

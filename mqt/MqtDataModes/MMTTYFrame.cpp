@@ -196,7 +196,7 @@ void MMTTYFrame::onRigModeFreq(QString, Frequency)
 {
 
 }
-void MMTTYFrame::sendCharacters(const QString &sendData, int carrier)
+void MMTTYFrame::sendCharacters(const QString &sendData, int markf)
 {
     trace(QString("Sending data %1").arg(sendData));
     if (sendData.isEmpty())
@@ -205,10 +205,10 @@ void MMTTYFrame::sendCharacters(const QString &sendData, int carrier)
     }
     else
     {
-        if (carrier > 0)
+        if (markf > 0)
         {
-            ::PostMessage(mttyHWnd, uMSG_MMTTY, RXM_SETMARK, carrier);
-            ::PostMessage(mttyHWnd, uMSG_MMTTY, RXM_SETSPACE, carrier + 170);
+            ::PostMessage(mttyHWnd, uMSG_MMTTY, RXM_SETMARK, markf);
+            ::PostMessage(mttyHWnd, uMSG_MMTTY, RXM_SETSPACE, markf + 170);
         }
         ::PostMessage(mttyHWnd, uMSG_MMTTY, RXM_PTT, 2);
         for(auto c:sendData)
@@ -262,7 +262,7 @@ void MMTTYFrame::msgEventFilter(MSG *msg, long */*result*/ )
         case TXM_CHAR:
         {
             QChar c = QChar(QLatin1Char(l & 0xff));
-            RXChar rxch(c, false, 0, carrier);
+            RXChar rxch(c, false, 0, markFrequency);
             engineWindow->rxBuff.addChar(rxch);
         }
             break;
@@ -272,11 +272,11 @@ void MMTTYFrame::msgEventFilter(MSG *msg, long */*result*/ )
             {
                 trace("Switch to TX");
                 txState = true;
-                RXChar rxch('T', true, 0, carrier);
+                RXChar rxch('T', true, 0, markFrequency);
                 engineWindow->rxBuff.addChar(rxch);
-                RXChar rxch2('X', false, 0, carrier);
+                RXChar rxch2('X', false, 0, markFrequency);
                 engineWindow->rxBuff.addChar(rxch2);
-                RXChar rxch3(' ', false, 0, carrier);
+                RXChar rxch3(' ', false, 0, markFrequency);
                 engineWindow->rxBuff.addChar(rxch3);
 
                 emit txChanged(true);
@@ -287,11 +287,11 @@ void MMTTYFrame::msgEventFilter(MSG *msg, long */*result*/ )
                 trace("Switch to RX");
                 txState = false;
 
-                RXChar rxch('R', true, 0, carrier);
+                RXChar rxch('R', true, 0, markFrequency);
                 engineWindow->rxBuff.addChar(rxch);
-                RXChar rxch2('X', false, 0, carrier);
+                RXChar rxch2('X', false, 0, markFrequency);
                 engineWindow->rxBuff.addChar(rxch2);
-                RXChar rxch3(' ', false, 0, carrier);
+                RXChar rxch3(' ', false, 0, markFrequency);
                 engineWindow->rxBuff.addChar(rxch3);
                 emit txChanged(false);
             }
@@ -302,7 +302,7 @@ void MMTTYFrame::msgEventFilter(MSG *msg, long */*result*/ )
         case TXM_BAUD:
             break;
         case TXM_MARK:
-            carrier = l;
+            markFrequency = l;
             break;
         case TXM_SPACE:
             break;

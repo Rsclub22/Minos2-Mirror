@@ -310,7 +310,7 @@ void DMMainWindow::on_routerCall(bool err, QSharedPointer<MinosRPCObj>mro, const
 
                 if (
                         args->getStructArgMember(0, rpcConstants::DMTransmit, psMess)
-                        && args->getStructArgMember(0, rpcConstants::DMCarrier, piCarr)
+                        && args->getStructArgMember(0, rpcConstants::DMMarkFreq, piCarr)
                         )
                 {
                     QString pmess;

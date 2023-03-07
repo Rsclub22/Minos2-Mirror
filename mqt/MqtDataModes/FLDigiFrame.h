@@ -23,7 +23,7 @@ public:
     explicit FLDigiFrame(EngineWindow *parent,  QLineEdit *sendEdit, QString fname, QString name);
     ~FLDigiFrame();
 
-    void sendCharacters(const QString &, int carrier);
+    void sendCharacters(const QString &, int mfreq);
     void sendMode(QString);
     void closeFrame();
 
@@ -37,9 +37,9 @@ private:
     bool fldigiActive = false;
     QString fname;
     QTimer *getTimer;
-    int carrier = 0;
+    int markFrequency = 0;
     QString mode;
-    int carrierOffset = 0;
+    int carrierOffsetFromMark = 0;
     QString bpskSpeed;
     QString rttySpeed;
 

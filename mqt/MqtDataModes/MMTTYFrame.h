@@ -22,7 +22,7 @@ public:
     explicit MMTTYFrame(EngineWindow *parent, bool twoTone, QLineEdit *sendEdit, QString fname, QString name);
     ~MMTTYFrame();
 
-    void sendCharacters(const QString &, int carrier);
+    void sendCharacters(const QString &, int markf);
     void sendMode(QString);
 
     void closeFrame();
@@ -46,7 +46,7 @@ private:
     bool txState = false;
     bool twoToneActive = false;
     bool mmttyActive = false;
-    int carrier = 0;
+    int markFrequency = 0;
     QString bpskSpeed;
     QString rttySpeed;
 

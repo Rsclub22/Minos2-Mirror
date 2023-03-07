@@ -543,7 +543,7 @@ void EngineWindow::doSendCharacters(QString d, int c)
 
 }
 
-void EngineWindow::wordSelected(QString word, int carrier)
+void EngineWindow::wordSelected(QString word, int markFreq)
 {
 // word has been clicked on the datapainter; we need to send it
 // on to the logger
@@ -556,7 +556,7 @@ void EngineWindow::wordSelected(QString word, int carrier)
         RPCGeneralClient rpc(rpcConstants::DMWord);
         QSharedPointer<RPCParam>st(new RPCParamStruct);
         st->addMember( word, rpcConstants::DMWord );
-        st->addMember( carrier, rpcConstants::DMCarrier );
+        st->addMember( markFreq, rpcConstants::DMMarkFreq );
         rpc.getCallArgs() ->addParam( st );
         rpc.queueCall( rpcConstants::loggerApp + "@" + router );
     }

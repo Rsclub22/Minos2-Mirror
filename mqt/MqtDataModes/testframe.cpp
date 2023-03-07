@@ -33,7 +33,7 @@ TestFrame::TestFrame(EngineWindow *parent, QLineEdit */*sendEdit*/, QString /*fn
         bool newLine = true;
         for (auto c:qAsConst(s))
         {
-            RXChar rxch(c, newLine, 0, carrier);
+            RXChar rxch(c, newLine, 0, markFrequency);
             newLine = false;
             engineWindow->rxBuff.addChar(rxch);
         }
@@ -56,7 +56,7 @@ void TestFrame::onTimeout()
     bool newLine = true;
     for (auto c:qAsConst(s))
     {
-        RXChar rxch(c, newLine, 0, carrier);
+        RXChar rxch(c, newLine, 0, markFrequency);
         newLine = false;
         engineWindow->rxBuff.addChar(rxch);
     }
@@ -70,7 +70,7 @@ void TestFrame::onRigModeFreq(QString, Frequency)
 {
 
 }
-void TestFrame::sendCharacters(const QString &toSend, int /*carrier*/)
+void TestFrame::sendCharacters(const QString &toSend, int /*markf*/)
 {
     mShowMessage(toSend, this);
 }
@@ -81,7 +81,7 @@ void TestFrame::sendMode(QString mode)
     bool newLine = true;
     for (auto c:qAsConst(nm))
     {
-        RXChar rxch(c, newLine, 0, carrier);
+        RXChar rxch(c, newLine, 0, markFrequency);
         newLine = false;
         engineWindow->rxBuff.addChar(rxch);
     }

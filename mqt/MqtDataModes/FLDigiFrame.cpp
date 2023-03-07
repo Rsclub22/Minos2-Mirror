@@ -138,9 +138,9 @@ void FLDigiFrame::onGetTimer()
        this, SLOT(myTxResponseMethod(QVariant&)),
        this, SLOT(myFaultResponse(int, const QString &)));
 }
-void FLDigiFrame::sendCharacters(const QString &s, int carrier)
+void FLDigiFrame::sendCharacters(const QString &s, int mfreq)
 {
-    trace(QString("FLDigi::sendCharacters %1 %2").arg(s).arg(carrier));
+    trace(QString("FLDigi::sendCharacters %1 %2").arg(s).arg(mfreq));
     // main.tx sets tx on
     // main.rx_tx "Sets normal Rx/Tx switching."
 
@@ -156,15 +156,15 @@ void FLDigiFrame::sendCharacters(const QString &s, int carrier)
 //    text.clear_tx
     QVariantList args;
 
-    if (carrier > 0)
+    if (mfreq > 0)
     {
         if (mode == hamlibData::RY)
         {
-            args << carrier + 170/2;
+            args << mfreq + 170/2;
         }
         else
         {
-            args << carrier;
+            args << mfreq;
         }
         rpcClient->call("modem.set_carrier", args,
            this, SLOT(myResponseMethod(QVariant&)),
@@ -203,7 +203,7 @@ void FLDigiFrame::sendMode(QString m)
     if (m == hamlibData::RY)
     {
         mode = hamlibData::RY;
-        carrierOffset = 170/2;
+        carrierOffsetFromMark = 170/2;
 
         QVariantList args;
 
@@ -225,7 +225,7 @@ void FLDigiFrame::sendMode(QString m)
     if (m == hamlibData::PSK)
     {
         mode = hamlibData::PSK;
-        carrierOffset = 0;
+        carrierOffsetFromMark = 0;
         QVariantList args;
 
         args.clear();
@@ -304,7 +304,7 @@ void FLDigiFrame::addText(const QString &t)
     bool newLine = true;
     for(const auto &s:qAsConst(t))
     {
-        RXChar rxch(s, newLine, 0, carrier);
+        RXChar rxch(s, newLine, 0, markFrequency);
         newLine = false;
         engineWindow->rxBuff.addChar(rxch);
     }
@@ -327,11 +327,11 @@ void FLDigiFrame::myResponseMethod(QVariant &v)
             addText("Response: ");
             for (auto c:qAsConst(s))
             {
-                RXChar rxch(c, nl, 0, carrier);
+                RXChar rxch(c, nl, 0, markFrequency);
                 nl = false;
                 engineWindow->rxBuff.addChar(rxch);
             }
-            RXChar rxch(' ', true, 0, carrier);
+            RXChar rxch(' ', true, 0, markFrequency);
             engineWindow->rxBuff.addChar(rxch);
         }
     }
@@ -345,7 +345,7 @@ void FLDigiFrame::myResponseMethod(QVariant &v)
             bool newLine = true;
             for (auto c:qAsConst(s))
             {
-                RXChar rxch(c, newLine, 0, carrier);
+                RXChar rxch(c, newLine, 0, markFrequency);
                 newLine = false;
                 engineWindow->rxBuff.addChar(rxch);
             }
@@ -362,7 +362,7 @@ void FLDigiFrame::myCarrierResponseMethod(QVariant &v)
         if (!s.isEmpty())
         {
             //trace(QString("Carrier 1 %1").arg(s));
-            carrier = s.toInt() - carrierOffset;
+            markFrequency = s.toInt() - carrierOffsetFromMark;
 
         }
     }
@@ -373,7 +373,7 @@ void FLDigiFrame::myCarrierResponseMethod(QVariant &v)
         for(const auto &s:qAsConst(sl))
         {
             //trace(QString("Carrier 2 %1").arg(s));
-            carrier = s.toInt() - carrierOffset;
+            markFrequency = s.toInt() - carrierOffsetFromMark;
         }
     }
 }
@@ -390,7 +390,7 @@ void FLDigiFrame::myTxResponseMethod(QVariant &v)
             bool newLine = true;
             for (auto c:qAsConst(s))
             {
-                RXChar rxch(c, newLine, 0, carrier);
+                RXChar rxch(c, newLine, 0, markFrequency);
                 newLine = false;
                 engineWindow->rxBuff.addChar(rxch);
             }
@@ -406,7 +406,7 @@ void FLDigiFrame::myTxResponseMethod(QVariant &v)
             bool newLine = true;
             for (auto c:qAsConst(s))
             {
-                RXChar rxch(c, newLine, 0, carrier);
+                RXChar rxch(c, newLine, 0, markFrequency);
                 newLine = false;
                 engineWindow->rxBuff.addChar(rxch);
             }
@@ -425,7 +425,7 @@ void FLDigiFrame::myRxResponseMethod(QVariant &v)
 
             for (auto c:qAsConst(s))
             {
-                RXChar rxch(c, false, 0, carrier);
+                RXChar rxch(c, false, 0, markFrequency);
                 engineWindow->rxBuff.addChar(rxch);
             }
         }
@@ -440,7 +440,7 @@ void FLDigiFrame::myRxResponseMethod(QVariant &v)
             bool newLine = true;
             for (auto c:qAsConst(s))
             {
-                RXChar rxch(c, newLine, 0, carrier);
+                RXChar rxch(c, newLine, 0, markFrequency);
                 newLine = false;
                 engineWindow->rxBuff.addChar(rxch);
             }

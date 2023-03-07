@@ -1054,16 +1054,16 @@ void QSOLogFrame::selectFirstInvalid()
 
 }
 
-void QSOLogFrame::rxDMWord(QString rxWord, int carr)
+void QSOLogFrame::rxDMWord(QString rxWord, int markFreq)
 {
-    // we now need to preserve this carrier so we can send it back on transmit
-    // and also put rig + carrier into the QSO frequency
+    // we now need to preserve this mark frequency so we can send it back on transmit
+    // and also put rig + mark frequency into the QSO frequency
     QLineEdit *ed = dynamic_cast<QLineEdit *>( current );
     ed->setText(rxWord);
 
-    if (carr != 0)
+    if (markFreq != 0)
     {
-        markOffset = carr;
+        markOffset = markFreq;
     }
 
     if ( !valid( cmCheckValid ) )   // make sure all single and cross field

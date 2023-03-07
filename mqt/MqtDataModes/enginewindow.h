@@ -119,7 +119,7 @@ private slots:
 
     void onNewCharacter();
 
-    void wordSelected(QString, int carrier);
+    void wordSelected(QString, int markFreq);
 
     void fButtonClicked();
 

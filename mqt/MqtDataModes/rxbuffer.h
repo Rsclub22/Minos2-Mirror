@@ -12,7 +12,7 @@ class RXChar
     bool valid = false;
     int deleteCount = 0;
     bool dirty = false;
-    int carrier = 0;
+    int markFreq = 0;
 
     bool RST = false;
     bool serial = false;
@@ -31,8 +31,8 @@ public:
     void setNewLine(bool newNewLine = true);
     bool getDirty() const;
     void setDirty(bool newDirty);
-    int getCarrier() const;
-    void setCarrier(int newCarrier);
+    int getMarkFreq() const;
+    void setMarkFreq(int newMFreq);
     bool getRST() const;
     void setRST(bool newRST);
     bool getSerial() const;

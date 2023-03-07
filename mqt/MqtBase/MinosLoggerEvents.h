@@ -186,7 +186,7 @@ public:
 
     static void SendRedrawQSOMap(bool grid, bool lines, bool cluster, int cldist);
 
-    static void SendFKey(BaseContestLog *c, int event, int carrier);
+    static void SendFKey(BaseContestLog *c, int event, int mfreq);
     static void SendSandPChanged(bool);
     static void SendDMMess(AnalysePubSubNotify);
     static void SendBroadcastSpot(QSharedPointer<ClusterSpotData>, bool delSpot = false);
