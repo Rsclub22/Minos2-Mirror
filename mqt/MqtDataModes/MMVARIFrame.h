@@ -39,13 +39,13 @@ public:
     explicit MMVARIFrame(QWidget *parent, EngineWindow *p, QFrame *cwl, QLineEdit *sendEdit, int inId, int outId, QString name);
     ~MMVARIFrame();
 
-    void sendCharacters(const QString &, int c);
+    void sendCharacters(const QString &, int markfreq);
     void sendMode(QString);
 
 private:
     Ui::MMVARIFrame *ui;
     EngineWindow *engineWindow;
-    int carrier = 0;
+    int markfreq = 0;
     QString bpskSpeed;
     QString rttySpeed;
     QFrame *pframe = nullptr;
@@ -88,7 +88,7 @@ private:
     QAction *newCheckableAction(const QString text, QMenu *m, void (MMVARIFrame::*slotparam)(bool) );
 
 private slots:
-    void onSendCharacters(QString, int);
+    void onSendCharacters(QString, int markfreq);
     void onRigModeFreq(QString, Frequency);
     void onATC(bool checked);
     void onModeComboChanged(const QString &m);

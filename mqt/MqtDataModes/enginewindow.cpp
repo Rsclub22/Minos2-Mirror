@@ -183,7 +183,7 @@ void EngineWindow::changeEvent( QEvent* e )
 void EngineWindow::on_notify(AnalysePubSubNotify an, const QString from )
 {
     // pubsub notify
-    trace( "Notify callback from " + from + ( !an.getOK() ? ":Error" : ":Normal" ) );
+//    trace( "Notify callback from " + from + ( !an.getOK() ? ":Error" : ":Normal" ) );
 
     if ( an.getOK() )
     {

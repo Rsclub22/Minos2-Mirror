@@ -292,9 +292,10 @@ void MMVARIFrame::onSetSpeeds(QString b, QString r)
     }
 }
 
-void MMVARIFrame::onSendCharacters(QString data, int c)
+void MMVARIFrame::onSendCharacters(QString data, int markfreq)
 {
-    sendCharacters(data, c);
+    trace(QString("onSendCharacters %1 mark %2").arg(data).arg(markfreq));
+    sendCharacters(data, markfreq);
 }
 
 void MMVARIFrame::onRigModeFreq(QString mode, Frequency f)
@@ -303,7 +304,7 @@ void MMVARIFrame::onRigModeFreq(QString mode, Frequency f)
     sendMode(mode);
 
 }
-void MMVARIFrame::sendCharacters(const QString &sendData, int c)
+void MMVARIFrame::sendCharacters(const QString &sendData, int mf)
 {
     //    wTxState As Integer (ReadOnly)
     //    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -320,10 +321,10 @@ void MMVARIFrame::sendCharacters(const QString &sendData, int c)
     }
     else
     {
-        if (c > 0)
+        if (mf > 0)
         {
-            mmvari->setWTxCarrier(c);
-            mmvari->setWRxCarrier(0, c);
+            mmvari->setWTxCarrier(mf + 170/2);
+            mmvari->setWRxCarrier(0, mf + 170/2);
         }
         mmvari->setBAddStartCR(true);
         mmvari->setBAddStopCR(true);
@@ -503,15 +504,23 @@ void MMVARIFrame::OnDrawFFT(int ,int& )
 
 void MMVARIFrame::OnTxCarrier(int txc)
 {
+    int mf = txc;
+    if (modeCombo->currentText().contains("rtty"))
+    {
+        mf -= 170/2;
+    }
+    trace(QString("OnTxCarrier c %1 m %2").arg(txc).arg(mf));
     txCarrier->setText(QString("Tx %1").arg(txc));
 }
 
 void MMVARIFrame::OnRxCarrier(int /*rxChannel*/, int rxc)
 {
+    markfreq = rxc;
+    trace(QString("OnRxCarrier c %1 m %2").arg(rxc).arg(markfreq));
     rxCarrier->setText(QString("Rx %1").arg(rxc));
     if (modeCombo->currentText().contains("rtty"))
     {
-        carrier = rxc - 170/2;
+        markfreq -= 170/2;
     }
 }
 
@@ -543,9 +552,10 @@ void MMVARIFrame::OnRxChar(int /*rxChannel*/, QString strChar, int /*wChar*/)
 //      strChar and wChar are the same data expressed in different formats,
 //      so you could use either of them as you like.
 
-    for (auto c:strChar)
+    trace(QString("RX chars %1 mark %2").arg(strChar).arg(markfreq));
+    for (const auto &c:qAsConst(strChar))
     {
-        RXChar rxch(c, false, 0, carrier);
+        RXChar rxch(c, false, 0, markfreq);
         engineWindow->rxBuff.addChar(rxch);
     }
 }
@@ -642,11 +652,11 @@ void MMVARIFrame::OnTxState(int a)
         txButton->setChecked(false);
         rxButton->setChecked(true);
 
-        RXChar rxch('R', true, 0, carrier);
+        RXChar rxch('R', true, 0, markfreq);
         engineWindow->rxBuff.addChar(rxch);
-        RXChar rxch2('X', false, 0, carrier);
+        RXChar rxch2('X', false, 0, markfreq);
         engineWindow->rxBuff.addChar(rxch2);
-        RXChar rxch3(' ', false, 0, carrier);
+        RXChar rxch3(' ', false, 0, markfreq);
         engineWindow->rxBuff.addChar(rxch3);
 
         emit txChanged(false);
@@ -656,11 +666,11 @@ void MMVARIFrame::OnTxState(int a)
         txButton->setText("RX");
         txButton->setChecked(true);
         rxButton->setChecked(false);
-        RXChar rxch('T', true, 0, carrier);
+        RXChar rxch('T', true, 0, markfreq);
         engineWindow->rxBuff.addChar(rxch);
-        RXChar rxch2('X', false, 0, carrier);
+        RXChar rxch2('X', false, 0, markfreq);
         engineWindow->rxBuff.addChar(rxch2);
-        RXChar rxch3(' ', false, 0, carrier);
+        RXChar rxch3(' ', false, 0, markfreq);
         engineWindow->rxBuff.addChar(rxch3);
 
         emit txChanged(true);
@@ -670,11 +680,11 @@ void MMVARIFrame::OnTxState(int a)
         txButton->setText("Wait");
         txButton->setChecked(true);
         rxButton->setChecked(false);
-        RXChar rxch('W', true, 0, carrier);
+        RXChar rxch('W', true, 0, markfreq);
         engineWindow->rxBuff.addChar(rxch);
-        RXChar rxch2('T', false, 0, carrier);
+        RXChar rxch2('T', false, 0, markfreq);
         engineWindow->rxBuff.addChar(rxch2);
-        RXChar rxch3(' ', false, 0, carrier);
+        RXChar rxch3(' ', false, 0, markfreq);
         engineWindow->rxBuff.addChar(rxch3);
         emit txChanged(true);
     }
@@ -683,11 +693,11 @@ void MMVARIFrame::OnTxState(int a)
         txButton->setText("Tone");
         txButton->setChecked(true);
         rxButton->setChecked(false);
-        RXChar rxch('T', true, 0, carrier);
+        RXChar rxch('T', true, 0, markfreq);
         engineWindow->rxBuff.addChar(rxch);
-        RXChar rxch2('N', false, 0, carrier);
+        RXChar rxch2('N', false, 0, markfreq);
         engineWindow->rxBuff.addChar(rxch2);
-        RXChar rxch3(' ', false, 0, carrier);
+        RXChar rxch3(' ', false, 0, markfreq);
         engineWindow->rxBuff.addChar(rxch3);
         emit txChanged(true);
     }
