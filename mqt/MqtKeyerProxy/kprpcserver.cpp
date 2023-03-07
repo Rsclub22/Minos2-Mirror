@@ -29,7 +29,7 @@ void KPRPCServer::on_provider(Provider /*provider*/, QString /*cat*/)
     // We should now be subscribed
 }
 //---------------------------------------------------------------------------
-void KPRPCServer::on_routerCall(bool err, QSharedPointer<MinosRPCObj>mro, const QString from )
+void KPRPCServer::on_routerCall(bool /*err*/, QSharedPointer<MinosRPCObj>/*mro*/, const QString /*from*/ )
 {
     //trace( "Keyer callback from " + from + ( err ? ":Error" : ":Normal" ) );
 

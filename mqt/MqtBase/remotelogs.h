@@ -33,6 +33,7 @@ private:
 signals:
     void syncNeeded();
     void newMonitoredLog(MonitoredLog *);
+    void currentLogChanged(MonitoredLog *);
 
 private slots:
     void on_notify(AnalysePubSubNotify an, const QString from );

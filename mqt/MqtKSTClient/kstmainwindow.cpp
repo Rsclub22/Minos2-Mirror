@@ -319,7 +319,7 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
 #endif
     ml = new KSTMonitoredLogs();
     connect(RemoteLogs::getRemoteLogs(), &RemoteLogs::newMonitoredLog, this, &KSTMainWindow::onNewLog);
-
+    connect(RemoteLogs::getRemoteLogs(), &RemoteLogs::currentLogChanged, this, &KSTMainWindow::onLogChanged);
 }
 
 KSTMainWindow::~KSTMainWindow()
@@ -401,6 +401,13 @@ void KSTMainWindow::testAutoStart()
 void KSTMainWindow::onNewLog(MonitoredLog *ml)
 {
     connect(ml, &MonitoredLog::newStanzas, this, &KSTMainWindow::onNewStanzas, Qt::QueuedConnection);
+}
+void KSTMainWindow::onLogChanged(MonitoredLog */*ml*/)
+{
+    kstMessageFilterModel.invalidate();
+    kstMeepFilterModel.invalidate();
+    kstCallFilterModel.invalidate();
+    kstPlanesFilterModel.invalidate();
 }
 void KSTMainWindow::onNewStanzas()
 {

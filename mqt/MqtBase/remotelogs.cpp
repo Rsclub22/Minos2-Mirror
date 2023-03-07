@@ -11,7 +11,7 @@ RemoteLogs::RemoteLogs()
     connect(rpc, &MinosRPC::notify, this, &RemoteLogs::on_notify);
     connect(rpc, &MinosRPC::provider, this, &RemoteLogs::on_provider);
 
-    QStringList sv = {};
+    QStringList sv = {rpcConstants::monitorLogCategory};
     rpc->findProviders(rpcConstants::monitorLogCategory, sv);
 
     MinosConfig *config = MinosConfig::getMinosConfig();
@@ -41,7 +41,7 @@ bool RemoteLogs::hasWorked(const Callsign &cs, QString band, QString mode)
         for (QVector< QSharedPointer<MonitoredLog> >::iterator l = s->slotList.begin(); l != s->slotList.end(); l++)
 #endif
        {
-            if ((*l)->getState() != psRevoked)
+            if ((*l)->getState() != psRevoked && s->currentLog == *l)
             {
                 BaseContact cc((*l)->getContest(), dtg(true));
                 cc.cs = cs;
@@ -102,17 +102,17 @@ void RemoteLogs::on_notify(AnalysePubSubNotify an, const QString /*from*/ )
         PublishState state = an.getState();
         QString key = an.getKey();          // key is minos file name
         QString value = an.getValue();      // value is stanzacount;[band] name;start time;end time
+        QString router = an.getPublisherRouter();
+        if ( router.size() == 0 )
+        {
+            // it is for us...
+            router = localRouterName;
+        }
+
+        QString logval = router + " : " + key ;
 
         if ( an.getCategory() == rpcConstants::monitorLogCategory )
         {
-            QString router = an.getPublisherRouter();
-            if ( router.size() == 0 )
-            {
-                // it is for us...
-                router = localRouterName;
-            }
-
-            QString logval = router + " : " + key ;
             trace( "ContestLog " + logval + " " + value );
 
             MonitoredStation *stat = stationList[Provider(an)];
@@ -169,6 +169,21 @@ void RemoteLogs::on_notify(AnalysePubSubNotify an, const QString /*from*/ )
                     {
                         (*log)->setState(state);
                     }
+                }
+            }
+        }
+        else if (an.getCategory() == rpcConstants::monitorLogCategory)
+        {
+            MonitoredStation *stat = stationList[Provider(an)];
+
+            if (stat)
+            {
+                QVector< QSharedPointer<MonitoredLog> >::iterator log = std::find_if( stat->slotList.begin(), stat->slotList.end(), MonitoredLogCmp( key ) );
+                if (log != stat->slotList.end())
+                {
+                    // this is now the current log
+                    stat->currentLog = *log;
+                    emit currentLogChanged(stat->currentLog.data());
                 }
             }
         }

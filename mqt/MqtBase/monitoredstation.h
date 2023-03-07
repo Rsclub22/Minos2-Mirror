@@ -10,6 +10,7 @@ class MonitoredStation
 {
    public:
       QVector< QSharedPointer<MonitoredLog> > slotList;
+      QSharedPointer<MonitoredLog> currentLog;
 
       MonitoredStation();
       ~MonitoredStation();

@@ -1137,6 +1137,8 @@ void TSingleLogFrame::on_ContestPageChanged ()
 
     updateQSODisplay();
 
+    RPCPubSub::publish( rpcConstants::currentLogCategory, contest->publishedName, QString(), psPublished );
+
     update();   // this queues a repaint
 }
 void TSingleLogFrame::on_doColumnChanges(BaseContestLog *b)

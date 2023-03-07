@@ -239,6 +239,7 @@ private slots:
     void on_logsButton_clicked();
 
     void onNewLog(MonitoredLog *ml);
+    void onLogChanged(MonitoredLog *ml);
     void onNewStanzas();
 private:
     Ui::KSTMainWindow *ui;
