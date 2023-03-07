@@ -11,8 +11,8 @@ RemoteLogs::RemoteLogs()
     connect(rpc, &MinosRPC::notify, this, &RemoteLogs::on_notify);
     connect(rpc, &MinosRPC::provider, this, &RemoteLogs::on_provider);
 
-    QStringList sv = {rpcConstants::monitorLogCategory};
-    rpc->findProviders(rpcConstants::LoggerCategory, sv);
+    QStringList sv = {};
+    rpc->findProviders(rpcConstants::monitorLogCategory, sv);
 
     MinosConfig *config = MinosConfig::getMinosConfig();
     localRouterName = config->getThisRouterName();
@@ -79,10 +79,16 @@ Callsign RemoteLogs::myCall()
     }
     return Callsign();
 }
-void RemoteLogs::on_provider(Provider provider, QString /*cat*/)
+void RemoteLogs::on_provider(Provider provider, QString cat)
 {
-    stationList[provider] = new MonitoredStation;
-    emit syncNeeded();
+    if (cat == rpcConstants::monitorLogCategory)
+    {
+        if (!stationList.contains(provider))
+        {
+            stationList[provider] = new MonitoredStation;
+            emit syncNeeded();
+        }
+    }
 }
 
 void RemoteLogs::on_notify(AnalysePubSubNotify an, const QString /*from*/ )
@@ -111,55 +117,58 @@ void RemoteLogs::on_notify(AnalysePubSubNotify an, const QString /*from*/ )
 
             MonitoredStation *stat = stationList[Provider(an)];
 
-            QVector< QSharedPointer<MonitoredLog> >::iterator log = std::find_if( stat->slotList.begin(), stat->slotList.end(), MonitoredLogCmp( key ) );
-            if (state == psPublished)
+            if (stat)
             {
-                QStringList args = value.split(";");
-                if ( log == stat->slotList.end() )
+                QVector< QSharedPointer<MonitoredLog> >::iterator log = std::find_if( stat->slotList.begin(), stat->slotList.end(), MonitoredLogCmp( key ) );
+                if (state == psPublished)
                 {
-                    QSharedPointer<MonitoredLog> ml(new MonitoredLog(stat));
-                    emit newMonitoredLog(ml.data());
+                    QStringList args = value.split(";");
+                    if ( log == stat->slotList.end() )
+                    {
+                        QSharedPointer<MonitoredLog> ml(new MonitoredLog(stat));
+                        emit newMonitoredLog(ml.data());
 
-                    ml->initialise( router, key );
+                        ml->initialise( router, key );
 
-                    if (args.count() >= 4)
-                    {
-                        ml->setDisplayName(args[1]);
-                        ml->setStartEnd(args[2], args[3]);
-                    }
-                    else if (args.count() >= 2)
-                    {
-                        ml->setDisplayName(args[1]);
-                    }
-                    if (args.count() >= 1)
-                    {
-                        ml->setExpectedStanzaCount( args[0].toInt() );
+                        if (args.count() >= 4)
+                        {
+                            ml->setDisplayName(args[1]);
+                            ml->setStartEnd(args[2], args[3]);
+                        }
+                        else if (args.count() >= 2)
+                        {
+                            ml->setDisplayName(args[1]);
+                        }
+                        if (args.count() >= 1)
+                        {
+                            ml->setExpectedStanzaCount( args[0].toInt() );
+                        }
+                        else
+                        {
+                            ml->setDisplayName(key);
+                        }
+
+                        ml->setState(state);
+                        stat->slotList.push_back( ml );
+                        emit syncNeeded();
+
                     }
                     else
                     {
-                        ml->setDisplayName(key);
+                        if (args.count() >= 1)
+                        {
+                            trace(QString("args 0 %1 ").arg(args[0]));
+                            (*log)->setExpectedStanzaCount( args[0].toInt() );
+                        }
+                        (*log)->setState(state);
                     }
-
-                    ml->setState(state);
-                    stat->slotList.push_back( ml );
-                    emit syncNeeded();
-
                 }
                 else
                 {
-                    if (args.count() >= 1)
+                    if ( log != stat->slotList.end() )
                     {
-                        trace(QString("args 0 %1 ").arg(args[0]));
-                        (*log)->setExpectedStanzaCount( args[0].toInt() );
+                        (*log)->setState(state);
                     }
-                    (*log)->setState(state);
-                }
-            }
-            else
-            {
-                if ( log != stat->slotList.end() )
-                {
-                    (*log)->setState(state);
                 }
             }
         }

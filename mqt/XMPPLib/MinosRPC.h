@@ -137,7 +137,7 @@ public:
     void setRouterAppCatMap(QMap<QString,QVector< QSharedPointer<Connectable> > > &sacm);
     void initialiseRouters(QStringList subs);
 
-    void findProviders(QString sub, QStringList postsubs);
+    void findProviders(QString provkey, QStringList postsubs);
     const QMap<QString, QVector<Provider> > &getProviders() const
     {
         return providers;

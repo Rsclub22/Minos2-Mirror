@@ -21,7 +21,6 @@ class MonitoredLogs : public QTreeView
 
     QTimer *monitorTimer = nullptr;
     bool syncstat = false;
-    RemoteLogs *remoteLogs = nullptr;
     void syncStations();
 
 

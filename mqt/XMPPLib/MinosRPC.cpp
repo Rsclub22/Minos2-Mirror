@@ -127,11 +127,21 @@ void MinosRPC::initialiseRouters(QStringList subs)
     routers.clear();    // so StationCategory can re-populate it
 
 }
-void MinosRPC::findProviders(QString sub, QStringList psubs)
+void MinosRPC::findProviders(QString provkey, QStringList psubs)
 {
-    providers[sub]; // create the element if it isn't there already
-    postSubs[sub] += psubs;
-    postSubs[sub].removeDuplicates();
+    // when we get a stationcategory published, we will subscribe to provkey
+    // Then look for a publish of provkey category, and subscribe to all
+    // the posttsubs
+
+    // QMap "providers" is indexed on provkey, and any providers found
+    // (i.e publishers of provkey) go into that providers QVector
+
+    // If you look at the provider signal, make sure the
+    // cat is the one you want, and that you haven't seen this provider before
+
+    providers[provkey]; // create the element if it isn't there already
+    postSubs[provkey] += psubs;
+    postSubs[provkey].removeDuplicates();
 
 }
 void MinosRPC::routerNotify( AnalysePubSubNotify &an)

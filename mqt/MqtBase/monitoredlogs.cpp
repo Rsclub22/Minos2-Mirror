@@ -24,9 +24,8 @@ MonitoredLogs::MonitoredLogs(QWidget *parent) :
     monitorTimer->start(100);
 
     /*MinosRPC *rpc =*/ MinosRPC::getMinosRPC(getAppStartupName(), true);
-    remoteLogs = RemoteLogs::getRemoteLogs();
 
-    connect(remoteLogs, &RemoteLogs::syncNeeded, this, &MonitoredLogs::onSyncNeeded);
+    connect(RemoteLogs::getRemoteLogs(), &RemoteLogs::syncNeeded, this, &MonitoredLogs::onSyncNeeded);
 
     connect(this, &QTreeView::doubleClicked, this, &MonitoredLogs::onMonitorTree_doubleClicked);
 }
@@ -39,7 +38,7 @@ MonitoredLogs::~MonitoredLogs()
 void MonitoredLogs::on_monitorTimeout()
 {
 
-    for ( auto const &s: qAsConst(remoteLogs->stationList) )
+    for ( auto const &s: qAsConst(RemoteLogs::getRemoteLogs()->stationList) )
     {
 
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
@@ -77,7 +76,7 @@ void MonitoredLogs::syncStations()
       syncstat = false;
 
       TreeNode *root = new RootTreeNode();
-      for ( auto s = remoteLogs->stationList.begin(); s != remoteLogs->stationList.end(); s++ )
+      for ( auto s = RemoteLogs::getRemoteLogs()->stationList.begin(); s != RemoteLogs::getRemoteLogs()->stationList.end(); s++ )
       {
           // clang complains that snode may leak - but if gets taken over by the tree
           TreeNode *snode = new RouterTreeNode(root, s.key().app + "@" + s.key().routerName);
@@ -120,7 +119,7 @@ void MonitoredLogs::onMonitorTree_doubleClicked(const QModelIndex &index)
         }
         QString s = sl[1] + "/" + sl[0] + "/xxx";
         Provider p(s);
-        MonitoredStation *ms = remoteLogs->stationList[ p ];
+        MonitoredStation *ms = RemoteLogs::getRemoteLogs()->stationList[ p ];
        if (!ms)
        {
            return;
