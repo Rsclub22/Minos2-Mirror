@@ -1005,7 +1005,7 @@ void RigControlFrame::setMode(QString m)
 
     traceMsg(QString("Set Mode = %1").arg(m));
     QStringList mode = m.split(':');
-    if (mode.length() == 2 )
+    if (ct && mode.length() == 2 )
     {
         if (ct->modeList.getValue().contains(mode[0]))
         {
