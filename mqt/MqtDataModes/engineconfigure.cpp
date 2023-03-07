@@ -193,8 +193,6 @@ EngineConfigure::EngineConfigure(DMMainWindow *parent) :
     ui->grittyPort2->setText(QString::number(p));
     ui->grittyPort2->setValidator(new QIntValidator(0, 0xffff, this));
 
-    ui->senderCombo->addItems(EngineWindow::enginesList);
-
     ui->rttySpeed->addItem("45.45");
     ui->rttySpeed->addItem("75");
     ui->rttySpeed->setCurrentText(getSpeed("RTTY"));
@@ -207,6 +205,9 @@ EngineConfigure::EngineConfigure(DMMainWindow *parent) :
     QSettings settings("./Configuration/DataModes.ini", QSettings::IniFormat);
 
     m = settings.value("Sender").toString();
+    ui->senderCombo->addItem(QString());
+    ui->senderCombo->addItems(EngineWindow::enginesList);
+    ui->senderCombo->setCurrentText(m);
 }
 
 EngineConfigure::~EngineConfigure()

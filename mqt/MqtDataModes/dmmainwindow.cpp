@@ -24,6 +24,7 @@
 #include "remotelogs.h"
 #include "MonitoredLog.h"
 #include "monitoredlogs.h"
+#include "MShowMessageDlg.h"
 
 #include "dmmainwindow.h"
 #include "ui_dmmainwindow.h"
@@ -280,16 +281,21 @@ void DMMainWindow::sendPressed(QString d, int c)
     // and send to this engine
 
     // search the engines for the one selected as sender
+    bool sent = false;
     for (const auto &e:qAsConst(engines))
     {
         if (e->engineName == m)
         {
             trace(QString("Send <%1> to %2").arg(d, m));
             e->doSendCharacters(d, c);
+            sent = true;
             break;
         }
     }
-
+    if (!sent)
+    {
+        mShowMessage(tr("No DataMode sender configured"), this);
+    }
 }
 
 void DMMainWindow::on_routerCall(bool err, QSharedPointer<MinosRPCObj>mro, const QString /*from*/ )
