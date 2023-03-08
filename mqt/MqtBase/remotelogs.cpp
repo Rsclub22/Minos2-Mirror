@@ -11,7 +11,7 @@ RemoteLogs::RemoteLogs()
     connect(rpc, &MinosRPC::notify, this, &RemoteLogs::on_notify);
     connect(rpc, &MinosRPC::provider, this, &RemoteLogs::on_provider);
 
-    QStringList sv = {rpcConstants::monitorLogCategory};
+    QStringList sv = {rpcConstants::currentLogCategory};
     rpc->findProviders(rpcConstants::monitorLogCategory, sv);
 
     MinosConfig *config = MinosConfig::getMinosConfig();
@@ -172,13 +172,13 @@ void RemoteLogs::on_notify(AnalysePubSubNotify an, const QString /*from*/ )
                 }
             }
         }
-        else if (an.getCategory() == rpcConstants::monitorLogCategory)
+        else if (an.getCategory() == rpcConstants::currentLogCategory)
         {
             MonitoredStation *stat = stationList[Provider(an)];
 
             if (stat)
             {
-                QVector< QSharedPointer<MonitoredLog> >::iterator log = std::find_if( stat->slotList.begin(), stat->slotList.end(), MonitoredLogCmp( key ) );
+                QVector< QSharedPointer<MonitoredLog> >::iterator log = std::find_if( stat->slotList.begin(), stat->slotList.end(), MonitoredLogCmp( value ) );
                 if (log != stat->slotList.end())
                 {
                     // this is now the current log
