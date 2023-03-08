@@ -72,7 +72,6 @@ lessThan(QT_MAJOR_VERSION, 6) {
 
 FORMS += \
     MMTTYFrame.ui \
-    MMVARIFrame.ui \
     grittyframe.ui
 
 LIBS += -lwinmm

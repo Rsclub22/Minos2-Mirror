@@ -2,29 +2,23 @@
 #include <QMenu>
 #include <QSplitter>
 #include "MTrace.h"
-#include "cutils.h"
 #include "rigcontrolcommonconstants.h"
 #include "rxbuffer.h"
 #include "dmmainwindow.h"
 #include "enginewindow.h"
 #include "MMVARIFrame.h"
-#include "ui_MMVARIFrame.h"
 
 // I think we are in charge of MMVARI multiple copies - we do all the INI file stuff
 
 // we already report on the TX/RX frequencies!
 // either pallette of sensitivity are rubbish - not seeoing signals
-MMVARIFrame::MMVARIFrame(QWidget *parent, EngineWindow *p, QFrame *cwl,
+MMVARIFrame::MMVARIFrame(QFrame *cwl, EngineWindow *p,
                          QLineEdit *sendEdit,
                          int inId, int outId, QString /*name*/) :
-    QFrame(parent),
-    ui(new Ui::MMVARIFrame),
+    QObject(cwl),
     engineWindow(p),
-    sendEdit(sendEdit),
-    pframe(cwl)
+    sendEdit(sendEdit)
 {
-    ui->setupUi(this);
-
     connect(mainWindow, &DMMainWindow::setSpeeds, this, &MMVARIFrame::onSetSpeeds);
     connect(engineWindow, &EngineWindow::sendCharactersDown, this, &MMVARIFrame::onSendCharacters);
     connect(engineWindow, &EngineWindow::rigModeFreq, this, &MMVARIFrame::onRigModeFreq);
@@ -39,23 +33,23 @@ MMVARIFrame::MMVARIFrame(QWidget *parent, EngineWindow *p, QFrame *cwl,
     mmvari = new MMVARILib::MMVARI();
     mmvari->setControl("{9C0D49DD-5C05-456D-916B-98C4CF63172F}");
 
-    mmview = new MMVARILib::XMMVView(this);
+    mmview = new MMVARILib::XMMVView(cwl);
     mmview->setControl("{702CBF07-C159-44F2-B8A6-DF8EA1001E08}");
 
-    mmview2 = new MMVARILib::XMMVView(this);
+    mmview2 = new MMVARILib::XMMVView(cwl);
     mmview2->setControl("{702CBF07-C159-44F2-B8A6-DF8EA1001E08}");
 
-    mmlevel = new MMVARILib::XMMVLvl(this);
+    mmlevel = new MMVARILib::XMMVLvl(cwl);
     mmlevel->setControl("{438EF93A-939D-4B6B-93A7-DF09049B8514}");
 
     mmvariVb = new QVBoxLayout();
-    setLayout(mmvariVb);
+    cwl->setLayout(mmvariVb);
 
     //====================================================================
     // N1MM also has BPF, ATC, FFT, Multi-Channel RX menus
     // Do we need to have anything here?
 
-    QMenuBar *mmbar = new QMenuBar(this);
+    QMenuBar *mmbar = new QMenuBar(cwl);
     QMenu * bpfMenu = new QMenu("BPF");
     QMenu * atcMenu = new QMenu("ATC");
     QMenu * fftMenu = new QMenu("FFT");
@@ -114,7 +108,7 @@ MMVARIFrame::MMVARIFrame(QWidget *parent, EngineWindow *p, QFrame *cwl,
     modeCombo = new QComboBox();
     mmvariButtons->addWidget(modeCombo);
 
-    speedCombo = new QComboBox(this);
+    speedCombo = new QComboBox(cwl);
     mmvariButtons->addWidget(speedCombo);
 
     rxCarrier = new QLabel();
@@ -220,48 +214,7 @@ MMVARIFrame::MMVARIFrame(QWidget *parent, EngineWindow *p, QFrame *cwl,
 
 MMVARIFrame::~MMVARIFrame()
 {
-    // This is complicated as we want to get rid of all controls
-    // when we switch engines, and rebuild them when MMVARI is selected again
-    if (mmvari)
-    {
-        mmvari->setBActive(false);
 
-        while (mmvariHb->count())
-        {
-            QLayoutItem *l = mmvariHb->takeAt(0);
-            QWidget *w = l->widget();
-            if (w && w == mmlevel)
-            {
-                mmlevel->clear();
-                mmlevel = nullptr;
-            }
-        }
-        while (mvb->count())
-        {
-            QLayoutItem *l = mvb->takeAt(0);
-            QWidget *w = l->widget();
-            if (w && w == mmview)
-            {
-                mmview->clear();
-                mmview = nullptr;
-            }
-            else if (w && w == mmview2)
-            {
-                mmview2->clear();
-                mmview2 = nullptr;
-            }
-        }
-        delete mvb;
-
-        mmvari->clear();
-        mmvari = nullptr;
-    }
-    QLayout *l = pframe->layout();
-
-
-    clearLayout(l);
-    delete l;
-    delete ui;
 }
 void MMVARIFrame::onSetSpeeds(QString b, QString r)
 {

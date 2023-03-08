@@ -368,7 +368,7 @@ void EngineWindow::selectMMVARI(QString name)
     QString odev = EngineConfigure::getEngineSound(name, "output");
     int outId = mainWindow->outDeviceIds[odev];
 
-    mmvariFrame = new MMVARIFrame(ui->variFrame, this, ui->variFrame, ui->sendEdit, inId, outId, name);
+    mmvariFrame = new MMVARIFrame(ui->variFrame, this, /*ui->variFrame, */ui->sendEdit, inId, outId, name);
     ui->sendFrame->setVisible(true);
 #endif
 }

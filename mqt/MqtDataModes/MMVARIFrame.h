@@ -31,12 +31,12 @@ namespace Ui {
 class MMVARIFrame;
 }
 class EngineWindow;
-class MMVARIFrame : public QFrame
+class MMVARIFrame : public QObject
 {
     Q_OBJECT
 
 public:
-    explicit MMVARIFrame(QWidget *parent, EngineWindow *p, QFrame *cwl, QLineEdit *sendEdit, int inId, int outId, QString name);
+    explicit MMVARIFrame(QFrame *cwl, EngineWindow *p, QLineEdit *sendEdit, int inId, int outId, QString name);
     ~MMVARIFrame();
 
     void sendCharacters(const QString &, int markfreq);
@@ -48,7 +48,7 @@ private:
     int markfreq = 0;
     QString bpskSpeed;
     QString rttySpeed;
-    QFrame *pframe = nullptr;
+    //QFrame *pframe = nullptr;
     QHBoxLayout *mmvariHb = nullptr;
     QVBoxLayout* mvb = nullptr;
 
