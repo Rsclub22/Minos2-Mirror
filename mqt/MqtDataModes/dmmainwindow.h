@@ -71,7 +71,6 @@ private slots:
 
     void on_configureButton_clicked();
     void on_startButton_clicked();
-    void on_stopButton_clicked();
     void sendPressed(QString d, int c);
 
 signals:

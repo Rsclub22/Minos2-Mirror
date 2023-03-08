@@ -136,11 +136,30 @@ DMMainWindow::DMMainWindow(QWidget *parent)
         restoreGeometry(geometry);
 
     connect(RemoteLogs::getRemoteLogs(), &RemoteLogs::newMonitoredLog, this, &DMMainWindow::onNewLog);
+
+    ui->startButton->setText(tr("Start All"));
+
+    if (EngineConfigure::check())
+    {
+        on_startButton_clicked();
+    }
 }
 
 DMMainWindow::~DMMainWindow()
 {
     delete ui;
+}
+
+void DMMainWindow::closeAllEngines()
+{
+    for (const auto &e:qAsConst(engines))
+    {
+        e->close();
+        e->deleteLater();
+    }
+    engines.clear();
+    ui->startButton->setText(tr("Start All"));
+
 }
 
 void DMMainWindow::LogTimerTimer()
@@ -199,7 +218,7 @@ void DMMainWindow::doCloseEvent()
     QSettings settings;
     settings.setValue(geoStr, saveGeometry());
 
-    on_stopButton_clicked();
+    closeAllEngines();
 
     trace("Minos Data Modes App Closing");
 }
@@ -244,32 +263,28 @@ void DMMainWindow::on_configureButton_clicked()
 
 void DMMainWindow::on_startButton_clicked()
 {
-    // start all configured engines
-    for(const auto &e:EngineWindow::enginesList)
+    if (engines.empty())
     {
-        if (EngineConfigure::getEngineEnabled(e))
+        // start all configured engines
+        for(const auto &e:EngineWindow::enginesList)
         {
-            EngineWindow *ew = new EngineWindow(/*this*/);
-            connect(ew, &EngineWindow::sendCharactersUp, this, &DMMainWindow::sendPressed);
+            if (EngineConfigure::getEngineEnabled(e))
+            {
+                EngineWindow *ew = new EngineWindow(/*this*/);
+                connect(ew, &EngineWindow::sendCharactersUp, this, &DMMainWindow::sendPressed);
 
-            ew->selectEngine(e);
-            engines.push_back(ew);
-            ew->show();
+                ew->selectEngine(e);
+                engines.push_back(ew);
+                ew->show();
+            }
         }
+        emit setSpeeds(EngineConfigure::getSpeed("BPSK"), EngineConfigure::getSpeed("RTTY"));
+        ui->startButton->setText(tr("Stop All"));
     }
-    emit setSpeeds(EngineConfigure::getSpeed("BPSK"), EngineConfigure::getSpeed("RTTY"));
-}
-
-void DMMainWindow::on_stopButton_clicked()
-{
-    // stop all configured engines
-
-    for (const auto &e:qAsConst(engines))
+    else
     {
-        e->close();
-        e->deleteLater();
+        closeAllEngines();
     }
-    engines.clear();
 }
 
 void DMMainWindow::sendPressed(QString d, int c)

@@ -8,75 +8,134 @@
 #include "engineconfigure.h"
 #include "ui_engineconfigure.h"
 
-/*static*/ void EngineConfigure::setEnginePath(QString engine, QString path)
+void EngineConfigure::setEnginePath(QSettings &settings, QString engine, QString path)
 {
-    QSettings settings("./Configuration/DataModes.ini", QSettings::IniFormat);
     QString eStr = QString("engines/");
     settings.setValue(eStr + engine, path);
 }
-
-/*static*/ QString EngineConfigure::getEnginePath(QString engine)
+/*static*/ void EngineConfigure::setEnginePath(QString engine, QString path)
 {
     QSettings settings("./Configuration/DataModes.ini", QSettings::IniFormat);
+    setEnginePath(settings, engine, path);
+}
+
+/*static*/ QString EngineConfigure::getEnginePath(QSettings &settings, QString engine)
+{
     QString eStr = QString("engines/");
     QString m = settings.value(eStr + engine).toString();
 
     return m;
 }
+/*static*/ QString EngineConfigure::getEnginePath(QString engine)
+{
+    QSettings settings("./Configuration/DataModes.ini", QSettings::IniFormat);
+    return getEnginePath(settings, engine);
+}
+
+
+void EngineConfigure::setSpeed(QSettings &settings, QString mode, QString speed)
+{
+    settings.setValue( mode, speed);
+}
+
 
 void EngineConfigure::setSpeed(QString mode, QString speed)
 {
     QSettings settings("./Configuration/DataModes.ini", QSettings::IniFormat);
-    settings.setValue( mode, speed);
+    setSpeed(settings, mode, speed);
 }
 
+QString EngineConfigure::getSpeed(QSettings &settings, QString mode)
+{
+    QString s = settings.value( mode, 0).toString();
+
+    return s;
+}
 QString EngineConfigure::getSpeed(QString mode)
 {
     QSettings settings("./Configuration/DataModes.ini", QSettings::IniFormat);
-    QString s = settings.value( mode, 0).toString();
+    return getSpeed(settings, mode);
+}
 
+bool EngineConfigure::getEngineEnabled(QSettings &settings, QString engine)
+{
+    bool s = settings.value("enabled/" + engine, false).toBool();
     return s;
 }
 
 bool EngineConfigure::getEngineEnabled(QString engine)
 {
     QSettings settings("./Configuration/DataModes.ini", QSettings::IniFormat);
-    bool s = settings.value("enabled/" + engine, false).toBool();
-    return s;
+    return getEngineEnabled(settings, engine);
 }
 
+void EngineConfigure::setEngineEnabled(QSettings &settings, QString engine, bool enabled)
+{
+    settings.setValue("enabled/" + engine, enabled);
+}
 void EngineConfigure::setEngineEnabled(QString engine, bool enabled)
 {
     QSettings settings("./Configuration/DataModes.ini", QSettings::IniFormat);
-    settings.setValue("enabled/" + engine, enabled);
+    setEngineEnabled(settings, engine, enabled);
+}
+
+QString EngineConfigure::getEngineSound(QSettings &settings, QString engine, QString io)
+{
+    QString s = settings.value("sound/" + engine + "/" + io).toString();
+    return s;
 }
 
 QString EngineConfigure::getEngineSound(QString engine, QString io)
 {
     QSettings settings("./Configuration/DataModes.ini", QSettings::IniFormat);
-    QString s = settings.value("sound/" + engine + "/" + io).toString();
-    return s;
+    return getEngineSound(settings, engine, io);
+}
+
+void EngineConfigure::setEngineSound(QSettings &settings, QString engine, QString io, QString s)
+{
+    settings.setValue("sound/" + engine + "/" + io, s);
 }
 
 void EngineConfigure::setEngineSound(QString engine, QString io, QString s)
 {
     QSettings settings("./Configuration/DataModes.ini", QSettings::IniFormat);
-    settings.setValue("sound/" + engine + "/" + io, s);
+    setEngineSound(settings, engine, io, s);
+}
+
+int EngineConfigure::getEnginePort(QSettings &settings, QString engine)
+{
+    int p = settings.value("port/" + engine).toInt();
+    return p;
 }
 
 int EngineConfigure::getEnginePort(QString engine)
 {
     QSettings settings("./Configuration/DataModes.ini", QSettings::IniFormat);
-    int p = settings.value("port/" + engine).toInt();
-    return p;
+    return getEnginePort(settings, engine);
+}
+
+void EngineConfigure::setEnginePort(QSettings &settings, QString engine, int port)
+{
+    settings.setValue("port/" + engine, port);
 }
 
 void EngineConfigure::setEnginePort(QString engine, int port)
 {
     QSettings settings("./Configuration/DataModes.ini", QSettings::IniFormat);
-    settings.setValue("port/" + engine, port);
+    setEnginePort(settings, engine, port);
 }
+bool EngineConfigure::check()
+{
+    // check
 
+    // all paths exist
+
+    // nothing enabled for which there is no path
+
+    // ports are set where required
+
+    return true;
+}
 EngineConfigure::EngineConfigure(DMMainWindow *parent) :
     QDialog(parent),
     ui(new Ui::EngineConfigure),
@@ -102,66 +161,68 @@ EngineConfigure::EngineConfigure(DMMainWindow *parent) :
     QString m = QCoreApplication::applicationDirPath() + "/MMVARI.ocx";
     ui->mmvariEdit->setText(m);
 
-    m = getEngineSound(EngineWindow::mmvari + EngineWindow::i1, "input");
+    QSettings settings("./Configuration/DataModes.ini", QSettings::IniFormat);
+
+    m = getEngineSound(settings, EngineWindow::mmvari + EngineWindow::i1, "input");
     ui->MMVARIRX1->setCurrentText(m);
-    m = getEngineSound(EngineWindow::mmvari + EngineWindow::i2, "input");
+    m = getEngineSound(settings, EngineWindow::mmvari + EngineWindow::i2, "input");
     ui->MMVARIRX2->setCurrentText(m);
 
-    m = getEngineSound(EngineWindow::mmvari + EngineWindow::i1, "output");
+    m = getEngineSound(settings, EngineWindow::mmvari + EngineWindow::i1, "output");
     ui->MMVARITX1->setCurrentText(m);
-    m = getEngineSound(EngineWindow::mmvari + EngineWindow::i2, "output");
+    m = getEngineSound(settings, EngineWindow::mmvari + EngineWindow::i2, "output");
     ui->MMVARITX2->setCurrentText(m);
 
     bool b;
-    b = getEngineEnabled(EngineWindow::mmvari + EngineWindow::i1);
+    b = getEngineEnabled(settings, EngineWindow::mmvari + EngineWindow::i1);
     ui->mmvariEnable1->setChecked(b);
-    b = getEngineEnabled(EngineWindow::mmvari + EngineWindow::i2);
+    b = getEngineEnabled(settings, EngineWindow::mmvari + EngineWindow::i2);
     ui->mmvariEnable2->setChecked(b);
 
     // Other engines have their own soundcard configuration
 
-    m = getEnginePath(EngineWindow::twotone + EngineWindow::i1);
+    m = getEnginePath(settings, EngineWindow::twotone + EngineWindow::i1);
     ui->twotoneEdit1->setText(m);
-    m = getEnginePath(EngineWindow::twotone + EngineWindow::i2);
+    m = getEnginePath(settings, EngineWindow::twotone + EngineWindow::i2);
     ui->twotoneEdit2->setText(m);
 
-    b = getEngineEnabled(EngineWindow::twotone + EngineWindow::i1);
+    b = getEngineEnabled(settings, EngineWindow::twotone + EngineWindow::i1);
     ui->twotoneEnable1->setChecked(b);
-    b = getEngineEnabled(EngineWindow::twotone + EngineWindow::i2);
+    b = getEngineEnabled(settings, EngineWindow::twotone + EngineWindow::i2);
     ui->twotoneEnable2->setChecked(b);
 
-    m = getEnginePath(EngineWindow::mmtty + EngineWindow::i1);
+    m = getEnginePath(settings, EngineWindow::mmtty + EngineWindow::i1);
     ui->mmttyEdit1->setText(m);
-    m = getEnginePath(EngineWindow::mmtty + EngineWindow::i2);
+    m = getEnginePath(settings, EngineWindow::mmtty + EngineWindow::i2);
     ui->mmttyEdit2->setText(m);
 
-    b = getEngineEnabled(EngineWindow::mmtty + EngineWindow::i1);
+    b = getEngineEnabled(settings, EngineWindow::mmtty + EngineWindow::i1);
     ui->mmttyEnable1->setChecked(b);
-    b = getEngineEnabled(EngineWindow::mmtty + EngineWindow::i2);
+    b = getEngineEnabled(settings, EngineWindow::mmtty + EngineWindow::i2);
     ui->mmttyEnable2->setChecked(b);
 
-    m = getEnginePath(EngineWindow::fldigi + EngineWindow::i1);
+    m = getEnginePath(settings, EngineWindow::fldigi + EngineWindow::i1);
     ui->fldigiEdit->setText(m);
 
-    b = getEngineEnabled(EngineWindow::fldigi + EngineWindow::i1);
+    b = getEngineEnabled(settings, EngineWindow::fldigi + EngineWindow::i1);
     ui->fldigiEnable1->setChecked(b);
-    b = getEngineEnabled(EngineWindow::fldigi + EngineWindow::i2);
+    b = getEngineEnabled(settings, EngineWindow::fldigi + EngineWindow::i2);
     ui->fldigiEnable2->setChecked(b);
 
-    m = getEnginePath(EngineWindow::gritty + EngineWindow::i1);
+    m = getEnginePath(settings, EngineWindow::gritty + EngineWindow::i1);
     ui->grittyEdit->setText(m);
 
-    b = getEngineEnabled(EngineWindow::gritty + EngineWindow::i1);
+    b = getEngineEnabled(settings, EngineWindow::gritty + EngineWindow::i1);
     ui->grittyEnable1->setChecked(b);
-    b = getEngineEnabled(EngineWindow::gritty + EngineWindow::i2);
+    b = getEngineEnabled(settings, EngineWindow::gritty + EngineWindow::i2);
     ui->grittyEnable2->setChecked(b);
 
-    b = getEngineEnabled(EngineWindow::test + EngineWindow::i1);
+    b = getEngineEnabled(settings, EngineWindow::test + EngineWindow::i1);
     ui->testEnable1->setChecked(b);
-    b = getEngineEnabled(EngineWindow::test + EngineWindow::i2);
+    b = getEngineEnabled(settings, EngineWindow::test + EngineWindow::i2);
     ui->testEnable2->setChecked(b);
 
-    int p = getEnginePort(EngineWindow::fldigi + EngineWindow::i1);
+    int p = getEnginePort(settings, EngineWindow::fldigi + EngineWindow::i1);
     if (p == 0)
     {
         p = 7362;
@@ -169,7 +230,7 @@ EngineConfigure::EngineConfigure(DMMainWindow *parent) :
     ui->fldigiPort1->setText(QString::number(p));
     ui->fldigiPort1->setValidator(new QIntValidator(0, 0xffff, this));
 
-    p = getEnginePort(EngineWindow::fldigi + EngineWindow::i2);
+    p = getEnginePort(settings, EngineWindow::fldigi + EngineWindow::i2);
     if (p == 0)
     {
         p = 7363;
@@ -177,7 +238,7 @@ EngineConfigure::EngineConfigure(DMMainWindow *parent) :
     ui->fldigiPort2->setText(QString::number(p));
     ui->fldigiPort2->setValidator(new QIntValidator(0, 0xffff, this));
 
-    p = getEnginePort(EngineWindow::gritty + EngineWindow::i1);
+    p = getEnginePort(settings, EngineWindow::gritty + EngineWindow::i1);
     if (p == 0)
     {
         p = 7502;
@@ -185,7 +246,7 @@ EngineConfigure::EngineConfigure(DMMainWindow *parent) :
     ui->grittyPort1->setText(QString::number(p));
     ui->grittyPort1->setValidator(new QIntValidator(0, 0xffff, this));
 
-    p = getEnginePort(EngineWindow::gritty + EngineWindow::i2);
+    p = getEnginePort(settings, EngineWindow::gritty + EngineWindow::i2);
     if (p == 0)
     {
         p = 7503;
@@ -200,9 +261,6 @@ EngineConfigure::EngineConfigure(DMMainWindow *parent) :
     ui->BPSKSpeed->addItem("31.25");
     ui->BPSKSpeed->addItem("62.5");
     ui->BPSKSpeed->setCurrentText(getSpeed("BPSK"));
-
-
-    QSettings settings("./Configuration/DataModes.ini", QSettings::IniFormat);
 
     m = settings.value("Sender").toString();
     ui->senderCombo->addItem(QString());
@@ -286,43 +344,48 @@ void EngineConfigure::on_OKButton_clicked()
     // MMTTY/2Tone - paths are different
     // gritty/fldigi - ports are different
     //setEnginePath(EngineWindow::mmvari, ui->mmvariEdit->text());
-    setEngineSound(EngineWindow::mmvari + EngineWindow::i1, "input", ui->MMVARIRX1->currentText());
-    setEngineSound(EngineWindow::mmvari + EngineWindow::i1, "output", ui->MMVARITX1->currentText());
+    QSettings settings("./Configuration/DataModes.ini", QSettings::IniFormat);
 
-    setEnginePath(EngineWindow::mmtty + EngineWindow::i1, ui->mmttyEdit1->text());
-    setEnginePath(EngineWindow::mmtty + EngineWindow::i2, ui->mmttyEdit2->text());
-    setEnginePath(EngineWindow::twotone + EngineWindow::i1, ui->twotoneEdit1->text());
-    setEnginePath(EngineWindow::twotone + EngineWindow::i2, ui->twotoneEdit2->text());
-    setEnginePath(EngineWindow::fldigi + EngineWindow::i1, ui->fldigiEdit->text());
-    setEnginePath(EngineWindow::fldigi + EngineWindow::i2, ui->fldigiEdit->text());
-    setEnginePath(EngineWindow::gritty + EngineWindow::i1, ui->grittyEdit->text());
-    setEnginePath(EngineWindow::gritty + EngineWindow::i2, ui->grittyEdit->text());
+    setEngineSound(settings, EngineWindow::mmvari + EngineWindow::i1, "input", ui->MMVARIRX1->currentText());
+    setEngineSound(settings, EngineWindow::mmvari + EngineWindow::i1, "output", ui->MMVARITX1->currentText());
 
-    setEngineEnabled(EngineWindow::mmvari + EngineWindow::i1, ui->mmvariEnable1->isChecked());
-    setEngineEnabled(EngineWindow::mmvari + EngineWindow::i2, ui->mmvariEnable2->isChecked());
-    setEngineEnabled(EngineWindow::mmtty + EngineWindow::i1, ui->mmttyEnable1->isChecked());
-    setEngineEnabled(EngineWindow::mmtty + EngineWindow::i2, ui->mmttyEnable2->isChecked());
-    setEngineEnabled(EngineWindow::twotone + EngineWindow::i1, ui->twotoneEnable1->isChecked());
-    setEngineEnabled(EngineWindow::twotone + EngineWindow::i2, ui->twotoneEnable2->isChecked());
-    setEngineEnabled(EngineWindow::fldigi + EngineWindow::i1, ui->fldigiEnable1->isChecked());
-    setEngineEnabled(EngineWindow::fldigi + EngineWindow::i2, ui->fldigiEnable2->isChecked());
-    setEngineEnabled(EngineWindow::gritty + EngineWindow::i1, ui->grittyEnable1->isChecked());
-    setEngineEnabled(EngineWindow::gritty + EngineWindow::i2, ui->grittyEnable2->isChecked());
-    setEngineEnabled(EngineWindow::test + EngineWindow::i1, ui->testEnable1->isChecked());
-    setEngineEnabled(EngineWindow::test + EngineWindow::i2, ui->testEnable2->isChecked());
+    setEnginePath(settings, EngineWindow::mmtty + EngineWindow::i1, ui->mmttyEdit1->text());
+    setEnginePath(settings, EngineWindow::mmtty + EngineWindow::i2, ui->mmttyEdit2->text());
+    setEnginePath(settings, EngineWindow::twotone + EngineWindow::i1, ui->twotoneEdit1->text());
+    setEnginePath(settings, EngineWindow::twotone + EngineWindow::i2, ui->twotoneEdit2->text());
+    setEnginePath(settings, EngineWindow::fldigi + EngineWindow::i1, ui->fldigiEdit->text());
+    setEnginePath(settings, EngineWindow::fldigi + EngineWindow::i2, ui->fldigiEdit->text());
+    setEnginePath(settings, EngineWindow::gritty + EngineWindow::i1, ui->grittyEdit->text());
+    setEnginePath(settings, EngineWindow::gritty + EngineWindow::i2, ui->grittyEdit->text());
 
-    setEnginePort(EngineWindow::gritty + EngineWindow::i1, ui->grittyPort1->text().toInt());
-    setEnginePort(EngineWindow::gritty + EngineWindow::i2, ui->grittyPort2->text().toInt());
-    setEnginePort(EngineWindow::fldigi + EngineWindow::i1, ui->fldigiPort1->text().toInt());
-    setEnginePort(EngineWindow::fldigi + EngineWindow::i2, ui->fldigiPort2->text().toInt());
+    setEngineEnabled(settings, EngineWindow::mmvari + EngineWindow::i1, ui->mmvariEnable1->isChecked());
+    setEngineEnabled(settings, EngineWindow::mmvari + EngineWindow::i2, ui->mmvariEnable2->isChecked());
+    setEngineEnabled(settings, EngineWindow::mmtty + EngineWindow::i1, ui->mmttyEnable1->isChecked());
+    setEngineEnabled(settings, EngineWindow::mmtty + EngineWindow::i2, ui->mmttyEnable2->isChecked());
+    setEngineEnabled(settings, EngineWindow::twotone + EngineWindow::i1, ui->twotoneEnable1->isChecked());
+    setEngineEnabled(settings, EngineWindow::twotone + EngineWindow::i2, ui->twotoneEnable2->isChecked());
+    setEngineEnabled(settings, EngineWindow::fldigi + EngineWindow::i1, ui->fldigiEnable1->isChecked());
+    setEngineEnabled(settings, EngineWindow::fldigi + EngineWindow::i2, ui->fldigiEnable2->isChecked());
+    setEngineEnabled(settings, EngineWindow::gritty + EngineWindow::i1, ui->grittyEnable1->isChecked());
+    setEngineEnabled(settings, EngineWindow::gritty + EngineWindow::i2, ui->grittyEnable2->isChecked());
+    setEngineEnabled(settings, EngineWindow::test + EngineWindow::i1, ui->testEnable1->isChecked());
+    setEngineEnabled(settings, EngineWindow::test + EngineWindow::i2, ui->testEnable2->isChecked());
 
-    setSpeed("RTTY", ui->rttySpeed->currentText());
-    setSpeed("BPSK", ui->BPSKSpeed->currentText());
+    setEnginePort(settings, EngineWindow::gritty + EngineWindow::i1, ui->grittyPort1->text().toInt());
+    setEnginePort(settings, EngineWindow::gritty + EngineWindow::i2, ui->grittyPort2->text().toInt());
+    setEnginePort(settings, EngineWindow::fldigi + EngineWindow::i1, ui->fldigiPort1->text().toInt());
+    setEnginePort(settings, EngineWindow::fldigi + EngineWindow::i2, ui->fldigiPort2->text().toInt());
 
-    QSettings settings;
-    settings.setValue(geoStr, saveGeometry());
+    setSpeed(settings, "RTTY", ui->rttySpeed->currentText());
+    setSpeed(settings, "BPSK", ui->BPSKSpeed->currentText());
 
-    accept();
+    QSettings qsettings;
+    qsettings.setValue(geoStr, saveGeometry());
+
+    if (check())
+    {
+        accept();
+    }
 }
 
 
