@@ -9,6 +9,8 @@ class EngineConfigure;
 }
 
 class QLineEdit;
+class QCheckBox;
+
 class DMMainWindow;
 
 class EngineConfigure : public QDialog
@@ -18,6 +20,7 @@ class EngineConfigure : public QDialog
 public:
     explicit EngineConfigure(DMMainWindow *parent = nullptr);
     ~EngineConfigure();
+
 
     static QString getEnginePath(QSettings &settings, QString engine);
     static QString getEnginePath(QString engine);
@@ -43,8 +46,9 @@ public:
     static int getEnginePort(QString engine);
     static void setEnginePort(QSettings &settings,QString engine, int port);
     static void setEnginePort(QString engine, int port);
-    static bool check();
 private slots:
+    bool check();
+
     void on_mmttyBrowse1_clicked();
     void on_mmttyBrowse2_clicked();
 
@@ -68,6 +72,9 @@ private:
     bool checkEnginesAvailable();
     virtual void closeEvent(QCloseEvent *event) override;
 
+    void checkEnginePath(QLineEdit *ele, QCheckBox *ecb);
+    void checkEnginePort(QLineEdit *ele, QCheckBox *ecb);
+    void setPortDefault(QSettings &settings, QString engine, QLineEdit *ple, int def);
 };
 
 #endif // ENGINECONFIGURE_H

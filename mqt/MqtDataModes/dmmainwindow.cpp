@@ -139,10 +139,7 @@ DMMainWindow::DMMainWindow(QWidget *parent)
 
     ui->startButton->setText(tr("Start All"));
 
-    if (EngineConfigure::check())
-    {
-        on_startButton_clicked();
-    }
+    on_startButton_clicked();
 }
 
 DMMainWindow::~DMMainWindow()
