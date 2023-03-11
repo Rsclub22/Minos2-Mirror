@@ -147,6 +147,10 @@ BundleFile::BundleFile( PROFILES p )
 
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpBandMapTraceDebug , "bandmapTraceDebug", false, QT_TR_NOOP(""), QT_TR_NOOP(""), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpClusterTraceDebug , "clusterTraceDebug", false, QT_TR_NOOP(""), QT_TR_NOOP(""), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpAutoQRZCsHF,"AutoQRZCsHF", false, QT_TR_NOOP("Auto QRZ HF callsigns"), QT_TR_NOOP("Auto QRZ HF callsigns"), false) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpAutoQRZCsVHF,"AutoQRZCsVHF", false,  QT_TR_NOOP("Auto QRZ VHF callsigns"), QT_TR_NOOP("Auto QRZ VHF callsigns"), false) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpAutoQRZWSJTHF,"AutoQRZWSJTHF", false,  QT_TR_NOOP("Auto QRZ HF WSJT-X callsigns"), QT_TR_NOOP("Auto QRZ HF WSJT-X callsigns"), false) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpAutoQRZWSJTVHF,"AutoQRZWSJTVHF", false,  QT_TR_NOOP("Auto QRZ VHF WSJT-X callsigns"), QT_TR_NOOP("Auto QRZ VHF WSJT-X callsigns"), false) ) );
 
         break;
     case epPRELOADPROFILE:

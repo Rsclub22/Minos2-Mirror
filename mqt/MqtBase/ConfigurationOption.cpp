@@ -8,6 +8,22 @@
 #include "ConfigurationOption.h"
 
 
+void ConfigurationOption::initialise(SettingsBundle *pset, int popt, QLineEdit *pcb, QString def)
+{
+    set = pset;
+    opt = popt;
+    qle = pcb;
+
+    set->getStringProfile(opt, sInitial);
+    if (sInitial.isEmpty())
+    {
+        qle->setText(def);
+    }
+    else
+    {
+        qle->setText(sInitial);
+    }
+}
 void ConfigurationOption::initialise(SettingsBundle *pset, int popt, QCheckBox *pcb)
 {
     set = pset;
@@ -62,6 +78,16 @@ bool ConfigurationOption::finalise() const
             if (now != iInitial)
             {
                 set->setIntProfile( opt, now );
+                set->flushProfile();
+                return true;
+            }
+        }
+        else if (qle)
+        {
+            QString now = qle->text();
+            if (now != sInitial)
+            {
+                set->setStringProfile(opt, now);
                 set->flushProfile();
                 return true;
             }

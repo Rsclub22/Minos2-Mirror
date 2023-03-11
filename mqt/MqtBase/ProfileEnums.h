@@ -91,7 +91,12 @@ enum LOGGERPROFILE {
     elpShowDerivedLoc,
 
     elpBandMapTraceDebug,
-    elpClusterTraceDebug
+    elpClusterTraceDebug,
+
+    elpAutoQRZCsHF,
+    elpAutoQRZCsVHF,
+    elpAutoQRZWSJTHF,
+    elpAutoQRZWSJTVHF
 
 
 };

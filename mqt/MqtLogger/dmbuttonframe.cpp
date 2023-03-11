@@ -13,6 +13,7 @@
 #include "MinosLoggerEvents.h"
 #include "MinosParameters.h"
 
+#include "MinosRPC.h"
 #include "dmbuttonframe.h"
 #include "tlogcontainer.h"
 #include "tsinglelogframe.h"

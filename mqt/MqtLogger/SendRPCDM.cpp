@@ -9,6 +9,7 @@
 
 #include <QHostInfo>
 #include "AppStartup.h"
+#include "MinosRPC.h"
 #include "cutils.h"
 #include "MTrace.h"
 

@@ -31,8 +31,16 @@ private slots:
 private:
     Ui::DefDirsDlg *ui;
 
-    int cap = 0;
     ConfigurationOption ConfAgeProtectContests;
+    ConfigurationOption ConfAge;
+    ConfigurationOption ConfListDir;
+    ConfigurationOption ConfLogDir;
+
+    ConfigurationOption autoQRZCsHF;
+    ConfigurationOption autoQRZCsVHF;
+    ConfigurationOption autoQRZWSJTHF;
+    ConfigurationOption autoQRZWSJTVHF;
+
 
     QString browseDefDir(const QString &prompt);
 };

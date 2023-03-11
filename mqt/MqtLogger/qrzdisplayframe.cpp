@@ -1,5 +1,6 @@
 #include <QSizePolicy>
 
+#include "MinosRPC.h"
 #include "RPCPubSub.h"
 #include "tlogcontainer.h"
 #include "tsinglelogframe.h"
@@ -19,9 +20,10 @@ QrzDisplayFrame::QrzDisplayFrame(QWidget *parent) :
     ui->setupUi(this);
     clear();
 
-    ui->searchQrzLineEdit->setValidator(&ucValidator);
+    ui->searchQrzLineEdit->setValidator(new UpperCaseValidator());
 
     connect (QrzDisplayServerRpc::getQrzDisplayServerRpc(), &QrzDisplayServerRpc::loggerQrzReply, this, &QrzDisplayFrame::onLoggerQrzReply);
+
     connect (QrzDisplayServerRpc::getQrzDisplayServerRpc(), &QrzDisplayServerRpc::qrzServerLoggedState, this, &QrzDisplayFrame::onQrzServerLoggedState);
     onQrzServerLoggedState(false, "");
 
@@ -43,13 +45,13 @@ QrzDisplayFrame::QrzDisplayFrame(QWidget *parent) :
     serverPingTimer = new QTimer(this);
     connect (serverPingTimer, &QTimer::timeout, this, [=](){onServerPingTimerTimeout();});
     serverPingTimer->start(PINGTIMER_DURATION);
+    ui->qrzSplitter->setSizes({1, 1, 100});
 }
 
 QrzDisplayFrame::~QrzDisplayFrame()
 {
     delete ui;
 }
-
 
 void QrzDisplayFrame::onSearchQrzReturnPressed()
 {
@@ -67,25 +69,15 @@ void QrzDisplayFrame::onSearchQrzReturnPressed()
         {
             setQrzMessageText(tr("Search callsign invalid"));
         }
-
-
-
     }
-
-
 }
-
 
 void QrzDisplayFrame::onCallsignTextMouseDoubleClicked()
 {
-
-
     if (!ui->callsignText->text().isEmpty())
     {
-
         MinosLoggerEvents::SendQRZInfoToLog(ui->callsignText->text(), ui->qraText->text(), ui->nameText->text());
     }
-
 }
 
 
@@ -131,14 +123,11 @@ void QrzDisplayFrame::onQrzServerLoggedState(bool state, QString stateMessage)
         setLogonPushButtonLabelText(false);
     }
 
-
-
     if (!stateMessage.isEmpty())
     {
         setQrzMessageText(stateMessage);
 
     }
-
 }
 
 void QrzDisplayFrame::onServerPingTimerTimeout()
@@ -220,17 +209,13 @@ void QrzDisplayFrame::clear()
 
 }
 
-
 void QrzDisplayFrame::getQrzDetailsForLogger(QString callsign)
 {
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
     QString frame_uuid = tslf->getContest()->uuid;
     trace(QString("[qrzDisplayFrame] sending callsign %1, from frame uuid %2 to QrzServer").arg(callsign, frame_uuid));
     QrzDisplayServerRpc::getQrzDisplayServerRpc()->sendCallsignFromLoggerToQrzServer(callsign, frame_uuid);
-
-
 }
-
 
 void QrzDisplayFrame::setQrzMessageText(QString msg)
 {
@@ -248,23 +233,14 @@ void QrzDisplayFrame::setLogonPushButtonLabelText(bool loggedOn)
     {
         ui->logOnStatusPb->setText(tr("Disconnected"));
     }
-
-
 }
 
 void QrzDisplayFrame::setContest(BaseContestLog( *c))
 {
     ct = c;
-
 }
 
-
-
 // -------- QRZ Display RPC -----------------------------------------------------
-
-
-
-//static bool syncstat = false;
 static QVector<QrzServerMessage> qrzRequestsQueue;
 
 QrzDisplayServerRpc *QrzDisplayServerRpc::qrzDisplayServerRpc = nullptr;
@@ -276,7 +252,6 @@ const char * QrzDisplayServerRpc::stateIndicator[] =
     QT_TR_NOOP("No Contact")
 };
 
-
 QrzDisplayServerRpc *QrzDisplayServerRpc::getQrzDisplayServerRpc()
 {
     if (!qrzDisplayServerRpc)
@@ -285,8 +260,6 @@ QrzDisplayServerRpc *QrzDisplayServerRpc::getQrzDisplayServerRpc()
     }
     return qrzDisplayServerRpc;
 }
-
-
 
 QrzDisplayServerRpc::QrzDisplayServerRpc()
 {
@@ -298,24 +271,16 @@ QrzDisplayServerRpc::QrzDisplayServerRpc()
     rpc->findProviders(rpcConstants::clusterApp, sv);
 
     connect(rpc, &MinosRPC::routerCall, this, &QrzDisplayServerRpc::on_routerCall);
-    connect(rpc, &MinosRPC::notify, this, &QrzDisplayServerRpc::on_notify);
-    connect(rpc, &MinosRPC::provider, this, &QrzDisplayServerRpc::on_provider);
 
     QString a = rpc->getAppName();
     QString station = MinosConfig::getMinosConfig()->getThisRouterName();
     trace(QString("[QrzDisplayServer]Publish %1 %2@%3").arg(rpcConstants::qrzDisplayApp, a, station));
     RPCPubSub::publish(rpcConstants::qrzDisplayApp,  a + "@" + station, "", psPublished);
-
-
 }
 
 QrzDisplayServerRpc::~QrzDisplayServerRpc()
 {
 }
-
-
-
-
 
 void QrzDisplayServerRpc::sendCallsignFromLoggerToQrzServer(QString callsign, QString frameid)
 {
@@ -341,7 +306,6 @@ void QrzDisplayServerRpc::sendCallsignFromLoggerToQrzServer(QString callsign, QS
         }
     }
 }
-
 
 void QrzDisplayServerRpc::on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString /*from*/ )
 {
@@ -525,25 +489,3 @@ void QrzDisplayServerRpc::on_routerCall(bool err, QSharedPointer<MinosRPCObj> mr
     }
 }
 
-
-void QrzDisplayServerRpc::on_notify(AnalysePubSubNotify /*an*/, const QString /*from*/ )
-{
-//    trace(QString("[QrzDisplayServer]   on_notify - routerName = %1, publisherProgram = %2, app = %3").arg(an.getPublisherRouter(), an.getPublisherProgram(), an.getKey()));
-}
-
-void QrzDisplayServerRpc::on_provider(Provider, QString /*cat*/)
-{
-//    syncstat = true;
-}
-
-/*
-void QrzServerRpc::SyncTimerTimer(  )
-{
-    if (qrzRequestsQueue.count())
-    {
-        //emit qrzRequestQueue(qrzRequestsQueue);
-        //qrzRequestsQueue.clear();
-    }
-}
-
-*/

@@ -484,6 +484,23 @@ void QSOLogFrame::focusChange(QObject *obj, bool in, QFocusEvent *event)
     if (obj == ui->CallsignFrame->getTextEditEdit())
     {
         ui->CallsignFrame->getTextEditlabel()->setText(colStr + CallsignLabelString);
+        if (!in)
+        {
+            // test for auto QRZ, if so, do so
+            bool autoQRZ;
+            if (contest->isHF())
+            {
+                TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpAutoQRZCsHF, autoQRZ );
+            }
+            else
+            {
+                TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpAutoQRZCsVHF, autoQRZ );
+            }
+            if (autoQRZ)
+            {
+                onQrzButtonClicked();
+            }
+        }
     }
 
     if (obj == ui->RSTTxFrame->getTextEditEdit())

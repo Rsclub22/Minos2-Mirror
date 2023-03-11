@@ -2,9 +2,7 @@
 #define QRZDISPLAYFRAME_H
 
 #include <QFrame>
-#include "MinosRPC.h"
 #include "XMPPRPCObj.h"
-#include "cutils.h"
 #include "qrzServerCommon.h"
 
 
@@ -27,8 +25,6 @@ public:
     void getQrzDetailsForLogger(QString callign);
     void setContest(BaseContestLog *c);
 
-
-
 private slots:
     void onQrzServerLoggedState(bool, QString);
     void onLoggerQrzReply(QrzCallsignData cd, QString qrzReplyState, QString uuid);
@@ -40,11 +36,10 @@ private slots:
     void onSearchQrzReturnPressed();
     void onBearingMouseDoubleClicked();
     void onNameTextMouseDoubleClicked();
+
 private:
     Ui::QrzDisplayFrame *ui;
     BaseContestLog *ct = nullptr;
-
-    UpperCaseValidator ucValidator;
 
     QrzDisplayServerRpc *qrzDisplayServerRpc;
 
@@ -87,23 +82,13 @@ signals:
 private:
 
     static QrzDisplayServerRpc *qrzDisplayServerRpc;
-    //QTimer SyncTimer;
 
     QVector<QrzServer> serverList;
 
 
 private slots:
 
-    //void SyncTimerTimer( );
     void on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString from);
-
-    void on_notify(AnalysePubSubNotify an, const QString );
-
-    void on_provider(Provider, QString cat);
-
-
-
-
 };
 
 

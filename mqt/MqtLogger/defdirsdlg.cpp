@@ -24,11 +24,19 @@ DefDirsDlg::~DefDirsDlg()
 void DefDirsDlg::initialise()
 {
     QString deflog = TLogContainer::getDefaultDirectory(false);
-    ui->logsDirEdit->setText(deflog);
-    QString deflist =TLogContainer::getDefaultDirectory(true);
-    ui->listsDirEdit->setText(deflist);
+    QString deflist = TLogContainer::getDefaultDirectory(true);
+
+    ConfAge.initialise(&TContestApp::getContestApp() ->loggerBundle,elpAgeToProtectContests, ui->ageSpinner);
+    ConfListDir.initialise(&TContestApp::getContestApp() ->loggerBundle,elpListDirectory, ui->listsDirEdit, deflist);
+    ConfLogDir.initialise(&TContestApp::getContestApp() ->loggerBundle,elpLogDirectory, ui->logsDirEdit, deflog);
 
     ConfAgeProtectContests.initialise(&TContestApp::getContestApp() ->loggerBundle, elpAgeProtectContests, ui->ageCb);
+
+    autoQRZCsHF.initialise(&TContestApp::getContestApp() ->loggerBundle,elpAutoQRZCsHF, ui->QRZCsHF);
+    autoQRZCsVHF.initialise(&TContestApp::getContestApp() ->loggerBundle,elpAutoQRZCsVHF, ui->QRZCsVHF);
+    autoQRZWSJTHF.initialise(&TContestApp::getContestApp() ->loggerBundle,elpAutoQRZWSJTHF, ui->QRZWSJTXHF);
+    autoQRZWSJTVHF.initialise(&TContestApp::getContestApp() ->loggerBundle,elpAutoQRZWSJTVHF, ui->QRZWSJTVHF);
+
 }
 bool DefDirsDlg::check()
 {
@@ -41,29 +49,22 @@ void DefDirsDlg::cancel()
 void DefDirsDlg::finalise()
 {
     bool doSelectSession = false;
-    QString temp;
 
-    temp = ui->logsDirEdit->text().trimmed();
-    TContestApp::getContestApp() ->loggerBundle.setStringProfile( elpLogDirectory, temp );
-
-
-    temp = ui->listsDirEdit->text().trimmed();
-    TContestApp::getContestApp() ->loggerBundle.setStringProfile( elpListDirectory, temp );
-
-    int ncap = ui->ageSpinner->value();
-    if (cap != ncap)
+    ConfListDir.finalise();
+    ConfLogDir.finalise();
+    if (ConfAgeProtectContests.finalise())
     {
-        TContestApp::getContestApp() ->loggerBundle.setIntProfile(elpAgeToProtectContests, ncap);
-        TContestApp::getContestApp() ->loggerBundle.flushProfile();
-
         doSelectSession = true;
     }
     if (ConfAgeProtectContests.finalise())
     {
         doSelectSession = true;
     }
+    autoQRZCsHF.finalise();
+    autoQRZCsVHF.finalise();
+    autoQRZWSJTHF.finalise();
+    autoQRZWSJTVHF.finalise();
 
-    TContestApp::getContestApp() ->loggerBundle.flushProfile();
     if (doSelectSession)
     {
         TWaitCursor wc(this);

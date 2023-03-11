@@ -30,6 +30,7 @@ public:
     {}
     ~ConfigurationOption(){}
 
+    void initialise(SettingsBundle *set, int opt, QLineEdit *cb, QString def);
     void initialise(SettingsBundle *set, int opt, QCheckBox *cb);
     void initialise(SettingsBundle *set, int opt, QSpinBox *sb);
     void initialise(QString fileName, QString section, QString key, QLineEdit *qle, QString def);
