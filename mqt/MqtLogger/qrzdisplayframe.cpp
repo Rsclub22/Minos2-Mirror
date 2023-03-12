@@ -45,7 +45,6 @@ QrzDisplayFrame::QrzDisplayFrame(QWidget *parent) :
     serverPingTimer = new QTimer(this);
     connect (serverPingTimer, &QTimer::timeout, this, [=](){onServerPingTimerTimeout();});
     serverPingTimer->start(PINGTIMER_DURATION);
-    ui->qrzSplitter->setSizes({1, 1, 100});
 }
 
 QrzDisplayFrame::~QrzDisplayFrame()
