@@ -484,7 +484,7 @@ void QSOLogFrame::focusChange(QObject *obj, bool in, QFocusEvent *event)
     if (obj == ui->CallsignFrame->getTextEditEdit())
     {
         ui->CallsignFrame->getTextEditlabel()->setText(colStr + CallsignLabelString);
-        if (!in)
+        if (contest && !in)
         {
             // test for auto QRZ, if so, do so
             bool autoQRZ;
