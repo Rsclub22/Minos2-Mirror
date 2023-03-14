@@ -47,7 +47,7 @@ BundleFile::BundleFile( PROFILES p )
         entries.push_back( QSharedPointer<ProfileEntry> (new ProfileEntry( elpQTHFile, "QTHFile", "./Configuration/QTH.ini", QT_TR_NOOP("QTH settings file"), QT_TR_NOOP("File containing QTH settings"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpLocsFile, "LocsFile", "./Configuration/LocSquares.ini", QT_TR_NOOP("Country locators file"), QT_TR_NOOP("File containing valid locators for countries"), false ) ));
 
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpDigiFunctionKeyFile, "DigiFKeyFile", "./Configuration/FunctionKeyMessages/Digi Default Messages.mc", QT_TR_NOOP("Digi Function Keys file"), QT_TR_NOOP("Digi Function Keys file"), false ) ));
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpDigiFunctionKeyFile, "DigiFKeyFile", "./Configuration/FunctionKeyMessages/Digi Messages.json", QT_TR_NOOP("Digi Function Keys file"), QT_TR_NOOP("Digi Function Keys file"), false ) ));
 
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpDisplayFile, "DisplayFile", "./Configuration/Display.ini", QT_TR_NOOP("Display settings file"), QT_TR_NOOP("File containing saved display settings"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpDisplaySection, "DisplaySection", "Default", QT_TR_NOOP("Display file section"), QT_TR_NOOP("Section to use in display file"), false ) ) );
