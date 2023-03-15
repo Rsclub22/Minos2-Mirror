@@ -109,6 +109,7 @@ void ScreenContact::initialise(BaseContestLog *ct , bool rInit)
     comments.setValue(QString());
     contactFlags.setValue(0);
     forcedMult.setValue(QString());
+    sentExchange.setValue(QString());
     setFrequency(Frequency(), QString());
     markOffset.clear();
     rotatorHeading = "";
@@ -161,6 +162,7 @@ void ScreenContact::copyFromArg( QSharedPointer<BaseContact> cct )
     ctryMult = cct->ctryMult;
     multCount = cct->multCount;
     forcedMult = cct->forcedMult;
+    sentExchange = cct->sentExchange;
     setFrequency(cct->getFrequency(), cct->band);
     markOffset = cct->markOffset;
     rotatorHeading = cct->rotatorHeading.getValue();
@@ -214,6 +216,7 @@ void ScreenContact::copyFromArg( ScreenContact &cct )
     ctryMult = cct.ctryMult;
     multCount = cct.multCount;
     forcedMult = cct.forcedMult;
+    sentExchange = cct.sentExchange;
     setFrequency(cct.getFrequency(), cct.band);
     markOffset = cct.markOffset;
     rotatorHeading = cct.rotatorHeading;

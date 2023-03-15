@@ -90,6 +90,7 @@ public:
     MinosStringItem<QString> comments;
     MinosItem<unsigned short> contactFlags;
     MinosStringItem<QString> forcedMult;
+    MinosStringItem<QString> sentExchange;
 
     QSharedPointer<DistrictEntry> districtMult;
     QSharedPointer<CountryEntry> ctryMult;

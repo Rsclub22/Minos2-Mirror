@@ -1395,6 +1395,8 @@ void QSOLogFrame::getScreenEntry()
    QString extra = ui->QTHFrame->getTextEditEdit()->text().trimmed();
    screenContact.extraText.setValue(extra);
 
+   screenContact.sentExchange.setValue(sentExchange);
+
    QString comments = ui->commentsFrame->getTextEditEdit()->text().trimmed();
    screenContact.comments.setValue(comments);
    screenContact.markOffset = markOffset;
@@ -1493,6 +1495,9 @@ void QSOLogFrame::showScreenEntry( )
       }
 
       ui->MGMSubModeEdit->setText(temp.mgmSubmode);
+
+      // This value doesn't get displayed
+      sentExchange = temp.sentExchange.getValue();
 
       // and now we want to put the selection on each at the END of the text
       for ( auto const &vcp: qAsConst(vcs) )

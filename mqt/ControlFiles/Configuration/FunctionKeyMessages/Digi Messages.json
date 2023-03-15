@@ -1,0 +1,99 @@
+[
+
+  {
+    "Name": "Default",
+    "Run": [
+      [ "F1", "Run CQ", "CQ CQ TEST {MYCALL} {MYCALL} {CALLFIELD}" ],
+      [ "F2", "Run Exch", "!{SENTRST} {EXCH} {EXCH} {EXCH} ! {SERIALFIELD}" ],
+      [ "F3", "Run TU", "{LOG}! TU de {MYCALL} QRZ? {CALLFIELD}" ],
+      [ "F4", "{MYCALL}", "{MYCALL}" ],
+      [ "F5", "His Call", "!" ],
+      [ "F6", "Spare", "" ],
+      [ "F7", "My Exch", "{SENTRST} {EXCH} {EXCH} {EXCH}" ],
+      [ "F8", "Agn?", "agn? agn?" ],
+      [ "F9", "Log", "{LOG}" ],
+      [ "F10", "Call Field", "{CALLFIELD}" ],
+      [ "F11", "Serial Field", "{SERIALFIELD}" ],
+      [ "F12", "Wipe", "{WIPE}" ]
+
+    ],
+    "SandP": [
+      [ "F1", "S&P CQ", "CQ TEST {MYCALL} {MYCALL} CQ {CALLFIELD}" ],
+      [ "F2", "S&P Exch", "! {SENTRST} {EXCH} {EXCH} {EXCH} {MYCALL}" ],
+      [ "F3", "S&P TU", "{LOG}! TU de {MYCALL}" ],
+      [ "F4", "S&P Call Him", "! de {MYCALL} {MYCALL}" ],
+      [ "F5", "His Call", "!" ],
+      [ "F6", "{MYCALL}", "{MYCALL}" ],
+      [ "F7", "My Exch", "{SENTRST} {EXCH} {EXCH} {EXCH}" ],
+      [ "F8", "Agn?", "agn? agn?" ],
+      [ "F9", "Log QSO", "{LOG}" ],
+      [ "F10", "Call Field", "{CALLFIELD}" ],
+      [ "F11", "Serial Field", "{SERIALFIELD}" ],
+      [ "F12", "Wipe", "{WIPE}" ]
+    ]
+  },
+  {
+    "Name": "BARTG Sprint",
+    "Run": [
+      [ "F1", "Run CQ", "CQ CQ BARTG {MYCALL} {MYCALL} {CALLFIELD}" ],
+      [ "F2", "Run Exch", "! {EXCH} {EXCH} {EXCH} ! {SERIALFIELD}" ],
+      [ "F3", "Run TU", "{LOG}! TU de {MYCALL} QRZ? {CALLFIELD}" ],
+      [ "F4", "{MYCALL}", "{MYCALL}" ],
+      [ "F5", "His Call", "!" ],
+      [ "F6", "Spare", "" ],
+      [ "F7", "My Exch", "{SENTRST} {EXCH} {EXCH} {EXCH}" ],
+      [ "F8", "Agn?", "agn? agn?" ],
+      [ "F9", "Log", "{LOG}" ],
+      [ "F10", "Call Field", "{CALLFIELD}" ],
+      [ "F11", "Serial Field", "{SERIALFIELD}" ],
+      [ "F12", "Wipe", "{WIPE}" ]
+
+    ],
+    "SandP": [
+      [ "F1", "S&P CQ", "CQ BARTG {MYCALL} {MYCALL} CQ {CALLFIELD}" ],
+      [ "F2", "S&P Exch", "! {EXCH} {EXCH} {EXCH} {MYCALL}" ],
+      [ "F3", "S&P TU", "{LOG}! TU de {MYCALL}" ],
+      [ "F4", "S&P Call Him", "! de {MYCALL} {MYCALL}" ],
+      [ "F5", "His Call", "!" ],
+      [ "F6", "{MYCALL}", "{MYCALL}" ],
+      [ "F7", "My Exch", "{EXCH} {EXCH} {EXCH}" ],
+      [ "F8", "Agn?", "agn? agn?" ],
+      [ "F9", "Log QSO", "{LOG}" ],
+      [ "F10", "Call Field", "{CALLFIELD}" ],
+      [ "F11", "Serial Field", "{SERIALFIELD}" ],
+      [ "F12", "Wipe", "{WIPE}" ]
+    ]
+  },
+  {
+    "Name": "BARTG HF",
+    "Run": [
+      [ "F1", "Run CQ", "CQ CQ BARTG {MYCALL} {MYCALL} {CALLFIELD}" ],
+      [ "F2", "Run Exch", "! {EXCH} {TIME2} {EXCH} {TIME2} {EXCH} {TIME2} ! {SERIALFIELD}" ],
+      [ "F3", "Run TU", "{LOG}! TU de {MYCALL} QRZ? {CALLFIELD}" ],
+      [ "F4", "{MYCALL}", "{MYCALL}" ],
+      [ "F5", "His Call", "!" ],
+      [ "F6", "Spare", "" ],
+      [ "F7", "My Exch", "{SENTRST} {EXCH} {TIME2} {EXCH} {TIME2} {EXCH} {TIME2}" ],
+      [ "F8", "Agn?", "agn? agn?" ],
+      [ "F9", "Log", "{LOG}" ],
+      [ "F10", "Call Field", "{CALLFIELD}" ],
+      [ "F11", "Serial Field", "{SERIALFIELD}" ],
+      [ "F12", "Wipe", "{WIPE}" ]
+
+    ],
+    "SandP": [
+      [ "F1", "S&P CQ", "CQ BARTG {MYCALL} {MYCALL} CQ {CALLFIELD}" ],
+      [ "F2", "S&P Exch", "! {EXCH} {TIME2} {EXCH} {TIME2} {EXCH} {TIME2} {MYCALL}" ],
+      [ "F3", "S&P TU", "{LOG}! TU de {MYCALL}" ],
+      [ "F4", "S&P Call Him", "! de {MYCALL} {MYCALL}" ],
+      [ "F5", "His Call", "!" ],
+      [ "F6", "{MYCALL}", "{MYCALL}" ],
+      [ "F7", "My Exch", "{EXCH} {TIME2} {EXCH} {TIME2} {EXCH} {TIME2}" ],
+      [ "F8", "Agn?", "agn? agn?" ],
+      [ "F9", "Log QSO", "{LOG}" ],
+      [ "F10", "Call Field", "{CALLFIELD}" ],
+      [ "F11", "Serial Field", "{SERIALFIELD}" ],
+      [ "F12", "Wipe", "{WIPE}" ]
+    ]
+  }
+]

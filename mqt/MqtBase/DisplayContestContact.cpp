@@ -121,6 +121,7 @@ void DisplayContestContact::copyFromArg( ScreenContact &cct )
    ctryMult = cct.ctryMult;
    multCount = cct.multCount;
    forcedMult = cct.forcedMult ;
+   sentExchange = cct.sentExchange;
    setFrequency(cct.getFrequency(), cct.band);
    rotatorHeading.setValue(cct.rotatorHeading);
    rigName.setValue(cct.rigName);
@@ -198,6 +199,9 @@ bool DisplayContestContact::ne(const ScreenContact &mct) const
       return true; // i.e. not equal
 
    if ( strcmpsp( mct.forcedMult.getValue(), forcedMult.getValue() ) )
+      return true; // i.e. not equal
+
+   if ( strcmpsp( mct.sentExchange.getValue(), sentExchange.getValue() ) )
       return true; // i.e. not equal
 
    if (getFrequency().getValue() != mct.getFrequency().getValue())
@@ -764,6 +768,7 @@ void DisplayContestContact::processMinosStanza( const QString &methodName, Minos
          mt->getStructArgMemberValue( "bandsList", contest->bandsList );
          mt->getStructArgMemberValue( "claimedScore", contactScore );
          mt->getStructArgMemberValue( "forcedMult", forcedMult );
+         mt->getStructArgMemberValue( "sentExchange", sentExchange );
          if (mt->getStructArgMemberValue( "frequency", temp ))
          {
             QString fband;

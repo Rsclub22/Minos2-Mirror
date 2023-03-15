@@ -221,7 +221,6 @@ void ContestDetailsTransferObject::getFromContest(LoggerContestLog *ct)
     sectionList = ct->sectionList;
 
     screenLayout = ct->screenLayout;
-
 }
 void ContestDetailsTransferObject::setToContest(LoggerContestLog *ct)
 {
@@ -343,5 +342,4 @@ void ContestDetailsTransferObject::setToContest(LoggerContestLog *ct)
     ct->sectionList = sectionList;
 
     ct->screenLayout = screenLayout;
-
 }

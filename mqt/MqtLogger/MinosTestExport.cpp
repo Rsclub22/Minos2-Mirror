@@ -134,6 +134,8 @@ void MinosTestExport::exportContest( QSharedPointer<QFile> expfd )
 
    ct->screenLayout.addIfDirty(st, "ScreenLayout", dirty);
 
+   ct->currentFKeySet.addIfDirty(st, "currentFKeySet", dirty);
+
    if ( dirty )
    {
       sendRequest( expfd, "MinosLogContest", st );
@@ -377,6 +379,7 @@ int MinosTestExport::exportQSO(QSharedPointer<QFile> expfd, const QSharedPointer
    ct->currentBand.addIfDirty( st, "currentBand", dirty );
    ct->bandsList.addIfDirty( st, "bandsList", dirty );
    lct->forcedMult.addIfDirty( st, "forcedMult", dirty );
+   lct->sentExchange.addIfDirty( st, "sentExchange", dirty );
    lct->getFrequency().addIfDirty( st, "frequency", dirty );
    lct->rotatorHeading.addIfDirty( st, "rotatorHeading", dirty );
    lct->rigName.addIfDirty( st, "rigName", dirty );

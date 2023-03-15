@@ -464,6 +464,11 @@ QSO:  3799 PH 1999-03-06 0712 HC8N           59 700    N5KO           59 CA     
     if (lcl->otherExchange.getValue() || lcl->otherOptionalExchange.getValue())
     {
         QString extra = lcl->location.getValue();
+
+        if (!sentExchange.getValue().isEmpty())
+        {
+            extra = sentExchange.getValue();
+        }
         if (extra.isEmpty())
         {
             extra = "-";

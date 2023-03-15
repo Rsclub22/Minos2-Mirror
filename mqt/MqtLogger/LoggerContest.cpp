@@ -117,10 +117,8 @@ void LoggerContestLog::clearDirty()
    clusterFilterSettings.clearDirty();
    bandmapFilterSettings.clearDirty();
 
-
-
-
    screenLayout.clearDirty();
+   currentFKeySet.clearDirty();
    statsPeriod1.clearDirty();
    statsPeriod2.clearDirty();
    showContinentEU.clearDirty();
@@ -194,10 +192,8 @@ void LoggerContestLog::setDirty()
    clusterFilterSettings.setDirty();
    bandmapFilterSettings.setDirty();
 
-
-
-
    screenLayout.setDirty();
+   currentFKeySet.setDirty();
    statsPeriod1.setDirty();
    statsPeriod2.setDirty();
    showContinentEU.setDirty();
@@ -267,6 +263,8 @@ bool LoggerContestLog::initialise( const QString &fn, bool newFile, int slotno )
    screenLayout.setInitialValue(temp);
 
    temp.clear(); // Initial value now comes from the screen config
+
+   currentFKeySet.setInitialValue("Default");
 
    for (int i = 0; i < STACKITEMS; i++)
    {
@@ -1535,6 +1533,7 @@ void LoggerContestLog::processMinosStanza( const QString &methodName, MinosTestI
       mt->getStructArgMemberValue( "section", entSect );
       mt->getStructArgMemberValue( "sectionList", sectionList );
       mt->getStructArgMemberValue( "ScreenLayout", screenLayout);
+      mt->getStructArgMemberValue("currentFKeySet", currentFKeySet);
    }
    else
       if ( methodName == "MinosLogMode" )

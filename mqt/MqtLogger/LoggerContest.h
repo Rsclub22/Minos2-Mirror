@@ -139,6 +139,7 @@ protected:
       QDateTime lastLocatorTabTime;
 
       MinosStringItem<QString> screenLayout;
+      MinosStringItem<QString> currentFKeySet;
 
       MinosItem<int> statsPeriod1;
       MinosItem<int> statsPeriod2;

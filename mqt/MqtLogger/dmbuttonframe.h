@@ -9,6 +9,7 @@
 
 class QPushButton;
 class QFileSystemWatcher;
+class LoggerContestLog;
 class BaseContestLog;
 
 namespace Ui {
@@ -44,20 +45,26 @@ private slots:
     void fkeyFileChanged();
     void DMMess(AnalysePubSubNotify an);
     void onModeChange(QString mode);
+    void on_fkeysetCombo_textActivated(const QString &arg1);
+
 private:
     Ui::DMButtonFrame *ui;
-    BaseContestLog *ct = nullptr;
+    LoggerContestLog *ct = nullptr;
 
     QString fkeyFileName;
     QFileSystemWatcher *qfsw = nullptr;
+    QStringList nameList;
+    QString currentName = "Default";
 
     QVector<QPushButton *> fButtons;
-    QMap<QString, QVector<QPair<QString, QString> > > fkeys;
+    QMap<QString, QMap<QString, QVector<QPair<QString, QString> > > > fkeys;
 
     QString dataSender;
 
     void showFButtons(bool s);
     QString getFKeysString() const;
+    bool parseFKeyString(QString s, QString mode);
+    bool parseFKeyArray(QJsonArray s, QString keyset, QString mode);
 };
 
 #endif // DMBUTTONFRAME_H

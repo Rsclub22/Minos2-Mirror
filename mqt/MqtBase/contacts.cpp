@@ -241,6 +241,7 @@ BaseContact& BaseContact::operator =( const BaseContact &ct )
    comments = ct.comments;
    contactFlags = ct.contactFlags;
    forcedMult = ct.forcedMult;
+   sentExchange = ct.sentExchange;
    setFrequency(ct.getFrequency(), ct.band);
    rotatorHeading = ct.rotatorHeading;
    rigName = ct.rigName;
@@ -287,6 +288,7 @@ void BaseContact::clearDirty()
    comments.clearDirty();
    contactFlags.clearDirty();
    forcedMult.clearDirty();
+   sentExchange.clearDirty();
    clearFrequencyDirty();
    rotatorHeading.clearDirty();
    rigName.clearDirty();
@@ -312,6 +314,7 @@ void BaseContact::setDirty()
    comments.setDirty();
    contactFlags.setDirty();
    forcedMult.setDirty();
+   sentExchange.setDirty();
    setFrequencyDirty();
    rotatorHeading.setDirty();
    rigName.setDirty();

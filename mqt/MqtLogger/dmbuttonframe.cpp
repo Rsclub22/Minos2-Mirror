@@ -1,3 +1,4 @@
+#include <QString>
 #include <QJsonDocument>
 #include <QJsonParseError>
 #include <QJsonObject>
@@ -9,6 +10,7 @@
 #include <QFileSystemWatcher>
 
 #include "ContestApp.h"
+#include "LoggerContest.h"
 #include "MShowMessageDlg.h"
 #include "MinosLoggerEvents.h"
 #include "MinosParameters.h"
@@ -48,6 +50,8 @@ DMButtonFrame::DMButtonFrame(QWidget *parent) :
     ui->nameLabel->setText(tr("Data Modes Buttons from %1").arg(fkeyFileName));
 
     ui->FButtonFrame->setEnabled(false);
+
+    ui->fkeysetCombo->addItem(currentName);
 }
 
 DMButtonFrame::~DMButtonFrame()
@@ -90,9 +94,11 @@ void DMButtonFrame::fButtonClicked()
 }
 void DMButtonFrame::setContest(BaseContestLog *c)
 {
-    ct = c;
+    ct = dynamic_cast<LoggerContestLog *>( c);
     if (ct)
     {
+        currentName = ct->currentFKeySet.getValue();
+        ui->fkeysetCombo->setCurrentText(currentName);
         QString mode = ct->currentMode.getValue();
         onModeChange(mode);
     }
@@ -101,11 +107,11 @@ void DMButtonFrame::fKey(BaseContestLog *c, int key, int carr)
 {
     if (c == ct)
     {
-        if (key >= Qt::Key_F1 && key <= Qt::Key_F12 && fkeys["Digi"].size() == 24)
+        if (key >= Qt::Key_F1 && key <= Qt::Key_F12 && fkeys["Digi"][currentName].size() == 24)
         {
             TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
             int spoffset = tslf->GJVQSOLogFrame->getSandP()?12:0;
-            QPair<QString, QString> mess = fkeys["Digi"][key - Qt::Key_F1 + spoffset];
+            QPair<QString, QString> mess = fkeys["Digi"][currentName][key - Qt::Key_F1 + spoffset];
 
             QString toSend = parseFKeyMessage(mess.second);
 
@@ -131,11 +137,13 @@ void DMButtonFrame::showFButtons(bool s)
     ui->FButtonFrame->setEnabled(false);
     MinosRPC *rpc = MinosRPC::getMinosRPC();
 
-    if (fkeys["Digi"].size() == 24)
+    if (fkeys["Digi"][currentName].size() == 24)
     {
         for (int i = 0; i < 12; i++)
         {
-            fButtons[i]->setText(fkeys["Digi"][i + (s?12:0)].first);
+            QString keytop = fkeys["Digi"][currentName][i + (s?12:0)].first;
+
+            fButtons[i]->setText(keytop);
         }
         ui->FButtonFrame->setEnabled(true);
 
@@ -144,7 +152,7 @@ void DMButtonFrame::showFButtons(bool s)
         rpc->publish( rpcConstants::DMCat, rpcConstants::DMFKeys, fkeys, psPublished );
 
     }
-    else if (fkeys["Digi"].size() == 0)
+    else if (fkeys["Digi"][currentName].size() == 0)
     {
         for (int i = 0; i < 12; i++)
         {
@@ -246,7 +254,13 @@ QString DMButtonFrame::parseFKeyMessage(QString mess)
                 }
                 else if (macro == "TIME2")
                 {
-                    txMess += QDateTime::currentDateTimeUtc().toString("HHmm");
+                    QString t2 = sc->sentExchange.getValue();
+                    if (t2.isEmpty())
+                    {
+                        t2 = QDateTime::currentDateTimeUtc().toString("HHmm");
+                    }
+                    txMess += t2;
+                    tslf->GJVQSOLogFrame->sentExchange = t2;
                 }
                 else if (macro == "LOG")
                 {
@@ -299,27 +313,76 @@ void DMButtonFrame::parseFKeyFile(QString fname, QString mode)
         MinosParameters::getMinosParameters() ->mshowMessage( ebuff );
         return;
     }
-    QTextStream istr(&lf);
-    while (!istr.atEnd())
+    bool retval = false;
+
+    QString s = lf.readAll();
+    retval = parseFKeyString(s, mode);
+    if (retval == false)
     {
-        // loop through file, parsing each line into a_exp entries
-        // for each line, call proc_line
-        // ignore comment lines. (any non alpha/num char)
-
-        QString buff = istr.readLine(0);
-        QStringList a;
-        if (buff.isEmpty() || (buff[ 0 ] == '#' ))
-        {
-            continue;   // skip comment lines
-        }
-        int cp = buff.indexOf(',');
-        a.push_back(buff.left(cp));
-        a.push_back(buff.right(buff.length() - cp - 1));
-
-        fkeys[mode].append(QPair<QString, QString>(a[0], a[1]));
+        mShowMessage(tr("Invalid or missing FKey definitions"), this);
+    }
+    else
+    {
+        ui->fkeysetCombo->clear();
+        ui->fkeysetCombo->addItems(nameList);
+        ui->fkeysetCombo->setCurrentText(currentName);
     }
 }
+bool DMButtonFrame::parseFKeyArray(QJsonArray s, QString keyset, QString mode)
+{
+    for (const auto &v:qAsConst(s))
+    {
+        if (v.isArray())
+        {
+            QJsonArray a = v.toArray();
+            if (a.size() == 3)
+            {
+                QString fk = a[0].toString();
+                QString keytop = a[1].toString();
+                QString val = a[2].toString();
 
+                QString l = fk + " " + keytop;
+                l.replace("&&", "&");
+                l.replace("&", "&&");
+
+                fkeys[mode][keyset].append(QPair<QString, QString>(l, val));
+            }
+        }
+    }
+    return true;
+}
+bool DMButtonFrame::parseFKeyString(QString s, QString mode)
+{
+    QJsonParseError err;
+    QJsonDocument json = QJsonDocument::fromJson(s.toUtf8(), &err);
+    if (!err.error)
+    {
+        if( json.isArray())
+        {
+            QJsonArray namearray = json.array();
+            for (auto const &n: qAsConst(namearray))
+            {
+                QJsonObject namestruct = n.toObject();
+                QString name = namestruct.value("Name").toString();
+                nameList.push_back(name);
+
+                QJsonArray run = namestruct.value("Run").toArray();
+
+                if (!parseFKeyArray(run, name, mode) )
+                {
+
+                }
+
+                QJsonArray sandp = namestruct.value("SandP").toArray();
+                if (!parseFKeyArray(sandp, name, mode) )
+                {
+
+                }
+            }
+        }
+    }
+    return true;
+}
 void DMButtonFrame::on_stopButton_clicked()
 {
     // send stop transmission to sender app
@@ -406,3 +469,11 @@ QString DMButtonFrame::getFKeysString() const
     return message;
 
 }
+
+void DMButtonFrame::on_fkeysetCombo_textActivated(const QString &arg1)
+{
+    currentName = arg1;
+    ct->currentFKeySet.setValue(currentName);
+    ct->commonSave(false);
+}
+

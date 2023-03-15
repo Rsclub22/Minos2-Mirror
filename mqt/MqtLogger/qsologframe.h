@@ -41,6 +41,7 @@ public:
     QSharedPointer<BaseContact> selectedContact;   // contact from log list selected
     bool catchup = false;
     bool unfilled = false;
+    QString sentExchange;
 
     bool setActiveControl( int *Key, Qt::KeyboardModifiers mods );
     void clearCurrentField();
@@ -227,13 +228,10 @@ private:
     void MainOpComboBox_Exit();
     void SecondOpComboBox_Exit();
 
-
-
     bool runButtonOnFlag;
     bool radioOffRunFreq;
 
     Frequency callsignEnterTextFreq;
-
 
     QString mode;
     QString oldMode;
