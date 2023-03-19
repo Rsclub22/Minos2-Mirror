@@ -230,7 +230,7 @@ void ContestDetails::setExchangeComboBox()
                 ui->ExchangeComboBox->setCurrentIndex( etOptional);
             }
             else
-                if ( otherExchange && otherOptional && otherMult <= 0 && !asymmetricMult )
+                if ( otherExchange && !otherOptional && otherMult == 0 && !asymmetricMult )
                 {
                     // Exchange Required (no multiplier)
                     ui->ExchangeComboBox->setCurrentIndex( etMandatory);
@@ -238,7 +238,7 @@ void ContestDetails::setExchangeComboBox()
                 else
                     if ( otherExchange && !otherOptional && otherMult > 0 && asymmetricMult )
                     {
-                        // Exchange Required (no multiplier)
+                        // Asymmetric (TX S/N, RX exchange), Multiplier
                         ui->ExchangeComboBox->setCurrentIndex( etAsymmetric);
                     }
                     else
@@ -1558,7 +1558,7 @@ QWidget * ContestDetails::getDetails( )
         break;
 
     case etOptional:     //Optional Exchange Multiplier
-        contestTransferObject->otherExchange.setValue( false );
+        contestTransferObject->otherExchange.setValue( true );
         contestTransferObject->otherOptionalExchange.setValue( true );
         contestTransferObject->districtMult.setValue( false );
         contestTransferObject->otherMult.setValue(2);
@@ -1569,7 +1569,7 @@ QWidget * ContestDetails::getDetails( )
         contestTransferObject->otherExchange.setValue( true );
         contestTransferObject->otherOptionalExchange.setValue( false );
         contestTransferObject->districtMult.setValue( false );
-        contestTransferObject->otherMult.setValue(1);
+        contestTransferObject->otherMult.setValue(0);
         contestTransferObject->asymmetricMult.setValue(false);
         break;
 
