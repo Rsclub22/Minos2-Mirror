@@ -7,14 +7,16 @@
 #include "ui_testframe.h"
 
 QStringList testData = {
-"CQ CQ BARTG G0G0GJV G0GVV TEST",
+"CQ CQ BARTG SP3P G0GVV TEST",
 "G0GJV DE PE1EWR PE1EWR",
 "PE1EWR 599 001 001 001 K",
 "599 020 020 020 PE1EWR",
 "PE1EWR TU G0GJV QRX BARTG"
 
 };
-
+int loffset = 0;
+int toffset = 0;
+bool newLine = true;
 // to run multiple copies - just do it!
 
 TestFrame::TestFrame(EngineWindow *parent, QLineEdit */*sendEdit*/, QString /*fname*/, QString /*name*/) :
@@ -27,21 +29,21 @@ TestFrame::TestFrame(EngineWindow *parent, QLineEdit */*sendEdit*/, QString /*fn
     connect(engineWindow, &EngineWindow::sendCharactersDown, this, &TestFrame::onSendCharacters);
     connect(engineWindow, &EngineWindow::rigModeFreq, this, &TestFrame::onRigModeFreq);
 
-    for(const auto &s:qAsConst(testData))
-    {
-        trace(QString("Response %1").arg(s));
-        bool newLine = true;
-        for (auto c:qAsConst(s))
-        {
-            RXChar rxch(c, newLine, 0, markFrequency);
-            newLine = false;
-            engineWindow->rxBuff.addChar(rxch);
-        }
-    }
+//    for(const auto &s:qAsConst(testData))
+//    {
+//        trace(QString("Response %1").arg(s));
+//        bool newLine = true;
+//        for (auto c:qAsConst(s))
+//        {
+//            RXChar rxch(c, newLine, 0, markFrequency);
+//            newLine = false;
+//            engineWindow->rxBuff.addChar(rxch);
+//        }
+//    }
 
     testTimer = new QTimer(this);
     connect(testTimer, &QTimer::timeout, this, &TestFrame::onTimeout);
-//    testTimer->start(1000);
+    testTimer->start(1000);
 }
 
 TestFrame::~TestFrame()
@@ -50,15 +52,35 @@ TestFrame::~TestFrame()
 }
 void TestFrame::onTimeout()
 {
-    static int n = 0;
-    QString s = QString::number(n);
-    n++;
-    bool newLine = true;
-    for (auto c:qAsConst(s))
+    if (loffset < testData.size())
     {
-        RXChar rxch(c, newLine, 0, markFrequency);
-        newLine = false;
-        engineWindow->rxBuff.addChar(rxch);
+        if (toffset >= testData[loffset].size())
+        {
+            loffset++;
+            toffset = 0;
+            newLine = true;
+        }
+        else
+        {
+            QChar c = testData[loffset][toffset];
+            RXChar rxch(c, newLine, 0, markFrequency);
+            newLine = false;
+            engineWindow->rxBuff.addChar(rxch);
+            toffset++;
+        }
+    }
+    else
+    {
+        static int n = 0;
+        QString s = QString::number(n);
+        n++;
+        bool newLine = true;
+        for (auto c:qAsConst(s))
+        {
+            RXChar rxch(c, newLine, 0, markFrequency);
+            newLine = false;
+            engineWindow->rxBuff.addChar(rxch);
+        }
     }
 }
 void TestFrame::onSendCharacters(QString data, int c)
