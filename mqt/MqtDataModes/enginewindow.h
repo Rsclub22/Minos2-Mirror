@@ -102,6 +102,7 @@ private:
     QStringList populateRig();
     void doSendButton_clicked(QString d, int c);
 
+    void setWordType(RxLine *rline, int offset, int endword);
 signals:
     void rigModeFreq(QString, Frequency);
     void sendCharactersDown(QString, int);

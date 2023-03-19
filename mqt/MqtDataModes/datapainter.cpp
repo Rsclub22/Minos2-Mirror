@@ -9,6 +9,7 @@
 
 #include <QStyleOption>
 
+#include "MTrace.h"
 #include "enginewindow.h"
 #include "cutils.h"
 #include "rxbuffer.h"
@@ -113,38 +114,62 @@ void DataPainter::setText()
         {
             QString rxbuff;
             int cols = engineWindow->rxBuff.getCols(i);
-            QColor colour = Qt::black;
+            QColor colour = QColor(0, 0, 1);
+            QColor colourSet = QColor(0, 0, 1);
+            bool bold = false;
+            bool boldSet = false;
             for (int j = 0; j < cols; j++)
             {
                 RXChar nc = engineWindow->rxBuff.getCharAt(i, j);
                 if (nc.getMyCall())
                 {
                     colour = Qt::darkRed;
+                    bold = true;
                 }
                 else if (nc.getRST())
                 {
                     colour = Qt::darkYellow;
+                    bold = false;
                 }
                 else if (nc.getSerial())
                 {
                     colour = Qt::darkGreen;
+                    bold = true;
                 }
                 else if (nc.getWorkedCall())
                 {
                     colour = Qt::gray;
+                    bold = false;
                 }
                 else if (nc.getUnworkedCall())
                 {
-                    colour = Qt::blue;
+                    colour = Qt::cyan;
+                    bold = true;
                 }
-                if (colour != Qt::black)
+                else
+                {
+                    colour = QColor(0, 0, 1);
+                    bold = false;
+                }
+
+                if (colour != QColor(0, 0, 1))
                 {
                     if (nc.getCh() == QChar(' '))
                     {
-                        colour = Qt::black;
+                        colour = QColor(0, 0, 1);
+                        bold = false;
                     }
+                }
+                if (colour != colourSet)
+                {
                     QString cstr = HtmlFontColour(colour);
                     rxbuff.append(cstr);
+                    colourSet = colour;
+                }
+                if (bold != boldSet)
+                {
+                    rxbuff.append(bold?"<b>":"</b>");
+                    boldSet = bold;
                 }
 
                 rxbuff.append(nc.getCh());
@@ -153,6 +178,7 @@ void DataPainter::setText()
             tcf.setFont(ff);
             lines[i]->textCursor().setCharFormat(tcf);
             lines[i]->setHtml(rxbuff);
+            trace(rxbuff);
 
             engineWindow->rxBuff.getRxLine(i)->setDirty(false);
         }

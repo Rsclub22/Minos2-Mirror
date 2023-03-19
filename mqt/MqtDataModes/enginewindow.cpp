@@ -458,6 +458,19 @@ void EngineWindow::doSendButton_clicked(QString d, int c)
 
 }
 
+void EngineWindow::setWordType(RxLine *rline, int offset, int endword)
+{
+    RXChar *set = rline->getCharRef(offset);
+    for (int i = offset + 1; i < endword; i++)
+    {
+        RXChar *body = rline->getCharRef(i);
+        body->setRST(set->getRST());
+        body->setSerial(set->getSerial());
+        body->setMyCall(set->getMyCall());
+        body->setWorkedCall(set->getWorkedCall());
+        body->setUnworkedCall(set->getUnworkedCall());
+    }
+}
 void EngineWindow::onNewCharacter()
 {
     if (watchDog->isActive())
@@ -473,26 +486,26 @@ void EngineWindow::onNewCharacter()
     QString line = rline->toString();
     QStringList words = line.split(" ");
     int offset = 0;
+    int endword = 0;
     for(const auto &w:qAsConst(words))
     {
+        endword = offset + w.size();
         RXChar *r = rline->getCharRef(offset);
-        if (r)
+        if (!w.isEmpty() && r)
         {
-            if (w.isEmpty())
-            {
-                offset++;
-            }
-            else if (isPureNumeric(w))
+            if (isPureNumeric(w))
             {
                 if (w == "599")
                 {
                     // RST
                     r->setRST(true);
+                    setWordType(rline, offset, endword);
                 }
                 else if (w.size() <= 4)
                 {
                     // possible serial number
                     r->setSerial(true);
+                    setWordType(rline, offset, endword);
                 }
             }
             else
@@ -518,8 +531,13 @@ void EngineWindow::onNewCharacter()
                     {
                         r->setUnworkedCall(true);
                     }
+                    setWordType(rline, offset, endword);
                 }
             }
+//            else
+//            {
+//                setWordType(rline, offset, endword);
+//            }
         }
         offset += w.size() + 1;
     }
