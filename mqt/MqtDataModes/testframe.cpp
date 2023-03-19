@@ -43,7 +43,7 @@ TestFrame::TestFrame(EngineWindow *parent, QLineEdit */*sendEdit*/, QString /*fn
 
     testTimer = new QTimer(this);
     connect(testTimer, &QTimer::timeout, this, &TestFrame::onTimeout);
-    testTimer->start(1000);
+    testTimer->start(100);
 }
 
 TestFrame::~TestFrame()
@@ -71,16 +71,16 @@ void TestFrame::onTimeout()
     }
     else
     {
-        static int n = 0;
-        QString s = QString::number(n);
-        n++;
-        bool newLine = true;
-        for (auto c:qAsConst(s))
-        {
-            RXChar rxch(c, newLine, 0, markFrequency);
-            newLine = false;
-            engineWindow->rxBuff.addChar(rxch);
-        }
+//        static int n = 0;
+//        QString s = QString::number(n);
+//        n++;
+//        bool newLine = true;
+//        for (auto c:qAsConst(s))
+//        {
+//            RXChar rxch(c, newLine, 0, markFrequency);
+//            newLine = false;
+//            engineWindow->rxBuff.addChar(rxch);
+//        }
     }
 }
 void TestFrame::onSendCharacters(QString data, int c)

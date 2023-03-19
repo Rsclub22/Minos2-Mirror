@@ -114,8 +114,8 @@ void DataPainter::setText()
         {
             QString rxbuff;
             int cols = engineWindow->rxBuff.getCols(i);
-            QColor colour = QColor(0, 0, 1);
-            QColor colourSet = QColor(0, 0, 1);
+            QColor colour =Qt::black;
+            QColor colourSet =Qt::black;
             bool bold = false;
             bool boldSet = false;
             for (int j = 0; j < cols; j++)
@@ -143,22 +143,31 @@ void DataPainter::setText()
                 }
                 else if (nc.getUnworkedCall())
                 {
-                    colour = Qt::cyan;
+                    colour = Qt::blue;
                     bold = true;
                 }
                 else
                 {
-                    colour = QColor(0, 0, 1);
+                    colour =Qt::black;
                     bold = false;
                 }
 
-                if (colour != QColor(0, 0, 1))
+                if (colour !=Qt::black)
                 {
                     if (nc.getCh() == QChar(' '))
                     {
-                        colour = QColor(0, 0, 1);
+                        colour =Qt::black;
                         bold = false;
                     }
+                }
+
+                // we seem to have to "stack"bold and colour!
+                // A Qt fault?
+
+                if (bold != boldSet && !bold)
+                {
+                    rxbuff.append("</b>");
+                    boldSet = bold;
                 }
                 if (colour != colourSet)
                 {
@@ -166,9 +175,9 @@ void DataPainter::setText()
                     rxbuff.append(cstr);
                     colourSet = colour;
                 }
-                if (bold != boldSet)
+                if (bold != boldSet && bold)
                 {
-                    rxbuff.append(bold?"<b>":"</b>");
+                    rxbuff.append("<b>");
                     boldSet = bold;
                 }
 
