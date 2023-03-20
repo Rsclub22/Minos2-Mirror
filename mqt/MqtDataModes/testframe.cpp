@@ -11,8 +11,8 @@ QStringList testData = {
 "G0GJV DE PE1EWR PE1EWR",
 "PE1EWR 599 001 001 001 K",
 "599 020 020 020 PE1EWR",
-"PE1EWR TU G0GJV QRX BARTG"
-
+"PE1EWR TU G0GJV QRX BARTG",
+"I AM M5N REALLY"
 };
 int loffset = 0;
 int toffset = 0;
@@ -43,7 +43,7 @@ TestFrame::TestFrame(EngineWindow *parent, QLineEdit */*sendEdit*/, QString /*fn
 
     testTimer = new QTimer(this);
     connect(testTimer, &QTimer::timeout, this, &TestFrame::onTimeout);
-    testTimer->start(1000);
+    testTimer->start(100);
 }
 
 TestFrame::~TestFrame()
@@ -71,16 +71,16 @@ void TestFrame::onTimeout()
     }
     else
     {
-        static int n = 0;
-        QString s = QString::number(n);
-        n++;
-        bool newLine = true;
-        for (auto c:qAsConst(s))
-        {
-            RXChar rxch(c, newLine, 0, markFrequency);
-            newLine = false;
-            engineWindow->rxBuff.addChar(rxch);
-        }
+//        static int n = 0;
+//        QString s = QString::number(n);
+//        n++;
+//        bool newLine = true;
+//        for (auto c:qAsConst(s))
+//        {
+//            RXChar rxch(c, newLine, 0, markFrequency);
+//            newLine = false;
+//            engineWindow->rxBuff.addChar(rxch);
+//        }
     }
 }
 void TestFrame::onSendCharacters(QString data, int c)

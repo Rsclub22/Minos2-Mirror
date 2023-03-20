@@ -522,14 +522,16 @@ void EngineWindow::onNewCharacter()
                         r->setMyCall(true);
                     }
                     else
-                    // look for it...
-                    if (RemoteLogs::getRemoteLogs()->hasWorked(cs, "", ""))
                     {
-                        r->setWorkedCall(true);
-                    }
-                    else
-                    {
-                        r->setUnworkedCall(true);
+                        // look for it...
+                        if (RemoteLogs::getRemoteLogs()->hasWorked(cs, "", ""))
+                        {
+                            r->setWorkedCall(true);
+                        }
+                        else
+                        {
+                            r->setUnworkedCall(true);
+                        }
                     }
                     setWordType(rline, offset, endword);
                 }

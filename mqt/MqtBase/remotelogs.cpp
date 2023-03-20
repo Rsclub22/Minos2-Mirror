@@ -73,7 +73,10 @@ Callsign RemoteLogs::myCall()
        {
             if ((*l)->getState() != psRevoked)
             {
-                return (*l)->getContest()->mycall;
+                BaseContestLog *ct = (*l)->getContest();
+                Callsign mcall = ct->mycall;
+                QString fcall = mcall.getFullCall();
+                return mcall;
             }
         }
     }
