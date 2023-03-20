@@ -11,8 +11,8 @@ QStringList testData = {
 "G0GJV DE PE1EWR PE1EWR",
 "PE1EWR 599 001 001 001 K",
 "599 020 020 020 PE1EWR",
-"PE1EWR TU G0GJV QRX BARTG"
-
+"PE1EWR TU G0GJV QRX BARTG",
+"I AM M5N REALLY"
 };
 int loffset = 0;
 int toffset = 0;
