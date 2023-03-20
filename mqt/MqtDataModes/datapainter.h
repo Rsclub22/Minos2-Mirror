@@ -49,7 +49,6 @@ signals:
 private:
     QGraphicsScene *scene = nullptr;
     QVector<QGraphicsTextItem *> lines;
-    QFont ff;
 
     DPGraphicsTextItem *createNewLine(int r, int yoffset);
 };

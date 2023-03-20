@@ -40,6 +40,7 @@ void DPGraphicsTextItem::paint(QPainter* painter, const QStyleOptionGraphicsItem
 
 void DPGraphicsTextItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
+    trace("mousepress");
     QTextCursor c = textCursor();
 
     int cp = document()->documentLayout()->hitTest(event->pos(), Qt::FuzzyHit);
@@ -67,7 +68,6 @@ DPGraphicsTextItem * DataPainter::createNewLine(int r, int yoffset)
     DPGraphicsTextItem *ti =  new DPGraphicsTextItem(engineWindow, QString(), r);
     connect(ti, &DPGraphicsTextItem::wordSelected, this, [this](QString s, int mfreq)
             {emit wordSelected(s, mfreq);});
-    ti->setFont(ff);
     scene->addItem(ti);
     ti->setPos(0, yoffset);
     ti->setTextInteractionFlags(Qt::TextSelectableByMouse | Qt::TextEditable | Qt::TextEditorInteraction);
@@ -89,10 +89,10 @@ void DataPainter::initialise(EngineWindow *e)
 
     QFont cf = QApplication::font();
 
-    ff = QFont("Courier", cf.pointSize());
-    scene->setFont(ff);
+//    ff = QFont("Courier", cf.pointSize());
+//    scene->setFont(ff);
 
-    QFontMetrics fm(ff);
+    QFontMetrics fm(cf);
     int h = fm.height();
 
     int yoffset = 0;
@@ -114,8 +114,8 @@ void DataPainter::setText()
         {
             QString rxbuff;
             int cols = engineWindow->rxBuff.getCols(i);
-            QColor colour = QColor(0, 0, 1);
-            QColor colourSet = QColor(0, 0, 1);
+            QColor colour = Qt::black;
+            QColor colourSet = Qt::black;
             bool bold = false;
             bool boldSet = false;
             for (int j = 0; j < cols; j++)
@@ -143,22 +143,27 @@ void DataPainter::setText()
                 }
                 else if (nc.getUnworkedCall())
                 {
-                    colour = Qt::cyan;
+                    colour = Qt::blue;
                     bold = true;
                 }
                 else
                 {
-                    colour = QColor(0, 0, 1);
+                    colour = Qt::black;
                     bold = false;
                 }
 
-                if (colour != QColor(0, 0, 1))
+                if (colour != Qt::black)
                 {
                     if (nc.getCh() == QChar(' '))
                     {
-                        colour = QColor(0, 0, 1);
+                        colour = Qt::black;
                         bold = false;
                     }
+                }
+                if (bold != boldSet && bold)
+                {
+                    rxbuff.append("<b>");
+                    boldSet = bold;
                 }
                 if (colour != colourSet)
                 {
@@ -166,19 +171,18 @@ void DataPainter::setText()
                     rxbuff.append(cstr);
                     colourSet = colour;
                 }
-                if (bold != boldSet)
+                if (bold != boldSet && !bold)
                 {
-                    rxbuff.append(bold?"<b>":"</b>");
+                    rxbuff.append("</b>");
                     boldSet = bold;
                 }
 
                 rxbuff.append(nc.getCh());
             }
             QTextCharFormat tcf;
-            tcf.setFont(ff);
+//            tcf.setFont(QApplication::font());
             lines[i]->textCursor().setCharFormat(tcf);
             lines[i]->setHtml(rxbuff);
-            trace(rxbuff);
 
             engineWindow->rxBuff.getRxLine(i)->setDirty(false);
         }
