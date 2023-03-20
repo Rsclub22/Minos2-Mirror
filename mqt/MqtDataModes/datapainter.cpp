@@ -156,7 +156,7 @@ void DataPainter::setText()
                 {
                     if (nc.getCh() == QChar(' '))
                     {
-                        colour = Qt::black;
+                        colour =Qt::black;
                         bold = false;
                     }
                 }
