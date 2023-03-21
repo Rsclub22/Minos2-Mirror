@@ -68,10 +68,10 @@ DPGraphicsTextItem * DataPainter::createNewLine(int r, int yoffset)
     DPGraphicsTextItem *ti =  new DPGraphicsTextItem(engineWindow, QString(), r);
     connect(ti, &DPGraphicsTextItem::wordSelected, this, [this](QString s, int mfreq)
             {emit wordSelected(s, mfreq);});
-    scene->addItem(ti);
     ti->setPos(0, yoffset);
     ti->setTextInteractionFlags(Qt::TextSelectableByMouse | Qt::TextEditable | Qt::TextEditorInteraction);
     ti->setFlags(QGraphicsItem::ItemIsFocusable | QGraphicsItem::ItemIsSelectable | ti->flags());
+    scene->addItem(ti);
     return ti;
 }
 DataPainter::DataPainter(QWidget *parent)
@@ -89,8 +89,8 @@ void DataPainter::initialise(EngineWindow *e)
 
     QFont cf = QApplication::font();
 
-//    ff = QFont("Courier", cf.pointSize());
-//    scene->setFont(ff);
+    QFont ff = QFont("Courier", cf.pointSize());
+    scene->setFont(ff);
 
     QFontMetrics fm(cf);
     int h = fm.height();
@@ -180,7 +180,6 @@ void DataPainter::setText()
                 rxbuff.append(nc.getCh());
             }
             QTextCharFormat tcf;
-//            tcf.setFont(QApplication::font());
             lines[i]->textCursor().setCharFormat(tcf);
             lines[i]->setHtml(rxbuff);
 
