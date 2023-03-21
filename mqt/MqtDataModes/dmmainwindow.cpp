@@ -1,3 +1,4 @@
+#include "delayedaction.h"
 #include <QSettings>
 #include <QTimer>
 #include <QFileSystemWatcher>
@@ -139,7 +140,9 @@ DMMainWindow::DMMainWindow(QWidget *parent)
 
     ui->startButton->setText(tr("Start All"));
 
-    on_startButton_clicked();
+    delayedAction(this, [=](){
+        on_startButton_clicked();
+    });
 }
 
 DMMainWindow::~DMMainWindow()
@@ -272,6 +275,7 @@ void DMMainWindow::on_startButton_clicked()
 
                 ew->selectEngine(e);
                 engines.push_back(ew);
+
                 ew->show();
             }
         }
@@ -304,7 +308,7 @@ void DMMainWindow::sendPressed(QString d, int c)
             break;
         }
     }
-    if (!sent)
+    if (!d.isEmpty() && !sent)
     {
         mShowMessage(tr("No DataMode sender configured"), this);
     }

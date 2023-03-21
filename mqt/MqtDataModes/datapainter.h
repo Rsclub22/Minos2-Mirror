@@ -13,8 +13,8 @@ class DPGraphicsTextItem: public QGraphicsTextItem
 {
     Q_OBJECT
 public:
-    explicit DPGraphicsTextItem(QGraphicsItem *parent = nullptr);
-    explicit DPGraphicsTextItem(EngineWindow *e, const QString &text, int r, QGraphicsItem *parent = nullptr);
+    //explicit DPGraphicsTextItem(QGraphicsItem *parent = nullptr);
+    explicit DPGraphicsTextItem(EngineWindow *e, const QString &text, int r);
     virtual ~DPGraphicsTextItem();
     virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
 
@@ -28,6 +28,12 @@ signals:
 
     void wordSelected(QString, int);
 
+};
+
+class DPScene : public QGraphicsScene
+{
+public:
+    DPScene(QObject *parent = nullptr);
 };
 
 class DataPainter : public QGraphicsView
@@ -47,10 +53,11 @@ signals:
     void wordSelected(QString, int);
 
 private:
-    QGraphicsScene *scene = nullptr;
-    QVector<QGraphicsTextItem *> lines;
+    DPScene *scene = nullptr;
+    QVector<DPGraphicsTextItem *> lines;
 
     DPGraphicsTextItem *createNewLine(int r, int yoffset);
+
 };
 
 #endif // DATAPAINTER_H

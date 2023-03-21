@@ -103,6 +103,8 @@ private:
     void doSendButton_clicked(QString d, int c);
 
     void setWordType(RxLine *rline, int offset, int endword);
+    void startEngine();
+
 signals:
     void rigModeFreq(QString, Frequency);
     void sendCharactersDown(QString, int);

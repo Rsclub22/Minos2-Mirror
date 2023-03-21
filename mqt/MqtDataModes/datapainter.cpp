@@ -17,12 +17,12 @@
 
 // Each line of the display is one of these
 
-DPGraphicsTextItem::DPGraphicsTextItem(QGraphicsItem *parent):
-    QGraphicsTextItem(parent), row(-1)
-{}
+//DPGraphicsTextItem::DPGraphicsTextItem(QGraphicsItem *parent):
+//    QGraphicsTextItem(parent), row(-1)
+//{}
 
-DPGraphicsTextItem::DPGraphicsTextItem(EngineWindow *engineWindow, const QString &text, int r, QGraphicsItem *parent):
-    QGraphicsTextItem(text, parent), row(r), engineWindow(engineWindow)
+DPGraphicsTextItem::DPGraphicsTextItem(EngineWindow *engineWindow, const QString &text, int r):
+    QGraphicsTextItem(text), row(r), engineWindow(engineWindow)
 {}
 
 DPGraphicsTextItem::~DPGraphicsTextItem()
@@ -68,12 +68,13 @@ DPGraphicsTextItem * DataPainter::createNewLine(int r, int yoffset)
     DPGraphicsTextItem *ti =  new DPGraphicsTextItem(engineWindow, QString(), r);
     connect(ti, &DPGraphicsTextItem::wordSelected, this, [this](QString s, int mfreq)
             {emit wordSelected(s, mfreq);});
+
     ti->setPos(0, yoffset);
     ti->setTextInteractionFlags(Qt::TextSelectableByMouse | Qt::TextEditable | Qt::TextEditorInteraction);
     ti->setFlags(QGraphicsItem::ItemIsFocusable | QGraphicsItem::ItemIsSelectable | ti->flags());
-    scene->addItem(ti);
     return ti;
 }
+
 DataPainter::DataPainter(QWidget *parent)
     : QGraphicsView{parent}
 {
@@ -84,16 +85,13 @@ void DataPainter::initialise(EngineWindow *e)
 {
     engineWindow = e;
 
-    scene = new QGraphicsScene(this);
+    scene = new DPScene(this);
     setScene(scene);
 
     QFont cf = QApplication::font();
-
-    QFont ff = QFont("Courier", cf.pointSize());
-    scene->setFont(ff);
-
     QFontMetrics fm(cf);
-    int h = fm.height();
+    int ls = fm.lineSpacing();
+    int h = ls *3/2;
 
     int yoffset = 0;
 
@@ -101,9 +99,17 @@ void DataPainter::initialise(EngineWindow *e)
     for (int i = 0; i < l; i++)
     {
         DPGraphicsTextItem *ti =  createNewLine(i, yoffset);
+        scene->addItem(ti);
         lines.push_back(ti);
+
+        if (!ti->isActive())
+        {
+            ti->setActive(true);
+        }
+
         yoffset += h;
-    }}
+    }
+}
 
 void DataPainter::setText()
 {
@@ -181,10 +187,21 @@ void DataPainter::setText()
             }
             QTextCharFormat tcf;
             lines[i]->textCursor().setCharFormat(tcf);
+
+            QFont cf = QApplication::font();
+
+            lines[i]->setFont(cf);
+
+
             lines[i]->setHtml(rxbuff);
 
             engineWindow->rxBuff.getRxLine(i)->setDirty(false);
         }
     }
+}
+
+DPScene::DPScene(QObject *parent):QGraphicsScene(parent)
+{
+
 }
 

@@ -1,6 +1,7 @@
 
 #include "AppStartup.h"
 #include "callsign.h"
+#include "delayedaction.h"
 #include <QSettings>
 #include <QTimer>
 #include <QKeyEvent>
@@ -74,13 +75,11 @@ EngineWindow::EngineWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    ui->rxChars->initialise(this);
 
     ui->FButtonFrame->setEnabled(false);
     ui->variFrame->setVisible(false);
 
     connect(&rxBuff, &RxBuffer::newCharacter, this, &EngineWindow::onNewCharacter);
-    connect(ui->rxChars, &DataPainter::wordSelected, this, &EngineWindow::wordSelected);
     connect(&rxBuff, &RxBuffer::newBackLine, this, &EngineWindow::onNewBackLine);
 
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
@@ -107,41 +106,52 @@ EngineWindow::EngineWindow(QWidget *parent)
     MinosRPC *rpc = MinosRPC::getMinosRPC(appName);
     connect(rpc, &MinosRPC::notify, this, &EngineWindow::on_notify);
     RPCPubSub::reconnectPubSub();
+
+    delayedAction(this, [=](){
+        ui->rxChars->initialise(this);
+        connect(ui->rxChars, &DataPainter::wordSelected, this, &EngineWindow::wordSelected);
+        startEngine();
+    });
 }
 
 EngineWindow::~EngineWindow()
 {
     delete ui;
 }
+void EngineWindow::startEngine()
+{
+    if (engineName.contains(mmvari))
+    {
+        selectMMVARI(engineName);
+    }
+    else if (engineName.contains(mmtty))
+    {
+        selectMMTTY(engineName);
+    }
+    else if (engineName.contains(twotone))
+    {
+        select2Tone(engineName);
+    }
+    else if (engineName.contains(gritty))
+    {
+        selectGritty(engineName);
+    }
+    else if (engineName.contains(fldigi))
+    {
+        selectFLDigi(engineName);
+    }
+    else if (engineName.contains(test))
+    {
+        selectTest(engineName);
+    }
+}
+
 void EngineWindow::selectEngine(QString name)
 {
     closeAllEngines();
     engineName = name;
     setWindowTitle(name);
-    if (name.contains(mmvari))
-    {
-        selectMMVARI(name);
-    }
-    else if (name.contains(mmtty))
-    {
-        selectMMTTY(name);
-    }
-    else if (name.contains(twotone))
-    {
-        select2Tone(name);
-    }
-    else if (name.contains(gritty))
-    {
-        selectGritty(name);
-    }
-    else if (name.contains(fldigi))
-    {
-        selectFLDigi(name);
-    }
-    else if (name.contains(test))
-    {
-        selectTest(name);
-    }
+
     QSettings settings;
     geoStr = QString("dataModes/%1/geometry").arg(name);
     QByteArray geometry = settings.value(geoStr).toByteArray();
