@@ -27,6 +27,7 @@ public:
 
     bool hasWorked(const Callsign &, QString band, QString mode);
     Callsign myCall();
+    void traceCS();
 private:
     QString localRouterName;
 

@@ -45,7 +45,10 @@ void DPGraphicsTextItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
     trace("mouse press");
     if (event->button() == Qt::RightButton)
     {
-        // This looks like a Qt bug. Solution comes from
+        trace("Right mouse press");
+        // RMB was crashing deep within Qt, with no relationship
+        // to this code.
+        // It looks like a Qt bug. This solution comes from
         // https://stackoverflow.com/questions/67264846/pyqt5-program-crashes-when-editable-qgraphicstextitem-is-clicked-with-right-mo
         setTextInteractionFlags(Qt::NoTextInteraction);
     }
@@ -114,7 +117,7 @@ DPGraphicsTextItem * DataPainter::createNewLine(int r, int yoffset)
             {emit wordSelected(s, mfreq);});
 
     ti->setPos(0, yoffset);
-    ti->setTextInteractionFlags(Qt::TextSelectableByMouse | Qt::TextEditable | Qt::TextEditorInteraction);
+    ti->setTextInteractionFlags( Qt::TextEditorInteraction);
     ti->setFlags(QGraphicsItem::ItemIsFocusable | QGraphicsItem::ItemIsSelectable | ti->flags());
     return ti;
 }

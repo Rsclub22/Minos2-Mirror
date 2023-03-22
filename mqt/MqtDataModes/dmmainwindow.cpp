@@ -137,6 +137,7 @@ DMMainWindow::DMMainWindow(QWidget *parent)
         restoreGeometry(geometry);
 
     connect(RemoteLogs::getRemoteLogs(), &RemoteLogs::newMonitoredLog, this, &DMMainWindow::onNewLog);
+    connect(RemoteLogs::getRemoteLogs(), &RemoteLogs::currentLogChanged, this, &DMMainWindow::onLogChanged);
 
     ui->startButton->setText(tr("Start All"));
 
@@ -246,7 +247,21 @@ void DMMainWindow::onNewLog(MonitoredLog *ml)
 
 void DMMainWindow::onNewStanzas()
 {
+    // we need to re-analyse the display, especially when we have a new QSO
 
+    for (const auto &e:qAsConst(engines))
+    {
+        e->rescan();
+    }
+}
+void DMMainWindow::onLogChanged(MonitoredLog */*ml*/)
+{
+    // we need to re-analyse the display, as current log has changed
+
+    for (const auto &e:qAsConst(engines))
+    {
+        e->rescan();
+    }
 }
 
 void DMMainWindow::on_configureButton_clicked()

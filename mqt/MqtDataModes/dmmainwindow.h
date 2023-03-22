@@ -73,6 +73,7 @@ private slots:
     void on_startButton_clicked();
     void sendPressed(QString d, int c);
 
+    void onLogChanged(MonitoredLog *);
 signals:
     void setSpeeds(QString b, QString r);
 

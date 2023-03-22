@@ -497,6 +497,13 @@ void EngineWindow::onNewCharacter()
     // we now need to parse the line for callsigns, numbers, etc
 
     int curLine = rxBuff.getCurLine();
+
+    scanLine(curLine);
+
+    ui->rxChars->setText();
+}
+void EngineWindow::scanLine(int curLine)
+{
     RxLine *rline = rxBuff.getRxLine(curLine);
     rline->clearFlags();
     QString line = rline->toString();
@@ -553,18 +560,25 @@ void EngineWindow::onNewCharacter()
                     setWordType(rline, offset, endword);
                 }
             }
-//            else
-//            {
-//                setWordType(rline, offset, endword);
-//            }
         }
         offset += w.size() + 1;
     }
+}
+void EngineWindow::rescan()
+{
+    for (int i = rxBuff.getCurLine() + 1; i < rxBuff.getLines(); i++)
+    {
+        scanLine(i);
+        rxBuff.getRxLine(i)->setDirty(true);
+    }
 
-
+    for (int i = 0; i <= rxBuff.getCurLine(); i++)
+    {
+        scanLine(i);
+        rxBuff.getRxLine(i)->setDirty(true);
+    }
     ui->rxChars->setText();
 }
-
 void EngineWindow::clear()
 {
     rxBuff.reset();

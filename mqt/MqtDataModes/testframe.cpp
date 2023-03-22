@@ -7,16 +7,13 @@
 #include "ui_testframe.h"
 
 QStringList testData = {
-"CQ CQ BARTG SP3P G0GVV TEST",
+"CQ CQ BARTG G0GVV SP3P G0GVV TEST",
 "G0GJV DE PE1EWR PE1EWR",
 "PE1EWR 599-001-001_001 K",
-"599 020 020 020 PE1EWR",
+"G0GVV 599 020 020 020 PE1EWR",
 "PE1EWR TU F/G0GJV/P QRX BARTG",
 "I AM M5N REALLY"
 };
-int loffset = 0;
-int toffset = 0;
-bool newLine = true;
 // to run multiple copies - just do it!
 
 TestFrame::TestFrame(EngineWindow *parent, QLineEdit */*sendEdit*/, QString /*fname*/, QString /*name*/) :

@@ -53,6 +53,7 @@ public:
     void clear();
 
     void doSendCharacters(QString d, int c);
+    void rescan();
 private:
     Ui::EngineWindow *ui;
 
@@ -106,6 +107,7 @@ private:
     void setWordType(RxLine *rline, int offset, int endword);
     void startEngine();
 
+    void scanLine(int curLine);
 signals:
     void rigModeFreq(QString, Frequency);
     void sendCharactersDown(QString, int);

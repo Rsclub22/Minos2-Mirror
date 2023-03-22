@@ -59,7 +59,28 @@ bool RemoteLogs::hasWorked(const Callsign &cs, QString band, QString mode)
     }
     return false;
 }
+void RemoteLogs::traceCS()
+{
+    for ( auto const &s: qAsConst(stationList) )
+    {
 
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+        for (QVector< QSharedPointer<MonitoredLog> >::const_iterator l = s->slotList.begin(); l != s->slotList.end(); l++)
+#else
+        for (QVector< QSharedPointer<MonitoredLog> >::iterator l = s->slotList.begin(); l != s->slotList.end(); l++)
+#endif
+       {
+            if ((*l)->getState() != psRevoked && s->currentLog == *l)
+            {
+                for (const auto &cs:qAsConst((*l)->getCallsigns()))
+                {
+                    trace(cs.dct->cs.getFullCall());
+                }
+            }
+        }
+    }
+
+}
 Callsign RemoteLogs::myCall()
 {
     for ( auto const &s: qAsConst(stationList) )

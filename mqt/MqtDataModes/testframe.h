@@ -41,6 +41,10 @@ private slots:
     void onTimeout();
 private:
     Ui::TestFrame *ui;
+    int loffset = 0;
+    int toffset = 0;
+    bool newLine = true;
+
 };
 
 #endif // TESTFRAME_H

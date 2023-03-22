@@ -208,7 +208,6 @@ void MonitoredLog::on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, cons
                     if (publishedName == logName )
                     {
                         contest->lastInserted = -1;
-                        emit newStanzas(this);
 
                         trace( "||" + stanzaData + "||" );
                         processLogStanza( stanza, stanzaData );
@@ -216,34 +215,31 @@ void MonitoredLog::on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, cons
                         BaseContestLog *contest = getContest();
 
                         int li = contest->lastInserted;
-                       // if (li >= 0)
+                        int ctc = contest->ctList.count();
+                        if ( li >= 0 && li == ctc - 1)
                         {
-                            int ctc = contest->ctList.count();
-                            if ( li >= 0 && li == ctc - 1)
+                            // and add callsign to callsign set
+
+                            callsigns.insert(DupContact(contest->pcontactAt(li).data()));
+
+                            // new last contact; import will have checked it
+                            // IT CAN MODIFY lastInserted to -1!
+                            emit newLastContact(this);
+
+                        }
+                        else
+                        {
+                            // change to a contact; we need a full rescan to understand it
+                            emit contactChanged(this);
+
+                            // rescan log and recreate callsign set
+                            callsigns.clear();
+                            for(const auto &cct: qAsConst(contest->ctList))
                             {
-                                // and add callsign to callsign set
-
-                                callsigns.insert(DupContact(contest->pcontactAt(li).data()));
-
-                                // new last contact; import will have checked it
-                                // IT CAN MODIFY lastInserted to -1!
-                                emit newLastContact(this);
-
-                            }
-                            else
-                            {
-                                // change to a contact; we need a full rescan to understand it
-                                emit contactChanged(this);
-
-                                // rescan log and recreate callsign set
-                                callsigns.clear();
-                                for(const auto &cct: qAsConst(contest->ctList))
-                                {
-                                    callsigns.insert(cct.wt.data());
-                                }
+                                callsigns.insert(cct.wt.data());
                             }
                         }
-                        return ;
+                        emit newStanzas(this);  // tell people to rescan
                     }
                 }
             }
