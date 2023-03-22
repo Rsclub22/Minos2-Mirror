@@ -23,6 +23,8 @@ public:
     RXChar();
     RXChar(QChar c, bool nl, int dc, int carr);
 
+    bool isType(const RXChar &) const;
+
     QChar getCh() const;
     void setCh(const QChar &newCh);
     bool getNewLine() const;

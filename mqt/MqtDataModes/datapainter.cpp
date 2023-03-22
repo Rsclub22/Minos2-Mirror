@@ -23,7 +23,9 @@
 
 DPGraphicsTextItem::DPGraphicsTextItem(EngineWindow *engineWindow, const QString &text, int r):
     QGraphicsTextItem(text), row(r), engineWindow(engineWindow)
-{}
+{
+    //setAcceptedMouseButtons(Qt::LeftButton);
+}
 
 DPGraphicsTextItem::~DPGraphicsTextItem()
 {}
@@ -40,25 +42,67 @@ void DPGraphicsTextItem::paint(QPainter* painter, const QStyleOptionGraphicsItem
 
 void DPGraphicsTextItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    trace("mousepress");
-    QTextCursor c = textCursor();
-
-    int cp = document()->documentLayout()->hitTest(event->pos(), Qt::FuzzyHit);
-    c.setPosition(cp);
-    c.select(QTextCursor::WordUnderCursor);
-    setTextCursor(c);
-
-    int mfreq = 0;
-    if (cp < engineWindow->rxBuff.getRxLine(row)->charCount())
+    trace("mouse press");
+    if (event->button() == Qt::RightButton)
     {
-        mfreq = engineWindow->rxBuff.getCharAt(row, cp).getMarkFreq();
+        // This looks like a Qt bug. Solution comes from
+        // https://stackoverflow.com/questions/67264846/pyqt5-program-crashes-when-editable-qgraphicstextitem-is-clicked-with-right-mo
+        setTextInteractionFlags(Qt::NoTextInteraction);
     }
-
-
-    QString sel = c.selectedText();
-    if (!sel.isEmpty())
+    else if (event && event->button() == Qt::LeftButton)
     {
-        emit wordSelected(c.selectedText(), mfreq);
+        trace("Left mouse press");
+        setTextInteractionFlags(Qt::TextEditable);
+        QTextCursor c = textCursor();
+
+        int cp = document()->documentLayout()->hitTest(event->pos(), Qt::FuzzyHit);
+
+        // walk back and forward looking for a separator
+        RXChar basec = engineWindow->rxBuff.getCharAt(row, cp);
+        RXChar selc = basec;
+        if (selc.getCh() == ' ')
+        {
+            c.setPosition(cp, QTextCursor::MoveAnchor);
+            setTextCursor(c);
+            return;
+        }
+        while (cp > 0 && selc.isType(basec))
+        {
+            cp--;
+            selc = engineWindow->rxBuff.getCharAt(row, cp);
+        }
+        if (!selc.isType(basec) && cp < engineWindow->rxBuff.getRxLine(row)->charCount())
+        {
+            cp++;
+            selc = engineWindow->rxBuff.getCharAt(row, cp);
+        }
+        c.setPosition(cp, QTextCursor::MoveAnchor);
+
+        // and forwards
+        while (cp < engineWindow->rxBuff.getRxLine(row)->charCount()  && selc.isType(basec))
+        {
+            cp++;
+            if (cp < engineWindow->rxBuff.getRxLine(row)->charCount())
+            {
+                selc = engineWindow->rxBuff.getCharAt(row, cp);
+            }
+        }
+
+        c.setPosition(cp, QTextCursor::KeepAnchor);
+        setTextCursor(c);
+
+        int mfreq = 0;
+        if (cp < engineWindow->rxBuff.getRxLine(row)->charCount())
+        {
+            mfreq = engineWindow->rxBuff.getCharAt(row, cp).getMarkFreq();
+        }
+
+
+        QString sel = c.selectedText();
+        if (!sel.isEmpty())
+        {
+            emit wordSelected(sel, mfreq);
+        }
     }
 }
 

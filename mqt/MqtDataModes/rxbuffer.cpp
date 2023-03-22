@@ -87,6 +87,25 @@ RXChar::RXChar(QChar c, bool nl, int dc, int carr)
     markFreq = carr;
 }
 
+bool RXChar::isType(const RXChar &rc) const
+{
+    if (ch == ' ' || rc.getCh() == ' ')
+    {
+        return false;
+    }
+    if (
+        rc.RST == RST
+        && rc.serial == serial
+        && rc.myCall == myCall
+        && rc.workedCall == workedCall
+        && rc.unworkedCall == unworkedCall
+    )
+    {
+        return true;
+    }
+    return false;
+}
+
 QChar RXChar::getCh() const
 {
     return ch;

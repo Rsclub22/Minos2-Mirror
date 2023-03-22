@@ -135,6 +135,7 @@ QString anchoredPattern(const QString &expression);
 int getStringlistOffSet(QStringList supportedBands, QString contestBandStr);
 void adjustMargins(QLayout *layout, int ls, int cml, int cmt, int cmr, int cmb);
 bool isPureNumeric ( const QString &s );
+bool isAlphaNumeric( const QString &s );
 
 void saveHeaderColumns(QString fn, QString tname, QString lname, QHeaderView *h);
 void setHeaderColumns(QString hLine, QHeaderView *hdr);

@@ -158,6 +158,12 @@ void EngineWindow::selectEngine(QString name)
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
+    QByteArray state;
+    splitterStr = QString("dataModes/%1/splitter").arg(name);
+    state = settings.value(splitterStr).toByteArray();
+    ui->splitter->restoreState(state);
+
+
 }
 
 void EngineWindow::closeEvent(QCloseEvent *event)
@@ -494,7 +500,8 @@ void EngineWindow::onNewCharacter()
     RxLine *rline = rxBuff.getRxLine(curLine);
     rline->clearFlags();
     QString line = rline->toString();
-    QStringList words = line.split(" ");
+    QRegExp separator("[( |\\-|_|)]");
+    QStringList words = line.split(separator);
     int offset = 0;
     int endword = 0;
     for(const auto &w:qAsConst(words))
@@ -684,4 +691,13 @@ void EngineWindow::on_backDataButton_clicked()
 //    ui->actionRTTY45->setChecked(false);
 //    EngineConfigure::setSpeed("RTTY", 75);
 //}
+
+
+void EngineWindow::on_splitter_splitterMoved(int /*pos*/, int /*index*/)
+{
+    QSettings settings;
+    QByteArray state = ui->splitter->saveState();
+    settings.setValue(splitterStr , state);
+
+}
 
