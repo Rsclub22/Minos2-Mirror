@@ -67,13 +67,13 @@ private slots:
 
     void onStdInRead(QString cmd);
 
-    void onNewLog(MonitoredLog *ml);
+    void onNewLog(QSharedPointer<MonitoredLog> ml);
 
     void on_configureButton_clicked();
     void on_startButton_clicked();
     void sendPressed(QString d, int c);
 
-    void onLogChanged(MonitoredLog *);
+    void onLogChanged(QSharedPointer<MonitoredLog> ml);
     void onLogStarted(QSharedPointer<MonitoredLog> ml);
     void onLogClosed(QSharedPointer<MonitoredLog> ml);
 signals:

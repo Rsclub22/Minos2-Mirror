@@ -28,13 +28,15 @@ public:
     bool hasWorked(const Callsign &, QString band, QString mode);
     Callsign myCall();
     void traceCS();
+    void testAutoStart();
 private:
     QString localRouterName;
 
 signals:
     void syncNeeded();
-    void newMonitoredLog(MonitoredLog *);
-    void currentLogChanged(MonitoredLog *);
+    void newMonitoredLog(QSharedPointer<MonitoredLog> ml);
+    void currentLogChanged(QSharedPointer<MonitoredLog> ml);
+    void logAutoStarted(QSharedPointer<MonitoredLog> ml);
 
 private slots:
     void on_notify(AnalysePubSubNotify an, const QString from );

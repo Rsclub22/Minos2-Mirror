@@ -174,7 +174,7 @@ void DMMainWindow::LogTimerTimer()
             close();
         }
     }
-    testAutoStart();
+    RemoteLogs::getRemoteLogs()->testAutoStart();
 }
 void DMMainWindow::closeEvent(QCloseEvent *event)
 {
@@ -224,25 +224,9 @@ void DMMainWindow::doCloseEvent()
     trace("Minos Data Modes App Closing");
 }
 
-void DMMainWindow::testAutoStart()
+void DMMainWindow::onNewLog(QSharedPointer<MonitoredLog> ml)
 {
-    for ( auto const &s: qAsConst(RemoteLogs::getRemoteLogs()->stationList) )
-    {
-       for ( auto &ml: s->slotList )
-       {
-            if (!ml->enabled())
-            {
-                if (ml->testAutoStart())
-                {
-                    ml->startMonitor();
-                }
-            }
-       }
-    }
-}
-void DMMainWindow::onNewLog(MonitoredLog *ml)
-{
-    connect(ml, &MonitoredLog::newStanzas, this, &DMMainWindow::onNewStanzas, Qt::QueuedConnection);
+    connect(ml.data(), &MonitoredLog::newStanzas, this, &DMMainWindow::onNewStanzas, Qt::QueuedConnection);
 }
 void DMMainWindow::onNewStanzas()
 {
@@ -253,7 +237,7 @@ void DMMainWindow::onNewStanzas()
         e->rescan();
     }
 }
-void DMMainWindow::onLogChanged(MonitoredLog */*ml*/)
+void DMMainWindow::onLogChanged(QSharedPointer<MonitoredLog> /*ml*/)
 {
     // we need to re-analyse the display, as current log has changed
 

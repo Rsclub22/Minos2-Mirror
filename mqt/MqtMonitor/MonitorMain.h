@@ -66,7 +66,7 @@ private slots:
 
     void onMonitorTree_clicked(const QModelIndex &index);
 
-    void onNewLog(MonitoredLog *m);
+    void onNewLog(QSharedPointer<MonitoredLog> m);
 
     void onNewStanzas(MonitoredLog *m);
     void onNewLastContact(MonitoredLog *m);

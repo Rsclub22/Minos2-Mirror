@@ -384,29 +384,14 @@ void KSTMainWindow::CloseTimerTimer(  )
          close();
       }
    }
-   testAutoStart();
+   RemoteLogs::getRemoteLogs()->testAutoStart();
 }
-void KSTMainWindow::testAutoStart()
+
+void KSTMainWindow::onNewLog(QSharedPointer<MonitoredLog> ml)
 {
-    for ( auto const &s: qAsConst(RemoteLogs::getRemoteLogs()->stationList) )
-    {
-       for ( auto &ml: s->slotList )
-       {
-            if (!ml->enabled())
-            {
-                if (ml->testAutoStart())
-                {
-                    ml->startMonitor();
-                }
-            }
-       }
-    }
+    connect(ml.data(), &MonitoredLog::newStanzas, this, &KSTMainWindow::onNewStanzas, Qt::QueuedConnection);
 }
-void KSTMainWindow::onNewLog(MonitoredLog *ml)
-{
-    connect(ml, &MonitoredLog::newStanzas, this, &KSTMainWindow::onNewStanzas, Qt::QueuedConnection);
-}
-void KSTMainWindow::onLogChanged(MonitoredLog */*ml*/)
+void KSTMainWindow::onLogChanged(QSharedPointer<MonitoredLog> /*ml*/)
 {
     kstMessageFilterModel.invalidate();
     kstMeepFilterModel.invalidate();

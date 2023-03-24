@@ -238,8 +238,8 @@ private slots:
 
     void on_logsButton_clicked();
 
-    void onNewLog(MonitoredLog *ml);
-    void onLogChanged(MonitoredLog *ml);
+    void onNewLog(QSharedPointer<MonitoredLog> ml);
+    void onLogChanged(QSharedPointer<MonitoredLog> ml);
     void onNewStanzas();
     void onLogStarted(QSharedPointer<MonitoredLog>);
     void onLogClosed(QSharedPointer<MonitoredLog>);

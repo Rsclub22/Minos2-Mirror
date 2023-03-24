@@ -1,9 +1,10 @@
 #include "remotelogs.h"
 #include "MTrace.h"
 #include "MinosRPC.h"
-#include "MonitoredLog.h"
-#include "RPCCommandConstants.h"
 #include "monitoredstation.h"
+#include "monitoredlogs.h"
+#include "monitoredlog.h"
+#include "RPCCommandConstants.h"
 
 RemoteLogs::RemoteLogs()
 {
@@ -29,7 +30,24 @@ void RemoteLogs::closeAll()
 {
     stationList.clear();
 }
+void RemoteLogs::testAutoStart()
+{
+    for ( auto const &s: qAsConst(RemoteLogs::getRemoteLogs()->stationList) )
+    {
+       for ( auto &ml: s->slotList )
+       {
+            if (!ml->enabled())
+            {
+                if (ml->testAutoStart())
+                {
+                    ml->startMonitor();
+                    emit logAutoStarted(ml);
+                }
+            }
+       }
+    }
 
+}
 bool RemoteLogs::hasWorked(const Callsign &cs, QString band, QString mode)
 {
     for ( auto const &s: qAsConst(stationList) )
@@ -150,7 +168,7 @@ void RemoteLogs::on_notify(AnalysePubSubNotify an, const QString /*from*/ )
                     if ( log == stat->slotList.end() )
                     {
                         QSharedPointer<MonitoredLog> ml(new MonitoredLog(stat));
-                        emit newMonitoredLog(ml.data());
+                        emit newMonitoredLog(ml);
 
                         ml->initialise( router, key );
 
@@ -207,7 +225,7 @@ void RemoteLogs::on_notify(AnalysePubSubNotify an, const QString /*from*/ )
                 {
                     // this is now the current log
                     stat->currentLog = *log;
-                    emit currentLogChanged(stat->currentLog.data());
+                    emit currentLogChanged(stat->currentLog);
                 }
             }
         }

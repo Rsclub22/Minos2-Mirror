@@ -51,6 +51,7 @@ MonitorMain::MonitorMain(QWidget *parent) :
     /*MinosRPC *rpc =*/ MinosRPC::getMinosRPC(getAppStartupName(), true);
 
     connect(RemoteLogs::getRemoteLogs(), &RemoteLogs::newMonitoredLog, this, &MonitorMain::onNewLog);
+    connect(RemoteLogs::getRemoteLogs(), &RemoteLogs::logAutoStarted, this, &MonitorMain::onLogStarted);
     connect(ui->monitorTree, &MonitoredLogs::logStarted, this, &MonitorMain::onLogStarted);
     connect(ui->monitorTree, &MonitoredLogs::logClosed, this, &MonitorMain::onLogClosed);
     connect(ui->monitorTree->getLogTree(), &QTreeView::clicked, this, &MonitorMain::onMonitorTree_clicked);
@@ -257,6 +258,7 @@ void MonitorMain::on_closeMonitoredLog()
 }
 void MonitorMain::onLogStarted(QSharedPointer<MonitoredLog> ml)
 {
+    trace("MonitorMain::onLogStarted");
     addSlot( ml );
 //    sel->setLog(ml);
 }
@@ -283,7 +285,7 @@ void MonitorMain::onNewLastContact(MonitoredLog *l)
 {
     trace("onNewLastContact");
     MonitoringFrame *frame = l->getFrame();
-    if (l->getContest()->lastInserted >= 0)
+    if (frame && l->getContest()->lastInserted >= 0)
     {
         QSharedPointer<BaseContact> bct = l->getContest()->pcontactAt(l->getContest()->lastInserted);
         frame->qsoModel.insertRows(l->getContest()->lastInserted, 1, QModelIndex());
@@ -307,14 +309,15 @@ void MonitorMain::onContactChanged(MonitoredLog *l)
 //=================================================================
 // callback slots from RemoteLogs
 
-void MonitorMain::onNewLog(MonitoredLog *ml)
+void MonitorMain::onNewLog(QSharedPointer<MonitoredLog> ml)
 {
-    connect(ml, &MonitoredLog::newStanzas, this, &MonitorMain::onNewStanzas);
-    connect(ml, &MonitoredLog::newLastContact, this, &MonitorMain::onNewLastContact);
-    connect(ml, &MonitoredLog::contactChanged, this, &MonitorMain::onContactChanged);
+    connect(ml.data(), &MonitoredLog::newStanzas, this, &MonitorMain::onNewStanzas);
+    connect(ml.data(), &MonitoredLog::newLastContact, this, &MonitorMain::onNewLastContact);
+    connect(ml.data(), &MonitoredLog::contactChanged, this, &MonitorMain::onContactChanged);
 }
 void MonitorMain::addSlot(  QSharedPointer< MonitoredLog>ct )
 {
+    trace("MonitorMain::addSlot");
    static int namegen = 0;
    QString baseFName = ExtractFileName( ct->getPublishedName() );
 
@@ -377,26 +380,8 @@ void MonitorMain::on_monitorTimeout()
         }
         ticks = 0;
     }
-    testAutoStart();
-
-}
-void MonitorMain::testAutoStart()
-{
-    for ( auto const &s: qAsConst(RemoteLogs::getRemoteLogs()->stationList) )
-    {
-       for ( auto &ml: s->slotList )
-       {
-            if (!ml->enabled())
-            {
-                if (ml->testAutoStart())
-                {
-                    ml->startMonitor();
-                    addSlot( ml );
-                }
-            }
-       }
-    }
-
+    // we need addSlot( ml ); for any newly started log
+    RemoteLogs::getRemoteLogs()->testAutoStart();
 }
 void MonitorMain::onMonitorTree_clicked(const QModelIndex &index)
 {
