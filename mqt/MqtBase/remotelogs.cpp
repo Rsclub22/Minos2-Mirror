@@ -41,7 +41,7 @@ bool RemoteLogs::hasWorked(const Callsign &cs, QString band, QString mode)
         for (QVector< QSharedPointer<MonitoredLog> >::iterator l = s->slotList.begin(); l != s->slotList.end(); l++)
 #endif
        {
-            if ((*l)->getState() != psRevoked && s->currentLog == *l)
+            if ((*l)->enabled() && (*l)->getState() != psRevoked && s->currentLog == *l)
             {
                 BaseContact cc((*l)->getContest(), dtg(true));
                 cc.cs = cs;
@@ -70,7 +70,7 @@ void RemoteLogs::traceCS()
         for (QVector< QSharedPointer<MonitoredLog> >::iterator l = s->slotList.begin(); l != s->slotList.end(); l++)
 #endif
        {
-            if ((*l)->getState() != psRevoked && s->currentLog == *l)
+            if ((*l)->enabled() && (*l)->getState() != psRevoked && s->currentLog == *l)
             {
                 for (const auto &cs:qAsConst((*l)->getCallsigns()))
                 {
@@ -92,11 +92,11 @@ Callsign RemoteLogs::myCall()
         for (QVector< QSharedPointer<MonitoredLog> >::iterator l = s->slotList.begin(); l != s->slotList.end(); l++)
 #endif
        {
-            if ((*l)->getState() != psRevoked)
+            if ((*l)->enabled() && (*l)->getState() != psRevoked && s->currentLog == *l)
             {
                 BaseContestLog *ct = (*l)->getContest();
                 Callsign mcall = ct->mycall;
-                QString fcall = mcall.getFullCall();
+                //QString fcall = mcall.getFullCall();
                 return mcall;
             }
         }

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>536</width>
-    <height>161</height>
+    <height>313</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,17 +16,7 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <spacer name="verticalSpacer">
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>20</width>
-        <height>40</height>
-       </size>
-      </property>
-     </spacer>
+     <widget class="MonitoredLogs" name="logsTreeView"/>
     </item>
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout">
@@ -72,6 +62,13 @@
    </property>
   </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>MonitoredLogs</class>
+   <extends>QTreeView</extends>
+   <header>monitoredlogs.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

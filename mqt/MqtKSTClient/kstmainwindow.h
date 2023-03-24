@@ -241,6 +241,8 @@ private slots:
     void onNewLog(MonitoredLog *ml);
     void onLogChanged(MonitoredLog *ml);
     void onNewStanzas();
+    void onLogStarted(QSharedPointer<MonitoredLog>);
+    void onLogClosed(QSharedPointer<MonitoredLog>);
 private:
     Ui::KSTMainWindow *ui;
     StdInReader *stdinReader = new StdInReader(this);

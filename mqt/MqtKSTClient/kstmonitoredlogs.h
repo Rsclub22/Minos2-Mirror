@@ -2,6 +2,7 @@
 #define KSTMONITOREDLOGS_H
 
 #include <QDialog>
+#include "MonitoredLog.h"
 
 namespace Ui {
 class KSTMonitoredLogs;
@@ -21,6 +22,10 @@ public:
 
 private slots:
     void on_hideButton_clicked();
+
+signals:
+    void logStarted(QSharedPointer<MonitoredLog>);
+    void logClosed(QSharedPointer<MonitoredLog>);
 
 private:
     Ui::KSTMonitoredLogs *ui;

@@ -65,9 +65,6 @@ DMMainWindow::DMMainWindow(QWidget *parent)
 
     mainWindow = this;
 
-    logsTreeView = new MonitoredLogs(this);
-    logsTreeView->setVisible(false);
-
 #ifdef Q_OS_WIN
     UINT devs = waveInGetNumDevs();
     inChannels = devs;
@@ -138,6 +135,9 @@ DMMainWindow::DMMainWindow(QWidget *parent)
 
     connect(RemoteLogs::getRemoteLogs(), &RemoteLogs::newMonitoredLog, this, &DMMainWindow::onNewLog);
     connect(RemoteLogs::getRemoteLogs(), &RemoteLogs::currentLogChanged, this, &DMMainWindow::onLogChanged);
+
+    connect(ui->logsTreeView, &MonitoredLogs::logStarted, this, &DMMainWindow::onLogStarted);
+    connect(ui->logsTreeView, &MonitoredLogs::logClosed, this, &DMMainWindow::onLogClosed);
 
     ui->startButton->setText(tr("Start All"));
 
@@ -244,7 +244,6 @@ void DMMainWindow::onNewLog(MonitoredLog *ml)
 {
     connect(ml, &MonitoredLog::newStanzas, this, &DMMainWindow::onNewStanzas, Qt::QueuedConnection);
 }
-
 void DMMainWindow::onNewStanzas()
 {
     // we need to re-analyse the display, especially when we have a new QSO
@@ -258,6 +257,20 @@ void DMMainWindow::onLogChanged(MonitoredLog */*ml*/)
 {
     // we need to re-analyse the display, as current log has changed
 
+    for (const auto &e:qAsConst(engines))
+    {
+        e->rescan();
+    }
+}
+void DMMainWindow::onLogStarted(QSharedPointer<MonitoredLog> /*ml*/)
+{
+    for (const auto &e:qAsConst(engines))
+    {
+        e->rescan();
+    }
+}
+void DMMainWindow::onLogClosed(QSharedPointer<MonitoredLog> /*ml*/)
+{
     for (const auto &e:qAsConst(engines))
     {
         e->rescan();

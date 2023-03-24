@@ -6,11 +6,8 @@
 #include <QMenu>
 
 #include "ScreenContact.h"
-#include "monitoredlogs.h"
-#include "remotelogs.h"
 #include "MonitoredLog.h"
 #include "MonitoringFrame.h"
-#include "MonitorTreeModel.h"
 #include "StdInReader.h"
 #include "cutils.h"
 
@@ -67,7 +64,7 @@ private slots:
 
     void on_searchSplitter_splitterMoved(int pos, int index);
 
-    void on_monitorTree_clicked(const QModelIndex &index);
+    void onMonitorTree_clicked(const QModelIndex &index);
 
     void onNewLog(MonitoredLog *m);
 

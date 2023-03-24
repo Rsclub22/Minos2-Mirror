@@ -1,15 +1,19 @@
+#include <QTimer>
 #include "AppStartup.h"
+#include "MonitorTreeModel.h"
 #include "contest.h"
 #include "MinosLoggerEvents.h"
 #include "ScreenContact.h"
 #include "MatchThread.h"
 #include "cutils.h"
+#include "remotelogs.h"
 #include "MonitoredLog.h"
 #include "MonitoringFrame.h"
 #include "LogEvents.h"
 #include "MTrace.h"
 #include "MonitorMain.h"
 #include "fileutils.h"
+#include "MinosRPC.h"
 #include "ui_MonitorMain.h"
 
 MonitorMain *monitorMain = nullptr;
@@ -49,6 +53,7 @@ MonitorMain::MonitorMain(QWidget *parent) :
     connect(RemoteLogs::getRemoteLogs(), &RemoteLogs::newMonitoredLog, this, &MonitorMain::onNewLog);
     connect(ui->monitorTree, &MonitoredLogs::logStarted, this, &MonitorMain::onLogStarted);
     connect(ui->monitorTree, &MonitoredLogs::logClosed, this, &MonitorMain::onLogClosed);
+    connect(ui->monitorTree->getLogTree(), &QTreeView::clicked, this, &MonitorMain::onMonitorTree_clicked);
 
     QByteArray state;
 
@@ -393,7 +398,7 @@ void MonitorMain::testAutoStart()
     }
 
 }
-void MonitorMain::on_monitorTree_clicked(const QModelIndex &index)
+void MonitorMain::onMonitorTree_clicked(const QModelIndex &index)
 {
     // select the correct tab
     TreeNode * sel = static_cast< TreeNode *>(index.internalPointer());

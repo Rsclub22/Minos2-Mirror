@@ -320,6 +320,10 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     ml = new KSTMonitoredLogs();
     connect(RemoteLogs::getRemoteLogs(), &RemoteLogs::newMonitoredLog, this, &KSTMainWindow::onNewLog);
     connect(RemoteLogs::getRemoteLogs(), &RemoteLogs::currentLogChanged, this, &KSTMainWindow::onLogChanged);
+
+    connect(ml, &KSTMonitoredLogs::logStarted, this, &KSTMainWindow::onLogStarted);
+    connect(ml, &KSTMonitoredLogs::logClosed, this, &KSTMainWindow::onLogClosed);
+
 }
 
 KSTMainWindow::~KSTMainWindow()
@@ -410,6 +414,20 @@ void KSTMainWindow::onLogChanged(MonitoredLog */*ml*/)
     kstPlanesFilterModel.invalidate();
 }
 void KSTMainWindow::onNewStanzas()
+{
+    kstMessageFilterModel.invalidate();
+    kstMeepFilterModel.invalidate();
+    kstCallFilterModel.invalidate();
+    kstPlanesFilterModel.invalidate();
+}
+void KSTMainWindow::onLogStarted(QSharedPointer<MonitoredLog> /*ml*/)
+{
+    kstMessageFilterModel.invalidate();
+    kstMeepFilterModel.invalidate();
+    kstCallFilterModel.invalidate();
+    kstPlanesFilterModel.invalidate();
+}
+void KSTMainWindow::onLogClosed(QSharedPointer<MonitoredLog> /*ml*/)
 {
     kstMessageFilterModel.invalidate();
     kstMeepFilterModel.invalidate();

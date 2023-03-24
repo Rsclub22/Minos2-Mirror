@@ -74,6 +74,8 @@ private slots:
     void sendPressed(QString d, int c);
 
     void onLogChanged(MonitoredLog *);
+    void onLogStarted(QSharedPointer<MonitoredLog> ml);
+    void onLogClosed(QSharedPointer<MonitoredLog> ml);
 signals:
     void setSpeeds(QString b, QString r);
 

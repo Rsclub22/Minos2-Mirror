@@ -1,7 +1,7 @@
 #ifndef MONITOREDLOGS_H
 #define MONITOREDLOGS_H
 
-#include <QTreeView>
+#include <QFrame>
 
 namespace Ui {
 class MonitoredLogs;
@@ -10,8 +10,9 @@ class MonitoredLogs;
 class MonitorTreeModel;
 class RemoteLogs;
 class MonitoredLog;
+class QTreeView;
 
-class MonitoredLogs : public QTreeView
+class MonitoredLogs : public QFrame
 {
     Q_OBJECT
 
@@ -23,10 +24,17 @@ class MonitoredLogs : public QTreeView
     bool syncstat = false;
     void syncStations();
 
+    QTreeView *logTree = nullptr;
+
 
 public:
     explicit MonitoredLogs(QWidget *parent);
     ~MonitoredLogs();
+
+    QTreeView *getLogTree() const
+    {
+        return logTree;
+    }
 
 private slots:
     void onMonitorTree_doubleClicked(const QModelIndex &index);

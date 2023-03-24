@@ -1,4 +1,8 @@
 #include <QTimer>
+#include <QHeaderView>
+#include <QVBoxLayout>
+#include <QTreeView>
+
 #include "AppStartup.h"
 #include "MTrace.h"
 #include "MonitorTreeModel.h"
@@ -8,14 +12,19 @@
 #include "ui_monitoredlogs.h"
 
 MonitoredLogs::MonitoredLogs(QWidget *parent) :
-    QTreeView(parent),
+    QFrame(parent),
     ui(new Ui::MonitoredLogs)
 {
     ui->setupUi(this);
 
+    QVBoxLayout *vbl = new QVBoxLayout(this);
+
+    logTree = new QTreeView(this);
+
+    vbl->addWidget(logTree);
     treeModel = new MonitorTreeModel();
-    setModel(treeModel);
-    header()->show();
+    logTree->setModel(treeModel);
+    logTree->header()->show();
 
     monitorTimer = new QTimer();
 
@@ -27,7 +36,7 @@ MonitoredLogs::MonitoredLogs(QWidget *parent) :
 
     connect(RemoteLogs::getRemoteLogs(), &RemoteLogs::syncNeeded, this, &MonitoredLogs::onSyncNeeded);
 
-    connect(this, &QTreeView::doubleClicked, this, &MonitoredLogs::onMonitorTree_doubleClicked);
+    connect(logTree, &QTreeView::doubleClicked, this, &MonitoredLogs::onMonitorTree_doubleClicked);
 }
 
 MonitoredLogs::~MonitoredLogs()
@@ -89,9 +98,9 @@ void MonitoredLogs::syncStations()
       int rc = treeModel->rowCount();
       for(int i = 0; i < rc; i++)
       {
-        setFirstColumnSpanned( i, QModelIndex(), true );
+        logTree->setFirstColumnSpanned( i, QModelIndex(), true );
       }
-      expandAll();
+      logTree->expandAll();
    }
 }
 void MonitoredLogs::onMonitorTree_doubleClicked(const QModelIndex &index)
@@ -137,10 +146,15 @@ void MonitoredLogs::onMonitorTree_doubleClicked(const QModelIndex &index)
        if ( !ml->enabled() )
        {
           ml->startMonitor();
-          //addSlot( ml );
-          //sel->setLog(ml);
           syncstat = true;
           emit logStarted(ml);
+       }
+       else
+       {
+           ml->setEnabled(false);
+           ml->setManualClose(true);
+           syncstat = true;
+           emit logClosed(ml);
        }
     }
 }

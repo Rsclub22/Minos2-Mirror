@@ -18,6 +18,12 @@ KSTMonitoredLogs::KSTMonitoredLogs(QWidget *parent) :
         restoreGeometry(geometry);
 
     hide();
+
+    connect(ui->treeView, &MonitoredLogs::logStarted, this, &KSTMonitoredLogs::logStarted);
+//            [=](QSharedPointer<MonitoredLog> ml){emit logStarted(ml);});
+
+    connect(ui->treeView, &MonitoredLogs::logClosed, this, &KSTMonitoredLogs::logClosed);
+//            [=](QSharedPointer<MonitoredLog> ml){emit logClosed(ml);});
 }
 
 KSTMonitoredLogs::~KSTMonitoredLogs()
