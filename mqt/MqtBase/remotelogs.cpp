@@ -2,10 +2,10 @@
 #include "MTrace.h"
 #include "MinosRPC.h"
 #include "monitoredstation.h"
-#include "monitoredlogs.h"
 #include "monitoredlog.h"
 #include "RPCCommandConstants.h"
 
+QString RemoteLogs::settingsFile;
 RemoteLogs::RemoteLogs()
 {
     MinosRPC *rpc = MinosRPC::validMinosRPC();

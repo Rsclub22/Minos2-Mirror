@@ -30,6 +30,8 @@ public:
     explicit MonitorMain(QWidget *parent = nullptr);
     ~MonitorMain() override;
 
+    QString iniName;
+
     ScreenContact screenContact;
 
     bool QSOGrid = true;

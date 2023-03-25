@@ -22,6 +22,10 @@ public:
         static RemoteLogs rl;
         return &rl;
     }
+    static void setSettingsFile(const QString &f)
+    {
+        settingsFile = f;
+    }
     void closeLog(MonitoredLog *);
     void closeAll();
 
@@ -31,6 +35,7 @@ public:
     void testAutoStart();
 private:
     QString localRouterName;
+    static QString settingsFile;
 
 signals:
     void syncNeeded();

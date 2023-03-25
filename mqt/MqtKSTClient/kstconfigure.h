@@ -20,6 +20,8 @@ public:
 
     QString hostname;
     QString port;
+    QString tnservername;
+    QString tnserverport;
     QString username;
     UpperCaseValidator userValidator;
     QString firstName;

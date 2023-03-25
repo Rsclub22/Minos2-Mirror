@@ -7,6 +7,7 @@
 #include "MonitoredLog.h"
 #include "cutils.h"
 #include "callsign.h"
+#include "fileutils.h"
 #include "kstconfigure.h"
 #include "airscoutlink.h"
 #include "delayedaction.h"
@@ -31,21 +32,12 @@ QStringList services =
 
 KSTMainWindow *mainWindow = nullptr;
 //==========================================================================================
-KSTMainWindow::KSTMainWindow(QWidget *parent)
-    : QMainWindow(parent)
-    , ui(new Ui::KSTMainWindow)
+void KSTMainWindow::getSettings(QSettings &settings)
 {
-    ui->setupUi(this);
-    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
-
-    mainWindow = this;
-
-    /*MinosRPC *rpc =*/ MinosRPC::getMinosRPC(getAppStartupName(), true);
-
-    QSettings settings;
-
     KSTserverName = settings.value("hostname", "www.on4kst.info").toString().trimmed();
     KSTserverPort = settings.value("port", "23001").toString().trimmed();
+    TNServerName = settings.value("tnhostname", "www.on4kst.info").toString();
+    TNServerPort = settings.value("tnport", "23000").toString();
     myCallsign.setFullCall(settings.value("username", "").toString());
     password = settings.value("password", "").toString().trimmed();
     maxDistance = settings.value("maxDistance", 99999).toInt();
@@ -59,12 +51,46 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     ASMaxDistance = settings.value("ASMaxDistance", 1000).toInt();
     ASPort = settings.value("ASPort", 9872).toInt();
     ASTimeout = settings.value("ASTimeout", 10).toInt();
+    chatSelection = settings.value("service", "1").toString();
+    activeChat = settings.value("active", "0").toInt();
+    autoConnect = settings.value("autoConnect", false).toBool();
+    myLoc = settings.value("locator", "").toString();
+
+}
+
+KSTMainWindow::KSTMainWindow(QWidget *parent)
+    : QMainWindow(parent)
+    , ui(new Ui::KSTMainWindow)
+{
+    ui->setupUi(this);
+    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
+
+    mainWindow = this;
+
+    /*MinosRPC *rpc =*/ MinosRPC::getMinosRPC(getAppStartupName(), true);
 
     callVector =    QSharedPointer<QVector <QSharedPointer<KstUser> > >( new QVector<QSharedPointer<KstUser> > );
     messageVector = QSharedPointer<QVector <QSharedPointer<KstMessageLine> > >( new QVector<QSharedPointer<KstMessageLine> >);
 
-    QString chatSelection = settings.value("service", "1").toString();
+    iniName = "./Configuration/" + getAppStartupName() + ".ini";
+
+    RemoteLogs::setSettingsFile(iniName);
+    bool needTransfer = !FileExists(iniName);
+
+    if (needTransfer)
+    {
+        QSettings rsettings;
+        getSettings(rsettings);
+        doConfiguration(false); // transfer everything to INI file
+    }
+    else
+    {
+        QSettings isettings(iniName, QSettings::IniFormat);
+        getSettings(isettings);
+    }
+
     QStringList selections = chatSelection.split(":");
+
     for (auto const &i: qAsConst(selections))
     {
         int s = i.toInt();
@@ -90,7 +116,6 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     }
     std::sort(kstChatSelection.begin(), kstChatSelection.end());
 
-    activeChat = settings.value("active", "0").toInt();
     setActive(activeChat);
 
     ui->login1cb->setText(services[0]);
@@ -123,15 +148,14 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     ui->messageChatFilter->addItems(services);
     ui->messageChatFilter->setCurrentIndex(0);
 
-    autoConnect = settings.value("autoConnect", false).toBool();
-    myLoc = settings.value("locator", "").toString();
+    QSettings rsettings;
 
-    QByteArray geometry = settings.value("geometry/Main").toByteArray();
+    QByteArray geometry = rsettings.value("geometry/Main").toByteArray();
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
     QByteArray state;
-    state = settings.value("kstSplitterState").toByteArray();
+    state = rsettings.value("kstSplitterState").toByteArray();
     ui->kstSplitter->restoreState(state);
 
     // Make sure the kstSplitter covers the maximum vertical space
@@ -142,10 +166,10 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     sizePolicy.setHeightForWidth(ui->kstSplitter->sizePolicy().hasHeightForWidth());
     ui->kstSplitter->setSizePolicy(sizePolicy);
 
-    state = settings.value("msgSplitterState").toByteArray();
+    state = rsettings.value("msgSplitterState").toByteArray();
     ui->msgSplitter->restoreState(state);
 
-    state = settings.value("callSplitterState").toByteArray();
+    state = rsettings.value("callSplitterState").toByteArray();
     ui->callSplitter->restoreState(state);
 
     createCloseEvent();
@@ -219,13 +243,13 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     QVector<Aircraft> qva;
     kstPlanesModel.setPlanesVector(qva);
 
-    state = settings.value("CSTable/state").toByteArray();
+    state = rsettings.value("CSTable/state").toByteArray();
     ui->CSTable->horizontalHeader()->restoreState(state);
 
-    state = settings.value("messageTable/state").toByteArray();
+    state = rsettings.value("messageTable/state").toByteArray();
     ui->messageTable->horizontalHeader()->restoreState(state);
 
-    state = settings.value("meepTable/state").toByteArray();
+    state = rsettings.value("meepTable/state").toByteArray();
     ui->meepTable->horizontalHeader()->restoreState(state);
 
     ui->CSTable->horizontalHeader()->setStretchLastSection(true);
@@ -298,7 +322,7 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
 
     while ( myCallsign.getValRes() != CS_OK)
     {
-        if (!doConfiguration())
+        if (!doConfiguration(true))
             break;
     }
     started = true;
@@ -433,7 +457,7 @@ void KSTMainWindow::connectToHost()
     kstLoggedIn.clear();
     while (myCallsign.getValRes() != CS_OK)
     {
-        if (!doConfiguration())
+        if (!doConfiguration(true))
             return;
     }
     if (kstChatSelection.count())
@@ -687,7 +711,7 @@ void KSTMainWindow::analyseKstMessage(QString atj)
 
 //            clearConnection();
             mShowMessage(sl[2], this);
-            doConfiguration();
+            doConfiguration(true);
         }
 
     }
@@ -1204,7 +1228,7 @@ void KSTMainWindow::onCSTableSelectionChanged(const QItemSelection &/*selected*/
         on_clearMessageFilter_clicked();
     }
 }
-bool KSTMainWindow::doConfiguration()
+bool KSTMainWindow::doConfiguration(bool showForm)
 {
     KSTConfigure conf;
 
@@ -1226,11 +1250,21 @@ bool KSTMainWindow::doConfiguration()
     conf.ASPort = ASPort;
     conf.ASTimeout = ASTimeout;
 
-    int ret = conf.exec();
+    conf.tnservername = TNServerName;
+    conf.tnserverport = TNServerPort;
+
+
+    int ret = QDialog::Accepted;
+    if (showForm)
+    {
+        ret = conf.exec();
+    }
     if (ret == QDialog::Accepted)
     {
         KSTserverName = conf.hostname.trimmed();
         KSTserverPort = conf.port.trimmed();
+        TNServerName = conf.tnservername.trimmed();
+        TNServerPort = conf.tnserverport.trimmed();
         myCallsign.setFullCall(conf.username);
         password = conf.password.trimmed();
         autoConnect = conf.autoConnect;
@@ -1246,10 +1280,12 @@ bool KSTMainWindow::doConfiguration()
         ASPort = conf.ASPort;
         ASTimeout = conf.ASTimeout;
 
-        QSettings settings;
+        QSettings settings(iniName, QSettings::IniFormat);
 
         settings.setValue("hostname", KSTserverName);
         settings.setValue("port", KSTserverPort);
+        settings.setValue("tnservername", TNServerName);
+        settings.setValue("tnserverport", TNServerPort);
         settings.setValue("username", myCallsign.getFullCall());
         settings.setValue("password", password);
         settings.setValue("autoConnect", autoConnect);
@@ -1266,23 +1302,26 @@ bool KSTMainWindow::doConfiguration()
         settings.setValue("ASPort", ASPort);
         settings.setValue("ASTimeout", ASTimeout);
 
-        for (auto const &l: qAsConst(*callVector))
+        if (showForm)
         {
-            l->distance = -1;
-        }
-        kstCallFilterModel.invalidate();
-        kstMessageFilterModel.invalidate();
+            for (auto const &l: qAsConst(*callVector))
+            {
+                l->distance = -1;
+            }
+            kstCallFilterModel.invalidate();
+            kstMessageFilterModel.invalidate();
 
-        if (getASActive())
-        {
-            asl.reset();
+            if (getASActive())
+            {
+                asl.reset();
 
-            asl = QSharedPointer<AirScoutLink>(new AirScoutLink());
-            connect(asl.data(), &AirScoutLink::acChanged, this, &KSTMainWindow::acChanged);
-        }
-        if  (kstconnected)
-        {
-            reconnect();
+                asl = QSharedPointer<AirScoutLink>(new AirScoutLink());
+                connect(asl.data(), &AirScoutLink::acChanged, this, &KSTMainWindow::acChanged);
+            }
+            if  (kstconnected)
+            {
+                reconnect();
+            }
         }
         return true;
     }
@@ -1291,7 +1330,7 @@ bool KSTMainWindow::doConfiguration()
 
 void KSTMainWindow::on_configureButton_clicked()
 {
-    doConfiguration();
+    doConfiguration(true);
 }
 void KSTMainWindow::reconnect()
 {
@@ -1693,7 +1732,7 @@ void KSTMainWindow::logincb_stateChanged(int /*arg1*/)
     if (a.count())
         setActive(a[0]);
     doLoginChanges();
-    QSettings settings;
+    QSettings settings(iniName, QSettings::IniFormat);
     settings.setValue("service", s.join(":"));
 }
 void KSTMainWindow::activerb_clicked()
@@ -1714,7 +1753,7 @@ void KSTMainWindow::activerb_clicked()
     {
         activeChat = 4;
     }
-    QSettings settings;
+    QSettings settings(iniName, QSettings::IniFormat);
     settings.setValue("active", QString::number(activeChat));
     checkAwayButton();
 }
@@ -1726,7 +1765,7 @@ void KSTMainWindow::on_messageChatFilter_currentIndexChanged(int index)
 
         kstMessageFilterModel.setChatFilter(messageChatFilter);
 
-        QSettings settings;
+        QSettings settings(iniName, QSettings::IniFormat);
         settings.setValue("messageChatFilter", QString::number(messageChatFilter));
     }
 }
@@ -1738,7 +1777,7 @@ void KSTMainWindow::on_CSChatFilter_currentIndexChanged(int index)
 
         kstCallFilterModel.setChatFilter(CSChatFilter);
 
-        QSettings settings;
+        QSettings settings(iniName, QSettings::IniFormat);
         settings.setValue("CSChatFilter", QString::number(CSChatFilter));
     }
 }
@@ -1777,7 +1816,7 @@ void KSTMainWindow::on_asBandCombo_currentIndexChanged(int band)
 
             userCallTimerTimer();
         }
-        QSettings settings;
+        QSettings settings(iniName, QSettings::IniFormat);
 
         settings.setValue("ASActiveBand", band);
     }
@@ -1801,7 +1840,7 @@ void KSTMainWindow::on_ASActivecb_stateChanged(int state)
             userCallTimerTimer();
         }
 
-        QSettings settings;
+        QSettings settings(iniName, QSettings::IniFormat);
 
         settings.setValue("ASActive", state != 0);
 
@@ -1857,7 +1896,7 @@ void KSTMainWindow::on_showMPath_clicked()
 void KSTMainWindow::on_maxDistanceEdit_editingFinished()
 {
     maxDistance = ui->maxDistanceEdit->text().toInt();
-    QSettings settings;
+    QSettings settings(iniName, QSettings::IniFormat);
     settings.setValue("maxDistance", maxDistance);
 
     kstCallFilterModel.invalidate();

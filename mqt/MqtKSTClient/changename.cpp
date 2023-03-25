@@ -4,6 +4,8 @@
 #include "delayedaction.h"
 
 #include "changename.h"
+#include "fileutils.h"
+#include "kstmainwindow.h"
 #include "ui_changename.h"
 
 //==========================================================================================
@@ -64,7 +66,7 @@ ChangeName::~ChangeName()
 
 void ChangeName::doChangeName()
 {
-    // run up telnet to hange the first name.
+    // run up telnet to change the first name.
     tnclient = new QtTelnet(this);
 
     connect(tnclient, &QtTelnet::socketConnected, this, &ChangeName::connectionEstablished);
@@ -78,10 +80,6 @@ void ChangeName::doChangeName()
     connect(tnclient, &QtTelnet::loggedOut, this, &ChangeName::loggedOut);
     connect(tnclient, &QtTelnet::message, this, &ChangeName::messageRx);
 
-    QSettings settings;
-    KSTserverName = settings.value("tnhostname", "www.on4kst.info").toString();
-    KSTserverPort = settings.value("tnport", "23000").toString();
-
     connectToHost();
 
 }
@@ -94,7 +92,7 @@ void ChangeName::sendData(QString msg)
 void ChangeName::connectToHost()
 {
     //tnclient->login(QString("%1\r\n").arg(myCallsign), QString(password) + "\r\n");
-    tnclient->connectToHost(KSTserverName , KSTserverPort.toInt());
+    tnclient->connectToHost(mainWindow->TNServerName , mainWindow->TNServerPort.toInt());
 
 }
 

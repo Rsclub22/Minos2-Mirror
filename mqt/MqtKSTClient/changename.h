@@ -22,8 +22,6 @@ public:
     QString newName;
     QtTelnet* tnclient = 0;
 
-    QString KSTserverName;
-    QString KSTserverPort;
     Callsign myCallsign;
     QString password;
 

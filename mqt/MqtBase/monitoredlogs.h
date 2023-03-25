@@ -36,6 +36,8 @@ public:
         return logTree;
     }
 
+    void setSettingsFile(const QString &fn);
+
 private slots:
     void onMonitorTree_doubleClicked(const QModelIndex &index);
     void onSyncNeeded();

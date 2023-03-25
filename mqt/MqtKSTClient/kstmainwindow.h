@@ -55,6 +55,7 @@ class KSTMainWindow : public QMainWindow
 
     QString KSTserverName;
     QString KSTserverPort;
+
     Callsign myCallsign;
     QString password;
     QString firstName;
@@ -110,11 +111,14 @@ class KSTMainWindow : public QMainWindow
     void setNameFromCall(const Callsign &call);
     void doLoginChanges();
     void setActive(int chat);
-    bool doConfiguration();
+    bool doConfiguration(bool showForm);
 
 public:
     KSTMainWindow(QWidget *parent = nullptr);
     ~KSTMainWindow() override;
+    QString iniName;
+    QString TNServerName;
+    QString TNServerPort;
 
     virtual void resizeEvent(QResizeEvent *event) override;
     virtual void moveEvent(QMoveEvent *event) override;
@@ -248,6 +252,10 @@ private:
     StdInReader *stdinReader = new StdInReader(this);
 
     KSTMonitoredLogs* ml = nullptr;
+
+    QString chatSelection;
+
+    void getSettings(QSettings &settings);
 
     void clearConnection();
     void checkActive();

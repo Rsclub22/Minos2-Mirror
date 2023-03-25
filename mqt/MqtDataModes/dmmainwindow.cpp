@@ -102,6 +102,8 @@ DMMainWindow::DMMainWindow(QWidget *parent)
 
 #endif
 
+    RemoteLogs::setSettingsFile("./Configuration/DataModes.ini");
+
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     connect(stdinReader, &StdInReader::stdinLine, this, &DMMainWindow::onStdInRead);
