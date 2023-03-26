@@ -44,7 +44,6 @@ public:
     TSendDM *sendDM;
     N1MMBroadcast *n1mmBroadcast = nullptr;
 
-    void selectContest(BaseContestLog *pc, QSharedPointer<BaseContact> pct );
     bool show(int argc, char *argv[]);
     TSingleLogFrame *getCurrentLogFrame();
 

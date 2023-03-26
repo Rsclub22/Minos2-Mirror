@@ -638,7 +638,7 @@ void TLogContainer::openRecentFile()
            if (ct)
            {
               sendDM->subscribeApps();
-              selectContest(ct, QSharedPointer<BaseContact>());
+              selectContest(ct);
            }
         }
         else
@@ -924,7 +924,7 @@ void TLogContainer::FileNewActionExecute(bool hf)
        }
     }
     sendDM->subscribeApps();
-    selectContest(c, QSharedPointer<BaseContact>());
+    selectContest(c);
 }
 void TLogContainer::VHFFileNewActionExecute()
 {
@@ -963,7 +963,7 @@ void TLogContainer::FileOpenActionExecute()
             if (ct)
             {
                 sendDM->subscribeApps();
-                selectContest(ct, QSharedPointer<BaseContact>());
+                selectContest(ct);
             }
         }
     }
@@ -1011,7 +1011,7 @@ void TLogContainer::FileImportActionExecute(bool hf)
             if (ct)
             {
                 sendDM->subscribeApps();
-                selectContest(ct, QSharedPointer<BaseContact>());
+                selectContest(ct);
             }
         }
     }
@@ -1443,7 +1443,7 @@ void TLogContainer::selectTab(int curTab)
         QWidget *ctab = ui->contestPageControl->widget(curTab);
         TSingleLogFrame * f = dynamic_cast<TSingleLogFrame *>( ctab );
         BaseContestLog *pc = f->getContest();
-        selectContest(pc, QSharedPointer<BaseContact>());
+        selectContest(pc);
     }
 
 }
@@ -1684,7 +1684,7 @@ void TLogContainer::selectLayoutAction()
 
         // we are going to have to re-order the tabs as well - but I don't want to redo them all!
 
-        selectContest( ct, QSharedPointer<BaseContact>() );
+        selectContest( ct );
         TContestApp::getContestApp() ->setCurrentContest(ct);
     }
 }
@@ -1815,7 +1815,7 @@ void TLogContainer::selectSession(QString sessName)
     app->suppressWritePreload = false;
     if ( ct )
     {
-        selectContest( ct, QSharedPointer<BaseContact>() );
+        selectContest( ct );
         app->setCurrentContest(ct);
     }
     app->logsPreloadBundle.flushProfile();
@@ -1963,7 +1963,7 @@ void TLogContainer::preloadFiles( const QString &conarg )
     if ( ct )
     {
         sendDM->subscribeApps();
-        selectContest( ct, QSharedPointer<BaseContact>() );
+        selectContest( ct );
     }
 }
 void TLogContainer::preloadLists( )
@@ -2170,11 +2170,9 @@ void TLogContainer::ShiftTabLeftActionExecute( )
       enableActions();
    }
 }
-void TLogContainer::selectContest( BaseContestLog *pc, QSharedPointer<BaseContact> pct )
+void TLogContainer::selectContest( BaseContestLog *pc)
 {
-    // we have double clicked on a contact in "other" or "archive" trees
-    // so we want to (a) switch tabs and (b) go to that contact edit
-
+    // select this contest on all screens
 
     for ( int j = 0; j < ui->contestPageControl->count(); j++ )
     {
@@ -2183,27 +2181,7 @@ void TLogContainer::selectContest( BaseContestLog *pc, QSharedPointer<BaseContac
         {
             if ( f->getContest() == pc )
             {
-                ui->contestPageControl->setCurrentIndex(j);         // This doesn't call ContestPageControlChange (see TPageControl::OnChange in  help)
-                on_contestPageControl_currentChanged(-1);       // so the contest gets properly switched
-                f->QSOTreeSelectContact( pct );         // which triggers edit on the contact
-                return ;
-            }
-        }
-    }
-}
-void TLogContainer::selectContest( BaseContestLog *pc)
-{
-    // select this contest on all screens
-    int pct = ui->contestPageControl->count();
-    for ( int j = 0; j < pct; j++ )
-    {
-        QWidget *ctab = ui->contestPageControl->widget(j);
-        if ( TSingleLogFrame * f = dynamic_cast<TSingleLogFrame *>( ctab ) )
-        {
-            if ( f->getContest() == pc )
-            {
-                ui->contestPageControl->setCurrentIndex(j);         // This doesn't call ContestPageControlChange (see TPageControl::OnChange in  help)
-                on_contestPageControl_currentChanged(-1);       // so the contest gets properly switched
+                ui->contestPageControl->setCurrentIndex(j);
                 return ;
             }
         }

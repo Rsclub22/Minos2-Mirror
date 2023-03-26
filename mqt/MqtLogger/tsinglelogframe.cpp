@@ -1139,6 +1139,7 @@ void TSingleLogFrame::on_ContestPageChanged ()
 
     RPCPubSub::publish( rpcConstants::currentLogCategory, rpcConstants::currentLogCategory, contest->publishedName, psPublished );
 
+    GJVQSOLogFrame->restorePartial();
     update();   // this queues a repaint
 }
 void TSingleLogFrame::on_doColumnChanges(BaseContestLog *b)

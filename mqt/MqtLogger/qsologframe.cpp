@@ -61,7 +61,6 @@ QString QSOLogFrame::getFKeyLabel(int n)
 QSOLogFrame::QSOLogFrame(QWidget *parent) :
     QFrame(parent)
     , ui(new Ui::QSOLogFrame)
-    //, selectedContact(nullptr)
     , partialContact(nullptr)
     , oldTimeOK(true)
     , contest(nullptr)
