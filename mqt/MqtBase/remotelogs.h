@@ -26,6 +26,10 @@ public:
     {
         settingsFile = f;
     }
+    static QString getSettingsFile()
+    {
+        return settingsFile;
+    }
     void closeLog(MonitoredLog *);
     void closeAll();
 

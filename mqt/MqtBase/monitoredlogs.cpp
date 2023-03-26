@@ -2,11 +2,15 @@
 #include <QHeaderView>
 #include <QVBoxLayout>
 #include <QTreeView>
+#include <QGroupBox>
+#include <QCheckBox>
+#include <QSettings>
 
 #include "AppStartup.h"
 #include "MTrace.h"
 #include "MonitorTreeModel.h"
 #include "MonitoredLog.h"
+#include "cutils.h"
 #include "monitoredlogs.h"
 #include "remotelogs.h"
 #include "ui_monitoredlogs.h"
@@ -25,6 +29,12 @@ MonitoredLogs::MonitoredLogs(QWidget *parent) :
     treeModel = new MonitorTreeModel();
     logTree->setModel(treeModel);
     logTree->header()->show();
+
+    autoStationsBox = new QGroupBox(this);
+    autoStationsBox->setTitle(tr("Auto start stations"));
+    vbl->addWidget(autoStationsBox);
+
+    /*vbl = */new QVBoxLayout(autoStationsBox);
 
     monitorTimer = new QTimer();
 
@@ -84,11 +94,25 @@ void MonitoredLogs::syncStations()
    {
       syncstat = false;
 
+      QString fname = RemoteLogs::getSettingsFile();
+      QSettings settings(fname, QSettings::IniFormat);
+      QString autoSyncStations = settings.value("autoStations", "None").toString();
+      QStringList autoStations;
+      if (autoSyncStations != "None")
+      {
+        autoStations = autoSyncStations.split(";", Qt::SkipEmptyParts);
+      }
+      clearLayout(autoStationsBox->layout());
+
+      QStringList allStations = autoStations;
+
       TreeNode *root = new RootTreeNode();
       for ( auto s = RemoteLogs::getRemoteLogs()->stationList.begin(); s != RemoteLogs::getRemoteLogs()->stationList.end(); s++ )
       {
-          // clang complains that snode may leak - but if gets taken over by the tree
-          TreeNode *snode = new RouterTreeNode(root, s.key().app + "@" + s.key().routerName);
+          allStations.append((*s)->name);
+
+          // clang complains that snode may leak - but it gets taken over by the tree
+          TreeNode *snode = new RouterTreeNode(root, (*s)->name);
           for ( auto const &l: qAsConst(s.value()->slotList) )
           {
               /*TreeNode *lnode =*/ new LogTreeNode(snode, l);
@@ -101,7 +125,51 @@ void MonitoredLogs::syncStations()
         logTree->setFirstColumnSpanned( i, QModelIndex(), true );
       }
       logTree->expandAll();
+
+      allStations.sort();
+      allStations.removeDuplicates();
+      for (const auto &sn:qAsConst(allStations))
+      {
+          QCheckBox *scb = new QCheckBox(autoStationsBox);
+          scb->setText(sn);
+          autoStationsBox->layout()->addWidget(scb);
+
+          if (autoSyncStations == "None")
+          {
+              MinosConfig *config = MinosConfig::getMinosConfig();
+              QString localRouterName = config->getThisRouterName();
+
+              if (sn.contains("@" + localRouterName))
+              {
+                  scb->setChecked(true);
+              }
+          }
+          if (autoStations.contains(sn))
+          {
+                scb->setChecked(true);
+          }
+          connect(scb, &QCheckBox::stateChanged, this, &MonitoredLogs::autoSyncChanged);
+      }
    }
+}
+void MonitoredLogs::autoSyncChanged(int)
+{
+    QStringList autoStations;
+    for(int i = 0; i < autoStationsBox->layout()->count(); i++)
+    {
+        QLayoutItem *li = autoStationsBox->layout()->itemAt(i);
+        QWidget *w = li->widget();
+
+        QCheckBox *cb = dynamic_cast<QCheckBox *>(w);
+        if (cb && cb->isChecked())
+        {
+            autoStations.append(cb->text());
+        }
+
+    }
+    QString fname = RemoteLogs::getSettingsFile();
+    QSettings settings(fname, QSettings::IniFormat);
+    settings.setValue("autoStations", autoStations.join(';'));
 }
 void MonitoredLogs::onMonitorTree_doubleClicked(const QModelIndex &index)
 {

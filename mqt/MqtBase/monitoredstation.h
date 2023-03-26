@@ -12,6 +12,8 @@ class MonitoredStation
       QVector< QSharedPointer<MonitoredLog> > slotList;
       QSharedPointer<MonitoredLog> currentLog;
 
+      QString name;
+
       MonitoredStation();
       ~MonitoredStation();
 };

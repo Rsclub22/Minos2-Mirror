@@ -1,3 +1,5 @@
+#include <QSettings>
+
 #include "remotelogs.h"
 #include "MTrace.h"
 #include "MinosRPC.h"
@@ -32,17 +34,19 @@ void RemoteLogs::closeAll()
 }
 void RemoteLogs::testAutoStart()
 {
+    QString fname = RemoteLogs::getSettingsFile();
+    QSettings settings(fname, QSettings::IniFormat);
+    QString autoSyncStations = settings.value("autoStations").toString();
+    QStringList autoStations = autoSyncStations.split(";");
+
     for ( auto const &s: qAsConst(RemoteLogs::getRemoteLogs()->stationList) )
     {
+        if (autoStations.contains(s->name))
        for ( auto &ml: s->slotList )
        {
-            if (!ml->enabled())
+            if (ml->testAutoStart())
             {
-                if (ml->testAutoStart())
-                {
-                    ml->startMonitor();
-                    emit logAutoStarted(ml);
-                }
+                emit logAutoStarted(ml);
             }
        }
     }
@@ -127,7 +131,9 @@ void RemoteLogs::on_provider(Provider provider, QString cat)
     {
         if (!stationList.contains(provider))
         {
-            stationList[provider] = new MonitoredStation;
+            MonitoredStation *s = new MonitoredStation;
+            s->name = provider.app + "@" + provider.routerName;
+            stationList[provider] = s;
             emit syncNeeded();
         }
     }

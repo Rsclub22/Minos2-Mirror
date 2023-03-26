@@ -11,6 +11,7 @@ class MonitorTreeModel;
 class RemoteLogs;
 class MonitoredLog;
 class QTreeView;
+class QGroupBox;
 
 class MonitoredLogs : public QFrame
 {
@@ -25,7 +26,7 @@ class MonitoredLogs : public QFrame
     void syncStations();
 
     QTreeView *logTree = nullptr;
-
+    QGroupBox *autoStationsBox;
 
 public:
     explicit MonitoredLogs(QWidget *parent);
@@ -44,6 +45,7 @@ private slots:
 
     void on_monitorTimeout();
 
+    void autoSyncChanged(int);
 signals:
     void logStarted(QSharedPointer<MonitoredLog>);
     void logClosed(QSharedPointer<MonitoredLog>);
