@@ -3554,7 +3554,7 @@ void QSOLogFrame::on_BandmapMarkFreqPbClicked()
 }
 
 
-void QSOLogFrame::on_bandmapSaveFreqPbClicked()
+void QSOLogFrame::doBandmapSaveFreq(bool PbClicked)
 {
     memoryData::memData logData;
     int callRes = -1;
@@ -3568,15 +3568,21 @@ void QSOLogFrame::on_bandmapSaveFreqPbClicked()
 
         trace(QString("bandmapSave: save clicked callsign %1").arg(logData.callsign));
         emit bandmapSaveFreq(logData.callsign, logData.freq, logData.mode, logData.locator, QString::number(logData.bearing), logData.exchange);
-
-
     }
     else
     {
        trace(QString("bandmapSave: save clicked callsign %1 not valid %2").arg(logData.callsign).arg(callRes));
+       if (!PbClicked)
+       {
+           // clear a partial bad QSO when tuning off
+           doGJVCancelButton_clicked();
+       }
     }
+}
 
-
+void QSOLogFrame::on_bandmapSaveFreqPbClicked()
+{
+    doBandmapSaveFreq(true);
 }
 
 void QSOLogFrame::onQrzButtonClicked()
@@ -3971,7 +3977,7 @@ void QSOLogFrame::on_FreqChanged(Frequency f)
                 if (toleranceF >= addToBandmapTuneTolerance)
                 {
 
-                    on_bandmapSaveFreqPbClicked();
+                    doBandmapSaveFreq(false);
                 }
             }
         }

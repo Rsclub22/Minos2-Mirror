@@ -1878,12 +1878,6 @@ void TSingleLogFrame::on_SetFreq(Frequency f)
             MinosLoggerEvents::SendContestBandChanged(contest);
         }
 
-        sCurFreq = f;
-        FKHRigControlFrame->setFreq(f);
-        runButtonsFrame->setFreq(f);
-        GJVQSOLogFrame->setFreq(f);
-        bandmapControlFrame->setFreq(f);
-
         updateFreq(f);
 
         if (stopKeyer)

@@ -297,6 +297,8 @@ private:
     bool readTuneAddBandMapSetting();
     QString getFKeyLabel(int n);
     void setEditStyleSheet(QLineEdit *qle, QString ss);
+    void doBandmapSaveFreq(bool PbClicked);
+
 signals:
     void QSOFrameCancelled();
     void sendBandMap( Frequency freq, QString call, QString utc, QString loc, QString qth );
