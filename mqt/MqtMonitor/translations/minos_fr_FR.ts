@@ -16,52 +16,52 @@
         <translation>Moniteur de Log Minos</translation>
     </message>
     <message>
-        <location filename="../MonitorMain.ui" line="72"/>
+        <location filename="../MonitorMain.ui" line="69"/>
         <source>Search Parameters</source>
         <translation>Paramètres de recherche</translation>
     </message>
     <message>
-        <location filename="../MonitorMain.ui" line="80"/>
+        <location filename="../MonitorMain.ui" line="77"/>
         <source>Call</source>
         <translation>Indicatif d&apos;appel</translation>
     </message>
     <message>
-        <location filename="../MonitorMain.ui" line="98"/>
+        <location filename="../MonitorMain.ui" line="95"/>
         <source>Loc</source>
         <translation>Locator</translation>
     </message>
     <message>
-        <location filename="../MonitorMain.ui" line="116"/>
+        <location filename="../MonitorMain.ui" line="113"/>
         <source>Exch</source>
         <translation>Échange</translation>
     </message>
     <message>
-        <location filename="../MonitorMain.ui" line="142"/>
+        <location filename="../MonitorMain.ui" line="139"/>
         <source>QSO Map</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MonitorMain.ui" line="150"/>
+        <location filename="../MonitorMain.ui" line="147"/>
         <source>Show Grid</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MonitorMain.ui" line="157"/>
+        <location filename="../MonitorMain.ui" line="154"/>
         <source>Show Lines</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MonitorMain.ui" line="171"/>
+        <location filename="../MonitorMain.ui" line="168"/>
         <source>Show spots</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MonitorMain.ui" line="191"/>
+        <location filename="../MonitorMain.ui" line="188"/>
         <source>Dist Limit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MonitorMain.cpp" line="80"/>
+        <location filename="../MonitorMain.cpp" line="90"/>
         <source>Close tab</source>
         <translation>Fermer l&apos;onglet</translation>
     </message>
