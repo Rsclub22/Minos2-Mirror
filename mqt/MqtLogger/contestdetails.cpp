@@ -1069,8 +1069,9 @@ void ContestDetails::setDetails( const IndividualContest &ic )
    {
        if (setMode == hamlibData::MGM)
        {
-           contestTransferObject->locMult.setValue( true );
-           contestTransferObject->locatorMandatoryField.setValue( true );
+           contestTransferObject->locMult.setValue( false );
+           contestTransferObject->countryMult.setValue( true );
+           contestTransferObject->locatorMandatoryField.setValue( false );
            contestTransferObject->MGMContestRules.setValue(true);
            contestTransferObject->serialMandatoryField.setValue(false);
            contestTransferObject->allowLoc4.setValue(true);

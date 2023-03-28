@@ -937,12 +937,10 @@ void WsjtxFrame::on_autoSelectButton_toggled(bool c)
 {
     if (!c)
     {
-        //ui->autoSelectButton->setArrowType(Qt::NoArrow);
         trace("WsjtxFrame autoselect off");
     }
     else
     {
-        //ui->autoSelectButton->setArrowType(Qt::DownArrow);
         trace("WsjtxFrame autoselect on");
     }
 }
