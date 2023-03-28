@@ -460,6 +460,9 @@ bool MinosConfig::saveAsJson(QString f)
              if ( j->deleted)
                  continue;
 
+             if (j->appType == MinosConfig::appNone )
+                 continue;
+
              QJsonObject c;
 
              c.insert("Program", j->commandLine);
