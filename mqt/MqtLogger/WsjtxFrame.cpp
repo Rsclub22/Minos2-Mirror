@@ -20,12 +20,16 @@
 #include "WsjtxFrame.h"
 #include "ui_WsjtxFrame.h"
 
-WsjtxFrame::WsjtxFrame(QWidget *parent) :
+WsjtxFrame::WsjtxFrame(TSingleLogFrame *parent) :
     QFrame(parent)
+  , tslf(parent)
   , ui(new Ui::WsjtxFrame)
   , decodes_model_ {new DecodesModel()}
 {
     ui->setupUi(this);
+    ui->decodes_table_view_->horizontalHeader()->setContextMenuPolicy( Qt::CustomContextMenu );
+    ui->decodes_table_view_->horizontalHeader()->setSectionsMovable(true);
+    connect( ui->decodes_table_view_->horizontalHeader(), &QHeaderView::customContextMenuRequested, this, &WsjtxFrame::ondecodes_table_view__customContextMenuRequested );
 
     ui->splitter->setStretchFactor(0, 2);
     ui->splitter->setStretchFactor(1, 1);
@@ -69,22 +73,22 @@ WsjtxFrame::WsjtxFrame(QWidget *parent) :
     ui->decodes_table_view_->setModel (decodes_model_);
     ui->decodes_table_view_->verticalHeader ()->hide ();
 
-    reloadColumns();
+//    reloadColumns();
 
     ui->decodes_table_view_->hideColumn (dcId);
-    ui->decodes_table_view_->hideColumn (dcDT);
-    ui->decodes_table_view_->hideColumn (dcDF);
+//    ui->decodes_table_view_->hideColumn (dcDT);
+//    ui->decodes_table_view_->hideColumn (dcDF);
     ui->decodes_table_view_->hideColumn (dcMd);
     ui->decodes_table_view_->hideColumn (dcConfidence);
     ui->decodes_table_view_->hideColumn (dcLive);
     ui->decodes_table_view_->hideColumn (dcSeq);
-    //ui->decodes_table_view_->hideColumn (dcPoints);
-    //ui->decodes_table_view_->hideColumn (dcBearing);
+//    //ui->decodes_table_view_->hideColumn (dcPoints);
+//    //ui->decodes_table_view_->hideColumn (dcBearing);
     ui->decodes_table_view_->hideColumn (dcDistance);
-    ui->decodes_table_view_->hideColumn (dcFromCall);
-    //ui->decodes_table_view_->hideColumn (dcFromGrid);
-    ui->decodes_table_view_->hideColumn (dcToCall);
-    ui->decodes_table_view_->hideColumn (dcToGrid);
+//    //ui->decodes_table_view_->hideColumn (dcFromCall);
+//    //ui->decodes_table_view_->hideColumn (dcFromGrid);
+//    //ui->decodes_table_view_->hideColumn (dcToCall);
+//    ui->decodes_table_view_->hideColumn (dcToGrid);
 
 
     if (autoEnabled)
@@ -104,12 +108,17 @@ WsjtxFrame::WsjtxFrame(QWidget *parent) :
     // this to change - get the item, and use the message decode data
     connect (ui->decodes_table_view_, &QTableView::doubleClicked, this, &WsjtxFrame::do_reply);
 
-    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::doColumnChanges, this, &WsjtxFrame::on_doColumnChanges);
+
+    createColumnsMenu(columnsMenu, decodes_model_, this,
+              [=]{
+                    viewColumn();
+              });
 
     connect( ui->decodes_table_view_->horizontalHeader(), &QHeaderView::sectionMoved,
-             this, &WsjtxFrame::on_sectionMoved);
+             this, &WsjtxFrame::ondecodes_table_view__sectionMoved);
     connect( ui->decodes_table_view_->horizontalHeader(), &QHeaderView::sectionResized,
              this, &WsjtxFrame::on_sectionResized);
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::doColumnChanges, this, &WsjtxFrame::on_doColumnChanges);
 
     restoreSplitters();
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::doSplitterChanges, this, &WsjtxFrame::on_doSplitterChanges);
@@ -158,6 +167,7 @@ void WsjtxFrame::on_clearLocalDecodesButton_clicked()
 void WsjtxFrame::setContest(BaseContestLog *c)
 {
     ct = c;
+    restoreWSJTXTableColumns();
 }
 
 //void WsjtxFrame::log_qso (QString const& /*id*/, QDateTime time_off, QString const& dx_call
@@ -579,7 +589,7 @@ decodeMessage *WsjtxFrame::parse_tx_message(QString atline, bool fromScrape)
                                     , message, low_confidence, true);
 
     trace(QString("WsjtxFrame::scrapeAllTxt - time %1 stage %2 %3")
-          .arg(time.toString("HH:mm:ss")).arg(dc.getMStage(), atline));
+          .arg(time.toString("HH:mm:ss"), dc.getMStage(), atline));
 
     currTxStage = dc.mstage;
 
@@ -597,13 +607,6 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
                                 , quint32 /*frequency_tolerance*/, quint32 /*tr_period*/
                                 , QString const& /*configuration_name*/, QString const& tx_message)
 {
-//    MinosParameters *mp = MinosParameters::getMinosParameters();
-//    if (!mp)
-//        return;
-//    BaseContestLog * cc = mp ->getCurrentContest();
-//    if (ct != cc || cc == nullptr)
-//        return;
-
     special_op_mode = so_mode;
     // protected contests aren't interesting
     if (!ct || ct->isReadOnly())
@@ -975,15 +978,15 @@ void WsjtxFrame::on_testButton_clicked()
 
             decode_added(true, "test", now, -14, 0, 0, "FT8", "CQ M/ZL1DRI", false, true);
 
-//            decode_added(true, "test", now, -14, 0, 0, "FT8", "G0XYZ K1ABC -19", false, true);
-//            decode_added(true, "test", now, -14, 0, 0, "FT8", "<G4ABC> <PA9XYZ> R 580071 JO22DB", false, true);
+            decode_added(true, "test", now, -14, 0, 0, "FT8", "G0XYZ K1ABC -19", false, true);
+            decode_added(true, "test", now, -14, 0, 0, "FT8", "<G4ABC> <PA9XYZ> R 580071 JO22DB", false, true);
 
-//            decode_added(true, "test", now, -14, 0, 0, "FT8", "G0GJV M0GXZ IO92", false, true);
-//            decode_added(true, "test", now, -2, 0, 0, "FT8", "G0GJV G8KWX -19", false, true);
-//            decode_added(true, "test", now, -1, 0, 0, "FT8", "G0GJV G3ZPB IO91", false, true);
-//            decode_added(true, "test", now, -1, 0, 0, "FT8", "G0GJV G3ZPB RR73", false, true);
-//            decode_added(true, "test", now, -19, 0, 0, "FT8", "<GB1945PJ> SP9DEM JO90", false, true);
-//            decode_added(true, "test", now, -19, 0, 0, "FT8", "<...> RW3SK KO94", false, true);
+            decode_added(true, "test", now, -14, 0, 0, "FT8", "G0GJV M0GXZ IO92", false, true);
+            decode_added(true, "test", now, -2, 0, 0, "FT8", "G0GJV G8KWX -19", false, true);
+            decode_added(true, "test", now, -1, 0, 0, "FT8", "G0GJV G3ZPB IO91", false, true);
+            decode_added(true, "test", now, -1, 0, 0, "FT8", "G0GJV G3ZPB RR73", false, true);
+            decode_added(true, "test", now, -19, 0, 0, "FT8", "<GB1945PJ> SP9DEM JO90", false, true);
+            decode_added(true, "test", now, -19, 0, 0, "FT8", "<...> RW3SK KO94", false, true);
 
 
 //            // Normal
@@ -1069,50 +1072,6 @@ void WsjtxFrame::on_doSplitterChanges(BaseContestLog *b)
         restoreSplitters();
     }
 }
-void WsjtxFrame::saveAllColumnWidthsAndPositions()
-{
-    if (!suppressSaveColumns)
-    {
-        QSettings settings;
-        QByteArray state;
-
-        state = ui->decodes_table_view_->horizontalHeader()->saveState();
-        settings.setValue("decodes_table_view_/state", state);
-
-        //And we need to send this out to all other instances
-
-        MinosLoggerEvents::SendColumnsChanged();
-    }
-}
-void WsjtxFrame::reloadColumns()
-{
-    QSettings settings;
-    QByteArray state = settings.value("decodes_table_view_/state").toByteArray();
-    if (state.size())
-    {
-        suppressSaveColumns = true;
-        // this will fire signals, so... don't save at the same time
-        ui->decodes_table_view_->horizontalHeader()->restoreState(state);
-        suppressSaveColumns = false;
-    }
-}
-void WsjtxFrame::on_doColumnChanges(BaseContestLog *b)
-{
-    if (b == ct)
-    {
-        reloadColumns();
-    }
-}
-void WsjtxFrame:: on_sectionMoved(int /*logicalIndex*/, int /*oldVisualIndex*/, int /*newVisualIndex*/)
-{
-    saveAllColumnWidthsAndPositions();
-}
-
-void WsjtxFrame::on_sectionResized(int /*logicalIndex*/, int /*oldSize*/, int /*newSize*/)
-{
-    saveAllColumnWidthsAndPositions();
-}
-
 void WsjtxFrame::on_configCQButton_clicked()
 {
     WsjtxConfigureCQ wccq(this);
@@ -1126,10 +1085,11 @@ void WsjtxFrame::on_decodes_table_view__clicked(const QModelIndex &index)
 {
     // How do we say "use from call"?
 
+    Callsign call;
+    decodeMessage &dc = messages[index.row()];
+
     if (index.column() == dcMessage)
     {
-        Callsign call;
-        decodeMessage &dc = messages[index.row()];
         switch (dc.mstage)
         {
         case emsNone:
@@ -1144,7 +1104,19 @@ void WsjtxFrame::on_decodes_table_view__clicked(const QModelIndex &index)
         {
             call = dc.toCall;
         }
-        if (!call.getFullCall().isEmpty())
+    }
+    // BUT we don't show these...
+    else if (index.column() == dcFromCall)
+    {
+        call = dc.fromCall;
+    }
+    else if (index.column() == dcToCall)
+    {
+        call = dc.toCall;
+    }
+    if (!call.getFullCall().isEmpty())
+    {
+        if (call != decoder.getMyCall())
         {
             TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
             tslf->transferFromWSJTX(call.getFullCall());
@@ -1234,5 +1206,64 @@ void WsjtxFrame::on_replayButton_clicked()
         }
     }
 
+}
+
+void WsjtxFrame::viewColumn()
+{
+    // a columnsMenu entry has been clicked... action it
+    QAction *act = dynamic_cast<QAction *>(sender());
+    if (act)
+    {
+        int col = act->data().toInt();
+        if (col >= 0)
+        {
+            bool check = act->isChecked();
+            ui->decodes_table_view_->horizontalHeader()->setSectionHidden(col, !check);
+        }
+        else
+        {
+            TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
+            QString fname("./Configuration/LoggerTableHeaders.ini");
+            resetHeaderColumns(fname, "WSJTXDecodesTable", tslf->getCurScreenLayout(), ui->decodes_table_view_->horizontalHeader());
+        }
+    }
+    saveWSJTXTableColumns();
+}
+void WsjtxFrame::saveWSJTXTableColumns()
+{
+    if (!inRestoreColumns && firstRestoreDone)
+    {
+        QString fname("./Configuration/LoggerTableHeaders.ini");
+        saveHeaderColumns(fname, "WSJTXDecodesTable", tslf->getCurScreenLayout(), ui->decodes_table_view_->horizontalHeader());
+        MinosLoggerEvents::SendColumnsChanged();
+    }
+}
+void WsjtxFrame::restoreWSJTXTableColumns()
+{
+    inRestoreColumns = true;
+    QString fname("./Configuration/LoggerTableHeaders.ini");
+    restoreHeaderColumns(fname, "WSJTXDecodesTable", tslf->getCurScreenLayout(), ui->decodes_table_view_->horizontalHeader());
+    inRestoreColumns = false;
+    firstRestoreDone = true;
+}
+void WsjtxFrame::ondecodes_table_view__customContextMenuRequested(const QPoint &pos)
+{
+    QPoint globalPos = ui->decodes_table_view_->mapToGlobal( pos );
+    popupColumnsMenu(columnsMenu, globalPos, ui->decodes_table_view_->horizontalHeader());
+}
+void WsjtxFrame::ondecodes_table_view__sectionMoved(int, int, int)
+{
+    saveWSJTXTableColumns();
+}
+void WsjtxFrame::on_sectionResized(int, int , int)
+{
+    saveWSJTXTableColumns();
+}
+void WsjtxFrame::on_doColumnChanges(BaseContestLog * b)
+{
+    if (b == ct)
+    {
+        restoreWSJTXTableColumns();
+    }
 }
 

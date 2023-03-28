@@ -3210,6 +3210,21 @@ void QSOLogFrame::transferFromWSJTX(QString call)
     }
     ui->CallsignFrame->getTextEditEdit()->setText(call);
     doGJVEditChange(ui->CallsignFrame->getTextEditEdit());
+
+    // test for auto QRZ, if so, do so
+    bool autoQRZ;
+    if (contest->isHF())
+    {
+        TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpAutoQRZWSJTHF, autoQRZ );
+    }
+    else
+    {
+        TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpAutoQRZWSJTVHF, autoQRZ );
+    }
+    if (autoQRZ)
+    {
+        onQrzButtonClicked();
+    }
 }
 void QSOLogFrame::transferFromQrz(QString callsign, QString locator, QString name)
 {

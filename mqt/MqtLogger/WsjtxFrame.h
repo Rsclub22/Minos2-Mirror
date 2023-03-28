@@ -2,12 +2,14 @@
 #define WSJTXFRAME_H
 
 #include <QFile>
+#include <QMenu>
 
 #include "WsjtxDecode.h"
 #include "WsjtxDecodesModel.hpp"
 #include "WsjtxMessageServer.hpp"
 
 class BaseContestLog;
+class TSingleLogFrame;
 
 using port_type = MessageServer::port_type;
 
@@ -20,7 +22,7 @@ class WsjtxFrame : public QFrame
     Q_OBJECT
 
 public:
-    explicit WsjtxFrame(QWidget *parent = nullptr);
+    explicit WsjtxFrame(TSingleLogFrame *parent);
     ~WsjtxFrame();
 
     void setContest(BaseContestLog *c);
@@ -31,6 +33,7 @@ public:
 
 private:
     Ui::WsjtxFrame *ui;
+    TSingleLogFrame *tslf = nullptr;
     BaseContestLog *ct = nullptr;
     DecodesModel * decodes_model_ = nullptr;
     bool fast_mode_ = false;
@@ -42,7 +45,6 @@ private:
     bool inDecode = false;
     int lastcol = 0;
     QTime lastTime;
-    bool suppressSaveColumns = false;
 
     bool currentlyTransmitting = false;
     bool currentlyDecoding = false;
@@ -67,12 +69,16 @@ private:
     QTimer *replayTimer = nullptr;
     bool replayEnabled = false;
 
+    bool firstRestoreDone = false;
+    QMenu columnsMenu;
+    bool inRestoreColumns = false;
+    void restoreWSJTXTableColumns();
+    void saveWSJTXTableColumns();
+
     void reply(decodeMessage &dc);
     void restoreSplitters();
     void process_decodes();
     
-    void saveAllColumnWidthsAndPositions();
-    void reloadColumns();
     void getCQStrings();
     decodeMessage *parse_tx_message(QString atline, bool fromScrape);
 
@@ -117,13 +123,18 @@ private slots:
     void on_halt_tx_button__clicked();
     void on_auto_off_button__clicked();
     void on_doSplitterChanges(BaseContestLog *b);
-    void on_doColumnChanges(BaseContestLog *b);
-    void on_sectionMoved(int, int, int);
-    void on_sectionResized(int, int, int);
     void on_configCQButton_clicked();
     void on_decodes_table_view__clicked(const QModelIndex &index);
     void on_replayButton_clicked();
     void doReplayTimer();
+
+    void on_sectionResized(int, int , int);
+    void ondecodes_table_view__customContextMenuRequested(const QPoint &pos);
+    void ondecodes_table_view__sectionMoved(int, int, int);
+
+    void viewColumn();
+
+    void on_doColumnChanges(BaseContestLog *b);
 };
 
 #endif // WSJTXFRAME_H

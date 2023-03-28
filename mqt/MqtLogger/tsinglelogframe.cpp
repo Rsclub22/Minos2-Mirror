@@ -774,6 +774,7 @@ void TSingleLogFrame::buildRow(ContestPage *cp, SCRow &scrow, int &auxInstance, 
                 {
                     hs->addWidget(wsjtxFrame);
                     wsjtxFrame->setVisible(true);
+
                     // don't set contest here
                     break;
                 }

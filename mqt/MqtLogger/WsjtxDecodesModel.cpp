@@ -48,7 +48,7 @@ DecodeHeading const DecodesModel::headings[dcMaxVal] = {
     {QT_TR_NOOP ("Snr"), Qt::AlignLeft},
     {QT_TR_NOOP ("DT"), Qt::AlignLeft},
     {QT_TR_NOOP ("DF"), Qt::AlignLeft},
-    {QT_TR_NOOP ("Md"),Qt::AlignLeft},
+    {QT_TR_NOOP ("Mode"),Qt::AlignLeft},
     {QT_TR_NOOP ("Confidence"),Qt::AlignLeft},
     {QT_TR_NOOP ("Live"),Qt::AlignLeft},
 
@@ -198,10 +198,24 @@ QVariant DecodesModel::data (QModelIndex const& pindex, int role) const
         QColor c ( 0, 0, 0);
         switch (pindex.column ())
         {
+//        enum DecodeColumns
+//        {
+//            dcId,
+//            dcTime, dcSnr, dcDT, dcDF, dcMd, dcConfidence, dcLive,
+//            dcSeq, dcPoints, dcBearing, dcDistance,
+//            dcFromCall, dcFromGrid, dcToCall, dcToGrid,
+//            dcBest,
+//            dcMessage, dcMaxVal
+//        };
         case dcPoints:
         case dcBearing:
+        case dcFromCall:
         case dcFromGrid:
+        case dcToCall:
+        case dcToGrid:
         case dcBest:
+        case dcDT:
+        case dcSnr:
         case dcMessage:                 // message
         {
             // we don't see transmitted messages, unfortunately
