@@ -1,4 +1,5 @@
 #include <QFileDialog>
+#include <QListWidget>
 
 #include "ContestApp.h"
 #include "LoggerContest.h"
@@ -124,6 +125,16 @@ WsjtxFrame::WsjtxFrame(TSingleLogFrame *parent) :
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::doSplitterChanges, this, &WsjtxFrame::on_doSplitterChanges);
 
     getCQStrings();
+
+    blackList =    QSharedPointer<QVector <QSharedPointer<BlCall> > >( new QVector<QSharedPointer<BlCall> > );
+
+    blModel.setCallVector(blackList);
+    BLDelegate = QSharedPointer<HtmlDelegate>( new HtmlDelegate(1.0, 1.0)) ;
+    blModel.delegate = BLDelegate;
+
+    blFilterModel.setSourceModel(&blModel);
+    ui->blackListView->setModel(&blFilterModel);
+
 
 }
 WsjtxFrame::~WsjtxFrame()
@@ -328,7 +339,11 @@ void WsjtxFrame::process_decodes()
         if (!ui->snrCheckBox->isChecked())
             minsnr = -100;
         trace(QString("WsjtxFrame::process_decodes Checking decodes start %1 end %2 autoselect %3 minPoints %4 minSnr %5")
-              .arg(decodeStartSize).arg(decodeEndSize).arg(ui->autoSelectButton->isChecked()).arg(minpoints).arg(minsnr));
+              .arg(decodeStartSize)
+              .arg(decodeEndSize)
+              .arg(ui->autoSelectButton->isChecked())
+              .arg(minpoints)
+              .arg(minsnr));
 
         if (decodeEndSize > decodeStartSize)
         {
@@ -356,10 +371,19 @@ void WsjtxFrame::process_decodes()
                         continue;   // potentially bad decode
 
                     trace(QString("WsjtxFrame::process_decodes Checking against lastTx %1 stage %2 tocall %3 fromcall %4 callingCall %5 workingCall %6")
-                          .arg(messages[i].message).arg(dc.getMStage()).arg(dc.toCall.getFullCall()).arg(dc.fromCall.getFullCall()).arg(callingCall).arg(workingCall));
+                          .arg(messages[i].message).arg(dc.getMStage())
+                          .arg(dc.toCall.getFullCall())
+                          .arg(dc.fromCall.getFullCall())
+                          .arg(callingCall)
+                          .arg(workingCall)
+                          );
 
-                    // if we are calling CQ or RR73 or 73, and we are toCall, we have a set of candidates for best
-                    // work these before lookng for others
+                    // if we are calling CQ or RR73 or 73, and we are toCall, we have a set of candidates
+                    // for best work these before lookng for others
+
+                    //  WSJT-X filters this message and only
+                    // acts upon it  if the message exactly describes  a prior decode
+                    // and that decode  is a CQ or QRZ message.
 
                      PointBonusMultSnr pbv(dc);
                      bool toMyCall = (dc.toCall == decoder.getMyCall());
@@ -367,7 +391,8 @@ void WsjtxFrame::process_decodes()
 
                      if (toMyCall)
                      {
-                         if (currTxStage == emsCQ || currTxStage == emsRRR || currTxStage == ems73) // calling CQ or waiting for 73
+                         if (currTxStage == emsCQ || currTxStage == emsRRR || currTxStage == ems73)
+                         // calling CQ or waiting for 73
                          {
                              // look for best candidate of those calling us - don't limit by snr or points
                              // If they are starting with Tx2, we can miss the loc - and so their score will
@@ -376,7 +401,8 @@ void WsjtxFrame::process_decodes()
                              if ( pbv > bestPoints  )
                              {
                                  // which might not be the most profitable
-                                 trace(QString("WsjtxFrame::process_decodes (lasttx) Candidate %1").arg(messages[i].message));
+                                 trace(QString("WsjtxFrame::process_decodes (lasttx) Candidate %1")
+                                       .arg(messages[i].message));
                                  bestOffset = i;
                                  bestPoints = pbv;
 
@@ -384,7 +410,8 @@ void WsjtxFrame::process_decodes()
                              }
                              else
                              {
-                                 trace(QString("WsjtxFrame::process_decodes (lasttx) NOT best %1").arg(messages[i].message));
+                                 trace(QString("WsjtxFrame::process_decodes (lasttx) NOT best %1")
+                                       .arg(messages[i].message));
                              }
                          }
                          else if (dcFromCall == workingCall || dcFromCall == callingCall)
@@ -403,7 +430,8 @@ void WsjtxFrame::process_decodes()
                      }
                      else if (dcFromCall == callingCall || dcFromCall == workingCall)
                      {
-                         // we are trying to work them, and they aren't working us - still CQ, or working someone else
+                         // we are trying to work them, and they aren't working us
+                         // - still CQ, or working someone else
 
                          // If they are calling CQ and we are "grid" we can carry on calling them
                         // don't kill tx unless there is a better option - using the general best search
@@ -437,7 +465,10 @@ void WsjtxFrame::process_decodes()
                          continue;
 
                      trace(QString("WsjtxFrame::process_decodes Checking %1 stage %2 tocall %3 fromcall %4")
-                           .arg(messages[i].message).arg(dc.getMStage()).arg(dc.toCall.getFullCall()).arg(dc.fromCall.getFullCall()));
+                           .arg(messages[i].message)
+                           .arg(dc.getMStage())
+                           .arg(dc.toCall.getFullCall())
+                           .arg(dc.fromCall.getFullCall()));
 
                      if (dc.points <= 0)    // e.g. duplicate
                         continue;
@@ -445,6 +476,7 @@ void WsjtxFrame::process_decodes()
                      PointBonusMultSnr pbv(dc);
                      bool toMyCall = (dc.toCall == decoder.getMyCall());
                      QString dcFromCall = dc.fromCall.getFullCall();
+                     Q_UNUSED(dcFromCall)
 
                      bool auto73 = ui->autosel73cb->isChecked();
                      if ((dc.mstage == emsCQ)   // CQ calls aren't "to" anyone
@@ -608,6 +640,8 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
                                 , QString const& /*configuration_name*/, QString const& tx_message)
 {
     special_op_mode = so_mode;
+
+    dxCall = dx_call;
     // protected contests aren't interesting
     if (!ct || ct->isReadOnly())
         return;
@@ -1265,3 +1299,160 @@ void WsjtxFrame::on_doColumnChanges(BaseContestLog * b)
     }
 }
 
+void WsjtxFrame::on_addBlackListButton_clicked()
+{
+    // add current call being "worked" to blacklist
+
+    QSharedPointer<BlCall> bc(new BlCall);
+    bc->call = dxCall;
+    if (!bc->call.isEmpty())
+    {
+        bc->band = ct->currentBand.getValue();
+        blModel.appendRow(bc);
+
+
+        showBlackList();
+    }
+}
+
+
+void WsjtxFrame::on_removeBlackListButton_clicked()
+{
+    // remove selected call from blacklist
+    QModelIndexList mil = ui->blackListView->selectionModel()->selectedRows();
+
+    QString mselstring;
+    for(auto &mi: mil)
+    {
+        QModelIndex m = blFilterModel.mapToSource(mi);
+        int r = m.row();
+
+        if (r >= 0)
+        {
+            blModel.removeRow(r);
+        }
+    }
+}
+
+void WsjtxFrame::showBlackList()
+{
+    ui->blackListView->update();    // not right!
+}
+
+
+BlModel::BlModel(){}
+
+BlModel::~BlModel()
+{}
+
+void BlModel::setCallVector(QSharedPointer<QVector<QSharedPointer<BlCall> > > &pcallVector)
+{
+    beginResetModel();
+    callVector = pcallVector;
+    endResetModel();
+}
+
+QVariant BlModel::data(const QModelIndex &index, int role) const
+{
+    if (role == Qt::DisplayRole)
+    {
+        return callVector->at(index.row())->call;
+    }
+    return QVariant();
+}
+
+QVariant BlModel::headerData(int /*section*/, Qt::Orientation orientation, int role) const
+{
+    if (role == Qt::DisplayRole && orientation == Qt::Horizontal)
+    {
+        return tr("Call");
+    }
+    return QVariant();
+}
+
+QModelIndex BlModel::parent(const QModelIndex &/*index*/) const
+{
+    return QModelIndex();
+}
+
+QModelIndex BlModel::index(int row, int column, const QModelIndex &parent) const
+{
+    if (!callVector)
+        return QModelIndex();
+
+    if ( row < 0 || row >= rowCount() || ( parent.isValid() && parent.column() != 0 ) )
+        return QModelIndex();
+
+    return createIndex( row, column, nullptr );
+
+}
+
+int BlModel::rowCount(const QModelIndex &/*parent*/) const
+{
+    if (!callVector)
+        return 0;
+    return callVector->count();
+}
+
+int BlModel::columnCount(const QModelIndex &/*parent*/) const
+{
+    return 1;
+}
+
+void BlModel::appendRow(QSharedPointer<BlCall> call)
+{
+    beginInsertRows(QModelIndex(), rowCount() , rowCount());
+    callVector->push_back(call);
+    endInsertRows();
+}
+
+void BlModel::insertRow(int row, QSharedPointer<BlCall> call)
+{
+    beginInsertRows(QModelIndex(), row , row);
+    callVector->insert(row, call);
+    endInsertRows();
+}
+
+void BlModel::reset()
+{
+    beginResetModel();
+    callVector->clear();
+    endResetModel();
+}
+
+void BlModel::removeRow(int _row)
+{
+    beginRemoveRows(QModelIndex(), _row, _row);
+    callVector->removeAt(_row);
+    endRemoveRows();
+}
+
+void BlModel::setFilterString(QString f)
+{
+    filterString = f;
+}
+
+
+bool BlGridSortFilterModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
+{
+    BlModel *cgm = dynamic_cast<BlModel *>(sourceModel());
+    if (!cgm || sourceRow >= cgm->rowCount())
+        return false;
+
+    QSharedPointer<BlCall> call = cgm->callVector->at(sourceRow);
+    if (filterString.isEmpty() || call->band == filterString)
+    {
+        return true;
+    }
+    return false;
+}
+
+void BlGridSortFilterModel::setFilterString(QString f)
+{
+    BlModel *cgm = dynamic_cast<BlModel *>(sourceModel());
+    if (cgm)
+        cgm->setFilterString(f);
+
+    filterString = f;
+    invalidateFilter();
+}

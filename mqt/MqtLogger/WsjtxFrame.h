@@ -4,6 +4,9 @@
 #include <QFile>
 #include <QMenu>
 
+#include <QAbstractItemModel>
+#include <QSortFilterProxyModel>
+
 #include "WsjtxDecode.h"
 #include "WsjtxDecodesModel.hpp"
 #include "WsjtxMessageServer.hpp"
@@ -16,6 +19,61 @@ using port_type = MessageServer::port_type;
 namespace Ui {
 class WsjtxFrame;
 }
+class BlCall
+{
+public:
+    QString call;
+    QString band;
+
+    bool operator < (BlCall &rhs)
+    {
+        if (call < rhs.call)
+            return true;
+
+        return band < rhs.band;
+    }
+};
+Q_DECLARE_METATYPE (QSharedPointer<BlCall>)
+class BlModel: public QAbstractItemModel
+{
+    Q_OBJECT
+
+    QString filterString;
+
+public:
+    BlModel();
+    virtual ~BlModel() override;
+    QSharedPointer<QVector<QSharedPointer<BlCall> > > callVector;
+    QSharedPointer<HtmlDelegate> delegate;
+
+    void setCallVector(QSharedPointer<QVector<QSharedPointer<BlCall> > > &pcallVector);
+    QVariant data( const QModelIndex &index, int role ) const Q_DECL_OVERRIDE;
+    QVariant headerData( int section, Qt::Orientation orientation,
+                        int role = Qt::DisplayRole ) const Q_DECL_OVERRIDE;
+    QModelIndex parent( const QModelIndex &index )const Q_DECL_OVERRIDE;
+    QModelIndex index( int row, int column,
+                      const QModelIndex &parent = QModelIndex() ) const Q_DECL_OVERRIDE;
+    int rowCount( const QModelIndex &parent = QModelIndex() )const Q_DECL_OVERRIDE;
+    int columnCount( const QModelIndex &parent = QModelIndex() ) const Q_DECL_OVERRIDE;
+
+    void appendRow(QSharedPointer<BlCall> kstmsg);
+    void insertRow(int row, QSharedPointer<BlCall> call);
+    void reset();
+    void removeRow(int _row);
+
+    void setFilterString(QString f);
+};
+
+
+
+class BlGridSortFilterModel: public QSortFilterProxyModel
+{
+    QString filterString;
+public:
+    bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
+    void setFilterString(QString f);
+
+};
 
 class WsjtxFrame : public QFrame
 {
@@ -53,6 +111,8 @@ private:
     QString callingCall;
     QString workingCall;
 
+    QString dxCall;
+
     WsjtxDecode decoder;
 
     QStringList testCQCalls;
@@ -72,6 +132,13 @@ private:
     bool firstRestoreDone = false;
     QMenu columnsMenu;
     bool inRestoreColumns = false;
+
+    QSharedPointer<HtmlDelegate> BLDelegate;
+    QSharedPointer<QVector<QSharedPointer<BlCall> > > blackList;
+    BlModel blModel;
+    BlGridSortFilterModel blFilterModel;
+
+
     void restoreWSJTXTableColumns();
     void saveWSJTXTableColumns();
 
@@ -82,6 +149,7 @@ private:
     void getCQStrings();
     decodeMessage *parse_tx_message(QString atline, bool fromScrape);
 
+    void showBlackList();
 public slots:
     void add_client (QString const& id, QString const& version, QString const& revision);
 
@@ -135,6 +203,8 @@ private slots:
     void viewColumn();
 
     void on_doColumnChanges(BaseContestLog *b);
+    void on_addBlackListButton_clicked();
+    void on_removeBlackListButton_clicked();
 };
 
 #endif // WSJTXFRAME_H
