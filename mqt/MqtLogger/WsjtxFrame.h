@@ -25,12 +25,19 @@ public:
     QString call;
     QString band;
 
-    bool operator < (BlCall &rhs)
+    bool operator < (const BlCall &rhs) const
     {
         if (call < rhs.call)
             return true;
 
         return band < rhs.band;
+    }
+    bool operator == (const BlCall &rhs) const
+    {
+        if (call == rhs.call && band == rhs.band)
+            return true;
+
+        return false;
     }
 };
 Q_DECLARE_METATYPE (QSharedPointer<BlCall>)
@@ -150,6 +157,7 @@ private:
     decodeMessage *parse_tx_message(QString atline, bool fromScrape);
 
     void showBlackList();
+    bool blackListContains(const BlCall &bl);
 public slots:
     void add_client (QString const& id, QString const& version, QString const& revision);
 

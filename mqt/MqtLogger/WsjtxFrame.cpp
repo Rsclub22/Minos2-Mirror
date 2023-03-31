@@ -41,6 +41,7 @@ WsjtxFrame::WsjtxFrame(TSingleLogFrame *parent) :
 
     TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpWSJTX1AutoEnabled, autoEnabled );
     ui->autoSelectReplyFrame->setVisible(autoEnabled);
+    ui->blFrame->setVisible(autoEnabled);
 
     int lcf;
     TContestApp::getContestApp() ->getIntDisplayProfile(edpListCompression, lcf);
@@ -389,6 +390,15 @@ void WsjtxFrame::process_decodes()
                      bool toMyCall = (dc.toCall == decoder.getMyCall());
                      QString dcFromCall = dc.fromCall.getFullCall();
 
+                     BlCall test;
+                     test.call = dcFromCall;
+                     test.band = ct->currentBand.getValue();
+
+                     if (blackListContains(test))
+                     {
+                        continue;
+                     }
+
                      if (toMyCall)
                      {
                          if (currTxStage == emsCQ || currTxStage == emsRRR || currTxStage == ems73)
@@ -476,7 +486,15 @@ void WsjtxFrame::process_decodes()
                      PointBonusMultSnr pbv(dc);
                      bool toMyCall = (dc.toCall == decoder.getMyCall());
                      QString dcFromCall = dc.fromCall.getFullCall();
-                     Q_UNUSED(dcFromCall)
+
+                     BlCall test;
+                     test.call = dcFromCall;
+                     test.band = ct->currentBand.getValue();
+
+                     if (blackListContains(test))
+                     {
+                        continue;
+                     }
 
                      bool auto73 = ui->autosel73cb->isChecked();
                      if ((dc.mstage == emsCQ)   // CQ calls aren't "to" anyone
@@ -1339,7 +1357,17 @@ void WsjtxFrame::showBlackList()
     ui->blackListView->update();    // not right!
 }
 
-
+bool WsjtxFrame::blackListContains(const BlCall &bl)
+{
+    for(const auto &b:qAsConst(*blackList))
+    {
+        if (*b == bl)
+        {
+            return true;
+        }
+    }
+    return false;
+}
 BlModel::BlModel(){}
 
 BlModel::~BlModel()
