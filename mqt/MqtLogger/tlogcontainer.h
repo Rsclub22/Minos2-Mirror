@@ -36,7 +36,7 @@ public:
 class TLogContainer : public QMainWindow
 {
     Q_OBJECT
-
+    friend class TAboutBox;
 public:
     explicit TLogContainer(QWidget *parent = nullptr);
     ~TLogContainer() override;

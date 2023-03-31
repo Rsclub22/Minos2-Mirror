@@ -114,7 +114,10 @@ TAboutBox::TAboutBox(QWidget *parent, bool onStartup) :
     ui->PageControl1->setCurrentWidget(ui->AboutTabSheet);
 
     QString welcomeText = QString("<br><h1>%1 ") + STRINGVERSION  + " " + PRERELEASETYPE + " " + SecondInstall::getSecondInstallText() + "</h1>"
+                                   "<br>Home page"
                                    "<br><a href=\"http://minos.sourceforge.net/\">http://minos.sourceforge.net</a>"
+                                   "<br><br>User forum (please join!)"
+                                   "<br><a href=\"https://minos.groups.io/g/users\">https://minos.groups.io/g/users</a>"
                                    "<br><br>";
     ui->AboutMemo->setText(welcomeText.arg(tr("Welcome to Minos Version")));
     ui->AboutMemo->setTextFormat(Qt::RichText);
@@ -287,5 +290,10 @@ void TAboutBox::on_appSelectButton_clicked()
 {
     StartConfigManager manageApps( this, true);   // when managing sets, include autostart
     manageApps.exec();
+}
+
+void TAboutBox::on_helpButton_clicked()
+{
+    LogContainer->HelpActionExecute();
 }
 
