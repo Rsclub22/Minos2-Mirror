@@ -159,6 +159,24 @@ void DXCCFrame::reInitialiseCountries()
     restoreDXCCTableColumns();
 
     doScrollToCountry();
+
+    QStringList sl;
+    for ( auto const &c: qAsConst(contlist ))
+    {
+        QString s;
+        if (c.allow)
+        {
+            s = HtmlFontColour(Qt::black);
+        }
+        else
+        {
+            s = HtmlFontColour(Qt::gray);
+        }
+        s += c.continent;
+        sl.append(s);
+    }
+
+    ui->continentsLabel->setText(sl.join(" "));
 }
 void DXCCFrame::scrollToCountry( const QString &bp, bool makeVisible )
 {

@@ -356,18 +356,17 @@ QString CountryEntry::str( bool )
 void CountryEntry::addSynonyms( QString &s )
 {
    // add list of synonyms to the display buffer
-   s = QString();
+
+   QStringList sl;
    for ( auto const &i: MultListsImpl::getMultLists() ->ctrySynList )
    {
       if ( i.wt ->getCountry() == this )
       {
-         if ( s.length() < 180 )   		// should really use the correct value here!
-         {
-            s += " ";
-            i.wt ->synCat( s );
-         }
+            sl.append(i.wt->getSynPrefix());
       }
    }
+   sl.sort();
+   s = sl.join(" ");
 }
 bool CountryEntry::operator<( const CountryEntry& rhs ) const
 {
@@ -490,10 +489,6 @@ int CountrySynonym::compare( const CountrySynonym &cs ) const
          return 0;
       else
          return 1;
-}
-void CountrySynonym::synCat( QString &add_buff )
-{
-   add_buff += synPrefix;
 }
 //======================================================================
 CountryList::CountryList( )

@@ -173,7 +173,6 @@ public:
       virtual ~CountrySynonym();
 
       void getDupPrefix( QString & );
-      virtual void synCat( QString &add_buff );
 
       virtual int compare( const CountrySynonym & ) const;
 
