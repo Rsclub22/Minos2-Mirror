@@ -4,11 +4,8 @@
 #include "AnalysePubSubNotify.h"
 #include "CacheSelection.h"
 #include "minositem.h"
-#include "PubSubValue.h"
 
-const QString AntennaDetailType("AntennaDetail");
-
-class AntennaDetail: public PubSubValue
+class AntennaDetail
 {
     MinosItem<int> _minAzimuth;
     MinosItem<int> _maxAzimuth;
@@ -18,15 +15,15 @@ class AntennaDetail: public PubSubValue
 public:
     AntennaDetail();
     AntennaDetail(QString s);
-    virtual ~AntennaDetail() override
+    ~AntennaDetail()
     {}
 
     bool isDirty() const;
     void clearDirty();
     void setDirty();
 
-    virtual QString pack() const override;
-    virtual void unpack(QString) override;
+    QString pack() const ;
+    void unpack(QString) ;
 
     MinosItem<int> minAzimuth() const;
     MinosItem<int> maxAzimuth() const;

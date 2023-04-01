@@ -20,7 +20,7 @@
 #include <QShortcut>
 
 #include "MinosLoggerEvents.h"
-#include "PubSubValue.h"
+#include "PubSubName.h"
 #include "rigmemcommondata.h"
 #include "radiodetails.h"
 #include "checkoperatingfreq.h"

@@ -18,6 +18,8 @@ StdInReader::~StdInReader()
 
 void StdInReader::run()
 {
+    // called by QThread from start()
+
     QTextStream stdinStream(stdin, QIODevice::ReadOnly);
 
     QString line;

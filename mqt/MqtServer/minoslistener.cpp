@@ -236,18 +236,7 @@ MinosRouterConnection *MinosRouterListener::findConnection(const QHostAddress &h
     }
     return nullptr;
 }
-MinosRouterConnection *MinosRouterListener::findConnection(const QString &h)
-{
-    for ( auto const &a: qAsConst(i_array ))
-    {
-        if (h == a->getClientRouter())
-        {
-            return dynamic_cast<MinosRouterConnection *>(a);
-        }
-    }
-    return nullptr;
-}
-//==============================================================================
+
 //==============================================================================
 MinosClientListener::MinosClientListener()
 {

@@ -89,10 +89,6 @@ class MinosCommonConnection: public QObject
       {
          return ( clientRouter.compare(s.router, Qt::CaseInsensitive) == 0 );
       }
-      virtual bool checkRouter( const QString &s )
-      {
-          return ( clientRouter.compare(s, Qt::CaseInsensitive) == 0 );
-      }
       virtual bool checkUser( const MinosId &u )
       {
          return ( clientUser.compare(u.user, Qt::CaseInsensitive) == 0 );

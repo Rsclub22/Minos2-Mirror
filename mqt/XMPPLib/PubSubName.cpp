@@ -1,20 +1,8 @@
-#include "PubSubValue.h"
+#include "PubSubName.h"
 #include "ConfigFile.h"
 #include "AnalysePubSubNotify.h"
 #include "MinosRPC.h"
 
-QString PubSubValue::psType() const
-{
-    return _psType;
-}
-
-PubSubValue::PubSubValue(QString t):_psType(t)
-{
-
-}
-PubSubValue::~PubSubValue()
-{}
-//=======================================================================
 PubSubName::PubSubName()
 {}
 

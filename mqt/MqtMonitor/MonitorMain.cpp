@@ -346,24 +346,6 @@ MonitoringFrame *MonitorMain::findCurrentLogFrame()
     MonitoringFrame *f = dynamic_cast<MonitoringFrame *>(w);
     return f;
 }
-MonitoringFrame *MonitorMain::findContestPage( BaseContestLog *ct )
-{
-   // we need to find the embedded frame...
-   if ( !ui->contestPageControl->count() || !ct )
-      return nullptr;
-   int pc = ui->contestPageControl->count();
-   for ( int i = 0; i < pc; i++ )
-   {
-       QWidget *tw = ui->contestPageControl->widget(i);
-       MonitoringFrame *f = dynamic_cast<MonitoringFrame *>(tw);
-       if (f)
-       {
-           if (f->getContest() == ct)
-               return f;
-       }
-   }
-   return nullptr;
-}
 
 void MonitorMain::on_monitorTimeout()
 {

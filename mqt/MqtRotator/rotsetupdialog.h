@@ -58,14 +58,10 @@ public:
     QStringList availAntennas;
     int numAvailAntennas;
 
-
-    QString getCurrentAntenna() const;
     int getRotatorId(QString rotator);
-
 
     void readCurrentAntenna();
     void saveCurrentAntenna();
-    QString getRotatorComPort(QString);
 
     void readSettings();
     void copyAntennaToCurrent(int antennaNumber);
@@ -119,9 +115,6 @@ private:
     void networkDataEntryVisible(int antNumber, bool visible);
 
     void addTab(int tabNum, QString tabName);
-    bool checkAntNameMatch(QString antName);
-//    void saveAntenna(int i);
-
 
     void loadSettingsToTab(int tabNum);
     void getAvailAntenna(int antNum, QSettings &config);

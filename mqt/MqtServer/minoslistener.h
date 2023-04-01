@@ -82,7 +82,6 @@ class MinosRouterListener: public MinosListener
       void closeDown() override;
 
       MinosRouterConnection *findConnection(const QHostAddress &h);
-      MinosRouterConnection *findConnection(const QString &h);
 };
 //==============================================================================
 class MinosClientListener: public MinosListener

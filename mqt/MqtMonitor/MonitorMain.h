@@ -105,7 +105,6 @@ private:
 
     void addSlot(QSharedPointer<MonitoredLog> ct );
     MonitoringFrame *findCurrentLogFrame();
-    MonitoringFrame *findContestPage( BaseContestLog *ct );
     void searchChanged();
 
     void testAutoStart();

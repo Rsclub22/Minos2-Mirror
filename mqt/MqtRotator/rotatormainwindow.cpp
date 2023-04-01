@@ -1887,27 +1887,10 @@ void RotatorMainWindow::stop_button_off()
     ui->stopButton->setText(tr("Stop"));
 }
 
-
-
-void RotatorMainWindow::setPolltime(int interval)
-{
-    pollTime = interval;
-}
-
-int RotatorMainWindow::getPolltime()
-{
-
-    return pollTime;
-}
-
 void RotatorMainWindow::onSentCommandError(int errorCode, QString cmd)
 {
     rotatorError(errorCode, cmd);
-
 }
-
-
-
 void RotatorMainWindow::rotatorError(int errorCode, QString cmd )
 {
 

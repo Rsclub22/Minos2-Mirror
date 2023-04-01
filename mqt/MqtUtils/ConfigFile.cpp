@@ -68,14 +68,6 @@ QString MinosConfig::getThisRouterName()
         }
     }
     return routerName;
-//    config.getPrivateProfileString( "Settings", "ServerName", QHostInfo::localHostName(), routerName );
-
-//    if ( routerName.size() == 0 )
-//    {
-//        QString h = QHostInfo::localHostName();
-//        routerName = h;
-//    }
-//    return routerName;
 }
 
 
@@ -116,34 +108,6 @@ bool RunConfigElement::initialise(INIFile &config, QString sect )
     }
 
     return true;
-}
-void RunConfigElement::save(INIFile &config)
-{
-    newElement = false;
-
-    if (name.isEmpty())
-    {
-        name = appType;
-    }
-
-    if (!deleted)
-    {
-        config.writePrivateProfileString(name, "Program", commandLine);
-        config.writePrivateProfileString(name, "Params", params.join(" ").trimmed());
-        config.writePrivateProfileString(name, "Directory", rundir);
-        config.writePrivateProfileString(name, "Server", router);
-        config.writePrivateProfileString(name, "RemoteApp", remoteApp);
-        config.writePrivateProfileString(name, "RunType", runType);
-        config.writePrivateProfileString(name, "AppType", appType);
-        config.writePrivateProfileBool(name, "ShowAdvanced", showAdvanced);
-        config.writePrivateProfileBool(name, "Enabled", rEnabled);
-        config.writePrivateProfileBool(name, "HideApp", hideApp);
-    }
-    else
-    {
-        // what was the old name?
-        config.writePrivateProfileString(name, "", "");
-    }
 }
 QSharedPointer<Connectable> RunConfigElement::connectable()
 {
@@ -565,10 +529,6 @@ bool MinosConfig::loadJson(QString f)
     return true;
 }
 //---------------------------------------------------------------------------
-bool configSort( const QSharedPointer<RunConfigElement> c1, const QSharedPointer<RunConfigElement> c2)
-{
-    return c1->name < c2->name;
-}
 void MinosConfig::saveAll()
 {
     saveAsJson(getConfigJsonName());
@@ -660,20 +620,6 @@ void MinosConfig::setAutoStart(bool s)
 {
     NamedConfig &nc = configs[thisConfigName];
     nc.autoStart = s;
-}
-QSharedPointer<Connectable> MinosConfig::getApp(QString appName)
-{
-    QSharedPointer<Connectable> res;
-    NamedConfig &nc = configs[thisConfigName];
-    for ( auto const &i: qAsConst(nc.elelist ))
-    {
-        if (appName.compare(i->name, Qt::CaseInsensitive) == 0)
-        {
-            res = i->connectable();
-            break;
-        }
-    }
-    return res;
 }
 
 QStringList MinosConfig::getAppTypes()

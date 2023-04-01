@@ -23,7 +23,7 @@
 #include <QProcess>
 
 #include "BandList.h"
-#include "PubSubValue.h"
+#include "PubSubName.h"
 #include "StdInReader.h"
 #include "serialtvswitch.h"
 #include "rigcommon.h"

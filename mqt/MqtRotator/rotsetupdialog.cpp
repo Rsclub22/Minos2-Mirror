@@ -527,25 +527,6 @@ void RotSetupDialog::loadAvailComportsToTab(int tabNum)
     antennaTab[tabNum]->setComport(availAntData[tabNum]->comport);
 }
 
-
-
-QString RotSetupDialog::getRotatorComPort(QString antennaName)
-{
-
-    for (int i = 0; i < numAvailAntennas ; i++)
-    {
-        if (availAntData[i]->antennaName == antennaName)
-        {
-            return availAntData[i]->comport;
-        }
-    }
-
-    return ""; // error, none found
-
-}
-
-
-
 void RotSetupDialog::saveCurrentAntenna()
 {
 
@@ -655,18 +636,6 @@ void RotSetupDialog::addAntenna()
 
 }
 
-bool RotSetupDialog::checkAntNameMatch(QString antName)
-{
-    for (int i = 0; i < numAvailAntennas; i++)
-    {
-        if (ui->antennaTab->tabText(i) == antName)
-            return true;
-    }
-
-    return false;
-}
-
-
 void RotSetupDialog::removeAntenna()
 {
 
@@ -748,17 +717,6 @@ void RotSetupDialog::editAntennaName()
     }
 
     //emit antennaTabChanged();
-}
-
-
-
-
-QString RotSetupDialog::getCurrentAntenna() const
-{
-
-
-    return currentAntennaName;
-
 }
 
 void RotSetupDialog::updateAvailAntennasToVersion2()

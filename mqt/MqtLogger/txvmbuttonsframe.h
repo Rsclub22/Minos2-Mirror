@@ -5,7 +5,7 @@
 #include <QGroupBox>
 #include <QKeyEvent>
 
-#include "PubSubValue.h"
+#include "PubSubName.h"
 #include "radiodetails.h"
 #include "voicekeyerbase.h"
 #include "voicekeyerfactory.h"

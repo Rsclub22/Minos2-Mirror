@@ -7,7 +7,6 @@
 #include "MTrace.h"
 
 RigState::RigState()
-    :PubSubValue(RigStateType)
 {
     qRegisterMetaType< RigState > ( "RigState" );
     _radioFreq.setInitialValue(0.0);
@@ -19,7 +18,6 @@ RigState::RigState()
 }
 
 RigState::RigState(QString s)
-    :PubSubValue(RigStateType)
 {
     unpack(s);
 }

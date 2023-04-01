@@ -83,8 +83,6 @@ public:  		// User declarations
     ~RunConfigElement();
     bool initialise( INIFile &, QString sect );
 
-    void save(INIFile &);
-
     QSharedPointer<Connectable> connectable();
 
     void createProcess();
@@ -154,7 +152,6 @@ public:
     QString getThisRouterName();
 
     QStringList getAppTypes();
-    QSharedPointer<Connectable> getApp(QString appName);
     AppConfigElement getAppConfigElement(QString appType);
 
     QVector<QSharedPointer<Connectable> > getConnectables();

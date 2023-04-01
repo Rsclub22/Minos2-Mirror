@@ -16,7 +16,7 @@
 #include <QString>
 #include <QSharedPointer>
 #include "XMPPRPCParams.h"
-#include "PubSubValue.h"
+#include "PubSubName.h"
 
 //---------------------------------------------------------------------------
 class XStanza;

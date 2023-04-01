@@ -6,14 +6,14 @@
 #include "RPCCommandConstants.h"
 #include "MTrace.h"
 
-AntennaDetail::AntennaDetail(): PubSubValue(AntennaDetailType)
+AntennaDetail::AntennaDetail()
 {
     _maxAzimuth.setInitialValue(0);
     _minAzimuth.setInitialValue(0);
     _cwCcwCmdEnable.setInitialValue(false);
     _supportStopCommand.setInitialValue(true);
 }
-AntennaDetail::AntennaDetail(QString s):PubSubValue(AntennaDetailType)
+AntennaDetail::AntennaDetail(QString s)
 {
     qRegisterMetaType< AntennaDetail > ( "AntennaDetail" );
     _maxAzimuth.setInitialValue(0);

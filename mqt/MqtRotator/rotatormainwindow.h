@@ -65,10 +65,6 @@ public:
     explicit RotatorMainWindow(QWidget *parent = nullptr);
     ~RotatorMainWindow();
 
-
-    void setPolltime(int interval);
-    int getPolltime();
-
     // setup connections
     void initActionsConnections();
 

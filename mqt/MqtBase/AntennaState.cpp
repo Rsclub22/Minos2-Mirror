@@ -6,11 +6,11 @@
 #include "RPCCommandConstants.h"
 #include "MTrace.h"
 
-AntennaState::AntennaState():PubSubValue(AntennaStateType)
+AntennaState::AntennaState()
 {
 }
 
-AntennaState::AntennaState(QString s):PubSubValue(AntennaStateType)
+AntennaState::AntennaState(QString s)
 {
     qRegisterMetaType< AntennaState > ( "AntennaState" );
     unpack(s);

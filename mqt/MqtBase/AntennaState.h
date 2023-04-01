@@ -1,11 +1,9 @@
 #ifndef ANTENNASTATE_H
 #define ANTENNASTATE_H
 
-#include "PubSubValue.h"
 #include "CacheSelection.h"
-const QString AntennaStateType("AntennaState");
 
-class AntennaState: public PubSubValue
+class AntennaState
 {
     MinosStringItem<QString> _bearing;
     MinosStringItem<QString> _status;
@@ -13,11 +11,11 @@ class AntennaState: public PubSubValue
 public:
     AntennaState();
     AntennaState(QString);
-    virtual ~AntennaState() override
+    ~AntennaState()
     {}
 
-    virtual QString pack() const override;
-    virtual void unpack(QString) override;
+    QString pack() const ;
+    void unpack(QString) ;
     bool isDirty() const;
     void clearDirty();
     void setDirty();

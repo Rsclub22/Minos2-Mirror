@@ -81,7 +81,6 @@ public:
                         int instance);
 
     void setVUCallBack(VUCallBack cb);
-    void setVUCallBack2(VUCallBack cb);
     void setRecordLevel(int l);
     void setRecordLevel2(int l);
     void setMono(bool);
@@ -90,7 +89,6 @@ private:
     RtAudio *audio = nullptr;
     RtAudio *audio2 = nullptr;
     VUCallBack WinVUCallback = nullptr;
-    VUCallBack WinVUCallback2 = nullptr;
 
     unsigned int inChannels = 0;
 

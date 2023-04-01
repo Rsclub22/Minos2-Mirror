@@ -19,6 +19,7 @@ INCLUDEPATH += ../MqtUtils
 SOURCES += \
     Dispatcher.cpp \
     PubSubClient.cpp \
+    PubSubName.cpp \
     RPCPubSub.cpp \
     ServerEvent.cpp \
     XMPPEvents.cpp \
@@ -27,7 +28,6 @@ SOURCES += \
     XMPPStanzas.cpp \
     MinosConnection.cpp \
     MinosRPC.cpp \
-    PubSubValue.cpp \
     AnalysePubSubNotify.cpp \
     PublishState.cpp
 
@@ -35,6 +35,7 @@ HEADERS += \
     Dispatcher.h \
     MapWrapper.h \
     PubSubClient.h \
+    PubSubName.h \
     RPCPubSub.h \
     ServerEvent.h \
     XMPPEvents.h \
@@ -44,7 +45,6 @@ HEADERS += \
     MinosConnection.h \
     MinosRPC.h \
     RPCCommandConstants.h \
-    PubSubValue.h \
     AnalysePubSubNotify.h \
     PublishState.h
     

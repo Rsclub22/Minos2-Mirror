@@ -11,11 +11,10 @@
 #define RIGSTATE_H
 
 #include "AnalysePubSubNotify.h"
-#include "PubSubValue.h"
 #include "CacheSelection.h"
 #include "frequency.h"
-const QString RigStateType("RigState");
-class RigState: public PubSubValue
+
+class RigState
 {
     CacheSelection _selected;
     MinosStringItem<QString> _status;
@@ -38,15 +37,15 @@ class RigState: public PubSubValue
 public:
     RigState();
     RigState(QString s);
-    virtual ~RigState() override
+    ~RigState()
     {}
 
     bool isDirty() const;
     void clearDirty();
     void setDirty();
 
-    virtual QString pack() const override;
-    virtual void unpack(QString) override;
+    QString pack() const ;
+    void unpack(QString) ;
 
     MinosStringItem<QString> getSelectedContest(QString loggerUuid) const;
     MinosStringItem<QString> status() const;

@@ -210,10 +210,6 @@ void RRRtAudioSoundSystem::setVUCallBack( VUCallBack cb )
 {
    WinVUCallback = cb;
 }
-void RRRtAudioSoundSystem::setVUCallBack2( VUCallBack cb )
-{
-   WinVUCallback2 = cb;
-}
 
 bool RRRtAudioSoundSystem::initialise( QString ind, QString ind2)
 {

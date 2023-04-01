@@ -1,20 +1,8 @@
-#ifndef PUBSUBVALUE_H
-#define PUBSUBVALUE_H
+#ifndef PUBSUBNAME_H
+#define PUBSUBNAME_H
 #include "XMPPRPCParams.h"
 
 class AnalysePubSubNotify;
-class PubSubValue
-{
-protected:
-    QString _psType;
-public:
-    PubSubValue(QString t);
-    virtual ~PubSubValue();
-
-    virtual QString pack() const = 0;
-    virtual void unpack(QString) = 0;
-    QString psType() const;
-};
 
 class PubSubName
 {
@@ -45,4 +33,4 @@ public:
     QString getLocalName() const;
 };
 
-#endif // PUBSUBVALUE_H
+#endif // PUBSUBNAME_H

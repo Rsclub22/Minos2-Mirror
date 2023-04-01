@@ -96,20 +96,10 @@ static bool isParentRunning()
 }
 
 //---------------------------------------------------------------------------
-void resetCloseEvent()
-{
-    original_ppid = parentPID();
-    //trace("original_ppid is " + QString::number(original_ppid));
-}
-//---------------------------------------------------------------------------
 void createCloseEvent()
 {
     original_ppid = parentPID();
     //trace("original_ppid is " + QString::number(original_ppid));
-}
-//---------------------------------------------------------------------------
-void signalCloseEvent()
-{
 }
 //---------------------------------------------------------------------------
 bool checkCloseEvent()

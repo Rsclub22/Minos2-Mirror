@@ -14,10 +14,8 @@
 
 #include "CacheSelection.h"
 #include "minositem.h"
-#include "PubSubValue.h"
 
-const QString RigDetailsType("RigDetails");
-class RigDetails: public PubSubValue
+class RigDetails
 {
     CacheSelection _selected;
     MinosItem<double> _transverterOffset;
@@ -37,15 +35,15 @@ class RigDetails: public PubSubValue
 public:
     RigDetails();
     RigDetails(QString s);
-    virtual ~RigDetails() override
+    ~RigDetails()
     {}
 
     bool isDirty() const;
     void clearDirty();
     void setDirty();
 
-    virtual QString pack() const override;
-    virtual void unpack(QString) override;
+    QString pack() const ;
+    void unpack(QString) ;
 
     MinosStringItem<QString> getSelectedContest(QString loggerUuid) const;
     MinosItem<double> transverterOffset() const;

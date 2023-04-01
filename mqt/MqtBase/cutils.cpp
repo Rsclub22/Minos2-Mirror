@@ -16,7 +16,7 @@
 #include <qnamespace.h>
 #include <cstring>
 
-#include "PubSubValue.h"
+#include "PubSubName.h"
 #include "cutils.h"
 #include "MTrace.h"
 #include "MinosParameters.h"

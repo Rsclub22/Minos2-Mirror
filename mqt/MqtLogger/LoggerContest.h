@@ -17,7 +17,7 @@
 #include "profiles.h"
 #include "rigmemcommondata.h"
 #include "clustercommon.h"
-#include "PubSubValue.h"
+#include "PubSubName.h"
 #include "contest.h"
 
 enum ExportType {EREG1TEST, ECABRILLO, EADIF, EG0GJV, EMINOS, EKML, EPRINTFILE };

@@ -9,7 +9,6 @@
 #include "MTrace.h"
 
 RigDetails::RigDetails()
-    :PubSubValue(RigDetailsType)
 {
     qRegisterMetaType< RigDetails > ( "RigDetails" );
     _transverterOffset.setInitialValue(0.0);
@@ -23,13 +22,9 @@ RigDetails::RigDetails()
     _pttType.setInitialValue(static_cast<int>(serialCommonData::PTTMethodCodes::PTT_METHOD_CAT));
     _voiceMemAvail.setInitialValue(false);
     _cwMemType.setInitialValue(false);
-
-
-
 }
 
 RigDetails::RigDetails(QString s)
-    :PubSubValue(RigDetailsType)
 {
     unpack(s);
 }
