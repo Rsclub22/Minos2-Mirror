@@ -49,7 +49,6 @@ private:
 
     MatchTreeItem *getXferItem();
 public: 		// User declarations
-    void selectContact(BaseContestLog * contest, CheckableContact *lct );
     void setContest( BaseContestLog * c )
     {
        contest = c;

@@ -103,13 +103,6 @@ public:
     bool isBandMapLoaded();
     bool bandMapLoaded = false;
 
-    bool isRotatorLoaded();
-    bool isRadioLoaded();
-    bool isQrzCallFrameLoaded();
-
-    bool qrzCallFrameLoaded = false;
-
-
     void updateTrees();
     void updateQSODisplay();
 

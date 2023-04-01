@@ -157,13 +157,6 @@ void TQSOEditDlg::on_editSplitter_splitterMoved(int, int)
 }
 //---------------------------------------------------------------------------
 
-void TQSOEditDlg::selectContact( BaseContestLog * ccontest, CheckableContact *lct )
-{
-   // this is the first call after construction
-   contest = ccontest;
-   firstContact = lct;
-}
-
 void TQSOEditDlg::showEvent(QShowEvent *event)
 {
     QDialog::showEvent(event);

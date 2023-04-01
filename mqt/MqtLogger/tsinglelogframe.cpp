@@ -1955,12 +1955,6 @@ void TSingleLogFrame::onLogRadioSettingsChanged(QSharedPointer<RadioSettingsDial
     }
 }
 
-
-bool TSingleLogFrame::isRadioLoaded()
-{
-   return LogContainer->sendDM->isRadioLoaded();
-}
-
 void TSingleLogFrame::on_SetRadioList()
 {
     FKHRigControlFrame->setRadioListFromTslf();
@@ -2233,10 +2227,7 @@ void TSingleLogFrame::sendRadioPassBandState(int state)
 
 // RotatorControl
 
-bool TSingleLogFrame::isRotatorLoaded()
-{
-   return LogContainer->sendDM->isRotatorLoaded();
-}
+
 void TSingleLogFrame::on_RotatorList()
 {
     FKHRotControlFrame->setRotatorList();
@@ -2336,15 +2327,8 @@ void TSingleLogFrame::onQrzInfoToLog(QString callsign, QString qraLocator, QStri
 }
 void TSingleLogFrame::setQrzDisplayFrameLoaded(bool loaded)
 {
-   qrzCallFrameLoaded = loaded;
    GJVQSOLogFrame->setqrzDisplayFrameLoaded(loaded);
 }
-
-bool TSingleLogFrame::isQrzCallFrameLoaded()
-{
-    return  qrzCallFrameLoaded;
-}
-
 
 //---------------------------------------------------------------------------
 
