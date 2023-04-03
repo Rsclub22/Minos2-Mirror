@@ -118,6 +118,7 @@ TAboutBox::TAboutBox(QWidget *parent, bool onStartup) :
                                    "<br><a href=\"http://minos.sourceforge.net/\">http://minos.sourceforge.net</a>"
                                    "<br><br>User forum (please join!)"
                                    "<br><a href=\"https://minos.groups.io/g/users\">https://minos.groups.io/g/users</a>"
+                                   "<br><br><h2><a href=\"file://Manual\">Click here to read the manual!</a>"
                                    "<br><br>";
     ui->AboutMemo->setText(welcomeText.arg(tr("Welcome to Minos Version")));
     ui->AboutMemo->setTextFormat(Qt::RichText);
@@ -219,7 +220,14 @@ void TAboutBox::accept()
 }
 void TAboutBox::on_AboutMemo_linkActivated(const QString &link)
 {
-    QDesktopServices::openUrl(QUrl(link));
+    if (link == "file://Manual")
+    {
+        LogContainer->HelpActionExecute();
+    }
+    else
+    {
+        QDesktopServices::openUrl(QUrl(link));
+    }
 }
 
 void TAboutBox::on_ExitButton_clicked()
@@ -290,10 +298,5 @@ void TAboutBox::on_appSelectButton_clicked()
 {
     StartConfigManager manageApps( this, true);   // when managing sets, include autostart
     manageApps.exec();
-}
-
-void TAboutBox::on_helpButton_clicked()
-{
-    LogContainer->HelpActionExecute();
 }
 
