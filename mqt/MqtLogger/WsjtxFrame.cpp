@@ -657,9 +657,6 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
                                 , quint32 /*frequency_tolerance*/, quint32 /*tr_period*/
                                 , QString const& /*configuration_name*/, QString const& tx_message)
 {
-    special_op_mode = so_mode;
-
-    dxCall = dx_call;
     // protected contests aren't interesting
     if (!ct || ct->isReadOnly())
         return;
@@ -719,14 +716,21 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
         return;
     }
 
-    id_ = id;
-
     trace(QString("WsjtxFrame::update_status dx_call %1 dx_grid %2 transmitting %3 decoding %4 tx_enabled %5")
           .arg(dx_call).arg(dx_grid).arg(transmitting).arg(decoding).arg(tx_enabled));
+
+
+    id_ = id;
+    special_op_mode = so_mode;
+    dxCall = dx_call;
 
     decodeMessage *lastTx = nullptr;
     if (transmitting && !currentlyTransmitting)
     {
+        // transition from not transmitting to transmitting
+        // so look at the message transmitted, decode it
+        // and add it to the message list
+
         QDateTime ut = QDateTime::currentDateTimeUtc();
 
         decodeMessage dc = decoder.decode(id, eTX, ut.time(), 0, 0
@@ -827,6 +831,7 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
         tcolour = Qt::red;
 
     // pass to decodes model
+
     QString special;
     switch (special_op_mode)
     {
@@ -835,8 +840,10 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
     case 2: special = "[EU VHF]"; break;
     case 3: special = "[FD]"; break;
     case 4: special = "[RTTY RU]"; break;
-    case 5: special = "[Fox]"; break;
-    case 6: special = "[Hound]"; break;
+    case 5: special = "[WW DIGI]"; break;
+    case 6: special = "[Fox]"; break;
+    case 7: special = "[Hound]"; break;
+    case 8: special = "[ARRL DIGI]"; break;
     default: special = "[Unknown]";
     }
 
@@ -867,11 +874,16 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
 
     if (decoding && !inDecode)
     {
+        // transition to decoding
+        // remember start of decoded messages for this period
         inDecode = true;
         decodeStartSize = messages.size();
     }
     if (inDecode && decoding == false)
     {
+        // transition to not decoding
+        // so look at what has been decoded
+
         inDecode = false;
 
         process_decodes();
@@ -999,6 +1011,7 @@ void WsjtxFrame::on_autoSelectButton_toggled(bool c)
 
 void WsjtxFrame::on_testButton_clicked()
 {
+// A collection of messages that we have at som time wanted to test
 
 //    void WsjtxServer::update_status (QString const& id, Frequency f, QString const& mode, QString const& dx_call
 //                                      , QString const& report, QString const& tx_mode, bool tx_enabled
@@ -1339,7 +1352,6 @@ void WsjtxFrame::on_removeBlackListButton_clicked()
     // remove selected call from blacklist
     QModelIndexList mil = ui->blackListView->selectionModel()->selectedRows();
 
-    QString mselstring;
     for(auto &mi: mil)
     {
         QModelIndex m = blFilterModel.mapToSource(mi);
@@ -1461,7 +1473,7 @@ void BlModel::setFilterString(QString f)
 }
 
 
-bool BlGridSortFilterModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
+bool BlGridSortFilterModel::filterAcceptsRow(int sourceRow, const QModelIndex &/*sourceParent*/) const
 {
     BlModel *cgm = dynamic_cast<BlModel *>(sourceModel());
     if (!cgm || sourceRow >= cgm->rowCount())
