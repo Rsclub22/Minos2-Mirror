@@ -116,7 +116,7 @@ bool MonitoredLog::testAutoStart()
     VHFNFD where 50 and 70 are split across two days
 
 */
-    if (enabled() && startTime.isValid() && endTime.isValid())
+    if (!enabled() && startTime.isValid() && endTime.isValid())
     {
         QDateTime tnow = QDateTime::currentDateTimeUtc();
         QDateTime epoch = QDateTime::fromMSecsSinceEpoch(0);
@@ -124,7 +124,7 @@ bool MonitoredLog::testAutoStart()
         int eday = epoch.daysTo(endTime);
         int tday = epoch.daysTo(tnow);
 
-        if (!enabled() && !getManualClose() && tday >= sday && (eday >= tday || eday + 1 >= tday))
+        if (!getManualClose() && tday >= sday && (eday >= tday || eday + 1 >= tday))
         {
             trace("Start monitor by time");
             startMonitor();
