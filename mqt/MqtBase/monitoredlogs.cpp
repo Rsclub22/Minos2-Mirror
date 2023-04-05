@@ -100,7 +100,11 @@ void MonitoredLogs::syncStations()
       QStringList autoStations;
       if (autoSyncStations != "None")
       {
-        autoStations = autoSyncStations.split(";", Qt::SkipEmptyParts);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+          autoStations = autoSyncStations.split(" ", Qt::SkipEmptyParts);
+#else
+          autoStations = autoSyncStations.split(" ", QString::SkipEmptyParts);
+#endif
       }
       clearLayout(autoStationsBox->layout());
 
