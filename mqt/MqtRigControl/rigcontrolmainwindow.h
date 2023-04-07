@@ -258,6 +258,7 @@ private:
     RigControlRpc *msg = nullptr;
 
     bool testMode = false;
+    QString liveRadio;
 
     RigBase  *radio;
     RigFactory* rigFactory;

@@ -213,12 +213,20 @@ void RigControlMainWindow::setTestMode(bool test)
 {
     if (test)
     {
+        if (!testMode)
+        {
+            liveRadio = ui->selectRadioBox->currentText();
+        }
         testMode = true;
         logMessage((QString("Radio Selection for Current Radio, for AppName %1, will be from logger").arg(appName)));
         ui->testRadioButton->setText(tr("Set Radio from Logger"));
     }
     else
     {
+        if (testMode)
+        {
+            currentRadioName = liveRadio;
+        }
         testMode = false;
         ui->testRadioButton->setText(tr("Test Radio"));
         logMessage((QString("Read Current Radio for Local selection")));
