@@ -211,26 +211,29 @@ RigControlMainWindow::~RigControlMainWindow()
 }
 void RigControlMainWindow::setTestMode(bool test)
 {
+    trace(QString("testMode is %1 test parameter is %2").arg(testMode).arg(test));
     if (test)
     {
         if (!testMode)
         {
-            liveRadio = ui->selectRadioBox->currentText();
+            testMode = true;
+            liveRadio = currentRadioName;
+            trace("save liveRadio " + liveRadio);;
         }
-        testMode = true;
-        logMessage((QString("Radio Selection for Current Radio, for AppName %1, will be from logger").arg(appName)));
+        logMessage((QString("Read Current Radio for Local selection")));
         ui->testRadioButton->setText(tr("Set Radio from Logger"));
     }
     else
     {
         if (testMode)
         {
-            currentRadioName = liveRadio;
-            upDateRadio(currentRadioName);
+            trace("restore liveRadio " + liveRadio);;
+            testMode = false;
+            upDateRadio(liveRadio);
+            msg->rigCache.invalidate();
         }
-        testMode = false;
         ui->testRadioButton->setText(tr("Test Radio"));
-        logMessage((QString("Read Current Radio for Local selection")));
+        logMessage((QString("Radio Selection for Current Radio, for AppName %1, will be from logger").arg(appName)));
 
         readCurrentRadio(currentRadioName);
 
