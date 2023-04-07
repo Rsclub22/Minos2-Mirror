@@ -226,7 +226,7 @@ void RigControlMainWindow::setTestMode(bool test)
         if (testMode)
         {
             currentRadioName = liveRadio;
-            ui->selectRadioBox->setCurrentText(currentRadioName);
+            upDateRadio(currentRadioName);
         }
         testMode = false;
         ui->testRadioButton->setText(tr("Test Radio"));
