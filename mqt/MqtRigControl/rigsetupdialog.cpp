@@ -1165,7 +1165,6 @@ void RigSetupDialog::updateAvailRadiosToVersion2(QSettings& settings)
     QStringList spList;
     QString radio;
 
-
     for (int i = 0; i < numAvailRadios; i++)
     {
         radio = availRadios[i] + "/radioModel";
@@ -1188,15 +1187,9 @@ void RigSetupDialog::updateAvailRadiosToVersion2(QSettings& settings)
         settings.remove(radio + "/radioModelName");
         settings.remove(radio + "/radioModelName");
         settings.remove(radio + "/radioModelNumber");
-
-
     }
-
     settings.setValue("Version/version", "2");
 }
-
-
-
 
 QString RigSetupDialog::getRadioComPort(QString radioName)
 {
@@ -1213,10 +1206,6 @@ QString RigSetupDialog::getRadioComPort(QString radioName)
 
 }
 
-
-
-
-
 void RigSetupDialog::setCurrentRadioName(QString name)
 {
     currentRadioName = name;
@@ -1228,15 +1217,6 @@ void RigSetupDialog::setCurrentRadioName(QString name)
     }
 }
 
-
-
-
-
-
-void RigSetupDialog::setAppName(QString name)
-{
-    appName = name;
-}
 
 
 

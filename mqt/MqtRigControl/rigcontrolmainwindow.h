@@ -257,6 +257,7 @@ private:
     bool closeApp = false;
     RigControlRpc *msg = nullptr;
 
+    bool testMode = false;
 
     RigBase  *radio;
     RigFactory* rigFactory;
@@ -537,6 +538,8 @@ private:
     void setRigControlPttState(bool state);
     void handleIcomCwMessage(QString cwMsg);
     void handleYaesuCwMessage(QString msg);
+    void setTestMode(bool test);
+
 private slots:
 
     void onStdInRead(QString);
@@ -609,6 +612,7 @@ private slots:
     void onSetCwTxMessage(QString cwMsg);
     void on_reconnectButton_clicked();
 
+    void on_testRadioButton_clicked();
 };
 
 #endif // RIGCONTROLMAINWINDOW_H

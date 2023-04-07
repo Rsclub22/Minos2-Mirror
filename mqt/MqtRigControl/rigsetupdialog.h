@@ -55,7 +55,6 @@ public:
 
     void copyRadioToCurrent(int radioNumber);
 
-    void setAppName(QString name);
     int comportAvial(QString radioName, QString comport);
 
     void setCurrentRadioName(QString name);
