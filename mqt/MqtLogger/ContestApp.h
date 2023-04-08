@@ -124,8 +124,6 @@ class TContestApp : public MinosParameters
       ~TContestApp() override;
       void close();
 
-      int getOccupiedListSlotCount();
-
       bool insertContest( BaseContestLog *p, int sno ) override;
       BaseContestLog * findFirstContest();
       int findContest( BaseContestLog * p );

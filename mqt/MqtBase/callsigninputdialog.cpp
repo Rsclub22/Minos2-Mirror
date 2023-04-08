@@ -23,11 +23,6 @@ QString CallsignInputDialog::getText()
     return ui->callsignInput->text().trimmed();
 }
 
-void CallsignInputDialog::setText(QString text)
-{
-    ui->callsignInput->setText(text);
-}
-
 bool CallsignInputDialog::isValid()
 {
     return ui->callsignInput->isValid();

@@ -98,7 +98,6 @@ void TSingleLogFrame::buildFrame(int slotNo)
 
     connect(FKHRigControlFrame, &RigControlFrame::sendFreqControl, this, &TSingleLogFrame::sendRadioFreq);
     connect(FKHRigControlFrame, &RigControlFrame::sendBandToRigControl, this, &TSingleLogFrame::sendBandToRig);
-    connect(GJVQSOLogFrame, &QSOLogFrame::sendFreqControl, this, &TSingleLogFrame::sendRadioFreq);
     connect(FKHRigControlFrame, &RigControlFrame::sendRitFreq, this, &TSingleLogFrame::sendRadioRitFreq);
     connect(FKHRigControlFrame, &RigControlFrame::sendVolumeToRadio, this, &TSingleLogFrame::sendRadioVolume);
     connect(FKHRigControlFrame, &RigControlFrame::ritStatus, this, &TSingleLogFrame::sendRadioRitStatus);

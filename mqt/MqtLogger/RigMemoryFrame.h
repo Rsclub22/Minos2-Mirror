@@ -96,8 +96,6 @@ private slots:
 
     void onRigFreqChanged(Frequency /*f*/, BaseContestLog *c);
 
-    void onRotBearingChanged(int /*f*/, BaseContestLog *c);
-
     void on_newMemoryButton_clicked();
 
     void vsectionClicked(int logicalIndex);

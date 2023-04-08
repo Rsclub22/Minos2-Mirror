@@ -173,10 +173,6 @@ Callsign WsjtxDecode::getMyCall() const
     return myCall;
 }
 
-Locator WsjtxDecode::getMyGrid() const
-{
-    return myGrid;
-}
 WsjtxDecode::WsjtxDecode()
 {
     

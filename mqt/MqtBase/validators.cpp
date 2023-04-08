@@ -55,7 +55,6 @@ void setError( int err )   // No CS
 }
 
 Validator::Validator( validatorTypes vt ) :
-    status( false ),
     vt( vt )
 {}
 //enum validTypes {cmNone, cmCancel, cmValid, cmCheckValid, cmValidStatus, cmReleasedFocus};

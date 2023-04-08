@@ -74,7 +74,6 @@ public:
 
     Callsign getMyCall() const;
     void setMyCallGrid(const QString &c, const QString &l);
-    Locator getMyGrid() const;
     void setMyGrid(const QString &value);
 private:
     Callsign myCall;

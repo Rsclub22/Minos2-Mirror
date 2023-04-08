@@ -133,10 +133,6 @@ public:
     {
        return logSequence;
     }
-    bool isNextContact() const
-    {
-        return ( getLogSequence() == static_cast< unsigned long > (- 1L) ) ? true : false;
-    }
     virtual void getText(QString &/*dest*/, const BaseContestLog * const /*curcon*/ , bool /*forHistory*/) const
     {}
 
@@ -163,7 +159,6 @@ public:
 
     void clearFrequencyDirty();
     void setFrequencyDirty();
-    bool isFrequencyDirty();
 };
 
 class BaseContact: public CheckableContact

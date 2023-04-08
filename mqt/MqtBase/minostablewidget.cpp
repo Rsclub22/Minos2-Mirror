@@ -173,11 +173,3 @@ void MinosTableWidget::scrollTo(const QModelIndex &index, ScrollHint hint)
 
     update(index);
 }
-const QModelIndex MinosTableWidget::getFirstSelected() const
-{
-    QModelIndexList mi = selectionModel() ->selectedRows();
-
-    if (mi.size())
-        return mi[0];
-    return QModelIndex();
-}

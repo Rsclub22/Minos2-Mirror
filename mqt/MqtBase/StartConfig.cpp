@@ -145,11 +145,6 @@ void StartConfig::changeEvent( QEvent* e )
     }
 }
 
-void StartConfig::setup(bool started)
-{
-    ui->StartButton->setEnabled(!started);
-    ui->StopButton->setVisible(false);
-}
 void StartConfig::on_StartButton_clicked()
 {
     copyFromScreen();

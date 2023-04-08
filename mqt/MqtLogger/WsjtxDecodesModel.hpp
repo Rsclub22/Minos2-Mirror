@@ -50,10 +50,6 @@ public:
 
   void de_call (QString const&);
   void rx_df (int);
-  void setId(QString clientId)
-  {
-      client_id_ = clientId;
-  }
   QVariant data (QModelIndex const& proxy_index, int role = Qt::DisplayRole) const override;
   virtual QVariant headerData (int section, Qt::Orientation orientation,
                                int role = Qt::DisplayRole) const override;

@@ -844,10 +844,4 @@ void RotControlFrame::checkConnection()
 
 void RotControlFrame::closeContest()
 {
-    // is this the last frame
-//    if (LogContainer->getLogFrameCount() == 1 && rotConnected)
-//    {
-//        trace(QString("Last contest frame closing, close rotator connection"));
-//        setRotatorAntennaName("");
-//    }
 }

@@ -58,7 +58,6 @@ public:
     TSingleLogFrame *findContest( const QString &pubname );
     TSingleLogFrame *findContest(BaseContestLog *ct );
     QVector<TSingleLogFrame *> getLogFrames();
-    int getLogFrameCount();
     int getSlotNo(TSingleLogFrame *) const;
 
     QVector<ContestPageControl *> contestPageControls;
@@ -79,10 +78,8 @@ public:
 
     QStringList getSessions();
     void updateSessionActions();
-    void closeSession();
     void selectSession(QString sessName);
 
-    void applyScreenLayouts();
     void selectLayout(QString layout);
 
     void doListOpenActionExecute(QWidget *p);
@@ -113,7 +110,6 @@ private:
 
     void enableActions();
 
-    QString getCurrentFile();
     void setCurrentFile(const QString &fileName);
     void removeCurrentFile(const QString &fileName);
     void updateRecentFileActions();

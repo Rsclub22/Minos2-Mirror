@@ -12,10 +12,6 @@
 #include "ui_ControlMain.h"
 
 ControlMain *controlMain = nullptr;
-void ControlMain::logMessage( QString s )
-{
-   trace( s );
-}
 //---------------------------------------------------------------------------
 void LineLog( const QString &msg )
 {

@@ -187,8 +187,6 @@ private:
     void parseCallsignData(QXmlStreamReader &xmlData);
     void parseSessionData(QXmlStreamReader &xmlData);
     void parseDXCCData(QXmlStreamReader &xmlData);
-    void getData(QNetworkReply *netReply);
-
     void logon();
     QString stripPasswordFromUrl(QString url);
     void askCallsignData(QString callsign);

@@ -26,7 +26,6 @@ class BearingLineEdit : public QLineEdit
 public:
     BearingLineEdit(QWidget*);
     int getBearing();
-    void setBearing(QString);
     bool isValid();
 
 

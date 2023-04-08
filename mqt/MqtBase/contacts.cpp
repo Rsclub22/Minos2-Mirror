@@ -50,10 +50,6 @@ void CheckableContact::setFrequencyDirty()
 {
     freq.setDirty();
 }
-bool CheckableContact::isFrequencyDirty()
-{
-    return freq.isDirty();
-}
 
 CheckableContact::CheckableContact(BaseContestLog * contest, dtg time_now ) : QObject()
   ,contest(contest), timeOn(time_now), timeOff(time_now)

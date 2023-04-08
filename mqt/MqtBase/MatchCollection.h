@@ -27,8 +27,6 @@ class TMatchCollection
       int contactCount();
       TMatchCollection();
       ~TMatchCollection();
-      int getContestCount( );
-      QSharedPointer<BaseMatchContest> pcontestAt( int );
 };
 
 typedef QSharedPointer< TMatchCollection > SharedMatchCollection;

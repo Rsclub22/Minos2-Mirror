@@ -614,18 +614,6 @@ QSharedPointer<BaseContact> LoggerContestLog::addContactBetween(QSharedPointer<B
    return bct;
 }
 //==========================================================================
-void LoggerContestLog::removeContact( QSharedPointer<BaseContact> lct )
-{
-    for ( LogIterator i = ctList.begin(); i != ctList.end(); i++ )
-    {
-        if (i->wt.data() == lct.data())
-        {
-            ctList.erase(i);
-            break;
-        }
-    }
-}
-//==========================================================================
 void LoggerContestLog::clearRunMemory(int memno, const memoryData::memData &mem)
 {
     QString band(mem.band);

@@ -54,7 +54,6 @@ public:
       ~MinosTableWidget() Q_DECL_OVERRIDE;
       void setModel(QAbstractItemModel *model) Q_DECL_OVERRIDE;
       void scrollTo(const QModelIndex &index, ScrollHint hint) Q_DECL_OVERRIDE;
-      const QModelIndex getFirstSelected() const;
 
 private:
       QToolButton *statusSortButton;

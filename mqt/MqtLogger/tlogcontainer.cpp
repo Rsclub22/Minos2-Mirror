@@ -675,14 +675,6 @@ void TLogContainer::removeCurrentFile(const QString &fileName)
     updateRecentFileActions();
 
 }
-QString TLogContainer::getCurrentFile()
-{
-    QSettings settings;
-    QStringList files = settings.value("dbmru").toStringList();
-    if (files.size())
-        return files[0];
-    return QString();
-}
 void TLogContainer::updateRecentFileActions()
 {
     QSettings settings;
@@ -1700,25 +1692,6 @@ void TLogContainer::selectLayout(QString layout)
         f->restoreQSOTableColumns();
     }
 }
-void TLogContainer::applyScreenLayouts()
-{
-    TWaitCursor wc(this);
-
-    BaseContestLog * ct = TContestApp::getContestApp() ->getCurrentContest();
-
-    // clear old splitter settings
-    QSettings settings;
-    settings.remove("Splitters");
-
-    for (int i = 0; i < ui->contestPageControl->count(); i++)
-    {
-        QWidget *ctab = ui->contestPageControl->widget(i);
-        TSingleLogFrame * f = dynamic_cast<TSingleLogFrame *>( ctab );
-        f->applyScreenLayout();
-    }
-    if (ct)
-        selectContest(ct);
-}
 void TLogContainer::updateSessionActions()
 {
     TContestApp *app = TContestApp::getContestApp();
@@ -1786,15 +1759,6 @@ void TLogContainer::selectSessionAction()
         app->currSession = selText;
         selectSession(selText);
     }
-}
-void TLogContainer::closeSession()
-{
-    TContestApp *app = TContestApp::getContestApp();
-    app->suppressWritePreload = true;
-
-    // first, close all current slots, but don't write preload
-    CloseAllActionExecute();
-    app->suppressWritePreload = false;
 }
 void TLogContainer::selectSession(QString sessName)
 {
@@ -2286,11 +2250,6 @@ QVector<TSingleLogFrame *> TLogContainer::getLogFrames()
     }
 
     return logs;
-}
-
-int TLogContainer::getLogFrameCount()
-{
-    return ui->contestPageControl->count();
 }
 
 int TLogContainer::getSlotNo(TSingleLogFrame *f) const

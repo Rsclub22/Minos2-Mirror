@@ -39,11 +39,6 @@ SlotsModel::SlotsModel(StatisticsDisplay *s):sd(s)
 
 SlotsModel::~SlotsModel()
 {}
-void SlotsModel::reset()
-{
-    beginResetModel();
-    endResetModel();
-}
 
 int SlotsModel::rowCount(const QModelIndex &/*parent*/) const
 {

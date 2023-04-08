@@ -34,7 +34,6 @@ public:
 
 private:
     Ui::ControlMain *ui;
-    void logMessage( QString s );
     void doProcLineEvents( );
     virtual void closeEvent(QCloseEvent *event) override;
     virtual void resizeEvent(QResizeEvent *event) override;

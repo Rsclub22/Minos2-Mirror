@@ -13,11 +13,6 @@ void EngineConfigure::setEnginePath(QSettings &settings, QString engine, QString
     QString eStr = QString("engines/");
     settings.setValue(eStr + engine, path);
 }
-/*static*/ void EngineConfigure::setEnginePath(QString engine, QString path)
-{
-    QSettings settings("./Configuration/DataModes.ini", QSettings::IniFormat);
-    setEnginePath(settings, engine, path);
-}
 
 /*static*/ QString EngineConfigure::getEnginePath(QSettings &settings, QString engine)
 {
@@ -36,13 +31,6 @@ void EngineConfigure::setEnginePath(QSettings &settings, QString engine, QString
 void EngineConfigure::setSpeed(QSettings &settings, QString mode, QString speed)
 {
     settings.setValue( mode, speed);
-}
-
-
-void EngineConfigure::setSpeed(QString mode, QString speed)
-{
-    QSettings settings("./Configuration/DataModes.ini", QSettings::IniFormat);
-    setSpeed(settings, mode, speed);
 }
 
 QString EngineConfigure::getSpeed(QSettings &settings, QString mode)
@@ -73,11 +61,6 @@ void EngineConfigure::setEngineEnabled(QSettings &settings, QString engine, bool
 {
     settings.setValue("enabled/" + engine, enabled);
 }
-void EngineConfigure::setEngineEnabled(QString engine, bool enabled)
-{
-    QSettings settings("./Configuration/DataModes.ini", QSettings::IniFormat);
-    setEngineEnabled(settings, engine, enabled);
-}
 
 QString EngineConfigure::getEngineSound(QSettings &settings, QString engine, QString io)
 {
@@ -94,12 +77,6 @@ QString EngineConfigure::getEngineSound(QString engine, QString io)
 void EngineConfigure::setEngineSound(QSettings &settings, QString engine, QString io, QString s)
 {
     settings.setValue("sound/" + engine + "/" + io, s);
-}
-
-void EngineConfigure::setEngineSound(QString engine, QString io, QString s)
-{
-    QSettings settings("./Configuration/DataModes.ini", QSettings::IniFormat);
-    setEngineSound(settings, engine, io, s);
 }
 
 int EngineConfigure::getEnginePort(QSettings &settings, QString engine)
@@ -119,11 +96,6 @@ void EngineConfigure::setEnginePort(QSettings &settings, QString engine, int por
     settings.setValue("port/" + engine, port);
 }
 
-void EngineConfigure::setEnginePort(QString engine, int port)
-{
-    QSettings settings("./Configuration/DataModes.ini", QSettings::IniFormat);
-    setEnginePort(settings, engine, port);
-}
 void EngineConfigure::checkEnginePath(QLineEdit *ele, QCheckBox *ecb)
 {
     QString m = ele->text();

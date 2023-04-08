@@ -26,11 +26,6 @@ QString LocatorInputDialog::getText()
     return ui->locatorInput->text().trimmed();
 }
 
-void LocatorInputDialog::setText(QString text)
-{
-    ui->locatorInput->setText(text);
-}
-
 bool LocatorInputDialog::isValid()
 {
     return ui->locatorInput->isValid();

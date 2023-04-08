@@ -37,10 +37,6 @@ class Locator
     {
         valRes = vr;
     }
-    void clearValRes()
-    {
-        valRes = LOC_NOT_VALIDATED;
-    }
 
     int setLoc(const QString &l)
     {

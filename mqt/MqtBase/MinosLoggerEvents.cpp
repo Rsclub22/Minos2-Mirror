@@ -68,11 +68,6 @@ void MinosLoggerEvents::SendAfterSelectContact(QSharedPointer<BaseContact> lct, 
     emit mle.AfterSelectContact(lct, c);
 }
 //---------------------------------------------------------------------------
-void MinosLoggerEvents::SendContestDetails(BaseContestLog *c)
-{
-    emit mle.ContestDetails(c);
-}
-//---------------------------------------------------------------------------
 void MinosLoggerEvents::SendGoToSerial(BaseContestLog *c)
 {
     emit mle.GoToSerial(c);
@@ -86,11 +81,6 @@ void MinosLoggerEvents::SendMakeEntry(BaseContestLog *c)
 void MinosLoggerEvents::SendNextUnfilled(BaseContestLog *c)
 {
     emit mle.NextUnfilled(c);
-}
-//---------------------------------------------------------------------------
-void MinosLoggerEvents::SendFormKey(unsigned int *key, BaseContestLog *c)
-{
-    emit mle.FormKey(key, c);
 }
 //---------------------------------------------------------------------------
 void MinosLoggerEvents::SendClearContestInFrame(BaseContestLog *c)
@@ -259,11 +249,6 @@ void MinosLoggerEvents::SendUpdateMemories(BaseContestLog *c )
 void MinosLoggerEvents::SendRigFreqChanged(Frequency f, BaseContestLog *c)
 {
     emit mle.RigFreqChanged(f, c);
-}
-//---------------------------------------------------------------------------
-void MinosLoggerEvents::SendRotBearingChanged(int f, BaseContestLog *c)
-{
-    emit mle.RotBearingChanged(f, c);
 }
 //---------------------------------------------------------------------------
 void MinosLoggerEvents::SendFreqToRig(Frequency f)

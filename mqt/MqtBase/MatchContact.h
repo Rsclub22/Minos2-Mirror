@@ -60,9 +60,6 @@ public:
 
    MatchList contactMatchList;
 
-   virtual int getContactCount(){return contactMatchList.size();}
-   QSharedPointer<MatchContact> pcontactAt( int );
-
    virtual const ContactList * getContactList() const
    {
       return nullptr;
