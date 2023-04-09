@@ -101,6 +101,9 @@ private:
     RotatorFactory* rotFactory;
     RotatorBase* rotator;
 
+    bool testMode = false;
+    QString liveAntenna;
+
     QTimer LogTimer;
     QTimer RotateTimer;
 
@@ -263,6 +266,8 @@ private slots:
     void onPSTRotatorConfig();
     void on_reconnectPushButton_clicked();
 
+    void on_testButton_clicked();
+
 private:
     void rotateTo(int bearing);
     int northCalcTarget(int targetBearing);
@@ -295,6 +300,7 @@ private:
 
     void checkTestBearingBox();
     void setCompassDialVisible(bool visible);
+    void setTestMode(bool test);
 };
 
 #endif // ROTATORMAINWINDOW_H

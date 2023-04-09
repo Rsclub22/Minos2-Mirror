@@ -218,7 +218,7 @@ void RigControlMainWindow::setTestMode(bool test)
         {
             testMode = true;
             liveRadio = currentRadioName;
-            trace("save liveRadio " + liveRadio);;
+            trace("save liveRadio " + liveRadio);
         }
         logMessage((QString("Read Current Radio for Local selection")));
         ui->testRadioButton->setText(tr("Set Radio from Logger"));
@@ -235,19 +235,19 @@ void RigControlMainWindow::setTestMode(bool test)
         ui->testRadioButton->setText(tr("Test Radio"));
         logMessage((QString("Radio Selection for Current Radio, for AppName %1, will be from logger").arg(appName)));
 
-        readCurrentRadio(currentRadioName);
+//        readCurrentRadio(currentRadioName);
 
-        if (!availRadiosContains(currentRadioName))
-        {
-            logMessage(QString("No radio found for this rigcontrol, %1").arg(appName));
-            QString errmsg = HtmlFontColour(Qt::red) + tr("Please select a radio!");
-            showStatusMessage(errmsg);
-            sendStatusLogger(errmsg);
-        }
-        else
-        {
-            ui->selectRadioBox->setCurrentText(currentRadioName);
-        }
+//        if (!availRadiosContains(currentRadioName))
+//        {
+//            logMessage(QString("No radio found for this rigcontrol, %1").arg(appName));
+//            QString errmsg = HtmlFontColour(Qt::red) + tr("Please select a radio!");
+//            showStatusMessage(errmsg);
+//            sendStatusLogger(errmsg);
+//        }
+//        else
+//        {
+//            ui->selectRadioBox->setCurrentText(currentRadioName);
+//        }
     }
     setSelectRadioBoxVisible(testMode);
     testBoxesVisible(testMode);
