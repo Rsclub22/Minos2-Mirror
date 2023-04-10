@@ -108,6 +108,7 @@ QString decodeMessage::getMStage() const
     }
     return "N/A";
 }
+
 bool decodeMessage::checkAsContact()
 {
     BaseContestLog * cc = MinosParameters::getMinosParameters() ->getCurrentContest();
