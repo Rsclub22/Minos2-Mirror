@@ -106,7 +106,15 @@ QrzServerMainWindow::QrzServerMainWindow(QWidget *parent)
     }
     );
 
+    sblabel0 = new QLabel( "" );
+    statusBar() ->addWidget( sblabel0, 6 );
+    sblabel1 = new QLabel( "" );
+    statusBar() ->addWidget( sblabel1, 1 );
+    sblabel2 = new QLabel( "" );
+    statusBar() ->addWidget( sblabel2, 2 );
+
     qdb = new QRZDB(this);
+
 }
 
 QrzServerMainWindow::~QrzServerMainWindow()
@@ -719,7 +727,14 @@ void QrzServerMainWindow::handleQrzRequests()
                         addTextToLogWindow(tr("Ask QRZ for callsign - %1").arg(askQrzCallsign));
                         trace(QString("handleQrzRequests: ask qrz for callsign %1").arg(askQrzCallsign));
                         askCallsignData(askQrzCallsign);
+                        qrzRequests++;
                     }
+                    else
+                    {
+                        dbRequests++;
+                    }
+                    sblabel0->setText(QString("qrz %1").arg(qrzRequests));
+                    sblabel1->setText(QString("db %1").arg(dbRequests));
 
                 }
                 else

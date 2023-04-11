@@ -31,6 +31,7 @@ namespace Ui { class QrzServerMainWindow; }
 QT_END_NAMESPACE
 
 class QRZDB;
+class QLabel;
 
 const QString QRZURL = "https://xmldata.qrz.com/xml/current/?";
 const QString AGENT = "Minos";
@@ -150,7 +151,12 @@ private slots:
     void onConnectPushButtonClicked();
 private:
     Ui::QrzServerMainWindow *ui;
+    QLabel *sblabel0;
+    QLabel *sblabel1;
+    QLabel *sblabel2;
 
+    int dbRequests = 0;
+    int qrzRequests = 0;
 
     StdInReader *stdinReader = new StdInReader(this);
     QString appName = "";
