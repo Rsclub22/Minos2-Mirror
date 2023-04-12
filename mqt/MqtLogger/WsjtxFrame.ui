@@ -82,8 +82,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>969</width>
-         <height>336</height>
+         <width>987</width>
+         <height>349</height>
         </rect>
        </property>
        <property name="sizePolicy">
@@ -124,6 +124,13 @@
                 </size>
                </property>
               </spacer>
+             </item>
+             <item>
+              <widget class="QLabel" name="qsoStateLabel">
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+              </widget>
              </item>
             </layout>
            </item>

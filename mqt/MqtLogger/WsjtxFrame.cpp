@@ -781,7 +781,10 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
 {
     // protected contests aren't interesting
     if (!ct || ct->isReadOnly())
+    {
+        ui->qsoStateLabel->clear();
         return;
+    }
 
     BandList &blist = BandList::getBandList();
     QSharedPointer<BandInfo>  bi;
@@ -835,6 +838,7 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
     if (!bandOK)
     {
         // don't continue
+        ui->qsoStateLabel->setText(tr("Wrong band"));
         return;
     }
 
@@ -1010,6 +1014,23 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
         inDecode = false;
 
         process_decodes();
+    }
+
+    // Diagnostic display of current qso state
+    switch(qsoState)
+    {
+    case NoQSOWaiting:
+        ui->qsoStateLabel->setText("NoQSOWaiting");
+        break;
+    case NoQSOCallingCQ:
+        ui->qsoStateLabel->setText("NoQSOCallingCQ");
+        break;
+    case NoQSOCallingThem:
+        ui->qsoStateLabel->setText("NoQSOCallingThem");
+        break;
+    case InQSO:
+        ui->qsoStateLabel->setText("InQSO");
+        break;
     }
 }
 
