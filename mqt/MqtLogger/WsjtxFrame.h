@@ -210,7 +210,7 @@ private:
     int decodeEndSize = 0;
     int minpoints = 0;
     int minsnr = 0;
-    decodeMessage *bestOffset = nullptr;
+    int bestOffset = -1;
     PointBonusMultSnr bestPoints;
 
     void startCQ();

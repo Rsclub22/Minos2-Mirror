@@ -367,7 +367,7 @@ void WsjtxFrame::getBestCQ73CallingMe()
                 )
             {
                 trace(QString("WsjtxFrame::getBestCQ73 Candidate %1").arg(messages[i].message));
-                bestOffset = &dc;
+                bestOffset = i;
                 bestPoints = pbv;
             }
             else
@@ -433,7 +433,7 @@ void WsjtxFrame::getBestToMe()
                     // which might not be the most profitable
                     trace(QString("WsjtxFrame::process_decodes (lasttx) Candidate %1")
                               .arg(dc.message));
-                    bestOffset = &dc;
+                    bestOffset = i;
                     bestPoints = pbv;
                                     }
                 else
@@ -513,14 +513,14 @@ bool WsjtxFrame::checkTheirCall()
 
 void WsjtxFrame::markBest()
 {
-    if (bestOffset)
+    if (bestOffset >= 0)
     {
         for (int i = decodeStartSize; i < decodeEndSize; i++)
         {
             decodeMessage &dc = messages[i];
-            dc.best = (&dc == bestOffset);
+            dc.best = (i == bestOffset);
         }
-        trace("WsjtxFrame::markBest best decode is " + bestOffset->message);
+        trace("WsjtxFrame::markBest best decode is " + messages[bestOffset].message);
     }
 }
 void WsjtxFrame::process_NoQSOWaiting()
@@ -532,18 +532,18 @@ void WsjtxFrame::process_NoQSOWaiting()
 
     // currTxStage will be emsNone
 
-    bestOffset = nullptr;
+    bestOffset = -1;
     bestPoints.clear();
 
     getBestCQ73CallingMe();
 
     markBest();
 
-    if (ui->autoSelectButton->isChecked() && bestOffset)
+    if (ui->autoSelectButton->isChecked() && bestOffset >= 0)
     {
-        trace("WsjtxFrame::process_decodes auto replying to " + bestOffset->message);
-        bestOffset->autoresp = true;
-        reply(*bestOffset);
+        trace("WsjtxFrame::process_decodes auto replying to " + messages[bestOffset].message);
+        messages[bestOffset].autoresp = true;
+        reply(messages[bestOffset]);
 
         qsoState = NoQSOCallingThem;
 
@@ -562,8 +562,8 @@ void WsjtxFrame::process_NoQSOCallingCQ()
     // Not in QSO, calling CQ
     // look for the best reply to our CQ, if none, look for the best CQ to call
 
-    decodeMessage *bestOffset = nullptr;
-    PointBonusMultSnr bestPoints;
+    bestOffset = -1;
+    bestPoints.clear();
 
     bool autoReplyAllowed = !currentlyTransmitting;
     // iterate over the latest decodes, and select the best
@@ -575,7 +575,7 @@ void WsjtxFrame::process_NoQSOCallingCQ()
 
     getBestToMe();
 
-    if (!bestOffset)
+    if (bestOffset < 0)
     {
         // we don't already have a best
         getBestCQ73CallingMe();
@@ -583,11 +583,11 @@ void WsjtxFrame::process_NoQSOCallingCQ()
 
     markBest();
 
-    if (autoReplyAllowed && ui->autoSelectButton->isChecked() && bestOffset)
+    if (autoReplyAllowed && ui->autoSelectButton->isChecked() && bestOffset >= 0)
     {
-        trace("WsjtxFrame::process_decodes auto replying to " + bestOffset->message);
-        bestOffset->autoresp = true;
-        reply(*bestOffset);
+        trace("WsjtxFrame::process_decodes auto replying to " + messages[bestOffset].message);
+        messages[bestOffset].autoresp = true;
+        reply(messages[bestOffset]);
         qsoState = NoQSOCallingThem;
 
         // we are assuming that autoseq is enabled, call 1st isn't
@@ -601,7 +601,7 @@ void WsjtxFrame::process_NoQSOCallingThem()
     // If they reply, let auto sequence proceed
     // if no reply, look for best calling us, or best CQ
 
-    bestOffset = nullptr;
+    bestOffset = -1;
     bestPoints.clear();
 
 
@@ -611,11 +611,11 @@ void WsjtxFrame::process_NoQSOCallingThem()
 
         markBest();
 
-        if (ui->autoSelectButton->isChecked() && bestOffset)
+        if (ui->autoSelectButton->isChecked() && bestOffset >= 0)
         {
-            trace("WsjtxFrame::process_decodes auto replying to " + bestOffset->message);
-            bestOffset->autoresp = true;
-            reply(*bestOffset);
+            trace("WsjtxFrame::process_decodes auto replying to " + messages[bestOffset].message);
+            messages[bestOffset].autoresp = true;
+            reply(messages[bestOffset]);
             qsoState = NoQSOCallingThem;
 
             // we are assuming that autoseq is enabled, call 1st isn't
@@ -636,7 +636,7 @@ void WsjtxFrame::process_InQSO()
     // Check for them working someone else
     // Check for too many repeats, may need to blacklist them
 
-    bestOffset = nullptr;
+    bestOffset = -1;
     bestPoints.clear();
 
     if (!checkTheirCall())
@@ -645,11 +645,11 @@ void WsjtxFrame::process_InQSO()
 
         markBest();
 
-        if (ui->autoSelectButton->isChecked() && bestOffset)
+        if (ui->autoSelectButton->isChecked() && bestOffset >= 0)
         {
-            trace("WsjtxFrame::process_decodes auto replying to " + bestOffset->message);
-            bestOffset->autoresp = true;
-            reply(*bestOffset);
+            trace("WsjtxFrame::process_decodes auto replying to " + messages[bestOffset].message);
+            messages[bestOffset].autoresp = true;
+            reply(messages[bestOffset]);
             qsoState = NoQSOCallingThem;
 
             // we are assuming that autoseq is enabled, call 1st isn't
