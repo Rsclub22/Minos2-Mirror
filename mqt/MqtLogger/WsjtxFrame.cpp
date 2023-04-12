@@ -896,7 +896,8 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
         switch (lastTx->mstage)
         {
         case emsNone:
-            // shouldn't happen...
+            // shouldn't happen... maybe from "TUNE"
+            break;
         case emsCQ:
             // repliable to "from"
             // CQ K1ABC FN42
