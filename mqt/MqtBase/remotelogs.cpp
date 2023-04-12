@@ -41,14 +41,17 @@ void RemoteLogs::testAutoStart()
 
     for ( auto const &s: qAsConst(RemoteLogs::getRemoteLogs()->stationList) )
     {
-        if (autoStations.contains(s->name))
-       for ( auto &ml: s->slotList )
-       {
-            if (ml->testAutoStart())
+        // if never set, autostations will be empty, so take all
+        if (autoStations.size() == 0 || autoStations.contains(s->name))
+        {
+            for ( auto &ml: s->slotList )
             {
-                emit logAutoStarted(ml);
+                if (ml->testAutoStart())
+                {
+                    emit logAutoStarted(ml);
+                }
             }
-       }
+        }
     }
 
 }
