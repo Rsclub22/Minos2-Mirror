@@ -952,7 +952,7 @@ bool TSingleLogFrame::doKeyPressEvent( QKeyEvent* event )
 }
 void TSingleLogFrame::doSendEntry(QString expName)
 {
-    // expName is the exported filename, not yet usable
+    // expName is the exported full filename, not yet usable
 
     // here we have to set up and execute the magic
     // to trigger Petes web site
@@ -963,13 +963,6 @@ void TSingleLogFrame::doSendEntry(QString expName)
     // I suspect section and club ar as for VHF
 
     // https://www.rsgbcc.org/cgi-bin/vhfentertest.pl?year=2022&Contest=70MHz+UKAC&Band=17+Nov&Req=Date&Section=AO&Category=&Club=Parallel+Lines+CG&this=NEXT
-
-    // so we need
-    // Contest Name
-    // year
-    // band (or if UKAC date)
-    // section
-    // club name
 
     LoggerContestLog * ct = dynamic_cast<LoggerContestLog *>( contest );
     if ( !ct )
@@ -1000,8 +993,26 @@ void TSingleLogFrame::doSendEntry(QString expName)
     // I suspect section and club ar as for VHF
 
     // https://www.rsgbcc.org/cgi-bin/vhfentertest.pl?year=2022&Contest=70MHz+UKAC&Band=17+Nov&Req=Date&Section=AO&Category=&Club=Parallel+Lines+CG&this=NEXT
-    QString target = QString("%1?year=-%2&contest=%3&Band=%4&Req=Date&Section=%5&Category=%6&Club=%7&this=NEXT")
-                         .arg("https://www.rsgbcc.org/cgi-bin/vhfentertest.pl")
+    QString site;
+    if (ct->isHF())
+    {
+        site = "https://www.rsgbcc.org/cgi-bin/hfenter.pl";
+    }
+    else
+    {
+        site = "https://www.rsgbcc.org/cgi-bin/vhfentertest.pl";
+    }
+    QString target = QString("%1?"
+                             "year=%2&"
+                             "contest=%3&"
+                             "Band=%4&"
+                             "Req=Date&"
+                             "Section=%5&"
+                             "Category=%6&"
+                             "Club=%7&"
+                             "this=NEXT"
+                             )
+                         .arg(site)
                          .arg(year)
                          .arg(cname)
                          .arg(band)
@@ -1009,7 +1020,15 @@ void TSingleLogFrame::doSendEntry(QString expName)
                          .arg(category)
                          .arg(club)
         ;
-    QDesktopServices::openUrl(QUrl(target));
+
+    trace("Working version is           https://www.rsgbcc.org/cgi-bin/vhfentertest.pl?year=2022&Contest=70MHz+UKAC&Band=17+Nov&Req=Date&Section=AO&Category=&Club=Parallel+Lines+CG&this=NEXT");
+
+    trace("About to open URL for entry " + target);
+    bool openRet = QDesktopServices::openUrl(QUrl(target));
+    if (openRet == false)
+    {
+        mShowMessage(tr("Failed to open %1").arg(target), this);
+    }
 }
 QString TSingleLogFrame::makeEntry( bool saveMinos, bool sendEntry )
 {
