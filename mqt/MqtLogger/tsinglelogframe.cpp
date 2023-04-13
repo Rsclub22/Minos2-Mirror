@@ -1,5 +1,7 @@
 #include "base_pch.h"
 #include <QScrollArea>
+#include <QDesktopServices>
+
 #include "MinosLoggerEvents.h"
 
 #include "ContestApp.h"
@@ -863,7 +865,6 @@ bool TSingleLogFrame::doKeyPressEvent( QKeyEvent* event )
     // each dependant ContestPage also needs this
     return GJVQSOLogFrame->doKeyPressEvent(event);
 }
-
 void TSingleLogFrame::doSendEntry(QString expName)
 {
     // here we have to set up and execute the magic
@@ -872,7 +873,7 @@ void TSingleLogFrame::doSendEntry(QString expName)
     // first, check for VHF or HF
     // For HF the link is e.g.
     // https://www.rsgbcc.org/cgi-bin/hfenter.pl?Contest=DX%20Contest&year=2022
-    // I suspect section and club ar as for HF
+    // I suspect section and club ar as for VHF
 
     // https://www.rsgbcc.org/cgi-bin/vhfentertest.pl?year=2022&Contest=70MHz+UKAC&Band=17+Nov&Req=Date&Section=AO&Category=&Club=Parallel+Lines+CG&this=NEXT
 
@@ -891,16 +892,37 @@ void TSingleLogFrame::doSendEntry(QString expName)
     QString cname = ct->VHFContestName.getValue();
     cname.replace(" ", "+");    // replaces in-situ
     QString club = ct->entrant.getValue();
-    QString dtgStart = ct->DTGStart.getValue();
+    club.replace(" ", "+");
+    //sendurlQString dtgStart = ct->DTGStart.getValue();
     QDateTime  contestStart = CanonicalToTDT(ct->DTGStart.getValue());
 
     QString band;
-    QString year;
+    QString year = contestStart.toString("yyyy");
     if (cname.contains("UKAC", Qt::CaseSensitive))
     {
-        QString date = contestStart.toString("yyyy-MMM");
+        band = contestStart.toString("dd+MMM");
+    }
+    else
+    {
+        band = ct->contestBands.getValue();
     }
     QString section = ct->entSect.getValue();
+    QString category;
+
+    // https://www.rsgbcc.org/cgi-bin/hfenter.pl?Contest=DX%20Contest&year=2022
+    // I suspect section and club ar as for VHF
+
+    // https://www.rsgbcc.org/cgi-bin/vhfentertest.pl?year=2022&Contest=70MHz+UKAC&Band=17+Nov&Req=Date&Section=AO&Category=&Club=Parallel+Lines+CG&this=NEXT
+    QString target = QString("%1?year=-%2&contest=%3&Band=%4&Req=Date&Section=%5&Category=%6&Club=%7&this=NEXT")
+                         .arg("https://www.rsgbcc.org/cgi-bin/vhfentertest.pl")
+                         .arg(year)
+                         .arg(cname)
+                         .arg(band)
+                         .arg(section)
+                         .arg(category)
+                         .arg(club)
+        ;
+    QDesktopServices::openUrl(QUrl(target));
 }
 QString TSingleLogFrame::makeEntry( bool saveMinos, bool sendEntry )
 {
