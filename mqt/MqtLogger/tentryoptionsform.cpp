@@ -9,11 +9,12 @@
 #include "ui_tentryoptionsform.h"
 
 
-TEntryOptionsForm::TEntryOptionsForm(QWidget* Owner, QSharedPointer<ContestDetailsTransferObject> cnt, LoggerContestLog *inputContest, bool saveMinos ):
+TEntryOptionsForm::TEntryOptionsForm(QWidget* Owner, QSharedPointer<ContestDetailsTransferObject> cnt, LoggerContestLog *inputContest, bool saveMinos , bool sendEntry):
     QDialog(Owner),
     ui(new Ui::TEntryOptionsForm),
     ct( cnt ), inputContest(inputContest),
-    minosSave( saveMinos )
+    minosSave( saveMinos ),
+    sendEntry(sendEntry)
 {
     ui->setupUi(this);
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
@@ -180,6 +181,10 @@ void TEntryOptionsForm::accept()
 
 void TEntryOptionsForm::on_CloseButton_clicked()
 {
+    if (sendEntry)
+    {
+        // we need to check that the mandatory fields are filled
+    }
     int r = 0;
     r++;  // date range not editable
 

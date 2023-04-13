@@ -46,7 +46,7 @@ signals:
    void AfterLogContact(BaseContestLog *ct, QSharedPointer<BaseContact> lct);
    void AfterSelectContact(QSharedPointer<BaseContact> ct, BaseContestLog *);
    void GoToSerial(BaseContestLog *);
-   void MakeEntry(BaseContestLog *);
+   void MakeEntry(BaseContestLog *, bool);
    void NextUnfilled(BaseContestLog *);
    void ScreenContactChanged(ScreenContact *, BaseContestLog *, QString b);
    void ReplaceThisLogList(SharedMatchCollection matchCollection, BaseContestLog *, QString b);
@@ -122,7 +122,7 @@ public:
    static void SendAfterLogContact(BaseContestLog *ct, QSharedPointer<BaseContact> lct);
    static void SendAfterSelectContact(QSharedPointer<BaseContact> ct, BaseContestLog *);
    static void SendGoToSerial(BaseContestLog *);
-   static void SendMakeEntry(BaseContestLog *);
+   static void SendMakeEntry(BaseContestLog *, bool e);
    static void SendNextUnfilled(BaseContestLog *);
    static void SendClearContestInFrame(BaseContestLog *);
    static void SendTabSandP();

@@ -1,4 +1,6 @@
 #include <QScrollArea>
+#include <QDesktopServices>
+
 #include <QLabel>
 #include "MShowMessageDlg.h"
 #include "MinosLoggerEvents.h"
@@ -948,8 +950,68 @@ bool TSingleLogFrame::doKeyPressEvent( QKeyEvent* event )
     // each dependant ContestPage also needs this
     return GJVQSOLogFrame->doKeyPressEvent(event);
 }
+void TSingleLogFrame::doSendEntry(QString expName)
+{
+    // expName is the exported filename, not yet usable
 
-QString TSingleLogFrame::makeEntry( bool saveMinos )
+    // here we have to set up and execute the magic
+    // to trigger Petes web site
+
+    // first, check for VHF or HF
+    // For HF the link is e.g.
+    // https://www.rsgbcc.org/cgi-bin/hfenter.pl?Contest=DX%20Contest&year=2022
+    // I suspect section and club ar as for VHF
+
+    // https://www.rsgbcc.org/cgi-bin/vhfentertest.pl?year=2022&Contest=70MHz+UKAC&Band=17+Nov&Req=Date&Section=AO&Category=&Club=Parallel+Lines+CG&this=NEXT
+
+    // so we need
+    // Contest Name
+    // year
+    // band (or if UKAC date)
+    // section
+    // club name
+
+    LoggerContestLog * ct = dynamic_cast<LoggerContestLog *>( contest );
+    if ( !ct )
+    {
+       return;
+    }
+    QString cname = ct->VHFContestName.getValue();
+    cname.replace(" ", "+");    // replaces in-situ
+    QString club = ct->entrant.getValue();
+    club.replace(" ", "+");
+    //sendurlQString dtgStart = ct->DTGStart.getValue();
+    QDateTime  contestStart = CanonicalToTDT(ct->DTGStart.getValue());
+
+    QString band;
+    QString year = contestStart.toString("yyyy");
+    if (cname.contains("UKAC", Qt::CaseSensitive))
+    {
+        band = contestStart.toString("dd+MMM");
+    }
+    else
+    {
+        band = ct->contestBands.getValue();
+    }
+    QString section = ct->entSect.getValue();
+    QString category;
+
+    // https://www.rsgbcc.org/cgi-bin/hfenter.pl?Contest=DX%20Contest&year=2022
+    // I suspect section and club ar as for VHF
+
+    // https://www.rsgbcc.org/cgi-bin/vhfentertest.pl?year=2022&Contest=70MHz+UKAC&Band=17+Nov&Req=Date&Section=AO&Category=&Club=Parallel+Lines+CG&this=NEXT
+    QString target = QString("%1?year=-%2&contest=%3&Band=%4&Req=Date&Section=%5&Category=%6&Club=%7&this=NEXT")
+                         .arg("https://www.rsgbcc.org/cgi-bin/vhfentertest.pl")
+                         .arg(year)
+                         .arg(cname)
+                         .arg(band)
+                         .arg(section)
+                         .arg(category)
+                         .arg(club)
+        ;
+    QDesktopServices::openUrl(QUrl(target));
+}
+QString TSingleLogFrame::makeEntry( bool saveMinos, bool sendEntry )
 {
    LoggerContestLog * ct = dynamic_cast<LoggerContestLog *>( contest );
    if ( !ct )
@@ -957,7 +1019,7 @@ QString TSingleLogFrame::makeEntry( bool saveMinos )
       return "";
    }
 
-   TEntryOptionsForm EntryDlg( this, QSharedPointer<ContestDetailsTransferObject>(), ct, saveMinos  );
+   TEntryOptionsForm EntryDlg( this, QSharedPointer<ContestDetailsTransferObject>(), ct, saveMinos, sendEntry  );
    if ( saveMinos )
    {
       EntryDlg.setWindowTitle(tr("Save imported log as a .minos file"));
@@ -966,6 +1028,10 @@ QString TSingleLogFrame::makeEntry( bool saveMinos )
    {
       ct->commonSave( false );
       QString expName = EntryDlg.doFileSave( );
+      if (sendEntry)
+      {
+          doSendEntry(expName);
+      }
       return expName;
    }
    return "";
@@ -1509,11 +1575,11 @@ int TSingleLogFrame::getCurrentBearing()
 }
 //---------------------------------------------------------------------------
 
-void TSingleLogFrame::on_MakeEntry(BaseContestLog *ct)
+void TSingleLogFrame::on_MakeEntry(BaseContestLog *ct, bool e)
 {
     if (ct == contest)
     {
-       makeEntry( false );
+       makeEntry( false, e );
     }
 }
 void TSingleLogFrame::on_AfterSelectContact( QSharedPointer<BaseContact>lct, BaseContestLog *ct)

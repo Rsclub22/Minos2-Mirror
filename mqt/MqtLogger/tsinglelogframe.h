@@ -81,7 +81,7 @@ public:
     void addAllQSOsToBandmap();
 
     void setActiveControl( int *Key );
-    QString makeEntry( bool saveMinos );
+    QString makeEntry(bool saveMinos , bool sendEntry);
     void exportContest();
     void QSOTreeSelectContact( QSharedPointer<BaseContact> lct );
 
@@ -204,6 +204,7 @@ private:
     void buildScreen(SCScreen &s, int t, int &auxInstance);
 
     void setQrzDisplayFrameLoaded(bool loaded);
+    void doSendEntry(QString expName);
 private slots:
     void onQSOTable_doubleClicked(const QModelIndex &index);
 
@@ -218,7 +219,7 @@ private slots:
     void NextContactDetailsTimerTimer();
     void PublishTimerTimer();
     void HideTimerTimer();
-    void on_MakeEntry(BaseContestLog*);
+    void on_MakeEntry(BaseContestLog*, bool e);
 
     void on_AfterSelectContact(QSharedPointer<BaseContact> lct, BaseContestLog *contest);
     void on_AfterLogContact(BaseContestLog *ct);

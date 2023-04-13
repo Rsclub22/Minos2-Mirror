@@ -1725,7 +1725,7 @@ void ContestDetails::on_OKButton_clicked()
 void ContestDetails::on_EntDetailButton_clicked()
 {
     getDetails( );   // override from the window
-    TEntryOptionsForm EntryDlg( this, contestTransferObject, nullptr, true );        // don't show the export options
+    TEntryOptionsForm EntryDlg( this, contestTransferObject, nullptr, true, false );        // don't show the export options
     if ( EntryDlg.exec() == QDialog::Accepted )
        setDetails( );
 

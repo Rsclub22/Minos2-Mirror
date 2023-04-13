@@ -567,6 +567,8 @@ void TLogContainer::setupMenus()
     //TabPopup.addAction(AnalyseMinosLogAction);
     newAction( QT_TR_NOOP("Cancel"), &TabPopup, &TLogContainer::CancelClick);
 
+    EnterAction = newAction(QT_TR_NOOP("Create Entry and send to RSGB"), ui->menuEnter, &TLogContainer::EnterActionExecute);
+
     HelpAction = newAction(QT_TR_NOOP("Help..."), ui->menuHelp, &TLogContainer::HelpActionExecute);
     CheckUpdatesAction = newAction(QT_TR_NOOP("Check For Updates..."), ui->menuHelp, &TLogContainer::CheckUpdatesActionExecute);
     HelpAboutAction = newAction(QT_TR_NOOP("About..."), ui->menuHelp, &TLogContainer::HelpAboutActionExecute);
@@ -1230,11 +1232,16 @@ void TLogContainer::AppendAdifActionExecute()
         tslf->startNextEntry();   //(AppendAdifActionExecute())
     }
 }
+void TLogContainer::EnterActionExecute()
+{
+    BaseContestLog * ct = TContestApp::getContestApp() ->getCurrentContest();
+    MinosLoggerEvents::SendMakeEntry(ct, true);
+}
 
 void TLogContainer::MakeEntryActionExecute()
 {
     BaseContestLog * ct = TContestApp::getContestApp() ->getCurrentContest();
-    MinosLoggerEvents::SendMakeEntry(ct);
+    MinosLoggerEvents::SendMakeEntry(ct, false);
 }
 void TLogContainer::StatsActionExecute()
 {
@@ -1507,7 +1514,7 @@ BaseContestLog * TLogContainer::addSlot(ContestDetails *ced, const QString &fnam
 
          if ( contest->needsExport() )      // imported from an alien format (e.g. .log)
          {
-            QString expName = f->makeEntry( true );
+            QString expName = f->makeEntry( true, false );
             if ( expName.size() )
             {
                closeSlot(tno, true );
