@@ -970,17 +970,14 @@ void TSingleLogFrame::doSendEntry(QString expName)
        return;
     }
     QString cname = ct->VHFContestName.getValue();
-    cname.replace(" ", "+");    // replaces in-situ
     QString club = ct->entrant.getValue();
-    club.replace(" ", "+");
-    //sendurlQString dtgStart = ct->DTGStart.getValue();
     QDateTime  contestStart = CanonicalToTDT(ct->DTGStart.getValue());
 
     QString band;
     QString year = contestStart.toString("yyyy");
     if (cname.contains("UKAC", Qt::CaseSensitive))
     {
-        band = contestStart.toString("dd+MMM");
+        band = contestStart.toString("dd MMM");
     }
     else
     {
@@ -1004,7 +1001,7 @@ void TSingleLogFrame::doSendEntry(QString expName)
     }
     QString target = QString("%1?"
                              "year=%2&"
-                             "contest=%3&"
+                             "Contest=%3&"
                              "Band=%4&"
                              "Req=Date&"
                              "Section=%5&"
@@ -1021,7 +1018,9 @@ void TSingleLogFrame::doSendEntry(QString expName)
                          .arg(club)
         ;
 
-    trace("Working version is           https://www.rsgbcc.org/cgi-bin/vhfentertest.pl?year=2022&Contest=70MHz+UKAC&Band=17+Nov&Req=Date&Section=AO&Category=&Club=Parallel+Lines+CG&this=NEXT");
+    target.replace(" ", "+");    // replaces in-situ
+
+//    trace("Working version is          https://www.rsgbcc.org/cgi-bin/vhfentertest.pl?year=2022&Contest=70MHz+UKAC&Band=17+Nov&Req=Date&Section=AO&Category=&Club=Parallel+Lines+CG&this=NEXT");
 
     trace("About to open URL for entry " + target);
     bool openRet = QDesktopServices::openUrl(QUrl(target));

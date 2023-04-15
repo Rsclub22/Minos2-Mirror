@@ -105,5 +105,15 @@ class CTYCalendarYear : public CalendarYear
         virtual QString getPath();
         virtual QString getURL();
 };
-
+class ClubListCalendarYear : public CalendarYear
+{
+        virtual QString getSite();
+    public:
+        ClubListCalendarYear ( int year ) : CalendarYear ( ectVHF, year )
+        {
+        }
+        virtual QString getPath();
+        virtual QString getURL();
+        virtual bool downloadProvisionalFile (bool);
+};
 #endif

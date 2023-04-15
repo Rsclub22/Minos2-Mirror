@@ -334,6 +334,7 @@ void TCalendarForm::downloadFiles()
     QVector<QSharedPointer<CalendarYear> > yearList;
 
     yearList.push_back ( QSharedPointer<CalendarYear> ( new CTYCalendarYear ( 0 ) ) );
+    yearList.push_back ( QSharedPointer<CalendarYear> ( new ClubListCalendarYear ( 0 ) ) );
     for ( int i = LOWURLYEAR; i <= HIGHYEAR; i++ )
     {
         yearList.push_back ( QSharedPointer<CalendarYear> ( new VHFCalendarYear ( i ) ) );

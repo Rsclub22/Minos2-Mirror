@@ -66,7 +66,8 @@ private:
    void setSelectedAntenna(QString s);
 
    void setBandBoxes(QString bandStr, QString bandsList);
-public Q_SLOTS:
+   void loadClubNames(QString groupName);
+   public Q_SLOTS:
    virtual void accept() override;
    virtual void reject() override;
 

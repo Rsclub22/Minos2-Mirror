@@ -134,6 +134,7 @@ cp $DIR/mqt/*.ico .
 cd Configuration
 
 wget https://www.country-files.com/cty/cty.dat -O cty.dat
+wget https://www.rsgbcc.org/cgi-bin/vhfenter.pl?afsdownload=y -O clublist.txt
 wget https://www.rsgbcc.org/vhf/vhfcontests22.xml -O vhfcontests22.xml
 wget https://www.rsgbcc.org/vhf/vhfcontests23.xml -O vhfcontests23.xml
 

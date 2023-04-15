@@ -168,7 +168,84 @@ ContestDetails::~ContestDetails()
 {
     delete ui;
 }
+void ContestDetails::loadClubNames(QString groupName)
+{
+    // we cannot just load from the file; we need to lose the first lines and take note of the "affiliated" flag and comment if NOT affiliated
 
+
+    ui->clubComboBox->clear();
+
+    int goffset = -1;
+
+    QString fname = "./Configuration/clublist.txt";
+
+    QStringList stringsRead;
+    QFile textFile( fname );
+    if ( textFile.open( QIODevice::ReadOnly ) )
+    {
+       QTextStream textStream( &textFile );
+       while ( true )
+       {
+           QString line = textStream.readLine();
+           if ( line.isNull() )
+               break;
+           else
+               if ( !line.isEmpty() )
+                   stringsRead.append( line.trimmed() );
+       }
+       stringsRead.sort( Qt::CaseInsensitive );
+       stringsRead.removeDuplicates();
+
+       ui->clubComboBox->addItem( tr("(None)"), 0 );
+
+       for ( int i = 1; i < stringsRead.count(); i++ )  // first line is a date
+       {
+           QString s = stringsRead.at( i );
+           QString c;
+           bool affiliated = false;
+
+           int l = s.size();
+           if (l > 2)
+           {
+               if ( s[ l - 1 ] == '1' )
+               {
+                   affiliated = true;
+               }
+               s = s.left( l - 2 );
+               c = s;
+           }
+           if (!affiliated)
+           {
+               c = "(" + s + ")";
+           }
+           if ( s.toLower() == groupName.toLower() )
+           {
+               goffset = i;
+           }
+           ui->clubComboBox->addItem( c, ( affiliated ? 1 : 0 ) );
+       }
+       if ( goffset >= 0 )
+       {
+           ui->clubComboBox->setCurrentIndex( goffset );
+       }
+       else
+       {
+           if (!groupName.isEmpty())
+           {
+               ui->clubComboBox->setCurrentText( "(" + groupName + ")" );
+           }
+       }
+
+    }
+
+//    bool affiliated = false;
+//    if ( goffset >= 0 )
+//    {
+//       int a = ui->clubComboBox->currentData().toInt();
+//       affiliated = ( a != 0 );
+//    }
+
+}
 
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
@@ -186,6 +263,7 @@ void ContestDetails::setDetails( LoggerContestLog * pcont )
 {
    if ( !pcont )
       return ;
+
    inputcontest = pcont;
    contestTransferObject = QSharedPointer<ContestDetailsTransferObject>(new ContestDetailsTransferObject());
    contestTransferObject->getFromContest(pcont);
@@ -472,6 +550,8 @@ void ContestDetails::setDetails(  )
        j++;
    }
    ui->screenLayoutCombo->setCurrentIndex(crow);
+
+   loadClubNames(contestTransferObject->entrant.getValue());
 
    enableControls();
    focusChange(nullptr, false, nullptr);
@@ -1599,6 +1679,22 @@ QWidget * ContestDetails::getDetails( )
     contestTransferObject->validateLoc();
 
     contestTransferObject->screenLayout.setValue(ui->screenLayoutCombo->currentText());
+
+    QString club = ui->clubComboBox->currentText();
+
+    if (club == tr("(None)"))
+    {
+        contestTransferObject->entrant.setValue(QString());
+    }
+    else
+    {
+        if (club[0] == '(')
+        {
+            club = club.mid(1, club.length() - 2);
+        }
+
+        contestTransferObject->entrant.setValue(club);
+    }
 
     return nextD;
 }
