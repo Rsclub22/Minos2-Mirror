@@ -326,7 +326,7 @@ void TSingleLogFrame::createScreenComponents()
     CribSheet->setLineWidth(0);
     CribSheet->setMidLineWidth(0);
 
-    MinosSplitter *cribSplitter = new MinosSplitter(CribSheet);
+    cribSplitter = new MinosSplitter(CribSheet);
     cribSplitter->setObjectName(QStringLiteral("cribSplitter"));
     cribSplitter->setOrientation(Qt::Vertical);
 
@@ -1245,8 +1245,8 @@ void TSingleLogFrame::onShowCribBand()
             show = true;
         }
     }
-
-    CurrentBandLabel->setVisible(show);
+    int topSplit = show?1:0;
+    cribSplitter->setSizes({topSplit, 100});
 }
 void TSingleLogFrame::NextContactDetailsTimerTimer( )
 {

@@ -52,6 +52,7 @@ public:
     RotPresets *rotPresets = nullptr;
 
     QFrame *CribSheet= nullptr;
+    MinosSplitter *cribSplitter = nullptr;
     QLabel *NextContactDetailsLabel = nullptr;
     QLabel *CurrentBandLabel = nullptr;
 
