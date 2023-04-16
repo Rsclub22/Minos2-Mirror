@@ -86,7 +86,7 @@ void TSingleLogFrame::buildFrame(int slotNo)
 
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::doColumnChanges, this, &TSingleLogFrame::on_doColumnChanges);
 
-
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::ShowCribBand, this, &TSingleLogFrame::onShowCribBand);
     // RigControl Updates
     // From rig controller
     connect(LogContainer->sendDM, &TSendDM::setRadioList, this, &TSingleLogFrame::on_SetRadioList);
@@ -1150,7 +1150,20 @@ void TSingleLogFrame::on_doColumnChanges(BaseContestLog *b)
         startNextEntry();             // (on_doColumnChanges) this does a restorePartial
     }
 }
+void TSingleLogFrame::onShowCribBand()
+{
+    bool show;
+    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpShowCribBand, show );
+    if (!contest->isHF())
+    {
+        if (contest->contestBands != contest->currentBand)
+        {
+            show = true;
+        }
+    }
 
+    CurrentBandLabel->setVisible(show);
+}
 void TSingleLogFrame::NextContactDetailsTimerTimer( )
 {
     if ( contest )

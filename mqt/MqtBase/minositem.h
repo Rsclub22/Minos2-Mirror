@@ -86,6 +86,14 @@ private:
           val = rhs.val;
           return *this;
       }
+      bool operator == ( const MinosItem &rhs )
+      {
+          return (rhs.val == val);
+      }
+      bool operator != ( const MinosItem &rhs )
+      {
+          return (rhs.val != val);
+      }
       void addIfDirty( RPCParamStruct *st, const QString &stName, bool &d ) const
       {
          d |= isDirty();

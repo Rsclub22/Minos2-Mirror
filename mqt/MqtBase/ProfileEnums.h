@@ -64,6 +64,7 @@ enum LOGGERPROFILE {
     elpLocMapCentre,
     elpTabforSandP,
     elpShowAuxHeaders,
+    elpShowCribBand,
     elpShowQSOMapGrid,
     elpShowQSOMapLines,
     elpMapShowCluster,

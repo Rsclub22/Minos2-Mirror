@@ -280,6 +280,7 @@ private slots:
     void onQrzCallsignRequest(QString callsign);
     void onQrzInfoToLog(QString callsign, QString qraLocator, QString name);
     void viewColumn();
+    void onShowCribBand();
 };
 
 #endif // TSINGLELOGFRAME_H
