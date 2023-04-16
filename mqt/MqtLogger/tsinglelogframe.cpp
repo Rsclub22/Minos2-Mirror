@@ -724,6 +724,7 @@ void TSingleLogFrame::buildRow(ContestPage *cp, SCRow &scrow, int &auxInstance, 
                 {
                     elementScrollArea->setWidget(CribSheet);
                     CribSheet->setVisible(true);
+                    onShowCribBand();
                     break;
                 }
                 case sctThisMatch:
@@ -1154,7 +1155,7 @@ void TSingleLogFrame::onShowCribBand()
 {
     bool show;
     TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpShowCribBand, show );
-    if (!contest->isHF())
+    if (contest->isHF())
     {
         if (contest->contestBands != contest->currentBand)
         {
