@@ -63,6 +63,7 @@ signals:
    void MainRaised();
    void QSOMargins();
    void showAuxHeaders();
+   void ShowCribBand();
    void bandMapLimitsChanged();
    void fKey(BaseContestLog *c, int e, int carr);
    void redrawQSOMap(bool grid, bool lines, bool cluster, int cldist);
@@ -176,6 +177,7 @@ public:
     static void SendReconnectFlagToClusterServer(bool state);
     static void SendQRZInfoToLog(QString callsign, QString locator, QString name);
     static void SendShowAuxHeaders();
+    static void SendShowCribBand();
     static void sendBandmapLimitsChanged();
 
     static void SendRedrawQSOMap(bool grid, bool lines, bool cluster, int cldist);

@@ -97,6 +97,10 @@ void MinosLoggerEvents::SendShowAuxHeaders()
 {
     emit mle.showAuxHeaders();
 }
+void MinosLoggerEvents::SendShowCribBand()
+{
+    emit mle.ShowCribBand();
+}
 void MinosLoggerEvents::SendRedrawQSOMap(bool grid, bool lines, bool cluster, int cldist)
 {
     emit mle.redrawQSOMap(grid, lines, cluster, cldist);

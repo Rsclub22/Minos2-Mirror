@@ -118,6 +118,8 @@ BundleFile::BundleFile( PROFILES p )
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpBandmapOldStyle, "OldStyleBandmap", false, QT_TR_NOOP("Old style of band map"), QT_TR_NOOP("Old style of band map"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpShowAuxHeaders, "ShowAuxHeaders", true, QT_TR_NOOP("Show Auxiliary Headers"), QT_TR_NOOP("Show Auxiliary Headers"), false ) ) );
 
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpShowCribBand, "ShowCribBand", true, QT_TR_NOOP("Show Crib Band"), QT_TR_NOOP("Show Crib Band"), false ) ) );
+
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpShowQSOMapGrid, "ShowQSOMapGrid", true, QT_TR_NOOP("Show QSO Map Grid"), QT_TR_NOOP("Show QSO Map Grid"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpShowQSOMapLines, "ShowQSOMapLines", true, QT_TR_NOOP("Show QSO Map Lines"), QT_TR_NOOP("Show QSO Map Lines"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpMapShowCluster, "MapShowCluster", true, QT_TR_NOOP("Show Cluster spots on map"), QT_TR_NOOP("Show Cluster spots on map"), false ) ) );

@@ -36,6 +36,7 @@ private:
     ConfigurationOption ExpertMode;
     ConfigurationOption AlternateFKeys;
     ConfigurationOption ShowAuxHeaders;
+    ConfigurationOption ShowSingleBandInCrib;
     ConfigurationOption ShowQSOMapGrid;
     ConfigurationOption ShowQSOMapLines;
     ConfigurationOption MapShowCluster;

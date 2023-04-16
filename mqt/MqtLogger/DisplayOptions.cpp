@@ -35,6 +35,7 @@ void DisplayOptions::initialise()
     AlternateFKeys.initialise(&TContestApp::getContestApp() ->displayBundle, edpAlternateFKeys, ui->alternateFKeysCheckBox);
     ShowAuxHeaders.initialise(&TContestApp::getContestApp() ->loggerBundle, elpShowAuxHeaders, ui->ShowAuxHeadersCheckBox);
 
+    ShowSingleBandInCrib.initialise(&TContestApp::getContestApp() ->loggerBundle, elpShowCribBand, ui->nextContactBandcb);
     ShowQSOMapGrid.initialise(&TContestApp::getContestApp() ->loggerBundle, elpShowQSOMapGrid, ui->QSOMapShowGrid);
     ShowQSOMapLines.initialise(&TContestApp::getContestApp() ->loggerBundle, elpShowQSOMapLines, ui->QSOMapShowLines);
 
@@ -165,6 +166,10 @@ void DisplayOptions::finalise()
     if (ShowAuxHeaders.finalise())
     {
         MinosLoggerEvents::SendShowAuxHeaders();
+    }
+    if (ShowSingleBandInCrib.finalise())
+    {
+        MinosLoggerEvents::SendShowCribBand();
     }
     bool gchanged = ShowQSOMapGrid.finalise();
     bool lchanged = ShowQSOMapLines.finalise();
