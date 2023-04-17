@@ -177,42 +177,39 @@ void RemoteLogs::on_notify(AnalysePubSubNotify an, const QString /*from*/ )
                     if ( log == stat->slotList.end() )
                     {
                         QSharedPointer<MonitoredLog> ml(new MonitoredLog(stat));
-                        emit newMonitoredLog(ml);
 
                         ml->initialise( router, key );
-
-                        if (args.count() >= 4)
-                        {
-                            ml->setDisplayName(args[1]);
-                            ml->setStartEnd(args[2], args[3]);
-                        }
-                        else if (args.count() >= 2)
-                        {
-                            ml->setDisplayName(args[1]);
-                        }
-                        if (args.count() >= 1)
-                        {
-                            ml->setExpectedStanzaCount( args[0].toInt() );
-                        }
-                        else
-                        {
-                            ml->setDisplayName(key);
-                        }
-
-                        ml->setState(state);
                         stat->slotList.push_back( ml );
-                        emit syncNeeded();
+                        log = std::find_if( stat->slotList.begin(), stat->slotList.end(), MonitoredLogCmp( key ) );
 
+                        emit newMonitoredLog(ml);
+
+                    }
+                    (*log)->setState(state);
+                    if (args.count() >= 4)
+                    {
+                        (*log)->setDisplayName(args[1]);
+                        (*log)->setStartEnd(args[2], args[3]);
+                    }
+                    else if (args.count() >= 2)
+                    {
+                        (*log)->setDisplayName(args[1]);
+                    }
+                    if (args.count() >= 1)
+                    {
+                        (*log)->setExpectedStanzaCount( args[0].toInt() );
                     }
                     else
                     {
-                        if (args.count() >= 1)
-                        {
-                            trace(QString("args 0 %1 ").arg(args[0]));
-                            (*log)->setExpectedStanzaCount( args[0].toInt() );
-                        }
-                        (*log)->setState(state);
+                        (*log)->setDisplayName(key);
                     }
+
+                    if (args.count() >= 1)
+                    {
+                        (*log)->setExpectedStanzaCount( args[0].toInt() );
+                    }
+
+                    emit syncNeeded();
                 }
                 else
                 {
