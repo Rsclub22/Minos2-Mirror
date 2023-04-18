@@ -203,27 +203,38 @@ int Callsign::validate( )
     else
     {
         // at least two parts
-        if ( isMobileString ( p3 ) )
+        if ( isMobileString ( p3 )  )
         {
-            mobileSuffix = p3;
+            // all 3 - e.g. UA9ABC/3/P
+
+            suffix = p3;
+
         }
         else
-            if ( isMobileNumeric ( p3 ) )
+        {
+            if ( isMobileString ( p3 ) )
             {
                 mobileSuffix = p3;
             }
+            else
+                if ( isMobileNumeric ( p3 ) )
+                {
+                    mobileSuffix = p3;
+                }
 
-        if ( isMobileString ( p2 ) )
-        {
-            mobileSuffix = p2;
-            call = p1;
-        }
-        else
-            if ( isMobileNumeric ( p2 ) )
+            if ( isMobileString ( p2 ) )
             {
                 mobileSuffix = p2;
                 call = p1;
             }
+            else
+                if ( isMobileNumeric ( p2 ) )
+                {
+                    mobileSuffix = p2;
+                    call = p1;
+                }
+            suffix = mobileSuffix;
+        }
         if ( call.isEmpty() )
         {
             // decide which is call and which is prefix - or is the whole thing broken
@@ -275,8 +286,8 @@ int Callsign::validate( )
         }
     }
 
+
     locCtryPrefix = countryPrefix;
-    suffix = mobileSuffix;
 
     // NB that leading spaces may be genuine wildcards, and so may
     // actually be significant; we should reject as invalid
