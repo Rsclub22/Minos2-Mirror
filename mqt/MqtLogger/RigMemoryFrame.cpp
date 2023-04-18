@@ -63,7 +63,6 @@ RigMemoryFrame::RigMemoryFrame(StackedInfoFrame *parent) :
 
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::TimerDistribution, this, &RigMemoryFrame::checkTimerTimer);
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::RigFreqChanged, this, &RigMemoryFrame::onRigFreqChanged);
-    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::RotBearingChanged, this, &RigMemoryFrame::onRotBearingChanged);
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::AfterLogContact, this, &RigMemoryFrame::on_AfterLogContact, Qt::QueuedConnection);
 
     restoreRigMemTableColumns();
@@ -385,13 +384,6 @@ void RigMemoryFrame::checkTimerTimer()
     emit proxyModel.headerDataChanged(Qt::Vertical, 0, model.rowCount() - 1);
 }
 void RigMemoryFrame::onRigFreqChanged(Frequency /*f*/, BaseContestLog *c)
-{
-    if (ct == c)
-    {
-        checkTimerTimer();
-    }
-}
-void RigMemoryFrame::onRotBearingChanged(int/*f*/, BaseContestLog *c)
 {
     if (ct == c)
     {

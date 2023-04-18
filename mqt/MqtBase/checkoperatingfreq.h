@@ -13,7 +13,6 @@ public:
     CheckOperatingFreq();
 
     int freqValid(const QString &band, const QString &mode, const Frequency &freq);
-    bool modeExists(const QString &band, const QString &mode);
     int getFreqLimitsForDial(ModeFreqDetail<Frequency> &listOfFreqs, const QString &band, const QString &mode);
 };
 

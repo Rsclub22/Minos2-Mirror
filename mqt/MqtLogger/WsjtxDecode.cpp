@@ -108,6 +108,7 @@ QString decodeMessage::getMStage() const
     }
     return "N/A";
 }
+
 bool decodeMessage::checkAsContact()
 {
     BaseContestLog * cc = MinosParameters::getMinosParameters() ->getCurrentContest();
@@ -173,10 +174,6 @@ Callsign WsjtxDecode::getMyCall() const
     return myCall;
 }
 
-Locator WsjtxDecode::getMyGrid() const
-{
-    return myGrid;
-}
 WsjtxDecode::WsjtxDecode()
 {
     

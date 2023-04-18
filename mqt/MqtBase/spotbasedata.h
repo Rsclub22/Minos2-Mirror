@@ -139,9 +139,6 @@ public:
     void setDxLocatorIsFromNode(const bool dxLocatorIsFromNode_){dxLocatorIsFromNode = dxLocatorIsFromNode_;}
     bool getDxLocatorIsFromNode() const {return dxLocatorIsFromNode;}
 
-    void setAskQrzFailed(const bool askQrzFailed_){askQrzFailed = askQrzFailed_;}
-    bool getAskQrzFailed() const {return askQrzFailed;}
-
     void setDxDist(const QString dxDist_){dxDist = dxDist_.trimmed();}
     QString getDxDist() const {return dxDist;}
 
@@ -210,7 +207,6 @@ private:
 
     // from ClusterSpotBaseData
     bool dxLocatorIsFromNode = false;
-    bool askQrzFailed = false;
     QString dxDist;
     QString dxBrg;
     bool dxCallWorked = false;

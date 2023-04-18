@@ -18,7 +18,6 @@ public:
 
     QString getText();
 
-    void setText(QString text);
     bool isValid();
 
 

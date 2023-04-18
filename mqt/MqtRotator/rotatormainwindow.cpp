@@ -75,10 +75,8 @@ RotatorMainWindow::RotatorMainWindow(QWidget *parent) :
 
     QSettings settings;
     geoStr = "geometry";
-    if (appName.length() > 0)
-    {
-        geoStr = geoStr + appName;
-    }
+    geoStr = geoStr + appName;
+
     QByteArray geometry = settings.value(geoStr).toByteArray();
     if (geometry.size() > 0)
         restoreGeometry(geometry);
@@ -156,58 +154,18 @@ RotatorMainWindow::RotatorMainWindow(QWidget *parent) :
 
     setupAntenna->setAppName(appName);
 
-
-
-    if (appName.length() > 0)
-    {
-        setSelectAntennaBoxVisible(false);
-        setAntennaNameLabelVisible(true);
-    }
-    else
-    {
-        setSelectAntennaBoxVisible(true);
-        setAntennaNameLabelVisible(false);
-    }
-
     brakedelay = 1 * 1000;
 
-
     rotatorBearing = COMPASS_ERROR; // force first update
-
 
     rotTimeCount = 0;
     RotateTimer.start(200);  // to set timeout for antenna rotating
 
-
-
     rotlog->getBearingLogConfig();
 
-
-    //logAntError = false;
     initSelectAntennaBox();
 
-    if (appName.length() > 0)
-    {
-        logMessage((QString("Read Current Antenna for AppName %1 from logger").arg(appName)));
-
-    }
-    else
-    {
-        logMessage((QString("Read Current Antenna for Local selection")));
-
-        setupAntenna->readCurrentAntenna();
-        ui->selectAntennaBox->setCurrentText(setupAntenna->currentAntennaName);
-        if (setupAntenna->currentAntennaName == "")
-        {
-            logMessage(QString("No antenna selected or no antenna found for this appName, %1").arg(appName));
-            QString errmsg = HtmlFontColour(Qt::red) + tr("Please select an antenna or no antenna found!");
-            showStatusMessage(errmsg);
-            statusMsg = errmsg;
-            sendStatusLogger();
-        }
-
-        upDateAntenna();
-    }
+    setTestMode(appName.isEmpty());
 
     trace("*** Rotator Started ***");
 }
@@ -217,6 +175,45 @@ RotatorMainWindow::~RotatorMainWindow()
 
     delete msg;
     delete ui;
+}
+void RotatorMainWindow::setTestMode(bool test)
+{
+    trace(QString("testMode is %1 test parameter is %2").arg(testMode).arg(test));
+    if (test)
+    {
+        if (!testMode)
+        {
+            testMode = true;
+            liveAntenna = setupAntenna->currentAntennaName;
+            trace("save liveAntenna " + liveAntenna);
+        }
+        logMessage((QString("Read Current Antenna for Local selection")));
+        ui->testButton->setText(tr("Set Antenna from Logger"));
+    }
+
+    else
+    {
+        if (testMode)
+        {
+            trace("restore liveAntenna " + liveAntenna);;
+            testMode = false;
+
+            ui->selectAntennaBox->setCurrentText(liveAntenna);
+            setupAntenna->currentAntennaName = liveAntenna;
+            setupAntenna->saveCurrentAntenna();
+            msg->rotatorCache.invalidate();
+        }
+        ui->testButton->setText(tr("Test Antenna"));
+        logMessage((QString("Antenna Selection for Current Antenna, for AppName %1, will be from logger").arg(appName)));
+
+    }
+    upDateAntenna();
+    setSelectAntennaBoxVisible(testMode);
+    setAntennaNameLabelVisible(!testMode);
+}
+void RotatorMainWindow::on_testButton_clicked()
+{
+    setTestMode(!testMode);
 }
 
 
@@ -753,8 +750,8 @@ void RotatorMainWindow::displayBearing(int bearing)
     // send Bearing to displays
 
     // send to minos logger
-    //QString s = QString::number(displayBearing);
-    if (appName.length() > 0)
+
+    if (!testMode)
     {
         // send bearings to logger
         QString ol = "";
@@ -968,7 +965,6 @@ void RotatorMainWindow::upDateAntenna()
             }
 
 
-            //writeWindowTitle(appName);
             ui->antNameDisp->setText(setupAntenna->currentAntenna.antennaName);
             ui->usingLibText->setText(rotator->getLibraryName());
 
@@ -1026,7 +1022,7 @@ void RotatorMainWindow::upDateAntenna()
 
             rotatorBearing = 9999;      // force display update
            // update logger
-           if (appName.length() > 0)
+           if (!testMode)
            {
                sendStatusToLogStop();
                PubSubName psname(setupAntenna->currentAntennaName);
@@ -1060,16 +1056,15 @@ void RotatorMainWindow::upDateAntenna()
         ui->antNameDisp->setText("");
         ui->usingLibText->setText("");
         closeRotator();
-        if (appName.length() > 0)
+        if (!testMode)
         {
-            //writeWindowTitle(appName);
             sendStatusToLogDisConnected();
             sendStatusToLogStop();
         }
 
     }
 
-    if (appName.length() > 0)
+    if (!testMode)
     {
         msg->rotatorCache.publish();
     }
@@ -1901,7 +1896,7 @@ void RotatorMainWindow::rotatorError(int errorCode, QString cmd )
 
     errorCode *= -1;
     rotErrorFlag = true;
-    if (appName.length() >0)
+    if (!testMode)
     {
         sendStatusToLogError();
     }
@@ -1923,17 +1918,12 @@ void RotatorMainWindow::rotatorError(int errorCode, QString cmd )
 
      }
 
-
      closeRotator();
      rotErrorFlag = false;
-     if (appName.length() >0)
+     if (!testMode)
      {
          sendStatusToLogDisConnected();
      }
-
-
-
-
 }
 
 

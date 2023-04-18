@@ -58,7 +58,6 @@ public:
     TSingleLogFrame *findContest( const QString &pubname );
     TSingleLogFrame *findContest(BaseContestLog *ct );
     QVector<TSingleLogFrame *> getLogFrames();
-    int getLogFrameCount();
     int getSlotNo(TSingleLogFrame *) const;
 
     QVector<ContestPageControl *> contestPageControls;
@@ -79,10 +78,8 @@ public:
 
     QStringList getSessions();
     void updateSessionActions();
-    void closeSession();
     void selectSession(QString sessName);
 
-    void applyScreenLayouts();
     void selectLayout(QString layout);
 
     void doListOpenActionExecute(QWidget *p);
@@ -113,7 +110,6 @@ private:
 
     void enableActions();
 
-    QString getCurrentFile();
     void setCurrentFile(const QString &fileName);
     void removeCurrentFile(const QString &fileName);
     void updateRecentFileActions();
@@ -137,6 +133,8 @@ private:
 
     void FileImportActionExecute(bool hf);
     void FileNewActionExecute(bool hf);
+
+    QAction *EnterAction;
 
     QAction *HelpAction;
     QAction *HelpAboutAction;
@@ -231,6 +229,8 @@ private slots:
     void GoToSerialActionExecute();
     void NextUnfilledActionExecute();
 
+    void EnterActionExecute();
+
     void menuLogsActionExecute(bool);
 
     void ManageAppConfigsActionExecute();
@@ -245,7 +245,6 @@ private slots:
     void doScreenConfigAction();
 
     void stealFocus();
-
     void StatsActionExecute();
 public slots:
     void onArgsReceived(QString conarg);

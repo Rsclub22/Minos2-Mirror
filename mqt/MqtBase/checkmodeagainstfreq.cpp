@@ -7,8 +7,6 @@ checkModeAgainstFreq::checkModeAgainstFreq()
 
 }
 
-
-
 QString checkModeAgainstFreq::getMode(const QString &band, Frequency freq)
 {
     if (bandModeFreqList.contains(band))
@@ -17,7 +15,6 @@ QString checkModeAgainstFreq::getMode(const QString &band, Frequency freq)
 
         for (QMap<QString, ModeFreqDetail<Frequency> >::const_iterator i = modeList.constBegin(); i != modeList.constEnd(); i++)
         {
-
             ModeFreqDetail<Frequency> freqs = i.value();
             for (auto const &freqLimits: qAsConst(freqs.freq))
             {
@@ -33,64 +30,7 @@ QString checkModeAgainstFreq::getMode(const QString &band, Frequency freq)
                 }
             }
         }
-
     }
 
     return NONE_MODE;
-}
-
-
-int checkModeAgainstFreq::confirmMode(QString &band, QString &mode, Frequency freq)
-{
-
-    QMap<QString, ModeFreqDetail<Frequency>> modeList;
-    ModeFreqDetail<Frequency> freqs;
-
-
-    if (bandModeFreqList.contains(band))
-    {
-        modeList = bandModeFreqList.value(band);
-        if (modeList.contains(mode))
-        {
-            freqs = modeList.value(mode);
-            for (auto const &freqLimits: qAsConst(freqs.freq))
-            {
-                if (freqLimits.count() == 0)
-                    continue;
-                if (freq >= freqLimits[0] && freq <= freqLimits[1])
-                {
-                    return MODE_FREQ_MATCH;
-
-                }
-            }
-
-            return NO_MODE_FREQ_MATCH;
-        }
-
-        return MODE_NOT_FOUND;
-    }
-
-    return BAND_NOT_FOUND;
-}
-
-
-
-// return false if band or mode doesn't exist - true if mode and band exists
-
-bool checkModeAgainstFreq::modeExists(QString &band, QString &mode)
-{
-
-    QMap<QString, ModeFreqDetail<Frequency>> modeList;
-
-    if (bandModeFreqList.contains(band))
-    {
-        modeList = bandModeFreqList.value(band);
-        if (modeList.contains(mode))
-        {
-            return true;
-        }
-    }
-
-    return false;
-
 }

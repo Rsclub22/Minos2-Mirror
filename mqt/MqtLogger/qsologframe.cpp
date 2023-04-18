@@ -798,10 +798,6 @@ void QSOLogFrame::on_FirstUnfilledButton_clicked()
     // ScanContest can work out how many there are - and we can display that on the button
        MinosLoggerEvents::SendNextUnfilled(contest);
 }
-void QSOLogFrame::setFirstUnfilledButtonEnabled(bool state)
-{
-    ui->FirstUnfilledButton->setEnabled(state);
-}
 
 void QSOLogFrame::MainOpComboBox_Exit()
 {
@@ -2379,10 +2375,6 @@ void QSOLogFrame::setFreq(Frequency f)
         emit freqChanged(f);
 
     }
-}
-void QSOLogFrame::sendFreq(Frequency f)
-{
-    emit sendFreqControl(f);
 }
 //---------------------------------------------------------------------------
 void QSOLogFrame::setRadioName(QString radioName)

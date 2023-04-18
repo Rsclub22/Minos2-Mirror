@@ -7,7 +7,6 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 #include <cmath>
-#include "contest.h"
 #include "cutils.h"
 #include "locator.h"
 #include "MinosParameters.h"
@@ -106,26 +105,6 @@ char lonlat( const QString &inqra, double &lon, double &lat, bool allowLoc4 )
 	  return locres;
    }
    return LOC_PARTIAL;
-}
-
-QString WtodbW(const QString &W )
-{
-   QString res;
-   double watts =W.toDouble();
-   if ( watts >= 0.00000001 )
-   {
-      double dbWatts = 10.0 * log10( watts );
-      res = QString::number( dbWatts );
-   }
-   return res;
-}
-
-QString dbWtoW(const QString &dbW )
-{
-   double dbWatts = dbW.toDouble();
-   double watts = pow( 10.0, dbWatts / 10.0 ) + 0.05;
-   QString res = QString::number(watts );
-   return res;
 }
 
 int normBrg( int mbear )

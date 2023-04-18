@@ -334,18 +334,6 @@ bool TContestApp::insertList(ContactList * p, int sno )
    listSlotList.insert( cs->slotno, cs );
    return true;
 }
-int TContestApp::getOccupiedListSlotCount()
-{
-   int cnt = 0;
-   for (auto const &i: qAsConst(listSlotList ))
-   {
-      if ( i && i->slot )
-      {
-         cnt++;
-      }
-   }
-   return cnt;
-}
 
 bool TContestApp::isListOpen( const QString fn )
 {
@@ -370,19 +358,6 @@ bool TContestApp::isContestOpen(const QString fn )
       }
    }
    return false;
-}
-
-
-BaseContestLog * TContestApp::findFirstContest()
-{
-    for (auto const &cs: qAsConst(contestSlotList ))
-   {
-      if ( cs->slot )
-      {
-         return cs->slot;
-      }
-   }
-   return nullptr;
 }
 int TContestApp::findContest( BaseContestLog * p )
 {

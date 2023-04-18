@@ -19,6 +19,53 @@ using port_type = MessageServer::port_type;
 namespace Ui {
 class WsjtxFrame;
 }
+class PointBonusMultSnr
+{
+    int points = -1;
+    int bonus = 0;
+    int mults = 0;
+    int snr = -100;
+public:
+    PointBonusMultSnr()
+    {
+
+    }
+    PointBonusMultSnr(decodeMessage &dc):points(dc.points), bonus(dc.bonus), mults(dc.mults), snr(dc.snr)
+    {
+
+    }
+    void clear()
+    {
+        points = -1;
+        bonus = 0;
+        mults = 0;
+        snr = -100;
+    }
+    bool operator>(PointBonusMultSnr &rhs)
+    {
+        if (mults > rhs.mults)
+            return true;
+        else if (mults == rhs.mults)
+        {
+            if (points + bonus > rhs.points + rhs.bonus)
+                return true;
+            else if (points + bonus == rhs.points + rhs.bonus)
+            {
+                if (snr > rhs.snr)
+                    return true;
+            }
+        }
+        return false;
+    }
+    bool operator==(PointBonusMultSnr &rhs)
+    {
+        if ((mults == rhs.mults) && (points + bonus == rhs.points + rhs.bonus) && snr == rhs.snr)
+            return true;
+
+        return false;
+    }
+};
+
 class BlCall
 {
 public:
@@ -97,6 +144,9 @@ public:
     int decodeStartSize = 0;
 
 private:
+    enum QSOStates {NoQSOWaiting, NoQSOCallingCQ, NoQSOCallingThem, InQSO};
+
+    QSOStates qsoState = NoQSOWaiting;
     Ui::WsjtxFrame *ui;
     TSingleLogFrame *tslf = nullptr;
     BaseContestLog *ct = nullptr;
@@ -149,15 +199,34 @@ private:
     void restoreWSJTXTableColumns();
     void saveWSJTXTableColumns();
 
-    void reply(decodeMessage &dc);
     void restoreSplitters();
-    void process_decodes();
     
     void getCQStrings();
     decodeMessage *parse_tx_message(QString atline, bool fromScrape);
 
     void showBlackList();
     bool blackListContains(const BlCall &bl);
+
+    int decodeEndSize = 0;
+    int minpoints = 0;
+    int minsnr = 0;
+    int bestOffset = -1;
+    PointBonusMultSnr bestPoints;
+
+    void startCQ();
+    void reply(decodeMessage &dc);
+
+    bool goodCQCall(decodeMessage &dc);
+    void getBestCQ73CallingMe();
+    void getBestToMe();
+    bool checkTheirCall();
+    void markBest();
+
+    void process_decodes();
+    void process_NoQSOWaiting();
+    void process_NoQSOCallingCQ();
+    void process_NoQSOCallingThem();
+    void process_InQSO();
 public slots:
     void add_client (QString const& id, QString const& version, QString const& revision);
 

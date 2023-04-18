@@ -70,7 +70,6 @@ public:
     void transferDetails(const ListContact *lct, const ContactList *matct );
     void transferDetails(QString cs, const QString loc, QString exchange, const bool fromBandmapOrMemory );
 
-    void setFirstUnfilledButtonEnabled(bool);
     void logTabChanged();
 
     void modeSentFromRig(QString mode);
@@ -279,7 +278,6 @@ private:
     void initLogRunButton();
     void runButtonOn();
     void runButtonOff();
-    void sendFreq(Frequency f);
 
     QString getRunMemoryFreq(int memoryNumber);
 

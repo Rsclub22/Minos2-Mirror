@@ -36,7 +36,6 @@ public:
         return children.size();
     }
 
-    bool isMatchLine();
     QSharedPointer<MatchContact> getMatchContact();
     BaseMatchContest *getMatchContest();
     MatchTreeItem *getParent();

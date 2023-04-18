@@ -50,10 +50,6 @@ private:
     QString bpskSpeed;
     QString rttySpeed;
 
-    HWND getTempHwnd()
-    {
-        return reinterpret_cast<HWND>(t->winId());
-    }
     WId getTempId()
     {
         return t->winId();

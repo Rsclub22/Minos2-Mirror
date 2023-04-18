@@ -25,27 +25,22 @@ public:
     static QString getEnginePath(QSettings &settings, QString engine);
     static QString getEnginePath(QString engine);
     static void setEnginePath(QSettings &settings, QString engine, QString path);
-    static void setEnginePath(QString engine, QString path);
 
     static QString getSpeed(QSettings &settings,QString mode);
     static QString getSpeed(QString mode);
     static void setSpeed(QSettings &settings,QString mode, QString speed);
-    static void setSpeed(QString mode, QString speed);
 
     static bool getEngineEnabled(QSettings &settings,QString engine);
     static bool getEngineEnabled(QString engine);
     static void setEngineEnabled(QSettings &settings,QString engine, bool s);
-    static void setEngineEnabled(QString engine, bool s);
 
     static QString getEngineSound(QSettings &settings,QString engine, QString io);
     static QString getEngineSound(QString engine, QString io);
     static void setEngineSound(QSettings &settings,QString engine, QString io, QString s);
-    static void setEngineSound(QString engine, QString io, QString s);
 
     static int getEnginePort(QSettings &settings,QString engine);
     static int getEnginePort(QString engine);
     static void setEnginePort(QSettings &settings,QString engine, int port);
-    static void setEnginePort(QString engine, int port);
 private slots:
     bool check();
 

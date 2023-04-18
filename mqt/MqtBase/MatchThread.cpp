@@ -152,6 +152,9 @@ void TMatchThread::on_DistrictSelect(QString
                                      #endif
                                      , BaseContestLog *c)
 {
+#ifndef NDEBUG
+   Q_UNUSED(sel)
+#endif
     BaseContestLog * ct = MinosParameters::getMinosParameters() ->getCurrentContest();
    if (c == ct)
    {
@@ -165,6 +168,9 @@ void TMatchThread::on_LocatorSelect(QString
                                     #endif
                                     , BaseContestLog *c)
 {
+#ifndef NDEBUG
+   Q_UNUSED(sel)
+#endif
     BaseContestLog * ct = MinosParameters::getMinosParameters() ->getCurrentContest();
    if (c == ct)
    {
@@ -282,27 +288,6 @@ void TMatchThread::ShowOtherMatchStatus( QString mess )
 {
    otherMatchStatus = mess;
 }
-QString TMatchThread::getOtherMatchStatus( )
-{
-   if ( matchThread )
-   {
-      return matchThread->otherMatchStatus;
-   }
-   return "";
-}
-void TMatchThread::ShowListMatchStatus( QString mess )
-{
-   listMatchStatus = mess;
-}
-QString TMatchThread::getListMatchStatus( )
-{
-   if ( matchThread )
-   {
-      return matchThread->listMatchStatus;
-   }
-   return "";
-}
-
 //=============================================================================
 void TMatchThread::matchCountry( QString cs )
 {
@@ -416,7 +401,7 @@ void Matcher::clearmatchall( )
    contestIndex = -1;
    contactIndex = -1;
    matchStarted = false;
-   matchRequired = false;
+   setMatchRequired(false);
 
    matchCollection->contestMatchList.clear();
 
@@ -433,7 +418,7 @@ void Matcher::clearmatchall( )
 // mark things that we want to start a match
 void Matcher::startMatch( QSharedPointer<CountryEntry> c )
 {
-   matchRequired = true;
+   setMatchRequired(true);
    matchStarted = false;				// if it started we need to stop it...
    tickct = 0;
    countryEntry = c;
@@ -445,7 +430,7 @@ void Matcher::initMatch( )
 {
    try
    {
-      if ( matchRequired )
+      if ( getMatchRequired() )
       {
          tickct++;
          if ( tickct < 5 )

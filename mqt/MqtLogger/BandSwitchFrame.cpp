@@ -31,11 +31,6 @@ int BandSwitchFrame::setButtonOnOff(QString band, bool on)
     return -1;
 }
 
-void BandSwitchFrame::setAllButtonsOff()
-{
-    bandSelButtons->setAllButtonsOff();
-}
-
 void BandSwitchFrame::selectSupportedBands(const QStringList &listOfBands)
 {
     bandSelButtons->selectSupportedBands(listOfBands);

@@ -13,13 +13,6 @@
 //---------------------------------------------------------------------------
 BaseMatchContest::~BaseMatchContest(){}
 
-QSharedPointer<MatchContact> BaseMatchContest::pcontactAt( int i )
-{
-    if (i > contactMatchList.size())
-        return QSharedPointer<MatchContact>();
-    return std::next(contactMatchList.begin(), i)->wt;
-}
-
 // Here we compare pointers, just to give an actual < operator
 bool MatchContactList::operator<( const BaseMatchContest& rhs ) const
 {

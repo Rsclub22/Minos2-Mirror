@@ -507,7 +507,11 @@ void EngineWindow::scanLine(int curLine)
     RxLine *rline = rxBuff.getRxLine(curLine);
     rline->clearFlags();
     QString line = rline->toString();
-    QRegExp separator("[( |\\-|_|)]");
+#if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
+    static QRegExp separator("[( |\\-|_|)]");
+#else
+    static QRegularExpression separator("[( |\\-|_|)]");
+#endif
     QStringList words = line.split(separator);
     int offset = 0;
     int endword = 0;

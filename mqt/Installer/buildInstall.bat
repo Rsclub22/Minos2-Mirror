@@ -106,6 +106,7 @@ xcopy /F /Y %MROOT%\mqt\ControlFiles\Configuration\FunctionKeyMessages .\Configu
 cd Configuration
 
 call powershell.exe "& {Invoke-WebRequest https://www.country-files.com/cty/cty.dat -Outfile cty.dat}"
+call powershell.exe "& {Invoke-WebRequest https://www.rsgbcc.org/cgi-bin/vhfenter.pl?afsdownload=y -Outfile clublist.txt}"
 call powershell.exe "& {Invoke-WebRequest https://www.rsgbcc.org/vhf/vhfcontests22.xml -Outfile vhfcontests22.xml}"
 call powershell.exe "& {Invoke-WebRequest https://www.rsgbcc.org/vhf/vhfcontests23.xml -Outfile vhfcontests23.xml}"
 

@@ -199,14 +199,6 @@ void writer::lwriteLine()
    QString l( 80, hl );					// horizontal line
    lwrite( l );
 }
-void writer::lwriteNl()
-{
-    qint64 ret = expfd->write("\r\n", 2);
-    if ( ret != 2 )
-   {
-      MinosParameters::getMinosParameters() ->mshowMessage( "bad reply from write!" );
-   }
-}
 void writer::lwriteFf()
 {
    //   ::write( expfd, "\f", 1 );
@@ -264,17 +256,6 @@ int toInt ( const QString &s, int def )
     }
     return def;
 }
-double toDouble ( const QString &s, double def )
-{
-    if ( !s.isEmpty() )
-    {
-        bool ok;
-        double d = s.toDouble(&ok);
-        if (ok)
-            return d;
-    }
-    return def;
-}
 QString makeStr( bool i )
 {
    return ( i ? "true" : "false" );
@@ -319,30 +300,6 @@ bool containsChars(QString s, const QList<QChar> chars)
     return state;
 
 }
-
-// replace with QChar c when a QChar from the QList is found.
-
-QString replaceChars(QString s, const QChar c, const QList<QChar> chars )
-{
-
-    for (auto i : chars)
-    {
-        s.replace(i, c);
-    }
-    return s;
-}
-
-// remove any QChars found in the QList from the QString
-QString removeChars(QString s, const QList<QChar> chars)
-{
-
-    for (auto i : chars)
-    {
-        s.remove(i, Qt::CaseInsensitive);
-    }
-    return s;
-}
-
 
 QString escapeXML ( const QString &value )
 {
@@ -490,14 +447,7 @@ void CSVToStringList( const QString &qs, QStringList &sl )
 
     csv.parseCsvLine(qs, sl);
 }
-void TSVToStringList( const QString &qs, QStringList &sl )
-{
-    sl.clear();
 
-    CsvReader csv('\t');
-
-    csv.parseCsvLine(qs, sl);
-}
 #ifdef RUBBISH
 CsvReader::CsvReader(){}
 
@@ -569,21 +519,6 @@ QString anchoredPattern(const QString &expression)
            + expression
            + QLatin1String(")\\z");
 }
-int getStringlistOffSet(QStringList supportedBands, QString contestBandStr)
-{
-    // needed because QStringList::indexOf not introduced until 5.13
-    int i = 0;
-    while(i != supportedBands.count())
-    {
-        if (contestBandStr == supportedBands[i])
-        {
-            return i;
-        }
-        i++;
-    }
-
-    return -1;
-}
 
 void adjustMargins(QLayout *layout, int ls, int cml, int cmt, int cmr, int cmb)
 {
@@ -643,23 +578,6 @@ bool isPureNumeric ( const QString &s )
     }
     return true;
 }
-bool isAlphaNumeric( const QString &s )
-{
-    int slen = s.length();
-    if ( slen == 0 )
-    {
-        return false;
-    }
-    for ( int i = 0; i < slen; i++ )
-    {
-        if ( !s[ i ].isLetterOrNumber() )
-        {
-            return false;
-        }
-    }
-    return true;
-}
-
 void saveHeaderColumns(QString fileName, QString tableName, QString layoutName, QHeaderView *hdr)
 {
  //   trace(QString("saveHeaderColumns %1").arg(layoutName));

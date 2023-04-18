@@ -99,7 +99,6 @@ class Validator: QObject
     Q_OBJECT
       static bool validNumber(const QString &S, bool trailingAlphaAllowed, bool zAllowed);
       static bool allSpaces( const QString &S );
-      bool status;
       validatorTypes vt;
    public:
       static ErrEntry errDefs[];
@@ -107,10 +106,6 @@ class Validator: QObject
       Validator( validatorTypes vt );
       bool validate( const QString &, ScreenContact &screenContact);
       static bool validateRST( const QString &t );
-      bool getStatus()
-      {
-         return status;
-      }
 };
 
 class ValidatedControl

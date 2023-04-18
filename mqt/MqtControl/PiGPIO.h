@@ -16,16 +16,6 @@ public:
     GPIOLine(int pin, bool input);
     virtual ~GPIOLine() override;
 
-    int getfd()
-    {
-        return fd;
-    }
-    int getpin()
-    {
-        return pin;
-    }
-
-
     bool initialise();
     void setPin(bool state);
     bool readPin();

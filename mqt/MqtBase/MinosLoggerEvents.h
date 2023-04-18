@@ -45,11 +45,9 @@ signals:
    void ReportOverstrike(bool ov, BaseContestLog *c);
    void AfterLogContact(BaseContestLog *ct, QSharedPointer<BaseContact> lct);
    void AfterSelectContact(QSharedPointer<BaseContact> ct, BaseContestLog *);
-   void ContestDetails(BaseContestLog *);
    void GoToSerial(BaseContestLog *);
-   void MakeEntry(BaseContestLog *);
+   void MakeEntry(BaseContestLog *, bool);
    void NextUnfilled(BaseContestLog *);
-   void FormKey(unsigned int *, BaseContestLog *);
    void ScreenContactChanged(ScreenContact *, BaseContestLog *, QString b);
    void ReplaceThisLogList(SharedMatchCollection matchCollection, BaseContestLog *, QString b);
    void ReplaceOtherLogList(SharedMatchCollection matchCollection, BaseContestLog *, QString b);
@@ -94,7 +92,6 @@ signals:
    void UpdateStats(BaseContestLog *);
    void UpdateMemories(BaseContestLog *);
    void RigFreqChanged(Frequency, BaseContestLog *);
-   void RotBearingChanged(int, BaseContestLog *);
 
    void XferEnabled(bool s, BaseContestLog *c, QString basename);
    void XferPressed(BaseContestLog *c, QString basename);
@@ -125,11 +122,9 @@ public:
    static void SendReportOverstrike(bool ov, BaseContestLog *c);
    static void SendAfterLogContact(BaseContestLog *ct, QSharedPointer<BaseContact> lct);
    static void SendAfterSelectContact(QSharedPointer<BaseContact> ct, BaseContestLog *);
-   static void SendContestDetails(BaseContestLog *);
    static void SendGoToSerial(BaseContestLog *);
-   static void SendMakeEntry(BaseContestLog *);
+   static void SendMakeEntry(BaseContestLog *, bool e);
    static void SendNextUnfilled(BaseContestLog *);
-   static void SendFormKey(unsigned int *, BaseContestLog *);
    static void SendClearContestInFrame(BaseContestLog *);
    static void SendTabSandP();
    static void SendMainRaised();
@@ -169,7 +164,6 @@ public:
    static void SendUpdateMemories(BaseContestLog *c );
 
     static void SendRigFreqChanged(Frequency f, BaseContestLog *c);
-    static void SendRotBearingChanged(int f, BaseContestLog *c);
 
     static void SendXferEnabled(bool s, BaseContestLog *c, QString basename);
     static void SendXferPressed(BaseContestLog *c, QString basename);

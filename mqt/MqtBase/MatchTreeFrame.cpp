@@ -254,10 +254,6 @@ MatchTreeItem::~MatchTreeItem()
     }
 }
 
-bool MatchTreeItem::isMatchLine()
-{
-    return matchContact != nullptr;
-}
 MatchTreeItem *MatchTreeItem::getParent()
 {
     return parent;

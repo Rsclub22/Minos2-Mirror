@@ -1,4 +1,6 @@
 #include <QScrollArea>
+#include <QDesktopServices>
+
 #include <QLabel>
 #include "MShowMessageDlg.h"
 #include "MinosLoggerEvents.h"
@@ -98,7 +100,6 @@ void TSingleLogFrame::buildFrame(int slotNo)
 
     connect(FKHRigControlFrame, &RigControlFrame::sendFreqControl, this, &TSingleLogFrame::sendRadioFreq);
     connect(FKHRigControlFrame, &RigControlFrame::sendBandToRigControl, this, &TSingleLogFrame::sendBandToRig);
-    connect(GJVQSOLogFrame, &QSOLogFrame::sendFreqControl, this, &TSingleLogFrame::sendRadioFreq);
     connect(FKHRigControlFrame, &RigControlFrame::sendRitFreq, this, &TSingleLogFrame::sendRadioRitFreq);
     connect(FKHRigControlFrame, &RigControlFrame::sendVolumeToRadio, this, &TSingleLogFrame::sendRadioVolume);
     connect(FKHRigControlFrame, &RigControlFrame::ritStatus, this, &TSingleLogFrame::sendRadioRitStatus);
@@ -325,7 +326,7 @@ void TSingleLogFrame::createScreenComponents()
     CribSheet->setLineWidth(0);
     CribSheet->setMidLineWidth(0);
 
-    MinosSplitter *cribSplitter = new MinosSplitter(CribSheet);
+    cribSplitter = new MinosSplitter(CribSheet);
     cribSplitter->setObjectName(QStringLiteral("cribSplitter"));
     cribSplitter->setOrientation(Qt::Vertical);
 
@@ -950,8 +951,86 @@ bool TSingleLogFrame::doKeyPressEvent( QKeyEvent* event )
     // each dependant ContestPage also needs this
     return GJVQSOLogFrame->doKeyPressEvent(event);
 }
+void TSingleLogFrame::doSendEntry(QString expName)
+{
+    // expName is the exported full filename, not yet usable
 
-QString TSingleLogFrame::makeEntry( bool saveMinos )
+    // here we have to set up and execute the magic
+    // to trigger Petes web site
+
+    // first, check for VHF or HF
+    // For HF the link is e.g.
+    // https://www.rsgbcc.org/cgi-bin/hfenter.pl?Contest=DX%20Contest&year=2022
+    // I suspect section and club ar as for VHF
+
+    // https://www.rsgbcc.org/cgi-bin/vhfentertest.pl?year=2022&Contest=70MHz+UKAC&Band=17+Nov&Req=Date&Section=AO&Category=&Club=Parallel+Lines+CG&this=NEXT
+
+    LoggerContestLog * ct = dynamic_cast<LoggerContestLog *>( contest );
+    if ( !ct )
+    {
+       return;
+    }
+    QString cname = ct->VHFContestName.getValue();
+    QString club = ct->entrant.getValue();
+    QDateTime  contestStart = CanonicalToTDT(ct->DTGStart.getValue());
+
+    QString band;
+    QString year = contestStart.toString("yyyy");
+    if (cname.contains("UKAC", Qt::CaseSensitive))
+    {
+        band = contestStart.toString("dd MMM");
+    }
+    else
+    {
+        band = ct->contestBands.getValue();
+    }
+    QString section = ct->entSect.getValue();
+    QString category;
+
+    // https://www.rsgbcc.org/cgi-bin/hfenter.pl?Contest=DX%20Contest&year=2022
+    // I suspect section and club ar as for VHF
+
+    // https://www.rsgbcc.org/cgi-bin/vhfentertest.pl?year=2022&Contest=70MHz+UKAC&Band=17+Nov&Req=Date&Section=AO&Category=&Club=Parallel+Lines+CG&this=NEXT
+    QString site;
+    if (ct->isHF())
+    {
+        site = "https://www.rsgbcc.org/cgi-bin/hfenter.pl";
+    }
+    else
+    {
+        site = "https://www.rsgbcc.org/cgi-bin/vhfentertest.pl";
+    }
+    QString target = QString("%1?"
+                             "year=%2&"
+                             "Contest=%3&"
+                             "Band=%4&"
+                             "Req=Date&"
+                             "Section=%5&"
+                             "Category=%6&"
+                             "Club=%7&"
+                             "this=NEXT"
+                             )
+                         .arg(site)
+                         .arg(year)
+                         .arg(cname)
+                         .arg(band)
+                         .arg(section)
+                         .arg(category)
+                         .arg(club)
+        ;
+
+    target.replace(" ", "+");    // replaces in-situ
+
+//    trace("Working version is          https://www.rsgbcc.org/cgi-bin/vhfentertest.pl?year=2022&Contest=70MHz+UKAC&Band=17+Nov&Req=Date&Section=AO&Category=&Club=Parallel+Lines+CG&this=NEXT");
+
+    trace("About to open URL for entry " + target);
+    bool openRet = QDesktopServices::openUrl(QUrl(target));
+    if (openRet == false)
+    {
+        mShowMessage(tr("Failed to open %1").arg(target), this);
+    }
+}
+QString TSingleLogFrame::makeEntry( bool saveMinos, bool sendEntry )
 {
    LoggerContestLog * ct = dynamic_cast<LoggerContestLog *>( contest );
    if ( !ct )
@@ -959,7 +1038,7 @@ QString TSingleLogFrame::makeEntry( bool saveMinos )
       return "";
    }
 
-   TEntryOptionsForm EntryDlg( this, QSharedPointer<ContestDetailsTransferObject>(), ct, saveMinos  );
+   TEntryOptionsForm EntryDlg( this, QSharedPointer<ContestDetailsTransferObject>(), ct, saveMinos, sendEntry  );
    if ( saveMinos )
    {
       EntryDlg.setWindowTitle(tr("Save imported log as a .minos file"));
@@ -968,6 +1047,10 @@ QString TSingleLogFrame::makeEntry( bool saveMinos )
    {
       ct->commonSave( false );
       QString expName = EntryDlg.doFileSave( );
+      if (sendEntry)
+      {
+          doSendEntry(expName);
+      }
       return expName;
    }
    return "";
@@ -1162,8 +1245,8 @@ void TSingleLogFrame::onShowCribBand()
             show = true;
         }
     }
-
-    CurrentBandLabel->setVisible(show);
+    int topSplit = show?1:0;
+    cribSplitter->setSizes({topSplit, 100});
 }
 void TSingleLogFrame::NextContactDetailsTimerTimer( )
 {
@@ -1524,11 +1607,11 @@ int TSingleLogFrame::getCurrentBearing()
 }
 //---------------------------------------------------------------------------
 
-void TSingleLogFrame::on_MakeEntry(BaseContestLog *ct)
+void TSingleLogFrame::on_MakeEntry(BaseContestLog *ct, bool e)
 {
     if (ct == contest)
     {
-       makeEntry( false );
+       makeEntry( false, e );
     }
 }
 void TSingleLogFrame::on_AfterSelectContact( QSharedPointer<BaseContact>lct, BaseContestLog *ct)

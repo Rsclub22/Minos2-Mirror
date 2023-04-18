@@ -32,8 +32,6 @@ public:
     void setElement(QSharedPointer<RunConfigElement> configElement);
     void saveElement();
     void setNameFocus();
-    void fixComboStyle();
-
 
 private slots:
     void on_programBrowseButton_clicked();

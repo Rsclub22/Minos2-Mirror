@@ -32,9 +32,8 @@ public Q_SLOTS:
 
 
 public:
-    void setup(bool started);
-
     void start();
+
 private slots:
     void on_StartButton_clicked();
 

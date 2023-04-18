@@ -99,6 +99,24 @@ QString CTYCalendarYear::getURL()
     return getSite();
 }
 //---------------------------------------------------------------------------
+QString ClubListCalendarYear::getSite()
+{
+    return "https://www.rsgbcc.org/cgi-bin/vhfenter.pl?afsdownload=y";
+}
+QString ClubListCalendarYear::getPath()
+{
+    QString p = "./Configuration/clublist.txt";
+    return p;
+}
+QString ClubListCalendarYear::getURL()
+{
+    return getSite();
+}
+bool ClubListCalendarYear::downloadProvisionalFile ( bool /*showError*/ )
+{
+    return false;
+}
+//---------------------------------------------------------------------------
 void CalendarYear::ignoreSslErrors(const QList<QSslError> &errors)
 {
 // All then error ignore stuff comes from

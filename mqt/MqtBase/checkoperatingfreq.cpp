@@ -41,23 +41,6 @@ int CheckOperatingFreq::freqValid(const QString &band, const QString &mode, cons
     return BAND_MISSING;
 }
 
-bool CheckOperatingFreq::modeExists(const QString &band, const QString &mode)
-{
-    QMap<QString, ModeFreqDetail<Frequency>> modeList;
-
-    if (bandModeFreqList.contains(band))
-    {
-        modeList = bandModeFreqList.value(band);
-        if (modeList.contains(mode))
-        {
-            return true;
-        }
-    }
-
-    return false;
-}
-
-
 int CheckOperatingFreq::getFreqLimitsForDial(ModeFreqDetail<Frequency> &listOfFreqs, const QString &band, const QString &pmode)
 {
     QMap<QString, ModeFreqDetail<Frequency>> modeList;

@@ -2076,12 +2076,6 @@ bool RigControlFrame::checkFreqOK(const Frequency &freq)
 
 void RigControlFrame::closeContest()
 {
-//    // is this the last frame
-//    if (LogContainer->getLogFrameCount() == 1 && radioConnected)
-//    {
-//        trace(QString("Last contest frame closing, close radio connection"));
-//        setRadioName("", ct->currentMode.getValue());
-//    }
 }
 
 void RigControlFrame::traceMsg(QString msg)

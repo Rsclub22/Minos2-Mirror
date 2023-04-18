@@ -29,7 +29,6 @@ public:
     void setRigControl(RigControlFrame *rc);
 
     int setButtonOnOff(QString band, bool on);
-    void setAllButtonsOff();
     void selectSupportedBands(const QStringList &listOfBands);
 
     int selectButtonGroupAndActiveBand(const QString band);

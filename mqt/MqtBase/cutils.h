@@ -55,8 +55,6 @@ const QList<QChar> illegalChars = {QChar('|'), QChar('/'), QChar('\\'), QChar('[
                                    QChar('@'), QChar(':'), QChar(';'), QChar('='), QChar('{'), QChar('}'), QChar('$')};
 
 extern bool containsChars(QString s, const QList<QChar> chars);
-extern QString replaceChars(QString s, const QChar c, const QList<QChar> cChars );
-extern QString removeChars(QString s, const QList<QChar> chars);
 extern QString escapeXML (const QString &value);
 
 
@@ -69,14 +67,12 @@ class writer
       void lwrite( const QString & );
       void lwrite( const char * );
       void lwriteLine( );
-      void lwriteNl( );
       void lwriteFf( );
       writer( QSharedPointer<QFile> f );
       ~writer();
 };
 
 extern int toInt ( const QString &s, int def = 0 );
-extern double toDouble ( const QString &s, double def = 0.0 );
 extern QString makeStr( bool i );
 
 // and disallow any other versions
@@ -130,12 +126,9 @@ private:
     void checkString(QString &temp, QChar character, QList<QStringList> &csv);
 };
 void CSVToStringList( const QString &s, QStringList &sl );
-void TSVToStringList( const QString &s, QStringList &sl );
 QString anchoredPattern(const QString &expression);
-int getStringlistOffSet(QStringList supportedBands, QString contestBandStr);
 void adjustMargins(QLayout *layout, int ls, int cml, int cmt, int cmr, int cmb);
 bool isPureNumeric ( const QString &s );
-bool isAlphaNumeric( const QString &s );
 
 void saveHeaderColumns(QString fn, QString tname, QString lname, QHeaderView *h);
 void setHeaderColumns(QString hLine, QHeaderView *hdr);
