@@ -75,8 +75,6 @@ WsjtxFrame::WsjtxFrame(TSingleLogFrame *parent) :
     ui->decodes_table_view_->setModel (decodes_model_);
     ui->decodes_table_view_->verticalHeader ()->hide ();
 
-//    reloadColumns();
-
     ui->decodes_table_view_->hideColumn (dcId);
 //    ui->decodes_table_view_->hideColumn (dcDT);
 //    ui->decodes_table_view_->hideColumn (dcDF);
@@ -281,8 +279,7 @@ void WsjtxFrame::remove_client (QString const& /*id*/)
     ui->mode_label_->clear();
     ui->bandErrorLabel->clear();
     ui->replyto_label->clear();
-    if (ui->autoSelectButton->isChecked())
-        ui->autoSelectButton->toggle();
+    ui->autoSelectButton->setChecked(false);
     id_.clear();
 }
 bool WsjtxFrame::goodCQCall(decodeMessage &dc)
@@ -302,7 +299,7 @@ bool WsjtxFrame::goodCQCall(decodeMessage &dc)
     {
         if (!testCQCalls.contains(dc.CQCall))
         {
-            trace(QString("WsjtxFrame::process_decodes %1 wrong CQ call").arg(dc.message));
+            trace(QString("WsjtxFrame::goodCQCall %1 wrong CQ call").arg(dc.message));
             return false;
         }
     }
@@ -310,7 +307,7 @@ bool WsjtxFrame::goodCQCall(decodeMessage &dc)
     {
         if (!nonTestCQCalls.contains(dc.CQCall))
         {
-            trace(QString("WsjtxFrame::process_decodes %1 wrong CQ call").arg(dc.message));
+            trace(QString("WsjtxFrame::goodCQCall %1 wrong CQ call").arg(dc.message));
             return false;
         }
 
@@ -349,10 +346,7 @@ void WsjtxFrame::getBestCQ73CallingMe()
             continue;
         }
 
-        bool auto73 = ui->autosel73cb->isChecked();
         if ((dc.mstage == emsCQ)   // CQ calls aren't "to" anyone
-            || (auto73 && (dc.mstage == ems73) && !toMyCall)
-            || (auto73 && (dc.mstage == emsRRR) && !toMyCall)
             || ((dc.mstage == emsGrid) && toMyCall)
             )
         {
@@ -391,7 +385,7 @@ void WsjtxFrame::getBestToMe()
         if (dc.decodeInd[0] == '?')
             continue;   // potentially bad decode
 
-        trace(QString("WsjtxFrame::process_decodes Checking against lastTx %1 stage %2 tocall %3 fromcall %4 callingCall %5 workingCall %6")
+        trace(QString("WsjtxFrame::getBestToMe Checking against lastTx %1 stage %2 tocall %3 fromcall %4 callingCall %5 workingCall %6")
                   .arg(dc.message).arg(dc.getMStage())
                   .arg(dc.toCall.getFullCall())
                   .arg(dc.fromCall.getFullCall())
@@ -431,14 +425,14 @@ void WsjtxFrame::getBestToMe()
                 if ( pbv > bestPoints  )
                 {
                     // which might not be the most profitable
-                    trace(QString("WsjtxFrame::process_decodes (lasttx) Candidate %1")
+                    trace(QString("WsjtxFrame::getBestToMe (lasttx) Candidate %1")
                               .arg(dc.message));
                     bestOffset = i;
                     bestPoints = pbv;
                                     }
                 else
                 {
-                    trace(QString("WsjtxFrame::process_decodes (lasttx) NOT best %1")
+                    trace(QString("WsjtxFrame::getBestToMe (lasttx) NOT best %1")
                               .arg(dc.message));
                 }
             }
@@ -458,6 +452,35 @@ void WsjtxFrame::getBestToMe()
         }
     }
 
+}
+bool WsjtxFrame::checkThemPresent()
+{
+    // check if the station we are trying to work is active
+    // either calling someone else of being called by someone else
+    // which would imply that they have swapped time periods
+
+    for (int i = decodeStartSize; i < decodeEndSize; i++)
+    {
+        decodeMessage &dc = messages[i];
+        if (dc.oldmsg)
+            continue;
+        if (dc.decodeInd[0] == '?')
+            continue;   // potentially bad decode
+
+        trace(QString("WsjtxFrame::checkThemPresent Checking against lastTx %1 stage %2 tocall %3 fromcall %4 callingCall %5 workingCall %6")
+                  .arg(dc.message).arg(dc.getMStage())
+                  .arg(dc.toCall.getFullCall())
+                  .arg(dc.fromCall.getFullCall())
+                  .arg(callingCall)
+                  .arg(workingCall)
+              );
+        QString dcFromCall = dc.fromCall.getFullCall();
+        if (dcFromCall == callingCall || dcFromCall == workingCall)
+        {
+            return true;
+        }
+    }
+    return false;
 }
 bool WsjtxFrame::checkTheirCall()
 {
@@ -492,19 +515,11 @@ bool WsjtxFrame::checkTheirCall()
                 // bestOffset should already be -1 unless there is someone else calling us
                 // in which case we will switch to them
 
-                trace(QString("WsjtxFrame::process_decodes (lasttx) stop response, look again"));
-                if (ui->autoRearmcb->isChecked())
-                {
-                    ui->autoSelectButton->setChecked(reArmValue);
-                    qsoState = NoQSOWaiting;
-                }
-                if (ui->autoSelectButton->isChecked())
-                {
+                trace(QString("WsjtxFrame::checkTheirCall (lasttx) stop response, look again"));
                     on_halt_tx_button__clicked();          // kill the automatic sequencing
                     qsoState = NoQSOWaiting;
-                }
-                return false;
 
+                return false;
             }
         }
     }
@@ -523,6 +538,30 @@ void WsjtxFrame::markBest()
         trace("WsjtxFrame::markBest best decode is " + messages[bestOffset].message);
     }
 }
+void WsjtxFrame::doResponse(bool cq)
+{
+    if (ui->autoSelectButton->isChecked() && !currentlyTransmitting)
+    {
+        if ( bestOffset >= 0)
+        {
+            trace("WsjtxFrame::doResponse auto replying to " + messages[bestOffset].message);
+            messages[bestOffset].autoresp = true;
+            reply(messages[bestOffset]);
+
+            qsoState = NoQSOCallingThem;
+
+            // we are assuming that autoseq is enabled, call 1st isn't
+            // but we can't enforce either
+            // things may be messy if we are not set this way
+        }
+        else if (cq)
+        {
+            // If we can, start calling CQ
+            startCQ();
+        }
+    }
+}
+
 void WsjtxFrame::process_NoQSOWaiting()
 {
     // Not calling CQ, not in QSO - look for the best CQ, or someone calling us
@@ -532,6 +571,7 @@ void WsjtxFrame::process_NoQSOWaiting()
 
     // currTxStage will be emsNone
 
+    trace("WsjtxFrame::process_NoQSOWaiting()");
     bestOffset = -1;
     bestPoints.clear();
 
@@ -539,33 +579,17 @@ void WsjtxFrame::process_NoQSOWaiting()
 
     markBest();
 
-    if (ui->autoSelectButton->isChecked() && bestOffset >= 0)
-    {
-        trace("WsjtxFrame::process_decodes auto replying to " + messages[bestOffset].message);
-        messages[bestOffset].autoresp = true;
-        reply(messages[bestOffset]);
-
-        qsoState = NoQSOCallingThem;
-
-        // we are assuming that autoseq is enabled, call 1st isn't
-        // but we can't enforce either
-        // things may be messy if we are not set this way
-    }
-    else
-    {
-        // If we can, start calling CQ
-        startCQ();
-    }
+    doResponse(true);
 }
 void WsjtxFrame::process_NoQSOCallingCQ()
 {
     // Not in QSO, calling CQ
     // look for the best reply to our CQ, if none, look for the best CQ to call
 
+    trace("WsjtxFrame::process_NoQSOCallingCQ()");
     bestOffset = -1;
     bestPoints.clear();
 
-    bool autoReplyAllowed = !currentlyTransmitting;
     // iterate over the latest decodes, and select the best
 
     // first, look at messages against our transmit status
@@ -582,18 +606,7 @@ void WsjtxFrame::process_NoQSOCallingCQ()
     }
 
     markBest();
-
-    if (autoReplyAllowed && ui->autoSelectButton->isChecked() && bestOffset >= 0)
-    {
-        trace("WsjtxFrame::process_decodes auto replying to " + messages[bestOffset].message);
-        messages[bestOffset].autoresp = true;
-        reply(messages[bestOffset]);
-        qsoState = NoQSOCallingThem;
-
-        // we are assuming that autoseq is enabled, call 1st isn't
-        // but we can't enforce either
-        // things may be messy if we are not set this way
-    }
+    doResponse(false);
 }
 void WsjtxFrame::process_NoQSOCallingThem()
 {
@@ -601,30 +614,41 @@ void WsjtxFrame::process_NoQSOCallingThem()
     // If they reply, let auto sequence proceed
     // if no reply, look for best calling us, or best CQ
 
+    trace("WsjtxFrame::process_NoQSOCallingThem()");
     bestOffset = -1;
     bestPoints.clear();
 
-
     if (!checkTheirCall())
     {
-        getBestCQ73CallingMe();
-
-        markBest();
-
-        if (ui->autoSelectButton->isChecked() && bestOffset >= 0)
+        // if they aren't in evidence, keep trying
+        if (checkThemPresent())
         {
-            trace("WsjtxFrame::process_decodes auto replying to " + messages[bestOffset].message);
-            messages[bestOffset].autoresp = true;
-            reply(messages[bestOffset]);
-            qsoState = NoQSOCallingThem;
+            attempts = 0;
+            getBestCQ73CallingMe();
 
-            // we are assuming that autoseq is enabled, call 1st isn't
-            // but we can't enforce either
-            // things may be messy if we are not set this way
+            markBest();
+
+            doResponse(false);
+        }
+        else
+        {
+            attempts++;
+            if (attempts > 3)
+            {
+                trace(QString("Add %1 to blacklist after 3 attempts").arg(dxCall));
+                on_addBlackListButton_clicked();
+                getBestCQ73CallingMe();
+
+                markBest();
+
+                doResponse(false);
+
+            }
         }
     }
     else
     {
+        attempts = 0;
         qsoState = InQSO;
 
     }
@@ -636,26 +660,43 @@ void WsjtxFrame::process_InQSO()
     // Check for them working someone else
     // Check for too many repeats, may need to blacklist them
 
+    trace("WsjtxFrame::process_InQSO()");
     bestOffset = -1;
     bestPoints.clear();
 
     if (!checkTheirCall())
     {
-        getBestCQ73CallingMe();
-
-        markBest();
-
-        if (ui->autoSelectButton->isChecked() && bestOffset >= 0)
+        if (checkThemPresent())
         {
-            trace("WsjtxFrame::process_decodes auto replying to " + messages[bestOffset].message);
-            messages[bestOffset].autoresp = true;
-            reply(messages[bestOffset]);
-            qsoState = NoQSOCallingThem;
+            // we want to give them several chances to work us
+            // not go immediately to best of the rest
 
-            // we are assuming that autoseq is enabled, call 1st isn't
-            // but we can't enforce either
-            // things may be messy if we are not set this way
+            attempts = 0;
+            getBestCQ73CallingMe();
+
+            markBest();
+
+            doResponse(false);
         }
+        else
+        {
+            attempts++;
+            if (attempts > 3)
+            {
+                trace(QString("Add %1 to blacklist after 3 attempts").arg(dxCall));
+                on_addBlackListButton_clicked();
+
+                getBestCQ73CallingMe();
+
+                markBest();
+
+                doResponse(false);
+            }
+        }
+    }
+    else
+    {
+        attempts = 0;
     }
 }
 
@@ -664,7 +705,7 @@ void WsjtxFrame::process_decodes()
     if (!bandOK)
         return;
 
-    if (autoEnabled)
+    if (ui->autoSelectButton->isChecked())
     {
         decodeEndSize = messages.size();
         minpoints = ui->minPointsSpinner->value();
@@ -904,10 +945,6 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
             // CQ DX K1ABC FN42
             // CQ TEST G4ABC/P IO91
 
-            if (ui->autoRearmcb->isChecked())
-            {
-                ui->autoSelectButton->setChecked(reArmValue);
-            }
             qsoState = NoQSOCallingCQ;
             break;
         case ems73:
@@ -1126,10 +1163,6 @@ void WsjtxFrame::startCQ()
 }
 void WsjtxFrame::reply(decodeMessage &dc)
 {
-    reArmValue = ui->autoSelectButton->isChecked();
-
-    ui->autoSelectButton->setChecked(false);
-    //ui->autoSelectButton->setArrowType(Qt::NoArrow);
     WsjtxServer::getWsjtxServer()->reply(dc.id, dc.time, dc.snr, dc.delta_time, dc.delta_frequency, dc.mode, dc.message, dc.low_confidence,  QApplication::keyboardModifiers () >> 24);
     ui->replyto_label->setText("Replying to: " + dc.message);
 }
@@ -1259,17 +1292,14 @@ void WsjtxFrame::on_testButton_clicked()
 
 }
 
-
 void WsjtxFrame::on_splitter_splitterMoved(int /*pos*/, int /*index*/)
 {
-
     QByteArray state = ui->splitter->saveState();
     QSettings settings;
     settings.setValue("Splitters/WsjtxFrame/state/", state);
 
     MinosLoggerEvents::SendSplittersChanged();
 }
-
 
 void WsjtxFrame::restoreSplitters()
 {

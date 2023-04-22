@@ -82,8 +82,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>987</width>
-         <height>349</height>
+         <width>949</width>
+         <height>364</height>
         </rect>
        </property>
        <property name="sizePolicy">
@@ -296,30 +296,6 @@
                   </widget>
                  </item>
                  <item>
-                  <widget class="QCheckBox" name="autosel73cb">
-                   <property name="focusPolicy">
-                    <enum>Qt::NoFocus</enum>
-                   </property>
-                   <property name="text">
-                    <string>Auto Select 73/RR73 (Not WSJT-X)</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QCheckBox" name="autoRearmcb">
-                   <property name="focusPolicy">
-                    <enum>Qt::NoFocus</enum>
-                   </property>
-                   <property name="text">
-                    <string>Auto Rearm</string>
-                   </property>
-                  </widget>
-                 </item>
-                </layout>
-               </item>
-               <item>
-                <layout class="QHBoxLayout" name="horizontalLayout">
-                 <item>
                   <widget class="QPushButton" name="configCQButton">
                    <property name="focusPolicy">
                     <enum>Qt::NoFocus</enum>
@@ -329,6 +305,10 @@
                    </property>
                   </widget>
                  </item>
+                </layout>
+               </item>
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout">
                  <item>
                   <widget class="QCheckBox" name="minPointsCheckBox">
                    <property name="focusPolicy">

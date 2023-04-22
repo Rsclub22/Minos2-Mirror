@@ -168,6 +168,8 @@ private:
     QString callingCall;
     QString workingCall;
 
+    int attempts = 0;
+
     QString dxCall;
 
     WsjtxDecode decoder;
@@ -213,6 +215,7 @@ private:
     int bestOffset = -1;
     PointBonusMultSnr bestPoints;
 
+    void doResponse(bool cq);
     void startCQ();
     void reply(decodeMessage &dc);
 
@@ -227,6 +230,8 @@ private:
     void process_NoQSOCallingCQ();
     void process_NoQSOCallingThem();
     void process_InQSO();
+
+    bool checkThemPresent();
 public slots:
     void add_client (QString const& id, QString const& version, QString const& revision);
 
