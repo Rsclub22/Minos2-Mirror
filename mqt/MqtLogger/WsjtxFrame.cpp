@@ -518,6 +518,7 @@ bool WsjtxFrame::checkTheirCall()
                 trace(QString("WsjtxFrame::checkTheirCall (lasttx) stop response, look again"));
                     on_halt_tx_button__clicked();          // kill the automatic sequencing
                     qsoState = NoQSOWaiting;
+                    trace("Transition to NoQSOWaiting");
 
                 return false;
             }
@@ -549,6 +550,7 @@ void WsjtxFrame::doResponse(bool cq)
             reply(messages[bestOffset]);
 
             qsoState = NoQSOCallingThem;
+            trace("Transition to NoQSOCallingThem");
 
             // we are assuming that autoseq is enabled, call 1st isn't
             // but we can't enforce either
@@ -650,6 +652,7 @@ void WsjtxFrame::process_NoQSOCallingThem()
     {
         attempts = 0;
         qsoState = InQSO;
+        trace("Transition to InQSO");
 
     }
 }
@@ -746,6 +749,7 @@ void WsjtxFrame::process_decodes()
 }
 decodeMessage *WsjtxFrame::parse_tx_message(QString atline, bool fromScrape)
 {
+    trace("In WsjtxFrame::parse_tx_message");
     // 200425_110345    50.313 Tx FT8      0  0.0 1500 CQ G0GJV IO91
 
     // 200424_160138     7.048 Rx FT4    -10  0.0  817 CQ YO4NF KN44
@@ -848,6 +852,7 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
             {
                 QString mess = tr("<h1><b>Contest band %1 not the same as %2 band %3").arg(ct->currentBand.getValue(), id, bi->uk);
                 ui->bandErrorLabel->setText(HtmlFontColour(Qt::red) + mess);
+                bandOK = false;
             }
         }
         else
@@ -862,6 +867,7 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
             {
                 QString mess = tr("<h1><b>Contest band %1 not the same as %2 band %3").arg(cb, id, bi->uk);
                 ui->bandErrorLabel->setText(HtmlFontColour(Qt::red) + mess);
+                bandOK = false;
             }
             else
             {
@@ -883,8 +889,8 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
         return;
     }
 
-    trace(QString("WsjtxFrame::update_status dx_call %1 dx_grid %2 transmitting %3 decoding %4 tx_enabled %5")
-          .arg(dx_call).arg(dx_grid).arg(transmitting).arg(decoding).arg(tx_enabled));
+    trace(QString("WsjtxFrame::update_status dx_call %1 dx_grid %2 transmitting %3 decoding %4 tx_enabled %5 tx_message %6")
+              .arg(dx_call).arg(dx_grid).arg(transmitting).arg(decoding).arg(tx_enabled).arg(tx_message));
 
 
     id_ = id;
@@ -904,7 +910,7 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
                                         , 0, mode
                                         , tx_message, false, true);
 
-        trace(QString("WsjtxFrame::parse_tx_message - stage %1 %2")
+        trace(QString("WsjtxFrame::update_status, decode TX message - stage %1, %2")
               .arg(dc.getMStage(), tx_message));
 
         currTxStage = dc.mstage;
@@ -915,6 +921,7 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
 
         decodes_model_->add_decode ();
         ui->decodes_table_view_->scrollToBottom ();
+        decodeStartSize++;
     }
     currentlyDecoding = decoding;
     currentlyTransmitting = transmitting;
@@ -946,12 +953,16 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
             // CQ TEST G4ABC/P IO91
 
             qsoState = NoQSOCallingCQ;
+            trace("Transition to NoQSOCallingCQ");
             break;
         case ems73:
             // after this may still get far end RRR or RR73
             // repliable to "from"
             // K1ABC G0XYZ 73
             // G4ABC/P PA9XYZ 73
+            qsoState = NoQSOWaiting;
+            trace("Transition to NoQSOWaiting");
+            break;
         case emsFree:
             // no calls involved
             break;
@@ -975,11 +986,15 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
             // similar to emsRplusDb
         case emsRplusDbGrid:
         case emsDbGrid:
+            workingCall = dx_call;
+            break;
         case emsRRR:
             // repliable to "from"
             // G0XYZ K1ABC RR73
             // PA9XYZ G4ABC/P RR73
             workingCall = dx_call;
+            qsoState = NoQSOWaiting;
+            trace("Transition to NoQSOWaiting");
             break;
         }
         trace(QString("WsjtxFrame::update_status last tx stage %1 calling <%2> working <%3>").arg(lastTx->getMStage()).arg(callingCall).arg(workingCall));
@@ -1078,7 +1093,7 @@ void WsjtxFrame::decode_added (bool is_new, QString const& id, QTime time
                                , QString const& message, bool low_confidence
                                , bool off_air)
 {
-    if (!bandOK)
+    if (!bandOK)    // but we don't know the decode band
         return;
     if (!ct || ct->isReadOnly())
         return;
@@ -1157,7 +1172,7 @@ void WsjtxFrame::decodes_cleared (QString const& client_id)
 }
 void WsjtxFrame::startCQ()
 {
-    qsoState = NoQSOCallingCQ;
+    trace("Transition to NoQSOCallingCQ");
 
     // And we need to send F1 to WSJT-X
 }
@@ -1221,6 +1236,7 @@ void WsjtxFrame::on_testButton_clicked()
 //19:30:14.580 WsjtxFrame::decode_added - 18:30:00 new message G0GJV M0GXZ IO92 stage Grid points 112 snr -24
 //19:30:14.690 WsjtxFrame::decode_added - 18:30:00 new message G0GJV G8KWX IO91 stage Grid points 50 snr -15
 //19:30:14.733 WsjtxFrame::decode_added - 18:30:00 new message G0GJV G3ZPB IO91 stage Grid points 50 snr -15
+#ifdef RUBBISH
             QTime now = QTime::currentTime();
 
             decode_added(true, "test", now, -14, 0, 0, "FT8", "CQ M/ZL1DRI", false, true);
@@ -1289,6 +1305,7 @@ void WsjtxFrame::on_testButton_clicked()
             update_status ("test", Frequency(144174000), "FT8", "","0", "FT8", false, false, false, 0, 0
                                     , "G0GJV", "IO91", "JO01"
                                     , false, "", false, 0, 0, 0, "", "");
+#endif
 
 }
 
