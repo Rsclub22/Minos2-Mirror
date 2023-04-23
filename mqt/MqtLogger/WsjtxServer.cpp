@@ -202,8 +202,8 @@ void WsjtxServer::decodes_cleared (QString const& client_id)
 void WsjtxServer::reply (QString const& id, QTime time, qint32 snr, float delta_time, quint32 delta_frequency
                    , QString const& mode, QString const& message, bool low_confidence, quint8 modifiers)
 {
-    trace(QString("WsjtxServer::reply to " + message));
-    server_1->reply(id, time, snr, delta_time, delta_frequency, mode, message, low_confidence, modifiers);
+    trace(QString("WsjtxServer::reply to <" + message + ">"));
+    server_1->reply(id, time, snr, delta_time, delta_frequency, mode, message.trimmed(), low_confidence, modifiers);
 }
 
 void WsjtxServer::do_halt_tx (QString const& id, bool auto_only)

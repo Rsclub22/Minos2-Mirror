@@ -1150,7 +1150,7 @@ void WsjtxFrame::decode_added (bool is_new, QString const& id, QTime time
     }
     else
     {
-        trace(QString("WsjtxFrame::decode_added - %1 new message %2 stage %3 points %4 snr %5").arg(time.toString("HH:mm:ss")).arg(message).arg(dc.getMStage()).arg(dc.points).arg(dc.snr));
+        trace(QString("WsjtxFrame::decode_added - %1 new message <%2> stage %3 points %4 snr %5").arg(time.toString("HH:mm:ss")).arg(message).arg(dc.getMStage()).arg(dc.points).arg(dc.snr));
         messages.push_back(dc);
     }
 
