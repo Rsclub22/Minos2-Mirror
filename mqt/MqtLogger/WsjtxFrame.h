@@ -287,6 +287,7 @@ private slots:
     void on_doColumnChanges(BaseContestLog *b);
     void on_addBlackListButton_clicked();
     void on_removeBlackListButton_clicked();
+    void on_resetButton_clicked();
 };
 
 #endif // WSJTXFRAME_H

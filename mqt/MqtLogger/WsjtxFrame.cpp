@@ -581,7 +581,7 @@ void WsjtxFrame::process_NoQSOWaiting()
 
     markBest();
 
-    doResponse(true);
+    doResponse(true);   // transitions to NoQSOCallingThem
 }
 void WsjtxFrame::process_NoQSOCallingCQ()
 {
@@ -608,7 +608,7 @@ void WsjtxFrame::process_NoQSOCallingCQ()
     }
 
     markBest();
-    doResponse(false);
+    doResponse(false);   // transitions to NoQSOCallingThem
 }
 void WsjtxFrame::process_NoQSOCallingThem()
 {
@@ -630,7 +630,7 @@ void WsjtxFrame::process_NoQSOCallingThem()
 
             markBest();
 
-            doResponse(false);
+            doResponse(false);   // transitions to NoQSOCallingThem
         }
         else
         {
@@ -643,7 +643,7 @@ void WsjtxFrame::process_NoQSOCallingThem()
 
                 markBest();
 
-                doResponse(false);
+                doResponse(false);   // transitions to NoQSOCallingThem
 
             }
         }
@@ -653,7 +653,6 @@ void WsjtxFrame::process_NoQSOCallingThem()
         attempts = 0;
         qsoState = InQSO;
         trace("Transition to InQSO");
-
     }
 }
 void WsjtxFrame::process_InQSO()
@@ -679,7 +678,7 @@ void WsjtxFrame::process_InQSO()
 
             markBest();
 
-            doResponse(false);
+            doResponse(false);   // transitions to NoQSOCallingThem
         }
         else
         {
@@ -693,7 +692,7 @@ void WsjtxFrame::process_InQSO()
 
                 markBest();
 
-                doResponse(false);
+                doResponse(false);   // transitions to NoQSOCallingThem
             }
         }
     }
@@ -972,12 +971,19 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
             // K1ABC G0XYZ IO91
             // G4ABC/P PA9XYZ JO22
             callingCall = dx_call;
+            qsoState = NoQSOCallingThem;
+            trace("Transition to NoQSOCallingThem");
             break;
 
         case emsDb:
             // db is aything else? or it may be a free text message
+            // on HF we alwasy miss out grid
             //G0XYZ K1ABC –19
             //PA9XYZ 590003 IO91NP
+            qsoState = NoQSOCallingThem;
+            trace("Transition to NoQSOCallingThem");
+            workingCall = dx_call;
+            break;
         case emsRplusDb:
             // repliable to "from" - but may have to wait for 73
             // K1ABC G0XYZ R-22
@@ -1694,3 +1700,11 @@ void BlGridSortFilterModel::setFilterString(QString f)
     filterString = f;
     invalidateFilter();
 }
+
+void WsjtxFrame::on_resetButton_clicked()
+{
+    on_halt_tx_button__clicked();          // kill the automatic sequencing
+    qsoState = NoQSOWaiting;
+    trace("Transition to NoQSOWaiting");
+}
+

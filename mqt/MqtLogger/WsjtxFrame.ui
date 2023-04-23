@@ -128,7 +128,14 @@
              <item>
               <widget class="QLabel" name="qsoStateLabel">
                <property name="text">
-                <string>TextLabel</string>
+                <string>NoQSOWaiting</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="resetButton">
+               <property name="text">
+                <string>Reset state to idle</string>
                </property>
               </widget>
              </item>
