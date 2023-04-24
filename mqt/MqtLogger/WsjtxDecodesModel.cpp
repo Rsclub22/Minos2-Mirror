@@ -215,10 +215,10 @@ QVariant DecodesModel::data (QModelIndex const& pindex, int role) const
         case dcToGrid:
         case dcBest:
         case dcDT:
+        case dcDF:
         case dcSnr:
-        case dcMessage:                 // message
+        case dcMessage:
         {
-            // we don't see transmitted messages, unfortunately
             auto message = data (index(pindex.row(), dcMessage)).toString ();
             if (msg.txrx == eTX)
             {
@@ -254,13 +254,13 @@ QVariant DecodesModel::data (QModelIndex const& pindex, int role) const
         }
         break;
 
-        case dcDF:                 // DF
-            if (qAbs (data (pindex).toInt () - rx_df_) <= 10)
-            {
-                // near my freq  - colour red(ish)
-                c = QColor (0xff, 0x66, 0x66);
-            }
-            break;
+//        case dcDF:                 // DF
+//            if (qAbs (data (pindex).toInt () - rx_df_) <= 10)
+//            {
+//                // near my freq  - colour red(ish)
+//                c = QColor (0xff, 0x66, 0x66);
+//            }
+//            break;
 
         case dcTime:
             {
