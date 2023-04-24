@@ -215,13 +215,13 @@ private:
     int bestOffset = -1;
     PointBonusMultSnr bestPoints;
 
-    void doResponse(bool cq);
+    void doResponse(QSOStates nstate, bool cq);
     void startCQ();
     void reply(decodeMessage &dc);
 
     bool goodCQCall(decodeMessage &dc);
     void getBestCQ73CallingMe();
-    void getBestToMe();
+    bool getBestToMe();
     bool checkTheirCall();
     void markBest();
 
@@ -232,6 +232,7 @@ private:
     void process_InQSO();
 
     bool checkThemPresent();
+    QString getStateText(QSOStates s);
 public slots:
     void add_client (QString const& id, QString const& version, QString const& revision);
 
