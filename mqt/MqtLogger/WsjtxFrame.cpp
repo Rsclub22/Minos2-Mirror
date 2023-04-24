@@ -353,7 +353,10 @@ void WsjtxFrame::getBestCQ73CallingMe()
             if (dc.mstage == emsCQ)
             {
                 if (!goodCQCall(dc))
+                {
+                    // e.g. CQ DX in a contest
                     continue;
+                }
             }
             if ( dc.snr >= minsnr
                 && dc.points > minpoints
@@ -375,7 +378,7 @@ void WsjtxFrame::getBestCQ73CallingMe()
         }
     }
 }
-void WsjtxFrame::getBestToMe()
+bool WsjtxFrame::getBestToMe()
 {
     for (int i = decodeStartSize; i < decodeEndSize; i++)
     {
@@ -442,7 +445,7 @@ void WsjtxFrame::getBestToMe()
                 // so long as autoseq is set in WSJT-X
 
                 ui->decodes_table_view_->scrollToBottom ();
-                return;
+                return true;
             }
             else
             {
@@ -451,7 +454,7 @@ void WsjtxFrame::getBestToMe()
             }
         }
     }
-
+    return false;
 }
 bool WsjtxFrame::checkThemPresent()
 {
@@ -501,10 +504,11 @@ bool WsjtxFrame::checkTheirCall()
               );
         bool toMyCall = (dc.toCall == decoder.getMyCall());
         QString dcFromCall = dc.fromCall.getFullCall();
+        bool cq = (dc.mstage == emsCQ);
 
         if (!toMyCall)
         {
-            if (dcFromCall == callingCall || dcFromCall == workingCall)
+            if (!cq && (dcFromCall == callingCall || dcFromCall == workingCall))
             {
                 // we are trying to work them, and they aren't working us
                 // - still CQ, or working someone else
@@ -516,9 +520,9 @@ bool WsjtxFrame::checkTheirCall()
                 // in which case we will switch to them
 
                 trace(QString("WsjtxFrame::checkTheirCall (lasttx) stop response, look again"));
-                    on_halt_tx_button__clicked();          // kill the automatic sequencing
-                    qsoState = NoQSOWaiting;
-                    trace("Transition to NoQSOWaiting");
+                on_halt_tx_button__clicked();          // kill the automatic sequencing
+                qsoState = NoQSOWaiting;
+                trace("Transition to NoQSOWaiting");
 
                 return false;
             }
@@ -539,7 +543,27 @@ void WsjtxFrame::markBest()
         trace("WsjtxFrame::markBest best decode is " + messages[bestOffset].message);
     }
 }
-void WsjtxFrame::doResponse(bool cq)
+QString WsjtxFrame::getStateText(QSOStates s)
+{
+    QString t;
+    switch(s)
+    {
+    case NoQSOWaiting:
+        t = "NoQSOWaiting";
+        break;
+    case NoQSOCallingCQ:
+        t = "NoQSOCallingCQ";
+        break;
+    case NoQSOCallingThem:
+        t ="NoQSOCallingThem";
+        break;
+    case InQSO:
+        t = "InQSO";
+        break;
+    }
+    return t;
+}
+void WsjtxFrame::doResponse(QSOStates nstate, bool cq)
 {
     if (ui->autoSelectButton->isChecked() && !currentlyTransmitting)
     {
@@ -549,8 +573,8 @@ void WsjtxFrame::doResponse(bool cq)
             messages[bestOffset].autoresp = true;
             reply(messages[bestOffset]);
 
-            qsoState = NoQSOCallingThem;
-            trace("Transition to NoQSOCallingThem");
+            qsoState = nstate;
+            trace("WsjtxFrame::doResponse Transition to " + getStateText(nstate));
 
             // we are assuming that autoseq is enabled, call 1st isn't
             // but we can't enforce either
@@ -581,7 +605,7 @@ void WsjtxFrame::process_NoQSOWaiting()
 
     markBest();
 
-    doResponse(true);   // transitions to NoQSOCallingThem
+    doResponse(NoQSOCallingThem, true);
 }
 void WsjtxFrame::process_NoQSOCallingCQ()
 {
@@ -592,6 +616,7 @@ void WsjtxFrame::process_NoQSOCallingCQ()
     bestOffset = -1;
     bestPoints.clear();
 
+    QSOStates nState = NoQSOCallingCQ;
     // iterate over the latest decodes, and select the best
 
     // first, look at messages against our transmit status
@@ -599,16 +624,22 @@ void WsjtxFrame::process_NoQSOCallingCQ()
     // which when rr73/73 has been sent, at end of
     // update_status()
 
-    getBestToMe();
-
-    if (bestOffset < 0)
+    if (getBestToMe())
+    {
+        nState = InQSO;
+    }
+    else
     {
         // we don't already have a best
         getBestCQ73CallingMe();
+        if (bestOffset >= 0)
+        {
+            nState = NoQSOCallingThem;
+        }
     }
 
     markBest();
-    doResponse(false);   // transitions to NoQSOCallingThem
+    doResponse(nState, false);
 }
 void WsjtxFrame::process_NoQSOCallingThem()
 {
@@ -622,37 +653,48 @@ void WsjtxFrame::process_NoQSOCallingThem()
 
     if (!checkTheirCall())
     {
+        // we have cancelled as they are CQ or working someone else
+        // state is NoQSOWaiting
         // if they aren't in evidence, keep trying
+        attempts = 0;
+        getBestCQ73CallingMe();
+        markBest();
+        doResponse(NoQSOCallingThem, true);
+    }
+    else
+    {
         if (checkThemPresent())
         {
             attempts = 0;
-            getBestCQ73CallingMe();
-
-            markBest();
-
-            doResponse(false);   // transitions to NoQSOCallingThem
+            if (getBestToMe())
+            {
+                qsoState = InQSO;
+                trace("Transition to InQSO");
+            }
+            else
+            {
+                markBest();
+                doResponse(NoQSOCallingThem, false);
+            }
         }
         else
         {
+            // not present, try 3 times and give up
             attempts++;
             if (attempts > 3)
             {
+                attempts = 0;
+
                 trace(QString("Add %1 to blacklist after 3 attempts").arg(dxCall));
                 on_addBlackListButton_clicked();
                 getBestCQ73CallingMe();
 
                 markBest();
 
-                doResponse(false);   // transitions to NoQSOCallingThem
+                doResponse(NoQSOCallingThem, true);
 
             }
         }
-    }
-    else
-    {
-        attempts = 0;
-        qsoState = InQSO;
-        trace("Transition to InQSO");
     }
 }
 void WsjtxFrame::process_InQSO()
@@ -668,37 +710,47 @@ void WsjtxFrame::process_InQSO()
 
     if (!checkTheirCall())
     {
+        // we have cancelled as they are CQ or working someone else
+        // state is NoQSOWaiting
+        // if they aren't in evidence, keep trying
+        attempts = 0;
+        getBestCQ73CallingMe();
+        markBest();
+        doResponse(NoQSOCallingThem, true);
+    }
+    else
+    {
         if (checkThemPresent())
         {
-            // we want to give them several chances to work us
-            // not go immediately to best of the rest
-
             attempts = 0;
-            getBestCQ73CallingMe();
-
-            markBest();
-
-            doResponse(false);   // transitions to NoQSOCallingThem
+            if (getBestToMe()) // hopefully they are now calling me
+            {
+                // let autosequence do its job
+            }
+            else
+            {
+                markBest();
+                doResponse(NoQSOCallingThem, false);
+            }
         }
         else
         {
+            // not present, try 3 times and give up
             attempts++;
             if (attempts > 3)
             {
+                attempts = 0;
+
                 trace(QString("Add %1 to blacklist after 3 attempts").arg(dxCall));
                 on_addBlackListButton_clicked();
-
                 getBestCQ73CallingMe();
 
                 markBest();
 
-                doResponse(false);   // transitions to NoQSOCallingThem
+                doResponse(NoQSOCallingThem, true);
+
             }
         }
-    }
-    else
-    {
-        attempts = 0;
     }
 }
 
@@ -1076,21 +1128,8 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
     }
 
     // Diagnostic display of current qso state
-    switch(qsoState)
-    {
-    case NoQSOWaiting:
-        ui->qsoStateLabel->setText("NoQSOWaiting");
-        break;
-    case NoQSOCallingCQ:
-        ui->qsoStateLabel->setText("NoQSOCallingCQ");
-        break;
-    case NoQSOCallingThem:
-        ui->qsoStateLabel->setText("NoQSOCallingThem");
-        break;
-    case InQSO:
-        ui->qsoStateLabel->setText("InQSO");
-        break;
-    }
+
+    ui->qsoStateLabel->setText(getStateText(qsoState));
 }
 
 void WsjtxFrame::decode_added (bool is_new, QString const& id, QTime time
@@ -1178,7 +1217,10 @@ void WsjtxFrame::decodes_cleared (QString const& client_id)
 }
 void WsjtxFrame::startCQ()
 {
-    trace("Transition to NoQSOCallingCQ");
+    // temporary solution
+
+    trace("Transition to NoQSOWaiting");
+    qsoState = NoQSOWaiting;
 
     // And we need to send F1 to WSJT-X
 }
