@@ -494,7 +494,7 @@ bool WsjtxFrame::checkThemPresent()
         QString dcFromCall = dc.fromCall.getFullCall();
         if (dcFromCall == callingCall || dcFromCall == workingCall)
         {
-            trace(QString("WsjtxFrame::checkThemPresent (dcFromCall == callingCall || dcFromCall == workingCall)");
+            trace(QString("WsjtxFrame::checkThemPresent (dcFromCall == callingCall || dcFromCall == workingCall)"));
             return true;
         }
     }
@@ -693,10 +693,10 @@ void WsjtxFrame::process_NoQSOCallingThem()
         if (checkThemPresent())
         {
             trace("WsjtxFrame::process_NoQSOCallingThem() checkThemPresent()");
-            attempts = 0;
             if (getBestToMe())
             {
                 trace("WsjtxFrame::process_NoQSOCallingThem() getBestToMe()");
+                attempts = 0;
                 qsoState = InQSO;
                 trace("WsjtxFrame::process_NoQSOCallingThem()Transition to InQSO");
             }
@@ -766,11 +766,11 @@ void WsjtxFrame::process_InQSO()
         if (checkThemPresent())
         {
             trace("WsjtxFrame::process_InQSOm() checkThemPresent()");
-            attempts = 0;
             if (getBestToMe()) // hopefully they are now calling me
             {
                 trace("WsjtxFrame::process_InQSO() getBestToMe()");
                 // let autosequence do its job
+                attempts = 0;
             }
             else
             {
