@@ -394,7 +394,7 @@ decodeMessage WsjtxDecode::decode(const QString &id, TxRx tr, QTime time, qint32
                     dc.validate();
                     addCall(dc.fromCall, dc.fromGrid);
                 }
-                else if (sl20.isDigit() || (sl20 == QChar('-')))
+                else if (sl20.isDigit() || sl20 == QChar('-') || (sl20 == QChar('+')))
                 {
                     dc.validate();
                     dc.mstage = emsDb;

@@ -123,18 +123,22 @@ void BandmapView::setBandmapZoom(int level)
     // we delay this as otherwise starting up with a non-default zoom
     // doesn't show the whole frequency range
     delayedAction(this, [=]{
-    if (level <= dialMaxZoomLevel && level >= dialMinZoomLevel)
-    {
-        zoomLevel = level;
-        dial->setZoomLevel(level);
+        if (!LogContainer || LogContainer->isLoggerClosing())
+        {
+            return;
+        }
+        if (level <= dialMaxZoomLevel && level >= dialMinZoomLevel)
+        {
+            zoomLevel = level;
+            dial->setZoomLevel(level);
 
-        setBandmapHeight(contestBandFlow, contestBandFhigh);
-        trace("BandmapView::bandmapUpdate()setBandMapZoom ");
-        bandmapUpdate(true);
-        scrollBandmapCenterToFreq(dial->getCurFreq());
+            setBandmapHeight(contestBandFlow, contestBandFhigh);
+            trace("BandmapView::bandmapUpdate()setBandMapZoom ");
+            bandmapUpdate(true);
+            scrollBandmapCenterToFreq(dial->getCurFreq());
 
-        emit newZoomlevel(level);
-    }
+            emit newZoomlevel(level);
+        }
     }, 10);
 }
 

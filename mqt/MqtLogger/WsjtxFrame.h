@@ -225,11 +225,11 @@ private:
     bool checkTheirCall();
     void markBest();
 
-    void process_decodes();
-    void process_NoQSOWaiting();
-    void process_NoQSOCallingCQ();
-    void process_NoQSOCallingThem();
-    void process_InQSO();
+    void process_decodes(bool freeStanding);
+    void process_NoQSOWaiting(bool freeStanding);
+    void process_NoQSOCallingCQ(bool freeStanding);
+    void process_NoQSOCallingThem(bool freeStanding);
+    void process_InQSO(bool freeStanding);
 
     bool checkThemPresent();
     QString getStateText(QSOStates s);
