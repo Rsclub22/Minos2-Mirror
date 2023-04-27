@@ -108,6 +108,8 @@ private:
     void startEngine();
 
     void scanLine(int curLine);
+    QString getSelectedRadio();
+    bool setSelectedRadio(QString s);
 signals:
     void rigModeFreq(QString, Frequency);
     void sendCharactersDown(QString, int);

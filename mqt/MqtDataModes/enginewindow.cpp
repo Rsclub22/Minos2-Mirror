@@ -165,6 +165,28 @@ void EngineWindow::selectEngine(QString name)
 
 
 }
+QString EngineWindow::getSelectedRadio()
+{
+    return ui->mainRigComboBox->currentData().toString();
+}
+
+bool EngineWindow::setSelectedRadio(QString s)
+{
+    QStringList radios;
+    int c = ui->mainRigComboBox->findData(s);
+    if (c >= 0)
+    {
+        ui->mainRigComboBox->setCurrentIndex(c);
+    }
+    else
+    {
+        for (int i = 0; i < ui->mainRigComboBox->count(); i++)
+        {
+            radios.append(ui->mainRigComboBox->itemData(i).toString());
+        }
+    }
+    return c >= 0;
+}
 
 void EngineWindow::closeEvent(QCloseEvent *event)
 {
@@ -247,7 +269,7 @@ void EngineWindow::on_notify(AnalysePubSubNotify an, const QString /*from*/ )
         {
             rigCache.setStateString(an);
             mainRig = rigCache.getSelected("");
-            ui->mainRigComboBox->setCurrentText(mainRig.toString());
+            setSelectedRadio(mainRig.toString());
         }
         else if ( an.getCategory() == rpcConstants::rigDetailsCategory)
         {
@@ -260,9 +282,11 @@ void EngineWindow::on_notify(AnalysePubSubNotify an, const QString /*from*/ )
             ui->mainRigComboBox->clear();
 
             QStringList cb = populateRig();
-            ui->mainRigComboBox->clear();
-            ui->mainRigComboBox->addItems(cb);
-            ui->mainRigComboBox->setCurrentText(mainRig.toString());
+            comboSetUniqueNames(cb, ui->mainRigComboBox);
+
+//            ui->mainRigComboBox->clear();
+//            ui->mainRigComboBox->addItems(cb);
+//            ui->mainRigComboBox->setCurrentText(mainRig.toString());
         }
 
         RigState &selState = rigCache.getState(mainRig);
