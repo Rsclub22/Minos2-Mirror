@@ -156,14 +156,14 @@ bool EngineConfigure::check()
     checkEnginePath(ui->fldigiEdit, ui->fldigiEnable1);
     checkEnginePath(ui->fldigiEdit, ui->fldigiEnable2);
 
-    checkEnginePath(ui->grittyEdit, ui->fldigiEnable1);
-    checkEnginePath(ui->grittyEdit, ui->fldigiEnable2);
+    checkEnginePath(ui->grittyEdit, ui->grittyEnable1);
+    checkEnginePath(ui->grittyEdit, ui->grittyEnable2);
 
     checkEnginePort(ui->fldigiPort1, ui->fldigiEnable1);
     checkEnginePort(ui->fldigiPort2, ui->fldigiEnable2);
 
-    checkEnginePort(ui->grittyPort1, ui->fldigiEnable1);
-    checkEnginePort(ui->grittyPort2, ui->fldigiEnable2);
+    checkEnginePort(ui->grittyPort1, ui->grittyEnable1);
+    checkEnginePort(ui->grittyPort2, ui->grittyEnable2);
 
     return true;
 }

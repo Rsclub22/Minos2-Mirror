@@ -60,7 +60,8 @@ void DPGraphicsTextItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
         int cp = document()->documentLayout()->hitTest(event->pos(), Qt::FuzzyHit);
 
-        // walk back and forward looking for a separator
+        // row is part of this DPGraphicsTextItem
+        // walk back looking for a separator
         RXChar basec = engineWindow->rxBuff.getCharAt(row, cp);
         RXChar selc = basec;
         if (selc.getCh() == ' ')
@@ -79,7 +80,7 @@ void DPGraphicsTextItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
             cp++;
             selc = engineWindow->rxBuff.getCharAt(row, cp);
         }
-        c.setPosition(cp, QTextCursor::MoveAnchor);
+        c.setPosition(cp - 1, QTextCursor::MoveAnchor);
 
         // and forwards
         while (cp < engineWindow->rxBuff.getRxLine(row)->charCount()  && selc.isType(basec))
@@ -91,7 +92,7 @@ void DPGraphicsTextItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
             }
         }
 
-        c.setPosition(cp, QTextCursor::KeepAnchor);
+        c.setPosition(cp - 1, QTextCursor::KeepAnchor);
         setTextCursor(c);
 
         int mfreq = 0;

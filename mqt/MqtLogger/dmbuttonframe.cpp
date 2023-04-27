@@ -304,6 +304,8 @@ QString DMButtonFrame::parseFKeyMessage(QString mess)
 void DMButtonFrame::parseFKeyFile(QString fname, QString mode)
 {
     fkeys[mode].clear();
+    ui->fkeysetCombo->clear();
+    nameList.clear();
 
     QFile lf(fname);
 
@@ -422,17 +424,18 @@ void DMButtonFrame::on_chooseButton_clicked()
     QFileInfo qf(InitialDir);
 
     InitialDir = qf.canonicalFilePath();
-    QString Filter = tr("Contact list files (*.mc);;"
+    QString Filter = tr("Contact list files (*.json);;"
                      "All Files (*.*)") ;
 
-    fkeyFileName = QFileDialog::getOpenFileName( this,
+    QString fName = QFileDialog::getOpenFileName( this,
                        tr("Open Function Key Definitions"),
                        InitialDir,
                        Filter
                        );
 
-    if (!fkeyFileName.isEmpty())
+    if (!fName.isEmpty())
     {
+        fkeyFileName = fName;
         TContestApp::getContestApp() ->loggerBundle.setStringProfile( elpDigiFunctionKeyFile, fkeyFileName );
 
         ui->nameLabel->setText(tr("Data Modes Buttons from %1").arg(fkeyFileName));
