@@ -299,7 +299,7 @@ bool WsjtxFrame::goodCQCall(decodeMessage &dc)
     {
         if (!testCQCalls.contains(dc.CQCall))
         {
-            trace(QString("WsjtxFrame::goodCQCall %1 wrong CQ call").arg(dc.message));
+            trace(QString("WsjtxFrame::goodCQCall inTest %1 wrong CQ call").arg(dc.message));
             return false;
         }
     }
@@ -307,7 +307,7 @@ bool WsjtxFrame::goodCQCall(decodeMessage &dc)
     {
         if (!nonTestCQCalls.contains(dc.CQCall))
         {
-            trace(QString("WsjtxFrame::goodCQCall %1 wrong CQ call").arg(dc.message));
+            trace(QString("WsjtxFrame::goodCQCall not inTest %1 wrong CQ call").arg(dc.message));
             return false;
         }
 
@@ -317,6 +317,11 @@ bool WsjtxFrame::goodCQCall(decodeMessage &dc)
 void WsjtxFrame::getBestCQ73CallingMe()
 {
     trace(QString("WsjtxFrame::getBestCQ73CallingMe"));
+
+    int bestCQOffset = -1;
+    PointBonusMultSnr bestCQPoints;
+    int bestToMeOffset = -1;
+    PointBonusMultSnr bestToMePoints;
 
     for (int i = decodeStartSize; i < decodeEndSize; i++)
     {
@@ -349,13 +354,11 @@ void WsjtxFrame::getBestCQ73CallingMe()
             continue;
         }
 
-        if ((dc.mstage == emsCQ)   // CQ calls aren't "to" anyone
-            || ((dc.mstage == emsGrid) && toMyCall)
-            )
+        if ((dc.mstage == emsCQ || dc.mstage == emsRRR || dc.mstage == ems73) && !toMyCall )
         {
-            if (dc.mstage == emsCQ)
+            if (dc.mstage == emsCQ || dc.mstage == emsRRR || dc.mstage == ems73)
             {
-                if (!goodCQCall(dc))
+                if (dc.mstage == emsCQ && !goodCQCall(dc))
                 {
                     // e.g. CQ DX in a contest
                     trace("WsjtxFrame::getBestCQ73CallingMe - not good CQ");
@@ -364,22 +367,49 @@ void WsjtxFrame::getBestCQ73CallingMe()
             }
             if ( dc.snr >= minsnr
                 && dc.points > minpoints
-                && pbv > bestPoints
+                && pbv > bestCQPoints
                 )
             {
-                trace(QString("WsjtxFrame::getBestCQ73CallingMe Candidate %1").arg(messages[i].message));
-                bestOffset = i;
-                bestPoints = pbv;
+                trace(QString("WsjtxFrame::getBestCQ73CallingMe CQ Candidate %1").arg(messages[i].message));
+                bestCQOffset = i;
+                bestCQPoints = pbv;
             }
             else
             {
-                trace(QString("WsjtxFrame::getBestCQ73CallingMe NOT best %1").arg(messages[i].message));
+                trace(QString("WsjtxFrame::getBestCQ73CallingMe NOT best CQ %1").arg(messages[i].message));
+            }
+        }
+        else if ((dc.mstage == emsGrid || dc.mstage == emsDb || dc.mstage == emsDbGrid) && toMyCall)
+        {
+            if ( dc.snr >= minsnr
+                && dc.points > minpoints
+                && pbv > bestToMePoints
+                )
+            {
+                trace(QString("WsjtxFrame::getBestCQ73CallingMe tome Candidate %1").arg(messages[i].message));
+                bestToMeOffset = i;
+                bestToMePoints = pbv;
+            }
+            else
+            {
+                trace(QString("WsjtxFrame::getBestCQ73CallingMe NOT best to me %1").arg(messages[i].message));
             }
         }
         else
         {
             trace(QString("WsjtxFrame::getBestCQ73CallingMe NOT Candidate %1").arg(messages[i].message));
         }
+    }
+    // we should prefer responses to me over CQ/RRR/73 calls
+    if (bestToMeOffset >= 0)
+    {
+        bestOffset = bestToMeOffset;
+        trace(QString("WsjtxFrame::getBestCQ73CallingMe best to me %1").arg(messages[bestToMeOffset].message));
+    }
+    else if (bestCQOffset >= 0)
+    {
+        bestOffset = bestCQOffset;
+        trace(QString("WsjtxFrame::getBestCQ73CallingMe best CQ %1").arg(messages[bestCQOffset].message));
     }
 }
 bool WsjtxFrame::getBestToMe()
@@ -426,28 +456,7 @@ bool WsjtxFrame::getBestToMe()
         if (toMyCall)
         {
             trace("WsjtxFrame::getBestToMe() toMyCall");
-            if (currTxStage == emsCQ || currTxStage == emsRRR || currTxStage == ems73)
-            // calling CQ or waiting for 73
-            {
-                // look for best candidate of those calling us - don't limit by snr or points
-                // If they are starting with Tx2, we can miss the loc - and so their score will
-                // be miniscule (probably 0)
-                // so start bestpoints at -1...
-                if ( pbv > bestPoints  )
-                {
-                    // which might not be the most profitable
-                    trace(QString("WsjtxFrame::getBestToMe (lasttx) Candidate %1")
-                              .arg(dc.message));
-                    bestOffset = i;
-                    bestPoints = pbv;
-                                    }
-                else
-                {
-                    trace(QString("WsjtxFrame::getBestToMe (lasttx) NOT best %1")
-                              .arg(dc.message));
-                }
-            }
-            else if (dcFromCall == workingCall || dcFromCall == callingCall)
+            if (dcFromCall == workingCall || dcFromCall == callingCall)
             {
                 trace("WsjtxFrame::getBestToMe (dcFromCall == workingCall || dcFromCall == callingCall)");
                 // this is best, and WSJT-X should automatically respond
