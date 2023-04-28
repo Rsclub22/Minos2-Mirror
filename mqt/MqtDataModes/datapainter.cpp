@@ -61,6 +61,29 @@ void DPGraphicsTextItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
         int cp = document()->documentLayout()->hitTest(event->pos(), Qt::FuzzyHit);
 
         // row is part of this DPGraphicsTextItem
+
+//        QTextCursor is modeled on the way a text cursor behaves in a text editor,
+//        providing a programmatic means of performing standard actions through the
+//        user interface.
+//
+//        A document can be thought of as a single string of characters.
+//
+//        The cursor's current position() then is always either between two consecutive characters in the string,
+//        or else before the very first character or after the very last character in the string.
+//
+//        Documents can also contain tables, lists, images, and other objects in addition to text but,
+//        from the developer's point of view, the document can be treated as one long string.
+//        Some portions of that string can be considered to lie within particular blocks (e.g. paragraphs),
+//        or within a table's cell, or a list's item, or other structural elements.
+
+//        When we refer to
+//        "current character" we mean the character immediately before the cursor position() in the document.
+//        Similarly, the "current block" is the block that contains the cursor position().
+
+//        A QTextCursor also has an anchor() position. The text that is between the
+//        anchor() and the position() is the selection.
+//        If anchor() == position() there is no selection.
+
         // walk back looking for a separator
         RXChar basec = engineWindow->rxBuff.getCharAt(row, cp);
         RXChar selc = basec;
@@ -72,15 +95,18 @@ void DPGraphicsTextItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
         }
         while (cp > 0 && selc.isType(basec))
         {
+            // Staying within word type, walk back one
             cp--;
             selc = engineWindow->rxBuff.getCharAt(row, cp);
         }
         if (!selc.isType(basec) && cp < engineWindow->rxBuff.getRxLine(row)->charCount())
         {
+            // if that takes us out of word, go forwards one
             cp++;
             selc = engineWindow->rxBuff.getCharAt(row, cp);
         }
-        c.setPosition(cp - 1, QTextCursor::MoveAnchor);
+        // and set the cursor position at the start of the word
+        c.setPosition(cp, QTextCursor::MoveAnchor);
 
         // and forwards
         while (cp < engineWindow->rxBuff.getRxLine(row)->charCount()  && selc.isType(basec))
@@ -92,7 +118,7 @@ void DPGraphicsTextItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
             }
         }
 
-        c.setPosition(cp - 1, QTextCursor::KeepAnchor);
+        c.setPosition(cp, QTextCursor::KeepAnchor);
         setTextCursor(c);
 
         int mfreq = 0;
@@ -161,6 +187,7 @@ void DataPainter::initialise(EngineWindow *e)
 
 void DataPainter::setText()
 {
+    // we really want to preserve selection as well
     int nlines = engineWindow->rxBuff.getLines();
     for (int i = 0; i < nlines; i++)
     {
@@ -233,8 +260,11 @@ void DataPainter::setText()
 
                 rxbuff.append(nc.getCh());
             }
+            QTextCursor cursor = lines[i]->textCursor();
+            int startPos = cursor.selectionStart();
+            int endPos = cursor.selectionEnd();
             QTextCharFormat tcf;
-            lines[i]->textCursor().setCharFormat(tcf);
+            cursor.setCharFormat(tcf);
 
             QFont cf = QApplication::font();
 
@@ -243,6 +273,12 @@ void DataPainter::setText()
 
             lines[i]->setHtml(rxbuff);
 
+            if (startPos != endPos)
+            {
+                cursor.setPosition(startPos, QTextCursor::MoveAnchor);
+                cursor.setPosition(endPos, QTextCursor::KeepAnchor);
+            }
+            lines[i]->setTextCursor(cursor);
             engineWindow->rxBuff.getRxLine(i)->setDirty(false);
         }
     }
