@@ -43,7 +43,7 @@ private:
     Ui::TestFrame *ui;
     int loffset = 0;
     int toffset = 0;
-    bool newLine = true;
+    bool newLine = false;
 
 };
 

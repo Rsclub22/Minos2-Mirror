@@ -2,6 +2,7 @@ include($$PWD/../mqt.pri)
 include($$PWD/../mqtapplibs.pri)
 
 QT += core gui network xml
+QT += serialport
 QT += widgets
 
 TARGET = MqtDataModes

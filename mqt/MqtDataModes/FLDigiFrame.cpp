@@ -301,11 +301,11 @@ void FLDigiFrame::on_started()
 }
 void FLDigiFrame::addText(const QString &t)
 {
-    bool newLine = true;
+    RXChar rxch('\n', 0, markFrequency);
+    engineWindow->rxBuff.addChar(rxch);
     for(const auto &s:qAsConst(t))
     {
-        RXChar rxch(s, newLine, 0, markFrequency);
-        newLine = false;
+        RXChar rxch(s, 0, markFrequency);
         engineWindow->rxBuff.addChar(rxch);
     }
 
@@ -323,16 +323,16 @@ void FLDigiFrame::myResponseMethod(QVariant &v)
         {
             trace(QString("Response %1").arg(s));
 
-            bool nl = true;
             addText("Response: ");
+            RXChar rxch('\n', 0, markFrequency);
+            engineWindow->rxBuff.addChar(rxch);
             for (auto c:qAsConst(s))
             {
-                RXChar rxch(c, nl, 0, markFrequency);
-                nl = false;
+                RXChar rxch(c, 0, markFrequency);
                 engineWindow->rxBuff.addChar(rxch);
             }
-            RXChar rxch(' ', true, 0, markFrequency);
-            engineWindow->rxBuff.addChar(rxch);
+            RXChar rxch1('\n', 0, markFrequency);
+            engineWindow->rxBuff.addChar(rxch1);
         }
     }
     else if (v.canConvert<QStringList>())
@@ -342,11 +342,11 @@ void FLDigiFrame::myResponseMethod(QVariant &v)
         for(const auto &s:qAsConst(sl))
         {
             trace(QString("Response %1").arg(s));
-            bool newLine = true;
+            RXChar rxch('\n', 0, markFrequency);
+            engineWindow->rxBuff.addChar(rxch);
             for (auto c:qAsConst(s))
             {
-                RXChar rxch(c, newLine, 0, markFrequency);
-                newLine = false;
+                RXChar rxch(c, 0, markFrequency);
                 engineWindow->rxBuff.addChar(rxch);
             }
         }
@@ -387,11 +387,11 @@ void FLDigiFrame::myTxResponseMethod(QVariant &v)
         if (!s.isEmpty())
         {
             trace(QString("TXResponse %1").arg(s));
-            bool newLine = true;
+            RXChar rxch('\n', 0, markFrequency);
+            engineWindow->rxBuff.addChar(rxch);
             for (auto c:qAsConst(s))
             {
-                RXChar rxch(c, newLine, 0, markFrequency);
-                newLine = false;
+                RXChar rxch(c, 0, markFrequency);
                 engineWindow->rxBuff.addChar(rxch);
             }
         }
@@ -403,11 +403,11 @@ void FLDigiFrame::myTxResponseMethod(QVariant &v)
         for(const auto &s:qAsConst(sl))
         {
             trace(QString("TXResponse %1").arg(s));
-            bool newLine = true;
+            RXChar rxch('\n', 0, markFrequency);
+            engineWindow->rxBuff.addChar(rxch);
             for (auto c:qAsConst(s))
             {
-                RXChar rxch(c, newLine, 0, markFrequency);
-                newLine = false;
+                RXChar rxch(c, 0, markFrequency);
                 engineWindow->rxBuff.addChar(rxch);
             }
         }
@@ -425,7 +425,7 @@ void FLDigiFrame::myRxResponseMethod(QVariant &v)
 
             for (auto c:qAsConst(s))
             {
-                RXChar rxch(c, false, 0, markFrequency);
+                RXChar rxch(c, 0, markFrequency);
                 engineWindow->rxBuff.addChar(rxch);
             }
         }
@@ -437,11 +437,11 @@ void FLDigiFrame::myRxResponseMethod(QVariant &v)
         for(const auto &s:qAsConst(sl))
         {
             trace(QString("RXResponse %1").arg(s));
-            bool newLine = true;
+            RXChar rxch('\n', 0, markFrequency);
+            engineWindow->rxBuff.addChar(rxch);
             for (auto c:qAsConst(s))
             {
-                RXChar rxch(c, newLine, 0, markFrequency);
-                newLine = false;
+                RXChar rxch(c, 0, markFrequency);
                 engineWindow->rxBuff.addChar(rxch);
             }
         }

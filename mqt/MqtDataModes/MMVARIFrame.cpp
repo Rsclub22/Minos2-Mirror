@@ -6,6 +6,7 @@
 #include "rxbuffer.h"
 #include "dmmainwindow.h"
 #include "enginewindow.h"
+#include "engineconfigure.h"
 #include "MMVARIFrame.h"
 
 // I think we are in charge of MMVARI multiple copies - we do all the INI file stuff
@@ -14,7 +15,7 @@
 // either pallette of sensitivity are rubbish - not seeoing signals
 MMVARIFrame::MMVARIFrame(QFrame *cwl, EngineWindow *p,
                          QLineEdit *sendEdit,
-                         int inId, int outId, QString /*name*/) :
+                         int inId, int outId, QString name) :
     QObject(cwl),
     engineWindow(p),
     sendEdit(sendEdit)
@@ -134,7 +135,18 @@ MMVARIFrame::MMVARIFrame(QFrame *cwl, EngineWindow *p,
     modeCombo->setCurrentIndex(0);
     onModeComboChanged(speedCombo->currentText());
 
+    // Set the PTT options
 
+    QString PTTPort = EngineConfigure::getEnginePTT(name);
+    if (!PTTPort.isEmpty())
+    {
+        int PTTLine = EngineConfigure::getEnginePTTL(name); // 0 is RTS, 1 is DTR (2 is TXD)
+
+        mmvari->setStrPTTPort(PTTPort);
+        mmvari->setBPTTLock(false);
+        mmvari->setBPTTLines(MMVARILib::pttlineDTR, PTTLine == 1);
+        mmvari->setBPTTLines(MMVARILib::pttlineRTS, PTTLine == 0);
+    }
     //====================================================================
     // and finally the spectrum and level controls
     mmvariHb = new QHBoxLayout();
@@ -508,7 +520,7 @@ void MMVARIFrame::OnRxChar(int /*rxChannel*/, QString strChar, int /*wChar*/)
     trace(QString("RX chars %1 mark %2").arg(strChar).arg(markfreq));
     for (const auto &c:qAsConst(strChar))
     {
-        RXChar rxch(c, false, 0, markfreq);
+        RXChar rxch(c, 0, markfreq);
         engineWindow->rxBuff.addChar(rxch);
     }
 }
@@ -605,11 +617,13 @@ void MMVARIFrame::OnTxState(int a)
         txButton->setChecked(false);
         rxButton->setChecked(true);
 
-        RXChar rxch('R', true, 0, markfreq);
+        RXChar rxchn('\n', 0, markfreq);
+        engineWindow->rxBuff.addChar(rxchn);
+        RXChar rxch('R', 0, markfreq);
         engineWindow->rxBuff.addChar(rxch);
-        RXChar rxch2('X', false, 0, markfreq);
+        RXChar rxch2('X', 0, markfreq);
         engineWindow->rxBuff.addChar(rxch2);
-        RXChar rxch3(' ', false, 0, markfreq);
+        RXChar rxch3(' ', 0, markfreq);
         engineWindow->rxBuff.addChar(rxch3);
 
         emit txChanged(false);
@@ -619,11 +633,13 @@ void MMVARIFrame::OnTxState(int a)
         txButton->setText("RX");
         txButton->setChecked(true);
         rxButton->setChecked(false);
-        RXChar rxch('T', true, 0, markfreq);
+        RXChar rxchn('\n', 0, markfreq);
+        engineWindow->rxBuff.addChar(rxchn);
+        RXChar rxch('T', 0, markfreq);
         engineWindow->rxBuff.addChar(rxch);
-        RXChar rxch2('X', false, 0, markfreq);
+        RXChar rxch2('X', 0, markfreq);
         engineWindow->rxBuff.addChar(rxch2);
-        RXChar rxch3(' ', false, 0, markfreq);
+        RXChar rxch3(' ', 0, markfreq);
         engineWindow->rxBuff.addChar(rxch3);
 
         emit txChanged(true);
@@ -633,11 +649,13 @@ void MMVARIFrame::OnTxState(int a)
         txButton->setText("Wait");
         txButton->setChecked(true);
         rxButton->setChecked(false);
-        RXChar rxch('W', true, 0, markfreq);
+        RXChar rxchn('\n', 0, markfreq);
+        engineWindow->rxBuff.addChar(rxchn);
+        RXChar rxch('W', 0, markfreq);
         engineWindow->rxBuff.addChar(rxch);
-        RXChar rxch2('T', false, 0, markfreq);
+        RXChar rxch2('T',  0, markfreq);
         engineWindow->rxBuff.addChar(rxch2);
-        RXChar rxch3(' ', false, 0, markfreq);
+        RXChar rxch3(' ', 0, markfreq);
         engineWindow->rxBuff.addChar(rxch3);
         emit txChanged(true);
     }
@@ -646,11 +664,13 @@ void MMVARIFrame::OnTxState(int a)
         txButton->setText("Tone");
         txButton->setChecked(true);
         rxButton->setChecked(false);
-        RXChar rxch('T', true, 0, markfreq);
+        RXChar rxchn('\n', 0, markfreq);
+        engineWindow->rxBuff.addChar(rxchn);
+        RXChar rxch('T', 0, markfreq);
         engineWindow->rxBuff.addChar(rxch);
-        RXChar rxch2('N', false, 0, markfreq);
+        RXChar rxch2('N', 0, markfreq);
         engineWindow->rxBuff.addChar(rxch2);
-        RXChar rxch3(' ', false, 0, markfreq);
+        RXChar rxch3(' ', 0, markfreq);
         engineWindow->rxBuff.addChar(rxch3);
         emit txChanged(true);
     }

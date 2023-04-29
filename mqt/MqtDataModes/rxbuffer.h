@@ -8,7 +8,6 @@
 class RXChar
 {
     QChar ch = ' ';
-    bool newLine = false;
     bool valid = false;
     int deleteCount = 0;
     bool dirty = false;
@@ -21,16 +20,14 @@ class RXChar
     bool unworkedCall = false;
 public:
     RXChar();
-    RXChar(QChar c, bool nl, int dc, int carr);
+    RXChar(QChar c, int dc, int carr);
 
     bool isType(const RXChar &) const;
 
     QChar getCh() const;
     void setCh(const QChar &newCh);
-    bool getNewLine() const;
     int getDeleteCharacters() const;
     bool isValid() const;
-    void setNewLine(bool newNewLine = true);
     bool getDirty() const;
     void setDirty(bool newDirty);
     int getMarkFreq() const;
@@ -66,7 +63,7 @@ public:
     RXChar *getCharRef(int col);
     RXChar getLastChar() const;
     RXChar getCharAt(int col) const;
-    int deleteChars(int n, RXChar &lastDeleted); // return chars still to delete
+    int deleteChars(int n); // return chars still to delete
     QString toString();
 };
 //=================================================

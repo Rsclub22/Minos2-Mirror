@@ -387,10 +387,15 @@ void GrittyFrame::analyseGrittyMessage(QString m)
                 //bool weak = getBool(sconf, "Weak", false);
                 //QString wordKind = getString(sconf, "WordKind", QString());
 
+                if (newLine)
+                {
+                    RXChar rxch('\n', 0, markFrequency);
+                    engineWindow->rxBuff.addChar(rxch);
+                }
                 for (auto c:qAsConst(ch))
                 {
                     // markFrequency will be zero - we don't get it from gritty
-                    RXChar rxch(c, newLine, deleteCount, markFrequency);
+                    RXChar rxch(c, deleteCount, markFrequency);
                     engineWindow->rxBuff.addChar(rxch);
                 }
                 trace(engineName + " End of decode");

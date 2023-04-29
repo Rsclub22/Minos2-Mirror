@@ -77,10 +77,9 @@ RXChar::RXChar()
 
 }
 
-RXChar::RXChar(QChar c, bool nl, int dc, int carr)
+RXChar::RXChar(QChar c, int dc, int carr)
 {
     ch = c;
-    newLine = nl;
     deleteCount = dc;
     valid = true;
     dirty = true;
@@ -114,16 +113,6 @@ QChar RXChar::getCh() const
 void RXChar::setCh(const QChar &newCh)
 {
     ch = newCh;
-}
-
-void RXChar::setNewLine(bool newNewLine)
-{
-    newLine = newNewLine;
-}
-
-bool RXChar::getNewLine() const
-{
-    return newLine;
 }
 
 int RXChar::getDeleteCharacters() const
@@ -216,19 +205,14 @@ RXChar RxLine::getCharAt(int col) const
     return RXChar();
 }
 
-int RxLine::deleteChars(int n, RXChar &lastDeleted)
+int RxLine::deleteChars(int n)
 {
     while (curCol > 0 && n > 0)
     {
         curCol--;
-        lastDeleted = rxLine[curCol];
         rxLine.remove(curCol);
         n--;
         //trace(QString("Remove char <%1> newline == %2").arg(lastDeleted.getCh()).arg(lastDeleted.getNewLine()));
-        if (lastDeleted.getNewLine())
-        {
-            break;
-        }
     }
     return n;
 }
@@ -268,12 +252,7 @@ void RxBuffer::addChar(RXChar &c)
     int d = c.getDeleteCharacters();
     deleteChars(d);
 
-    if (c.getCh() == '\n' || c.getCh() == '\r')
-    {
-        //trace("Add newline character");
-        c = RXChar(' ', true, 0, 0);
-    }
-    if (c.getNewLine())
+    if (c.getCh() == '\n'|| c.getCh() == '\r')
     {
         //trace(QString("Implement newline from line %1").arg(curLine));
 
@@ -300,7 +279,7 @@ void RxBuffer::addChar(RXChar &c)
         {
             buff[curLine + 1].reset();
 
-            RXChar ulc = RXChar('_', false, 0, 0);
+            RXChar ulc = RXChar('_', 0, 0);
 
             for (int i = 0; i < 40; i++)
             {
@@ -309,8 +288,10 @@ void RxBuffer::addChar(RXChar &c)
             //trace(QString("clear line %1").arg(curLine + 1));
         }
     }
-
-    buff[curLine].addChar(c);
+    else
+    {
+        buff[curLine].addChar(c);
+    }
     //trace(QString("Add character <%1> %2 on line %3").arg(c.getCh()).arg(int(c.getCh().toLatin1())).arg(curLine));
 
     emit newCharacter();
@@ -369,15 +350,14 @@ void RxBuffer::deleteChars(int n)
             //trace(QString("delete %1 characters curLine is %2").arg(n).arg(curLine));
             while (n > 0)
             {
-                RXChar lastDeleted;  // but if there is more than one char...
-                n = buff[curLine].deleteChars(n, lastDeleted);
+                n = buff[curLine].deleteChars(n);
                 int l = charCount();
                 if (n > l)
                 {
                     n = l;
                 }
 
-                if (lastDeleted.getNewLine())
+                if (n > 0)
                 {
                     buff[curLine].reset();
                     curLine--;

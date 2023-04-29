@@ -4,6 +4,7 @@
 #include "dmmainwindow.h"
 #include "enginewindow.h"
 #include "fileutils.h"
+#include "rigcommon.h"
 
 #include "engineconfigure.h"
 #include "ui_engineconfigure.h"
@@ -94,6 +95,35 @@ int EngineConfigure::getEnginePort(QString engine)
 void EngineConfigure::setEnginePort(QSettings &settings, QString engine, int port)
 {
     settings.setValue("port/" + engine, port);
+}
+QString EngineConfigure::getEnginePTT(QSettings &settings, QString engine)
+{
+    QString s = settings.value("PTT/" + engine).toString();
+    return s;
+}
+QString EngineConfigure::getEnginePTT(QString engine)
+{
+    QSettings settings("./Configuration/DataModes.ini", QSettings::IniFormat);
+    return getEnginePTT(settings, engine);
+}
+void EngineConfigure::setEnginePTT(QSettings &settings,QString engine, QString port)
+{
+    settings.setValue("PTT/" + engine, port);
+}
+
+int EngineConfigure::getEnginePTTL(QSettings &settings, QString engine)
+{
+    int p = settings.value("PTTL/" + engine).toInt();
+    return p;
+}
+int EngineConfigure::getEnginePTTL(QString engine)
+{
+    QSettings settings("./Configuration/DataModes.ini", QSettings::IniFormat);
+    return getEnginePTTL(settings, engine);
+}
+void EngineConfigure::setEnginePTT(QSettings &settings,QString engine, int l)
+{
+    settings.setValue("PTTL/" + engine, l);
 }
 
 void EngineConfigure::checkEnginePath(QLineEdit *ele, QCheckBox *ecb)
@@ -221,6 +251,33 @@ EngineConfigure::EngineConfigure(DMMainWindow *parent) :
     b = getEngineEnabled(settings, EngineWindow::mmvari + EngineWindow::i2);
     ui->mmvariEnable2->setChecked(b);
 
+    fillPortsInfo(ui->MMVARIPTT1);
+    QString p = getEnginePTT(settings, EngineWindow::mmvari + EngineWindow::i1);
+    int l = getEnginePTTL(settings, EngineWindow::mmvari + EngineWindow::i1);
+
+    ui->MMVARIPTT1->setCurrentText(p);
+    if (l == 1)
+    {
+        ui->MMVARIDTR1->setChecked(true);
+    }
+    else
+    {
+        ui->MMVARIRTS1->setChecked(true);
+    }
+    fillPortsInfo(ui->MMVARIPTT2);
+    p = getEnginePTT(settings, EngineWindow::mmvari + EngineWindow::i2);
+    l = getEnginePTTL(settings, EngineWindow::mmvari + EngineWindow::i2);
+
+    ui->MMVARIPTT2->setCurrentText(p);
+    if (l == 1)
+    {
+        ui->MMVARIDTR2->setChecked(true);
+    }
+    else
+    {
+        ui->MMVARIRTS2->setChecked(true);
+    }
+
     // Other engines have their own soundcard configuration
 
     m = getEnginePath(settings, EngineWindow::twotone + EngineWindow::i1);
@@ -266,8 +323,8 @@ EngineConfigure::EngineConfigure(DMMainWindow *parent) :
 
     setPortDefault(settings, EngineWindow::fldigi + EngineWindow::i1, ui->fldigiPort1, 7362);
     setPortDefault(settings, EngineWindow::fldigi + EngineWindow::i2, ui->fldigiPort2, 7363);
-    setPortDefault(settings, EngineWindow::gritty + EngineWindow::i1, ui->fldigiPort1, 7502);
-    setPortDefault(settings, EngineWindow::gritty + EngineWindow::i2, ui->fldigiPort1, 7503);
+    setPortDefault(settings, EngineWindow::gritty + EngineWindow::i1, ui->grittyPort1, 7502);
+    setPortDefault(settings, EngineWindow::gritty + EngineWindow::i2, ui->grittyPort2, 7503);
 
     ui->rttySpeed->addItem("45.45");
     ui->rttySpeed->addItem("75");
@@ -368,6 +425,10 @@ void EngineConfigure::on_OKButton_clicked()
 
         setEngineSound(settings, EngineWindow::mmvari + EngineWindow::i1, "input", ui->MMVARIRX1->currentText());
         setEngineSound(settings, EngineWindow::mmvari + EngineWindow::i1, "output", ui->MMVARITX1->currentText());
+        setEnginePTT(settings, EngineWindow::mmvari + EngineWindow::i1, ui->MMVARIPTT1->currentText());
+        setEnginePTT(settings, EngineWindow::mmvari + EngineWindow::i2, ui->MMVARIPTT2->currentText());
+        setEnginePTT(settings, EngineWindow::mmvari + EngineWindow::i1, ui->MMVARIDTR1->isChecked());
+        setEnginePTT(settings, EngineWindow::mmvari + EngineWindow::i2, ui->MMVARIDTR2->isChecked());
 
         setEnginePath(settings, EngineWindow::mmtty + EngineWindow::i1, ui->mmttyEdit1->text());
         setEnginePath(settings, EngineWindow::mmtty + EngineWindow::i2, ui->mmttyEdit2->text());

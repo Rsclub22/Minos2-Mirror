@@ -79,13 +79,13 @@ void TestFrame::onTimeout()
         {
             loffset++;
             toffset = 0;
-            newLine = true;
+            RXChar rxch('\n', 0, markFrequency);
+            engineWindow->rxBuff.addChar(rxch);
         }
         else
         {
             QChar c = testData[loffset][toffset];
-            RXChar rxch(c, newLine, 0, markFrequency);
-            newLine = false;
+            RXChar rxch(c, 0, markFrequency);
             engineWindow->rxBuff.addChar(rxch);
             toffset++;
         }
@@ -121,10 +121,11 @@ void TestFrame::sendCharacters(const QString &toSend, int /*markf*/)
 void TestFrame::sendMode(QString mode)
 {
     QString nm = "New mode set: " +  mode;
-    bool newLine = true;
+    RXChar rxchn('\n', 0, markFrequency);
+    engineWindow->rxBuff.addChar(rxchn);
     for (auto c:qAsConst(nm))
     {
-        RXChar rxch(c, newLine, 0, markFrequency);
+        RXChar rxch(c, 0, markFrequency);
         newLine = false;
         engineWindow->rxBuff.addChar(rxch);
     }

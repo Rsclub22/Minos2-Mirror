@@ -41,6 +41,14 @@ public:
     static int getEnginePort(QSettings &settings,QString engine);
     static int getEnginePort(QString engine);
     static void setEnginePort(QSettings &settings,QString engine, int port);
+
+    static QString getEnginePTT(QSettings &settings, QString engine);
+    static QString getEnginePTT(QString engine);
+    static void setEnginePTT(QSettings &settings,QString engine, QString port);
+
+    static int getEnginePTTL(QSettings &settings, QString engine);
+    static int getEnginePTTL(QString engine);
+    static void setEnginePTT(QSettings &settings,QString engine, int l);
 private slots:
     bool check();
 

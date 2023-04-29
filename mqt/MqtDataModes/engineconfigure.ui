@@ -6,22 +6,22 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>530</width>
-    <height>687</height>
+    <width>556</width>
+    <height>769</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Configure Engines</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_7">
+  <layout class="QVBoxLayout" name="verticalLayout_9">
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_12">
+    <layout class="QHBoxLayout" name="horizontalLayout_21">
      <item>
       <widget class="QFrame" name="MMVARI1frame">
        <property name="frameShape">
         <enum>QFrame::Box</enum>
        </property>
-       <layout class="QVBoxLayout" name="verticalLayout">
+       <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout">
           <item>
@@ -78,6 +78,44 @@
           </item>
          </layout>
         </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_12">
+          <item>
+           <widget class="QLabel" name="label_21">
+            <property name="text">
+             <string>PTT port</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="MMVARIPTT1"/>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout">
+            <item>
+             <widget class="QRadioButton" name="MMVARIRTS1">
+              <property name="text">
+               <string>RTS</string>
+              </property>
+              <attribute name="buttonGroup">
+               <string notr="true">MMVARIPTTL1</string>
+              </attribute>
+             </widget>
+            </item>
+            <item>
+             <widget class="QRadioButton" name="MMVARIDTR1">
+              <property name="text">
+               <string>DTR</string>
+              </property>
+              <attribute name="buttonGroup">
+               <string notr="true">MMVARIPTTL1</string>
+              </attribute>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </item>
        </layout>
       </widget>
      </item>
@@ -86,7 +124,7 @@
        <property name="frameShape">
         <enum>QFrame::Box</enum>
        </property>
-       <layout class="QVBoxLayout" name="verticalLayout_2">
+       <layout class="QVBoxLayout" name="verticalLayout_8">
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_9">
           <item>
@@ -133,6 +171,44 @@
           </item>
           <item>
            <widget class="QComboBox" name="MMVARITX2"/>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_20">
+          <item>
+           <widget class="QLabel" name="label_22">
+            <property name="text">
+             <string>PTT Port</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="MMVARIPTT2"/>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_7">
+            <item>
+             <widget class="QRadioButton" name="MMVARIRTS2">
+              <property name="text">
+               <string>RTS</string>
+              </property>
+              <attribute name="buttonGroup">
+               <string notr="true">MMVARIPTTL2</string>
+              </attribute>
+             </widget>
+            </item>
+            <item>
+             <widget class="QRadioButton" name="MMVARIDTR2">
+              <property name="text">
+               <string>DTR</string>
+              </property>
+              <attribute name="buttonGroup">
+               <string notr="true">MMVARIPTTL2</string>
+              </attribute>
+             </widget>
+            </item>
+           </layout>
           </item>
          </layout>
         </item>
@@ -523,4 +599,8 @@
  </widget>
  <resources/>
  <connections/>
+ <buttongroups>
+  <buttongroup name="MMVARIPTTL1"/>
+  <buttongroup name="MMVARIPTTL2"/>
+ </buttongroups>
 </ui>
