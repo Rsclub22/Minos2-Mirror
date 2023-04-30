@@ -37,7 +37,17 @@ void RemoteLogs::testAutoStart()
     QString fname = RemoteLogs::getSettingsFile();
     QSettings settings(fname, QSettings::IniFormat);
     QString autoSyncStations = settings.value("autoStations").toString();
-    QStringList autoStations = autoSyncStations.split(";");
+
+    QStringList autoStations;
+
+    if (autoSyncStations != "None")
+    {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+        autoStations = autoSyncStations.split(";", Qt::SkipEmptyParts);
+#else
+        autoStations = autoSyncStations.split(";", QString::SkipEmptyParts);
+#endif
+    }
 
     for ( auto const &s: qAsConst(RemoteLogs::getRemoteLogs()->stationList) )
     {
