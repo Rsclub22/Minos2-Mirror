@@ -64,7 +64,8 @@ MMVARIFrame::MMVARIFrame(QFrame *cwl, EngineWindow *p,
     newCheckableAction("On", atcMenu, &MMVARIFrame::onATC);
     onATC(mmvari->bATC());
 
-    mmvariVb->addWidget(mmbar);
+    // until we actually implement these controls, don't show them
+    //mmvariVb->addWidget(mmbar);
 
     //====================================================================
     // we need a row of buttons here...
@@ -75,33 +76,31 @@ MMVARIFrame::MMVARIFrame(QFrame *cwl, EngineWindow *p,
 
     QHBoxLayout *mmvariButtons = new QHBoxLayout();
 
-    txButton = new QPushButton();
-    txButton->setCheckable(true);
-    txButton->setText("TX");
-    mmvariButtons->addWidget(txButton);
-    connect(txButton, &QPushButton::clicked, this, &MMVARIFrame::txButtonClicked);
+    txLabel = new QLabel();
+    txLabel->setText("RX");
+    txLabel->setToolTip(tr("RX/TX state"));
+    mmvariButtons->addWidget(txLabel);
+    QSpacerItem *horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
-    rxButton = new QPushButton();
-    rxButton->setCheckable(true);
-    rxButton->setText("RX");
-    rxButton->setChecked(true);
-    mmvariButtons->addWidget(rxButton);
-    connect(rxButton, &QPushButton::clicked, this, &MMVARIFrame::rxButtonClicked);
+    mmvariButtons->addItem(horizontalSpacer);
 
     afcButton = new QPushButton();
     afcButton->setCheckable(true);
     afcButton->setText("AFC");
+    afcButton->setToolTip(tr("Move the cursor to keep it centered on a signal if the frequency changes slightly"));
     mmvariButtons->addWidget(afcButton);
     connect(afcButton, &QPushButton::clicked, this, &MMVARIFrame::afcButtonClicked);
 
     netButton = new QPushButton();
     netButton->setCheckable(true);
     netButton->setText("NET");
+    netButton->setToolTip(tr("When NET is on the TX frequency follows the RX frequency "));
     mmvariButtons->addWidget(netButton);
     connect(netButton, &QPushButton::clicked, this, &MMVARIFrame::netButtonClicked);
 
     alignButton = new QPushButton();
     alignButton->setText("Align");
+    alignButton->setToolTip(tr("Align the transmit frequency to the receive frequency"));
     mmvariButtons->addWidget(alignButton);
     connect(alignButton, &QPushButton::clicked, this, &MMVARIFrame::alignButtonClicked);
 
@@ -401,33 +400,6 @@ void MMVARIFrame::onSpeedComboChanged(const QString &s)
 {
     mmvari->setDblSpeed(0, s.toDouble());
 }
-void MMVARIFrame::txButtonClicked(bool checked)
-{
-//    wTxState As Integer (ReadOnly)
-//    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-//    This property shows the TX/RX status.
-//        0 - txstateRX		RX
-//        1 - txstateTX		TX
-//        2 - txstateREQRX		TX and waiting for idle
-//        3 - txstateWAIT		Switching to RX (flushing PCM data in the sound buffer)
-//        4 - txstateTONE		Transmitting a single tone
-
-    if (checked)
-    {
-        mmvari->setBAddStartCR(true);
-        mmvari->setBAddStopCR(true);
-        mmvari->SendText(sendEdit->text().trimmed());
-        mmvari->setBTX(true);
-        mmvari->setBReqRX(true);    // return to RX when buffer empty
-    }
-}
-void MMVARIFrame::rxButtonClicked(bool checked)
-{
-    if (checked)
-    {
-        mmvari->setBTX(false);
-    }
-}
 void MMVARIFrame::afcButtonClicked(bool checked)
 {
     mmvari->setBAFC(0, checked);
@@ -613,9 +585,9 @@ void MMVARIFrame::OnTxState(int a)
 
     if (a == 0)
     {
-        txButton->setText("TX");
-        txButton->setChecked(false);
-        rxButton->setChecked(true);
+        txLabel->setText("RX");
+//        txButton->setChecked(false);
+//        rxButton->setChecked(true);
 
         RXChar rxchn('\n', 0, markfreq);
         engineWindow->rxBuff.addChar(rxchn);
@@ -630,9 +602,9 @@ void MMVARIFrame::OnTxState(int a)
     }
     else if (a == 1)
     {
-        txButton->setText("RX");
-        txButton->setChecked(true);
-        rxButton->setChecked(false);
+        txLabel->setText("TX");
+//        txButton->setChecked(true);
+//        rxButton->setChecked(false);
         RXChar rxchn('\n', 0, markfreq);
         engineWindow->rxBuff.addChar(rxchn);
         RXChar rxch('T', 0, markfreq);
@@ -646,9 +618,9 @@ void MMVARIFrame::OnTxState(int a)
     }
     else if (a == 2 || a == 3)
     {
-        txButton->setText("Wait");
-        txButton->setChecked(true);
-        rxButton->setChecked(false);
+        txLabel->setText("Wait");
+//        txButton->setChecked(true);
+//        rxButton->setChecked(false);
         RXChar rxchn('\n', 0, markfreq);
         engineWindow->rxBuff.addChar(rxchn);
         RXChar rxch('W', 0, markfreq);
@@ -661,9 +633,9 @@ void MMVARIFrame::OnTxState(int a)
     }
     else if (a == 4)
     {
-        txButton->setText("Tone");
-        txButton->setChecked(true);
-        rxButton->setChecked(false);
+        txLabel->setText("Tone");
+//        txButton->setChecked(true);
+//        rxButton->setChecked(false);
         RXChar rxchn('\n', 0, markfreq);
         engineWindow->rxBuff.addChar(rxchn);
         RXChar rxch('T', 0, markfreq);

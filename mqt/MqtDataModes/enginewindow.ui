@@ -47,6 +47,9 @@
           </item>
           <item>
            <widget class="QPushButton" name="sendButton">
+            <property name="toolTip">
+             <string>Start Transmission</string>
+            </property>
             <property name="text">
              <string>Send</string>
             </property>
@@ -54,6 +57,9 @@
           </item>
           <item>
            <widget class="QPushButton" name="stopButton">
+            <property name="toolTip">
+             <string>Stop Transmission Immediately</string>
+            </property>
             <property name="text">
              <string>Stop</string>
             </property>

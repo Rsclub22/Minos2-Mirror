@@ -68,8 +68,8 @@ private:
 
     // TX, RX, AFC, NET, ALIGN, mode combo, speed combo, TX Carrier, RX Carrier, db indicator
 
-    QPushButton *txButton = nullptr;
-    QPushButton *rxButton = nullptr;
+    QLabel *txLabel = nullptr;
+    //QPushButton *rxButton = nullptr;
     QPushButton *afcButton = nullptr;
     QPushButton *netButton = nullptr;
     QPushButton *alignButton = nullptr;
@@ -93,8 +93,6 @@ private slots:
     void onATC(bool checked);
     void onModeComboChanged(const QString &m);
     void onSpeedComboChanged(const QString &s);
-    void txButtonClicked(bool checked);
-    void rxButtonClicked(bool checked);
     void afcButtonClicked(bool checked);
     void netButtonClicked(bool checked);
     void alignButtonClicked(bool checked);
