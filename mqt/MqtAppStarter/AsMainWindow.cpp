@@ -7,6 +7,7 @@
 
 #include "MShowMessageDlg.h"
 #include "ServerEvent.h"
+#include "StartConfig.h"
 #include "waitcursor.h"
 #include "AppStartup.h"
 #include "LogEvents.h"
@@ -207,14 +208,17 @@ void MainWindow::LanguageAcceptActionExecute()
 
 void MainWindow::on_appsButton_clicked()
 {
-    StartConfigManager manageApps(this, true);
-    manageApps.exec();
-
-    QString cc = MinosConfig::getMinosConfig() ->getCurrConfig().configName;
-
-    sbLabel->setText(cc);
-
+    MinosConfig *minosConfig = MinosConfig::getMinosConfig();
+    StartConfig configBox( this, false, minosConfig->getCurrConfig().configName);
+    configBox.exec();
 }
+
+void MainWindow::on_appSelectButton_clicked()
+{
+    StartConfigManager manageApps( this, true);   // when managing sets, include autostart
+    manageApps.exec();
+}
+
 
 void MainWindow::on_closeButton_clicked()
 {

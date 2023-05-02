@@ -250,17 +250,14 @@ void TAboutBox::on_LoggerOnlyButton_clicked()
 
 void TAboutBox::on_AppsButton_clicked()
 {
-    if (Qt::ShiftModifier == QApplication::keyboardModifiers())
-    {
-        StartConfigManager manageApps( this, true);   // when managing sets, include autostart
-        manageApps.exec();
-    }
-    else
-    {
-        MinosConfig *minosConfig = MinosConfig::getMinosConfig();
-        StartConfig configBox( this, false, minosConfig->getCurrConfig().configName);
-        configBox.exec();
-    }
+    MinosConfig *minosConfig = MinosConfig::getMinosConfig();
+    StartConfig configBox( this, false, minosConfig->getCurrConfig().configName);
+    configBox.exec();
+}
+void TAboutBox::on_appSelectButton_clicked()
+{
+    StartConfigManager manageApps( this, true);   // when managing sets, include autostart
+    manageApps.exec();
 }
 
 void TAboutBox::on_manageSets_clicked()
@@ -291,12 +288,5 @@ void TAboutBox::on_ageCb_stateChanged(int /*arg1*/)
     ui->ageSpinner->setEnabled(ui->ageCb->isChecked());
     TContestApp::getContestApp() ->loggerBundle.setBoolProfile(elpAgeProtectContests, ui->ageCb->isChecked());
     TContestApp::getContestApp() ->loggerBundle.flushProfile();
-}
-
-
-void TAboutBox::on_appSelectButton_clicked()
-{
-    StartConfigManager manageApps( this, true);   // when managing sets, include autostart
-    manageApps.exec();
 }
 

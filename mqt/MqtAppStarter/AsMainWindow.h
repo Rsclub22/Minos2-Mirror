@@ -23,6 +23,8 @@ private slots:
     void startTimer_Timeout();
 
     void on_appsButton_clicked();
+    void on_startAppsButton_clicked();
+    void on_appSelectButton_clicked();
 
     void on_closeButton_clicked();
 
@@ -31,7 +33,6 @@ private slots:
     void ExitActionExecute();
     void FontEditAcceptActionExecute();
     void LanguageAcceptActionExecute();
-    void on_startAppsButton_clicked();
 
 private:
     Ui::MainWindow *ui;
