@@ -468,7 +468,7 @@ void QSOMapFrame::drawSpot(QSharedPointer<ClusterSpotData> bsd)
         double distance = 0.0;
         ct->calcDistanceBearing(loc, &distance, &bearing);
 
-        if (distance > spotDistance)
+        if (spotDistance > 0 && distance > spotDistance)
         {
             return;
         }
