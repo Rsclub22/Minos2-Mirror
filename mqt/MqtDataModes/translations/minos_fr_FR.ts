@@ -49,23 +49,23 @@
     </message>
     <message>
         <location filename="../engineconfigure.ui" line="58"/>
-        <location filename="../engineconfigure.ui" line="116"/>
+        <location filename="../engineconfigure.ui" line="154"/>
         <source>Receive</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../engineconfigure.ui" line="72"/>
-        <location filename="../engineconfigure.ui" line="130"/>
+        <location filename="../engineconfigure.ui" line="168"/>
         <source>Transmit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../engineconfigure.ui" line="165"/>
-        <location filename="../engineconfigure.ui" line="193"/>
-        <location filename="../engineconfigure.ui" line="230"/>
-        <location filename="../engineconfigure.ui" line="258"/>
-        <location filename="../engineconfigure.ui" line="295"/>
-        <location filename="../engineconfigure.ui" line="367"/>
+        <location filename="../engineconfigure.ui" line="241"/>
+        <location filename="../engineconfigure.ui" line="269"/>
+        <location filename="../engineconfigure.ui" line="306"/>
+        <location filename="../engineconfigure.ui" line="334"/>
+        <location filename="../engineconfigure.ui" line="371"/>
+        <location filename="../engineconfigure.ui" line="443"/>
         <source>...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -76,108 +76,130 @@
     </message>
     <message>
         <location filename="../engineconfigure.ui" line="47"/>
-        <location filename="../engineconfigure.ui" line="172"/>
-        <location filename="../engineconfigure.ui" line="237"/>
-        <location filename="../engineconfigure.ui" line="316"/>
-        <location filename="../engineconfigure.ui" line="388"/>
-        <location filename="../engineconfigure.ui" line="434"/>
+        <location filename="../engineconfigure.ui" line="248"/>
+        <location filename="../engineconfigure.ui" line="313"/>
+        <location filename="../engineconfigure.ui" line="392"/>
+        <location filename="../engineconfigure.ui" line="464"/>
+        <location filename="../engineconfigure.ui" line="510"/>
         <source>Enable 1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../engineconfigure.ui" line="86"/>
+        <source>PTT port</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../engineconfigure.ui" line="98"/>
+        <location filename="../engineconfigure.ui" line="194"/>
+        <source>RTS</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../engineconfigure.ui" line="108"/>
+        <location filename="../engineconfigure.ui" line="204"/>
+        <source>DTR</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../engineconfigure.ui" line="136"/>
         <source>MMVARI/2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../engineconfigure.ui" line="105"/>
-        <location filename="../engineconfigure.ui" line="200"/>
-        <location filename="../engineconfigure.ui" line="265"/>
-        <location filename="../engineconfigure.ui" line="337"/>
-        <location filename="../engineconfigure.ui" line="409"/>
-        <location filename="../engineconfigure.ui" line="441"/>
+        <location filename="../engineconfigure.ui" line="143"/>
+        <location filename="../engineconfigure.ui" line="276"/>
+        <location filename="../engineconfigure.ui" line="341"/>
+        <location filename="../engineconfigure.ui" line="413"/>
+        <location filename="../engineconfigure.ui" line="485"/>
+        <location filename="../engineconfigure.ui" line="517"/>
         <source>Enable 2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../engineconfigure.ui" line="155"/>
+        <location filename="../engineconfigure.ui" line="182"/>
+        <source>PTT Port</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../engineconfigure.ui" line="231"/>
         <source>MMTTY/1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../engineconfigure.ui" line="183"/>
+        <location filename="../engineconfigure.ui" line="259"/>
         <source>MMTTY/2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../engineconfigure.ui" line="220"/>
+        <location filename="../engineconfigure.ui" line="296"/>
         <source>2Tone/1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../engineconfigure.ui" line="248"/>
+        <location filename="../engineconfigure.ui" line="324"/>
         <source>2Tone/2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../engineconfigure.ui" line="285"/>
+        <location filename="../engineconfigure.ui" line="361"/>
         <source>Gritty</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../engineconfigure.ui" line="306"/>
-        <location filename="../engineconfigure.ui" line="378"/>
+        <location filename="../engineconfigure.ui" line="382"/>
+        <location filename="../engineconfigure.ui" line="454"/>
         <source>Port 1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../engineconfigure.ui" line="327"/>
-        <location filename="../engineconfigure.ui" line="399"/>
+        <location filename="../engineconfigure.ui" line="403"/>
+        <location filename="../engineconfigure.ui" line="475"/>
         <source>Port 2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../engineconfigure.ui" line="357"/>
+        <location filename="../engineconfigure.ui" line="433"/>
         <source>FLDigi</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../engineconfigure.ui" line="427"/>
+        <location filename="../engineconfigure.ui" line="503"/>
         <source>Test</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../engineconfigure.ui" line="466"/>
+        <location filename="../engineconfigure.ui" line="542"/>
         <source>Sender</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../engineconfigure.ui" line="476"/>
+        <location filename="../engineconfigure.ui" line="552"/>
         <source>RTTY</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../engineconfigure.ui" line="486"/>
+        <location filename="../engineconfigure.ui" line="562"/>
         <source>BPSK</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../engineconfigure.ui" line="509"/>
+        <location filename="../engineconfigure.ui" line="585"/>
         <source>OK</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../engineconfigure.ui" line="516"/>
+        <location filename="../engineconfigure.ui" line="592"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../engineconfigure.cpp" line="309"/>
+        <location filename="../engineconfigure.cpp" line="366"/>
         <source>Engine Files (*.ocx *.exe);;All Files (*.*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../engineconfigure.cpp" line="313"/>
+        <location filename="../engineconfigure.cpp" line="370"/>
         <source>%1 Engine Executable</source>
         <translation type="unfinished"></translation>
     </message>
@@ -186,45 +208,55 @@
     <name>EngineWindow</name>
     <message>
         <location filename="../enginewindow.ui" line="51"/>
+        <source>Start Transmission</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../enginewindow.ui" line="54"/>
         <source>Send</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../enginewindow.ui" line="58"/>
+        <location filename="../enginewindow.ui" line="61"/>
+        <source>Stop Transmission Immediately</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../enginewindow.ui" line="64"/>
         <source>Stop</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../enginewindow.ui" line="77"/>
+        <location filename="../enginewindow.ui" line="83"/>
         <source>Current Radio</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../enginewindow.ui" line="91"/>
-        <location filename="../enginewindow.ui" line="98"/>
-        <location filename="../enginewindow.ui" line="133"/>
-        <location filename="../enginewindow.ui" line="140"/>
-        <location filename="../enginewindow.ui" line="147"/>
-        <location filename="../enginewindow.ui" line="154"/>
-        <location filename="../enginewindow.ui" line="161"/>
-        <location filename="../enginewindow.ui" line="168"/>
-        <location filename="../enginewindow.ui" line="179"/>
-        <location filename="../enginewindow.ui" line="186"/>
-        <location filename="../enginewindow.ui" line="193"/>
-        <location filename="../enginewindow.ui" line="200"/>
-        <location filename="../enginewindow.ui" line="207"/>
-        <location filename="../enginewindow.ui" line="214"/>
+        <location filename="../enginewindow.ui" line="97"/>
+        <location filename="../enginewindow.ui" line="104"/>
+        <location filename="../enginewindow.ui" line="139"/>
+        <location filename="../enginewindow.ui" line="146"/>
+        <location filename="../enginewindow.ui" line="153"/>
+        <location filename="../enginewindow.ui" line="160"/>
+        <location filename="../enginewindow.ui" line="167"/>
+        <location filename="../enginewindow.ui" line="174"/>
+        <location filename="../enginewindow.ui" line="185"/>
+        <location filename="../enginewindow.ui" line="192"/>
+        <location filename="../enginewindow.ui" line="199"/>
+        <location filename="../enginewindow.ui" line="206"/>
+        <location filename="../enginewindow.ui" line="213"/>
+        <location filename="../enginewindow.ui" line="220"/>
         <source>...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../enginewindow.ui" line="118"/>
-        <location filename="../enginewindow.cpp" line="676"/>
+        <location filename="../enginewindow.ui" line="124"/>
+        <location filename="../enginewindow.cpp" line="700"/>
         <source>Show Back Data</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../enginewindow.cpp" line="681"/>
+        <location filename="../enginewindow.cpp" line="705"/>
         <source>Hide Back Data</source>
         <translation type="unfinished"></translation>
     </message>
@@ -242,6 +274,29 @@
     <message>
         <location filename="../MMTTYFrame.ui" line="13"/>
         <source>Frame</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>MMVARIFrame</name>
+    <message>
+        <location filename="../MMVARIFrame.cpp" line="81"/>
+        <source>RX/TX state</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../MMVARIFrame.cpp" line="90"/>
+        <source>Move the cursor to keep it centered on a signal if the frequency changes slightly</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../MMVARIFrame.cpp" line="97"/>
+        <source>When NET is on the TX frequency follows the RX frequency </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../MMVARIFrame.cpp" line="103"/>
+        <source>Align the transmit frequency to the receive frequency</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

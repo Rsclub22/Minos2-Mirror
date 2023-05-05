@@ -5,7 +5,7 @@
     <name>MainWindow</name>
     <message>
         <location filename="../AsMainWindow.ui" line="14"/>
-        <location filename="../AsMainWindow.cpp" line="119"/>
+        <location filename="../AsMainWindow.cpp" line="120"/>
         <source>Start Minos Apps</source>
         <translation type="unfinished"></translation>
     </message>
@@ -20,37 +20,42 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AsMainWindow.ui" line="61"/>
+        <location filename="../AsMainWindow.ui" line="48"/>
+        <source>...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../AsMainWindow.ui" line="68"/>
         <source>Close All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AsMainWindow.ui" line="91"/>
+        <location filename="../AsMainWindow.ui" line="98"/>
         <source>File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AsMainWindow.ui" line="96"/>
+        <location filename="../AsMainWindow.ui" line="103"/>
         <source>Tools</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AsMainWindow.cpp" line="46"/>
+        <location filename="../AsMainWindow.cpp" line="47"/>
         <source>E&amp;xit Minos Application Starter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AsMainWindow.cpp" line="47"/>
+        <location filename="../AsMainWindow.cpp" line="48"/>
         <source>Select &amp;Font...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AsMainWindow.cpp" line="48"/>
+        <location filename="../AsMainWindow.cpp" line="49"/>
         <source>Select &amp;Language</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AsMainWindow.cpp" line="147"/>
+        <location filename="../AsMainWindow.cpp" line="148"/>
         <source>Font setting will not work while the QT_QPA_PLATFORMTHEME environment variable is set to qt5ct</source>
         <translation type="unfinished"></translation>
     </message>

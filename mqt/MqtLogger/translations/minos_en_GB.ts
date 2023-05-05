@@ -296,38 +296,38 @@
 <context>
     <name>BandmapView</name>
     <message>
-        <location filename="../bandmapview.cpp" line="1328"/>
+        <location filename="../bandmapview.cpp" line="1332"/>
         <source>%1%2CQ Frequency @ .%3%4%5</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1360"/>
+        <location filename="../bandmapview.cpp" line="1364"/>
         <source>New</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1463"/>
+        <location filename="../bandmapview.cpp" line="1467"/>
         <source>min</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1480"/>
+        <location filename="../bandmapview.cpp" line="1484"/>
         <source>CQ Frequency = %1
 The mode is %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1508"/>
+        <location filename="../bandmapview.cpp" line="1512"/>
         <source>The computed mode is</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1511"/>
+        <location filename="../bandmapview.cpp" line="1515"/>
         <source>The mode is</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1518"/>
+        <location filename="../bandmapview.cpp" line="1522"/>
         <source>%1 - %2, %3, %4, %5 [%6 %7 @ %8 min] 
 %9 %10
 %11
@@ -366,7 +366,7 @@ The mode is %2</source>
 <context>
     <name>BlModel</name>
     <message>
-        <location filename="../WsjtxFrame.cpp" line="1559"/>
+        <location filename="../WsjtxFrame.cpp" line="1716"/>
         <source>Call</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1530,7 +1530,7 @@ Move between components of a group using the mouse or up/down arrow keys.<byte v
     </message>
     <message>
         <location filename="../dmbuttonframe.cpp" line="50"/>
-        <location filename="../dmbuttonframe.cpp" line="438"/>
+        <location filename="../dmbuttonframe.cpp" line="441"/>
         <source>Data Modes Buttons from %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1540,17 +1540,17 @@ Move between components of a group using the mouse or up/down arrow keys.<byte v
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dmbuttonframe.cpp" line="322"/>
+        <location filename="../dmbuttonframe.cpp" line="324"/>
         <source>Invalid or missing FKey definitions</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dmbuttonframe.cpp" line="425"/>
-        <source>Contact list files (*.mc);;All Files (*.*)</source>
+        <location filename="../dmbuttonframe.cpp" line="427"/>
+        <source>Contact list files (*.json);;All Files (*.*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dmbuttonframe.cpp" line="429"/>
+        <location filename="../dmbuttonframe.cpp" line="431"/>
         <source>Open Function Key Definitions</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6150,103 +6150,103 @@ Include the CQ as well as the type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxFrame.ui" line="131"/>
-        <source>TextLabel</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../WsjtxFrame.ui" line="155"/>
-        <location filename="../WsjtxFrame.ui" line="162"/>
-        <location filename="../WsjtxFrame.ui" line="169"/>
-        <location filename="../WsjtxFrame.ui" line="176"/>
-        <location filename="../WsjtxFrame.ui" line="183"/>
-        <location filename="../WsjtxFrame.ui" line="190"/>
-        <location filename="../WsjtxFrame.ui" line="197"/>
-        <location filename="../WsjtxFrame.ui" line="204"/>
-        <location filename="../WsjtxFrame.ui" line="211"/>
-        <location filename="../WsjtxFrame.ui" line="218"/>
+        <location filename="../WsjtxFrame.ui" line="165"/>
+        <location filename="../WsjtxFrame.ui" line="172"/>
+        <location filename="../WsjtxFrame.ui" line="179"/>
+        <location filename="../WsjtxFrame.ui" line="203"/>
+        <location filename="../WsjtxFrame.ui" line="210"/>
+        <location filename="../WsjtxFrame.ui" line="217"/>
+        <location filename="../WsjtxFrame.ui" line="224"/>
+        <location filename="../WsjtxFrame.ui" line="231"/>
+        <location filename="../WsjtxFrame.ui" line="238"/>
+        <location filename="../WsjtxFrame.ui" line="245"/>
         <source>.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxFrame.ui" line="288"/>
+        <location filename="../WsjtxFrame.ui" line="321"/>
         <source>Auto Select Reply</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxFrame.ui" line="304"/>
-        <source>Auto Select 73/RR73 (Not WSJT-X)</source>
+        <location filename="../WsjtxFrame.ui" line="334"/>
+        <source>Allow select 73/RR73</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxFrame.ui" line="314"/>
-        <source>Auto Rearm</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../WsjtxFrame.ui" line="328"/>
+        <location filename="../WsjtxFrame.ui" line="346"/>
         <source>Config CQ</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxFrame.ui" line="338"/>
+        <location filename="../WsjtxFrame.ui" line="362"/>
         <source>Ignore &lt; (points)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxFrame.ui" line="361"/>
+        <location filename="../WsjtxFrame.ui" line="385"/>
         <source>Ignore &lt; (SNR)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxFrame.ui" line="394"/>
+        <location filename="../WsjtxFrame.ui" line="419"/>
         <source>Halt TX</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxFrame.ui" line="404"/>
+        <location filename="../WsjtxFrame.ui" line="429"/>
         <source>Disable Tx</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxFrame.ui" line="418"/>
+        <location filename="../WsjtxFrame.ui" line="443"/>
         <source>Clear Local Decodes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxFrame.ui" line="428"/>
+        <location filename="../WsjtxFrame.ui" line="453"/>
         <source>Clear All Decodes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxFrame.ui" line="255"/>
+        <location filename="../WsjtxFrame.ui" line="285"/>
         <source>Replay</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxFrame.ui" line="245"/>
+        <location filename="../WsjtxFrame.ui" line="131"/>
+        <source>NoQSOWaiting</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../WsjtxFrame.ui" line="138"/>
+        <source>Reset state to idle</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../WsjtxFrame.ui" line="275"/>
         <source>test</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxFrame.cpp" line="808"/>
-        <location filename="../WsjtxFrame.cpp" line="822"/>
+        <location filename="../WsjtxFrame.cpp" line="959"/>
+        <location filename="../WsjtxFrame.cpp" line="974"/>
         <source>&lt;h1&gt;&lt;b&gt;Contest band %1 not the same as %2 band %3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxFrame.cpp" line="841"/>
+        <location filename="../WsjtxFrame.cpp" line="995"/>
         <source>Wrong band</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxFrame.cpp" line="1386"/>
-        <location filename="../WsjtxFrame.cpp" line="1390"/>
+        <location filename="../WsjtxFrame.cpp" line="1540"/>
+        <location filename="../WsjtxFrame.cpp" line="1544"/>
         <source>WSJT-X recording Files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxFrame.cpp" line="1387"/>
+        <location filename="../WsjtxFrame.cpp" line="1541"/>
         <source>All Files</source>
         <translation type="unfinished"></translation>
     </message>
