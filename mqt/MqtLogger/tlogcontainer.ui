@@ -86,17 +86,11 @@
      <string>Logs</string>
     </property>
    </widget>
-   <widget class="QMenu" name="menuEnter">
-    <property name="title">
-     <string>Enter</string>
-    </property>
-   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuSearch"/>
    <addaction name="menuTools"/>
    <addaction name="menuLogs"/>
    <addaction name="menuHelp"/>
-   <addaction name="menuEnter"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
  </widget>

@@ -134,7 +134,8 @@ private:
     void FileImportActionExecute(bool hf);
     void FileNewActionExecute(bool hf);
 
-    QAction *EnterAction;
+    QMenu *menuEnter = nullptr;
+    QAction *EnterAction = nullptr;
 
     QAction *HelpAction;
     QAction *HelpAboutAction;

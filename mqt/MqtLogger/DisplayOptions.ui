@@ -196,7 +196,7 @@
          <item>
           <widget class="QCheckBox" name="nextContactBandcb">
            <property name="text">
-            <string>ShowSingle Band in Next Contact</string>
+            <string>Show Single Band in Next Contact</string>
            </property>
           </widget>
          </item>
@@ -612,7 +612,7 @@
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="locButtonGroup"/>
   <buttongroup name="otButtonGroup"/>
+  <buttongroup name="locButtonGroup"/>
  </buttongroups>
 </ui>

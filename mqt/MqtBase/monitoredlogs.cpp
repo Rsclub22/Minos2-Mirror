@@ -30,7 +30,7 @@ MonitoredLogs::MonitoredLogs(QWidget *parent) :
     logTree->header()->show();
 
     autoStationsBox = new QGroupBox(this);
-    autoStationsBox->setTitle(tr("Auto start stations"));
+    autoStationsBox->setTitle(tr("Auto start current logs from stations"));
     vbl->addWidget(autoStationsBox);
 
     /*vbl = */new QVBoxLayout(autoStationsBox);

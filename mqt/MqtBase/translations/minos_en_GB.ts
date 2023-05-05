@@ -1596,7 +1596,7 @@ The format required is (e.g.) 1296.3, 144.32 or 144.290123<byte value="xd"/>
     <name>MonitoredLogs</name>
     <message>
         <location filename="../monitoredlogs.cpp" line="33"/>
-        <source>Auto start stations</source>
+        <source>Auto start current logs from stations</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -1674,7 +1674,7 @@ Attention: &quot;.&quot; pas &quot;,&quot;<byte value="xd"/>
     <name>MonitoredLogs</name>
     <message>
         <location filename="../monitoredlogs.cpp" line="33"/>
-        <source>Auto start stations</source>
+        <source>Auto start current logs from stations</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

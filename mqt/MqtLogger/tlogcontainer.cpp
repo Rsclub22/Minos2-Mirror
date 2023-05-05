@@ -398,6 +398,11 @@ void TLogContainer::changeEvent( QEvent* e )
         }
         ui->retranslateUi(this);
         setCaption(QString());
+        if (menuEnter)
+        {
+            menuEnter->setTitle(QCoreApplication::translate("TLogContainer", "Enter", nullptr));
+        }
+
     }
     QMainWindow::changeEvent(e);
 }
@@ -567,7 +572,16 @@ void TLogContainer::setupMenus()
     //TabPopup.addAction(AnalyseMinosLogAction);
     newAction( QT_TR_NOOP("Cancel"), &TabPopup, &TLogContainer::CancelClick);
 
-    EnterAction = newAction(QT_TR_NOOP("Create Entry and send to RSGB"), ui->menuEnter, &TLogContainer::EnterActionExecute);
+#ifndef NDEBUG
+    // until it works, don't show it!
+    menuEnter = new QMenu(ui->menuBar);
+    menuEnter->setObjectName(QString::fromUtf8("enterMenu"));
+    menuEnter->setTitle(QCoreApplication::translate("TLogContainer", "Enter", nullptr));
+
+    ui->menuBar->addMenu(menuEnter);
+
+    EnterAction = newAction(QT_TR_NOOP("Create Entry and send to RSGB"), menuEnter, &TLogContainer::EnterActionExecute);
+#endif
 
     HelpAction = newAction(QT_TR_NOOP("Help..."), ui->menuHelp, &TLogContainer::HelpActionExecute);
     CheckUpdatesAction = newAction(QT_TR_NOOP("Check For Updates..."), ui->menuHelp, &TLogContainer::CheckUpdatesActionExecute);
