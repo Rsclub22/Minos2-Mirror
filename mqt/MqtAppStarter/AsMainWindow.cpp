@@ -211,12 +211,18 @@ void MainWindow::on_appsButton_clicked()
     MinosConfig *minosConfig = MinosConfig::getMinosConfig();
     StartConfig configBox( this, false, minosConfig->getCurrConfig().configName);
     configBox.exec();
+
+    minosConfig = MinosConfig::getMinosConfig();
+    sbLabel->setText(minosConfig->getCurrConfig().configName);
+
 }
 
 void MainWindow::on_appSelectButton_clicked()
 {
     StartConfigManager manageApps( this, true);   // when managing sets, include autostart
     manageApps.exec();
+    MinosConfig *minosConfig = MinosConfig::getMinosConfig();
+    sbLabel->setText(minosConfig->getCurrConfig().configName);
 }
 
 
