@@ -439,7 +439,8 @@ class BaseContestLog: public BaseLogList
       void addToContestList(QSharedPointer<BaseContact> rct);
       void checkSpotWorked(const Callsign &mcs, const QString &locator, const Frequency &freq, bool *callWorked, bool *locatorWorked);
       void calcDistanceBearing(const QString &_locator, double *distance, int *bearing);
-protected:
+      QString getLocForCall(const Callsign &mcs);
+  protected:
       unsigned long nextBlock = 1;
    int ct_stanzaCount = 0;
    bool suppressProtected = false;

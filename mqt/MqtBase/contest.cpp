@@ -1940,6 +1940,7 @@ void BaseContestLog::checkSpotWorked(const Callsign &mcs, const QString &locator
                 QSharedPointer<BandInfo> bandChanged = checkBandChange(freq, (*i).wt->getFrequency().getValue().str());
                 if (bandChanged)
                 {
+                    // i.e. freq isn't same band as the searched QSO
                     continue;
                 }
             }
@@ -1969,7 +1970,22 @@ void BaseContestLog::checkSpotWorked(const Callsign &mcs, const QString &locator
         }
     }
 }
+QString BaseContestLog::getLocForCall(const Callsign &mcs)
+{
+    for ( LogIterator i = ctList.begin(); i != ctList.end(); i++ )
+    {
+        if ((*i).wt->notValidContact() )
+        {
+            continue;
+        }
 
+        if ((*i).wt->cs == mcs)
+        {
+            return (*i).wt->loc.getLoc();
+        }
+    }
+    return QString();
+}
 //====================================================================
 ContestScore::ContestScore(BaseContestLog *ct)
 {

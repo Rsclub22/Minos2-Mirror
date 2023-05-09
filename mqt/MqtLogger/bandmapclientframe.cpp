@@ -968,11 +968,6 @@ void BandmapClientFrame::addLogSpotToBandmapTable(QSharedPointer<ClusterSpotData
                     bandmapSpotType::SPOT_TYPE savedSpotType = bsd->getSpotType();
                     if (savedSpotType == bandmapSpotType::LOGGED || savedSpotType == bandmapSpotType::SAVED)
                     {
-                        if (loc.isEmpty())
-                        {
-                            loc = bsd->getDxLocator();
-                            spot->setDxLocator(loc);
-                        }
                         // delete the old logged/saved entry, add the new one
                         bsd->setSpotType(bandmapSpotType::DELETED);
                         MinosLoggerEvents::SendBroadcastSpot(bsd);
@@ -1003,6 +998,12 @@ void BandmapClientFrame::addLogSpotToBandmapTable(QSharedPointer<ClusterSpotData
         {
             QString loc = spot->getDxLocator();
             Callsign call = spot->getDxCall();
+            if (loc.isEmpty())
+            {
+                // If we have worked them, fill in locator
+                // This happens when we save just the call for someone we worked from CQ
+                loc = ct->getLocForCall(call);
+            }
             if (!loc.isEmpty() || call.getValRes() == CS_OK)
             {
                 // check to see if call or locator worked
@@ -1070,30 +1071,10 @@ void BandmapClientFrame::addLogSpotToBandmapTable(QSharedPointer<ClusterSpotData
                                 bsd->setDistrict(exchange);
                             }
                             QString loc = spot->getDxLocator();
-
                             if (!loc.isEmpty())
                             {
                                 // and override the loc - it may now be provided or changed
-                                QString distance;
-
-                                if (!spot->getDxLocator().isEmpty())
-                                {
-                                    double dist = 0;
-                                    int brg = 0;
-                                    ct->calcDistanceBearing(spot->getDxLocator(), &dist, &brg);
-                                    distance = QString::number(static_cast<int>(dist));
-                                }
-                                QString rotBrg;
-                                if (rotatorConnected)
-                                {
-                                    rotBrg = curRotBearing;   // get rotator bearing
-                                }
-                                else
-                                {
-                                    rotBrg = "0";
-                                }
                                 bsd->setDxLocator(loc);
-
                             }
                         }
                         bandmapDataModel->sortModel();
