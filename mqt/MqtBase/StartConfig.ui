@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>837</width>
+    <height>327</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -27,8 +27,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>380</width>
-        <height>190</height>
+        <width>815</width>
+        <height>200</height>
        </rect>
       </property>
      </widget>
@@ -40,6 +40,13 @@
       <widget class="QCheckBox" name="autoStartCheckBox">
        <property name="text">
         <string>Autostart</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="showButton">
+       <property name="text">
+        <string>Show</string>
        </property>
       </widget>
      </item>

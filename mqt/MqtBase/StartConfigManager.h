@@ -18,6 +18,8 @@ public:
 
     int exec() override;
 
+    static bool configHidden;
+
 private slots:
     void on_cancelButton_clicked();
 
@@ -48,8 +50,6 @@ private:
     bool showAutoStart = false;
     bool suppressItemSelect = false;
     QString curConfigName;
-
-    static bool configHidden;
 
     virtual void resizeEvent(QResizeEvent *event) override;
     virtual void moveEvent(QMoveEvent *event) override;

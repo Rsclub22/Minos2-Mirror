@@ -73,7 +73,8 @@ void StartConfigManager::checkEnabled()
     {
 
         ui->showButton->setText(tr("Hide"));
-    }}
+    }
+}
 
 void StartConfigManager::showDetails()
 {

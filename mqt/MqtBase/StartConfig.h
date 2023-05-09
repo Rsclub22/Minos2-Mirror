@@ -50,6 +50,8 @@ private slots:
     void checkEnabled();
     void on_formShown();
 
+    void on_showButton_clicked();
+
 public slots:
     void on_CancelButton_clicked();
 

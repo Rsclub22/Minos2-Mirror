@@ -4,7 +4,7 @@
 
 #include "MShowMessageDlg.h"
 #include "StartConfig.h"
-
+#include "StartConfigManager.h"
 #include "ConfigFile.h"
 #include "ConfigElementFrame.h"
 #include "delayedaction.h"
@@ -107,6 +107,16 @@ void StartConfig::checkEnabled()
     for (auto const &e: qAsConst(elementFrames))
     {
         e->setEnabled(!running);
+    }
+    if (StartConfigManager::configHidden)
+    {
+        // show all hidden apps
+        ui->showButton->setText(tr("Show"));
+    }
+    else
+    {
+
+        ui->showButton->setText(tr("Hide"));
     }
 }
 void StartConfig::reject()
@@ -255,4 +265,23 @@ void StartConfig::on_newElementButton_clicked()
     cef->setNameFocus();
 }
 
+
+
+void StartConfig::on_showButton_clicked()
+{
+    MinosConfig *minosConfig = MinosConfig::getMinosConfig();
+    minosConfig->showHide(StartConfigManager::configHidden);
+    StartConfigManager::configHidden = !StartConfigManager::configHidden;
+    if (StartConfigManager::configHidden)
+    {
+        // show all hidden apps
+        ui->showButton->setText(tr("Show"));
+    }
+    else
+    {
+
+        ui->showButton->setText(tr("Hide"));
+    }
+
+}
 
