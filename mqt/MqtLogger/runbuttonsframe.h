@@ -28,9 +28,9 @@ public:
     QShortcut* shortKey;
     QShortcut* shiftShortKey;
     QAction* runOffAction;
-    QAction* readAction;
+    //QAction* readAction;
     QAction* writeAction;
-    QAction* editAction;
+    //QAction* editAction;
     QAction* clearAction;
 
     Frequency returnFrequency;

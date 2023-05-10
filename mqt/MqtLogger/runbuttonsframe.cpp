@@ -601,26 +601,33 @@ RunMemoryButton::RunMemoryButton(QToolButton *b, RunButtonsFrame *rcf, int no)
 
     shortKey = new QShortcut(QKeySequence(runButShortCut[memNo]), memButton);
     shiftShortKey = new QShortcut(QKeySequence(runButShiftShortCut[memNo]), memButton);
+
     runOffAction = new QAction(tr("&Off"), memButton);
-    readAction = new QAction(tr("&Read"), memButton);
-    writeAction = new QAction(tr("&New"),memButton);
-    editAction = new QAction(tr("&Edit"), memButton);
-    clearAction = new QAction(tr("&Clear"),memButton);
     memoryMenu->addAction(runOffAction);
-    memoryMenu->addAction(readAction);
+    connect( runOffAction, &QAction::triggered, this, &RunMemoryButton::runOffActionSelected);
+
+//    readAction = new QAction(tr("&Read"), memButton);
+//    memoryMenu->addAction(readAction);
+//    connect( readAction, &QAction::triggered, this, &RunMemoryButton::buttonSelected);
+
+//    writeAction = new QAction(tr("&New"),memButton);
+    writeAction = new QAction(tr("&Set"),memButton);
     memoryMenu->addAction(writeAction);
-    memoryMenu->addAction(editAction);
+    connect( writeAction, &QAction::triggered, this, &RunMemoryButton::writeActionSelected);
+
+//    editAction = new QAction(tr("&Edit"), memButton);
+//    memoryMenu->addAction(editAction);
+//    connect( editAction, &QAction::triggered, this, &RunMemoryButton::editActionSelected);
+
+    clearAction = new QAction(tr("&Clear"),memButton);
     memoryMenu->addAction(clearAction);
+    connect( clearAction, &QAction::triggered, this, &RunMemoryButton::clearActionSelected);
+
     memButton->setMenu(memoryMenu);
 
-    connect( readAction, &QAction::triggered, this, &RunMemoryButton::buttonSelected);
     connect(memButton, &QToolButton::clicked, this, &RunMemoryButton::buttonSelected);
     connect(shortKey, &QShortcut::activated, this, &RunMemoryButton::buttonSelected);
     connect(shiftShortKey, &QShortcut::activated, this, &RunMemoryButton::memoryShortCutSelected);
-    connect( writeAction, &QAction::triggered, this, &RunMemoryButton::writeActionSelected);
-    connect( editAction, &QAction::triggered, this, &RunMemoryButton::editActionSelected);
-    connect( clearAction, &QAction::triggered, this, &RunMemoryButton::clearActionSelected);
-    connect( runOffAction, &QAction::triggered, this, &RunMemoryButton::runOffActionSelected);
 
 }
 RunMemoryButton::~RunMemoryButton()
