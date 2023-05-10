@@ -188,6 +188,45 @@ void StackedInfoFrame::setTabVisibility()
         break;
     }
 
+    if (setTabsVisible)
+    {
+        setTabsVisible = false;
+        QVector<int> vtabs;
+        for (int i = 0; i < ui->tabbar->count(); i++)
+        {
+            ui->tabbar->setTabVisible(i, false);
+        }
+        QStringList bll = contest->bandsList.getValue().split(";");
+
+        for(const auto &bs: qAsConst(bll))
+        {
+            QStringList bsl = bs.split(" ");
+            if (bsl.count() == 3)
+            {
+                for (int i = 0; i < ui->tabbar->count(); i++)
+                {
+                    QString bt = ui->tabbar->tabText(i);
+                    bool thisBand = (bt == bsl[0] + " " + bsl[1]);
+                    if (thisBand)
+                    {
+                        if (bsl[2] != "0")
+                        {
+                            vtabs.push_back(i);
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+        if (vtabs.count() > 1)
+        {
+            setTabsVisible = true;
+            for(int t:vtabs)
+            {
+                ui->tabbar->setTabVisible(t, true);
+            }
+        }
+    }
     ui->tabbar->setVisible(setTabsVisible);
     ui->tabbar->setFocusPolicy(Qt::NoFocus);
 
