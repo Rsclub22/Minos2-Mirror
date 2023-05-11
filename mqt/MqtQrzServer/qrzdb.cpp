@@ -164,3 +164,15 @@ QrzCallsignData QRZDB::getRecord(const QString cs)
     }
     return csData;
 }
+
+int QRZDB::getRecordCount()
+{
+    QSqlQuery query;
+    query.prepare("SELECT COUNT(*) FROM QRZ");
+    if (query.exec() && query.next())
+    {
+        int recs = query.value(0).toInt();
+        return recs;
+    }
+    return -1;
+}

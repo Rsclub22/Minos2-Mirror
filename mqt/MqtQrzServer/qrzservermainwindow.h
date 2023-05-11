@@ -155,11 +155,12 @@ private:
     QLabel *sblabel1;
     QLabel *sblabel2;
 
+    int dbRecords = 0;
     int dbRequests = 0;
     int qrzRequests = 0;
 
     StdInReader *stdinReader = new StdInReader(this);
-    QString appName = "";
+    //QString appName = "";
 
     QTimer LogTimer;
     QTimer *pingStateTimer;

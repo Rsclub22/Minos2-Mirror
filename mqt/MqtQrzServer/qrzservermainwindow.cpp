@@ -50,17 +50,17 @@ QrzServerMainWindow::QrzServerMainWindow(QWidget *parent)
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
-    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
-    appName = env.value("MQTRPCNAME", "") ;
+ //   QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+ //   appName = env.value("MQTRPCNAME", "") ;
 
-    // this is only needed for standalone to store to registry - appname might not be correct here!
-    if (appName.isEmpty())
-    {
-        QApplication::setOrganizationName( SecondInstall::getOrgName() );
-        QApplication::setOrganizationDomain( "g0gjv.org.uk" );
-        QApplication::QCoreApplication::setApplicationName( "mqtQrzServer" );
+//    // this is only needed for standalone to store to registry - appname might not be correct here!
+//    if (appName.isEmpty())
+//    {
+//        QApplication::setOrganizationName( SecondInstall::getOrgName() );
+//        QApplication::setOrganizationDomain( "g0gjv.org.uk" );
+//        QApplication::QCoreApplication::setApplicationName( "mqtQrzServer" );
 
-    }
+//    }
 
     logonCallsign = settings.value("logonCallsign", "").toString();
     password = settings.value("password", "").toString();
@@ -70,8 +70,9 @@ QrzServerMainWindow::QrzServerMainWindow(QWidget *parent)
     connect(&LogTimer, &QTimer::timeout, this, &QrzServerMainWindow::LogTimerTimer);
     LogTimer.start(100);
 
+    QString appName = getAppStartupName();
     trace(QString("AppName = %1").arg(appName));
-    MinosRPC *rpc = MinosRPC::getMinosRPC(getAppStartupName());
+    MinosRPC *rpc = MinosRPC::getMinosRPC(appName);
     Q_UNUSED(rpc)
 
     QStringList sv{
@@ -114,6 +115,8 @@ QrzServerMainWindow::QrzServerMainWindow(QWidget *parent)
     statusBar() ->addWidget( sblabel2, 2 );
 
     qdb = new QRZDB(this);
+
+    dbRecords = qdb->getRecordCount();
 
 }
 
@@ -225,6 +228,7 @@ bool QrzServerMainWindow::askDBCallsignData(QString callsign)
     if (cs.realCall == qrzCallsignData.getCallsign())
     {
         qrzCallsignData.setDataSource("DB|" + qrzCallsignData.getDataSource());
+        dbRequests++;
         callsignDataReceived();
         return true;
     }
@@ -302,6 +306,8 @@ void QrzServerMainWindow::sendUrl(QString url)
                             parseCallsignData(xmlData);
                             qrzCallsignData.setDBDate(QDateTime::currentDateTimeUtc().toString("yyyy-MM-dd HH:mm:ss"));
                             qdb->createRecord(qrzCallsignData);
+                            qrzRequests++;
+                            dbRecords++;
                             callsignDataReceived();
 
                         }
@@ -468,6 +474,10 @@ void QrzServerMainWindow::callsignDataReceived()
             trace(msg);
             addTextToLogWindow(tr("Logger Qrz Callsign Data received for call = %1, Send to Qrz Display in Logger Server").arg(requestedStation.getDxCall()));
             QString stateMsg = "";
+
+            qrzCallsignData.setDbRecords(dbRecords);
+            qrzCallsignData.setDbRecalls(dbRequests);
+            qrzCallsignData.setQrzRecalls(qrzRequests);
             QrzServerRpc::getQrzServerRpc()->sendQrzResponseToLoggerDisplay(qrzCallsignData, stateMsg, requestedStation.getFromStationName(), requestedStation.getLoggerUuid());
 
         }
@@ -727,7 +737,6 @@ void QrzServerMainWindow::handleQrzRequests()
                         addTextToLogWindow(tr("Ask QRZ for callsign - %1").arg(askQrzCallsign));
                         trace(QString("handleQrzRequests: ask qrz for callsign %1").arg(askQrzCallsign));
                         askCallsignData(askQrzCallsign);
-                        qrzRequests++;
                     }
                     else
                     {

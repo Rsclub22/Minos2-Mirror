@@ -82,6 +82,35 @@ public:
     void setDBDate(QString dbdate_){dbdate = dbdate_;}
     QString getDBDate() const {return dbdate;}
 
+    int getDbRecords() const
+    {
+        return dbRecords;
+    }
+
+    void setDbRecords(int newDbRecords)
+    {
+        dbRecords = newDbRecords;
+    }
+
+    int getDbRecalls() const
+    {
+        return dbRecalls;
+    }
+
+    void setDbRecalls(int newDbRecalls)
+    {
+        dbRecalls = newDbRecalls;
+    }
+
+    int getQrzRecalls() const
+    {
+        return qrzRecalls;
+    }
+
+     void setQrzRecalls(int newQrzRecalls)
+    {
+        qrzRecalls = newQrzRecalls;
+    }
     void clear()
     {
         dataSource.clear();
@@ -99,9 +128,11 @@ public:
         ituZone.clear();
         moddate.clear();
         dbdate.clear();
+
+        dbRecords = 0;
+        dbRecalls = 0;
+        qrzRecalls = 0;
     }
-
-
 
 private:
 
@@ -121,7 +152,12 @@ private:
     QString moddate;
     QString dbdate;
 
+    int dbRecords = 0;
+    int dbRecalls = 0;
+    int qrzRecalls = 0;
+
 };
+
 
 
 class QrzServerMessage

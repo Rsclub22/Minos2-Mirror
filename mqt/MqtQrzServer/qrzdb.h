@@ -15,6 +15,8 @@ public:
 
     QrzCallsignData getRecord(const QString cs);
 
+    int getRecordCount();
+
 private:
     QSqlDatabase qdb;
 
