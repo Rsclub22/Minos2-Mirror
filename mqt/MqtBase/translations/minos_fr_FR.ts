@@ -1090,12 +1090,12 @@
 <context>
     <name>ContestScore</name>
     <message>
-        <location filename="../contest.cpp" line="1993"/>
+        <location filename="../contest.cpp" line="2009"/>
         <source>Score: Qsos: %1; %2 pts :%3%4 countries%5: bonuses %6(%7) = %8</source>
         <translation>QSOs: %1; %2 pts:%3%4 pays %5: bonus %6 (%7) = %8</translation>
     </message>
     <message>
-        <location filename="../contest.cpp" line="2006"/>
+        <location filename="../contest.cpp" line="2022"/>
         <source>Score: Qsos: %1; %2 pts :%3%4 countries%5:%6%7 districts%8:%9%10 locators %13 = %14</source>
         <translation>Score: QSO: %1; %2 pts: %3%4 pays %5:%6%7 Districts%8:%9%10 Locators %13 = %14</translation>
     </message>
@@ -2039,44 +2039,57 @@ Entrer une autre direction SVP</translation>
         <translation>Lancement automatique</translation>
     </message>
     <message>
-        <location filename="../StartConfig.ui" line="62"/>
+        <location filename="../StartConfig.ui" line="49"/>
+        <location filename="../StartConfig.cpp" line="114"/>
+        <location filename="../StartConfig.cpp" line="278"/>
+        <source>Show</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../StartConfig.ui" line="69"/>
         <source>Save and Start Apps</source>
         <translation>Enregistrer et démarrer les applications</translation>
     </message>
     <message>
-        <location filename="../StartConfig.ui" line="69"/>
+        <location filename="../StartConfig.ui" line="76"/>
         <source>Stop Apps</source>
         <translation>Arrêter les Applications</translation>
     </message>
     <message>
-        <location filename="../StartConfig.ui" line="76"/>
+        <location filename="../StartConfig.ui" line="83"/>
         <source>New Entry</source>
         <translation>Nouvelle entrée</translation>
     </message>
     <message>
-        <location filename="../StartConfig.ui" line="87"/>
+        <location filename="../StartConfig.ui" line="94"/>
         <source>Server Name</source>
         <translation>Nom du server</translation>
     </message>
     <message>
-        <location filename="../StartConfig.ui" line="101"/>
+        <location filename="../StartConfig.ui" line="108"/>
         <source>Set Server Name</source>
         <translation>Configurer le Nom du server</translation>
     </message>
     <message>
-        <location filename="../StartConfig.ui" line="112"/>
+        <location filename="../StartConfig.ui" line="119"/>
         <source>Cancel</source>
         <translation>Annuler</translation>
     </message>
     <message>
-        <location filename="../StartConfig.ui" line="132"/>
+        <location filename="../StartConfig.ui" line="139"/>
         <source>TextLabel</source>
         <translation>TEXTLABEL</translation>
     </message>
     <message>
-        <location filename="../StartConfig.ui" line="152"/>
+        <location filename="../StartConfig.ui" line="159"/>
         <source>Save and Close</source>
         <translation>Enregistrer et fermer</translation>
+    </message>
+    <message>
+        <location filename="../StartConfig.cpp" line="119"/>
+        <location filename="../StartConfig.cpp" line="283"/>
+        <source>Hide</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2114,7 +2127,7 @@ Entrer une autre direction SVP</translation>
     <message>
         <location filename="../StartConfigManager.ui" line="72"/>
         <location filename="../StartConfigManager.cpp" line="70"/>
-        <location filename="../StartConfigManager.cpp" line="304"/>
+        <location filename="../StartConfigManager.cpp" line="305"/>
         <source>Show</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2145,24 +2158,24 @@ Entrer une autre direction SVP</translation>
     </message>
     <message>
         <location filename="../StartConfigManager.cpp" line="75"/>
-        <location filename="../StartConfigManager.cpp" line="291"/>
-        <location filename="../StartConfigManager.cpp" line="309"/>
+        <location filename="../StartConfigManager.cpp" line="292"/>
+        <location filename="../StartConfigManager.cpp" line="310"/>
         <source>Hide</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../StartConfigManager.cpp" line="153"/>
+        <location filename="../StartConfigManager.cpp" line="154"/>
         <source>Please give a new name for the layout</source>
         <translation>Nouveau nom pour la mise en page SVP</translation>
     </message>
     <message>
-        <location filename="../StartConfigManager.cpp" line="157"/>
+        <location filename="../StartConfigManager.cpp" line="158"/>
         <source>%1 already exists</source>
         <translation>%1 existe déjà</translation>
     </message>
     <message>
-        <location filename="../StartConfigManager.cpp" line="180"/>
-        <location filename="../StartConfigManager.cpp" line="199"/>
+        <location filename="../StartConfigManager.cpp" line="181"/>
+        <location filename="../StartConfigManager.cpp" line="200"/>
         <source>new app config</source>
         <translation>configuration de nouvelles applications</translation>
     </message>

@@ -179,7 +179,7 @@ void QrzDisplayFrame::onLoggerQrzReply(QrzCallsignData cd, QString qrzReplyState
             ui->moddateText->setText(cd.getModDate());
             ui->dbdateText->setText(cd.getDBDate());
 
-            QString stats(tr("DB hits %1 QRZ calls %2 DB Size %3 records")
+            QString stats(tr("DB hits %1 QRZ requests %2 DB Size %3 records")
                               .arg(cd.getDbRecalls()).arg(cd.getQrzRecalls()).arg(cd.getDbRecords()));
             ui->statsLabel->setText(stats);
         }

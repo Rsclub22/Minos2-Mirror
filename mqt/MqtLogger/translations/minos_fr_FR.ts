@@ -274,27 +274,27 @@
         <translation>Filtre %1</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1571"/>
+        <location filename="../bandmapclientframe.cpp" line="1552"/>
         <source>Mouse in frame, updates paused</source>
         <translation>Souris dans le cadre, mises à jour suspendues</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1304"/>
+        <location filename="../bandmapclientframe.cpp" line="1285"/>
         <source>Cluster Server Not Running</source>
         <translation>Le Serveur du Cluster ne fonctionne pas</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1337"/>
+        <location filename="../bandmapclientframe.cpp" line="1318"/>
         <source>Connected</source>
         <translation>Connecté</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1347"/>
+        <location filename="../bandmapclientframe.cpp" line="1328"/>
         <source>Disconnected</source>
         <translation>Déconnecté</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1459"/>
+        <location filename="../bandmapclientframe.cpp" line="1440"/>
         <source>Freq out of band</source>
         <translation>Fréquence hors bande</translation>
     </message>
@@ -2888,72 +2888,77 @@ Non - Ignorer les modifications</translation>
         <translation>QRZ</translation>
     </message>
     <message>
-        <location filename="../qrzdisplayframe.ui" line="57"/>
+        <location filename="../qrzdisplayframe.ui" line="64"/>
         <source>Callsign:</source>
         <translation>Indicatif d&apos;appel:</translation>
     </message>
     <message>
-        <location filename="../qrzdisplayframe.ui" line="93"/>
+        <location filename="../qrzdisplayframe.ui" line="100"/>
         <source>Name:</source>
         <translation>Nom:</translation>
     </message>
     <message>
-        <location filename="../qrzdisplayframe.ui" line="303"/>
+        <location filename="../qrzdisplayframe.ui" line="310"/>
         <source>Address 1:</source>
         <translation>Adresse 1:</translation>
     </message>
     <message>
-        <location filename="../qrzdisplayframe.ui" line="267"/>
+        <location filename="../qrzdisplayframe.ui" line="274"/>
         <source>Address 2:</source>
         <translation>Adresse 2:</translation>
     </message>
     <message>
-        <location filename="../qrzdisplayframe.ui" line="231"/>
+        <location filename="../qrzdisplayframe.ui" line="238"/>
         <source>Country:</source>
         <translation>Pays:</translation>
     </message>
     <message>
-        <location filename="../qrzdisplayframe.ui" line="133"/>
+        <location filename="../qrzdisplayframe.ui" line="140"/>
         <source>QRA:</source>
         <translation>QRA:</translation>
     </message>
     <message>
-        <location filename="../qrzdisplayframe.ui" line="169"/>
+        <location filename="../qrzdisplayframe.ui" line="42"/>
+        <source>.</source>
+        <translation type="unfinished">.</translation>
+    </message>
+    <message>
+        <location filename="../qrzdisplayframe.ui" line="176"/>
         <source>Bearing:</source>
         <translation>Direction:</translation>
     </message>
     <message>
-        <location filename="../qrzdisplayframe.ui" line="347"/>
+        <location filename="../qrzdisplayframe.ui" line="354"/>
         <source>QRZ date:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qrzdisplayframe.ui" line="387"/>
+        <location filename="../qrzdisplayframe.ui" line="394"/>
         <source>Distance:</source>
         <translation>Distance:</translation>
     </message>
     <message>
-        <location filename="../qrzdisplayframe.ui" line="423"/>
+        <location filename="../qrzdisplayframe.ui" line="430"/>
         <source>ITU Zone:</source>
         <translation>Zone ITU:</translation>
     </message>
     <message>
-        <location filename="../qrzdisplayframe.ui" line="459"/>
+        <location filename="../qrzdisplayframe.ui" line="466"/>
         <source>CQ Zone:</source>
         <translation>Zone CQ:</translation>
     </message>
     <message>
-        <location filename="../qrzdisplayframe.ui" line="503"/>
+        <location filename="../qrzdisplayframe.ui" line="510"/>
         <source>DB date:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qrzdisplayframe.ui" line="595"/>
+        <location filename="../qrzdisplayframe.ui" line="602"/>
         <source>QRZ  Message: </source>
         <translation>Message QRZ: </translation>
     </message>
     <message>
-        <location filename="../qrzdisplayframe.ui" line="561"/>
+        <location filename="../qrzdisplayframe.ui" line="568"/>
         <source>Search</source>
         <translation>Chercher</translation>
     </message>
@@ -2988,12 +2993,17 @@ Non - Ignorer les modifications</translation>
         <translation>Indicatif invalide dans la recherche</translation>
     </message>
     <message>
-        <location filename="../qrzdisplayframe.cpp" line="229"/>
+        <location filename="../qrzdisplayframe.cpp" line="182"/>
+        <source>DB hits %1 QRZ requests %2 DB Size %3 records</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qrzdisplayframe.cpp" line="233"/>
         <source>Connected</source>
         <translation>Connecté</translation>
     </message>
     <message>
-        <location filename="../qrzdisplayframe.cpp" line="233"/>
+        <location filename="../qrzdisplayframe.cpp" line="237"/>
         <source>Disconnected</source>
         <translation>Déconnecté</translation>
     </message>
@@ -3001,17 +3011,17 @@ Non - Ignorer les modifications</translation>
 <context>
     <name>QrzDisplayServerRpc</name>
     <message>
-        <location filename="../qrzdisplayframe.cpp" line="249"/>
+        <location filename="../qrzdisplayframe.cpp" line="253"/>
         <source>Available</source>
         <translation>Disponible</translation>
     </message>
     <message>
-        <location filename="../qrzdisplayframe.cpp" line="250"/>
+        <location filename="../qrzdisplayframe.cpp" line="254"/>
         <source>Not Available</source>
         <translation>Indisponible</translation>
     </message>
     <message>
-        <location filename="../qrzdisplayframe.cpp" line="251"/>
+        <location filename="../qrzdisplayframe.cpp" line="255"/>
         <source>No Contact</source>
         <translation>Aucun contact</translation>
     </message>
@@ -3705,27 +3715,29 @@ Non - Ignorer les modifications</translation>
 <context>
     <name>RunMemoryButton</name>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="604"/>
+        <location filename="../runbuttonsframe.cpp" line="605"/>
         <source>&amp;Off</source>
         <translation>&amp;Éteint</translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="605"/>
+        <location filename="../runbuttonsframe.cpp" line="614"/>
+        <source>&amp;Set</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>&amp;Read</source>
-        <translation>&amp;Lire</translation>
+        <translation type="vanished">&amp;Lire</translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="606"/>
         <source>&amp;New</source>
-        <translation>&amp;Nouveau</translation>
+        <translation type="vanished">&amp;Nouveau</translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="607"/>
         <source>&amp;Edit</source>
-        <translation>&amp;Modifier</translation>
+        <translation type="vanished">&amp;Modifier</translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="608"/>
+        <location filename="../runbuttonsframe.cpp" line="622"/>
         <source>&amp;Clear</source>
         <translation>&amp;Effacer</translation>
     </message>
