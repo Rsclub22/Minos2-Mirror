@@ -626,12 +626,8 @@ void EngineWindow::wordSelected(QString word, int markFreq)
 {
 // word has been clicked on the datapainter; we need to send it
 // on to the logger
-    bool routerRunning = checkRouterReady();
-
-    if (routerRunning)
+    if (!router.isEmpty())
     {
-        QString router = MinosConfig::getMinosConfig( )->getThisRouterName();
-
         RPCGeneralClient rpc(rpcConstants::DMWord);
         QSharedPointer<RPCParam>st(new RPCParamStruct);
         st->addMember( word, rpcConstants::DMWord );
@@ -650,11 +646,14 @@ void EngineWindow::fButtonClicked()
 
 void EngineWindow::fKey(int key)
 {
-    RPCGeneralClient rpc(rpcConstants::DMKeyPress);
-    QSharedPointer<RPCParam>st(new RPCParamStruct);
-    st->addMember( key, rpcConstants::DMFKey );
-    rpc.getCallArgs() ->addParam( st );
-    rpc.queueCall( rpcConstants::loggerApp + "@" + router );
+    if (!router.isEmpty())
+    {
+        RPCGeneralClient rpc(rpcConstants::DMKeyPress);
+        QSharedPointer<RPCParam>st(new RPCParamStruct);
+        st->addMember( key, rpcConstants::DMFKey );
+        rpc.getCallArgs() ->addParam( st );
+        rpc.queueCall( rpcConstants::loggerApp + "@" + router );
+    }
 
 }
 bool EngineWindow::eventFilter(QObject */*obj*/, QEvent *event)

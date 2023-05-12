@@ -16,6 +16,13 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
+     <widget class="QLabel" name="label">
+      <property name="text">
+       <string>Logs to monitor for QSOs</string>
+      </property>
+     </widget>
+    </item>
+    <item>
      <widget class="MonitoredLogs" name="logsTreeView"/>
     </item>
     <item>
