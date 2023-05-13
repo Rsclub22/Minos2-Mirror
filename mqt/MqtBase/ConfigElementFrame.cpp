@@ -1,6 +1,7 @@
 #include <QPainter>
 #include <QDir>
 #include <QFileDialog>
+#include <QAbstractItemView>
 
 #include "ConfigElementFrame.h"
 #include "fileutils.h"
@@ -20,6 +21,8 @@ ConfigElementFrame::ConfigElementFrame(bool nele) :
     QStringList appTypes = MinosConfig::getMinosConfig()->getAppTypes();
     ui->appTypeCombo->addItems(appTypes);
     ui->appTypeCombo->setCurrentIndex(appTypes.indexOf(MinosConfig::tr(MinosConfig::appNone)));
+    // The dropdown list gets elided without this
+    ui->appTypeCombo->view()->setTextElideMode(Qt::ElideNone);
     inhibitIndexChange = false;
 
     gradient.setColorAt(0.0, Qt::lightGray);
