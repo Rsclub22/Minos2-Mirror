@@ -90,7 +90,7 @@ NG, Nottingham, G, ,IO92KW
 NL, London N1 - 22(Edmonton), G, ,IO91XO
 NN, Northampton, G, ,IO92NF
 NP, Newport(Pontypool), GW, G,IO81LQ
-NR, Norwich, G, ,JO02PO
+NK, Norwich, G, ,JO02PO
 NW, London NW1 - 11(Hendon), G, ,IO91VO
 OL, Oldham(Rochdale), G, ,IO83WO
 OX, Oxford, G, ,IO91IR
