@@ -332,7 +332,6 @@ void ClusterMainWindow::doStartup()
 
     connect(setupCluster, &SetupDialog::clusterListChanged, this, &ClusterMainWindow::clusterListChanged);
 
-    connect(ui->overrideLogCheckBox, &QCheckBox::clicked, this, &ClusterMainWindow::onOverrideLogCheckBoxClicked);
     connect(ui->hfLogFilterCheckBox, &QCheckBox::clicked, this, &ClusterMainWindow::onLogFilterCheckBoxClicked);
     connect(ui->vhfMwLogFilterCheckBox, &QCheckBox::clicked, this, &ClusterMainWindow::onLogFilterCheckBoxClicked);
 
@@ -1123,12 +1122,9 @@ QString ClusterMainWindow::getQraFromCallsignPrefix(Callsign cs)
     return syn->getCentral().getLoc();
 }
 
-
-
-static QRegularExpression rews("\\s+");
-
 int ClusterMainWindow::upackShowDxSpot(const QString txt, QSharedPointer<ClusterSpotData> newSpot)
 {
+    static QRegularExpression rews("\\s+");
 
     trace(QString("UnpackShowDXSpot - %1").arg(txt));
 
@@ -1314,7 +1310,6 @@ void ClusterMainWindow::handleResendSpotToClientsCmds()
             {
 
                 // check band to set logBandFilter
-                setLogBandFilter(resendSpotsToClientQueue[i].getBandmask());
                 resendAllSpotsToClients(resendSpotsToClientQueue[i]);
 
             }
@@ -1323,35 +1318,6 @@ void ClusterMainWindow::handleResendSpotToClientsCmds()
         resendSpotsToClientQueue.clear();
     }
 }
-
-
-void ClusterMainWindow::setLogBandFilter(QString band)
-{
-    if (!ui->overrideLogCheckBox->isChecked())
-    {
-        QString bandType = getBandType(band);
-        if (bandType == NO_BANDTYPE)
-        {
-            trace(QString("setLogBandFilter: error no bandType found for band %1").arg(band));
-            return;
-        }
-
-        if (bandType == HF_BANDTYPE)
-        {
-            ui->hfLogFilterCheckBox->setChecked(true);
-        }
-
-        if (bandType == VHF_BANDTYPE || bandType == MW_BANDTYPE)
-        {
-            ui->vhfMwLogFilterCheckBox->setChecked(true);
-        }
-
-        onLogFilterCheckBoxClicked();
-    }
-
-}
-
-
 QString ClusterMainWindow::getBandType(QString band)
 {
 
@@ -1597,6 +1563,8 @@ void ClusterMainWindow::getSpotsFromDisplayQueue()
 
 int ClusterMainWindow::upackDxSpot(QString txt, QSharedPointer<ClusterSpotData> newSpot)
 {
+    static QRegularExpression tre("\\d\\d\\d\\dZ");
+    static QRegularExpression dre("\\s+");
 
     trace(QString("UnpackDXSpot - %1").arg(txt));
 
@@ -1606,7 +1574,7 @@ int ClusterMainWindow::upackDxSpot(QString txt, QSharedPointer<ClusterSpotData> 
 
     txt.remove('\x07');
 
-    dxMsg = txt.split(QRegularExpression("\\s+"));
+    dxMsg = txt.split(dre);
 
     if (dxMsg.count() > 5)
     {
@@ -1640,8 +1608,7 @@ int ClusterMainWindow::upackDxSpot(QString txt, QSharedPointer<ClusterSpotData> 
         QString time;
         for (int i = 4; i < dxMsg.count(); i++)
         {
-            QRegularExpression re("\\d\\d\\d\\dZ");
-            QRegularExpressionMatch match = re.match(dxMsg[i]);
+            QRegularExpressionMatch match = tre.match(dxMsg[i]);
             if (match.hasMatch())
             {
                 //newSpot.setSpotTime(dxMsg[i].remove('Z'));
@@ -1841,54 +1808,17 @@ bool ClusterMainWindow::lookforModeInComment(const QString &spotComment, int &co
 void ClusterMainWindow::setSendSpotsToLogWarning(QString txt)
 {
 
-    ui->sendSpotsToLogWarningLabel->setText(txt);
+    ui->sendSpotsToLogWarningLabel->setText(HtmlFontColour(Qt::red) + txt);
 }
 
 void ClusterMainWindow::onLogFilterCheckBoxClicked()
 {
-
-    if (ui->hfLogFilterCheckBox->isChecked())
-    {
-        setHfLogOverrideIndicatorOnOff(true);
-    }
-    else
-    {
-        setHfLogOverrideIndicatorOnOff(false);
-    }
-
-    if (ui->vhfMwLogFilterCheckBox->isChecked())
-    {
-        setVhfMwLogOverrideIndicatorOnOff(true);
-    }
-    else
-    {
-        setVhfMwLogOverrideIndicatorOnOff(false);
-    }
-
-
-
     if (!ui->hfLogFilterCheckBox->isChecked() && !ui->vhfMwLogFilterCheckBox->isChecked())
     {
         setSendSpotsToLogWarning(tr("No spots will be sent to the log - please check one of the boxes!"));
     }
     else
     {
-        setSendSpotsToLogWarning("");
-    }
-}
-
-
-void ClusterMainWindow::onOverrideLogCheckBoxClicked()
-{
-    if (ui->overrideLogCheckBox->isChecked())
-    {
-        ui->hfLogFilterCheckBox->setEnabled(true);
-        ui->vhfMwLogFilterCheckBox->setEnabled(true);
-    }
-    else
-    {
-        ui->hfLogFilterCheckBox->setEnabled(false);
-        ui->vhfMwLogFilterCheckBox->setEnabled(false);
         setSendSpotsToLogWarning("");
     }
 }
@@ -1954,13 +1884,10 @@ void ClusterMainWindow::LogTimerTimer()
 
 void ClusterMainWindow::sendSpotToDXCluster(Frequency freq, QString call, QString loc)
 {
-
-
-    bool spotStatus = false;
     QString spotMsg = assembleSpotForDXCluster(freq, call, loc);
     if (setupCluster->getSendToDXClusterEnabled() && loginSuccess && !freq.isClear() && !call.isEmpty())
     {
-        trace(QString("SendSpotToDXCluster: sending spot, call %1, freq %2, locator %3").arg(call).arg(freq.traceStr()).arg(loc));
+        trace(QString("SendSpotToDXCluster: sending spot, call %1, freq %2, locator %3").arg(call, freq.traceStr(), loc));
         if (BandList::getBandList().checkValidBand(freq))
         {
 
@@ -1969,13 +1896,13 @@ void ClusterMainWindow::sendSpotToDXCluster(Frequency freq, QString call, QStrin
             if (error < 0)
             {
                 trace(QString("SendSpotToDXCluster: sending spot %1 failed to send").arg(spotMsg));
-                spotStatus = false;
+                bool spotStatus = false;
                 addSentSpotToDisplayQueue(spotStatus, tr(sendClusterReasonText[COMMS_ERR]));
             }
             else
             {
                 trace(QString("SendSpotToDXCluster: sending spot %1 sent Ok").arg(spotMsg));
-                spotStatus = true;
+                bool spotStatus = true;
                 addSentSpotToDisplayQueue(spotStatus, tr(sendClusterReasonText[TX_OK]));
             }
 #endif
@@ -1984,14 +1911,12 @@ void ClusterMainWindow::sendSpotToDXCluster(Frequency freq, QString call, QStrin
         }
         else
         {
-            trace(QString("SendSpotToDXCluster: spot freq is out of band %1, spot callsign %2").arg(freq.traceStr()).arg(call));
-            spotStatus = false;
+            trace(QString("SendSpotToDXCluster: spot freq is out of band %1, spot callsign %2").arg(freq.traceStr(), call));
             addSentSpotToDisplayQueue(false, tr(sendClusterReasonText[FREQ_ERR]));
         }
     }
     else
     {
-        spotStatus = false;
         if (!loginSuccess)
         {
            addSentSpotToDisplayQueue(false, tr(sendClusterReasonText[NOT_LOGGED_ON]));
@@ -2677,46 +2602,7 @@ void ClusterMainWindow::loadBandFilterSettingsToTab()
         QString band = b->uk;
 
         bandCheckBoxes.value(band).bandChkBox->setChecked(filterSettings.getBandFilter(band));
-
-
     }
-
-
-    if (!ui->overrideLogCheckBox->isChecked())
-    {
-        setHfLogOverrideIndicatorOnOff(false);
-        ui->hfLogFilterCheckBox->setChecked(false);
-        ui->hfLogFilterCheckBox->setEnabled(false);
-        setVhfMwLogOverrideIndicatorOnOff(false);
-        ui->vhfMwLogFilterCheckBox->setChecked(false);
-        ui->vhfMwLogFilterCheckBox->setEnabled(false);
-    }
-    else
-    {
-        ui->hfLogFilterCheckBox->setEnabled(true);
-        ui->vhfMwLogFilterCheckBox->setEnabled(true);
-        if (ui->hfLogFilterCheckBox->isChecked())
-        {
-            setHfLogOverrideIndicatorOnOff(true);
-        }
-        else
-        {
-            setHfLogOverrideIndicatorOnOff(false);
-        }
-
-        if (ui->vhfMwLogFilterCheckBox->isChecked())
-        {
-            setVhfMwLogOverrideIndicatorOnOff(true);
-        }
-        else
-        {
-            setVhfMwLogOverrideIndicatorOnOff(false);
-        }
-    }
-
-
-
-
 }
 
 
@@ -2738,7 +2624,6 @@ void ClusterMainWindow::saveBandFilterSettings()
 
     config.beginGroup("Spots_To_Log_Filter");
 
-    config.setValue(QString("logFilterOverride"), ui->overrideLogCheckBox->isChecked() );
     config.setValue(QString("logFilterHF"), ui->hfLogFilterCheckBox->isChecked());
     config.setValue(QString("logFilterVHFMW"),ui->vhfMwLogFilterCheckBox->isChecked());
 
@@ -2765,11 +2650,12 @@ void ClusterMainWindow::readBandFilterSettings()
 
     config.beginGroup("Spots_To_Log_Filter");
 
-    ui->overrideLogCheckBox->setChecked(config.value("logFilterOverride", false).toBool());
     ui->hfLogFilterCheckBox->setChecked(config.value("logFilterHF", true).toBool());
     ui->vhfMwLogFilterCheckBox->setChecked(config.value("logFilterVHFMW", true).toBool());
 
     config.endGroup();
+
+    onLogFilterCheckBoxClicked();
 }
 
 
@@ -2812,39 +2698,6 @@ void ClusterMainWindow::readStartEndScriptSettings()
     ui->saveStartSciptCheckBox->setChecked(config.value("saveStartScriptSettingsOnClose", false).toBool());
     config.endGroup();
 }
-
-
-
-void ClusterMainWindow::setHfLogOverrideIndicatorOnOff(bool on)
-{
-
-    if (on)
-    {
-        ui->hfFilterToLogIndicator->setStyleSheet(LOG_FILTER_INDICATOR_ON_STYLE);
-    }
-    else
-    {
-        ui->hfFilterToLogIndicator->setStyleSheet(LOG_FILTER_INDICATOR_OFF_STYLE);
-    }
-
-
-}
-
-void ClusterMainWindow::setVhfMwLogOverrideIndicatorOnOff(bool on)
-{
-
-    if (on)
-    {
-        ui->vhfMwFilterToLogIndicator->setStyleSheet(LOG_FILTER_INDICATOR_ON_STYLE);
-    }
-    else
-    {
-        ui->vhfMwFilterToLogIndicator->setStyleSheet(LOG_FILTER_INDICATOR_OFF_STYLE);
-    }
-
-}
-
-
 void ClusterMainWindow::setHfFilterControlsVisible()
 {
 

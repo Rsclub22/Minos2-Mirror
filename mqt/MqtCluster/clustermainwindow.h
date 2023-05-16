@@ -481,11 +481,8 @@ private:
     bool getUseQrzForQraFlag();
     void askQrzForQraLocator(QSharedPointer<ClusterSpotData> newSpot);
     void setSendSpotsToLogWarning(QString txt);
-    void setHfLogOverrideIndicatorOnOff(bool on);
-    void setVhfMwLogOverrideIndicatorOnOff(bool on);
 
     bool areAnyBandsChecked(QString bandType);
-    void setLogBandFilter(QString band);
     QString getBandType(QString band);
     void saveEnableStartEndScriptFileFlags();
     void saveBandFilterOnSaveFlag();
@@ -539,7 +536,6 @@ private slots:
     void onReconnectCommandFromLog(bool state);
     void onclusterQrzResponse(QString dxCall, QString dxGrid, QString dxCallState, QString spotterCall, QString spotterGrid, QString spotterState);
     void onLogFilterCheckBoxClicked();
-    void onOverrideLogCheckBoxClicked();
 };
 
 #endif // CLUSTERMAINWINDOW_H

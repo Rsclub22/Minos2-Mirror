@@ -94,8 +94,7 @@ void ClusterClientServer::SyncTimerTimer(  )
     if (spotQueue.count())
     {
         emit dxSpot(spotQueue); // does this take a copy of spotQueue?
-                                // if so, targets shoud call back to get the spotQueue
-                                // And we could work straight off on_routerCall??
+                                // no, it passes a pointer (phew!)
         spotQueue.clear();
     }
 }
