@@ -111,6 +111,7 @@ private:
     QString getSelectedRadio();
     bool setSelectedRadio(QString s);
 signals:
+    void setSpeeds(QString b, QString r);
     void rigModeFreq(QString, Frequency);
     void sendCharactersDown(QString, int);
     void sendCharactersUp(QString, int);

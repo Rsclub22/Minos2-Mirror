@@ -47,6 +47,7 @@ TestFrame::TestFrame(EngineWindow *parent, QLineEdit */*sendEdit*/, QString /*fn
 {
     ui->setupUi(this);
     connect(mainWindow, &DMMainWindow::setSpeeds, this, &TestFrame::onSetSpeeds);
+    connect(engineWindow, &EngineWindow::setSpeeds, this, &TestFrame::onSetSpeeds);
     connect(engineWindow, &EngineWindow::sendCharactersDown, this, &TestFrame::onSendCharacters);
     connect(engineWindow, &EngineWindow::rigModeFreq, this, &TestFrame::onRigModeFreq);
 

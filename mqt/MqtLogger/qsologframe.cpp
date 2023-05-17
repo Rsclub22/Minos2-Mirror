@@ -1078,6 +1078,7 @@ void QSOLogFrame::rxDMWord(QString rxWord, int markFreq)
         markOffset = markFreq;
     }
 
+    trace(QString("QSOLogFrame::rxDMWord %1 %2").arg(rxWord).arg(markFreq));
     if ( !valid( cmCheckValid ) )   // make sure all single and cross field
     {
         QWidget *firstInvalid = nullptr;

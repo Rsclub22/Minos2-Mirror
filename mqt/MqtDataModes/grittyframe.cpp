@@ -155,6 +155,7 @@ GrittyFrame::GrittyFrame(EngineWindow *parent, QLineEdit *sendEdit, QString fnam
 {
     ui->setupUi(this);
     connect(mainWindow, &DMMainWindow::setSpeeds, this, &GrittyFrame::onSetSpeeds);
+    connect(engineWindow, &EngineWindow::setSpeeds, this, &GrittyFrame::onSetSpeeds);
     connect(engineWindow, &EngineWindow::sendCharactersDown, this, &GrittyFrame::onSendCharacters);
     connect(engineWindow, &EngineWindow::rigModeFreq, this, &GrittyFrame::onRigModeFreq);
 

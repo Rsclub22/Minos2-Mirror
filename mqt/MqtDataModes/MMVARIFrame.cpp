@@ -21,6 +21,7 @@ MMVARIFrame::MMVARIFrame(QFrame *cwl, EngineWindow *p,
     sendEdit(sendEdit)
 {
     connect(mainWindow, &DMMainWindow::setSpeeds, this, &MMVARIFrame::onSetSpeeds);
+    connect(engineWindow, &EngineWindow::setSpeeds, this, &MMVARIFrame::onSetSpeeds);
     connect(engineWindow, &EngineWindow::sendCharactersDown, this, &MMVARIFrame::onSendCharacters);
     connect(engineWindow, &EngineWindow::rigModeFreq, this, &MMVARIFrame::onRigModeFreq);
     connect(this, &MMVARIFrame::txChanged, engineWindow, &EngineWindow::onTxChanged);
@@ -43,8 +44,6 @@ MMVARIFrame::MMVARIFrame(QFrame *cwl, EngineWindow *p,
     mmlevel = new MMVARILib::XMMVLvl(cwl);
     mmlevel->setControl("{438EF93A-939D-4B6B-93A7-DF09049B8514}");
 
-    mmvariVb = new QVBoxLayout();
-    cwl->setLayout(mmvariVb);
 
     //====================================================================
     // N1MM also has BPF, ATC, FFT, Multi-Channel RX menus
@@ -129,10 +128,13 @@ MMVARIFrame::MMVARIFrame(QFrame *cwl, EngineWindow *p,
     speedCombo->clear();
 
     connect(speedCombo, &QComboBox::currentTextChanged, this, &MMVARIFrame::onSpeedComboChanged);
+
+    mmvariVb = new QVBoxLayout();
+
     mmvariVb->addLayout(mmvariButtons);
 
     modeCombo->setCurrentIndex(0);
-    onModeComboChanged(speedCombo->currentText());
+    onModeComboChanged(modeCombo->currentText());
 
     // Set the PTT options
 
@@ -285,10 +287,13 @@ void MMVARIFrame::sendCharacters(const QString &sendData, int mf)
     }
     else
     {
-        if (mf > 0)
+        if (modeCombo->currentText().contains("rtty"))
         {
-            mmvari->setWTxCarrier(mf + 170/2);
-            mmvari->setWRxCarrier(0, mf + 170/2);
+            if (mf > 0)
+            {
+                mmvari->setWTxCarrier(mf + 170/2);
+                mmvari->setWRxCarrier(0, mf + 170/2);
+            }
         }
         mmvari->setBAddStartCR(true);
         mmvari->setBAddStopCR(true);

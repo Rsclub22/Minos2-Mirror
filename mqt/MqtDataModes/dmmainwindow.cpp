@@ -316,7 +316,7 @@ void DMMainWindow::sendPressed(QString d, int c)
     {
         if (e->engineName == m)
         {
-            trace(QString("Send <%1> to %2").arg(d, m));
+            trace(QString("Send <%1> to %2 mark %3").arg(d, m).arg(c));
             e->doSendCharacters(d, c);
             sent = true;
             break;

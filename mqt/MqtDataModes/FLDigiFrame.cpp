@@ -61,6 +61,7 @@ FLDigiFrame::FLDigiFrame(EngineWindow *parent, QLineEdit *sendEdit, QString fnam
     ui->setupUi(this);
 
     connect(mainWindow, &DMMainWindow::setSpeeds, this, &FLDigiFrame::onSetSpeeds);
+    connect(engineWindow, &EngineWindow::setSpeeds, this, &FLDigiFrame::onSetSpeeds);
     connect(engineWindow, &EngineWindow::sendCharactersDown, this, &FLDigiFrame::onSendCharacters);
     connect(engineWindow, &EngineWindow::rigModeFreq, this, &FLDigiFrame::onRigModeFreq);
     connect(this, &FLDigiFrame::txChanged, engineWindow, &EngineWindow::onTxChanged);

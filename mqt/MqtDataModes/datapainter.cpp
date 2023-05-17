@@ -87,6 +87,7 @@ void DPGraphicsTextItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
         // walk back looking for a separator
         RXChar basec = engineWindow->rxBuff.getCharAt(row, cp);
         RXChar selc = basec;
+
         if (selc.getCh() == ' ')
         {
             c.setPosition(cp, QTextCursor::MoveAnchor);
@@ -129,6 +130,7 @@ void DPGraphicsTextItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
 
         QString sel = c.selectedText();
+        trace(QString("Word selected is <%1>").arg(sel));
         if (!sel.isEmpty())
         {
             emit wordSelected(sel, mfreq);
@@ -257,8 +259,14 @@ void DataPainter::setText()
                     rxbuff.append("</b>");
                     boldSet = bold;
                 }
-
-                rxbuff.append(nc.getCh());
+                if (nc.getCh() == ' ')
+                {
+                    rxbuff.append("&nbsp;");
+                }
+                else
+                {
+                    rxbuff.append(nc.getCh());
+                }
             }
             QTextCursor cursor = lines[i]->textCursor();
             int startPos = cursor.selectionStart();

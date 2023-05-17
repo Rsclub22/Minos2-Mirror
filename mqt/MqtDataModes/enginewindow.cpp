@@ -144,6 +144,7 @@ void EngineWindow::startEngine()
     {
         selectTest(engineName);
     }
+    emit setSpeeds(EngineConfigure::getSpeed("BPSK"), EngineConfigure::getSpeed("RTTY"));
 }
 
 void EngineWindow::selectEngine(QString name)

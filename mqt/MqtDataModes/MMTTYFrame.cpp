@@ -146,6 +146,7 @@ MMTTYFrame::MMTTYFrame(EngineWindow *parent, bool twoTone, QLineEdit *sendEdit, 
 {
     ui->setupUi(this);
     connect(mainWindow, &DMMainWindow::setSpeeds, this, &MMTTYFrame::onSetSpeeds);
+    connect(engineWindow, &EngineWindow::setSpeeds, this, &MMTTYFrame::onSetSpeeds);
     connect(engineWindow, &EngineWindow::sendCharactersDown, this, &MMTTYFrame::onSendCharacters);
     connect(engineWindow, &EngineWindow::rigModeFreq, this, &MMTTYFrame::onRigModeFreq);
     connect(this, &MMTTYFrame::txChanged, engineWindow, &EngineWindow::onTxChanged);
