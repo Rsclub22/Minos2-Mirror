@@ -192,10 +192,12 @@ void StackedInfoFrame::setTabVisibility()
     {
         setTabsVisible = false;
         QVector<int> vtabs;
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
         for (int i = 0; i < ui->tabbar->count(); i++)
         {
             ui->tabbar->setTabVisible(i, false);
         }
+#endif
         QStringList bll = contest->bandsList.getValue().split(";");
 
         for(const auto &bs: qAsConst(bll))
@@ -220,11 +222,13 @@ void StackedInfoFrame::setTabVisibility()
         }
         if (vtabs.count() > 1)
         {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
             setTabsVisible = true;
             for(int t:vtabs)
             {
                 ui->tabbar->setTabVisible(t, true);
             }
+#endif
         }
     }
     ui->tabbar->setVisible(setTabsVisible);
