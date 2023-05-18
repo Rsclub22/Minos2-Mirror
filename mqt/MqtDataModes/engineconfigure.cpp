@@ -175,6 +175,9 @@ bool EngineConfigure::check()
 
     QSettings settings("./Configuration/DataModes.ini", QSettings::IniFormat);
 
+    checkEnginePath(ui->mmvariEdit, ui->mmvariEnable1);
+    checkEnginePath(ui->mmvariEdit, ui->mmvariEnable2);
+
     checkEnginePath(ui->twotoneEdit1, ui->twotoneEnable1);
     checkEnginePath(ui->twotoneEdit2, ui->twotoneEnable2);
 
