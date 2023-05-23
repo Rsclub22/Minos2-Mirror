@@ -13,6 +13,7 @@ QString ExtractFileExt(const QString &fname );
 bool FileExists( const QString& Name );
 bool FileAccessible(const QString &fname);
 bool FileWriteable(const QString &fname);
+bool FileExecutable(const QString &fname);
 bool DirectoryExists ( const QString & Name );
 
 bool CreateDir( const QString &s );

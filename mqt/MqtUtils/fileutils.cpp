@@ -18,6 +18,19 @@ bool FileExists(const QString &path )
         return false;
     }
 }
+bool FileExecutable(const QString &path)
+{
+    QFileInfo checkFile( path );
+    // check if file exists and if yes: Is it really a file and no directory?
+    if ( checkFile.exists() && checkFile.isExecutable() )
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
 bool DirectoryExists (const QString &Name )
 {
     QFileInfo qinf( Name );
@@ -101,4 +114,3 @@ qint64 FileLength(const QString &fname)
     qint64 len = qinf.size();
     return len;
 }
-

@@ -129,7 +129,17 @@ void EngineConfigure::setEnginePTT(QSettings &settings,QString engine, int l)
 void EngineConfigure::checkEnginePath(QLineEdit *ele, QCheckBox *ecb)
 {
     QString m = ele->text();
-    if (!FileExists(m))
+    QString ext = ExtractFileExt(m);
+    bool ok = false;
+    if (ext.compare("ocx", Qt::CaseInsensitive))
+    {
+        ok = FileExists(m);
+    }
+    else
+    {
+        ok = FileExecutable(m);
+    }
+    if (!ok)
     {
         ecb->setChecked(false);
         ecb->setEnabled(false);

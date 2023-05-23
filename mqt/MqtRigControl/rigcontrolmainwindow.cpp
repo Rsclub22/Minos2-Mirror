@@ -1129,9 +1129,9 @@ int RigControlMainWindow::openRigCtldRadio(bool localRigCtld)
         // check rigctld file exists
         QString filename = getRigCtldExePath() + getRigCtldExeName();
 
-        if (!FileExists(filename))
+        if (!FileExecutable(filename))
         {
-            trace(QString("openRigCtld: rigctld is missing from %1").arg(filename));
+            trace(QString("openRigCtld: rigctld %1 is not executable").arg(filename));
             return RIGCTLD_EXE_MISSING;
         }
 

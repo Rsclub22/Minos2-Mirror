@@ -138,9 +138,9 @@ void RunConfigElement::createProcess()
 
         QString program = commandLine;
         QStringList progArgs = params;
-        if (!FileExists(program))
+        if (!FileExecutable(program))
         {
-            trace(name + tr(":program doesn't exist:") + program);
+            trace(name + tr(":program is not executable:") + program);
         }
 
         QString locale = getCurrentLanguage();
@@ -835,9 +835,9 @@ QString MinosConfig::checkConfig(QString name)
 
             if (ele->runType == RunLocal)
             {
-                if (!FileExists(ele->commandLine))
+                if (!FileExecutable(ele->commandLine))
                 {
-                    reqErrs += ele->appType + tr(" Executable path does not exist\n\n");
+                    reqErrs += ele->appType + tr(" Executable path is not executable\n\n");
                 }
                 if (ele->appType != tr(appNone) && !FileExists(ele->rundir + "/Configuration/MinosConfig.json"))
                 {
