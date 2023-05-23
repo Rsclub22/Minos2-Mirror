@@ -34,9 +34,9 @@ void RigMemoryFrame::traceMsg(QString msg)
 }
 RigMemoryFrame::RigMemoryFrame(StackedInfoFrame *parent) :
     QFrame(parent)
+    , tslf(parent->tslf)
     , ui(new Ui::RigMemoryFrame)
     , ct(nullptr)
-    , tslf(parent->tslf)
 {
     ui->setupUi(this);
 

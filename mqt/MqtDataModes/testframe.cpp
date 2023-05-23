@@ -42,8 +42,8 @@ QStringList testData = {
 
 TestFrame::TestFrame(EngineWindow *parent, QLineEdit */*sendEdit*/, QString /*fname*/, QString /*name*/) :
     QFrame(parent),
-    ui(new Ui::TestFrame),
-    engineWindow(parent)
+    engineWindow(parent),
+    ui(new Ui::TestFrame)
 {
     ui->setupUi(this);
     connect(mainWindow, &DMMainWindow::setSpeeds, this, &TestFrame::onSetSpeeds);

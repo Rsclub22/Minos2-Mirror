@@ -1401,7 +1401,7 @@ void InterruptingPTTAction::timeOut()
 //=============================================================================
 PlayAction::PlayAction(int mno, const QString &keyName, const QString &pfileName, bool noPTT, long pdelayStart,
                       long prepeatDelay, bool firstTime, bool CW )
-    : mno(mno), keyName(keyName), fileName(pfileName), delayTime(pdelayStart), testMode( noPTT ), CW( CW ), actionState( epasInitial )
+    : mno(mno), fileName(pfileName), keyName(keyName), delayTime(pdelayStart), testMode( noPTT ), CW( CW ), actionState( epasInitial )
 {
    if ( sblog )
    {

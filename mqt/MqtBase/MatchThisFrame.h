@@ -37,7 +37,7 @@ private slots:
     virtual void MatchTreeSelected(MatchType m, BaseContestLog *c, QString basename, const QItemSelection &selected) override;
 
     void on_ReplaceThisLogList(SharedMatchCollection matchCollection, BaseContestLog *, QString b);
-    void afterMatchTreeClicked();
+    void afterMatchTreeClicked() override;
 };
 
 #endif // MATCHTHISFRAME_H

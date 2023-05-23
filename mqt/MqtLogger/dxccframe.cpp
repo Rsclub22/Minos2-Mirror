@@ -25,8 +25,8 @@ QVector<GridColumn> DXCCGridModel::CountryTreeColumns =
 
 DXCCFrame::DXCCFrame(StackedInfoFrame *parent) :
     QFrame(parent),
-    ui(new Ui::DXCCFrame),
-    tslf(parent->tslf)
+    tslf(parent->tslf),
+    ui(new Ui::DXCCFrame)
 {
     ui->setupUi(this);
     ui->DXCCTable->horizontalHeader()->setContextMenuPolicy( Qt::CustomContextMenu );

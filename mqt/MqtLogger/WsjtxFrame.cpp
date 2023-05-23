@@ -28,8 +28,8 @@ static void wtrace(QString m)
 }
 WsjtxFrame::WsjtxFrame(TSingleLogFrame *parent) :
     QFrame(parent)
-  , tslf(parent)
-  , ui(new Ui::WsjtxFrame)
+    , ui(new Ui::WsjtxFrame)
+    , tslf(parent)
   , decodes_model_ {new DecodesModel()}
 {
     ui->setupUi(this);

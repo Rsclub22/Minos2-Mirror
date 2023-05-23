@@ -22,7 +22,7 @@
 //{}
 
 DPGraphicsTextItem::DPGraphicsTextItem(EngineWindow *engineWindow, const QString &text, int r):
-    QGraphicsTextItem(text), row(r), engineWindow(engineWindow)
+    QGraphicsTextItem(text), engineWindow(engineWindow), row(r)
 {
     //setAcceptedMouseButtons(Qt::LeftButton);
 }

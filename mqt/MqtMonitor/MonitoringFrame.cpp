@@ -10,8 +10,8 @@
 // When columns changed, need to tell ALL monitoring frames
 
 MonitoringFrame::MonitoringFrame(MonitorMain *parent) :
-    QFrame(parent), mparent(parent),
-    ui(new Ui::MonitoringFrame)
+    QFrame(parent), ui(new Ui::MonitoringFrame),
+    mparent(parent)
 {
     ui->setupUi(this);
 }

@@ -19,8 +19,8 @@ QVector<GridColumn> DistrictGridModel::DistrictTreeColumns =
 
 DistrictFrame::DistrictFrame(StackedInfoFrame *parent) :
     QFrame(parent),
-    ui(new Ui::DistrictFrame),
-    tslf(parent->tslf)
+    tslf(parent->tslf),
+    ui(new Ui::DistrictFrame)
 {
     ui->setupUi(this);
     ui->DistrictTable->horizontalHeader()->setContextMenuPolicy( Qt::CustomContextMenu );

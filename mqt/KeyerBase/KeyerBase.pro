@@ -16,7 +16,7 @@ INCLUDEPATH += ../TinyXML
 
 unix:!mac{DEFINES += __LINUX_ALSA__}
 win32{DEFINES += __WINDOWS_WASAPI__}
-mac{DEFINES += __MACOSX_CORE__}
+#mac{DEFINES += __MACOSX_CORE__}
 
 SOURCES += \
     ../filter_c/adis_filter.c \

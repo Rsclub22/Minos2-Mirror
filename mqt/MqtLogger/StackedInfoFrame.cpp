@@ -47,9 +47,9 @@ bool showUnworked = false;
 
 StackedInfoFrame::StackedInfoFrame(QWidget *parent, int instance, TSingleLogFrame *t) :
     QFrame(parent),
+    tslf(t),
     ui(new Ui::StackedInfoFrame),
-    stackInstance(instance),
-    tslf(t)
+    stackInstance(instance)
 {
     ui->setupUi(this);
 

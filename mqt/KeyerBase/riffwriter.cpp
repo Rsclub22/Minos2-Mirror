@@ -7,7 +7,7 @@
 #define RINGBUFFERSIZE 1024
 
 RiffWriter::RiffWriter(RtAudioSoundSystem *parent, int bufferFrames) :
-    QThread(parent), bufferFrames(bufferFrames), ss(parent), terminated(false)
+    QThread(parent), ss(parent), bufferFrames(bufferFrames), terminated(false)
 {
     inBuffs = new InBuff[RINGBUFFERSIZE];
 
