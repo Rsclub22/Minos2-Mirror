@@ -162,7 +162,7 @@ void StackedInfoFrame::setTabVisibility()
         ui->tabbar->setVisible(false);
         return;
     }
-    bool setTabsVisible = (contest->isHF());
+    bool setTabsVisible = (contest->isHF() && ui->tabbar->count() > 1);
 
     QString a = ui->infoCombo->currentText();
 
@@ -188,49 +188,6 @@ void StackedInfoFrame::setTabVisibility()
         break;
     }
 
-    if (setTabsVisible)
-    {
-        setTabsVisible = false;
-        QVector<int> vtabs;
-#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
-        for (int i = 0; i < ui->tabbar->count(); i++)
-        {
-            ui->tabbar->setTabVisible(i, false);
-        }
-#endif
-        QStringList bll = contest->bandsList.getValue().split(";");
-
-        for(const auto &bs: qAsConst(bll))
-        {
-            QStringList bsl = bs.split(" ");
-            if (bsl.count() == 3)
-            {
-                for (int i = 0; i < ui->tabbar->count(); i++)
-                {
-                    QString bt = ui->tabbar->tabText(i);
-                    bool thisBand = (bt == bsl[0] + " " + bsl[1]);
-                    if (thisBand)
-                    {
-                        if (bsl[2] != "0")
-                        {
-                            vtabs.push_back(i);
-                        }
-                        break;
-                    }
-                }
-            }
-        }
-        if (vtabs.count() > 1)
-        {
-#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
-            setTabsVisible = true;
-            for(int t:vtabs)
-            {
-                ui->tabbar->setTabVisible(t, true);
-            }
-#endif
-        }
-    }
     ui->tabbar->setVisible(setTabsVisible);
     ui->tabbar->setFocusPolicy(Qt::NoFocus);
 
@@ -406,6 +363,56 @@ void StackedInfoFrame::setContest(LoggerContestLog *ct)
                     onInfoComboCurrentIndexChanged(-1);
                 }
             }
+            bool setTabsVisible = false;
+            QStringList vtabs;
+            QStringList bll = contest->bandsList.getValue().split(";");
+
+            for(const auto &bs: qAsConst(bll))
+            {
+                QStringList bsl = bs.split(" ");
+                if (bsl.count() == 3)
+                {
+                    for (int i = 0; i < ui->tabbar->count(); i++)
+                    {
+                        QString bt = ui->tabbar->tabText(i);
+                        bool thisBand = (bt == bsl[0] + " " + bsl[1]);
+                        if (thisBand)
+                        {
+                            if (bsl[2] != "0")
+                            {
+                                vtabs.append(bt);
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+            if (vtabs.count() > 1)
+            {
+                setTabsVisible = true;
+                for(const QString &t:vtabs)
+                {
+                    Q_UNUSED(t)
+                    for (int i = 0; i < ui->tabbar->count(); i++)
+                    {
+                        QString bt = ui->tabbar->tabText(i);
+                        if (vtabs.contains(bt))
+                        {
+                            continue;
+                        }
+                        ui->tabbar->removeTab(i);
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                for (int i = 0; i < ui->tabbar->count(); i++)
+                {
+                    ui->tabbar->removeTab(0);
+                }
+            }
+            ui->tabbar->setVisible(setTabsVisible);
         }
         onContestBandChanged(ct);
     }

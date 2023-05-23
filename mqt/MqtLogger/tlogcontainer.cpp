@@ -1039,13 +1039,14 @@ void TLogContainer::ContestDetailsActionExecute()
         if (ct)
         {
             QString curConfig = ct->screenLayout.getValue();
+            MinosItem<QString> bandsList = ct->bandsList;
             ContestDetails pced( this );
 
 
             pced.setDetails( ct );
             if ( pced.exec() == QDialog::Accepted )
             {
-                if (ct->screenLayout.getValue() != curConfig)
+                if (ct->screenLayout.getValue() != curConfig || ct->bandsList != bandsList)
                 {
                     f->applyScreenLayout();
                 }
