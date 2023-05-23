@@ -122,9 +122,14 @@ else
 fi
 
 cp -r $DIR/mqt/ControlFiles/Configuration/* ./Configuration
-cp -r $DIR/mqt/ControlFiles/Configuration/LinuxFiles/* ./Configuration
+if [[ "$OSTYPE" == "darwin"* ]] ; then 		#MacOS
+    cp -r $DIR/mqt/ControlFiles/Configuration/Maciles/* ./Configuration
+else
+    cp -r $DIR/mqt/ControlFiles/Configuration/LinuxFiles/* ./Configuration
+fi
 rm -rf ./Configuration/WindowsFiles
 rm -rf ./Configuration/LinuxFiles
+rm -rf ./Configuration/MacFiles
 cp $DIR/mqt/Installer/Minos.sh . 
 cp $DIR/mqt/Installer/runAppStarter.sh .
 cp $DIR/mqt/Docs/*.* ./Docs
