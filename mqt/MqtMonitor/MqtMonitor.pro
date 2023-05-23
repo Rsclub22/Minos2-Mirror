@@ -17,6 +17,7 @@ TARGET = MqtMonitor
 TEMPLATE = app
 
 win32:RC_ICONS += ../MinosMonitor.ico
+mac:ICON=../MinosMonitor.ico
 
 SOURCES += \
         main.cpp \

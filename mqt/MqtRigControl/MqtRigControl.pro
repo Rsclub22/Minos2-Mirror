@@ -16,6 +16,7 @@ TARGET = MqtRigControl
 TEMPLATE = app
 
 win32:RC_ICONS += ../MinosRig.ico
+mac:ICON=../MinosRig.ico
 
 #message(rig control)
 win32-g++*{

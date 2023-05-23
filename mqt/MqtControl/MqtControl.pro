@@ -12,6 +12,7 @@ TARGET = MqtControl
 TEMPLATE = app
 
 win32:RC_ICONS += ../minos.ico
+mac:ICON=../minos.ico
 
 SOURCES += main.cpp\
         ControlMain.cpp \

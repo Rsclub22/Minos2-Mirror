@@ -24,6 +24,7 @@ TARGET = MqtLogger
 TEMPLATE = app
 
 win32:RC_ICONS += ../MinosLogger.ico
+mac:ICON=../MinosLogger.ico
 
 android {
     CONFIG_INSTALL_PATH=/assets/Configuration

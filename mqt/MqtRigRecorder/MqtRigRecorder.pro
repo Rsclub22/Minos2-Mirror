@@ -9,9 +9,11 @@ TEMPLATE = app
 
 
 win32:RC_ICONS += ../MinosRecorder.ico
+mac:ICON=../MinosRecorder.ico
 
-unix:!macos{DEFINES += __LINUX_ALSA__}
+unix:!mac{DEFINES += __LINUX_ALSA__}
 win32{DEFINES += __WINDOWS_WASAPI__}
+mac{DEFINES += __MACOSX_CORE__}
 INCLUDEPATH += ../rtaudio
 
 

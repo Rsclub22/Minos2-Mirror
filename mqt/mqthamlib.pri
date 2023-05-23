@@ -68,7 +68,7 @@ unix: {
    LIBS += -lhamlib
 }
 
-macx: { 
+mac: {
    HAMLIBDIR = /usr/local
    LIBS += -L$$HAMLIBDIR/lib/ -L$${HAMLIBDIR}/lib/hamlib -lhamlib
    INCLUDEPATH += $${HAMLIBDIR}/include

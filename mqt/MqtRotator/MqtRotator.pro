@@ -14,6 +14,7 @@ TARGET = MqtRotator
 TEMPLATE = app
 
 win32:RC_ICONS += ../MinosRotator.ico
+mac:ICON=../MinosRotator.ico
 
 SOURCES += \
     hamlibRotcontrol.cpp \

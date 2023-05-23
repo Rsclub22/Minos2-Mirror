@@ -13,6 +13,7 @@ TARGET = MqtKeyer
 TEMPLATE = app
 
 win32:RC_ICONS += ../MinosKeyer.ico
+mac:ICON=../MinosKeyer.ico
 
 SOURCES += main.cpp\
         KeyerMain.cpp \

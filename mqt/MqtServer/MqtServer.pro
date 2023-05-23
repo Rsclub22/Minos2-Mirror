@@ -15,6 +15,7 @@ TARGET = MqtServer
 TEMPLATE = app
 
 win32:RC_ICONS += ../MinosServer.ico
+mac:ICON=../MinosServer.ico
 
 win32:LIBS += -lws2_32
 

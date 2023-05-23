@@ -13,6 +13,7 @@ TARGET = MqtCluster
 TEMPLATE = app
 
 win32:RC_ICONS += ../MinosDXC.ico
+mac:ICON=../MinosDXC.ico
 
 win32:LIBS += -lWs2_32
 

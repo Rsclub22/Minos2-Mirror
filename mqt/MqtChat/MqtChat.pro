@@ -14,6 +14,7 @@ TARGET = MqtChat
 TEMPLATE = app
 
 win32:RC_ICONS += ../MinosChat.ico
+mac:ICON=../MinosChat.ico
 
 SOURCES += main.cpp \
     chatmain.cpp
