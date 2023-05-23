@@ -61,7 +61,7 @@ bool keyer_docommand( const KeyerCtrl &keyer_ctrl )
 void startRecordDVPFile( int fileno )
 {
    char buff[ 20 ];
-   sprintf( buff, "CQF%d.WAV", fileno + 1 );
+   snprintf( buff, 19, "CQF%d.WAV", fileno + 1 );
    keyer_docommand( KeyerCtrl( eKEYER_RECORD, fileno, 0, 0, buff, getMasterConfig()->kjj[fileno].CQName ) );
 }
 void finishRecordDVPFile( )
@@ -71,7 +71,7 @@ void finishRecordDVPFile( )
 void playKeyerFile( int fileno, bool ptt )
 {
    char buff[ 20 ];
-   sprintf( buff, "CQF%d.WAV", fileno + 1 );
+   snprintf( buff, 19, "CQF%d.WAV", fileno + 1 );
    keyer_docommand( KeyerCtrl( eKEYER_PLAY, fileno, 0, 0, buff, getMasterConfig()->kjj[fileno].CQName, ptt ) );
 }
 void sendTone1( )
@@ -124,7 +124,6 @@ commonPort * select_keyer( const QString &kn )
       trace( "Select keyer " + kn + " called." );
    }
    keyer_docommand( KeyerCtrl( eKEYER_STOPALL, -1, 0, 0, "", "" ) );
-   int i = 0;
 
    for ( auto const &cp: portChain )
    {
@@ -142,7 +141,6 @@ commonPort * select_keyer( const QString &kn )
             currentKeyer->select( true );
             return cp;
          }
-         i++;
       }
    }
 
@@ -1043,7 +1041,7 @@ void VoiceAction::interruptOK( )
 void ToneAction::getActionState( QString &s )
 {
    char buff[ 80 ];
-   sprintf( buff, "Tuning %d tone", nTone );
+   snprintf( buff, 79, "Tuning %d tone", nTone );
    s = buff;
 }
 void ToneAction::LxChanged( int /*line*/, bool state )

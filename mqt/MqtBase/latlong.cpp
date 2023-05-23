@@ -769,7 +769,7 @@ static int geooutput( Location *outgrid )
    }
 
    char gridref[100];
-   sprintf( gridref,
+   snprintf( gridref, 99,
             "%2.2d %2.2d %2.4f %c " 		// northing
             "%3.3d %2.2d %2.4f %c",       // easting
             dlat, mlat, slat, lats,

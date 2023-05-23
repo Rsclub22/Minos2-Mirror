@@ -396,7 +396,7 @@ bool Cabrillo::exportTest(QSharedPointer<QFile> expfd)
 
     for ( auto const &l: linelist )
     {
-       sprintf( lbuff, "%s: %s", l.prefix.toStdString().c_str(), l.data.toStdString().c_str() );
+       snprintf( lbuff, 1023, "%s: %s", l.prefix.toStdString().c_str(), l.data.toStdString().c_str() );
        wr.lwrite( lbuff );
     }
 

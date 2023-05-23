@@ -468,7 +468,7 @@ RPCIntParam::~RPCIntParam()
 void RPCIntParam::addNode( TiXmlElement &node ) const
 {
    char buff[ 40 ];
-   sprintf( buff, "%d", value );
+   snprintf( buff, 39, "%d", value );
    TiXmlElement vNode( "i4" );
    TiXmlText tNode( buff );
    vNode.InsertEndChild( tNode );
@@ -477,13 +477,13 @@ void RPCIntParam::addNode( TiXmlElement &node ) const
 QString RPCIntParam::print() const
 {
    char buff[ 128 ];
-   sprintf( buff, "Integer value %d\r\n", value );
+   snprintf( buff, 127, "Integer value %d\r\n", value );
    return QString( buff );
 }
 QString RPCIntParam::analyse() const
 {
    char buff[ 128 ];
-   sprintf( buff, "%d", value );
+   snprintf( buff, 127, "%d", value );
    return QString( buff );
 }
 bool RPCIntParam::getInt( int &res ) const
@@ -555,7 +555,7 @@ void RPCDoubleParam::addNode( TiXmlElement &node ) const
 {
    TiXmlElement vNode( "double" );
    char buff[ 40 ];
-   sprintf( buff, "%f", value );
+   snprintf( buff, 39, "%f", value );
    TiXmlText tNode( buff );
    vNode.InsertEndChild( tNode );
    node.InsertEndChild( vNode );
@@ -563,13 +563,13 @@ void RPCDoubleParam::addNode( TiXmlElement &node ) const
 QString RPCDoubleParam::print() const
 {
    char buff[ 128 ];
-   sprintf( buff, "double value %f\r\n", value );
+   snprintf( buff, 127, "double value %f\r\n", value );
    return QString( buff );
 }
 QString RPCDoubleParam::analyse() const
 {
    char buff[ 128 ];
-   sprintf( buff, "%f", value );
+   snprintf( buff, 127, "%f", value );
    return QString( buff );
 }
 bool RPCDoubleParam::getDouble( double &res ) const

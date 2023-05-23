@@ -184,7 +184,7 @@ bool reg1test::exportTest( QSharedPointer<QFile> expfd, bool noSerials )
 
    for ( auto const &l: linelist )
    {
-      sprintf( lbuff, "%s=%s", l.prefix.toStdString().c_str(), l.data.toStdString().c_str() );
+      snprintf( lbuff, 1023, "%s=%s", l.prefix.toStdString().c_str(), l.data.toStdString().c_str() );
       wr.lwrite( lbuff );
    }
    /*
@@ -201,7 +201,7 @@ bool reg1test::exportTest( QSharedPointer<QFile> expfd, bool noSerials )
    /*
       [QSORecords;Number of QSO records following]QSO records identifier;number of QSO records following
    */
-   sprintf( lbuff, "[QSORecords;%d]", nlines );
+   snprintf( lbuff, 1023, "[QSORecords;%d]", nlines );
    wr.lwrite( lbuff );
    // and then the contact list
 

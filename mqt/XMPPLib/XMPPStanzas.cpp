@@ -31,7 +31,7 @@ void XStanza::setNextId()
    static int nextId = 1;
    static char buff[ 40 ] = {0};
 
-   sprintf( buff, "%d", nextId );
+   snprintf( buff, 39, "%d", nextId );
    nextId++;
 
    return buff;

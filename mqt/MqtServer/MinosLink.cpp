@@ -130,7 +130,7 @@ bool MinosCommonConnection::sendRaw ( const TIXML_STRING xmlstr )
    if ( xmllen )
    {
       char * xmlbuff = new char[ 10 + 1 + xmllen + 1 ];
-      sprintf( xmlbuff, "&&%lu%s&&", static_cast<unsigned long>(xmllen), xmlstr.c_str() );
+      snprintf( xmlbuff, 10 + 1 + xmllen, "&&%lu%s&&", static_cast<unsigned long>(xmllen), xmlstr.c_str() );
       xmllen = strlen( xmlbuff );
 
       qint64 ret = sock->write ( xmlbuff, xmllen );

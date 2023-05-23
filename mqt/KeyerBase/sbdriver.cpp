@@ -318,7 +318,7 @@ bool SoundSystemDriver::sbdvp_init( QString ind, QString outd, QString host, QSt
          dvkFile *dvk = new dvkFile;
 
          char buff[ 100 ];
-         sprintf( buff, "CQF%d.WAV", fileno + 1 );
+         snprintf( buff, 99, "CQF%d.WAV", fileno + 1 );
          dvk->fileName = buff;
          dvk->sampleRate = rate;
 

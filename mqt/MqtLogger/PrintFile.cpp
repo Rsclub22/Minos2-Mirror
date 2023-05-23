@@ -156,7 +156,7 @@ bool PrintFile::exportTest(QSharedPointer<QFile> expfd )
    {
       if (l.prefix.size())
       {
-         sprintf( lbuff, "%s : %s", l.prefix.toStdString().c_str(), l.data.toStdString().c_str() );
+         snprintf( lbuff, 1023, "%s : %s", l.prefix.toStdString().c_str(), l.data.toStdString().c_str() );
          wr.lwrite( lbuff );
       }
    }
