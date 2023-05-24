@@ -9,7 +9,7 @@ TEMPLATE = app
 
 
 win32:RC_ICONS += ../MinosRecorder.ico
-mac:ICON=../MinosRecorder.ico
+mac:ICON=../MinosRecorder.icns
 
 unix:!mac{DEFINES += __LINUX_ALSA__}
 win32{DEFINES += __WINDOWS_WASAPI__}

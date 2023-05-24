@@ -9,7 +9,7 @@ TARGET = MqtQrzServer
 TEMPLATE = app
 
 win32:RC_ICONS += ../MinosQRZ.ico
-mac:ICON=../MinosQRZ.ico
+mac:ICON=../MinosQRZ.icns
 
 CONFIG += c++11
 

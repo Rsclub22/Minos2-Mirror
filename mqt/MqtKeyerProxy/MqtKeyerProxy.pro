@@ -10,7 +10,7 @@ TARGET = MqtKeyerProxy
 TEMPLATE = app
 
 win32:RC_ICONS += ../minos.ico
-mac:ICON=../minos.ico
+mac:ICON=../minos.icns
 
 
 SOURCES += main.cpp\

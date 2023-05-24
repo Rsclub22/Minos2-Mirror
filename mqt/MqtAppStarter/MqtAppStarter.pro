@@ -15,7 +15,7 @@ TARGET = MqtAppStarter
 TEMPLATE = app
 
 win32:RC_ICONS += ../MinosAppStarter.ico
-mac:ICON=../MinosAppStarter.ico
+mac:ICON=../MinosAppStarter.icns
 
 SOURCES += main.cpp \
     AsMainWindow.cpp

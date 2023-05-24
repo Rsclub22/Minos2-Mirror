@@ -9,7 +9,7 @@ TARGET = MqtRigSync
 TEMPLATE = app
 
 win32:RC_ICONS += ../MinosSync.ico
-mac:ICON=../MinosSync.ico
+mac:ICON=../MinosSync.icns
 
 SOURCES += \
     RSConfigure.cpp \

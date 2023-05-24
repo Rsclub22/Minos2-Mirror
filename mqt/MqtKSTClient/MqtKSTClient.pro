@@ -8,7 +8,7 @@ TARGET = MqtKSTClient
 TEMPLATE = app
 
 win32:RC_ICONS += ../MinosKST.ico
-mac:ICON=../MinosKST.ico
+mac:ICON=../MinosKST.icns
 
 win32:LIBS += -lWs2_32
 
