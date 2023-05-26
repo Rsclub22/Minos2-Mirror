@@ -14,7 +14,13 @@ TARGET = MqtChat
 TEMPLATE = app
 
 win32:RC_ICONS += ../MinosChat.ico
-mac:ICON=../MinosChat.icns
+macx:ICON = ../MinosChat.icns
+
+ios {
+    ios_icon.files += $$files(../ControlFiles/ios/MqtChat/*.png)
+    QMAKE_BUNDLE_DATA += ios_icon
+    QMAKE_INFO_PLIST = ../ControlFiles/ios/Info.plist
+}
 
 SOURCES += main.cpp \
     chatmain.cpp

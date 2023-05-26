@@ -16,7 +16,6 @@
 #include "MTrace.h"
 #include "fileutils.h"
 
-//QMutex CsGuard::m_mutex(QMutex::Recursive);
 //---------------------------------------------------------------------------
 static QTextStream &getLogFile( QString name )
 {

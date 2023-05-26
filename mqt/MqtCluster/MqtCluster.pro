@@ -13,7 +13,16 @@ TARGET = MqtCluster
 TEMPLATE = app
 
 win32:RC_ICONS += ../MinosDXC.ico
-mac:ICON=../MinosDXC.icns
+macx:ICON = ../MinosDXC.icns
+
+ios {
+    ios_icon.files += $$files(../ControlFiles/ios/MqtCluster/*.png)
+    QMAKE_BUNDLE_DATA += ios_icon
+    QMAKE_INFO_PLIST = ../ControlFiles/ios/Info.plist
+    config.files += $$files(../ControlFiles/Configuration/Cluster/*.ini)
+    config.path = Configuration/Cluster
+    QMAKE_BUNDLE_DATA += config
+}
 
 win32:LIBS += -lWs2_32
 

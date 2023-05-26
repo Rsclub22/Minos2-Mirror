@@ -24,7 +24,7 @@ TARGET = MqtLogger
 TEMPLATE = app
 
 win32:RC_ICONS += ../MinosLogger.ico
-mac:ICON=../MinosLogger.icns
+macx:ICON=../MinosLogger.icns
 
 android {
     CONFIG_INSTALL_PATH=/assets/Configuration
@@ -34,6 +34,31 @@ android {
     config.depends += FORCE
 
     INSTALLS += config
+}
+
+ios {
+    config.files += $$files(../ControlFiles/Configuration/OSXFiles/AppConfig.ini)
+    config.files += $$files(../ControlFiles/Configuration/*.ini)
+    config.files += $$files(../ControlFiles/Configuration/*.xml)
+    config.files += $$files(../ControlFiles/Configuration/*.ctl)
+    config.files += $$files(../ControlFiles/Configuration/*.syn)
+    config.files += $$files(../ControlFiles/Configuration/*.SYN)
+    config.files += $$files(../ControlFiles/ios/*.dat)
+    config.files += $$files(../ControlFiles/ios/*.xml)
+    config.path = Configuration
+    QMAKE_BUNDLE_DATA += config
+    ios_icon.files += $$files(../ControlFiles/ios/MqtLogger/*.png)
+    QMAKE_BUNDLE_DATA += ios_icon
+    QMAKE_INFO_PLIST = ../ControlFiles/ios/Info.plist
+}
+
+macx {
+    QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.13
+    QMAKE_TARGET_BUNDLE_PREFIX = uk.org.g0gjv.minos
+    MY_ENTITLEMENTS.name = CODE_SIGN_ENTITLEMENTS
+    MY_ENTITLEMENTS.value = ../ControlFiles/minos.entitlements
+    QMAKE_MAC_XCODE_SETTINGS += MY_ENTITLEMENTS
+    QMAKE_INFO_PLIST = ../ControlFiles/Info.plist
 }
 
 INCLUDEPATH += $$PWD/../MqtRotator

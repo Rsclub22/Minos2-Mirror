@@ -5,6 +5,8 @@
 #include <QJsonParseError>
 #include <QJsonObject>
 #include <QJsonArray>
+#include <QDir>
+
 #include "AppStartup.h"
 #include "LogEvents.h"
 #include "SecondInstall.h"
@@ -352,7 +354,7 @@ void MinosConfig::initialise()
             defConfig.configName = defConfigName;
             defConfig.autoStart = config.getPrivateProfileBool( "Settings", "AutoStart", false );
             config.getPrivateProfileString( "Settings", "ServerName", "", thisRouterName );
-            if ( thisRouterName.isEmpty() )
+            if ( thisRouterName.trimmed().isEmpty() )
             {
                 QString h = QHostInfo::localHostName();
                 thisRouterName = h;
@@ -680,6 +682,13 @@ Server=false
                 ac.appPath += ".exe";
             }
 #endif
+#ifdef Q_OS_MACOS
+            if (!ac.appPath.isEmpty())
+            {
+                ac.appPath += ".app";
+                ac.appPath = QCoreApplication::applicationDirPath()+"/../Resources/"+ac.appPath;
+            }
+#endif
             ac.router = appConfig.getPrivateProfileBool(a, "Server", false);
             ac.defaultHide = appConfig.getPrivateProfileBool(a, "HideApp", false);
 
@@ -837,7 +846,8 @@ QString MinosConfig::checkConfig(QString name)
             {
                 if (!FileExecutable(ele->commandLine))
                 {
-                    reqErrs += ele->appType + tr(" Executable path is not executable\n\n");
+                    QDir mydir(".");
+                    reqErrs += ele->appType + tr(" Executable path does not exist or is not executable:") + mydir.absolutePath() + ele->commandLine + tr("\n\n");
                 }
                 if (ele->appType != tr(appNone) && !FileExists(ele->rundir + "/Configuration/MinosConfig.json"))
                 {

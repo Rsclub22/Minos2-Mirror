@@ -3002,8 +3002,8 @@ bool DxSpotSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelInd
     if (traceDebugFlag)
     {
         trace(QString("filterAcceptsRow: callsign = %1, matchBand = %2")
-            .arg(sourceModel()->data(sourceModel()->index(sourceRow, DXSPOT_CALL_COL_NUM), DataStoredRole).toString())
-            .arg(match_band ? "True" : "False"));
+            .arg(sourceModel()->data(sourceModel()->index(sourceRow, DXSPOT_CALL_COL_NUM), DataStoredRole).toString(),
+            match_band ? "True" : "False"));
    }
     return match_band;
 }

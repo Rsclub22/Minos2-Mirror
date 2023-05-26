@@ -6,6 +6,7 @@
 #include <QMessageBox>
 #include <QTranslator>
 #include <QSettings>
+#include <QStandardPaths>
 
 #include "fileutils.h"
 #include "MTrace.h"
@@ -196,6 +197,18 @@ void appStartup(const QString &pappName)
 
     qa->setStyleSheet(QString("[readOnly=\"true\"] { background-color: %0 }").arg(qa->palette().color(QPalette::Window).name(QColor::HexRgb)));
 
+// For Mac Users, set the default directory to be Documents/Minos
+
+#ifdef Q_OS_MACOS
+    QString sharedPath = QStandardPaths::locate(QStandardPaths::DocumentsLocation,"",QStandardPaths::LocateDirectory);
+    QDir::setCurrent(sharedPath);
+    if (!DirectoryExists("./Minos2")) {
+        QDir().mkdir("Minos2");
+    }
+    QDir::setCurrent("./Minos2");
+#elif defined(Q_OS_IOS)
+    QString sharedPath = sharedDirectory("group.minos2").toLocalFile();
+#endif
     if (!DirectoryExists("./Configuration"))
     {
 #ifdef Q_OS_ANDROID
@@ -208,10 +221,28 @@ void appStartup(const QString &pappName)
         // try for executable directory
         QString fpath = QCoreApplication::applicationDirPath();
 
+#ifndef Q_OS_MACOS
+
         if (DirectoryExists(fpath + "/../Configuration"))
         {
             QDir::setCurrent(fpath + "/..");
         }
+#else
+        // We have no configuration directory so copy default one
+        // Also Create a logs directory and copy Docs
+        cpDir(QString(fpath+"/../Resources/Configuration"), QString("./Configuration"));
+
+        if (!DirectoryExists("Logs")) {
+            QDir().mkdir("Logs");
+        }
+        if (!DirectoryExists("Help")) {
+            cpDir(QString(fpath+"/../Resources/Help"), QString("Help"));
+        }
+        if (!DirectoryExists("./Docs")) {
+            cpDir(QString(fpath+"/../Resources/Docs"), QString("Docs"));
+        }
+
+#endif
         int confTries = 0;
         while (!DirectoryExists("./Configuration") )
         {
@@ -337,4 +368,28 @@ void setAppClosing()
     appClosing = true;
 }
 
+bool cpDir(const QString &srcPath, const QString &dstPath)
+{
+    QDir parentDstDir(QFileInfo(dstPath).path());
+    if (!parentDstDir.mkdir(QFileInfo(dstPath).fileName()))
+        return false;
+
+    QDir srcDir(srcPath);
+    foreach(const QFileInfo &info, srcDir.entryInfoList(QDir::Dirs | QDir::Files | QDir::NoDotAndDotDot)) {
+        QString srcItemPath = srcPath + "/" + info.fileName();
+        QString dstItemPath = dstPath + "/" + info.fileName();
+        if (info.isDir()) {
+            if (!cpDir(srcItemPath, dstItemPath)) {
+                return false;
+            }
+        } else if (info.isFile()) {
+            if (!QFile::copy(srcItemPath, dstItemPath)) {
+                return false;
+            }
+        } else {
+            qDebug() << "Unhandled item" << info.filePath() << "in cpDir";
+        }
+    }
+    return true;
+}
 

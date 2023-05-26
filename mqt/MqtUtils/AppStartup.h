@@ -18,6 +18,7 @@ extern QString getCurrentLanguage();
 extern void setAppFont();
 void setAppFont(QString fs);
 extern void setAppClosing();
+extern bool cpDir(const QString &srcPath, const QString &dstPath);
 extern void setAppLanguage(QString loc);
 
 #endif // APPSTARTUP_H

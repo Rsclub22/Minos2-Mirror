@@ -13,7 +13,13 @@ TARGET = MqtKeyer
 TEMPLATE = app
 
 win32:RC_ICONS += ../MinosKeyer.ico
-mac:ICON=../MinosKeyer.icns
+macx:ICON=../MinosKeyer.icns
+
+ios {
+    ios_icon.files += $$files(../ControlFiles/ios/MqtKeyer/*.png)
+    QMAKE_BUNDLE_DATA += ios_icon
+    QMAKE_INFO_PLIST = ../ControlFiles/ios/Info.plist
+}
 
 SOURCES += main.cpp\
         KeyerMain.cpp \

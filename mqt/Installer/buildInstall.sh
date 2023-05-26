@@ -1,6 +1,12 @@
 #!/bin/bash
 
 #cd ~/Minos2
+
+if [[ "$OSTYPE" == "darwin"* ]] ; then 		#MacOS
+echo Please use macInstall.sh instead
+exit 1
+fi
+
 SCRIPT=$(readlink -f $0)
 DIR=$(echo ${SCRIPT%/*}/../..)
 cd $DIR
@@ -81,52 +87,27 @@ do
 done
 cp /usr/share/qt5/translations/qt*.qm Bin/translations
 
-echo $OSTYPE
+cp $DIR/$BUILDDIR/MqtAppStarter/MqtAppStarter Bin
+cp $DIR/$BUILDDIR/MqtChat/MqtChat Bin
+cp $DIR/$BUILDDIR/MqtCluster/MqtCluster Bin
+cp $DIR/$BUILDDIR/MqtControl/MqtControl Bin
+cp $DIR/$BUILDDIR/MqtDataModes/MqtDataModes Bin
+cp $DIR/$BUILDDIR/MqtKeyer/MqtKeyer Bin
+cp $DIR/$BUILDDIR/MqtKeyerProxy/MqtKeyerProxy Bin
+cp $DIR/$BUILDDIR/MqtKSTClient/MqtKSTClient Bin
+cp $DIR/$BUILDDIR/MqtLogger/MqtLogger Bin
+cp $DIR/$BUILDDIR/MqtMonitor/MqtMonitor Bin
+cp $DIR/$BUILDDIR/MqtQrzServer/MqtQrzServer Bin
+cp $DIR/$BUILDDIR/MqtRigControl/MqtRigControl Bin
+cp $DIR/$BUILDDIR/MqtRigSync/MqtRigSync Bin
+cp $DIR/$BUILDDIR/MqtRigRecorder/MqtRigRecorder Bin
+cp $DIR/$BUILDDIR/MqtRotator/MqtRotator Bin
+cp $DIR/$BUILDDIR/MqtServer/MqtServer Bin
 
-if [[ "$OSTYPE" == "darwin"* ]] ; then 		#MacOS
-
-	cp -r $DIR/$BUILDDIR/MqtAppStarter/MqtAppStarter.app Bin
-	cp -r $DIR/$BUILDDIR/MqtChat/MqtChat.app Bin
-	cp -r $DIR/$BUILDDIR/MqtCluster/MqtCluster.app Bin
-	cp -r $DIR/$BUILDDIR/MqtControl/MqtControl.app Bin
-	cp -r $DIR/$BUILDDIR/MqtDataModes/MqtDataModes.app Bin
-	cp -r $DIR/$BUILDDIR/MqtKeyer/MqtKeyer.app Bin
-	cp -r $DIR/$BUILDDIR/MqtKeyerProxy/MqtKeyerProxy.app Bin
-	cp -r $DIR/$BUILDDIR/MqtKSTClient/MqtKSTClient.app Bin
-	cp -r $DIR/$BUILDDIR/MqtLogger/MqtLogger.app Bin
-	cp -r $DIR/$BUILDDIR/MqtMonitor/MqtMonitor.app Bin
-	cp -r $DIR/$BUILDDIR/MqtQrzServer/MqtQrzServer.app Bin
-	cp -r $DIR/$BUILDDIR/MqtRigControl/MqtRigControl.app Bin
-	cp -r $DIR/$BUILDDIR/MqtRigSync/MqtRigSync.app Bin
-	cp -r $DIR/$BUILDDIR/MqtRigRecorder/MqtRigRecorder.app Bin
-	cp -r $DIR/$BUILDDIR/MqtRotator/MqtRotator.app Bin
-	cp -r $DIR/$BUILDDIR/MqtServer/MqtServer.app Bin
-
-else
-	cp $DIR/$BUILDDIR/MqtAppStarter/MqtAppStarter Bin
-	cp $DIR/$BUILDDIR/MqtChat/MqtChat Bin
-	cp $DIR/$BUILDDIR/MqtCluster/MqtCluster Bin
-	cp $DIR/$BUILDDIR/MqtControl/MqtControl Bin
-	cp $DIR/$BUILDDIR/MqtDataModes/MqtDataModes Bin
-	cp $DIR/$BUILDDIR/MqtKeyer/MqtKeyer Bin
-	cp $DIR/$BUILDDIR/MqtKeyerProxy/MqtKeyerProxy Bin
-	cp $DIR/$BUILDDIR/MqtKSTClient/MqtKSTClient Bin
-	cp $DIR/$BUILDDIR/MqtLogger/MqtLogger Bin
-	cp $DIR/$BUILDDIR/MqtMonitor/MqtMonitor Bin
-	cp $DIR/$BUILDDIR/MqtQrzServer/MqtQrzServer Bin
-	cp $DIR/$BUILDDIR/MqtRigControl/MqtRigControl Bin
-	cp $DIR/$BUILDDIR/MqtRigSync/MqtRigSync Bin
-	cp $DIR/$BUILDDIR/MqtRigRecorder/MqtRigRecorder Bin
-	cp $DIR/$BUILDDIR/MqtRotator/MqtRotator Bin
-	cp $DIR/$BUILDDIR/MqtServer/MqtServer Bin
-fi
 
 cp -r $DIR/mqt/ControlFiles/Configuration/* ./Configuration
-if [[ "$OSTYPE" == "darwin"* ]] ; then 		#MacOS
-    cp -r $DIR/mqt/ControlFiles/Configuration/Maciles/* ./Configuration
-else
-    cp -r $DIR/mqt/ControlFiles/Configuration/LinuxFiles/* ./Configuration
-fi
+cp -r $DIR/mqt/ControlFiles/Configuration/LinuxFiles/* ./Configuration
+
 rm -rf ./Configuration/WindowsFiles
 rm -rf ./Configuration/LinuxFiles
 rm -rf ./Configuration/MacFiles

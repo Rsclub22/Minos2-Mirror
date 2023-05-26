@@ -15,7 +15,13 @@ TARGET = MqtServer
 TEMPLATE = app
 
 win32:RC_ICONS += ../MinosServer.ico
-mac:ICON=../MinosServer.icns
+macx:ICON=../MinosServer.icns
+
+ios {
+    ios_icon.files += $$files(../ControlFiles/ios/MqtServer/*.png)
+    QMAKE_BUNDLE_DATA += ios_icon
+    QMAKE_INFO_PLIST = ../ControlFiles/ios/Info.plist
+}
 
 win32:LIBS += -lws2_32
 
