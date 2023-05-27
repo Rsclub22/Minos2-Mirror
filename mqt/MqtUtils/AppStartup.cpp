@@ -1,3 +1,4 @@
+#include <QDebug>
 #include <QPalette>
 #include <QApplication>
 #include <QCommandLineParser>
