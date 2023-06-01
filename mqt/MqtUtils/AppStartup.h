@@ -11,6 +11,8 @@ public:
 };
 
 extern void appStartup(const QString &appName);
+extern QString getAppExecutable();
+extern QString getAppExecutableName();
 extern QString getAppStartupName();
 extern QVector<Translation> getLanguages();
 extern void switchTranslation(QString loc);

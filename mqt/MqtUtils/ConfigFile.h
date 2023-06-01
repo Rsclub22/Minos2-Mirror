@@ -29,6 +29,7 @@ class AppConfigElement
 public:
     AppConfigElement(){}
 
+    QString name;
     QString appType;
     QString appPath;
     QStringList requiresApps;
@@ -65,6 +66,8 @@ public:  		// User declarations
     QStringList params;
     QString router;
     QString remoteApp;
+    bool inferProgram = true;
+    QString appConfigName;
     bool localOK = false;
     bool remoteOK = false;
 
@@ -85,6 +88,7 @@ public:  		// User declarations
 
     QSharedPointer<Connectable> connectable();
 
+    QString inferExecutable();
     void createProcess();
     void askStopProcess();
     void forceStopProcess();

@@ -101,6 +101,7 @@ bool RunConfigElement::initialise(INIFile &config, QString sect )
     config.getPrivateProfileString( sect, "AppType",  "", appType );
 
     AppConfigElement ace = MinosConfig::getMinosConfig()->getAppConfigElement(appType);
+    appConfigName = ace.name;
     requiresApps = ace.requiresApps;
     localOK = ace.localOK;
     remoteOK = ace.remoteOK;
@@ -129,7 +130,80 @@ QSharedPointer<Connectable> RunConfigElement::connectable()
     }
     return res;
 }
+QString RunConfigElement::inferExecutable()
+{
+    QString executable;
+    QString launcherExecutablePath = getAppExecutable(); // launch apps executable name
+    QString launcherExecutableName = getAppExecutableName();
 
+#if defined(Q_OS_MACOS)
+    //Path=MqtLogger.app/Contents/Resources/MqtBandMap.app
+    QString debugString = launcherExecutableName + "/debug/" + launcherExecutableName;
+    QString releaseString = launcherExecutableName + "/release/" + launcherExecutableName;
+    QString binString = launcherExecutableName;
+
+    if (launcherExecutablePath.contains(debugString))
+    {
+        executable = launcherExecutablePath;
+        executable.replace(debugString, appConfigName + "/debug/" + appConfigName);
+    }
+    else if (launcherExecutablePath.contains(releaseString))
+    {
+        executable = launcherExecutablePath;
+        executable.replace(debugString, appConfigName + "/release/" + appConfigName);
+    }
+    else if (launcherExecutablePath.contains(binString))
+    {
+        executable = launcherExecutablePath;
+        executable.append("/Contents/Resources/" + appConfigName);
+    }
+
+#elif defined(Q_OS_WIN)
+    QString debugString = launcherExecutableName + "\\debug\\" + launcherExecutableName;
+    QString releaseString = launcherExecutableName + "\\release\\" + launcherExecutableName;
+    QString binString = "\\Bin\\" + launcherExecutableName;
+
+    if (launcherExecutablePath.contains(debugString))
+    {
+        executable = launcherExecutablePath;
+        executable.replace(debugString, appConfigName + "\\debug\\" + appConfigName);
+    }
+    else if (launcherExecutablePath.contains(releaseString))
+    {
+        executable = launcherExecutablePath;
+        executable.replace(debugString, appConfigName + "\\release\\" + appConfigName);
+    }
+    else if (launcherExecutablePath.contains(binString))
+    {
+        executable = launcherExecutablePath;
+        executable.replace(binString, "\\Bin\\" + appConfigName);
+    }
+#elif defined(Q_OS_ANDROID)
+#else
+    QString debugString = launcherExecutableName + "/debug/" + launcherExecutableName;
+    QString releaseString = launcherExecutableName + "/release/" + launcherExecutableName;
+    QString binString = "/Bin/" + launcherExecutableName;
+
+    if (launcherExecutablePath.contains(debugString))
+    {
+        executable = launcherExecutablePath;
+        executable.replace(debugString, appConfigName + "/debug/" + appConfigName);
+    }
+    else if (launcherExecutablePath.contains(releaseString))
+    {
+        executable = launcherExecutablePath;
+        executable.replace(debugString, appConfigName + "/release/" + appConfigName);
+    }
+    else if (launcherExecutablePath.contains(binString))
+    {
+        executable = launcherExecutablePath;
+        executable.replace(binString, "/Bin/" + appConfigName);
+    }
+#endif
+
+
+    return executable;
+}
 void RunConfigElement::createProcess()
 {
     if (deleted)
@@ -138,7 +212,15 @@ void RunConfigElement::createProcess()
     {
         runner = new QProcess(parent());
 
-        QString program = commandLine;
+        QString program;
+        if (inferProgram)
+        {
+            program = inferExecutable();
+        }
+        else
+        {
+            program = commandLine;
+        }
         QStringList progArgs = params;
         if (!FileExecutable(program))
         {
@@ -431,6 +513,7 @@ bool MinosConfig::saveAsJson(QString f)
 
              QJsonObject c;
 
+             c.insert("Infer", j->inferProgram);
              c.insert("Program", j->commandLine);
              c.insert("Params", j->params.join(" "));
              c.insert("name", j->name);
@@ -509,9 +592,11 @@ bool MinosConfig::loadJson(QString f)
                         tce->showAdvanced = conf.value("ShowAdvanced" ).toBool();
                         tce->rEnabled = conf.value("Enabled" ).toBool();
                         tce->hideApp = conf.value("HideApp" ).toBool();
+                        tce->inferProgram = true;   // NB this is looking at OLD ini file
 
                         AppConfigElement ace = getAppConfigElement(tce->appType);
                         tce->requiresApps = ace.requiresApps;
+                        tce->appConfigName = ace.name;
                         tce->localOK = ace.localOK;
                         tce->remoteOK = ace.remoteOK;
                         if (ace.appType == tr(MinosConfig::appOther))
@@ -675,6 +760,8 @@ Server=false
             AppConfigElement ac;
 
             ac.appType = a.trimmed();
+            appConfig.getPrivateProfileString(a, "Name", "", ac.name);
+
             appConfig.getPrivateProfileString(a, "Path", "", ac.appPath);
 #ifdef Q_OS_WIN
             if (!ac.appPath.isEmpty() && ac.appPath.right(4).compare(".exe", Qt::CaseInsensitive) != 0)
@@ -844,7 +931,7 @@ QString MinosConfig::checkConfig(QString name)
 
             if (ele->runType == RunLocal)
             {
-                if (!FileExecutable(ele->commandLine))
+                if (!ele->inferProgram && !FileExecutable(ele->commandLine))
                 {
                     QDir mydir(".");
                     reqErrs += ele->appType + tr(" Executable path does not exist or is not executable:") + mydir.absolutePath() + ele->commandLine + tr("\n\n");

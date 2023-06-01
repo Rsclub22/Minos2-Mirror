@@ -98,10 +98,13 @@ void ConfigElementFrame::setElement(QSharedPointer<RunConfigElement> c)
     ui->parametersEdit->setText(c->params.join(" "));
     ui->serverNameEdit->setText(c->router);
     ui->remoteAppNameEdit->setText(c->remoteApp);
+    ui->inferProgramcb->setChecked(c->inferProgram);
 
     ui->advancedCheckbox->setChecked(c->showAdvanced);
     ui->enabledCheckbox->setChecked(c->rEnabled);
     ui->hideAppCheckBox->setChecked(c->hideApp);
+
+    ui->autoProg->setText(configElement->inferExecutable());
 
     checkEnabled();
 }
@@ -139,6 +142,7 @@ void ConfigElementFrame::saveElement()
         configElement->params = ui->parametersEdit->text().trimmed().split(" ");
         configElement->router = ui->serverNameEdit->text().trimmed();
         configElement->remoteApp = ui->remoteAppNameEdit->text().trimmed();
+        configElement->inferProgram = ui->inferProgramcb->isChecked();
 
         configElement->localOK = localOK;
         configElement->remoteOK = remoteOK;

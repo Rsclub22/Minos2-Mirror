@@ -20,11 +20,20 @@
 static bool appClosing = false;
 static QString appStartupName;
 static QString executableName;
+static QString executablePath;
 static QString currentLanguage;
 
 static QSharedPointer<QTranslator> translator;
 static QSharedPointer<QTranslator> qtTranslator;
 
+QString getAppExecutable()
+{
+    return executablePath;
+}
+QString getAppExecutableName()
+{
+    return executableName;
+}
 QString getAppStartupName()
 {
     return appStartupName;
@@ -180,6 +189,7 @@ QString getCurrentLanguage()
 void appStartup(const QString &pappName)
 {
     oldHandler = qInstallMessageHandler(myMessageOutput);
+    // This gets reset later, but at this point it is the launch executable name
     executableName = QCoreApplication::instance()->applicationName();
 
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
@@ -271,16 +281,23 @@ void appStartup(const QString &pappName)
     }
     enableTrace( "./TraceLog", appStartupName + "_" );
 
+    trace(QSysInfo::prettyProductName());
+    trace(QSysInfo::buildAbi());
+    trace(qVersion());
+
+
+    QString sysinfo = QString("%1 %2 %3").arg(appStartupName,
+                                      QSysInfo::kernelType(),
+                                      QSysInfo::buildCpuArchitecture()
+                                      );
+    trace(sysinfo);
+
     QString Version = QString(STRINGVERSION)  + " " + PRERELEASETYPE + " " + SecondInstall::getSecondInstallText() ;
-
-    QString title = appStartupName;
-
     QString compiler;
 #ifndef NDEBUG
     compiler += " DEBUG ";
 #endif
 
-#define STRING(s) #s
 #ifdef __GNUC__
 
         compiler += QString(" GCC");
@@ -288,18 +305,8 @@ void appStartup(const QString &pappName)
 #ifdef _MSC_FULL_VER
         compiler += QString(" MSVC");
 #endif
-#ifdef Q_PROCESSOR_X86_32
-        title += " 32 bit X86 build Version ";
-#else
-#ifdef Q_PROCESSOR_X86_64
-        title += " 64 bit X86 build Version " ;
-#else
-        title += " Other build Version ";
-#endif
-#endif
-    title += Version + compiler;
 
-    trace(title);
+    trace(appStartupName + " " + Version + " " + compiler);
 
     QCommandLineParser parser;
 
@@ -311,6 +318,8 @@ void appStartup(const QString &pappName)
     trace("Arguments " + args.join("|"));
 
     parser.process(args);
+
+    executablePath = args[0];
 
     if (parser.isSet(languageOption))
     {
