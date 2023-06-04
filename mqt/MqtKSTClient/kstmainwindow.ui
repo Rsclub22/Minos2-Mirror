@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>853</width>
-    <height>715</height>
+    <width>768</width>
+    <height>551</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -719,8 +719,8 @@ when user selected</string>
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>853</width>
-     <height>24</height>
+     <width>768</width>
+     <height>22</height>
     </rect>
    </property>
   </widget>
@@ -747,7 +747,7 @@ when user selected</string>
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="activeChatGroup"/>
   <buttongroup name="callStringButtonGroup"/>
+  <buttongroup name="activeChatGroup"/>
  </buttongroups>
 </ui>
