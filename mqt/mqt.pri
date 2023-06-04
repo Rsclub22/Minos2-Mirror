@@ -17,7 +17,10 @@ defined(SECONDINSTALL, var) {
 CONFIG += c++11
 DEFINES += TIXML_USE_STL
 DEFINES += NOMINMAX
-
+macos: {
+INC_MAP = 1
+DEFINES += INC_MAP
+}
 win32: {
 versionAtLeast(QT_VERSION, 6.5.0){
 INC_MAP = 1

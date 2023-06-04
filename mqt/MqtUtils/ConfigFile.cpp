@@ -137,26 +137,29 @@ QString RunConfigElement::inferExecutable()
     QString launcherExecutableName = getAppExecutableName();
 
 #if defined(Q_OS_MACOS)
-    //Path=MqtLogger.app/Contents/Resources/MqtBandMap.app
-    QString debugString = launcherExecutableName + "/debug/" + launcherExecutableName;
-    QString releaseString = launcherExecutableName + "/release/" + launcherExecutableName;
-    QString binString = launcherExecutableName;
+    //Path=MqtLogger.app/Contents/Resources/MqtCluster.app
+    //"/Users/mjg/Minos2/build-mqt-Qt_6_5_1_for_macOS-Debug/MqtCluster/MqtCluster.app/Contents/MacOS/MqtCluster"
 
-    if (launcherExecutablePath.contains(debugString))
+    QString exeString = launcherExecutableName + "/" + launcherExecutableName + ".app/Contents/MacOS/" + launcherExecutableName;
+    QString binString = launcherExecutableName;
+trace(exeString);
+trace(binString);
+trace(appConfigName);
+trace(launcherExecutablePath);
+trace(launcherExecutableName);
+    if (launcherExecutablePath.contains(exeString))
     {
+        trace("contains exestring");
         executable = launcherExecutablePath;
-        executable.replace(debugString, appConfigName + "/debug/" + appConfigName);
-    }
-    else if (launcherExecutablePath.contains(releaseString))
-    {
-        executable = launcherExecutablePath;
-        executable.replace(debugString, appConfigName + "/release/" + appConfigName);
+        executable.replace(launcherExecutableName, appConfigName);
+trace(executable);
     }
     else if (launcherExecutablePath.contains(binString))
     {
+trace("contains binString");
         executable = launcherExecutablePath;
-        executable.append("/Contents/Resources/" + appConfigName);
-    }
+        executable.append("/Contents/Resources/Bin/" + appConfigName);
+trace(executable);    }
 
 #elif defined(Q_OS_WIN)
     QString debugString = launcherExecutableName + "\\debug\\" + launcherExecutableName;
@@ -180,19 +183,13 @@ QString RunConfigElement::inferExecutable()
     }
 #elif defined(Q_OS_ANDROID)
 #else
-    QString debugString = launcherExecutableName + "/debug/" + launcherExecutableName;
-    QString releaseString = launcherExecutableName + "/release/" + launcherExecutableName;
+    QString exeString = launcherExecutableName + "/" + launcherExecutableName;
     QString binString = "/Bin/" + launcherExecutableName;
 
-    if (launcherExecutablePath.contains(debugString))
+    if (launcherExecutablePath.contains(exeString))
     {
         executable = launcherExecutablePath;
-        executable.replace(debugString, appConfigName + "/debug/" + appConfigName);
-    }
-    else if (launcherExecutablePath.contains(releaseString))
-    {
-        executable = launcherExecutablePath;
-        executable.replace(debugString, appConfigName + "/release/" + appConfigName);
+        executable.replace(exeString, appConfigName + "/" + appConfigName);
     }
     else if (launcherExecutablePath.contains(binString))
     {
@@ -727,6 +724,7 @@ QStringList MinosConfig::getAppTypes()
 }
 void MinosConfig::buildAppConfigList()
 {
+    trace(GetCurrentDir());
     INIFile appConfig("./Configuration/AppConfig.ini");
     /*
 [BandMap]

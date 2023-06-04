@@ -50,7 +50,7 @@ private slots:
 
     void on_hideAppCheckBox_clicked();
 public slots:
-    void on_appTypeCombo_currentIndexChanged(const QString &arg1);
+    void on_appTypeCombo_currentTextChanged(const QString &value);
 
 private:
     Ui::ConfigElementFrame *ui;
