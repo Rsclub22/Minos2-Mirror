@@ -180,19 +180,13 @@ QString RunConfigElement::inferExecutable()
     }
 #elif defined(Q_OS_ANDROID)
 #else
-    QString debugString = launcherExecutableName + "/debug/" + launcherExecutableName;
-    QString releaseString = launcherExecutableName + "/release/" + launcherExecutableName;
+    QString exeString = launcherExecutableName + "/" + launcherExecutableName;
     QString binString = "/Bin/" + launcherExecutableName;
 
-    if (launcherExecutablePath.contains(debugString))
+    if (launcherExecutablePath.contains(exeString))
     {
         executable = launcherExecutablePath;
-        executable.replace(debugString, appConfigName + "/debug/" + appConfigName);
-    }
-    else if (launcherExecutablePath.contains(releaseString))
-    {
-        executable = launcherExecutablePath;
-        executable.replace(debugString, appConfigName + "/release/" + appConfigName);
+        executable.replace(exeString, appConfigName + "/" + appConfigName);
     }
     else if (launcherExecutablePath.contains(binString))
     {
