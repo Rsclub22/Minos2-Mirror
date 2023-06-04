@@ -73,7 +73,7 @@ void MonitoringFrame::initialise( BaseContestLog * pcontest )
 
    contest = pcontest;
 
-#if !defined(Q_OS_WIN) || QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+#if !defined(INC_MAP)
    ui->mapButton->setVisible(false);
 #endif
 
