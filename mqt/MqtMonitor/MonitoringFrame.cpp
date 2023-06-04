@@ -73,7 +73,7 @@ void MonitoringFrame::initialise( BaseContestLog * pcontest )
 
    contest = pcontest;
 
-#if !defined(INC_MAP)
+#ifndef INC_MAP
    ui->mapButton->setVisible(false);
 #endif
 

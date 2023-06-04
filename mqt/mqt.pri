@@ -29,6 +29,11 @@ DEFINES += INC_MAP
 }
 }
 
+mac: {
+INC_MAP = 1
+DEFINES += INC_MAP
+}
+
 *g++*:CONFIG(release, debug|release): QMAKE_CXXFLAGS_WARN_ON += -Wno-reorder -Wold-style-cast -DNDEBUG  -Winvalid-pch
 else:*g++*:CONFIG(debug, debug|release):QMAKE_CXXFLAGS_WARN_ON += -Wno-reorder -Wold-style-cast  -Winvalid-pch
 
