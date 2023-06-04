@@ -3,6 +3,7 @@
 #include <QApplication>
 #include <QCommandLineParser>
 #include <QFileDialog>
+#include <QDateTime>
 #include <QProcessEnvironment>
 #include <QMessageBox>
 #include <QTranslator>
@@ -217,6 +218,24 @@ void appStartup(const QString &pappName)
         QDir().mkdir("Minos2");
     }
     QDir::setCurrent("./Minos2");
+
+    // We have no configuration directory so copy default one
+    // Also Create a logs directory and copy Docs
+
+    // cpDir does copy if newer, no a new installation updates the old one
+
+    cpDir(QString(fpath+"/../Resources/Configuration"), QString("./Configuration"));
+
+    if (!DirectoryExists("Logs")) {
+        QDir().mkdir("Logs");
+    }
+    if (!DirectoryExists("Help")) {
+        cpDir(QString(fpath+"/../Resources/Help"), QString("Help"));
+    }
+    if (!DirectoryExists("./Docs")) {
+        cpDir(QString(fpath+"/../Resources/Docs"), QString("Docs"));
+    }
+
 #elif defined(Q_OS_IOS)
     QString sharedPath = sharedDirectory("group.minos2").toLocalFile();
 #endif
@@ -233,26 +252,10 @@ void appStartup(const QString &pappName)
         QString fpath = QCoreApplication::applicationDirPath();
 
 #ifndef Q_OS_MACOS
-
         if (DirectoryExists(fpath + "/../Configuration"))
         {
             QDir::setCurrent(fpath + "/..");
         }
-#else
-        // We have no configuration directory so copy default one
-        // Also Create a logs directory and copy Docs
-        cpDir(QString(fpath+"/../Resources/Configuration"), QString("./Configuration"));
-
-        if (!DirectoryExists("Logs")) {
-            QDir().mkdir("Logs");
-        }
-        if (!DirectoryExists("Help")) {
-            cpDir(QString(fpath+"/../Resources/Help"), QString("Help"));
-        }
-        if (!DirectoryExists("./Docs")) {
-            cpDir(QString(fpath+"/../Resources/Docs"), QString("Docs"));
-        }
-
 #endif
         int confTries = 0;
         while (!DirectoryExists("./Configuration") )
@@ -278,6 +281,10 @@ void appStartup(const QString &pappName)
             }
         }
 #endif
+    }
+    else
+    {
+        // Configuration already exists; we should probably "copy if newer"
     }
     enableTrace( "./TraceLog", appStartupName + "_" );
 
@@ -380,9 +387,12 @@ void setAppClosing()
 
 bool cpDir(const QString &srcPath, const QString &dstPath)
 {
-    QDir parentDstDir(QFileInfo(dstPath).path());
-    if (!parentDstDir.mkdir(QFileInfo(dstPath).fileName()))
-        return false;
+    if (!FileExists(QFileInfo(dstPath).path()))
+    {
+        QDir parentDstDir(QFileInfo(dstPath).path());
+        if (!parentDstDir.mkdir(QFileInfo(dstPath).fileName()))
+            return false;
+    }
 
     QDir srcDir(srcPath);
     foreach(const QFileInfo &info, srcDir.entryInfoList(QDir::Dirs | QDir::Files | QDir::NoDotAndDotDot)) {
@@ -393,6 +403,19 @@ bool cpDir(const QString &srcPath, const QString &dstPath)
                 return false;
             }
         } else if (info.isFile()) {
+            if (FileExists(dstItemPath))
+            {
+                // check if src is newer than dest
+                QFileInfo srcInfo(srcItemPath);
+                QFileInfo dstInfo(dstItemPath);
+                if (dstInfo.fileTime(QFileDevice::FileModificationTime)
+                    >= srcInfo.fileTime(QFileDevice::FileModificationTime))
+                {
+                    continue;
+                }
+                QFile::remove(dstItemPath);
+            }
+
             if (!QFile::copy(srcItemPath, dstItemPath)) {
                 return false;
             }
