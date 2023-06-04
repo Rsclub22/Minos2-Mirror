@@ -160,11 +160,11 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
 
     // Make sure the kstSplitter covers the maximum vertical space
 
-    QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::MinimumExpanding);
-    sizePolicy.setHorizontalStretch(0);
-    sizePolicy.setVerticalStretch(0);
-    sizePolicy.setHeightForWidth(ui->kstSplitter->sizePolicy().hasHeightForWidth());
-    ui->kstSplitter->setSizePolicy(sizePolicy);
+//    QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::MinimumExpanding);
+//    sizePolicy.setHorizontalStretch(0);
+//    sizePolicy.setVerticalStretch(0);
+//    sizePolicy.setHeightForWidth(ui->kstSplitter->sizePolicy().hasHeightForWidth());
+//    ui->kstSplitter->setSizePolicy(sizePolicy);
 
     state = rsettings.value("msgSplitterState").toByteArray();
     ui->msgSplitter->restoreState(state);
@@ -348,6 +348,8 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     connect(ml, &KSTMonitoredLogs::logStarted, this, &KSTMainWindow::onLogStarted);
     connect(ml, &KSTMonitoredLogs::logClosed, this, &KSTMainWindow::onLogClosed);
 
+    ui->kstFrame->layout()->setContentsMargins(0, 0, 0, 0);
+    ui->centralwidget->layout()->setContentsMargins(0, 0, 0, 0);
 }
 
 KSTMainWindow::~KSTMainWindow()
