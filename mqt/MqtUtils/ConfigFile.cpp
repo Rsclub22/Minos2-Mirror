@@ -142,24 +142,25 @@ QString RunConfigElement::inferExecutable()
 
     QString exeString = launcherExecutableName + "/" + launcherExecutableName + ".app/Contents/MacOS/" + launcherExecutableName;
     QString binString = launcherExecutableName;
-trace(exeString);
-trace(binString);
-trace(appConfigName);
-trace(launcherExecutablePath);
-trace(launcherExecutableName);
+//trace(exeString);
+//trace(binString);
+//trace(appConfigName);
+//trace(launcherExecutablePath);
+//trace(launcherExecutableName);
     if (launcherExecutablePath.contains(exeString))
     {
         trace("contains exestring");
         executable = launcherExecutablePath;
         executable.replace(launcherExecutableName, appConfigName);
-trace(executable);
+        trace(executable);
     }
     else if (launcherExecutablePath.contains(binString))
     {
-trace("contains binString");
+        trace("contains binString");
         executable = launcherExecutablePath;
         executable.append("/Contents/Resources/Bin/" + appConfigName);
-trace(executable);    }
+        trace(executable);
+    }
 
 #elif defined(Q_OS_WIN)
     QString debugString = launcherExecutableName + "\\debug\\" + launcherExecutableName;
