@@ -144,6 +144,9 @@ void ConfigElementFrame::saveElement()
         configElement->remoteApp = ui->remoteAppNameEdit->text().trimmed();
         configElement->inferProgram = ui->inferProgramcb->isChecked();
 
+        AppConfigElement ace = MinosConfig::getMinosConfig()->getAppConfigElement(configElement->appType);
+        configElement->appConfigName = ace.name;
+
         configElement->localOK = localOK;
         configElement->remoteOK = remoteOK;
 
@@ -257,7 +260,7 @@ void ConfigElementFrame::on_rbConnectRemote_clicked()
     checkEnabled();
 }
 
-void ConfigElementFrame::on_appTypeCombo_currentIndexChanged(const QString &value)
+void ConfigElementFrame::on_appTypeCombo_currentTextChanged(const QString &value)
 {
     if (!inhibitIndexChange)
     {
@@ -295,6 +298,7 @@ void ConfigElementFrame::on_appTypeCombo_currentIndexChanged(const QString &valu
         saveElement();
 
         checkEnabled();
+        ui->autoProg->setText(configElement->inferExecutable());
     }
 }
 

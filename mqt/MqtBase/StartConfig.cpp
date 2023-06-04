@@ -82,7 +82,7 @@ void StartConfig::on_formShown()
         c->appType = "Server";
         c->rEnabled = true;
         elementFrames[0]->setElement(c);
-        elementFrames[0]->on_appTypeCombo_currentIndexChanged("Server");
+        elementFrames[0]->on_appTypeCombo_currentTextChanged("Server");
 
         // and start the next one
         on_newElementButton_clicked();
