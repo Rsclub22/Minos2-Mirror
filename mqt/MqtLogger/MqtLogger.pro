@@ -53,7 +53,7 @@ ios {
 }
 
 macx {
-    QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.13
+    QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.15
     QMAKE_TARGET_BUNDLE_PREFIX = uk.org.g0gjv.minos
     MY_ENTITLEMENTS.name = CODE_SIGN_ENTITLEMENTS
     MY_ENTITLEMENTS.value = ../ControlFiles/minos.entitlements
