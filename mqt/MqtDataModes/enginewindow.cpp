@@ -1,8 +1,3 @@
-
-#include "regsettings.h"
-#include "AppStartup.h"
-#include "callsign.h"
-#include "delayedaction.h"
 #include <QSettings>
 #include <QTimer>
 #include <QKeyEvent>
@@ -20,7 +15,11 @@
 #include "remotelogs.h"
 #include "RPCCommandConstants.h"
 #include "RPCPubSub.h"
-
+#include "BandList.h"
+#include "regsettings.h"
+#include "AppStartup.h"
+#include "callsign.h"
+#include "delayedaction.h"
 #include "enginewindow.h"
 #include "ui_enginewindow.h"
 
@@ -264,6 +263,7 @@ void EngineWindow::on_notify(AnalysePubSubNotify an, const QString /*from*/ )
         {
             // send the new mode to our engine
 
+            rigMode = value;
             emit rigModeFreq(value, Frequency());
         }
         else if ( an.getCategory() == rpcConstants::rigStateCategory)
@@ -294,10 +294,12 @@ void EngineWindow::on_notify(AnalysePubSubNotify an, const QString /*from*/ )
 
         if (selState.radioMode().isDirty() || selState.radioFreq().isDirty())
         {
-            QString rigMode = selState.radioMode().getValue();
+            rigMode = selState.radioMode().getValue();
             ui->rigMode->setText(rigMode);
-            Frequency rigFreq = selState.radioFreq().getValue();
+            rigFreq = selState.radioFreq().getValue();
             ui->rigFreq->setText(rigFreq.pretty_frequency_MHz_string());
+
+            rigBand = BandList::getBand(rigFreq);
 
             emit rigModeFreq(rigMode, rigFreq);
 
@@ -577,7 +579,7 @@ void EngineWindow::scanLine(int curLine)
                     else
                     {
                         // look for it...
-                        if (RemoteLogs::getRemoteLogs()->hasWorked(cs, "", ""))
+                        if (RemoteLogs::getRemoteLogs()->hasWorked(cs, rigBand, rigMode))
                         {
                             r->setWorkedCall(true);
                         }

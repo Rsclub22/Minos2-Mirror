@@ -64,6 +64,10 @@ private:
     RigCache rigCache;
     PubSubName mainRig;
 
+    QString rigMode;
+    Frequency rigFreq;
+    QString rigBand;
+
     unsigned int inChannels = 0;
     unsigned int outChannels = 0;
 
