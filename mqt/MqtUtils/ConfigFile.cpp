@@ -175,7 +175,7 @@ QString RunConfigElement::inferExecutable()
     else if (launcherExecutablePath.contains(releaseString))
     {
         executable = launcherExecutablePath;
-        executable.replace(debugString, appConfigName + "\\release\\" + appConfigName);
+        executable.replace(releaseString, appConfigName + "\\release\\" + appConfigName);
     }
     else if (launcherExecutablePath.contains(binString))
     {
