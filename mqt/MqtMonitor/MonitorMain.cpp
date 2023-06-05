@@ -1,4 +1,5 @@
 #include <QTimer>
+#include "regsettings.h"
 #include "AppStartup.h"
 #include "MonitorTreeModel.h"
 #include "contest.h"
@@ -35,8 +36,8 @@ MonitorMain::MonitorMain(QWidget *parent) :
 #else
     splitterHandleWidth = 6;
 #endif
-    QSettings settings;
-    QByteArray geometry = settings.value("geometry").toByteArray();
+    RegSettings settings;
+    QByteArray geometry = settings.getSettings().value("geometry").toByteArray();
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
@@ -62,7 +63,7 @@ MonitorMain::MonitorMain(QWidget *parent) :
 
     QByteArray state;
 
-    state = settings.value("MonitorSplitter/state").toByteArray();
+    state = settings.getSettings().value("MonitorSplitter/state").toByteArray();
     if (state.size())
     {
         ui->monitorSplitter->restoreState(state);
@@ -73,11 +74,11 @@ MonitorMain::MonitorMain(QWidget *parent) :
         ui->monitorSplitter->setSizes(split);
     }
 
-    state = settings.value("MainSplitter/state").toByteArray();
+    state = settings.getSettings().value("MainSplitter/state").toByteArray();
     if (state.size())
         ui->mainSplitter->restoreState(state);
 
-    state = settings.value("SearchSplitter/state").toByteArray();
+    state = settings.getSettings().value("SearchSplitter/state").toByteArray();
     if (state.size())
         ui->searchSplitter->restoreState(state);
 
@@ -134,22 +135,22 @@ void MonitorMain::closeEvent(QCloseEvent *event)
 }
 void MonitorMain::moveEvent(QMoveEvent * event)
 {
-    QSettings settings;
-    settings.setValue("geometry", saveGeometry());
+    RegSettings settings;
+    settings.getSettings().setValue("geometry", saveGeometry());
     QWidget::moveEvent(event);
 }
 void MonitorMain::resizeEvent(QResizeEvent * event)
 {
-    QSettings settings;
-    settings.setValue("geometry", saveGeometry());
+    RegSettings settings;
+    settings.getSettings().setValue("geometry", saveGeometry());
     QWidget::resizeEvent(event);
 }
 void MonitorMain::changeEvent( QEvent* e )
 {
     if( e->type() == QEvent::WindowStateChange )
     {
-        QSettings settings;
-        settings.setValue("geometry", saveGeometry());
+        RegSettings settings;
+        settings.getSettings().setValue("geometry", saveGeometry());
     }
 }
 bool MonitorMain::eventFilter(QObject * /*obj*/, QEvent *event)
@@ -179,21 +180,21 @@ void MonitorMain::on_callsignEdit_textChanged(const QString &/*arg1*/)
 void MonitorMain::on_monitorSplitter_splitterMoved(int /*pos*/, int /*index*/)
 {
     QByteArray state = ui->monitorSplitter->saveState();
-    QSettings settings;
-    settings.setValue("MonitorSplitter/state", state);
+    RegSettings settings;
+    settings.getSettings().setValue("MonitorSplitter/state", state);
 }
 void MonitorMain::on_mainSplitter_splitterMoved(int /*pos*/, int /*index*/)
 {
     QByteArray state = ui->mainSplitter->saveState();
-    QSettings settings;
-    settings.setValue("MainSplitter/state", state);
+    RegSettings settings;
+    settings.getSettings().setValue("MainSplitter/state", state);
 }
 
 void MonitorMain::on_searchSplitter_splitterMoved(int /*pos*/, int /*index*/)
 {
     QByteArray state = ui->searchSplitter->saveState();
-    QSettings settings;
-    settings.setValue("SearchSplitter/state", state);
+    RegSettings settings;
+    settings.getSettings().setValue("SearchSplitter/state", state);
 }
 
 void MonitorMain::closeTab(MonitoringFrame *cttab)

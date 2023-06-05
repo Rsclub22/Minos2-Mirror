@@ -1,3 +1,4 @@
+#include "regsettings.h"
 #include "ContestApp.h"
 #include "list.h"
 #include "tlogcontainer.h"
@@ -11,8 +12,8 @@ TManageListsDlg::TManageListsDlg(QWidget *parent) :
     ui->setupUi(this);
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-    QSettings settings;
-    QByteArray geometry = settings.value("TManageListsDlg/geometry").toByteArray();
+    RegSettings settings;
+    QByteArray geometry = settings.getSettings().value("TManageListsDlg/geometry").toByteArray();
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
@@ -26,8 +27,8 @@ TManageListsDlg::~TManageListsDlg()
 }
 void TManageListsDlg::doCloseEvent()
 {
-    QSettings settings;
-    settings.setValue("TManageListsDlg/geometry", saveGeometry());
+    RegSettings settings;
+    settings.getSettings().setValue("TManageListsDlg/geometry", saveGeometry());
 }
 void TManageListsDlg::reject()
 {

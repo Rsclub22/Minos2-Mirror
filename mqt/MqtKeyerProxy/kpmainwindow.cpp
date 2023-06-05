@@ -1,6 +1,7 @@
 #include <QtSerialPort/QSerialPort>
 #include <QtSerialPort/QSerialPortInfo>
 #include <QFileDialog>
+#include "regsettings.h"
 #include "LogEvents.h"
 #include "MShowMessageDlg.h"
 #include "MTrace.h"
@@ -30,8 +31,8 @@ KPMainWindow::KPMainWindow(QWidget *parent)
     kpc = new KPRPCServer();
     connect(kpc, &KPRPCServer::newHost, this, &KPMainWindow::onNewHost);
 
-    QSettings settings;
-    QByteArray geometry = settings.value("KeyerProxyMain/geometry").toByteArray();
+    RegSettings settings;
+    QByteArray geometry = settings.getSettings().value("KeyerProxyMain/geometry").toByteArray();
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
@@ -47,10 +48,10 @@ KPMainWindow::KPMainWindow(QWidget *parent)
 
     fillPortsInfo(ui->spCombo);
 
-    bool senabled = settings.value("PTTEnabled").toBool();
-    QString serialPort = settings.value("PTTPort").toString();
-    bool rts = settings.value("PTTRTS").toBool();
-    bool dtr = settings.value("PTTDTR").toBool();
+    bool senabled = settings.getSettings().value("PTTEnabled").toBool();
+    QString serialPort = settings.getSettings().value("PTTPort").toString();
+    bool rts = settings.getSettings().value("PTTRTS").toBool();
+    bool dtr = settings.getSettings().value("PTTDTR").toBool();
 
     inPTTConfig = true;
     ui->serialPTTEnable->setChecked(senabled);
@@ -65,7 +66,7 @@ KPMainWindow::KPMainWindow(QWidget *parent)
 
     ui->outputCombo->addItem(tr("Remote IP Client"));
     ui->outputCombo->addItems(outputList);
-    QString currentOutput = settings.value("outputDevice", SoundSystemDriver::getSbDriver()->getDefaultOutputDevice()).toString();
+    QString currentOutput = settings.getSettings().value("outputDevice", SoundSystemDriver::getSbDriver()->getDefaultOutputDevice()).toString();
     ui->outputCombo->setCurrentText(currentOutput);
 
 //    QString port = settings.value("SenderPort", DEFAULT_PORT).toString();
@@ -141,22 +142,22 @@ void KPMainWindow::closeEvent(QCloseEvent *event)
 }
 void KPMainWindow::moveEvent(QMoveEvent *event)
 {
-    QSettings settings;
-    settings.setValue("KeyerProxyMain/geometry", saveGeometry());
+    RegSettings settings;
+    settings.getSettings().setValue("KeyerProxyMain/geometry", saveGeometry());
     QWidget::moveEvent(event);
 }
 void KPMainWindow::resizeEvent(QResizeEvent *event)
 {
-    QSettings settings;
-    settings.setValue("KeyerProxyMain/geometry", saveGeometry());
+    RegSettings settings;
+    settings.getSettings().setValue("KeyerProxyMain/geometry", saveGeometry());
     QWidget::resizeEvent(event);
 }
 void KPMainWindow::changeEvent( QEvent* e )
 {
     if( e->type() == QEvent::WindowStateChange )
     {
-        QSettings settings;
-        settings.setValue("geometry", saveGeometry());
+        RegSettings settings;
+        settings.getSettings().setValue("geometry", saveGeometry());
     }
 }
 void KPMainWindow::runAlsaScript(const QString &alsaFileName, const QString &command)
@@ -274,8 +275,8 @@ void KPMainWindow::on_restoreAlsaButton_clicked()
 
 void KPMainWindow::on_outputCombo_activated(int /*index*/)
 {
-    QSettings settings;
-    settings.setValue("outputDevice", ui->outputCombo->currentText());
+    RegSettings settings;
+    settings.getSettings().setValue("outputDevice", ui->outputCombo->currentText());
 
     mShowMessage(tr("Restart to set output to %1").arg(ui->outputCombo->currentText()), this);
 }
@@ -335,9 +336,9 @@ void KPMainWindow::doSetVU( vudata v)
 }
 bool KPMainWindow::openSerialPort()
 {
-    QSettings settings;
+    RegSettings settings;
 
-    bool senabled = settings.value("PTTEnabled").toBool();
+    bool senabled = settings.getSettings().value("PTTEnabled").toBool();
 
     if (senabled && !sp)
     {
@@ -347,9 +348,9 @@ bool KPMainWindow::openSerialPort()
     {
         if (!sp->isOpen())
         {
-            QString serialPort = settings.value("PTTPort").toString();
-            bool rts = settings.value("PTTRTS").toBool();
-            bool dtr = settings.value("PTTDTR").toBool();
+            QString serialPort = settings.getSettings().value("PTTPort").toString();
+            bool rts = settings.getSettings().value("PTTRTS").toBool();
+            bool dtr = settings.getSettings().value("PTTDTR").toBool();
 
             if (!sp->openComport(serialPort, rts, dtr))
             {
@@ -392,11 +393,11 @@ void KPMainWindow::saveSerialSettings()
         bool dtr = ui->dtr->isChecked();
         bool senabled = ui->serialPTTEnable->isChecked();
 
-        QSettings settings;
-        settings.setValue("PTTEnabled", senabled);
-        settings.setValue("PTTPort", serialPort);
-        settings.setValue("PTTRTS", rts);
-        settings.setValue("PTTDTR", dtr);
+        RegSettings settings;
+        settings.getSettings().setValue("PTTEnabled", senabled);
+        settings.getSettings().setValue("PTTPort", serialPort);
+        settings.getSettings().setValue("PTTRTS", rts);
+        settings.getSettings().setValue("PTTDTR", dtr);
 
         if (sp)
         {

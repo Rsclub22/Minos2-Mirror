@@ -28,6 +28,7 @@ SOURCES += \
     MTrace.cpp \
     LogEvents.cpp \
     frequency.cpp \
+    regsettings.cpp \
     singleapplication.cpp \
     INIFile.cpp \
     MMessageDialog.cpp \
@@ -47,6 +48,7 @@ HEADERS += \
     MTrace.h \
     LogEvents.h \
     frequency.h \
+    regsettings.h \
     singleapplication.h \
     INIFile.h \
     MMessageDialog.h \

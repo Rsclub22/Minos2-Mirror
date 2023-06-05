@@ -16,6 +16,7 @@
 #include <QMessageBox>
 #include <QInputDialog>
 
+#include "regsettings.h"
 #include "MShowMessageDlg.h"
 #include "addantennadialog.h"
 #include "rotsetupdialog.h"
@@ -29,8 +30,8 @@ RotSetupDialog::RotSetupDialog(RotatorFactory* rotFactory_, QWidget *parent) :
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
     rotatorFactory = rotFactory_;
 
-    QSettings settings;
-    QByteArray geometry = settings.value("RotControlSetup/geometry").toByteArray();
+    RegSettings settings;
+    QByteArray geometry = settings.getSettings().value("RotControlSetup/geometry").toByteArray();
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
@@ -324,8 +325,8 @@ void RotSetupDialog::saveButtonPushed()
 
 void RotSetupDialog::doCloseEvent()
 {
-    QSettings settings;
-    settings.setValue("RotControlSetup/geometry", saveGeometry());
+    RegSettings settings;
+    settings.getSettings().setValue("RotControlSetup/geometry", saveGeometry());
 }
 
 

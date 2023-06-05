@@ -1,5 +1,6 @@
 #include <QSettings>
 
+#include "regsettings.h"
 #include "profiles.h"
 #include "enqdlg.h"
 #include "MinosParameters.h"
@@ -18,12 +19,12 @@ TSettingsEditDlg::TSettingsEditDlg(QWidget *parent, SettingsBundle *bundle) :
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
     initialSection = bundle->getSection();
 
-    QSettings settings;
-    QByteArray geometry = settings.value("EntrySettings/geometry/" + bundle->getBundle()).toByteArray();
+    RegSettings settings;
+    QByteArray geometry = settings.getSettings().value("EntrySettings/geometry/" + bundle->getBundle()).toByteArray();
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
-    QByteArray state = settings.value("EntrySettings/SplitterState/" + bundle->getBundle()).toByteArray();
+    QByteArray state = settings.getSettings().value("EntrySettings/SplitterState/" + bundle->getBundle()).toByteArray();
     ui->splitter->restoreState(state);
 
     baseTitle = windowTitle();
@@ -35,9 +36,9 @@ TSettingsEditDlg::TSettingsEditDlg(QWidget *parent, SettingsBundle *bundle) :
 }
 void TSettingsEditDlg::on_splitter_splitterMoved(int /*pos*/, int /*index*/)
 {
-    QSettings settings;
+    RegSettings settings;
     QByteArray state = ui->splitter->saveState();
-    settings.setValue("EntrySettings/SplitterState/" + bundle->getBundle(), state);
+    settings.getSettings().setValue("EntrySettings/SplitterState/" + bundle->getBundle(), state);
 }
 void TSettingsEditDlg::ShowCurrentSectionOnly()
 {
@@ -333,8 +334,8 @@ void TSettingsEditDlg::on_SectionsList_itemSelectionChanged()
 }
 void TSettingsEditDlg::doCloseEvent()
 {
-    QSettings settings;
-    settings.setValue("EntrySettings/geometry/" + bundle->getBundle(), saveGeometry());
+    RegSettings settings;
+    settings.getSettings().setValue("EntrySettings/geometry/" + bundle->getBundle(), saveGeometry());
 }
 void TSettingsEditDlg::reject()
 {

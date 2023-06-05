@@ -12,6 +12,7 @@
 #include "SecondInstall.h"
 #include "MShowMessageDlg.h"
 #include "MTrace.h"
+#include "regsettings.h"
 
 #include "checkupdates.h"
 #include "ui_checkupdates.h"
@@ -23,8 +24,8 @@ CheckUpdates::CheckUpdates(QWidget *parent) :
     ui->setupUi(this);
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-    QSettings settings;
-    QByteArray geometry = settings.value("CheckUpdates/geometry").toByteArray();
+    RegSettings settings;
+    QByteArray geometry = settings.getSettings().value("CheckUpdates/geometry").toByteArray();
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
@@ -132,8 +133,8 @@ CheckUpdates::~CheckUpdates()
 }
 void CheckUpdates::doCloseEvent()
 {
-    QSettings settings;
-    settings.setValue("CheckUpdates/geometry", saveGeometry());
+    RegSettings settings;
+    settings.getSettings().setValue("CheckUpdates/geometry", saveGeometry());
 }
 
 void CheckUpdates::on_closeButton_clicked()

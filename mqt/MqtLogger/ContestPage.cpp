@@ -1,3 +1,4 @@
+#include "regsettings.h"
 #include "ScreenConfigFile.h"
 #include "tlogcontainer.h"
 #include "minossplitter.h"
@@ -110,11 +111,11 @@ void ContestPage::getSplitters()
     {
         return;
     }
-    QSettings settings;
+    RegSettings settings;
     QByteArray state;
 
     QString name = QString("Splitters/%1/state/%2/%3").arg("singleLogFrameSplitter", tslf->getCurScreenLayout()).arg(pageNo);
-    state = settings.value(name).toByteArray();
+    state = settings.getSettings().value(name).toByteArray();
     singleLogFrameSplitter->restoreState(state);
 
     // and reset some of the saved state
@@ -126,7 +127,7 @@ void ContestPage::getSplitters()
     {
         QByteArray sstate;
         QString name = QString("Splitters/%1/state/%2/%3").arg(s->objectName(), tslf->getCurScreenLayout()).arg(pageNo);
-        sstate = settings.value(name, sstate).toByteArray();
+        sstate = settings.getSettings().value(name, sstate).toByteArray();
         s->restoreState(sstate);
         s->setHandleWidth(splitterHandleWidth);
         s->setChildrenCollapsible(true);
@@ -139,15 +140,15 @@ void ContestPage::onSplittersChanged()
 void ContestPage::onSplitterMoved(int /*pos*/, int /*index*/)
 {
     QByteArray state = singleLogFrameSplitter->saveState();
-    QSettings settings;
+    RegSettings settings;
     QString name = QString("Splitters/%1/state/%2/%3").arg("singleLogFrameSplitter", tslf->getCurScreenLayout()).arg(pageNo);
-    settings.setValue(name, state);
+    settings.getSettings().setValue(name, state);
 
     for(auto const &s: qAsConst(rowSplitters))
     {
         state = s->saveState();
         QString name = QString("Splitters/%1/state/%2/%3").arg(s->objectName(), tslf->getCurScreenLayout()).arg(pageNo);
-        settings.setValue(name, state);
+        settings.getSettings().setValue(name, state);
         MinosLoggerEvents::SendSplittersChanged();
     }
 }

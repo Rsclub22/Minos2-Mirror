@@ -10,6 +10,7 @@
 #include <QSettings>
 #include <QStandardPaths>
 
+#include "regsettings.h"
 #include "fileutils.h"
 #include "MTrace.h"
 #include "SecondInstall.h"
@@ -152,21 +153,21 @@ void switchTranslation(QString loc)
     trace(QString("Translation file %1 loaded:%2 installed:%3").arg(qtlocfile).arg(qtloadOK).arg(qtinstallOK));
     trace(QString("Translation file %1 loaded:%2 installed:%3").arg(locfile).arg(loadOK).arg(installOK));
 
-    QSettings settings;
+    RegSettings settings;
     currentLanguage = loc;
     if (loc == QLocale::system().name())
     {
-        settings.remove("language");
+        settings.getSettings().remove("language");
     }
     else
     {
-        settings.setValue( "language", loc );
+        settings.getSettings().setValue( "language", loc );
     }
 }
 static QString getAppLanguage()
 {
-    QSettings settings;
-    QVariant qlang = settings.value( "language" );
+    RegSettings settings;
+    QVariant qlang = settings.getSettings().value( "language" );
     if ( qlang == QVariant() )
     {
         qlang = QLocale::system().name();
@@ -354,8 +355,8 @@ void appStartup(const QString &pappName)
 
 void setAppFont()
 {
-    QSettings settings;
-    QVariant qfont = settings.value( "font" );
+    RegSettings settings;
+    QVariant qfont = settings.getSettings().value( "font" );
     if ( qfont != QVariant() )
     {
         QApplication::setFont( qfont.value<QFont>() );

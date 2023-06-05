@@ -102,7 +102,7 @@ private:
     int numAvailRadios;
     QMap<QString, QSharedPointer<scatParams> > availRadioData;
 
-    QSettings availRadioIni;
+    //QSettings availRadioIni;
 
     QString appName = "";
 

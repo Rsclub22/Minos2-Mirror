@@ -1,5 +1,6 @@
 #include <QSettings>
 
+#include "regsettings.h"
 #include "tloccalcform.h"
 #include "ui_tloccalcform.h"
 
@@ -9,8 +10,8 @@ TLocCalcForm::TLocCalcForm(QWidget *parent) :
 {
     ui->setupUi(this);
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
-    QSettings settings;
-    QByteArray geometry = settings.value("TLocCalcForm/geometry").toByteArray();
+    RegSettings settings;
+    QByteArray geometry = settings.getSettings().value("TLocCalcForm/geometry").toByteArray();
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
@@ -34,8 +35,8 @@ int TLocCalcForm::exec()
 
 void TLocCalcForm::doCloseEvent()
 {
-    QSettings settings;
-    settings.setValue("TLocCalcForm/geometry", saveGeometry());
+    RegSettings settings;
+    settings.getSettings().setValue("TLocCalcForm/geometry", saveGeometry());
 }
 void TLocCalcForm::reject()
 {

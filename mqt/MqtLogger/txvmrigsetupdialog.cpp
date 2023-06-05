@@ -1,4 +1,5 @@
 #include <QSettings>
+#include "regsettings.h"
 #include "txvmrigsetupdialog.h"
 #include "ui_txvmrigsetupdialog.h"
 
@@ -12,8 +13,8 @@ TxVmRigSetupDialog::TxVmRigSetupDialog(VoiceKeyerCapabilities voiceCap_, int nb,
     ui->setupUi(this);
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-    QSettings settings;
-    QByteArray geometry = settings.value("TxVmSetupDialog/geometry").toByteArray();
+    RegSettings settings;
+    QByteArray geometry = settings.getSettings().value("TxVmSetupDialog/geometry").toByteArray();
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
@@ -27,8 +28,8 @@ TxVmRigSetupDialog::~TxVmRigSetupDialog()
 }
 void TxVmRigSetupDialog::doCloseEvent()
 {
-    QSettings settings;
-    settings.setValue("TxVmSetupDialog/geometry", saveGeometry());
+    RegSettings settings;
+    settings.getSettings().setValue("TxVmSetupDialog/geometry", saveGeometry());
 }
 void TxVmRigSetupDialog::reject()
 {

@@ -1,5 +1,6 @@
 #include <QFileInfo>
 #include <QFileDialog>
+#include "regsettings.h"
 #include "ContestApp.h"
 #include "tlogcontainer.h"
 #include "enqdlg.h"
@@ -16,12 +17,12 @@ TSessionManager::TSessionManager(QWidget *parent) :
     ui->setupUi(this);
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-    QSettings settings;
-    QByteArray geometry = settings.value("TSessionManager/geometry").toByteArray();
+    RegSettings settings;
+    QByteArray geometry = settings.getSettings().value("TSessionManager/geometry").toByteArray();
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
-    QByteArray state = settings.value("TSessionManager/SplitterState/setSplitter").toByteArray();
+    QByteArray state = settings.getSettings().value("TSessionManager/SplitterState/setSplitter").toByteArray();
     ui->setSplitter->restoreState(state);
 
     parseSessions();
@@ -35,9 +36,9 @@ TSessionManager::~TSessionManager()
 
 void TSessionManager::on_setSplitter_splitterMoved(int /*pos*/, int /*index*/)
 {
-    QSettings settings;
+    RegSettings settings;
     QByteArray state = ui->setSplitter->saveState();
-    settings.setValue("TSessionManager/SplitterState/setSplitter", state);
+    settings.getSettings().setValue("TSessionManager/SplitterState/setSplitter", state);
 }
 void TSessionManager::enableButtons()
 {
@@ -218,8 +219,8 @@ void TSessionManager::on_cancelButton_clicked()
 }
 void TSessionManager::doCloseEvent()
 {
-    QSettings settings;
-    settings.setValue("TSessionManager/geometry", saveGeometry());
+    RegSettings settings;
+    settings.getSettings().setValue("TSessionManager/geometry", saveGeometry());
 }
 void TSessionManager::reject()
 {

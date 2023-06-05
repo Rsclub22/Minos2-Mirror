@@ -1,10 +1,10 @@
+#include "regsettings.h"
 #include "mqtktWaveShowDialog.h"
-#include "mqtktMainWindow.h"
-#include "ui_mqtktMainWindow.h"
 
 #include "adis_filter.h"
 #include "SimpleComp.h"
-#include "MqtLogCompressor.h"
+#include "mqtktMainWindow.h"
+#include "ui_mqtktMainWindow.h"
 
 const double pi = 3.141592653;
 
@@ -16,8 +16,8 @@ mqtktMainWindow::mqtktMainWindow(QWidget *parent) :
     ui->setupUi(this);
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-    QSettings settings;
-    QByteArray geometry = settings.value("mqtktMainWindow/geometry").toByteArray();
+    RegSettings settings;
+    QByteArray geometry = settings.getSettings().value("mqtktMainWindow/geometry").toByteArray();
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
@@ -38,23 +38,23 @@ mqtktMainWindow::~mqtktMainWindow()
 }
 void mqtktMainWindow::moveEvent(QMoveEvent *event)
 {
-    QSettings settings;
+    RegSettings settings;
     QByteArray sg = saveGeometry();
-    settings.setValue("mqtktMainWindow/geometry", sg);
+    settings.getSettings().setValue("mqtktMainWindow/geometry", sg);
     QWidget::moveEvent(event);
 }
 void mqtktMainWindow::resizeEvent(QResizeEvent * event)
 {
-    QSettings settings;
-    settings.setValue("mqtktMainWindow/geometry", saveGeometry());
+    RegSettings settings;
+    settings.getSettings().setValue("mqtktMainWindow/geometry", saveGeometry());
     QWidget::resizeEvent(event);
 }
 void mqtktMainWindow::changeEvent( QEvent* e )
 {
     if( e->type() == QEvent::WindowStateChange )
     {
-        QSettings settings;
-        settings.setValue("mqtktMainWindow/geometry", saveGeometry());
+        RegSettings settings;
+        settings.getSettings().setValue("mqtktMainWindow/geometry", saveGeometry());
     }
 }
 

@@ -5,6 +5,7 @@
 #include <QFileDialog>
 #include <QLabel>
 
+#include "regsettings.h"
 #include "AppStartup.h"
 #include "MMessageDialog.h"
 #include "MShowMessageDlg.h"
@@ -117,8 +118,8 @@ TLogContainer::TLogContainer(QWidget *parent) :
     connect(ui->contestPageControl->tabBar(), &QTabBar::tabCloseRequested, this, &TLogContainer::onTabClosebutton);
     connect(ui->contestPageControl->tabBar(), &QTabBar::tabMoved, this, &TLogContainer::onTabMoved);
 
-    QSettings settings;
-    QByteArray geometry = settings.value("geometry").toByteArray();
+    RegSettings settings;
+    QByteArray geometry = settings.getSettings().value("geometry").toByteArray();
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
@@ -364,22 +365,22 @@ void TLogContainer::closeEvent(QCloseEvent *event)
 }
 void TLogContainer::moveEvent(QMoveEvent *event)
 {
-    QSettings settings;
-    settings.setValue("geometry", saveGeometry());
+    RegSettings settings;
+    settings.getSettings().setValue("geometry", saveGeometry());
     QWidget::moveEvent(event);
 }
 void TLogContainer::resizeEvent(QResizeEvent * event)
 {
-    QSettings settings;
-    settings.setValue("geometry", saveGeometry());
+    RegSettings settings;
+    settings.getSettings().setValue("geometry", saveGeometry());
     QWidget::resizeEvent(event);
 }
 void TLogContainer::changeEvent( QEvent* e )
 {
     if( e->type() == QEvent::WindowStateChange )
     {
-        QSettings settings;
-        settings.setValue("geometry", saveGeometry());
+        RegSettings settings;
+        settings.getSettings().setValue("geometry", saveGeometry());
     }
 
     if (e->type() == QEvent::LanguageChange)
@@ -666,35 +667,35 @@ void TLogContainer::openRecentFile()
 
 void TLogContainer::setCurrentFile(const QString &fileName)
 {
-    QSettings settings;
-    QStringList files = settings.value("dbmru").toStringList();
+    RegSettings settings;
+    QStringList files = settings.getSettings().value("dbmru").toStringList();
     files.removeAll(fileName);
     files.prepend(fileName);
     while (files.size() > MaxRecentFiles)
         files.removeLast();
 
-    settings.setValue("dbmru", files);
+    settings.getSettings().setValue("dbmru", files);
 
     updateRecentFileActions();
 
 }
 void TLogContainer::removeCurrentFile(const QString &fileName)
 {
-    QSettings settings;
-    QStringList files = settings.value("dbmru").toStringList();
+    RegSettings settings;
+    QStringList files = settings.getSettings().value("dbmru").toStringList();
     files.removeAll(fileName);
     while (files.size() > MaxRecentFiles)
         files.removeLast();
 
-    settings.setValue("dbmru", files);
+    settings.getSettings().setValue("dbmru", files);
 
     updateRecentFileActions();
 
 }
 void TLogContainer::updateRecentFileActions()
 {
-    QSettings settings;
-    QStringList files = settings.value("dbmru").toStringList();
+    RegSettings settings;
+    QStringList files = settings.getSettings().value("dbmru").toStringList();
 
     int numRecentFiles = qMin(files.size(), static_cast< int >(MaxRecentFiles));
 

@@ -16,6 +16,7 @@
 #include <QInputDialog>
 #include <QFile>
 
+#include "regsettings.h"
 #include "rigsetupform.h"
 #include "serialCommonData.h"
 #include "transvertsetupform.h"
@@ -40,8 +41,8 @@ RigSetupDialog::RigSetupDialog(RigFactory* rigFactory_, const QVector<QSharedPoi
     rigFactory = rigFactory_;
     bands = _bands;
 
-    QSettings settings;
-    QByteArray geometry = settings.value("RigControl/geometry").toByteArray();
+    RegSettings settings;
+    QByteArray geometry = settings.getSettings().value("RigControl/geometry").toByteArray();
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
@@ -639,8 +640,8 @@ void RigSetupDialog::loadAvailPttComportsToTab(QString radioName)
 
 void RigSetupDialog::doCloseEvent()
 {
-    QSettings settings;
-    settings.setValue("RigControl/geometry", saveGeometry());
+    RegSettings settings;
+    settings.getSettings().setValue("RigControl/geometry", saveGeometry());
 }
 
 

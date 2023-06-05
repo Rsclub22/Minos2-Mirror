@@ -2,6 +2,7 @@
 #include <QSettings>
 #include <QInputDialog>
 
+#include "regsettings.h"
 #include "helpbrowser.h"
 #include "ui_helpbrowser.h"
 
@@ -14,9 +15,9 @@ HelpBrowser::HelpBrowser(QString collectionFile, QUrl startUrl, QWidget *parent)
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     // Restore any settings
-    QSettings settings;
-    restoreGeometry(settings.value("HelpBrowser/geometry").toByteArray());
-    ui->splitter->restoreState(settings.value("HelpBrowser/splitterSizes").toByteArray());
+    RegSettings settings;
+    restoreGeometry(settings.getSettings().value("HelpBrowser/geometry").toByteArray());
+    ui->splitter->restoreState(settings.getSettings().value("HelpBrowser/splitterSizes").toByteArray());
 
     // Create the Help Engine
     helpEngine = new QHelpEngine(QString(collectionFile));
@@ -42,8 +43,8 @@ HelpBrowser::HelpBrowser(QString collectionFile, QUrl startUrl, QWidget *parent)
 }
 void HelpBrowser::doCloseEvent()
 {
-    QSettings settings;
-    settings.setValue("HelpBrowser/geometry", saveGeometry());
+    RegSettings settings;
+    settings.getSettings().setValue("HelpBrowser/geometry", saveGeometry());
 }
 void HelpBrowser::reject()
 {
@@ -90,8 +91,8 @@ void HelpBrowser::on_linksActivated(const QMap<QString, QUrl> &map, const QStrin
 
 void HelpBrowser::on_splitter_splitterMoved(int /*pos*/, int /*index*/)
 {
-    QSettings settings;
-    settings.setValue("HelpBrowser/splitterSizes", ui->splitter->saveState());
+    RegSettings settings;
+    settings.getSettings().setValue("HelpBrowser/splitterSizes", ui->splitter->saveState());
 }
 
 HelpBrowser::~HelpBrowser()

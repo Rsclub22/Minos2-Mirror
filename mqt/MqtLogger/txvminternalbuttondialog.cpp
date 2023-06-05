@@ -1,5 +1,6 @@
 #include <QMessageBox>
 #include <QSettings>
+#include "regsettings.h"
 #include "sbdriver.h"
 #include "WaveShowDialog.h"
 #include "voicekeyerfactory.h"
@@ -23,8 +24,8 @@ TxVmInternalButtonDialog::TxVmInternalButtonDialog(QWidget *parent) :
     ui->setupUi(this);
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-    QSettings settings;
-    QByteArray geometry = settings.value("TxVmInternalButtonDialog/geometry").toByteArray();
+    RegSettings settings;
+    QByteArray geometry = settings.getSettings().value("TxVmInternalButtonDialog/geometry").toByteArray();
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
@@ -46,8 +47,8 @@ TxVmInternalButtonDialog::~TxVmInternalButtonDialog()
 
 void TxVmInternalButtonDialog::doCloseEvent()
 {
-    QSettings settings;
-    settings.setValue("TxVmInternalButtonDialog/geometry", saveGeometry());
+    RegSettings settings;
+    settings.getSettings().setValue("TxVmInternalButtonDialog/geometry", saveGeometry());
     txvmIntInhibitCallbacks = true;
     txvmbd = nullptr;
 }

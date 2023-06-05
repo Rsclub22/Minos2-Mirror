@@ -11,6 +11,7 @@
 /////////////////////////////////////////////////////////////////////////////
 #include <QTableView>
 #include <QMessageBox>
+#include "regsettings.h"
 #include "MinosLoggerEvents.h"
 #include "clusterclientfilterdialog.h"
 #include "contest.h"
@@ -806,48 +807,48 @@ bool ClusterClientFrame::checkDbRowForMatch(qint64 incomingVal, int row, const i
 
 void ClusterClientFrame::on_dxSpotViewSectionResized(int, int , int)
 {
-    QSettings settings;
+    RegSettings settings;
     QByteArray state;
 
     state = dxSpotView->horizontalHeader()->saveState();
-    settings.setValue("ClusterClientFilter/dxSpotView/state", state);
+    settings.getSettings().setValue("ClusterClientFilter/dxSpotView/state", state);
     MinosLoggerEvents::SendColumnsChanged();
 }
 void ClusterClientFrame::on_callsignViewSectionResized(int, int , int)
 {
-    QSettings settings;
+    RegSettings settings;
     QByteArray state;
 
     state = callSignView->horizontalHeader()->saveState();
-    settings.setValue("ClusterClientFilter/callSignView/state", state);
+    settings.getSettings().setValue("ClusterClientFilter/callSignView/state", state);
     MinosLoggerEvents::SendColumnsChanged();
 }
 void ClusterClientFrame::on_locatorViewSectionResized(int, int , int)
 {
-    QSettings settings;
+    RegSettings settings;
     QByteArray state;
 
     state = locatorView->horizontalHeader()->saveState();
-    settings.setValue("ClusterClientFilter/locatorView/state", state);
+    settings.getSettings().setValue("ClusterClientFilter/locatorView/state", state);
     MinosLoggerEvents::SendColumnsChanged();
 }
 
 void ClusterClientFrame::on_searchViewSectionResized(int, int , int)
 {
-    QSettings settings;
+    RegSettings settings;
     QByteArray state;
 
     state = searchView->horizontalHeader()->saveState();
-    settings.setValue("ClusterClientFilter/searchView/state", state);
+    settings.getSettings().setValue("ClusterClientFilter/searchView/state", state);
     MinosLoggerEvents::SendColumnsChanged();
 }
 
 void ClusterClientFrame::restoreDxSpotViewColumns()
 {
-    QSettings settings;
+    RegSettings settings;
     QByteArray state;
 
-    state = settings.value("ClusterClientFilter/dxSpotView/state").toByteArray();
+    state = settings.getSettings().value("ClusterClientFilter/dxSpotView/state").toByteArray();
     dxSpotView->horizontalHeader()->restoreState(state);
     MinosLoggerEvents::SendColumnsChanged();
 }
@@ -855,10 +856,10 @@ void ClusterClientFrame::restoreDxSpotViewColumns()
 
 void ClusterClientFrame::restoreCallsignViewColumns()
 {
-    QSettings settings;
+    RegSettings settings;
     QByteArray state;
 
-    state = settings.value("ClusterClientFilter/callSignView/state").toByteArray();
+    state = settings.getSettings().value("ClusterClientFilter/callSignView/state").toByteArray();
     callSignView->horizontalHeader()->restoreState(state);
     MinosLoggerEvents::SendColumnsChanged();
 }
@@ -866,18 +867,18 @@ void ClusterClientFrame::restoreCallsignViewColumns()
 
 void ClusterClientFrame::restoreLocatorViewColumns()
 {
-    QSettings settings;
+    RegSettings settings;
     QByteArray state;
 
-    state = settings.value("ClusterClientFilter/locatorView/state").toByteArray();
+    state = settings.getSettings().value("ClusterClientFilter/locatorView/state").toByteArray();
     locatorView->horizontalHeader()->restoreState(state);
 }
 void ClusterClientFrame::restoreSearchViewColumns()
 {
-    QSettings settings;
+    RegSettings settings;
     QByteArray state;
 
-    state = settings.value("ClusterClientFilter/searchView/state").toByteArray();
+    state = settings.getSettings().value("ClusterClientFilter/searchView/state").toByteArray();
     searchView->horizontalHeader()->restoreState(state);
 }
 
@@ -891,18 +892,18 @@ void ClusterClientFrame::restoreColumns()
 void ClusterClientFrame::on_clusterSplitter_splitterMoved(int /*pos*/, int /*index*/)
 {
     QByteArray state = ui->clusterSplitter->saveState();
-    QSettings settings;
-    settings.setValue("Splitters/ClusterClientFrame/state/", state);
+    RegSettings settings;
+    settings.getSettings().setValue("Splitters/ClusterClientFrame/state/", state);
 
     MinosLoggerEvents::SendSplittersChanged();
 }
 
 void ClusterClientFrame::restoreSplitters()
 {
-    QSettings settings;
+    RegSettings settings;
     QByteArray state;
 
-    state = settings.value("Splitters/ClusterClientFrame/state/").toByteArray();
+    state = settings.getSettings().value("Splitters/ClusterClientFrame/state/").toByteArray();
     ui->clusterSplitter->restoreState(state);
 }
 void ClusterClientFrame::on_doColumnChanges(BaseContestLog *b)

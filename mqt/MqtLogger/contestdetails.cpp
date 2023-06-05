@@ -1,3 +1,4 @@
+#include "regsettings.h"
 #include "LoggerContest.h"
 #include "Calendar.h"
 #include "BandList.h"
@@ -43,8 +44,8 @@ ContestDetails::ContestDetails(QWidget *parent) :
 
     trAllHf = tr("All HF");
 
-    QSettings settings;
-    QByteArray geometry = settings.value("ContestDetails/geometry").toByteArray();
+    RegSettings settings;
+    QByteArray geometry = settings.getSettings().value("ContestDetails/geometry").toByteArray();
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
@@ -124,8 +125,8 @@ ContestDetails::ContestDetails(QWidget *parent) :
 }
 void ContestDetails::doCloseEvent()
 {
-    QSettings settings;
-    settings.setValue("ContestDetails/geometry", saveGeometry());
+    RegSettings settings;
+    settings.getSettings().setValue("ContestDetails/geometry", saveGeometry());
 }
 void ContestDetails::reject()
 {

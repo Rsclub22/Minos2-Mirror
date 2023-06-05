@@ -18,6 +18,7 @@
 #include <QTableView>
 #include <QMessageBox>
 
+#include "regsettings.h"
 #include "AppStartup.h"
 #include "MShowMessageDlg.h"
 #include "clustercommon.h"
@@ -96,8 +97,8 @@ void ClusterMainWindow::connectToCluster()
     ui->clusterTab->setCurrentWidget(ui->bandFilter);
     ui->startCloseFileTab->setAutoFillBackground(true);
 
-    QSettings settings;
-    ui->clusterTab->setCurrentIndex(settings.value("ClusterServer/curTab", 0).toInt());
+    RegSettings settings;
+    ui->clusterTab->setCurrentIndex(settings.getSettings().value("ClusterServer/curTab", 0).toInt());
 }
 
 void ClusterMainWindow::doStartup()
@@ -162,9 +163,9 @@ void ClusterMainWindow::doStartup()
 #endif
 
 
-    QSettings settings;
+    RegSettings settings;
     geoStr = QString("clusterServer/geometry");
-    QByteArray geometry = settings.value(geoStr).toByteArray();
+    QByteArray geometry = settings.getSettings().value(geoStr).toByteArray();
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
@@ -491,40 +492,40 @@ void ClusterMainWindow::onSpotTabChanged(int index)
 
 void ClusterMainWindow::dxSpotView_sectionResized(int, int, int)
 {
-    QSettings settings;
+    RegSettings settings;
     QByteArray state;
 
     state = dxSpotView->horizontalHeader()->saveState();
-    settings.setValue("dxSpotView/state", state);
+    settings.getSettings().setValue("dxSpotView/state", state);
 
 }
 
 
 void ClusterMainWindow::sentSpotView_sectionResized(int, int, int)
 {
-    QSettings settings;
+    RegSettings settings;
     QByteArray state;
 
     state = sentSpotView->horizontalHeader()->saveState();
-    settings.setValue("sentSpotView/state", state);
+    settings.getSettings().setValue("sentSpotView/state", state);
 
 }
 
 void ClusterMainWindow::restoreDxSpotViewColumns()
 {
-    QSettings settings;
+    RegSettings settings;
     QByteArray state;
 
-    state = settings.value("dxSpotView/state").toByteArray();
+    state = settings.getSettings().value("dxSpotView/state").toByteArray();
     dxSpotView->horizontalHeader()->restoreState(state);
 }
 
 void ClusterMainWindow::restoreSentSpotViewColumns()
 {
-    QSettings settings;
+    RegSettings settings;
     QByteArray state;
 
-    state = settings.value("sentSpotView/state").toByteArray();
+    state = settings.getSettings().value("sentSpotView/state").toByteArray();
     sentSpotView->horizontalHeader()->restoreState(state);
 }
 
@@ -2008,11 +2009,11 @@ void ClusterMainWindow::closeEvent(QCloseEvent *event)
 
     // and tidy up all loose ends
 
-    QSettings settings;
-    settings.setValue(geoStr, saveGeometry());
+    RegSettings settings;
+    settings.getSettings().setValue(geoStr, saveGeometry());
 
 
-    settings.setValue("ClusterServer/curTab", ui->clusterTab->currentIndex());
+    settings.getSettings().setValue("ClusterServer/curTab", ui->clusterTab->currentIndex());
 
     disconnectNode();
 
@@ -2030,22 +2031,22 @@ void ClusterMainWindow::onStdInRead(QString cmd)
 }
 void ClusterMainWindow::moveEvent(QMoveEvent * event)
 {
-    QSettings settings;
-    settings.setValue(geoStr, saveGeometry());
+    RegSettings settings;
+    settings.getSettings().setValue(geoStr, saveGeometry());
     QWidget::moveEvent(event);
 }
 void ClusterMainWindow::resizeEvent(QResizeEvent * event)
 {
-    QSettings settings;
-    settings.setValue(geoStr, saveGeometry());
+    RegSettings settings;
+    settings.getSettings().setValue(geoStr, saveGeometry());
     QWidget::resizeEvent(event);
 }
 void ClusterMainWindow::changeEvent( QEvent* e )
 {
     if( e->type() == QEvent::WindowStateChange )
     {
-        QSettings settings;
-        settings.setValue(geoStr, saveGeometry());
+        RegSettings settings;
+        settings.getSettings().setValue(geoStr, saveGeometry());
     }
 }
 

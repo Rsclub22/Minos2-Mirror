@@ -15,6 +15,7 @@
 #include <mmsystem.h>
 #endif
 
+#include "regsettings.h"
 #include "AppStartup.h"
 #include "MinosRPC.h"
 #include "LogEvents.h"
@@ -129,9 +130,9 @@ DMMainWindow::DMMainWindow(QWidget *parent)
     connect(&LogTimer, &QTimer::timeout, this, &DMMainWindow::LogTimerTimer);
     LogTimer.start(100);
 
-    QSettings settings;
+    RegSettings settings;
     geoStr = QString("dataModes/geometry");
-    QByteArray geometry = settings.value(geoStr).toByteArray();
+    QByteArray geometry = settings.getSettings().value(geoStr).toByteArray();
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
@@ -185,22 +186,22 @@ void DMMainWindow::closeEvent(QCloseEvent *event)
 }
 void DMMainWindow::moveEvent(QMoveEvent * event)
 {
-    QSettings settings;
-    settings.setValue(geoStr, saveGeometry());
+    RegSettings settings;
+    settings.getSettings().setValue(geoStr, saveGeometry());
     QWidget::moveEvent(event);
 }
 void DMMainWindow::resizeEvent(QResizeEvent * event)
 {
-    QSettings settings;
-    settings.setValue(geoStr, saveGeometry());
+    RegSettings settings;
+    settings.getSettings().setValue(geoStr, saveGeometry());
     QWidget::resizeEvent(event);
 }
 void DMMainWindow::changeEvent( QEvent* e )
 {
     if( e->type() == QEvent::WindowStateChange )
     {
-        QSettings settings;
-        settings.setValue(geoStr, saveGeometry());
+        RegSettings settings;
+        settings.getSettings().setValue(geoStr, saveGeometry());
     }
     QMainWindow::changeEvent(e);
 }
@@ -218,8 +219,8 @@ void DMMainWindow::doCloseEvent()
 
     // and tidy up all loose ends
 
-    QSettings settings;
-    settings.setValue(geoStr, saveGeometry());
+    RegSettings settings;
+    settings.getSettings().setValue(geoStr, saveGeometry());
 
     closeAllEngines();
 

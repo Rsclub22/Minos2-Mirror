@@ -21,6 +21,7 @@
 #include <QProcessEnvironment>
 #include <QDir>
 
+#include "regsettings.h"
 #include "RPCCommandConstants.h"
 #include "rotatorRpc.h"
 #include "rotatorlog.h"
@@ -73,11 +74,11 @@ RotatorMainWindow::RotatorMainWindow(QWidget *parent) :
     LogTimer.start(100);
     msg = new RotatorRpc(this);
 
-    QSettings settings;
+    RegSettings settings;
     geoStr = "geometry";
     geoStr = geoStr + appName;
 
-    QByteArray geometry = settings.value(geoStr).toByteArray();
+    QByteArray geometry = settings.getSettings().value(geoStr).toByteArray();
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
@@ -241,8 +242,8 @@ void RotatorMainWindow::closeEvent(QCloseEvent *event)
 
     // and tidy up all loose ends
 
-    QSettings settings;
-    settings.setValue(geoStr, saveGeometry());
+    RegSettings settings;
+    settings.getSettings().setValue(geoStr, saveGeometry());
     trace("MinosRotator Closing");
     QWidget::closeEvent(event);
 
@@ -253,8 +254,8 @@ void RotatorMainWindow::closeEvent(QCloseEvent *event)
 void RotatorMainWindow::resizeEvent(QResizeEvent * event)
 {
 
-    QSettings settings;
-    settings.setValue(geoStr, saveGeometry());
+    RegSettings settings;
+    settings.getSettings().setValue(geoStr, saveGeometry());
 
     QWidget::resizeEvent(event);
 }

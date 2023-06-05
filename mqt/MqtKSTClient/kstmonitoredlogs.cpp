@@ -1,6 +1,6 @@
 #include <QSettings>
 
-//#include "monitoredlogs.h"
+#include "regsettings.h"
 #include "kstmonitoredlogs.h"
 #include "ui_kstmonitoredlogs.h"
 
@@ -12,8 +12,8 @@ KSTMonitoredLogs::KSTMonitoredLogs(QWidget *parent) :
 
     setWindowFlags(windowFlags() & ~(Qt::WindowContextHelpButtonHint | Qt::WindowCloseButtonHint));
 
-    QSettings settings;
-    QByteArray geometry = settings.value("geometry/Monitor").toByteArray();
+    RegSettings settings;
+    QByteArray geometry = settings.getSettings().value("geometry/Monitor").toByteArray();
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
@@ -32,22 +32,22 @@ KSTMonitoredLogs::~KSTMonitoredLogs()
 }
 void KSTMonitoredLogs::resizeEvent(QResizeEvent * event)
 {
-    QSettings settings;
-    settings.setValue("geometry/Monitor", saveGeometry());
+    RegSettings settings;
+    settings.getSettings().setValue("geometry/Monitor", saveGeometry());
     QWidget::resizeEvent(event);
 }
 void KSTMonitoredLogs::moveEvent(QMoveEvent * event)
 {
-    QSettings settings;
-    settings.setValue("geometry/Monitor", saveGeometry());
+    RegSettings settings;
+    settings.getSettings().setValue("geometry/Monitor", saveGeometry());
     QWidget::moveEvent(event);
 }
 void KSTMonitoredLogs::changeEvent( QEvent* e )
 {
     if( e->type() == QEvent::WindowStateChange )
     {
-        QSettings settings;
-        settings.setValue("geometry/Monitor", saveGeometry());
+        RegSettings settings;
+        settings.getSettings().setValue("geometry/Monitor", saveGeometry());
     }
 }
 void KSTMonitoredLogs::on_hideButton_clicked()

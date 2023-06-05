@@ -2,6 +2,7 @@
 #include <QLineEdit>
 #include <QMessageBox>
 
+#include "regsettings.h"
 #include "ContestApp.h"
 #include "bandmapcommon.h"
 #include "rigutils.h"
@@ -24,8 +25,8 @@ ClusterBandmapConfigure::~ClusterBandmapConfigure()
 
 void ClusterBandmapConfigure::initialise()
 {
-    QSettings settings;
-    int curTabNo = settings.value("OptionsClusterBandmapConfigure/curTab").toInt();
+    RegSettings settings;
+    int curTabNo = settings.getSettings().value("OptionsClusterBandmapConfigure/curTab").toInt();
     ui->ClusterBandmapConfiguretabWidget->setCurrentIndex(curTabNo);
 
     BandList::getBandList().loadAllBands(bands, false);
@@ -247,8 +248,8 @@ void ClusterBandmapConfigure::finalise()
 
 void ClusterBandmapConfigure::on_ClusterBandmapConfiguretabWidget_currentChanged(int index)
 {
-    QSettings settings;
-    settings.setValue("OptionsClusterBandmapConfigure/curTab", index);
+    RegSettings settings;
+    settings.getSettings().setValue("OptionsClusterBandmapConfigure/curTab", index);
 }
 
 void ClusterBandmapConfigure::onDistanceEditingFinished(QLineEdit *distLineEdit)

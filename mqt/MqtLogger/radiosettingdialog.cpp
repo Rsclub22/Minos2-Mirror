@@ -11,6 +11,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include <QMessageBox>
+#include "regsettings.h"
 #include "rigcommon.h"
 #include "rigcontrolcommonconstants.h"
 #include "ContestApp.h"
@@ -27,10 +28,10 @@ RadioSettingDialog::RadioSettingDialog( QWidget *parent) :
 {
     ui->setupUi(this);
 
-    QSettings settings;
-    int curTabNo = settings.value("OptionsLogRadioSettingsDialog/curTab").toInt();
+    RegSettings settings;
+    int curTabNo = settings.getSettings().value("OptionsLogRadioSettingsDialog/curTab").toInt();
     ui->radioSettingsTabWidget->setCurrentIndex(curTabNo);
-    int presetCurTabNo = settings.value("OptionsPresetFreqDialog/curTab").toInt();
+    int presetCurTabNo = settings.getSettings().value("OptionsPresetFreqDialog/curTab").toInt();
     ui->PresetTabWidget->setCurrentIndex(presetCurTabNo);
 }
 
@@ -357,15 +358,15 @@ void RadioSettingDialog::finalise()
 
 void RadioSettingDialog::on_radioSettingsTabWidget_currentChanged(int index)
 {
-    QSettings settings;
-    settings.setValue("OptionsLogRadioSettingsDialog/curTab", index);
+    RegSettings settings;
+    settings.getSettings().setValue("OptionsLogRadioSettingsDialog/curTab", index);
 }
 
 
 void RadioSettingDialog::on_PresetTabWidget_currentChanged(int index)
 {
-    QSettings settings;
-    settings.setValue("OptionsPresetFreqDialog/curTab", index);
+    RegSettings settings;
+    settings.getSettings().setValue("OptionsPresetFreqDialog/curTab", index);
 }
 
 void RadioSettingDialog::onCwPresetLineEditingFinished(QString bandName, QLineEdit *le)

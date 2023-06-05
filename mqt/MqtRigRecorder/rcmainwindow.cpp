@@ -1,6 +1,7 @@
 #include <QSettings>
 #include <QFileDialog>
 #include <QDateTime>
+#include "regsettings.h"
 #include "AppStartup.h"
 #include "RPCCommandConstants.h"
 #include "dtg.h"
@@ -48,8 +49,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(stdinReader, &StdInReader::stdinLine, this, &MainWindow::onStdInRead);
 
 
-    QSettings gsettings;
-    QByteArray geometry = gsettings.value("RigRecorderMain/geometry").toByteArray();
+    RegSettings gsettings;
+    QByteArray geometry = gsettings.getSettings().value("RigRecorderMain/geometry").toByteArray();
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
@@ -120,22 +121,22 @@ MainWindow::~MainWindow()
 
 void MainWindow::moveEvent(QMoveEvent *event)
 {
-    QSettings settings;
-    settings.setValue("RigRecorderMain/geometry", saveGeometry());
+    RegSettings settings;
+    settings.getSettings().setValue("RigRecorderMain/geometry", saveGeometry());
     QWidget::moveEvent(event);
 }
 void MainWindow::resizeEvent(QResizeEvent *event)
 {
-    QSettings settings;
-    settings.setValue("RigRecorderMain/geometry", saveGeometry());
+    RegSettings settings;
+    settings.getSettings().setValue("RigRecorderMain/geometry", saveGeometry());
     QWidget::resizeEvent(event);
 }
 void MainWindow::changeEvent( QEvent* e )
 {
     if( e->type() == QEvent::WindowStateChange )
     {
-        QSettings settings;
-        settings.setValue("RigRecorderMain/geometry", saveGeometry());
+        RegSettings settings;
+        settings.getSettings().setValue("RigRecorderMain/geometry", saveGeometry());
     }
 }
 void MainWindow::onStdInRead(QString cmd)

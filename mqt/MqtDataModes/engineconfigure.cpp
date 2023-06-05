@@ -1,6 +1,7 @@
 #include <QSettings>
 #include <QFileDialog>
 
+#include "regsettings.h"
 #include "dmmainwindow.h"
 #include "enginewindow.h"
 #include "fileutils.h"
@@ -228,9 +229,9 @@ EngineConfigure::EngineConfigure(DMMainWindow *parent) :
     connect(ui->grittyPort1, &QLineEdit::editingFinished, this, &EngineConfigure::check);
     connect(ui->grittyPort2, &QLineEdit::editingFinished, this, &EngineConfigure::check);
 
-    QSettings qsettings;
+    RegSettings qsettings;
     geoStr = QString("dataModes/Configuration/geometry");
-    QByteArray geometry = qsettings.value(geoStr).toByteArray();
+    QByteArray geometry = qsettings.getSettings().value(geoStr).toByteArray();
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
@@ -361,8 +362,8 @@ EngineConfigure::~EngineConfigure()
 }
 void EngineConfigure::closeEvent(QCloseEvent *event)
 {
-    QSettings settings;
-    settings.setValue(geoStr, saveGeometry());
+    RegSettings settings;
+    settings.getSettings().setValue(geoStr, saveGeometry());
     QWidget::closeEvent(event);
 }
 
@@ -475,8 +476,8 @@ void EngineConfigure::on_OKButton_clicked()
 
         accept();
     }
-    QSettings qsettings;
-    qsettings.setValue(geoStr, saveGeometry());
+    RegSettings qsettings;
+    qsettings.getSettings().setValue(geoStr, saveGeometry());
 }
 
 

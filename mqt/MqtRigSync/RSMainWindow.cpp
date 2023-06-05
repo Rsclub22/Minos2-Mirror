@@ -1,6 +1,7 @@
 #include <QThread>
 #include <QSettings>
 #include "AppStartup.h"
+#include "regsettings.h"
 #include "RPCCommandConstants.h"
 #include "cutils.h"
 #include "MinosRPC.h"
@@ -26,14 +27,14 @@ RSMainWindow::RSMainWindow(QWidget *parent) :
 
     createCloseEvent();
 
-    QSettings settings;
-    QByteArray geometry = settings.value("geometry").toByteArray();
+    RegSettings settings;
+    QByteArray geometry = settings.getSettings().value("geometry").toByteArray();
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
-    bool trackRig = settings.value("trackRig", false).toBool();
+    bool trackRig = settings.getSettings().value("trackRig", false).toBool();
     ui->trackRig->setChecked(trackRig);
-    bool trackSub= settings.value("trackSub", false).toBool();
+    bool trackSub= settings.getSettings().value("trackSub", false).toBool();
     ui->trackSub->setChecked(trackSub);
 
     connect(&SyncTimer, &QTimer::timeout, this, &RSMainWindow::syncTimerTimer);
@@ -122,22 +123,22 @@ void RSMainWindow::closeEvent(QCloseEvent *event)
 }
 void RSMainWindow::moveEvent(QMoveEvent * event)
 {
-    QSettings settings;
-    settings.setValue("geometry", saveGeometry());
+    RegSettings settings;
+    settings.getSettings().setValue("geometry", saveGeometry());
     QWidget::moveEvent(event);
 }
 void RSMainWindow::resizeEvent(QResizeEvent * event)
 {
-    QSettings settings;
-    settings.setValue("geometry", saveGeometry());
+    RegSettings settings;
+    settings.getSettings().setValue("geometry", saveGeometry());
     QWidget::resizeEvent(event);
 }
 void RSMainWindow::changeEvent( QEvent* e )
 {
     if( e->type() == QEvent::WindowStateChange )
     {
-        QSettings settings;
-        settings.setValue("geometry", saveGeometry());
+        RegSettings settings;
+        settings.getSettings().setValue("geometry", saveGeometry());
     }
 }
 void RSMainWindow::syncTimerTimer(  )
@@ -428,8 +429,8 @@ void RSMainWindow::on_trackRig_clicked()
         // set rig2 to rig1
         subRig.controlFreq(mainRig.rigFreq, mainRig.rigMode);
     }
-    QSettings settings;
-    settings.setValue("trackRig", ui->trackRig->isChecked());
+    RegSettings settings;
+    settings.getSettings().setValue("trackRig", ui->trackRig->isChecked());
 }
 
 void RSMainWindow::on_trackSub_clicked()
@@ -443,8 +444,8 @@ void RSMainWindow::on_trackSub_clicked()
         mainRig.controlFreq(subRig.rigFreq, subRig.rigMode);
     }
 
-    QSettings settings;
-    settings.setValue("trackSub", ui->trackSub->isChecked());
+    RegSettings settings;
+    settings.getSettings().setValue("trackSub", ui->trackSub->isChecked());
 }
 
 void RSMainWindow::on_wsjtxCb_stateChanged(int /*arg1*/)

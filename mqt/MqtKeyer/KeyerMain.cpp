@@ -6,6 +6,8 @@
 
 #include <QFileDialog>
 
+#include "regsettings.h"
+#include "regsettings.h"
 #include "LogEvents.h"
 #include "MTrace.h"
 #include "fileutils.h"
@@ -147,8 +149,8 @@ KeyerMain::KeyerMain(QWidget *parent) :
     connect(makeUpGainFrame, &SliderSpinner::valueChanged, this, &KeyerMain::makeUpGain_valueChanged);
 
 
-    QSettings settings;
-    QByteArray geometry = settings.value("KeyerMain/geometry").toByteArray();
+    RegSettings settings;
+    QByteArray geometry = settings.getSettings().value("KeyerMain/geometry").toByteArray();
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
@@ -168,12 +170,12 @@ KeyerMain::KeyerMain(QWidget *parent) :
     QStringList outputList = SoundSystemDriver::getSbDriver()->getOutputDevices();
 
     ui->inputCombo->addItems(inputList);
-    QString currentInput = settings.value("inputDevice", SoundSystemDriver::getSbDriver()->getDefaultInputDevice()).toString();
+    QString currentInput = settings.getSettings().value("inputDevice", SoundSystemDriver::getSbDriver()->getDefaultInputDevice()).toString();
     ui->inputCombo->setCurrentText(currentInput);
 
     ui->outputCombo->addItem(tr("Remote IP Client"));
     ui->outputCombo->addItems(outputList);
-    QString currentOutput = settings.value("outputDevice", SoundSystemDriver::getSbDriver()->getDefaultOutputDevice()).toString();
+    QString currentOutput = settings.getSettings().value("outputDevice", SoundSystemDriver::getSbDriver()->getDefaultOutputDevice()).toString();
     ui->outputCombo->setCurrentText(currentOutput);
 
     QStringList sampleRates =  {"0",
@@ -183,11 +185,11 @@ KeyerMain::KeyerMain(QWidget *parent) :
 
 
     ui->sampleRate->addItems(sampleRates);
-    QString sr = settings.value("sampleRate", 0).toString();
+    QString sr = settings.getSettings().value("sampleRate", 0).toString();
     ui->sampleRate->setCurrentText(sr);
     SoundSystemDriver::getSbDriver()->setSampleRate(sr.toInt());
 
-    QString port = settings.value("SenderPort", DEFAULT_PORT).toString();
+    QString port = settings.getSettings().value("SenderPort", DEFAULT_PORT).toString();
     ui->portEdit->setText(port);
     ui->portEdit->setValidator(new QIntValidator(0, 0xffff, this));
 
@@ -211,9 +213,9 @@ KeyerMain::KeyerMain(QWidget *parent) :
     inVolChangeCount++;
 
     // Initially look in settings...
-    int recordLevel = settings.value("RecordLevel", 0).toInt();
-    int replayLevel = settings.value("ReplayLevel", 0).toInt();
-    int passThroughLevel = settings.value("PassThroughLevel", 0).toInt();
+    int recordLevel = settings.getSettings().value("RecordLevel", 0).toInt();
+    int replayLevel = settings.getSettings().value("ReplayLevel", 0).toInt();
+    int passThroughLevel = settings.getSettings().value("PassThroughLevel", 0).toInt();
 
     CompressorParams cpar;
     if (masterConfig.read("./Configuration/MinosKeyer.json"))
@@ -261,22 +263,22 @@ void KeyerMain::closeEvent(QCloseEvent *event)
 }
 void KeyerMain::moveEvent(QMoveEvent *event)
 {
-    QSettings settings;
-    settings.setValue("KeyerMain/geometry", saveGeometry());
+    RegSettings settings;
+    settings.getSettings().setValue("KeyerMain/geometry", saveGeometry());
     QWidget::moveEvent(event);
 }
 void KeyerMain::resizeEvent(QResizeEvent *event)
 {
-    QSettings settings;
-    settings.setValue("KeyerMain/geometry", saveGeometry());
+    RegSettings settings;
+    settings.getSettings().setValue("KeyerMain/geometry", saveGeometry());
     QWidget::resizeEvent(event);
 }
 void KeyerMain::changeEvent( QEvent* e )
 {
     if( e->type() == QEvent::WindowStateChange )
     {
-        QSettings settings;
-        settings.setValue("geometry", saveGeometry());
+        RegSettings settings;
+        settings.getSettings().setValue("geometry", saveGeometry());
     }
 }
 bool KeyerMain::writeConfig(bool force)
@@ -776,8 +778,8 @@ void KeyerMain::on_doCompression_stateChanged(int )
 
 void KeyerMain::on_inputCombo_activated(int /*index*/)
 {
-    QSettings settings;
-    settings.setValue("inputDevice", ui->inputCombo->currentText());
+    RegSettings settings;
+    settings.getSettings().setValue("inputDevice", ui->inputCombo->currentText());
     trace("About to re-initialise audio");
     SoundSystemDriver::getSbDriver()->closedown();
     SoundSystemDriver::getSbDriver()->initialise(
@@ -790,8 +792,8 @@ void KeyerMain::on_inputCombo_activated(int /*index*/)
 
 void KeyerMain::on_outputCombo_activated(int /*index*/)
 {
-    QSettings settings;
-    settings.setValue("outputDevice", ui->outputCombo->currentText());
+    RegSettings settings;
+    settings.getSettings().setValue("outputDevice", ui->outputCombo->currentText());
     trace("About to re-initialise audio");
     SoundSystemDriver::getSbDriver()->closedown();
     SoundSystemDriver::getSbDriver()->initialise(ui->inputCombo->currentText()
@@ -803,8 +805,8 @@ void KeyerMain::on_outputCombo_activated(int /*index*/)
 
 void KeyerMain::on_sampleRate_activated(int /*index*/)
 {
-    QSettings settings;
-    settings.setValue("sampleRate", ui->sampleRate->currentText());
+    RegSettings settings;
+    settings.getSettings().setValue("sampleRate", ui->sampleRate->currentText());
 
     if (ui->sampleRate->currentText() == "0")
     {

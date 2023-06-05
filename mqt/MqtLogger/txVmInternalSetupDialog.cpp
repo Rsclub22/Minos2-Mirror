@@ -1,4 +1,5 @@
 #include <QSettings>
+#include "regsettings.h"
 #include "sbdriver.h"
 #include "MTrace.h"
 
@@ -18,8 +19,8 @@ txVmInternalSetupDialog::txVmInternalSetupDialog(VoiceKeyerCapabilities voiceCap
     ui->setupUi(this);
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-    QSettings settings;
-    QByteArray geometry = settings.value("txVmInternalSetupDialog/geometry").toByteArray();
+    RegSettings settings;
+    QByteArray geometry = settings.getSettings().value("txVmInternalSetupDialog/geometry").toByteArray();
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
@@ -33,8 +34,8 @@ txVmInternalSetupDialog::~txVmInternalSetupDialog()
 }
 void txVmInternalSetupDialog::doCloseEvent()
 {
-    QSettings settings;
-    settings.setValue("txVmInternalSetupDialog/geometry", saveGeometry());
+    RegSettings settings;
+    settings.getSettings().setValue("txVmInternalSetupDialog/geometry", saveGeometry());
 }
 void txVmInternalSetupDialog::reject()
 {

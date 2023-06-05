@@ -1,4 +1,5 @@
 #include <QSettings>
+#include "regsettings.h"
 #include "MShowMessageDlg.h"
 #include "RSConfigure.h"
 #include "rigcontrolcommonconstants.h"
@@ -11,8 +12,8 @@ RSConfigure::RSConfigure(QWidget *parent) :
     ui->setupUi(this);
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-    QSettings settings;
-    QByteArray geometry = settings.value("RSConfigure/geometry").toByteArray();
+    RegSettings settings;
+    QByteArray geometry = settings.getSettings().value("RSConfigure/geometry").toByteArray();
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
@@ -84,8 +85,8 @@ void RSConfigure::on_canceButton_clicked()
 }
 void RSConfigure::doCloseEvent()
 {
-    QSettings settings;
-    settings.setValue("RSConfigure/geometry", saveGeometry());
+    RegSettings settings;
+    settings.getSettings().setValue("RSConfigure/geometry", saveGeometry());
 }
 void RSConfigure::reject()
 {

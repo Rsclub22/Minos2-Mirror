@@ -1,5 +1,6 @@
 #include <QMessageBox>
 #include <QSettings>
+#include "regsettings.h"
 #include "txvmrigbuttondialog.h"
 #include "ui_txvmrigbuttondialog.h"
 #include "rigcontrolcommonconstants.h"
@@ -13,8 +14,8 @@ TxVmRigButtonDialog::TxVmRigButtonDialog(QWidget *parent) :
     ui->setupUi(this);
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-    QSettings settings;
-    QByteArray geometry = settings.value("TxVmRigButtonDialog/geometry").toByteArray();
+    RegSettings settings;
+    QByteArray geometry = settings.getSettings().value("TxVmRigButtonDialog/geometry").toByteArray();
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
@@ -34,8 +35,8 @@ TxVmRigButtonDialog::~TxVmRigButtonDialog()
 
 void TxVmRigButtonDialog::doCloseEvent()
 {
-    QSettings settings;
-    settings.setValue("TxVmRigButtonDialog/geometry", saveGeometry());
+    RegSettings settings;
+    settings.getSettings().setValue("TxVmRigButtonDialog/geometry", saveGeometry());
 }
 void TxVmRigButtonDialog::reject()
 {

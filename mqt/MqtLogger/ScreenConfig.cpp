@@ -1,5 +1,6 @@
 #include <QScrollBar>
 #include <QScrollArea>
+#include "regsettings.h"
 #include "ContestApp.h"
 #include "tlogcontainer.h"
 
@@ -23,8 +24,8 @@ ScreenConfig::ScreenConfig(QWidget *parent, ScreenConfigFile &scfp, QString curC
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
     screenConfigDialog = this;
 
-    QSettings settings;
-    QByteArray geometry = settings.value("ScreenConfig/geometry").toByteArray();
+    RegSettings settings;
+    QByteArray geometry = settings.getSettings().value("ScreenConfig/geometry").toByteArray();
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
@@ -131,8 +132,8 @@ SC ScreenConfig::getConfig()
 
 void ScreenConfig::doCloseEvent()
 {
-    QSettings settings;
-    settings.setValue("ScreenConfig/geometry", saveGeometry());
+    RegSettings settings;
+    settings.getSettings().setValue("ScreenConfig/geometry", saveGeometry());
 }
 void ScreenConfig::reject()
 {

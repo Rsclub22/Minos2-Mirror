@@ -12,6 +12,7 @@
 
 #include <QSettings>
 #include <QMessageBox>
+#include "regsettings.h"
 #include "cutils.h"
 #include "clustercommon.h"
 #include "CallsignLineEdit.h"
@@ -33,8 +34,8 @@ SetupDialog::SetupDialog(QWidget *parent) :
     ui->setupUi(this);
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-    QSettings settings;
-    QByteArray geometry = settings.value("ClusterSetup/geometry").toByteArray();
+    RegSettings settings;
+    QByteArray geometry = settings.getSettings().value("ClusterSetup/geometry").toByteArray();
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
@@ -98,8 +99,8 @@ void SetupDialog::closeEvent (QCloseEvent *event)
 void SetupDialog::doCloseEvent()
 {
 
-    QSettings settings;
-    settings.setValue("ClusterSetup/geometry", saveGeometry());
+    RegSettings settings;
+    settings.getSettings().setValue("ClusterSetup/geometry", saveGeometry());
 }
 
 

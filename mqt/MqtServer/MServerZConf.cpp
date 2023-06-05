@@ -13,6 +13,7 @@
 #include "RPCCommandConstants.h"
 #include "SecondInstall.h"
 #include "fileutils.h"
+#include "regsettings.h"
 #include "tinyxml.h"
 #include "TinyUtils.h"
 
@@ -49,13 +50,13 @@ static QString getRouterId()
 {
    const QString key = "ServerUUID";
 
-   QSettings settings ;
+   RegSettings settings ;
 
-   QString uuid = settings.value(key, "").toString();
+   QString uuid = settings.getSettings().value(key, "").toString();
    if (uuid.size() == 0)
    {
        uuid = makeUuid();
-       settings.setValue(key, uuid);
+       settings.getSettings().setValue(key, uuid);
    }
    return uuid;
 

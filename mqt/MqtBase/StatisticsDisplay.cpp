@@ -1,4 +1,5 @@
 #include <QSettings>
+#include "regsettings.h"
 #include "contacts.h"
 #include "contest.h"
 #include "cutils.h"
@@ -188,12 +189,12 @@ StatisticsDisplay::StatisticsDisplay(BaseContestLog *ct, QWidget *parent) :
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     trAll = tr("ALL");
-    QSettings settings;
-    QByteArray geometry = settings.value("StatisticsDisplay/geometry").toByteArray();
+    RegSettings settings;
+    QByteArray geometry = settings.getSettings().value("StatisticsDisplay/geometry").toByteArray();
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
-    int interval = settings.value("StatisticsDisplay/interval", 60).toInt();
+    int interval = settings.getSettings().value("StatisticsDisplay/interval", 60).toInt();
     ui->MinutesSpinner->setValue(interval);
 
     sm = new SlotsModel(this);
@@ -260,22 +261,22 @@ void StatisticsDisplay::on_currentTabChangedSlot(int index)
 }
 void StatisticsDisplay::moveEvent(QMoveEvent *event)
 {
-    QSettings settings;
-    settings.setValue("StatisticsDisplay/geometry", saveGeometry());
+    RegSettings settings;
+    settings.getSettings().setValue("StatisticsDisplay/geometry", saveGeometry());
     QDialog::moveEvent(event);
 }
 void StatisticsDisplay::resizeEvent(QResizeEvent * event)
 {
-    QSettings settings;
-    settings.setValue("StatisticsDisplay/geometry", saveGeometry());
+    RegSettings settings;
+    settings.getSettings().setValue("StatisticsDisplay/geometry", saveGeometry());
     QDialog::resizeEvent(event);
 }
 void StatisticsDisplay::changeEvent( QEvent* e )
 {
     if( e->type() == QEvent::WindowStateChange )
     {
-        QSettings settings;
-        settings.setValue("StatisticsDisplay/geometry", saveGeometry());
+        RegSettings settings;
+        settings.getSettings().setValue("StatisticsDisplay/geometry", saveGeometry());
     }
 }
 QString StatisticsDisplay::getIniKey()
@@ -585,8 +586,8 @@ void StatisticsDisplay::on_RecalcButton_clicked()
 void StatisticsDisplay::on_MinutesSpinner_textChanged(const QString &)
 {
     int interval = ui->MinutesSpinner->value();
-    QSettings settings;
-    settings.setValue("StatisticsDisplay/interval", interval);
+    RegSettings settings;
+    settings.getSettings().setValue("StatisticsDisplay/interval", interval);
 
 }
 

@@ -1,5 +1,6 @@
 #include <QFileDialog>
 
+#include "regsettings.h"
 #include "LoggerContest.h"
 #include "ContestDetailsTransferObject.h"
 #include "fileutils.h"
@@ -27,8 +28,8 @@ TEntryOptionsForm::TEntryOptionsForm(QWidget* Owner, QSharedPointer<ContestDetai
     if ( !ct )
         return ;
 
-    QSettings settings;
-    QByteArray geometry = settings.value("EntryOptions/geometry").toByteArray();
+    RegSettings settings;
+    QByteArray geometry = settings.getSettings().value("EntryOptions/geometry").toByteArray();
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
@@ -165,8 +166,8 @@ TEntryOptionsForm::~TEntryOptionsForm()
 }
 void TEntryOptionsForm::doCloseEvent()
 {
-    QSettings settings;
-    settings.setValue("EntryOptions/geometry", saveGeometry());
+    RegSettings settings;
+    settings.getSettings().setValue("EntryOptions/geometry", saveGeometry());
 }
 void TEntryOptionsForm::reject()
 {

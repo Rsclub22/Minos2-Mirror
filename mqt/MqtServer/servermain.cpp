@@ -4,6 +4,7 @@
 #include "MServerZConf.h"
 #include "MServer.h"
 #include "MServerPubSub.h"
+#include "regsettings.h"
 
 #include "ServerEvent.h"
 #include "servermain.h"
@@ -23,8 +24,8 @@ ServerMain::ServerMain(QWidget *parent) :
     connect(stdinReader, &StdInReader::stdinLine, this, &ServerMain::onStdInRead);
 
     createCloseEvent();
-    QSettings settings;
-    QByteArray geometry = settings.value("geometry/Main").toByteArray();
+    RegSettings settings;
+    QByteArray geometry = settings.getSettings().value("geometry/Main").toByteArray();
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
@@ -139,22 +140,22 @@ void ServerMain::closeEvent(QCloseEvent *event)
 }
 void ServerMain::resizeEvent(QResizeEvent * event)
 {
-    QSettings settings;
-    settings.setValue("geometry/Main", saveGeometry());
+    RegSettings settings;
+    settings.getSettings().setValue("geometry/Main", saveGeometry());
     QWidget::resizeEvent(event);
 }
 void ServerMain::moveEvent(QMoveEvent * event)
 {
-    QSettings settings;
-    settings.setValue("geometry/Main", saveGeometry());
+    RegSettings settings;
+    settings.getSettings().setValue("geometry/Main", saveGeometry());
     QWidget::moveEvent(event);
 }
 void ServerMain::changeEvent( QEvent* e )
 {
     if( e->type() == QEvent::WindowStateChange )
     {
-        QSettings settings;
-        settings.setValue("geometry/Main", saveGeometry());
+        RegSettings settings;
+        settings.getSettings().setValue("geometry/Main", saveGeometry());
     }
 }
 

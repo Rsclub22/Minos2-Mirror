@@ -1,3 +1,4 @@
+#include "regsettings.h"
 #include "ContestApp.h"
 #include "tsinglelogframe.h"
 #include "tlogcontainer.h"
@@ -18,8 +19,8 @@ ScreenConfigManager::ScreenConfigManager(QWidget *parent) :
     ui->setupUi(this);
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-    QSettings settings;
-    QByteArray geometry = settings.value("ScreenConfigManager/geometry").toByteArray();
+    RegSettings settings;
+    QByteArray geometry = settings.getSettings().value("ScreenConfigManager/geometry").toByteArray();
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
@@ -102,8 +103,8 @@ void ScreenConfigManager::checkEnabled()
 }
 void ScreenConfigManager::doCloseEvent()
 {
-    QSettings settings;
-    settings.setValue("ScreenConfigManager/geometry", saveGeometry());
+    RegSettings settings;
+    settings.getSettings().setValue("ScreenConfigManager/geometry", saveGeometry());
 }
 void ScreenConfigManager::reject()
 {

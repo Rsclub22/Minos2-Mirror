@@ -8,6 +8,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include <QDateTime>
+#include "regsettings.h"
 #include "MShowMessageDlg.h"
 #include "cutils.h"
 #include "keyers.h"
@@ -950,11 +951,11 @@ void sbKeyer::sbTickEvent()           // this will often be an interrupt routine
 bool sbKeyer::sbInitialise( unsigned int rate, int pipTone, int pipVolume, int pipLength )
 {
    QString errmess;
-   QSettings settings;
+   RegSettings settings;
 
-   QString currentInput = settings.value("inputDevice", SoundSystemDriver::getSbDriver()->getDefaultInputDevice()).toString();
-   QString currentOutput = settings.value("outputDevice", SoundSystemDriver::getSbDriver()->getDefaultOutputDevice()).toString();
-   QString port = settings.value("SenderPort", DEFAULT_PORT).toString();
+   QString currentInput = settings.getSettings().value("inputDevice", SoundSystemDriver::getSbDriver()->getDefaultInputDevice()).toString();
+   QString currentOutput = settings.getSettings().value("outputDevice", SoundSystemDriver::getSbDriver()->getDefaultOutputDevice()).toString();
+   QString port = settings.getSettings().value("SenderPort", DEFAULT_PORT).toString();
 
    if ( !SoundSystemDriver::getSbDriver() ->sbdvp_init(currentInput, currentOutput, QString(), port, errmess, rate, pipTone, pipVolume, pipLength  ) )
    {

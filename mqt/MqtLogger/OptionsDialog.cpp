@@ -1,3 +1,4 @@
+#include "regsettings.h"
 #include "Clusterbandmapconfigure.h"
 #include "defdirsdlg.h"
 #include "DisplayOptions.h"
@@ -17,8 +18,8 @@ OptionsDialog::OptionsDialog(QWidget *parent) :
     ui->setupUi(this);
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-    QSettings settings;
-    QByteArray geometry = settings.value("OptionsDialog/geometry").toByteArray();
+    RegSettings settings;
+    QByteArray geometry = settings.getSettings().value("OptionsDialog/geometry").toByteArray();
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
@@ -35,8 +36,8 @@ void OptionsDialog::onMainRaised()
 }
 void OptionsDialog::doCloseEvent()
 {
-    QSettings settings;
-    settings.setValue("OptionsDialog/geometry", saveGeometry());
+    RegSettings settings;
+    settings.getSettings().setValue("OptionsDialog/geometry", saveGeometry());
 }
 void OptionsDialog::reject()
 {
@@ -51,8 +52,8 @@ void OptionsDialog::accept()
 
 int OptionsDialog::exec()
 {
-    QSettings settings;
-    int curTabNo = settings.value("OptionsDialog/curTab").toInt();
+    RegSettings settings;
+    int curTabNo = settings.getSettings().value("OptionsDialog/curTab").toInt();
 
     bs = new BandsSelect();
     cbc = new ClusterBandmapConfigure();
@@ -143,8 +144,8 @@ void OptionsDialog::on_optionTabs_currentChanged(int index)
         accept();
     }
 
-    QSettings settings;
-    settings.setValue("OptionsDialog/curTab", index);
+    RegSettings settings;
+    settings.getSettings().setValue("OptionsDialog/curTab", index);
 
     current = ui->optionTabs->currentWidget();
 }

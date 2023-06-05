@@ -1,5 +1,6 @@
 #include <QSettings>
 
+#include "regsettings.h"
 #include "ConfigFile.h"
 #include "StartConfig.h"
 #include "enqdlg.h"
@@ -22,8 +23,8 @@ StartConfigManager::StartConfigManager(QWidget *parent, bool showAutoStart) :
     MinosConfig *minosConfig = MinosConfig::getMinosConfig();
     curConfigName = minosConfig->getCurrConfig().configName;
 
-    QSettings settings;
-    QByteArray geometry = settings.value("ManageAppConfigs/geometry").toByteArray();
+    RegSettings settings;
+    QByteArray geometry = settings.getSettings().value("ManageAppConfigs/geometry").toByteArray();
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
@@ -125,22 +126,22 @@ void StartConfigManager::accept()
 }
 void StartConfigManager::moveEvent(QMoveEvent *event)
 {
-    QSettings settings;
-    settings.setValue("ManageAppConfigs/geometry", saveGeometry());
+    RegSettings settings;
+    settings.getSettings().setValue("ManageAppConfigs/geometry", saveGeometry());
     QDialog::moveEvent(event);
 }
 void StartConfigManager::resizeEvent(QResizeEvent * event)
 {
-    QSettings settings;
-    settings.setValue("ManageAppConfigs/geometry", saveGeometry());
+    RegSettings settings;
+    settings.getSettings().setValue("ManageAppConfigs/geometry", saveGeometry());
     QDialog::resizeEvent(event);
 }
 void StartConfigManager::changeEvent( QEvent* e )
 {
     if( e->type() == QEvent::WindowStateChange )
     {
-        QSettings settings;
-        settings.setValue("ManageAppConfigs/geometry", saveGeometry());
+        RegSettings settings;
+        settings.getSettings().setValue("ManageAppConfigs/geometry", saveGeometry());
     }
 }
 bool StartConfigManager::getNewName(QString &Value)

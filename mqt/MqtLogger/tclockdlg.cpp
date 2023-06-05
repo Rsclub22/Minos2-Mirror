@@ -2,6 +2,7 @@
 #include <QFile>
 #include <QTextStream>
 
+#include "regsettings.h"
 #include "ContestApp.h"
 #include "MinosParameters.h"
 #include "tclockdlg.h"
@@ -17,8 +18,8 @@ TClockDlg::TClockDlg(QWidget *parent) :
     ui->setupUi(this);
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-    QSettings settings;
-    QByteArray geometry = settings.value("TClockDlg/geometry").toByteArray();
+    RegSettings settings;
+    QByteArray geometry = settings.getSettings().value("TClockDlg/geometry").toByteArray();
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
@@ -114,8 +115,8 @@ void TClockDlg::on_timeEdit_timeChanged(const QTime &/*time*/)
 }
 void TClockDlg::doCloseEvent()
 {
-    QSettings settings;
-    settings.setValue("TClockDlg/geometry", saveGeometry());
+    RegSettings settings;
+    settings.getSettings().setValue("TClockDlg/geometry", saveGeometry());
 }
 void TClockDlg::reject()
 {

@@ -20,6 +20,7 @@
 #include <QMetaType>
 #include <QDir>
 
+#include "regsettings.h"
 #include "serialCommonData.h"
 #include "MShowMessageDlg.h"
 #include "fileutils.h"
@@ -30,7 +31,6 @@
 #include "rigctldclient.h"
 #include "serialdata.h"
 #include "LogEvents.h"
-#include "cutils.h"
 #include "MTrace.h"
 
 #include "rigcontrolmainwindow.h"
@@ -91,14 +91,14 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
     rigStateDetails = new RigStateDetails();
 
 
-    QSettings settings;
+    RegSettings settings;
     geoStr = "geometry";
     geoStr = geoStr + appName;
 
     ui->testRitButton->setVisible(false);
     ui->setRitSpinner->setVisible(false);
 
-    QByteArray geometry = settings.value(geoStr).toByteArray();
+    QByteArray geometry = settings.getSettings().value(geoStr).toByteArray();
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
@@ -341,8 +341,8 @@ void RigControlMainWindow::closeEvent(QCloseEvent *event)
 
     // and tidy up all loose ends
 
-    QSettings settings;
-    settings.setValue(geoStr, saveGeometry());
+    RegSettings settings;
+    settings.getSettings().setValue(geoStr, saveGeometry());
     trace("MinosRigControl Closing");
     QWidget::closeEvent(event);
 }

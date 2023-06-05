@@ -3,6 +3,7 @@
 #include <QStatusBar>
 #include <QSettings>
 
+#include "regsettings.h"
 #include "MTrace.h"
 
 #include "MShowMessageDlg.h"
@@ -24,8 +25,8 @@ MainWindow::MainWindow(QWidget *parent) :
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     createCloseEvent();
-    QSettings settings;
-    QByteArray geometry = settings.value("geometry").toByteArray();
+    RegSettings settings;
+    QByteArray geometry = settings.getSettings().value("geometry").toByteArray();
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
@@ -86,22 +87,22 @@ void MainWindow::closeEvent(QCloseEvent *event)
 }
 void MainWindow::moveEvent(QMoveEvent *event)
 {
-    QSettings settings;
-    settings.setValue("geometry", saveGeometry());
+    RegSettings settings;
+    settings.getSettings().setValue("geometry", saveGeometry());
     QMainWindow::moveEvent(event);
 }
 void MainWindow::resizeEvent(QResizeEvent * event)
 {
-    QSettings settings;
-    settings.setValue("geometry", saveGeometry());
+    RegSettings settings;
+    settings.getSettings().setValue("geometry", saveGeometry());
     QMainWindow::resizeEvent(event);
 }
 void MainWindow::changeEvent( QEvent* e )
 {
     if( e->type() == QEvent::WindowStateChange )
     {
-        QSettings settings;
-        settings.setValue("geometry", saveGeometry());
+        RegSettings settings;
+        settings.getSettings().setValue("geometry", saveGeometry());
     }
     if (e->type() == QEvent::LanguageChange)
     {
@@ -146,8 +147,8 @@ void MainWindow::FontEditAcceptActionExecute()
     if (qpa.compare("qt5ct", Qt::CaseInsensitive) == 0)
     {
         mShowMessage(tr("Font setting will not work while the QT_QPA_PLATFORMTHEME environment variable is set to qt5ct"), this);
-        QSettings settings;
-        settings.remove( "font");
+        RegSettings settings;
+        settings.getSettings().remove( "font");
     }
     else
     {
@@ -164,8 +165,8 @@ void MainWindow::FontEditAcceptActionExecute()
                 widget->update();
             }
 
-            QSettings settings;
-            settings.setValue( "font", font() );
+            RegSettings settings;
+            settings.getSettings().setValue( "font", font() );
 
             bool routerRunning = checkRouterReady();
             if (routerRunning)

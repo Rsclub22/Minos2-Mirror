@@ -9,6 +9,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include <QMessageBox>
+#include "regsettings.h"
 #include "MTrace.h"
 
 #include "bandmapclientfilterdialog.h"
@@ -28,8 +29,8 @@ BandmapClientFilterDialog::BandmapClientFilterDialog(BaseContestLog *c, BandmapC
     ui->setupUi(this);
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-    QSettings settings;
-    QByteArray geometry = settings.value("BandmapClientFilter/geometry").toByteArray();
+    RegSettings settings;
+    QByteArray geometry = settings.getSettings().value("BandmapClientFilter/geometry").toByteArray();
     if (geometry.size() > 0)
     {
         restoreGeometry(geometry);
@@ -71,8 +72,8 @@ void BandmapClientFilterDialog::closeEvent (QCloseEvent *event)
 
 void BandmapClientFilterDialog::doCloseEvent()
 {
-    QSettings settings;
-    settings.setValue("BandmapClientFilter/geometry", saveGeometry());
+    RegSettings settings;
+    settings.getSettings().setValue("BandmapClientFilter/geometry", saveGeometry());
 }
 
 

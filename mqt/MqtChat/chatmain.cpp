@@ -1,4 +1,5 @@
 #include <QSettings>
+#include "regsettings.h"
 #include "AppStartup.h"
 #include "MinosRPC.h"
 #include "LogEvents.h"
@@ -21,8 +22,8 @@ TMinosChatForm::TMinosChatForm(QWidget *parent) :
     connect(&CloseTimer, &QTimer::timeout, this, &TMinosChatForm::CloseTimerTimer);
     CloseTimer.start(100);
 
-    QSettings settings;
-    QByteArray geometry = settings.value("geometry").toByteArray();
+    RegSettings settings;
+    QByteArray geometry = settings.getSettings().value("geometry").toByteArray();
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 }
@@ -54,21 +55,21 @@ void TMinosChatForm::closeEvent(QCloseEvent *event)
 }
 void TMinosChatForm::moveEvent(QMoveEvent * event)
 {
-    QSettings settings;
-    settings.setValue("geometry", saveGeometry());
+    RegSettings settings;
+    settings.getSettings().setValue("geometry", saveGeometry());
     QWidget::moveEvent(event);
 }
 void TMinosChatForm::resizeEvent(QResizeEvent * event)
 {
-    QSettings settings;
-    settings.setValue("geometry", saveGeometry());
+    RegSettings settings;
+    settings.getSettings().setValue("geometry", saveGeometry());
     QWidget::resizeEvent(event);
 }
 void TMinosChatForm::changeEvent( QEvent* e )
 {
     if( e->type() == QEvent::WindowStateChange )
     {
-        QSettings settings;
-        settings.setValue("geometry", saveGeometry());
+        RegSettings settings;
+        settings.getSettings().setValue("geometry", saveGeometry());
     }
 }

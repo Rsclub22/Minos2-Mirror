@@ -2,6 +2,7 @@
 #include <QSettings>
 #include <QKeyEvent>
 
+#include "regsettings.h"
 #include "AppStartup.h"
 #include "MShowMessageDlg.h"
 #include "MonitoredLog.h"
@@ -79,8 +80,8 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
 
     if (needTransfer)
     {
-        QSettings rsettings;
-        getSettings(rsettings);
+        RegSettings rsettings;
+        getSettings(rsettings.getSettings());
         doConfiguration(false); // transfer everything to INI file
     }
     else
@@ -148,14 +149,14 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     ui->messageChatFilter->addItems(services);
     ui->messageChatFilter->setCurrentIndex(0);
 
-    QSettings rsettings;
+    RegSettings rsettings;
 
-    QByteArray geometry = rsettings.value("geometry/Main").toByteArray();
+    QByteArray geometry = rsettings.getSettings().value("geometry/Main").toByteArray();
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
     QByteArray state;
-    state = rsettings.value("kstSplitterState").toByteArray();
+    state = rsettings.getSettings().value("kstSplitterState").toByteArray();
     ui->kstSplitter->restoreState(state);
 
     // Make sure the kstSplitter covers the maximum vertical space
@@ -166,10 +167,10 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
 //    sizePolicy.setHeightForWidth(ui->kstSplitter->sizePolicy().hasHeightForWidth());
 //    ui->kstSplitter->setSizePolicy(sizePolicy);
 
-    state = rsettings.value("msgSplitterState").toByteArray();
+    state = rsettings.getSettings().value("msgSplitterState").toByteArray();
     ui->msgSplitter->restoreState(state);
 
-    state = rsettings.value("callSplitterState").toByteArray();
+    state = rsettings.getSettings().value("callSplitterState").toByteArray();
     ui->callSplitter->restoreState(state);
 
     createCloseEvent();
@@ -243,13 +244,13 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     QVector<Aircraft> qva;
     kstPlanesModel.setPlanesVector(qva);
 
-    state = rsettings.value("CSTable/state").toByteArray();
+    state = rsettings.getSettings().value("CSTable/state").toByteArray();
     ui->CSTable->horizontalHeader()->restoreState(state);
 
-    state = rsettings.value("messageTable/state").toByteArray();
+    state = rsettings.getSettings().value("messageTable/state").toByteArray();
     ui->messageTable->horizontalHeader()->restoreState(state);
 
-    state = rsettings.value("meepTable/state").toByteArray();
+    state = rsettings.getSettings().value("meepTable/state").toByteArray();
     ui->meepTable->horizontalHeader()->restoreState(state);
 
     ui->CSTable->horizontalHeader()->setStretchLastSection(true);
@@ -358,22 +359,22 @@ KSTMainWindow::~KSTMainWindow()
 }
 void KSTMainWindow::resizeEvent(QResizeEvent * event)
 {
-    QSettings settings;
-    settings.setValue("geometry/Main", saveGeometry());
+    RegSettings settings;
+    settings.getSettings().setValue("geometry/Main", saveGeometry());
     QWidget::resizeEvent(event);
 }
 void KSTMainWindow::moveEvent(QMoveEvent * event)
 {
-    QSettings settings;
-    settings.setValue("geometry/Main", saveGeometry());
+    RegSettings settings;
+    settings.getSettings().setValue("geometry/Main", saveGeometry());
     QWidget::moveEvent(event);
 }
 void KSTMainWindow::changeEvent( QEvent* e )
 {
     if( e->type() == QEvent::WindowStateChange )
     {
-        QSettings settings;
-        settings.setValue("geometry/Main", saveGeometry());
+        RegSettings settings;
+        settings.getSettings().setValue("geometry/Main", saveGeometry());
     }
 }
 void KSTMainWindow::closeEvent(QCloseEvent *event)
@@ -389,8 +390,8 @@ void KSTMainWindow::closeEvent(QCloseEvent *event)
         on_connectButton_clicked();
     }
 
-    QSettings settings;
-    settings.setValue("geometry/Main", saveGeometry());
+    RegSettings settings;
+    settings.getSettings().setValue("geometry/Main", saveGeometry());
     trace("KSTMainWindow Closing");
 
     delete ml;
@@ -1121,38 +1122,38 @@ void KSTMainWindow::on_CSFilter_textChanged(const QString &arg1)
 
 void KSTMainWindow::on_kstSplitter_splitterMoved(int /*pos*/, int /*index*/)
 {
-    QSettings settings;
+    RegSettings settings;
     QByteArray state = ui->kstSplitter->saveState();
-    settings.setValue("kstSplitterState" , state);
+    settings.getSettings().setValue("kstSplitterState" , state);
 }
 
 void KSTMainWindow::on_msgSplitter_splitterMoved(int /*pos*/, int /*index*/)
 {
-    QSettings settings;
+    RegSettings settings;
     QByteArray state = ui->msgSplitter->saveState();
-    settings.setValue("msgSplitterState" , state);
+    settings.getSettings().setValue("msgSplitterState" , state);
 }
 
 void KSTMainWindow::on_callSplitter_splitterMoved(int /*pos*/, int /*index*/)
 {
-    QSettings settings;
+    RegSettings settings;
     QByteArray state = ui->callSplitter->saveState();
-    settings.setValue("callSplitterState" , state);
+    settings.getSettings().setValue("callSplitterState" , state);
 }
 
 void KSTMainWindow::on_sectionResized(int, int, int)
 {
-    QSettings settings;
+    RegSettings settings;
     QByteArray state;
 
     state = ui->CSTable->horizontalHeader()->saveState();
-    settings.setValue("CSTable/state", state);
+    settings.getSettings().setValue("CSTable/state", state);
 
     state = ui->messageTable->horizontalHeader()->saveState();
-    settings.setValue("messageTable/state", state);
+    settings.getSettings().setValue("messageTable/state", state);
 
     state = ui->meepTable->horizontalHeader()->saveState();
-    settings.setValue("meepTable/state", state);
+    settings.getSettings().setValue("meepTable/state", state);
 }
 void KSTMainWindow::on_sectionMoved(int, int, int)
 {

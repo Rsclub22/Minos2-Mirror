@@ -1,5 +1,6 @@
 #include <QSettings>
 #include <QCloseEvent>
+#include "regsettings.h"
 #include "AppStartup.h"
 #include "MinosRPC.h"
 #include "RPCCommandConstants.h"
@@ -32,8 +33,8 @@ ControlMain::ControlMain(QWidget *parent) :
 
     createCloseEvent();
 
-    QSettings settings;
-    QByteArray geometry = settings.value("geometry").toByteArray();
+    RegSettings settings;
+    QByteArray geometry = settings.getSettings().value("geometry").toByteArray();
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
@@ -165,22 +166,22 @@ void ControlMain::closeEvent(QCloseEvent * event)
 }
 void ControlMain::moveEvent(QMoveEvent * event)
 {
-    QSettings settings;
-    settings.setValue("geometry", saveGeometry());
+    RegSettings settings;
+    settings.getSettings().setValue("geometry", saveGeometry());
     QWidget::moveEvent(event);
 }
 void ControlMain::resizeEvent(QResizeEvent * event)
 {
-    QSettings settings;
-    settings.setValue("geometry", saveGeometry());
+    RegSettings settings;
+    settings.getSettings().setValue("geometry", saveGeometry());
     QWidget::resizeEvent(event);
 }
 void ControlMain::changeEvent( QEvent* e )
 {
     if( e->type() == QEvent::WindowStateChange )
     {
-        QSettings settings;
-        settings.setValue("geometry", saveGeometry());
+        RegSettings settings;
+        settings.getSettings().setValue("geometry", saveGeometry());
     }
 }
 void ControlMain::LogTimerTimer( )

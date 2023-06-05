@@ -1,6 +1,7 @@
 #include <QFileDialog>
 #include <QListWidget>
 
+#include "regsettings.h"
 #include "ContestApp.h"
 #include "LoggerContest.h"
 #include "AdifImport.h"
@@ -1419,18 +1420,18 @@ void WsjtxFrame::on_testButton_clicked()
 void WsjtxFrame::on_splitter_splitterMoved(int /*pos*/, int /*index*/)
 {
     QByteArray state = ui->splitter->saveState();
-    QSettings settings;
-    settings.setValue("Splitters/WsjtxFrame/state/", state);
+    RegSettings settings;
+    settings.getSettings().setValue("Splitters/WsjtxFrame/state/", state);
 
     MinosLoggerEvents::SendSplittersChanged();
 }
 
 void WsjtxFrame::restoreSplitters()
 {
-    QSettings settings;
+    RegSettings settings;
     QByteArray state;
 
-    state = settings.value("Splitters/WsjtxFrame/state/").toByteArray();
+    state = settings.getSettings().value("Splitters/WsjtxFrame/state/").toByteArray();
     ui->splitter->restoreState(state);
 }
 void WsjtxFrame::on_doSplitterChanges(BaseContestLog *b)

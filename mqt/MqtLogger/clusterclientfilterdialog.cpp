@@ -16,6 +16,7 @@
 #include <QTextStream>
 #include <QFileDialog>
 
+#include "regsettings.h"
 #include "MShowMessageDlg.h"
 #include "cutils.h"
 #include "clusterclientfilterdialog.h"
@@ -47,8 +48,8 @@ ClusterClientFilterDialog::ClusterClientFilterDialog(BaseContestLog *c, const Cl
     ui->setupUi(this);
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-    QSettings settings;
-    QByteArray geometry = settings.value("ClusterClientFilter/geometry").toByteArray();
+    RegSettings settings;
+    QByteArray geometry = settings.getSettings().value("ClusterClientFilter/geometry").toByteArray();
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
@@ -68,8 +69,8 @@ ClusterClientFilterDialog::~ClusterClientFilterDialog()
 
 void ClusterClientFilterDialog::doCloseEvent()
 {
-    QSettings settings;
-    settings.setValue("ClusterClientFilter/geometry", saveGeometry());
+    RegSettings settings;
+    settings.getSettings().setValue("ClusterClientFilter/geometry", saveGeometry());
 }
 
 void ClusterClientFilterDialog::initCheckFilterTab()

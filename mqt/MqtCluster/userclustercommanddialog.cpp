@@ -13,6 +13,7 @@
 
 #include <QSettings>
 
+#include "regsettings.h"
 #include "userclustercommanddialog.h"
 #include "ui_userclustercommanddialog.h"
 
@@ -43,8 +44,8 @@ userClusterCommandDialog::userClusterCommandDialog(QWidget *parent, QString tabS
     ui->setupUi(this);
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-    QSettings settings;
-    QByteArray geometry = settings.value("ClusterUserCommand/geometry").toByteArray();
+    RegSettings settings;
+    QByteArray geometry = settings.getSettings().value("ClusterUserCommand/geometry").toByteArray();
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
@@ -73,8 +74,8 @@ userClusterCommandDialog::~userClusterCommandDialog()
 
 void userClusterCommandDialog::doCloseEvent()
 {
-    QSettings settings;
-    settings.setValue("ClusterUserCommand/geometry", saveGeometry());
+    RegSettings settings;
+    settings.getSettings().setValue("ClusterUserCommand/geometry", saveGeometry());
 }
 
 

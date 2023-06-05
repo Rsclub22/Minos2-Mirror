@@ -1,6 +1,7 @@
 #include <QSettings>
 #include <QMessageBox>
 
+#include "regsettings.h"
 #include "MTrace.h"
 #include "RPCPubSub.h"
 #include "SendRPCDM.h"
@@ -18,6 +19,10 @@ TxVmExternalButtonDialog::TxVmExternalButtonDialog(QWidget *parent) :
     ui->setupUi(this);
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
+    RegSettings settings;
+    QByteArray geometry = settings.getSettings().value("TxVmExternalButtonDialog/geometry").toByteArray();
+    if (geometry.size() > 0)
+        restoreGeometry(geometry);
     // record
     recordFrame = new SliderSpinner(this, tr("\nRecord"), Qt::Vertical, -10, +10, 0);
     ui->levelsFrame->layout()->addWidget(recordFrame);
@@ -72,8 +77,8 @@ TxVmExternalButtonDialog::~TxVmExternalButtonDialog()
 
 void TxVmExternalButtonDialog::doCloseEvent()
 {
-    QSettings settings;
-    settings.setValue("TxVmInternalButtonDialog/geometry", saveGeometry());
+    RegSettings settings;
+    settings.getSettings().setValue("TxVmExternalButtonDialog/geometry", saveGeometry());
     txvmbd = nullptr;
 }
 

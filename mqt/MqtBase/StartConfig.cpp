@@ -2,6 +2,7 @@
 #include <QScrollBar>
 #include <QSettings>
 
+#include "regsettings.h"
 #include "MShowMessageDlg.h"
 #include "StartConfig.h"
 #include "StartConfigManager.h"
@@ -24,8 +25,8 @@ StartConfig::StartConfig(QWidget *parent, bool showAutoStart, QString curName) :
         curConfigName = minosConfig->defConfigName;
     }
 
-    QSettings settings;
-    QByteArray geometry = settings.value("startConfig/geometry").toByteArray();
+    RegSettings settings;
+    QByteArray geometry = settings.getSettings().value("startConfig/geometry").toByteArray();
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
@@ -136,22 +137,22 @@ void StartConfig::accept()
 }
 void StartConfig::moveEvent(QMoveEvent *event)
 {
-    QSettings settings;
-    settings.setValue("startConfig/geometry", saveGeometry());
+    RegSettings settings;
+    settings.getSettings().setValue("startConfig/geometry", saveGeometry());
     QDialog::moveEvent(event);
 }
 void StartConfig::resizeEvent(QResizeEvent * event)
 {
-    QSettings settings;
-    settings.setValue("startConfig/geometry", saveGeometry());
+    RegSettings settings;
+    settings.getSettings().setValue("startConfig/geometry", saveGeometry());
     QDialog::resizeEvent(event);
 }
 void StartConfig::changeEvent( QEvent* e )
 {
     if( e->type() == QEvent::WindowStateChange )
     {
-        QSettings settings;
-        settings.setValue("startConfig/geometry", saveGeometry());
+        RegSettings settings;
+        settings.getSettings().setValue("startConfig/geometry", saveGeometry());
     }
 }
 

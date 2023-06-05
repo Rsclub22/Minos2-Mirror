@@ -17,10 +17,10 @@
 #include <QSharedPointer>
 #include <QSettings>
 #include <QProcessEnvironment>
+#include "regsettings.h"
 #include "AppStartup.h"
 #include "MinosRPC.h"
 #include "RPCCommandConstants.h"
-#include "SecondInstall.h"
 #include "delayedaction.h"
 #include "qrzdb.h"
 #include "qrzservermainwindow.h"
@@ -45,8 +45,8 @@ QrzServerMainWindow::QrzServerMainWindow(QWidget *parent)
     trace("Connect to stdinRead");  // This connect doesn't appear to work for some time!
     connect(stdinReader, &StdInReader::stdinLine, this, &QrzServerMainWindow::onStdInRead);
 
-    QSettings settings;
-    QByteArray geometry = settings.value("geometry").toByteArray();
+    RegSettings settings;
+    QByteArray geometry = settings.getSettings().value("geometry").toByteArray();
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
@@ -62,8 +62,8 @@ QrzServerMainWindow::QrzServerMainWindow(QWidget *parent)
 
 //    }
 
-    logonCallsign = settings.value("logonCallsign", "").toString();
-    password = settings.value("password", "").toString();
+    logonCallsign = settings.getSettings().value("logonCallsign", "").toString();
+    password = settings.getSettings().value("password", "").toString();
 
     createCloseEvent();
 
@@ -126,30 +126,30 @@ QrzServerMainWindow::~QrzServerMainWindow()
 }
 void QrzServerMainWindow::resizeEvent(QResizeEvent * event)
 {
-    QSettings settings;
-    settings.setValue("geometry", saveGeometry());
+    RegSettings settings;
+    settings.getSettings().setValue("geometry", saveGeometry());
     QWidget::resizeEvent(event);
 }
 void QrzServerMainWindow::moveEvent(QMoveEvent * event)
 {
-    QSettings settings;
-    settings.setValue("geometry", saveGeometry());
+    RegSettings settings;
+    settings.getSettings().setValue("geometry", saveGeometry());
     QWidget::moveEvent(event);
 }
 void QrzServerMainWindow::changeEvent( QEvent* e )
 {
     if( e->type() == QEvent::WindowStateChange )
     {
-        QSettings settings;
-        settings.setValue("geometry", saveGeometry());
+        RegSettings settings;
+        settings.getSettings().setValue("geometry", saveGeometry());
     }
 }
 void QrzServerMainWindow::closeEvent(QCloseEvent *event)
 {
     trace("QrzServerMainWindow::closeEvent");
 
-    QSettings settings;
-    settings.setValue("geometry", saveGeometry());
+    RegSettings settings;
+    settings.getSettings().setValue("geometry", saveGeometry());
 
     QWidget::closeEvent(event);
 }
@@ -634,20 +634,20 @@ void QrzServerMainWindow::onConfigure()
         bool passwordChanged = false;
 
 
-        QSettings settings;
+        RegSettings settings;
 
-        if (conf.logCallsign.trimmed() != settings.value("logonCallsign", "").toString())
+        if (conf.logCallsign.trimmed() != settings.getSettings().value("logonCallsign", "").toString())
         {
             logonCallsign = conf.logCallsign.trimmed();
-            settings.setValue("logonCallsign", logonCallsign);
+            settings.getSettings().setValue("logonCallsign", logonCallsign);
             callsignChanged = true;
 
         }
 
-        if (conf.logPassword.trimmed() != settings.value("pasword", "").toString())
+        if (conf.logPassword.trimmed() != settings.getSettings().value("pasword", "").toString())
         {
             password = conf.logPassword.trimmed();
-            settings.setValue("password", password);
+            settings.getSettings().setValue("password", password);
             passwordChanged = true;
         }
 

@@ -1,5 +1,6 @@
 #include "riff.h"
 #include "sbdriver.h"
+#include "regsettings.h"
 
 #include "WaveShowDialog.h"
 #include "ui_WaveShowDialog.h"
@@ -10,8 +11,8 @@ WaveShowDialog::WaveShowDialog(QWidget *parent, int fno) :
 {
     ui->setupUi(this);
 
-    QSettings settings;
-    QByteArray geometry = settings.value("KeyerWaveShow/geometry").toByteArray();
+    RegSettings settings;
+    QByteArray geometry = settings.getSettings().value("KeyerWaveShow/geometry").toByteArray();
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
@@ -33,8 +34,8 @@ WaveShowDialog::~WaveShowDialog()
 }
 void WaveShowDialog::doCloseEvent()
 {
-    QSettings settings;
-    settings.setValue("KeyerWaveShow/geometry", saveGeometry());
+    RegSettings settings;
+    settings.getSettings().setValue("KeyerWaveShow/geometry", saveGeometry());
 }
 void WaveShowDialog::reject()
 {

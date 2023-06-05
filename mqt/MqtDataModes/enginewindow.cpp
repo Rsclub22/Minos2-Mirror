@@ -1,4 +1,5 @@
 
+#include "regsettings.h"
 #include "AppStartup.h"
 #include "callsign.h"
 #include "delayedaction.h"
@@ -17,7 +18,6 @@
 #include "engineconfigure.h"
 #include "dmmainwindow.h"
 #include "remotelogs.h"
-#include "ServerEvent.h"
 #include "RPCCommandConstants.h"
 #include "RPCPubSub.h"
 
@@ -153,15 +153,15 @@ void EngineWindow::selectEngine(QString name)
     engineName = name;
     setWindowTitle(name);
 
-    QSettings settings;
+    RegSettings settings;
     geoStr = QString("dataModes/%1/geometry").arg(name);
-    QByteArray geometry = settings.value(geoStr).toByteArray();
+    QByteArray geometry = settings.getSettings().value(geoStr).toByteArray();
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
     QByteArray state;
     splitterStr = QString("dataModes/%1/splitter").arg(name);
-    state = settings.value(splitterStr).toByteArray();
+    state = settings.getSettings().value(splitterStr).toByteArray();
     ui->splitter->restoreState(state);
 
 
@@ -198,23 +198,23 @@ void EngineWindow::moveEvent(QMoveEvent * event)
 {
     if (!geoStr.isEmpty())
     {
-        QSettings settings;
-        settings.setValue(geoStr, saveGeometry());
+        RegSettings settings;
+        settings.getSettings().setValue(geoStr, saveGeometry());
         QWidget::moveEvent(event);
     }
 }
 void EngineWindow::resizeEvent(QResizeEvent * event)
 {
-    QSettings settings;
-    settings.setValue(geoStr, saveGeometry());
+    RegSettings settings;
+    settings.getSettings().setValue(geoStr, saveGeometry());
     QWidget::resizeEvent(event);
 }
 void EngineWindow::changeEvent( QEvent* e )
 {
     if( e->type() == QEvent::WindowStateChange )
     {
-        QSettings settings;
-        settings.setValue(geoStr, saveGeometry());
+        RegSettings settings;
+        settings.getSettings().setValue(geoStr, saveGeometry());
     }
     QDialog::changeEvent(e);
 
@@ -479,8 +479,8 @@ void EngineWindow::doCloseEvent()
 
     // and tidy up all loose ends
 
-    QSettings settings;
-    settings.setValue(geoStr, saveGeometry());
+    RegSettings settings;
+    settings.getSettings().setValue(geoStr, saveGeometry());
 
 
     trace("Minos Data Modes Engine Closing");
@@ -737,9 +737,9 @@ void EngineWindow::on_backDataButton_clicked()
 
 void EngineWindow::on_splitter_splitterMoved(int /*pos*/, int /*index*/)
 {
-    QSettings settings;
+    RegSettings settings;
     QByteArray state = ui->splitter->saveState();
-    settings.setValue(splitterStr , state);
+    settings.getSettings().setValue(splitterStr , state);
 
 }
 

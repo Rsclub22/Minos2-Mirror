@@ -1,3 +1,4 @@
+#include "regsettings.h"
 #include "MinosLoggerEvents.h"
 #include "contest.h"
 #include "MatchTreeFrame.h"
@@ -31,8 +32,8 @@ TQSOEditDlg::TQSOEditDlg(QWidget *parent, bool unfilled )
     splitterHandleWidth = 6;
 #endif
 
-    QSettings settings;
-    QByteArray geometry = settings.value("QSOEditDialog/geometry").toByteArray();
+    RegSettings settings;
+    QByteArray geometry = settings.getSettings().value("QSOEditDialog/geometry").toByteArray();
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
@@ -138,22 +139,22 @@ void TQSOEditDlg::on_EditFrameCancelled()
 }
 void TQSOEditDlg::getSplitters()
 {
-    QSettings settings;
+    RegSettings settings;
     QByteArray state;
 
-    state = settings.value("editSplitter/state").toByteArray();
+    state = settings.getSettings().value("editSplitter/state").toByteArray();
     ui->editSplitter->restoreState(state);
     ui->editSplitter->setHandleWidth(splitterHandleWidth);
 
-    state = settings.value("Log/ArchiveSplitter/state").toByteArray();
+    state = settings.getSettings().value("Log/ArchiveSplitter/state").toByteArray();
     ui->archiveSplitter->restoreState(state);
     ui->archiveSplitter->setHandleWidth(splitterHandleWidth);
 }
 void TQSOEditDlg::on_editSplitter_splitterMoved(int, int)
 {
     QByteArray state = ui->editSplitter->saveState();
-    QSettings settings;
-    settings.setValue("editSplitter/state", state);
+    RegSettings settings;
+    settings.getSettings().setValue("editSplitter/state", state);
 }
 //---------------------------------------------------------------------------
 
@@ -204,8 +205,8 @@ void TQSOEditDlg::refreshOps( ScreenContact &screenContact )
 //---------------------------------------------------------------------------
 void TQSOEditDlg::doCloseEvent()
 {
-    QSettings settings;
-    settings.setValue("QSOEditDialog/geometry", saveGeometry());
+    RegSettings settings;
+    settings.getSettings().setValue("QSOEditDialog/geometry", saveGeometry());
 }
 void TQSOEditDlg::reject()
 {
@@ -300,8 +301,8 @@ void TQSOEditDlg::transferDetails(MatchTreeItem *MatchTreeIndex )
 void TQSOEditDlg::on_archiveSplitter_splitterMoved(int /*pos*/, int /*index*/)
 {
     QByteArray state = ui->archiveSplitter->saveState();
-    QSettings settings;
-    settings.setValue("Edit/ArchiveSplitter/state", state);
+    RegSettings settings;
+    settings.getSettings().setValue("Edit/ArchiveSplitter/state", state);
     MinosLoggerEvents::SendSplittersChanged();
 }
 void TQSOEditDlg::MatchTreeSelected(MatchType m, BaseContestLog *c, QString basename, const QItemSelection &/*selected*/)

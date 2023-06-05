@@ -1,4 +1,5 @@
 #include <QFontDialog>
+#include "regsettings.h"
 #include "AppStartup.h"
 #include "ContestApp.h"
 #include "MShowMessageDlg.h"
@@ -325,8 +326,8 @@ void DisplayOptions::on_FontChangeButton_clicked()
     if (qpa.compare("qt5ct", Qt::CaseInsensitive) == 0)
     {
         mShowMessage(tr("Font setting will not work while the QT_QPA_PLATFORMTHEME environment variable is set to qt5ct"), this);
-        QSettings settings;
-        settings.remove( "font");
+        RegSettings settings;
+        settings.getSettings().remove( "font");
         return;
     }
     bool ok;
@@ -353,8 +354,8 @@ void DisplayOptions::doFontChange()
             widget->update();
         }
 
-        QSettings settings;
-        settings.setValue( "font", font() );
+        RegSettings settings;
+        settings.getSettings().setValue( "font", font() );
 
         MinosLoggerEvents::SendFontChanged();
         if (routerRunning)

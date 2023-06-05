@@ -1,6 +1,8 @@
+#include "regsettings.h"
+#include "KeyerMain.h"
 #include "windowMonitor.h"
 #include "ui_windowMonitor.h"
-#include "KeyerMain.h"
+
 extern KeyerMain *keyerMain;
 
 
@@ -11,8 +13,8 @@ windowMonitor::windowMonitor(QWidget *parent) :
     ui->setupUi(this);
     setWindowFlags(Qt::Window | Qt::WindowTitleHint | Qt::CustomizeWindowHint);
 
-    QSettings settings;
-    QByteArray geometry = settings.value("monitorGeometry").toByteArray();
+    RegSettings settings;
+    QByteArray geometry = settings.getSettings().value("monitorGeometry").toByteArray();
     if (geometry.size() > 0)
         restoreGeometry(geometry);
     else
@@ -35,22 +37,22 @@ windowMonitor::~windowMonitor()
 }
 void windowMonitor::moveEvent(QMoveEvent * event)
 {
-    QSettings settings;
-    settings.setValue("monitorGeometry", saveGeometry());
+    RegSettings settings;
+    settings.getSettings().setValue("monitorGeometry", saveGeometry());
     QWidget::moveEvent(event);
 }
 void windowMonitor::resizeEvent(QResizeEvent * event)
 {
-    QSettings settings;
-    settings.setValue("monitorGeometry", saveGeometry());
+    RegSettings settings;
+    settings.getSettings().setValue("monitorGeometry", saveGeometry());
     QWidget::resizeEvent(event);
 }
 void windowMonitor::changeEvent( QEvent* e )
 {
     if( e->type() == QEvent::WindowStateChange )
     {
-        QSettings settings;
-        settings.setValue("monitorGeometry", saveGeometry());
+        RegSettings settings;
+        settings.getSettings().setValue("monitorGeometry", saveGeometry());
     }
 }
 bool windowMonitor::L1Checked()

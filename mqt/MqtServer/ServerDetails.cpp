@@ -1,5 +1,6 @@
 #include <QSettings>
 
+#include "regsettings.h"
 #include "MServerPubSub.h"
 #include "minoslistener.h"
 
@@ -14,8 +15,8 @@ ServerDetails::ServerDetails(QWidget *parent) :
 {
     ui->setupUi(this);
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
-    QSettings settings;
-    QByteArray geometry = settings.value("geometry/Details").toByteArray();
+    RegSettings settings;
+    QByteArray geometry = settings.getSettings().value("geometry/Details").toByteArray();
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
@@ -32,22 +33,22 @@ void ServerDetails::on_closeButton_clicked()
 }
 void ServerDetails::resizeEvent(QResizeEvent * event)
 {
-    QSettings settings;
-    settings.setValue("geometry/Details", saveGeometry());
+    RegSettings settings;
+    settings.getSettings().setValue("geometry/Details", saveGeometry());
     QWidget::resizeEvent(event);
 }
 void ServerDetails::moveEvent(QMoveEvent * event)
 {
-    QSettings settings;
-    settings.setValue("geometry/Details", saveGeometry());
+    RegSettings settings;
+    settings.getSettings().setValue("geometry/Details", saveGeometry());
     QWidget::moveEvent(event);
 }
 void ServerDetails::changeEvent( QEvent* e )
 {
     if( e->type() == QEvent::WindowStateChange )
     {
-        QSettings settings;
-        settings.setValue("geometry", saveGeometry());
+        RegSettings settings;
+        settings.getSettings().setValue("geometry", saveGeometry());
     }
 }
 void ServerDetails::refresh()

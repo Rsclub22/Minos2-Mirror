@@ -3,6 +3,7 @@
 #include "riff.h"
 #include "adis_filter.h"
 #include "SimpleComp.h"
+#include "regsettings.h"
 #include "mqtktWaveShowDialog.h"
 #include "ui_mqtktWaveShowDialog.h"
 
@@ -95,8 +96,8 @@ WaveShowDialog::WaveShowDialog(QWidget *parent) :
     ui->setupUi(this);
     sblog = true;
 
-    QSettings settings;
-    QByteArray geometry = settings.value("WaveShowDialog/geometry").toByteArray();
+    RegSettings settings;
+    QByteArray geometry = settings.getSettings().value("WaveShowDialog/geometry").toByteArray();
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
@@ -173,22 +174,22 @@ WaveShowDialog::~WaveShowDialog()
 }
 void WaveShowDialog::moveEvent(QMoveEvent *event)
 {
-    QSettings settings;
-    settings.setValue("WaveShowDialog/geometry", saveGeometry());
+    RegSettings settings;
+    settings.getSettings().setValue("WaveShowDialog/geometry", saveGeometry());
     QDialog::moveEvent(event);
 }
 void WaveShowDialog::resizeEvent(QResizeEvent * event)
 {
-    QSettings settings;
-    settings.setValue("WaveShowDialog/geometry", saveGeometry());
+    RegSettings settings;
+    settings.getSettings().setValue("WaveShowDialog/geometry", saveGeometry());
     QDialog::resizeEvent(event);
 }
 void WaveShowDialog::changeEvent( QEvent* e )
 {
     if( e->type() == QEvent::WindowStateChange )
     {
-        QSettings settings;
-        settings.setValue("WaveShowDialog/geometry", saveGeometry());
+        RegSettings settings;
+        settings.getSettings().setValue("WaveShowDialog/geometry", saveGeometry());
     }
 }
 void WaveShowDialog::on_closeButton_clicked()

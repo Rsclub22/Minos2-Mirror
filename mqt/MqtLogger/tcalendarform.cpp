@@ -1,3 +1,4 @@
+#include "regsettings.h"
 #include "MTrace.h"
 #include "MMessageDialog.h"
 #include "MShowMessageDlg.h"
@@ -29,16 +30,16 @@ int TCalendarForm::exec()
 
     FormShow();
 
-    QSettings settings;
+    RegSettings settings;
     QString sname = "Calendar/grid_geometry_" + calendarNameString[calType];
-    QByteArray state = settings.value(sname).toByteArray();
+    QByteArray state = settings.getSettings().value(sname).toByteArray();
     if (state.size())
     {
         ui->CalendarGrid->horizontalHeader()->restoreState(state);
     }
     ui->CalendarGrid->horizontalHeader()->setStretchLastSection(true);
 
-    QByteArray geometry = settings.value("Calendar/form_geometry_" + calendarNameString[calType]).toByteArray();
+    QByteArray geometry = settings.getSettings().value("Calendar/form_geometry_" + calendarNameString[calType]).toByteArray();
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
@@ -62,11 +63,11 @@ void TCalendarForm::accept()
 
 void TCalendarForm::doCloseEvent()
 {
-    QSettings settings;
+    RegSettings settings;
 
-    settings.setValue("Calendar/grid_geometry_" + calendarNameString[calType], ui->CalendarGrid->horizontalHeader()->saveState());
+    settings.getSettings().setValue("Calendar/grid_geometry_" + calendarNameString[calType], ui->CalendarGrid->horizontalHeader()->saveState());
 
-    settings.setValue("Calendar/form_geometry_" + calendarNameString[calType], saveGeometry());
+    settings.getSettings().setValue("Calendar/form_geometry_" + calendarNameString[calType], saveGeometry());
 }
 
 bool TCalendarForm::loadYear ( Calendar &cal, int year )

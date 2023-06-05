@@ -2,6 +2,7 @@
 #include <QToolTip>
 #include "WindowsAppId.h"
 #include "SecondInstall.h"
+#include "regsettings.h"
 
 #include "ContestApp.h"
 #include "tlogcontainer.h"
@@ -119,8 +120,8 @@ void ContestPageControl::setInstance(int value)
         // we seem to have to do the geometry before the appId stuff,
         // or the geometry stuff doesn't work - don't know why!
 
-        QSettings settings;
-        QByteArray geometry = settings.value(QString("screen%1/geometry").arg(instance)).toByteArray();
+        RegSettings settings;
+        QByteArray geometry = settings.getSettings().value(QString("screen%1/geometry").arg(instance)).toByteArray();
         if (geometry.size() > 0)
         {
             restoreGeometry(geometry);
@@ -145,8 +146,8 @@ void ContestPageControl::moveEvent(QMoveEvent *event)
 {
     if (instance > 0)
     {
-        QSettings settings;
-        settings.setValue(QString("screen%1/geometry").arg(getInstance()), saveGeometry());
+        RegSettings settings;
+        settings.getSettings().setValue(QString("screen%1/geometry").arg(getInstance()), saveGeometry());
     }
     QLogTabWidget::moveEvent(event);
 }
@@ -154,8 +155,8 @@ void ContestPageControl::resizeEvent(QResizeEvent * event)
 {
     if (instance > 0)
     {
-        QSettings settings;
-        settings.setValue(QString("screen%1/geometry").arg(getInstance()), saveGeometry());
+        RegSettings settings;
+        settings.getSettings().setValue(QString("screen%1/geometry").arg(getInstance()), saveGeometry());
     }
     QLogTabWidget::resizeEvent(event);
 }
@@ -165,8 +166,8 @@ void ContestPageControl::changeEvent( QEvent* e )
     {
         if (instance > 0)
         {
-            QSettings settings;
-            settings.setValue(QString("screen%1/geometry").arg(getInstance()), saveGeometry());
+            RegSettings settings;
+            settings.getSettings().setValue(QString("screen%1/geometry").arg(getInstance()), saveGeometry());
         }
         ContestPage *ctab = dynamic_cast<ContestPage *>(currentWidget());
         if (ctab)

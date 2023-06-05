@@ -1,4 +1,5 @@
 #include <QDesktopServices>
+#include "regsettings.h"
 #include "MShowMessageDlg.h"
 #include "SecondInstall.h"
 #include "ContestApp.h"
@@ -106,8 +107,8 @@ TAboutBox::TAboutBox(QWidget *parent, bool onStartup) :
     ui->setupUi(this);
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-    QSettings settings;
-    QByteArray geometry = settings.value("MinosAbout/geometry").toByteArray();
+    RegSettings settings;
+    QByteArray geometry = settings.getSettings().value("MinosAbout/geometry").toByteArray();
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
@@ -205,8 +206,8 @@ TAboutBox::~TAboutBox()
 }
 void TAboutBox::doCloseEvent()
 {
-    QSettings settings;
-    settings.setValue("MinosAbout/geometry", saveGeometry());
+    RegSettings settings;
+    settings.getSettings().setValue("MinosAbout/geometry", saveGeometry());
 }
 void TAboutBox::reject()
 {
