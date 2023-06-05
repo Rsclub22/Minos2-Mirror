@@ -210,6 +210,7 @@ void appStartup(const QString &pappName)
     qa->setStyleSheet(QString("[readOnly=\"true\"] { background-color: %0 }").arg(qa->palette().color(QPalette::Window).name(QColor::HexRgb)));
 
 // For Mac Users, set the default directory to be Documents/Minos
+    QString fpath = QCoreApplication::applicationDirPath();
 
 #ifdef Q_OS_MACOS
     QString sharedPath = QStandardPaths::locate(QStandardPaths::DocumentsLocation,"",QStandardPaths::LocateDirectory);
@@ -224,17 +225,24 @@ void appStartup(const QString &pappName)
 
     // cpDir does copy if newer, no a new installation updates the old one
 
-    cpDir(QString(fpath+"/../Resources/Configuration"), QString("./Configuration"));
-
+    if (!DirectoryExists("Configuration")) {
+        QDir().mkdir("Configuration");
+    }
     if (!DirectoryExists("Logs")) {
         QDir().mkdir("Logs");
     }
+    if (!DirectoryExists("Lists")) {
+        QDir().mkdir("Lists");
+    }
     if (!DirectoryExists("Help")) {
-        cpDir(QString(fpath+"/../Resources/Help"), QString("Help"));
+        QDir().mkdir("Help");
     }
-    if (!DirectoryExists("./Docs")) {
-        cpDir(QString(fpath+"/../Resources/Docs"), QString("Docs"));
+    if (!DirectoryExists("Docs")) {
+        QDir().mkdir("Docs");
     }
+    cpDir(QString(fpath+"/../Resources/Configuration"), QString("./Configuration"));
+    cpDir(QString(fpath+"/../Resources/Help"), QString("./Help"));
+    cpDir(QString(fpath+"/../Resources/Docs"), QString("./Docs"));
 
 #elif defined(Q_OS_IOS)
     QString sharedPath = sharedDirectory("group.minos2").toLocalFile();
@@ -249,7 +257,6 @@ void appStartup(const QString &pappName)
         }
 #else
         // try for executable directory
-        QString fpath = QCoreApplication::applicationDirPath();
 
 #ifndef Q_OS_MACOS
         if (DirectoryExists(fpath + "/../Configuration"))
