@@ -32,6 +32,30 @@ RSMainWindow::RSMainWindow(QWidget *parent) :
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
+    QString fileName = RIG_CONFIGURATION_FILEPATH_LOGGER + MINOS_RIGSYNC_CONFIG_FILE;
+    QSettings config(fileName, QSettings::IniFormat);
+
+    QString tg = config.value("trackRig", "").toString();
+    if (tg.isEmpty())
+    {
+        QSettings s;
+        tg = s.value("trackRig", "").toString();
+        if (!tg.isEmpty())
+        {
+            config.setValue("trackRig", tg);
+        }
+    }
+    QString ts = config.value("trackSub", "").toString();
+    if (ts.isEmpty())
+    {
+        QSettings s;
+        ts = s.value("trackSub", "").toString();
+        if (!ts.isEmpty())
+        {
+            config.setValue("trackSub", ts);
+        }
+    }
+
     bool trackRig = settings.getSettings().value("trackRig", false).toBool();
     ui->trackRig->setChecked(trackRig);
     bool trackSub= settings.getSettings().value("trackSub", false).toBool();
@@ -429,8 +453,9 @@ void RSMainWindow::on_trackRig_clicked()
         // set rig2 to rig1
         subRig.controlFreq(mainRig.rigFreq, mainRig.rigMode);
     }
-    RegSettings settings;
-    settings.getSettings().setValue("trackRig", ui->trackRig->isChecked());
+    QString fileName = RIG_CONFIGURATION_FILEPATH_LOGGER + MINOS_RIGSYNC_CONFIG_FILE;
+    QSettings config(fileName, QSettings::IniFormat);
+    config.setValue("trackRig", ui->trackRig->isChecked());
 }
 
 void RSMainWindow::on_trackSub_clicked()
@@ -444,8 +469,9 @@ void RSMainWindow::on_trackSub_clicked()
         mainRig.controlFreq(subRig.rigFreq, subRig.rigMode);
     }
 
-    RegSettings settings;
-    settings.getSettings().setValue("trackSub", ui->trackSub->isChecked());
+    QString fileName = RIG_CONFIGURATION_FILEPATH_LOGGER + MINOS_RIGSYNC_CONFIG_FILE;
+    QSettings config(fileName, QSettings::IniFormat);
+    config.setValue("trackSub", ui->trackSub->isChecked());
 }
 
 void RSMainWindow::on_wsjtxCb_stateChanged(int /*arg1*/)

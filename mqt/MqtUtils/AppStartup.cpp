@@ -170,7 +170,16 @@ static QString getAppLanguage()
     QVariant qlang = settings.getSettings().value( "language" );
     if ( qlang == QVariant() )
     {
-        qlang = QLocale::system().name();
+        QSettings s;
+        qlang = s.value( "language" );
+        if ( qlang == QVariant() )
+        {
+            qlang = QLocale::system().name();
+        }
+        else
+        {
+            settings.getSettings().setValue("language", qlang.toString());
+        }
     }
     return qlang.toString();
 }
@@ -357,6 +366,12 @@ void setAppFont()
 {
     RegSettings settings;
     QVariant qfont = settings.getSettings().value( "font" );
+    if ( qfont == QVariant() )
+    {
+        QSettings s;
+        qfont = s.value( "font" );
+        settings.getSettings().setValue("font", qfont);
+    }
     if ( qfont != QVariant() )
     {
         QApplication::setFont( qfont.value<QFont>() );

@@ -55,8 +55,14 @@ static QString getRouterId()
    QString uuid = settings.getSettings().value(key, "").toString();
    if (uuid.size() == 0)
    {
-       uuid = makeUuid();
-       settings.getSettings().setValue(key, uuid);
+        // first look for "old" registry based setting
+        QSettings s;
+        uuid = s.value(key, "").toString();
+        if (uuid.size() == 0)
+        {
+            uuid = makeUuid();
+        }
+        settings.getSettings().setValue(key, uuid);
    }
    return uuid;
 

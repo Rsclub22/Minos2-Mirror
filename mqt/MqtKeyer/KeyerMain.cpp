@@ -169,13 +169,30 @@ KeyerMain::KeyerMain(QWidget *parent) :
     QStringList inputList = SoundSystemDriver::getSbDriver()->getInputDevices();
     QStringList outputList = SoundSystemDriver::getSbDriver()->getOutputDevices();
 
-    ui->inputCombo->addItems(inputList);
     QString currentInput = settings.getSettings().value("inputDevice", SoundSystemDriver::getSbDriver()->getDefaultInputDevice()).toString();
+    QString currentOutput = settings.getSettings().value("outputDevice", SoundSystemDriver::getSbDriver()->getDefaultOutputDevice()).toString();
+    QString port = settings.getSettings().value("SenderPort", DEFAULT_PORT).toString();
+    QString sr = settings.getSettings().value("sampleRate", 0).toString();
+
+    if (currentInput.isEmpty() && currentOutput.isEmpty())
+    {
+        QSettings qsettings;
+        currentInput = qsettings.value("inputDevice", SoundSystemDriver::getSbDriver()->getDefaultInputDevice()).toString();
+        currentOutput = qsettings.value("outputDevice", SoundSystemDriver::getSbDriver()->getDefaultOutputDevice()).toString();
+        port = qsettings.value("SenderPort", DEFAULT_PORT).toString();
+        sr = qsettings.value("sampleRate", 0).toString();
+
+        settings.getSettings().setValue("inputDevice", currentInput);
+        settings.getSettings().setValue("outputDevice", currentOutput);
+        settings.getSettings().setValue("sampleRate", sr);
+        settings.getSettings().setValue("SenderPort", port);
+    }
+
+    ui->inputCombo->addItems(inputList);
     ui->inputCombo->setCurrentText(currentInput);
 
     ui->outputCombo->addItem(tr("Remote IP Client"));
     ui->outputCombo->addItems(outputList);
-    QString currentOutput = settings.getSettings().value("outputDevice", SoundSystemDriver::getSbDriver()->getDefaultOutputDevice()).toString();
     ui->outputCombo->setCurrentText(currentOutput);
 
     QStringList sampleRates =  {"0",
@@ -185,11 +202,9 @@ KeyerMain::KeyerMain(QWidget *parent) :
 
 
     ui->sampleRate->addItems(sampleRates);
-    QString sr = settings.getSettings().value("sampleRate", 0).toString();
     ui->sampleRate->setCurrentText(sr);
     SoundSystemDriver::getSbDriver()->setSampleRate(sr.toInt());
 
-    QString port = settings.getSettings().value("SenderPort", DEFAULT_PORT).toString();
     ui->portEdit->setText(port);
     ui->portEdit->setValidator(new QIntValidator(0, 0xffff, this));
 
@@ -774,7 +789,6 @@ void KeyerMain::on_doCompression_stateChanged(int )
     setVolumeMults();
     writeConfig(false);
 }
-
 
 void KeyerMain::on_inputCombo_activated(int /*index*/)
 {

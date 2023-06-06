@@ -50,20 +50,23 @@ QrzServerMainWindow::QrzServerMainWindow(QWidget *parent)
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
- //   QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
- //   appName = env.value("MQTRPCNAME", "") ;
+    QString fileName = "./Configuration/QRZServer.ini";
+    QSettings config(fileName, QSettings::IniFormat);
 
-//    // this is only needed for standalone to store to registry - appname might not be correct here!
-//    if (appName.isEmpty())
-//    {
-//        QApplication::setOrganizationName( SecondInstall::getOrgName() );
-//        QApplication::setOrganizationDomain( "g0gjv.org.uk" );
-//        QApplication::QCoreApplication::setApplicationName( "mqtQrzServer" );
+    logonCallsign = config.value("logonCallsign", "").toString();
+    password = config.value("password", "").toString();
 
-//    }
-
-    logonCallsign = settings.getSettings().value("logonCallsign", "").toString();
-    password = settings.getSettings().value("password", "").toString();
+    if (logonCallsign.isEmpty() && password.isEmpty())
+    {
+        QSettings qsettings;
+        logonCallsign = qsettings.value("logonCallsign", "").toString();
+        password = qsettings.value("password", "").toString();
+        if (!logonCallsign.isEmpty() || !password.isEmpty())
+        {
+            config.setValue("logonCallsign", logonCallsign);
+            config.setValue("password", password);
+        }
+    }
 
     createCloseEvent();
 
@@ -75,17 +78,10 @@ QrzServerMainWindow::QrzServerMainWindow(QWidget *parent)
     MinosRPC *rpc = MinosRPC::getMinosRPC(appName);
     Q_UNUSED(rpc)
 
-    QStringList sv{
-            rpcConstants::clusterApp, rpcConstants::qrzDisplayApp
-        };
-
     connect (QrzServerRpc::getQrzServerRpc(), &QrzServerRpc::clusterQrzMsg, this, &QrzServerMainWindow::onClusterQrzMessage);
     connect (QrzServerRpc::getQrzServerRpc(), &QrzServerRpc::loggerQrzMsg, this, &QrzServerMainWindow::onLoggerQrzMsg);
 
-
-
     connect(ui->actionSetup_QRZ, &QAction::triggered, this, [=](){onConfigure();});
-
     connect(ui->connectPb, &QPushButton::clicked, this, [=](){onConnectPushButtonClicked();});
 
     checkQrzRequestsTimer = new QTimer(this);
@@ -98,7 +94,6 @@ QrzServerMainWindow::QrzServerMainWindow(QWidget *parent)
 
     ui->messageTextWindow->isReadOnly();
     addTextToLogWindow(tr("Note! An xml subscription is required to look up QRA data on QRZ.com"));
-
 
     delayedAction(this, [=]()
     {
@@ -177,7 +172,6 @@ void QrzServerMainWindow::onConnectPushButtonClicked()
 void QrzServerMainWindow::onPingStateTimerTimeout()
 {
         QrzServerRpc::getQrzServerRpc()->sendQrzLoggedState(qrzServerStateFlags.getQrzLoggedOnFlag(), stateErrorMessage);
-
 }
 
 void QrzServerMainWindow::onStdInRead(QString cmd)
@@ -189,12 +183,9 @@ void QrzServerMainWindow::onStdInRead(QString cmd)
     }
 }
 
-
 void QrzServerMainWindow::quit()
 {
-
 }
-
 
 void QrzServerMainWindow::logon()
 {
@@ -242,8 +233,6 @@ void QrzServerMainWindow::askCallsignData(QString callsign)
     QString callsignUrl = QRZURL + "s=" + qrzSessionData.getKey() + ";callsign=" + callsign;
     sendUrl(callsignUrl);
 }
-
-
 
 void QrzServerMainWindow::sendUrl(QString url)
 {
@@ -340,9 +329,7 @@ void QrzServerMainWindow::sendUrl(QString url)
         addTextToLogWindow(msg);
         qrzServerStateFlags.clear();
         QrzServerRpc::getQrzServerRpc()->sendQrzLoggedState(qrzServerStateFlags.getQrzLoggedOnFlag(), reply->errorString());
-
     }
-
 }
 
 
@@ -355,37 +342,19 @@ QString QrzServerMainWindow::stripPasswordFromUrl(QString url)
         {
             return ul[0];
         }
-
     }
-
     return url;
-
 }
 
 
 void QrzServerMainWindow::sessionDataReceived()
 {
-
-
     if (!qrzSessionData.getError().isEmpty())
     {
         trace(QString("Qrz Error: %1").arg(qrzSessionData.getError()));
         addToErrorTextLabel(qrzSessionData.getError());
         addTextToLogWindow(qrzSessionData.getError());
-        //if (qrzServerStateFlags.getAskCallsignFlag())
-        //{
-        //    qrzServerStateFlags.setAskCallsignFlag(false);
-        //}
-
-        //if (qrzServerStateFlags.getAskLogonFlag())
-        //{
-        //    qrzServerStateFlags.setAskLogonFlag(false);
-        //}
-
     }
-
-
-
 
     if (qrzServerStateFlags.getAskLogonFlag())
     {
@@ -409,13 +378,10 @@ void QrzServerMainWindow::sessionDataReceived()
             addTextToLogWindow(tr("Logon failed to Qrz.com, logon callsign = %1, error = %2").arg(logonCallsign, errorMsg));
             setQrzStatusConnected(false);
             qrzServerStateFlags.clear();
-
         }
-
     }
 
-
-    if (qrzServerStateFlags.getAskCallsignFlag() /*&& requestedStation.getLoggerFlag()*/)
+    if (qrzServerStateFlags.getAskCallsignFlag())
     {
         QString stateMsg;
         if (!qrzSessionData.getError().isEmpty())
@@ -443,14 +409,9 @@ void QrzServerMainWindow::sessionDataReceived()
         {
             QrzServerRpc::getQrzServerRpc()->sendQrzResponseToClusterServer(qrzCallsignData.getCallsign(), "", stateMsg, "", "", "");
         }
-
-        //QrzServerRpc::getQrzServerRpc()->sendQrzResponseToLoggerDisplay(qrzCallsignData, stateMsg, requestedStation.getFromStationName(),requestedStation.getLoggerUuid());
-
         qrzServerStateFlags.setAskCallsignFlag(false);
     }
-
 }
-
 
 void QrzServerMainWindow::callsignDataReceived()
 {
@@ -481,9 +442,7 @@ void QrzServerMainWindow::callsignDataReceived()
             QrzServerRpc::getQrzServerRpc()->sendQrzResponseToLoggerDisplay(qrzCallsignData, stateMsg, requestedStation.getFromStationName(), requestedStation.getLoggerUuid());
 
         }
-
         qrzServerStateFlags.setAskCallsignFlag(false);
-
     }
 }
 
@@ -519,8 +478,6 @@ void QrzServerMainWindow::parseSessionData(QXmlStreamReader &xmlData)
         }
     }
 }
-
-
 
 void QrzServerMainWindow::parseCallsignData(QXmlStreamReader &xmlData)
 {
@@ -609,18 +566,13 @@ void QrzServerMainWindow::parseCallsignData(QXmlStreamReader &xmlData)
     }
 }
 
-
 void QrzServerMainWindow::parseDXCCData(QXmlStreamReader &xmlData)
 {
     Q_UNUSED(xmlData)
 }
 
-
-
-
 void QrzServerMainWindow::onConfigure()
 {
-
     QrzConfigureDialog conf;
 
     conf.logCallsign = logonCallsign;
@@ -629,49 +581,35 @@ void QrzServerMainWindow::onConfigure()
     int ret = conf.exec();
     if (ret == QDialog::Accepted)
     {
-
         bool callsignChanged = false;
         bool passwordChanged = false;
 
+        QString fileName = "./Configuration/QRZServer.ini";
+        QSettings config(fileName, QSettings::IniFormat);
 
-        RegSettings settings;
-
-        if (conf.logCallsign.trimmed() != settings.getSettings().value("logonCallsign", "").toString())
+        if (conf.logCallsign.trimmed() != config.value("logonCallsign", "").toString())
         {
             logonCallsign = conf.logCallsign.trimmed();
-            settings.getSettings().setValue("logonCallsign", logonCallsign);
+            config.setValue("logonCallsign", logonCallsign);
             callsignChanged = true;
-
         }
 
-        if (conf.logPassword.trimmed() != settings.getSettings().value("pasword", "").toString())
+        if (conf.logPassword.trimmed() != config.value("pasword", "").toString())
         {
             password = conf.logPassword.trimmed();
-            settings.getSettings().setValue("password", password);
+            config.setValue("password", password);
             passwordChanged = true;
         }
 
         if (callsignChanged || passwordChanged || !logonCallsign.isEmpty() || !password.isEmpty())
         {
             qrzSessionData.clear();
-            //logon();
         }
-        //else if (logonCallsign.isEmpty() || password.isEmpty())
-        //{
-        //    qrzSessionData.clear();
-        //}
-
     }
-
-
-
-
-
 }
 
 void QrzServerMainWindow::onClusterQrzMessage(QrzServerMessage qrzRequest)
 {
-
     trace(QString("onClusterQrzMessage: add message to queue, callsign %1").arg(qrzRequest.getDxCall()));
     qrzRequestQueue += qrzRequest;
 }
@@ -682,12 +620,10 @@ void QrzServerMainWindow::onLoggerQrzMsg(QrzServerMessage qrzRequest)
     qrzRequestQueue += qrzRequest;
 }
 
-
 void QrzServerMainWindow::handleQrzRequests()
 {
     if (!qrzRequestQueue.isEmpty())
     {
-
         trace(QString("handQrzRequests: number of callsigns in queue = %1").arg(qrzRequestQueue.count()));
         if (qrzServerStateFlags.getQrzLoggedOnFlag())
         {
@@ -695,7 +631,6 @@ void QrzServerMainWindow::handleQrzRequests()
 
             if (!qrzServerStateFlags.getAskCallsignFlag())
             {
-
                 requestedStation.clear();
 
                 requestedStation = qrzRequestQueue[0];
@@ -715,8 +650,6 @@ void QrzServerMainWindow::handleQrzRequests()
                     addTextToLogWindow(tr("Callsign received from cluster - %1").arg(requestedStation.getDxCall()));
                     trace(QString("handleQrzRequests: Callsign received from cluster - %1").arg(requestedStation.getDxCall()));
                 }
-
-
 
                 Callsign callsign;
                 callsign.setFullCall(requestedStation.getDxCall());
@@ -744,35 +677,23 @@ void QrzServerMainWindow::handleQrzRequests()
                     }
                     sblabel0->setText(QString("qrz %1").arg(qrzRequests));
                     sblabel1->setText(QString("db %1").arg(dbRequests));
-
                 }
                 else
                 {
                     addTextToLogWindow(tr("Callsign is invalid - %1").arg(requestedStation.getDxCall()));
                     trace(QString("handleQrzRequests: callsign is invalid - %1").arg(requestedStation.getDxCall()));
-
                 }
-
-
             }
-
         }
         else
         {
-
             QrzServerRpc::getQrzServerRpc()->sendQrzResponseToClusterServer(requestedStation.getDxCall(), "", rpcConstants::qrzServerLoggedOut, requestedStation.getSpotterCall(), "", rpcConstants::qrzServerLoggedOut);
-
         }
-
     }
 }
 
-
-
 void QrzServerMainWindow::addTextToLogWindow(QString message)
 {
-
-    //ui->messageTextWindow-> appendPlainText(QTime::currentTime().toString("hh:mm:ss.z") + " " + message);
     ui->messageTextWindow-> appendPlainText(QDateTime::currentDateTimeUtc().time().toString("hh:mm:ss.z") + " UTC - " + message);
 }
 
