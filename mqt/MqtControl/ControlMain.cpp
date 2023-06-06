@@ -74,10 +74,6 @@ void ControlMain::getRouterAppCatMap()
         {
             // no action
         }
-        else if (c->appType == "BandMap")
-        {
-            // no action
-        }
         else if (c->appType == "Chat")
         {
             // no action - done in chat server

@@ -54,10 +54,6 @@ void TSendDM::getRouterAppCatMap()
         {
             // no action
         }
-        else if (i->appType == "BandMap")
-        {
-            // no action
-        }
         else if (i->appType == "Chat")
         {
             // no action - done in chat server
