@@ -3441,8 +3441,6 @@ void QSOLogFrame::on_InsertAfterButton_clicked()
     selectEntryForEdit(newct);
 }
 
-
-//void QSOLogFrame::on_ModeComboBoxGJV_currentIndexChanged(int index)
 void QSOLogFrame::on_ModeComboBoxGJV_activated(int index)
 {
 

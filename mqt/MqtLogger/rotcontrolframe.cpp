@@ -809,7 +809,7 @@ void RotControlFrame::traceMsg(QString msg)
     trace(QString("[RotcontrolFrame] %1 - %2").arg(antennaName).arg( msg));
 }
 
-void RotControlFrame::on_antennaNameSel_activated(const QString &/*arg1*/)
+void RotControlFrame::on_antennaNameSel_activated(int /*arg1*/)
 {
     antennaName = ui->antennaNameSel->currentData().toString();
 

@@ -146,7 +146,7 @@ private slots:
 
     void on_nudgeLeft_clicked();
     void on_nudgeRight_clicked();
-    void on_antennaNameSel_activated(const QString &arg1);
+    void on_antennaNameSel_activated(int arg1);
 
 
     void setBrgFromQSOLog(QString);

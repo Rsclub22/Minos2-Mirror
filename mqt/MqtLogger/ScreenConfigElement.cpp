@@ -186,7 +186,7 @@ AuxEntries ScreenConfigElement::getAuxType() const
     return static_cast<AuxEntries>(t);
 }
 
-void ScreenConfigElement::on_elementTypeCombo_activated(const QString &/*arg1*/)
+void ScreenConfigElement::on_elementTypeCombo_activated(int /*arg1*/)
 {
     trace("ScreenConfigElement::on_elementTypeCombo_activated");
 

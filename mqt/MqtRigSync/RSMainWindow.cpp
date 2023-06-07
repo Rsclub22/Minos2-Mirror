@@ -489,8 +489,9 @@ void RSMainWindow::on_wsjtxCb_stateChanged(int /*arg1*/)
     }
 }
 
-void RSMainWindow::on_Rig2Combo_activated(const QString &psn)
+void RSMainWindow::on_Rig2Combo_activated(int /*index*/)
 {
+    QString psn = ui->Rig2Combo->currentText();
     subRig.selected = psn;
 
     QString fileName = RIG_CONFIGURATION_FILEPATH_LOGGER + MINOS_RIGSYNC_CONFIG_FILE;

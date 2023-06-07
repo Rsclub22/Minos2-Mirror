@@ -69,7 +69,7 @@ private slots:
     void on_trackRig_clicked();
     void on_trackSub_clicked();
     void on_wsjtxCb_stateChanged(int arg1);
-    void on_Rig2Combo_activated(const QString &arg1);
+    void on_Rig2Combo_activated(int index);
 
     void syncTimerTimer();
 

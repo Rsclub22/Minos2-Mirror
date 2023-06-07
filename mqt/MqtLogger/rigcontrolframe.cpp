@@ -312,12 +312,12 @@ void RigControlFrame::clusterUpdateRigFreq(Frequency freq)
     sendRigFreq(freq);
 }
 
-void RigControlFrame::on_radioNameSel_activated(const QString &arg1)
+void RigControlFrame::on_radioNameSel_activated(int /*index*/)
 {
     // radio combo selected
     radioName = getSelectedRadio();
 
-    traceMsg(QString("on radioNameSel activated: radioName - %1 requested ***").arg(arg1));
+    traceMsg(QString("on radioNameSel activated: radioName - %1 requested ***").arg(ui->radioNameSel->currentText()));
     setRadioName(radioName, true);       // set true here as we want to act like start and use preset freq, except if a last freq is available
 }
 

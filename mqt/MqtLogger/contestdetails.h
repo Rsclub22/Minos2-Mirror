@@ -97,8 +97,8 @@ private slots:
    void on_RotatorList();
    void on_SetRadioList();
    void on_ageProtectedcb_stateChanged(int arg1);
-   void on_BandComboBox_activated(const QString &arg1);
-   void on_ExchangeComboBox_activated(const QString &arg1);
+   void on_BandComboBox_activated(int arg1);
+   void on_ExchangeComboBox_activated(int arg1);
 };
 
 #endif // CONTESTDETAILS_H

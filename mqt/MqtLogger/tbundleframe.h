@@ -35,7 +35,7 @@ public:  		// User declarations
 
 private slots:
    void on_BundleEdit_clicked();
-   void on_BundleSection_currentIndexChanged(const QString &arg1);
+   void on_BundleSection_currentIndexChanged(int arg1);
 };
 
 #endif // TBUNDLEFRAME_H

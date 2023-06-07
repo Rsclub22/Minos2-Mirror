@@ -50,7 +50,7 @@ public:
     static const char *getRawScreenTypeString(SCType t);
     static const char *getRawScreenHint(SCType t);
 private slots:
-    void on_elementTypeCombo_activated(const QString &arg1);
+    void on_elementTypeCombo_activated(int arg1);
 
     void on_addLeftButton_clicked();
 

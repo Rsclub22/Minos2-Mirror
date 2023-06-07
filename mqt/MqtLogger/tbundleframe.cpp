@@ -90,7 +90,7 @@ void TBundleFrame::on_BundleEdit_clicked()
     }
 }
 
-void TBundleFrame::on_BundleSection_currentIndexChanged(const QString &/*arg1*/)
+void TBundleFrame::on_BundleSection_currentIndexChanged(int /*arg1*/)
 {
     if ( bundle )
     {

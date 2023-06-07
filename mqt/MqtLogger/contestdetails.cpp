@@ -2154,7 +2154,7 @@ void ContestDetails::on_ageProtectedcb_stateChanged(int /*arg1*/)
     enableControls();
 }
 
-void ContestDetails::on_BandComboBox_activated(const QString &/*arg1*/)
+void ContestDetails::on_BandComboBox_activated(int /*arg1*/)
 {
     QString band = ui->BandComboBox->currentText();
     bool hfBand = false;
@@ -2180,7 +2180,7 @@ void ContestDetails::on_BandComboBox_activated(const QString &/*arg1*/)
 }
 
 
-void ContestDetails::on_ExchangeComboBox_activated(const QString &/*arg1*/)
+void ContestDetails::on_ExchangeComboBox_activated(int /*arg1*/)
 {
     focusChange(nullptr, false, nullptr);
 
