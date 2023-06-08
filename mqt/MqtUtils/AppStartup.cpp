@@ -220,6 +220,7 @@ void appStartup(const QString &pappName)
     qa->setStyleSheet(QString("[readOnly=\"true\"] { background-color: %0 }").arg(qa->palette().color(QPalette::Window).name(QColor::HexRgb)));
 
 // For Mac Users, set the default directory to be Documents/Minos
+
     QString fpath = QCoreApplication::applicationDirPath();
 
 #ifdef Q_OS_MACOS
@@ -299,9 +300,56 @@ void appStartup(const QString &pappName)
         }
 #endif
     }
-    else
+    else if (fpath.contains("/build"))
     {
+        // Don't do this from an issue system
         // Configuration already exists; we should probably "copy if newer"
+
+        QString srcMaster = fpath;
+        while(DirectoryExists(srcMaster))
+        {
+            QFileInfo src(srcMaster + "/..");
+            srcMaster = src.canonicalFilePath();
+            if (DirectoryExists(srcMaster) && DirectoryExists(srcMaster + "/mqt/ControlFiles/Configuration"))
+            {
+                break;
+            }
+        }
+        if (DirectoryExists(srcMaster) && DirectoryExists(srcMaster + "/mqt/ControlFiles/Configuration"))
+        {
+            // copyifnewer the master config
+            QString destConfig = QDir::currentPath() + "/Configuration";
+
+
+            cpDir(srcMaster + "/mqt/ControlFiles/Configuration", destConfig);
+#if defined( Q_OS_MACOS)
+            cpDir(destConfig + "/OSXFiles", destConfig);
+#elif defined(Q_OS_WIN)
+            cpDir(destConfig + "/WindowsFiles", destConfig);
+#else
+            cpDir(destConfig + "/LinuxFiles", destConfig);
+#endif
+            QDir osx(destConfig + "/OSXFiles");
+            osx.removeRecursively();
+            QDir win(destConfig + "/WindowsFiles");
+            win.removeRecursively();
+            QDir linux(destConfig + "/LinuxFiles");
+            linux.removeRecursively();
+        }
+        if (DirectoryExists(srcMaster) && DirectoryExists(srcMaster + "/mqt/Help"))
+        {
+            // copyifnewer the master config
+            QString destHelp = QDir::currentPath() + "/Help";
+
+            cpDir(srcMaster + "/mqt/Help", destHelp);
+        }
+        if (DirectoryExists(srcMaster) && DirectoryExists(srcMaster + "/mqt/Docs"))
+        {
+            // copyifnewer the master config
+            QString destDocs = QDir::currentPath() + "/Docs";
+
+            cpDir(srcMaster + "/mqt/Docs", destDocs);
+        }
     }
     enableTrace( "./TraceLog", appStartupName + "_" );
 
@@ -410,22 +458,38 @@ void setAppClosing()
 
 bool cpDir(const QString &srcPath, const QString &dstPath)
 {
-    if (!FileExists(QFileInfo(dstPath).path()))
+    if (QFileInfo(srcPath).isDir())
     {
-        QDir parentDstDir(QFileInfo(dstPath).path());
-        if (!parentDstDir.mkdir(QFileInfo(dstPath).fileName()))
+        QDir dstDir;
+        if (!dstDir.mkpath(dstPath))
+        {
             return false;
+        }
+    }
+    else
+    {
+        QString parentDir(QFileInfo(dstPath).path());
+        if (!DirectoryExists(parentDir))
+        {
+            QDir parentDstDir(QFileInfo(dstPath).path());
+            if (!parentDstDir.mkdir(QFileInfo(dstPath).fileName()))
+                return false;
+        }
     }
 
     QDir srcDir(srcPath);
     foreach(const QFileInfo &info, srcDir.entryInfoList(QDir::Dirs | QDir::Files | QDir::NoDotAndDotDot)) {
         QString srcItemPath = srcPath + "/" + info.fileName();
         QString dstItemPath = dstPath + "/" + info.fileName();
-        if (info.isDir()) {
-            if (!cpDir(srcItemPath, dstItemPath)) {
+        if (info.isDir())
+        {
+            if (!cpDir(srcItemPath, dstItemPath))
+            {
                 return false;
             }
-        } else if (info.isFile()) {
+        }
+        else if (info.isFile())
+        {
             if (FileExists(dstItemPath))
             {
                 // check if src is newer than dest
