@@ -9,6 +9,7 @@
 #include <QTranslator>
 #include <QSettings>
 #include <QStandardPaths>
+#include <QDir>
 
 #include "regsettings.h"
 #include "fileutils.h"
@@ -333,8 +334,8 @@ void appStartup(const QString &pappName)
             osx.removeRecursively();
             QDir win(destConfig + "/WindowsFiles");
             win.removeRecursively();
-            QDir linux(destConfig + "/LinuxFiles");
-            linux.removeRecursively();
+            QDir linuxf(destConfig + "/LinuxFiles");    // straight "linux" is objected to
+            linuxf.removeRecursively();
         }
         if (DirectoryExists(srcMaster) && DirectoryExists(srcMaster + "/mqt/Help"))
         {
