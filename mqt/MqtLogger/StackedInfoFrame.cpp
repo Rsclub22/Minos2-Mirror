@@ -390,28 +390,27 @@ void StackedInfoFrame::setContest(LoggerContestLog *ct)
             if (vtabs.count() > 1)
             {
                 setTabsVisible = true;
-                for(const QString &t:vtabs)
-                {
-                    Q_UNUSED(t)
-                    for (int i = 0; i < ui->tabbar->count(); i++)
-                    {
-                        QString bt = ui->tabbar->tabText(i);
-                        if (vtabs.contains(bt))
-                        {
-                            continue;
-                        }
-                        ui->tabbar->removeTab(i);
-                        break;
-                    }
-                }
             }
             else
             {
+                setTabsVisible = false;
+            }
+
+            for(const QString &t:vtabs)
+            {
+                Q_UNUSED(t)
                 for (int i = 0; i < ui->tabbar->count(); i++)
                 {
-                    ui->tabbar->removeTab(0);
+                    QString bt = ui->tabbar->tabText(i);
+                    if (vtabs.contains(bt))
+                    {
+                        continue;
+                    }
+                    ui->tabbar->removeTab(i);
+                    break;
                 }
             }
+
             ui->tabbar->setVisible(setTabsVisible);
         }
         onContestBandChanged(ct);
