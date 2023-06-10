@@ -33,14 +33,14 @@ Frame {
             anchors.fill: parent
             hoverEnabled: true
 
-            onPressed: mouse=>{
+            onPressed: mouse => {
                 let hcoord = QtPositioning.coordinate(homeLat, homeLon)
                 let cc = mapOfEurope.toCoordinate(Qt.point(mouse.x,mouse.y));
                 let b = hcoord.azimuthTo(cc)
                 let gc = ["Pressed", cc.latitude, cc.longitude, b];
                 qmlSignal(gc);
             }
-            onPositionChanged: mapMouse=>{
+            onPositionChanged: mapMouse => {
                 // doesn't work!
                 ToolTip.y = mapMouse.mouseY
                 ToolTip.x = mapMouse.mouseX
@@ -48,7 +48,7 @@ Frame {
             }
         }
 
-        onCenterChanged: centre=>{
+        onCenterChanged: centre => {
             let gc = ["CentreChanged", center.latitude, center.longitude];
             qmlSignal(gc)
         }

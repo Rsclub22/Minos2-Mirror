@@ -1689,7 +1689,7 @@ QWidget * ContestDetails::getDetails( )
     }
     else
     {
-        if (club[0] == '(')
+        if (club.length() > 2 && club[0] == '(')
         {
             club = club.mid(1, club.length() - 2);
         }
