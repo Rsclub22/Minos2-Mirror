@@ -89,7 +89,7 @@ cp /usr/share/qt5/translations/qt*.qm Bin/translations
 
   for j in MqtAppStarter MqtChat MqtCluster MqtControl MqtDataModes MqtKeyer MqtKeyerProxy MqtKSTClient MqtLogger MqtMonitor MqtQrzServer MqtRigControl MqtRigSync MqtRigRecorder MqtRotator MqtServer
   do
-    cp $DIR/$BUILDDIR/${i}/${i} Bin
+    cp $DIR/$BUILDDIR/${j}/${j} Bin
   done
 
 cp -r $DIR/mqt/ControlFiles/Configuration/* ./Configuration
