@@ -74,7 +74,7 @@ mkdir Help
 
 for i in en_GB fr_FR
 do
-  for j in MqtAppStarter MqtChat MqtCluster MqtDataModes MqtKeyer MqtKeyerProxy MqtKSTClient MqtLogger MqtMonitor MqtQrzServer MqtRigControl MqtRigSync MqtRigRecorder MqtRotator MqtServer
+  for j in MqtAppStarter MqtChat MqtCluster MqtControl MqtDataModes MqtKeyer MqtKeyerProxy MqtKSTClient MqtLogger MqtMonitor MqtQrzServer MqtRigControl MqtRigSync MqtRigRecorder MqtRotator MqtServer
   do
     lconvert -verbose -o Bin/translations/${j}_${i}.qm \
     $DIR/$BUILDDIR/MqtUtils/translations/minos_${i}.qm \
@@ -87,23 +87,10 @@ do
 done
 cp /usr/share/qt5/translations/qt*.qm Bin/translations
 
-cp $DIR/$BUILDDIR/MqtAppStarter/MqtAppStarter Bin
-cp $DIR/$BUILDDIR/MqtChat/MqtChat Bin
-cp $DIR/$BUILDDIR/MqtCluster/MqtCluster Bin
-cp $DIR/$BUILDDIR/MqtControl/MqtControl Bin
-cp $DIR/$BUILDDIR/MqtDataModes/MqtDataModes Bin
-cp $DIR/$BUILDDIR/MqtKeyer/MqtKeyer Bin
-cp $DIR/$BUILDDIR/MqtKeyerProxy/MqtKeyerProxy Bin
-cp $DIR/$BUILDDIR/MqtKSTClient/MqtKSTClient Bin
-cp $DIR/$BUILDDIR/MqtLogger/MqtLogger Bin
-cp $DIR/$BUILDDIR/MqtMonitor/MqtMonitor Bin
-cp $DIR/$BUILDDIR/MqtQrzServer/MqtQrzServer Bin
-cp $DIR/$BUILDDIR/MqtRigControl/MqtRigControl Bin
-cp $DIR/$BUILDDIR/MqtRigSync/MqtRigSync Bin
-cp $DIR/$BUILDDIR/MqtRigRecorder/MqtRigRecorder Bin
-cp $DIR/$BUILDDIR/MqtRotator/MqtRotator Bin
-cp $DIR/$BUILDDIR/MqtServer/MqtServer Bin
-
+  for j in MqtAppStarter MqtChat MqtCluster MqtControl MqtDataModes MqtKeyer MqtKeyerProxy MqtKSTClient MqtLogger MqtMonitor MqtQrzServer MqtRigControl MqtRigSync MqtRigRecorder MqtRotator MqtServer
+  do
+    cp $DIR/$BUILDDIR/${i}/${i} Bin
+  done
 
 cp -r $DIR/mqt/ControlFiles/Configuration/* ./Configuration
 cp -r $DIR/mqt/ControlFiles/Configuration/LinuxFiles/* ./Configuration
