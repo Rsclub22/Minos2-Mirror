@@ -3,6 +3,7 @@
 #include <QMessageBox>
 #include <QSettings>
 #include <QThread>
+#include <QDir>
 
 #ifdef Q_OS_WIN
 #include <windows.h>
@@ -15,6 +16,7 @@
 
 #include "singleapplication.h"
 #include "SecondInstall.h"
+#include "fileutils.h"
 
 #define TIME_OUT                (500)    // 500ms
 #define TEST_TIME_OUT           (10)    // 10ms
@@ -112,11 +114,28 @@ void SingleApplication::_newLocalServer()
 
 void SingleApplication::clearRegistry()
 {
-#ifdef Q_OS_WIN
     QThread::msleep(1000);
-    QSettings reg("HKEY_CURRENT_USER\\Software\\" + SecondInstall::getOrgName(), QSettings::NativeFormat);
-    reg.clear();
-#endif
+//#ifdef Q_OS_WIN
+// Eventually we need a Windows API implementation for clearing all the registry entries
+// as the Qt version only does the current app
+//    QSettings reg("HKEY_CURRENT_USER\\Software\\" + SecondInstall::getOrgName(), QSettings::NativeFormat);
+//    reg.clear();
+//#endif
+    // we can  now clear all the RegSettings files on ANY platform
+    QDir const source("./Configuration");
+    if (!source.exists())
+        return;
+
+    QString oname = SecondInstall::getOrgName();
+    QString fileName = oname + "_*_reg.ini";
+
+    QStringList const files = source.entryList(QStringList() << fileName, QDir::Files);
+
+    QString cdir = GetCurrentDir();
+    for (QString const& name: files)
+    {
+        QFile::remove(cdir + "/" + name);
+    }
 }
 void SingleApplication::sendArgs()
 {
