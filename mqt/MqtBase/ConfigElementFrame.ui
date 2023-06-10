@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>682</width>
-    <height>369</height>
+    <height>376</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -225,7 +225,7 @@
              <item>
               <widget class="QCheckBox" name="inferProgramcb">
                <property name="text">
-                <string>Auto Program</string>
+                <string>Auto Infer Program Path</string>
                </property>
               </widget>
              </item>
