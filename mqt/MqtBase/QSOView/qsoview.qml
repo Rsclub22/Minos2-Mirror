@@ -42,7 +42,7 @@ Frame {
          DragHandler {
              id: drag
              target: null
-             onTranslationChanged: (delta) => map.pan(-delta.x, -delta.y)
+             onTranslationChanged: (delta) => mapOfEurope.pan(-delta.x, -delta.y)
          }
         MouseArea {
             id: mapMouse
