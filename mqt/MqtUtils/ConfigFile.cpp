@@ -936,14 +936,26 @@ QString MinosConfig::checkConfig(QString name)
 
             if (ele->runType == RunLocal)
             {
-                if (!ele->inferProgram && !FileExecutable(ele->commandLine))
+                if (ele->inferProgram)
                 {
-                    QDir mydir(".");
-                    reqErrs += ele->appType + tr(" Executable path does not exist or is not executable:") + mydir.absolutePath() + ele->commandLine + tr("\n\n");
+                    QString program = ele->inferExecutable();
+                    if (!FileExecutable(program))
+                    {
+                        reqErrs += "<" + ele->appType + ">" + tr(" Inferred Executable path does not exist or is not executable:") + " " + program + tr("\n\n");
+                    }
                 }
+                else
+                {
+                    if (!FileExecutable(ele->commandLine))
+                    {
+                        QDir mydir(".");
+                        reqErrs += "<" + ele->appType + ">" + tr(" Executable path does not exist or is not executable:") + " " + mydir.absolutePath() + ele->commandLine + tr("\n\n");
+                    }
+                }
+
                 if (ele->appType != tr(appNone) && !FileExists(ele->rundir + "/Configuration/MinosConfig.json"))
                 {
-                    reqErrs += ele->appType + tr(" Working directory is not valid - no Configuration/MinosConfig.json\n\n");
+                    reqErrs += "<" + ele->appType + ">" + tr(" Working directory is not valid - no Configuration/MinosConfig.json\n\n");
                 }
             }
         }
