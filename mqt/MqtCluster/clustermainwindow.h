@@ -536,6 +536,9 @@ private slots:
     void onReconnectCommandFromLog(bool state);
     void onclusterQrzResponse(QString dxCall, QString dxGrid, QString dxCallState, QString spotterCall, QString spotterGrid, QString spotterState);
     void onLogFilterCheckBoxClicked();
+    void on_setupButton_clicked();
+    void on_clearSpots_clicked();
+    void on_shortcuts_clicked();
 };
 
 #endif // CLUSTERMAINWINDOW_H

@@ -124,8 +124,8 @@ void ClusterMainWindow::doStartup()
     status = new QLabel;
     ui->statusBar->addWidget(status);
 
-    connect(ui->actionAbout, &QAction::triggered, this, &ClusterMainWindow::about);
-    connect(ui->actionUser_Command_Shortcuts, &QAction::triggered, this, &ClusterMainWindow::clusterNodeCommandsShortcutHelp);
+   // connect(ui->actionAbout, &QAction::triggered, this, &ClusterMainWindow::about);
+   // connect(ui->actionUser_Command_Shortcuts, &QAction::triggered, this, &ClusterMainWindow::clusterNodeCommandsShortcutHelp);
 
     BandList::getBandList().loadAllBands(bands, false);
 
@@ -322,8 +322,8 @@ void ClusterMainWindow::doStartup()
     ui->clusterViewsTab->setTabColor(ui->clusterViewsTab->currentIndex(), CLUSTER_TAB_SELECT_COLOR);
     connect(ui->clusterViewsTab, &QLogTabWidget::currentChanged, this, &ClusterMainWindow::onSpotTabChanged);
 
-    connect(ui->actionSetup, &QAction::triggered, this, &ClusterMainWindow::onLaunchSetup);
-    connect(ui->actionClear_All_Spots, &QAction::triggered, this, &ClusterMainWindow::onClearAllSpots);
+    //connect(ui->actionSetup, &QAction::triggered, this, &ClusterMainWindow::onLaunchSetup);
+    //connect(ui->actionClear_All_Spots, &QAction::triggered, this, &ClusterMainWindow::onClearAllSpots);
 
 #if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
     connect(ui->nodeCb, &QComboBox::textActivated, this, &ClusterMainWindow::connectToNode);
@@ -724,7 +724,12 @@ void ClusterMainWindow::onReconnectCommandFromLog(bool state)
 
 void ClusterMainWindow::messageRx(QString msg)
 {
-    rawClusterDataView->appendPlainText(msg.remove('\x07'));
+    while(msg[msg.length() - 1] == '\r' || msg[msg.length() - 1] == '\n')
+    {
+        msg = msg.left(msg.length() - 1);
+    }
+    msg.remove('\x07');
+    rawClusterDataView->appendPlainText(msg);   // append paragraph, so has newline
 }
 
 
@@ -3133,3 +3138,21 @@ void ClusterMainWindow::onSpotTestTimerTimeOut()
 
 
 #endif
+
+void ClusterMainWindow::on_setupButton_clicked()
+{
+    onLaunchSetup();
+}
+
+
+void ClusterMainWindow::on_clearSpots_clicked()
+{
+    onClearAllSpots();
+}
+
+
+void ClusterMainWindow::on_shortcuts_clicked()
+{
+    clusterNodeCommandsShortcutHelp();
+}
+

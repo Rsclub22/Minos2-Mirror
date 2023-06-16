@@ -94,9 +94,9 @@ RotatorMainWindow::RotatorMainWindow(QWidget *parent) :
     //blackText->setColor(QPalette::ButtonText, Qt::black);
 
     // disable some menus for now
-    ui->actionHelp->setVisible(false);
-    ui->actionSkyScan->setVisible(false);
-    ui->actionAlways_On_Top->setVisible(false);
+//    ui->actionHelp->setVisible(false);
+//    ui->actionSkyScan->setVisible(false);
+//    ui->actionAlways_On_Top->setVisible(false);
 
     initPresetButtons();
 
@@ -652,15 +652,15 @@ void RotatorMainWindow::initActionsConnections()
     connect(ui->testBearing, &QLineEdit::returnPressed, this, &RotatorMainWindow::onTestBearingEnter);
 
     // setup antennas
-    connect(ui->actionSetup_Antennas, &QAction::triggered, this, &RotatorMainWindow::onLaunchSetup);
+    //connect(ui->actionSetup_Antennas, &QAction::triggered, this, &RotatorMainWindow::onLaunchSetup);
     connect(setupAntenna, &RotSetupDialog::currentAntennaSettingChanged, this, &RotatorMainWindow::currentAntennaSettingChanged);
     connect(setupAntenna, &RotSetupDialog::antennaNameChange, this, &RotatorMainWindow::updateSelectAntennaBox);
     connect(setupAntenna, &RotSetupDialog::antennaTabChanged, this, &RotatorMainWindow::updateSelectAntennaBox);
 
-    connect(ui->actionPST_Rotator_Config, &QAction::triggered, this, &RotatorMainWindow::onPSTRotatorConfig);
+    //connect(ui->actionPST_Rotator_Config, &QAction::triggered, this, &RotatorMainWindow::onPSTRotatorConfig);
 
     // Bearing Log
-    connect(ui->actionLog_Heading, &QAction::triggered, setupLog, &LogDialog::loadLogConfig);
+    //connect(ui->actionLog_Heading, &QAction::triggered, setupLog, &LogDialog::loadLogConfig);
     connect(setupLog, &LogDialog::showLogDialog, setupLog, &RotatorMainWindow::show);
     connect(setupLog, &LogDialog::bearingLogConfigChanged, rotlog, &RotatorLog::getBearingLogConfig);
 
@@ -670,9 +670,9 @@ void RotatorMainWindow::initActionsConnections()
     connect(msg, &RotatorRpc::setRotPreset, this, &RotatorMainWindow::onLoggerSetPreset);
 
 
-    connect(ui->actionAbout, &QAction::triggered, this, &RotatorMainWindow::about);
-    connect(ui->actionAbout_Rotator_Config, &QAction::triggered, this, &RotatorMainWindow::aboutRotatorConfig);
-    connect(ui->actionTraceComms, &QAction::toggled, this, &RotatorMainWindow::saveTraceLogFlag);    // set/clear comms tracing
+    //connect(ui->actionAbout, &QAction::triggered, this, &RotatorMainWindow::about);
+    //connect(ui->actionAbout_Rotator_Config, &QAction::triggered, this, &RotatorMainWindow::aboutRotatorConfig);
+    //connect(ui->actionTraceComms, &QAction::toggled, this, &RotatorMainWindow::saveTraceLogFlag);    // set/clear comms tracing
 
 }
 
@@ -2153,7 +2153,8 @@ void RotatorMainWindow::readTraceLogFlag()
     bool state = config.value("TraceLog", false).toBool();
     config.endGroup();
 
-    ui->actionTraceComms->setChecked(state);
+    ui->traceDataComms->setChecked(state);
+//    ui->actionTraceComms->setChecked(state);
     traceCommsFlag = state;             // set state of trace hamlib comms
 }
 
@@ -2443,7 +2444,7 @@ void RotatorMainWindow::aboutRotatorConfig()
     {
         RotCapabilities rotCap = rotFactory->supported_rotators()->value(setupAntenna->currentAntenna.rotatorModel);
 
-        msg.append(tr("App Instance Name  = %1\n").arg(appName));
+        msg.append(tr("App Instance Name  = %1\n\n").arg(appName));
         if (rotator != nullptr)
         {
             msg.append(tr("Hamlib Version = %1\n").arg(rotator->getRotLibVersion()));
@@ -2488,7 +2489,7 @@ void RotatorMainWindow::aboutRotatorConfig()
         msg.append(tr("Support CW and CCW Commands = %1\n").arg(setupAntenna->currentAntenna.supportCwCcwCmd ? "True" : "False"));
         msg.append(tr("Simulate CW and CCW Commands selected = %1\n").arg(setupAntenna->currentAntenna.simCwCcwCmd ? "True" : "False"));
         msg.append(tr("Rotator Polltime = %1\n").arg(setupAntenna->currentAntenna.pollInterval));
-        msg.append(tr("Tracelog = %1\n").arg(ui->actionTraceComms->isChecked() ? "True" : "False"));
+        msg.append(tr("Tracelog = %1\n").arg(ui->traceDataComms->isChecked() ? "True" : "False"));
 
 
     }
@@ -2563,7 +2564,7 @@ void RotatorMainWindow::dumpRotatorToTraceLog()
         trace(QString("Support CW and CCW Commands = %1").arg(setupAntenna->currentAntenna.supportCwCcwCmd ? "True" : "False"));
         trace(QString("Simulate CW and CCW Commands selected = %1").arg(setupAntenna->currentAntenna.simCwCcwCmd ? "True" : "False"));
         trace(QString("Rotator Polltime = %1").arg(setupAntenna->currentAntenna.pollInterval));
-        trace(QString("Tracelog = %1").arg(ui->actionTraceComms->isChecked() ? "True" : "False"));
+        trace(QString("Tracelog = %1").arg(ui->traceDataComms->isChecked() ? "True" : "False"));
 
 
     }
@@ -2577,5 +2578,35 @@ void RotatorMainWindow::dumpRotatorToTraceLog()
 void RotatorMainWindow::on_reconnectPushButton_clicked()
 {
     refreshAntenna();
+}
+
+
+void RotatorMainWindow::on_setupAntennas_clicked()
+{
+    onLaunchSetup();
+}
+
+
+void RotatorMainWindow::on_aboutRC_clicked()
+{
+    aboutRotatorConfig();
+}
+
+
+void RotatorMainWindow::on_logHeadings_clicked()
+{
+    setupLog->loadLogConfig();
+}
+
+
+void RotatorMainWindow::on_PSTConfig_clicked()
+{
+    onPSTRotatorConfig();
+}
+
+
+void RotatorMainWindow::on_traceDataComms_stateChanged(int /*arg1*/)
+{
+    saveTraceLogFlag(ui->traceDataComms->isChecked());
 }
 

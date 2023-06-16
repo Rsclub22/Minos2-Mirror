@@ -363,7 +363,7 @@ private:
     void dumpRadioToTraceLog();
     void setRitFreqDisplayVisible(bool state);
     int getRitFreq(VFO vfo);
-    void setRitFreq(VFO vfo, const ShortFreq &ritFreq);
+    void doSetRitFreq(const ShortFreq &ritFreq);
     void cmdLockOn();
     void cmdLockOff();
 
@@ -566,7 +566,7 @@ private slots:
     void onLaunchSetup();
     void onConfigureRigctld();
 
-    void setRitFreq(ShortFreq ritFreq);
+    void setRitFreq(const ShortFreq &ritFreq);
     void setRitLogStatus(bool status);
 
     void sendRadioListLogger(const QStringList &availRadios);
@@ -614,6 +614,8 @@ private slots:
     void on_reconnectButton_clicked();
 
     void on_testRadioButton_clicked();
+
+    void on_traceDataComms_stateChanged(int arg1);
 };
 
 #endif // RIGCONTROLMAINWINDOW_H

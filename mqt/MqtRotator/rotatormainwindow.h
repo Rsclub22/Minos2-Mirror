@@ -268,6 +268,16 @@ private slots:
 
     void on_testButton_clicked();
 
+    void on_setupAntennas_clicked();
+
+    void on_aboutRC_clicked();
+
+    void on_logHeadings_clicked();
+
+    void on_PSTConfig_clicked();
+
+    void on_traceDataComms_stateChanged(int arg1);
+
 private:
     void rotateTo(int bearing);
     int northCalcTarget(int targetBearing);
