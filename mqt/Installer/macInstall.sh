@@ -2,10 +2,12 @@
 
 #cd ~/Minos2
 
+set -x
+
 echo $OSTYPE
 SCRIPT=$(basename $0)
 DIR=$(echo `pwd`/../..)
-QTDIR=~/Qt/5.15.2/clang_64
+QTDIR=~/Qt/6.5.1/macos
 
 cd $DIR
 echo Working Dir: $DIR
@@ -53,7 +55,7 @@ mkdir ./minos-runtime
 
 cd ./minos-runtime
 
-cp -r ../minos/build/MqtLogger/MqtLogger.app .
+cp -r ../Minos2/build/MqtLogger/MqtLogger.app .
 cd MqtLogger.app/Contents/Resources
 
 mkdir Configuration
