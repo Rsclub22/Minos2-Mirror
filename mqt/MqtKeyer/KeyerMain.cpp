@@ -460,7 +460,7 @@ void KeyerMain::on_PipCheckBox_clicked()
     setPipEnabled( ui->PipCheckBox->isChecked() );
 }
 
-void KeyerMain::on_delayEdit_valueChanged(const QString &/*arg1*/)
+void KeyerMain::on_delayEdit_valueChanged(int/*arg1*/)
 {
     QString temp = ui->delayEdit->text();
     int val = temp.toInt();

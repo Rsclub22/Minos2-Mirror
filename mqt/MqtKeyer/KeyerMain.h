@@ -47,7 +47,7 @@ private slots:
 
     void on_PipCheckBox_clicked();
 
-    void on_delayEdit_valueChanged(const QString &arg1);
+    void on_delayEdit_valueChanged(int arg1);
 
     void on_tuneButton_clicked();
 

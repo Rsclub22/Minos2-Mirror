@@ -172,16 +172,19 @@ void KeyerConfigure::SetMorseCode( TiXmlElement *e )
          if ( GetStringAttribute( c, "character", character ) == TIXML_SUCCESS
               && GetStringAttribute( c, "code", code ) == TIXML_SUCCESS )
          {
-            QString proccode;
-            for ( int i = 0; i < 8 && code[ i ].unicode() != 0 && code[ i ].unicode() != ' '; i++ )
+            if (code.length() > 0)
             {
-               if ( code[ i ] == '.' )
-                  proccode += '\x40';
-               if ( code[ i ] == '-' )
-                  proccode += '\x80';
+                QString proccode;
+                  for ( int i = 0; i < code.length() && i < 8 && code[ i ].unicode() != 0 && code[ i ].unicode() != ' '; i++ )
+                {
+                   if ( code[ i ] == '.' )
+                      proccode += '\x40';
+                   if ( code[ i ] == '-' )
+                      proccode += '\x80';
+                }
+                char c = character[ 0 ].toLatin1();
+                MORSECODE[ c ] = proccode;
             }
-            char c = character[ 0 ].toLatin1();
-            MORSECODE[ c ] = proccode;
          }
       }
    }
