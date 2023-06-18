@@ -370,12 +370,18 @@ void LocFrame::reInitialiseLocators()
             if (cell == currentCentre)
             {
                 ui->LocView->scrollTo(index, QAbstractItemView::PositionAtCenter);
-                selectLastClicked();
+                if (lmc == lmsClicked)
+                {
+                    selectLastClicked();
+                }
                 return;
             }
         }
     }
-    selectLastClicked();
+    if (lmc == lmsClicked)
+    {
+        selectLastClicked();
+    }
 }
 
 
