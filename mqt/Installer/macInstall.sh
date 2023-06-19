@@ -90,7 +90,7 @@ do
 done
 
 cd ../../..
-macdeployqt MqtLogger.app/
+macdeployqt --qmldir $DIR/mqt/MqtBase/QSOView MqtLogger.app/
 cd MqtLogger.app/Contents
 
 mkdir Frameworks	
