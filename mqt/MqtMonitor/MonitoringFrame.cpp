@@ -18,6 +18,10 @@ MonitoringFrame::MonitoringFrame(MonitorMain *parent) :
 MonitoringFrame::~MonitoringFrame()
 {
     delete ui;
+//    if (qsoMapFrame)
+//    {
+//        delete qsoMapFrame;
+//    }
 }
 void MonitoringFrame::viewColumn()
 {
@@ -166,13 +170,10 @@ void MonitoringFrame::on_mapButton_clicked()
     {
         ui->QSOTable->setVisible(false);
 
-        qsoMapFrame = new QSOMapFrame(nullptr);
-        BaseContestLog *ct = getContest();
-        bool grid = monitorMain->QSOGrid;
-        bool lines = monitorMain->QSOLines;
-        bool spots = monitorMain->mapShowSpots;
-        int sd = monitorMain->clusterDistanceLimit;
-        qsoMapFrame->setContest(ct, true, grid, lines, spots, sd );
+        if (!qsoMapFrame)
+        {
+            qsoMapFrame = new QSOMapFrame(nullptr);
+        }
         ui->logFrame->layout()->addWidget(qsoMapFrame);
         ui->logFrame->layout()->removeWidget(ui->QSOTable);
 
@@ -180,13 +181,25 @@ void MonitoringFrame::on_mapButton_clicked()
         vbl->setStretch(0, 25);
         vbl->setStretch(1, 1);
         ui->mapButton->setText(tr("Show Log"));
+
+        BaseContestLog *ct = getContest();
+        bool grid = monitorMain->QSOGrid;
+        bool lines = monitorMain->QSOLines;
+        bool spots = monitorMain->mapShowSpots;
+        int sd = monitorMain->clusterDistanceLimit;
+        qsoMapFrame->setContest(ct, true, grid, lines, spots, sd );
+        qsoMapFrame->setVisible(true);
     }
     else
     {
         ui->logFrame->layout()->removeWidget(qsoMapFrame);
         ui->logFrame->layout()->addWidget(ui->QSOTable);
-        delete qsoMapFrame;
-        qsoMapFrame = nullptr;
+
+        qsoMapFrame->setVisible(false);
+        // detach but don't delete
+
+        //delete qsoMapFrame;
+        //qsoMapFrame = nullptr;
         ui->QSOTable->setVisible(true);
         ui->mapButton->setText(tr("Show Map"));
     }
