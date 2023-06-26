@@ -39,6 +39,7 @@ QSOMapFrame::QSOMapFrame(QWidget *parent) :
 
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::AfterLogContact, this, &QSOMapFrame::on_AfterLogContact, Qt::UniqueConnection);
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::redrawQSOMap, this, &QSOMapFrame::on_redrawQSOMap, Qt::QueuedConnection);
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::ContestBandChanged, this, &QSOMapFrame::onContestBandChanged);
 
     connect (ClusterClientServer::getClusterClientServer(), &ClusterClientServer::dxSpot, this, &QSOMapFrame::dxSpots);
 
@@ -67,6 +68,16 @@ void QSOMapFrame::setContest(BaseContestLog *c, bool monitor, bool grid, bool li
     else
     {
         stopMap();
+    }
+}
+void QSOMapFrame::onContestBandChanged(BaseContestLog *c)
+{
+    if (c == ct)
+    {
+        emit clearAll();
+        locs.clear();
+
+        doRedraw(ct, bdrawGrid, bdrawLines, drawSpots, spotDistance);
     }
 }
 void QSOMapFrame::startMap()
@@ -368,6 +379,13 @@ void QSOMapFrame::showContact(const BaseContestLog *c, const QSharedPointer<Base
         {
             return;
         }
+        QString currBand = c->currentBand.getValue();
+
+        if (lct->band != currBand)
+        {
+            return;
+        }
+
         bool drawLine = true;
         QPair<double, double> pos = calcPosition(loc, drawLine);
 
@@ -398,7 +416,7 @@ void QSOMapFrame::on_AfterLogContact(const BaseContestLog *c, const QSharedPoint
         if (lct)
         {
             Callsign dxCallsign = lct->cs;
-            Frequency dxFreq = lct->getFrequency().getValue();
+            //Frequency dxFreq = lct->getFrequency().getValue();
 
             if (spotQueue.count() != 0)
             {
@@ -460,6 +478,12 @@ void QSOMapFrame::drawSpot(QSharedPointer<ClusterSpotData> bsd)
 
         QString loc = bsd->getDxLocator();
         if (loc.isEmpty())
+        {
+            return;
+        }
+        QString currBand = ct->currentBand.getValue();
+
+        if (bsd->getBand() != currBand)
         {
             return;
         }

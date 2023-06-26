@@ -71,6 +71,7 @@ private slots:
     void dxSpots(QVector<ClusterMessage> spotMsg);
     void purgeSpots();
     void saveParams();
+    void onContestBandChanged(BaseContestLog *c);
 public slots:
     void on_AfterLogContact(const BaseContestLog *c, const QSharedPointer<BaseContact> lct);
     void on_redrawQSOMap(bool grid, bool lines, bool spots, int sd);
