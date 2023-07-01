@@ -544,7 +544,8 @@ void adjustMargins(QLayout *layout, int ls, int cml, int cmt, int cmr, int cmb)
                     QSplitter *s = dynamic_cast<QSplitter *>(w);
                     if (s)
                     {
-                        for (int j = 0; j< s->count(); j++)
+                        int sct = s->count();
+                        for (int j = 0; j< sct; j++)
                         {
                             adjustMargins(s->widget(j)->layout(), ls, cml, cmt, cmr, cmb);
                         }
@@ -560,6 +561,57 @@ void adjustMargins(QLayout *layout, int ls, int cml, int cmt, int cmr, int cmb)
         }
         layout->setSpacing(ls);
         layout->setContentsMargins(cml, cmt, cmr, cmb);
+    }
+}
+void removeFrameBoxes(QLayout *layout)
+{
+    if (layout)
+    {
+        for(int i = 0; i < layout->count(); i++)
+        {
+            QLayoutItem *li = layout->itemAt(i);
+            QLayout *l = li->layout();
+            QWidget *w = li->widget();
+            if (l)
+            {
+                removeFrameBoxes(l);
+            }
+            if (w)
+            {
+                if (w->layout())
+                {
+                    QFrame *f = dynamic_cast<QFrame *>(w);
+                    if (f)
+                    {
+                        f->setFrameShape(QFrame::NoFrame);
+                    }
+                    removeFrameBoxes(w->layout());
+                }
+                else
+                {
+                    QSplitter *s = dynamic_cast<QSplitter *>(w);
+                    if (s)
+                    {
+                        int sct = s->count();
+                        for (int j = 0; j< sct; j++)
+                        {
+                            removeFrameBoxes(s->widget(j)->layout());
+                        }
+                    }
+                    QScrollArea *sa = dynamic_cast<QScrollArea *>(w);
+                    if (sa)
+                    {
+                        w = sa->widget();
+                        removeFrameBoxes(w->layout());
+                    }
+                    QFrame *f = dynamic_cast<QFrame *>(w);
+                    if (f)
+                    {
+                        f->setFrameShape(QFrame::NoFrame);
+                    }
+                }
+            }
+        }
     }
 }
 bool isPureNumeric ( const QString &s )

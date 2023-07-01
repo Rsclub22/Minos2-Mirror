@@ -83,7 +83,7 @@
          <x>0</x>
          <y>0</y>
          <width>949</width>
-         <height>364</height>
+         <height>381</height>
         </rect>
        </property>
        <property name="sizePolicy">
@@ -95,6 +95,9 @@
        <layout class="QHBoxLayout" name="horizontalLayout_8">
         <item>
          <widget class="QFrame" name="blFrame">
+          <property name="frameShape">
+           <enum>QFrame::Box</enum>
+          </property>
           <layout class="QHBoxLayout" name="horizontalLayout_5">
            <item>
             <layout class="QVBoxLayout" name="verticalLayout">
@@ -148,317 +151,375 @@
          </widget>
         </item>
         <item>
-         <layout class="QVBoxLayout" name="verticalLayout_6">
-          <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_4">
-            <property name="sizeConstraint">
-             <enum>QLayout::SetMinimumSize</enum>
-            </property>
-            <item>
-             <widget class="QFrame" name="statusFrame">
-              <layout class="QVBoxLayout" name="verticalLayout_7">
-               <item>
-                <layout class="QHBoxLayout" name="horizontalLayout_2">
-                 <item>
-                  <widget class="QLabel" name="bandErrorLabel">
-                   <property name="text">
-                    <string>.</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QLabel" name="replyto_label">
-                   <property name="text">
-                    <string>.</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QLabel" name="specialOpMode">
-                   <property name="text">
-                    <string>.</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <spacer name="horizontalSpacer_2">
-                   <property name="orientation">
-                    <enum>Qt::Horizontal</enum>
-                   </property>
-                   <property name="sizeHint" stdset="0">
-                    <size>
-                     <width>40</width>
-                     <height>20</height>
-                    </size>
-                   </property>
-                  </spacer>
-                 </item>
-                </layout>
-               </item>
-               <item>
-                <layout class="QHBoxLayout" name="horizontalLayout_9">
-                 <item>
-                  <widget class="QLabel" name="de_label_">
-                   <property name="text">
-                    <string>.</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QLabel" name="mode_label_">
-                   <property name="text">
-                    <string>.</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QLabel" name="frequency_label_">
-                   <property name="text">
-                    <string>.</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QLabel" name="dx_label_">
-                   <property name="text">
-                    <string>.</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QLabel" name="rx_df_label_">
-                   <property name="text">
-                    <string>.</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QLabel" name="tx_df_label_">
-                   <property name="text">
-                    <string>.</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QLabel" name="report_label_">
-                   <property name="text">
-                    <string>.</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <spacer name="horizontalSpacer_3">
-                   <property name="orientation">
-                    <enum>Qt::Horizontal</enum>
-                   </property>
-                   <property name="sizeHint" stdset="0">
-                    <size>
-                     <width>40</width>
-                     <height>20</height>
-                    </size>
-                   </property>
-                  </spacer>
-                 </item>
-                </layout>
-               </item>
-              </layout>
-             </widget>
-            </item>
-            <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_6">
+         <widget class="QFrame" name="wframe">
+          <property name="frameShape">
+           <enum>QFrame::Box</enum>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_6">
+           <item>
+            <widget class="QFrame" name="dframe">
+             <layout class="QHBoxLayout" name="horizontalLayout_4">
+              <property name="sizeConstraint">
+               <enum>QLayout::SetMinimumSize</enum>
+              </property>
               <item>
-               <widget class="QPushButton" name="testButton">
-                <property name="focusPolicy">
-                 <enum>Qt::NoFocus</enum>
+               <widget class="QFrame" name="statusFrame">
+                <property name="frameShape">
+                 <enum>QFrame::Box</enum>
                 </property>
-                <property name="text">
-                 <string>test</string>
-                </property>
+                <layout class="QVBoxLayout" name="verticalLayout_7">
+                 <item>
+                  <layout class="QHBoxLayout" name="horizontalLayout_2">
+                   <item>
+                    <widget class="QLabel" name="bandErrorLabel">
+                     <property name="text">
+                      <string>.</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLabel" name="replyto_label">
+                     <property name="text">
+                      <string>.</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLabel" name="specialOpMode">
+                     <property name="text">
+                      <string>.</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <spacer name="horizontalSpacer_2">
+                     <property name="orientation">
+                      <enum>Qt::Horizontal</enum>
+                     </property>
+                     <property name="sizeHint" stdset="0">
+                      <size>
+                       <width>40</width>
+                       <height>20</height>
+                      </size>
+                     </property>
+                    </spacer>
+                   </item>
+                  </layout>
+                 </item>
+                 <item>
+                  <layout class="QHBoxLayout" name="horizontalLayout_9">
+                   <item>
+                    <widget class="QLabel" name="de_label_">
+                     <property name="text">
+                      <string>.</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLabel" name="mode_label_">
+                     <property name="text">
+                      <string>.</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLabel" name="frequency_label_">
+                     <property name="text">
+                      <string>.</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLabel" name="dx_label_">
+                     <property name="text">
+                      <string>.</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLabel" name="rx_df_label_">
+                     <property name="text">
+                      <string>.</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLabel" name="tx_df_label_">
+                     <property name="text">
+                      <string>.</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLabel" name="report_label_">
+                     <property name="text">
+                      <string>.</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <spacer name="horizontalSpacer_3">
+                     <property name="orientation">
+                      <enum>Qt::Horizontal</enum>
+                     </property>
+                     <property name="sizeHint" stdset="0">
+                      <size>
+                       <width>40</width>
+                       <height>20</height>
+                      </size>
+                     </property>
+                    </spacer>
+                   </item>
+                  </layout>
+                 </item>
+                </layout>
                </widget>
               </item>
               <item>
-               <widget class="QPushButton" name="replayButton">
-                <property name="focusPolicy">
-                 <enum>Qt::NoFocus</enum>
+               <widget class="QFrame" name="testframe">
+                <property name="frameShape">
+                 <enum>QFrame::Box</enum>
                 </property>
-                <property name="text">
-                 <string>Replay</string>
-                </property>
+                <layout class="QHBoxLayout" name="horizontalLayout_6">
+                 <item>
+                  <widget class="QPushButton" name="testButton">
+                   <property name="focusPolicy">
+                    <enum>Qt::NoFocus</enum>
+                   </property>
+                   <property name="text">
+                    <string>test</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="replayButton">
+                   <property name="focusPolicy">
+                    <enum>Qt::NoFocus</enum>
+                   </property>
+                   <property name="text">
+                    <string>Replay</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
                </widget>
               </item>
              </layout>
-            </item>
-           </layout>
-          </item>
-          <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_7">
-            <item>
-             <widget class="QFrame" name="autoSelectReplyFrame">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="frameShape">
-               <enum>QFrame::StyledPanel</enum>
-              </property>
-              <property name="frameShadow">
-               <enum>QFrame::Raised</enum>
-              </property>
-              <layout class="QVBoxLayout" name="verticalLayout_5">
-               <item>
-                <widget class="QFrame" name="autoSelectFrame">
-                 <layout class="QHBoxLayout" name="horizontalLayout_3">
-                  <item>
-                   <layout class="QVBoxLayout" name="verticalLayout_8">
+            </widget>
+           </item>
+           <item>
+            <widget class="QFrame" name="cframe">
+             <layout class="QHBoxLayout" name="horizontalLayout_7">
+              <item>
+               <widget class="QFrame" name="autoSelectReplyFrame">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="frameShape">
+                 <enum>QFrame::Box</enum>
+                </property>
+                <property name="frameShadow">
+                 <enum>QFrame::Plain</enum>
+                </property>
+                <layout class="QVBoxLayout" name="verticalLayout_5">
+                 <item>
+                  <widget class="QFrame" name="autoSelectFrame">
+                   <layout class="QHBoxLayout" name="horizontalLayout_3">
                     <item>
-                     <widget class="QCheckBox" name="autoSelectButton">
+                     <widget class="QFrame" name="asframe">
+                      <property name="frameShape">
+                       <enum>QFrame::Box</enum>
+                      </property>
+                      <layout class="QVBoxLayout" name="verticalLayout_8">
+                       <item>
+                        <widget class="QCheckBox" name="semiAutocb">
+                         <property name="text">
+                          <string>Semi-auto</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QCheckBox" name="autoSelectButton">
+                         <property name="focusPolicy">
+                          <enum>Qt::NoFocus</enum>
+                         </property>
+                         <property name="text">
+                          <string>Auto Select Reply</string>
+                         </property>
+                         <property name="checkable">
+                          <bool>true</bool>
+                         </property>
+                         <property name="checked">
+                          <bool>false</bool>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QCheckBox" name="RR73select">
+                         <property name="text">
+                          <string>Allow select 73/RR73</string>
+                         </property>
+                        </widget>
+                       </item>
+                      </layout>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QFrame" name="selFrame">
+                      <property name="frameShape">
+                       <enum>QFrame::Box</enum>
+                      </property>
+                      <layout class="QVBoxLayout" name="verticalLayout_9">
+                       <item>
+                        <widget class="QPushButton" name="semiAutoButton">
+                         <property name="text">
+                          <string>Select Best Response</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QPushButton" name="configCQButton">
+                         <property name="focusPolicy">
+                          <enum>Qt::NoFocus</enum>
+                         </property>
+                         <property name="text">
+                          <string>Config CQ</string>
+                         </property>
+                        </widget>
+                       </item>
+                      </layout>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QFrame" name="ignoreFrame">
+                   <property name="frameShape">
+                    <enum>QFrame::Box</enum>
+                   </property>
+                   <layout class="QHBoxLayout" name="horizontalLayout">
+                    <item>
+                     <widget class="QCheckBox" name="minPointsCheckBox">
                       <property name="focusPolicy">
                        <enum>Qt::NoFocus</enum>
                       </property>
                       <property name="text">
-                       <string>Auto Select Reply</string>
-                      </property>
-                      <property name="checkable">
-                       <bool>true</bool>
-                      </property>
-                      <property name="checked">
-                       <bool>false</bool>
+                       <string>Ignore &lt; (points)</string>
                       </property>
                      </widget>
                     </item>
                     <item>
-                     <widget class="QCheckBox" name="RR73select">
+                     <widget class="QSpinBox" name="minPointsSpinner">
+                      <property name="focusPolicy">
+                       <enum>Qt::ClickFocus</enum>
+                      </property>
+                      <property name="maximum">
+                       <number>10000</number>
+                      </property>
+                      <property name="singleStep">
+                       <number>10</number>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QCheckBox" name="snrCheckBox">
+                      <property name="focusPolicy">
+                       <enum>Qt::NoFocus</enum>
+                      </property>
                       <property name="text">
-                       <string>Allow select 73/RR73</string>
+                       <string>Ignore &lt; (SNR)</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QSpinBox" name="snrSpinner">
+                      <property name="focusPolicy">
+                       <enum>Qt::NoFocus</enum>
+                      </property>
+                      <property name="minimum">
+                       <number>-30</number>
+                      </property>
+                      <property name="maximum">
+                       <number>30</number>
+                      </property>
+                      <property name="value">
+                       <number>-20</number>
                       </property>
                      </widget>
                     </item>
                    </layout>
-                  </item>
-                  <item>
-                   <widget class="QPushButton" name="configCQButton">
-                    <property name="focusPolicy">
-                     <enum>Qt::NoFocus</enum>
-                    </property>
-                    <property name="text">
-                     <string>Config CQ</string>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
-                </widget>
-               </item>
-               <item>
-                <widget class="QFrame" name="ignoreFrame">
-                 <layout class="QHBoxLayout" name="horizontalLayout">
-                  <item>
-                   <widget class="QCheckBox" name="minPointsCheckBox">
-                    <property name="focusPolicy">
-                     <enum>Qt::NoFocus</enum>
-                    </property>
-                    <property name="text">
-                     <string>Ignore &lt; (points)</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QSpinBox" name="minPointsSpinner">
-                    <property name="focusPolicy">
-                     <enum>Qt::ClickFocus</enum>
-                    </property>
-                    <property name="maximum">
-                     <number>10000</number>
-                    </property>
-                    <property name="singleStep">
-                     <number>10</number>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QCheckBox" name="snrCheckBox">
-                    <property name="focusPolicy">
-                     <enum>Qt::NoFocus</enum>
-                    </property>
-                    <property name="text">
-                     <string>Ignore &lt; (SNR)</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QSpinBox" name="snrSpinner">
-                    <property name="focusPolicy">
-                     <enum>Qt::NoFocus</enum>
-                    </property>
-                    <property name="minimum">
-                     <number>-30</number>
-                    </property>
-                    <property name="maximum">
-                     <number>30</number>
-                    </property>
-                    <property name="value">
-                     <number>-20</number>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
-                </widget>
-               </item>
-              </layout>
-             </widget>
-            </item>
-            <item>
-             <layout class="QVBoxLayout" name="verticalLayout_2">
-              <item>
-               <widget class="QPushButton" name="halt_tx_button_">
-                <property name="focusPolicy">
-                 <enum>Qt::NoFocus</enum>
-                </property>
-                <property name="text">
-                 <string>Halt TX</string>
-                </property>
+                  </widget>
+                 </item>
+                </layout>
                </widget>
               </item>
               <item>
-               <widget class="QPushButton" name="auto_off_button_">
-                <property name="focusPolicy">
-                 <enum>Qt::NoFocus</enum>
+               <widget class="QFrame" name="txframe">
+                <property name="frameShape">
+                 <enum>QFrame::Box</enum>
                 </property>
-                <property name="text">
-                 <string>Disable Tx</string>
+                <layout class="QVBoxLayout" name="verticalLayout_2">
+                 <item>
+                  <widget class="QPushButton" name="halt_tx_button_">
+                   <property name="focusPolicy">
+                    <enum>Qt::NoFocus</enum>
+                   </property>
+                   <property name="text">
+                    <string>Halt TX</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="auto_off_button_">
+                   <property name="focusPolicy">
+                    <enum>Qt::NoFocus</enum>
+                   </property>
+                   <property name="text">
+                    <string>Disable Tx</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
+               <widget class="QFrame" name="cdframe">
+                <property name="frameShape">
+                 <enum>QFrame::Box</enum>
                 </property>
+                <layout class="QVBoxLayout" name="verticalLayout_4">
+                 <item>
+                  <widget class="QPushButton" name="clearLocalDecodesButton">
+                   <property name="focusPolicy">
+                    <enum>Qt::NoFocus</enum>
+                   </property>
+                   <property name="text">
+                    <string>Clear Local Decodes</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="clearDecodesButton">
+                   <property name="focusPolicy">
+                    <enum>Qt::NoFocus</enum>
+                   </property>
+                   <property name="text">
+                    <string>Clear All Decodes</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
                </widget>
               </item>
              </layout>
-            </item>
-            <item>
-             <layout class="QVBoxLayout" name="verticalLayout_4">
-              <item>
-               <widget class="QPushButton" name="clearLocalDecodesButton">
-                <property name="focusPolicy">
-                 <enum>Qt::NoFocus</enum>
-                </property>
-                <property name="text">
-                 <string>Clear Local Decodes</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QPushButton" name="clearDecodesButton">
-                <property name="focusPolicy">
-                 <enum>Qt::NoFocus</enum>
-                </property>
-                <property name="text">
-                 <string>Clear All Decodes</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-           </layout>
-          </item>
-         </layout>
+            </widget>
+           </item>
+          </layout>
+         </widget>
         </item>
         <item>
          <spacer name="horizontalSpacer">

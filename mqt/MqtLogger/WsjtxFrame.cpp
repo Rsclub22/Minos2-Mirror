@@ -140,7 +140,22 @@ WsjtxFrame::WsjtxFrame(TSingleLogFrame *parent) :
     blFilterModel.setSourceModel(&blModel);
     ui->blackListView->setModel(&blFilterModel);
 
+    int ls = 2;
+    int cml = 2;
+    int cmt = 0;
+    int cmr = 2;
+    int cmb = 0;
 
+//    TContestApp::getContestApp() ->getIntDisplayProfile(edpls, ls);
+//    TContestApp::getContestApp() ->getIntDisplayProfile(edpcml, cml);
+//    TContestApp::getContestApp() ->getIntDisplayProfile(edpcmt, cmt);
+//    TContestApp::getContestApp() ->getIntDisplayProfile(edpcmr, cmr);
+//    TContestApp::getContestApp() ->getIntDisplayProfile(edpcmb, cmb);
+
+    adjustMargins(ui->blFrame->layout(), ls, cml, cmt, cmr, cmb);
+    adjustMargins(ui->wframe->layout(), ls, cml, cmt, cmr, cmb);
+    removeFrameBoxes(ui->blFrame->layout());
+    removeFrameBoxes(ui->wframe->layout());
 }
 WsjtxFrame::~WsjtxFrame()
 {
@@ -324,9 +339,7 @@ void WsjtxFrame::getBestCQ73CallingMe()
 {
     wtrace(QString("WsjtxFrame::getBestCQ73CallingMe"));
 
-    int bestCQOffset = -1;
     PointBonusMultSnr bestCQPoints;
-    int bestToMeOffset = -1;
     PointBonusMultSnr bestToMePoints;
 
     for (int i = decodeStartSize; i < decodeEndSize; i++)
@@ -415,7 +428,7 @@ void WsjtxFrame::getBestCQ73CallingMe()
         wtrace(QString("WsjtxFrame::getBestCQ73CallingMe best CQ %1").arg(messages[bestCQOffset].message));
     }
 }
-bool WsjtxFrame::getBestToMe()
+bool WsjtxFrame::areAnyToMe()
 {
     wtrace(QString("WsjtxFrame::getBestToMe"));
 
@@ -604,29 +617,35 @@ QString WsjtxFrame::getStateText(QSOStates s)
     }
     return t;
 }
-void WsjtxFrame::doResponse(QSOStates nstate, bool cq)
+void WsjtxFrame::autoDoResponse(QSOStates nstate, bool cq, int offset)
 {
-    wtrace("WsjtxFrame::doResponse");
+    wtrace("WsjtxFrame::autoDoResponse");
     if (ui->autoSelectButton->isChecked() && !currentlyTransmitting)
     {
-        if ( bestOffset >= 0)
-        {
-            wtrace("WsjtxFrame::doResponse auto replying to " + messages[bestOffset].message);
-            messages[bestOffset].autoresp = true;
-            reply(messages[bestOffset]);
+        doResponse(nstate, cq, offset);
+    }
+}
+void WsjtxFrame::doResponse(QSOStates nstate, bool cq, int offset)
+{
+    wtrace("WsjtxFrame::doResponse");
 
-            qsoState = nstate;
-            wtrace("WsjtxFrame::doResponse Transition to " + getStateText(nstate));
+    if ( offset >= 0)
+    {
+        wtrace("WsjtxFrame::doResponse auto replying to " + messages[offset].message);
+        messages[offset].autoresp = true;
+        reply(messages[offset]);
 
-            // we are assuming that autoseq is enabled, call 1st isn't
-            // but we can't enforce either
-            // things may be messy if we are not set this way
-        }
-        else if (cq)
-        {
-            // If we can, start calling CQ
-            startCQ();
-        }
+        qsoState = nstate;
+        wtrace("WsjtxFrame::doResponse Transition to " + getStateText(nstate));
+
+        // we are assuming that autoseq is enabled, call 1st isn't
+        // but we can't enforce either
+        // things may be messy if we are not set this way
+    }
+    else if (cq)
+    {
+        // If we can, start calling CQ
+        startCQ();
     }
 }
 
@@ -645,14 +664,12 @@ void WsjtxFrame::process_NoQSOWaiting(bool freeStanding)
         wtrace("WsjtxFrame::process_NoQSOWaiting() freeStanding - ignore");
         return;
     }
-    bestOffset = -1;
-    bestPoints.clear();
 
     getBestCQ73CallingMe();
 
     markBest();
 
-    doResponse(NoQSOCallingThem, true);
+    autoDoResponse(NoQSOCallingThem, true, bestOffset);
 }
 void WsjtxFrame::process_NoQSOCallingCQ(bool freeStanding)
 {
@@ -666,9 +683,6 @@ void WsjtxFrame::process_NoQSOCallingCQ(bool freeStanding)
         wtrace("WsjtxFrame::process_NoQSOCallingCQ() freeStanding - ignore");
     }
 
-    bestOffset = -1;
-    bestPoints.clear();
-
     QSOStates nState = NoQSOCallingCQ;
     // iterate over the latest decodes, and select the best
 
@@ -677,7 +691,7 @@ void WsjtxFrame::process_NoQSOCallingCQ(bool freeStanding)
     // which when rr73/73 has been sent, at end of
     // update_status()
 
-    if (getBestToMe())
+    if (areAnyToMe())
     {
         nState = InQSO;
     }
@@ -692,7 +706,7 @@ void WsjtxFrame::process_NoQSOCallingCQ(bool freeStanding)
     }
 
     markBest();
-    doResponse(nState, false);
+    autoDoResponse(nState, false, bestOffset);
 }
 void WsjtxFrame::process_NoQSOCallingThem(bool freeStanding)
 {
@@ -707,9 +721,6 @@ void WsjtxFrame::process_NoQSOCallingThem(bool freeStanding)
         return;
     }
 
-    bestOffset = -1;
-    bestPoints.clear();
-
     if (!checkTheirCall() && checkThemPresent())
     {
         wtrace("WsjtxFrame::process_NoQSOCallingThem() !checkTheirCall() && checkThemPresent()");
@@ -719,12 +730,12 @@ void WsjtxFrame::process_NoQSOCallingThem(bool freeStanding)
         attempts = 0;
         getBestCQ73CallingMe();
         markBest();
-        doResponse(NoQSOCallingThem, true);
+        autoDoResponse(NoQSOCallingThem, true, bestOffset);
     }
     else
     {
         wtrace("WsjtxFrame::process_NoQSOCallingThem() !(!checkThemPresent() && checkThemPresent())");
-        if (getBestToMe())
+        if (areAnyToMe())
         {
             wtrace("WsjtxFrame::process_NoQSOCallingThem() getBestToMe()");
             attempts = 0;
@@ -745,7 +756,7 @@ void WsjtxFrame::process_NoQSOCallingThem(bool freeStanding)
                 on_addBlackListButton_clicked();
                 getBestCQ73CallingMe();
                 markBest();
-                doResponse(NoQSOCallingThem, false);
+                autoDoResponse(NoQSOCallingThem, false, bestOffset);
             }
         }
     }
@@ -764,9 +775,6 @@ void WsjtxFrame::process_InQSO(bool freeStanding)
         return;
     }
 
-    bestOffset = -1;
-    bestPoints.clear();
-
     if (!checkTheirCall() && checkThemPresent())
     {
         wtrace("WsjtxFrame::process_InQSO() !checkTheirCall() && checkThemPresent()");
@@ -776,12 +784,12 @@ void WsjtxFrame::process_InQSO(bool freeStanding)
         attempts = 0;
         getBestCQ73CallingMe();
         markBest();
-        doResponse(NoQSOCallingThem, true);
+        autoDoResponse(NoQSOCallingThem, true, bestOffset);
     }
     else
     {
         wtrace("WsjtxFrame::process_InQSOm() !(!checkThemPresent() && checkThemPresent())");
-        if (getBestToMe()) // hopefully they are now calling me
+        if (areAnyToMe()) // hopefully they are now calling me
         {
             wtrace("WsjtxFrame::process_InQSO() getBestToMe()");
             // let autosequence do its job
@@ -801,7 +809,7 @@ void WsjtxFrame::process_InQSO(bool freeStanding)
                 on_addBlackListButton_clicked();
                 getBestCQ73CallingMe();
                 markBest();
-                doResponse(NoQSOCallingThem, false);
+                autoDoResponse(NoQSOCallingThem, false, bestOffset);
             }
         }
     }
@@ -815,7 +823,12 @@ void WsjtxFrame::process_decodes(bool freeStanding)
         return;
     }
 
-    if (ui->autoSelectButton->isChecked())
+    bestOffset = -1;
+    bestPoints.clear();
+    bestCQOffset = -1;
+    bestToMeOffset = -1;
+
+    if (ui->autoSelectButton->isChecked() || ui->semiAutoButton->isChecked())
     {
         decodeEndSize = messages.size();
         minpoints = ui->minPointsSpinner->value();
@@ -1812,4 +1825,45 @@ void WsjtxFrame::on_resetButton_clicked()
     qsoState = NoQSOWaiting;
     wtrace("WsjtxFrame::on_resetButton_clicked() Transition to NoQSOWaiting");
 }
+
+
+void WsjtxFrame::on_semiAutoButton_clicked()
+{
+    // we want the best for the current phase
+    // NoQSOWaiting         reply to best CQ call
+    // NoQSOCallingCQ       best response to us - don't look at CQ calls
+    // NoQSOCallingThem     should be disabled
+    // InQSO                should be disabled
+
+    switch (qsoState)
+    {
+    case NoQSOWaiting:
+        doResponse(NoQSOCallingThem, false, bestOffset);
+        break;
+    case NoQSOCallingCQ:
+        if (bestToMeOffset > -1)
+        {
+            doResponse(InQSO, false, bestToMeOffset);
+        }
+        break;
+    case NoQSOCallingThem:
+        doResponse(NoQSOCallingThem, false, bestCQOffset);
+        break;
+    case InQSO:
+        doResponse(InQSO, false, bestToMeOffset);
+        break;
+    }
+}
+
+
+void WsjtxFrame::on_semiAutocb_toggled(bool c)
+{
+    if (!c)
+    {
+        wtrace("WsjtxFrame semi-auto off");
+    }
+    else
+    {
+        wtrace("WsjtxFrame semi-auto on");
+    }}
 

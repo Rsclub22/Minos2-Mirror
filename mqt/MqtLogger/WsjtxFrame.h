@@ -213,15 +213,19 @@ private:
     int minpoints = 0;
     int minsnr = 0;
     int bestOffset = -1;
+    int bestCQOffset = -1;
+    int bestToMeOffset = -1;
+
     PointBonusMultSnr bestPoints;
 
-    void doResponse(QSOStates nstate, bool cq);
+    void autoDoResponse(QSOStates nstate, bool cq, int offset);
+    void doResponse(QSOStates nstate, bool cq, int offset);
     void startCQ();
     void reply(decodeMessage &dc);
 
     bool goodCQCall(decodeMessage &dc);
     void getBestCQ73CallingMe();
-    bool getBestToMe();
+    bool areAnyToMe();
     bool checkTheirCall();
     void markBest();
 
@@ -289,6 +293,8 @@ private slots:
     void on_addBlackListButton_clicked();
     void on_removeBlackListButton_clicked();
     void on_resetButton_clicked();
+    void on_semiAutoButton_clicked();
+    void on_semiAutocb_toggled(bool checked);
 };
 
 #endif // WSJTXFRAME_H
