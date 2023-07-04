@@ -34,6 +34,9 @@ private:
 
     void addSpotQueue(const ClusterMessage spot);
 
+    QVector<ClusterMessage> spotQueue;
+
+
 private slots:
     void SyncTimerTimer( );
     void on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString &from);

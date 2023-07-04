@@ -951,7 +951,7 @@ bool TSingleLogFrame::doKeyPressEvent( QKeyEvent* event )
     // each dependant ContestPage also needs this
     return GJVQSOLogFrame->doKeyPressEvent(event);
 }
-void TSingleLogFrame::doSendEntry(QString expName)
+void TSingleLogFrame::doSendEntry(QString /*expName*/)
 {
     // expName is the exported full filename, not yet usable
 

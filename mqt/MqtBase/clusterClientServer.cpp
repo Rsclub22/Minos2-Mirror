@@ -21,8 +21,6 @@
 #include "clusterClientServer.h"
 #include "MTrace.h"
 
-static QVector<ClusterMessage> spotQueue;
-
 ClusterClientServer *ClusterClientServer::clusterClientServer = nullptr;
 
 
@@ -77,7 +75,7 @@ void ClusterClientServer::on_routerCall(bool err, QSharedPointer<MinosRPCObj> mr
                 psMess->getString(pmess);
                 loggerUuid->getString(uuid);
                 frameId->getInt(frame_id);
-                trace(QString("ClusterClientServer: on_routerCall - receive cluster spot = %1, uuid = %2").arg(pmess).arg(uuid));
+                trace(QString("ClusterClientServer: on_routerCall - receive cluster spot = %1, uuid = %2").arg(pmess, uuid));
                 ClusterMessage msg;
                 msg.setMessage(pmess);
                 msg.setFrameId(frame_id);
