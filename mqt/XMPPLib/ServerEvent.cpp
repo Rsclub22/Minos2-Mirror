@@ -13,21 +13,25 @@
 #include "singleapplication.h"
 
 #ifdef Q_OS_WIN
-    static QSharedMemory RouterEvent;
+    static QSharedMemory *RouterEvent = nullptr;
 #endif
 void makeRouterEvent( bool create )
 {
     // we keep this so that we appear to old systems
 #ifdef Q_OS_WIN
-    RouterEvent.setKey( SecondInstall::getRouterEventName() );
+    if (!RouterEvent)
+    {
+        RouterEvent = new QSharedMemory();
+    }
+    RouterEvent->setKey( SecondInstall::getRouterEventName() );
     if (create)
     {
-        RouterEvent.create( 1 );
+        RouterEvent->create( 1 );
 
     }
     else
     {
-        RouterEvent.detach();
+        RouterEvent->detach();
     }
 #else
     Q_UNUSED(create)

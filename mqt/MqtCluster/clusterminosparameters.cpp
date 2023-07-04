@@ -2,8 +2,6 @@
 #include "MMessageDialog.h"
 #include "clusterminosparameters.h"
 
-static ClusterMinosParameters mp;
-
 bool ClusterMinosParameters::getAllowLoc4()
 {
     return true;

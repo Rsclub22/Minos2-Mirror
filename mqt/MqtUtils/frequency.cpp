@@ -153,9 +153,9 @@ QString Frequency::convertFreqStrDispSingleNoTrailZero()
 
 
 
-static QRegularExpression trz("0+$");
 QString Frequency::removeTrailingZeroes(QString sfreq)
 {
+    static QRegularExpression trz("0+$");
     // remove trailing zero, apart from after period.
     QStringList fspl = sfreq.split('.');
     int last = fspl.count() - 1;

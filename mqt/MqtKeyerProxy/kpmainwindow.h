@@ -41,6 +41,9 @@ private:
     QLabel *sbLabel = nullptr;
     bool inPTTConfig = false;
 
+    QString alsaStore = "store";
+    QString alsaRestore = "restore";
+
     void runAlsaScript(const QString &alsaFileName, const QString &command);
 
     virtual void closeEvent(QCloseEvent *event) override;

@@ -244,7 +244,6 @@ void QrzDisplayFrame::setContest(BaseContestLog( *c))
 }
 
 // -------- QRZ Display RPC -----------------------------------------------------
-static QVector<QrzServerMessage> qrzRequestsQueue;
 
 QrzDisplayServerRpc *QrzDisplayServerRpc::qrzDisplayServerRpc = nullptr;
 

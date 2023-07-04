@@ -218,6 +218,15 @@ public:
 
 
 };
+class DistCount
+{
+  public:
+      DistCount(QString p, int d):prefix(p), dcount(d){}
+      DistCount():dcount(0){}
+      QString prefix;
+      char dcount;
+};
+
 class GlistList : public MultList < GlistEntry >
 {
     Q_OBJECT
@@ -229,6 +238,7 @@ class GlistList : public MultList < GlistEntry >
       void load( );
       virtual bool procLine(QStringList );
 
+      static QVector<DistCount> distCounts;
 };
 class DistrictList : public MultList < DistrictEntry >
 {

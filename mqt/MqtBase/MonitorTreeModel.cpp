@@ -71,12 +71,7 @@ QString RouterTreeNode::data(int column)
         return Name();
     return "";
 }
-static QStringList stateList =
-{
-   "P",
-   "R",
-   "NC"
-};
+
 QString LogTreeNode::data(int column)
 {
     if (column == 1)

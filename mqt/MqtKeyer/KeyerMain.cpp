@@ -26,8 +26,6 @@
 
 KeyerMain *keyerMain = nullptr;
 
-static QString alsaStore("store");
-static QString alsaRestore("restore");
 static bool kmInhibitCallbacks = false;
 
 

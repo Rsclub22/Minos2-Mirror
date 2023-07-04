@@ -18,9 +18,6 @@
 #include "kpmainwindow.h"
 #include "ui_kpmainwindow.h"
 
-static QString alsaStore("store");
-static QString alsaRestore("restore");
-
 KPMainWindow::KPMainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::KPMainWindow)

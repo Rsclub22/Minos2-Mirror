@@ -78,7 +78,7 @@
     }
 ]
 */
-static QString defaultConfig = "[{\"name\": \"%1\","
+QString ScreenConfigFile::defaultConfig = "[{\"name\": \"%1\","
         "\"rows\":["
         "[{\"type\": \"%2\"},{\"type\": \"%3\"}],"
         "[{\"type\": \"%4\"},{\"type\": \"%5\"},{\"type\": \"%6\"},{\"type\": \"%7\"}],"
@@ -86,7 +86,7 @@ static QString defaultConfig = "[{\"name\": \"%1\","
         "[{\"type\": \"%10\"},{\"type\": \"%11\"},{\"type\": \"%12\"}]"
         "]}]";
 
-static QString protectedConfig  = "[{\"name\": \"%1\","
+QString ScreenConfigFile::protectedConfig  = "[{\"name\": \"%1\","
                                "\"rows\":["
                                "[{\"type\": \"%2\"}],"
                                "[{\"type\": \"%3\"}],"

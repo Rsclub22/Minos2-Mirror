@@ -22,7 +22,7 @@
 
 
 static bool syncstat = false;
-static QVector<QrzServerMessage> qrzRequestsQueue;
+
 const char * QrzServerRpc::qrzServerStateIndicator[] =
 {
     QT_TR_NOOP("Available"),

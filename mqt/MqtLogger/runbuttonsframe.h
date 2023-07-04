@@ -56,6 +56,9 @@ signals:
 
 private:
     int memNo;
+    static QKeySequence runButShortCut[];
+    static QKeySequence runButShiftShortCut[];
+
 };
 
 class RunButtonsFrame : public QGroupBox
@@ -100,7 +103,6 @@ private:
     Frequency curRunFreq;
     QString curRunMode;
     QTimer *chkRunFreqTimer;
-
 
     void initRunMemoryButton();
     void loadRunButtonLabels();

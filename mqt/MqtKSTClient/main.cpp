@@ -1,11 +1,14 @@
 #include <QApplication>
 #include "AppStartup.h"
+#include "KSTMinosParameters.h"
 #include "RPCCommandConstants.h"
 #include "SecondInstall.h"
 #include "kstmainwindow.h"
 
 int main(int argc, char *argv[])
 {
+    KSTMinosParameters mp;
+
     SecondInstall::parseSecondInstall(argc, argv);
     QApplication a(argc, argv);
     appStartup(rpcConstants::KSTClientApp);

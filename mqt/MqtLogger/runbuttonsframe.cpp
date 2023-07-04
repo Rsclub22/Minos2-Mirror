@@ -22,13 +22,13 @@ const int RUN_BUTTON_2_ON = 1;
 
 const int CHECK_RUN_FREQ_POLLTIME = 1000;
 
-static QKeySequence runButShortCut[] {
+QKeySequence RunMemoryButton::runButShortCut[] {
     QKeySequence(Qt::CTRL | Qt::Key_BracketLeft),
     QKeySequence(Qt::CTRL | Qt::Key_BracketRight)
 
 };
 
-static QKeySequence runButShiftShortCut[] {
+QKeySequence RunMemoryButton::runButShiftShortCut[] {
     QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_BracketLeft),
     QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_BracketRight)
 

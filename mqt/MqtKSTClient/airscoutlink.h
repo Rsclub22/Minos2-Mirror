@@ -100,13 +100,14 @@ class AirScoutLink: public QObject
     QTimer ASTimer;
     QDateTime lastASSEnd;
 
-
     // variablesfor checksums
     char lastbyte;
     int cs;
     char lcs;
 
     bool assetPathInProgress = false;
+
+    static QVector<const char *> bandFreqStrings;
 
     qint64 sendMessage(QString messagetype, QString messageText);
     void sendToAllBroadcast(QByteArray *packet);
@@ -115,7 +116,7 @@ public:
     AirScoutLink();
     ~AirScoutLink();
 
-    static QVector<const char *>ASBandStrings;
+    static QVector<const char *> ASBandStrings;
 
     void usersChanged(QSharedPointer<QVector<QSharedPointer<KstUser> > > callVector);
     void asSelected(QSharedPointer<KstUser> user);

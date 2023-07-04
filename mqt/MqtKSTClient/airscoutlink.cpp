@@ -3,22 +3,8 @@
 
 #include "kstmainwindow.h"
 
-QVector<const char *>AirScoutLink::ASBandStrings = {
-    QT_TR_NOOP("50MHz"),
-    QT_TR_NOOP("70MHz"),
-    QT_TR_NOOP("144MHz"),
-    QT_TR_NOOP("432MHz"),
-    QT_TR_NOOP("1.2GHz"),
-    QT_TR_NOOP("2.3GHz"),
-    QT_TR_NOOP("3.4GHz"),
-    QT_TR_NOOP("5.7GHz"),
-    QT_TR_NOOP("10GHz"),
-    QT_TR_NOOP("24GHz"),
-    QT_TR_NOOP("47GHz"),
-    QT_TR_NOOP("76GHz")
-};
 // frequencies are in 100 hz unit
-static QVector<const char *> bandFreqStrings = {
+QVector<const char *> AirScoutLink::bandFreqStrings = {
        "500000",
        "700000",
       "1440000",
@@ -32,6 +18,21 @@ static QVector<const char *> bandFreqStrings = {
     "470880000",
     "760320000"
 };
+QVector<const char *> AirScoutLink::ASBandStrings = {
+    QT_TR_NOOP("50MHz"),
+    QT_TR_NOOP("70MHz"),
+    QT_TR_NOOP("144MHz"),
+    QT_TR_NOOP("432MHz"),
+    QT_TR_NOOP("1.2GHz"),
+    QT_TR_NOOP("2.3GHz"),
+    QT_TR_NOOP("3.4GHz"),
+    QT_TR_NOOP("5.7GHz"),
+    QT_TR_NOOP("10GHz"),
+    QT_TR_NOOP("24GHz"),
+    QT_TR_NOOP("47GHz"),
+    QT_TR_NOOP("76GHz")
+};
+
 AirScoutLink::AirScoutLink():
     qus(new QUdpSocket())
 {

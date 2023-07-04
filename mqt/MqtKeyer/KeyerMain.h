@@ -151,6 +151,8 @@ private:
     CompressorParams getCompSliders();
     void setCompSliders(CompressorParams &cp);
 
+    QString alsaStore = "store";
+    QString alsaRestore = "restore";
 
     void runAlsaScript(const QString &alsaFileName, const QString &command);
 

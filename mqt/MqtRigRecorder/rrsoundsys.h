@@ -13,6 +13,9 @@
 #include <QThread>
 #include <QMap>
 #include <QDateTime>
+#include <QWaitCondition>
+#include <QMutex>
+
 #include "vucallback.h"
 
 
@@ -38,6 +41,7 @@ class RRRiffWriter : public QThread
     Q_OBJECT
 
      RRRtAudioSoundSystem *ss;
+
 public:
      bool terminated;
     RRRiffWriter(RRRtAudioSoundSystem *parent = nullptr) ;
@@ -58,6 +62,10 @@ public:
     bool initialise(QString ind, QString ind2);
     void stop();
     void closedown();
+
+    static QWaitCondition bufferNotEmpty;
+    static QWaitCondition bufferNotFull;
+    static QMutex mutex;
 
     QStringList inputDevices;
 

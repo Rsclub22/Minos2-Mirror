@@ -66,8 +66,6 @@ DecodeHeading const DecodesModel::headings[dcMaxVal] = {
     {QT_TR_NOOP ("Message"), Qt::AlignLeft}
 };
 
-static QRegularExpression cq_re {"(CQ|CQDX|QRZ)[^A-Z0-9/]+"};
-
 QString DecodesModel::confidence_string (bool low_confidence) const
 {
     return low_confidence ? tr ("low") : tr ("high");

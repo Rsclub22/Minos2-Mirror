@@ -75,6 +75,10 @@ class ScreenConfigFile
 
     static ScreenConfigFile scf;
     bool loaded = false;
+
+    static QString defaultConfig;
+    static QString protectedConfig;
+
 public:
 
     static ScreenConfigFile &getScreenConfigFile(QWidget *p)

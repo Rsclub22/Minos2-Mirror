@@ -2,8 +2,6 @@
 #include "MMessageDialog.h"
 #include "DMMinosParameters.h"
 
-static DMMinosParameters mp;
-
 bool DMMinosParameters::getAllowLoc4()
 {
     return true;

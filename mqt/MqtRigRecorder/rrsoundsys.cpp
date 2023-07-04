@@ -37,9 +37,9 @@
 #define RINGBUFFERSIZE 1024
 #define BUFFSIZE RINGBUFFERSIZE * FRAMESAMPLES * 2
 
-static QWaitCondition bufferNotEmpty;
-static QWaitCondition bufferNotFull;
-static QMutex mutex;
+QWaitCondition RRRtAudioSoundSystem::bufferNotEmpty;
+QWaitCondition RRRtAudioSoundSystem::bufferNotFull;
+QMutex RRRtAudioSoundSystem::mutex;
 
 static int16_t inBuff[BUFFSIZE] = {};
 static int recIndex = 0;
@@ -59,10 +59,10 @@ void RRRiffWriter::run()
 {
     for (;;)
     {
-        mutex.lock();
+        RRRtAudioSoundSystem::mutex.lock();
         if (writeIndex == recIndex || writeIndex == recIndex2)
-            bufferNotEmpty.wait(&mutex);
-        mutex.unlock();
+            RRRtAudioSoundSystem::bufferNotEmpty.wait(&RRRtAudioSoundSystem::mutex);
+        RRRtAudioSoundSystem::mutex.unlock();
 
         if (terminated)
             break;
@@ -71,11 +71,11 @@ void RRRiffWriter::run()
         while (f > writeIndex)
         {
             ss->writeDataToFile(&inBuff[writeIndex%RINGBUFFERSIZE * FRAMESAMPLES * 2], FRAMESAMPLES);
-            mutex.lock();
+            RRRtAudioSoundSystem::mutex.lock();
             writeIndex += 1;
 
-            bufferNotFull.wakeAll();
-            mutex.unlock();
+            RRRtAudioSoundSystem::bufferNotFull.wakeAll();
+            RRRtAudioSoundSystem::mutex.unlock();
 #ifdef Q_OS_UNIX
             sync();     // make sure it goes to disk
 #endif

@@ -1,8 +1,5 @@
 #include "qrzserverminosparameters.h"
 
-static QrzServerMinosParameters qrzMp;
-
-
 bool QrzServerMinosParameters::getAllowLoc4()
 {
     return true;

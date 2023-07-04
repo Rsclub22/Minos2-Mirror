@@ -24,15 +24,7 @@ QVector<ContList> contlist =
    };
 //============================================================================
 // prefix/mult count
-class DistCount
-{
-public:
-    DistCount(QString p, int d):prefix(p), dcount(d){}
-    DistCount():dcount(0){}
-   QString prefix;
-   char dcount;
-};
-static QVector<DistCount> distCounts =
+QVector<DistCount> GlistList::distCounts =
    {
       DistCount("G", 1),
       DistCount("GD", 1),
@@ -333,7 +325,7 @@ int CountryEntry::districtLimit()
     if ( distLimit >= 0 )
         return distLimit;
 
-    for (auto &dc: qAsConst(distCounts))
+    for (auto &dc: qAsConst(GlistList::distCounts))
     {
         if ( basePrefix.compare( dc.prefix, Qt::CaseSensitive ) == 0 )
         {
@@ -964,7 +956,7 @@ bool MultListsImpl::isUKprefix(const Callsign &cs)
    {
       return false;
    }
-   for ( auto &dc: qAsConst(distCounts) )
+   for ( auto &dc: qAsConst(GlistList::distCounts) )
    {
        if ( ctry->getBasePrefix().compare( dc.prefix, Qt::CaseSensitive ) == 0 )
        {

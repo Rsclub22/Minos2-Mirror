@@ -1270,8 +1270,8 @@ void ContestDetails::setModes()
     }
 }
 //---------------------------------------------------------------------------
-static QString ssLineEditFrRedBkRed = "QLineEdit { border-style: outset ; border-width: 2px ; border-color: red  }";
-static QString ssComboBoxFrRedBkRed = "QComboBox { border-style: outset ; border-width: 2px ; border-color: red  }";
+QString ssLineEditFrRedBkRed = "QLineEdit { border-style: outset ; border-width: 2px ; border-color: red  }";
+QString ssComboBoxFrRedBkRed = "QComboBox { border-style: outset ; border-width: 2px ; border-color: red  }";
 QString ssLineEditOK = "QLineEdit { background-color: white ; border-style: outset ; border-width: 1px ; border-color: black ; color : black ; }";
 QString ssComboBoxOK = "QComboBox { background-color: white ; border-style: outset ; border-width: 1px ; border-color: black ; color : black ; }";
 

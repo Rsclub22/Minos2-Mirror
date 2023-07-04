@@ -15,9 +15,12 @@
 #include "RPCCommandConstants.h"
 #include "SecondInstall.h"
 #include "clustermainwindow.h"
+#include "clusterminosparameters.h"
 
 int main(int argc, char *argv[])
 {
+    ClusterMinosParameters mp;
+
     SecondInstall::parseSecondInstall(argc, argv);
     QApplication a(argc, argv);
     appStartup(rpcConstants::clusterApp);

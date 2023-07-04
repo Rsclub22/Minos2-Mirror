@@ -2,8 +2,6 @@
 #include "MMessageDialog.h"
 #include "KSTMinosParameters.h"
 
-static KSTMinosParameters mp;
-
 bool KSTMinosParameters::getAllowLoc4()
 {
     return true;
