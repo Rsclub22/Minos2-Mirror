@@ -98,7 +98,6 @@ int TForceLogDlg::doexec(BaseContestLog *contest,  ScreenContact &screenContact,
 
         if ( !ui->CheckBox6->isChecked() )
         {
-            tryagain = false;
             screenContact.contactFlags.setValue(screenContact.contactFlags.getValue() & ~ COUNTRY_FORCED);
             screenContact.ctryMult.reset();
             screenContact.forcedMult.setValue(QString());

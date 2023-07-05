@@ -144,7 +144,7 @@ OmnirigControl::~OmnirigControl()
 
 void OmnirigControl::onHandleCOMException (int code, QString source, QString desc, QString help)
 {
-    traceMsg(QString("COM/OLE error: %1 at %2: %3 (%4)").arg (QString::number(code)).arg(source). arg(desc). arg(help));
+    traceMsg(QString("COM/OLE error: %1 at %2: %3 (%4)").arg (QString::number(code), source, desc, help));
     emit rigStatus(OMINIRIG_COM_EXCEPTION * -1, QString("COM Exception"));
 }
 

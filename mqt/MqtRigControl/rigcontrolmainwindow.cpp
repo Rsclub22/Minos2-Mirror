@@ -40,6 +40,10 @@
 const bool PUBLISH_NOW = true;
 const bool DONT_PUBLISH_NOW = false;
 
+// hamlib conf token strings
+const char * HAMLIB_RETRY = "retry";
+const char * HAMLIB_TIMEOUT = "timeout";
+
 RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
    QMainWindow(parent),
    ui(new Ui::RigControlMainWindow),
@@ -1877,7 +1881,7 @@ void RigControlMainWindow::onSelectRadio(PubSubName s, QString band, Frequency f
     if (closeApp)
         return;
 
-    logMessage(QString("**** Received SelectRadio from Logger = %1, band = %2, freq = %3, mode = %4 ****").arg(s.toString()).arg(band).arg(freq.traceStr()).arg(mode));
+    logMessage(QString("**** Received SelectRadio from Logger = %1, band = %2, freq = %3, mode = %4 ****").arg(s.toString(), band, freq.traceStr(), mode));
 
 
     loggerRequests->selRadioMode = mode;
@@ -2292,10 +2296,10 @@ void RigControlMainWindow::processRxFrequencyForDisplay()
             if (b)
             {
                 logMessage(QString("Found transverter for band = %1").arg(b));
-                logMessage(QString("Transverter Key %1 %2 offset %3 rfreq %4").arg(tvName)
-                           .arg(currentRadio.transVertSettings.value(tvName)->transVertName)
-                           .arg(currentRadio.transVertSettings.value(tvName)->transVertOffset.traceStr())
-                           .arg(rigStateDetails->rfrequency.traceStr())
+                logMessage(QString("Transverter Key %1 %2 offset %3 rfreq %4").arg(tvName
+                           , currentRadio.transVertSettings.value(tvName)->transVertName
+                           , currentRadio.transVertSettings.value(tvName)->transVertOffset.traceStr()
+                           , rigStateDetails->rfrequency.traceStr())
                            );
 
                 transVertF = rigStateDetails->rfrequency + currentRadio.transVertSettings.value(tvName)->transVertOffset;
@@ -3072,7 +3076,7 @@ void RigControlMainWindow::setMode(QString mode, VFO vfo)
             }
             else
             {
-                logMessage(QString("SetMode: Change Error Code = %1, Mode = %2").arg(QString::number(retCode), rigcommon::convertModeToQString(mCode)).arg(rigcommon::convertModeToQString(mCode)));
+                logMessage(QString("SetMode: Change Error Code = %1, Mode = %2").arg(QString::number(retCode), rigcommon::convertModeToQString(mCode), rigcommon::convertModeToQString(mCode)));
 
                 if (radio->modeSupported(mCode, rigStateDetails->rfrequency))
                 {
@@ -3725,7 +3729,7 @@ void RigControlMainWindow::radioError(int errorCode, QString cmd)
         {
             logMessage(QString("%1 library Error - Code = %2 - %3").arg(radio->getLibraryName()).arg(errorCode).arg(errorMsg));
 
-            QMessageBox::critical(this, tr("RigControl %1 library Error").arg(radio->getLibraryName()), tr("%1\n%2 - %3\nCommand: %4").arg(currentRadio.radioName).arg(errorCode).arg(errorMsg).arg(cmd));
+            QMessageBox::critical(this, tr("RigControl %1 library Error").arg(radio->getLibraryName()), tr("%1\n%2 - %3\nCommand: %4").arg(currentRadio.radioName).arg(errorCode).arg(errorMsg, cmd));
         }
 
     }
@@ -3979,7 +3983,7 @@ void RigControlMainWindow::sendFreqToLog(const Frequency &freq)
 {
     PubSubName psname(currentRadio.radioName);
     msg->rigCache.setRadioFreq(psname, freq);
-    logMessage(QString("Send freq to logger = %1 psn=%2").arg(freq.traceStr()).arg(psname.toString()));
+    logMessage(QString("Send freq to logger = %1 psn=%2").arg(freq.traceStr(), psname.toString()));
 }
 
 void RigControlMainWindow::sendModeToLog(QString mode)

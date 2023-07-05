@@ -51,7 +51,7 @@ bool MinosListener::initialise( QString type, quint16 port )
 
 void MinosListener::addListenerSlot( MinosCommonConnection *il )
 {
-    trace( QString("addListenerSlot: from %1 %2").arg(isRouter()?"Server":"Client").arg(il->connectHost.toString() ));
+    trace( QString("addListenerSlot: from %1 %2").arg(isRouter()?"Server":"Client", il->connectHost.toString() ));
 
     i_array.push_back( il );
     il->initialise();

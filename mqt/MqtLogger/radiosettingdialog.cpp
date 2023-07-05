@@ -343,7 +343,7 @@ void RadioSettingDialog::finalise()
                 else
                 {
                     QString errMsg = LogContainer->serialTVSw->error();
-                    trace(QString("Bandswitch Comport failed to open = %1 Error = %2").arg(comport).arg(errMsg));
+                    trace(QString("Bandswitch Comport failed to open = %1 Error = %2").arg(comport, errMsg));
                 }
             }
             else
@@ -373,7 +373,8 @@ void RadioSettingDialog::onCwPresetLineEditingFinished(QString bandName, QLineEd
 {
     if (!checking)
     {
-        QString freq = le->text().trimmed().remove( QRegularExpression("^[0]*"));
+        static QRegularExpression qre("^[0]*");
+        QString freq = le->text().trimmed().remove( qre);
         if (valInputFreq(freq, QString("Invalid CW Preset Frequency for %1").arg(bandName)))
         {
            freq = convertFreqToFullDigit(freq).remove('.');
@@ -389,7 +390,8 @@ void RadioSettingDialog::onPhonePresetLineEditingFinished(QString bandName, QLin
 {
     if (!checking)
     {
-        QString freq = le->text().trimmed().remove( QRegularExpression("^[0]*"));
+        static QRegularExpression qre("^[0]*");
+        QString freq = le->text().trimmed().remove( qre);
         if (valInputFreq(freq, tr("Invalid Phone Preset Frequency for %1").arg(bandName)))
         {
            freq = convertFreqToFullDigit(freq).remove('.');
@@ -405,7 +407,8 @@ void RadioSettingDialog::onRTTYPresetLineEditingFinished(QString bandName, QLine
 {
     if (!checking)
     {
-        QString freq = le->text().trimmed().remove( QRegularExpression("^[0]*"));
+        static QRegularExpression qre("^[0]*");
+        QString freq = le->text().trimmed().remove( qre);
         if (valInputFreq(freq, tr("Invalid RTTY Preset Frequency for %1").arg(bandName)))
         {
            freq = convertFreqToFullDigit(freq).remove('.');
@@ -421,7 +424,8 @@ void RadioSettingDialog::onPSKPresetLineEditingFinished(QString bandName, QLineE
 {
     if (!checking)
     {
-        QString freq = le->text().trimmed().remove( QRegularExpression("^[0]*"));
+        static QRegularExpression qre("^[0]*");
+        QString freq = le->text().trimmed().remove( qre);
         if (valInputFreq(freq, tr("Invalid PSK Preset Frequency for %1").arg(bandName)))
         {
            freq = convertFreqToFullDigit(freq).remove('.');
@@ -437,7 +441,8 @@ void RadioSettingDialog::onMgmPresetLineEditingFinished(QString bandName, QLineE
 {
     if (!checking)
     {
-        QString freq = le->text().trimmed().remove( QRegularExpression("^[0]*"));
+        static QRegularExpression qre("^[0]*");
+        QString freq = le->text().trimmed().remove( qre);
         if (valInputFreq(freq, tr("Invalid MGM Preset Frequency for %1").arg(bandName)))
         {
            freq = convertFreqToFullDigit(freq).remove('.');
@@ -456,7 +461,8 @@ void RadioSettingDialog::getFreq(QLineEdit* f_box, int band)
 {
     if (cancelled)
         return;
-    QString freq = f_box->text().trimmed().remove( QRegularExpression("^[0]*"));
+    static QRegularExpression qre("^[0]*");
+    QString freq = f_box->text().trimmed().remove( qre);
     if (valInputFreq(freq, tr(RADIO_FREQ_EDIT_ERR_MSG)))
     {
        freq = convertFreqToFullDigit(freq).remove('.');

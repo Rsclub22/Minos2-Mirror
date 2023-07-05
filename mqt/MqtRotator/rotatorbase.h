@@ -49,6 +49,7 @@ public:
     virtual QString getLibraryName() = 0;
     virtual QString getErrorMsgText(int errorCode) = 0;
 
+    virtual bool isPstRotator(){return false;}
 
 //protected:
 

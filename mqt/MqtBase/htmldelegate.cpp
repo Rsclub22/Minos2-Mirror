@@ -100,7 +100,7 @@ void TestDelegate::paint ( QPainter * painter, const QStyleOptionViewItem & opti
 QSize TestDelegate::sizeHint ( const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
     QSize s = HtmlDelegate::sizeHint(option, index);
-    QString text = option.text;
+    //QString text = option.text;
     return s;
 }
 QSize TestDelegate::docSize(QString text) const

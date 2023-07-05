@@ -14,6 +14,12 @@
 #include "contest.h"
 #include "bandselbuttons.h"
 
+namespace bandSelButtonData
+{
+const char * BUTTON_ON_STYLE = "background-color: Sandybrown ; border-style: outset; border-width: 1px; border-color: black";
+const char * BUTTON_OFF_STYLE = "background-color: Gainsboro ; border-style: outset; border-width: 1px; border-color: black";
+const char * BUTTON_NOT_CONTEST_STYLE = "background-color: Yellow ; border-style: outset; border-width: 1px; border-color: black";
+}
 
 BandSelButtons::BandSelButtons(const QVector<QSharedPointer<BandInfo> > &_bands, QGridLayout *_bandSelGrid, QObject *parent) : QObject(parent)
 

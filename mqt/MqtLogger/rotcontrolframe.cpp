@@ -359,7 +359,7 @@ void RotControlFrame::on_RotateLeft_clicked()
 
         if (rotatorBearing <= minAzimuth)
         {
-            traceMsg(QString("Current Bearing = %1 <= minAzimuth %2").arg(QString::number(rotatorBearing)).arg( QString::number(minAzimuth)));
+            traceMsg(QString("Current Bearing = %1 <= minAzimuth %2").arg(QString::number(rotatorBearing), QString::number(minAzimuth)));
             return;
         }
 
@@ -406,7 +406,7 @@ void RotControlFrame::on_RotateRight_clicked()
 
         if (rotatorBearing >= maxAzimuth)
         {
-            traceMsg(QString("Current Bearing = %1 >= maxAzimuth %2").arg(QString::number(currentBearing)).arg(QString::number(maxAzimuth)));
+            traceMsg(QString("Current Bearing = %1 >= maxAzimuth %2").arg(QString::number(currentBearing), QString::number(maxAzimuth)));
             return;
         }
 
@@ -806,7 +806,7 @@ void RotControlFrame::setCwCcW_Items_Visible(bool visible)
 
 void RotControlFrame::traceMsg(QString msg)
 {
-    trace(QString("[RotcontrolFrame] %1 - %2").arg(antennaName).arg( msg));
+    trace(QString("[RotcontrolFrame] %1 - %2").arg(antennaName, msg));
 }
 
 void RotControlFrame::on_antennaNameSel_activated(int /*arg1*/)

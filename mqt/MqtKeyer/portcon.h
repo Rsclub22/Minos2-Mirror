@@ -47,7 +47,6 @@ class commonPort : public QObject
       virtual bool initialisePort() = 0;
 
       virtual bool openPort() = 0;
-      virtual bool closePort() = 0;
 
       virtual void ptt( int state ) = 0;
 
@@ -106,7 +105,6 @@ class WindowsMonitorPort: public commonPort
       virtual bool initialisePort();
 
       virtual bool openPort();
-      virtual bool closePort();
 
       virtual void ptt( int state );
 
@@ -168,7 +166,6 @@ class LineEventsPort: public commonPort
       virtual bool initialisePort();
 
       virtual bool openPort();
-      virtual bool closePort();
 
       virtual void ptt( int state );
 

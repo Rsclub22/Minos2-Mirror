@@ -12,6 +12,8 @@
 #include "ui_txvmbuttonsframe.h"
 #include "rigcommon.h"
 
+const char * VM_BUTTON_ON_STYLE = "background-color: orange ; color:black ; border-style: outset; border-width: 1px; border-color: black;\n";
+const char * VM_BUTTON_OFF_STYLE = "background-color: Gainsboro ; color:black ; border-style: outset; border-width: 1px; border-color: black;\n";
 
 const int NO_VM_BUTTON_ON = -1;
 
@@ -22,7 +24,7 @@ const QStringList vmButtonShortCutKeys = {
                                     "Shift+F7", "Shift+F8"
 
                                     };
-const QString vmStopButtonShortCutKey = "Shift+F10";
+const char * vmStopButtonShortCutKey = "Shift+F10";
 
 
 TxVmButtonsFrame::TxVmButtonsFrame(QWidget *parent) :
@@ -1085,7 +1087,7 @@ void TxVoiceMemButton::memoryShortCutSelected()
 }
 void TxVoiceMemButton::readActionSelected()
 {
-    trace(QString("TxVoiceMemButton::readActionSelected from %1 %2").arg(sender()->metaObject()->className()).arg(sender()->objectName()));
+    trace(QString("TxVoiceMemButton::readActionSelected from %1 %2").arg(sender()->metaObject()->className(), sender()->objectName()));
     txVmButtonsFrame->readActionSelected(memNo);
 }
 void TxVoiceMemButton::editActionSelected()

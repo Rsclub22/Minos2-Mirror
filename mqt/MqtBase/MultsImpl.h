@@ -44,7 +44,7 @@ public:
 
          if (!lf.open(QIODevice::ReadOnly|QIODevice::Text))
          {
-             QString ebuff = QString( "Failed to open %1 (%2)" ).arg(fmess).arg(fname );
+             QString ebuff = QString( "Failed to open %1 (%2)" ).arg(fmess, fname );
              MinosParameters::getMinosParameters() ->mshowMessage( ebuff );
              return;
          }

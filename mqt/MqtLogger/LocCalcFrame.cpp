@@ -163,7 +163,10 @@ bool LocCalcFrame::handleExit( QLineEdit *Edit )
 
       int tok = transform( &l1, &l2 );
 
-      ngrIl->setText( (tok == GRIDOK ) ? l2.datastring : "" );
+      if (ngrIl)
+      {
+        ngrIl->setText( (tok == GRIDOK ) ? l2.datastring : "" );
+      }
    }
 
    if ( gstyle != LOC )
@@ -172,7 +175,10 @@ bool LocCalcFrame::handleExit( QLineEdit *Edit )
 
       int tok = transform( &l1, &l2 );
 
-      locIl->setText( (tok == GRIDOK ) ? l2.datastring : "" );
+      if (locIl)
+      {
+        locIl->setText( (tok == GRIDOK ) ? l2.datastring : "" );
+      }
    }
 
    if ( gstyle != GEO )
@@ -180,7 +186,10 @@ bool LocCalcFrame::handleExit( QLineEdit *Edit )
       l2.gridstyle = GEO;
       int tok = transform( &l1, &l2 );
 
-      geoIl->setText( (tok == GRIDOK ) ? l2.datastring : "" );
+      if (geoIl)
+      {
+        geoIl->setText( (tok == GRIDOK ) ? l2.datastring : "" );
+      }
    }
    return true;
 }

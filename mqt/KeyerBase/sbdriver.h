@@ -13,7 +13,7 @@
 #include "CompressorParams.h"
 #include "vudata.h"
 
-const QString DEFAULT_PORT( "7799" );
+extern const char * DEFAULT_PORT;
 
 class dvkFile
 {

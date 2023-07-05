@@ -67,6 +67,11 @@ public:
     QString getRotLibVersion() override;
     QString getErrorMsgText(int errorCode) override;
     QString getLibraryName() override;
+    bool isPstRotator() override
+    {
+        return false;
+    }
+
 
     void setPstNetAddress(QString address);
     void setPstPortAddress(QString port);
@@ -109,7 +114,7 @@ private:
 
 
     void traceMsg(QString msg);
-    void traceCommsMsg(QString msg);
+    void doTraceCommsMsg(QString msg);
 
 };
 

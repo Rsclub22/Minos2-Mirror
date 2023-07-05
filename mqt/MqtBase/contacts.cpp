@@ -516,7 +516,7 @@ void BaseContact::getText(QString &dest, const BaseContestLog * const curcon, bo
    next += 1;
    next = placestr( contactBuffs.buff, op2.getValue(), next, -8 );
 
-   next = placestr( contactBuffs.buff, contactBuffs.buff2, next + 1, 90 );
+   /*next =*/ placestr( contactBuffs.buff, contactBuffs.buff2, next + 1, 90 );
 
    dest = QString( contactBuffs.buff ).trimmed();
 }

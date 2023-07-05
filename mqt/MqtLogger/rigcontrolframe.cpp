@@ -627,7 +627,8 @@ void RigControlFrame::changeMainRadioFreq()
     {
         if (!newFreq.isClear())
         {
-            newFreqStr.remove( QRegularExpression("^[0]*")); //remove periods and leading zeros
+            static QRegularExpression qre("^[0]*");
+            newFreqStr.remove( qre); //remove periods and leading zeros
         }
 
         if (newFreq != lastFreq)
@@ -1092,8 +1093,9 @@ void RigControlFrame::setRadioName(QString radNam, bool fromStartRigControl)
 
 
 
-    traceMsg(QString("setRadioName: Set RadioName = %1, contest = %2, contestChangedFlag = %3, rigFrameStartFlag = %4").arg(radNam).arg(ct ? ct->uuid : "")
-             .arg(onContestPageChangedFlag ? "True" : "False", rigFrameStartFlag ? "True" : "False"));
+    traceMsg(QString("setRadioName: Set RadioName = %1, contest = %2, contestChangedFlag = %3, rigFrameStartFlag = %4")
+             .arg(radNam, ct ? ct->uuid : "",
+             onContestPageChangedFlag ? "True" : "False", rigFrameStartFlag ? "True" : "False"));
 
 
 
@@ -1194,13 +1196,13 @@ void RigControlFrame::setRadioName(QString radNam, bool fromStartRigControl)
                             traceMsg(QString("setRadioName: saved mode is empty - revert to contest mode = %1").arg(m));
 
                         }
-                        traceMsg(QString("setRadioName: sending radioName = %1, mode = %2").arg(radioName).arg(m));
+                        traceMsg(QString("setRadioName: sending radioName = %1, mode = %2").arg(radioName, m));
                         emit selectRadio(radioName, contestBand, sendFreq, m.remove(':'));  // send radio and previous mode.
                     }
                     else
                     {
                         traceMsg(QString("setRadioName: restoreModeFlag set"));
-                        traceMsg(QString("setRadioName: onContestPageChange = %1, radioName = %2, mode = %3").arg(onContestPageChangedFlag ? "true" : "false").arg(radioName).arg(contestMode));
+                        traceMsg(QString("setRadioName: onContestPageChange = %1, radioName = %2, mode = %3").arg(onContestPageChangedFlag ? "true" : "false", radioName, contestMode));
                         emit selectRadio(radioName, contestBand, sendFreq, contestMode);
                     }
                 }
@@ -1241,8 +1243,8 @@ Frequency RigControlFrame::getSendFreq()
 void RigControlFrame::setRadioFreq( Frequency &freqToSend, bool &fromStartRigControl)
 {
     traceMsg(QString("setRadioFreq: enter function, fromStartRigControl = %1, onContestPageChangedFlag = %2, rigFrameStartFlag = %3, lastFreq = %4")
-             .arg(fromStartRigControl ? "True" : "False").arg(onContestPageChangedFlag ? "True" : "False")
-             .arg(rigFrameStartFlag ? "True" : "False").arg(lastFreq.traceStr()));
+             .arg(fromStartRigControl ? "True" : "False", onContestPageChangedFlag ? "True" : "False",
+             rigFrameStartFlag ? "True" : "False", lastFreq.traceStr()));
 
     if (selRadioDetails.getBandList().isEmpty())
     {
@@ -2047,10 +2049,10 @@ bool RigControlFrame::isFreqLegal(const Frequency &freq, const QString band, con
                 case FREQ_NO_MATCH:
                     return false;
                 case MODE_MISSING:
-                    traceMsg(QString("RigControl Frame isFreqLegal: mode is missing from file - band %1, mode %2").arg(band).arg(mode));
+                    traceMsg(QString("RigControl Frame isFreqLegal: mode is missing from file - band %1, mode %2").arg(band, mode));
                     return true;
                 case BAND_MISSING:
-                    traceMsg(QString("Bandmap isFreqLegal: band is missing from file - band %1, mode %2").arg(band).arg(mode));
+                    traceMsg(QString("Bandmap isFreqLegal: band is missing from file - band %1, mode %2").arg(band, mode));
                     return true;
             }
     }
@@ -2088,7 +2090,7 @@ void RigControlFrame::traceMsg(QString msg)
     }
 
 
-    trace(QString("[RigcontrolFrame: %1, Uuid %2] %3 ").arg(radioName).arg(frameUuid).arg(msg));
+    trace(QString("[RigcontrolFrame: %1, Uuid %2] %3 ").arg(radioName, frameUuid, msg));
 }
 
 
@@ -2178,9 +2180,9 @@ void RigControlFrame::on_resetBandFreqButton_clicked()
     if (readIgnorePresetFreqFlag() || readIgnorePreviousFreqFlag())
     {
         traceMsg(QString("Ignore Preset Flag = %1 or Ignore Previous Freq Flag = %2, just send Band = %3")
-                .arg(readIgnorePresetFreqFlag() ? "True" : "False")
-                .arg(readIgnorePreviousFreqFlag() ? "True" : "False")
-                .arg(cb));
+                .arg(readIgnorePresetFreqFlag() ? "True" : "False"
+                , readIgnorePreviousFreqFlag() ? "True" : "False"
+                , cb));
         emit sendBandToRigControl(cb);
         return;
     }

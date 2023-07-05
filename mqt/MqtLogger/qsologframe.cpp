@@ -3532,7 +3532,7 @@ void QSOLogFrame::on_SpotPbClicked()
             }
             else
             {
-                trace(QString("spotButton: callsign - %1 or freq - %2 is empty").arg(logData.callsign).arg(curFreq.traceStr()));
+                trace(QString("spotButton: callsign - %1 or freq - %2 is empty").arg(logData.callsign, curFreq.traceStr()));
             }
         }
         else

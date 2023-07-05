@@ -15,11 +15,8 @@ class BaseContestLog;
 
 namespace bandSelButtonData
 {
-    const QString BUTTON_ON_STYLE = QString("background-color: Sandybrown ; border-style: outset; border-width: 1px; border-color: black");
-    const QString BUTTON_OFF_STYLE = QString("background-color: Gainsboro ; border-style: outset; border-width: 1px; border-color: black");
-    const QString BUTTON_NOT_CONTEST_STYLE = QString("background-color: Yellow ; border-style: outset; border-width: 1px; border-color: black");
-    const QString TYPE_BUTTON_ON_STYLE = QString("background-color: White ; border-style: outset; border-width: 1px; border-color: black");
-    const QString TYPE_BUTTON_OFF_STYLE = QString("background-color: Gainsboro ; border-style: outset; border-width: 1px; border-color: black");
+    extern const char * BUTTON_ON_STYLE;
+    extern const char * BUTTON_OFF_STYLE;
 }
 
 

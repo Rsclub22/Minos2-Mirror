@@ -52,7 +52,7 @@ void RotPresets::selectRotator(QString s)
 }
 void RotPresets::traceMsg(QString msg)
 {
-    trace(QString("RotPresets: %1 - %2").arg(antennaName).arg( msg));
+    trace(QString("RotPresets: %1 - %2").arg(antennaName, msg));
 }
 void RotPresets::setRotatorPresetList(QString s)
 {
@@ -95,12 +95,12 @@ void RotPresets::initPresetButtons()
         // build array of buttons
         presetButton.append(new PresetButton(ui_presetbuttons[i], i, shortCutKeyList[i], shiftShortCutKeyList[i], buttonLabels));
 
-        connect(presetButton[i], &PresetButton::presetShortCutRecall, [this, i]() {presetRead(i);});
-        connect(presetButton[i], &PresetButton::presetShiftShortCutRecall, [this, i]() {showPresetMenu(i);});
-        connect(presetButton[i], &PresetButton::presetReadAction, [this, i]() {presetRead(i);});
-        connect(presetButton[i], &PresetButton::presetEditAction, [this, i]() {presetEdit(i);});
-        connect(presetButton[i], &PresetButton::presetWriteAction, [this, i]() {presetWrite(i);});
-        connect(presetButton[i], &PresetButton::presetClearAction, [this, i]() {presetClear(i);});
+        connect(presetButton[i], &PresetButton::presetShortCutRecall, this, [this, i]() {presetRead(i);});
+        connect(presetButton[i], &PresetButton::presetShiftShortCutRecall, this, [this, i]() {showPresetMenu(i);});
+        connect(presetButton[i], &PresetButton::presetReadAction, this, [this, i]() {presetRead(i);});
+        connect(presetButton[i], &PresetButton::presetEditAction, this, [this, i]() {presetEdit(i);});
+        connect(presetButton[i], &PresetButton::presetWriteAction, this, [this, i]() {presetWrite(i);});
+        connect(presetButton[i], &PresetButton::presetClearAction, this, [this, i]() {presetClear(i);});
 
     }
 }
@@ -202,7 +202,7 @@ void RotPresets::setRotPresetButData(int buttonNumber, RotPresetData& editData)
 
 void RotPresets::rotPresetButtonUpdate(int buttonNumber, RotPresetData& editData)
 {
-    presetButton[buttonNumber]->presetButton->setText(QString("%1: %2\r\n%3").arg(QString::number(buttonNumber + 1)).arg(editData.name).arg(editData.bearing) );
+    presetButton[buttonNumber]->presetButton->setText(QString("%1: %2\r\n%3").arg(QString::number(buttonNumber + 1), editData.name, editData.bearing) );
     QString tTipStr = tr("Bearing = %1").arg(editData.bearing);
     presetButton[buttonNumber]->presetButton->setToolTip(tTipStr);
 }
@@ -210,7 +210,7 @@ void RotPresets::rotPresetButtonUpdate(int buttonNumber, RotPresetData& editData
 void RotPresets::saveRotPresetButton(RotPresetData& editData)
 {
     QString msg;
-    msg = QString("%1:%2:%3").arg(QString::number(editData.number)).arg(editData.name).arg(editData.bearing);
+    msg = QString("%1:%2:%3").arg(QString::number(editData.number), editData.name, editData.bearing);
     emit sendRotatorPreset(msg);
 }
 

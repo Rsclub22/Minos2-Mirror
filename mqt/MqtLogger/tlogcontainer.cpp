@@ -915,7 +915,7 @@ void TLogContainer::FileNewActionExecute(bool hf)
           QDir r(creationDir);
           if ( !r.rename( initName, suggestedfName ) )
           {
-             MinosParameters::getMinosParameters() ->mshowMessage( tr( "Failed to rename\n%1\n as \n%2\n\nPlease choose a new name.").arg(initName).arg(suggestedfName) );
+             MinosParameters::getMinosParameters() ->mshowMessage( tr( "Failed to rename\n%1\n as \n%2\n\nPlease choose a new name.").arg(initName, suggestedfName) );
              suggestedfName = initName;
           }
 
@@ -1218,7 +1218,7 @@ void TLogContainer::AppendAdifActionExecute()
         if (!adifFile->open(om))
         {
            QString lerr = adifFile->errorString();
-           QString emess = tr("Failed to open ADIF file %1 : %2").arg(fname).arg(lerr);
+           QString emess = tr("Failed to open ADIF file %1 : %2").arg(fname, lerr);
            MinosParameters::getMinosParameters() ->mshowMessage( emess );
            return;
         }
@@ -1299,7 +1299,7 @@ void TLogContainer::AnalyseMinosLogActionExecute()
     if (!contestFile->open(om))
     {
        QString lerr = contestFile->errorString();
-       QString emess = tr("Failed to open Contest Log file %1 : %2").arg(fname).arg(lerr);
+       QString emess = tr("Failed to open Contest Log file %1 : %2").arg(fname, lerr);
        MinosParameters::getMinosParameters() ->mshowMessage( emess );
        return;
     }

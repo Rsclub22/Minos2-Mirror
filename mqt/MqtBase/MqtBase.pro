@@ -36,6 +36,7 @@ SOURCES += \
     MonitoredLog.cpp \
     StartConfigManager.cpp \
     StatisticsDisplay.cpp \
+    bandmapcommon.cpp \
     bandmapmarkerdetails.cpp \
     baseloglist.cpp \
     calcs.cpp \
@@ -86,6 +87,7 @@ SOURCES += \
     profiles.cpp \
     qlogtabwidget.cpp \
     qmlcpplink.cpp \
+    qrzServerCommon.cpp \
     qsomapframe.cpp \
     RigCache.cpp \
     remotelogs.cpp \

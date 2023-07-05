@@ -684,7 +684,6 @@ void RotSetupDialog::editAntennaName()
 {
     int tabNum = ui->antennaTab->currentIndex();
     QString antName = ui->antennaTab->tabText(tabNum);
-    QString oldName = antName;
     if (currentAntennaName == antName)
     {
         // can't change current antennaName

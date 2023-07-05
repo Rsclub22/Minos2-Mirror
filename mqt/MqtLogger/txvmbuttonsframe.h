@@ -60,11 +60,6 @@ private:
 
 };
 
-
-const QString VM_BUTTON_ON_STYLE = QString("background-color: orange ; color:black ; border-style: outset; border-width: 1px; border-color: black;\n");
-const QString VM_BUTTON_OFF_STYLE = QString("background-color: Gainsboro ; color:black ; border-style: outset; border-width: 1px; border-color: black;\n");
-
-
 class TxVmButtonsFrame : public QGroupBox
 {
     Q_OBJECT

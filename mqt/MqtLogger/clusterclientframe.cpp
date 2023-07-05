@@ -662,7 +662,7 @@ void ClusterClientFrame::dxSpots(QVector<ClusterMessage> spotMsg)
         for (int i = 0; i < spotMsg.count(); i++)
         {
             ClusterMessage msg = spotMsg[i];
-            traceMsg(QString("retrieve cluster spot from queue - spot = %1 for loggeruuid = %2, this contest uuid = %3, this frameId = %4").arg(msg.getMessage()).arg(msg.getLoggerUuid()).arg(ct->uuid).arg(msg.getFrameId()));
+            traceMsg(QString("retrieve cluster spot from queue - spot = %1 for loggeruuid = %2, this contest uuid = %3, this frameId = %4").arg(msg.getMessage(), msg.getLoggerUuid(), ct->uuid).arg(msg.getFrameId()));
 
             // if loggerUuid is empty, message is for all frames
             if ((msg.getLoggerUuid().isEmpty() || msg.getLoggerUuid() == ct->uuid) && (msg.getFrameId() == resendFrameId::CLUSTER_CLIENT || msg.getFrameId() == resendFrameId::ALL_CLIENTS))
@@ -1450,7 +1450,7 @@ void ClusterClientFrame::checkSavedFilters()
     LoggerContestLog* contest = dynamic_cast<LoggerContestLog *>( ct);
     if (contest)
     {
-        QString cUuuid = ct->uuid;
+        //QString cUuuid = ct->uuid;
         ClusterClientFilterSettings cfs;
         cfs.initFilterSettings(bands);
         cfs = contest->clusterFilterSettings.getValue();

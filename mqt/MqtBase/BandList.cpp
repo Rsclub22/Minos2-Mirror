@@ -26,6 +26,10 @@
 #include "tinyxml.h"
 #include "MTrace.h"
 
+const char * HF_BANDTYPE = "HF";
+const char * VHF_BANDTYPE = "VHF";
+const char * MW_BANDTYPE = "MWAVE";
+const char * NO_BANDTYPE = "NONE";
 //---------------------------------------------------------------------------
 const QString allHF{"ALLHF"}; // not to be translated
 

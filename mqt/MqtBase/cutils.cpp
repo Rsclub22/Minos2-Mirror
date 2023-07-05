@@ -100,7 +100,7 @@ size_t strcpysp( char *s1, const QString &s2, int maxlen )
 {
     QString ss2 = s2.trimmed().left(maxlen);
 
-    strcpy(s1, ss2.toLatin1());
+    strncpy(s1, ss2.toLatin1(), maxlen);
     return strlen(s1);
 }
 
@@ -329,8 +329,9 @@ bool CsvReader::parseCsv(const QString &fileName, QList<QStringList> &csv)
     QFile file (fileName);
     if (file.open(QIODevice::ReadOnly))
     {
+        static QRegularExpression rer("\r");
         QString data = file.readAll();
-        data.remove( QRegularExpression("\r") ); //remove all ocurrences of CR (Carriage Return)
+        data.remove( rer ); //remove all ocurrences of CR (Carriage Return)
         QString temp;
         QChar character;
 
@@ -399,8 +400,10 @@ void CsvReader::checkString(QString &temp, QChar character, QStringList &csv)
     {
         if (temp.startsWith( QChar('\"')) && temp.endsWith( QChar('\"') ) )
         {
-             temp.remove( QRegularExpression("^\"") );
-             temp.remove( QRegularExpression("\"$") );
+             static QRegularExpression qre1("^\"");
+             static QRegularExpression qre2("\"$");
+             temp.remove( qre1 );
+             temp.remove( qre2 );
         }
         //FIXME: will possibly fail if there are 4 or more reapeating double quotes
         temp.replace("\"\"", "\"");

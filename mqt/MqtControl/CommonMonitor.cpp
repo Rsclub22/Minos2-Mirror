@@ -35,8 +35,6 @@ void commonController::closeDown()
    // close down each port
    for ( auto const &icp: qAsConst(portChain) )
    {
-      if ( icp )
-         icp ->closePort();
       delete ( icp );
    }
    portChain.clear();

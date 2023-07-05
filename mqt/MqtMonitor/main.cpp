@@ -1,3 +1,4 @@
+#include "MonitorParameters.h"
 #include <QApplication>
 #ifdef INC_MAP
 #include <QQmlApplicationEngine>
@@ -14,6 +15,8 @@
 
 int main(int argc, char *argv[])
 {
+    MonitorParameters mp;
+
     QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     SecondInstall::parseSecondInstall(argc, argv);
     QApplication a(argc, argv);

@@ -249,6 +249,7 @@ void MainWindow::on_stdOutLine(QString line)
         if (l[1] == "RestartApps")
         {
             m_connection = connect(MinosConfig::getMinosConfig(), &MinosConfig::allStopped,
+                                   this,
                                    [this]{
                                         this->disconnect(m_connection);
                                         m_connection =  QMetaObject::Connection();
@@ -260,6 +261,7 @@ void MainWindow::on_stdOutLine(QString line)
         else if (l[1] == "CloseApps")
         {
             m_connection = connect(MinosConfig::getMinosConfig(), &MinosConfig::allStopped,
+                                   this,
                                    [this]{
                                         this->disconnect(m_connection);
                                         m_connection =  QMetaObject::Connection();
@@ -271,6 +273,7 @@ void MainWindow::on_stdOutLine(QString line)
         else if (l[1] == "RestartOS")
         {
             m_connection = connect(MinosConfig::getMinosConfig(), &MinosConfig::allStopped,
+                                   this,
                                    [this]{
                                         this->disconnect(m_connection);
                                         m_connection =  QMetaObject::Connection();
@@ -283,6 +286,7 @@ void MainWindow::on_stdOutLine(QString line)
         else if (l[1] == "CloseOS")
         {
             m_connection = connect(MinosConfig::getMinosConfig(), &MinosConfig::allStopped,
+                                   this,
                                    [this]{
                                         this->disconnect(m_connection);
                                         m_connection =  QMetaObject::Connection();

@@ -387,7 +387,8 @@ void ClusterClientFilterDialog::filtersAccepted()
             if(bandDistanceWidgets.value(band).bandLineEdit->text() != QString::number(filterSettings.getDistanceFilter(band)))
             {
                 filterSettings.setDistanceFilter(band, bandDistanceWidgets.value(band).bandLineEdit->text().toInt());
-                trace(QString("Distance Filter Changed Band = %1 , Distance = %2, ContestUuid = %3").arg(band).arg(bandDistanceWidgets.value(band).bandLineEdit->text()).arg(contestUuid));
+                trace(QString("Distance Filter Changed Band = %1 , Distance = %2, ContestUuid = %3")
+                          .arg(band, bandDistanceWidgets.value(band).bandLineEdit->text(), contestUuid));
 
                 distanceFilterChangedFlag = true;
             }
@@ -404,7 +405,8 @@ void ClusterClientFilterDialog::filtersAccepted()
             if(bandDistanceWidgets.value(band).distFilterIgnoreCheckBox->isChecked() != filterSettings.getIgnoreDistanceFlag(band))
             {
                 filterSettings.setIgnoreDistanceFlag(band, bandDistanceWidgets.value(band).distFilterIgnoreCheckBox->isChecked());
-                trace(QString("Ignore Distance Checked Band = %1 , State = %2, ContestUuid = %3").arg(band).arg(bandDistanceWidgets.value(band).distFilterIgnoreCheckBox->isChecked()  ? "True" : "False").arg(contestUuid));
+                trace(QString("Ignore Distance Checked Band = %1 , State = %2, ContestUuid = %3")
+                          .arg(band, bandDistanceWidgets.value(band).distFilterIgnoreCheckBox->isChecked()  ? "True" : "False", contestUuid));
 
                 ignoreDistanceChangedFlag = true;
             }

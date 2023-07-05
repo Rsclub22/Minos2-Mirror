@@ -26,17 +26,6 @@ class ClusterMainWindow;
 
 #define TEST_SPOTS
 
-
-
-#ifdef TEST_SPOTS
-
-const QString CLUSTER_SPOT_TEST_FILE = "testspots.txt";
-
-#endif
-
-
-
-
 const QStringList userVHFUHFCommandShortCutKeys = { "Ctrl+1", "Ctrl+2",
                                                     "Ctrl+3", "Ctrl+4",
                                                     "Ctrl+5", "Ctrl+6",

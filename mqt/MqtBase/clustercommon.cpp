@@ -548,7 +548,7 @@ QString getMode(checkModeAgainstFreq* modeBandPlan, Frequency freq, const QStrin
 {
     QString dxModeStr = NONE_MODE;
 
-    trace(QString("getMode: freq %1, dxBand %2").arg(freq.traceStr()).arg(dxBand));
+    trace(QString("getMode: freq %1, dxBand %2").arg(freq.traceStr(), dxBand));
     trace(QString("getMode: modeBandPlan loaded Ok - %1").arg(modeBandPlan->checkLoadedOk() ? "true" : "false"));
     if (dxBand != "")
     {

@@ -52,7 +52,7 @@ public:
     int rigInit(scatParams &currentRadio, bool useRigCtld) override;
     int closeRig() override;
 
-    void setRigConnected(bool rigConnected_) override;
+    void setRigConnected(bool rigConnected_);
     bool getRigConnected() override;
 
     int getFrequency(VFO vfo, Frequency& f) override;

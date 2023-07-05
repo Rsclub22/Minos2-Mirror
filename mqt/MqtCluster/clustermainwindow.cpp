@@ -48,6 +48,9 @@ const char *ClusterMainWindow::userCmdButtonLabels[4] = {QT_TR_NOOP("&Send"), QT
 
 
 
+#ifdef TEST_SPOTS
+const char * CLUSTER_SPOT_TEST_FILE = "testspots.txt";
+#endif
 
 #define TXSPOT  // enable to actually send to cluster
 //#define TEST_PLEASE_IGNORE // comment out to stop this in tx spot remarks
@@ -605,7 +608,7 @@ void ClusterMainWindow::connectToHost(QString hostName)
                                               "User Callsign: %2\n"
                                               "User QTH: %3\n"
                                               "User Locator: %4\n"
-                                              "Do you want to enter\\change your details?").arg(currentUserName).arg(currentUserCallsign).arg(currentUserQTH).arg(currentUserLocator),
+                                              "Do you want to enter\\change your details?").arg(currentUserName, currentUserCallsign, currentUserQTH, currentUserLocator),
                                            QMessageBox::Yes | QMessageBox::Cancel);
             switch (ret) {
               case QMessageBox::Yes:

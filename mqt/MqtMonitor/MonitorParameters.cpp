@@ -3,8 +3,6 @@
 #include "MonitorMain.h"
 #include "MonitorParameters.h"
 
-static MonitorParameters mp;
-
 int MonitorParameters::getStatsPeriod1()
 {
    return p1;

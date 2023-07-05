@@ -294,7 +294,6 @@ QVariant KstCallGridModel::data( const QModelIndex &index, int role ) const
                 return QString("000000");
 
             int zcount = 0;
-            QString col;
             if (crec->planes.count())
             {
                 for (auto const &i: qAsConst(crec->planes))
@@ -324,7 +323,6 @@ QVariant KstCallGridModel::headerData( int section, Qt::Orientation orientation,
                      int role ) const
 {
 
-    QString cell;
     if ( orientation == Qt::Horizontal && role == Qt::DisplayRole )
     {
         switch(section)

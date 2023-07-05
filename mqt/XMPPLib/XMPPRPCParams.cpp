@@ -340,7 +340,6 @@ RPCParamArray::RPCParamArray( TiXmlElement &aNode )
    {
       if ( checkElementName( e , "data" ) )
       {
-         QString pname;
          for ( TiXmlElement * f = e->FirstChildElement(); f; f = f->NextSiblingElement() )
          {
             if ( checkElementName( f, "value" ) )

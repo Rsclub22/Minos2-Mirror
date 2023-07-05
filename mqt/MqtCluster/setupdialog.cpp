@@ -20,6 +20,8 @@
 #include "setupdialog.h"
 #include "ui_setupdialog.h"
 
+const char * CLUSTER_NODE_LIST_FILE = "./Configuration/Cluster/ClusterSites.ini";
+
 SetupDialog::SetupDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::SetupDialog),
@@ -40,9 +42,9 @@ SetupDialog::SetupDialog(QWidget *parent) :
         restoreGeometry(geometry);
 
     // General Tab
-    connect(ui->timeToLive, &QLineEdit::editingFinished, [=](){timeToliveEditFinished();});
-    connect(ui->sendSpotsToDXClusterChkBox, &QCheckBox::stateChanged, [=](int state){sendSpotsToDXClusterChkBoxChanged(state);});
-    connect(ui->useQrzCheckBox, &QCheckBox::stateChanged, [=](int state){onQrzCheckBoxChkBoxClicked(state);});
+    connect(ui->timeToLive, &QLineEdit::editingFinished, this, [=](){timeToliveEditFinished();});
+    connect(ui->sendSpotsToDXClusterChkBox, &QCheckBox::stateChanged, this, [=](int state){sendSpotsToDXClusterChkBoxChanged(state);});
+    connect(ui->useQrzCheckBox, &QCheckBox::stateChanged, this, [=](int state){onQrzCheckBoxChkBoxClicked(state);});
     readGeneralSettings();
     loadGeneralToSetupTab();
 
@@ -577,7 +579,6 @@ void SetupDialog::clusterListSave()
         settings.clear();
         for (int row = 0; row < clusterListModel->rowCount(); ++row)
         {
-            QString s = clusterListModel->item(row, NameColNum)->text();
             settings.beginGroup(clusterListModel->item(row, NameColNum)->text());
             settings.setValue("address", clusterListModel->item(row, AddressColNum)->text());
             settings.setValue("port", clusterListModel->item(row, PortColNum)->text());

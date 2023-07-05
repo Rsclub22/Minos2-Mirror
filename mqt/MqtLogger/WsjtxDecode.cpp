@@ -53,7 +53,6 @@ W9XYZ K1ABC 73                                                         ems73
 */
 
 static QMap<QString, Locator> GridCallMap;
-static Locator nullLoc;
 
 static void addCall(const Callsign &c, const Locator &l)
 {
@@ -66,11 +65,12 @@ static void addCall(const Callsign &c, const Locator &l)
 
 const Locator &WsjtGetCallLoc(const Callsign &c)
 {
+    static Locator nulloc;
     if (GridCallMap.contains(c.realCall))
     {
         return GridCallMap[c.realCall];
     }
-    return nullLoc;
+    return nulloc;
 }
 
 decodeMessage::decodeMessage()

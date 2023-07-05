@@ -5,11 +5,10 @@
 #include <QString>
 #include "PublishState.h"
 
-const QString QRZ_BUTTON_ON_STYLE = QString("background-color: Sandybrown ; border-style: outset; border-width: 1px; border-color: black; min-width: 5em; padding: 3px;\n");
-const QString QRZ_BUTTON_OFF_STYLE = QString("background-color: Gainsboro ; border-style: outset; border-width: 1px; border-color: black; min-width: 5em; padding: 3px;\n");
+extern const char * QRZ_BUTTON_ON_STYLE;
+extern const char * QRZ_BUTTON_OFF_STYLE;
 
-const QString QRA_LOOKUP_OK = "qraLookUpOK";
-const QString QRA_NOT_FOUND = "qraNotFound";
+extern const char * QRA_LOOKUP_OK;
 
 class QrzServer
 {

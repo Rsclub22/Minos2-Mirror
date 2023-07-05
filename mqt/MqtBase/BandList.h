@@ -29,10 +29,10 @@
 #include "frequency.h"
 extern const QString allHF;
 
-const QString HF_BANDTYPE = "HF";
-const QString VHF_BANDTYPE = "VHF";
-const QString MW_BANDTYPE = "MWAVE";
-const QString NO_BANDTYPE = "NONE";
+extern const char * HF_BANDTYPE;
+extern const char * VHF_BANDTYPE;
+extern const char * MW_BANDTYPE;
+extern const char * NO_BANDTYPE;
 
 
 class ExclusionInfo

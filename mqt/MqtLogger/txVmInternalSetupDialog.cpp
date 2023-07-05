@@ -6,8 +6,8 @@
 #include "txVmInternalSetupDialog.h"
 #include "ui_txVmInternalSetupDialog.h"
 
-const QString indevKey("InDevice");
-const QString outdevKey("OutDevice");
+const char * indevKey("InDevice");
+const char * outdevKey("OutDevice");
 
 txVmInternalSetupDialog::txVmInternalSetupDialog(VoiceKeyerCapabilities voiceCap_, int nb, QWidget *parent) :
     QDialog(parent),

@@ -334,7 +334,7 @@ void RotatorMainWindow::setCompassDialVisible(bool visible)
 
 void RotatorMainWindow::onLoggerSetRotation(int direction, int angle)
 {
-    if (closeApp && rotator != nullptr)
+    if (closeApp || rotator == nullptr)
         return;
 
     logMessage("Command From Logger command number = " + QString::number(direction) + ", angle = " + QString::number(angle));
@@ -388,7 +388,7 @@ void RotatorMainWindow::onLoggerSetPreset(QString presetMsg)
     }
     else
     {
-        logMessage(QString("Preset from Logger - Save - Button Number %1, Name %2, Bearing %3").arg(msg[0]).arg(msg[1]).arg(msg[2]));
+        logMessage(QString("Preset from Logger - Save - Button Number %1, Name %2, Bearing %3").arg(msg[0], msg[1], msg[2]));
         int butNum = msg[0].toInt();
         RotPresetData d = RotPresetData(butNum, msg[1], msg[2]);
         setRotPresetButData(butNum, d);
@@ -461,7 +461,7 @@ int RotatorMainWindow::openRotator()
     connect(rotator, &RotatorBase::bearing_updated, this, &RotatorMainWindow::checkMoving);
     connect(rotator, &RotatorBase::bearing_updated, rotlog, &RotatorLog::saveBearingLog);
 
-    if (rotator->getLibraryName() == PSTROTATOR_API)
+    if (rotator->isPstRotator())
     {
         connect(rotator, &RotatorBase::sentCommandError, this, &RotatorMainWindow::onSentCommandError, Qt::QueuedConnection);
     }
@@ -496,11 +496,11 @@ int RotatorMainWindow::openRotator()
         }
         else if (setupAntenna->currentAntenna.portType == RotCapConstants::PortType::network )
         {
-            showStatusMessage(tr("Connected to: %1 - %2, %3").arg(setupAntenna->currentAntenna.antennaName).arg(setupAntenna->currentAntenna.rotatorModel).arg(setupAntenna->currentAntenna.networkAdd + ":" + setupAntenna->currentAntenna.networkPort));
+            showStatusMessage(tr("Connected to: %1 - %2, %3").arg(setupAntenna->currentAntenna.antennaName, setupAntenna->currentAntenna.rotatorModel, setupAntenna->currentAntenna.networkAdd + ":" + setupAntenna->currentAntenna.networkPort));
         }
         else if (setupAntenna->currentAntenna.portType == RotCapConstants::PortType::none)
         {
-                showStatusMessage(tr("Connected to: %1 - %2").arg(setupAntenna->currentAntenna.antennaName).arg(setupAntenna->currentAntenna.rotatorModel));
+                showStatusMessage(tr("Connected to: %1 - %2").arg(setupAntenna->currentAntenna.antennaName, setupAntenna->currentAntenna.rotatorModel));
         }
 
         //sendStatusToLogConnected();
@@ -535,7 +535,7 @@ void RotatorMainWindow::closeRotator()
         disconnect(rotator, &RotatorBase::bearing_updated, this, &RotatorMainWindow::checkMoving);
         disconnect(rotator, &RotatorBase::bearing_updated, rotlog, &RotatorLog::saveBearingLog);
 
-        if (rotator->getLibraryName() == PSTROTATOR_API)
+        if (rotator->isPstRotator())
         {
             disconnect(rotator, &RotatorBase::sentCommandError, this, &RotatorMainWindow::onSentCommandError);
 
@@ -571,7 +571,7 @@ void RotatorMainWindow::showStatusMessage(const QString &message)
 void RotatorMainWindow::sendStatusLogger( )
 {
    QString message = connectStat + ':' + statusMsg;
-   logMessage(QString("Send %1 message to logger, appName = %2").arg(message).arg(appName));
+   logMessage(QString("Send %1 message to logger, appName = %2").arg(message, appName));
 
    PubSubName psname(setupAntenna->currentAntennaName);
    msg->rotatorCache.setStatus(psname, message);
@@ -764,7 +764,7 @@ void RotatorMainWindow::displayBearing(int bearing)
         {
             ol = "0";
         }
-        QString s = QString("%1:%2:%3").arg(QString::number(displayBearing)).arg(QString::number(rotatorBearing)).arg(ol);
+        QString s = QString("%1:%2:%3").arg(QString::number(displayBearing), QString::number(rotatorBearing), ol);
 
         PubSubName psname(setupAntenna->currentAntennaName);
         msg->rotatorCache.setBearing(psname, s);
@@ -1027,7 +1027,7 @@ void RotatorMainWindow::upDateAntenna()
            {
                sendStatusToLogStop();
                PubSubName psname(setupAntenna->currentAntennaName);
-               trace(QString("Update Antenna - send to logger - maxAzimuth = %1, minAzimuth = %2, simulate CwCcwCmd = %3").arg(QString::number(setupAntenna->currentAntenna.max_azimuth)).arg(QString::number(setupAntenna->currentAntenna.min_azimuth)).arg(setupAntenna->currentAntenna.supportCwCcwCmd  ? "True" : "False"));
+               trace(QString("Update Antenna - send to logger - maxAzimuth = %1, minAzimuth = %2, simulate CwCcwCmd = %3").arg(QString::number(setupAntenna->currentAntenna.max_azimuth)).arg(QString::number(setupAntenna->currentAntenna.min_azimuth), setupAntenna->currentAntenna.supportCwCcwCmd  ? "True" : "False"));
                msg->rotatorCache.setMaxAzimuth(psname, setupAntenna->currentAntenna.max_azimuth);
                msg->rotatorCache.setMinAzimuth(psname, setupAntenna->currentAntenna.min_azimuth);
 
@@ -1077,7 +1077,6 @@ void RotatorMainWindow::refreshAntenna()
     int antennaIndex = ui->selectAntennaBox->currentIndex();
     if (antennaIndex > 0)
     {
-        antennaIndex -= 1;
         if (setupAntenna->currentAntenna.rotatorModelNumber == 0)
         {
             closeRotator();
@@ -1258,7 +1257,7 @@ void RotatorMainWindow::rotateToController()
     else
     {
          QMessageBox::critical(this, tr("Bearing Error"),
-                               tr("Invalid Bearing\nPlease enter %1 - %2").arg(QString::number(COMPASS_MIN0)).arg(QString::number(COMPASS_MAX360)));
+                               tr("Invalid Bearing\nPlease enter %1 - %2").arg(QString::number(COMPASS_MIN0), QString::number(COMPASS_MAX360)));
     }
 
     rotCmdflag = false;
@@ -1295,7 +1294,7 @@ void RotatorMainWindow::rotateTo(int bearing)
         }
 
 
-        logMessage(QString("Rotate to Bearing = %1, adjusted with offset = %2").arg(QString::number(rotateTo)).arg(QString::number(setupAntenna->currentAntenna.antennaOffset)));
+        logMessage(QString("Rotate to Bearing = %1, adjusted with offset = %2").arg(QString::number(rotateTo), QString::number(setupAntenna->currentAntenna.antennaOffset)));
 
 
 
@@ -1405,12 +1404,12 @@ int RotatorMainWindow::calcRotZero360(int targetBearing)
             targetBearing -= COMPASS_HALF;
         }
         logMessage(QString("NCalc - EndStop Type - ROT_0_360 - S_STOPINV"));
-        logMessage(QString("NCalc - 1 - Target Bearing = %1, rotator Bearing = %2").arg(QString::number(targetBearing)).arg(QString::number(rotatorBearing)));
+        logMessage(QString("NCalc - 1 - Target Bearing = %1, rotator Bearing = %2").arg(QString::number(targetBearing), QString::number(rotatorBearing)));
     }
     else
     {
         logMessage(QString("NCalc - EndStop Type - ROT_0_360 - S_STOPOFF"));
-        logMessage(QString("NCalc - 1 - Target Bearing = %1, rotator Bearing = %2").arg(QString::number(targetBearing)).arg(QString::number(rotatorBearing)));
+        logMessage(QString("NCalc - 1 - Target Bearing = %1, rotator Bearing = %2").arg(QString::number(targetBearing), QString::number(rotatorBearing)));
     }
 
     return targetBearing;
@@ -1429,7 +1428,7 @@ int RotatorMainWindow::calcRotNeg180_180(int targetBearing)
     }
 
 
-    logMessage(QString("Target Bearing = %1, rotator Bearing = %2").arg(QString::number(targetBearing)).arg(QString::number(rotatorBearing)));
+    logMessage(QString("Target Bearing = %1, rotator Bearing = %2").arg(QString::number(targetBearing), QString::number(rotatorBearing)));
     return target;
 
 }
@@ -1446,7 +1445,7 @@ int RotatorMainWindow::calclRot_0_450_Neg180_540(int targetBearing)
             {
                 target = targetBearing;
                 logMessage(QString("NCalc - EndStop Type - ROT_NEG180_450"));
-                logMessage(QString("NCalc - 4 - - Target Bearing = %1, rotator Bearing = %2").arg(QString::number(targetBearing)).arg(QString::number(rotatorBearing)));
+                logMessage(QString("NCalc - 4 - - Target Bearing = %1, rotator Bearing = %2").arg(QString::number(targetBearing), QString::number(rotatorBearing)));
             }
             else if (targetBearing > COMPASS_HALF && targetBearing <= COMPASS_MAX360)
             {
@@ -1455,7 +1454,7 @@ int RotatorMainWindow::calclRot_0_450_Neg180_540(int targetBearing)
                     target = targetBearing - COMPASS_MAX360;
                 }
                 logMessage(QString("NCalc - EndStop Type - ROT_NEG180_450"));
-                logMessage(QString("NCalc - 5 - - Target Bearing = %1, rotator Bearing = %2").arg(QString::number(targetBearing)).arg(QString::number(rotatorBearing)));
+                logMessage(QString("NCalc - 5 - - Target Bearing = %1, rotator Bearing = %2").arg(QString::number(targetBearing), QString::number(rotatorBearing)));
                 return target;
             }
         }
@@ -1466,7 +1465,7 @@ int RotatorMainWindow::calclRot_0_450_Neg180_540(int targetBearing)
                 target = targetBearing - COMPASS_MAX360;
             }
             logMessage(QString("NCalc - EndStop Type - ROT_NEG180_450"));
-            logMessage(QString("NCalc - 6 - - Target Bearing = %1, rotator Bearing = %2").arg(QString::number(targetBearing)).arg(QString::number(rotatorBearing)));
+            logMessage(QString("NCalc - 6 - - Target Bearing = %1, rotator Bearing = %2").arg(QString::number(targetBearing), QString::number(rotatorBearing)));
             return target;
         }
 
@@ -1484,7 +1483,7 @@ int RotatorMainWindow::calclRot_0_450_Neg180_540(int targetBearing)
     {
         target = targetBearing;
         logMessage(QString("NCalc - 8 - Rotator Bearing = %1 >= 360, target bearing = %2 is < 360, target = %3")
-                   .arg(QString::number(rotatorBearing)).arg(QString::number(targetBearing)).arg(QString::number(target)));
+                   .arg(QString::number(rotatorBearing), QString::number(targetBearing), QString::number(target)));
         return target;
     }
     else if (rotatorBearing > COMPASS_HALF && rotatorBearing <= COMPASS_MAX360)
@@ -1498,14 +1497,14 @@ int RotatorMainWindow::calclRot_0_450_Neg180_540(int targetBearing)
         }
 
         logMessage(QString("NCalc - 9 - Rotator Bearing = %1 > 180 and <= 360, target bearing = %2, target = %3")
-                   .arg(QString::number(rotatorBearing)).arg(QString::number(targetBearing)).arg(QString::number(target)));
+                   .arg(QString::number(rotatorBearing), QString::number(targetBearing), QString::number(target)));
         return target;
     }
     else if (rotatorBearing >= COMPASS_MIN0 && rotatorBearing <= COMPASS_HALF)
     {
         target = targetBearing;
         logMessage(QString("NCalc - 10 - Rotator Bearing = %1 >= 0 and <= 180, target bearing = %2, target = %3")
-                    .arg(QString::number(rotatorBearing)).arg(QString::number(targetBearing)).arg(QString::number(target)));
+                    .arg(QString::number(rotatorBearing), QString::number(targetBearing), QString::number(target)));
         return target;
     }
     return target;
@@ -1906,7 +1905,7 @@ void RotatorMainWindow::rotatorError(int errorCode, QString cmd )
     if (rotator)
     {
         errorMsg = rotator->getErrorMsgText(errorCode);
-        logMessage(QString("%1 library Error - Code = %2 - %3").arg(rotator->getLibraryName()).arg(QString::number(errorCode)).arg(errorMsg));
+        logMessage(QString("%1 library Error - Code = %2 - %3").arg(rotator->getLibraryName(), QString::number(errorCode), errorMsg));
 
     }
 
@@ -1915,7 +1914,7 @@ void RotatorMainWindow::rotatorError(int errorCode, QString cmd )
 
      if (rotator)
      {
-         QMessageBox::critical(this, tr("Rotator %1 library Error").arg(rotator->getLibraryName()), tr("%1\n%2 - %3\nCommand: %4").arg(setupAntenna->currentAntenna.antennaName).arg(errorCode).arg(errorMsg).arg(cmd));
+         QMessageBox::critical(this, tr("Rotator %1 library Error").arg(rotator->getLibraryName()), tr("%1\n%2 - %3\nCommand: %4").arg(setupAntenna->currentAntenna.antennaName).arg(errorCode).arg(errorMsg, cmd));
 
      }
 
@@ -2213,12 +2212,12 @@ void RotatorMainWindow::initPresetButtons()
 
         presetButton.append(new PresetButton(ui_presetbuttons[i], i, shortCutKeyList[i], shiftShortCutKeyList[i], buttonLabels));
 
-        connect(presetButton[i], &PresetButton::presetShortCutRecall, [this, i]() {presetRead(i);});
-        connect(presetButton[i], &PresetButton::presetShiftShortCutRecall, [this, i]() {showPresetMenu(i);});
-        connect(presetButton[i], &PresetButton::presetReadAction, [this, i]() {presetRead(i);});
-        connect(presetButton[i], &PresetButton::presetEditAction, [this, i]() {presetEdit(i);});
-        connect(presetButton[i], &PresetButton::presetWriteAction, [this, i]() {presetWrite(i);});
-        connect(presetButton[i], &PresetButton::presetClearAction, [this, i]() {presetClear(i);});
+        connect(presetButton[i], &PresetButton::presetShortCutRecall, this, [this, i]() {presetRead(i);});
+        connect(presetButton[i], &PresetButton::presetShiftShortCutRecall, this, [this, i]() {showPresetMenu(i);});
+        connect(presetButton[i], &PresetButton::presetReadAction, this, [this, i]() {presetRead(i);});
+        connect(presetButton[i], &PresetButton::presetEditAction, this, [this, i]() {presetEdit(i);});
+        connect(presetButton[i], &PresetButton::presetWriteAction, this, [this, i]() {presetWrite(i);});
+        connect(presetButton[i], &PresetButton::presetClearAction, this, [this, i]() {presetClear(i);});
 
 
     }
@@ -2324,7 +2323,7 @@ void RotatorMainWindow::setRotPresetButData(int buttonNumber, RotPresetData& edi
 
 void RotatorMainWindow::rotPresetButtonUpdate(int buttonNumber, RotPresetData& editData)
 {
-    presetButton[buttonNumber]->presetButton->setText(QString("%1: %2\r\n%3").arg(QString::number(buttonNumber + 1)).arg(editData.name).arg(editData.bearing) );
+    presetButton[buttonNumber]->presetButton->setText(QString("%1: %2\r\n%3").arg(QString::number(buttonNumber + 1), editData.name, editData.bearing) );
     QString tTipStr = tr("Bearing = %1").arg(editData.bearing);
     presetButton[buttonNumber]->presetButton->setToolTip(tTipStr);
 }
@@ -2332,7 +2331,7 @@ void RotatorMainWindow::rotPresetButtonUpdate(int buttonNumber, RotPresetData& e
 void RotatorMainWindow::saveRotPresetButton(RotPresetData& editData)
 {
     QString msg;
-    msg = QString("%1:%2:%3").arg(QString::number(editData.number)).arg(editData.name).arg(editData.bearing);
+    msg = QString("%1:%2:%3").arg(QString::number(editData.number), editData.name, editData.bearing);
     savePreset(editData);
     sendPresetListLogger();
     //emit sendRotatorPreset(msg);

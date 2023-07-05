@@ -19,10 +19,6 @@
 #include "voicekeyerbase.h"
 #include "voicekeyerfactory.h"
 
-
-const QString ICOM_STOPCODE = "0";
-
-
 class RigControlVoiceMemoryKeyer : public VoiceKeyerBase
 {
     Q_OBJECT

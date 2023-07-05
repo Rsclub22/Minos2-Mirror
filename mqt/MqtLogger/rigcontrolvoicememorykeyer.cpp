@@ -5,6 +5,8 @@
 #include "txvmrigbuttondialog.h"
 #include "rigcontrolvoicememorykeyer.h"
 
+const char * ICOM_STOPCODE = "0";
+
 RigControlVoiceMemoryKeyer::RigControlVoiceMemoryKeyer(QObject *parent) : VoiceKeyerBase(parent)
 {
 

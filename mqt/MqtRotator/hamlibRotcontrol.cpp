@@ -246,7 +246,7 @@ int HamlibRotControl::closeRotator()
        QThread::msleep(SPID_DELAY);
     }
     int retcode;
-    retcode = rot_close (my_rot);
+    /*retcode = */rot_close (my_rot);
     retcode = rot_cleanup (my_rot);
     setRotConnected(false);
     return retcode;
@@ -575,7 +575,7 @@ QString HamlibRotControl::getErrorMsgText(int errorCode)
 
 QString HamlibRotControl::getLibraryName()
 {
-    return QString("Hamlib");
+    return QString(HAMLIB_API);
 }
 
 

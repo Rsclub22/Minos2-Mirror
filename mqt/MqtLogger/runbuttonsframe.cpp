@@ -12,9 +12,9 @@
 
 const int RUN_TOLERANCE = 300; // Hz
 
-const QString RUN_BUTTON_ON_FREQ_STYLE = QString("background-color: orange ; color:black ; border-style: outset; border-width: 1px; border-color: black;\n");
-const QString RUN_BUTTON_OFF_FREQ_STYLE = QString("background-color: yellow ; color:black ; border-style: outset; border-width: 1px; border-color: black;\n");
-const QString RUN_BUTTON_OFF_STYLE = QString("background-color: Gainsboro ; color:black ; border-style: outset; border-width: 1px; border-color: black;\n");
+const char * RUN_BUTTON_ON_FREQ_STYLE = "background-color: orange ; color:black ; border-style: outset; border-width: 1px; border-color: black;\n";
+const char * RUN_BUTTON_OFF_FREQ_STYLE = "background-color: yellow ; color:black ; border-style: outset; border-width: 1px; border-color: black;\n";
+const char * RUN_BUTTON_OFF_STYLE = "background-color: Gainsboro ; color:black ; border-style: outset; border-width: 1px; border-color: black;\n";
 
 const int NO_RUN_BUTTON_ON = -1;
 const int RUN_BUTTON_1_ON = 0;

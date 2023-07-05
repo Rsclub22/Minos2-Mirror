@@ -236,7 +236,7 @@ bool RotatorCache::setSelected(const PubSubName &name, const QString &loggeruuid
     else
     {
         trace (QString("selection NOT OK; name %1 psnselected %2 loggers %3 ")
-               .arg(name.toString()).arg(psnSelected.toString()).arg(loggers.join(";")));
+               .arg(name.toString(), psnSelected.toString(), loggers.join(";")));
 
     }
 

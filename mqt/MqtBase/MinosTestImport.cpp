@@ -195,9 +195,9 @@ int MinosTestImport::importTestBuffer( const QByteArray &buffer )
 void MinosTestImport::endImportTest()
 {}
 //==============================================================================
-const QString header1 = "<?xml version='1.0'?><stream:stream xmlns:stream='http://minos.goodey.org.uk/streams' xmlns='minos:client' version='1.0'>";
-const QString header2 = "<?xml version='1.0'?><stream:stream xmlns:stream='http://etherx.jabber.org/streams' xmlns='jabber:client' version='1.0'>";
-const QString stubHeader = "<stream:stream>";
+const char * header1 = "<?xml version='1.0'?><stream:stream xmlns:stream='http://minos.goodey.org.uk/streams' xmlns='minos:client' version='1.0'>";
+const char * header2 = "<?xml version='1.0'?><stream:stream xmlns:stream='http://etherx.jabber.org/streams' xmlns='jabber:client' version='1.0'>";
+const char * stubHeader = "<stream:stream>";
 
 void MinosTestImport::dispatchResponse( XStanza *xs )
 {

@@ -52,7 +52,7 @@ userClusterCommandDialog::userClusterCommandDialog(QWidget *parent, QString tabS
 
     editData = _editData;
     curData = _curData;
-    setWindowTitle(tr("Cluster %1 User Command %2 - %3").arg(tabSelected).arg(QString::number(buttonNumber + 1)).arg(name));
+    setWindowTitle(tr("Cluster %1 User Command %2 - %3").arg(tabSelected, QString::number(buttonNumber + 1), name));
     ui->name->setText(curData->name);
     ui->commandString->setText(curData->cmdString);
 

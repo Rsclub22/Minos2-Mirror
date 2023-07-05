@@ -29,7 +29,7 @@
 #include "rigsetupdialog.h"
 #include "ui_rigsetupdialog.h"
 
-
+const char * RADIO_DELETED = "radioDeleted";
 
 RigSetupDialog::RigSetupDialog(RigFactory* rigFactory_, const QVector<QSharedPointer<BandInfo> > &_bands, QWidget *parent) :
     QDialog(parent),

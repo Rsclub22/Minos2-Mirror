@@ -5,6 +5,10 @@
 #include <QDialog>
 #include "voicekeyerfactory.h"
 
+extern const char * indevKey;
+extern const char * outdevKey;
+
+
 namespace Ui {
 class txVmInternalSetupDialog;
 }

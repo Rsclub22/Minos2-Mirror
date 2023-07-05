@@ -351,10 +351,10 @@ void WsjtxFrame::getBestCQ73CallingMe()
             continue;
 
         wtrace(QString("WsjtxFrame::getBestCQ73CallingMe Checking %1 stage %2 tocall %3 fromcall %4")
-                  .arg(messages[i].message)
-                  .arg(dc.getMStage())
-                  .arg(dc.toCall.getFullCall())
-                  .arg(dc.fromCall.getFullCall()));
+                  .arg(messages[i].message
+                  ,dc.getMStage()
+                  ,dc.toCall.getFullCall()
+                  ,dc.fromCall.getFullCall()));
 
         if (dc.points <= 0)    // e.g. duplicate
             continue;
@@ -1125,7 +1125,7 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
             wtrace("WsjtxFrame::update_status emsRRR Transition to NoQSOWaiting");
             break;
         }
-        wtrace(QString("WsjtxFrame::update_status last tx stage %1 calling <%2> working <%3>").arg(lastTx->getMStage()).arg(callingCall).arg(workingCall));
+        wtrace(QString("WsjtxFrame::update_status last tx stage %1 calling <%2> working <%3>").arg(lastTx->getMStage(), callingCall, workingCall));
     }
 
     QColor fcolour = Qt::black;
@@ -1159,21 +1159,23 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
     decoder.setMyCallGrid(de_call, de_grid);
     decodes_model_->de_call (de_call);
     decodes_model_->rx_df (rx_df);
-    ui->de_label_->setText (de_call.size () >= 0 ? QString {"DE: %1%2"}.arg (de_call)
-                                                   .arg (de_grid.size () ? '(' + de_grid + ')' : QString {}) : QString {});
+    ui->de_label_->setText (de_call.size () >= 0 ? QString {"DE: %1%2"}.arg (de_call,
+                                                   de_grid.size () ? '(' + de_grid + ')' : QString {}) : QString {});
 
     ui->specialOpMode->setText(special);
+    static QRegularExpression qre1 {R"(ISCAT|MSK144)"};
+
     ui->mode_label_->setText (HtmlFontColour(dcolour) + QString {"Mode: %1%2%3%4"}
-                              .arg (mode)
-                              .arg (sub_mode)
-                              .arg (fast_mode && !mode.contains (QRegularExpression {R"(ISCAT|MSK144)"}) ? "fast" : "")
-                              .arg (tx_mode.isEmpty () || tx_mode == mode ? QString() : '(' + tx_mode + ')'));
+                              .arg (mode
+                              ,sub_mode
+                              ,fast_mode && !mode.contains (qre1) ? "fast" : ""
+                              ,tx_mode.isEmpty () || tx_mode == mode ? QString() : '(' + tx_mode + ')') );
 
 
     ui->frequency_label_->setText (HtmlFontColour(fcolour) + "QRG: " + f.pretty_frequency_MHz_string());
 
-    ui->dx_label_->setText (dx_call.size () >= 0 ? QString {"DX: %1%2"}.arg (dx_call)
-                                                   .arg (dx_grid.size () ? '(' + dx_grid + ')' : QString {}) : QString {});
+    ui->dx_label_->setText (dx_call.size () >= 0 ? QString {"DX: %1%2"}.arg (dx_call
+                                                   ,dx_grid.size () ? '(' + dx_grid + ')' : QString {}) : QString {});
     ui->rx_df_label_->setText (rx_df >= 0 ? QString {HtmlFontColour(tcolour) + "Rx: %1"}.arg (rx_df) : "");
     ui->tx_df_label_->setText (tx_df >= 0 ? QString {HtmlFontColour(tcolour) + "Tx: %1"}.arg (tx_df) : "");
     ui->report_label_->setText ("SNR: " + report);
@@ -1233,7 +1235,7 @@ void WsjtxFrame::decode_added (bool is_new, QString const& id, QTime time
     // need to make use of the decode data stack, both here and in ::data
     if (!is_new)
     {
-        wtrace(QString("WsjtxFrame::decode_added - %1 old message %2").arg(time.toString("HH:mm:ss")).arg( message));
+        wtrace(QString("WsjtxFrame::decode_added - %1 old message %2").arg(time.toString("HH:mm:ss"), message));
         int target_row {-1};
         for (int row = 0; row < messages.size(); ++row)
         {

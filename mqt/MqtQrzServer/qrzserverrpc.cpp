@@ -241,7 +241,7 @@ void QrzServerRpc::on_notify(AnalysePubSubNotify an, const QString /*from*/ )
                     if (stat.state != an.getState())
                     {
                         stat.state = an.getState();
-                        QString mess = tr("%1 changed state to %2").arg(an.getKey()).arg(tr(qrzServerStateIndicator[an.getState()]));
+                        //QString mess = tr("%1 changed state to %2").arg(an.getKey()).arg(tr(qrzServerStateIndicator[an.getState()]));
                         //addChat( mess );
                         syncstat = true;
                     }

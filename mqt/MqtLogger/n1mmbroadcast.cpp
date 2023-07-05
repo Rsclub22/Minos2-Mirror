@@ -174,7 +174,7 @@ void N1MMBroadcast::afterQSOSaved(BaseContestLog *c, QSharedPointer<BaseContact>
     }
     if (ADIFSelect && !ADIFHost.isNull())
     {
-        QString header = tr("Exported by Minos VHF logging system Version %1 %2").arg(STRINGVERSION).arg(PRERELEASETYPE) + "\r\n";
+        QString header = tr("Exported by Minos VHF logging system Version %1 %2").arg(STRINGVERSION, PRERELEASETYPE) + "\r\n";
 
         header += "<EOH>\r\n";
 

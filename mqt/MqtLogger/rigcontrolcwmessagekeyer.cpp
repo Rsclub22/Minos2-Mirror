@@ -19,7 +19,7 @@
 #include "txvmrigbuttondialog.h"
 #include "rigcontrolcwmessagekeyer.h"
 
-
+const char * STOPCW = "\xFF";
 
 RigControlCwMessageKeyer::RigControlCwMessageKeyer(QObject *parent) : VoiceKeyerBase(parent)
 {

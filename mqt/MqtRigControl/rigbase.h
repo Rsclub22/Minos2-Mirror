@@ -26,7 +26,6 @@ class RigBase : public QObject
 public:
     explicit RigBase(QObject *parent = nullptr);
 
-    virtual void setRigConnected(bool rigConnected_) = 0;
     virtual bool getRigConnected() = 0;
 
     virtual void setTraceComms(bool value) = 0;

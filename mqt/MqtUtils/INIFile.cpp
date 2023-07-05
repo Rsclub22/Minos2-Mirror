@@ -291,7 +291,7 @@ bool INIFile::writeINIFile()
             const QString val = this_entry->getValue();
             if ( this_entry->isValidEntry() )
             {
-                QString s = QString("%1=%2\n").arg(name).arg(val);
+                QString s = QString("%1=%2\n").arg(name, val);
                 out << s;
             }
             else

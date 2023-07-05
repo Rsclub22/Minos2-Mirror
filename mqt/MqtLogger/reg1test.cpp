@@ -425,7 +425,7 @@ bool reg1test::parseHeader(QString line )
                                                                                  else
                                                                                     if ( code == "CWWLS" )
                                                                                     {
-                                                                                       scnt = parseLine( a[ 1 ], ';', b, 3, 0, sep2seen );   // BAD - parseLine writes to buffer
+                                                                                       /*scnt = */parseLine( a[ 1 ], ';', b, 3, 0, sep2seen );
                                                                                        // Claimed no. of WWLs;Bonus per new WWL;WWL multiplier
                                                                                        //CWWLs=0;0;1
                                                                                        if ( b[ 0 ].toInt() != 0 )
@@ -442,7 +442,7 @@ bool reg1test::parseHeader(QString line )
                                                                                        else
                                                                                           if ( code == "CEXCS" )
                                                                                           {
-                                                                                             scnt = parseLine( a[ 1 ], ';', b, 3, 0, sep2seen );   // BAD - parseLine writes to buffer
+                                                                                             /*scnt = */parseLine( a[ 1 ], ';', b, 3, 0, sep2seen );
                                                                                              // Claimed no. of exchanges; Bonus for each new exchange; Exchange Multiplier
                                                                                              //CExcs=0;0;1
                                                                                              if ( b[ 0 ].toInt() != 0 )
@@ -459,7 +459,7 @@ bool reg1test::parseHeader(QString line )
                                                                                              else
                                                                                                 if ( code == "CDXCS" )
                                                                                                 {
-                                                                                                   scnt = parseLine( a[ 1 ], ';', b, 3, 0, sep2seen );   // BAD - parseLine writes to buffer
+                                                                                                   /*scnt = */parseLine( a[ 1 ], ';', b, 3, 0, sep2seen );
                                                                                                    // Claimed no. of DXCCs; Bonus for each new DXCC;DXCC multiplier
                                                                                                    //CDXCs=0;0;1
                                                                                                    if ( b[ 0 ].toInt() != 0 )

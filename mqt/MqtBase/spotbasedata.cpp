@@ -17,6 +17,13 @@
 
 #include "spotbasedata.h"
 
+namespace clusterSpotType {
+
+const char * DXSPOT_TYPE = "dxSpotType";
+const char * SHOW_DXSPOT_TYPE = "showDxSpotType";
+
+}
+
 ClusterSpotData::ClusterSpotData()
 {
     qRegisterMetaType< QSharedPointer<ClusterSpotData> > ( "QSharedPointer<ClusterSpotData>" );
@@ -130,7 +137,6 @@ QSharedPointer<ClusterSpotData> stringToDxSpot(QString spot, BaseContestLog *ct,
             // check to see if spot is for this contest band
 
             QString band = spotlist[DXBANDSTR];
-            QString bandlist = ct->contestBands.getValue();
             if (ct->isHF())
             {
                 BandList &blist = BandList::getBandList();

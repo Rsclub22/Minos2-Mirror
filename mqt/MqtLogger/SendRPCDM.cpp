@@ -701,39 +701,39 @@ void TSendDM::notifyRigChanges()
                     if (selState.radioFreq().isDirty())
                     {
 
-                        traceMsg(QString("Rig set freq = %1, uuid = %2").arg(selState.radioFreq().getValue().traceStr()).arg(selStateUuid));
+                        traceMsg(QString("Rig set freq = %1, uuid = %2").arg(selState.radioFreq().getValue().traceStr(), selStateUuid));
                         tslf->on_SetFreq(selState.radioFreq().getValue());
 
                     }
                     if (selState.radioMode().isDirty())
                     {
-                        traceMsg(QString("Rig set mode = %1, uuid = %2").arg(selState.radioMode().getValue()).arg(selStateUuid));
+                        traceMsg(QString("Rig set mode = %1, uuid = %2").arg(selState.radioMode().getValue(), selStateUuid));
                         tslf->on_SetMode(selState.radioMode().getValue());
                     }
                     if (selState.radioRitFreq().isDirty())
                     {
-                        traceMsg(QString("Rig set ritFreq = %1, uuid = %2").arg(selState.radioRitFreq().getValue().traceStr()).arg(selStateUuid));
+                        traceMsg(QString("Rig set ritFreq = %1, uuid = %2").arg(selState.radioRitFreq().getValue().traceStr(), selStateUuid));
                         tslf->on_SetRitFreq(selState.radioRitFreq().getValue());
                     }
                     if (selState.ritRadioStatus().isDirty())
                     {
                         QString s;
-                        traceMsg(QString("Rig set ritRadioStatus = %1, uuid = %2").arg((s = selState.ritRadioStatus().getValue() ? "On" : "Off")).arg(selStateUuid));
+                        traceMsg(QString("Rig set ritRadioStatus = %1, uuid = %2").arg((s = selState.ritRadioStatus().getValue() ? "On" : "Off"), selStateUuid));
                         tslf->on_SetRitRadioStatus(selState.ritRadioStatus().getValue());
                     }
                     if (selState.radioVolLevel().isDirty())
                     {
-                        traceMsg(QString("Rig set volume =  %1, uuid = %2").arg(QString::number(selState.radioVolLevel().getValue())).arg(selStateUuid));
+                        traceMsg(QString("Rig set volume =  %1, uuid = %2").arg(QString::number(selState.radioVolLevel().getValue()), selStateUuid));
                         tslf->on_SetVolume(selState.radioVolLevel().getValue());
                     }
                     if (selState.pttState().isDirty())
                     {
-                        traceMsg(QString("Rig ptt state = %1, uuid = %2").arg(selState.pttState().getValue() ? "Tx" : "Rx").arg(selStateUuid));
+                        traceMsg(QString("Rig ptt state = %1, uuid = %2").arg(selState.pttState().getValue() ? "Tx" : "Rx", selStateUuid));
                         tslf->on_SetPttState(selState.pttState().getValue());
                     }
                     if (selState.status().isDirty())
                     {
-                        traceMsg(QString("Rig set status = %1, uuid = %2").arg(selState.status().getValue()).arg(selStateUuid));
+                        traceMsg(QString("Rig set status = %1, uuid = %2").arg(selState.status().getValue(), selStateUuid));
                         tslf->on_SetRadioStatus(selState.status().getValue());
                     }
                     selState.clearDirty();
@@ -769,12 +769,12 @@ void TSendDM::notifyRotChanges()
 
                     if (selState.bearing().isDirty())
                     {
-                        traceMsg(QString("Rotator set bearing = %1, uuid = %2").arg(selState.bearing().getValue()).arg(selStateUuid));
+                        traceMsg(QString("Rotator set bearing = %1, uuid = %2").arg(selState.bearing().getValue(), selStateUuid));
                         tslf->on_RotatorBearing(selState.bearing().getValue());
                     }
                     if (selState.status().isDirty())
                     {
-                        traceMsg(QString("Rotator set status = %1, uuid = %2").arg(selState.status().getValue()).arg(selStateUuid));
+                        traceMsg(QString("Rotator set status = %1, uuid = %2").arg(selState.status().getValue(), selStateUuid));
                         tslf->on_RotatorStatus(selState.status().getValue());
                     }
                     selState.clearDirty();
@@ -794,12 +794,12 @@ void TSendDM::notifyRotChanges()
                     }
                     if (selDetail.cwCcwCmdEnable().isDirty())
                     {
-                        traceMsg(QString("SendRPC Rotator set cwCcwCmdEnable = %1, uuid = %2").arg(selDetail.cwCcwCmdEnable().getValue() ? "True" : "False").arg(selStateUuid));
+                        traceMsg(QString("SendRPC Rotator set cwCcwCmdEnable = %1, uuid = %2").arg(selDetail.cwCcwCmdEnable().getValue() ? "True" : "False", selStateUuid));
                         tslf->on_cwCcwCmdEnable(selDetail.cwCcwCmdEnable().getValue());
                     }
                     if (selDetail.supportStopCommand().isDirty())
                     {
-                        traceMsg(QString("Rotator set supportStopCommand = %1, uuid = %2").arg(selDetail.supportStopCommand().getValue() ? "True" :"False").arg(selStateUuid));
+                        traceMsg(QString("Rotator set supportStopCommand = %1, uuid = %2").arg(selDetail.supportStopCommand().getValue() ? "True" :"False", selStateUuid));
                         tslf->on_SupportStopCommand(selDetail.supportStopCommand().getValue());
                     }
                     selDetail.clearDirty();
@@ -807,7 +807,7 @@ void TSendDM::notifyRotChanges()
                 }
                 if (rotatorCache.rotatorPresetsIsDirty(rotSelected))
                 {
-                    traceMsg(QString("Rotator set presets = %1 - %2").arg(rotatorCache.getRotatorPresets(rotSelected)).arg(selStateUuid));
+                    traceMsg(QString("Rotator set presets = %1 - %2").arg(rotatorCache.getRotatorPresets(rotSelected), selStateUuid));
                     tslf->on_RotatorPresetList(rotatorCache.getRotatorPresets(rotSelected));
                 }
             }

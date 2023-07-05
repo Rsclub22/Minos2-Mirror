@@ -201,8 +201,8 @@ int QSOGridModel::columnCount( const QModelIndex &/*parent*/ ) const
 
 bool QSOGridModel::insertRows(int row, int count, const QModelIndex &index)
 {
-    emit beginInsertRows(index, row, row + count - 1);
-    emit endInsertRows();
+    beginInsertRows(index, row, row + count - 1);
+    endInsertRows();
     return true;
 }
 void QSOGridModel::changeRow(int row)

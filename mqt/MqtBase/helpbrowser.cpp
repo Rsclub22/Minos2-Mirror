@@ -38,8 +38,8 @@ HelpBrowser::HelpBrowser(QString collectionFile, QUrl startUrl, QWidget *parent)
     // Connect the helpEngine Signals - functor versions will be complicated
     QObject::connect(helpEngine->contentWidget(), SIGNAL(linkActivated(QUrl)), ui->textBrowser, SLOT(setSource(QUrl)));
     QObject::connect(helpEngine->indexWidget(), SIGNAL(linkActivated(QUrl, QString)), ui->textBrowser, SLOT(setSource(QUrl)));
-    QObject::connect(helpEngine->indexWidget(), SIGNAL(linksActivated(const QMap<QString, QUrl>, QString)),
-                     this, SLOT(on_linksActivated(const QMap<QString, QUrl>, QString)));
+    QObject::connect(helpEngine->indexWidget(), SIGNAL(linksActivated(const QMap<QString,QUrl>,QString)),
+                     this, SLOT(on_linksActivated(const QMap<QString,QUrl>,QString)));
 }
 void HelpBrowser::doCloseEvent()
 {

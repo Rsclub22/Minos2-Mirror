@@ -17,8 +17,6 @@ namespace Ui {
 class SetupDialog;
 }
 
-const QString CLUSTER_NODE_LIST_FILE = "./Configuration/Cluster/ClusterSites.ini";
-
 const int ClusterListNumCols = 4;
 const int NameColNum = 0;
 const int AddressColNum = 1;

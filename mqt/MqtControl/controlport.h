@@ -64,7 +64,6 @@ class commonPort
       virtual bool initialisePort() = 0;
 
       virtual bool openPort() = 0;
-      virtual bool closePort() = 0;
 
       void checkControls( );
 
@@ -92,7 +91,6 @@ class WindowsMonitorPort: public commonPort
       virtual bool initialisePort() override;
 
       virtual bool openPort() override;
-      virtual bool closePort() override;
 
       void setLine( commonLineControl * ) override;
       bool getLine( commonLineControl * ) override;
@@ -110,7 +108,6 @@ class PiGPIOPort: public commonPort
       virtual bool initialisePort() override;
 
       virtual bool openPort() override;
-      virtual bool closePort() override;
       virtual void addLine( const LineConfig &line ) override;
 
       void setLine( commonLineControl * ) override;
@@ -131,7 +128,6 @@ class K8055Port: public commonPort
       virtual bool initialisePort();
 
       virtual bool openPort();
-      virtual bool closePort();
 
       void setLine( commonLineControl * );
       bool getLine( commonLineControl * );

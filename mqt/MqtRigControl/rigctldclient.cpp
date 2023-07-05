@@ -37,7 +37,7 @@ void RigCtldClient::recvTimeout()
 
 bool RigCtldClient::connectToHost(QString host, quint16 port)
 {
-    trace(QString("RigCtldClient - Connecting to Host - %1:%2").arg(host).arg(QString::number(port)));
+    trace(QString("RigCtldClient - Connecting to Host - %1:%2").arg(host, QString::number(port)));
     socket->connectToHost(host, port);
     return socket->waitForConnected();
 }

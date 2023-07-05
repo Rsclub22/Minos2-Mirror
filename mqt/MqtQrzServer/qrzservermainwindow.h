@@ -33,19 +33,6 @@ QT_END_NAMESPACE
 class QRZDB;
 class QLabel;
 
-const QString QRZURL = "https://xmldata.qrz.com/xml/current/?";
-const QString AGENT = "Minos";
-
-const int QUERYTIMEOUT = 2000;
-
-
-
-// SubExp response
-
-const QString NONSUBCRIBER = "non-subscriber";
-
-
-
 class QrzSessionData
 {
 public:

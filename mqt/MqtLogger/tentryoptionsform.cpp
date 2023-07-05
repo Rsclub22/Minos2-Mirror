@@ -391,7 +391,7 @@ QString TEntryOptionsForm::doFileSave( )
                 if (!contestFile->open(om))
                 {
                    QString lerr = contestFile->errorString();
-                   QString emess = tr("Failed to open Contest export file%1 : %2 ").arg(expName).arg(lerr);
+                   QString emess = tr("Failed to open Contest export file%1 : %2 ").arg(expName, lerr);
                    MinosParameters::getMinosParameters() ->mshowMessage( emess, this );
                    continue;
                 }

@@ -45,7 +45,8 @@ RunButtonDialog::~RunButtonDialog()
 
 void RunButtonDialog::onFreqEditFinish()
 {
-    QString f = ui->freqLineEdit->text().trimmed().remove( QRegularExpression("^[0]*"));
+    static QRegularExpression qre("^[0]*");
+    QString f = ui->freqLineEdit->text().trimmed().remove( qre);
     if (f.contains('.'))
     {
         QStringList fl = f.split('.');
@@ -108,7 +109,8 @@ void RunButtonDialog::on_okButton_clicked()
 {
     // update run data
     //logdata->freq = ui->freqLineEdit->text().remove('.');
-    QString f = ui->freqLineEdit->text().remove( QRegularExpression("^[0]*")); //remove periods and leading zeros
+    static QRegularExpression qre("^[0]*");
+    QString f = ui->freqLineEdit->text().remove( qre); //remove periods and leading zeros
     if (f.isEmpty())
     {
         logdata->freq = f;

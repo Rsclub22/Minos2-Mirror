@@ -348,7 +348,7 @@ QString dtg::getTime( DTG dstyle, bool &d ) const
 }
 QString dtg::getTime( DTG dstyle ) const
 {
-   bool dirty;
+   bool dirty = false;
    return getTime( dstyle, dirty );
 }
 bool dtg::getDtg( QDateTime &cttime, bool &d ) const
@@ -387,7 +387,7 @@ bool dtg::getDtg( QDateTime &cttime, bool &d ) const
 }
 bool dtg::getDtg(QDateTime &cttime ) const
 {
-   bool dirty;
+   bool dirty = false;
    return getDtg( cttime, dirty );
 }
 void dtg::setDate(const QString &d, DTG dstyle )

@@ -322,7 +322,7 @@ bool LoggerContestLog::initialise( const QString &fn, bool newFile, int slotno )
           if (!contestFile->open(om))
           {
              QString lerr = contestFile->errorString();
-             QString emess = tr("Failed to open Contest file %1 : %2 ").arg(fn).arg(lerr);
+             QString emess = tr("Failed to open Contest file %1 : %2 ").arg(fn, lerr);
              MinosParameters::getMinosParameters() ->mshowMessage( emess );
              return false;
           }
@@ -403,7 +403,7 @@ bool LoggerContestLog::initialise( const QString &fn, bool newFile, int slotno )
           if (!contestFile->open(om))
           {
              QString lerr = contestFile->errorString();
-             QString emess = tr("Failed to create Contest file %1 : %2").arg(fn).arg(lerr);
+             QString emess = tr("Failed to create Contest file %1 : %2").arg(fn, lerr);
              MinosParameters::getMinosParameters() ->mshowMessage( emess );
              return false;
           }
@@ -861,7 +861,7 @@ bool LoggerContestLog::GJVload( )
    buftostr( temp );
    if ( strnicmp( temp, GJVVERSION, VERLENGTH ) != 0 )
    {
-      MinosParameters::getMinosParameters() ->mshowMessage( tr( "Invalid Contest file format (%1, %2 expected)" ).arg(temp).arg(GJVVERSION) );
+      MinosParameters::getMinosParameters() ->mshowMessage( tr( "Invalid Contest file format (%1, %2 expected)" ).arg(temp, GJVVERSION) );
       return false;
    }
 
@@ -1034,7 +1034,7 @@ bool LoggerContestLog::exportADIF(QSharedPointer<QFile> expfd )
    // ADIF format file entry
    // OP header
    // and EOH
-   QString header = tr("Exported by Minos VHF logging system Version %1 %2").arg(STRINGVERSION).arg(PRERELEASETYPE) + "\r\n\r\n";
+   QString header = tr("Exported by Minos VHF logging system Version %1 %2").arg(STRINGVERSION, PRERELEASETYPE) + "\r\n\r\n";
 
    header += tr( "From file %1" ).arg(cfileName) + "\r\n\r\n";
 
@@ -1238,7 +1238,7 @@ bool LoggerContestLog::exportKML(QSharedPointer<QFile> expfd )
 
 
          char inputbuff[ 100 ];
-         strcpy( inputbuff, ct->loc.getLoc().toUtf8().data() );
+         strncpy( inputbuff, ct->loc.getLoc().toUtf8().data(), 100 );
          l1.gridstyle = LOC;
          l1.datastring = inputbuff;
 
@@ -1805,7 +1805,7 @@ bool LoggerContestLog::getStanza( unsigned int stanza, QString &stanzaData )
    bool ret = contestFile.open(QIODevice::ReadOnly);
    if ( !ret )
    {
-      QString emess = tr("Failed to open Contest file for monitoring %1 : %2").arg(cfileName).arg(contestFile.errorString());
+      QString emess = tr("Failed to open Contest file for monitoring %1 : %2").arg(cfileName, contestFile.errorString());
       MinosParameters::getMinosParameters() ->mshowMessage( emess );
       return false;
    }

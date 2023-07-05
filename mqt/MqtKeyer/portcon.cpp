@@ -141,7 +141,8 @@ WindowsMonitorPort::~WindowsMonitorPort()
    {
       trace( "WindowsMonitorPort::~WindowsMonitorPort" );
    }
-   closePort();
+   delete winMonForm;
+   winMonForm = nullptr;
 }
 
 
@@ -162,15 +163,6 @@ bool WindowsMonitorPort::openPort()
 {
    return true;
 }
-
-bool WindowsMonitorPort::closePort()
-{
-   delete winMonForm;
-   winMonForm = nullptr;
-
-   return true;
-}
-
 
 void WindowsMonitorPort::ptt( int state )
 {
@@ -309,7 +301,6 @@ LineEventsPort::LineEventsPort( const PortConfig &port ) : commonPort( port )
 LineEventsPort::~LineEventsPort()
 {
    closing = true;
-   closePort();
 }
 
 void LineEventsPort::linesChangedEvent()
@@ -339,10 +330,6 @@ bool LineEventsPort::initialisePort()
 }
 
 bool LineEventsPort::openPort()
-{
-   return true;
-}
-bool LineEventsPort::closePort()
 {
    return true;
 }

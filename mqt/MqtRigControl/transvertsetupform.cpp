@@ -67,11 +67,13 @@ void TransVertSetupForm::radioFreqEditfocusChange(QObject *obj, bool fIn, QFocus
                 setOffsetFreqLabel(radioData->transVertSettings.value(bandName)->transVertOffset);
                 return;
             }
-            QString txf = ui->radioFreq->text().trimmed().remove(QRegularExpression("^[0]*"));
+            static QRegularExpression qre1("^[0]*");
+            QString txf = ui->radioFreq->text().trimmed().remove(qre1);
             if (valInputFreq(txf, tr(RADIO_FREQ_EDIT_ERR_MSG)))
             {
                radioFreqOK = true;
-               if (validateFreqTxtInput(convertFreqToFullDigit(ui->targetFreq->text().trimmed().remove(QRegularExpression("^[0]*")))))
+                static QRegularExpression qre2("^[0]*");
+               if (validateFreqTxtInput(convertFreqToFullDigit(ui->targetFreq->text().trimmed().remove(qre2))))
                {
                    targetFreqOK = true;
                    calcOffset();
@@ -110,11 +112,13 @@ void TransVertSetupForm::targetFreqEditfocusChange(QObject *obj , bool fIn, QFoc
                 setOffsetFreqLabel(radioData->transVertSettings.value(bandName)->transVertOffset);
                 return;
             }
-            QString targetf = ui->targetFreq->text().trimmed().remove(QRegularExpression("^[0]*"));
+            static QRegularExpression qre3("^[0]*");
+            QString targetf = ui->targetFreq->text().trimmed().remove(qre3);
             if (valInputFreq(targetf, tr(TARGET_FREQ_EDIT_ERR_MSG)))
             {
                targetFreqOK = true;
-               if (validateFreqTxtInput(convertFreqToFullDigit(ui->radioFreq->text().trimmed().remove(QRegularExpression("^[0]*")))))
+                static QRegularExpression qre4("^[0]*");
+               if (validateFreqTxtInput(convertFreqToFullDigit(ui->radioFreq->text().trimmed().remove(qre4))))
                {
                    radioFreqOK = true;
                    calcOffset();
@@ -150,8 +154,9 @@ void TransVertSetupForm::calcOffset()
 
     transVertOffsetOk = false;
 
-    QString txf = ui->radioFreq->text().trimmed().remove( QRegularExpression("^[0]*"));
-    QString targetf = ui->targetFreq->text().trimmed().remove(QRegularExpression("^[0]*"));
+    static QRegularExpression qre1("^[0]*");
+    QString txf = ui->radioFreq->text().trimmed().remove( qre1);
+    QString targetf = ui->targetFreq->text().trimmed().remove(qre1);
 
     // convert radio freq
     txf = convertFreqToFullDigit(txf);

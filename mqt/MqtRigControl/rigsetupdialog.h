@@ -34,8 +34,6 @@ namespace Ui {
 class RigSetupDialog;
 }
 
-const QString RADIO_DELETED = "radioDeleted";
-
 class RigSetupDialog : public QDialog
 {
     Q_OBJECT

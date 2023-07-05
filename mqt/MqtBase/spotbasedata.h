@@ -29,8 +29,8 @@ enum SPOT_TYPE {NONE, CLUSTER, CLUSTER_MARKED, LOGGED, MARKED, SAVED, CQ, DELETE
 
 namespace clusterSpotType {
 
-const QString DXSPOT_TYPE = "dxSpotType";
-const QString SHOW_DXSPOT_TYPE = "showDxSpotType";
+extern const char * DXSPOT_TYPE;
+extern const char * SHOW_DXSPOT_TYPE;
 
 }
 

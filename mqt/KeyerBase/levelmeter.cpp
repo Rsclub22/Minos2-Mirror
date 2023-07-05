@@ -146,8 +146,8 @@ void LevelMeter::paintEvent(QPaintEvent *event)
     qreal peakHoldLevel = (log(m_peakHoldLevel) + 6.0)/6.0;
     peakHoldLevel = (peakHoldLevel - minLevel)/(1 - minLevel);
 
-    qreal decayedPeakLevel = (log(m_decayedPeakLevel) + 6.0)/6.0;
-    decayedPeakLevel = (decayedPeakLevel - minLevel)/(1 - minLevel);
+    //qreal decayedPeakLevel = (log(m_decayedPeakLevel) + 6.0)/6.0;
+    //decayedPeakLevel = (decayedPeakLevel - minLevel)/(1 - minLevel);
 
     qreal rmsLevel = (log(m_rmsLevel) + 6.0)/6.0;
     rmsLevel = (rmsLevel - minLevel)/(1 - minLevel);
@@ -155,8 +155,8 @@ void LevelMeter::paintEvent(QPaintEvent *event)
 
     if (peakHoldLevel < 0)
         peakHoldLevel = 0;
-    if (decayedPeakLevel < 0)
-        decayedPeakLevel = 0;
+    //if (decayedPeakLevel < 0)
+    //    decayedPeakLevel = 0;
     if (rmsLevel < 0)
         rmsLevel = 0;
 

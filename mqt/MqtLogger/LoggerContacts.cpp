@@ -121,7 +121,7 @@ void ContestContact::getPrintFileText( QString &sdest, short maxlen )
       {
          strcpysp( contactBuffs.buff2, contactBuffs.qthbuff, 42 );
       }
-      contactBuffs.buff = QString("%1 %2 %3").arg(contactBuffs.buff2).arg(exp_buff).arg(multbuff );
+      contactBuffs.buff = QString("%1 %2 %3").arg(contactBuffs.buff2, exp_buff, multbuff );
 
       int next = 0;
       next = placestr( contactBuffs.buff2, timeOff.getDate( DTGPRINT ), next, 10 );
@@ -162,7 +162,7 @@ void ContestContact::getPrintFileText( QString &sdest, short maxlen )
       contactBuffs.qthbuff.truncate( EXTRALENGTH);
       next = placestr( contactBuffs.buff2, contactBuffs.qthbuff, next + 1, contactBuffs.qthbuff.length() );
 
-      next = placestr( contactBuffs.buff2, contactBuffs.buff, next + 1, contactBuffs.buff.length() );
+      /*next = */placestr( contactBuffs.buff2, contactBuffs.buff, next + 1, contactBuffs.buff.length() );
 
    }
    dest += contactBuffs.buff2;

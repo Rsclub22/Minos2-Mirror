@@ -35,6 +35,12 @@
 // The QRZ XML format is described at
 // https://www.qrz.com/page/current_spec.html
 
+// SubExp response
+
+const char * QRZURL = "https://xmldata.qrz.com/xml/current/?";
+const char * AGENT = "Minos";
+const char * NONSUBCRIBER = "non-subscriber";
+
 QrzServerMainWindow::QrzServerMainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::QrzServerMainWindow)
@@ -204,7 +210,7 @@ void QrzServerMainWindow::logon()
         onConfigure();
     }
 
-    QString logonQrz = QRZURL + "username=" + logonCallsign.trimmed() + ";password=" + password.trimmed() + ";agent=" + AGENT;
+    QString logonQrz = QString(QRZURL) + "username=" + logonCallsign.trimmed() + ";password=" + password.trimmed() + ";agent=" + AGENT;
     addTextToLogWindow(tr("Logging on to QRZ.com with callsign: %1").arg(logonCallsign));
     sendUrl(logonQrz);
 }
@@ -230,7 +236,7 @@ void QrzServerMainWindow::askCallsignData(QString callsign)
 {
     Callsign cs;
     cs.setFullCall(callsign);
-    QString callsignUrl = QRZURL + "s=" + qrzSessionData.getKey() + ";callsign=" + callsign;
+    QString callsignUrl = QString(QRZURL) + "s=" + qrzSessionData.getKey() + ";callsign=" + callsign;
     sendUrl(callsignUrl);
 }
 

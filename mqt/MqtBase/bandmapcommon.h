@@ -23,9 +23,9 @@ const int SPOTMARKER_XOFFSET = 20;
 const int FREQ_SEL_WIDTH = 20;
 const int NO_OP_FREQ_WIDTH = 5;
 
-const QString BAND_LIST_INI = "./Configuration/bandList.ini";
-const QString BAND_LIST_SECT_FREQ_LOW = "BandLimitsLow";
-const QString BAND_LIST_SECT_FREQ_HIGH = "BandLimitsHigh";
+extern const char * BAND_LIST_INI;
+extern const char * BAND_LIST_SECT_FREQ_LOW;
+extern const char * BAND_LIST_SECT_FREQ_HIGH;
 
 
 namespace dialData {

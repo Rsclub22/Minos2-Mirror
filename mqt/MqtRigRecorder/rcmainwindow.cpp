@@ -12,11 +12,11 @@
 #include "rcmainwindow.h"
 #include "ui_rcmainwindow.h"
 
-const QString indevKey("InDevice");
-const QString indevKey2("InDevice2");
-const QString outdevKey("OutDevice");
-const QString baseFileKey("BaseFile");
-const QString cycleRateKey("CycleRate");
+const char * indevKey("InDevice");
+const char * indevKey2("InDevice2");
+const char * outdevKey("OutDevice");
+const char * baseFileKey("BaseFile");
+const char * cycleRateKey("CycleRate");
 
 MainWindow *mainWindow = nullptr;
 
@@ -178,9 +178,6 @@ void MainWindow::onCloseTimer()
     if (!stopped && link && tstart.isValid() && tend.isValid())
     {
         QDateTime tnow = QDateTime::currentDateTimeUtc();
-        QString t1 = tstart.addSecs(-60).toString();
-        QString t2 = tend.addSecs(60).toString();
-        QString t3 = tnow.toString();
 
         if (started && tnow > tend.addSecs(60))
         {

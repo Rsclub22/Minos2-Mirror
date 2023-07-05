@@ -35,7 +35,7 @@ bool analyseNode( RPCDispatcher *RPCDisp, TiXmlElement *tix )
    }
 
    QString from = getAttribute( tix, "from" );
-   QString to = getAttribute( tix, "to" );
+   //QString to = getAttribute( tix, "to" );
    QString id = getAttribute( tix, "id" );
    QString subtype = getAttribute( tix, "type" );
 

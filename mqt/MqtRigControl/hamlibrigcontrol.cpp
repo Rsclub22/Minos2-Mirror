@@ -59,7 +59,7 @@ int debug_callback (enum rig_debug_level_e level, rig_ptr_t /* arg */, char cons
 
   if (hamlibTraceComms)
   {
-      trace(QString("%1 %2").arg(fmt).arg(message));
+      trace(QString("%1 %2").arg(fmt, message));
   }
 
 

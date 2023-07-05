@@ -671,7 +671,6 @@ static int geoinput( Location *ingrid )
    else
       j = 0;
 
-   QString nStr;
    QString *b1 = nullptr;
    QString *b2 = nullptr;
 

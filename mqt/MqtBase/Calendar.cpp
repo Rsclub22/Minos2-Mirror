@@ -269,7 +269,7 @@ bool Calendar::parseFile ( const QString &fname )
                             }
                             else
                             {
-                                QString eval = e->Value();
+                                //QString eval = e->Value();
                                 //<!ELEMENT calendar (version, icalurl?, googleurl?, notes_list*, mult_type+, special_rule+, category*, section+, band+, contest_series*, contest+)>
                                 continue;
                             }
@@ -570,7 +570,7 @@ bool Calendar::parseMultType ( TiXmlElement * tix )
                             }
                             else
                                 {
-                                    QString eval = e->Value();
+                                    //QString eval = e->Value();
                                     continue;
                                 }
     }
@@ -598,7 +598,7 @@ bool Calendar::parseSpecialRule ( TiXmlElement * tix )
                 }
                 else
                 {
-                    QString eval = e->Value();
+                    //QString eval = e->Value();
                     continue;
                 }
     }
@@ -664,7 +664,7 @@ bool Calendar::parseSection ( TiXmlElement * tix )
                                         }
                                         else
                                         {
-                                            QString eval = e->Value();
+                                            //QString eval = e->Value();
                                             continue;
                                     }
     }
@@ -706,7 +706,7 @@ bool Calendar::parseBand ( TiXmlElement * tix )
                     }
                     else
                     {
-                        QString eval = e->Value();
+                        //QString eval = e->Value();
                         continue;
                     }
     }
@@ -743,7 +743,7 @@ bool Calendar::parseContestSeries ( TiXmlElement * tix )
                     }
                     else
                     {
-                        QString eval = e->Value();
+                        //QString eval = e->Value();
                         continue;
                     }
     }
@@ -934,7 +934,7 @@ bool Calendar::parseContest ( TiXmlElement * tix )
                                                                                 }
                                                                                 else
                                                                                 {
-                                                                                    QString eval = e->Value();
+                                                                                    //QString eval = e->Value();
                                                                                     continue;
                                                                                 }
     }
@@ -991,7 +991,7 @@ bool Calendar::parseTimeList ( TiXmlElement * tix, QVector<TimeList> &timeList )
                                     }
                                     else
                                     {
-                                        QString eval = e->Value();
+                                        //QString eval = e->Value();
                                         continue;
                                     }
     }

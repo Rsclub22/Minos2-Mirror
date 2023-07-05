@@ -177,11 +177,11 @@ void unloadKeyers()
    currentKeyer = nullptr;
 
    // close down each port
-   for (auto const &icp: portChain )
-   {
-      if ( icp )
-         icp->closePort();
-   }
+//   for (auto const &icp: portChain )
+//   {
+//      if ( icp )
+//         icp->closePort();
+//   }
 
    // close down the SB card
    SoundSystemDriver::sbdvp_unload();
@@ -501,7 +501,7 @@ bool voiceKeyer::docommand( const KeyerCtrl &dvp_ctrl )
     eMixerSets ems = VKMixer::GetVKMixer()->GetCurrentMixerSet();
    if ( sblog )
    {
-      trace( QString("docommand(%1) mixerset is  %2" ).arg(QString::number( dvp_ctrl.command )).arg(VKMixer::GetVKMixer()->getCurrentMixerText()));
+      trace( QString("docommand(%1) mixerset is  %2" ).arg(QString::number( dvp_ctrl.command ), VKMixer::GetVKMixer()->getCurrentMixerText()));
    }
    switch ( dvp_ctrl.command )
    {

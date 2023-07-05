@@ -10,9 +10,6 @@
 
 #include "InternalVoiceMemoryKeyer.h"
 
-const QString indevKey("InDevice");
-const QString outdevKey("OutDevice");
-
 InternalVoiceMemoryKeyer::InternalVoiceMemoryKeyer(QObject *parent) : VoiceKeyerBase(parent)
 {
 

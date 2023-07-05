@@ -122,6 +122,8 @@ void commonPort::reportLineChange( commonLineControl *line )
 }
 
 //==============================================================================
+static windowMonitor *WindowsMonitorForm = nullptr;
+
 //=============================================================================
 WindowsMonitorPort::WindowsMonitorPort(QWidget *p, const PortConfig &port ) :
     commonPort( port )
@@ -129,10 +131,9 @@ WindowsMonitorPort::WindowsMonitorPort(QWidget *p, const PortConfig &port ) :
 {}
 WindowsMonitorPort::~WindowsMonitorPort()
 {
-   closePort();
+   delete WindowsMonitorForm;
+   WindowsMonitorForm = nullptr;
 }
-
-static windowMonitor *WindowsMonitorForm = nullptr;
 
 bool WindowsMonitorPort::initialisePort()
 {
@@ -143,14 +144,6 @@ bool WindowsMonitorPort::initialisePort()
 
 bool WindowsMonitorPort::openPort()
 {
-   return true;
-}
-
-bool WindowsMonitorPort::closePort()
-{
-   delete WindowsMonitorForm;
-   WindowsMonitorForm = nullptr;
-
    return true;
 }
 
@@ -206,7 +199,6 @@ PiGPIOPort::PiGPIOPort( const PortConfig &port ) : commonPort( port ),
 }
 PiGPIOPort::~PiGPIOPort()
 {
-   closePort();
    delete pigpio;
 }
 bool PiGPIOPort::initialisePort()
@@ -218,11 +210,6 @@ bool PiGPIOPort::initialisePort()
 bool PiGPIOPort::openPort()
 {
     return true;
-}
-
-bool PiGPIOPort::closePort()
-{
-   return true;
 }
 
 void PiGPIOPort::addLine( const LineConfig &line )
@@ -269,7 +256,7 @@ K8055Port::K8055Port( const PortConfig &port ) : commonPort( port ),
 }
 K8055Port::~K8055Port()
 {
-   closePort();
+   K8055::closeDevice();
 }
 bool K8055Port::initialisePort()
 {
@@ -282,13 +269,6 @@ bool K8055Port::openPort()
    int ret = K8055::openDevice( addr );
    return ret != -1;
 }
-
-bool K8055Port::closePort()
-{
-   K8055::closeDevice();
-   return true;
-}
-
 
 void K8055Port::setLine( commonLineControl *line )
 {
