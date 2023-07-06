@@ -828,7 +828,7 @@ void WsjtxFrame::process_decodes(bool freeStanding)
     bestCQOffset = -1;
     bestToMeOffset = -1;
 
-    if (ui->autoSelectButton->isChecked() || ui->semiAutoButton->isChecked())
+    if (ui->autoSelectButton->isChecked() || ui->semiAutocb->isChecked())
     {
         decodeEndSize = messages.size();
         minpoints = ui->minPointsSpinner->value();
