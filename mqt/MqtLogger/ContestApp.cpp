@@ -95,18 +95,18 @@ static void initClock( )
 {
     QFile lf( "./Configuration/time.correction");
 
-    if (!lf.open(QIODevice::ReadOnly))
+    if (lf.open(QIODevice::ReadOnly))
     {
-        return;
-    }
-    QTextStream strm(&lf);
+        QTextStream strm(&lf);
 
-   if ( !strm.atEnd() )
-   {
-      long big_corr;
-      strm >> big_corr;
-      bigClockCorr = big_corr;
-   }
+       if ( !strm.atEnd() )
+       {
+          long big_corr;
+          strm >> big_corr;
+          bigClockCorr = big_corr;
+       }
+    }
+   trace(QString("Clock correction is %1 seconds").arg(bigClockCorr));
 }
 bool TContestApp::initialise()
 {

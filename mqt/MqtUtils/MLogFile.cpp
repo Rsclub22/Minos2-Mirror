@@ -43,10 +43,12 @@ void MLogFile::createLogFile(const QString &path, const QString filePrefix, int 
     QString fLogFileName = generateLogFileName ( path + "/" + filePrefix  );
 
     QString dtg = QDateTime::currentDateTimeUtc().toString( "yyyy MMM dd HH:mm:ss.zzz" );
+    QString ldtg = QDateTime::currentDateTime().toString( "yyyy MMM dd HH:mm:ss.zzz" );
 
 	getLogFile( fLogFileName );
     QTextStream &l = log();
     l << dtg << " ALL TIMES ARE UTC\n";
+    l << dtg << " Current time and timezone is " + ldtg + + " " + QDateTime::currentDateTime().timeZoneAbbreviation() + "\n";
     l.flush();
 }
 //---------------------------------------------------------------------------
