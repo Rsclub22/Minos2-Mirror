@@ -218,7 +218,6 @@ private:
 
     PointBonusMultSnr bestPoints;
 
-    void autoDoResponse(QSOStates nstate, bool cq, int offset);
     void doResponse(QSOStates nstate, bool cq, int offset);
     void startCQ();
     void reply(decodeMessage &dc);

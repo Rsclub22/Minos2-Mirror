@@ -300,7 +300,6 @@ void WsjtxFrame::remove_client (QString const& /*id*/)
     ui->mode_label_->clear();
     ui->bandErrorLabel->clear();
     ui->replyto_label->clear();
-    ui->autoSelectButton->setChecked(false);
     id_.clear();
 }
 bool WsjtxFrame::goodCQCall(decodeMessage &dc)
@@ -617,14 +616,6 @@ QString WsjtxFrame::getStateText(QSOStates s)
     }
     return t;
 }
-void WsjtxFrame::autoDoResponse(QSOStates nstate, bool cq, int offset)
-{
-    wtrace("WsjtxFrame::autoDoResponse");
-    if (ui->autoSelectButton->isChecked() && !currentlyTransmitting)
-    {
-        doResponse(nstate, cq, offset);
-    }
-}
 void WsjtxFrame::doResponse(QSOStates nstate, bool cq, int offset)
 {
     wtrace("WsjtxFrame::doResponse");
@@ -666,10 +657,6 @@ void WsjtxFrame::process_NoQSOWaiting(bool freeStanding)
     }
 
     getBestCQ73CallingMe();
-
-    markBest();
-
-    autoDoResponse(NoQSOCallingThem, true, bestOffset);
 }
 void WsjtxFrame::process_NoQSOCallingCQ(bool freeStanding)
 {
@@ -683,7 +670,6 @@ void WsjtxFrame::process_NoQSOCallingCQ(bool freeStanding)
         wtrace("WsjtxFrame::process_NoQSOCallingCQ() freeStanding - ignore");
     }
 
-    QSOStates nState = NoQSOCallingCQ;
     // iterate over the latest decodes, and select the best
 
     // first, look at messages against our transmit status
@@ -693,7 +679,7 @@ void WsjtxFrame::process_NoQSOCallingCQ(bool freeStanding)
 
     if (areAnyToMe())
     {
-        nState = InQSO;
+        qsoState = InQSO;
     }
     else
     {
@@ -701,12 +687,9 @@ void WsjtxFrame::process_NoQSOCallingCQ(bool freeStanding)
         getBestCQ73CallingMe();
         if (bestOffset >= 0)
         {
-            nState = NoQSOCallingThem;
+            qsoState = NoQSOCallingThem;
         }
     }
-
-    markBest();
-    autoDoResponse(nState, false, bestOffset);
 }
 void WsjtxFrame::process_NoQSOCallingThem(bool freeStanding)
 {
@@ -729,8 +712,6 @@ void WsjtxFrame::process_NoQSOCallingThem(bool freeStanding)
         // if they aren't in evidence, keep trying
         attempts = 0;
         getBestCQ73CallingMe();
-        markBest();
-        autoDoResponse(NoQSOCallingThem, true, bestOffset);
     }
     else
     {
@@ -755,8 +736,6 @@ void WsjtxFrame::process_NoQSOCallingThem(bool freeStanding)
                 wtrace(QString("WsjtxFrame::process_NoQSOCallingThem() Add %1 to blacklist after 3 attempts").arg(dxCall));
                 on_addBlackListButton_clicked();
                 getBestCQ73CallingMe();
-                markBest();
-                autoDoResponse(NoQSOCallingThem, false, bestOffset);
             }
         }
     }
@@ -783,8 +762,6 @@ void WsjtxFrame::process_InQSO(bool freeStanding)
         // if they aren't in evidence, keep trying
         attempts = 0;
         getBestCQ73CallingMe();
-        markBest();
-        autoDoResponse(NoQSOCallingThem, true, bestOffset);
     }
     else
     {
@@ -808,8 +785,6 @@ void WsjtxFrame::process_InQSO(bool freeStanding)
                 wtrace(QString("WsjtxFrame::process_InQSO() Add %1 to blacklist after 3 attempts").arg(dxCall));
                 on_addBlackListButton_clicked();
                 getBestCQ73CallingMe();
-                markBest();
-                autoDoResponse(NoQSOCallingThem, false, bestOffset);
             }
         }
     }
@@ -828,7 +803,7 @@ void WsjtxFrame::process_decodes(bool freeStanding)
     bestCQOffset = -1;
     bestToMeOffset = -1;
 
-    if (ui->autoSelectButton->isChecked() || ui->semiAutocb->isChecked())
+    if (ui->semiAutocb->isChecked())
     {
         decodeEndSize = messages.size();
         minpoints = ui->minPointsSpinner->value();
@@ -837,10 +812,9 @@ void WsjtxFrame::process_decodes(bool freeStanding)
         minsnr =  ui->snrSpinner->value();
         if (!ui->snrCheckBox->isChecked())
             minsnr = -100;
-        wtrace(QString("WsjtxFrame::process_decodes Checking decodes start %1 end %2 autoselect %3 minPoints %4 minSnr %5")
+        wtrace(QString("WsjtxFrame::process_decodes Checking decodes start %1 end %2 minPoints %3 minSnr %4")
                   .arg(decodeStartSize)
                   .arg(decodeEndSize)
-                  .arg(ui->autoSelectButton->isChecked())
                   .arg(minpoints)
                   .arg(minsnr));
 
@@ -861,6 +835,7 @@ void WsjtxFrame::process_decodes(bool freeStanding)
                 process_InQSO(freeStanding);
                 break;
             }
+            markBest();
             decodeStartSize = messages.size();
             emit decodes_model_->dataChanged(decodes_model_->index(decodeStartSize, dcBest), decodes_model_->index(decodeEndSize, dcBest));
         }
