@@ -33,7 +33,7 @@
          <item>
           <widget class="QToolButton" name="aboutRC">
            <property name="toolTip">
-            <string>About Radio Config</string>
+            <string>About Rotator Config</string>
            </property>
            <property name="text">
             <string>?</string>
