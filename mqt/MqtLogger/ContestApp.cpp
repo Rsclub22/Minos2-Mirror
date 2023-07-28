@@ -7,6 +7,7 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 #include <QFileInfo>
+#include <QDir>
 #include <QTextStream>
 #include "LoggerContest.h"
 #include "MMessageDialog.h"
@@ -445,7 +446,9 @@ void TContestApp::writeContestList()
 
             QString ent = QString::number(cs->slotno);
 
-            logsPreloadBundle.setStringProfile( ent, ct->cfileName );
+            QString fn = GetCleanPath(ct->cfileName);
+
+            logsPreloadBundle.setStringProfile( ent, fn );
             if ( currentContest == ct )
             {
                 logsPreloadBundle.setIntProfile( eppCurrent, cs->slotno );
@@ -463,7 +466,6 @@ void TContestApp::writeListsList()
 {
     if (preloadComplete)
     {
-
         // build a stripped, renumbered list
         int newSlotNo = 0;
         ListSlotList newListSlotList;
@@ -495,8 +497,10 @@ void TContestApp::writeListsList()
                 if ( !ct )
                     continue;
 
+                QString fn = GetCleanPath(ct->cfileName);
+
                 QString ent =  QString::number(cs->slotno + 1 );
-                listsPreloadBundle.setStringProfile( ent, ct->cfileName );
+                listsPreloadBundle.setStringProfile( ent, fn );
             }
             // no need for any concept of a "current" list
         }

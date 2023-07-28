@@ -114,3 +114,14 @@ qint64 FileLength(const QString &fname)
     qint64 len = qinf.size();
     return len;
 }
+QString GetCleanPath(QString fn)
+{
+    QDir cdir(GetCurrentDir());
+    fn = cdir.cleanPath(fn);
+    fn = cdir.absoluteFilePath(fn);
+    if (fn.indexOf(GetCurrentDir()) == 0)
+    {
+        fn = cdir.relativeFilePath(fn);
+    }
+    return fn;
+}
