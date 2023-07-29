@@ -2173,16 +2173,17 @@ void QSOLogFrame::contactValid( )
         {
             if (!contest->districtMult.getValue())
             {
+                QString extra = vcct->extraText.getValue();
                 if ( vcct->extraText.getValue().size() == 0 )
                 {
                     // no QTH info if required
 
-                    lgTraceerr( ERR_21 );            // Exchange required
+//                    lgTraceerr( ERR_21 );            // Exchange required
                     qthIl->tIfValid = false;
                 }
                 else
                 {
-                    if (vcct->extraText.getValue() == "-" && contest->otherExchange .getValue())
+                    if (extra == "-" && contest->otherExchange .getValue() && ! contest->otherOptionalExchange.getValue())
                     {
                         lgTraceerr( ERR_21 );            // Exchange required
                         qthIl->tIfValid = false;

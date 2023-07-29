@@ -178,13 +178,14 @@ int CheckableContact::checkContact(bool adddup)
             districtMult.reset();						// just in case we have changed the type...
             if ( contest->otherExchange.getValue() || contest->otherOptionalExchange.getValue() )
             {
+                QString extra = extraText.getValue();
                 if ( contest->districtMult.getValue() )
                 {
                     if ( !comments.getValue().trimmed().size() )
                         checkret = ERR_21;
                 }
                 else
-                    if ( contest->otherExchange.getValue() && !extraText.getValue().trimmed().size() )
+                    if ( contest->otherExchange.getValue() && !extra.trimmed().size() )
 
                         checkret = ERR_21;
             }
