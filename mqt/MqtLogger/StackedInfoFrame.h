@@ -8,7 +8,6 @@
 #include "locTreeFrame.h"
 #include "locframe.h"
 #include "tstatsdispframe.h"
-#include "FilterFrame.h"
 
 namespace Ui {
 class StackedInfoFrame;
@@ -20,7 +19,6 @@ enum AuxEntries {
     aeClock,
     aeDXCC,
     aeDistrict,
-    aeFilter,
     aeMemories,
     aeLocatorMap,
     aeLocatorTree,
@@ -60,7 +58,6 @@ private:
     TClockFrame *clockFrame = nullptr;
     DXCCFrame *dxccFrame = nullptr;
     DistrictFrame *districtFrame = nullptr;
-    FilterFrame *filterFrame = nullptr;
     RigMemoryFrame *rigMemFrame = nullptr;
     LocFrame *locFrame = nullptr;
     LocTreeFrame *locTreeFrame = nullptr;

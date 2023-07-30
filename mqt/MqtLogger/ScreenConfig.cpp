@@ -3,7 +3,7 @@
 #include "regsettings.h"
 #include "ContestApp.h"
 #include "tlogcontainer.h"
-
+#include "baseconstants.h"
 #include "ScreenConfigFile.h"
 #include "ScreenConfigElement.h"
 #include "ScreenConfigScreen.h"

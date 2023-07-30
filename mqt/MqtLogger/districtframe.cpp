@@ -113,8 +113,9 @@ void DistrictFrame::on_doColumnChanges(BaseContestLog *b)
     }
 }
 
-void DistrictFrame::setContest(BaseContestLog *contest)
+void DistrictFrame::setContest(LoggerContestLog *contest)
 {
+    ct = contest;
     model.ct = contest;
 
     if (contest)
@@ -150,6 +151,14 @@ void DistrictFrame::doScrollToDistrict()
 
 void DistrictFrame::reInitialiseDistricts()
 {
+    ui->wkdButton->setText(tr("wkd"));
+    ui->unwkdButton->setText(tr("unwkd"));
+    if (ct)
+    {
+        ui->wkdButton->setChecked(ct->showWorked.getValue());
+        ui->unwkdButton->setChecked(ct->showUnworked.getValue());
+    }
+
     restoreDistrictTableColumns();
 
     doScrollToDistrict();
@@ -300,3 +309,19 @@ void DistrictFrame::on_DistrictTable_clicked(const QModelIndex &index)
     QString disp = MultLists::getMultLists() ->getDistListText( cd, 0, model.ct, model.band );
     MinosLoggerEvents::SendDistrictSelect(disp, model.ct);
 }
+
+void DistrictFrame::on_wkdButton_clicked()
+{
+    ct->showWorked.setValue(!ct->showWorked.getValue());
+    ct->commonSave(false);
+    reInitialiseDistricts();
+}
+
+
+void DistrictFrame::on_unwkdButton_clicked()
+{
+    ct->showUnworked.setValue(!ct->showUnworked.getValue());
+    ct->commonSave(false);
+    reInitialiseDistricts();
+}
+

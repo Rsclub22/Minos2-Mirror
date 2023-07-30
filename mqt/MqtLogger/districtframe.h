@@ -13,6 +13,7 @@ class DistrictFrame;
 }
 
 class BaseContestLog;
+class LoggerContestLog;
 class TSingleLogFrame;
 class StackedInfoFrame;
 
@@ -58,6 +59,8 @@ class DistrictFrame : public QFrame
 {
     Q_OBJECT
 
+    LoggerContestLog *ct = nullptr;
+
     QString band;
     DistrictGridModel model;
     DistrictSortFilterProxyModel proxyModel;
@@ -70,7 +73,7 @@ public:
     explicit DistrictFrame(StackedInfoFrame *parent);
     ~DistrictFrame();
 
-    void setContest(BaseContestLog *contest);
+    void setContest(LoggerContestLog *contest);
     void setBand(QString band);
 
     void reInitialiseDistricts();
@@ -91,6 +94,8 @@ private slots:
     void viewColumn();
 
     void on_doColumnChanges(BaseContestLog *b);
+    void on_wkdButton_clicked();
+    void on_unwkdButton_clicked();
 };
 
 #endif // DISTRICTFRAME_H

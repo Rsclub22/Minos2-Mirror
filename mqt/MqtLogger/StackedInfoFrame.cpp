@@ -11,7 +11,6 @@ QVector <AuxTypeOption> StackedInfoFrame::auxoptions = {
     {aeClock, QT_TR_NOOP("Clock"), QT_TR_NOOP("Clock")},
     {aeDXCC, QT_TR_NOOP("DXCC"), QT_TR_NOOP("DXCC")},
     {aeDistrict, QT_TR_NOOP("District"), QT_TR_NOOP("District")},
-    {aeFilter, QT_TR_NOOP("Filter"), QT_TR_NOOP("Filter")},
     {aeMemories, QT_TR_NOOP("Memories"), QT_TR_NOOP("Memories")},
     {aeLocatorMap, QT_TR_NOOP("Locator Map"), QT_TR_NOOP("Locator Map")},
     {aeLocatorTree, QT_TR_NOOP("Locator Tree"), QT_TR_NOOP("Locator Tree")},
@@ -172,10 +171,6 @@ void StackedInfoFrame::setTabVisibility()
         setTabsVisible = false;
         break;
 
-    case aeFilter:
-        setTabsVisible = false;
-        break;
-
     case aeMemories:
         setTabsVisible = false;
         break;
@@ -210,7 +205,6 @@ void StackedInfoFrame::onInfoComboCurrentIndexChanged(int /*arg1*/)
     delete clockFrame;
     delete dxccFrame;
     delete districtFrame;
-    delete filterFrame;
     delete rigMemFrame;
     delete locFrame;
     delete locTreeFrame;
@@ -219,7 +213,6 @@ void StackedInfoFrame::onInfoComboCurrentIndexChanged(int /*arg1*/)
     clockFrame = nullptr;
     dxccFrame = nullptr;
     districtFrame = nullptr;
-    filterFrame = nullptr;
     rigMemFrame = nullptr;
     locFrame = nullptr;
     locTreeFrame = nullptr;
@@ -248,13 +241,6 @@ void StackedInfoFrame::onInfoComboCurrentIndexChanged(int /*arg1*/)
         currStackFrame = districtFrame;
         ui->stackFrame->layout()->addWidget(districtFrame);
         districtFrame->setContest(contest);
-        break;
-
-    case aeFilter:
-        filterFrame = new FilterFrame(this);
-        currStackFrame = filterFrame;
-        ui->stackFrame->layout()->addWidget(filterFrame);
-        filterFrame->setContest(contest);
         break;
 
     case aeMemories:
@@ -322,11 +308,7 @@ void StackedInfoFrame::setContest(LoggerContestLog *ct)
     {
         contest = ct;
 
-        if (filterFrame)
-        {
-            filterFrame->setContest(contest);
-        }
-        else if (dxccFrame)
+        if (dxccFrame)
             dxccFrame->setContest(contest);
         else if (districtFrame)
             districtFrame->setContest(contest);
@@ -508,8 +490,6 @@ void StackedInfoFrame::onFiltersChanged(BaseContestLog *ct)
 {
     if (contest && ct == contest)
     {
-        if (filterFrame)
-            filterFrame->initFilters();
         if (dxccFrame)
             dxccFrame->reInitialiseCountries();
         if (districtFrame)

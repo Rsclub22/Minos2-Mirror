@@ -13,16 +13,6 @@
 
 
 //============================================================================
-QVector<ContList> contlist =
-   {
-      ContList("EU", true),
-      ContList("AS", false),
-      ContList("AF", false),
-      ContList("OC", false),
-      ContList("SA", false),
-      ContList("NA", false)
-   };
-//============================================================================
 // prefix/mult count
 QVector<DistCount> GlistList::distCounts =
    {

@@ -22,6 +22,15 @@ QVector<GridColumn> DXCCGridModel::CountryTreeColumns =
     GridColumn( ectITUZone, "1234", QT_TR_NOOP("ITU"), taCenter ),
     GridColumn( ectOtherCalls, "This is a very very very very long country name", QT_TR_NOOP("Other calls"), taLeftJustify /*taRightJustify*/ )
 };
+static QVector<ContList> contlist =
+    {
+        ContList("EU", true),
+        ContList("AS", false),
+        ContList("AF", false),
+        ContList("OC", false),
+        ContList("SA", false),
+        ContList("NA", false)
+};
 
 DXCCFrame::DXCCFrame(StackedInfoFrame *parent) :
     QFrame(parent),
@@ -118,6 +127,7 @@ DXCCFrame::~DXCCFrame()
 }
 void DXCCFrame::setContest(LoggerContestLog *contest)
 {
+    ct = contest;
     model.ct = contest;
     if (contest)
     {
@@ -156,27 +166,54 @@ void DXCCFrame::doScrollToCountry()
 
 void DXCCFrame::reInitialiseCountries()
 {
+    ui->c1Button->setText(tr("EU"));
+    ui->c2Button->setText(tr("AS"));
+    ui->c3Button->setText(tr("AF"));
+    ui->c4Button->setText(tr("OC"));
+    ui->c5Button->setText(tr("SA"));
+    ui->c6Button->setText(tr("NA"));
+    ui->wkdButton->setText(tr("wkd"));
+    ui->unwkdButton->setText(tr("unwkd"));
+    if (ct)
+    {
+        contlist[ 0 ].allow = ct->showContinentEU.getValue();
+        contlist[ 1 ].allow = ct->showContinentAS.getValue();
+        contlist[ 2 ].allow = ct->showContinentAF.getValue();
+        contlist[ 3 ].allow = ct->showContinentOC.getValue();
+        contlist[ 4 ].allow = ct->showContinentSA.getValue();
+        contlist[ 5 ].allow = ct->showContinentNA.getValue();
+
+        ui->c1Button->setChecked(ct->showContinentEU.getValue());
+        ui->c2Button->setChecked(ct->showContinentAS.getValue());
+        ui->c3Button->setChecked(ct->showContinentAF.getValue());
+        ui->c4Button->setChecked(ct->showContinentOC.getValue());
+        ui->c5Button->setChecked(ct->showContinentSA.getValue());
+        ui->c6Button->setChecked(ct->showContinentNA.getValue());
+
+        ui->wkdButton->setChecked(ct->showWorked.getValue());
+        ui->unwkdButton->setChecked(ct->showUnworked.getValue());
+    }
     restoreDXCCTableColumns();
 
     doScrollToCountry();
 
-    QStringList sl;
-    for ( auto const &c: qAsConst(contlist ))
-    {
-        QString s;
-        if (c.allow)
-        {
-            s = HtmlFontColour(Qt::black);
-        }
-        else
-        {
-            s = HtmlFontColour(Qt::gray);
-        }
-        s += c.continent;
-        sl.append(s);
-    }
+//    QStringList sl;
+//    for ( auto const &c: qAsConst(contlist ))
+//    {
+//        QString s;
+//        if (c.allow)
+//        {
+//            s = HtmlFontColour(Qt::black);
+//        }
+//        else
+//        {
+//            s = HtmlFontColour(Qt::gray);
+//        }
+//        s += c.continent;
+//        sl.append(s);
+//    }
 
-    ui->continentsLabel->setText(sl.join(" "));
+//    ui->continentsLabel->setText(sl.join(" "));
 }
 void DXCCFrame::scrollToCountry( const QString &bp, bool makeVisible )
 {
@@ -329,3 +366,64 @@ void DXCCFrame::on_DXCCTable_clicked(const QModelIndex &index)
     MinosLoggerEvents::SendCountrySelect(disp, model.ct);
 
 }
+
+/*
+ui->c1Button->setChecked(ct->showContinentEU.getValue());
+ui->c2Button->setChecked(ct->showContinentAS.getValue());
+ui->c3Button->setChecked(ct->showContinentAF.getValue());
+ui->c4Button->setChecked(ct->showContinentOC.getValue());
+ui->c5Button->setChecked(ct->showContinentSA.getValue());
+ui->c6Button->setChecked(ct->showContinentNA.getValue());
+
+ui->wkdButton->setChecked(ct->showWorked.getValue());
+ui->unwkdButton->setChecked(ct->showUnworked.getValue());
+*/
+void DXCCFrame::on_c1Button_clicked()
+{
+    ct->showContinentEU.setValue(!ct->showContinentEU.getValue());
+    ct->commonSave(false);
+    reInitialiseCountries();
+}
+void DXCCFrame::on_c2Button_clicked()
+{
+    ct->showContinentAS.setValue(!ct->showContinentAS.getValue());
+    ct->commonSave(false);
+    reInitialiseCountries();
+}
+void DXCCFrame::on_c3Button_clicked()
+{
+    ct->showContinentAF.setValue(!ct->showContinentAF.getValue());
+    ct->commonSave(false);
+    reInitialiseCountries();
+}
+void DXCCFrame::on_c4Button_clicked()
+{
+    ct->showContinentOC.setValue(!ct->showContinentOC.getValue());
+    ct->commonSave(false);
+    reInitialiseCountries();
+}
+void DXCCFrame::on_c5Button_clicked()
+{
+    ct->showContinentSA.setValue(!ct->showContinentSA.getValue());
+    ct->commonSave(false);
+    reInitialiseCountries();
+}
+void DXCCFrame::on_c6Button_clicked()
+{
+    ct->showContinentNA.setValue(!ct->showContinentNA.getValue());
+    ct->commonSave(false);
+    reInitialiseCountries();
+}
+void DXCCFrame::on_wkdButton_clicked()
+{
+    ct->showWorked.setValue(!ct->showWorked.getValue());
+    ct->commonSave(false);
+    reInitialiseCountries();
+}
+void DXCCFrame::on_unwkdButton_clicked()
+{
+    ct->showUnworked.setValue(!ct->showUnworked.getValue());
+    ct->commonSave(false);
+    reInitialiseCountries();
+}
+

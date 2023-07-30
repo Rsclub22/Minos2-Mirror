@@ -35,8 +35,6 @@ public:
    bool allow = false;
 };
 
-extern QVector<ContList> contlist;
-
 enum eMultGridCols {ectCall, ectWorked, ectLocator, ectBearing, ectName,
                     ectCQZone, ectITUZone, ectOtherCalls,
                     ectMultMaxCol

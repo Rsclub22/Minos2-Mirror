@@ -75,7 +75,6 @@ SOURCES += \
     ContestPageControl.cpp \
     DisplayOptions.cpp \
     ExternalMqtKeyer.cpp \
-    FilterFrame.cpp \
     InternalVoiceMemoryKeyer.cpp \
     LocCalcFrame.cpp \
     LoggerContacts.cpp \
@@ -177,7 +176,6 @@ HEADERS  += \
     ContestPageControl.h \
     DisplayOptions.h \
     ExternalMqtKeyer.h \
-    FilterFrame.h \
     InternalVoiceMemoryKeyer.h \
     LocCalcFrame.h \
     LoggerContacts.h \
@@ -281,7 +279,6 @@ FORMS    += \
     districtframe.ui \
     dmbuttonframe.ui \
     dxccframe.ui \
-    FilterFrame.ui \
     LocCalcFrame.ui \
     locframe.ui \
     locTreeFrame.ui \

@@ -3,6 +3,7 @@
 #include <QJsonParseError>
 #include <QJsonObject>
 #include <QJsonArray>
+#include <QFile>
 #include "MShowMessageDlg.h"
 #include "profiles.h"
 #include "MTrace.h"

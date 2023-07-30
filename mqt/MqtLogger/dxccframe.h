@@ -53,6 +53,7 @@ class DXCCFrame : public QFrame
 {
     Q_OBJECT
 
+    LoggerContestLog *ct = nullptr;
     DXCCGridModel model;
     DXCCSortFilterProxyModel proxyModel;
     QSharedPointer<HtmlDelegate> delegate ;
@@ -86,6 +87,14 @@ private slots:
     void viewColumn();
 
     void on_doColumnChanges(BaseContestLog *b);
+    void on_c1Button_clicked();
+    void on_c2Button_clicked();
+    void on_c3Button_clicked();
+    void on_c4Button_clicked();
+    void on_c5Button_clicked();
+    void on_c6Button_clicked();
+    void on_wkdButton_clicked();
+    void on_unwkdButton_clicked();
 };
 
 #endif // DXCCFRAME_H
