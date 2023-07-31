@@ -9,33 +9,38 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dmmainwindow.ui" line="26"/>
+        <location filename="../dmmainwindow.ui" line="21"/>
+        <source>Logs to monitor for QSOs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dmmainwindow.ui" line="33"/>
         <source>Start</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dmmainwindow.ui" line="46"/>
+        <location filename="../dmmainwindow.ui" line="53"/>
         <source>Configure</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dmmainwindow.cpp" line="71"/>
+        <location filename="../dmmainwindow.cpp" line="72"/>
         <source>Default Device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dmmainwindow.cpp" line="144"/>
-        <location filename="../dmmainwindow.cpp" line="164"/>
+        <location filename="../dmmainwindow.cpp" line="145"/>
+        <location filename="../dmmainwindow.cpp" line="165"/>
         <source>Start All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dmmainwindow.cpp" line="297"/>
+        <location filename="../dmmainwindow.cpp" line="298"/>
         <source>Stop All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dmmainwindow.cpp" line="327"/>
+        <location filename="../dmmainwindow.cpp" line="328"/>
         <source>No DataMode sender configured</source>
         <translation type="unfinished"></translation>
     </message>
@@ -194,12 +199,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../engineconfigure.cpp" line="366"/>
+        <location filename="../engineconfigure.cpp" line="380"/>
         <source>Engine Files (*.ocx *.exe);;All Files (*.*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../engineconfigure.cpp" line="370"/>
+        <location filename="../engineconfigure.cpp" line="384"/>
         <source>%1 Engine Executable</source>
         <translation type="unfinished"></translation>
     </message>
@@ -251,12 +256,12 @@
     </message>
     <message>
         <location filename="../enginewindow.ui" line="124"/>
-        <location filename="../enginewindow.cpp" line="700"/>
+        <location filename="../enginewindow.cpp" line="702"/>
         <source>Show Back Data</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../enginewindow.cpp" line="705"/>
+        <location filename="../enginewindow.cpp" line="707"/>
         <source>Hide Back Data</source>
         <translation type="unfinished"></translation>
     </message>
@@ -280,22 +285,22 @@
 <context>
     <name>MMVARIFrame</name>
     <message>
-        <location filename="../MMVARIFrame.cpp" line="81"/>
+        <location filename="../MMVARIFrame.cpp" line="80"/>
         <source>RX/TX state</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MMVARIFrame.cpp" line="90"/>
+        <location filename="../MMVARIFrame.cpp" line="89"/>
         <source>Move the cursor to keep it centered on a signal if the frequency changes slightly</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MMVARIFrame.cpp" line="97"/>
+        <location filename="../MMVARIFrame.cpp" line="96"/>
         <source>When NET is on the TX frequency follows the RX frequency </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MMVARIFrame.cpp" line="103"/>
+        <location filename="../MMVARIFrame.cpp" line="102"/>
         <source>Align the transmit frequency to the receive frequency</source>
         <translation type="unfinished"></translation>
     </message>

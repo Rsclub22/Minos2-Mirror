@@ -19,32 +19,32 @@
         <translation>Fermer?</translation>
     </message>
     <message>
-        <location filename="../mqtktWaveShowDialog.cpp" line="135"/>
+        <location filename="../mqtktWaveShowDialog.cpp" line="136"/>
         <source>Window (ms)</source>
         <translation>Fenetre (ms)</translation>
     </message>
     <message>
-        <location filename="../mqtktWaveShowDialog.cpp" line="139"/>
+        <location filename="../mqtktWaveShowDialog.cpp" line="140"/>
         <source>Threshold (db below max)</source>
         <translation>Seuil (db inférieur au max) </translation>
     </message>
     <message>
-        <location filename="../mqtktWaveShowDialog.cpp" line="143"/>
+        <location filename="../mqtktWaveShowDialog.cpp" line="144"/>
         <source>Compression Ratio</source>
         <translation>Taux de compression</translation>
     </message>
     <message>
-        <location filename="../mqtktWaveShowDialog.cpp" line="147"/>
+        <location filename="../mqtktWaveShowDialog.cpp" line="148"/>
         <source>Attack (ms)</source>
         <translation>[Context?] </translation>
     </message>
     <message>
-        <location filename="../mqtktWaveShowDialog.cpp" line="151"/>
+        <location filename="../mqtktWaveShowDialog.cpp" line="152"/>
         <source>Release (ms)</source>
         <translation>[Context?] </translation>
     </message>
     <message>
-        <location filename="../mqtktWaveShowDialog.cpp" line="155"/>
+        <location filename="../mqtktWaveShowDialog.cpp" line="156"/>
         <source>Makeup Gain (db)</source>
         <translation>[Context?] </translation>
     </message>

@@ -4,27 +4,27 @@
 <context>
     <name>MinosConfig</name>
     <message>
-        <location filename="../ConfigFile.cpp" line="26"/>
+        <location filename="../ConfigFile.cpp" line="28"/>
         <source>None</source>
         <translation>Aucun</translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="27"/>
+        <location filename="../ConfigFile.cpp" line="29"/>
         <source>Other</source>
         <translation>Autre</translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="300"/>
+        <location filename="../ConfigFile.cpp" line="388"/>
         <source>Default App Config</source>
         <translation>Configuration d&apos;application défaut</translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="752"/>
+        <location filename="../ConfigFile.cpp" line="853"/>
         <source>More than one server is defined and enabled</source>
         <translation>Plusieurs serveurs définis et active</translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="761"/>
+        <location filename="../ConfigFile.cpp" line="862"/>
         <source>A local server is required.<byte value="xd"/>
 <byte value="xd"/>
 </source>
@@ -33,17 +33,17 @@
 </translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="776"/>
+        <location filename="../ConfigFile.cpp" line="877"/>
         <source> contains bad characters [ and/or ]</source>
         <translation> contient de mauvais caractères [et / ou]</translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="791"/>
+        <location filename="../ConfigFile.cpp" line="892"/>
         <source> appears more than once (names are not case sensitive)</source>
         <translation> apparaît plusieurs fois (les noms ne sont pas sensibles à la casse)</translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="830"/>
+        <location filename="../ConfigFile.cpp" line="931"/>
         <source>%1 requires a local %2
 
 </source>
@@ -52,16 +52,33 @@
 </translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="840"/>
+        <location filename="../ConfigFile.cpp" line="944"/>
+        <source> Inferred Executable path does not exist or is not executable:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ConfigFile.cpp" line="944"/>
+        <location filename="../ConfigFile.cpp" line="952"/>
+        <source>
+
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ConfigFile.cpp" line="952"/>
+        <source> Executable path does not exist or is not executable:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source> Executable path does not exist
 
 </source>
-        <translation> Le chemin pour l&apos;exécutable n&apos;existe pas
+        <translation type="vanished"> Le chemin pour l&apos;exécutable n&apos;existe pas
 
 </translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="844"/>
+        <location filename="../ConfigFile.cpp" line="958"/>
         <source> Working directory is not valid - no Configuration/MinosConfig.json
 
 </source>
@@ -73,9 +90,13 @@
 <context>
     <name>RunConfigElement</name>
     <message>
-        <location filename="../ConfigFile.cpp" line="143"/>
         <source>:program doesn&apos;t exist:</source>
-        <translation>:l&apos;exécutable n&apos;existe pas:</translation>
+        <translation type="vanished">:l&apos;exécutable n&apos;existe pas:</translation>
+    </message>
+    <message>
+        <location filename="../ConfigFile.cpp" line="225"/>
+        <source>:program is not executable:</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

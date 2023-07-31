@@ -54,7 +54,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MonitorMain.cpp" line="90"/>
+        <location filename="../MonitorMain.cpp" line="91"/>
         <source>Close tab</source>
         <translation type="unfinished"></translation>
     </message>
@@ -63,12 +63,12 @@
     <name>MonitoringFrame</name>
     <message>
         <location filename="../MonitoringFrame.ui" line="62"/>
-        <location filename="../MonitoringFrame.cpp" line="191"/>
+        <location filename="../MonitoringFrame.cpp" line="204"/>
         <source>Show Map</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MonitoringFrame.cpp" line="182"/>
+        <location filename="../MonitoringFrame.cpp" line="183"/>
         <source>Show Log</source>
         <translation type="unfinished"></translation>
     </message>

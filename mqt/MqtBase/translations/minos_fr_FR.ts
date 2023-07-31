@@ -39,32 +39,32 @@
 <context>
     <name>BaseContact</name>
     <message>
-        <location filename="../contacts.cpp" line="441"/>
+        <location filename="../contacts.cpp" line="444"/>
         <source>DELETED</source>
         <translation>SUPPRIMÉ</translation>
     </message>
     <message>
-        <location filename="../contacts.cpp" line="456"/>
+        <location filename="../contacts.cpp" line="459"/>
         <source>MAN</source>
         <translation>MANUELLE</translation>
     </message>
     <message>
-        <location filename="../contacts.cpp" line="459"/>
+        <location filename="../contacts.cpp" line="462"/>
         <source>DEL</source>
         <translation>SUPPRIMER</translation>
     </message>
     <message>
-        <location filename="../contacts.cpp" line="462"/>
+        <location filename="../contacts.cpp" line="465"/>
         <source>N/S</source>
         <translation>NON SIGNIFICATIF</translation>
     </message>
     <message>
-        <location filename="../contacts.cpp" line="467"/>
+        <location filename="../contacts.cpp" line="470"/>
         <source>DUP</source>
         <translation>DUPLIQUER</translation>
     </message>
     <message>
-        <location filename="../contacts.cpp" line="512"/>
+        <location filename="../contacts.cpp" line="515"/>
         <source>MHz</source>
         <translation>MHz</translation>
     </message>
@@ -932,42 +932,42 @@
 <context>
     <name>ClusterSpotData</name>
     <message>
-        <location filename="../spotbasedata.cpp" line="61"/>
+        <location filename="../spotbasedata.cpp" line="68"/>
         <source>NONE</source>
         <translation type="unfinished">AUCUN</translation>
     </message>
     <message>
-        <location filename="../spotbasedata.cpp" line="64"/>
+        <location filename="../spotbasedata.cpp" line="71"/>
         <source>CLUSTER</source>
         <translation type="unfinished">CLUSTER</translation>
     </message>
     <message>
-        <location filename="../spotbasedata.cpp" line="67"/>
+        <location filename="../spotbasedata.cpp" line="74"/>
         <source>CLUSTER MARKED</source>
         <translation type="unfinished">CLUSTER MARQUÉ</translation>
     </message>
     <message>
-        <location filename="../spotbasedata.cpp" line="70"/>
+        <location filename="../spotbasedata.cpp" line="77"/>
         <source>LOGGED</source>
         <translation type="unfinished">ENREGISTRÉ</translation>
     </message>
     <message>
-        <location filename="../spotbasedata.cpp" line="73"/>
+        <location filename="../spotbasedata.cpp" line="80"/>
         <source>MARKED</source>
         <translation type="unfinished">MARQUÉ</translation>
     </message>
     <message>
-        <location filename="../spotbasedata.cpp" line="76"/>
+        <location filename="../spotbasedata.cpp" line="83"/>
         <source>SAVED</source>
         <translation type="unfinished">SAUVÉ</translation>
     </message>
     <message>
-        <location filename="../spotbasedata.cpp" line="79"/>
+        <location filename="../spotbasedata.cpp" line="86"/>
         <source>CQ</source>
         <translation type="unfinished">CQ</translation>
     </message>
     <message>
-        <location filename="../spotbasedata.cpp" line="82"/>
+        <location filename="../spotbasedata.cpp" line="89"/>
         <source>DELETED</source>
         <translation type="unfinished">SUPPRIMÉ</translation>
     </message>
@@ -1025,6 +1025,16 @@
         <translation>Connecter éloigné</translation>
     </message>
     <message>
+        <location filename="../ConfigElementFrame.ui" line="228"/>
+        <source>Auto Infer Program Path</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ConfigElementFrame.ui" line="235"/>
+        <source>.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../ConfigElementFrame.ui" line="249"/>
         <source>Program</source>
         <translation>Programme</translation>
@@ -1062,27 +1072,27 @@
         <translation>Serveur distant</translation>
     </message>
     <message>
-        <location filename="../ConfigElementFrame.cpp" line="10"/>
+        <location filename="../ConfigElementFrame.cpp" line="11"/>
         <source>&lt;Deleted&gt;</source>
         <translation>&lt;Supprimé&gt;</translation>
     </message>
     <message>
-        <location filename="../ConfigElementFrame.cpp" line="158"/>
+        <location filename="../ConfigElementFrame.cpp" line="168"/>
         <source>Minos Component Program</source>
         <translation>Element du programme Minos</translation>
     </message>
     <message>
-        <location filename="../ConfigElementFrame.cpp" line="167"/>
+        <location filename="../ConfigElementFrame.cpp" line="177"/>
         <source>All Files</source>
         <translation>Tous les fichiers</translation>
     </message>
     <message>
-        <location filename="../ConfigElementFrame.cpp" line="194"/>
+        <location filename="../ConfigElementFrame.cpp" line="204"/>
         <source>Set Working Directory</source>
         <translation>Définir le répertoire de travail</translation>
     </message>
     <message>
-        <location filename="../ConfigElementFrame.cpp" line="234"/>
+        <location filename="../ConfigElementFrame.cpp" line="244"/>
         <source>Local</source>
         <translation>Local</translation>
     </message>
@@ -1090,12 +1100,12 @@
 <context>
     <name>ContestScore</name>
     <message>
-        <location filename="../contest.cpp" line="2009"/>
+        <location filename="../contest.cpp" line="2013"/>
         <source>Score: Qsos: %1; %2 pts :%3%4 countries%5: bonuses %6(%7) = %8</source>
         <translation>QSOs: %1; %2 pts:%3%4 pays %5: bonus %6 (%7) = %8</translation>
     </message>
     <message>
-        <location filename="../contest.cpp" line="2022"/>
+        <location filename="../contest.cpp" line="2026"/>
         <source>Score: Qsos: %1; %2 pts :%3%4 countries%5:%6%7 districts%8:%9%10 locators %13 = %14</source>
         <translation>Score: QSO: %1; %2 pts: %3%4 pays %5:%6%7 Districts%8:%9%10 Locators %13 = %14</translation>
     </message>
@@ -1103,12 +1113,12 @@
 <context>
     <name>CountryList</name>
     <message>
-        <location filename="../MultsImpl.cpp" line="506"/>
+        <location filename="../MultsImpl.cpp" line="488"/>
         <source>CT9 Country File</source>
         <translation>CT9 Fichier  des Pays</translation>
     </message>
     <message>
-        <location filename="../MultsImpl.cpp" line="590"/>
+        <location filename="../MultsImpl.cpp" line="572"/>
         <source>Failed to open %1 (%2)</source>
         <translation>L&apos;ouverture du fichier %1 (%2)  a échoué</translation>
     </message>
@@ -1116,12 +1126,12 @@
 <context>
     <name>CountrySynonymList</name>
     <message>
-        <location filename="../MultsImpl.cpp" line="734"/>
+        <location filename="../MultsImpl.cpp" line="716"/>
         <source>Country Synonym File</source>
         <translation>Fichier des synonymes de Pays</translation>
     </message>
     <message>
-        <location filename="../MultsImpl.cpp" line="754"/>
+        <location filename="../MultsImpl.cpp" line="736"/>
         <source>Synonym ranges no longer allowed : %1 for %2</source>
         <translation>Les plages de synonymes ne sont plus autorisées: %1 pour %2</translation>
     </message>
@@ -1303,7 +1313,7 @@ Attention: &quot;.&quot; pas &quot;,&quot;<byte value="xd"/>
 <context>
     <name>GlistList</name>
     <message>
-        <location filename="../MultsImpl.cpp" line="82"/>
+        <location filename="../MultsImpl.cpp" line="64"/>
         <source>prefix synonyms file</source>
         <translation>Fichier de synonymes de préfixe</translation>
     </message>
@@ -1357,12 +1367,12 @@ Attention: &quot;.&quot; pas &quot;,&quot;<byte value="xd"/>
         <translation>à droite</translation>
     </message>
     <message>
-        <location filename="../helpbrowser.cpp" line="85"/>
+        <location filename="../helpbrowser.cpp" line="86"/>
         <source>Choose</source>
         <translation>Choisir</translation>
     </message>
     <message>
-        <location filename="../helpbrowser.cpp" line="85"/>
+        <location filename="../helpbrowser.cpp" line="86"/>
         <source>Select topic for: </source>
         <translation>Sélectionner le sujet pour: </translation>
     </message>
@@ -1378,12 +1388,12 @@ Attention: &quot;.&quot; pas &quot;,&quot;<byte value="xd"/>
 <context>
     <name>LogTreeNode</name>
     <message>
-        <location filename="../MonitorTreeModel.cpp" line="89"/>
+        <location filename="../MonitorTreeModel.cpp" line="84"/>
         <source>Monitoring</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MonitorTreeModel.cpp" line="91"/>
+        <location filename="../MonitorTreeModel.cpp" line="86"/>
         <source>Enabled</source>
         <translation type="unfinished">Activé</translation>
     </message>
@@ -1660,12 +1670,12 @@ Attention: &quot;.&quot; pas &quot;,&quot;<byte value="xd"/>
 <context>
     <name>MonitorTreeModel</name>
     <message>
-        <location filename="../MonitorTreeModel.cpp" line="160"/>
+        <location filename="../MonitorTreeModel.cpp" line="155"/>
         <source>Contest Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MonitorTreeModel.cpp" line="164"/>
+        <location filename="../MonitorTreeModel.cpp" line="159"/>
         <source>State</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1878,7 +1888,7 @@ Attention: &quot;.&quot; pas &quot;,&quot;<byte value="xd"/>
 <context>
     <name>QWidget</name>
     <message>
-        <location filename="../cutils.cpp" line="731"/>
+        <location filename="../cutils.cpp" line="786"/>
         <source>Reset Columns</source>
         <comment>createColumnsMenu</comment>
         <translation>Réinitialiser les colonnes</translation>
@@ -2040,8 +2050,8 @@ Entrer une autre direction SVP</translation>
     </message>
     <message>
         <location filename="../StartConfig.ui" line="49"/>
-        <location filename="../StartConfig.cpp" line="114"/>
-        <location filename="../StartConfig.cpp" line="278"/>
+        <location filename="../StartConfig.cpp" line="115"/>
+        <location filename="../StartConfig.cpp" line="279"/>
         <source>Show</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2086,8 +2096,8 @@ Entrer une autre direction SVP</translation>
         <translation>Enregistrer et fermer</translation>
     </message>
     <message>
-        <location filename="../StartConfig.cpp" line="119"/>
-        <location filename="../StartConfig.cpp" line="283"/>
+        <location filename="../StartConfig.cpp" line="120"/>
+        <location filename="../StartConfig.cpp" line="284"/>
         <source>Hide</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2126,8 +2136,8 @@ Entrer une autre direction SVP</translation>
     </message>
     <message>
         <location filename="../StartConfigManager.ui" line="72"/>
-        <location filename="../StartConfigManager.cpp" line="70"/>
-        <location filename="../StartConfigManager.cpp" line="305"/>
+        <location filename="../StartConfigManager.cpp" line="71"/>
+        <location filename="../StartConfigManager.cpp" line="306"/>
         <source>Show</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2147,35 +2157,35 @@ Entrer une autre direction SVP</translation>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../StartConfigManager.cpp" line="58"/>
+        <location filename="../StartConfigManager.cpp" line="59"/>
         <source>Stop all apps</source>
         <translation>Arrêter tous les Applications</translation>
     </message>
     <message>
-        <location filename="../StartConfigManager.cpp" line="63"/>
+        <location filename="../StartConfigManager.cpp" line="64"/>
         <source>Start all apps</source>
         <translation>Démarrer toutes les applications</translation>
     </message>
     <message>
-        <location filename="../StartConfigManager.cpp" line="75"/>
-        <location filename="../StartConfigManager.cpp" line="292"/>
-        <location filename="../StartConfigManager.cpp" line="310"/>
+        <location filename="../StartConfigManager.cpp" line="76"/>
+        <location filename="../StartConfigManager.cpp" line="293"/>
+        <location filename="../StartConfigManager.cpp" line="311"/>
         <source>Hide</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../StartConfigManager.cpp" line="154"/>
+        <location filename="../StartConfigManager.cpp" line="155"/>
         <source>Please give a new name for the layout</source>
         <translation>Nouveau nom pour la mise en page SVP</translation>
     </message>
     <message>
-        <location filename="../StartConfigManager.cpp" line="158"/>
+        <location filename="../StartConfigManager.cpp" line="159"/>
         <source>%1 already exists</source>
         <translation>%1 existe déjà</translation>
     </message>
     <message>
-        <location filename="../StartConfigManager.cpp" line="181"/>
-        <location filename="../StartConfigManager.cpp" line="200"/>
+        <location filename="../StartConfigManager.cpp" line="182"/>
+        <location filename="../StartConfigManager.cpp" line="201"/>
         <source>new app config</source>
         <translation>configuration de nouvelles applications</translation>
     </message>
@@ -2183,7 +2193,7 @@ Entrer une autre direction SVP</translation>
 <context>
     <name>StatisticsDisplay</name>
     <message>
-        <location filename="../StatisticsDisplay.cpp" line="190"/>
+        <location filename="../StatisticsDisplay.cpp" line="191"/>
         <source>ALL</source>
         <translation>Tous [Context?]
 </translation>

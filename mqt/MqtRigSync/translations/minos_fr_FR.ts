@@ -108,7 +108,7 @@
         <translation>Transférer Secondaire -&gt; Principal</translation>
     </message>
     <message>
-        <location filename="../RSMainWindow.cpp" line="55"/>
+        <location filename="../RSMainWindow.cpp" line="80"/>
         <source>Configure...</source>
         <translation>Configurer...</translation>
     </message>
