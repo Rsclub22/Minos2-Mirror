@@ -149,8 +149,10 @@ protected:
       MinosItem<bool> showContinentOC;
       MinosItem<bool> showContinentSA;
       MinosItem<bool> showContinentNA;
-      MinosItem<bool> showWorked;
-      MinosItem<bool> showUnworked;
+      MinosItem<bool> showWorkedCountries;
+      MinosItem<bool> showUnworkedCountries;
+      MinosItem<bool> showWorkedDistricts;
+      MinosItem<bool> showUnworkedDistricts;
       MinosStringItem<QString> currentStackItems[STACKITEMS];
       bool currentStackItemsValid = false;
 

@@ -537,8 +537,10 @@ int MinosTestExport::exportStackDisplay(QSharedPointer<QFile> expfd )
     ct->showContinentOC.addIfDirty( st, "oc", dirty );
     ct->showContinentSA.addIfDirty( st, "sa", dirty );
     ct->showContinentNA.addIfDirty( st, "na", dirty );
-    ct->showWorked.addIfDirty( st, "sw", dirty );
-    ct->showUnworked.addIfDirty( st, "su", dirty );
+    ct->showWorkedCountries.addIfDirty( st, "sw", dirty );
+    ct->showUnworkedCountries.addIfDirty( st, "su", dirty );
+    ct->showWorkedDistricts.addIfDirty( st, "dw", dirty );
+    ct->showUnworkedDistricts.addIfDirty( st, "du", dirty );
 
     bool siDirty = false;
 

@@ -190,8 +190,8 @@ void DXCCFrame::reInitialiseCountries()
         ui->c5Button->setChecked(ct->showContinentSA.getValue());
         ui->c6Button->setChecked(ct->showContinentNA.getValue());
 
-        ui->wkdButton->setChecked(ct->showWorked.getValue());
-        ui->unwkdButton->setChecked(ct->showUnworked.getValue());
+        ui->wkdButton->setChecked(ct->showWorkedCountries.getValue());
+        ui->unwkdButton->setChecked(ct->showUnworkedCountries.getValue());
     }
     restoreDXCCTableColumns();
 
@@ -342,12 +342,12 @@ bool DXCCSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex
         }
     }
 
-    if ( worked && ct->showUnworked.getValue() && !ct->showWorked.getValue() )
+    if ( worked && ct->showUnworkedCountries.getValue() && !ct->showWorkedCountries.getValue() )
     {
         makeVisible = false;
     }
     else
-        if ( !worked && !ct->showUnworked.getValue() && ct->showWorked.getValue() )
+        if ( !worked && !ct->showUnworkedCountries.getValue() && ct->showWorkedCountries.getValue() )
         {
             makeVisible = false;
         }
@@ -416,13 +416,13 @@ void DXCCFrame::on_c6Button_clicked()
 }
 void DXCCFrame::on_wkdButton_clicked()
 {
-    ct->showWorked.setValue(!ct->showWorked.getValue());
+    ct->showWorkedCountries.setValue(!ct->showWorkedCountries.getValue());
     ct->commonSave(false);
     reInitialiseCountries();
 }
 void DXCCFrame::on_unwkdButton_clicked()
 {
-    ct->showUnworked.setValue(!ct->showUnworked.getValue());
+    ct->showUnworkedCountries.setValue(!ct->showUnworkedCountries.getValue());
     ct->commonSave(false);
     reInitialiseCountries();
 }

@@ -155,8 +155,8 @@ void DistrictFrame::reInitialiseDistricts()
     ui->unwkdButton->setText(tr("unwkd"));
     if (ct)
     {
-        ui->wkdButton->setChecked(ct->showWorked.getValue());
-        ui->unwkdButton->setChecked(ct->showUnworked.getValue());
+        ui->wkdButton->setChecked(ct->showWorkedDistricts.getValue());
+        ui->unwkdButton->setChecked(ct->showUnworkedDistricts.getValue());
     }
 
     restoreDistrictTableColumns();
@@ -287,12 +287,12 @@ bool DistrictSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelI
     int worked = MultLists::getMultLists()->getDistWorked(cd, ct, band) ;
 
     bool makeVisible = true;
-    if ( worked && ct->showUnworked.getValue() && !ct->showWorked.getValue() )
+    if ( worked && ct->showUnworkedDistricts.getValue() && !ct->showWorkedDistricts.getValue() )
     {
        makeVisible = false;
     }
     else
-       if ( !worked && !ct->showUnworked.getValue() && ct->showWorked.getValue() )
+       if ( !worked && !ct->showUnworkedDistricts.getValue() && ct->showWorkedDistricts.getValue() )
        {
           makeVisible = false;
        }
@@ -312,7 +312,7 @@ void DistrictFrame::on_DistrictTable_clicked(const QModelIndex &index)
 
 void DistrictFrame::on_wkdButton_clicked()
 {
-    ct->showWorked.setValue(!ct->showWorked.getValue());
+    ct->showWorkedDistricts.setValue(!ct->showWorkedDistricts.getValue());
     ct->commonSave(false);
     reInitialiseDistricts();
 }
@@ -320,7 +320,7 @@ void DistrictFrame::on_wkdButton_clicked()
 
 void DistrictFrame::on_unwkdButton_clicked()
 {
-    ct->showUnworked.setValue(!ct->showUnworked.getValue());
+    ct->showUnworkedDistricts.setValue(!ct->showUnworkedDistricts.getValue());
     ct->commonSave(false);
     reInitialiseDistricts();
 }

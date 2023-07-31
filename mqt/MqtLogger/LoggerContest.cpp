@@ -127,8 +127,10 @@ void LoggerContestLog::clearDirty()
    showContinentOC.clearDirty();
    showContinentSA.clearDirty();
    showContinentNA.clearDirty();
-   showWorked.clearDirty();
-   showUnworked.clearDirty();
+   showWorkedCountries.clearDirty();
+   showUnworkedCountries.clearDirty();
+   showWorkedDistricts.clearDirty();
+   showUnworkedDistricts.clearDirty();
    for (int i = 0; i < STACKITEMS; i++)
    {
         currentStackItems[i].clearDirty();
@@ -202,8 +204,10 @@ void LoggerContestLog::setDirty()
    showContinentOC.setDirty();
    showContinentSA.setDirty();
    showContinentNA.setDirty();
-   showWorked.setDirty();
-   showUnworked.setDirty();
+   showWorkedCountries.setDirty();
+   showUnworkedCountries.setDirty();
+   showWorkedDistricts.setDirty();
+   showUnworkedDistricts.setDirty();
    for (int i = 0; i < STACKITEMS; i++)
    {
         currentStackItems[i].setDirty();
@@ -253,10 +257,14 @@ bool LoggerContestLog::initialise( const QString &fn, bool newFile, int slotno )
    MinosParameters::getMinosParameters() ->getBoolDisplayProfile( edpShowContinentNA, bTemp );
    showContinentNA.setInitialValue(bTemp);
 
-   MinosParameters::getMinosParameters() ->getBoolDisplayProfile( edpShowWorked, bTemp );
-   showWorked.setInitialValue(bTemp);
-   MinosParameters::getMinosParameters() ->getBoolDisplayProfile( edpShowUnworked, bTemp );
-   showUnworked.setInitialValue(bTemp);
+   MinosParameters::getMinosParameters() ->getBoolDisplayProfile( edpShowWorkedCountries, bTemp );
+   showWorkedCountries.setInitialValue(bTemp);
+   MinosParameters::getMinosParameters() ->getBoolDisplayProfile( edpShowUnworkedCountries, bTemp );
+   showUnworkedCountries.setInitialValue(bTemp);
+   MinosParameters::getMinosParameters() ->getBoolDisplayProfile( edpShowWorkedDistricts, bTemp );
+   showWorkedDistricts.setInitialValue(bTemp);
+   MinosParameters::getMinosParameters() ->getBoolDisplayProfile( edpShowUnworkedDistricts, bTemp );
+   showUnworkedDistricts.setInitialValue(bTemp);
 
    QString temp;
    MinosParameters::getMinosParameters() -> getStringDisplayProfile( edpDefaultLayout, temp );
@@ -1762,8 +1770,10 @@ void LoggerContestLog::processMinosStanza( const QString &methodName, MinosTestI
                                              mt->getStructArgMemberValue( "oc", showContinentOC);
                                              mt->getStructArgMemberValue( "sa", showContinentSA);
                                              mt->getStructArgMemberValue( "na", showContinentNA);
-                                             mt->getStructArgMemberValue( "sw", showWorked);
-                                             mt->getStructArgMemberValue( "su", showUnworked);
+                                             mt->getStructArgMemberValue( "sw", showWorkedCountries);
+                                             mt->getStructArgMemberValue( "su", showUnworkedCountries);
+                                             mt->getStructArgMemberValue( "dw", showWorkedDistricts);
+                                             mt->getStructArgMemberValue( "du", showUnworkedDistricts);
                                              for (int i = 0; i < STACKITEMS; i++)
                                              {
                                                   mt->getStructArgMemberValue( "sitem" + QString::number(i), currentStackItems[i]);
