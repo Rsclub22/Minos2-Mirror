@@ -194,6 +194,7 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::tabSandP, this, &QSOLogFrame::on_tabSandP);
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::FontChanged, this, &QSOLogFrame::on_FontChanged, Qt::QueuedConnection);
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::QSOMargins, this, &QSOLogFrame::on_QSOMargins);
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::ContestBandChanged, this, &QSOLogFrame::onContestBandChanged);
 
     TContestApp::getContestApp() ->loggerBundle.getIntProfile( elpAddBandMapTuningTolerance, addToBandmapTuneTolerance );
 
@@ -211,7 +212,13 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
     on_QSOMargins();
     checkQRZClusterBandmapShowing();
 }
-
+void QSOLogFrame::onContestBandChanged(BaseContestLog *c)
+{
+    if (contest == c)
+    {
+        setPlaceholders(QStringList());
+    }
+}
 void QSOLogFrame::on_FontChanged()
 {
     int lcf;
@@ -2741,7 +2748,12 @@ void QSOLogFrame::doGJVEditChange( QObject *Sender )
             // force bearing calc
             calcLoc();
         }
-        if ((csEdit && !csEdit->text().isEmpty()) || (locEdit && !locEdit->text().isEmpty()))
+        QLineEdit *qthEdit = ui->QTHFrame->getTextEditEdit();
+
+        if ((csEdit && !csEdit->text().isEmpty())
+            || (locEdit && !locEdit->text().isEmpty())
+            || (qthEdit && !qthEdit->text().isEmpty())
+            )
         {
             setPlaceholders(QStringList());
         }

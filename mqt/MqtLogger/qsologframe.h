@@ -352,6 +352,7 @@ private slots:
     void on_callRb_clicked();
 
     void on_SandPrb_clicked();
+    void onContestBandChanged(BaseContestLog *c);
 public slots:
     void setXferEnabled(bool s, BaseContestLog *c, QString basename);
 
