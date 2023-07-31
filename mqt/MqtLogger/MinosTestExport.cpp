@@ -112,8 +112,8 @@ void MinosTestExport::exportContest( QSharedPointer<QFile> expfd )
    ct->nonGCountryMult.addIfDirty( st, "NonGCtryMult", dirty );
    ct->locMult.addIfDirty( st, "locMult", dirty );
    ct->GLocMult.addIfDirty( st, "GLocMult", dirty );
-   ct->otherExchange.addIfDirty( st, "QTHReq", dirty );
-   ct->otherOptionalExchange.addIfDirty( st, "QTHOpt", dirty );
+   ct->exchangeRequired.addIfDirty( st, "QTHReq", dirty );
+   ct->exchangeDashAllowed.addIfDirty( st, "QTHOpt", dirty );
    ct->otherMult.addIfDirty(st, "OtherMultType", dirty);
    ct->asymmetricMult.addIfDirty(st, "AsymmetricMult", dirty);
    ct->allowLoc4.addIfDirty( st, "AllowLoc4", dirty );

@@ -925,7 +925,7 @@ void QSOLogFrame::doGJVOKButton_clicked()
                     lte->setText(lht);
                 }
             }
-            if (contest->otherExchange.getValue() || contest->otherOptionalExchange.getValue())
+            if (contest->exchangeRequired.getValue())
             {
                 if (!qht.isEmpty())
                 {
@@ -2028,7 +2028,7 @@ void QSOLogFrame::fillRst( QLineEdit *rIl, QString &rep, const QString &fmode )
 //==============================================================================
 void QSOLogFrame::fillExchange( QLineEdit *rIl, const QString &exch )
 {
-    if (current == rIl && exch.isEmpty() && contest->otherOptionalExchange.getValue())
+   if (current == rIl && exch.isEmpty() && contest->exchangeDashAllowed.getValue())
     {
         //rIl->setText("-");
     }
@@ -2169,7 +2169,7 @@ void QSOLogFrame::contactValid( )
         // What do we allow as valid? Should we error wrong postcode/country combination?
     }
     else
-        if ( contest->otherExchange .getValue() || contest->otherOptionalExchange .getValue())
+        if ( contest->exchangeRequired .getValue())
         {
             if (!contest->districtMult.getValue())
             {
@@ -2178,12 +2178,12 @@ void QSOLogFrame::contactValid( )
                 {
                     // no QTH info if required
 
-//                    lgTraceerr( ERR_21 );            // Exchange required
+//                  lgTraceerr( ERR_21 );            // Exchange required
                     qthIl->tIfValid = false;
                 }
                 else
                 {
-                    if (extra == "-" && contest->otherExchange .getValue() && ! contest->otherOptionalExchange.getValue())
+                    if (extra == "-" && contest->exchangeRequired .getValue() && ! contest->exchangeDashAllowed.getValue())
                     {
                         lgTraceerr( ERR_21 );            // Exchange required
                         qthIl->tIfValid = false;
@@ -2523,7 +2523,7 @@ void QSOLogFrame::updateQSODisplay()
    bool locman = contest->locatorMandatoryField.getValue();
    ui->LocFrame->getTextEditEdit()->setEnabled(locman);  // loc remains enabled in protected to enable searching
    ui->LocFrame->setVisible(locman);
-   bool exchangeNeeded = contest->otherExchange .getValue() || contest->districtMult.getValue() || contest->otherOptionalExchange.getValue();
+   bool exchangeNeeded = contest->exchangeRequired .getValue();
    ui->QTHFrame->setEnabled( exchangeNeeded );
    ui->QTHFrame->setVisible(exchangeNeeded);
    ui->commentsFrame->setEnabled(notProtected);
@@ -3097,19 +3097,13 @@ void QSOLogFrame::transferDetails(CheckableContact *lct, const BaseContestLog *m
 
    // only transfer qth info if required for this ContestLog
    // and it might be valid...
-   if ( contest->districtMult.getValue() || contest->otherExchange.getValue() || contest->otherOptionalExchange.getValue() )
+   if ( contest->exchangeRequired.getValue() && matct->exchangeRequired.getValue())
    {
-      if ( ( contest->districtMult.getValue() && matct->districtMult.getValue() ) ||
-           ( contest->otherExchange.getValue() && matct->otherExchange.getValue() ) ||
-           ( contest->otherOptionalExchange.getValue() && matct->otherOptionalExchange.getValue() )
-         )
-      {
         QString exch = lct->extraText.getValue();
         if (exch.size())
         {
            ui->QTHFrame->getTextEditEdit()->setText(exch);
         }
-      }
    }
    valid( cmCheckValid ); // make sure all single and cross field
    // validation has been done
@@ -3139,16 +3133,13 @@ void QSOLogFrame::transferDetails( const ListContact *lct, const ContactList * /
        ui->LocFrame->getTextEditEdit()->setText(lct->loc.getLoc());
    }
 
-   if ( contest->districtMult.getValue() || contest->otherExchange.getValue() || contest->otherOptionalExchange.getValue() )
+   if ( contest->exchangeRequired.getValue() )
    {
-      if ( contest->districtMult.getValue() || contest->otherExchange.getValue() )
-      {
         QString exch = lct->extraText;
         if (exch.size())
         {
             ui->QTHFrame->getTextEditEdit()->setText(exch);
         }
-      }
    }
    valid( cmCheckValid ); // make sure all single and cross field
    // validation has been done
@@ -3176,12 +3167,9 @@ void QSOLogFrame::transferDetails(QString cs, const QString loc, QString exchang
 
     ui->CallsignFrame->getTextEditEdit()->setText(cs);
     ui->LocFrame->getTextEditEdit()->setText(loc);
-    if ( contest->districtMult.getValue() || contest->otherExchange.getValue() || contest->otherOptionalExchange.getValue() )
+    if ( contest->exchangeRequired.getValue() )
     {
-       if ( contest->districtMult.getValue() || contest->otherExchange.getValue() )
-       {
-            ui->QTHFrame->getTextEditEdit()->setText(exchange);
-       }
+        ui->QTHFrame->getTextEditEdit()->setText(exchange);
     }
 
     valid( cmCheckValid ); // make sure all single and cross field
@@ -3656,7 +3644,7 @@ void QSOLogFrame::setPlaceholders(QStringList nearMatches)
             {
                 ui->LocFrame->getTextEditEdit()->setPlaceholderText(n[2]);
             }
-            if (contest->otherExchange.getValue() || contest->otherOptionalExchange.getValue())
+            if (contest->exchangeRequired.getValue())
             {
                 ui->QTHFrame->getTextEditEdit()->setPlaceholderText(n[4]);
             }
@@ -3688,7 +3676,7 @@ void QSOLogFrame::setPlaceholders(QStringList nearMatches)
             {
                 ui->LocFrame->getTextEditEdit()->setPlaceholderText("");
             }
-            if (contest->otherExchange.getValue() || contest->otherOptionalExchange.getValue())
+            if (contest->exchangeRequired.getValue())
             {
                 ui->QTHFrame->getTextEditEdit()->setPlaceholderText("");
             }
@@ -3705,7 +3693,7 @@ void QSOLogFrame::setPlaceholders(QStringList nearMatches)
         {
             ui->LocFrame->getTextEditEdit()->setPlaceholderText("");
         }
-        if (contest->otherExchange.getValue() || contest->otherOptionalExchange.getValue())
+        if (contest->exchangeRequired.getValue() )
         {
             ui->QTHFrame->getTextEditEdit()->setPlaceholderText("");
         }

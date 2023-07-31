@@ -802,8 +802,8 @@ bool LoggerContestLog::GJVsave( GJVParams &gp )
    strtobuf( mycall.getFullCall() );
    strtobuf( myloc.getLoc() );
    strtobuf( location );
-
-   opyn( otherExchange );
+   
+   opyn( exchangeRequired );
    opyn( false /*Country_mult && County_mult*/ );	//CC_mult
    opyn( locMult );
 
@@ -872,8 +872,8 @@ bool LoggerContestLog::GJVload( )
    buftostr( temp );
    myloc.setLoc(temp);
    buftostr( location );
-
-   otherExchange.setValue( inyn() );
+   
+   exchangeRequired.setValue( inyn() );
    inyn();
    locMult.setValue( inyn() );
 

@@ -171,8 +171,8 @@ class BaseContestLog: public BaseLogList
       MinosStringItem<QString> currentBand;
       MinosStringItem<QString> bandsList;
 
-      MinosItem<bool> otherExchange;            // exchange field is required (also required for postcodes)
-      MinosItem<bool> otherOptionalExchange;    // but exchange is not mandatory
+      MinosItem<bool> exchangeRequired;            // exchange field is required (also required for postcodes)
+      MinosItem<bool> exchangeDashAllowed;    // but exchange is not mandatory
 
       MinosItem<bool> countryMult;              // DXCC mults
       MinosItem<bool> nonGCountryMult;          // Non G country mults

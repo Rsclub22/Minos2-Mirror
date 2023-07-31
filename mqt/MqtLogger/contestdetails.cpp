@@ -52,7 +52,7 @@ ContestDetails::ContestDetails(QWidget *parent) :
     ui->ExchangeComboBox->addItem(tr("No Exchange Required") );
     ui->ExchangeComboBox->addItem(tr("PostCode Multipliers"));
     ui->ExchangeComboBox->addItem(tr("Other Exchange Multiplier"));
-    ui->ExchangeComboBox->addItem(tr("Optional Exchange Multiplier"));
+    ui->ExchangeComboBox->addItem(tr("Exchange Multiplier (may be \"-\")"));
     ui->ExchangeComboBox->addItem(tr("Exchange Required (no multiplier)"));
     ui->ExchangeComboBox->addItem(tr("Asymmetric (TX S/N, RX exchange), Multiplier"));
 
@@ -285,8 +285,8 @@ void ContestDetails::setExchangeComboBox()
 
    */
 
-    bool otherExchange = contestTransferObject->otherExchange.getValue();
-    bool otherOptional = contestTransferObject->otherOptionalExchange.getValue();
+    bool otherExchange = contestTransferObject->exchangeRequired.getValue();
+    bool otherOptional = contestTransferObject->exchangeDashAllowed.getValue();
     int otherMult = contestTransferObject->otherMult.getValue();
 
     bool asymmetricMult = contestTransferObject->asymmetricMult.getValue();
@@ -792,8 +792,8 @@ void ContestDetails::setDetails( const IndividualContest &ic )
           contestTransferObject->GLocMult.setValue( false );
           contestTransferObject->nonGCountryMult.setValue( false );
 
-          contestTransferObject->otherExchange.setValue(false);
-          contestTransferObject->otherOptionalExchange.setValue(false);
+          contestTransferObject->exchangeRequired.setValue(false);
+          contestTransferObject->exchangeDashAllowed.setValue(false);
           contestTransferObject->otherMult.setValue(0);
           contestTransferObject->asymmetricMult.setValue(false);
 
@@ -816,8 +816,8 @@ void ContestDetails::setDetails( const IndividualContest &ic )
           contestTransferObject->GLocMult.setValue( false );
           contestTransferObject->nonGCountryMult.setValue( false );
 
-          contestTransferObject->otherExchange.setValue(false);
-          contestTransferObject->otherOptionalExchange.setValue(false);
+          contestTransferObject->exchangeRequired.setValue(false);
+          contestTransferObject->exchangeDashAllowed.setValue(false);
           contestTransferObject->otherMult.setValue(0);
           contestTransferObject->asymmetricMult.setValue(false);
 
@@ -840,8 +840,8 @@ void ContestDetails::setDetails( const IndividualContest &ic )
           contestTransferObject->GLocMult.setValue( false );
           contestTransferObject->nonGCountryMult.setValue( false );
 
-          contestTransferObject->otherExchange.setValue(false);
-          contestTransferObject->otherOptionalExchange.setValue(true);  // bonus, not mult, so usual code not right
+          contestTransferObject->exchangeRequired.setValue(true);
+          contestTransferObject->exchangeDashAllowed.setValue(true);  // bonus, not mult, so usual code not right
           contestTransferObject->otherMult.setValue(0);
           contestTransferObject->asymmetricMult.setValue(false);
 
@@ -864,8 +864,8 @@ void ContestDetails::setDetails( const IndividualContest &ic )
           contestTransferObject->GLocMult.setValue( false );
           contestTransferObject->nonGCountryMult.setValue( false );
 
-          contestTransferObject->otherExchange.setValue(false);
-          contestTransferObject->otherOptionalExchange.setValue(true);
+          contestTransferObject->exchangeRequired.setValue(true);
+          contestTransferObject->exchangeDashAllowed.setValue(true);
           contestTransferObject->otherMult.setValue(0);
           contestTransferObject->asymmetricMult.setValue(false);
 
@@ -887,8 +887,8 @@ void ContestDetails::setDetails( const IndividualContest &ic )
           contestTransferObject->GLocMult.setValue( false );
           contestTransferObject->nonGCountryMult.setValue( false );
 
-          contestTransferObject->otherExchange.setValue(false);
-          contestTransferObject->otherOptionalExchange.setValue(false);
+          contestTransferObject->exchangeRequired.setValue(false);
+          contestTransferObject->exchangeDashAllowed.setValue(false);
           contestTransferObject->otherMult.setValue(0);
           contestTransferObject->asymmetricMult.setValue(false);
 
@@ -914,8 +914,8 @@ void ContestDetails::setDetails( const IndividualContest &ic )
           contestTransferObject->GLocMult.setValue( false );
           contestTransferObject->nonGCountryMult.setValue( false );
 
-          contestTransferObject->otherExchange.setValue(true);
-          contestTransferObject->otherOptionalExchange.setValue(false);
+          contestTransferObject->exchangeRequired.setValue(true);
+          contestTransferObject->exchangeDashAllowed.setValue(false);
           contestTransferObject->otherMult.setValue(0);
           contestTransferObject->asymmetricMult.setValue(false);
 
@@ -938,8 +938,8 @@ void ContestDetails::setDetails( const IndividualContest &ic )
           contestTransferObject->GLocMult.setValue( false );
           contestTransferObject->nonGCountryMult.setValue( false );
 
-          contestTransferObject->otherExchange.setValue(false);
-          contestTransferObject->otherOptionalExchange.setValue(false);
+          contestTransferObject->exchangeRequired.setValue(false);
+          contestTransferObject->exchangeDashAllowed.setValue(false);
           contestTransferObject->otherMult.setValue(0);
           contestTransferObject->asymmetricMult.setValue(false);
 
@@ -962,8 +962,8 @@ void ContestDetails::setDetails( const IndividualContest &ic )
           contestTransferObject->GLocMult.setValue( false );
           contestTransferObject->nonGCountryMult.setValue( false );
 
-          contestTransferObject->otherExchange.setValue(true);
-          contestTransferObject->otherOptionalExchange.setValue(false);
+          contestTransferObject->exchangeRequired.setValue(true);
+          contestTransferObject->exchangeDashAllowed.setValue(false);
           contestTransferObject->otherMult.setValue(0);
           contestTransferObject->asymmetricMult.setValue(false);
 
@@ -986,8 +986,8 @@ void ContestDetails::setDetails( const IndividualContest &ic )
           contestTransferObject->GLocMult.setValue( false );
           contestTransferObject->nonGCountryMult.setValue( false );
 
-          contestTransferObject->otherExchange.setValue(false);
-          contestTransferObject->otherOptionalExchange.setValue(false);
+          contestTransferObject->exchangeRequired.setValue(false);
+          contestTransferObject->exchangeDashAllowed.setValue(false);
           contestTransferObject->otherMult.setValue(0);
           contestTransferObject->asymmetricMult.setValue(false);
 
@@ -1010,8 +1010,8 @@ void ContestDetails::setDetails( const IndividualContest &ic )
           contestTransferObject->GLocMult.setValue( true );
           contestTransferObject->nonGCountryMult.setValue( false );
 
-          contestTransferObject->otherExchange.setValue(false);
-          contestTransferObject->otherOptionalExchange.setValue(false);
+          contestTransferObject->exchangeRequired.setValue(false);
+          contestTransferObject->exchangeDashAllowed.setValue(false);
           contestTransferObject->otherMult.setValue(0);
           contestTransferObject->asymmetricMult.setValue(false);
 
@@ -1034,8 +1034,8 @@ void ContestDetails::setDetails( const IndividualContest &ic )
           contestTransferObject->GLocMult.setValue( true );
           contestTransferObject->nonGCountryMult.setValue( true );
 
-          contestTransferObject->otherExchange.setValue(false);
-          contestTransferObject->otherOptionalExchange.setValue(false);
+          contestTransferObject->exchangeRequired.setValue(false);
+          contestTransferObject->exchangeDashAllowed.setValue(false);
           contestTransferObject->otherMult.setValue(0);
           contestTransferObject->asymmetricMult.setValue(false);
 
@@ -1058,8 +1058,8 @@ void ContestDetails::setDetails( const IndividualContest &ic )
           contestTransferObject->GLocMult.setValue( true );
           contestTransferObject->nonGCountryMult.setValue( false );
 
-          contestTransferObject->otherExchange.setValue(false);
-          contestTransferObject->otherOptionalExchange.setValue(false);
+          contestTransferObject->exchangeRequired.setValue(false);
+          contestTransferObject->exchangeDashAllowed.setValue(false);
           contestTransferObject->otherMult.setValue(0);
           contestTransferObject->asymmetricMult.setValue(false);
 
@@ -1081,8 +1081,8 @@ void ContestDetails::setDetails( const IndividualContest &ic )
            contestTransferObject->GLocMult.setValue( false );
            contestTransferObject->nonGCountryMult.setValue( false );
 
-           contestTransferObject->otherExchange.setValue(false);
-           contestTransferObject->otherOptionalExchange.setValue(false);
+           contestTransferObject->exchangeRequired.setValue(false);
+           contestTransferObject->exchangeDashAllowed.setValue(false);
            contestTransferObject->otherMult.setValue(0);
            contestTransferObject->asymmetricMult.setValue(false);
 
@@ -1104,8 +1104,8 @@ void ContestDetails::setDetails( const IndividualContest &ic )
            contestTransferObject->GLocMult.setValue( false );
            contestTransferObject->nonGCountryMult.setValue( false );
 
-           contestTransferObject->otherExchange.setValue(false);
-           contestTransferObject->otherOptionalExchange.setValue(false);
+           contestTransferObject->exchangeRequired.setValue(false);
+           contestTransferObject->exchangeDashAllowed.setValue(false);
            contestTransferObject->otherMult.setValue(0);
            contestTransferObject->asymmetricMult.setValue(false);
 
@@ -1127,8 +1127,8 @@ void ContestDetails::setDetails( const IndividualContest &ic )
           contestTransferObject->GLocMult.setValue( false );
           contestTransferObject->nonGCountryMult.setValue( false );
 
-          contestTransferObject->otherExchange.setValue(false);
-          contestTransferObject->otherOptionalExchange.setValue(false);
+          contestTransferObject->exchangeRequired.setValue(false);
+          contestTransferObject->exchangeDashAllowed.setValue(false);
           contestTransferObject->otherMult.setValue(0);
           contestTransferObject->asymmetricMult.setValue(false);
 
@@ -1616,48 +1616,48 @@ QWidget * ContestDetails::getDetails( )
     switch ( ui->ExchangeComboBox->currentIndex() )
     {
     case etNoExchange:     //No Exchange Required
-        contestTransferObject->otherExchange.setValue( false );
-        contestTransferObject->otherOptionalExchange.setValue( false );
+        contestTransferObject->exchangeRequired.setValue( false );
+        contestTransferObject->exchangeDashAllowed.setValue( false );
         contestTransferObject->districtMult.setValue( false );
         contestTransferObject->otherMult.setValue(0);
         contestTransferObject->asymmetricMult.setValue(false);
         break;
 
     case etPostCode:     //PostCode Multipliers
-        contestTransferObject->otherExchange.setValue( true );
-        contestTransferObject->otherOptionalExchange.setValue( false );
+        contestTransferObject->exchangeRequired.setValue( true );
+        contestTransferObject->exchangeDashAllowed.setValue( false );
         contestTransferObject->districtMult.setValue( true );
         contestTransferObject->otherMult.setValue(0);
         contestTransferObject->asymmetricMult.setValue(false);
         break;
 
     case etOther:     //Other Exchange Multiplier
-        contestTransferObject->otherExchange.setValue( true );
-        contestTransferObject->otherOptionalExchange.setValue( false );
+        contestTransferObject->exchangeRequired.setValue( true );
+        contestTransferObject->exchangeDashAllowed.setValue( false );
         contestTransferObject->districtMult.setValue( false );
         contestTransferObject->otherMult.setValue(1);
         contestTransferObject->asymmetricMult.setValue(false);
         break;
 
     case etOptional:     //Optional Exchange Multiplier
-        contestTransferObject->otherExchange.setValue( true );
-        contestTransferObject->otherOptionalExchange.setValue( true );
+        contestTransferObject->exchangeRequired.setValue( true );
+        contestTransferObject->exchangeDashAllowed.setValue( true );
         contestTransferObject->districtMult.setValue( false );
         contestTransferObject->otherMult.setValue(2);
         contestTransferObject->asymmetricMult.setValue(false);
         break;
 
     case etMandatory:     //Exchange Required (no multiplier)
-        contestTransferObject->otherExchange.setValue( true );
-        contestTransferObject->otherOptionalExchange.setValue( false );
+        contestTransferObject->exchangeRequired.setValue( true );
+        contestTransferObject->exchangeDashAllowed.setValue( false );
         contestTransferObject->districtMult.setValue( false );
         contestTransferObject->otherMult.setValue(0);
         contestTransferObject->asymmetricMult.setValue(false);
         break;
 
     case etAsymmetric:     //Asymmetric
-        contestTransferObject->otherExchange.setValue( true );
-        contestTransferObject->otherOptionalExchange.setValue( false );
+        contestTransferObject->exchangeRequired.setValue( true );
+        contestTransferObject->exchangeDashAllowed.setValue( false );
         contestTransferObject->districtMult.setValue( false );
         contestTransferObject->otherMult.setValue(1);
         contestTransferObject->asymmetricMult.setValue(true);

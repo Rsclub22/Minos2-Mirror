@@ -91,8 +91,8 @@ private:
     MinosStringItem<QString> currentBand;
     MinosStringItem<QString> bandsList;
     MinosItem<bool> hfContest;
-    MinosItem<bool> otherExchange;
-    MinosItem<bool> otherOptionalExchange;
+    MinosItem<bool> exchangeRequired;
+    MinosItem<bool> exchangeDashAllowed;
     MinosItem<bool> countryMult;
     MinosItem<bool> nonGCountryMult;
     MinosItem<bool> locMult;

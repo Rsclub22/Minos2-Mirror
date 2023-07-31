@@ -226,7 +226,7 @@ QString DMButtonFrame::parseFKeyMessage(QString mess)
                         txMess += serials;
                         needSpace = true;
                     }
-                    if (!ct->asymmetricMult.getValue() && (ct->otherExchange.getValue() || ct->otherOptionalExchange.getValue()))
+                    if (!ct->asymmetricMult.getValue() && ct->exchangeRequired.getValue())
                     {
                         QString exch = ct->location.getValue();
                         if (!exch.isEmpty() && exch != "-")

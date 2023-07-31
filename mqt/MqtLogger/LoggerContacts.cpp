@@ -330,7 +330,7 @@ void ContestContact::getReg1TestText(QString &sdest , bool noSerials)
          sdest += districtMult->districtCode;
    }
    else
-      if ( clp->otherExchange.getValue() || clp->otherOptionalExchange.getValue() )
+      if ( clp->exchangeRequired.getValue() )
       {
          sdest += extraText.getValue();
       }
@@ -461,7 +461,7 @@ QSO:  3799 PH 1999-03-06 0712 HC8N           59 700    N5KO           59 CA     
             outstr += getCabrilloField(lcl->myloc.getLoc(), 6);
         }
     }
-    if (lcl->otherExchange.getValue() || lcl->otherOptionalExchange.getValue())
+    if (lcl->exchangeRequired.getValue())
     {
         QString extra = lcl->location.getValue();
 
@@ -495,7 +495,7 @@ QSO:  3799 PH 1999-03-06 0712 HC8N           59 700    N5KO           59 CA     
     {
         outstr += getCabrilloField(loc.getLoc(), 6);
     }
-    if (lcl->otherExchange.getValue() || lcl->otherOptionalExchange.getValue())
+    if (lcl->exchangeRequired.getValue() )
     {
         QString extra = extraText.getValue();
         outstr += getCabrilloField(extra, 6);
@@ -519,7 +519,7 @@ QString ContestContact::getADIFLine()
     if (contest->locatorMandatoryField.getValue())
         outstr += makeADIFField( "GRIDSQUARE", loc.getLoc() );
 
-    if (lcl->otherExchange.getValue() || lcl->otherOptionalExchange.getValue())
+    if (lcl->exchangeRequired.getValue())
     {
         if (contest->location.getValue().size())
         {
@@ -572,7 +572,7 @@ QString ContestContact::getADIFLine()
     {
         outstr += makeADIFField( "SRX_STRING", districtMult->districtCode );
     }
-    else if (lcl->otherExchange.getValue() || lcl->otherOptionalExchange.getValue())
+    else if (lcl->exchangeRequired.getValue())
     {
         if (contest->location.getValue().size())
         {

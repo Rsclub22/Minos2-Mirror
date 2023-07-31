@@ -72,10 +72,14 @@ void ContestDetailsTransferObject::setINIDetails()
       myloc.setLoc(temp);
 
       if ( districtMult.getValue() )
+      {
          QTHBundle.getStringProfile( eqpDistrict, location );
+      }
       else
-         if ( (otherExchange.getValue() || otherOptionalExchange.getValue()) && location.getValue().size() == 0 )
+         if ( exchangeRequired.getValue() && location.getValue().size() == 0 )
+         {
             QTHBundle.getStringProfile( eqpLocation, location );
+         }
 
       QTHBundle.getStringProfile( eqpStationQTH1, sqth1 );
       QTHBundle.getStringProfile( eqpStationQTH2, sqth2 );
@@ -135,8 +139,8 @@ void ContestDetailsTransferObject::getFromContest(LoggerContestLog *ct)
     bandsList = ct->bandsList;
 
     hfContest = ct->hfContest;
-    otherExchange = ct->otherExchange;
-    otherOptionalExchange = ct->otherOptionalExchange;
+    exchangeRequired = ct->exchangeRequired;
+    exchangeDashAllowed = ct->exchangeDashAllowed;
     countryMult = ct->countryMult;
     nonGCountryMult = ct->nonGCountryMult;
     locMult = ct->locMult;
@@ -256,8 +260,8 @@ void ContestDetailsTransferObject::setToContest(LoggerContestLog *ct)
     ct->currentBand = currentBand;
     ct->bandsList = bandsList;
     ct->hfContest = hfContest;
-    ct->otherOptionalExchange = otherOptionalExchange;
-    ct->otherExchange = otherExchange;
+    ct->exchangeDashAllowed = exchangeDashAllowed;
+    ct->exchangeRequired = exchangeRequired;
     ct->countryMult = countryMult;
     ct->nonGCountryMult = nonGCountryMult;
     ct->locMult = locMult;
