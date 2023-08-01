@@ -1245,7 +1245,7 @@ bool LoggerContestLog::exportKML(QSharedPointer<QFile> expfd )
          QSharedPointer<BaseContact> ct = e.value();
 
 
-         char inputbuff[ 100 ];
+         char inputbuff[ 101 ];
          strncpy( inputbuff, ct->loc.getLoc().toUtf8().data(), 100 );
          l1.gridstyle = LOC;
          l1.datastring = inputbuff;

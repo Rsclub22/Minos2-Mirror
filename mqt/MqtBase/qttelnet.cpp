@@ -972,7 +972,7 @@ void QtTelnet::close()
 void QtTelnet::sendControl(QtTelnet::Control ctrl)
 {
     bool sendsync = false;
-    char c;
+    char c = ' ';
     switch (ctrl) {
     case InterruptProcess: // Ctrl-C
         c = static_cast<char>(Common::IP);
