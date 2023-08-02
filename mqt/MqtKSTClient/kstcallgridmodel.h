@@ -86,6 +86,7 @@ public:
 class KstCallGridSortFilterModel: public QSortFilterProxyModel
 {
     QStringList filterStrings;
+    QStringList filterSyns;
     int chatFilter = 0;
     bool filterDxcc = false;
     bool isFiltered() const

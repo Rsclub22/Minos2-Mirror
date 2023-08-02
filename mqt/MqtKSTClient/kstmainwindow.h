@@ -238,8 +238,6 @@ private slots:
 
     void on_clearMeepFiltersButton_clicked();
 
-    void on_loggerPushButton_clicked();
-
     void on_logsButton_clicked();
 
     void onNewLog(QSharedPointer<MonitoredLog> ml);

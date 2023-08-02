@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>803</width>
-    <height>616</height>
+    <height>779</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -148,7 +148,7 @@
            </property>
            <layout class="QVBoxLayout" name="verticalLayout">
             <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_2">
+             <layout class="QHBoxLayout" name="horizontalLayout_12">
               <item>
                <widget class="QLabel" name="label">
                 <property name="text">
@@ -163,6 +163,10 @@
                 </property>
                </widget>
               </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_2">
               <item>
                <widget class="QRadioButton" name="stringRb">
                 <property name="text">
@@ -252,13 +256,6 @@
                  </size>
                 </property>
                </spacer>
-              </item>
-              <item>
-               <widget class="QPushButton" name="loggerPushButton">
-                <property name="text">
-                 <string>Logger</string>
-                </property>
-               </widget>
               </item>
              </layout>
             </item>
@@ -784,7 +781,7 @@ when user selected</string>
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="callStringButtonGroup"/>
   <buttongroup name="activeChatGroup"/>
+  <buttongroup name="callStringButtonGroup"/>
  </buttongroups>
 </ui>

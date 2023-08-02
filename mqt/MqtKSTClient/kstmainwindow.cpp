@@ -339,9 +339,6 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
 
     ui->stringRb->setChecked(true);
 
-#ifndef Q_OS_WIN
-    ui->loggerPushButton->setVisible(false);
-#endif
     ml = new KSTMonitoredLogs();
     connect(RemoteLogs::getRemoteLogs(), &RemoteLogs::newMonitoredLog, this, &KSTMainWindow::onNewLog);
     connect(RemoteLogs::getRemoteLogs(), &RemoteLogs::currentLogChanged, this, &KSTMainWindow::onLogChanged);
@@ -1985,14 +1982,6 @@ void KSTMainWindow::on_clearMeepFiltersButton_clicked()
     setMeepFilters();
 }
 
-
-void KSTMainWindow::on_loggerPushButton_clicked()
-{
-    QString router = MinosConfig::getMinosConfig( )->getThisRouterName();
-    RPCGeneralClient rpc(rpcConstants::loggerTakeFocus);
-    rpc.queueCall( rpcConstants::loggerApp + "@" + router );
-
-}
 
 void KSTMainWindow::on_logsButton_clicked()
 {

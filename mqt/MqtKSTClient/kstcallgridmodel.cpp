@@ -405,16 +405,12 @@ bool KstCallGridSortFilterModel::filterAcceptsRow(int sourceRow, const QModelInd
         {
             if (filterDxcc)
             {
-                for (auto const &filterString: qAsConst( filterStrings))
+                for (auto const &filterSyn: qAsConst( filterSyns))
                 {
-                    if (!filterString.isEmpty())
+                    if (!filterSyn.isEmpty())
                     {
-                        QSharedPointer<CountrySynonym> syn = MultLists::getMultLists()->searchCountrySynonym ( filterString );
-                        if ( syn )
-                        {
-                            if (call->dxcc == syn->getCountry()->getBasePrefix())
-                                return true;
-                        }
+                        if (call->dxcc == filterSyn)
+                            return true;
                     }
                 }
             }
@@ -460,6 +456,22 @@ void KstCallGridSortFilterModel::setFilterString(QString f)
 #else
     filterStrings = f.split(" ", QString::SkipEmptyParts);
 #endif
+    filterSyns.clear();
+    for (auto const &filterString: qAsConst( filterStrings))
+    {
+        if (!filterString.isEmpty())
+        {
+            Callsign cs;
+            cs.setFullCall(filterString);
+
+            QSharedPointer<CountrySynonym> syn = MultLists::getMultLists()->searchCountrySynonym ( cs.locCtryPrefix );
+            if ( syn )
+            {
+                filterSyns.push_back(syn->getCountry()->getBasePrefix());
+            }
+        }
+    }
+
     invalidateFilter();
 }
 
