@@ -118,10 +118,10 @@ class WinMonitor: public lineMonitor
    private:
       bool PTTState;
 
-      bool lastPttState = false;
-      bool lastL1State = false;
-      bool lastL2State = false;
-      int lastLinesMode = -1;
+      //bool lastPttState = false;
+      //bool lastL1State = false;
+      //bool lastL2State = false;
+      //int lastLinesMode = -1;
    public:
       static bool PTTInState;
       static bool L1State;
