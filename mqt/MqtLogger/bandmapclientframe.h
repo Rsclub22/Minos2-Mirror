@@ -203,6 +203,7 @@ private:
 
     void ShowFilter();
 
+    void restoreSplitters();
 protected:
 
     void keyPressEvent(QKeyEvent *event) override;
@@ -261,7 +262,9 @@ private slots:
      void on_zoomSpinner_valueChanged(int arg1);
 
      void on_bandmapLimitsChanged();
-public slots:
+     void on_doSplitterChanges(BaseContestLog *b);
+     void on_bmSplitter_splitterMoved(int, int);
+ public slots:
      void on_AfterLogContact(BaseContestLog *c, QSharedPointer<BaseContact>);
 };
 

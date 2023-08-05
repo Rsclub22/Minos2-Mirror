@@ -11,6 +11,7 @@
 #include "clusterClientServer.h"
 #include "cutils.h"
 #include "MinosLoggerEvents.h"
+#include "regsettings.h"
 #include "tlogcontainer.h"
 #include "SendRPCDM.h"
 #include "tsinglelogframe.h"
@@ -34,6 +35,7 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
     clusterStatusIndicatorToggle(false);
     radioStatusIndicatorToggle(false);
     ui->radioStatusMsg->clear();
+    restoreSplitters();
 
     connect (ClusterClientServer::getClusterClientServer(), &ClusterClientServer::dxSpot, this, &BandmapClientFrame::dxSpots);
 
@@ -56,6 +58,8 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
     checkNewSpotsTimer = new QTimer(this);
     connect (checkNewSpotsTimer, &QTimer::timeout, this, &BandmapClientFrame::timerCheckNewBandMapSpots);
     checkNewSpotsTimer->start(CHECKSPOTS_DURATION);
+
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::doSplitterChanges, this, &BandmapClientFrame::on_doSplitterChanges);
 
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::bandMapLimitsChanged, this, &BandmapClientFrame::on_bandmapLimitsChanged);
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::FontChanged, this, &BandmapClientFrame::on_FontChanged, Qt::QueuedConnection);
@@ -202,7 +206,29 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
     ui->zoomSpinner->setMaximum(dialData::MAX_ZOOM_LEVEL);
 
 }
+void BandmapClientFrame::on_doSplitterChanges(BaseContestLog *b)
+{
+    if (b == ct)
+    {
+        restoreSplitters();
+    }
+}
+void BandmapClientFrame::on_bmSplitter_splitterMoved(int /*pos*/, int /*index*/)
+{
+    QByteArray state = ui->bmSplitter->saveState();
+    RegSettings settings;
+    settings.getSettings().setValue("Splitters/BandmapClientFrame/state/", state);
 
+    MinosLoggerEvents::SendSplittersChanged();
+}
+void BandmapClientFrame::restoreSplitters()
+{
+    RegSettings settings;
+    QByteArray state;
+
+    state = settings.getSettings().value("Splitters/BandmapClientFrame/state/").toByteArray();
+    ui->bmSplitter->restoreState(state);
+}
 void BandmapClientFrame::onContestBandChanged(BaseContestLog *c)
 {
     if (c && c == ct)
