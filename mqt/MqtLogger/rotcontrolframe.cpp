@@ -159,7 +159,7 @@ void RotControlFrame::setBrgFromQSOLog(QString brg)
     {
         if (!brg.isEmpty())
         {
-            traceMsg("Bearing from QSO Log" + brg);
+            traceMsg("Bearing from QSO Log " + brg);
             setTurnDisplayText(convertBearingForDisplay(brg));
         }
     }

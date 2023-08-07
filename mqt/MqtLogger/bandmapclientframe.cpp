@@ -1798,7 +1798,7 @@ void BandmapClientFrame::setBandmapSaveFreq(QString cs, Frequency _freq, QString
 {
     if (ct && !ct->isReadOnly())
     {
-        traceMsg(QString("save freq  add marker - callsign %1, freq %2, loc %3, brg %4").arg(cs, _freq.traceStr(), loc, brg));
+        traceMsg(QString("save freq  add marker - callsign %1, freq %2, loc %3, brg %4, exch %5").arg(cs, _freq.traceStr(), loc, brg).arg(exchange));
         QDateTime time = QDateTime::currentDateTimeUtc();
 
         QString logBandStr;
