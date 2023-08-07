@@ -883,6 +883,7 @@ void QSOLogFrame::doGJVOKButton_clicked()
     {
        return;
     }
+    trace("QSOLogFrame::doGJVOKButton_clicked()");
     ui->SerTxFrame->getTextEditEdit()->setReadOnly(!edit);
     ui->SerTxFrame->getTextEditEdit()->setFocusPolicy(edit?Qt::StrongFocus:Qt::ClickFocus);
 
@@ -982,8 +983,10 @@ void QSOLogFrame::doGJVOKButton_clicked()
              }
              else
              {
+                trace("doGJVOKButton_clicked(), about to go to dlgForced");
                  if (dlgForced())              // repeated attack on same faulty field
                  {
+                    trace("dlgForced, accepted");
                      emit QSOFrameCancelled();  // so edit dialog can close
                  }
              }
@@ -1150,9 +1153,13 @@ void QSOLogFrame::on_GJVForceButton_clicked()
     }
     ui->SerTxFrame->getTextEditEdit()->setReadOnly(!edit);
 
-    if (dlgForced())
-        emit QSOFrameCancelled();
+    trace("on_GJVForceButton_clicked(), about to go to dlgForced");
 
+    if (dlgForced())
+    {
+       trace("dlgForced, accepted");
+        emit QSOFrameCancelled();
+    }
 }
 bool QSOLogFrame::savePartial()
 {
@@ -1216,6 +1223,7 @@ void QSOLogFrame::startNextEntry( )
 }
 void QSOLogFrame::doGJVCancelButton_clicked()
 {
+    trace("QSOLogFrame::doGJVCancelButton_clicked()");
     if (edit)
     {
         checkAndLogEntry();
