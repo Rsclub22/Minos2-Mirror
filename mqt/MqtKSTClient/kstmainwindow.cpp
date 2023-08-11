@@ -141,11 +141,11 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
 
     checkActive();
 
-    ui->CSChatFilter->addItem("");
+    ui->CSChatFilter->addItem(tr("Active"));
     ui->CSChatFilter->addItems(services);
     ui->CSChatFilter->setCurrentIndex(0);
 
-    ui->messageChatFilter->addItem("");
+    ui->messageChatFilter->addItem(tr("Active"));
     ui->messageChatFilter->addItems(services);
     ui->messageChatFilter->setCurrentIndex(0);
 

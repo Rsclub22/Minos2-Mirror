@@ -152,7 +152,7 @@
               <item>
                <widget class="QLabel" name="label">
                 <property name="text">
-                 <string>User Filter</string>
+                 <string>Chat Filter</string>
                 </property>
                </widget>
               </item>
@@ -164,6 +164,13 @@
                </widget>
               </item>
              </layout>
+            </item>
+            <item>
+             <widget class="Line" name="line">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+             </widget>
             </item>
             <item>
              <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -187,6 +194,10 @@
                 </attribute>
                </widget>
               </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_13">
               <item>
                <widget class="QLineEdit" name="CSFilter">
                 <property name="toolTip">
@@ -781,7 +792,7 @@ when user selected</string>
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="activeChatGroup"/>
   <buttongroup name="callStringButtonGroup"/>
+  <buttongroup name="activeChatGroup"/>
  </buttongroups>
 </ui>
