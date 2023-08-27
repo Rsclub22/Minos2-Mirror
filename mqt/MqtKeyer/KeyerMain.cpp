@@ -291,7 +291,7 @@ void KeyerMain::changeEvent( QEvent* e )
     if( e->type() == QEvent::WindowStateChange )
     {
         RegSettings settings;
-        settings.getSettings().setValue("geometry", saveGeometry());
+        settings.getSettings().setValue("KeyerMain/geometry", saveGeometry());
     }
 }
 bool KeyerMain::writeConfig(bool force)

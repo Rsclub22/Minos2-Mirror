@@ -154,7 +154,7 @@ void KPMainWindow::changeEvent( QEvent* e )
     if( e->type() == QEvent::WindowStateChange )
     {
         RegSettings settings;
-        settings.getSettings().setValue("geometry", saveGeometry());
+        settings.getSettings().setValue("KeyerProxyMain/geometry", saveGeometry());
     }
 }
 void KPMainWindow::runAlsaScript(const QString &alsaFileName, const QString &command)
