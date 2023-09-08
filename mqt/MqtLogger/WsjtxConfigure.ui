@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>481</width>
-    <height>322</height>
+    <height>324</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -53,7 +53,11 @@
            </widget>
           </item>
           <item>
-           <widget class="QLineEdit" name="groupAddrEdit"/>
+           <widget class="QLineEdit" name="groupAddrEdit">
+            <property name="clearButtonEnabled">
+             <bool>true</bool>
+            </property>
+           </widget>
           </item>
          </layout>
         </item>
@@ -77,7 +81,11 @@
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="udpRecPath"/>
+          <widget class="QLineEdit" name="udpRecPath">
+           <property name="clearButtonEnabled">
+            <bool>true</bool>
+           </property>
+          </widget>
          </item>
          <item>
           <widget class="QToolButton" name="udpRecBrowseButton">
@@ -131,7 +139,11 @@
            </widget>
           </item>
           <item>
-           <widget class="QLineEdit" name="groupAddrEdit_2"/>
+           <widget class="QLineEdit" name="groupAddrEdit_2">
+            <property name="clearButtonEnabled">
+             <bool>true</bool>
+            </property>
+           </widget>
           </item>
          </layout>
         </item>
@@ -170,7 +182,11 @@
            </widget>
           </item>
           <item>
-           <widget class="QLineEdit" name="groupAddrEdit_3"/>
+           <widget class="QLineEdit" name="groupAddrEdit_3">
+            <property name="clearButtonEnabled">
+             <bool>true</bool>
+            </property>
+           </widget>
           </item>
          </layout>
         </item>
@@ -209,7 +225,11 @@
            </widget>
           </item>
           <item>
-           <widget class="QLineEdit" name="groupAddrEdit_4"/>
+           <widget class="QLineEdit" name="groupAddrEdit_4">
+            <property name="clearButtonEnabled">
+             <bool>true</bool>
+            </property>
+           </widget>
           </item>
          </layout>
         </item>
@@ -261,7 +281,11 @@
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="wsjtxAddr"/>
+      <widget class="QLineEdit" name="wsjtxAddr">
+       <property name="clearButtonEnabled">
+        <bool>true</bool>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QLabel" name="label_10">
@@ -271,7 +295,11 @@
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="wsjtxPort"/>
+      <widget class="QLineEdit" name="wsjtxPort">
+       <property name="clearButtonEnabled">
+        <bool>true</bool>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>

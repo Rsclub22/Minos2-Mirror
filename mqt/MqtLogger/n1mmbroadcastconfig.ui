@@ -58,7 +58,11 @@
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="extCSAddr"/>
+          <widget class="QLineEdit" name="extCSAddr">
+           <property name="clearButtonEnabled">
+            <bool>true</bool>
+           </property>
+          </widget>
          </item>
          <item>
           <widget class="QLabel" name="label_2">
@@ -68,7 +72,11 @@
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="extCSPort"/>
+          <widget class="QLineEdit" name="extCSPort">
+           <property name="clearButtonEnabled">
+            <bool>true</bool>
+           </property>
+          </widget>
          </item>
         </layout>
        </widget>
@@ -104,7 +112,11 @@
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="contactsAddr"/>
+          <widget class="QLineEdit" name="contactsAddr">
+           <property name="clearButtonEnabled">
+            <bool>true</bool>
+           </property>
+          </widget>
          </item>
          <item>
           <widget class="QLabel" name="label">
@@ -114,7 +126,11 @@
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="contactsPort"/>
+          <widget class="QLineEdit" name="contactsPort">
+           <property name="clearButtonEnabled">
+            <bool>true</bool>
+           </property>
+          </widget>
          </item>
         </layout>
        </widget>
@@ -156,7 +172,11 @@
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="spotsAddr"/>
+          <widget class="QLineEdit" name="spotsAddr">
+           <property name="clearButtonEnabled">
+            <bool>true</bool>
+           </property>
+          </widget>
          </item>
          <item>
           <widget class="QLabel" name="label_7">
@@ -166,7 +186,11 @@
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="spotsPort"/>
+          <widget class="QLineEdit" name="spotsPort">
+           <property name="clearButtonEnabled">
+            <bool>true</bool>
+           </property>
+          </widget>
          </item>
         </layout>
        </widget>
@@ -208,7 +232,11 @@
        </widget>
       </item>
       <item>
-       <widget class="QLineEdit" name="ADIFAddr"/>
+       <widget class="QLineEdit" name="ADIFAddr">
+        <property name="clearButtonEnabled">
+         <bool>true</bool>
+        </property>
+       </widget>
       </item>
       <item>
        <widget class="QLabel" name="label_9">
@@ -218,7 +246,11 @@
        </widget>
       </item>
       <item>
-       <widget class="QLineEdit" name="ADIFPort"/>
+       <widget class="QLineEdit" name="ADIFPort">
+        <property name="clearButtonEnabled">
+         <bool>true</bool>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>

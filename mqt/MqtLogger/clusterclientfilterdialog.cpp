@@ -178,6 +178,7 @@ void ClusterClientFilterDialog::initCheckFilterTab()
         vl->addWidget(bandLabel);
 
         QLineEdit *spotDistanceEdit = new QLineEdit(p);
+        spotDistanceEdit->setClearButtonEnabled(true);
         vl->addWidget(spotDistanceEdit);
 
         hl->addLayout(vl);

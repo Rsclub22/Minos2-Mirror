@@ -56,6 +56,7 @@ void RadioSettingDialog::initialise()
         for (const auto &b: qAsConst(bands))
         {
             QLineEdit *qle = new QLineEdit();
+            qle->setClearButtonEnabled(true);
             cwPresetLineEditList << qle;
             connect(qle, &QLineEdit::editingFinished, this, [=]() {onCwPresetLineEditingFinished(b->name(), qle);});
 
@@ -84,6 +85,7 @@ void RadioSettingDialog::initialise()
         for (const auto &b: qAsConst(bands))
         {
             QLineEdit *qle = new QLineEdit();
+            qle->setClearButtonEnabled(true);
             phonePresetLineEditList << qle;
             connect(qle, &QLineEdit::editingFinished, this, [=]() {onPhonePresetLineEditingFinished(b->name(), qle);});
 
@@ -112,6 +114,7 @@ void RadioSettingDialog::initialise()
         for (const auto &b: qAsConst(bands))
         {
             QLineEdit *qle = new QLineEdit();
+            qle->setClearButtonEnabled(true);
             RTTYPresetLineEditList << qle;
             connect(qle, &QLineEdit::editingFinished, this, [=]() {onRTTYPresetLineEditingFinished(b->name(), qle);});
 
@@ -140,6 +143,7 @@ void RadioSettingDialog::initialise()
         for (const auto &b: qAsConst(bands))
         {
             QLineEdit *qle = new QLineEdit();
+            qle->setClearButtonEnabled(true);
             PSKPresetLineEditList << qle;
             connect(qle, &QLineEdit::editingFinished, this, [=]() {onPSKPresetLineEditingFinished(b->name(), qle);});
 
@@ -169,6 +173,7 @@ void RadioSettingDialog::initialise()
         for (const auto &b: qAsConst(bands))
         {
             QLineEdit *qle = new QLineEdit();
+            qle->setClearButtonEnabled(true);
             mgmPresetLineEditList << qle;
             connect(qle, &QLineEdit::editingFinished, this, [=]() {onMgmPresetLineEditingFinished(b->name(), qle);});
 
@@ -198,6 +203,7 @@ void RadioSettingDialog::initialise()
         for (const auto &b: qAsConst(bands))
         {
             QLineEdit *qle = new QLineEdit();
+            qle->setClearButtonEnabled(true);
             connect(qle, &QLineEdit::editingFinished, this, [=]() {onBandSwLineEditingFinished();});
             bandSwLineEdits << qle;
 

@@ -51,6 +51,7 @@ void ClusterBandmapConfigure::initialise()
     for (const auto &b: qAsConst(bands))
     {
         QLineEdit *qle = new QLineEdit();
+        qle->setClearButtonEnabled(true);
         QLabel *qlel = new QLabel();
         qlel->setText(b->uk);
 
@@ -165,6 +166,7 @@ void ClusterBandmapConfigure::initialise()
 
 
          QLineEdit *qlbs = new QLineEdit();
+         qlbs->setClearButtonEnabled(true);
          connect(qlbs, &QLineEdit::editingFinished, this, [=]() {
             QString freq = qlbs->text();
             valInputFreq(freq, tr(RADIO_FREQ_EDIT_ERR_MSG));
@@ -180,6 +182,7 @@ void ClusterBandmapConfigure::initialise()
          hbl->addWidget(eLabel);
 
          QLineEdit *qlbe = new QLineEdit();
+         qlbe->setClearButtonEnabled(true);
          connect(qlbe, &QLineEdit::editingFinished, this, [=]() {
             QString freq = qlbe->text();
             valInputFreq(freq, tr(RADIO_FREQ_EDIT_ERR_MSG));
