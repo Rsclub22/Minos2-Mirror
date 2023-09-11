@@ -1377,6 +1377,7 @@ int RigControlMainWindow::openRadio()
     else
     {
         logMessage(QString("Rig Created in the factory Ok"));
+        logMessage(QString("Library Version = %1").arg(radio->getRigLibVersion()));     // show library version in trace log before connection.
     }
 
     radio->setTraceComms(rigStateDetails->traceCommsFlag);
