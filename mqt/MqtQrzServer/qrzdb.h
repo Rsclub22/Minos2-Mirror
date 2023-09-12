@@ -17,6 +17,8 @@ public:
 
     int getRecordCount();
 
+    void resetDB();
+
 private:
     QSqlDatabase qdb;
 

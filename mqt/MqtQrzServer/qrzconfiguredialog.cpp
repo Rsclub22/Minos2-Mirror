@@ -27,31 +27,12 @@ QrzConfigureDialog::QrzConfigureDialog(QWidget *parent) :
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     ui->logonCallsignLineEdit->setValidator(&ucValidator);
-    connect(ui->buttonBox, &QDialogButtonBox::accepted, this, [=](){onAccepted();});
-    connect(ui->buttonBox, &QDialogButtonBox::rejected, this, [=](){onRejected();});
-
 }
 
 QrzConfigureDialog::~QrzConfigureDialog()
 {
     delete ui;
 }
-
-
-void QrzConfigureDialog::onRejected()
-{
-    reject();
-}
-
-void QrzConfigureDialog::onAccepted()
-{
-
-    logCallsign = ui->logonCallsignLineEdit->text().trimmed();
-    logPassword = ui->qrzPasswordLineEdit->text().trimmed();
-
-    accept();
-}
-
 
 int QrzConfigureDialog::exec()
 {
@@ -60,3 +41,25 @@ int QrzConfigureDialog::exec()
 
     return QDialog::exec();
 }
+
+void QrzConfigureDialog::on_resetDBButton_clicked()
+{
+    resetDB = true;
+    accept();
+}
+
+
+void QrzConfigureDialog::on_OKButton_clicked()
+{
+    logCallsign = ui->logonCallsignLineEdit->text().trimmed();
+    logPassword = ui->qrzPasswordLineEdit->text().trimmed();
+
+    accept();
+}
+
+
+void QrzConfigureDialog::on_cancelButton_clicked()
+{
+    reject();
+}
+

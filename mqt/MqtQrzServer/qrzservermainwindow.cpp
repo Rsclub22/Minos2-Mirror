@@ -283,12 +283,13 @@ void QrzServerMainWindow::sendUrl(QString url)
         xmlData.addData( xml );
         if (raw == 200)
         {
-            //trace(QString("XML read %1").arg(QString(xml)));
+            trace(QString("XML read %1").arg(QString(xml)));
             if (xmlData.readNextStartElement())
             {
                 if (xmlData.name().contains(QString("QRZDatabase")))
                 {
-                    if (xmlData.readNextStartElement())
+                    bool csRX = false;
+                    while (xmlData.readNextStartElement())
                     {
                         if (xmlData.name().contains(QString("Session")))
                         {
@@ -297,19 +298,27 @@ void QrzServerMainWindow::sendUrl(QString url)
                         }
                         else if (xmlData.name().contains(QString("Callsign")))
                         {
-
+                            csRX = true;
                             parseCallsignData(xmlData);
-                            qrzCallsignData.setDBDate(QDateTime::currentDateTimeUtc().toString("yyyy-MM-dd HH:mm:ss"));
-                            qdb->createRecord(qrzCallsignData);
-                            qrzRequests++;
-                            dbRecords++;
-                            callsignDataReceived();
 
                         }
                         else if (xmlData.name().contains(QString("DXCC")))
                         {
                             parseDXCCData(xmlData);
                         }
+                    }
+                    if (csRX)
+                    {
+                        QString sessmess = qrzSessionData.getMessage();
+                        if (!sessmess.isEmpty())
+                        {
+                            qrzCallsignData.setMessage(sessmess);
+                        }
+                        qrzCallsignData.setDBDate(QDateTime::currentDateTimeUtc().toString("yyyy-MM-dd HH:mm:ss"));
+                        qdb->createRecord(qrzCallsignData);
+                        qrzRequests++;
+                        dbRecords++;
+                        callsignDataReceived();
                     }
                 }
              }
@@ -387,6 +396,7 @@ void QrzServerMainWindow::sessionDataReceived()
         }
     }
 
+
     if (qrzServerStateFlags.getAskCallsignFlag())
     {
         QString stateMsg;
@@ -394,29 +404,28 @@ void QrzServerMainWindow::sessionDataReceived()
         {
             stateMsg = qrzSessionData.getError();
         }
-        else if (!qrzSessionData.getMessage().isEmpty())
-        {
-            stateMsg = qrzSessionData.getMessage();
-        }
+//        else if (!qrzSessionData.getMessage().isEmpty())
+//        {
+//            stateMsg = qrzSessionData.getMessage();
+//        }
 
-        if (qrzServerStateFlags.getAskCallsignFlag())
+        if (!stateMsg.isEmpty())
         {
+            qrzCallsignData.clear();
+            qrzCallsignData.setCallsign(requestedStation.getDxCall());
+            if (requestedStation.getLoggerFlag())
+            {
+                QrzServerRpc::getQrzServerRpc()->sendQrzResponseToLoggerDisplay(qrzCallsignData, stateMsg, requestedStation.getFromStationName(),requestedStation.getLoggerUuid());
+
+            }
+            else
+            {
+                QrzServerRpc::getQrzServerRpc()->sendQrzResponseToClusterServer(qrzCallsignData.getCallsign(), "", stateMsg, "", "", "");
+            }
             qrzServerStateFlags.setAskCallsignFlag(false);
         }
-
-        qrzCallsignData.clear();
-        qrzCallsignData.setCallsign(requestedStation.getDxCall());
-        if (requestedStation.getLoggerFlag())
-        {
-            QrzServerRpc::getQrzServerRpc()->sendQrzResponseToLoggerDisplay(qrzCallsignData, stateMsg, requestedStation.getFromStationName(),requestedStation.getLoggerUuid());
-
-        }
-        else
-        {
-            QrzServerRpc::getQrzServerRpc()->sendQrzResponseToClusterServer(qrzCallsignData.getCallsign(), "", stateMsg, "", "", "");
-        }
-        qrzServerStateFlags.setAskCallsignFlag(false);
     }
+
 }
 
 void QrzServerMainWindow::callsignDataReceived()
@@ -455,7 +464,8 @@ void QrzServerMainWindow::callsignDataReceived()
 
 void QrzServerMainWindow::parseSessionData(QXmlStreamReader &xmlData)
 {
-    QString("Parse Session Data");
+    trace(QString("Parse Session Data"));
+    qrzSessionData.clear();
     while(xmlData.readNextStartElement())
     {
         if (xmlData.name() == QString("Error"))
@@ -610,6 +620,17 @@ void QrzServerMainWindow::onConfigure()
         if (callsignChanged || passwordChanged || !logonCallsign.isEmpty() || !password.isEmpty())
         {
             qrzSessionData.clear();
+        }
+
+        if (conf.resetDB)
+        {
+            qdb->resetDB();
+            delete qdb;
+            qdb = new QRZDB(this);
+
+            dbRecords = qdb->getRecordCount();
+            dbRequests = 0;
+            qrzRequests = 0;
         }
     }
 }

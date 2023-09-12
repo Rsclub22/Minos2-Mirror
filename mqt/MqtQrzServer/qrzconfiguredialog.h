@@ -35,15 +35,18 @@ public:
     QString logCallsign;
     QString logPassword;
 
+    bool resetDB = false;
+
 public Q_SLOTS:
         virtual int exec() override;
 
 private slots:
 
+    void on_resetDBButton_clicked();
 
-    void onRejected();
-    void onAccepted();
+    void on_OKButton_clicked();
 
+    void on_cancelButton_clicked();
 
 private:
     Ui::QrzConfigureDialog *ui;

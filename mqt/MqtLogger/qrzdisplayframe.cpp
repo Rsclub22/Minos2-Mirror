@@ -178,6 +178,10 @@ void QrzDisplayFrame::onLoggerQrzReply(QrzCallsignData cd, QString qrzReplyState
             ui->ituZoneText->setText(cd.getItuZone());
             ui->moddateText->setText(cd.getModDate());
             ui->dbdateText->setText(cd.getDBDate());
+            if (!cd.getMessage().isEmpty())
+            {
+                ui->qrzLabel->setText(cd.getMessage());
+            }
 
             QString stats(tr("DB hits %1 QRZ requests %2 DB Size %3 records")
                               .arg(cd.getDbRecalls()).arg(cd.getQrzRecalls()).arg(cd.getDbRecords()));
@@ -222,7 +226,6 @@ void QrzDisplayFrame::getQrzDetailsForLogger(QString callsign)
 
 void QrzDisplayFrame::setQrzMessageText(QString msg)
 {
-    ui->qrzMessageText->clear();
     ui->qrzMessageText->setText(msg);
 }
 
@@ -348,6 +351,7 @@ void QrzDisplayServerRpc::on_routerCall(bool err, QSharedPointer<MinosRPCObj> mr
                     QSharedPointer<RPCParam> msgQrzITUZone;
                     QSharedPointer<RPCParam> msgQrzModdate;
                     QSharedPointer<RPCParam> msgQrzDBDate;
+                    QSharedPointer<RPCParam> msgQrzMessage;
                     QSharedPointer<RPCParam> msgQrzDBRecords;
                     QSharedPointer<RPCParam> msgQrzDBRecalls;
                     QSharedPointer<RPCParam> msgQrzRecalls;
@@ -370,6 +374,7 @@ void QrzDisplayServerRpc::on_routerCall(bool err, QSharedPointer<MinosRPCObj> mr
                             && args->getStructArgMember(0, rpcConstants::qrzItuZone, msgQrzITUZone)
                             && args->getStructArgMember(0, rpcConstants::qrzmoddate, msgQrzModdate)
                             && args->getStructArgMember(0, rpcConstants::qrzdbdate, msgQrzDBDate)
+                        && args->getStructArgMember(0, rpcConstants::qrzmessage, msgQrzMessage)
                         && args->getStructArgMember(0, rpcConstants::qrzdbrecords, msgQrzDBRecords)
                         && args->getStructArgMember(0, rpcConstants::qrzdbrecalls, msgQrzDBRecalls)
                         && args->getStructArgMember(0, rpcConstants::qrzrecalls, msgQrzRecalls)
@@ -438,6 +443,10 @@ void QrzDisplayServerRpc::on_routerCall(bool err, QSharedPointer<MinosRPCObj> mr
                         QString dbdate;
                         msgQrzDBDate->getString(dbdate);
                         cd.setDBDate(dbdate);
+
+                        QString message;
+                        msgQrzMessage->getString(message);
+                        cd.setMessage(message);
 
                         int dbRecords;
                         msgQrzDBRecords->getInt(dbRecords);

@@ -38,15 +38,27 @@ QRZDB::QRZDB(QObject *parent)
        "cqZone TEXT,"
        "ituZone TEXT,"
        "moddate TEXT,"
-       "dbdate TEXT"
+       "dbdate TEXT,"
+       "message TEXT"
        ") ";
 
           // you should check if args are ok first...
-          QSqlQuery query;
-          query.prepare(createQuery);
-          if(query.exec())
+          QSqlQuery cquery;
+          cquery.prepare(createQuery);
+          if(cquery.exec())
           {
               trace("QRZ database created successfully");
+              QSqlQuery rquery;
+              rquery.prepare("ALTER TABLE QRZ ADD message TEXT");
+              if (rquery.exec())
+              {
+                  trace("message added to QRZ table");
+              }
+              else
+              {
+                  trace(QString("failed to add message to QRZ table error ; %1").arg(rquery.lastError().text()));
+              }
+
               QSqlQuery query;
               query.prepare("SELECT COUNT(*) FROM QRZ");
               if (query.exec())
@@ -57,17 +69,17 @@ QRZDB::QRZDB(QObject *parent)
                   }
                   else
                   {
-                      trace(QString("select count(*) next error:").arg(query.lastError().text()));
+                      trace(QString("select count(*) next error: %1").arg(query.lastError().text()));
                   }
               }
               else
               {
-                  trace(QString("select count(*) exec error:").arg(query.lastError().text()));
+                  trace(QString("select count(*) exec error: %1").arg(query.lastError().text()));
               }
           }
           else
           {
-               trace(QString("create DB error:%1").arg(query.lastError().text()));
+               trace(QString("create DB error: %1").arg(cquery.lastError().text()));
           }
     }
 }
@@ -77,9 +89,9 @@ bool QRZDB::createRecord(const QrzCallsignData &csData)
     QSqlQuery query;
     query.prepare(
       "INSERT INTO QRZ "
-      "(dataSource, callsign, firstName, name, addr1, addr2, county, country, lat, lon, qra, cqZone, ituZone, moddate, dbdate)"
+      "(dataSource, callsign, firstName, name, addr1, addr2, county, country, lat, lon, qra, cqZone, ituZone, moddate, dbdate, message)"
       " VALUES "
-      "(:dataSource, :callsign, :firstName, :name, :addr1, :addr2, :county, :country, :lat, :lon, :qra, :cqZone, :ituZone, :moddate, :dbdate)"
+      "(:dataSource, :callsign, :firstName, :name, :addr1, :addr2, :county, :country, :lat, :lon, :qra, :cqZone, :ituZone, :moddate, :dbdate, :message)"
        );
     query.bindValue(":dataSource", csData.getDataSource());
     query.bindValue(":callsign", csData.getCallsign());
@@ -96,6 +108,7 @@ bool QRZDB::createRecord(const QrzCallsignData &csData)
     query.bindValue(":ituZone", csData.getItuZone());
     query.bindValue(":moddate", csData.getModDate());
     query.bindValue(":dbdate", csData.getDBDate());
+    query.bindValue(":message", csData.getMessage());
     if(query.exec())
     {
         trace(QString("Record created for csData callsign %1").arg(csData.getCallsign()));
@@ -132,6 +145,7 @@ QrzCallsignData QRZDB::getRecord(const QString cs)
         int idituZone = query.record().indexOf("ituZone");
         int idmoddate = query.record().indexOf("moddate");
         int iddbdate = query.record().indexOf("dbdate");
+        int idmessage = query.record().indexOf("message");
         if (query.next())
         {
            csData.setDataSource(query.value(idDataSource).toString());
@@ -149,6 +163,7 @@ QrzCallsignData QRZDB::getRecord(const QString cs)
            csData.setItuZone(query.value(idituZone).toString());
            csData.setModDate(query.value(idmoddate).toString());
            csData.setDBDate(query.value(iddbdate).toString());
+           csData.setMessage(query.value(idmessage).toString());
 
            trace(QString("Record retrieved for csData callsign %1").arg(csData.getCallsign()));
 
@@ -175,4 +190,18 @@ int QRZDB::getRecordCount()
         return recs;
     }
     return -1;
+}
+
+void QRZDB::resetDB()
+{
+    QSqlQuery rquery;
+    rquery.prepare("DROP TABLE QRZ");
+    if (rquery.exec())
+    {
+        trace("QRZ table dropped");
+    }
+    else
+    {
+        trace(QString("failed to drop QRZ table error ; %1").arg(rquery.lastError().text()));
+    }
 }
