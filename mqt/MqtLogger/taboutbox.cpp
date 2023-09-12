@@ -1,4 +1,5 @@
 #include <QDesktopServices>
+#include "MTrace.h"
 #include "regsettings.h"
 #include "MShowMessageDlg.h"
 #include "SecondInstall.h"
@@ -107,10 +108,14 @@ TAboutBox::TAboutBox(QWidget *parent, bool onStartup) :
     ui->setupUi(this);
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
+    trace(QString("TAboutbox geometry T %1 L %2 B %3 R %4").arg(geometry().top()).arg(geometry().left())
+              .arg(geometry().bottom()).arg(geometry().right()));
     RegSettings settings;
-    QByteArray geometry = settings.getSettings().value("MinosAbout/geometry").toByteArray();
-    if (geometry.size() > 0)
-        restoreGeometry(geometry);
+    QByteArray ageometry = settings.getSettings().value("MinosAbout/geometry").toByteArray();
+    if (ageometry.size() > 0)
+        restoreGeometry(ageometry);
+    trace(QString("TAboutbox geometry T %1 L %2 B %3 R %4").arg(geometry().top()).arg(geometry().left())
+              .arg(geometry().bottom()).arg(geometry().right()));
 
     ui->PageControl1->setCurrentWidget(ui->AboutTabSheet);
 
@@ -206,6 +211,9 @@ TAboutBox::~TAboutBox()
 }
 void TAboutBox::doCloseEvent()
 {
+    trace(QString("TAboutbox geometry T %1 L %2 B %3 R %4").arg(geometry().top()).arg(geometry().left())
+              .arg(geometry().bottom()).arg(geometry().right()));
+
     RegSettings settings;
     settings.getSettings().setValue("MinosAbout/geometry", saveGeometry());
 }

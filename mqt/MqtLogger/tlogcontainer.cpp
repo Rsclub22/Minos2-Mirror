@@ -118,10 +118,15 @@ TLogContainer::TLogContainer(QWidget *parent) :
     connect(ui->contestPageControl->tabBar(), &QTabBar::tabCloseRequested, this, &TLogContainer::onTabClosebutton);
     connect(ui->contestPageControl->tabBar(), &QTabBar::tabMoved, this, &TLogContainer::onTabMoved);
 
+    trace(QString("TLogContainer geometry T %1 L %2 B %3 R %4").arg(geometry().top()).arg(geometry().left())
+              .arg(geometry().bottom()).arg(geometry().right()));
+
     RegSettings settings;
-    QByteArray geometry = settings.getSettings().value("geometry").toByteArray();
-    if (geometry.size() > 0)
-        restoreGeometry(geometry);
+    QByteArray ageometry = settings.getSettings().value("geometry").toByteArray();
+    if (ageometry.size() > 0)
+        restoreGeometry(ageometry);
+    trace(QString("TLogContainer geometry T %1 L %2 B %3 R %4").arg(geometry().top()).arg(geometry().left())
+              .arg(geometry().bottom()).arg(geometry().right()));
 
     sblabel0 = new QLabel( "" );
     statusBar() ->addWidget( sblabel0, 6 );
@@ -365,12 +370,18 @@ void TLogContainer::closeEvent(QCloseEvent *event)
 }
 void TLogContainer::moveEvent(QMoveEvent *event)
 {
+    trace(QString("TLogContainer moveEvent geometry T %1 L %2 B %3 R %4").arg(geometry().top()).arg(geometry().left())
+              .arg(geometry().bottom()).arg(geometry().right()));
+
     RegSettings settings;
     settings.getSettings().setValue("geometry", saveGeometry());
     QWidget::moveEvent(event);
 }
 void TLogContainer::resizeEvent(QResizeEvent * event)
 {
+    trace(QString("TLogContainer resizeEvent geometry T %1 L %2 B %3 R %4").arg(geometry().top()).arg(geometry().left())
+              .arg(geometry().bottom()).arg(geometry().right()));
+
     RegSettings settings;
     settings.getSettings().setValue("geometry", saveGeometry());
     QWidget::resizeEvent(event);
@@ -379,6 +390,8 @@ void TLogContainer::changeEvent( QEvent* e )
 {
     if( e->type() == QEvent::WindowStateChange )
     {
+       trace(QString("TLogContainer changeEvent geometry T %1 L %2 B %3 R %4").arg(geometry().top()).arg(geometry().left())
+                 .arg(geometry().bottom()).arg(geometry().right()));
         RegSettings settings;
         settings.getSettings().setValue("geometry", saveGeometry());
     }
