@@ -1162,6 +1162,20 @@ bool OmnirigControl::supportVoiceMemory(int rigModelNumber)
     return false;
 }
 
+int OmnirigControl::stop_voice_mem(VFO vfo)
+{
+
+    Q_UNUSED(vfo)
+    return omnirigError(OMNIRIG_NOT_SUPPORTED);
+}
+
+
+bool OmnirigControl::supportStopVoiceMem(int rigModelNumber)
+{
+    Q_UNUSED(rigModelNumber);
+    return false;
+}
+
 int OmnirigControl::sendMorse(VFO vfo, QString msg)
 {
     Q_UNUSED(vfo)

@@ -128,6 +128,7 @@ public:
         supportGetPtt = false;
         supportSetPtt = false;
         supportVoiceMemory = false;
+        supportStopVoiceMemory = false;
         suportSendMorse = false;
         supportStopMorse = false;
         supportWaitMorse = false;
@@ -145,6 +146,7 @@ public:
     bool supportGetPtt;
     bool supportSetPtt;
     bool supportVoiceMemory;
+    bool supportStopVoiceMemory;
     bool suportSendMorse;
     bool supportStopMorse;
     bool supportWaitMorse;

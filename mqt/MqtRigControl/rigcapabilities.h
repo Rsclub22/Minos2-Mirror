@@ -3,7 +3,7 @@
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //                      Rig Control
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2020
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2023
 //
 //
 //
@@ -48,6 +48,7 @@ public:
                     bool supportAntSw_ = false,
                     bool supportRigCtld_ = false,
                     bool supportVoiceMemory_ = false,
+                    bool supportStopVoiceMemory_ = false,
                     bool supportCwMemory_ = false,
                     bool pollData_= RigCapConstants::pollDataOn);
 
@@ -73,6 +74,7 @@ public:
     bool supportAntSw;
     bool supportRigCtld;
     bool supportVoiceMemory;
+    bool supportStopVoiceMemory;
     bool supportCwMemory;
     bool pollData;
 

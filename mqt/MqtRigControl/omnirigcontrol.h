@@ -92,6 +92,9 @@ public:
     int sendVoiceMessage(VFO vfo, int vmNum) override;
     bool supportVoiceMemory(int rigNumber) override;
 
+    int stop_voice_mem(VFO vfo)  override;
+    bool supportStopVoiceMem(int rigNumber) override;
+
     int sendMorse(VFO vfo, QString msg) override;
     int stopMorse(VFO vfo) override;
     //int waitMorsePtt(VFO vfo) override;

@@ -3,7 +3,7 @@
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //                      Hamlib Rig Control
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2021
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2023
 //
 //
 //
@@ -149,9 +149,12 @@ void HamlibRigControl::register_rigs(RigFactory::Rigs* rigsList)
         bool supportAntSw = (capsList[i]->get_ant && capsList[i]->set_ant) ? true:false;
 
         bool supportVoiceMem = capsList[i]->send_voice_mem ? true:false;
+        bool supportStopVoiceMem = capsList[i]->stop_voice_mem ? true:false;
 
         bool supportCwMem = capsList[i]->send_morse ? true:false;
 
+        // below to get a parameter dump for development... edit required parameters...
+        //trace(QString("%1\t%2\t%3\t%4").arg(QString(capsList[i]->mfg_name) + " " + QString(capsList[i]->model_name)).arg(capsList[i]->rig_model).arg(supportCwMem ? "True" : "False").arg(supportVoiceMem ? "True" : "False"));
 
 
         (*rigsList)[key] = RigCapabilities(port_type,
@@ -174,6 +177,7 @@ void HamlibRigControl::register_rigs(RigFactory::Rigs* rigsList)
                                            supportAntSw,        // radio supports antenna switch
                                            true,            // radio supports RigCtld
                                            supportVoiceMem,        // radio supports Voice Memory
+                                           supportStopVoiceMem,     // radio supports stop Voice Memmory (TS890S)
                                            supportCwMem,     // radio supports Cw Memory
                                            true);    // radio poll data
     }
@@ -1047,6 +1051,28 @@ bool HamlibRigControl::supportVoiceMemory(int rigNumber)
     if (myRig)
     {
         return my_rig->caps->send_voice_mem ? true:false;
+    }
+
+    return false;
+
+}
+
+// this is to support stop on TS890S. It does not use voice message number 0 to stop the message
+// but sends a seperate parameter 1 to start message, 0 to stop message. hamlib remembers the message
+// number.
+
+int HamlibRigControl::stop_voice_mem(VFO vfo)
+{
+    return rig_stop_voice_mem(my_rig, hamlibVfoNames[vfo]);
+}
+
+bool HamlibRigControl::supportStopVoiceMem(int rigNumber)
+{
+    RIG *myRig;
+    myRig = rig_init(rigNumber);
+    if (myRig)
+    {
+        return my_rig->caps->stop_voice_mem ? true:false;
     }
 
     return false;

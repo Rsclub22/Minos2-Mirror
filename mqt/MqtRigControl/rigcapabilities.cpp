@@ -3,7 +3,7 @@
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //                      Rig Control
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2021
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2023
 //
 //
 //
@@ -36,6 +36,7 @@ RigCapabilities::RigCapabilities(RigCapConstants::PortType portType_,
                                  bool supportAntSw_,
                                  bool supportRigCtld_,
                                  bool supportVoiceMemory_,
+                                 bool supportStopVoiceMemory_,
                                  bool supportCwMemory_,
                                  bool pollData_ )
     : portType (portType_),
@@ -58,6 +59,7 @@ RigCapabilities::RigCapabilities(RigCapConstants::PortType portType_,
       supportAntSw (supportAntSw_),
       supportRigCtld (supportRigCtld_),
       supportVoiceMemory (supportVoiceMemory_),
+      supportStopVoiceMemory (supportStopVoiceMemory_),
       supportCwMemory(supportCwMemory_),
       pollData (pollData_)
 {
@@ -90,6 +92,7 @@ RigCapabilities & RigCapabilities::operator= ( const RigCapabilities &rigcap)
     supportAntSw = rigcap.supportAntSw;
     supportRigCtld = rigcap.supportRigCtld;
     supportVoiceMemory = rigcap.supportVoiceMemory;
+    supportStopVoiceMemory = rigcap.supportStopVoiceMemory;
     supportCwMemory = rigcap.supportCwMemory;
     pollData = rigcap.pollData;
     return *this;

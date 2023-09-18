@@ -3,7 +3,7 @@
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //                      Rig Control
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2021
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2023
 //
 // Interprocess Control Logic
 // COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2017
@@ -879,6 +879,8 @@ bool RigControlMainWindow::checkSupportVoiceMemory()
         {
 
             selectedRigSupCap->supportVoiceMemory = radio->supportVoiceMemory(currentRadio.rigModelNumber);
+            // does it support stop voiceMemory - TS890S
+            selectedRigSupCap->supportStopVoiceMemory = radio->supportStopVoiceMem(currentRadio.rigModelNumber);
             if (selectedRigSupCap->supportVoiceMemory)
             {
                 setVoiceMemIndVisible(true);
@@ -925,13 +927,17 @@ bool RigControlMainWindow::checkSupportCwKeyerMemory()
                 {
                     addCwKeyerMemoryStatusToRigCache(hamlibData::CW_MEMORY_TYPES::YAESU_MEM_RECALL);
                 }
+                if (currentRadio.rigModelNumber >= 2000 && currentRadio.rigModelNumber < 3000)
+                {
+                    addCwKeyerMemoryStatusToRigCache(hamlibData::CW_MEMORY_TYPES::KENWOOD_MEM_RECALL);
+                }
                 else if (currentRadio.rigModelNumber >= 3000 && currentRadio.rigModelNumber < 4000)
                 {
                     addCwKeyerMemoryStatusToRigCache(hamlibData::CW_MEMORY_TYPES::ICOM);
                 }
                 else
                 {
-                    // only support Yaesu and Icom for now
+                    // not supported
                     setCwMemIndVisible(false);
                     setCwMemIndOnOff(false);
                     addCwKeyerMemoryStatusToRigCache(hamlibData::CW_MEMORY_TYPES::NONE);
@@ -1415,6 +1421,7 @@ int RigControlMainWindow::openRadio()
 
 
     // reduce the radio error timeouts from default
+    // timeouts in hamlib seem to be increasing, maybe need to reduce this for other radios?
     if (rigStateDetails->rigCap.rigModelNumber == RIG_MODEL_FT817 || rigStateDetails->rigCap.rigModelNumber == RIG_MODEL_FT818)
     {
 
@@ -5081,7 +5088,9 @@ void RigControlMainWindow::showRitTestControl(bool state)
 
 
 
-
+// hamlib sendVoiceMessage() funtion uses numbers 0 to max number of voicememory on the radio
+// activate voicemessage on most radios. Note! 0 is stop message, and 1 is the first message memory.
+// hamlib TS890S, if msgNum is 0, need to call seperate stop_voice_mem function.
 
 void RigControlMainWindow::onSetVoiceMessageNum(QString msgNum)
 {
@@ -5090,8 +5099,17 @@ void RigControlMainWindow::onSetVoiceMessageNum(QString msgNum)
 
     if (radio && ok)
     {
-        trace(QString("Send Voice Memory %1 to rig").arg(msgNum));
-        radio->sendVoiceMessage(rigStateDetails->curVfo, vmNum);
+        trace(QString("Send Voice Memory Number %1 to rig").arg(msgNum));
+        if (msgNum == "0" && selectedRigSupCap->supportStopVoiceMemory)
+        {
+            trace(QString("This radio supports hamlib stop_voice_mem function"));
+            radio->stop_voice_mem(rigStateDetails->curVfo);
+        }
+        else
+        {
+            radio->sendVoiceMessage(rigStateDetails->curVfo, vmNum);
+        }
+
     }
     else
     {

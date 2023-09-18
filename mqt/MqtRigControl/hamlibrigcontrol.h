@@ -3,7 +3,7 @@
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //                      Rig Control
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2020
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2023
 //
 //
 //
@@ -96,6 +96,9 @@ public:
 
     int sendVoiceMessage(VFO vfo, int vmNum) override;
     bool supportVoiceMemory(int rigNumber) override;
+
+    int stop_voice_mem(VFO vfo)  override;
+    bool supportStopVoiceMem(int rigNumber) override;
 
     int sendMorse(VFO vfo, QString msg) override;
     int stopMorse(VFO vfo) override;
