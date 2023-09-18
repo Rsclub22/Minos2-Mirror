@@ -63,7 +63,8 @@ void TxVmRigSetupDialog::initSetup()
     if (voiceCap.getUseCatPTTForEom())
     {
         ui->pttEOMChkBox->setVisible(true);
-        QString fileName = VOICE_KEYER_PATH + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[VoiceKeyerId::RigControl] + ".ini";
+        //QString fileName = VOICE_KEYER_PATH + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[VoiceKeyerId::RigControl] + ".ini";
+        QString fileName = VOICEKEYER_COMMON_PARAMS_PATH + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[VoiceKeyerId::RigControl] + ".ini";
         QSettings config(fileName, QSettings::IniFormat);
         ui->pttEOMChkBox->setChecked(config.value("Common/UseCatPttForEom", false).toBool());
     }
@@ -76,7 +77,8 @@ void TxVmRigSetupDialog::initSetup()
     if (voiceCap.getEnableCwMode())
     {
         ui->switchToCw->setVisible(true);
-        QString fileName = VOICE_KEYER_PATH + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[VoiceKeyerId::CW_RigControl] + ".ini";
+        //QString fileName = VOICE_KEYER_PATH + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[VoiceKeyerId::CW_RigControl] + ".ini";
+        QString fileName = VOICEKEYER_COMMON_PARAMS_PATH + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[VoiceKeyerId::RigControl] + ".ini";
         QSettings config(fileName, QSettings::IniFormat);
         ui->switchToCw->setChecked(config.value("Common/SwitchToCwMode", true).toBool());
     }
