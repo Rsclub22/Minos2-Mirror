@@ -147,6 +147,7 @@ private:
     void setFrameState(QString voiceKeyerName);
     void setRepeatIndicatorOnOff(bool on);
     void pttStopMessage(bool state);
+    void turnOffVMButton();
 
 
     void updateVoiceMemAvailStateAndCwType();

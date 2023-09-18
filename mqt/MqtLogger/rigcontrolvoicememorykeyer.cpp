@@ -5,7 +5,8 @@
 #include "txvmrigbuttondialog.h"
 #include "rigcontrolvoicememorykeyer.h"
 
-const char * ICOM_STOPCODE = "0";
+const char * ICOM_STOPCODE = "0"; // THis stop code is used for all hamlib radios for now...
+
 
 RigControlVoiceMemoryKeyer::RigControlVoiceMemoryKeyer(QObject *parent) : VoiceKeyerBase(parent)
 {
