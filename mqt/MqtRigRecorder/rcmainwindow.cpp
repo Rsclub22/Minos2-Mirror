@@ -1,6 +1,7 @@
 #include <QSettings>
 #include <QFileDialog>
 #include <QDateTime>
+#include "MShowMessageDlg.h"
 #include "regsettings.h"
 #include "AppStartup.h"
 #include "RPCCommandConstants.h"
@@ -48,6 +49,11 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(stdinReader, &StdInReader::stdinLine, this, &MainWindow::onStdInRead);
 
+    if (rass.inputDevices.count() == 0)
+    {
+        mShowMessage(tr("No Sound Input devices available"), this);
+        exit(2);
+    }
 
     RegSettings gsettings;
     QByteArray geometry = gsettings.getSettings().value("RigRecorderMain/geometry").toByteArray();
