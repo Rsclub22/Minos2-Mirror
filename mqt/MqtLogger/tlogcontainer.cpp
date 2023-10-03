@@ -121,10 +121,12 @@ TLogContainer::TLogContainer(QWidget *parent) :
     trace(QString("TLogContainer geometry T %1 L %2 B %3 R %4").arg(geometry().top()).arg(geometry().left())
               .arg(geometry().bottom()).arg(geometry().right()));
 
-    RegSettings settings;
-    QByteArray ageometry = settings.getSettings().value("geometry").toByteArray();
-    if (ageometry.size() > 0)
-        restoreGeometry(ageometry);
+    {
+        RegSettings settings;
+        QByteArray ageometry = settings.getSettings().value("geometry").toByteArray();
+        if (ageometry.size() > 0)
+            restoreGeometry(ageometry);
+    }
     trace(QString("TLogContainer geometry T %1 L %2 B %3 R %4").arg(geometry().top()).arg(geometry().left())
               .arg(geometry().bottom()).arg(geometry().right()));
 
