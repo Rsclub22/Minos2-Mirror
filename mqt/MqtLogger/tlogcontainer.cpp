@@ -1412,7 +1412,6 @@ void TLogContainer::on_contestPageControl_currentChanged(int index)
     updateLayoutsMenu();
 
     ui->menuLogs->clear();
-    trace("on_contestPageControl_currentChanged menuLogsActions.clear()");
     menuLogsActions.clear();
 
     if (index >= 0)
@@ -1883,7 +1882,6 @@ BaseContestLog *TLogContainer::loadSession( QString sessName)
     app ->writeContestList();	// to clear the unopened and changed ones
 
     ui->menuLogs->clear();
-    trace("loadSession menuLogsActions.clear()");
     menuLogsActions.clear();
 
     ui->menuLogs->addAction(FileOpenAction);
