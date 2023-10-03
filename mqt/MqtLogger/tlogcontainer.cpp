@@ -1387,6 +1387,7 @@ void TLogContainer::setMenuLog(int current)
         QVariant qpc(i);
         ma->setData(qpc);
         menuLogsActions.push_back(ma);
+        trace("menuLogsActions.push_back(ma);");
 
         if (current == i)
         {
@@ -1411,6 +1412,7 @@ void TLogContainer::on_contestPageControl_currentChanged(int index)
     updateLayoutsMenu();
 
     ui->menuLogs->clear();
+    trace("on_contestPageControl_currentChanged menuLogsActions.clear()");
     menuLogsActions.clear();
 
     if (index >= 0)
@@ -1881,6 +1883,7 @@ BaseContestLog *TLogContainer::loadSession( QString sessName)
     app ->writeContestList();	// to clear the unopened and changed ones
 
     ui->menuLogs->clear();
+    trace("loadSession menuLogsActions.clear()");
     menuLogsActions.clear();
 
     ui->menuLogs->addAction(FileOpenAction);
@@ -1965,6 +1968,7 @@ void TLogContainer::preloadFiles( const QString &conarg )
         sendDM->subscribeApps();
         selectContest( ct );
     }
+     on_contestPageControl_currentChanged(-1);
 }
 void TLogContainer::preloadLists( )
 {
