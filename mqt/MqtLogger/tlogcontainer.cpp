@@ -1389,6 +1389,7 @@ void TLogContainer::setMenuLog(int current)
         QVariant qpc(i);
         ma->setData(qpc);
         menuLogsActions.push_back(ma);
+        trace("menuLogsActions.push_back(ma);");
 
         if (current == i)
         {
@@ -1967,6 +1968,7 @@ void TLogContainer::preloadFiles( const QString &conarg )
         sendDM->subscribeApps();
         selectContest( ct );
     }
+     on_contestPageControl_currentChanged(-1);
 }
 void TLogContainer::preloadLists( )
 {
