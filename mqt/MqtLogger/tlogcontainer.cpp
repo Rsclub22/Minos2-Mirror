@@ -124,11 +124,27 @@ TLogContainer::TLogContainer(QWidget *parent) :
     {
         RegSettings settings;
         QByteArray ageometry = settings.getSettings().value("geometry").toByteArray();
+        int t = settings.getSettings().value("geoT").toInt();
+        int l = settings.getSettings().value("geoL").toInt();
+        int b = settings.getSettings().value("geoB").toInt();
+        int r = settings.getSettings().value("geoR").toInt();
         if (ageometry.size() > 0)
             restoreGeometry(ageometry);
+
+        trace(QString("TLogContainer geometry T %1 L %2 B %3 R %4 (%5 %6 %7 %8)").arg(geometry().top()).arg(geometry().left())
+              .arg(geometry().bottom()).arg(geometry().right()).arg(t).arg(l).arg(b).arg(r));
+
+        if (t != 0 && l != 0 && b != 0 && r != 0)
+        if (geometry().top() != t
+            ||geometry().left() != l
+            ||geometry().bottom() != b
+            ||geometry().right() != r
+            )
+        {
+            mShowMessage("Bad geometry!", this);
+        }
+
     }
-    trace(QString("TLogContainer geometry T %1 L %2 B %3 R %4").arg(geometry().top()).arg(geometry().left())
-              .arg(geometry().bottom()).arg(geometry().right()));
 
     sblabel0 = new QLabel( "" );
     statusBar() ->addWidget( sblabel0, 6 );
@@ -377,6 +393,12 @@ void TLogContainer::moveEvent(QMoveEvent *event)
 
     RegSettings settings;
     settings.getSettings().setValue("geometry", saveGeometry());
+
+    settings.getSettings().setValue("geoT", geometry().top());
+    settings.getSettings().setValue("geoL", geometry().left());
+    settings.getSettings().setValue("geoB", geometry().bottom());
+    settings.getSettings().setValue("geoR", geometry().right());
+
     QWidget::moveEvent(event);
 }
 void TLogContainer::resizeEvent(QResizeEvent * event)
@@ -386,6 +408,12 @@ void TLogContainer::resizeEvent(QResizeEvent * event)
 
     RegSettings settings;
     settings.getSettings().setValue("geometry", saveGeometry());
+
+    settings.getSettings().setValue("geoT", geometry().top());
+    settings.getSettings().setValue("geoL", geometry().left());
+    settings.getSettings().setValue("geoB", geometry().bottom());
+    settings.getSettings().setValue("geoR", geometry().right());
+
     QWidget::resizeEvent(event);
 }
 void TLogContainer::changeEvent( QEvent* e )
@@ -396,6 +424,11 @@ void TLogContainer::changeEvent( QEvent* e )
                  .arg(geometry().bottom()).arg(geometry().right()));
         RegSettings settings;
         settings.getSettings().setValue("geometry", saveGeometry());
+
+        settings.getSettings().setValue("geoT", geometry().top());
+        settings.getSettings().setValue("geoL", geometry().left());
+        settings.getSettings().setValue("geoB", geometry().bottom());
+        settings.getSettings().setValue("geoR", geometry().right());
     }
 
     if (e->type() == QEvent::LanguageChange)
