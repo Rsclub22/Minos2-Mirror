@@ -191,6 +191,7 @@ private:
 
     void updateLayoutsMenu();
 
+    bool inspectGeometry(const QByteArray &geometry);
 private slots:
     void CancelClick();
     void HelpActionExecute();
