@@ -266,8 +266,10 @@ TLogContainer::TLogContainer(QWidget *parent) :
             ||geometry().right() != r
             )
         {
-            inspectGeometry(ageometry);
-            mShowMessage("Bad geometry!", this);
+            //inspectGeometry(ageometry);
+            trace("Bad geometry!");
+            QRect geoRect(l, t, r - l, b - t);
+            setGeometry(geoRect);
         }
 
     }
