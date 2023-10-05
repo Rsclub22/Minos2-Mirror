@@ -1218,7 +1218,16 @@ void RotatorMainWindow::checkMoving(int bearing)
         return;
     }
 
-    if (oldBearing != bearing)
+    if (abs(targetBearing - bearing <= 2) && (oldBearing != bearing))
+    {
+        if (rotTimeCount > 1)
+        {
+            logMessage(QString("Rotator is near target for too long"));
+            stopButton();
+            sendStatusToLogStop();
+        }
+    }
+    else if (oldBearing != bearing)
     {
             oldBearing = bearing;
             rotTimeCount = 0;
@@ -1229,7 +1238,7 @@ void RotatorMainWindow::checkMoving(int bearing)
     {
         if (rotTimeCount > ROTATE_MOVE_TIMEOUT)
         {
-            logMessage(QString("Rotator has stoped moving"));
+            logMessage(QString("Rotator has stopped moving"));
             stopButton();
             sendStatusToLogStop();
         }
@@ -1333,6 +1342,7 @@ void RotatorMainWindow::rotateTo(int bearing)
                 rotateTo = rotateTo - 1;        // some hamlib and PST Rotator do not like 360
             }
 
+            targetBearing = rotateTo;
             retCode = rotator->rotate_to_bearing(rotateTo);
             if (retCode < 0)
             {

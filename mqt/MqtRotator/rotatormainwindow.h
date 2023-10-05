@@ -84,7 +84,6 @@ signals:
     void displayOverlap(overlapStat);
     void checkingEndStop();
     void sendBackBearing(QString);
-//   void displayOverlapBearing(QString);
     void displayActualBearing(QString);
     void presetRotateTo();
 
@@ -113,7 +112,6 @@ private:
     QList<QShortcut *> shiftShortCutKeyList;
 
     QComboBox *selectAntenna;
-    //QPushButton* presetButtons[NUM_PRESETS];
     QString appName = "";
     QLabel *status;
     QLabel *offSetlbl;
@@ -122,8 +120,6 @@ private:
     QLabel *actualRotatorDisplay;
     QLabel *rawRotatorlbl;
     QLabel *rawRotatorDisplay;
-    //QPalette *redText;
-    //QPalette *blackText;
     RotSetupDialog *setupAntenna;
     EditPresetsDialog *editPresets;
     LogDialog *setupLog;
@@ -138,6 +134,7 @@ private:
     bool turn_button_status = OFF;
     bool brakeflag = false;
     bool moving = false;
+    int targetBearing = 0;
     bool movingCW = false;
     bool movingCCW = false;
     bool cwCcwCmdflag = false;     // command sentflag
@@ -148,24 +145,12 @@ private:
 
     bool traceCommsFlag =  false;
 
-    //endStop endStopType;
     overlapStat overLapStatus = NO_OVERLAP;
     bool overLapActiveflag = true;
-    //bool southStopActiveflag;
     bool rotErrorFlag = false;
-    //bool supportCwCcwCmd;
     int rotatorBearing;
     int curBearingWithOffset;
-    //int rotatorMinAzimuth;
-    //int rotatorMaxAzimuth;
-    //int currentMinAzimuth;
-    //int currentMaxAzimuth;
-    //int rotatorCWEndStop;
-    //int rotatorCCWEndStop;
     QString backBearingmsg;
-
-    //QString presetName[NUM_PRESETS];
-    //QString presetBearing[NUM_PRESETS];
 
     QString geoStr;         // geometry registry location
 
@@ -287,7 +272,6 @@ private:
 
     void toggleOverLapDisplay(bool toggle);
 
-//    bool getCwCcwCmdFlag(int rotatorNumber);
     void rot_right_button_off();
     void rot_right_button_on();
     void rot_left_button_off();
