@@ -1218,7 +1218,7 @@ void RotatorMainWindow::checkMoving(int bearing)
         return;
     }
 
-    if (abs(targetBearing - bearing <= 2) && (oldBearing != bearing))
+    if ((abs(targetBearing - bearing) <= 2) && (oldBearing != bearing))
     {
         if (rotTimeCount > 1)
         {
