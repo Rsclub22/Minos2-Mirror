@@ -14,7 +14,7 @@ defined(SECONDINSTALL, var) {
     }
 }
 
-CONFIG += c++11
+CONFIG += c++20
 DEFINES += TIXML_USE_STL
 DEFINES += NOMINMAX
 
