@@ -1476,7 +1476,7 @@ void TSingleLogFrame::transferDetails(MatchTreeItem *MatchTreeIndex )
    QSharedPointer<MatchContact> mc = MatchTreeIndex->getMatchContact();
    BaseMatchContest *mct = MatchTreeIndex->getMatchContest();
 
-   if (mct)
+   if (mct && mc)
    {
        CheckableContact *bct = mc->getBaseContact();
        if (bct)
