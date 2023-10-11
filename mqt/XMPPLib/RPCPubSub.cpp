@@ -41,7 +41,7 @@ void RPCPubSub::subscribeRemote( const QString &router, const QString &category 
 void RPCPubSub::reconnectPubSub( )
 {
    // iterate the publish and subscribe objects and re-do them
-   for ( auto const &i: std::as_const(publishList ))
+   for ( auto const &i: qAsConst(publishList ))
    {
       if ( i )
       {
