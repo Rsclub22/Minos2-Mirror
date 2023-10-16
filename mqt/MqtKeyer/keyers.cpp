@@ -43,7 +43,7 @@ static const char * lineModeStrings[] = {
 };
 //=============================================================================
 
-commonKeyer *currentKeyer = nullptr;
+QSharedPointer <commonKeyer> currentKeyer;
 
 extern KeyerJson *getMasterConfig();
 //=============================================================================
@@ -118,7 +118,7 @@ bool keyer_init( QString &errmess )
       return false;
    return true;
 }
-commonPort * select_keyer( const QString &kn )
+QSharedPointer<commonPort> select_keyer( const QString &kn )
 {
    if ( sblog )
    {
@@ -128,13 +128,13 @@ commonPort * select_keyer( const QString &kn )
 
    for ( auto const &cp: portChain )
    {
-      for ( auto const &lm: cp->monitors )
+      for ( auto &lm: cp->monitors )
       {
          if ( kn.compare(lm->pName, Qt::CaseInsensitive ) == 0 )
          {
             if ( currentKeyer )
                currentKeyer->select( false );
-            currentKeyer = static_cast<commonKeyer *>(lm);
+            currentKeyer = lm.dynamicCast<commonKeyer>();
             if ( sblog )
             {
                trace( "Keyer " + kn + " made current." );
@@ -147,9 +147,9 @@ commonPort * select_keyer( const QString &kn )
 
    return nullptr;
 }
-commonPort* loadKeyers()
+QSharedPointer<commonPort> loadKeyers()
 {
-   commonPort *cp = nullptr;
+   QSharedPointer<commonPort> cp;
    QString buff;
    bool KeyerLoaded = keyer_init( buff );	// params are argc, argv fo DVP control strings
    if ( KeyerLoaded )
@@ -186,8 +186,13 @@ void unloadKeyers()
    // close down the SB card
    SoundSystemDriver::sbdvp_unload();
    // unload everything - destructors SHOULD sort the mess out!
+   for(auto &p:portChain)
+   {
+      p->monitors.freeAll();
+   }
    portChain.freeAll();
 
+   winp.clear();
 }
 bool getPTT()
 {
@@ -229,7 +234,11 @@ QVector < QString > get_keyer_list()
    {
       for ( auto const &lm: cp->monitors )
       {
-         if ( dynamic_cast<commonKeyer *>( lm ) )
+         QSharedPointer<lineMonitor> plm = lm;
+         // This crashes because we have already deleted the monitor(?)
+         // because we failed to sbInitialise the voice keyer
+         commonKeyer *ck = dynamic_cast<commonKeyer *>( plm.data() );
+         if ( ck )
          {
             keylist.push_back( lm->pName );
          }
@@ -329,14 +338,6 @@ lineMonitor::~lineMonitor()
       trace( "lineMonitor::~lineMonitor" );
    }
 }
-bool lineMonitor::initialise( const KeyerConfig &/*keyer*/, const PortConfig &/*port*/ )
-{
-   if ( cp )
-   {
-      cp->registerMonitor( this );
-   }
-   return true;
-}
 
 void lineMonitor::checkControls( )
 {
@@ -353,7 +354,10 @@ void lineMonitor::ptt( int state )
    if ( cp )
       cp->ptt( state );
 }
-
+bool lineMonitor::initialise( )
+{
+   return true;
+}
 //==============================================================================
 timerTicker::timerTicker()
 {
@@ -393,7 +397,7 @@ bool commonKeyer::getPTT( )
 }
 void commonKeyer::getActionState( QString &s )
 {
-   KeyerAction * sba = KeyerAction::getCurrentAction();
+   QSharedPointer<KeyerAction> sba = KeyerAction::getCurrentAction();
    if ( sba )
       sba->getActionState( s );
    else
@@ -419,7 +423,7 @@ bool commonKeyer::getStatus( QString &buff )
 
    return ( KeyerAction::getCurrentAction() ) ? true : false;
 }
-bool commonKeyer::initialise( const KeyerConfig &keyer, const PortConfig &port )
+bool commonKeyer::initialise( )
 {
    if ( kconf.pipTone >= 0 )
    {
@@ -428,7 +432,11 @@ bool commonKeyer::initialise( const KeyerConfig &keyer, const PortConfig &port )
       if ( kconf.pipTone > 1500 )
          kconf.pipTone = 1500;
    }
-   bool ret = lineMonitor::initialise( keyer, port );
+
+
+
+   bool ret = lineMonitor::initialise( );
+
    return ret;
 }
 void commonKeyer::select( bool /*sel*/ )
@@ -522,14 +530,14 @@ bool voiceKeyer::docommand( const KeyerCtrl &dvp_ctrl )
             KeyerAction::currentAction.clear_after( KeyerAction::getCurrentAction() );
             int ardelay = getAutoRepeatDelay(dvp_ctrl.intParam1);
             bool ar = getEnableAutoRepeat(dvp_ctrl.intParam1);
-            new PlayAction( dvp_ctrl.intParam1, dvp_ctrl.keyName, dvp_ctrl.filename, !dvp_ctrl.xmit, kconf.startDelay, ar?ardelay:0, true, false );
+            KeyerAction::currentAction.push_back(QSharedPointer<KeyerAction>(new PlayAction( dvp_ctrl.intParam1, dvp_ctrl.keyName, dvp_ctrl.filename, !dvp_ctrl.xmit, kconf.startDelay, ar?ardelay:0, true, false )));
          }
          break;
 
       case eKEYER_RECORD:      /* record file */
          {
             KeyerAction::currentAction.freeAll();
-            new RecordAction( dvp_ctrl.filename );
+            KeyerAction::currentAction.push_back(QSharedPointer<KeyerAction>(new RecordAction( dvp_ctrl.filename )));
             break;
          }
 
@@ -542,7 +550,7 @@ bool voiceKeyer::docommand( const KeyerCtrl &dvp_ctrl )
 
       case eKEYER_TONE1:
          {
-            KeyerAction *sba = KeyerAction::getCurrentAction();
+            QSharedPointer<KeyerAction> sba = KeyerAction::getCurrentAction();
             SoundSystemDriver::getSbDriver() ->stopall();
             KeyerAction::currentAction.freeAll();
             if ( !sba )
@@ -550,14 +558,14 @@ bool voiceKeyer::docommand( const KeyerCtrl &dvp_ctrl )
                tone1 = dvp_ctrl.intParam1;
                tuneTime = dvp_ctrl.intTime;
                initTone1( tone1 );
-               new ToneAction( 1, kconf.startDelay );
+               KeyerAction::currentAction.push_back(QSharedPointer<KeyerAction>(new ToneAction( 1, kconf.startDelay )));
             }
          }
          break;
 
       case eKEYER_TONE2:
          {
-            KeyerAction *sba = KeyerAction::getCurrentAction();
+            QSharedPointer<KeyerAction> sba = KeyerAction::getCurrentAction();
             SoundSystemDriver::getSbDriver() ->stopall();
             KeyerAction::currentAction.freeAll();
             if ( !sba )
@@ -566,7 +574,7 @@ bool voiceKeyer::docommand( const KeyerCtrl &dvp_ctrl )
                tuneTime = dvp_ctrl.intTime;
                tone2 = dvp_ctrl.intParam2;
                initTone2( tone1, tone2 );
-               new ToneAction( 2, kconf.startDelay );
+               KeyerAction::currentAction.push_back(QSharedPointer<KeyerAction>(new ToneAction( 2, kconf.startDelay )));
             }
          }
          break;
@@ -597,7 +605,7 @@ bool voiceKeyer::linesModeChanged( int state )
    commonKeyer::linesModeChanged( state );
    if ( started && currentKeyer == this )
    {
-       KeyerAction * sba = KeyerAction::getCurrentAction();
+       QSharedPointer<KeyerAction> sba = KeyerAction::getCurrentAction();
        if ( sba )
           sba->linesModeChanged( state );
    }
@@ -613,7 +621,7 @@ bool voiceKeyer::pttChanged( int state )
 
       // we need to also take note of PTT being used as a record trigger
 
-      KeyerAction * sba = KeyerAction::getCurrentAction();
+      QSharedPointer<KeyerAction> sba = KeyerAction::getCurrentAction();
       if ( sba )
          sba->pttChanged( state );
       else
@@ -637,7 +645,7 @@ bool voiceKeyer::pttChanged( int state )
              default:
                  break;
              }
-            new InitialPTTAction();
+             KeyerAction::currentAction.push_back(QSharedPointer<KeyerAction>(new InitialPTTAction()));
             KeyerAction::getCurrentAction() ->timeOut();
          }
    }
@@ -659,7 +667,7 @@ bool voiceKeyer::L12Changed( int state, sbControls sbc )
    if ( started && currentKeyer == this )
    {
        // Look at linesMode, switch what L1 does accordingly
-       KeyerAction * ca = KeyerAction::getCurrentAction();
+       QSharedPointer<KeyerAction> ca = KeyerAction::getCurrentAction();
 
        switch (linesMode)
        {
@@ -670,7 +678,7 @@ bool voiceKeyer::L12Changed( int state, sbControls sbc )
            if (state && !ca)
            {
                // trigger record on push, not release
-               BoxRecordAction *bra = new BoxRecordAction();
+               QSharedPointer<KeyerAction> bra( new BoxRecordAction());
                bra->LxChanged( sbc, state );
            }
            return true;
@@ -823,7 +831,8 @@ bool voiceKeyer::L12Changed( int state, sbControls sbc )
             int ardelay = getAutoRepeatDelay(mno);
             bool ar = getEnableAutoRepeat(mno);
 
-            new PlayAction(mno,  getMasterConfig()->kjj[mno].CQName, cqWavFile, false, kconf.startDelay, ar?ardelay:0, true, false );
+            KeyerAction::currentAction.push_back(QSharedPointer<KeyerAction>(
+                new PlayAction(mno,  getMasterConfig()->kjj[mno].CQName, cqWavFile, false, kconf.startDelay, ar?ardelay:0, true, false )));
             KeyerAction::getCurrentAction() ->LxChanged( sbc, state );
          }
       }
@@ -837,7 +846,7 @@ bool voiceKeyer::L12Changed( int state, sbControls sbc )
                SoundSystemDriver::getSbDriver() ->stopall();                       // make sure nothing is happening
                KeyerAction::currentAction.freeAll();	// clear all the chains
 
-               new BoxRecordAction();
+               KeyerAction::currentAction.push_back(QSharedPointer<KeyerAction>(new BoxRecordAction()));
             }
             else
                if ( boxRecPending )
@@ -855,9 +864,9 @@ void voiceKeyer::tickEvent()
       sbTickEvent();
    }
 }
-bool voiceKeyer::initialise( const KeyerConfig &keyer, const PortConfig &port )
+bool voiceKeyer::initialise( )
 {
-   if ( commonKeyer::initialise( keyer, port ) )
+   if ( commonKeyer::initialise( ) )
    {
       if ( sblog )
       {
@@ -887,7 +896,7 @@ void voiceKeyer::startTone2()
 }
 bool voiceKeyer::sendCW( const char *message, int speed, int tone )
 {
-   KeyerAction * ca = KeyerAction::getCurrentAction();
+   QSharedPointer<KeyerAction> ca = KeyerAction::getCurrentAction();
    if ( !ca && !recPending && !boxRecPending && started && currentKeyer == this )
    {
       SoundSystemDriver::getSbDriver() ->stopall();    // make sure nothing is happening
@@ -896,7 +905,8 @@ bool voiceKeyer::sendCW( const char *message, int speed, int tone )
       SoundSystemDriver::getSbDriver() ->createCWBuffer( message, speed, tone );
       bool ar = getEnableAutoRepeat(0);
       int ardelay = getAutoRepeatDelay(0);
-      new PlayAction( 0, "", "AudioCWFile", false, kconf.startDelay, ar?ardelay:0, true, true );
+      KeyerAction::currentAction.push_back(QSharedPointer<KeyerAction>(
+          new PlayAction( 0, "", "AudioCWFile", false, kconf.startDelay, ar?ardelay:0, true, true )));
       return true;
    }
    return false;
@@ -924,12 +934,12 @@ void sbKeyer::sbTickEvent()           // this will often be an interrupt routine
 {
    if ( currentKeyer && currentKeyer->started )
    {
-      KeyerAction * sba = KeyerAction::getCurrentAction();
+      QSharedPointer<KeyerAction> sba = KeyerAction::getCurrentAction();
       if ( sba )
       {
          if ( sba->deleteAtTick )
          {
-            KeyerAction * sbn = sba->getNextAction();
+            QSharedPointer<KeyerAction> sbn = sba->getNextAction();
             if ( sbn )
             {
                sbn->actionTime = 1;
@@ -987,7 +997,6 @@ void sbKeyer::sbStartTone2()
 
 KeyerAction::KeyerAction()
 {
-   KeyerAction::currentAction.push_back( this );
    lastTick = currTick;
 }
 KeyerAction::~KeyerAction()
@@ -1198,7 +1207,7 @@ void InitialPTTAction::pttChanged( bool state )
    else
    {
       // PTT released, start pip - after debounce if needed
-      KeyerAction * sba = KeyerAction::getCurrentAction();
+      QSharedPointer<KeyerAction> sba = KeyerAction::getCurrentAction();
       if ( sba )
          sba->timeOut();
    }
@@ -1259,7 +1268,7 @@ void InitialPTTAction::timeOut()
          if ( getPipEnabled() )
          {
             if ( !getNextAction() )
-               new PipAction();
+            KeyerAction::currentAction.push_back(QSharedPointer<KeyerAction>(new PipAction()));
             deleteAtTick = true;
          }
          actionState = einitPTTEnd;
@@ -1318,7 +1327,7 @@ void InterruptingPTTAction::pttChanged( bool state )
    else
    {
       // PTT released, start pip
-      KeyerAction * sba = KeyerAction::getCurrentAction();
+      QSharedPointer<KeyerAction> sba = KeyerAction::getCurrentAction();
       if ( sba )
          sba->timeOut();
    }
@@ -1378,7 +1387,7 @@ void InterruptingPTTAction::timeOut()
          {
             if ( !getNextAction() )
             {
-                new PipAction();
+            KeyerAction::currentAction.push_back(QSharedPointer<KeyerAction>(new PipAction()));
                 deleteAtTick = true;
             }
          }
@@ -1447,7 +1456,7 @@ void PlayAction::LxChanged( int line, bool state )
    {
       trace( "PlayAction::LxChanged(" + QString::number( line ) + ", " + QString::number( state ) + ")" );
    }
-   if ( KeyerAction::currentAction.next_element( this ) && ( actionState != epasEndPlayFile ) )    	// something waiting, but not actually playing
+   if ( KeyerAction::currentAction.next_element( *this ) && ( actionState != epasEndPlayFile ) )    	// something waiting, but not actually playing
    {
       // start the next action instantly
       deleteAtTick = true;
@@ -1468,7 +1477,7 @@ void PlayAction::pttChanged( bool state )
       SoundSystemDriver::getSbDriver() ->CW_ACTIVE = false;
 
       // start a PTT action, but don't pip unless it is "long"
-      InterruptingPTTAction *ptta = new InterruptingPTTAction();
+      QSharedPointer<KeyerAction> ptta(new InterruptingPTTAction());
       ptta->actionTime = 1;
       deleteAtTick = true;
    }
@@ -1562,13 +1571,14 @@ void PlayAction::timeOut()
             currentKeyer->ptt( 0 );
          VKMixer::GetVKMixer()->SetCurrentMixerSet( emsPassThroughNoPTT );
 
-         KeyerAction *sbn = getNextAction();
+         QSharedPointer<KeyerAction> sbn = getNextAction();
          int ardelay = getAutoRepeatDelay(mno);
          bool ar = getEnableAutoRepeat(mno);
 
          if ( !testMode && ar && ardelay && !sbn && !CW )
          {
-            new PlayAction( mno, getMasterConfig()->kjj[mno].CQName, fileName, false, currentKeyer->kconf.startDelay, ardelay, false, false );
+            KeyerAction::currentAction.push_back(QSharedPointer<KeyerAction>(
+                new PlayAction( mno, getMasterConfig()->kjj[mno].CQName, fileName, false, currentKeyer->kconf.startDelay, ardelay, false, false )));
          }
 
          deleteAtTick = true;
@@ -1622,7 +1632,7 @@ void PipAction::pttChanged( bool state )
    {
       // PTT pressed, so kill playback and chain PTT action
       KeyerAction::currentAction.clear_after( KeyerAction::getCurrentAction() );
-      new InterruptingPTTAction();
+      KeyerAction::currentAction.push_back(QSharedPointer<KeyerAction>(new InterruptingPTTAction()));
       deleteAtTick = true;
    }
    else
@@ -1831,22 +1841,22 @@ void BoxRecordAction::LxChanged( int line, bool state )
        case elmPlay01Pip:
        case elmPlay01NoPip:
        case elm01Record:
-           new RecordAction( "CQF1.WAV" );
+         KeyerAction::currentAction.push_back(QSharedPointer<KeyerAction>(new RecordAction( "CQF1.WAV" )));
            break;
        case elm23Record:
        case elmPlay23Pip:
        case elmPlay23NoPip:
-           new RecordAction( "CQF3.WAV" );
+           KeyerAction::currentAction.push_back(QSharedPointer<KeyerAction>(new RecordAction( "CQF3.WAV" )));
            break;
        case elm45Record:
        case elmPlay45Pip:
        case elmPlay45NoPip:
-           new RecordAction( "CQF5.WAV" );
+           KeyerAction::currentAction.push_back(QSharedPointer<KeyerAction>(new RecordAction( "CQF5.WAV" )));
            break;
        case elm67Record:
        case elmPlay67Pip:
        case elmPlay67NoPip:
-           new RecordAction( "CQF7.WAV" );
+           KeyerAction::currentAction.push_back(QSharedPointer<KeyerAction>(new RecordAction( "CQF7.WAV" )));
            break;
         default:
            break;
@@ -1863,22 +1873,22 @@ void BoxRecordAction::LxChanged( int line, bool state )
           case elmPlay01Pip:
           case elmPlay01NoPip:
           case elm01Record:
-              new RecordAction( "CQF2.WAV" );
+           KeyerAction::currentAction.push_back(QSharedPointer<KeyerAction>(new RecordAction( "CQF2.WAV" )));
               break;
           case elm23Record:
           case elmPlay23Pip:
           case elmPlay23NoPip:
-              new RecordAction( "CQF4.WAV" );
+              KeyerAction::currentAction.push_back(QSharedPointer<KeyerAction>(new RecordAction( "CQF4.WAV" )));
               break;
           case elm45Record:
           case elmPlay45Pip:
           case elmPlay45NoPip:
-              new RecordAction( "CQF6.WAV" );
+              KeyerAction::currentAction.push_back(QSharedPointer<KeyerAction>(new RecordAction( "CQF6.WAV" )));
               break;
           case elm67Record:
           case elmPlay67Pip:
           case elmPlay67NoPip:
-              new RecordAction( "CQF8.WAV" );
+              KeyerAction::currentAction.push_back(QSharedPointer<KeyerAction>(new RecordAction( "CQF8.WAV" )));
               break;
           default:
               break;

@@ -31,14 +31,13 @@
  
 */
 
-my_deque < commonPort *> portChain;
-static WinMonitor *winp = nullptr;
-/*
-*/ 
+my_deque < commonPort> portChain;
+QSharedPointer<WinMonitor> winp;
+
 //==============================================================================
-commonPort *createPort( const PortConfig &port )
+QSharedPointer<commonPort> createPort( const PortConfig &port )
 {
-   commonPort * cp = portChain.find( port.name );
+    QSharedPointer<commonPort> cp = portChain.find( port.name );
 
    if ( cp )
       return cp;
@@ -49,22 +48,26 @@ commonPort *createPort( const PortConfig &port )
       switch ( port.portType )
       {
          case PortConfig::eptWindows:
-            cp = new WindowsMonitorPort( port );
+          cp = QSharedPointer<commonPort>(new WindowsMonitorPort( port ));
             break;
 
          case PortConfig::eptMinosControl:
-            cp = new LineEventsPort( port );
+            cp = QSharedPointer<commonPort>(new LineEventsPort( port ));
             break;
       }
 
-      if ( !cp->initialise( port ) )
+         if ( cp->initialisePort() && cp->openPort() )
       {
-         delete cp;
-         cp = nullptr;
+            portChain.push_back(cp);
       }
-      if ( cp && !winp )
+      else
       {
-         winp = new WinMonitor();
+         cp.reset();
+      }
+
+         if ( cp && !winp )
+      {
+         winp = QSharedPointer<WinMonitor>(new WinMonitor());
          winp->cp = cp;
          cp->monitors.push_back( winp );
       }
@@ -84,20 +87,6 @@ commonPort::~commonPort()
       trace( "~commonPort" );
    }
    monitors.freeAll();
-}
-bool commonPort::initialise( const PortConfig &/*port*/ )
-{
-   if ( initialisePort() && openPort() )
-   {
-      portChain.push_back( this );
-      return true;
-   }
-   return false;
-}
-void commonPort::registerMonitor( lineMonitor *k )
-{
-   k->cp = this;
-   monitors.push_back( k );
 }
 //==============================================================================
 void commonPort::pttChanged( int state )
@@ -240,11 +229,6 @@ WinMonitor::~WinMonitor()
    }
 }
 
-bool WinMonitor::initialise( const KeyerConfig &/*keyer*/, const PortConfig &/*port*/ )
-{
-   return true;
-}
-
 void WinMonitor::ptt( int state )
 {
    if ( currentKeyer && currentKeyer->started )
@@ -253,6 +237,11 @@ void WinMonitor::ptt( int state )
       if (cp)
         emit cp->lcallback ( PTTState, PTTInState, L1State, L2State, linesMode );
    }
+}
+
+bool WinMonitor::initialise()
+{
+   return true;
 }
 
 void WinMonitor::checkControls( )

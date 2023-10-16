@@ -206,8 +206,8 @@ KeyerMain::KeyerMain(QWidget *parent) :
     ui->portEdit->setText(port);
     ui->portEdit->setValidator(new QIntValidator(0, 0xffff, this));
 
-    commonPort * cp = loadKeyers();
-    connect(cp, &commonPort::lcallback, this, &KeyerMain::lcallback);
+    QSharedPointer<commonPort> cp = loadKeyers();
+    connect(cp.data(), &commonPort::lcallback, this, &KeyerMain::lcallback);
 
     setVolumeMults();
 

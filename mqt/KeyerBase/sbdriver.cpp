@@ -89,7 +89,7 @@ bool SoundSystemDriver::dofile( int i, int clipRecord )
    */ 
    unsigned long psamples = 0;
    int16_t *pdataptr = nullptr;
-   KeyerAction * sba = KeyerAction::getCurrentAction();
+   QSharedPointer<KeyerAction> sba = KeyerAction::getCurrentAction();
    int pipSDS = 0;
    if (sba && sba->tailWithPip)
    {
@@ -559,7 +559,7 @@ SoundSystemDriver::~SoundSystemDriver()
 }
 void SoundSystemDriver::interruptOK()
 {
-    KeyerAction * sba = KeyerAction::getCurrentAction();
+   QSharedPointer<KeyerAction> sba = KeyerAction::getCurrentAction();
     if ( sba )
        sba->interruptOK();	// so as we do not time it out immediately
 
@@ -567,7 +567,7 @@ void SoundSystemDriver::interruptOK()
 
 void SoundSystemDriver::outputFinished()
 {
-    KeyerAction * sba = KeyerAction::getCurrentAction();
+    QSharedPointer<KeyerAction> sba = KeyerAction::getCurrentAction();
      if ( sba )
      {
         sba->actionTime = 1;    // force to stop
@@ -580,7 +580,7 @@ void SoundSystemDriver::outputFinished()
 }
 void SoundSystemDriver::actionQueueFinished()
 {
-    KeyerAction * sba = KeyerAction::getCurrentAction();
+    QSharedPointer<KeyerAction> sba = KeyerAction::getCurrentAction();
      if ( sba )
      {
         sba->queueFinished();

@@ -41,7 +41,7 @@ extern qint64 currTick;
 class SoundSystemDriver;
 
 class commonPort;
-class commonKeyer;
+//class commonKeyer;
 
 class timerTicker: public QObject
 {
@@ -49,7 +49,7 @@ class timerTicker: public QObject
       QTimer b;
    public:
       timerTicker();
-      ~timerTicker() override;
+      virtual ~timerTicker() override;
       virtual void tickEvent() = 0;       // this will often be an interrupt routine
 
 private slots:
@@ -62,13 +62,15 @@ class lineMonitor: public timerTicker
 {
     Q_OBJECT
    public:
-      commonPort *cp = nullptr;
+    QSharedPointer<commonPort> cp;
       PortConfig pconf;
       KeyerConfig kconf;
       QString pName;
       lineMonitor( const QString pname );
       lineMonitor( const KeyerConfig &keyer, const PortConfig &port );
-      virtual ~lineMonitor();
+      virtual ~lineMonitor() override;
+
+      virtual bool initialise() = 0;
 
       virtual void ptt( int state );
 
@@ -81,8 +83,6 @@ class lineMonitor: public timerTicker
           return true;
       }
 
-      virtual bool initialise( const KeyerConfig &keyer, const PortConfig &port ) = 0;
-
       virtual void checkControls( );
 };
 
@@ -92,7 +92,7 @@ class commonKeyer: public lineMonitor
     Q_OBJECT
    public:
       commonKeyer( const KeyerConfig &keyer, const PortConfig &port );
-      ~commonKeyer() override;
+      virtual ~commonKeyer() override;
 
       virtual bool pttChanged( int state ) override;
       virtual bool L1Changed( int state ) override;
@@ -103,7 +103,6 @@ class commonKeyer: public lineMonitor
       virtual void tickEvent() override;       // this will often be an interrupt routine
       virtual bool getInfo( KeyerInfo * ) = 0;
 
-      virtual bool initialise( const KeyerConfig &keyer, const PortConfig &port ) override = 0;
       virtual void select( bool ) = 0;
 
       virtual bool docommand( const KeyerCtrl &dvp_ctrl ) = 0;
@@ -115,6 +114,8 @@ class commonKeyer: public lineMonitor
       virtual bool startMicPassThrough() = 0;
       virtual bool stopMicPassThrough() = 0;
       virtual bool sendCW( const char *message, int speed, int tone ) = 0;
+
+      virtual bool initialise() override;
 
       virtual void initTone1( int ) = 0;
       virtual void initTone2( int, int ) = 0;
@@ -162,31 +163,31 @@ class voiceKeyer: public commonKeyer, public sbKeyer
    public:
 
       voiceKeyer( const KeyerConfig &keyer, const PortConfig &port );
-      ~voiceKeyer();
-      bool docommand( const KeyerCtrl &dvp_ctrl );
+      virtual ~voiceKeyer() override;
+      bool docommand( const KeyerCtrl &dvp_ctrl ) override;
 
-      virtual bool getInfo( KeyerInfo * );
-      virtual bool pttChanged( int state );
-      virtual bool L1Changed( int state );
-      virtual bool L2Changed( int state );
+      virtual bool getInfo( KeyerInfo * ) override;
+      virtual bool pttChanged( int state ) override;
+      virtual bool L1Changed( int state ) override;
+      virtual bool L2Changed( int state ) override;
       virtual bool L12Changed( int state, sbControls sbc );
-      virtual bool linesModeChanged(int lmode);
-      virtual bool initialise( const KeyerConfig &keyer, const PortConfig &port );
-      virtual void select( bool );
-      virtual bool sendCW( const char *message, int speed, int tone );
-      virtual bool startMicPassThrough();
-      virtual bool stopMicPassThrough();
-      void tickEvent();       // this will often be an interrupt routine
-      virtual void initTone1( int );
-      virtual void initTone2( int, int );
-      virtual void startTone1();
-      virtual void startTone2();
+      virtual bool linesModeChanged(int lmode) override;
+      virtual bool initialise() override;
+      virtual void select( bool ) override;
+      virtual bool sendCW( const char *message, int speed, int tone ) override;
+      virtual bool startMicPassThrough() override;
+      virtual bool stopMicPassThrough() override;
+      void tickEvent() override;       // this will often be an interrupt routine
+      virtual void initTone1( int ) override;
+      virtual void initTone2( int, int ) override;
+      virtual void startTone1() override;
+      virtual void startTone2() override;
 };
 
 //=============================================================================
 
 
-extern commonKeyer *currentKeyer;
+extern QSharedPointer<commonKeyer> currentKeyer;
 
 
 //=============================================================================

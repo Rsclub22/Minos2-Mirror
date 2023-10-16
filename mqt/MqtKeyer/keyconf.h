@@ -11,6 +11,7 @@
 
 #include <QString>
 #include <QMap>
+#include <QSharedPointer>
 
 class PortConfig
 {
@@ -64,7 +65,7 @@ class KeyerConfigure
       QMap <QString, PortConfig> portmap;
       QMap <QString, KeyerConfig> keyermap;
 
-      commonKeyer *createKeyer( const KeyerConfig &keyer, const PortConfig &port );
+      QSharedPointer<commonKeyer> createKeyer( const KeyerConfig &keyer, const PortConfig &port );
       void SetTrace( TiXmlElement *e );
       void SetTune( TiXmlElement *e );
       void SetPorts( TiXmlElement *e );
