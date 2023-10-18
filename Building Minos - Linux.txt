@@ -16,6 +16,18 @@ problem with other variants, but all the package stuff may be different.
 
 
 =========== Initial setup ====================================================
+On a Pi, you may need to set up more swapfile space; assuming you have enough 
+disk space (you will probably need a 16Gb or larger SD card)
+
+sudo nano /etc/dphys-swapfile
+
+and change
+
+CONF_SWAPSIZE=100
+
+to CONF_SWAPSIZE=2000
+
+exit and save the file, then reboot for it to take effect.
 
 If git isn't installed, you need to install it:
 
@@ -42,7 +54,7 @@ git checkout Mqt_Release_2.5.3.1
 sudo ./tools.sh
 
 ===================== Building Hamlib 4 ========================================
-The current Minos (2.5.3) uses hamlib 4.5.2
+The current Minos (2.5.3 1) uses hamlib 4.5.5
 
 Look at https://github.com/Hamlib/Hamlib for all the up to date hamlib information,
 including their build instructions, from which the following is derived.
@@ -69,7 +81,7 @@ cd Hamlib
 
 # get the hamlib 4.5 release branch
 
-git checkout Hamlib-4.5.2
+git checkout Hamlib-4.5.5
 
 # and run the build
 
