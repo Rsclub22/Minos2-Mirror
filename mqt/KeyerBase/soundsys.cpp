@@ -127,6 +127,10 @@ RtAudioSoundSystem::~RtAudioSoundSystem()
        replayfilter2 = nullptr;
     }
 }
+void errorCallback( RtAudioError::Type /*type*/, const std::string &errorText)
+{
+    trace(QString("RTAudio error callback: ") + errorText.c_str());
+}
 bool RtAudioSoundSystem::initialise( QString ind, QString outd, QString host, QString port  )
 {
     if (!audio)
@@ -181,7 +185,8 @@ bool RtAudioSoundSystem::initialise( QString ind, QString outd, QString host, QS
                       RTAUDIO_SINT16, sampleRate,
                       &bufferFrames, ::audioCallback,
                       static_cast<void *>(this),
-                      &soptions
+                      &soptions,
+                      &errorCallback
                       );
     } catch (RtAudioError &error)
     {

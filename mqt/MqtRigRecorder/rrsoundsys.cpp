@@ -210,7 +210,10 @@ void RRRtAudioSoundSystem::setVUCallBack( VUCallBack cb )
 {
    WinVUCallback = cb;
 }
-
+void errorCallback( RtAudioError::Type /*type*/, const std::string &errorText)
+{
+   trace(QString("RTAudio error callback: ") + errorText.c_str());
+}
 bool RRRtAudioSoundSystem::initialise( QString ind, QString ind2)
 {
     if (!audio)
@@ -236,7 +239,8 @@ bool RRRtAudioSoundSystem::initialise( QString ind, QString ind2)
                       RTAUDIO_SINT16, sampleRate,
                       &bufferFrames, ::audioCallback,
                       static_cast<void *>(this),
-                      &soptions
+                      &soptions,
+                      &errorCallback
                       );
     audio->startStream();
     trace(QString("Audio stream %1 %2 opened OK").arg(deviceIds[ind]).arg(ind));
@@ -266,7 +270,8 @@ bool RRRtAudioSoundSystem::initialise( QString ind, QString ind2)
                           RTAUDIO_SINT16, sampleRate,
                           &bufferFrames, ::audioCallback2,
                           static_cast<void *>(this),
-                          &soptions
+                          &soptions,
+                          &errorCallback
                           );
 
         audio2->startStream();
