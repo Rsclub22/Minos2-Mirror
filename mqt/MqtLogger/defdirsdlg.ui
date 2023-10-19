@@ -145,7 +145,7 @@
     </spacer>
    </item>
    <item>
-    <widget class="QFrame" name="frame">
+    <widget class="QFrame" name="frame1">
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_3">
