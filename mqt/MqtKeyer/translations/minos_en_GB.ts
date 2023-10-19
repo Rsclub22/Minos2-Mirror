@@ -349,7 +349,7 @@ Through</source>
 <context>
     <name>commonKeyer</name>
     <message>
-        <location filename="../keyers.cpp" line="400"/>
+        <location filename="../keyers.cpp" line="404"/>
         <source>No current actions</source>
         <translation type="unfinished"></translation>
     </message>
