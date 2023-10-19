@@ -98,10 +98,11 @@ private:
     RtAudio *audio2 = nullptr;
     VUCallBack WinVUCallback = nullptr;
 
-    unsigned int inChannels = 0;
-
+    QMap<QString, unsigned int> inChannels;
     QMap<QString, int> deviceIds;
 
+    QString curInDev1;
+    QString curInDev2;
 
     // internal values
     unsigned int sampleRate = 0;
