@@ -12,7 +12,6 @@ QT_BEGIN_NAMESPACE
 namespace Ui { class DMMainWindow; }
 QT_END_NAMESPACE
 
-class RtAudio;
 class QFileSystemWatcher;
 class QPushButton;
 class MonitoredLog;
