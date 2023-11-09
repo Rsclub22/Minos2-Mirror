@@ -318,7 +318,7 @@ void TCalendarForm::FormShow ( )
 }
 void TCalendarForm::downloadFiles()
 {
-    trace(tr("OpenSSL version built is is %1").arg(QSslSocket::sslLibraryBuildVersionString()));
+    trace(QString("OpenSSL version build is %1").arg(QSslSocket::sslLibraryBuildVersionString()));
     if (!QSslSocket::supportsSsl())
     {
         // NB MSVC 2015 redistributable may be needed for OpenSSL

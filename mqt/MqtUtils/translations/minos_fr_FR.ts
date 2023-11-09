@@ -54,7 +54,7 @@
     <message>
         <location filename="../ConfigFile.cpp" line="944"/>
         <source> Inferred Executable path does not exist or is not executable:</source>
-        <translation type="unfinished"></translation>
+        <translation> Le chemin exécutable déduit n&apos;existe pas ou n&apos;est pas exécutable&#xa0;: [why inferred???]</translation>
     </message>
     <message>
         <location filename="../ConfigFile.cpp" line="944"/>
@@ -62,20 +62,12 @@
         <source>
 
 </source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">[???? what???]</translation>
     </message>
     <message>
         <location filename="../ConfigFile.cpp" line="952"/>
         <source> Executable path does not exist or is not executable:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source> Executable path does not exist
-
-</source>
-        <translation type="vanished"> Le chemin pour l&apos;exécutable n&apos;existe pas
-
-</translation>
+        <translation> Le chemin de l&apos;exécutable n&apos;existe pas ou n&apos;est pas exécutable&#xa0;:</translation>
     </message>
     <message>
         <location filename="../ConfigFile.cpp" line="958"/>
@@ -90,13 +82,9 @@
 <context>
     <name>RunConfigElement</name>
     <message>
-        <source>:program doesn&apos;t exist:</source>
-        <translation type="vanished">:l&apos;exécutable n&apos;existe pas:</translation>
-    </message>
-    <message>
         <location filename="../ConfigFile.cpp" line="225"/>
         <source>:program is not executable:</source>
-        <translation type="unfinished"></translation>
+        <translation>:l&apos;exécutable n&apos;est pas exécutable&#xa0;:</translation>
     </message>
 </context>
 </TS>

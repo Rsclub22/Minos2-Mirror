@@ -221,10 +221,6 @@
         <translation>-</translation>
     </message>
     <message>
-        <source>User Filter</source>
-        <translation type="vanished">Filtre utilisateur</translation>
-    </message>
-    <message>
         <location filename="../kstmainwindow.ui" line="162"/>
         <source>Only show users for this band</source>
         <translation>Afficher uniquement les utilisateurs de cette bande</translation>
@@ -288,7 +284,7 @@ l&apos;indicatif sélectionné</translation>
     <message>
         <location filename="../kstmainwindow.ui" line="155"/>
         <source>Chat Filter</source>
-        <translation type="unfinished"></translation>
+        <translation>Filtre de chat</translation>
     </message>
     <message>
         <location filename="../kstmainwindow.ui" line="190"/>
@@ -377,7 +373,7 @@ l&apos;indicatif sélectionné</translation>
     <message>
         <location filename="../kstmainwindow.ui" line="721"/>
         <source>Logs</source>
-        <translation type="unfinished"></translation>
+        <translation>Journaux</translation>
     </message>
     <message>
         <location filename="../kstmainwindow.ui" line="728"/>
@@ -409,7 +405,7 @@ l&apos;indicatif sélectionné</translation>
         <location filename="../kstmainwindow.cpp" line="144"/>
         <location filename="../kstmainwindow.cpp" line="148"/>
         <source>Active</source>
-        <translation type="unfinished"></translation>
+        <translation>Actif</translation>
     </message>
     <message>
         <location filename="../kstmainwindow.cpp" line="643"/>
@@ -433,12 +429,12 @@ l&apos;indicatif sélectionné</translation>
     <message>
         <location filename="../kstmonitoredlogs.ui" line="14"/>
         <source>Monitored Logs</source>
-        <translation type="unfinished"></translation>
+        <translation>Journaux surveillés</translation>
     </message>
     <message>
         <location filename="../kstmonitoredlogs.ui" line="38"/>
         <source>Hide</source>
-        <translation type="unfinished"></translation>
+        <translation>Cacher</translation>
     </message>
 </context>
 <context>

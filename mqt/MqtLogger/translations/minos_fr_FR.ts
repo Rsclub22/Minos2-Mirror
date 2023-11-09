@@ -47,10 +47,6 @@
         <translation>MSK144</translation>
     </message>
     <message>
-        <source>PSK31</source>
-        <translation type="vanished">PSK31</translation>
-    </message>
-    <message>
         <location filename="../bandmapclientfilterdialog.ui" line="74"/>
         <source>FM</source>
         <translation>FM</translation>
@@ -83,7 +79,7 @@
     <message>
         <location filename="../bandmapclientfilterdialog.ui" line="109"/>
         <source>PSK31/63</source>
-        <translation type="unfinished">PSK31/63</translation>
+        <translation>PSK31/63</translation>
     </message>
     <message>
         <location filename="../bandmapclientfilterdialog.ui" line="119"/>
@@ -378,7 +374,7 @@ Le mode calculé est %2</translation>
     <message>
         <location filename="../WsjtxFrame.cpp" line="1707"/>
         <source>Call</source>
-        <translation type="unfinished">Indicatif d&apos;appel</translation>
+        <translation>Indicatif d&apos;appel [???]</translation>
     </message>
 </context>
 <context>
@@ -1108,7 +1104,7 @@ Le mode calculé est %2</translation>
     <message>
         <location filename="../contestdetails.ui" line="218"/>
         <source>On Behalf Of (Club)</source>
-        <translation type="unfinished"></translation>
+        <translation>Au nom de (Club)</translation>
     </message>
     <message>
         <location filename="../contestdetails.ui" line="248"/>
@@ -1333,10 +1329,6 @@ Comptabiliser entre Locators de 4 caractères</translation>
         <translation>Autre multiplicateur d&apos;échange</translation>
     </message>
     <message>
-        <source>Optional Exchange Multiplier</source>
-        <translation type="vanished">Multiplicateur d&apos;échange optionnel</translation>
-    </message>
-    <message>
         <location filename="../contestdetails.cpp" line="56"/>
         <source>Exchange Required (no multiplier)</source>
         <translation>Échange requis (pas de multiplicateur)</translation>
@@ -1344,7 +1336,7 @@ Comptabiliser entre Locators de 4 caractères</translation>
     <message>
         <location filename="../contestdetails.cpp" line="57"/>
         <source>Asymmetric (TX S/N, RX exchange), Multiplier</source>
-        <translation type="unfinished"></translation>
+        <translation>Asymétrique (TX S/N, échange RX) multiplicateur [context???]</translation>
     </message>
     <message>
         <location filename="../contestdetails.cpp" line="59"/>
@@ -1385,7 +1377,7 @@ Comptabiliser entre Locators de 4 caractères</translation>
         <location filename="../contestdetails.cpp" line="200"/>
         <location filename="../contestdetails.cpp" line="1686"/>
         <source>(None)</source>
-        <translation type="unfinished"></translation>
+        <translation>(Aucun)</translation>
     </message>
     <message>
         <location filename="../contestdetails.cpp" line="332"/>
@@ -1401,12 +1393,12 @@ Comptabiliser entre Locators de 4 caractères</translation>
     <message>
         <location filename="../contestdetails.cpp" line="55"/>
         <source>Exchange Multiplier (may be &quot;-&quot;)</source>
-        <translation type="unfinished"></translation>
+        <translation>Multiplicateur d&apos;échange (peut être &quot;-&quot;) [???]</translation>
     </message>
     <message>
         <location filename="../contestdetails.cpp" line="727"/>
         <source>Band %1 is set as unwanted.</source>
-        <translation type="unfinished"></translation>
+        <translation>Bande %1 définir comme non désiré</translation>
     </message>
     <message>
         <location filename="../contestdetails.cpp" line="1435"/>
@@ -1527,7 +1519,7 @@ Déplacez-vous entre les composants d&apos;un groupe à l&apos;aide de la souris
     <message>
         <location filename="../dmbuttonframe.ui" line="14"/>
         <source>Frame</source>
-        <translation type="unfinished">Cadre</translation>
+        <translation>Cadre</translation>
     </message>
     <message>
         <location filename="../dmbuttonframe.ui" line="39"/>
@@ -1543,58 +1535,58 @@ Déplacez-vous entre les composants d&apos;un groupe à l&apos;aide de la souris
         <location filename="../dmbuttonframe.ui" line="113"/>
         <location filename="../dmbuttonframe.ui" line="120"/>
         <source>...</source>
-        <translation type="unfinished">...</translation>
+        <translation>...</translation>
     </message>
     <message>
         <location filename="../dmbuttonframe.ui" line="147"/>
         <source>Stop</source>
-        <translation type="unfinished">Arrêter</translation>
+        <translation>Arrêter</translation>
     </message>
     <message>
         <location filename="../dmbuttonframe.ui" line="154"/>
         <source>Choose File</source>
-        <translation type="unfinished"></translation>
+        <translation>Choisisser Fichier</translation>
     </message>
     <message>
         <location filename="../dmbuttonframe.ui" line="161"/>
         <source>Edit</source>
-        <translation type="unfinished">Modifier</translation>
+        <translation>Modifier</translation>
     </message>
     <message>
         <location filename="../dmbuttonframe.ui" line="188"/>
         <source>Log It</source>
-        <translation type="unfinished"></translation>
+        <translation>Enregistre [-le???]</translation>
     </message>
     <message>
         <location filename="../dmbuttonframe.ui" line="208"/>
         <source>Wipe</source>
-        <translation type="unfinished"></translation>
+        <translation>Supprimer</translation>
     </message>
     <message>
         <location filename="../dmbuttonframe.cpp" line="50"/>
         <location filename="../dmbuttonframe.cpp" line="441"/>
         <source>Data Modes Buttons from %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Boutons de modes de données de %1 [???]</translation>
     </message>
     <message>
         <location filename="../dmbuttonframe.cpp" line="164"/>
         <source>Not enough key definitions in %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Pas assez de définitions dans %1 [key???]</translation>
     </message>
     <message>
         <location filename="../dmbuttonframe.cpp" line="324"/>
         <source>Invalid or missing FKey definitions</source>
-        <translation type="unfinished"></translation>
+        <translation>Définitions FKey invalides ou manquantes</translation>
     </message>
     <message>
         <location filename="../dmbuttonframe.cpp" line="427"/>
         <source>Contact list files (*.json);;All Files (*.*)</source>
-        <translation type="unfinished"></translation>
+        <translation>Fichiers de la liste de contacts (* .json) ;; Tous les fichiers (*. *) [Contacts = json??]</translation>
     </message>
     <message>
         <location filename="../dmbuttonframe.cpp" line="431"/>
         <source>Open Function Key Definitions</source>
-        <translation type="unfinished"></translation>
+        <translation>Ouvrir les définitions des touches de fonction [???]</translation>
     </message>
 </context>
 <context>
@@ -1607,57 +1599,57 @@ Déplacez-vous entre les composants d&apos;un groupe à l&apos;aide de la souris
         <location filename="../dxccframe.ui" line="111"/>
         <location filename="../dxccframe.ui" line="121"/>
         <source>...</source>
-        <translation type="unfinished">...</translation>
+        <translation>...</translation>
     </message>
     <message>
         <location filename="../dxccframe.ui" line="144"/>
         <source>Wkd</source>
-        <translation type="unfinished">Contacté</translation>
+        <translation>Contacté</translation>
     </message>
     <message>
         <location filename="../dxccframe.ui" line="154"/>
         <source>UnWkd</source>
-        <translation type="unfinished"></translation>
+        <translation>Pas contacté [English???]</translation>
     </message>
     <message>
         <location filename="../dxccframe.cpp" line="169"/>
         <source>EU</source>
-        <translation type="unfinished"></translation>
+        <translation>EU</translation>
     </message>
     <message>
         <location filename="../dxccframe.cpp" line="170"/>
         <source>AS</source>
-        <translation type="unfinished"></translation>
+        <translation>AS</translation>
     </message>
     <message>
         <location filename="../dxccframe.cpp" line="171"/>
         <source>AF</source>
-        <translation type="unfinished"></translation>
+        <translation>AF</translation>
     </message>
     <message>
         <location filename="../dxccframe.cpp" line="172"/>
         <source>OC</source>
-        <translation type="unfinished"></translation>
+        <translation>OC</translation>
     </message>
     <message>
         <location filename="../dxccframe.cpp" line="173"/>
         <source>SA</source>
-        <translation type="unfinished"></translation>
+        <translation>SA</translation>
     </message>
     <message>
         <location filename="../dxccframe.cpp" line="174"/>
         <source>NA</source>
-        <translation type="unfinished"></translation>
+        <translation>NA</translation>
     </message>
     <message>
         <location filename="../dxccframe.cpp" line="175"/>
         <source>wkd</source>
-        <translation type="unfinished"></translation>
+        <translation>contacté</translation>
     </message>
     <message>
         <location filename="../dxccframe.cpp" line="176"/>
         <source>unwkd</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -1733,13 +1725,9 @@ Déplacez-vous entre les composants d&apos;un groupe à l&apos;aide de la souris
         <translation>DF</translation>
     </message>
     <message>
-        <source>Md</source>
-        <translation type="vanished">Mode</translation>
-    </message>
-    <message>
         <location filename="../WsjtxDecodesModel.cpp" line="51"/>
         <source>Mode</source>
-        <translation type="unfinished">Mode</translation>
+        <translation>Mode</translation>
     </message>
     <message>
         <location filename="../WsjtxDecodesModel.cpp" line="52"/>
@@ -1862,27 +1850,27 @@ Déplacez-vous entre les composants d&apos;un groupe à l&apos;aide de la souris
     <message>
         <location filename="../defdirsdlg.ui" line="100"/>
         <source>Auto QRZ</source>
-        <translation type="unfinished"></translation>
+        <translation>QRZ Automatique</translation>
     </message>
     <message>
         <location filename="../defdirsdlg.ui" line="106"/>
         <source>VHF Callsign</source>
-        <translation type="unfinished"></translation>
+        <translation>Indicatif d&apos;appel VHF</translation>
     </message>
     <message>
         <location filename="../defdirsdlg.ui" line="113"/>
         <source>HF Callsign</source>
-        <translation type="unfinished"></translation>
+        <translation>Indicatif d&apos;appel HF</translation>
     </message>
     <message>
         <location filename="../defdirsdlg.ui" line="120"/>
         <source>VHF WSJT-X</source>
-        <translation type="unfinished"></translation>
+        <translation>VHF WSJT-X</translation>
     </message>
     <message>
         <location filename="../defdirsdlg.ui" line="127"/>
         <source>HF WSJT-X</source>
-        <translation type="unfinished"></translation>
+        <translation>HF WSJT-X</translation>
     </message>
     <message>
         <location filename="../defdirsdlg.ui" line="155"/>
@@ -1976,7 +1964,7 @@ Déplacez-vous entre les composants d&apos;un groupe à l&apos;aide de la souris
     <message>
         <location filename="../DisplayOptions.ui" line="199"/>
         <source>Show Single Band in Next Contact</source>
-        <translation type="unfinished"></translation>
+        <translation>Afficher une seule bande dans le prochain contact [???length]</translation>
     </message>
     <message>
         <location filename="../DisplayOptions.ui" line="334"/>
@@ -2006,52 +1994,52 @@ Déplacez-vous entre les composants d&apos;un groupe à l&apos;aide de la souris
     <message>
         <location filename="../DisplayOptions.ui" line="212"/>
         <source>Centre Auxiliary locator map</source>
-        <translation type="unfinished"></translation>
+        <translation>[????]</translation>
     </message>
     <message>
         <location filename="../DisplayOptions.ui" line="218"/>
         <source>Don&apos;t Move</source>
-        <translation type="unfinished"></translation>
+        <translation>Ne bouger pas</translation>
     </message>
     <message>
         <location filename="../DisplayOptions.ui" line="228"/>
         <source>On My Locator</source>
-        <translation type="unfinished"></translation>
+        <translation>Sur Mon Locator</translation>
     </message>
     <message>
         <location filename="../DisplayOptions.ui" line="238"/>
         <source>On last clicked Locator</source>
-        <translation type="unfinished"></translation>
+        <translation>Sur le Locator du dernier clic</translation>
     </message>
     <message>
         <location filename="../DisplayOptions.ui" line="248"/>
         <source>On worked area centre</source>
-        <translation type="unfinished"></translation>
+        <translation>Au centre de la zone travaillée</translation>
     </message>
     <message>
         <location filename="../DisplayOptions.ui" line="274"/>
         <source>QSO Map Panel Options</source>
-        <translation type="unfinished"></translation>
+        <translation>Options pour QSO panneau de carte </translation>
     </message>
     <message>
         <location filename="../DisplayOptions.ui" line="280"/>
         <source>Show grid when contest has locators</source>
-        <translation type="unfinished"></translation>
+        <translation>Afficher grille lorsque quand le Concour utiliser Locators [???]</translation>
     </message>
     <message>
         <location filename="../DisplayOptions.ui" line="287"/>
         <source>Draw lines to QSO partners</source>
-        <translation type="unfinished"></translation>
+        <translation>Tracer des lignes vers les partenaires QSO</translation>
     </message>
     <message>
         <location filename="../DisplayOptions.ui" line="294"/>
         <source>Show Cluster Spots</source>
-        <translation type="unfinished"></translation>
+        <translation>Afficher les Spots de Cluster</translation>
     </message>
     <message>
         <location filename="../DisplayOptions.ui" line="301"/>
         <source>Limit Cluster distance</source>
-        <translation type="unfinished"></translation>
+        <translation>Limiter la distance du Cluster</translation>
     </message>
     <message>
         <location filename="../DisplayOptions.ui" line="388"/>
@@ -2110,17 +2098,17 @@ Déplacez-vous entre les composants d&apos;un groupe à l&apos;aide de la souris
         <location filename="../districtframe.ui" line="84"/>
         <location filename="../districtframe.ui" line="94"/>
         <source>...</source>
-        <translation type="unfinished">...</translation>
+        <translation>...</translation>
     </message>
     <message>
         <location filename="../districtframe.cpp" line="154"/>
         <source>wkd</source>
-        <translation type="unfinished"></translation>
+        <translation>contacté</translation>
     </message>
     <message>
         <location filename="../districtframe.cpp" line="155"/>
         <source>unwkd</source>
-        <translation type="unfinished"></translation>
+        <translation>Pas contacté [English???]</translation>
     </message>
 </context>
 <context>
@@ -2149,47 +2137,6 @@ Déplacez-vous entre les composants d&apos;un groupe à l&apos;aide de la souris
         <location filename="../districtframe.cpp" line="17"/>
         <source>District</source>
         <translation>District</translation>
-    </message>
-</context>
-<context>
-    <name>FilterFrame</name>
-    <message>
-        <source>Filters only apply to DXCC and District
-Continents only apply to DXCC</source>
-        <translation type="vanished">Les filtres ne s&apos;appliquent qu&apos;aux pays DXCC et aux Districts
-Les continents ne s&apos;appliquent qu&apos;à DXCC</translation>
-    </message>
-    <message>
-        <source>Africa</source>
-        <translation type="vanished">Afrique</translation>
-    </message>
-    <message>
-        <source>Asia</source>
-        <translation type="vanished">Asie</translation>
-    </message>
-    <message>
-        <source>Europe</source>
-        <translation type="vanished">Europe</translation>
-    </message>
-    <message>
-        <source>N America</source>
-        <translation type="vanished">Amérique du Nord</translation>
-    </message>
-    <message>
-        <source>Oceania</source>
-        <translation type="vanished">Océanie</translation>
-    </message>
-    <message>
-        <source>S America</source>
-        <translation type="vanished">Amérique du Sud</translation>
-    </message>
-    <message>
-        <source>Worked</source>
-        <translation type="vanished">Contacté</translation>
-    </message>
-    <message>
-        <source>Unworked</source>
-        <translation type="vanished">Non contacté</translation>
     </message>
 </context>
 <context>
@@ -2444,7 +2391,7 @@ et envoyer le fichier .EDI produit.<byte value="xd"/>
     <message>
         <location filename="../n1mmbroadcast.cpp" line="398"/>
         <source>CQ frequency</source>
-        <translation type="unfinished"></translation>
+        <translation>Fréquence CQ</translation>
     </message>
 </context>
 <context>
@@ -2478,16 +2425,12 @@ et envoyer le fichier .EDI produit.<byte value="xd"/>
     <message>
         <location filename="../n1mmbroadcastconfig.ui" line="90"/>
         <source>QSO Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Informations sur les QSO</translation>
     </message>
     <message>
         <location filename="../n1mmbroadcastconfig.ui" line="150"/>
         <source>Spot Information</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Contact Information</source>
-        <translation type="vanished">Détails du QSO</translation>
+        <translation>Informations sur les Spots</translation>
     </message>
     <message>
         <location filename="../n1mmbroadcastconfig.ui" line="204"/>
@@ -2997,7 +2940,7 @@ Non - Ignorer les modifications</translation>
     <message>
         <location filename="../qrzdisplayframe.ui" line="42"/>
         <source>.</source>
-        <translation type="unfinished">.</translation>
+        <translation>.</translation>
     </message>
     <message>
         <location filename="../qrzdisplayframe.ui" line="177"/>
@@ -3007,7 +2950,7 @@ Non - Ignorer les modifications</translation>
     <message>
         <location filename="../qrzdisplayframe.ui" line="357"/>
         <source>QRZ date:</source>
-        <translation type="unfinished"></translation>
+        <translation>Date QRZ [???Context]:</translation>
     </message>
     <message>
         <location filename="../qrzdisplayframe.ui" line="399"/>
@@ -3027,7 +2970,7 @@ Non - Ignorer les modifications</translation>
     <message>
         <location filename="../qrzdisplayframe.ui" line="515"/>
         <source>DB date:</source>
-        <translation type="unfinished"></translation>
+        <translation>Date DB [???Context}:</translation>
     </message>
     <message>
         <location filename="../qrzdisplayframe.ui" line="608"/>
@@ -3072,7 +3015,7 @@ Non - Ignorer les modifications</translation>
     <message>
         <location filename="../qrzdisplayframe.cpp" line="186"/>
         <source>DB hits %1 QRZ requests %2 DB Size %3 records</source>
-        <translation type="unfinished"></translation>
+        <translation>DB coups %1 requêtes QRZ %2 taille de DB %3 enregistrements</translation>
     </message>
     <message>
         <location filename="../qrzdisplayframe.cpp" line="236"/>
@@ -3164,12 +3107,12 @@ Non - Ignorer les modifications</translation>
     <message>
         <location filename="../radiosettingdialog.ui" line="151"/>
         <source>RTTY</source>
-        <translation type="unfinished">RTTY</translation>
+        <translation>RTTY</translation>
     </message>
     <message>
         <location filename="../radiosettingdialog.ui" line="168"/>
         <source>PSK</source>
-        <translation type="unfinished"></translation>
+        <translation>PSK</translation>
     </message>
     <message>
         <location filename="../radiosettingdialog.ui" line="189"/>
@@ -3209,12 +3152,12 @@ Non - Ignorer les modifications</translation>
     <message>
         <location filename="../radiosettingdialog.cpp" line="418"/>
         <source>Invalid RTTY Preset Frequency for %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Fréquence RTTY non valide pour %1</translation>
     </message>
     <message>
         <location filename="../radiosettingdialog.cpp" line="435"/>
         <source>Invalid PSK Preset Frequency for %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Fréquence PSK non valide pour %1</translation>
     </message>
     <message>
         <location filename="../radiosettingdialog.cpp" line="452"/>
@@ -3799,19 +3742,7 @@ Non - Ignorer les modifications</translation>
     <message>
         <location filename="../runbuttonsframe.cpp" line="614"/>
         <source>&amp;Set</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&amp;Read</source>
-        <translation type="vanished">&amp;Lire</translation>
-    </message>
-    <message>
-        <source>&amp;New</source>
-        <translation type="vanished">&amp;Nouveau</translation>
-    </message>
-    <message>
-        <source>&amp;Edit</source>
-        <translation type="vanished">&amp;Modifier</translation>
+        <translation>[Context???]</translation>
     </message>
     <message>
         <location filename="../runbuttonsframe.cpp" line="622"/>
@@ -4065,7 +3996,7 @@ Non - Ignorer les modifications</translation>
     <message>
         <location filename="../ScreenConfigElement.cpp" line="37"/>
         <source>Data Modes Buttons</source>
-        <translation type="unfinished"></translation>
+        <translation>Boutons Data [???]</translation>
     </message>
     <message>
         <location filename="../ScreenConfigElement.cpp" line="38"/>
@@ -4255,10 +4186,6 @@ L&apos;arrière-plan de la ligne change de couleur lorsqu&apos;elle est sélecti
         <translation>District</translation>
     </message>
     <message>
-        <source>Filter</source>
-        <translation type="vanished">Filtre</translation>
-    </message>
-    <message>
         <location filename="../StackedInfoFrame.cpp" line="14"/>
         <source>Memories</source>
         <translation>Mémoires</translation>
@@ -4351,7 +4278,7 @@ L&apos;arrière-plan de la ligne change de couleur lorsqu&apos;elle est sélecti
     <message>
         <location filename="../taboutbox.ui" line="313"/>
         <source>...</source>
-        <translation type="unfinished">...</translation>
+        <translation>...</translation>
     </message>
     <message>
         <location filename="../taboutbox.cpp" line="129"/>
@@ -4587,9 +4514,8 @@ n&apos;existe pas; télécharger les derniers calendriers&#xa0;?</translation>
         <translation>Le chargement du fichier du calendrier Micro-ondes a échoué</translation>
     </message>
     <message>
-        <location filename="../tcalendarform.cpp" line="321"/>
         <source>OpenSSL version built is is %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Version OpenSSL construite est %1 ???]</translation>
     </message>
     <message>
         <location filename="../tcalendarform.cpp" line="325"/>
@@ -5119,11 +5045,7 @@ n&apos;existe pas; télécharger les derniers calendriers&#xa0;?</translation>
         <location filename="../tlogcontainer.cpp" line="580"/>
         <location filename="../tlogcontainer.cpp" line="756"/>
         <source>Enter</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Minos Contest Logger</source>
-        <translation type="vanished">Minos Enregistreur deu Concours</translation>
+        <translation>Entrer</translation>
     </message>
     <message>
         <location filename="../tlogcontainer.cpp" line="473"/>
@@ -5288,7 +5210,7 @@ n&apos;existe pas; télécharger les derniers calendriers&#xa0;?</translation>
     <message>
         <location filename="../tlogcontainer.cpp" line="760"/>
         <source>Create Entry and send to RSGB</source>
-        <translation type="unfinished"></translation>
+        <translation>Créer l&apos;entrée et envoyer à RSGB</translation>
     </message>
     <message>
         <location filename="../tlogcontainer.cpp" line="763"/>
@@ -5314,7 +5236,7 @@ n&apos;existe pas; télécharger les derniers calendriers&#xa0;?</translation>
     <message>
         <location filename="../tlogcontainer.cpp" line="1038"/>
         <source>All HF</source>
-        <translation type="unfinished">Toutes HF</translation>
+        <translation>Toutes HF</translation>
     </message>
     <message>
         <location filename="../tlogcontainer.cpp" line="1065"/>
@@ -5373,14 +5295,6 @@ Veuillez choisir un nouveau nom.</translation>
         <translation>Importer %1 Concours</translation>
     </message>
     <message>
-        <source>This action will clear registry entries for all of the apps within the Minos V2 Logger.<byte value="xd"/>
-<byte value="xd"/>
-Please confirm this action by pressing &quot;Yes&quot;.</source>
-        <translation type="vanished">Cette action effacera les entrées de registre pour toutes les applications du Minos V2 Logger.
-
-Confirmer cette action en appuyant sur &quot;Oui&quot; SVP.</translation>
-    </message>
-    <message>
         <location filename="../tlogcontainer.cpp" line="1363"/>
         <source>Clear registry only works under Windows</source>
         <translation>L&apos;effacement des registres ne fonctionne que sous Windows</translation>
@@ -5423,7 +5337,7 @@ Confirmer cette action en appuyant sur &quot;Oui&quot; SVP.</translation>
     <message>
         <location filename="../tlogcontainer.cpp" line="2365"/>
         <source>Minos Contest Logger Application</source>
-        <translation type="unfinished"></translation>
+        <translation>Application Minos Contest Logger</translation>
     </message>
     <message>
         <location filename="../tlogcontainer.cpp" line="1327"/>
@@ -5435,7 +5349,9 @@ Confirmer cette action en appuyant sur &quot;Oui&quot; SVP.</translation>
         <source>This action will clear geometry entries for all of the apps within Minos.<byte value="xd"/>
 <byte value="xd"/>
 Please confirm this action by pressing &quot;Yes&quot;.</source>
-        <translation type="unfinished"></translation>
+        <translation>Cette action effacera les entrées de géométrie pour toutes les applications de Minos.
+
+Veuillez confirmer cette action en appuyant sur &quot;Oui&quot;.</translation>
     </message>
     <message>
         <location filename="../tlogcontainer.cpp" line="1560"/>
@@ -5488,10 +5404,6 @@ Please confirm this action by pressing &quot;Yes&quot;.</source>
         <location filename="../tlogcontainer.cpp" line="2211"/>
         <source>Open Archive List</source>
         <translation>Ouvrir la liste des archives</translation>
-    </message>
-    <message>
-        <source>Minos contest Logger Application</source>
-        <translation type="vanished">Application Minos Enregistreur de Concours</translation>
     </message>
 </context>
 <context>
@@ -5755,7 +5667,7 @@ Please confirm this action by pressing &quot;Yes&quot;.</source>
     <message>
         <location filename="../tsinglelogframe.cpp" line="1030"/>
         <source>Failed to open %1</source>
-        <translation type="unfinished"></translation>
+        <translation>L&apos;Ouverture échoué %1</translation>
     </message>
     <message>
         <location filename="../tsinglelogframe.cpp" line="1044"/>
@@ -6033,7 +5945,7 @@ Through</source>
     <message>
         <location filename="../txVmExternalButtonDialog.cpp" line="61"/>
         <source>Makeup Gain (db)</source>
-        <translation type="unfinished">[Context?] </translation>
+        <translation>[Context?] </translation>
     </message>
     <message>
         <location filename="../txVmExternalButtonDialog.cpp" line="96"/>
@@ -6076,7 +5988,7 @@ Through</source>
     <message>
         <location filename="../txvminternalbuttondialog.ui" line="127"/>
         <source>Show</source>
-        <translation type="unfinished">Afficher [context?] </translation>
+        <translation>Afficher [context?] </translation>
     </message>
     <message>
         <location filename="../txvminternalbuttondialog.ui" line="120"/>
@@ -6212,10 +6124,6 @@ Through</source>
 </context>
 <context>
     <name>TxVmRigSetupDialog</name>
-    <message>
-        <source>Dialog</source>
-        <translation type="vanished">Dialogue</translation>
-    </message>
     <message>
         <location filename="../txvmrigsetupdialog.ui" line="27"/>
         <source>Number Buttons</source>
@@ -6363,12 +6271,12 @@ Inclure le &quot;CQ&quot; ainsi que le type</translation>
     <message>
         <location filename="../WsjtxFrame.ui" line="107"/>
         <source>Add Blacklist</source>
-        <translation type="unfinished"></translation>
+        <translation>Ajouter blackliste</translation>
     </message>
     <message>
         <location filename="../WsjtxFrame.ui" line="114"/>
         <source>Remove Blacklist</source>
-        <translation type="unfinished"></translation>
+        <translation>Supprimer blackliste</translation>
     </message>
     <message>
         <location filename="../WsjtxFrame.ui" line="176"/>
@@ -6385,31 +6293,19 @@ Inclure le &quot;CQ&quot; ainsi que le type</translation>
         <translation>.</translation>
     </message>
     <message>
-        <source>Auto Select Reply</source>
-        <translation type="vanished">Réponse de sélection automatique</translation>
-    </message>
-    <message>
-        <source>Auto Select 73/RR73</source>
-        <translation type="vanished">Sélection automatique 73/RR73</translation>
-    </message>
-    <message>
-        <source>Auto Rearm</source>
-        <translation type="vanished">Réarmement automatique</translation>
-    </message>
-    <message>
         <location filename="../WsjtxFrame.ui" line="340"/>
         <source>Semi-auto</source>
-        <translation type="unfinished"></translation>
+        <translation>Semi-auto</translation>
     </message>
     <message>
         <location filename="../WsjtxFrame.ui" line="347"/>
         <source>Allow select 73/RR73</source>
-        <translation type="unfinished"></translation>
+        <translation>Autoriser sélection de 73/RR73</translation>
     </message>
     <message>
         <location filename="../WsjtxFrame.ui" line="363"/>
         <source>Select Best Response</source>
-        <translation type="unfinished"></translation>
+        <translation>Sélectionner meilleure réponse</translation>
     </message>
     <message>
         <location filename="../WsjtxFrame.ui" line="373"/>
@@ -6454,12 +6350,12 @@ Inclure le &quot;CQ&quot; ainsi que le type</translation>
     <message>
         <location filename="../WsjtxFrame.ui" line="134"/>
         <source>NoQSOWaiting</source>
-        <translation type="unfinished"></translation>
+        <translation>Pas de qso attend [???context???]</translation>
     </message>
     <message>
         <location filename="../WsjtxFrame.ui" line="141"/>
         <source>Reset state to idle</source>
-        <translation type="unfinished"></translation>
+        <translation>Réinitialiser l&apos;état au repos</translation>
     </message>
     <message>
         <location filename="../WsjtxFrame.ui" line="290"/>
@@ -6475,7 +6371,7 @@ Inclure le &quot;CQ&quot; ainsi que le type</translation>
     <message>
         <location filename="../WsjtxFrame.cpp" line="984"/>
         <source>Wrong band</source>
-        <translation type="unfinished"></translation>
+        <translation>Mauvais bande</translation>
     </message>
     <message>
         <location filename="../WsjtxFrame.cpp" line="1531"/>

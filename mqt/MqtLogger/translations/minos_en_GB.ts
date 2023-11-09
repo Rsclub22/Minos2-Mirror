@@ -4430,11 +4430,6 @@ does not exist; do you wish to download the latest calendars?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tcalendarform.cpp" line="321"/>
-        <source>OpenSSL version built is is %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../tcalendarform.cpp" line="325"/>
         <source>Something is wrong - SSL not supported on this system.</source>
         <translation type="unfinished"></translation>

@@ -31,17 +31,17 @@
     <message>
         <location filename="../qrzconfiguredialog.ui" line="81"/>
         <source>Reset DB</source>
-        <translation type="unfinished"></translation>
+        <translation>Réinitialiser DB</translation>
     </message>
     <message>
         <location filename="../qrzconfiguredialog.ui" line="101"/>
         <source>OK</source>
-        <translation type="unfinished"></translation>
+        <translation>OK</translation>
     </message>
     <message>
         <location filename="../qrzconfiguredialog.ui" line="108"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Annutler</translation>
     </message>
 </context>
 <context>
@@ -87,14 +87,13 @@
         <translation>Connexion à QRZ.com avec l&apos;indicatif : %1</translation>
     </message>
     <message>
-        <location filename="../qrzservermainwindow.cpp" line="336"/>
         <source>OpenSSSL version built is is %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Version OpenSSL construite est %1 ???]</translation>
     </message>
     <message>
         <location filename="../qrzservermainwindow.cpp" line="337"/>
         <source>SSL not supported on this system.</source>
-        <translation>SSL n&apos;est pas supporté par cette système  </translation>
+        <translation>SSL n&apos;est pas supporté par cette système.</translation>
     </message>
     <message>
         <location filename="../qrzservermainwindow.cpp" line="383"/>
@@ -134,7 +133,7 @@
     <message>
         <location filename="../qrzservermainwindow.cpp" line="691"/>
         <source>Ask QRZ DB for callsign - %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Demander à QRZ DB l&apos;Indicatif - %1 [????]</translation>
     </message>
     <message>
         <location filename="../qrzservermainwindow.cpp" line="697"/>

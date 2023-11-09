@@ -278,7 +278,7 @@ Vérifier le tracelog Rigcontrol</translation>
         <location filename="../rigcontrolmainwindow.ui" line="166"/>
         <location filename="../rigcontrolmainwindow.cpp" line="235"/>
         <source>Test Radio</source>
-        <translation type="unfinished"></translation>
+        <translation>Tester Radio</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.ui" line="186"/>
@@ -558,7 +558,7 @@ Certaines radios / interfaces peuvent nécessiter de forcer DTR ou RTS au niveau
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="224"/>
         <source>Set Radio from Logger</source>
-        <translation type="unfinished"></translation>
+        <translation>Régler la radio à partir de Logger</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="531"/>
@@ -696,7 +696,7 @@ Certaines radios / interfaces peuvent nécessiter de forcer DTR ou RTS au niveau
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="3088"/>
         <source>%1 not supported by radio</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 non supportée par la radio</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="3237"/>
@@ -759,7 +759,9 @@ Veuillez les supprimer et configurer à nouveau les radios</translation>
         <source>App Instance Name  = %1
 
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Nom d&apos;instance d&apos;Application = %1
+
+</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="4536"/>
@@ -1438,12 +1440,12 @@ Corriger les entrées du convertisseur SVP.</translation>
     <message>
         <location filename="../rigsetupform.ui" line="556"/>
         <source>RTTY Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Mode de RTTY</translation>
     </message>
     <message>
         <location filename="../rigsetupform.ui" line="566"/>
         <source>PSK31/63 Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Mode de PSK31/63</translation>
     </message>
     <message>
         <location filename="../rigsetupform.ui" line="613"/>

@@ -67,12 +67,12 @@
     <message>
         <location filename="../clustermainwindow.ui" line="50"/>
         <source>Setup...</source>
-        <translation type="unfinished"></translation>
+        <translation>Configuration...</translation>
     </message>
     <message>
         <location filename="../clustermainwindow.ui" line="64"/>
         <source>Shortcuts</source>
-        <translation type="unfinished"></translation>
+        <translation>Raccourcis</translation>
     </message>
     <message>
         <location filename="../clustermainwindow.ui" line="302"/>

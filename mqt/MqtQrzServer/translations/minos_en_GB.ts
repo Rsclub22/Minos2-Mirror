@@ -87,11 +87,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qrzservermainwindow.cpp" line="336"/>
-        <source>OpenSSSL version built is is %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../qrzservermainwindow.cpp" line="337"/>
         <source>SSL not supported on this system.</source>
         <translation type="unfinished"></translation>

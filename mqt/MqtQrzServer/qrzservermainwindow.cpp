@@ -333,7 +333,7 @@ void QrzServerMainWindow::sendUrl(QString url)
         QString sslError;
         if (!QSslSocket::supportsSsl())
         {
-            trace(tr("OpenSSSL version built is is %1").arg(QSslSocket::sslLibraryBuildVersionString()));
+            trace(QString("OpenSSSL version build is %1").arg(QSslSocket::sslLibraryBuildVersionString()));
             sslError = "\r\n" + tr("SSL not supported on this system.");
         }
 

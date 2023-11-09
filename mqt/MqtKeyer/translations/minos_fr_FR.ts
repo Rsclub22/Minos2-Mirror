@@ -132,27 +132,27 @@
     <message>
         <location filename="../KeyerMain.ui" line="387"/>
         <source>Audio Input</source>
-        <translation type="unfinished"></translation>
+        <translation>Entrée audio</translation>
     </message>
     <message>
         <location filename="../KeyerMain.ui" line="394"/>
         <source>Audio Output</source>
-        <translation type="unfinished"></translation>
+        <translation>Sortie audio</translation>
     </message>
     <message>
         <location filename="../KeyerMain.ui" line="401"/>
         <source>Sample rate</source>
-        <translation type="unfinished"></translation>
+        <translation>Taux d&apos;échantillonnage</translation>
     </message>
     <message>
         <location filename="../KeyerMain.ui" line="408"/>
         <source>IP Port</source>
-        <translation type="unfinished"></translation>
+        <translation>Port IP</translation>
     </message>
     <message>
         <location filename="../KeyerMain.ui" line="465"/>
         <source>TextLabel</source>
-        <translation type="unfinished"></translation>
+        <translation>????????????????????????????????????Testlabel</translation>
     </message>
     <message>
         <location filename="../KeyerMain.ui" line="487"/>
@@ -239,7 +239,7 @@ Through</source>
     <message>
         <location filename="../KeyerMain.cpp" line="192"/>
         <source>Remote IP Client</source>
-        <translation type="unfinished"></translation>
+        <translation>Client distant  IP</translation>
     </message>
     <message>
         <location filename="../KeyerMain.cpp" line="412"/>
@@ -264,7 +264,8 @@ Through</source>
     <message>
         <location filename="../KeyerMain.cpp" line="825"/>
         <source>Restart to set sample rate to &quot;0&quot;</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Redémarrer could be taken as reboot?</translatorcomment>
+        <translation>Redémarrer pour régler la fréquence d&apos;échantillonnage sur &quot;0&quot;</translation>
     </message>
 </context>
 <context>

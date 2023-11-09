@@ -5,162 +5,163 @@
     <name>KPMainWindow</name>
     <message>
         <source>KPMainWindow</source>
-        <translation type="unfinished"></translation>
+        <translation>KPMainWindow [???]</translation>
     </message>
     <message>
         <source>Audio Output</source>
-        <translation type="unfinished"></translation>
+        <translation>Sortie audio</translation>
     </message>
     <message>
         <source>Serial PTT</source>
-        <translation type="unfinished"></translation>
+        <translation>PTT série</translation>
     </message>
     <message>
         <source>Enable</source>
-        <translation type="unfinished"></translation>
+        <translation>Activer</translation>
     </message>
     <message>
         <source>RTS</source>
-        <translation type="unfinished"></translation>
+        <translation>RTS</translation>
     </message>
     <message>
         <source>DTR</source>
-        <translation type="unfinished"></translation>
+        <translation>DTR</translation>
     </message>
     <message>
         <source>Setup Script (alsactl)</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Script de configuration (alsactl)</translatorcomment>
+        <translation>Script d&apos;installation (alsactl) [???]</translation>
     </message>
     <message>
         <source>...</source>
-        <translation type="unfinished"></translation>
+        <translation>...</translation>
     </message>
     <message>
         <source>Save Alsa Config</source>
-        <translation type="unfinished"></translation>
+        <translation>Enregistrer la configuration Alsa [what is Alsa????]</translation>
     </message>
     <message>
         <source>Restore Alsa Config</source>
-        <translation type="unfinished"></translation>
+        <translation>Restaurer la configuration Alsa [what is Also ????]</translation>
     </message>
     <message>
         <source>seq</source>
-        <translation type="unfinished"></translation>
+        <translation>séquence [??????]</translation>
     </message>
     <message>
         <source>delay</source>
-        <translation type="unfinished"></translation>
+        <translation>Retard</translation>
     </message>
     <message>
         <source>buffered</source>
-        <translation type="unfinished"></translation>
+        <translation>tamponnée [???]</translation>
     </message>
     <message>
         <source>Toggle</source>
-        <translation type="unfinished"></translation>
+        <translation>Basculer</translation>
     </message>
     <message>
         <source>PTT</source>
-        <translation type="unfinished"></translation>
+        <translation>PTT</translation>
     </message>
     <message>
         <source>Metering</source>
-        <translation type="unfinished"></translation>
+        <translation>Mesure [????]</translation>
     </message>
     <message>
         <source>Input</source>
-        <translation type="unfinished"></translation>
+        <translation>Entrée</translation>
     </message>
     <message>
         <source>Remote IP Client</source>
-        <translation type="unfinished"></translation>
+        <translation>Client IP distant</translation>
     </message>
     <message>
         <source>Alsa Control Files</source>
-        <translation type="unfinished"></translation>
+        <translation>Fichiers de contrôle Alsa [???]</translation>
     </message>
     <message>
         <source>All Files</source>
-        <translation type="unfinished"></translation>
+        <translation>Tous les fichiers</translation>
     </message>
     <message>
         <source>File for mixer setup</source>
-        <translation type="unfinished"></translation>
+        <translation>Fichier pour la configuration du mixeur</translation>
     </message>
     <message>
         <source>Restart to set output to %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Redémarrez pour définir la sortie sur %1</translation>
     </message>
     <message>
         <source>Restarting as host/port/rate has changed</source>
-        <translation type="unfinished"></translation>
+        <translation>Redémarrage&#xa0;: hôte/port/débit a changé [read as reboot???]</translation>
     </message>
     <message>
         <source>Open COM port %1 failed: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Ouverture du port COM %1&#xa0;Échec : %2</translation>
     </message>
 </context>
 <context>
     <name>SerialPTT</name>
     <message>
         <source>Serial port not open</source>
-        <translation type="unfinished"></translation>
+        <translation>Port série non ouvert</translation>
     </message>
     <message>
         <source>No Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Pas d&apos;erreur</translation>
     </message>
     <message>
         <source>Device Not Found</source>
-        <translation type="unfinished"></translation>
+        <translation> Périphérique introuvable</translation>
     </message>
     <message>
         <source>Permission Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Erreur d&apos;autorisation</translation>
     </message>
     <message>
         <source>Open Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Erreur d&apos;ouverture</translation>
     </message>
     <message>
         <source>Parity Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Erreur de parité</translation>
     </message>
     <message>
         <source>Framing Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Erreur de format</translation>
     </message>
     <message>
         <source>Break Condition</source>
-        <translation type="unfinished"></translation>
+        <translation>État de break[???]</translation>
     </message>
     <message>
         <source>Write Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Erreur d&apos;écriture</translation>
     </message>
     <message>
         <source>Read Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Erreur de lecture</translation>
     </message>
     <message>
         <source>Resource Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Erreur des ressources</translation>
     </message>
     <message>
         <source>Unsupported Operation Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Erreur d&apos;opération non prise en charge [???]</translation>
     </message>
     <message>
         <source>Unknown Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Erreur inconnue</translation>
     </message>
     <message>
         <source>Timeout Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Erreur d&apos;expiration</translation>
     </message>
     <message>
         <source>Not Open Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Erreur de non-ouverture [???]</translation>
     </message>
 </context>
 </TS>

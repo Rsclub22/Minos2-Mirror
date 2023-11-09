@@ -57,7 +57,7 @@
     <message>
         <location filename="../rcmainwindow.cpp" line="54"/>
         <source>No Sound Input devices available</source>
-        <translation type="unfinished"></translation>
+        <translation>Aucun périphérique d&apos;entrée audio disponible</translation>
     </message>
     <message>
         <location filename="../rcmainwindow.cpp" line="245"/>

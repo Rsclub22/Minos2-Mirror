@@ -2,41 +2,6 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="fr_FR">
 <context>
-    <name>BandmapSpotData</name>
-    <message>
-        <source>NONE</source>
-        <translation type="vanished">AUCUN</translation>
-    </message>
-    <message>
-        <source>CLUSTER</source>
-        <translation type="vanished">CLUSTER</translation>
-    </message>
-    <message>
-        <source>CLUSTER MARKED</source>
-        <translation type="vanished">CLUSTER MARQUÉ</translation>
-    </message>
-    <message>
-        <source>LOGGED</source>
-        <translation type="vanished">ENREGISTRÉ</translation>
-    </message>
-    <message>
-        <source>MARKED</source>
-        <translation type="vanished">MARQUÉ</translation>
-    </message>
-    <message>
-        <source>SAVED</source>
-        <translation type="vanished">SAUVÉ</translation>
-    </message>
-    <message>
-        <source>CQ</source>
-        <translation type="vanished">CQ</translation>
-    </message>
-    <message>
-        <source>DELETED</source>
-        <translation type="vanished">SUPPRIMÉ</translation>
-    </message>
-</context>
-<context>
     <name>BaseContact</name>
     <message>
         <location filename="../contacts.cpp" line="444"/>
@@ -380,32 +345,32 @@
     <message>
         <location filename="../profiles.cpp" line="88"/>
         <source>UDP External QSO Info Enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>UDP&#xa0;:Iinformations sur les QSO externes activées</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="89"/>
         <source>UDP External QSO Info Address</source>
-        <translation type="unfinished"></translation>
+        <translation>UDP&#xa0;: Adresse d&apos;informations QSO externe</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="90"/>
         <source>UDP External QSO Info Port</source>
-        <translation type="unfinished"></translation>
+        <translation>UDP&#xa0;: Port d&apos;informations QSO externe</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="92"/>
         <source>UDP External Spots Enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>UDP: Spots externes activés</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="93"/>
         <source>UDP External Spots Address</source>
-        <translation type="unfinished"></translation>
+        <translation>UDP&#xa0;: Adresse des spots externes</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="94"/>
         <source>UDP External Spots Port</source>
-        <translation type="unfinished"></translation>
+        <translation>UDP&#xa0;: Port pour Spots externes</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="101"/>
@@ -485,17 +450,17 @@
     <message>
         <location filename="../profiles.cpp" line="121"/>
         <source>Show Crib Band</source>
-        <translation type="unfinished"></translation>
+        <translation>[What does this mean???]</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="123"/>
         <source>Show QSO Map Grid</source>
-        <translation type="unfinished"></translation>
+        <translation>Afficher la grille de la carte QSO</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="124"/>
         <source>Show QSO Map Lines</source>
-        <translation type="unfinished"></translation>
+        <translation>Afficher les lignes de la carte QSO</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="125"/>
@@ -505,7 +470,8 @@
     <message>
         <location filename="../profiles.cpp" line="126"/>
         <source>Limit Cluster spot distance on map</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Limiter la distance du Spot sur la carte Cluster </translatorcomment>
+        <translation></translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="128"/>
@@ -585,22 +551,22 @@
     <message>
         <location filename="../profiles.cpp" line="152"/>
         <source>Auto QRZ HF callsigns</source>
-        <translation type="unfinished"></translation>
+        <translation>Indicatifs d&apos;appel automatiques QRZ HF</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="153"/>
         <source>Auto QRZ VHF callsigns</source>
-        <translation type="unfinished"></translation>
+        <translation>Indicatifs d&apos;appel automatiques QRZ VHF</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="154"/>
         <source>Auto QRZ HF WSJT-X callsigns</source>
-        <translation type="unfinished"></translation>
+        <translation>Indicatifs d&apos;appel automatiques QRZ WSJT-X HF</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="155"/>
         <source>Auto QRZ VHF WSJT-X callsigns</source>
-        <translation type="unfinished"></translation>
+        <translation>Indicatifs d&apos;appel automatiques QRZ WSJT-X VHF</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="159"/>
@@ -934,42 +900,42 @@
     <message>
         <location filename="../spotbasedata.cpp" line="68"/>
         <source>NONE</source>
-        <translation type="unfinished">AUCUN</translation>
+        <translation>AUCUN</translation>
     </message>
     <message>
         <location filename="../spotbasedata.cpp" line="71"/>
         <source>CLUSTER</source>
-        <translation type="unfinished">CLUSTER</translation>
+        <translation>CLUSTER</translation>
     </message>
     <message>
         <location filename="../spotbasedata.cpp" line="74"/>
         <source>CLUSTER MARKED</source>
-        <translation type="unfinished">CLUSTER MARQUÉ</translation>
+        <translation>CLUSTER MARQUÉ</translation>
     </message>
     <message>
         <location filename="../spotbasedata.cpp" line="77"/>
         <source>LOGGED</source>
-        <translation type="unfinished">ENREGISTRÉ</translation>
+        <translation>ENREGISTRÉ</translation>
     </message>
     <message>
         <location filename="../spotbasedata.cpp" line="80"/>
         <source>MARKED</source>
-        <translation type="unfinished">MARQUÉ</translation>
+        <translation>MARQUÉ</translation>
     </message>
     <message>
         <location filename="../spotbasedata.cpp" line="83"/>
         <source>SAVED</source>
-        <translation type="unfinished">SAUVÉ</translation>
+        <translation>SAUVÉ</translation>
     </message>
     <message>
         <location filename="../spotbasedata.cpp" line="86"/>
         <source>CQ</source>
-        <translation type="unfinished">CQ</translation>
+        <translation>CQ</translation>
     </message>
     <message>
         <location filename="../spotbasedata.cpp" line="89"/>
         <source>DELETED</source>
-        <translation type="unfinished">SUPPRIMÉ</translation>
+        <translation>SUPPRIMÉ</translation>
     </message>
 </context>
 <context>
@@ -1032,7 +998,7 @@
     <message>
         <location filename="../ConfigElementFrame.ui" line="235"/>
         <source>.</source>
-        <translation type="unfinished"></translation>
+        <translation>.</translation>
     </message>
     <message>
         <location filename="../ConfigElementFrame.ui" line="249"/>
@@ -1390,12 +1356,12 @@ Attention: &quot;.&quot; pas &quot;,&quot;<byte value="xd"/>
     <message>
         <location filename="../MonitorTreeModel.cpp" line="84"/>
         <source>Monitoring</source>
-        <translation type="unfinished"></translation>
+        <translation>Surveillance</translation>
     </message>
     <message>
         <location filename="../MonitorTreeModel.cpp" line="86"/>
         <source>Enabled</source>
-        <translation type="unfinished">Activé</translation>
+        <translation>Activé</translation>
     </message>
 </context>
 <context>
@@ -1672,12 +1638,12 @@ Attention: &quot;.&quot; pas &quot;,&quot;<byte value="xd"/>
     <message>
         <location filename="../MonitorTreeModel.cpp" line="155"/>
         <source>Contest Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Nom du concours</translation>
     </message>
     <message>
         <location filename="../MonitorTreeModel.cpp" line="159"/>
         <source>State</source>
-        <translation type="unfinished"></translation>
+        <translation>État</translation>
     </message>
 </context>
 <context>
@@ -1685,7 +1651,7 @@ Attention: &quot;.&quot; pas &quot;,&quot;<byte value="xd"/>
     <message>
         <location filename="../monitoredlogs.cpp" line="33"/>
         <source>Auto start current logs from stations</source>
-        <translation type="unfinished"></translation>
+        <translation>[What does this mean???]</translation>
     </message>
 </context>
 <context>
@@ -1708,7 +1674,7 @@ Attention: &quot;.&quot; pas &quot;,&quot;<byte value="xd"/>
     <message>
         <location filename="../TreeUtils.cpp" line="20"/>
         <source>Mode</source>
-        <translation type="unfinished">Mode</translation>
+        <translation>Mode</translation>
     </message>
     <message>
         <location filename="../TreeUtils.cpp" line="21"/>
@@ -1797,7 +1763,7 @@ Attention: &quot;.&quot; pas &quot;,&quot;<byte value="xd"/>
     <message>
         <location filename="../MatchTreeFrame.cpp" line="17"/>
         <source>Mode</source>
-        <translation type="unfinished">Mode</translation>
+        <translation>Mode</translation>
     </message>
     <message>
         <location filename="../MatchTreeFrame.cpp" line="18"/>
@@ -2053,7 +2019,7 @@ Entrer une autre direction SVP</translation>
         <location filename="../StartConfig.cpp" line="115"/>
         <location filename="../StartConfig.cpp" line="279"/>
         <source>Show</source>
-        <translation type="unfinished"></translation>
+        <translation>Montrer</translation>
     </message>
     <message>
         <location filename="../StartConfig.ui" line="69"/>
@@ -2099,7 +2065,7 @@ Entrer une autre direction SVP</translation>
         <location filename="../StartConfig.cpp" line="120"/>
         <location filename="../StartConfig.cpp" line="284"/>
         <source>Hide</source>
-        <translation type="unfinished"></translation>
+        <translation>Cacher</translation>
     </message>
 </context>
 <context>
@@ -2139,7 +2105,7 @@ Entrer une autre direction SVP</translation>
         <location filename="../StartConfigManager.cpp" line="71"/>
         <location filename="../StartConfigManager.cpp" line="306"/>
         <source>Show</source>
-        <translation type="unfinished"></translation>
+        <translation>Montrer</translation>
     </message>
     <message>
         <location filename="../StartConfigManager.ui" line="95"/>
@@ -2171,7 +2137,7 @@ Entrer une autre direction SVP</translation>
         <location filename="../StartConfigManager.cpp" line="293"/>
         <location filename="../StartConfigManager.cpp" line="311"/>
         <source>Hide</source>
-        <translation type="unfinished"></translation>
+        <translation>Cacher</translation>
     </message>
     <message>
         <location filename="../StartConfigManager.cpp" line="155"/>

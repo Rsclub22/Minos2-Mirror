@@ -331,22 +331,22 @@ Veuillez les supprimer et configurer les rotateurs à nouveau</translation>
     <message>
         <location filename="../rotatormainwindow.ui" line="29"/>
         <source>Setup Antennas...</source>
-        <translation type="unfinished"></translation>
+        <translation>Configurer les Antennes...</translation>
     </message>
     <message>
         <location filename="../rotatormainwindow.ui" line="39"/>
         <source>?</source>
-        <translation type="unfinished"></translation>
+        <translation>? [???]?</translation>
     </message>
     <message>
         <location filename="../rotatormainwindow.ui" line="46"/>
         <source>Log Headings...</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../rotatormainwindow.ui" line="53"/>
         <source>PST Config...</source>
-        <translation type="unfinished"></translation>
+        <translation>Configuration du PST...</translation>
     </message>
     <message>
         <location filename="../rotatormainwindow.ui" line="92"/>
@@ -397,7 +397,7 @@ Veuillez les supprimer et configurer les rotateurs à nouveau</translation>
     <message>
         <location filename="../rotatormainwindow.ui" line="287"/>
         <source>PushButton</source>
-        <translation type="unfinished"></translation>
+        <translation>Bouton</translation>
     </message>
     <message>
         <location filename="../rotatormainwindow.ui" line="301"/>
@@ -612,12 +612,12 @@ Entrer %1 - %2 SVP</translation>
     <message>
         <location filename="../rotatormainwindow.cpp" line="192"/>
         <source>Set Antenna from Logger</source>
-        <translation type="unfinished"></translation>
+        <translation>Régler l&apos;antenne depuis Logger</translation>
     </message>
     <message>
         <location filename="../rotatormainwindow.cpp" line="207"/>
         <source>Test Antenna</source>
-        <translation type="unfinished"></translation>
+        <translation>Antenne de test  [context???]</translation>
     </message>
     <message>
         <location filename="../rotatormainwindow.cpp" line="1114"/>
@@ -687,7 +687,9 @@ Voulez-vous recharger les paramètres de l&apos;antenne maintenant?</translation
         <source>App Instance Name  = %1
 
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Nom d&apos;instance d&apos;Application = %1
+
+</translation>
     </message>
     <message>
         <location filename="../rotatormainwindow.cpp" line="2459"/>
