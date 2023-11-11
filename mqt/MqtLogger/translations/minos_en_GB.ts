@@ -1067,240 +1067,245 @@ The mode is %2</source>
 <context>
     <name>ContestDetails</name>
     <message>
-        <location filename="../contestdetails.ui" line="14"/>
+        <location filename="../contestdetails.ui" line="20"/>
         <source>Contest Details</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="72"/>
+        <location filename="../contestdetails.ui" line="84"/>
         <location filename="../contestdetails.cpp" line="1875"/>
         <source>HF Calendar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="79"/>
+        <location filename="../contestdetails.ui" line="91"/>
         <location filename="../contestdetails.cpp" line="1904"/>
         <source>VHF Calendar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="86"/>
+        <location filename="../contestdetails.ui" line="98"/>
         <source>uwave Calendar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="198"/>
+        <location filename="../contestdetails.ui" line="109"/>
+        <source>Selected Contest</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../contestdetails.ui" line="224"/>
         <source>How to use these settings?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="218"/>
+        <location filename="../contestdetails.ui" line="244"/>
         <source>On Behalf Of (Club)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="248"/>
+        <location filename="../contestdetails.ui" line="274"/>
         <source>Contest Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="271"/>
+        <location filename="../contestdetails.ui" line="297"/>
         <source>Band</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="303"/>
+        <location filename="../contestdetails.ui" line="329"/>
         <source>Section</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="335"/>
+        <location filename="../contestdetails.ui" line="361"/>
         <source>Protected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="342"/>
+        <location filename="../contestdetails.ui" line="368"/>
         <source>Age Protected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="362"/>
+        <location filename="../contestdetails.ui" line="388"/>
         <source>Callsign as sent</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="385"/>
+        <location filename="../contestdetails.ui" line="411"/>
         <source>Locator as sent</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="408"/>
+        <location filename="../contestdetails.ui" line="434"/>
         <source>Exchange as sent (Postcode, QTH, etc)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="431"/>
+        <location filename="../contestdetails.ui" line="457"/>
         <source>Power</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="460"/>
+        <location filename="../contestdetails.ui" line="486"/>
         <source>Start Date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="478"/>
+        <location filename="../contestdetails.ui" line="504"/>
         <source>Start Time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="511"/>
+        <location filename="../contestdetails.ui" line="537"/>
         <source>End Date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="529"/>
+        <location filename="../contestdetails.ui" line="555"/>
         <source>End Time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="562"/>
+        <location filename="../contestdetails.ui" line="588"/>
         <source>Main Op</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="583"/>
+        <location filename="../contestdetails.ui" line="609"/>
         <source>Second Op</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="611"/>
+        <location filename="../contestdetails.ui" line="637"/>
         <source>Current Mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="654"/>
+        <location filename="../contestdetails.ui" line="680"/>
         <source>Radio Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="681"/>
+        <location filename="../contestdetails.ui" line="707"/>
         <source>Antenna Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="708"/>
+        <location filename="../contestdetails.ui" line="734"/>
         <source>Screen Layout</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="729"/>
+        <location filename="../contestdetails.ui" line="755"/>
         <source>Scoring</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="738"/>
+        <location filename="../contestdetails.ui" line="764"/>
         <source>Commenced Kilometer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="745"/>
+        <location filename="../contestdetails.ui" line="771"/>
         <source>Point per QSO</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="755"/>
+        <location filename="../contestdetails.ui" line="781"/>
         <source>Bonus Scheme</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="773"/>
+        <location filename="../contestdetails.ui" line="799"/>
         <source>Antenna Offset</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="806"/>
+        <location filename="../contestdetails.ui" line="832"/>
         <source>RSGB MGM Contest Rules
 Score between 4 fig loc centres</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="827"/>
+        <location filename="../contestdetails.ui" line="853"/>
         <source>Locator Length</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="833"/>
+        <location filename="../contestdetails.ui" line="859"/>
         <source>Allow 4 char Locators</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="840"/>
+        <location filename="../contestdetails.ui" line="866"/>
         <source>Allow 8 char Locators</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="850"/>
+        <location filename="../contestdetails.ui" line="876"/>
         <source>Mandatory QSO Fields</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="858"/>
+        <location filename="../contestdetails.ui" line="884"/>
         <source>RS(T)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="865"/>
+        <location filename="../contestdetails.ui" line="891"/>
         <source>Serial</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="876"/>
+        <location filename="../contestdetails.ui" line="902"/>
         <source>Locator</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="892"/>
+        <location filename="../contestdetails.ui" line="918"/>
         <source>Multipliers and Exchange</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="898"/>
+        <location filename="../contestdetails.ui" line="924"/>
         <source>DXCC Multiplier</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="905"/>
+        <location filename="../contestdetails.ui" line="931"/>
         <source>Non UK Countries Only (M6)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="912"/>
+        <location filename="../contestdetails.ui" line="938"/>
         <source>Locator Multiplier</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="919"/>
+        <location filename="../contestdetails.ui" line="945"/>
         <source>UK Locs only (M5, M6)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="926"/>
+        <location filename="../contestdetails.ui" line="952"/>
         <source>All locs; UK locs x2 (M7)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="989"/>
+        <location filename="../contestdetails.ui" line="1015"/>
         <source>OK</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="1012"/>
+        <location filename="../contestdetails.ui" line="1038"/>
         <source>Entry Details</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="1032"/>
+        <location filename="../contestdetails.ui" line="1058"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5527,38 +5532,40 @@ Please confirm this action by pressing &quot;Yes&quot;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tsettingseditdlg.cpp" line="122"/>
+        <location filename="../tsettingseditdlg.cpp" line="125"/>
         <source> for &quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tsettingseditdlg.cpp" line="252"/>
+        <location filename="../tsettingseditdlg.cpp" line="262"/>
         <source>Please give a name for the new %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tsettingseditdlg.cpp" line="264"/>
-        <location filename="../tsettingseditdlg.cpp" line="311"/>
+        <location filename="../tsettingseditdlg.cpp" line="249"/>
+        <location filename="../tsettingseditdlg.cpp" line="274"/>
+        <location filename="../tsettingseditdlg.cpp" line="321"/>
         <source>%1 already exists</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tsettingseditdlg.cpp" line="279"/>
+        <location filename="../tsettingseditdlg.cpp" line="289"/>
         <source>You cannot delete the empty %1!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tsettingseditdlg.cpp" line="281"/>
+        <location filename="../tsettingseditdlg.cpp" line="291"/>
         <source>Are you sure you want to delete the current %1?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tsettingseditdlg.cpp" line="295"/>
+        <location filename="../tsettingseditdlg.cpp" line="305"/>
         <source>You cannot rename the empty %1!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tsettingseditdlg.cpp" line="299"/>
+        <location filename="../tsettingseditdlg.cpp" line="239"/>
+        <location filename="../tsettingseditdlg.cpp" line="309"/>
         <source>Please give a new name for the %1</source>
         <translation type="unfinished"></translation>
     </message>
