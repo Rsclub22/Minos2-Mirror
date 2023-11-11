@@ -149,7 +149,7 @@ int ContestDetails::exec()
     ui->QTHBundleFrame->initialise( this, tr("QTH"), &contestTransferObject->QTHBundle, &contestTransferObject->QTHBundleName );
     ui->StationBundleFrame->initialise(this,  tr("Station"), &contestTransferObject->stationBundle, &contestTransferObject->stationBundleName );
     ui->EntryBundleFrame->initialise(this,  tr("Entry"), &contestTransferObject->entryBundle, &contestTransferObject->entryBundleName );
-    ui->ContestNameSelected->setText(contestTransferObject->VHFContestName.getValue());
+    ui->ContestNameSelected->setText(contestTransferObject->contestName.getValue());
 
     contestTransferObject->initialiseINI();
 
@@ -734,7 +734,7 @@ void ContestDetails::setDetails( const IndividualContest &ic )
    setWindowTitle(tr("Details of Contest Entry - %1").arg(contestTransferObject->cfileName) );
 
    ui->ContestNameEdit->setText(ic.description);                      // contest
-   contestTransferObject->VHFContestName.setValue(ic.description);
+   contestTransferObject->contestName.setValue(ic.description);
 
     setBandBoxes(ic.reg1band, QString());
 
@@ -1757,7 +1757,7 @@ void ContestDetails::enableControls()
    ui->HFCalendarButton->setEnabled(!protectedChecked);
    ui->VHFCalendarButton->setEnabled(!protectedChecked);
    ui->uwaveCalendarButton->setEnabled(!protectedChecked);
-   ui->ContestNameSelected->setEnabled(!protectedChecked);
+   //ui->ContestNameSelected->setEnabled(!protectedChecked);
    ui->LocatorGroupBox->setEnabled(!protectedChecked);
    ui->AllowLoc8CB->setEnabled(!protectedChecked);
    ui->AllowLoc4CB->setEnabled(!protectedChecked);

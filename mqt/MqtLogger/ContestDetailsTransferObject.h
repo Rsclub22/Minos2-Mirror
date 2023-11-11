@@ -150,7 +150,7 @@ private:
     MinosItem<PubSubName> radioName;
     MinosItem<PubSubName> antennaName;
 
-    MinosStringItem<QString> VHFContestName;
+    MinosStringItem<QString> contestName;
 
     // Most of this info is bundle related, and not relevant when monitored (?)
 

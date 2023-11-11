@@ -196,7 +196,7 @@ void ContestDetailsTransferObject::getFromContest(LoggerContestLog *ct)
     radioName = ct->radioName;
     antennaName = ct->antennaName;
 
-    VHFContestName = ct->VHFContestName;
+    contestName = ct->VHFContestName;
 
     entrant = ct->entrant;
     entSect = ct->entSect;
@@ -317,7 +317,7 @@ void ContestDetailsTransferObject::setToContest(LoggerContestLog *ct)
     ct->radioName = radioName;
     ct->antennaName = antennaName;
 
-    ct->VHFContestName = VHFContestName;
+    ct->VHFContestName = contestName;
 
     ct->entrant = entrant;
     ct->entSect = entSect;
