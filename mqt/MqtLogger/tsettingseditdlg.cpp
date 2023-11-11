@@ -233,15 +233,22 @@ int nCol = sender()->property("col").toInt();
 
 void TSettingsEditDlg::on_NewSectionButton_clicked()
 {
-    getDetails();  // save what is set already
-    QString Value = "new " + bundle->getBundle();
+   getDetails();  // save what is set already
+   QString Value = "new " + bundle->getBundle();
 
-    bundle->newSection( Value );
-    bundle->openSection( Value );
-    showSections(Value);
-    showDetails();
-
-    on_renameButton_clicked();
+   if ( enquireDialog( this, tr("Please give a new name for the %1").arg(bundle->getBundle()), Value ) )
+   {
+      if (bundle->newSection( Value ))
+      {
+          bundle->openSection( Value );
+          showSections(Value);
+          showDetails();
+      }
+      else
+      {
+          MinosParameters::getMinosParameters() ->mshowMessage( tr("%1 already exists").arg(Value), this );
+      }
+   }
 }
 
 void TSettingsEditDlg::on_CopyButton_clicked()
