@@ -25,7 +25,7 @@ TSettingsEditDlg::TSettingsEditDlg(QWidget *parent, SettingsBundle *bundle) :
         restoreGeometry(geometry);
 
     QByteArray state = settings.getSettings().value("EntrySettings/SplitterState/" + bundle->getBundle()).toByteArray();
-    ui->splitter->restoreState(state);
+    ui->settingsSplitter->restoreState(state);
 
     baseTitle = windowTitle();
 
@@ -33,11 +33,14 @@ TSettingsEditDlg::TSettingsEditDlg(QWidget *parent, SettingsBundle *bundle) :
     ui->CopyButton->setText(tr("Copy %1").arg(bundle->getBundle()));
     ui->DeleteButton->setText(tr("Delete %1").arg(bundle->getBundle()));
     ui->renameButton->setText(tr("Rename %1").arg(bundle->getBundle()));
+
+    ui->SectionsList->setMinimumWidth(10);
+    ui->OptionsTable->setMinimumWidth(10);
 }
 void TSettingsEditDlg::on_splitter_splitterMoved(int /*pos*/, int /*index*/)
 {
     RegSettings settings;
-    QByteArray state = ui->splitter->saveState();
+    QByteArray state = ui->settingsSplitter->saveState();
     settings.getSettings().setValue("EntrySettings/SplitterState/" + bundle->getBundle(), state);
 }
 void TSettingsEditDlg::ShowCurrentSectionOnly()

@@ -348,6 +348,13 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
 
     ui->kstFrame->layout()->setContentsMargins(0, 0, 0, 0);
     ui->centralwidget->layout()->setContentsMargins(0, 0, 0, 0);
+
+    ui->callSplitter->setMinimumWidth(10);
+    ui->msgSplitter->setMinimumWidth(10);
+    ui->callsFrame->setMinimumHeight(10);
+    ui->planesFrame->setMinimumHeight(10);
+    ui->msgFrame->setMinimumHeight(10);
+    ui->tomeFrame->setMinimumHeight(10);
 }
 
 KSTMainWindow::~KSTMainWindow()

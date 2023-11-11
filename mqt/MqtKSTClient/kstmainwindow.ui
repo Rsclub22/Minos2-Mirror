@@ -142,7 +142,7 @@
           <property name="orientation">
            <enum>Qt::Vertical</enum>
           </property>
-          <widget class="QFrame" name="frame2">
+          <widget class="QFrame" name="callsFrame">
            <property name="frameShape">
             <enum>QFrame::NoFrame</enum>
            </property>
@@ -351,7 +351,7 @@ when user selected</string>
           <property name="orientation">
            <enum>Qt::Vertical</enum>
           </property>
-          <widget class="QWidget" name="layoutWidget">
+          <widget class="QFrame" name="msgFrame">
            <layout class="QVBoxLayout" name="verticalLayout_2">
             <item>
              <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -452,7 +452,7 @@ when user selected</string>
             </item>
            </layout>
           </widget>
-          <widget class="QWidget" name="layoutWidget1">
+          <widget class="QFrame" name="tomeFrame">
            <layout class="QVBoxLayout" name="verticalLayout_4">
             <item>
              <layout class="QHBoxLayout" name="horizontalLayout_5">
