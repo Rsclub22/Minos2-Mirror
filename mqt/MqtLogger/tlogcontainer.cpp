@@ -2407,8 +2407,13 @@ TSingleLogFrame *TLogContainer::findContest(BaseContestLog *ct )
 
 void TLogContainer::stealFocus()
 {
+   static bool doSteal = false;
+   trace("stealFocus");
+   doSteal = true;
     delayedAction(this,  [=]()
     {
+       if (doSteal)
+           {
         // Bring window(s) to top
         for(auto cpc: qAsConst(LogContainer->contestPageControls))
         {
@@ -2419,17 +2424,22 @@ void TLogContainer::stealFocus()
 
                 cpc->setWindowState(Qt::WindowState::WindowNoState);
                 cpc->setWindowState(css | Qt::WindowState::WindowActive);
+
+                trace(QString("set WindowActive %1").arg(cpc->windowTitle()));
             }
         }
         Qt::WindowStates ss = windowState();
         setWindowState(Qt::WindowState::WindowNoState);
         setWindowState(ss | Qt::WindowState::WindowActive);
+        trace(QString("set WindowActive %1").arg(windowTitle()));
 
         TSingleLogFrame *tslf = getCurrentLogFrame();
         if (tslf)
         {
             tslf->GJVQSOLogFrame->selectFirstInvalid();
         }
+       }
+       doSteal = false;
     });
 
 }
