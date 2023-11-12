@@ -33,7 +33,7 @@
             <item>
              <widget class="QPushButton" name="aboutRC">
               <property name="text">
-               <string>About Radio Config</string>
+               <string>Current Radio Config</string>
               </property>
              </widget>
             </item>
