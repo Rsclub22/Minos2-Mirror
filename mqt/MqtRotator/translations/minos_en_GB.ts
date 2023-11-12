@@ -324,127 +324,127 @@ Please delete them and set up the rotators again</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.ui" line="29"/>
+        <location filename="../rotatormainwindow.ui" line="32"/>
         <source>Setup Antennas...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../rotatormainwindow.ui" line="39"/>
-        <source>?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../rotatormainwindow.ui" line="46"/>
         <source>Log Headings...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.ui" line="53"/>
+        <location filename="../rotatormainwindow.ui" line="46"/>
         <source>PST Config...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.ui" line="92"/>
+        <location filename="../rotatormainwindow.ui" line="73"/>
+        <source>Current Antenna Config</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rotatormainwindow.ui" line="115"/>
         <source>Main</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.ui" line="108"/>
-        <location filename="../rotatormainwindow.ui" line="146"/>
+        <location filename="../rotatormainwindow.ui" line="131"/>
+        <location filename="../rotatormainwindow.ui" line="169"/>
         <source>000</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.ui" line="130"/>
+        <location filename="../rotatormainwindow.ui" line="153"/>
         <source>Back</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.ui" line="167"/>
+        <location filename="../rotatormainwindow.ui" line="190"/>
         <source>Antenna Select</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.ui" line="182"/>
+        <location filename="../rotatormainwindow.ui" line="205"/>
         <source>0</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.ui" line="189"/>
+        <location filename="../rotatormainwindow.ui" line="212"/>
         <source>Enter Test Bearing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.ui" line="205"/>
+        <location filename="../rotatormainwindow.ui" line="228"/>
         <source>Using:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.ui" line="242"/>
+        <location filename="../rotatormainwindow.ui" line="265"/>
         <source>Antenna:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.ui" line="280"/>
+        <location filename="../rotatormainwindow.ui" line="303"/>
         <source>Reconnect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.ui" line="287"/>
+        <location filename="../rotatormainwindow.ui" line="310"/>
         <source>PushButton</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.ui" line="301"/>
+        <location filename="../rotatormainwindow.ui" line="324"/>
         <source>Target</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.ui" line="321"/>
+        <location filename="../rotatormainwindow.ui" line="344"/>
         <location filename="../rotatormainwindow.cpp" line="1832"/>
         <location filename="../rotatormainwindow.cpp" line="1840"/>
         <source>Turn</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.ui" line="328"/>
+        <location filename="../rotatormainwindow.ui" line="351"/>
         <location filename="../rotatormainwindow.cpp" line="1884"/>
         <location filename="../rotatormainwindow.cpp" line="1892"/>
         <source>Stop</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.ui" line="367"/>
+        <location filename="../rotatormainwindow.ui" line="390"/>
         <source>Presets</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.ui" line="391"/>
-        <location filename="../rotatormainwindow.ui" line="400"/>
-        <location filename="../rotatormainwindow.ui" line="411"/>
-        <location filename="../rotatormainwindow.ui" line="452"/>
-        <location filename="../rotatormainwindow.ui" line="463"/>
-        <location filename="../rotatormainwindow.ui" line="474"/>
-        <location filename="../rotatormainwindow.ui" line="485"/>
-        <location filename="../rotatormainwindow.ui" line="526"/>
-        <location filename="../rotatormainwindow.ui" line="537"/>
-        <location filename="../rotatormainwindow.ui" line="548"/>
+        <location filename="../rotatormainwindow.ui" line="414"/>
+        <location filename="../rotatormainwindow.ui" line="423"/>
+        <location filename="../rotatormainwindow.ui" line="434"/>
+        <location filename="../rotatormainwindow.ui" line="475"/>
+        <location filename="../rotatormainwindow.ui" line="486"/>
+        <location filename="../rotatormainwindow.ui" line="497"/>
+        <location filename="../rotatormainwindow.ui" line="508"/>
+        <location filename="../rotatormainwindow.ui" line="549"/>
+        <location filename="../rotatormainwindow.ui" line="560"/>
+        <location filename="../rotatormainwindow.ui" line="571"/>
         <source>...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.ui" line="614"/>
+        <location filename="../rotatormainwindow.ui" line="637"/>
         <location filename="../rotatormainwindow.cpp" line="2028"/>
         <source>No Overlap</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.ui" line="60"/>
+        <location filename="../rotatormainwindow.ui" line="80"/>
         <source>Trace Data Comms</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.ui" line="36"/>
+        <location filename="../rotatormainwindow.ui" line="70"/>
         <source>About Rotator Config</source>
         <translation type="unfinished"></translation>
     </message>

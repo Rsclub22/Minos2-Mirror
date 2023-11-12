@@ -275,6 +275,11 @@ Vérifier le tracelog Rigcontrol</translation>
         <translation>En utilisant: </translation>
     </message>
     <message>
+        <location filename="../rigcontrolmainwindow.ui" line="36"/>
+        <source>Current Radio Config</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../rigcontrolmainwindow.ui" line="166"/>
         <location filename="../rigcontrolmainwindow.cpp" line="235"/>
         <source>Test Radio</source>
@@ -443,9 +448,8 @@ Actif</translation>
         <translation type="vanished">A propos</translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.ui" line="36"/>
         <source>About Radio Config</source>
-        <translation>À propos de la configuration de la radio</translation>
+        <translation type="vanished">À propos de la configuration de la radio</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.ui" line="50"/>
