@@ -1892,19 +1892,33 @@ int BaseContestLog::getCountriesWorked( const QString &item )
     }
     return n;
 }
-int BaseContestLog::getDistrictsWorked( const QString &band, const QString &item )
+int BaseContestLog::getDistrictsWorked( const QString &pband, const QString &item )
 {
-    if (districtWorked.contains(band))
+    QString cband = pband;
+    if (districtWorked.count() == 1 && districtWorked.contains(""))
     {
-        return districtWorked[band][item];
+        cband = "";
+    }
+    if (cband.isEmpty() || districtWorked.contains(cband))
+    {
+        int n = districtWorked[cband][item];
+        if (n > 0)
+        {
+            return n;
+        }
     }
    return 0;
 }
-int BaseContestLog::getCountriesWorked(const QString &band, const QString &item )
+int BaseContestLog::getCountriesWorked(const QString &pband, const QString &item )
 {
-    if (countryWorked.contains(band))
+   QString cband = pband;
+   if (countryWorked.count() == 1 && countryWorked.contains(""))
+   {
+        cband = "";
+   }
+    if (cband.isEmpty() || countryWorked.contains(cband))
     {
-        return countryWorked[band][item];
+        return countryWorked[cband][item];
     }
    return 0;
 }
