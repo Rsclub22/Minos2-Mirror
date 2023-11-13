@@ -59,7 +59,7 @@ void RotSetupDialog::initSetup()
 
     // get the number of available antennas
 
-    QString fileName = ANTENNA_PATH_LOGGER + FILENAME_AVAIL_ANTENNAS;
+    QString fileName = ANTENNA_PATH_LOGGER() + FILENAME_AVAIL_ANTENNAS;
     QSettings settings(fileName, QSettings::IniFormat);
 
     availAntennas = settings.childGroups();
@@ -78,7 +78,7 @@ void RotSetupDialog::initSetup()
         if (version != "2")
         {
             mShowMessage(tr("The Rotator configuration files in %1 are from an old incompatible version of Minos.\r\n\r\n"
-                         "Please delete them and set up the rotators again").arg(ANTENNA_PATH_LOGGER), parentWidget());
+                            "Please delete them and set up the rotators again").arg(ANTENNA_PATH_LOGGER()), parentWidget());
             exit(10);
         }
 
@@ -376,7 +376,7 @@ void RotSetupDialog::saveSettings()
     bool currentAntennaChanged = false;
 
     QString fileName;
-    fileName = ANTENNA_PATH_LOGGER + FILENAME_AVAIL_ANTENNAS;
+    fileName = ANTENNA_PATH_LOGGER() + FILENAME_AVAIL_ANTENNAS;
     QSettings config(fileName, QSettings::IniFormat);
 
     // get current list of saved antennas
@@ -532,7 +532,7 @@ void RotSetupDialog::saveCurrentAntenna()
 {
 
     QString fileName;
-    fileName = ANTENNA_PATH_LOGGER + appName + FILENAME_CURRENT_ANTENNA;
+    fileName = ANTENNA_PATH_LOGGER() + appName + FILENAME_CURRENT_ANTENNA;
     QSettings config(fileName, QSettings::IniFormat);
 
 
@@ -549,7 +549,7 @@ void RotSetupDialog::readCurrentAntenna()
 {
 
     QString fileName;
-    fileName = ANTENNA_PATH_LOGGER + appName + FILENAME_CURRENT_ANTENNA;
+    fileName = ANTENNA_PATH_LOGGER() + appName + FILENAME_CURRENT_ANTENNA;
     QSettings config(fileName, QSettings::IniFormat);
 
     {
@@ -722,7 +722,7 @@ void RotSetupDialog::editAntennaName()
 void RotSetupDialog::updateAvailAntennasToVersion2()
 {
 
-    QString fileName = ANTENNA_PATH_LOGGER + FILENAME_AVAIL_ANTENNAS;
+    QString fileName = ANTENNA_PATH_LOGGER() + FILENAME_AVAIL_ANTENNAS;
     QSettings settings(fileName, QSettings::IniFormat);
 
     QString antennaModel;

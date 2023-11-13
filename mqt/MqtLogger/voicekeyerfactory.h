@@ -17,6 +17,7 @@
 #include <QString>
 #include <QMap>
 #include <QModelIndex>
+#include "fileutils.h"
 #include "voicekeyerbase.h"
 
 class QComboBox;
@@ -33,9 +34,9 @@ enum VoiceKeyerId
 
 const QStringList keyerTypes = {"", "Voice RigControl", "CW RigControl", "SerialControl", "Internal", "mqtKeyer"};
 
-const QString VOICE_KEYER_PATH = "./Configuration/VoiceKeyer/";
+QString VOICE_KEYER_PATH();
 const QString VOICE_KEYER_BASE_FILE_NAME = "txVoiceMemory";
-const QString VOICEKEYER_COMMON_PARAMS_PATH = VOICE_KEYER_PATH + "CommonParams/";
+QString VOICEKEYER_COMMON_PARAMS_PATH();
 const QString VOICEKEYER_COMMON_PARAMS_FILENAME = "txVoiceKeyCommonParams.ini";
 const QString VOICEKEYER_COMMON_PARAMS_GROUPNAME = "commonParams";
 

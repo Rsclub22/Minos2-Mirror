@@ -5,6 +5,7 @@
 #include <QJsonArray>
 #include <QFile>
 #include "MShowMessageDlg.h"
+#include "fileutils.h"
 #include "profiles.h"
 #include "MTrace.h"
 
@@ -106,12 +107,12 @@ ScreenConfigFile::~ScreenConfigFile()
 }
 void ScreenConfigFile::loadFile(QWidget *parent)
 {
-    readFile("./Configuration/ScreenConfigs.json", parent);
+    readFile(getDirectoryLocation(dlConfiguration) + "/ScreenConfigs.json", parent);
     loaded = true;
 }
 bool ScreenConfigFile::dumpFile()
 {
-    return writeFile("./Configuration/ScreenConfigs.json");
+    return writeFile(getDirectoryLocation(dlConfiguration) + "/ScreenConfigs.json");
 }
 void ScreenConfigFile::procScreens(QVector<SCScreen> &elescr, QJsonArray &screens)
 {

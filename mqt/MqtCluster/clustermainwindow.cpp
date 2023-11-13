@@ -150,7 +150,7 @@ void ClusterMainWindow::doStartup()
 
 #ifdef TEST_SPOTS
 
-    if (FileExists(CLUSTER_PATH + CLUSTER_SPOT_TEST_FILE))
+    if (FileExists(CLUSTER_PATH() + CLUSTER_SPOT_TEST_FILE))
     {
         ui->testSpotsPb->setVisible(true);
         connect(ui->testSpotsPb, &QPushButton::clicked, this, &ClusterMainWindow::testSpotPbClicked);
@@ -192,7 +192,7 @@ void ClusterMainWindow::doStartup()
     dxClusterCommand = new ClusterCommands();
 
 
-    if (!FileExists(CLUSTER_SETTINGS_FILE))
+    if (!FileExists(CLUSTER_SETTINGS_FILE()))
     {
         // missing cluster settings file, create default
         setupCluster->createDefaultGeneralSettingsFile();
@@ -862,11 +862,11 @@ void ClusterMainWindow::handleStartFile()
 {
     if (ui->vhfScriptRadioButton->isChecked())
     {
-       handleCmdFile(CLUSTER_PATH + CLUSTER_START_FILE);
+        handleCmdFile(CLUSTER_PATH() + CLUSTER_START_FILE);
     }
     else if (ui->hfScriptRadioButton->isChecked())
     {
-       handleCmdFile(CLUSTER_PATH + CLUSTER_START_HF_FILE);
+        handleCmdFile(CLUSTER_PATH() + CLUSTER_START_HF_FILE);
     }
     else
     {
@@ -880,11 +880,11 @@ void ClusterMainWindow::handleEndFile()
 {
     if (ui->vhfScriptRadioButton->isChecked())
     {
-        handleCmdFile(CLUSTER_PATH + CLUSTER_END_FILE);
+        handleCmdFile(CLUSTER_PATH() + CLUSTER_END_FILE);
     }
     else if(ui->hfScriptRadioButton->isChecked())
     {
-        handleCmdFile(CLUSTER_PATH + CLUSTER_END_HF_FILE);
+        handleCmdFile(CLUSTER_PATH() + CLUSTER_END_HF_FILE);
     }
     else
     {
@@ -1483,7 +1483,7 @@ void ClusterMainWindow::handlePingClusterNodeTimeout()
 
 int ClusterMainWindow::getPingTimeoutValue()
 {
-    QSettings settings(CLUSTER_SETTINGS_FILE, QSettings::IniFormat);
+    QSettings settings(CLUSTER_SETTINGS_FILE(), QSettings::IniFormat);
     settings.beginGroup("PingTimeout");
     int timeout = settings.value("PingTimeout", 60000).toInt();
     settings.endGroup();
@@ -2432,7 +2432,7 @@ void ClusterMainWindow::userCommandAllButtonUpdate()
 
 void ClusterMainWindow::readUserCommandStrings()
 {
-    QSettings config(CLUSTER_PATH + CLUSTER_COMMANDS, QSettings::IniFormat);
+    QSettings config(CLUSTER_PATH() + CLUSTER_COMMANDS, QSettings::IniFormat);
 
     QStringList keys = config.childGroups();
     if (keys.contains("UserCommandStrings"))
@@ -2468,7 +2468,7 @@ void ClusterMainWindow::readUserCommandStrings()
 
 void ClusterMainWindow::updateToNewVhfUhfGroupKey()
 {
-    QSettings config(CLUSTER_PATH + CLUSTER_COMMANDS, QSettings::IniFormat);
+    QSettings config(CLUSTER_PATH() + CLUSTER_COMMANDS, QSettings::IniFormat);
 
     config.beginGroup("UserCommandStrings");
     QStringList keys = config.allKeys();
@@ -2510,7 +2510,7 @@ void ClusterMainWindow::updateToNewVhfUhfGroupKey()
 void ClusterMainWindow:: saveUserCommandString(QString tabSelected, int buttonNumber, ClusterUserCommandData& buttonData)
 {
 
-    QSettings config(CLUSTER_PATH + CLUSTER_COMMANDS, QSettings::IniFormat);
+    QSettings config(CLUSTER_PATH() + CLUSTER_COMMANDS, QSettings::IniFormat);
     if (tabSelected == VHF_UHF_USERCOMMAND_TABNAME)
     {
        config.beginGroup("VHF_UHF_UserCommandStrings");
@@ -2617,7 +2617,7 @@ void ClusterMainWindow::loadBandFilterSettingsToTab()
 
 void ClusterMainWindow::saveBandFilterSettings()
 {
-    QSettings config(CLUSTER_SETTINGS_FILE, QSettings::IniFormat);
+    QSettings config(CLUSTER_SETTINGS_FILE(), QSettings::IniFormat);
     config.beginGroup("DXSPOT_Display_BandFilter");
 
     for (auto const &b: qAsConst(bands))
@@ -2643,7 +2643,7 @@ void ClusterMainWindow::saveBandFilterSettings()
 
 void ClusterMainWindow::readBandFilterSettings()
 {
-    QSettings config(CLUSTER_SETTINGS_FILE, QSettings::IniFormat);
+    QSettings config(CLUSTER_SETTINGS_FILE(), QSettings::IniFormat);
     config.beginGroup("DXSPOT_Display_BandFilter");
     for (auto const &b: qAsConst(bands))
     {
@@ -2673,7 +2673,7 @@ void ClusterMainWindow::readBandFilterSettings()
 void ClusterMainWindow::saveStartEndScriptSettings()
 {
 
-    QSettings config(CLUSTER_SETTINGS_FILE, QSettings::IniFormat);
+    QSettings config(CLUSTER_SETTINGS_FILE(), QSettings::IniFormat);
     config.beginGroup("StartEndScript");
 
     if (ui->hfScriptRadioButton->isEnabled())
@@ -2695,7 +2695,7 @@ void ClusterMainWindow::saveStartEndScriptSettings()
 
 void ClusterMainWindow::readStartEndScriptSettings()
 {
-    QSettings config(CLUSTER_SETTINGS_FILE, QSettings::IniFormat);
+    QSettings config(CLUSTER_SETTINGS_FILE(), QSettings::IniFormat);
     config.beginGroup("StartEndScript");
 
     ui->hfScriptRadioButton->setChecked(config.value("hfScriptFileEnabled", false).toBool());
@@ -2727,7 +2727,7 @@ void ClusterMainWindow::setHfFilterControlsVisible()
 
 void ClusterMainWindow::saveEnableStartEndScriptFileFlags()
 {
-    QSettings config(CLUSTER_SETTINGS_FILE, QSettings::IniFormat);
+    QSettings config(CLUSTER_SETTINGS_FILE(), QSettings::IniFormat);
 
     config.beginGroup("CommandFile");
 
@@ -2747,7 +2747,7 @@ void ClusterMainWindow::saveEnableStartEndScriptFileFlags()
 
 void ClusterMainWindow::saveBandFilterOnSaveFlag()
 {
-    QSettings config(CLUSTER_SETTINGS_FILE, QSettings::IniFormat);
+    QSettings config(CLUSTER_SETTINGS_FILE(), QSettings::IniFormat);
 /*
     config.beginGroup("General");
     if (band)
@@ -2970,7 +2970,7 @@ void ClusterMainWindow::handleStatusTimer()
 
 bool ClusterMainWindow::getUseQrzForQraFlag()
 {
-    QSettings config(CLUSTER_SETTINGS_FILE, QSettings::IniFormat);
+    QSettings config(CLUSTER_SETTINGS_FILE(), QSettings::IniFormat);
     config.beginGroup("UseQRZServer");
     bool useQrzFlag =  config.value("enableGetQraFromQrz", false).toBool();
     config.endGroup();
@@ -3044,9 +3044,9 @@ void ClusterMainWindow::testSpotPbClicked()
     testSpotList.clear();
 
     // get list of test spots from file
-    if (FileExists(CLUSTER_PATH + CLUSTER_SPOT_TEST_FILE))
+    if (FileExists(CLUSTER_PATH() + CLUSTER_SPOT_TEST_FILE))
     {
-        QFile inputFile(CLUSTER_PATH + CLUSTER_SPOT_TEST_FILE);
+        QFile inputFile(CLUSTER_PATH() + CLUSTER_SPOT_TEST_FILE);
         if (inputFile.open(QIODevice::ReadOnly))
         {
            QTextStream in(&inputFile);

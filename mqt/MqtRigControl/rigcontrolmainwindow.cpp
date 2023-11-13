@@ -119,7 +119,7 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
         ui->supportBandsLabel->setText(tr("Minos Selected Bands"));
     }
 
-    QString fileName = RIG_CONFIGURATION_FILEPATH_LOGGER + MINOS_RADIO_CONFIG_FILE;
+    QString fileName = RIG_CONFIGURATION_FILEPATH_LOGGER() + MINOS_RADIO_CONFIG_FILE;
     QSettings config(fileName, QSettings::IniFormat);
 
     rigStateDetails->mgmModes = config.value("MGM_Modes/MgmModes", "").toStringList();
@@ -709,7 +709,7 @@ void RigControlMainWindow::upDateRadio(QString radioName)
 bool RigControlMainWindow::availRadiosContains(const QString radioName)
 {
 
-    QString fileName = RADIO_PATH_LOGGER + FILENAME_AVAIL_RADIOS;
+    QString fileName = RADIO_PATH_LOGGER() + FILENAME_AVAIL_RADIOS;
     QSettings  settings(fileName, QSettings::IniFormat);
 
     return settings.childGroups().contains(radioName);
@@ -1417,7 +1417,7 @@ int RigControlMainWindow::openRadio()
     if (rigStateDetails->rigCap.rigModelNumber == RIG_MODEL_FT817 || rigStateDetails->rigCap.rigModelNumber == RIG_MODEL_FT818)
     {
 
-        QString fileName = RADIO_PATH_LOGGER + MINOS_RADIO_CONFIG_FILE;
+        QString fileName = RADIO_PATH_LOGGER() + MINOS_RADIO_CONFIG_FILE;
         QSettings  settings(fileName, QSettings::IniFormat);
         settings.beginGroup(currentRadio.radioName);
         QString retryValue = settings.value("retry", DEFAULT_FT817_RADIO_RETRY).toString();
@@ -2629,11 +2629,11 @@ void RigControlMainWindow::getRigCtldConnectDelay()
     QString fileName;
     if (appName.isEmpty())
     {
-        fileName = RIG_CONFIGURATION_FILEPATH_LOCAL + MINOS_RADIO_CONFIG_FILE;
+        fileName = RIG_CONFIGURATION_FILEPATH_LOCAL() + MINOS_RADIO_CONFIG_FILE;
     }
     else
     {
-        fileName = RIG_CONFIGURATION_FILEPATH_LOGGER + MINOS_RADIO_CONFIG_FILE;
+        fileName = RIG_CONFIGURATION_FILEPATH_LOGGER() + MINOS_RADIO_CONFIG_FILE;
     }
 
 
@@ -3803,11 +3803,11 @@ bool RigControlMainWindow::readTestStandAloneFlag()
     QString fileName;
     if (appName.isEmpty())
     {
-        fileName = RIG_CONFIGURATION_FILEPATH_LOCAL + MINOS_RADIO_CONFIG_FILE;
+       fileName = RIG_CONFIGURATION_FILEPATH_LOCAL() + MINOS_RADIO_CONFIG_FILE;
     }
     else
     {
-        fileName = RIG_CONFIGURATION_FILEPATH_LOGGER + MINOS_RADIO_CONFIG_FILE;
+       fileName = RIG_CONFIGURATION_FILEPATH_LOGGER() + MINOS_RADIO_CONFIG_FILE;
     }
 
 
@@ -3829,11 +3829,11 @@ void RigControlMainWindow::readTraceLogFlag()
     QString fileName;
     if (appName.isEmpty())
     {
-        fileName = RIG_CONFIGURATION_FILEPATH_LOCAL + MINOS_RADIO_CONFIG_FILE;
+       fileName = RIG_CONFIGURATION_FILEPATH_LOCAL() + MINOS_RADIO_CONFIG_FILE;
     }
     else
     {
-        fileName = RIG_CONFIGURATION_FILEPATH_LOGGER + MINOS_RADIO_CONFIG_FILE;
+       fileName = RIG_CONFIGURATION_FILEPATH_LOGGER() + MINOS_RADIO_CONFIG_FILE;
     }
 
 
@@ -3868,11 +3868,11 @@ void RigControlMainWindow::saveTraceLogFlag(bool state)
     QString fileName;
     if (appName.isEmpty())
     {
-        fileName = RIG_CONFIGURATION_FILEPATH_LOCAL + MINOS_RADIO_CONFIG_FILE;
+        fileName = RIG_CONFIGURATION_FILEPATH_LOCAL() + MINOS_RADIO_CONFIG_FILE;
     }
     else
     {
-        fileName = RIG_CONFIGURATION_FILEPATH_LOGGER + MINOS_RADIO_CONFIG_FILE;
+        fileName = RIG_CONFIGURATION_FILEPATH_LOGGER() + MINOS_RADIO_CONFIG_FILE;
     }
 
     QSettings config(fileName, QSettings::IniFormat);
@@ -4216,7 +4216,7 @@ void RigControlMainWindow::onConfigureRigctld()
 void RigControlMainWindow::readCurrentRadio(QString &currentRadioName)
 {
 
-    QString fileName = RADIO_PATH_LOGGER + appName + FILENAME_CURRENT_RADIO;
+    QString fileName = RADIO_PATH_LOGGER() + appName + FILENAME_CURRENT_RADIO;
     QSettings config(fileName, QSettings::IniFormat);
 
     config.beginGroup("CurrentRadio");
@@ -4228,7 +4228,7 @@ void RigControlMainWindow::readCurrentRadio(QString &currentRadioName)
 
 void RigControlMainWindow::saveCurrentRadio(const QString currentRadioName)
 {
-    QString fileName = RADIO_PATH_LOGGER + appName + FILENAME_CURRENT_RADIO;
+    QString fileName = RADIO_PATH_LOGGER() + appName + FILENAME_CURRENT_RADIO;
     QSettings config(fileName, QSettings::IniFormat);
 
 
@@ -4249,7 +4249,7 @@ void RigControlMainWindow::getRadioConfigData(scatParams *radioData, QString rad
 {
 
 
-    QString fileName = RADIO_PATH_LOGGER + FILENAME_AVAIL_RADIOS;
+    QString fileName = RADIO_PATH_LOGGER() + FILENAME_AVAIL_RADIOS;
     QSettings  config(fileName, QSettings::IniFormat);
 
     config.beginGroup(radioName);
@@ -4314,7 +4314,7 @@ void RigControlMainWindow::getRadioConfigData(scatParams *radioData, QString rad
     config.endGroup();
 
     // now read transverter settings
-    QString fileNameTransVert = TRANSVERT_PATH_LOGGER + radioData->radioName + FILENAME_TRANSVERT_RADIOS;
+    QString fileNameTransVert = TRANSVERT_PATH_LOGGER() + radioData->radioName + FILENAME_TRANSVERT_RADIOS;
     QSettings  configTransVert(fileNameTransVert, QSettings::IniFormat);
 
     QStringList tvList = configTransVert.childGroups();
@@ -4363,7 +4363,7 @@ QString RigControlMainWindow::getRigCtldExeName()
 #endif
 
     QString fileName;
-    fileName = RIG_CONFIGURATION_FILEPATH_LOGGER + MINOS_RADIO_CONFIG_FILE;
+    fileName = RIG_CONFIGURATION_FILEPATH_LOGGER() + MINOS_RADIO_CONFIG_FILE;
     QSettings  settings(fileName, QSettings::IniFormat);
     settings.beginGroup(RIGCTLD_GROUP_NAME);
 
@@ -4381,7 +4381,7 @@ QString RigControlMainWindow::getRigCtldExeName()
 QString RigControlMainWindow::getRigCtldExePath()
 {
     QString fileName;
-    fileName = RIG_CONFIGURATION_FILEPATH_LOGGER + MINOS_RADIO_CONFIG_FILE;
+    fileName = RIG_CONFIGURATION_FILEPATH_LOGGER() + MINOS_RADIO_CONFIG_FILE;
     QSettings  settings(fileName, QSettings::IniFormat);
     settings.beginGroup(RIGCTLD_GROUP_NAME);
 
@@ -4411,7 +4411,7 @@ QString RigControlMainWindow::getRigCtldExePath()
 void RigControlMainWindow::setRigCtldExePath(const QString &path)
 {
     QString fileName;
-    fileName = RIG_CONFIGURATION_FILEPATH_LOGGER + MINOS_RADIO_CONFIG_FILE;
+    fileName = RIG_CONFIGURATION_FILEPATH_LOGGER() + MINOS_RADIO_CONFIG_FILE;
     QSettings  settings(fileName, QSettings::IniFormat);
     settings.beginGroup(RIGCTLD_GROUP_NAME);
 
@@ -4424,7 +4424,7 @@ void RigControlMainWindow::setRigCtldExePath(const QString &path)
 void RigControlMainWindow::setRigCtldExeName(const QString &progname)
 {
     QString fileName;
-    fileName = RIG_CONFIGURATION_FILEPATH_LOGGER + MINOS_RADIO_CONFIG_FILE;
+    fileName = RIG_CONFIGURATION_FILEPATH_LOGGER() + MINOS_RADIO_CONFIG_FILE;
     QSettings  settings(fileName, QSettings::IniFormat);
     settings.beginGroup(RIGCTLD_GROUP_NAME);
 
@@ -4437,7 +4437,7 @@ void RigControlMainWindow::setRigCtldExeName(const QString &progname)
 
 void RigControlMainWindow::getAvailRadiosList(QStringList &availRadios)
 {
-    QString fileName = RADIO_PATH_LOGGER + FILENAME_AVAIL_RADIOS;
+    QString fileName = RADIO_PATH_LOGGER() + FILENAME_AVAIL_RADIOS;
     QSettings  settings(fileName, QSettings::IniFormat);
     availRadios = settings.childGroups();
     for (int i = 0; i < availRadios.count(); i++)
@@ -4454,7 +4454,7 @@ void RigControlMainWindow::getAvailRadiosList(QStringList &availRadios)
 void RigControlMainWindow::checkIniFileVersion()
 {
 
-    QString fileName = RADIO_PATH_LOGGER + FILENAME_AVAIL_RADIOS;
+    QString fileName = RADIO_PATH_LOGGER() + FILENAME_AVAIL_RADIOS;
     QSettings  settings(fileName, QSettings::IniFormat);
 
     QStringList availRadios = settings.childGroups();
@@ -4474,7 +4474,7 @@ void RigControlMainWindow::checkIniFileVersion()
         if (version != "2")
         {
             mShowMessage(tr("The Radio configuration files in %1 are from an old incompatible version of Minos.\r\n\r\n"
-                         "Please delete them and set up the radios again").arg(RADIO_PATH_LOGGER), parentWidget());
+                            "Please delete them and set up the radios again").arg(RADIO_PATH_LOGGER()), parentWidget());
             exit(10);
         }
 

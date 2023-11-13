@@ -118,15 +118,15 @@ const QString BEARINGLOG_FILETYPE = ".log";
 
 const QString LOCAL_ANTENNA = "Local";
 
-const QString CONFIGURATION_FILEPATH_LOGGER = "./Configuration/";
-const QString CONFIGURATION_FILEPATH_LOCAL = "./Configuration/";
+QString CONFIGURATION_FILEPATH_LOGGER();
+QString CONFIGURATION_FILEPATH_LOCAL();
 
 const QString MINOS_ROTATOR_CONFIG_FILE = "MinosRotatorConfig.ini";
 //const QString ROTATOR_DATA_FILE = "rotators.ini";
-const QString PST_CONFIG_FILE = "./Configuration/PSTConfig.ini";
+QString PST_CONFIG_FILE();
 
-const QString ANTENNA_PATH_LOGGER = "./Configuration/Antenna/";
-const QString ANTENNA_PATH_LOCAL = "./Configuration/Antenna/";
+QString ANTENNA_PATH_LOGGER();
+QString ANTENNA_PATH_LOCAL();
 const QString FILENAME_AVAIL_ANTENNAS = "AvailAntenna.ini";
 const QString FILENAME_CURRENT_ANTENNA = "CurrentAntenna.ini";
 

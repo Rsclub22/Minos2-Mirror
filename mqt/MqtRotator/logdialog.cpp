@@ -16,6 +16,7 @@
 #include <QSettings>
 #include <QKeyEvent>
 
+#include "fileutils.h"
 #include "logdialog.h"
 #include "ui_logdialog.h"
 
@@ -41,7 +42,7 @@ LogDialog::~LogDialog()
 
 void LogDialog::on_logDirBrowsePb_clicked()
 {
-    QString dir = QFileDialog::getExistingDirectory(nullptr, tr("Select Bearing Log Folder"), "./Configuration/BearingLog");
+    QString dir = QFileDialog::getExistingDirectory(nullptr, tr("Select Bearing Log Folder"), getDirectoryLocation(dlConfiguration) + "/BearingLog");
     if (dir != directory)
     {
         directory = dir;
@@ -70,7 +71,7 @@ void LogDialog:: saveLogConfig()
 {
 
     bool changed = false;
-    QSettings config("./Configuration/MinosRotatorConfig.ini", QSettings::IniFormat);
+    QSettings config(getDirectoryLocation(dlConfiguration) + "/MinosRotatorConfig.ini", QSettings::IniFormat);
     config.beginGroup("BearingLog");
     if (dirChanged)
     {
@@ -111,7 +112,7 @@ void LogDialog:: saveLogConfig()
 
 void LogDialog::readLogConfig()
 {
-    QSettings config("./Configuration/MinosRotatorConfig.ini", QSettings::IniFormat);
+    QSettings config(getDirectoryLocation(dlConfiguration) + "/MinosRotatorConfig.ini", QSettings::IniFormat);
     config.beginGroup("BearingLog");
 
     directory = config.value("directory", "./BearingLog").toString();

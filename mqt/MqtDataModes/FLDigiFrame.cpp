@@ -36,7 +36,7 @@ void FLDigiFrame::createProcess()
     connect (fldigiProcess, &QProcess::readyReadStandardError, this, &FLDigiFrame::on_readyReadStandardError);
     connect (fldigiProcess, &QProcess::readyReadStandardOutput, this, &FLDigiFrame::on_readyReadStandardOutput);
 
-    QString configDir = "./Configuration/DataModes/" + engineName;
+    QString configDir = getDirectoryLocation(dlConfiguration) + "/DataModes/" + engineName;
     CreateDir(configDir);
     QDir dir( configDir );
     QStringList engineOpts = {

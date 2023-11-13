@@ -1,5 +1,6 @@
 #include <QFileInfo>
 #include <QFileDialog>
+#include "fileutils.h"
 #include "regsettings.h"
 #include "ContestApp.h"
 #include "tlogcontainer.h"
@@ -277,7 +278,7 @@ void TSessionManager::on_AddEntryButton_clicked()
     //- need to put up a file selection dialog
     // AND we want it to be multiselect
 
-    QString InitialDir = LogContainer->getDefaultDirectory( false );
+    QString InitialDir = getDirectoryLocation(dlLogs);
 
     QFileInfo qf(InitialDir);
 

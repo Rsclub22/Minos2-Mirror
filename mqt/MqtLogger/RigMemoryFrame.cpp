@@ -2,6 +2,7 @@
 #include "LoggerContest.h"
 #include "MMessageDialog.h"
 #include "MShowMessageDlg.h"
+#include "fileutils.h"
 #include "tlogcontainer.h"
 #include "SendRPCDM.h"
 #include "tsinglelogframe.h"
@@ -174,7 +175,7 @@ void RigMemoryFrame::viewColumn()
         }
         else
         {
-            QString fname("./Configuration/LoggerTableHeaders.ini");
+            QString fname(getDirectoryLocation(dlConfiguration) + "/LoggerTableHeaders.ini");
             resetHeaderColumns(fname, "RigMemTable", tslf->getCurScreenLayout(), ui->rigMemTable->horizontalHeader());
         }
     }
@@ -184,7 +185,7 @@ void RigMemoryFrame::saveRigMemTableColumns()
 {
     if (!inRestoreColumns && !suppressSaveColumns)
     {
-        QString fname("./Configuration/LoggerTableHeaders.ini");
+        QString fname(getDirectoryLocation(dlConfiguration) + "/LoggerTableHeaders.ini");
         saveHeaderColumns(fname, "RigMemTable", tslf->getCurScreenLayout(), ui->rigMemTable->horizontalHeader());
 
         //And we need to send this out to all other instances
@@ -196,7 +197,7 @@ void RigMemoryFrame::saveRigMemTableColumns()
 void RigMemoryFrame::restoreRigMemTableColumns()
 {
     inRestoreColumns = true;
-    QString fname("./Configuration/LoggerTableHeaders.ini");
+    QString fname(getDirectoryLocation(dlConfiguration) + "/LoggerTableHeaders.ini");
     restoreHeaderColumns(fname, "RigMemTable", tslf->getCurScreenLayout(), ui->rigMemTable->horizontalHeader());
     inRestoreColumns = false;
 }

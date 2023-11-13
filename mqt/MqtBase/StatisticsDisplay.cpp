@@ -1,4 +1,5 @@
 #include <QSettings>
+#include "fileutils.h"
 #include "regsettings.h"
 #include "contacts.h"
 #include "contest.h"
@@ -309,7 +310,7 @@ void StatisticsDisplay::viewColumn()
         }
         else
         {
-            QString fname("./Configuration/LoggerTableHeaders.ini");
+            QString fname(getDirectoryLocation(dlConfiguration) + "/LoggerTableHeaders.ini");
             resetHeaderColumns(fname, "StatisticsTable", getIniKey(), ui->StatsTable->horizontalHeader());
         }
     }
@@ -323,14 +324,14 @@ void StatisticsDisplay::saveStatisticsTableColumns()
 {
     if (!inRestoreColumns)
     {
-        QString fname("./Configuration/LoggerTableHeaders.ini");
+        QString fname(getDirectoryLocation(dlConfiguration) + "/LoggerTableHeaders.ini");
         saveHeaderColumns(fname, "StatisticsTable", getIniKey(), ui->StatsTable->horizontalHeader());
     }
 }
 void StatisticsDisplay::restoreStatisticsTableColumns()
 {
     inRestoreColumns = true;
-    QString fname("./Configuration/LoggerTableHeaders.ini");
+    QString fname(getDirectoryLocation(dlConfiguration) + "/LoggerTableHeaders.ini");
     restoreHeaderColumns(fname, "StatisticsTable", getIniKey(), ui->StatsTable->horizontalHeader());
     inRestoreColumns = false;
 }

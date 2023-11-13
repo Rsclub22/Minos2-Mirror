@@ -1,5 +1,6 @@
 #include "rigcontrolcommonconstants.h"
 #include "BandList.h"
+#include "fileutils.h"
 
 const char * RIG_STATUS_CONNECTED = "Connected";
 const char * RIG_STATUS_DISCONNECTED = "Disconnected";
@@ -237,7 +238,7 @@ bool PresetFreq::contains(QString mode, QString band)
 
 void PresetFreq::readSettings(const QVector<QSharedPointer<BandInfo> > &bands)
 {
-    QString fileName = RADIO_PATH_LOGGER + FILENAME_FREQ_PRESETS;
+    QString fileName = RADIO_PATH_LOGGER() + FILENAME_FREQ_PRESETS;
     QSettings config(fileName, QSettings::IniFormat);
     clear();
 
@@ -347,7 +348,7 @@ void PresetFreq::readSettings(const QVector<QSharedPointer<BandInfo> > &bands)
 
 QString readBandSwitchDataFromIni(QString band)
 {
-    QString fileName = BANDSWITCH_INI_FILENAME;
+    QString fileName = BANDSWITCH_INI_FILENAME();
     QString iniBand = band;
     iniBand = BandInfo::normalise (iniBand);
     QSettings config(fileName, QSettings::IniFormat);
@@ -358,7 +359,7 @@ QString readBandSwitchDataFromIni(QString band)
 
 void writeBandSwitchDataToIni(QString band, QString data)
 {
-    QString fileName = BANDSWITCH_INI_FILENAME;
+    QString fileName = BANDSWITCH_INI_FILENAME();
     QString iniBand = band;
     iniBand = BandInfo::normalise (iniBand);
     QSettings config(fileName, QSettings::IniFormat);
@@ -368,7 +369,7 @@ void writeBandSwitchDataToIni(QString band, QString data)
 
 bool readEnableBandSwitchFromIni()
 {
-    QString fileName = BANDSWITCH_INI_FILENAME;
+    QString fileName = BANDSWITCH_INI_FILENAME();
 
     QSettings config(fileName, QSettings::IniFormat);
     bool value = config.value(BANDSWITCH_ENABLE_KEY_TEXT, false).toBool();
@@ -378,7 +379,7 @@ bool readEnableBandSwitchFromIni()
 
 void writeEnableBandSwitchDataToIni(bool data)
 {
-    QString fileName = BANDSWITCH_INI_FILENAME;
+    QString fileName = BANDSWITCH_INI_FILENAME();
 
     QSettings config(fileName, QSettings::IniFormat);
     config.setValue(BANDSWITCH_ENABLE_KEY_TEXT, data);
@@ -386,7 +387,7 @@ void writeEnableBandSwitchDataToIni(bool data)
 
 bool readEnableSerialBandSwitchFromIni()
 {
-    QString fileName = BANDSWITCH_INI_FILENAME;
+    QString fileName = BANDSWITCH_INI_FILENAME();
 
     QSettings config(fileName, QSettings::IniFormat);
     bool value = config.value(BANDSWITCH_SERIAL_ENABLE_KEY_TEXT, false).toBool();
@@ -396,7 +397,7 @@ bool readEnableSerialBandSwitchFromIni()
 
 void writeEnableSerialBandSwitchDataToIni(bool data)
 {
-    QString fileName = BANDSWITCH_INI_FILENAME;
+    QString fileName = BANDSWITCH_INI_FILENAME();
 
     QSettings config(fileName, QSettings::IniFormat);
     config.setValue(BANDSWITCH_SERIAL_ENABLE_KEY_TEXT, data);
@@ -405,7 +406,7 @@ void writeEnableSerialBandSwitchDataToIni(bool data)
 
 QString readSerialComportBandSwitchFromIni()
 {
-    QString fileName = BANDSWITCH_INI_FILENAME;
+    QString fileName = BANDSWITCH_INI_FILENAME();
 
     QSettings config(fileName, QSettings::IniFormat);
     QString value = config.value(BANDSWITCH_COMPORT_KEY_TEXT, "").toString();
@@ -415,10 +416,44 @@ QString readSerialComportBandSwitchFromIni()
 
 void writeSerialComportBandSwitchDataToIni(QString comport)
 {
-    QString fileName = BANDSWITCH_INI_FILENAME;
+    QString fileName = BANDSWITCH_INI_FILENAME();
 
     QSettings config(fileName, QSettings::IniFormat);
     config.setValue(BANDSWITCH_COMPORT_KEY_TEXT, comport);
 }
 
 
+
+QString RIG_CONFIGURATION_FILEPATH_LOGGER()
+{
+    return getDirectoryLocation(dlConfiguration);
+}
+QString RIG_CONFIGURATION_FILEPATH_LOCAL()
+{
+    return getDirectoryLocation(dlConfiguration);
+}
+
+QString BANDSWITCH_INI_FILENAME()
+{
+    return getDirectoryLocation(dlConfiguration) + "/BandSwitchData.ini";
+}
+
+QString TRANSVERT_PATH_LOCAL()
+{
+    return getDirectoryLocation(dlConfiguration) + "/Radio/Transverter/";
+}
+
+QString TRANSVERT_PATH_LOGGER()
+{
+    return getDirectoryLocation(dlConfiguration) + "/Radio/Transverter/";
+}
+
+QString RADIO_PATH_LOCAL()
+{
+    return getDirectoryLocation(dlConfiguration) + "/Radio/";
+}
+
+QString RADIO_PATH_LOGGER()
+{
+    return getDirectoryLocation(dlConfiguration) + "/Radio/";
+}

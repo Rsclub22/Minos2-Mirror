@@ -10,6 +10,7 @@
 #include "cutils.h"
 #include "contacts.h"
 #include "MultsImpl.h"
+#include "fileutils.h"
 
 
 //============================================================================
@@ -61,7 +62,7 @@ GlistList::~GlistList()
 {}
 void GlistList::load( )
 {
-   loadEntries( "./Configuration/prefix.syn", tr("prefix synonyms file") );
+   loadEntries( getDirectoryLocation(dlConfiguration) + "/prefix.syn", tr("prefix synonyms file") );
 }
 bool GlistList::procLine( QStringList a )
 {
@@ -210,7 +211,7 @@ int DistrictList::slen( bool longver )
 }
 void DistrictList::load( )
 {
-   loadEntries( "./Configuration/district.ctl", "District Control File" );
+   loadEntries( getDirectoryLocation(dlConfiguration) + "/district.ctl", "District Control File" );
 }
 bool DistrictList::procLine(QStringList a )
 {
@@ -242,7 +243,7 @@ DistrictSynonymList::~DistrictSynonymList()
 
 void DistrictSynonymList::load( )
 {
-   loadEntries( "./Configuration/DISTRICT.SYN", "District Synonym File" );
+   loadEntries( getDirectoryLocation(dlConfiguration) + "/DISTRICT.SYN", "District Synonym File" );
 }
 bool DistrictSynonymList::procLine( QStringList a )
 {
@@ -485,7 +486,7 @@ int CountryList::slen( bool )
 }
 void CountryList::load( )
 {
-   loadEntries( "./Configuration/cty.dat", tr("CT9 Country File" ));
+   loadEntries( getDirectoryLocation(dlConfiguration) + "/cty.dat", tr("CT9 Country File" ));
 }
 bool CountryList::procLine(QStringList )
 {
@@ -713,7 +714,7 @@ CountrySynonymList::~CountrySynonymList()
 }
 void CountrySynonymList::load( )
 {
-   loadEntries( "./Configuration/cty.syn", tr("Country Synonym File") );
+   loadEntries( getDirectoryLocation(dlConfiguration) + "/cty.syn", tr("Country Synonym File") );
 }
 bool CountrySynonymList::procLine( QStringList a )
 {

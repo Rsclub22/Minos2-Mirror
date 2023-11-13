@@ -66,7 +66,7 @@ void RigSetupDialog::initSetup()
 
     // radio settings ini file
     QString fileName;
-    fileName = RADIO_PATH_LOGGER + FILENAME_AVAIL_RADIOS;
+    fileName = RADIO_PATH_LOGGER() + FILENAME_AVAIL_RADIOS;
     QSettings  settings(fileName, QSettings::IniFormat);
 
     // get current settings
@@ -88,7 +88,7 @@ void RigSetupDialog::initSetup()
 
         // find transverters
 
-        QString fileName = TRANSVERT_PATH_LOGGER + availRadios[i] + FILENAME_TRANSVERT_RADIOS;
+        QString fileName = TRANSVERT_PATH_LOGGER() + availRadios[i] + FILENAME_TRANSVERT_RADIOS;
         QSettings  configTransvert(fileName, QSettings::IniFormat);
 
         QStringList listOfTransverters = configTransvert.childGroups();  // get transvert names for this radio
@@ -853,7 +853,7 @@ void RigSetupDialog::saveSettings()
 
     QString fileNameTransVert;
 
-    QString fileNameRadio = RADIO_PATH_LOGGER + FILENAME_AVAIL_RADIOS;
+    QString fileNameRadio = RADIO_PATH_LOGGER() + FILENAME_AVAIL_RADIOS;
     QSettings configRadio(fileNameRadio, QSettings::IniFormat);
 
     // ensure this is a version 2 ini file
@@ -876,7 +876,7 @@ void RigSetupDialog::saveSettings()
                 configRadio.remove("");      // remove all keys for this group
                 configRadio.endGroup();
                 // remove transverters for this radio
-                fileNameTransVert = TRANSVERT_PATH_LOGGER + availRadioData.value(k)->previousRadioName + FILENAME_TRANSVERT_RADIOS;
+                fileNameTransVert = TRANSVERT_PATH_LOGGER() + availRadioData.value(k)->previousRadioName + FILENAME_TRANSVERT_RADIOS;
                 if (QFile::exists(fileNameTransVert))
                 {
                     QFile::remove(fileNameTransVert);
@@ -899,7 +899,7 @@ void RigSetupDialog::saveSettings()
             configRadio.remove("");      // remove all keys for this group
             configRadio.endGroup();
             // remove transverters for this radio
-            fileNameTransVert = TRANSVERT_PATH_LOGGER + k + FILENAME_TRANSVERT_RADIOS;
+            fileNameTransVert = TRANSVERT_PATH_LOGGER() + k + FILENAME_TRANSVERT_RADIOS;
             if (QFile::exists(fileNameTransVert))
             {
                 QFile::remove(fileNameTransVert);
@@ -918,7 +918,7 @@ void RigSetupDialog::saveSettings()
     for (const auto &k: qAsConst(lk))
     {
         QString fileName;
-        fileName = RADIO_PATH_LOGGER + FILENAME_AVAIL_RADIOS;
+        fileName = RADIO_PATH_LOGGER() + FILENAME_AVAIL_RADIOS;
         QSettings  settings(fileName, QSettings::IniFormat);
 
         QSharedPointer<scatParams> savedRadioData = QSharedPointer<scatParams>(new scatParams());
@@ -935,7 +935,7 @@ void RigSetupDialog::saveSettings()
 
         QStringList tvKeys = availRadioData.value(k)->transVertSettings.keys();
 
-        fileName = TRANSVERT_PATH_LOGGER + k + FILENAME_TRANSVERT_RADIOS;
+        fileName = TRANSVERT_PATH_LOGGER() + k + FILENAME_TRANSVERT_RADIOS;
         QSettings  configTransvert(fileName, QSettings::IniFormat);
         QStringList iniTvKey = configTransvert.childGroups();
 
@@ -1112,7 +1112,7 @@ void RigSetupDialog::getRadioSetting(QSharedPointer<scatParams> radioData, QStri
 
     // now read transverter settings
     QString fileNameTransVert;
-    fileNameTransVert = TRANSVERT_PATH_LOGGER + radioData->radioName + FILENAME_TRANSVERT_RADIOS;
+    fileNameTransVert = TRANSVERT_PATH_LOGGER() + radioData->radioName + FILENAME_TRANSVERT_RADIOS;
     QSettings  configTransVert(fileNameTransVert, QSettings::IniFormat);
 
     QStringList tvList = configTransVert.childGroups();

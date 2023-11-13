@@ -1582,7 +1582,7 @@ void WsjtxFrame::viewColumn()
         else
         {
             TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
-            QString fname("./Configuration/LoggerTableHeaders.ini");
+            QString fname(getDirectoryLocation(dlConfiguration) + "/LoggerTableHeaders.ini");
             resetHeaderColumns(fname, "WSJTXDecodesTable", tslf->getCurScreenLayout(), ui->decodes_table_view_->horizontalHeader());
         }
     }
@@ -1592,7 +1592,7 @@ void WsjtxFrame::saveWSJTXTableColumns()
 {
     if (!inRestoreColumns && firstRestoreDone)
     {
-        QString fname("./Configuration/LoggerTableHeaders.ini");
+        QString fname(getDirectoryLocation(dlConfiguration) + "/LoggerTableHeaders.ini");
         saveHeaderColumns(fname, "WSJTXDecodesTable", tslf->getCurScreenLayout(), ui->decodes_table_view_->horizontalHeader());
         MinosLoggerEvents::SendColumnsChanged();
     }
@@ -1600,7 +1600,7 @@ void WsjtxFrame::saveWSJTXTableColumns()
 void WsjtxFrame::restoreWSJTXTableColumns()
 {
     inRestoreColumns = true;
-    QString fname("./Configuration/LoggerTableHeaders.ini");
+    QString fname(getDirectoryLocation(dlConfiguration) + "/LoggerTableHeaders.ini");
     restoreHeaderColumns(fname, "WSJTXDecodesTable", tslf->getCurScreenLayout(), ui->decodes_table_view_->horizontalHeader());
     inRestoreColumns = false;
     firstRestoreDone = true;

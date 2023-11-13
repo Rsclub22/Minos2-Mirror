@@ -22,4 +22,18 @@ qint64 FileLength(const QString &fname);
 
 QString GetCleanPath(QString);
 
+enum DirectoryLocation {dlBinaries
+                         ,dlTranslations
+                         ,dlConfiguration
+                         ,dlLists
+                         ,dlLogs
+                         ,dlHelp
+                         ,dlDocs
+                         ,dlTraceLog
+                         ,dlQRZDB
+};
+
+QString getDirectoryLocation(DirectoryLocation, QString runDir = ".");
+void setDefLogDir(QString l);
+void setDefListDir(QString l);
 #endif // FILEUTILS_H

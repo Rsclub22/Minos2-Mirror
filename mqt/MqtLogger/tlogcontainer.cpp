@@ -231,6 +231,9 @@ TLogContainer::TLogContainer(QWidget *parent) :
     // we may need to delay this to get the container fully constructed
     TContestApp::getContestApp(); // initialise all the infrastructure
 
+    setDefLogDir(getDefaultDirectory(false));
+    setDefListDir(getDefaultDirectory(true));
+
     // make the tab control fill the window
     ui->centralWidget->layout()->setContentsMargins(0,0,0,0);
 
@@ -981,7 +984,7 @@ void TLogContainer::onSetMemoryActionExecute()
 }
 void TLogContainer::FileNewActionExecute(bool hf)
 {
-    QString InitialDir = getDefaultDirectory( false );
+    QString InitialDir = getDirectoryLocation(dlLogs);
 
     QFileInfo qf(InitialDir);
 
@@ -1124,7 +1127,7 @@ void TLogContainer::FileOpenActionExecute()
 {
     // first choose file
 //"Images (*.png *.xpm *.jpg);;Text files (*.txt);;XML files (*.xml)"
-    QString InitialDir = getDefaultDirectory( false );
+    QString InitialDir = getDirectoryLocation(dlLogs);
 
     QFileInfo qf(InitialDir);
 
@@ -1166,7 +1169,7 @@ void TLogContainer::FileImportActionExecute(bool hf)
 {
     // first choose file
 //"Images (*.png *.xpm *.jpg);;Text files (*.txt);;XML files (*.xml)"
-    QString InitialDir = getDefaultDirectory( false );
+    QString InitialDir = getDirectoryLocation(dlLogs);
 
     QFileInfo qf(InitialDir);
 
@@ -1370,7 +1373,7 @@ void TLogContainer::AppendAdifActionExecute()
     if (!ct)
         return;
 
-    QString InitialDir = getDefaultDirectory( false );
+    QString InitialDir = getDirectoryLocation(dlLogs);
 
     QFileInfo qf(InitialDir);
 
@@ -1453,7 +1456,7 @@ void TLogContainer::LocCalcActionExecute()
 }
 void TLogContainer::AnalyseMinosLogActionExecute()
 {
-    QString InitialDir = getDefaultDirectory( false );
+    QString InitialDir = getDirectoryLocation(dlLogs);
 
     QFileInfo qf(InitialDir);
 
@@ -2199,7 +2202,7 @@ void TLogContainer::doListOpenActionExecute(QWidget *p)
 {
     // first choose file
 
-    QString InitialDir = getDefaultDirectory( true );
+    QString InitialDir = getDirectoryLocation(dlLists);
 
     QFileInfo qf(InitialDir);
 

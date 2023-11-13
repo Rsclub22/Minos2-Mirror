@@ -102,7 +102,7 @@ void TxVmButtonsFrame::initTxVmButtonFrame()
     setVoiceNumMemButtonsVisible(0);
 
 
-    QString fileName = VOICEKEYER_COMMON_PARAMS_PATH + VOICEKEYER_COMMON_PARAMS_FILENAME;
+    QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + VOICEKEYER_COMMON_PARAMS_FILENAME;
     QSettings config(fileName, QSettings::IniFormat);
     config.beginGroup(VOICEKEYER_COMMON_PARAMS_GROUPNAME);
 
@@ -261,7 +261,7 @@ void TxVmButtonsFrame::onVoiceKeyerSelect(int idx)
     QString voiceKeyerName = ui->voiceKeyerSelect->currentText();
     trace(QString("keyer select name = %1").arg( ui->voiceKeyerSelect->currentText()));
 
-    QString fileName = VOICEKEYER_COMMON_PARAMS_PATH + VOICEKEYER_COMMON_PARAMS_FILENAME;
+    QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + VOICEKEYER_COMMON_PARAMS_FILENAME;
     QSettings config(fileName, QSettings::IniFormat);
     config.beginGroup(VOICEKEYER_COMMON_PARAMS_GROUPNAME);
 

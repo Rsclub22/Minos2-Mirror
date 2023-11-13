@@ -328,8 +328,6 @@ void TCalendarForm::downloadFiles()
         return;
     }
 
-   // QString fpath = "./Configuration";
-
     int fileCount = 0;
 
     QVector<QSharedPointer<CalendarYear> > yearList;

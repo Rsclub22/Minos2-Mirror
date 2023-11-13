@@ -154,7 +154,7 @@ KeyerMain::KeyerMain(QWidget *parent) :
 
     createCloseEvent();
 
-    QSettings keyerSettings( GetCurrentDir() + "/Configuration/MixerSettings.ini" , QSettings::IniFormat ) ;
+    QSettings keyerSettings( getDirectoryLocation(dlConfiguration) + "/MixerSettings.ini" , QSettings::IniFormat ) ;
     QString alsaFileName = keyerSettings.value("AlsaCtlFile", "AlsaCtlFile.txt").toString();
     ui->setupScriptEdit->setText(alsaFileName);
 
@@ -231,7 +231,7 @@ KeyerMain::KeyerMain(QWidget *parent) :
     int passThroughLevel = settings.getSettings().value("PassThroughLevel", 0).toInt();
 
     CompressorParams cpar;
-    if (masterConfig.read("./Configuration/MinosKeyer.json"))
+    if (masterConfig.read(getDirectoryLocation(dlConfiguration) + "/MinosKeyer.json"))
     {
         recordLevel = masterConfig.recordSliderPosition;
         replayLevel = masterConfig.replaySliderPosition;
@@ -302,7 +302,7 @@ bool KeyerMain::writeConfig(bool force)
     QString conf = masterConfig.makeConfig(QJsonDocument::Compact, force, true);
     if (force || old != conf)
     {
-        ret = masterConfig.write("./Configuration/MinosKeyer.json");
+        ret = masterConfig.write(getDirectoryLocation(dlConfiguration) + "/MinosKeyer.json");
         KeyerServer::publishConfig(masterConfig.makeConfig(QJsonDocument::Compact, force, false));
 
         old = conf;
@@ -582,7 +582,7 @@ void KeyerMain::on_setupBrowseButton_clicked()
         ui->setupScriptEdit->setText(alsaFileName);
 
         {
-            QSettings keyerSettings( GetCurrentDir() + "/Configuration/MixerSettings.ini" , QSettings::IniFormat ) ;
+            QSettings keyerSettings( getDirectoryLocation(dlConfiguration) + "/MixerSettings.ini" , QSettings::IniFormat ) ;
             keyerSettings.setValue("AlsaCtlFile", alsaFileName);
             keyerSettings.sync();
         }

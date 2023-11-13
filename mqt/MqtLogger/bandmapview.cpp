@@ -1538,7 +1538,7 @@ void BandmapView::setFreqOperatingInfo(const QString contestBandStr, const QStri
 
 bool BandmapView::readLessGreaterThanDistanceFlag()
 {
-    QSettings config(CLUSTER_FILTER_FILE, QSettings::IniFormat);
+    QSettings config(CLUSTER_FILTER_FILE(), QSettings::IniFormat);
     return config.value(LESS_GREATER_THAN_DISTANCE_FLAG_INI_NAME, false).toBool();
 
 }

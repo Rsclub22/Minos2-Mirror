@@ -21,6 +21,7 @@
 #include <QProcessEnvironment>
 #include <QDir>
 
+#include "fileutils.h"
 #include "regsettings.h"
 #include "RPCCommandConstants.h"
 #include "rotatorRpc.h"
@@ -2101,7 +2102,7 @@ void RotatorMainWindow::onPSTRotatorConfig()
     int res = pstConfigDialog.exec();
     if ( res == QDialog::Accepted )
     {
-        QString fileName = PST_CONFIG_FILE;
+            QString fileName = PST_CONFIG_FILE();
         QSettings  config(fileName, QSettings::IniFormat);
 
         config.beginGroup("PSTRotatorPath");
@@ -2149,11 +2150,11 @@ void RotatorMainWindow::readTraceLogFlag()
     QString fileName;
     if (appName == "")
     {
-        fileName = RIG_CONFIGURATION_FILEPATH_LOCAL + MINOS_ROTATOR_CONFIG_FILE;
+        fileName = RIG_CONFIGURATION_FILEPATH_LOCAL() + MINOS_ROTATOR_CONFIG_FILE;
     }
     else
     {
-        fileName = RIG_CONFIGURATION_FILEPATH_LOGGER + MINOS_ROTATOR_CONFIG_FILE;
+        fileName = RIG_CONFIGURATION_FILEPATH_LOGGER() + MINOS_ROTATOR_CONFIG_FILE;
     }
 
 
@@ -2182,11 +2183,11 @@ void RotatorMainWindow::saveTraceLogFlag(bool state)
     QString fileName;
     if (appName == "")
     {
-        fileName = RIG_CONFIGURATION_FILEPATH_LOCAL + MINOS_ROTATOR_CONFIG_FILE;
+       fileName = RIG_CONFIGURATION_FILEPATH_LOCAL() + MINOS_ROTATOR_CONFIG_FILE;
     }
     else
     {
-        fileName = RIG_CONFIGURATION_FILEPATH_LOGGER + MINOS_ROTATOR_CONFIG_FILE;
+       fileName = RIG_CONFIGURATION_FILEPATH_LOGGER() + MINOS_ROTATOR_CONFIG_FILE;
     }
 
     QSettings config(fileName, QSettings::IniFormat);
@@ -2350,7 +2351,7 @@ void RotatorMainWindow::saveRotPresetButton(RotPresetData& editData)
 
 void RotatorMainWindow::readPresets()
 {
-    QSettings config("./Configuration/MinosRotatorConfig.ini", QSettings::IniFormat);
+    QSettings config(getDirectoryLocation(dlConfiguration) + "/MinosRotatorConfig.ini", QSettings::IniFormat);
     config.beginGroup("Presets");
     if (presetButton.count() > 0)
     {
@@ -2370,7 +2371,7 @@ void RotatorMainWindow:: savePreset(RotPresetData& editData)
 {
 
 
-    QSettings config("./Configuration/MinosRotatorConfig.ini", QSettings::IniFormat);
+    QSettings config(getDirectoryLocation(dlConfiguration) + "/MinosRotatorConfig.ini", QSettings::IniFormat);
     config.beginGroup("Presets");
         config.setValue("preset" + QString::number(editData.number + 1), editData.name);
         config.setValue("bearing" + QString::number(editData.number + 1), editData.bearing);
@@ -2411,7 +2412,7 @@ void RotatorMainWindow::updatePresetLabels()
 
 void RotatorMainWindow::checkTestBearingBox()
 {
-    QSettings config(CONFIGURATION_FILEPATH_LOGGER + MINOS_ROTATOR_CONFIG_FILE, QSettings::IniFormat);
+    QSettings config(CONFIGURATION_FILEPATH_LOGGER() + MINOS_ROTATOR_CONFIG_FILE, QSettings::IniFormat);
     config.beginGroup("TestBearings");
 
     if (config.value("testbearings", false).toBool())

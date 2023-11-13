@@ -558,7 +558,7 @@ void RadioSettingDialog::onEnableSerialBandSwChkBox()
 void RadioSettingDialog::saveSettings()
 {
 
-    QString fileName = RADIO_PATH_LOGGER + FILENAME_FREQ_PRESETS;
+    QString fileName = RADIO_PATH_LOGGER() + FILENAME_FREQ_PRESETS;
 
     QSettings config(fileName, QSettings::IniFormat);
 

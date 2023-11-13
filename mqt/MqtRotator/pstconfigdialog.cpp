@@ -22,7 +22,7 @@ PstConfigDialog::~PstConfigDialog()
 
 void PstConfigDialog::loadDialog()
 {
-    QString fileName = PST_CONFIG_FILE;
+    QString fileName = PST_CONFIG_FILE();
     QSettings  config(fileName, QSettings::IniFormat);
 
     config.beginGroup("PSTRotatorPath");

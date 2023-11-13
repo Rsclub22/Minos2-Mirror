@@ -27,7 +27,7 @@ void WsjtxLink::initialise()
     int port = 0;
     QString multicast_group_address;
 
-    QString fileName = RIG_CONFIGURATION_FILEPATH_LOGGER + MINOS_RIGSYNC_CONFIG_FILE;
+    QString fileName = RIG_CONFIGURATION_FILEPATH_LOGGER() + MINOS_RIGSYNC_CONFIG_FILE;
     QSettings settings(fileName, QSettings::IniFormat);
 
     port = settings.value("WSJT-X port", 2237).toInt();

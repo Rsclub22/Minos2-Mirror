@@ -105,18 +105,18 @@ const QString DEFAULT_MAC_RIGCTLD_PATH = "./Bin/";
 
 const QString LOCAL_RADIO = "Local";
 
-const QString RIG_CONFIGURATION_FILEPATH_LOGGER = "./Configuration/";
-const QString RIG_CONFIGURATION_FILEPATH_LOCAL = "./Configuration/";
+QString RIG_CONFIGURATION_FILEPATH_LOGGER();
+QString RIG_CONFIGURATION_FILEPATH_LOCAL();
 
 const QString MINOS_RADIO_CONFIG_FILE = "MinosRigControlConfig.ini";
 const QString MINOS_RIGSYNC_CONFIG_FILE = "MinosRigSyncConfig.ini";
 
 
-const QString RADIO_PATH_LOGGER = "./Configuration/Radio/";
-const QString RADIO_PATH_LOCAL = "./Configuration/Radio/";
+QString RADIO_PATH_LOGGER();
+QString RADIO_PATH_LOCAL();
 
-const QString TRANSVERT_PATH_LOGGER = "./Configuration/Radio/Transverter/";
-const QString TRANSVERT_PATH_LOCAL = "./Configuration/Radio/Transverter/";
+QString TRANSVERT_PATH_LOGGER();
+QString TRANSVERT_PATH_LOCAL();
 
 const QString FILENAME_AVAIL_RADIOS = "AvailRadio.ini";
 const QString FILENAME_CURRENT_RADIO = "CurrentRadio.ini";
@@ -135,7 +135,7 @@ const QString RIGCTLD_NAME_SETTING_NAME = "RigctldName";
 const QString DEFAULT_FT817_RADIO_RETRY = "3";
 const QString DEFAULT_FT817_RADIO_TIMEOUT = "1000";
 
-const QString BANDSWITCH_INI_FILENAME = "./Configuration/BandSwitchData.ini";
+QString BANDSWITCH_INI_FILENAME();
 const QString BANDSWITCH_KEY_TEXT = "_bandSwData";
 const QString BANDSWITCH_ENABLE_KEY_TEXT = "bandSwEnable";
 const QString BANDSWITCH_SERIAL_ENABLE_KEY_TEXT = "bandSwSerialEnable";
@@ -143,14 +143,13 @@ const QString BANDSWITCH_COMPORT_KEY_TEXT = "comport";
 
 namespace freqPresetData {
 
-    const QString PRESET_MODE_CW = "CW";
-    const QString PRESET_MODE_PHONE = "PHONE";
-    const QString PRESET_MODE_MGM = "MGM";
-    const QString PRESET_MODE_RTTY = "RY";
-    const QString PRESET_MODE_PSK = "PS";
+const QString PRESET_MODE_CW = "CW";
+const QString PRESET_MODE_PHONE = "PHONE";
+const QString PRESET_MODE_MGM = "MGM";
+const QString PRESET_MODE_RTTY = "RY";
+const QString PRESET_MODE_PSK = "PS";
 
 }
-
 class StoredPresetFreqs
 {
 

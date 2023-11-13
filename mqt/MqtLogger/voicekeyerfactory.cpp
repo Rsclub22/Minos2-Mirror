@@ -106,3 +106,13 @@ void VoiceKeyerFactory::populateComboKeyerList(QComboBox* comBox, QString voiceK
         comBox->setCurrentText(voiceKeyerName);
     }
 }
+
+QString VOICE_KEYER_PATH()
+{
+    return getDirectoryLocation(dlConfiguration) + "/VoiceKeyer/";
+}
+
+QString VOICEKEYER_COMMON_PARAMS_PATH()
+{
+    return VOICE_KEYER_PATH() + "CommonParams/";
+}

@@ -744,7 +744,7 @@ void BandmapClientFrame::readDefaultDistanceFilterSettings(BandmapClientFilterSe
     ClusterFilterDefaultDistIniName defaultDistIniNames;
     defaultDistIniNames.initClusterFilterIdAndNames(bands);
 
-    QSettings config(CLUSTER_FILTER_FILE, QSettings::IniFormat);
+    QSettings config(CLUSTER_FILTER_FILE(), QSettings::IniFormat);
     config.beginGroup("Default Distance");
 
     filterSettings->setDistanceFilter(config.value(defaultDistIniNames.getDefaultDistIniName(contestBandStr).defaultDistanceName, DEFAULT_FILTER_DISTANCE).toInt());
@@ -768,7 +768,7 @@ void BandmapClientFrame::getBandLimitsFromBandListXML()
     {
         if (bi->uk == contestBandStr)
         {
-            QSettings config(BAND_LIST_INI, QSettings::IniFormat);
+            QSettings config(BAND_LIST_INI(), QSettings::IniFormat);
             contestBandFlow = convertFreqToFullDigit(config.value( QString(BAND_LIST_SECT_FREQ_LOW) + "/" + bi->uk, bi->bandmapLow.convertFreqStrDispSingle() ).toString());
             contestBandFHigh = convertFreqToFullDigit(config.value( QString(BAND_LIST_SECT_FREQ_HIGH) + "/" + bi->uk, bi->bandmapHigh.convertFreqStrDispSingle() ).toString());
 

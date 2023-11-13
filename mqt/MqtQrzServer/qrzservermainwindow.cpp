@@ -17,6 +17,7 @@
 #include <QSharedPointer>
 #include <QSettings>
 #include <QProcessEnvironment>
+#include "fileutils.h"
 #include "regsettings.h"
 #include "AppStartup.h"
 #include "MinosRPC.h"
@@ -56,7 +57,7 @@ QrzServerMainWindow::QrzServerMainWindow(QWidget *parent)
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
-    QString fileName = "./Configuration/QRZServer.ini";
+    QString fileName = getDirectoryLocation(dlConfiguration) + "/QRZServer.ini";
     QSettings config(fileName, QSettings::IniFormat);
 
     logonCallsign = config.value("logonCallsign", "").toString();
@@ -600,7 +601,7 @@ void QrzServerMainWindow::onConfigure()
         bool callsignChanged = false;
         bool passwordChanged = false;
 
-        QString fileName = "./Configuration/QRZServer.ini";
+        QString fileName = getDirectoryLocation(dlConfiguration) + "/QRZServer.ini";
         QSettings config(fileName, QSettings::IniFormat);
 
         if (conf.logCallsign.trimmed() != config.value("logonCallsign", "").toString())

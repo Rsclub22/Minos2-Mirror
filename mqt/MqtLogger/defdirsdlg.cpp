@@ -52,6 +52,10 @@ void DefDirsDlg::finalise()
 
     ConfListDir.finalise();
     ConfLogDir.finalise();
+
+    setDefLogDir(TLogContainer::getDefaultDirectory(false));
+    setDefListDir(TLogContainer::getDefaultDirectory(true));
+
     if (ConfAgeProtectContests.finalise())
     {
         doSelectSession = true;

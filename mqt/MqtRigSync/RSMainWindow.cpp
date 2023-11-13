@@ -32,7 +32,7 @@ RSMainWindow::RSMainWindow(QWidget *parent) :
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
-    QString fileName = RIG_CONFIGURATION_FILEPATH_LOGGER + MINOS_RIGSYNC_CONFIG_FILE;
+    QString fileName = RIG_CONFIGURATION_FILEPATH_LOGGER() + MINOS_RIGSYNC_CONFIG_FILE;
     QSettings config(fileName, QSettings::IniFormat);
 
     QString tg = config.value("trackRig", "").toString();
@@ -453,7 +453,7 @@ void RSMainWindow::on_trackRig_clicked()
         // set rig2 to rig1
         subRig.controlFreq(mainRig.rigFreq, mainRig.rigMode);
     }
-    QString fileName = RIG_CONFIGURATION_FILEPATH_LOGGER + MINOS_RIGSYNC_CONFIG_FILE;
+    QString fileName = RIG_CONFIGURATION_FILEPATH_LOGGER() + MINOS_RIGSYNC_CONFIG_FILE;
     QSettings config(fileName, QSettings::IniFormat);
     config.setValue("trackRig", ui->trackRig->isChecked());
 }
@@ -469,7 +469,7 @@ void RSMainWindow::on_trackSub_clicked()
         mainRig.controlFreq(subRig.rigFreq, subRig.rigMode);
     }
 
-    QString fileName = RIG_CONFIGURATION_FILEPATH_LOGGER + MINOS_RIGSYNC_CONFIG_FILE;
+    QString fileName = RIG_CONFIGURATION_FILEPATH_LOGGER() + MINOS_RIGSYNC_CONFIG_FILE;
     QSettings config(fileName, QSettings::IniFormat);
     config.setValue("trackSub", ui->trackSub->isChecked());
 }
@@ -494,7 +494,7 @@ void RSMainWindow::on_Rig2Combo_activated(int /*index*/)
     QString psn = ui->Rig2Combo->currentText();
     subRig.selected = psn;
 
-    QString fileName = RIG_CONFIGURATION_FILEPATH_LOGGER + MINOS_RIGSYNC_CONFIG_FILE;
+    QString fileName = RIG_CONFIGURATION_FILEPATH_LOGGER() + MINOS_RIGSYNC_CONFIG_FILE;
     QSettings config(fileName, QSettings::IniFormat);
 
     config.setValue("SyncRigControlRig", subRig.selected.toString());
@@ -506,7 +506,7 @@ void RSMainWindow::on_Rig2Combo_activated(int /*index*/)
 
 SyncRadio::SyncRadio(const QString &w, RigCache &r):which(w), rigCache(r)
 {
-    QString fileName = RIG_CONFIGURATION_FILEPATH_LOGGER + MINOS_RIGSYNC_CONFIG_FILE;
+    QString fileName = RIG_CONFIGURATION_FILEPATH_LOGGER() + MINOS_RIGSYNC_CONFIG_FILE;
     QSettings config(fileName, QSettings::IniFormat);
 
     server = config.value(which + "RigControlApp", server).toString();
@@ -517,7 +517,7 @@ void SyncRadio::configureServer(const QString s)
     PubSubName test = PubSubName(s + "/x");    // expects r/a/k - this is just r/a
     server = test.getRouterApp();
 
-    QString fileName = RIG_CONFIGURATION_FILEPATH_LOGGER + MINOS_RIGSYNC_CONFIG_FILE;
+    QString fileName = RIG_CONFIGURATION_FILEPATH_LOGGER() + MINOS_RIGSYNC_CONFIG_FILE;
     QSettings config(fileName, QSettings::IniFormat);
 
     config.setValue(which + "RigControlApp", server);

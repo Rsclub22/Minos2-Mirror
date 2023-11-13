@@ -2,6 +2,7 @@
 
 #include "LoggerContest.h"
 #include "ContestApp.h"
+#include "fileutils.h"
 #include "htmldelegate.h"
 #include "tsinglelogframe.h"
 #include "StackedInfoFrame.h"
@@ -70,7 +71,7 @@ void DistrictFrame::viewColumn()
         }
         else
         {
-            QString fname("./Configuration/LoggerTableHeaders.ini");
+            QString fname(getDirectoryLocation(dlConfiguration) + "/LoggerTableHeaders.ini");
             resetHeaderColumns(fname, "DistrictTable", tslf->getCurScreenLayout(), ui->DistrictTable->horizontalHeader());
         }
     }
@@ -80,7 +81,7 @@ void DistrictFrame::saveDistrictTableColumns()
 {
     if (!inRestoreColumns)
     {
-        QString fname("./Configuration/LoggerTableHeaders.ini");
+        QString fname(getDirectoryLocation(dlConfiguration) + "/LoggerTableHeaders.ini");
         saveHeaderColumns(fname, "DistrictTable", tslf->getCurScreenLayout(), ui->DistrictTable->horizontalHeader());
         MinosLoggerEvents::SendColumnsChanged();
     }
@@ -88,7 +89,7 @@ void DistrictFrame::saveDistrictTableColumns()
 void DistrictFrame::restoreDistrictTableColumns()
 {
     inRestoreColumns = true;
-    QString fname("./Configuration/LoggerTableHeaders.ini");
+    QString fname(getDirectoryLocation(dlConfiguration) + "/LoggerTableHeaders.ini");
     restoreHeaderColumns(fname, "DistrictTable", tslf->getCurScreenLayout(), ui->DistrictTable->horizontalHeader());
     inRestoreColumns = false;
 }

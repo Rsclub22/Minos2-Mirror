@@ -124,7 +124,7 @@ N1MMLink::N1MMLink(QObject *parent):
 
 void N1MMLink::initialise()
 {
-    QString fileName = RIG_CONFIGURATION_FILEPATH_LOGGER + MINOS_RIGSYNC_CONFIG_FILE;
+    QString fileName = RIG_CONFIGURATION_FILEPATH_LOGGER() + MINOS_RIGSYNC_CONFIG_FILE;
     QSettings settings(fileName, QSettings::IniFormat);
 
     int n1mmPort = settings.value("N1MM+ port", 12060).toInt();

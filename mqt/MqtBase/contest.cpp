@@ -1759,7 +1759,7 @@ void BaseContestLog::loadBonusList()
                 {
                     // load from ./Configuration/B2Mults.xml
                     vhf = Calendar(year, ectVHF);
-                    /*loaded =*/ vhf.parseFile ( "./Configuration/B2Mults.xml" );
+                    /*loaded =*/ vhf.parseFile ( getDirectoryLocation(dlConfiguration) + "B2Mults.xml" );
                     B2 = vhf.mults["B2"];
                 }
                 for (QMap<QString, int>::iterator i = B2.bonuses.begin(); i != B2.bonuses.end(); i++)

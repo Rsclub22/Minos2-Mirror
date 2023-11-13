@@ -1091,7 +1091,7 @@ void TSingleLogFrame::addAllQSOsToBandmap()
 void TSingleLogFrame::restoreQSOTableColumns()
 {
     inRestoreColumns = true;
-    QString fname("./Configuration/LoggerTableHeaders.ini");
+    QString fname(getDirectoryLocation(dlConfiguration) + "/LoggerTableHeaders.ini");
     restoreHeaderColumns(fname, "QSOTable", curScreenLayout, QSOTable->horizontalHeader());
 
     columnsChanged = false;
@@ -1101,7 +1101,7 @@ void TSingleLogFrame::saveQSOTableColumns()
 {
     if (!inRestoreColumns)
     {
-        QString fname("./Configuration/LoggerTableHeaders.ini");
+        QString fname(getDirectoryLocation(dlConfiguration) + "/LoggerTableHeaders.ini");
         saveHeaderColumns(fname, "QSOTable", curScreenLayout, QSOTable->horizontalHeader());
 
         MinosLoggerEvents::SendColumnsChanged();
@@ -1136,7 +1136,7 @@ void TSingleLogFrame::viewColumn()
         }
         else
         {
-            QString fname("./Configuration/LoggerTableHeaders.ini");
+            QString fname(getDirectoryLocation(dlConfiguration) + "/LoggerTableHeaders.ini");
             resetHeaderColumns(fname, "QSOTable", curScreenLayout, QSOTable->horizontalHeader());
         }
     }

@@ -7,6 +7,7 @@
 #include "CalendarList.h"
 #include "MShowMessageDlg.h"
 #include "MTrace.h"
+#include "fileutils.h"
 
 QMap<QString, QString> contestNameMap;
 int calendarFormYear = 0;
@@ -24,7 +25,7 @@ QString calendarNameString[] =
 //---------------------------------------------------------------------------
 QString CalendarYear::getPath()
 {
-    QString path =  "./Configuration/" + calendarNameString[ type ] + yearString() + ".xml";
+    QString path =  getDirectoryLocation(dlConfiguration) + "/" + calendarNameString[ type ] + yearString() + ".xml";
     return path;
 }
 QString CalendarYear::getURL()
@@ -61,7 +62,7 @@ QString VHFOtherCalendarYear::getSite()
 }
 QString VHFOtherCalendarYear::getPath()
 {
-    QString p = "./Configuration/" + calendarNameString[ type ] + ".xml";
+    QString p = getDirectoryLocation(dlConfiguration) + "/" +  calendarNameString[ type ] + ".xml";
     return p;
 }
 QString VHFOtherCalendarYear::getURL()
@@ -76,7 +77,7 @@ QString HFOtherCalendarYear::getSite()
 }
 QString HFOtherCalendarYear::getPath()
 {
-    QString p = "./Configuration/" + calendarNameString[ type ] + ".xml";
+    QString p = getDirectoryLocation(dlConfiguration) + "/" + calendarNameString[ type ] + ".xml";
     return p;
 }
 QString HFOtherCalendarYear::getURL()
@@ -91,7 +92,7 @@ QString CTYCalendarYear::getSite()
 }
 QString CTYCalendarYear::getPath()
 {
-    QString p = "./Configuration/cty.dat";
+    QString p = getDirectoryLocation(dlConfiguration) + "/cty.dat";
     return p;
 }
 QString CTYCalendarYear::getURL()
@@ -105,7 +106,7 @@ QString ClubListCalendarYear::getSite()
 }
 QString ClubListCalendarYear::getPath()
 {
-    QString p = "./Configuration/clublist.txt";
+    QString p = getDirectoryLocation(dlConfiguration) + "/clublist.txt";
     return p;
 }
 QString ClubListCalendarYear::getURL()

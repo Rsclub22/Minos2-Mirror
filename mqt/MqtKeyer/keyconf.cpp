@@ -8,6 +8,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include "MTrace.h"
+#include "fileutils.h"
 #include "tinyxml.h"
 #include "TinyUtils.h"
 #include "keyers.h"
@@ -214,7 +215,7 @@ bool KeyerConfigure::configureKeyers()
 
    TiXmlBase::SetCondenseWhiteSpace( false );
    TiXmlDocument keyerdoc;
-   keyerdoc.LoadFile( "./Configuration/keyerConfig.xml" );
+   keyerdoc.LoadFile( (getDirectoryLocation(dlConfiguration) + "/keyerConfig.xml").toLatin1() );
    TiXmlElement *root = keyerdoc.RootElement();
    if ( !root )
    {

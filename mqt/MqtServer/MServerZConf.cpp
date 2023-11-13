@@ -278,7 +278,7 @@ void TZConf::readRouterListFile()
 
    // Read the server override file
 
-   QSettings routers(GetCurrentDir() + "/Configuration/Servers.ini", QSettings::IniFormat);
+   QSettings routers(getDirectoryLocation(dlConfiguration) + "/Servers.ini", QSettings::IniFormat);
    QStringList sl = routers.childGroups();
 
 //   trace(QString::number(sl.size()) + " child groups");

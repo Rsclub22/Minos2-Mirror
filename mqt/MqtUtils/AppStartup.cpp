@@ -235,7 +235,7 @@ void appStartup(const QString &pappName)
     // We have no configuration directory so copy default one
     // Also Create a logs directory and copy Docs
 
-    // cpDir does copy if newer, no a new installation updates the old one
+    // cpDir does copy if newer, so a new installation updates the old one
 
     if (!DirectoryExists("Configuration")) {
         QDir().mkdir("Configuration");

@@ -1,5 +1,6 @@
 #include "MinosParameters.h"
 #include "ListContact.h"
+#include "fileutils.h"
 #include "list.h"
 #include "contest.h"
 #include "htmldelegate.h"
@@ -181,7 +182,7 @@ void MatchTreeFrame::viewColumn()
         }
         else
         {
-            QString fname("./Configuration/" + baseName + "TableHeaders.ini");
+            QString fname(getDirectoryLocation(dlConfiguration) + "/" + baseName + "TableHeaders.ini");
             resetHeaderColumns(fname, "QSOTable", curScreenLayout, this->header());
 
             MinosLoggerEvents::SendColumnsChanged();
@@ -195,7 +196,7 @@ void MatchTreeFrame::saveHeaderLayout()
     if (!inRestoreColumns)
     {
         QString treeName = getTreeName();
-        QString fname("./Configuration/" + baseName + "TableHeaders.ini");
+        QString fname(getDirectoryLocation(dlConfiguration) + "/" + baseName + "TableHeaders.ini");
         saveHeaderColumns(fname, treeName, curScreenLayout, header());
 
         MinosLoggerEvents::SendColumnsChanged();
@@ -215,7 +216,7 @@ void MatchTreeFrame::restoreColumns()
 {
     inRestoreColumns = true;
     QString treeName = getTreeName();
-    QString fname("./Configuration/" + baseName + "TableHeaders.ini");
+    QString fname(getDirectoryLocation(dlConfiguration) + "/" + baseName + "TableHeaders.ini");
     restoreHeaderColumns(fname, treeName, curScreenLayout, header());
 
     inRestoreColumns = false;

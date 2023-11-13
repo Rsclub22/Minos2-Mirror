@@ -73,7 +73,7 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     callVector =    QSharedPointer<QVector <QSharedPointer<KstUser> > >( new QVector<QSharedPointer<KstUser> > );
     messageVector = QSharedPointer<QVector <QSharedPointer<KstMessageLine> > >( new QVector<QSharedPointer<KstMessageLine> >);
 
-    iniName = "./Configuration/" + getAppStartupName() + ".ini";
+    iniName = getDirectoryLocation(dlConfiguration) + "/" + getAppStartupName() + ".ini";
 
     RemoteLogs::setSettingsFile(iniName);
     bool needTransfer = !FileExists(iniName);

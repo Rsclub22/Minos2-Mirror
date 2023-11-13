@@ -12,6 +12,7 @@
 
 #include <QSettings>
 #include <QMessageBox>
+#include "fileutils.h"
 #include "regsettings.h"
 #include "cutils.h"
 #include "clustercommon.h"
@@ -20,7 +21,10 @@
 #include "setupdialog.h"
 #include "ui_setupdialog.h"
 
-const char * CLUSTER_NODE_LIST_FILE = "./Configuration/Cluster/ClusterSites.ini";
+QString CLUSTER_NODE_LIST_FILE()
+{
+    return getDirectoryLocation(dlConfiguration) + "/Cluster/ClusterSites.ini";
+}
 
 SetupDialog::SetupDialog(QWidget *parent) :
     QDialog(parent),
@@ -125,7 +129,7 @@ void SetupDialog::cancelButtonPushed()
     // load back the data to model
     clusterListModel->clear();      // also clears rows and columns
 
-    QString fileName = CLUSTER_NODE_LIST_FILE;
+    QString fileName = CLUSTER_NODE_LIST_FILE();
     QSettings settings(fileName, QSettings::IniFormat);
     QStringList availNodeNames = settings.childGroups();
     clusterListModel->setRowCount(availNodeNames.count());      // restore model row and col
@@ -179,7 +183,7 @@ void SetupDialog::saveGeneralSettings()
         || useQrzForQraChanged)
     {
         timeToLive = ui->timeToLive->text().trimmed();
-        QSettings config(CLUSTER_SETTINGS_FILE, QSettings::IniFormat);
+        QSettings config(CLUSTER_SETTINGS_FILE(), QSettings::IniFormat);
 
         if (timeToLive != config.value("timeToLive", "").toString())
         {
@@ -209,7 +213,7 @@ void SetupDialog::saveGeneralSettings()
 
 void SetupDialog::createDefaultGeneralSettingsFile()
 {
-    QSettings config(CLUSTER_SETTINGS_FILE, QSettings::IniFormat);
+    QSettings config(CLUSTER_SETTINGS_FILE(), QSettings::IniFormat);
 
     config.beginGroup("Personal");
 
@@ -227,7 +231,7 @@ void SetupDialog::createDefaultGeneralSettingsFile()
 
 void SetupDialog::readGeneralSettings()
 {
-    QSettings config(CLUSTER_SETTINGS_FILE, QSettings::IniFormat);
+    QSettings config(CLUSTER_SETTINGS_FILE(), QSettings::IniFormat);
     config.beginGroup("TimeToLive");
     timeToLive = config.value("timeToLive", "").toString();
     if (timeToLive == "0")      // 0 as no purge removed.
@@ -415,7 +419,7 @@ void SetupDialog::savePersonal()
             qth = ui->qthEdit->text().trimmed();
         }
 
-        QSettings config(CLUSTER_SETTINGS_FILE, QSettings::IniFormat);
+        QSettings config(CLUSTER_SETTINGS_FILE(), QSettings::IniFormat);
 
         config.beginGroup("Personal");
         config.setValue("Callsign", callsign);
@@ -431,7 +435,7 @@ void SetupDialog::savePersonal()
 
 void SetupDialog::readPersonal()
 {
-    QSettings config(CLUSTER_SETTINGS_FILE, QSettings::IniFormat);
+    QSettings config(CLUSTER_SETTINGS_FILE(), QSettings::IniFormat);
 
     config.beginGroup("Personal");
 
@@ -447,7 +451,7 @@ void SetupDialog::readPersonal()
 
 void SetupDialog::saveCurrentNodeName(QString nodeName)
 {
-    QSettings config(CLUSTER_SETTINGS_FILE, QSettings::IniFormat);
+    QSettings config(CLUSTER_SETTINGS_FILE(), QSettings::IniFormat);
 
     config.beginGroup("CurrentNodeName");
     config.setValue("currentNodeName", nodeName);
@@ -457,7 +461,7 @@ void SetupDialog::saveCurrentNodeName(QString nodeName)
 
 QString SetupDialog::getCurrentNodeName()
 {
-    QSettings config(CLUSTER_SETTINGS_FILE, QSettings::IniFormat);
+    QSettings config(CLUSTER_SETTINGS_FILE(), QSettings::IniFormat);
 
     config.beginGroup("CurrentNodeName");
     QString currentNodeName = config.value("currentNodeName", "").toString();
@@ -484,7 +488,7 @@ void SetupDialog::loadClusterListToModel()
     // ****************** need check for no ini file and empty ini file
     // get number of cluster nodes from settings ini file
 
-    QSettings settings(CLUSTER_NODE_LIST_FILE, QSettings::IniFormat);
+    QSettings settings(CLUSTER_NODE_LIST_FILE(), QSettings::IniFormat);
 
     QStringList availNodeNames = settings.childGroups();
     int numClusterNodes = availNodeNames.count();
@@ -573,7 +577,7 @@ void SetupDialog::clusterListSave()
 
     if (listDataChanged)
     {
-        QString fileName = CLUSTER_NODE_LIST_FILE;
+       QString fileName = CLUSTER_NODE_LIST_FILE();
         QSettings  settings(fileName, QSettings::IniFormat);
 
         settings.clear();

@@ -23,7 +23,7 @@ const int SPOTMARKER_XOFFSET = 20;
 const int FREQ_SEL_WIDTH = 20;
 const int NO_OP_FREQ_WIDTH = 5;
 
-extern const char * BAND_LIST_INI;
+extern QString BAND_LIST_INI();
 extern const char * BAND_LIST_SECT_FREQ_LOW;
 extern const char * BAND_LIST_SECT_FREQ_HIGH;
 

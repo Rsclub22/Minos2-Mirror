@@ -5,6 +5,105 @@
 
 #include "fileutils.h"
 
+static QString deflog;
+static QString deflist;
+
+void setDefLogDir(QString l)
+{
+    deflog = l;
+}
+void setDefListDir(QString l)
+{
+    deflist = l;
+}
+QString getDirectoryLocation(DirectoryLocation dl, QString runDir)
+{
+    // At the moment, these are all Windows, and relative
+    // to the current working directory
+
+    QString dirLoc;
+    switch (dl)
+        {
+#ifdef Q_OS_MACOS
+    case dlBinaries:
+        dirLoc = "Bin";
+        break;
+
+    case dlTranslations:
+        dirLoc = "Bin/translations";
+        break;
+
+    case dlConfiguration:
+        dirLoc = "Configuration";
+        break;
+
+    case dlLists:
+        dirLoc = deflist;
+        break;
+
+    case dlLogs:
+        dirLoc = deflog;
+        break;
+
+    case dlHelp:
+        dirLoc = "Help";
+        break;
+
+    case dlDocs:
+        dirLoc = "Docs";
+        break;
+
+    case dlTraceLog:
+        dirLoc = "TraceLog";
+        break;
+
+    case dlQRZDB:
+        dirLoc = "";
+        break;
+#else
+        case dlBinaries:
+            dirLoc = runDir + "/Bin";
+            break;
+
+        case dlTranslations:
+            dirLoc = runDir + "/Bin/translations";
+            break;
+
+        case dlConfiguration:
+            dirLoc = runDir + "/Configuration";
+            break;
+
+        case dlLists:
+            dirLoc = deflist;
+            break;
+
+        case dlLogs:
+            dirLoc = deflog;
+            break;
+
+        case dlHelp:
+            dirLoc = runDir + "/Help";
+            break;
+
+        case dlDocs:
+            dirLoc = runDir + "/Docs";
+            break;
+
+        case dlTraceLog:
+            dirLoc = runDir + "/TraceLog";
+            break;
+
+        case dlQRZDB:
+            dirLoc = runDir;
+            break;
+#endif
+
+        }
+    QDir d(dirLoc);
+    dirLoc = d.absolutePath();
+    return dirLoc;
+}
+
 bool FileExists(const QString &path )
 {
     QFileInfo checkFile( path );

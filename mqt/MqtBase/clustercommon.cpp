@@ -3,6 +3,7 @@
 #include "checkmodeagainstfreq.h"
 #include "BandList.h"
 #include "MTrace.h"
+#include "fileutils.h"
 #include "rigcontrolcommonconstants.h"
 
 const char * clusterStateList[] =
@@ -653,4 +654,19 @@ bool extractDxLocFromNodeFlag(QString locFlagMsg)
     }
 
     return false;
+}
+
+QString CLUSTER_PATH()
+{
+    return getDirectoryLocation(dlConfiguration) + "/Cluster/";
+}
+
+QString CLUSTER_SETTINGS_FILE()
+{
+    return getDirectoryLocation(dlConfiguration) + "/Cluster/ClusterSettings.ini";
+}
+
+QString CLUSTER_FILTER_FILE()
+{
+    return getDirectoryLocation(dlConfiguration) + "/clusterBandmapFilter.ini";
 }

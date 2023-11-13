@@ -1,3 +1,4 @@
+#include "fileutils.h"
 #include "regsettings.h"
 #include "LoggerContest.h"
 #include "Calendar.h"
@@ -178,7 +179,7 @@ void ContestDetails::loadClubNames(QString groupName)
 
     int goffset = -1;
 
-    QString fname = "./Configuration/clublist.txt";
+    QString fname = getDirectoryLocation(dlConfiguration) + "/clublist.txt";
 
     QStringList stringsRead;
     QFile textFile( fname );

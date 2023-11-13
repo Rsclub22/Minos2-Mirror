@@ -51,7 +51,7 @@ MonitorMain::MonitorMain(QWidget *parent) :
 
     /*MinosRPC *rpc =*/ MinosRPC::getMinosRPC(getAppStartupName(), true);
 
-    iniName = "./Configuration/" + getAppStartupName() + ".ini";
+    iniName = getDirectoryLocation(dlConfiguration) + "/" + getAppStartupName() + ".ini";
     RemoteLogs::setSettingsFile(iniName);
 
 

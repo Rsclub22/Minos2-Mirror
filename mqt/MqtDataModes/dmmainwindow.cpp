@@ -1,4 +1,5 @@
 #include "delayedaction.h"
+#include "fileutils.h"
 #include <QSettings>
 #include <QTimer>
 #include <QFileSystemWatcher>
@@ -103,7 +104,7 @@ DMMainWindow::DMMainWindow(QWidget *parent)
 
 #endif
 
-    RemoteLogs::setSettingsFile("./Configuration/DataModes.ini");
+    RemoteLogs::setSettingsFile(getDirectoryLocation(dlConfiguration) + "/DataModes.ini");
 
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
@@ -305,7 +306,7 @@ void DMMainWindow::on_startButton_clicked()
 
 void DMMainWindow::sendPressed(QString d, int c)
 {
-    QSettings settings("./Configuration/DataModes.ini", QSettings::IniFormat);
+    QSettings settings(getDirectoryLocation(dlConfiguration) + "/DataModes.ini", QSettings::IniFormat);
 
     QString m = settings.value("Sender").toString();
 

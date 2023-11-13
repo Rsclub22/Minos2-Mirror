@@ -43,12 +43,12 @@ MinosConfig *MinosConfig::getMinosConfig()
 /*static*/
 QString MinosConfig::getConfigIniName()
 {
-    return "./Configuration/MinosConfig.ini";
+    return getDirectoryLocation(dlConfiguration) + "/MinosConfig.ini";
 }
 
 QString MinosConfig::getConfigJsonName()
 {
-    return "./Configuration/MinosConfig.json";
+    return getDirectoryLocation(dlConfiguration) + "/MinosConfig.json";
 }
 
 QString MinosConfig::getThisRouterName()
@@ -732,7 +732,7 @@ QStringList MinosConfig::getAppTypes()
 void MinosConfig::buildAppConfigList()
 {
     trace(GetCurrentDir());
-    INIFile appConfig("./Configuration/AppConfig.ini");
+    INIFile appConfig(getDirectoryLocation(dlConfiguration) + "/AppConfig.ini");
     /*
 [BandMap]
 Path=./mqtBandMap
@@ -953,7 +953,7 @@ QString MinosConfig::checkConfig(QString name)
                     }
                 }
 
-                if (ele->appType != tr(appNone) && !FileExists(ele->rundir + "/Configuration/MinosConfig.json"))
+                if (ele->appType != tr(appNone) && !FileExists( getDirectoryLocation(dlConfiguration, ele->rundir) + "/MinosConfig.json"))
                 {
                     reqErrs += "<" + ele->appType + ">" + tr(" Working directory is not valid - no Configuration/MinosConfig.json\n\n");
                 }

@@ -78,7 +78,7 @@ void TxVmInternalButtonDialog::setVmData(VoiceKeyerParams* vmData_)
 
     inVolChange = true;
 
-    QString fileName = VOICE_KEYER_PATH + VOICE_KEYER_BASE_FILE_NAME + "Internal" + ".ini";
+    QString fileName = VOICE_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + "Internal" + ".ini";
     QSettings settings(fileName, QSettings::IniFormat);
 
     int recordLevel = settings.value("RecordLevel", 0).toInt();
@@ -191,7 +191,7 @@ void TxVmInternalButtonDialog::on_recordSlider_valueChanged(int position)
 {
     if (!inVolChange)
     {
-        QString fileName = VOICE_KEYER_PATH + VOICE_KEYER_BASE_FILE_NAME + "Internal" + ".ini";
+        QString fileName = VOICE_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + "Internal" + ".ini";
         QSettings settings(fileName, QSettings::IniFormat);
         settings.setValue("RecordLevel", position);
     }

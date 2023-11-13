@@ -1276,7 +1276,7 @@ void RigSetupForm::fillMgmModes()
 {
     QString fileName;
 
-    fileName = RIG_CONFIGURATION_FILEPATH_LOGGER + MINOS_RADIO_CONFIG_FILE;
+    fileName = RIG_CONFIGURATION_FILEPATH_LOGGER() + MINOS_RADIO_CONFIG_FILE;
     QSettings config(fileName, QSettings::IniFormat);
     config.beginGroup("MGM_Modes");
     // this config is only ever preset at install time

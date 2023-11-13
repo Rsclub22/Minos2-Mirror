@@ -122,7 +122,7 @@ void SingleApplication::clearRegistry()
 //    reg.clear();
 //#endif
     // we can  now clear all the RegSettings files on ANY platform
-    QDir const source("./Configuration");
+    QDir const source(getDirectoryLocation(dlConfiguration) );
     if (!source.exists())
         return;
 

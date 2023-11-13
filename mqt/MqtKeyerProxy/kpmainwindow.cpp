@@ -37,7 +37,7 @@ KPMainWindow::KPMainWindow(QWidget *parent)
     connect(&CloseTimer, &QTimer::timeout, this, &KPMainWindow::CloseTimerTimer);
     CloseTimer.start(100);
 
-    QSettings keyerSettings( GetCurrentDir() + "/Configuration/MixerSettings.ini" , QSettings::IniFormat ) ;
+    QSettings keyerSettings(getDirectoryLocation(dlConfiguration) + "/MixerSettings.ini" , QSettings::IniFormat ) ;
     QString alsaFileName = keyerSettings.value("AlsaCtlFile", "AlsaCtlFile.txt").toString();
     ui->setupScriptEdit->setText(alsaFileName);
 
@@ -245,7 +245,7 @@ void KPMainWindow::on_setupBrowseButton_clicked()
         ui->setupScriptEdit->setText(alsaFileName);
 
         {
-            QSettings keyerSettings( GetCurrentDir() + "/Configuration/MixerSettings.ini" , QSettings::IniFormat ) ;
+            QSettings keyerSettings( getDirectoryLocation(dlConfiguration) + "/MixerSettings.ini" , QSettings::IniFormat ) ;
             keyerSettings.setValue("AlsaCtlFile", alsaFileName);
             keyerSettings.sync();
         }

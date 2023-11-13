@@ -3,6 +3,7 @@
 #include "LoggerContest.h"
 #include "ContestApp.h"
 
+#include "fileutils.h"
 #include "qvariant.h"
 #include "tsinglelogframe.h"
 #include "htmldelegate.h"
@@ -78,7 +79,7 @@ void DXCCFrame::viewColumn()
         }
         else
         {
-            QString fname("./Configuration/LoggerTableHeaders.ini");
+            QString fname(getDirectoryLocation(dlConfiguration) + "/LoggerTableHeaders.ini");
             resetHeaderColumns(fname, "DXCCTable", tslf->getCurScreenLayout(), ui->DXCCTable->horizontalHeader());
         }
     }
@@ -88,7 +89,7 @@ void DXCCFrame::saveDXCCTableColumns()
 {
     if (!inRestoreColumns)
     {
-        QString fname("./Configuration/LoggerTableHeaders.ini");
+        QString fname(getDirectoryLocation(dlConfiguration) + "/LoggerTableHeaders.ini");
         saveHeaderColumns(fname, "DXCCTable", tslf->getCurScreenLayout(), ui->DXCCTable->horizontalHeader());
         MinosLoggerEvents::SendColumnsChanged();
     }
@@ -96,7 +97,7 @@ void DXCCFrame::saveDXCCTableColumns()
 void DXCCFrame::restoreDXCCTableColumns()
 {
     inRestoreColumns = true;
-    QString fname("./Configuration/LoggerTableHeaders.ini");
+    QString fname(getDirectoryLocation(dlConfiguration) + "/LoggerTableHeaders.ini");
     restoreHeaderColumns(fname, "DXCCTable", tslf->getCurScreenLayout(), ui->DXCCTable->horizontalHeader());
     inRestoreColumns = false;
 }
