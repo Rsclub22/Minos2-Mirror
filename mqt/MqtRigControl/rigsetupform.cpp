@@ -3,7 +3,8 @@
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //                      Rig Control
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2020
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2023
+//
 //
 //
 //
@@ -1344,7 +1345,13 @@ void RigSetupForm::onEnableCatPttClicked()
     if (radioData->enableDisableCatFeature.catEnable != checked)
     {
         radioData->enableDisableCatFeature.catEnable = checked;
+        if (!(ui->pttDTREnable->isChecked() || ui->pttRTSEnable->isChecked()))
+        {
+            ui->pttCatEnable->setChecked(checked);  // change the state of the ptt group CAT radio button
+                                                    // if DTR or RTS buttons not checked
+        }
 
+        ui->pttCatEnable->setVisible(checked);
     }
 }
 void RigSetupForm::onEnableVoiceTxMemClicked()
@@ -1899,7 +1906,7 @@ void RigSetupForm::processPortNumber(QLineEdit* netAddBox, QLineEdit* netPortBox
 void RigSetupForm::setPttInitialState()
 {
     radioData->enablePTT = false;
-    radioData->portType = serialCommonData::PTTMethodCodes::PTT_METHOD_CAT;
+    radioData->pttType = serialCommonData::PTTMethodCodes::PTT_METHOD_CAT;
     setPttControlsVisible(false);
     ui->pttCatEnable->setChecked(true);
     setPTTCheckBoxChecked(false);
@@ -1926,6 +1933,11 @@ void RigSetupForm::setPTTCheckBoxDisabled(bool disabled)
     ui->pttEnable->setDisabled(disabled);
 }
 
+void RigSetupForm::setCatPttRadioButtonVisible(bool visible)
+{
+    ui->pttCatEnable->setVisible(visible);
+}
+
 void RigSetupForm::loadAvailPttComports()
 {
     fillPortsInfo(ui->pttComportSel);
@@ -1944,6 +1956,12 @@ void RigSetupForm::setPttTypeRadioButtons(int type)
 
     if (pttType == serialCommonData::PTTMethodCodes::PTT_METHOD_CAT)
     {
+        if (radioData->enableDisableCatFeature.catEnable)
+        {
+            ui->pttCatEnable->setChecked(false);
+
+        }
+
         ui->pttCatEnable->setChecked(true);
         pttComportSelDisabled(true);
         if (isPttComportEqualCatComport())
