@@ -1377,9 +1377,8 @@ Corriger les entrées du convertisseur SVP.</translation>
         <translation>Paramètres avancés pour CAT</translation>
     </message>
     <message>
-        <location filename="../rigsetupform.ui" line="365"/>
         <source>EnableDisable CAT Features</source>
-        <translation>Activer/Désactiver les fonctionnalités CAT</translation>
+        <translation type="vanished">Activer/Désactiver les fonctionnalités CAT</translation>
     </message>
     <message>
         <location filename="../rigsetupform.ui" line="372"/>
@@ -1387,9 +1386,8 @@ Corriger les entrées du convertisseur SVP.</translation>
         <translation>Activer PTT</translation>
     </message>
     <message>
-        <location filename="../rigsetupform.ui" line="381"/>
         <source>Enable\Disable  CAT  Features</source>
-        <translation>Activer/désactiver les fonctionnalités CAT</translation>
+        <translation type="vanished">Activer/désactiver les fonctionnalités CAT</translation>
     </message>
     <message>
         <location filename="../rigsetupform.ui" line="389"/>
@@ -1435,6 +1433,16 @@ Corriger les entrées du convertisseur SVP.</translation>
         <location filename="../rigsetupform.ui" line="465"/>
         <source>Use RigCtld</source>
         <translation>Utiliser RigCtld</translation>
+    </message>
+    <message>
+        <location filename="../rigsetupform.ui" line="365"/>
+        <source>Enable/Disable CAT Features</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rigsetupform.ui" line="381"/>
+        <source>Enable/Disable  CAT  Features</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../rigsetupform.ui" line="472"/>

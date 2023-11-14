@@ -2244,9 +2244,12 @@ void RotatorMainWindow::presetRead(int buttonNumber)
 {
     if (!rotPresets.isEmpty()  && buttonNumber < rotPresets.count())
     {
-        rotateTo(rotPresets[buttonNumber]->bearing.toInt());
-        ui->bearingEdit->setText(rotPresets[buttonNumber]->bearing);
-        ui->bearingEdit->setFocus();
+        if (!rotPresets[buttonNumber]->bearing.isEmpty())
+        {
+            rotateTo(rotPresets[buttonNumber]->bearing.toInt());
+            ui->bearingEdit->setText(rotPresets[buttonNumber]->bearing);
+            ui->bearingEdit->setFocus();
+        }
     }
 
 }
