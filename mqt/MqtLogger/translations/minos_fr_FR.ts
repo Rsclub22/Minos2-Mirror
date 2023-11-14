@@ -3707,9 +3707,8 @@ Non - Ignorer les modifications</translation>
         <translation>Run</translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="359"/>
         <source>Run %1 - New</source>
-        <translation>Run %1 - Nouveau</translation>
+        <translation type="vanished">Run %1 - Nouveau</translation>
     </message>
     <message>
         <location filename="../runbuttonsframe.cpp" line="377"/>
@@ -3730,6 +3729,11 @@ Non - Ignorer les modifications</translation>
         <location filename="../runbuttonsframe.cpp" line="425"/>
         <source>Freq: </source>
         <translation>Fréquence: </translation>
+    </message>
+    <message>
+        <location filename="../runbuttonsframe.cpp" line="359"/>
+        <source>Run %1 - Set</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../runbuttonsframe.cpp" line="426"/>

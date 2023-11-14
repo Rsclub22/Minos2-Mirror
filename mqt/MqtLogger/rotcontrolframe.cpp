@@ -823,10 +823,13 @@ void RotControlFrame::getRotDetails(memoryData::memData &m)
 
 void RotControlFrame::presetTurn(QString b)
 {
-    turnTo(b.toInt());
-    //ui->BrgSt->setText(b);
-    setTurnDisplayText(convertBearingForDisplay(b));
-    ui->BrgSt->setFocus();
+    if (!b.isEmpty())
+    {
+        turnTo(b.toInt());
+        //ui->BrgSt->setText(b);
+        setTurnDisplayText(convertBearingForDisplay(b));
+        ui->BrgSt->setFocus();
+    }
 }
 void RotControlFrame::checkConnection()
 {

@@ -3638,11 +3638,6 @@ No          - Discard changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="359"/>
-        <source>Run %1 - New</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../runbuttonsframe.cpp" line="377"/>
         <source>Run %1 - Edit</source>
         <translation type="unfinished"></translation>
@@ -3660,6 +3655,11 @@ No          - Discard changes</source>
     <message>
         <location filename="../runbuttonsframe.cpp" line="425"/>
         <source>Freq: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../runbuttonsframe.cpp" line="359"/>
+        <source>Run %1 - Set</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

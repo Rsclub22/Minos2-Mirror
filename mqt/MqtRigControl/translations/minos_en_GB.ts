@@ -1247,18 +1247,8 @@ Please correct the transverter entries.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigsetupform.ui" line="365"/>
-        <source>EnableDisable CAT Features</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../rigsetupform.ui" line="372"/>
         <source>PTT Enable</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../rigsetupform.ui" line="381"/>
-        <source>Enable\Disable  CAT  Features</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1304,6 +1294,16 @@ Please correct the transverter entries.</source>
     <message>
         <location filename="../rigsetupform.ui" line="465"/>
         <source>Use RigCtld</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rigsetupform.ui" line="365"/>
+        <source>Enable/Disable CAT Features</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rigsetupform.ui" line="381"/>
+        <source>Enable/Disable  CAT  Features</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

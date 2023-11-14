@@ -423,7 +423,7 @@ void scatParams::scatParamsCopy(const QSharedPointer<scatParams> srce)
     transVertSettings = srce->transVertSettings;
 
 
-    // enable\Disable Cat features
+    // enableDisable Cat features
     enableDisableCatFeature = srce->enableDisableCatFeature;
 
 

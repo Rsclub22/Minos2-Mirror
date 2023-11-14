@@ -1304,7 +1304,7 @@ void RigSetupForm::fillMgmModes()
 }
 
 
-/********************** Enable\Disable Features Checkboxes **************/
+/********************** Enable/Disable Features Checkboxes **************/
 
 
 void RigSetupForm::onEnableRitClicked()

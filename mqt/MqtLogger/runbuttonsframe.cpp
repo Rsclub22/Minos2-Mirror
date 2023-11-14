@@ -356,7 +356,7 @@ void RunButtonsFrame::runButWriteActSel(int buttonNumber)
     // load run data into run memory
 
     RunButtonDialog runDialog(this);
-    runDialog.setWindowTitle(tr("Run %1 - New").arg(QString::number(buttonNumber + 1)));
+    runDialog.setWindowTitle(tr("Run %1 - Set").arg(QString::number(buttonNumber + 1)));
     runDialog.setLogData(&runData, buttonNumber, ct);
     if (runDialog.exec() == QDialog::Accepted)
     {
