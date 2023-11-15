@@ -64,7 +64,6 @@ mkdir Logs
 mkdir Bin
 mkdir Bin/translations
 mkdir Docs
-mkdir Help
 
 for i in en_GB fr_FR
 do
@@ -137,7 +136,6 @@ cp -r $DIR/mqt/ControlFiles/Configuration/* ./Configuration
 cp -r $DIR/mqt/ControlFiles/Configuration/LinuxFiles/* ./Configuration 
 
 cp $DIR/mqt/Docs/*.* ./Docs 
-cp $DIR/mqt/Help/*.* ./Help
 
 rm -rf ./Configuration/OSXFiles
 rm -rf ./Configuration/LinuxFiles

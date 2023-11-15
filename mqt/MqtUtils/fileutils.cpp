@@ -45,10 +45,6 @@ QString getDirectoryLocation(DirectoryLocation dl, QString runDir)
         dirLoc = deflog;
         break;
 
-    case dlHelp:
-        dirLoc = runDir + "/Help";
-        break;
-
     case dlDocs:
         dirLoc = runDir + "/Docs";
         break;
@@ -79,10 +75,6 @@ QString getDirectoryLocation(DirectoryLocation dl, QString runDir)
 
         case dlLogs:
             dirLoc = deflog;
-            break;
-
-        case dlHelp:
-            dirLoc = runDir + "/Help";
             break;
 
         case dlDocs:

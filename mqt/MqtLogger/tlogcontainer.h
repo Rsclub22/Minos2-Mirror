@@ -5,7 +5,6 @@
 #include <QMainWindow>
 #include <QMenu>
 #include <QTimer>
-#include "helpbrowser.h"
 #include "n1mmbroadcast.h"
 #include "rigcontrolcommonconstants.h"
 #include "serialtvswitch.h"
@@ -103,8 +102,6 @@ private:
     QMenu *recentFilesMenu;
     QVector<QAction *> sessionActs;
     QMenu *sessionsMenu;
-
-    QSharedPointer<HelpBrowser>  helpBrowser;
 
     static bool loggerClosing;
 

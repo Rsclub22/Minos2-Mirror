@@ -56,7 +56,6 @@ enum LOGGERPROFILE {
     elpwsjtxRbPort,
     elpADIFAddr,
     elpADIFPort,
-    elpHelpFile, elpHelpEntryURL,
     elpPDFFile,
     elpReadabilityInit,
     elpAutoFill,

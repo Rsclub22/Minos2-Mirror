@@ -70,7 +70,6 @@ mkdir Lists
 mkdir Logs
 mkdir Bin
 mkdir Docs
-mkdir Help
 
 copy %MROOT%\%builddir%\MqtAppStarter\release\MqtAppStarter.exe Bin
 copy %MROOT%\%builddir%\MqtChat\release\MqtChat.exe Bin
@@ -96,7 +95,6 @@ copy %QtOpenSSL%\*.DLL Bin
 copy %QtLicenses%\LICENSE-OPENSSL
 
 copy %MROOT%\mqt\Docs\*.* Docs
-copy %MROOT%\mqt\Help\*.* Help
 
 xcopy /F /Y %MROOT%\mqt\ControlFiles\Configuration .\Configuration
 xcopy /F /Y %MROOT%\mqt\ControlFiles\Configuration\WindowsFiles .\Configuration

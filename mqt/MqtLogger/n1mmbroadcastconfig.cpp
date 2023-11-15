@@ -1,4 +1,5 @@
 #include "ContestApp.h"
+#include "qvalidator.h"
 #include "tlogcontainer.h"
 
 #include "n1mmbroadcastconfig.h"

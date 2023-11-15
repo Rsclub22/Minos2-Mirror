@@ -7,7 +7,6 @@
 
 #ifdef Q_OS_WIN
 #include <windows.h>
-//#include <tlhelp32.h>
 #endif
 
 #ifdef Q_OS_UNIX

@@ -7,7 +7,6 @@
 #include "MShowMessageDlg.h"
 #include "MinosParameters.h"
 #include "tentryoptionsform.h"
-#include "tminosbshelpform.h"
 #include "tcalendarform.h"
 #include "tlogcontainer.h"
 #include "SendRPCDM.h"
@@ -1861,13 +1860,6 @@ const char * ContestDetails::BSHelpText =
    "\r\n"
    "Move between components of a group using the mouse or up/down arrow keys.\r\n")
    ;
-
-void ContestDetails::on_BSHelpButton_clicked()
-{
-    // Put up the help text on bundled settings
-     TMinosBSHelpForm HelpForm( this );
-     HelpForm.setText(tr(BSHelpText));
-     HelpForm.exec();}
 
 void ContestDetails::on_HFCalendarButton_clicked()
 {

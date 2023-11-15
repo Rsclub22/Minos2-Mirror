@@ -904,39 +904,20 @@ void TLogContainer::HelpAboutActionExecute()
 }
 void TLogContainer::HelpActionExecute()
 {
-    //  Action method for Help Browser button.
+    //  Action method for Help button.
 
-    //  Creates a HelpBrowser instance and sets the collection and startUrl.
+    //  Brings up PDF manual.
 
-    QString collectionFile;
-    TContestApp::getContestApp() ->loggerBundle.getStringProfile( elpHelpFile, collectionFile );
-
-    if (FileExists(collectionFile))
+    QString pdfFile;
+    TContestApp::getContestApp() ->loggerBundle.getStringProfile( elpPDFFile, pdfFile );
+    if (FileExists(pdfFile))
     {
-        QString url;
-        TContestApp::getContestApp() ->loggerBundle.getStringProfile( elpHelpEntryURL, url );
-        QUrl startUrl = QUrl(url);
-
-        if (!helpBrowser)
-            helpBrowser = QSharedPointer<HelpBrowser>(new HelpBrowser(collectionFile, startUrl, this));
-        helpBrowser->show();
+        QUrl url = QUrl().fromLocalFile(pdfFile);
+        QDesktopServices::openUrl(url);
     }
     else
     {
-        if (helpBrowser)
-        {
-            helpBrowser.clear();
-        }
-        TContestApp::getContestApp() ->loggerBundle.getStringProfile( elpPDFFile, collectionFile );
-        if (FileExists(collectionFile))
-        {
-            QUrl url = QUrl().fromLocalFile(collectionFile);
-            QDesktopServices::openUrl(url);
-        }
-        else
-        {
-            mShowMessage(tr("Documentation File %1 doesn't exist.").arg(collectionFile), this);
-        }
+        mShowMessage(tr("Documentation File %1 doesn't exist.").arg(pdfFile), this);
     }
 
 }

@@ -13,6 +13,7 @@
 
 #include <QComboBox>
 #include <QStandardItemModel>
+#include <QListView>
 #include "voicekeyerfactory.h"
 #include "rigcontrolvoicememorykeyer.h"
 #include "rigcontrolcwmessagekeyer.h"

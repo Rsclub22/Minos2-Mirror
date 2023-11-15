@@ -81,7 +81,6 @@ private slots:
    void on_OKButton_clicked();
    void on_EntDetailButton_clicked();
    void on_CancelButton_clicked();
-   void on_BSHelpButton_clicked();
    void on_HFCalendarButton_clicked();
    void on_VHFCalendarButton_clicked();
    void on_uwaveCalendarButton_clicked();

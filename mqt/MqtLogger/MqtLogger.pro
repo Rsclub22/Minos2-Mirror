@@ -10,7 +10,6 @@ include($$PWD/../mqtapplibs.pri)
 QT       += core gui
 QT       += widgets
 QT       += network
-QT       += help
 QT       += charts
 QT       += serialport
 
@@ -150,7 +149,6 @@ SOURCES += \
     voicekeyerbase.cpp \
     voicekeyerfactory.cpp \
     volumeslider.cpp \
-    tminosbshelpform.cpp \
     radiodetails.cpp \
     WsjtxFrame.cpp \
     WsjtxServer.cpp \
@@ -250,7 +248,6 @@ HEADERS  += \
     voicekeyerbase.h \
     voicekeyerfactory.h \
     volumeslider.h \
-    tminosbshelpform.h \
     radiodetails.h \
     WsjtxFrame.h \
     WsjtxServer.h \
@@ -315,7 +312,6 @@ FORMS    += \
     clusterclientfilterdialog.ui \
     clusterclientframe.ui \
     tstatsdispframe.ui \
-    tminosbshelpform.ui \
     WsjtxFrame.ui \
     WsjtxConfigure.ui \
     bandmapclientframe.ui \

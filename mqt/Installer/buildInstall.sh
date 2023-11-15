@@ -70,7 +70,6 @@ mkdir Logs
 mkdir Bin
 mkdir Bin/translations
 mkdir Docs
-mkdir Help
 
 for i in en_GB fr_FR
 do
@@ -101,7 +100,6 @@ rm -rf ./Configuration/MacFiles
 cp $DIR/mqt/Installer/Minos.sh . 
 cp $DIR/mqt/Installer/runAppStarter.sh .
 cp $DIR/mqt/Docs/*.* ./Docs
-cp $DIR/mqt/Help/*.* ./Help
 cp $DIR/mqt/*.ico .
 
 cd Configuration

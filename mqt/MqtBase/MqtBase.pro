@@ -10,7 +10,6 @@ include($$PWD/../mqthamlib.pri)
 QT       += core gui
 QT       += widgets
 QT       += network
-QT       += help
 
 equals(INC_MAP, 1): {
 QT += qml
@@ -109,8 +108,6 @@ SOURCES += \
     dxspotdatamodel.cpp \
     qttelnet.cpp \
     clusterClientServer.cpp \
-    helpbrowser.cpp \
-    helptextbrowser.cpp \
     clustercommon.cpp \
     CallsignLineEdit.cpp \
     locatorlineedit.cpp \
@@ -210,8 +207,6 @@ HEADERS += \
     clustercommon.h \
     clusterClientServer.h \
     rigmemcommondata.h \
-    helpbrowser.h \
-    helptextbrowser.h \
     CallsignLineEdit.h \
     locatorlineedit.h \
     bearinglineedit.h \
@@ -235,7 +230,6 @@ FORMS += \
     monitoredlogs.ui \
     rotpresetdialog.ui \
     StartConfig.ui \
-    helpbrowser.ui \
     callsigninputdialog.ui \
     locatorinputdialog.ui \
     qsomapframe.ui

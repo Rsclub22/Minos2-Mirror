@@ -246,14 +246,10 @@ void appStartup(const QString &pappName)
     if (!DirectoryExists("Lists")) {
         QDir().mkdir("Lists");
     }
-    if (!DirectoryExists("Help")) {
-        QDir().mkdir("Help");
-    }
     if (!DirectoryExists("Docs")) {
         QDir().mkdir("Docs");
     }
     cpDir(QString(fpath+"/../Resources/Configuration"), QString("./Configuration"));
-    cpDir(QString(fpath+"/../Resources/Help"), QString("./Help"));
     cpDir(QString(fpath+"/../Resources/Docs"), QString("./Docs"));
 
 #elif defined(Q_OS_IOS)
@@ -336,13 +332,6 @@ void appStartup(const QString &pappName)
             win.removeRecursively();
             QDir linuxf(destConfig + "/LinuxFiles");    // straight "linux" is objected to
             linuxf.removeRecursively();
-        }
-        if (DirectoryExists(srcMaster) && DirectoryExists(srcMaster + "/mqt/Help"))
-        {
-            // copyifnewer the master config
-            QString destHelp = QDir::currentPath() + "/Help";
-
-            cpDir(srcMaster + "/mqt/Help", destHelp);
         }
         if (DirectoryExists(srcMaster) && DirectoryExists(srcMaster + "/mqt/Docs"))
         {

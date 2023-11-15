@@ -95,7 +95,6 @@ RotatorMainWindow::RotatorMainWindow(QWidget *parent) :
     //blackText->setColor(QPalette::ButtonText, Qt::black);
 
     // disable some menus for now
-//    ui->actionHelp->setVisible(false);
 //    ui->actionSkyScan->setVisible(false);
 //    ui->actionAlways_On_Top->setVisible(false);
 

@@ -27,7 +27,6 @@ enum DirectoryLocation {dlBinaries
                          ,dlConfiguration
                          ,dlLists
                          ,dlLogs
-                         ,dlHelp
                          ,dlDocs
                          ,dlTraceLog
                          ,dlQRZDB

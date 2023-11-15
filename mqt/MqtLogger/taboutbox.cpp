@@ -1,4 +1,5 @@
 #include <QDesktopServices>
+#include <QUrl>
 #include "MTrace.h"
 #include "regsettings.h"
 #include "MShowMessageDlg.h"
