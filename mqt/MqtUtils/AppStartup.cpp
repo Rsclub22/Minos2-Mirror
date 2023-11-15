@@ -87,7 +87,7 @@ void myMessageOutput(QtMsgType type,
 QVector<Translation> getLanguages()
 {
     QVector<Translation> locs;
-    QString searchString = GetCurrentDir() + "/Bin/translations";
+    QString searchString = getDirectoryLocation(dlTranslations);
 
     QDirIterator files( searchString, QDir::Files | QDir::NoSymLinks , QDirIterator::NoIteratorFlags );
     while ( files.hasNext() )
@@ -125,18 +125,18 @@ void switchTranslation(QString loc)
     QSharedPointer<QTranslator> myappTranslator(new QTranslator());    // which goes out of scope :(
     QSharedPointer<QTranslator> myqtTranslator(new QTranslator());    // which goes out of scope :(
 
-    QString qtlocfile = QString("Bin/translations/") + "qtbase_" + loc;
+    QString qtlocfile = getDirectoryLocation(dlTranslations) + "/qtbase_" + loc;
     bool qtloadOK = myqtTranslator->load(qtlocfile);
     bool qtinstallOK = qa->installTranslator(myqtTranslator.data());
 
     if (!qtloadOK || qtinstallOK)
     {
-        qtlocfile = QString("Bin/translations/") + "qt_" + loc;
+        qtlocfile = getDirectoryLocation(dlTranslations) + "/qt_" + loc;
         qtloadOK = myqtTranslator->load(qtlocfile);
         qtinstallOK = qa->installTranslator(myqtTranslator.data());
     }
 
-    QString locfile = "Bin/translations/" + executableName + "_" + loc;
+    QString locfile = getDirectoryLocation(dlTranslations) + "/" + executableName + "_" + loc;
     bool loadOK = myappTranslator->load(locfile);
     bool installOK = qa->installTranslator(myappTranslator.data());
 

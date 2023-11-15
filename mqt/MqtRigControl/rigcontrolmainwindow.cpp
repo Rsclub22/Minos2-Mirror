@@ -4385,15 +4385,7 @@ QString RigControlMainWindow::getRigCtldExePath()
     QSettings  settings(fileName, QSettings::IniFormat);
     settings.beginGroup(RIGCTLD_GROUP_NAME);
 
-#if defined Q_OS_WIN32
-    QString rigCtldExePath = settings.value(RIGCTLD_PATH_SETTING_NAME, DEFAULT_WIN32_RIGCTLD_PATH).toString();
-#elif defined Q_OS_LINUX
-    QString rigCtldExePath = settings.value(RIGCTLD_PATH_SETTING_NAME, DEFAULT_LINUX_RIGCTLD_PATH).toString();
-    rigCtldExePath.replace("//", "/");
-#elif defined Q_OS_MAC
-    QString rigCtldExePath = settings.value(RIGCTLD_PATH_SETTING_NAME, DEFAULT_MAC_RIGCTLD_PATH).toString();
-    rigCtldExePath.replace("//", "/");
-#endif
+    QString rigCtldExePath = settings.value(RIGCTLD_PATH_SETTING_NAME, DEFAULT_RIGCTLD_PATH()).toString();
 
     settings.endGroup();
 

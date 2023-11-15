@@ -457,3 +457,8 @@ QString RADIO_PATH_LOGGER()
 {
     return getDirectoryLocation(dlConfiguration) + "/Radio/";
 }
+
+QString DEFAULT_RIGCTLD_PATH()
+{
+    return getDirectoryLocation(dlBinaries);
+}

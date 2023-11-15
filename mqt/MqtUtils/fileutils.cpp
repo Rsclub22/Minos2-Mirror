@@ -26,15 +26,15 @@ QString getDirectoryLocation(DirectoryLocation dl, QString runDir)
         {
 #ifdef Q_OS_MACOS
     case dlBinaries:
-        dirLoc = "Bin";
+        dirLoc = runDir + "/Bin";
         break;
 
     case dlTranslations:
-        dirLoc = "Bin/translations";
+        dirLoc = runDir + "/Bin/translations";
         break;
 
     case dlConfiguration:
-        dirLoc = "Configuration";
+        dirLoc = runDir + "/Configuration";
         break;
 
     case dlLists:
@@ -46,19 +46,19 @@ QString getDirectoryLocation(DirectoryLocation dl, QString runDir)
         break;
 
     case dlHelp:
-        dirLoc = "Help";
+        dirLoc = runDir + "/Help";
         break;
 
     case dlDocs:
-        dirLoc = "Docs";
+        dirLoc = runDir + "/Docs";
         break;
 
     case dlTraceLog:
-        dirLoc = "TraceLog";
+        dirLoc = runDir + "/TraceLog";
         break;
 
     case dlQRZDB:
-        dirLoc = "";
+        dirLoc = runDir;
         break;
 #else
         case dlBinaries:
