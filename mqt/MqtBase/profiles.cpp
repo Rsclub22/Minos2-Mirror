@@ -620,6 +620,16 @@ ProfileEntry::ProfileEntry(int id, const char *name, const QString &def, const c
         hint( hint ),
         RO(RO)
 {}
+ProfileEntry::ProfileEntry(int id, const char *name, const char *def, const char * dispname, const char * hint, bool RO )
+    :
+    pt( petString ),
+    id( id ),
+    name( name ),
+    dispname(dispname),
+    sdefaultval( def ),
+    hint( hint ),
+    RO(RO)
+{}
 /*
 ProfileEntry::ProfileEntry(int id, const QString &n, const QString &d, const QString &dname, const QString &h, bool RO )
       : id( id ), name( n ), sdefaultval( d ), hint( h ), pt( petString ), dispname(dname), RO(RO)

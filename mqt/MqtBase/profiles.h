@@ -37,6 +37,7 @@ class ProfileEntry
 
       void createEntry( SettingsBundle * );
       ProfileEntry(int id, const  char *name, const QString &def, const char * dispname, const char * hint, bool RO );
+      ProfileEntry(int id, const  char *name, const char *def, const char * dispname, const char * hint, bool RO );
       ProfileEntry(int id, const  char *name, int def, const char * dispname, const char * hint, bool RO );
       ProfileEntry(int id, const char *name, bool def, const char * dispname, const char * hint, bool RO );
 };
