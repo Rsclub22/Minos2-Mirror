@@ -3,6 +3,7 @@
 #include <QSqlError>
 #include <QVariant>
 #include "MTrace.h"
+#include "fileutils.h"
 #include "qrzdb.h"
 
 QRZDB::QRZDB(QObject *parent)
@@ -10,9 +11,9 @@ QRZDB::QRZDB(QObject *parent)
 {
     qdb = QSqlDatabase::addDatabase("QSQLITE");
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-    qdb.setDatabaseName("qrzdb6");
+    qdb.setDatabaseName(getDirectoryLocation(dlQRZDB) + "/qrzdb6");
 #else
-    qdb.setDatabaseName("qrzdb5");
+    qdb.setDatabaseName(getDirectoryLocation(dlQRZDB) + "/qrzdb5");
 #endif
 
     if (!qdb.open())
