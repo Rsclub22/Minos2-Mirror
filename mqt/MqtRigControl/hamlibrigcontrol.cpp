@@ -89,6 +89,7 @@ HamlibRigControl::~HamlibRigControl()
 }
 
 
+
 void HamlibRigControl::register_rigs(RigFactory::Rigs* rigsList)
 {
     rig_set_debug_callback (debug_callback, nullptr);
