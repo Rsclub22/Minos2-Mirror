@@ -341,7 +341,7 @@ void appStartup(const QString &pappName)
             cpDir(srcMaster + "/mqt/Docs", destDocs);
         }
     }
-    enableTrace( "./TraceLog", appStartupName + "_" );
+    enableTrace( getDirectoryLocation(dlTraceLog), appStartupName + "_" );
 
     trace(QSysInfo::prettyProductName());
     trace(QSysInfo::buildAbi());
