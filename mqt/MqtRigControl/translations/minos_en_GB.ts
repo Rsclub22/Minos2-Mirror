@@ -281,6 +281,11 @@ Check Rigcontrol tracelog</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../rigcontrolmainwindow.ui" line="43"/>
+        <source>Select rigctld path</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../rigcontrolmainwindow.ui" line="166"/>
         <location filename="../rigcontrolmainwindow.cpp" line="235"/>
         <source>Test Radio</source>
@@ -382,11 +387,6 @@ Check Rigcontrol tracelog</source>
     <message>
         <location filename="../rigcontrolmainwindow.ui" line="29"/>
         <source>Setup Radios...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../rigcontrolmainwindow.ui" line="43"/>
-        <source>Configure Rigctld...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

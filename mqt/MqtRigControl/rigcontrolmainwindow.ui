@@ -40,7 +40,7 @@
             <item>
              <widget class="QPushButton" name="configRigctld">
               <property name="text">
-               <string>Configure Rigctld...</string>
+               <string>Select rigctld path</string>
               </property>
              </widget>
             </item>

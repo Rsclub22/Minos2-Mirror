@@ -2253,99 +2253,104 @@ Double-cliquer sur un carré d&apos;arête pour étendre la zone de la carte.</t
 <context>
     <name>LoggerContestLog</name>
     <message>
-        <location filename="../LoggerContest.cpp" line="318"/>
+        <location filename="../LoggerContest.cpp" line="319"/>
         <source>Not a known file type! (%1)</source>
         <translation>Type de fichier inconnu! (%1)</translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="333"/>
+        <location filename="../LoggerContest.cpp" line="334"/>
         <source>Failed to open Contest file %1 : %2 </source>
         <translation>L&apos;ouverture du fichier %1 a échoué : %2 </translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="414"/>
+        <location filename="../LoggerContest.cpp" line="367"/>
+        <source>File %1 is empty, so cannot be opened</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../LoggerContest.cpp" line="419"/>
         <source>Failed to create Contest file %1 : %2</source>
         <translation>La création du fichier %1 a échoué : %2</translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="475"/>
+        <location filename="../LoggerContest.cpp" line="480"/>
         <source>(read) seek failed!</source>
         <translation>(Lire) la recherche a échoué!</translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="482"/>
+        <location filename="../LoggerContest.cpp" line="487"/>
         <source>Short read</source>
         <translation>Lecture courte</translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="495"/>
+        <location filename="../LoggerContest.cpp" line="500"/>
         <source>Invalid block number for write!!</source>
         <translation>Numéro de bloc non valide pour l&apos;écriture!!</translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="500"/>
-        <location filename="../LoggerContest.cpp" line="1825"/>
+        <location filename="../LoggerContest.cpp" line="505"/>
+        <location filename="../LoggerContest.cpp" line="1830"/>
         <source>(write) seek failed!</source>
         <translation>(Écriture) la recherche a échoué!</translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="505"/>
-        <location filename="../LoggerContest.cpp" line="1056"/>
-        <location filename="../LoggerContest.cpp" line="1069"/>
-        <location filename="../LoggerContest.cpp" line="1075"/>
+        <location filename="../LoggerContest.cpp" line="510"/>
+        <location filename="../LoggerContest.cpp" line="1061"/>
+        <location filename="../LoggerContest.cpp" line="1074"/>
+        <location filename="../LoggerContest.cpp" line="1080"/>
         <source>bad reply from write!</source>
         <translation>mauvaise réponse depuis l&apos;écriture!</translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="597"/>
+        <location filename="../LoggerContest.cpp" line="602"/>
         <source>Attempt to insert after last contact - not allowed. Please report a bug!</source>
         <translation>Insérer après le dernier contact - non autorisé. Merci de signaler un bug!</translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="771"/>
+        <location filename="../LoggerContest.cpp" line="776"/>
         <source>.GJV should have been opened read only!</source>
         <translation>.GJV aurait dû être ouvert en lecture seule!</translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="865"/>
+        <location filename="../LoggerContest.cpp" line="870"/>
         <source>Invalid block 0 in .GJV Contest file</source>
         <translation>Fichier de Concours .GJV - bloc 0 non valide</translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="872"/>
+        <location filename="../LoggerContest.cpp" line="877"/>
         <source>Invalid Contest file format (%1, %2 expected)</source>
         <translation>Format de fichier non valide (%1,%2 attendu)</translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="994"/>
-        <location filename="../LoggerContest.cpp" line="1146"/>
+        <location filename="../LoggerContest.cpp" line="999"/>
+        <location filename="../LoggerContest.cpp" line="1151"/>
         <source>Please give first serial to be written</source>
         <translation>Spécifier le premier numéro de série à écrire SVP</translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="996"/>
-        <location filename="../LoggerContest.cpp" line="1148"/>
+        <location filename="../LoggerContest.cpp" line="1001"/>
+        <location filename="../LoggerContest.cpp" line="1153"/>
         <source>Please give last serial to be written</source>
         <translation>Spécifier le dernier numéro de série à écrire SVP</translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="1002"/>
-        <location filename="../LoggerContest.cpp" line="1154"/>
+        <location filename="../LoggerContest.cpp" line="1007"/>
+        <location filename="../LoggerContest.cpp" line="1159"/>
         <source>Writing all contacts between serials %1 and %2 inclusive</source>
         <translation>Écriture de tous les contacts entre la séquence %1 et %2 inclus</translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="1045"/>
+        <location filename="../LoggerContest.cpp" line="1050"/>
         <source>Exported by Minos VHF logging system Version %1 %2</source>
         <translation>Exporté par Minos Logger Version %1 %2</translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="1047"/>
+        <location filename="../LoggerContest.cpp" line="1052"/>
         <source>From file %1</source>
         <translation>Depuis le fichier %1</translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="1818"/>
+        <location filename="../LoggerContest.cpp" line="1823"/>
         <source>Failed to open Contest file for monitoring %1 : %2</source>
         <translation>Echec de l&apos;ouverture du fichier pour la surveillance de %1 : %2</translation>
     </message>

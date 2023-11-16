@@ -12,6 +12,7 @@
 #include "LoggerContacts.h"
 #include "ContestApp.h"
 #include "AdifImport.h"
+#include "MShowMessageDlg.h"
 #include "cutils.h"
 #include "fileutils.h"
 #include "reg1test.h"
@@ -360,6 +361,10 @@ bool LoggerContestLog::initialise( const QString &fn, bool newFile, int slotno )
                QTHBundle.openSection( QTHBundleName.getValue() );
                stationBundle.openSection( stationBundleName.getValue() );
                loadOK = true;
+            }
+            else
+            {
+               mShowMessage(tr("File %1 is empty, so cannot be opened").arg(fn), nullptr);
             }
          }
          else

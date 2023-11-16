@@ -76,6 +76,16 @@ void ContestPage::buildScreen(TSingleLogFrame *tslfp, SCScreen &s, int &auxInsta
         for (int j = 0; j < rowSplitters[i]->count(); j++)
         {
             rowSplitters[i]->setStretchFactor(j, 0);
+
+            for(int n = 0; n < rowSplitters[i]->count(); n++)
+            {
+                QWidget *w = rowSplitters[i]->widget(n);
+                if (w)
+                {
+                    w->setMinimumWidth(20);
+                    w->setMinimumHeight(20);
+                }
+            }
         }
         connect(rowSplitters[i], &MinosSplitter::splitterMoved, this, &ContestPage::onSplitterMoved);
     }

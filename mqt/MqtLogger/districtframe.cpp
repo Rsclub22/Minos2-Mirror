@@ -15,7 +15,7 @@ QVector<GridColumn> DistrictGridModel::DistrictTreeColumns =
       GridColumn( ectWorked, "Wk CtX", QT_TR_NOOP("Wkd"), taCenter ),
       GridColumn( ectLocator, "MM00MM00", QT_TR_NOOP("Locator"), taLeftJustify ),
       GridColumn( ectBearing, "BRGXXX", QT_TR_NOOP("brg"), taCenter ),
-      GridColumn( ectName, "This is a Very Very long District", QT_TR_NOOP("District"), taLeftJustify )
+      GridColumn( ectName, "This is a long District", QT_TR_NOOP("District"), taLeftJustify )
    };
 
 DistrictFrame::DistrictFrame(StackedInfoFrame *parent) :
