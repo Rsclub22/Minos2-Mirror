@@ -280,6 +280,11 @@ Vérifier le tracelog Rigcontrol</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../rigcontrolmainwindow.ui" line="43"/>
+        <source>Select rigctld path</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../rigcontrolmainwindow.ui" line="166"/>
         <location filename="../rigcontrolmainwindow.cpp" line="235"/>
         <source>Test Radio</source>
@@ -403,9 +408,8 @@ Vérifier le tracelog Rigcontrol</translation>
         <translation type="vanished">Modification du concours - Ignorer la fréquence prédéfinie</translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.ui" line="43"/>
         <source>Configure Rigctld...</source>
-        <translation>Configurer le programme Rigctld...</translation>
+        <translation type="vanished">Configurer le programme Rigctld...</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.ui" line="564"/>
