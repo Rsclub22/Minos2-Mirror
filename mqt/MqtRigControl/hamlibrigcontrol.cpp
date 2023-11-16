@@ -39,7 +39,7 @@ const char* HamlibRigControl::hamlibErrorMsg[] =  {QT_TR_NOOP("No Error, operati
                                                 QT_TR_NOOP("Invalid VFO"),
                                                 QT_TR_NOOP("RIG_EDOM")};
 
-
+/*
 static QList<const rig_caps *> capsList;
 
 int collect(const rig_caps *caps, rig_ptr_t)
@@ -47,6 +47,9 @@ int collect(const rig_caps *caps, rig_ptr_t)
     capsList.append(caps);
     return 1;
 }
+*/
+
+
 
 bool hamlibTraceComms = false;
 
@@ -68,12 +71,134 @@ int debug_callback (enum rig_debug_level_e level, rig_ptr_t /* arg */, char cons
 
 const int RIGCTLD_MODEL_NUMBER = 2;
 
+/*
 extern "C"
 {
   //typedef struct rot RIG;
   struct rig_caps;
   //typedef int vfo_t;
 }
+*/
+
+int register_callback(rig_model_t rig_model, void *callback_data)
+{
+
+    RigFactory::Rigs* rigsList = reinterpret_cast<RigFactory::Rigs*> (callback_data);
+
+
+    RIG *myRig;
+    myRig = rig_init(rig_model);
+    bool myRigOk = (myRig) ? true : false;
+
+
+
+    QString manufacturerName = QString::fromLatin1 (rig_get_caps_cptr (rig_model, RIG_CAPS_MFG_NAME_CPTR)).trimmed ();
+    QString modelName = QString::fromLatin1 (rig_get_caps_cptr (rig_model, RIG_CAPS_MODEL_NAME_CPTR)).trimmed ();
+
+    QString key = QString("%1 %2").arg(manufacturerName, modelName);
+
+    auto port_type = RigCapConstants::PortType::none;
+
+    switch(rig_get_caps_int (rig_model, RIG_CAPS_PORT_TYPE))
+    {
+        case RIG_PORT_SERIAL:
+            port_type = RigCapConstants::PortType::serial;
+        break;
+
+        case RIG_PORT_NETWORK:
+            port_type = RigCapConstants::PortType::network;
+        break;
+
+        case RIG_PORT_USB:
+            port_type = RigCapConstants::PortType::usb;
+        break;
+        default:
+        {}
+    }
+
+
+    bool supportGetRit = rig_get_function_ptr(rig_model, RIG_FUNCTION_GET_RIT) ? true:false;
+    bool supportSetRit = rig_get_function_ptr(rig_model, RIG_FUNCTION_SET_RIT) ? true:false;
+
+    bool supportGetRitState = false;
+    bool supportSetRitState = false;
+
+    if (myRigOk)
+    {
+
+        supportGetRitState = rig_has_get_func(myRig, RIG_FUNC_RIT)  ? true:false;
+        supportSetRitState = rig_has_set_func(myRig, RIG_FUNC_RIT)  ? true:false;
+    }
+
+
+    bool supportSMeter = (rig_get_caps_int (rig_model, RIG_CAPS_HAS_GET_LEVEL) & RIG_LEVEL_STRENGTH) == RIG_LEVEL_STRENGTH;
+
+    // hamlib 4.5 - Dummy need to enable PTT to use PTT, so disable for now
+    bool supportGetPtt = false;
+    bool supportSetPtt = false;
+
+    if (!key.contains("Hamlib Dummy"))
+    {
+        supportGetPtt = rig_get_function_ptr(rig_model, RIG_FUNCTION_GET_PTT) ? true:false;
+        supportSetPtt = rig_get_function_ptr(rig_model, RIG_FUNCTION_SET_PTT) ? true:false;
+    }
+
+    bool supportGetVox = rig_has_get_func(myRig, RIG_FUNC_VOX) ? true:false;
+    bool supportSetVox = rig_has_get_func(myRig, RIG_FUNC_VOX) ? true:false;
+
+
+    bool supportVolume = ((rig_get_caps_int (rig_model, RIG_CAPS_HAS_GET_LEVEL) & RIG_LEVEL_AF) == RIG_LEVEL_AF) &&
+                rig_has_get_func(myRig, RIG_LEVEL_AF);  //((rig_get_caps_int (rig_model, RIG_CAPS_HAS_SET_LEVEL) & RIG_LEVEL_AF) == RIG_LEVEL_AF);
+
+    // support Antenna Switch
+    bool supportAntSw = (rig_get_function_ptr(rig_model, RIG_FUNCTION_GET_ANT) && rig_get_function_ptr(rig_model, RIG_FUNCTION_SET_ANT)) ? true:false;
+
+    bool supportVoiceMem = rig_get_function_ptr(rig_model, RIG_FUNCTION_SEND_VOICE_MEM) ? true:false;
+    bool supportStopVoiceMem = false; // ******** rig_get_function_ptr(rig_model, RIG_FUNCTION_STOP_VOICE_MEM) ? true:false;
+
+    bool supportCwMem = rig_get_function_ptr(rig_model, RIG_FUNCTION_SEND_MORSE) ? true:false;
+    bool supportCwMemStop = rig_get_function_ptr(rig_model, RIG_FUNCTION_STOP_MORSE) ? true:false;
+    bool supportCwMemWait = rig_get_function_ptr(rig_model, RIG_FUNCTION_SEND_MORSE) ? true:false;
+
+    // below to get a parameter dump for development... edit required parameters...
+    trace(QString("%1\t%2\t%3\t%4").arg(manufacturerName + " " + modelName).arg(rig_model).arg(supportCwMem ? "True" : "False").arg(supportVoiceMem ? "True" : "False"));
+
+    (*rigsList)[key] = RigCapabilities(port_type,
+                                       manufacturerName,
+                                       modelName,
+                                       key,
+                                       rig_model,
+                                       true,                // radio supports lookup supported bands
+                                       supportGetRit,       // radio supports get rit
+                                       supportSetRit,       // radio supports set rit
+                                       supportGetRitState,  // radio supports get rit state
+                                       supportSetRitState,  // radio supports set rit state
+                                       true,                // radio supports get rit max Khz
+                                       supportSMeter,       // radio supports s-meter
+                                       supportGetPtt,       // radio supports get Ptt
+                                       supportSetPtt,       // radio supports set Ptt
+                                       supportGetVox,       // radio supports get Vox State
+                                       supportSetVox,       // radio supports set Vox State
+                                       supportVolume,       // radio supports volume
+                                       supportAntSw,        // radio supports antenna switch
+                                       true,                // radio supports RigCtld
+                                       supportVoiceMem,        // radio supports Voice Memory
+                                       supportStopVoiceMem,     // radio supports stop Voice Memmory (TS890S)
+                                       supportCwMem,            // radio supports Cw Memory
+                                       supportCwMemStop,
+                                       supportCwMemWait,
+
+                                       true);    // radio poll data
+
+
+
+
+
+  return 1;
+
+}
+
+
 
 
 HamlibRigControl::HamlibRigControl(QObject *parent) : RigBase(parent)
@@ -90,19 +215,24 @@ HamlibRigControl::~HamlibRigControl()
 
 
 
+
+
 void HamlibRigControl::register_rigs(RigFactory::Rigs* rigsList)
 {
     rig_set_debug_callback (debug_callback, nullptr);
 
-    capsList.clear();
+    //capsList.clear();
     rig_load_all_backends();
-    rig_list_foreach(collect, nullptr);
-
+    rig_list_foreach_model(register_callback, rigsList);
+/*
     QString key;
 
     for (int i = 0; i < capsList.count(); i++)
     {
-        key = QString("%1 %2").arg(capsList[i]->mfg_name, capsList[i]->model_name);
+
+        rig_model_t rig_model = capsList[i]->rig_model;
+        //key = QString("%1 %2").arg(capsList[i]->mfg_name, capsList[i]->model_name);
+        key = QString("%1 %2").arg(QString::fromLatin1 (rig_get_caps_cptr (rig_model, RIG_CAPS_MFG_NAME_CPTR)).trimmed (), QString::fromLatin1 (rig_get_caps_cptr (rig_model, RIG_CAPS_MODEL_NAME_CPTR)).trimmed ());
         auto port_type = RigCapConstants::PortType::none;
         switch(capsList[i]->port_type)
         {
@@ -184,7 +314,7 @@ void HamlibRigControl::register_rigs(RigFactory::Rigs* rigsList)
     }
 
 
-
+*/
 
 }
 
@@ -1017,11 +1147,12 @@ bool HamlibRigControl::supportSignalStrength(int modelNumber)
     return rigHasGetLevel(modelNumber, RIG_LEVEL_STRENGTH);
 }
 
+/*
 bool HamlibRigControl::supportSMeter(int modelNumber)
 {
     return rigHasGetLevel(modelNumber, RIG_LEVEL_STRENGTH);
 }
-
+*/
 int HamlibRigControl::getSignalStrength(VFO vfo, int *value)
 {
     int retCode = RIG_OK;

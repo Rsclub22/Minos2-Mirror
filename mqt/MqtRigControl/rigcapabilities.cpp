@@ -38,6 +38,8 @@ RigCapabilities::RigCapabilities(RigCapConstants::PortType portType_,
                                  bool supportVoiceMemory_,
                                  bool supportStopVoiceMemory_,
                                  bool supportCwMemory_,
+                                 bool supportCwMemoryStop_,
+                                 bool supportCwMemoryWait_,
                                  bool pollData_ )
     : portType (portType_),
       rigManufacturer (rigManufacturer_),
@@ -61,6 +63,8 @@ RigCapabilities::RigCapabilities(RigCapConstants::PortType portType_,
       supportVoiceMemory (supportVoiceMemory_),
       supportStopVoiceMemory (supportStopVoiceMemory_),
       supportCwMemory(supportCwMemory_),
+      supportCwMemoryStop(supportCwMemoryStop_),
+      supportCwMemoryWait(supportCwMemoryWait_),
       pollData (pollData_)
 {
 
@@ -94,6 +98,8 @@ RigCapabilities & RigCapabilities::operator= ( const RigCapabilities &rigcap)
     supportVoiceMemory = rigcap.supportVoiceMemory;
     supportStopVoiceMemory = rigcap.supportStopVoiceMemory;
     supportCwMemory = rigcap.supportCwMemory;
+    supportCwMemoryStop = rigcap.supportCwMemoryStop;
+    supportCwMemoryWait = rigcap.supportCwMemoryWait;
     pollData = rigcap.pollData;
     return *this;
 }

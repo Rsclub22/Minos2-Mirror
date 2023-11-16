@@ -3,7 +3,7 @@
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //                      Omnirig Rig Control
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2021
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2023
 //
 //  Insperation for some of this code from the WSJT-X Project.
 //
@@ -508,7 +508,10 @@ void OmnirigControl::register_rigs(RigFactory::Rigs* rigsList, int id1, int id2)
                 false,      // support antenna switch
                 false,      // support rigctld
                 false,      // support voice memory
+                false,      // support stop voice memory
                 false,      // support Cw memory
+                false,      // support Cw memory Stop
+                false,      // support Cw memory wait
                 false);     // polldata flag
 
     // note the library may support these features,
@@ -537,7 +540,10 @@ void OmnirigControl::register_rigs(RigFactory::Rigs* rigsList, int id1, int id2)
                 false,      // support antenna switch
                 false,      // support rigctld
                 false,      // support voice memory
+                false,      // support stop voice memory
                 false,      // support Cw memory
+                false,      // support Cw memory Stop
+                false,      // support Cw memory wait
                 false);     // polldata flag
 
 

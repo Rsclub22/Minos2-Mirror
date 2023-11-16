@@ -4,7 +4,7 @@
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //                      Omnirig Rig Control
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2020
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2023
 //
 //
 //
