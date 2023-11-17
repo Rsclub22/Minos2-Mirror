@@ -57,7 +57,7 @@ macx {
     MY_ENTITLEMENTS.name = CODE_SIGN_ENTITLEMENTS
     MY_ENTITLEMENTS.value = ../ControlFiles/minos.entitlements
     QMAKE_MAC_XCODE_SETTINGS += MY_ENTITLEMENTS
-    QMAKE_INFO_PLIST = ../ControlFiles/Info.plist
+    #QMAKE_INFO_PLIST = ../ControlFiles/Info.plist
 }
 
 INCLUDEPATH += $$PWD/../MqtRotator
