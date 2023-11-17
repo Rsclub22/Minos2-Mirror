@@ -9,7 +9,6 @@
 //---------------------------------------------------------------------------
 
 #include "MLogFile.h"
-#include "fileutils.h"
 
 //---------------------------------------------------------------------------
 static MLogFile mLogFile;
@@ -24,16 +23,7 @@ void enableTrace(const QString &where , const QString filePrefix)
 {
    if ( !logEnabled )
    {
-      QString path = GetCurrentDir();
-      if ( where[ 0 ] == '.' )
-      {
-         path = GetCurrentDir() + where.right( where.size() - 1 );
-      }
-      else
-      {
-         path = where;
-      }
-      mLogFile.createLogFile( path, filePrefix, 10 );
+      mLogFile.createLogFile( where, filePrefix, 10 );
       logEnabled = true;
    }
 }
