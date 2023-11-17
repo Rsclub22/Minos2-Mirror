@@ -3,7 +3,7 @@
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //                      Rig Control
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2020
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2023
 //
 //
 //
@@ -22,9 +22,9 @@
 bool model_Sort(const rig_caps *caps1,const rig_caps *caps2);
 int rig_message_cb(enum rig_debug_level_e, rig_ptr_t, const char*, va_list);
 
-int collect(const rig_caps *caps, void *);
+//int collect(const rig_caps *caps, void *);
 
-
+int register_callback(rig_model_t rig_model, void *callback_data);
 
 enum serial_force_Lines_e {FORCE_LINE_NONE, FORCE_LINE_OFF, FORCE_LINE_ON};
 const serial_force_Lines_e forceLinesCodes[] = {FORCE_LINE_NONE, FORCE_LINE_OFF, FORCE_LINE_ON};
@@ -97,6 +97,9 @@ public:
     int sendVoiceMessage(VFO vfo, int vmNum) override;
     bool supportVoiceMemory(int rigNumber) override;
 
+    int stop_voice_mem(VFO vfo)  override;
+    bool supportStopVoiceMem(int rigNumber) override;
+
     int sendMorse(VFO vfo, QString msg) override;
     int stopMorse(VFO vfo) override;
     //int waitMorsePtt(VFO vfo) override;
@@ -150,17 +153,8 @@ private:
 
     bool rigConnected;
 
-    setting_t rigHasGetFunc(setting_t);
-    static setting_t rigHasGetFunc(int rigNumber, setting_t level);
-
-    setting_t rigHasSetFunc(setting_t);
-    static setting_t rigHasSetFunc(int rigNumber, setting_t);
 
 
-    setting_t rigHasGetLevel(setting_t level);
-    static setting_t rigHasGetLevel(int rigNumber, setting_t level);
-    setting_t rigHasSetLevel(setting_t level);
-    static setting_t rigHasSetLevel(int rigNumber, setting_t level);
     int rigSetLevel(vfo_t vfo, setting_t level, value_t val);
     int rigGetLevel(vfo_t vfo, setting_t level, value_t *val);
 
@@ -179,6 +173,22 @@ private:
 
     static bool supportVolume(int rigNumber);
     static const freq_range_t *getFreqRange(RIG *myRig, const Frequency &freq);
+
+
+    // leaving these - now using the hamlib functions directly in register_rigs
+    setting_t rigHasGetFunc(setting_t);
+    static setting_t rigHasGetFunc(int rigNumber, setting_t level);
+
+    setting_t rigHasSetFunc(setting_t);
+    static setting_t rigHasSetFunc(int rigNumber, setting_t level);
+
+
+    setting_t rigHasGetLevel(setting_t level);
+    static setting_t rigHasGetLevel(int rigNumber, setting_t level);
+    setting_t rigHasSetLevel(setting_t level);
+    static setting_t rigHasSetLevel(int rigNumber, setting_t level);
+
+
 };
 
 #endif // HAMLIBRIGCONTROL_H

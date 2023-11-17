@@ -671,7 +671,7 @@ void TxVmButtonsFrame::onMsgDurTimerTimeout()
 {
     if (buttonNumSent >= 0)
     {
-        if (vmKeyParamList[buttonNumSent].getVmDuration() > 0 )
+        if (vmKeyParamList[buttonNumSent].getVmDuration() > 0 || usePttForEomFlag)
         {
         // message duration of zero means that there shouldn't be a timer running
             if (vmKeyParamList[buttonNumSent].getVmRepeatFlag())
@@ -681,11 +681,10 @@ void TxVmButtonsFrame::onMsgDurTimerTimeout()
             }
             else
             {
-                txVmButtonMap[buttonNumSent]->showButtonOnOff(false);
-                setRepeatIndicatorOnOff(false);
-                buttonNumSent = NO_VM_BUTTON_ON;
+                turnOffVMButton();
             }
         }
+
     }
     msgDurTimer->stop();
 
@@ -707,6 +706,14 @@ void TxVmButtonsFrame::onMsgDurTimerTimeout()
 
 
 
+}
+
+
+void TxVmButtonsFrame::turnOffVMButton()
+{
+    txVmButtonMap[buttonNumSent]->showButtonOnOff(false);
+    setRepeatIndicatorOnOff(false);
+    buttonNumSent = NO_VM_BUTTON_ON;
 }
 
 
@@ -973,10 +980,20 @@ void TxVmButtonsFrame::setPttState(bool state)
 void TxVmButtonsFrame::pttStopMessage(bool state)
 {
    trace(QString("[TxVmButtonsFrame] pttStopMessage state = %1").arg(state ? "true" : "false"));
-   if (txVoiceKeyer && txVoiceKeyer->doRepeatFromLogger() && !state)
+   if (usePttForEomFlag)
    {
-        onMsgDurTimerTimeout();
+       trace(QString("[TxVmButtonsFrame] Using PTT for EOM Flag"));
+       if (txVoiceKeyer && txVoiceKeyer->doRepeatFromLogger() && !state)
+       {
+            onMsgDurTimerTimeout();
+       }
    }
+   else
+   {
+       trace(QString("[TxVmButtonsFrame] Ignoring PTT for EOM Flag"));
+   }
+
+
 }
 
 void TxVmButtonsFrame::on_pipCb_stateChanged(int /*arg1*/)

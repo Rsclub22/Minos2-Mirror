@@ -229,10 +229,12 @@ void RigSetupDialog::loadSettingsToTab(int tabNum, QString tabName)
         {
             radioTab.value(tabName)->setPttControlsVisible(true);
             radioTab.value(tabName)->setPTTCheckBoxChecked(true);
-            if (radioTab.value(tabName)->getRadioData()->pttType == serialCommonData::PTT_METHOD_CAT)
-            {
+            radioTab.value(tabName)->setCatPttRadioButtonVisible(availRadioData.value(tabName)->enableDisableCatFeature.catEnable);
 
-            }
+            //if (radioTab.value(tabName)->getRadioData()->pttType == serialCommonData::PTT_METHOD_CAT)
+            //{
+
+            //}
 
         }
         else

@@ -1,3 +1,18 @@
+/////////////////////////////////////////////////////////////////////////////
+// $Id$
+//
+// PROJECT NAME 		Minos Amateur Radio Control and Logging System
+//                      Rig Control
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2023
+//
+//
+//
+//
+//
+/////////////////////////////////////////////////////////////////////////////
+
+
+
 #ifndef RIGSETUPFORM_H
 #define RIGSETUPFORM_H
 
@@ -168,6 +183,7 @@ public:
     void setPttComport(QString p);
     void setPttTypeRadioButtons(int type);
     void setPTTCheckBoxDisabled(bool disabled);
+    void setCatPttRadioButtonVisible(bool visible);
     void loadEnableShowCatFeaturesBox(const RigCapabilities rigCap);
 
 

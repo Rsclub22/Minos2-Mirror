@@ -87,6 +87,9 @@ public:
     virtual int sendVoiceMessage(VFO vfo, int vmNum) = 0;
     virtual bool supportVoiceMemory(int rigNumber) = 0;
 
+    virtual int stop_voice_mem(VFO  vfo) = 0;
+    virtual bool supportStopVoiceMem(int rigNumber) = 0;
+
     virtual int sendMorse(VFO vfo, QString msg) = 0;
     virtual int stopMorse(VFO vfo) = 0;
     //virtual int waitMorsePtt(VFO vfo) = 0;
