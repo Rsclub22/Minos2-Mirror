@@ -592,9 +592,10 @@ QMenu *TLogContainer::newMenu(QMenu *m, const char *text)
     menuList[menu] = text;
     return menu;
 }
-QAction *TLogContainer::newAction(const char *text, QMenu *m, void (TLogContainer::*slotparam)() )
+QAction *TLogContainer::newAction(const char *text, QMenu *m, void (TLogContainer::*slotparam)(),QAction::MenuRole mr )
 {
     QAction * newAct = new QAction( tr(text), this );
+    newAct->setMenuRole(mr);
     actionList[newAct] = text;
     m->addAction( newAct );
     if (slotparam)
@@ -603,9 +604,10 @@ QAction *TLogContainer::newAction(const char *text, QMenu *m, void (TLogContaine
     }
     return newAct;
 }
-QAction *TLogContainer::newAction(int n, QMenu *m, void (TLogContainer::*slotparam)() )
+QAction *TLogContainer::newAction(int n, QMenu *m, void (TLogContainer::*slotparam)(),QAction::MenuRole mr )
 {
     QAction * newAct = new QAction( QString::number(n), this );
+    newAct->setMenuRole(mr);
     m->addAction( newAct );
     if (slotparam)
     {
@@ -686,10 +688,10 @@ void TLogContainer::setupMenus()
 
     ui->menuFile->addSeparator();
 #ifdef Q_OS_WIN
-    ExitClearAction = newAction(QT_TR_NOOP("E&xit Minos Contest Logger and Clear registry..."), ui->menuFile, &TLogContainer::ExitClearActionExecute);
+    ExitClearAction = newAction(QT_TR_NOOP("E&xit Minos Contest Logger and Clear registry..."), ui->menuFile, &TLogContainer::ExitClearActionExecute, QAction::ApplicationSpecificRole);
 #endif
     ui->menuFile->addSeparator();
-    ExitAction = newAction(QT_TR_NOOP("E&xit Minos Contest Logger"), ui->menuFile, &TLogContainer::ExitActionExecute);
+    ExitAction = newAction(QT_TR_NOOP("E&xit Minos Contest Logger"), ui->menuFile, &TLogContainer::ExitActionExecute, QAction::QuitRole);
 // end of file menu
 
     GoToSerialAction = newAction(QT_TR_NOOP("&Go To Contact Serial..."), ui->menuSearch, &TLogContainer::GoToSerialActionExecute);
@@ -706,7 +708,7 @@ void TLogContainer::setupMenus()
     CorrectDateTimeAction = newAction(QT_TR_NOOP("Correct Date/Time..."), ui->menuTools, &TLogContainer::CorrectDateTimeActionExecute);
     ui->menuTools->addSeparator();
 
-    OptionsAction = newAction(QT_TR_NOOP("Options..."), ui->menuTools, &TLogContainer::OptionsActionExecute);
+    OptionsAction = newAction(QT_TR_NOOP("Options..."), ui->menuTools, &TLogContainer::OptionsActionExecute, QAction::PreferencesRole);
 
     AdvancedOptionsAction = newAction(QT_TR_NOOP("Advanced Options..."), ui->menuTools, &TLogContainer::AdvancedOptionsActionExecute);
     AdvancedOptionsAction->setVisible(false);
@@ -765,7 +767,7 @@ void TLogContainer::setupMenus()
 
     HelpAction = newAction(QT_TR_NOOP("Help..."), ui->menuHelp, &TLogContainer::HelpActionExecute);
     CheckUpdatesAction = newAction(QT_TR_NOOP("Check For Updates..."), ui->menuHelp, &TLogContainer::CheckUpdatesActionExecute);
-    HelpAboutAction = newAction(QT_TR_NOOP("About..."), ui->menuHelp, &TLogContainer::HelpAboutActionExecute);
+    HelpAboutAction = newAction(QT_TR_NOOP("About..."), ui->menuHelp, &TLogContainer::HelpAboutActionExecute, QAction::AboutRole);
 }
 
 

@@ -120,8 +120,8 @@ private:
     QAction *lastLayoutSelected = nullptr;
     QAction *lastLanguageSelected = nullptr;
 
-    QAction *newAction(int n, QMenu *m, void (TLogContainer::*slotparam)());
-    QAction *newAction(const char *text, QMenu *m, void (TLogContainer::*slotparam)() );
+    QAction *newAction(int n, QMenu *m, void (TLogContainer::*slotparam)(),QAction::MenuRole mr = QAction::TextHeuristicRole);
+    QAction *newAction(const char *text, QMenu *m, void (TLogContainer::*slotparam)() ,QAction::MenuRole mr = QAction::TextHeuristicRole);
     QMenu *newMenu(QMenu *m, const char *text);
     SetMemoryAction *newMemoryAction(const char *text, QMenu *m, void (TLogContainer::*slotparam)() );
     QAction *newCheckableAction(const char *text, QMenu *m, void (TLogContainer::*slotparam)(bool) );
