@@ -568,21 +568,17 @@ void TLogContainer::changeEvent( QEvent* e )
         TWaitCursor wc(this);
         selectSession(TContestApp::getContestApp()->currSession);
 
-        for(QMap<QMenu *, const char *>::iterator i = menuList.begin(); i != menuList.end(); i++)
-        {
-            i.key()->setTitle(tr(i.value()));
-        }
-        for(QMap<QAction *, const char *>::iterator i = actionList.begin(); i != actionList.end(); i++)
-        {
-            i.key()->setText(tr(i.value()));
-        }
+        // clear and rebuild the menus, in their new language
+        clearMenus();
+
+        setupMenus();
+
+        TSingleLogFrame *tslf = getCurrentLogFrame();
+        int tab = ui->contestPageControl->indexOf(tslf);
+        setMenuLog(tab);
+
         ui->retranslateUi(this);
         setCaption(QString());
-        if (menuEnter)
-        {
-            menuEnter->setTitle(QCoreApplication::translate("TLogContainer", "Enter", nullptr));
-        }
-
     }
     QMainWindow::changeEvent(e);
 }
@@ -769,7 +765,24 @@ void TLogContainer::setupMenus()
     CheckUpdatesAction = newAction(QT_TR_NOOP("Check For Updates..."), ui->menuHelp, &TLogContainer::CheckUpdatesActionExecute);
     HelpAboutAction = newAction(QT_TR_NOOP("About..."), ui->menuHelp, &TLogContainer::HelpAboutActionExecute, QAction::AboutRole);
 }
+void TLogContainer::clearMenus()
+{
+    for(QMap<QMenu *, const char *>::iterator i = menuList.begin(); i != menuList.end(); i++)
+    {
+        i.key()->deleteLater();
+    }
+    for(QMap<QAction *, const char *>::iterator i = actionList.begin(); i != actionList.end(); i++)
+    {
+        i.key()->deleteLater();
+    }
+#ifndef NDEBUG
+    EnterAction->deleteLater();
+    menuEnter->deleteLater();
+#endif
+    menuList.clear();
+    actionList.clear();
 
+}
 
 void TLogContainer::enableActions()
 {

@@ -127,6 +127,7 @@ private:
     QAction *newCheckableAction(const char *text, QMenu *m, void (TLogContainer::*slotparam)(bool) );
     QAction *newCheckableAction(const QString text, QMenu *m, void (TLogContainer::*slotparam)(bool) );
     void setupMenus();
+    void clearMenus();
 
     void FileImportActionExecute(bool hf);
     void FileNewActionExecute(bool hf);
