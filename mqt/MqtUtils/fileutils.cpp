@@ -88,6 +88,8 @@ QString getDirectoryLocation(DirectoryLocation dl, QString runDir)
         case dlQRZDB:
             dirLoc = runDir;
             break;
+
+// Do we need a WSJTX recordings directory?
 #endif
 
         }
