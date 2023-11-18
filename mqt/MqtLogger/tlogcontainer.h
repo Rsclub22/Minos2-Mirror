@@ -132,7 +132,6 @@ private:
     void FileImportActionExecute(bool hf);
     void FileNewActionExecute(bool hf);
 
-    QMenu *menuEnter = nullptr;
     QAction *EnterAction = nullptr;
 
     QAction *HelpAction;

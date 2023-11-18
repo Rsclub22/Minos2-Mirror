@@ -709,6 +709,12 @@ void TLogContainer::setupMenus()
     AdvancedOptionsAction = newAction(QT_TR_NOOP("Advanced Options..."), ui->menuTools, &TLogContainer::AdvancedOptionsActionExecute);
     AdvancedOptionsAction->setVisible(false);
 
+#ifndef NDEBUG
+    // until it works, don't show it!
+
+    EnterAction = newAction(QT_TR_NOOP("Create Entry and send to RSGB"), ui->menuTools, &TLogContainer::EnterActionExecute);
+#endif
+
     // end of tools manu
 
     setMemoryAction = newMemoryAction(QT_TR_NOOP("Add as new memory..."), &TabPopup, &TLogContainer::onSetMemoryActionExecute);
@@ -747,19 +753,11 @@ void TLogContainer::setupMenus()
     TabPopup.addAction(CorrectDateTimeAction);
     TabPopup.addSeparator();
 
+    TabPopup.addAction(OptionsAction);
+
     //TabPopup.addAction(AnalyseMinosLogAction);
     newAction( QT_TR_NOOP("Cancel"), &TabPopup, &TLogContainer::CancelClick);
 
-#ifndef NDEBUG
-    // until it works, don't show it!
-    menuEnter = new QMenu(ui->menuBar);
-    menuEnter->setObjectName(QString::fromUtf8("enterMenu"));
-    menuEnter->setTitle(QCoreApplication::translate("TLogContainer", "Enter", nullptr));
-
-    ui->menuBar->addMenu(menuEnter);
-
-    EnterAction = newAction(QT_TR_NOOP("Create Entry and send to RSGB"), menuEnter, &TLogContainer::EnterActionExecute);
-#endif
 
     HelpAction = newAction(QT_TR_NOOP("Help..."), ui->menuHelp, &TLogContainer::HelpActionExecute);
     CheckUpdatesAction = newAction(QT_TR_NOOP("Check For Updates..."), ui->menuHelp, &TLogContainer::CheckUpdatesActionExecute);
@@ -775,10 +773,7 @@ void TLogContainer::clearMenus()
     {
         i.key()->deleteLater();
     }
-#ifndef NDEBUG
-    EnterAction->deleteLater();
-    menuEnter->deleteLater();
-#endif
+
     menuList.clear();
     actionList.clear();
 
