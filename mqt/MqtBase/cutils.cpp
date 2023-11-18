@@ -879,7 +879,7 @@ void comboSetUniqueNames(QStringList nameList, QComboBox *cb)
     }
 
     cb->clear();
-    cb->addItem("");
+    cb->addItem("", "");
     for(int i = 0; i < names.count(); i++)
     {
         cb->addItem( uniqueNames[i], names[i].toString());
