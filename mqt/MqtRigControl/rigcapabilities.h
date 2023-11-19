@@ -21,6 +21,9 @@ namespace RigCapConstants
 {
     enum PortType {none, serial, network, usb};
 
+
+    // These are the PTT capabilities from hamlib. Most radios are RIG_PTT_NONE, RIG_PTT_RIG and RIG_PTT_RIG_MICDATA
+    // we will use RIG_PTT_NONE to disable CAT PTT and allow Hardware PTT
     enum PttPortType {RIG_PTT_NONE = 0,       /*!< No PTT available */
                       RIG_PTT_RIG,            /*!< Legacy PTT (CAT PTT) */
                       RIG_PTT_SERIAL_DTR,     /*!< PTT control through serial DTR signal */
@@ -52,7 +55,7 @@ public:
                     bool supportSetRitState = false,
                     bool supportGetRitMax = false,
                     bool supportSMeter_ = false,
-                    RigCapConstants::PttPortType pttPortType_ = RigCapConstants::PttPortType::RIG_PTT_NONE,
+                    RigCapConstants::PttPortType supportPttPortType_ = RigCapConstants::PttPortType::RIG_PTT_NONE,
                     bool supportGetPtt_ = false,
                     bool supportSetPtt_ = false,
                     bool supportGetVox_ = false,
@@ -81,7 +84,7 @@ public:
     bool supportSetRitState;
     bool supportGetRitMax;
     bool supportSMeter;
-    RigCapConstants::PttPortType pttPortType = RigCapConstants::PttPortType::RIG_PTT_NONE;
+    RigCapConstants::PttPortType supportPttPortType = RigCapConstants::PttPortType::RIG_PTT_NONE;
     bool supportGetPtt;
     bool supportSetPtt;
     bool supportGetVox;

@@ -969,6 +969,57 @@ bool RigControlMainWindow::checkSupportCwKeyerMemory()
 
 }
 
+
+void RigControlMainWindow::checkSupportPtt()
+{
+
+    if (radio)
+    {
+        if (rigFactory->supported_rigs()->value(currentRadio.rigModel).supportPttPortType == RigCapConstants::PttPortType::RIG_PTT_NONE
+                || rigFactory->supported_rigs()->value(currentRadio.rigModel).supportPttPortType == RigCapConstants::PttPortType::RIG_PTT_RIG
+                || rigFactory->supported_rigs()->value(currentRadio.rigModel).supportPttPortType == RigCapConstants::PttPortType::RIG_PTT_RIG_MICDATA
+            )
+        {
+            if (rigFactory->supported_rigs()->value(currentRadio.rigModel).supportPttPortType == RigCapConstants::PttPortType::RIG_PTT_NONE)
+            {
+                ui->pttLbl->setText("Serial PTT");
+            }
+            else
+            {
+                ui->pttLbl->setText("CAT PTT");
+            }
+
+            setPttGroupItemsVisible(true);
+
+            if (currentRadio.enablePTT)
+            {
+              setPttIndOnOff(true);
+              addPTTEnabledStatusToRigCache(true);
+            }
+            else
+            {
+                setPttIndOnOff(false);
+                addPTTEnabledStatusToRigCache(false);
+            }
+
+            setTxRxIndOnOff(false);
+
+        }
+        else
+        {
+
+            setPttGroupItemsVisible(false);
+            setPttIndOnOff(false);
+            addPTTEnabledStatusToRigCache(false);
+
+         }
+    }
+
+
+}
+
+/*
+
 void RigControlMainWindow::checkSupportPtt()
 {
 
@@ -1022,7 +1073,7 @@ void RigControlMainWindow::checkSupportPtt()
 
 }
 
-
+*/
 void RigControlMainWindow::checkSupportPollRadio()
 {
     if (rigFactory->supported_rigs()->value(currentRadio.rigModel).pollData)
@@ -4275,7 +4326,7 @@ void RigControlMainWindow::getRadioConfigData(scatParams *radioData, QString rad
     radioData->forceDtr = config.value("forceDTR", 0).toInt();
     radioData->forceRts= config.value("forceRTS", 0).toInt();
     radioData->enablePTT = config.value("enablePtt", false).toBool();
-    radioData->pttType = config.value("pttType", static_cast<int>(serialCommonData::PTTMethodCodes::PTT_METHOD_CAT)).toInt();
+    radioData->pttType = config.value("pttType", static_cast<int>(serialCommonData::PTTMethodCodes::PTT_METHOD_NONE)).toInt();
     radioData->pttSerialPort = config.value("pttSerialPort", "").toString();
     radioData->pollInterval = config.value("radioPollInterval", "1").toString();
     radioData->rigCtldEnable = config.value("rigCtldEnable", false).toBool();

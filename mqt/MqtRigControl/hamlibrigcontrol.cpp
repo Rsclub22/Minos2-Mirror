@@ -120,7 +120,25 @@ int register_callback(rig_model_t rig_model, void *callback_data)
     bool supportGetPtt = false;
     bool supportSetPtt = false;
 
-    auto pttPortType = static_cast<RigCapConstants::PttPortType> (rig_get_caps_int(rig_model, RIG_CAPS_PTT_TYPE));
+    auto supportPttPortType = RigCapConstants::PttPortType::RIG_PTT_NONE;
+
+    switch (rig_get_caps_int(rig_model, RIG_CAPS_PTT_TYPE))
+    {
+        case RIG_PTT_NONE:
+            supportPttPortType = RigCapConstants::PttPortType::RIG_PTT_NONE;
+        break;
+
+        case RIG_PTT_RIG:       // CAT PTT
+            supportPttPortType = RigCapConstants::PttPortType::RIG_PTT_RIG;
+        break;
+
+        case RIG_PTT_RIG_MICDATA:  // CAT PTT
+            supportPttPortType = RigCapConstants::PttPortType::RIG_PTT_RIG_MICDATA;
+        break;
+        default:
+        {}
+
+    }
 
     if (!key.contains("Hamlib Dummy"))
     {
@@ -146,7 +164,7 @@ int register_callback(rig_model_t rig_model, void *callback_data)
     bool supportCwMemWait = rig_get_function_ptr(rig_model, RIG_FUNCTION_SEND_MORSE) ? true:false;
 
     // below to get a parameter dump for development... edit required parameters...
-    trace(QString("%1\t%2\t%3\t%4\tportType = %5\tpttPortType = %6").arg(manufacturerName + " " + modelName).arg(rig_model).arg(supportCwMem ? "True" : "False").arg(supportVoiceMem ? "True" : "False").arg(port_type).arg(pttPortType));
+    trace(QString("%1\t%2\t%3\t%4\tportType = %5\tpttPortType = %6").arg(manufacturerName + " " + modelName).arg(rig_model).arg(supportCwMem ? "True" : "False").arg(supportVoiceMem ? "True" : "False").arg(port_type).arg(supportPttPortType));
 
     (*rigsList)[key] = RigCapabilities(port_type,
                                        manufacturerName,
@@ -160,7 +178,7 @@ int register_callback(rig_model_t rig_model, void *callback_data)
                                        supportSetRitState,  // radio supports set rit state
                                        true,                // radio supports get rit max Khz
                                        supportSMeter,       // radio supports s-meter
-                                       pttPortType,
+                                       supportPttPortType,  // we only support CAT and when NONE Serial HW
                                        supportGetPtt,       // radio supports get Ptt
                                        supportSetPtt,       // radio supports set Ptt
                                        supportGetVox,       // radio supports get Vox State

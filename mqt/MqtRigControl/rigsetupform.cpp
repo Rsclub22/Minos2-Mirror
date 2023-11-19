@@ -27,6 +27,7 @@
 #include "BandList.h"
 #include "addtransverterdialog.h"
 #include "rigsetupform.h"
+#include "rigsetupform.h"
 
 RigSetupForm::RigSetupForm(RigFactory* rigFactory_, QSharedPointer<scatParams> _radioData,
                            const QVector<QSharedPointer<BandInfo> > _bands, QLogTabWidget* _ui_RadioTab, QWidget *parent):
@@ -83,17 +84,17 @@ RigSetupForm::RigSetupForm(RigFactory* rigFactory_, QSharedPointer<scatParams> _
 
 
     connect(ui->pttEnable, &QCheckBox::clicked, this, &RigSetupForm::onPttEnableSelected);
-    connect(ui->pttCatEnable, &QCheckBox::clicked, this, &RigSetupForm::onPttCatEnableClicked);
-    connect(ui->pttDTREnable, &QCheckBox::clicked, this, &RigSetupForm::onPttDtrEnableClicked);
-    connect(ui->pttRTSEnable, &QCheckBox::clicked, this, &RigSetupForm::onPttRtsEnableClicked);
+    connect(ui->pttCatSelectRadioButton, &QCheckBox::clicked, this, &RigSetupForm::onPttCatEnableClicked);
+    connect(ui->pttDTRSelectRadioButton, &QCheckBox::clicked, this, &RigSetupForm::onPttDtrEnableClicked);
+    connect(ui->pttRTSSelectRadioButton, &QCheckBox::clicked, this, &RigSetupForm::onPttRtsEnableClicked);
     connect(ui->pttComportSel, QOverload<int>::of(&QComboBox::activated), this, &RigSetupForm::onPttComportSelActivated);
 
-    connect(ui->enableRitChkBox, &QCheckBox::clicked, this, &RigSetupForm::onEnableRitClicked);
-    connect(ui->enableSMeterChkBox, &QCheckBox::clicked, this, &RigSetupForm::onEnableSMeterClicked);
-    connect(ui->enableVolChkBox, &QCheckBox::clicked, this, &RigSetupForm::onEnableVolClicked);
-    connect(ui->enableCatPttChkBox, &QCheckBox::clicked, this, &RigSetupForm::onEnableCatPttClicked);
-    connect(ui->enableVoiceTxMemChkBox, &QCheckBox::clicked, this, &RigSetupForm::onEnableVoiceTxMemClicked);
-    connect(ui->enableCwTxMemChkBox, &QCheckBox::clicked, this, &RigSetupForm::onEnableCwTxMemClicked);
+    connect(ui->enableRitCatFeatureChkBox, &QCheckBox::clicked, this, &RigSetupForm::onEnableRitCatFeatureClicked);
+    connect(ui->enableSMeterCatFeatureChkBox, &QCheckBox::clicked, this, &RigSetupForm::onEnableSMeterCatFeatureClicked);
+    connect(ui->enableVolCatFeatureChkBox, &QCheckBox::clicked, this, &RigSetupForm::onEnableVolCatFeatureClicked);
+    connect(ui->enableCatPttCatFeatureChkBox, &QCheckBox::clicked, this, &RigSetupForm::onEnableCatPttCatFeatureClicked);
+    connect(ui->enableVoiceTxMemCatFeatureChkBox, &QCheckBox::clicked, this, &RigSetupForm::onEnableVoiceTxMemCatFeatureClicked);
+    connect(ui->enableCwTxMemCatFeatureChkBox, &QCheckBox::clicked, this, &RigSetupForm::onEnableCwTxMemCatFeatureClicked);
     connect(ui->enableCatFeaturesChkBox, &QCheckBox::clicked, this, &RigSetupForm::onEnableCatFeaturesClicked);
 
 
@@ -219,6 +220,7 @@ void RigSetupForm::setupRadioModel(QString radioModel)
         else
         {
             setSupportBandCheckBoxVisible(true);
+            setCatFeaturesEnableChkBoxVisible(false);          // this is an Omnirig radio, turn off the CAT Features enable checkbox
         }
 
 
@@ -278,7 +280,21 @@ void RigSetupForm::setupRadioModel(QString radioModel)
              setLocTVSWComportVisible(false);
          }
 
+/*
+         if (rigCap.supportPttPortType == RigCapConstants::PttPortType::RIG_PTT_RIG
+                 || rigCap.supportPttPortType == RigCapConstants::PttPortType::RIG_PTT_RIG_MICDATA)
+         {
+             // support CAT PTT
+             setCatPttInitialState(true);
+         }
+         else if (rigCap.supportPttPortType == RigCapConstants::PttPortType::RIG_PTT_NONE)
+         {
 
+            // support Serial
+            setCatPttInitialState(false);
+         }
+
+*/
 
     }
 
@@ -410,6 +426,7 @@ void RigSetupForm::comportSelected()
         radioData->comport = ui->comPortBox->currentText();
 
     }
+/*********************************************************************************
 
     if (ui->pttEnable->isChecked())
     {
@@ -435,6 +452,7 @@ void RigSetupForm::comportSelected()
             setForceDTRDisabled(false);
         }
     }
+*/
 }
 
 QString RigSetupForm::getComport() const
@@ -1308,9 +1326,9 @@ void RigSetupForm::fillMgmModes()
 /********************** Enable\Disable Features Checkboxes **************/
 
 
-void RigSetupForm::onEnableRitClicked()
+void RigSetupForm::onEnableRitCatFeatureClicked()
 {
-    bool checked = ui->enableRitChkBox->isChecked();
+    bool checked = ui->enableRitCatFeatureChkBox->isChecked();
     if (radioData->enableDisableCatFeature.ritEnable != checked)
     {
         radioData->enableDisableCatFeature.ritEnable = checked;
@@ -1320,9 +1338,9 @@ void RigSetupForm::onEnableRitClicked()
 }
 
 
-void RigSetupForm::onEnableSMeterClicked()
+void RigSetupForm::onEnableSMeterCatFeatureClicked()
 {
-    bool checked = ui->enableSMeterChkBox->isChecked();
+    bool checked = ui->enableSMeterCatFeatureChkBox->isChecked();
     if (radioData->enableDisableCatFeature.sMeterEnable != checked)
     {
         radioData->enableDisableCatFeature.sMeterEnable = checked;
@@ -1330,33 +1348,35 @@ void RigSetupForm::onEnableSMeterClicked()
     }
 }
 
-void RigSetupForm::onEnableVolClicked()
+void RigSetupForm::onEnableVolCatFeatureClicked()
 {
-    bool checked = ui->enableVolChkBox->isChecked();
+    bool checked = ui->enableVolCatFeatureChkBox->isChecked();
     if (radioData->enableDisableCatFeature.volumeEnable != checked)
     {
         radioData->enableDisableCatFeature.volumeEnable = checked;
 
     }
 }
-void RigSetupForm::onEnableCatPttClicked()
+void RigSetupForm::onEnableCatPttCatFeatureClicked()
 {
-    bool checked = ui->enableCatPttChkBox->isChecked();
+    bool checked = ui->enableCatPttCatFeatureChkBox->isChecked();
     if (radioData->enableDisableCatFeature.catEnable != checked)
     {
+
         radioData->enableDisableCatFeature.catEnable = checked;
-        if (!(ui->pttDTREnable->isChecked() || ui->pttRTSEnable->isChecked()))
+        if (!(ui->pttDTRSelectRadioButton->isChecked() || ui->pttRTSSelectRadioButton->isChecked()))
         {
-            ui->pttCatEnable->setChecked(checked);  // change the state of the ptt group CAT radio button
+            ui->pttCatSelectRadioButton->setChecked(checked);  // change the state of the ptt group CAT radio button
                                                     // if DTR or RTS buttons not checked
         }
 
-        ui->pttCatEnable->setVisible(checked);
+        ui->pttCatSelectRadioButton->setVisible(checked);
+
     }
 }
-void RigSetupForm::onEnableVoiceTxMemClicked()
+void RigSetupForm::onEnableVoiceTxMemCatFeatureClicked()
 {
-    bool checked = ui->enableVoiceTxMemChkBox->isChecked();
+    bool checked = ui->enableVoiceTxMemCatFeatureChkBox->isChecked();
     if (radioData->enableDisableCatFeature.voiceMemEnable != checked)
     {
         radioData->enableDisableCatFeature.voiceMemEnable = checked;
@@ -1364,9 +1384,9 @@ void RigSetupForm::onEnableVoiceTxMemClicked()
     }
 
 }
-void RigSetupForm::onEnableCwTxMemClicked()
+void RigSetupForm::onEnableCwTxMemCatFeatureClicked()
 {
-    bool checked = ui->enableCwTxMemChkBox->isChecked();
+    bool checked = ui->enableCwTxMemCatFeatureChkBox->isChecked();
     if (radioData->enableDisableCatFeature.cWMemEnable != checked)
     {
         radioData->enableDisableCatFeature.cWMemEnable = checked;
@@ -1403,65 +1423,65 @@ void RigSetupForm::loadEnableShowCatFeaturesBox(const RigCapabilities rigCap)
        setEnableDisableCatFeaturesGroupVisible(false);
     }
 
-    ui->enableRitChkBox->setChecked(radioData->enableDisableCatFeature.ritEnable);
+    ui->enableRitCatFeatureChkBox->setChecked(radioData->enableDisableCatFeature.ritEnable);
     if (rigCap.supportGetRit || rigCap.supportSetRit)
     {
-        ui->enableRitChkBox->setVisible(true);
+        ui->enableRitCatFeatureChkBox->setVisible(true);
     }
     else
     {
-        ui->enableRitChkBox->setVisible(false);
+        ui->enableRitCatFeatureChkBox->setVisible(false);
     }
 
 
-    ui->enableSMeterChkBox->setChecked(radioData->enableDisableCatFeature.sMeterEnable);
+    ui->enableSMeterCatFeatureChkBox->setChecked(radioData->enableDisableCatFeature.sMeterEnable);
     if(rigCap.supportSMeter)
     {
-        ui->enableSMeterChkBox->setVisible(true);
+        ui->enableSMeterCatFeatureChkBox->setVisible(true);
     }
     else
     {
-        ui->enableSMeterChkBox->setVisible(false);
+        ui->enableSMeterCatFeatureChkBox->setVisible(false);
     }
 
-    ui->enableVolChkBox->setChecked(radioData->enableDisableCatFeature.volumeEnable);
+    ui->enableVolCatFeatureChkBox->setChecked(radioData->enableDisableCatFeature.volumeEnable);
     if (rigCap.supportVolume)
     {
-        ui->enableVolChkBox->setVisible(true);
+        ui->enableVolCatFeatureChkBox->setVisible(true);
     }
     else
     {
-        ui->enableVolChkBox->setVisible(false);
+        ui->enableVolCatFeatureChkBox->setVisible(false);
     }
 
-    ui->enableCatPttChkBox->setChecked(radioData->enableDisableCatFeature.catEnable);
+    ui->enableCatPttCatFeatureChkBox->setChecked(radioData->enableDisableCatFeature.catEnable);
     if (rigCap.supportGetPtt && rigCap.supportSetPtt)
     {
-        ui->enableCatPttChkBox->setVisible(true);
+        ui->enableCatPttCatFeatureChkBox->setVisible(true);
     }
     else
     {
-        ui->enableCatPttChkBox->setVisible(false);
+        ui->enableCatPttCatFeatureChkBox->setVisible(false);
     }
 
-    ui->enableVoiceTxMemChkBox->setChecked(radioData->enableDisableCatFeature.voiceMemEnable);
+    ui->enableVoiceTxMemCatFeatureChkBox->setChecked(radioData->enableDisableCatFeature.voiceMemEnable);
     if (rigCap.supportVoiceMemory)
     {
-        ui->enableVoiceTxMemChkBox->setVisible(true);
+        ui->enableVoiceTxMemCatFeatureChkBox->setVisible(true);
     }
     else
     {
-        ui->enableVoiceTxMemChkBox->setVisible(false);
+        ui->enableVoiceTxMemCatFeatureChkBox->setVisible(false);
     }
 
-    ui->enableCwTxMemChkBox->setChecked(radioData->enableDisableCatFeature.cWMemEnable);
+    ui->enableCwTxMemCatFeatureChkBox->setChecked(radioData->enableDisableCatFeature.cWMemEnable);
     if (rigCap.supportCwMemory)
     {
-        ui->enableCwTxMemChkBox->setVisible(true);
+        ui->enableCwTxMemCatFeatureChkBox->setVisible(true);
     }
     else
     {
-        ui->enableCwTxMemChkBox->setVisible(false);
+        ui->enableCwTxMemCatFeatureChkBox->setVisible(false);
     }
 
 
@@ -1473,6 +1493,11 @@ void RigSetupForm::loadEnableShowCatFeaturesBox(const RigCapabilities rigCap)
 void RigSetupForm::setEnableDisableCatFeaturesGroupVisible(bool visible)
 {
      ui->enable_disableFeaturesGroup->setVisible(visible);
+}
+
+void RigSetupForm::setCatFeaturesEnableChkBoxVisible(bool visible)
+{
+    ui->enableCatFeaturesChkBox->setVisible(visible);
 }
 
 
@@ -1903,40 +1928,98 @@ void RigSetupForm::processPortNumber(QLineEdit* netAddBox, QLineEdit* netPortBox
 
 }
 
-void RigSetupForm::setPttInitialState()
+void RigSetupForm::setPttInitialState(bool setCatPTT, bool setSerialPTT)
 {
-    radioData->enablePTT = false;
-    radioData->pttType = serialCommonData::PTTMethodCodes::PTT_METHOD_CAT;
-    setPttControlsVisible(false);
-    ui->pttCatEnable->setChecked(true);
-    setPTTCheckBoxChecked(false);
+
+    setPTTEnableCheckBox(false);
+
+    setCatPttControlsVisible(setCatPTT);
+    ui->pttCatSelectRadioButton->setChecked(setCatPTT);
+
+    setSerialPttControlsVisible(setSerialPTT);
     setPttComport("");
-    setPTTCheckBoxChecked(false);
+
+    setPTTEnableCheckBox(false);
+    ui->pttGroupBox->setVisible(false);
 }
 
-void RigSetupForm::setPttControlsVisible(bool visible)
+
+
+
+
+
+void RigSetupForm::setSerialPttControlsVisible(bool visible)
 {
+    ui->pttDTRSelectRadioButton->setVisible(visible);
+    ui->pttRTSSelectRadioButton->setVisible(visible);
     ui->pttComportLbl->setVisible(visible);
-    ui->pttCatEnable->setVisible(visible);
-    ui->pttDTREnable->setVisible(visible);
-    ui->pttRTSEnable->setVisible(visible);
+    ui->pttComportSel->setVisible(visible);
+
+}
+
+void RigSetupForm::setPttGroupBoxVisible(bool visible)
+{
     ui->pttGroupBox->setVisible(visible);
 }
 
-void RigSetupForm::setPTTCheckBoxChecked(bool checked)
+void RigSetupForm::setPTTEnableCheckBox(bool checked)
 {
     ui->pttEnable->setChecked(checked);
+
 }
+
+
 
 void RigSetupForm::setPTTCheckBoxDisabled(bool disabled)
 {
     ui->pttEnable->setDisabled(disabled);
 }
 
-void RigSetupForm::setCatPttRadioButtonVisible(bool visible)
+void RigSetupForm::setCatPttControlsVisible(bool visible)
 {
-    ui->pttCatEnable->setVisible(visible);
+    ui->pttCatSelectRadioButton->setVisible(visible);
+
 }
+
+void RigSetupForm::setPttCatSelectRadioButtonChecked(bool checked)
+{
+    ui->pttCatSelectRadioButton->setChecked(checked);
+
+}
+
+
+
+void RigSetupForm::setPttCatSelectRadioButtonVisible(bool visible)
+{
+    ui->pttCatSelectRadioButton->setVisible(visible);
+}
+
+
+void RigSetupForm::setPttDtrSelectRadioButtonChecked(bool checked)
+{
+    ui->pttDTRSelectRadioButton->setChecked(checked);
+}
+
+
+
+void RigSetupForm::setPttDtrSelectRadioButtonVisible(bool visible)
+{
+    ui->pttDTRSelectRadioButton->setVisible(visible);
+}
+
+void RigSetupForm::setPttRtsSelectRadioButtonChecked(bool checked)
+{
+    ui->pttRTSSelectRadioButton->setChecked(checked);
+}
+
+
+
+void RigSetupForm::setPttRtsSelectRadioButtonVisible(bool visible)
+{
+    ui->pttRTSSelectRadioButton->setVisible(visible);
+}
+
+
 
 void RigSetupForm::loadAvailPttComports()
 {
@@ -1952,6 +2035,8 @@ void RigSetupForm::setPttComport(QString p)
 
 void RigSetupForm::setPttTypeRadioButtons(int type)
 {
+/*
+
     serialCommonData::PTTMethodCodes pttType = static_cast<serialCommonData::PTTMethodCodes>(type);
 
     if (pttType == serialCommonData::PTTMethodCodes::PTT_METHOD_CAT)
@@ -2008,6 +2093,8 @@ void RigSetupForm::setPttTypeRadioButtons(int type)
             setForceDTRDisabled(true);
         }
     }
+
+*/
 }
 
 void RigSetupForm::onPttEnableSelected(bool /*checked*/)
@@ -2017,17 +2104,18 @@ void RigSetupForm::onPttEnableSelected(bool /*checked*/)
     if (radioData->enablePTT != checked)
     {
         radioData->enablePTT = checked;
-        setPttControlsVisible(checked);
+        //setSerialPttControlsVisible(checked);
+        setPttGroupBoxVisible(checked);
         if (checked)
         {
             if (isPttComportEqualCatComport())
             {
-                if (ui->pttRTSEnable->isChecked())
+                if (ui->pttRTSSelectRadioButton->isChecked())
                 {
                     setForceDTRDisabled(true);
                     setForceRTSDisabled(false);
                 }
-                else if (ui->pttDTREnable->isChecked())
+                else if (ui->pttDTRSelectRadioButton->isChecked())
                 {
                     setForceRTSDisabled(true);
                     setForceDTRDisabled(false);
@@ -2047,18 +2135,19 @@ void RigSetupForm::onPttEnableSelected(bool /*checked*/)
 
 void RigSetupForm::onPttCatEnableClicked(bool /*checked*/)
 {
-    if (ui->pttCatEnable->isChecked() && (static_cast<serialCommonData::PTTMethodCodes>(radioData->pttType) != serialCommonData::PTTMethodCodes::PTT_METHOD_CAT))
+    if (ui->pttCatSelectRadioButton->isChecked() && (static_cast<serialCommonData::PTTMethodCodes>(radioData->pttType) != serialCommonData::PTTMethodCodes::PTT_METHOD_CAT))
     {
         radioData->pttType = static_cast<int>(serialCommonData::PTTMethodCodes::PTT_METHOD_CAT);
     }
 
-    if (ui->pttCatEnable->isChecked())
+    if (ui->pttCatSelectRadioButton->isChecked())
     {
         pttComportSelDisabled(true);
         setForceRTSDisabled(false);
         setForceDTRDisabled(false);
 
     }
+
 }
 
 
@@ -2069,12 +2158,14 @@ void RigSetupForm::pttComportSelDisabled(bool state)
 
 void RigSetupForm::onPttDtrEnableClicked(bool /*checked*/)
 {
-    if (ui->pttDTREnable->isChecked() && (static_cast<serialCommonData::PTTMethodCodes>(radioData->pttType) != serialCommonData::PTTMethodCodes::PTT_METHOD_DTR))
+
+
+    if (ui->pttDTRSelectRadioButton->isChecked() && (static_cast<serialCommonData::PTTMethodCodes>(radioData->pttType) != serialCommonData::PTTMethodCodes::PTT_METHOD_DTR))
     {
         radioData->pttType = static_cast<int>(serialCommonData::PTTMethodCodes::PTT_METHOD_DTR);
     }
 
-    if (ui->pttDTREnable->isChecked())
+    if (ui->pttDTRSelectRadioButton->isChecked())
     {
         ui->pttComportSel->setDisabled(false);
         if (isPttComportEqualCatComport())
@@ -2101,12 +2192,12 @@ void RigSetupForm::setPttComportToolTip(QString toolTip)
 
 void RigSetupForm::onPttRtsEnableClicked(bool /*checked*/)
 {
-    if (ui->pttRTSEnable->isChecked() && (static_cast<serialCommonData::PTTMethodCodes>(radioData->pttType) != serialCommonData::PTTMethodCodes::PTT_METHOD_RTS))
+    if (ui->pttRTSSelectRadioButton->isChecked() && (static_cast<serialCommonData::PTTMethodCodes>(radioData->pttType) != serialCommonData::PTTMethodCodes::PTT_METHOD_RTS))
     {
             radioData->pttType = static_cast<int>(serialCommonData::PTTMethodCodes::PTT_METHOD_RTS);
     }
 
-    if (ui->pttRTSEnable->isChecked())
+    if (ui->pttRTSSelectRadioButton->isChecked())
     {
         ui->pttComportSel->setDisabled(false);
         if (isPttComportEqualCatComport())
@@ -2126,6 +2217,7 @@ void RigSetupForm::onPttRtsEnableClicked(bool /*checked*/)
 
 void RigSetupForm::onPttComportSelActivated(int /*idx*/)
 {
+
     if (ui->pttComportSel->currentText() != radioData->pttSerialPort)
     {
         radioData->pttSerialPort = ui->pttComportSel->currentText();
@@ -2139,7 +2231,7 @@ void RigSetupForm::onPttComportSelActivated(int /*idx*/)
                 advancedSerialDataEntryVisible(true);
             }
 
-            if (ui->pttRTSEnable->isChecked())
+            if (ui->pttRTSSelectRadioButton->isChecked())
             {
                 setForceRTSDisabled(true);
                 setForceDTRDisabled(false);
@@ -2150,7 +2242,7 @@ void RigSetupForm::onPttComportSelActivated(int /*idx*/)
                     setForceRTSComboBox(radioData->forceRts);
                 }
             }
-            else if (ui->pttDTREnable->isChecked())
+            else if (ui->pttDTRSelectRadioButton->isChecked())
             {
                 setForceDTRDisabled(true);
                 setForceRTSDisabled(false);
@@ -2170,6 +2262,7 @@ void RigSetupForm::onPttComportSelActivated(int /*idx*/)
 
 
     }
+
 }
 
 bool RigSetupForm::isPttComportEqualCatComport() const
@@ -2186,12 +2279,12 @@ bool RigSetupForm::isPttComportEqualCatComport() const
 
 void RigSetupForm::setPttRTSDisabled(bool state)
 {
-    ui->pttRTSEnable->setDisabled(state);
+    ui->pttRTSSelectRadioButton->setDisabled(state);
 }
 
 void RigSetupForm::setPttDTRDisabled(bool state)
 {
-    ui->pttRTSEnable->setDisabled(state);
+    ui->pttDTRSelectRadioButton->setDisabled(state);
 }
 
 

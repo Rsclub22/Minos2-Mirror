@@ -22,7 +22,7 @@
 bool model_Sort(const rig_caps *caps1,const rig_caps *caps2);
 int rig_message_cb(enum rig_debug_level_e, rig_ptr_t, const char*, va_list);
 
-//int collect(const rig_caps *caps, void *);
+
 
 int register_callback(rig_model_t rig_model, void *callback_data);
 

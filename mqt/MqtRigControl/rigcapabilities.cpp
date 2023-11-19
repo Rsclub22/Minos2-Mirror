@@ -28,7 +28,7 @@ RigCapabilities::RigCapabilities(RigCapConstants::PortType portType_,
                                  bool supportSetRitState_,
                                  bool supportGetRitMax_,
                                  bool supportSMeter_,
-                                 RigCapConstants::PttPortType pttPortType_,
+                                 RigCapConstants::PttPortType supportPttPortType_,
                                  bool supportGetPtt_,
                                  bool supportSetPtt_,
                                  bool supportGetVox_,
@@ -54,7 +54,7 @@ RigCapabilities::RigCapabilities(RigCapConstants::PortType portType_,
       supportSetRitState (supportSetRitState_),
       supportGetRitMax (supportGetRitMax_),
       supportSMeter (supportSMeter_),
-      pttPortType(pttPortType_),
+      supportPttPortType(supportPttPortType_),
       supportGetPtt (supportGetPtt_),
       supportSetPtt (supportSetPtt_),
       supportGetVox(supportGetVox_),
@@ -90,7 +90,7 @@ RigCapabilities & RigCapabilities::operator= ( const RigCapabilities &rigcap)
     supportSetRitState = rigcap.supportSetRitState;
     supportGetRitMax = rigcap.supportGetRitMax;
     supportSMeter = rigcap.supportSMeter;
-    pttPortType = rigcap.pttPortType;
+    supportPttPortType = rigcap.supportPttPortType;
     supportGetPtt = rigcap.supportGetPtt;
     supportSetPtt = rigcap.supportSetPtt;
     supportGetVox = rigcap.supportGetVox;

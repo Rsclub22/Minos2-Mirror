@@ -176,15 +176,19 @@ public:
 
     bool isAnySupportBandChecked();
 
-    void setPttControlsVisible(bool visible);
 
-    void setPTTCheckBoxChecked(bool checked);
+
+    void setPTTEnableCheckBox(bool checked);
     void loadAvailPttComports();
     void setPttComport(QString p);
     void setPttTypeRadioButtons(int type);
     void setPTTCheckBoxDisabled(bool disabled);
     void setCatPttRadioButtonVisible(bool visible);
     void loadEnableShowCatFeaturesBox(const RigCapabilities rigCap);
+
+    void setCatPttInitialState(bool catPTT);
+    void setCatPttControlsVisible(bool visible);
+
 
 
     bool isPttComportEqualCatComport() const;
@@ -193,8 +197,19 @@ public:
 
     void setPttComportToolTip(QString toolTip);
 
-    void setPttInitialState();
+    void setPttInitialState(bool catPTT, bool serialPTT);
     void setEnableDisableCatFeaturesGroupVisible(bool visible);
+    void setPttCatSelectRadioButtonChecked(bool checked);
+    void setPttCatSelectRadioButtonVisible(bool visible);
+    void setPttDtrSelectRadioButtonChecked(bool checked);
+    void setPttDtrSelectRadioButtonVisible(bool visible);
+    void setPttRtsSelectRadioButtonChecked(bool checked);
+    void setPttRtsSelectRadioButtonVisible(bool visible);
+
+
+    void setPttGroupBoxVisible(bool visible);
+    void setSerialPttControlsVisible(bool visible);
+    void setCatFeaturesEnableChkBoxVisible(bool visible);
 public slots:
     void comSpeedSelected();
     void comDataBitsSelected();
@@ -254,12 +269,14 @@ private slots:
 
 
 
-    void onEnableRitClicked();
-    void onEnableSMeterClicked();
-    void onEnableVolClicked();
-    void onEnableCatPttClicked();
-    void onEnableVoiceTxMemClicked();
-    void onEnableCwTxMemClicked();
+
+
+    void onEnableRitCatFeatureClicked();
+    void onEnableSMeterCatFeatureClicked();
+    void onEnableVolCatFeatureClicked();
+    void onEnableCatPttCatFeatureClicked();
+    void onEnableVoiceTxMemCatFeatureClicked();
+    void onEnableCwTxMemCatFeatureClicked();
     void onEnableCatFeaturesClicked();
 private:
 
@@ -318,6 +335,8 @@ private:
 
     void setPttRTSDisabled(bool state);
     void setPttDTRDisabled(bool state);
+
+
 };
 
 #endif // RIGSETUPFORM_H

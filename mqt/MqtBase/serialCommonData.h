@@ -23,9 +23,9 @@ namespace serialCommonData
     const QStringList stopbitsStr = QStringList()<< "" << "1" << "2";
     const QStringList pollTimeStr  = QStringList() << "0.5" << "1" << "2" << "3";
 
-    enum PTTMethodCodes {PTT_METHOD_VOX, PTT_METHOD_CAT, PTT_METHOD_DTR, PTT_METHOD_RTS};
-    const PTTMethodCodes pttMethodCodesList[] = {PTT_METHOD_VOX, PTT_METHOD_CAT, PTT_METHOD_DTR, PTT_METHOD_RTS};
-    const QStringList pttMethodStr = QStringList() << "VOX" << "CAT" << "DTR" << "RTS";
+    enum PTTMethodCodes {PTT_METHOD_VOX, PTT_METHOD_CAT, PTT_METHOD_DTR, PTT_METHOD_RTS, PTT_METHOD_NONE};
+    const PTTMethodCodes pttMethodCodesList[] = {PTT_METHOD_VOX, PTT_METHOD_CAT, PTT_METHOD_DTR, PTT_METHOD_RTS, PTT_METHOD_NONE};
+    const QStringList pttMethodStr = QStringList() << "VOX" << "CAT" << "DTR" << "RTS" << "NONE" ;
 }
 
 
