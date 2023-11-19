@@ -242,16 +242,16 @@ void appStartup(const QString &pappName)
     // cpDir does copy if newer, so a new installation updates the old one
 
     if (!DirectoryExists(getDirectoryLocation(dlConfiguration))) {
-        QDir().mkdir(getDirectoryLocation(dlConfiguration));
+        QDir().mkpath(getDirectoryLocation(dlConfiguration));
     }
     if (!DirectoryExists(getDirectoryLocation(dlLogs))) {
-        QDir().mkdir(getDirectoryLocation(dlLogs));
+        QDir().mkpath(getDirectoryLocation(dlLogs));
     }
     if (!DirectoryExists(getDirectoryLocation(dlLists))) {
-        QDir().mkdir(getDirectoryLocation(dlLists));
+        QDir().mkpath(getDirectoryLocation(dlLists));
     }
     if (!DirectoryExists(getDirectoryLocation(dlDocs))) {
-        QDir().mkdir(getDirectoryLocation(dlDocs));
+        QDir().mkpath(getDirectoryLocation(dlDocs));
     }
     cpDir(QString(fpath+"/../Resources/Configuration"), getDirectoryLocation(dlConfiguration));
     cpDir(QString(fpath+"/../Resources/Docs"), getDirectoryLocation(dlDocs));
@@ -467,7 +467,7 @@ bool cpDir(const QString &srcPath, const QString &dstPath)
         if (!DirectoryExists(parentDir))
         {
             QDir parentDstDir(QFileInfo(dstPath).path());
-            if (!parentDstDir.mkdir(QFileInfo(dstPath).fileName()))
+            if (!parentDstDir.mkpath(QFileInfo(dstPath).fileName()))
                 return false;
         }
     }
