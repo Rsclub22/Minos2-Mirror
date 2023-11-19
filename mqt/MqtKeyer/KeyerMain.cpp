@@ -1,3 +1,4 @@
+#include "AppStartup.h"
 #include "MShowMessageDlg.h"
 #include  <QtGlobal>
 #ifdef Q_OS_UNIX

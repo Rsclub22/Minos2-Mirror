@@ -1,9 +1,9 @@
+#include "AppStartup.h"
 #include "MinosLoggerEvents.h"
 
 #include "LoggerContest.h"
 #include "ContestApp.h"
 
-#include "fileutils.h"
 #include "qvariant.h"
 #include "tsinglelogframe.h"
 #include "htmldelegate.h"

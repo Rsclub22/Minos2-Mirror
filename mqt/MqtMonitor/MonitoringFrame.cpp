@@ -1,4 +1,4 @@
-#include "fileutils.h"
+#include "AppStartup.h"
 #include "htmldelegate.h"
 #include "contest.h"
 #include "cutils.h"

@@ -4,8 +4,8 @@
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QFile>
+#include "AppStartup.h"
 #include "MShowMessageDlg.h"
-#include "fileutils.h"
 #include "profiles.h"
 #include "MTrace.h"
 

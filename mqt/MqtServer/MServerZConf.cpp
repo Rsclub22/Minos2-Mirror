@@ -8,11 +8,11 @@
 /////////////////////////////////////////////////////////////////////////////
 //---------------------------------------------------------------------------
 #include <QUuid>
+#include "AppStartup.h"
 #include "MTrace.h"
 #include <QNetworkDatagram>
 #include "RPCCommandConstants.h"
 #include "SecondInstall.h"
-#include "fileutils.h"
 #include "regsettings.h"
 #include "tinyxml.h"
 #include "TinyUtils.h"

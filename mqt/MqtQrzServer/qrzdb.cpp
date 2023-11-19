@@ -2,8 +2,8 @@
 #include <QSqlRecord>
 #include <QSqlError>
 #include <QVariant>
+#include "AppStartup.h"
 #include "MTrace.h"
-#include "fileutils.h"
 #include "qrzdb.h"
 
 QRZDB::QRZDB(QObject *parent)

@@ -10,7 +10,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include "rotatorcommon.h"
-#include "fileutils.h"
+#include "AppStartup.h"
 
 const char * RotPresetData::presetButtonLabels[4] = {QT_TR_NOOP("&Read"),
                                         QT_TR_NOOP("&New"),

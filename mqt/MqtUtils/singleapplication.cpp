@@ -1,3 +1,4 @@
+#include "AppStartup.h"
 #include <QLocalSocket>
 #include <QFileInfo>
 #include <QMessageBox>

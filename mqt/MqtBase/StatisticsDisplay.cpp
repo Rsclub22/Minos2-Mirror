@@ -1,5 +1,5 @@
 #include <QSettings>
-#include "fileutils.h"
+#include "AppStartup.h"
 #include "regsettings.h"
 #include "contacts.h"
 #include "contest.h"

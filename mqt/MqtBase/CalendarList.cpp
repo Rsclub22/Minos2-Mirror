@@ -3,11 +3,11 @@
 #include <QNetworkRequest>
 #include <QFile>
 
+#include "AppStartup.h"
 #include "Calendar.h"
 #include "CalendarList.h"
 #include "MShowMessageDlg.h"
 #include "MTrace.h"
-#include "fileutils.h"
 
 QMap<QString, QString> contestNameMap;
 int calendarFormYear = 0;

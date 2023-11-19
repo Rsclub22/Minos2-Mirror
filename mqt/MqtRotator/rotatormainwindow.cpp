@@ -21,7 +21,7 @@
 #include <QProcessEnvironment>
 #include <QDir>
 
-#include "fileutils.h"
+#include "AppStartup.h"
 #include "regsettings.h"
 #include "RPCCommandConstants.h"
 #include "rotatorRpc.h"

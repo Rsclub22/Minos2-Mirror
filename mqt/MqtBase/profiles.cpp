@@ -6,9 +6,9 @@
 // COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2008
 //
 /////////////////////////////////////////////////////////////////////////////
+#include "AppStartup.h"
 #include "INIFile.h"
 #include "clustercommon.h"
-#include "fileutils.h"
 #include "profiles.h"
 
 //#include "ScreenConfigFile.h"

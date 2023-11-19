@@ -23,4 +23,17 @@ extern void setAppClosing();
 extern bool cpDir(const QString &srcPath, const QString &dstPath);
 extern void setAppLanguage(QString loc);
 
+enum DirectoryLocation {dlBinaries
+                         ,dlTranslations
+                         ,dlConfiguration
+                         ,dlLists
+                         ,dlLogs
+                         ,dlDocs
+                         ,dlTraceLog
+                         ,dlQRZDB
+};
+
+extern QString getDirectoryLocation(DirectoryLocation, QString runDir = ".");
+extern void setDefLogDir(QString l);
+extern void setDefListDir(QString l);
 #endif // APPSTARTUP_H

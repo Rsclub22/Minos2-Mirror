@@ -1,5 +1,6 @@
 #include <QDateTime>
 
+#include "AppStartup.h"
 #include "MTrace.h"
 #include "dmmainwindow.h"
 #include "fileutils.h"

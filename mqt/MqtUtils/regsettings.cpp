@@ -1,7 +1,6 @@
 #include <QSettings>
 #include "AppStartup.h"
 #include "SecondInstall.h"
-#include "fileutils.h"
 #include "regsettings.h"
 
 QSettings *RegSettings::s = nullptr;

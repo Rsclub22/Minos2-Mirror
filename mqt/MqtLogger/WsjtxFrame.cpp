@@ -1,6 +1,7 @@
 #include <QFileDialog>
 #include <QListWidget>
 
+#include "AppStartup.h"
 #include "regsettings.h"
 #include "ContestApp.h"
 #include "LoggerContest.h"

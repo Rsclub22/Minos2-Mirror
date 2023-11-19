@@ -16,9 +16,7 @@
 #include "LogEvents.h"
 #include "kstmonitoredlogs.h"
 #include "mults.h"
-#include "ConfigFile.h"
 #include "MinosRPC.h"
-#include "RPCCommandConstants.h"
 
 #include "kstmainwindow.h"
 #include "ui_kstmainwindow.h"

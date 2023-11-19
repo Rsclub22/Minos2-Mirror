@@ -29,6 +29,10 @@ static QString currentLanguage;
 static QSharedPointer<QTranslator> translator;
 static QSharedPointer<QTranslator> qtTranslator;
 
+
+static QString deflog;
+static QString deflist;
+
 QString getAppExecutable()
 {
     return executablePath;
@@ -503,3 +507,92 @@ bool cpDir(const QString &srcPath, const QString &dstPath)
     return true;
 }
 
+void setDefLogDir(QString l)
+{
+    deflog = l;
+}
+void setDefListDir(QString l)
+{
+    deflist = l;
+}
+QString getDirectoryLocation(DirectoryLocation dl, QString runDir)
+{
+    // At the moment, these are all Windows, and relative
+    // to the current working directory
+
+    QString dirLoc;
+    switch (dl)
+    {
+#ifdef Q_OS_MACOS
+    case dlBinaries:
+        dirLoc = runDir + "/Bin";
+        break;
+
+    case dlTranslations:
+        dirLoc = runDir + "/Bin/translations";
+        break;
+
+    case dlConfiguration:
+        dirLoc = runDir + "/Configuration";
+        break;
+
+    case dlLists:
+        dirLoc = deflist;
+        break;
+
+    case dlLogs:
+        dirLoc = deflog;
+        break;
+
+    case dlDocs:
+        dirLoc = runDir + "/Docs";
+        break;
+
+    case dlTraceLog:
+        dirLoc = runDir + "/TraceLog";
+        break;
+
+    case dlQRZDB:
+        dirLoc = runDir;
+        break;
+#else
+    case dlBinaries:
+        dirLoc = runDir + "/Bin";
+        break;
+
+    case dlTranslations:
+        dirLoc = runDir + "/Bin/translations";
+        break;
+
+    case dlConfiguration:
+        dirLoc = runDir + "/Configuration";
+        break;
+
+    case dlLists:
+        dirLoc = deflist;
+        break;
+
+    case dlLogs:
+        dirLoc = deflog;
+        break;
+
+    case dlDocs:
+        dirLoc = runDir + "/Docs";
+        break;
+
+    case dlTraceLog:
+        dirLoc = runDir + "/TraceLog";
+        break;
+
+    case dlQRZDB:
+        dirLoc = runDir;
+        break;
+
+// Do we need a WSJTX recordings directory?
+#endif
+
+    }
+    QDir d(dirLoc);
+    dirLoc = d.absolutePath();
+    return dirLoc;
+}

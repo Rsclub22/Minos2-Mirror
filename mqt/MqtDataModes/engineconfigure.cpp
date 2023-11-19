@@ -1,6 +1,7 @@
 #include <QSettings>
 #include <QFileDialog>
 
+#include "AppStartup.h"
 #include "regsettings.h"
 #include "dmmainwindow.h"
 #include "enginewindow.h"

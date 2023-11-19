@@ -8,6 +8,7 @@
 /////////////////////////////////////////////////////////////////////////////
 #include <QHostInfo>
 #include <cmath>
+#include "AppStartup.h"
 #include "calcs.h"
 #include "contacts.h"
 #include "cutils.h"

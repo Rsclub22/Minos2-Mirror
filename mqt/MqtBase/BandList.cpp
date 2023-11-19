@@ -20,10 +20,10 @@
 ======================================================================================*/
 #include <QSharedPointer>
 
+#include "AppStartup.h"
 #include "INIFile.h"
 #include "BandList.h"
 #include "TinyUtils.h"
-#include "fileutils.h"
 #include "tinyxml.h"
 #include "MTrace.h"
 

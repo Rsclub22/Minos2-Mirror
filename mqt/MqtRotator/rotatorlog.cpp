@@ -16,7 +16,7 @@
 #include <QDateTime>
 #include <QSettings>
 
-#include "fileutils.h"
+#include "AppStartup.h"
 #include "rotatorcommon.h"
 #include "rotatorlog.h"
 

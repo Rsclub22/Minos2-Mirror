@@ -1,8 +1,7 @@
+#include "AppStartup.h"
 #include "MinosLoggerEvents.h"
-
 #include "LoggerContest.h"
 #include "ContestApp.h"
-#include "fileutils.h"
 #include "htmldelegate.h"
 #include "tsinglelogframe.h"
 #include "StackedInfoFrame.h"

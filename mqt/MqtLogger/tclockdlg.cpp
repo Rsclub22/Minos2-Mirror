@@ -2,7 +2,7 @@
 #include <QFile>
 #include <QTextStream>
 
-#include "fileutils.h"
+#include "AppStartup.h"
 #include "regsettings.h"
 #include "ContestApp.h"
 #include "MinosParameters.h"

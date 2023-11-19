@@ -1,5 +1,6 @@
 #include <QDir>
 #include <QFileDialog>
+#include "AppStartup.h"
 #include "ContestApp.h"
 #include "fileutils.h"
 #include "tlogcontainer.h"

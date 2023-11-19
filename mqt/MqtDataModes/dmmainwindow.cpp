@@ -1,5 +1,4 @@
 #include "delayedaction.h"
-#include "fileutils.h"
 #include <QSettings>
 #include <QTimer>
 #include <QFileSystemWatcher>

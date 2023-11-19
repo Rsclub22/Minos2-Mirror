@@ -1,9 +1,9 @@
 #include <QDateTime>
+#include "AppStartup.h"
 #include "clustercommon.h"
 #include "checkmodeagainstfreq.h"
 #include "BandList.h"
 #include "MTrace.h"
-#include "fileutils.h"
 #include "rigcontrolcommonconstants.h"
 
 const char * clusterStateList[] =

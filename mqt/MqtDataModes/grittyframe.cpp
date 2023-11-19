@@ -6,6 +6,7 @@
 #include <QJsonArray>
 
 
+#include "AppStartup.h"
 #include "MTrace.h"
 #include "delayedaction.h"
 #include "dmmainwindow.h"

@@ -2,6 +2,7 @@
 #include <QDesktopServices>
 
 #include <QLabel>
+#include "AppStartup.h"
 #include "MShowMessageDlg.h"
 #include "MinosLoggerEvents.h"
 

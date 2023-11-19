@@ -9,6 +9,7 @@
 #include <QFileInfo>
 #include <QDir>
 #include <QTextStream>
+#include "AppStartup.h"
 #include "LoggerContest.h"
 #include "MMessageDialog.h"
 #include "MShowMessageDlg.h"

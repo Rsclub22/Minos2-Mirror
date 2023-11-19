@@ -7,10 +7,10 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 #include <QRegularExpression>
+#include "AppStartup.h"
 #include "cutils.h"
 #include "contacts.h"
 #include "MultsImpl.h"
-#include "fileutils.h"
 
 
 //============================================================================

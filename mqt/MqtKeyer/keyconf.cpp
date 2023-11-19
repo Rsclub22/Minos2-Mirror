@@ -7,8 +7,8 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
+#include "AppStartup.h"
 #include "MTrace.h"
-#include "fileutils.h"
 #include "tinyxml.h"
 #include "TinyUtils.h"
 #include "keyers.h"

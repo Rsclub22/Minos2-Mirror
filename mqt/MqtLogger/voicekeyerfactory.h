@@ -17,7 +17,6 @@
 #include <QString>
 #include <QMap>
 #include <QModelIndex>
-#include "fileutils.h"
 #include "voicekeyerbase.h"
 
 class QComboBox;

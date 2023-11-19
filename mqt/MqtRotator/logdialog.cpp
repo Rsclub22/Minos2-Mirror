@@ -16,7 +16,7 @@
 #include <QSettings>
 #include <QKeyEvent>
 
-#include "fileutils.h"
+#include "AppStartup.h"
 #include "logdialog.h"
 #include "ui_logdialog.h"
 
@@ -42,7 +42,9 @@ LogDialog::~LogDialog()
 
 void LogDialog::on_logDirBrowsePb_clicked()
 {
-    QString dir = QFileDialog::getExistingDirectory(nullptr, tr("Select Bearing Log Folder"), getDirectoryLocation(dlConfiguration) + "/BearingLog");
+    QString dir = QFileDialog::getExistingDirectory(nullptr
+                                                    , tr("Select Bearing Log Folder")
+                                                    , getDirectoryLocation(dlConfiguration) + "/BearingLog");
     if (dir != directory)
     {
         directory = dir;

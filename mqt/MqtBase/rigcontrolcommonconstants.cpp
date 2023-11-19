@@ -1,6 +1,6 @@
 #include "rigcontrolcommonconstants.h"
+#include "AppStartup.h"
 #include "BandList.h"
-#include "fileutils.h"
 
 const char * RIG_STATUS_CONNECTED = "Connected";
 const char * RIG_STATUS_DISCONNECTED = "Disconnected";

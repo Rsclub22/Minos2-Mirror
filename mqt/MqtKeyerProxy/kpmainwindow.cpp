@@ -1,6 +1,7 @@
 #include <QtSerialPort/QSerialPort>
 #include <QtSerialPort/QSerialPortInfo>
 #include <QFileDialog>
+#include "AppStartup.h"
 #include "regsettings.h"
 #include "LogEvents.h"
 #include "MShowMessageDlg.h"

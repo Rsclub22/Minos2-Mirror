@@ -1,5 +1,5 @@
 #include "bandmapcommon.h"
-#include "fileutils.h"
+#include "AppStartup.h"
 QString BAND_LIST_INI()
 {
     return getDirectoryLocation(dlConfiguration) + "/bandList.ini";

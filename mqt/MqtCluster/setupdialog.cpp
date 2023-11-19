@@ -12,7 +12,7 @@
 
 #include <QSettings>
 #include <QMessageBox>
-#include "fileutils.h"
+#include "AppStartup.h"
 #include "regsettings.h"
 #include "cutils.h"
 #include "clustercommon.h"

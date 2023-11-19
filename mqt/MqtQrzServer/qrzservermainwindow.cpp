@@ -17,7 +17,6 @@
 #include <QSharedPointer>
 #include <QSettings>
 #include <QProcessEnvironment>
-#include "fileutils.h"
 #include "regsettings.h"
 #include "AppStartup.h"
 #include "MinosRPC.h"
