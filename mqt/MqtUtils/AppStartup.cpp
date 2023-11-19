@@ -30,8 +30,8 @@ static QSharedPointer<QTranslator> translator;
 static QSharedPointer<QTranslator> qtTranslator;
 
 
-static QString deflog;
-static QString deflist;
+static QString deflog = "Logs";
+static QString deflist = "Lists";
 
 QString getAppExecutable()
 {
@@ -224,7 +224,7 @@ void appStartup(const QString &pappName)
 
     qa->setStyleSheet(QString("[readOnly=\"true\"] { background-color: %0 }").arg(qa->palette().color(QPalette::Window).name(QColor::HexRgb)));
 
-// For Mac Users, set the default directory to be Documents/Minos
+// For Mac Users, set the default directory to be Documents/Minos2
 
     QString fpath = QCoreApplication::applicationDirPath();
 
@@ -241,28 +241,28 @@ void appStartup(const QString &pappName)
 
     // cpDir does copy if newer, so a new installation updates the old one
 
-    if (!DirectoryExists("Configuration")) {
-        QDir().mkdir("Configuration");
+    if (!DirectoryExists(getDirectoryLocation(dlConfiguration))) {
+        QDir().mkdir(getDirectoryLocation(dlConfiguration));
     }
-    if (!DirectoryExists("Logs")) {
-        QDir().mkdir("Logs");
+    if (!DirectoryExists(getDirectoryLocation(dlLogs))) {
+        QDir().mkdir(getDirectoryLocation(dlLogs));
     }
-    if (!DirectoryExists("Lists")) {
-        QDir().mkdir("Lists");
+    if (!DirectoryExists(getDirectoryLocation(dlLists))) {
+        QDir().mkdir(getDirectoryLocation(dlLists));
     }
-    if (!DirectoryExists("Docs")) {
-        QDir().mkdir("Docs");
+    if (!DirectoryExists(getDirectoryLocation(dlDocs))) {
+        QDir().mkdir(getDirectoryLocation(dlDocs));
     }
-    cpDir(QString(fpath+"/../Resources/Configuration"), QString("./Configuration"));
-    cpDir(QString(fpath+"/../Resources/Docs"), QString("./Docs"));
+    cpDir(QString(fpath+"/../Resources/Configuration"), getDirectoryLocation(dlConfiguration));
+    cpDir(QString(fpath+"/../Resources/Docs"), getDirectoryLocation(dlDocs));
 
 #elif defined(Q_OS_IOS)
     QString sharedPath = sharedDirectory("group.minos2").toLocalFile();
 #endif
-    if (!DirectoryExists("./Configuration"))
+    if (!DirectoryExists(getDirectoryLocation(dlConfiguration)))
     {
 #ifdef Q_OS_ANDROID
-        bool createOK = CreateDir("./Configuration");
+        bool createOK = CreateDir(getDirectoryLocation(dlConfiguration));
         if (!mShowOKCancelMessage(0, createOK?"./Config created":"create ./Config failed; Cancel for abort"))
         {
             exit(0);
@@ -271,13 +271,13 @@ void appStartup(const QString &pappName)
         // try for executable directory
 
 #ifndef Q_OS_MACOS
-        if (DirectoryExists(fpath + "/../Configuration"))
+        if (DirectoryExists(getDirectoryLocation(dlConfiguration)))
         {
             QDir::setCurrent(fpath + "/..");
         }
 #endif
         int confTries = 0;
-        while (!DirectoryExists("./Configuration") )
+        while (!DirectoryExists(getDirectoryLocation(dlConfiguration)) )
         {
             if (++confTries > 2)
             {
@@ -319,7 +319,7 @@ void appStartup(const QString &pappName)
         if (DirectoryExists(srcMaster) && DirectoryExists(srcMaster + "/mqt/ControlFiles/Configuration"))
         {
             // copyifnewer the master config
-            QString destConfig = QDir::currentPath() + "/Configuration";
+            QString destConfig = getDirectoryLocation(dlConfiguration);
 
 
             cpDir(srcMaster + "/mqt/ControlFiles/Configuration", destConfig);
@@ -340,7 +340,8 @@ void appStartup(const QString &pappName)
         if (DirectoryExists(srcMaster) && DirectoryExists(srcMaster + "/mqt/Docs"))
         {
             // copyifnewer the master config
-            QString destDocs = QDir::currentPath() + "/Docs";
+
+            QString destDocs = getDirectoryLocation(dlDocs);
 
             cpDir(srcMaster + "/mqt/Docs", destDocs);
         }
@@ -515,11 +516,22 @@ void setDefListDir(QString l)
 {
     deflist = l;
 }
-QString getDirectoryLocation(DirectoryLocation dl, QString runDir)
+QString getDirectoryLocation(DirectoryLocation dl, QString runDir /* = "."*/)
 {
     // At the moment, these are all Windows, and relative
     // to the current working directory
 
+#ifdef Q_OS_MACOS
+
+//        Open Finder, press and hold Shift + Command + G, then hit Enter.
+//        Now that you are in the Library folder, you can open the corresponding
+//        subfolder to save app data or find a specific file.
+
+    QString sharedPath = QStandardPaths::locate(QStandardPaths::DocumentsLocation,"",QStandardPaths::LocateDirectory);
+    QString libAppSupportPath = QStandardPaths::locate(QStandardPaths::AppDataLocation,"",QStandardPaths::LocateDirectory);
+    libAppSupportPath += "/Minos2";
+
+#endif
     QString dirLoc;
     switch (dl)
     {
@@ -533,7 +545,7 @@ QString getDirectoryLocation(DirectoryLocation dl, QString runDir)
         break;
 
     case dlConfiguration:
-        dirLoc = runDir + "/Configuration";
+        dirLoc = libAppSupportPath + "/Configuration";
         break;
 
     case dlLists:
@@ -545,15 +557,15 @@ QString getDirectoryLocation(DirectoryLocation dl, QString runDir)
         break;
 
     case dlDocs:
-        dirLoc = runDir + "/Docs";
+        dirLoc = libAppSupportPath + "/Docs";
         break;
 
     case dlTraceLog:
-        dirLoc = runDir + "/TraceLog";
+        dirLoc = libAppSupportPath + "/TraceLog";
         break;
 
     case dlQRZDB:
-        dirLoc = runDir;
+        dirLoc = libAppSupportPath;
         break;
 #else
     case dlBinaries:
