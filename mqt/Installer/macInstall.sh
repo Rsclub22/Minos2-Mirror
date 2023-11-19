@@ -1,13 +1,11 @@
 #!/bin/bash
 
-#cd ~/Minos2
-
 set -x
 
 echo $OSTYPE
 SCRIPT=$(basename $0)
 DIR=$(echo `pwd`/../..)
-QTDIR=~/Qt/6.5.1/macos
+QTDIR=~/Qt/6.6.0/macos
 
 cd $DIR
 echo Working Dir: $DIR
@@ -28,7 +26,7 @@ if [ $retVal -ne 0 ]; then
     exit $retVal 
 fi
 
-make -j2
+make -j4
 retVal=$?
 
 if [ $retVal -ne 0 ]; then
@@ -81,8 +79,6 @@ done
 
 cp $QTDIR/translations/qt*.qm Bin/translations
 
-echo $OSTYPE
-
 for j in MqtAppStarter MqtChat MqtCluster MqtControl MqtKeyer MqtKSTClient MqtMonitor MqtQrzServer MqtRigControl MqtRigRecorder MqtRigSync MqtRotator MqtServer
 do
   cp -r $DIR/build/${j}/${j}.app Bin
@@ -111,25 +107,25 @@ done
 
 cd ../..
 
-	sudo install_name_tool -change /usr/local/lib/libusb-1.0.0.dylib @executable_path/../Frameworks/libusb-1.0.0.dylib MqtLogger.app/Contents/Frameworks/libhamlib.4.dylib
-	sudo install_name_tool -change $QTDIR/lib/QtCore.framework/Versions/5/QtCore @executable_path/../Frameworks/QtCore.framework/Versions/5/QtCore MqtLogger.app/Contents/Frameworks/QtMultimedia.framework/Versions/5/QtMultimedia
-	sudo install_name_tool -change $QTDIR/lib/QtMultimedia.framework/Versions/5/QtMultimedia @executable_path/../Frameworks/QtMultimedia.framework/Versions/5/QtMultimedia MqtLogger.app/Contents/Frameworks/QtMultimedia.framework/Versions/5/QtMultimedia
-	sudo install_name_tool -change $QTDIR/lib/QtSerialPort.framework/Versions/5/QtSerialPort @executable_path/../Frameworks/QtSerialPort.framework/Versions/5/QtSerialPort MqtLogger.app/Contents/Frameworks/QtSerialPort.framework/Versions/5/QtSerialPort
-	sudo install_name_tool -change $QTDIR/lib/QtNetwork.framework/Versions/5/QtNetwork @executable_path/../Frameworks/QtNetwork.framework/Versions/5/QtNetwork MqtLogger.app/Contents/Frameworks/QtMultimedia.framework/Versions/5/QtMultimedia
-	sudo install_name_tool -change $QTDIR/lib/QtGui.framework/Versions/5/QtGui @executable_path/../Frameworks/QtGui.framework/Versions/5/QtGui MqtLogger.app/Contents/Frameworks/QtMultimedia.framework/Versions/5/QtMultimedia
-	sudo install_name_tool -change $QTDIR/lib/QtCore.framework/Versions/5/QtCore @executable_path/../Frameworks/QtCore.framework/Versions/5/QtCore MqtLogger.app/Contents/Frameworks/QtSerialPort.framework/Versions/5/QtSerialPort
-    
-    for j in MqtAppStarter MqtChat MqtCluster MqtControl MqtKeyer MqtKSTClient MqtMonitor MqtQrzServer MqtRigControl MqtRigRecorder MqtRigSync MqtRotator MqtServer
-    do
-        install_name_tool -change /usr/local/lib/libhamlib.4.dylib @executable_path/../Frameworks/libhamlib.4.dylib MqtLogger.app/Contents/Resources/Bin/${j}.app/Contents/MacOS/${j}
-        install_name_tool -change /usr/local/lib/libusb-1.0.0.dylib @executable_path/../Frameworks/libusb-1.0.0.dylib MqtLogger.app/Contents/Resources/Bin/${j}.app/Contents/MacOS/${j}
-        install_name_tool -change $QTDIR/lib/QtWidgets.framework/Versions/5/QtWidgets @executable_path/../Frameworks/QtWidgets.framework/Versions/5/QtWidgets MqtLogger.app/Contents/Resources/Bin/M${j}.app/Contents/MacOS/${j}
-        install_name_tool -change $QTDIR/lib/QtGui.framework/Versions/5/QtGui @executable_path/../Frameworks/QtGui.framework/Versions/5/QtGui MqtLogger.app/Contents/Resources/Bin/${j}.app/Contents/MacOS/${j}
-        install_name_tool -change $QTDIR/lib/QtSerialPort.framework/Versions/5/QtSerialPort @executable_path/../Frameworks/QtSerialPort.framework/Versions/5/QtSerialPort MqtLogger.app/Contents/Resources/Bin/${j}.app/Contents/MacOS/${j}
-        install_name_tool -change $QTDIR/lib/QtNetwork.framework/Versions/5/QtNetwork @executable_path/../Frameworks/QtNetwork.framework/Versions/5/QtNetwork MqtLogger.app/Contents/Resources/Bin/${j}.app/Contents/MacOS/${j}
-        install_name_tool -change $QTDIR/lib/QtCore.framework/Versions/5/QtCore @executable_path/../Frameworks/QtCore.framework/Versions/5/QtCore MqtLogger.app/Contents/Resources/Bin/${j}.app/Contents/MacOS/${j}
-    done
-	cd MqtLogger.app/Contents/Resources
+sudo install_name_tool -change /usr/local/lib/libusb-1.0.0.dylib @executable_path/../Frameworks/libusb-1.0.0.dylib MqtLogger.app/Contents/Frameworks/libhamlib.4.dylib
+sudo install_name_tool -change $QTDIR/lib/QtCore.framework/Versions/5/QtCore @executable_path/../Frameworks/QtCore.framework/Versions/5/QtCore MqtLogger.app/Contents/Frameworks/QtMultimedia.framework/Versions/5/QtMultimedia
+sudo install_name_tool -change $QTDIR/lib/QtMultimedia.framework/Versions/5/QtMultimedia @executable_path/../Frameworks/QtMultimedia.framework/Versions/5/QtMultimedia MqtLogger.app/Contents/Frameworks/QtMultimedia.framework/Versions/5/QtMultimedia
+sudo install_name_tool -change $QTDIR/lib/QtSerialPort.framework/Versions/5/QtSerialPort @executable_path/../Frameworks/QtSerialPort.framework/Versions/5/QtSerialPort MqtLogger.app/Contents/Frameworks/QtSerialPort.framework/Versions/5/QtSerialPort
+sudo install_name_tool -change $QTDIR/lib/QtNetwork.framework/Versions/5/QtNetwork @executable_path/../Frameworks/QtNetwork.framework/Versions/5/QtNetwork MqtLogger.app/Contents/Frameworks/QtMultimedia.framework/Versions/5/QtMultimedia
+sudo install_name_tool -change $QTDIR/lib/QtGui.framework/Versions/5/QtGui @executable_path/../Frameworks/QtGui.framework/Versions/5/QtGui MqtLogger.app/Contents/Frameworks/QtMultimedia.framework/Versions/5/QtMultimedia
+sudo install_name_tool -change $QTDIR/lib/QtCore.framework/Versions/5/QtCore @executable_path/../Frameworks/QtCore.framework/Versions/5/QtCore MqtLogger.app/Contents/Frameworks/QtSerialPort.framework/Versions/5/QtSerialPort
+  
+for j in MqtAppStarter MqtChat MqtCluster MqtControl MqtKeyer MqtKSTClient MqtMonitor MqtQrzServer MqtRigControl MqtRigRecorder MqtRigSync MqtRotator MqtServer
+do
+    install_name_tool -change /usr/local/lib/libhamlib.4.dylib @executable_path/../Frameworks/libhamlib.4.dylib MqtLogger.app/Contents/Resources/Bin/${j}.app/Contents/MacOS/${j}
+    install_name_tool -change /usr/local/lib/libusb-1.0.0.dylib @executable_path/../Frameworks/libusb-1.0.0.dylib MqtLogger.app/Contents/Resources/Bin/${j}.app/Contents/MacOS/${j}
+    install_name_tool -change $QTDIR/lib/QtWidgets.framework/Versions/5/QtWidgets @executable_path/../Frameworks/QtWidgets.framework/Versions/5/QtWidgets MqtLogger.app/Contents/Resources/Bin/M${j}.app/Contents/MacOS/${j}
+    install_name_tool -change $QTDIR/lib/QtGui.framework/Versions/5/QtGui @executable_path/../Frameworks/QtGui.framework/Versions/5/QtGui MqtLogger.app/Contents/Resources/Bin/${j}.app/Contents/MacOS/${j}
+    install_name_tool -change $QTDIR/lib/QtSerialPort.framework/Versions/5/QtSerialPort @executable_path/../Frameworks/QtSerialPort.framework/Versions/5/QtSerialPort MqtLogger.app/Contents/Resources/Bin/${j}.app/Contents/MacOS/${j}
+    install_name_tool -change $QTDIR/lib/QtNetwork.framework/Versions/5/QtNetwork @executable_path/../Frameworks/QtNetwork.framework/Versions/5/QtNetwork MqtLogger.app/Contents/Resources/Bin/${j}.app/Contents/MacOS/${j}
+    install_name_tool -change $QTDIR/lib/QtCore.framework/Versions/5/QtCore @executable_path/../Frameworks/QtCore.framework/Versions/5/QtCore MqtLogger.app/Contents/Resources/Bin/${j}.app/Contents/MacOS/${j}
+done
+cd MqtLogger.app/Contents/Resources
 
 
 cp -r $DIR/mqt/ControlFiles/Configuration/* ./Configuration 
@@ -144,6 +140,7 @@ rm -rf ./Configuration/WindowsFiles
 cd Configuration
 
 wget https://www.country-files.com/cty/cty.dat -O cty.dat
+wget https://www.rsgbcc.org/cgi-bin/vhfenter.pl?afsdownload=y -O clublist.txt"
 
 wget https://www.rsgbcc.org/vhf/vhfcontests20.xml -O vhfcontests23.xml
 wget https://www.rsgbcc.org/vhf/vhfcontests21.xml -O vhfcontests24.xml

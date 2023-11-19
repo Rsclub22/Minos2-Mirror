@@ -68,22 +68,9 @@ mkdir Logs
 mkdir Bin
 mkdir Docs
 
-copy %MROOT%\%builddir%\MqtAppStarter\release\MqtAppStarter.exe Bin
-copy %MROOT%\%builddir%\MqtChat\release\MqtChat.exe Bin
-copy %MROOT%\%builddir%\MqtCluster\release\MqtCluster.exe Bin
-copy %MROOT%\%builddir%\MqtDataModes\release\MqtDataModes.exe Bin
-REM copy %MROOT%\%builddir%\MqtControl\release\MqtControl.exe Bin
-REM copy %MROOT%\%builddir%\MqtKeyer\release\MqtKeyer.exe Bin
-REM copy %MROOT%\%builddir%\MqtKeyerProxy\release\MqtKeyerProxy.exe Bin
-copy %MROOT%\%builddir%\MqtKSTClient\release\MqtKSTClient.exe Bin
-copy %MROOT%\%builddir%\MqtLogger\release\MqtLogger.exe Bin
-copy %MROOT%\%builddir%\MqtMonitor\release\MqtMonitor.exe Bin
-copy %MROOT%\%builddir%\MqtQrzServer\release\MqtQrzServer.exe Bin
-copy %MROOT%\%builddir%\MqtRigControl\release\MqtRigControl.exe Bin
-copy %MROOT%\%builddir%\MqtRigRecorder\release\MqtRigRecorder.exe Bin
-copy %MROOT%\%builddir%\MqtRigSync\release\MqtRigSync.exe Bin
-copy %MROOT%\%builddir%\MqtRotator\release\MqtRotator.exe Bin
-copy %MROOT%\%builddir%\MqtServer\release\MqtServer.exe Bin
+for %%j in (MqtAppStarter MqtChat MqtCluster MqtDataModes MqtKSTClient MqtLogger MqtMonitor MqtQrzServer MqtRigControl MqtRigRecorder MqtRigSync MqtRotator MqtServer) do (
+copy %MROOT%\%builddir%\%%j\release\%%j.exe Bin
+)
 
 copy %MMVARIPath%\MMVARI.ocx Bin
 
@@ -117,22 +104,12 @@ call powershell.exe "& {Invoke-WebRequest http://microwave.rsgbcc.org/microconte
 
 cd ../Bin
 
-windeployqt.exe MqtAppStarter.exe
-windeployqt.exe MqtChat.exe
-windeployqt.exe MqtCluster.exe
-windeployqt.exe MqtDataModes.exe
-REM windeployqt.exe MqtControl.exe
-REM windeployqt.exe MqtKeyer.exe
-REM windeployqt.exe MqtKeyerProxy.exe
-windeployqt.exe MqtKSTClient.exe
-windeployqt.exe --qmldir %MROOT%/mqt/MqtBase/QSOView MqtLogger.exe
-windeployqt.exe --qmldir %MROOT%/mqt/MqtBase/QSOView MqtMonitor.exe
-windeployqt.exe MqtQrzServer.exe
-windeployqt.exe MqtRigControl.exe
-windeployqt.exe MqtRigRecorder.exe
-windeployqt.exe MqtRigSync.exe
-windeployqt.exe MqtRotator.exe
-windeployqt.exe MqtServer.exe
+for %%j in (MqtAppStarter MqtChat MqtCluster MqtDataModes MqtKSTClient MqtQrzServer MqtRigControl MqtRigRecorder MqtRigSync MqtRotator MqtServer) do (
+windeployqt.exe %%j.exe
+)
+for %%j in ( MqtLogger MqtMonitor) do (
+windeployqt.exe  --qmldir %MROOT%/mqt/MqtBase/QSOView  %%j.exe
+)
 
 REM bin\translations now exists... we can build our translations
 
