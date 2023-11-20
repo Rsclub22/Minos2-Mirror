@@ -236,25 +236,29 @@ void appStartup(const QString &pappName)
     }
     QDir::setCurrent("./Minos2");
 
+    QString home = QDir::homePath();
+    QString libAppSupportPath = home + "/Library/Application Support/Minos2";
+    bool mkdirOK = QDir().mkdir(libAppSupportPath);
+
     // We have no configuration directory so copy default one
     // Also Create a logs directory and copy Docs
 
     // cpDir does copy if newer, so a new installation updates the old one
 
     if (!DirectoryExists(getDirectoryLocation(dlConfiguration))) {
-        QDir().mkdir(getDirectoryLocation(dlConfiguration));
+        mkdirOK = QDir().mkdir(getDirectoryLocation(dlConfiguration));
     }
     if (!DirectoryExists(getDirectoryLocation(dlLogs))) {
-        QDir().mkdir(getDirectoryLocation(dlLogs));
+        mkdirOK = QDir().mkdir(getDirectoryLocation(dlLogs));
     }
     if (!DirectoryExists(getDirectoryLocation(dlLists))) {
-        QDir().mkdir(getDirectoryLocation(dlLists));
+        mkdirOK = QDir().mkdir(getDirectoryLocation(dlLists));
     }
     if (!DirectoryExists(getDirectoryLocation(dlDocs))) {
-        QDir().mkdir(getDirectoryLocation(dlDocs));
+        mkdirOK = QDir().mkdir(getDirectoryLocation(dlDocs));
     }
-    cpDir(QString(fpath+"/../Resources/Configuration"), getDirectoryLocation(dlConfiguration));
-    cpDir(QString(fpath+"/../Resources/Docs"), getDirectoryLocation(dlDocs));
+    //mkdirOK = cpDir(QString(fpath+"/../Resources/Configuration"), getDirectoryLocation(dlConfiguration));
+    //mkdirOK = cpDir(QString(fpath+"/../Resources/Docs"), getDirectoryLocation(dlDocs));
 
 #elif defined(Q_OS_IOS)
     QString sharedPath = sharedDirectory("group.minos2").toLocalFile();
@@ -527,9 +531,11 @@ QString getDirectoryLocation(DirectoryLocation dl, QString runDir /* = "."*/)
 //        Now that you are in the Library folder, you can open the corresponding
 //        subfolder to save app data or find a specific file.
 
+    QString home = QDir::homePath();
+    QString libAppSupportPath = home + "/Library/Application Support/Minos2";
     QString sharedPath = QStandardPaths::locate(QStandardPaths::DocumentsLocation,"",QStandardPaths::LocateDirectory);
-    QString libAppSupportPath = QStandardPaths::locate(QStandardPaths::AppDataLocation,"",QStandardPaths::LocateDirectory);
-    libAppSupportPath += "/Minos2";
+    //QString libAppSupportPath = QStandardPaths::locate(QStandardPaths::AppLocalDataLocation,"",QStandardPaths::LocateDirectory);
+    //libAppSupportPath += "Minos2";
 
 #endif
     QString dirLoc;
