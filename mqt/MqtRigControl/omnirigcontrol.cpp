@@ -494,6 +494,8 @@ void OmnirigControl::register_rigs(RigFactory::Rigs* rigsList, int id1, int id2)
                 OmniRigOneName,
                 id1,
                 false,      // support getSupBands
+                false,      // support get vfo
+                false,      // support set vfo
                 false,      // support get rit
                 false,      // support set rit
                 false,      // support get rit state
@@ -527,6 +529,8 @@ void OmnirigControl::register_rigs(RigFactory::Rigs* rigsList, int id1, int id2)
                 OmniRigTwoName,
                 id2,
                 false,      // support getSupBands
+                false,      // support get vfo
+                false,      // support set vfo
                 false,      // support get rit
                 false,      // support set rit
                 false,      // support get rit state

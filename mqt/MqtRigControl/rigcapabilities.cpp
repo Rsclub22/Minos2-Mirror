@@ -22,6 +22,8 @@ RigCapabilities::RigCapabilities(RigCapConstants::PortType portType_,
                                  QString rigModelName_,
                                  int rigModelNumber_,
                                  bool supportGetSupBands_,
+                                 bool supportGetVfo_,
+                                 bool supportSetVfo_,
                                  bool supportGetRit_,
                                  bool supportSetRit_,
                                  bool supportGetRitState_,
@@ -48,6 +50,8 @@ RigCapabilities::RigCapabilities(RigCapConstants::PortType portType_,
       rigModelName (rigModelName_),
       rigModelNumber (rigModelNumber_),
       supportGetSupBands (supportGetSupBands_),
+      supportGetVfo(supportGetVfo_),
+      supportSetVfo(supportSetVfo_),
       supportGetRit (supportGetRit_),
       supportSetRit (supportSetRit_),
       supportGetRitState (supportGetRitState_),
@@ -73,10 +77,18 @@ RigCapabilities::RigCapabilities(RigCapConstants::PortType portType_,
 }
 
 
+
+
+
 RigCapabilities:: RigCapabilities( const RigCapabilities &rigcap)
 {
     *this = rigcap;
 }
+
+
+
+
+
 RigCapabilities & RigCapabilities::operator= ( const RigCapabilities &rigcap)
 {
     portType = rigcap.portType;
@@ -84,6 +96,8 @@ RigCapabilities & RigCapabilities::operator= ( const RigCapabilities &rigcap)
     rigModelName = rigcap.rigModelName;
     rigModelNumber = rigcap.rigModelNumber;
     supportGetSupBands = rigcap.supportGetSupBands;
+    supportGetVfo = rigcap.supportGetVfo;
+    supportSetVfo = rigcap.supportSetVfo;
     supportGetRit = rigcap.supportGetRit;
     supportSetRit = rigcap.supportSetRit;
     supportGetRitState = rigcap.supportGetRitState;
@@ -106,4 +120,6 @@ RigCapabilities & RigCapabilities::operator= ( const RigCapabilities &rigcap)
     pollData = rigcap.pollData;
     return *this;
 }
+
+
 

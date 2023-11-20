@@ -100,6 +100,9 @@ int register_callback(rig_model_t rig_model, void *callback_data)
     }
 
 
+    bool supportGetVfo = rig_get_function_ptr(rig_model, RIG_FUNCTION_GET_VFO) ? true:false;
+    bool supportSetVfo = rig_get_function_ptr(rig_model, RIG_FUNCTION_SET_VFO) ? true:false;
+
     bool supportGetRit = rig_get_function_ptr(rig_model, RIG_FUNCTION_GET_RIT) ? true:false;
     bool supportSetRit = rig_get_function_ptr(rig_model, RIG_FUNCTION_SET_RIT) ? true:false;
 
@@ -164,7 +167,7 @@ int register_callback(rig_model_t rig_model, void *callback_data)
     bool supportCwMemWait = rig_get_function_ptr(rig_model, RIG_FUNCTION_SEND_MORSE) ? true:false;
 
     // below to get a parameter dump for development... edit required parameters...
-    trace(QString("%1\t%2\t%3\t%4\tportType = %5\tpttPortType = %6").arg(manufacturerName + " " + modelName).arg(rig_model).arg(supportCwMem ? "True" : "False").arg(supportVoiceMem ? "True" : "False").arg(port_type).arg(supportPttPortType));
+    //trace(QString("%1\t%2\t%3\t%4\tportType = %5\tpttPortType = %6").arg(manufacturerName + " " + modelName).arg(rig_model).arg(supportCwMem ? "True" : "False").arg(supportVoiceMem ? "True" : "False").arg(port_type).arg(supportPttPortType));
 
     (*rigsList)[key] = RigCapabilities(port_type,
                                        manufacturerName,
@@ -172,6 +175,8 @@ int register_callback(rig_model_t rig_model, void *callback_data)
                                        key,
                                        rig_model,
                                        true,                // radio supports lookup supported bands
+                                       supportGetVfo,
+                                       supportSetVfo,
                                        supportGetRit,       // radio supports get rit
                                        supportSetRit,       // radio supports set rit
                                        supportGetRitState,  // radio supports get rit state

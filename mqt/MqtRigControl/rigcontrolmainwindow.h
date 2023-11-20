@@ -3,7 +3,7 @@
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //                      Rig Control
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2017 - 2020
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2017 - 2023
 //
 // Interprocess Control Logic
 // COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2017
@@ -109,6 +109,8 @@ public:
     int rigCtldConnectDelay;
 };
 
+/*
+
 class RigSupCapabilities
 {
 public:
@@ -153,6 +155,7 @@ public:
 
 };
 
+*/
 
 class RigStateDetails
 {
@@ -271,7 +274,8 @@ private:
 
     LoggerRequests *loggerRequests;
     RigCtldDetails *rigCtldDetails;
-    RigSupCapabilities *selectedRigSupCap;
+    RigCapabilities selectedRadioSupportCap;
+
 
     //RigCapabilities rigCap;
     QString appName = "";

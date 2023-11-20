@@ -49,6 +49,8 @@ public:
                     QString rigModelName_ = "",
                     int rigModelNumber_ = 0,
                     bool supportGetSupBands_ = false,
+                    bool supportGetVfo = false,
+                    bool supportSetVfo = false,
                     bool supportGetRit_ = false,
                     bool supportSetRit_ = false,
                     bool supportGetRitState = false,
@@ -78,6 +80,8 @@ public:
     QString rigModelName;       // combined manufacturer and rig names
     int rigModelNumber;
     bool supportGetSupBands;
+    bool supportGetVfo;
+    bool supportSetVfo;
     bool supportGetRit;
     bool supportSetRit;
     bool supportGetRitState;
@@ -98,6 +102,8 @@ public:
     bool supportCwMemoryStop;
     bool supportCwMemoryWait;
     bool pollData;
+
+
 
   RigCapabilities( const RigCapabilities &rigcap);
   RigCapabilities &operator= ( const RigCapabilities &rigcap);
