@@ -500,14 +500,15 @@ void RigControlMainWindow::upDateRadio(QString radioName)
 
     rigStateDetails->curTransVertFreq.clear();
     rigStateDetails->selTvBand.clear();
-/*
-    setRigCltdIndicatorVisible(false); ************************************************************
+
+    setRigCltdIndicatorVisible(false);
     setMemoryGroupVisible(false);
     setPttGroupItemsVisible(false);
     setSmeterVisible(false);
-*/
+
     if (radioCommsOK)
     {
+        onTxPttTestPbClicked();     // turn off PTT in case it is on
         closeRadio();
     }
 
@@ -555,7 +556,7 @@ void RigControlMainWindow::upDateRadio(QString radioName)
     // get current radio user settings
     updateCurrentRadioFromAvailRadios(currentRadioName);
 
-    // get select radio capabilities
+    // get selected radio capabilities
 
     selectedRadioSupportCap = rigFactory->supported_rigs()->value(currentRadio.rigModel);
 
@@ -620,11 +621,7 @@ void RigControlMainWindow::upDateRadio(QString radioName)
             rigStateDetails->curVfo = CURRENT_VFO;
         }
 
-        //selectedRigSupCap->supportSetVfo = radio->supportWriteVfo(currentRadio.rigModelNumber);
         trace(QString("Supports writing Vfo = %1").arg(selectedRadioSupportCap.supportSetVfo ? "true" : "false"));
-
-
-
         trace(QString("VFO = %1").arg(vfoToStr(rigStateDetails->curVfo)));
 
         ui->usingLibText->setText(radio->getLibraryName());
@@ -827,10 +824,10 @@ void RigControlMainWindow::checkSupportSMeter()
 
 void RigControlMainWindow::checkSupportRit()
 {
-/*    getRitSupportStatus();
+    getRitSupportStatus();
 
     rigStateDetails->ritEnable = currentRadio.enableDisableCatFeature.ritEnable;
-    if (rigStateDetails->ritEnable && (selectedRigSupCap->radioSupSetRit || selectedRigSupCap->radioSupGetRit))
+    if (rigStateDetails->ritEnable && (selectedRadioSupportCap.supportSetRit || selectedRadioSupportCap.supportGetRit))
     {
 
 
@@ -842,8 +839,8 @@ void RigControlMainWindow::checkSupportRit()
         }
 
         setRitGetSetFreqIndicatorVisible(true);
-        ritSetFreqIndicatorToggle(selectedRigSupCap->radioSupSetRit);
-        ritGetFreqIndicatorToggle(selectedRigSupCap->radioSupGetRit);
+        ritSetFreqIndicatorToggle(selectedRadioSupportCap.supportSetRit);
+        ritGetFreqIndicatorToggle(selectedRadioSupportCap.supportGetRit);
 
 
         //setRitFreqStr("0");             // turn off RIT
@@ -859,7 +856,7 @@ void RigControlMainWindow::checkSupportRit()
 
     }
 
-*/
+
 }
 
 bool RigControlMainWindow::checkSupportVoiceMemory()
@@ -872,9 +869,7 @@ bool RigControlMainWindow::checkSupportVoiceMemory()
         if (radio)
         {
 
-            //selectedRigSupCap->supportVoiceMemory = radio->supportVoiceMemory(currentRadio.rigModelNumber);
-            // does it support stop voiceMemory - TS890S
-            //selectedRigSupCap->supportStopVoiceMemory = radio->supportStopVoiceMem(currentRadio.rigModelNumber);
+
             if (selectedRadioSupportCap.supportVoiceMemory)
             {
                 setVoiceMemIndVisible(true);
@@ -910,9 +905,6 @@ bool RigControlMainWindow::checkSupportCwKeyerMemory()
 
         if (radio)
         {
-            //selectedRigSupCap->suportSendMorse = radio->supportSendMorse(currentRadio.rigModelNumber);
-            //selectedRigSupCap->supportStopMorse = radio->supportStopMorse(currentRadio.rigModelNumber);
-            //selectedRigSupCap->supportWaitMorse = radio->supportWaitMorse(currentRadio.rigModelNumber);
             if (selectedRadioSupportCap.supportCwMemory)
             {
                 setCwMemIndVisible(true);
@@ -1015,8 +1007,8 @@ void RigControlMainWindow::checkSupportPtt()
 
 }
 
-/*
 
+/*
 void RigControlMainWindow::checkSupportPtt()
 {
 
@@ -1806,14 +1798,14 @@ void RigControlMainWindow::getRadioInfo(bool pubNow)
     }
 
 
-/*
 
-    if (radioCommsOK && selectedRigSupCap->radioSupSetRit && rigStateDetails->ritEnable)
+
+    if (radioCommsOK && selectedRadioSupportCap.supportSetRit && rigStateDetails->ritEnable)
     {
-        logMessage((QString("Poll RIT Info - Get Rit Freq = %1").arg(selectedRigSupCap->radioSupGetRit ? "True" : "False")));
+        logMessage((QString("Poll RIT Info - Get Rit Freq = %1").arg(selectedRadioSupportCap.supportGetRit ? "True" : "False")));
 
 
-        if (selectedRigSupCap->radioSupGetRit)
+        if (selectedRadioSupportCap.supportGetRit)
         {
             retCode = getRitFreq(rigStateDetails->curVfo);
             if (retCode < 0)
@@ -1831,11 +1823,11 @@ void RigControlMainWindow::getRadioInfo(bool pubNow)
 
 
 
-        if (selectedRigSupCap->radioSupGetRit)
+        if (selectedRadioSupportCap.supportGetRit)
         {
 
             bool ritStatus = false;
-            if (selectedRigSupCap->radioSupGetRitState)
+            if (selectedRadioSupportCap.supportGetRitState)
             {
                 logMessage(QString("Get Rit"));
                 retCode = getRitRadioStatus(rigStateDetails->curVfo, &ritStatus);
@@ -1866,9 +1858,9 @@ void RigControlMainWindow::getRadioInfo(bool pubNow)
 
 
     }
-*/
 
-    if (radioCommsOK && selectedRadioSupportCap.supportVolume && currentRadio.enableDisableCatFeature.voiceMemEnable)
+
+    if (radioCommsOK && selectedRadioSupportCap.supportVolume && currentRadio.enableDisableCatFeature.volumeEnable)
     {
         logMessage(QString("Get Radio Volume"));
         retCode = getVolume(rigStateDetails->curVfo);
@@ -1897,7 +1889,7 @@ void RigControlMainWindow::getRadioInfo(bool pubNow)
     }
 
 
-    if (radioCommsOK && selectedRadioSupportCap.supportGetPtt)
+    if (radioCommsOK && selectedRadioSupportCap.supportGetPtt && currentRadio.enablePTT)
     {
         if (currentRadio.pttType != serialCommonData::PTT_METHOD_CAT || (currentRadio.pttType == serialCommonData::PTT_METHOD_CAT && currentRadio.enableDisableCatFeature.catEnable))
         {
@@ -3171,10 +3163,6 @@ void RigControlMainWindow::loggerSetVolume(int level)
 
 void RigControlMainWindow::clearSupportRitFlags()
 {
-    //selectedRigSupCap->radioSupGetRit = false; ************************************************
-    //selectedRigSupCap->radioSupSetRit = false;
-    //selectedRigSupCap->radioSupGetRitState = false;
-    //selectedRigSupCap->radioSupSetRitState = false;
     rigStateDetails->radioRitOn = false;
     rigStateDetails->ritEnable = false;
     rigStateDetails->ritKHzFlag = false;
@@ -3183,7 +3171,7 @@ void RigControlMainWindow::clearSupportRitFlags()
 
 void RigControlMainWindow::getRitSupportStatus()
 {
-/*
+
     if (radio != nullptr)
     {
 
@@ -3211,20 +3199,18 @@ void RigControlMainWindow::getRitSupportStatus()
             if (rigStateDetails->rigCap.supportGetRit)
             {
                 // Does radio support getting Rit Freq?
-                selectedRigSupCap->radioSupGetRit = radio->supportReadRit(currentRadio.rigModelNumber);
-                logMessage(QString("Get Rit Support Status - getRit support is  = %1").arg(selectedRigSupCap->radioSupGetRit ? "True" : "False"));
+                logMessage(QString("Get Rit Support Status - getRit support is  = %1").arg(selectedRadioSupportCap.supportGetRit ? "True" : "False"));
 
             }
 
             if (rigStateDetails->rigCap.supportSetRit)
             {
                 // Does radio support setting Rit Freq?
-                selectedRigSupCap->radioSupSetRit = radio->supportWriteRit(currentRadio.rigModelNumber);
-                logMessage(QString("Get Rit Support Status - setRit support is  = %1").arg(selectedRigSupCap->radioSupSetRit ? "True" : "False"));
+                logMessage(QString("Get Rit Support Status - setRit support is  = %1").arg(selectedRadioSupportCap.supportSetRit ? "True" : "False"));
 
             }
 
-            if (selectedRigSupCap->radioSupSetRit)
+            if (selectedRadioSupportCap.supportSetRit)
             {
                 rigStateDetails->ritEnable = currentRadio.enableDisableCatFeature.ritEnable;
                 logMessage(QString("Get Rit Support - Rit Enabled = %1").arg(rigStateDetails->ritEnable ? "True" : "False"));
@@ -3235,16 +3221,14 @@ void RigControlMainWindow::getRitSupportStatus()
 
             if (rigStateDetails->rigCap.supportSetRitState)
             {
-                selectedRigSupCap->radioSupSetRitState = radio->supportWriteRitState(currentRadio.rigModelNumber);
-                logMessage(QString("Get Rit Support Status - set Rit on/off support is  = %1").arg(selectedRigSupCap->radioSupSetRitState ? "True" : "False"));
+                logMessage(QString("Get Rit Support Status - set Rit on/off support is  = %1").arg(selectedRadioSupportCap.supportSetRitState ? "True" : "False"));
 
             }
 
             if (rigStateDetails->rigCap.supportGetRitState)
             {
                 // Does radio support getting Rit on/off state?
-                selectedRigSupCap->radioSupGetRitState = radio->supportReadRitState(currentRadio.rigModelNumber);
-                logMessage(QString("Get Rit Support Status - Rit On/Off state support is  = %1").arg(selectedRigSupCap->radioSupGetRitState ? "True" : "False"));
+                logMessage(QString("Get Rit Support Status - Rit On/Off state support is  = %1").arg(selectedRadioSupportCap.supportGetRitState ? "True" : "False"));
 
             }
 
@@ -3261,7 +3245,7 @@ void RigControlMainWindow::getRitSupportStatus()
         logMessage(QString("Get Rit Support Status - radio ptr is null"));
 
     }
-*/
+
 }
 
 
@@ -3272,7 +3256,7 @@ void RigControlMainWindow::setRitLogStatus(bool status)
 
     if (closeApp)
         return;
-/*
+
 
     loggerRequests->logRitOn = status;
     logMessage(QString("Logger RIT Status received = %1").arg(status ? "True" : "False"));
@@ -3281,7 +3265,7 @@ void RigControlMainWindow::setRitLogStatus(bool status)
     {
         ritIndicatorToggle(loggerRequests->logRitOn);
 
-        if (selectedRigSupCap->radioSupSetRitState)
+        if (selectedRadioSupportCap.supportSetRitState)
         {
             logMessage(QString("Radio Support RIT On/off switching - turn off"));
             if (radioCommsOK)
@@ -3304,7 +3288,7 @@ void RigControlMainWindow::setRitLogStatus(bool status)
         {
 
             logMessage(QString("Radio Doesn't support Rit Off/On - Send 0 freq to radio"));
-            if (radioCommsOK && selectedRigSupCap->radioSupSetRit && rigStateDetails->ritEnable)
+            if (radioCommsOK && selectedRadioSupportCap.supportSetRit && rigStateDetails->ritEnable)
             {
                 setRitFreq(ShortFreq());
                 sendRitFreqLogger(ShortFreq());
@@ -3313,7 +3297,7 @@ void RigControlMainWindow::setRitLogStatus(bool status)
 
         }
 
-        if (!selectedRigSupCap->radioSupGetRitState)
+        if (!selectedRadioSupportCap.supportGetRitState)
         {
             ritIndicatorToggle(loggerRequests->logRitOn);
         }
@@ -3322,7 +3306,7 @@ void RigControlMainWindow::setRitLogStatus(bool status)
     {
         logMessage(QString("radio = nullptr"));
     }
-*/
+
 
  }
 
@@ -3476,7 +3460,7 @@ int RigControlMainWindow::getRitFreq(VFO vfo)
 
 void RigControlMainWindow::doSetRitFreq(const ShortFreq &ritFreq)
 {
-/*
+
     if (closeApp)
         return;
     logMessage(QString("setRitFreq"));
@@ -3497,7 +3481,7 @@ void RigControlMainWindow::doSetRitFreq(const ShortFreq &ritFreq)
             }
             else
             {
-                if (!selectedRigSupCap->radioSupGetRit)
+                if (!selectedRadioSupportCap.supportGetRit)
                 {
                     // get rit is not available, update local rit display
                     // and send to logger to update logger
@@ -3512,7 +3496,7 @@ void RigControlMainWindow::doSetRitFreq(const ShortFreq &ritFreq)
     {
         logMessage(QString("radio = nullptr"));
     }
-*/
+
 }
 
 void RigControlMainWindow::setRitFreq(const ShortFreq &freq)
@@ -3947,7 +3931,7 @@ void RigControlMainWindow::saveTraceLogFlag(bool state)
 
 void RigControlMainWindow::about()
 {
-    QMessageBox::about(this, tr("Minos RigControl"), tr("Minos QT RigControl\nCopyright D Balharrie G8FKH/M0DGB 2019"));
+    QMessageBox::about(this, tr("Minos RigControl"), tr("Minos QT RigControl\nCopyright D Balharrie G8FKH/M0DGB 2023"));
 }
 
 
