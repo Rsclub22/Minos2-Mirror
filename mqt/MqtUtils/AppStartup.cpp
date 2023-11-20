@@ -258,37 +258,8 @@ void appStartup(const QString &pappName)
     if (!DirectoryExists(getDirectoryLocation(dlDocs))) {
         mkdirOK = QDir().mkpath(getDirectoryLocation(dlDocs));
     }
-    //mkdirOK = cpDir(QString(fpath+"/../Resources/Configuration"), getDirectoryLocation(dlConfiguration));
-    //mkdirOK = cpDir(QString(fpath+"/../Resources/Docs"), getDirectoryLocation(dlDocs));
 
-
-    if (!DirectoryExists(getDirectoryLocation(dlConfiguration)))
-    {
-        int confTries = 0;
-        while (!DirectoryExists(getDirectoryLocation(dlConfiguration)) )
-        {
-            if (++confTries > 2)
-            {
-                exit(-1);
-            }
-            QString destDir = QFileDialog::getExistingDirectory(
-                nullptr,
-                "Set Minos Working Directory",      // we are pre-translation here...
-                fpath,
-                QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks
-                );
-            if ( !destDir.isEmpty() )
-            {
-
-                if (destDir.toUpper().indexOf("/CONFIGURATION") == destDir.size() - QString("/Configuration").size())
-                {
-                    destDir = destDir.left(destDir.size() - QString("/Configuration").size());
-                }
-                QDir::setCurrent(destDir);
-            }
-        }
-    }
-    else if (fpath.contains("/build"))
+    if (fpath.contains("/build"))
     {
         // Don't do this from an issue system
         // Configuration already exists; we should probably "copy if newer"
@@ -347,12 +318,12 @@ void appStartup(const QString &pappName)
 #else
     // try for executable directory
 
-        if (DirectoryExists(getDirectoryLocation(dlConfiguration)))
+        if (DirectoryExists(fpath + "/../Configuration"))
         {
             QDir::setCurrent(fpath + "/..");
         }
         int confTries = 0;
-        while (!DirectoryExists(getDirectoryLocation(dlConfiguration)) )
+        while (!DirectoryExists("./Configuration") )
         {
             if (++confTries > 2)
             {
