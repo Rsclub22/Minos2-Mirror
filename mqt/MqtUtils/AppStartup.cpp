@@ -226,9 +226,10 @@ void appStartup(const QString &pappName)
 
 // For Mac Users, set the default directory to be Documents/Minos2
 
+#ifdef Q_OS_MACOS
+
     QString fpath = QCoreApplication::applicationDirPath();
 
-#ifdef Q_OS_MACOS
     QString sharedPath = QStandardPaths::locate(QStandardPaths::DocumentsLocation,"",QStandardPaths::LocateDirectory);
     QDir::setCurrent(sharedPath);
     if (!DirectoryExists("./Minos2")) {
@@ -236,27 +237,103 @@ void appStartup(const QString &pappName)
     }
     QDir::setCurrent("./Minos2");
 
+    QString home = QDir::homePath();
+    QString libAppSupportPath = home + "/Library/Application Support/Minos2";
+    bool mkdirOK = QDir().mkpath(libAppSupportPath);
+
     // We have no configuration directory so copy default one
     // Also Create a logs directory and copy Docs
 
     // cpDir does copy if newer, so a new installation updates the old one
 
     if (!DirectoryExists(getDirectoryLocation(dlConfiguration))) {
-        QDir().mkpath(getDirectoryLocation(dlConfiguration));
+        mkdirOK = QDir().mkpath(getDirectoryLocation(dlConfiguration));
     }
     if (!DirectoryExists(getDirectoryLocation(dlLogs))) {
-        QDir().mkpath(getDirectoryLocation(dlLogs));
+        mkdirOK = QDir().mkpath(getDirectoryLocation(dlLogs));
     }
     if (!DirectoryExists(getDirectoryLocation(dlLists))) {
-        QDir().mkpath(getDirectoryLocation(dlLists));
+        mkdirOK = QDir().mkpath(getDirectoryLocation(dlLists));
     }
     if (!DirectoryExists(getDirectoryLocation(dlDocs))) {
-        QDir().mkpath(getDirectoryLocation(dlDocs));
+        mkdirOK = QDir().mkpath(getDirectoryLocation(dlDocs));
     }
-    cpDir(QString(fpath+"/../Resources/Configuration"), getDirectoryLocation(dlConfiguration));
-    cpDir(QString(fpath+"/../Resources/Docs"), getDirectoryLocation(dlDocs));
+    //mkdirOK = cpDir(QString(fpath+"/../Resources/Configuration"), getDirectoryLocation(dlConfiguration));
+    //mkdirOK = cpDir(QString(fpath+"/../Resources/Docs"), getDirectoryLocation(dlDocs));
 
-#elif defined(Q_OS_IOS)
+
+    if (!DirectoryExists(getDirectoryLocation(dlConfiguration)))
+    {
+        int confTries = 0;
+        while (!DirectoryExists(getDirectoryLocation(dlConfiguration)) )
+        {
+            if (++confTries > 2)
+            {
+                exit(-1);
+            }
+            QString destDir = QFileDialog::getExistingDirectory(
+                nullptr,
+                "Set Minos Working Directory",      // we are pre-translation here...
+                fpath,
+                QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks
+                );
+            if ( !destDir.isEmpty() )
+            {
+
+                if (destDir.toUpper().indexOf("/CONFIGURATION") == destDir.size() - QString("/Configuration").size())
+                {
+                    destDir = destDir.left(destDir.size() - QString("/Configuration").size());
+                }
+                QDir::setCurrent(destDir);
+            }
+        }
+    }
+    else if (fpath.contains("/build"))
+    {
+        // Don't do this from an issue system
+        // Configuration already exists; we should probably "copy if newer"
+
+        QString srcMaster = fpath;
+        while(DirectoryExists(srcMaster))
+        {
+            QFileInfo src(srcMaster + "/..");
+            srcMaster = src.canonicalFilePath();
+            if (DirectoryExists(srcMaster) && DirectoryExists(srcMaster + "/mqt/ControlFiles/Configuration"))
+            {
+                break;
+            }
+        }
+        if (DirectoryExists(srcMaster) && DirectoryExists(srcMaster + "/mqt/ControlFiles/Configuration"))
+        {
+            // copyifnewer the master config
+            QString destConfig = getDirectoryLocation(dlConfiguration);
+
+
+            cpDir(srcMaster + "/mqt/ControlFiles/Configuration", destConfig);
+            cpDir(destConfig + "/OSXFiles", destConfig);
+
+            QDir osx(destConfig + "/OSXFiles");
+            osx.removeRecursively();
+            QDir win(destConfig + "/WindowsFiles");
+            win.removeRecursively();
+            QDir linuxf(destConfig + "/LinuxFiles");    // straight "linux" is objected to
+            linuxf.removeRecursively();
+        }
+        if (DirectoryExists(srcMaster) && DirectoryExists(srcMaster + "/mqt/Docs"))
+        {
+            // copyifnewer the master config
+
+            QString destDocs = getDirectoryLocation(dlDocs);
+
+            cpDir(srcMaster + "/mqt/Docs", destDocs);
+        }
+    }
+
+#else
+
+    QString fpath = QCoreApplication::applicationDirPath();
+
+#if defined(Q_OS_IOS)
     QString sharedPath = sharedDirectory("group.minos2").toLocalFile();
 #endif
     if (!DirectoryExists(getDirectoryLocation(dlConfiguration)))
@@ -268,14 +345,12 @@ void appStartup(const QString &pappName)
             exit(0);
         }
 #else
-        // try for executable directory
+    // try for executable directory
 
-#ifndef Q_OS_MACOS
         if (DirectoryExists(getDirectoryLocation(dlConfiguration)))
         {
             QDir::setCurrent(fpath + "/..");
         }
-#endif
         int confTries = 0;
         while (!DirectoryExists(getDirectoryLocation(dlConfiguration)) )
         {
@@ -284,11 +359,11 @@ void appStartup(const QString &pappName)
                 exit(-1);
             }
             QString destDir = QFileDialog::getExistingDirectory(
-                        nullptr,
-                        "Set Minos Working Directory",      // we are pre-translation here...
-                        fpath,
-                        QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks
-                        );
+                nullptr,
+                "Set Minos Working Directory",      // we are pre-translation here...
+                fpath,
+                QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks
+                );
             if ( !destDir.isEmpty() )
             {
 
@@ -346,6 +421,7 @@ void appStartup(const QString &pappName)
             cpDir(srcMaster + "/mqt/Docs", destDocs);
         }
     }
+#endif
     enableTrace( getDirectoryLocation(dlTraceLog), appStartupName + "_" );
 
     trace(QSysInfo::prettyProductName());
@@ -467,7 +543,7 @@ bool cpDir(const QString &srcPath, const QString &dstPath)
         if (!DirectoryExists(parentDir))
         {
             QDir parentDstDir(QFileInfo(dstPath).path());
-            if (!parentDstDir.mkpath(QFileInfo(dstPath).fileName()))
+            if (!parentDstDir.mkdir(QFileInfo(dstPath).fileName()))
                 return false;
         }
     }
@@ -523,13 +599,17 @@ QString getDirectoryLocation(DirectoryLocation dl, QString runDir /* = "."*/)
 
 #ifdef Q_OS_MACOS
 
-//        Open Finder, press and hold Shift + Command + G, then hit Enter.
+//        Open Finder, press and hold Shift + Command + G, enter "Library/Application Support" then hit Enter.
 //        Now that you are in the Library folder, you can open the corresponding
 //        subfolder to save app data or find a specific file.
 
+    // default rundir is <sharedPath>/Minos2
+
+    QString home = QDir::homePath();
+    QString libAppSupportPath = home + "/Library/Application Support/Minos2";
     QString sharedPath = QStandardPaths::locate(QStandardPaths::DocumentsLocation,"",QStandardPaths::LocateDirectory);
-    QString libAppSupportPath = QStandardPaths::locate(QStandardPaths::AppDataLocation,"",QStandardPaths::LocateDirectory);
-    libAppSupportPath += "/Minos2";
+
+    QString binPath = QCoreApplication::applicationDirPath() + "../Resources";
 
 #endif
     QString dirLoc;
@@ -537,11 +617,11 @@ QString getDirectoryLocation(DirectoryLocation dl, QString runDir /* = "."*/)
     {
 #ifdef Q_OS_MACOS
     case dlBinaries:
-        dirLoc = runDir + "/Bin";
+        dirLoc = binPath + "/Bin";
         break;
 
     case dlTranslations:
-        dirLoc = runDir + "/Bin/translations";
+        dirLoc = binPath + "/Bin/translations";
         break;
 
     case dlConfiguration:
@@ -557,7 +637,7 @@ QString getDirectoryLocation(DirectoryLocation dl, QString runDir /* = "."*/)
         break;
 
     case dlDocs:
-        dirLoc = libAppSupportPath + "/Docs";
+        dirLoc = binPath + "/Docs";
         break;
 
     case dlTraceLog:
