@@ -261,9 +261,6 @@ void appStartup(const QString &pappName)
 
     if (fpath.contains("/build"))
     {
-        // Don't do this from an issue system
-        // Configuration already exists; we should probably "copy if newer"
-
         QString srcMaster = fpath;
         while(DirectoryExists(srcMaster))
         {
@@ -292,12 +289,17 @@ void appStartup(const QString &pappName)
         }
         if (DirectoryExists(srcMaster) && DirectoryExists(srcMaster + "/mqt/Docs"))
         {
-            // copyifnewer the master config
+            // copyifnewer the master docs
 
             QString destDocs = getDirectoryLocation(dlDocs);
 
             cpDir(srcMaster + "/mqt/Docs", destDocs);
         }
+    }
+    else
+    {
+        cpDir(QString(fpath+"/../Resources/Configuration"), getDirectoryLocation(dlConfiguration));
+        cpDir(QString(fpath+"/../Resources/Docs"), getDirectoryLocation(dlDocs));
     }
 
 #else
@@ -580,7 +582,7 @@ QString getDirectoryLocation(DirectoryLocation dl, QString runDir /* = "."*/)
     QString libAppSupportPath = home + "/Library/Application Support/Minos2";
     QString sharedPath = QStandardPaths::locate(QStandardPaths::DocumentsLocation,"",QStandardPaths::LocateDirectory);
 
-    QString binPath = QCoreApplication::applicationDirPath() + "../Resources";
+    QString resourcePath = QCoreApplication::applicationDirPath() + "../Resources";
 
 #endif
     QString dirLoc;
@@ -588,11 +590,11 @@ QString getDirectoryLocation(DirectoryLocation dl, QString runDir /* = "."*/)
     {
 #ifdef Q_OS_MACOS
     case dlBinaries:
-        dirLoc = binPath + "/Bin";
+        dirLoc = resourcePath + "/Bin";
         break;
 
     case dlTranslations:
-        dirLoc = binPath + "/Bin/translations";
+        dirLoc = resourcePath + "/Bin/translations";
         break;
 
     case dlConfiguration:
@@ -608,7 +610,7 @@ QString getDirectoryLocation(DirectoryLocation dl, QString runDir /* = "."*/)
         break;
 
     case dlDocs:
-        dirLoc = binPath + "/Docs";
+        dirLoc = libAppSupportPath + "/Docs";
         break;
 
     case dlTraceLog:
@@ -657,40 +659,41 @@ QString getDirectoryLocation(DirectoryLocation dl, QString runDir /* = "."*/)
     }
     QDir d(dirLoc);
     dirLoc = d.absolutePath();
+    QString dltype;
     switch (dl)
     {
     case dlBinaries:
-        trace("dlBinaries" + dirLoc);
+        dltype = "dlBinaries";
         break;
 
     case dlTranslations:
-        trace("dlTranslations" + dirLoc);
+        dltype = "dlTranslations";
         break;
 
     case dlConfiguration:
-        trace("dlConfiguration" + dirLoc);
+        dltype = "dlConfiguration";
         break;
 
     case dlLists:
-        trace("dlLists" + dirLoc);
+        dltype = "dlLists";
         break;
 
     case dlLogs:
-        trace("dlLogs" + dirLoc);
+        dltype = "dlLogs";
         break;
 
     case dlDocs:
-        trace("dlDocs" + dirLoc);
+        dltype = "dlDocs";
         break;
 
     case dlTraceLog:
-        trace("dlTraceLog" + dirLoc);
+        dltype = "dlTraceLog";
         break;
 
     case dlQRZDB:
-        trace("dlQRZDB" + dirLoc);
+        dltype = "dlQRZDB";
         break;
     }
-
+    trace(QString("%1: %2").arg(dltype, dirLoc));
     return dirLoc;
 }
