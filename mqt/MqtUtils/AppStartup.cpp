@@ -686,5 +686,40 @@ QString getDirectoryLocation(DirectoryLocation dl, QString runDir /* = "."*/)
     }
     QDir d(dirLoc);
     dirLoc = d.absolutePath();
+    switch (dl)
+    {
+    case dlBinaries:
+        trace("dlBinaries" + dirLoc);
+        break;
+
+    case dlTranslations:
+        trace("dlTranslations" + dirLoc);
+        break;
+
+    case dlConfiguration:
+        trace("dlConfiguration" + dirLoc);
+        break;
+
+    case dlLists:
+        trace("dlLists" + dirLoc);
+        break;
+
+    case dlLogs:
+        trace("dlLogs" + dirLoc);
+        break;
+
+    case dlDocs:
+        trace("dlDocs" + dirLoc);
+        break;
+
+    case dlTraceLog:
+        trace("dlTraceLog" + dirLoc);
+        break;
+
+    case dlQRZDB:
+        trace("dlQRZDB" + dirLoc);
+        break;
+    }
+
     return dirLoc;
 }
