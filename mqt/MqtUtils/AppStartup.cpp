@@ -694,6 +694,6 @@ QString getDirectoryLocation(DirectoryLocation dl, QString runDir /* = "."*/)
         dltype = "dlQRZDB";
         break;
     }
-    trace(QString("%1: %2").arg(dltype, dirLoc));
+    //trace(QString("%1: %2").arg(dltype, dirLoc));
     return dirLoc;
 }
