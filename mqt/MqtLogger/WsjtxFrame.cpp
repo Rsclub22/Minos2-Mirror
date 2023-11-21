@@ -1294,18 +1294,6 @@ void WsjtxFrame::do_reply (QModelIndex index)
 
 }
 
-void WsjtxFrame::on_autoSelectButton_toggled(bool c)
-{
-    if (!c)
-    {
-        wtrace("WsjtxFrame autoselect off");
-    }
-    else
-    {
-        wtrace("WsjtxFrame autoselect on");
-    }
-}
-
 void WsjtxFrame::on_testButton_clicked()
 {
 // A collection of messages that we have at som time wanted to test

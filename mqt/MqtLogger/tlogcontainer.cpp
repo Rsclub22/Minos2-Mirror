@@ -712,7 +712,7 @@ void TLogContainer::setupMenus()
 #ifndef NDEBUG
     // until it works, don't show it!
 
-    EnterAction = newAction(QT_TR_NOOP("Create Entry and send to RSGB"), ui->menuTools, &TLogContainer::EnterActionExecute);
+    // EnterAction = newAction(QT_TR_NOOP("Create Entry and send to RSGB"), ui->menuTools, &TLogContainer::EnterActionExecute);
 #endif
 
     // end of tools manu
