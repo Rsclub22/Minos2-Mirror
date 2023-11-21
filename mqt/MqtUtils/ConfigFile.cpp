@@ -150,6 +150,7 @@ QString RunConfigElement::inferExecutable()
     if (launcherExecutablePath.contains(exeString))
     {
         trace("contains exestring");
+        // launch fom a build directory
         executable = launcherExecutablePath;
         executable.replace(launcherExecutableName, appConfigName);
         trace(executable);
@@ -157,8 +158,9 @@ QString RunConfigElement::inferExecutable()
     else if (launcherExecutablePath.contains(binString))
     {
         trace("contains binString");
+        // launch from a release bundle
         executable = launcherExecutablePath;
-        executable.append("/Contents/Resources/Bin/" + appConfigName);
+        executable.replace("/MacOS/" + launcherExecutableName, "/Resources/Bin/" + appConfigName + ".app");
         trace(executable);
     }
 
@@ -960,6 +962,7 @@ QString MinosConfig::checkConfig(QString name)
             }
         }
     }
+    trace("MinosConfig::checkConfig " + reqErrs);
     return reqErrs;
 }
 

@@ -51,14 +51,7 @@ ios {
     QMAKE_INFO_PLIST = ../ControlFiles/ios/Info.plist
 }
 
-macx {
-    QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.15
-    QMAKE_TARGET_BUNDLE_PREFIX = uk.org.g0gjv.minos
-    MY_ENTITLEMENTS.name = CODE_SIGN_ENTITLEMENTS
-    MY_ENTITLEMENTS.value = ../ControlFiles/minos.entitlements
-    QMAKE_MAC_XCODE_SETTINGS += MY_ENTITLEMENTS
-    #QMAKE_INFO_PLIST = ../ControlFiles/Info.plist
-}
+
 
 INCLUDEPATH += $$PWD/../MqtRotator
 INCLUDEPATH += $$PWD/../MqtRigControl
