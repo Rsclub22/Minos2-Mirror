@@ -109,8 +109,8 @@ public:
     int rigCtldConnectDelay;
 };
 
-/*
 
+/*
 class RigSupCapabilities
 {
 public:
