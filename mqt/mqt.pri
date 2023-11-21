@@ -25,7 +25,8 @@ macx {
     MY_ENTITLEMENTS.value = ../ControlFiles/minos.entitlements
     QMAKE_MAC_XCODE_SETTINGS += MY_ENTITLEMENTS
 
-    QMAKE_APPLE_DEVICE_ARCHS = x86_64 arm64
+#    QMAKE_APPLE_DEVICE_ARCHS = x86_64 arm64
+    QMAKE_APPLE_DEVICE_ARCHS = arm64
 }
 
 win32: {
