@@ -1099,7 +1099,7 @@ Le mode calculé est %2</translation>
     <message>
         <location filename="../contestdetails.ui" line="109"/>
         <source>Selected Contest</source>
-        <translation type="unfinished"></translation>
+        <translation>Concours sélectionné</translation>
     </message>
     <message>
         <location filename="../contestdetails.ui" line="224"/>
@@ -1403,7 +1403,7 @@ Comptabiliser entre Locators de 4 caractères</translation>
     <message>
         <location filename="../contestdetails.cpp" line="727"/>
         <source>Band %1 is set as unwanted.</source>
-        <translation>Bande %1 définir comme non désiré</translation>
+        <translation>Bande %1 définir comme non désiré.</translation>
     </message>
     <message>
         <location filename="../contestdetails.cpp" line="1435"/>
@@ -1614,7 +1614,7 @@ Déplacez-vous entre les composants d&apos;un groupe à l&apos;aide de la souris
     <message>
         <location filename="../dxccframe.ui" line="154"/>
         <source>UnWkd</source>
-        <translation>Pas contacté [English???]</translation>
+        <translation>Pas Contacté</translation>
     </message>
     <message>
         <location filename="../dxccframe.cpp" line="169"/>
@@ -1654,7 +1654,7 @@ Déplacez-vous entre les composants d&apos;un groupe à l&apos;aide de la souris
     <message>
         <location filename="../dxccframe.cpp" line="176"/>
         <source>unwkd</source>
-        <translation></translation>
+        <translation>Pas Contacté</translation>
     </message>
 </context>
 <context>
@@ -2113,7 +2113,7 @@ Déplacez-vous entre les composants d&apos;un groupe à l&apos;aide de la souris
     <message>
         <location filename="../districtframe.cpp" line="155"/>
         <source>unwkd</source>
-        <translation>Pas contacté [English???]</translation>
+        <translation>Pas Contacté</translation>
     </message>
 </context>
 <context>
@@ -3712,10 +3712,6 @@ Non - Ignorer les modifications</translation>
         <translation>Run</translation>
     </message>
     <message>
-        <source>Run %1 - New</source>
-        <translation type="vanished">Run %1 - Nouveau</translation>
-    </message>
-    <message>
         <location filename="../runbuttonsframe.cpp" line="377"/>
         <source>Run %1 - Edit</source>
         <translation>Run %1 - Modifier</translation>
@@ -3738,7 +3734,7 @@ Non - Ignorer les modifications</translation>
     <message>
         <location filename="../runbuttonsframe.cpp" line="359"/>
         <source>Run %1 - Set</source>
-        <translation type="unfinished"></translation>
+        <translation>Run %1 - Définir</translation>
     </message>
     <message>
         <location filename="../runbuttonsframe.cpp" line="426"/>
@@ -3756,7 +3752,7 @@ Non - Ignorer les modifications</translation>
     <message>
         <location filename="../runbuttonsframe.cpp" line="614"/>
         <source>&amp;Set</source>
-        <translation>[Context???]</translation>
+        <translation>&amp;Définir</translation>
     </message>
     <message>
         <location filename="../runbuttonsframe.cpp" line="622"/>
@@ -4526,10 +4522,6 @@ n&apos;existe pas; télécharger les derniers calendriers&#xa0;?</translation>
         <location filename="../tcalendarform.cpp" line="311"/>
         <source>Failed to load the Microwave calendar file</source>
         <translation>Le chargement du fichier du calendrier Micro-ondes a échoué</translation>
-    </message>
-    <message>
-        <source>OpenSSL version built is is %1</source>
-        <translation type="vanished">Version OpenSSL construite est %1 ???]</translation>
     </message>
     <message>
         <location filename="../tcalendarform.cpp" line="325"/>
@@ -6004,7 +5996,7 @@ Through</source>
     <message>
         <location filename="../txvminternalbuttondialog.ui" line="127"/>
         <source>Show</source>
-        <translation>Afficher [context?] </translation>
+        <translation>Montrer</translation>
     </message>
     <message>
         <location filename="../txvminternalbuttondialog.ui" line="120"/>

@@ -277,7 +277,7 @@ Vérifier le tracelog Rigcontrol</translation>
     <message>
         <location filename="../rigcontrolmainwindow.ui" line="36"/>
         <source>Current Radio Config</source>
-        <translation type="unfinished"></translation>
+        <translation>Configuration radio actuelle</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.ui" line="43"/>
@@ -395,23 +395,6 @@ Vérifier le tracelog Rigcontrol</translation>
         <translation>Configurer les radios...</translation>
     </message>
     <message>
-        <source>Edit Preset Freq</source>
-        <translation type="vanished">Modifier la fréquence prédéfinie</translation>
-    </message>
-    <message>
-        <source>Contest Start - Ignore Preset Freq</source>
-        <translatorcomment>Debut du concours - Ignorer la fréquence prédéfinie</translatorcomment>
-        <translation type="vanished">Début du concours - Ignorer la fréquence prédéfinie</translation>
-    </message>
-    <message>
-        <source>Contest Change - Ignore Previous Freq</source>
-        <translation type="vanished">Modification du concours - Ignorer la fréquence prédéfinie</translation>
-    </message>
-    <message>
-        <source>Configure Rigctld...</source>
-        <translation type="vanished">Configurer le programme Rigctld...</translation>
-    </message>
-    <message>
         <location filename="../rigcontrolmainwindow.ui" line="564"/>
         <location filename="../rigcontrolmainwindow.ui" line="584"/>
         <source>RIT</source>
@@ -440,33 +423,9 @@ Active</source>
 Actif</translation>
     </message>
     <message>
-        <source>Configure</source>
-        <translation type="vanished">Configurer</translation>
-    </message>
-    <message>
-        <source>Help</source>
-        <translation type="vanished">Aide</translation>
-    </message>
-    <message>
-        <source>About</source>
-        <translation type="vanished">A propos</translation>
-    </message>
-    <message>
-        <source>About Radio Config</source>
-        <translation type="vanished">À propos de la configuration de la radio</translation>
-    </message>
-    <message>
         <location filename="../rigcontrolmainwindow.ui" line="50"/>
         <source>Trace Data Comms</source>
         <translation>Suivre la communication de données</translation>
-    </message>
-    <message>
-        <source>Trace RigCtld Comms</source>
-        <translation type="vanished">Suivre la communication de RigCtld</translation>
-    </message>
-    <message>
-        <source>Please select a radio!</source>
-        <translation type="vanished">Sélectionner une radio SVP!</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="415"/>
@@ -755,12 +714,6 @@ Please delete them and set up the radios again</source>
         <translation>Les fichiers de configuration de la radio dans %1 proviennent d&apos;une ancienne version incompatible de Minos.
 
 Veuillez les supprimer et configurer à nouveau les radios</translation>
-    </message>
-    <message>
-        <source>App Instance Name  = %1
-</source>
-        <translation type="vanished">Nom d&apos;instance d&apos;Application = %1
-</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="4531"/>
@@ -1381,17 +1334,9 @@ Corriger les entrées du convertisseur SVP.</translation>
         <translation>Paramètres avancés pour CAT</translation>
     </message>
     <message>
-        <source>EnableDisable CAT Features</source>
-        <translation type="vanished">Activer/Désactiver les fonctionnalités CAT</translation>
-    </message>
-    <message>
         <location filename="../rigsetupform.ui" line="372"/>
         <source>PTT Enable</source>
         <translation>Activer PTT</translation>
-    </message>
-    <message>
-        <source>Enable\Disable  CAT  Features</source>
-        <translation type="vanished">Activer/désactiver les fonctionnalités CAT</translation>
     </message>
     <message>
         <location filename="../rigsetupform.ui" line="389"/>
@@ -1441,12 +1386,12 @@ Corriger les entrées du convertisseur SVP.</translation>
     <message>
         <location filename="../rigsetupform.ui" line="365"/>
         <source>Enable/Disable CAT Features</source>
-        <translation type="unfinished"></translation>
+        <translation>Activer/Désactiver les fonctionnalités CAT</translation>
     </message>
     <message>
         <location filename="../rigsetupform.ui" line="381"/>
         <source>Enable/Disable  CAT  Features</source>
-        <translation type="unfinished"></translation>
+        <translation>Activer/Désactiver les fonctionnalités CAT</translation>
     </message>
     <message>
         <location filename="../rigsetupform.ui" line="472"/>
