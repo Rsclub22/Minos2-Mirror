@@ -2157,6 +2157,16 @@ void TSingleLogFrame::sendRigTxVoiceMessage(QString msgNum)
     }
 }
 
+void TSingleLogFrame::sendRigStopTxVoiceMessage(QString msg)
+{
+    if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
+    {
+        //sendKeyerStop();    // don't keep calling while tuning!
+        LogContainer->sendDM->sendRigStopTxVoiceMessage(this, msg);
+
+    }
+}
+
 void TSingleLogFrame::sendRigTxCwMessage(QString msg)
 {
     if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())

@@ -53,6 +53,7 @@ public:
     void setLogFreq(const PubSubName &name, Frequency freq);
 
     void setVoiceMessageNum(const PubSubName &name, const QString &msgNum);
+    void setStopVoiceMessage(const PubSubName &name, const QString &msg);
 
     void setRadioVolume(const PubSubName &name, const int level);
     void setLogVolume(const PubSubName &name, const int level);

@@ -140,6 +140,7 @@ public:
 
     void on_SupportStopCommand(bool state);
     void sendRigTxVoiceMessage(QString msgNum);
+    void sendRigStopTxVoiceMessage(QString msg);
 
     void onSetPttEnabled(bool state, PubSubName psn);
     void onSetPttType(int type, PubSubName psn);

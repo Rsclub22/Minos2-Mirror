@@ -44,6 +44,7 @@ signals:
     void setRitStatus(bool);
     void setVolume(int volLevel);
     void setVoiceMessageNum(QString msgNum);
+    void setStopVoiceMessage(QString msg);
     void setPttOnOff(bool);
     void setCwTXMessage(QString cwMsg);
     void rereadConfig();

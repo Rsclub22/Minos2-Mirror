@@ -145,6 +145,7 @@ void RigControlRpc::on_routerCall( bool err, QSharedPointer<MinosRPCObj>mro, con
         QSharedPointer<RPCParam> psName;
         QSharedPointer<RPCParam> psLoggerUuid;
         QSharedPointer<RPCParam> psVoiceMessageNum;
+        QSharedPointer<RPCParam> psStopVoiceMessage;
         QSharedPointer<RPCParam> psCwMessage;
         QSharedPointer<RPCParam> psSelect;
         QSharedPointer<RPCParam> psRitFreq;
@@ -307,6 +308,21 @@ void RigControlRpc::on_routerCall( bool err, QSharedPointer<MinosRPCObj>mro, con
                     // here you handle what the logger has sent to us
                     trace(QString("Rig RPC: VoiceMessage Number From Logger = %1").arg(msgNum));
                     emit setVoiceMessageNum(msgNum);
+                }
+            }
+        }
+        else if ( args->getStructArgMember( 0, rpcConstants::rigStopVoiceMessage, psStopVoiceMessage ))
+        {
+            PubSubName psn("test"); // just uses router/appname
+            QString cursel = rigCache.getSelectedContest(psn, loggeruuid);
+            if (cursel == selContest)
+            {
+                QString msg;
+                if ( psStopVoiceMessage->getString( msg ) )
+                {
+                    // here you handle what the logger has sent to us
+                    trace(QString("Rig RPC: Stop VoiceMessage From Logger = %1").arg(msg));
+                    emit setStopVoiceMessage(msg);
                 }
             }
         }

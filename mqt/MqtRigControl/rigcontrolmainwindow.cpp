@@ -387,6 +387,7 @@ void RigControlMainWindow::initActionsConnections()
     connect(msg, &RigControlRpc::selectLoggerRadio,  this, &RigControlMainWindow::onSelectRadio);
     connect(msg, &RigControlRpc::setVolume,  this, &RigControlMainWindow::loggerSetVolume);
     connect(msg, &RigControlRpc::setVoiceMessageNum, this, &RigControlMainWindow::onSetVoiceMessageNum);
+    connect(msg, &RigControlRpc::setStopVoiceMessage, this, &RigControlMainWindow::onSetStopVoiceMessage);
     connect(msg, &RigControlRpc::setPttOnOff, this, &RigControlMainWindow::onSetPttOnOff);
     connect(msg, &RigControlRpc::setCwTXMessage, this, &RigControlMainWindow::onSetCwTxMessage);
     connect(msg, &RigControlRpc::rereadConfig, this, &RigControlMainWindow::updateRigDetailsCache);
@@ -5143,6 +5144,8 @@ void RigControlMainWindow::showRitTestControl(bool state)
 // activate voicemessage on most radios. Note! 0 is stop message, and 1 is the first message memory.
 // hamlib TS890S, if msgNum is 0, need to call seperate stop_voice_mem function.
 
+// 2023 added a seperate stopVoiceMessage from logger
+
 void RigControlMainWindow::onSetVoiceMessageNum(QString msgNum)
 {
     bool ok = false;
@@ -5150,16 +5153,8 @@ void RigControlMainWindow::onSetVoiceMessageNum(QString msgNum)
 
     if (radio && ok)
     {
-        trace(QString("Send Voice Memory Number %1 to rig").arg(msgNum));
-        if (msgNum == "0" && selectedRadioSupportCap.supportStopVoiceMemory)
-        {
-            trace(QString("This radio supports hamlib stop_voice_mem function"));
-            radio->stop_voice_mem(rigStateDetails->curVfo);
-        }
-        else
-        {
-            radio->sendVoiceMessage(rigStateDetails->curVfo, vmNum);
-        }
+        trace(QString("Send Voice Message number = %1").arg(msgNum));
+        radio->sendVoiceMessage(rigStateDetails->curVfo, vmNum);
 
     }
     else
@@ -5167,6 +5162,26 @@ void RigControlMainWindow::onSetVoiceMessageNum(QString msgNum)
         trace(QString("send Voice Memory - radio empty, msgNum invalid"));
     }
 
+}
+
+
+void RigControlMainWindow::onSetStopVoiceMessage(QString msg)
+{
+
+   Q_UNUSED(msg) // we don't use the message
+   if (radio)
+   {
+       if (selectedRadioSupportCap.supportStopVoiceMemory)
+       {
+           trace(QString("This radio supports hamlib stop_voice_mem function"));
+           radio->stop_voice_mem(rigStateDetails->curVfo);
+       }
+       else
+       {
+           trace(QString("This radio does not support stop voice mem function - send 0 to sendvoicemessage"));
+           radio->sendVoiceMessage(rigStateDetails->curVfo, 0);
+       }
+   }
 }
 
 

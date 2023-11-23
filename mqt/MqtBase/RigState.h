@@ -22,6 +22,7 @@ class RigState
     MinosFrequencyItem<Frequency> _logFreq;
     MinosStringItem<QString> _logBand;
     MinosStringItem<QString> _radioVoiceMessageNum;
+    MinosStringItem<QString> _radioStopVoiceMessage;
     MinosStringItem<QString> _cwTxMessage;
     MinosStringItem<QString> _radioMode;
     MinosStringItem<QString> _logMode;
@@ -54,6 +55,7 @@ public:
     MinosItem<QString> logBand() const;
     MinosStringItem<QString> radioMode() const;
     MinosStringItem<QString> radioVoiceMessageNum() const;
+    MinosStringItem<QString> radioStopVoiceMessage() const;
     MinosStringItem<QString> cwTxMessage() const;
     MinosStringItem<QString> logMode() const;
     MinosItem<bool> ritOnOffStatus() const;
@@ -71,6 +73,7 @@ public:
     void setRadioMode(const QString &mode);
     void setLogMode(const QString &mode);
     void setVoiceMessageNum(const QString msgNum);
+    void setStopVoiceMessage(const QString msg);
     void setCwTxMessage(const QString msg);
     void setRadioVolume(int level);
     void setLogVolume(int level);

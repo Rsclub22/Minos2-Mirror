@@ -611,6 +611,7 @@ private slots:
 
 
     void onSetVoiceMessageNum(QString msgNum);
+    void onSetStopVoiceMessage(QString msg);
     void onCwKeyerPbClicked();
     void onCwKeyerStopPbClicked();
 

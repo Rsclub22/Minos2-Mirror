@@ -276,6 +276,10 @@ void RigCache::setVoiceMessageNum(const PubSubName &name, const QString &msgNum)
 {
     rigStates[name].setVoiceMessageNum(msgNum);
 }
+void RigCache::setStopVoiceMessage(const PubSubName &name, const QString &msg)
+{
+    rigStates[name].setStopVoiceMessage(msg);
+}
 void RigCache::setCwTxMessage(const PubSubName &name, const QString &msg)
 {
     rigStates[name].setCwTxMessage(msg);
