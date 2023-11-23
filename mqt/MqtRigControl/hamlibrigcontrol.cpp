@@ -162,9 +162,31 @@ int register_callback(rig_model_t rig_model, void *callback_data)
     bool supportVoiceMem = rig_get_function_ptr(rig_model, RIG_FUNCTION_SEND_VOICE_MEM) ? true:false;
     bool supportStopVoiceMem = rig_get_function_ptr(rig_model, RIG_FUNCTION_STOP_VOICE_MEM) ? true:false;
 
+    //RIG_MTYPE_VOICE,		/*!< Stored Voice Message */
+    //RIG_MTYPE_MORSE
+
+    int startVoiceMemoryNumber = 0;
+    int endVoiceMemoryNumber = 0;
+
+    if (supportVoiceMem)
+    {
+        HamlibRigControl::getNumberVoiceCWMemoryChannels(myRig, startVoiceMemoryNumber, endVoiceMemoryNumber, RIG_MTYPE_VOICE);
+    }
+
+
+
     bool supportCwMem = rig_get_function_ptr(rig_model, RIG_FUNCTION_SEND_MORSE) ? true:false;
     bool supportCwMemStop = rig_get_function_ptr(rig_model, RIG_FUNCTION_STOP_MORSE) ? true:false;
     bool supportCwMemWait = rig_get_function_ptr(rig_model, RIG_FUNCTION_SEND_MORSE) ? true:false;
+
+    int startCwMemoryNumber = 0;
+    int endCwMemoryNumber = 0;
+    if (supportCwMem)
+    {
+        HamlibRigControl::getNumberVoiceCWMemoryChannels(myRig, startCwMemoryNumber, endCwMemoryNumber, RIG_MTYPE_MORSE);
+
+    }
+
 
     // below to get a parameter dump for development... edit required parameters...
     //trace(QString("%1\t%2\t%3\t%4\tportType = %5\tpttPortType = %6").arg(manufacturerName + " " + modelName).arg(rig_model).arg(supportCwMem ? "True" : "False").arg(supportVoiceMem ? "True" : "False").arg(port_type).arg(supportPttPortType));
@@ -192,6 +214,10 @@ int register_callback(rig_model_t rig_model, void *callback_data)
                                        supportAntSw,        // radio supports antenna switch
                                        true,                // radio supports RigCtld
                                        supportVoiceMem,        // radio supports Voice Memory
+                                       startVoiceMemoryNumber,
+                                       endVoiceMemoryNumber,
+                                       startCwMemoryNumber,
+                                       endCwMemoryNumber,
                                        supportStopVoiceMem,     // radio supports stop Voice Memmory (TS890S)
                                        supportCwMem,            // radio supports Cw Memory
                                        supportCwMemStop,
@@ -217,6 +243,8 @@ HamlibRigControl::~HamlibRigControl()
 
 
 }
+
+
 
 
 
@@ -971,6 +999,9 @@ int HamlibRigControl::getVoxState(VFO vfo, bool &state)
     return retCode;
 }
 
+
+
+
 /*************** Passband ********************************/
 
 
@@ -1192,8 +1223,45 @@ bool HamlibRigControl::supportWaitMorse(int rigNumber)
 
 }
 
+/***************** Memory Channels *****************************/
 
 
+bool HamlibRigControl::getNumberVoiceCWMemoryChannels(RIG *myRig, int &startNumMem, int &endNumMem, chan_type_t channelType)
+{
+    if (myRig)
+    {
+
+        chan_t* chan_list = myRig->caps->chan_list;
+        for (int i = 0; !RIG_IS_CHAN_END(chan_list[i]) && i < HAMLIB_CHANLSTSIZ; i++)
+        {
+            if (chan_list[i].type == channelType)
+            {
+                startNumMem = chan_list[i].startc;
+                endNumMem = chan_list[i].endc;
+                return true;
+            }
+        }
+
+
+    }
+
+
+
+    return false;
+
+
+}
+
+/*
+int HamlibRigControl::getAllMemoryChannelData(RIG * rig, VFO vfo, channel_t chans[])
+{
+    int ok = -1;
+
+    ok = rig_get_chan_all(rig, hamlibVfoNames[vfo], chans);
+    return ok;
+
+}
+*/
 /*************** Level Control  ********************************/
 
 

@@ -90,7 +90,9 @@ public:
 
     void setPttOnOff(const PubSubName &name, bool onOff);
     void setVoiceMemAvail(const PubSubName &name, bool voiceMemAvail);
+    void setNumVoiceMessages(const PubSubName &name, int numMessages);
     void setCwMemAvail(const PubSubName &name, int cwType);
+    void setNumCwMessages(const PubSubName &name, int numMessages);
     void setCwTxMessage(const PubSubName &name, const QString &msg);
 };
 

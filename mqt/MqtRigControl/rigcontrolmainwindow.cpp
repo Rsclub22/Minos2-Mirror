@@ -602,8 +602,19 @@ void RigControlMainWindow::upDateRadio(QString radioName)
     logMessage(QString("Get and Set Volume = %1").arg((selectedRadioSupportCap.supportVolume ? "True" : "False")));
     logMessage(QString("Get and Set Antenna Switch = %1").arg((selectedRadioSupportCap.supportAntSw ? "True" : "False")));
     logMessage(QString("Send Voice Memory = %1").arg((selectedRadioSupportCap.supportVoiceMemory ? "True" : "False")));
+    if (selectedRadioSupportCap.supportVoiceMemory)
+    {
+        logMessage(QString("Start Voice Memory Message Number = %1").arg(selectedRadioSupportCap.startVoiceMemoryNumber));
+        logMessage(QString("End Voice Memory Message Number = %1").arg(selectedRadioSupportCap.endVoiceMemoryNumber));
+
+    }
     logMessage(QString("Stop Voice Memory = %1").arg((selectedRadioSupportCap.supportStopVoiceMemory ? "True" : "False")));
     logMessage(QString("Send Cw Memory = %1").arg((selectedRadioSupportCap.supportCwMemory ? "True" : "False")));
+    if (selectedRadioSupportCap.supportCwMemory)
+    {
+        logMessage(QString("Start Cw Memory Message Number = %1").arg(selectedRadioSupportCap.startCwMemoryNumber));
+        logMessage(QString("End Cw Memory Message Number = %1").arg(selectedRadioSupportCap.endCwMemoryNumber));
+    }
     logMessage(QString("Stop Cw Memory = %1").arg((selectedRadioSupportCap.supportCwMemoryStop ? "True" : "False")));
     logMessage(QString("wait Cw Memory = %1").arg((selectedRadioSupportCap.supportCwMemoryWait ? "True" : "False")));
     logMessage(QString("Poll for Radio Data = %1").arg((selectedRadioSupportCap.pollData ? "True" : "False")));
@@ -4050,11 +4061,25 @@ void RigControlMainWindow::addVoiceMemStatusToRigCache(bool status)
     msg->rigCache.setVoiceMemAvail(psname, status);
 }
 
+void RigControlMainWindow::addVoiceNumberMessagesToRigCache(int numMessages)
+{
+    logMessage(QString("Add Number of Voice Memory Messages to rigcache = %1").arg(numMessages));
+    PubSubName psname(currentRadio.radioName);
+    msg->rigCache.setNumVoiceMessages(psname, numMessages);
+}
+
 void RigControlMainWindow::addCwKeyerMemoryStatusToRigCache(int cwMemType)
 {
     logMessage(QString("Add CW Keyer Memory Status to rigcache = %1").arg(cwMemType));
     PubSubName psname(currentRadio.radioName);
     msg->rigCache.setCwMemAvail(psname, cwMemType);
+}
+
+void RigControlMainWindow::addCwKeyerNumberMessagesToRigCache(int numMessages)
+{
+    logMessage(QString("Add Number of Voice Memory Messages to rigcache = %1").arg(numMessages));
+    PubSubName psname(currentRadio.radioName);
+    msg->rigCache.setNumCwMessages(psname, numMessages);
 }
 
 void RigControlMainWindow::addPTTEnabledStatusToRigCache(bool status)

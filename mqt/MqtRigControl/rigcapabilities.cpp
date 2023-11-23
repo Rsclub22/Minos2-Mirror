@@ -39,8 +39,12 @@ RigCapabilities::RigCapabilities(RigCapConstants::PortType portType_,
                                  bool supportAntSw_,
                                  bool supportRigCtld_,
                                  bool supportVoiceMemory_,
+                                 int startVoiceMemoryNumber_,
+                                 int endVoiceMemoryNumber_,
                                  bool supportStopVoiceMemory_,
                                  bool supportCwMemory_,
+                                 int startCwMemoryNumber_,
+                                 int endCwMemoryNumber_,
                                  bool supportCwMemoryStop_,
                                  bool supportCwMemoryWait_,
                                  bool pollData_ )
@@ -66,9 +70,13 @@ RigCapabilities::RigCapabilities(RigCapConstants::PortType portType_,
       supportVolume (supportVolume_),
       supportAntSw (supportAntSw_),
       supportRigCtld (supportRigCtld_),
-      supportVoiceMemory (supportVoiceMemory_),
+      supportVoiceMemory(supportVoiceMemory_),
+      startVoiceMemoryNumber(startVoiceMemoryNumber_),
+      endVoiceMemoryNumber(endVoiceMemoryNumber_),
       supportStopVoiceMemory (supportStopVoiceMemory_),
       supportCwMemory(supportCwMemory_),
+      startCwMemoryNumber(startCwMemoryNumber_),
+      endCwMemoryNumber(endCwMemoryNumber_),
       supportCwMemoryStop(supportCwMemoryStop_),
       supportCwMemoryWait(supportCwMemoryWait_),
       pollData (pollData_)
@@ -113,8 +121,12 @@ RigCapabilities & RigCapabilities::operator= ( const RigCapabilities &rigcap)
     supportAntSw = rigcap.supportAntSw;
     supportRigCtld = rigcap.supportRigCtld;
     supportVoiceMemory = rigcap.supportVoiceMemory;
+    startVoiceMemoryNumber = rigcap.startVoiceMemoryNumber;
+    endVoiceMemoryNumber = rigcap.endVoiceMemoryNumber;
     supportStopVoiceMemory = rigcap.supportStopVoiceMemory;
     supportCwMemory = rigcap.supportCwMemory;
+    startCwMemoryNumber = rigcap.startCwMemoryNumber;
+    endCwMemoryNumber = rigcap.endCwMemoryNumber;
     supportCwMemoryStop = rigcap.supportCwMemoryStop;
     supportCwMemoryWait = rigcap.supportCwMemoryWait;
     pollData = rigcap.pollData;

@@ -66,8 +66,12 @@ public:
                     bool supportAntSw_ = false,
                     bool supportRigCtld_ = false,
                     bool supportVoiceMemory_ = false,
+                    int startVoiceMemoryNumber_ = 0,
+                    int endVoiceMemoryNumber_ = 0,
                     bool supportStopVoiceMemory_ = false,
                     bool supportCwMemory_ = false,
+                    int startCwMemoryNumber_ = 0,
+                    int endCwMemoryNumber_ = 0,
                     bool supportCwMemoryStop_ = false,
                     bool supportCwMemoryWait_ = false,
                     bool pollData_= RigCapConstants::pollDataOn);
@@ -97,8 +101,12 @@ public:
     bool supportAntSw;
     bool supportRigCtld;
     bool supportVoiceMemory;
+    int startVoiceMemoryNumber;
+    int endVoiceMemoryNumber;
     bool supportStopVoiceMemory;
     bool supportCwMemory;
+    int startCwMemoryNumber;
+    int endCwMemoryNumber;
     bool supportCwMemoryStop;
     bool supportCwMemoryWait;
     bool pollData;

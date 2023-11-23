@@ -511,8 +511,12 @@ void OmnirigControl::register_rigs(RigFactory::Rigs* rigsList, int id1, int id2)
                 false,      // support antenna switch
                 false,      // support rigctld
                 false,      // support voice memory
+                0,          // start voice memory channel number
+                0,          // end voice memory channel number
                 false,      // support stop voice memory
                 false,      // support Cw memory
+                0,          // start cw memory channel number
+                0,          // end cw memory channel number
                 false,      // support Cw memory Stop
                 false,      // support Cw memory wait
                 false);     // polldata flag
@@ -546,8 +550,12 @@ void OmnirigControl::register_rigs(RigFactory::Rigs* rigsList, int id1, int id2)
                 false,      // support antenna switch
                 false,      // support rigctld
                 false,      // support voice memory
+                0,          // start voice memory channel number
+                0,          // end voice memory channel number
                 false,      // support stop voice memory
                 false,      // support Cw memory
+                0,          // start cw memory channel number
+                0,          // end cw memory channel number
                 false,      // support Cw memory Stop
                 false,      // support Cw memory wait
                 false);     // polldata flag

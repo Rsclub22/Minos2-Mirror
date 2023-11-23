@@ -519,7 +519,9 @@ private:
     void checkSupportPollRadio();
     void setupTransVerter();
     void addVoiceMemStatusToRigCache(bool status);
+    void addVoiceNumberMessagesToRigCache(int numMessages);
     void addCwKeyerMemoryStatusToRigCache(int cwMemType);
+    void addCwKeyerNumberMessagesToRigCache(int numMessages);
     void addPTTEnabledStatusToRigCache(bool status);
     QString getRigCtldExePath();
     QString getRigCtldExeName();

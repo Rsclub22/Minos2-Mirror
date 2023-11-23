@@ -131,6 +131,7 @@ public:
     int getVoxState(VFO vfo, bool &state) override;
 
     bool modeSupported(MODE mode, Frequency f) override;
+    static bool getNumberVoiceCWMemoryChannels(RIG *myRig, int &startNumMem, int &endNumMem, chan_type_t channelType);
 private:
 
 
@@ -187,6 +188,7 @@ private:
     static setting_t rigHasGetLevel(int rigNumber, setting_t level);
     setting_t rigHasSetLevel(setting_t level);
     static setting_t rigHasSetLevel(int rigNumber, setting_t level);
+
 
 
 };
