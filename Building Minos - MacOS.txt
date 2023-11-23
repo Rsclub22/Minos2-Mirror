@@ -30,7 +30,21 @@ N.B. I have build other applications using this Mac, and may have hidden pre-req
     Install Qt 6.6.0. Under "Additional libraries" you need at least 
         Qt Charts, Qt Location, Qt positioning, Qt Multimedia, Qt Serial Port
         
-5) Get and build the latest Hamlib
+
+
+5) Download Minos Source Code
+	NB other scripts refer to $HOME/Minos2, so you're stuck with it. 
+
+	cd ~
+	git clone git://git.code.sf.net/p/minos/minos Minos2
+	cd Minos2
+
+6) Install other required components
+
+	./mactools.sh
+
+
+7) Get and build the latest Hamlib
 
 Look at https://github.com/Hamlib/Hamlib for all the up to date hamlib information,
 including their build instructions, from which the following is derived.
@@ -53,7 +67,7 @@ If 4.6 has been released
 git checkout Hamlib-4.6.0
 
 
-Othwewise, 
+Otherwise, 
 
 # get the main development branch
 
@@ -71,33 +85,14 @@ so that the built libraries can be found:
 
 sudo ldconfig
 
-
-4) Download Minos Source Code
-	NB other scripts refer to $HOME/Minos2, so you're stuck with it. 
-
-	cd ~
-	git clone git://git.code.sf.net/p/minos/minos Minos2
-	cd Minos2
-
-5) Install other required components
-
-	./mactools.sh
-
-7) You should now be able to go ahead with the build.
+8) You should now be able to go ahead with the build.
 
 	export PATH="~/qt/6.6.0/bin:$PATH"
 	cd ~/mqt/Installer
 	./macInstall.sh
 
-8) And then run it with
+9) And then run it with
 	open -a ~/minos-runtime/MqtLogger.app
 
 To update and buid again, repeat from after "git clone"
-
-
-Other files changed: 
-	mqt/MqtRigControl/rigcontrol.cpp
-	mqt/MqtRotator/rotcontrol.cpp
-	mqt/mqrhamlib.pri
-
 
