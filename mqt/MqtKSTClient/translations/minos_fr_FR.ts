@@ -382,7 +382,7 @@ l&apos;indicatif sélectionné</translation>
     </message>
     <message>
         <location filename="../kstmainwindow.ui" line="755"/>
-        <location filename="../kstmainwindow.cpp" line="503"/>
+        <location filename="../kstmainwindow.cpp" line="501"/>
         <source>Connect</source>
         <translation>Connecter</translation>
     </message>
@@ -392,34 +392,34 @@ l&apos;indicatif sélectionné</translation>
         <translation>Fermer</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="492"/>
+        <location filename="../kstmainwindow.cpp" line="490"/>
         <source>Disconnect</source>
         <translation>Déconnecter</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="485"/>
+        <location filename="../kstmainwindow.cpp" line="483"/>
         <source>Including %1</source>
         <translation>%1 Compris</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="144"/>
-        <location filename="../kstmainwindow.cpp" line="148"/>
+        <location filename="../kstmainwindow.cpp" line="142"/>
+        <location filename="../kstmainwindow.cpp" line="146"/>
         <source>Active</source>
         <translation>Actif</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="650"/>
+        <location filename="../kstmainwindow.cpp" line="648"/>
         <source>Set Back</source>
         <translatorcomment>ou Retour?</translatorcomment>
         <translation>Définir statut à « Présent »</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="654"/>
+        <location filename="../kstmainwindow.cpp" line="652"/>
         <source>Set Away</source>
         <translation>Définir statut à « Absent »</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="1592"/>
+        <location filename="../kstmainwindow.cpp" line="1590"/>
         <source>Message updates paused</source>
         <translation>Mises à jour des messages suspendues</translation>
     </message>

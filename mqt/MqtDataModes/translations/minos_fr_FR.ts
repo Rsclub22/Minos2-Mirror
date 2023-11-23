@@ -199,12 +199,12 @@
         <translation>Annuler</translation>
     </message>
     <message>
-        <location filename="../engineconfigure.cpp" line="380"/>
+        <location filename="../engineconfigure.cpp" line="381"/>
         <source>Engine Files (*.ocx *.exe);;All Files (*.*)</source>
         <translation>[What???] Fichiers (*.ocx *.exe);;Tous les fichiers (*.*)</translation>
     </message>
     <message>
-        <location filename="../engineconfigure.cpp" line="384"/>
+        <location filename="../engineconfigure.cpp" line="385"/>
         <source>%1 Engine Executable</source>
         <translation>%1 [what????] Exécutable</translation>
     </message>

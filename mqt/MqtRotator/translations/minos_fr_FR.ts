@@ -171,7 +171,7 @@ utiliser un autre nom SVP</translation>
         <translation>Logging activé</translation>
     </message>
     <message>
-        <location filename="../logdialog.cpp" line="44"/>
+        <location filename="../logdialog.cpp" line="46"/>
         <source>Select Bearing Log Folder</source>
         <translation>Sélectionner le dossier d&apos;enregistrement des directions du rotateur</translation>
     </message>
