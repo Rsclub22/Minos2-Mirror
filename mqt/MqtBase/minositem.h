@@ -76,7 +76,7 @@ private:
       {}
       MinosItem( const itemtype &d ) : dirty( false ), val( d )
       {}
-      MinosItem<itemtype>(const MinosItem<itemtype> &s) : dirty(s.dirty), val(s.val)
+      MinosItem(const MinosItem &s) : dirty(s.dirty), val(s.val)
       {}
       virtual ~MinosItem()
       {}
