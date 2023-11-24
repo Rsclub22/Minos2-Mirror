@@ -35,7 +35,11 @@ public:
 
     void setVoiceMemAvail(bool avail);
     bool getVoiceMemAvail();
+    void setNumVoiceMessages(int numMsgs);
+    int getNumVoiceMessages();
     void setCwMemType(int cwMemType);
+    void setNumCwMessages(int numMsgs);
+    int getNumCwMessages();
     int getCwMemType();
 private:
 
@@ -49,7 +53,9 @@ int maxRitFreq;
 bool pttEnabled;
 int pttType;
 bool voiceMemAvail;
+int numVoiceMessages;
 int cwMemType;
+int numCwMessages;
 QString bandList;
 
 };

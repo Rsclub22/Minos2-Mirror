@@ -678,12 +678,28 @@ void TSendDM::notifyRigDetailChanges()
                     tslf->onSetVoiceMemAvail(selDetail.voiceMemAvail().getValue(),psn);
                 }
             }
+            if (selDetail.numVoiceMessages().isDirty())
+            {
+                for (int i = 0; i < frames.size(); i++)
+                {
+                    TSingleLogFrame *tslf = frames[i];
+                    tslf->onSetNumVoiceMessages(selDetail.numVoiceMessages().getValue(), psn);
+                }
+            }
             if (selDetail.cwMemType().isDirty())
             {
                 for (int i =0; i < frames.size(); i++)
                 {
                     TSingleLogFrame *tslf = frames[i];
                     tslf->onSetCwMemType(selDetail.cwMemType().getValue(), psn);
+                }
+            }
+            if (selDetail.numCwMessages().isDirty())
+            {
+                for (int i = 0; i < frames.size(); i++)
+                {
+                    TSingleLogFrame *tslf = frames[i];
+                    tslf->onSetNumCwMessages(selDetail.numCwMessages().getValue(), psn);
                 }
             }
 
