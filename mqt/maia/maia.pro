@@ -3,42 +3,23 @@
 ######################################################################
 
 include($$PWD/../mqt.pri)
-include("maia/maia.pri")
 
-TEMPLATE = lib #app
+TEMPLATE = lib
 TARGET = maia
 CONFIG += staticlib
 
-DEPENDPATH += .
-INCLUDEPATH += .
+INCLUDEPATH += $$PWD/
 QT -= gui
-CONFIG += qt silent #debug
+QT += xml network
 
-macx {
-    QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.15
-    QMAKE_TARGET_BUNDLE_PREFIX = uk.org.g0gjv.minos
-    MY_ENTITLEMENTS.name = CODE_SIGN_ENTITLEMENTS
-    MY_ENTITLEMENTS.value = ../ControlFiles/minos.entitlements
-    QMAKE_MAC_XCODE_SETTINGS += MY_ENTITLEMENTS
+HEADERS += maiaObject.h \
+            maiaFault.h \
+            maiaXmlRpcClient.h \
+            maiaXmlRpcServer.h \
+            maiaXmlRpcServerConnection.h
 
-#    QMAKE_APPLE_DEVICE_ARCHS = x86_64 arm64
-    QMAKE_APPLE_DEVICE_ARCHS = x86_64
-}
-
-target.path = $$PREFIX/lib
-
-headers.files = \
-    maia/maiaFault.h \
-    maia/maiaObject.h \
-    maia/maiaXmlRpcClient.h \
-    maia/maiaXmlRpcServer.h \
-    maia/maiaXmlRpcServerConnection.h \
-
-headers.path = $$PREFIX/include/maia
-
-INSTALLS += \
-    target \
-    headers \
-
-# Input
-
+SOURCES += maiaObject.cpp \
+           maiaFault.cpp \
+           maiaXmlRpcClient.cpp \
+           maiaXmlRpcServer.cpp \
+           maiaXmlRpcServerConnection.cpp
