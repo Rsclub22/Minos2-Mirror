@@ -91,12 +91,9 @@ cd MqtLogger.app/Contents
 mkdir Frameworks	
 sudo cp /usr/local/lib/libhamlib.4.dylib Frameworks
 sudo cp /usr/local/lib/libusb-1.0.0.dylib Frameworks
-#sudo cp -R $QTDIR/lib/QtMultimedia.framework Frameworks
 sudo cp -R $QTDIR/lib/QtSerialPort.framework Frameworks
-#sudo rm -rf Frameworks/QtMultimedia.framework/Headers
 sudo rm -rf Frameworks/QtSerialPort.framework/Headers
 sudo rm -rf Frameworks/QtSerialPort.framework/Versions/Current/Headers
-#sudo chown -R mjg Frameworks/QtMultimedia.framework
 sudo chown -R mjg Frameworks/QtSerialPort.framework
 
 for j in MqtAppStarter MqtChat MqtCluster MqtControl MqtKeyer MqtKSTClient MqtMonitor MqtQrzServer MqtRigControl MqtRigRecorder MqtRigSync MqtRotator MqtServer
@@ -108,12 +105,6 @@ done
 cd ../..
 
 sudo install_name_tool -change /usr/local/lib/libusb-1.0.0.dylib @executable_path/../Frameworks/libusb-1.0.0.dylib MqtLogger.app/Contents/Frameworks/libhamlib.4.dylib
-
-#sudo install_name_tool -change $QTDIR/lib/QtCore.framework/Versions/A/QtCore    @executable_path/../Frameworks/QtCore.framework/Versions/A/QtCore    MqtLogger.app/Contents/Frameworks/QtMultimedia.framework/Versions/A/QtMultimedia
-#sudo install_name_tool -change $QTDIR/lib/QtMultimedia.framework/Versions/A/QtMultimedia @executable_path/../Frameworks/QtMultimedia.framework/Versions/A/QtMultimedia MqtLogger.app/Contents/Frameworks/QtMultimedia.framework/Versions/A/QtMultimedia
-#sudo install_name_tool -change $QTDIR/lib/QtNetwork.framework/Versions/A/QtNetwork @executable_path/../Frameworks/QtNetwork.framework/Versions/A/QtNetwork MqtLogger.app/Contents/Frameworks/QtMultimedia.framework/Versions/A/QtMultimedia
-#sudo install_name_tool -change $QTDIR/lib/QtGui.framework/Versions/A/QtGui @executable_path/../Frameworks/QtGui.framework/Versions/A/QtGui MqtLogger.app/Contents/Frameworks/QtMultimedia.framework/Versions/A/QtMultimedia
-
 sudo install_name_tool -change $QTDIR/lib/QtSerialPort.framework/Versions/A/QtSerialPort @executable_path/../Frameworks/QtSerialPort.framework/Versions/A/QtSerialPort MqtLogger.app/Contents/Frameworks/QtSerialPort.framework/Versions/A/QtSerialPort
 sudo install_name_tool -change $QTDIR/lib/QtCore.framework/Versions/A/QtCore @executable_path/../Frameworks/QtCore.framework/Versions/A/QtCore MqtLogger.app/Contents/Frameworks/QtSerialPort.framework/Versions/A/QtSerialPort
   
