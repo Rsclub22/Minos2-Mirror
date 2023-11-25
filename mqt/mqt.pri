@@ -43,11 +43,13 @@ DEFINES += INC_MAP
 mac: {
 INC_MAP = 1
 DEFINES += INC_MAP
-}
+CONFIG(release, debug|release): QMAKE_CXXFLAGS_WARN_ON += -Wno-deprecated-declarations -Wno-reorder -Wold-style-cast -DNDEBUG  -Winvalid-pch
+CONFIG(debug, debug|release):QMAKE_CXXFLAGS_WARN_ON += -Wno-deprecated-declarations -Wno-reorder -Wold-style-cast  -Winvalid-pch
 
+} else {
 *g++*:CONFIG(release, debug|release): QMAKE_CXXFLAGS_WARN_ON += -Wno-deprecated-declarations -Wno-reorder -Wold-style-cast -DNDEBUG  -Winvalid-pch
 else:*g++*:CONFIG(debug, debug|release):QMAKE_CXXFLAGS_WARN_ON += -Wno-deprecated-declarations -Wno-reorder -Wold-style-cast  -Winvalid-pch
-
+}
 DEFINES += _CRT_SECURE_NO_WARNINGS
 DEFINES *= QT_USE_QSTRINGBUILDER
 # The following define makes your compiler emit warnings if you use
