@@ -1364,13 +1364,14 @@ void RigSetupForm::onEnableCatPttCatFeatureClicked()
     {
 
         radioData->enableDisableCatFeature.catEnable = checked;
-        if (!(ui->pttDTRSelectRadioButton->isChecked() || ui->pttRTSSelectRadioButton->isChecked()))
-        {
-            ui->pttCatSelectRadioButton->setChecked(checked);  // change the state of the ptt group CAT radio button
+        //if (!(ui->pttDTRSelectRadioButton->isChecked() || ui->pttRTSSelectRadioButton->isChecked()))
+        //{
+        //    ui->pttCatSelectRadioButton->setChecked(checked);  // change the state of the ptt group CAT radio button
                                                     // if DTR or RTS buttons not checked
-        }
+        //}
 
-        ui->pttCatSelectRadioButton->setVisible(checked);
+        //ui->pttCatSelectRadioButton->setVisible(checked);
+        ui->pttCatSelectRadioButton->setDisabled(!checked);
 
     }
 }
@@ -1484,7 +1485,16 @@ void RigSetupForm::loadEnableShowCatFeaturesBox(const RigCapabilities rigCap)
         ui->enableCwTxMemCatFeatureChkBox->setVisible(false);
     }
 
-
+    if (ui->enableCwTxMemCatFeatureChkBox->isVisible()|| ui->enableVoiceTxMemCatFeatureChkBox->isVisible()
+            || ui->enableCatPttCatFeatureChkBox->isVisible() || ui->enableVolCatFeatureChkBox->isVisible()
+            || ui->enableSMeterCatFeatureChkBox->isVisible() || ui->enableRitCatFeatureChkBox->isVisible())
+    {
+        ui->enableCatFeaturesChkBox->setVisible(true);
+    }
+    else
+    {
+        ui->enableCatFeaturesChkBox->setVisible(false);
+    }
 
 }
 
@@ -1499,6 +1509,7 @@ void RigSetupForm::setCatFeaturesEnableChkBoxVisible(bool visible)
 {
     ui->enableCatFeaturesChkBox->setVisible(visible);
 }
+
 
 
 
@@ -1933,8 +1944,8 @@ void RigSetupForm::setPttInitialState(bool setCatPTT, bool setSerialPTT)
 
     setPTTEnableCheckBox(false);
 
-    setCatPttControlsVisible(setCatPTT);
-    ui->pttCatSelectRadioButton->setChecked(setCatPTT);
+    setPttCatSelectRadioButtonVisible(setCatPTT);
+    ui->pttCatSelectRadioButton->setChecked(false);
 
     setSerialPttControlsVisible(setSerialPTT);
     setPttComport("");
@@ -1975,11 +1986,8 @@ void RigSetupForm::setPTTCheckBoxDisabled(bool disabled)
     ui->pttEnable->setDisabled(disabled);
 }
 
-void RigSetupForm::setCatPttControlsVisible(bool visible)
-{
-    ui->pttCatSelectRadioButton->setVisible(visible);
 
-}
+
 
 void RigSetupForm::setPttCatSelectRadioButtonChecked(bool checked)
 {
@@ -1992,6 +2000,11 @@ void RigSetupForm::setPttCatSelectRadioButtonChecked(bool checked)
 void RigSetupForm::setPttCatSelectRadioButtonVisible(bool visible)
 {
     ui->pttCatSelectRadioButton->setVisible(visible);
+}
+
+void RigSetupForm::setPttCatSelectRadioButtonDisabled(bool disabled)
+{
+    ui->pttCatSelectRadioButton->setDisabled(disabled);
 }
 
 

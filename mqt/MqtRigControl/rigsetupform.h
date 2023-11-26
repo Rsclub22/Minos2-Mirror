@@ -187,7 +187,7 @@ public:
     void loadEnableShowCatFeaturesBox(const RigCapabilities rigCap);
 
     void setCatPttInitialState(bool catPTT);
-    void setCatPttControlsVisible(bool visible);
+
 
 
 
@@ -201,11 +201,13 @@ public:
     void setEnableDisableCatFeaturesGroupVisible(bool visible);
     void setPttCatSelectRadioButtonChecked(bool checked);
     void setPttCatSelectRadioButtonVisible(bool visible);
+    void setPttCatSelectRadioButtonDisabled(bool disabled);
     void setPttDtrSelectRadioButtonChecked(bool checked);
     void setPttDtrSelectRadioButtonVisible(bool visible);
     void setPttRtsSelectRadioButtonChecked(bool checked);
     void setPttRtsSelectRadioButtonVisible(bool visible);
 
+    bool radioSupportCatFeatures(const RigCapabilities rigCap);
 
     void setPttGroupBoxVisible(bool visible);
     void setSerialPttControlsVisible(bool visible);

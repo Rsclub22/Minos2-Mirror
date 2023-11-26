@@ -218,7 +218,7 @@ int register_callback(rig_model_t rig_model, void *callback_data)
                                        endVoiceMemoryNumber,
                                        startCwMemoryNumber,
                                        endCwMemoryNumber,
-                                       supportStopVoiceMem,     // radio supports stop Voice Memmory (TS890S)
+                                       supportStopVoiceMem,     // radio supports stop Voice Memmory
                                        supportCwMem,            // radio supports Cw Memory
                                        supportCwMemStop,
                                        supportCwMemWait,
