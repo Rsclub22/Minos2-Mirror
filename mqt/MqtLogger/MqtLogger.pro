@@ -35,24 +35,6 @@ android {
     INSTALLS += config
 }
 
-ios {
-    config.files += $$files(../ControlFiles/Configuration/OSXFiles/AppConfig.ini)
-    config.files += $$files(../ControlFiles/Configuration/*.ini)
-    config.files += $$files(../ControlFiles/Configuration/*.xml)
-    config.files += $$files(../ControlFiles/Configuration/*.ctl)
-    config.files += $$files(../ControlFiles/Configuration/*.syn)
-    config.files += $$files(../ControlFiles/Configuration/*.SYN)
-    config.files += $$files(../ControlFiles/ios/*.dat)
-    config.files += $$files(../ControlFiles/ios/*.xml)
-    config.path = Configuration
-    QMAKE_BUNDLE_DATA += config
-    ios_icon.files += $$files(../ControlFiles/ios/MqtLogger/*.png)
-    QMAKE_BUNDLE_DATA += ios_icon
-    QMAKE_INFO_PLIST = ../ControlFiles/ios/Info.plist
-}
-
-
-
 INCLUDEPATH += $$PWD/../MqtRotator
 INCLUDEPATH += $$PWD/../MqtRigControl
 INCLUDEPATH += $$PWD/../MqtBandMap

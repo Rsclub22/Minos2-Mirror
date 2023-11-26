@@ -10,7 +10,7 @@ include($$PWD/../mqthamlib.pri)
 QT       += core gui
 QT       += widgets
 QT       += network
-!ios:QT  += serialport
+QT  += serialport
 
 TARGET = MqtRigControl
 TEMPLATE = app
