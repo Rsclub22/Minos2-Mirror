@@ -311,12 +311,12 @@ void RunConfigElement::sendCommand(const QString & cmd)
 {
     if (runner && appType != MinosConfig::tr(MinosConfig::appNone) )
     {
-#ifdef Q_OS_MACOS
         if (cmd == "Shutdown")
         {
+            // under some circumstances the shutdown target needs
+            // to be shown or it doesn't shut down
              sendCommand("ShowServers");
         }
-#endif
         QByteArray command = (cmd + "\n").toUtf8();
         qint64 res = runner->write( command );
         if (res < 0)

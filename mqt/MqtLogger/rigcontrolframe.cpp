@@ -269,6 +269,13 @@ void RigControlFrame::setContest(BaseContestLog *c)
 
         setRadioList();
     }
+    else
+    {
+        if (launchRadioSelectTimer)
+        {
+            launchRadioSelectTimer->stop();
+        }
+    }
 }
 
 void RigControlFrame::initRigFrame(QWidget * /*parent*/)
