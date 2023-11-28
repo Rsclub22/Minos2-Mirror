@@ -340,26 +340,26 @@ C - Clear cmd
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../setupdialog.cpp" line="133"/>
-        <location filename="../setupdialog.cpp" line="494"/>
+        <location filename="../setupdialog.cpp" line="137"/>
+        <location filename="../setupdialog.cpp" line="498"/>
         <source>Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../setupdialog.cpp" line="134"/>
-        <location filename="../setupdialog.cpp" line="495"/>
+        <location filename="../setupdialog.cpp" line="138"/>
+        <location filename="../setupdialog.cpp" line="499"/>
         <source>Address</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../setupdialog.cpp" line="135"/>
-        <location filename="../setupdialog.cpp" line="496"/>
+        <location filename="../setupdialog.cpp" line="139"/>
+        <location filename="../setupdialog.cpp" line="500"/>
         <source>Port</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../setupdialog.cpp" line="136"/>
-        <location filename="../setupdialog.cpp" line="497"/>
+        <location filename="../setupdialog.cpp" line="140"/>
+        <location filename="../setupdialog.cpp" line="501"/>
         <source>Password</source>
         <translation type="unfinished"></translation>
     </message>
@@ -495,7 +495,7 @@ C - Clear cmd
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../setupdialog.cpp" line="163"/>
+        <location filename="../setupdialog.cpp" line="167"/>
         <source>%1 minutes has been entered
 The time to live must be between %2 minutes and %3 minutes</source>
         <translation type="unfinished"></translation>

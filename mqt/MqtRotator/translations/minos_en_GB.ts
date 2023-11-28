@@ -168,7 +168,7 @@ Please enter a name for the antenna</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../logdialog.cpp" line="44"/>
+        <location filename="../logdialog.cpp" line="46"/>
         <source>Select Bearing Log Folder</source>
         <translation type="unfinished"></translation>
     </message>

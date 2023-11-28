@@ -199,12 +199,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../engineconfigure.cpp" line="380"/>
+        <location filename="../engineconfigure.cpp" line="381"/>
         <source>Engine Files (*.ocx *.exe);;All Files (*.*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../engineconfigure.cpp" line="384"/>
+        <location filename="../engineconfigure.cpp" line="385"/>
         <source>%1 Engine Executable</source>
         <translation type="unfinished"></translation>
     </message>
