@@ -3169,7 +3169,7 @@ No          - Discard changes</source>
     </message>
     <message>
         <location filename="../rigcontrolframe.ui" line="204"/>
-        <location filename="../rigcontrolframe.cpp" line="599"/>
+        <location filename="../rigcontrolframe.cpp" line="606"/>
         <source>On</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3205,48 +3205,48 @@ No          - Discard changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="606"/>
+        <location filename="../rigcontrolframe.cpp" line="613"/>
         <source>Off</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1215"/>
+        <location filename="../rigcontrolframe.cpp" line="1222"/>
         <source>Selected radio details were not found, please add radio or restart rigcontrol!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1251"/>
+        <location filename="../rigcontrolframe.cpp" line="1258"/>
         <source>Radio Bandlist is empty!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1260"/>
+        <location filename="../rigcontrolframe.cpp" line="1267"/>
         <source>Radio has no available bands</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1357"/>
-        <location filename="../rigcontrolframe.cpp" line="2234"/>
+        <location filename="../rigcontrolframe.cpp" line="1364"/>
+        <location filename="../rigcontrolframe.cpp" line="2241"/>
         <source>No %1 Band found for this radio!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1469"/>
+        <location filename="../rigcontrolframe.cpp" line="1476"/>
         <source>Freq out of contest band</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1621"/>
+        <location filename="../rigcontrolframe.cpp" line="1628"/>
         <source>Error: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1630"/>
+        <location filename="../rigcontrolframe.cpp" line="1637"/>
         <source>Connected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1651"/>
+        <location filename="../rigcontrolframe.cpp" line="1658"/>
         <source>Disconnected</source>
         <translation type="unfinished"></translation>
     </message>
