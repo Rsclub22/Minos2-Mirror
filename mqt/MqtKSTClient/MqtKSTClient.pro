@@ -10,12 +10,6 @@ TEMPLATE = app
 win32:RC_ICONS += ../MinosKST.ico
 macx:ICON=../MinosKST.icns
 
-ios {
-    ios_icon.files += $$files(../ControlFiles/ios/MqtKSTClient/*.png)
-    QMAKE_BUNDLE_DATA += ios_icon
-    QMAKE_INFO_PLIST = ../ControlFiles/ios/Info.plist
-}
-
 win32:LIBS += -lWs2_32
 
 SOURCES += \

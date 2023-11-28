@@ -82,8 +82,8 @@ win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../maia/release/ -lmai
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../maia/debug/ -lmaia
 else:unix: LIBS += -L$$OUT_PWD/../maia/ -lmaia
 
-INCLUDEPATH += $$PWD/../maia/maia
-DEPENDPATH += $$PWD/../maia/maia
+INCLUDEPATH += $$PWD/../maia
+DEPENDPATH += $$PWD/../maia
 
 win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../maia/release/libmaia.a
 else:win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../maia/debug/libmaia.a

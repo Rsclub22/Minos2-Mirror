@@ -28,7 +28,7 @@ N.B. I have build other applications using this Mac, and may have hidden pre-req
     Run the installer. You will need to set up a Qt account.
     
     Install Qt 6.6.0. Under "Additional libraries" you need at least 
-        Qt Charts, Qt Location, Qt positioning, Qt Multimedia, Qt Serial Port
+        Qt Charts, Qt Location, Qt positioning and Qt Serial Port
         
 
 
@@ -79,11 +79,6 @@ git checkout master
 ./configure
 make
 sudo make install
-
-The first time that you build and install hamlib, an extra stage is required
-so that the built libraries can be found:
-
-sudo ldconfig
 
 8) You should now be able to go ahead with the build.
 

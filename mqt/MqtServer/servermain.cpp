@@ -134,9 +134,8 @@ void ServerMain::closeEvent(QCloseEvent *event)
         routerListener ->closeDown();
 
         LogTimerTimer( );
-
-        QWidget::closeEvent(event);
     }
+    QWidget::closeEvent(event);
 }
 void ServerMain::resizeEvent(QResizeEvent * event)
 {

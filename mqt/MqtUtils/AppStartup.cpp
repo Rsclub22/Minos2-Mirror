@@ -306,9 +306,6 @@ void appStartup(const QString &pappName)
 
     QString fpath = QCoreApplication::applicationDirPath();
 
-#if defined(Q_OS_IOS)
-    QString sharedPath = sharedDirectory("group.minos2").toLocalFile();
-#endif
     if (!DirectoryExists(getDirectoryLocation(dlConfiguration)))
     {
 #ifdef Q_OS_ANDROID

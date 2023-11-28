@@ -141,6 +141,12 @@ cp Minos.sh ~/$RUNTIME
 
 read -n 1 -p "Do you want to copy the configuration to ~/$RUNTIME (press y/n)? " ans;
 
+case $ans in
+    y|Y)
+        ;;
+    n|N|*)
+        exit;;
+esac
 
 cp -rv Configuration ~/$RUNTIME
 
