@@ -3237,7 +3237,7 @@ Non - Ignorer les modifications</translation>
     </message>
     <message>
         <location filename="../rigcontrolframe.ui" line="204"/>
-        <location filename="../rigcontrolframe.cpp" line="599"/>
+        <location filename="../rigcontrolframe.cpp" line="606"/>
         <source>On</source>
         <translation>Actif</translation>
     </message>
@@ -3273,49 +3273,49 @@ Non - Ignorer les modifications</translation>
         <translation>Vol</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="606"/>
+        <location filename="../rigcontrolframe.cpp" line="613"/>
         <source>Off</source>
         <translation>Éteint</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1215"/>
+        <location filename="../rigcontrolframe.cpp" line="1222"/>
         <source>Selected radio details were not found, please add radio or restart rigcontrol!</source>
         <translation>Radio sélectionnée aucun détail trouvé, ajouter une bande ou transverter SVP!</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1251"/>
+        <location filename="../rigcontrolframe.cpp" line="1258"/>
         <source>Radio Bandlist is empty!</source>
         <translatorcomment>Liste des bandes est vide!</translatorcomment>
         <translation>La liste des bandes est vide!</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1260"/>
+        <location filename="../rigcontrolframe.cpp" line="1267"/>
         <source>Radio has no available bands</source>
         <translation>La radio n&apos;a pas de bandes disponibles</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1357"/>
-        <location filename="../rigcontrolframe.cpp" line="2234"/>
+        <location filename="../rigcontrolframe.cpp" line="1364"/>
+        <location filename="../rigcontrolframe.cpp" line="2241"/>
         <source>No %1 Band found for this radio!</source>
         <translation>Aucune Bande %1 trouvée pour cette radio!</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1469"/>
+        <location filename="../rigcontrolframe.cpp" line="1476"/>
         <source>Freq out of contest band</source>
         <translation>Fréquence hors bande du Concours</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1621"/>
+        <location filename="../rigcontrolframe.cpp" line="1628"/>
         <source>Error: %1</source>
         <translation>Erreur: %1</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1630"/>
+        <location filename="../rigcontrolframe.cpp" line="1637"/>
         <source>Connected</source>
         <translation>Connecté</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1651"/>
+        <location filename="../rigcontrolframe.cpp" line="1658"/>
         <source>Disconnected</source>
         <translation>Déconnecté</translation>
     </message>

@@ -4,7 +4,7 @@
 <context>
     <name>MaiaObject</name>
     <message>
-        <location filename="../maia/maiaObject.cpp" line="314"/>
+        <location filename="../maiaObject.cpp" line="314"/>
         <source>parse error: invalid xml-rpc. not conforming to spec.</source>
         <translation type="unfinished"></translation>
     </message>
