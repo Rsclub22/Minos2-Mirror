@@ -84,6 +84,7 @@ public:  		// User declarations
       void sendRigControlFreq(TSingleLogFrame *tslf,const Frequency &freq);
       void sendRigControlBand(TSingleLogFrame *tslf, const QString &band);
       void sendRigTxVoiceMessage(TSingleLogFrame *tslf, const QString &msgNum);
+      void sendRigStopTxVoiceMessage(TSingleLogFrame *tslf, const QString &msg);
       void sendRigTxCwMessage(TSingleLogFrame *tslf, const QString &msg);
 
       void sendRigControlMode(TSingleLogFrame *tslf, const QString &mode);

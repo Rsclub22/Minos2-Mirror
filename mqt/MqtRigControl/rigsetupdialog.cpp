@@ -219,37 +219,84 @@ void RigSetupDialog::loadSettingsToTab(int tabNum, QString tabName)
 
 
     // serial ptt comport loaded with other comports
-    radioTab.value(tabName)->setPttTypeRadioButtons(availRadioData.value(tabName)->pttType);
+    //radioTab.value(tabName)->setPttTypeRadioButtons(availRadioData.value(tabName)->pttType);
 
+    // When radio reports CAT PTT, we also allow option of Serial PTT
+    // When radio reports CAT NONE, we only allow option of Serial PTT
 
-    if (rigCap.supportGetPtt && rigCap.supportSetPtt)
+    bool catPTT = true;     // This is radio PTT capability true = CAT PTT
+    bool serialPTT = true;
+    if (rigCap.supportPttPortType == RigCapConstants::PttPortType::RIG_PTT_RIG
+            || rigCap.supportPttPortType == RigCapConstants::PttPortType::RIG_PTT_RIG_MICDATA)
     {
-        radioTab.value(tabName)->setPTTCheckBoxDisabled(false);
-        if (radioTab.value(tabName)->getRadioData()->enablePTT)
+        // support CAT PTT and Serial PTT
+        catPTT = true;
+        serialPTT = true;
+        radioTab.value(tabName)->setPttInitialState(catPTT, serialPTT);
+    }
+    else if (rigCap.supportPttPortType == RigCapConstants::PttPortType::RIG_PTT_NONE)
+    {
+
+       // support Serial PTT only
+       catPTT = false;
+       serialPTT = true;
+       radioTab.value(tabName)->setPttInitialState(catPTT, serialPTT);
+    }
+
+    // now load the PTT settings
+
+
+
+    // These are user selections in Minos
+    if (availRadioData.value(tabName)->pttType == serialCommonData::PTTMethodCodes::PTT_METHOD_CAT)
+    {
+        radioTab.value(tabName)->setPttCatSelectRadioButtonChecked(true);
+
+    }
+    else if (availRadioData.value(tabName)->pttType == serialCommonData::PTTMethodCodes::PTT_METHOD_RTS)
+    {
+        radioTab.value(tabName)->setPttRtsSelectRadioButtonChecked(true);
+
+    }
+    else if (availRadioData.value(tabName)->pttType == serialCommonData::PTTMethodCodes::PTT_METHOD_DTR)
+    {
+        radioTab.value(tabName)->setPttDtrSelectRadioButtonChecked(true);
+
+    }
+
+
+
+    if (catPTT)
+    {
+
+        radioTab.value(tabName)->setPttCatSelectRadioButtonVisible(true);
+
+
+        if (availRadioData.value(tabName)->enableDisableCatFeature.catEnable)
         {
-            radioTab.value(tabName)->setPttControlsVisible(true);
-            radioTab.value(tabName)->setPTTCheckBoxChecked(true);
-            radioTab.value(tabName)->setCatPttRadioButtonVisible(availRadioData.value(tabName)->enableDisableCatFeature.catEnable);
-
-            //if (radioTab.value(tabName)->getRadioData()->pttType == serialCommonData::PTT_METHOD_CAT)
-            //{
-
-            //}
-
+            radioTab.value(tabName)->setPttCatSelectRadioButtonDisabled(false);
         }
         else
         {
-           radioTab.value(tabName)->setPttControlsVisible(false);
-           radioTab.value(tabName)->setPTTCheckBoxChecked(false);
-
+           radioTab.value(tabName)->setPttCatSelectRadioButtonDisabled(true);
         }
+
+
+
+
     }
-    else
+    else if (serialPTT)
     {
-        radioTab.value(tabName)->setPttControlsVisible(false);
-        radioTab.value(tabName)->setPTTCheckBoxChecked(false);
-        radioTab.value(tabName)->setPTTCheckBoxDisabled(true);
+        radioTab.value(tabName)->setPttCatSelectRadioButtonVisible(false);
+        radioTab.value(tabName)->setSerialPttControlsVisible(true);
+
     }
+
+
+    // enable PTT checkbox and make groupbox visible
+    radioTab.value(tabName)->setPTTEnableCheckBox(availRadioData.value(tabName)->enablePTT);
+    radioTab.value(tabName)->setPttGroupBoxVisible(availRadioData.value(tabName)->enablePTT);
+
 
 
 
@@ -271,7 +318,10 @@ void RigSetupDialog::loadSettingsToTab(int tabNum, QString tabName)
     else
     {
         radioTab.value(tabName)->setSupportBandCheckBoxVisible(true);
+        radioTab.value(tabName)->setCatFeaturesEnableChkBoxVisible(false);          // this is an Omnirig radio, turn off the CAT Features enable checkbox
     }
+
+    // if radio does not support any
 
     radioTab.value(tabName)->setUseRigctldCheckbox(availRadioData.value(tabName)->rigCtldEnable);
     radioTab.value(tabName)->setStartMinosRigctldCheckbox(availRadioData.value(tabName)->startMinosRigCtld);
@@ -365,8 +415,17 @@ void RigSetupDialog::addRadio()
     addTab(tabNum, radioName);
     numAvailRadios++;
     radioTab.value(radioName)->setAdvancedCommsFlag(false);
-    radioTab.value(radioName)->setPttInitialState();
+
+    if (availRadioData.value(radioName)->pttType == RigCapConstants::PttPortType::RIG_PTT_RIG
+            || availRadioData.value(radioName)->pttType == RigCapConstants::PttPortType::RIG_PTT_RIG_MICDATA)
+    {
+        radioTab.value(radioName)->setPttInitialState(true, true);;
+    }
+
+    radioTab.value(radioName)->setPttInitialState(false, true);
+
     radioTab.value(radioName)->setEnableDisableCatFeaturesGroupVisible(false);
+
     radioTab.value(radioName)->setupRadioModel(radioModel);
     radioTab.value(radioName)->setPollInterval(RIG_DEFAULT_POLLINTERVAL);
 

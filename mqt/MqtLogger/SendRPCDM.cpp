@@ -448,6 +448,24 @@ void TSendDM::sendRigTxVoiceMessage(TSingleLogFrame *tslf, const QString &msgNum
 }
 
 
+void TSendDM::sendRigStopTxVoiceMessage(TSingleLogFrame *tslf, const QString &msg)
+{
+
+    PubSubName rigSelected = rigCache.getSelected(loggerUuid);
+    rigCache.setStopVoiceMessage(rigSelected, msg);
+    RPCGeneralClient rpc(rpcConstants::rigControlMethod);
+    QSharedPointer<RPCParam>st(new RPCParamStruct);
+
+    st->addMember( loggerUuid, rpcConstants::loggerUuid );
+    st->addMember( tslf->getContest()->uuid, rpcConstants::selected );
+    st->addMember( msg, rpcConstants::rigStopVoiceMessage );
+    rpc.getCallArgs() ->addParam( st );
+
+    rpc.queueCall( rigSelected );
+    traceMsg(QString("SendStopRigVoiceMessage = %1 uuid = %2").arg(msg, tslf->getContest()->uuid));
+}
+
+
 void TSendDM::sendRigTxCwMessage(TSingleLogFrame *tslf, const QString &msg)
 {
     traceMsg(QString("SendRigTxCwMessage = %1 uuid = %2").arg(msg, tslf->getContest()->uuid));
@@ -660,12 +678,28 @@ void TSendDM::notifyRigDetailChanges()
                     tslf->onSetVoiceMemAvail(selDetail.voiceMemAvail().getValue(),psn);
                 }
             }
+            if (selDetail.numVoiceMessages().isDirty())
+            {
+                for (int i = 0; i < frames.size(); i++)
+                {
+                    TSingleLogFrame *tslf = frames[i];
+                    tslf->onSetNumVoiceMessages(selDetail.numVoiceMessages().getValue(), psn);
+                }
+            }
             if (selDetail.cwMemType().isDirty())
             {
                 for (int i =0; i < frames.size(); i++)
                 {
                     TSingleLogFrame *tslf = frames[i];
                     tslf->onSetCwMemType(selDetail.cwMemType().getValue(), psn);
+                }
+            }
+            if (selDetail.numCwMessages().isDirty())
+            {
+                for (int i = 0; i < frames.size(); i++)
+                {
+                    TSingleLogFrame *tslf = frames[i];
+                    tslf->onSetNumCwMessages(selDetail.numCwMessages().getValue(), psn);
                 }
             }
 

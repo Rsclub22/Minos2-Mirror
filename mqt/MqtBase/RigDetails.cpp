@@ -141,11 +141,20 @@ void RigDetails::setVoiceMemAvail(bool voiceMemAvail)
 {
     _voiceMemAvail.setValue(voiceMemAvail);
 }
+void RigDetails::setNumVoiceMessages(int numMessages)
+{
+    _numVoiceMemMessages.setValue(numMessages);
+}
 void RigDetails::setCwMemType(int cwMemType)
 {
     _cwMemType.setValue(cwMemType);
 
 }
+void RigDetails::setNumCweMessages(int numMessages)
+{
+    _numCwMemMessages.setValue(numMessages);
+}
+
 
 QString RigDetails::pack() const
 {
@@ -163,7 +172,9 @@ QString RigDetails::pack() const
     jv.insert(rpcConstants::rigPttEnabled, pttEnabled().getValue());
     jv.insert(rpcConstants::rigPttType, pttType().getValue());
     jv.insert(rpcConstants::rigVoiceMemAvail, voiceMemAvail().getValue());
+    jv.insert(rpcConstants::rigNumberVoiceMessages, numVoiceMessages().getValue());
     jv.insert(rpcConstants::rigCwMemType, cwMemType().getValue());
+    jv.insert(rpcConstants::rigNumberCwMessages, numCwMessages().getValue());
 
 
     QJsonDocument json(jv);
@@ -191,7 +202,9 @@ void RigDetails::unpack(QString s)
         _pttEnabled.setValue(json.object().value(rpcConstants::rigPttEnabled).toBool());
         _pttType.setValue(json.object().value(rpcConstants::rigPttType).toInt());
         _voiceMemAvail.setValue(json.object().value(rpcConstants::rigVoiceMemAvail).toBool());
+        _numVoiceMemMessages.setValue(json.object().value(rpcConstants::rigNumberVoiceMessages).toInt());
         _cwMemType.setValue(json.object().value(rpcConstants::rigCwMemType).toInt());
+        _numCwMemMessages.setValue(json.object().value(rpcConstants::rigNumberCwMessages).toInt());
 
     }
     else
@@ -253,8 +266,16 @@ MinosItem<bool> RigDetails::voiceMemAvail() const
 {
     return _voiceMemAvail;
 }
+MinosItem<int> RigDetails::numVoiceMessages() const
+{
+    return _numVoiceMemMessages;
+}
 MinosItem<int> RigDetails::cwMemType() const
 {
     return _cwMemType;
+}
+MinosItem<int> RigDetails::numCwMessages() const
+{
+    return _numCwMemMessages;
 }
 

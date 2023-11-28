@@ -2129,11 +2129,30 @@ void TSingleLogFrame::onSetVoiceMemAvail(bool avail, PubSubName psn)
     }
 }
 
+void TSingleLogFrame::onSetNumVoiceMessages(int numMsgs, PubSubName psn)
+{
+    if ( this == LogContainer->getCurrentLogFrame() )
+    {
+        txVmButtonsFrame->setNumVoiceMessages(numMsgs, psn);
+    }
+}
+
 void TSingleLogFrame::onSetCwMemType(int cwMemType, PubSubName psn)
 {
     if ( this == LogContainer->getCurrentLogFrame() )
     {
         txVmButtonsFrame->setCwMemType(cwMemType, psn);
+    }
+}
+
+void TSingleLogFrame::onSetNumCwMessages(int numMsgs, PubSubName psn)
+{
+    if ( this == LogContainer->getCurrentLogFrame() )
+    {
+        if ( this == LogContainer->getCurrentLogFrame() )
+        {
+            txVmButtonsFrame->setNumCwMessages(numMsgs, psn);
+        }
     }
 }
 
@@ -2154,6 +2173,16 @@ void TSingleLogFrame::sendRigTxVoiceMessage(QString msgNum)
     {
         //sendKeyerStop();    // don't keep calling while tuning!
         LogContainer->sendDM->sendRigTxVoiceMessage(this, msgNum);
+
+    }
+}
+
+void TSingleLogFrame::sendRigStopTxVoiceMessage(QString msg)
+{
+    if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
+    {
+        //sendKeyerStop();    // don't keep calling while tuning!
+        LogContainer->sendDM->sendRigStopTxVoiceMessage(this, msg);
 
     }
 }
