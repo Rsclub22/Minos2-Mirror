@@ -3918,7 +3918,7 @@ No          - Discard changes</source>
     </message>
     <message>
         <location filename="../ScreenConfigElement.cpp" line="34"/>
-        <source>TX Voice Mem. Buttons</source>
+        <source>Keyer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
