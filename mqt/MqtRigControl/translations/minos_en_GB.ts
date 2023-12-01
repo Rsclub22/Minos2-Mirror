@@ -281,11 +281,6 @@ Check Rigcontrol tracelog</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.ui" line="43"/>
-        <source>Select rigctld path</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../rigcontrolmainwindow.ui" line="166"/>
         <location filename="../rigcontrolmainwindow.cpp" line="235"/>
         <source>Test Radio</source>
@@ -674,6 +669,7 @@ Copyright D Balharrie G8FKH/M0DGB 2019</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../rigcontrolmainwindow.ui" line="43"/>
         <location filename="../rigcontrolmainwindow.cpp" line="4193"/>
         <source>Select Rigctld Program</source>
         <translation type="unfinished"></translation>
