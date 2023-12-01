@@ -3990,8 +3990,12 @@ Non - Ignorer les modifications</translation>
     </message>
     <message>
         <location filename="../ScreenConfigElement.cpp" line="34"/>
+        <source>Keyer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>TX Voice Mem. Buttons</source>
-        <translation>Boutons de mémoire de voix TX</translation>
+        <translation type="vanished">Boutons de mémoire de voix TX</translation>
     </message>
     <message>
         <location filename="../ScreenConfigElement.cpp" line="35"/>
