@@ -256,11 +256,14 @@ void RigSetupDialog::loadSettingsToTab(int tabNum, QString tabName)
     else if (availRadioData.value(tabName)->pttType == serialCommonData::PTTMethodCodes::PTT_METHOD_RTS)
     {
         radioTab.value(tabName)->setPttRtsSelectRadioButtonChecked(true);
+        radioTab.value(tabName)->pttComportSelDisabled(false);
+
 
     }
     else if (availRadioData.value(tabName)->pttType == serialCommonData::PTTMethodCodes::PTT_METHOD_DTR)
     {
         radioTab.value(tabName)->setPttDtrSelectRadioButtonChecked(true);
+        radioTab.value(tabName)->pttComportSelDisabled(false);
 
     }
 
@@ -275,10 +278,12 @@ void RigSetupDialog::loadSettingsToTab(int tabNum, QString tabName)
         if (availRadioData.value(tabName)->enableDisableCatFeature.catEnable)
         {
             radioTab.value(tabName)->setPttCatSelectRadioButtonDisabled(false);
+
         }
         else
         {
            radioTab.value(tabName)->setPttCatSelectRadioButtonDisabled(true);
+
         }
 
 

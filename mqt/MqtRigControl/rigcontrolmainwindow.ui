@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1115</width>
-    <height>392</height>
+    <width>1041</width>
+    <height>366</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -750,7 +750,7 @@
              </property>
              <layout class="QHBoxLayout" name="horizontalLayout_24">
               <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_26">
+               <layout class="QHBoxLayout" name="horizontalLayout_32">
                 <item>
                  <layout class="QHBoxLayout" name="horizontalLayout_27">
                   <item>
@@ -779,27 +779,49 @@
                  </layout>
                 </item>
                 <item>
-                 <widget class="QLabel" name="txRxLbl">
-                  <property name="text">
-                   <string>TX</string>
-                  </property>
-                 </widget>
+                 <layout class="QHBoxLayout" name="horizontalLayout_26">
+                  <item>
+                   <widget class="QLabel" name="txRxLbl">
+                    <property name="text">
+                     <string>TX</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QPushButton" name="txRxInd">
+                    <property name="enabled">
+                     <bool>false</bool>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>16</width>
+                      <height>16</height>
+                     </size>
+                    </property>
+                    <property name="text">
+                     <string/>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
                 </item>
                 <item>
-                 <widget class="QPushButton" name="txRxInd">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>16</width>
-                    <height>16</height>
-                   </size>
-                  </property>
-                  <property name="text">
-                   <string/>
-                  </property>
-                 </widget>
+                 <layout class="QHBoxLayout" name="horizontalLayout_31">
+                  <item>
+                   <widget class="QLabel" name="supportPttLbl">
+                    <property name="text">
+                     <string>Support:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QLabel" name="supportedPttLbl">
+                    <property name="text">
+                     <string/>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
                 </item>
                </layout>
               </item>
