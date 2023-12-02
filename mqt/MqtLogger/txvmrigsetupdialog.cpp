@@ -67,6 +67,7 @@ void TxVmRigSetupDialog::initSetup()
         QString fileName = VOICEKEYER_COMMON_PARAMS_PATH + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[VoiceKeyerId::RigControl] + ".ini";
         QSettings config(fileName, QSettings::IniFormat);
         ui->pttEOMChkBox->setChecked(config.value("Common/UseCatPttForEom", false).toBool());
+        ui->saveByRadioNameChkBox->setChecked(config.value("Common/SaveButtonByRadioName", false).toBool());
     }
     else
     {
@@ -95,6 +96,12 @@ void TxVmRigSetupDialog::initSetup()
 
 
 
+}
+
+
+bool TxVmRigSetupDialog::getSaveButtonsByRadioNameState()
+{
+    return ui->saveByRadioNameChkBox->isChecked();
 }
 
 bool TxVmRigSetupDialog::getCatPttForEomState()

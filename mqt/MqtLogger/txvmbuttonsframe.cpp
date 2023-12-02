@@ -371,6 +371,7 @@ void TxVmButtonsFrame::editActionSelected(int buttonNumber)
 
     VoiceKeyerParams vmData;
     vmData.setType(voiceKeyerType);
+    vmData.setSelRadioName(selectedRadio.key());  // get current radio name
 
     if (txVoiceKeyer)
     {
