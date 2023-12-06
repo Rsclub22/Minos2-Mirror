@@ -5,7 +5,7 @@ set -x
 echo $OSTYPE
 SCRIPT=$(basename $0)
 DIR=$(echo `pwd`/../..)
-QTDIR=~/Qt/6.6.0/macos
+QTDIR=~/Qt/6.6.1/macos
 
 cd $DIR
 echo Working Dir: $DIR
