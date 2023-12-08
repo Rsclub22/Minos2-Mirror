@@ -126,14 +126,14 @@ cd Configuration
 wget https://www.country-files.com/cty/cty.dat -O cty.dat
 wget https://www.rsgbcc.org/cgi-bin/vhfenter.pl?afsdownload=y -O clublist.txt
 
-wget https://www.rsgbcc.org/vhf/vhfcontests20.xml -O vhfcontests23.xml
-wget https://www.rsgbcc.org/vhf/vhfcontests21.xml -O vhfcontests24.xml
+wget https://www.rsgbcc.org/vhf/vhfcontests23.xml -O vhfcontests23.xml
+wget https://www.rsgbcc.org/vhf/vhfcontests24.xml -O vhfcontests24.xml
 
-wget https://www.rsgbcc.org/vhf/hfcontests20.xml -O hfcontests23.xml
-wget https://www.rsgbcc.org/vhf/hfcontests21.xml -O hfcontests24.xml
+wget https://www.rsgbcc.org/vhf/hfcontests23.xml -O hfcontests23.xml
+wget https://www.rsgbcc.org/vhf/hfcontests24.xml -O hfcontests24.xml
 
-wget https://microwave.rsgbcc.org/microcontests20.xml -O microcontests23.xml
-wget https://microwave.rsgbcc.org/microcontests21.xml -O microcontests24.xml
+wget https://microwave.rsgbcc.org/microcontests23.xml -O microcontests23.xml
+wget https://microwave.rsgbcc.org/microcontests24.xml -O microcontests24.xml
 
 cd ..
 
