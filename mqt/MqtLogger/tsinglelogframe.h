@@ -140,6 +140,7 @@ public:
 
     void on_SupportStopCommand(bool state);
     void sendRigTxVoiceMessage(QString msgNum);
+    void sendRigStopTxVoiceMessage(QString msg);
 
     void onSetPttEnabled(bool state, PubSubName psn);
     void onSetPttType(int type, PubSubName psn);
@@ -152,7 +153,9 @@ public:
     bool doKeyPressEvent(QKeyEvent *event);
     void transferFromWSJTX(QString call);
     void onSetVoiceMemAvail(bool avail, PubSubName psn);
+    void onSetNumVoiceMessages(int numMsgs, PubSubName psn);
     void onSetCwMemType(int cwMemType, PubSubName psn);
+    void onSetNumCwMessages(int numMsgs, PubSubName psn);
     void sendRigTxCwMessage(QString msg);
 
     void on_SetMode(QString);

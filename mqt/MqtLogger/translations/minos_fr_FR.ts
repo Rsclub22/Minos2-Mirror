@@ -3323,7 +3323,7 @@ Non - Ignorer les modifications</translation>
 <context>
     <name>RigControlVoiceMemoryKeyer</name>
     <message>
-        <location filename="../rigcontrolvoicememorykeyer.cpp" line="128"/>
+        <location filename="../rigcontrolvoicememorykeyer.cpp" line="126"/>
         <source>Rig Control Voice Memory Setup</source>
         <translation>Configuration de la mémoire de voix</translation>
     </message>
@@ -5832,22 +5832,22 @@ Last %8 Mins: %9 QSO %10 pts %11 mults<byte value="xd"/>
         <translation>%1 %2 - Nouveau</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="900"/>
+        <location filename="../txvmbuttonsframe.cpp" line="936"/>
         <source>Rig Voice Keyer Available</source>
         <translation>Mémoire de voix disponible</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="904"/>
+        <location filename="../txvmbuttonsframe.cpp" line="940"/>
         <source>Rig CW Messages Available</source>
         <translation>Message CW disponible</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1009"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1045"/>
         <source>TX On</source>
         <translation>TX Actif</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1015"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1051"/>
         <source>TX Off</source>
         <translation>TX Éteint</translation>
     </message>
@@ -6155,12 +6155,12 @@ Through</source>
 <context>
     <name>TxVoiceMemButton</name>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1076"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1112"/>
         <source>&amp;New</source>
         <translation>&amp;Nouveau</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1077"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1113"/>
         <source>&amp;Edit</source>
         <translation>&amp;Modifier</translation>
     </message>

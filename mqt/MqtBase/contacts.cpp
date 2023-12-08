@@ -332,16 +332,16 @@ QSharedPointer<CountryEntry> findCtryPrefix( const Callsign &cs )
     {
         return ctryMult;
     }
-   if ( cs.suffix.length() )
-   {
-       QString testpart = "/";	// look for e.g. /RVI as a country suffix
-       testpart += cs.suffix;	// look for e.g. /RVI as a country suffix
-       csyn = MultLists::getMultLists() ->searchCountrySynonym( testpart );
-   }
+    if ( cs.suffix.length() )
+    {
+        QString testpart = "/";	// look for e.g. /RVI as a country suffix
+        testpart += cs.suffix;	// look for e.g. /RVI as a country suffix
+        csyn = MultLists::getMultLists() ->searchCountrySynonym( testpart );
+    }
 
-   if ( !csyn )   	// look with number
-   {
-      /*
+    if ( !csyn )   	// look with number
+    {
+        /*
       		// eg for <pe/f0ctt/mm> (g0gjv/p) [F6CTT/RVI/P] ?F6CTT/RVI?
       		char prefix[BITLENGTH + 1]; // <pe> (g) [RVI] ???? country of location
       		char prefix2[BITLENGTH + 1];  // <f> (g) [F] ?F?country of issue
@@ -349,83 +349,73 @@ QSharedPointer<CountryEntry> findCtryPrefix( const Callsign &cs )
       		char body[BITLENGTH + 1];  // <ctt> (gjv) [CTT] ?CTT?main body
       		char suffix[TRAILBITLENGTH + 1]; // <mm> (p) [P] ?RVI?trailer
       */
-      if ( cs.locCtryPrefix != cs.dupPrefix )
-      {
-         // we have a leading / for a pre-pended prefix, so callsign itself is
-         // not relevant
-         csyn = MultLists::getMultLists() ->searchCountrySynonym( cs.locCtryPrefix );
-      }
+        if ( cs.locCtryPrefix != cs.dupPrefix )
+        {
+            // we have a leading / for a pre-pended prefix, so callsign itself is
+            // not relevant
+            csyn = MultLists::getMultLists() ->searchCountrySynonym( cs.locCtryPrefix );
+        }
 
-      if ( !csyn )
-      {
+        if ( !csyn )
+        {
+            csyn = MultLists::getMultLists() ->searchCountrySynonym(cs.getFullCall() );
+            if (!csyn || csyn->prefixType != stCallsign)
+            {
 
-          // This should just be cs.locCtryPrefix, searched for...
-          // as that is derived in the same way.
+                // This should just be cs.locCtryPrefix, searched for...
+                // as that is derived in the same way.
 
-          csyn = MultLists::getMultLists() ->searchCountrySynonym(cs.locCtryPrefix );
+                csyn = MultLists::getMultLists() ->searchCountrySynonym(cs.locCtryPrefix );
 
-          if (!csyn)
-          {
-         // take the whole callsign, extra prefix, suffix, the lot and look for the
-         // longest matching synonym. If the list is incomplete then this may
-         // misidentify the country - e.g. if GW were missed out then this algorithm
-         // would (wrongly?) allow a match on G. This might be a benefit for e.g.
-         // PA or DL, as we don't need to put all the synonyms in, just the base
-         // letter
+                if (!csyn)
+                {
+                    // take the whole callsign, extra prefix, suffix, the lot and look for the
+                    // longest matching synonym. If the list is incomplete then this may
+                    // misidentify the country - e.g. if GW were missed out then this algorithm
+                    // would (wrongly?) allow a match on G. This might be a benefit for e.g.
+                    // PA or DL, as we don't need to put all the synonyms in, just the base
+                    // letter
 
-         // There are really foul callsigns, such as
-         // Glorioso Island:      FR-G  e.g.  FR7GL
-         // Callbook implies that FR#*/G (see below) is also valid
-         // Short of entering ALL these, not sure what to do
+                    // There are really foul callsigns, such as
+                    // Glorioso Island:      FR-G  e.g.  FR7GL
+                    // Callbook implies that FR#*/G (see below) is also valid
+                    // Short of entering ALL these, not sure what to do
 
-         // How about a '#' in the synonym meaning any number?
-         // Also need an "any letter" - what about '?', to match
-         // DOS wild cards? As well as * to mean a sequence of letters
+                    // How about a '#' in the synonym meaning any number?
+                    // Also need an "any letter" - what about '?', to match
+                    // DOS wild cards? As well as * to mean a sequence of letters
 
-         // This coding cannot be fully expanded into the synonym list; maybe
-         // some kind of synonym decision tree needs to be built
-         // This is getting VERY nasty; maybe we just say to enter the actual call
-         // as a synonym (but of what... we need a placeholder for the main country)!
+                    // This coding cannot be fully expanded into the synonym list; maybe
+                    // some kind of synonym decision tree needs to be built
+                    // This is getting VERY nasty; maybe we just say to enter the actual call
+                    // as a synonym (but of what... we need a placeholder for the main country)!
 
-// replacement algorithm - HF inspired
-// just keep stripping it back until we get a match
-// Now, start at the beginning and continue until there isn't a match
-// then come back one.
-// Does this work? e.g. if we have DL, D isn't in itself valid
+                    // replacement algorithm - HF inspired
+                    // just keep stripping it back until we get a match
+                    // Now, start at the beginning and continue until there isn't a match
+                    // then come back one.
+                    // Does this work? e.g. if we have DL, D isn't in itself valid
 
-         QString testpart = cs.getFullCall();
+                    QString testpart = cs.getFullCall();
 
-         int clen = testpart.length();
-         while ( ( clen >= 1 ) && ( !csyn ) )
-         {
-            // we need to stop when we get to the basic prefix...
-            // otherwise RVI6ABC ends up matching R, which is UA
-            testpart = testpart.left(clen);
-            clen--;
-            csyn = MultLists::getMultLists() ->searchCountrySynonym(testpart );
-         }
-//          QString p = cs.getFullCall();
-//          QSharedPointer<CountrySynonym> lastCsyn;
-//          for (int i = 1; i < p.size(); i++)
-//          {
-//              QString testPart = p.left(i);
-//              lastCsyn = MultLists::getMultLists()->searchCountrySynonym ( testPart );
+                    int clen = testpart.length();
+                    while ( ( clen >= 1 ) && (( !csyn ) || csyn->prefixType == stCallsign) )
+                    {
+                        // we need to stop when we get to the basic prefix...
+                        // otherwise RVI6ABC ends up matching R, which is UA
+                        testpart = testpart.left(clen);
+                        clen--;
+                        csyn = MultLists::getMultLists() ->searchCountrySynonym(testpart );
+                    }
+                }
 
-//              if ( lastCsyn )
-//              {
-//                  csyn = lastCsyn;
-//                  continue;
-//              }
-//              break;
-//          }
+            }
+        }
+    }
 
-          }
-      }
-   }
-
-   if (csyn)
+    if (csyn)
         ctryMult = csyn->getCountry();
-   return ctryMult;
+    return ctryMult;
 }
 
 void BaseContact::getText(QString &dest, const BaseContestLog * const curcon, bool forHistory ) const

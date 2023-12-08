@@ -814,6 +814,24 @@ void TxVmButtonsFrame::setVoiceMemAvail(bool avail, PubSubName psn)
     updateVoiceMemAvailStateAndCwType();
 }
 
+void TxVmButtonsFrame::setNumVoiceMessages(int numMsgs, PubSubName psn)
+{
+    RadioDetails rd;
+    if (allRadioDetails.contains(psn))
+    {
+        rd = allRadioDetails[psn];
+        rd.setNumVoiceMessages(numMsgs);
+        allRadioDetails[psn] = rd;
+    }
+    else
+    {
+        rd.setNumVoiceMessages(numMsgs);
+        allRadioDetails[psn] = rd;
+    }
+
+    updateVoiceMemAvailStateAndCwType();
+}
+
 bool TxVmButtonsFrame::isVoiceMemAvail(PubSubName psn)
 {
     RadioDetails rd;
@@ -838,6 +856,24 @@ void TxVmButtonsFrame::setCwMemType(int cwMemType, PubSubName psn)
     else
     {
         rd.setCwMemType(cwMemType);
+        allRadioDetails[psn] = rd;
+    }
+
+    updateVoiceMemAvailStateAndCwType();
+}
+
+void TxVmButtonsFrame::setNumCwMessages(int numMsgs, PubSubName psn)
+{
+    RadioDetails rd;
+    if (allRadioDetails.contains(psn))
+    {
+        rd = allRadioDetails[psn];
+        rd.setNumCwMessages(numMsgs);
+        allRadioDetails[psn] = rd;
+    }
+    else
+    {
+        rd.setNumCwMessages(numMsgs);
         allRadioDetails[psn] = rd;
     }
 

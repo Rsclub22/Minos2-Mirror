@@ -190,6 +190,7 @@ static const QString rigControlRadioFreq   ("RadioFrequency");
 static const QString rigControlLogFreq     ("LogFrequency");
 static const QString rigControlLogBand     ("LogBand");
 static const QString rigVoiceMessageNum    ("RigVoiceMessageNum");
+static const QString rigStopVoiceMessage   ("StopVoiceMessage");
 static const QString rigCwTxMessage        ("RigTxCwMessage");
 static const QString rigControlRadioMode   ("RadioMode");
 static const QString rigControlLogMode     ("LogMode");
@@ -212,7 +213,9 @@ static const QString rigPttType ("PttType");
 static const QString rigPttState  ("PttState");
 static const QString rigPttOnOff ("PttOnOff");
 static const QString rigVoiceMemAvail ("VoiceMemAvail");
+static const QString rigNumberVoiceMessages ("NumberOfVoiceMessages");
 static const QString rigCwMemType ("CwMemType");
+static const QString rigNumberCwMessages ("NumberOfCwMessages");
 
 
 // KSTClient

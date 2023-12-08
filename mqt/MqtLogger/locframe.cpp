@@ -506,7 +506,7 @@ QVariant LocGridModel::data( const QModelIndex &index, int role ) const
             disp = HtmlFontColour(Qt::white) + disp;
         }
         if (lci != locMap.end())
-            disp = /*HtmlFontColour(multhighlight) +*/ "<b>" + disp ;
+            disp = "<b>" + disp ;
         return disp;
     }
 

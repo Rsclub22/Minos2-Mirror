@@ -22,12 +22,15 @@ RigCapabilities::RigCapabilities(RigCapConstants::PortType portType_,
                                  QString rigModelName_,
                                  int rigModelNumber_,
                                  bool supportGetSupBands_,
+                                 bool supportGetVfo_,
+                                 bool supportSetVfo_,
                                  bool supportGetRit_,
                                  bool supportSetRit_,
                                  bool supportGetRitState_,
                                  bool supportSetRitState_,
                                  bool supportGetRitMax_,
                                  bool supportSMeter_,
+                                 RigCapConstants::PttPortType supportPttPortType_,
                                  bool supportGetPtt_,
                                  bool supportSetPtt_,
                                  bool supportGetVox_,
@@ -36,8 +39,12 @@ RigCapabilities::RigCapabilities(RigCapConstants::PortType portType_,
                                  bool supportAntSw_,
                                  bool supportRigCtld_,
                                  bool supportVoiceMemory_,
+                                 int startVoiceMemoryNumber_,
+                                 int endVoiceMemoryNumber_,
                                  bool supportStopVoiceMemory_,
                                  bool supportCwMemory_,
+                                 int startCwMemoryNumber_,
+                                 int endCwMemoryNumber_,
                                  bool supportCwMemoryStop_,
                                  bool supportCwMemoryWait_,
                                  bool pollData_ )
@@ -47,12 +54,15 @@ RigCapabilities::RigCapabilities(RigCapConstants::PortType portType_,
       rigModelName (rigModelName_),
       rigModelNumber (rigModelNumber_),
       supportGetSupBands (supportGetSupBands_),
+      supportGetVfo(supportGetVfo_),
+      supportSetVfo(supportSetVfo_),
       supportGetRit (supportGetRit_),
       supportSetRit (supportSetRit_),
       supportGetRitState (supportGetRitState_),
       supportSetRitState (supportSetRitState_),
       supportGetRitMax (supportGetRitMax_),
       supportSMeter (supportSMeter_),
+      supportPttPortType(supportPttPortType_),
       supportGetPtt (supportGetPtt_),
       supportSetPtt (supportSetPtt_),
       supportGetVox(supportGetVox_),
@@ -60,9 +70,13 @@ RigCapabilities::RigCapabilities(RigCapConstants::PortType portType_,
       supportVolume (supportVolume_),
       supportAntSw (supportAntSw_),
       supportRigCtld (supportRigCtld_),
-      supportVoiceMemory (supportVoiceMemory_),
+      supportVoiceMemory(supportVoiceMemory_),
+      startVoiceMemoryNumber(startVoiceMemoryNumber_),
+      endVoiceMemoryNumber(endVoiceMemoryNumber_),
       supportStopVoiceMemory (supportStopVoiceMemory_),
       supportCwMemory(supportCwMemory_),
+      startCwMemoryNumber(startCwMemoryNumber_),
+      endCwMemoryNumber(endCwMemoryNumber_),
       supportCwMemoryStop(supportCwMemoryStop_),
       supportCwMemoryWait(supportCwMemoryWait_),
       pollData (pollData_)
@@ -71,10 +85,18 @@ RigCapabilities::RigCapabilities(RigCapConstants::PortType portType_,
 }
 
 
+
+
+
 RigCapabilities:: RigCapabilities( const RigCapabilities &rigcap)
 {
     *this = rigcap;
 }
+
+
+
+
+
 RigCapabilities & RigCapabilities::operator= ( const RigCapabilities &rigcap)
 {
     portType = rigcap.portType;
@@ -82,12 +104,15 @@ RigCapabilities & RigCapabilities::operator= ( const RigCapabilities &rigcap)
     rigModelName = rigcap.rigModelName;
     rigModelNumber = rigcap.rigModelNumber;
     supportGetSupBands = rigcap.supportGetSupBands;
+    supportGetVfo = rigcap.supportGetVfo;
+    supportSetVfo = rigcap.supportSetVfo;
     supportGetRit = rigcap.supportGetRit;
     supportSetRit = rigcap.supportSetRit;
     supportGetRitState = rigcap.supportGetRitState;
     supportSetRitState = rigcap.supportSetRitState;
     supportGetRitMax = rigcap.supportGetRitMax;
     supportSMeter = rigcap.supportSMeter;
+    supportPttPortType = rigcap.supportPttPortType;
     supportGetPtt = rigcap.supportGetPtt;
     supportSetPtt = rigcap.supportSetPtt;
     supportGetVox = rigcap.supportGetVox;
@@ -96,11 +121,17 @@ RigCapabilities & RigCapabilities::operator= ( const RigCapabilities &rigcap)
     supportAntSw = rigcap.supportAntSw;
     supportRigCtld = rigcap.supportRigCtld;
     supportVoiceMemory = rigcap.supportVoiceMemory;
+    startVoiceMemoryNumber = rigcap.startVoiceMemoryNumber;
+    endVoiceMemoryNumber = rigcap.endVoiceMemoryNumber;
     supportStopVoiceMemory = rigcap.supportStopVoiceMemory;
     supportCwMemory = rigcap.supportCwMemory;
+    startCwMemoryNumber = rigcap.startCwMemoryNumber;
+    endCwMemoryNumber = rigcap.endCwMemoryNumber;
     supportCwMemoryStop = rigcap.supportCwMemoryStop;
     supportCwMemoryWait = rigcap.supportCwMemoryWait;
     pollData = rigcap.pollData;
     return *this;
 }
+
+
 

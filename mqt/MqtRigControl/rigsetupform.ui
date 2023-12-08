@@ -261,21 +261,21 @@
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_71">
             <item>
-             <widget class="QRadioButton" name="pttCatEnable">
+             <widget class="QRadioButton" name="pttCatSelectRadioButton">
               <property name="text">
                <string>CAT</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QRadioButton" name="pttRTSEnable">
+             <widget class="QRadioButton" name="pttRTSSelectRadioButton">
               <property name="text">
                <string>RTS</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QRadioButton" name="pttDTREnable">
+             <widget class="QRadioButton" name="pttDTRSelectRadioButton">
               <property name="text">
                <string>DTR</string>
               </property>
@@ -384,42 +384,42 @@
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_5">
             <item>
-             <widget class="QCheckBox" name="enableRitChkBox">
+             <widget class="QCheckBox" name="enableRitCatFeatureChkBox">
               <property name="text">
                <string>RIT</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QCheckBox" name="enableSMeterChkBox">
+             <widget class="QCheckBox" name="enableSMeterCatFeatureChkBox">
               <property name="text">
                <string>Signal Meter</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QCheckBox" name="enableVolChkBox">
+             <widget class="QCheckBox" name="enableVolCatFeatureChkBox">
               <property name="text">
                <string>Volume</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QCheckBox" name="enableCatPttChkBox">
+             <widget class="QCheckBox" name="enableCatPttCatFeatureChkBox">
               <property name="text">
                <string>CAT Ptt</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QCheckBox" name="enableVoiceTxMemChkBox">
+             <widget class="QCheckBox" name="enableVoiceTxMemCatFeatureChkBox">
               <property name="text">
                <string>Voice TX Mem</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QCheckBox" name="enableCwTxMemChkBox">
+             <widget class="QCheckBox" name="enableCwTxMemCatFeatureChkBox">
               <property name="text">
                <string>CW TX Mem</string>
               </property>

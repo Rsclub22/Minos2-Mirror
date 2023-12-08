@@ -113,6 +113,14 @@ bool RadioDetails::getVoiceMemAvail()
 {
     return voiceMemAvail;
 }
+void RadioDetails::setNumVoiceMessages(int numMsgs)
+{
+    numVoiceMessages = numMsgs;
+}
+int RadioDetails::getNumVoiceMessages()
+{
+    return numVoiceMessages;
+}
 void RadioDetails::setCwMemType(int _cwMemType)
 {
     cwMemType = _cwMemType;
@@ -120,6 +128,14 @@ void RadioDetails::setCwMemType(int _cwMemType)
 int RadioDetails::getCwMemType()
 {
     return cwMemType;
+}
+void RadioDetails::setNumCwMessages(int numMsgs)
+{
+    numCwMessages = numMsgs;
+}
+int RadioDetails::getNumCwMessages()
+{
+    return numCwMessages;
 }
 
 
