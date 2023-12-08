@@ -298,7 +298,6 @@ static QSharedPointer<DistrictEntry> searchDistrict( const QString &syn )
 CountryEntry::CountryEntry(const QString &continent, const QString &prefix,
                             const QString &name, const QString &cloc , int cq, int itu) :
     MultEntry( name, cloc )
-  , distLimit( -1 )
   , continent( continent )
   , ITUZone(itu)
   , CQZone(cq)
@@ -343,7 +342,7 @@ void CountryEntry::addSynonyms( QString &s )
    QStringList sl;
    for ( auto const &i: MultListsImpl::getMultLists() ->ctrySynList )
    {
-      if ( i.wt ->getCountry() == this )
+       if ( i.wt ->getCountry() == this && i.wt->prefixType == stNormal )
       {
             sl.append(i.wt->getSynPrefix());
       }
@@ -367,20 +366,11 @@ bool CountryEntry::operator!=( const CountryEntry& rhs ) const
    return res != 0;
 }
 //======================================================================
-static QSharedPointer<CountrySynonym> searchCountrySynonym( const QString &syn )
-{
-    MapWrapper < CountrySynonym > test(new CountrySynonym( syn, "", "", "", "", "" ));
-    MapWrapper < CountrySynonym > defVal(new CountrySynonym("", "", "", "", "", ""));
-    MapWrapper < CountrySynonym > cs = MultListsImpl::getMultLists() ->ctrySynList.value(test, defVal);
 
-    if (cs == defVal)
-        return QSharedPointer<CountrySynonym>();
-    else
-        return cs.wt;
-
-}
-CountrySynonym::CountrySynonym(const QString &ssyn, const QString &sprefix , const QString &cq, const QString &itu, const QString &ll, const QString &cont) :
-    country( nullptr )
+CountrySynonym::CountrySynonym(const QString &ssyn, const QString &sprefix
+                              , const QString &cq, const QString &itu, const QString &ll
+                              , const QString &cont, SynType ptype) :
+      prefixType(ptype)
 {
     //    (#) Override CQ Zone
     //    [#] Override ITU Zone
@@ -637,8 +627,7 @@ void CountryList::loadEntries( const QString &fname, const QString &fmess )
          QStringList b;
          parseLine( countrybuff, ',', b, 99, ';', sep2seen );
          int i = 0;
-         QString part = b[i];
-         while ( !skip && i < 99 && !part.isEmpty()  && part[ 0 ] != '=')   // = prefixes a full callsign
+         while ( !skip && i < 99 && !b[i].isEmpty() )   // = prefixes a full callsign
          {
 //             (#) Override CQ Zone
 //             [#] Override ITU Zone
@@ -689,10 +678,19 @@ void CountryList::loadEntries( const QString &fname, const QString &fmess )
             {
                 synName = b[i];
             }
+            if ( b[ i ][ 0 ] == '=')
+            {
+                // One off callsign - it all needs to match
+                QString cs = QString(b[i]);
+                cs = cs.mid(1);
 
-            CountrySynonymList::makeCountrySynonym( synName, mainPrefix, overrides[0], overrides[1], overrides[2], overrides[3] );
+                makeCountrySynonym( cs, mainPrefix, overrides[0], overrides[1], overrides[2], overrides[3], stCallsign );
+            }
+            else
+            {
+                makeCountrySynonym( synName, mainPrefix, overrides[0], overrides[1], overrides[2], overrides[3], stNormal );
+            }
             i++;
-            part = b[i];
          }
       }
    }
@@ -720,12 +718,17 @@ bool CountrySynonymList::procLine( QStringList a )
 {
    for ( int i = 1; i < a.length() && !a[ i ].isEmpty() ; i++ )
    {
-      makeCountrySynonym( a[ i ], a[ 0 ], "", "", "", "" );
+        MultListsImpl::getMultLists()->ctryList.makeCountrySynonym( a[ i ], a[ 0 ]
+                                                                  , "", "", "", ""
+                                                                  , stNormal
+                                                                  );
    }
 
    return true;
 }
-void CountrySynonymList::makeCountrySynonym(const QString &ssyn, const QString &sprefix, const QString &cq, const QString &itu, const QString &ll, const QString &cont)
+void CountryList::makeCountrySynonym(const QString &ssyn, const QString &sprefix
+                                     , const QString &cq, const QString &itu, const QString &ll
+                                     , const QString &cont, SynType prefixType)
 {
    // search country list for the prefix
 
@@ -739,22 +742,21 @@ void CountrySynonymList::makeCountrySynonym(const QString &ssyn, const QString &
    }
 
    QSharedPointer<CountryEntry> ctry;
-   for ( auto const &i: MultListsImpl::getMultLists() ->ctryList )
+   MapWrapper<CountryEntry> test(new CountryEntry(prefix));
+   MapWrapper<CountryEntry> res = value(test);
+   if (res)
    {
-      if ( i.wt->getBasePrefix().compare( prefix, Qt::CaseInsensitive ) == 0 )
-      {
-         ctry = i.wt;
-         break;
-      }
+       ctry = res.wt;
    }
-   if ( !ctry )
-      return ;		// as it will be unsuccessfull anyway
 
-   MapWrapper< CountrySynonym> cts(searchCountrySynonym ( syn ));
+   MapWrapper< CountrySynonym> cts(MultListsImpl::getMultLists()->searchCountrySynonym ( syn ));
    if ( cts.wt && ( cts.wt->getCountry().data() == ctry.data() ) )
       return ;		// as already there
 
-   cts = MapWrapper<CountrySynonym >(new CountrySynonym ( syn, prefix, cq, itu, ll, cont ));
+   cts = MapWrapper<CountrySynonym >(new CountrySynonym ( syn, prefix
+                                                       , cq, itu, ll, cont
+                                                       , prefixType
+                                                       ));
 
    if ( cts.wt->getCountry() )
    {
@@ -853,7 +855,7 @@ bool MultListsImpl::loadMultFiles( )
    distList.load();
    distSynList.load();
    glist.load();
-/*
+// /*
    QFile fos("c:/temp/multlist.txt");
    if (!fos.open(QIODevice::WriteOnly|QIODevice::Text))
       return false;
@@ -865,14 +867,14 @@ bool MultListsImpl::loadMultFiles( )
    os << "================== country entries ========================\n";
    for (MultList < CountryEntry >::iterator i = m->ctryList.begin(); i != m->ctryList.end(); i++)
    {
-      os << i->wt->basePrefix + " " + i->wt->realName << "\n";
+      os << i->wt->getBasePrefix() + " " + i->wt->getRealName() << "\n";
    }
    os << QString("================== country synonyms ") + QString::number(m->ctrySynList.size()) + "========================\n";
    for (MultList < CountrySynonym  >::iterator i = m->ctrySynList.begin(); i != m->ctrySynList.end(); i++)
    {
-      QString temp1 = i->wt->synPrefix;
+      QString temp1 = i->wt->getSynPrefix();
       QSharedPointer<CountryEntry> country = i->wt->country;
-      QString temp2 = country->basePrefix;
+      QString temp2 = country->getBasePrefix();
       os << (temp1 + " : " + temp2) << "\n";
    }
    os << "================== district entries ========================\n";
@@ -890,7 +892,7 @@ bool MultListsImpl::loadMultFiles( )
    {
       os << i->wt->synPrefix + " : " + i->wt->dupPrefix + "\n";
    }
-*/
+// */
    return true;
 }
 MultListsImpl::MultListsImpl()
@@ -924,9 +926,16 @@ QSharedPointer<CountryEntry> MultListsImpl::getCtryForPrefix( const QString &for
 }
 
 //void MultListsImpl::addCountry( bool addsyn );
-QSharedPointer<CountrySynonym> MultListsImpl::searchCountrySynonym( const QString &syn )
+QSharedPointer<CountrySynonym> MultListsImpl::searchCountrySynonym(const QString &syn )
 {
-   return ::searchCountrySynonym( syn );
+    MapWrapper < CountrySynonym > test(new CountrySynonym( syn, "", "", "", "", "", stNormal ));
+    MapWrapper < CountrySynonym > defVal(new CountrySynonym("", "", "", "", "", "", stNormal));
+    MapWrapper < CountrySynonym > cs = MultListsImpl::getMultLists() ->ctrySynList.value(test, defVal);
+
+    if (cs == defVal)
+        return QSharedPointer<CountrySynonym>();
+    else
+        return cs.wt;
 }
 QSharedPointer<DistrictEntry> MultListsImpl::searchDistrict( const QString &syn )
 {
