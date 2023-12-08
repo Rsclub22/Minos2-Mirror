@@ -251,9 +251,11 @@ void ContestPageControl::onTabBarClicked(int index)
 {
     trace(QString("onTabBarClicked %1").arg(index));
     ContestPage *ctab = dynamic_cast<ContestPage *>(widget(index));
-    BaseContestLog *pc = ctab->getContest();
-
-    LogContainer->selectContest(pc);
+    if (ctab)
+    {
+        BaseContestLog *pc = ctab->getContest();
+        LogContainer->selectContest(pc);
+    }
 }
 void ContestPageControl::onCustomContextMenuRequested(const QPoint &pos)
 {
@@ -263,9 +265,11 @@ void ContestPageControl::onCustomContextMenuRequested(const QPoint &pos)
     if (curtab >= 0)
     {
         ContestPage *ctab = dynamic_cast<ContestPage *>(widget(curtab));
-        BaseContestLog *pc = ctab->getContest();
-
-        LogContainer->selectContest(pc);
+        if (ctab)
+        {
+            BaseContestLog *pc = ctab->getContest();
+            LogContainer->selectContest(pc);
+        }
     }
 
     QPoint globalPos = mapToGlobal( pos );
