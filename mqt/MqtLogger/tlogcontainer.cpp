@@ -2332,6 +2332,10 @@ void TLogContainer::ShiftTabLeftActionExecute( )
 void TLogContainer::selectContest( BaseContestLog *pc)
 {
     // select this contest on all screens
+    if (!pc)
+    {
+        return;
+    }
 
     for ( int j = 0; j < ui->contestPageControl->count(); j++ )
     {
