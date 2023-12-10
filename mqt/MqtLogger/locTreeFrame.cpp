@@ -72,17 +72,9 @@ void LocTreeFrame::reInitialiseLocators()
                     if (ct->usesBonus.getValue())
                     {
                         QColor multhighlight = Qt::black;
-                        switch (ct->getSquareBonus(locStart + disp))
+                        if (ct->getSquareBonus(locStart + disp))
                         {
-                        case 500:  //blue
                             multhighlight = Qt::blue;
-                            break;
-                        case 1000: //green
-                            multhighlight = Qt::darkGreen;
-                            break;
-                        case 2000: //red
-                            multhighlight = Qt::red;
-                            break;
                         }
 
                         dispLine += HtmlFontColour(multhighlight) + "<b>" + disp + "</b>" + " (" + QString::number(lc->UKLocCount + lc->nonUKLocCount) + ") ";

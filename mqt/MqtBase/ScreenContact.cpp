@@ -130,8 +130,10 @@ void ScreenContact::initialise(BaseContestLog *ct , bool rInit)
     bearing = 0;
 
     multCount = 0;
-    bonus = 0;
-    newBonus = false;
+    locBonus = 0;
+    distBonus = 0;
+    countryBonus = 0;
+    newBonus = 0;
     cqResponse = false;
 
 }
@@ -167,7 +169,9 @@ void ScreenContact::copyFromArg( QSharedPointer<BaseContact> cct )
     markOffset = cct->markOffset;
     rotatorHeading = cct->rotatorHeading.getValue();
     rigName = cct->rigName.getValue();
-    bonus = cct->bonus;
+    locBonus = cct->locBonus;
+    countryBonus = cct->countryBonus;
+    distBonus = cct->distBonus;
     newBonus = cct->newBonus;
 
     op1 = cct->op1.getValue();
@@ -221,7 +225,9 @@ void ScreenContact::copyFromArg( ScreenContact &cct )
     markOffset = cct.markOffset;
     rotatorHeading = cct.rotatorHeading;
     rigName = cct.rigName;
-    bonus = cct.bonus;
+    locBonus = cct.locBonus;
+    distBonus = cct.distBonus;
+    countryBonus = cct.countryBonus;
     newBonus = cct.newBonus;
 
     op1 = cct.op1;
@@ -253,8 +259,10 @@ void ScreenContact::checkScreenContact( )
     locCount = 0;
     newGLoc = false;
     newNonGLoc = false;
-    bonus = 0;
-    newBonus = false;
+    locBonus = 0;
+    distBonus = 0;
+    countryBonus = 0;
+    newBonus = 0;
 
     score();
 
@@ -290,6 +298,16 @@ void ScreenContact::score()
                     multCount++;
                 }
                 newDistrict = true;
+                if (newDistrict && contest->usesBonus.getValue())
+                {
+                    int db = contest->getDistBonus(districtMult->districtCode);
+                    if (db)
+                    {
+                        distBonus += db;
+                        newBonus++;
+                    }
+                }
+
            }
        }
 
@@ -305,6 +323,15 @@ void ScreenContact::score()
                        multCount++;
                    }
                    newCtry = true;
+                   if (newCtry && contest->usesBonus.getValue())
+                   {
+                       int cb = contest->getCountryBonus(ctryMult->getBasePrefix());
+                       if (cb)
+                       {
+                           countryBonus += cb;
+                           newBonus++;
+                       }
+                   }
                 }
             }
         }
@@ -400,8 +427,12 @@ void ScreenContact::score()
                  {
                     if (npt->UKLocCount == 0 &&  npt->nonUKLocCount == 0)
                     {
-                       bonus += contest->getSquareBonus(sloc);
-                       newBonus = true;
+                        int lb = contest->getSquareBonus(sloc);
+                        if (lb)
+                        {
+                            locBonus += lb;
+                            newBonus++;
+                        }
                     }
                  }
                  if (UKcall)

@@ -515,17 +515,9 @@ QVariant LocGridModel::data( const QModelIndex &index, int role ) const
         QColor multhighlight = Qt::darkGray;
         if (ct->usesBonus.getValue())
         {
-            switch (ct->getSquareBonus(disp))
+            if (ct->getSquareBonus(disp))
             {
-            case 500:  //blue
                 multhighlight = Qt::blue;
-                break;
-            case 1000: //green
-                multhighlight = Qt::green;
-                break;
-            case 2000: //red
-                multhighlight = Qt::red;
-                break;
             }
         }
         QMap<QString, LocCount * >::const_iterator lci = locMap.find(disp);

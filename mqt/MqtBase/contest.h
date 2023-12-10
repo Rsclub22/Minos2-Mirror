@@ -179,6 +179,7 @@ class BaseContestLog: public BaseLogList
       MinosItem<bool> locMult;                  // locator mults
       MinosItem<bool> GLocMult;                 // G locs only mults
       MinosItem<bool> districtMult;             // postcodes
+      MinosItem<bool> districtBonus;
       MinosItem<int>  otherMult;                // type of "other" mult
       MinosItem<bool> asymmetricMult;            // TX S/N, RX serial or mult
 
@@ -313,8 +314,12 @@ class BaseContestLog: public BaseLogList
       int bonusYearLoaded = 0;
       QString bonusTypeLoaded;
       QMap<QString, int> locBonuses;
+      QMap<QString, int> distBonuses;
+      QMap<QString, int> countryBonuses;
       void loadBonusList();
       int getSquareBonus(QString sloc) const;
+      int getCountryBonus(QString c) const;
+      int getDistBonus(QString d) const;
 
       int getDistrictsWorked( const QString &item );
       int getCountriesWorked( const QString &item );
@@ -329,7 +334,6 @@ class BaseContestLog: public BaseLogList
       QMap<QString, int > ndistrict;
       QMap<QString, int > nlocs;
 
-      QMap<QString, int > nbonus;
       QMap<QString, int>  bonus;
 
       int getValidQSOs();
@@ -429,8 +433,6 @@ class BaseContestLog: public BaseLogList
 
       int getNlocs() const;
 
-      int getNbonus() const;
-
       int getBonus() const;
 
       void getOpTime(QString &otBuff, SHOWOPERATINGTIME temp);
@@ -473,6 +475,7 @@ class ContestScore
 
       QString name;
       bool usesBonus;
+      QString bonusType;
 
       int nqsos;
       int contestScore;

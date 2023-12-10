@@ -832,7 +832,7 @@ bool ThisLogMatcher::idleMatch( int limit )
                    uprqth = uprqth.toUpper();
                    qthmatch = matchqth.checkMatch( uprqth );
 
-                   if ( ccon->districtMult.getValue() )
+                   if ( ccon->districtMult.getValue() || ccon->districtBonus.getValue() )
                    {
                        if ( ccon != nullptr && !qthmatch )
                        {
@@ -1058,7 +1058,7 @@ bool OtherLogMatcher::idleMatch( int limit )
 
                   if ( ccon != nullptr && !qthmatch )
                   {
-                     if ( ccon->districtMult.getValue() )
+                     if ( ccon->districtMult.getValue() || ccon->districtBonus.getValue() )
                      {
                         // attempt match against district code
                         if ( cct->districtMult && wildComp( cct->districtMult->districtCode, matchqth.mstr ) )

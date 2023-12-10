@@ -108,6 +108,7 @@ void MinosTestExport::exportContest( QSharedPointer<QFile> expfd )
    ct->DTGStart.addIfDirty( st, "startTime", dirty );
    ct->DTGEnd.addIfDirty( st, "endTime", dirty );
    ct->districtMult.addIfDirty( st, "districtMult", dirty );
+   ct->districtBonus.addIfDirty( st, "districtBonus", dirty );
    ct->countryMult.addIfDirty( st, "DXCCMult", dirty );
    ct->nonGCountryMult.addIfDirty( st, "NonGCtryMult", dirty );
    ct->locMult.addIfDirty( st, "locMult", dirty );

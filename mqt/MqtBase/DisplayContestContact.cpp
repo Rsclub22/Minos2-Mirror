@@ -125,7 +125,9 @@ void DisplayContestContact::copyFromArg( ScreenContact &cct )
    setFrequency(cct.getFrequency(), cct.band);
    rotatorHeading.setValue(cct.rotatorHeading);
    rigName.setValue(cct.rigName);
-   bonus = cct.bonus;
+   locBonus = cct.locBonus;
+   distBonus = cct.distBonus;
+   countryBonus = cct.countryBonus;
    newBonus = cct.newBonus;
 
    op1.setValue( cct.op1 );
@@ -235,8 +237,10 @@ int DisplayContestContact::checkContact(bool adddup)
     locCount = 0;
     newGLoc = false;
     newNonGLoc = false;
-    bonus = 0;
-    newBonus = false;
+    locBonus = 0;
+    countryBonus = 0;
+    distBonus = 0;
+    newBonus = 0;
 
     double dist = getContactScore();    // calculated in CheckableContact
    bool dupContact = (cs.getValRes() == ERR_DUPCS);    // calculated in CheckableContact
@@ -255,6 +259,15 @@ int DisplayContestContact::checkContact(bool adddup)
             multCount++;
          }
          newDistrict = true;
+         if (newDistrict && contest->usesBonus.getValue())
+         {
+             distBonus = contest->getDistBonus(districtMult->districtCode);
+             if (distBonus > 0)
+             {
+                 clp->bonus[band] += distBonus;
+                 newBonus++;
+             }
+         }
       }
   }
 
@@ -274,6 +287,15 @@ int DisplayContestContact::checkContact(bool adddup)
                   multCount++;
               }
               newCtry = true;
+              if (newCtry && contest->usesBonus.getValue())
+              {
+                  countryBonus = contest->getCountryBonus(ctryMult->getBasePrefix());
+                  if (countryBonus > 0)
+                  {
+                      clp->bonus[band] += countryBonus;
+                      newBonus++;
+                  }
+              }
            }
        }
    }
@@ -369,11 +391,13 @@ int DisplayContestContact::checkContact(bool adddup)
             {
                if (npt->UKLocCount == 0 &&  npt->nonUKLocCount == 0)
                {
-                  clp->bonus[band] = clp->getSquareBonus(sloc);
+                  locBonus = clp->getSquareBonus(sloc);
 
-                  bonus += clp->bonus[band];
-                  clp->nbonus[band] = true;
-                  newBonus = true;
+                   if (locBonus > 0)
+                   {
+                      clp->bonus[band] += locBonus;
+                      newBonus++;
+                   }
                }
             }
 

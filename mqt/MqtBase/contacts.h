@@ -111,8 +111,10 @@ public:
     bool newNonGLoc = false;
 
     char multCount = 0;
-    int bonus = 0;
-    bool newBonus = 0;
+    int locBonus = 0;
+    int countryBonus = 0;
+    int distBonus = 0;
+    int newBonus = 0;
 
 
 protected:

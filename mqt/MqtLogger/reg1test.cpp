@@ -113,7 +113,9 @@ bool reg1test::exportTest( QSharedPointer<QFile> expfd, bool noSerials )
       if ( cct->contactScore.getValue() > 0 )
       {
          nvalid++;
-         bonus += cct->bonus;
+         bonus += cct->locBonus;
+         bonus += cct->distBonus;
+         bonus += cct->countryBonus;
       }
    }
    if (bonus)

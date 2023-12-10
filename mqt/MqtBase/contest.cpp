@@ -54,6 +54,7 @@ BaseContestLog::BaseContestLog(bool hf)
   countryMult.setValue( false );
   nonGCountryMult.setValue( false );
   districtMult.setValue( false );
+  districtBonus.setValue( false );
   locMult.setValue( false );
   GLocMult.setValue(false);
   otherMult.setValue(0);
@@ -303,6 +304,7 @@ void BaseContestLog::clearDirty()
    locMult.clearDirty();
    GLocMult.clearDirty();
    districtMult.clearDirty();
+   districtBonus.clearDirty();
    otherMult.clearDirty();
    asymmetricMult.clearDirty();
 
@@ -351,6 +353,7 @@ void BaseContestLog::setDirty()
    locMult.setDirty();
    GLocMult.setDirty();
    districtMult.setDirty();
+   districtBonus.setDirty();
    otherMult.setDirty();
    asymmetricMult.setDirty();
 
@@ -733,7 +736,9 @@ bool BaseContestLog::updateStat( CheckableContact *cct, int sp1, int sp2 )
       QSO1++;
       kms1 += thisscore;
       mults1 += cct->multCount;
-      bonus1 += cct->bonus;
+      bonus1 += cct->locBonus;
+      bonus1 += cct->distBonus;
+      bonus1 += cct->countryBonus;
       acted = true;
    }
    else
@@ -744,7 +749,9 @@ bool BaseContestLog::updateStat( CheckableContact *cct, int sp1, int sp2 )
          QSO1p++;
          kms1p += thisscore;
          mults1p += cct->multCount;
-         bonus1p += cct->bonus;
+         bonus1p += cct->locBonus;
+         bonus1p += cct->distBonus;
+         bonus1p += cct->countryBonus;
          acted = true;
       }
 
@@ -755,7 +762,9 @@ bool BaseContestLog::updateStat( CheckableContact *cct, int sp1, int sp2 )
       QSO2++;
       kms2 += thisscore;
       mults2 += cct->multCount;
-      bonus2 += cct->bonus;
+      bonus2 += cct->locBonus;
+      bonus2 += cct->distBonus;
+      bonus2 += cct->countryBonus;
       acted = true;
    }
    else
@@ -766,7 +775,9 @@ bool BaseContestLog::updateStat( CheckableContact *cct, int sp1, int sp2 )
          QSO2p++;
          kms2p += thisscore;
          mults2p += cct->multCount;
-         bonus2p += cct->bonus;
+         bonus2p += cct->locBonus;
+         bonus2p += cct->distBonus;
+         bonus2p += cct->countryBonus;
          acted = true;
       }
 
@@ -1075,8 +1086,10 @@ void BaseContestLog::getScoresTo(ContestScore &cs, QDateTime limit)
 //         cs.nlocs += (nct->newGLoc || nct->newNonGLoc)?1:0;
          cs.nqsos++;
 
-         cs.bonus += nct->bonus;
-         cs.nbonus += nct->newBonus?1:0;
+         cs.bonus += nct->locBonus;
+         cs.bonus += nct->countryBonus;
+         cs.bonus += nct->distBonus;
+         cs.nbonus += nct->newBonus;
 
       }
       else
@@ -1085,6 +1098,7 @@ void BaseContestLog::getScoresTo(ContestScore &cs, QDateTime limit)
       }
    }
    cs.nmults = 0;
+   QString bt = bonusType.getValue();
    if ( countryMult.getValue() )
    {
       cs.brcc1 = cs.brcc2 = ' ';
@@ -1099,6 +1113,18 @@ void BaseContestLog::getScoresTo(ContestScore &cs, QDateTime limit)
    {
       cs.brloc1 = cs.brloc2 = ' ';
       cs.nmults += cs.nlocs;
+   }
+   if ( bt == "B6" )
+   {
+       cs.brcc1 = cs.brcc2 = ' ';
+   }
+   if ( bt == "B6" )
+   {
+       cs.brcc3 = cs.brcc4 = ' ';
+   }
+   if ( bt == "B4" || bt == "B6" )
+   {
+       cs.brloc1 = cs.brloc2 = ' ';
    }
    if (usesBonus.getValue())
    {
@@ -1506,6 +1532,7 @@ void BaseContestLog::processMinosStanza( const QString &methodName, MinosTestImp
       mt->getStructArgMemberValue( "endTime", DTGEnd );
 
       mt->getStructArgMemberValue( "districtMult", districtMult );
+      mt->getStructArgMemberValue( "districtBonus", districtBonus );
       mt->getStructArgMemberValue( "DXCCMult", countryMult );
       mt->getStructArgMemberValue( "NonGCtryMult", nonGCountryMult );
       mt->getStructArgMemberValue( "locMult", locMult );
@@ -1735,7 +1762,7 @@ static bool loadCalYear ( Calendar &cal, int year )
 }
 void BaseContestLog::loadBonusList()
 {
-    if (usesBonus.getValue() && (bonusType.getValue() == "B2" || bonusType.getValue() == "B4"))
+    if (usesBonus.getValue() && (bonusType.getValue() == "B6" || bonusType.getValue() == "B4"))
     {
         QDateTime  contestStart = CanonicalToTDT(DTGStart.getValue());
         int year = contestStart.date().year();
@@ -1751,24 +1778,20 @@ void BaseContestLog::loadBonusList()
             }
 
             locBonuses.clear();
-            if (bonusType.getValue() == "B2")
+            distBonuses.clear();
+            countryBonuses.clear();
+
+            if (bonusType.getValue() == "B6")
             {
-                MultType B2 = vhf.mults["B2"];
+                MultType B6 = vhf.mults["B6"];
 
-                if (B2.bonuses.size() == 0)
+                if (B6.bonuses.size() == 0)
                 {
-                    // load from ./Configuration/B2Mults.xml
-                    vhf = Calendar(year, ectVHF);
-                    /*loaded =*/ vhf.parseFile ( "./Configuration/B2Mults.xml" );
-                    B2 = vhf.mults["B2"];
+                    B6.bonuses["DEFAULT"] = 200;
                 }
-                for (QMap<QString, int>::iterator i = B2.bonuses.begin(); i != B2.bonuses.end(); i++)
-                {
-                    QString name = i.key().toUpper();
-                    int value = i.value();
-
-                    locBonuses[name] = value;
-                }
+                locBonuses["DEFAULT"] = 200;
+                distBonuses["DEFAULT"] = 200;
+                countryBonuses["DEFAULT"] = 200;
             }
             if (bonusType.getValue() == "B4")
             {
@@ -1785,6 +1808,8 @@ void BaseContestLog::loadBonusList()
 
                     locBonuses[name] = value;
                 }
+                distBonuses["DEFAULT"] = 0;
+                countryBonuses["DEFAULT"] = 0;
             }
         }
     }
@@ -1817,6 +1842,48 @@ int BaseContestLog::getSquareBonus(QString sloc) const
     }
     return bonus;
 }
+int BaseContestLog::getCountryBonus(QString c) const
+{
+    int bonus = 0;
+    QMap<QString, int>::const_iterator l = countryBonuses.find(c);
+
+    if ( l != countryBonuses.end())
+    {
+        // specific bonus for square allocated
+        bonus = l.value();
+    }
+    else
+    {
+        QMap<QString, int>::const_iterator l = countryBonuses.find("DEFAULT");
+        if ( l != countryBonuses.end())
+        {
+            // specific bonus for country allocated
+            bonus = l.value();
+        }
+    }
+    return bonus;
+}
+int BaseContestLog::getDistBonus(QString d) const
+{
+    int bonus = 0;
+    QMap<QString, int>::const_iterator l = distBonuses.find(d);
+
+    if ( l != distBonuses.end())
+    {
+        // specific bonus for district allocated
+        bonus = l.value();
+    }
+    else
+    {
+        QMap<QString, int>::const_iterator l = distBonuses.find("DEFAULT");
+        if ( l != distBonuses.end())
+        {
+            // specific bonus for square allocated
+            bonus = l.value();
+        }
+    }
+    return bonus;
+}
 
 int BaseContestLog::getBonus() const
 {
@@ -1827,15 +1894,6 @@ int BaseContestLog::getBonus() const
     }
     return tot;
 }
-
-int BaseContestLog::getNbonus() const
-{
-    int tot = 0;
-    for(auto const &n: nbonus)
-    {
-        tot += n;
-    }
-    return tot;}
 
 int BaseContestLog::getNlocs() const
 {
@@ -2018,26 +2076,40 @@ ContestScore::ContestScore(BaseContestLog *ct)
 
    name = ct->publishedName;
    usesBonus = ct->usesBonus.getValue();
+   bonusType = ct->bonusType.getValue();
 }
 QString ContestScore::disp()
 {
     QString buff;
     if (usesBonus == true)
     {
-        buff = tr("Score: Qsos: %1; %2 pts :%3%4 countries%5: bonuses %6(%7) = %8")
-            .arg(nqsos).arg(contestScore).arg(brcc1).arg(nctry).arg(brcc2)
-            .arg(bonus) .arg(nbonus)
-            .arg(totalScore );
+        if (bonusType == "B4")
+        {
+            buff = tr("Score: %1 Qsos; %2 pts; %3 countries; %4 locs; bonuses %5(%6) = %7")
+                       .arg(nqsos).arg(contestScore)
+                       .arg(nctry).arg(nlocs)
+                       .arg(bonus) .arg(nbonus)
+                       .arg(totalScore );
+        }
+        else if (bonusType == "B6")
+        {
+            buff = tr("Score: %1 Qsos; %2 pts; %3 countries; %4 districts; %5 locs; bonuses %6(%7) = %8")
+                       .arg(nqsos).arg(contestScore)
+                       .arg(nctry).arg(ndistrict).arg(nlocs)
+                       .arg(bonus) .arg(nbonus)
+                       .arg(totalScore );
+        }
+        else
+        {
+            buff = tr("Score: %1 Qsos; %2 pts; %3%4 countries%5; bonuses %6(%7) = %8")
+                       .arg(nqsos).arg(contestScore).arg(brcc1).arg(nctry).arg(brcc2)
+                       .arg(bonus) .arg(nbonus)
+                       .arg(totalScore );
+        }
     }
     else
     {
-        /*
-        buff = tr( "Score: Qsos: %1; %2 pts :%3%4 countries%5:%6%7 districts%8:%9%10(%11/%12) locators %13 = %14" )
-            .arg(nqsos).arg(contestScore).arg(brcc1).arg(nctry).arg(brcc2).arg(brcc3).arg(ndistrict)
-            .arg(brcc4).arg(brloc1).arg(nlocs).arg(nGlocs).arg(nonGlocs).arg(brloc2)
-            .arg(totalScore );
-        */
-        buff = tr( "Score: Qsos: %1; %2 pts :%3%4 countries%5:%6%7 districts%8:%9%10 locators %13 = %14" )
+         buff = tr( "Score: %1 Qsos; %2 pts;%3%4 countries%5;%6%7 districts%8; %9%10 locators %13 = %14" )
             .arg(nqsos).arg(contestScore).arg(brcc1).arg(nctry).arg(brcc2).arg(brcc3).arg(ndistrict)
             .arg(brcc4).arg(brloc1).arg(nlocs).arg(brloc2)
             .arg(totalScore );

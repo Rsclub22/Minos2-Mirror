@@ -18,7 +18,8 @@
 
 enum ExchangeTypes {
     etNoExchange,
-    etPostCode,
+    etPostCodeMult,
+    etPostCodeBonus,
     etOther,
     etOptional,
     etMandatory,
@@ -27,8 +28,8 @@ enum ExchangeTypes {
 
 enum BonusTypes {
     btNone,
-    btB2,
     btB4,
+    btB6,
     btNAC
 };
 
@@ -51,14 +52,15 @@ ContestDetails::ContestDetails(QWidget *parent) :
 
     ui->ExchangeComboBox->addItem(tr("No Exchange Required") );
     ui->ExchangeComboBox->addItem(tr("PostCode Multipliers"));
+    ui->ExchangeComboBox->addItem(tr("PostCode Bonuses"));
     ui->ExchangeComboBox->addItem(tr("Other Exchange Multiplier"));
     ui->ExchangeComboBox->addItem(tr("Exchange Multiplier (may be \"-\")"));
     ui->ExchangeComboBox->addItem(tr("Exchange Required (no multiplier)"));
     ui->ExchangeComboBox->addItem(tr("Asymmetric (TX S/N, RX exchange), Multiplier"));
 
     ui->BonusComboBox->addItem(tr("None"));
-    ui->BonusComboBox->addItem(tr("UKAC Bonuses (B2)"));
     ui->BonusComboBox->addItem(tr("UKAC Bonuses (B4)"));
+    ui->BonusComboBox->addItem(tr("AFS Bonuses (B6)"));
     ui->BonusComboBox->addItem(tr("NAC Bonuses"));
 
     for ( int i = 0; i < 24; i++ )
@@ -291,40 +293,46 @@ void ContestDetails::setExchangeComboBox()
 
     bool asymmetricMult = contestTransferObject->asymmetricMult.getValue();
 
-    if ( contestTransferObject->districtMult.getValue() )
+    if ( contestTransferObject->districtBonus.getValue() )
     {
         // PostCode Multipliers
-        ui->ExchangeComboBox->setCurrentIndex( etPostCode);
+        ui->ExchangeComboBox->setCurrentIndex( etPostCodeBonus);
     }
     else
-        if ( otherExchange && !otherOptional && otherMult > 0 && !asymmetricMult )
+        if ( contestTransferObject->districtMult.getValue() )
         {
-            // Other Exchange Multiplier
-            ui->ExchangeComboBox->setCurrentIndex( etOther);
+            // PostCode Multipliers
+            ui->ExchangeComboBox->setCurrentIndex( etPostCodeMult);
         }
         else
-            if ( otherExchange && otherOptional && otherMult > 0 && !asymmetricMult )
+            if ( otherExchange && !otherOptional && otherMult > 0 && !asymmetricMult )
             {
-                // Optional Exchange Multiplier
-                ui->ExchangeComboBox->setCurrentIndex( etOptional);
+                // Other Exchange Multiplier
+                ui->ExchangeComboBox->setCurrentIndex( etOther);
             }
             else
-                if ( otherExchange && !otherOptional && otherMult == 0 && !asymmetricMult )
+                if ( otherExchange && otherOptional && otherMult > 0 && !asymmetricMult )
                 {
-                    // Exchange Required (no multiplier)
-                    ui->ExchangeComboBox->setCurrentIndex( etMandatory);
+                    // Optional Exchange Multiplier
+                    ui->ExchangeComboBox->setCurrentIndex( etOptional);
                 }
                 else
-                    if ( otherExchange && !otherOptional && otherMult > 0 && asymmetricMult )
+                    if ( otherExchange && !otherOptional && otherMult == 0 && !asymmetricMult )
                     {
-                        // Asymmetric (TX S/N, RX exchange), Multiplier
-                        ui->ExchangeComboBox->setCurrentIndex( etAsymmetric);
+                        // Exchange Required (no multiplier)
+                        ui->ExchangeComboBox->setCurrentIndex( etMandatory);
                     }
                     else
-                    {
-                        // No Exchange Required
-                        ui->ExchangeComboBox->setCurrentIndex( etNoExchange);
-                    }
+                        if ( otherExchange && !otherOptional && otherMult > 0 && asymmetricMult )
+                        {
+                            // Asymmetric (TX S/N, RX exchange), Multiplier
+                            ui->ExchangeComboBox->setCurrentIndex( etAsymmetric);
+                        }
+                        else
+                        {
+                            // No Exchange Required
+                            ui->ExchangeComboBox->setCurrentIndex( etNoExchange);
+                        }
 }
 
 void ContestDetails::setDetails(  )
@@ -488,10 +496,10 @@ void ContestDetails::setDetails(  )
 
    if (usesBonus)
    {
-       if (bonusType == "B2")
-           ui->BonusComboBox->setCurrentIndex(btB2);
-       else if (bonusType == "B4")
+       if (bonusType == "B4")
            ui->BonusComboBox->setCurrentIndex(btB4);
+       else if (bonusType == "B6")
+           ui->BonusComboBox->setCurrentIndex(btB6);
        else if (bonusType == "NAC")
            ui->BonusComboBox->setCurrentIndex(btNAC);
        else
@@ -785,6 +793,7 @@ void ContestDetails::setDetails( const IndividualContest &ic )
           // DXCCs worked on each band
            contestTransferObject->usesBonus.setValue(false);
            contestTransferObject->bonusType.setValue("");
+           contestTransferObject->districtBonus.setValue(false);
 
           contestTransferObject->districtMult.setValue( false );
           contestTransferObject->countryMult.setValue( true );
@@ -809,6 +818,7 @@ void ContestDetails::setDetails( const IndividualContest &ic )
           // UK Prefixes per band and mode
            contestTransferObject->usesBonus.setValue(false);
            contestTransferObject->bonusType.setValue("");
+           contestTransferObject->districtBonus.setValue(false);
 
           contestTransferObject->districtMult.setValue( false );
           contestTransferObject->countryMult.setValue( false );
@@ -833,6 +843,7 @@ void ContestDetails::setDetails( const IndividualContest &ic )
           // DXCC & UK District BONUS
            contestTransferObject->usesBonus.setValue(false);
            contestTransferObject->bonusType.setValue("");
+           contestTransferObject->districtBonus.setValue(true);
 
           contestTransferObject->districtMult.setValue( false );
           contestTransferObject->countryMult.setValue( false );
@@ -857,6 +868,7 @@ void ContestDetails::setDetails( const IndividualContest &ic )
           // IOTA Points
           contestTransferObject->usesBonus.setValue(false);
           contestTransferObject->bonusType.setValue("");
+          contestTransferObject->districtBonus.setValue(false);
 
           contestTransferObject->districtMult.setValue( false );
           contestTransferObject->countryMult.setValue( false );
@@ -880,6 +892,7 @@ void ContestDetails::setDetails( const IndividualContest &ic )
        {
           contestTransferObject->usesBonus.setValue(false);
           contestTransferObject->bonusType.setValue("");
+          contestTransferObject->districtBonus.setValue(false);
 
           contestTransferObject->districtMult.setValue( false );
           contestTransferObject->countryMult.setValue( false );
@@ -907,6 +920,7 @@ void ContestDetails::setDetails( const IndividualContest &ic )
           // PC, DXCC
            contestTransferObject->usesBonus.setValue(false);
            contestTransferObject->bonusType.setValue("");
+           contestTransferObject->districtBonus.setValue(false);
 
           contestTransferObject->districtMult.setValue( true );
           contestTransferObject->countryMult.setValue( true );
@@ -931,6 +945,7 @@ void ContestDetails::setDetails( const IndividualContest &ic )
           // Loc
            contestTransferObject->usesBonus.setValue(false);
            contestTransferObject->bonusType.setValue("");
+           contestTransferObject->districtBonus.setValue(false);
 
           contestTransferObject->districtMult.setValue( false );
           contestTransferObject->countryMult.setValue( false );
@@ -955,6 +970,7 @@ void ContestDetails::setDetails( const IndividualContest &ic )
           // PC, DXCC, LOC
            contestTransferObject->usesBonus.setValue(false);
            contestTransferObject->bonusType.setValue("");
+           contestTransferObject->districtBonus.setValue(false);
 
           contestTransferObject->districtMult.setValue( true );
           contestTransferObject->countryMult.setValue( true );
@@ -979,6 +995,7 @@ void ContestDetails::setDetails( const IndividualContest &ic )
           // DXCC, LOC
           contestTransferObject->usesBonus.setValue(false);
           contestTransferObject->bonusType.setValue("");
+          contestTransferObject->districtBonus.setValue(false);
 
           contestTransferObject->districtMult.setValue( false );
           contestTransferObject->countryMult.setValue( true );
@@ -1003,6 +1020,7 @@ void ContestDetails::setDetails( const IndividualContest &ic )
           // G Locs only
           contestTransferObject->usesBonus.setValue(false);
           contestTransferObject->bonusType.setValue("");
+          contestTransferObject->districtBonus.setValue(false);
 
           contestTransferObject->districtMult.setValue( false );
           contestTransferObject->countryMult.setValue( false );
@@ -1027,6 +1045,7 @@ void ContestDetails::setDetails( const IndividualContest &ic )
           // G Locs only  + DXCC
           contestTransferObject->usesBonus.setValue(false);
           contestTransferObject->bonusType.setValue("");
+          contestTransferObject->districtBonus.setValue(false);
 
           contestTransferObject->districtMult.setValue( false );
           contestTransferObject->countryMult.setValue( false );
@@ -1051,6 +1070,7 @@ void ContestDetails::setDetails( const IndividualContest &ic )
           // Modified M5; non UK 1 mult, UK 2 mults
           contestTransferObject->usesBonus.setValue(false);
           contestTransferObject->bonusType.setValue("");
+          contestTransferObject->districtBonus.setValue(false);
 
           contestTransferObject->districtMult.setValue( false );
           contestTransferObject->countryMult.setValue( false );
@@ -1070,10 +1090,11 @@ void ContestDetails::setDetails( const IndividualContest &ic )
           contestTransferObject->UKloc_multiplier = 2;
           contestTransferObject->NonUKloc_multiplier = 1;
        }
-       else if ( ic.mults == "B2" )
+       else if ( ic.mults == "B6" )
        {
            contestTransferObject->usesBonus.setValue(true);
-           contestTransferObject->bonusType.setValue("B2");
+           contestTransferObject->bonusType.setValue("B6");
+           contestTransferObject->districtBonus.setValue(true);
 
            contestTransferObject->districtMult.setValue( false );
            contestTransferObject->countryMult.setValue( false );
@@ -1081,8 +1102,8 @@ void ContestDetails::setDetails( const IndividualContest &ic )
            contestTransferObject->GLocMult.setValue( false );
            contestTransferObject->nonGCountryMult.setValue( false );
 
-           contestTransferObject->exchangeRequired.setValue(false);
-           contestTransferObject->exchangeDashAllowed.setValue(false);
+           contestTransferObject->exchangeRequired.setValue(true);
+           contestTransferObject->exchangeDashAllowed.setValue(true);
            contestTransferObject->otherMult.setValue(0);
            contestTransferObject->asymmetricMult.setValue(false);
 
@@ -1097,6 +1118,7 @@ void ContestDetails::setDetails( const IndividualContest &ic )
        {
            contestTransferObject->usesBonus.setValue(true);
            contestTransferObject->bonusType.setValue("B4");
+           contestTransferObject->districtBonus.setValue(false);
 
            contestTransferObject->districtMult.setValue( false );
            contestTransferObject->countryMult.setValue( false );
@@ -1120,6 +1142,7 @@ void ContestDetails::setDetails( const IndividualContest &ic )
        {
           contestTransferObject->usesBonus.setValue(false);
           contestTransferObject->bonusType.setValue("");
+          contestTransferObject->districtBonus.setValue(false);
 
           contestTransferObject->districtMult.setValue( false );
           contestTransferObject->countryMult.setValue( false );
@@ -1190,8 +1213,8 @@ void ContestDetails::setDetails( const IndividualContest &ic )
    else
    {
        QString bonusType = contestTransferObject->bonusType.getValue();
-       if (bonusType == "B2")
-            ui->BonusComboBox->setCurrentIndex(btB2);
+       if (bonusType == "B6")
+            ui->BonusComboBox->setCurrentIndex(btB6);
        if (bonusType == "B4")
             ui->BonusComboBox->setCurrentIndex(btB4);
    }
@@ -1524,13 +1547,13 @@ QWidget * ContestDetails::getDetails( )
     {
         int bt = ui->BonusComboBox->currentIndex();
 
-        if (bt == btB2)
-        {
-            contestTransferObject->bonusType.setValue("B2");
-        }
-        else if (bt == btB4)
+        if (bt == btB4)
         {
             contestTransferObject->bonusType.setValue("B4");
+        }
+        else if (bt == btB6)
+        {
+            contestTransferObject->bonusType.setValue("B6");
         }
         else if (bt == btNAC)
         {
@@ -1619,14 +1642,25 @@ QWidget * ContestDetails::getDetails( )
         contestTransferObject->exchangeRequired.setValue( false );
         contestTransferObject->exchangeDashAllowed.setValue( false );
         contestTransferObject->districtMult.setValue( false );
+        contestTransferObject->districtBonus.setValue( false );
         contestTransferObject->otherMult.setValue(0);
         contestTransferObject->asymmetricMult.setValue(false);
         break;
 
-    case etPostCode:     //PostCode Multipliers
+    case etPostCodeMult:     //PostCode Multipliers
         contestTransferObject->exchangeRequired.setValue( true );
         contestTransferObject->exchangeDashAllowed.setValue( false );
         contestTransferObject->districtMult.setValue( true );
+        contestTransferObject->districtBonus.setValue( false );
+        contestTransferObject->otherMult.setValue(0);
+        contestTransferObject->asymmetricMult.setValue(false);
+        break;
+
+    case etPostCodeBonus:     //PostCode Bonuses
+        contestTransferObject->exchangeRequired.setValue( true );
+        contestTransferObject->exchangeDashAllowed.setValue( true );
+        contestTransferObject->districtMult.setValue( false );
+        contestTransferObject->districtBonus.setValue( true );
         contestTransferObject->otherMult.setValue(0);
         contestTransferObject->asymmetricMult.setValue(false);
         break;
@@ -1635,6 +1669,7 @@ QWidget * ContestDetails::getDetails( )
         contestTransferObject->exchangeRequired.setValue( true );
         contestTransferObject->exchangeDashAllowed.setValue( false );
         contestTransferObject->districtMult.setValue( false );
+        contestTransferObject->districtBonus.setValue( false );
         contestTransferObject->otherMult.setValue(1);
         contestTransferObject->asymmetricMult.setValue(false);
         break;
@@ -1643,6 +1678,7 @@ QWidget * ContestDetails::getDetails( )
         contestTransferObject->exchangeRequired.setValue( true );
         contestTransferObject->exchangeDashAllowed.setValue( true );
         contestTransferObject->districtMult.setValue( false );
+        contestTransferObject->districtBonus.setValue( false );
         contestTransferObject->otherMult.setValue(2);
         contestTransferObject->asymmetricMult.setValue(false);
         break;
@@ -1651,6 +1687,7 @@ QWidget * ContestDetails::getDetails( )
         contestTransferObject->exchangeRequired.setValue( true );
         contestTransferObject->exchangeDashAllowed.setValue( false );
         contestTransferObject->districtMult.setValue( false );
+        contestTransferObject->districtBonus.setValue( false );
         contestTransferObject->otherMult.setValue(0);
         contestTransferObject->asymmetricMult.setValue(false);
         break;
@@ -1659,6 +1696,7 @@ QWidget * ContestDetails::getDetails( )
         contestTransferObject->exchangeRequired.setValue( true );
         contestTransferObject->exchangeDashAllowed.setValue( false );
         contestTransferObject->districtMult.setValue( false );
+        contestTransferObject->districtBonus.setValue( false );
         contestTransferObject->otherMult.setValue(1);
         contestTransferObject->asymmetricMult.setValue(true);
         break;

@@ -98,6 +98,7 @@ private:
     MinosItem<bool> locMult;
     MinosItem<bool> GLocMult;
     MinosItem<bool> districtMult;
+    MinosItem<bool> districtBonus;
     MinosItem<int>  otherMult;
     MinosItem<bool> asymmetricMult;
 
