@@ -280,7 +280,7 @@ void LocFrame::reInitialiseLocators()
                 LocCount *lc = ct->locs[band].itemAt(k) ->map( j * 10 + i );
                 QString disp = QString("%1").arg(j * 10 + i, 2, 10, QChar('0'));
 
-                if ( lc && (lc->UKLocCount || lc->nonUKLocCount))
+                if ( lc && (lc->locCount))
                 {
                     model->locMap[locStart + disp] = lc;
 

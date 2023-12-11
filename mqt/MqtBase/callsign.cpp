@@ -427,18 +427,6 @@ int Callsign::validate( )
 
 }
 //============================================================
-bool Callsign::isUK() const
-{
-   if (fullCall.getValue().size() == 0)
-   {
-      return false;
-   }
-   // is this callsign in one of the UK areas?
-   // prefix is country of location
-   // prefix2 is country of issue
-   return MultLists::getMultLists()->isUKprefix(*this);
-}
-//============================================================
 bool Callsign::operator==( const Callsign& rhs ) const
 {
    const Callsign * c1 = this;    // search item

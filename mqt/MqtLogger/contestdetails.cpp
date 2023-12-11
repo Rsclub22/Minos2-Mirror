@@ -121,9 +121,6 @@ ContestDetails::ContestDetails(QWidget *parent) :
     connect(LogContainer->sendDM, &TSendDM::setRadioList, this, &ContestDetails::on_SetRadioList);
     connect(LogContainer->sendDM, &TSendDM::RotatorList, this, &ContestDetails::on_RotatorList);
 
-    ui->NonGCtryMult->setVisible(false);
-    ui->GLocMult->setVisible(false);
-    ui->M7LocatorMults->setVisible(false);
 }
 void ContestDetails::doCloseEvent()
 {
@@ -240,14 +237,6 @@ void ContestDetails::loadClubNames(QString groupName)
        }
 
     }
-
-//    bool affiliated = false;
-//    if ( goffset >= 0 )
-//    {
-//       int a = ui->clubComboBox->currentData().toInt();
-//       affiliated = ( a != 0 );
-//    }
-
 }
 
 //---------------------------------------------------------------------------
@@ -487,9 +476,6 @@ void ContestDetails::setDetails(  )
    setExchangeComboBox();
 
    ui->DXCCMult->setChecked( contestTransferObject->countryMult.getValue()) ;
-   ui->NonGCtryMult->setChecked( contestTransferObject->nonGCountryMult.getValue()) ;
-
-   ui->M7LocatorMults->setChecked(contestTransferObject->M7Mults.getValue());
 
    bool usesBonus = contestTransferObject->usesBonus.getValue();
    QString bonusType = contestTransferObject->bonusType.getValue();
@@ -512,7 +498,6 @@ void ContestDetails::setDetails(  )
    }
 
    ui->LocatorMult->setChecked(contestTransferObject->locMult.getValue()) ;
-   ui->GLocMult->setChecked(contestTransferObject->GLocMult.getValue());
 
    ui->PowerEdit->setText(contestTransferObject->power.getValue());
 
@@ -798,20 +783,13 @@ void ContestDetails::setDetails( const IndividualContest &ic )
           contestTransferObject->districtMult.setValue( false );
           contestTransferObject->countryMult.setValue( true );
           contestTransferObject->locMult.setValue( false );
-          contestTransferObject->GLocMult.setValue( false );
-          contestTransferObject->nonGCountryMult.setValue( false );
 
           contestTransferObject->exchangeRequired.setValue(false);
           contestTransferObject->exchangeDashAllowed.setValue(false);
           contestTransferObject->otherMult.setValue(0);
           contestTransferObject->asymmetricMult.setValue(false);
 
-          contestTransferObject->M7Mults.setValue(false);
-
-          contestTransferObject->UKloc_mult = false;
-          contestTransferObject->NonUKloc_mult = false;
-          contestTransferObject->UKloc_multiplier = 0;
-          contestTransferObject->NonUKloc_multiplier = 0;
+          contestTransferObject->loc_multiplier = 0;
        }
        else if ( ic.mults == "M2" )
        {
@@ -823,20 +801,12 @@ void ContestDetails::setDetails( const IndividualContest &ic )
           contestTransferObject->districtMult.setValue( false );
           contestTransferObject->countryMult.setValue( false );
           contestTransferObject->locMult.setValue( false );
-          contestTransferObject->GLocMult.setValue( false );
-          contestTransferObject->nonGCountryMult.setValue( false );
 
           contestTransferObject->exchangeRequired.setValue(false);
           contestTransferObject->exchangeDashAllowed.setValue(false);
           contestTransferObject->otherMult.setValue(0);
           contestTransferObject->asymmetricMult.setValue(false);
-
-          contestTransferObject->M7Mults.setValue(false);
-
-          contestTransferObject->UKloc_mult = false;
-          contestTransferObject->NonUKloc_mult = false;
-          contestTransferObject->UKloc_multiplier = 0;
-          contestTransferObject->NonUKloc_multiplier = 0;
+          contestTransferObject->loc_multiplier = 0;
        }
        else if ( ic.mults == "M3" )
        {
@@ -848,20 +818,13 @@ void ContestDetails::setDetails( const IndividualContest &ic )
           contestTransferObject->districtMult.setValue( false );
           contestTransferObject->countryMult.setValue( false );
           contestTransferObject->locMult.setValue( false );
-          contestTransferObject->GLocMult.setValue( false );
-          contestTransferObject->nonGCountryMult.setValue( false );
 
           contestTransferObject->exchangeRequired.setValue(true);
           contestTransferObject->exchangeDashAllowed.setValue(true);  // bonus, not mult, so usual code not right
           contestTransferObject->otherMult.setValue(0);
           contestTransferObject->asymmetricMult.setValue(false);
 
-          contestTransferObject->M7Mults.setValue(false);
-
-          contestTransferObject->UKloc_mult = false;
-          contestTransferObject->NonUKloc_mult = false;
-          contestTransferObject->UKloc_multiplier = 0;
-          contestTransferObject->NonUKloc_multiplier = 0;
+          contestTransferObject->loc_multiplier = 0;
        }
        else if ( ic.mults == "M4" )
        {
@@ -873,20 +836,12 @@ void ContestDetails::setDetails( const IndividualContest &ic )
           contestTransferObject->districtMult.setValue( false );
           contestTransferObject->countryMult.setValue( false );
           contestTransferObject->locMult.setValue( false );
-          contestTransferObject->GLocMult.setValue( false );
-          contestTransferObject->nonGCountryMult.setValue( false );
 
           contestTransferObject->exchangeRequired.setValue(true);
           contestTransferObject->exchangeDashAllowed.setValue(true);
           contestTransferObject->otherMult.setValue(0);
           contestTransferObject->asymmetricMult.setValue(false);
-
-          contestTransferObject->M7Mults.setValue(false);
-
-          contestTransferObject->UKloc_mult = false;
-          contestTransferObject->NonUKloc_mult = false;
-          contestTransferObject->UKloc_multiplier = 0;
-          contestTransferObject->NonUKloc_multiplier = 0;
+          contestTransferObject->loc_multiplier = 0;
        }
        else
        {
@@ -897,20 +852,12 @@ void ContestDetails::setDetails( const IndividualContest &ic )
           contestTransferObject->districtMult.setValue( false );
           contestTransferObject->countryMult.setValue( false );
           contestTransferObject->locMult.setValue( false );
-          contestTransferObject->GLocMult.setValue( false );
-          contestTransferObject->nonGCountryMult.setValue( false );
 
           contestTransferObject->exchangeRequired.setValue(false);
           contestTransferObject->exchangeDashAllowed.setValue(false);
           contestTransferObject->otherMult.setValue(0);
           contestTransferObject->asymmetricMult.setValue(false);
-
-          contestTransferObject->M7Mults.setValue(false);
-
-          contestTransferObject->UKloc_mult = false;
-          contestTransferObject->NonUKloc_mult = false;
-          contestTransferObject->UKloc_multiplier = 0;
-          contestTransferObject->NonUKloc_multiplier = 0;
+          contestTransferObject->loc_multiplier = 0;
        }
    }
    else
@@ -925,20 +872,13 @@ void ContestDetails::setDetails( const IndividualContest &ic )
           contestTransferObject->districtMult.setValue( true );
           contestTransferObject->countryMult.setValue( true );
           contestTransferObject->locMult.setValue( false );
-          contestTransferObject->GLocMult.setValue( false );
-          contestTransferObject->nonGCountryMult.setValue( false );
 
           contestTransferObject->exchangeRequired.setValue(true);
           contestTransferObject->exchangeDashAllowed.setValue(false);
           contestTransferObject->otherMult.setValue(0);
           contestTransferObject->asymmetricMult.setValue(false);
 
-          contestTransferObject->M7Mults.setValue(false);
-
-          contestTransferObject->UKloc_mult = false;
-          contestTransferObject->NonUKloc_mult = false;
-          contestTransferObject->UKloc_multiplier = 0;
-          contestTransferObject->NonUKloc_multiplier = 0;
+          contestTransferObject->loc_multiplier = 0;
        }
        else if ( ic.mults == "M2" )
        {
@@ -950,20 +890,12 @@ void ContestDetails::setDetails( const IndividualContest &ic )
           contestTransferObject->districtMult.setValue( false );
           contestTransferObject->countryMult.setValue( false );
           contestTransferObject->locMult.setValue( true );
-          contestTransferObject->GLocMult.setValue( false );
-          contestTransferObject->nonGCountryMult.setValue( false );
 
           contestTransferObject->exchangeRequired.setValue(false);
           contestTransferObject->exchangeDashAllowed.setValue(false);
           contestTransferObject->otherMult.setValue(0);
           contestTransferObject->asymmetricMult.setValue(false);
-
-          contestTransferObject->M7Mults.setValue(false);
-
-          contestTransferObject->UKloc_mult = true;
-          contestTransferObject->NonUKloc_mult = true;
-          contestTransferObject->UKloc_multiplier = 1;
-          contestTransferObject->NonUKloc_multiplier = 1;
+          contestTransferObject->loc_multiplier = 1;
        }
        else if ( ic.mults == "M3" )
        {
@@ -975,20 +907,13 @@ void ContestDetails::setDetails( const IndividualContest &ic )
           contestTransferObject->districtMult.setValue( true );
           contestTransferObject->countryMult.setValue( true );
           contestTransferObject->locMult.setValue( true );
-          contestTransferObject->GLocMult.setValue( false );
-          contestTransferObject->nonGCountryMult.setValue( false );
 
           contestTransferObject->exchangeRequired.setValue(true);
           contestTransferObject->exchangeDashAllowed.setValue(false);
           contestTransferObject->otherMult.setValue(0);
           contestTransferObject->asymmetricMult.setValue(false);
 
-          contestTransferObject->M7Mults.setValue(false);
-
-          contestTransferObject->UKloc_mult = true;
-          contestTransferObject->NonUKloc_mult = true;
-          contestTransferObject->UKloc_multiplier = 1;
-          contestTransferObject->NonUKloc_multiplier = 1;
+          contestTransferObject->loc_multiplier = 1;
        }
        else if ( ic.mults == "M4" )
        {
@@ -1000,95 +925,12 @@ void ContestDetails::setDetails( const IndividualContest &ic )
           contestTransferObject->districtMult.setValue( false );
           contestTransferObject->countryMult.setValue( true );
           contestTransferObject->locMult.setValue( true );
-          contestTransferObject->GLocMult.setValue( false );
-          contestTransferObject->nonGCountryMult.setValue( false );
 
           contestTransferObject->exchangeRequired.setValue(false);
           contestTransferObject->exchangeDashAllowed.setValue(false);
           contestTransferObject->otherMult.setValue(0);
           contestTransferObject->asymmetricMult.setValue(false);
-
-          contestTransferObject->M7Mults.setValue(false);
-
-          contestTransferObject->UKloc_mult = true;
-          contestTransferObject->NonUKloc_mult = true;
-          contestTransferObject->UKloc_multiplier = 1;
-          contestTransferObject->NonUKloc_multiplier = 1;
-       }
-       else if ( ic.mults == "M5" )
-       {
-          // G Locs only
-          contestTransferObject->usesBonus.setValue(false);
-          contestTransferObject->bonusType.setValue("");
-          contestTransferObject->districtBonus.setValue(false);
-
-          contestTransferObject->districtMult.setValue( false );
-          contestTransferObject->countryMult.setValue( false );
-          contestTransferObject->locMult.setValue( true );
-          contestTransferObject->GLocMult.setValue( true );
-          contestTransferObject->nonGCountryMult.setValue( false );
-
-          contestTransferObject->exchangeRequired.setValue(false);
-          contestTransferObject->exchangeDashAllowed.setValue(false);
-          contestTransferObject->otherMult.setValue(0);
-          contestTransferObject->asymmetricMult.setValue(false);
-
-          contestTransferObject->M7Mults.setValue(false);
-
-          contestTransferObject->UKloc_mult = true;
-          contestTransferObject->NonUKloc_mult = false;
-          contestTransferObject->UKloc_multiplier = 1;
-          contestTransferObject->NonUKloc_multiplier = 0;
-       }
-       else if ( ic.mults == "M6" )
-       {
-          // G Locs only  + DXCC
-          contestTransferObject->usesBonus.setValue(false);
-          contestTransferObject->bonusType.setValue("");
-          contestTransferObject->districtBonus.setValue(false);
-
-          contestTransferObject->districtMult.setValue( false );
-          contestTransferObject->countryMult.setValue( false );
-          contestTransferObject->locMult.setValue( true );
-          contestTransferObject->GLocMult.setValue( true );
-          contestTransferObject->nonGCountryMult.setValue( true );
-
-          contestTransferObject->exchangeRequired.setValue(false);
-          contestTransferObject->exchangeDashAllowed.setValue(false);
-          contestTransferObject->otherMult.setValue(0);
-          contestTransferObject->asymmetricMult.setValue(false);
-
-          contestTransferObject->M7Mults.setValue(false);
-
-          contestTransferObject->UKloc_mult = true;
-          contestTransferObject->NonUKloc_mult = false;
-          contestTransferObject->UKloc_multiplier = 1;
-          contestTransferObject->NonUKloc_multiplier = 0;
-       }
-       else if ( ic.mults == "M7" )
-       {
-          // Modified M5; non UK 1 mult, UK 2 mults
-          contestTransferObject->usesBonus.setValue(false);
-          contestTransferObject->bonusType.setValue("");
-          contestTransferObject->districtBonus.setValue(false);
-
-          contestTransferObject->districtMult.setValue( false );
-          contestTransferObject->countryMult.setValue( false );
-          contestTransferObject->locMult.setValue( true );
-          contestTransferObject->GLocMult.setValue( true );
-          contestTransferObject->nonGCountryMult.setValue( false );
-
-          contestTransferObject->exchangeRequired.setValue(false);
-          contestTransferObject->exchangeDashAllowed.setValue(false);
-          contestTransferObject->otherMult.setValue(0);
-          contestTransferObject->asymmetricMult.setValue(false);
-
-          contestTransferObject->M7Mults.setValue(true);
-
-          contestTransferObject->UKloc_mult = true;
-          contestTransferObject->NonUKloc_mult = true;
-          contestTransferObject->UKloc_multiplier = 2;
-          contestTransferObject->NonUKloc_multiplier = 1;
+          contestTransferObject->loc_multiplier = 1;
        }
        else if ( ic.mults == "B6" )
        {
@@ -1099,20 +941,12 @@ void ContestDetails::setDetails( const IndividualContest &ic )
            contestTransferObject->districtMult.setValue( false );
            contestTransferObject->countryMult.setValue( false );
            contestTransferObject->locMult.setValue( false );
-           contestTransferObject->GLocMult.setValue( false );
-           contestTransferObject->nonGCountryMult.setValue( false );
 
            contestTransferObject->exchangeRequired.setValue(true);
            contestTransferObject->exchangeDashAllowed.setValue(true);
            contestTransferObject->otherMult.setValue(0);
            contestTransferObject->asymmetricMult.setValue(false);
-
-           contestTransferObject->M7Mults.setValue(false);
-
-           contestTransferObject->UKloc_mult = false;
-           contestTransferObject->NonUKloc_mult = false;
-           contestTransferObject->UKloc_multiplier = 0;
-           contestTransferObject->NonUKloc_multiplier = 0;
+           contestTransferObject->loc_multiplier = 0;
        }
        else if ( ic.mults == "B4" )
        {
@@ -1123,20 +957,12 @@ void ContestDetails::setDetails( const IndividualContest &ic )
            contestTransferObject->districtMult.setValue( false );
            contestTransferObject->countryMult.setValue( false );
            contestTransferObject->locMult.setValue( false );
-           contestTransferObject->GLocMult.setValue( false );
-           contestTransferObject->nonGCountryMult.setValue( false );
 
            contestTransferObject->exchangeRequired.setValue(false);
            contestTransferObject->exchangeDashAllowed.setValue(false);
            contestTransferObject->otherMult.setValue(0);
            contestTransferObject->asymmetricMult.setValue(false);
-
-           contestTransferObject->M7Mults.setValue(false);
-
-           contestTransferObject->UKloc_mult = false;
-           contestTransferObject->NonUKloc_mult = false;
-           contestTransferObject->UKloc_multiplier = 0;
-           contestTransferObject->NonUKloc_multiplier = 0;
+           contestTransferObject->loc_multiplier = 0;
        }
        else
        {
@@ -1147,20 +973,12 @@ void ContestDetails::setDetails( const IndividualContest &ic )
           contestTransferObject->districtMult.setValue( false );
           contestTransferObject->countryMult.setValue( false );
           contestTransferObject->locMult.setValue( false );
-          contestTransferObject->GLocMult.setValue( false );
-          contestTransferObject->nonGCountryMult.setValue( false );
 
           contestTransferObject->exchangeRequired.setValue(false);
           contestTransferObject->exchangeDashAllowed.setValue(false);
           contestTransferObject->otherMult.setValue(0);
           contestTransferObject->asymmetricMult.setValue(false);
-
-          contestTransferObject->M7Mults.setValue(false);
-
-          contestTransferObject->UKloc_mult = false;
-          contestTransferObject->NonUKloc_mult = false;
-          contestTransferObject->UKloc_multiplier = 0;
-          contestTransferObject->NonUKloc_multiplier = 0;
+          contestTransferObject->loc_multiplier = 0;
        }
    }
    contestTransferObject->MGMContestRules.setValue(false);
@@ -1198,12 +1016,7 @@ void ContestDetails::setDetails( const IndividualContest &ic )
 
    setExchangeComboBox();
 
-   ui->NonGCtryMult->setChecked(contestTransferObject->nonGCountryMult.getValue()) ;
-   ui->DXCCMult->setChecked(contestTransferObject->countryMult.getValue()) ;
-
    ui->LocatorMult->setChecked(contestTransferObject->locMult.getValue()) ;
-   ui->GLocMult->setChecked(contestTransferObject->GLocMult.getValue()) ;
-   ui->M7LocatorMults->setChecked(contestTransferObject->M7Mults.getValue()) ;
 
    bool UKACBonus = contestTransferObject->usesBonus.getValue();
    if (!UKACBonus)
@@ -1526,21 +1339,10 @@ QWidget * ContestDetails::getDetails( )
     contestTransferObject->location.setValue( ui->ExchangeEdit->text() );
     contestTransferObject->scoreMode.setValue( static_cast< SCOREMODE > (ui->PPQSORB->isChecked()?PPQSO:PPKM) );  // combo
 
-    if (ui->NonGCtryMult->isChecked())
-    {
-        ui->DXCCMult->setChecked(true);
-    }
     contestTransferObject->countryMult.setValue( ui->DXCCMult->isChecked() );   // bool
-    contestTransferObject->nonGCountryMult.setValue( ui->NonGCtryMult->isChecked() );   // bool
 
-    if (ui->GLocMult->isChecked() || ui->M7LocatorMults->isChecked())
-    {
-        ui->LocatorMult->setChecked(true);
-    }
 
     contestTransferObject->locMult.setValue( ui->LocatorMult->isChecked() ) ;   // bool
-    contestTransferObject->GLocMult.setValue( ui->GLocMult->isChecked() ) ;   // bool
-    contestTransferObject->M7Mults.setValue( ui->M7LocatorMults->isChecked() ) ;   // bool
     contestTransferObject->usesBonus.setValue(ui->BonusComboBox->currentIndex() > btNone);
 
     if (contestTransferObject->usesBonus.getValue())
@@ -1570,39 +1372,15 @@ QWidget * ContestDetails::getDetails( )
         contestTransferObject->bonusType.setValue("");
     }
 
-    if (contestTransferObject->M7Mults.getValue())
+    if (contestTransferObject->locMult.getValue())
     {
-        contestTransferObject->UKloc_mult = true;
-        contestTransferObject->NonUKloc_mult = true;
-        contestTransferObject->UKloc_multiplier = 2;
-        contestTransferObject->NonUKloc_multiplier = 1;
+        contestTransferObject->loc_multiplier = 1;
     }
     else
     {
-        if (contestTransferObject->locMult.getValue())
-        {
-            contestTransferObject->UKloc_mult = true;
-            contestTransferObject->UKloc_multiplier = 1;
-
-            if (contestTransferObject->GLocMult.getValue())
-            {
-                contestTransferObject->NonUKloc_mult = false;
-                contestTransferObject->NonUKloc_multiplier = 0;
-            }
-            else
-            {
-                contestTransferObject->NonUKloc_mult = true;
-                contestTransferObject->NonUKloc_multiplier = 1;
-            }
-        }
-        else
-        {
-            contestTransferObject->UKloc_mult = false;
-            contestTransferObject->NonUKloc_mult = false;
-            contestTransferObject->UKloc_multiplier = 0;
-            contestTransferObject->NonUKloc_multiplier = 0;
-        }
+        contestTransferObject->loc_multiplier = 0;
     }
+
     contestTransferObject->MGMContestRules.setValue(ui->MGMCheckBox->isChecked());
 
     if (ui->ProtectedOption->isChecked() && contestTransferObject->isProtected() && contestTransferObject->isProtectedSuppressed())
@@ -2012,25 +1790,6 @@ void ContestDetails::on_DXCCMult_clicked()
         return;
     }
     noMultRipple = true;
-    if (ui->DXCCMult->isChecked())
-    {
-       ui->NonGCtryMult->setChecked(false);
-    }
-    ui->BonusComboBox->setCurrentIndex(btNone);
-    noMultRipple = false;
-}
-
-void ContestDetails::on_NonGCtryMult_clicked()
-{
-    if (noMultRipple)
-    {
-        return;
-    }
-    noMultRipple = true;
-    if (ui->NonGCtryMult->isChecked())
-    {
-       ui->DXCCMult->setChecked(false);
-    }
     ui->BonusComboBox->setCurrentIndex(btNone);
     noMultRipple = false;
 }
@@ -2042,50 +1801,10 @@ void ContestDetails::on_LocatorMult_clicked()
         return;
     }
     noMultRipple = true;
-    if (!ui->LocatorMult->isChecked())
-    {
-
-       ui->GLocMult->setChecked(false);
-       ui->M7LocatorMults->setChecked(false);
-
-    }
     ui->BonusComboBox->setCurrentIndex(btNone);
     noMultRipple = false;
 }
 
-void ContestDetails::on_GLocMult_clicked()
-{
-    if (noMultRipple)
-    {
-        return;
-    }
-    noMultRipple = true;
-    if (ui->GLocMult->isChecked())
-    {
-       ui->LocatorMult->setChecked(true);
-       ui->M7LocatorMults->setChecked(false);
-    }
-    ui->BonusComboBox->setCurrentIndex(btNone);
-    noMultRipple = false;
-}
-
-void ContestDetails::on_M7LocatorMults_clicked()
-{
-    if (noMultRipple)
-    {
-        return;
-    }
-    noMultRipple = true;
-    if (ui->M7LocatorMults->isChecked())
-    {
-       ui->LocatorMult->setChecked(true);
-       ui->GLocMult->setChecked(false);
-       ui->NonGCtryMult->setChecked(false);
-       ui->DXCCMult->setChecked(false);
-    }
-    ui->BonusComboBox->setCurrentIndex(btNone);
-    noMultRipple = false;
-}
 void ContestDetails::on_BonusComboBox_currentIndexChanged(int /*index*/)
 {
     if (noMultRipple)
@@ -2094,11 +1813,7 @@ void ContestDetails::on_BonusComboBox_currentIndexChanged(int /*index*/)
     }
     noMultRipple = true;
     ui->LocatorMult->setChecked(false);
-    ui->GLocMult->setChecked(false);
-    ui->NonGCtryMult->setChecked(false);
     ui->DXCCMult->setChecked(false);
-    ui->M7LocatorMults->setChecked(false);
-//    ui->MGMCheckBox->setChecked(false);  // bonus doesn't preclude MGM
     noMultRipple = false;
 }
 

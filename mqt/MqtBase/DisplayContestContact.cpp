@@ -133,9 +133,8 @@ void DisplayContestContact::copyFromArg( ScreenContact &cct )
    op1.setValue( cct.op1 );
    op2.setValue( cct.op2 );
 
-   locCount = cct.locCount;
-   newGLoc = cct.newGLoc;
-   newNonGLoc = cct.newNonGLoc;
+   locMultCount = cct.locMultCount;
+   newLoc = cct.newLoc;
    newDistrict = cct.newDistrict;
    newCtry = cct.newCtry;
 
@@ -234,9 +233,8 @@ int DisplayContestContact::checkContact(bool adddup)
     multCount = 0;
     newDistrict = false;
     newCtry = false;
-    locCount = 0;
-    newGLoc = false;
-    newNonGLoc = false;
+    locMultCount = 0;
+    newLoc = false;
     locBonus = 0;
     countryBonus = 0;
     distBonus = 0;
@@ -259,7 +257,7 @@ int DisplayContestContact::checkContact(bool adddup)
             multCount++;
          }
          newDistrict = true;
-         if (newDistrict && contest->usesBonus.getValue())
+         if (contest->usesBonus.getValue())
          {
              distBonus = contest->getDistBonus(districtMult->districtCode);
              if (distBonus > 0)
@@ -277,26 +275,21 @@ int DisplayContestContact::checkContact(bool adddup)
        int n = clp->getCountriesWorked(band, ctryMult->getBasePrefix());
        if ( n == 1 )
        {
-           // nonGCountryMult says M6 - non UK countries only
-           // since M6 died, always false
-           if (!clp->nonGCountryMult.getValue() || !cs.isUK())
-           {
-              clp->nctry[band]++;   // DXCC mults
-              if ( clp->countryMult.getValue() )
+            clp->nctry[band]++;   // DXCC mults
+            if ( clp->countryMult.getValue() )
+            {
+              multCount++;
+            }
+            newCtry = true;
+            if (contest->usesBonus.getValue())
+            {
+              countryBonus = contest->getCountryBonus(ctryMult->getBasePrefix());
+              if (countryBonus > 0)
               {
-                  multCount++;
+                  clp->bonus[band] += countryBonus;
+                  newBonus++;
               }
-              newCtry = true;
-              if (newCtry && contest->usesBonus.getValue())
-              {
-                  countryBonus = contest->getCountryBonus(ctryMult->getBasePrefix());
-                  if (countryBonus > 0)
-                  {
-                      clp->bonus[band] += countryBonus;
-                      newBonus++;
-                  }
-              }
-           }
+            }
        }
    }
 
@@ -383,63 +376,28 @@ int DisplayContestContact::checkContact(bool adddup)
       int oldMultCount = multCount;
       if ( ls )
       {
-         bool UKcall = cs.isUK();
          LocCount * npt = ls->map ( numbers );
-         if ( npt )
+         if ( npt && npt->locCount == 0 )
          {
             if (clp->usesBonus.getValue())
             {
-               if (npt->UKLocCount == 0 &&  npt->nonUKLocCount == 0)
-               {
-                  locBonus = clp->getSquareBonus(sloc);
+              locBonus = clp->getSquareBonus(sloc);
 
-                   if (locBonus > 0)
-                   {
-                      clp->bonus[band] += locBonus;
-                      newBonus++;
-                   }
+               if (locBonus > 0)
+               {
+                  clp->bonus[band] += locBonus;
+                  newBonus++;
                }
             }
 
-            // but we set uk/non uk mult value to zero...
-            if (UKcall)
-            {
-               if (!npt->UKMultGiven)
-               {
-                  npt->UKMultGiven = true;
-                  newGLoc = true;
-                  if (npt->UKLocCount + npt->nonUKLocCount == 0)
-                  {
-                     // hasn't been worked at all
-                     clp->nlocs[band] += 1;
-                     multCount += clp->UKloc_multiplier;
-                  }
-                  else
-                  {
-                     // has already been worked - must have been non-uk, so that
-                     // bit of the mult has already happened.
-                     //clp->nlocs += clp->UKloc_multiplier - clp->NonUKloc_multiplier;
-                     multCount += clp->UKloc_multiplier - clp->NonUKloc_multiplier;
-                  }
-               }
-               npt->UKLocCount++;
-            }
-            else
-            {
-               if ( npt->UKLocCount + npt->nonUKLocCount == 0 )
-               {
-                  clp->nlocs[band] += 1;
-                  multCount += clp->NonUKloc_multiplier;
-               }
-               if (npt->nonUKLocCount == 0)
-               {
-                  newNonGLoc = true;
-               }
-               npt->nonUKLocCount++;
-            }
+            clp->nlocs[band] += 1;
+            multCount += clp->loc_multiplier;
+            newLoc = true;
+
+            npt->locCount++;
          }
       }
-      locCount = multCount - oldMultCount;
+      locMultCount = multCount - oldMultCount;
    }
    return checkret;
 }

@@ -110,9 +110,7 @@ void MinosTestExport::exportContest( QSharedPointer<QFile> expfd )
    ct->districtMult.addIfDirty( st, "districtMult", dirty );
    ct->districtBonus.addIfDirty( st, "districtBonus", dirty );
    ct->countryMult.addIfDirty( st, "DXCCMult", dirty );
-   ct->nonGCountryMult.addIfDirty( st, "NonGCtryMult", dirty );
    ct->locMult.addIfDirty( st, "locMult", dirty );
-   ct->GLocMult.addIfDirty( st, "GLocMult", dirty );
    ct->exchangeRequired.addIfDirty( st, "QTHReq", dirty );
    ct->exchangeDashAllowed.addIfDirty( st, "QTHOpt", dirty );
    ct->otherMult.addIfDirty(st, "OtherMultType", dirty);
@@ -126,7 +124,6 @@ void MinosTestExport::exportContest( QSharedPointer<QFile> expfd )
    ct->serialMandatoryField.addIfDirty(st, "serialField", dirty);
    ct->locatorMandatoryField.addIfDirty(st, "locatorField", dirty);
 
-   ct->M7Mults.addIfDirty( st, "M7Mults", dirty );
    ct->usesBonus.addIfDirty( st, "UKACBonus", dirty );
    ct->bonusType.addIfDirty( st, "BonusType", dirty );
    ct->MGMContestRules.addIfDirty(st, "MGMContestRules", dirty);

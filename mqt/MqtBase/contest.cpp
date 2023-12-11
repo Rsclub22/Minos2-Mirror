@@ -52,14 +52,11 @@ BaseContestLog::BaseContestLog(bool hf)
   exchangeRequired.setValue( false );
   exchangeDashAllowed.setValue( false );
   countryMult.setValue( false );
-  nonGCountryMult.setValue( false );
   districtMult.setValue( false );
   districtBonus.setValue( false );
   locMult.setValue( false );
-  GLocMult.setValue(false);
   otherMult.setValue(0);
   asymmetricMult.setValue(false);
-  M7Mults.setValue(false);
   usesBonus.setValue(false);
   scoreMode.setValue( PPKM );
   powerWatts.setValue( true );
@@ -300,15 +297,12 @@ void BaseContestLog::clearDirty()
    exchangeRequired.clearDirty();
    exchangeDashAllowed.clearDirty();
    countryMult.clearDirty();
-   nonGCountryMult.clearDirty();
    locMult.clearDirty();
-   GLocMult.clearDirty();
    districtMult.clearDirty();
    districtBonus.clearDirty();
    otherMult.clearDirty();
    asymmetricMult.clearDirty();
 
-   M7Mults.clearDirty();
    usesBonus.clearDirty();
    bonusType.clearDirty();
    MGMContestRules.clearDirty();
@@ -349,15 +343,12 @@ void BaseContestLog::setDirty()
    exchangeRequired.setDirty();
    exchangeDashAllowed.setDirty();
    countryMult.setDirty();
-   nonGCountryMult.setDirty();
    locMult.setDirty();
-   GLocMult.setDirty();
    districtMult.setDirty();
    districtBonus.setDirty();
    otherMult.setDirty();
    asymmetricMult.setDirty();
 
-   M7Mults.setDirty();
    usesBonus.setDirty();
    bonusType.setDirty();
    MGMContestRules.setDirty();
@@ -1016,8 +1007,6 @@ void BaseContestLog::getScoresTo(ContestScore &cs, QDateTime limit)
    cs.nctry = 0;
    cs.ndistrict = 0;
    cs.nlocs = 0;
-   cs.nGlocs = 0;
-   cs.nonGlocs = 0;
    cs.nqsos = 0;
    cs.contestScore = 0;
    cs.bonus = 0;
@@ -1052,15 +1041,7 @@ void BaseContestLog::getScoresTo(ContestScore &cs, QDateTime limit)
       {
          if ( locatorMandatoryField.getValue())
          {
-             cs.nlocs += (nct->newGLoc || nct->newNonGLoc)?1:0;
-             if (nct->newGLoc)
-             {
-                cs.nGlocs++;
-             }
-             else if ((nct->newNonGLoc))
-             {
-                cs.nonGlocs++;
-             }
+             cs.nlocs += (nct->newLoc?1:0);
          }
          int cscore = nct->contactScore.getValue();
          switch ( scoreMode.getValue() )
@@ -1534,12 +1515,10 @@ void BaseContestLog::processMinosStanza( const QString &methodName, MinosTestImp
       mt->getStructArgMemberValue( "districtMult", districtMult );
       mt->getStructArgMemberValue( "districtBonus", districtBonus );
       mt->getStructArgMemberValue( "DXCCMult", countryMult );
-      mt->getStructArgMemberValue( "NonGCtryMult", nonGCountryMult );
       mt->getStructArgMemberValue( "locMult", locMult );
       mt->getStructArgMemberValue( "OtherMultType", otherMult);
       mt->getStructArgMemberValue( "AsymmetricMult", asymmetricMult);
 
-      mt->getStructArgMemberValue( "GLocMult", GLocMult );
       mt->getStructArgMemberValue( "QTHReq", exchangeRequired );
       mt->getStructArgMemberValue( "QTHOpt", exchangeDashAllowed );
       if (exchangeDashAllowed.getValue())
@@ -1575,44 +1554,22 @@ void BaseContestLog::processMinosStanza( const QString &methodName, MinosTestImp
       if (usesBonus.getValue())
       {
           if (bonusType.getValue().isEmpty())
+          {
               bonusType.setValue("B4"); // cope with old Minos files
+          }
           loadBonusList();
       }
-      mt->getStructArgMemberValue( "M7Mults", M7Mults);
 
-      if ( M7Mults.getValue())
-      {
-         NonUKloc_mult = true;
-         NonUKloc_multiplier = 1;
-         UKloc_mult = true;
-         UKloc_multiplier = 2;
-      }
-      else
-      {
-         if (locMult.getValue())
-         {
-            UKloc_multiplier = 1;
-            UKloc_mult = true;
-            if (GLocMult.getValue())
-            {
-               NonUKloc_multiplier = 0;
-               NonUKloc_mult = false;
-            }
-            else
-            {
-               NonUKloc_multiplier = 1;
-               NonUKloc_mult = true;
-            }
-         }
-         else
-         {
-            UKloc_multiplier = 0;
-            UKloc_mult = false;
-            NonUKloc_multiplier = 0;
-            NonUKloc_mult = false;
-         }
-      }
-      mt->getStructArgMemberValue("MGMContestRules", MGMContestRules);
+     if (locMult.getValue())
+     {
+        loc_multiplier = 1;
+     }
+     else
+     {
+        loc_multiplier = 0;
+     }
+
+     mt->getStructArgMemberValue("MGMContestRules", MGMContestRules);
    }
    else
       if ( methodName == "MinosLogMode" )

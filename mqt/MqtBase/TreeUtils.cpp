@@ -122,7 +122,7 @@ QVariant QSOGridModel::data( const QModelIndex &index, int role ) const
                  }
                  break;
               case egLoc:
-                 if ( contest->locMult.getValue() && ct->locCount > 0)
+                  if ( contest->locMult.getValue() && ct->locMultCount > 0)
                  {
                      setHighlight = true;
                  }

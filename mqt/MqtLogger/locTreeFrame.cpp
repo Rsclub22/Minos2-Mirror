@@ -67,7 +67,7 @@ void LocTreeFrame::reInitialiseLocators()
                 LocCount *lc = l ->map( j * 10 + i );
                 QString disp = QString("%1").arg(j * 10 + i, 2, 10, QChar('0'));
 
-                if ( lc && (lc->UKLocCount || lc->nonUKLocCount))
+                if ( lc && (lc->locCount))
                 {
                     if (ct->usesBonus.getValue())
                     {
@@ -77,13 +77,11 @@ void LocTreeFrame::reInitialiseLocators()
                             multhighlight = Qt::blue;
                         }
 
-                        dispLine += HtmlFontColour(multhighlight) + "<b>" + disp + "</b>" + " (" + QString::number(lc->UKLocCount + lc->nonUKLocCount) + ") ";
+                        dispLine += HtmlFontColour(multhighlight) + "<b>" + disp + "</b>" + " (" + QString::number(lc->locCount) + ") ";
                     }
                     else
                     {
-//                        dispLine += disp + " (" + QString::number(lc->UKLocCount)
-//                                    + (lc->nonUKLocCount?("/" + QString::number(lc->nonUKLocCount)):QString("")) + ") ";
-                        dispLine += disp + " (" + QString::number(lc->UKLocCount + lc->nonUKLocCount) + ") ";
+                        dispLine += disp + " (" + QString::number(lc->locCount) + ") ";
                     }
 
                 }

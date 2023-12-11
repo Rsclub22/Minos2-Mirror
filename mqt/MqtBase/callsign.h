@@ -45,8 +45,6 @@ class Callsign
           return ::qHash(realCall);
       }
 
-      bool isUK() const;
-
       int getValRes() const
       {
           return valRes;
