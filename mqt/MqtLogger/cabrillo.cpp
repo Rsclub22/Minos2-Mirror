@@ -345,7 +345,9 @@ bool Cabrillo::exportTest(QSharedPointer<QFile> expfd)
 
        if ( cct->contactScore.getValue() > 0 )
        {
-          bonus += cct->bonus;
+           bonus += cct->locBonus;
+           bonus += cct->distBonus;
+           bonus += cct->countryBonus;
        }
     }
 

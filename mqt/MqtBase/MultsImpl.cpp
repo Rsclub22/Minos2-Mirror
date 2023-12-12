@@ -802,9 +802,7 @@ void LocSquare::clear( )
    for ( int i = 0; i < 10; i++ )
       for ( int j = 0; j < 10; j++ )
       {
-         numbers[ i ][ j ].UKMultGiven = false;
-         numbers[ i ][ j ].UKLocCount = 0;
-         numbers[ i ][ j ].nonUKLocCount = 0;
+         numbers[ i ][ j ].locCount = 0;
       }
 }
 bool LocSquare::isClear()
@@ -813,9 +811,7 @@ bool LocSquare::isClear()
     {
        for ( int j = 0; j < 10; j++ )
        {
-          if (numbers[ i ][ j ].UKLocCount > 0)
-              return false;
-          if (numbers[ i ][ j ].nonUKLocCount > 0)
+          if (numbers[ i ][ j ].locCount > 0)
               return false;
        }
     }
@@ -948,22 +944,6 @@ QString MultListsImpl::getCtryListText( const QString &item, int Column, BaseCon
 QString MultListsImpl::getDistListText(const QString &item, int Column, BaseContestLog *const ct, const QString &band )
 {
    return distList.getText( item, Column, ct, band );
-}
-bool MultListsImpl::isUKprefix(const Callsign &cs)
-{
-   QSharedPointer<CountryEntry> ctry = findCtryPrefix( cs );
-   if (!ctry)
-   {
-      return false;
-   }
-   for ( auto &dc: qAsConst(GlistList::distCounts) )
-   {
-       if ( ctry->getBasePrefix().compare( dc.prefix, Qt::CaseSensitive ) == 0 )
-       {
-           return true;
-       }
-   }
-    return false;
 }
 
 int MultListsImpl::getDistWorked(const QString & item, BaseContestLog * const ct, const QString &band)

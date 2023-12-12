@@ -117,9 +117,8 @@ void ScreenContact::initialise(BaseContestLog *ct , bool rInit)
     QSOValid = false;
     newCtry = false;
     newDistrict = false;
-    locCount = 0 ;
-    newGLoc = false ;
-    newNonGLoc = false ;
+    locMultCount = 0 ;
+    newLoc = false ;
     op1 = "" ;
     op2 = "" ;
 
@@ -130,8 +129,10 @@ void ScreenContact::initialise(BaseContestLog *ct , bool rInit)
     bearing = 0;
 
     multCount = 0;
-    bonus = 0;
-    newBonus = false;
+    locBonus = 0;
+    distBonus = 0;
+    countryBonus = 0;
+    newBonus = 0;
     cqResponse = false;
 
 }
@@ -167,15 +168,16 @@ void ScreenContact::copyFromArg( QSharedPointer<BaseContact> cct )
     markOffset = cct->markOffset;
     rotatorHeading = cct->rotatorHeading.getValue();
     rigName = cct->rigName.getValue();
-    bonus = cct->bonus;
+    locBonus = cct->locBonus;
+    countryBonus = cct->countryBonus;
+    distBonus = cct->distBonus;
     newBonus = cct->newBonus;
 
     op1 = cct->op1.getValue();
     op2 = cct->op2.getValue();
 
-    locCount = cct->locCount;
-    newGLoc = cct->newGLoc;
-    newNonGLoc = cct->newNonGLoc;
+    locMultCount = cct->locMultCount;
+    newLoc = cct->newLoc;
     newDistrict = cct->newDistrict;
     newCtry = cct->newCtry;
 
@@ -221,15 +223,16 @@ void ScreenContact::copyFromArg( ScreenContact &cct )
     markOffset = cct.markOffset;
     rotatorHeading = cct.rotatorHeading;
     rigName = cct.rigName;
-    bonus = cct.bonus;
+    locBonus = cct.locBonus;
+    distBonus = cct.distBonus;
+    countryBonus = cct.countryBonus;
     newBonus = cct.newBonus;
 
     op1 = cct.op1;
     op2 = cct.op2;
 
-    locCount = cct.locCount;
-    newGLoc = cct.newGLoc;
-    newNonGLoc = cct.newNonGLoc;
+    locMultCount = cct.locMultCount;
+    newLoc = cct.newLoc;
     newDistrict = cct.newDistrict;
     newCtry = cct.newCtry;
 
@@ -250,11 +253,12 @@ void ScreenContact::checkScreenContact( )
     multCount = 0;
     newDistrict = false;
     newCtry = false;
-    locCount = 0;
-    newGLoc = false;
-    newNonGLoc = false;
-    bonus = 0;
-    newBonus = false;
+    locMultCount = 0;
+    newLoc = false;
+    locBonus = 0;
+    distBonus = 0;
+    countryBonus = 0;
+    newBonus = 0;
 
     score();
 
@@ -290,6 +294,16 @@ void ScreenContact::score()
                     multCount++;
                 }
                 newDistrict = true;
+                if (newDistrict && contest->usesBonus.getValue())
+                {
+                    int db = contest->getDistBonus(districtMult->districtCode);
+                    if (db)
+                    {
+                        distBonus += db;
+                        newBonus++;
+                    }
+                }
+
            }
        }
 
@@ -298,14 +312,20 @@ void ScreenContact::score()
             int n = contest->getCountriesWorked(band, ctryMult->getBasePrefix());
             if ( n == 0 )
             {
-                if (!contest->nonGCountryMult.getValue() || !cs.isUK())
-                {
-                   if ( contest->countryMult.getValue() )
+               if ( contest->countryMult.getValue() )
+               {
+                   multCount++;
+               }
+               newCtry = true;
+               if (newCtry && contest->usesBonus.getValue())
+               {
+                   int cb = contest->getCountryBonus(ctryMult->getBasePrefix());
+                   if (cb)
                    {
-                       multCount++;
+                       countryBonus += cb;
+                       newBonus++;
                    }
-                   newCtry = true;
-                }
+               }
             }
         }
 
@@ -392,50 +412,24 @@ void ScreenContact::score()
            int oldMultCount = multCount;
            if ( ls )
            {
-              bool UKcall = cs.isUK();
               LocCount * npt = ls->map ( numbers );
-              if ( npt )
+              if ( npt && npt->locCount == 0)
               {
                  if (contest->usesBonus.getValue())
                  {
-                    if (npt->UKLocCount == 0 &&  npt->nonUKLocCount == 0)
+                    int lb = contest->getSquareBonus(sloc);
+                    if (lb)
                     {
-                       bonus += contest->getSquareBonus(sloc);
-                       newBonus = true;
+                        locBonus += lb;
+                        newBonus++;
                     }
                  }
-                 if (UKcall)
-                 {
-                    if (!npt->UKMultGiven)
-                    {
-                       newGLoc = true;
-                       if (npt->UKLocCount + npt->nonUKLocCount == 0)
-                       {
-                          // hasn't been worked at all
-                          multCount += contest->UKloc_multiplier;
-                       }
-                       else
-                       {
-                          // has already been worked - must have been non-uk, so that
-                          // bit of the mult has already happened.
-                          multCount += contest->UKloc_multiplier - contest->NonUKloc_multiplier;
-                       }
-                    }
-                 }
-                 else
-                 {
-                    if ( npt->UKLocCount + npt->nonUKLocCount == 0 )
-                    {
-                       multCount += contest->NonUKloc_multiplier;
-                    }
-                    if (npt->nonUKLocCount == 0)
-                    {
-                       newNonGLoc = true;
-                    }
-                 }
+
+                 multCount += contest->loc_multiplier;  // will be 0 if no loc mults
+                 newLoc = true;
               }
            }
-           locCount = multCount - oldMultCount;
+           locMultCount = multCount - oldMultCount;
         }
 
     }

@@ -94,14 +94,11 @@ private:
     MinosItem<bool> exchangeRequired;
     MinosItem<bool> exchangeDashAllowed;
     MinosItem<bool> countryMult;
-    MinosItem<bool> nonGCountryMult;
     MinosItem<bool> locMult;
-    MinosItem<bool> GLocMult;
     MinosItem<bool> districtMult;
+    MinosItem<bool> districtBonus;
     MinosItem<int>  otherMult;
     MinosItem<bool> asymmetricMult;
-
-    MinosItem<bool> M7Mults;
 
     MinosItem<bool> usesBonus;
     MinosStringItem<QString> bonusType;
@@ -131,10 +128,7 @@ private:
     QString opsQSO2;
 
     bool locValid = false;
-    bool NonUKloc_mult = false;
-    bool UKloc_mult = false;
-    int NonUKloc_multiplier = 0;
-    int UKloc_multiplier = 0;
+    int loc_multiplier = 0;
 
     bool ageProtected = false;
     bool suppressProtected = false;

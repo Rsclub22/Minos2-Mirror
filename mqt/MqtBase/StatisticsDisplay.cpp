@@ -415,7 +415,9 @@ void StatisticsDisplay::doRecalc()
             BandModeSlot &bms = contestSlots[sno].modesMap[band].modes[mode];
             bms.QSOs++;
             bms.points += c.wt->contactScore.getValue();
-            bms.bonus += c.wt->bonus;
+            bms.bonus += c.wt->locBonus;
+            bms.bonus += c.wt->distBonus;
+            bms.bonus += c.wt->countryBonus;
             bms.newMults += c.wt->multCount;
             QString op = c.wt->op1.getValue();
             if (!bms.ops.contains(op))

@@ -161,7 +161,7 @@ void QrzDisplayFrame::onLoggerQrzReply(QrzCallsignData cd, QString qrzReplyState
                 bearing = 0;
                 ct->calcDistanceBearing(cd.getQra(), &distance, &bearing);
 
-                ui->distanceText->setText(QString::number(distance));
+                ui->distanceText->setText(QString::number(static_cast<int>(distance)));
                 if (bearing >= 0 && bearing <= 360)
                 {
                     if (bearing == 360)
