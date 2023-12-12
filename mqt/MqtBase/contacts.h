@@ -106,13 +106,14 @@ public:
     // these are used in the derived classes
     bool newCtry = false;
     bool newDistrict = false;
-    int locCount = 0;  // was newLocs, now is mult from locs
-    bool newGLoc = false;
-    bool newNonGLoc = false;
+    int locMultCount = 0;  // was newLocs, now is mult from locs
+    bool newLoc = false;
 
-    char multCount = 0;
-    int bonus = 0;
-    bool newBonus = 0;
+    int multCount = 0;
+    int locBonus = 0;
+    int countryBonus = 0;
+    int distBonus = 0;
+    int newBonus = 0;
 
 
 protected:

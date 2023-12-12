@@ -201,10 +201,8 @@ public:
 class LocCount
 {
 public:
-    unsigned short UKLocCount;
-      unsigned short nonUKLocCount;
-      bool UKMultGiven;
-      LocCount():UKLocCount(0), nonUKLocCount(0), UKMultGiven(false){}
+    unsigned short locCount;
+      LocCount():locCount(0){}
 };
 class LocSquare
 {
@@ -253,7 +251,6 @@ class MultLists
       virtual QSharedPointer<CountryEntry> getCtryForPrefix( const QString &forcedMult ) = 0;
       virtual QString getCtryListText( const QString & item, int Column, BaseContestLog *const ct, const QString &band ) = 0;
       virtual QString getDistListText( const QString & item, int Column, BaseContestLog *const ct, const QString &band ) = 0;
-      virtual bool isUKprefix(const Callsign &cs) = 0;
       virtual int getDistWorked(const QString & item, BaseContestLog *const ct, const QString &band ) = 0;
       virtual int getCountryWorked(const QString & item, BaseContestLog *const ct, const QString &band ) = 0;
 

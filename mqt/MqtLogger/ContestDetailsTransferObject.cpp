@@ -142,14 +142,11 @@ void ContestDetailsTransferObject::getFromContest(LoggerContestLog *ct)
     exchangeRequired = ct->exchangeRequired;
     exchangeDashAllowed = ct->exchangeDashAllowed;
     countryMult = ct->countryMult;
-    nonGCountryMult = ct->nonGCountryMult;
     locMult = ct->locMult;
-    GLocMult = ct->GLocMult;
     districtMult = ct->districtMult;
+    districtBonus = ct->districtBonus;
     otherMult = ct->otherMult;
     asymmetricMult = ct->asymmetricMult;
-
-    M7Mults = ct->M7Mults;
 
     usesBonus = ct->usesBonus;
     bonusType = ct->bonusType;
@@ -178,10 +175,7 @@ void ContestDetailsTransferObject::getFromContest(LoggerContestLog *ct)
     opsQSO2 = ct->opsQSO2;
 
     locValid = ct->locValid;
-    NonUKloc_mult = ct->NonUKloc_mult;
-    UKloc_mult = ct->UKloc_mult;
-    NonUKloc_multiplier = ct->NonUKloc_multiplier;
-    UKloc_multiplier = ct->UKloc_multiplier;
+    loc_multiplier = ct->loc_multiplier;
 
     suppressProtected = ct->suppressProtected;
     unwriteable = ct->unwriteable;
@@ -263,14 +257,11 @@ void ContestDetailsTransferObject::setToContest(LoggerContestLog *ct)
     ct->exchangeDashAllowed = exchangeDashAllowed;
     ct->exchangeRequired = exchangeRequired;
     ct->countryMult = countryMult;
-    ct->nonGCountryMult = nonGCountryMult;
     ct->locMult = locMult;
-    ct->GLocMult = GLocMult;
     ct->districtMult = districtMult;
+    ct->districtBonus = districtBonus;
     ct->otherMult = otherMult;
     ct->asymmetricMult = asymmetricMult;
-
-    ct->M7Mults = M7Mults;
 
     ct->usesBonus = usesBonus;
     ct->bonusType = bonusType;
@@ -299,10 +290,7 @@ void ContestDetailsTransferObject::setToContest(LoggerContestLog *ct)
     ct->opsQSO2 = opsQSO2;
 
     ct->locValid = locValid;
-    ct->NonUKloc_mult = NonUKloc_mult;
-    ct->UKloc_mult = UKloc_mult;
-    ct->NonUKloc_multiplier = NonUKloc_multiplier;
-    ct->UKloc_multiplier = UKloc_multiplier;
+    ct->loc_multiplier = loc_multiplier;
 
     ct->suppressProtected = suppressProtected;
     ct->unwriteable = unwriteable;

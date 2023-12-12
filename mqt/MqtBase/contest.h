@@ -175,14 +175,11 @@ class BaseContestLog: public BaseLogList
       MinosItem<bool> exchangeDashAllowed;    // but exchange is not mandatory
 
       MinosItem<bool> countryMult;              // DXCC mults
-      MinosItem<bool> nonGCountryMult;          // Non G country mults
       MinosItem<bool> locMult;                  // locator mults
-      MinosItem<bool> GLocMult;                 // G locs only mults
       MinosItem<bool> districtMult;             // postcodes
+      MinosItem<bool> districtBonus;
       MinosItem<int>  otherMult;                // type of "other" mult
       MinosItem<bool> asymmetricMult;            // TX S/N, RX serial or mult
-
-      MinosItem<bool> M7Mults;                  // loc mults, but more for G locs
 
       MinosItem<bool> usesBonus;
       MinosStringItem<QString> bonusType;
@@ -303,18 +300,19 @@ class BaseContestLog: public BaseLogList
       long contestScore = 0;
 
       bool locValid = false;
-      bool NonUKloc_mult = false;
-      bool UKloc_mult = false;
       bool bdummy = false;          // improve padding on Windows
-      int NonUKloc_multiplier = 0;
-      int UKloc_multiplier = 0;
+      int loc_multiplier = 0;
       
       int multsAsBonuses = 0;
       int bonusYearLoaded = 0;
       QString bonusTypeLoaded;
       QMap<QString, int> locBonuses;
+      QMap<QString, int> distBonuses;
+      QMap<QString, int> countryBonuses;
       void loadBonusList();
       int getSquareBonus(QString sloc) const;
+      int getCountryBonus(QString c) const;
+      int getDistBonus(QString d) const;
 
       int getDistrictsWorked( const QString &item );
       int getCountriesWorked( const QString &item );
@@ -329,7 +327,6 @@ class BaseContestLog: public BaseLogList
       QMap<QString, int > ndistrict;
       QMap<QString, int > nlocs;
 
-      QMap<QString, int > nbonus;
       QMap<QString, int>  bonus;
 
       int getValidQSOs();
@@ -429,8 +426,6 @@ class BaseContestLog: public BaseLogList
 
       int getNlocs() const;
 
-      int getNbonus() const;
-
       int getBonus() const;
 
       void getOpTime(QString &otBuff, SHOWOPERATINGTIME temp);
@@ -473,14 +468,13 @@ class ContestScore
 
       QString name;
       bool usesBonus;
+      QString bonusType;
 
       int nqsos;
       int contestScore;
       int nctry;
       int ndistrict;
       int nlocs;
-      int nGlocs;
-      int nonGlocs;
       int nmults;
       int bonus;
       int nbonus;

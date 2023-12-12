@@ -149,12 +149,12 @@ int CheckableContact::checkContact(bool adddup)
 
     unsigned short cf = contactFlags.getValue();
     cf &= ~UNKNOWN_COUNTRY;
-    if ( !checkret && ( contest->countryMult.getValue() || contest->districtMult.getValue() ) && !ctryMult )    // need at least a valid country
+    if ( !checkret && ( contest->countryMult.getValue() || contest->districtMult.getValue() || contest->districtBonus.getValue() ) && !ctryMult )    // need at least a valid country
     {
         cf |= UNKNOWN_COUNTRY;
     }
     contactFlags.setValue(cf);
-    if ( contest->districtMult.getValue() )
+    if ( contest->districtMult.getValue() ||contest->districtBonus.getValue())
     {
         // if CC_mult and country "has districts" search for the "extra" in the county synonym list
 

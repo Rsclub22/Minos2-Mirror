@@ -36,8 +36,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>905</width>
-        <height>768</height>
+        <width>888</width>
+        <height>767</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_24">
@@ -926,30 +926,9 @@ Score between 4 fig loc centres</string>
                </widget>
               </item>
               <item>
-               <widget class="QCheckBox" name="NonGCtryMult">
-                <property name="text">
-                 <string>Non UK Countries Only (M6)</string>
-                </property>
-               </widget>
-              </item>
-              <item>
                <widget class="QCheckBox" name="LocatorMult">
                 <property name="text">
                  <string>Locator Multiplier</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QCheckBox" name="GLocMult">
-                <property name="text">
-                 <string>UK Locs only (M5, M6)</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QCheckBox" name="M7LocatorMults">
-                <property name="text">
-                 <string>All locs; UK locs x2 (M7)</string>
                 </property>
                </widget>
               </item>

@@ -1134,7 +1134,9 @@ bool QSOLogFrame::dlgForced()
         if ( screenContact.contactFlags.getValue() & NON_SCORING )
         {
             screenContact.multCount = 0;
-            screenContact.bonus = 0;
+            screenContact.locBonus = 0;
+            screenContact.distBonus = 0;
+            screenContact.countryBonus = 0;
         }
 
         // if no dtg then autofill dtg
@@ -1863,7 +1865,7 @@ bool QSOLogFrame::validateControls( validTypes command )   // do control validat
                 }
                 setEditStyleSheet(vcp->wc, ss);
             }
-            else if (vcp == locIl && (screenContact.locCount > 0 || screenContact.newBonus))
+            else if (vcp == locIl && (screenContact.locMultCount > 0 || screenContact.newBonus))
             {
                 if (ss == ssLineEditFrRedBkWhite)
                 {
@@ -2172,7 +2174,7 @@ void QSOLogFrame::contactValid( )
             }
         }
     }
-   if ( contest->districtMult.getValue() && !vcct->QSOValid )
+    if ( (contest->districtMult.getValue() || contest->districtBonus.getValue()) && !vcct->QSOValid )
     {
         // no district when required
         // No CS means we should go to QTH, as its likely to be needed
@@ -2186,7 +2188,7 @@ void QSOLogFrame::contactValid( )
     else
         if ( contest->exchangeRequired .getValue())
         {
-            if (!contest->districtMult.getValue())
+            if (!(contest->districtMult.getValue() || contest->districtBonus.getValue()))
             {
                 QString extra = vcct->extraText.getValue();
                 if ( vcct->extraText.getValue().size() == 0 )
