@@ -1016,6 +1016,7 @@ void ContestDetails::setDetails( const IndividualContest &ic )
 
    setExchangeComboBox();
 
+   ui->DXCCMult->setChecked(contestTransferObject->countryMult.getValue()) ;
    ui->LocatorMult->setChecked(contestTransferObject->locMult.getValue()) ;
 
    bool UKACBonus = contestTransferObject->usesBonus.getValue();
