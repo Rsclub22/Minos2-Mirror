@@ -420,6 +420,7 @@ void TSingleLogFrame::clearScreenLayout(bool clearAllTabs)
     // clear down the screen elements, but don't delete them (except for the aux frames) - they will be used to rebuild the screen
     // BUT on contest creation, the contest address may change, so clear the contest
 
+    inClearScreenLayout = true; // stop cutils saving headers
     LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( getContest() );
     QString msg;
     if (ct != nullptr)
@@ -554,6 +555,7 @@ void TSingleLogFrame::clearScreenLayout(bool clearAllTabs)
             }
         }
     }
+    inClearScreenLayout = false;
     traceMsg("clearScreenLayout complete for " + msg);
 }
 void TSingleLogFrame::applyScreenLayout()
@@ -1109,8 +1111,9 @@ void TSingleLogFrame::saveQSOTableColumns()
     }
 }
 
-void TSingleLogFrame::on_sectionResized(int, int, int)
+void TSingleLogFrame::on_sectionResized(int a, int b, int c)
 {
+    trace(QString("TSingleLogFrame::on_sectionResized %1 %2 %3").arg(a).arg(b).arg(c));
     saveQSOTableColumns();
 }
 
@@ -1141,10 +1144,12 @@ void TSingleLogFrame::viewColumn()
             resetHeaderColumns(fname, "QSOTable", curScreenLayout, QSOTable->horizontalHeader());
         }
     }
+    trace("TSingleLogFrame::viewColumn()");
     saveQSOTableColumns();
 }
 void TSingleLogFrame::onQSOGrid_sectionMoved(int, int, int)
 {
+    trace("TSingleLogFrame::onQSOGrid_sectionMoved");
     saveQSOTableColumns();
 }
 
@@ -1230,6 +1235,7 @@ void TSingleLogFrame::on_ContestPageChanged ()
 }
 void TSingleLogFrame::on_doColumnChanges(BaseContestLog *b)
 {
+    trace("TSingleLogFrame::on_doColumnChanges");
     if (b == contest)
     {
         startNextEntry();             // (on_doColumnChanges) this does a restorePartial
