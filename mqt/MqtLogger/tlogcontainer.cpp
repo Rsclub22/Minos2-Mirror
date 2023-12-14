@@ -773,9 +773,21 @@ void TLogContainer::clearMenus()
     {
         i.key()->deleteLater();
     }
+    for(QVector<QAction *>::iterator i = recentFileActs.begin(); i != recentFileActs.end(); i++)
+    {
+        (*i)->deleteLater();
+    }
+    for(QVector<QAction *>::iterator i = sessionActs.begin(); i != sessionActs.end(); i++)
+    {
+        (*i)->deleteLater();
+    }
+    ui->menuLogs->clear();
+    menuLogsActions.clear();
 
     menuList.clear();
     actionList.clear();
+    recentFileActs.clear();
+    sessionActs.clear();
 
 }
 
