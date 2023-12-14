@@ -92,8 +92,7 @@ public:
 
     void refreshMults();
 
-    bool columnsChanged;
-
+    bool columnsChanged = false;
     // From rigcontrol
     Frequency sCurFreq;
     Frequency sSavedCurFreq;

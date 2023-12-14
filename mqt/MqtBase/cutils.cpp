@@ -28,6 +28,8 @@ char diskBuffer[ bsize + 1 ];
 //char *lbuff = &diskBuffer[ 0 ];
 int buffpt = 0;
 
+bool inClearScreenLayout = false;
+
 void clearBuffer( )
 {
    memset( diskBuffer, '#', bsize );
@@ -635,7 +637,12 @@ bool isPureNumeric ( const QString &s )
 }
 void saveHeaderColumns(QString fileName, QString tableName, QString layoutName, QHeaderView *hdr)
 {
- //   trace(QString("saveHeaderColumns %1").arg(layoutName));
+    trace(QString("saveHeaderColumns %1 table %2").arg(layoutName,tableName));
+    if ( inClearScreenLayout)
+    {
+        trace("Ignoring as in clearScreenLayout");
+        return;
+    }
     QString hLine;
     for (int i = 0; i < hdr->count(); i++)
     {
@@ -653,8 +660,11 @@ void saveHeaderColumns(QString fileName, QString tableName, QString layoutName, 
     Qt::SortOrder so = hdr->sortIndicatorOrder();
     hLine += QString(";%1,%2").arg(sort).arg(so);
 
+    trace(QString("saveHeaderColumns %1 line %2").arg(tableName, hLine));
+
     QSettings hdrSettings(fileName, QSettings::IniFormat);
     hdrSettings.setValue(tableName + "/" + layoutName + "_" + "state", hLine);
+    hdrSettings.sync();
 }
 class HdrCol
 {
@@ -668,6 +678,7 @@ public:
 
 void setHeaderColumns(QString hLine, QHeaderView *hdr)
 {
+    trace(QString("setHeaderColumns %1").arg(hLine));
     QVector<HdrCol> hdrs;
     int sort = 0;
     int sortOrder = Qt::AscendingOrder;
@@ -718,7 +729,7 @@ void setHeaderColumns(QString hLine, QHeaderView *hdr)
         }
         else
         {
-            hdr->resizeSection(h.logPos, 100);
+            hdr->resizeSection(h.logPos, 101);
         }
         hdr->moveSection(hdr->visualIndex(h.logPos), h.visPos);
     }
@@ -730,7 +741,7 @@ void setHeaderColumns(QString hLine, QHeaderView *hdr)
 }
 void restoreHeaderColumns(QString fileName, QString tableName, QString layoutName, QHeaderView *hdr)
 {
-//    trace(QString("restoreHeaderColumns %1").arg(layoutName));
+    trace(QString("restoreHeaderColumns %1 table %2").arg(layoutName, tableName));
     QSettings hdrSettings(fileName, QSettings::IniFormat);
     QString hLine = hdrSettings.value(tableName + "/" + layoutName + "_" + "state", "").toString();
 
@@ -740,12 +751,13 @@ void restoreHeaderColumns(QString fileName, QString tableName, QString layoutNam
         return;
     }
 
+    trace(QString("setHeaderColumns (in restore) %1 table %2").arg(layoutName, tableName));
     setHeaderColumns(hLine, hdr);
 
 }
 void resetHeaderColumns(QString fileName, QString tableName, QString layoutName, QHeaderView *hdr)
 {
-//    trace(QString("resetHeaderColumns %1").arg(layoutName));
+    trace(QString("resetHeaderColumns %1 table %2").arg(layoutName, tableName));
     QSettings hdrSettings(fileName, QSettings::IniFormat);
     hdrSettings.setValue(tableName + "/" + layoutName + "_" + "state", "");
 
@@ -766,6 +778,7 @@ void resetHeaderColumns(QString fileName, QString tableName, QString layoutName,
     Qt::SortOrder so = Qt::AscendingOrder;
     hLine += QString(";%1,%2").arg(sort).arg(so);
 
+    trace(QString("setHeaderColumns (in reset) %1 table %2").arg(layoutName).arg(tableName));
     setHeaderColumns(hLine, hdr);
 }
 void popupColumnsMenu(QMenu &menu, const QPoint &globalPos, QHeaderView *hdr)
