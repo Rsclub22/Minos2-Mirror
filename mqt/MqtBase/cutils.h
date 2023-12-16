@@ -130,7 +130,7 @@ QString anchoredPattern(const QString &expression);
 void adjustMargins(QLayout *layout, int ls, int cml, int cmt, int cmr, int cmb);
 bool isPureNumeric ( const QString &s );
 
-extern bool inClearScreenLayout;
+extern bool suppressSaveHeaders;
 
 void saveHeaderColumns(QString fn, QString tname, QString lname, QHeaderView *h);
 void setHeaderColumns(QString hLine, QHeaderView *hdr);

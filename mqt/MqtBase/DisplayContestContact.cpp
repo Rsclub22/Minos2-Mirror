@@ -6,7 +6,7 @@
 // COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2008
 //
 /////////////////////////////////////////////////////////////////////////////
-#include "TreeUtils.h"
+#include "qsogridmodel.h"
 #include "cutils.h"
 #include "contest.h"
 #include "MinosTestImport.h"

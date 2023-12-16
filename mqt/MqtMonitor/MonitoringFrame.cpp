@@ -107,8 +107,8 @@ void MonitoringFrame::initialise( BaseContestLog * pcontest )
 
    QSharedPointer<HtmlDelegate> delegate(new HtmlDelegate(1.0, 1.0));
    qsoModel.delegate = delegate;
-
-   qsoModel.initialise(contest);
+   
+   qsoModel.setContest(contest);
 
    ui->QSOTable->setModel(&qsoModel);
    ui->QSOTable->setItemDelegate( delegate.data() );

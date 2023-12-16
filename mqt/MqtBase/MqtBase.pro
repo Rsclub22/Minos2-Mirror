@@ -30,6 +30,7 @@ SOURCES += \
     BandList.cpp \
     CacheSelection.cpp \
     ConfigurationOption.cpp \
+    GridColumn.cpp \
     MonitorTreeModel.cpp \
     MonitoredContestLog.cpp \
     MonitoredLog.cpp \
@@ -87,6 +88,7 @@ SOURCES += \
     qlogtabwidget.cpp \
     qmlcpplink.cpp \
     qrzServerCommon.cpp \
+    qsogridmodel.cpp \
     qsomapframe.cpp \
     RigCache.cpp \
     remotelogs.cpp \
@@ -100,7 +102,6 @@ SOURCES += \
     rotpresetdialog.cpp \
     ScreenContact.cpp \
     StartConfig.cpp \
-    TreeUtils.cpp \
     serialdata.cpp \
     serialtvswitch.cpp \
     spotbasedata.cpp \
@@ -123,6 +124,7 @@ HEADERS += \
     AntennaState.h \
     BandList.h \
     ConfigurationOption.h \
+    GridColumn.h \
     MonitorTreeModel.h \
     MonitoredContestLog.h \
     MonitoredLog.h \
@@ -181,6 +183,7 @@ HEADERS += \
     profiles.h \
     qlogtabwidget.h \
     qmlcpplink.h \
+    qsogridmodel.h \
     qsomapframe.h \
     RigCache.h \
     qrzServerCommon.h \
@@ -196,7 +199,6 @@ HEADERS += \
     rotpresetdialog.h \
     ScreenContact.h \
     StartConfig.h \
-    TreeUtils.h \
     serialdata.h \
     serialtvswitch.h \
     spotbasedata.h \

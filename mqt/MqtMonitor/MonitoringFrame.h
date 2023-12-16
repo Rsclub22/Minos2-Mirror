@@ -2,7 +2,7 @@
 #define MONITORINGFRAME_H
 
 #include <QFrame>
-#include "TreeUtils.h"
+#include "qsogridmodel.h"
 #include "qmenu.h"
 
 namespace Ui {

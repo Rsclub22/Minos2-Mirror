@@ -2083,10 +2083,6 @@ bool RigControlFrame::checkFreqOK(const Frequency &freq)
     }
 }
 
-void RigControlFrame::closeContest()
-{
-}
-
 void RigControlFrame::traceMsg(QString msg)
 {
 

@@ -41,6 +41,7 @@ RigMemoryFrame::RigMemoryFrame(StackedInfoFrame *parent) :
 {
     ui->setupUi(this);
 
+    suppressSaveColumns = true;
     ui->rigMemTable->setObjectName( "rigMemTable" );
     ui->rigMemTable->horizontalHeader() ->setSectionsMovable( true );
     ui->rigMemTable->horizontalHeader() ->setSectionsClickable( true );
@@ -244,6 +245,7 @@ void RigMemoryFrame::on_sortIndicatorChanged(int /*logicalIndex*/, Qt::SortOrder
 }
 void RigMemoryFrame::setContest( BaseContestLog *pct )
 {
+    suppressSaveColumns = false;
     ct = dynamic_cast<LoggerContestLog *>( pct);
 
     model.ct = pct;

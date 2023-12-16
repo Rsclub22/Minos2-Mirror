@@ -92,8 +92,6 @@ public:
 
     void setTransVertEnabled(bool status, PubSubName psn);
 
-    void closeContest();
-
     Frequency getSendFreq();
     void logRadioSettingsChanged(QSharedPointer<RadioSettingsDialogChangeFlag> logRadioSettingsFlags);
     void setVmButtonsFrame(TxVmButtonsFrame *txVmButtonsFrame);

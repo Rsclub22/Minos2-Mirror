@@ -4,8 +4,9 @@
 #include <QTreeView>
 #include <QMenu>
 
+#include "htmldelegate.h"
 #include "baseconstants.h"
-#include "TreeUtils.h"
+#include "GridColumn.h"
 #include "contest.h"
 #include "MatchCollection.h"
 
