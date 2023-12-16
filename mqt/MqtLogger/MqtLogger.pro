@@ -90,6 +90,7 @@ SOURCES += \
     n1mmbroadcastconfig.cpp \
     qrzdisplayframe.cpp \
     qsologframe.cpp \
+    qsotableframe.cpp \
     radiosettingdialog.cpp \
     reg1test.cpp \
     rigcontrolcwmessagekeyer.cpp \
@@ -189,6 +190,7 @@ HEADERS  += \
     printfile.h \
     qrzdisplayframe.h \
     qsologframe.h \
+    qsotableframe.h \
     radiosettingdialog.h \
     reg1test.h \
     rigcontrolcwmessagekeyer.h \
@@ -257,6 +259,7 @@ FORMS    += \
     n1mmbroadcastconfig.ui \
     qrzdisplayframe.ui \
     qsologframe.ui \
+    qsotableframe.ui \
     radiosettingdialog.ui \
     rigcontrolframe.ui \
     rigmemdialog.ui \

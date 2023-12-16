@@ -1,8 +1,7 @@
 #include <QScrollArea>
 #include <QDesktopServices>
-
 #include <QLabel>
-#include "AppStartup.h"
+
 #include "MShowMessageDlg.h"
 #include "MinosLoggerEvents.h"
 
@@ -13,7 +12,6 @@
 #include "dmbuttonframe.h"
 #include "fileutils.h"
 #include "qheaderview.h"
-#include "qtableview.h"
 #include "tqsoeditdlg.h"
 #include "tentryoptionsform.h"
 
@@ -21,7 +19,6 @@
 #include "RPCPubSub.h"
 #include "tlogcontainer.h"
 #include "focuswatcher.h"
-#include "htmldelegate.h"
 #include "enqdlg.h"
 #include "MatchTreeFrame.h"
 #include "rigmemdialog.h"
@@ -39,15 +36,40 @@
 #include "ChatFrame.h"
 #include "clusterclientframe.h"
 #include "bandmapclientframe.h"
-#include "delayedaction.h"
 #include "ContestPageControl.h"
 #include "MTrace.h"
 
 #include "tsinglelogframe.h"
 #include "ui_tsinglelogframe.h"
 
+TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
+    ContestPage(parent, contest),
+    ui(new Ui::TSingleLogFrame),
+    bandMapLoaded(false),
+    lastStanzaCount( 0 )
+
+
+{
+    qRegisterMetaType< QSharedPointer<BaseContact> > ( "QSharedPointer<BaseContact>" );
+
+    ui->setupUi(this);
+}
+TSingleLogFrame::~TSingleLogFrame()
+{
+    delete ui;
+
+    ui = nullptr;
+    contest = nullptr;
+
+    // we need to delete all the dependant ContestPage as well
+
+
+    delete clusterControlFrame;
+    delete wsjtxFrame;
+}
 void TSingleLogFrame::buildFrame(int slotNo)
 {
+    // Initial build when log frame first created
     createScreenComponents();
 
     buildScreenLayout(slotNo);
@@ -57,12 +79,7 @@ void TSingleLogFrame::buildFrame(int slotNo)
     ArchiveMatchTreeFW = new FocusWatcher(archiveMatchFrame->getTreeView());
     connect(ArchiveMatchTreeFW, &FocusWatcher::focusChanged, this, &TSingleLogFrame::onArchiveTreeFocused);
 
-    createColumnsMenu(columnsMenu, QSOTable->horizontalHeader(), this,
-              [=]{
-                    viewColumn();
-              });
-
-    restoreQSOTableColumns();
+    QSOListFrame->buildFrame();
 
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::ContestPageChanged, this, &TSingleLogFrame::on_ContestPageChanged);
 
@@ -70,14 +87,12 @@ void TSingleLogFrame::buildFrame(int slotNo)
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::TimerDistribution, this, &TSingleLogFrame::PublishTimerTimer);
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::TimerDistribution, this, &TSingleLogFrame::HideTimerTimer);
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::MakeEntry, this, &TSingleLogFrame::on_MakeEntry);
-    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::AfterSelectContact, this, &TSingleLogFrame::on_AfterSelectContact, Qt::QueuedConnection);
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::AfterLogContact, this, &TSingleLogFrame::on_AfterLogContact, Qt::QueuedConnection);
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::setMemory, this, &TSingleLogFrame::on_SetMemory);
     // from cluster frame or bandmap frame
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::DxSpotToMemory, this, &TSingleLogFrame::on_dxSpotToMemory);
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::MatchStarting, this, &TSingleLogFrame::on_MatchStarting);
 
-    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::ColumnsChanged, this, &TSingleLogFrame::onColumnsChanged);
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::NextUnfilled, this, &TSingleLogFrame::on_NextUnfilled);
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::GoToSerial, this, &TSingleLogFrame::on_GoToSerial);
 
@@ -152,10 +167,6 @@ void TSingleLogFrame::buildFrame(int slotNo)
     connect(FKHRigControlFrame, &RigControlFrame::radioIsConnected, this, &TSingleLogFrame::sendBandmapRadioIsConnected);
     connect(FKHRigControlFrame, &RigControlFrame::radioHasError, this, &TSingleLogFrame::sendBandmapRadioHasError);
 
-
-    connect( QSOTable->horizontalHeader(), &QHeaderView::sectionResized, this, &TSingleLogFrame::on_sectionResized);
-    connect(QSOTable, &QTableView::doubleClicked, this, &TSingleLogFrame::onQSOTable_doubleClicked);
-
     connect(LogContainer, &TLogContainer::sendKeyerPlay, this, &TSingleLogFrame::sendKeyerPlay);
     connect(LogContainer, &TLogContainer::sendKeyerRecord, this, &TSingleLogFrame::sendKeyerRecord);
     connect(LogContainer, &TLogContainer::sendKeyerTone, this, &TSingleLogFrame::sendKeyerTone);
@@ -166,79 +177,26 @@ void TSingleLogFrame::buildFrame(int slotNo)
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::FontChanged, this, &TSingleLogFrame::on_FontChanged, Qt::QueuedConnection);
 }
 
-TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
-    ContestPage(parent, contest),
-    ui(new Ui::TSingleLogFrame),
-    bandMapLoaded(false),
-    lastStanzaCount( 0 )
-
-
-{
-    qRegisterMetaType< QSharedPointer<BaseContact> > ( "QSharedPointer<BaseContact>" );
-
-    ui->setupUi(this);
-}
-
 void TSingleLogFrame::on_FontChanged()
 {
     applyScreenLayout();
 }
-TSingleLogFrame::~TSingleLogFrame()
-{
-    delete ui;
 
-    ui = nullptr;
-    contest = nullptr;
-
-    // we need to delete all the dependant ContestPage as well
-
-
-    delete clusterControlFrame;
-    delete wsjtxFrame;
-}
 void TSingleLogFrame::createScreenComponents()
 {
     // create component frames, parentless
-    LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( getContest() );
-    traceMsg("createScreenComponents for " + ct->name.getValue() + " uuid " + ct->uuid);
 
-    QSOTable = new QTableView(this);
-    QSOTable->setObjectName(QStringLiteral("QSOTable"));
-    QSOTable->setFocusPolicy(Qt::ClickFocus);
-    QSOTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    QSOTable->setAlternatingRowColors(true);
-    QSOTable->setSelectionMode(QAbstractItemView::SingleSelection);
-    QSOTable->setSelectionBehavior(QAbstractItemView::SelectRows);
-    QSOTable->setWordWrap(false);
-    QSOTable->setCornerButtonEnabled(false);
+    traceMsg("createScreenComponents");
 
-    QSOTable->verticalHeader()->setVisible(false);
-    QSOTable->verticalHeader()->setMinimumSectionSize(1);
-    QSOTable->verticalHeader()->setDefaultSectionSize(1);
 
-    QSOTable->horizontalHeader()->setHighlightSections(false);
-    QSOTable->horizontalHeader()->setStretchLastSection(true);
-    QSOTable->horizontalHeader()->setMinimumSectionSize(10);
-    QSOTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);
-    QSOTable->horizontalHeader() ->setSectionsMovable( true );
-    QSOTable->horizontalHeader()->setContextMenuPolicy( Qt::CustomContextMenu );
+    QSOListFrame = new QSOTableFrame(this);
+    QSOListFrame->setFocusPolicy(Qt::ClickFocus);
+    QSOListFrame->setFrameShape(QFrame::NoFrame);
+    QSOListFrame->setFrameShadow(QFrame::Plain);
+    QSOListFrame->setLineWidth(1);
+    QSOListFrame->setMidLineWidth(1);
 
-    connect( QSOTable->horizontalHeader(), &QHeaderView::customContextMenuRequested, this, &TSingleLogFrame::onQSOGrid_customContextMenuRequested );
-    connect( QSOTable->horizontalHeader(), &QHeaderView::sectionMoved, this, &TSingleLogFrame::onQSOGrid_sectionMoved);
-
-    int lcf;
-    TContestApp::getContestApp() ->getIntDisplayProfile(edpListCompression, lcf);
-    delegate = QSharedPointer<HtmlDelegate>(new HtmlDelegate(1.0, lcf/100.0));
-    qsoModel.delegate = delegate;
-    qsoModel.initialise(contest);
-    QSOTable->setModel(&qsoModel);
-
-    QSOTable->setItemDelegate( delegate.data() );
-    QSize ms = delegate->docSize("XX");
-    QSOTable->verticalHeader()->setDefaultSectionSize(ms.height() );
-    QSOTable->verticalHeader()->setMinimumSectionSize(10);
-
-    QSOTable->setVisible(false);
+    QSOListFrame->setVisible(false);
 
     GJVQSOLogFrame = new QSOLogFrame(this);
     GJVQSOLogFrame->setObjectName(QStringLiteral("GJVQSOLogFrame"));
@@ -255,12 +213,10 @@ void TSingleLogFrame::createScreenComponents()
     txVmButtonsFrame = new TxVmButtonsFrame(this);
     txVmButtonsFrame->setObjectName(QStringLiteral("txVmButtonsFrame"));
     txVmButtonsFrame->setVisible(false);
-    txVmButtonsFrame->setContest(contest);
 
     bandSwitchFrame = new BandSwitchFrame(this);
     bandSwitchFrame->setObjectName(QStringLiteral("bandSwitchFrame"));
     bandSwitchFrame->setVisible(false);
-    bandSwitchFrame->setContest(contest);
 
     FKHRigControlFrame = new RigControlFrame(this);
     FKHRigControlFrame->setObjectName(QStringLiteral("FKHRigControlFrame"));
@@ -269,7 +225,6 @@ void TSingleLogFrame::createScreenComponents()
     FKHRigControlFrame->setVmButtonsFrame(txVmButtonsFrame);
 
     FKHRigControlFrame->setVisible(false);
-    FKHRigControlFrame->setContest(contest);
 
     bandSwitchFrame->setRigControl(FKHRigControlFrame);
 
@@ -277,13 +232,10 @@ void TSingleLogFrame::createScreenComponents()
     runButtonsFrame->setObjectName(QStringLiteral("runButtonsFrame"));
     runButtonsFrame->setVisible(false);
     runButtonsFrame->setRigControl(FKHRigControlFrame);
-    runButtonsFrame->setContest(contest);
-
 
     qrzDisplayFrame = new QrzDisplayFrame(this);
     qrzDisplayFrame->setObjectName(QStringLiteral("qrzDisplayFrame"));
     qrzDisplayFrame->setVisible(false);
-    qrzDisplayFrame->setContest(contest);
     setQrzDisplayFrameLoaded(false);
 
     FKHRotControlFrame = new RotControlFrame(this);
@@ -293,7 +245,6 @@ void TSingleLogFrame::createScreenComponents()
     FKHRotControlFrame->setFrameShadow(QFrame::Raised);
 
     FKHRotControlFrame->setVisible(false);
-    FKHRotControlFrame->setContest(contest);
 
     clusterControlFrame = new ClusterClientFrame(this);
     clusterControlFrame->setObjectName(QStringLiteral("ClusterControlFrame"));
@@ -301,7 +252,6 @@ void TSingleLogFrame::createScreenComponents()
     clusterControlFrame->setFrameShadow(QFrame::Raised);
 
     clusterControlFrame->setVisible(false);
-    clusterControlFrame->setContest(contest);
 
     bandmapControlFrame = new BandmapClientFrame(this);
     bandmapControlFrame->setObjectName(QStringLiteral("BandmapControlFrame"));
@@ -309,7 +259,6 @@ void TSingleLogFrame::createScreenComponents()
     bandmapControlFrame->setFrameShadow(QFrame::Raised);
 
     bandmapControlFrame->setVisible(false);
-    bandmapControlFrame->setContest(contest);
     setBandmapLoaded(false);
 
 
@@ -411,7 +360,6 @@ void TSingleLogFrame::createScreenComponents()
     dmButtonFrame->setObjectName(QStringLiteral("DMButtonFrame"));
     dmButtonFrame->setFrameShape(QFrame::StyledPanel);
     dmButtonFrame->setFrameShadow(QFrame::Raised);
-    dmButtonFrame->setContest(contest);
 
     dmButtonFrame->setVisible(false);
 }
@@ -420,7 +368,7 @@ void TSingleLogFrame::clearScreenLayout(bool clearAllTabs)
     // clear down the screen elements, but don't delete them (except for the aux frames) - they will be used to rebuild the screen
     // BUT on contest creation, the contest address may change, so clear the contest
 
-    inClearScreenLayout = true; // stop cutils saving headers
+    suppressSaveHeaders = true; // stop cutils saving headers
     LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( getContest() );
     QString msg;
     if (ct != nullptr)
@@ -434,8 +382,7 @@ void TSingleLogFrame::clearScreenLayout(bool clearAllTabs)
         traceMsg("clearScreenLayout starts for " + msg);
     }
 
-    qsoModel.initialise(nullptr);
-
+    QSOListFrame->setContest(nullptr);
     FKHRigControlFrame->setContest(nullptr);
     runButtonsFrame->setContest(nullptr);
     bandSwitchFrame->setContest(nullptr);
@@ -462,6 +409,8 @@ void TSingleLogFrame::clearScreenLayout(bool clearAllTabs)
     // we need to setContest(nullptr) on all aux frames
     MinosLoggerEvents::SendClearContestInFrame(ct);
 
+    // and now detach the panes from the contestpage windows
+
     clusterControlFrame->setParent(this);
     clusterControlFrame->hide();
 
@@ -474,8 +423,8 @@ void TSingleLogFrame::clearScreenLayout(bool clearAllTabs)
     }
     else
     {
-        QSOTable->setParent(this);
-        QSOTable->hide();
+        QSOListFrame->setParent(this);
+        QSOListFrame->hide();
 
         FKHRigControlFrame->setParent(this);
         FKHRigControlFrame->hide();
@@ -555,7 +504,7 @@ void TSingleLogFrame::clearScreenLayout(bool clearAllTabs)
             }
         }
     }
-    inClearScreenLayout = false;
+    suppressSaveHeaders = false;
     traceMsg("clearScreenLayout complete for " + msg);
 }
 void TSingleLogFrame::applyScreenLayout()
@@ -567,15 +516,9 @@ void TSingleLogFrame::applyScreenLayout()
     int slotNo = LogContainer->getSlotNo(this);
 
     traceMsg("applyScreenLayout for " + ct->name.getValue() + " uuid " + ct->uuid);
-    QSOTable->verticalHeader()->setSectionResizeMode(QHeaderView::Interactive);
 
     clearScreenLayout(true);
     buildScreenLayout(slotNo);
-
-    QSOTable->setItemDelegate( delegate.data() );
-    QSize ms = delegate->docSize("XX");
-    QSOTable->verticalHeader()->setDefaultSectionSize(ms.height());
-    QSOTable->verticalHeader()->setMinimumSectionSize(10);
 
     updateTrees();  //in apply screen layout
 }
@@ -592,6 +535,10 @@ void TSingleLogFrame::setCurScreenLayout(const QString &value)
     LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( contest );
     ct->screenLayout.setValue(value);
     ct->commonSave(false);
+    if (QSOListFrame)
+    {
+        QSOListFrame->setCurScreenLayout(curScreenLayout);
+    }
     if (thisMatchFrame)
     {
         thisMatchFrame->setCurScreenLayout(curScreenLayout);
@@ -663,16 +610,17 @@ void TSingleLogFrame::buildRow(ContestPage *cp, SCRow &scrow, int &auxInstance, 
                     StackedInfoFrame *f = new StackedInfoFrame(elementScrollArea, auxInstance++, this);
 
                     f->setCurrentFrameType(StackedInfoFrame::getTrAuxTypeString(scele.auxType));
-                    f->setContest(ct);
                     elementScrollArea->setWidget(f);
+                    f->setContest(ct);
                     f->setVisible(true);
                     break;
                 }
                 case sctLog:
                 {
-                    QSOTable->setParent(hs);
-                    hs->addWidget(QSOTable);
-                    QSOTable->setVisible(true);
+                    QSOListFrame->setParent(hs);
+                    hs->addWidget(QSOListFrame);
+                    QSOListFrame->setContest(ct);
+                    QSOListFrame->setVisible(true);
                     break;
                 }
                 case sctRigControl:
@@ -708,6 +656,7 @@ void TSingleLogFrame::buildRow(ContestPage *cp, SCRow &scrow, int &auxInstance, 
                 case sctQrzDisplay:
                 {
                     elementScrollArea->setWidget(qrzDisplayFrame);
+                    qrzDisplayFrame->setContest(ct);
                     setQrzDisplayFrameLoaded(true);
                     break;
                 }
@@ -755,6 +704,8 @@ void TSingleLogFrame::buildRow(ContestPage *cp, SCRow &scrow, int &auxInstance, 
                 case sctChat:
                 {
                     elementScrollArea->setWidget(chatFrame);
+                    // chatFrame doesn't have a setContest
+                    //chatFrame->setContest(ct);
                     chatFrame->setVisible(true);
                     break;
                 }
@@ -882,6 +833,8 @@ void TSingleLogFrame::buildScreen(SCScreen &s, int t, int &auxInstance)
 }
 void TSingleLogFrame::buildScreenLayout(int slotNo)
 {
+    suppressSaveHeaders = true; // stop cutils saving headers
+
     ScreenConfigFile &scf = ScreenConfigFile::getScreenConfigFile(this);
 
     LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( contest );
@@ -934,8 +887,7 @@ void TSingleLogFrame::buildScreenLayout(int slotNo)
         LogContainer->contestPageControls[t]->insertTab(slotNo, p, sname);
     }
     TContestApp::getContestApp() ->suppressWritePreload = temp;
-    qsoModel.initialise(contest);
-    QSOTable->setModel(&qsoModel);
+    QSOListFrame->setModel();
 
     // ALWAYS link the wsjt frame to the contest; then we can log
     // even without showing it
@@ -946,8 +898,9 @@ void TSingleLogFrame::buildScreenLayout(int slotNo)
     LogContainer->raise();  // get it back in front
 
     MinosLoggerEvents::SendMainRaised();
-}
 
+    suppressSaveHeaders = false;
+}
 
 bool TSingleLogFrame::doKeyPressEvent( QKeyEvent* event )
 {
@@ -1063,9 +1016,6 @@ void TSingleLogFrame::closeContest()
 {
     if ( TContestApp::getContestApp() )
     {
-       FKHRigControlFrame->closeContest();          // this disconnects rig on last closing contest
-       FKHRotControlFrame->closeContest();
-       GJVQSOLogFrame->closeContest();
        if (contest)
        {
             RPCPubSub::publish( rpcConstants::monitorLogCategory, contest->publishedName, QString::number( 0 ), psRevoked );
@@ -1073,7 +1023,6 @@ void TSingleLogFrame::closeContest()
 
        clearScreenLayout(false);
        TContestApp::getContestApp() ->closeFile( contest );
-       qsoModel.initialise(nullptr);
 
        contest = nullptr;
     }
@@ -1091,83 +1040,20 @@ void TSingleLogFrame::addAllQSOsToBandmap()
         bandmapControlFrame->on_AfterLogContact(contest, cct);
     }
 }
-void TSingleLogFrame::restoreQSOTableColumns()
-{
-    inRestoreColumns = true;
-    QString fname(getDirectoryLocation(dlConfiguration) + "/LoggerTableHeaders.ini");
-    restoreHeaderColumns(fname, "QSOTable", curScreenLayout, QSOTable->horizontalHeader());
-
-    columnsChanged = false;
-    inRestoreColumns = false;
-}
-void TSingleLogFrame::saveQSOTableColumns()
-{
-    if (!inRestoreColumns)
-    {
-        QString fname(getDirectoryLocation(dlConfiguration) + "/LoggerTableHeaders.ini");
-        saveHeaderColumns(fname, "QSOTable", curScreenLayout, QSOTable->horizontalHeader());
-
-        MinosLoggerEvents::SendColumnsChanged();
-    }
-}
-
-void TSingleLogFrame::on_sectionResized(int a, int b, int c)
-{
-    trace(QString("TSingleLogFrame::on_sectionResized %1 %2 %3").arg(a).arg(b).arg(c));
-    saveQSOTableColumns();
-}
-
-void TSingleLogFrame::onColumnsChanged()
-{
-    columnsChanged = true;
-}
-void TSingleLogFrame::onQSOGrid_customContextMenuRequested(const QPoint &pos)
-{
-    QPoint globalPos = QSOTable->mapToGlobal( pos );
-    popupColumnsMenu(columnsMenu, globalPos, QSOTable->horizontalHeader());
-}
-void TSingleLogFrame::viewColumn()
-{
-    // a columnsMenu entry has been clicked... action it
-    QAction *act = dynamic_cast<QAction *>(sender());
-    if (act)
-    {
-        int col = act->data().toInt();
-        if (col >= 0)
-        {
-            bool check = act->isChecked();
-            QSOTable->horizontalHeader()->setSectionHidden(col, !check);
-        }
-        else
-        {
-            QString fname(getDirectoryLocation(dlConfiguration) + "/LoggerTableHeaders.ini");
-            resetHeaderColumns(fname, "QSOTable", curScreenLayout, QSOTable->horizontalHeader());
-        }
-    }
-    trace("TSingleLogFrame::viewColumn()");
-    saveQSOTableColumns();
-}
-void TSingleLogFrame::onQSOGrid_sectionMoved(int, int, int)
-{
-    trace("TSingleLogFrame::onQSOGrid_sectionMoved");
-    saveQSOTableColumns();
-}
-
 void TSingleLogFrame::startNextEntry()
 {
     ScreenContact *p = GJVQSOLogFrame->getPartialContact();
     GJVQSOLogFrame->setPartialContact(nullptr);
 
-   NextContactDetailsTimerTimer( );
+    NextContactDetailsTimerTimer( );
 
-   restoreQSOTableColumns();
-   columnsChanged = false;
+    QSOListFrame->startNextEntry();
 
-   GJVQSOLogFrame->clearCurrentField();
-   GJVQSOLogFrame->startNextEntry();
+    GJVQSOLogFrame->clearCurrentField();
+    GJVQSOLogFrame->startNextEntry();
 
-   GJVQSOLogFrame->killPartial();
-   GJVQSOLogFrame->setPartialContact(p);
+    GJVQSOLogFrame->killPartial();
+    GJVQSOLogFrame->setPartialContact(p);
 
 }
 void TSingleLogFrame::on_ContestPageChanged ()
@@ -1200,11 +1086,7 @@ void TSingleLogFrame::on_ContestPageChanged ()
 
     MinosLoggerEvents::SendContestShownChanged();
 
-    if ( columnsChanged )
-    {
-        MinosLoggerEvents::SendDoColumnChanges(ct);             // this does a restorePartial in showQSOs
-        columnsChanged = false;
-    }
+    QSOListFrame->onContestChanged();
 
     refreshMults();
 
@@ -1354,8 +1236,6 @@ void TSingleLogFrame::HideTimerTimer(  )
 {
     if (!contest)
         return;
-
-
 }
 
 void TSingleLogFrame::updateQSODisplay()
@@ -1561,17 +1441,6 @@ void TSingleLogFrame::getCurrentDetails(memoryData::memData &m)
 }
 //---------------------------------------------------------------------------
 
-void TSingleLogFrame::QSOTreeSelectContact( QSharedPointer<BaseContact> lct )
-{
-   if (lct)
-   {
-      EditContact( lct.data(), false );
-   }
-}
-void TSingleLogFrame::onQSOTable_doubleClicked(const QModelIndex &index)
-{
-    QSOTreeSelectContact(contest->pcontactAt( index.row() ));
-}
 void TSingleLogFrame::EditContact( CheckableContact *cct, bool nextUnfilled )
 {
    TQSOEditDlg qdlg( this, nextUnfilled );
@@ -1621,29 +1490,6 @@ void TSingleLogFrame::on_MakeEntry(BaseContestLog *ct, bool e)
        makeEntry( false, e );
     }
 }
-void TSingleLogFrame::on_AfterSelectContact( QSharedPointer<BaseContact>lct, BaseContestLog *ct)
-{
-    if (ct == contest && !lct)
-    {
-        // use a lambda on a short timer as when contest is first opened, it doesn't actually scroll
-        delayedAction(this, [=]()
-        {
-            // NB a lambda function
-            QSOTable->scrollToBottom();
-            int row = QSOTable->model()->rowCount() - 1;
-            if (row >= 0)
-            {
-                QModelIndex oldIndex = QSOTable->currentIndex();
-                if (oldIndex.row() != row)
-                {
-                    QModelIndex index = QSOTable->model()->index( row, 0 );
-                    QSOTable->setCurrentIndex(index);
-                }
-            }
-        }
-        );
-    }
-}
 void TSingleLogFrame::on_AfterLogContact( BaseContestLog *ct)
 {
       if (ct == contest)
@@ -1659,7 +1505,7 @@ void TSingleLogFrame::refreshMults()
 
 void TSingleLogFrame::updateTrees()
 {
-   qsoModel.reset();
+    QSOListFrame->refreshModel();
    refreshMults();
 }
 bool TSingleLogFrame::getStanza( unsigned int stanza, QString &stanzaData )
@@ -1772,17 +1618,12 @@ void TSingleLogFrame::on_SetMemory(BaseContestLog *c, QString call, QString loc)
     }
 }
 
-
-
 // send to memory from DXCluster frame or Bandmapframe
 
 void TSingleLogFrame::on_dxSpotToMemory(BaseContestLog *c, memoryData::memData dxData)
 {
-
     if (contest == c)
     {
-
-
         int n = -1;
         LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( contest );
 
@@ -1809,10 +1650,6 @@ void TSingleLogFrame::on_dxSpotToMemory(BaseContestLog *c, memoryData::memData d
         MinosLoggerEvents::SendUpdateMemories(ct);
     }
 }
-
-
-
-
 //---------------------------------------------------------------------------
 
 void TSingleLogFrame::sendKeyerPlay( int fno )
@@ -1832,7 +1669,6 @@ void TSingleLogFrame::on_BandmapMarkFreq(Frequency freq, QString mode)
     bandmapControlFrame->setBandmapMarkFreq(freq, mode);
 }
 
-
 void TSingleLogFrame::on_BandmapSaveFreq(QString cs, Frequency freq, QString mode, QString loc, QString brg, QString exchange)
 {
     bandmapControlFrame->setBandmapSaveFreq(cs, freq, mode, loc, brg, exchange);
@@ -1847,11 +1683,6 @@ void TSingleLogFrame::sendBandmapRadioHasError(QString error)
 {
     bandmapControlFrame->setBandmapRadioHasError(error);
 }
-
-//void TSingleLogFrame::on_SendCQFreq(QString runFreq, bool showMarker)
-//{
-//    bandmapControlFrame->setCQFreq(runFreq, showMarker);
-//}
 
 void TSingleLogFrame::sendRunOnFlag(Frequency runFreq, QString mode, bool runModeOn)
 {
@@ -1882,8 +1713,6 @@ void TSingleLogFrame::sendKeyerStop()
     if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
         LogContainer->sendDM->sendKeyerStop(this);
 }
-
-
 //---------------------------------------------------------------------------
 
 // Bandmap
@@ -1912,8 +1741,6 @@ void TSingleLogFrame::on_setClusterTXSpotEnableState(QString state)
 
     GJVQSOLogFrame->setClusterTXSpotEnableState(txEnableState);
 }
-
-
 
 void TSingleLogFrame::on_clusterServerState(QString state)
 {
@@ -1991,7 +1818,6 @@ void TSingleLogFrame::on_SetFreq(Frequency f)
             sendKeyerStop();    // if we have tuned, stop keyer
         }
     }
-
 }
 
 void TSingleLogFrame::updateFreq(Frequency f)
@@ -2005,17 +1831,16 @@ void TSingleLogFrame::updateFreq(Frequency f)
     MinosLoggerEvents::SendRigFreqChanged(f, contest);
 }
 
-
-
-
 void TSingleLogFrame::on_SetRitFreq(ShortFreq f)
 {
     if (curRitFreq != f)
+    {
         if ( this == LogContainer->getCurrentLogFrame() )
         {
             curRitFreq = f;
             FKHRigControlFrame->setRitFreq(f);
         }
+    }
 }
 
 void TSingleLogFrame::on_SetRitRadioStatus(bool status)
@@ -2024,7 +1849,6 @@ void TSingleLogFrame::on_SetRitRadioStatus(bool status)
     {
         FKHRigControlFrame->setRitRadioStatus(status);
     }
-
 }
 
 void TSingleLogFrame::on_NoRadioSetFreq(Frequency f)
@@ -2310,8 +2134,6 @@ void TSingleLogFrame::sendSelectRadio(const QString &radName, const QString &ban
     }
 }
 
-
-
 void TSingleLogFrame::invalidateCacheOnDisconnect()
 {
     if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
@@ -2323,7 +2145,6 @@ void TSingleLogFrame::invalidateCacheOnDisconnect()
         }
     }
 }
-
 
 void TSingleLogFrame::sendSelectRotator(const QString &s)
 {
@@ -2338,28 +2159,15 @@ void TSingleLogFrame::sendSelectRotator(const QString &s)
             {
                 ct->antennaName.setValue(s);
                 ct->commonSave(false);
-
-                //FKHRotControlFrame->setRotatorAntennaName(s);
             }
             LogContainer->sendDM->changeRotatorSelectionTo(ct->antennaName.getValue(), ct->uuid);
             LogContainer->sendDM->invalidateRotatorCache(ct->antennaName.getValue());
         }
     }
-
 }
-
-/*
-void TSingleLogFrame::sendRadioPassBandState(int state)
-{
-    if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
-        sendDM->sendRigControlPassBandState(state);
-}
-*/
-
 //---------------------------------------------------------------------------
 
 // RotatorControl
-
 
 void TSingleLogFrame::on_RotatorList()
 {
@@ -2370,7 +2178,6 @@ void TSingleLogFrame::on_RotatorPresetList(QString s)
 {
     rotPresets->setRotatorPresetList(s);
 }
-
 
 void TSingleLogFrame::on_RotatorStatus(QString s)
 {
@@ -2394,7 +2201,6 @@ void TSingleLogFrame::on_rotatorConnected(bool connected)
 {
     bandmapControlFrame->setRotatorConnected(connected);
 }
-
 
 void TSingleLogFrame::on_RotatorMaxAzimuth(int s)
 {
@@ -2445,7 +2251,6 @@ void TSingleLogFrame::presetTurn(QString b)
     if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
         FKHRotControlFrame->presetTurn(b);
 }
-
 
 //--------------- QRZ Display ---------------------------------------
 

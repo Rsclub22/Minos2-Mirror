@@ -844,7 +844,3 @@ void RotControlFrame::checkConnection()
         setRotatorState(ROT_STATUS_DISCONNECTED);
     }
 }
-
-void RotControlFrame::closeContest()
-{
-}

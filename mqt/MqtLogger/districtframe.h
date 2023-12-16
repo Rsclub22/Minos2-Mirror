@@ -4,8 +4,9 @@
 #include <QAbstractItemModel>
 #include <QSortFilterProxyModel>
 #include <QMenu>
-
-#include "TreeUtils.h"
+#include <QFrame>
+#include "GridColumn.h"
+#include "htmldelegate.h"
 #include "mults.h"
 
 namespace Ui {

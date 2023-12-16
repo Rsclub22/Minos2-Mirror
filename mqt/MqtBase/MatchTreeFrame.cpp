@@ -7,6 +7,7 @@
 #include "MatchThread.h"
 #include "cutils.h"
 #include "MinosLoggerEvents.h"
+#include "qsogridmodel.h"
 #include "MatchTreeFrame.h"
 #include "ui_MatchTreeFrame.h"
 

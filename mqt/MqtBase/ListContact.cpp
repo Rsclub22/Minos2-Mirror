@@ -8,7 +8,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include "MinosParameters.h"
-#include "TreeUtils.h"
+#include "qsogridmodel.h"
 #include "calcs.h"
 #include "contest.h"
 #include "ListContact.h"

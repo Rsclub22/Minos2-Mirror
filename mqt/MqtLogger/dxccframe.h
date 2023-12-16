@@ -1,15 +1,17 @@
 #ifndef DXCCFRAME_H
 #define DXCCFRAME_H
 
-#include "TreeUtils.h"
+#include "GridColumn.h"
+#include "htmldelegate.h"
 #include <QAbstractItemModel>
 #include <QSortFilterProxyModel>
 #include <QMenu>
+#include <QFrame>
 
 namespace Ui {
 class DXCCFrame;
 }
-
+class BaseContestLog;
 class LoggerContestLog;
 class StackedInfoFrame;
 class TSingleLogFrame;

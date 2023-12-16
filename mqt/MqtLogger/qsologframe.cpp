@@ -2719,17 +2719,6 @@ void QSOLogFrame::on_tabSandP()
     setPlaceholders(QStringList());
 }
 //---------------------------------------------------------------------------
-void QSOLogFrame::closeContest()
-{
-   BaseContestLog * currentContest = TContestApp::getContestApp() ->getCurrentContest();
-   if (contest == currentContest)
-   {
-      ui->GJVCancelButton->setEnabled(true);
-      ui->GJVCancelButton->setFocus();
-   }
-   contest = nullptr;
-}
-//---------------------------------------------------------------------------
 void QSOLogFrame::doGJVEditChange( QObject *Sender )
 {
     // sensitive field changed - trigger match scan
@@ -2855,7 +2844,7 @@ void QSOLogFrame::logScreenEntry( )
         lct = ct->addContact( ctmax, 0, false, false, screenContact.mode.getValue(), screenContact.mgmSubmode, dtg(true), curFreq );	// "current" doesn't get flag, don't save ContestLog yet
 
         TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
-        tslf->QSOTable->model()->insertRows(contest->ctList.count(), 1, QModelIndex());
+        tslf->QSOListFrame->insertRow(contest->ctList.count());
    }
 
    if ( screenContact.mode.getValue().compare( hamlibData::MGM, Qt::CaseInsensitive ) != 0
@@ -3028,7 +3017,7 @@ void QSOLogFrame::logCurrentContact( )
                 nct_no++;
 
                 TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
-                tslf->QSOTable->model()->insertRows(nct_no, 1, QModelIndex());
+                tslf->QSOListFrame->insertRow(nct_no);
              }
              while ( nct_no < ctno ) ;
          }

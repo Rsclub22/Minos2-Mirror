@@ -28,7 +28,7 @@ char diskBuffer[ bsize + 1 ];
 //char *lbuff = &diskBuffer[ 0 ];
 int buffpt = 0;
 
-bool inClearScreenLayout = false;
+bool suppressSaveHeaders = false;
 
 void clearBuffer( )
 {
@@ -638,7 +638,7 @@ bool isPureNumeric ( const QString &s )
 void saveHeaderColumns(QString fileName, QString tableName, QString layoutName, QHeaderView *hdr)
 {
     trace(QString("saveHeaderColumns %1 table %2").arg(layoutName,tableName));
-    if ( inClearScreenLayout)
+    if ( suppressSaveHeaders)
     {
         trace("Ignoring as in clearScreenLayout");
         return;
