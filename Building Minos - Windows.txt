@@ -28,9 +28,9 @@ branches and merged to master when ready.
 So now 
 
 cd Minos2
-git checkout Mqt_Release_2.5.3.1
+git checkout Mqt_Release_2.6.0.0
 
-Install hamlib 4.5.2 32 bit from https://sourceforge.net/projects/hamlib/files/hamlib/ into a directory under C:\projects`
+Install hamlib 4.6 32 bit from https://sourceforge.net/projects/hamlib/files/hamlib/ into a directory under C:\projects`
 (it has to be in the correct position relative to Minos, or the build won't find the corect files).
 
 To get Qt, go to (NB This really needs some pictures!)
@@ -47,9 +47,12 @@ Let Qt install into its "natural" home C:\Qt
 
 Click through until it updates its meta information, then under "select components" choose the required components
 
-Get Qt version 5.15.2 and MinGW 8.1.0; under "tools" make sure that MinGW 8.1.0 32 bit is ticked, and that "Qt Charts" is ticked. 
+Get Qt version 5.15.2 and MinGW 8.1.0; under "tools" make sure that MinGW 8.1.0 32 bit is ticked, and that 
+"Active Qt", Qt Charts", "Qt Location", "Qt Positioning" and "Qt Serial Port" are ticked. 
 
-Using MSVC and/or more recent Qt versions counts as an "advanced" option, but is quite possible.
+Also under "Developer and Designer Tools" tick OpenSSL 1.1.1v.
+
+Using MSVC, 64 bit and/or more recent Qt versions counts as an "advanced" option, but is quite possible.
 
 Install wget and Inno Setup:
 
