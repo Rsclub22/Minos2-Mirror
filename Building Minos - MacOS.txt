@@ -12,9 +12,7 @@ know your way around Mac.
 Building under MacOS X
 ======================
 
-This is based on Xcode 9.2 on MacOS High Sierra 10.13.3 
-
-N.B. I have build other applications using this Mac, and may have hidden pre-requisites already in place.  This is entirely an 'it worked once' installation, rather than something repeatable on any Mac you can find. 
+This is based on Xcode on MacOS Sonoma 
 
 
 1) Install Xcode from developer.apple.com.  You will need to register for a developer account using your apple ID.  
@@ -27,17 +25,16 @@ N.B. I have build other applications using this Mac, and may have hidden pre-req
     Download the QT installer - go to https://www.qt.io/download-qt-installer
     Run the installer. You will need to set up a Qt account.
     
-    Install Qt 6.6.0. Under "Additional libraries" you need at least 
+    Install at least Qt 6.6.0. Under "Additional libraries" you need at least 
         Qt Charts, Qt Location, Qt positioning and Qt Serial Port
-        
-
-
+ 
 5) Download Minos Source Code
 	NB other scripts refer to $HOME/Minos2, so you're stuck with it. 
 
 	cd ~
 	git clone git://git.code.sf.net/p/minos/minos Minos2
 	cd Minos2
+    git checkout Mqt_Release_2.6.0.0
 
 6) Install other required components
 

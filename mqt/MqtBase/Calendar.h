@@ -19,7 +19,9 @@ class MultType
         QString scoringDescription;
         QString exchange;
 
-        QMap<QString, int> bonuses;
+        QMap<QString, int> locBonuses;
+        QMap<QString, int> dxccBonuses;
+        QMap<QString, int> postcodeBonuses;
 };
 class SpecialRule
 {
