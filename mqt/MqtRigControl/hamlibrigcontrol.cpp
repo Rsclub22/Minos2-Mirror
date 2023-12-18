@@ -306,8 +306,8 @@ int HamlibRigControl::rigInit(scatParams &currentRadio, bool useRigCtld)
     }
     else
     {
-
-        if (rig_port_e(currentRadio.portType) == RIG_PORT_SERIAL)
+        if (currentRadio.portType == RigCapConstants::PortType::serial)
+        //if (rig_port_e(currentRadio.portType) == RIG_PORT_SERIAL)
         {
             comport.append(currentRadio.comport);
             strncpy(my_rig->state.rigport.pathname, comport.toLatin1().data(), HAMLIB_FILPATHLEN - 1);
@@ -334,7 +334,8 @@ int HamlibRigControl::rigInit(scatParams &currentRadio, bool useRigCtld)
             }
 
         }
-        else if (rig_port_e(currentRadio.portType) == RIG_PORT_NETWORK || rig_port_e(currentRadio.portType) == RIG_PORT_UDP_NETWORK)
+        else if (currentRadio.portType == RigCapConstants::PortType::network || currentRadio.portType == RigCapConstants::PortType::udp)
+        //else if (rig_port_e(currentRadio.portType) == RIG_PORT_NETWORK || rig_port_e(currentRadio.portType) == RIG_PORT_UDP_NETWORK)
         {
             QString netAdd;
             if (currentRadio.networkAdd.isEmpty() || isHostLocal(currentRadio.networkAdd))
@@ -347,7 +348,7 @@ int HamlibRigControl::rigInit(scatParams &currentRadio, bool useRigCtld)
             }
             strncpy(my_rig->state.rigport.pathname, QString(netAdd + ":" + currentRadio.networkPort).toLatin1().data(), HAMLIB_FILPATHLEN - 1);
         }
-        else if (rig_port_e(currentRadio.portType) == RIG_PORT_NONE)
+        else if (currentRadio.portType == RigCapConstants::PortType::none)
         {
             strncpy(my_rig->state.rigport.pathname, QString("").toLatin1().data(), HAMLIB_FILPATHLEN - 1);
         }

@@ -64,6 +64,8 @@ RigSetupForm::RigSetupForm(RigFactory* rigFactory_, QSharedPointer<scatParams> _
     rigCtldItemsVisible(false);
 
     connect(ui->radioModelBox, QOverload<int>::of(&QComboBox::activated), this, &RigSetupForm::radioModelSelected);
+    connect(ui->portTypeSerialRadioButton,  &QCheckBox::clicked, this, &RigSetupForm::onPortTypeSerialRadioButtonClicked);
+    connect(ui->portTypeNetworkRadioButton,  &QCheckBox::clicked, this, &RigSetupForm::onPortTypeNetworkRadioButtonClicked);
     connect(ui->comPortBox, QOverload<int>::of(&QComboBox::activated), this, &RigSetupForm::comportSelected);
     connect(ui->comSpeedBox, QOverload<int>::of(&QComboBox::activated), this, &RigSetupForm::comSpeedSelected);
     connect(ui->comDataBitsBox, QOverload<int>::of(&QComboBox::activated), this, &RigSetupForm::comDataBitsSelected);
@@ -186,29 +188,35 @@ void RigSetupForm::setupRadioModel(QString radioModel)
 
         if (rigCap.portType == RigCapConstants::PortType::network)
         {
-               serialDataEntryVisible(false);
-               advancedSerialDataEntryVisible(false);
-               setAdvancedCommsChkBoxVisible(false);
-               networkDataEntryVisible(true);
-               setStartMinosRigctldCheckbox(true);
+
+               setDialogBoxesVisibleForNetwork();
+
+            //serialDataEntryVisible(false);
+               //advancedSerialDataEntryVisible(false);
+               //setAdvancedCommsChkBoxVisible(false);
+               //networkDataEntryVisible(true);
+               //setStartMinosRigctldCheckbox(true);
 
 
         }
         else if (rigCap.portType == RigCapConstants::PortType::serial)
         {
-                serialDataEntryVisible(true);
-                advancedSerialDataEntryVisible(radioData->advancedCommsFlag);
-                checkAdvancedCommsCheckBox(radioData->advancedCommsFlag);
-                setAdvancedCommsChkBoxVisible(true);
-                networkDataEntryVisible(false);
+
+            setDialogBoxesVisibleForSerial();
+            //serialDataEntryVisible(true);
+                //advancedSerialDataEntryVisible(radioData->advancedCommsFlag);
+                //checkAdvancedCommsCheckBox(radioData->advancedCommsFlag);
+                //setAdvancedCommsChkBoxVisible(true);
+                //networkDataEntryVisible(false);
 
         }
         else // RIG_PORT_NONE
         {
-                serialDataEntryVisible(false);
-                advancedSerialDataEntryVisible(false);
-                setAdvancedCommsChkBoxVisible(false);
-                networkDataEntryVisible(false);
+                setDialogBoxesVisibleForNone();
+            //serialDataEntryVisible(false);
+                //advancedSerialDataEntryVisible(false);
+                //setAdvancedCommsChkBoxVisible(false);
+                //networkDataEntryVisible(false);
         }
         setRigctldCheckBoxVisible(rigCap.supportRigCtld);
         //getRadioData()->rigCtldEnable = rigCap.supportRigCtld;
@@ -299,6 +307,43 @@ void RigSetupForm::setupRadioModel(QString radioModel)
     }
 
 
+}
+
+
+void RigSetupForm::setDialogBoxesVisibleForNetwork()
+{
+
+    setPortTypeNetworkRadioButtonChecked(true);
+    setPortTypeSerialRadioButtonChecked(false);
+    serialDataEntryVisible(false);
+    advancedSerialDataEntryVisible(false);
+    setAdvancedCommsChkBoxVisible(false);
+    networkDataEntryVisible(true);
+    setStartMinosRigctldCheckbox(true);
+
+
+
+}
+
+void RigSetupForm::setDialogBoxesVisibleForSerial()
+{
+    setPortTypeNetworkRadioButtonChecked(false);
+    setPortTypeSerialRadioButtonChecked(true);
+    serialDataEntryVisible(true);
+    advancedSerialDataEntryVisible(radioData->advancedCommsFlag);
+    checkAdvancedCommsCheckBox(radioData->advancedCommsFlag);
+    setAdvancedCommsChkBoxVisible(true);
+    networkDataEntryVisible(false);
+}
+
+void RigSetupForm::setDialogBoxesVisibleForNone()
+{
+    setPortTypeNetworkRadioButtonChecked(false);
+    setPortTypeSerialRadioButtonChecked(false);
+    serialDataEntryVisible(false);
+    advancedSerialDataEntryVisible(false);
+    setAdvancedCommsChkBoxVisible(false);
+    networkDataEntryVisible(false);
 }
 
 QString RigSetupForm::getRadioModel() const
@@ -412,6 +457,46 @@ void RigSetupForm::CIVEditVisible(bool visible)
     ui->CIVLabel->setVisible(visible);
     ui->CIVlineEdit->setVisible(visible);
 }
+
+
+
+/********* Port Type Selection Radio Buttons ************/
+
+void RigSetupForm::onPortTypeSerialRadioButtonClicked()
+{
+
+    if (ui->portTypeSerialRadioButton->isChecked())
+    {
+        setDialogBoxesVisibleForSerial();
+        radioData->portType = RigCapConstants::PortType::serial;
+    }
+
+
+
+}
+
+void RigSetupForm::setPortTypeSerialRadioButtonChecked(bool checked)
+{
+    ui->portTypeSerialRadioButton->setChecked(checked);
+}
+
+
+void RigSetupForm::onPortTypeNetworkRadioButtonClicked()
+{
+
+    if (ui->portTypeNetworkRadioButton->isChecked())
+    {
+        setDialogBoxesVisibleForNetwork();
+        radioData->portType = RigCapConstants::PortType::network;
+    }
+}
+
+
+void RigSetupForm::setPortTypeNetworkRadioButtonChecked(bool checked)
+{
+    ui->portTypeNetworkRadioButton->setChecked(checked);
+}
+
 
 
 /***************** Comports ****************************/

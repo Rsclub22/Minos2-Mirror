@@ -508,7 +508,7 @@ void RigControlMainWindow::upDateRadio(QString radioName)
 
     if (radioCommsOK)
     {
-        onTxPttTestPbClicked();     // turn off PTT in case it is on
+        onSetPttOnOff(false);     // turn off PTT in case it is on
         closeRadio();
     }
 
