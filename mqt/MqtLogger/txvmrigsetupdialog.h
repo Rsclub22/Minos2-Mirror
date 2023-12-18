@@ -23,6 +23,7 @@ public:
 
     bool getCatPttForEomState();
     bool getSetCwModeAndRestoreState();
+    bool getSaveButtonsByRadioNameState();
 private slots:
 
     void onNumButtonsValueChanged(int num);

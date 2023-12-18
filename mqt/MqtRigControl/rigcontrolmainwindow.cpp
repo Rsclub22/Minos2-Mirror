@@ -508,7 +508,7 @@ void RigControlMainWindow::upDateRadio(QString radioName)
 
     if (radioCommsOK)
     {
-        onTxPttTestPbClicked();     // turn off PTT in case it is on
+        onSetPttOnOff(false);     // turn off PTT in case it is on
         closeRadio();
     }
 
@@ -592,7 +592,7 @@ void RigControlMainWindow::upDateRadio(QString radioName)
     else if (selectedRadioSupportCap.supportPttPortType == RigCapConstants::PttPortType::RIG_PTT_RIG
              || selectedRadioSupportCap.supportPttPortType == RigCapConstants::PttPortType::RIG_PTT_RIG_MICDATA)
     {
-        pttPortTypeStr = "cat";
+        pttPortTypeStr = "cat";     // Note A radio may support CAT, but a user may decide to use RTS or DTR instead
     }
     logMessage(QString("Ptt control port Type = %1").arg((pttPortTypeStr)));
     logMessage(QString("Get Ptt = %1").arg((selectedRadioSupportCap.supportGetPtt ? "True" : "False")));
@@ -1026,11 +1026,11 @@ void RigControlMainWindow::checkSupportPtt()
         {
             if (selectedRadioSupportCap.supportPttPortType == RigCapConstants::PttPortType::RIG_PTT_NONE)
             {
-                ui->pttLbl->setText("Serial PTT");
+                ui->supportedPttLbl->setText("Serial");
             }
             else
             {
-                ui->pttLbl->setText("CAT PTT");
+                ui->supportedPttLbl->setText("CAT/Serial");
             }
 
             setPttGroupItemsVisible(true);
@@ -1039,12 +1039,33 @@ void RigControlMainWindow::checkSupportPtt()
             if (currentRadio.enablePTT)
             {
               setPttIndOnOff(true);
+
+              serialCommonData::PTTMethodCodes pttType = static_cast<serialCommonData::PTTMethodCodes>(currentRadio.pttType);
+
+              if (pttType == serialCommonData::PTT_METHOD_CAT)
+              {
+                  ui->pttLbl->setText("CAT");
+              }
+              else if (pttType == serialCommonData::PTT_METHOD_RTS)
+              {
+                 ui->pttLbl->setText("RTS");
+              }
+              else if (pttType == serialCommonData::PTT_METHOD_DTR)
+              {
+                 ui->pttLbl->setText("DTR");
+              }
+              else if (pttType == serialCommonData::PTT_METHOD_NONE)
+              {
+                 ui->pttLbl->setText("None");
+              }
+
               addPTTEnabledStatusToRigCache(true);
               ui->txPttTestPb->setVisible(true);
             }
             else
             {
                 setPttIndOnOff(false);
+                ui->pttLbl->setText("");
                 addPTTEnabledStatusToRigCache(false);
                 ui->txPttTestPb->setVisible(false);
             }
@@ -1054,7 +1075,7 @@ void RigControlMainWindow::checkSupportPtt()
         }
         else
         {
-
+            ui->pttLbl->setText("None");
             setPttGroupItemsVisible(false);
             setPttIndOnOff(false);
             addPTTEnabledStatusToRigCache(false);
@@ -1561,6 +1582,8 @@ int RigControlMainWindow::openRadio()
             showStatusMessage(tr("Connected: %1 - %2").arg(currentRadio.radioName, currentRadio.rigModelName));
         }
 
+
+
     }
     else
     {
@@ -1893,9 +1916,9 @@ void RigControlMainWindow::getRadioInfo(bool pubNow)
     }
 
 
-    if (radioCommsOK && selectedRadioSupportCap.supportGetPtt && currentRadio.enablePTT)
+    if (radioCommsOK && currentRadio.enablePTT)
     {
-        if (currentRadio.pttType != serialCommonData::PTT_METHOD_CAT || (currentRadio.pttType == serialCommonData::PTT_METHOD_CAT && currentRadio.enableDisableCatFeature.catEnable))
+        if (currentRadio.pttType != serialCommonData::PTT_METHOD_CAT || currentRadio.pttType == serialCommonData::PTT_METHOD_DTR ||  currentRadio.pttType == serialCommonData::PTT_METHOD_RTS)
         {
             logMessage(QString("Get PTT Status"));
             retCode = getTXStatus(rigStateDetails->curVfo);

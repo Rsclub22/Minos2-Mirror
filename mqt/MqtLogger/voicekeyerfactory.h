@@ -19,6 +19,7 @@
 #include <QModelIndex>
 #include "voicekeyerbase.h"
 
+
 class QComboBox;
 
 enum VoiceKeyerId
@@ -26,7 +27,7 @@ enum VoiceKeyerId
     None = 0,
     RigControl,
     CW_RigControl,    // Rig sends message by CW
-    SerialControl,
+    SerialControl,    // Sends user serial message to control external voice keyer
     InternalVoiceKeyer,
     ExternalVoiceKeyer
 };
@@ -54,7 +55,6 @@ public:
 
     QString getKeyerType(){return keyerType;}
     void setKeyerType(const QString keyerType_){keyerType = keyerType_;}
-
 
     int getNumVoiceKeys(){return numVoiceKeys;}
     void setNumVoiceKeys(const int numVoiceKeys_){numVoiceKeys = numVoiceKeys_;}

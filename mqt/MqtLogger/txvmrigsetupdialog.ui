@@ -45,6 +45,13 @@
       </layout>
      </item>
      <item>
+      <widget class="QCheckBox" name="saveByRadioNameChkBox">
+       <property name="text">
+        <string>Save Buttons by Radio Name</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QCheckBox" name="pttEOMChkBox">
        <property name="text">
         <string>Use CAT PTT For EOM</string>
