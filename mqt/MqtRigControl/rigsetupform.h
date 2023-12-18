@@ -212,6 +212,13 @@ public:
     void setPttGroupBoxVisible(bool visible);
     void setSerialPttControlsVisible(bool visible);
     void setCatFeaturesEnableChkBoxVisible(bool visible);
+    void setPortTypeSerialRadioButtonChecked(bool checked);
+    void setPortTypeNetworkRadioButtonChecked(bool checked);
+    void setDialogBoxesVisibleForNone();
+    void setDialogBoxesVisibleForSerial();
+    void setDialogBoxesVisibleForNetwork();
+
+
 public slots:
     void comSpeedSelected();
     void comDataBitsSelected();
@@ -339,6 +346,8 @@ private:
     void setPttDTRDisabled(bool state);
 
 
+    void onPortTypeSerialRadioButtonClicked();
+    void onPortTypeNetworkRadioButtonClicked();
 };
 
 #endif // RIGSETUPFORM_H

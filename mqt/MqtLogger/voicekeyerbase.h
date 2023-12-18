@@ -3,7 +3,7 @@
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //                      Rig Control
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2021
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2023
 //
 //
 //
@@ -42,6 +42,9 @@ public:
     QString getType() const {return type;}
     void setType(const QString type_){type = type_;}
 
+    QString getSelRadioName(){return selRadioName;}
+    void setSelRadioName(const QString selRadioName_){selRadioName = selRadioName_;}
+
 
     QString getVmName() const {return vmName;}
     void setVmName(const QString vmName_){vmName = vmName_.trimmed();}
@@ -72,6 +75,7 @@ private:
 
     QString type;
     QSharedPointer<VoiceKeyerBase> vkBase;
+    QString selRadioName;
     QString vmName;
     QString vmCwMessage;
     int vmDuration = 0;

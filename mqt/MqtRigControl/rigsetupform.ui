@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string/>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_8">
+  <layout class="QVBoxLayout" name="verticalLayout_10">
    <item>
     <layout class="QVBoxLayout" name="verticalLayout_5">
      <item>
@@ -57,6 +57,31 @@
              <widget class="QLineEdit" name="CIVlineEdit">
               <property name="clearButtonEnabled">
                <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_8">
+            <item>
+             <widget class="QLabel" name="label_5">
+              <property name="text">
+               <string>Port Type</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QRadioButton" name="portTypeSerialRadioButton">
+              <property name="text">
+               <string>Serial</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QRadioButton" name="portTypeNetworkRadioButton">
+              <property name="text">
+               <string>Network</string>
               </property>
              </widget>
             </item>

@@ -134,6 +134,7 @@ int RigControlVoiceMemoryKeyer::setup(VoiceKeyerFactory *voiceKeyerFactory, int 
         QSettings config(fileName, QSettings::IniFormat);
         config.setValue("Common/NumButtons", numButtons);
         config.setValue("Common/UseCatPttForEom", txVmSetupDialog.getCatPttForEomState() );
+        config.setValue("Common/SaveButtonByRadioName", txVmSetupDialog.getSaveButtonsByRadioNameState());
         usePttForEom = txVmSetupDialog.getCatPttForEomState();
 
     }

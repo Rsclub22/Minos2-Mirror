@@ -563,10 +563,28 @@ bool Calendar::parseMultType ( TiXmlElement * tix )
                             if ( checkElementName ( e, "bonus" ) )
                             {
                                 //<bonus square="IO83" points="500"/>
+
+                                // <bonus square="default" points="200"/>
+                                // <bonus postcode="default" points="200"/>
+                                // <bonus dxcc="default" points="200"/>
+
                                 QString square = e->Attribute("square");
+                                QString postcode = e->Attribute("postcode");
+                                QString dxcc = e->Attribute("dxcc");
                                 QString points = e->Attribute("points");
 
-                                mt.bonuses[square] = points.toInt();
+                                if (!square.isEmpty())
+                                {
+                                    mt.locBonuses[square] = points.toInt();
+                                }
+                                if (!dxcc.isEmpty())
+                                {
+                                    mt.dxccBonuses[dxcc] = points.toInt();
+                                }
+                                if (!postcode.isEmpty())
+                                {
+                                    mt.postcodeBonuses[postcode] = points.toInt();
+                                }
                             }
                             else
                                 {

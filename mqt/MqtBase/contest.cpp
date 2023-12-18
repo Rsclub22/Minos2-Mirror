@@ -1736,46 +1736,75 @@ void BaseContestLog::loadBonusList()
             }
 
             locBonuses.clear();
-            distBonuses.clear();
-            countryBonuses.clear();
+            postcodeBonuses.clear();
+            dxccBonuses.clear();
 
             if (bonusType.getValue() == "B6")
             {
                 MultType B6 = vhf.mults["B6"];
-
-                if (B6.bonuses.size() == 0)
+                
+                if (B6.locBonuses.size() == 0)
                 {
-                    B6.bonuses["DEFAULT"] = 200;
+                    B6.locBonuses["DEFAULT"] = 200;
                 }
-                locBonuses["DEFAULT"] = 200;
-                distBonuses["DEFAULT"] = 200;
-                countryBonuses["DEFAULT"] = 200;
-            }
-            if (bonusType.getValue() == "B4")
-            {
-                MultType B4 = vhf.mults["B4"];
-
-                if (B4.bonuses.size() == 0)
-                {
-                    B4.bonuses["DEFAULT"] = 500;
-                }
-                for (QMap<QString, int>::iterator i = B4.bonuses.begin(); i != B4.bonuses.end(); i++)
+                for (QMap<QString, int>::iterator i = B6.locBonuses.begin(); i != B6.locBonuses.end(); i++)
                 {
                     QString name = i.key().toUpper();
                     int value = i.value();
 
                     locBonuses[name] = value;
                 }
-                distBonuses["DEFAULT"] = 0;
-                countryBonuses["DEFAULT"] = 0;
+
+                if (B6.postcodeBonuses.size() == 0)
+                {
+                    B6.postcodeBonuses["DEFAULT"] = 200;
+                }
+                for (QMap<QString, int>::iterator i = B6.postcodeBonuses.begin(); i != B6.postcodeBonuses.end(); i++)
+                {
+                    QString name = i.key().toUpper();
+                    int value = i.value();
+
+                    postcodeBonuses[name] = value;
+                }
+
+                if (B6.dxccBonuses.size() == 0)
+                {
+                    B6.dxccBonuses["DEFAULT"] = 200;
+                }
+                for (QMap<QString, int>::iterator i = B6.dxccBonuses.begin(); i != B6.dxccBonuses.end(); i++)
+                {
+                    QString name = i.key().toUpper();
+                    int value = i.value();
+
+                    dxccBonuses[name] = value;
+                }
+            }
+            if (bonusType.getValue() == "B4")
+            {
+                MultType B4 = vhf.mults["B4"];
+                
+                if (B4.locBonuses.size() == 0)
+                {
+                    B4.locBonuses["DEFAULT"] = 500;
+                }
+                for (QMap<QString, int>::iterator i = B4.locBonuses.begin(); i != B4.locBonuses.end(); i++)
+                {
+                    QString name = i.key().toUpper();
+                    int value = i.value();
+
+                    locBonuses[name] = value;
+                }
+                postcodeBonuses["DEFAULT"] = 0;
+                dxccBonuses["DEFAULT"] = 0;
             }
         }
     }
     else if (usesBonus.getValue() && bonusType.getValue() == "NAC")
     {
         bonusYearLoaded = 0;
-        locBonuses.clear();
         locBonuses["DEFAULT"] = 500;
+        postcodeBonuses["DEFAULT"] = 0;
+        dxccBonuses["DEFAULT"] = 0;
     }
 
 }
@@ -1803,17 +1832,17 @@ int BaseContestLog::getSquareBonus(QString sloc) const
 int BaseContestLog::getCountryBonus(QString c) const
 {
     int bonus = 0;
-    QMap<QString, int>::const_iterator l = countryBonuses.find(c);
+    QMap<QString, int>::const_iterator l = dxccBonuses.find(c);
 
-    if ( l != countryBonuses.end())
+    if ( l != dxccBonuses.end())
     {
         // specific bonus for square allocated
         bonus = l.value();
     }
     else
     {
-        QMap<QString, int>::const_iterator l = countryBonuses.find("DEFAULT");
-        if ( l != countryBonuses.end())
+        QMap<QString, int>::const_iterator l = dxccBonuses.find("DEFAULT");
+        if ( l != dxccBonuses.end())
         {
             // specific bonus for country allocated
             bonus = l.value();
@@ -1824,17 +1853,17 @@ int BaseContestLog::getCountryBonus(QString c) const
 int BaseContestLog::getDistBonus(QString d) const
 {
     int bonus = 0;
-    QMap<QString, int>::const_iterator l = distBonuses.find(d);
+    QMap<QString, int>::const_iterator l = postcodeBonuses.find(d);
 
-    if ( l != distBonuses.end())
+    if ( l != postcodeBonuses.end())
     {
         // specific bonus for district allocated
         bonus = l.value();
     }
     else
     {
-        QMap<QString, int>::const_iterator l = distBonuses.find("DEFAULT");
-        if ( l != distBonuses.end())
+        QMap<QString, int>::const_iterator l = postcodeBonuses.find("DEFAULT");
+        if ( l != postcodeBonuses.end())
         {
             // specific bonus for square allocated
             bonus = l.value();
@@ -2043,7 +2072,7 @@ QString ContestScore::disp()
     {
         if (bonusType == "B4")
         {
-            buff = tr("Score: %1 Qsos; %2 pts; %3 countries; %4 locs; bonuses %5(%6) = %7")
+            buff = tr("Score: %1 Qsos; %2 pts; (%3 countries); %4 locs; bonuses %5(%6) = %7")
                        .arg(nqsos).arg(contestScore)
                        .arg(nctry).arg(nlocs)
                        .arg(bonus) .arg(nbonus)

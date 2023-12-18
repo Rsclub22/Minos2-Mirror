@@ -19,7 +19,7 @@
 
 namespace RigCapConstants
 {
-    enum PortType {none, serial, network, usb};
+    enum PortType {none, serial, network, usb, udp};
 
 
     // These are the PTT capabilities from hamlib. Most radios are RIG_PTT_NONE, RIG_PTT_RIG and RIG_PTT_RIG_MICDATA

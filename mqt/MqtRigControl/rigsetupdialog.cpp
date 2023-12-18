@@ -182,21 +182,28 @@ void RigSetupDialog::loadSettingsToTab(int tabNum, QString tabName)
     radioTab.value(tabName)->setEnableLocalTransVertSw(availRadioData.value(tabName)->enableLocTVSwMsg);
 
 
-
-    if (rigCap.portType == RigCapConstants::PortType::network)
+    if (availRadioData.value(tabName)->portType == RigCapConstants::PortType::network)
+    //if (rigCap.portType == RigCapConstants::PortType::network)
     {
-        radioTab.value(tabName)->serialDataEntryVisible(false);
-        radioTab.value(tabName)->advancedSerialDataEntryVisible(false);
-        radioTab.value(tabName)->setAdvancedCommsChkBoxVisible(false);
-        radioTab.value(tabName)->networkDataEntryVisible(true);
+        radioTab.value(tabName)->setDialogBoxesVisibleForNetwork();
+        //radioTab.value(tabName)->setPortTypeNetworkRadioButtonChecked(true);
+        //radioTab.value(tabName)->setPortTypeSerialRadioButtonChecked(false);
+        //radioTab.value(tabName)->serialDataEntryVisible(false);
+        //radioTab.value(tabName)->advancedSerialDataEntryVisible(false);
+        //radioTab.value(tabName)->setAdvancedCommsChkBoxVisible(false);
+        //radioTab.value(tabName)->networkDataEntryVisible(true);
     }
-    else if (rigCap.portType == RigCapConstants::PortType::serial)
+    else if (availRadioData.value(tabName)->portType == RigCapConstants::PortType::serial)
+    //else if (rigCap.portType == RigCapConstants::PortType::serial)
     {
-        radioTab.value(tabName)->serialDataEntryVisible(true);
-        radioTab.value(tabName)->advancedSerialDataEntryVisible(availRadioData.value(tabName)->advancedCommsFlag);
-        radioTab.value(tabName)->setAdvancedCommsChkBoxVisible(true);
-        radioTab.value(tabName)->checkAdvancedCommsCheckBox(availRadioData.value(tabName)->advancedCommsFlag);
-        radioTab.value(tabName)->networkDataEntryVisible(false);
+        radioTab.value(tabName)->setDialogBoxesVisibleForSerial();
+        //radioTab.value(tabName)->setPortTypeNetworkRadioButtonChecked(false);
+        //radioTab.value(tabName)->setPortTypeSerialRadioButtonChecked(true);
+        //radioTab.value(tabName)->serialDataEntryVisible(true);
+        //radioTab.value(tabName)->advancedSerialDataEntryVisible(availRadioData.value(tabName)->advancedCommsFlag);
+        //radioTab.value(tabName)->setAdvancedCommsChkBoxVisible(true);
+        //radioTab.value(tabName)->checkAdvancedCommsCheckBox(availRadioData.value(tabName)->advancedCommsFlag);
+        //radioTab.value(tabName)->networkDataEntryVisible(false);
         if (radioTab.value(tabName)->getRadioData()->handshake == RIG_HANDSHAKE_HARDWARE) // CTS/RTS enabled
         {
             radioTab.value(tabName)->setForceRTSDisabled(true);
@@ -207,12 +214,16 @@ void RigSetupDialog::loadSettingsToTab(int tabNum, QString tabName)
         }
 
     }
-    else if (rigCap.portType == RigCapConstants::PortType::none)
+    else if (availRadioData.value(tabName)->portType == RigCapConstants::PortType::none)
+    //else if (rigCap.portType == RigCapConstants::PortType::none)
     {
-        radioTab.value(tabName)->serialDataEntryVisible(false);
-        radioTab.value(tabName)->advancedSerialDataEntryVisible(false);
-        radioTab.value(tabName)->setAdvancedCommsChkBoxVisible(false);
-        radioTab.value(tabName)->networkDataEntryVisible(false);
+        radioTab.value(tabName)->setDialogBoxesVisibleForNone();
+        //radioTab.value(tabName)->setPortTypeNetworkRadioButtonChecked(false);
+        //radioTab.value(tabName)->setPortTypeSerialRadioButtonChecked(false);
+        //radioTab.value(tabName)->serialDataEntryVisible(false);
+        //radioTab.value(tabName)->advancedSerialDataEntryVisible(false);
+        //radioTab.value(tabName)->setAdvancedCommsChkBoxVisible(false);
+        //radioTab.value(tabName)->networkDataEntryVisible(false);
     }
 
     radioTab.value(tabName)->setRigctldCheckBoxVisible(rigCap.supportRigCtld);
@@ -256,11 +267,14 @@ void RigSetupDialog::loadSettingsToTab(int tabNum, QString tabName)
     else if (availRadioData.value(tabName)->pttType == serialCommonData::PTTMethodCodes::PTT_METHOD_RTS)
     {
         radioTab.value(tabName)->setPttRtsSelectRadioButtonChecked(true);
+        radioTab.value(tabName)->pttComportSelDisabled(false);
+
 
     }
     else if (availRadioData.value(tabName)->pttType == serialCommonData::PTTMethodCodes::PTT_METHOD_DTR)
     {
         radioTab.value(tabName)->setPttDtrSelectRadioButtonChecked(true);
+        radioTab.value(tabName)->pttComportSelDisabled(false);
 
     }
 
@@ -275,10 +289,12 @@ void RigSetupDialog::loadSettingsToTab(int tabNum, QString tabName)
         if (availRadioData.value(tabName)->enableDisableCatFeature.catEnable)
         {
             radioTab.value(tabName)->setPttCatSelectRadioButtonDisabled(false);
+
         }
         else
         {
            radioTab.value(tabName)->setPttCatSelectRadioButtonDisabled(true);
+
         }
 
 
