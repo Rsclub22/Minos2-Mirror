@@ -307,8 +307,8 @@ class BaseContestLog: public BaseLogList
       int bonusYearLoaded = 0;
       QString bonusTypeLoaded;
       QMap<QString, int> locBonuses;
-      QMap<QString, int> distBonuses;
-      QMap<QString, int> countryBonuses;
+      QMap<QString, int> postcodeBonuses;
+      QMap<QString, int> dxccBonuses;
       void loadBonusList();
       int getSquareBonus(QString sloc) const;
       int getCountryBonus(QString c) const;
