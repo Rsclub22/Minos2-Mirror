@@ -489,8 +489,8 @@ void OmnirigControl::register_rigs(RigFactory::Rigs* rigsList, int id1, int id2)
 
     (*rigsList)[OmniRigOneName] = RigCapabilities(
                 RigCapConstants::PortType::none,
-                "Afreet",
-                "Omnirig",
+                OMINRIG_MFR_NAME,
+                OMNIRIG_NAME,
                 OmniRigOneName,
                 id1,
                 false,      // support getSupBands
@@ -528,8 +528,8 @@ void OmnirigControl::register_rigs(RigFactory::Rigs* rigsList, int id1, int id2)
 
     (*rigsList)[OmniRigTwoName] = RigCapabilities(
                 RigCapConstants::PortType::none,
-                "Afreet",
-                "Omnirig",
+                OMINRIG_MFR_NAME,
+                OMNIRIG_NAME,
                 OmniRigTwoName,
                 id2,
                 false,      // support getSupBands

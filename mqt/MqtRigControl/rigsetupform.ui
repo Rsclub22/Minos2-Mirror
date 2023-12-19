@@ -65,7 +65,7 @@
           <item>
            <layout class="QVBoxLayout" name="verticalLayout_8">
             <item>
-             <widget class="QLabel" name="label_5">
+             <widget class="QLabel" name="portTypeLabel">
               <property name="text">
                <string>Port Type</string>
               </property>

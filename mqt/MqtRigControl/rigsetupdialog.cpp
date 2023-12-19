@@ -183,27 +183,14 @@ void RigSetupDialog::loadSettingsToTab(int tabNum, QString tabName)
 
 
     if (availRadioData.value(tabName)->portType == RigCapConstants::PortType::network)
-    //if (rigCap.portType == RigCapConstants::PortType::network)
     {
         radioTab.value(tabName)->setDialogBoxesVisibleForNetwork();
-        //radioTab.value(tabName)->setPortTypeNetworkRadioButtonChecked(true);
-        //radioTab.value(tabName)->setPortTypeSerialRadioButtonChecked(false);
-        //radioTab.value(tabName)->serialDataEntryVisible(false);
-        //radioTab.value(tabName)->advancedSerialDataEntryVisible(false);
-        //radioTab.value(tabName)->setAdvancedCommsChkBoxVisible(false);
-        //radioTab.value(tabName)->networkDataEntryVisible(true);
+
     }
     else if (availRadioData.value(tabName)->portType == RigCapConstants::PortType::serial)
-    //else if (rigCap.portType == RigCapConstants::PortType::serial)
     {
         radioTab.value(tabName)->setDialogBoxesVisibleForSerial();
-        //radioTab.value(tabName)->setPortTypeNetworkRadioButtonChecked(false);
-        //radioTab.value(tabName)->setPortTypeSerialRadioButtonChecked(true);
-        //radioTab.value(tabName)->serialDataEntryVisible(true);
-        //radioTab.value(tabName)->advancedSerialDataEntryVisible(availRadioData.value(tabName)->advancedCommsFlag);
-        //radioTab.value(tabName)->setAdvancedCommsChkBoxVisible(true);
-        //radioTab.value(tabName)->checkAdvancedCommsCheckBox(availRadioData.value(tabName)->advancedCommsFlag);
-        //radioTab.value(tabName)->networkDataEntryVisible(false);
+
         if (radioTab.value(tabName)->getRadioData()->handshake == RIG_HANDSHAKE_HARDWARE) // CTS/RTS enabled
         {
             radioTab.value(tabName)->setForceRTSDisabled(true);
@@ -215,15 +202,9 @@ void RigSetupDialog::loadSettingsToTab(int tabNum, QString tabName)
 
     }
     else if (availRadioData.value(tabName)->portType == RigCapConstants::PortType::none)
-    //else if (rigCap.portType == RigCapConstants::PortType::none)
     {
         radioTab.value(tabName)->setDialogBoxesVisibleForNone();
-        //radioTab.value(tabName)->setPortTypeNetworkRadioButtonChecked(false);
-        //radioTab.value(tabName)->setPortTypeSerialRadioButtonChecked(false);
-        //radioTab.value(tabName)->serialDataEntryVisible(false);
-        //radioTab.value(tabName)->advancedSerialDataEntryVisible(false);
-        //radioTab.value(tabName)->setAdvancedCommsChkBoxVisible(false);
-        //radioTab.value(tabName)->networkDataEntryVisible(false);
+
     }
 
     radioTab.value(tabName)->setRigctldCheckBoxVisible(rigCap.supportRigCtld);
@@ -334,7 +315,7 @@ void RigSetupDialog::loadSettingsToTab(int tabNum, QString tabName)
     else
     {
         radioTab.value(tabName)->setSupportBandCheckBoxVisible(true);
-        radioTab.value(tabName)->setCatFeaturesEnableChkBoxVisible(false);          // this is an Omnirig radio, turn off the CAT Features enable checkbox
+
     }
 
     // if radio does not support any
@@ -396,6 +377,15 @@ void RigSetupDialog::loadSettingsToTab(int tabNum, QString tabName)
     }
 
     radioTab.value(tabName)->loadEnableShowCatFeaturesBox(rigCap);
+
+
+    // Most features are handled in rigcap, but others for Omnirig here
+
+    if (rigCap.rigManufacturer == OMINRIG_MFR_NAME)
+    {
+        radioTab.value(tabName)->setCatFeaturesEnableChkBoxVisible(false);
+        radioTab.value(tabName)->setPortTypeWidgetsVisible(false);
+    }
 
 
 

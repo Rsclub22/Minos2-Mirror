@@ -219,6 +219,7 @@ public:
     void setDialogBoxesVisibleForNetwork();
 
 
+    void setPortTypeWidgetsVisible(bool visible);
 public slots:
     void comSpeedSelected();
     void comDataBitsSelected();

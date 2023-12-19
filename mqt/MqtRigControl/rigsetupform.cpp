@@ -188,38 +188,21 @@ void RigSetupForm::setupRadioModel(QString radioModel)
 
         if (rigCap.portType == RigCapConstants::PortType::network)
         {
-
-               setDialogBoxesVisibleForNetwork();
-
-            //serialDataEntryVisible(false);
-               //advancedSerialDataEntryVisible(false);
-               //setAdvancedCommsChkBoxVisible(false);
-               //networkDataEntryVisible(true);
-               //setStartMinosRigctldCheckbox(true);
-
-
+            setDialogBoxesVisibleForNetwork();
         }
         else if (rigCap.portType == RigCapConstants::PortType::serial)
         {
-
             setDialogBoxesVisibleForSerial();
-            //serialDataEntryVisible(true);
-                //advancedSerialDataEntryVisible(radioData->advancedCommsFlag);
-                //checkAdvancedCommsCheckBox(radioData->advancedCommsFlag);
-                //setAdvancedCommsChkBoxVisible(true);
-                //networkDataEntryVisible(false);
 
         }
         else // RIG_PORT_NONE
         {
-                setDialogBoxesVisibleForNone();
-            //serialDataEntryVisible(false);
-                //advancedSerialDataEntryVisible(false);
-                //setAdvancedCommsChkBoxVisible(false);
-                //networkDataEntryVisible(false);
+            setDialogBoxesVisibleForNone();
+
         }
+
         setRigctldCheckBoxVisible(rigCap.supportRigCtld);
-        //getRadioData()->rigCtldEnable = rigCap.supportRigCtld;
+
 
         if (rigCap.supportGetSupBands)
         {
@@ -228,7 +211,7 @@ void RigSetupForm::setupRadioModel(QString radioModel)
         else
         {
             setSupportBandCheckBoxVisible(true);
-            setCatFeaturesEnableChkBoxVisible(false);          // this is an Omnirig radio, turn off the CAT Features enable checkbox
+
         }
 
 
@@ -286,6 +269,15 @@ void RigSetupForm::setupRadioModel(QString radioModel)
          else
          {
              setLocTVSWComportVisible(false);
+         }
+
+
+         // Omnirig
+
+         if (rigCap.rigManufacturer == OMINRIG_MFR_NAME)
+         {
+             setCatFeaturesEnableChkBoxVisible(false);
+             setPortTypeWidgetsVisible(false);
          }
 
 /*
@@ -495,6 +487,14 @@ void RigSetupForm::onPortTypeNetworkRadioButtonClicked()
 void RigSetupForm::setPortTypeNetworkRadioButtonChecked(bool checked)
 {
     ui->portTypeNetworkRadioButton->setChecked(checked);
+}
+
+
+void RigSetupForm::setPortTypeWidgetsVisible(bool visible)
+{
+    ui->portTypeLabel->setVisible(visible);
+    ui->portTypeSerialRadioButton->setVisible(visible);
+    ui->portTypeNetworkRadioButton->setVisible(visible);
 }
 
 
