@@ -369,6 +369,20 @@ void QrzServerMainWindow::sessionDataReceived()
         trace(QString("Qrz Error: %1").arg(qrzSessionData.getError()));
         addToErrorTextLabel(qrzSessionData.getError());
         addTextToLogWindow(qrzSessionData.getError());
+
+        if (qrzSessionData.getError() != "Connection refused")
+        {
+            // if "Connection refused" then logon won't work
+            // for at least 24 hours, so no point in trying
+
+            if (qrzSessionData.getKey().isEmpty())
+            {
+                // session has expired, we need to re-connect
+
+                qrzServerStateFlags.clear();
+                logon();
+            }
+        }
     }
 
     if (qrzServerStateFlags.getAskLogonFlag())
