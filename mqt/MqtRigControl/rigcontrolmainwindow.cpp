@@ -508,7 +508,7 @@ void RigControlMainWindow::upDateRadio(QString radioName)
 
     if (radioCommsOK)
     {
-        onSetPttOnOff(false);     // turn off PTT in case it is on
+
         closeRadio();
     }
 
@@ -1123,6 +1123,7 @@ void RigControlMainWindow::checkSupportPollRadio()
         connect(radio, &RigBase::ritOff, this, &RigControlMainWindow::onRitOff, Qt::QueuedConnection);
         connect(radio, &RigBase::ritOffset, this, &RigControlMainWindow::onRitOffset, Qt::QueuedConnection);
         connect(radio, &RigBase::rit0, this, &RigControlMainWindow::onRit0, Qt::QueuedConnection);
+        connect(radio, &RigBase::pttState, this, &RigControlMainWindow::onPttState, Qt::QueuedConnection);
     }
 }
 
@@ -1602,6 +1603,16 @@ int RigControlMainWindow::openRadio()
 void RigControlMainWindow::closeRadio()
 {
 
+    if (currentRadio.enablePTT)
+    {
+        if (radio != nullptr)
+        {
+           onSetPttOnOff(false);     // turn off PTT in case it is on
+        }
+
+    }
+
+
     if (rigFactory->supported_rigs()->value(currentRadio.rigModel).pollData)
     {
         pollTimer->stop();
@@ -1620,6 +1631,8 @@ void RigControlMainWindow::closeRadio()
             disconnect(radio, &RigBase::ritOff, this, &RigControlMainWindow::onRitOff);
             disconnect(radio, &RigBase::ritOffset, this, &RigControlMainWindow::onRitOffset);
             disconnect(radio, &RigBase::rit0, this, &RigControlMainWindow::onRit0);
+            disconnect(radio, &RigBase::pttState, this, &RigControlMainWindow::onPttState);
+
 
         }
 

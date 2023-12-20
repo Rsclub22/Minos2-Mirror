@@ -19,8 +19,9 @@
 #include <QMessageBox>
 #include <QHostAddress>
 #include <QInputDialog>
-#include "serialCommonData.h"
 
+#include "serialCommonData.h"
+#include "cutils.h"
 #include "hamlib/rig.h"
 
 #include "minosNetUtils.h"
@@ -188,38 +189,21 @@ void RigSetupForm::setupRadioModel(QString radioModel)
 
         if (rigCap.portType == RigCapConstants::PortType::network)
         {
-
-               setDialogBoxesVisibleForNetwork();
-
-            //serialDataEntryVisible(false);
-               //advancedSerialDataEntryVisible(false);
-               //setAdvancedCommsChkBoxVisible(false);
-               //networkDataEntryVisible(true);
-               //setStartMinosRigctldCheckbox(true);
-
-
+            setDialogBoxesVisibleForNetwork();
         }
         else if (rigCap.portType == RigCapConstants::PortType::serial)
         {
-
             setDialogBoxesVisibleForSerial();
-            //serialDataEntryVisible(true);
-                //advancedSerialDataEntryVisible(radioData->advancedCommsFlag);
-                //checkAdvancedCommsCheckBox(radioData->advancedCommsFlag);
-                //setAdvancedCommsChkBoxVisible(true);
-                //networkDataEntryVisible(false);
 
         }
         else // RIG_PORT_NONE
         {
-                setDialogBoxesVisibleForNone();
-            //serialDataEntryVisible(false);
-                //advancedSerialDataEntryVisible(false);
-                //setAdvancedCommsChkBoxVisible(false);
-                //networkDataEntryVisible(false);
+            setDialogBoxesVisibleForNone();
+
         }
+
         setRigctldCheckBoxVisible(rigCap.supportRigCtld);
-        //getRadioData()->rigCtldEnable = rigCap.supportRigCtld;
+
 
         if (rigCap.supportGetSupBands)
         {
@@ -228,7 +212,7 @@ void RigSetupForm::setupRadioModel(QString radioModel)
         else
         {
             setSupportBandCheckBoxVisible(true);
-            setCatFeaturesEnableChkBoxVisible(false);          // this is an Omnirig radio, turn off the CAT Features enable checkbox
+
         }
 
 
@@ -288,6 +272,23 @@ void RigSetupForm::setupRadioModel(QString radioModel)
              setLocTVSWComportVisible(false);
          }
 
+
+         // Omnirig
+
+         if (rigCap.rigManufacturer == OMINRIG_MFR_NAME)
+         {
+             setCatFeaturesEnableChkBoxVisible(false);
+             setPortTypeWidgetsVisible(false);
+             setComportErrorTxtVisible(false);
+         }
+         else
+         {
+             // hamlib
+             setCatFeaturesEnableChkBoxVisible(true);
+             setPortTypeWidgetsVisible(true);
+
+         }
+
 /*
          if (rigCap.supportPttPortType == RigCapConstants::PttPortType::RIG_PTT_RIG
                  || rigCap.supportPttPortType == RigCapConstants::PttPortType::RIG_PTT_RIG_MICDATA)
@@ -317,6 +318,7 @@ void RigSetupForm::setDialogBoxesVisibleForNetwork()
     setPortTypeSerialRadioButtonChecked(false);
     serialDataEntryVisible(false);
     advancedSerialDataEntryVisible(false);
+    setComportErrorTxtVisible(false);
     setAdvancedCommsChkBoxVisible(false);
     networkDataEntryVisible(true);
     setStartMinosRigctldCheckbox(true);
@@ -331,6 +333,7 @@ void RigSetupForm::setDialogBoxesVisibleForSerial()
     setPortTypeSerialRadioButtonChecked(true);
     serialDataEntryVisible(true);
     advancedSerialDataEntryVisible(radioData->advancedCommsFlag);
+    setComportErrorTxtVisible(true);
     checkAdvancedCommsCheckBox(radioData->advancedCommsFlag);
     setAdvancedCommsChkBoxVisible(true);
     networkDataEntryVisible(false);
@@ -498,6 +501,14 @@ void RigSetupForm::setPortTypeNetworkRadioButtonChecked(bool checked)
 }
 
 
+void RigSetupForm::setPortTypeWidgetsVisible(bool visible)
+{
+    ui->portTypeLabel->setVisible(visible);
+    ui->portTypeSerialRadioButton->setVisible(visible);
+    ui->portTypeNetworkRadioButton->setVisible(visible);
+}
+
+
 
 /***************** Comports ****************************/
 
@@ -550,18 +561,24 @@ void RigSetupForm::setComport(QString p)
 
     if (ui->comPortBox->findText(p) ==  -1)
     {
-        ui->comportErrorTxt->setText(/*HtmlFontColour(Qt::red) + */tr("%1 Not Available").arg(p));
-        ui->comportErrorTxt->setVisible(true);
+        ui->comportErrorTxt->setText(HtmlFontColour(Qt::red) + tr("%1 Not Available").arg(p));
+        //ui->comportErrorTxt->setVisible(true);
 
     }
     else
     {
         ui->comportErrorTxt->setText("");
-        ui->comportErrorTxt->setVisible(false);
+        //ui->comportErrorTxt->setVisible(false);
 
     }
 
     ui->comPortBox->setCurrentIndex(ui->comPortBox->findText(p));
+}
+
+
+void RigSetupForm::setComportErrorTxtVisible(bool visible)
+{
+    ui->comportErrorTxt->setVisible(visible);
 }
 
 
