@@ -219,6 +219,8 @@ public:
     void setDialogBoxesVisibleForNetwork();
 
 
+    void setPortTypeWidgetsVisible(bool visible);
+    void setComportErrorTxtVisible(bool visible);
 public slots:
     void comSpeedSelected();
     void comDataBitsSelected();

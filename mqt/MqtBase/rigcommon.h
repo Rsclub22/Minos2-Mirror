@@ -29,6 +29,9 @@ VFO strToVfo(QString vfo);
 
 const int MAX_RITFREQ = 9999;
 
+auto constexpr OMNIRIG_NAME = "Omnirig";
+auto constexpr OMINRIG_MFR_NAME = "Afreet";
+
 class TransVertParams
 {
 
