@@ -7,17 +7,18 @@
 
 #HAMLIBVER = $$(hamlib)
 #HAMLIBVER = $$(45)
-HAMLIBVER = 455
+#HAMLIBVER = 455
+HAMLIBVER = 460
 #message(The hamlib version is $$HAMLIBVER)
 
 equals(HAMLIBVER, 455) {
 
-    #message(Using  hamlib V4.5.5)
+    message(Using  hamlib V4.5.5)
     win32: {
        win32-g++* {
           contains(QT_ARCH, i386) {
           HAMLIBDIR = $$absolute_path(../../hamlib-w32-4.5.5)
-          #message(Hamlib path is $$HAMLIBDIR)
+          message(Hamlib path is $$HAMLIBDIR)
           }
        contains(QT_ARCH, x86_64) {
           HAMLIBDIR = $$absolute_path(../../hamlib-w64-4.5.5)
@@ -37,23 +38,23 @@ equals(HAMLIBVER, 455) {
 
     }
 } else {
-    #message(Using other version - currently set at hamlib V4.3.1)
+    message(Using hamlib V4.6)
    win32: {
    win32-g++* {
       contains(QT_ARCH, i386) {
-      HAMLIBDIR = $$absolute_path(../../hamlib-w32-4.3.1)
-      #message(Hamlib path is $$HAMLIBDIR)
+      HAMLIBDIR = $$absolute_path(../../hamlib-w32-4.6)
+      message(Hamlib path is $$HAMLIBDIR)
       }
    contains(QT_ARCH, x86_64) {
-      HAMLIBDIR = $$absolute_path(../../hamlib-w32-4.3.1)
+      HAMLIBDIR = $$absolute_path(../../hamlib-w64-4.6)
       }
       LIBS += -L$$HAMLIBDIR/lib/gcc/ -llibhamlib
    } else {
       contains(QT_ARCH, i386) {
-         HAMLIBDIR = $$absolute_path(../../hamlib-w32-4.3.1)
+         HAMLIBDIR = $$absolute_path(../../hamlib-w32-4.6)
       }
       contains(QT_ARCH, x86_64) {
-         HAMLIBDIR = $$absolute_path(../../hamlib-w64-4.3.1)
+         HAMLIBDIR = $$absolute_path(../../hamlib-w64-4.6)
       }
       msvc: LIBS += -L$$HAMLIBDIR/lib/msvc/ -llibhamlib-4
       msvc: DEFINES += DLL_EXPORT

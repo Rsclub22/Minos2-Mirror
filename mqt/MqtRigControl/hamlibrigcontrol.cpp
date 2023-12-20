@@ -42,7 +42,7 @@ const char* HamlibRigControl::hamlibErrorMsg[] =  {QT_TR_NOOP("No Error, operati
 
 static QList<const rig_caps *> capsList;
 
-int collect(const rig_caps *caps, rig_ptr_t)
+int collect( rig_caps *caps, rig_ptr_t)
 {
     capsList.append(caps);
     return 1;
