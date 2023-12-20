@@ -19,8 +19,9 @@
 #include <QMessageBox>
 #include <QHostAddress>
 #include <QInputDialog>
-#include "serialCommonData.h"
 
+#include "serialCommonData.h"
+#include "cutils.h"
 #include "hamlib/rig.h"
 
 #include "minosNetUtils.h"
@@ -278,6 +279,14 @@ void RigSetupForm::setupRadioModel(QString radioModel)
          {
              setCatFeaturesEnableChkBoxVisible(false);
              setPortTypeWidgetsVisible(false);
+             setComportErrorTxtVisible(false);
+         }
+         else
+         {
+             // hamlib
+             setCatFeaturesEnableChkBoxVisible(true);
+             setPortTypeWidgetsVisible(true);
+
          }
 
 /*
@@ -309,6 +318,7 @@ void RigSetupForm::setDialogBoxesVisibleForNetwork()
     setPortTypeSerialRadioButtonChecked(false);
     serialDataEntryVisible(false);
     advancedSerialDataEntryVisible(false);
+    setComportErrorTxtVisible(false);
     setAdvancedCommsChkBoxVisible(false);
     networkDataEntryVisible(true);
     setStartMinosRigctldCheckbox(true);
@@ -323,6 +333,7 @@ void RigSetupForm::setDialogBoxesVisibleForSerial()
     setPortTypeSerialRadioButtonChecked(true);
     serialDataEntryVisible(true);
     advancedSerialDataEntryVisible(radioData->advancedCommsFlag);
+    setComportErrorTxtVisible(true);
     checkAdvancedCommsCheckBox(radioData->advancedCommsFlag);
     setAdvancedCommsChkBoxVisible(true);
     networkDataEntryVisible(false);
@@ -550,18 +561,24 @@ void RigSetupForm::setComport(QString p)
 
     if (ui->comPortBox->findText(p) ==  -1)
     {
-        ui->comportErrorTxt->setText(/*HtmlFontColour(Qt::red) + */tr("%1 Not Available").arg(p));
-        ui->comportErrorTxt->setVisible(true);
+        ui->comportErrorTxt->setText(HtmlFontColour(Qt::red) + tr("%1 Not Available").arg(p));
+        //ui->comportErrorTxt->setVisible(true);
 
     }
     else
     {
         ui->comportErrorTxt->setText("");
-        ui->comportErrorTxt->setVisible(false);
+        //ui->comportErrorTxt->setVisible(false);
 
     }
 
     ui->comPortBox->setCurrentIndex(ui->comPortBox->findText(p));
+}
+
+
+void RigSetupForm::setComportErrorTxtVisible(bool visible)
+{
+    ui->comportErrorTxt->setVisible(visible);
 }
 
 
