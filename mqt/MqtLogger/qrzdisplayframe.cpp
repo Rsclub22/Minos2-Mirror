@@ -144,7 +144,7 @@ void QrzDisplayFrame::onServerPingTimerTimeout()
 
 void QrzDisplayFrame::onLoggerQrzReply(QrzCallsignData cd, QString qrzReplyState, QString /*uuid*/)
 {
-    if (!ct->isAgeProtected())
+    if (ct && !ct->isAgeProtected())
     {
         clear();
         if (qrzReplyState.isEmpty())
@@ -219,9 +219,12 @@ void QrzDisplayFrame::clear()
 void QrzDisplayFrame::getQrzDetailsForLogger(QString callsign)
 {
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
-    QString frame_uuid = tslf->getContest()->uuid;
-    trace(QString("[qrzDisplayFrame] sending callsign %1, from frame uuid %2 to QrzServer").arg(callsign, frame_uuid));
-    QrzDisplayServerRpc::getQrzDisplayServerRpc()->sendCallsignFromLoggerToQrzServer(callsign, frame_uuid);
+    if (tslf)
+    {
+        QString frame_uuid = tslf->getContest()->uuid;
+        trace(QString("[qrzDisplayFrame] sending callsign %1, from frame uuid %2 to QrzServer").arg(callsign, frame_uuid));
+        QrzDisplayServerRpc::getQrzDisplayServerRpc()->sendCallsignFromLoggerToQrzServer(callsign, frame_uuid);
+    }
 }
 
 void QrzDisplayFrame::setQrzMessageText(QString msg)

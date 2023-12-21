@@ -38,7 +38,7 @@ equals(HAMLIBVER, 455) {
 
     }
 } else {
-    message(Using test version - currently set at hamlib V4.6)
+    message(Using hamlib V4.6)
    win32: {
    win32-g++* {
       contains(QT_ARCH, i386) {
