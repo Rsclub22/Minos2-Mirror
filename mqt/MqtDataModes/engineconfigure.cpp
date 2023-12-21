@@ -219,6 +219,15 @@ EngineConfigure::EngineConfigure(DMMainWindow *parent) :
 {
     ui->setupUi(this);
 
+#ifndef Q_OS_WIN
+    ui->MMTTYframe->setVisible(false);
+    ui->grittyframe->setVisible(false);
+    ui->MMVARI1frame->setVisible(false);
+    ui->MMVARI2frame->setVisible(false);
+    ui->twotoneframe->setVisible(false);
+#endif
+
+
     connect(ui->mmttyEdit1, &QLineEdit::editingFinished, this, &EngineConfigure::check);
     connect(ui->mmttyEdit2, &QLineEdit::editingFinished, this, &EngineConfigure::check);
     connect(ui->twotoneEdit1, &QLineEdit::editingFinished, this, &EngineConfigure::check);
