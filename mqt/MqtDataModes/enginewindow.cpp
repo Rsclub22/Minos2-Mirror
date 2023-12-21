@@ -36,10 +36,12 @@ const QString EngineWindow::i1("_1");
 const QString EngineWindow::i2("_2");
 
 const QStringList EngineWindow::enginesList = {
+#ifdef Q_OS_WIN
     mmvari + i1, mmvari + i2,
     mmtty + i1, mmtty + i2,
     twotone + i1, twotone + i2,
     gritty + i1, gritty + i2,
+#endif
     fldigi + i1, fldigi + i2,
     test + i1, test + i2
 };
