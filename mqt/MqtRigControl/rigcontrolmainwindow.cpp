@@ -1449,11 +1449,19 @@ int RigControlMainWindow::openRadio()
     else
     {
         logMessage(QString("Rig Created in the factory Ok"));
-        logMessage(QString("Library Version = %1").arg(radio->getRigLibVersion()));     // show library version in trace log before connection.
+
     }
 
     radio->setTraceComms(rigStateDetails->traceCommsFlag);
     rigStateDetails->rigCap = rigFactory->supported_rigs()->value(currentRadio.rigModel);
+
+    if (rigStateDetails->rigCap.rigManufacturer != OMINRIG_MFR_NAME)
+    {
+        logMessage(QString("Hamlib Library Version = %1").arg(radio->getRigLibVersion()));     // show library version in trace log before connection.
+    }
+
+
+
 
     // set state of trace hamlib comms
 
@@ -1479,6 +1487,10 @@ int RigControlMainWindow::openRadio()
             return OPEN_FAILED;
         }
 
+        if (rigStateDetails->rigCap.rigManufacturer == OMINRIG_MFR_NAME)
+        {
+            logMessage(QString("Library Version = %1").arg(radio->getRigLibVersion()));    // Omnirig COM needs to exist to do this..
+        }
     }
 
 
