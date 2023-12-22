@@ -263,6 +263,12 @@ private slots:
 
     void on_traceDataComms_stateChanged(int arg1);
 
+    void on_rotSplitter_splitterMoved(int pos, int index);
+
+    void on_antSplitter_splitterMoved(int pos, int index);
+
+    void on_rotTabs_currentChanged(int index);
+
 private:
     void rotateTo(int bearing);
     int northCalcTarget(int targetBearing);

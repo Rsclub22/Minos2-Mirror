@@ -83,31 +83,38 @@ RotatorMainWindow::RotatorMainWindow(QWidget *parent) :
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
+    int curTabNo = settings.getSettings().value("rotTabs/curTab").toInt();
+    ui->rotTabs->setCurrentIndex(curTabNo);
+
+    QByteArray state;
+    state = settings.getSettings().value("antSplitter").toByteArray();
+    ui->antSplitter->restoreState(state);
+
+    state = settings.getSettings().value("rotSplitter").toByteArray();
+    ui->rotSplitter->restoreState(state);
+
+    ui->antSplitter->setMinimumHeight(10);
+    ui->antSplitter->setMinimumWidth(10);
+    ui->rotSplitter->setMinimumHeight(10);
+    ui->rotSplitter->setMinimumWidth(10);
+    ui->dialFrame->setMinimumWidth(10);
+
+//    ui->dialFrame->setStretch(0, 100);
+//    ui->dialLayout->setStretch(1, 1);
+//    ui->dialLayout->setStretch(2, 1);
 
     ui->rot_left_button->setShortcut(QKeySequence(ROTATE_CCW_KEY));
     ui->rot_right_button->setShortcut(QKeySequence(ROTATE_CW_KEY));
     ui->turnButton->setShortcut(QKeySequence(ROTATE_TURN_KEY));
     ui->stopButton->setShortcut(QKeySequence(ROTATE_STOP_KEY));
 
-    //redText = new QPalette();
-    //blackText = new QPalette();
-    //redText->setColor(QPalette::ButtonText, Qt::red);
-    //blackText->setColor(QPalette::ButtonText, Qt::black);
-
-    // disable some menus for now
-//    ui->actionSkyScan->setVisible(false);
-//    ui->actionAlways_On_Top->setVisible(false);
-
     initPresetButtons();
-
 
     rotator = nullptr;
     readTraceLogFlag();
     trace(QString("Starting rotator factory and adding rotators to the list"));
     rotFactory = new RotatorFactory(traceCommsFlag, this);
 
-    //rotator->getRotatorList();
-    //setupAntenna = new RotSetupDialog(rotator);
     setupAntenna = new RotSetupDialog(rotFactory);
     setupLog = new LogDialog;
     pollTimer = new QTimer(this);
@@ -138,13 +145,10 @@ RotatorMainWindow::RotatorMainWindow(QWidget *parent) :
     rawRotatorlbl->setText(tr("RawRot: "));
     ui->statusbar->addPermanentWidget(rawRotatorDisplay);
 
-//    ui->overlaplineEdit->setFixedSize(60,20);
     ui->antNameDisp->setText("");
 
     rot_left_button_off();
     rot_right_button_off();
-
-
 
     refreshPresetLabels();
     initActionsConnections();
@@ -312,7 +316,7 @@ void RotatorMainWindow::setSelectAntennaBoxVisible(bool visible)
 {
 
 
-    ui->antennaSelectlbl->setVisible(visible);
+    //ui->antennaSelectlbl->setVisible(visible);
     ui->selectAntennaBox->setVisible(visible);
 
 
@@ -922,6 +926,11 @@ void RotatorMainWindow::initSelectAntennaBox()
         selectAntenna->addItem(setupAntenna->availAntData[i]->antennaName);
     }
     sendAntennaListLogger();
+
+    if (setupAntenna->numAvailAntennas == 0)
+    {
+        ui->rotTabs->setCurrentIndex(0);
+    }
 }
 
 
@@ -2620,5 +2629,31 @@ void RotatorMainWindow::on_PSTConfig_clicked()
 void RotatorMainWindow::on_traceDataComms_stateChanged(int /*arg1*/)
 {
     saveTraceLogFlag(ui->traceDataComms->isChecked());
+}
+
+
+void RotatorMainWindow::on_rotSplitter_splitterMoved(int /*pos*/, int /*index*/)
+{
+    RegSettings settings;
+    QByteArray state = ui->rotSplitter->saveState();
+    settings.getSettings().setValue("rotSplitter" , state);
+
+}
+
+
+void RotatorMainWindow::on_antSplitter_splitterMoved(int /*pos*/, int /*index*/)
+{
+    RegSettings settings;
+    QByteArray state = ui->antSplitter->saveState();
+    settings.getSettings().setValue("antSplitter" , state);
+
+}
+
+
+void RotatorMainWindow::on_rotTabs_currentChanged(int index)
+{
+    RegSettings settings;
+    settings.getSettings().setValue("rotTabs/curTab", index);
+
 }
 
