@@ -438,19 +438,17 @@ void RigSetupDialog::addRadio()
     int tabNum = availRadios.count();
     addTab(tabNum, radioName);
     numAvailRadios++;
+
+    radioTab.value(radioName)->setupRadioModel(radioModel);
+
+
     radioTab.value(radioName)->setAdvancedCommsFlag(false);
 
-    if (availRadioData.value(radioName)->pttType == RigCapConstants::PttPortType::RIG_PTT_RIG
-            || availRadioData.value(radioName)->pttType == RigCapConstants::PttPortType::RIG_PTT_RIG_MICDATA)
-    {
-        radioTab.value(radioName)->setPttInitialState(true, true);;
-    }
 
-    radioTab.value(radioName)->setPttInitialState(false, true);
 
     radioTab.value(radioName)->setEnableDisableCatFeaturesGroupVisible(false);
 
-    radioTab.value(radioName)->setupRadioModel(radioModel);
+
     radioTab.value(radioName)->setPollInterval(RIG_DEFAULT_POLLINTERVAL);
 
     loadAvailComportsToTab(radioName);

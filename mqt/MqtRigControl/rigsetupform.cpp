@@ -281,7 +281,7 @@ void RigSetupForm::setupRadioModel(QString radioModel)
              setPortTypeWidgetsVisible(false);
              setComportErrorTxtVisible(false);
              setSerialPttControlsVisible(false);
-             setPttCatSelectRadioButtonChecked(true);
+             setPttCatSelectRadioButtonChecked(false);
              setPttCatSelectRadioButtonVisible(true);
 
          }
@@ -293,21 +293,43 @@ void RigSetupForm::setupRadioModel(QString radioModel)
 
          }
 
-/*
-         if (rigCap.supportPttPortType == RigCapConstants::PttPortType::RIG_PTT_RIG
+
+         // serial ptt comport loaded with other comports
+         //radioTab.value(tabName)->setPttTypeRadioButtons(availRadioData.value(tabName)->pttType);
+
+         // When radio reports CAT PTT, we also allow option of Serial PTT
+         // When radio reports CAT NONE, we only allow option of Serial PTT
+         // Note Omnirig only CAT PTT
+
+         bool catPTT = true;     // This is radio PTT capability true = CAT PTT
+         bool serialPTT = true;
+
+         if (rigCap.supportPttPortType == RigCapConstants::PttPortType::RIG_PTT_RIG && rigCap.rigManufacturer == OMINRIG_MFR_NAME)
+         {
+            // support CAT PTT only
+
+            catPTT = true;
+            serialPTT = false;
+            setPttInitialState(catPTT, serialPTT);
+         }
+         else if (rigCap.supportPttPortType == RigCapConstants::PttPortType::RIG_PTT_RIG
                  || rigCap.supportPttPortType == RigCapConstants::PttPortType::RIG_PTT_RIG_MICDATA)
          {
-             // support CAT PTT
-             setCatPttInitialState(true);
+             // support CAT PTT and Serial PTT
+             catPTT = true;
+             serialPTT = true;
+             setPttInitialState(catPTT, serialPTT);
          }
          else if (rigCap.supportPttPortType == RigCapConstants::PttPortType::RIG_PTT_NONE)
          {
 
-            // support Serial
-            setCatPttInitialState(false);
+            // support Serial PTT only
+            catPTT = false;
+            serialPTT = true;
+            setPttInitialState(catPTT, serialPTT);
          }
 
-*/
+
 
     }
 
@@ -2151,10 +2173,10 @@ void RigSetupForm::setPttComport(QString p)
 }
 
 
-
+/*
 void RigSetupForm::setPttTypeRadioButtons(int type)
 {
-/*
+
 
     serialCommonData::PTTMethodCodes pttType = static_cast<serialCommonData::PTTMethodCodes>(type);
 
@@ -2213,9 +2235,9 @@ void RigSetupForm::setPttTypeRadioButtons(int type)
         }
     }
 
-*/
-}
 
+}
+*/
 void RigSetupForm::onPttEnableSelected(bool /*checked*/)
 {
 
@@ -2254,7 +2276,7 @@ void RigSetupForm::onPttEnableSelected(bool /*checked*/)
 
 void RigSetupForm::onPttCatEnableClicked(bool /*checked*/)
 {
-    if (ui->pttCatSelectRadioButton->isChecked() && (static_cast<serialCommonData::PTTMethodCodes>(radioData->pttType) != serialCommonData::PTTMethodCodes::PTT_METHOD_CAT))
+    if (ui->pttCatSelectRadioButton->isChecked() /* && (static_cast<serialCommonData::PTTMethodCodes>(radioData->pttType) != serialCommonData::PTTMethodCodes::PTT_METHOD_CAT)*/)
     {
         radioData->pttType = static_cast<int>(serialCommonData::PTTMethodCodes::PTT_METHOD_CAT);
     }
@@ -2279,7 +2301,7 @@ void RigSetupForm::onPttDtrEnableClicked(bool /*checked*/)
 {
 
 
-    if (ui->pttDTRSelectRadioButton->isChecked() && (static_cast<serialCommonData::PTTMethodCodes>(radioData->pttType) != serialCommonData::PTTMethodCodes::PTT_METHOD_DTR))
+    if (ui->pttDTRSelectRadioButton->isChecked() /* && (static_cast<serialCommonData::PTTMethodCodes>(radioData->pttType) != serialCommonData::PTTMethodCodes::PTT_METHOD_DTR)*/)
     {
         radioData->pttType = static_cast<int>(serialCommonData::PTTMethodCodes::PTT_METHOD_DTR);
     }
@@ -2311,7 +2333,7 @@ void RigSetupForm::setPttComportToolTip(QString toolTip)
 
 void RigSetupForm::onPttRtsEnableClicked(bool /*checked*/)
 {
-    if (ui->pttRTSSelectRadioButton->isChecked() && (static_cast<serialCommonData::PTTMethodCodes>(radioData->pttType) != serialCommonData::PTTMethodCodes::PTT_METHOD_RTS))
+    if (ui->pttRTSSelectRadioButton->isChecked() /*&& (static_cast<serialCommonData::PTTMethodCodes>(radioData->pttType) != serialCommonData::PTTMethodCodes::PTT_METHOD_RTS)*/)
     {
             radioData->pttType = static_cast<int>(serialCommonData::PTTMethodCodes::PTT_METHOD_RTS);
     }
