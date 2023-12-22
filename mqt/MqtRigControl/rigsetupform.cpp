@@ -280,6 +280,10 @@ void RigSetupForm::setupRadioModel(QString radioModel)
              setCatFeaturesEnableChkBoxVisible(false);
              setPortTypeWidgetsVisible(false);
              setComportErrorTxtVisible(false);
+             setSerialPttControlsVisible(false);
+             setPttCatSelectRadioButtonChecked(true);
+             setPttCatSelectRadioButtonVisible(true);
+
          }
          else
          {

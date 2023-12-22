@@ -502,9 +502,9 @@ void OmnirigControl::register_rigs(RigFactory::Rigs* rigsList, int id1, int id2)
                 false,      // support set rit state
                 false,      // get Rit Max Khz
                 false,      // support s-meter
-                RigCapConstants::PttPortType::RIG_PTT_NONE,
-                false,      // support get Ptt
-                false,      // support set Ptt
+                RigCapConstants::PttPortType::RIG_PTT_RIG,  // Omnirig doesn't support HW PTT
+                true,      // support get Ptt
+                true,      // support set Ptt
                 false,      // support get Vox State
                 false,      // support set Vox State
                 false,      // support volume
@@ -541,9 +541,9 @@ void OmnirigControl::register_rigs(RigFactory::Rigs* rigsList, int id1, int id2)
                 false,      // support set rit state
                 false,      // get Rit Max Khz
                 false,      // support s-meter
-                RigCapConstants::PttPortType::RIG_PTT_NONE,
-                false,      // support get Ptt
-                false,      // support set Ptt
+                RigCapConstants::PttPortType::RIG_PTT_RIG,    // Omnirig doesn't support HW PTT
+                true,      // support get Ptt
+                true,      // support set Ptt
                 false,      // support get Vox State
                 false,      // support set Vox State
                 false,      // support volume
