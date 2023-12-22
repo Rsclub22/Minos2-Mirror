@@ -1248,9 +1248,12 @@ int OmnirigControl::getPttStatus(VFO vfo, bool &state)
 int OmnirigControl::setPtt(VFO vfo, bool state)
 {
     Q_UNUSED(vfo)
-    Q_UNUSED(state)
-    return omnirigError(OMNIRIG_NOT_SUPPORTED);
+
+    rig->SetTx (state ? OmniRig::PM_TX : OmniRig::PM_RX);
+    return omnirigError(OMNIRIG_OK);
 }
+
+
 
 bool OmnirigControl::supportGetPtt(int rigModelNumber)
 {
