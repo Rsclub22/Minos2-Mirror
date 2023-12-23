@@ -325,7 +325,7 @@ bool TLogContainer::eventFilter(QObject *obj, QEvent *event)
 {
     if (event->type() == QEvent::ToolTip && obj == sblabel1)
     {
-        QHelpEvent *helpEvent = static_cast<QHelpEvent *>(event);
+        QHelpEvent *helpEvent = dynamic_cast<QHelpEvent *>(event);
 
         QString toolTip;
         QWidget *f = QApplication::focusWidget ();

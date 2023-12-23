@@ -2432,24 +2432,10 @@ void QSOLogFrame::setRotatorBearing(const QString &s)
     if (sl.size() < 3)
         return;
 
-    QString brg;
-    //int len = bearing.length();
-    int len = sl[0].length();
-    if (len < 2)
-    {
-        brg = QString("%1%2")
-        .arg("00", sl[0]);
-    }
-    else if (len < 3)
-    {
-        brg = QString("%1%2")
-        .arg("0", sl[0]);
-    }
-    else
-    {
-        brg = sl[0];
-    }
+    bool ok;
+    int iBearing = sl[1].toInt(&ok, 10);
 
+    QString brg = QString("%1").arg(iBearing, 3, 10, QChar('0'));
 
     if (curRotatorBearing != brg)
     {

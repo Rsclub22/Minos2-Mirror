@@ -724,26 +724,10 @@ void RotControlFrame::setRotatorBearing(const QString &s)
     }
 
 
-    //QString bearing = bearing.number(iBearing);
     QString brg;
     QChar degsym = QChar(DEGREE_SYMBOL);
-    //int len = bearing.length();
-    int len = sl[0].length();
-    if (len < 2)
-    {
-        brg = QString("%1%2%3")
-        .arg("00").arg(sl[0], degsym);
-    }
-    else if (len < 3)
-    {
-        brg = QString("%1%2%3")
-        .arg("0").arg(sl[0], degsym);
-    }
-    else
-    {
-        brg = QString("%1%2")
-        .arg(sl[0]).arg(degsym);
-    }
+
+    brg = QString("%1%2").arg(iBearing, 3, 10, QChar('0')).arg(degsym);
 
     brg.append("</font>");
 

@@ -47,7 +47,7 @@ bool ContestPageControl::eventFilter(QObject */*obj*/, QEvent *event)
     }
     else if (event->type() == QEvent::ToolTip)
     {
-        QHelpEvent *helpEvent = static_cast<QHelpEvent *>(event);
+        QHelpEvent *helpEvent = dynamic_cast<QHelpEvent *>(event);
         int curtab = tabBar()->tabAt(helpEvent->pos());
         if (curtab >= 0)
         {
