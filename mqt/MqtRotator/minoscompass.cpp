@@ -23,14 +23,15 @@
 
 MinosCompass::MinosCompass(QWidget *parent)
 
-    : QDial(parent)
+    : QWidget(parent)
 
 {
+    compassDialBearing = 0;
+    setSizePolicy(QSizePolicy:: Preferred, QSizePolicy:: Preferred);
 
-   compassDialBearing = 0;
-   setSizePolicy(QSizePolicy:: Preferred, QSizePolicy:: Preferred);
+    setMouseTracking(true);
 
-   setMouseTracking(true);
+    installEventFilter(this);
    // for test...
 //   QTimer *timer = new QTimer(this);
 //   connect(this, SIGNAL(bearing_updated(QString)), this, SLOT(compassDialUpdate(const QString &)));
@@ -41,7 +42,7 @@ MinosCompass::MinosCompass(QWidget *parent)
 
 QSize MinosCompass::minimumSizeHint() const
 {
-    return QDial::minimumSizeHint();
+    return QWidget::minimumSizeHint();
 }
 QSize MinosCompass::sizeHint() const
 {
@@ -200,6 +201,34 @@ double angleFromN(const QPoint &V )
     return atan2(-V.y(), V.x());    // mouse position increases down and right
 }
 
+
+int MinosCompass::getMouseBearing(QPoint vec)
+{
+    double brg = angleFromN(vec) ;
+    brg *= -180/M_PI;    // clockwise degrees
+    brg += 90;      // from N rather than E
+
+    while (brg < 0)
+        brg += 360;
+    while (brg > 360)
+        brg -= 360;
+    int m = static_cast<int>(brg);
+
+    return m;
+}
+bool MinosCompass::inAnnulus(QPoint vec)
+{
+    double distanceFromCentre = sqrt(vec.x() * vec.x() + vec.y() * vec.y());
+
+    int minwh = std::min(width(), height());
+
+    int radius = minwh/2;
+    int inner = (radius * 7)/10;
+
+    bool ina = distanceFromCentre < radius && distanceFromCentre > inner;
+
+    return ina;
+}
 void MinosCompass::mousePressEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton)
@@ -209,29 +238,17 @@ void MinosCompass::mousePressEvent(QMouseEvent *event)
 
         QPoint vec = lastPoint - centre;
 
-        double distanceFromCentre = sqrt(vec.x() * vec.x() + vec.y() * vec.y());
-
-        int minwh = std::min(width(), height());
-
-        int radius = minwh/2;
-        int inner = (radius * 7)/10;
-
-        if (distanceFromCentre < radius && distanceFromCentre > inner)
+        if (inAnnulus(vec))
         {
-            double brg = angleFromN(vec) ;
-            brg *= -180/M_PI;    // clockwise degrees
-            brg += 90;      // from N rather than E
-
-            while (brg < 0)
-                brg += 360;
-            while (brg > 360)
-                brg -= 360;
+            int brg = getMouseBearing(vec) ;
             emit sendClickBearing(static_cast<int>(brg) );
-
+        }
+        else
+        {
+            emit sendStop();
         }
     }
 }
-
 void MinosCompass::mouseMoveEvent(QMouseEvent *event)
 {
     QPoint lastPoint = event->pos();
@@ -239,24 +256,9 @@ void MinosCompass::mouseMoveEvent(QMouseEvent *event)
 
     QPoint vec = lastPoint - centre;
 
-    double distanceFromCentre = sqrt(vec.x() * vec.x() + vec.y() * vec.y());
-
-    int minwh = std::min(width(), height());
-
-    int radius = minwh/2;
-    int inner = (radius * 7)/10;
-
-    if (distanceFromCentre < radius && distanceFromCentre > inner)
+    if (inAnnulus(vec))
     {
-        double brg = angleFromN(vec) ;
-        brg *= -180/M_PI;    // clockwise degrees
-        brg += 90;      // from N rather than E
-
-        while (brg < 0)
-            brg += 360;
-        while (brg > 360)
-            brg -= 360;
-        mouseBearing = static_cast<int>(brg);
+        mouseBearing = getMouseBearing(vec);
 
         update();
     }
@@ -267,8 +269,45 @@ void MinosCompass::mouseMoveEvent(QMouseEvent *event)
             mouseBearing = -1;
             update();
         }
-
     }
+    QToolTip::hideText();
+}
+
+bool MinosCompass::eventFilter(QObject */*obj*/, QEvent *event)
+{
+    if (event->type() == QEvent::ToolTip)
+    {
+        QHelpEvent *helpEvent = dynamic_cast<QHelpEvent *>(event);
+
+        if (helpEvent)
+        {
+            QString message;
+
+            QPoint lastPoint = helpEvent->pos();
+            QPoint centre(width()/2, height()/2);
+
+            QPoint vec = lastPoint - centre;
+            if (inAnnulus(vec))
+            {
+                message = QString("%1").arg(getMouseBearing(vec));
+            }
+            else
+            {
+                message = tr("Stop");
+            }
+
+            if (!QToolTip::isVisible())
+            {
+                QPoint p = mapFromGlobal(QCursor::pos());
+                if (p.x() >= 0 && p.y() >= 0 && p.x() < width() && p.y() < height())
+                {
+                    QToolTip::showText(QCursor::pos(), message);
+                }
+            }
+        }
+        return true;
+    }
+    return QWidget::event(event);
 }
 
 

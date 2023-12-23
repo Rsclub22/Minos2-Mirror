@@ -640,6 +640,7 @@ void RotatorMainWindow::initActionsConnections()
     // click on compass rose
 
     connect(ui->compassDial, &MinosCompass::sendClickBearing, this, &RotatorMainWindow::compassClicked);
+    connect(ui->compassDial, &MinosCompass::sendStop, this, &RotatorMainWindow::stop_rotation);
 
     // display bearing
     connect(pollTimer, &QTimer::timeout, this, &RotatorMainWindow::request_bearing);
@@ -672,12 +673,6 @@ void RotatorMainWindow::initActionsConnections()
     connect(msg, &RotatorRpc::setRotation, this, &RotatorMainWindow::onLoggerSetRotation);
     connect(msg, &RotatorRpc::selectAntennaFromLog, this, &RotatorMainWindow::onLoggerSelectAntenna);
     connect(msg, &RotatorRpc::setRotPreset, this, &RotatorMainWindow::onLoggerSetPreset);
-
-
-    //connect(ui->actionAbout, &QAction::triggered, this, &RotatorMainWindow::about);
-    //connect(ui->actionAbout_Rotator_Config, &QAction::triggered, this, &RotatorMainWindow::aboutRotatorConfig);
-    //connect(ui->actionTraceComms, &QAction::toggled, this, &RotatorMainWindow::saveTraceLogFlag);    // set/clear comms tracing
-
 }
 
 
@@ -774,15 +769,8 @@ void RotatorMainWindow::displayBearing(int bearing)
         msg->rotatorCache.setBearing(psname, s);
         msg->rotatorCache.publish();
     }
-    QString rotatorBearingmsg = QString::number(displayBearing);
-    if (displayBearing < 10 && rotatorBearing > 0)
-    {
-        rotatorBearingmsg = "00" +rotatorBearingmsg;
-    }
-    else if (displayBearing < 100 && rotatorBearing > 0)
-    {
-        rotatorBearingmsg = "0" +rotatorBearingmsg;
-    }
+    QString rotatorBearingmsg = QString("%1").arg(rotatorBearing, 3, 10, QChar('0'));
+
     // send rotatorBearing to actual rotatorBearingDisplay
     emit displayActualBearing(rotatorBearingmsg);
     // display raw rotator bearing on status line
@@ -817,15 +805,7 @@ void RotatorMainWindow::displayBearing(int bearing)
 
     }
 
-    QString bearingmsg = QString::number(displayBearing, 10);
-    if (displayBearing < 10)    // prevent display resizing
-    {
-        bearingmsg = "00" + bearingmsg;
-    }
-    else if (displayBearing < 100)
-    {
-        bearingmsg = "0" + bearingmsg;
-    }
+    QString bearingmsg = QString("%1").arg(displayBearing, 3, 10, QChar('0'));
 
     emit sendBearing(bearingmsg);
     emit sendCompassDial(displayBearing);
@@ -843,15 +823,7 @@ void RotatorMainWindow::displayBearing(int bearing)
         backBearing -= COMPASS_MAX360;
     }
     // send backBearing to display
-    QString backBearingmsg = QString::number(backBearing, 10);
-    if (backBearing < 10)
-    {
-        backBearingmsg = "00" + backBearingmsg;
-    }
-    else if (backBearing < 100)
-    {
-        backBearingmsg = "0" + backBearingmsg;
-    }
+    QString backBearingmsg = QString("%1").arg(backBearing, 3, 10, QChar('0'));
     emit sendBackBearing(backBearingmsg);
 
 }
@@ -865,7 +837,9 @@ void RotatorMainWindow::compassClicked(int brg)
 
 void RotatorMainWindow::dispRawRotBearing(int rotatorBearing)
 {
-    rawRotatorDisplay->setText(QString::number(rotatorBearing));
+    QString rotbearingmsg = QString("%1").arg(rotatorBearing, 3, 10, QChar('0'));
+
+    rawRotatorDisplay->setText(rotbearingmsg);
 }
 
 

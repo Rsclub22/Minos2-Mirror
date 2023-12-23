@@ -771,7 +771,7 @@
  <customwidgets>
   <customwidget>
    <class>MinosCompass</class>
-   <extends>QDial</extends>
+   <extends>QWidget</extends>
    <header>minoscompass.h</header>
   </customwidget>
   <customwidget>
