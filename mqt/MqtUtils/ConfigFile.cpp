@@ -777,7 +777,7 @@ Server=false
             }
 #endif
 #ifdef Q_OS_MACOS
-            if (!ac.appPath.isEmpty())
+            if (!ac.appPath.isEmpty() && ac.appPath.right(4).compare(".app", Qt::CaseInsensitive) != 0)
             {
                 ac.appPath += ".app";
                 ac.appPath = QCoreApplication::applicationDirPath()+"/../Resources/"+ac.appPath;

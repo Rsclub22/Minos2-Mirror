@@ -4,32 +4,32 @@
 <context>
     <name>BaseContact</name>
     <message>
-        <location filename="../contacts.cpp" line="444"/>
+        <location filename="../contacts.cpp" line="434"/>
         <source>DELETED</source>
         <translation>SUPPRIMÉ</translation>
     </message>
     <message>
-        <location filename="../contacts.cpp" line="459"/>
+        <location filename="../contacts.cpp" line="449"/>
         <source>MAN</source>
         <translation>MANUELLE</translation>
     </message>
     <message>
-        <location filename="../contacts.cpp" line="462"/>
+        <location filename="../contacts.cpp" line="452"/>
         <source>DEL</source>
         <translation>SUPPRIMER</translation>
     </message>
     <message>
-        <location filename="../contacts.cpp" line="465"/>
+        <location filename="../contacts.cpp" line="455"/>
         <source>N/S</source>
         <translation>NON SIGNIFICATIF</translation>
     </message>
     <message>
-        <location filename="../contacts.cpp" line="470"/>
+        <location filename="../contacts.cpp" line="460"/>
         <source>DUP</source>
         <translation>DUPLIQUER</translation>
     </message>
     <message>
-        <location filename="../contacts.cpp" line="515"/>
+        <location filename="../contacts.cpp" line="505"/>
         <source>MHz</source>
         <translation>MHz</translation>
     </message>
@@ -1077,27 +1077,31 @@
 <context>
     <name>CountryList</name>
     <message>
-        <location filename="../MultsImpl.cpp" line="489"/>
+        <location filename="../MultsImpl.cpp" line="479"/>
         <source>CT9 Country File</source>
         <translation>CT9 Fichier  des Pays</translation>
     </message>
     <message>
-        <location filename="../MultsImpl.cpp" line="573"/>
+        <location filename="../MultsImpl.cpp" line="563"/>
         <source>Failed to open %1 (%2)</source>
         <translation>L&apos;ouverture du fichier %1 (%2)  a échoué</translation>
+    </message>
+    <message>
+        <location filename="../MultsImpl.cpp" line="740"/>
+        <source>Synonym ranges no longer allowed : %1 for %2</source>
+        <translation type="unfinished">Les plages de synonymes ne sont plus autorisées: %1 pour %2</translation>
     </message>
 </context>
 <context>
     <name>CountrySynonymList</name>
     <message>
-        <location filename="../MultsImpl.cpp" line="717"/>
+        <location filename="../MultsImpl.cpp" line="715"/>
         <source>Country Synonym File</source>
         <translation>Fichier des synonymes de Pays</translation>
     </message>
     <message>
-        <location filename="../MultsImpl.cpp" line="737"/>
         <source>Synonym ranges no longer allowed : %1 for %2</source>
-        <translation>Les plages de synonymes ne sont plus autorisées: %1 pour %2</translation>
+        <translation type="vanished">Les plages de synonymes ne sont plus autorisées: %1 pour %2</translation>
     </message>
 </context>
 <context>
