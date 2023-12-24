@@ -494,17 +494,33 @@ int RotatorMainWindow::openRotator()
         pollTimer->start(pollTime);             // start timer to send message to controller
         if (setupAntenna->currentAntenna.portType == RotCapConstants::PortType::serial)
         {
-            showStatusMessage(tr("Connected to: %1 - %2, %3, %4, %5, %6, %7,  Handshake %8, ForceDTR %9, ForceRTS %10")
-                                  .arg(setupAntenna->currentAntenna.antennaName).arg(setupAntenna->currentAntenna.rotatorModel).arg(setupAntenna->currentAntenna.comport).arg(setupAntenna->currentAntenna.baudrate).arg(setupAntenna->currentAntenna.databits)
-                                  .arg(setupAntenna->currentAntenna.stopbits).arg(serialCommonData::parityStr[setupAntenna->currentAntenna.parity]).arg(serialCommonData::handshakeStr[setupAntenna->currentAntenna.handshake]).arg(serialCommonData::forceLinesStr[setupAntenna->currentAntenna.forceDtr]).arg(serialCommonData::forceLinesStr[setupAntenna->currentAntenna.forceRts]));
+            QString base = tr("Connected");
+
+            QString extra= tr("Connected to: %1 - %2, %3, %4, %5, %6, %7,  Handshake %8, ForceDTR %9, ForceRTS %10")
+                                .arg(setupAntenna->currentAntenna.antennaName
+                                     ,setupAntenna->currentAntenna.rotatorModel
+                                     ,setupAntenna->currentAntenna.comport)
+                                  .arg(setupAntenna->currentAntenna.baudrate)
+                                  .arg(setupAntenna->currentAntenna.databits)
+                                  .arg(setupAntenna->currentAntenna.stopbits)
+                                  .arg(serialCommonData::parityStr[setupAntenna->currentAntenna.parity]
+                                  ,serialCommonData::handshakeStr[setupAntenna->currentAntenna.handshake]
+                                  ,serialCommonData::forceLinesStr[setupAntenna->currentAntenna.forceDtr]
+                                  ,serialCommonData::forceLinesStr[setupAntenna->currentAntenna.forceRts]);
+
+            showStatusMessage(base, extra);
         }
         else if (setupAntenna->currentAntenna.portType == RotCapConstants::PortType::network )
         {
-            showStatusMessage(tr("Connected to: %1 - %2, %3").arg(setupAntenna->currentAntenna.antennaName, setupAntenna->currentAntenna.rotatorModel, setupAntenna->currentAntenna.networkAdd + ":" + setupAntenna->currentAntenna.networkPort));
+            QString base = tr("Connected");
+            QString extra = tr("Connected to: %1 - %2, %3").arg(setupAntenna->currentAntenna.antennaName, setupAntenna->currentAntenna.rotatorModel, setupAntenna->currentAntenna.networkAdd + ":" + setupAntenna->currentAntenna.networkPort);
+            showStatusMessage(base, extra);
         }
         else if (setupAntenna->currentAntenna.portType == RotCapConstants::PortType::none)
         {
-                showStatusMessage(tr("Connected to: %1 - %2").arg(setupAntenna->currentAntenna.antennaName, setupAntenna->currentAntenna.rotatorModel));
+            QString base = tr("Connected");
+            QString extra = tr("Connected to: %1 - %2").arg(setupAntenna->currentAntenna.antennaName, setupAntenna->currentAntenna.rotatorModel);
+            showStatusMessage(base, extra);
         }
 
         //sendStatusToLogConnected();
@@ -566,9 +582,10 @@ void RotatorMainWindow::closeRotator()
 
 
 
-void RotatorMainWindow::showStatusMessage(const QString &message)
+void RotatorMainWindow::showStatusMessage(const QString &message, const QString &tt)
 {
     status->setText(message);
+    status->setToolTip(tt.isEmpty()?message:tt);
 }
 
 

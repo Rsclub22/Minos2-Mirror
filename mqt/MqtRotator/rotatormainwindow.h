@@ -164,7 +164,7 @@ private:
     void closeRotator();
 
     void refreshPresetLabels();
-    void showStatusMessage(const QString &);
+    void showStatusMessage(const QString &, const QString &tt = QString());
     void sendAntennaListLogger();
     void sendStatusLogger();
     void readPresets();
