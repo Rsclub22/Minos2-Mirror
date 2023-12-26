@@ -1024,14 +1024,23 @@ void RigControlMainWindow::checkSupportPtt()
                 || selectedRadioSupportCap.supportPttPortType == RigCapConstants::PttPortType::RIG_PTT_RIG_MICDATA
             )
         {
-            if (selectedRadioSupportCap.supportPttPortType == RigCapConstants::PttPortType::RIG_PTT_NONE)
+            if (selectedRadioSupportCap.rigManufacturer == OMINRIG_MFR_NAME )
             {
-                ui->supportedPttLbl->setText("Serial");
+                ui->supportedPttLbl->setText("Cat");
             }
             else
             {
-                ui->supportedPttLbl->setText("CAT/Serial");
+                if (selectedRadioSupportCap.supportPttPortType == RigCapConstants::PttPortType::RIG_PTT_NONE)
+                {
+                    ui->supportedPttLbl->setText("Serial");
+                }
+                else
+                {
+                    ui->supportedPttLbl->setText("CAT/Serial");
+                }
             }
+
+
 
             setPttGroupItemsVisible(true);
 
@@ -1449,11 +1458,19 @@ int RigControlMainWindow::openRadio()
     else
     {
         logMessage(QString("Rig Created in the factory Ok"));
-        logMessage(QString("Library Version = %1").arg(radio->getRigLibVersion()));     // show library version in trace log before connection.
+
     }
 
     radio->setTraceComms(rigStateDetails->traceCommsFlag);
     rigStateDetails->rigCap = rigFactory->supported_rigs()->value(currentRadio.rigModel);
+
+    if (rigStateDetails->rigCap.rigManufacturer != OMINRIG_MFR_NAME)
+    {
+        logMessage(QString("Hamlib Library Version = %1").arg(radio->getRigLibVersion()));     // show library version in trace log before connection.
+    }
+
+
+
 
     // set state of trace hamlib comms
 
@@ -1479,6 +1496,10 @@ int RigControlMainWindow::openRadio()
             return OPEN_FAILED;
         }
 
+        if (rigStateDetails->rigCap.rigManufacturer == OMINRIG_MFR_NAME)
+        {
+            logMessage(QString("Library Version = %1").arg(radio->getRigLibVersion()));    // Omnirig COM needs to exist to do this..
+        }
     }
 
 
@@ -3831,11 +3852,12 @@ void RigControlMainWindow::radioError(int errorCode, QString cmd)
 
 
 // Omnirig
-void RigControlMainWindow::onPttState(bool state)
+void RigControlMainWindow::onPttState(bool pttState)
 {
-    if (state != rigStateDetails->curPttStatus)
+    if (pttState != rigStateDetails->curPttStatus)
     {
-       trace(QString("onPttState = %1").arg(rigStateDetails->curPttStatus ? "On" : "Off"));
+        trace(QString("Omnirig onPttState = %1").arg(pttState ? "On" : "Off"));
+        rigStateDetails->curPttStatus = pttState;
         setRigControlPttState(rigStateDetails->curPttStatus);
     }
 }

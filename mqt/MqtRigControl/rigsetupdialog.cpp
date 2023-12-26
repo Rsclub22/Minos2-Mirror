@@ -215,10 +215,20 @@ void RigSetupDialog::loadSettingsToTab(int tabNum, QString tabName)
 
     // When radio reports CAT PTT, we also allow option of Serial PTT
     // When radio reports CAT NONE, we only allow option of Serial PTT
+    // Note Omnirig only CAT PTT
 
     bool catPTT = true;     // This is radio PTT capability true = CAT PTT
     bool serialPTT = true;
-    if (rigCap.supportPttPortType == RigCapConstants::PttPortType::RIG_PTT_RIG
+
+    if (rigCap.supportPttPortType == RigCapConstants::PttPortType::RIG_PTT_RIG && rigCap.rigManufacturer == OMINRIG_MFR_NAME)
+    {
+       // support CAT PTT only
+
+       catPTT = true;
+       serialPTT = false;
+       radioTab.value(tabName)->setPttInitialState(catPTT, serialPTT);
+    }
+    else if (rigCap.supportPttPortType == RigCapConstants::PttPortType::RIG_PTT_RIG
             || rigCap.supportPttPortType == RigCapConstants::PttPortType::RIG_PTT_RIG_MICDATA)
     {
         // support CAT PTT and Serial PTT
@@ -234,6 +244,7 @@ void RigSetupDialog::loadSettingsToTab(int tabNum, QString tabName)
        serialPTT = true;
        radioTab.value(tabName)->setPttInitialState(catPTT, serialPTT);
     }
+
 
     // now load the PTT settings
 
@@ -385,6 +396,7 @@ void RigSetupDialog::loadSettingsToTab(int tabNum, QString tabName)
     {
         radioTab.value(tabName)->setCatFeaturesEnableChkBoxVisible(false);
         radioTab.value(tabName)->setPortTypeWidgetsVisible(false);
+
     }
     else
     {
@@ -426,19 +438,17 @@ void RigSetupDialog::addRadio()
     int tabNum = availRadios.count();
     addTab(tabNum, radioName);
     numAvailRadios++;
+
+    radioTab.value(radioName)->setupRadioModel(radioModel);
+
+
     radioTab.value(radioName)->setAdvancedCommsFlag(false);
 
-    if (availRadioData.value(radioName)->pttType == RigCapConstants::PttPortType::RIG_PTT_RIG
-            || availRadioData.value(radioName)->pttType == RigCapConstants::PttPortType::RIG_PTT_RIG_MICDATA)
-    {
-        radioTab.value(radioName)->setPttInitialState(true, true);;
-    }
 
-    radioTab.value(radioName)->setPttInitialState(false, true);
 
     radioTab.value(radioName)->setEnableDisableCatFeaturesGroupVisible(false);
 
-    radioTab.value(radioName)->setupRadioModel(radioModel);
+
     radioTab.value(radioName)->setPollInterval(RIG_DEFAULT_POLLINTERVAL);
 
     loadAvailComportsToTab(radioName);

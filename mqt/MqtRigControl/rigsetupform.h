@@ -181,12 +181,11 @@ public:
     void setPTTEnableCheckBox(bool checked);
     void loadAvailPttComports();
     void setPttComport(QString p);
-    void setPttTypeRadioButtons(int type);
+    //void setPttTypeRadioButtons(int type);
     void setPTTCheckBoxDisabled(bool disabled);
-    void setCatPttRadioButtonVisible(bool visible);
+
     void loadEnableShowCatFeaturesBox(const RigCapabilities rigCap);
 
-    void setCatPttInitialState(bool catPTT);
 
 
 
