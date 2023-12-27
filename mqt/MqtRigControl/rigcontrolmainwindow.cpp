@@ -443,15 +443,20 @@ void RigControlMainWindow::currentRadioSettingChanged(QString radioName)
 
 void RigControlMainWindow::updateSelectRadioBox()
 {
-    int curidx = ui->selectRadioBox->currentIndex();
-    ui->selectRadioBox->clear();
+    QString curSelect = ui->selectRadioBox->currentText();
     initSelectRadioBox();
+    int curidx = ui->selectRadioBox->findText(curSelect);
+    if (curidx < 0)
+    {
+        curidx = 0;     // if it has been deleted, set to space
+    }
     ui->selectRadioBox->setCurrentIndex(curidx);
 }
 
 
 void RigControlMainWindow::initSelectRadioBox()
 {
+    ui->selectRadioBox->clear();
 
     ui->selectRadioBox->addItem("");
     QStringList availRadios;
@@ -4271,7 +4276,8 @@ void RigControlMainWindow::onLaunchSetup()
             msg->publishListChangedRadioNames(setupRadio.listOfRadioNameChanges, setupRadio.listOfRadiosDataChanged);
         }
 
-        if (!setupRadio.listOfRadioNameChanges.isEmpty())
+        // if we don't update, we dont see radios added/deleted in test mode
+        //if (!setupRadio.listOfRadioNameChanges.isEmpty())
         {
             updateSelectRadioBox();
         }
