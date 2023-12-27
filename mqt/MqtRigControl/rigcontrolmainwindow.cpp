@@ -219,6 +219,8 @@ void RigControlMainWindow::setTestMode(bool test)
             testMode = true;
             liveRadio = currentRadioName;
             trace("save liveRadio " + liveRadio);
+
+            updateSelectRadioBox();
         }
         logMessage((QString("Read Current Radio for Local selection")));
         ui->testRadioButton->setText(tr("Set Radio from Logger"));
@@ -567,15 +569,15 @@ void RigControlMainWindow::upDateRadio(QString radioName)
 
     logMessage(QString("******* Selected Radio, %1 Supported Capabilities ******").arg(currentRadioName));
     QString commPortTypeStr = "none";
-    if (selectedRadioSupportCap.portType == RigCapConstants::PortType::serial)
+    if (currentRadio.portType == RigCapConstants::PortType::serial)
     {
         commPortTypeStr = "serial";
     }
-    else if (selectedRadioSupportCap.portType == RigCapConstants::PortType::network)
+    else if (currentRadio.portType == RigCapConstants::PortType::network)
     {
         commPortTypeStr = "network";
     }
-    else if (selectedRadioSupportCap.portType == RigCapConstants::PortType::usb)
+    else if (currentRadio.portType == RigCapConstants::PortType::usb)
     {
         commPortTypeStr = "usb";
     }
@@ -4277,7 +4279,7 @@ void RigControlMainWindow::onLaunchSetup()
         }
 
         // if we don't update, we dont see radios added/deleted in test mode
-        //if (!setupRadio.listOfRadioNameChanges.isEmpty())
+        if (testMode)
         {
             updateSelectRadioBox();
         }
@@ -4785,7 +4787,7 @@ void RigControlMainWindow::dumpRadioToTraceLog()
 
         }
         //trace(QString("Rig PortType = %1").arg(hamlibData::portTypeList[setupRadio->currentRadio.portType]));
-        if (rigCap.portType == RigCapConstants::PortType::network)
+        if (currentRadio.portType == RigCapConstants::PortType::network)
         {
             trace(QString("Network Address = %1").arg(currentRadio.networkAdd));
             trace(QString("Network Port = %1").arg(currentRadio.networkPort));
@@ -4793,7 +4795,7 @@ void RigControlMainWindow::dumpRadioToTraceLog()
         }
 
 
-        if (rigCap.portType == RigCapConstants::PortType::serial)
+        if (currentRadio.portType == RigCapConstants::PortType::serial)
         {
             trace(QString("Comport = %1").arg(currentRadio.comport));
             trace(QString("Data bits = %1").arg(currentRadio.databits));
