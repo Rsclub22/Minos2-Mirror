@@ -4677,14 +4677,14 @@ void RigControlMainWindow::aboutRigConfig()
 
         //msg.append(tr("Rig PortType = %1\n").arg(hamlibData::portTypeList[setupRadio->currentRadio.portType]));
 
-        if (rigCap.portType == RigCapConstants::PortType::network)
+        if (currentRadio.portType == RigCapConstants::PortType::network)
         {
             msg.append(tr("Network Address = %1\n").arg(currentRadio.networkAdd));
             msg.append(tr("Network Port = %1\n").arg(currentRadio.networkPort));
 
         }
 
-        if (rigCap.portType == RigCapConstants::PortType::serial)
+        if (currentRadio.portType == RigCapConstants::PortType::serial)
         {
             msg.append(tr("Comport = %1\n").arg(currentRadio.comport));
             msg.append(tr("Baudrate = %1\n").arg(currentRadio.baudrate));
