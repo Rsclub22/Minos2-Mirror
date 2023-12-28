@@ -644,7 +644,7 @@ void TSingleLogFrame::buildRow(ContestPage *cp, SCRow &scrow, int &auxInstance, 
                 case sctTxVmButtons:
                 {
                     elementScrollArea->setWidget(txVmButtonsFrame);
-                    txVmButtonsFrame->setContest(ct);
+                    // don't set contest here
                     break;
                 }
                 case sctRotControl:
@@ -760,7 +760,7 @@ void TSingleLogFrame::buildRow(ContestPage *cp, SCRow &scrow, int &auxInstance, 
                 {
                     elementScrollArea->setWidget(dmButtonFrame);
                     dmButtonFrame->setVisible(true);
-                    dmButtonFrame->setContest(ct);
+                    // don't set contest here
                     break;
                 }
                 case sctSplit:
@@ -894,6 +894,8 @@ void TSingleLogFrame::buildScreenLayout(int slotNo)
     wsjtxFrame->setContest(ct);
     FKHRigControlFrame->setContest(ct);
     FKHRotControlFrame->setContest(ct);
+    dmButtonFrame->setContest(ct);
+    txVmButtonsFrame->setContest(ct);
 
     LogContainer->raise();  // get it back in front
 

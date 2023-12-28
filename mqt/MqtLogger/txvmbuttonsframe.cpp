@@ -446,11 +446,12 @@ void TxVmButtonsFrame::readActionSelected(int buttonNumber)
     vmData.setType(voiceKeyerType);
     txVoiceKeyer->readVmButtonParams(buttonNumber, vmData);
 
-    if (vmData.getVmName().isEmpty())
-    {
-        trace(QString("[TxVmButtonsFrame] Button Name Empty Ignore Button"));
-        return;
-    }
+    // Why should we worry about the name being empty?
+    // if (vmData.getVmName().isEmpty())
+    // {
+    //     trace(QString("[TxVmButtonsFrame] Button Name Empty Ignore Button"));
+    //     return;
+    // }
 
 
     setRepeatIndicatorOnOff(vmData.getVmRepeatFlag());
