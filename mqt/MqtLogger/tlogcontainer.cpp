@@ -1537,6 +1537,8 @@ void TLogContainer::setMenuLog(int current)
 {
     // why doesn't this happen at startup?
 
+    ui->menuLogs->clear();
+
     ui->menuLogs->addAction(FileOpenAction);
     ui->menuLogs->addMenu(recentFilesMenu);
     ui->menuLogs->addAction(VHFFileNewAction);
@@ -1549,21 +1551,25 @@ void TLogContainer::setMenuLog(int current)
     ui->menuLogs->addAction(CloseAllButAction);
     ui->menuLogs->addSeparator();
 
+    // add the currently open contests - but don't add to the actions
     for (int i = 0; i < ui->contestPageControl->count(); i++)
     {
-        QSharedPointer<QAction> ma(newCheckableAction(ui->contestPageControl->tabText(i), ui->menuLogs, &TLogContainer::menuLogsActionExecute));
+        QAction * newAct = new QAction( ui->contestPageControl->tabText(i), this );
+        newAct->setCheckable( true );
+        ui->menuLogs->addAction( newAct );
+        connect( newAct, &QAction::triggered, this, &TLogContainer::menuLogsActionExecute );
 
         QVariant qpc(i);
-        ma->setData(qpc);
-        menuLogsActions.push_back(ma);
-        trace("menuLogsActions.push_back(ma);");
+        newAct->setData(qpc);
 
         if (current == i)
         {
-            ma->setChecked(true);
+            newAct->setChecked(true);
         }
     }
-    sessionsMenu = newMenu(ui->menuLogs, QT_TR_NOOP("Contest Sets"));
+
+    // update the list of contest sets
+    sessionsMenu = ui->menuLogs->addMenu(tr("Contest Sets"));
     updateSessionActions();
 }
 void TLogContainer::on_contestPageControl_currentChanged(int index)
