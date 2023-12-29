@@ -177,6 +177,10 @@ void ScreenConfigFile::procRows(QVector<SCRow> &elerows, QJsonArray &rows)
             SCElement scele;
             QJsonObject ele = e.toObject();
             QString eletype = ele.value("type").toString();
+            if (eletype == "TX Voice Mem. Buttons" || eletype == tr("TX Voice Mem. Buttons"))
+            {
+                eletype = ScreenConfigElement::getRawScreenTypeString(sctTxVmButtons);
+            }
             scele.type = ScreenConfigElement::getScreenType(eletype);
             if (scele.type == sctSplit)
             {
