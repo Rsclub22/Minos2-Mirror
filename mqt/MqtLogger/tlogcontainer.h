@@ -97,12 +97,12 @@ private:
     QMap<QAction *, const char *> actionList;
     QMap<QMenu *, const char *> menuList;
 
-    QMenu *screenLayoutMenu;
+    QMenu *screenLayoutMenu = nullptr;
     enum { MaxRecentFiles = 5 };
     QVector<QAction *> recentFileActs;
-    QMenu *recentFilesMenu;
+    QMenu *recentFilesMenu = nullptr;
     QVector<QAction *> sessionActs;
-    QMenu *sessionsMenu;
+    QMenu *sessionsMenu = nullptr;
 
     QSharedPointer<HelpBrowser>  helpBrowser;
 
@@ -140,40 +140,40 @@ private:
     QAction *HelpAction;
     QAction *HelpAboutAction;
 
-    QAction *FileOpenAction;
-    QAction *FileImportVHFAction;
-    QAction *FileImportHFAction;
-    QAction *ListOpenAccept;
-    QAction *ContestDetailsAction;
-    QAction *FileCloseAction;
-    QAction *CloseAllAction;
-    QAction *CloseAllButAction;
-    QAction *OptionsAction;
+    QAction *FileOpenAction = nullptr;
+    QAction *FileImportVHFAction = nullptr;
+    QAction *FileImportHFAction = nullptr;
+    QAction *ListOpenAccept = nullptr;
+    QAction *ContestDetailsAction = nullptr;
+    QAction *FileCloseAction = nullptr;
+    QAction *CloseAllAction = nullptr;
+    QAction *CloseAllButAction = nullptr;
+    QAction *OptionsAction = nullptr;
 
-    QAction *sessionManagerAction;
+    QAction *sessionManagerAction = nullptr;
 
-    QAction *ExitAction;
-    QAction *ExitClearAction;
-    QAction *MakeEntryAction;
-    QAction *StatsAction;
-    QAction *AppendAdifAction;
-    QAction *VHFFileNewAction;
-    QAction *HFFileNewAction;
-    QAction *ListOpenAction;
-    QAction *ManageListsAction;
-    QAction *ShiftTabLeftAction;
-    QAction *ShiftTabRightAction;
+    QAction *ExitAction = nullptr;
+    QAction *ExitClearAction = nullptr;
+    QAction *MakeEntryAction = nullptr;
+    QAction *StatsAction = nullptr;
+    QAction *AppendAdifAction = nullptr;
+    QAction *VHFFileNewAction = nullptr;
+    QAction *HFFileNewAction = nullptr;
+    QAction *ListOpenAction = nullptr;
+    QAction *ManageListsAction = nullptr;
+    QAction *ShiftTabLeftAction = nullptr;
+    QAction *ShiftTabRightAction = nullptr;
 
-    QAction *startConfigAction;
-    QAction *LocCalcAction;
-    QAction *AnalyseMinosLogAction;
-    QAction *CorrectDateTimeAction;
-    QAction *ScreenConfigAction;
-    QAction *AdvancedOptionsAction;
-    QAction *CheckUpdatesAction;
+    QAction *startConfigAction = nullptr;
+    QAction *LocCalcAction = nullptr;
+    QAction *AnalyseMinosLogAction = nullptr;
+    QAction *CorrectDateTimeAction = nullptr;
+    QAction *ScreenConfigAction = nullptr;
+    QAction *AdvancedOptionsAction = nullptr;
+    QAction *CheckUpdatesAction = nullptr;
 
-    QAction *GoToSerialAction;
-    QAction *NextUnfilledAction;
+    QAction *GoToSerialAction = nullptr;
+    QAction *NextUnfilledAction = nullptr;
 
     QVector< QSharedPointer<QAction> > menuLogsActions;
 
