@@ -1081,13 +1081,13 @@ Le mode calculé est %2</translation>
     </message>
     <message>
         <location filename="../contestdetails.ui" line="84"/>
-        <location filename="../contestdetails.cpp" line="1875"/>
+        <location filename="../contestdetails.cpp" line="1692"/>
         <source>HF Calendar</source>
         <translation>Calendrier HF</translation>
     </message>
     <message>
         <location filename="../contestdetails.ui" line="91"/>
-        <location filename="../contestdetails.cpp" line="1904"/>
+        <location filename="../contestdetails.cpp" line="1721"/>
         <source>VHF Calendar</source>
         <translation>Calendrier VHF</translation>
     </message>
@@ -1284,134 +1284,140 @@ Comptabiliser entre Locators de 4 caractères</translation>
         <translation>Multiplicateur DXCC</translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="931"/>
         <source>Non UK Countries Only (M6)</source>
-        <translation>Pays non UK uniquement (M6)</translation>
+        <translation type="vanished">Pays non UK uniquement (M6)</translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="938"/>
+        <location filename="../contestdetails.ui" line="931"/>
         <source>Locator Multiplier</source>
         <translation>Multiplicateurs Locator</translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="945"/>
         <source>UK Locs only (M5, M6)</source>
-        <translation>Locators UK uniquement (M5,M6)</translation>
+        <translation type="vanished">Locators UK uniquement (M5,M6)</translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="952"/>
         <source>All locs; UK locs x2 (M7)</source>
-        <translation>Tous les Locators; Locators UK x2 (M7)</translation>
+        <translation type="vanished">Tous les Locators; Locators UK x2 (M7)</translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="1015"/>
+        <location filename="../contestdetails.ui" line="994"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="1038"/>
+        <location filename="../contestdetails.ui" line="1017"/>
         <source>Entry Details</source>
         <translation>Détails de l&apos;entrée</translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="1058"/>
+        <location filename="../contestdetails.ui" line="1037"/>
         <source>Cancel</source>
         <translation>Annuler</translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="52"/>
+        <location filename="../contestdetails.cpp" line="53"/>
         <source>No Exchange Required</source>
         <translation>Aucun échange requis</translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="53"/>
+        <location filename="../contestdetails.cpp" line="54"/>
         <source>PostCode Multipliers</source>
         <translation>Multiplicateurs des codes postaux</translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="54"/>
+        <location filename="../contestdetails.cpp" line="56"/>
         <source>Other Exchange Multiplier</source>
         <translation>Autre multiplicateur d&apos;échange</translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="56"/>
+        <location filename="../contestdetails.cpp" line="58"/>
         <source>Exchange Required (no multiplier)</source>
         <translation>Échange requis (pas de multiplicateur)</translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="57"/>
+        <location filename="../contestdetails.cpp" line="59"/>
         <source>Asymmetric (TX S/N, RX exchange), Multiplier</source>
         <translation>Asymétrique (TX S/N, échange RX) multiplicateur [context???]</translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="59"/>
+        <location filename="../contestdetails.cpp" line="61"/>
         <source>None</source>
         <translation>Aucun</translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="60"/>
         <source>UKAC Bonuses (B2)</source>
-        <translation>Bonus UKAC (B2)</translation>
+        <translation type="vanished">Bonus UKAC (B2)</translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="61"/>
+        <location filename="../contestdetails.cpp" line="62"/>
         <source>UKAC Bonuses (B4)</source>
         <translation>Bonus UKAC (B4)</translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="62"/>
+        <location filename="../contestdetails.cpp" line="64"/>
         <source>NAC Bonuses</source>
         <translation>Bonus NAC</translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="149"/>
+        <location filename="../contestdetails.cpp" line="148"/>
         <source>QTH</source>
         <translation>QTH</translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="150"/>
+        <location filename="../contestdetails.cpp" line="149"/>
         <source>Station</source>
         <translation>Station</translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="151"/>
+        <location filename="../contestdetails.cpp" line="150"/>
         <source>Entry</source>
         <translation>Entrée</translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="200"/>
-        <location filename="../contestdetails.cpp" line="1686"/>
+        <location filename="../contestdetails.cpp" line="199"/>
+        <location filename="../contestdetails.cpp" line="1503"/>
         <source>(None)</source>
         <translation>(Aucun)</translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="332"/>
-        <location filename="../contestdetails.cpp" line="734"/>
+        <location filename="../contestdetails.cpp" line="329"/>
+        <location filename="../contestdetails.cpp" line="727"/>
         <source>Details of Contest Entry - %1</source>
         <translation>Détails de l&apos;entrée du Concours - %1</translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="45"/>
+        <location filename="../contestdetails.cpp" line="46"/>
         <source>All HF</source>
         <translation>Toutes HF</translation>
     </message>
     <message>
         <location filename="../contestdetails.cpp" line="55"/>
+        <source>PostCode Bonuses</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../contestdetails.cpp" line="57"/>
         <source>Exchange Multiplier (may be &quot;-&quot;)</source>
         <translation>Multiplicateur d&apos;échange (peut être &quot;-&quot;) [???]</translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="727"/>
+        <location filename="../contestdetails.cpp" line="63"/>
+        <source>AFS Bonuses (B6)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../contestdetails.cpp" line="720"/>
         <source>Band %1 is set as unwanted.</source>
         <translation>Bande %1 définir comme non désiré.</translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="1435"/>
+        <location filename="../contestdetails.cpp" line="1272"/>
         <source>Contest end is before contest start</source>
         <translation>Fin du concours avant début du concours</translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="1790"/>
+        <location filename="../contestdetails.cpp" line="1607"/>
         <source>This contest will be marked as protected.<byte value="xd"/>
 This is a permanent change that may be temporarily overridden.<byte value="xd"/>
 Please confirm this change by pressing &quot;Yes&quot;.</source>
@@ -1420,7 +1426,7 @@ Il s&apos;agit d&apos;un changement permanent qui peut être temporairement annu
 Veuillez confirmer cette modification en appuyant sur &quot;Oui&quot;.</translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="1838"/>
+        <location filename="../contestdetails.cpp" line="1655"/>
         <source>These settings are groups of settings that can be applied to a contest all in one go.<byte value="xd"/>
 <byte value="xd"/>
 There are four basic groups: - <byte value="xd"/>
@@ -1467,17 +1473,17 @@ Déplacez-vous entre les composants d&apos;un groupe à l&apos;aide de la souris
 </translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="1932"/>
+        <location filename="../contestdetails.cpp" line="1749"/>
         <source>Microwave Calendar</source>
         <translation>Calendrier Microonde</translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="2074"/>
+        <location filename="../contestdetails.cpp" line="1828"/>
         <source>Are you sure you want to protect this contest?</source>
         <translation>Voulez-vous vraiment protéger ce Concours?</translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="2081"/>
+        <location filename="../contestdetails.cpp" line="1835"/>
         <source>Are you sure you want to disable protection for this contest?</source>
         <translation>Voulez-vous vraiment désactiver la protection pour ce Concours?</translation>
     </message>
@@ -2243,7 +2249,7 @@ Déplacez-vous entre les composants d&apos;un groupe à l&apos;aide de la souris
 <context>
     <name>LocGridModel</name>
     <message>
-        <location filename="../locframe.cpp" line="545"/>
+        <location filename="../locframe.cpp" line="537"/>
         <source>Single click to transfer the square centre bearing ( %1 ) to rotator control;
 Double click on an edge square to extend the area of the map.</source>
         <translation>Un seul clic pour transférer le palier central carré ( %1 ) vers le contrôle du rotateur;
@@ -2386,7 +2392,7 @@ et envoyer le fichier .EDI produit.<byte value="xd"/>
     </message>
     <message>
         <location filename="../MinosTestExport.cpp" line="56"/>
-        <location filename="../MinosTestExport.cpp" line="574"/>
+        <location filename="../MinosTestExport.cpp" line="572"/>
         <source>bad reply from write!</source>
         <translation>mauvaise réponse depuis l&apos;écriture!</translation>
     </message>
@@ -2839,7 +2845,7 @@ to</source>
         <translation>Terminer rattrapage</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2233"/>
+        <location filename="../qsologframe.cpp" line="2235"/>
         <source>This Contact has changed: Shall I log the changes?
 
 Yes         - Log as shown
@@ -2850,57 +2856,57 @@ Oui - Enregistrer  comme indiqué
 Non - Ignorer les modifications</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2483"/>
+        <location filename="../qsologframe.cpp" line="2485"/>
         <source>Read Only</source>
         <translation>Lecture seulement</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2487"/>
+        <location filename="../qsologframe.cpp" line="2489"/>
         <source>Protected</source>
         <translation>Protégé</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2491"/>
+        <location filename="../qsologframe.cpp" line="2493"/>
         <source>Protected by age of contest</source>
         <translation>Protégé par l&apos;âge du concours</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2501"/>
+        <location filename="../qsologframe.cpp" line="2503"/>
         <source>No QSO entry field focussed!</source>
         <translation>Aucun champ d&apos;entrée QSO focalisé&#xa0;!</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2872"/>
+        <location filename="../qsologframe.cpp" line="2874"/>
         <source>Change mode to CW?</source>
         <translation>Changer de mode en CW?</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2879"/>
+        <location filename="../qsologframe.cpp" line="2881"/>
         <source>Change mode to USB?</source>
         <translation>Changer de mode en USB?</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2925"/>
+        <location filename="../qsologframe.cpp" line="2927"/>
         <source>Spot Last Logged (%1) </source>
         <translation>Spot dernière enregistrée (%1) </translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2993"/>
+        <location filename="../qsologframe.cpp" line="2995"/>
         <source>&quot;Serial sent&quot; is too high - please confirm that this is correct?</source>
         <translation>&quot;Numéro Tx&quot; est trop élevé - est-ce correct?</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2995"/>
+        <location filename="../qsologframe.cpp" line="2997"/>
         <source>Do you want to enter the missing contacts later?</source>
         <translation>Voulez-vous entrer les contacts manquants plus tard?</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="3388"/>
+        <location filename="../qsologframe.cpp" line="3390"/>
         <source>Start of QSOs</source>
         <translation>Début des QSO</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="3423"/>
+        <location filename="../qsologframe.cpp" line="3425"/>
         <source>End of QSOs</source>
         <translation>Fin des QSO</translation>
     </message>
@@ -3028,12 +3034,12 @@ Non - Ignorer les modifications</translation>
         <translation>DB coups %1 requêtes QRZ %2 taille de DB %3 enregistrements</translation>
     </message>
     <message>
-        <location filename="../qrzdisplayframe.cpp" line="236"/>
+        <location filename="../qrzdisplayframe.cpp" line="239"/>
         <source>Connected</source>
         <translation>Connecté</translation>
     </message>
     <message>
-        <location filename="../qrzdisplayframe.cpp" line="240"/>
+        <location filename="../qrzdisplayframe.cpp" line="243"/>
         <source>Disconnected</source>
         <translation>Déconnecté</translation>
     </message>
@@ -3041,17 +3047,17 @@ Non - Ignorer les modifications</translation>
 <context>
     <name>QrzDisplayServerRpc</name>
     <message>
-        <location filename="../qrzdisplayframe.cpp" line="255"/>
+        <location filename="../qrzdisplayframe.cpp" line="258"/>
         <source>Available</source>
         <translation>Disponible</translation>
     </message>
     <message>
-        <location filename="../qrzdisplayframe.cpp" line="256"/>
+        <location filename="../qrzdisplayframe.cpp" line="259"/>
         <source>Not Available</source>
         <translation>Indisponible</translation>
     </message>
     <message>
-        <location filename="../qrzdisplayframe.cpp" line="257"/>
+        <location filename="../qrzdisplayframe.cpp" line="260"/>
         <source>No Contact</source>
         <translation>Aucun contact</translation>
     </message>
@@ -4026,7 +4032,12 @@ Non - Ignorer les modifications</translation>
 <context>
     <name>ScreenConfigFile</name>
     <message>
-        <location filename="../ScreenConfigFile.cpp" line="238"/>
+        <location filename="../ScreenConfigFile.cpp" line="179"/>
+        <source>TX Voice Mem. Buttons</source>
+        <translation type="unfinished">Boutons de mémoire de voix TX</translation>
+    </message>
+    <message>
+        <location filename="../ScreenConfigFile.cpp" line="242"/>
         <source>Invalid or missing screen configurations; using built in defaults</source>
         <translation>Configurations d&apos;écran non valides ou manquantes; en utilisant les valeurs par défaut intégrées</translation>
     </message>
@@ -5345,7 +5356,7 @@ Veuillez choisir un nouveau nom.</translation>
         <translation>Analyse de %1 terminée; regarder dans le journal de suivi pour l&apos;analyse.</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="2365"/>
+        <location filename="../tlogcontainer.cpp" line="2369"/>
         <source>Minos Contest Logger Application</source>
         <translation>Application Minos Contest Logger</translation>
     </message>

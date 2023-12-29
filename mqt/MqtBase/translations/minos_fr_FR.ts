@@ -37,12 +37,12 @@
 <context>
     <name>BaseContestLog</name>
     <message>
-        <location filename="../contest.cpp" line="660"/>
+        <location filename="../contest.cpp" line="654"/>
         <source>DUPLICATE OF </source>
         <translation>Duplicata de </translation>
     </message>
     <message>
-        <location filename="../contest.cpp" line="676"/>
+        <location filename="../contest.cpp" line="670"/>
         <source>DUP OF</source>
         <translation>Duplicata de</translation>
     </message>
@@ -1066,14 +1066,32 @@
 <context>
     <name>ContestScore</name>
     <message>
-        <location filename="../contest.cpp" line="2027"/>
         <source>Score: Qsos: %1; %2 pts :%3%4 countries%5: bonuses %6(%7) = %8</source>
-        <translation>QSOs: %1; %2 pts:%3%4 pays %5: bonus %6 (%7) = %8</translation>
+        <translation type="vanished">QSOs: %1; %2 pts:%3%4 pays %5: bonus %6 (%7) = %8</translation>
     </message>
     <message>
-        <location filename="../contest.cpp" line="2040"/>
         <source>Score: Qsos: %1; %2 pts :%3%4 countries%5:%6%7 districts%8:%9%10 locators %13 = %14</source>
-        <translation>Score: QSO: %1; %2 pts: %3%4 pays %5:%6%7 Districts%8:%9%10 Locators %13 = %14</translation>
+        <translation type="vanished">Score: QSO: %1; %2 pts: %3%4 pays %5:%6%7 Districts%8:%9%10 Locators %13 = %14</translation>
+    </message>
+    <message>
+        <location filename="../contest.cpp" line="2074"/>
+        <source>Score: %1 Qsos; %2 pts; (%3 countries); %4 locs; bonuses %5(%6) = %7</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../contest.cpp" line="2082"/>
+        <source>Score: %1 Qsos; %2 pts; %3 countries; %4 districts; %5 locs; bonuses %6(%7) = %8</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../contest.cpp" line="2090"/>
+        <source>Score: %1 Qsos; %2 pts; %3%4 countries%5; bonuses %6(%7) = %8</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../contest.cpp" line="2098"/>
+        <source>Score: %1 Qsos; %2 pts;%3%4 countries%5;%6%7 districts%8; %9%10 locators %13 = %14</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1133,32 +1151,32 @@
 <context>
     <name>DisplayContestContact</name>
     <message>
-        <location filename="../DisplayContestContact.cpp" line="441"/>
+        <location filename="../DisplayContestContact.cpp" line="423"/>
         <source>DELETED</source>
         <translation>SUPPRIMÉ</translation>
     </message>
     <message>
-        <location filename="../DisplayContestContact.cpp" line="501"/>
+        <location filename="../DisplayContestContact.cpp" line="483"/>
         <source>MAN</source>
         <translation>MANUEL</translation>
     </message>
     <message>
-        <location filename="../DisplayContestContact.cpp" line="571"/>
+        <location filename="../DisplayContestContact.cpp" line="553"/>
         <source>DEL</source>
         <translation>SUPPRIMÉ</translation>
     </message>
     <message>
-        <location filename="../DisplayContestContact.cpp" line="574"/>
+        <location filename="../DisplayContestContact.cpp" line="556"/>
         <source>N/S</source>
         <translation>NON SIGNIFICATIF</translation>
     </message>
     <message>
-        <location filename="../DisplayContestContact.cpp" line="581"/>
+        <location filename="../DisplayContestContact.cpp" line="563"/>
         <source>DUP</source>
         <translation>DUPLIQUER</translation>
     </message>
     <message>
-        <location filename="../DisplayContestContact.cpp" line="662"/>
+        <location filename="../DisplayContestContact.cpp" line="644"/>
         <source>UNFILLED CONTACT </source>
         <translation>CONTACT NON REMPLI </translation>
     </message>
@@ -1850,7 +1868,7 @@ Attention: &quot;.&quot; pas &quot;,&quot;<byte value="xd"/>
         <translation>Appareil</translation>
     </message>
     <message>
-        <location filename="../MatchTreeFrame.cpp" line="494"/>
+        <location filename="../MatchTreeFrame.cpp" line="492"/>
         <source>Current contest: </source>
         <translation>Concours en cours: </translation>
     </message>

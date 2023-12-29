@@ -37,12 +37,12 @@
 <context>
     <name>BaseContestLog</name>
     <message>
-        <location filename="../contest.cpp" line="660"/>
+        <location filename="../contest.cpp" line="654"/>
         <source>DUPLICATE OF </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contest.cpp" line="676"/>
+        <location filename="../contest.cpp" line="670"/>
         <source>DUP OF</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1039,13 +1039,23 @@
 <context>
     <name>ContestScore</name>
     <message>
-        <location filename="../contest.cpp" line="2027"/>
-        <source>Score: Qsos: %1; %2 pts :%3%4 countries%5: bonuses %6(%7) = %8</source>
+        <location filename="../contest.cpp" line="2074"/>
+        <source>Score: %1 Qsos; %2 pts; (%3 countries); %4 locs; bonuses %5(%6) = %7</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contest.cpp" line="2040"/>
-        <source>Score: Qsos: %1; %2 pts :%3%4 countries%5:%6%7 districts%8:%9%10 locators %13 = %14</source>
+        <location filename="../contest.cpp" line="2082"/>
+        <source>Score: %1 Qsos; %2 pts; %3 countries; %4 districts; %5 locs; bonuses %6(%7) = %8</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../contest.cpp" line="2090"/>
+        <source>Score: %1 Qsos; %2 pts; %3%4 countries%5; bonuses %6(%7) = %8</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../contest.cpp" line="2098"/>
+        <source>Score: %1 Qsos; %2 pts;%3%4 countries%5;%6%7 districts%8; %9%10 locators %13 = %14</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1102,32 +1112,32 @@
 <context>
     <name>DisplayContestContact</name>
     <message>
-        <location filename="../DisplayContestContact.cpp" line="441"/>
+        <location filename="../DisplayContestContact.cpp" line="423"/>
         <source>DELETED</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../DisplayContestContact.cpp" line="501"/>
+        <location filename="../DisplayContestContact.cpp" line="483"/>
         <source>MAN</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../DisplayContestContact.cpp" line="571"/>
+        <location filename="../DisplayContestContact.cpp" line="553"/>
         <source>DEL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../DisplayContestContact.cpp" line="574"/>
+        <location filename="../DisplayContestContact.cpp" line="556"/>
         <source>N/S</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../DisplayContestContact.cpp" line="581"/>
+        <location filename="../DisplayContestContact.cpp" line="563"/>
         <source>DUP</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../DisplayContestContact.cpp" line="662"/>
+        <location filename="../DisplayContestContact.cpp" line="644"/>
         <source>UNFILLED CONTACT </source>
         <translation type="unfinished"></translation>
     </message>
@@ -1802,7 +1812,7 @@ The format required is (e.g.) 1296.3, 144.32 or 144.290123<byte value="xd"/>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MatchTreeFrame.cpp" line="494"/>
+        <location filename="../MatchTreeFrame.cpp" line="492"/>
         <source>Current contest: </source>
         <translation type="unfinished"></translation>
     </message>
