@@ -843,10 +843,15 @@ void TLogContainer::openRecentFile()
 
 void TLogContainer::setCurrentFile(const QString &fileName)
 {
+    QString f2 = GetCleanPath(fileName);
     RegSettings settings;
     QStringList files = settings.getSettings().value("dbmru").toStringList();
-    files.removeAll(fileName);
-    files.prepend(fileName);
+    for (auto &s:files)
+    {
+        s = GetCleanPath(s);
+    }
+    files.removeAll(f2);
+    files.prepend(f2);
     while (files.size() > MaxRecentFiles)
         files.removeLast();
 
@@ -857,9 +862,14 @@ void TLogContainer::setCurrentFile(const QString &fileName)
 }
 void TLogContainer::removeCurrentFile(const QString &fileName)
 {
+    QString f2 = GetCleanPath(fileName);
     RegSettings settings;
     QStringList files = settings.getSettings().value("dbmru").toStringList();
-    files.removeAll(fileName);
+    for (auto &s:files)
+    {
+        s = GetCleanPath(s);
+    }
+    files.removeAll(f2);
     while (files.size() > MaxRecentFiles)
         files.removeLast();
 
@@ -1565,6 +1575,9 @@ void TLogContainer::setMenuLog(int current)
     // update the list of contest sets
     sessionsMenu = ui->menuLogs->addMenu(tr("Contest Sets"));
     updateSessionActions();
+
+    updateRecentFileActions();
+
 }
 void TLogContainer::on_contestPageControl_currentChanged(int index)
 {
@@ -2002,6 +2015,7 @@ BaseContestLog *TLogContainer::loadSession( QString sessName)
 
     preloadBundle.startGroup();
     preloadBundle.openSection(sessName);
+    int curSlot = 0;
     QStringList slotlst = preloadBundle.getProfileEntries();
     if (slotlst.count())
     {
@@ -2013,7 +2027,6 @@ BaseContestLog *TLogContainer::loadSession( QString sessName)
             preloadBundle.getStringProfile( s, ent, "" );
             pathlst.append( ent );
         }
-        int curSlot = 0;
         preloadBundle.getIntProfile( eppCurrent, curSlot );
         for ( int i = 0; i < slotlst.size(); i++ )
         {
@@ -2048,27 +2061,29 @@ BaseContestLog *TLogContainer::loadSession( QString sessName)
     preloadBundle.openSection(app->preloadsect);
     preloadBundle.setStringProfile(eppSession, sessName);
     preloadBundle.openSection(sessName);
+    preloadBundle.endGroup();
+
     app ->writeContestList();	// to clear the unopened and changed ones
 
-    ui->menuLogs->clear();
-    menuLogsActions.clear();
+    setMenuLog(curSlot);
+    // ui->menuLogs->clear();
+    // menuLogsActions.clear();
 
-    ui->menuLogs->addAction(FileOpenAction);
-    ui->menuLogs->addMenu(recentFilesMenu);
-    ui->menuLogs->addAction(VHFFileNewAction);
-    if (HFFileNewAction)
-    {
-        ui->menuLogs->addAction(HFFileNewAction);
-    }
-    ui->menuLogs->addAction(FileCloseAction);
-    ui->menuLogs->addAction(CloseAllAction);
-    ui->menuLogs->addAction(CloseAllButAction);
-    ui->menuLogs->addSeparator();
+    // ui->menuLogs->addAction(FileOpenAction);
+    // ui->menuLogs->addMenu(recentFilesMenu);
+    // ui->menuLogs->addAction(VHFFileNewAction);
+    // if (HFFileNewAction)
+    // {
+    //     ui->menuLogs->addAction(HFFileNewAction);
+    // }
+    // ui->menuLogs->addAction(FileCloseAction);
+    // ui->menuLogs->addAction(CloseAllAction);
+    // ui->menuLogs->addAction(CloseAllButAction);
+    // ui->menuLogs->addSeparator();
 
-    sessionsMenu = newMenu(ui->menuLogs, QT_TR_NOOP("Contest Sets"));
-    updateSessionActions();
+    // sessionsMenu = newMenu(ui->menuLogs, QT_TR_NOOP("Contest Sets"));
+    // updateSessionActions();
 
-    preloadBundle.endGroup();
     return ct;
 }
 QString TLogContainer::getCurrSession()
