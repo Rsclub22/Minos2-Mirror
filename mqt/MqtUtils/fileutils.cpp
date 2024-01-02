@@ -126,3 +126,10 @@ QString GetCleanPath(QString fn)
     }
     return fn;
 }
+QString GetFullPath(QString fn)
+{
+    QDir cdir(GetCurrentDir());
+    fn = cdir.cleanPath(fn);
+    fn = cdir.absoluteFilePath(fn);
+    return fn;
+}

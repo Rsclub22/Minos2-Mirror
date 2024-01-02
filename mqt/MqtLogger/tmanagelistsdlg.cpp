@@ -1,3 +1,4 @@
+#include "fileutils.h"
 #include "regsettings.h"
 #include "ContestApp.h"
 #include "list.h"
@@ -71,6 +72,7 @@ void TManageListsDlg::DrawList()
           QString sname = l->slot->name;
           qlwi->setText( sname);
           qlwi->setData( Qt::UserRole, l->slotno);
+          qlwi->setToolTip(GetFullPath(sname));
 
           ui->ListsListBox->setItem(row, 0, qlwi );
 

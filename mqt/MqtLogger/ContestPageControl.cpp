@@ -2,6 +2,7 @@
 #include <QToolTip>
 #include "WindowsAppId.h"
 #include "SecondInstall.h"
+#include "fileutils.h"
 #include "regsettings.h"
 
 #include "ContestApp.h"
@@ -57,7 +58,8 @@ bool ContestPageControl::eventFilter(QObject */*obj*/, QEvent *event)
             if ( pc )
             {
                 pc->setScore( statbuf );
-                QString toolTip = pc->cfileName + "\r\n" + statbuf;
+                QString fname = GetFullPath(pc->cfileName);
+                QString toolTip = fname + "\r\n" + statbuf;
                 if (!pc->isReadOnly())
                 {
                     LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( pc);

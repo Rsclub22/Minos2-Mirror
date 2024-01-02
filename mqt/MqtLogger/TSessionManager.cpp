@@ -1,6 +1,7 @@
 #include <QFileInfo>
 #include <QFileDialog>
 #include "AppStartup.h"
+#include "fileutils.h"
 #include "regsettings.h"
 #include "ContestApp.h"
 #include "tlogcontainer.h"
@@ -187,7 +188,11 @@ void TSessionManager::showSession(int sess)
 
             for ( int i = 0; i < rowCount; i++ )
             {
-                ui->sessionEntries->setItem(i, 0, new QTableWidgetItem(sessionList.sessions[sess].entries[i]));
+                QString fname = sessionList.sessions[sess].entries[i];
+                QTableWidgetItem *ritem = new QTableWidgetItem(fname);
+                ritem->setToolTip(GetFullPath(fname));
+
+                ui->sessionEntries->setItem(i, 0, ritem);
             }
             if (sessionList.sessions[sess].entries.count())
             {
