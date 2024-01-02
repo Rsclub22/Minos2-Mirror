@@ -255,7 +255,7 @@ void TSessionManager::on_CloneSessionButton_clicked()
     // copy the current session with  new name, enter it
     QString newName;
     Session newSession = sessionList.sessions[sessionList.currentSession];
-    QString prompt = tr("Give name for new log set");
+    QString prompt = tr("Give name for new contest set");
     if (enquireDialog(this, prompt, newName))
     {
         newSession.sessionName = newName;
@@ -341,7 +341,7 @@ void TSessionManager::on_RenameSessionButton_clicked()
 {
     // change the session name
     QString newName;
-    QString prompt = tr("Give new name for log set %1").arg(sessionList.sessions[sessionList.currentSession].sessionName);
+    QString prompt = tr("Give new name for contest set %1").arg(sessionList.sessions[sessionList.currentSession].sessionName);
     if (enquireDialog(this, prompt, newName))
     {
         sessionList.sessions[sessionList.currentSession].sessionName = newName;

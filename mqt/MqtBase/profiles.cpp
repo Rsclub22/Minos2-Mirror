@@ -22,7 +22,7 @@ QString defaultProtectedLayoutName()
 }
 QString defaultSessionName()
 {
-    return QCoreApplication::translate("Default Log Session", "Default Session");
+    return QCoreApplication::translate("Default Contest Set", "Default Set");
 }
 
 AppSettingsBundle::AppSettingsBundle():
