@@ -549,6 +549,7 @@ private:
     void handleYaesuCwMessage(QString msg);
     void setTestMode(bool test);
 
+    void setPttOnOff(bool pttOn);
 private slots:
 
     void onStdInRead(QString);
