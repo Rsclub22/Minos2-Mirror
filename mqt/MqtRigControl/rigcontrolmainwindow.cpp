@@ -298,14 +298,27 @@ void RigControlMainWindow::onTxPttTestPbClicked()
     }
 }
 
-void RigControlMainWindow::onSetPttOnOff(bool pttOnOff)
+void RigControlMainWindow::onSetPttOnOff(bool pttOnState)
 {
-    trace(QString("Ptt On/Off message from Logger - %1").arg(pttOnOff ? "On" : "Off"));
+    trace(QString("Ptt On/Off message from Logger - %1").arg(pttOnState ? "On" : "Off"));
+
+    setPttOnOff(pttOnState);
+}
+
+void RigControlMainWindow::setPttOnOff(bool pttOnState)
+{
+    trace(QString("Set Ptt On/Off State: %1").arg(pttOnState ? "On" : "Off") );
 
     if (radio)
     {
-        setTxState(rigStateDetails->curVfo, pttOnOff);
-
+        if (radio->getRigConnected())
+        {
+            setTxState(rigStateDetails->curVfo, pttOnState);
+        }
+        else
+        {
+            trace(QString("Rig Not connected ignore change ptt state"));
+        }
     }
 }
 
@@ -501,6 +514,14 @@ void RigControlMainWindow::upDateRadio(QString radioName)
 
      pollTimer->stop();      // stop updates
 
+     if (radioCommsOK)  // close existing radio before clearing data
+     {
+
+         closeRadio();
+     }
+
+
+
     clrRigctldNames();
     clearSupportRitFlags();
     currentRadio.clear();
@@ -513,11 +534,6 @@ void RigControlMainWindow::upDateRadio(QString radioName)
     setPttGroupItemsVisible(false);
     setSmeterVisible(false);
 
-    if (radioCommsOK)
-    {
-
-        closeRadio();
-    }
 
     if (radioName.isEmpty())
     {
