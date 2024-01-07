@@ -49,6 +49,7 @@ public:
 private slots:
     void on_readyRead();
 
+    void errorOccurred(QSerialPort::SerialPortError error);
 signals:
     void dataReceived(QByteArray);
     void errString(QString);

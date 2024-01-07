@@ -37,7 +37,7 @@ LIBS *= -lsetupapi -lhid
 }
 #message($$INCLUDEPATH)
 SOURCES += main.cpp\
-    FlexControlFrame.cpp \
+    flexcontrolframe.cpp \
     configureknobs.cpp \
     hamlibrigcontrol.cpp \
     powermateframe.cpp \
@@ -55,7 +55,7 @@ SOURCES += main.cpp\
     rigctldclient.cpp
 
 HEADERS  += rigcontrolmainwindow.h \
-    FlexControlFrame.h \
+    flexcontrolframe.h \
     configureknobs.h \
     hamlibrigcontrol.h \
     powermateframe.h \
@@ -78,7 +78,7 @@ win32:{HEADERS +=  OmniWrapper.h \
        }
 
 FORMS    += rigcontrolmainwindow.ui \
-    FlexControlFrame.ui \
+    flexcontrolframe.ui \
     configureknobs.ui \
     powermateframe.ui \
     rigsetupdialog.ui \

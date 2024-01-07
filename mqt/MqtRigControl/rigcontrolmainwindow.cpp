@@ -5355,7 +5355,7 @@ Frequency RigControlMainWindow::getRadioFrequency()
     Frequency cf;
     if (radio)
     {
-        cf = radio->getFrequency(VFO::CURRENT_VFO, cf);
+        radio->getFrequency(VFO::CURRENT_VFO, cf);
     }
     return cf;
 }
@@ -5369,8 +5369,7 @@ void RigControlMainWindow::setRadioFrequency(Frequency f)
 Frequency rigStep(10);
 void RigControlMainWindow::tuneData(QByteArray b)
 {
-    // should really split on ";" and build a chain of commands,
-    // keeping back any residue
+    //  split on ";" and build a chain of commands, keeping back any residue
 
     static QString seq;
     QString s(b);
@@ -5383,9 +5382,9 @@ void RigControlMainWindow::tuneData(QByteArray b)
         s = seq.left(sc);
         seq = seq.mid(sc + 1);
 
-        QString catCommand;
-
         Frequency f = getRadioFrequency();
+        logMessage(QString("tuneData: Get Freq: Read Freq from Radio = %1").arg(f.traceStr()));
+
         int steps = s.mid(1).toInt();
         if (s.startsWith("U"))
         {
@@ -5395,19 +5394,20 @@ void RigControlMainWindow::tuneData(QByteArray b)
             }
             else
             {
-                catCommand = QString("ZZAF%1;").arg(steps, 2, 10, QChar('0'));
+                f = f + Frequency(rigStep * steps);
             }
         }
         else if (s.startsWith("D"))
         {
             if (steps == 0 || steps == 1)
             {
-                catCommand = "ZZSA;";
+                f = f - rigStep;
             }
             else
             {
-                catCommand = QString("ZZAE%1;").arg(steps, 2, 10, QChar('0'));
+                f = f - Frequency(rigStep * steps);
             }
         }
+        setRadioFrequency(f);
     }
 }

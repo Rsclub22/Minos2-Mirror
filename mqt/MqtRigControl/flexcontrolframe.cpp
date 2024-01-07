@@ -1,11 +1,12 @@
 #include <QSettings>
+#include "MShowMessageDlg.h"
 #include "regsettings.h"
 #include "MTrace.h"
 #include "cutils.h"
 
 #include "rigcontrolmainwindow.h"
-#include "FlexControlFrame.h"
-#include "ui_FlexControlFrame.h"
+#include "flexcontrolframe.h"
+#include "ui_flexcontrolframe.h"
 /*
 Sending from FlexControl to host:
 All commands terminate with ';' (no returns or line feeds)
@@ -140,16 +141,14 @@ void ControlFlex::start()
         sp = new QSerialPort;
         sp->setPortName(comPort);
 
-        // http://ryeng.name/blog/3
-        //1200 bps (Rot1Prog) or 600 bps (Rot2Prog), 8 bits, no parity and 1 stop bit.
-
-        sp->setBaudRate(QSerialPort::Baud9600);  // for SPID
+        sp->setBaudRate(QSerialPort::Baud9600);
         sp->setDataBits(QSerialPort::Data8);
         sp->setParity(QSerialPort::NoParity);
         sp->setStopBits(QSerialPort::OneStop);
         sp->setFlowControl(QSerialPort::NoFlowControl);
 
         connect(sp, &QSerialPort::readyRead, this, &ControlFlex::on_readyRead);
+        connect(sp, &QSerialPort::errorOccurred, this, &ControlFlex::errorOccurred);
 
         openFlag = sp->open(QIODevice::ReadWrite);
         if (!openFlag)
@@ -171,4 +170,18 @@ void ControlFlex::on_readyRead()
     hex_dump(data, 8, "FlexControl");
 
     emit dataReceived(data);
+}
+void ControlFlex::errorOccurred(QSerialPort::SerialPortError error)
+{
+    if (error != QSerialPort::NoError)
+    {
+        QStringList comportErrMsgs = { tr("No Error"), tr("Device Not Found"), tr("Permission Error")
+            ,tr("Open Error"), tr("Parity Error"), tr("Framing Error")
+            ,tr("Break Condition"), tr("Write Error"), tr("Read Error")
+            ,tr("Resource Error"), tr("Unsupported Operation Error")
+            ,tr("Unknown Error"), tr("Timeout Error"), tr("Not Open Error")
+        };
+        trace(comportErrMsgs[error]);
+        mShowMessage(comportErrMsgs[error], 0);
+    }
 }
