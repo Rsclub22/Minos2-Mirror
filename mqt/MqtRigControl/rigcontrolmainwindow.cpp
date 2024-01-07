@@ -20,6 +20,7 @@
 #include <QMetaType>
 #include <QDir>
 
+#include "configureknobs.h"
 #include "regsettings.h"
 #include "serialCommonData.h"
 #include "MShowMessageDlg.h"
@@ -36,6 +37,7 @@
 #include "rigcontrolmainwindow.h"
 #include "ui_rigcontrolmainwindow.h"
 
+RigControlMainWindow *mainWindow = nullptr;
 
 const bool PUBLISH_NOW = true;
 const bool DONT_PUBLISH_NOW = false;
@@ -51,6 +53,8 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
 
 {
     ui->setupUi(this);
+    mainWindow = this;
+
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     serialData::translateSerialData();
@@ -200,12 +204,14 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
 
     upDateRadio(currentRadioName);
 
+    ConfigureKnobs::start();
     trace("*** Rig App Started ***");
 }
 
 RigControlMainWindow::~RigControlMainWindow()
 {
     trace("RigControlMainWindow::~RigControlMainWindow()");
+    ConfigureKnobs::stop();
     delete ui;
     delete msg;
 }
@@ -5335,3 +5341,73 @@ void RigControlMainWindow::on_traceDataComms_stateChanged(int /*arg1*/)
     saveTraceLogFlag(ui->traceDataComms->isChecked());
 }
 
+
+void RigControlMainWindow::on_configureKnobs_clicked()
+{
+    ConfigureKnobs ck(this);
+
+    ck.exec();
+
+    ck.start();
+}
+Frequency RigControlMainWindow::getRadioFrequency()
+{
+    Frequency cf;
+    if (radio)
+    {
+        cf = radio->getFrequency(VFO::CURRENT_VFO, cf);
+    }
+    return cf;
+}
+void RigControlMainWindow::setRadioFrequency(Frequency f)
+{
+    if (radio)
+    {
+        radio->setFrequency(f, VFO::CURRENT_VFO);
+    }
+}
+Frequency rigStep(10);
+void RigControlMainWindow::tuneData(QByteArray b)
+{
+    // should really split on ";" and build a chain of commands,
+    // keeping back any residue
+
+    static QString seq;
+    QString s(b);
+
+    seq += s;
+
+    int sc = seq.indexOf(';');
+    while ( !seq.isEmpty() && sc >= 0 )
+    {
+        s = seq.left(sc);
+        seq = seq.mid(sc + 1);
+
+        QString catCommand;
+
+        Frequency f = getRadioFrequency();
+        int steps = s.mid(1).toInt();
+        if (s.startsWith("U"))
+        {
+            if (steps == 0 || steps == 1)
+            {
+                f = f + rigStep;
+            }
+            else
+            {
+                catCommand = QString("ZZAF%1;").arg(steps, 2, 10, QChar('0'));
+            }
+        }
+        else if (s.startsWith("D"))
+        {
+            if (steps == 0 || steps == 1)
+            {
+                catCommand = "ZZSA;";
+            }
+            else
+            {
+                catCommand = QString("ZZAE%1;").arg(steps, 2, 10, QChar('0'));
+            }
+        }
+    }
+}

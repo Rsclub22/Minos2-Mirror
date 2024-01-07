@@ -255,6 +255,8 @@ public:
     const QString version = "2.20";
 
 
+    Frequency getRadioFrequency();
+    void setRadioFrequency(Frequency f);
 private:
 
     Ui::RigControlMainWindow *ui;
@@ -550,6 +552,9 @@ private:
     void setTestMode(bool test);
 
     void setPttOnOff(bool pttOn);
+public slots:
+    void tuneData(QByteArray b);
+
 private slots:
 
     void onStdInRead(QString);
@@ -626,6 +631,8 @@ private slots:
     void on_testRadioButton_clicked();
 
     void on_traceDataComms_stateChanged(int arg1);
+    void on_configureKnobs_clicked();
 };
 
+extern RigControlMainWindow *mainWindow;
 #endif // RIGCONTROLMAINWINDOW_H

@@ -79,6 +79,8 @@ extern QString makeStr( bool i );
 template <class T>
 QString makeStr(T) = delete; // C++11
 
+void hex_dump(const QByteArray &src, size_t line_size, const QString &prefix);
+
 extern QString HtmlFontColour( const QColor &c );
 
 template<class T>

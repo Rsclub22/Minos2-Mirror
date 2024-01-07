@@ -262,6 +262,45 @@ QString makeStr( bool i )
 {
    return ( i ? "true" : "false" );
 }
+void hex_dump(const QByteArray &src,  size_t line_size,  const QString &rawPrefix)
+{
+    QString prefix = rawPrefix + "               ";
+    prefix = prefix.left(15);
+    int length = src.size();
+    size_t i = 0;
+    const char *address = static_cast<const char *>(src);
+    const char *line = address;
+
+    QString lbuff;
+
+    lbuff = lbuff + prefix + "|" ;
+    while (length-- > 0)
+    {
+        char b = *address++;
+        QByteArray a;
+        a += b;
+        lbuff += QString( " %1").arg(a.toHex().data());
+        if (!(++i % line_size) || (length == 0 && i % line_size))
+        {
+            if (length == 0) {
+                while (i++ % line_size)
+                    lbuff += "__ ";
+            }
+            lbuff += " | ";  /* right close */
+            while (line < address)
+            {
+                char c = *line++;
+                if (c < 33)
+                    c = 0x2E;
+                lbuff += c;
+            }
+            if (length > 0)
+                lbuff = lbuff + "\n" + "                            " + "|" ;
+        }
+    }
+    trace (lbuff);
+}
+
 QString HtmlFontColour( const QColor &c )
 {
     QString s = "<font color='" + c.name() + "'>";

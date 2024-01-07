@@ -32,9 +32,15 @@ win32-msvc{
         #message(msvc dumpcpp)
         TYPELIBS = $$system(dumpcpp OmniRig.tlb)
 }
+win32{
+LIBS *= -lsetupapi -lhid
+}
 #message($$INCLUDEPATH)
 SOURCES += main.cpp\
+    FlexControlFrame.cpp \
+    configureknobs.cpp \
     hamlibrigcontrol.cpp \
+    powermateframe.cpp \
     rigbase.cpp \
     rigcapabilities.cpp \
     rigcontrolmainwindow.cpp \
@@ -49,7 +55,10 @@ SOURCES += main.cpp\
     rigctldclient.cpp
 
 HEADERS  += rigcontrolmainwindow.h \
+    FlexControlFrame.h \
+    configureknobs.h \
     hamlibrigcontrol.h \
+    powermateframe.h \
     rigbase.h \
     rigcapabilities.h \
     rigcontrolrpc.h \
@@ -69,6 +78,9 @@ win32:{HEADERS +=  OmniWrapper.h \
        }
 
 FORMS    += rigcontrolmainwindow.ui \
+    FlexControlFrame.ui \
+    configureknobs.ui \
+    powermateframe.ui \
     rigsetupdialog.ui \
     rigsetupform.ui \
     transvertsetupform.ui \
