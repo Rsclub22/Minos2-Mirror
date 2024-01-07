@@ -5382,12 +5382,12 @@ void RigControlMainWindow::tuneData(QByteArray b)
         s = seq.left(sc);
         seq = seq.mid(sc + 1);
 
-        Frequency f = getRadioFrequency();
-        logMessage(QString("tuneData: Get Freq: Read Freq from Radio = %1").arg(f.traceStr()));
 
         int steps = s.mid(1).toInt();
         if (s.startsWith("U"))
         {
+            Frequency f = getRadioFrequency();
+            logMessage(QString("tuneData U: Get Freq: Read Freq from Radio = %1").arg(f.traceStr()));
             if (steps == 0 || steps == 1)
             {
                 f = f + rigStep;
@@ -5396,9 +5396,12 @@ void RigControlMainWindow::tuneData(QByteArray b)
             {
                 f = f + Frequency(rigStep * steps);
             }
+            setRadioFrequency(f);
         }
         else if (s.startsWith("D"))
         {
+            Frequency f = getRadioFrequency();
+            logMessage(QString("tuneData D: Get Freq: Read Freq from Radio = %1").arg(f.traceStr()));
             if (steps == 0 || steps == 1)
             {
                 f = f - rigStep;
@@ -5407,7 +5410,7 @@ void RigControlMainWindow::tuneData(QByteArray b)
             {
                 f = f - Frequency(rigStep * steps);
             }
+            setRadioFrequency(f);
         }
-        setRadioFrequency(f);
     }
 }
