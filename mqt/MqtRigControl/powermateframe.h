@@ -1,15 +1,16 @@
 #ifndef POWERMATEFRAME_H
 #define POWERMATEFRAME_H
 
+#if defined (WIN32)
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
+#endif
 
 #include <QFrame>
 #include <QThread>
 
 class ControlPowerMate;
 #if defined (WIN32)
-
 class PMThread:public QThread
 {
 public:
@@ -40,6 +41,7 @@ private:
 
     PMThread *pmThread = nullptr;
 
+#endif
 
 signals:
     void dataReceived(QByteArray);
@@ -58,7 +60,6 @@ public:
     void stop();
 
 };
-
 namespace Ui {
 class PowerMateFrame;
 }
@@ -73,7 +74,7 @@ public:
 private:
     Ui::PowerMateFrame *ui;
 
-#endif
+
 private slots:
     void on_enabledCb_clicked();
 };

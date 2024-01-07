@@ -243,6 +243,7 @@ void ControlPowerMate::stop()
 #endif
 }
 
+#if defined (WIN32)
 
 
 PMThread::PMThread(ControlPowerMate *p, HANDLE devH):QThread(p), devHandle(devH), controller(p)
@@ -257,7 +258,6 @@ PMThread::~PMThread()
 
 void PMThread::run()
 {
-#if defined WIN32
     trace("PMThread running");
     char reportBuffer[8] = {0};
 
@@ -336,6 +336,6 @@ void PMThread::run()
 
     } // end while
     trace("PMThread closed");
-#endif
 }
 
+#endif

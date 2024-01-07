@@ -16,9 +16,9 @@ ConfigureKnobs::ConfigureKnobs(QWidget *parent)
         restoreGeometry(geometry);
 
     ui->knobCombo->addItem(tr("None"));
-    ui->knobCombo->addItem(tr("FlexControl"));
 
 #if defined (WIN32)
+    ui->knobCombo->addItem(tr("FlexControl"));
     ui->knobCombo->addItem(tr("Griffin PowerMate"));
 #endif
 
