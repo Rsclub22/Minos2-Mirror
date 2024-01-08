@@ -254,9 +254,6 @@ public:
 
     const QString version = "2.20";
 
-
-    Frequency getRadioFrequency();
-    void setRadioFrequency(Frequency f);
 private:
 
     Ui::RigControlMainWindow *ui;
@@ -481,9 +478,6 @@ private:
 
     void showRitTestControl(bool state);
 
-
-
-
     void getAndSendTransVertSwNum(QString transvertName);
     bool findTransverter(QString &transVerterBand, QString band);
 
@@ -552,8 +546,6 @@ private:
     void setTestMode(bool test);
 
     void setPttOnOff(bool pttOn);
-public slots:
-    void tuneData(QByteArray b);
 
 private slots:
 
@@ -608,14 +600,7 @@ private slots:
     void onRitOffset();
     void onRit0();
     void onNewVfo(QString omniRigVfo);
-
-
-
-
-
     void pollRadioInfo();
-
-
     void onSetVoiceMessageNum(QString msgNum);
     void onSetStopVoiceMessage(QString msg);
     void onCwKeyerPbClicked();
@@ -631,7 +616,15 @@ private slots:
     void on_testRadioButton_clicked();
 
     void on_traceDataComms_stateChanged(int arg1);
+#if defined(INC_TUNE)
+public:
+    Frequency getRadioFrequency();
+    void setRadioFrequency(Frequency f);
+public slots:
+    void tuneData(QByteArray b);
+private slots:
     void on_configureKnobs_clicked();
+#endif
 };
 
 extern RigControlMainWindow *mainWindow;

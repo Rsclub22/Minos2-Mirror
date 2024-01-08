@@ -20,7 +20,9 @@
 #include <QMetaType>
 #include <QDir>
 
+#if defined(INC_TUNE)
 #include "configureknobs.h"
+#endif
 #include "regsettings.h"
 #include "serialCommonData.h"
 #include "MShowMessageDlg.h"
@@ -204,14 +206,21 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
 
     upDateRadio(currentRadioName);
 
+#if defined(INC_TUNE)
+    ui->configureKnobs->setVisible(true);
     ConfigureKnobs::start();
+#else
+    ui->configureKnobs->setVisible(false);
+#endif
     trace("*** Rig App Started ***");
 }
 
 RigControlMainWindow::~RigControlMainWindow()
 {
     trace("RigControlMainWindow::~RigControlMainWindow()");
+#if defined(INC_TUNE)
     ConfigureKnobs::stop();
+#endif
     delete ui;
     delete msg;
 }
@@ -5341,7 +5350,7 @@ void RigControlMainWindow::on_traceDataComms_stateChanged(int /*arg1*/)
     saveTraceLogFlag(ui->traceDataComms->isChecked());
 }
 
-
+#if defined(INC_TUNE)
 void RigControlMainWindow::on_configureKnobs_clicked()
 {
     ConfigureKnobs ck(this);
@@ -5414,3 +5423,4 @@ void RigControlMainWindow::tuneData(QByteArray b)
         }
     }
 }
+#endif

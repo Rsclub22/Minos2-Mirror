@@ -37,10 +37,7 @@ LIBS *= -lsetupapi -lhid
 }
 #message($$INCLUDEPATH)
 SOURCES += main.cpp\
-    flexcontrolframe.cpp \
-    configureknobs.cpp \
     hamlibrigcontrol.cpp \
-    powermateframe.cpp \
     rigbase.cpp \
     rigcapabilities.cpp \
     rigcontrolmainwindow.cpp \
@@ -55,10 +52,7 @@ SOURCES += main.cpp\
     rigctldclient.cpp
 
 HEADERS  += rigcontrolmainwindow.h \
-    flexcontrolframe.h \
-    configureknobs.h \
     hamlibrigcontrol.h \
-    powermateframe.h \
     rigbase.h \
     rigcapabilities.h \
     rigcontrolrpc.h \
@@ -78,11 +72,25 @@ win32:{HEADERS +=  OmniWrapper.h \
        }
 
 FORMS    += rigcontrolmainwindow.ui \
-    flexcontrolframe.ui \
-    configureknobs.ui \
-    powermateframe.ui \
     rigsetupdialog.ui \
     rigsetupform.ui \
     transvertsetupform.ui \
     addtransverterdialog.ui \
     addradiodialog.ui
+
+equals(INC_TUNE, 1): {
+    SOURCES += \
+    flexcontrolframe.cpp \
+    configureknobs.cpp \
+    powermateframe.cpp
+
+    HEADERS += \
+    flexcontrolframe.h \
+    configureknobs.h \
+    powermateframe.h
+
+    FORMS += \
+    flexcontrolframe.ui \
+    configureknobs.ui \
+    powermateframe.ui
+}

@@ -30,6 +30,11 @@ macx {
 }
 
 win32: {
+INC_TUNE = 1
+DEFINES += INC_TUNE
+}
+
+win32: {
 versionAtLeast(QT_VERSION, 6.5.0){
 INC_MAP = 1
 DEFINES += INC_MAP

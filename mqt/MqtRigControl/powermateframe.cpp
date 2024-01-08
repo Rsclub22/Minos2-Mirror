@@ -159,7 +159,7 @@ void ControlPowerMate::start()
             // retrieves detailed information about a specified device interface
             SetupDiGetDeviceInterfaceDetail(hDevInfoSet,&interfaceData,NULL,0,&bufferLength,NULL);
 
-            PSP_INTERFACE_DEVICE_DETAIL_DATA interfaceDetail = (PSP_INTERFACE_DEVICE_DETAIL_DATA)new char[bufferLength];
+            PSP_INTERFACE_DEVICE_DETAIL_DATA interfaceDetail = reinterpret_cast<PSP_INTERFACE_DEVICE_DETAIL_DATA>(new char[bufferLength]);
 
             interfaceDetail->cbSize = sizeof(SP_INTERFACE_DEVICE_DETAIL_DATA);
 
@@ -201,7 +201,8 @@ void ControlPowerMate::start()
 
 
 
-                    if( (int)HidAttributes::ProductID == hidAttr.ProductID && (int)HidAttributes::VendorID  == hidAttr.VendorID )
+                    if( static_cast<int>(HidAttributes::ProductID) == hidAttr.ProductID
+                        && static_cast<int>(HidAttributes::VendorID)  == hidAttr.VendorID )
                     {
                         trace("FOUND GRIFFIN KNOB " );
 
@@ -272,9 +273,9 @@ void PMThread::run()
     while(!terminated)
     {
 
-        BOOL result = ReadFile(devHandle, reportBuffer, sizeof(reportBuffer), &dwBytesRead, &overLap);// async call
+        /*BOOL result =*/ ReadFile(devHandle, reportBuffer, sizeof(reportBuffer), &dwBytesRead, &overLap);// async call
 
-        DWORD dw = WaitForSingleObject(hEvent, TIMER_CAT);  // wait for 200=200mSec (was 2 seconds)
+        DWORD dw = WaitForSingleObject(hEvent, TIMER_CAT);  // wait for 100=100mSec (was 2 seconds)
 
         switch(dw)
         {
@@ -283,7 +284,7 @@ void PMThread::run()
             if (reportBuffer[1] == 1)   // test for pushbutton
             {
 
-                ButtonState bs = ButtonState::Down;
+                //ButtonState bs = ButtonState::Down;
                 //EventsHelper::Tire(buttonDelegate, bs, bandsel, qqq, aaa);  // send button state, and bandsel to form
 
                 trace("DETECTED DN");
@@ -291,7 +292,7 @@ void PMThread::run()
             }
             else if ( reportBuffer[2] == 0 && reportBuffer[1] == 0)  // test for knob UP
             {
-                ButtonState bs = ButtonState::Up;
+                //ButtonState bs = ButtonState::Up;
                 //EventsHelper::Tire(buttonDelegate, bs, bandsel1, qqq, aaa);
 
                 trace("DETECTED UP");
@@ -302,17 +303,20 @@ void PMThread::run()
 
             if (rotvalue != 0)                    // test for knob rotation
             {
-                trace(QString("Reportbuffer %1").arg(rotvalue));
-
+                QString m;
                 if (rotvalue >= 1)
                 {
-                    emit controller->dataReceived(QString("U%1;").arg(rotvalue, 2, 10, QChar('0')).toLocal8Bit());
+                    m = QString("U%1;").arg(rotvalue, 2, 10, QChar('0'));
                 }
                 else if (rotvalue <= -1)
                 {
-                    emit controller->dataReceived(QString("D%1;").arg(-rotvalue, 2, 10, QChar('0')).toLocal8Bit());
+                    m = QString("D%1;").arg(-rotvalue, 2, 10, QChar('0'));
                 }
-
+                if (!m.isEmpty())
+                {
+                    trace("PowerMate " + m);
+                    emit controller->dataReceived(m.toLocal8Bit());
+                }
             } // knob rotation
 
 
