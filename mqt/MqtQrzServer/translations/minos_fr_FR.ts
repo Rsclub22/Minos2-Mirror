@@ -96,57 +96,57 @@
         <translation>SSL n&apos;est pas supporté par cette système.</translation>
     </message>
     <message>
-        <location filename="../qrzservermainwindow.cpp" line="383"/>
+        <location filename="../qrzservermainwindow.cpp" line="397"/>
         <source>Qrz logged on Ok with call %1</source>
         <translation>Connecté  à QRZ.com avec l&apos;indicatif : %1</translation>
     </message>
     <message>
-        <location filename="../qrzservermainwindow.cpp" line="393"/>
+        <location filename="../qrzservermainwindow.cpp" line="407"/>
         <source>Logon failed to Qrz.com, logon callsign = %1, error = %2</source>
         <translation>Échec de la connexion à QRZ.com, indicatif = %1, erreur = %2</translation>
     </message>
     <message>
-        <location filename="../qrzservermainwindow.cpp" line="441"/>
+        <location filename="../qrzservermainwindow.cpp" line="455"/>
         <source>Cluster Qrz Callsign Data received for call = %1, Qra = %2 - Send to Cluster Server</source>
         <translation>Données d&apos;indicatif reçues pour l&apos;appel = %1, Qra = %2 - Envoyer au serveur de cluster</translation>
     </message>
     <message>
-        <location filename="../qrzservermainwindow.cpp" line="451"/>
+        <location filename="../qrzservermainwindow.cpp" line="465"/>
         <source>Logger Qrz Callsign Data received for call = %1, Send to Qrz Display in Logger Server</source>
         <translation>Données d&apos;indicatif reçues pour l&apos;appel = %1, envoyer à l&apos;affichage Qrz dans Logger Server</translation>
     </message>
     <message>
-        <location filename="../qrzservermainwindow.cpp" line="672"/>
+        <location filename="../qrzservermainwindow.cpp" line="686"/>
         <source>Callsign received from logger - %1</source>
         <translation>Indicatif reçu de l&apos;enregistreur - %1</translation>
     </message>
     <message>
-        <location filename="../qrzservermainwindow.cpp" line="677"/>
+        <location filename="../qrzservermainwindow.cpp" line="691"/>
         <source>Callsign received from cluster - %1</source>
         <translation>Indicatif reçu du cluster - %1</translation>
     </message>
     <message>
-        <location filename="../qrzservermainwindow.cpp" line="685"/>
+        <location filename="../qrzservermainwindow.cpp" line="699"/>
         <source>Callsign is valid - %1</source>
         <translation>Indicatif d&apos;appel valide - %1</translation>
     </message>
     <message>
-        <location filename="../qrzservermainwindow.cpp" line="691"/>
+        <location filename="../qrzservermainwindow.cpp" line="705"/>
         <source>Ask QRZ DB for callsign - %1</source>
         <translation>Demander à QRZ DB l&apos;Indicatif - %1 [????]</translation>
     </message>
     <message>
-        <location filename="../qrzservermainwindow.cpp" line="697"/>
+        <location filename="../qrzservermainwindow.cpp" line="711"/>
         <source>Ask QRZ for callsign - %1</source>
         <translation>Demander l&apos;indicatif %1 à QRZ</translation>
     </message>
     <message>
-        <location filename="../qrzservermainwindow.cpp" line="710"/>
+        <location filename="../qrzservermainwindow.cpp" line="724"/>
         <source>Callsign is invalid - %1</source>
         <translation>Indicatif d&apos;appel invalide - %1</translation>
     </message>
     <message>
-        <location filename="../qrzservermainwindow.cpp" line="744"/>
+        <location filename="../qrzservermainwindow.cpp" line="758"/>
         <source>Connected</source>
         <translation>Connecté</translation>
     </message>
