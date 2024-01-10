@@ -199,12 +199,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../engineconfigure.cpp" line="381"/>
+        <location filename="../engineconfigure.cpp" line="390"/>
         <source>Engine Files (*.ocx *.exe);;All Files (*.*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../engineconfigure.cpp" line="385"/>
+        <location filename="../engineconfigure.cpp" line="394"/>
         <source>%1 Engine Executable</source>
         <translation type="unfinished"></translation>
     </message>
@@ -256,12 +256,12 @@
     </message>
     <message>
         <location filename="../enginewindow.ui" line="124"/>
-        <location filename="../enginewindow.cpp" line="702"/>
+        <location filename="../enginewindow.cpp" line="704"/>
         <source>Show Back Data</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../enginewindow.cpp" line="707"/>
+        <location filename="../enginewindow.cpp" line="709"/>
         <source>Hide Back Data</source>
         <translation type="unfinished"></translation>
     </message>

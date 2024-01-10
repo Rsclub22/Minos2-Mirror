@@ -579,7 +579,7 @@ QString getDirectoryLocation(DirectoryLocation dl, QString runDir /* = "."*/)
     QString libAppSupportPath = home + "/Library/Application Support/Minos2";
     QString sharedPath = QStandardPaths::locate(QStandardPaths::DocumentsLocation,"",QStandardPaths::LocateDirectory);
 
-    QString resourcePath = QCoreApplication::applicationDirPath() + "../Resources";
+    QString resourcePath = QCoreApplication::applicationDirPath() + "/../Resources";
 
 #endif
     QString dirLoc;
@@ -591,6 +591,7 @@ QString getDirectoryLocation(DirectoryLocation dl, QString runDir /* = "."*/)
         break;
 
     case dlTranslations:
+        // this isn't correct in build directories
         dirLoc = resourcePath + "/Bin/translations";
         break;
 
