@@ -18,8 +18,8 @@ ConfigureKnobs::ConfigureKnobs(QWidget *parent)
     ui->knobCombo->addItem(tr("None"));
 
 #if defined (WIN32)
-    ui->knobCombo->addItem(tr("FlexControl"));
-    ui->knobCombo->addItem(tr("Griffin PowerMate"));
+    ui->knobCombo->addItem("FlexControl");
+    ui->knobCombo->addItem("Griffin PowerMate");
 #endif
 
     curKnob = settings.getSettings().value("knobs/curKnob", 0).toInt();
