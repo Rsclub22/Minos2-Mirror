@@ -179,9 +179,14 @@ utiliser un autre nom SVP</translation>
 <context>
     <name>MinosCompass</name>
     <message>
-        <location filename="../minoscompass.cpp" line="179"/>
+        <location filename="../minoscompass.cpp" line="180"/>
         <source>N,E,S,W</source>
         <translation>N,E,S,O</translation>
+    </message>
+    <message>
+        <location filename="../minoscompass.cpp" line="296"/>
+        <source>Stop</source>
+        <translation type="unfinished">Arrêter</translation>
     </message>
 </context>
 <context>
@@ -329,7 +334,7 @@ Veuillez les supprimer et configurer les rotateurs à nouveau</translation>
         <translation>Rotateur Minos</translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.ui" line="32"/>
+        <location filename="../rotatormainwindow.ui" line="48"/>
         <source>Setup Antennas...</source>
         <translation>Configurer les Antennes...</translation>
     </message>
@@ -338,111 +343,126 @@ Veuillez les supprimer et configurer les rotateurs à nouveau</translation>
         <translation type="vanished">? [???]?</translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.ui" line="39"/>
+        <location filename="../rotatormainwindow.ui" line="79"/>
         <source>Log Headings...</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.ui" line="46"/>
+        <location filename="../rotatormainwindow.ui" line="55"/>
         <source>PST Config...</source>
         <translation>Configuration du PST...</translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.ui" line="73"/>
+        <location filename="../rotatormainwindow.ui" line="39"/>
+        <source>Setup</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rotatormainwindow.ui" line="65"/>
         <source>Current Antenna Config</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.ui" line="115"/>
+        <location filename="../rotatormainwindow.ui" line="103"/>
+        <location filename="../rotatormainwindow.ui" line="114"/>
+        <source>Select</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rotatormainwindow.ui" line="654"/>
         <source>Main</source>
         <translation>Principale (En avant)</translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.ui" line="131"/>
-        <location filename="../rotatormainwindow.ui" line="169"/>
+        <location filename="../rotatormainwindow.ui" line="670"/>
+        <location filename="../rotatormainwindow.ui" line="705"/>
         <source>000</source>
         <translation>000</translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.ui" line="153"/>
+        <location filename="../rotatormainwindow.ui" line="689"/>
         <source>Back</source>
         <translation>En arrière</translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.ui" line="190"/>
         <source>Antenna Select</source>
-        <translation>Sélection d&apos;antenne</translation>
+        <translation type="vanished">Sélection d&apos;antenne</translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.ui" line="205"/>
+        <location filename="../rotatormainwindow.ui" line="128"/>
         <source>0</source>
         <translation>0</translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.ui" line="212"/>
+        <location filename="../rotatormainwindow.ui" line="135"/>
         <source>Enter Test Bearing</source>
         <translation>Entrer la direction de test</translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.ui" line="228"/>
+        <location filename="../rotatormainwindow.ui" line="158"/>
         <source>Using:</source>
         <translation>En utilisant:</translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.ui" line="265"/>
+        <location filename="../rotatormainwindow.ui" line="195"/>
         <source>Antenna:</source>
         <translation>Antenne:</translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.ui" line="303"/>
+        <location filename="../rotatormainwindow.ui" line="226"/>
         <source>Reconnect</source>
         <translation>Rebrancher</translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.ui" line="310"/>
+        <location filename="../rotatormainwindow.ui" line="250"/>
         <source>PushButton</source>
         <translation>Bouton</translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.ui" line="324"/>
+        <location filename="../rotatormainwindow.ui" line="289"/>
         <source>Target</source>
         <translation>Cible</translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.ui" line="344"/>
+        <location filename="../rotatormainwindow.ui" line="298"/>
+        <source>Turn to</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rotatormainwindow.ui" line="317"/>
         <location filename="../rotatormainwindow.cpp" line="1832"/>
         <location filename="../rotatormainwindow.cpp" line="1840"/>
         <source>Turn</source>
         <translation>Tourner</translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.ui" line="351"/>
+        <location filename="../rotatormainwindow.ui" line="337"/>
         <location filename="../rotatormainwindow.cpp" line="1884"/>
         <location filename="../rotatormainwindow.cpp" line="1892"/>
         <source>Stop</source>
         <translation>Arrêter</translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.ui" line="390"/>
+        <location filename="../rotatormainwindow.ui" line="404"/>
         <source>Presets</source>
         <translation>Préconfigurations</translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.ui" line="414"/>
-        <location filename="../rotatormainwindow.ui" line="423"/>
-        <location filename="../rotatormainwindow.ui" line="434"/>
-        <location filename="../rotatormainwindow.ui" line="475"/>
-        <location filename="../rotatormainwindow.ui" line="486"/>
-        <location filename="../rotatormainwindow.ui" line="497"/>
-        <location filename="../rotatormainwindow.ui" line="508"/>
-        <location filename="../rotatormainwindow.ui" line="549"/>
-        <location filename="../rotatormainwindow.ui" line="560"/>
-        <location filename="../rotatormainwindow.ui" line="571"/>
+        <location filename="../rotatormainwindow.ui" line="428"/>
+        <location filename="../rotatormainwindow.ui" line="437"/>
+        <location filename="../rotatormainwindow.ui" line="448"/>
+        <location filename="../rotatormainwindow.ui" line="489"/>
+        <location filename="../rotatormainwindow.ui" line="500"/>
+        <location filename="../rotatormainwindow.ui" line="511"/>
+        <location filename="../rotatormainwindow.ui" line="522"/>
+        <location filename="../rotatormainwindow.ui" line="563"/>
+        <location filename="../rotatormainwindow.ui" line="574"/>
+        <location filename="../rotatormainwindow.ui" line="585"/>
         <source>...</source>
         <translation>...</translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.ui" line="637"/>
+        <location filename="../rotatormainwindow.ui" line="741"/>
         <location filename="../rotatormainwindow.cpp" line="2028"/>
         <source>No Overlap</source>
         <translation>Pas de chevauchement</translation>
@@ -480,12 +500,12 @@ Veuillez les supprimer et configurer les rotateurs à nouveau</translation>
         <translation type="vanished">A propos</translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.ui" line="80"/>
+        <location filename="../rotatormainwindow.ui" line="72"/>
         <source>Trace Data Comms</source>
         <translation>Suivre la communication de données</translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.ui" line="70"/>
+        <location filename="../rotatormainwindow.ui" line="62"/>
         <source>About Rotator Config</source>
         <translation>À propos de la configuration du rotateur</translation>
     </message>
@@ -495,18 +515,18 @@ Veuillez les supprimer et configurer les rotateurs à nouveau</translation>
         <translation>Configuration du PSTrotator</translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.cpp" line="130"/>
+        <location filename="../rotatormainwindow.cpp" line="137"/>
         <source>Offset: </source>
         <translation>Décalage: </translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.cpp" line="134"/>
+        <location filename="../rotatormainwindow.cpp" line="141"/>
         <source>Actual: </source>
         <translatorcomment> Réel: </translatorcomment>
         <translation>Antenne: </translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.cpp" line="138"/>
+        <location filename="../rotatormainwindow.cpp" line="145"/>
         <source>RawRot: </source>
         <translation>Rotateur brut: </translation>
     </message>
@@ -515,47 +535,54 @@ Veuillez les supprimer et configurer les rotateurs à nouveau</translation>
         <translation type="vanished">Sélectionner une antenne SVP, ou aucune antenne trouvée!</translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.cpp" line="411"/>
+        <location filename="../rotatormainwindow.cpp" line="415"/>
         <source>Please select an Antenna</source>
         <translation>Sélectionner une antenne SVP</translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.cpp" line="419"/>
+        <location filename="../rotatormainwindow.cpp" line="423"/>
         <source>Comport %1 no longer configured on computer?</source>
         <translation>Le port COM %1 n&apos;est plus configuré sur l&apos;ordinateur?</translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.cpp" line="426"/>
+        <location filename="../rotatormainwindow.cpp" line="430"/>
         <source>Please select a Comport</source>
         <translation>Sélectionner un port COM SVP</translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.cpp" line="436"/>
+        <location filename="../rotatormainwindow.cpp" line="440"/>
         <source>Please enter a network Address and Port Number</source>
         <translation>Entrée une adresse réseau et un numéro de port SVP</translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.cpp" line="444"/>
+        <location filename="../rotatormainwindow.cpp" line="448"/>
         <source>Please select a rotator model</source>
         <translation>Sélectionner un type de rotateur SVP</translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.cpp" line="499"/>
+        <location filename="../rotatormainwindow.cpp" line="497"/>
+        <location filename="../rotatormainwindow.cpp" line="515"/>
+        <location filename="../rotatormainwindow.cpp" line="521"/>
+        <source>Connected</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rotatormainwindow.cpp" line="516"/>
         <source>Connected to: %1 - %2, %3</source>
         <translation>Connecté  à: %1 - %2, %3</translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.cpp" line="503"/>
+        <location filename="../rotatormainwindow.cpp" line="522"/>
         <source>Connected to: %1 - %2</source>
         <translation>Connecté  à: %1 - %2</translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.cpp" line="514"/>
+        <location filename="../rotatormainwindow.cpp" line="534"/>
         <source>Rotator Open error</source>
         <translation>Erreur d&apos;ouverture du Rotateur</translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.cpp" line="555"/>
+        <location filename="../rotatormainwindow.cpp" line="575"/>
         <source>Disconnected</source>
         <translation>Déconnecté</translation>
     </message>
@@ -609,17 +636,17 @@ Entrer %1 - %2 SVP</translation>
         <translation>Sens horaire (à droite)</translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.cpp" line="493"/>
+        <location filename="../rotatormainwindow.cpp" line="499"/>
         <source>Connected to: %1 - %2, %3, %4, %5, %6, %7,  Handshake %8, ForceDTR %9, ForceRTS %10</source>
         <translation>Connecté  à: %1 - %2, %3:%4 - %5 %6, %7, Handshake %8 ForceDTR %9, ForceRTS %10</translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.cpp" line="192"/>
+        <location filename="../rotatormainwindow.cpp" line="196"/>
         <source>Set Antenna from Logger</source>
         <translation>Régler l&apos;antenne depuis Logger</translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.cpp" line="207"/>
+        <location filename="../rotatormainwindow.cpp" line="211"/>
         <source>Test Antenna</source>
         <translation>Antenne de test  [context???]</translation>
     </message>

@@ -37,12 +37,12 @@
 <context>
     <name>BaseContestLog</name>
     <message>
-        <location filename="../contest.cpp" line="661"/>
+        <location filename="../contest.cpp" line="655"/>
         <source>DUPLICATE OF </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contest.cpp" line="677"/>
+        <location filename="../contest.cpp" line="671"/>
         <source>DUP OF</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1029,13 +1029,23 @@
 <context>
     <name>ContestScore</name>
     <message>
-        <location filename="../contest.cpp" line="2028"/>
-        <source>Score: Qsos: %1; %2 pts :%3%4 countries%5: bonuses %6(%7) = %8</source>
+        <location filename="../contest.cpp" line="2075"/>
+        <source>Score: %1 Qsos; %2 pts; (%3 countries); %4 locs; bonuses %5(%6) = %7</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contest.cpp" line="2041"/>
-        <source>Score: Qsos: %1; %2 pts :%3%4 countries%5:%6%7 districts%8:%9%10 locators %13 = %14</source>
+        <location filename="../contest.cpp" line="2083"/>
+        <source>Score: %1 Qsos; %2 pts; %3 countries; %4 districts; %5 locs; bonuses %6(%7) = %8</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../contest.cpp" line="2091"/>
+        <source>Score: %1 Qsos; %2 pts; %3%4 countries%5; bonuses %6(%7) = %8</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../contest.cpp" line="2099"/>
+        <source>Score: %1 Qsos; %2 pts;%3%4 countries%5;%6%7 districts%8; %9%10 locators %13 = %14</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1066,10 +1076,10 @@
     </message>
 </context>
 <context>
-    <name>Default Log Session</name>
+    <name>Default Contest Set</name>
     <message>
         <location filename="../profiles.cpp" line="25"/>
-        <source>Default Session</source>
+        <source>Default Set</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1092,32 +1102,32 @@
 <context>
     <name>DisplayContestContact</name>
     <message>
-        <location filename="../DisplayContestContact.cpp" line="441"/>
+        <location filename="../DisplayContestContact.cpp" line="423"/>
         <source>DELETED</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../DisplayContestContact.cpp" line="501"/>
+        <location filename="../DisplayContestContact.cpp" line="483"/>
         <source>MAN</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../DisplayContestContact.cpp" line="571"/>
+        <location filename="../DisplayContestContact.cpp" line="553"/>
         <source>DEL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../DisplayContestContact.cpp" line="574"/>
+        <location filename="../DisplayContestContact.cpp" line="556"/>
         <source>N/S</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../DisplayContestContact.cpp" line="581"/>
+        <location filename="../DisplayContestContact.cpp" line="563"/>
         <source>DUP</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../DisplayContestContact.cpp" line="662"/>
+        <location filename="../DisplayContestContact.cpp" line="644"/>
         <source>UNFILLED CONTACT </source>
         <translation type="unfinished"></translation>
     </message>
@@ -1256,7 +1266,7 @@ The format required is (e.g.) 1296.3, 144.32 or 144.290123<byte value="xd"/>
 <context>
     <name>MatchThisFrame</name>
     <message>
-        <location filename="../MatchThisFrame.cpp" line="71"/>
+        <location filename="../MatchThisFrame.cpp" line="72"/>
         <source>Press &quot;Yes&quot; to transfer details, or &quot;No&quot; to edit the QSO</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1545,92 +1555,92 @@ The format required is (e.g.) 1296.3, 144.32 or 144.290123<byte value="xd"/>
 <context>
     <name>QSOGridModel</name>
     <message>
-        <location filename="../TreeUtils.cpp" line="17"/>
+        <location filename="../qsogridmodel.cpp" line="11"/>
         <source>Date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../TreeUtils.cpp" line="18"/>
+        <location filename="../qsogridmodel.cpp" line="12"/>
         <source>UTC</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../TreeUtils.cpp" line="19"/>
+        <location filename="../qsogridmodel.cpp" line="13"/>
         <source>Band</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../TreeUtils.cpp" line="20"/>
+        <location filename="../qsogridmodel.cpp" line="14"/>
         <source>Mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../TreeUtils.cpp" line="21"/>
+        <location filename="../qsogridmodel.cpp" line="15"/>
         <source>Callsign</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../TreeUtils.cpp" line="22"/>
+        <location filename="../qsogridmodel.cpp" line="16"/>
         <source>RepTx</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../TreeUtils.cpp" line="23"/>
+        <location filename="../qsogridmodel.cpp" line="17"/>
         <source>SnTx</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../TreeUtils.cpp" line="24"/>
+        <location filename="../qsogridmodel.cpp" line="18"/>
         <source>RepRx</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../TreeUtils.cpp" line="25"/>
+        <location filename="../qsogridmodel.cpp" line="19"/>
         <source>SnRx</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../TreeUtils.cpp" line="26"/>
+        <location filename="../qsogridmodel.cpp" line="20"/>
         <source>Loc</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../TreeUtils.cpp" line="27"/>
+        <location filename="../qsogridmodel.cpp" line="21"/>
         <source>dist</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../TreeUtils.cpp" line="28"/>
+        <location filename="../qsogridmodel.cpp" line="22"/>
         <source>brg</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../TreeUtils.cpp" line="29"/>
+        <location filename="../qsogridmodel.cpp" line="23"/>
         <source>Exchange</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../TreeUtils.cpp" line="30"/>
+        <location filename="../qsogridmodel.cpp" line="24"/>
         <source>Comments</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../TreeUtils.cpp" line="31"/>
+        <location filename="../qsogridmodel.cpp" line="25"/>
         <source>Freq</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../TreeUtils.cpp" line="32"/>
+        <location filename="../qsogridmodel.cpp" line="26"/>
         <source>Rot Heading</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../TreeUtils.cpp" line="33"/>
+        <location filename="../qsogridmodel.cpp" line="27"/>
         <source>Rig</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../TreeUtils.cpp" line="34"/>
+        <location filename="../qsogridmodel.cpp" line="28"/>
         <source>Op</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1638,103 +1648,103 @@ The format required is (e.g.) 1296.3, 144.32 or 144.290123<byte value="xd"/>
 <context>
     <name>QSOMatchGridModel</name>
     <message>
-        <location filename="../MatchTreeFrame.cpp" line="16"/>
-        <location filename="../MatchTreeFrame.cpp" line="36"/>
+        <location filename="../MatchTreeFrame.cpp" line="17"/>
+        <location filename="../MatchTreeFrame.cpp" line="37"/>
         <source>UTC</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MatchTreeFrame.cpp" line="17"/>
+        <location filename="../MatchTreeFrame.cpp" line="18"/>
         <source>Band</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MatchTreeFrame.cpp" line="18"/>
+        <location filename="../MatchTreeFrame.cpp" line="19"/>
         <source>Mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MatchTreeFrame.cpp" line="19"/>
-        <location filename="../MatchTreeFrame.cpp" line="37"/>
-        <location filename="../MatchTreeFrame.cpp" line="50"/>
+        <location filename="../MatchTreeFrame.cpp" line="20"/>
+        <location filename="../MatchTreeFrame.cpp" line="38"/>
+        <location filename="../MatchTreeFrame.cpp" line="51"/>
         <source>Callsign</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MatchTreeFrame.cpp" line="20"/>
+        <location filename="../MatchTreeFrame.cpp" line="21"/>
         <source>RepTx</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MatchTreeFrame.cpp" line="21"/>
+        <location filename="../MatchTreeFrame.cpp" line="22"/>
         <source>SnTx</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MatchTreeFrame.cpp" line="22"/>
+        <location filename="../MatchTreeFrame.cpp" line="23"/>
         <source>RepRx</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MatchTreeFrame.cpp" line="23"/>
-        <source>SnRx</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../MatchTreeFrame.cpp" line="24"/>
-        <location filename="../MatchTreeFrame.cpp" line="38"/>
-        <location filename="../MatchTreeFrame.cpp" line="51"/>
-        <source>Loc</source>
+        <source>SnRx</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../MatchTreeFrame.cpp" line="25"/>
         <location filename="../MatchTreeFrame.cpp" line="39"/>
         <location filename="../MatchTreeFrame.cpp" line="52"/>
-        <source>dist</source>
+        <source>Loc</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../MatchTreeFrame.cpp" line="26"/>
         <location filename="../MatchTreeFrame.cpp" line="40"/>
         <location filename="../MatchTreeFrame.cpp" line="53"/>
-        <source>brg</source>
+        <source>dist</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../MatchTreeFrame.cpp" line="27"/>
         <location filename="../MatchTreeFrame.cpp" line="41"/>
         <location filename="../MatchTreeFrame.cpp" line="54"/>
-        <source>Exchange</source>
+        <source>brg</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../MatchTreeFrame.cpp" line="28"/>
         <location filename="../MatchTreeFrame.cpp" line="42"/>
         <location filename="../MatchTreeFrame.cpp" line="55"/>
-        <source>Comments</source>
+        <source>Exchange</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../MatchTreeFrame.cpp" line="29"/>
         <location filename="../MatchTreeFrame.cpp" line="43"/>
-        <source>Freq</source>
+        <location filename="../MatchTreeFrame.cpp" line="56"/>
+        <source>Comments</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../MatchTreeFrame.cpp" line="30"/>
         <location filename="../MatchTreeFrame.cpp" line="44"/>
-        <source>Rot Heading</source>
+        <source>Freq</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../MatchTreeFrame.cpp" line="31"/>
         <location filename="../MatchTreeFrame.cpp" line="45"/>
+        <source>Rot Heading</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../MatchTreeFrame.cpp" line="32"/>
+        <location filename="../MatchTreeFrame.cpp" line="46"/>
         <source>Rig</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MatchTreeFrame.cpp" line="495"/>
+        <location filename="../MatchTreeFrame.cpp" line="494"/>
         <source>Current contest: </source>
         <translation type="unfinished"></translation>
     </message>
@@ -1742,7 +1752,7 @@ The format required is (e.g.) 1296.3, 144.32 or 144.290123<byte value="xd"/>
 <context>
     <name>QWidget</name>
     <message>
-        <location filename="../cutils.cpp" line="786"/>
+        <location filename="../cutils.cpp" line="838"/>
         <source>Reset Columns</source>
         <comment>createColumnsMenu</comment>
         <translation type="unfinished"></translation>
