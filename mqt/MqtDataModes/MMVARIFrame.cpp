@@ -589,9 +589,9 @@ void MMVARIFrame::OnPTT(int )
 {
 //    trace(QString("%1: %2").arg("MMVARIFrame::OnPTT(int)").arg(a));
 }
-void MMVARIFrame::OnNET(int )
+void MMVARIFrame::OnNET(int a)
 {
-    //trace(QString("%1: %2").arg("MMVARIFrame::OnNet(int)").arg(a));
+    trace(QString("%1: %2").arg("MMVARIFrame::OnNet(int)").arg(a));
 }
 void MMVARIFrame::OnTxState(int a)
 {

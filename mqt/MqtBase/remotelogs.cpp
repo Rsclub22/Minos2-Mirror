@@ -232,16 +232,19 @@ void RemoteLogs::on_notify(AnalysePubSubNotify an, const QString /*from*/ )
         }
         else if (an.getCategory() == rpcConstants::currentLogCategory)
         {
-            MonitoredStation *stat = stationList[Provider(an)];
-
-            if (stat)
+            if (stationList.contains(Provider(an)))
             {
-                QVector< QSharedPointer<MonitoredLog> >::iterator log = std::find_if( stat->slotList.begin(), stat->slotList.end(), MonitoredLogCmp( value ) );
-                if (log != stat->slotList.end())
+                MonitoredStation *stat = stationList[Provider(an)];
+
+                if (stat)
                 {
-                    // this is now the current log
-                    stat->currentLog = *log;
-                    emit currentLogChanged(stat->currentLog);
+                    QVector< QSharedPointer<MonitoredLog> >::iterator log = std::find_if( stat->slotList.begin(), stat->slotList.end(), MonitoredLogCmp( value ) );
+                    if (log != stat->slotList.end())
+                    {
+                        // this is now the current log
+                        stat->currentLog = *log;
+                        emit currentLogChanged(stat->currentLog);
+                    }
                 }
             }
         }
