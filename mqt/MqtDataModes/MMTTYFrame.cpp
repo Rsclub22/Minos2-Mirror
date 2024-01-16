@@ -233,8 +233,7 @@ void MMTTYFrame::closeFrame()
         trace("About to ask engine to exit");
         ::PostMessage(mttyHWnd, uMSG_MMTTY, RXM_EXIT, 0);
 
-        twoToneActive = false;
-        mmttyActive = false;
+        active = false;
 
         rttyProcess->waitForFinished(1000);
 
@@ -396,6 +395,7 @@ void MMTTYFrame::createProcess()
     connect (rttyProcess, &QProcess::readyReadStandardOutput, this, &MMTTYFrame::on_readyReadStandardOutput);
 
     rttyProcess->start(rttyEngine, rttyEngineOpts, QProcess::ReadWrite);
+    active = true;
 }
 void MMTTYFrame::on_started()
 {
@@ -412,7 +412,7 @@ void MMTTYFrame::on_finished(int err, QProcess::ExitStatus exitStatus)
         rttyProcess->deleteLater();
         rttyProcess = nullptr;
     }
-    if (mmttyActive || twoToneActive)
+    if (active)
     {
         createProcess();
     }

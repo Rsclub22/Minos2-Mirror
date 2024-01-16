@@ -185,7 +185,7 @@ bool EngineConfigure::check()
 
     // ports are set where required
 
-    QSettings settings(getDirectoryLocation(dlConfiguration) + "/DataModes.ini", QSettings::IniFormat);
+    //QSettings settings(getDirectoryLocation(dlConfiguration) + "/DataModes.ini", QSettings::IniFormat);
 
     checkEnginePath(ui->mmvariEdit, ui->mmvariEnable1);
     checkEnginePath(ui->mmvariEdit, ui->mmvariEnable2);

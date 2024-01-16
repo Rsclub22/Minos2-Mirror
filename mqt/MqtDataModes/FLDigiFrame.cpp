@@ -48,6 +48,7 @@ void FLDigiFrame::createProcess()
         "-title", engineName
     };
     fldigiProcess->start(fname, engineOpts, QProcess::ReadWrite);
+    fldigiActive = true;
 
 }
 
@@ -71,8 +72,6 @@ FLDigiFrame::FLDigiFrame(EngineWindow *parent, QLineEdit *sendEdit, QString fnam
     rpcClient = new MaiaXmlRpcClient(QUrl("http://localhost:" + QString::number(p)), this);
 
     createProcess();
-
-    fldigiActive = true;
 
     getTimer = new QTimer(this);
     connect(getTimer, &QTimer::timeout, this, &FLDigiFrame::onGetTimer);

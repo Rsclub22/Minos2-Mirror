@@ -44,8 +44,8 @@ private:
 
     HWND mttyHWnd;
     bool txState = false;
-    bool twoToneActive = false;
-    bool mmttyActive = false;
+    bool active = false;
+
     int markFrequency = 0;
     QString bpskSpeed;
     QString rttySpeed;
