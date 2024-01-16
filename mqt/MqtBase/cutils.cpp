@@ -941,7 +941,7 @@ void comboSetUniqueNames(QStringList nameList, QComboBox *cb)
 }
 void clearLayout(QLayout *layout)
 {
-    trace("Enter clearLayout");
+//    trace("Enter clearLayout");
     if (layout != nullptr)
     {
         while(layout->count() > 0)
@@ -967,9 +967,9 @@ void clearLayout(QLayout *layout)
                     name += " | " + p->objectName();
                     p = p->parentWidget();
                 }
-                QString s = f->metaObject()->className() + QString(" | ") + name;
+//                QString s = f->metaObject()->className() + QString(" | ") + name;
 
-                trace(s);
+//                trace(s);
                 delete widget;
             }
             else
@@ -977,7 +977,7 @@ void clearLayout(QLayout *layout)
                 QLayout * layout = item->layout();
                 if (layout)
                 {
-                    trace(QString("Clear layout %1").arg(layout->objectName()));
+//                    trace(QString("Clear layout %1").arg(layout->objectName()));
                     clearLayout(layout);
                 }
                 else
@@ -985,17 +985,17 @@ void clearLayout(QLayout *layout)
                     QSpacerItem * si = item->spacerItem();
                     if (si)
                     {
-                        trace("clear spacer");
+//                        trace("clear spacer");
                         //delete si;    // the spacer IS the item
                     }
                     else
                     {
-                        trace("clear something!");
+//                        trace("clear something!");
                     }
                 }
             }
             delete item;
         }
     }
-    trace("Exit clearLayout");
+//    trace("Exit clearLayout");
 }

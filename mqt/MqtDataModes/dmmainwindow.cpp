@@ -295,7 +295,10 @@ void DMMainWindow::on_startButton_clicked()
             }
         }
         emit setSpeeds(EngineConfigure::getSpeed("BPSK"), EngineConfigure::getSpeed("RTTY"));
-        ui->startButton->setText(tr("Stop All"));
+        if (engines.count() > 0)
+        {
+            ui->startButton->setText(tr("Stop All"));
+        }
     }
     else
     {
