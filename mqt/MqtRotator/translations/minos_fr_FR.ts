@@ -339,13 +339,9 @@ Veuillez les supprimer et configurer les rotateurs à nouveau</translation>
         <translation>Configurer les Antennes...</translation>
     </message>
     <message>
-        <source>?</source>
-        <translation type="vanished">? [???]?</translation>
-    </message>
-    <message>
         <location filename="../rotatormainwindow.ui" line="79"/>
         <source>Log Headings...</source>
-        <translation></translation>
+        <translation>Enregistrer les directions d&apos;antenne...</translation>
     </message>
     <message>
         <location filename="../rotatormainwindow.ui" line="55"/>
@@ -360,7 +356,7 @@ Veuillez les supprimer et configurer les rotateurs à nouveau</translation>
     <message>
         <location filename="../rotatormainwindow.ui" line="65"/>
         <source>Current Antenna Config</source>
-        <translation type="unfinished"></translation>
+        <translation>Configuration actuelle de l&apos;antenne</translation>
     </message>
     <message>
         <location filename="../rotatormainwindow.ui" line="103"/>
@@ -468,38 +464,6 @@ Veuillez les supprimer et configurer les rotateurs à nouveau</translation>
         <translation>Pas de chevauchement</translation>
     </message>
     <message>
-        <source>&amp;Configure</source>
-        <translation type="vanished">&amp;Configurer</translation>
-    </message>
-    <message>
-        <source>Help</source>
-        <translation type="vanished">Aide</translation>
-    </message>
-    <message>
-        <source>Always On Top</source>
-        <translation type="vanished">Toujours visibles</translation>
-    </message>
-    <message>
-        <source>Exit</source>
-        <translation type="vanished">Quitter</translation>
-    </message>
-    <message>
-        <source>Setup Antennas</source>
-        <translation type="vanished">Configurer les Antennes</translation>
-    </message>
-    <message>
-        <source>SkyScan</source>
-        <translation type="vanished">SkyScan</translation>
-    </message>
-    <message>
-        <source>Log Heading</source>
-        <translation type="vanished">Définir le Log de directions d&apos;antenne</translation>
-    </message>
-    <message>
-        <source>About</source>
-        <translation type="vanished">A propos</translation>
-    </message>
-    <message>
         <location filename="../rotatormainwindow.ui" line="72"/>
         <source>Trace Data Comms</source>
         <translation>Suivre la communication de données</translation>
@@ -529,10 +493,6 @@ Veuillez les supprimer et configurer les rotateurs à nouveau</translation>
         <location filename="../rotatormainwindow.cpp" line="145"/>
         <source>RawRot: </source>
         <translation>Rotateur brut: </translation>
-    </message>
-    <message>
-        <source>Please select an antenna or no antenna found!</source>
-        <translation type="vanished">Sélectionner une antenne SVP, ou aucune antenne trouvée!</translation>
     </message>
     <message>
         <location filename="../rotatormainwindow.cpp" line="415"/>
@@ -705,12 +665,6 @@ Voulez-vous recharger les paramètres de l&apos;antenne maintenant?</translation
 </source>
         <translation>*** Configuration du Rotateur ***
 
-</translation>
-    </message>
-    <message>
-        <source>App Instance Name  = %1
-</source>
-        <translation type="vanished">Nom d&apos;instance d&apos;Application = %1
 </translation>
     </message>
     <message>
