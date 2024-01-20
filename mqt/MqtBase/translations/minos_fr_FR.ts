@@ -190,10 +190,6 @@
         <translation>UDP: Contacts activés</translation>
     </message>
     <message>
-        <source>UDP External Callsign Lookup Enabled</source>
-        <translation type="vanished">UDP: Recherche externe des Indicatifs activée</translation>
-    </message>
-    <message>
         <location filename="../profiles.cpp" line="100"/>
         <source>WSJTX re-broadcast Enabled</source>
         <translation>WSJTX: Rediffusion activée</translation>
@@ -214,15 +210,6 @@
         <translation>UDP: Port pour les Contacts</translation>
     </message>
     <message>
-        <source>UDP External Callsign Lookup Address</source>
-        <translation type="vanished">UDP: Adresse pour Indicatif d&apos;appel recherche externe</translation>
-    </message>
-    <message>
-        <source>UDP External Callsign Lookup  Address</source>
-        <translatorcomment>DUPLICATE</translatorcomment>
-        <translation type="vanished">UDP: Adresse pour Indicatif d&apos;appel recherche externe</translation>
-    </message>
-    <message>
         <location filename="../profiles.cpp" line="97"/>
         <source>UDP ADIF Address</source>
         <translation>UDP: Adresse pour ADIF</translation>
@@ -231,11 +218,6 @@
         <location filename="../profiles.cpp" line="98"/>
         <source>UDP ADIF Port</source>
         <translation>UDP ADIF numéro de port</translation>
-    </message>
-    <message>
-        <source>UDP External Callsign Lookup  Port</source>
-        <translatorcomment>UDP: Port pour la recherche externe d&apos;Indicatif d&apos;appel</translatorcomment>
-        <translation type="vanished">UDP: Port pour la recherche externe d&apos;Indicatif d&apos;appel</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="42"/>
@@ -250,7 +232,7 @@
     <message>
         <location filename="../profiles.cpp" line="50"/>
         <source>Digi Function Keys file</source>
-        <translation type="unfinished"></translation>
+        <translation>Fichier de Touches de Fonction Digi</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="61"/>
@@ -420,7 +402,7 @@
     <message>
         <location filename="../profiles.cpp" line="113"/>
         <source>Locator Map Centering</source>
-        <translation type="unfinished"></translation>
+        <translation>Centrage de la carte de Locator</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="115"/>
@@ -465,7 +447,7 @@
     <message>
         <location filename="../profiles.cpp" line="125"/>
         <source>Show Cluster spots on map</source>
-        <translation type="unfinished"></translation>
+        <translation>Afficher les spots du cluster sur la carte</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="126"/>
@@ -575,10 +557,6 @@
         <source>hint</source>
         <translatorcomment>référence, indice</translatorcomment>
         <translation>indication</translation>
-    </message>
-    <message>
-        <source>Default editor</source>
-        <translation type="vanished">Éditeur par défaut</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="183"/>
@@ -993,7 +971,7 @@
     <message>
         <location filename="../ConfigElementFrame.ui" line="228"/>
         <source>Auto Infer Program Path</source>
-        <translation type="unfinished"></translation>
+        <translation>Déduire l&apos;emplacement du programme</translation>
     </message>
     <message>
         <location filename="../ConfigElementFrame.ui" line="235"/>
@@ -1066,32 +1044,24 @@
 <context>
     <name>ContestScore</name>
     <message>
-        <source>Score: Qsos: %1; %2 pts :%3%4 countries%5: bonuses %6(%7) = %8</source>
-        <translation type="vanished">QSOs: %1; %2 pts:%3%4 pays %5: bonus %6 (%7) = %8</translation>
-    </message>
-    <message>
-        <source>Score: Qsos: %1; %2 pts :%3%4 countries%5:%6%7 districts%8:%9%10 locators %13 = %14</source>
-        <translation type="vanished">Score: QSO: %1; %2 pts: %3%4 pays %5:%6%7 Districts%8:%9%10 Locators %13 = %14</translation>
-    </message>
-    <message>
         <location filename="../contest.cpp" line="2074"/>
         <source>Score: %1 Qsos; %2 pts; (%3 countries); %4 locs; bonuses %5(%6) = %7</source>
-        <translation type="unfinished"></translation>
+        <translation>Score: %1 Qsos; %2 pts; (%3 pays); %4 locs; bonuses %5(%6) = %7</translation>
     </message>
     <message>
         <location filename="../contest.cpp" line="2082"/>
         <source>Score: %1 Qsos; %2 pts; %3 countries; %4 districts; %5 locs; bonuses %6(%7) = %8</source>
-        <translation type="unfinished"></translation>
+        <translation>Score: %1 Qsos; %2 pts; %3 pays; %4 quartiers; %5 locs; bonuses %6(%7) = %8</translation>
     </message>
     <message>
         <location filename="../contest.cpp" line="2090"/>
         <source>Score: %1 Qsos; %2 pts; %3%4 countries%5; bonuses %6(%7) = %8</source>
-        <translation type="unfinished"></translation>
+        <translation>Score: %1 Qsos; %2 pts; %3%4 pays%5; bonuses %6(%7) = %8</translation>
     </message>
     <message>
         <location filename="../contest.cpp" line="2098"/>
         <source>Score: %1 Qsos; %2 pts;%3%4 countries%5;%6%7 districts%8; %9%10 locators %13 = %14</source>
-        <translation type="unfinished"></translation>
+        <translation>Score: %1 Qsos; %2 pts;%3%4 pays%5;%6%7 quartiers%8; %9%10 locators %13 = %14</translation>
     </message>
 </context>
 <context>
@@ -1109,7 +1079,7 @@
     <message>
         <location filename="../MultsImpl.cpp" line="739"/>
         <source>Synonym ranges no longer allowed : %1 for %2</source>
-        <translation type="unfinished">Les plages de synonymes ne sont plus autorisées: %1 pour %2</translation>
+        <translation>Les plages de synonymes ne sont plus autorisées: %1 pour %2</translation>
     </message>
 </context>
 <context>
@@ -1118,10 +1088,6 @@
         <location filename="../MultsImpl.cpp" line="714"/>
         <source>Country Synonym File</source>
         <translation>Fichier des synonymes de Pays</translation>
-    </message>
-    <message>
-        <source>Synonym ranges no longer allowed : %1 for %2</source>
-        <translation type="vanished">Les plages de synonymes ne sont plus autorisées: %1 pour %2</translation>
     </message>
 </context>
 <context>

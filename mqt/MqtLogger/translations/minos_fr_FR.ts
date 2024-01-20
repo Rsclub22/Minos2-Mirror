@@ -1284,21 +1284,9 @@ Comptabiliser entre Locators de 4 caractères</translation>
         <translation>Multiplicateur DXCC</translation>
     </message>
     <message>
-        <source>Non UK Countries Only (M6)</source>
-        <translation type="vanished">Pays non UK uniquement (M6)</translation>
-    </message>
-    <message>
         <location filename="../contestdetails.ui" line="931"/>
         <source>Locator Multiplier</source>
         <translation>Multiplicateurs Locator</translation>
-    </message>
-    <message>
-        <source>UK Locs only (M5, M6)</source>
-        <translation type="vanished">Locators UK uniquement (M5,M6)</translation>
-    </message>
-    <message>
-        <source>All locs; UK locs x2 (M7)</source>
-        <translation type="vanished">Tous les Locators; Locators UK x2 (M7)</translation>
     </message>
     <message>
         <location filename="../contestdetails.ui" line="994"/>
@@ -1346,10 +1334,6 @@ Comptabiliser entre Locators de 4 caractères</translation>
         <translation>Aucun</translation>
     </message>
     <message>
-        <source>UKAC Bonuses (B2)</source>
-        <translation type="vanished">Bonus UKAC (B2)</translation>
-    </message>
-    <message>
         <location filename="../contestdetails.cpp" line="62"/>
         <source>UKAC Bonuses (B4)</source>
         <translation>Bonus UKAC (B4)</translation>
@@ -1394,7 +1378,7 @@ Comptabiliser entre Locators de 4 caractères</translation>
     <message>
         <location filename="../contestdetails.cpp" line="55"/>
         <source>PostCode Bonuses</source>
-        <translation type="unfinished"></translation>
+        <translation>Bonus code postal</translation>
     </message>
     <message>
         <location filename="../contestdetails.cpp" line="57"/>
@@ -1404,7 +1388,7 @@ Comptabiliser entre Locators de 4 caractères</translation>
     <message>
         <location filename="../contestdetails.cpp" line="63"/>
         <source>AFS Bonuses (B6)</source>
-        <translation type="unfinished"></translation>
+        <translation>Bonuses AFS (B6)</translation>
     </message>
     <message>
         <location filename="../contestdetails.cpp" line="720"/>
@@ -4000,10 +3984,6 @@ Non - Ignorer les modifications</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>TX Voice Mem. Buttons</source>
-        <translation type="vanished">Boutons de mémoire de voix TX</translation>
-    </message>
-    <message>
         <location filename="../ScreenConfigElement.cpp" line="35"/>
         <source>QRZ Display</source>
         <translation>Affichage du QRZ</translation>
@@ -4034,7 +4014,7 @@ Non - Ignorer les modifications</translation>
     <message>
         <location filename="../ScreenConfigFile.cpp" line="179"/>
         <source>TX Voice Mem. Buttons</source>
-        <translation type="unfinished">Boutons de mémoire de voix TX</translation>
+        <translation>Boutons de mémoire de voix TX</translation>
     </message>
     <message>
         <location filename="../ScreenConfigFile.cpp" line="242"/>
