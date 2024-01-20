@@ -81,16 +81,6 @@ Please enter a name for the radio</source>
         <source>None</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <location filename="../configureknobs.cpp" line="21"/>
-        <source>FlexControl</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../configureknobs.cpp" line="22"/>
-        <source>Griffin PowerMate</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>ControlFlex</name>

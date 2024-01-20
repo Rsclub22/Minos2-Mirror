@@ -31,16 +31,30 @@
     <message>
         <location filename="../dmmainwindow.cpp" line="145"/>
         <location filename="../dmmainwindow.cpp" line="165"/>
+        <location filename="../dmmainwindow.cpp" line="326"/>
+        <source>Start All Engines</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dmmainwindow.cpp" line="277"/>
+        <source>Any changes will only be actioned when you stop and restart the engines.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dmmainwindow.cpp" line="305"/>
+        <source>Stop All Engines</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Start All</source>
-        <translation>Démarrer tout</translation>
+        <translation type="vanished">Démarrer tout</translation>
     </message>
     <message>
-        <location filename="../dmmainwindow.cpp" line="298"/>
         <source>Stop All</source>
-        <translation>Arrêter tout</translation>
+        <translation type="vanished">Arrêter tout</translation>
     </message>
     <message>
-        <location filename="../dmmainwindow.cpp" line="328"/>
+        <location filename="../dmmainwindow.cpp" line="352"/>
         <source>No DataMode sender configured</source>
         <translation>Aucun expéditeur DataMode configuré</translation>
     </message>
@@ -256,12 +270,12 @@
     </message>
     <message>
         <location filename="../enginewindow.ui" line="124"/>
-        <location filename="../enginewindow.cpp" line="704"/>
+        <location filename="../enginewindow.cpp" line="705"/>
         <source>Show Back Data</source>
         <translation>Afficher les données arrière [huh???]</translation>
     </message>
     <message>
-        <location filename="../enginewindow.cpp" line="709"/>
+        <location filename="../enginewindow.cpp" line="710"/>
         <source>Hide Back Data</source>
         <translation>Masquer les données arrière [huh???]</translation>
     </message>
