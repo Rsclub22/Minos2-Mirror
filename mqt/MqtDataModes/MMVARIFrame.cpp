@@ -88,14 +88,14 @@ MMVARIFrame::MMVARIFrame(QFrame *cwl, EngineWindow *p,
     afcButton->setText("AFC");
     afcButton->setToolTip(tr("Move the cursor to keep it centered on a signal if the frequency changes slightly"));
     mmvariButtons->addWidget(afcButton);
-    connect(afcButton, &QPushButton::clicked, this, &MMVARIFrame::afcButtonClicked);
+    connect(afcButton, &QPushButton::toggled, this, &MMVARIFrame::afcButtonToggled);
 
     netButton = new QPushButton();
     netButton->setCheckable(true);
     netButton->setText("NET");
     netButton->setToolTip(tr("When NET is on the TX frequency follows the RX frequency "));
     mmvariButtons->addWidget(netButton);
-    connect(netButton, &QPushButton::clicked, this, &MMVARIFrame::netButtonClicked);
+    connect(netButton, &QPushButton::toggled, this, &MMVARIFrame::netButtonToggled);
 
     alignButton = new QPushButton();
     alignButton->setText("Align");
@@ -227,8 +227,8 @@ MMVARIFrame::MMVARIFrame(QFrame *cwl, EngineWindow *p,
     bool bAFC = mmvari->bAFC(0);
     bool bNET = mmvari->bNET();
 
-    afcButton->setDown(bAFC);
-    netButton->setDown(bNET);
+    afcButton->setChecked(bAFC);
+    netButton->setChecked(bNET);
 }
 
 MMVARIFrame::~MMVARIFrame()
@@ -422,12 +422,16 @@ void MMVARIFrame::onSpeedComboChanged(const QString &s)
 {
     mmvari->setDblSpeed(0, s.toDouble());
 }
-void MMVARIFrame::afcButtonClicked(bool checked)
+void MMVARIFrame::afcButtonToggled(bool /*checked*/)
 {
+    bool checked = afcButton->isChecked();
+    trace(QString("set net to %1").arg(checked));
     mmvari->setBAFC(0, checked);
 }
-void MMVARIFrame::netButtonClicked(bool checked)
+void MMVARIFrame::netButtonToggled(bool /*checked*/)
 {
+    bool checked = netButton->isChecked();
+    trace(QString("set net to %1").arg(checked));
     mmvari->setBNET(checked);
 }
 void MMVARIFrame::alignButtonClicked(bool /*checked*/)
@@ -589,9 +593,9 @@ void MMVARIFrame::OnPTT(int )
 {
 //    trace(QString("%1: %2").arg("MMVARIFrame::OnPTT(int)").arg(a));
 }
-void MMVARIFrame::OnNET(int )
+void MMVARIFrame::OnNET(int a)
 {
-    //trace(QString("%1: %2").arg("MMVARIFrame::OnNet(int)").arg(a));
+    trace(QString("%1: %2").arg("MMVARIFrame::OnNet(int)").arg(a));
 }
 void MMVARIFrame::OnTxState(int a)
 {

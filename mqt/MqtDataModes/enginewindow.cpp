@@ -76,6 +76,7 @@ EngineWindow::EngineWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
+    setWindowFlags(windowFlags() & ~(Qt::WindowContextHelpButtonHint | Qt::WindowCloseButtonHint));
 
     ui->FButtonFrame->setEnabled(false);
     ui->variFrame->setVisible(false);

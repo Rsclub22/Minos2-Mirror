@@ -93,8 +93,8 @@ private slots:
     void onATC(bool checked);
     void onModeComboChanged(const QString &m);
     void onSpeedComboChanged(const QString &s);
-    void afcButtonClicked(bool checked);
-    void netButtonClicked(bool checked);
+    void afcButtonToggled(bool checked);
+    void netButtonToggled(bool checked);
     void alignButtonClicked(bool checked);
 
     void onHandleMMVARICOMException(int code, QString source, QString desc, QString help);
