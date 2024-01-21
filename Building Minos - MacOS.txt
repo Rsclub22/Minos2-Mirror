@@ -7,7 +7,7 @@ horrified. If so, please take it over and fix it for me!
 At the moment, Minos under Mac has to count as "advanced", as you do need to 
 know your way around Mac. 
 
-
+Note that Minos 2.6.0.0 is not fully ready for building and running under MacOS.
 
 Building under MacOS X
 ======================

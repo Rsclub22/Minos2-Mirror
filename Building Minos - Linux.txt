@@ -11,7 +11,7 @@ Building under Linux
 ====================
 
 Currently, these instructions work under Ubuntu, and also on the Raspberry Pi
-where the default oS is similar enough to Ubuntu. There shouldn't be any
+where the default OS is similar enough to Ubuntu. There shouldn't be any
 problem with other variants, but all the package stuff may be different.
 
 
@@ -79,9 +79,18 @@ git clone https://github.com/Hamlib/Hamlib.git
 
 cd Hamlib
 
-# get the hamlib 4.6 release branch
+If 4.6 has been released
+
+# get the hamlib 4.6.0 release branch
 
 git checkout Hamlib-4.6.0
+
+
+Otherwise, 
+
+# get the main development branch
+
+git checkout master
 
 # and run the build
 

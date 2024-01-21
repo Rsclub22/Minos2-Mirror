@@ -1,39 +1,53 @@
-Ver 2.3.0a (07/01/2020) - Maintenance release only
-1. Added new DLL to avoid occasional error when downloading a new Contest Calendar
+Bandmap scaling re-write
+Inversion of bandmap frequencies
+Alternate F keys, allowing plain F keys for driving keyer
+Improve QSO box spacing and sizing; expert mode with reduced verbiage
+Header spacing etc in INI file; hide sections on right mouse button
+Aux title line under splitter, can be default collapsed
+External keyer improvements, including variable compression
+Short names for rigs and rotators (leave off router/app if unique)
+Internal and external keyer - show waveform (needs Qt Charts even on Linux)
+/1 and /2 command line switches to override first/second install builds
+Massive speed improvements in Monitor
+General improvement in response to typing and logging
+General import speed improvement
+Stats/rate analysis screen
+Rotator "reconnect"
+Check for (Minos) Updates menu option
+Prompt to check for new calendar when calendar file not present
+"Proper" QSO map panel in logger and monitor - experimental, Windows only
+Cluster spots on QSO Map
+Support for HF data mode programs (MMVARI, MMTTY, 2Tone, Gritty, FLDigi) - experimental, Linux has FLDigi Windows only 
+Asymmetric exchanges, particularly on HF
+Monitor improvements - (configurable) auto start current contest(s) select tab by click in tree
+Grey KST callsigns that have been worked (uses Monitor code so also configurable)
+WASAPI for audio on windows - needs to be tested on Win7 - apparently OK
+Better selection of HF bands, especially for RSGB contests
+Rig Recorder - two channel record (mic + rig)
+RestorePartial call on switching back to a contest
+Rig/Rot control - test mode (integrate stand alone when started by logger)
+Emphasise manual and forum in splash screen
+Modifications (simplifications) to Run Button menus
+Start of assisted RSGB entry (disabled - doesn't work yet)
+Hamlib 4.5.5
 
-Ver 2.3.0.0 (23/12/2019) - New features, improved features and bug fixes
-1. New Bandmap introduced
-2. Added mode filtering to Cluster and Bandmap
-3. Added ability to send DX Cluster Spots from logger
-4. Fixed problem with completing unfilled contacts with no Rig or Rotator information
-5. Screen layout adding left/right column issues and other bug fixes
-6. Fixed problem with Rig missing during first contest create
-7. Added forceDTR and forceRTS lines in RigControl and rigctld to power USB adaptors and other bug fixes
-8. Fixed error messages not appearing in RigControl panel
-9. Allow the entry of localhost in network address boxes in RigControl and RotControl servers
-10. Fixed problem with Log growing too large to load if changing Operator
-11. Fixed problem with RigControl on restart with transverter connected
-12. Fixed problem with missing configuration file during installation
-13. Fixed problem with networked radios and rigctld
-14. Added ability to modify tuning increment from +5 / -5 KHz, which is mode dependent.
-15. Added "Frequency out of bounds" indication
-16. Added higher baud rates to RigControl and RotControl
-17. Fixed problem with Volume Control indication not always visible when starting a new contest
-18. Fixed problem with frequency change sometimes causes volume to change
-19. Allow click on compass rose (the ring part) to set the target bearing in RotControl
-20. Added Clear button on WSJT-X panel
-21. Fixed problems with invalid or empty bearing entries in RotControl
-22. Fixed long wait on loading Contests before any indication of progress
-23. Fixed Logger sometimes crashes on create new contest
-24. Fixed the warning 'Contest band xx not the same as WSJT-X band' does not get cleared
-25. Fixed the produce entry window closing so it stays open until you cancel (or "done") / X
-26. WSJT-X panel points column improved
-27. Fixed QSO panel content reappears after contact logged
-28. Added labels to all layout panels and other screen improvements
-29. Fixed rogue content appearing in Auxiliary Locator Tree panel
-30. Fixed problem with Screen layout handling of 'default'
-31. Fixed WSJT-X erase button doesn't always clear Minos copy
-32. Fixed problem with <ESC> handling fails if Minos loses focus
-33. Fixed not exporting MGM sub-mode to ADIF
+Post Beta 1
+===========
 
-Previous version was 2.2.1 (22/03/2019)
+Spot filtering (sent to log)
+Mac build and run
+    Infer executable
+    Code tidy (and Qt 6.5.1)
+Registry use minimised
+WSJT-X advanced semi-auto
+Remove "filter" auxiliary panel; selection moved to DXCC/District panels
+Cosmetic changes to BM and KST
+
+Post Beta 2
+===========
+
+Mac build and release
+B6 bonuses
+Digimodes on Linux
+Hamlib 4.6
+
