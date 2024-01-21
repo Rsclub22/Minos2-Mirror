@@ -642,6 +642,7 @@ void BandmapClientFrame::context_clearSpotActionSelected()
     {
         traceMsg(QString("menu clear spot selected for callsign %1").arg(contextMenuSelectedSpotData.getDxCallStr()));
         bandmapSpotProxyModel->removeRows(contextMenuSelectedSpotDataRowNum, 1);
+        bandmapView->bandmapUpdate(true);
     }
 }
 
