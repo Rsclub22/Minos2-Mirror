@@ -108,13 +108,6 @@
               </property>
              </spacer>
             </item>
-            <item>
-             <widget class="QPushButton" name="configureKnobs">
-              <property name="text">
-               <string>Tuning Knobs</string>
-              </property>
-             </widget>
-            </item>
            </layout>
           </item>
           <item>

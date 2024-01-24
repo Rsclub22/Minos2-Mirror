@@ -20,9 +20,6 @@
 #include <QMetaType>
 #include <QDir>
 
-#if defined(INC_TUNE)
-#include "configureknobs.h"
-#endif
 #include "regsettings.h"
 #include "serialCommonData.h"
 #include "MShowMessageDlg.h"
@@ -206,21 +203,13 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
 
     upDateRadio(currentRadioName);
 
-#if defined(INC_TUNE)
-    ui->configureKnobs->setVisible(true);
-    ConfigureKnobs::start();
-#else
-    ui->configureKnobs->setVisible(false);
-#endif
     trace("*** Rig App Started ***");
 }
 
 RigControlMainWindow::~RigControlMainWindow()
 {
     trace("RigControlMainWindow::~RigControlMainWindow()");
-#if defined(INC_TUNE)
-    ConfigureKnobs::stop();
-#endif
+
     delete ui;
     delete msg;
 }
@@ -5349,78 +5338,3 @@ void RigControlMainWindow::on_traceDataComms_stateChanged(int /*arg1*/)
 {
     saveTraceLogFlag(ui->traceDataComms->isChecked());
 }
-
-#if defined(INC_TUNE)
-void RigControlMainWindow::on_configureKnobs_clicked()
-{
-    ConfigureKnobs ck(this);
-
-    ck.exec();
-
-    ck.start();
-}
-Frequency RigControlMainWindow::getRadioFrequency()
-{
-    Frequency cf;
-    if (radio)
-    {
-        radio->getFrequency(VFO::CURRENT_VFO, cf);
-    }
-    return cf;
-}
-void RigControlMainWindow::setRadioFrequency(Frequency f)
-{
-    if (radio)
-    {
-        radio->setFrequency(f, VFO::CURRENT_VFO);
-    }
-}
-Frequency rigStep(10);
-void RigControlMainWindow::tuneData(QByteArray b)
-{
-    //  split on ";" and build a chain of commands, keeping back any residue
-
-    static QString seq;
-    QString s(b);
-
-    seq += s;
-
-    int sc = seq.indexOf(';');
-    while ( !seq.isEmpty() && sc >= 0 )
-    {
-        s = seq.left(sc);
-        seq = seq.mid(sc + 1);
-
-
-        int steps = s.mid(1).toInt();
-        if (s.startsWith("U"))
-        {
-            Frequency f = getRadioFrequency();
-            logMessage(QString("tuneData U: Get Freq: Read Freq from Radio = %1").arg(f.traceStr()));
-            if (steps == 0 || steps == 1)
-            {
-                f = f + rigStep;
-            }
-            else
-            {
-                f = f + Frequency(rigStep * steps);
-            }
-            setRadioFrequency(f);
-        }
-        else if (s.startsWith("D"))
-        {
-            Frequency f = getRadioFrequency();
-            logMessage(QString("tuneData D: Get Freq: Read Freq from Radio = %1").arg(f.traceStr()));
-            if (steps == 0 || steps == 1)
-            {
-                f = f - rigStep;
-            }
-            else
-            {
-                f = f - Frequency(rigStep * steps);
-            }
-            setRadioFrequency(f);
-        }
-    }
-}
-#endif

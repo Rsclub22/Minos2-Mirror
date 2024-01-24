@@ -616,15 +616,6 @@ private slots:
     void on_testRadioButton_clicked();
 
     void on_traceDataComms_stateChanged(int arg1);
-#if defined(INC_TUNE)
-public:
-    Frequency getRadioFrequency();
-    void setRadioFrequency(Frequency f);
-public slots:
-    void tuneData(QByteArray b);
-private slots:
-    void on_configureKnobs_clicked();
-#endif
 };
 
 extern RigControlMainWindow *mainWindow;

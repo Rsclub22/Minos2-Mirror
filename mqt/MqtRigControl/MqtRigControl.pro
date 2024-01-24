@@ -77,20 +77,3 @@ FORMS    += rigcontrolmainwindow.ui \
     transvertsetupform.ui \
     addtransverterdialog.ui \
     addradiodialog.ui
-
-equals(INC_TUNE, 1): {
-    SOURCES += \
-    flexcontrolframe.cpp \
-    configureknobs.cpp \
-    powermateframe.cpp
-
-    HEADERS += \
-    flexcontrolframe.h \
-    configureknobs.h \
-    powermateframe.h
-
-    FORMS += \
-    flexcontrolframe.ui \
-    configureknobs.ui \
-    powermateframe.ui
-}
