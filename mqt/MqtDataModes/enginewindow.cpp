@@ -113,6 +113,7 @@ EngineWindow::EngineWindow(QWidget *parent)
         ui->rxChars->initialise(this);
         connect(ui->rxChars, &DataPainter::wordSelected, this, &EngineWindow::wordSelected);
         startEngine();
+        started = true;
     });
 }
 
@@ -299,6 +300,10 @@ void EngineWindow::on_notify(AnalysePubSubNotify an, const QString /*from*/ )
         {
             rigMode = selState.radioMode().getValue();
             ui->rigMode->setText(rigMode);
+            if (rigMode.contains(":"))
+            {
+                rigMode = rigMode.left(rigMode.indexOf(":"));
+            }
             rigFreq = selState.radioFreq().getValue();
             ui->rigFreq->setText(rigFreq.pretty_frequency_MHz_string());
 
@@ -361,6 +366,7 @@ void EngineWindow::onWatchdogTimer()
 
 void EngineWindow::closeAllEngines()
 {
+    started = false;
     ui->variFrame->setVisible(false);
 #ifdef Q_OS_WIN
 
@@ -600,18 +606,21 @@ void EngineWindow::scanLine(int curLine)
 }
 void EngineWindow::rescan()
 {
-    for (int i = rxBuff.getCurLine() + 1; i < rxBuff.getLines(); i++)
+    if (started)
     {
-        scanLine(i);
-        rxBuff.getRxLine(i)->setDirty(true);
-    }
+        for (int i = rxBuff.getCurLine() + 1; i < rxBuff.getLines(); i++)
+        {
+            scanLine(i);
+            rxBuff.getRxLine(i)->setDirty(true);
+        }
 
-    for (int i = 0; i <= rxBuff.getCurLine(); i++)
-    {
-        scanLine(i);
-        rxBuff.getRxLine(i)->setDirty(true);
+        for (int i = 0; i <= rxBuff.getCurLine(); i++)
+        {
+            scanLine(i);
+            rxBuff.getRxLine(i)->setDirty(true);
+        }
+        ui->rxChars->setText();
     }
-    ui->rxChars->setText();
 }
 void EngineWindow::clear()
 {

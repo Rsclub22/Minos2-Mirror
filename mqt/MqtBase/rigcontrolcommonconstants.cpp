@@ -426,11 +426,11 @@ void writeSerialComportBandSwitchDataToIni(QString comport)
 
 QString RIG_CONFIGURATION_FILEPATH_LOGGER()
 {
-    return getDirectoryLocation(dlConfiguration);
+    return getDirectoryLocation(dlConfiguration) + "/";
 }
 QString RIG_CONFIGURATION_FILEPATH_LOCAL()
 {
-    return getDirectoryLocation(dlConfiguration);
+    return getDirectoryLocation(dlConfiguration) + "/";
 }
 
 QString BANDSWITCH_INI_FILENAME()
@@ -460,5 +460,5 @@ QString RADIO_PATH_LOGGER()
 
 QString DEFAULT_RIGCTLD_PATH()
 {
-    return getDirectoryLocation(dlBinaries);
+    return getDirectoryLocation(dlBinaries) + "/";
 }
