@@ -297,12 +297,12 @@ void MMVARIFrame::sendCharacters(const QString &sendData, int mf)
 
         RXChar rxchn('\n', 0, markfreq);
         engineWindow->rxBuff.addChar(rxchn);
-        RXChar rxch('T', 0, markfreq);
-        engineWindow->rxBuff.addChar(rxch);
-        RXChar rxch2('X', 0, markfreq);
-        engineWindow->rxBuff.addChar(rxch2);
-        RXChar rxch3(' ', 0, markfreq);
-        engineWindow->rxBuff.addChar(rxch3);
+        // RXChar rxch('T', 0, markfreq);
+        // engineWindow->rxBuff.addChar(rxch);
+        // RXChar rxch2('X', 0, markfreq);
+        // engineWindow->rxBuff.addChar(rxch2);
+        // RXChar rxch3(' ', 0, markfreq);
+        // engineWindow->rxBuff.addChar(rxch3);
 
         if (modeCombo->currentText().contains("rtty"))
         {
@@ -615,14 +615,14 @@ void MMVARIFrame::OnTxState(int a)
 //        txButton->setChecked(false);
 //        rxButton->setChecked(true);
 
-        RXChar rxchn('\n', 0, markfreq);
-        engineWindow->rxBuff.addChar(rxchn);
-        RXChar rxch('R', 0, markfreq);
-        engineWindow->rxBuff.addChar(rxch);
-        RXChar rxch2('X', 0, markfreq);
-        engineWindow->rxBuff.addChar(rxch2);
-        RXChar rxch3(' ', 0, markfreq);
-        engineWindow->rxBuff.addChar(rxch3);
+        // RXChar rxchn('\n', 0, markfreq);
+        // engineWindow->rxBuff.addChar(rxchn);
+        // RXChar rxch('R', 0, markfreq);
+        // engineWindow->rxBuff.addChar(rxch);
+        // RXChar rxch2('X', 0, markfreq);
+        // engineWindow->rxBuff.addChar(rxch2);
+        // RXChar rxch3(' ', 0, markfreq);
+        // engineWindow->rxBuff.addChar(rxch3);
 
         emit txChanged(false);
     }
@@ -647,14 +647,14 @@ void MMVARIFrame::OnTxState(int a)
         txLabel->setText("Wait");
 //        txButton->setChecked(true);
 //        rxButton->setChecked(false);
-        RXChar rxchn('\n', 0, markfreq);
-        engineWindow->rxBuff.addChar(rxchn);
-        RXChar rxch('W', 0, markfreq);
-        engineWindow->rxBuff.addChar(rxch);
-        RXChar rxch2('T',  0, markfreq);
-        engineWindow->rxBuff.addChar(rxch2);
-        RXChar rxch3(' ', 0, markfreq);
-        engineWindow->rxBuff.addChar(rxch3);
+        //RXChar rxchn('\n', 0, markfreq);
+        //engineWindow->rxBuff.addChar(rxchn);
+        // RXChar rxch('W', 0, markfreq);
+        // engineWindow->rxBuff.addChar(rxch);
+        // RXChar rxch2('T',  0, markfreq);
+        // engineWindow->rxBuff.addChar(rxch2);
+        // RXChar rxch3(' ', 0, markfreq);
+        // engineWindow->rxBuff.addChar(rxch3);
         emit txChanged(true);
     }
     else if (a == 4)
@@ -664,12 +664,12 @@ void MMVARIFrame::OnTxState(int a)
 //        rxButton->setChecked(false);
         RXChar rxchn('\n', 0, markfreq);
         engineWindow->rxBuff.addChar(rxchn);
-        RXChar rxch('T', 0, markfreq);
-        engineWindow->rxBuff.addChar(rxch);
-        RXChar rxch2('N', 0, markfreq);
-        engineWindow->rxBuff.addChar(rxch2);
-        RXChar rxch3(' ', 0, markfreq);
-        engineWindow->rxBuff.addChar(rxch3);
+        // RXChar rxch('T', 0, markfreq);
+        // engineWindow->rxBuff.addChar(rxch);
+        // RXChar rxch2('N', 0, markfreq);
+        // engineWindow->rxBuff.addChar(rxch2);
+        // RXChar rxch3(' ', 0, markfreq);
+        // engineWindow->rxBuff.addChar(rxch3);
         emit txChanged(true);
     }
 

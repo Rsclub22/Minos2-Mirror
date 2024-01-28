@@ -274,12 +274,12 @@ void MMTTYFrame::msgEventFilter(MSG *msg, long */*result*/ )
                 txState = true;
                 RXChar rxchn('\n', 0, markFrequency);
                 engineWindow->rxBuff.addChar(rxchn);
-                RXChar rxch('T', 0, markFrequency);
-                engineWindow->rxBuff.addChar(rxch);
-                RXChar rxch2('X', 0, markFrequency);
-                engineWindow->rxBuff.addChar(rxch2);
-                RXChar rxch3(' ', 0, markFrequency);
-                engineWindow->rxBuff.addChar(rxch3);
+                // RXChar rxch('T', 0, markFrequency);
+                // engineWindow->rxBuff.addChar(rxch);
+                // RXChar rxch2('X', 0, markFrequency);
+                // engineWindow->rxBuff.addChar(rxch2);
+                // RXChar rxch3(' ', 0, markFrequency);
+                // engineWindow->rxBuff.addChar(rxch3);
 
                 emit txChanged(true);
 
@@ -291,12 +291,12 @@ void MMTTYFrame::msgEventFilter(MSG *msg, long */*result*/ )
 
                 RXChar rxchn('\n', 0, markFrequency);
                 engineWindow->rxBuff.addChar(rxchn);
-                RXChar rxch('R', 0, markFrequency);
-                engineWindow->rxBuff.addChar(rxch);
-                RXChar rxch2('X', 0, markFrequency);
-                engineWindow->rxBuff.addChar(rxch2);
-                RXChar rxch3(' ', 0, markFrequency);
-                engineWindow->rxBuff.addChar(rxch3);
+                // RXChar rxch('R', 0, markFrequency);
+                // engineWindow->rxBuff.addChar(rxch);
+                // RXChar rxch2('X', 0, markFrequency);
+                // engineWindow->rxBuff.addChar(rxch2);
+                // RXChar rxch3(' ', 0, markFrequency);
+                // engineWindow->rxBuff.addChar(rxch3);
                 emit txChanged(false);
             }
         }
