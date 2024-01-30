@@ -212,7 +212,7 @@ private slots:
     void sessionManageExecute();
 
     void MakeEntryActionExecute();
-    void AppendAdifActionExecute();
+    void ManageAdifActionExecute();
     void onSetMemoryActionExecute();
     void VHFFileNewActionExecute();
     void HFFileNewActionExecute();

@@ -1,7 +1,6 @@
 #include "delayedaction.h"
 #include <QSettings>
 #include <QTimer>
-#include <QFileSystemWatcher>
 #include <QKeyEvent>
 
 #include <QJsonDocument>

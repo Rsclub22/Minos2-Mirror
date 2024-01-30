@@ -86,6 +86,7 @@ SOURCES += \
     locTreeFrame.cpp \
     locframe.cpp \
     main.cpp \
+    manageadifdialog.cpp \
     n1mmbroadcast.cpp \
     n1mmbroadcastconfig.cpp \
     qrzdisplayframe.cpp \
@@ -185,6 +186,7 @@ HEADERS  += \
     freqlineedit.h \
     locTreeFrame.h \
     locframe.h \
+    manageadifdialog.h \
     n1mmbroadcast.h \
     n1mmbroadcastconfig.h \
     printfile.h \
@@ -256,6 +258,7 @@ FORMS    += \
     LocCalcFrame.ui \
     locframe.ui \
     locTreeFrame.ui \
+    manageadifdialog.ui \
     n1mmbroadcastconfig.ui \
     qrzdisplayframe.ui \
     qsologframe.ui \

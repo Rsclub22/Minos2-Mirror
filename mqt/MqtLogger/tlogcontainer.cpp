@@ -6,6 +6,7 @@
 #include <QLabel>
 #include <QScreen>
 
+#include "manageadifdialog.h"
 #include "regsettings.h"
 #include "AppStartup.h"
 #include "MMessageDialog.h"
@@ -675,7 +676,7 @@ void TLogContainer::setupMenus()
     StatsAction = newAction(QT_TR_NOOP("Show Contest Statistics..."), ui->menuFile, &TLogContainer::StatsActionExecute);
     ui->menuFile->addSeparator();
 
-    AppendAdifAction = newAction(QT_TR_NOOP("Append ADIF file to contest..."), ui->menuFile, &TLogContainer::AppendAdifActionExecute);
+    AppendAdifAction = newAction(QT_TR_NOOP("Manage ADIF files"), ui->menuFile, &TLogContainer::ManageAdifActionExecute);
     ui->menuFile->addSeparator();
 
     ListOpenAction = newAction(QT_TR_NOOP("Open &Archive List..."), ui->menuFile, &TLogContainer::ListOpenActionExecute);
@@ -1379,66 +1380,16 @@ void TLogContainer::ExitClearActionExecute()
     mShowMessage(tr("Clear registry only works under Windows"), this);
 #endif
 }
-void TLogContainer::AppendAdifActionExecute()
+void TLogContainer::ManageAdifActionExecute()
 {
     BaseContestLog * ct = TContestApp::getContestApp() ->getCurrentContest();
 
     if (!ct)
         return;
 
-    QString InitialDir = getDirectoryLocation(dlLogs);
+    ManageAdifDialog mad;
 
-    QFileInfo qf(InitialDir);
-
-    InitialDir = qf.canonicalFilePath();
-
-    QString Filter = tr("ADIF files (*.adi);;"
-                     "All Files (*.*)") ;
-
-    QString fname = QFileDialog::getOpenFileName( this,
-                       tr("Open ADIF for append"),
-                       InitialDir,  // dir
-                       Filter
-                       );
-
-    if (!fname.isEmpty())
-    {
-        QIODevice::OpenMode om = QIODevice::ReadOnly;
-
-        QSharedPointer<QFile> adifFile(new QFile(fname));
-
-        if (!adifFile->open(om))
-        {
-           QString lerr = adifFile->errorString();
-           QString emess = tr("Failed to open ADIF file %1 : %2").arg(fname, lerr);
-           MinosParameters::getMinosParameters() ->mshowMessage( emess );
-           return;
-        }
-
-        trace(QString("Appending ADIF log %1 to %2").arg(fname, ct->cfileName));
-        int spoint = ct->ctList.count();
-        if (! ADIFImport::doImportADIFLog(dynamic_cast<LoggerContestLog *>(ct),  adifFile ))
-        {
-            MinosParameters::getMinosParameters() ->mshowMessage( tr("Failed to append %1").arg(fname) );
-        }
-        for ( int i = spoint; i != ct->ctList.count(); i++ )
-        {
-            QSharedPointer<BaseContact> bct = ct->pcontactAt(i);
-            bct->commonSave(bct);
-        }
-        ct->commonSave( false );
-        ct->scanContest();          // after append ADIF file, required
-        //ct->validateLoc();
-        for ( int i = spoint; i != ct->ctList.count(); i++ )
-        {
-            QSharedPointer<BaseContact> bct = ct->pcontactAt(i);
-            MinosLoggerEvents::SendAfterLogContact(ct, bct);          // after append ADIF file
-        }
-        TSingleLogFrame * tslf = LogContainer ->findContest( ct );
-
-        tslf->updateTrees();
-        tslf->startNextEntry();   //(AppendAdifActionExecute())
-    }
+    mad.exec();
 }
 void TLogContainer::EnterActionExecute()
 {
