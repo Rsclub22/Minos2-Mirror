@@ -1,5 +1,5 @@
 #! /bin/bash
 
-cd /home/pi/runtime
+cd "${BASH_SOURCE%/*}" || exit
 sleep 30
-/home/pi/runtime/Bin/MqtAppStarter &
+Bin/MqtAppStarter &
