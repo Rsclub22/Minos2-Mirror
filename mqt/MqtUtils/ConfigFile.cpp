@@ -185,17 +185,33 @@ QString RunConfigElement::inferExecutable()
 #elif defined(Q_OS_ANDROID)
 #else
     QString exeString = launcherExecutableName + "/" + launcherExecutableName;
-    QString binString = "/Bin/" + launcherExecutableName;
+    QString binString = "Bin/" + launcherExecutableName;
+
+//    19:14:26.676 MqtLogger/MqtLogger
+//    19:14:26.676 /Bin/MqtLogger
+//    19:14:26.676 MqtCluster
+//    19:14:26.676 Bin/MqtLogger
+//    19:14:26.676 MqtLogger
+
+    trace(exeString);
+    trace(binString);
+    trace(appConfigName);
+    trace(launcherExecutablePath);
+    trace(launcherExecutableName);
 
     if (launcherExecutablePath.contains(exeString))
     {
+        trace("contains exestring");
         executable = launcherExecutablePath;
         executable.replace(exeString, appConfigName + "/" + appConfigName);
+        trace(executable);
     }
     else if (launcherExecutablePath.contains(binString))
     {
+        trace("contains binstring");
         executable = launcherExecutablePath;
-        executable.replace(binString, "/Bin/" + appConfigName);
+        executable.replace(binString, "Bin/" + appConfigName);
+        trace(executable);
     }
 #endif
 
