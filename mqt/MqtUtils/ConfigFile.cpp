@@ -133,8 +133,8 @@ QSharedPointer<Connectable> RunConfigElement::connectable()
 QString RunConfigElement::inferExecutable()
 {
     QString executable;
-    QString launcherExecutablePath = getAppExecutable(); // launch apps executable name
-    QString launcherExecutableName = getAppExecutableName();
+    QString launcherExecutablePath = getAppExecutable();      // path with "/" rather than "\"
+    QString launcherExecutableName = getAppExecutableName();  // launch apps executable name
 
 #if defined(Q_OS_MACOS)
     //Path=MqtLogger.app/Contents/Resources/MqtCluster.app
@@ -165,29 +165,29 @@ QString RunConfigElement::inferExecutable()
     }
 
 #elif defined(Q_OS_WIN)
-    QString debugString = launcherExecutableName + "\\debug\\" + launcherExecutableName;
-    QString releaseString = launcherExecutableName + "\\release\\" + launcherExecutableName;
-    QString binString = "\\Bin\\" + launcherExecutableName;
+    QString debugString = launcherExecutableName + "/debug/" + launcherExecutableName;
+    QString releaseString = launcherExecutableName + "/release/" + launcherExecutableName;
+    QString binString = "/Bin/" + launcherExecutableName;
 
     if (launcherExecutablePath.contains(debugString))
     {
         executable = launcherExecutablePath;
-        executable.replace(debugString, appConfigName + "\\debug\\" + appConfigName);
+        executable.replace(debugString, appConfigName + "/debug/" + appConfigName);
     }
     else if (launcherExecutablePath.contains(releaseString))
     {
         executable = launcherExecutablePath;
-        executable.replace(releaseString, appConfigName + "\\release\\" + appConfigName);
+        executable.replace(releaseString, appConfigName + "/release/" + appConfigName);
     }
     else if (launcherExecutablePath.contains(binString))
     {
         executable = launcherExecutablePath;
-        executable.replace(binString, "\\Bin\\" + appConfigName);
+        executable.replace(binString, "/Bin/" + appConfigName);
     }
 #elif defined(Q_OS_ANDROID)
 #else
     QString exeString = launcherExecutableName + "/" + launcherExecutableName;
-    QString binString = "Bin/" + launcherExecutableName;
+    QString binString = "/Bin/" + launcherExecutableName;
 
 //    19:14:26.676 MqtLogger/MqtLogger
 //    19:14:26.676 /Bin/MqtLogger
@@ -212,7 +212,7 @@ QString RunConfigElement::inferExecutable()
     {
         trace("contains binstring");
         executable = launcherExecutablePath;
-        executable.replace(binString, "Bin/" + appConfigName);
+        executable.replace(binString, "/Bin/" + appConfigName);
         trace(executable);
     }
 #endif

@@ -124,33 +124,33 @@ QVector<Translation> getLanguages()
 
 void switchTranslation(QString loc)
 {
-    QApplication *qa = dynamic_cast<QApplication *>(QApplication::instance());
+    //QApplication *qa = dynamic_cast<QApplication *>(QApplication::instance());
 
     QSharedPointer<QTranslator> myappTranslator(new QTranslator());    // which goes out of scope :(
     QSharedPointer<QTranslator> myqtTranslator(new QTranslator());    // which goes out of scope :(
 
     QString qtlocfile = getDirectoryLocation(dlTranslations) + "/qtbase_" + loc;
     bool qtloadOK = myqtTranslator->load(qtlocfile);
-    bool qtinstallOK = qa->installTranslator(myqtTranslator.data());
+    bool qtinstallOK = QCoreApplication::installTranslator(myqtTranslator.data());
 
     if (!qtloadOK || qtinstallOK)
     {
         qtlocfile = getDirectoryLocation(dlTranslations) + "/qt_" + loc;
         qtloadOK = myqtTranslator->load(qtlocfile);
-        qtinstallOK = qa->installTranslator(myqtTranslator.data());
+        qtinstallOK = QCoreApplication::installTranslator(myqtTranslator.data());
     }
 
     QString locfile = getDirectoryLocation(dlTranslations) + "/" + executableName + "_" + loc;
     bool loadOK = myappTranslator->load(locfile);
-    bool installOK = qa->installTranslator(myappTranslator.data());
+    bool installOK = QCoreApplication::installTranslator(myappTranslator.data());
 
     if (translator)
     {
-        qa->removeTranslator(translator.data());
+        QCoreApplication::removeTranslator(translator.data());
     }
     if (qtTranslator)
     {
-        qa->removeTranslator(qtTranslator.data());
+        QCoreApplication::removeTranslator(qtTranslator.data());
     }
 
     qtTranslator = myqtTranslator;
@@ -206,7 +206,8 @@ void appStartup(const QString &pappName)
 {
     oldHandler = qInstallMessageHandler(myMessageOutput);
     // This gets reset later, but at this point it is the launch executable name
-    executableName = QCoreApplication::instance()->applicationName();
+    executableName = QCoreApplication::applicationName();
+    executablePath = QCoreApplication::applicationFilePath();
 
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
     appStartupName = env.value("MQTRPCNAME", "") ;
@@ -427,12 +428,10 @@ void appStartup(const QString &pappName)
     QCommandLineOption languageOption({"l", "lang"}, "language", "languageName", "");
     parser.addOption(languageOption);
 
-    QStringList args = QCoreApplication::instance()->arguments();
+    QStringList args = QCoreApplication::arguments();
     trace("Arguments " + args.join("|"));
 
     parser.process(args);
-
-    executablePath = args[0];
 
     if (parser.isSet(languageOption))
     {
