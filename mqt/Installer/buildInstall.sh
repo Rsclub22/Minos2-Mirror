@@ -98,8 +98,8 @@ cp -r $DIR/mqt/ControlFiles/Configuration/LinuxFiles/* ./Configuration
 rm -rf ./Configuration/WindowsFiles
 rm -rf ./Configuration/LinuxFiles
 rm -rf ./Configuration/MacFiles
-cp $DIR/mqt/Installer/Minos.sh . 
-cp $DIR/mqt/Installer/runAppStarter.sh .
+cp -p $DIR/mqt/Installer/Minos.sh . 
+cp -p $DIR/mqt/Installer/runAppStarter.sh .
 cp $DIR/mqt/Docs/*.* ./Docs
 cp $DIR/mqt/Help/*.* ./Help
 cp $DIR/mqt/*.ico .
@@ -139,8 +139,8 @@ if [ ! -d ~/$RUNTIME/Lists ]; then
 fi
 cp -rv Bin ~/$RUNTIME
 cp *.ico ~/$RUNTIME
-cp runAppStarter.sh ~/$RUNTIME
-cp Minos.sh ~/$RUNTIME
+cp -p runAppStarter.sh ~/$RUNTIME
+cp -p Minos.sh ~/$RUNTIME
 
 read -n 1 -p "Do you want to copy the configuration to ~/$RUNTIME (press y/n)? " ans;
 
