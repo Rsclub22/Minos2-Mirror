@@ -210,7 +210,7 @@ void MainWindow::LanguageAcceptActionExecute()
 void MainWindow::on_appsButton_clicked()
 {
     MinosConfig *minosConfig = MinosConfig::getMinosConfig();
-    StartConfig configBox( this, false, minosConfig->getCurrConfig().configName);
+    StartConfig configBox( this, true, minosConfig->getCurrConfig().configName);
     configBox.exec();
 
     minosConfig = MinosConfig::getMinosConfig();
