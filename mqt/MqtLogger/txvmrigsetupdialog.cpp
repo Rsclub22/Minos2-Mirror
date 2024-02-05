@@ -60,12 +60,13 @@ void TxVmRigSetupDialog::initSetup()
         ui->comportLbl->setVisible(false);
     }
 
+    QString fileName = VOICEKEYER_COMMON_PARAMS_PATH + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[VoiceKeyerId::RigControl] + ".ini";
+    QSettings config(fileName, QSettings::IniFormat);
+
     if (voiceCap.getUseCatPTTForEom())
     {
         ui->pttEOMChkBox->setVisible(true);
-        //QString fileName = VOICE_KEYER_PATH + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[VoiceKeyerId::RigControl] + ".ini";
-        QString fileName = VOICEKEYER_COMMON_PARAMS_PATH + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[VoiceKeyerId::RigControl] + ".ini";
-        QSettings config(fileName, QSettings::IniFormat);
+
         ui->pttEOMChkBox->setChecked(config.value("Common/UseCatPttForEom", false).toBool());
         ui->saveByRadioNameChkBox->setChecked(config.value("Common/SaveButtonByRadioName", false).toBool());
     }
@@ -78,9 +79,6 @@ void TxVmRigSetupDialog::initSetup()
     if (voiceCap.getEnableCwMode())
     {
         ui->switchToCw->setVisible(true);
-        //QString fileName = VOICE_KEYER_PATH + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[VoiceKeyerId::CW_RigControl] + ".ini";
-        QString fileName = VOICEKEYER_COMMON_PARAMS_PATH + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[VoiceKeyerId::RigControl] + ".ini";
-        QSettings config(fileName, QSettings::IniFormat);
         ui->switchToCw->setChecked(config.value("Common/SwitchToCwMode", true).toBool());
     }
     else
@@ -89,8 +87,10 @@ void TxVmRigSetupDialog::initSetup()
     }
 
 
+    // save buttons by radio file name checkbox
 
 
+    ui->saveByRadioNameChkBox->setChecked(config.value("Common/SaveButtonByRadioName", false).toBool());
 
     connect(ui->numButtons, QOverload<int>::of(&QSpinBox::valueChanged), this, &TxVmRigSetupDialog::onNumButtonsValueChanged);
 

@@ -155,6 +155,9 @@ private:
     void updateVoiceMemAvailStateAndCwType();
     void setTXStatusVisible(bool visible);
     void sendModeToRadio(const QString m);
+    void setSaveButtonByRadionameText(QString selectedRadioName);
+    void checkButtonIniFileVersion(QString voiceKeyerType);
+    void loadButtonData();
 private slots:
 
     void onVoiceKeyerSelect(int idx);

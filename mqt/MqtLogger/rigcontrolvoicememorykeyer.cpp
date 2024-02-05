@@ -83,17 +83,34 @@ void RigControlVoiceMemoryKeyer::stopMsg(VoiceKeyerParams *vkParams)
 
 bool RigControlVoiceMemoryKeyer::readVmButtonParams(int buttonNum, VoiceKeyerParams &vmParams)
 {
-    QString fileName = VOICE_KEYER_PATH + VOICE_KEYER_BASE_FILE_NAME + vmParams.getType() + ".ini";
+
+    QString fileName = VOICEKEYER_COMMON_PARAMS_PATH + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[VoiceKeyerId::RigControl] + ".ini";
+    QSettings readConfig(fileName, QSettings::IniFormat);
+
+    bool saveByRadioName = readConfig.value("Common/SaveButtonByRadioName", false).toBool();
+
+
+    fileName = VOICE_KEYER_PATH + VOICE_KEYER_BASE_FILE_NAME + vmParams.getType() + ".ini";
     QSettings config(fileName, QSettings::IniFormat);
-    config.beginGroup("button" + QString::number(buttonNum));
+
+    if (saveByRadioName && !vmParams.getSelRadioName().isEmpty())
+    {
+        config.beginGroup(vmParams.getSelRadioName());
+    }
+    else
+    {
+        config.beginGroup("AllRadios");
+    }
+
+    //config.beginGroup("button" + QString::number(buttonNum));
 
 
-    vmParams.setType(config.value("type", "").toString());
-    vmParams.setVmName(config.value("name", "").toString());
-    vmParams.setVmRepeatFlag(config.value("repeatFlag", false).toBool());
-    vmParams.setVmDuration(config.value("messageDuration", 0).toInt());
-    vmParams.setVmRepeatPauseDur(config.value("repeatPauseDuration", 0).toInt());
-    vmParams.setvmButtonNum(config.value("buttonNum", buttonNum).toInt());
+    vmParams.setType(config.value("button" + QString::number(buttonNum) + "/type", "").toString());
+    vmParams.setVmName(config.value("button" + QString::number(buttonNum) + "/name", "").toString());
+    vmParams.setVmRepeatFlag(config.value("button" + QString::number(buttonNum) + "/repeatFlag", false).toBool());
+    vmParams.setVmDuration(config.value("button" + QString::number(buttonNum) + "/messageDuration", 0).toInt());
+    vmParams.setVmRepeatPauseDur(config.value("button" + QString::number(buttonNum) + "/repeatPauseDuration", 0).toInt());
+    vmParams.setvmButtonNum(config.value("button" + QString::number(buttonNum) + "/buttonNum", buttonNum).toInt());
     config.endGroup();
 
     return true;
@@ -103,16 +120,30 @@ void RigControlVoiceMemoryKeyer::saveVmButtonParams(const VoiceKeyerParams &vmPa
 {
     VoiceKeyerParams vmParams = vmParams_;
 
-    QString fileName = VOICE_KEYER_PATH + VOICE_KEYER_BASE_FILE_NAME + vmParams.getType() + ".ini";
-    QSettings config(fileName, QSettings::IniFormat);
-    config.beginGroup("button" + QString::number(vmParams.getvmButtonNum()));
+    QString fileName = VOICEKEYER_COMMON_PARAMS_PATH + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[VoiceKeyerId::RigControl] + ".ini";
+    QSettings readConfig(fileName, QSettings::IniFormat);
 
-    config.setValue("type", vmParams.getType());
-    config.setValue("name", vmParams.getVmName());
-    config.setValue("repeatFlag", vmParams.getVmRepeatFlag());
-    config.setValue("messageDuration", vmParams.getVmDuration());
-    config.setValue("repeatPauseDuration", vmParams.getVmRepeatPauseDur());
-    config.setValue("buttonNum", vmParams.getvmButtonNum());
+    bool saveByRadioName = readConfig.value("Common/SaveButtonByRadioName", false).toBool();
+
+    fileName = VOICE_KEYER_PATH + VOICE_KEYER_BASE_FILE_NAME + vmParams.getType() + ".ini";
+    QSettings config(fileName, QSettings::IniFormat);
+
+    if (saveByRadioName  && !vmParams.getSelRadioName().isEmpty())
+    {
+       config.beginGroup(vmParams.getSelRadioName());
+    }
+    else
+    {
+       config.beginGroup("AllRadios");
+    }
+
+
+    config.setValue("button" + QString::number(vmParams.getvmButtonNum()) + "/type", vmParams.getType());
+    config.setValue("button" + QString::number(vmParams.getvmButtonNum()) + "/name", vmParams.getVmName());
+    config.setValue("button" + QString::number(vmParams.getvmButtonNum()) + "/repeatFlag", vmParams.getVmRepeatFlag());
+    config.setValue("button" + QString::number(vmParams.getvmButtonNum()) + "/messageDuration", vmParams.getVmDuration());
+    config.setValue("button" + QString::number(vmParams.getvmButtonNum()) + "/repeatPauseDuration", vmParams.getVmRepeatPauseDur());
+    config.setValue("button" + QString::number(vmParams.getvmButtonNum()) + "/buttonNum", vmParams.getvmButtonNum());
     config.endGroup();
 
 }

@@ -119,6 +119,10 @@ void TxVmButtonsFrame::initTxVmButtonFrame()
     //setRepeatIndicatorVisible(false);
 
     config.endGroup();
+
+
+
+
 }
 
 
@@ -146,6 +150,12 @@ void TxVmButtonsFrame::onVmSetupClicked()
             if (txVoiceKeyer->numButtons != oldnb)
             {
                 setVoiceNumMemButtonsVisible(txVoiceKeyer->numButtons);
+            }
+
+            if (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl] || voiceKeyerType == keyerTypes[VoiceKeyerId::RigControl])
+            {
+                setSaveButtonByRadionameText(selectedRadio.getLocalName());
+                loadButtonData();
             }
 
         }
@@ -198,7 +208,9 @@ void TxVmButtonsFrame::createKeyer(QString voiceKeyerName)
                 vmKeyParamList.clear();
                 buttonNumSent = NO_VM_BUTTON_ON;
 
-               for (int i = 0; i < voiceMemButtonList.count(); i++)
+                checkButtonIniFileVersion(voiceKeyerType);      // convert to version 2 ini type
+
+/*             for (int i = 0; i < voiceMemButtonList.count(); i++)
                {
                    VoiceKeyerParams vmData;
                    if (vmData.getType().isEmpty())
@@ -212,12 +224,87 @@ void TxVmButtonsFrame::createKeyer(QString voiceKeyerName)
                }
 
                setVoiceNumMemButtonsVisible(txVoiceKeyer->numButtons);
-
+*/
 
             }
+
         }
     }
 }
+
+
+void TxVmButtonsFrame::loadButtonData()
+{
+    for (int i = 0; i < voiceMemButtonList.count(); i++)
+    {
+        VoiceKeyerParams vmData;
+        if (vmData.getType().isEmpty())
+        {
+            vmData.setType(voiceKeyerType);
+        }
+
+        if (!selectedRadio.getLocalName().isEmpty())
+        {
+            vmData.setSelRadioName(selectedRadio.getLocalName());
+        }
+
+        txVoiceKeyer->readVmButtonParams(i, vmData);
+        vmKeyParamList.append(vmData);
+        setRunButtonText(i, vmData.getVmName());
+    }
+
+    setVoiceNumMemButtonsVisible(txVoiceKeyer->numButtons);
+}
+
+
+void TxVmButtonsFrame::checkButtonIniFileVersion(QString voiceKeyerType)
+{
+    QString fileName = VOICE_KEYER_PATH + VOICE_KEYER_BASE_FILE_NAME + voiceKeyerType + ".ini";
+    QSettings config(fileName, QSettings::IniFormat);
+
+    if (config.value("version", 0).toInt() != 2)
+    {
+        // this is not a version 2 file
+        QStringList keys = config.childGroups();
+        if (!keys.isEmpty())
+        {
+            for ( const auto& key : keys  )
+            {
+                QStringRef buttonNumStr(&key, 6, 1);
+                // read settings for this key
+                config.beginGroup(key);
+
+
+                QString type = config.value("type", "").toString();
+                QString name = config.value("name", "").toString();
+                bool repeatFlag = config.value("repeatFlag", false).toBool();
+                int duration = config.value("messageDuration", 0).toInt();
+                int repeatPauseDur = config.value("repeatPauseDuration", 0).toInt();
+
+
+                config.remove("");
+                config.endGroup();
+
+                config.beginGroup("AllRadios");
+
+                QString buttonKey = "button" + buttonNumStr;
+                config.setValue(buttonKey + "/type", type);
+                config.setValue(buttonKey + "/name", name);
+                config.setValue(buttonKey + "/repeatFlag", repeatFlag);
+                config.setValue(buttonKey + "/messageDuration", duration);
+                config.setValue(buttonKey + "/repeatPauseDuration", repeatPauseDur);
+                config.setValue(buttonKey + "/buttonNum", buttonNumStr.toInt());
+                config.endGroup();
+
+
+            }
+
+            config.setValue("version", 2);
+        }
+    }
+}
+
+
 void TxVmButtonsFrame::onExtConnectTimer()
 {
     QString voiceKeyerName = ui->voiceKeyerSelect->currentText();
@@ -342,6 +429,12 @@ void TxVmButtonsFrame::setFrameState(QString voiceKeyerName)
             }
         }
 
+        if (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl] || voiceKeyerType == keyerTypes[VoiceKeyerId::RigControl])
+        {
+            setSaveButtonByRadionameText(selectedRadio.getLocalName());
+            loadButtonData();
+        }
+
 
     }
 
@@ -350,7 +443,25 @@ void TxVmButtonsFrame::setFrameState(QString voiceKeyerName)
 }
 
 
+void TxVmButtonsFrame::setSaveButtonByRadionameText(QString selectedRadioName)
+{
+    QString fileName = VOICEKEYER_COMMON_PARAMS_PATH + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[VoiceKeyerId::RigControl] + ".ini";
+    QSettings readConfig(fileName, QSettings::IniFormat);
 
+    if (readConfig.value("Common/SaveButtonByRadioName", false).toBool())
+    {
+        //ui->buttonSelectionLbl->setVisible(true);
+        //ui->saveByRadioNameText->setVisible(true);
+        ui->saveByRadioNameText->setText(selectedRadioName);
+
+    }
+    else
+    {
+        //ui->buttonSelectionLbl->setVisible(false);
+        //ui->saveByRadioNameText->setVisible(false);
+        ui->saveByRadioNameText->setText("All Radios");
+    }
+}
 
 void TxVmButtonsFrame::clearButtonLabels()
 {
