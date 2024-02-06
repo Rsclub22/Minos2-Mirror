@@ -262,12 +262,17 @@ void TxVmButtonsFrame::checkButtonIniFileVersion(QString voiceKeyerType)
     QString fileName = VOICE_KEYER_PATH + VOICE_KEYER_BASE_FILE_NAME + voiceKeyerType + ".ini";
     QSettings config(fileName, QSettings::IniFormat);
 
-    if (config.value("version", 0).toInt() != 2)
-    {
+    //if (config.value("version", 0).toInt() != 2)
+    //{
         // this is not a version 2 file
-        QStringList keys = config.childGroups();
-        if (!keys.isEmpty())
+
+    QStringList keys = config.childGroups();
+    if (!keys.isEmpty())
+    {
+        // check if this is a version 2 file
+        if (config.value("version", 0).toInt() != 2)
         {
+            // no convert file to version 2
             for ( const auto& key : keys  )
             {
                 QStringRef buttonNumStr(&key, 6, 1);
