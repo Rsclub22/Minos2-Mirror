@@ -53,6 +53,8 @@ public:
     virtual int editButton(VoiceKeyerParams* vmData, QString title) override;
 
 
+    bool readSaveButtonByRadioNameIni();
+
 signals:
 
 

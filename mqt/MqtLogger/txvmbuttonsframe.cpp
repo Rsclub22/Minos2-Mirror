@@ -455,15 +455,13 @@ void TxVmButtonsFrame::setSaveButtonByRadionameText(QString selectedRadioName)
 
     if (readConfig.value("Common/SaveButtonByRadioName", false).toBool())
     {
-        //ui->buttonSelectionLbl->setVisible(true);
-        //ui->saveByRadioNameText->setVisible(true);
+
         ui->saveByRadioNameText->setText(selectedRadioName);
 
     }
     else
     {
-        //ui->buttonSelectionLbl->setVisible(false);
-        //ui->saveByRadioNameText->setVisible(false);
+
         ui->saveByRadioNameText->setText("All Radios");
     }
 }
@@ -487,7 +485,7 @@ void TxVmButtonsFrame::editActionSelected(int buttonNumber)
 
     VoiceKeyerParams vmData;
     vmData.setType(voiceKeyerType);
-    vmData.setSelRadioName(selectedRadio.key());  // get current radio name
+    vmData.setSelRadioName(selectedRadio.getLocalName());  // get current radio name
 
     if (txVoiceKeyer)
     {
@@ -509,6 +507,7 @@ void TxVmButtonsFrame::editActionSelected(int buttonNumber)
             title1 = tr("Voice Memory");
         }
         QString title(tr("%1 %2 - Edit").arg(title1).arg(buttonNumber + 1));
+
         int ret = txVoiceKeyer->editButton(&vmData, title);
         if (ret == QDialog::Accepted)
         {
@@ -708,6 +707,7 @@ void TxVmButtonsFrame::writeActionSelected(int buttonNumber)
     }
     QString title(tr("%1 %2 - New").arg(title1).arg(buttonNumber + 1));
 
+    vmData.setSelRadioName(selectedRadio.getLocalName());
     vmData.setvmButtonNum(buttonNumber);
     vmData.setType(voiceKeyerType);
     vmData.setVkBase(txVoiceKeyer);

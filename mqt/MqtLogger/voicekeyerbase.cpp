@@ -27,7 +27,10 @@ void VoiceKeyerParams::clear()
 VoiceKeyerParams& VoiceKeyerParams::operator = (const VoiceKeyerParams& vkp)
 {
     type = vkp.type;
+    selRadioName = vkp.selRadioName;
     vmName = vkp.vmName;
+
+    vkBase = vkp.vkBase;
     
 
     vmRepeatFlag = vkp.vmRepeatFlag;

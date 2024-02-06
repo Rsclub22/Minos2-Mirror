@@ -83,12 +83,18 @@ void TxVmRigButtonDialog::setVmData(VoiceKeyerParams* vmData_)
     vmData = vmData_;
     ui->txVmTypeLbl->setText(vmData->getType());
     ui->txVmNameEdit->setText(vmData->getVmName());
-    ui->radioNameLbl->setText(vmData->getSelRadioName());
     ui->txCwMessageLineEdit->setText(vmData->getVmCwMessage());
     ui->txVmRepeatChkBox->setChecked(vmData->getVmRepeatFlag());
     ui->txVmRepeatPauseDur->setText(QString::number(vmData->getVmRepeatPauseDur()));
     ui->txVmMessageDur->setText(QString::number(vmData->getVmDuration()));
 }
+
+
+void TxVmRigButtonDialog::setRadioNameLbl(QString radioName)
+{
+    ui->radioNameLbl->setText(radioName);
+}
+
 
 void TxVmRigButtonDialog::on_txCwMessageEditingFinshed()
 {
