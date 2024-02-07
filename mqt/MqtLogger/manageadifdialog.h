@@ -3,6 +3,8 @@
 
 #include <QDialog>
 
+class LoggerContestLog;
+
 namespace Ui {
 class ManageAdifDialog;
 }
@@ -28,6 +30,7 @@ private slots:
 
 private:
     Ui::ManageAdifDialog *ui;
+    LoggerContestLog * lt = nullptr;
 };
 
 #endif // MANAGEADIFDIALOG_H

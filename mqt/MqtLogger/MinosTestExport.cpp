@@ -539,6 +539,8 @@ int MinosTestExport::exportStackDisplay(QSharedPointer<QFile> expfd )
     ct->showUnworkedCountries.addIfDirty( st, "su", dirty );
     ct->showWorkedDistricts.addIfDirty( st, "dw", dirty );
     ct->showUnworkedDistricts.addIfDirty( st, "du", dirty );
+    ct->watchedADIFFile.addIfDirty(st, "WatchADIFFile", dirty);
+    ct->watchedADIFLastOffset.addIfDirty(st, "WatchADIFLO", dirty);
 
     bool siDirty = false;
 

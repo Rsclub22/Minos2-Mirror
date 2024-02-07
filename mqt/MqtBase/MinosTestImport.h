@@ -42,6 +42,8 @@ class MinosTestImport: public RPCDispatcher
       bool getStructArgMemberValue( QSharedPointer<RPCParam>rpm, const QString &name, MinosStringItem<QString> &val );
       bool getStructArgMemberValue(QSharedPointer<RPCParam>rpm, const QString &name, int &val );
       bool getStructArgMemberValue( QSharedPointer<RPCParam>rpm, const QString &name, MinosItem<int> &val );
+      bool getStructArgMemberValue(QSharedPointer<RPCParam>rpm, const QString &name, qint64 &val );
+      bool getStructArgMemberValue( QSharedPointer<RPCParam>rpm, const QString &name, MinosItem<qint64> &val );
       bool getStructArgMemberValue( QSharedPointer<RPCParam>rpm, const QString &name, bool &val );
       bool getStructArgMemberValue( QSharedPointer<RPCParam>rpm, const QString &name, MinosItem<bool> &val );
    public:
@@ -65,6 +67,8 @@ class MinosTestImport: public RPCDispatcher
       bool getStructArgMemberValue( const QString &name, MinosStringItem<QString> &val );
       bool getStructArgMemberValue( const QString &name, int &val );
       bool getStructArgMemberValue( const QString &name, MinosItem<int> &val );
+      bool getStructArgMemberValue( const QString &name, qint64 &val );
+      bool getStructArgMemberValue( const QString &name, MinosItem<qint64> &val );
       bool getStructArgMemberValue( const QString &name, bool &val );
       bool getStructArgMemberValue( const QString &name, MinosItem<bool> &val );
 

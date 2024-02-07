@@ -13,6 +13,7 @@
 #include "ContestApp.h"
 #include "AdifImport.h"
 #include "MShowMessageDlg.h"
+#include "adifmanager.h"
 #include "cutils.h"
 #include "fileutils.h"
 #include "reg1test.h"
@@ -137,6 +138,8 @@ void LoggerContestLog::clearDirty()
         currentStackItems[i].clearDirty();
    }
 
+   watchedADIFFile.clearDirty();
+   watchedADIFLastOffset.clearDirty();
    BaseContestLog::clearDirty();
 }
 void LoggerContestLog::setDirty()
@@ -213,7 +216,8 @@ void LoggerContestLog::setDirty()
    {
         currentStackItems[i].setDirty();
    }
-
+   watchedADIFFile.setDirty();
+   watchedADIFLastOffset.setDirty();
    BaseContestLog::setDirty();
 }
 bool LoggerContestLog::initialise( int sno )
@@ -360,6 +364,13 @@ bool LoggerContestLog::initialise( const QString &fn, bool newFile, int slotno )
                entryBundle.openSection( entryBundleName.getValue() );
                QTHBundle.openSection( QTHBundleName.getValue() );
                stationBundle.openSection( stationBundleName.getValue() );
+               // and create the ADIF manger if required
+               QString wadif = watchedADIFFile.getValue();
+               if (!wadif.isEmpty())
+               {
+                   qint64 lo = watchedADIFLastOffset.getValue();
+                   adifManager = QSharedPointer<AdifManager>(new AdifManager(this, wadif, lo));
+               }
                loadOK = true;
             }
             else
@@ -1534,7 +1545,9 @@ void LoggerContestLog::processMinosStanza( const QString &methodName, MinosTestI
       mt->getStructArgMemberValue( "section", entSect );
       mt->getStructArgMemberValue( "sectionList", sectionList );
       mt->getStructArgMemberValue( "ScreenLayout", screenLayout);
-      mt->getStructArgMemberValue("currentFKeySet", currentFKeySet);
+      mt->getStructArgMemberValue( "currentFKeySet", currentFKeySet);
+      mt->getStructArgMemberValue( "WatchADIFFile", watchedADIFFile);
+      mt->getStructArgMemberValue( "WatchADIFLo", watchedADIFLastOffset);
    }
    else
       if ( methodName == "MinosLogMode" )

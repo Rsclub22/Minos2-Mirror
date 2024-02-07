@@ -70,6 +70,7 @@ SOURCES += \
     TClockFrame.cpp \
     TSessionManager.cpp \
     WsjtxConfigureCQ.cpp \
+    adifmanager.cpp \
     bandmapclientfilterdialog.cpp \
     bandmapdatamodel.cpp \
     bandmapgraphicspanel.cpp \
@@ -171,6 +172,7 @@ HEADERS  += \
     TClockFrame.h \
     TSessionManager.h \
     WsjtxConfigureCQ.h \
+    adifmanager.h \
     bandmapclientfilterdialog.h \
     bandmapdatamodel.h \
     bandmapgraphicspanel.h \
