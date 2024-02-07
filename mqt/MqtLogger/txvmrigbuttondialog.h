@@ -25,6 +25,7 @@ public:
     void setDialogForCatPttEom(bool state);
 
 
+    void setRadioNameLbl(QString radioName);
 private slots:
     void on_okButtonClicked();
     void on_cancelbuttonClicked();

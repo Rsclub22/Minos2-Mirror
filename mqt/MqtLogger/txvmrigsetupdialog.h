@@ -24,9 +24,17 @@ public:
     bool getCatPttForEomState();
     bool getSetCwModeAndRestoreState();
     bool getSaveButtonsByRadioNameState();
+    void setPttEOMChkBoxVisible(bool visible);
+    void setPttEOMChkBoxChecked(bool checked);
+    void setSwitchToCwVisible(bool visible);
+    void setSwitchToCwChecked(bool checked);
+    void setSaveByRadioNameChkBoxChecked(bool checked);
+    void setSetupRadioGroupBoxTitle(QString selectedRadioName);
 private slots:
 
     void onNumButtonsValueChanged(int num);
+
+    void onSaveByRadioNameClicked();
 
 public Q_SLOTS:
     virtual void accept() override;
@@ -42,6 +50,7 @@ private:
 
     void initSetup();
     void doCloseEvent();
+    bool readSaveButtonByRadioNameIni();
 };
 
 #endif // TXVMRIGSETUPDIALOG_H

@@ -123,13 +123,29 @@ bool RigControlCwMessageKeyer::readVmButtonParams(int buttonNum, VoiceKeyerParam
     return true;
 }
 
+
 void RigControlCwMessageKeyer::saveVmButtonParams(const VoiceKeyerParams &vmParams_ )
 {
     VoiceKeyerParams vmParams = vmParams_;
 
-    QString fileName = VOICE_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + vmParams.getType() + ".ini";
+    QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[VoiceKeyerId::RigControl] + ".ini";
+    QSettings readConfig(fileName, QSettings::IniFormat);
+
+    bool saveByRadioName = readConfig.value("Common/SaveButtonByRadioName", false).toBool();
+
+
+    fileName = VOICE_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + vmParams.getType() + ".ini";
     QSettings config(fileName, QSettings::IniFormat);
-    config.beginGroup("button" + QString::number(vmParams.getvmButtonNum()));
+
+    if (saveByRadioName && !vmParams.getSelRadioName().isEmpty())
+    {
+        config.beginGroup(vmParams.getSelRadioName() + "_" + "button" + QString::number(vmParams.getvmButtonNum()));
+    }
+    else
+    {
+        config.beginGroup("button" + QString::number(vmParams.getvmButtonNum()));
+    }
+
 
     config.setValue("type", vmParams.getType());
     config.setValue("name", vmParams.getVmName());
@@ -142,7 +158,7 @@ void RigControlCwMessageKeyer::saveVmButtonParams(const VoiceKeyerParams &vmPara
 
 }
 
-int RigControlCwMessageKeyer::setup(VoiceKeyerFactory *voiceKeyerFactory, int &numButtons)
+int RigControlCwMessageKeyer::setup(VoiceKeyerFactory *voiceKeyerFactory, int &numButtons, QString /*selectedRadioName*/)
 {
 
 
@@ -166,6 +182,9 @@ int RigControlCwMessageKeyer::setup(VoiceKeyerFactory *voiceKeyerFactory, int &n
         usePttForEom = txVmSetupDialog.getCatPttForEomState();
         config.setValue("Common/SwitchToCwMode", txVmSetupDialog.getSetCwModeAndRestoreState());
         setCwModeAndRestoreCurrentMode = txVmSetupDialog.getSetCwModeAndRestoreState();
+        config.setValue("Common/SaveButtonByRadioName", txVmSetupDialog.getSaveButtonsByRadioNameState());
+
+
     }
     return ret;
 

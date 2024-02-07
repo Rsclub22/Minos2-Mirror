@@ -49,9 +49,11 @@ public:
     bool readVmButtonParams(int buttonNum, VoiceKeyerParams &vmParams) override;
     void saveVmButtonParams(const VoiceKeyerParams &vmParams) override;
 
-    virtual int setup(VoiceKeyerFactory *voiceKeyerFactory, int &numButtons) override;
+    virtual int setup(VoiceKeyerFactory *voiceKeyerFactory, int &numButtons, QString selectedRadioName) override;
     virtual int editButton(VoiceKeyerParams* vmData, QString title) override;
 
+
+    bool readSaveButtonByRadioNameIni();
 
 signals:
 
