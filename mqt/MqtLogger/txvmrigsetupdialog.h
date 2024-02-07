@@ -8,15 +8,14 @@ namespace Ui {
 class TxVmRigSetupDialog;
 }
 
-const int MAXNUM_BUTTONS = 8;
-const int MININUM_BUTTONS = 2;
+
 
 class TxVmRigSetupDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit TxVmRigSetupDialog(VoiceKeyerCapabilities voiceCap_, int nb, QWidget *parent = nullptr);
+    explicit TxVmRigSetupDialog(VoiceKeyerCapabilities voiceCap_, int maxNumButtons_, int nb, QWidget *parent = nullptr);
     ~TxVmRigSetupDialog();
 
     int getNumButtons(){return numButtons;}
@@ -30,6 +29,7 @@ public:
     void setSwitchToCwChecked(bool checked);
     void setSaveByRadioNameChkBoxChecked(bool checked);
     void setSetupRadioGroupBoxTitle(QString selectedRadioName);
+    void setMaxNumOfButtons(int maxNumButtons);
 private slots:
 
     void onNumButtonsValueChanged(int num);
@@ -47,6 +47,7 @@ private:
     VoiceKeyerCapabilities voiceCap;
 
     int numButtons = MININUM_BUTTONS;
+    int maxNumButtons = MAXIMUM_BUTTONS;
 
     void initSetup();
     void doCloseEvent();

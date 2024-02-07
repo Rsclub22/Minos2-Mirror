@@ -9,11 +9,12 @@
 const char * indevKey("InDevice");
 const char * outdevKey("OutDevice");
 
-txVmInternalSetupDialog::txVmInternalSetupDialog(VoiceKeyerCapabilities voiceCap_, int nb, QWidget *parent) :
+txVmInternalSetupDialog::txVmInternalSetupDialog(VoiceKeyerCapabilities voiceCap_, int maxNumButtons_,int nb, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::txVmInternalSetupDialog),
     voiceCap(voiceCap_),
-    numButtons(nb)
+    numButtons(nb),
+    maxNumButtons(maxNumButtons_)
 
 {
     ui->setupUi(this);
@@ -52,7 +53,7 @@ void txVmInternalSetupDialog::accept()
 void txVmInternalSetupDialog::initSetup()
 {
 
-    ui->numButtons->setRange(MININUM_BUTTONS, MAXNUM_BUTTONS);
+    ui->numButtons->setRange(MININUM_BUTTONS, maxNumButtons);
     ui->numButtons->setValue(numButtons);
 
     if (voiceCap.getSupportSerial())

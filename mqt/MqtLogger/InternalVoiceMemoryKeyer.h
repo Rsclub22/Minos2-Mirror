@@ -36,7 +36,7 @@ public:
     virtual void setPttOnOff(bool onOff) override;
     virtual bool getUsePttForEomFlag() override;
 
-    virtual int setup(VoiceKeyerFactory *voiceKeyerFactory, int &numButtons, QString selectedRadioName) override;
+    virtual int setup(VoiceKeyerFactory *voiceKeyerFactory, int &maxNumButtons, int &numButtons, QString selectedRadioName) override;
     virtual int editButton(VoiceKeyerParams* vmData, QString title) override;
 
 private slots:

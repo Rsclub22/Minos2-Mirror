@@ -137,7 +137,16 @@ void TxVmButtonsFrame::onVmSetupClicked()
     {
         int oldnb = txVoiceKeyer->numButtons;
 
-        if (txVoiceKeyer->setup(voiceKeyerFactory, txVoiceKeyer->numButtons, selectedRadio.getLocalName()) == QDialog::Accepted)
+
+        int maxNumOfVoiceMessages = MAXIMUM_BUTTONS;
+
+        if (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl] || voiceKeyerType == keyerTypes[VoiceKeyerId::RigControl])
+        {
+           maxNumOfVoiceMessages = allRadioDetails[selectedRadio].getNumVoiceMessages();
+        }
+
+
+        if (txVoiceKeyer->setup(voiceKeyerFactory, maxNumOfVoiceMessages, txVoiceKeyer->numButtons, selectedRadio.getLocalName()) == QDialog::Accepted)
         {
             if (txVoiceKeyer->numButtons != oldnb)
             {

@@ -22,6 +22,9 @@
 
 class QComboBox;
 
+const int MAXIMUM_BUTTONS = 8;
+const int MININUM_BUTTONS = 2;
+
 enum VoiceKeyerId
 {
     None = 0,

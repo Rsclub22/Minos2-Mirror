@@ -4,11 +4,12 @@
 #include "txvmrigsetupdialog.h"
 #include "ui_txvmrigsetupdialog.h"
 
-TxVmRigSetupDialog::TxVmRigSetupDialog(VoiceKeyerCapabilities voiceCap_, int nb, QWidget *parent) :
+TxVmRigSetupDialog::TxVmRigSetupDialog(VoiceKeyerCapabilities voiceCap_, int maxNumButtons_, int nb, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::TxVmRigSetupDialog),
     voiceCap(voiceCap_),
-    numButtons(nb)
+    numButtons(nb),
+    maxNumButtons(maxNumButtons_)
 
 {
     ui->setupUi(this);
@@ -47,7 +48,7 @@ void TxVmRigSetupDialog::accept()
 void TxVmRigSetupDialog::initSetup()
 {
 
-    ui->numButtons->setRange(MININUM_BUTTONS, MAXNUM_BUTTONS);
+    ui->numButtons->setRange(MININUM_BUTTONS, maxNumButtons);
     ui->numButtons->setValue(numButtons);
 
     if (voiceCap.getSupportSerial())
@@ -131,6 +132,11 @@ void TxVmRigSetupDialog::onNumButtonsValueChanged(int num)
     numButtons = num;
 }
 
+
+void TxVmRigSetupDialog::setMaxNumOfButtons(int maxNumButtons)
+{
+    ui->numButtons->setRange(MININUM_BUTTONS, maxNumButtons);
+}
 
 bool TxVmRigSetupDialog::readSaveButtonByRadioNameIni()
 {

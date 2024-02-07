@@ -109,12 +109,13 @@ bool ExternalMqtKeyer::getUsePttForEomFlag()
     return usePttForEom;
 }
 
-int ExternalMqtKeyer::setup(VoiceKeyerFactory *voiceKeyerFactory, int &numButtons, QString selectedRadioName)
+int ExternalMqtKeyer::setup(VoiceKeyerFactory *voiceKeyerFactory, int &maxNumButtons, int &numButtons, QString selectedRadioName)
 {
     // setup button shouldn't be visible, so shouldn't be called
 
 
     Q_UNUSED(voiceKeyerFactory)
+    Q_UNUSED(maxNumButtons)
     Q_UNUSED(numButtons)
     Q_UNUSED(selectedRadioName)
 
