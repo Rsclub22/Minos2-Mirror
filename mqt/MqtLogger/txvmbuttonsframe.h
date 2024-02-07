@@ -158,6 +158,7 @@ private:
     void setSaveButtonByRadionameText(QString selectedRadioName);
     void checkButtonIniFileVersion(QString voiceKeyerType);
     void loadButtonData();
+    void checkCommonIniFileVersion(QString voiceKeyerType);
 private slots:
 
     void onVoiceKeyerSelect(int idx);

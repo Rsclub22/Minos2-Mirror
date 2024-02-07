@@ -24,6 +24,12 @@ public:
     bool getCatPttForEomState();
     bool getSetCwModeAndRestoreState();
     bool getSaveButtonsByRadioNameState();
+    void setPttEOMChkBoxVisible(bool visible);
+    void setPttEOMChkBoxChecked(bool checked);
+    void setSwitchToCwVisible(bool visible);
+    void setSwitchToCwChecked(bool checked);
+    void setSaveByRadioNameChkBoxChecked(bool checked);
+    void setSelectedRadioNameLabel(QString selectedRadioName);
 private slots:
 
     void onNumButtonsValueChanged(int num);

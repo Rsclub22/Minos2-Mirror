@@ -174,8 +174,10 @@ bool InternalVoiceMemoryKeyer::getUsePttForEomFlag()
     return usePttForEom;
 }
 
-int InternalVoiceMemoryKeyer::setup(VoiceKeyerFactory *voiceKeyerFactory, int &numButtons)
+int InternalVoiceMemoryKeyer::setup(VoiceKeyerFactory *voiceKeyerFactory, int &numButtons, QString selectedRadio)
 {
+    Q_UNUSED(selectedRadio)
+
     VoiceKeyerCapabilities voiceCap = voiceKeyerFactory->supportedVoiceKeyers()->value("internal");
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
 

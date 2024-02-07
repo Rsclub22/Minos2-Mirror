@@ -56,15 +56,7 @@ TxVmButtonsFrame::TxVmButtonsFrame(QWidget *parent) :
 
     initTxVmButtonFrame();
 
-    //setPttStatusIndicatorOnOff(false);
-    //ui->txStatusFrame->setVisible(false);
 
-    //setAvailIndicatorVisible(false);
-    //setRepeatIndicatorVisible(false);
-
-    //ui->vmSetupPb->setVisible(false);
-    //ui->pipCb->setVisible(false);
-    //ui->txStatusFrame->setVisible(false);
 }
 
 TxVmButtonsFrame::~TxVmButtonsFrame()
@@ -145,7 +137,7 @@ void TxVmButtonsFrame::onVmSetupClicked()
     {
         int oldnb = txVoiceKeyer->numButtons;
 
-        if (txVoiceKeyer->setup(voiceKeyerFactory, txVoiceKeyer->numButtons) == QDialog::Accepted)
+        if (txVoiceKeyer->setup(voiceKeyerFactory, txVoiceKeyer->numButtons, selectedRadio.getLocalName()) == QDialog::Accepted)
         {
             if (txVoiceKeyer->numButtons != oldnb)
             {
@@ -208,25 +200,33 @@ void TxVmButtonsFrame::createKeyer(QString voiceKeyerName)
                 vmKeyParamList.clear();
                 buttonNumSent = NO_VM_BUTTON_ON;
 
-                checkButtonIniFileVersion(voiceKeyerType);      // convert to version 2 ini type
-
-/*             for (int i = 0; i < voiceMemButtonList.count(); i++)
-               {
-                   VoiceKeyerParams vmData;
-                   if (vmData.getType().isEmpty())
+                if (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl] || voiceKeyerType == keyerTypes[VoiceKeyerId::RigControl])
+                {
+                    // convert to version 2 ini type
+                    checkButtonIniFileVersion(voiceKeyerType);
+                    checkCommonIniFileVersion(voiceKeyerType);
+                }
+                else
+                {
+                   for (int i = 0; i < voiceMemButtonList.count(); i++)
                    {
-                       vmData.setType(voiceKeyerType);
+                       VoiceKeyerParams vmData;
+                       if (vmData.getType().isEmpty())
+                       {
+                           vmData.setType(voiceKeyerType);
+                       }
+
+                       txVoiceKeyer->readVmButtonParams(i, vmData);
+                       vmKeyParamList.append(vmData);
+                       setRunButtonText(i, vmData.getVmName());
                    }
 
-                   txVoiceKeyer->readVmButtonParams(i, vmData);
-                   vmKeyParamList.append(vmData);
-                   setRunButtonText(i, vmData.getVmName());
-               }
 
-               setVoiceNumMemButtonsVisible(txVoiceKeyer->numButtons);
-*/
+                }
 
-            }
+                setVoiceNumMemButtonsVisible(txVoiceKeyer->numButtons);
+
+          }
 
         }
     }
@@ -307,6 +307,74 @@ void TxVmButtonsFrame::checkButtonIniFileVersion(QString voiceKeyerType)
             config.setValue("version", 2);
         }
     }
+}
+
+
+void TxVmButtonsFrame::checkCommonIniFileVersion(QString voiceKeyerType)
+{
+
+    QString fileName = VOICE_KEYER_PATH + VOICE_KEYER_BASE_FILE_NAME + voiceKeyerType + ".ini";
+    QSettings buttonConfig(fileName, QSettings::IniFormat);
+
+    fileName = VOICEKEYER_COMMON_PARAMS_PATH + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[VoiceKeyerId::RigControl] + ".ini";
+    QSettings commonConfig(fileName, QSettings::IniFormat);
+
+    QStringList keys = commonConfig.childGroups();
+
+    if (!keys.empty())
+    {
+        // check if this is version 2 file
+        if (commonConfig.value("version", 0).toInt() != 2)
+        {
+            // convert file to version 2 and move some keys from common to button Ini file
+
+            commonConfig.beginGroup("Common");
+
+            int numButtons = commonConfig.value("NumButtons", 8).toInt();
+            commonConfig.remove("NumButtons");
+
+            bool useCatPttForEom = false;
+            bool switchToCwMode = false;
+
+
+
+            if (voiceKeyerType == keyerTypes[VoiceKeyerId::RigControl])
+            {
+                useCatPttForEom = commonConfig.value("UseCatPttForEom", true).toBool();
+                commonConfig.remove("UseCatPttForEom");
+            }
+
+            if (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl])
+            {
+                switchToCwMode = commonConfig.value("SwitchToCwMode", true).toBool();
+                commonConfig.remove("SwitchToCwMode");
+            }
+
+            commonConfig.endGroup();
+
+            // move these keys to the button ini file
+
+            buttonConfig.beginGroup("AllRadios");
+
+            buttonConfig.setValue("NumButtons", numButtons);
+
+            if (voiceKeyerType == keyerTypes[VoiceKeyerId::RigControl])
+            {
+                buttonConfig.setValue("UseCatPttForEom", useCatPttForEom);
+            }
+
+            if (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl])
+            {
+                buttonConfig.setValue("SwitchToCwMode", switchToCwMode);
+            }
+
+            buttonConfig.endGroup();
+
+            commonConfig.setValue("version", 2);
+
+        }
+    }
+
 }
 
 
