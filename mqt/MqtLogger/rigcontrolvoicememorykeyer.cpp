@@ -155,11 +155,11 @@ int RigControlVoiceMemoryKeyer::setup(VoiceKeyerFactory *voiceKeyerFactory, int 
 
     if (readSaveButtonByRadioNameIni())
     {
-        txVmSetupDialog.setSelectedRadioNameLabel(selectedRadioName);
+        txVmSetupDialog.setSetupRadioGroupBoxTitle(selectedRadioName);
     }
     else
     {
-        txVmSetupDialog.setSelectedRadioNameLabel("All Radios");
+        txVmSetupDialog.setSetupRadioGroupBoxTitle("All Radios");
     }
 
 

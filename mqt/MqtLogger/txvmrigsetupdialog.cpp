@@ -1,4 +1,5 @@
 #include <QSettings>
+#include <QMessageBox>
 #include "regsettings.h"
 #include "txvmrigsetupdialog.h"
 #include "ui_txvmrigsetupdialog.h"
@@ -60,49 +61,27 @@ void TxVmRigSetupDialog::initSetup()
         ui->comportLbl->setVisible(false);
     }
 
-/*
-    QString fileName = VOICEKEYER_COMMON_PARAMS_PATH + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[VoiceKeyerId::RigControl] + ".ini";
-    QSettings config(fileName, QSettings::IniFormat);
 
-    if (voiceCap.getUseCatPTTForEom())
-    {
-        ui->pttEOMChkBox->setVisible(true);
-
-        ui->pttEOMChkBox->setChecked(config.value("Common/UseCatPttForEom", false).toBool());
-
-    }
-    else
-    {
-        ui->pttEOMChkBox->setVisible(false);
-    }
-
-
-    if (voiceCap.getEnableCwMode())
-    {
-        ui->switchToCw->setVisible(true);
-        ui->switchToCw->setChecked(config.value("Common/SwitchToCwMode", true).toBool());
-    }
-    else
-    {
-        ui->switchToCw->setVisible(false);
-    }
-
-
-    // save buttons by radio file name checkbox
-
-
-    ui->saveByRadioNameChkBox->setChecked(config.value("Common/SaveButtonByRadioName", false).toBool());
-*/
     connect(ui->numButtons, QOverload<int>::of(&QSpinBox::valueChanged), this, &TxVmRigSetupDialog::onNumButtonsValueChanged);
-
+    connect(ui->saveByRadioNameChkBox, QOverload<bool>::of(&QCheckBox::clicked), this, &TxVmRigSetupDialog::onSaveByRadioNameClicked);
 
 
 }
 
 
-void TxVmRigSetupDialog::setSelectedRadioNameLabel(QString selectedRadioName)
+void TxVmRigSetupDialog::onSaveByRadioNameClicked()
 {
-    ui->selectedRadioNameLbl->setText(selectedRadioName);
+    if (ui->saveByRadioNameChkBox->isChecked() != readSaveButtonByRadioNameIni())
+    {
+        QMessageBox msgBox;
+        msgBox.setText("Save by Radio Changed\nPlease close Setup before making further changes");
+        msgBox.exec();
+    }
+}
+
+void TxVmRigSetupDialog::setSetupRadioGroupBoxTitle(QString selectedRadioName)
+{
+    ui->setupRadioGroupBox->setTitle(selectedRadioName);
 }
 
 void TxVmRigSetupDialog::setPttEOMChkBoxVisible(bool visible)
@@ -150,4 +129,14 @@ bool TxVmRigSetupDialog::getSetCwModeAndRestoreState()
 void TxVmRigSetupDialog::onNumButtonsValueChanged(int num)
 {
     numButtons = num;
+}
+
+
+bool TxVmRigSetupDialog::readSaveButtonByRadioNameIni()
+{
+    QString fileName = VOICEKEYER_COMMON_PARAMS_PATH + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[VoiceKeyerId::RigControl] + ".ini";
+    QSettings readConfig(fileName, QSettings::IniFormat);
+
+    return readConfig.value("Common/SaveButtonByRadioName", false).toBool();
+
 }
