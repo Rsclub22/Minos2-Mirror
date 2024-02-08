@@ -2951,18 +2951,21 @@ void QSOLogFrame::showScreenContactTime()
 }
 void QSOLogFrame::getScreenRigData()
 {
-    screenContact.rigName = curRadioName;
-    if (!edit && !catchup && isRadioLoaded() && !curRadioName.isEmpty() && !curFreq.isClear())
+    if (contest)
     {
-        QString band;
-        Frequency ff = contest->getTxFreqBand(curFreq, band);
-        screenContact.setFrequency(ff, band);
-    }
-    else
-    {
-        QString cb;
-        Frequency f = contest->getTxFreqBand(Frequency(), cb);
-        screenContact.setFrequency(f, cb);
+        screenContact.rigName = curRadioName;
+        if (!edit && !catchup && isRadioLoaded() && !curRadioName.isEmpty() && !curFreq.isClear())
+        {
+            QString band;
+            Frequency ff = contest->getTxFreqBand(curFreq, band);
+            screenContact.setFrequency(ff, band);
+        }
+        else
+        {
+            QString cb;
+            Frequency f = contest->getTxFreqBand(Frequency(), cb);
+            screenContact.setFrequency(f, cb);
+        }
     }
 }
 void QSOLogFrame::getscreenRotatorData()
