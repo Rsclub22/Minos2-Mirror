@@ -14,6 +14,7 @@
 #include "regsettings.h"
 #include "rigcommon.h"
 #include "rigcontrolcommonconstants.h"
+#include "voicekeyerCommonConstants.h"
 #include "ContestApp.h"
 #include "rigutils.h"
 #include "tlogcontainer.h"
@@ -225,7 +226,6 @@ void RadioSettingDialog::initialise()
     fillPortsInfo(ui->bandSwCombo);
     connect(ui->enableBandSwChkBox, &QCheckBox::stateChanged, this, [=]() {onEnableBandSwChkBox();});
     connect(ui->enableSerialBandSwChkBox, &QCheckBox::stateChanged, this, [=]() {onEnableSerialBandSwChkBox();});
-
     freqPresetReadSettings(presetFreq, bands); // static
 
     //===========================================================================================================
@@ -565,6 +565,7 @@ void RadioSettingDialog::saveSettings()
     saveBandSwComport();
     saveBandSwData();
     saveBandSwCheckBoxes();
+    saveVoiceCwMemoryButtonByRadioNameCheckBox();
 }
 
 
@@ -616,6 +617,15 @@ void RadioSettingDialog::saveBandSwCheckBoxes()
     if (readSerialComportBandSwitchFromIni() != ui->bandSwCombo->currentText())
     {
         writeEnableSerialBandSwitchDataToIni(ui->enableSerialBandSwChkBox->isChecked());
+    }
+}
+
+void RadioSettingDialog::saveVoiceCwMemoryButtonByRadioNameCheckBox()
+{
+    if (readSaveVoiceCWMemoryButtonByRadioNameFromIni() != ui->saveVoiceCwMemoryButtonByRadioName->isChecked())
+    {
+        writeSaveVoiceCWMemoryButtonByRadioNameToIni(ui->saveVoiceCwMemoryButtonByRadioName->isChecked());
+        emit
     }
 }
 

@@ -18,34 +18,12 @@
 #include <QMap>
 #include <QModelIndex>
 #include "voicekeyerbase.h"
+#include "voicekeyerCommonConstants.h"
 
 
 class QComboBox;
 
-const int MAXIMUM_BUTTONS = 8;
-const int MININUM_BUTTONS = 2;
 
-enum VoiceKeyerId
-{
-    None = 0,
-    RigControl,
-    CW_RigControl,    // Rig sends message by CW
-    SerialControl,    // Sends user serial message to control external voice keyer
-    InternalVoiceKeyer,
-    ExternalVoiceKeyer
-};
-
-const QStringList keyerTypes = {"", "Voice RigControl", "CW RigControl", "SerialControl", "Internal", "mqtKeyer"};
-
-const QString VOICE_KEYER_PATH = "./Configuration/VoiceKeyer/";
-const QString VOICE_KEYER_BASE_FILE_NAME = "txVoiceMemory";
-const QString VOICEKEYER_COMMON_PARAMS_PATH = VOICE_KEYER_PATH + "CommonParams/";
-const QString VOICEKEYER_COMMON_PARAMS_FILENAME = "txVoiceKeyCommonParams.ini";
-const QString VOICEKEYER_COMMON_PARAMS_GROUPNAME = "commonParams";
-
-const QString CW_MESSAGE_BASE_FILE_NAME = "txCwMemory";
-
-const int VOICEKEYER_MAX_NUMBUTTONS = 8;
 
 class VoiceKeyerCapabilities
 {

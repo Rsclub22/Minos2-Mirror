@@ -6,6 +6,8 @@
 #include "txVmInternalSetupDialog.h"
 #include "ui_txVmInternalSetupDialog.h"
 
+using namespace voiceKeyerCommon;
+
 const char * indevKey("InDevice");
 const char * outdevKey("OutDevice");
 

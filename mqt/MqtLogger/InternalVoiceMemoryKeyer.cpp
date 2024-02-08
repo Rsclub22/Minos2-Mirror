@@ -3,12 +3,15 @@
 #include "SendRPCDM.h"
 #include "txvminternalbuttondialog.h"
 #include "txVmInternalSetupDialog.h"
+#include "voicekeyerCommonConstants.h"
 
 #include "sbdriver.h"
 #include "keyerlog.h"
 #include "MTrace.h"
 
 #include "InternalVoiceMemoryKeyer.h"
+
+using namespace voiceKeyerCommon;
 
 InternalVoiceMemoryKeyer::InternalVoiceMemoryKeyer(QObject *parent) : VoiceKeyerBase(parent)
 {

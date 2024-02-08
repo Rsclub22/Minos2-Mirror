@@ -21,6 +21,8 @@
 
 const char * STOPCW = "\xFF";
 
+using namespace voiceKeyerCommon;
+
 RigControlCwMessageKeyer::RigControlCwMessageKeyer(QObject *parent) : VoiceKeyerBase(parent)
 {
 
@@ -182,7 +184,6 @@ int RigControlCwMessageKeyer::setup(VoiceKeyerFactory *voiceKeyerFactory, int &m
         usePttForEom = txVmSetupDialog.getCatPttForEomState();
         config.setValue("Common/SwitchToCwMode", txVmSetupDialog.getSetCwModeAndRestoreState());
         setCwModeAndRestoreCurrentMode = txVmSetupDialog.getSetCwModeAndRestoreState();
-        config.setValue("Common/SaveButtonByRadioName", txVmSetupDialog.getSaveButtonsByRadioNameState());
 
 
     }

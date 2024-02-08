@@ -4,6 +4,7 @@
 #include "KeyerJson.h"
 #include "voicekeyerbase.h"
 #include "voicekeyerfactory.h"
+#include "rigcontrolcommonconstants.h"
 
 class ExternalMqtKeyer:public VoiceKeyerBase
 {

@@ -8,6 +8,8 @@
 
 #include "ExternalMqtKeyer.h"
 
+using namespace voiceKeyerCommon;
+
 /*static*/ QString ExternalMqtKeyer::keyerName = "ExternalMqtKeyer";
 
 

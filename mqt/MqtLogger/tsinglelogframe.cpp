@@ -2050,6 +2050,12 @@ void TSingleLogFrame::onLogRadioSettingsChanged(QSharedPointer<RadioSettingsDial
     {
         FKHRigControlFrame->logRadioSettingsChanged(logRadioSettingsFlags);
     }
+
+    if (txVmButtonsFrame)
+    {
+        txVmButtonsFrame->logRadioSettingsChanged(logRadioSettingsFlags);
+    }
+
 }
 
 void TSingleLogFrame::on_SetRadioList()

@@ -4,6 +4,7 @@
 
 #include <QDialog>
 #include "voicekeyerfactory.h"
+#include "voicekeyerCommonConstants.h"
 
 extern const char * indevKey;
 extern const char * outdevKey;
@@ -13,7 +14,7 @@ namespace Ui {
 class txVmInternalSetupDialog;
 }
 
-
+using namespace voiceKeyerCommon;
 
 class txVmInternalSetupDialog : public QDialog
 {

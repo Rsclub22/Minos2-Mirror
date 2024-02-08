@@ -9,6 +9,7 @@
 #include "radiodetails.h"
 #include "voicekeyerbase.h"
 #include "voicekeyerfactory.h"
+#include "radiosettingdialog.h"
 
 class QToolButton;
 class QMenu;
@@ -90,6 +91,7 @@ public:
     int getCwMemType(PubSubName psn);
     void setMode(const QString m);
     void setContest(BaseContestLog *);
+    void logRadioSettingsChanged(QSharedPointer<RadioSettingsDialogChangeFlag> logRadioSettingsFlags);
 signals:
 
     void pttStatus(bool);
