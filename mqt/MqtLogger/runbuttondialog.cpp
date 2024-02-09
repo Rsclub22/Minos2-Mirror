@@ -78,7 +78,7 @@ void RunButtonDialog::setLogData(memoryData::memData* ldata, int buttonNumber, L
     logdata = ldata;
 
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
-    ScreenContact sc = tslf->getScreenEntry();
+    ScreenContact &sc = tslf->getScreenEntry();
 
     QString m = ldata->mode;
     if (m.isEmpty())
