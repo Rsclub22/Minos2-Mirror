@@ -4,11 +4,14 @@
 #include "txvmrigsetupdialog.h"
 #include "ui_txvmrigsetupdialog.h"
 
-TxVmRigSetupDialog::TxVmRigSetupDialog(VoiceKeyerCapabilities voiceCap_, int nb, QWidget *parent) :
+
+
+TxVmRigSetupDialog::TxVmRigSetupDialog(VoiceKeyerCapabilities voiceCap_, int maxNumButtons_, int nb, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::TxVmRigSetupDialog),
     voiceCap(voiceCap_),
-    numButtons(nb)
+    numButtons(nb),
+    maxNumButtons(maxNumButtons_)
 
 {
     ui->setupUi(this);
@@ -47,7 +50,7 @@ void TxVmRigSetupDialog::accept()
 void TxVmRigSetupDialog::initSetup()
 {
 
-    ui->numButtons->setRange(MININUM_BUTTONS, MAXNUM_BUTTONS);
+    ui->numButtons->setRange(MININUM_BUTTONS, maxNumButtons);
     ui->numButtons->setValue(numButtons);
 
     if (voiceCap.getSupportSerial())
@@ -63,21 +66,12 @@ void TxVmRigSetupDialog::initSetup()
 
 
     connect(ui->numButtons, QOverload<int>::of(&QSpinBox::valueChanged), this, &TxVmRigSetupDialog::onNumButtonsValueChanged);
-    connect(ui->saveByRadioNameChkBox, QOverload<bool>::of(&QCheckBox::clicked), this, &TxVmRigSetupDialog::onSaveByRadioNameClicked);
 
 
 }
 
 
-void TxVmRigSetupDialog::onSaveByRadioNameClicked()
-{
-    if (ui->saveByRadioNameChkBox->isChecked() != readSaveButtonByRadioNameIni())
-    {
-        QMessageBox msgBox;
-        msgBox.setText("Save by Radio Changed\nPlease close Setup before making further changes");
-        msgBox.exec();
-    }
-}
+
 
 void TxVmRigSetupDialog::setSetupRadioGroupBoxTitle(QString selectedRadioName)
 {
@@ -106,15 +100,7 @@ void TxVmRigSetupDialog::setSwitchToCwChecked(bool checked)
     ui->switchToCw->setChecked(checked);
 }
 
-void TxVmRigSetupDialog::setSaveByRadioNameChkBoxChecked(bool checked)
-{
-    ui->saveByRadioNameChkBox->setChecked(checked);
-}
 
-bool TxVmRigSetupDialog::getSaveButtonsByRadioNameState()
-{
-    return ui->saveByRadioNameChkBox->isChecked();
-}
 
 bool TxVmRigSetupDialog::getCatPttForEomState()
 {
@@ -132,11 +118,19 @@ void TxVmRigSetupDialog::onNumButtonsValueChanged(int num)
 }
 
 
-bool TxVmRigSetupDialog::readSaveButtonByRadioNameIni()
+void TxVmRigSetupDialog::setMaxNumOfButtons(int maxNumButtons)
 {
+<<<<<<< HEAD
     QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[VoiceKeyerId::RigControl] + ".ini";
     QSettings readConfig(fileName, QSettings::IniFormat);
+=======
+    ui->numButtons->setRange(MININUM_BUTTONS, maxNumButtons);
+}
 
-    return readConfig.value("Common/SaveButtonByRadioName", false).toBool();
+>>>>>>> 8fkh_newDev
 
+
+void TxVmRigSetupDialog::setMaxNumOfButtonsLabel(int maxNumButtons)
+{
+    ui->maxAvailButtonsLbl->setText(QString::number(maxNumButtons));
 }

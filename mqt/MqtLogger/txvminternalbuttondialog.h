@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include "voicekeyerbase.h"
+#include "voicekeyerCommonConstants.h"
 #include "vudata.h"
 
 namespace Ui {

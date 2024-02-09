@@ -117,6 +117,7 @@ private:
     void enableBandSwLineEdits(bool enabled);
     void saveBandSwComport();
     void saveBandSwCheckBoxes();
+    void saveVoiceCwMemoryButtonByRadioNameCheckBox();
 };
 
 #endif // RADIOSETTINGDIALOG_H

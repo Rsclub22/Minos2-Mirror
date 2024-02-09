@@ -90,6 +90,7 @@ class VoiceKeyerBase  : public QObject
 
 public:
     int numButtons = 0;
+    int maxNumberButtons = 8;       // set with max buttons from radio or 8
 
 
     explicit VoiceKeyerBase(QObject *parent = nullptr);
@@ -115,7 +116,7 @@ public:
     virtual void setPttOnOff(bool onOff) = 0;
     virtual bool getUsePttForEomFlag() = 0;
 
-    virtual int setup(VoiceKeyerFactory *voiceKeyerFactory, int &numButtons, QString selectedRadioName) = 0;
+    virtual int setup(VoiceKeyerFactory *voiceKeyerFactory, int &maxNumButtons, int &numButtons, QString selectedRadioName) = 0;
     virtual int editButton(VoiceKeyerParams* vmData, QString title) = 0;
 
     virtual bool hasPip() const

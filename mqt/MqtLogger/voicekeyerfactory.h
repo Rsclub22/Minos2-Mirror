@@ -18,10 +18,12 @@
 #include <QMap>
 #include <QModelIndex>
 #include "voicekeyerbase.h"
+#include "voicekeyerCommonConstants.h"
 
 
 class QComboBox;
 
+<<<<<<< HEAD
 enum VoiceKeyerId
 {
     None = 0,
@@ -41,8 +43,9 @@ const QString VOICEKEYER_COMMON_PARAMS_FILENAME = "txVoiceKeyCommonParams.ini";
 const QString VOICEKEYER_COMMON_PARAMS_GROUPNAME = "commonParams";
 
 const QString CW_MESSAGE_BASE_FILE_NAME = "txCwMemory";
+=======
+>>>>>>> 8fkh_newDev
 
-const int VOICEKEYER_MAX_NUMBUTTONS = 8;
 
 class VoiceKeyerCapabilities
 {

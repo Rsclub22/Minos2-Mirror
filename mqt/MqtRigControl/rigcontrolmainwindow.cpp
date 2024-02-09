@@ -963,6 +963,14 @@ bool RigControlMainWindow::checkSupportVoiceMemory()
                 setVoiceMemIndVisible(true);
                 setVoiceMemIndOnOff(true);
                 addVoiceMemStatusToRigCache(true);
+                int voiceMemNum = 0;
+                // they all seem to start at 1
+                if (selectedRadioSupportCap.startVoiceMemoryNumber == 1)
+                {
+                    voiceMemNum = selectedRadioSupportCap.endVoiceMemoryNumber;
+                    addVoiceNumberMessagesToRigCache(voiceMemNum);
+                }
+
                 return true;
 
             }
@@ -1015,6 +1023,16 @@ bool RigControlMainWindow::checkSupportCwKeyerMemory()
                     setCwMemIndVisible(false);
                     setCwMemIndOnOff(false);
                     addCwKeyerMemoryStatusToRigCache(hamlibData::CW_MEMORY_TYPES::NONE);
+                    int cwMemNum = 0;
+                    if (selectedRadioSupportCap.startCwMemoryNumber == 1)
+                    {
+                       cwMemNum = selectedRadioSupportCap.endCwMemoryNumber;
+                       addCwKeyerMemoryStatusToRigCache(0);
+                    }
+
+                        addCwKeyerMemoryStatusToRigCache(cwMemNum);
+
+
                     return false;
                 }
 

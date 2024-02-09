@@ -9,6 +9,7 @@
 #include "radiodetails.h"
 #include "voicekeyerbase.h"
 #include "voicekeyerfactory.h"
+#include "radiosettingdialog.h"
 
 class QToolButton;
 class QMenu;
@@ -17,6 +18,8 @@ class BaseContestLog;
 namespace Ui {
 class TxVmButtonsFrame;
 }
+
+using namespace voiceKeyerCommon;
 
 class TxVmButtonsFrame;
 
@@ -90,6 +93,7 @@ public:
     int getCwMemType(PubSubName psn);
     void setMode(const QString m);
     void setContest(BaseContestLog *);
+    void logRadioSettingsChanged(QSharedPointer<RadioSettingsDialogChangeFlag> logRadioSettingsFlags);
 signals:
 
     void pttStatus(bool);
@@ -128,6 +132,8 @@ private:
     bool radioConnected;
     bool pttState;
 
+
+
     bool notifyComboChange = true;
     void initTxVmButtonFrame();
 
@@ -159,6 +165,8 @@ private:
     void checkButtonIniFileVersion(QString voiceKeyerType);
     void loadButtonData();
     void checkCommonIniFileVersion(QString voiceKeyerType);
+    int getNumCwMessages(PubSubName psn);
+    int getNumVoiceMessages(PubSubName psn);
 private slots:
 
     void onVoiceKeyerSelect(int idx);

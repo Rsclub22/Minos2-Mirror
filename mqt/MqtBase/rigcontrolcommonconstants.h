@@ -320,6 +320,7 @@ public:
         enableBandSwitch = false;
         enableSerialBandSwitch = false;
         serialComport = false;
+        saveVoiceMemoryButtonByRadioName = false;
         cqRit = false;
     }
 
@@ -337,6 +338,7 @@ public:
         enableBandSwitch ||
         enableSerialBandSwitch ||
         serialComport ||
+        saveVoiceMemoryButtonByRadioName ||
         cqRit;
     }
 
@@ -353,6 +355,7 @@ public:
     bool enableBandSwitch;
     bool enableSerialBandSwitch;
     bool serialComport;
+    bool saveVoiceMemoryButtonByRadioName;
     bool cqRit;
 
 

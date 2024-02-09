@@ -21,6 +21,8 @@
 
 const char * STOPCW = "\xFF";
 
+using namespace voiceKeyerCommon;
+
 RigControlCwMessageKeyer::RigControlCwMessageKeyer(QObject *parent) : VoiceKeyerBase(parent)
 {
 
@@ -158,14 +160,18 @@ void RigControlCwMessageKeyer::saveVmButtonParams(const VoiceKeyerParams &vmPara
 
 }
 
+<<<<<<< HEAD
 int RigControlCwMessageKeyer::setup(VoiceKeyerFactory *voiceKeyerFactory, int &numButtons, QString /*selectedRadioName*/)
+=======
+int RigControlCwMessageKeyer::setup(VoiceKeyerFactory *voiceKeyerFactory, int &maxNumButtons, int &numButtons, QString selectedRadioName)
+>>>>>>> 8fkh_newDev
 {
 
 
     VoiceKeyerCapabilities voiceCap = voiceKeyerFactory->supportedVoiceKeyers()->value("cwRigControl");
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
 
-    TxVmRigSetupDialog txVmSetupDialog(voiceCap, numButtons, tslf->txVmButtonsFrame);
+    TxVmRigSetupDialog txVmSetupDialog(voiceCap, maxNumButtons, numButtons, tslf->txVmButtonsFrame);
     txVmSetupDialog.setWindowTitle(tr("Rig Control CW Memory Setup"));
 
     cwMemType = hamlibData::CW_MEMORY_TYPES::NONE;
@@ -182,7 +188,6 @@ int RigControlCwMessageKeyer::setup(VoiceKeyerFactory *voiceKeyerFactory, int &n
         usePttForEom = txVmSetupDialog.getCatPttForEomState();
         config.setValue("Common/SwitchToCwMode", txVmSetupDialog.getSetCwModeAndRestoreState());
         setCwModeAndRestoreCurrentMode = txVmSetupDialog.getSetCwModeAndRestoreState();
-        config.setValue("Common/SaveButtonByRadioName", txVmSetupDialog.getSaveButtonsByRadioNameState());
 
 
     }

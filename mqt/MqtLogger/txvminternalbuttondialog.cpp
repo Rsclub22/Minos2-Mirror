@@ -8,6 +8,10 @@
 #include "txvminternalbuttondialog.h"
 #include "ui_txvminternalbuttondialog.h"
 
+
+using namespace voiceKeyerCommon;
+
+
 static bool txvmIntInhibitCallbacks = false;
 
 static TxVmInternalButtonDialog *txvmbd = nullptr;

@@ -23,6 +23,8 @@
 #include "tlogcontainer.h"
 #include "SendRPCDM.h"
 
+using namespace voiceKeyerCommon;
+
 VoiceKeyerFactory::VoiceKeyerFactory(QObject *parent) : QObject(parent)
 {
     RigControlVoiceMemoryKeyer::registerVoiceKeyer(&vmKeyersList);

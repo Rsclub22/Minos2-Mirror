@@ -4,6 +4,7 @@
 
 #include <QDialog>
 #include "voicekeyerfactory.h"
+#include "voicekeyerCommonConstants.h"
 
 extern const char * indevKey;
 extern const char * outdevKey;
@@ -12,15 +13,15 @@ extern const char * outdevKey;
 namespace Ui {
 class txVmInternalSetupDialog;
 }
-const int MAXNUM_BUTTONS = 8;
-const int MININUM_BUTTONS = 2;
+
+using namespace voiceKeyerCommon;
 
 class txVmInternalSetupDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit txVmInternalSetupDialog(VoiceKeyerCapabilities voiceCap_, int nb, QWidget *parent = nullptr);
+    explicit txVmInternalSetupDialog(VoiceKeyerCapabilities voiceCap_, int maxNumButtons_, int nb, QWidget *parent = nullptr);
     ~txVmInternalSetupDialog();
 
     int getNumButtons(){return numButtons;}
@@ -43,6 +44,7 @@ private:
     VoiceKeyerCapabilities voiceCap;
 
     int numButtons = MININUM_BUTTONS;
+    int maxNumButtons = MAXIMUM_BUTTONS;
 
     void initSetup();
     void doCloseEvent();

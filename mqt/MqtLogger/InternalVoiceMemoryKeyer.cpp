@@ -3,12 +3,15 @@
 #include "SendRPCDM.h"
 #include "txvminternalbuttondialog.h"
 #include "txVmInternalSetupDialog.h"
+#include "voicekeyerCommonConstants.h"
 
 #include "sbdriver.h"
 #include "keyerlog.h"
 #include "MTrace.h"
 
 #include "InternalVoiceMemoryKeyer.h"
+
+using namespace voiceKeyerCommon;
 
 InternalVoiceMemoryKeyer::InternalVoiceMemoryKeyer(QObject *parent) : VoiceKeyerBase(parent)
 {
@@ -174,14 +177,15 @@ bool InternalVoiceMemoryKeyer::getUsePttForEomFlag()
     return usePttForEom;
 }
 
-int InternalVoiceMemoryKeyer::setup(VoiceKeyerFactory *voiceKeyerFactory, int &numButtons, QString selectedRadio)
+int InternalVoiceMemoryKeyer::setup(VoiceKeyerFactory *voiceKeyerFactory, int &maxNumButtons, int &numButtons, QString selectedRadio)
 {
     Q_UNUSED(selectedRadio)
+    Q_UNUSED(maxNumButtons)
 
     VoiceKeyerCapabilities voiceCap = voiceKeyerFactory->supportedVoiceKeyers()->value("internal");
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
 
-    txVmInternalSetupDialog txvmSetup(voiceCap, numButtons, tslf->txVmButtonsFrame);
+    txVmInternalSetupDialog txvmSetup(voiceCap, maxNumButtons, numButtons, tslf->txVmButtonsFrame);
     txvmSetup.setWindowTitle(tr("Internal Voice Memory Setup"));
 
     int ret = txvmSetup.exec();
