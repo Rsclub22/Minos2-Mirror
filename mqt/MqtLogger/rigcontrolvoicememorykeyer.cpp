@@ -161,6 +161,9 @@ int RigControlVoiceMemoryKeyer::setup(VoiceKeyerFactory *voiceKeyerFactory, int 
 
     txVmSetupDialog.setWindowTitle(tr("Rig Control Voice Memory Setup"));
 
+
+    txVmSetupDialog.setMaxNumOfButtonsLabel(maxNumButtons);
+
     QString allRadiosGrpName = "All Radios";
     if (readSaveVoiceCWMemoryButtonByRadioNameFromIni())
     {

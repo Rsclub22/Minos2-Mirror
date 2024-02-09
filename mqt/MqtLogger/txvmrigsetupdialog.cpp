@@ -123,3 +123,9 @@ void TxVmRigSetupDialog::setMaxNumOfButtons(int maxNumButtons)
     ui->numButtons->setRange(MININUM_BUTTONS, maxNumButtons);
 }
 
+
+
+void TxVmRigSetupDialog::setMaxNumOfButtonsLabel(int maxNumButtons)
+{
+    ui->maxAvailButtonsLbl->setText(QString::number(maxNumButtons));
+}

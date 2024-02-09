@@ -19,6 +19,8 @@ namespace Ui {
 class TxVmButtonsFrame;
 }
 
+using namespace voiceKeyerCommon;
+
 class TxVmButtonsFrame;
 
 
@@ -130,6 +132,8 @@ private:
     bool radioConnected;
     bool pttState;
 
+
+
     bool notifyComboChange = true;
     void initTxVmButtonFrame();
 
@@ -161,6 +165,8 @@ private:
     void checkButtonIniFileVersion(QString voiceKeyerType);
     void loadButtonData();
     void checkCommonIniFileVersion(QString voiceKeyerType);
+    int getNumCwMessages(PubSubName psn);
+    int getNumVoiceMessages(PubSubName psn);
 private slots:
 
     void onVoiceKeyerSelect(int idx);

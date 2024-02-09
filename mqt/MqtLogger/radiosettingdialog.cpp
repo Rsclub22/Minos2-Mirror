@@ -237,6 +237,7 @@ void RadioSettingDialog::initialise()
 
     //===========================================================================================================
     ui->enableBandSwChkBox->setChecked(readEnableBandSwitchFromIni());
+    ui->saveVoiceCwMemoryButtonByRadioName->setChecked(readSaveVoiceCWMemoryButtonByRadioNameFromIni());
     enableBandSwLineEdits(ui->enableBandSwChkBox->isChecked());
 
     ui->enableSerialBandSwChkBox->setChecked(readEnableSerialBandSwitchFromIni());
@@ -625,7 +626,7 @@ void RadioSettingDialog::saveVoiceCwMemoryButtonByRadioNameCheckBox()
     if (readSaveVoiceCWMemoryButtonByRadioNameFromIni() != ui->saveVoiceCwMemoryButtonByRadioName->isChecked())
     {
         writeSaveVoiceCWMemoryButtonByRadioNameToIni(ui->saveVoiceCwMemoryButtonByRadioName->isChecked());
-        emit
+
     }
 }
 

@@ -28,7 +28,8 @@ public:
     void setSwitchToCwVisible(bool visible);
     void setSwitchToCwChecked(bool checked);
      void setSetupRadioGroupBoxTitle(QString selectedRadioName);
-    void setMaxNumOfButtons(int maxNumButtons);
+     void setMaxNumOfButtons(int maxNumButtons);
+     void setMaxNumOfButtonsLabel(int maxNumButtons);
 private slots:
 
     void onNumButtonsValueChanged(int num);

@@ -12,7 +12,7 @@
 #include "ui_txvmbuttonsframe.h"
 #include "rigcommon.h"
 
-using namespace voiceKeyerCommon;
+
 
 const char * VM_BUTTON_ON_STYLE = "background-color: orange ; color:black ; border-style: outset; border-width: 1px; border-color: black;\n";
 const char * VM_BUTTON_OFF_STYLE = "background-color: Gainsboro ; color:black ; border-style: outset; border-width: 1px; border-color: black;\n";
@@ -142,9 +142,13 @@ void TxVmButtonsFrame::onVmSetupClicked()
 
         int maxNumOfVoiceMessages = MAXIMUM_BUTTONS;
 
-        if (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl] || voiceKeyerType == keyerTypes[VoiceKeyerId::RigControl])
+        if (voiceKeyerType == keyerTypes[VoiceKeyerId::RigControl])
         {
-           maxNumOfVoiceMessages = allRadioDetails[selectedRadio].getNumVoiceMessages();
+           maxNumOfVoiceMessages = getNumVoiceMessages(selectedRadio);
+        }
+        else if (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl])
+        {
+            maxNumOfVoiceMessages = getNumCwMessages(selectedRadio);
         }
 
 
@@ -168,6 +172,7 @@ void TxVmButtonsFrame::logRadioSettingsChanged(QSharedPointer<RadioSettingsDialo
 
     if (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl] || voiceKeyerType == keyerTypes[VoiceKeyerId::RigControl])
     {
+        setSaveButtonByRadionameText(selectedRadio.getLocalName());
         loadButtonData();
     }
 }
@@ -1033,6 +1038,21 @@ void TxVmButtonsFrame::setNumVoiceMessages(int numMsgs, PubSubName psn)
     updateVoiceMemAvailStateAndCwType();
 }
 
+// This is max number of voice messages available on a radio
+int TxVmButtonsFrame::getNumVoiceMessages(PubSubName psn)
+{
+    RadioDetails rd;
+    if (allRadioDetails.contains(psn))
+    {
+        rd = allRadioDetails[psn];
+        return rd.getNumVoiceMessages();
+    }
+    else
+    {
+        return MAXIMUM_BUTTONS;
+    }
+}
+
 bool TxVmButtonsFrame::isVoiceMemAvail(PubSubName psn)
 {
     RadioDetails rd;
@@ -1079,6 +1099,21 @@ void TxVmButtonsFrame::setNumCwMessages(int numMsgs, PubSubName psn)
     }
 
     updateVoiceMemAvailStateAndCwType();
+}
+
+// This is max number of cw messages available on a radio
+int TxVmButtonsFrame::getNumCwMessages(PubSubName psn)
+{
+    RadioDetails rd;
+    if (allRadioDetails.contains(psn))
+    {
+        rd = allRadioDetails[psn];
+        return rd.getNumCwMessages();
+    }
+    else
+    {
+        return MAXIMUM_BUTTONS;
+    }
 }
 
 bool TxVmButtonsFrame::isCwMemTypeAvail(PubSubName psn)
