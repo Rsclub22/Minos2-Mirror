@@ -908,7 +908,7 @@ void RigControlFrame::transferDetails(memoryData::memData &m)
 void RigControlFrame::getDetails(memoryData::memData &logData)
 {
     // get contest information
-    ScreenContact sc = tslf->getScreenEntry();
+    ScreenContact &sc = tslf->getScreenEntry();
 
     logData.callsign = sc.cs.getFullCall();
     logData.freq = curFreq;
