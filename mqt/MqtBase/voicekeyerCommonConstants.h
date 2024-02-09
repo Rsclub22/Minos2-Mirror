@@ -6,6 +6,7 @@
 #include <QString>
 #include <QStringList>
 
+
 namespace voiceKeyerCommon
 {
 
@@ -24,9 +25,9 @@ namespace voiceKeyerCommon
 
     const QStringList keyerTypes = {"", "Voice RigControl", "CW RigControl", "SerialControl", "Internal", "mqtKeyer"};
 
-    const QString VOICE_KEYER_PATH = "./Configuration/VoiceKeyer/";
+    //const QString VOICE_KEYER_PATH = "./Configuration/VoiceKeyer/";
     const QString VOICE_KEYER_BASE_FILE_NAME = "txVoiceMemory";
-    const QString VOICEKEYER_COMMON_PARAMS_PATH = VOICE_KEYER_PATH + "CommonParams/";
+    //const QString VOICEKEYER_COMMON_PARAMS_PATH = VOICE_KEYER_PATH + "CommonParams/";
     const QString VOICEKEYER_COMMON_PARAMS_FILENAME = "txVoiceKeyCommonParams.ini";
     const QString VOICEKEYER_COMMON_PARAMS_GROUPNAME = "commonParams";
 
@@ -38,8 +39,8 @@ namespace voiceKeyerCommon
 
 
 
-bool readSaveVoiceCWMemoryButtonByRadioNameFromIni();
-void writeSaveVoiceCWMemoryButtonByRadioNameToIni(bool data);
+//bool readSaveVoiceCWMemoryButtonByRadioNameFromIni();
+//void writeSaveVoiceCWMemoryButtonByRadioNameToIni(bool data);
 
 
 #endif // VOICEKEYERCOMMONCONSTANTS_H

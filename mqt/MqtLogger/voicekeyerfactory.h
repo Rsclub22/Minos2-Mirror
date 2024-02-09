@@ -23,29 +23,10 @@
 
 class QComboBox;
 
-<<<<<<< HEAD
-enum VoiceKeyerId
-{
-    None = 0,
-    RigControl,
-    CW_RigControl,    // Rig sends message by CW
-    SerialControl,    // Sends user serial message to control external voice keyer
-    InternalVoiceKeyer,
-    ExternalVoiceKeyer
-};
-
-const QStringList keyerTypes = {"", "Voice RigControl", "CW RigControl", "SerialControl", "Internal", "mqtKeyer"};
-
 QString VOICE_KEYER_PATH();
-const QString VOICE_KEYER_BASE_FILE_NAME = "txVoiceMemory";
 QString VOICEKEYER_COMMON_PARAMS_PATH();
-const QString VOICEKEYER_COMMON_PARAMS_FILENAME = "txVoiceKeyCommonParams.ini";
-const QString VOICEKEYER_COMMON_PARAMS_GROUPNAME = "commonParams";
-
-const QString CW_MESSAGE_BASE_FILE_NAME = "txCwMemory";
-=======
->>>>>>> 8fkh_newDev
-
+bool readSaveVoiceCWMemoryButtonByRadioNameFromIni();
+void writeSaveVoiceCWMemoryButtonByRadioNameToIni(bool data);
 
 class VoiceKeyerCapabilities
 {

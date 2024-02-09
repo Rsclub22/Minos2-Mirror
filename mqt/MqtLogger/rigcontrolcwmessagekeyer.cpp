@@ -160,11 +160,8 @@ void RigControlCwMessageKeyer::saveVmButtonParams(const VoiceKeyerParams &vmPara
 
 }
 
-<<<<<<< HEAD
-int RigControlCwMessageKeyer::setup(VoiceKeyerFactory *voiceKeyerFactory, int &numButtons, QString /*selectedRadioName*/)
-=======
+
 int RigControlCwMessageKeyer::setup(VoiceKeyerFactory *voiceKeyerFactory, int &maxNumButtons, int &numButtons, QString selectedRadioName)
->>>>>>> 8fkh_newDev
 {
 
 

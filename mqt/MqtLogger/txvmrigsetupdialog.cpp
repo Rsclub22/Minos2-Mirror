@@ -120,14 +120,11 @@ void TxVmRigSetupDialog::onNumButtonsValueChanged(int num)
 
 void TxVmRigSetupDialog::setMaxNumOfButtons(int maxNumButtons)
 {
-<<<<<<< HEAD
-    QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[VoiceKeyerId::RigControl] + ".ini";
-    QSettings readConfig(fileName, QSettings::IniFormat);
-=======
+
     ui->numButtons->setRange(MININUM_BUTTONS, maxNumButtons);
 }
 
->>>>>>> 8fkh_newDev
+
 
 
 void TxVmRigSetupDialog::setMaxNumOfButtonsLabel(int maxNumButtons)

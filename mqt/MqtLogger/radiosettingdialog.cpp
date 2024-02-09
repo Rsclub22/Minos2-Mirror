@@ -15,6 +15,7 @@
 #include "rigcommon.h"
 #include "rigcontrolcommonconstants.h"
 #include "voicekeyerCommonConstants.h"
+#include "voicekeyerfactory.h"
 #include "ContestApp.h"
 #include "rigutils.h"
 #include "tlogcontainer.h"
