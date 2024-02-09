@@ -134,22 +134,34 @@ PiGPIO::~PiGPIO()
     exportedPins.clear();
 }
 
-void PiGPIO::setPinInput(int pin)
+bool PiGPIO::setPinInput(int pin)
 {
-    QSharedPointer<GPIOLine> line(new GPIOLine(pin, true));
-    if (line->initialise())
+    for(int i = 0; i < 10; i++)
     {
-        exportedPins[pin] = line;
+        QThread::msleep(i * 100);
+        QSharedPointer<GPIOLine> line(new GPIOLine(pin, true));
+        if (line->initialise())
+        {
+            exportedPins[pin] = line;
+            return true;
+        }
     }
+    return false;
 }
 
-void PiGPIO::setPinOutput(int pin)
+bool PiGPIO::setPinOutput(int pin)
 {
-    QSharedPointer<GPIOLine> line(new GPIOLine(pin, false));
-    if (line->initialise())
+    for(int i = 0; i < 10; i++)
     {
-        exportedPins[pin] = line;
+        QThread::msleep(i * 100);
+        QSharedPointer<GPIOLine> line(new GPIOLine(pin, false));
+        if (line->initialise())
+        {
+            exportedPins[pin] = line;
+            return true;
+        }
     }
+    return false;
 }
 
 void PiGPIO::setPin(int pin, bool state)

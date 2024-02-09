@@ -30,8 +30,8 @@ class PiGPIO: public QObject
 public:
     PiGPIO();
     virtual ~PiGPIO() override;
-    void setPinInput(int pin);
-    void setPinOutput(int pin);
+    bool setPinInput(int pin);
+    bool setPinOutput(int pin);
 
     void setPin(int pin, bool state);
     bool readPin(int pin);

@@ -214,15 +214,20 @@ bool PiGPIOPort::openPort()
 
 void PiGPIOPort::addLine( const LineConfig &line )
 {
+    bool ok = false;
     commonPort::addLine(line);
 
     if (line.lineIn)
     {
-        pigpio->setPinInput(toInt(line.portLineName));
+        ok = pigpio->setPinInput(toInt(line.portLineName));
     }
     else
     {
-        pigpio->setPinOutput(toInt(line.portLineName));
+        ok = pigpio->setPinOutput(toInt(line.portLineName));
+    }
+    if (!ok)
+    {
+        exit (-1);
     }
 }
 void PiGPIOPort::setLine( commonLineControl *line )
