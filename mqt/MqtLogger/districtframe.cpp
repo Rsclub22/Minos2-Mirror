@@ -1,5 +1,5 @@
+#include "AppStartup.h"
 #include "MinosLoggerEvents.h"
-
 #include "LoggerContest.h"
 #include "ContestApp.h"
 #include "htmldelegate.h"
@@ -14,7 +14,7 @@ QVector<GridColumn> DistrictGridModel::DistrictTreeColumns =
       GridColumn( ectWorked, "Wk CtX", QT_TR_NOOP("Wkd"), taCenter ),
       GridColumn( ectLocator, "MM00MM00", QT_TR_NOOP("Locator"), taLeftJustify ),
       GridColumn( ectBearing, "BRGXXX", QT_TR_NOOP("brg"), taCenter ),
-      GridColumn( ectName, "This is a Very Very long District", QT_TR_NOOP("District"), taLeftJustify )
+      GridColumn( ectName, "This is a long District", QT_TR_NOOP("District"), taLeftJustify )
    };
 
 DistrictFrame::DistrictFrame(StackedInfoFrame *parent) :
@@ -70,7 +70,7 @@ void DistrictFrame::viewColumn()
         }
         else
         {
-            QString fname("./Configuration/LoggerTableHeaders.ini");
+            QString fname(getDirectoryLocation(dlConfiguration) + "/LoggerTableHeaders.ini");
             resetHeaderColumns(fname, "DistrictTable", tslf->getCurScreenLayout(), ui->DistrictTable->horizontalHeader());
         }
     }
@@ -80,7 +80,7 @@ void DistrictFrame::saveDistrictTableColumns()
 {
     if (!inRestoreColumns)
     {
-        QString fname("./Configuration/LoggerTableHeaders.ini");
+        QString fname(getDirectoryLocation(dlConfiguration) + "/LoggerTableHeaders.ini");
         saveHeaderColumns(fname, "DistrictTable", tslf->getCurScreenLayout(), ui->DistrictTable->horizontalHeader());
         MinosLoggerEvents::SendColumnsChanged();
     }
@@ -88,7 +88,7 @@ void DistrictFrame::saveDistrictTableColumns()
 void DistrictFrame::restoreDistrictTableColumns()
 {
     inRestoreColumns = true;
-    QString fname("./Configuration/LoggerTableHeaders.ini");
+    QString fname(getDirectoryLocation(dlConfiguration) + "/LoggerTableHeaders.ini");
     restoreHeaderColumns(fname, "DistrictTable", tslf->getCurScreenLayout(), ui->DistrictTable->horizontalHeader());
     inRestoreColumns = false;
 }

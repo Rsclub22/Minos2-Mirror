@@ -14,9 +14,9 @@
 #ifndef MINOSCOMPASS_H
 #define MINOSCOMPASS_H
 
-#include <QDial>
+#include <QWidget>
 
-class MinosCompass : public QDial
+class MinosCompass : public QWidget
 {
     Q_OBJECT
 
@@ -37,12 +37,12 @@ signals:
 */
 signals:
     void sendClickBearing(int brg);
+    void sendStop();
 protected:
     void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
-
-
     void mousePressEvent(QMouseEvent *event) override;
     void mouseMoveEvent(QMouseEvent *event) override;
+    bool eventFilter(QObject *obj, QEvent *event) override;
 
 private:
     int compassDialBearing;
@@ -50,6 +50,8 @@ private:
 
     QSize minimumSizeHint() const Q_DECL_OVERRIDE;
     QSize sizeHint() const Q_DECL_OVERRIDE;
+    int getMouseBearing(QPoint vec);
+    bool inAnnulus(QPoint vec);
 };
 
 

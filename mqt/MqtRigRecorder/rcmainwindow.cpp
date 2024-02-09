@@ -1,6 +1,7 @@
 #include <QSettings>
 #include <QFileDialog>
 #include <QDateTime>
+#include "MShowMessageDlg.h"
 #include "regsettings.h"
 #include "AppStartup.h"
 #include "RPCCommandConstants.h"
@@ -48,6 +49,11 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(stdinReader, &StdInReader::stdinLine, this, &MainWindow::onStdInRead);
 
+    if (rass.inputDevices.count() == 0)
+    {
+        mShowMessage(tr("No Sound Input devices available"), this);
+        exit(2);
+    }
 
     RegSettings gsettings;
     QByteArray geometry = gsettings.getSettings().value("RigRecorderMain/geometry").toByteArray();
@@ -63,7 +69,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->inChannelCB_2->addItem(QString());
     ui->inChannelCB_2->addItems(rass.inputDevices);
 
-    QString filename = "./Configuration/RigRecorder.ini";
+    QString filename = getDirectoryLocation(dlConfiguration) + "/RigRecorder.ini";
     QSettings settings(filename, QSettings::IniFormat);
 
     QString indev = settings.value(indevKey).toString();
@@ -246,7 +252,7 @@ void MainWindow::on_baseFileBrowse_clicked()
     if (!fileName.isEmpty())
     {
         ui->baseFilename->setText(fileName);
-        QString filename = "./Configuration/RigRecorder.ini";
+        QString filename = getDirectoryLocation(dlConfiguration) + "/RigRecorder.ini";
         QSettings settings(filename, QSettings::IniFormat);
         settings.setValue(baseFileKey, fileName);
     }
@@ -256,7 +262,7 @@ void MainWindow::inChannelCB_currentTextChanged(const QString &arg1)
 {
     if (!closing)
     {
-        QString filename = "./Configuration/RigRecorder.ini";
+        QString filename = getDirectoryLocation(dlConfiguration) + "/RigRecorder.ini";
         QSettings settings(filename, QSettings::IniFormat);
         settings.setValue(indevKey, arg1);
 
@@ -270,7 +276,7 @@ void MainWindow::inChannelCB_2_currentTextChanged(const QString &arg1)
 {
     if (!closing)
     {
-        QString filename = "./Configuration/RigRecorder.ini";
+        QString filename = getDirectoryLocation(dlConfiguration) + "/RigRecorder.ini";
         QSettings settings(filename, QSettings::IniFormat);
         settings.setValue(indevKey2, arg1);
 
@@ -285,7 +291,7 @@ void MainWindow::on_baseFilename_editingFinished()
 {
     if (!closing)
     {
-        QString filename = "./Configuration/RigRecorder.ini";
+        QString filename = getDirectoryLocation(dlConfiguration) + "/RigRecorder.ini";
         QSettings settings(filename, QSettings::IniFormat);
         settings.setValue(baseFileKey, ui->baseFilename->text());
     }
@@ -295,7 +301,7 @@ void MainWindow::on_rotInterval_editingFinished()
 {
     if (!closing)
     {
-        QString filename = "./Configuration/RigRecorder.ini";
+        QString filename = getDirectoryLocation(dlConfiguration) + "/RigRecorder.ini";
         QSettings settings(filename, QSettings::IniFormat);
         settings.setValue(cycleRateKey, ui->rotInterval->value());
     }
@@ -327,7 +333,7 @@ void MainWindow::on_recordSlider_valueChanged(int position)
 {
     if (!inVolChange)
     {
-        QString filename = "./Configuration/RigRecorder.ini";
+        QString filename = getDirectoryLocation(dlConfiguration) + "/RigRecorder.ini";
         QSettings settings(filename, QSettings::IniFormat);
         settings.setValue("RecordLevel", position);
     }
@@ -338,7 +344,7 @@ void MainWindow::on_monoCb_stateChanged(int /*arg1*/)
 {
     bool mono = ui->monoCb->isChecked();
     rass.setMono(mono);
-    QString filename = "./Configuration/RigRecorder.ini";
+    QString filename = getDirectoryLocation(dlConfiguration) + "/RigRecorder.ini";
     QSettings settings(filename, QSettings::IniFormat);
     settings.setValue("Mono", mono);
 }
@@ -354,7 +360,7 @@ void MainWindow::on_recordSlider_2_valueChanged(int position)
 {
     if (!inVolChange)
     {
-        QString filename = "./Configuration/RigRecorder.ini";
+        QString filename = getDirectoryLocation(dlConfiguration) + "/RigRecorder.ini";
         QSettings settings(filename, QSettings::IniFormat);
         settings.setValue("RecordLevel2", position);
     }
@@ -364,7 +370,7 @@ void MainWindow::on_recordSlider_2_valueChanged(int position)
 void MainWindow::on_contestLinkCB_stateChanged(int /*arg1*/)
 {
     bool link = ui->contestLinkCB->isChecked();
-    QString filename = "./Configuration/RigRecorder.ini";
+    QString filename = getDirectoryLocation(dlConfiguration) + "/RigRecorder.ini";
     QSettings settings(filename, QSettings::IniFormat);
     settings.setValue("ContestLink", link);
 }

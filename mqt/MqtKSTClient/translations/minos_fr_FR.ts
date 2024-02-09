@@ -221,10 +221,6 @@
         <translation>-</translation>
     </message>
     <message>
-        <source>User Filter</source>
-        <translation type="vanished">Filtre utilisateur</translation>
-    </message>
-    <message>
         <location filename="../kstmainwindow.ui" line="162"/>
         <source>Only show users for this band</source>
         <translation>Afficher uniquement les utilisateurs de cette bande</translation>
@@ -288,7 +284,7 @@ l&apos;indicatif sélectionné</translation>
     <message>
         <location filename="../kstmainwindow.ui" line="155"/>
         <source>Chat Filter</source>
-        <translation type="unfinished"></translation>
+        <translation>Filtre de chat</translation>
     </message>
     <message>
         <location filename="../kstmainwindow.ui" line="190"/>
@@ -377,7 +373,7 @@ l&apos;indicatif sélectionné</translation>
     <message>
         <location filename="../kstmainwindow.ui" line="721"/>
         <source>Logs</source>
-        <translation type="unfinished"></translation>
+        <translation>Journaux</translation>
     </message>
     <message>
         <location filename="../kstmainwindow.ui" line="728"/>
@@ -386,7 +382,7 @@ l&apos;indicatif sélectionné</translation>
     </message>
     <message>
         <location filename="../kstmainwindow.ui" line="755"/>
-        <location filename="../kstmainwindow.cpp" line="496"/>
+        <location filename="../kstmainwindow.cpp" line="501"/>
         <source>Connect</source>
         <translation>Connecter</translation>
     </message>
@@ -396,34 +392,34 @@ l&apos;indicatif sélectionné</translation>
         <translation>Fermer</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="485"/>
+        <location filename="../kstmainwindow.cpp" line="490"/>
         <source>Disconnect</source>
         <translation>Déconnecter</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="478"/>
+        <location filename="../kstmainwindow.cpp" line="483"/>
         <source>Including %1</source>
         <translation>%1 Compris</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="144"/>
-        <location filename="../kstmainwindow.cpp" line="148"/>
+        <location filename="../kstmainwindow.cpp" line="142"/>
+        <location filename="../kstmainwindow.cpp" line="146"/>
         <source>Active</source>
-        <translation type="unfinished"></translation>
+        <translation>Actif</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="643"/>
+        <location filename="../kstmainwindow.cpp" line="648"/>
         <source>Set Back</source>
         <translatorcomment>ou Retour?</translatorcomment>
         <translation>Définir statut à « Présent »</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="647"/>
+        <location filename="../kstmainwindow.cpp" line="652"/>
         <source>Set Away</source>
         <translation>Définir statut à « Absent »</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="1585"/>
+        <location filename="../kstmainwindow.cpp" line="1590"/>
         <source>Message updates paused</source>
         <translation>Mises à jour des messages suspendues</translation>
     </message>
@@ -433,12 +429,12 @@ l&apos;indicatif sélectionné</translation>
     <message>
         <location filename="../kstmonitoredlogs.ui" line="14"/>
         <source>Monitored Logs</source>
-        <translation type="unfinished"></translation>
+        <translation>Journaux surveillés</translation>
     </message>
     <message>
         <location filename="../kstmonitoredlogs.ui" line="38"/>
         <source>Hide</source>
-        <translation type="unfinished"></translation>
+        <translation>Cacher</translation>
     </message>
 </context>
 <context>

@@ -25,6 +25,7 @@ private Q_SLOTS:
     void testCase1();
 
     void testInt();
+    void testInt64();
     void testBool();
     void testDouble();
     void testString();
@@ -84,6 +85,28 @@ void RPCTestTest::testInt()
    bool pOK = xm.getIntArg( 0, ires );
    QVERIFY(pOK );
    QTRY_COMPARE( i1, ires );
+}
+void RPCTestTest::testInt64()
+{
+    qint64 i1 = -1;
+
+    RPCArgs * xms = new RPCArgs();
+    xms->addParam( i1 );
+
+    QString pstr = xms->makeParamsString();
+
+    delete xms;
+
+    RPCArgs xm;
+    TIXML_STRING sstr = pstr.toStdString();
+    bool parseOK = xm.parseParams( sstr);
+    QVERIFY( parseOK );
+
+    qint64 ires;
+
+    bool pOK = xm.getInt64Arg( 0, ires );
+    QVERIFY(pOK );
+    QTRY_COMPARE( i1, ires );
 }
 
 void RPCTestTest::testBool()

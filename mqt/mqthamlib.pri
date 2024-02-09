@@ -38,7 +38,7 @@ equals(HAMLIBVER, 455) {
 
     }
 } else {
-    message(Using test version - currently set at hamlib V4.6)
+    message(Using hamlib V4.6)
    win32: {
    win32-g++* {
       contains(QT_ARCH, i386) {
@@ -46,7 +46,7 @@ equals(HAMLIBVER, 455) {
       message(Hamlib path is $$HAMLIBDIR)
       }
    contains(QT_ARCH, x86_64) {
-      HAMLIBDIR = $$absolute_path(../../hamlib-w32-4.6)
+      HAMLIBDIR = $$absolute_path(../../hamlib-w64-4.6)
       }
       LIBS += -L$$HAMLIBDIR/lib/gcc/ -llibhamlib
    } else {

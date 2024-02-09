@@ -61,7 +61,6 @@ public:
     virtual void updateQSOTime(bool fromTimer = false);
     void setDtgSection();
     virtual void updateQSODisplay();
-    virtual void closeContest();
 
     void doGJVCancelButton_clicked();
     void doGJVOKButton_clicked();

@@ -28,7 +28,7 @@
     </spacer>
    </item>
    <item>
-    <widget class="QFrame" name="">
+    <widget class="QFrame" name="frame">
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
        <widget class="QCheckBox" name="ageCb">
@@ -145,7 +145,7 @@
     </spacer>
    </item>
    <item>
-    <widget class="QFrame" name="">
+    <widget class="QFrame" name="frame1">
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -157,7 +157,11 @@
          </widget>
         </item>
         <item>
-         <widget class="QLineEdit" name="logsDirEdit"/>
+         <widget class="QLineEdit" name="logsDirEdit">
+          <property name="clearButtonEnabled">
+           <bool>true</bool>
+          </property>
+         </widget>
         </item>
         <item>
          <widget class="QToolButton" name="logsDirBrowse">
@@ -178,7 +182,11 @@
          </widget>
         </item>
         <item>
-         <widget class="QLineEdit" name="listsDirEdit"/>
+         <widget class="QLineEdit" name="listsDirEdit">
+          <property name="clearButtonEnabled">
+           <bool>true</bool>
+          </property>
+         </widget>
         </item>
         <item>
          <widget class="QToolButton" name="listsDirBrowse">

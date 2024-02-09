@@ -1134,7 +1134,9 @@ bool QSOLogFrame::dlgForced()
         if ( screenContact.contactFlags.getValue() & NON_SCORING )
         {
             screenContact.multCount = 0;
-            screenContact.bonus = 0;
+            screenContact.locBonus = 0;
+            screenContact.distBonus = 0;
+            screenContact.countryBonus = 0;
         }
 
         // if no dtg then autofill dtg
@@ -1863,7 +1865,7 @@ bool QSOLogFrame::validateControls( validTypes command )   // do control validat
                 }
                 setEditStyleSheet(vcp->wc, ss);
             }
-            else if (vcp == locIl && (screenContact.locCount > 0 || screenContact.newBonus))
+            else if (vcp == locIl && (screenContact.locMultCount > 0 || screenContact.newBonus))
             {
                 if (ss == ssLineEditFrRedBkWhite)
                 {
@@ -2172,7 +2174,7 @@ void QSOLogFrame::contactValid( )
             }
         }
     }
-   if ( contest->districtMult.getValue() && !vcct->QSOValid )
+    if ( (contest->districtMult.getValue() || contest->districtBonus.getValue()) && !vcct->QSOValid )
     {
         // no district when required
         // No CS means we should go to QTH, as its likely to be needed
@@ -2186,7 +2188,7 @@ void QSOLogFrame::contactValid( )
     else
         if ( contest->exchangeRequired .getValue())
         {
-            if (!contest->districtMult.getValue())
+            if (!(contest->districtMult.getValue() || contest->districtBonus.getValue()))
             {
                 QString extra = vcct->extraText.getValue();
                 if ( vcct->extraText.getValue().size() == 0 )
@@ -2430,24 +2432,10 @@ void QSOLogFrame::setRotatorBearing(const QString &s)
     if (sl.size() < 3)
         return;
 
-    QString brg;
-    //int len = bearing.length();
-    int len = sl[0].length();
-    if (len < 2)
-    {
-        brg = QString("%1%2")
-        .arg("00", sl[0]);
-    }
-    else if (len < 3)
-    {
-        brg = QString("%1%2")
-        .arg("0", sl[0]);
-    }
-    else
-    {
-        brg = sl[0];
-    }
+    bool ok;
+    int iBearing = sl[1].toInt(&ok, 10);
 
+    QString brg = QString("%1").arg(iBearing, 3, 10, QChar('0'));
 
     if (curRotatorBearing != brg)
     {
@@ -2717,17 +2705,6 @@ void QSOLogFrame::on_tabSandP()
     setPlaceholders(QStringList());
 }
 //---------------------------------------------------------------------------
-void QSOLogFrame::closeContest()
-{
-   BaseContestLog * currentContest = TContestApp::getContestApp() ->getCurrentContest();
-   if (contest == currentContest)
-   {
-      ui->GJVCancelButton->setEnabled(true);
-      ui->GJVCancelButton->setFocus();
-   }
-   contest = nullptr;
-}
-//---------------------------------------------------------------------------
 void QSOLogFrame::doGJVEditChange( QObject *Sender )
 {
     // sensitive field changed - trigger match scan
@@ -2853,7 +2830,7 @@ void QSOLogFrame::logScreenEntry( )
         lct = ct->addContact( ctmax, 0, false, false, screenContact.mode.getValue(), screenContact.mgmSubmode, dtg(true), curFreq );	// "current" doesn't get flag, don't save ContestLog yet
 
         TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
-        tslf->QSOTable->model()->insertRows(contest->ctList.count(), 1, QModelIndex());
+        tslf->QSOListFrame->insertRow(contest->ctList.count());
    }
 
    if ( screenContact.mode.getValue().compare( hamlibData::MGM, Qt::CaseInsensitive ) != 0
@@ -2949,18 +2926,21 @@ void QSOLogFrame::showScreenContactTime()
 }
 void QSOLogFrame::getScreenRigData()
 {
-    screenContact.rigName = curRadioName;
-    if (!edit && !catchup && isRadioLoaded() && !curRadioName.isEmpty() && !curFreq.isClear())
+    if (contest)
     {
-        QString band;
-        Frequency ff = contest->getTxFreqBand(curFreq, band);
-        screenContact.setFrequency(ff, band);
-    }
-    else
-    {
-        QString cb;
-        Frequency f = contest->getTxFreqBand(Frequency(), cb);
-        screenContact.setFrequency(f, cb);
+        screenContact.rigName = curRadioName;
+        if (!edit && !catchup && isRadioLoaded() && !curRadioName.isEmpty() && !curFreq.isClear())
+        {
+            QString band;
+            Frequency ff = contest->getTxFreqBand(curFreq, band);
+            screenContact.setFrequency(ff, band);
+        }
+        else
+        {
+            QString cb;
+            Frequency f = contest->getTxFreqBand(Frequency(), cb);
+            screenContact.setFrequency(f, cb);
+        }
     }
 }
 void QSOLogFrame::getscreenRotatorData()
@@ -3026,7 +3006,7 @@ void QSOLogFrame::logCurrentContact( )
                 nct_no++;
 
                 TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
-                tslf->QSOTable->model()->insertRows(nct_no, 1, QModelIndex());
+                tslf->QSOListFrame->insertRow(nct_no);
              }
              while ( nct_no < ctno ) ;
          }

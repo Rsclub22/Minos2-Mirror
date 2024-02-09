@@ -1,20 +1,18 @@
 If or when you know what you are doing, a lot of this will be
 overly prescriptive.
 
-And when it comes to "installation" at the end a Linux guru will probably be 
+And when it comes to "installation" at the end a Mac guru will probably be 
 horrified. If so, please take it over and fix it for me!
 
-At the moment, Minos under Linux has to count as "advanced", as you do need to 
-know your way around Linux. 
+At the moment, Minos under Mac has to count as "advanced", as you do need to 
+know your way around Mac. 
 
 
 
 Building under MacOS X
 ======================
 
-This is based on Xcode 9.2 on MacOS High Sierra 10.13.3 
-
-N.B. I have build other applications using this Mac, and may have hidden pre-requisites already in place.  This is entirely an 'it worked once' installation, rather than something repeatable on any Mac you can find. 
+This is based on Xcode on MacOS Sonoma 
 
 
 1) Install Xcode from developer.apple.com.  You will need to register for a developer account using your apple ID.  
@@ -22,50 +20,71 @@ N.B. I have build other applications using this Mac, and may have hidden pre-req
 	/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 3) Install dependencies:
 	brew install git
-
-4) Download Minos Source Code
+    
+4) Install Qt
+    Download the QT installer - go to https://www.qt.io/download-qt-installer
+    Run the installer. You will need to set up a Qt account.
+    
+    Install at least Qt 6.6.0. Under "Additional libraries" you need at least 
+        Qt Charts, Qt Location, Qt positioning and Qt Serial Port
+ 
+5) Download Minos Source Code
 	NB other scripts refer to $HOME/Minos2, so you're stuck with it. 
 
 	cd ~
 	git clone git://git.code.sf.net/p/minos/minos Minos2
 	cd Minos2
+    git checkout Mqt_Release_2.6.0.0
 
-5) Install other required components
+6) Install other required components
 
 	./mactools.sh
 
-4) Download RTaudio and compile (ended up not needing this, got the included RTaudio to build)
 
-	cd <somwhere that works for you>
-	wget http://www.music.mcgill.ca/~gary/rtaudio/release/rtaudio-5.0.0.tar.gz
-	tar xfz rtaudio-5.0.0.tar.gz
-	cd rtaudio-5.0.0
-	configure && make
-	sudo make install
+7) Get and build the latest Hamlib
 
-5) There is no step 5. 
+Look at https://github.com/Hamlib/Hamlib for all the up to date hamlib information,
+including their build instructions, from which the following is derived.
 
-6) Modify buildInstall.sh changing
-	cp ~/Minos2/build/MqtAppStarter/MqtAppStarter Bin
-to
-	cp -r ~/Minos2/build/MqtAppStarter/MqtAppStarter.app Bin
-for each app.
+This means that you have to download and build it yourself; here is one recipe:
 
-7) You should now be able to go ahead with the build.
+cd ~
 
-	export PATH="/usr/local/opt/qt/bin:$PATH"
-	cd mqt/Installer
-	./buildInstall.sh
+to be sure you are in your home directory,
+Then
 
-8) And then run it with
+git clone https://github.com/Hamlib/Hamlib.git
+
+cd Hamlib
+
+If 4.6 has been released
+
+# get the hamlib 4.6.0 release branch
+
+git checkout Hamlib-4.6.0
+
+
+Otherwise, 
+
+# get the main development branch
+
+git checkout master
+
+# and run the build
+
+./bootstrap
+./configure
+make
+sudo make install
+
+8) You should now be able to go ahead with the build.
+
+	export PATH="~/qt/6.6.0/bin:$PATH"
+	cd ~/mqt/Installer
+	./macInstall.sh
+
+9) And then run it with
 	open -a ~/minos-runtime/MqtLogger.app
 
 To update and buid again, repeat from after "git clone"
-
-
-Other files changed: 
-	mqt/MqtRigControl/rigcontrol.cpp
-	mqt/MqtRotator/rotcontrol.cpp
-	mqt/mqrhamlib.pri
-
 

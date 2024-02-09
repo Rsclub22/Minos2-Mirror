@@ -10,7 +10,6 @@ include($$PWD/../mqthamlib.pri)
 QT       += core gui
 QT       += widgets
 QT       += network
-QT       += help
 
 equals(INC_MAP, 1): {
 QT += qml
@@ -31,6 +30,7 @@ SOURCES += \
     BandList.cpp \
     CacheSelection.cpp \
     ConfigurationOption.cpp \
+    GridColumn.cpp \
     MonitorTreeModel.cpp \
     MonitoredContestLog.cpp \
     MonitoredLog.cpp \
@@ -88,6 +88,7 @@ SOURCES += \
     qlogtabwidget.cpp \
     qmlcpplink.cpp \
     qrzServerCommon.cpp \
+    qsogridmodel.cpp \
     qsomapframe.cpp \
     RigCache.cpp \
     remotelogs.cpp \
@@ -101,7 +102,6 @@ SOURCES += \
     rotpresetdialog.cpp \
     ScreenContact.cpp \
     StartConfig.cpp \
-    TreeUtils.cpp \
     serialdata.cpp \
     serialtvswitch.cpp \
     spotbasedata.cpp \
@@ -109,8 +109,6 @@ SOURCES += \
     dxspotdatamodel.cpp \
     qttelnet.cpp \
     clusterClientServer.cpp \
-    helpbrowser.cpp \
-    helptextbrowser.cpp \
     clustercommon.cpp \
     CallsignLineEdit.cpp \
     locatorlineedit.cpp \
@@ -126,6 +124,7 @@ HEADERS += \
     AntennaState.h \
     BandList.h \
     ConfigurationOption.h \
+    GridColumn.h \
     MonitorTreeModel.h \
     MonitoredContestLog.h \
     MonitoredLog.h \
@@ -184,6 +183,7 @@ HEADERS += \
     profiles.h \
     qlogtabwidget.h \
     qmlcpplink.h \
+    qsogridmodel.h \
     qsomapframe.h \
     RigCache.h \
     qrzServerCommon.h \
@@ -199,7 +199,6 @@ HEADERS += \
     rotpresetdialog.h \
     ScreenContact.h \
     StartConfig.h \
-    TreeUtils.h \
     serialdata.h \
     serialtvswitch.h \
     spotbasedata.h \
@@ -210,8 +209,6 @@ HEADERS += \
     clustercommon.h \
     clusterClientServer.h \
     rigmemcommondata.h \
-    helpbrowser.h \
-    helptextbrowser.h \
     CallsignLineEdit.h \
     locatorlineedit.h \
     bearinglineedit.h \
@@ -235,7 +232,6 @@ FORMS += \
     monitoredlogs.ui \
     rotpresetdialog.ui \
     StartConfig.ui \
-    helpbrowser.ui \
     callsigninputdialog.ui \
     locatorinputdialog.ui \
     qsomapframe.ui

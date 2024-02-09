@@ -1,4 +1,4 @@
-VERSION=2.5.2999.0
+VERSION=2.6.0.1999
 DEFINES += STRINGVERSION=\\\"$$VERSION\\\"
 DEFINES += PRERELEASETYPE=\\\"Pre-Beta\\\"
 #DEFINES += PRERELEASETYPE=\\\"Beta\\\"
@@ -14,9 +14,20 @@ defined(SECONDINSTALL, var) {
     }
 }
 
-CONFIG += c++11
+CONFIG += c++17
 DEFINES += TIXML_USE_STL
 DEFINES += NOMINMAX
+
+macx {
+    QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.15
+    QMAKE_TARGET_BUNDLE_PREFIX = uk.org.g0gjv.minos
+    MY_ENTITLEMENTS.name = CODE_SIGN_ENTITLEMENTS
+    MY_ENTITLEMENTS.value = ../ControlFiles/minos.entitlements
+    QMAKE_MAC_XCODE_SETTINGS += MY_ENTITLEMENTS
+
+#    QMAKE_APPLE_DEVICE_ARCHS = x86_64 arm64
+    QMAKE_APPLE_DEVICE_ARCHS = x86_64
+}
 
 win32: {
 versionAtLeast(QT_VERSION, 6.5.0){
@@ -32,11 +43,13 @@ DEFINES += INC_MAP
 mac: {
 INC_MAP = 1
 DEFINES += INC_MAP
+CONFIG(release, debug|release): QMAKE_CXXFLAGS_WARN_ON += -Wno-deprecated-declarations -Wno-reorder -Wold-style-cast -DNDEBUG  -Winvalid-pch
+CONFIG(debug, debug|release):QMAKE_CXXFLAGS_WARN_ON += -Wno-deprecated-declarations -Wno-reorder -Wold-style-cast  -Winvalid-pch
+
+} else {
+*g++*:CONFIG(release, debug|release): QMAKE_CXXFLAGS_WARN_ON += -Wno-deprecated-declarations -Wno-reorder -Wold-style-cast -DNDEBUG  -Winvalid-pch
+else:*g++*:CONFIG(debug, debug|release):QMAKE_CXXFLAGS_WARN_ON += -Wno-deprecated-declarations -Wno-reorder -Wold-style-cast  -Winvalid-pch
 }
-
-*g++*:CONFIG(release, debug|release): QMAKE_CXXFLAGS_WARN_ON += -Wno-reorder -Wold-style-cast -DNDEBUG  -Winvalid-pch
-else:*g++*:CONFIG(debug, debug|release):QMAKE_CXXFLAGS_WARN_ON += -Wno-reorder -Wold-style-cast  -Winvalid-pch
-
 DEFINES += _CRT_SECURE_NO_WARNINGS
 DEFINES *= QT_USE_QSTRINGBUILDER
 # The following define makes your compiler emit warnings if you use

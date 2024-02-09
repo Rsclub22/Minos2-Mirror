@@ -736,7 +736,7 @@ void ClusterClientFrame::addDxSpotToTable(const QString spot)
 
 bool ClusterClientFrame::readLessGreaterThanDistanceFlag()
 {
-    QSettings config(CLUSTER_FILTER_FILE, QSettings::IniFormat);
+    QSettings config(CLUSTER_FILTER_FILE(), QSettings::IniFormat);
     return config.value(LESS_GREATER_THAN_DISTANCE_FLAG_INI_NAME, false).toBool();
 
 }
@@ -962,7 +962,7 @@ void ClusterClientFrame::setContest(BaseContestLog *c)
                     filterSettings.setModeFilter(contestModeStr, true);
                 }
 
-                QSettings config(CLUSTER_FILTER_FILE, QSettings::IniFormat);
+                QSettings config(CLUSTER_FILTER_FILE(), QSettings::IniFormat);
                 config.beginGroup("distanceFilter");
 
                 ClusterFilterDefaultDistIniName defaultDistIniNames;

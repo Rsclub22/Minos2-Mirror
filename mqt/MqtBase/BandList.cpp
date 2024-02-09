@@ -20,6 +20,7 @@
 ======================================================================================*/
 #include <QSharedPointer>
 
+#include "AppStartup.h"
 #include "INIFile.h"
 #include "BandList.h"
 #include "TinyUtils.h"
@@ -151,7 +152,7 @@ BandList &BandList::getBandList()
     static bool loaded = false;
     if ( !loaded )
     {
-        blist.parseFile ( "./Configuration/bandlist.xml" ) ;
+        blist.parseFile ( getDirectoryLocation(dlConfiguration) + "/bandlist.xml" ) ;
         loaded = true;
     }
     return blist;
@@ -681,7 +682,7 @@ bool BandList::isFreqOK(const Frequency &f, const QString &band, const QString &
 
 void BandList::readEnabled()
 {
-    QString filename = "./Configuration/bandsEnabled.ini";
+    QString filename = getDirectoryLocation(dlConfiguration) + "/bandsEnabled.ini";
     INIFile settings(filename);
     for ( auto const &b: qAsConst(bandList ))
     {
@@ -690,7 +691,7 @@ void BandList::readEnabled()
 }
 void BandList::updateEnabled()
 {
-    QString filename = "./Configuration/bandsEnabled.ini";
+    QString filename = getDirectoryLocation(dlConfiguration) + "/bandsEnabled.ini";
     INIFile settings(filename);
     for ( auto const &b: qAsConst(bandList ))
     {

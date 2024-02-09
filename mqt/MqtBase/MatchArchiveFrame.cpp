@@ -1,5 +1,6 @@
 #include "MinosParameters.h"
 #include "MinosLoggerEvents.h"
+#include "qsogridmodel.h"
 #include "ListContact.h"
 #include "MatchArchiveFrame.h"
 

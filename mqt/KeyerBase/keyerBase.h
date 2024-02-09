@@ -1,8 +1,10 @@
 #ifndef KEYERBASE_H
 #define KEYERBASE_H
 
-#include <deque>
 #include <QString>
+#include <QSharedPointer>
+#include <deque>
+#include <iterator>
 
 extern QMap <int, QString> MORSECODE;    // . is 0x40, - is 0x80
 class MORSEMSG
@@ -23,7 +25,7 @@ extern int CWSpeed;
 
 //================================================================================
 template < class qe >
-class my_deque : public std::deque < qe >
+class my_deque : public std::deque < QSharedPointer<qe> >
 {
    public:
       my_deque()
@@ -33,12 +35,14 @@ class my_deque : public std::deque < qe >
 
       void freeAll()
       {
-          for (auto const &i: *this)
-            delete i;
+          for (auto &i: *this)
+          {
+              i.reset();
+          }
           my_deque::clear();
       }
 
-      qe find( const QString &s )
+      QSharedPointer<qe> find( const QString &s )
       {
           for (auto const &i: *this)
             if ( i ->pName.compare(s, Qt::CaseInsensitive ) == 0 )
@@ -46,7 +50,7 @@ class my_deque : public std::deque < qe >
          return 0;
       }
 
-      void clear_after ( qe e )
+      void clear_after ( QSharedPointer<qe> e )
       {
          typename my_deque::iterator i = std::find( this->begin(), this->end(), e );
          if ( i == this->end() )
@@ -56,11 +60,12 @@ class my_deque : public std::deque < qe >
             return ;
          for ( typename my_deque::iterator i2 = i; i2 != this->end(); i2++ )
          {
-            delete ( *i2 );
+            QSharedPointer<qe> mdp = *i2;
+            mdp.reset( );
          }
          my_deque::erase( i, this->end() );
       }
-      void free_element ( qe e )
+      void free_element ( QSharedPointer<qe> e )
       {
          if ( e )
          {
@@ -69,20 +74,31 @@ class my_deque : public std::deque < qe >
             {
                my_deque::erase( i );
             }
-            delete e;
+            e.reset();
          }
       }
 
-      qe next_element( qe q )
+      QSharedPointer<qe> next_element( qe &q )
       {
-         typename my_deque::iterator i = std::find( this->begin(), this->end(), q );
-         if ( i != this->end() )
+         typename my_deque::iterator i;
+         for (i = this->begin(); i != this->end(); i++)
          {
-            i++;
-            if ( i != this->end() )
-               return * i;
+            QSharedPointer<qe> x = *i;
+            if (x.data() == &q)
+            {
+               std::advance(i, 1);
+               if (i == this->end())
+               {
+                   return QSharedPointer<qe>();
+               }
+               else
+               {
+                   return *i;
+               }
+            }
          }
-         return 0;
+
+         return QSharedPointer<qe>();
       }
 };
 //=============================================================================
@@ -130,9 +146,9 @@ class KeyerAction
 
       KeyerAction();
       virtual ~KeyerAction();
-      static my_deque < KeyerAction *> currentAction;
-      static KeyerAction *getCurrentAction();
-      KeyerAction *getNextAction();
+      static my_deque < KeyerAction > currentAction;
+      static QSharedPointer<KeyerAction> getCurrentAction();
+      QSharedPointer<KeyerAction> getNextAction();
       virtual QString statusLetter() = 0;
       virtual bool playingFile( const QString & );
       virtual void activateVox( );

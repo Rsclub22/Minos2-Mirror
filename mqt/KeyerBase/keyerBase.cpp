@@ -20,17 +20,17 @@ int CWTone = 1000;
 int CWSpeed = 12;
 
 qint64 currTick;
-my_deque < KeyerAction *> KeyerAction::currentAction;
+my_deque < KeyerAction > KeyerAction::currentAction;
 
-/*static*/ KeyerAction *KeyerAction::getCurrentAction()
+/*static*/ QSharedPointer<KeyerAction> KeyerAction::getCurrentAction()
 {
    if ( currentAction.begin() == currentAction.end() )
       return nullptr;
-   return *currentAction.begin();
+   return *(currentAction.begin());
 }
-KeyerAction *KeyerAction::getNextAction()
+QSharedPointer<KeyerAction> KeyerAction::getNextAction()
 {
-   return KeyerAction::currentAction.next_element( this );
+   return (KeyerAction::currentAction).next_element( *this );
 }
 /*
 -- Variable strings

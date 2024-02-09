@@ -33,7 +33,7 @@ void ClusterBandmapConfigure::initialise()
     ClusterFilterDefaultDistIniName defaultDistIniNames;
     defaultDistIniNames.initClusterFilterIdAndNames(bands);
 
-    QSettings config(CLUSTER_FILTER_FILE, QSettings::IniFormat);
+    QSettings config(CLUSTER_FILTER_FILE(), QSettings::IniFormat);
     config.beginGroup("Default Distance");
 
     QGridLayout *hfLayout = new QGridLayout();
@@ -51,6 +51,7 @@ void ClusterBandmapConfigure::initialise()
     for (const auto &b: qAsConst(bands))
     {
         QLineEdit *qle = new QLineEdit();
+        qle->setClearButtonEnabled(true);
         QLabel *qlel = new QLabel();
         qlel->setText(b->uk);
 
@@ -165,13 +166,14 @@ void ClusterBandmapConfigure::initialise()
 
 
          QLineEdit *qlbs = new QLineEdit();
+         qlbs->setClearButtonEnabled(true);
          connect(qlbs, &QLineEdit::editingFinished, this, [=]() {
             QString freq = qlbs->text();
             valInputFreq(freq, tr(RADIO_FREQ_EDIT_ERR_MSG));
          });
 
          ConfigurationOption lb;
-         lb.initialise(BAND_LIST_INI, BAND_LIST_SECT_FREQ_LOW, b->uk, qlbs, b->bandmapLow.convertFreqStrDispSingle() );
+         lb.initialise(BAND_LIST_INI(), BAND_LIST_SECT_FREQ_LOW, b->uk, qlbs, b->bandmapLow.convertFreqStrDispSingle() );
          bandLimits.push_back(lb);
          hbl->addWidget(qlbs);
 
@@ -180,12 +182,13 @@ void ClusterBandmapConfigure::initialise()
          hbl->addWidget(eLabel);
 
          QLineEdit *qlbe = new QLineEdit();
+         qlbe->setClearButtonEnabled(true);
          connect(qlbe, &QLineEdit::editingFinished, this, [=]() {
             QString freq = qlbe->text();
             valInputFreq(freq, tr(RADIO_FREQ_EDIT_ERR_MSG));
          });
          ConfigurationOption hb;
-         hb.initialise(BAND_LIST_INI, BAND_LIST_SECT_FREQ_HIGH, b->uk, qlbe, b->bandmapHigh.convertFreqStrDispSingle() );
+         hb.initialise(BAND_LIST_INI(), BAND_LIST_SECT_FREQ_HIGH, b->uk, qlbe, b->bandmapHigh.convertFreqStrDispSingle() );
          bandLimits.push_back(hb);
          hbl->addWidget(qlbe);
 
@@ -301,7 +304,7 @@ void ClusterBandmapConfigure::saveDistances()
     ClusterFilterDefaultDistIniName defaultDistIniNames;
     defaultDistIniNames.initClusterFilterIdAndNames(bands);
 
-    QSettings config(CLUSTER_FILTER_FILE, QSettings::IniFormat);
+    QSettings config(CLUSTER_FILTER_FILE(), QSettings::IniFormat);
     config.beginGroup("Default Distance");
 
     for (const auto &b: qAsConst(bands))

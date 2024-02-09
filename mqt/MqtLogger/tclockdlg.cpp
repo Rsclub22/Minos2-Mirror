@@ -2,6 +2,7 @@
 #include <QFile>
 #include <QTextStream>
 
+#include "AppStartup.h"
 #include "regsettings.h"
 #include "ContestApp.h"
 #include "MinosParameters.h"
@@ -47,7 +48,7 @@ void TClockDlg::setEdits()
 void TClockDlg::on_OKButton_clicked()
 {
     // and save the correction to the correction file
-    QFile lf( "./Configuration/time.correction");
+    QFile lf( getDirectoryLocation(dlConfiguration) + "/time.correction");
 
     if (!lf.open(QIODevice::WriteOnly))
     {

@@ -29,6 +29,10 @@ static QString currentLanguage;
 static QSharedPointer<QTranslator> translator;
 static QSharedPointer<QTranslator> qtTranslator;
 
+
+static QString deflog = "Logs";
+static QString deflist = "Lists";
+
 QString getAppExecutable()
 {
     return executablePath;
@@ -87,7 +91,7 @@ void myMessageOutput(QtMsgType type,
 QVector<Translation> getLanguages()
 {
     QVector<Translation> locs;
-    QString searchString = GetCurrentDir() + "/Bin/translations";
+    QString searchString = getDirectoryLocation(dlTranslations);
 
     QDirIterator files( searchString, QDir::Files | QDir::NoSymLinks , QDirIterator::NoIteratorFlags );
     while ( files.hasNext() )
@@ -120,33 +124,33 @@ QVector<Translation> getLanguages()
 
 void switchTranslation(QString loc)
 {
-    QApplication *qa = dynamic_cast<QApplication *>(QApplication::instance());
+    //QApplication *qa = dynamic_cast<QApplication *>(QApplication::instance());
 
     QSharedPointer<QTranslator> myappTranslator(new QTranslator());    // which goes out of scope :(
     QSharedPointer<QTranslator> myqtTranslator(new QTranslator());    // which goes out of scope :(
 
-    QString qtlocfile = QString("Bin/translations/") + "qtbase_" + loc;
+    QString qtlocfile = getDirectoryLocation(dlTranslations) + "/qtbase_" + loc;
     bool qtloadOK = myqtTranslator->load(qtlocfile);
-    bool qtinstallOK = qa->installTranslator(myqtTranslator.data());
+    bool qtinstallOK = QCoreApplication::installTranslator(myqtTranslator.data());
 
     if (!qtloadOK || qtinstallOK)
     {
-        qtlocfile = QString("Bin/translations/") + "qt_" + loc;
+        qtlocfile = getDirectoryLocation(dlTranslations) + "/qt_" + loc;
         qtloadOK = myqtTranslator->load(qtlocfile);
-        qtinstallOK = qa->installTranslator(myqtTranslator.data());
+        qtinstallOK = QCoreApplication::installTranslator(myqtTranslator.data());
     }
 
-    QString locfile = "Bin/translations/" + executableName + "_" + loc;
+    QString locfile = getDirectoryLocation(dlTranslations) + "/" + executableName + "_" + loc;
     bool loadOK = myappTranslator->load(locfile);
-    bool installOK = qa->installTranslator(myappTranslator.data());
+    bool installOK = QCoreApplication::installTranslator(myappTranslator.data());
 
     if (translator)
     {
-        qa->removeTranslator(translator.data());
+        QCoreApplication::removeTranslator(translator.data());
     }
     if (qtTranslator)
     {
-        qa->removeTranslator(qtTranslator.data());
+        QCoreApplication::removeTranslator(qtTranslator.data());
     }
 
     qtTranslator = myqtTranslator;
@@ -202,7 +206,8 @@ void appStartup(const QString &pappName)
 {
     oldHandler = qInstallMessageHandler(myMessageOutput);
     // This gets reset later, but at this point it is the launch executable name
-    executableName = QCoreApplication::instance()->applicationName();
+    executableName = QCoreApplication::applicationName();
+    executablePath = QCoreApplication::applicationFilePath();
 
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
     appStartupName = env.value("MQTRPCNAME", "") ;
@@ -220,11 +225,12 @@ void appStartup(const QString &pappName)
 
     qa->setStyleSheet(QString("[readOnly=\"true\"] { background-color: %0 }").arg(qa->palette().color(QPalette::Window).name(QColor::HexRgb)));
 
-// For Mac Users, set the default directory to be Documents/Minos
+// For Mac Users, set the default directory to be Documents/Minos2
+
+#ifdef Q_OS_MACOS
 
     QString fpath = QCoreApplication::applicationDirPath();
 
-#ifdef Q_OS_MACOS
     QString sharedPath = QStandardPaths::locate(QStandardPaths::DocumentsLocation,"",QStandardPaths::LocateDirectory);
     QDir::setCurrent(sharedPath);
     if (!DirectoryExists("./Minos2")) {
@@ -232,50 +238,90 @@ void appStartup(const QString &pappName)
     }
     QDir::setCurrent("./Minos2");
 
+    QString home = QDir::homePath();
+    QString libAppSupportPath = home + "/Library/Application Support/Minos2";
+    bool mkdirOK = QDir().mkpath(libAppSupportPath);
+
     // We have no configuration directory so copy default one
     // Also Create a logs directory and copy Docs
 
-    // cpDir does copy if newer, no a new installation updates the old one
+    // cpDir does copy if newer, so a new installation updates the old one
 
-    if (!DirectoryExists("Configuration")) {
-        QDir().mkdir("Configuration");
+    if (!DirectoryExists(getDirectoryLocation(dlConfiguration))) {
+        mkdirOK = QDir().mkpath(getDirectoryLocation(dlConfiguration));
     }
-    if (!DirectoryExists("Logs")) {
-        QDir().mkdir("Logs");
+    if (!DirectoryExists(getDirectoryLocation(dlLogs))) {
+        mkdirOK = QDir().mkpath(getDirectoryLocation(dlLogs));
     }
-    if (!DirectoryExists("Lists")) {
-        QDir().mkdir("Lists");
+    if (!DirectoryExists(getDirectoryLocation(dlLists))) {
+        mkdirOK = QDir().mkpath(getDirectoryLocation(dlLists));
     }
-    if (!DirectoryExists("Help")) {
-        QDir().mkdir("Help");
+    if (!DirectoryExists(getDirectoryLocation(dlDocs))) {
+        mkdirOK = QDir().mkpath(getDirectoryLocation(dlDocs));
     }
-    if (!DirectoryExists("Docs")) {
-        QDir().mkdir("Docs");
-    }
-    cpDir(QString(fpath+"/../Resources/Configuration"), QString("./Configuration"));
-    cpDir(QString(fpath+"/../Resources/Help"), QString("./Help"));
-    cpDir(QString(fpath+"/../Resources/Docs"), QString("./Docs"));
 
-#elif defined(Q_OS_IOS)
-    QString sharedPath = sharedDirectory("group.minos2").toLocalFile();
-#endif
-    if (!DirectoryExists("./Configuration"))
+    if (fpath.contains("/build"))
+    {
+        QString srcMaster = fpath;
+        while(DirectoryExists(srcMaster))
+        {
+            QFileInfo src(srcMaster + "/..");
+            srcMaster = src.canonicalFilePath();
+            if (DirectoryExists(srcMaster) && DirectoryExists(srcMaster + "/mqt/ControlFiles/Configuration"))
+            {
+                break;
+            }
+        }
+        if (DirectoryExists(srcMaster) && DirectoryExists(srcMaster + "/mqt/ControlFiles/Configuration"))
+        {
+            // copyifnewer the master config
+            QString destConfig = getDirectoryLocation(dlConfiguration);
+
+
+            cpDir(srcMaster + "/mqt/ControlFiles/Configuration", destConfig);
+            cpDir(destConfig + "/OSXFiles", destConfig);
+
+            QDir osx(destConfig + "/OSXFiles");
+            osx.removeRecursively();
+            QDir win(destConfig + "/WindowsFiles");
+            win.removeRecursively();
+            QDir linuxf(destConfig + "/LinuxFiles");    // straight "linux" is objected to
+            linuxf.removeRecursively();
+        }
+        if (DirectoryExists(srcMaster) && DirectoryExists(srcMaster + "/mqt/Docs"))
+        {
+            // copyifnewer the master docs
+
+            QString destDocs = getDirectoryLocation(dlDocs);
+
+            cpDir(srcMaster + "/mqt/Docs", destDocs);
+        }
+    }
+    else
+    {
+        cpDir(QString(fpath+"/../Resources/Configuration"), getDirectoryLocation(dlConfiguration));
+        cpDir(QString(fpath+"/../Resources/Docs"), getDirectoryLocation(dlDocs));
+    }
+
+#else
+
+    QString fpath = QCoreApplication::applicationDirPath();
+
+    if (!DirectoryExists(getDirectoryLocation(dlConfiguration)))
     {
 #ifdef Q_OS_ANDROID
-        bool createOK = CreateDir("./Configuration");
+        bool createOK = CreateDir(getDirectoryLocation(dlConfiguration));
         if (!mShowOKCancelMessage(0, createOK?"./Config created":"create ./Config failed; Cancel for abort"))
         {
             exit(0);
         }
 #else
-        // try for executable directory
+    // try for executable directory
 
-#ifndef Q_OS_MACOS
         if (DirectoryExists(fpath + "/../Configuration"))
         {
             QDir::setCurrent(fpath + "/..");
         }
-#endif
         int confTries = 0;
         while (!DirectoryExists("./Configuration") )
         {
@@ -284,11 +330,11 @@ void appStartup(const QString &pappName)
                 exit(-1);
             }
             QString destDir = QFileDialog::getExistingDirectory(
-                        nullptr,
-                        "Set Minos Working Directory",      // we are pre-translation here...
-                        fpath,
-                        QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks
-                        );
+                nullptr,
+                "Set Minos Working Directory",      // we are pre-translation here...
+                fpath,
+                QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks
+                );
             if ( !destDir.isEmpty() )
             {
 
@@ -319,7 +365,7 @@ void appStartup(const QString &pappName)
         if (DirectoryExists(srcMaster) && DirectoryExists(srcMaster + "/mqt/ControlFiles/Configuration"))
         {
             // copyifnewer the master config
-            QString destConfig = QDir::currentPath() + "/Configuration";
+            QString destConfig = getDirectoryLocation(dlConfiguration);
 
 
             cpDir(srcMaster + "/mqt/ControlFiles/Configuration", destConfig);
@@ -337,22 +383,17 @@ void appStartup(const QString &pappName)
             QDir linuxf(destConfig + "/LinuxFiles");    // straight "linux" is objected to
             linuxf.removeRecursively();
         }
-        if (DirectoryExists(srcMaster) && DirectoryExists(srcMaster + "/mqt/Help"))
-        {
-            // copyifnewer the master config
-            QString destHelp = QDir::currentPath() + "/Help";
-
-            cpDir(srcMaster + "/mqt/Help", destHelp);
-        }
         if (DirectoryExists(srcMaster) && DirectoryExists(srcMaster + "/mqt/Docs"))
         {
             // copyifnewer the master config
-            QString destDocs = QDir::currentPath() + "/Docs";
+
+            QString destDocs = getDirectoryLocation(dlDocs);
 
             cpDir(srcMaster + "/mqt/Docs", destDocs);
         }
     }
-    enableTrace( "./TraceLog", appStartupName + "_" );
+#endif
+    enableTrace( getDirectoryLocation(dlTraceLog), appStartupName + "_" );
 
     trace(QSysInfo::prettyProductName());
     trace(QSysInfo::buildAbi());
@@ -387,12 +428,10 @@ void appStartup(const QString &pappName)
     QCommandLineOption languageOption({"l", "lang"}, "language", "languageName", "");
     parser.addOption(languageOption);
 
-    QStringList args = QCoreApplication::instance()->arguments();
+    QStringList args = QCoreApplication::arguments();
     trace("Arguments " + args.join("|"));
 
     parser.process(args);
-
-    executablePath = args[0];
 
     if (parser.isSet(languageOption))
     {
@@ -514,3 +553,144 @@ bool cpDir(const QString &srcPath, const QString &dstPath)
     return true;
 }
 
+void setDefLogDir(QString l)
+{
+    deflog = l;
+}
+void setDefListDir(QString l)
+{
+    deflist = l;
+}
+QString getDirectoryLocation(DirectoryLocation dl, QString runDir /* = "."*/)
+{
+    // At the moment, these are all Windows, and relative
+    // to the current working directory
+
+#ifdef Q_OS_MACOS
+
+//        Open Finder, press and hold Shift + Command + G, enter "Library/Application Support" then hit Enter.
+//        Now that you are in the Library folder, you can open the corresponding
+//        subfolder to save app data or find a specific file.
+
+    // default rundir is <sharedPath>/Minos2
+
+    QString home = QDir::homePath();
+    QString libAppSupportPath = home + "/Library/Application Support/Minos2";
+    QString sharedPath = QStandardPaths::locate(QStandardPaths::DocumentsLocation,"",QStandardPaths::LocateDirectory);
+
+    QString resourcePath = QCoreApplication::applicationDirPath() + "/../Resources";
+
+#endif
+    QString dirLoc;
+    switch (dl)
+    {
+#ifdef Q_OS_MACOS
+    case dlBinaries:
+        dirLoc = resourcePath + "/Bin";
+        break;
+
+    case dlTranslations:
+        // this isn't correct in build directories
+        dirLoc = resourcePath + "/Bin/translations";
+        break;
+
+    case dlConfiguration:
+        dirLoc = libAppSupportPath + "/Configuration";
+        break;
+
+    case dlLists:
+        dirLoc = deflist;
+        break;
+
+    case dlLogs:
+        dirLoc = deflog;
+        break;
+
+    case dlDocs:
+        dirLoc = libAppSupportPath + "/Docs";
+        break;
+
+    case dlTraceLog:
+        dirLoc = libAppSupportPath + "/TraceLog";
+        break;
+
+    case dlQRZDB:
+        dirLoc = libAppSupportPath;
+        break;
+#else
+    case dlBinaries:
+        dirLoc = runDir + "/Bin";
+        break;
+
+    case dlTranslations:
+        dirLoc = runDir + "/Bin/translations";
+        break;
+
+    case dlConfiguration:
+        dirLoc = runDir + "/Configuration";
+        break;
+
+    case dlLists:
+        dirLoc = deflist;
+        break;
+
+    case dlLogs:
+        dirLoc = deflog;
+        break;
+
+    case dlDocs:
+        dirLoc = runDir + "/Docs";
+        break;
+
+    case dlTraceLog:
+        dirLoc = runDir + "/TraceLog";
+        break;
+
+    case dlQRZDB:
+        dirLoc = runDir;
+        break;
+
+// Do we need a WSJTX recordings directory?
+#endif
+
+    }
+    QDir d(dirLoc);
+    dirLoc = d.absolutePath();
+    QString dltype;
+    switch (dl)
+    {
+    case dlBinaries:
+        dltype = "dlBinaries";
+        break;
+
+    case dlTranslations:
+        dltype = "dlTranslations";
+        break;
+
+    case dlConfiguration:
+        dltype = "dlConfiguration";
+        break;
+
+    case dlLists:
+        dltype = "dlLists";
+        break;
+
+    case dlLogs:
+        dltype = "dlLogs";
+        break;
+
+    case dlDocs:
+        dltype = "dlDocs";
+        break;
+
+    case dlTraceLog:
+        dltype = "dlTraceLog";
+        break;
+
+    case dlQRZDB:
+        dltype = "dlQRZDB";
+        break;
+    }
+    //trace(QString("%1: %2").arg(dltype, dirLoc));
+    return dirLoc;
+}

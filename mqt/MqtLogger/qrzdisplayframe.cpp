@@ -144,7 +144,7 @@ void QrzDisplayFrame::onServerPingTimerTimeout()
 
 void QrzDisplayFrame::onLoggerQrzReply(QrzCallsignData cd, QString qrzReplyState, QString /*uuid*/)
 {
-    if (!ct->isAgeProtected())
+    if (ct && !ct->isAgeProtected())
     {
         clear();
         if (qrzReplyState.isEmpty())
@@ -161,7 +161,7 @@ void QrzDisplayFrame::onLoggerQrzReply(QrzCallsignData cd, QString qrzReplyState
                 bearing = 0;
                 ct->calcDistanceBearing(cd.getQra(), &distance, &bearing);
 
-                ui->distanceText->setText(QString::number(distance));
+                ui->distanceText->setText(QString::number(static_cast<int>(distance)));
                 if (bearing >= 0 && bearing <= 360)
                 {
                     if (bearing == 360)
@@ -178,6 +178,10 @@ void QrzDisplayFrame::onLoggerQrzReply(QrzCallsignData cd, QString qrzReplyState
             ui->ituZoneText->setText(cd.getItuZone());
             ui->moddateText->setText(cd.getModDate());
             ui->dbdateText->setText(cd.getDBDate());
+            if (!cd.getMessage().isEmpty())
+            {
+                ui->qrzLabel->setText(cd.getMessage());
+            }
 
             QString stats(tr("DB hits %1 QRZ requests %2 DB Size %3 records")
                               .arg(cd.getDbRecalls()).arg(cd.getQrzRecalls()).arg(cd.getDbRecords()));
@@ -215,14 +219,16 @@ void QrzDisplayFrame::clear()
 void QrzDisplayFrame::getQrzDetailsForLogger(QString callsign)
 {
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
-    QString frame_uuid = tslf->getContest()->uuid;
-    trace(QString("[qrzDisplayFrame] sending callsign %1, from frame uuid %2 to QrzServer").arg(callsign, frame_uuid));
-    QrzDisplayServerRpc::getQrzDisplayServerRpc()->sendCallsignFromLoggerToQrzServer(callsign, frame_uuid);
+    if (tslf)
+    {
+        QString frame_uuid = tslf->getContest()->uuid;
+        trace(QString("[qrzDisplayFrame] sending callsign %1, from frame uuid %2 to QrzServer").arg(callsign, frame_uuid));
+        QrzDisplayServerRpc::getQrzDisplayServerRpc()->sendCallsignFromLoggerToQrzServer(callsign, frame_uuid);
+    }
 }
 
 void QrzDisplayFrame::setQrzMessageText(QString msg)
 {
-    ui->qrzMessageText->clear();
     ui->qrzMessageText->setText(msg);
 }
 
@@ -348,6 +354,7 @@ void QrzDisplayServerRpc::on_routerCall(bool err, QSharedPointer<MinosRPCObj> mr
                     QSharedPointer<RPCParam> msgQrzITUZone;
                     QSharedPointer<RPCParam> msgQrzModdate;
                     QSharedPointer<RPCParam> msgQrzDBDate;
+                    QSharedPointer<RPCParam> msgQrzMessage;
                     QSharedPointer<RPCParam> msgQrzDBRecords;
                     QSharedPointer<RPCParam> msgQrzDBRecalls;
                     QSharedPointer<RPCParam> msgQrzRecalls;
@@ -370,6 +377,7 @@ void QrzDisplayServerRpc::on_routerCall(bool err, QSharedPointer<MinosRPCObj> mr
                             && args->getStructArgMember(0, rpcConstants::qrzItuZone, msgQrzITUZone)
                             && args->getStructArgMember(0, rpcConstants::qrzmoddate, msgQrzModdate)
                             && args->getStructArgMember(0, rpcConstants::qrzdbdate, msgQrzDBDate)
+                        && args->getStructArgMember(0, rpcConstants::qrzmessage, msgQrzMessage)
                         && args->getStructArgMember(0, rpcConstants::qrzdbrecords, msgQrzDBRecords)
                         && args->getStructArgMember(0, rpcConstants::qrzdbrecalls, msgQrzDBRecalls)
                         && args->getStructArgMember(0, rpcConstants::qrzrecalls, msgQrzRecalls)
@@ -438,6 +446,10 @@ void QrzDisplayServerRpc::on_routerCall(bool err, QSharedPointer<MinosRPCObj> mr
                         QString dbdate;
                         msgQrzDBDate->getString(dbdate);
                         cd.setDBDate(dbdate);
+
+                        QString message;
+                        msgQrzMessage->getString(message);
+                        cd.setMessage(message);
 
                         int dbRecords;
                         msgQrzDBRecords->getInt(dbRecords);

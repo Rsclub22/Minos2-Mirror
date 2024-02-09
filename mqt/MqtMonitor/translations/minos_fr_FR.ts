@@ -2,13 +2,6 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="fr_FR">
 <context>
-    <name>LogTreeNode</name>
-    <message>
-        <source>Monitoring</source>
-        <translation type="vanished">Surveillance</translation>
-    </message>
-</context>
-<context>
     <name>MonitorMain</name>
     <message>
         <location filename="../MonitorMain.ui" line="14"/>
@@ -38,27 +31,27 @@
     <message>
         <location filename="../MonitorMain.ui" line="139"/>
         <source>QSO Map</source>
-        <translation type="unfinished"></translation>
+        <translation>Carte des QSO</translation>
     </message>
     <message>
         <location filename="../MonitorMain.ui" line="147"/>
         <source>Show Grid</source>
-        <translation type="unfinished"></translation>
+        <translation>Afficher la grille</translation>
     </message>
     <message>
         <location filename="../MonitorMain.ui" line="154"/>
         <source>Show Lines</source>
-        <translation type="unfinished"></translation>
+        <translation>Afficher les Lignes</translation>
     </message>
     <message>
         <location filename="../MonitorMain.ui" line="168"/>
         <source>Show spots</source>
-        <translation type="unfinished"></translation>
+        <translation>Afficher les Spots</translation>
     </message>
     <message>
         <location filename="../MonitorMain.ui" line="188"/>
         <source>Dist Limit</source>
-        <translation type="unfinished"></translation>
+        <translation>Limite de distance</translation>
     </message>
     <message>
         <location filename="../MonitorMain.cpp" line="91"/>
@@ -67,28 +60,17 @@
     </message>
 </context>
 <context>
-    <name>MonitorTreeModel</name>
-    <message>
-        <source>Contest Name</source>
-        <translation type="vanished">Nom du concours</translation>
-    </message>
-    <message>
-        <source>State</source>
-        <translation type="vanished">Serveurs/état</translation>
-    </message>
-</context>
-<context>
     <name>MonitoringFrame</name>
     <message>
         <location filename="../MonitoringFrame.ui" line="62"/>
-        <location filename="../MonitoringFrame.cpp" line="204"/>
+        <location filename="../MonitoringFrame.cpp" line="205"/>
         <source>Show Map</source>
-        <translation type="unfinished"></translation>
+        <translation>Afficher la Carte</translation>
     </message>
     <message>
-        <location filename="../MonitoringFrame.cpp" line="183"/>
+        <location filename="../MonitoringFrame.cpp" line="184"/>
         <source>Show Log</source>
-        <translation type="unfinished"></translation>
+        <translation>Afficher le journal</translation>
     </message>
 </context>
 </TS>

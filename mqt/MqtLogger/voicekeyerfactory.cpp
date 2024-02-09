@@ -13,6 +13,8 @@
 
 #include <QComboBox>
 #include <QStandardItemModel>
+#include <QListView>
+#include "AppStartup.h"
 #include "voicekeyerfactory.h"
 #include "rigcontrolvoicememorykeyer.h"
 #include "rigcontrolcwmessagekeyer.h"
@@ -105,4 +107,14 @@ void VoiceKeyerFactory::populateComboKeyerList(QComboBox* comBox, QString voiceK
 
         comBox->setCurrentText(voiceKeyerName);
     }
+}
+
+QString VOICE_KEYER_PATH()
+{
+    return getDirectoryLocation(dlConfiguration) + "/VoiceKeyer/";
+}
+
+QString VOICEKEYER_COMMON_PARAMS_PATH()
+{
+    return VOICE_KEYER_PATH() + "CommonParams/";
 }

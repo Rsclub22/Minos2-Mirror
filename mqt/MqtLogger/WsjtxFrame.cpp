@@ -1,6 +1,7 @@
 #include <QFileDialog>
 #include <QListWidget>
 
+#include "AppStartup.h"
 #include "regsettings.h"
 #include "ContestApp.h"
 #include "LoggerContest.h"
@@ -1293,18 +1294,6 @@ void WsjtxFrame::do_reply (QModelIndex index)
 
 }
 
-void WsjtxFrame::on_autoSelectButton_toggled(bool c)
-{
-    if (!c)
-    {
-        wtrace("WsjtxFrame autoselect off");
-    }
-    else
-    {
-        wtrace("WsjtxFrame autoselect on");
-    }
-}
-
 void WsjtxFrame::on_testButton_clicked()
 {
 // A collection of messages that we have at som time wanted to test
@@ -1582,7 +1571,7 @@ void WsjtxFrame::viewColumn()
         else
         {
             TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
-            QString fname("./Configuration/LoggerTableHeaders.ini");
+            QString fname(getDirectoryLocation(dlConfiguration) + "/LoggerTableHeaders.ini");
             resetHeaderColumns(fname, "WSJTXDecodesTable", tslf->getCurScreenLayout(), ui->decodes_table_view_->horizontalHeader());
         }
     }
@@ -1592,7 +1581,7 @@ void WsjtxFrame::saveWSJTXTableColumns()
 {
     if (!inRestoreColumns && firstRestoreDone)
     {
-        QString fname("./Configuration/LoggerTableHeaders.ini");
+        QString fname(getDirectoryLocation(dlConfiguration) + "/LoggerTableHeaders.ini");
         saveHeaderColumns(fname, "WSJTXDecodesTable", tslf->getCurScreenLayout(), ui->decodes_table_view_->horizontalHeader());
         MinosLoggerEvents::SendColumnsChanged();
     }
@@ -1600,7 +1589,7 @@ void WsjtxFrame::saveWSJTXTableColumns()
 void WsjtxFrame::restoreWSJTXTableColumns()
 {
     inRestoreColumns = true;
-    QString fname("./Configuration/LoggerTableHeaders.ini");
+    QString fname(getDirectoryLocation(dlConfiguration) + "/LoggerTableHeaders.ini");
     restoreHeaderColumns(fname, "WSJTXDecodesTable", tslf->getCurScreenLayout(), ui->decodes_table_view_->horizontalHeader());
     inRestoreColumns = false;
     firstRestoreDone = true;

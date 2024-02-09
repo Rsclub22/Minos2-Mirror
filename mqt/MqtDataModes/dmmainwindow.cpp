@@ -1,7 +1,6 @@
 #include "delayedaction.h"
 #include <QSettings>
 #include <QTimer>
-#include <QFileSystemWatcher>
 #include <QKeyEvent>
 
 #include <QJsonDocument>
@@ -103,7 +102,7 @@ DMMainWindow::DMMainWindow(QWidget *parent)
 
 #endif
 
-    RemoteLogs::setSettingsFile("./Configuration/DataModes.ini");
+    RemoteLogs::setSettingsFile(getDirectoryLocation(dlConfiguration) + "/DataModes.ini");
 
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
@@ -142,7 +141,7 @@ DMMainWindow::DMMainWindow(QWidget *parent)
     connect(ui->logsTreeView, &MonitoredLogs::logStarted, this, &DMMainWindow::onLogStarted);
     connect(ui->logsTreeView, &MonitoredLogs::logClosed, this, &DMMainWindow::onLogClosed);
 
-    ui->startButton->setText(tr("Start All"));
+    ui->startButton->setText(tr("Start All Engines"));
 
     delayedAction(this, [=](){
         on_startButton_clicked();
@@ -162,7 +161,7 @@ void DMMainWindow::closeAllEngines()
         e->deleteLater();
     }
     engines.clear();
-    ui->startButton->setText(tr("Start All"));
+    ui->startButton->setText(tr("Start All Engines"));
 
 }
 
@@ -273,6 +272,9 @@ void DMMainWindow::on_configureButton_clicked()
         // But for now, just broadcast speeds in case they have changed
 
         emit setSpeeds(EngineConfigure::getSpeed("BPSK"), EngineConfigure::getSpeed("RTTY"));
+
+        QString mess = tr("Any changes will only be actioned when you stop and restart the engines.");
+        mShowMessage(mess, this);
     }
 }
 
@@ -287,6 +289,8 @@ void DMMainWindow::on_startButton_clicked()
             {
                 EngineWindow *ew = new EngineWindow(/*this*/);
                 connect(ew, &EngineWindow::sendCharactersUp, this, &DMMainWindow::sendPressed);
+                connect(ew, &QWidget::destroyed, this, &DMMainWindow::engineDestroyed);
+                ew->setAttribute(Qt::WA_DeleteOnClose);
 
                 ew->selectEngine(e);
                 engines.push_back(ew);
@@ -295,17 +299,36 @@ void DMMainWindow::on_startButton_clicked()
             }
         }
         emit setSpeeds(EngineConfigure::getSpeed("BPSK"), EngineConfigure::getSpeed("RTTY"));
-        ui->startButton->setText(tr("Stop All"));
+        if (engines.count() > 0)
+        {
+            ui->startButton->setText(tr("Stop All Engines"));
+        }
     }
     else
     {
         closeAllEngines();
     }
 }
-
+void DMMainWindow::engineDestroyed(QObject *d)
+{
+    // can't dynamic_cast as the object has already been destroyed
+    EngineWindow *ew = static_cast<EngineWindow *>(d);
+    if (ew)
+    {
+        int i = engines.indexOf(ew);
+        if (i >= 0)
+        {
+            engines.remove(i);
+        }
+        if (engines.count() <= 0)
+        {
+            ui->startButton->setText(tr("Start All Engines"));
+        }
+    }
+}
 void DMMainWindow::sendPressed(QString d, int c)
 {
-    QSettings settings("./Configuration/DataModes.ini", QSettings::IniFormat);
+    QSettings settings(getDirectoryLocation(dlConfiguration) + "/DataModes.ini", QSettings::IniFormat);
 
     QString m = settings.value("Sender").toString();
 

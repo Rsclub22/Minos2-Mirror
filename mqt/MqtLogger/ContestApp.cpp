@@ -9,6 +9,7 @@
 #include <QFileInfo>
 #include <QDir>
 #include <QTextStream>
+#include "AppStartup.h"
 #include "LoggerContest.h"
 #include "MMessageDialog.h"
 #include "MShowMessageDlg.h"
@@ -94,7 +95,7 @@ ListSlot::~ListSlot()
 //---------------------------------------------------------------------------
 static void initClock( )
 {
-    QFile lf( "./Configuration/time.correction");
+    QFile lf( getDirectoryLocation(dlConfiguration) + "/time.correction");
 
     if (lf.open(QIODevice::ReadOnly))
     {
@@ -132,7 +133,7 @@ bool TContestApp::initialise()
     BundleFile::bundleFiles[ epLOCSQUARESPROFILE ] = QSharedPointer<BundleFile>( new BundleFile( epLOCSQUARESPROFILE ) );
 
     //----------------------------------
-    BundleFile::bundleFiles[ epLOGGERPROFILE ] ->openProfile( "./Configuration/MinosLogger.ini", tr("Advanced Options") );
+    BundleFile::bundleFiles[ epLOGGERPROFILE ] ->openProfile( getDirectoryLocation(dlConfiguration) + "/MinosLogger.ini", tr("Advanced Options") );
     loggerBundle.setProfile( BundleFile::bundleFiles[ epLOGGERPROFILE ] );
     loggerBundle.openSection( "Default" );
 

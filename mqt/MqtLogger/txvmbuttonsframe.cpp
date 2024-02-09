@@ -94,7 +94,7 @@ void TxVmButtonsFrame::initTxVmButtonFrame()
     setVoiceNumMemButtonsVisible(0);
 
 
-    QString fileName = VOICEKEYER_COMMON_PARAMS_PATH + VOICEKEYER_COMMON_PARAMS_FILENAME;
+    QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + VOICEKEYER_COMMON_PARAMS_FILENAME;
     QSettings config(fileName, QSettings::IniFormat);
     config.beginGroup(VOICEKEYER_COMMON_PARAMS_GROUPNAME);
 
@@ -268,7 +268,7 @@ void TxVmButtonsFrame::loadButtonData()
 
 void TxVmButtonsFrame::checkButtonIniFileVersion(QString voiceKeyerType)
 {
-    QString fileName = VOICE_KEYER_PATH + VOICE_KEYER_BASE_FILE_NAME + voiceKeyerType + ".ini";
+    QString fileName = VOICE_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + voiceKeyerType + ".ini";
     QSettings config(fileName, QSettings::IniFormat);
 
     //if (config.value("version", 0).toInt() != 2)
@@ -284,7 +284,7 @@ void TxVmButtonsFrame::checkButtonIniFileVersion(QString voiceKeyerType)
             // no convert file to version 2
             for ( const auto& key : keys  )
             {
-                QStringRef buttonNumStr(&key, 6, 1);
+                QString buttonNumStr = key.mid( 6, 1);
                 // read settings for this key
                 config.beginGroup(key);
 
@@ -322,10 +322,10 @@ void TxVmButtonsFrame::checkButtonIniFileVersion(QString voiceKeyerType)
 void TxVmButtonsFrame::checkCommonIniFileVersion(QString voiceKeyerType)
 {
 
-    QString fileName = VOICE_KEYER_PATH + VOICE_KEYER_BASE_FILE_NAME + voiceKeyerType + ".ini";
+    QString fileName = VOICE_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + voiceKeyerType + ".ini";
     QSettings buttonConfig(fileName, QSettings::IniFormat);
 
-    fileName = VOICEKEYER_COMMON_PARAMS_PATH + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[VoiceKeyerId::RigControl] + ".ini";
+    fileName = VOICEKEYER_COMMON_PARAMS_PATH() + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[VoiceKeyerId::RigControl] + ".ini";
     QSettings commonConfig(fileName, QSettings::IniFormat);
 
     QStringList keys = commonConfig.childGroups();
@@ -430,7 +430,7 @@ void TxVmButtonsFrame::onVoiceKeyerSelect(int idx)
     QString voiceKeyerName = ui->voiceKeyerSelect->currentText();
     trace(QString("keyer select name = %1").arg( ui->voiceKeyerSelect->currentText()));
 
-    QString fileName = VOICEKEYER_COMMON_PARAMS_PATH + VOICEKEYER_COMMON_PARAMS_FILENAME;
+    QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + VOICEKEYER_COMMON_PARAMS_FILENAME;
     QSettings config(fileName, QSettings::IniFormat);
     config.beginGroup(VOICEKEYER_COMMON_PARAMS_GROUPNAME);
 
@@ -527,7 +527,7 @@ void TxVmButtonsFrame::setFrameState(QString voiceKeyerName)
 
 void TxVmButtonsFrame::setSaveButtonByRadionameText(QString selectedRadioName)
 {
-    QString fileName = VOICEKEYER_COMMON_PARAMS_PATH + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[VoiceKeyerId::RigControl] + ".ini";
+    QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[VoiceKeyerId::RigControl] + ".ini";
     QSettings readConfig(fileName, QSettings::IniFormat);
 
     if (readConfig.value("Common/SaveButtonByRadioName", false).toBool())
@@ -638,11 +638,12 @@ void TxVmButtonsFrame::readActionSelected(int buttonNumber)
     vmData.setType(voiceKeyerType);
     txVoiceKeyer->readVmButtonParams(buttonNumber, vmData);
 
-    if (vmData.getVmName().isEmpty())
-    {
-        trace(QString("[TxVmButtonsFrame] Button Name Empty Ignore Button"));
-        return;
-    }
+    // Why should we worry about the name being empty?
+    // if (vmData.getVmName().isEmpty())
+    // {
+    //     trace(QString("[TxVmButtonsFrame] Button Name Empty Ignore Button"));
+    //     return;
+    // }
 
 
     setRepeatIndicatorOnOff(vmData.getVmRepeatFlag());

@@ -54,12 +54,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rcmainwindow.cpp" line="239"/>
+        <location filename="../rcmainwindow.cpp" line="54"/>
+        <source>No Sound Input devices available</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rcmainwindow.cpp" line="245"/>
         <source>Record Files (*.wav);;All Files (*.*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rcmainwindow.cpp" line="242"/>
+        <location filename="../rcmainwindow.cpp" line="248"/>
         <source>Recorded Files</source>
         <translation type="unfinished"></translation>
     </message>

@@ -105,7 +105,7 @@ void ContestContact::getPrintFileText( QString &sdest, short maxlen )
          if ( clp->districtMult.getValue() && newDistrict )
             catmult( multbuff, districtMult->districtCode );
 
-         if ( clp->locMult.getValue() && locCount > 0 )
+         if ( clp->locMult.getValue() && locMultCount > 0 )
          {
             catmult( multbuff, loc.getLoc(), 4 );
          }
@@ -366,7 +366,7 @@ void ContestContact::getReg1TestText(QString &sdest , bool noSerials)
       sdest += 'N';
    sdest += ';';
 
-   if (  clp->locMult.getValue() && locCount > 0 )
+   if (  clp->locMult.getValue() && locMultCount > 0 )
       sdest += 'N';
    sdest += ';';
 

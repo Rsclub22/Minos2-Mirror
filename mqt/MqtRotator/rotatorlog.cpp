@@ -16,6 +16,7 @@
 #include <QDateTime>
 #include <QSettings>
 
+#include "AppStartup.h"
 #include "rotatorcommon.h"
 #include "rotatorlog.h"
 
@@ -144,7 +145,7 @@ int RotatorLog::writeBearing(const QString bearing, QString filename)
 
 void RotatorLog::getBearingLogConfig()
 {
-    QSettings config("./Configuration/MinosRotatorConfig.ini", QSettings::IniFormat);
+    QSettings config(getDirectoryLocation(dlConfiguration) + "/MinosRotatorConfig.ini", QSettings::IniFormat);
     config.beginGroup("BearingLog");
 
     bearingLogDir = config.value("directory", "./BearingLog").toString();

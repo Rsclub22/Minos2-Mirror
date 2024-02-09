@@ -22,7 +22,9 @@
 
 enum ExportType {EREG1TEST, ECABRILLO, EADIF, EG0GJV, EMINOS, EKML, EPRINTFILE };
 
+class AdifManager;
 class DisplayContestContact;
+
 struct StanzaPos
 {
    unsigned int stanza;
@@ -154,7 +156,10 @@ protected:
       MinosItem<bool> showWorkedDistricts;
       MinosItem<bool> showUnworkedDistricts;
       MinosStringItem<QString> currentStackItems[STACKITEMS];
+      MinosStringItem<QString> watchedADIFFile;
+      MinosItem<qint64> watchedADIFLastOffset;
       bool currentStackItemsValid = false;
+      QSharedPointer<AdifManager> adifManager;
 
       void saveRunMemory(int memno, const memoryData::memData &mem);
       void clearRunMemory(int memno, const memoryData::memData &mem);

@@ -1,3 +1,4 @@
+#include "AppStartup.h"
 #include "MinosParameters.h"
 #include "ListContact.h"
 #include "list.h"
@@ -6,6 +7,7 @@
 #include "MatchThread.h"
 #include "cutils.h"
 #include "MinosLoggerEvents.h"
+#include "qsogridmodel.h"
 #include "MatchTreeFrame.h"
 #include "ui_MatchTreeFrame.h"
 
@@ -181,7 +183,7 @@ void MatchTreeFrame::viewColumn()
         }
         else
         {
-            QString fname("./Configuration/" + baseName + "TableHeaders.ini");
+            QString fname(getDirectoryLocation(dlConfiguration) + "/" + baseName + "TableHeaders.ini");
             resetHeaderColumns(fname, "QSOTable", curScreenLayout, this->header());
 
             MinosLoggerEvents::SendColumnsChanged();
@@ -195,7 +197,7 @@ void MatchTreeFrame::saveHeaderLayout()
     if (!inRestoreColumns)
     {
         QString treeName = getTreeName();
-        QString fname("./Configuration/" + baseName + "TableHeaders.ini");
+        QString fname(getDirectoryLocation(dlConfiguration) + "/" + baseName + "TableHeaders.ini");
         saveHeaderColumns(fname, treeName, curScreenLayout, header());
 
         MinosLoggerEvents::SendColumnsChanged();
@@ -215,7 +217,7 @@ void MatchTreeFrame::restoreColumns()
 {
     inRestoreColumns = true;
     QString treeName = getTreeName();
-    QString fname("./Configuration/" + baseName + "TableHeaders.ini");
+    QString fname(getDirectoryLocation(dlConfiguration) + "/" + baseName + "TableHeaders.ini");
     restoreHeaderColumns(fname, treeName, curScreenLayout, header());
 
     inRestoreColumns = false;
@@ -442,31 +444,29 @@ QVariant QSOMatchGridModel::data( const QModelIndex &index, int role ) const
                         case egCall:
                             if ( contest->countryMult.getValue() && ct->newCtry )
                                 setHighlight = true;
+                            else if ( contest->usesBonus.getValue() && ct->newCtry)
+                            {
+                                multhighlight = Qt::blue;
+                                setHighlight = true;
+                            }
                             break;
                         case egExchange:
                             if ( contest->districtMult.getValue() && ct->newDistrict )
                                 setHighlight = true;
+                            else if ( contest->usesBonus.getValue() && ct->newDistrict)
+                            {
+                                multhighlight = Qt::blue;
+                                setHighlight = true;
+                            }
                             break;
                         case egLoc:
-                            if ( contest->locMult.getValue() && ct->locCount > 0)
+                            if ( contest->locMult.getValue() && ct->locMultCount > 0)
                             {
                                 setHighlight = true;
                             }
-                            else if ( contest->usesBonus.getValue() && ct->bonus > 0)
+                            else if ( contest->usesBonus.getValue() && ct->locBonus > 0)
                             {
-                                switch (ct->bonus)
-                                {
-                                case 500:  //blue
-                                    multhighlight = Qt::blue;
-                                    break;
-                                case 1000: //green
-                                    multhighlight = Qt::darkGreen;
-                                    break;
-                                case 2000: //red
-                                    multhighlight = Qt::red;
-                                    break;
-                                }
-
+                                multhighlight = Qt::blue;
                                 setHighlight = true;
                             }
                             break;

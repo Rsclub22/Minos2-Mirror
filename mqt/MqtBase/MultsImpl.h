@@ -272,6 +272,9 @@ class CountryList : public MultList < CountryEntry >
       CountryList( );
       virtual ~CountryList();
       void load( );
+      void makeCountrySynonym(const QString &ssyn, const QString &sprefix,
+                              const QString &ct, const QString &itu, const QString &ll,
+                              const QString &cont, SynType prefixType);
       virtual bool procLine( QStringList );
       virtual int slen( bool );
       void loadEntries( const QString &fname, const QString &fmess );
@@ -288,7 +291,6 @@ class CountrySynonymList : public MultList < CountrySynonym >
       virtual ~CountrySynonymList();
       void load( );
       virtual bool procLine(QStringList );
-      static void makeCountrySynonym(const QString &ssyn, const QString &sprefix, const QString &ct, const QString &itu, const QString &ll, const QString &cont);
 };
 
 
@@ -316,7 +318,6 @@ class MultListsImpl: public MultLists
       virtual QSharedPointer<CountryEntry> getCtryForPrefix( const QString &forcedMult );
       virtual QString getCtryListText(const QString &item, int Column, BaseContestLog *const ct , const QString &band);
       virtual QString getDistListText(const QString &item, int Column, BaseContestLog *const ct, const QString &band );
-      virtual bool isUKprefix(const Callsign &cs);
       virtual int getDistWorked(const QString & item, BaseContestLog *const ct , const QString &band);
       virtual int getCountryWorked(const QString & item, BaseContestLog *const ct, const QString &band );
 

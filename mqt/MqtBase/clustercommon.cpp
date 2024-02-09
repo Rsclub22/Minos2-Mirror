@@ -1,4 +1,5 @@
 #include <QDateTime>
+#include "AppStartup.h"
 #include "clustercommon.h"
 #include "checkmodeagainstfreq.h"
 #include "BandList.h"
@@ -653,4 +654,19 @@ bool extractDxLocFromNodeFlag(QString locFlagMsg)
     }
 
     return false;
+}
+
+QString CLUSTER_PATH()
+{
+    return getDirectoryLocation(dlConfiguration) + "/Cluster/";
+}
+
+QString CLUSTER_SETTINGS_FILE()
+{
+    return getDirectoryLocation(dlConfiguration) + "/Cluster/ClusterSettings.ini";
+}
+
+QString CLUSTER_FILTER_FILE()
+{
+    return getDirectoryLocation(dlConfiguration) + "/clusterBandmapFilter.ini";
 }

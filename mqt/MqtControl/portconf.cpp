@@ -7,6 +7,7 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 #include <QString>
+#include "AppStartup.h"
 #include "tinyxml.h"
 #include "TinyUtils.h"
 #include "CommonMonitor.h"
@@ -109,7 +110,7 @@ bool PortConfigure::configurePorts( commonController &monitor )
 
    TiXmlBase::SetCondenseWhiteSpace( false );
    TiXmlDocument keyerdoc;
-   keyerdoc.LoadFile( "./Configuration/portConfig.xml" );
+   keyerdoc.LoadFile( (getDirectoryLocation(dlConfiguration) + "/portConfig.xml").toLatin1() );
    TiXmlElement *root = keyerdoc.RootElement();
    if ( !root )
    {

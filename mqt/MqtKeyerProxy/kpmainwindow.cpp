@@ -1,6 +1,7 @@
 #include <QtSerialPort/QSerialPort>
 #include <QtSerialPort/QSerialPortInfo>
 #include <QFileDialog>
+#include "AppStartup.h"
 #include "regsettings.h"
 #include "LogEvents.h"
 #include "MShowMessageDlg.h"
@@ -37,7 +38,7 @@ KPMainWindow::KPMainWindow(QWidget *parent)
     connect(&CloseTimer, &QTimer::timeout, this, &KPMainWindow::CloseTimerTimer);
     CloseTimer.start(100);
 
-    QSettings keyerSettings( GetCurrentDir() + "/Configuration/MixerSettings.ini" , QSettings::IniFormat ) ;
+    QSettings keyerSettings(getDirectoryLocation(dlConfiguration) + "/MixerSettings.ini" , QSettings::IniFormat ) ;
     QString alsaFileName = keyerSettings.value("AlsaCtlFile", "AlsaCtlFile.txt").toString();
     ui->setupScriptEdit->setText(alsaFileName);
 
@@ -154,7 +155,7 @@ void KPMainWindow::changeEvent( QEvent* e )
     if( e->type() == QEvent::WindowStateChange )
     {
         RegSettings settings;
-        settings.getSettings().setValue("geometry", saveGeometry());
+        settings.getSettings().setValue("KeyerProxyMain/geometry", saveGeometry());
     }
 }
 void KPMainWindow::runAlsaScript(const QString &alsaFileName, const QString &command)
@@ -245,7 +246,7 @@ void KPMainWindow::on_setupBrowseButton_clicked()
         ui->setupScriptEdit->setText(alsaFileName);
 
         {
-            QSettings keyerSettings( GetCurrentDir() + "/Configuration/MixerSettings.ini" , QSettings::IniFormat ) ;
+            QSettings keyerSettings( getDirectoryLocation(dlConfiguration) + "/MixerSettings.ini" , QSettings::IniFormat ) ;
             keyerSettings.setValue("AlsaCtlFile", alsaFileName);
             keyerSettings.sync();
         }

@@ -10,6 +10,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include "rotatorcommon.h"
+#include "AppStartup.h"
 
 const char * RotPresetData::presetButtonLabels[4] = {QT_TR_NOOP("&Read"),
                                         QT_TR_NOOP("&New"),
@@ -30,3 +31,28 @@ RotPresetData::RotPresetData()
 }
 
 
+
+QString ANTENNA_PATH_LOCAL()
+{
+    return getDirectoryLocation(dlConfiguration) + "/Antenna/";
+}
+
+QString ANTENNA_PATH_LOGGER()
+{
+    return getDirectoryLocation(dlConfiguration) + "/Antenna/";
+}
+
+QString PST_CONFIG_FILE()
+{
+    return getDirectoryLocation(dlConfiguration) + "/PSTConfig.ini";
+}
+
+QString CONFIGURATION_FILEPATH_LOCAL()
+{
+    return getDirectoryLocation(dlConfiguration);
+}
+
+QString CONFIGURATION_FILEPATH_LOGGER()
+{
+    return getDirectoryLocation(dlConfiguration);
+}

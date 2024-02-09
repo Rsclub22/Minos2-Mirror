@@ -19,7 +19,7 @@
 
 // What do we do about variable entries? Do we allow them?
 // What about about entries for other Minos programs
-// where we won't know what is is relevant?
+// where we won't know what is relevant?
 
 class INISection;
 typedef INISection *IniSectionPtr;

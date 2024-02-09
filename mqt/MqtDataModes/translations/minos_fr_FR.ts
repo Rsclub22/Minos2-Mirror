@@ -6,43 +6,57 @@
     <message>
         <location filename="../dmmainwindow.ui" line="14"/>
         <source>Minos Data Modes</source>
-        <translation type="unfinished"></translation>
+        <translation>Minos - Modes de données</translation>
     </message>
     <message>
         <location filename="../dmmainwindow.ui" line="21"/>
         <source>Logs to monitor for QSOs</source>
-        <translation type="unfinished"></translation>
+        <translation>Journaux à surveiller pour les QSO</translation>
     </message>
     <message>
         <location filename="../dmmainwindow.ui" line="33"/>
         <source>Start</source>
-        <translation type="unfinished"></translation>
+        <translation>Démarrer</translation>
     </message>
     <message>
         <location filename="../dmmainwindow.ui" line="53"/>
         <source>Configure</source>
-        <translation type="unfinished"></translation>
+        <translation>Configurer</translation>
     </message>
     <message>
         <location filename="../dmmainwindow.cpp" line="72"/>
         <source>Default Device</source>
-        <translation type="unfinished"></translation>
+        <translation>Appareil par défaut</translation>
     </message>
     <message>
         <location filename="../dmmainwindow.cpp" line="145"/>
         <location filename="../dmmainwindow.cpp" line="165"/>
+        <location filename="../dmmainwindow.cpp" line="326"/>
+        <source>Start All Engines</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dmmainwindow.cpp" line="277"/>
+        <source>Any changes will only be actioned when you stop and restart the engines.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dmmainwindow.cpp" line="305"/>
+        <source>Stop All Engines</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Start All</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Démarrer tout</translation>
     </message>
     <message>
-        <location filename="../dmmainwindow.cpp" line="298"/>
         <source>Stop All</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Arrêter tout</translation>
     </message>
     <message>
-        <location filename="../dmmainwindow.cpp" line="328"/>
+        <location filename="../dmmainwindow.cpp" line="352"/>
         <source>No DataMode sender configured</source>
-        <translation type="unfinished"></translation>
+        <translation>Aucun expéditeur DataMode configuré</translation>
     </message>
 </context>
 <context>
@@ -50,19 +64,19 @@
     <message>
         <location filename="../engineconfigure.ui" line="14"/>
         <source>Configure Engines</source>
-        <translation type="unfinished"></translation>
+        <translation>Configurer [what does this mean?]</translation>
     </message>
     <message>
         <location filename="../engineconfigure.ui" line="58"/>
         <location filename="../engineconfigure.ui" line="154"/>
         <source>Receive</source>
-        <translation type="unfinished"></translation>
+        <translation>Recevoire</translation>
     </message>
     <message>
         <location filename="../engineconfigure.ui" line="72"/>
         <location filename="../engineconfigure.ui" line="168"/>
         <source>Transmit</source>
-        <translation type="unfinished"></translation>
+        <translation>Transmettre</translation>
     </message>
     <message>
         <location filename="../engineconfigure.ui" line="241"/>
@@ -72,12 +86,12 @@
         <location filename="../engineconfigure.ui" line="371"/>
         <location filename="../engineconfigure.ui" line="443"/>
         <source>...</source>
-        <translation type="unfinished"></translation>
+        <translation>...</translation>
     </message>
     <message>
         <location filename="../engineconfigure.ui" line="33"/>
         <source>MMVARI/1</source>
-        <translation type="unfinished"></translation>
+        <translation>MMVARI/1</translation>
     </message>
     <message>
         <location filename="../engineconfigure.ui" line="47"/>
@@ -87,29 +101,29 @@
         <location filename="../engineconfigure.ui" line="464"/>
         <location filename="../engineconfigure.ui" line="510"/>
         <source>Enable 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Activer 1</translation>
     </message>
     <message>
         <location filename="../engineconfigure.ui" line="86"/>
         <source>PTT port</source>
-        <translation type="unfinished"></translation>
+        <translation>Port PTT</translation>
     </message>
     <message>
         <location filename="../engineconfigure.ui" line="98"/>
         <location filename="../engineconfigure.ui" line="194"/>
         <source>RTS</source>
-        <translation type="unfinished"></translation>
+        <translation>RTS</translation>
     </message>
     <message>
         <location filename="../engineconfigure.ui" line="108"/>
         <location filename="../engineconfigure.ui" line="204"/>
         <source>DTR</source>
-        <translation type="unfinished"></translation>
+        <translation>DTR</translation>
     </message>
     <message>
         <location filename="../engineconfigure.ui" line="136"/>
         <source>MMVARI/2</source>
-        <translation type="unfinished"></translation>
+        <translation>MMVARI/2</translation>
     </message>
     <message>
         <location filename="../engineconfigure.ui" line="143"/>
@@ -119,94 +133,94 @@
         <location filename="../engineconfigure.ui" line="485"/>
         <location filename="../engineconfigure.ui" line="517"/>
         <source>Enable 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Activer 2</translation>
     </message>
     <message>
         <location filename="../engineconfigure.ui" line="182"/>
         <source>PTT Port</source>
-        <translation type="unfinished"></translation>
+        <translation>Port PTT</translation>
     </message>
     <message>
         <location filename="../engineconfigure.ui" line="231"/>
         <source>MMTTY/1</source>
-        <translation type="unfinished"></translation>
+        <translation>MMTTY/1</translation>
     </message>
     <message>
         <location filename="../engineconfigure.ui" line="259"/>
         <source>MMTTY/2</source>
-        <translation type="unfinished"></translation>
+        <translation>MMTTY/2</translation>
     </message>
     <message>
         <location filename="../engineconfigure.ui" line="296"/>
         <source>2Tone/1</source>
-        <translation type="unfinished"></translation>
+        <translation>2Ton/1</translation>
     </message>
     <message>
         <location filename="../engineconfigure.ui" line="324"/>
         <source>2Tone/2</source>
-        <translation type="unfinished"></translation>
+        <translation>2Ton/2</translation>
     </message>
     <message>
         <location filename="../engineconfigure.ui" line="361"/>
         <source>Gritty</source>
-        <translation type="unfinished"></translation>
+        <translation>Gritty</translation>
     </message>
     <message>
         <location filename="../engineconfigure.ui" line="382"/>
         <location filename="../engineconfigure.ui" line="454"/>
         <source>Port 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Port 1</translation>
     </message>
     <message>
         <location filename="../engineconfigure.ui" line="403"/>
         <location filename="../engineconfigure.ui" line="475"/>
         <source>Port 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Port 2</translation>
     </message>
     <message>
         <location filename="../engineconfigure.ui" line="433"/>
         <source>FLDigi</source>
-        <translation type="unfinished"></translation>
+        <translation>FLDigi</translation>
     </message>
     <message>
         <location filename="../engineconfigure.ui" line="503"/>
         <source>Test</source>
-        <translation type="unfinished"></translation>
+        <translation>Tester</translation>
     </message>
     <message>
         <location filename="../engineconfigure.ui" line="542"/>
         <source>Sender</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../engineconfigure.ui" line="552"/>
         <source>RTTY</source>
-        <translation type="unfinished"></translation>
+        <translation>RTTY</translation>
     </message>
     <message>
         <location filename="../engineconfigure.ui" line="562"/>
         <source>BPSK</source>
-        <translation type="unfinished"></translation>
+        <translation>BPSK</translation>
     </message>
     <message>
         <location filename="../engineconfigure.ui" line="585"/>
         <source>OK</source>
-        <translation type="unfinished"></translation>
+        <translation>OK</translation>
     </message>
     <message>
         <location filename="../engineconfigure.ui" line="592"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Annuler</translation>
     </message>
     <message>
-        <location filename="../engineconfigure.cpp" line="380"/>
+        <location filename="../engineconfigure.cpp" line="390"/>
         <source>Engine Files (*.ocx *.exe);;All Files (*.*)</source>
-        <translation type="unfinished"></translation>
+        <translation>[What???] Fichiers (*.ocx *.exe);;Tous les fichiers (*.*)</translation>
     </message>
     <message>
-        <location filename="../engineconfigure.cpp" line="384"/>
+        <location filename="../engineconfigure.cpp" line="394"/>
         <source>%1 Engine Executable</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 [what????] Exécutable</translation>
     </message>
 </context>
 <context>
@@ -214,27 +228,27 @@
     <message>
         <location filename="../enginewindow.ui" line="51"/>
         <source>Start Transmission</source>
-        <translation type="unfinished"></translation>
+        <translation>Démarrer la transmission</translation>
     </message>
     <message>
         <location filename="../enginewindow.ui" line="54"/>
         <source>Send</source>
-        <translation type="unfinished"></translation>
+        <translation>Envoyer</translation>
     </message>
     <message>
         <location filename="../enginewindow.ui" line="61"/>
         <source>Stop Transmission Immediately</source>
-        <translation type="unfinished"></translation>
+        <translation>Arrêter immédiatement la transmission</translation>
     </message>
     <message>
         <location filename="../enginewindow.ui" line="64"/>
         <source>Stop</source>
-        <translation type="unfinished"></translation>
+        <translation>Arrêter</translation>
     </message>
     <message>
         <location filename="../enginewindow.ui" line="83"/>
         <source>Current Radio</source>
-        <translation type="unfinished"></translation>
+        <translation>Radio actuel</translation>
     </message>
     <message>
         <location filename="../enginewindow.ui" line="97"/>
@@ -252,18 +266,18 @@
         <location filename="../enginewindow.ui" line="213"/>
         <location filename="../enginewindow.ui" line="220"/>
         <source>...</source>
-        <translation type="unfinished"></translation>
+        <translation>...</translation>
     </message>
     <message>
         <location filename="../enginewindow.ui" line="124"/>
-        <location filename="../enginewindow.cpp" line="702"/>
+        <location filename="../enginewindow.cpp" line="705"/>
         <source>Show Back Data</source>
-        <translation type="unfinished"></translation>
+        <translation>Afficher les données arrière [huh???]</translation>
     </message>
     <message>
-        <location filename="../enginewindow.cpp" line="707"/>
+        <location filename="../enginewindow.cpp" line="710"/>
         <source>Hide Back Data</source>
-        <translation type="unfinished"></translation>
+        <translation>Masquer les données arrière [huh???]</translation>
     </message>
 </context>
 <context>
@@ -271,7 +285,7 @@
     <message>
         <location filename="../grittyframe.ui" line="13"/>
         <source>Frame</source>
-        <translation type="unfinished"></translation>
+        <translation>Cadre</translation>
     </message>
 </context>
 <context>
@@ -279,7 +293,7 @@
     <message>
         <location filename="../MMTTYFrame.ui" line="13"/>
         <source>Frame</source>
-        <translation type="unfinished"></translation>
+        <translation>Cadre</translation>
     </message>
 </context>
 <context>
@@ -287,22 +301,22 @@
     <message>
         <location filename="../MMVARIFrame.cpp" line="80"/>
         <source>RX/TX state</source>
-        <translation type="unfinished"></translation>
+        <translation>RX/TX État</translation>
     </message>
     <message>
         <location filename="../MMVARIFrame.cpp" line="89"/>
         <source>Move the cursor to keep it centered on a signal if the frequency changes slightly</source>
-        <translation type="unfinished"></translation>
+        <translation>Déplacer le curseur pour le maintenir centré sur un signal si la fréquence change légèrement</translation>
     </message>
     <message>
         <location filename="../MMVARIFrame.cpp" line="96"/>
         <source>When NET is on the TX frequency follows the RX frequency </source>
-        <translation type="unfinished"></translation>
+        <translation>Lorsque NET est sur la fréquence TX suit la fréquence RX </translation>
     </message>
     <message>
         <location filename="../MMVARIFrame.cpp" line="102"/>
         <source>Align the transmit frequency to the receive frequency</source>
-        <translation type="unfinished"></translation>
+        <translation>Aligner la fréquence TX sur la fréquence RX</translation>
     </message>
 </context>
 <context>
@@ -310,7 +324,7 @@
     <message>
         <location filename="../testframe.ui" line="13"/>
         <source>Frame</source>
-        <translation type="unfinished"></translation>
+        <translation>Cadre</translation>
     </message>
 </context>
 </TS>

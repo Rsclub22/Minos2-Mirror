@@ -146,7 +146,6 @@ RRRtAudioSoundSystem::RRRtAudioSoundSystem()
          }
          if (i == defInput)
          {
-             inChannels = info.inputChannels;
              trace("(Default input)");
          }
          if (info.inputChannels)
@@ -154,8 +153,9 @@ RRRtAudioSoundSystem::RRRtAudioSoundSystem()
              inputDevices.append(info.name.c_str());
          }
          deviceIds[QString(info.name.c_str())] = i;
+         inChannels[info.name.c_str()] = info.inputChannels;
+         trace( QString(info.name.c_str()) + " input channels = " + QString::number(inChannels[info.name.c_str()]));
        }
-       trace( "Default input channels = " + QString::number(inChannels));
     }
     catch (RtAudioError &error)
     {
@@ -210,13 +210,19 @@ void RRRtAudioSoundSystem::setVUCallBack( VUCallBack cb )
 {
    WinVUCallback = cb;
 }
-
+void errorCallback( RtAudioError::Type /*type*/, const std::string &errorText)
+{
+   trace(QString("RTAudio error callback: ") + errorText.c_str());
+}
 bool RRRtAudioSoundSystem::initialise( QString ind, QString ind2)
 {
     if (!audio)
     {
         audio = new RtAudio();
     }
+    curInDev1 = ind;
+    curInDev2 = ind2;
+
     RtAudio::StreamParameters inParams;
     RtAudio::StreamOptions soptions;
 
@@ -224,7 +230,7 @@ bool RRRtAudioSoundSystem::initialise( QString ind, QString ind2)
 
     inParams.deviceId = deviceIds[ind];
     inParams.firstChannel = 0;
-    inParams.nChannels = inChannels;
+    inParams.nChannels = inChannels[ind];
 
     soptions.flags = 0;
     soptions.numberOfBuffers = FRAMES;
@@ -236,7 +242,8 @@ bool RRRtAudioSoundSystem::initialise( QString ind, QString ind2)
                       RTAUDIO_SINT16, sampleRate,
                       &bufferFrames, ::audioCallback,
                       static_cast<void *>(this),
-                      &soptions
+                      &soptions,
+                      &errorCallback
                       );
     audio->startStream();
     trace(QString("Audio stream %1 %2 opened OK").arg(deviceIds[ind]).arg(ind));
@@ -254,7 +261,7 @@ bool RRRtAudioSoundSystem::initialise( QString ind, QString ind2)
 
         inParams.deviceId = deviceIds[ind2];
         inParams.firstChannel = 0;
-        inParams.nChannels = inChannels;
+        inParams.nChannels = inChannels[ind2];
 
         soptions.flags = 0;
         soptions.numberOfBuffers = FRAMES;
@@ -266,7 +273,8 @@ bool RRRtAudioSoundSystem::initialise( QString ind, QString ind2)
                           RTAUDIO_SINT16, sampleRate,
                           &bufferFrames, ::audioCallback2,
                           static_cast<void *>(this),
-                          &soptions
+                          &soptions,
+                          &errorCallback
                           );
 
         audio2->startStream();
@@ -313,6 +321,7 @@ int RRRtAudioSoundSystem::audioCallback( void *inputBuffer,
     {
         return 0;   // no data
     }
+    unsigned int inCh = inChannels[(instance == 1)?curInDev1:curInDev2];
 
     double recmult = recordMult;
     if (instance == 2)
@@ -344,8 +353,8 @@ int RRRtAudioSoundSystem::audioCallback( void *inputBuffer,
     for (unsigned int i = 0; i < nFrames ; i++)
     {
         // copy to staging buffer
-        int16_t s1 = q[i * inChannels];
-        int16_t s2 = (inChannels > 1)?q[i * inChannels + 1]:q[i * inChannels];
+        int16_t s1 = q[i * inCh];
+        int16_t s2 = (inCh > 1)?q[i * inCh + 1]:q[i * inCh];
 
         qreal val1 = s1 * recmult;
         qreal val2 = s2 * recmult;
@@ -360,8 +369,8 @@ int RRRtAudioSoundSystem::audioCallback( void *inputBuffer,
         if (val2 < -32767.0)
             val2 = -32767.0;
 
-        p[i * inChannels] = static_cast<qint16>(val1);
-        p[i * inChannels + 1] = static_cast<qint16>(val2);
+        p[i * inCh] = static_cast<qint16>(val1);
+        p[i * inCh + 1] = static_cast<qint16>(val2);
         int16_t sample = static_cast<int16_t>(std::max( std::abs(val1), std::abs(val2) ));
 
         if ( sample > maxvol )

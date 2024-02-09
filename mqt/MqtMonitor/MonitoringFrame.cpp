@@ -1,3 +1,4 @@
+#include "AppStartup.h"
 #include "htmldelegate.h"
 #include "contest.h"
 #include "cutils.h"
@@ -37,7 +38,7 @@ void MonitoringFrame::viewColumn()
         }
         else
         {
-            QString fname("./Configuration/MonitorTableHeaders.ini");
+            QString fname(getDirectoryLocation(dlConfiguration) + "/MonitorTableHeaders.ini");
             resetHeaderColumns(fname, "QSOTable", "", ui->QSOTable->horizontalHeader());
         }
     }
@@ -47,7 +48,7 @@ void MonitoringFrame::saveQSOTableColumns()
 {
     if (!inRestoreColumns)
     {
-        QString fname("./Configuration/MonitorTableHeaders.ini");
+        QString fname(getDirectoryLocation(dlConfiguration) + "/MonitorTableHeaders.ini");
         saveHeaderColumns(fname, "QSOTable", "", ui->QSOTable->horizontalHeader());
         MinosLoggerEvents::SendColumnsChanged();
     }
@@ -55,7 +56,7 @@ void MonitoringFrame::saveQSOTableColumns()
 void MonitoringFrame::restoreQSOTableColumns()
 {
     inRestoreColumns = true;
-    QString fname("./Configuration/MonitorTableHeaders.ini");
+    QString fname(getDirectoryLocation(dlConfiguration) + "/MonitorTableHeaders.ini");
     restoreHeaderColumns(fname, "QSOTable", "", ui->QSOTable->horizontalHeader());
     inRestoreColumns = false;
 }
@@ -106,8 +107,8 @@ void MonitoringFrame::initialise( BaseContestLog * pcontest )
 
    QSharedPointer<HtmlDelegate> delegate(new HtmlDelegate(1.0, 1.0));
    qsoModel.delegate = delegate;
-
-   qsoModel.initialise(contest);
+   
+   qsoModel.setContest(contest);
 
    ui->QSOTable->setModel(&qsoModel);
    ui->QSOTable->setItemDelegate( delegate.data() );

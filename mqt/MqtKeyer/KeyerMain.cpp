@@ -1,3 +1,4 @@
+#include "AppStartup.h"
 #include "MShowMessageDlg.h"
 #include  <QtGlobal>
 #ifdef Q_OS_UNIX
@@ -154,7 +155,7 @@ KeyerMain::KeyerMain(QWidget *parent) :
 
     createCloseEvent();
 
-    QSettings keyerSettings( GetCurrentDir() + "/Configuration/MixerSettings.ini" , QSettings::IniFormat ) ;
+    QSettings keyerSettings( getDirectoryLocation(dlConfiguration) + "/MixerSettings.ini" , QSettings::IniFormat ) ;
     QString alsaFileName = keyerSettings.value("AlsaCtlFile", "AlsaCtlFile.txt").toString();
     ui->setupScriptEdit->setText(alsaFileName);
 
@@ -206,8 +207,8 @@ KeyerMain::KeyerMain(QWidget *parent) :
     ui->portEdit->setText(port);
     ui->portEdit->setValidator(new QIntValidator(0, 0xffff, this));
 
-    commonPort * cp = loadKeyers();
-    connect(cp, &commonPort::lcallback, this, &KeyerMain::lcallback);
+    QSharedPointer<commonPort> cp = loadKeyers();
+    connect(cp.data(), &commonPort::lcallback, this, &KeyerMain::lcallback);
 
     setVolumeMults();
 
@@ -231,7 +232,7 @@ KeyerMain::KeyerMain(QWidget *parent) :
     int passThroughLevel = settings.getSettings().value("PassThroughLevel", 0).toInt();
 
     CompressorParams cpar;
-    if (masterConfig.read("./Configuration/MinosKeyer.json"))
+    if (masterConfig.read(getDirectoryLocation(dlConfiguration) + "/MinosKeyer.json"))
     {
         recordLevel = masterConfig.recordSliderPosition;
         replayLevel = masterConfig.replaySliderPosition;
@@ -291,7 +292,7 @@ void KeyerMain::changeEvent( QEvent* e )
     if( e->type() == QEvent::WindowStateChange )
     {
         RegSettings settings;
-        settings.getSettings().setValue("geometry", saveGeometry());
+        settings.getSettings().setValue("KeyerMain/geometry", saveGeometry());
     }
 }
 bool KeyerMain::writeConfig(bool force)
@@ -302,7 +303,7 @@ bool KeyerMain::writeConfig(bool force)
     QString conf = masterConfig.makeConfig(QJsonDocument::Compact, force, true);
     if (force || old != conf)
     {
-        ret = masterConfig.write("./Configuration/MinosKeyer.json");
+        ret = masterConfig.write(getDirectoryLocation(dlConfiguration) + "/MinosKeyer.json");
         KeyerServer::publishConfig(masterConfig.makeConfig(QJsonDocument::Compact, force, false));
 
         old = conf;
@@ -582,7 +583,7 @@ void KeyerMain::on_setupBrowseButton_clicked()
         ui->setupScriptEdit->setText(alsaFileName);
 
         {
-            QSettings keyerSettings( GetCurrentDir() + "/Configuration/MixerSettings.ini" , QSettings::IniFormat ) ;
+            QSettings keyerSettings( getDirectoryLocation(dlConfiguration) + "/MixerSettings.ini" , QSettings::IniFormat ) ;
             keyerSettings.setValue("AlsaCtlFile", alsaFileName);
             keyerSettings.sync();
         }

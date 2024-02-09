@@ -30,6 +30,7 @@ public:
 
     RxBuffer rxBuff;
     QString engineName;
+    bool started = false;
 
     static const QString mmvari;
     static const QString mmtty;

@@ -140,7 +140,7 @@ void TxVmRigSetupDialog::setMaxNumOfButtons(int maxNumButtons)
 
 bool TxVmRigSetupDialog::readSaveButtonByRadioNameIni()
 {
-    QString fileName = VOICEKEYER_COMMON_PARAMS_PATH + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[VoiceKeyerId::RigControl] + ".ini";
+    QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[VoiceKeyerId::RigControl] + ".ini";
     QSettings readConfig(fileName, QSettings::IniFormat);
 
     return readConfig.value("Common/SaveButtonByRadioName", false).toBool();

@@ -55,12 +55,12 @@ int main(int argc, char *argv[])
         SetCurrentDir(sdCard);
         QString here = GetCurrentDir();
 
-        if (!DirectoryExists(sdCard + "/Configuration"))
+        if (!DirectoryExists(getDirectoryLocation(dlConfiguration) ))
         {
-            CreateDir(sdCard + "/Configuration");
-            QFile::copy("assets:/Configuration/MinosLogger.ini",sdCard + "/Configuration/MinosLogger.ini");
+            CreateDir(getDirectoryLocation(dlConfiguration));
+            QFile::copy("assets:/Configuration/MinosLogger.ini",getDirectoryLocation(dlConfiguration) + "/MinosLogger.ini");
             //If it's a db file, you need write access:
-            QFile::setPermissions(sdCard + "/Configuration/MinosLogger.ini",QFile::ReadOwner|QFile::WriteOwner);
+            QFile::setPermissions(getDirectoryLocation(dlConfiguration) + "/MinosLogger.ini",QFile::ReadOwner|QFile::WriteOwner);
         }
 #endif
 

@@ -8,19 +8,13 @@ include($$PWD/../mqthamlib.pri)
 include($$PWD/../mqtapplibs.pri)
 
 QT       += core gui network widgets
-!ios:QT       += serialport
+QT       += serialport
 
 TARGET = MqtRotator
 TEMPLATE = app
 
 win32:RC_ICONS += ../MinosRotator.ico
 macx:ICON=../MinosRotator.icns
-
-ios {
-    ios_icon.files += $$files(../ControlFiles/ios/MqtRotator/*.png)
-    QMAKE_BUNDLE_DATA += ios_icon
-    QMAKE_INFO_PLIST = ../ControlFiles/ios/Info.plist
-}
 
 SOURCES += \
     hamlibRotcontrol.cpp \

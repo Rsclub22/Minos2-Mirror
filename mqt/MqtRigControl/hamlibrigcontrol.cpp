@@ -413,6 +413,7 @@ int HamlibRigControl::rigInit(scatParams &currentRadio, bool useRigCtld)
     }
     else
     {
+        rigerror(retcode);  // log the internal debug info
         setRigConnected(false);
     }
 

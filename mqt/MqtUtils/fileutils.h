@@ -21,5 +21,6 @@ bool CreateDir( const QString &s );
 qint64 FileLength(const QString &fname);
 
 QString GetCleanPath(QString);
+QString GetFullPath(QString fn);
 
 #endif // FILEUTILS_H

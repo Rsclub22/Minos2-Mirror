@@ -269,7 +269,6 @@ signals:
                                       , QColor const& bg = QColor {}, QColor const& fg = QColor {}
                                       , bool last_only = false);
 private slots:
-    void on_autoSelectButton_toggled(bool);
     void on_testButton_clicked();
     void on_clearDecodesButton_clicked();
     void on_clearLocalDecodesButton_clicked();

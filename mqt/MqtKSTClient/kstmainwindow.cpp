@@ -16,9 +16,7 @@
 #include "LogEvents.h"
 #include "kstmonitoredlogs.h"
 #include "mults.h"
-#include "ConfigFile.h"
 #include "MinosRPC.h"
-#include "RPCCommandConstants.h"
 
 #include "kstmainwindow.h"
 #include "ui_kstmainwindow.h"
@@ -73,7 +71,7 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     callVector =    QSharedPointer<QVector <QSharedPointer<KstUser> > >( new QVector<QSharedPointer<KstUser> > );
     messageVector = QSharedPointer<QVector <QSharedPointer<KstMessageLine> > >( new QVector<QSharedPointer<KstMessageLine> >);
 
-    iniName = "./Configuration/" + getAppStartupName() + ".ini";
+    iniName = getDirectoryLocation(dlConfiguration) + "/" + getAppStartupName() + ".ini";
 
     RemoteLogs::setSettingsFile(iniName);
     bool needTransfer = !FileExists(iniName);
@@ -348,6 +346,13 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
 
     ui->kstFrame->layout()->setContentsMargins(0, 0, 0, 0);
     ui->centralwidget->layout()->setContentsMargins(0, 0, 0, 0);
+
+    ui->callSplitter->setMinimumWidth(10);
+    ui->msgSplitter->setMinimumWidth(10);
+    ui->callsFrame->setMinimumHeight(10);
+    ui->planesFrame->setMinimumHeight(10);
+    ui->msgFrame->setMinimumHeight(10);
+    ui->tomeFrame->setMinimumHeight(10);
 }
 
 KSTMainWindow::~KSTMainWindow()

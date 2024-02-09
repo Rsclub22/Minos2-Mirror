@@ -62,7 +62,6 @@ public:
     void setCwCcwCmdEnable(bool s);
 
     void checkConnection();
-    void closeContest();
     void setSupportStopCommandFlag(bool state);
 
 private:

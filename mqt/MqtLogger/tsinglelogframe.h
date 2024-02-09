@@ -4,6 +4,7 @@
 #include "ContestPage.h"
 #include "dmbuttonframe.h"
 #include "rigmemcommondata.h"
+#include "qsotableframe.h"
 #include "MatchTreeFrame.h"
 #include "MatchThisFrame.h"
 #include "MatchOtherFrame.h"
@@ -41,7 +42,7 @@ public:
     explicit TSingleLogFrame(QWidget *parent, BaseContestLog *contest);
     virtual ~TSingleLogFrame();
 
-    QTableView *QSOTable = nullptr;
+    QSOTableFrame *QSOListFrame = nullptr;
     RigControlFrame *FKHRigControlFrame = nullptr;
     RunButtonsFrame *runButtonsFrame = nullptr;
     BandSwitchFrame *bandSwitchFrame = nullptr;
@@ -84,15 +85,14 @@ public:
     void setActiveControl( int *Key );
     QString makeEntry(bool saveMinos , bool sendEntry);
     void exportContest();
-    void QSOTreeSelectContact( QSharedPointer<BaseContact> lct );
+
+    void EditContact(CheckableContact *lct , bool nextUnfilled);
 
     ScreenContact &getScreenEntry();
     int getBearingFrmQSOLog();
     int getCurrentBearing();
 
     void refreshMults();
-
-    bool columnsChanged;
 
     // From rigcontrol
     Frequency sCurFreq;
@@ -119,12 +119,10 @@ public:
     void getCurrentDetails(memoryData::memData &m);
 
     void checkConnections();
+
     void applyScreenLayout();
     QString getCurScreenLayout() const;
-
     void setCurScreenLayout(const QString &value);
-    void restoreQSOTableColumns();
-
 
     void on_SetTransVertOffset(double offset, PubSubName psn);
     void on_SetTransVertSwitch(int switchNum, PubSubName psn);
@@ -174,10 +172,7 @@ public:
     void presetTurn(QString);
 
 private:
-    QSharedPointer<HtmlDelegate> delegate;
-    QSOGridModel qsoModel;
     QString curScreenLayout;
-    QMenu columnsMenu;
 
     int lastStanzaCount = 0;
 
@@ -189,9 +184,6 @@ private:
     bool pauseRigControlUpdates = false;
 
     void transferDetails( MatchTreeItem *MatchTreeIndex );
-
-    void saveQSOTableColumns();
-    bool inRestoreColumns = false;
 
     MatchTreeItem *getXferItem();
 
@@ -210,8 +202,6 @@ private:
     void setQrzDisplayFrameLoaded(bool loaded);
     void doSendEntry(QString expName);
 private slots:
-    void onQSOTable_doubleClicked(const QModelIndex &index);
-
     void on_ContestPageChanged();
     void onOtherMatchTreeFocused(QObject *, bool in, QFocusEvent *);
     void onArchiveTreeFocused(QObject *, bool in, QFocusEvent *);
@@ -225,18 +215,10 @@ private slots:
     void HideTimerTimer();
     void on_MakeEntry(BaseContestLog*, bool e);
 
-    void on_AfterSelectContact(QSharedPointer<BaseContact> lct, BaseContestLog *contest);
     void on_AfterLogContact(BaseContestLog *ct);
     void on_NextUnfilled(BaseContestLog*);
     void on_GoToSerial(BaseContestLog*);
     void on_SetMemory(BaseContestLog *, QString, QString);
-
-    void onColumnsChanged();
-    void on_sectionResized(int, int, int);
-    void onQSOGrid_customContextMenuRequested(const QPoint &pos);
-    void onQSOGrid_sectionMoved(int, int, int);
-
-    void EditContact(CheckableContact *lct , bool nextUnfilled);
 
     void on_SetRadioList();
 
@@ -284,7 +266,6 @@ private slots:
 
     void onQrzCallsignRequest(QString callsign);
     void onQrzInfoToLog(QString callsign, QString qraLocator, QString name);
-    void viewColumn();
     void onShowCribBand();
 };
 

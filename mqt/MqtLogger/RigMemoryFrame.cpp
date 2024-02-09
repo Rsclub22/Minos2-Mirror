@@ -1,3 +1,4 @@
+#include "AppStartup.h"
 #include "ContestApp.h"
 #include "LoggerContest.h"
 #include "MMessageDialog.h"
@@ -40,6 +41,7 @@ RigMemoryFrame::RigMemoryFrame(StackedInfoFrame *parent) :
 {
     ui->setupUi(this);
 
+    suppressSaveColumns = true;
     ui->rigMemTable->setObjectName( "rigMemTable" );
     ui->rigMemTable->horizontalHeader() ->setSectionsMovable( true );
     ui->rigMemTable->horizontalHeader() ->setSectionsClickable( true );
@@ -174,7 +176,7 @@ void RigMemoryFrame::viewColumn()
         }
         else
         {
-            QString fname("./Configuration/LoggerTableHeaders.ini");
+            QString fname(getDirectoryLocation(dlConfiguration) + "/LoggerTableHeaders.ini");
             resetHeaderColumns(fname, "RigMemTable", tslf->getCurScreenLayout(), ui->rigMemTable->horizontalHeader());
         }
     }
@@ -184,7 +186,7 @@ void RigMemoryFrame::saveRigMemTableColumns()
 {
     if (!inRestoreColumns && !suppressSaveColumns)
     {
-        QString fname("./Configuration/LoggerTableHeaders.ini");
+        QString fname(getDirectoryLocation(dlConfiguration) + "/LoggerTableHeaders.ini");
         saveHeaderColumns(fname, "RigMemTable", tslf->getCurScreenLayout(), ui->rigMemTable->horizontalHeader());
 
         //And we need to send this out to all other instances
@@ -196,7 +198,7 @@ void RigMemoryFrame::saveRigMemTableColumns()
 void RigMemoryFrame::restoreRigMemTableColumns()
 {
     inRestoreColumns = true;
-    QString fname("./Configuration/LoggerTableHeaders.ini");
+    QString fname(getDirectoryLocation(dlConfiguration) + "/LoggerTableHeaders.ini");
     restoreHeaderColumns(fname, "RigMemTable", tslf->getCurScreenLayout(), ui->rigMemTable->horizontalHeader());
     inRestoreColumns = false;
 }
@@ -243,6 +245,7 @@ void RigMemoryFrame::on_sortIndicatorChanged(int /*logicalIndex*/, Qt::SortOrder
 }
 void RigMemoryFrame::setContest( BaseContestLog *pct )
 {
+    suppressSaveColumns = false;
     ct = dynamic_cast<LoggerContestLog *>( pct);
 
     model.ct = pct;

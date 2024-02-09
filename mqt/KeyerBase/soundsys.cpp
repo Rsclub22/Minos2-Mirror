@@ -79,13 +79,11 @@ RtAudioSoundSystem::RtAudioSoundSystem()
 
          if (i == defInput)
          {
-             inChannels = info.inputChannels;
              trace("(Default input)");
              defaultInput = info.name.c_str();
          }
          if (i == defOutput)
          {
-             outChannels = info.outputChannels;
              trace("(Default output)");
              defaultOutput = info.name.c_str();
          }
@@ -98,8 +96,12 @@ RtAudioSoundSystem::RtAudioSoundSystem()
              outputDevices.append(info.name.c_str());
          }
          deviceIds[QString(info.name.c_str())] = i;
+         inChannels[info.name.c_str()] = info.inputChannels;
+         outChannels[info.name.c_str()] = info.outputChannels;
+         trace( QString(info.name.c_str()) + " output channels = "
+               + QString::number(outChannels[info.name.c_str()])
+               + " input channels = " + QString::number(inChannels[info.name.c_str()]));
        }
-       trace( "Default output channels = " + QString::number(outChannels) + " Default input channels = " + QString::number(inChannels));
     }
     catch (RtAudioError &error)
     {
@@ -125,12 +127,19 @@ RtAudioSoundSystem::~RtAudioSoundSystem()
        replayfilter2 = nullptr;
     }
 }
+void errorCallback( RtAudioError::Type /*type*/, const std::string &errorText)
+{
+    trace(QString("RTAudio error callback: ") + errorText.c_str());
+}
 bool RtAudioSoundSystem::initialise( QString ind, QString outd, QString host, QString port  )
 {
     if (!audio)
     {
         audio = new RtAudio();
     }
+
+    curInDev = ind;
+    curOutDev = outd;
 
     bool oip = false;
     RtAudio::StreamParameters outParams;
@@ -150,7 +159,7 @@ bool RtAudioSoundSystem::initialise( QString ind, QString outd, QString host, QS
     }
 
     outParams.firstChannel = 0;
-    outParams.nChannels = outChannels;
+    outParams.nChannels = outChannels[outd];
 
     bool iip = false;
     if (deviceIds.contains(ind))
@@ -162,7 +171,7 @@ bool RtAudioSoundSystem::initialise( QString ind, QString outd, QString host, QS
         iip = true;
     }
     inParams.firstChannel = 0;
-    inParams.nChannels = inChannels;
+    inParams.nChannels = inChannels[ind];
 
     soptions.flags = 0;
     soptions.numberOfBuffers = RTAUDIO_MINIMIZE_LATENCY;
@@ -176,7 +185,8 @@ bool RtAudioSoundSystem::initialise( QString ind, QString outd, QString host, QS
                       RTAUDIO_SINT16, sampleRate,
                       &bufferFrames, ::audioCallback,
                       static_cast<void *>(this),
-                      &soptions
+                      &soptions,
+                      &errorCallback
                       );
     } catch (RtAudioError &error)
     {
@@ -345,6 +355,8 @@ int RtAudioSoundSystem::audioCallback(void *outputBuffer, void *inputBuffer,
     {
         stime = tnow;
     }
+    unsigned int inCh = inChannels[curInDev];
+    unsigned int outCh = outChannels[curOutDev];
 
     cbacks += 1;
     qreal msecsPerCallback = (tnow - stime)/cbacks;
@@ -431,7 +443,7 @@ int RtAudioSoundSystem::audioCallback(void *outputBuffer, void *inputBuffer,
 
     if (outputBuffer != nullptr && nFrames > 0)
     {
-        memset(outputBuffer, 0, nFrames * 2 * outChannels);   // 2 bytes, 2 channels
+        memset(outputBuffer, 0, nFrames * 2 * outCh);   // 2 bytes, 2 channels
     }
 
     // if we are reading from IP compression etc was done earlier
@@ -448,8 +460,8 @@ int RtAudioSoundSystem::audioCallback(void *outputBuffer, void *inputBuffer,
 
         for (unsigned int i = 0; i < nFrames ; i++)
         {
-            double initi1 = q[i * inChannels];
-            double initi2 = (inChannels > 1)?q[i * inChannels + 1]:q[i * inChannels];
+            double initi1 = q[i * inCh];
+            double initi2 = (inCh > 1)?q[i * inCh + 1]:q[i * inCh];
 
             double s1 = initi1;
             double s2 = initi2;
@@ -493,17 +505,17 @@ int RtAudioSoundSystem::audioCallback(void *outputBuffer, void *inputBuffer,
 
             if (passThroughEnabled)
             {
-                m[i * outChannels] = static_cast<qint16>(val1);
-                m[i * outChannels + 1] = static_cast<qint16>(val2);
+                m[i * outCh] = static_cast<qint16>(val1);
+                m[i * outCh + 1] = static_cast<qint16>(val2);
 
             }
             if (inputEnabled)
             {
-                p[i * outChannels] = static_cast<qint16>(val1);
-                if (inChannels > 1)
-                    p[i * outChannels + 1] = static_cast<qint16>(val2);
+                p[i * outCh] = static_cast<qint16>(val1);
+                if (inCh > 1)
+                    p[i * outCh + 1] = static_cast<qint16>(val2);
                 else
-                    p[i * outChannels + 1] = static_cast<qint16>(val1);
+                    p[i * outCh + 1] = static_cast<qint16>(val1);
             }
 
             int16_t sample = static_cast<int16_t>(std::max( val1, val2 ));
@@ -549,7 +561,7 @@ int RtAudioSoundSystem::audioCallback(void *outputBuffer, void *inputBuffer,
     }
     if (replayBuff != nullptr)  // playing from IP
     {
-        memcpy(outputBuffer, replayBuff->buff, replayBuff->bh.frameCount * 2 * outChannels);
+        memcpy(outputBuffer, replayBuff->buff, replayBuff->bh.frameCount * 2 * outCh);
 
         qint64 delay = QDateTime::currentMSecsSinceEpoch() - replayBuff->bh.tnow;
         //int buffered = dataBuffer->buffered();

@@ -269,6 +269,13 @@ void RigControlFrame::setContest(BaseContestLog *c)
 
         setRadioList();
     }
+    else
+    {
+        if (launchRadioSelectTimer)
+        {
+            launchRadioSelectTimer->stop();
+        }
+    }
 }
 
 void RigControlFrame::initRigFrame(QWidget * /*parent*/)
@@ -2074,10 +2081,6 @@ bool RigControlFrame::checkFreqOK(const Frequency &freq)
     {
         return false;
     }
-}
-
-void RigControlFrame::closeContest()
-{
 }
 
 void RigControlFrame::traceMsg(QString msg)

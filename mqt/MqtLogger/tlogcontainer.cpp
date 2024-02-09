@@ -4,7 +4,9 @@
 #include <QToolTip>
 #include <QFileDialog>
 #include <QLabel>
+#include <QScreen>
 
+#include "manageadifdialog.h"
 #include "regsettings.h"
 #include "AppStartup.h"
 #include "MMessageDialog.h"
@@ -91,6 +93,130 @@ void TLogContainer::openSerialTVSwitch()
         }
     }
 }
+bool TLogContainer::inspectGeometry(const QByteArray &geometry)
+{
+    if (geometry.size() < 4)
+        return false;
+    QDataStream stream(geometry);
+    stream.setVersion(QDataStream::Qt_4_0);
+
+    const quint32 magicNumber = 0x1D9D0CB;
+    quint32 storedMagicNumber;
+    stream >> storedMagicNumber;
+    if (storedMagicNumber != magicNumber)
+        return false;
+
+    const quint16 currentMajorVersion = 3;
+    quint16 majorVersion = 0;
+    quint16 minorVersion = 0;
+
+    stream >> majorVersion >> minorVersion;
+
+    if (majorVersion > currentMajorVersion)
+        return false;
+    // (Allow all minor versions.)
+
+    QRect restoredFrameGeometry;
+    QRect restoredGeometry;
+    QRect restoredNormalGeometry;
+    qint32 restoredScreenNumber;
+    quint8 maximized;
+    quint8 fullScreen;
+    qint32 restoredScreenWidth = 0;
+
+    stream >> restoredFrameGeometry // Only used for sanity checks in version 0
+        >> restoredNormalGeometry
+        >> restoredScreenNumber
+        >> maximized
+        >> fullScreen;
+
+    if (majorVersion > 1)
+        stream >> restoredScreenWidth;
+    if (majorVersion > 2)
+        stream >> restoredGeometry;
+
+    // ### Qt 6 - Perhaps it makes sense to dumb down the restoreGeometry() logic, see QTBUG-69104
+
+    if (restoredScreenNumber >= qMax(QGuiApplication::screens().size(), 1))
+        restoredScreenNumber = 0;
+    const QScreen *restoredScreen = QGuiApplication::screens().value(restoredScreenNumber, nullptr);
+    const qreal screenWidthF = restoredScreen ? qreal(restoredScreen->geometry().width()) : 0;
+    // Sanity check bailing out when large variations of screen sizes occur due to
+    // high DPI scaling or different levels of DPI awareness.
+    if (restoredScreenWidth) {
+        const qreal factor = qreal(restoredScreenWidth) / screenWidthF;
+        if (factor < 0.8 || factor > 1.25)
+            return false;
+    } else {
+        // Saved by Qt 5.3 and earlier, try to prevent too large windows
+        // unless the size will be adapted by maximized or fullscreen.
+        if (!maximized && !fullScreen && qreal(restoredFrameGeometry.width()) / screenWidthF > 1.5)
+            return false;
+    }
+
+    const int frameHeight = QApplication::style()
+                                ? QApplication::style()->pixelMetric(QStyle::PM_TitleBarHeight)
+                                : 20;
+
+    if (!restoredNormalGeometry.isValid())
+        restoredNormalGeometry = QRect(QPoint(0, frameHeight), sizeHint());
+    if (!restoredNormalGeometry.isValid()) {
+        // use the widget's adjustedSize if the sizeHint() doesn't help
+//        restoredNormalGeometry.setSize(restoredNormalGeometry
+//                                           .size()
+//                                           .expandedTo(d_func()->adjustedSize()));
+    }
+
+    const QRect availableGeometry = restoredScreen ? restoredScreen->availableGeometry()
+                                                   : QRect();
+
+    // Modify the restored geometry if we are about to restore to coordinates
+    // that would make the window "lost". This happens if:
+    // - The restored geometry is completely or partly oustside the available geometry
+    // - The title bar is outside the available geometry.
+
+//    QWidgetPrivate::checkRestoredGeometry(availableGeometry, &restoredGeometry, frameHeight);
+//    QWidgetPrivate::checkRestoredGeometry(availableGeometry, &restoredNormalGeometry, frameHeight);
+
+    if (maximized || fullScreen) {
+        // set geometry before setting the window state to make
+        // sure the window is maximized to the right screen.
+        Qt::WindowStates ws = windowState();
+#ifndef Q_OS_WIN
+        setGeometry(restoredNormalGeometry);
+#else
+        if (ws & Qt::WindowFullScreen) {
+            // Full screen is not a real window state on Windows.
+            move(availableGeometry.topLeft());
+        } else if (ws & Qt::WindowMaximized) {
+            // Setting a geometry on an already maximized window causes this to be
+            // restored into a broken, half-maximized state, non-resizable state (QTBUG-4397).
+            // Move the window in normal state if needed.
+            if (restoredScreen != screen()) {
+                setWindowState(Qt::WindowNoState);
+                setGeometry(restoredNormalGeometry);
+            }
+        } else {
+            setGeometry(restoredNormalGeometry);
+        }
+#endif // Q_OS_WIN
+        if (maximized)
+            ws |= Qt::WindowMaximized;
+        if (fullScreen)
+            ws |= Qt::WindowFullScreen;
+        setWindowState(ws);
+//        d_func()->topData()->normalGeometry = restoredNormalGeometry;
+    } else {
+        setWindowState(windowState() & ~(Qt::WindowMaximized | Qt::WindowFullScreen));
+
+        // FIXME: Why fall back to restoredNormalGeometry if majorVersion <= 2?
+        if (majorVersion > 2)
+            setGeometry(restoredGeometry);
+        else
+            setGeometry(restoredNormalGeometry);
+    }
+    return true;
+}
 
 TLogContainer::TLogContainer(QWidget *parent) :
     QMainWindow(parent)
@@ -106,6 +232,9 @@ TLogContainer::TLogContainer(QWidget *parent) :
     // we may need to delay this to get the container fully constructed
     TContestApp::getContestApp(); // initialise all the infrastructure
 
+    setDefLogDir(getDefaultDirectory(false));
+    setDefListDir(getDefaultDirectory(true));
+
     // make the tab control fill the window
     ui->centralWidget->layout()->setContentsMargins(0,0,0,0);
 
@@ -118,10 +247,36 @@ TLogContainer::TLogContainer(QWidget *parent) :
     connect(ui->contestPageControl->tabBar(), &QTabBar::tabCloseRequested, this, &TLogContainer::onTabClosebutton);
     connect(ui->contestPageControl->tabBar(), &QTabBar::tabMoved, this, &TLogContainer::onTabMoved);
 
-    RegSettings settings;
-    QByteArray geometry = settings.getSettings().value("geometry").toByteArray();
-    if (geometry.size() > 0)
-        restoreGeometry(geometry);
+    trace(QString("TLogContainer geometry T %1 L %2 B %3 R %4").arg(geometry().top()).arg(geometry().left())
+              .arg(geometry().bottom()).arg(geometry().right()));
+
+    {
+        RegSettings settings;
+        QByteArray ageometry = settings.getSettings().value("geometry").toByteArray();
+        int t = settings.getSettings().value("geoT").toInt();
+        int l = settings.getSettings().value("geoL").toInt();
+        int b = settings.getSettings().value("geoB").toInt();
+        int r = settings.getSettings().value("geoR").toInt();
+        if (ageometry.size() > 0)
+            restoreGeometry(ageometry);
+
+        trace(QString("TLogContainer geometry T %1 L %2 B %3 R %4 (%5 %6 %7 %8)").arg(geometry().top()).arg(geometry().left())
+              .arg(geometry().bottom()).arg(geometry().right()).arg(t).arg(l).arg(b).arg(r));
+
+        if (t != 0 && l != 0 && b != 0 && r != 0)
+        if (geometry().top() != t
+            ||geometry().left() != l
+            ||geometry().bottom() != b
+            ||geometry().right() != r
+            )
+        {
+            //inspectGeometry(ageometry);
+            trace("Bad geometry!");
+            QRect geoRect(l, t, r - l, b - t);
+            setGeometry(geoRect);
+        }
+
+    }
 
     sblabel0 = new QLabel( "" );
     statusBar() ->addWidget( sblabel0, 6 );
@@ -171,7 +326,7 @@ bool TLogContainer::eventFilter(QObject *obj, QEvent *event)
 {
     if (event->type() == QEvent::ToolTip && obj == sblabel1)
     {
-        QHelpEvent *helpEvent = static_cast<QHelpEvent *>(event);
+        QHelpEvent *helpEvent = dynamic_cast<QHelpEvent *>(event);
 
         QString toolTip;
         QWidget *f = QApplication::focusWidget ();
@@ -365,22 +520,47 @@ void TLogContainer::closeEvent(QCloseEvent *event)
 }
 void TLogContainer::moveEvent(QMoveEvent *event)
 {
+    trace(QString("TLogContainer moveEvent geometry T %1 L %2 B %3 R %4").arg(geometry().top()).arg(geometry().left())
+              .arg(geometry().bottom()).arg(geometry().right()));
+
     RegSettings settings;
     settings.getSettings().setValue("geometry", saveGeometry());
+
+    settings.getSettings().setValue("geoT", geometry().top());
+    settings.getSettings().setValue("geoL", geometry().left());
+    settings.getSettings().setValue("geoB", geometry().bottom());
+    settings.getSettings().setValue("geoR", geometry().right());
+
     QWidget::moveEvent(event);
 }
 void TLogContainer::resizeEvent(QResizeEvent * event)
 {
+    trace(QString("TLogContainer resizeEvent geometry T %1 L %2 B %3 R %4").arg(geometry().top()).arg(geometry().left())
+              .arg(geometry().bottom()).arg(geometry().right()));
+
     RegSettings settings;
     settings.getSettings().setValue("geometry", saveGeometry());
+
+    settings.getSettings().setValue("geoT", geometry().top());
+    settings.getSettings().setValue("geoL", geometry().left());
+    settings.getSettings().setValue("geoB", geometry().bottom());
+    settings.getSettings().setValue("geoR", geometry().right());
+
     QWidget::resizeEvent(event);
 }
 void TLogContainer::changeEvent( QEvent* e )
 {
     if( e->type() == QEvent::WindowStateChange )
     {
+       trace(QString("TLogContainer changeEvent geometry T %1 L %2 B %3 R %4").arg(geometry().top()).arg(geometry().left())
+                 .arg(geometry().bottom()).arg(geometry().right()));
         RegSettings settings;
         settings.getSettings().setValue("geometry", saveGeometry());
+
+        settings.getSettings().setValue("geoT", geometry().top());
+        settings.getSettings().setValue("geoL", geometry().left());
+        settings.getSettings().setValue("geoB", geometry().bottom());
+        settings.getSettings().setValue("geoR", geometry().right());
     }
 
     if (e->type() == QEvent::LanguageChange)
@@ -389,21 +569,17 @@ void TLogContainer::changeEvent( QEvent* e )
         TWaitCursor wc(this);
         selectSession(TContestApp::getContestApp()->currSession);
 
-        for(QMap<QMenu *, const char *>::iterator i = menuList.begin(); i != menuList.end(); i++)
-        {
-            i.key()->setTitle(tr(i.value()));
-        }
-        for(QMap<QAction *, const char *>::iterator i = actionList.begin(); i != actionList.end(); i++)
-        {
-            i.key()->setText(tr(i.value()));
-        }
+        // clear and rebuild the menus, in their new language
+        clearMenus();
+
+        setupMenus();
+
+        TSingleLogFrame *tslf = getCurrentLogFrame();
+        int tab = ui->contestPageControl->indexOf(tslf);
+        setMenuLog(tab);
+
         ui->retranslateUi(this);
         setCaption(QString());
-        if (menuEnter)
-        {
-            menuEnter->setTitle(QCoreApplication::translate("TLogContainer", "Enter", nullptr));
-        }
-
     }
     QMainWindow::changeEvent(e);
 }
@@ -413,9 +589,10 @@ QMenu *TLogContainer::newMenu(QMenu *m, const char *text)
     menuList[menu] = text;
     return menu;
 }
-QAction *TLogContainer::newAction(const char *text, QMenu *m, void (TLogContainer::*slotparam)() )
+QAction *TLogContainer::newAction(const char *text, QMenu *m, void (TLogContainer::*slotparam)(),QAction::MenuRole mr )
 {
     QAction * newAct = new QAction( tr(text), this );
+    newAct->setMenuRole(mr);
     actionList[newAct] = text;
     m->addAction( newAct );
     if (slotparam)
@@ -424,9 +601,10 @@ QAction *TLogContainer::newAction(const char *text, QMenu *m, void (TLogContaine
     }
     return newAct;
 }
-QAction *TLogContainer::newAction(int n, QMenu *m, void (TLogContainer::*slotparam)() )
+QAction *TLogContainer::newAction(int n, QMenu *m, void (TLogContainer::*slotparam)(),QAction::MenuRole mr )
 {
     QAction * newAct = new QAction( QString::number(n), this );
+    newAct->setMenuRole(mr);
     m->addAction( newAct );
     if (slotparam)
     {
@@ -498,7 +676,7 @@ void TLogContainer::setupMenus()
     StatsAction = newAction(QT_TR_NOOP("Show Contest Statistics..."), ui->menuFile, &TLogContainer::StatsActionExecute);
     ui->menuFile->addSeparator();
 
-    AppendAdifAction = newAction(QT_TR_NOOP("Append ADIF file to contest..."), ui->menuFile, &TLogContainer::AppendAdifActionExecute);
+    AppendAdifAction = newAction(QT_TR_NOOP("Manage ADIF files"), ui->menuFile, &TLogContainer::ManageAdifActionExecute);
     ui->menuFile->addSeparator();
 
     ListOpenAction = newAction(QT_TR_NOOP("Open &Archive List..."), ui->menuFile, &TLogContainer::ListOpenActionExecute);
@@ -507,10 +685,10 @@ void TLogContainer::setupMenus()
 
     ui->menuFile->addSeparator();
 #ifdef Q_OS_WIN
-    ExitClearAction = newAction(QT_TR_NOOP("E&xit Minos Contest Logger and Clear registry..."), ui->menuFile, &TLogContainer::ExitClearActionExecute);
+    ExitClearAction = newAction(QT_TR_NOOP("E&xit Minos Contest Logger and Clear registry..."), ui->menuFile, &TLogContainer::ExitClearActionExecute, QAction::ApplicationSpecificRole);
 #endif
     ui->menuFile->addSeparator();
-    ExitAction = newAction(QT_TR_NOOP("E&xit Minos Contest Logger"), ui->menuFile, &TLogContainer::ExitActionExecute);
+    ExitAction = newAction(QT_TR_NOOP("E&xit Minos Contest Logger"), ui->menuFile, &TLogContainer::ExitActionExecute, QAction::QuitRole);
 // end of file menu
 
     GoToSerialAction = newAction(QT_TR_NOOP("&Go To Contact Serial..."), ui->menuSearch, &TLogContainer::GoToSerialActionExecute);
@@ -527,10 +705,16 @@ void TLogContainer::setupMenus()
     CorrectDateTimeAction = newAction(QT_TR_NOOP("Correct Date/Time..."), ui->menuTools, &TLogContainer::CorrectDateTimeActionExecute);
     ui->menuTools->addSeparator();
 
-    OptionsAction = newAction(QT_TR_NOOP("Options..."), ui->menuTools, &TLogContainer::OptionsActionExecute);
+    OptionsAction = newAction(QT_TR_NOOP("Options..."), ui->menuTools, &TLogContainer::OptionsActionExecute, QAction::PreferencesRole);
 
     AdvancedOptionsAction = newAction(QT_TR_NOOP("Advanced Options..."), ui->menuTools, &TLogContainer::AdvancedOptionsActionExecute);
     AdvancedOptionsAction->setVisible(false);
+
+#ifndef NDEBUG
+    // until it works, don't show it!
+
+    // EnterAction = newAction(QT_TR_NOOP("Create Entry and send to RSGB"), ui->menuTools, &TLogContainer::EnterActionExecute);
+#endif
 
     // end of tools manu
 
@@ -570,25 +754,43 @@ void TLogContainer::setupMenus()
     TabPopup.addAction(CorrectDateTimeAction);
     TabPopup.addSeparator();
 
+    TabPopup.addAction(OptionsAction);
+
     //TabPopup.addAction(AnalyseMinosLogAction);
     newAction( QT_TR_NOOP("Cancel"), &TabPopup, &TLogContainer::CancelClick);
 
-#ifndef NDEBUG
-    // until it works, don't show it!
-    menuEnter = new QMenu(ui->menuBar);
-    menuEnter->setObjectName(QString::fromUtf8("enterMenu"));
-    menuEnter->setTitle(QCoreApplication::translate("TLogContainer", "Enter", nullptr));
-
-    ui->menuBar->addMenu(menuEnter);
-
-    EnterAction = newAction(QT_TR_NOOP("Create Entry and send to RSGB"), menuEnter, &TLogContainer::EnterActionExecute);
-#endif
 
     HelpAction = newAction(QT_TR_NOOP("Help..."), ui->menuHelp, &TLogContainer::HelpActionExecute);
     CheckUpdatesAction = newAction(QT_TR_NOOP("Check For Updates..."), ui->menuHelp, &TLogContainer::CheckUpdatesActionExecute);
-    HelpAboutAction = newAction(QT_TR_NOOP("About..."), ui->menuHelp, &TLogContainer::HelpAboutActionExecute);
+    HelpAboutAction = newAction(QT_TR_NOOP("About..."), ui->menuHelp, &TLogContainer::HelpAboutActionExecute, QAction::AboutRole);
 }
+void TLogContainer::clearMenus()
+{
+    for(QMap<QMenu *, const char *>::iterator i = menuList.begin(); i != menuList.end(); i++)
+    {
+        i.key()->deleteLater();
+    }
+    for(QMap<QAction *, const char *>::iterator i = actionList.begin(); i != actionList.end(); i++)
+    {
+        i.key()->deleteLater();
+    }
+    for(QVector<QAction *>::iterator i = recentFileActs.begin(); i != recentFileActs.end(); i++)
+    {
+        (*i)->deleteLater();
+    }
+    for(QVector<QAction *>::iterator i = sessionActs.begin(); i != sessionActs.end(); i++)
+    {
+        (*i)->deleteLater();
+    }
+    ui->menuLogs->clear();
+    menuLogsActions.clear();
 
+    menuList.clear();
+    actionList.clear();
+    recentFileActs.clear();
+    sessionActs.clear();
+
+}
 
 void TLogContainer::enableActions()
 {
@@ -667,10 +869,15 @@ void TLogContainer::openRecentFile()
 
 void TLogContainer::setCurrentFile(const QString &fileName)
 {
+    QString f2 = GetCleanPath(fileName);
     RegSettings settings;
     QStringList files = settings.getSettings().value("dbmru").toStringList();
-    files.removeAll(fileName);
-    files.prepend(fileName);
+    for (auto &s:files)
+    {
+        s = GetCleanPath(s);
+    }
+    files.removeAll(f2);
+    files.prepend(f2);
     while (files.size() > MaxRecentFiles)
         files.removeLast();
 
@@ -681,9 +888,14 @@ void TLogContainer::setCurrentFile(const QString &fileName)
 }
 void TLogContainer::removeCurrentFile(const QString &fileName)
 {
+    QString f2 = GetCleanPath(fileName);
     RegSettings settings;
     QStringList files = settings.getSettings().value("dbmru").toStringList();
-    files.removeAll(fileName);
+    for (auto &s:files)
+    {
+        s = GetCleanPath(s);
+    }
+    files.removeAll(f2);
     while (files.size() > MaxRecentFiles)
         files.removeLast();
 
@@ -725,39 +937,20 @@ void TLogContainer::HelpAboutActionExecute()
 }
 void TLogContainer::HelpActionExecute()
 {
-    //  Action method for Help Browser button.
+    //  Action method for Help button.
 
-    //  Creates a HelpBrowser instance and sets the collection and startUrl.
+    //  Brings up PDF manual.
 
-    QString collectionFile;
-    TContestApp::getContestApp() ->loggerBundle.getStringProfile( elpHelpFile, collectionFile );
-
-    if (FileExists(collectionFile))
+    QString pdfFile;
+    TContestApp::getContestApp() ->loggerBundle.getStringProfile( elpPDFFile, pdfFile );
+    if (FileExists(pdfFile))
     {
-        QString url;
-        TContestApp::getContestApp() ->loggerBundle.getStringProfile( elpHelpEntryURL, url );
-        QUrl startUrl = QUrl(url);
-
-        if (!helpBrowser)
-            helpBrowser = QSharedPointer<HelpBrowser>(new HelpBrowser(collectionFile, startUrl, this));
-        helpBrowser->show();
+        QUrl url = QUrl().fromLocalFile(pdfFile);
+        QDesktopServices::openUrl(url);
     }
     else
     {
-        if (helpBrowser)
-        {
-            helpBrowser.clear();
-        }
-        TContestApp::getContestApp() ->loggerBundle.getStringProfile( elpPDFFile, collectionFile );
-        if (FileExists(collectionFile))
-        {
-            QUrl url = QUrl().fromLocalFile(collectionFile);
-            QDesktopServices::openUrl(url);
-        }
-        else
-        {
-            mShowMessage(tr("Documentation File %1 doesn't exist.").arg(collectionFile), this);
-        }
+        mShowMessage(tr("Documentation File %1 doesn't exist.").arg(pdfFile), this);
     }
 
 }
@@ -805,7 +998,7 @@ void TLogContainer::onSetMemoryActionExecute()
 }
 void TLogContainer::FileNewActionExecute(bool hf)
 {
-    QString InitialDir = getDefaultDirectory( false );
+    QString InitialDir = getDirectoryLocation(dlLogs);
 
     QFileInfo qf(InitialDir);
 
@@ -948,7 +1141,7 @@ void TLogContainer::FileOpenActionExecute()
 {
     // first choose file
 //"Images (*.png *.xpm *.jpg);;Text files (*.txt);;XML files (*.xml)"
-    QString InitialDir = getDefaultDirectory( false );
+    QString InitialDir = getDirectoryLocation(dlLogs);
 
     QFileInfo qf(InitialDir);
 
@@ -990,7 +1183,7 @@ void TLogContainer::FileImportActionExecute(bool hf)
 {
     // first choose file
 //"Images (*.png *.xpm *.jpg);;Text files (*.txt);;XML files (*.xml)"
-    QString InitialDir = getDefaultDirectory( false );
+    QString InitialDir = getDirectoryLocation(dlLogs);
 
     QFileInfo qf(InitialDir);
 
@@ -1187,66 +1380,16 @@ void TLogContainer::ExitClearActionExecute()
     mShowMessage(tr("Clear registry only works under Windows"), this);
 #endif
 }
-void TLogContainer::AppendAdifActionExecute()
+void TLogContainer::ManageAdifActionExecute()
 {
     BaseContestLog * ct = TContestApp::getContestApp() ->getCurrentContest();
 
     if (!ct)
         return;
 
-    QString InitialDir = getDefaultDirectory( false );
+    ManageAdifDialog mad;
 
-    QFileInfo qf(InitialDir);
-
-    InitialDir = qf.canonicalFilePath();
-
-    QString Filter = tr("ADIF files (*.adi);;"
-                     "All Files (*.*)") ;
-
-    QString fname = QFileDialog::getOpenFileName( this,
-                       tr("Open ADIF for append"),
-                       InitialDir,  // dir
-                       Filter
-                       );
-
-    if (!fname.isEmpty())
-    {
-        QIODevice::OpenMode om = QIODevice::ReadOnly;
-
-        QSharedPointer<QFile> adifFile(new QFile(fname));
-
-        if (!adifFile->open(om))
-        {
-           QString lerr = adifFile->errorString();
-           QString emess = tr("Failed to open ADIF file %1 : %2").arg(fname, lerr);
-           MinosParameters::getMinosParameters() ->mshowMessage( emess );
-           return;
-        }
-
-        trace(QString("Appending ADIF log %1 to %2").arg(fname, ct->cfileName));
-        int spoint = ct->ctList.count();
-        if (! ADIFImport::doImportADIFLog(dynamic_cast<LoggerContestLog *>(ct),  adifFile ))
-        {
-            MinosParameters::getMinosParameters() ->mshowMessage( tr("Failed to append %1").arg(fname) );
-        }
-        for ( int i = spoint; i != ct->ctList.count(); i++ )
-        {
-            QSharedPointer<BaseContact> bct = ct->pcontactAt(i);
-            bct->commonSave(bct);
-        }
-        ct->commonSave( false );
-        ct->scanContest();          // after append ADIF file, required
-        //ct->validateLoc();
-        for ( int i = spoint; i != ct->ctList.count(); i++ )
-        {
-            QSharedPointer<BaseContact> bct = ct->pcontactAt(i);
-            MinosLoggerEvents::SendAfterLogContact(ct, bct);          // after append ADIF file
-        }
-        TSingleLogFrame * tslf = LogContainer ->findContest( ct );
-
-        tslf->updateTrees();
-        tslf->startNextEntry();   //(AppendAdifActionExecute())
-    }
+    mad.exec();
 }
 void TLogContainer::EnterActionExecute()
 {
@@ -1277,7 +1420,7 @@ void TLogContainer::LocCalcActionExecute()
 }
 void TLogContainer::AnalyseMinosLogActionExecute()
 {
-    QString InitialDir = getDefaultDirectory( false );
+    QString InitialDir = getDirectoryLocation(dlLogs);
 
     QFileInfo qf(InitialDir);
 
@@ -1355,6 +1498,8 @@ void TLogContainer::setMenuLog(int current)
 {
     // why doesn't this happen at startup?
 
+    ui->menuLogs->clear();
+
     ui->menuLogs->addAction(FileOpenAction);
     ui->menuLogs->addMenu(recentFilesMenu);
     ui->menuLogs->addAction(VHFFileNewAction);
@@ -1367,21 +1512,29 @@ void TLogContainer::setMenuLog(int current)
     ui->menuLogs->addAction(CloseAllButAction);
     ui->menuLogs->addSeparator();
 
+    // add the currently open contests - but don't add to the actions
     for (int i = 0; i < ui->contestPageControl->count(); i++)
     {
-        QSharedPointer<QAction> ma(newCheckableAction(ui->contestPageControl->tabText(i), ui->menuLogs, &TLogContainer::menuLogsActionExecute));
+        QAction * newAct = new QAction( ui->contestPageControl->tabText(i), this );
+        newAct->setCheckable( true );
+        ui->menuLogs->addAction( newAct );
+        connect( newAct, &QAction::triggered, this, &TLogContainer::menuLogsActionExecute );
 
         QVariant qpc(i);
-        ma->setData(qpc);
-        menuLogsActions.push_back(ma);
+        newAct->setData(qpc);
 
         if (current == i)
         {
-            ma->setChecked(true);
+            newAct->setChecked(true);
         }
     }
-    sessionsMenu = newMenu(ui->menuLogs, QT_TR_NOOP("Contest Sets"));
+
+    // update the list of contest sets
+    sessionsMenu = ui->menuLogs->addMenu(tr("Contest Sets"));
     updateSessionActions();
+
+    updateRecentFileActions();
+
 }
 void TLogContainer::on_contestPageControl_currentChanged(int index)
 {
@@ -1712,7 +1865,7 @@ void TLogContainer::selectLayout(QString layout)
         f->setCurScreenLayout(layout);
         f->applyScreenLayout();
         updateLayoutsMenu();
-        f->restoreQSOTableColumns();
+        f->QSOListFrame->restoreQSOTableColumns();
     }
 }
 void TLogContainer::updateSessionActions()
@@ -1819,6 +1972,7 @@ BaseContestLog *TLogContainer::loadSession( QString sessName)
 
     preloadBundle.startGroup();
     preloadBundle.openSection(sessName);
+    int curSlot = 0;
     QStringList slotlst = preloadBundle.getProfileEntries();
     if (slotlst.count())
     {
@@ -1830,7 +1984,6 @@ BaseContestLog *TLogContainer::loadSession( QString sessName)
             preloadBundle.getStringProfile( s, ent, "" );
             pathlst.append( ent );
         }
-        int curSlot = 0;
         preloadBundle.getIntProfile( eppCurrent, curSlot );
         for ( int i = 0; i < slotlst.size(); i++ )
         {
@@ -1865,27 +2018,29 @@ BaseContestLog *TLogContainer::loadSession( QString sessName)
     preloadBundle.openSection(app->preloadsect);
     preloadBundle.setStringProfile(eppSession, sessName);
     preloadBundle.openSection(sessName);
+    preloadBundle.endGroup();
+
     app ->writeContestList();	// to clear the unopened and changed ones
 
-    ui->menuLogs->clear();
-    menuLogsActions.clear();
+    setMenuLog(curSlot);
+    // ui->menuLogs->clear();
+    // menuLogsActions.clear();
 
-    ui->menuLogs->addAction(FileOpenAction);
-    ui->menuLogs->addMenu(recentFilesMenu);
-    ui->menuLogs->addAction(VHFFileNewAction);
-    if (HFFileNewAction)
-    {
-        ui->menuLogs->addAction(HFFileNewAction);
-    }
-    ui->menuLogs->addAction(FileCloseAction);
-    ui->menuLogs->addAction(CloseAllAction);
-    ui->menuLogs->addAction(CloseAllButAction);
-    ui->menuLogs->addSeparator();
+    // ui->menuLogs->addAction(FileOpenAction);
+    // ui->menuLogs->addMenu(recentFilesMenu);
+    // ui->menuLogs->addAction(VHFFileNewAction);
+    // if (HFFileNewAction)
+    // {
+    //     ui->menuLogs->addAction(HFFileNewAction);
+    // }
+    // ui->menuLogs->addAction(FileCloseAction);
+    // ui->menuLogs->addAction(CloseAllAction);
+    // ui->menuLogs->addAction(CloseAllButAction);
+    // ui->menuLogs->addSeparator();
 
-    sessionsMenu = newMenu(ui->menuLogs, QT_TR_NOOP("Contest Sets"));
-    updateSessionActions();
+    // sessionsMenu = newMenu(ui->menuLogs, QT_TR_NOOP("Contest Sets"));
+    // updateSessionActions();
 
-    preloadBundle.endGroup();
     return ct;
 }
 QString TLogContainer::getCurrSession()
@@ -1952,6 +2107,7 @@ void TLogContainer::preloadFiles( const QString &conarg )
         sendDM->subscribeApps();
         selectContest( ct );
     }
+     on_contestPageControl_currentChanged(-1);
 }
 void TLogContainer::preloadLists( )
 {
@@ -2021,7 +2177,7 @@ void TLogContainer::doListOpenActionExecute(QWidget *p)
 {
     // first choose file
 
-    QString InitialDir = getDefaultDirectory( true );
+    QString InitialDir = getDirectoryLocation(dlLists);
 
     QFileInfo qf(InitialDir);
 
@@ -2160,6 +2316,10 @@ void TLogContainer::ShiftTabLeftActionExecute( )
 void TLogContainer::selectContest( BaseContestLog *pc)
 {
     // select this contest on all screens
+    if (!pc)
+    {
+        return;
+    }
 
     for ( int j = 0; j < ui->contestPageControl->count(); j++ )
     {
@@ -2229,8 +2389,13 @@ TSingleLogFrame *TLogContainer::findContest(BaseContestLog *ct )
 
 void TLogContainer::stealFocus()
 {
+   static bool doSteal = false;
+   trace("stealFocus");
+   doSteal = true;
     delayedAction(this,  [=]()
     {
+       if (doSteal)
+           {
         // Bring window(s) to top
         for(auto cpc: qAsConst(LogContainer->contestPageControls))
         {
@@ -2241,17 +2406,22 @@ void TLogContainer::stealFocus()
 
                 cpc->setWindowState(Qt::WindowState::WindowNoState);
                 cpc->setWindowState(css | Qt::WindowState::WindowActive);
+
+                trace(QString("set WindowActive %1").arg(cpc->windowTitle()));
             }
         }
         Qt::WindowStates ss = windowState();
         setWindowState(Qt::WindowState::WindowNoState);
         setWindowState(ss | Qt::WindowState::WindowActive);
+        trace(QString("set WindowActive %1").arg(windowTitle()));
 
         TSingleLogFrame *tslf = getCurrentLogFrame();
         if (tslf)
         {
             tslf->GJVQSOLogFrame->selectFirstInvalid();
         }
+       }
+       doSteal = false;
     });
 
 }

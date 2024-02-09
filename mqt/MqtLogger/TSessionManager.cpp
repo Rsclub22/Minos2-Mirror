@@ -1,5 +1,7 @@
 #include <QFileInfo>
 #include <QFileDialog>
+#include "AppStartup.h"
+#include "fileutils.h"
 #include "regsettings.h"
 #include "ContestApp.h"
 #include "tlogcontainer.h"
@@ -186,7 +188,11 @@ void TSessionManager::showSession(int sess)
 
             for ( int i = 0; i < rowCount; i++ )
             {
-                ui->sessionEntries->setItem(i, 0, new QTableWidgetItem(sessionList.sessions[sess].entries[i]));
+                QString fname = sessionList.sessions[sess].entries[i];
+                QTableWidgetItem *ritem = new QTableWidgetItem(fname);
+                ritem->setToolTip(GetFullPath(fname));
+
+                ui->sessionEntries->setItem(i, 0, ritem);
             }
             if (sessionList.sessions[sess].entries.count())
             {
@@ -254,7 +260,7 @@ void TSessionManager::on_CloneSessionButton_clicked()
     // copy the current session with  new name, enter it
     QString newName;
     Session newSession = sessionList.sessions[sessionList.currentSession];
-    QString prompt = tr("Give name for new log set");
+    QString prompt = tr("Give name for new contest set");
     if (enquireDialog(this, prompt, newName))
     {
         newSession.sessionName = newName;
@@ -277,7 +283,7 @@ void TSessionManager::on_AddEntryButton_clicked()
     //- need to put up a file selection dialog
     // AND we want it to be multiselect
 
-    QString InitialDir = LogContainer->getDefaultDirectory( false );
+    QString InitialDir = getDirectoryLocation(dlLogs);
 
     QFileInfo qf(InitialDir);
 
@@ -340,7 +346,7 @@ void TSessionManager::on_RenameSessionButton_clicked()
 {
     // change the session name
     QString newName;
-    QString prompt = tr("Give new name for log set %1").arg(sessionList.sessions[sessionList.currentSession].sessionName);
+    QString prompt = tr("Give new name for contest set %1").arg(sessionList.sessions[sessionList.currentSession].sessionName);
     if (enquireDialog(this, prompt, newName))
     {
         sessionList.sessions[sessionList.currentSession].sessionName = newName;

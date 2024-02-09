@@ -17,7 +17,7 @@ RSConfigure::RSConfigure(QWidget *parent) :
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
-    QString fileName = RIG_CONFIGURATION_FILEPATH_LOGGER + MINOS_RIGSYNC_CONFIG_FILE;
+    QString fileName = RIG_CONFIGURATION_FILEPATH_LOGGER() + MINOS_RIGSYNC_CONFIG_FILE;
     QSettings config(fileName, QSettings::IniFormat);
 
     wsjtxPort = config.value("WSJT-X port", 2237).toInt();
@@ -67,7 +67,7 @@ void RSConfigure::on_OKButton_clicked()
         wsjtxAddress = ui->wsjtxAddress->text().trimmed();
         n1mmPort = ui->n1mmPort->value();
 
-        QString fileName = RIG_CONFIGURATION_FILEPATH_LOGGER + MINOS_RIGSYNC_CONFIG_FILE;
+        QString fileName = RIG_CONFIGURATION_FILEPATH_LOGGER() + MINOS_RIGSYNC_CONFIG_FILE;
         QSettings config(fileName, QSettings::IniFormat);
 
         config.setValue("WSJT-X port", wsjtxPort);

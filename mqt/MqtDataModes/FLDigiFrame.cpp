@@ -1,5 +1,6 @@
 #include <QDateTime>
 
+#include "AppStartup.h"
 #include "MTrace.h"
 #include "dmmainwindow.h"
 #include "fileutils.h"
@@ -36,7 +37,7 @@ void FLDigiFrame::createProcess()
     connect (fldigiProcess, &QProcess::readyReadStandardError, this, &FLDigiFrame::on_readyReadStandardError);
     connect (fldigiProcess, &QProcess::readyReadStandardOutput, this, &FLDigiFrame::on_readyReadStandardOutput);
 
-    QString configDir = "./Configuration/DataModes/" + engineName;
+    QString configDir = getDirectoryLocation(dlConfiguration) + "/DataModes/" + engineName;
     CreateDir(configDir);
     QDir dir( configDir );
     QStringList engineOpts = {
@@ -47,6 +48,7 @@ void FLDigiFrame::createProcess()
         "-title", engineName
     };
     fldigiProcess->start(fname, engineOpts, QProcess::ReadWrite);
+    fldigiActive = true;
 
 }
 
@@ -70,8 +72,6 @@ FLDigiFrame::FLDigiFrame(EngineWindow *parent, QLineEdit *sendEdit, QString fnam
     rpcClient = new MaiaXmlRpcClient(QUrl("http://localhost:" + QString::number(p)), this);
 
     createProcess();
-
-    fldigiActive = true;
 
     getTimer = new QTimer(this);
     connect(getTimer, &QTimer::timeout, this, &FLDigiFrame::onGetTimer);

@@ -54,6 +54,11 @@ void RPCParam::addValue( TiXmlElement &node ) const
             return QSharedPointer<RPCParam>(new RPCIntParam(node));
          }
          else
+          if ( checkElementName( &node , "i64" )  )
+          {
+              return QSharedPointer<RPCParam>(new RPCInt64Param(node));
+          }
+          else
             if ( checkElementName( &node , "boolean" ) )
             {
                return QSharedPointer<RPCParam>(new RPCBooleanParam(node));
@@ -87,6 +92,10 @@ bool RPCParam::getBoolean( bool & ) const
 bool RPCParam::getInt( int & ) const
 {
    return false;
+}
+bool RPCParam::getInt64( qint64 & ) const
+{
+    return false;
 }
 bool RPCParam::getDouble( double & ) const
 {
@@ -128,6 +137,10 @@ void RPCParam::addMember( QSharedPointer<RPCParam> , const QString &/*name*/ )
 void RPCParam::addMember( int, const QString &/*name*/ )
 {
    throw Exception("addMember to non-struct RPCParam");
+}
+void RPCParam::addMember( qint64, const QString &/*name*/ )
+{
+    throw Exception("addMember to non-struct RPCParam");
 }
 void RPCParam::addMember( bool, const QString &/*name*/ )
 {
@@ -198,6 +211,10 @@ void RPCParamStruct::addMember( QSharedPointer<RPCParam>p, const QString &mname 
 void RPCParamStruct::addMember( int v, const QString &mname )
 {
    addMember( QSharedPointer<RPCParam>(new RPCIntParam( v )), mname );
+}
+void RPCParamStruct::addMember( qint64 v, const QString &mname )
+{
+    addMember( QSharedPointer<RPCParam>(new RPCInt64Param( v )), mname );
 }
 void RPCParamStruct::addMember( bool v, const QString &mname )
 {
@@ -369,6 +386,10 @@ void RPCParamArray::addElement( int v )
 {
    addElement( QSharedPointer<RPCParam>(new RPCIntParam( v )) );
 }
+void RPCParamArray::addElement( qint64 v )
+{
+    addElement( QSharedPointer<RPCParam>(new RPCInt64Param( v )) );
+}
 void RPCParamArray::addElement( bool v )
 {
    addElement( QSharedPointer<RPCParam>(new RPCBooleanParam( v )) );
@@ -489,6 +510,45 @@ bool RPCIntParam::getInt( int &res ) const
 {
    res = value;
    return true;
+}
+//---------------------------------------------------------------------------
+// int64
+RPCInt64Param::RPCInt64Param( qint64 v ) : value( v )
+{}
+RPCInt64Param::RPCInt64Param() : value( 0 )
+{}
+RPCInt64Param::RPCInt64Param( TiXmlElement &aNode )
+{
+    const char * val = aNode.GetText();
+    if ( val )
+    {
+        value = QString(val).toLongLong();
+    }
+}
+RPCInt64Param::~RPCInt64Param()
+{}
+void RPCInt64Param::addNode( TiXmlElement &node ) const
+{
+    QString buff = QString("%1").arg(value);
+    TiXmlElement vNode( "i64" );
+    TiXmlText tNode( buff.toStdString() );
+    vNode.InsertEndChild( tNode );
+    node.InsertEndChild( vNode );
+}
+QString RPCInt64Param::print() const
+{
+    QString buff = QString("qint64 value %1\r\n").arg(value);
+    return buff;
+}
+QString RPCInt64Param::analyse() const
+{
+    QString buff = QString("%1").arg(value);
+    return buff;
+}
+bool RPCInt64Param::getInt64( qint64 &res ) const
+{
+    res = value;
+    return true;
 }
 
 //---------------------------------------------------------------------------
@@ -718,6 +778,10 @@ void RPCArgs::addParam( int v )
 {
    addParam( QSharedPointer<RPCParam>(new RPCIntParam(v)));
 }
+void RPCArgs::addParam( qint64 v )
+{
+    addParam( QSharedPointer<RPCParam>(new RPCInt64Param(v)));
+}
 void RPCArgs::addParam( bool v )
 {
    addParam( QSharedPointer<RPCParam>(new RPCBooleanParam( v )) );
@@ -881,6 +945,14 @@ bool RPCArgs::getIntArg(int argno, int &res )
       return args[ argno ] ->getInt( res );
    }
    return false;
+}
+bool RPCArgs::getInt64Arg(int argno, qint64 &res )
+{
+    if ( args.size() > argno )
+    {
+        return args[ argno ] ->getInt64( res );
+    }
+    return false;
 }
 bool RPCArgs::getDoubleArg( int argno, double &res )
 {

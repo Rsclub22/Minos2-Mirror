@@ -6,6 +6,7 @@
 // COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2008
 //
 /////////////////////////////////////////////////////////////////////////////
+#include "AppStartup.h"
 #include "INIFile.h"
 #include "clustercommon.h"
 #include "profiles.h"
@@ -21,7 +22,7 @@ QString defaultProtectedLayoutName()
 }
 QString defaultSessionName()
 {
-    return QCoreApplication::translate("Default Log Session", "Default Session");
+    return QCoreApplication::translate("Default Contest Set", "Default Set");
 }
 
 AppSettingsBundle::AppSettingsBundle():
@@ -42,20 +43,20 @@ BundleFile::BundleFile( PROFILES p )
         entries.push_back( QSharedPointer<ProfileEntry> (new ProfileEntry( elpListDirectory, "List Directory", "./Lists", QT_TR_NOOP("List Directory"), QT_TR_NOOP("Default archive list directory"), false ) ) );
         entries.push_back( QSharedPointer<ProfileEntry> (new ProfileEntry( elpLogDirectory, "Log Directory", "./Logs", QT_TR_NOOP("Log Directory"), QT_TR_NOOP("Default logs directory"), false ) ) );
 
-        entries.push_back( QSharedPointer<ProfileEntry> (new ProfileEntry( elpEntryFile, "EntryFile", "./Configuration/Entry.ini", QT_TR_NOOP("Entry settings file"), QT_TR_NOOP("File containing entry settings"), false ) ) );
-        entries.push_back( QSharedPointer<ProfileEntry> (new ProfileEntry( elpStationFile, "StationFile", "./Configuration/Station.ini", QT_TR_NOOP("Station settings file"), QT_TR_NOOP("File containing station settings"), false ) ) );
-        entries.push_back( QSharedPointer<ProfileEntry> (new ProfileEntry( elpQTHFile, "QTHFile", "./Configuration/QTH.ini", QT_TR_NOOP("QTH settings file"), QT_TR_NOOP("File containing QTH settings"), false ) ) );
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpLocsFile, "LocsFile", "./Configuration/LocSquares.ini", QT_TR_NOOP("Country locators file"), QT_TR_NOOP("File containing valid locators for countries"), false ) ));
+        entries.push_back( QSharedPointer<ProfileEntry> (new ProfileEntry( elpEntryFile, "EntryFile", getDirectoryLocation(dlConfiguration) + "/Entry.ini", QT_TR_NOOP("Entry settings file"), QT_TR_NOOP("File containing entry settings"), false ) ) );
+        entries.push_back( QSharedPointer<ProfileEntry> (new ProfileEntry( elpStationFile, "StationFile", getDirectoryLocation(dlConfiguration) + "/Station.ini", QT_TR_NOOP("Station settings file"), QT_TR_NOOP("File containing station settings"), false ) ) );
+        entries.push_back( QSharedPointer<ProfileEntry> (new ProfileEntry( elpQTHFile, "QTHFile", getDirectoryLocation(dlConfiguration) + "/QTH.ini", QT_TR_NOOP("QTH settings file"), QT_TR_NOOP("File containing QTH settings"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpLocsFile, "LocsFile", getDirectoryLocation(dlConfiguration) + "/LocSquares.ini", QT_TR_NOOP("Country locators file"), QT_TR_NOOP("File containing valid locators for countries"), false ) ));
 
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpDigiFunctionKeyFile, "DigiFKeyFile", "./Configuration/FunctionKeyMessages/Digi Messages.json", QT_TR_NOOP("Digi Function Keys file"), QT_TR_NOOP("Digi Function Keys file"), false ) ));
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpDigiFunctionKeyFile, "DigiFKeyFile", getDirectoryLocation(dlConfiguration) + "/FunctionKeyMessages/Digi Messages.json", QT_TR_NOOP("Digi Function Keys file"), QT_TR_NOOP("Digi Function Keys file"), false ) ));
 
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpDisplayFile, "DisplayFile", "./Configuration/Display.ini", QT_TR_NOOP("Display settings file"), QT_TR_NOOP("File containing saved display settings"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpDisplayFile, "DisplayFile", getDirectoryLocation(dlConfiguration) + "/Display.ini", QT_TR_NOOP("Display settings file"), QT_TR_NOOP("File containing saved display settings"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpDisplaySection, "DisplaySection", "Default", QT_TR_NOOP("Display file section"), QT_TR_NOOP("Section to use in display file"), false ) ) );
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpOperatorFile, "OperatorFile", "./Configuration/Operator.ini", QT_TR_NOOP("Operators file"), QT_TR_NOOP("File containing operators"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpOperatorFile, "OperatorFile", getDirectoryLocation(dlConfiguration) + "/Operator.ini", QT_TR_NOOP("Operators file"), QT_TR_NOOP("File containing operators"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpOperatorSection, "OperatorSection", "Default", QT_TR_NOOP("Operators file section"), QT_TR_NOOP("section to use in operators file"), false ) ) );
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpPreloadFile, "PreloadFile", "./Configuration/LogsPreload.ini", QT_TR_NOOP("Log preload file"), QT_TR_NOOP("File containing log pre-loads"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpPreloadFile, "PreloadFile", getDirectoryLocation(dlConfiguration) + "/LogsPreload.ini", QT_TR_NOOP("Log preload file"), QT_TR_NOOP("File containing log pre-loads"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpPreloadSection, "PreloadSection", "Default", QT_TR_NOOP("Preload contests default section"), QT_TR_NOOP("Section to use in preload file"), false ) ) );
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpListsFile, "ListsFile", "./Configuration/ListPreload.ini", QT_TR_NOOP("List preload file"), QT_TR_NOOP("File containing list pre-loads"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpListsFile, "ListsFile", getDirectoryLocation(dlConfiguration) + "/ListPreload.ini", QT_TR_NOOP("List preload file"), QT_TR_NOOP("File containing list pre-loads"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpListsSection, "ListsSection", "Default", QT_TR_NOOP("Preload Lists file section"), QT_TR_NOOP("Section to use in lists preload file"), false ) ) );
 
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpWSJTXUdpRecEnabled, "WSJTXUdpRecEnabled", false, QT_TR_NOOP("WSJTX UDP record Enabled"), QT_TR_NOOP("WSJTX UDP Record Enabled"), false ) ) );
@@ -102,9 +103,7 @@ BundleFile::BundleFile( PROFILES p )
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpwsjtxRbPort, "WSJTXRbPort", 2333, QT_TR_NOOP("WSJTX re-broadcast Port"), QT_TR_NOOP("WSJTX re-broadcast Port"), false ) ) );
 
 
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpHelpFile, "HelpFile", "./helpfiles/MinosHelp.qch", QT_TR_NOOP("Help file"), QT_TR_NOOP("Help file"), false ) ) );
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpHelpEntryURL, "HelpEntryPoint", "qthelp://Minos/Minos.html", QT_TR_NOOP("Help entry point"), QT_TR_NOOP("Help entry point"), false ) ) );
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpPDFFile, "PDFFile", "./Docs/Minos.pdf", QT_TR_NOOP("PDF documentation file"), QT_TR_NOOP("PDF documentation file"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpPDFFile, "PDFFile", getDirectoryLocation(dlDocs) + "/Minos.pdf", QT_TR_NOOP("PDF documentation file"), QT_TR_NOOP("PDF documentation file"), false ) ) );
 
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpReadabilityInit, "ReadabilityInit", true, QT_TR_NOOP("Auto set Readability to 5"), QT_TR_NOOP("Auto set Readability to 5"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpAutoFill, "AutoFill", false, QT_TR_NOOP("Auto Fill signal report"), QT_TR_NOOP("Auto Fill signal report on return"), false ) ) );
@@ -609,7 +608,7 @@ void SettingsBundle::flushProfile( )
    bundleFile->iniFile->writePrivateProfileString( "", "", "" );
 }
 //=============================================================================
-ProfileEntry::ProfileEntry(int id, const char *name, const char *def, const char * dispname, const char * hint, bool RO )
+ProfileEntry::ProfileEntry(int id, const char *name, const QString &def, const char * dispname, const char * hint, bool RO )
       :
         pt( petString ),
         id( id ),
@@ -618,6 +617,16 @@ ProfileEntry::ProfileEntry(int id, const char *name, const char *def, const char
         sdefaultval( def ),
         hint( hint ),
         RO(RO)
+{}
+ProfileEntry::ProfileEntry(int id, const char *name, const char *def, const char * dispname, const char * hint, bool RO )
+    :
+    pt( petString ),
+    id( id ),
+    name( name ),
+    dispname(dispname),
+    sdefaultval( def ),
+    hint( hint ),
+    RO(RO)
 {}
 /*
 ProfileEntry::ProfileEntry(int id, const QString &n, const QString &d, const QString &dname, const QString &h, bool RO )

@@ -79,6 +79,8 @@ extern QString makeStr( bool i );
 template <class T>
 QString makeStr(T) = delete; // C++11
 
+void hex_dump(const QByteArray &src, size_t line_size, const QString &prefix);
+
 extern QString HtmlFontColour( const QColor &c );
 
 template<class T>
@@ -129,6 +131,8 @@ void CSVToStringList( const QString &s, QStringList &sl );
 QString anchoredPattern(const QString &expression);
 void adjustMargins(QLayout *layout, int ls, int cml, int cmt, int cmr, int cmb);
 bool isPureNumeric ( const QString &s );
+
+extern bool suppressSaveHeaders;
 
 void saveHeaderColumns(QString fn, QString tname, QString lname, QHeaderView *h);
 void setHeaderColumns(QString hLine, QHeaderView *hdr);

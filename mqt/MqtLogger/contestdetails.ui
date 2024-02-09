@@ -10,6 +10,12 @@
     <height>820</height>
    </rect>
   </property>
+  <property name="minimumSize">
+   <size>
+    <width>0</width>
+    <height>0</height>
+   </size>
+  </property>
   <property name="windowTitle">
    <string>Contest Details</string>
   </property>
@@ -31,7 +37,7 @@
         <x>0</x>
         <y>0</y>
         <width>888</width>
-        <height>765</height>
+        <height>767</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_24">
@@ -56,6 +62,12 @@
                 <horstretch>1</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>0</height>
+               </size>
               </property>
               <property name="frameShape">
                <enum>QFrame::StyledPanel</enum>
@@ -90,11 +102,25 @@
                 </layout>
                </item>
                <item>
-                <widget class="QLineEdit" name="ContestNameSelected">
-                 <property name="clearButtonEnabled">
-                  <bool>true</bool>
-                 </property>
-                </widget>
+                <layout class="QHBoxLayout" name="horizontalLayout_9">
+                 <item>
+                  <widget class="QLabel" name="label_19">
+                   <property name="text">
+                    <string>Selected Contest</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLineEdit" name="ContestNameSelected">
+                   <property name="readOnly">
+                    <bool>true</bool>
+                   </property>
+                   <property name="clearButtonEnabled">
+                    <bool>false</bool>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
                </item>
               </layout>
              </widget>
@@ -900,30 +926,9 @@ Score between 4 fig loc centres</string>
                </widget>
               </item>
               <item>
-               <widget class="QCheckBox" name="NonGCtryMult">
-                <property name="text">
-                 <string>Non UK Countries Only (M6)</string>
-                </property>
-               </widget>
-              </item>
-              <item>
                <widget class="QCheckBox" name="LocatorMult">
                 <property name="text">
                  <string>Locator Multiplier</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QCheckBox" name="GLocMult">
-                <property name="text">
-                 <string>UK Locs only (M5, M6)</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QCheckBox" name="M7LocatorMults">
-                <property name="text">
-                 <string>All locs; UK locs x2 (M7)</string>
                 </property>
                </widget>
               </item>

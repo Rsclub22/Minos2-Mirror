@@ -178,6 +178,7 @@ void ClusterClientFilterDialog::initCheckFilterTab()
         vl->addWidget(bandLabel);
 
         QLineEdit *spotDistanceEdit = new QLineEdit(p);
+        spotDistanceEdit->setClearButtonEnabled(true);
         vl->addWidget(spotDistanceEdit);
 
         hl->addLayout(vl);
@@ -1184,7 +1185,7 @@ void ClusterClientFilterDialog::saveFilterToFile(QStringList listOfFilters, QStr
         {
             listDir = CLUSTER_LOCATORLIST_DIR;
         }
-        path = CLUSTER_PATH + listDir;
+        path = CLUSTER_PATH() + listDir;
 
         CreateDir(path);
 
@@ -1236,7 +1237,7 @@ void ClusterClientFilterDialog::importFilterToWidgetList(QStringList &listOfFilt
     {
         listDir = CLUSTER_LOCATORLIST_DIR;
     }
-    path = CLUSTER_PATH + listDir;
+    path = CLUSTER_PATH() + listDir;
 
     QString fileName = QFileDialog::getOpenFileName(this,
         tr("Open %1").arg(type), path, tr("%1 List Files (*.txt)").arg(type));
@@ -1381,7 +1382,7 @@ void ClusterClientFilterDialog::onMwSetDefDistPbClicked()
 
 void ClusterClientFilterDialog::setDefDistances(QString bandType)
 {
-    QSettings settings(CLUSTER_FILTER_FILE, QSettings::IniFormat);
+    QSettings settings(CLUSTER_FILTER_FILE(), QSettings::IniFormat);
     settings.beginGroup("Default Distance");
 
     ClusterFilterDefaultDistIniName defaultDistIniNames;

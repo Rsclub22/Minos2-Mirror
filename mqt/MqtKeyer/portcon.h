@@ -38,12 +38,11 @@ class commonPort : public QObject
 
       // we need a chain of interested monitors. Only an active one should
       // actually accept any line change.
-      my_deque <lineMonitor *> monitors;
+      my_deque <lineMonitor > monitors;
 
       commonPort( const PortConfig &port );
       virtual ~commonPort() override;
 
-      virtual bool initialise( const PortConfig &port );
       virtual bool initialisePort() = 0;
 
       virtual bool openPort() = 0;
@@ -72,16 +71,12 @@ class commonPort : public QObject
       int lastTransverterSwitch = -1;
 
       virtual void checkControls( ) = 0;
-
-      void registerMonitor( lineMonitor * );
-
 signals:
       void lcallback( bool pPTT, bool pPTTRef, bool pL1Ref, bool pL2Ref, int lmode );
 };
 
-commonPort *createPort( const PortConfig &port );
-extern my_deque < commonPort *> portChain;
-
+QSharedPointer<commonPort> createPort( const PortConfig &port );
+extern my_deque < commonPort > portChain;
 //==============================================================================
 
 // this is a particular implementation, created by factory and not generally seen
@@ -133,18 +128,18 @@ class WinMonitor: public lineMonitor
 
       virtual void ptt( int state )override;
 
+      virtual bool initialise() override;
       virtual bool pttChanged( int state )override;
       virtual bool L1Changed( int state )override;
       virtual bool L2Changed( int state )override;
       virtual bool linesModeChanged(int lmode)override;
-
-      virtual bool initialise( const KeyerConfig &keyer, const PortConfig &port )override;
 
       virtual void checkControls( )override;
 
       virtual void tickEvent() override;       // this will often be an interrupt routine
 
 };
+extern QSharedPointer<WinMonitor> winp;
 //==============================================================================
 
 class LineEventsPort: public commonPort

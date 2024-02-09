@@ -72,7 +72,7 @@ void txVmInternalSetupDialog::initSetup()
     ui->inChannelCB->addItems(SoundSystemDriver::getSbDriver()->getInputDevices());
     ui->outChannelCB->addItems(SoundSystemDriver::getSbDriver()->getOutputDevices());
 
-    QString fileName = VOICE_KEYER_PATH + VOICE_KEYER_BASE_FILE_NAME + "Internal" + ".ini";
+    QString fileName = VOICE_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + "Internal" + ".ini";
     QSettings settings(fileName, QSettings::IniFormat);
 
     QString indev = settings.value(indevKey, "").toString();
@@ -96,7 +96,7 @@ void txVmInternalSetupDialog::onNumButtonsValueChanged(int num)
 
 void txVmInternalSetupDialog::inChannelCB_currentTextChanged(const QString &arg1)
 {
-    QString fileName = VOICE_KEYER_PATH + VOICE_KEYER_BASE_FILE_NAME + "Internal" + ".ini";
+    QString fileName = VOICE_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + "Internal" + ".ini";
     QSettings settings(fileName, QSettings::IniFormat);
 
     settings.setValue(indevKey, arg1);
@@ -108,7 +108,7 @@ void txVmInternalSetupDialog::inChannelCB_currentTextChanged(const QString &arg1
 
 void txVmInternalSetupDialog::outChannelCB_currentTextChanged(const QString &arg1)
 {
-    QString fileName = VOICE_KEYER_PATH + VOICE_KEYER_BASE_FILE_NAME + "Internal" + ".ini";
+    QString fileName = VOICE_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + "Internal" + ".ini";
     QSettings settings(fileName, QSettings::IniFormat);
     settings.setValue(outdevKey, arg1);
     trace("About to re-initialise audio");

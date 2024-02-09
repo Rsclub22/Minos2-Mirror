@@ -28,6 +28,8 @@ char diskBuffer[ bsize + 1 ];
 //char *lbuff = &diskBuffer[ 0 ];
 int buffpt = 0;
 
+bool suppressSaveHeaders = false;
+
 void clearBuffer( )
 {
    memset( diskBuffer, '#', bsize );
@@ -260,6 +262,45 @@ QString makeStr( bool i )
 {
    return ( i ? "true" : "false" );
 }
+void hex_dump(const QByteArray &src,  size_t line_size,  const QString &rawPrefix)
+{
+    QString prefix = rawPrefix + "               ";
+    prefix = prefix.left(15);
+    int length = src.size();
+    size_t i = 0;
+    const char *address = static_cast<const char *>(src);
+    const char *line = address;
+
+    QString lbuff;
+
+    lbuff = lbuff + prefix + "|" ;
+    while (length-- > 0)
+    {
+        char b = *address++;
+        QByteArray a;
+        a += b;
+        lbuff += QString( " %1").arg(a.toHex().data());
+        if (!(++i % line_size) || (length == 0 && i % line_size))
+        {
+            if (length == 0) {
+                while (i++ % line_size)
+                    lbuff += "__ ";
+            }
+            lbuff += " | ";  /* right close */
+            while (line < address)
+            {
+                char c = *line++;
+                if (c < 33)
+                    c = 0x2E;
+                lbuff += c;
+            }
+            if (length > 0)
+                lbuff = lbuff + "\n" + "                            " + "|" ;
+        }
+    }
+    trace (lbuff);
+}
+
 QString HtmlFontColour( const QColor &c )
 {
     QString s = "<font color='" + c.name() + "'>";
@@ -635,7 +676,12 @@ bool isPureNumeric ( const QString &s )
 }
 void saveHeaderColumns(QString fileName, QString tableName, QString layoutName, QHeaderView *hdr)
 {
- //   trace(QString("saveHeaderColumns %1").arg(layoutName));
+    trace(QString("saveHeaderColumns %1 table %2").arg(layoutName,tableName));
+    if ( suppressSaveHeaders)
+    {
+        trace("Ignoring as in clearScreenLayout");
+        return;
+    }
     QString hLine;
     for (int i = 0; i < hdr->count(); i++)
     {
@@ -653,8 +699,11 @@ void saveHeaderColumns(QString fileName, QString tableName, QString layoutName, 
     Qt::SortOrder so = hdr->sortIndicatorOrder();
     hLine += QString(";%1,%2").arg(sort).arg(so);
 
+    trace(QString("saveHeaderColumns %1 line %2").arg(tableName, hLine));
+
     QSettings hdrSettings(fileName, QSettings::IniFormat);
     hdrSettings.setValue(tableName + "/" + layoutName + "_" + "state", hLine);
+    hdrSettings.sync();
 }
 class HdrCol
 {
@@ -668,6 +717,7 @@ public:
 
 void setHeaderColumns(QString hLine, QHeaderView *hdr)
 {
+    trace(QString("setHeaderColumns %1").arg(hLine));
     QVector<HdrCol> hdrs;
     int sort = 0;
     int sortOrder = Qt::AscendingOrder;
@@ -718,7 +768,7 @@ void setHeaderColumns(QString hLine, QHeaderView *hdr)
         }
         else
         {
-            hdr->resizeSection(h.logPos, 100);
+            hdr->resizeSection(h.logPos, 101);
         }
         hdr->moveSection(hdr->visualIndex(h.logPos), h.visPos);
     }
@@ -730,7 +780,7 @@ void setHeaderColumns(QString hLine, QHeaderView *hdr)
 }
 void restoreHeaderColumns(QString fileName, QString tableName, QString layoutName, QHeaderView *hdr)
 {
-//    trace(QString("restoreHeaderColumns %1").arg(layoutName));
+    trace(QString("restoreHeaderColumns %1 table %2").arg(layoutName, tableName));
     QSettings hdrSettings(fileName, QSettings::IniFormat);
     QString hLine = hdrSettings.value(tableName + "/" + layoutName + "_" + "state", "").toString();
 
@@ -740,12 +790,13 @@ void restoreHeaderColumns(QString fileName, QString tableName, QString layoutNam
         return;
     }
 
+    trace(QString("setHeaderColumns (in restore) %1 table %2").arg(layoutName, tableName));
     setHeaderColumns(hLine, hdr);
 
 }
 void resetHeaderColumns(QString fileName, QString tableName, QString layoutName, QHeaderView *hdr)
 {
-//    trace(QString("resetHeaderColumns %1").arg(layoutName));
+    trace(QString("resetHeaderColumns %1 table %2").arg(layoutName, tableName));
     QSettings hdrSettings(fileName, QSettings::IniFormat);
     hdrSettings.setValue(tableName + "/" + layoutName + "_" + "state", "");
 
@@ -766,6 +817,7 @@ void resetHeaderColumns(QString fileName, QString tableName, QString layoutName,
     Qt::SortOrder so = Qt::AscendingOrder;
     hLine += QString(";%1,%2").arg(sort).arg(so);
 
+    trace(QString("setHeaderColumns (in reset) %1 table %2").arg(layoutName).arg(tableName));
     setHeaderColumns(hLine, hdr);
 }
 void popupColumnsMenu(QMenu &menu, const QPoint &globalPos, QHeaderView *hdr)
@@ -879,7 +931,7 @@ void comboSetUniqueNames(QStringList nameList, QComboBox *cb)
     }
 
     cb->clear();
-    cb->addItem("");
+    cb->addItem("", "");
     for(int i = 0; i < names.count(); i++)
     {
         cb->addItem( uniqueNames[i], names[i].toString());
@@ -889,7 +941,7 @@ void comboSetUniqueNames(QStringList nameList, QComboBox *cb)
 }
 void clearLayout(QLayout *layout)
 {
-    trace("Enter clearLayout");
+//    trace("Enter clearLayout");
     if (layout != nullptr)
     {
         while(layout->count() > 0)
@@ -915,9 +967,9 @@ void clearLayout(QLayout *layout)
                     name += " | " + p->objectName();
                     p = p->parentWidget();
                 }
-                QString s = f->metaObject()->className() + QString(" | ") + name;
+//                QString s = f->metaObject()->className() + QString(" | ") + name;
 
-                trace(s);
+//                trace(s);
                 delete widget;
             }
             else
@@ -925,7 +977,7 @@ void clearLayout(QLayout *layout)
                 QLayout * layout = item->layout();
                 if (layout)
                 {
-                    trace(QString("Clear layout %1").arg(layout->objectName()));
+//                    trace(QString("Clear layout %1").arg(layout->objectName()));
                     clearLayout(layout);
                 }
                 else
@@ -933,17 +985,17 @@ void clearLayout(QLayout *layout)
                     QSpacerItem * si = item->spacerItem();
                     if (si)
                     {
-                        trace("clear spacer");
+//                        trace("clear spacer");
                         //delete si;    // the spacer IS the item
                     }
                     else
                     {
-                        trace("clear something!");
+//                        trace("clear something!");
                     }
                 }
             }
             delete item;
         }
     }
-    trace("Exit clearLayout");
+//    trace("Exit clearLayout");
 }

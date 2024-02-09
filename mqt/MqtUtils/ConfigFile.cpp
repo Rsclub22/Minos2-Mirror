@@ -43,12 +43,12 @@ MinosConfig *MinosConfig::getMinosConfig()
 /*static*/
 QString MinosConfig::getConfigIniName()
 {
-    return "./Configuration/MinosConfig.ini";
+    return getDirectoryLocation(dlConfiguration) + "/MinosConfig.ini";
 }
 
 QString MinosConfig::getConfigJsonName()
 {
-    return "./Configuration/MinosConfig.json";
+    return getDirectoryLocation(dlConfiguration) + "/MinosConfig.json";
 }
 
 QString MinosConfig::getThisRouterName()
@@ -133,8 +133,8 @@ QSharedPointer<Connectable> RunConfigElement::connectable()
 QString RunConfigElement::inferExecutable()
 {
     QString executable;
-    QString launcherExecutablePath = getAppExecutable(); // launch apps executable name
-    QString launcherExecutableName = getAppExecutableName();
+    QString launcherExecutablePath = getAppExecutable();      // path with "/" rather than "\"
+    QString launcherExecutableName = getAppExecutableName();  // launch apps executable name
 
 #if defined(Q_OS_MACOS)
     //Path=MqtLogger.app/Contents/Resources/MqtCluster.app
@@ -150,6 +150,7 @@ QString RunConfigElement::inferExecutable()
     if (launcherExecutablePath.contains(exeString))
     {
         trace("contains exestring");
+        // launch fom a build directory
         executable = launcherExecutablePath;
         executable.replace(launcherExecutableName, appConfigName);
         trace(executable);
@@ -157,45 +158,62 @@ QString RunConfigElement::inferExecutable()
     else if (launcherExecutablePath.contains(binString))
     {
         trace("contains binString");
+        // launch from a release bundle
         executable = launcherExecutablePath;
-        executable.append("/Contents/Resources/Bin/" + appConfigName);
+        executable.replace("/MacOS/" + launcherExecutableName, "/Resources/Bin/" + appConfigName + ".app");
         trace(executable);
     }
 
 #elif defined(Q_OS_WIN)
-    QString debugString = launcherExecutableName + "\\debug\\" + launcherExecutableName;
-    QString releaseString = launcherExecutableName + "\\release\\" + launcherExecutableName;
-    QString binString = "\\Bin\\" + launcherExecutableName;
+    QString debugString = launcherExecutableName + "/debug/" + launcherExecutableName;
+    QString releaseString = launcherExecutableName + "/release/" + launcherExecutableName;
+    QString binString = "/Bin/" + launcherExecutableName;
 
     if (launcherExecutablePath.contains(debugString))
     {
         executable = launcherExecutablePath;
-        executable.replace(debugString, appConfigName + "\\debug\\" + appConfigName);
+        executable.replace(debugString, appConfigName + "/debug/" + appConfigName);
     }
     else if (launcherExecutablePath.contains(releaseString))
     {
         executable = launcherExecutablePath;
-        executable.replace(releaseString, appConfigName + "\\release\\" + appConfigName);
+        executable.replace(releaseString, appConfigName + "/release/" + appConfigName);
     }
     else if (launcherExecutablePath.contains(binString))
     {
         executable = launcherExecutablePath;
-        executable.replace(binString, "\\Bin\\" + appConfigName);
+        executable.replace(binString, "/Bin/" + appConfigName);
     }
 #elif defined(Q_OS_ANDROID)
 #else
     QString exeString = launcherExecutableName + "/" + launcherExecutableName;
     QString binString = "/Bin/" + launcherExecutableName;
 
+//    19:14:26.676 MqtLogger/MqtLogger
+//    19:14:26.676 /Bin/MqtLogger
+//    19:14:26.676 MqtCluster
+//    19:14:26.676 Bin/MqtLogger
+//    19:14:26.676 MqtLogger
+
+    trace(exeString);
+    trace(binString);
+    trace(appConfigName);
+    trace(launcherExecutablePath);
+    trace(launcherExecutableName);
+
     if (launcherExecutablePath.contains(exeString))
     {
+        trace("contains exestring");
         executable = launcherExecutablePath;
         executable.replace(exeString, appConfigName + "/" + appConfigName);
+        trace(executable);
     }
     else if (launcherExecutablePath.contains(binString))
     {
+        trace("contains binstring");
         executable = launcherExecutablePath;
         executable.replace(binString, "/Bin/" + appConfigName);
+        trace(executable);
     }
 #endif
 
@@ -309,12 +327,12 @@ void RunConfigElement::sendCommand(const QString & cmd)
 {
     if (runner && appType != MinosConfig::tr(MinosConfig::appNone) )
     {
-#ifdef Q_OS_MACOS
         if (cmd == "Shutdown")
         {
+            // under some circumstances the shutdown target needs
+            // to be shown or it doesn't shut down
              sendCommand("ShowServers");
         }
-#endif
         QByteArray command = (cmd + "\n").toUtf8();
         qint64 res = runner->write( command );
         if (res < 0)
@@ -732,7 +750,7 @@ QStringList MinosConfig::getAppTypes()
 void MinosConfig::buildAppConfigList()
 {
     trace(GetCurrentDir());
-    INIFile appConfig("./Configuration/AppConfig.ini");
+    INIFile appConfig(getDirectoryLocation(dlConfiguration) + "/AppConfig.ini");
     /*
 [BandMap]
 Path=./mqtBandMap
@@ -775,7 +793,7 @@ Server=false
             }
 #endif
 #ifdef Q_OS_MACOS
-            if (!ac.appPath.isEmpty())
+            if (!ac.appPath.isEmpty() && ac.appPath.right(4).compare(".app", Qt::CaseInsensitive) != 0)
             {
                 ac.appPath += ".app";
                 ac.appPath = QCoreApplication::applicationDirPath()+"/../Resources/"+ac.appPath;
@@ -953,13 +971,14 @@ QString MinosConfig::checkConfig(QString name)
                     }
                 }
 
-                if (ele->appType != tr(appNone) && !FileExists(ele->rundir + "/Configuration/MinosConfig.json"))
+                if (ele->appType != tr(appNone) && !FileExists( getDirectoryLocation(dlConfiguration, ele->rundir) + "/MinosConfig.json"))
                 {
                     reqErrs += "<" + ele->appType + ">" + tr(" Working directory is not valid - no Configuration/MinosConfig.json\n\n");
                 }
             }
         }
     }
+    trace("MinosConfig::checkConfig " + reqErrs);
     return reqErrs;
 }
 

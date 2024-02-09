@@ -4,6 +4,7 @@
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QFile>
+#include "AppStartup.h"
 #include "MShowMessageDlg.h"
 #include "profiles.h"
 #include "MTrace.h"
@@ -106,12 +107,12 @@ ScreenConfigFile::~ScreenConfigFile()
 }
 void ScreenConfigFile::loadFile(QWidget *parent)
 {
-    readFile("./Configuration/ScreenConfigs.json", parent);
+    readFile(getDirectoryLocation(dlConfiguration) + "/ScreenConfigs.json", parent);
     loaded = true;
 }
 bool ScreenConfigFile::dumpFile()
 {
-    return writeFile("./Configuration/ScreenConfigs.json");
+    return writeFile(getDirectoryLocation(dlConfiguration) + "/ScreenConfigs.json");
 }
 void ScreenConfigFile::procScreens(QVector<SCScreen> &elescr, QJsonArray &screens)
 {
@@ -176,6 +177,10 @@ void ScreenConfigFile::procRows(QVector<SCRow> &elerows, QJsonArray &rows)
             SCElement scele;
             QJsonObject ele = e.toObject();
             QString eletype = ele.value("type").toString();
+            if (eletype == "TX Voice Mem. Buttons" || eletype == tr("TX Voice Mem. Buttons"))
+            {
+                eletype = ScreenConfigElement::getRawScreenTypeString(sctTxVmButtons);
+            }
             scele.type = ScreenConfigElement::getScreenType(eletype);
             if (scele.type == sctSplit)
             {

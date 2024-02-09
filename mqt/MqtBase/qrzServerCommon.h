@@ -81,6 +81,9 @@ public:
     void setDBDate(QString dbdate_){dbdate = dbdate_;}
     QString getDBDate() const {return dbdate;}
 
+    void setMessage(QString mess_){message = mess_;}
+    QString getMessage() const {return message;}
+
     int getDbRecords() const
     {
         return dbRecords;
@@ -127,6 +130,7 @@ public:
         ituZone.clear();
         moddate.clear();
         dbdate.clear();
+        message.clear();
 
         dbRecords = 0;
         dbRecalls = 0;
@@ -150,6 +154,7 @@ private:
     QString ituZone;
     QString moddate;
     QString dbdate;
+    QString message;
 
     int dbRecords = 0;
     int dbRecalls = 0;

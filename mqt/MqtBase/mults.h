@@ -126,7 +126,7 @@ class DistrictSynonym
 
 class CountryEntry : public MultEntry
 {
-      int distLimit;
+      int distLimit = -1;
       QString basePrefix;
       QString continent;
 
@@ -155,10 +155,11 @@ class CountryEntry : public MultEntry
       int getCQZone() const override;
 };
 
+// stCallsign means a FULL callsign from cty.dat
+enum SynType {stNormal, stCallsign, stTest};
 class CountrySynonym
 {
     QString synPrefix;
-    QSharedPointer<CountryEntry> country;
     Locator central;	// central point to take bearings to
 
     QString continent;
@@ -167,7 +168,11 @@ class CountrySynonym
     int CQZone = 0;
 public:
 
-      CountrySynonym(const QString &syn, const QString &prefix, const QString &cq, const QString &itu, const QString &ll, const QString &cont );
+    QSharedPointer<CountryEntry> country;
+    SynType prefixType;              // "prefix" is a full call if stCallsign
+      CountrySynonym(const QString &syn, const QString &prefix
+                   , const QString &cq, const QString &itu, const QString &ll
+                   , const QString &cont , SynType ptype);
       virtual ~CountrySynonym();
 
       void getDupPrefix( QString & );
@@ -196,10 +201,8 @@ public:
 class LocCount
 {
 public:
-    unsigned short UKLocCount;
-      unsigned short nonUKLocCount;
-      bool UKMultGiven;
-      LocCount():UKLocCount(0), nonUKLocCount(0), UKMultGiven(false){}
+    unsigned short locCount;
+      LocCount():locCount(0){}
 };
 class LocSquare
 {
@@ -248,7 +251,6 @@ class MultLists
       virtual QSharedPointer<CountryEntry> getCtryForPrefix( const QString &forcedMult ) = 0;
       virtual QString getCtryListText( const QString & item, int Column, BaseContestLog *const ct, const QString &band ) = 0;
       virtual QString getDistListText( const QString & item, int Column, BaseContestLog *const ct, const QString &band ) = 0;
-      virtual bool isUKprefix(const Callsign &cs) = 0;
       virtual int getDistWorked(const QString & item, BaseContestLog *const ct, const QString &band ) = 0;
       virtual int getCountryWorked(const QString & item, BaseContestLog *const ct, const QString &band ) = 0;
 

@@ -10,7 +10,7 @@ include($$PWD/../mqthamlib.pri)
 QT       += core gui
 QT       += widgets
 QT       += network
-!ios:QT  += serialport
+QT  += serialport
 
 TARGET = MqtRigControl
 TEMPLATE = app
@@ -31,6 +31,9 @@ win32-msvc{
         QT += axcontainer
         #message(msvc dumpcpp)
         TYPELIBS = $$system(dumpcpp OmniRig.tlb)
+}
+win32{
+LIBS *= -lsetupapi -lhid
 }
 #message($$INCLUDEPATH)
 SOURCES += main.cpp\

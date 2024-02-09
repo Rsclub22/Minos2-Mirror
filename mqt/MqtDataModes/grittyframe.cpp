@@ -6,6 +6,7 @@
 #include <QJsonArray>
 
 
+#include "AppStartup.h"
 #include "MTrace.h"
 #include "delayedaction.h"
 #include "dmmainwindow.h"
@@ -134,7 +135,7 @@ void GrittyFrame::createProcess()
     connect (grittyProcess, &QProcess::readyReadStandardError, this, &GrittyFrame::on_readyReadStandardError);
     connect (grittyProcess, &QProcess::readyReadStandardOutput, this, &GrittyFrame::on_readyReadStandardOutput);
 
-    QString configDir = "./Configuration/DataModes/";
+    QString configDir = getDirectoryLocation(dlConfiguration) + "/DataModes/";
     CreateDir(configDir);
     QDir dir( configDir );
 

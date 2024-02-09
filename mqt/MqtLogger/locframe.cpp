@@ -280,7 +280,7 @@ void LocFrame::reInitialiseLocators()
                 LocCount *lc = ct->locs[band].itemAt(k) ->map( j * 10 + i );
                 QString disp = QString("%1").arg(j * 10 + i, 2, 10, QChar('0'));
 
-                if ( lc && (lc->UKLocCount || lc->nonUKLocCount))
+                if ( lc && (lc->locCount))
                 {
                     model->locMap[locStart + disp] = lc;
 
@@ -506,7 +506,7 @@ QVariant LocGridModel::data( const QModelIndex &index, int role ) const
             disp = HtmlFontColour(Qt::white) + disp;
         }
         if (lci != locMap.end())
-            disp = /*HtmlFontColour(multhighlight) +*/ "<b>" + disp ;
+            disp = "<b>" + disp ;
         return disp;
     }
 
@@ -515,17 +515,9 @@ QVariant LocGridModel::data( const QModelIndex &index, int role ) const
         QColor multhighlight = Qt::darkGray;
         if (ct->usesBonus.getValue())
         {
-            switch (ct->getSquareBonus(disp))
+            if (ct->getSquareBonus(disp))
             {
-            case 500:  //blue
                 multhighlight = Qt::blue;
-                break;
-            case 1000: //green
-                multhighlight = Qt::green;
-                break;
-            case 2000: //red
-                multhighlight = Qt::red;
-                break;
             }
         }
         QMap<QString, LocCount * >::const_iterator lci = locMap.find(disp);

@@ -1,7 +1,5 @@
 #!/bin/bash
 
-#cd ~/Minos2
-
 if [[ "$OSTYPE" == "darwin"* ]] ; then 		#MacOS
 echo Please use macInstall.sh instead
 exit 1
@@ -70,7 +68,6 @@ mkdir Logs
 mkdir Bin
 mkdir Bin/translations
 mkdir Docs
-mkdir Help
 
 for i in en_GB fr_FR
 do
@@ -98,16 +95,16 @@ cp -r $DIR/mqt/ControlFiles/Configuration/LinuxFiles/* ./Configuration
 rm -rf ./Configuration/WindowsFiles
 rm -rf ./Configuration/LinuxFiles
 rm -rf ./Configuration/MacFiles
-cp $DIR/mqt/Installer/Minos.sh . 
-cp $DIR/mqt/Installer/runAppStarter.sh .
+cp -p $DIR/mqt/Installer/Minos.sh . 
+cp -p $DIR/mqt/Installer/runAppStarter.sh .
 cp $DIR/mqt/Docs/*.* ./Docs
-cp $DIR/mqt/Help/*.* ./Help
 cp $DIR/mqt/*.ico .
 
 cd Configuration
 
 wget https://www.country-files.com/cty/cty.dat -O cty.dat
 wget https://www.rsgbcc.org/cgi-bin/vhfenter.pl?afsdownload=y -O clublist.txt
+
 wget https://www.rsgbcc.org/vhf/vhfcontests23.xml -O vhfcontests23.xml
 wget https://www.rsgbcc.org/vhf/vhfcontests24.xml -O vhfcontests24.xml
 
@@ -139,11 +136,17 @@ if [ ! -d ~/$RUNTIME/Lists ]; then
 fi
 cp -rv Bin ~/$RUNTIME
 cp *.ico ~/$RUNTIME
-cp runAppStarter.sh ~/$RUNTIME
-cp Minos.sh ~/$RUNTIME
+cp -p runAppStarter.sh ~/$RUNTIME
+cp -p Minos.sh ~/$RUNTIME
 
 read -n 1 -p "Do you want to copy the configuration to ~/$RUNTIME (press y/n)? " ans;
 
+case $ans in
+    y|Y)
+        ;;
+    n|N|*)
+        exit;;
+esac
 
 cp -rv Configuration ~/$RUNTIME
 

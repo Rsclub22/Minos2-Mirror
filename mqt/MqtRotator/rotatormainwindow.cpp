@@ -21,6 +21,7 @@
 #include <QProcessEnvironment>
 #include <QDir>
 
+#include "AppStartup.h"
 #include "regsettings.h"
 #include "RPCCommandConstants.h"
 #include "rotatorRpc.h"
@@ -82,32 +83,38 @@ RotatorMainWindow::RotatorMainWindow(QWidget *parent) :
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
+    int curTabNo = settings.getSettings().value("rotTabs/curTab").toInt();
+    ui->rotTabs->setCurrentIndex(curTabNo);
+
+    QByteArray state;
+    state = settings.getSettings().value("antSplitter").toByteArray();
+    ui->antSplitter->restoreState(state);
+
+    state = settings.getSettings().value("rotSplitter").toByteArray();
+    ui->rotSplitter->restoreState(state);
+
+    ui->antSplitter->setMinimumHeight(10);
+    ui->antSplitter->setMinimumWidth(10);
+    ui->rotSplitter->setMinimumHeight(10);
+    ui->rotSplitter->setMinimumWidth(10);
+    ui->dialFrame->setMinimumWidth(10);
+
+//    ui->dialFrame->setStretch(0, 100);
+//    ui->dialLayout->setStretch(1, 1);
+//    ui->dialLayout->setStretch(2, 1);
 
     ui->rot_left_button->setShortcut(QKeySequence(ROTATE_CCW_KEY));
     ui->rot_right_button->setShortcut(QKeySequence(ROTATE_CW_KEY));
     ui->turnButton->setShortcut(QKeySequence(ROTATE_TURN_KEY));
     ui->stopButton->setShortcut(QKeySequence(ROTATE_STOP_KEY));
 
-    //redText = new QPalette();
-    //blackText = new QPalette();
-    //redText->setColor(QPalette::ButtonText, Qt::red);
-    //blackText->setColor(QPalette::ButtonText, Qt::black);
-
-    // disable some menus for now
-//    ui->actionHelp->setVisible(false);
-//    ui->actionSkyScan->setVisible(false);
-//    ui->actionAlways_On_Top->setVisible(false);
-
     initPresetButtons();
-
 
     rotator = nullptr;
     readTraceLogFlag();
     trace(QString("Starting rotator factory and adding rotators to the list"));
     rotFactory = new RotatorFactory(traceCommsFlag, this);
 
-    //rotator->getRotatorList();
-    //setupAntenna = new RotSetupDialog(rotator);
     setupAntenna = new RotSetupDialog(rotFactory);
     setupLog = new LogDialog;
     pollTimer = new QTimer(this);
@@ -138,13 +145,10 @@ RotatorMainWindow::RotatorMainWindow(QWidget *parent) :
     rawRotatorlbl->setText(tr("RawRot: "));
     ui->statusbar->addPermanentWidget(rawRotatorDisplay);
 
-//    ui->overlaplineEdit->setFixedSize(60,20);
     ui->antNameDisp->setText("");
 
     rot_left_button_off();
     rot_right_button_off();
-
-
 
     refreshPresetLabels();
     initActionsConnections();
@@ -312,7 +316,7 @@ void RotatorMainWindow::setSelectAntennaBoxVisible(bool visible)
 {
 
 
-    ui->antennaSelectlbl->setVisible(visible);
+    //ui->antennaSelectlbl->setVisible(visible);
     ui->selectAntennaBox->setVisible(visible);
 
 
@@ -490,17 +494,33 @@ int RotatorMainWindow::openRotator()
         pollTimer->start(pollTime);             // start timer to send message to controller
         if (setupAntenna->currentAntenna.portType == RotCapConstants::PortType::serial)
         {
-            showStatusMessage(tr("Connected to: %1 - %2, %3, %4, %5, %6, %7,  Handshake %8, ForceDTR %9, ForceRTS %10")
-                                  .arg(setupAntenna->currentAntenna.antennaName).arg(setupAntenna->currentAntenna.rotatorModel).arg(setupAntenna->currentAntenna.comport).arg(setupAntenna->currentAntenna.baudrate).arg(setupAntenna->currentAntenna.databits)
-                                  .arg(setupAntenna->currentAntenna.stopbits).arg(serialCommonData::parityStr[setupAntenna->currentAntenna.parity]).arg(serialCommonData::handshakeStr[setupAntenna->currentAntenna.handshake]).arg(serialCommonData::forceLinesStr[setupAntenna->currentAntenna.forceDtr]).arg(serialCommonData::forceLinesStr[setupAntenna->currentAntenna.forceRts]));
+            QString base = tr("Connected");
+
+            QString extra= tr("Connected to: %1 - %2, %3, %4, %5, %6, %7,  Handshake %8, ForceDTR %9, ForceRTS %10")
+                                .arg(setupAntenna->currentAntenna.antennaName
+                                     ,setupAntenna->currentAntenna.rotatorModel
+                                     ,setupAntenna->currentAntenna.comport)
+                                  .arg(setupAntenna->currentAntenna.baudrate)
+                                  .arg(setupAntenna->currentAntenna.databits)
+                                  .arg(setupAntenna->currentAntenna.stopbits)
+                                  .arg(serialCommonData::parityStr[setupAntenna->currentAntenna.parity]
+                                  ,serialCommonData::handshakeStr[setupAntenna->currentAntenna.handshake]
+                                  ,serialCommonData::forceLinesStr[setupAntenna->currentAntenna.forceDtr]
+                                  ,serialCommonData::forceLinesStr[setupAntenna->currentAntenna.forceRts]);
+
+            showStatusMessage(base, extra);
         }
         else if (setupAntenna->currentAntenna.portType == RotCapConstants::PortType::network )
         {
-            showStatusMessage(tr("Connected to: %1 - %2, %3").arg(setupAntenna->currentAntenna.antennaName, setupAntenna->currentAntenna.rotatorModel, setupAntenna->currentAntenna.networkAdd + ":" + setupAntenna->currentAntenna.networkPort));
+            QString base = tr("Connected");
+            QString extra = tr("Connected to: %1 - %2, %3").arg(setupAntenna->currentAntenna.antennaName, setupAntenna->currentAntenna.rotatorModel, setupAntenna->currentAntenna.networkAdd + ":" + setupAntenna->currentAntenna.networkPort);
+            showStatusMessage(base, extra);
         }
         else if (setupAntenna->currentAntenna.portType == RotCapConstants::PortType::none)
         {
-                showStatusMessage(tr("Connected to: %1 - %2").arg(setupAntenna->currentAntenna.antennaName, setupAntenna->currentAntenna.rotatorModel));
+            QString base = tr("Connected");
+            QString extra = tr("Connected to: %1 - %2").arg(setupAntenna->currentAntenna.antennaName, setupAntenna->currentAntenna.rotatorModel);
+            showStatusMessage(base, extra);
         }
 
         //sendStatusToLogConnected();
@@ -562,9 +582,10 @@ void RotatorMainWindow::closeRotator()
 
 
 
-void RotatorMainWindow::showStatusMessage(const QString &message)
+void RotatorMainWindow::showStatusMessage(const QString &message, const QString &tt)
 {
     status->setText(message);
+    status->setToolTip(tt.isEmpty()?message:tt);
 }
 
 
@@ -636,6 +657,7 @@ void RotatorMainWindow::initActionsConnections()
     // click on compass rose
 
     connect(ui->compassDial, &MinosCompass::sendClickBearing, this, &RotatorMainWindow::compassClicked);
+    connect(ui->compassDial, &MinosCompass::sendStop, this, &RotatorMainWindow::stop_rotation);
 
     // display bearing
     connect(pollTimer, &QTimer::timeout, this, &RotatorMainWindow::request_bearing);
@@ -668,12 +690,6 @@ void RotatorMainWindow::initActionsConnections()
     connect(msg, &RotatorRpc::setRotation, this, &RotatorMainWindow::onLoggerSetRotation);
     connect(msg, &RotatorRpc::selectAntennaFromLog, this, &RotatorMainWindow::onLoggerSelectAntenna);
     connect(msg, &RotatorRpc::setRotPreset, this, &RotatorMainWindow::onLoggerSetPreset);
-
-
-    //connect(ui->actionAbout, &QAction::triggered, this, &RotatorMainWindow::about);
-    //connect(ui->actionAbout_Rotator_Config, &QAction::triggered, this, &RotatorMainWindow::aboutRotatorConfig);
-    //connect(ui->actionTraceComms, &QAction::toggled, this, &RotatorMainWindow::saveTraceLogFlag);    // set/clear comms tracing
-
 }
 
 
@@ -770,15 +786,8 @@ void RotatorMainWindow::displayBearing(int bearing)
         msg->rotatorCache.setBearing(psname, s);
         msg->rotatorCache.publish();
     }
-    QString rotatorBearingmsg = QString::number(displayBearing);
-    if (displayBearing < 10 && rotatorBearing > 0)
-    {
-        rotatorBearingmsg = "00" +rotatorBearingmsg;
-    }
-    else if (displayBearing < 100 && rotatorBearing > 0)
-    {
-        rotatorBearingmsg = "0" +rotatorBearingmsg;
-    }
+    QString rotatorBearingmsg = QString("%1").arg(rotatorBearing, 3, 10, QChar('0'));
+
     // send rotatorBearing to actual rotatorBearingDisplay
     emit displayActualBearing(rotatorBearingmsg);
     // display raw rotator bearing on status line
@@ -813,15 +822,7 @@ void RotatorMainWindow::displayBearing(int bearing)
 
     }
 
-    QString bearingmsg = QString::number(displayBearing, 10);
-    if (displayBearing < 10)    // prevent display resizing
-    {
-        bearingmsg = "00" + bearingmsg;
-    }
-    else if (displayBearing < 100)
-    {
-        bearingmsg = "0" + bearingmsg;
-    }
+    QString bearingmsg = QString("%1").arg(displayBearing, 3, 10, QChar('0'));
 
     emit sendBearing(bearingmsg);
     emit sendCompassDial(displayBearing);
@@ -839,15 +840,7 @@ void RotatorMainWindow::displayBearing(int bearing)
         backBearing -= COMPASS_MAX360;
     }
     // send backBearing to display
-    QString backBearingmsg = QString::number(backBearing, 10);
-    if (backBearing < 10)
-    {
-        backBearingmsg = "00" + backBearingmsg;
-    }
-    else if (backBearing < 100)
-    {
-        backBearingmsg = "0" + backBearingmsg;
-    }
+    QString backBearingmsg = QString("%1").arg(backBearing, 3, 10, QChar('0'));
     emit sendBackBearing(backBearingmsg);
 
 }
@@ -861,7 +854,9 @@ void RotatorMainWindow::compassClicked(int brg)
 
 void RotatorMainWindow::dispRawRotBearing(int rotatorBearing)
 {
-    rawRotatorDisplay->setText(QString::number(rotatorBearing));
+    QString rotbearingmsg = QString("%1").arg(rotatorBearing, 3, 10, QChar('0'));
+
+    rawRotatorDisplay->setText(rotbearingmsg);
 }
 
 
@@ -922,6 +917,11 @@ void RotatorMainWindow::initSelectAntennaBox()
         selectAntenna->addItem(setupAntenna->availAntData[i]->antennaName);
     }
     sendAntennaListLogger();
+
+    if (setupAntenna->numAvailAntennas == 0)
+    {
+        ui->rotTabs->setCurrentIndex(0);
+    }
 }
 
 
@@ -1218,7 +1218,16 @@ void RotatorMainWindow::checkMoving(int bearing)
         return;
     }
 
-    if (oldBearing != bearing)
+    if ((abs(targetBearing - bearing) <= 2) && (oldBearing != bearing))
+    {
+        if (rotTimeCount > 1)
+        {
+            logMessage(QString("Rotator is near target for too long"));
+            stopButton();
+            sendStatusToLogStop();
+        }
+    }
+    else if (oldBearing != bearing)
     {
             oldBearing = bearing;
             rotTimeCount = 0;
@@ -1229,7 +1238,7 @@ void RotatorMainWindow::checkMoving(int bearing)
     {
         if (rotTimeCount > ROTATE_MOVE_TIMEOUT)
         {
-            logMessage(QString("Rotator has stoped moving"));
+            logMessage(QString("Rotator has stopped moving"));
             stopButton();
             sendStatusToLogStop();
         }
@@ -1333,6 +1342,7 @@ void RotatorMainWindow::rotateTo(int bearing)
                 rotateTo = rotateTo - 1;        // some hamlib and PST Rotator do not like 360
             }
 
+            targetBearing = rotateTo;
             retCode = rotator->rotate_to_bearing(rotateTo);
             if (retCode < 0)
             {
@@ -2091,7 +2101,7 @@ void RotatorMainWindow::onPSTRotatorConfig()
     int res = pstConfigDialog.exec();
     if ( res == QDialog::Accepted )
     {
-        QString fileName = PST_CONFIG_FILE;
+            QString fileName = PST_CONFIG_FILE();
         QSettings  config(fileName, QSettings::IniFormat);
 
         config.beginGroup("PSTRotatorPath");
@@ -2139,11 +2149,11 @@ void RotatorMainWindow::readTraceLogFlag()
     QString fileName;
     if (appName == "")
     {
-        fileName = RIG_CONFIGURATION_FILEPATH_LOCAL + MINOS_ROTATOR_CONFIG_FILE;
+        fileName = RIG_CONFIGURATION_FILEPATH_LOCAL() + MINOS_ROTATOR_CONFIG_FILE;
     }
     else
     {
-        fileName = RIG_CONFIGURATION_FILEPATH_LOGGER + MINOS_ROTATOR_CONFIG_FILE;
+        fileName = RIG_CONFIGURATION_FILEPATH_LOGGER() + MINOS_ROTATOR_CONFIG_FILE;
     }
 
 
@@ -2172,11 +2182,11 @@ void RotatorMainWindow::saveTraceLogFlag(bool state)
     QString fileName;
     if (appName == "")
     {
-        fileName = RIG_CONFIGURATION_FILEPATH_LOCAL + MINOS_ROTATOR_CONFIG_FILE;
+       fileName = RIG_CONFIGURATION_FILEPATH_LOCAL() + MINOS_ROTATOR_CONFIG_FILE;
     }
     else
     {
-        fileName = RIG_CONFIGURATION_FILEPATH_LOGGER + MINOS_ROTATOR_CONFIG_FILE;
+       fileName = RIG_CONFIGURATION_FILEPATH_LOGGER() + MINOS_ROTATOR_CONFIG_FILE;
     }
 
     QSettings config(fileName, QSettings::IniFormat);
@@ -2234,9 +2244,12 @@ void RotatorMainWindow::presetRead(int buttonNumber)
 {
     if (!rotPresets.isEmpty()  && buttonNumber < rotPresets.count())
     {
-        rotateTo(rotPresets[buttonNumber]->bearing.toInt());
-        ui->bearingEdit->setText(rotPresets[buttonNumber]->bearing);
-        ui->bearingEdit->setFocus();
+        if (!rotPresets[buttonNumber]->bearing.isEmpty())
+        {
+            rotateTo(rotPresets[buttonNumber]->bearing.toInt());
+            ui->bearingEdit->setText(rotPresets[buttonNumber]->bearing);
+            ui->bearingEdit->setFocus();
+        }
     }
 
 }
@@ -2340,7 +2353,7 @@ void RotatorMainWindow::saveRotPresetButton(RotPresetData& editData)
 
 void RotatorMainWindow::readPresets()
 {
-    QSettings config("./Configuration/MinosRotatorConfig.ini", QSettings::IniFormat);
+    QSettings config(getDirectoryLocation(dlConfiguration) + "/MinosRotatorConfig.ini", QSettings::IniFormat);
     config.beginGroup("Presets");
     if (presetButton.count() > 0)
     {
@@ -2360,7 +2373,7 @@ void RotatorMainWindow:: savePreset(RotPresetData& editData)
 {
 
 
-    QSettings config("./Configuration/MinosRotatorConfig.ini", QSettings::IniFormat);
+    QSettings config(getDirectoryLocation(dlConfiguration) + "/MinosRotatorConfig.ini", QSettings::IniFormat);
     config.beginGroup("Presets");
         config.setValue("preset" + QString::number(editData.number + 1), editData.name);
         config.setValue("bearing" + QString::number(editData.number + 1), editData.bearing);
@@ -2401,7 +2414,7 @@ void RotatorMainWindow::updatePresetLabels()
 
 void RotatorMainWindow::checkTestBearingBox()
 {
-    QSettings config(CONFIGURATION_FILEPATH_LOGGER + MINOS_ROTATOR_CONFIG_FILE, QSettings::IniFormat);
+    QSettings config(CONFIGURATION_FILEPATH_LOGGER() + MINOS_ROTATOR_CONFIG_FILE, QSettings::IniFormat);
     config.beginGroup("TestBearings");
 
     if (config.value("testbearings", false).toBool())
@@ -2607,5 +2620,31 @@ void RotatorMainWindow::on_PSTConfig_clicked()
 void RotatorMainWindow::on_traceDataComms_stateChanged(int /*arg1*/)
 {
     saveTraceLogFlag(ui->traceDataComms->isChecked());
+}
+
+
+void RotatorMainWindow::on_rotSplitter_splitterMoved(int /*pos*/, int /*index*/)
+{
+    RegSettings settings;
+    QByteArray state = ui->rotSplitter->saveState();
+    settings.getSettings().setValue("rotSplitter" , state);
+
+}
+
+
+void RotatorMainWindow::on_antSplitter_splitterMoved(int /*pos*/, int /*index*/)
+{
+    RegSettings settings;
+    QByteArray state = ui->antSplitter->saveState();
+    settings.getSettings().setValue("antSplitter" , state);
+
+}
+
+
+void RotatorMainWindow::on_rotTabs_currentChanged(int index)
+{
+    RegSettings settings;
+    settings.getSettings().setValue("rotTabs/curTab", index);
+
 }
 

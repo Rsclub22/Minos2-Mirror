@@ -6,7 +6,7 @@
     <message>
         <location filename="../mqtktWaveShowDialog.ui" line="14"/>
         <source>Wave Display</source>
-        <translation>Affichage Waveform. </translation>
+        <translation>Affichage Waveform</translation>
     </message>
     <message>
         <location filename="../mqtktWaveShowDialog.ui" line="38"/>
@@ -26,7 +26,7 @@
     <message>
         <location filename="../mqtktWaveShowDialog.cpp" line="140"/>
         <source>Threshold (db below max)</source>
-        <translation>Seuil (db inférieur au max) </translation>
+        <translation>Seuil (db inférieur au max)</translation>
     </message>
     <message>
         <location filename="../mqtktWaveShowDialog.cpp" line="144"/>

@@ -81,16 +81,12 @@ private slots:
    void on_OKButton_clicked();
    void on_EntDetailButton_clicked();
    void on_CancelButton_clicked();
-   void on_BSHelpButton_clicked();
    void on_HFCalendarButton_clicked();
    void on_VHFCalendarButton_clicked();
    void on_uwaveCalendarButton_clicked();
    void on_CallsignEdit_editingFinished();
    void on_DXCCMult_clicked();
-   void on_NonGCtryMult_clicked();
    void on_LocatorMult_clicked();
-   void on_GLocMult_clicked();
-   void on_M7LocatorMults_clicked();
    void on_ProtectedOption_clicked();
    void on_BonusComboBox_currentIndexChanged(int index);
    void on_MGMCheckBox_stateChanged(int arg1);

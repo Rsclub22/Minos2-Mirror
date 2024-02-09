@@ -63,12 +63,12 @@
     <name>MonitoringFrame</name>
     <message>
         <location filename="../MonitoringFrame.ui" line="62"/>
-        <location filename="../MonitoringFrame.cpp" line="204"/>
+        <location filename="../MonitoringFrame.cpp" line="205"/>
         <source>Show Map</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MonitoringFrame.cpp" line="183"/>
+        <location filename="../MonitoringFrame.cpp" line="184"/>
         <source>Show Log</source>
         <translation type="unfinished"></translation>
     </message>

@@ -56,7 +56,7 @@ QrzServerMainWindow::QrzServerMainWindow(QWidget *parent)
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
-    QString fileName = "./Configuration/QRZServer.ini";
+    QString fileName = getDirectoryLocation(dlConfiguration) + "/QRZServer.ini";
     QSettings config(fileName, QSettings::IniFormat);
 
     logonCallsign = config.value("logonCallsign", "").toString();
@@ -283,12 +283,13 @@ void QrzServerMainWindow::sendUrl(QString url)
         xmlData.addData( xml );
         if (raw == 200)
         {
-            //trace(QString("XML read %1").arg(QString(xml)));
+            trace(QString("XML read %1").arg(QString(xml)));
             if (xmlData.readNextStartElement())
             {
                 if (xmlData.name().contains(QString("QRZDatabase")))
                 {
-                    if (xmlData.readNextStartElement())
+                    bool csRX = false;
+                    while (xmlData.readNextStartElement())
                     {
                         if (xmlData.name().contains(QString("Session")))
                         {
@@ -297,19 +298,27 @@ void QrzServerMainWindow::sendUrl(QString url)
                         }
                         else if (xmlData.name().contains(QString("Callsign")))
                         {
-
+                            csRX = true;
                             parseCallsignData(xmlData);
-                            qrzCallsignData.setDBDate(QDateTime::currentDateTimeUtc().toString("yyyy-MM-dd HH:mm:ss"));
-                            qdb->createRecord(qrzCallsignData);
-                            qrzRequests++;
-                            dbRecords++;
-                            callsignDataReceived();
 
                         }
                         else if (xmlData.name().contains(QString("DXCC")))
                         {
                             parseDXCCData(xmlData);
                         }
+                    }
+                    if (csRX)
+                    {
+                        QString sessmess = qrzSessionData.getMessage();
+                        if (!sessmess.isEmpty())
+                        {
+                            qrzCallsignData.setMessage(sessmess);
+                        }
+                        qrzCallsignData.setDBDate(QDateTime::currentDateTimeUtc().toString("yyyy-MM-dd HH:mm:ss"));
+                        qdb->createRecord(qrzCallsignData);
+                        qrzRequests++;
+                        dbRecords++;
+                        callsignDataReceived();
                     }
                 }
              }
@@ -324,7 +333,7 @@ void QrzServerMainWindow::sendUrl(QString url)
         QString sslError;
         if (!QSslSocket::supportsSsl())
         {
-            trace(tr("OpenSSSL version built is is %1").arg(QSslSocket::sslLibraryBuildVersionString()));
+            trace(QString("OpenSSSL version build is %1").arg(QSslSocket::sslLibraryBuildVersionString()));
             sslError = "\r\n" + tr("SSL not supported on this system.");
         }
 
@@ -360,6 +369,20 @@ void QrzServerMainWindow::sessionDataReceived()
         trace(QString("Qrz Error: %1").arg(qrzSessionData.getError()));
         addToErrorTextLabel(qrzSessionData.getError());
         addTextToLogWindow(qrzSessionData.getError());
+
+        if (qrzSessionData.getError() != "Connection refused")
+        {
+            // if "Connection refused" then logon won't work
+            // for at least 24 hours, so no point in trying
+
+            if (qrzSessionData.getKey().isEmpty())
+            {
+                // session has expired, we need to re-connect
+
+                qrzServerStateFlags.clear();
+                logon();
+            }
+        }
     }
 
     if (qrzServerStateFlags.getAskLogonFlag())
@@ -387,6 +410,7 @@ void QrzServerMainWindow::sessionDataReceived()
         }
     }
 
+
     if (qrzServerStateFlags.getAskCallsignFlag())
     {
         QString stateMsg;
@@ -394,29 +418,28 @@ void QrzServerMainWindow::sessionDataReceived()
         {
             stateMsg = qrzSessionData.getError();
         }
-        else if (!qrzSessionData.getMessage().isEmpty())
-        {
-            stateMsg = qrzSessionData.getMessage();
-        }
+//        else if (!qrzSessionData.getMessage().isEmpty())
+//        {
+//            stateMsg = qrzSessionData.getMessage();
+//        }
 
-        if (qrzServerStateFlags.getAskCallsignFlag())
+        if (!stateMsg.isEmpty())
         {
+            qrzCallsignData.clear();
+            qrzCallsignData.setCallsign(requestedStation.getDxCall());
+            if (requestedStation.getLoggerFlag())
+            {
+                QrzServerRpc::getQrzServerRpc()->sendQrzResponseToLoggerDisplay(qrzCallsignData, stateMsg, requestedStation.getFromStationName(),requestedStation.getLoggerUuid());
+
+            }
+            else
+            {
+                QrzServerRpc::getQrzServerRpc()->sendQrzResponseToClusterServer(qrzCallsignData.getCallsign(), "", stateMsg, "", "", "");
+            }
             qrzServerStateFlags.setAskCallsignFlag(false);
         }
-
-        qrzCallsignData.clear();
-        qrzCallsignData.setCallsign(requestedStation.getDxCall());
-        if (requestedStation.getLoggerFlag())
-        {
-            QrzServerRpc::getQrzServerRpc()->sendQrzResponseToLoggerDisplay(qrzCallsignData, stateMsg, requestedStation.getFromStationName(),requestedStation.getLoggerUuid());
-
-        }
-        else
-        {
-            QrzServerRpc::getQrzServerRpc()->sendQrzResponseToClusterServer(qrzCallsignData.getCallsign(), "", stateMsg, "", "", "");
-        }
-        qrzServerStateFlags.setAskCallsignFlag(false);
     }
+
 }
 
 void QrzServerMainWindow::callsignDataReceived()
@@ -455,7 +478,8 @@ void QrzServerMainWindow::callsignDataReceived()
 
 void QrzServerMainWindow::parseSessionData(QXmlStreamReader &xmlData)
 {
-    QString("Parse Session Data");
+    trace(QString("Parse Session Data"));
+    qrzSessionData.clear();
     while(xmlData.readNextStartElement())
     {
         if (xmlData.name() == QString("Error"))
@@ -590,7 +614,7 @@ void QrzServerMainWindow::onConfigure()
         bool callsignChanged = false;
         bool passwordChanged = false;
 
-        QString fileName = "./Configuration/QRZServer.ini";
+        QString fileName = getDirectoryLocation(dlConfiguration) + "/QRZServer.ini";
         QSettings config(fileName, QSettings::IniFormat);
 
         if (conf.logCallsign.trimmed() != config.value("logonCallsign", "").toString())
@@ -610,6 +634,17 @@ void QrzServerMainWindow::onConfigure()
         if (callsignChanged || passwordChanged || !logonCallsign.isEmpty() || !password.isEmpty())
         {
             qrzSessionData.clear();
+        }
+
+        if (conf.resetDB)
+        {
+            qdb->resetDB();
+            delete qdb;
+            qdb = new QRZDB(this);
+
+            dbRecords = qdb->getRecordCount();
+            dbRequests = 0;
+            qrzRequests = 0;
         }
     }
 }

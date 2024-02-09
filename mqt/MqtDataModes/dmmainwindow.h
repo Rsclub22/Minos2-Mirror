@@ -12,8 +12,6 @@ QT_BEGIN_NAMESPACE
 namespace Ui { class DMMainWindow; }
 QT_END_NAMESPACE
 
-class RtAudio;
-class QFileSystemWatcher;
 class QPushButton;
 class MonitoredLog;
 class MonitoredLogs;
@@ -76,6 +74,7 @@ private slots:
     void onLogChanged(QSharedPointer<MonitoredLog> ml);
     void onLogStarted(QSharedPointer<MonitoredLog> ml);
     void onLogClosed(QSharedPointer<MonitoredLog> ml);
+    void engineDestroyed(QObject *d);
 signals:
     void setSpeeds(QString b, QString r);
 

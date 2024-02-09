@@ -4,7 +4,6 @@
 #include "delayedaction.h"
 
 #include "changename.h"
-#include "fileutils.h"
 #include "kstmainwindow.h"
 #include "ui_changename.h"
 

@@ -9,6 +9,7 @@
 #ifndef keyctrlH
 #define keyctrlH
 #include <QString>
+#include <QSharedPointer>
 
 class commonPort;
 enum KEYER_COMMAND {eKEYER_STOPRECORD,    		// kill record
@@ -55,7 +56,7 @@ class KeyerInfo    // only passes info up
       int CWTone;
       int CWSpeed;
 };
-commonPort *  loadKeyers( );
+QSharedPointer<commonPort> loadKeyers( );
 void unloadKeyers( );
 
 bool getKeyerStatus( QString & );
@@ -71,7 +72,7 @@ void finishRecordDVPFile( );
 void playKeyerFile( int fileno, bool ptt );
 
 QVector < QString > get_keyer_list();
-commonPort *select_keyer( const QString &kn );
+QSharedPointer<commonPort> select_keyer( const QString &kn );
 
 void doConfig(QString config);
 void stopKeyer();

@@ -48,7 +48,7 @@ void ServerDetails::changeEvent( QEvent* e )
     if( e->type() == QEvent::WindowStateChange )
     {
         RegSettings settings;
-        settings.getSettings().setValue("geometry", saveGeometry());
+        settings.getSettings().setValue("geometry/Details", saveGeometry());
     }
 }
 void ServerDetails::refresh()

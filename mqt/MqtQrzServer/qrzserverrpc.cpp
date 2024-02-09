@@ -116,6 +116,7 @@ void QrzServerRpc::sendQrzResponseToLoggerDisplay(QrzCallsignData qrzCallsignDat
             st->addMember(qrzCallsignData.getItuZone(), rpcConstants::qrzItuZone);
             st->addMember(qrzCallsignData.getModDate(), rpcConstants::qrzmoddate);
             st->addMember(qrzCallsignData.getDBDate(), rpcConstants::qrzdbdate);
+            st->addMember(qrzCallsignData.getMessage(), rpcConstants::qrzmessage);
             st->addMember(qrzCallsignData.getDbRecords(), rpcConstants::qrzdbrecords);
             st->addMember(qrzCallsignData.getDbRecalls(), rpcConstants::qrzdbrecalls);
             st->addMember(qrzCallsignData.getQrzRecalls(), rpcConstants::qrzrecalls);

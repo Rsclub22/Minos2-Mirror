@@ -113,7 +113,9 @@ bool reg1test::exportTest( QSharedPointer<QFile> expfd, bool noSerials )
       if ( cct->contactScore.getValue() > 0 )
       {
          nvalid++;
-         bonus += cct->bonus;
+         bonus += cct->locBonus;
+         bonus += cct->distBonus;
+         bonus += cct->countryBonus;
       }
    }
    if (bonus)
@@ -228,7 +230,7 @@ bool reg1test::exportTest( QSharedPointer<QFile> expfd, bool noSerials )
    // [END] isn't a part of the Reg1Test spec, but everyone else seems to have it!
    // Adjudication software copes either way round.
    
-   QString pver = QString("[END; Minos by G0GJV, version ") + STRINGVERSION  + " " + PRERELEASETYPE + "]";
+   QString pver = QString("[END; Minos by G0GJV, version ") + STRINGVERSION  + " " + PRERELEASETYPE + " ON " + QSysInfo::prettyProductName() + "]";
    wr.lwrite( pver );
 
    return true;

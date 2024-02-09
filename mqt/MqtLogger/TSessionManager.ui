@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Manage Log Sets</string>
+   <string>Manage Contest Sets</string>
   </property>
   <property name="sizeGripEnabled">
    <bool>true</bool>
@@ -24,28 +24,28 @@
        <item>
         <widget class="QPushButton" name="NewSessionButton">
          <property name="text">
-          <string>New Log Set</string>
+          <string>New Contest Set</string>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QPushButton" name="CloneSessionButton">
          <property name="text">
-          <string>Clone Log Set</string>
+          <string>Clone Contest Set</string>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QPushButton" name="DeleteSessionButton">
          <property name="text">
-          <string>Delete Log Set</string>
+          <string>Delete Contest Set</string>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QPushButton" name="RenameSessionButton">
          <property name="text">
-          <string>Rename Log Set</string>
+          <string>Rename Contest Set</string>
          </property>
         </widget>
        </item>
@@ -77,7 +77,7 @@
          <item>
           <widget class="QLabel" name="label">
            <property name="text">
-            <string>Log Sets</string>
+            <string>Contest Sets</string>
            </property>
           </widget>
          </item>
@@ -91,7 +91,7 @@
          <item>
           <widget class="QLabel" name="label_2">
            <property name="text">
-            <string>Entries in Log Sets</string>
+            <string>Entries in Contest Sets</string>
            </property>
           </widget>
          </item>

@@ -724,26 +724,10 @@ void RotControlFrame::setRotatorBearing(const QString &s)
     }
 
 
-    //QString bearing = bearing.number(iBearing);
     QString brg;
     QChar degsym = QChar(DEGREE_SYMBOL);
-    //int len = bearing.length();
-    int len = sl[0].length();
-    if (len < 2)
-    {
-        brg = QString("%1%2%3")
-        .arg("00").arg(sl[0], degsym);
-    }
-    else if (len < 3)
-    {
-        brg = QString("%1%2%3")
-        .arg("0").arg(sl[0], degsym);
-    }
-    else
-    {
-        brg = QString("%1%2")
-        .arg(sl[0]).arg(degsym);
-    }
+
+    brg = QString("%1%2").arg(iBearing, 3, 10, QChar('0')).arg(degsym);
 
     brg.append("</font>");
 
@@ -823,10 +807,13 @@ void RotControlFrame::getRotDetails(memoryData::memData &m)
 
 void RotControlFrame::presetTurn(QString b)
 {
-    turnTo(b.toInt());
-    //ui->BrgSt->setText(b);
-    setTurnDisplayText(convertBearingForDisplay(b));
-    ui->BrgSt->setFocus();
+    if (!b.isEmpty())
+    {
+        turnTo(b.toInt());
+        //ui->BrgSt->setText(b);
+        setTurnDisplayText(convertBearingForDisplay(b));
+        ui->BrgSt->setFocus();
+    }
 }
 void RotControlFrame::checkConnection()
 {
@@ -840,8 +827,4 @@ void RotControlFrame::checkConnection()
         ui->antennaNameSel->setCurrentText("");
         setRotatorState(ROT_STATUS_DISCONNECTED);
     }
-}
-
-void RotControlFrame::closeContest()
-{
 }

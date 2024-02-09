@@ -25,7 +25,7 @@ TSettingsEditDlg::TSettingsEditDlg(QWidget *parent, SettingsBundle *bundle) :
         restoreGeometry(geometry);
 
     QByteArray state = settings.getSettings().value("EntrySettings/SplitterState/" + bundle->getBundle()).toByteArray();
-    ui->splitter->restoreState(state);
+    ui->settingsSplitter->restoreState(state);
 
     baseTitle = windowTitle();
 
@@ -33,11 +33,14 @@ TSettingsEditDlg::TSettingsEditDlg(QWidget *parent, SettingsBundle *bundle) :
     ui->CopyButton->setText(tr("Copy %1").arg(bundle->getBundle()));
     ui->DeleteButton->setText(tr("Delete %1").arg(bundle->getBundle()));
     ui->renameButton->setText(tr("Rename %1").arg(bundle->getBundle()));
+
+    ui->SectionsList->setMinimumWidth(10);
+    ui->OptionsTable->setMinimumWidth(10);
 }
 void TSettingsEditDlg::on_splitter_splitterMoved(int /*pos*/, int /*index*/)
 {
     RegSettings settings;
-    QByteArray state = ui->splitter->saveState();
+    QByteArray state = ui->settingsSplitter->saveState();
     settings.getSettings().setValue("EntrySettings/SplitterState/" + bundle->getBundle(), state);
 }
 void TSettingsEditDlg::ShowCurrentSectionOnly()
@@ -230,15 +233,22 @@ int nCol = sender()->property("col").toInt();
 
 void TSettingsEditDlg::on_NewSectionButton_clicked()
 {
-    getDetails();  // save what is set already
-    QString Value = "new " + bundle->getBundle();
+   getDetails();  // save what is set already
+   QString Value = "new " + bundle->getBundle();
 
-    bundle->newSection( Value );
-    bundle->openSection( Value );
-    showSections(Value);
-    showDetails();
-
-    on_renameButton_clicked();
+   if ( enquireDialog( this, tr("Please give a new name for the %1").arg(bundle->getBundle()), Value ) )
+   {
+      if (bundle->newSection( Value ))
+      {
+          bundle->openSection( Value );
+          showSections(Value);
+          showDetails();
+      }
+      else
+      {
+          MinosParameters::getMinosParameters() ->mshowMessage( tr("%1 already exists").arg(Value), this );
+      }
+   }
 }
 
 void TSettingsEditDlg::on_CopyButton_clicked()

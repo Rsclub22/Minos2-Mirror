@@ -1,3 +1,4 @@
+#include "AppStartup.h"
 #include "MinosLoggerEvents.h"
 
 #include "LoggerContest.h"
@@ -78,7 +79,7 @@ void DXCCFrame::viewColumn()
         }
         else
         {
-            QString fname("./Configuration/LoggerTableHeaders.ini");
+            QString fname(getDirectoryLocation(dlConfiguration) + "/LoggerTableHeaders.ini");
             resetHeaderColumns(fname, "DXCCTable", tslf->getCurScreenLayout(), ui->DXCCTable->horizontalHeader());
         }
     }
@@ -88,7 +89,7 @@ void DXCCFrame::saveDXCCTableColumns()
 {
     if (!inRestoreColumns)
     {
-        QString fname("./Configuration/LoggerTableHeaders.ini");
+        QString fname(getDirectoryLocation(dlConfiguration) + "/LoggerTableHeaders.ini");
         saveHeaderColumns(fname, "DXCCTable", tslf->getCurScreenLayout(), ui->DXCCTable->horizontalHeader());
         MinosLoggerEvents::SendColumnsChanged();
     }
@@ -96,7 +97,7 @@ void DXCCFrame::saveDXCCTableColumns()
 void DXCCFrame::restoreDXCCTableColumns()
 {
     inRestoreColumns = true;
-    QString fname("./Configuration/LoggerTableHeaders.ini");
+    QString fname(getDirectoryLocation(dlConfiguration) + "/LoggerTableHeaders.ini");
     restoreHeaderColumns(fname, "DXCCTable", tslf->getCurScreenLayout(), ui->DXCCTable->horizontalHeader());
     inRestoreColumns = false;
 }
@@ -196,24 +197,6 @@ void DXCCFrame::reInitialiseCountries()
     restoreDXCCTableColumns();
 
     doScrollToCountry();
-
-//    QStringList sl;
-//    for ( auto const &c: qAsConst(contlist ))
-//    {
-//        QString s;
-//        if (c.allow)
-//        {
-//            s = HtmlFontColour(Qt::black);
-//        }
-//        else
-//        {
-//            s = HtmlFontColour(Qt::gray);
-//        }
-//        s += c.continent;
-//        sl.append(s);
-//    }
-
-//    ui->continentsLabel->setText(sl.join(" "));
 }
 void DXCCFrame::scrollToCountry( const QString &bp, bool makeVisible )
 {
@@ -329,7 +312,6 @@ bool DXCCSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex
     if (scrolledCountry == bp)
         return true;
 
-    //int worked = MultLists::getMultLists()->getCountryWorked(bp, ct) ;
     int worked = ct->getCountriesWorked(band, bp);
 
     bool makeVisible = false;
@@ -367,17 +349,6 @@ void DXCCFrame::on_DXCCTable_clicked(const QModelIndex &index)
 
 }
 
-/*
-ui->c1Button->setChecked(ct->showContinentEU.getValue());
-ui->c2Button->setChecked(ct->showContinentAS.getValue());
-ui->c3Button->setChecked(ct->showContinentAF.getValue());
-ui->c4Button->setChecked(ct->showContinentOC.getValue());
-ui->c5Button->setChecked(ct->showContinentSA.getValue());
-ui->c6Button->setChecked(ct->showContinentNA.getValue());
-
-ui->wkdButton->setChecked(ct->showWorked.getValue());
-ui->unwkdButton->setChecked(ct->showUnworked.getValue());
-*/
 void DXCCFrame::on_c1Button_clicked()
 {
     ct->showContinentEU.setValue(!ct->showContinentEU.getValue());

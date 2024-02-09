@@ -90,6 +90,7 @@ static const QString qrzDxReplyState      ("qrzDxReplyState");
 static const QString qrzSpotterReplyState      ("qrzSpotterReplyState");
 static const QString qrzmoddate           ("qrzmoddate");
 static const QString qrzdbdate            ("qrzdbdate");
+static const QString qrzmessage            ("qrzmessage");
 static const QString qrzdbrecords         ("qrzdbrecords");
 static const QString qrzdbrecalls     ("qrzdbrecallsdate");
 static const QString qrzrecalls           ("qrzrecalls");

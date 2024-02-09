@@ -5,6 +5,7 @@
 
 #include "fileutils.h"
 
+
 bool FileExists(const QString &path )
 {
     QFileInfo checkFile( path );
@@ -123,5 +124,12 @@ QString GetCleanPath(QString fn)
     {
         fn = cdir.relativeFilePath(fn);
     }
+    return fn;
+}
+QString GetFullPath(QString fn)
+{
+    QDir cdir(GetCurrentDir());
+    fn = cdir.cleanPath(fn);
+    fn = cdir.absoluteFilePath(fn);
     return fn;
 }

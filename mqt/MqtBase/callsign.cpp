@@ -73,19 +73,24 @@ static QString getPrefix ( QString p, QSharedPointer<CountrySynonym> &csyn )
 {
     QString testpart = p;
 
+    bool firstPass = true;
     while ( testpart.length() >= 1 )
     {
         // we need to stop when we get to the basic prefix...
         // otherwise RVI6ABC ends up matching R, which is UA
 
-        csyn = MultLists::getMultLists()->searchCountrySynonym ( testpart );
+        csyn = MultLists::getMultLists()->searchCountrySynonym ( testpart);
 
         if ( csyn )
         {
-            break;
+            if (csyn->prefixType != stCallsign || firstPass == true)
+            {
+                break;
+            }
         }
 
         testpart = testpart.left (testpart.length() - 1 );
+        firstPass = false;
     }
     return testpart;
 }
@@ -244,7 +249,17 @@ int Callsign::validate( )
             int p1t = extraTail ( p1, csyn1 );
             int p2t = extraTail ( p2, csyn2 );
 
-            if ( p1t == -1 || p2t == -1 )
+            if (csyn1 && csyn1->prefixType == stCallsign)
+            {
+                call = p1;
+                countryPrefix = csyn1->country->getBasePrefix();
+            }
+            else if (csyn2 && csyn2->prefixType == stCallsign)
+            {
+                call = p2;
+                countryPrefix = csyn2->country->getBasePrefix();
+            }
+            else if ( p1t == -1 || p2t == -1 )
             {
                 if ( p1size <= p2size )
                 {
@@ -410,18 +425,6 @@ int Callsign::validate( )
 
     return valRes;
 
-}
-//============================================================
-bool Callsign::isUK() const
-{
-   if (fullCall.getValue().size() == 0)
-   {
-      return false;
-   }
-   // is this callsign in one of the UK areas?
-   // prefix is country of location
-   // prefix2 is country of issue
-   return MultLists::getMultLists()->isUKprefix(*this);
 }
 //============================================================
 bool Callsign::operator==( const Callsign& rhs ) const

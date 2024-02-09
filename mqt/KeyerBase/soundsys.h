@@ -99,10 +99,12 @@ private:
 
     RtAudio *audio = nullptr;
 
-    unsigned int inChannels = 0;
-    unsigned int outChannels = 0;
-
     QMap<QString, int> deviceIds;
+    QMap<QString, unsigned int> inChannels;
+    QMap<QString, unsigned int> outChannels;
+
+    QString curInDev;
+    QString curOutDev;
 
     int dropped = 0;
     int missed = 0;

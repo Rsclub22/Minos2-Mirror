@@ -7,9 +7,11 @@
 #include <QHeaderView>
 #include <QMenu>
 
-#include "TreeUtils.h"
+#include "GridColumn.h"
+#include "htmldelegate.h"
 #include "rigmemcommondata.h"
 
+class BaseContestLog;
 class LoggerContestLog;
 namespace Ui {
 class RigMemoryFrame;

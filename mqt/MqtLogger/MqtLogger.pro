@@ -10,7 +10,6 @@ include($$PWD/../mqtapplibs.pri)
 QT       += core gui
 QT       += widgets
 QT       += network
-QT       += help
 QT       += charts
 QT       += serialport
 
@@ -34,31 +33,6 @@ android {
     config.depends += FORCE
 
     INSTALLS += config
-}
-
-ios {
-    config.files += $$files(../ControlFiles/Configuration/OSXFiles/AppConfig.ini)
-    config.files += $$files(../ControlFiles/Configuration/*.ini)
-    config.files += $$files(../ControlFiles/Configuration/*.xml)
-    config.files += $$files(../ControlFiles/Configuration/*.ctl)
-    config.files += $$files(../ControlFiles/Configuration/*.syn)
-    config.files += $$files(../ControlFiles/Configuration/*.SYN)
-    config.files += $$files(../ControlFiles/ios/*.dat)
-    config.files += $$files(../ControlFiles/ios/*.xml)
-    config.path = Configuration
-    QMAKE_BUNDLE_DATA += config
-    ios_icon.files += $$files(../ControlFiles/ios/MqtLogger/*.png)
-    QMAKE_BUNDLE_DATA += ios_icon
-    QMAKE_INFO_PLIST = ../ControlFiles/ios/Info.plist
-}
-
-macx {
-    QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.15
-    QMAKE_TARGET_BUNDLE_PREFIX = uk.org.g0gjv.minos
-    MY_ENTITLEMENTS.name = CODE_SIGN_ENTITLEMENTS
-    MY_ENTITLEMENTS.value = ../ControlFiles/minos.entitlements
-    QMAKE_MAC_XCODE_SETTINGS += MY_ENTITLEMENTS
-    QMAKE_INFO_PLIST = ../ControlFiles/Info.plist
 }
 
 INCLUDEPATH += $$PWD/../MqtRotator
@@ -96,6 +70,7 @@ SOURCES += \
     TClockFrame.cpp \
     TSessionManager.cpp \
     WsjtxConfigureCQ.cpp \
+    adifmanager.cpp \
     bandmapclientfilterdialog.cpp \
     bandmapdatamodel.cpp \
     bandmapgraphicspanel.cpp \
@@ -112,10 +87,12 @@ SOURCES += \
     locTreeFrame.cpp \
     locframe.cpp \
     main.cpp \
+    manageadifdialog.cpp \
     n1mmbroadcast.cpp \
     n1mmbroadcastconfig.cpp \
     qrzdisplayframe.cpp \
     qsologframe.cpp \
+    qsotableframe.cpp \
     radiosettingdialog.cpp \
     reg1test.cpp \
     rigcontrolcwmessagekeyer.cpp \
@@ -150,7 +127,6 @@ SOURCES += \
     voicekeyerbase.cpp \
     voicekeyerfactory.cpp \
     volumeslider.cpp \
-    tminosbshelpform.cpp \
     radiodetails.cpp \
     WsjtxFrame.cpp \
     WsjtxServer.cpp \
@@ -196,6 +172,7 @@ HEADERS  += \
     TClockFrame.h \
     TSessionManager.h \
     WsjtxConfigureCQ.h \
+    adifmanager.h \
     bandmapclientfilterdialog.h \
     bandmapdatamodel.h \
     bandmapgraphicspanel.h \
@@ -211,11 +188,13 @@ HEADERS  += \
     freqlineedit.h \
     locTreeFrame.h \
     locframe.h \
+    manageadifdialog.h \
     n1mmbroadcast.h \
     n1mmbroadcastconfig.h \
     printfile.h \
     qrzdisplayframe.h \
     qsologframe.h \
+    qsotableframe.h \
     radiosettingdialog.h \
     reg1test.h \
     rigcontrolcwmessagekeyer.h \
@@ -250,7 +229,6 @@ HEADERS  += \
     voicekeyerbase.h \
     voicekeyerfactory.h \
     volumeslider.h \
-    tminosbshelpform.h \
     radiodetails.h \
     WsjtxFrame.h \
     WsjtxServer.h \
@@ -282,9 +260,11 @@ FORMS    += \
     LocCalcFrame.ui \
     locframe.ui \
     locTreeFrame.ui \
+    manageadifdialog.ui \
     n1mmbroadcastconfig.ui \
     qrzdisplayframe.ui \
     qsologframe.ui \
+    qsotableframe.ui \
     radiosettingdialog.ui \
     rigcontrolframe.ui \
     rigmemdialog.ui \
@@ -315,7 +295,6 @@ FORMS    += \
     clusterclientfilterdialog.ui \
     clusterclientframe.ui \
     tstatsdispframe.ui \
-    tminosbshelpform.ui \
     WsjtxFrame.ui \
     WsjtxConfigure.ui \
     bandmapclientframe.ui \

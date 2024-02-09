@@ -7,28 +7,37 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
+#include "AppStartup.h"
 #include "MTrace.h"
 #include "tinyxml.h"
 #include "TinyUtils.h"
 #include "keyers.h"
 #include "keyconf.h"
 #include "keyerlog.h"
+#include "portcon.h"
 
 //==============================================================================
 // The keyer factory
-commonKeyer *KeyerConfigure::createKeyer( const KeyerConfig &keyer, const PortConfig &port )
+QSharedPointer<commonKeyer> KeyerConfigure::createKeyer( const KeyerConfig &keyer, const PortConfig &port )
 {
-   commonKeyer * ck = nullptr;
+    QSharedPointer<commonKeyer> ck;
 
-   ck = new voiceKeyer( keyer, port );
+    ck = QSharedPointer<commonKeyer>(new voiceKeyer( keyer, port ));
    if ( sblog )
    {
       trace( "keyer created" );
    }
-   if ( !ck->initialise( keyer, port ) )
+   if ( ck->initialise( ) )
    {
-      delete ck;
-      ck = nullptr;
+      if ( ck->cp )
+      {
+          ck->cp->monitors.push_back( ck );
+      }
+
+   }
+   else
+   {
+      ck.reset();
    }
 
    return ck;
@@ -206,7 +215,7 @@ bool KeyerConfigure::configureKeyers()
 
    TiXmlBase::SetCondenseWhiteSpace( false );
    TiXmlDocument keyerdoc;
-   keyerdoc.LoadFile( "./Configuration/keyerConfig.xml" );
+   keyerdoc.LoadFile( (getDirectoryLocation(dlConfiguration) + "/keyerConfig.xml").toLatin1() );
    TiXmlElement *root = keyerdoc.RootElement();
    if ( !root )
    {

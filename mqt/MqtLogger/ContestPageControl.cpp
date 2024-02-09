@@ -2,6 +2,7 @@
 #include <QToolTip>
 #include "WindowsAppId.h"
 #include "SecondInstall.h"
+#include "fileutils.h"
 #include "regsettings.h"
 
 #include "ContestApp.h"
@@ -47,7 +48,7 @@ bool ContestPageControl::eventFilter(QObject */*obj*/, QEvent *event)
     }
     else if (event->type() == QEvent::ToolTip)
     {
-        QHelpEvent *helpEvent = static_cast<QHelpEvent *>(event);
+        QHelpEvent *helpEvent = dynamic_cast<QHelpEvent *>(event);
         int curtab = tabBar()->tabAt(helpEvent->pos());
         if (curtab >= 0)
         {
@@ -57,7 +58,8 @@ bool ContestPageControl::eventFilter(QObject */*obj*/, QEvent *event)
             if ( pc )
             {
                 pc->setScore( statbuf );
-                QString toolTip = pc->cfileName + "\r\n" + statbuf;
+                QString fname = GetFullPath(pc->cfileName);
+                QString toolTip = fname + "\r\n" + statbuf;
                 if (!pc->isReadOnly())
                 {
                     LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( pc);
@@ -251,9 +253,11 @@ void ContestPageControl::onTabBarClicked(int index)
 {
     trace(QString("onTabBarClicked %1").arg(index));
     ContestPage *ctab = dynamic_cast<ContestPage *>(widget(index));
-    BaseContestLog *pc = ctab->getContest();
-
-    LogContainer->selectContest(pc);
+    if (ctab)
+    {
+        BaseContestLog *pc = ctab->getContest();
+        LogContainer->selectContest(pc);
+    }
 }
 void ContestPageControl::onCustomContextMenuRequested(const QPoint &pos)
 {
@@ -263,9 +267,11 @@ void ContestPageControl::onCustomContextMenuRequested(const QPoint &pos)
     if (curtab >= 0)
     {
         ContestPage *ctab = dynamic_cast<ContestPage *>(widget(curtab));
-        BaseContestLog *pc = ctab->getContest();
-
-        LogContainer->selectContest(pc);
+        if (ctab)
+        {
+            BaseContestLog *pc = ctab->getContest();
+            LogContainer->selectContest(pc);
+        }
     }
 
     QPoint globalPos = mapToGlobal( pos );

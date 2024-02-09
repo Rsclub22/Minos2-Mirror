@@ -19,7 +19,7 @@ class checkModeAgainstFreq;
 class BandInfo;
 
 // Files
-const QString CLUSTER_PATH = "./Configuration/Cluster/";
+QString CLUSTER_PATH();
 const QString CLUSTER_SITES = "ClusterSites.ini";
 const QString CLUSTER_COMMANDS = "ClusterCommands.ini";
 const QString CLUSTER_START_FILE = "cluster_start.txt";
@@ -28,8 +28,8 @@ const QString CLUSTER_START_HF_FILE = "cluster_start_hf.txt";
 const QString CLUSTER_END_HF_FILE = "cluster_end_hf.txt";
 const QString CLUSTER_LOCATORLIST_DIR = "locatorFilterLists/";
 const QString CLUSTER_CALLSIGNLIST_DIR = "callsignFilterLists/";
-const QString CLUSTER_SETTINGS_FILE = "./Configuration/Cluster/ClusterSettings.ini";
-const QString CLUSTER_FILTER_FILE = "./Configuration/clusterBandmapFilter.ini";
+QString CLUSTER_SETTINGS_FILE();
+QString CLUSTER_FILTER_FILE();
 
 const QString NONE_MODE = "NONE";
 const QString CW_MODE = "CW";

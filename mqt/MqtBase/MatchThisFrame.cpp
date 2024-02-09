@@ -1,6 +1,7 @@
 #include "MMessageDialog.h"
 #include "MinosParameters.h"
 #include "MinosLoggerEvents.h"
+#include "qsogridmodel.h"
 #include "contest.h"
 #include "MatchThisFrame.h"
 

@@ -1,6 +1,7 @@
 #include <QSettings>
 #include <QFileDialog>
 
+#include "AppStartup.h"
 #include "regsettings.h"
 #include "dmmainwindow.h"
 #include "enginewindow.h"
@@ -25,7 +26,7 @@ void EngineConfigure::setEnginePath(QSettings &settings, QString engine, QString
 }
 /*static*/ QString EngineConfigure::getEnginePath(QString engine)
 {
-    QSettings settings("./Configuration/DataModes.ini", QSettings::IniFormat);
+    QSettings settings(getDirectoryLocation(dlConfiguration) + "/DataModes.ini", QSettings::IniFormat);
     return getEnginePath(settings, engine);
 }
 
@@ -43,7 +44,7 @@ QString EngineConfigure::getSpeed(QSettings &settings, QString mode)
 }
 QString EngineConfigure::getSpeed(QString mode)
 {
-    QSettings settings("./Configuration/DataModes.ini", QSettings::IniFormat);
+    QSettings settings(getDirectoryLocation(dlConfiguration) + "/DataModes.ini", QSettings::IniFormat);
     return getSpeed(settings, mode);
 }
 
@@ -55,7 +56,7 @@ bool EngineConfigure::getEngineEnabled(QSettings &settings, QString engine)
 
 bool EngineConfigure::getEngineEnabled(QString engine)
 {
-    QSettings settings("./Configuration/DataModes.ini", QSettings::IniFormat);
+    QSettings settings(getDirectoryLocation(dlConfiguration) + "/DataModes.ini", QSettings::IniFormat);
     return getEngineEnabled(settings, engine);
 }
 
@@ -72,7 +73,7 @@ QString EngineConfigure::getEngineSound(QSettings &settings, QString engine, QSt
 
 QString EngineConfigure::getEngineSound(QString engine, QString io)
 {
-    QSettings settings("./Configuration/DataModes.ini", QSettings::IniFormat);
+    QSettings settings(getDirectoryLocation(dlConfiguration) + "/DataModes.ini", QSettings::IniFormat);
     return getEngineSound(settings, engine, io);
 }
 
@@ -89,7 +90,7 @@ int EngineConfigure::getEnginePort(QSettings &settings, QString engine)
 
 int EngineConfigure::getEnginePort(QString engine)
 {
-    QSettings settings("./Configuration/DataModes.ini", QSettings::IniFormat);
+    QSettings settings(getDirectoryLocation(dlConfiguration) + "/DataModes.ini", QSettings::IniFormat);
     return getEnginePort(settings, engine);
 }
 
@@ -104,7 +105,7 @@ QString EngineConfigure::getEnginePTT(QSettings &settings, QString engine)
 }
 QString EngineConfigure::getEnginePTT(QString engine)
 {
-    QSettings settings("./Configuration/DataModes.ini", QSettings::IniFormat);
+    QSettings settings(getDirectoryLocation(dlConfiguration) + "/DataModes.ini", QSettings::IniFormat);
     return getEnginePTT(settings, engine);
 }
 void EngineConfigure::setEnginePTT(QSettings &settings,QString engine, QString port)
@@ -119,7 +120,7 @@ int EngineConfigure::getEnginePTTL(QSettings &settings, QString engine)
 }
 int EngineConfigure::getEnginePTTL(QString engine)
 {
-    QSettings settings("./Configuration/DataModes.ini", QSettings::IniFormat);
+    QSettings settings(getDirectoryLocation(dlConfiguration) + "/DataModes.ini", QSettings::IniFormat);
     return getEnginePTTL(settings, engine);
 }
 void EngineConfigure::setEnginePTT(QSettings &settings,QString engine, int l)
@@ -184,7 +185,7 @@ bool EngineConfigure::check()
 
     // ports are set where required
 
-    QSettings settings("./Configuration/DataModes.ini", QSettings::IniFormat);
+    //QSettings settings(getDirectoryLocation(dlConfiguration) + "/DataModes.ini", QSettings::IniFormat);
 
     checkEnginePath(ui->mmvariEdit, ui->mmvariEnable1);
     checkEnginePath(ui->mmvariEdit, ui->mmvariEnable2);
@@ -218,6 +219,15 @@ EngineConfigure::EngineConfigure(DMMainWindow *parent) :
 {
     ui->setupUi(this);
 
+#ifndef Q_OS_WIN
+    ui->MMTTYframe->setVisible(false);
+    ui->grittyframe->setVisible(false);
+    ui->MMVARI1frame->setVisible(false);
+    ui->MMVARI2frame->setVisible(false);
+    ui->twotoneframe->setVisible(false);
+#endif
+
+
     connect(ui->mmttyEdit1, &QLineEdit::editingFinished, this, &EngineConfigure::check);
     connect(ui->mmttyEdit2, &QLineEdit::editingFinished, this, &EngineConfigure::check);
     connect(ui->twotoneEdit1, &QLineEdit::editingFinished, this, &EngineConfigure::check);
@@ -247,7 +257,7 @@ EngineConfigure::EngineConfigure(DMMainWindow *parent) :
     QString m = QCoreApplication::applicationDirPath() + "/MMVARI.ocx";
     ui->mmvariEdit->setText(m);
 
-    QSettings settings("./Configuration/DataModes.ini", QSettings::IniFormat);
+    QSettings settings(getDirectoryLocation(dlConfiguration) + "/DataModes.ini", QSettings::IniFormat);
 
     m = getEngineSound(settings, EngineWindow::mmvari + EngineWindow::i1, "input");
     ui->MMVARIRX1->setCurrentText(m);
@@ -435,7 +445,7 @@ void EngineConfigure::on_OKButton_clicked()
 
     if (check())
     {
-        QSettings settings("./Configuration/DataModes.ini", QSettings::IniFormat);
+        QSettings settings(getDirectoryLocation(dlConfiguration) + "/DataModes.ini", QSettings::IniFormat);
 
         setEngineSound(settings, EngineWindow::mmvari + EngineWindow::i1, "input", ui->MMVARIRX1->currentText());
         setEngineSound(settings, EngineWindow::mmvari + EngineWindow::i1, "output", ui->MMVARITX1->currentText());
@@ -489,7 +499,7 @@ void EngineConfigure::on_cancelButton_clicked()
 
 void EngineConfigure::on_senderCombo_activated(int /*index*/)
 {
-    QSettings settings("./Configuration/DataModes.ini", QSettings::IniFormat);
+    QSettings settings(getDirectoryLocation(dlConfiguration) + "/DataModes.ini", QSettings::IniFormat);
 
     settings.setValue("Sender", ui->senderCombo->currentText());
 

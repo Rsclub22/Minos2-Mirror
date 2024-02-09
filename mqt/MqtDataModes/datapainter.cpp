@@ -281,12 +281,12 @@ void DataPainter::setText()
 
             lines[i]->setHtml(rxbuff);
 
-            if (startPos != endPos)
+            if (startPos != endPos && startPos < cols && endPos < cols)
             {
                 cursor.setPosition(startPos, QTextCursor::MoveAnchor);
                 cursor.setPosition(endPos, QTextCursor::KeepAnchor);
+                lines[i]->setTextCursor(cursor);
             }
-            lines[i]->setTextCursor(cursor);
             engineWindow->rxBuff.getRxLine(i)->setDirty(false);
         }
     }
