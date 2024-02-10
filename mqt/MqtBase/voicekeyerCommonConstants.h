@@ -38,9 +38,10 @@ namespace voiceKeyerCommon
 
 
 
-
-//bool readSaveVoiceCWMemoryButtonByRadioNameFromIni();
-//void writeSaveVoiceCWMemoryButtonByRadioNameToIni(bool data);
+QString VOICE_KEYER_PATH();
+QString VOICEKEYER_COMMON_PARAMS_PATH();
+bool readSaveVoiceCWMemoryButtonByRadioNameFromIni();
+void writeSaveVoiceCWMemoryButtonByRadioNameToIni(bool data);
 
 
 #endif // VOICEKEYERCOMMONCONSTANTS_H
