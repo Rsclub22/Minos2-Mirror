@@ -2,9 +2,9 @@
 #define ADIFMANAGER_H
 
 #include <QObject>
+#include <QTimer>
 
 class LoggerContestLog;
-class QFileSystemWatcher;
 
 class AdifManager: public QObject
 {
@@ -15,12 +15,13 @@ public:
     QString getWatchedFile() const;
 
 private:
-    QFileSystemWatcher *adifWatcher = nullptr;
+    QTimer fileTimer;
     QString watchedFile;
     qint64 lastOffset = 0;
     LoggerContestLog * ct = nullptr;
-private slots:
     void AdifFileChanged();
+private slots:
+    void checkFile();
 signals:
     void adifImportFailed();
 

@@ -142,6 +142,9 @@ protected:
 
       MinosStringItem<QString> screenLayout;
       MinosStringItem<QString> currentFKeySet;
+      MinosStringItem<QString> watchedADIFFile;
+      MinosItem<qint64> watchedADIFLastOffset;
+      QSharedPointer<AdifManager> adifManager;
 
       MinosItem<int> statsPeriod1;
       MinosItem<int> statsPeriod2;
@@ -156,10 +159,7 @@ protected:
       MinosItem<bool> showWorkedDistricts;
       MinosItem<bool> showUnworkedDistricts;
       MinosStringItem<QString> currentStackItems[STACKITEMS];
-      MinosStringItem<QString> watchedADIFFile;
-      MinosItem<qint64> watchedADIFLastOffset;
       bool currentStackItemsValid = false;
-      QSharedPointer<AdifManager> adifManager;
 
       void saveRunMemory(int memno, const memoryData::memData &mem);
       void clearRunMemory(int memno, const memoryData::memData &mem);

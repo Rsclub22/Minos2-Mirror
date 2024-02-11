@@ -11,6 +11,7 @@
 #include "LoggerContest.h"
 #include "AdifImport.h"
 #include "contest.h"
+#include "fileutils.h"
 #include "tlogcontainer.h"
 #include "tsinglelogframe.h"
 
@@ -36,6 +37,18 @@ ManageAdifDialog::ManageAdifDialog(QWidget *parent)
     {
         ui->fileNameEdit->setText(lt->adifManager->getWatchedFile());
         ui->appendButton->setEnabled(false);
+        ui->stopButton->setEnabled(true);
+        ui->monitorButton->setEnabled(false);
+        ui->fileNameBrowse->setEnabled(false);
+        ui->fileNameEdit->setEnabled(false);
+    }
+    else
+    {
+        ui->appendButton->setEnabled(true);
+        ui->stopButton->setEnabled(false);
+        ui->monitorButton->setEnabled(true);
+        ui->fileNameBrowse->setEnabled(true);
+        ui->fileNameEdit->setEnabled(true);
     }
 }
 
@@ -48,13 +61,6 @@ void ManageAdifDialog::on_OKButton_clicked()
 {
     accept();
 }
-
-
-void ManageAdifDialog::on_cancelButton_clicked()
-{
-    reject();
-}
-
 
 void ManageAdifDialog::on_fileNameBrowse_clicked()
 {
@@ -102,7 +108,6 @@ void ManageAdifDialog::on_monitorButton_clicked()
     {
         // override or cancel?
         lt->adifManager.reset();
-        ui->appendButton->setEnabled(false);
     }
 
     QString fname = ui->fileNameEdit->text().trimmed();
@@ -114,7 +119,17 @@ void ManageAdifDialog::on_monitorButton_clicked()
         {
             // -1 says look at file size
             // otherwise we need to get from contest
-            lt->adifManager = QSharedPointer<AdifManager>(new AdifManager(lt, fname, -1));
+            qint64 lo = -1;
+            if (ui->appendMonitorCB->isChecked())
+            {
+                lo = 0;
+            }
+            lt->adifManager = QSharedPointer<AdifManager>(new AdifManager(lt, fname, lo));
+            ui->appendButton->setEnabled(false);
+            ui->stopButton->setEnabled(true);
+            ui->monitorButton->setEnabled(false);
+            ui->fileNameBrowse->setEnabled(false);
+            ui->fileNameEdit->setEnabled(false);
         }
         else
         {
@@ -125,6 +140,19 @@ void ManageAdifDialog::on_monitorButton_clicked()
     {
         ui->fileNameEdit->setFocus();
     }
+}
+void ManageAdifDialog::on_stopButton_clicked()
+{
+    if (lt->adifManager)
+    {
+        // override or cancel?
+        lt->adifManager.reset();
+    }
+    ui->appendButton->setEnabled(true);
+    ui->stopButton->setEnabled(false);
+    ui->monitorButton->setEnabled(true);
+    ui->fileNameBrowse->setEnabled(true);
+    ui->fileNameEdit->setEnabled(true);
 }
 
 
@@ -171,5 +199,3 @@ void ManageAdifDialog::on_appendButton_clicked()
         tslf->startNextEntry();   //(AppendAdifActionExecute())
     }
 }
-
-

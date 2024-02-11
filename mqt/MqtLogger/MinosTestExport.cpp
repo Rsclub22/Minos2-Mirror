@@ -133,6 +133,8 @@ void MinosTestExport::exportContest( QSharedPointer<QFile> expfd )
    ct->screenLayout.addIfDirty(st, "ScreenLayout", dirty);
 
    ct->currentFKeySet.addIfDirty(st, "currentFKeySet", dirty);
+   ct->watchedADIFFile.addIfDirty(st, "WatchADIFFile", dirty);
+   ct->watchedADIFLastOffset.addIfDirty(st, "WatchADIFLO", dirty);
 
    if ( dirty )
    {
@@ -539,8 +541,6 @@ int MinosTestExport::exportStackDisplay(QSharedPointer<QFile> expfd )
     ct->showUnworkedCountries.addIfDirty( st, "su", dirty );
     ct->showWorkedDistricts.addIfDirty( st, "dw", dirty );
     ct->showUnworkedDistricts.addIfDirty( st, "du", dirty );
-    ct->watchedADIFFile.addIfDirty(st, "WatchADIFFile", dirty);
-    ct->watchedADIFLastOffset.addIfDirty(st, "WatchADIFLO", dirty);
 
     bool siDirty = false;
 
