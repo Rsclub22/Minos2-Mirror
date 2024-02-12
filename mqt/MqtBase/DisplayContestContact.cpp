@@ -18,7 +18,7 @@
 #include "calcs.h"
 
 //==========================================================================
-DisplayContestContact::DisplayContestContact( BaseContestLog * ct, bool time_now, bool rInit )
+DisplayContestContact::DisplayContestContact( BaseContestLog * ct, bool time_now, bool initReport )
       : BaseContact( ct, time_now ),
       modificationCount( 0 )
 {
@@ -70,7 +70,7 @@ DisplayContestContact::DisplayContestContact( BaseContestLog * ct, bool time_now
        }
        else
        {
-           if (rInit)
+           if (initReport)
            {
                repr.setInitialValue( "5  " );
                reps.setInitialValue( "5  " );

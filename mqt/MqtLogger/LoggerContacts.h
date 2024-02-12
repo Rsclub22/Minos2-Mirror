@@ -28,7 +28,7 @@ class ContestContact: public DisplayContestContact
 
 //      virtual bool setField(QSharedPointer<BaseContact> tct, int ACol, const QString Value );
 
-      ContestContact(LoggerContestLog *contest, bool time_now , bool rInit);
+      ContestContact(LoggerContestLog *contest, bool time_now , bool initReport);
       ~ContestContact() override;
       virtual void getPrintFileText(QString &, short ) override;
       virtual void addReg1TestComment(QStringList &remarks ) override;

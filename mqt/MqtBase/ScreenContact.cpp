@@ -18,7 +18,12 @@ ScreenContact::ScreenContact():CheckableContact()
 {}
 ScreenContact::~ScreenContact()
 {}
-void ScreenContact::initialise(BaseContestLog *ct , bool rInit)
+ScreenContact::ScreenContact(const ScreenContact &ct) : CheckableContact()
+{
+    // probably never used
+    *this = ct;
+}
+void ScreenContact::initialise(BaseContestLog *ct , bool initReport)
 {
     contest = ct;
     setLogSequence(static_cast<unsigned long> (- 1));
@@ -83,7 +88,7 @@ void ScreenContact::initialise(BaseContestLog *ct , bool rInit)
         }
         else
         {
-            if (rInit)
+            if (initReport)
             {
                 repr = "5  " ;
                 reps = "5  " ;

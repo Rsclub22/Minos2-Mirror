@@ -32,19 +32,12 @@ class DisplayContestContact: public BaseContact
          modificationCount = c;
       }
 
-      // Contact items are all in BaseContact
-
-
-      // end of Contact items
-
       virtual bool commonSave(QSharedPointer<BaseContact>  ) override
       {
          return false;
       }
-      //      virtual bool GJVload( int diskBlock ){return false;}   // moved to BAseCointact
 
-
-      DisplayContestContact(BaseContestLog *contest, bool time_now , bool rInit);
+      DisplayContestContact(BaseContestLog *contest, bool time_now , bool initReport);
       ~DisplayContestContact() override;
       virtual bool ne( const ScreenContact& ) const override;
       virtual int checkContact(bool adddup) override;

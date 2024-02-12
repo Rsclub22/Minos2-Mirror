@@ -12,7 +12,7 @@
 #include "MinosParameters.h"
 #include "LoggerContacts.h"
 
-ContestContact::ContestContact( LoggerContestLog * ct, bool time_now, bool rInit ) : DisplayContestContact( ct, time_now, rInit )
+ContestContact::ContestContact(LoggerContestLog * ct, bool time_now, bool initReport ) : DisplayContestContact( ct, time_now, initReport )
 {}
 ContestContact::~ContestContact()
 {}
