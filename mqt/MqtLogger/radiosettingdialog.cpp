@@ -3,7 +3,7 @@
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //                      Rig Control
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2018 - 2021
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2018 - 2024
 //
 //
 //
@@ -11,6 +11,9 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include <QMessageBox>
+
+#include <QListWidgetItem>
+#include <QList>
 #include "regsettings.h"
 #include "rigcommon.h"
 #include "rigcontrolcommonconstants.h"
@@ -21,6 +24,7 @@
 #include "MTrace.h"
 
 #include "radiosettingdialog.h"
+#include "deletedradioforvoicecwmemorybuttonsdialog.h"
 #include "ui_radiosettingdialog.h"
 
 RadioSettingDialog::RadioSettingDialog( QWidget *parent) :
@@ -232,6 +236,7 @@ void RadioSettingDialog::initialise()
     fillPortsInfo(ui->bandSwCombo);
     connect(ui->enableBandSwChkBox, &QCheckBox::stateChanged, this, [=]() {onEnableBandSwChkBox();});
     connect(ui->enableSerialBandSwChkBox, &QCheckBox::stateChanged, this, [=]() {onEnableSerialBandSwChkBox();});
+
     freqPresetReadSettings(presetFreq, bands); // static
 
     //===========================================================================================================
@@ -243,7 +248,14 @@ void RadioSettingDialog::initialise()
 
     //===========================================================================================================
     ui->enableBandSwChkBox->setChecked(readEnableBandSwitchFromIni());
+
     ui->saveVoiceCwMemoryButtonByRadioName->setChecked(readSaveVoiceCWMemoryButtonByRadioNameFromIni());
+    connect(ui->saveVoiceCwMemoryButtonByRadioName, &QCheckBox::stateChanged, this, [=]() {onSaveVoiceCwMemoryButtonByRadioNameClicked();});
+
+    ui->deleteMemoryButtonRadiosPushButton->setVisible(readSaveVoiceCWMemoryButtonByRadioNameFromIni());
+    connect(ui->deleteMemoryButtonRadiosPushButton, &QPushButton::clicked, this, [=]() {onDeleteMemoryButtonRadiosPushButtonClicked();});
+
+
     enableBandSwLineEdits(ui->enableBandSwChkBox->isChecked());
 
     ui->enableSerialBandSwChkBox->setChecked(readEnableSerialBandSwitchFromIni());
@@ -556,6 +568,48 @@ void RadioSettingDialog::onEnableSerialBandSwChkBox()
     ui->comportLabel->setVisible(ui->enableSerialBandSwChkBox->isChecked());
 
 }
+
+
+
+void RadioSettingDialog::onSaveVoiceCwMemoryButtonByRadioNameClicked()
+{
+    setDeleteMemoryButtonRadiosPushButtonVisible(ui->saveVoiceCwMemoryButtonByRadioName->isChecked());
+}
+
+
+void RadioSettingDialog::onDeleteMemoryButtonRadiosPushButtonClicked()
+{
+    QStringList listOfRadios = getListOfRadioNamesForVoiceCWMemoryButtons();
+
+    DeletedRadioForVoiceCwMemoryButtonsDialog vmDeleteRadios(listOfRadios,nullptr);
+    int ret = vmDeleteRadios.exec();
+
+    QList<QListWidgetItem *> selectedItems;
+    QStringList listOfRadiosToDelete;
+
+    if (ret == QDialog::Accepted)
+    {
+        selectedItems = vmDeleteRadios.getSelectedItems();
+        if (selectedItems.isEmpty())
+        {
+            return;
+        }
+        else
+        {
+            foreach (QListWidgetItem* item, selectedItems)
+            {
+                QString itemText = item->text();
+                listOfRadios.append(itemText);
+            }
+        }
+    }
+}
+
+void RadioSettingDialog::setDeleteMemoryButtonRadiosPushButtonVisible(bool visible)
+{
+    ui->deleteMemoryButtonRadiosPushButton->setVisible(visible);
+}
+
 void RadioSettingDialog::saveSettings()
 {
 

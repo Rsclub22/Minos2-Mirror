@@ -80,6 +80,7 @@ SOURCES += \
     checkupdates.cpp \
     contestdetails.cpp \
     defdirsdlg.cpp \
+    deletedradioforvoicecwmemorybuttonsdialog.cpp \
     districtframe.cpp \
     dmbuttonframe.cpp \
     dxccframe.cpp \
@@ -182,6 +183,7 @@ HEADERS  += \
     checkupdates.h \
     contestdetails.h \
     defdirsdlg.h \
+    deletedradioforvoicecwmemorybuttonsdialog.h \
     districtframe.h \
     dmbuttonframe.h \
     dxccframe.h \
@@ -254,6 +256,7 @@ FORMS    += \
     checkupdates.ui \
     contestdetails.ui \
     defdirsdlg.ui \
+    deletedradioforvoicecwmemorybuttonsdialog.ui \
     districtframe.ui \
     dmbuttonframe.ui \
     dxccframe.ui \
