@@ -3,7 +3,7 @@
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //                      Rig Control
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2018 - 2021
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2018 - 2024
 //
 //
 /////////////////////////////////////////////////////////////////////////////
@@ -168,7 +168,7 @@ void RigSetupDialog::loadSettingsToTab(int tabNum, QString tabName)
 
 
     radioTab.value(tabName)->setPollInterval(availRadioData.value(tabName)->pollInterval);
-    if (rigCap.pollData)
+    if (rigCap.getPollData())
     {
         radioTab.value(tabName)->pollIntervalVisible(true);
     }
@@ -207,7 +207,7 @@ void RigSetupDialog::loadSettingsToTab(int tabNum, QString tabName)
 
     }
 
-    radioTab.value(tabName)->setRigctldCheckBoxVisible(rigCap.supportRigCtld);
+    radioTab.value(tabName)->setRigctldCheckBoxVisible(rigCap.getSupportRigCtld());
 
 
     // serial ptt comport loaded with other comports
@@ -220,7 +220,7 @@ void RigSetupDialog::loadSettingsToTab(int tabNum, QString tabName)
     bool catPTT = true;     // This is radio PTT capability true = CAT PTT
     bool serialPTT = true;
 
-    if (rigCap.supportPttPortType == RigCapConstants::PttPortType::RIG_PTT_RIG && rigCap.rigManufacturer == OMINRIG_MFR_NAME)
+    if (rigCap.getSupportPttPortType() == RigCapConstants::PttPortType::RIG_PTT_RIG && rigCap.getRigManufacturer() == OMINRIG_MFR_NAME)
     {
        // support CAT PTT only
 
@@ -228,15 +228,15 @@ void RigSetupDialog::loadSettingsToTab(int tabNum, QString tabName)
        serialPTT = false;
        radioTab.value(tabName)->setPttInitialState(catPTT, serialPTT);
     }
-    else if (rigCap.supportPttPortType == RigCapConstants::PttPortType::RIG_PTT_RIG
-            || rigCap.supportPttPortType == RigCapConstants::PttPortType::RIG_PTT_RIG_MICDATA)
+    else if (rigCap.getSupportPttPortType() == RigCapConstants::PttPortType::RIG_PTT_RIG
+            || rigCap.getSupportPttPortType() == RigCapConstants::PttPortType::RIG_PTT_RIG_MICDATA)
     {
         // support CAT PTT and Serial PTT
         catPTT = true;
         serialPTT = true;
         radioTab.value(tabName)->setPttInitialState(catPTT, serialPTT);
     }
-    else if (rigCap.supportPttPortType == RigCapConstants::PttPortType::RIG_PTT_NONE)
+    else if (rigCap.getSupportPttPortType() == RigCapConstants::PttPortType::RIG_PTT_NONE)
     {
 
        // support Serial PTT only
@@ -319,7 +319,7 @@ void RigSetupDialog::loadSettingsToTab(int tabNum, QString tabName)
     }
 
 
-    if (rigCap.supportGetSupBands)
+    if (rigCap.getSupportGetSupBands())
     {
         radioTab.value(tabName)->setSupportBandCheckBoxVisible(false);
     }
@@ -392,7 +392,7 @@ void RigSetupDialog::loadSettingsToTab(int tabNum, QString tabName)
 
     // Most features are handled in rigcap, but others for Omnirig here
 
-    if (rigCap.rigManufacturer == OMINRIG_MFR_NAME)
+    if (rigCap.getRigManufacturer() == OMINRIG_MFR_NAME)
     {
         radioTab.value(tabName)->setCatFeaturesEnableChkBoxVisible(false);
         radioTab.value(tabName)->setPortTypeWidgetsVisible(false);
@@ -914,7 +914,7 @@ void RigSetupDialog::isAnySupportedBandsAvailForOmnirig(QString &supRadNames)
     for (const auto &k: qAsConst(lk))
     {
         RigCapabilities rigCap = rigFactory->supported_rigs()->value(radioTab.value(k)->getRadioData()->rigModel);
-        if (!rigCap.supportGetSupBands)
+        if (!rigCap.getSupportGetSupBands())
         {
             if (!radioTab.value(k)->isAnySupportBandChecked() && radioTab.value(k)->getRadioData()->transVertSettings.count() == 0)
             {
@@ -1204,9 +1204,11 @@ void RigSetupDialog::getRadioSetting(QSharedPointer<scatParams> radioData, QStri
         readTranVerterSetting(radioData, tv, configTransVert);
     }
 
-    radioData->rigMfg_Name = rigFactory->supported_rigs()->value(radioData->rigModel).rigManufacturer;
-    radioData->rigModelName = rigFactory->supported_rigs()->value(radioData->rigModel).rigModelName;
-    radioData->rigModelNumber = rigFactory->supported_rigs()->value(radioData->rigModel).rigModelNumber;
+    RigCapabilities rigCap = rigFactory->supported_rigs()->value(radioData->rigModel);
+
+    radioData->rigMfg_Name = rigCap.getRigManufacturer();
+    radioData->rigModelName = rigCap.getRigModelName();
+    radioData->rigModelNumber = rigCap.getRigModelNumber();
 
 }
 

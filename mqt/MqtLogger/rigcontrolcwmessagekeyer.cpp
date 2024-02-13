@@ -109,17 +109,34 @@ void RigControlCwMessageKeyer::stopCwMsg()
 
 bool RigControlCwMessageKeyer::readVmButtonParams(int buttonNum, VoiceKeyerParams &vmParams)
 {
+
+    bool saveByRadioName = readSaveVoiceCWMemoryButtonByRadioNameFromIni();
+
+
     QString fileName = VOICE_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + vmParams.getType() + ".ini";
     QSettings config(fileName, QSettings::IniFormat);
-    config.beginGroup("button" + QString::number(buttonNum));
 
-    vmParams.setType(config.value("type", "").toString());
-    vmParams.setVmName(config.value("name", "").toString());
-    vmParams.setVmCwMessage(config.value("cwMessageText", "").toString());
-    vmParams.setVmRepeatFlag(config.value("repeatFlag", false).toBool());
-    vmParams.setVmDuration(config.value("messageDuration", 0).toInt());
-    vmParams.setVmRepeatPauseDur(config.value("repeatPauseDuration", 0).toInt());
-    vmParams.setvmButtonNum(config.value("buttonNum", buttonNum).toInt());
+
+    if (saveByRadioName && !vmParams.getSelRadioName().isEmpty())
+    {
+        config.beginGroup(vmParams.getSelRadioName().replace('/', '_'));
+    }
+    else
+    {
+        config.beginGroup(ALL_RADIOS_GROUP_NAME);
+    }
+
+
+
+    QString newKey = "button" +  QString::number(buttonNum);
+
+    vmParams.setType(config.value(newKey + "/type", "").toString());
+    vmParams.setVmName(config.value(newKey + "/name", "").toString());
+    vmParams.setVmCwMessage(config.value(newKey + "/cwMessageText", "").toString());
+    vmParams.setVmRepeatFlag(config.value(newKey + "/repeatFlag", false).toBool());
+    vmParams.setVmDuration(config.value(newKey + "/messageDuration", 0).toInt());
+    vmParams.setVmRepeatPauseDur(config.value(newKey + "/repeatPauseDuration", 0).toInt());
+    vmParams.setvmButtonNum(config.value(newKey + "/buttonNum", buttonNum).toInt());
     config.endGroup();
 
     return true;
@@ -130,32 +147,28 @@ void RigControlCwMessageKeyer::saveVmButtonParams(const VoiceKeyerParams &vmPara
 {
     VoiceKeyerParams vmParams = vmParams_;
 
-    QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[VoiceKeyerId::RigControl] + ".ini";
-    QSettings readConfig(fileName, QSettings::IniFormat);
+    bool saveByRadioName = readSaveVoiceCWMemoryButtonByRadioNameFromIni();
 
-    bool saveByRadioName = readConfig.value("Common/SaveButtonByRadioName", false).toBool();
-
-
-    fileName = VOICE_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + vmParams.getType() + ".ini";
+    QString fileName = VOICE_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + vmParams.getType() + ".ini";
     QSettings config(fileName, QSettings::IniFormat);
 
-    if (saveByRadioName && !vmParams.getSelRadioName().isEmpty())
+    if (saveByRadioName  && !vmParams.getSelRadioName().isEmpty())
     {
-        config.beginGroup(vmParams.getSelRadioName() + "_" + "button" + QString::number(vmParams.getvmButtonNum()));
+       config.beginGroup(vmParams.getSelRadioName().replace('/', '_'));
     }
     else
     {
-        config.beginGroup("button" + QString::number(vmParams.getvmButtonNum()));
+       config.beginGroup(ALL_RADIOS_GROUP_NAME);
     }
 
+    QString newKey = "button" + QString::number(vmParams.getvmButtonNum());
 
-    config.setValue("type", vmParams.getType());
-    config.setValue("name", vmParams.getVmName());
-    config.setValue("cwMessageText", vmParams.getVmCwMessage());
-    config.setValue("repeatFlag", vmParams.getVmRepeatFlag());
-    config.setValue("messageDuration", vmParams.getVmDuration());
-    config.setValue("repeatPauseDuration", vmParams.getVmRepeatPauseDur());
-    config.setValue("buttonNum", vmParams.getvmButtonNum());
+    config.setValue(newKey + "/type", vmParams.getType());
+    config.setValue(newKey + "/name", vmParams.getVmName());
+    config.setValue(newKey + "/repeatFlag", vmParams.getVmRepeatFlag());
+    config.setValue(newKey + "/messageDuration", vmParams.getVmDuration());
+    config.setValue(newKey + "/repeatPauseDuration", vmParams.getVmRepeatPauseDur());
+    config.setValue(newKey + "/buttonNum", vmParams.getvmButtonNum());
     config.endGroup();
 
 }
@@ -169,7 +182,85 @@ int RigControlCwMessageKeyer::setup(VoiceKeyerFactory *voiceKeyerFactory, int &m
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
 
     TxVmRigSetupDialog txVmSetupDialog(voiceCap, maxNumButtons, numButtons, tslf->txVmButtonsFrame);
+
+    QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[VoiceKeyerId::CW_RigControl] + ".ini";
+    QSettings config(fileName, QSettings::IniFormat);
+
+    fileName = VOICE_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[VoiceKeyerId::CW_RigControl] + ".ini";
+    QSettings buttonConfig(fileName, QSettings::IniFormat);
+
+
+
     txVmSetupDialog.setWindowTitle(tr("Rig Control CW Memory Setup"));
+
+    txVmSetupDialog.setMaxNumOfButtonsLabel(maxNumButtons);
+
+    QString allRadiosGrpName = ALL_RADIOS_GROUP_NAME;
+    if (readSaveVoiceCWMemoryButtonByRadioNameFromIni())
+    {
+        txVmSetupDialog.setSetupRadioGroupBoxTitle(selectedRadioName);
+    }
+    else
+    {
+        txVmSetupDialog.setSetupRadioGroupBoxTitle(allRadiosGrpName);
+    }
+
+    if (voiceCap.getUseCatPTTForEom())
+    {
+        txVmSetupDialog.setPttEOMChkBoxVisible(true);
+
+        if (readSaveVoiceCWMemoryButtonByRadioNameFromIni())
+        {
+            buttonConfig.beginGroup(selectedRadioName);
+            txVmSetupDialog.setPttEOMChkBoxChecked(buttonConfig.value("UseCatPttForEom", false).toBool());
+
+            buttonConfig.endGroup();
+        }
+        else
+        {
+            config.beginGroup(allRadiosGrpName);
+            txVmSetupDialog.setPttEOMChkBoxChecked(buttonConfig.value("UseCatPttForEom", false).toBool());
+            buttonConfig.endGroup();
+        }
+
+
+    }
+    else
+    {
+        txVmSetupDialog.setPttEOMChkBoxVisible(false);
+    }
+
+
+
+
+    if (voiceCap.getEnableCwMode())
+    {
+        txVmSetupDialog.setSwitchToCwVisible(true);
+
+        if (readSaveVoiceCWMemoryButtonByRadioNameFromIni())
+        {
+            buttonConfig.beginGroup(selectedRadioName);
+            txVmSetupDialog.setSwitchToCwChecked(buttonConfig.value("SwitchToCwMode", true).toBool());
+            buttonConfig.endGroup();
+        }
+        else
+        {
+            config.beginGroup(allRadiosGrpName);
+            txVmSetupDialog.setSwitchToCwChecked(buttonConfig.value("SwitchToCwMode", true).toBool());
+            buttonConfig.endGroup();
+        }
+
+    }
+    else
+    {
+        txVmSetupDialog.setSwitchToCwVisible(false);
+    }
+
+
+
+
+
+
 
     cwMemType = hamlibData::CW_MEMORY_TYPES::NONE;
 
@@ -178,16 +269,31 @@ int RigControlCwMessageKeyer::setup(VoiceKeyerFactory *voiceKeyerFactory, int &m
     if (ret == QDialog::Accepted)
     {
         numButtons = txVmSetupDialog.getNumButtons();
-        QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[VoiceKeyerId::CW_RigControl] + ".ini";
-        QSettings config(fileName, QSettings::IniFormat);
-        config.setValue("Common/NumButtons", numButtons);
-        config.setValue("Common/UseCatPttForEom", txVmSetupDialog.getCatPttForEomState() );
+
+        // save these values by radio name in the buttons ini file
+
+
+        if (readSaveVoiceCWMemoryButtonByRadioNameFromIni())
+        {
+            buttonConfig.beginGroup(selectedRadioName.replace('/', '_'));
+        }
+        else
+        {
+            buttonConfig.beginGroup("AllRadios");
+        }
+
+
+        buttonConfig.setValue("NumButtons", numButtons);
+        buttonConfig.setValue("UseCatPttForEom", txVmSetupDialog.getCatPttForEomState() );
+        buttonConfig.setValue("SwitchToCwMode", txVmSetupDialog.getSetCwModeAndRestoreState());
+        buttonConfig.endGroup();
+
         usePttForEom = txVmSetupDialog.getCatPttForEomState();
-        config.setValue("Common/SwitchToCwMode", txVmSetupDialog.getSetCwModeAndRestoreState());
         setCwModeAndRestoreCurrentMode = txVmSetupDialog.getSetCwModeAndRestoreState();
 
 
     }
+
     return ret;
 
 

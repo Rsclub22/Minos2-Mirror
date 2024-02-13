@@ -3,7 +3,7 @@
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //                      Rig Control
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2023
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2024
 //
 //
 //
@@ -16,76 +16,16 @@
 #include "rigcapabilities.h"
 #include <hamlib/rig.h>
 
-RigCapabilities::RigCapabilities(RigCapConstants::PortType portType_,
-                                 QString rigManufacturer_,
-                                 QString rigName_,
-                                 QString rigModelName_,
-                                 int rigModelNumber_,
-                                 bool supportGetSupBands_,
-                                 bool supportGetVfo_,
-                                 bool supportSetVfo_,
-                                 bool supportGetRit_,
-                                 bool supportSetRit_,
-                                 bool supportGetRitState_,
-                                 bool supportSetRitState_,
-                                 bool supportGetRitMax_,
-                                 bool supportSMeter_,
-                                 RigCapConstants::PttPortType supportPttPortType_,
-                                 bool supportGetPtt_,
-                                 bool supportSetPtt_,
-                                 bool supportGetVox_,
-                                 bool supportSetVox_,
-                                 bool supportVolume_,
-                                 bool supportAntSw_,
-                                 bool supportRigCtld_,
-                                 bool supportVoiceMemory_,
-                                 int startVoiceMemoryNumber_,
-                                 int endVoiceMemoryNumber_,
-                                 bool supportStopVoiceMemory_,
-                                 bool supportCwMemory_,
-                                 int startCwMemoryNumber_,
-                                 int endCwMemoryNumber_,
-                                 bool supportCwMemoryStop_,
-                                 bool supportCwMemoryWait_,
-                                 bool pollData_ )
-    : portType (portType_),
-      rigManufacturer (rigManufacturer_),
-      rigName (rigName_),
-      rigModelName (rigModelName_),
-      rigModelNumber (rigModelNumber_),
-      supportGetSupBands (supportGetSupBands_),
-      supportGetVfo(supportGetVfo_),
-      supportSetVfo(supportSetVfo_),
-      supportGetRit (supportGetRit_),
-      supportSetRit (supportSetRit_),
-      supportGetRitState (supportGetRitState_),
-      supportSetRitState (supportSetRitState_),
-      supportGetRitMax (supportGetRitMax_),
-      supportSMeter (supportSMeter_),
-      supportPttPortType(supportPttPortType_),
-      supportGetPtt (supportGetPtt_),
-      supportSetPtt (supportSetPtt_),
-      supportGetVox(supportGetVox_),
-      supportSetVox(supportSetVox_),
-      supportVolume (supportVolume_),
-      supportAntSw (supportAntSw_),
-      supportRigCtld (supportRigCtld_),
-      supportVoiceMemory(supportVoiceMemory_),
-      startVoiceMemoryNumber(startVoiceMemoryNumber_),
-      endVoiceMemoryNumber(endVoiceMemoryNumber_),
-      supportStopVoiceMemory (supportStopVoiceMemory_),
-      supportCwMemory(supportCwMemory_),
-      startCwMemoryNumber(startCwMemoryNumber_),
-      endCwMemoryNumber(endCwMemoryNumber_),
-      supportCwMemoryStop(supportCwMemoryStop_),
-      supportCwMemoryWait(supportCwMemoryWait_),
-      pollData (pollData_)
+RigCapabilities::RigCapabilities()
 {
-
+    clear();
 }
 
 
+RigCapabilities::~RigCapabilities()
+{
 
+}
 
 
 RigCapabilities:: RigCapabilities( const RigCapabilities &rigcap)
@@ -131,6 +71,334 @@ RigCapabilities & RigCapabilities::operator= ( const RigCapabilities &rigcap)
     supportCwMemoryWait = rigcap.supportCwMemoryWait;
     pollData = rigcap.pollData;
     return *this;
+}
+
+
+
+void RigCapabilities::clear()
+{
+
+    portType = RigCapConstants::none;
+    rigManufacturer = "";
+    rigName = "";
+    rigModelName = "";
+    rigModelNumber = 0;
+    supportGetSupBands = false;
+    supportGetVfo = false;
+    supportSetVfo = false;
+    supportGetRit = false;
+    supportSetRit = false;
+    supportGetRitState = false;
+    supportSetRitState = false;
+    supportGetRitMax = false;
+    supportSMeter = false;
+    supportPttPortType = RigCapConstants::PttPortType::RIG_PTT_NONE;
+    supportGetPtt = false;
+    supportSetPtt = false;
+    supportGetVox = false;
+    supportSetVox = false;
+    supportVolume = false;
+    supportAntSw = false;
+    supportRigCtld = false;
+    supportVoiceMemory = false;
+    startVoiceMemoryNumber = 0;
+    endVoiceMemoryNumber = 0;
+    supportStopVoiceMemory = false;
+    supportCwMemory = false;
+    startCwMemoryNumber = 0;
+    endCwMemoryNumber = 0;
+    supportCwMemoryStop = false;
+    supportCwMemoryWait = false;
+    pollData= RigCapConstants::pollDataOn;
+}
+
+
+void RigCapabilities::setPortType(RigCapConstants::PortType portType_)
+{
+    portType = portType_;
+}
+RigCapConstants::PortType RigCapabilities::getPortType() const
+{
+    return portType;
+}
+
+void RigCapabilities::setRigManufacturer(QString rigManufacturer_)
+{
+    rigManufacturer = rigManufacturer_;
+}
+QString RigCapabilities::getRigManufacturer() const
+{
+    return rigManufacturer;
+}
+
+void RigCapabilities::setRigName(QString rigName_)
+{
+   rigName = rigName_;
+}
+QString RigCapabilities::getRigName() const
+{
+    return rigName;
+}
+
+void RigCapabilities::setRigModelName(QString rigModelName_)
+{
+    rigModelName = rigModelName_;
+}
+QString RigCapabilities::getRigModelName() const
+{
+    return rigModelName;
+}
+
+void RigCapabilities::setRigModelNumber(int rigModelNumber_)
+{
+    rigModelNumber = rigModelNumber_;
+}
+int RigCapabilities::getRigModelNumber() const
+{
+    return rigModelNumber;
+}
+
+void RigCapabilities::setSupportGetSupBands(bool supportGetSupBands_)
+{
+    supportGetSupBands = supportGetSupBands_;
+}
+bool RigCapabilities::getSupportGetSupBands() const
+{
+    return supportGetSupBands;
+}
+
+void RigCapabilities::setSupportGetVfo(bool supportGetVfo_)
+{
+    supportGetVfo = supportGetVfo_;
+}
+bool RigCapabilities::getSupportGetVfo() const
+{
+    return supportGetVfo;
+}
+
+void RigCapabilities::setSupportSetVfo(bool supportSetVfo_)
+{
+    supportSetVfo = supportSetVfo_;
+}
+bool RigCapabilities::getSupportSetVfo() const
+{
+    return supportSetVfo;
+}
+
+void RigCapabilities::setSupportGetRit(bool supportGetRit_)
+{
+   supportGetRit = supportGetRit_;
+}
+bool RigCapabilities::getSupportGetRit() const
+{
+    return supportGetRit;
+}
+
+void RigCapabilities::setSupportSetRit(bool supportSetRit_)
+{
+    supportSetRit = supportSetRit_;
+}
+bool RigCapabilities::getSupportSetRit() const
+{
+    return supportSetRit;
+}
+
+void RigCapabilities::setSupportGetRitState(bool supportGetRitState_)
+{
+    supportGetRitState = supportGetRitState_;
+}
+bool RigCapabilities::getSupportGetRitState() const
+{
+    return supportGetRitState;
+}
+
+void RigCapabilities::setSupportSetRitState(bool supportSetRitState_)
+{
+   supportSetRitState = supportSetRitState_;
+}
+bool RigCapabilities::getSupportSetRitState() const
+{
+    return supportSetRitState;
+}
+
+void RigCapabilities::setSupportGetRitMax(bool supportGetRitMax_)
+{
+   supportGetRitMax = supportGetRitMax_;
+}
+bool RigCapabilities::getSupportGetRitMax() const
+{
+    return supportGetRitMax;
+}
+
+void RigCapabilities::setSupportSMeter(bool supportSMeter_)
+{
+    supportSMeter = supportSMeter_;
+}
+bool RigCapabilities::getSupportSMeter() const
+{
+    return supportSMeter;
+}
+
+void RigCapabilities::setSupportPttPortType(RigCapConstants::PttPortType supportPttPortType_)
+{
+    supportPttPortType = supportPttPortType_;
+}
+RigCapConstants::PttPortType  RigCapabilities::getSupportPttPortType()
+{
+    return supportPttPortType;
+}
+
+void RigCapabilities::setSupportGetPtt(bool supportGetPtt_)
+{
+    supportGetPtt = supportGetPtt_;
+}
+bool RigCapabilities::getSupportGetPtt() const
+{
+    return supportGetPtt;
+}
+
+void RigCapabilities::setSupportSetPtt(bool supportSetPtt_)
+{
+    supportSetPtt = supportSetPtt_;
+}
+bool RigCapabilities::getSupportSetPtt() const
+{
+    return supportSetPtt;
+}
+
+void RigCapabilities::setSupportGetVox(bool supportGetVox_)
+{
+    supportGetVox = supportGetVox_;
+}
+bool RigCapabilities::getSupportGetVox() const
+{
+    return supportGetVox;
+}
+
+void RigCapabilities::setSupportSetVox(bool supportSetVox_)
+{
+    supportSetVox = supportSetVox_;
+}
+bool RigCapabilities::getSupportSetVox() const
+{
+    return supportSetVox;
+}
+
+void RigCapabilities::setSupportVolume(bool supportVolume_)
+{
+   supportVolume = supportVolume_;
+}
+bool RigCapabilities::getSupportVolume() const
+{
+    return supportVolume;
+}
+
+void RigCapabilities::setSupportAntSw(bool supportAntSw_)
+{
+    supportAntSw = supportAntSw_;
+}
+bool RigCapabilities::getSupportAntSw() const
+{
+    return supportAntSw;
+}
+
+void RigCapabilities::setSupportRigCtld(bool supportRigCtld_)
+{
+    supportRigCtld = supportRigCtld_;
+}
+bool RigCapabilities::getSupportRigCtld() const
+{
+    return supportRigCtld;
+}
+
+void RigCapabilities::setSupportVoiceMemory(bool supportVoiceMemory_)
+{
+    supportVoiceMemory = supportVoiceMemory_;
+}
+bool RigCapabilities::getSupportVoiceMemory() const
+{
+    return supportVoiceMemory;
+}
+
+void RigCapabilities::setStartVoiceMemoryNumber(int startVoiceMemoryNumber_)
+{
+    startVoiceMemoryNumber = startVoiceMemoryNumber_;
+}
+int RigCapabilities::getStartVoiceMemoryNumber() const
+{
+    return startVoiceMemoryNumber;
+}
+
+void RigCapabilities::setEndVoiceMemoryNumber(int endVoiceMemoryNumber_)
+{
+    endVoiceMemoryNumber = endVoiceMemoryNumber_;
+}
+int RigCapabilities::getEndVoiceMemoryNumber() const
+{
+    return endVoiceMemoryNumber;
+}
+
+void RigCapabilities::setSupportStopVoiceMemory(bool supportStopVoiceMemory_)
+{
+    supportStopVoiceMemory = supportStopVoiceMemory_;
+}
+bool RigCapabilities::getSupportStopVoiceMemory() const
+{
+    return supportStopVoiceMemory;
+}
+
+void RigCapabilities::setSupportCwMemory(bool supportCwMemory_)
+{
+    supportCwMemory = supportCwMemory_;
+}
+bool RigCapabilities::getSupportCwMemory() const
+{
+    return supportCwMemory;
+}
+
+void RigCapabilities::setStartCwMemoryNumber(int startCwMemoryNumber_)
+{
+    startCwMemoryNumber = startCwMemoryNumber_;
+}
+int RigCapabilities::getStartCwMemoryNumber() const
+{
+    return startCwMemoryNumber;
+}
+
+void RigCapabilities::setEndCwMemoryNumber(int endCwMemoryNumber_)
+{
+     endCwMemoryNumber =  endCwMemoryNumber_;
+}
+int RigCapabilities::getEndCwMemoryNumber() const
+{
+    return  endCwMemoryNumber;
+}
+
+void RigCapabilities::setSupportCwMemoryStop(bool supportCwMemoryStop_)
+{
+    supportCwMemoryStop = supportCwMemoryStop_;
+}
+bool RigCapabilities::getSupportCwMemoryStop() const
+{
+    return supportCwMemoryStop;
+}
+
+void RigCapabilities::setSupportCwMemoryWait(bool supportCwMemoryWait_)
+{
+    supportCwMemoryWait = supportCwMemoryWait_;
+}
+bool RigCapabilities::getSupportCwMemoryWait() const
+{
+    return supportCwMemoryWait;
+}
+
+void RigCapabilities::setPollData(bool pollData_)
+{
+   pollData = pollData_;
+}
+bool RigCapabilities::getPollData() const
+{
+    return pollData;
 }
 
 

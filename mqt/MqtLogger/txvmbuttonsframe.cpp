@@ -650,13 +650,6 @@ void TxVmButtonsFrame::readActionSelected(int buttonNumber)
     vmData.setType(voiceKeyerType);
     txVoiceKeyer->readVmButtonParams(buttonNumber, vmData);
 
-    // Why should we worry about the name being empty?
-    // if (vmData.getVmName().isEmpty())
-    // {
-    //     trace(QString("[TxVmButtonsFrame] Button Name Empty Ignore Button"));
-    //     return;
-    // }
-
 
     setRepeatIndicatorOnOff(vmData.getVmRepeatFlag());
 
@@ -752,11 +745,6 @@ void TxVmButtonsFrame::onVmStopClicked()
         }
 
 
-        // Yaesu doesn't support a stop message command!
-        //else if (getCwMemType(selectedRadio) == hamlibData::CW_MEMORY_TYPES::YAESU_MEM_RECALL)
-        //{
-
-        //}
     }
     else
     {

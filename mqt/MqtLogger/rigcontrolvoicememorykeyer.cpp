@@ -97,7 +97,7 @@ bool RigControlVoiceMemoryKeyer::readVmButtonParams(int buttonNum, VoiceKeyerPar
     }
     else
     {
-        config.beginGroup("AllRadios");
+        config.beginGroup(ALL_RADIOS_GROUP_NAME);
     }
 
     QString newKey = "button" + QString::number(buttonNum);
@@ -129,7 +129,7 @@ void RigControlVoiceMemoryKeyer::saveVmButtonParams(const VoiceKeyerParams &vmPa
     }
     else
     {
-       config.beginGroup("AllRadios");
+       config.beginGroup(ALL_RADIOS_GROUP_NAME);
     }
 
     QString newKey = "button" + QString::number(vmParams.getvmButtonNum());
@@ -201,28 +201,7 @@ int RigControlVoiceMemoryKeyer::setup(VoiceKeyerFactory *voiceKeyerFactory, int 
     }
 
 
-    if (voiceCap.getEnableCwMode())
-    {
-        txVmSetupDialog.setSwitchToCwVisible(true);
-
-        if (readSaveVoiceCWMemoryButtonByRadioNameFromIni())
-        {
-            buttonConfig.beginGroup(selectedRadioName);
-            txVmSetupDialog.setSwitchToCwChecked(buttonConfig.value("SwitchToCwMode", true).toBool());
-            buttonConfig.endGroup();
-        }
-        else
-        {
-            config.beginGroup(allRadiosGrpName);
-            txVmSetupDialog.setSwitchToCwChecked(buttonConfig.value("SwitchToCwMode", true).toBool());
-            buttonConfig.endGroup();
-        }
-
-    }
-    else
-    {
-        txVmSetupDialog.setSwitchToCwVisible(false);
-    }
+    txVmSetupDialog.setSwitchToCwVisible(false);
 
 
     int ret = txVmSetupDialog.exec();
