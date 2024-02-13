@@ -612,9 +612,9 @@ void QSOLogFrame::setContest(BaseContestLog *pcontest)
 {
     catchup = false;
     contest = pcontest;
-    bool rInit;
-    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpReadabilityInit, rInit );
-    screenContact.initialise( contest, rInit ); // get ops etc correct
+    bool initReport;
+    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpReadabilityInit, initReport );
+    screenContact.initialise( contest, initReport ); // get ops etc correct
     setXferEnabled(false, contest, "Logger");
 
     if (!pcontest)
@@ -1213,9 +1213,9 @@ void QSOLogFrame::startNextEntry( )
    if ( !restorePartial() )
    {
        // no partial to restore
-       bool rInit;
-       TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpReadabilityInit, rInit );
-      screenContact.initialise( contest, rInit );
+       bool initReport;
+       TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpReadabilityInit, initReport );
+      screenContact.initialise( contest, initReport );
    }
 
    updateQSOTime();

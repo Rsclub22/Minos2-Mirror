@@ -20,11 +20,11 @@ public:
 private slots:
     void on_OKButton_clicked();
 
-    void on_cancelButton_clicked();
-
     void on_fileNameBrowse_clicked();
 
     void on_monitorButton_clicked();
+
+    void on_stopButton_clicked();
 
     void on_appendButton_clicked();
 

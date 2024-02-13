@@ -300,7 +300,7 @@ void ADIFImport::ADIFImportEndOfRecord( )
     {
         QSharedPointer<BaseContact> bct = test.pcontactAt(0);
 
-        if (!bct->getFrequency().getValue().isClear())
+        if (bct && !bct->getFrequency().getValue().isClear())
         {
             bool ok = false;
             BandList &blist = BandList::getBandList();
@@ -312,10 +312,20 @@ void ADIFImport::ADIFImportEndOfRecord( )
 
             if (ok)
             {
-                Frequency freq = bct->getFrequency().getValue();
-                if (freq <= bi->fHigh && freq >= bi->fLow)
+                if (test.isHF())
                 {
-                    bandOK = true;
+                    if (bi->getType() == HF_BANDTYPE)
+                    {
+                        bandOK = true;
+                    }
+                }
+                else
+                {
+                    Frequency freq = bct->getFrequency().getValue();
+                    if (freq <= bi->fHigh && freq >= bi->fLow)
+                    {
+                        bandOK = true;
+                    }
                 }
             }
 

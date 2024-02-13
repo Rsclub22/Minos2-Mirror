@@ -447,6 +447,7 @@ void DMButtonFrame::on_chooseButton_clicked()
         else
         {
             qfsw = new QFileSystemWatcher(this);
+            connect(qfsw, &QFileSystemWatcher::fileChanged, this, &DMButtonFrame::fkeyFileChanged);
         }
 
         fkeyFileChanged();

@@ -47,12 +47,13 @@ LoggerContestLog::LoggerContestLog(bool hf) : BaseContestLog(hf),
 }
 void LoggerContestLog::makeContact(bool timeNow, QSharedPointer<BaseContact> &lct )
 {
-    bool rInit;
-    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpReadabilityInit, rInit );
-    lct = QSharedPointer<BaseContact>(new ContestContact( this, timeNow, rInit ));
+    bool initReport;
+    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpReadabilityInit, initReport );
+    lct = QSharedPointer<BaseContact>(new ContestContact( this, timeNow, initReport ));
 }
 LoggerContestLog::~LoggerContestLog()
 {
+    adifManager.reset();    // clear it earlier than would be natural
 }
 void LoggerContestLog::initialiseINI()
 {
@@ -364,13 +365,6 @@ bool LoggerContestLog::initialise( const QString &fn, bool newFile, int slotno )
                entryBundle.openSection( entryBundleName.getValue() );
                QTHBundle.openSection( QTHBundleName.getValue() );
                stationBundle.openSection( stationBundleName.getValue() );
-               // and create the ADIF manger if required
-               QString wadif = watchedADIFFile.getValue();
-               if (!wadif.isEmpty())
-               {
-                   qint64 lo = watchedADIFLastOffset.getValue();
-                   adifManager = QSharedPointer<AdifManager>(new AdifManager(this, wadif, lo));
-               }
                loadOK = true;
             }
             else
@@ -411,6 +405,13 @@ bool LoggerContestLog::initialise( const QString &fn, bool newFile, int slotno )
       if ( !loadOK )    // sets ct as well
       {
          return false;
+      }
+      // and create the ADIF manger if required
+      QString wadif = watchedADIFFile.getValue();
+      if (!wadif.isEmpty())
+      {
+          qint64 lo = watchedADIFLastOffset.getValue();
+          adifManager = QSharedPointer<AdifManager>(new AdifManager(this, wadif, lo));
       }
    }
    else

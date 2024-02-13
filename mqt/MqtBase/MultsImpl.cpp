@@ -851,7 +851,7 @@ bool MultListsImpl::loadMultFiles( )
    distList.load();
    distSynList.load();
    glist.load();
-// /*
+ /*
    QFile fos("c:/temp/multlist.txt");
    if (!fos.open(QIODevice::WriteOnly|QIODevice::Text))
       return false;
@@ -888,7 +888,7 @@ bool MultListsImpl::loadMultFiles( )
    {
       os << i->wt->synPrefix + " : " + i->wt->dupPrefix + "\n";
    }
-// */
+ */
    return true;
 }
 MultListsImpl::MultListsImpl()

@@ -17,11 +17,12 @@ class ScreenContact: public CheckableContact
    public:
       ScreenContact();
       virtual ~ScreenContact();
+      ScreenContact(const ScreenContact &ct);   // probably never used
       virtual void copyFromArg(QSharedPointer<BaseContact> );   // this MIGHT just get used for dummy, for ops
       virtual void copyFromArg( ScreenContact & );    // used for partialSave
       void checkScreenContact( );
 
-      void initialise( BaseContestLog *ct, bool rInit );
+      void initialise(BaseContestLog *ct, bool initReport );
 
       void score();
 

@@ -1,6 +1,6 @@
 #include <QFileInfo>
-#include <QFileSystemWatcher>
 
+#include "fileutils.h"
 #include "tlogcontainer.h"
 #include "LoggerContest.h"
 #include "AdifImport.h"
@@ -8,6 +8,10 @@
 #include "tsinglelogframe.h"
 #include "adifmanager.h"
 
+/*
+    I'd use QFileWatcher, but it doesn't seem to work when records are dripped
+    into the file with no file detail change
+*/
 AdifManager::AdifManager(LoggerContestLog * const c, QString fname, qint64 lo)
     :ct(c), watchedFile(fname), lastOffset(lo)
 {
@@ -18,20 +22,38 @@ AdifManager::AdifManager(LoggerContestLog * const c, QString fname, qint64 lo)
         if (ok)
         {
             lastOffset = wf.size();
-            ct->watchedADIFLastOffset.setValue(lastOffset);
-            ct->watchedADIFFile.setValue(fname);
+        }
+        else
+        {
+            lastOffset = 0;
         }
     }
-    adifWatcher = new QFileSystemWatcher(this);
-    adifWatcher->addPath(watchedFile);
-    connect(adifWatcher, &QFileSystemWatcher::fileChanged, this, &AdifManager::AdifFileChanged);
+    ct->watchedADIFLastOffset.setValue(lastOffset);
+    ct->watchedADIFFile.setValue(watchedFile);
+    ct->commonSave(false);
+
+    connect(&fileTimer, &QTimer::timeout, this, &AdifManager::checkFile);
+
+    if (!FileExists(watchedFile))
+    {
+        ct->watchedADIFLastOffset.setValue(0);
+    }
+    fileTimer.start(1000);
 
 }
 AdifManager::~AdifManager()
 {
+    fileTimer.stop();
+}
+void AdifManager::checkFile()
+{
+    QString watchedFile = ct->watchedADIFFile.getValue();
+    if (FileExists(watchedFile))
+    {
+        AdifFileChanged();
+    }
 
 }
-
 QString AdifManager::getWatchedFile() const
 {
     return watchedFile;
@@ -40,20 +62,33 @@ void AdifManager::AdifFileChanged()
 {
     QFile wf(watchedFile, this);
     bool ok = wf.open(QIODevice::ReadOnly);
-    int spoint = ct->ctList.count();
+    qint64 fsz = 0;
 
-    while (ok && lastOffset < wf.size())
+    if (ok)
+    {
+        fsz = wf.size();
+        if (lastOffset >= fsz)
+        {
+            lastOffset = fsz;
+            ok = false;
+        }
+        if (lastOffset < 0)
+        {
+            lastOffset = 0;
+        }
+    }
+
+    while (ok && lastOffset < fsz)
     {
         ok = wf.seek(lastOffset);
         if (ok)
         {
-            QByteArray all = wf.readLine();
+            QByteArray all = QByteArray("Header\n<EOH>") + wf.readLine();
             if (all.size())
             {
                 ok = ADIFImport::doImportADIFString(ct, all);
                 lastOffset = wf.pos();
                 ct->watchedADIFLastOffset.setValue(lastOffset);
-
             }
             else
             {
@@ -73,6 +108,7 @@ void AdifManager::AdifFileChanged()
         // WsjtxFrame has similar
 
         QSharedPointer<BaseContact> bct;
+        int spoint = ct->ctList.count();
         for ( int i = spoint; i < ct->ctList.count(); i++ )
         {
             // do we ever get multiple QSOs in one ADIF? We can here.
