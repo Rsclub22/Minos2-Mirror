@@ -52,6 +52,8 @@ public:
     bool check();
     void cancel();
 
+
+
 private slots:
 
     void on_radioSettingsTabWidget_currentChanged(int index);

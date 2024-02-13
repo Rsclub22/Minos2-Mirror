@@ -3,7 +3,7 @@
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //                      Delete Voice/CW Memory Radios
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2018 - 2024
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2024
 //
 //
 /////////////////////////////////////////////////////////////////////////////
