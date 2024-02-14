@@ -14,18 +14,46 @@ namespace RotCapConstants
 class RotCapabilities
 {
 public:
-    RotCapabilities(int modelNumber = 0,
-                    RotCapConstants::PortType portType_ = RotCapConstants::none,
-                    QString rotatorManufacturer_ = "",
-                    QString rotatorModelName_ = "",
-                    bool supportCwCCwCmd_ = false,
-                    bool supportStopCommand = true,
-                    int minRot_ = COMPASS_MIN0,
-                    int maxRot_ = COMPASS_MAX360,
-                    bool enableSelectDisplayDial_= RotCapConstants::disableSelectDisplayDial,
-                    bool pollData_ = RotCapConstants::pollDataOn,
-                    bool allowSouthStopConfig_ = true);
+    RotCapabilities();
 
+
+
+    void clear();
+    void setModelNumber(int modelNumber_);
+    int getModelNumber() const;
+
+    void setPortType(RotCapConstants::PortType portType_);
+    RotCapConstants::PortType getPortType() const;
+
+    void setRotatorManufacturer(QString rotatorManufacturer_);
+    QString getRotatorManufacturer() const;
+
+    void setRotatorModelName(QString rotatorModelName_);
+    QString getRotatorModelName() const;
+
+    void setSupportCwCCwCmd(bool supportCwCCwCmd_);
+    bool getSupportCwCCwCmd() const;
+
+    void setSupportStopCommand(bool supportStopCommand_);
+    bool getSupportStopCommand() const;
+
+    void setMinRot(int minRot_);
+    int getMinRot() const;
+
+    void setMaxRot(int maxRot_);
+    int getMaxRot() const;
+
+    void setEnableSelectDisplayDial(bool enableSelectDisplayDial_);
+    bool getEnableSelectDisplayDial() const;
+
+    void setPollData(bool pollData_);
+    bool getPollData() const;
+
+    void setAllowSouthStopConfig(bool allowSouthStopConfig_);
+    bool getAllowSouthStopConfig() const;
+
+
+private:
 
     int modelNumber;
     RotCapConstants::PortType portType;
@@ -38,7 +66,6 @@ public:
     bool enableSelectDisplayDial;
     bool pollData;
     bool allowSouthStopConfig;
-
 
 };
 

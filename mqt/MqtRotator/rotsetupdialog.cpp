@@ -93,11 +93,13 @@ void RotSetupDialog::initSetup()
 
             getAvailAntenna(i, settings);   // get settings from ini file
 
-            availAntData[i]->rotatorModelName = rotatorFactory->supported_rotators()->value(availAntData[i]->rotatorModel).rotatorModelName;
-            availAntData[i]->rotatorModelNumber = rotatorFactory->supported_rotators()->value(availAntData[i]->rotatorModel).modelNumber;
-            availAntData[i]->rotatorManufacturer = rotatorFactory->supported_rotators()->value(availAntData[i]->rotatorModel).rotatorManufacturer;
-            availAntData[i]->rotatorCWEndStop = rotatorFactory->supported_rotators()->value(availAntData[i]->rotatorModel).maxRot;
-            availAntData[i]->rotatorCCWEndStop = rotatorFactory->supported_rotators()->value(availAntData[i]->rotatorModel).minRot;
+            RotCapabilities rotCap = rotatorFactory->supported_rotators()->value(availAntData[i]->rotatorModel);
+
+            availAntData[i]->rotatorModelName = rotCap.getRotatorModelName();
+            availAntData[i]->rotatorModelNumber = rotCap.getModelNumber();
+            availAntData[i]->rotatorManufacturer = rotCap.getRotatorManufacturer();
+            availAntData[i]->rotatorCWEndStop = rotCap.getMaxRot();
+            availAntData[i]->rotatorCCWEndStop = rotCap.getMinRot();
 
             bool overrunState = availAntData[i]->overRunFlag;   // save as it is changed in setEndStopType
             antennaTab[i]->setEndStopType(availAntData[i], availAntData[i]->rotatorCCWEndStop, availAntData[i]->rotatorCWEndStop);
@@ -162,7 +164,7 @@ void RotSetupDialog::loadSettingsToTab(int tabNum)
 
         if (availAntData[tabNum]->rotType == ROT_0_360)
         {
-           if (rotCap.allowSouthStopConfig)
+           if (rotCap.getAllowSouthStopConfig())
            {
               antennaTab[tabNum]->sStopButtonsVisible(true);
               antennaTab[tabNum]->setSStopButtons(availAntData[tabNum]->southStopType);
@@ -252,14 +254,14 @@ void RotSetupDialog::loadSettingsToTab(int tabNum)
 
         }
 
-        if (!rotCap.supportStopCommand)
+        if (!rotCap.getSupportStopCommand())
         {
             antennaTab[tabNum]->setSimCW_CCWcmdVisible(false);
 
         }
 
 
-        if (rotatorFactory->supported_rotators()->value(availAntData[tabNum]->rotatorModel).enableSelectDisplayDial)
+        if (rotCap.getEnableSelectDisplayDial())
         {
             antennaTab[tabNum]->setCompassDialChkBoxVisible(true);
             antennaTab[tabNum]->checkCompassDialChkBox(availAntData[tabNum]->showCompassDialFlag);

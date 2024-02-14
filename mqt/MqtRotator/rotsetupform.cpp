@@ -115,16 +115,16 @@ void rotSetupForm::setupRotatorModel(QString rotatorModel)
         ui->rotatorModelBox->setCurrentText(antennaData->rotatorModel);
         //RotatorFactory::Rotators *rList = rotatorsList;
         RotCapabilities rotCap = rotFactory->supported_rotators()->value(antennaData->rotatorModel);
-        antennaData->rotatorModelNumber = rotCap.modelNumber;
-        antennaData->rotatorManufacturer = rotCap.rotatorManufacturer;
-        antennaData->rotatorModelName = rotCap.rotatorModelName;
-        maxRot = rotCap.maxRot;
-        minRot = rotCap.minRot;
-        antennaData->rotatorCWEndStop = rotCap.maxRot;
-        antennaData->rotatorCCWEndStop = rotCap.minRot;
+        antennaData->rotatorModelNumber = rotCap.getModelNumber();
+        antennaData->rotatorManufacturer = rotCap.getRotatorManufacturer();
+        antennaData->rotatorModelName = rotCap.getRotatorModelName();
+        maxRot = rotCap.getMaxRot();
+        minRot = rotCap.getMinRot();
+        antennaData->rotatorCWEndStop = rotCap.getMaxRot();
+        antennaData->rotatorCCWEndStop = rotCap.getMinRot();
 
-        antennaData->supportCwCcwCmd = rotCap.supportCwCCwCmd;
-        antennaData->portType = rotCap.portType;
+        antennaData->supportCwCcwCmd = rotCap.getSupportCwCCwCmd();
+        antennaData->portType = rotCap.getPortType();
 
 
         //antennaData->rotatorModel = ui->rotatorModelBox->currentText();
@@ -145,7 +145,7 @@ void rotSetupForm::setupRotatorModel(QString rotatorModel)
 
                 ui->chkOverrun->setVisible(false);
                 ui->chkOverrun->setChecked(false);
-                if (rotCap.allowSouthStopConfig)
+                if (rotCap.getAllowSouthStopConfig())
                 {
                     sStopButtonsVisible(true);
                     setSStopOffButChecked(true);
@@ -216,7 +216,7 @@ void rotSetupForm::setupRotatorModel(QString rotatorModel)
                 antennaData->simCwCcwCmd = true;
             }
 
-           if (!rotCap.supportStopCommand)
+           if (!rotCap.getSupportStopCommand())
            {
 
                 setSimCW_CCWcmdVisible(false);
@@ -225,7 +225,7 @@ void rotSetupForm::setupRotatorModel(QString rotatorModel)
 
 
 
-            if (rotCap.enableSelectDisplayDial)
+            if (rotCap.getEnableSelectDisplayDial())
             {
                 setCompassDialChkBoxVisible(true);
                 checkCompassDialChkBox(true);

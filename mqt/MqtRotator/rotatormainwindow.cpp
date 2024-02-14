@@ -450,7 +450,7 @@ int RotatorMainWindow::openRotator()
     }
 
 
-    rotator = rotFactory->createRotator(rotFactory->supported_rotators()->value(setupAntenna->currentAntenna.rotatorModelName).RotCapabilities::modelNumber);
+    rotator = rotFactory->createRotator(rotFactory->supported_rotators()->value(setupAntenna->currentAntenna.rotatorModelName).getModelNumber());
 
     if (rotator == nullptr)
     {
@@ -990,7 +990,7 @@ void RotatorMainWindow::upDateAntenna()
 
 
             RotCapabilities rotCap = rotFactory->supported_rotators()->value(setupAntenna->currentAntenna.rotatorModel);
-            if (rotCap.enableSelectDisplayDial && !setupAntenna->currentAntenna.showCompassDialFlag)
+            if (rotCap.getEnableSelectDisplayDial() && !setupAntenna->currentAntenna.showCompassDialFlag)
             {
                 setCompassDialVisible(false);
             }
@@ -999,7 +999,7 @@ void RotatorMainWindow::upDateAntenna()
                 setCompassDialVisible(true);
             }
 
-            if (rotCap.supportStopCommand)
+            if (rotCap.getSupportStopCommand())
             {
                 supportStopCommandFlag = true;
                 ui->stopButton->setVisible(true);
@@ -2476,12 +2476,12 @@ void RotatorMainWindow::aboutRotatorConfig()
         msg.append(tr("Rotator CW EndStop = %1\n").arg(QString::number(setupAntenna->currentAntenna.rotatorCWEndStop)));
         msg.append(tr("Rotator CCW EndStop = %1\n").arg(QString::number(setupAntenna->currentAntenna.rotatorCCWEndStop)));
         msg.append(tr("Rotator PortType = %1\n").arg(hamlibData::portTypeList[setupAntenna->currentAntenna.portType]));
-        if (rotCap.portType == RotCapConstants::PortType::network)
+        if (rotCap.getPortType() == RotCapConstants::PortType::network)
         {
             msg.append(tr("Network Address = %1\n").arg(setupAntenna->currentAntenna.networkAdd));
             msg.append(tr("Network Port = %1\n").arg(setupAntenna->currentAntenna.networkPort));
         }
-        if (rotCap.portType == RotCapConstants::PortType::serial)
+        if (rotCap.getPortType() == RotCapConstants::PortType::serial)
         {
             msg.append(tr("Rotator Comport = %1\n").arg(setupAntenna->currentAntenna.comport));
             msg.append(tr("Baudrate = %1\n").arg(QString::number(setupAntenna->currentAntenna.baudrate)));
@@ -2549,12 +2549,12 @@ void RotatorMainWindow::dumpRotatorToTraceLog()
         trace(QString("Rotator CCW EndStop = %1").arg(QString::number(setupAntenna->currentAntenna.rotatorCCWEndStop)));
         trace(QString("Rotator PortType = %1").arg(hamlibData::portTypeList[setupAntenna->currentAntenna.portType]));
 
-        if (rotCap.portType == RotCapConstants::PortType::network)
+        if (rotCap.getPortType() == RotCapConstants::PortType::network)
         {
             trace(QString("Network Address = %1").arg(setupAntenna->currentAntenna.networkAdd));
             trace(QString("Network Port = %1").arg(setupAntenna->currentAntenna.networkPort));
         }
-        if (rotCap.portType == RotCapConstants::PortType::serial)
+        if (rotCap.getPortType() == RotCapConstants::PortType::serial)
         {
             trace(QString("Rotator Comport = %1").arg(setupAntenna->currentAntenna.comport));
             trace(QString("Baudrate = %1").arg(QString::number(setupAntenna->currentAntenna.baudrate)));

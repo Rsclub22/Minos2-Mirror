@@ -45,15 +45,22 @@ PstRotControl::~PstRotControl()
 void PstRotControl::register_rotators(RotatorFactory::Rotators *rotatorsList, int rotatorId)
 {
 
-    (*rotatorsList)["PSTRotator"] = RotCapabilities(rotatorId, RotCapConstants::PortType::network,
-                                                           "", "PSTRotator",
-                                                           false,
-                                                           true,        // support stop command
-                                                           COMPASS_MIN0,
-                                                           COMPASS_MAX360,
-                                                           RotCapConstants::PollData::pollDataOn,
-                                                           RotCapConstants::SelectDisplayCompass::enableSelectDisplayDial,
-                                                           false);
+    RotCapabilities rotCap;
+
+    rotCap.setModelNumber(rotatorId);
+    rotCap.setPortType(RotCapConstants::PortType::network);
+    rotCap.setRotatorManufacturer("");
+    rotCap.setRotatorModelName("PSTRotator");
+    rotCap.setSupportCwCCwCmd(false);
+    rotCap.setSupportStopCommand(true);
+    rotCap.setMinRot(COMPASS_MIN0);
+    rotCap.setMaxRot(COMPASS_MAX360);
+    rotCap.setEnableSelectDisplayDial(RotCapConstants::SelectDisplayCompass::enableSelectDisplayDial);
+    rotCap.setPollData(RotCapConstants::PollData::pollDataOn);
+    rotCap.setAllowSouthStopConfig(false);
+
+
+    (*rotatorsList)["PSTRotator"] = rotCap;
 
 
 
