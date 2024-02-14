@@ -32,7 +32,7 @@
           </property>
           <widget class="QTabWidget" name="rotTabs">
            <property name="currentIndex">
-            <number>0</number>
+            <number>1</number>
            </property>
            <widget class="QWidget" name="setupTab">
             <attribute name="title">
@@ -151,6 +151,7 @@
                    <widget class="QLabel" name="usinglbl">
                     <property name="font">
                      <font>
+                      <weight>75</weight>
                       <bold>true</bold>
                      </font>
                     </property>
@@ -163,6 +164,7 @@
                    <widget class="QLabel" name="usingLibText">
                     <property name="font">
                      <font>
+                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -188,6 +190,7 @@
                    <widget class="QLabel" name="antNameDispLbl">
                     <property name="font">
                      <font>
+                      <weight>75</weight>
                       <bold>true</bold>
                      </font>
                     </property>
@@ -614,7 +617,7 @@
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_2">
           <item>
-           <widget class="MinosCompass" name="compassDial">
+           <widget class="MinosCompass" name="compassDial" native="true">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
               <horstretch>0</horstretch>
@@ -647,6 +650,7 @@
               <widget class="QLabel" name="Main">
                <property name="font">
                 <font>
+                 <weight>75</weight>
                  <bold>true</bold>
                 </font>
                </property>
@@ -663,6 +667,7 @@
                <property name="font">
                 <font>
                  <pointsize>36</pointsize>
+                 <weight>75</weight>
                  <bold>true</bold>
                 </font>
                </property>
@@ -682,6 +687,7 @@
               <widget class="QLabel" name="Back">
                <property name="font">
                 <font>
+                 <weight>75</weight>
                  <bold>true</bold>
                 </font>
                </property>
@@ -698,6 +704,7 @@
                <property name="font">
                 <font>
                  <pointsize>24</pointsize>
+                 <weight>75</weight>
                  <bold>true</bold>
                 </font>
                </property>
