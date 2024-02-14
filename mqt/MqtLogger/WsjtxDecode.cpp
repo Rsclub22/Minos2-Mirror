@@ -140,9 +140,9 @@ bool decodeMessage::checkAsContact()
         {
             mults = scc.multCount;
         }
-        bonus = scc.locBonus;
-        bonus = scc.distBonus;
-        bonus = scc.countryBonus;
+        bonus += scc.locBonus;
+        bonus += scc.distBonus;
+        bonus += scc.countryBonus;
 
         return true;
     }
