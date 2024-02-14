@@ -52,6 +52,8 @@ public:
     bool check();
     void cancel();
 
+
+
 private slots:
 
     void on_radioSettingsTabWidget_currentChanged(int index);
@@ -67,6 +69,8 @@ private slots:
     void onEnableSerialBandSwChkBox();
 
     void on_PresetTabWidget_currentChanged(int index);
+    void onDeleteMemoryButtonRadiosPushButtonClicked();
+    void onSaveVoiceCwMemoryButtonByRadioNameClicked();
 private:
     Ui::RadioSettingDialog *ui;
 
@@ -118,6 +122,7 @@ private:
     void saveBandSwComport();
     void saveBandSwCheckBoxes();
     void saveVoiceCwMemoryButtonByRadioNameCheckBox();
+    void setDeleteMemoryButtonRadiosPushButtonVisible(bool visbile);
 };
 
 #endif // RADIOSETTINGDIALOG_H

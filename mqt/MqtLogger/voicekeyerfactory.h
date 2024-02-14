@@ -23,10 +23,6 @@
 
 class QComboBox;
 
-QString VOICE_KEYER_PATH();
-QString VOICEKEYER_COMMON_PARAMS_PATH();
-bool readSaveVoiceCWMemoryButtonByRadioNameFromIni();
-void writeSaveVoiceCWMemoryButtonByRadioNameToIni(bool data);
 
 class VoiceKeyerCapabilities
 {

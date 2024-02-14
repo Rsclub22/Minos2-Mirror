@@ -559,14 +559,25 @@ void SetupDialog::deleteClusterNode()
 
     if (select->hasSelection()) //check if has selection
     {
-       QModelIndexList indexes = select->selectedIndexes();
-       if (!indexes.empty())
-       {
-           clusterListModel->removeRows(indexes.last().row(), 1);
-           indexes.removeLast();
-           listDataChanged = true;
-       }
+        QMessageBox::StandardButton reply;
+        reply = QMessageBox::question(this, tr("Delete Cluster Node"), tr("Are you sure you want to delete a cluster node?"), QMessageBox::Yes | QMessageBox::No);
 
+        if (reply == QMessageBox::Yes)
+        {
+            QModelIndexList indexes = select->selectedIndexes();
+            if (!indexes.empty())
+            {
+                clusterListModel->removeRows(indexes.last().row(), 1);
+                indexes.removeLast();
+                listDataChanged = true;
+            }
+
+        }
+        else if (reply == QMessageBox::No)
+        {
+
+            return;
+        }
     }
 
 }
