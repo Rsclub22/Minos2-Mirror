@@ -103,14 +103,15 @@ xcopy /F /Y %MROOT%\mqt\ControlFiles\Configuration\Cluster .\Configuration\Clust
 cd Configuration
 
 call powershell.exe "& {Invoke-WebRequest https://www.country-files.com/cty/cty.dat -Outfile cty.dat}"
-call powershell.exe "& {Invoke-WebRequest https://www.rsgbcc.org/vhf/vhfcontests21.xml -Outfile vhfcontests21.xml}"
-call powershell.exe "& {Invoke-WebRequest https://www.rsgbcc.org/vhf/vhfcontests22.xml -Outfile vhfcontests22.xml}"
+call powershell.exe "& {Invoke-WebRequest https://www.rsgbcc.org/cgi-bin/vhfenter.pl?afsdownload=y -Outfile clublist.txt}"
+call powershell.exe "& {Invoke-WebRequest https://www.rsgbcc.org/vhf/vhfcontests23.xml -Outfile vhfcontests23.xml}"
+call powershell.exe "& {Invoke-WebRequest https://www.rsgbcc.org/vhf/vhfcontests24.xml -Outfile vhfcontests24.xml}"
 
-call powershell.exe "& {Invoke-WebRequest http://www.rsgbcc.org/vhf/hfcontests21.xml -Outfile hfcontests21.xml}"
-call powershell.exe "& {Invoke-WebRequest http://www.rsgbcc.org/vhf/hfcontests22.xml -Outfile hfcontests22.xml}"
+call powershell.exe "& {Invoke-WebRequest http://www.rsgbcc.org/vhf/hfcontests23.xml -Outfile hfcontests23.xml}"
+call powershell.exe "& {Invoke-WebRequest http://www.rsgbcc.org/vhf/hfcontests24.xml -Outfile hfcontests24.xml}"
 
-call powershell.exe "& {Invoke-WebRequest http://microwave.rsgbcc.org/microcontests21.xml -Outfile microcontests21.xml}"
-call powershell.exe "& {Invoke-WebRequest http://microwave.rsgbcc.org/microcontests22.xml -Outfile microcontests22.xml}"
+call powershell.exe "& {Invoke-WebRequest http://microwave.rsgbcc.org/microcontests23.xml -Outfile microcontests23.xml}"
+call powershell.exe "& {Invoke-WebRequest http://microwave.rsgbcc.org/microcontests24.xml -Outfile microcontests24.xml}"
 
 
 cd ../Bin
