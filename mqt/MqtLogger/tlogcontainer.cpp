@@ -369,6 +369,8 @@ bool TLogContainer::eventFilter(QObject *obj, QEvent *event)
 
 bool TLogContainer::show(int argc, char *argv[])
 {
+    QMainWindow::show();
+
     TContestApp::getContestApp() ->loggerBundle.flushProfile();
 
     TimerUpdateQSOTimer.start(1000);
@@ -377,8 +379,6 @@ bool TLogContainer::show(int argc, char *argv[])
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::ReportOverstrike, this, &TLogContainer::on_ReportOverstrike, Qt::QueuedConnection);
 
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::setMemoryAction, this, &TLogContainer::mleSetMemoryAction);
-
-    QMainWindow::show();
 
     setWinAppId(this, SecondInstall::getOrgName() + QString(".MqtLogger.SubScreen%1").arg(0) );
 
