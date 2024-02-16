@@ -738,7 +738,7 @@ Le mode calculé est %2</translation>
     <message>
         <location filename="../clusterclientfilterdialog.ui" line="582"/>
         <source>MW</source>
-        <translation></translation>
+        <translation>MO</translation>
     </message>
     <message>
         <location filename="../clusterclientfilterdialog.cpp" line="78"/>
@@ -2014,7 +2014,7 @@ Déplacez-vous entre les composants d&apos;un groupe à l&apos;aide de la souris
     <message>
         <location filename="../DisplayOptions.ui" line="274"/>
         <source>QSO Map Panel Options</source>
-        <translation>Options pour QSO panneau de carte </translation>
+        <translation>Options pour QSO panneau de carte</translation>
     </message>
     <message>
         <location filename="../DisplayOptions.ui" line="280"/>
@@ -2255,7 +2255,7 @@ Double-cliquer sur un carré d&apos;arête pour étendre la zone de la carte.</t
     <message>
         <location filename="../LoggerContest.cpp" line="367"/>
         <source>File %1 is empty, so cannot be opened</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 vide - impossible d&apos;ouvrir</translation>
     </message>
     <message>
         <location filename="../LoggerContest.cpp" line="419"/>
@@ -3981,7 +3981,7 @@ Non - Ignorer les modifications</translation>
     <message>
         <location filename="../ScreenConfigElement.cpp" line="34"/>
         <source>Keyer</source>
-        <translation type="unfinished"></translation>
+        <translation>Keyer</translation>
     </message>
     <message>
         <location filename="../ScreenConfigElement.cpp" line="35"/>
@@ -6440,3 +6440,4 @@ Inclure le &quot;CQ&quot; ainsi que le type</translation>
     </message>
 </context>
 </TS>
+
