@@ -175,7 +175,6 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
     ui->statusBar->addWidget(status);
     ui->radioNameDisp->setText("");
 
-    ui->setupTabWidget->setStyleSheet("background-color: grey" );
 
     readTraceLogFlag();
 
