@@ -38,6 +38,8 @@
 
 RigControlMainWindow *mainWindow = nullptr;
 
+
+
 const bool PUBLISH_NOW = true;
 const bool DONT_PUBLISH_NOW = false;
 
@@ -172,6 +174,8 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
     status = new QLabel;
     ui->statusBar->addWidget(status);
     ui->radioNameDisp->setText("");
+
+    ui->setupTabWidget->setStyleSheet("background-color: grey" );
 
     readTraceLogFlag();
 
