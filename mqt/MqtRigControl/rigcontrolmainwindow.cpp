@@ -1457,6 +1457,7 @@ int RigControlMainWindow::openRadio()
 
     if (currentRadio.portType == RigCapConstants::PortType::serial)
     {
+        logMessage(QString("Using COM port %1").arg(currentRadio.comport));
 
         if (currentRadio.comport == "")
         {
@@ -1470,13 +1471,12 @@ int RigControlMainWindow::openRadio()
             showStatusMessage(tr("Comport %1 no longer configured on computer?").arg(currentRadio.comport));
             return OPEN_FAILED;
         }
-
-
-
     }
 
     else if (currentRadio.portType == RigCapConstants::PortType::network)
     {
+        logMessage(QString("Using network address <%1> port <%2>").arg(currentRadio.networkAdd, currentRadio.networkPort));
+
         if (currentRadio.networkAdd == "" || (currentRadio.networkPort == ""))
         {
             logMessage(QString("Open Radio: No network or Port Number"));
