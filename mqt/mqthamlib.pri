@@ -7,8 +7,8 @@
 
 #HAMLIBVER = $$(hamlib)
 #HAMLIBVER = $$(45)
-#HAMLIBVER = 455
-HAMLIBVER = 460
+HAMLIBVER = 455
+//HAMLIBVER = 460
 #message(The hamlib version is $$HAMLIBVER)
 
 equals(HAMLIBVER, 455) {
