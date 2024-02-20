@@ -3,7 +3,7 @@
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //                      Rotator Control
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2021
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2024
 //
 // Interprocess Control Logic
 // COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2008
@@ -36,6 +36,7 @@
 #include "MTrace.h"
 #include "LogEvents.h"
 #include "rotatormainwindow.h"
+#include "checkHamlibVersionIsValid.h"
 #include "ui_rotatormainwindow.h"
 
 RotatorMainWindow::RotatorMainWindow(QWidget *parent) :
@@ -164,7 +165,44 @@ RotatorMainWindow::RotatorMainWindow(QWidget *parent) :
 
     rotlog->getBearingLogConfig();
 
-    initSelectAntennaBox();
+    hamlibOk = false;
+
+    logMessage(QString("Checking installed hamlib version"));
+    int hamlibCheckErrorNum = checkHamlibVersionIsValid(hamlibOk, hamlib_version, MINIMUM_HAMLIB_VERSION);
+
+    if (hamlibCheckErrorNum < 0)
+    {
+
+        if (hamlibCheckErrorNum == -2 )
+        {
+            QMessageBox::critical(nullptr, tr("Rotator Hamlib Library Version Error!"), tr("Installed hamlib version %1 is imcompatible.\nIt should be version %2 or greater.\n\nPlease check your installation.\nYou will not be able to select a radio until this is rectified!").arg(hamlib_version).arg(MINIMUM_HAMLIB_VERSION), QMessageBox::Ok);
+            logMessage(QString("Error version number conversion to int failed - installed version = %1, minimum version = %2").arg(hamlib_version).arg(MINIMUM_HAMLIB_VERSION)); // error)
+        }
+        else if (hamlibCheckErrorNum == -1 )
+        {
+            // we should not get here....
+            QMessageBox::critical(nullptr, tr("Hambib Version test Conversion Error!"), tr("Hamlib Version test conversion error. Please report error"));
+            logMessage(QString("Error version number conversion to int failed - installed version = %1, minimum version = %2").arg(hamlib_version).arg(MINIMUM_HAMLIB_VERSION));
+        }
+        else if (hamlibCheckErrorNum == -3)
+        {
+            //we should not get here...
+            logMessage(QString("Error: checkhamlibVersion faile error code = %1").arg(hamlibCheckErrorNum));
+        }
+
+
+    }
+
+    if (hamlibOk)
+    {
+        initSelectAntennaBox();
+    }
+    else
+    {
+        showStatusMessage(tr("Error: Installed hamlib version %1 is incorrect, should be version %2 or greater").arg(hamlib_version).arg(MINIMUM_HAMLIB_VERSION));
+    }
+
+
 
     setTestMode(appName.isEmpty());
 
@@ -2445,6 +2483,9 @@ void RotatorMainWindow::onTestBearingEnter()
         displayBearing(brg);
     }
 }
+
+
+
 
 void RotatorMainWindow::aboutRotatorConfig()
 {

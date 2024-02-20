@@ -67,6 +67,7 @@ void delay(int sec);
 void sleepFor(qint64 milliseconds);
 
 
+
 class LoggerRequests
 {
 
@@ -295,6 +296,7 @@ private:
     //QStringList availRadios;
 
 
+    bool hamlibOk = false;
 
     bool radioCommsOK = false;
 
