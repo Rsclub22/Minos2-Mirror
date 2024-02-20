@@ -46,6 +46,7 @@ SOURCES += \
     ChatServer.cpp \
     ConfigElementFrame.cpp \
     callsign.cpp \
+    checkHamlibVersionIsValid.cpp \
     checkmodeagainstfreq.cpp \
     checkoperatingfreq.cpp \
     contacts.cpp \
@@ -141,6 +142,7 @@ HEADERS += \
     ChatServer.h \
     ConfigElementFrame.h \
     callsign.h \
+    checkHamlibVersionIsValid.h \
     checkmodeagainstfreq.h \
     checkoperatingfreq.h \
     contacts.h \

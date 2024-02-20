@@ -66,7 +66,7 @@ namespace rigCtldTrace {
 void delay(int sec);
 void sleepFor(qint64 milliseconds);
 
-const QString MINIMUM_HAMLIB_VERSION = "4.6";
+
 
 
 class LoggerRequests
@@ -553,8 +553,7 @@ private:
 
 
 
-    int extractNumberFromString(const QString str);
-    bool checkHamlibVersionIsValid(bool &ok, QString &installedVersionNumber);
+
 private slots:
 
     void onStdInRead(QString);

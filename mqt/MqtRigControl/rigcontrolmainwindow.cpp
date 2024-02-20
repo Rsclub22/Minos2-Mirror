@@ -32,6 +32,7 @@
 #include "serialdata.h"
 #include "LogEvents.h"
 #include "MTrace.h"
+#include "checkHamlibVersionIsValid.h"
 
 #include "rigcontrolmainwindow.h"
 #include "ui_rigcontrolmainwindow.h"
@@ -149,30 +150,43 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
     }
 
 
-    QString installedHamlibVersionNumber;
+
     hamlibOk = false;
 
-    if (checkHamlibVersionIsValid(hamlibOk, installedHamlibVersionNumber))
+    logMessage(QString("Checking installed hamlib version"));
+    int hamlibCheckErrorNum = checkHamlibVersionIsValid(hamlibOk, hamlib_version, MINIMUM_HAMLIB_VERSION);
+
+    if (hamlibCheckErrorNum < 0)
     {
-        if (!hamlibOk)
+
+        if (hamlibCheckErrorNum == -2 )
         {
-            QMessageBox::critical(nullptr, tr("Hamlib Library Version Error!"), tr("Installed hamlib version %1 is imcompatible.\nIt should be version %2 or greater.\n\nPlease check your installation.\nYou will not be able to select a radio until this is rectified!").arg(installedHamlibVersionNumber).arg(MINIMUM_HAMLIB_VERSION), QMessageBox::Ok);
-            // prevent radio selection
-            logMessage(QString("Problem with hamlib library, no radio selection in rigcontrol and logger is available"));
-            //showStatusMessage(tr("Error - Installed version of hamlib is %1. Requires version %2 or greater.").arg(installedHamlibVersionNumber).arg(MINIMUM_HAMLIB_VERSION));
+            QMessageBox::critical(nullptr, tr("RigControl Hamlib Library Version Error!"), tr("Installed hamlib version %1 is imcompatible.\nIt should be version %2 or greater.\n\nPlease check your installation.\nYou will not be able to select a radio until this is rectified!").arg(hamlib_version).arg(MINIMUM_HAMLIB_VERSION), QMessageBox::Ok);
+            logMessage(QString("Error version number conversion to int failed - installed version = %1, minimum version = %2").arg(hamlib_version).arg(MINIMUM_HAMLIB_VERSION)); // error)
         }
-    }
-    else
-    {
-        // we should not get here....
-        QMessageBox::critical(nullptr, tr("Hambib Version test Conversion Error!"), tr("Hamlib Version test conversion error. Please report error"));
+        else if (hamlibCheckErrorNum == -1 )
+        {
+            // we should not get here....
+            QMessageBox::critical(nullptr, tr("Hambib Version test Conversion Error!"), tr("Hamlib Version test conversion error. Please report error"));
+            logMessage(QString("Error version number conversion to int failed - installed version = %1, minimum version = %2").arg(hamlib_version).arg(MINIMUM_HAMLIB_VERSION));
+        }
+        else if (hamlibCheckErrorNum == -3)
+        {
+            //we should not get here...
+            logMessage(QString("Error: checkhamlibVersion faile error code = %1").arg(hamlibCheckErrorNum));
+        }
+
 
     }
+
 
 
 
     if (hamlibOk)
     {
+
+        logMessage(QString("installed hamlib version %1 is OK").arg(hamlib_version));
+
         // init cache with radio data
         trace(QString("rigcontrol: Started by logger appname = %1").arg(appName));
         QStringList availRadios;
@@ -249,7 +263,7 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
 
     if (!hamlibOk)
     {
-        showStatusMessage(tr("Error: Installed hamlib version %1 is incorrect, should be version %2 or greater").arg(installedHamlibVersionNumber).arg(MINIMUM_HAMLIB_VERSION));
+        showStatusMessage(tr("Error: Installed hamlib version %1 is incorrect, should be version %2 or greater").arg(hamlib_version).arg(MINIMUM_HAMLIB_VERSION));
     }
 
     trace("*** Rig App Started ***");
@@ -1417,80 +1431,7 @@ int RigControlMainWindow::openRigCtldRadio(bool localRigCtld)
 }
 
 
-bool RigControlMainWindow::checkHamlibVersionIsValid(bool &ok, QString &installedVersionNumber)
-{
 
-    ok = false;
-    QString usingHamlibVersionTxt = hamlib_version;
-    installedVersionNumber = usingHamlibVersionTxt;
-
-    logMessage(QString("Installed version of hamlib is %1").arg(usingHamlibVersionTxt));
-
-
-    int installedVerNum = 0;
-    int miniMumVerNum = 0;
-
-    installedVerNum = extractNumberFromString(usingHamlibVersionTxt);
-    miniMumVerNum = extractNumberFromString(MINIMUM_HAMLIB_VERSION);
-
-    if (installedVerNum == 0 || miniMumVerNum == 0)
-    {
-        logMessage(QString("Error version number conversion to int failed - installed version = %1, minimum version = %2").arg(installedVerNum).arg(miniMumVerNum));
-        ok = false;
-        return false; // error
-    }
-
-    if (installedVerNum < miniMumVerNum)
-    {
-        logMessage(QString("Installed hamlib version %1 is imcompatible, it should be hamlib version %2 or greater").arg(usingHamlibVersionTxt).arg(MINIMUM_HAMLIB_VERSION));
-        ok = false;
-        return true;
-    }
-    else
-    {
-        logMessage(QString("Installed hamlib is ok"));
-        ok = true;
-        return true;
-    }
-
-
-
-
-    return false;
-}
-
-int RigControlMainWindow::extractNumberFromString(const QString str)
-{
-
-    QString numberFromString;
-    int n = 0;
-
-    for (const QChar& digit : str)
-    {
-        if (digit > '0' && digit < '9')
-        {
-            numberFromString.append(digit);
-        }
-    }
-
-    if (!numberFromString.isEmpty())
-    {
-        if (numberFromString.length() == 1)
-        {
-            numberFromString.append("00");
-        }
-        else if (numberFromString.length() == 2)
-        {
-            numberFromString.append("0");
-        }
-
-        n = numberFromString.toInt();
-    }
-
-    return n;
-
-
-}
 
 
 
