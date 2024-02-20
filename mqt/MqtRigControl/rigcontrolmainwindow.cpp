@@ -56,7 +56,7 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
     ui->setupUi(this);
     mainWindow = this;
 
-    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
+    //setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     serialData::translateSerialData();
 
@@ -113,6 +113,8 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
 
     checkIniFileVersion();  // converts earlier availRadio ini formats
 
+
+
     trace("Create Rigfactory and add rigs to list");
     radio = nullptr;
     rigFactory = new RigFactory(false, this);
@@ -147,14 +149,40 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
     }
 
 
-    // init cache with radio data
-    trace(QString("rigcontrol: Started by logger appname = %1").arg(appName));
-    QStringList availRadios;
-    getAvailRadiosList(availRadios);
-    sendRadioListLogger(availRadios);
+    QString installedHamlibVersionNumber;
+    hamlibOk = false;
 
-    initCacheData(availRadios);
-    msg->rigCache.publish();
+    if (checkHamlibVersionIsValid(hamlibOk, installedHamlibVersionNumber))
+    {
+        if (!hamlibOk)
+        {
+            QMessageBox::critical(nullptr, tr("Hamlib Library Version Error!"), tr("Installed hamlib version %1 is imcompatible.\nIt should be version %2 or greater.\n\nPlease check your installation.\nYou will not be able to select a radio until this is rectified!").arg(installedHamlibVersionNumber).arg(MINIMUM_HAMLIB_VERSION), QMessageBox::Ok);
+            // prevent radio selection
+            logMessage(QString("Problem with hamlib library, no radio selection in rigcontrol and logger is available"));
+            //showStatusMessage(tr("Error - Installed version of hamlib is %1. Requires version %2 or greater.").arg(installedHamlibVersionNumber).arg(MINIMUM_HAMLIB_VERSION));
+        }
+    }
+    else
+    {
+        // we should not get here....
+        QMessageBox::critical(nullptr, tr("Hambib Version test Conversion Error!"), tr("Hamlib Version test conversion error. Please report error"));
+
+    }
+
+
+
+    if (hamlibOk)
+    {
+        // init cache with radio data
+        trace(QString("rigcontrol: Started by logger appname = %1").arg(appName));
+        QStringList availRadios;
+        getAvailRadiosList(availRadios);
+        sendRadioListLogger(availRadios);
+
+        initCacheData(availRadios);
+        msg->rigCache.publish();
+    }
+
 
     serialTVSw = new SerialTVSwitch();     // create local serial sw
 
@@ -180,7 +208,12 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
 
     initActionsConnections();
 
-    initSelectRadioBox();
+    if (hamlibOk)
+    {
+        initSelectRadioBox();
+    }
+
+
 
     setTransVertDisplayVisible(false);
     sendTransVertSwitchToLogger(TRANSSW_NUM_DEFAULT);
@@ -191,7 +224,11 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
 
     initialiseSupportedRadioDisplay();
 
-    setTestMode(testMode);
+    if (hamlibOk)
+    {
+        setTestMode(testMode);
+    }
+
 
     setPolltime(1000);
 
@@ -204,7 +241,16 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
 
     ui->reconnectButton->setVisible(false);
 
+
+
+
     upDateRadio(currentRadioName);
+
+
+    if (!hamlibOk)
+    {
+        showStatusMessage(tr("Error: Installed hamlib version %1 is incorrect, should be version %2 or greater").arg(installedHamlibVersionNumber).arg(MINIMUM_HAMLIB_VERSION));
+    }
 
     trace("*** Rig App Started ***");
 }
@@ -227,7 +273,11 @@ void RigControlMainWindow::setTestMode(bool test)
             liveRadio = currentRadioName;
             trace("save liveRadio " + liveRadio);
 
-            updateSelectRadioBox();
+            if (hamlibOk)
+            {
+                updateSelectRadioBox();     // we don't want to update radiolist if hamlib version is incorrect
+            }
+
         }
         logMessage((QString("Read Current Radio for Local selection")));
         ui->testRadioButton->setText(tr("Set Radio from Logger"));
@@ -514,7 +564,6 @@ void RigControlMainWindow::setRadioNameLabelVisible(bool visible)
 void RigControlMainWindow::upDateRadio(QString radioName)
 {
     int radioOpenStat = OPEN_FAILED;
-
 
 
     logMessage(QString("UpdateRadio: Radio requested = %1").arg(radioName));
@@ -1368,7 +1417,80 @@ int RigControlMainWindow::openRigCtldRadio(bool localRigCtld)
 }
 
 
+bool RigControlMainWindow::checkHamlibVersionIsValid(bool &ok, QString &installedVersionNumber)
+{
 
+    ok = false;
+    QString usingHamlibVersionTxt = hamlib_version;
+    installedVersionNumber = usingHamlibVersionTxt;
+
+    logMessage(QString("Installed version of hamlib is %1").arg(usingHamlibVersionTxt));
+
+
+    int installedVerNum = 0;
+    int miniMumVerNum = 0;
+
+    installedVerNum = extractNumberFromString(usingHamlibVersionTxt);
+    miniMumVerNum = extractNumberFromString(MINIMUM_HAMLIB_VERSION);
+
+    if (installedVerNum == 0 || miniMumVerNum == 0)
+    {
+        logMessage(QString("Error version number conversion to int failed - installed version = %1, minimum version = %2").arg(installedVerNum).arg(miniMumVerNum));
+        ok = false;
+        return false; // error
+    }
+
+    if (installedVerNum < miniMumVerNum)
+    {
+        logMessage(QString("Installed hamlib version %1 is imcompatible, it should be hamlib version %2 or greater").arg(usingHamlibVersionTxt).arg(MINIMUM_HAMLIB_VERSION));
+        ok = false;
+        return true;
+    }
+    else
+    {
+        logMessage(QString("Installed hamlib is ok"));
+        ok = true;
+        return true;
+    }
+
+
+
+
+    return false;
+}
+
+int RigControlMainWindow::extractNumberFromString(const QString str)
+{
+
+    QString numberFromString;
+    int n = 0;
+
+    for (const QChar& digit : str)
+    {
+        if (digit > '0' && digit < '9')
+        {
+            numberFromString.append(digit);
+        }
+    }
+
+    if (!numberFromString.isEmpty())
+    {
+        if (numberFromString.length() == 1)
+        {
+            numberFromString.append("00");
+        }
+        else if (numberFromString.length() == 2)
+        {
+            numberFromString.append("0");
+        }
+
+        n = numberFromString.toInt();
+    }
+
+    return n;
+
+
+}
 
 
 
