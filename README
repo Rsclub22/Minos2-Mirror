@@ -1,0 +1,15 @@
+If you wish to build Minos for yourself normally this will be for Linux), 
+
+Clone the repository
+
+    cd ~
+    git clone git://git.code.sf.net/p/minos/minos Minos2
+
+Switch to the latest release branch (currently 4.6)
+
+    cd Minos2
+    git checkout Mqt_Release_2.6.0.0
+
+And follow the instructions in the relevant "Building Minos - <OS>.txt"
+
+    Building Minos - Linux.txt
