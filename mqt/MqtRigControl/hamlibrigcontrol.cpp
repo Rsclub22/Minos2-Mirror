@@ -230,40 +230,7 @@ int register_callback(rig_model_t rig_model, void *callback_data)
 
     (*rigsList)[key] = rigCap;
 
-    /*        RigCapabilities(port_type,
-                                       ,
-                                       ,
-                                      // key,
-                                      // rig_model,
-                                      // true,                // radio supports lookup supported bands
-                                      // supportGetVfo,
-                                      // ,
-                                      // supportGetRit,       // radio supports get rit
-                                     //  supportSetRit,       // radio supports set rit
-                                     //  supportGetRitState,  // radio supports get rit state
-                                       //supportSetRitState,  // radio supports set rit state
-                                       //true,                // radio supports get rit max Khz
-                                      // supportSMeter,       // radio supports s-meter
-                                      // supportPttPortType,  // we only support CAT and when NONE Serial HW
-                                      // supportGetPtt,       // radio supports get Ptt
-                                      // supportSetPtt,       // radio supports set Ptt
-                                     //  supportGetVox,       // radio supports get Vox State
-                                     //  supportSetVox,       // radio supports set Vox State
-                                      // supportVolume,       // radio supports volume
-                                    //   ,        // radio supports antenna switch
-                                    //   true,                // radio supports RigCtld
-                                     //  supportVoiceMem,        // radio supports Voice Memory
-                                     //  startVoiceMemoryNumber,
-                                     //  endVoiceMemoryNumber,
-                                     //  supportStopVoiceMem,     // radio supports stop Voice Memmory
-                                     //  startCwMemoryNumber,
-                                     //  endCwMemoryNumber,
-                                     //  supportCwMem,            // radio supports Cw Memory
-                                     //  supportCwMemStop,
-                                      // supportCwMemWait,
 
-                                       true);    // radio poll data
-*/
     return 1;
 
 }

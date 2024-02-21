@@ -1012,22 +1012,21 @@ bool RigControlMainWindow::checkSupportCwKeyerMemory()
             int cwMemNum = 0;
             setCwMemIndVisible(true);
             setCwMemIndOnOff(true);
-            if (currentRadio.rigModelNumber >= 1000 && currentRadio.rigModelNumber < 2000)
+            if (currentRadio.rigMfg_Name == "Yaesu")
             {
                 addCwKeyerMemoryStatusToRigCache(hamlibData::CW_MEMORY_TYPES::YAESU_MEM_RECALL);
             }
-            if (currentRadio.rigModelNumber >= 2000 && currentRadio.rigModelNumber < 3000)
+            if (currentRadio.rigMfg_Name == "Kenwood")
             {
                 addCwKeyerMemoryStatusToRigCache(hamlibData::CW_MEMORY_TYPES::KENWOOD_MEM_RECALL);
             }
-            else if (currentRadio.rigModelNumber >= 3000 && currentRadio.rigModelNumber < 4000)
+            else if (currentRadio.rigMfg_Name == "Icom")
             {
                 addCwKeyerMemoryStatusToRigCache(hamlibData::CW_MEMORY_TYPES::ICOM);
             }
-            else if (selectedRadioSupportCap.getStartCwMemoryNumber() == 1)
+            else if (currentRadio.rigMfg_Name == "Elecraft")
             {
-                cwMemNum = selectedRadioSupportCap.getEndCwMemoryNumber();
-                addCwKeyerNumberMessagesToRigCache(cwMemNum);
+                addCwKeyerMemoryStatusToRigCache(hamlibData::CW_MEMORY_TYPES::ELECRAFT);
             }
             else
             {
@@ -1037,6 +1036,13 @@ bool RigControlMainWindow::checkSupportCwKeyerMemory()
                 addCwKeyerMemoryStatusToRigCache(hamlibData::CW_MEMORY_TYPES::NONE);
 
                 return false;
+            }
+
+
+            if (selectedRadioSupportCap.getStartCwMemoryNumber() == 1)
+            {
+                cwMemNum = selectedRadioSupportCap.getEndCwMemoryNumber();
+                addCwKeyerNumberMessagesToRigCache(cwMemNum);
             }
 
 

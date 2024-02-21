@@ -73,7 +73,7 @@ namespace hamlibData
 
     const int RIGCTL = 2;               // rigctl model number
 
-    enum CW_MEMORY_TYPES {NONE, ICOM, YAESU_MEM_RECALL, KENWOOD_MEM_RECALL };
+    enum CW_MEMORY_TYPES {NONE, ICOM, YAESU_MEM_RECALL, KENWOOD_MEM_RECALL, ELECRAFT };
 }
 
 const int Rig_OK = 0;

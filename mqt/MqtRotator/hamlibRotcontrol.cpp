@@ -100,53 +100,7 @@ HamlibRotControl::~HamlibRotControl()
 }
 
 
-/*
 
-int HamlibRotControl::getSupportCwCcwCmd(int rotNumber, bool *flag)
-{
-    int retCode = 0;
-    ROT *my_rot;
-    my_rot = rot_init(rotNumber);
-    if (my_rot != nullptr)
-    {
-            if (my_rot->caps->move == nullptr)
-            {
-                *flag = false;
-            }
-            else
-            {
-                *flag = true;
-            }
-
-            return retCode;
-    }
-
-    retCode = -1;
-    return retCode;
-}
-
-int HamlibRotControl::getMaxMinRotation(int rotNumber, int *maxRot, int *minRot)
-{
-    int retCode = 0;
-    ROT *my_rot;
-    my_rot = rot_init(rotNumber);
-    if (my_rot != nullptr)
-    {
-        *maxRot = int(my_rot->caps->max_az);
-        *minRot = int(my_rot->caps->min_az);
-    }
-    else
-    {
-        *maxRot = COMPASS_MAX360;
-        *minRot = COMPASS_MIN0;
-        retCode = -1;
-    }
-
-
-    return retCode;
-}
-
-*/
 int HamlibRotControl::rotInit(srotParams &selectedAntenna)
 {
     int retcode;
