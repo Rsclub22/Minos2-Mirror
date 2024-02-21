@@ -58,7 +58,7 @@ int extractNumberFromString(const QString str)
 
     for (const QChar& digit : str)
     {
-        if (digit > '0' && digit < '9')
+        if (digit >= '0' && digit <= '9')
         {
             numberFromString.append(digit);
         }
