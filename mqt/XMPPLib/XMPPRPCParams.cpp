@@ -179,7 +179,11 @@ RPCParamStruct::RPCParamStruct( TiXmlElement &aNode )
             TiXmlElement * vnode = valuenode->FirstChildElement();
             if ( vnode )
             {
-               addMember( paramFactory( *vnode ), pname );
+                QSharedPointer<RPCParam> node = paramFactory(*vnode);
+                if (node)
+                {
+                    addMember(node, pname);
+                }
             }
          }
       }
