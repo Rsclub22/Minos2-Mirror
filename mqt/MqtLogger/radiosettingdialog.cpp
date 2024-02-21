@@ -582,9 +582,14 @@ void RadioSettingDialog::onSaveVoiceCwMemoryButtonByRadioNameClicked()
 
 void RadioSettingDialog::onDeleteMemoryButtonRadiosPushButtonClicked()
 {
-    QStringList listOfRadios = getListOfRadioNamesForVoiceCWMemoryButtons();
+    QStringList listOfVoiceMemoryRadios;
+    getListOfRadioNamesForMemoryButtons(listOfVoiceMemoryRadios, voiceKeyerCommon::RigControl);
 
-    DeletedRadioForVoiceCwMemoryButtonsDialog vmDeleteRadios(listOfRadios,nullptr);
+    QStringList listOfCwMemoryRadios;
+    getListOfRadioNamesForMemoryButtons(listOfCwMemoryRadios, voiceKeyerCommon::CW_RigControl);
+
+    DeletedRadioForVoiceCwMemoryButtonsDialog vmDeleteRadios(listOfVoiceMemoryRadios,listOfCwMemoryRadios, nullptr);
+
     int ret = vmDeleteRadios.exec();
 
     QList<QListWidgetItem *> selectedItems;

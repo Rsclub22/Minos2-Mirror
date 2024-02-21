@@ -46,7 +46,7 @@ QString VOICE_KEYER_PATH();
 QString VOICEKEYER_COMMON_PARAMS_PATH();
 bool readSaveVoiceCWMemoryButtonByRadioNameFromIni();
 void writeSaveVoiceCWMemoryButtonByRadioNameToIni(bool data);
-QStringList getListOfRadioNamesForVoiceCWMemoryButtons();
+void getListOfRadioNamesForMemoryButtons(QStringList &radioNames, voiceKeyerCommon::VoiceKeyerId id);
 
 
 #endif // VOICEKEYERCOMMONCONSTANTS_H

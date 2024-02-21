@@ -12,14 +12,21 @@
 #include "deletedradioforvoicecwmemorybuttonsdialog.h"
 #include "ui_deletedradioforvoicecwmemorybuttonsdialog.h"
 
-DeletedRadioForVoiceCwMemoryButtonsDialog::DeletedRadioForVoiceCwMemoryButtonsDialog(QStringList listOfRadioNames, QWidget *parent) :
+DeletedRadioForVoiceCwMemoryButtonsDialog::DeletedRadioForVoiceCwMemoryButtonsDialog(QStringList listOfVoiceRadioNames, QStringList listOfCwRadioNames, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::DeletedRadioForVoiceCwMemoryButtonsDialog)
 {
     ui->setupUi(this);
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
-    ui->voiceCwMemoryButtonslistWidget->addItems(listOfRadioNames);
-    ui->voiceCwMemoryButtonslistWidget->setSelectionMode(QAbstractItemView::ExtendedSelection);
+    setWindowTitle(tr("Delete Stored Radios - Voice or CW Memories"));
+
+    ui->voiceMemoryRadioListWidget->addItems(listOfVoiceRadioNames);
+    ui->voiceMemoryRadioListWidget->setSelectionMode(QAbstractItemView::ExtendedSelection);
+
+    ui->cwMemoryRadioListWidget->addItems(listOfCwRadioNames);
+    ui->cwMemoryRadioListWidget->setSelectionMode(QAbstractItemView::ExtendedSelection);
+
+
 
     connect(ui->buttonBox, &QDialogButtonBox::accepted, this, &DeletedRadioForVoiceCwMemoryButtonsDialog::accepted);
 
@@ -34,16 +41,21 @@ DeletedRadioForVoiceCwMemoryButtonsDialog::~DeletedRadioForVoiceCwMemoryButtonsD
 }
 
 
-QList<QListWidgetItem *> DeletedRadioForVoiceCwMemoryButtonsDialog::getSelectedItems()
+QList<QListWidgetItem *> DeletedRadioForVoiceCwMemoryButtonsDialog::getVoiceSelectedItems()
 {
-    return ui->voiceCwMemoryButtonslistWidget->selectedItems();
+    return ui->voiceMemoryRadioListWidget->selectedItems();
 }
 
+
+QList<QListWidgetItem *> DeletedRadioForVoiceCwMemoryButtonsDialog::getCwSelectedItems()
+{
+    return ui->cwMemoryRadioListWidget->selectedItems();
+}
 
 
 void DeletedRadioForVoiceCwMemoryButtonsDialog::accepted()
 {
-    selectedItems = getSelectedItems();
+   /* selectedItems = getSelectedItems();
     if (!selectedItems.isEmpty())
     {
         QString msgText;
@@ -77,7 +89,7 @@ void DeletedRadioForVoiceCwMemoryButtonsDialog::accepted()
         reject();
     }
 
-
+*/
 }
 
 

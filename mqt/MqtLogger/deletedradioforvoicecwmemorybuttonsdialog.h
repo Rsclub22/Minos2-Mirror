@@ -13,7 +13,7 @@ class DeletedRadioForVoiceCwMemoryButtonsDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit DeletedRadioForVoiceCwMemoryButtonsDialog(QStringList listOfRadioNames, QWidget *parent = nullptr);
+    explicit DeletedRadioForVoiceCwMemoryButtonsDialog(QStringList listOfRadioNames, QStringList listCwRadioNames, QWidget *parent = nullptr);
     ~DeletedRadioForVoiceCwMemoryButtonsDialog();
 
     QList<QListWidgetItem *> getSelectedItems();
@@ -24,7 +24,8 @@ private:
 
     Ui::DeletedRadioForVoiceCwMemoryButtonsDialog *ui;
 
-    QList<QListWidgetItem*> selectedItems;
+    QList<QListWidgetItem *> getVoiceSelectedItems();
+    QList<QListWidgetItem *> getCwSelectedItems();
 
 
 };

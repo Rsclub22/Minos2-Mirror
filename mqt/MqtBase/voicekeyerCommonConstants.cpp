@@ -37,20 +37,15 @@ void writeSaveVoiceCWMemoryButtonByRadioNameToIni(bool data)
 }
 
 
-QStringList getListOfRadioNamesForVoiceCWMemoryButtons()
+void getListOfRadioNamesForMemoryButtons(QStringList &radioNames, VoiceKeyerId id)
 {
-    QStringList radioNames;
 
-    QString fileName = VOICE_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[VoiceKeyerId::RigControl] + ".ini";
-    QSettings voiceButtonConfig(fileName, QSettings::IniFormat);
+    QString fileName = VOICE_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[id] + ".ini";
+    QSettings config(fileName, QSettings::IniFormat);
 
-    QStringList voiceRadioKeys = voiceButtonConfig.childGroups();
+    QStringList voiceMemoryKeys = config.childGroups();
 
-    fileName = VOICE_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[VoiceKeyerId::CW_RigControl] + ".ini";
-    QSettings cwButtonConfig(fileName, QSettings::IniFormat);
-    QStringList cwRadioKeys = cwButtonConfig.childGroups();
-
-    for (const auto &name: qAsConst(voiceRadioKeys))
+    for (const auto &name: qAsConst(voiceMemoryKeys))
     {
         if (name != ALL_RADIOS_GROUP_NAME)
         {
@@ -61,18 +56,9 @@ QStringList getListOfRadioNamesForVoiceCWMemoryButtons()
         }
     }
 
-    for (const auto &name: qAsConst(cwRadioKeys))
-    {
-        if (name != ALL_RADIOS_GROUP_NAME)
-        {
-            if (!radioNames.contains(name))
-            {
-                radioNames.append(name);
-            }
-        }
-    }
-
-    return radioNames;
 
 
 }
+
+
+
