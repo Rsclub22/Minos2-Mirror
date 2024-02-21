@@ -29,7 +29,7 @@ class MinosAppConnection:public QObject, RPCDispatcher
 
       RPCDispatcher *user_data;
       QSharedPointer<QTcpSocket> sock;
-      char rxbuff[ RXBUFFLEN + 1 ];
+      char rxbuff[RXBUFFLEN + 1] = {};
       TIXML_STRING packetbuff;
 
       QTimer waitConnectTimer;

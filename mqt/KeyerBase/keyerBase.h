@@ -109,7 +109,7 @@ class RecBuffer
       int RecBlock = -1;
       int WriteBlock = -1;
 
-      char buff[ 40000 ]; // should be same size as sound buffers
+      char buff[40000] = {}; // should be same size as sound buffers
       int Size = 0;
       bool filled = false;
       RecBuffer()

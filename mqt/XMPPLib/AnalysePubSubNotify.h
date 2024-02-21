@@ -15,7 +15,7 @@ class AnalysePubSubNotify
       QString category;
       QString key;
       QString value;
-      PublishState state;
+      PublishState state = psNotConnected;
 
       bool OK = false;
    public:

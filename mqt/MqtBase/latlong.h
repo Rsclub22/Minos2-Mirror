@@ -18,9 +18,9 @@ enum gridstyle {NUL, GEO, OWN, NGR, LOC};
 
 struct Location
 {
-   enum gridstyle gridstyle;
+   enum gridstyle gridstyle = NUL;
    QString datastring;
-   double northing, easting, centremeridian;
+   double northing = 0.0, easting = 0.0, centremeridian = 0.0;
 };
 
 void dms( double, int *, int *, double * );

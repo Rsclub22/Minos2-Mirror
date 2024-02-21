@@ -43,18 +43,18 @@ class KeyerInfo    // only passes info up
 {
    public:
       QString kname;
-      double kspeed;
-      bool CW;
-      bool voice;
+      double kspeed = 0.0;
+      bool CW = false;
+      bool voice = false;
 
-      bool tune;
-      bool twoTone;
-      int tone1;
-      int tone2;
-      int tuneTime;
-      double tuneLevel;
-      int CWTone;
-      int CWSpeed;
+      bool tune = false;
+      bool twoTone = false;
+      int tone1 = 0;
+      int tone2 = 0;
+      int tuneTime = 0;
+      double tuneLevel = 0.0;
+      int CWTone = 0;
+      int CWSpeed = 0;
 };
 QSharedPointer<commonPort> loadKeyers( );
 void unloadKeyers( );
