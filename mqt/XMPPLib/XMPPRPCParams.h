@@ -122,7 +122,7 @@ class RPCParamArray: public RPCParam
 class RPCIntParam: public RPCParam
 {
    protected:
-      int value;
+      int value = 0;
    public:
       RPCIntParam( int v );
       RPCIntParam( TiXmlElement &sNode );
@@ -155,7 +155,7 @@ public:
 class RPCBooleanParam: public RPCParam
 {
    protected:
-      bool value;
+      bool value = false;
    public:
       RPCBooleanParam( bool v );
       RPCBooleanParam( TiXmlElement &sNode );
@@ -172,7 +172,7 @@ class RPCBooleanParam: public RPCParam
 class RPCDoubleParam: public RPCParam
 {
    protected:
-      double value;
+       double value = 0.0;
    public:
       RPCDoubleParam( double v );
       RPCDoubleParam( TiXmlElement &sNode );

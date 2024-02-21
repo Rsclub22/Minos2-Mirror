@@ -386,16 +386,20 @@ bool BandmapDataModel::insertRows(int row, int count, const QModelIndex &index)
 {
     Q_UNUSED(index)
 
-    beginInsertRows(QModelIndex(), row , row + count - 1);
-    for (int i = 0; i < count; i++)
-    {
-        bandmapData.insert(row , rowData[i]);
-    }
-    rowData.clear();
+        if (count > 0)
+        {
 
-    sortBandmapModel();
+            beginInsertRows(QModelIndex(), row, row + count - 1);
+            for (int i = 0; i < count; i++)
+            {
+                bandmapData.insert(row, rowData[i]);
+            }
+            rowData.clear();
 
-    endInsertRows();
+            sortBandmapModel();
+
+            endInsertRows();
+        }
     return true;
 }
 // not used......

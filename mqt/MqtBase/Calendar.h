@@ -146,7 +146,7 @@ class CalendarContest
 class IndividualContest
 {
     public:
-        CalType calType;
+        CalType calType = ectVHF;
         QDateTime start;
         QDateTime finish;
         QString duration;
@@ -159,7 +159,7 @@ class IndividualContest
         QString reg1band;
         QString ukband;
         double flow = 0;
-        bool ppKmScoring;
+        bool ppKmScoring = false;
         QString sections;
         QString mults;
         QString specialRules;

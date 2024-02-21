@@ -35,9 +35,9 @@ class CalendarYear:public QObject
 
         virtual bool downloadFile ( bool showError, QWidget *parent );
 
-        bool loaded;
-        int yearOffset;
-        CalType type;
+        bool loaded = false;
+        int yearOffset = 0;
+        CalType type = ectVHF;
         virtual QString getPath();
         virtual QString getURL();
 private slots:
