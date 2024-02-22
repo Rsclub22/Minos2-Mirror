@@ -14,6 +14,7 @@
 #include <QLineEdit>
 #include "BandList.h"
 #include "rigcontrolcommonconstants.h"
+#include "voicekeyerCommonConstants.h"
 #include "ConfigurationOption.h"
 
 namespace Ui {
@@ -31,6 +32,7 @@ public:
 
 };
 
+using namespace voiceKeyerCommon;
 
 class RadioSettingDialog : public QFrame
 {
@@ -69,8 +71,10 @@ private slots:
     void onEnableSerialBandSwChkBox();
 
     void on_PresetTabWidget_currentChanged(int index);
-    void onDeleteMemoryButtonRadiosPushButtonClicked();
-    void onSaveVoiceCwMemoryButtonByRadioNameClicked();
+    void onSaveVoiceMemoryButtonByRadioNameChkBoxClicked();
+    void onSaveCwMemoryButtonByRadioNameChkBoxClicked();
+    void onDeleteVoiceMemoryButtonRadiosPushButtonClicked();
+    void onDeleteCwMemoryButtonRadiosPushButtonClicked();
 private:
     Ui::RadioSettingDialog *ui;
 
@@ -121,8 +125,11 @@ private:
     void enableBandSwLineEdits(bool enabled);
     void saveBandSwComport();
     void saveBandSwCheckBoxes();
-    void saveVoiceCwMemoryButtonByRadioNameCheckBox();
-    void setDeleteMemoryButtonRadiosPushButtonVisible(bool visbile);
+
+    void saveVoiceMemoryButtonByRadioNameCheckBox();
+    void saveCwMemoryButtonByRadioNameCheckBox();
+    void setDeleteMemoryButtonRadiosPushButtonVisible(bool visible, VoiceKeyerId id);
+    void deleteMemoryButtonRadios(VoiceKeyerId id);
 };
 
 #endif // RADIOSETTINGDIALOG_H

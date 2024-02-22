@@ -12,20 +12,32 @@
 #include "deletedradioforvoicecwmemorybuttonsdialog.h"
 #include "ui_deletedradioforvoicecwmemorybuttonsdialog.h"
 
-DeletedRadioForVoiceCwMemoryButtonsDialog::DeletedRadioForVoiceCwMemoryButtonsDialog(QStringList listOfVoiceRadioNames, QStringList listOfCwRadioNames, QWidget *parent) :
+DeletedRadioForVoiceCwMemoryButtonsDialog::DeletedRadioForVoiceCwMemoryButtonsDialog(QStringList listOfRadioNames,  VoiceKeyerId id_, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::DeletedRadioForVoiceCwMemoryButtonsDialog)
 {
     ui->setupUi(this);
+
+    id = id_;
+
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
-    setWindowTitle(tr("Delete Stored Radios - Voice or CW Memories"));
 
-    ui->voiceMemoryRadioListWidget->addItems(listOfVoiceRadioNames);
-    ui->voiceMemoryRadioListWidget->setSelectionMode(QAbstractItemView::ExtendedSelection);
-
-    ui->cwMemoryRadioListWidget->addItems(listOfCwRadioNames);
-    ui->cwMemoryRadioListWidget->setSelectionMode(QAbstractItemView::ExtendedSelection);
-
+    if (id == VoiceKeyerId::RigControl)
+    {
+        setWindowTitle(tr("Delete RigControl Radios - Voice Keyer Memories"));
+        ui->cwMemoryRadioListWidget->setVisible(false);
+        ui->voiceMemoryRadioListWidget->setVisible(true);
+        ui->voiceMemoryRadioListWidget->addItems(listOfRadioNames);
+        ui->voiceMemoryRadioListWidget->setSelectionMode(QAbstractItemView::ExtendedSelection);
+    }
+    else if (id == VoiceKeyerId::CW_RigControl)
+    {
+        setWindowTitle(tr("Delete RigControl Radios - CW Keyer Memories"));
+        ui->cwMemoryRadioListWidget->setVisible(true);
+        ui->voiceMemoryRadioListWidget->setVisible(false);
+        ui->cwMemoryRadioListWidget->addItems(listOfRadioNames);
+        ui->cwMemoryRadioListWidget->setSelectionMode(QAbstractItemView::ExtendedSelection);
+    }
 
 
     connect(ui->buttonBox, &QDialogButtonBox::accepted, this, &DeletedRadioForVoiceCwMemoryButtonsDialog::accepted);
@@ -41,50 +53,55 @@ DeletedRadioForVoiceCwMemoryButtonsDialog::~DeletedRadioForVoiceCwMemoryButtonsD
 }
 
 
-QList<QListWidgetItem *> DeletedRadioForVoiceCwMemoryButtonsDialog::getVoiceSelectedItems()
+QList<QListWidgetItem *> DeletedRadioForVoiceCwMemoryButtonsDialog::getSelectedItems(VoiceKeyerId id)
 {
-    return ui->voiceMemoryRadioListWidget->selectedItems();
+
+    QList<QListWidgetItem *> none;
+
+    if (id == VoiceKeyerId::RigControl)
+    {
+        return ui->voiceMemoryRadioListWidget->selectedItems();
+    }
+    else if (id == VoiceKeyerId::CW_RigControl)
+    {
+        return ui->cwMemoryRadioListWidget->selectedItems();
+    }
+
+    return none;
+
 }
 
 
-QList<QListWidgetItem *> DeletedRadioForVoiceCwMemoryButtonsDialog::getCwSelectedItems()
-{
-    return ui->cwMemoryRadioListWidget->selectedItems();
-}
 
 
 void DeletedRadioForVoiceCwMemoryButtonsDialog::accepted()
 {
-   voiceSelectedItems = getVoiceSelectedItems();
-   cwSelectedItems = getCwSelectedItems();
+   selectedItems = getSelectedItems(id);
+
 
    QString msgText;
-   if (!voiceSelectedItems.isEmpty())
+   if (!selectedItems.isEmpty())
    {
 
-        msgText.append("Voice Memory Radios:-\n");
-        foreach (QListWidgetItem* item, voiceSelectedItems)
-        {
+       if (id ==VoiceKeyerId::RigControl)
+       {
+           msgText.append("Voice Memory Radios:-\n");
+       }
+       else if (id ==VoiceKeyerId::CW_RigControl)
+       {
+           msgText.append("CW Memory Radios:-\n");
+       }
+
+       foreach (QListWidgetItem* item, selectedItems)
+       {
             msgText.append(item->text() + "\n");
-        }
+       }
 
         msgText.append("\n");
 
    }
 
-   if (!cwSelectedItems.isEmpty())
-   {
-
-       msgText.append("Cw Memory Radios:-\n");
-       foreach (QListWidgetItem* item, cwSelectedItems)
-       {
-           msgText.append(item->text() + "\n");
-       }
-
-       msgText.append("\n");
-   }
-
-   if (!voiceSelectedItems.isEmpty() || !cwSelectedItems.isEmpty())
+      if (!selectedItems.isEmpty())
    {
 
         int status = QMessageBox::question( this,

@@ -109,8 +109,7 @@ void TxVmButtonsFrame::initTxVmButtonFrame()
 
     onVoiceKeyerSelect(ui->voiceKeyerSelect->currentIndex());
 
-    //setAvailIndicatorVisible(false);
-    //setRepeatIndicatorVisible(false);
+
 
     config.endGroup();
 
@@ -574,20 +573,37 @@ void TxVmButtonsFrame::setFrameState(QString voiceKeyerName)
 
 void TxVmButtonsFrame::setSaveButtonByRadionameText(QString selectedRadioName)
 {
-    QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[VoiceKeyerId::RigControl] + ".ini";
-    QSettings readConfig(fileName, QSettings::IniFormat);
 
-    if (readConfig.value("Common/SaveButtonByRadioName", false).toBool())
+    if (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl] || voiceKeyerType == keyerTypes[VoiceKeyerId::RigControl])
     {
+        QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + VOICE_KEYER_BASE_FILE_NAME + voiceKeyerType + ".ini";
+        QSettings readConfig(fileName, QSettings::IniFormat);
 
-        ui->saveByRadioNameText->setText(selectedRadioName);
+        ui->saveByRadioNameText->setVisible(true);
+        ui->buttonSelectionLbl->setVisible(true);
 
+        if (readConfig.value("Common/SaveButtonByRadioName", false).toBool())
+        {
+
+            ui->saveByRadioNameText->setText(selectedRadioName);
+
+        }
+        else
+        {
+
+            ui->saveByRadioNameText->setText("All Radios");
+        }
     }
     else
     {
+        ui->saveByRadioNameText->setVisible(false);
+        ui->buttonSelectionLbl->setVisible(false);
 
-        ui->saveByRadioNameText->setText("All Radios");
     }
+
+
+
+
 }
 
 void TxVmButtonsFrame::clearButtonLabels()

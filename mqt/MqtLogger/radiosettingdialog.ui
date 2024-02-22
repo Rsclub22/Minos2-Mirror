@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>681</width>
-    <height>433</height>
+    <width>556</width>
+    <height>257</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,7 +20,7 @@
       <bool>true</bool>
      </property>
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="radioGeneralSettingsTab">
       <property name="autoFillBackground">
@@ -70,21 +70,52 @@
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout_5">
            <item>
-            <widget class="QCheckBox" name="saveVoiceCwMemoryButtonByRadioName">
+            <widget class="QCheckBox" name="saveVoiceMemoryButtonByRadioName">
              <property name="text">
-              <string>Voice/CW Memory Buttons - Save by Radio Name</string>
+              <string>Voice Memory Buttons - Save by Radio Name</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="deleteMemoryButtonRadiosPushButton">
+            <widget class="QPushButton" name="deleteVoiceMemoryButtonRadiosPushButton">
              <property name="text">
-              <string>Delete Memory Button Radios</string>
+              <string>Delete Voice Memory Button Radios</string>
              </property>
             </widget>
            </item>
            <item>
             <spacer name="horizontalSpacer_6">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_6">
+           <item>
+            <widget class="QCheckBox" name="saveCWMemoryButtonByRadioName">
+             <property name="text">
+              <string>CW Memory Buttons - Save by Radio Name</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="deleteCWMemoryButtonRadiosPushButton">
+             <property name="text">
+              <string>Delete CW Memory Button Radios</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer_7">
              <property name="orientation">
               <enum>Qt::Horizontal</enum>
              </property>
