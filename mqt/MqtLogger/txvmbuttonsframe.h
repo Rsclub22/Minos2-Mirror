@@ -167,6 +167,7 @@ private:
     void checkCommonIniFileVersion(QString voiceKeyerType);
     int getNumCwMessages(PubSubName psn);
     int getNumVoiceMessages(PubSubName psn);
+    int getRadioUserSavedNumberOfButtons(QString selectedRadioName);
 private slots:
 
     void onVoiceKeyerSelect(int idx);

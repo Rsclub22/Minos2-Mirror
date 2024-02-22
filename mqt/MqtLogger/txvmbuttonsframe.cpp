@@ -173,6 +173,8 @@ void TxVmButtonsFrame::logRadioSettingsChanged(QSharedPointer<RadioSettingsDialo
     if (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl] || voiceKeyerType == keyerTypes[VoiceKeyerId::RigControl])
     {
         setSaveButtonByRadionameText(selectedRadio.getLocalName());
+        txVoiceKeyer->numButtons = getRadioUserSavedNumberOfButtons(selectedRadio.getLocalName());
+
         loadButtonData();
     }
 }
@@ -254,8 +256,40 @@ void TxVmButtonsFrame::createKeyer(QString voiceKeyerName)
 }
 
 
+
+int TxVmButtonsFrame::getRadioUserSavedNumberOfButtons(QString selectedRadioName)
+{
+
+    int numButtons = MAXIMUM_BUTTONS;
+
+    QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + VOICE_KEYER_BASE_FILE_NAME + voiceKeyerType + ".ini";
+    QSettings readCommonConfig(fileName, QSettings::IniFormat);
+
+    QString groupName;
+    if (readCommonConfig.value("Common/SaveButtonByRadioName", false).toBool())
+    {
+        groupName = selectedRadioName.replace('/', '_');
+    }
+    else
+    {
+        groupName = ALL_RADIOS_GROUP_NAME;
+    }
+
+    fileName = VOICE_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + voiceKeyerType + ".ini";
+    QSettings config(fileName, QSettings::IniFormat);
+
+    config.beginGroup(groupName);
+    numButtons = config.value("NumButtons", MAXIMUM_BUTTONS).toInt();
+    config.endGroup();
+
+    return numButtons;
+}
+
+
+
 void TxVmButtonsFrame::loadButtonData()
 {
+
     for (int i = 0; i < voiceMemButtonList.count(); i++)
     {
         VoiceKeyerParams vmData;
@@ -526,6 +560,7 @@ void TxVmButtonsFrame::setFrameState(QString voiceKeyerName)
         if (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl] || voiceKeyerType == keyerTypes[VoiceKeyerId::RigControl])
         {
             setSaveButtonByRadionameText(selectedRadio.getLocalName());
+            txVoiceKeyer->numButtons = getRadioUserSavedNumberOfButtons(selectedRadio.getLocalName());
             loadButtonData();
         }
 
@@ -811,18 +846,28 @@ void TxVmButtonsFrame::onRemoteConfigChanged()
     {
         ui->pipCb->setChecked(s);
     }
-    for (int i = 0; i < voiceMemButtonList.count(); i++)
-    {
-        VoiceKeyerParams vmData;
-        if (vmData.getType().isEmpty())
-        {
-            vmData.setType(voiceKeyerType);
-        }
 
-        txVoiceKeyer->readVmButtonParams(i, vmData);
-        vmKeyParamList[i] = vmData;
-        setRunButtonText(i, vmData.getVmName());
+
+    if (voiceKeyerType != keyerTypes[VoiceKeyerId::RigControl] || voiceKeyerType != keyerTypes[VoiceKeyerId::RigControl] ||voiceKeyerType != keyerTypes[VoiceKeyerId::CW_RigControl])
+    {
+
     }
+    else
+    {
+        for (int i = 0; i < voiceMemButtonList.count(); i++)
+        {
+            VoiceKeyerParams vmData;
+            if (vmData.getType().isEmpty())
+            {
+                vmData.setType(voiceKeyerType);
+            }
+
+            txVoiceKeyer->readVmButtonParams(i, vmData);
+            vmKeyParamList[i] = vmData;
+            setRunButtonText(i, vmData.getVmName());
+        }
+    }
+
 }
 void TxVmButtonsFrame::onRemoteKeyerStarted(int key)
 {
