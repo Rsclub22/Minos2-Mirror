@@ -55,18 +55,41 @@ QList<QListWidgetItem *> DeletedRadioForVoiceCwMemoryButtonsDialog::getCwSelecte
 
 void DeletedRadioForVoiceCwMemoryButtonsDialog::accepted()
 {
-   /* selectedItems = getSelectedItems();
-    if (!selectedItems.isEmpty())
-    {
-        QString msgText;
-        foreach (QListWidgetItem* item, selectedItems)
+   voiceSelectedItems = getVoiceSelectedItems();
+   cwSelectedItems = getCwSelectedItems();
+
+   QString msgText;
+   if (!voiceSelectedItems.isEmpty())
+   {
+
+        msgText.append("Voice Memory Radios:-\n");
+        foreach (QListWidgetItem* item, voiceSelectedItems)
         {
             msgText.append(item->text() + "\n");
         }
 
+        msgText.append("\n");
+
+   }
+
+   if (!cwSelectedItems.isEmpty())
+   {
+
+       msgText.append("Cw Memory Radios:-\n");
+       foreach (QListWidgetItem* item, cwSelectedItems)
+       {
+           msgText.append(item->text() + "\n");
+       }
+
+       msgText.append("\n");
+   }
+
+   if (!voiceSelectedItems.isEmpty() || !cwSelectedItems.isEmpty())
+   {
+
         int status = QMessageBox::question( this,
                                 tr("Remove Radio"),
-                                tr("Do you want to delete these radios:-\n%1")
+                                tr("Do you want to delete these radios?\n%1")
                                 .arg(msgText),
                                 QMessageBox::Yes|QMessageBox::No|QMessageBox::Escape,
                                 QMessageBox::NoButton);
@@ -89,7 +112,7 @@ void DeletedRadioForVoiceCwMemoryButtonsDialog::accepted()
         reject();
     }
 
-*/
+
 }
 
 

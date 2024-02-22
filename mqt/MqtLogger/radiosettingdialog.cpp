@@ -592,43 +592,67 @@ void RadioSettingDialog::onDeleteMemoryButtonRadiosPushButtonClicked()
 
     int ret = vmDeleteRadios.exec();
 
-    QList<QListWidgetItem *> selectedItems;
-    QStringList listOfRadiosToDelete;
+    QList<QListWidgetItem *> voiceSelectedItems;
+    QStringList voiceListOfRadiosToDelete;
+
+    QList<QListWidgetItem *> cwSelectedItems;
+    QStringList cwListOfRadiosToDelete;
 
     if (ret == QDialog::Accepted)
     {
-        selectedItems = vmDeleteRadios.getSelectedItems();
-        if (!selectedItems.isEmpty())
-        {
+        voiceSelectedItems = vmDeleteRadios.getVoiceSelectedItems();
+        cwSelectedItems = vmDeleteRadios.getCwSelectedItems();
 
+        if (!voiceSelectedItems.isEmpty())
+        {
             QString fileName = VOICE_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[VoiceKeyerId::RigControl] + ".ini";
             QSettings voiceButtonConfig(fileName, QSettings::IniFormat);
 
-            fileName = VOICE_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[VoiceKeyerId::RigControl] + ".ini";
-            QSettings cwButtonConfig(fileName, QSettings::IniFormat);
-
-            foreach (QListWidgetItem* item, selectedItems)
+            foreach (QListWidgetItem* item, voiceSelectedItems)
             {
                 QString itemText = item->text();
-                listOfRadiosToDelete.append(itemText);
+                voiceListOfRadiosToDelete.append(itemText);
             }
 
-            if (!listOfRadiosToDelete.isEmpty())
+            if (!voiceListOfRadiosToDelete.isEmpty())
             {
-                for(const auto &radioName: listOfRadiosToDelete)
+
+                for(const auto &radioName: voiceListOfRadiosToDelete)
                 {
                     voiceButtonConfig.beginGroup(radioName);
                     voiceButtonConfig.remove("");
                     voiceButtonConfig.endGroup();
+                }
+            }
 
+        }
+        else if (!cwSelectedItems.isEmpty())
+        {
+            QString fileName = VOICE_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[VoiceKeyerId::CW_RigControl] + ".ini";
+            QSettings cwButtonConfig(fileName, QSettings::IniFormat);
+
+            foreach (QListWidgetItem* item, cwSelectedItems)
+            {
+                QString itemText = item->text();
+                cwListOfRadiosToDelete.append(itemText);
+            }
+
+            if (!cwListOfRadiosToDelete.isEmpty())
+            {
+
+                for(const auto &radioName: cwListOfRadiosToDelete)
+                {
                     cwButtonConfig.beginGroup(radioName);
                     cwButtonConfig.remove("");
                     cwButtonConfig.endGroup();
                 }
-
-                //mShowMessage(tr("You will need to close and reload Minos to have these settings applied"), this);
             }
+
         }
+
+
+
+
     }
 }
 

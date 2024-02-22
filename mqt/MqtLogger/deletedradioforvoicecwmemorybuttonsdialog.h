@@ -16,7 +16,9 @@ public:
     explicit DeletedRadioForVoiceCwMemoryButtonsDialog(QStringList listOfRadioNames, QStringList listCwRadioNames, QWidget *parent = nullptr);
     ~DeletedRadioForVoiceCwMemoryButtonsDialog();
 
-    QList<QListWidgetItem *> getSelectedItems();
+    QList<QListWidgetItem *> getVoiceSelectedItems();
+    QList<QListWidgetItem *> getCwSelectedItems();
+
 private slots:
     void accepted();
 
@@ -24,8 +26,10 @@ private:
 
     Ui::DeletedRadioForVoiceCwMemoryButtonsDialog *ui;
 
-    QList<QListWidgetItem *> getVoiceSelectedItems();
-    QList<QListWidgetItem *> getCwSelectedItems();
+
+
+    QList<QListWidgetItem*> voiceSelectedItems;
+    QList<QListWidgetItem*> cwSelectedItems;
 
 
 };
