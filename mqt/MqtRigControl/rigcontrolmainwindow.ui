@@ -32,9 +32,9 @@
             <bool>true</bool>
            </property>
            <property name="currentIndex">
-            <number>1</number>
+            <number>0</number>
            </property>
-           <widget class="QWidget" name="setupTab">
+           <widget class="MinosCustomTab" name="setupTab">
             <attribute name="title">
              <string>Setup</string>
             </attribute>
@@ -86,7 +86,7 @@
              </item>
             </layout>
            </widget>
-           <widget class="QWidget" name="selectTab">
+           <widget class="MinosCustomTab" name="selectTab">
             <attribute name="title">
              <string>Select</string>
             </attribute>
@@ -1038,6 +1038,12 @@ Active</string>
    <class>SmeterBar</class>
    <extends>QWidget</extends>
    <header>smeterbar.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>MinosCustomTab</class>
+   <extends>QWidget</extends>
+   <header>minoscustomtab.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

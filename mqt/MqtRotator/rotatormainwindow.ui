@@ -32,9 +32,9 @@
           </property>
           <widget class="QTabWidget" name="rotTabs">
            <property name="currentIndex">
-            <number>1</number>
+            <number>0</number>
            </property>
-           <widget class="QWidget" name="setupTab">
+           <widget class="MinosCustomTab" name="setupTab">
             <attribute name="title">
              <string>Setup</string>
             </attribute>
@@ -98,7 +98,7 @@
              </item>
             </layout>
            </widget>
-           <widget class="QWidget" name="selectTab">
+           <widget class="MinosCustomTab" name="selectTab">
             <attribute name="title">
              <string>Select</string>
             </attribute>
@@ -151,7 +151,6 @@
                    <widget class="QLabel" name="usinglbl">
                     <property name="font">
                      <font>
-                      <weight>75</weight>
                       <bold>true</bold>
                      </font>
                     </property>
@@ -164,7 +163,6 @@
                    <widget class="QLabel" name="usingLibText">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -190,7 +188,6 @@
                    <widget class="QLabel" name="antNameDispLbl">
                     <property name="font">
                      <font>
-                      <weight>75</weight>
                       <bold>true</bold>
                      </font>
                     </property>
@@ -287,7 +284,7 @@
              </item>
             </layout>
            </widget>
-           <widget class="QWidget" name="targetTab">
+           <widget class="MinosCustomTab" name="targetTab">
             <attribute name="title">
              <string>Target</string>
             </attribute>
@@ -650,7 +647,6 @@
               <widget class="QLabel" name="Main">
                <property name="font">
                 <font>
-                 <weight>75</weight>
                  <bold>true</bold>
                 </font>
                </property>
@@ -667,7 +663,6 @@
                <property name="font">
                 <font>
                  <pointsize>36</pointsize>
-                 <weight>75</weight>
                  <bold>true</bold>
                 </font>
                </property>
@@ -687,7 +682,6 @@
               <widget class="QLabel" name="Back">
                <property name="font">
                 <font>
-                 <weight>75</weight>
                  <bold>true</bold>
                 </font>
                </property>
@@ -704,7 +698,6 @@
                <property name="font">
                 <font>
                  <pointsize>24</pointsize>
-                 <weight>75</weight>
                  <bold>true</bold>
                 </font>
                </property>
@@ -790,6 +783,12 @@
    <class>MinosSplitter</class>
    <extends>QSplitter</extends>
    <header>minossplitter.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>MinosCustomTab</class>
+   <extends>QWidget</extends>
+   <header>minoscustomtab.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

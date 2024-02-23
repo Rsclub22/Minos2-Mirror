@@ -71,6 +71,7 @@ SOURCES += \
     MatchTreeFrame.cpp \
     locator.cpp \
     minosNetUtils.cpp \
+    minoscustomtab.cpp \
     minositem.cpp \
     minoskeyboard.cpp \
     MinosLines.cpp \
@@ -168,6 +169,7 @@ HEADERS += \
     MatchTreeFrame.h \
     locator.h \
     minosNetUtils.h \
+    minoscustomtab.h \
     minositem.h \
     minoskeyboard.h \
     MinosLines.h \
