@@ -19,7 +19,8 @@ QString calendarNameString[] =
         "microcontests",
         "VHFContestsOther",
         "HFContestsOther",
-        "bartgcontests"
+        "bartgcontests",
+        "uksmgcontests"
     };
 
 //---------------------------------------------------------------------------
@@ -116,6 +117,11 @@ QString ClubListCalendarYear::getURL()
 bool ClubListCalendarYear::downloadProvisionalFile ( bool /*showError*/ )
 {
     return false;
+}
+//---------------------------------------------------------------------------
+QString UKSMGCalendarYear::getSite()
+{
+    return "https://logs.uksmg.org/";
 }
 //---------------------------------------------------------------------------
 void CalendarYear::ignoreSslErrors(const QList<QSslError> &errors)

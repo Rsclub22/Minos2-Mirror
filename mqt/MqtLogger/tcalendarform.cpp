@@ -20,6 +20,7 @@ TCalendarForm( QWidget *parent, CalType calType ) :
       , hfother ( 2000, ectHFOther )
       , vhfother ( 2000, ectVHFOther )
       , hfbartg( 2000, ectHFBARTG )
+      , uksmg( 2000, ectUKSMG )
 {
     ui->setupUi( this );
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
@@ -83,7 +84,7 @@ bool TCalendarForm::loadYear ( Calendar &cal, int year )
     QString fname = yearList[ yearOffset ] ->getPath();
     bool thisYearExists = FileExists ( fname );
 
-    if (!thisYearExists)
+    if (!thisYearExists && cal.calType != ectUKSMG)
     {
         QString yearMessage = tr("This year's calendar file\n\n%1\n\ndoes not exist; do you wish to download the latest calendars?").arg(fname);
         if (mShowYesNoMessage(this, yearMessage))
@@ -315,6 +316,28 @@ void TCalendarForm::FormShow ( )
                             }
                             LoadGrid ( mwave );
                         }
+                        else
+                            if ( calType == ectUKSMG )
+                            {
+                                setWindowTitle ( tr("Select Contest from UKSMG Calendar") );
+                                uksmg = Calendar ( year, ectUKSMG );
+
+                                yearList.clear();
+                                for ( int i = LOWYEAR; i <= HIGHYEAR; i++ )
+                                {
+                                    yearList.push_back ( QSharedPointer<CalendarYear> ( new UKSMGCalendarYear ( i ) ) );
+                                }
+
+                                loaded = loadYear ( uksmg, year );
+                                if ( !loaded )
+                                {
+                                    mShowMessage ( tr("Failed to load the UKSMG calendar file"), this );
+                                    ui->CalendarVersionLabel->setText( tr("No file loaded") );
+                                    ui->CalendarGrid->setRowCount( 0 );
+                                    return ; // don't close - they need a chance to download
+                                }
+                                LoadGrid ( uksmg );
+                            }
 }
 void TCalendarForm::downloadFiles()
 {
@@ -338,8 +361,9 @@ void TCalendarForm::downloadFiles()
     {
         yearList.push_back ( QSharedPointer<CalendarYear> ( new VHFCalendarYear ( i ) ) );
         yearList.push_back ( QSharedPointer<CalendarYear> ( new HFCalendarYear ( i ) ) );
-//        yearList.push_back ( QSharedPointer<CalendarYear> ( new HFBARTGCalendarYear ( i ) ) );
+        yearList.push_back ( QSharedPointer<CalendarYear> ( new HFBARTGCalendarYear ( i ) ) );
         yearList.push_back ( QSharedPointer<CalendarYear> ( new MicroCalendarYear ( i ) ) );
+        yearList.push_back ( QSharedPointer<CalendarYear> ( new UKSMGCalendarYear ( i ) ) );
     }
 
     for ( auto const &y: yearList )
@@ -417,6 +441,16 @@ void TCalendarForm::on_SelectButton_clicked()
                             }
 
                         }
+                        else
+                            if ( calType == ectUKSMG )
+                            {
+                                if ( row >= 0 && row < uksmg.calendar.size())
+                                {
+                                    ic = uksmg.calendar[ row ];
+                                    accept();
+                                }
+
+                            }
 }
 
 void TCalendarForm::on_GetCalendarButton_clicked()

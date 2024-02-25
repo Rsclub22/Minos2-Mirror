@@ -7,7 +7,7 @@
 #include <QDateTime>
 #include <QVector>
 
-enum CalType {ectVHF, ectHF, ectMwave, ectVHFOther, ectHFOther, ectHFBARTG};
+enum CalType {ectVHF, ectHF, ectMwave, ectVHFOther, ectHFOther, ectHFBARTG, ectUKSMG};
 extern QMap<QString, QString> contestNameMap;
 
 class MultType
@@ -126,7 +126,7 @@ class CalendarContest
         QString name;
         QString description;
         QString shortDescription;
-        enum ScoreType{oneppq, perkms, desc} scoring;
+        enum ScoreType{oneppq, perkms, desc, uksmg} scoring;
         bool iaru;
         QString mult;
         QString power;

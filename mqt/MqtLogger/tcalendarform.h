@@ -63,6 +63,7 @@ public Q_SLOTS:
         Calendar hfother;
         Calendar vhfother;
         Calendar hfbartg;
+        Calendar uksmg;
         IndividualContest ic;
         void downloadFiles();
 

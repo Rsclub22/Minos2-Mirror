@@ -99,6 +99,20 @@
                    </property>
                   </widget>
                  </item>
+                 <item>
+                  <widget class="QPushButton" name="UKSMGCalendarButton">
+                   <property name="text">
+                    <string>UKSMG Calendar</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="BARTGCalendarButton">
+                   <property name="text">
+                    <string>BARTG Calendar</string>
+                   </property>
+                  </widget>
+                 </item>
                 </layout>
                </item>
                <item>

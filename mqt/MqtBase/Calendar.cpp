@@ -899,7 +899,14 @@ bool Calendar::parseContest ( TiXmlElement * tix )
                                                                                             c.minPower[band] = e->GetText();
                                                                                         }
                                                                                         else
-                                                                                            return false;
+                                                                                            if ( checkElementName ( f, "uksmg" ) )
+                                                                                            {
+                                                                                                c.scoring = CalendarContest::uksmg;
+                                                                                            }
+                                                                                            else
+                                                                                            {
+                                                                                                return false;
+                                                                                            }
                                                                         break;
                                                                     }
                                                                 }
@@ -919,8 +926,7 @@ bool Calendar::parseContest ( TiXmlElement * tix )
                                                                                 QString mode;
                                                                                 mode = e->GetText();
                                                                                 if (mode == "SSB")
-                                                                                {
-                                                                                   mode = hamlibData::USB;
+                                                                                {                                                                                   mode = hamlibData::USB;
                                                                                 }
                                                                                 if (mode == "CW")
                                                                                 {

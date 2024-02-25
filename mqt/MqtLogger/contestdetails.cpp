@@ -733,7 +733,7 @@ void ContestDetails::setDetails( const IndividualContest &ic )
 
     contestTransferObject->RSTMandatoryField.setValue(true);
     contestTransferObject->serialMandatoryField.setValue(true);
-    bool isHF = ic.calType == ectHF;
+    bool isHF = ((ic.calType == ectHF) || (ic.calType == ectHFBARTG));
     contestTransferObject->locatorMandatoryField.setValue(!isHF);
 
     ui->SectionComboBox->clear();
@@ -1574,6 +1574,8 @@ void ContestDetails::enableControls()
    ui->HFCalendarButton->setEnabled(!protectedChecked);
    ui->VHFCalendarButton->setEnabled(!protectedChecked);
    ui->uwaveCalendarButton->setEnabled(!protectedChecked);
+   ui->BARTGCalendarButton->setEnabled(!protectedChecked);
+   ui->UKSMGCalendarButton->setEnabled(!protectedChecked);
    //ui->ContestNameSelected->setEnabled(!protectedChecked);
    ui->LocatorGroupBox->setEnabled(!protectedChecked);
    ui->AllowLoc8CB->setEnabled(!protectedChecked);
@@ -1593,8 +1595,10 @@ void ContestDetails::enableControls()
    ui->MGMCheckBox->setEnabled(!protectedChecked);
 
    ui->HFCalendarButton->setVisible(contestTransferObject->isHF());
+   ui->BARTGCalendarButton->setVisible(contestTransferObject->isHF());
    ui->VHFCalendarButton->setVisible(!contestTransferObject->isHF());
    ui->uwaveCalendarButton->setVisible(!contestTransferObject->isHF());
+   ui->UKSMGCalendarButton->setVisible(!contestTransferObject->isHF());
 }
 //---------------------------------------------------------------------------
 
@@ -1678,11 +1682,11 @@ const char * ContestDetails::BSHelpText =
    "Move between components of a group using the mouse or up/down arrow keys.\r\n")
    ;
 
-void ContestDetails::on_HFCalendarButton_clicked()
+void ContestDetails::doCalendarButton(QString dtitle, CalType calt)
 {
-    TCalendarForm CalendarDlg(this, ectHF);
+    TCalendarForm CalendarDlg(this, calt);
 
-    CalendarDlg.setWindowTitle( tr("HF Calendar"));
+    CalendarDlg.setWindowTitle( dtitle);
     CalendarDlg.description = ui->ContestNameSelected->text();
 
     QString sdate = ui->StartDateEdit->date().toString("dd/MM/yyyy");
@@ -1691,79 +1695,45 @@ void ContestDetails::on_HFCalendarButton_clicked()
 
     if ( CalendarDlg.exec() == QDialog::Accepted )
     {
-       // set up all the details that we can from the calendar
-       ui->ContestNameSelected->setText(CalendarDlg.ic.description);
-       setDetails( CalendarDlg.ic );
+        // set up all the details that we can from the calendar
+        ui->ContestNameSelected->setText(CalendarDlg.ic.description);
+        setDetails( CalendarDlg.ic );
     }
     QWidget *next = getNextFocus();
     if (next)
     {
-       next->setFocus();
+        next->setFocus();
     }
     else
     {
-       ui->OKButton->setFocus();
+        ui->OKButton->setFocus();
     }
     focusChange(nullptr, false, nullptr);
 }
-
+void ContestDetails::on_HFCalendarButton_clicked()
+{
+    doCalendarButton(tr("HF Calendar"), ectHF);
+}
 void ContestDetails::on_VHFCalendarButton_clicked()
 {
-    TCalendarForm CalendarDlg(this, ectVHF);
-
-    CalendarDlg.setWindowTitle( tr("VHF Calendar"));
-    CalendarDlg.description = ui->ContestNameSelected->text();
-
-    QString sdate = ui->StartDateEdit->date().toString("dd/MM/yyyy");
-    CalendarDlg.sdate = CanonicalToTDT(TDTToCanonical( sdate + " " + ui->StartTimeCombo->currentText())) ;
-    CalendarDlg.band = ui->BandComboBox->currentText();
-
-    if ( CalendarDlg.exec() == QDialog::Accepted )
-    {
-       // set up all the details that we can from the calendar
-       ui->ContestNameSelected->setText(CalendarDlg.ic.description);
-       setDetails( CalendarDlg.ic );
-    }
-    QWidget *next = getNextFocus();
-    if (next)
-    {
-       next->setFocus();
-    }
-    else
-    {
-       ui->OKButton->setFocus();
-    }
-    focusChange(nullptr, false, nullptr);
+    doCalendarButton(tr("VHF Calendar"), ectVHF);
 }
 void ContestDetails::on_uwaveCalendarButton_clicked()
 {
-    TCalendarForm CalendarDlg(this, ectMwave);
-
-    CalendarDlg.setWindowTitle( tr("Microwave Calendar"));
-    CalendarDlg.description = ui->ContestNameSelected->text();
-
-    QString sdate = ui->StartDateEdit->date().toString("dd/MM/yyyy");
-    CalendarDlg.sdate = CanonicalToTDT(TDTToCanonical( sdate + " " + ui->StartTimeCombo->currentText())) ;
-    CalendarDlg.band = ui->BandComboBox->currentText();
-
-    if ( CalendarDlg.exec() == QDialog::Accepted )
-    {
-       // set up all the details that we can from the calendar
-       ui->ContestNameSelected->setText(CalendarDlg.ic.description);
-       setDetails( CalendarDlg.ic );
-    }
-    QWidget *next = getNextFocus();
-    if (next)
-    {
-       next->setFocus();
-    }
-    else
-    {
-       ui->OKButton->setFocus();
-    }
-    focusChange(nullptr, false, nullptr);
+    doCalendarButton(tr("Microwave Calendar"), ectMwave);
 }
 
+
+void ContestDetails::on_UKSMGCalendarButton_clicked()
+{
+    doCalendarButton(tr("UKSMG Calendar"), ectUKSMG);
+}
+
+
+void ContestDetails::on_BARTGCalendarButton_clicked()
+{
+    doCalendarButton(tr("BARTG Calendar"), ectHFBARTG);
+}
 
 void ContestDetails::on_CallsignEdit_editingFinished()
 {
@@ -1932,4 +1902,5 @@ void ContestDetails::on_ExchangeComboBox_activated(int /*arg1*/)
     focusChange(nullptr, false, nullptr);
 
 }
+
 

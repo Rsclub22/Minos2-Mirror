@@ -2,6 +2,7 @@
 #define CONTESTDETAILS_H
 
 #include <QDialog>
+#include "Calendar.h"
 #include "focuswatcher.h"
 #include "ContestDetailsTransferObject.h"
 #include "cutils.h"
@@ -67,6 +68,7 @@ private:
 
    void setBandBoxes(QString bandStr, QString bandsList);
    void loadClubNames(QString groupName);
+   void doCalendarButton(QString dtitle, CalType calt);
    public Q_SLOTS:
    virtual void accept() override;
    virtual void reject() override;
@@ -95,6 +97,8 @@ private slots:
    void on_ageProtectedcb_stateChanged(int arg1);
    void on_BandComboBox_activated(int arg1);
    void on_ExchangeComboBox_activated(int arg1);
+   void on_UKSMGCalendarButton_clicked();
+   void on_BARTGCalendarButton_clicked();
 };
 
 #endif // CONTESTDETAILS_H

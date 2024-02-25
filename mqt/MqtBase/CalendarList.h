@@ -95,6 +95,15 @@ class VHFOtherCalendarYear : public CalendarYear
         virtual QString getPath();
         virtual QString getURL();
 };
+class UKSMGCalendarYear : public CalendarYear
+{
+    virtual QString getSite();
+public:
+    UKSMGCalendarYear ( int year ) : CalendarYear ( ectUKSMG, year )
+    {
+    }
+};
+
 class CTYCalendarYear : public CalendarYear
 {
         virtual QString getSite();
