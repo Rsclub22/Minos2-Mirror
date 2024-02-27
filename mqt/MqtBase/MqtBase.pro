@@ -46,6 +46,7 @@ SOURCES += \
     ChatServer.cpp \
     ConfigElementFrame.cpp \
     callsign.cpp \
+    checkHamlibVersionIsValid.cpp \
     checkmodeagainstfreq.cpp \
     checkoperatingfreq.cpp \
     contacts.cpp \
@@ -70,6 +71,7 @@ SOURCES += \
     MatchTreeFrame.cpp \
     locator.cpp \
     minosNetUtils.cpp \
+    minoscustomtab.cpp \
     minositem.cpp \
     minoskeyboard.cpp \
     MinosLines.cpp \
@@ -141,6 +143,7 @@ HEADERS += \
     ChatServer.h \
     ConfigElementFrame.h \
     callsign.h \
+    checkHamlibVersionIsValid.h \
     checkmodeagainstfreq.h \
     checkoperatingfreq.h \
     contacts.h \
@@ -166,6 +169,7 @@ HEADERS += \
     MatchTreeFrame.h \
     locator.h \
     minosNetUtils.h \
+    minoscustomtab.h \
     minositem.h \
     minoskeyboard.h \
     MinosLines.h \

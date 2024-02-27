@@ -3,7 +3,7 @@
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //                      Rotator Control
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2021
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2024
 //
 // Interprocess Control Logic
 // COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2008
@@ -37,6 +37,7 @@
 #include "MTrace.h"
 #include "LogEvents.h"
 #include "rotatormainwindow.h"
+#include "checkHamlibVersionIsValid.h"
 #include "ui_rotatormainwindow.h"
 
 RotatorMainWindow::RotatorMainWindow(QWidget *parent) :
@@ -168,7 +169,44 @@ RotatorMainWindow::RotatorMainWindow(QWidget *parent) :
 
     rotlog->getBearingLogConfig();
 
-    initSelectAntennaBox();
+    hamlibOk = false;
+
+    logMessage(QString("Checking installed hamlib version"));
+    int hamlibCheckErrorNum = checkHamlibVersionIsValid(hamlibOk, hamlib_version, MINIMUM_HAMLIB_VERSION);
+
+    if (hamlibCheckErrorNum < 0)
+    {
+
+        if (hamlibCheckErrorNum == -2 )
+        {
+            QMessageBox::critical(nullptr, tr("Rotator Hamlib Library Version Error!"), tr("Installed hamlib version %1 is imcompatible.\nIt should be version %2 or greater.\n\nPlease check your installation.\nYou will not be able to select a radio until this is rectified!").arg(hamlib_version).arg(MINIMUM_HAMLIB_VERSION), QMessageBox::Ok);
+            logMessage(QString("Error version number conversion to int failed - installed version = %1, minimum version = %2").arg(hamlib_version).arg(MINIMUM_HAMLIB_VERSION)); // error)
+        }
+        else if (hamlibCheckErrorNum == -1 )
+        {
+            // we should not get here....
+            QMessageBox::critical(nullptr, tr("Hambib Version test Conversion Error!"), tr("Hamlib Version test conversion error. Please report error"));
+            logMessage(QString("Error version number conversion to int failed - installed version = %1, minimum version = %2").arg(hamlib_version).arg(MINIMUM_HAMLIB_VERSION));
+        }
+        else if (hamlibCheckErrorNum == -3)
+        {
+            //we should not get here...
+            logMessage(QString("Error: checkhamlibVersion faile error code = %1").arg(hamlibCheckErrorNum));
+        }
+
+
+    }
+
+    if (hamlibOk)
+    {
+        initSelectAntennaBox();
+    }
+    else
+    {
+        showStatusMessage(tr("Error: Installed hamlib version %1 is incorrect, should be version %2 or greater").arg(hamlib_version).arg(MINIMUM_HAMLIB_VERSION));
+    }
+
+
 
     setTestMode(appName.isEmpty());
 
@@ -450,7 +488,7 @@ int RotatorMainWindow::openRotator()
     }
 
 
-    rotator = rotFactory->createRotator(rotFactory->supported_rotators()->value(setupAntenna->currentAntenna.rotatorModelName).RotCapabilities::modelNumber);
+    rotator = rotFactory->createRotator(rotFactory->supported_rotators()->value(setupAntenna->currentAntenna.rotatorModelName).getModelNumber());
 
     if (rotator == nullptr)
     {
@@ -990,7 +1028,7 @@ void RotatorMainWindow::upDateAntenna()
 
 
             RotCapabilities rotCap = rotFactory->supported_rotators()->value(setupAntenna->currentAntenna.rotatorModel);
-            if (rotCap.enableSelectDisplayDial && !setupAntenna->currentAntenna.showCompassDialFlag)
+            if (rotCap.getEnableSelectDisplayDial() && !setupAntenna->currentAntenna.showCompassDialFlag)
             {
                 setCompassDialVisible(false);
             }
@@ -999,7 +1037,7 @@ void RotatorMainWindow::upDateAntenna()
                 setCompassDialVisible(true);
             }
 
-            if (rotCap.supportStopCommand)
+            if (rotCap.getSupportStopCommand())
             {
                 supportStopCommandFlag = true;
                 ui->stopButton->setVisible(true);
@@ -2446,6 +2484,9 @@ void RotatorMainWindow::onTestBearingEnter()
     }
 }
 
+
+
+
 void RotatorMainWindow::aboutRotatorConfig()
 {
 
@@ -2476,12 +2517,12 @@ void RotatorMainWindow::aboutRotatorConfig()
         msg.append(tr("Rotator CW EndStop = %1\n").arg(QString::number(setupAntenna->currentAntenna.rotatorCWEndStop)));
         msg.append(tr("Rotator CCW EndStop = %1\n").arg(QString::number(setupAntenna->currentAntenna.rotatorCCWEndStop)));
         msg.append(tr("Rotator PortType = %1\n").arg(hamlibData::portTypeList[setupAntenna->currentAntenna.portType]));
-        if (rotCap.portType == RotCapConstants::PortType::network)
+        if (rotCap.getPortType() == RotCapConstants::PortType::network)
         {
             msg.append(tr("Network Address = %1\n").arg(setupAntenna->currentAntenna.networkAdd));
             msg.append(tr("Network Port = %1\n").arg(setupAntenna->currentAntenna.networkPort));
         }
-        if (rotCap.portType == RotCapConstants::PortType::serial)
+        if (rotCap.getPortType() == RotCapConstants::PortType::serial)
         {
             msg.append(tr("Rotator Comport = %1\n").arg(setupAntenna->currentAntenna.comport));
             msg.append(tr("Baudrate = %1\n").arg(QString::number(setupAntenna->currentAntenna.baudrate)));
@@ -2549,12 +2590,12 @@ void RotatorMainWindow::dumpRotatorToTraceLog()
         trace(QString("Rotator CCW EndStop = %1").arg(QString::number(setupAntenna->currentAntenna.rotatorCCWEndStop)));
         trace(QString("Rotator PortType = %1").arg(hamlibData::portTypeList[setupAntenna->currentAntenna.portType]));
 
-        if (rotCap.portType == RotCapConstants::PortType::network)
+        if (rotCap.getPortType() == RotCapConstants::PortType::network)
         {
             trace(QString("Network Address = %1").arg(setupAntenna->currentAntenna.networkAdd));
             trace(QString("Network Port = %1").arg(setupAntenna->currentAntenna.networkPort));
         }
-        if (rotCap.portType == RotCapConstants::PortType::serial)
+        if (rotCap.getPortType() == RotCapConstants::PortType::serial)
         {
             trace(QString("Rotator Comport = %1").arg(setupAntenna->currentAntenna.comport));
             trace(QString("Baudrate = %1").arg(QString::number(setupAntenna->currentAntenna.baudrate)));

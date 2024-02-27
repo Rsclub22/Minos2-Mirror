@@ -67,6 +67,8 @@ void delay(int sec);
 void sleepFor(qint64 milliseconds);
 
 
+
+
 class LoggerRequests
 {
 
@@ -298,6 +300,8 @@ private:
     scatParams currentRadio;
     QString currentRadioName;
     //QStringList availRadios;
+
+    bool hamlibOk = false;
 
 
 
@@ -546,6 +550,9 @@ private:
     void setTestMode(bool test);
 
     void setPttOnOff(bool pttOn);
+
+
+
 
 private slots:
 

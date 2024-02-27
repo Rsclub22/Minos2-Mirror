@@ -191,39 +191,45 @@ int register_callback(rig_model_t rig_model, void *callback_data)
     // below to get a parameter dump for development... edit required parameters...
     //trace(QString("%1\t%2\t%3\t%4\tportType = %5\tpttPortType = %6").arg(manufacturerName + " " + modelName).arg(rig_model).arg(supportCwMem ? "True" : "False").arg(supportVoiceMem ? "True" : "False").arg(port_type).arg(supportPttPortType));
 
-    (*rigsList)[key] = RigCapabilities(port_type,
-                                       manufacturerName,
-                                       modelName,
-                                       key,
-                                       rig_model,
-                                       true,                // radio supports lookup supported bands
-                                       supportGetVfo,
-                                       supportSetVfo,
-                                       supportGetRit,       // radio supports get rit
-                                       supportSetRit,       // radio supports set rit
-                                       supportGetRitState,  // radio supports get rit state
-                                       supportSetRitState,  // radio supports set rit state
-                                       true,                // radio supports get rit max Khz
-                                       supportSMeter,       // radio supports s-meter
-                                       supportPttPortType,  // we only support CAT and when NONE Serial HW
-                                       supportGetPtt,       // radio supports get Ptt
-                                       supportSetPtt,       // radio supports set Ptt
-                                       supportGetVox,       // radio supports get Vox State
-                                       supportSetVox,       // radio supports set Vox State
-                                       supportVolume,       // radio supports volume
-                                       supportAntSw,        // radio supports antenna switch
-                                       true,                // radio supports RigCtld
-                                       supportVoiceMem,        // radio supports Voice Memory
-                                       startVoiceMemoryNumber,
-                                       endVoiceMemoryNumber,
-                                       startCwMemoryNumber,
-                                       endCwMemoryNumber,
-                                       supportStopVoiceMem,     // radio supports stop Voice Memmory
-                                       supportCwMem,            // radio supports Cw Memory
-                                       supportCwMemStop,
-                                       supportCwMemWait,
 
-                                       true);    // radio poll data
+    RigCapabilities rigCap;
+
+    rigCap.setPortType(port_type);
+    rigCap.setRigManufacturer(manufacturerName);
+    rigCap.setRigName(modelName);
+    rigCap.setRigModelName(key);
+    rigCap.setRigModelNumber(rig_model);
+    rigCap.setSupportGetSupBands(true);
+    rigCap.setSupportGetVfo(supportGetVfo);
+    rigCap.setSupportSetVfo(supportSetVfo);
+    rigCap.setSupportGetRit(supportGetRit);
+    rigCap.setSupportSetRit(supportSetRit);
+    rigCap.setSupportGetRitState(supportGetRitState);
+    rigCap.setSupportSetRitState(supportSetRitState);
+    rigCap.setSupportGetRitMax(true);
+    rigCap.setSupportSMeter(supportSMeter);
+    rigCap.setSupportPttPortType(supportPttPortType);
+    rigCap.setSupportGetPtt(supportGetPtt);
+    rigCap.setSupportSetPtt(supportSetPtt);
+    rigCap.setSupportGetVox(supportGetVox);
+    rigCap.setSupportSetVox(supportSetVox);
+    rigCap.setSupportVolume(supportVolume);
+    rigCap.setSupportAntSw(supportAntSw);
+    rigCap.setSupportRigCtld(true);
+    rigCap.setSupportVoiceMemory(supportVoiceMem);
+    rigCap.setStartVoiceMemoryNumber(startVoiceMemoryNumber);
+    rigCap.setEndVoiceMemoryNumber(endVoiceMemoryNumber);
+    rigCap.setSupportStopVoiceMemory(supportStopVoiceMem);
+    rigCap.setStartCwMemoryNumber(startCwMemoryNumber);
+    rigCap.setEndCwMemoryNumber(endCwMemoryNumber);
+    rigCap.setSupportCwMemory(supportCwMem);
+    rigCap.setSupportCwMemoryStop(supportCwMemStop);
+    rigCap.setSupportCwMemoryWait(supportCwMemWait);
+    rigCap.setPollData(true);
+
+
+    (*rigsList)[key] = rigCap;
+
 
     return 1;
 

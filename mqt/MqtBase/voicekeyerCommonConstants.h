@@ -9,6 +9,9 @@
 
 namespace voiceKeyerCommon
 {
+    // These are Minos max and min keyer buttons
+    // Rigcontrol with hamlib will provide max number of memories the
+    // radio will support.
 
     const int MAXIMUM_BUTTONS = 8;
     const int MININUM_BUTTONS = 2;
@@ -44,9 +47,9 @@ namespace voiceKeyerCommon
 
 QString VOICE_KEYER_PATH();
 QString VOICEKEYER_COMMON_PARAMS_PATH();
-bool readSaveVoiceCWMemoryButtonByRadioNameFromIni();
-void writeSaveVoiceCWMemoryButtonByRadioNameToIni(bool data);
-QStringList getListOfRadioNamesForVoiceCWMemoryButtons();
+bool readSaveVoiceCWMemoryButtonByRadioNameFromIni(voiceKeyerCommon::VoiceKeyerId id);
+void writeSaveVoiceCWMemoryButtonByRadioNameToIni(bool data, voiceKeyerCommon::VoiceKeyerId id);
+void getListOfRadioNamesForMemoryButtons(QStringList &radioNames, voiceKeyerCommon::VoiceKeyerId id);
 
 
 #endif // VOICEKEYERCOMMONCONSTANTS_H

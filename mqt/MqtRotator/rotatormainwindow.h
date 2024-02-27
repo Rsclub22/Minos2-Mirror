@@ -3,7 +3,7 @@
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //                      Rotator Control
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2024
 //
 // Interprocess Control Logic
 // COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2008
@@ -158,6 +158,8 @@ private:
     QString statusMsg;
     QString activeMsg;
 
+    bool hamlibOk = false;
+
 
 
     int openRotator();
@@ -301,6 +303,7 @@ private:
     void checkTestBearingBox();
     void setCompassDialVisible(bool visible);
     void setTestMode(bool test);
+
 };
 
 #endif // ROTATORMAINWINDOW_H

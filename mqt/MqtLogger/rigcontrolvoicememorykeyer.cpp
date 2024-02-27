@@ -85,7 +85,7 @@ void RigControlVoiceMemoryKeyer::stopMsg(VoiceKeyerParams *vkParams)
 bool RigControlVoiceMemoryKeyer::readVmButtonParams(int buttonNum, VoiceKeyerParams &vmParams)
 {
 
-    bool saveByRadioName = readSaveVoiceCWMemoryButtonByRadioNameFromIni();
+    bool saveByRadioName = readSaveVoiceCWMemoryButtonByRadioNameFromIni(VoiceKeyerId::RigControl);
 
 
     QString fileName = VOICE_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + vmParams.getType() + ".ini";
@@ -97,7 +97,7 @@ bool RigControlVoiceMemoryKeyer::readVmButtonParams(int buttonNum, VoiceKeyerPar
     }
     else
     {
-        config.beginGroup("AllRadios");
+        config.beginGroup(ALL_RADIOS_GROUP_NAME);
     }
 
     QString newKey = "button" + QString::number(buttonNum);
@@ -118,7 +118,7 @@ void RigControlVoiceMemoryKeyer::saveVmButtonParams(const VoiceKeyerParams &vmPa
 {
     VoiceKeyerParams vmParams = vmParams_;
 
-    bool saveByRadioName = readSaveVoiceCWMemoryButtonByRadioNameFromIni();
+    bool saveByRadioName = readSaveVoiceCWMemoryButtonByRadioNameFromIni(VoiceKeyerId::RigControl);
 
     QString fileName = VOICE_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + vmParams.getType() + ".ini";
     QSettings config(fileName, QSettings::IniFormat);
@@ -129,7 +129,7 @@ void RigControlVoiceMemoryKeyer::saveVmButtonParams(const VoiceKeyerParams &vmPa
     }
     else
     {
-       config.beginGroup("AllRadios");
+       config.beginGroup(ALL_RADIOS_GROUP_NAME);
     }
 
     QString newKey = "button" + QString::number(vmParams.getvmButtonNum());
@@ -165,7 +165,7 @@ int RigControlVoiceMemoryKeyer::setup(VoiceKeyerFactory *voiceKeyerFactory, int 
     txVmSetupDialog.setMaxNumOfButtonsLabel(maxNumButtons);
 
     QString allRadiosGrpName = ALL_RADIOS_GROUP_NAME;
-    if (readSaveVoiceCWMemoryButtonByRadioNameFromIni())
+    if (readSaveVoiceCWMemoryButtonByRadioNameFromIni(VoiceKeyerId::RigControl))
     {
         txVmSetupDialog.setSetupRadioGroupBoxTitle(selectedRadioName);
     }
@@ -179,7 +179,7 @@ int RigControlVoiceMemoryKeyer::setup(VoiceKeyerFactory *voiceKeyerFactory, int 
     {
         txVmSetupDialog.setPttEOMChkBoxVisible(true);
 
-        if (readSaveVoiceCWMemoryButtonByRadioNameFromIni())
+        if (readSaveVoiceCWMemoryButtonByRadioNameFromIni(VoiceKeyerId::RigControl))
         {
             buttonConfig.beginGroup(selectedRadioName);
             txVmSetupDialog.setPttEOMChkBoxChecked(buttonConfig.value("UseCatPttForEom", false).toBool());
@@ -201,28 +201,7 @@ int RigControlVoiceMemoryKeyer::setup(VoiceKeyerFactory *voiceKeyerFactory, int 
     }
 
 
-    if (voiceCap.getEnableCwMode())
-    {
-        txVmSetupDialog.setSwitchToCwVisible(true);
-
-        if (readSaveVoiceCWMemoryButtonByRadioNameFromIni())
-        {
-            buttonConfig.beginGroup(selectedRadioName);
-            txVmSetupDialog.setSwitchToCwChecked(buttonConfig.value("SwitchToCwMode", true).toBool());
-            buttonConfig.endGroup();
-        }
-        else
-        {
-            config.beginGroup(allRadiosGrpName);
-            txVmSetupDialog.setSwitchToCwChecked(buttonConfig.value("SwitchToCwMode", true).toBool());
-            buttonConfig.endGroup();
-        }
-
-    }
-    else
-    {
-        txVmSetupDialog.setSwitchToCwVisible(false);
-    }
+    txVmSetupDialog.setSwitchToCwVisible(false);
 
 
     int ret = txVmSetupDialog.exec();
@@ -234,7 +213,7 @@ int RigControlVoiceMemoryKeyer::setup(VoiceKeyerFactory *voiceKeyerFactory, int 
         // save these values by radio name in the buttons ini file
 
 
-        if (readSaveVoiceCWMemoryButtonByRadioNameFromIni())
+        if (readSaveVoiceCWMemoryButtonByRadioNameFromIni(VoiceKeyerId::RigControl))
         {
             buttonConfig.beginGroup(selectedRadioName.replace('/', '_'));
         }
@@ -261,7 +240,7 @@ int RigControlVoiceMemoryKeyer::editButton(VoiceKeyerParams *vmData, QString tit
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
     TxVmRigButtonDialog vmButtonDialog(tslf->txVmButtonsFrame);
 
-    if (readSaveVoiceCWMemoryButtonByRadioNameFromIni())
+    if (readSaveVoiceCWMemoryButtonByRadioNameFromIni(VoiceKeyerId::RigControl))
     {
         vmButtonDialog.setRadioNameLbl(vmData->getSelRadioName());
     }

@@ -42,79 +42,154 @@ namespace RigCapConstants
 
 class RigCapabilities
 {
+
 public:
-    RigCapabilities(RigCapConstants::PortType portType_ = RigCapConstants::none,
-                    QString rigManufacturer_ = "",
-                    QString rigName_ = "",
-                    QString rigModelName_ = "",
-                    int rigModelNumber_ = 0,
-                    bool supportGetSupBands_ = false,
-                    bool supportGetVfo = false,
-                    bool supportSetVfo = false,
-                    bool supportGetRit_ = false,
-                    bool supportSetRit_ = false,
-                    bool supportGetRitState = false,
-                    bool supportSetRitState = false,
-                    bool supportGetRitMax = false,
-                    bool supportSMeter_ = false,
-                    RigCapConstants::PttPortType supportPttPortType_ = RigCapConstants::PttPortType::RIG_PTT_NONE,
-                    bool supportGetPtt_ = false,
-                    bool supportSetPtt_ = false,
-                    bool supportGetVox_ = false,
-                    bool supportSetVox_ = false,
-                    bool supportVolume_ = false,
-                    bool supportAntSw_ = false,
-                    bool supportRigCtld_ = false,
-                    bool supportVoiceMemory_ = false,
-                    int startVoiceMemoryNumber_ = 0,
-                    int endVoiceMemoryNumber_ = 0,
-                    bool supportStopVoiceMemory_ = false,
-                    bool supportCwMemory_ = false,
-                    int startCwMemoryNumber_ = 0,
-                    int endCwMemoryNumber_ = 0,
-                    bool supportCwMemoryStop_ = false,
-                    bool supportCwMemoryWait_ = false,
-                    bool pollData_= RigCapConstants::pollDataOn);
 
 
+    RigCapabilities();
 
-    RigCapConstants::PortType portType;
-    QString rigManufacturer;
-    QString rigName;
-    QString rigModelName;       // combined manufacturer and rig names
-    int rigModelNumber;
-    bool supportGetSupBands;
-    bool supportGetVfo;
-    bool supportSetVfo;
-    bool supportGetRit;
-    bool supportSetRit;
-    bool supportGetRitState;
-    bool supportSetRitState;
-    bool supportGetRitMax;
-    bool supportSMeter;
-    RigCapConstants::PttPortType supportPttPortType = RigCapConstants::PttPortType::RIG_PTT_NONE;
-    bool supportGetPtt;
-    bool supportSetPtt;
-    bool supportGetVox;
-    bool supportSetVox;
-    bool supportVolume;
-    bool supportAntSw;
-    bool supportRigCtld;
-    bool supportVoiceMemory;
-    int startVoiceMemoryNumber;
-    int endVoiceMemoryNumber;
-    bool supportStopVoiceMemory;
-    bool supportCwMemory;
-    int startCwMemoryNumber;
-    int endCwMemoryNumber;
-    bool supportCwMemoryStop;
-    bool supportCwMemoryWait;
-    bool pollData;
+    ~RigCapabilities();
+
+
+    void clear();
+
+    void setPortType(RigCapConstants::PortType portType_);
+    RigCapConstants::PortType getPortType() const;
+
+    void setRigManufacturer(QString rigManufacturer_);
+    QString getRigManufacturer()const;
+
+    void setRigName(QString rigName_);
+    QString getRigName()const;
+
+    void setRigModelName(QString rigModelName_);
+    QString getRigModelName()const;
+
+    void setRigModelNumber(int rigModelNumber_);
+    int getRigModelNumber()const;
+
+    void setSupportGetSupBands(bool supportGetSupBands_);
+    bool getSupportGetSupBands()const;
+
+    void setSupportGetVfo(bool supportGetVfo_);
+    bool getSupportGetVfo()const;
+
+    void setSupportSetVfo(bool supportSetVfo_);
+    bool getSupportSetVfo()const;
+
+    void setSupportGetRit(bool supportGetRit_);
+    bool getSupportGetRit()const;
+
+    void setSupportSetRit(bool supportSetRit_);
+    bool getSupportSetRit()const;
+
+    void setSupportGetRitState(bool supportGetRitState_);
+    bool getSupportGetRitState()const;
+
+    void setSupportSetRitState(bool supportSetRitState_);
+    bool getSupportSetRitState()const;
+
+    void setSupportGetRitMax(bool supportGetRitMax_);
+    bool getSupportGetRitMax()const;
+
+    void setSupportSMeter(bool supportSMeter_);
+    bool getSupportSMeter()const;
+
+    void setSupportPttPortType(RigCapConstants::PttPortType supportPttPortType_);
+    RigCapConstants::PttPortType  getSupportPttPortType();
+
+    void setSupportGetPtt(bool supportGetPtt_);
+    bool getSupportGetPtt()const;
+
+    void setSupportSetPtt(bool supportSetPtt_);
+    bool getSupportSetPtt()const;
+
+    void setSupportGetVox(bool supportGetVox_);
+    bool getSupportGetVox()const;
+
+    void setSupportSetVox(bool supportSetVox_);
+    bool getSupportSetVox()const;
+
+    void setSupportVolume(bool supportVolume_);
+    bool getSupportVolume()const;
+
+    void setSupportAntSw(bool supportAntSw_);
+    bool getSupportAntSw()const;
+
+    void setSupportRigCtld(bool supportRigCtld_);
+    bool getSupportRigCtld()const;
+
+    void setSupportVoiceMemory(bool supportVoiceMemory_);
+    bool getSupportVoiceMemory()const;
+
+    void setStartVoiceMemoryNumber(int startVoiceMemoryNumber_);
+    int getStartVoiceMemoryNumber()const;
+
+    void setEndVoiceMemoryNumber(int endVoiceMemoryNumber_);
+    int getEndVoiceMemoryNumber()const;
+
+    void setSupportStopVoiceMemory(bool supportStopVoiceMemory_);
+    bool getSupportStopVoiceMemory()const;
+
+    void setSupportCwMemory(bool supportCwMemory_);
+    bool getSupportCwMemory()const;
+
+    void setStartCwMemoryNumber(int startCwMemoryNumber_);
+    int getStartCwMemoryNumber()const;
+
+    void setEndCwMemoryNumber(int endCwMemoryNumber_);
+    int getEndCwMemoryNumber()const;
+
+    void setSupportCwMemoryStop(bool supportCwMemoryStop_);
+    bool getSupportCwMemoryStop()const;
+
+    void setSupportCwMemoryWait(bool supportCwMemoryWait_);
+    bool getSupportCwMemoryWait()const;
+
+    void setPollData(bool pollData_);
+    bool getPollData()const;
+
+
 
 
 
   RigCapabilities( const RigCapabilities &rigcap);
   RigCapabilities &operator= ( const RigCapabilities &rigcap);
+
+private:
+
+  RigCapConstants::PortType portType;
+  QString rigManufacturer;
+  QString rigName;
+  QString rigModelName;       // combined manufacturer and rig names
+  int rigModelNumber;
+  bool supportGetSupBands;
+  bool supportGetVfo;
+  bool supportSetVfo;
+  bool supportGetRit;
+  bool supportSetRit;
+  bool supportGetRitState;
+  bool supportSetRitState;
+  bool supportGetRitMax;
+  bool supportSMeter;
+  RigCapConstants::PttPortType supportPttPortType = RigCapConstants::PttPortType::RIG_PTT_NONE;
+  bool supportGetPtt;
+  bool supportSetPtt;
+  bool supportGetVox;
+  bool supportSetVox;
+  bool supportVolume;
+  bool supportAntSw;
+  bool supportRigCtld;
+  bool supportVoiceMemory;
+  int startVoiceMemoryNumber;
+  int endVoiceMemoryNumber;
+  bool supportStopVoiceMemory;
+  bool supportCwMemory;
+  int startCwMemoryNumber;
+  int endCwMemoryNumber;
+  bool supportCwMemoryStop;
+  bool supportCwMemoryWait;
+  bool pollData;
 
 
 };

@@ -487,78 +487,54 @@ void OmnirigControl::onHandleCustomReply(int, QVariant const&, QVariant const&)
 void OmnirigControl::register_rigs(RigFactory::Rigs* rigsList, int id1, int id2)
 {
 
-    (*rigsList)[OmniRigOneName] = RigCapabilities(
-                RigCapConstants::PortType::none,
-                OMINRIG_MFR_NAME,
-                OMNIRIG_NAME,
-                OmniRigOneName,
-                id1,
-                false,      // support getSupBands
-                false,      // support get vfo
-                false,      // support set vfo
-                false,      // support get rit
-                false,      // support set rit
-                false,      // support get rit state
-                false,      // support set rit state
-                false,      // get Rit Max Khz
-                false,      // support s-meter
-                RigCapConstants::PttPortType::RIG_PTT_RIG,  // Omnirig doesn't support HW PTT
-                true,      // support get Ptt
-                true,      // support set Ptt
-                false,      // support get Vox State
-                false,      // support set Vox State
-                false,      // support volume
-                false,      // support antenna switch
-                false,      // support rigctld
-                false,      // support voice memory
-                0,          // start voice memory channel number
-                0,          // end voice memory channel number
-                false,      // support stop voice memory
-                false,      // support Cw memory
-                0,          // start cw memory channel number
-                0,          // end cw memory channel number
-                false,      // support Cw memory Stop
-                false,      // support Cw memory wait
-                false);     // polldata flag
+    RigCapabilities rigCap;
 
-    // note the library may support these features,
-    // but Omnirig should be polled to verify the radio supports the feature
+    rigCap.setPortType(RigCapConstants::PortType::none);
+    rigCap.setRigManufacturer(OMINRIG_MFR_NAME);
+    rigCap.setRigName(OMNIRIG_NAME);
+    rigCap.setRigModelName(OmniRigOneName);
+    rigCap.setRigModelNumber(id1);
 
+    rigCap.setSupportGetSupBands(true);
+    rigCap.setSupportGetVfo(false);
+    rigCap.setSupportSetVfo(false);
+    rigCap.setSupportGetRit(false);
+    rigCap.setSupportSetRit(false);
+    rigCap.setSupportGetRitState(false);
+    rigCap.setSupportSetRitState(false);
+    rigCap.setSupportGetRitMax(false);
+    rigCap.setSupportSMeter(false);
+    rigCap.setSupportPttPortType(RigCapConstants::PttPortType::RIG_PTT_RIG);
+    rigCap.setSupportGetPtt(true);
+    rigCap.setSupportSetPtt(true);
+    rigCap.setSupportGetVox(false);
+    rigCap.setSupportSetVox(false);
+    rigCap.setSupportVolume(false);
+    rigCap.setSupportAntSw(false);
+    rigCap.setSupportRigCtld(true);
+    rigCap.setSupportVoiceMemory(false);
+    rigCap.setStartVoiceMemoryNumber(0);
+    rigCap.setEndVoiceMemoryNumber(0);
+    rigCap.setSupportStopVoiceMemory(false);
+    rigCap.setStartCwMemoryNumber(0);
+    rigCap.setEndCwMemoryNumber(0);
+    rigCap.setSupportCwMemory(false);
+    rigCap.setSupportCwMemoryStop(false);
+    rigCap.setSupportCwMemoryWait(false);
+    rigCap.setPollData(false);
 
 
-    (*rigsList)[OmniRigTwoName] = RigCapabilities(
-                RigCapConstants::PortType::none,
-                OMINRIG_MFR_NAME,
-                OMNIRIG_NAME,
-                OmniRigTwoName,
-                id2,
-                false,      // support getSupBands
-                false,      // support get vfo
-                false,      // support set vfo
-                false,      // support get rit
-                false,      // support set rit
-                false,      // support get rit state
-                false,      // support set rit state
-                false,      // get Rit Max Khz
-                false,      // support s-meter
-                RigCapConstants::PttPortType::RIG_PTT_RIG,    // Omnirig doesn't support HW PTT
-                true,      // support get Ptt
-                true,      // support set Ptt
-                false,      // support get Vox State
-                false,      // support set Vox State
-                false,      // support volume
-                false,      // support antenna switch
-                false,      // support rigctld
-                false,      // support voice memory
-                0,          // start voice memory channel number
-                0,          // end voice memory channel number
-                false,      // support stop voice memory
-                false,      // support Cw memory
-                0,          // start cw memory channel number
-                0,          // end cw memory channel number
-                false,      // support Cw memory Stop
-                false,      // support Cw memory wait
-                false);     // polldata flag
+
+    (*rigsList)[OmniRigOneName] = rigCap;
+
+
+
+    rigCap.setRigModelName(OmniRigTwoName);
+    rigCap.setRigModelNumber(id2);
+
+    (*rigsList)[OmniRigTwoName] = rigCap;
+
+
 
 
 }

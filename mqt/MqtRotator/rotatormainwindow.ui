@@ -34,7 +34,7 @@
            <property name="currentIndex">
             <number>0</number>
            </property>
-           <widget class="QWidget" name="setupTab">
+           <widget class="MinosCustomTab" name="setupTab">
             <attribute name="title">
              <string>Setup</string>
             </attribute>
@@ -98,7 +98,7 @@
              </item>
             </layout>
            </widget>
-           <widget class="QWidget" name="selectTab">
+           <widget class="MinosCustomTab" name="selectTab">
             <attribute name="title">
              <string>Select</string>
             </attribute>
@@ -284,7 +284,7 @@
              </item>
             </layout>
            </widget>
-           <widget class="QWidget" name="targetTab">
+           <widget class="MinosCustomTab" name="targetTab">
             <attribute name="title">
              <string>Target</string>
             </attribute>
@@ -614,7 +614,7 @@
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_2">
           <item>
-           <widget class="MinosCompass" name="compassDial">
+           <widget class="MinosCompass" name="compassDial" native="true">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
               <horstretch>0</horstretch>
@@ -783,6 +783,12 @@
    <class>MinosSplitter</class>
    <extends>QSplitter</extends>
    <header>minossplitter.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>MinosCustomTab</class>
+   <extends>QWidget</extends>
+   <header>minoscustomtab.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

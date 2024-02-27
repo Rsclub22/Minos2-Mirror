@@ -100,53 +100,7 @@ HamlibRotControl::~HamlibRotControl()
 }
 
 
-/*
 
-int HamlibRotControl::getSupportCwCcwCmd(int rotNumber, bool *flag)
-{
-    int retCode = 0;
-    ROT *my_rot;
-    my_rot = rot_init(rotNumber);
-    if (my_rot != nullptr)
-    {
-            if (my_rot->caps->move == nullptr)
-            {
-                *flag = false;
-            }
-            else
-            {
-                *flag = true;
-            }
-
-            return retCode;
-    }
-
-    retCode = -1;
-    return retCode;
-}
-
-int HamlibRotControl::getMaxMinRotation(int rotNumber, int *maxRot, int *minRot)
-{
-    int retCode = 0;
-    ROT *my_rot;
-    my_rot = rot_init(rotNumber);
-    if (my_rot != nullptr)
-    {
-        *maxRot = int(my_rot->caps->max_az);
-        *minRot = int(my_rot->caps->min_az);
-    }
-    else
-    {
-        *maxRot = COMPASS_MAX360;
-        *minRot = COMPASS_MIN0;
-        retCode = -1;
-    }
-
-
-    return retCode;
-}
-
-*/
 int HamlibRotControl::rotInit(srotParams &selectedAntenna)
 {
     int retcode;
@@ -318,19 +272,24 @@ void HamlibRotControl::register_rotators(RotatorFactory::Rotators* rotatorsList)
               .arg(capsList[i]->min_az)
               .arg(capsList[i]->max_az));
 
+        RotCapabilities rotCap;
+
+        rotCap.setModelNumber(capsList[i]->rot_model);
+        rotCap.setPortType(port_type);
+        rotCap.setRotatorManufacturer(capsList[i]->mfg_name);
+        rotCap.setRotatorModelName(capsList[i]->model_name);
+        rotCap.setSupportCwCCwCmd(capsList[i]->move != nullptr ? true : false);
+        rotCap.setSupportStopCommand(capsList[i]->stop != nullptr ? true : false);
+        rotCap.setMinRot(min_az);
+        rotCap.setMaxRot(max_az);
+        rotCap.setEnableSelectDisplayDial(RotCapConstants::SelectDisplayCompass::disableSelectDisplayDial);
+        rotCap.setPollData(RotCapConstants::PollData::pollDataOn);
+        rotCap.setAllowSouthStopConfig(true);
 
 
-        (*rotatorsList)[key] = RotCapabilities(capsList[i]->rot_model,
-                                               port_type,
-                                               capsList[i]->mfg_name,
-                                               capsList[i]->model_name,
-                                               capsList[i]->move != nullptr ? true : false,
-                                               capsList[i]->stop != nullptr ? true : false,
-                                               min_az,
-                                               max_az,
-                                               RotCapConstants::SelectDisplayCompass::disableSelectDisplayDial,
-                                               RotCapConstants::PollData::pollDataOn,
-                                               true);
+        (*rotatorsList)[key] = rotCap;
+
+
     }
 
 
@@ -355,52 +314,7 @@ bool HamlibRotControl::getTraceComms()
 }
 
 
-/*
-void HamlibRotControl::getRotatorList()
-{
 
-
-        capsList.clear();
-        rot_load_all_backends();
-        rot_list_foreach(collect, nullptr);
-        qSort(capsList.begin(),capsList.end(),model_Sort);
-
-}
-
-
-
-bool HamlibRotControl::getRotatorList(QComboBox *cb)
-{
-    int i;
-    rig_port_e portType = RIG_PORT_NONE;
-
-    if(capsList.count()==0) return false;
-    QStringList sl;
-    // add blank at beginning
-    //sl << "";
-    for (i=0;i<capsList.count();i++)
-    {
-
-        QString t;
-        t= QString::number(capsList.at(i)->rot_model);
-        t=t.rightJustified(5,' ')+", ";
-        t+= capsList.at(i)->mfg_name;
-        t+=", ";
-        t+=capsList.at(i)->model_name;
-        if (getPortType(capsList.at(i)->rot_model, &portType) != -1)
-        {
-            if (portType == RIG_PORT_SERIAL || portType == RIG_PORT_NETWORK || portType == RIG_PORT_UDP_NETWORK || portType == RIG_PORT_NONE)
-            {
-                sl << t;
-            }
-        }
-    }
-    std::sort(sl.begin(), sl.end());
-    cb->addItems(sl);
-    return true;
-}
-
-*/
 
 int HamlibRotControl::getPortType(int rotNumber, rig_port_e *portType)
 {

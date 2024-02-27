@@ -3,7 +3,7 @@
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //                      Rig Control
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2023
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2024
 //
 // Interprocess Control Logic
 // COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2017
@@ -32,11 +32,14 @@
 #include "serialdata.h"
 #include "LogEvents.h"
 #include "MTrace.h"
+#include "checkHamlibVersionIsValid.h"
 
 #include "rigcontrolmainwindow.h"
 #include "ui_rigcontrolmainwindow.h"
 
 RigControlMainWindow *mainWindow = nullptr;
+
+
 
 const bool PUBLISH_NOW = true;
 const bool DONT_PUBLISH_NOW = false;
@@ -54,7 +57,7 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
     ui->setupUi(this);
     mainWindow = this;
 
-    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
+    //setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     serialData::translateSerialData();
 
@@ -111,6 +114,8 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
 
     checkIniFileVersion();  // converts earlier availRadio ini formats
 
+
+
     trace("Create Rigfactory and add rigs to list");
     radio = nullptr;
     rigFactory = new RigFactory(false, this);
@@ -145,14 +150,53 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
     }
 
 
-    // init cache with radio data
-    trace(QString("rigcontrol: Started by logger appname = %1").arg(appName));
-    QStringList availRadios;
-    getAvailRadiosList(availRadios);
-    sendRadioListLogger(availRadios);
 
-    initCacheData(availRadios);
-    msg->rigCache.publish();
+    hamlibOk = false;
+
+    logMessage(QString("Checking installed hamlib version"));
+    int hamlibCheckErrorNum = checkHamlibVersionIsValid(hamlibOk, hamlib_version, MINIMUM_HAMLIB_VERSION);
+
+    if (hamlibCheckErrorNum < 0)
+    {
+
+        if (hamlibCheckErrorNum == -2 )
+        {
+            QMessageBox::critical(nullptr, tr("RigControl Hamlib Library Version Error!"), tr("Installed hamlib version %1 is imcompatible.\nIt should be version %2 or greater.\n\nPlease check your installation.\nYou will not be able to select a radio until this is rectified!").arg(hamlib_version).arg(MINIMUM_HAMLIB_VERSION), QMessageBox::Ok);
+            logMessage(QString("Error version number conversion to int failed - installed version = %1, minimum version = %2").arg(hamlib_version).arg(MINIMUM_HAMLIB_VERSION)); // error)
+        }
+        else if (hamlibCheckErrorNum == -1 )
+        {
+            // we should not get here....
+            QMessageBox::critical(nullptr, tr("Hambib Version test Conversion Error!"), tr("Hamlib Version test conversion error. Please report error"));
+            logMessage(QString("Error version number conversion to int failed - installed version = %1, minimum version = %2").arg(hamlib_version).arg(MINIMUM_HAMLIB_VERSION));
+        }
+        else if (hamlibCheckErrorNum == -3)
+        {
+            //we should not get here...
+            logMessage(QString("Error: checkhamlibVersion faile error code = %1").arg(hamlibCheckErrorNum));
+        }
+
+
+    }
+
+
+
+
+    if (hamlibOk)
+    {
+
+        logMessage(QString("installed hamlib version %1 is OK").arg(hamlib_version));
+
+        // init cache with radio data
+        trace(QString("rigcontrol: Started by logger appname = %1").arg(appName));
+        QStringList availRadios;
+        getAvailRadiosList(availRadios);
+        sendRadioListLogger(availRadios);
+
+        initCacheData(availRadios);
+        msg->rigCache.publish();
+    }
+
 
     serialTVSw = new SerialTVSwitch();     // create local serial sw
 
@@ -173,11 +217,17 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
     ui->statusBar->addWidget(status);
     ui->radioNameDisp->setText("");
 
+
     readTraceLogFlag();
 
     initActionsConnections();
 
-    initSelectRadioBox();
+    if (hamlibOk)
+    {
+        initSelectRadioBox();
+    }
+
+
 
     setTransVertDisplayVisible(false);
     sendTransVertSwitchToLogger(TRANSSW_NUM_DEFAULT);
@@ -188,7 +238,11 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
 
     initialiseSupportedRadioDisplay();
 
-    setTestMode(testMode);
+    if (hamlibOk)
+    {
+        setTestMode(testMode);
+    }
+
 
     setPolltime(1000);
 
@@ -201,7 +255,16 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
 
     ui->reconnectButton->setVisible(false);
 
+
+
+
     upDateRadio(currentRadioName);
+
+
+    if (!hamlibOk)
+    {
+        showStatusMessage(tr("Error: Installed hamlib version %1 is incorrect, should be version %2 or greater").arg(hamlib_version).arg(MINIMUM_HAMLIB_VERSION));
+    }
 
     trace("*** Rig App Started ***");
 }
@@ -224,7 +287,11 @@ void RigControlMainWindow::setTestMode(bool test)
             liveRadio = currentRadioName;
             trace("save liveRadio " + liveRadio);
 
-            updateSelectRadioBox();
+            if (hamlibOk)
+            {
+                updateSelectRadioBox();     // we don't want to update radiolist if hamlib version is incorrect
+            }
+
         }
         logMessage((QString("Read Current Radio for Local selection")));
         ui->testRadioButton->setText(tr("Set Radio from Logger"));
@@ -513,7 +580,6 @@ void RigControlMainWindow::upDateRadio(QString radioName)
     int radioOpenStat = OPEN_FAILED;
 
 
-
     logMessage(QString("UpdateRadio: Radio requested = %1").arg(radioName));
 
      pollTimer->stop();      // stop updates
@@ -587,66 +653,7 @@ void RigControlMainWindow::upDateRadio(QString radioName)
 
     selectedRadioSupportCap = rigFactory->supported_rigs()->value(currentRadio.rigModel);
 
-    logMessage(QString("******* Selected Radio, %1 Supported Capabilities ******").arg(currentRadioName));
-    QString commPortTypeStr = "none";
-    if (currentRadio.portType == RigCapConstants::PortType::serial)
-    {
-        commPortTypeStr = "serial";
-    }
-    else if (currentRadio.portType == RigCapConstants::PortType::network)
-    {
-        commPortTypeStr = "network";
-    }
-    else if (currentRadio.portType == RigCapConstants::PortType::usb)
-    {
-        commPortTypeStr = "usb";
-    }
-    logMessage(QString("Communication Port Type = %1").arg(commPortTypeStr));
-    logMessage(QString("Get Supported Bands = %1").arg((selectedRadioSupportCap.supportGetSupBands ? "True" : "False")));
-    logMessage(QString("Get Vfo = %1").arg((selectedRadioSupportCap.supportGetVfo ? "True" : "False")));
-    logMessage(QString("Set Vfo = %1").arg((selectedRadioSupportCap.supportSetVfo ? "True" : "False")));
-    logMessage(QString("Get Rit = %1").arg((selectedRadioSupportCap.supportGetRit ? "True" : "False")));
-    logMessage(QString("Set Rit = %1").arg((selectedRadioSupportCap.supportSetRit ? "True" : "False")));
-    logMessage(QString("Get RitState = %1").arg((selectedRadioSupportCap.supportGetRitState ? "True" : "False")));
-    logMessage(QString("Set RitState = %1").arg((selectedRadioSupportCap.supportSetRitState ? "True" : "False")));
-    logMessage(QString("Get Rit Max Freq = %1").arg((selectedRadioSupportCap.supportGetRitMax ? "True" : "False")));
-    logMessage(QString("Get Signal Strength = %1").arg((selectedRadioSupportCap.supportSMeter ? "True" : "False")));
-    QString pttPortTypeStr = "none";
-    if (selectedRadioSupportCap.supportPttPortType == RigCapConstants::PttPortType::RIG_PTT_NONE)
-    {
-        pttPortTypeStr = "serial hardware control lines";
-    }
-    else if (selectedRadioSupportCap.supportPttPortType == RigCapConstants::PttPortType::RIG_PTT_RIG
-             || selectedRadioSupportCap.supportPttPortType == RigCapConstants::PttPortType::RIG_PTT_RIG_MICDATA)
-    {
-        pttPortTypeStr = "cat";     // Note A radio may support CAT, but a user may decide to use RTS or DTR instead
-    }
-    logMessage(QString("Ptt control port Type = %1").arg((pttPortTypeStr)));
-    logMessage(QString("Get Ptt = %1").arg((selectedRadioSupportCap.supportGetPtt ? "True" : "False")));
-    logMessage(QString("Set Ptt = %1").arg((selectedRadioSupportCap.supportSetPtt ? "True" : "False")));
-    logMessage(QString("Get Vox = %1").arg((selectedRadioSupportCap.supportGetVox ? "True" : "False")));
-    logMessage(QString("Set Vox = %1").arg((selectedRadioSupportCap.supportSetVox ? "True" : "False")));
-    logMessage(QString("Get Vox = %1").arg((selectedRadioSupportCap.supportGetVox ? "True" : "False")));
-    logMessage(QString("Get and Set Volume = %1").arg((selectedRadioSupportCap.supportVolume ? "True" : "False")));
-    logMessage(QString("Get and Set Antenna Switch = %1").arg((selectedRadioSupportCap.supportAntSw ? "True" : "False")));
-    logMessage(QString("Send Voice Memory = %1").arg((selectedRadioSupportCap.supportVoiceMemory ? "True" : "False")));
-    if (selectedRadioSupportCap.supportVoiceMemory)
-    {
-        logMessage(QString("Start Voice Memory Message Number = %1").arg(selectedRadioSupportCap.startVoiceMemoryNumber));
-        logMessage(QString("End Voice Memory Message Number = %1").arg(selectedRadioSupportCap.endVoiceMemoryNumber));
-
-    }
-    logMessage(QString("Stop Voice Memory = %1").arg((selectedRadioSupportCap.supportStopVoiceMemory ? "True" : "False")));
-    logMessage(QString("Send Cw Memory = %1").arg((selectedRadioSupportCap.supportCwMemory ? "True" : "False")));
-    if (selectedRadioSupportCap.supportCwMemory)
-    {
-        logMessage(QString("Start Cw Memory Message Number = %1").arg(selectedRadioSupportCap.startCwMemoryNumber));
-        logMessage(QString("End Cw Memory Message Number = %1").arg(selectedRadioSupportCap.endCwMemoryNumber));
-    }
-    logMessage(QString("Stop Cw Memory = %1").arg((selectedRadioSupportCap.supportCwMemoryStop ? "True" : "False")));
-    logMessage(QString("wait Cw Memory = %1").arg((selectedRadioSupportCap.supportCwMemoryWait ? "True" : "False")));
-    logMessage(QString("Poll for Radio Data = %1").arg((selectedRadioSupportCap.pollData ? "True" : "False")));
-
+    dumpRadioToTraceLog();
 
 
     if (currentRadio.rigCtldEnable)
@@ -670,11 +677,11 @@ void RigControlMainWindow::upDateRadio(QString radioName)
 
         dumpRadioToTraceLog();
 
-        trace(QString("Supports reading Vfo = %1").arg(selectedRadioSupportCap.supportGetVfo ? "true" : "false"));
+        trace(QString("Supports reading Vfo = %1").arg(selectedRadioSupportCap.getSupportGetVfo() ? "true" : "false"));
 
 
 
-        if (selectedRadioSupportCap.supportGetVfo)
+        if (selectedRadioSupportCap.getSupportGetVfo())
         {
             // get current VFO
             retCode = radio->getVfo(&rigStateDetails->curVfo);
@@ -698,10 +705,10 @@ void RigControlMainWindow::upDateRadio(QString radioName)
             {
                 // no doesn't support targetted Vfo, default to Current Vfo
                 trace(QString("Does not support targetted Vfo, use Current_VFO"));
-                selectedRadioSupportCap.supportGetVfo = false;
+
                 rigStateDetails->curVfo = CURRENT_VFO;
-                selectedRadioSupportCap.supportGetVfo = false;      // don't bother with Vfo selection
-                selectedRadioSupportCap.supportSetVfo = false;
+                selectedRadioSupportCap.setSupportGetVfo(false);      // don't bother with Vfo selection
+                selectedRadioSupportCap.setSupportSetVfo(false);
             }
         }
         else
@@ -709,7 +716,7 @@ void RigControlMainWindow::upDateRadio(QString radioName)
             rigStateDetails->curVfo = CURRENT_VFO;
         }
 
-        trace(QString("Supports writing Vfo = %1").arg(selectedRadioSupportCap.supportSetVfo ? "true" : "false"));
+        trace(QString("Supports writing Vfo = %1").arg(selectedRadioSupportCap.getSupportSetVfo() ? "true" : "false"));
         trace(QString("VFO = %1").arg(vfoToStr(rigStateDetails->curVfo)));
 
         ui->usingLibText->setText(radio->getLibraryName());
@@ -890,10 +897,10 @@ void RigControlMainWindow::checkSupportVolume()
 {
     // does the library support control of volume control
 
-    if (selectedRadioSupportCap.supportVolume && currentRadio.enableDisableCatFeature.volumeEnable)
+    if (selectedRadioSupportCap.getSupportVolume() && currentRadio.enableDisableCatFeature.volumeEnable)
     {
-        logMessage(QString("Update Radio: Radio Supports Volume Control %1").arg(selectedRadioSupportCap.supportVolume ? "True" : "False"));
-        addVolStatusToRigCache(selectedRadioSupportCap.supportVolume);
+        logMessage(QString("Update Radio: Radio Supports Volume Control %1").arg(selectedRadioSupportCap.getSupportVolume() ? "True" : "False"));
+        addVolStatusToRigCache(selectedRadioSupportCap.getSupportVolume());
     }
 }
 
@@ -902,9 +909,9 @@ void RigControlMainWindow::checkSupportSMeter()
 {
     // does the library support signal strength meter
 
-    if (selectedRadioSupportCap.supportSMeter && currentRadio.enableDisableCatFeature.sMeterEnable)
+    if (selectedRadioSupportCap.getSupportSMeter() && currentRadio.enableDisableCatFeature.sMeterEnable)
     {
-       setSmeterVisible(selectedRadioSupportCap.supportSMeter);
+       setSmeterVisible(selectedRadioSupportCap.getSupportSMeter());
 
     }
 
@@ -915,7 +922,7 @@ void RigControlMainWindow::checkSupportRit()
     getRitSupportStatus();
 
     rigStateDetails->ritEnable = currentRadio.enableDisableCatFeature.ritEnable;
-    if (rigStateDetails->ritEnable && (selectedRadioSupportCap.supportSetRit || selectedRadioSupportCap.supportGetRit))
+    if (rigStateDetails->ritEnable && (selectedRadioSupportCap.getSupportSetRit() || selectedRadioSupportCap.getSupportGetRit()))
     {
 
 
@@ -927,8 +934,8 @@ void RigControlMainWindow::checkSupportRit()
         }
 
         setRitGetSetFreqIndicatorVisible(true);
-        ritSetFreqIndicatorToggle(selectedRadioSupportCap.supportSetRit);
-        ritGetFreqIndicatorToggle(selectedRadioSupportCap.supportGetRit);
+        ritSetFreqIndicatorToggle(selectedRadioSupportCap.getSupportSetRit());
+        ritGetFreqIndicatorToggle(selectedRadioSupportCap.getSupportGetRit());
 
 
         //setRitFreqStr("0");             // turn off RIT
@@ -951,37 +958,37 @@ bool RigControlMainWindow::checkSupportVoiceMemory()
 {
 
 
-    if (selectedRadioSupportCap.supportVoiceMemory && currentRadio.enableDisableCatFeature.voiceMemEnable)
+    if (selectedRadioSupportCap.getSupportVoiceMemory() && currentRadio.enableDisableCatFeature.voiceMemEnable)
     {
 
         if (radio)
         {
 
 
-            if (selectedRadioSupportCap.supportVoiceMemory)
+            if (selectedRadioSupportCap.getSupportVoiceMemory())
             {
                 setVoiceMemIndVisible(true);
                 setVoiceMemIndOnOff(true);
                 addVoiceMemStatusToRigCache(true);
                 int voiceMemNum = 0;
                 // they all seem to start at 1
-                if (selectedRadioSupportCap.startVoiceMemoryNumber == 1)
+                if (selectedRadioSupportCap.getStartVoiceMemoryNumber() == 1)
                 {
-                    voiceMemNum = selectedRadioSupportCap.endVoiceMemoryNumber;
+                    voiceMemNum = selectedRadioSupportCap.getEndVoiceMemoryNumber();
                     addVoiceNumberMessagesToRigCache(voiceMemNum);
                 }
 
                 return true;
 
             }
-            else
-            {
-                setVoiceMemIndVisible(false);
-                setVoiceMemIndOnOff(false);
-                addVoiceMemStatusToRigCache(false);
-                return false;
+            //else
+            //{
+            //    setVoiceMemIndVisible(false);
+            //    setVoiceMemIndOnOff(false);
+            //    addVoiceMemStatusToRigCache(false);
+            //    return false;
 
-            }
+           // }
         }
     }
 
@@ -996,64 +1003,60 @@ bool RigControlMainWindow::checkSupportVoiceMemory()
 bool RigControlMainWindow::checkSupportCwKeyerMemory()
 {
 
-    if (selectedRadioSupportCap.supportCwMemory && currentRadio.enableDisableCatFeature.cWMemEnable)
+    if (selectedRadioSupportCap.getSupportCwMemory() && currentRadio.enableDisableCatFeature.cWMemEnable)
     {
 
         if (radio)
         {
-            if (selectedRadioSupportCap.supportCwMemory)
+
+            int cwMemNum = 0;
+            setCwMemIndVisible(true);
+            setCwMemIndOnOff(true);
+            if (currentRadio.rigMfg_Name == "Yaesu")
             {
-                setCwMemIndVisible(true);
-                setCwMemIndOnOff(true);
-                if (currentRadio.rigModelNumber >= 1000 && currentRadio.rigModelNumber < 2000)
-                {
-                    addCwKeyerMemoryStatusToRigCache(hamlibData::CW_MEMORY_TYPES::YAESU_MEM_RECALL);
-                }
-                if (currentRadio.rigModelNumber >= 2000 && currentRadio.rigModelNumber < 3000)
-                {
-                    addCwKeyerMemoryStatusToRigCache(hamlibData::CW_MEMORY_TYPES::KENWOOD_MEM_RECALL);
-                }
-                else if (currentRadio.rigModelNumber >= 3000 && currentRadio.rigModelNumber < 4000)
-                {
-                    addCwKeyerMemoryStatusToRigCache(hamlibData::CW_MEMORY_TYPES::ICOM);
-                }
-                else
-                {
-                    // not supported
-                    setCwMemIndVisible(false);
-                    setCwMemIndOnOff(false);
-                    addCwKeyerMemoryStatusToRigCache(hamlibData::CW_MEMORY_TYPES::NONE);
-                    int cwMemNum = 0;
-                    if (selectedRadioSupportCap.startCwMemoryNumber == 1)
-                    {
-                       cwMemNum = selectedRadioSupportCap.endCwMemoryNumber;
-                       addCwKeyerMemoryStatusToRigCache(0);
-                    }
-
-                        addCwKeyerMemoryStatusToRigCache(cwMemNum);
-
-
-                    return false;
-                }
-
-
-                return true;
-
+                addCwKeyerMemoryStatusToRigCache(hamlibData::CW_MEMORY_TYPES::YAESU_MEM_RECALL);
+            }
+            if (currentRadio.rigMfg_Name == "Kenwood")
+            {
+                addCwKeyerMemoryStatusToRigCache(hamlibData::CW_MEMORY_TYPES::KENWOOD_MEM_RECALL);
+            }
+            else if (currentRadio.rigMfg_Name == "Icom")
+            {
+                addCwKeyerMemoryStatusToRigCache(hamlibData::CW_MEMORY_TYPES::ICOM);
+            }
+            else if (currentRadio.rigMfg_Name == "Elecraft")
+            {
+                addCwKeyerMemoryStatusToRigCache(hamlibData::CW_MEMORY_TYPES::ELECRAFT);
             }
             else
             {
+                // not supported
                 setCwMemIndVisible(false);
                 setCwMemIndOnOff(false);
                 addCwKeyerMemoryStatusToRigCache(hamlibData::CW_MEMORY_TYPES::NONE);
-                return false;
 
+                return false;
             }
+
+
+            if (selectedRadioSupportCap.getStartCwMemoryNumber() == 1)
+            {
+                cwMemNum = selectedRadioSupportCap.getEndCwMemoryNumber();
+                addCwKeyerNumberMessagesToRigCache(cwMemNum);
+            }
+
+
+            return true;
+
+
+
          }
     }
 
-    addCwKeyerMemoryStatusToRigCache(hamlibData::CW_MEMORY_TYPES::NONE);
+
     setCwMemIndVisible(false);
     setCwMemIndOnOff(false);
+    addCwKeyerMemoryStatusToRigCache(hamlibData::CW_MEMORY_TYPES::NONE);
     return false;
 
 }
@@ -1064,18 +1067,18 @@ void RigControlMainWindow::checkSupportPtt()
 
     if (radio)
     {
-        if (selectedRadioSupportCap.supportPttPortType == RigCapConstants::PttPortType::RIG_PTT_NONE
-                || selectedRadioSupportCap.supportPttPortType == RigCapConstants::PttPortType::RIG_PTT_RIG
-                || selectedRadioSupportCap.supportPttPortType == RigCapConstants::PttPortType::RIG_PTT_RIG_MICDATA
+        if (selectedRadioSupportCap.getSupportPttPortType() == RigCapConstants::PttPortType::RIG_PTT_NONE
+                || selectedRadioSupportCap.getSupportPttPortType() == RigCapConstants::PttPortType::RIG_PTT_RIG
+                || selectedRadioSupportCap.getSupportPttPortType() == RigCapConstants::PttPortType::RIG_PTT_RIG_MICDATA
             )
         {
-            if (selectedRadioSupportCap.rigManufacturer == OMINRIG_MFR_NAME )
+            if (selectedRadioSupportCap.getRigManufacturer() == OMINRIG_MFR_NAME )
             {
                 ui->supportedPttLbl->setText("Cat");
             }
             else
             {
-                if (selectedRadioSupportCap.supportPttPortType == RigCapConstants::PttPortType::RIG_PTT_NONE)
+                if (selectedRadioSupportCap.getSupportPttPortType() == RigCapConstants::PttPortType::RIG_PTT_NONE)
                 {
                     ui->supportedPttLbl->setText("Serial");
                 }
@@ -1144,7 +1147,7 @@ void RigControlMainWindow::checkSupportPtt()
 
 void RigControlMainWindow::checkSupportPollRadio()
 {
-    if (selectedRadioSupportCap.pollData)
+    if (selectedRadioSupportCap.getPollData())
     {
         if (radio != nullptr)
         {
@@ -1186,9 +1189,10 @@ void RigControlMainWindow::updateCurrentRadioFromAvailRadios(QString radioName)
 {
     getRadioConfigData(&currentRadio, radioName);
     // retrieve this data from the factory as we don't save it
-    currentRadio.rigMfg_Name = rigFactory->supported_rigs()->value(currentRadio.rigModel).rigManufacturer;
-    currentRadio.rigModelName = rigFactory->supported_rigs()->value(currentRadio.rigModel).rigModelName;
-    currentRadio.rigModelNumber = rigFactory->supported_rigs()->value(currentRadio.rigModel).rigModelNumber;
+    RigCapabilities rigCap = rigFactory->supported_rigs()->value(currentRadio.rigModel);
+    currentRadio.rigMfg_Name = rigCap.getRigManufacturer();
+    currentRadio.rigModelName = rigCap.getRigModelName();
+    currentRadio.rigModelNumber = rigCap.getRigModelNumber();
 }
 
 
@@ -1492,7 +1496,7 @@ int RigControlMainWindow::openRadio()
         return OPEN_FAILED;
     }
 
-    radio = rigFactory->createRigs(rigFactory->supported_rigs()->value(currentRadio.rigModel).RigCapabilities::rigModelNumber);
+    radio = rigFactory->createRigs(rigFactory->supported_rigs()->value(currentRadio.rigModel).getRigModelNumber());
 
     if (radio == nullptr)
     {
@@ -1509,7 +1513,7 @@ int RigControlMainWindow::openRadio()
     radio->setTraceComms(rigStateDetails->traceCommsFlag);
     rigStateDetails->rigCap = rigFactory->supported_rigs()->value(currentRadio.rigModel);
 
-    if (rigStateDetails->rigCap.rigManufacturer != OMINRIG_MFR_NAME)
+    if (rigStateDetails->rigCap.getRigManufacturer() != OMINRIG_MFR_NAME)
     {
         logMessage(QString("Hamlib Library Version = %1").arg(radio->getRigLibVersion()));     // show library version in trace log before connection.
     }
@@ -1541,7 +1545,7 @@ int RigControlMainWindow::openRadio()
             return OPEN_FAILED;
         }
 
-        if (rigStateDetails->rigCap.rigManufacturer == OMINRIG_MFR_NAME)
+        if (rigStateDetails->rigCap.getRigManufacturer() == OMINRIG_MFR_NAME)
         {
             logMessage(QString("Library Version = %1").arg(radio->getRigLibVersion()));    // Omnirig COM needs to exist to do this..
         }
@@ -1554,7 +1558,7 @@ int RigControlMainWindow::openRadio()
 
     // reduce the radio error timeouts from default
     // timeouts in hamlib seem to be increasing, maybe need to reduce this for other radios?
-    if (rigStateDetails->rigCap.rigModelNumber == RIG_MODEL_FT817 || rigStateDetails->rigCap.rigModelNumber == RIG_MODEL_FT818)
+    if (rigStateDetails->rigCap.getRigModelNumber() == RIG_MODEL_FT817 || rigStateDetails->rigCap.getRigModelNumber() == RIG_MODEL_FT818)
     {
 
         QString fileName = RADIO_PATH_LOGGER() + MINOS_RADIO_CONFIG_FILE;
@@ -1679,7 +1683,7 @@ void RigControlMainWindow::closeRadio()
     }
 
 
-    if (rigFactory->supported_rigs()->value(currentRadio.rigModel).pollData)
+    if (rigFactory->supported_rigs()->value(currentRadio.rigModel).getPollData())
     {
         pollTimer->stop();
 
@@ -1906,12 +1910,12 @@ void RigControlMainWindow::getRadioInfo(bool pubNow)
 
 
 
-    if (radioCommsOK && selectedRadioSupportCap.supportSetRit && rigStateDetails->ritEnable)
+    if (radioCommsOK && selectedRadioSupportCap.getSupportSetRit() && rigStateDetails->ritEnable)
     {
-        logMessage((QString("Poll RIT Info - Get Rit Freq = %1").arg(selectedRadioSupportCap.supportGetRit ? "True" : "False")));
+        logMessage((QString("Poll RIT Info - Get Rit Freq = %1").arg(selectedRadioSupportCap.getSupportGetRit() ? "True" : "False")));
 
 
-        if (selectedRadioSupportCap.supportGetRit)
+        if (selectedRadioSupportCap.getSupportGetRit())
         {
             retCode = getRitFreq(rigStateDetails->curVfo);
             if (retCode < 0)
@@ -1929,11 +1933,11 @@ void RigControlMainWindow::getRadioInfo(bool pubNow)
 
 
 
-        if (selectedRadioSupportCap.supportGetRit)
+        if (selectedRadioSupportCap.getSupportGetRit())
         {
 
             bool ritStatus = false;
-            if (selectedRadioSupportCap.supportGetRitState)
+            if (selectedRadioSupportCap.getSupportGetRitState())
             {
                 logMessage(QString("Get Rit"));
                 retCode = getRitRadioStatus(rigStateDetails->curVfo, &ritStatus);
@@ -1966,7 +1970,7 @@ void RigControlMainWindow::getRadioInfo(bool pubNow)
     }
 
 
-    if (radioCommsOK && selectedRadioSupportCap.supportVolume && currentRadio.enableDisableCatFeature.volumeEnable)
+    if (radioCommsOK && selectedRadioSupportCap.getSupportVolume() && currentRadio.enableDisableCatFeature.volumeEnable)
     {
         logMessage(QString("Get Radio Volume"));
         retCode = getVolume(rigStateDetails->curVfo);
@@ -1980,7 +1984,7 @@ void RigControlMainWindow::getRadioInfo(bool pubNow)
     }
 
 
-    if (radioCommsOK && selectedRadioSupportCap.supportSMeter && currentRadio.enableDisableCatFeature.sMeterEnable)
+    if (radioCommsOK && selectedRadioSupportCap.getSupportSMeter() && currentRadio.enableDisableCatFeature.sMeterEnable)
     {
 
         logMessage(QString("Get Signal Strength"));
@@ -2205,7 +2209,7 @@ void RigControlMainWindow::setFreq(Frequency freq, VFO vfo)
             logMessage(QString("SetFreq: Rig set to Freq = %1").arg(QString::number(static_cast<qint64>(f))));
         }
 
-        if (!rigFactory->supported_rigs()->value(currentRadio.rigModel).pollData) // non polling radio
+        if (!rigFactory->supported_rigs()->value(currentRadio.rigModel).getPollData()) // non polling radio
         {
             // when not polling radio for information
             trace(QString("SetFreq: Check Transvert Freq at startup"));
@@ -2368,7 +2372,7 @@ void RigControlMainWindow::clearTransVertSupport()
 int RigControlMainWindow::getAndSendVfo()
 {
     int retCode = 0;
-    if (selectedRadioSupportCap.supportGetVfo)
+    if (selectedRadioSupportCap.getSupportGetVfo())
     {
         retCode = radio->getVfo(&rigStateDetails->curVfo);
         trace(QString("Read VFO = %1").arg(vfoToStr(rigStateDetails->curVfo)));
@@ -3302,21 +3306,21 @@ void RigControlMainWindow::getRitSupportStatus()
 
             sendMaxRitFreqLogger();
 
-            if (rigStateDetails->rigCap.supportGetRit)
+            if (rigStateDetails->rigCap.getSupportGetRit())
             {
                 // Does radio support getting Rit Freq?
-                logMessage(QString("Get Rit Support Status - getRit support is  = %1").arg(selectedRadioSupportCap.supportGetRit ? "True" : "False"));
+                logMessage(QString("Get Rit Support Status - getRit support is  = %1").arg(selectedRadioSupportCap.getSupportGetRit() ? "True" : "False"));
 
             }
 
-            if (rigStateDetails->rigCap.supportSetRit)
+            if (rigStateDetails->rigCap.getSupportSetRit())
             {
                 // Does radio support setting Rit Freq?
-                logMessage(QString("Get Rit Support Status - setRit support is  = %1").arg(selectedRadioSupportCap.supportSetRit ? "True" : "False"));
+                logMessage(QString("Get Rit Support Status - setRit support is  = %1").arg(selectedRadioSupportCap.getSupportSetRit() ? "True" : "False"));
 
             }
 
-            if (selectedRadioSupportCap.supportSetRit)
+            if (selectedRadioSupportCap.getSupportSetRit())
             {
                 rigStateDetails->ritEnable = currentRadio.enableDisableCatFeature.ritEnable;
                 logMessage(QString("Get Rit Support - Rit Enabled = %1").arg(rigStateDetails->ritEnable ? "True" : "False"));
@@ -3325,16 +3329,16 @@ void RigControlMainWindow::getRitSupportStatus()
 
             // Does radio support turning Rit on/off
 
-            if (rigStateDetails->rigCap.supportSetRitState)
+            if (rigStateDetails->rigCap.getSupportSetRitState())
             {
-                logMessage(QString("Get Rit Support Status - set Rit on/off support is  = %1").arg(selectedRadioSupportCap.supportSetRitState ? "True" : "False"));
+                logMessage(QString("Get Rit Support Status - set Rit on/off support is  = %1").arg(selectedRadioSupportCap.getSupportSetRitState() ? "True" : "False"));
 
             }
 
-            if (rigStateDetails->rigCap.supportGetRitState)
+            if (rigStateDetails->rigCap.getSupportGetRitState())
             {
                 // Does radio support getting Rit on/off state?
-                logMessage(QString("Get Rit Support Status - Rit On/Off state support is  = %1").arg(selectedRadioSupportCap.supportGetRitState ? "True" : "False"));
+                logMessage(QString("Get Rit Support Status - Rit On/Off state support is  = %1").arg(selectedRadioSupportCap.getSupportGetRitState() ? "True" : "False"));
 
             }
 
@@ -3371,7 +3375,7 @@ void RigControlMainWindow::setRitLogStatus(bool status)
     {
         ritIndicatorToggle(loggerRequests->logRitOn);
 
-        if (selectedRadioSupportCap.supportSetRitState)
+        if (selectedRadioSupportCap.getSupportSetRitState())
         {
             logMessage(QString("Radio Support RIT On/off switching - turn off"));
             if (radioCommsOK)
@@ -3394,7 +3398,7 @@ void RigControlMainWindow::setRitLogStatus(bool status)
         {
 
             logMessage(QString("Radio Doesn't support Rit Off/On - Send 0 freq to radio"));
-            if (radioCommsOK && selectedRadioSupportCap.supportSetRit && rigStateDetails->ritEnable)
+            if (radioCommsOK && selectedRadioSupportCap.getSupportSetRit() && rigStateDetails->ritEnable)
             {
                 setRitFreq(ShortFreq());
                 sendRitFreqLogger(ShortFreq());
@@ -3403,7 +3407,7 @@ void RigControlMainWindow::setRitLogStatus(bool status)
 
         }
 
-        if (!selectedRadioSupportCap.supportGetRitState)
+        if (!selectedRadioSupportCap.getSupportGetRitState())
         {
             ritIndicatorToggle(loggerRequests->logRitOn);
         }
@@ -3489,48 +3493,7 @@ void RigControlMainWindow::ritGetFreqIndicatorToggle(bool state)
     }
 }
 
-/*
-void RigControlMainWindow::saveRitEnableChk(bool state)
-{
-    QString fileNameRadio = RADIO_PATH_LOGGER + FILENAME_AVAIL_RADIOS;
-    QSettings config(fileNameRadio, QSettings::IniFormat);
-    config.beginGroup(currentRadio.radioName);
-    config.setValue("ritEnable", state);
-    config.endGroup();
-}
 
-
-bool RigControlMainWindow::readRitEnableChk()
-{
-    QString fileNameRadio = RADIO_PATH_LOGGER + FILENAME_AVAIL_RADIOS;
-    QSettings config(fileNameRadio, QSettings::IniFormat);
-    config.beginGroup(currentRadio.radioName);
-    bool ritEnableState = config.value("ritEnable", false).toBool();
-    config.endGroup();
-    return ritEnableState;
-}
-
-void RigControlMainWindow::ritEnableChecked(int chkState)
-{
-    rigStateDetails->ritEnable = false;
-    if (chkState == Qt::Unchecked)
-    {
-        saveRitEnableChk(rigStateDetails->ritEnable);
-        setRitFreqDisplayVisible(rigStateDetails->ritEnable);
-        logMessage(QString("RitEnableChecked - is checked"));
-
-    }
-    else if (chkState == Qt::Checked)
-    {
-        rigStateDetails->ritEnable = true;
-        saveRitEnableChk(rigStateDetails->ritEnable);
-        setRitFreqDisplayVisible(rigStateDetails->ritEnable);
-        logMessage(QString("RitEnableChecked - is unchecked"));
-    }
-
-    sendRitEnableStatusLogger();
-}
-*/
 
 int RigControlMainWindow::getRitFreq(VFO vfo)
 {
@@ -3587,7 +3550,7 @@ void RigControlMainWindow::doSetRitFreq(const ShortFreq &ritFreq)
             }
             else
             {
-                if (!selectedRadioSupportCap.supportGetRit)
+                if (!selectedRadioSupportCap.getSupportGetRit())
                 {
                     // get rit is not available, update local rit display
                     // and send to logger to update logger
@@ -4038,7 +4001,7 @@ void RigControlMainWindow::saveTraceLogFlag(bool state)
 
 void RigControlMainWindow::about()
 {
-    QMessageBox::about(this, tr("Minos RigControl"), tr("Minos QT RigControl\nCopyright D Balharrie G8FKH/M0DGB 2023"));
+    QMessageBox::about(this, tr("Minos RigControl"), tr("Minos QT RigControl\nCopyright D Balharrie G8FKH/M0DGB 2024"));
 }
 
 
@@ -4255,7 +4218,7 @@ void RigControlMainWindow::sendTransVertSwitchToComPort(const QString &swNum)
 
 void RigControlMainWindow::sendRitEnableStatusLogger()
 {
-    if (selectedRadioSupportCap.supportSetRit & rigStateDetails->ritEnable)
+    if (selectedRadioSupportCap.getSupportSetRit() & rigStateDetails->ritEnable)
     {
         sendRitEnableStatus(true);
     }
@@ -4698,10 +4661,10 @@ void RigControlMainWindow::aboutRigConfig()
 
         msg.append(tr("Radio Name = %1\n").arg(currentRadio.radioName));
         msg.append(tr("Radio Number = %1\n").arg(currentRadio.radioNumber));
-        msg.append(tr("Rig Model = %1\n").arg(rigCap.rigModelName));
-        msg.append(tr("Rig Number = %1\n").arg(rigCap.rigModelNumber));
-        msg.append(tr("Rig Manufacturer = %1\n").arg(rigCap.rigManufacturer));
-        if (rigCap.rigManufacturer == "Icom")
+        msg.append(tr("Rig Model = %1\n").arg(rigCap.getRigModelName()));
+        msg.append(tr("Rig Number = %1\n").arg(rigCap.getRigModelNumber()));
+        msg.append(tr("Rig Manufacturer = %1\n").arg(rigCap.getRigManufacturer()));
+        if (rigCap.getRigManufacturer() == "Icom")
         {
             if (currentRadio.civAddress == "")
             {
@@ -4724,28 +4687,70 @@ void RigControlMainWindow::aboutRigConfig()
 
         }
 
-        if (currentRadio.portType == RigCapConstants::PortType::serial)
-        {
-            msg.append(tr("Comport = %1\n").arg(currentRadio.comport));
-            msg.append(tr("Baudrate = %1\n").arg(currentRadio.baudrate));
-            msg.append(tr("Data bits = %1\n").arg(currentRadio.databits));
-            msg.append(tr("Stop bits = %1\n").arg(QString::number(currentRadio.stopbits)));
-            msg.append(tr("Parity = %1\n").arg(serialCommonData::parityStr[currentRadio.parity]));
-            msg.append(tr("Handshake = %1\n").arg(serialCommonData::handshakeStr[currentRadio.handshake]));
-            msg.append(tr("ForceDTR = %1\n").arg(serialCommonData::forceLinesStr[currentRadio.forceDtr]));
-            msg.append(tr("ForceRTS = %1\n").arg(serialCommonData::forceLinesStr[currentRadio.forceRts]));
-
-        }
 
         if (currentRadio.rigCtldEnable)
         {
-            msg.append(QString("\n"));
-            msg.append(tr("Using rigctld daemon = %1\n").arg(currentRadio.rigCtldEnable ? tr("True") : tr("False")));
+            if (currentRadio.startMinosRigCtld)
+            {
+               msg.append(tr("Using Minos RigCtld Daemon\n"));
+            }
+            else
+            {
+                msg.append(tr("Using external hamlib rigctld daemon"));
+            }
+
+
+
+            if (currentRadio.rigCtldNetworkAdd.isEmpty())
+            {
+               msg.append(tr("Using rigctld default network address.\n"));
+            }
+            else
+            {
+               msg.append(tr("Rigctld network address = %1\n").arg(currentRadio.rigCtldNetworkAdd));
+            }
+
+            if (currentRadio.rigCtldNetworkPort.isEmpty())
+            {
+                msg.append(tr("Using rigctld default network address.\n"));
+            }
+            else
+            {
+                msg.append(tr("Rigctld port address = %1\n").arg(currentRadio.rigCtldNetworkPort));
+            }
+
             msg.append(tr("Rigctld path = %1\n").arg(getRigCtldExePath()));
-            msg.append(tr("Rigctld name = %1\n").arg(getRigCtldExeName()));
-            msg.append(tr("Rigctld network address = %1\n").arg(currentRadio.rigCtldNetworkAdd));
-            msg.append(tr("Rigctld port address = %1\n").arg(currentRadio.rigCtldNetworkPort));
             msg.append(tr("Rigctld Connect delay = %1\n").arg(rigCtldDetails->rigCtldConnectDelay));
+        }
+        else
+        {
+
+            if (currentRadio.portType == RigCapConstants::PortType::serial)
+            {
+                msg.append(tr("Comport = %1\n").arg(currentRadio.comport));
+                msg.append(tr("Baudrate = %1\n").arg(currentRadio.baudrate));
+                msg.append(tr("Data bits = %1\n").arg(currentRadio.databits));
+                msg.append(tr("Stop bits = %1\n").arg(QString::number(currentRadio.stopbits)));
+                msg.append(tr("Parity = %1\n").arg(serialCommonData::parityStr[currentRadio.parity]));
+                msg.append(tr("Handshake = %1\n").arg(serialCommonData::handshakeStr[currentRadio.handshake]));
+                msg.append(tr("ForceDTR = %1\n").arg(serialCommonData::forceLinesStr[currentRadio.forceDtr]));
+                msg.append(tr("ForceRTS = %1\n").arg(serialCommonData::forceLinesStr[currentRadio.forceRts]));
+
+            }
+            else if (currentRadio.portType == RigCapConstants::PortType::network)
+            {
+                    msg.append(tr("Communication Port Type = %1\n").arg("network"));
+                    msg.append(tr("Network Address = %1\n").arg(currentRadio.networkAdd));
+                    msg.append(tr("Network Port = %1\n").arg(currentRadio.networkPort));
+
+            }
+            else if (currentRadio.portType == RigCapConstants::PortType::usb)
+            {
+                    msg.append(tr("Communication Port Type = %1\n").arg("usb"));
+            }
+
+
+
         }
 
         msg.append(QString("\n"));
@@ -4765,17 +4770,53 @@ void RigControlMainWindow::aboutRigConfig()
         }
 
         msg.append(QString("\n"));
-        msg.append(tr("Radio Supports RIT = %1\n").arg(selectedRadioSupportCap.supportSetRit ? tr("True") : tr("False")));
-        if (selectedRadioSupportCap.supportSetRit)
+        msg.append(tr("Radio Supports RIT = %1\n").arg(selectedRadioSupportCap.getSupportSetRit() ? tr("True") : tr("False")));
+        if (selectedRadioSupportCap.getSupportSetRit())
         {
             msg.append(tr("Rit Enable On = %1\n").arg(rigStateDetails->ritEnable  ? tr("True") : tr("False")));
-            msg.append(tr("Radio Supports Get RIT Freq = %1\n").arg(selectedRadioSupportCap.supportGetRit ? tr("True") : tr("False")));
-            msg.append(tr("Radio Supports Set RIT Freq = %1\n").arg(selectedRadioSupportCap.supportSetRit ? tr("True") : tr("False")));
+            msg.append(tr("Radio Supports Get RIT Freq = %1\n").arg(selectedRadioSupportCap.getSupportGetRit() ? tr("True") : tr("False")));
+            msg.append(tr("Radio Supports Set RIT Freq = %1\n").arg(selectedRadioSupportCap.getSupportSetRit() ? tr("True") : tr("False")));
             //msg.append(tr("Radio Supports Get RIT State On/Off = %1\n").arg(radioSupGetRitState ? tr("True") : tr("False")));
             //msg.append(tr("Radio Supports Set RIT State On/Off = %1\n").arg(radioSupRitOnOff ? tr("True") : tr("False")));
         }
 
-        if (rigCap.pollData)
+        QString pttPortTypeStr = "none";
+        if (selectedRadioSupportCap.getSupportPttPortType() == RigCapConstants::PttPortType::RIG_PTT_NONE)
+        {
+            pttPortTypeStr = "serial hardware control lines";
+        }
+        else if (selectedRadioSupportCap.getSupportPttPortType() == RigCapConstants::PttPortType::RIG_PTT_RIG
+                 || selectedRadioSupportCap.getSupportPttPortType() == RigCapConstants::PttPortType::RIG_PTT_RIG_MICDATA)
+        {
+            pttPortTypeStr = "cat";     // Note A radio may support CAT, but a user may decide to use RTS or DTR instead
+        }
+        msg.append(tr("Ptt control port Type = %1\n").arg((pttPortTypeStr)));
+        msg.append(tr("Get Ptt = %1\n").arg((selectedRadioSupportCap.getSupportGetPtt() ? "True" : "False")));
+        msg.append(tr("Set Ptt = %1\n").arg((selectedRadioSupportCap.getSupportSetPtt() ? "True" : "False")));
+        msg.append(tr("Get Vox = %1\n").arg((selectedRadioSupportCap.getSupportGetVox() ? "True" : "False")));
+        msg.append(tr("Set Vox = %1\n").arg((selectedRadioSupportCap.getSupportSetVox() ? "True" : "False")));
+        msg.append(tr("Get Vox = %1\n").arg((selectedRadioSupportCap.getSupportGetVox() ? "True" : "False")));
+        msg.append(tr("Get and Set Volume = %1\n").arg((selectedRadioSupportCap.getSupportVolume() ? "True" : "False")));
+        msg.append(tr("Get and Set Antenna Switch = %1\n").arg((selectedRadioSupportCap.getSupportAntSw() ? "True" : "False")));
+        msg.append(tr("Send Voice Memory = %1\n").arg((selectedRadioSupportCap.getSupportVoiceMemory() ? "True" : "False")));
+        if (selectedRadioSupportCap.getSupportVoiceMemory())
+        {
+            msg.append(tr("Start Voice Memory Message Number = %1\n").arg(selectedRadioSupportCap.getStartVoiceMemoryNumber()));
+            msg.append(tr("End Voice Memory Message Number = %1\n").arg(selectedRadioSupportCap.getEndVoiceMemoryNumber()));
+
+        }
+        msg.append(tr("Stop Voice Memory = %1\n").arg((selectedRadioSupportCap.getSupportStopVoiceMemory() ? "True" : "False")));
+        msg.append(tr("Send Cw Memory = %1\n").arg((selectedRadioSupportCap.getSupportCwMemory() ? "True" : "False")));
+        if (selectedRadioSupportCap.getSupportCwMemory())
+        {
+            msg.append(tr("Start Cw Memory Message Number = %1\n").arg(selectedRadioSupportCap.getStartCwMemoryNumber()));
+            msg.append(tr("End Cw Memory Message Number = %1\n").arg(selectedRadioSupportCap.getEndCwMemoryNumber()));
+        }
+        msg.append(tr("Stop Cw Memory = %1\n").arg((selectedRadioSupportCap.getSupportCwMemoryStop() ? "True" : "False")));
+        msg.append(tr("wait Cw Memory = %1\n").arg((selectedRadioSupportCap.getSupportCwMemoryWait() ? "True" : "False")));
+
+
+        if (rigCap.getPollData())
         {
             msg.append(tr("Radio Polltime = %1\n").arg(currentRadio.pollInterval));
         }
@@ -4796,7 +4837,7 @@ void RigControlMainWindow::dumpRadioToTraceLog()
 
     if (currentRadio.radioName != "" )
     {
-        trace("*** Radio Update ***");
+        trace("*** Settings Dump ***");
         trace(QString("App Instance Name  = %1").arg(appName));
         if (radio != nullptr)
         {
@@ -4804,15 +4845,15 @@ void RigControlMainWindow::dumpRadioToTraceLog()
         }
         else
         {
-            trace(QString("Not able to determine library version at this time"));
+            trace(QString("Radio is not created so not able to determine library version at this time"));
         }
 
         trace(QString("Radio Name = %1").arg(currentRadio.radioName));
         trace(QString("Radio Number = %1").arg(currentRadio.radioNumber));
-        trace(QString("Rig Model = %1").arg(rigCap.rigModelName));
-        trace(QString("Rig Number = %1").arg(rigCap.rigModelNumber));
-        trace(QString("Rig Manufacturer = %1").arg(rigCap.rigManufacturer));
-        if (rigCap.rigManufacturer == "Icom")
+        trace(QString("Rig Model = %1").arg(rigCap.getRigModelName()));
+        trace(QString("Rig Number = %1").arg(rigCap.getRigModelNumber()));
+        trace(QString("Rig Manufacturer = %1").arg(rigCap.getRigManufacturer()));
+        if (rigCap.getRigManufacturer() == "Icom")
         {
             if (currentRadio.civAddress == "")
             {
@@ -4824,36 +4865,121 @@ void RigControlMainWindow::dumpRadioToTraceLog()
             }
 
         }
-        //trace(QString("Rig PortType = %1").arg(hamlibData::portTypeList[setupRadio->currentRadio.portType]));
-        if (currentRadio.portType == RigCapConstants::PortType::network)
-        {
-            trace(QString("Network Address = %1").arg(currentRadio.networkAdd));
-            trace(QString("Network Port = %1").arg(currentRadio.networkPort));
-
-        }
-
-
-        if (currentRadio.portType == RigCapConstants::PortType::serial)
-        {
-            trace(QString("Comport = %1").arg(currentRadio.comport));
-            trace(QString("Data bits = %1").arg(currentRadio.databits));
-            trace(QString("Baudrate = %1").arg(currentRadio.baudrate));
-            trace(QString("Stop bits = %1").arg(QString::number(currentRadio.stopbits)));
-            trace(QString("Parity = %1").arg(serialCommonData::parityStr[currentRadio.parity]));
-            trace(QString("Handshake = %1").arg(serialCommonData::handshakeStr[currentRadio.handshake]));
-            trace(QString("ForceDTR = %1").arg(serialCommonData::forceLinesStr[currentRadio.forceDtr]));
-            trace(QString("ForceRTS = %1").arg(serialCommonData::forceLinesStr[currentRadio.forceRts]));
-
-        }
 
         if (currentRadio.rigCtldEnable)
         {
+            if (currentRadio.startMinosRigCtld)
+            {
+               trace(QString("Using Minos RigCtld Daemon"));
+            }
+            else
+            {
+                trace(QString("Using external hamlib rigctld daemon"));
+            }
+
+
+
             trace(QString("Using rigctld daemon = %1").arg(currentRadio.rigCtldEnable ? "True" : "False"));
-            trace(QString("Rigctld network address = %1").arg(currentRadio.rigCtldNetworkAdd));
-            trace(QString("Rigctld port address = %1").arg(currentRadio.rigCtldNetworkPort));
+            if (currentRadio.rigCtldNetworkAdd.isEmpty())
+            {
+               trace(QString("Using rigctld default network address."));
+            }
+            else
+            {
+               trace(QString("Rigctld network address = %1").arg(currentRadio.rigCtldNetworkAdd));
+            }
+
+            if (currentRadio.rigCtldNetworkPort.isEmpty())
+            {
+                trace(QString("Using rigctld default network address."));
+            }
+            else
+            {
+                trace(QString("Rigctld port address = %1").arg(currentRadio.rigCtldNetworkPort));
+            }
+
             trace(QString("Rigctld path = %1").arg(getRigCtldExePath()));
             trace(QString("Rigctld Connect delay = %1").arg(rigCtldDetails->rigCtldConnectDelay));
         }
+        else
+        {
+            if (currentRadio.portType == RigCapConstants::PortType::network)
+            {
+                trace(QString("Communication Port Type = %1").arg("network"));
+                trace(QString("Network Address = %1").arg(currentRadio.networkAdd));
+                trace(QString("Network Port = %1").arg(currentRadio.networkPort));
+
+            }
+            else if (currentRadio.portType == RigCapConstants::PortType::serial)
+            {
+                trace(QString("Communication Port Type = %1").arg("serial"));
+                trace(QString("Comport = %1").arg(currentRadio.comport));
+                trace(QString("Data bits = %1").arg(currentRadio.databits));
+                trace(QString("Baudrate = %1").arg(currentRadio.baudrate));
+                trace(QString("Stop bits = %1").arg(QString::number(currentRadio.stopbits)));
+                trace(QString("Parity = %1").arg(serialCommonData::parityStr[currentRadio.parity]));
+                trace(QString("Handshake = %1").arg(serialCommonData::handshakeStr[currentRadio.handshake]));
+                trace(QString("ForceDTR = %1").arg(serialCommonData::forceLinesStr[currentRadio.forceDtr]));
+                trace(QString("ForceRTS = %1").arg(serialCommonData::forceLinesStr[currentRadio.forceRts]));
+
+            }
+            else if (currentRadio.portType == RigCapConstants::PortType::usb)
+            {
+                trace(QString("Communication Port Type = %1").arg("usb"));
+            }
+
+        }
+
+
+
+
+        trace(QString("Get Supported Bands = %1").arg((selectedRadioSupportCap.getSupportGetSupBands() ? "True" : "False")));
+        trace(QString("Get Vfo = %1").arg((selectedRadioSupportCap.getSupportGetVfo() ? "True" : "False")));
+        trace(QString("Set Vfo = %1").arg((selectedRadioSupportCap.getSupportSetVfo() ? "True" : "False")));
+        trace(QString("Get Rit = %1").arg((selectedRadioSupportCap.getSupportGetRit() ? "True" : "False")));
+        trace(QString("Set Rit = %1").arg((selectedRadioSupportCap.getSupportSetRit() ? "True" : "False")));
+        trace(QString("Get RitState = %1").arg((selectedRadioSupportCap.getSupportGetRitState() ? "True" : "False")));
+        trace(QString("Set RitState = %1").arg((selectedRadioSupportCap.getSupportSetRitState() ? "True" : "False")));
+        trace(QString("Get Rit Max Freq = %1").arg((selectedRadioSupportCap.getSupportGetRitMax() ? "True" : "False")));
+        trace(QString("Get Signal Strength = %1").arg((selectedRadioSupportCap.getSupportSMeter() ? "True" : "False")));
+        QString pttPortTypeStr = "none";
+        if (selectedRadioSupportCap.getSupportPttPortType() == RigCapConstants::PttPortType::RIG_PTT_NONE)
+        {
+            pttPortTypeStr = "serial hardware control lines";
+        }
+        else if (selectedRadioSupportCap.getSupportPttPortType() == RigCapConstants::PttPortType::RIG_PTT_RIG
+                 || selectedRadioSupportCap.getSupportPttPortType() == RigCapConstants::PttPortType::RIG_PTT_RIG_MICDATA)
+        {
+            pttPortTypeStr = "cat";     // Note A radio may support CAT, but a user may decide to use RTS or DTR instead
+        }
+        trace(QString("Ptt control port Type = %1").arg((pttPortTypeStr)));
+        trace(QString("Get Ptt = %1").arg((selectedRadioSupportCap.getSupportGetPtt() ? "True" : "False")));
+        trace(QString("Set Ptt = %1").arg((selectedRadioSupportCap.getSupportSetPtt() ? "True" : "False")));
+        trace(QString("Get Vox = %1").arg((selectedRadioSupportCap.getSupportGetVox() ? "True" : "False")));
+        trace(QString("Set Vox = %1").arg((selectedRadioSupportCap.getSupportSetVox() ? "True" : "False")));
+        trace(QString("Get Vox = %1").arg((selectedRadioSupportCap.getSupportGetVox() ? "True" : "False")));
+        trace(QString("Get and Set Volume = %1").arg((selectedRadioSupportCap.getSupportVolume() ? "True" : "False")));
+        trace(QString("Get and Set Antenna Switch = %1").arg((selectedRadioSupportCap.getSupportAntSw() ? "True" : "False")));
+        trace(QString("Send Voice Memory = %1").arg((selectedRadioSupportCap.getSupportVoiceMemory() ? "True" : "False")));
+        if (selectedRadioSupportCap.getSupportVoiceMemory())
+        {
+            trace(QString("Start Voice Memory Message Number = %1").arg(selectedRadioSupportCap.getStartVoiceMemoryNumber()));
+            trace(QString("End Voice Memory Message Number = %1").arg(selectedRadioSupportCap.getEndVoiceMemoryNumber()));
+
+        }
+        trace(QString("Stop Voice Memory = %1").arg((selectedRadioSupportCap.getSupportStopVoiceMemory() ? "True" : "False")));
+        trace(QString("Send Cw Memory = %1").arg((selectedRadioSupportCap.getSupportCwMemory() ? "True" : "False")));
+        if (selectedRadioSupportCap.getSupportCwMemory())
+        {
+            trace(QString("Start Cw Memory Message Number = %1").arg(selectedRadioSupportCap.getStartCwMemoryNumber()));
+            trace(QString("End Cw Memory Message Number = %1").arg(selectedRadioSupportCap.getEndCwMemoryNumber()));
+        }
+        trace(QString("Stop Cw Memory = %1").arg((selectedRadioSupportCap.getSupportCwMemoryStop() ? "True" : "False")));
+        trace(QString("wait Cw Memory = %1").arg((selectedRadioSupportCap.getSupportCwMemoryWait() ? "True" : "False")));
+        trace(QString("Poll for Radio Data = %1").arg((selectedRadioSupportCap.getPollData() ? "True" : "False")));
+
+
+
         trace(QString("MGM mode = %1").arg(currentRadio.mgmMode));
         trace(QString("RTTY mode = %1").arg(currentRadio.rttyMode));
         trace(QString("PSK mode = %1").arg(currentRadio.pskMode));
@@ -4870,17 +4996,17 @@ void RigControlMainWindow::dumpRadioToTraceLog()
             trace(QString("Transverter Switch num = %1").arg(currentRadio.transVertSettings.value(tv)->transSwitchNum));
             trace(QString("Transverter Switch enable = %1").arg(currentRadio.enableTransSwitch  ? "True" : "False"));
         }
-        trace(QString("Radio Supports RIT = %1").arg(selectedRadioSupportCap.supportSetRit ? "True" : "False"));
-        if (selectedRadioSupportCap.supportSetRit)
+        trace(QString("Radio Supports RIT = %1").arg(selectedRadioSupportCap.getSupportSetRit() ? "True" : "False"));
+        if (selectedRadioSupportCap.getSupportSetRit())
         {
             trace(QString("Rit Enable On = %1").arg(rigStateDetails->ritEnable  ? "True" : "False"));
-            trace(QString("Radio Supports Get RIT Freq = %1").arg(selectedRadioSupportCap.supportGetRit ? "True" : "False"));
-            trace(QString("Radio Supports Set RIT Freq = %1").arg(selectedRadioSupportCap.supportSetRit ? "True" : "False"));
+            trace(QString("Radio Supports Get RIT Freq = %1").arg(selectedRadioSupportCap.getSupportGetRit() ? "True" : "False"));
+            trace(QString("Radio Supports Set RIT Freq = %1").arg(selectedRadioSupportCap.getSupportSetRit() ? "True" : "False"));
             //trace(QString("Radio Supports Get RIT State On/Off = %1").arg(radioSupGetRitState ? "True" : "False"));
             //trace(QString("Radio Supports Set RIT State On/Off = %1").arg(radioSupRitOnOff ? "True" : "False"));
         }
 
-        if (rigCap.pollData)
+        if (rigCap.getPollData())
         {
             trace(QString("Radio Polltime = %1").arg(currentRadio.pollInterval));
         }
@@ -5267,7 +5393,7 @@ void RigControlMainWindow::onSetStopVoiceMessage(QString msg)
    Q_UNUSED(msg) // we don't use the message
    if (radio)
    {
-       if (selectedRadioSupportCap.supportStopVoiceMemory)
+       if (selectedRadioSupportCap.getSupportStopVoiceMemory())
        {
            trace(QString("This radio supports hamlib stop_voice_mem function"));
            radio->stop_voice_mem(rigStateDetails->curVfo);

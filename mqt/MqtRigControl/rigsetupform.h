@@ -184,7 +184,7 @@ public:
     //void setPttTypeRadioButtons(int type);
     void setPTTCheckBoxDisabled(bool disabled);
 
-    void loadEnableShowCatFeaturesBox(const RigCapabilities rigCap);
+    void loadEnableShowCatFeaturesBox(RigCapabilities &rigCap);
 
 
 

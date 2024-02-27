@@ -159,13 +159,17 @@ void RigSetupForm::setupRadioModel(QString radioModel)
         RigCapabilities rigCap = rigFactory->supported_rigs()->value(radioData->rigModel);
 
 
-        radioData->rigModelNumber = rigFactory->supported_rigs()->value(radioData->rigModel).rigModelNumber;
-        radioData->rigModelName = rigFactory->supported_rigs()->value(radioData->rigModel).rigModelName;
-        radioData->rigMfg_Name = rigFactory->supported_rigs()->value(radioData->rigModel).rigManufacturer;
-        radioData->portType = rigFactory->supported_rigs()->value(radioData->rigModel).portType;
+        //radioData->rigModelNumber = rigFactory->supported_rigs()->value(radioData->rigModel).rigModelNumber;
+        //radioData->rigModelName = rigFactory->supported_rigs()->value(radioData->rigModel).rigModelName;
+        //radioData->rigMfg_Name = rigFactory->supported_rigs()->value(radioData->rigModel).rigManufacturer;
+        //radioData->portType = rigFactory->supported_rigs()->value(radioData->rigModel).portType;
 
+        radioData->rigModelNumber = rigCap.getRigModelNumber();
+        radioData->rigModelName = rigCap.getRigModelName();
+        radioData->rigMfg_Name = rigCap.getRigManufacturer();
+        radioData->portType = rigCap.getPortType();
 
-        if (rigCap.pollData)
+        if (rigCap.getPollData())
         {
             pollIntervalVisible(true);
         }
@@ -175,7 +179,7 @@ void RigSetupForm::setupRadioModel(QString radioModel)
         }
 
 
-        if (rigCap.rigManufacturer == "Icom")
+        if (rigCap.getRigManufacturer() == "Icom")
         {
             CIVEditVisible(true);
         }
@@ -187,11 +191,11 @@ void RigSetupForm::setupRadioModel(QString radioModel)
 
 
 
-        if (rigCap.portType == RigCapConstants::PortType::network)
+        if (rigCap.getPortType() == RigCapConstants::PortType::network)
         {
             setDialogBoxesVisibleForNetwork();
         }
-        else if (rigCap.portType == RigCapConstants::PortType::serial)
+        else if (rigCap.getPortType() == RigCapConstants::PortType::serial)
         {
             setDialogBoxesVisibleForSerial();
 
@@ -202,10 +206,10 @@ void RigSetupForm::setupRadioModel(QString radioModel)
 
         }
 
-        setRigctldCheckBoxVisible(rigCap.supportRigCtld);
+        setRigctldCheckBoxVisible(rigCap.getSupportRigCtld());
 
 
-        if (rigCap.supportGetSupBands)
+        if (rigCap.getSupportGetSupBands())
         {
             setSupportBandCheckBoxVisible(false);
         }
@@ -220,7 +224,7 @@ void RigSetupForm::setupRadioModel(QString radioModel)
 
         for (int i = 0; i < radioData->transVertSettings.count(); i++)
         {
-            if (rigCap.supportAntSw)
+            if (rigCap.getSupportAntSw())
             {
                //transVertTab[i]->antSwNumVisible(true);
                radioData->antSwitchAvail = true;
@@ -275,7 +279,7 @@ void RigSetupForm::setupRadioModel(QString radioModel)
 
          // Omnirig
 
-         if (rigCap.rigManufacturer == OMINRIG_MFR_NAME)
+         if (rigCap.getRigManufacturer() == OMINRIG_MFR_NAME)
          {
              setCatFeaturesEnableChkBoxVisible(false);
              setPortTypeWidgetsVisible(false);
@@ -304,7 +308,7 @@ void RigSetupForm::setupRadioModel(QString radioModel)
          bool catPTT = true;     // This is radio PTT capability true = CAT PTT
          bool serialPTT = true;
 
-         if (rigCap.supportPttPortType == RigCapConstants::PttPortType::RIG_PTT_RIG && rigCap.rigManufacturer == OMINRIG_MFR_NAME)
+         if (rigCap.getSupportPttPortType() == RigCapConstants::PttPortType::RIG_PTT_RIG && rigCap.getRigManufacturer() == OMINRIG_MFR_NAME)
          {
             // support CAT PTT only
 
@@ -312,15 +316,15 @@ void RigSetupForm::setupRadioModel(QString radioModel)
             serialPTT = false;
             setPttInitialState(catPTT, serialPTT);
          }
-         else if (rigCap.supportPttPortType == RigCapConstants::PttPortType::RIG_PTT_RIG
-                 || rigCap.supportPttPortType == RigCapConstants::PttPortType::RIG_PTT_RIG_MICDATA)
+         else if (rigCap.getSupportPttPortType() == RigCapConstants::PttPortType::RIG_PTT_RIG
+                 || rigCap.getSupportPttPortType() == RigCapConstants::PttPortType::RIG_PTT_RIG_MICDATA)
          {
              // support CAT PTT and Serial PTT
              catPTT = true;
              serialPTT = true;
              setPttInitialState(catPTT, serialPTT);
          }
-         else if (rigCap.supportPttPortType == RigCapConstants::PttPortType::RIG_PTT_NONE)
+         else if (rigCap.getSupportPttPortType() == RigCapConstants::PttPortType::RIG_PTT_NONE)
          {
 
             // support Serial PTT only
@@ -387,7 +391,7 @@ void RigSetupForm::setRadioModel(QString m)
 
     RigCapabilities rigCap = rigFactory->supported_rigs()->value(ui->radioModelBox->currentText());
 
-    if (rigCap.rigManufacturer == "Icom")
+    if (rigCap.getRigManufacturer() == "Icom")
     {
         CIVEditVisible(true);
     }
@@ -1540,7 +1544,7 @@ void RigSetupForm::onEnableCatFeaturesClicked()
 
 
 
-void RigSetupForm::loadEnableShowCatFeaturesBox(const RigCapabilities rigCap)
+void RigSetupForm::loadEnableShowCatFeaturesBox(RigCapabilities &rigCap)
 {
     ui->enableCatFeaturesChkBox->setChecked(radioData->enableDisableCatFeature.enableDisplay);
     if (ui->enableCatFeaturesChkBox->isChecked())
@@ -1553,7 +1557,7 @@ void RigSetupForm::loadEnableShowCatFeaturesBox(const RigCapabilities rigCap)
     }
 
     ui->enableRitCatFeatureChkBox->setChecked(radioData->enableDisableCatFeature.ritEnable);
-    if (rigCap.supportGetRit || rigCap.supportSetRit)
+    if (rigCap.getSupportGetRit() || rigCap.getSupportSetRit())
     {
         ui->enableRitCatFeatureChkBox->setVisible(true);
     }
@@ -1564,7 +1568,7 @@ void RigSetupForm::loadEnableShowCatFeaturesBox(const RigCapabilities rigCap)
 
 
     ui->enableSMeterCatFeatureChkBox->setChecked(radioData->enableDisableCatFeature.sMeterEnable);
-    if(rigCap.supportSMeter)
+    if(rigCap.getSupportSMeter())
     {
         ui->enableSMeterCatFeatureChkBox->setVisible(true);
     }
@@ -1574,7 +1578,7 @@ void RigSetupForm::loadEnableShowCatFeaturesBox(const RigCapabilities rigCap)
     }
 
     ui->enableVolCatFeatureChkBox->setChecked(radioData->enableDisableCatFeature.volumeEnable);
-    if (rigCap.supportVolume)
+    if (rigCap.getSupportVolume())
     {
         ui->enableVolCatFeatureChkBox->setVisible(true);
     }
@@ -1584,7 +1588,7 @@ void RigSetupForm::loadEnableShowCatFeaturesBox(const RigCapabilities rigCap)
     }
 
     ui->enableCatPttCatFeatureChkBox->setChecked(radioData->enableDisableCatFeature.catEnable);
-    if (rigCap.supportGetPtt && rigCap.supportSetPtt)
+    if (rigCap.getSupportGetPtt() && rigCap.getSupportSetPtt())
     {
         ui->enableCatPttCatFeatureChkBox->setVisible(true);
     }
@@ -1594,7 +1598,7 @@ void RigSetupForm::loadEnableShowCatFeaturesBox(const RigCapabilities rigCap)
     }
 
     ui->enableVoiceTxMemCatFeatureChkBox->setChecked(radioData->enableDisableCatFeature.voiceMemEnable);
-    if (rigCap.supportVoiceMemory)
+    if (rigCap.getSupportVoiceMemory())
     {
         ui->enableVoiceTxMemCatFeatureChkBox->setVisible(true);
     }
@@ -1604,7 +1608,7 @@ void RigSetupForm::loadEnableShowCatFeaturesBox(const RigCapabilities rigCap)
     }
 
     ui->enableCwTxMemCatFeatureChkBox->setChecked(radioData->enableDisableCatFeature.cWMemEnable);
-    if (rigCap.supportCwMemory)
+    if (rigCap.getSupportCwMemory())
     {
         ui->enableCwTxMemCatFeatureChkBox->setVisible(true);
     }

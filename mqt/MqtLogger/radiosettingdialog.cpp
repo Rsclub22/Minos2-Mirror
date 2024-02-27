@@ -17,7 +17,7 @@
 #include "regsettings.h"
 #include "rigcommon.h"
 #include "rigcontrolcommonconstants.h"
-#include "voicekeyerCommonConstants.h"
+
 #include "ContestApp.h"
 #include "rigutils.h"
 #include "tlogcontainer.h"
@@ -28,7 +28,7 @@
 #include "deletedradioforvoicecwmemorybuttonsdialog.h"
 #include "ui_radiosettingdialog.h"
 
-using namespace voiceKeyerCommon;
+
 
 RadioSettingDialog::RadioSettingDialog( QWidget *parent) :
     QFrame(parent),
@@ -252,12 +252,20 @@ void RadioSettingDialog::initialise()
     //===========================================================================================================
     ui->enableBandSwChkBox->setChecked(readEnableBandSwitchFromIni());
 
-    ui->saveVoiceCwMemoryButtonByRadioName->setChecked(readSaveVoiceCWMemoryButtonByRadioNameFromIni());
-    connect(ui->saveVoiceCwMemoryButtonByRadioName, &QCheckBox::stateChanged, this, [=]() {onSaveVoiceCwMemoryButtonByRadioNameClicked();});
 
-    ui->deleteMemoryButtonRadiosPushButton->setVisible(readSaveVoiceCWMemoryButtonByRadioNameFromIni());
-    connect(ui->deleteMemoryButtonRadiosPushButton, &QPushButton::clicked, this, [=]() {onDeleteMemoryButtonRadiosPushButtonClicked();});
+    // handle Voice and CW Save Memory Buttons by Name Checkboxes
+    ui->saveVoiceMemoryButtonByRadioName->setChecked(readSaveVoiceCWMemoryButtonByRadioNameFromIni(VoiceKeyerId::RigControl));
+    connect(ui->saveVoiceMemoryButtonByRadioName, &QCheckBox::stateChanged, this, [=]() {onSaveVoiceMemoryButtonByRadioNameChkBoxClicked();});
 
+    ui->saveCWMemoryButtonByRadioName->setChecked(readSaveVoiceCWMemoryButtonByRadioNameFromIni(VoiceKeyerId::CW_RigControl));
+    connect(ui->saveCWMemoryButtonByRadioName, &QCheckBox::stateChanged, this, [=]() {onSaveCwMemoryButtonByRadioNameChkBoxClicked();});
+
+
+    ui->deleteVoiceMemoryButtonRadiosPushButton->setVisible(readSaveVoiceCWMemoryButtonByRadioNameFromIni(VoiceKeyerId::RigControl));
+    connect(ui->deleteVoiceMemoryButtonRadiosPushButton, &QPushButton::clicked, this, [=]() {onDeleteVoiceMemoryButtonRadiosPushButtonClicked();});
+
+    ui->deleteCWMemoryButtonRadiosPushButton->setVisible(readSaveVoiceCWMemoryButtonByRadioNameFromIni(VoiceKeyerId::CW_RigControl));
+    connect(ui->deleteCWMemoryButtonRadiosPushButton, &QPushButton::clicked, this, [=]() {onDeleteCwMemoryButtonRadiosPushButtonClicked();});
 
     enableBandSwLineEdits(ui->enableBandSwChkBox->isChecked());
 
@@ -574,33 +582,51 @@ void RadioSettingDialog::onEnableSerialBandSwChkBox()
 
 
 
-void RadioSettingDialog::onSaveVoiceCwMemoryButtonByRadioNameClicked()
+void RadioSettingDialog::onSaveVoiceMemoryButtonByRadioNameChkBoxClicked()
 {
-    setDeleteMemoryButtonRadiosPushButtonVisible(ui->saveVoiceCwMemoryButtonByRadioName->isChecked());
+    setDeleteMemoryButtonRadiosPushButtonVisible(ui->saveVoiceMemoryButtonByRadioName->isChecked(), VoiceKeyerId::RigControl);
+}
+
+void RadioSettingDialog::onSaveCwMemoryButtonByRadioNameChkBoxClicked()
+{
+    setDeleteMemoryButtonRadiosPushButtonVisible(ui->saveCWMemoryButtonByRadioName->isChecked(), VoiceKeyerId::CW_RigControl);
 }
 
 
-void RadioSettingDialog::onDeleteMemoryButtonRadiosPushButtonClicked()
+void RadioSettingDialog::onDeleteVoiceMemoryButtonRadiosPushButtonClicked()
 {
-    QStringList listOfRadios = getListOfRadioNamesForVoiceCWMemoryButtons();
+    deleteMemoryButtonRadios(VoiceKeyerId::RigControl);
+}
 
-    DeletedRadioForVoiceCwMemoryButtonsDialog vmDeleteRadios(listOfRadios,nullptr);
+void RadioSettingDialog::onDeleteCwMemoryButtonRadiosPushButtonClicked()
+{
+    deleteMemoryButtonRadios(VoiceKeyerId::CW_RigControl);
+}
+
+
+void RadioSettingDialog::deleteMemoryButtonRadios(VoiceKeyerId id)
+{
+
+    QStringList listOfRadios;
+
+    getListOfRadioNamesForMemoryButtons(listOfRadios, id);
+
+    DeletedRadioForVoiceCwMemoryButtonsDialog vmDeleteRadios(listOfRadios,id, nullptr);
+
     int ret = vmDeleteRadios.exec();
 
     QList<QListWidgetItem *> selectedItems;
     QStringList listOfRadiosToDelete;
 
+
+
     if (ret == QDialog::Accepted)
     {
-        selectedItems = vmDeleteRadios.getSelectedItems();
+        selectedItems = vmDeleteRadios.getSelectedItems(id);
+
+
         if (!selectedItems.isEmpty())
         {
-
-            QString fileName = VOICE_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[VoiceKeyerId::RigControl] + ".ini";
-            QSettings voiceButtonConfig(fileName, QSettings::IniFormat);
-
-            fileName = VOICE_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[VoiceKeyerId::RigControl] + ".ini";
-            QSettings cwButtonConfig(fileName, QSettings::IniFormat);
 
             foreach (QListWidgetItem* item, selectedItems)
             {
@@ -608,28 +634,42 @@ void RadioSettingDialog::onDeleteMemoryButtonRadiosPushButtonClicked()
                 listOfRadiosToDelete.append(itemText);
             }
 
+
+            QString fileName = VOICE_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[id] + ".ini";
+            QSettings config(fileName, QSettings::IniFormat);
+
             if (!listOfRadiosToDelete.isEmpty())
             {
+
                 for(const auto &radioName: listOfRadiosToDelete)
                 {
-                    voiceButtonConfig.beginGroup(radioName);
-                    voiceButtonConfig.remove("");
-                    voiceButtonConfig.endGroup();
-
-                    cwButtonConfig.beginGroup(radioName);
-                    cwButtonConfig.remove("");
-                    cwButtonConfig.endGroup();
+                    config.beginGroup(radioName);
+                    config.remove("");
+                    config.endGroup();
                 }
-
-                //mShowMessage(tr("You will need to close and reload Minos to have these settings applied"), this);
             }
+
         }
+
+
+
+
+
     }
 }
 
-void RadioSettingDialog::setDeleteMemoryButtonRadiosPushButtonVisible(bool visible)
+void RadioSettingDialog::setDeleteMemoryButtonRadiosPushButtonVisible(bool visible, VoiceKeyerId id)
 {
-    ui->deleteMemoryButtonRadiosPushButton->setVisible(visible);
+    if (id == VoiceKeyerId::RigControl)
+    {
+        ui->deleteVoiceMemoryButtonRadiosPushButton->setVisible(visible);
+    }
+    else if (id == VoiceKeyerId::CW_RigControl)
+    {
+        ui->deleteCWMemoryButtonRadiosPushButton->setVisible(visible);
+    }
+
+
 }
 
 void RadioSettingDialog::saveSettings()
@@ -648,7 +688,8 @@ void RadioSettingDialog::saveSettings()
     saveBandSwComport();
     saveBandSwData();
     saveBandSwCheckBoxes();
-    saveVoiceCwMemoryButtonByRadioNameCheckBox();
+    saveVoiceMemoryButtonByRadioNameCheckBox();
+    saveCwMemoryButtonByRadioNameCheckBox();
 }
 
 
@@ -703,11 +744,20 @@ void RadioSettingDialog::saveBandSwCheckBoxes()
     }
 }
 
-void RadioSettingDialog::saveVoiceCwMemoryButtonByRadioNameCheckBox()
+void RadioSettingDialog::saveVoiceMemoryButtonByRadioNameCheckBox()
 {
-    if (readSaveVoiceCWMemoryButtonByRadioNameFromIni() != ui->saveVoiceCwMemoryButtonByRadioName->isChecked())
+    if (readSaveVoiceCWMemoryButtonByRadioNameFromIni(VoiceKeyerId::RigControl) != ui->saveVoiceMemoryButtonByRadioName->isChecked())
     {
-        writeSaveVoiceCWMemoryButtonByRadioNameToIni(ui->saveVoiceCwMemoryButtonByRadioName->isChecked());
+        writeSaveVoiceCWMemoryButtonByRadioNameToIni(ui->saveVoiceMemoryButtonByRadioName->isChecked(), VoiceKeyerId::RigControl);
+
+    }
+}
+
+void RadioSettingDialog::saveCwMemoryButtonByRadioNameCheckBox()
+{
+    if (readSaveVoiceCWMemoryButtonByRadioNameFromIni(VoiceKeyerId::CW_RigControl) != ui->saveCWMemoryButtonByRadioName->isChecked())
+    {
+        writeSaveVoiceCWMemoryButtonByRadioNameToIni(ui->saveCWMemoryButtonByRadioName->isChecked(), VoiceKeyerId::CW_RigControl);
 
     }
 }
