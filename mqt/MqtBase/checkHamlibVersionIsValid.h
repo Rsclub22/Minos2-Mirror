@@ -15,7 +15,7 @@
 
 #include <QString>
 
-const QString MINIMUM_HAMLIB_VERSION = "4.6";
+const QString MINIMUM_HAMLIB_VERSION = HAMLIBVERSION;
 
 int checkHamlibVersionIsValid(bool &ok, QString installedVersionNumber, const QString requiredVersionNumber);
 
