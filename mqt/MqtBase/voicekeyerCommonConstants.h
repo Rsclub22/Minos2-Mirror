@@ -35,7 +35,7 @@ namespace voiceKeyerCommon
     //const QString VOICEKEYER_COMMON_PARAMS_PATH = VOICE_KEYER_PATH + "CommonParams/";
     const QString VOICEKEYER_COMMON_PARAMS_FILENAME = "txVoiceKeyCommonParams.ini";
     const QString VOICEKEYER_COMMON_PARAMS_GROUPNAME = VOICEKEYER_COMMON_KEY;
-
+    const QString CWKEYER_RADIO_COMMON_PARAMS_FILENAME = "cwRadioParams";
     const QString CW_MESSAGE_BASE_FILE_NAME = "txCwMemory";
 
     const QString ALL_RADIOS_GROUP_NAME = "AllRadios";
@@ -50,6 +50,12 @@ QString VOICEKEYER_COMMON_PARAMS_PATH();
 bool readSaveVoiceCWMemoryButtonByRadioNameFromIni(voiceKeyerCommon::VoiceKeyerId id);
 void writeSaveVoiceCWMemoryButtonByRadioNameToIni(bool data, voiceKeyerCommon::VoiceKeyerId id);
 void getListOfRadioNamesForMemoryButtons(QStringList &radioNames, voiceKeyerCommon::VoiceKeyerId id);
+
+bool getRigCWKeyerSupportedSpecialCharacters(QMap<QString, QChar> &specialCharMap, QString radioMfg);
+bool getRigCWKeyerRadiosSupportSpecialCharacters(QStringList &listOfRadioModels, QString radioMfg);
+bool getRigCWKeyerSupportedCharacters(QString &supportedChars, QString radioMfg);
+bool getRigCWMessageStoredInRadioFlag(bool &storedInRadio, QString radioMfg);
+bool getRigCWKeyerMaxMessageLength(int &messageLength, QString radioMfg);
 
 
 #endif // VOICEKEYERCOMMONCONSTANTS_H

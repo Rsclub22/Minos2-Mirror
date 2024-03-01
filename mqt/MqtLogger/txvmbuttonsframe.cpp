@@ -58,7 +58,6 @@ TxVmButtonsFrame::TxVmButtonsFrame(QWidget *parent) :
 
     initTxVmButtonFrame();
 
-
 }
 
 TxVmButtonsFrame::~TxVmButtonsFrame()

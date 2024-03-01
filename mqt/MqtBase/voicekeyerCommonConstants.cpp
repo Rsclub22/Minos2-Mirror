@@ -62,3 +62,136 @@ void getListOfRadioNamesForMemoryButtons(QStringList &radioNames, VoiceKeyerId i
 
 
 
+bool getRigCWMessageStoredInRadioFlag(bool &storedInRadio, QString radioMfg)
+{
+    QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + CWKEYER_RADIO_COMMON_PARAMS_FILENAME + ".ini";
+    QSettings config(fileName, QSettings::IniFormat);
+
+    if (config.childGroups().contains(radioMfg))
+    {
+        config.beginGroup(radioMfg);
+        storedInRadio =  config.value("messageStoredInRadio", false).toBool();
+        config.endGroup();
+        return true;
+    }
+
+    return false;    // error
+}
+
+bool getRigCWKeyerMaxMessageLength(int &messageLength, QString radioMfg)
+{
+
+    QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + CWKEYER_RADIO_COMMON_PARAMS_FILENAME + ".ini";
+    QSettings config(fileName, QSettings::IniFormat);
+
+    if (config.childGroups().contains(radioMfg))
+    {
+        config.beginGroup(radioMfg);
+        messageLength = config.value("maxMsgLength", 0).toInt();
+        config.endGroup();
+        return true;
+    }
+
+    return false;    // error
+
+
+}
+
+
+bool getRigCWKeyerSupportedCharacters(QString &supportedChars, QString radioMfg)
+{
+    QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + CWKEYER_RADIO_COMMON_PARAMS_FILENAME + ".ini";
+    QSettings config(fileName, QSettings::IniFormat);
+
+    if (config.childGroups().contains(radioMfg))
+    {
+        config.beginGroup(radioMfg);
+        supportedChars =  config.value("supportedCharacters", "").toString();
+        config.endGroup();
+        return true;
+    }
+
+    return false;    // error
+}
+
+bool getRigCWKeyerRadiosSupportSpecialCharacters(QStringList &listOfRadioModels, QString radioMfg)
+{
+    QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + CWKEYER_RADIO_COMMON_PARAMS_FILENAME + ".ini";
+    QSettings config(fileName, QSettings::IniFormat);
+
+    QString radios;
+
+    if (config.childGroups().contains(radioMfg))
+    {
+        config.beginGroup(radioMfg);
+        radios = config.value("radiosSupportSpecialChars", "").toString();
+        config.endGroup();
+
+        if (!radios.isEmpty())
+        {
+            listOfRadioModels = radios.split(',');
+            if (!listOfRadioModels.isEmpty())
+            {
+                foreach (const QString radio, listOfRadioModels)
+                {
+                    listOfRadioModels.append(radio.trimmed());
+                }
+
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+
+bool getRigCWKeyerSupportedSpecialCharacters(QMap<QString, QChar> &specialCharMap, QString radioMfg)
+{
+    QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + CWKEYER_RADIO_COMMON_PARAMS_FILENAME + ".ini";
+    QSettings config(fileName, QSettings::IniFormat);
+
+    QString specialChars;
+    QStringList listOfSpecialChars;
+
+    if (config.childGroups().contains(radioMfg))
+    {
+        config.beginGroup(radioMfg);
+        specialChars = config.value("specialCharacters", "").toString();
+        config.endGroup();
+
+        if (!specialChars.isEmpty())
+        {
+            listOfSpecialChars = specialChars.split(',');
+            if (!listOfSpecialChars.isEmpty())
+            {
+                foreach (const QString specialChar, listOfSpecialChars)
+                {
+                    if (specialChar.length() == 4)
+                    {
+                        QString spCharStr = specialChar.left(2);
+                        QChar spCharCode = specialChar.at(3);
+                        specialCharMap.insert(spCharStr, spCharCode);
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+
+                if (!specialCharMap.isEmpty())
+                {
+                    return true;
+                }
+            }
+        }
+    }
+
+    return false;
+
+}
+
+
+
+
+
