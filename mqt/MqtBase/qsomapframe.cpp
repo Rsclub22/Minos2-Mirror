@@ -53,7 +53,7 @@ QSOMapFrame::~QSOMapFrame()
 {
     delete ui;
 }
-void QSOMapFrame::setContest(BaseContestLog *c, bool monitor, bool grid, bool lines, bool spots, int spotDistance)
+void QSOMapFrame::setContest(BaseContestLog *c, bool monitor, bool grid, bool lines, bool spots, int spotDistance, bool sl, QString tl, QString br)
 {
     // NB maps that aren't displayed never get ct set
 
@@ -63,7 +63,7 @@ void QSOMapFrame::setContest(BaseContestLog *c, bool monitor, bool grid, bool li
         bmonitor = monitor;
         startMap();
 
-        doRedraw(c, grid, lines, spots, spotDistance);
+        doRedraw(c, grid, lines, spots, spotDistance, sl, tl, br);
     }
     else
     {
@@ -77,7 +77,7 @@ void QSOMapFrame::onContestBandChanged(BaseContestLog *c)
         emit clearAll();
         locs.clear();
 
-        doRedraw(ct, bdrawGrid, bdrawLines, drawSpots, spotDistance);
+        doRedraw(ct, bdrawGrid, bdrawLines, drawSpots, spotDistance,showLoc, locTL, locBR);
     }
 }
 void QSOMapFrame::startMap()
@@ -124,6 +124,10 @@ void QSOMapFrame::startMap()
 
         connect(this, SIGNAL(drawLines(QVariant)), qmlObj, SLOT(setDrawLines(QVariant)), Qt::UniqueConnection);
         connect(this, SIGNAL(drawGrid(QVariant)), qmlObj, SLOT(setDrawGrid(QVariant)), Qt::UniqueConnection);
+        connect(this, SIGNAL(showLocs(QVariant)), qmlObj, SLOT(setShowLocs(QVariant)), Qt::UniqueConnection);
+        connect(this, SIGNAL(showLocsTL(QVariant)), qmlObj, SLOT(setShowLocsTL(QVariant)), Qt::UniqueConnection);
+        connect(this, SIGNAL(showLocsBR(QVariant)), qmlObj, SLOT(setShowLocsBR(QVariant)), Qt::UniqueConnection);
+
         connect(this, SIGNAL(clearAll()), qmlObj, SLOT(clearAll()), Qt::UniqueConnection);
 
         connect(qmlObj, SIGNAL(qmlSignal(QVariant)), this, SLOT(onQmlSignal(QVariant)), Qt::UniqueConnection);
@@ -140,7 +144,7 @@ void QSOMapFrame::onQmlSignal(QVariant v)
     QList<QVariant> gc = v.toList();
 
     QString reason = gc[0].toString();
-    if (reason == "Pressed")
+    if (reason == "LeftPressed")
     {
         //   QString latitude = gc[1].toString();
         //   QString longitude = gc[2].toString();
@@ -192,18 +196,78 @@ void QSOMapFrame::saveParams()
         }
     }
 }
-void QSOMapFrame::doRedraw(const BaseContestLog *ctest, bool grid, bool lines, bool spots, int sd)
+void QSOMapFrame::doRedraw(const BaseContestLog *ctest, bool grid, bool lines, bool spots, int sd
+                           ,bool sl, QString tl, QString br)
 {
     trace(QString("QSOMapFrame doRedraw grid %1 lines %2 spots %3 sd %4").arg(grid).arg(lines).arg(spots).arg(sd));
     if (ct == nullptr || ctest != ct)
     {
         return;
     }
+
+    if (tl.size() != 4)
+    {
+        return;
+    }
+    Locator tlloc;
+    tlloc.setLoc(tl);
+    int tllocres = tlloc.getValRes();
+    if (tllocres != LOC_OK && tllocres != LOC_PARTIAL)
+    {
+        return;
+    }
+    if (br.size() != 4)
+    {
+        return;
+    }
+    Locator brloc;
+    brloc.setLoc(br);
+
+    int brlocres = brloc.getValRes();
+    if (brlocres != LOC_OK && brlocres != LOC_PARTIAL)
+    {
+        return;
+    }
+
     bdrawGrid = grid;
     bdrawLines = lines;
 
-    emit drawGrid(grid);
-    emit drawLines(lines);
+    emit drawGrid(bdrawGrid);
+    emit drawLines(bdrawLines);
+
+    showLoc = sl;
+    emit showLocs(showLoc);
+
+    locTL = tl;
+
+    // 1st letter, number increases East
+    // 2nd letter, number increases North
+
+    // we are positioning loc from top left
+    QPair<double, double> pos = calcLoc(locTL);
+
+    QStringList latlong; // [latitude, longitude]
+
+    int tllat = pos.first + 1 + 1;
+    int tllon = pos.second + 1 - 2;
+
+    latlong << QString::number(tllat);
+    latlong << QString::number(tllon);
+
+    emit showLocsTL(latlong);
+
+    locBR = br;
+
+    pos = calcLoc(locBR);
+
+    latlong.clear();
+
+    int brlat = pos.first + 1;
+    int brlon = pos.second + 1;
+    latlong << QString::number(brlat);
+    latlong << QString::number(brlon);
+
+    emit showLocsBR(latlong);
 
     drawSpots = spots;
     spotDistance = sd;
@@ -362,6 +426,20 @@ QPair<double, double> QSOMapFrame::calcPosition(QString loc, bool &drawLine)
     }
     return QPair<double, double>(lat, lon);
 }
+QPair<double, double> QSOMapFrame::calcLoc(QString loc)
+{
+    // 1st letter, number increases East
+    // 2nd letter, number increases North
+
+    double slat;
+    double slon;
+    loc = loc.left(4) + "AX";   // should be top right
+    /*char v =*/ lonlat( loc, slon, slat, true);
+
+    double lat = raddeg(slat);
+    double lon = raddeg(slon);
+    return QPair<double, double>(lat, lon);
+}
 void QSOMapFrame::showContact(const BaseContestLog *c, const QSharedPointer<BaseContact> lct)
 {
     if (ct != nullptr && ct == c && !ct->isReadOnly())
@@ -438,7 +516,7 @@ void QSOMapFrame::on_AfterLogContact(const BaseContestLog *c, const QSharedPoint
         {
             emit clearAll();
             locs.clear();
-            doRedraw(c, bdrawGrid, bdrawLines, drawSpots, spotDistance);
+            doRedraw(c, bdrawGrid, bdrawLines, drawSpots, spotDistance, showLoc, locTL, locBR);
         }
         else
         {
@@ -447,7 +525,8 @@ void QSOMapFrame::on_AfterLogContact(const BaseContestLog *c, const QSharedPoint
     }
 }
 
-void QSOMapFrame::on_redrawQSOMap(bool grid, bool lines, bool spots, int sd)
+void QSOMapFrame::on_redrawQSOMap(bool grid, bool lines, bool spots, int sd,
+                                    bool sl, QString tl, QString br)
 {
     if (ct != nullptr)
     {
@@ -456,7 +535,7 @@ void QSOMapFrame::on_redrawQSOMap(bool grid, bool lines, bool spots, int sd)
         emit clearAll();
         locs.clear();
 
-        doRedraw(ct, grid, lines, spots, sd);
+        doRedraw(ct, grid, lines, spots, sd, sl, tl, br);
     }
 }
 
@@ -620,7 +699,7 @@ void QSOMapFrame::purgeSpots()
     {
         emit clearAll();
         locs.clear();
-        doRedraw(ct, bdrawGrid, bdrawLines, drawSpots, spotDistance);
+        doRedraw(ct, bdrawGrid, bdrawLines, drawSpots, spotDistance, showLoc, locTL, locBR);
     }
 }
 

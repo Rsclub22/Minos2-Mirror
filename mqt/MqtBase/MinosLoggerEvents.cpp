@@ -101,9 +101,11 @@ void MinosLoggerEvents::SendShowCribBand()
 {
     emit mle.ShowCribBand();
 }
-void MinosLoggerEvents::SendRedrawQSOMap(bool grid, bool lines, bool cluster, int cldist)
+void MinosLoggerEvents::SendRedrawQSOMap(bool grid, bool lines
+                                         , bool cluster, int cldist
+                                         , bool showloc, QString tl, QString br)
 {
-    emit mle.redrawQSOMap(grid, lines, cluster, cldist);
+    emit mle.redrawQSOMap(grid, lines, cluster, cldist, showloc, tl, br);
 }
 void MinosLoggerEvents::sendBandmapLimitsChanged()
 {

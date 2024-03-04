@@ -39,6 +39,9 @@ private:
     ConfigurationOption ShowSingleBandInCrib;
     ConfigurationOption ShowQSOMapGrid;
     ConfigurationOption ShowQSOMapLines;
+    ConfigurationOption ShowQSOMapShowLoc;
+    ConfigurationOption ShowQSOMapTLLoc;
+    ConfigurationOption ShowQSOMapBRLoc;
     ConfigurationOption MapShowCluster;
     ConfigurationOption MapClusterDistance;
 

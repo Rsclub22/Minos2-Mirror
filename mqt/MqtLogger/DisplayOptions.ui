@@ -7,13 +7,13 @@
     <x>0</x>
     <y>0</y>
     <width>942</width>
-    <height>658</height>
+    <height>743</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Frame</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_5">
+  <layout class="QVBoxLayout" name="verticalLayout_6">
    <item>
     <widget class="QFrame" name="fontLangFrame">
      <layout class="QHBoxLayout" name="horizontalLayout_7">
@@ -273,57 +273,112 @@
      <property name="title">
       <string>QSO Map Panel Options</string>
      </property>
-     <layout class="QHBoxLayout" name="horizontalLayout_14">
+     <layout class="QVBoxLayout" name="verticalLayout_5">
       <item>
-       <widget class="QCheckBox" name="QSOMapShowGrid">
+       <layout class="QHBoxLayout" name="horizontalLayout_12">
+        <item>
+         <widget class="QCheckBox" name="QSOMapShowGrid">
+          <property name="text">
+           <string>Show grid when contest has locators</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="QSOMapShowLines">
+          <property name="text">
+           <string>Draw lines to QSO partners</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="mapShowCluster">
+          <property name="text">
+           <string>Show Cluster Spots</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_2">
+          <property name="text">
+           <string>Limit Cluster distance</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QSpinBox" name="mapClusterDistance">
+          <property name="maximum">
+           <number>100000</number>
+          </property>
+          <property name="singleStep">
+           <number>100</number>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer_5">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_8">
         <property name="text">
-         <string>Show grid when contest has locators</string>
+         <string>NB Showing Loc can make the display very slow, so restrict the area as much as possible.</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QCheckBox" name="QSOMapShowLines">
-        <property name="text">
-         <string>Draw lines to QSO partners</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QCheckBox" name="mapShowCluster">
-        <property name="text">
-         <string>Show Cluster Spots</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="label_2">
-        <property name="text">
-         <string>Limit Cluster distance</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QSpinBox" name="mapClusterDistance">
-        <property name="maximum">
-         <number>100000</number>
-        </property>
-        <property name="singleStep">
-         <number>100</number>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <spacer name="horizontalSpacer_5">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
+       <layout class="QHBoxLayout" name="horizontalLayout_14">
+        <item>
+         <widget class="QCheckBox" name="QSOMapShowLoc">
+          <property name="text">
+           <string>Show Loc</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_3">
+          <property name="text">
+           <string>Top Left Loc</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="QSOMapTLLoc"/>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_7">
+          <property name="text">
+           <string>Bottom Right Loc</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="QSOMapBRLoc"/>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer_11">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
       </item>
      </layout>
     </widget>
@@ -612,7 +667,7 @@
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="otButtonGroup"/>
   <buttongroup name="locButtonGroup"/>
+  <buttongroup name="otButtonGroup"/>
  </buttongroups>
 </ui>

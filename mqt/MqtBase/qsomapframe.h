@@ -23,7 +23,10 @@ public:
     explicit QSOMapFrame(QWidget *parent = nullptr);
     ~QSOMapFrame();
 
-    void setContest(BaseContestLog *, bool monitor, bool grid, bool lines, bool spots, int spotDistance);
+    void setContest(BaseContestLog *, bool monitor, bool grid, bool lines
+                    , bool spots, int spotDistance
+                    , bool sl, QString tl, QString br
+);
 
 private:
     Ui::QSOMapFrame *ui;
@@ -37,6 +40,9 @@ private:
     bool bdrawLines = true;
     bool drawSpots = true;
     int spotDistance = 0;
+    bool showLoc = true;
+    QString locTL;
+    QString locBR;
 
     QString mCentreLat;
     QString mCentreLon;
@@ -51,12 +57,14 @@ private:
 
     void startMap();
     void stopMap();
-    void doRedraw(const BaseContestLog *c, bool grid, bool lines, bool spots, int spotDistance);
+    void doRedraw(const BaseContestLog *c, bool grid, bool lines, bool spots, int spotDistance
+                  ,bool sl, QString tl, QString br);
     void drawSpot(QSharedPointer<ClusterSpotData>);
 
     void showContact(const BaseContestLog *c, const QSharedPointer<BaseContact> lct);
     bool checkSpotInTable(QSharedPointer<ClusterSpotData> spot);
     QPair<double, double> calcPosition(QString loc, bool &drawLine);
+    QPair<double, double> calcLoc(QString loc);
 signals:
     void callSig(QVariant stringList);
     void spotSig(QVariant stringList);
@@ -64,6 +72,9 @@ signals:
 
     void drawLines(QVariant dl);
     void drawGrid(QVariant dg);
+    void showLocs(QVariant sl);
+    void showLocsTL(QVariant tl);
+    void showLocsBR(QVariant br);
     void clearAll();
 
 private slots:
@@ -74,7 +85,7 @@ private slots:
     void onContestBandChanged(BaseContestLog *c);
 public slots:
     void on_AfterLogContact(const BaseContestLog *c, const QSharedPointer<BaseContact> lct);
-    void on_redrawQSOMap(bool grid, bool lines, bool spots, int sd);
+    void on_redrawQSOMap(bool grid, bool lines, bool spots, int sd, bool sl, QString tl, QString br);
 
 };
 

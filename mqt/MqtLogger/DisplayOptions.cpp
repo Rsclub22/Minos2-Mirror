@@ -39,6 +39,9 @@ void DisplayOptions::initialise()
     ShowSingleBandInCrib.initialise(&TContestApp::getContestApp() ->loggerBundle, elpShowCribBand, ui->nextContactBandcb);
     ShowQSOMapGrid.initialise(&TContestApp::getContestApp() ->loggerBundle, elpShowQSOMapGrid, ui->QSOMapShowGrid);
     ShowQSOMapLines.initialise(&TContestApp::getContestApp() ->loggerBundle, elpShowQSOMapLines, ui->QSOMapShowLines);
+    ShowQSOMapShowLoc.initialise(&TContestApp::getContestApp() ->loggerBundle, elpShowMapLoc, ui->QSOMapShowLoc);
+    ShowQSOMapTLLoc.initialise(&TContestApp::getContestApp() ->loggerBundle, elpShowMapTLLoc, ui->QSOMapTLLoc, "IP40");
+    ShowQSOMapBRLoc.initialise(&TContestApp::getContestApp() ->loggerBundle, elpShowMapBRLoc, ui->QSOMapBRLoc, "KM00");
 
     MapShowCluster.initialise(&TContestApp::getContestApp() ->loggerBundle, elpMapShowCluster, ui->mapShowCluster);
     MapClusterDistance.initialise(&TContestApp::getContestApp() ->loggerBundle, elpMapClusterDistance, ui->mapClusterDistance);
@@ -131,6 +134,33 @@ void DisplayOptions::initialise()
 }
 bool DisplayOptions::check()
 {
+    QString tl = ui->QSOMapTLLoc->text().trimmed();
+    if (tl.size() != 4)
+    {
+        return false;
+    }
+    Locator tlloc;
+    tlloc.setLoc(tl);
+    int tllocres = tlloc.getValRes();
+    if (tllocres != LOC_OK && tllocres != LOC_PARTIAL)
+    {
+        return false;
+    }
+
+    QString br = ui->QSOMapBRLoc->text().trimmed();
+    if (br.size() != 4)
+    {
+        return false;
+    }
+    Locator brloc;
+    brloc.setLoc(br);
+
+    int brlocres = brloc.getValRes();
+    if (brlocres != LOC_OK && brlocres != LOC_PARTIAL)
+    {
+        return false;
+    }
+
     return true;
 }
 void DisplayOptions::cancel()
@@ -178,13 +208,20 @@ void DisplayOptions::finalise()
     bool mscchanged = MapShowCluster.finalise();
     bool mcdchanged = MapClusterDistance.finalise();
 
+    bool showLocChanged = ShowQSOMapShowLoc.finalise();
+    bool mapTLChanged = ShowQSOMapTLLoc.finalise();
+    bool mapBRChanged = ShowQSOMapBRLoc.finalise();
 
-    if (gchanged || lchanged || mscchanged || mcdchanged)
+    if (gchanged || lchanged || mscchanged || mcdchanged
+        || showLocChanged || mapTLChanged || mapBRChanged)
     {
         MinosLoggerEvents::SendRedrawQSOMap(ShowQSOMapGrid.value(),
                                             ShowQSOMapLines.value(),
                                             MapShowCluster.value(),
-                                            MapClusterDistance.iValue()
+                                            MapClusterDistance.iValue(),
+                                            ShowQSOMapShowLoc.value(),
+                                            ShowQSOMapTLLoc.sValue(),
+                                            ShowQSOMapBRLoc.sValue()
                                             );
     }
 

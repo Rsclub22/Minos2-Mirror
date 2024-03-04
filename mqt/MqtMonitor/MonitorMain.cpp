@@ -60,6 +60,7 @@ MonitorMain::MonitorMain(QWidget *parent) :
     connect(ui->monitorTree, &MonitoredLogs::logStarted, this, &MonitorMain::onLogStarted);
     connect(ui->monitorTree, &MonitoredLogs::logClosed, this, &MonitorMain::onLogClosed);
     connect(ui->monitorTree->getLogTree(), &QTreeView::clicked, this, &MonitorMain::onMonitorTree_clicked);
+    connect(RemoteLogs::getRemoteLogs(), &RemoteLogs::currentLogChanged, this, &MonitorMain::onLogChanged);
 
     QByteArray state;
 
@@ -119,6 +120,13 @@ MonitorMain::MonitorMain(QWidget *parent) :
     ui->mapShowSpots->setChecked(mapShowSpots);
     clusterDistanceLimit = isettings.value("clusterDistanceLimit", 0).toInt();
     ui->clusterDistanceLimit->setValue(clusterDistanceLimit);
+
+    showLoc = isettings.value("mapShowLoc", true).toBool();
+    ui->showLocs->setChecked(showLoc);
+    locTL = isettings.value("mapShowLocTL", "IP40").toString();
+    ui->locTL->setText(locTL);
+    locBR = isettings.value("mapShowLocBR", "KM40").toString();
+    ui->locBR->setText(locBR);
 }
 
 MonitorMain::~MonitorMain()
@@ -276,6 +284,13 @@ void MonitorMain::onLogClosed(QSharedPointer<MonitoredLog> l)
     {
        closeTab(cttab);
     }
+}
+void MonitorMain::onLogChanged(QSharedPointer<MonitoredLog> /*ml*/)
+{
+    // Are we showing this contest?
+    // Is it active?
+
+    // If setting says so, switch contests
 }
 //---------------------------------------------------------------------------
 // callback slots from RPC in MonitoredLog
@@ -462,7 +477,8 @@ void MonitorMain::on_showGridcb_stateChanged(int /*arg1*/)
     QSettings settings(iniName, QSettings::IniFormat);
     QSOGrid = ui->showGridcb->isChecked();
     settings.setValue("showQSOGrid", QSOGrid);
-    MinosLoggerEvents::SendRedrawQSOMap(QSOGrid, QSOLines, mapShowSpots, clusterDistanceLimit);
+    MinosLoggerEvents::SendRedrawQSOMap(QSOGrid, QSOLines, mapShowSpots, clusterDistanceLimit
+                                        , showLoc, locTL, locBR);
 }
 
 
@@ -471,7 +487,8 @@ void MonitorMain::on_showLinescb_stateChanged(int /*arg1*/)
     QSettings settings(iniName, QSettings::IniFormat);
     QSOLines = ui->showLinescb->isChecked();
     settings.setValue("showQSOLines", QSOLines);
-    MinosLoggerEvents::SendRedrawQSOMap(QSOGrid, QSOLines, mapShowSpots, clusterDistanceLimit);
+    MinosLoggerEvents::SendRedrawQSOMap(QSOGrid, QSOLines, mapShowSpots, clusterDistanceLimit
+                                        , showLoc, locTL, locBR);
 }
 
 
@@ -480,7 +497,8 @@ void MonitorMain::on_mapShowSpots_stateChanged(int /*arg1*/)
     QSettings settings(iniName, QSettings::IniFormat);
     mapShowSpots = ui->mapShowSpots->isChecked();
     settings.setValue("mapShowSpots", mapShowSpots);
-    MinosLoggerEvents::SendRedrawQSOMap(QSOGrid, QSOLines, mapShowSpots, clusterDistanceLimit);
+    MinosLoggerEvents::SendRedrawQSOMap(QSOGrid, QSOLines, mapShowSpots, clusterDistanceLimit
+                                        , showLoc, locTL, locBR);
 }
 
 
@@ -489,6 +507,36 @@ void MonitorMain::on_clusterDistanceLimit_valueChanged(int /*arg1*/)
     QSettings settings(iniName, QSettings::IniFormat);
     clusterDistanceLimit = ui->clusterDistanceLimit->value();
     settings.setValue("clusterDistanceLimit", clusterDistanceLimit);
-    MinosLoggerEvents::SendRedrawQSOMap(QSOGrid, QSOLines, mapShowSpots, clusterDistanceLimit);
+    MinosLoggerEvents::SendRedrawQSOMap(QSOGrid, QSOLines, mapShowSpots, clusterDistanceLimit
+                                        , showLoc, locTL, locBR);
 }
 
+
+void MonitorMain::on_showLocs_stateChanged(int /*arg1*/)
+{
+    QSettings settings(iniName, QSettings::IniFormat);
+    showLoc = ui->showLocs->isChecked();
+    settings.setValue("mapShowLoc", showLoc);
+    MinosLoggerEvents::SendRedrawQSOMap(QSOGrid, QSOLines, mapShowSpots, clusterDistanceLimit
+                                        , showLoc, locTL, locBR);
+}
+
+
+void MonitorMain::on_locTL_editingFinished()
+{
+    QSettings settings(iniName, QSettings::IniFormat);
+    locTL = ui->locTL->text();
+    settings.setValue("mapShowLocTL", locTL);
+    MinosLoggerEvents::SendRedrawQSOMap(QSOGrid, QSOLines, mapShowSpots, clusterDistanceLimit
+                                        , showLoc, locTL, locBR);
+}
+
+
+void MonitorMain::on_locBR_editingFinished()
+{
+    QSettings settings(iniName, QSettings::IniFormat);
+    locBR = ui->locBR->text();
+    settings.setValue("mapShowLocBR", locBR);
+    MinosLoggerEvents::SendRedrawQSOMap(QSOGrid, QSOLines, mapShowSpots, clusterDistanceLimit
+                                        , showLoc, locTL, locBR);
+}

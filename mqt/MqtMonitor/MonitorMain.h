@@ -38,6 +38,9 @@ public:
     bool QSOLines = true;
     bool mapShowSpots = true;
     int clusterDistanceLimit = 0;
+    bool showLoc = true;
+    QString locTL;
+    QString locBR;
 
     void closeTab(MonitoringFrame *tab);
 
@@ -84,6 +87,13 @@ private slots:
 
     void on_clusterDistanceLimit_valueChanged(int arg1);
 
+    void on_showLocs_stateChanged(int arg1);
+
+    void on_locTL_editingFinished();
+
+    void on_locBR_editingFinished();
+
+    void onLogChanged(QSharedPointer<MonitoredLog>);
 private:
     Ui::MonitorMain *ui;
     UpperCaseValidator ucValidator;

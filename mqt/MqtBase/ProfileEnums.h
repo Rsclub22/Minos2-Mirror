@@ -66,6 +66,9 @@ enum LOGGERPROFILE {
     elpShowCribBand,
     elpShowQSOMapGrid,
     elpShowQSOMapLines,
+    elpShowMapLoc,
+    elpShowMapTLLoc,
+    elpShowMapBRLoc,
     elpMapShowCluster,
     elpMapClusterDistance,
 

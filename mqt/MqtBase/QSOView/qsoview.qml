@@ -13,6 +13,12 @@ Frame {
     property bool showGrid: false
     property bool showLines: false
 
+    property bool showLocs: true
+    property int locTLLat: 0
+    property int locTLLon: 0
+    property int locBRLat: 0
+    property int locBRLon: 0
+
     property string homeLat: "0.0"
     property string homeLon: "0.0"
 
@@ -48,13 +54,19 @@ Frame {
             id: mapMouse
             anchors.fill: parent
             hoverEnabled: true
+            acceptedButtons: Qt.LeftButton/* | Qt.RightButton*/
 
             onPressed: mouse => {
-                let hcoord = QtPositioning.coordinate(homeLat, homeLon)
-                let cc = mapOfEurope.toCoordinate(Qt.point(mouse.x,mouse.y));
-                let b = hcoord.azimuthTo(cc)
-                let gc = ["Pressed", cc.latitude, cc.longitude, b];
-                qmlSignal(gc);
+                {
+                    if (pressedButtons && Qt.LeftButton)
+                    {
+                        let hcoord = QtPositioning.coordinate(homeLat, homeLon)
+                        let cc = mapOfEurope.toCoordinate(Qt.point(mouse.x,mouse.y));
+                        let b = hcoord.azimuthTo(cc)
+                        let gc = ["LeftPressed", cc.latitude, cc.longitude, b];
+                        qmlSignal(gc);
+                    }
+                }
             }
             onPositionChanged: mapMouse => {
                 // doesn't work!
@@ -95,7 +107,49 @@ Frame {
             drawLongitude(-85, 85, -90, 0)
             drawLongitude(-85, 85, 0, 90)
             drawLongitude(-85, 85, 90, 180)
+
+            // for (var latPos = -84; latPos < 85; latPos += 1 )
+            // {
+            //     for (var lonPos = -180; lonPos < 180; lonPos += 2)
+            if (showLocs)
+            {
+                for (var latPos = locBRLat; latPos < locTLLat; latPos += 1 )
+                {
+                    for (var lonPos = locTLLon; lonPos < locBRLon; lonPos += 2)
+                    {
+                        drawQRA(latPos, lonPos);
+                    }
+                }
+            }
+//            drawQRA(52, 0);
+
         }
+    }
+
+    function drawQRA(lat, lon)
+    {
+        var cmqra = Qt.createQmlObject(
+'import QtQuick 2.15
+import QtLocation 5.15
+
+MapQuickItem {
+    id: qraItem
+sourceItem: Text {
+        id: qraText
+        text: ""
+        color: "gray"
+
+        font.pointSize: mapOfEurope.zoomLevel * mapOfEurope.zoomLevel  * mapOfEurope.zoomLevel/ 16
+
+}
+}', mapOfEurope);
+        cmqra.sourceItem.color = setColorAlpha(cmqra.sourceItem.color, 0.5)
+        let r = QmlCppLink.locator(lat - 0.05, lon + 0.05);
+
+        cmqra.sourceItem.text = r.slice(0, 4);
+        let p = QtPositioning.coordinate(lat - 0.05, lon + 0.05)
+        cmqra.coordinate = p;
+        mapOfEurope.addMapItem(cmqra);
     }
 
     function drawLatitude(minlat, maxlat, minlong,maxlong)
@@ -309,6 +363,21 @@ MapPolyline
     {
         showGrid = dg
     }
+    function setShowLocs(sl)
+    {
+        showLocs = sl;
+    }
+    function setShowLocsTL(tl)
+    {
+        locTLLat = parseInt(tl[0], 10)
+        locTLLon = parseInt(tl[1], 10)
+    }
+    function setShowLocsBR(br)
+    {
+        locBRLat = parseInt(br[0], 10)
+        locBRLon = parseInt(br[1], 10)
+    }
+
     function clearAll()
     {
         mapOfEurope.clearMapItems();
