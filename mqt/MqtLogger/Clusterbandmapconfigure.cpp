@@ -8,6 +8,8 @@
 #include "rigutils.h"
 #include "MinosLoggerEvents.h"
 #include "Clusterbandmapconfigure.h"
+#include "tlogcontainer.h"
+#include "waitcursor.h"
 #include "ui_Clusterbandmapconfigure.h"
 
 ClusterBandmapConfigure::ClusterBandmapConfigure(QWidget *parent) :
@@ -120,19 +122,43 @@ void ClusterBandmapConfigure::initialise()
 
    // get addBandmapTuningTolerance
 
-     TContestApp::getContestApp() ->loggerBundle.getIntProfile( elpAddBandMapTuningTolerance, addBandmapTuningTolerance );
-
-
-     if (addBandmapTuningTolerance < ADD_TUNING_BANDMAP_FREQ_DEFAULT_MIN_TOLERANCE || addBandmapTuningTolerance > ADD_TUNING_BANDMAP_FREQ_DEFAULT_MAX_TOLERANCE)
+     int tolcw = 0;
+     TContestApp::getContestApp() ->loggerBundle.getIntProfile( elpAddBandMapTuningToleranceCW, tolcw);
+     if (tolcw < ADD_TUNING_BANDMAP_FREQ_DEFAULT_MIN_TOLERANCE_CW || tolcw > ADD_TUNING_BANDMAP_FREQ_DEFAULT_MAX_TOLERANCE_CW)
      {
-        addBandmapTuningTolerance =  ADD_TUNING_BANDMAP_FREQ_DEFAULT_TOLERANCE;
+         TContestApp::getContestApp() ->loggerBundle.setIntProfile( elpAddBandMapTuningToleranceCW, ADD_TUNING_BANDMAP_FREQ_DEFAULT_TOLERANCE_CW );
      }
+     ui->addBandmapTuningCwTolSpinBox->setRange(ADD_TUNING_BANDMAP_FREQ_DEFAULT_MIN_TOLERANCE_CW, ADD_TUNING_BANDMAP_FREQ_DEFAULT_MAX_TOLERANCE_CW);
 
-     ui->addBandmapTuningTolSpinBox->setRange(ADD_TUNING_BANDMAP_FREQ_DEFAULT_MIN_TOLERANCE, ADD_TUNING_BANDMAP_FREQ_DEFAULT_MAX_TOLERANCE);
+     tuningTolCW.initialise(&TContestApp::getContestApp() ->loggerBundle, elpAddBandMapTuningToleranceCW, ui->addBandmapTuningCwTolSpinBox);
+     tuningAddMapCW.initialise(&TContestApp::getContestApp() ->loggerBundle, elpAddBandMapTuningEnableCW, ui->tuningAddMapCWcb);
 
-     ui->addBandmapTuningTolSpinBox->setValue(addBandmapTuningTolerance);
+     int toldata = 0;
+     TContestApp::getContestApp() ->loggerBundle.getIntProfile( elpAddBandMapTuningToleranceDATA, toldata );
+     if (toldata < ADD_TUNING_BANDMAP_FREQ_DEFAULT_MIN_TOLERANCE_DATA || toldata > ADD_TUNING_BANDMAP_FREQ_DEFAULT_MAX_TOLERANCE_DATA)
+     {
+         TContestApp::getContestApp() ->loggerBundle.setIntProfile( elpAddBandMapTuningToleranceDATA, ADD_TUNING_BANDMAP_FREQ_DEFAULT_TOLERANCE_DATA );
+     }
+     ui->addBandmapTuningDataTolSpinBox->setRange(ADD_TUNING_BANDMAP_FREQ_DEFAULT_MIN_TOLERANCE_DATA, ADD_TUNING_BANDMAP_FREQ_DEFAULT_MAX_TOLERANCE_DATA);
+     tuningTolData.initialise(&TContestApp::getContestApp() ->loggerBundle, elpAddBandMapTuningToleranceDATA, ui->addBandmapTuningDataTolSpinBox);
+     tuningAddMapData.initialise(&TContestApp::getContestApp() ->loggerBundle, elpAddBandMapTuningEnableDATA, ui->tuningAddMapDatacb);
 
-     tuningAddMap.initialise(&TContestApp::getContestApp() ->loggerBundle, elpAddBandMapTuningEnable, ui->tuningAddMapcb);
+     int tolphone;
+     TContestApp::getContestApp() ->loggerBundle.getIntProfile( elpAddBandMapTuningTolerancePHONE, tolphone );
+     if (tolphone <= 5)
+     {
+         tolphone = tolphone * 1000;
+         TContestApp::getContestApp() ->loggerBundle.setIntProfile( elpAddBandMapTuningTolerancePHONE, tolphone );
+     }
+     if (tolphone < ADD_TUNING_BANDMAP_FREQ_DEFAULT_MIN_TOLERANCE_PHONE || tolphone > ADD_TUNING_BANDMAP_FREQ_DEFAULT_MAX_TOLERANCE_PHONE)
+     {
+         tolphone =  ADD_TUNING_BANDMAP_FREQ_DEFAULT_TOLERANCE_PHONE;
+         TContestApp::getContestApp() ->loggerBundle.setIntProfile( elpAddBandMapTuningTolerancePHONE, tolphone );
+     }
+     ui->addBandmapTuningPhoneTolSpinBox->setRange(ADD_TUNING_BANDMAP_FREQ_DEFAULT_MIN_TOLERANCE_PHONE, ADD_TUNING_BANDMAP_FREQ_DEFAULT_MAX_TOLERANCE_PHONE);
+     tuningTolPhone.initialise(&TContestApp::getContestApp() ->loggerBundle, elpAddBandMapTuningTolerancePHONE, ui->addBandmapTuningPhoneTolSpinBox);
+     tuningAddMapPhone.initialise(&TContestApp::getContestApp() ->loggerBundle, elpAddBandMapTuningEnablePHONE, ui->tuningAddMapPhonecb);
+
      disableNotShown.initialise(&TContestApp::getContestApp() ->loggerBundle, elpBandMapDisableNotShown, ui->disableNotShowncb);
      disableLoggedCalls.initialise(&TContestApp::getContestApp() ->loggerBundle, elpBandMapDisableLoggedCalls, ui->disableLoggedCallscb);
      disablePlaceHolders.initialise(&TContestApp::getContestApp() ->loggerBundle, elpBandMapDisablePlaceHolders, ui->disablePlaceHolderscb);
@@ -217,19 +243,28 @@ void ClusterBandmapConfigure::finalise()
 {
     saveDistances();
 
-    TContestApp::getContestApp()->loggerBundle.setIntProfile(elpAddBandMapTuningTolerance, ui->addBandmapTuningTolSpinBox->value());
+    //I think we are going to need to restart all contests..
 
-    tuningAddMap.finalise();
-    disableNotShown.finalise();
-    disableLoggedCalls.finalise();
-    disablePlaceHolders.finalise();
+    bool doSelectSession = false;
 
-    BandMapTurnOffOperatingFreqStrip.finalise();
-    BandMapFollowRadioModeOperatingFreqStrip.finalise();
-    BandMapMouseInFrameDelay.finalise();
-    BandMapShowDerivedLoc.finalise();
-    BandmapOldStyle.finalise();
-    BandmapInvert.finalise();
+    doSelectSession = tuningTolCW.finalise();
+    doSelectSession |= tuningTolData.finalise();
+    doSelectSession |= tuningTolPhone.finalise();
+
+    doSelectSession |= tuningAddMapCW.finalise();
+    doSelectSession |= tuningAddMapData.finalise();
+    doSelectSession |= tuningAddMapPhone.finalise();
+
+    doSelectSession |= disableNotShown.finalise();
+    doSelectSession |= disableLoggedCalls.finalise();
+    doSelectSession |= disablePlaceHolders.finalise();
+
+    doSelectSession |= BandMapTurnOffOperatingFreqStrip.finalise();
+    doSelectSession |= BandMapFollowRadioModeOperatingFreqStrip.finalise();
+    doSelectSession |= BandMapMouseInFrameDelay.finalise();
+    doSelectSession |= BandMapShowDerivedLoc.finalise();
+    doSelectSession |= BandmapOldStyle.finalise();
+    doSelectSession |= BandmapInvert.finalise();
 
     TContestApp::getContestApp() ->loggerBundle.flushProfile();
 
@@ -245,6 +280,11 @@ void ClusterBandmapConfigure::finalise()
     if (limitsChanged)
     {
         MinosLoggerEvents::sendBandmapLimitsChanged();
+    }
+    if (doSelectSession || limitsChanged)
+    {
+        TWaitCursor wc(this);
+        LogContainer->selectSession(TContestApp::getContestApp()->currSession);
     }
 }
 

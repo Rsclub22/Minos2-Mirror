@@ -33,7 +33,14 @@ private slots:
 private:
     Ui::ClusterBandmapConfigure *ui;
 
-    ConfigurationOption tuningAddMap;
+    ConfigurationOption tuningAddMapCW;
+    ConfigurationOption tuningAddMapData;
+    ConfigurationOption tuningAddMapPhone;
+
+    ConfigurationOption tuningTolCW;
+    ConfigurationOption tuningTolData;
+    ConfigurationOption tuningTolPhone;
+
     ConfigurationOption disableNotShown;
     ConfigurationOption disableLoggedCalls;
     ConfigurationOption disablePlaceHolders;
@@ -54,7 +61,6 @@ private:
     QVector<QSharedPointer<BandInfo> > bands;
     QMap<QString, distValue> distanceValues;
 
-    int addBandmapTuningTolerance;
     bool lessGreaterThanDistanceFlag = false;   // less than = false, greater than = true;
 
     QVector<ConfigurationOption> bandLimits;

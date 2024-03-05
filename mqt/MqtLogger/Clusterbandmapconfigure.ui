@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>764</width>
-    <height>369</height>
+    <width>762</width>
+    <height>469</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,7 +20,7 @@
       <bool>true</bool>
      </property>
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="bandmapGeneralTab">
       <property name="autoFillBackground">
@@ -29,124 +29,196 @@
       <attribute name="title">
        <string>Bandmap General</string>
       </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_6">
+      <layout class="QVBoxLayout" name="verticalLayout_5">
        <item>
-        <layout class="QVBoxLayout" name="verticalLayout_5">
+        <layout class="QHBoxLayout" name="horizontalLayout_3">
          <item>
-          <layout class="QHBoxLayout" name="horizontalLayout_3">
+          <layout class="QHBoxLayout" name="horizontalLayout_2">
            <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_2">
-             <item>
-              <widget class="QCheckBox" name="tuningAddMapcb">
-               <property name="text">
-                <string>Tuning - add to map</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QSpinBox" name="addBandmapTuningTolSpinBox"/>
-             </item>
-            </layout>
-           </item>
-           <item>
-            <widget class="QLabel" name="label_4">
+            <widget class="QCheckBox" name="tuningAddMapCWcb">
              <property name="text">
-              <string>Add Spot to Bandmap Tuning Tolerance khz</string>
+              <string>CW Tuning - add to map</string>
              </property>
             </widget>
            </item>
            <item>
-            <spacer name="horizontalSpacer">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>40</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
+            <widget class="QSpinBox" name="addBandmapTuningCwTolSpinBox"/>
            </item>
           </layout>
          </item>
          <item>
-          <widget class="QCheckBox" name="disableNotShowncb">
+          <widget class="QLabel" name="label_4">
            <property name="text">
-            <string>Disable Bandmap when not shown</string>
+            <string>Add Spot to Bandmap Tuning Tolerance Hz</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QCheckBox" name="disableLoggedCallscb">
-           <property name="text">
-            <string>Disable adding logged Calls to bandmap</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QCheckBox" name="disablePlaceHolderscb">
-           <property name="text">
-            <string>Disable setting placeholders from current frequency on bandmap</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QCheckBox" name="operatingFreqChkBox">
-           <property name="text">
-            <string>Turn Off Operating Frequency Colour Band</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QCheckBox" name="modeOperatingFreqChkBox">
-           <property name="text">
-            <string>Operating Frequency Colour Band Follow Radio Mode </string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QCheckBox" name="showDerivedLocChkBox">
-           <property name="text">
-            <string>Display Locators in Cluster Spots  Derived from QRZ or Country</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QCheckBox" name="invertBandmap">
-           <property name="text">
-            <string>Bandmap High Frequency At Top</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QCheckBox" name="mouseInBcb">
-           <property name="text">
-            <string>Delay updates when mouse pointer is in the Bandmap</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QCheckBox" name="oldBandmapChkBox">
-           <property name="text">
-            <string>Old Bandmap</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <spacer name="verticalSpacer">
+          <spacer name="horizontalSpacer">
            <property name="orientation">
-            <enum>Qt::Vertical</enum>
+            <enum>Qt::Horizontal</enum>
            </property>
            <property name="sizeHint" stdset="0">
             <size>
-             <width>20</width>
-             <height>40</height>
+             <width>40</width>
+             <height>20</height>
             </size>
            </property>
           </spacer>
          </item>
         </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_5">
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_6">
+           <item>
+            <widget class="QCheckBox" name="tuningAddMapDatacb">
+             <property name="text">
+              <string>Data Tuning - add to map</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QSpinBox" name="addBandmapTuningDataTolSpinBox"/>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_5">
+           <property name="text">
+            <string>Add Spot to Bandmap Tuning Tolerance Hz</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_3">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_7">
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_8">
+           <item>
+            <widget class="QCheckBox" name="tuningAddMapPhonecb">
+             <property name="text">
+              <string>Phone Tuning - add to map</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QSpinBox" name="addBandmapTuningPhoneTolSpinBox"/>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_6">
+           <property name="text">
+            <string>Add Spot to Bandmap Tuning Tolerance Hz</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_4">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="disableNotShowncb">
+         <property name="text">
+          <string>Disable Bandmap when not shown</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="disableLoggedCallscb">
+         <property name="text">
+          <string>Disable adding logged Calls to bandmap</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="disablePlaceHolderscb">
+         <property name="text">
+          <string>Disable setting placeholders from current frequency on bandmap</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="operatingFreqChkBox">
+         <property name="text">
+          <string>Turn Off Operating Frequency Colour Band</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="modeOperatingFreqChkBox">
+         <property name="text">
+          <string>Operating Frequency Colour Band Follow Radio Mode </string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="showDerivedLocChkBox">
+         <property name="text">
+          <string>Display Locators in Cluster Spots  Derived from QRZ or Country</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="invertBandmap">
+         <property name="text">
+          <string>Bandmap High Frequency At Top</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="mouseInBcb">
+         <property name="text">
+          <string>Delay updates when mouse pointer is in the Bandmap</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="oldBandmapChkBox">
+         <property name="text">
+          <string>Old Bandmap</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>4</height>
+          </size>
+         </property>
+        </spacer>
        </item>
       </layout>
      </widget>
@@ -275,8 +347,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>722</width>
-            <height>301</height>
+            <width>718</width>
+            <height>542</height>
            </rect>
           </property>
          </widget>

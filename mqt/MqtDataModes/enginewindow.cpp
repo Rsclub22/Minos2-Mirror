@@ -697,6 +697,11 @@ bool EngineWindow::doKeyPressEvent( QKeyEvent* event )
         fKey(Key);
         return true;
     }
+    if (Key == Qt::Key_Escape)
+    {
+        on_stopButton_clicked();
+        return true;
+    }
     return false;
 }
 

@@ -420,7 +420,7 @@ void EngineConfigure::on_twotoneBrowse1_clicked()
 
 void EngineConfigure::on_twotoneBrowse2_clicked()
 {
-    doBrowse(EngineWindow::twotone + EngineWindow::i2, ui->twotoneEdit1);
+    doBrowse(EngineWindow::twotone + EngineWindow::i2, ui->twotoneEdit2);
 }
 
 

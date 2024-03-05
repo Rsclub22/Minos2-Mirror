@@ -212,7 +212,9 @@ private:
 
     void setBandMapControlsVisible(bool visible);
     bool logDataFromBandmapOrMemory;
-    int addToBandmapTuneTolerance;
+
+    QMap<QString, int> addToBandmapTuneTolerance;
+    QMap<QString, bool> addToBandmapTuneEnabled;
 
     bool qrzDisplayFrameLoaded;
     bool isQrzDisplayFrameLoaded();
@@ -291,7 +293,7 @@ private:
     void checkQRZClusterBandmapShowing();
     void doShowOperators(bool so);
     
-    bool readTuneAddBandMapSetting();
+    bool readTuneAddBandMapSetting(QString mode);
     QString getFKeyLabel(int n);
     void setEditStyleSheet(QLineEdit *qle, QString ss);
     void doBandmapSaveFreq(bool PbClicked);

@@ -196,17 +196,65 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::QSOMargins, this, &QSOLogFrame::on_QSOMargins);
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::ContestBandChanged, this, &QSOLogFrame::onContestBandChanged);
 
-    TContestApp::getContestApp() ->loggerBundle.getIntProfile( elpAddBandMapTuningTolerance, addToBandmapTuneTolerance );
-
-    if (addToBandmapTuneTolerance < ADD_TUNING_BANDMAP_FREQ_DEFAULT_MIN_TOLERANCE || addToBandmapTuneTolerance > ADD_TUNING_BANDMAP_FREQ_DEFAULT_MAX_TOLERANCE)
+    TContestApp::getContestApp() ->loggerBundle.getIntProfile( elpAddBandMapTuningToleranceCW, addToBandmapTuneTolerance["CW"] );
+    if (addToBandmapTuneTolerance["CW"] < ADD_TUNING_BANDMAP_FREQ_DEFAULT_MIN_TOLERANCE_CW || addToBandmapTuneTolerance["CW"] > ADD_TUNING_BANDMAP_FREQ_DEFAULT_MAX_TOLERANCE_CW)
     {
-       addToBandmapTuneTolerance =  ADD_TUNING_BANDMAP_FREQ_DEFAULT_TOLERANCE;
-        trace(QString("addToBandmapTuneTolerance read in out of range = %1 khz, set default").arg(addToBandmapTuneTolerance));
+       addToBandmapTuneTolerance["CW"] =  ADD_TUNING_BANDMAP_FREQ_DEFAULT_TOLERANCE_CW;
+        trace(QString("addToBandmapTuneTolerance CW read in out of range = %1 Hz, set default").arg(addToBandmapTuneTolerance["CW"]));
     }
     else
     {
-        trace(QString("addToBandmapTuneTolerance read in = %1 khz").arg(addToBandmapTuneTolerance));
+        trace(QString("addToBandmapTuneTolerance CW read in = %1 Hz").arg(addToBandmapTuneTolerance["CW"]));
     }
+    addToBandmapTuneTolerance[hamlibData::CW] = addToBandmapTuneTolerance["CW"];
+    TContestApp::getContestApp()->loggerBundle.getBoolProfile(elpAddBandMapTuningEnableCW, addToBandmapTuneEnabled["CW"]);
+    addToBandmapTuneEnabled[hamlibData::CW] = addToBandmapTuneEnabled["CW"];
+
+    TContestApp::getContestApp() ->loggerBundle.getIntProfile( elpAddBandMapTuningToleranceDATA, addToBandmapTuneTolerance["DATA"] );
+    if (addToBandmapTuneTolerance["DATA"] < ADD_TUNING_BANDMAP_FREQ_DEFAULT_MIN_TOLERANCE_DATA || addToBandmapTuneTolerance["DATA"] > ADD_TUNING_BANDMAP_FREQ_DEFAULT_MAX_TOLERANCE_DATA)
+    {
+        addToBandmapTuneTolerance["DATA"] =  ADD_TUNING_BANDMAP_FREQ_DEFAULT_TOLERANCE_DATA;
+        trace(QString("addToBandmapTuneTolerance Data read in out of range = %1 Hz, set default").arg(addToBandmapTuneTolerance["DATA"]));
+    }
+    else
+    {
+        trace(QString("addToBandmapTuneTolerance Data read in = %1 Hz").arg(addToBandmapTuneTolerance["DATA"]));
+    }
+    addToBandmapTuneTolerance[hamlibData::RTTY] = addToBandmapTuneTolerance["DATA"];
+    addToBandmapTuneTolerance[hamlibData::RY] = addToBandmapTuneTolerance["DATA"];
+    addToBandmapTuneTolerance[hamlibData::PSK] = addToBandmapTuneTolerance["DATA"];
+
+    TContestApp::getContestApp()->loggerBundle.getBoolProfile(elpAddBandMapTuningEnableDATA, addToBandmapTuneEnabled["DATA"]);
+    addToBandmapTuneEnabled[hamlibData::RTTY] = addToBandmapTuneEnabled["DATA"];
+    addToBandmapTuneEnabled[hamlibData::RY] = addToBandmapTuneEnabled["DATA"];
+    addToBandmapTuneEnabled[hamlibData::PSK] = addToBandmapTuneEnabled["DATA"];
+
+
+    TContestApp::getContestApp() ->loggerBundle.getIntProfile( elpAddBandMapTuningTolerancePHONE, addToBandmapTuneTolerance["PHONE"] );
+    if (addToBandmapTuneTolerance["PHONE"] <= 5)
+    {
+        addToBandmapTuneTolerance["PHONE"] = addToBandmapTuneTolerance["PHONE"] * 1000;
+    }
+    if (addToBandmapTuneTolerance["PHONE"] < ADD_TUNING_BANDMAP_FREQ_DEFAULT_MIN_TOLERANCE_PHONE || addToBandmapTuneTolerance["PHONE"] > ADD_TUNING_BANDMAP_FREQ_DEFAULT_MAX_TOLERANCE_PHONE)
+    {
+        addToBandmapTuneTolerance["PHONE"] =  ADD_TUNING_BANDMAP_FREQ_DEFAULT_TOLERANCE_PHONE;
+        trace(QString("addToBandmapTuneTolerance Phone read in out of range = %1 Hz, set default").arg(addToBandmapTuneTolerance["PHONE"]));
+    }
+    else
+    {
+        trace(QString("addToBandmapTuneTolerance Phone read in = %1 Hz").arg(addToBandmapTuneTolerance["PHONE"]));
+    }
+    addToBandmapTuneTolerance[hamlibData::USB] = addToBandmapTuneTolerance["PHONE"];
+    addToBandmapTuneTolerance[hamlibData::LSB] = addToBandmapTuneTolerance["PHONE"];
+    addToBandmapTuneTolerance[hamlibData::PH] = addToBandmapTuneTolerance["PHONE"];
+    addToBandmapTuneTolerance[hamlibData::FM] = addToBandmapTuneTolerance["PHONE"];
+
+    TContestApp::getContestApp()->loggerBundle.getBoolProfile(elpAddBandMapTuningEnablePHONE, addToBandmapTuneEnabled["PHONE"]);
+    addToBandmapTuneEnabled[hamlibData::USB] = addToBandmapTuneEnabled["PHONE"];
+    addToBandmapTuneEnabled[hamlibData::LSB] = addToBandmapTuneEnabled["PHONE"];
+    addToBandmapTuneEnabled[hamlibData::PH] = addToBandmapTuneEnabled["PHONE"];
+    addToBandmapTuneEnabled[hamlibData::FM] = addToBandmapTuneEnabled["PHONE"];
+
     on_tabSandP();  // show (or not) the Call/S&P choice
     on_ShowOperators();
     on_QSOMargins();
@@ -3949,10 +3997,12 @@ void QSOLogFrame::setClusterSendSpotControlsState()
 void QSOLogFrame::on_FreqChanged(Frequency f)
 {
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
-    if (!logDataFromBandmapOrMemory && tslf && tslf->isBandMapLoaded() && readTuneAddBandMapSetting())
+    QString mode = ui->ModeComboBoxGJV->currentText();
+
+    if (!logDataFromBandmapOrMemory && tslf && tslf->isBandMapLoaded() && readTuneAddBandMapSetting(mode))
     {
-        qint64 dialFreq = qint64(f) / 1000;
-        qint64 callsignEnterFreq = qint64(callsignEnterTextFreq) / 1000;
+        qint64 dialFreq = qint64(f) ;
+        qint64 callsignEnterFreq = qint64(callsignEnterTextFreq) ;
         int toleranceF = 0;
         if (callsignEnterFreq != 0)
         {
@@ -3969,9 +4019,8 @@ void QSOLogFrame::on_FreqChanged(Frequency f)
 
                 }
 
-                if (toleranceF >= addToBandmapTuneTolerance)
+                if (addToBandmapTuneTolerance.contains(mode) && toleranceF >= addToBandmapTuneTolerance[mode])
                 {
-
                     doBandmapSaveFreq(false);
                 }
             }
@@ -3997,10 +4046,15 @@ void QSOLogFrame::on_SandPrb_clicked()
 {
     MinosLoggerEvents::SendSandPChanged(getSandP());
 }
-bool QSOLogFrame::readTuneAddBandMapSetting()
+bool QSOLogFrame::readTuneAddBandMapSetting(QString mode)
 {
-    bool state;
-    TContestApp::getContestApp()->loggerBundle.getBoolProfile(elpAddBandMapTuningEnable, state);
+    bool state = false;
+
+    if (addToBandmapTuneEnabled.contains(mode))
+    {
+        state = addToBandmapTuneEnabled[mode];
+    }
+
     return state;
 }
 bool QSOLogFrame::getSandP()
