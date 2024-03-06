@@ -129,7 +129,7 @@ void ClusterBandmapConfigure::initialise()
          TContestApp::getContestApp() ->loggerBundle.setIntProfile( elpAddBandMapTuningToleranceCW, ADD_TUNING_BANDMAP_FREQ_DEFAULT_TOLERANCE_CW );
      }
      ui->addBandmapTuningCwTolSpinBox->setRange(ADD_TUNING_BANDMAP_FREQ_DEFAULT_MIN_TOLERANCE_CW, ADD_TUNING_BANDMAP_FREQ_DEFAULT_MAX_TOLERANCE_CW);
-
+     ui->addBandmapTuningCwTolSpinBox->setSingleStep(10);
      tuningTolCW.initialise(&TContestApp::getContestApp() ->loggerBundle, elpAddBandMapTuningToleranceCW, ui->addBandmapTuningCwTolSpinBox);
      tuningAddMapCW.initialise(&TContestApp::getContestApp() ->loggerBundle, elpAddBandMapTuningEnableCW, ui->tuningAddMapCWcb);
 
@@ -140,6 +140,7 @@ void ClusterBandmapConfigure::initialise()
          TContestApp::getContestApp() ->loggerBundle.setIntProfile( elpAddBandMapTuningToleranceDATA, ADD_TUNING_BANDMAP_FREQ_DEFAULT_TOLERANCE_DATA );
      }
      ui->addBandmapTuningDataTolSpinBox->setRange(ADD_TUNING_BANDMAP_FREQ_DEFAULT_MIN_TOLERANCE_DATA, ADD_TUNING_BANDMAP_FREQ_DEFAULT_MAX_TOLERANCE_DATA);
+     ui->addBandmapTuningDataTolSpinBox->setSingleStep(10);
      tuningTolData.initialise(&TContestApp::getContestApp() ->loggerBundle, elpAddBandMapTuningToleranceDATA, ui->addBandmapTuningDataTolSpinBox);
      tuningAddMapData.initialise(&TContestApp::getContestApp() ->loggerBundle, elpAddBandMapTuningEnableDATA, ui->tuningAddMapDatacb);
 
@@ -156,7 +157,8 @@ void ClusterBandmapConfigure::initialise()
          TContestApp::getContestApp() ->loggerBundle.setIntProfile( elpAddBandMapTuningTolerancePHONE, tolphone );
      }
      ui->addBandmapTuningPhoneTolSpinBox->setRange(ADD_TUNING_BANDMAP_FREQ_DEFAULT_MIN_TOLERANCE_PHONE, ADD_TUNING_BANDMAP_FREQ_DEFAULT_MAX_TOLERANCE_PHONE);
-     tuningTolPhone.initialise(&TContestApp::getContestApp() ->loggerBundle, elpAddBandMapTuningTolerancePHONE, ui->addBandmapTuningPhoneTolSpinBox);
+     ui->addBandmapTuningPhoneTolSpinBox->setSingleStep(100);
+         tuningTolPhone.initialise(&TContestApp::getContestApp() ->loggerBundle, elpAddBandMapTuningTolerancePHONE, ui->addBandmapTuningPhoneTolSpinBox);
      tuningAddMapPhone.initialise(&TContestApp::getContestApp() ->loggerBundle, elpAddBandMapTuningEnablePHONE, ui->tuningAddMapPhonecb);
 
      disableNotShown.initialise(&TContestApp::getContestApp() ->loggerBundle, elpBandMapDisableNotShown, ui->disableNotShowncb);

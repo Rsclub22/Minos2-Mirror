@@ -676,6 +676,15 @@ void BandmapView::setFreq(Frequency f, bool legalFreq)
 
 void BandmapView::setDialRadioMode(QString mode)
 {
+    int colPos = mode.indexOf(":");
+    if (colPos > 0)
+    {
+        curMode = curMode.left(colPos);
+    }
+    else
+    {
+        curMode = mode;
+    }
     dial->setRadioMode(mode);
     trace("BandmapView::bandmapUpdate() bandmapView::setDialRadioMode");
     bandmapUpdate(true);
@@ -1431,8 +1440,21 @@ void BandmapView::assembleSpotMsg(int row, QString& markerMsg)
         mfreq = mfreq - Frequency(BPSK_OFFSET);
     }
 
+    int tol = 0;
+    if (curMode == hamlibData::PH || curMode == hamlibData::USB || curMode == hamlibData::LSB || curMode == hamlibData::FM)
+    {
+        tol = 1000;
+    }
+    else if (curMode == hamlibData::PSK || curMode == hamlibData::RY || curMode == hamlibData::RTTY)
+    {
+        tol = 100;
+    }
+    else if (curMode == hamlibData::CW)
+    {
+        tol = 100;
+    }
     int offset = std::abs(freq - cFreq);
-    if (offset < 1000 )
+    if (tol > 0 && offset < tol )
     {
         // highlight this line as current frequency
         bLineStart = "<b>";

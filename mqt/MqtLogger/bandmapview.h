@@ -129,6 +129,7 @@ private:
 
     BandmapFreqDial *dial;
     Frequency curFreq;
+    QString curMode;
 
     QTimer updateTimer;
     bool updateRequired = false;
