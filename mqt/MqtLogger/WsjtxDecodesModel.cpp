@@ -380,7 +380,7 @@ QVariant DecodesModel::data (QModelIndex const& pindex, int role) const
         case dcFromCall:
             if (msg.txrx == eTX)
                 return "";
-            return msg.fromCall.realCall;
+            return msg.fromCall.getFullCall();
         case dcFromGrid:
             if (msg.txrx == eTX)
                 return "";
@@ -388,7 +388,7 @@ QVariant DecodesModel::data (QModelIndex const& pindex, int role) const
         case dcToCall:
             if (msg.txrx == eTX)
                 return "";
-            return msg.toCall.realCall;
+            return msg.toCall.getFullCall();
         case dcToGrid:
             if (msg.txrx == eTX)
                 return "";
