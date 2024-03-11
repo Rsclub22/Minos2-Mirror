@@ -171,6 +171,8 @@ public:
     void on_cwCcwCmdEnable(bool);
     void presetTurn(QString);
 
+    void xferFromKST(QString call, QString loc, QString freq);
+
 private:
     QString curScreenLayout;
 

@@ -49,7 +49,7 @@ void RemoteLogs::testAutoStart()
 #endif
     }
 
-    for ( auto const &s: qAsConst(RemoteLogs::getRemoteLogs()->stationList) )
+    for ( auto const &s: qAsConst(stationList) )
     {
         // if never set, autostations will be empty, so take all
         if (autoStations.size() == 0 || autoStations.contains(s->name))

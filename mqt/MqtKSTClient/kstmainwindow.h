@@ -245,6 +245,8 @@ private slots:
     void onNewStanzas();
     void onLogStarted(QSharedPointer<MonitoredLog>);
     void onLogClosed(QSharedPointer<MonitoredLog>);
+    void on_loggerXferButton_clicked();
+
 private:
     Ui::KSTMainWindow *ui;
     StdInReader *stdinReader = new StdInReader(this);

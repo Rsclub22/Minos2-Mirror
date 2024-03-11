@@ -69,6 +69,7 @@ public:
     void transferDetails(const ListContact *lct, const ContactList *matct );
     void transferDetails(QString cs, const QString loc, QString exchange, const bool fromBandmapOrMemory );
 
+    void xferFromKST(QString call, QString loc);
     void logTabChanged();
 
     void modeSentFromRig(QString mode);

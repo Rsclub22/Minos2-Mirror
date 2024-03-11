@@ -268,6 +268,13 @@
                 </property>
                </spacer>
               </item>
+              <item>
+               <widget class="QPushButton" name="loggerXferButton">
+                <property name="text">
+                 <string>Send to Logger</string>
+                </property>
+               </widget>
+              </item>
              </layout>
             </item>
            </layout>
@@ -792,7 +799,7 @@ when user selected</string>
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="callStringButtonGroup"/>
   <buttongroup name="activeChatGroup"/>
+  <buttongroup name="callStringButtonGroup"/>
  </buttongroups>
 </ui>

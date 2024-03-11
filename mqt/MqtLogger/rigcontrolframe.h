@@ -54,6 +54,7 @@ public:
     void getDetails(memoryData::memData &m);
     void getRigDetails(memoryData::memData &m);
 
+    void xferFromKST(QString freq);
 
     void on_RadioLoaded();
     void setRadioListFromTslf();

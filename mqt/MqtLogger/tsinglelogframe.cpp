@@ -2267,6 +2267,13 @@ void TSingleLogFrame::presetTurn(QString b)
         FKHRotControlFrame->presetTurn(b);
 }
 
+//---------------------------KST------------------------------------
+void TSingleLogFrame::xferFromKST(QString call, QString loc, QString freq)
+{
+    GJVQSOLogFrame->xferFromKST(call, loc);
+    FKHRigControlFrame->xferFromKST(freq);
+}
+
 //--------------- QRZ Display ---------------------------------------
 
 void TSingleLogFrame::onQrzCallsignRequest(QString callsign)

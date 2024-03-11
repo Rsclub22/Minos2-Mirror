@@ -2,6 +2,7 @@
 #include <QSettings>
 #include <QKeyEvent>
 
+#include "RPCCommandConstants.h"
 #include "regsettings.h"
 #include "AppStartup.h"
 #include "MShowMessageDlg.h"
@@ -1993,3 +1994,40 @@ void KSTMainWindow::on_logsButton_clicked()
     ml->show();
 }
 
+
+void KSTMainWindow::on_loggerXferButton_clicked()
+{
+    QModelIndexList mil = ui->CSTable->selectionModel()->selectedRows();
+
+    if (mil.size() == 1)
+    {
+        QStringList routerList;
+
+        for ( auto s = RemoteLogs::getRemoteLogs()->stationList.begin();
+             s != RemoteLogs::getRemoteLogs()->stationList.end();
+             s++ )
+        {
+            routerList.append((*s)->name);
+        }
+        routerList.sort();
+        routerList.removeDuplicates();
+
+        auto &mi = mil[0];
+        QModelIndex m = kstCallFilterModel.mapToSource(mi);
+        int r = m.row();
+        QSharedPointer<KstUser> user = callVector->at(r);
+        QString call = user->call.getFullCall();
+        QString loc = user->loc;
+
+        for(const auto &router: routerList)
+        {
+
+            RPCGeneralClient rpc(rpcConstants::KSTTransfer);
+            QSharedPointer<RPCParam>st(new RPCParamStruct);
+            st->addMember( call, rpcConstants::KSTTransferCall );
+            st->addMember( loc, rpcConstants::KSTTransferLocator );
+            rpc.getCallArgs() ->addParam( st );
+            rpc.queueCall( router );
+        }
+    }
+}

@@ -945,6 +945,15 @@ void RigControlFrame::getRigDetails(memoryData::memData &m)
     m.freq = curFreq;
 }
 
+void RigControlFrame::xferFromKST(QString freq)
+{
+    if (!freq.isEmpty())
+    {
+        Frequency f(freq);
+        setFreq(f);
+    }
+}
+
 
 void RigControlFrame::noRadioSetMode(QString m)
 {

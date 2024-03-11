@@ -219,7 +219,11 @@ static const QString rigNumberCwMessages ("NumberOfCwMessages");
 
 
 // KSTClient
-static const QString KSTClientApp         ("mqtKSTClient");
+static const QString KSTClientApp           ("mqtKSTClient");
+static const QString KSTTransfer            ("KSTXfer");
+static const QString KSTTransferCall        ("KSTXferCall");
+static const QString KSTTransferLocator     ("KSTXferLoc");
+static const QString KSTTransferFrequency   ("KSTXferQRG");
 
 // Data Modes
 static const QString datamodesApp         ("mqtDataModesApp");

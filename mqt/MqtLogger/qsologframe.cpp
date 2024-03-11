@@ -3232,6 +3232,21 @@ void QSOLogFrame::transferDetails(QString cs, const QString loc, QString exchang
     doGJVEditChange(ui->LocFrame->getTextEditEdit());
     doGJVEditChange(ui->QTHFrame->getTextEditEdit());
 }
+
+void QSOLogFrame::xferFromKST(QString call, QString loc)
+{
+    if (!call.isEmpty())
+    {
+        ui->CallsignFrame->getTextEditEdit()->setText(call);
+        doGJVEditChange(ui->CallsignFrame->getTextEditEdit());
+    }
+
+    if (!loc.isEmpty())
+    {
+        ui->LocFrame->getTextEditEdit()->setText(loc);
+        doGJVEditChange(ui->LocFrame->getTextEditEdit());
+    }
+}
 void QSOLogFrame::transferFromWSJTX(QString call)
 {
     if (!contest)
