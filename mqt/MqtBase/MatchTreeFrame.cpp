@@ -489,6 +489,7 @@ QVariant QSOMatchGridModel::data( const QModelIndex &index, int role ) const
             {
                 if (column == 0)
                 {
+                    QString cell;
                     if (type == ThisMatch)
                     {
                         QString res = tr("Current contest: ") + TMatchThread::getThisMatchStatus();
@@ -497,6 +498,8 @@ QVariant QSOMatchGridModel::data( const QModelIndex &index, int role ) const
                     if (type == OtherMatch)
                     {
                         const BaseContestLog *contest = matchContest->getContactLog();
+                        if (contest)
+                        {
                         //But we have just shut the "other" contest... so we are pointing at nothing
                         //This is where we have an "other" match and we close the "other" contest
                         QString name = contest->name.getValue();
@@ -505,10 +508,11 @@ QVariant QSOMatchGridModel::data( const QModelIndex &index, int role ) const
                         QDateTime  contestStart = CanonicalToTDT(contest->DTGStart.getValue());
                         QString dtg = contestStart.toString("yyyy/MM/dd");
 
-                        QString cell = "[" + band + " " + dtg + "] " + name;
+                        cell = "[" + band + " " + dtg + "] " + name;
                         if (currentModel && baseName.compare("Monitor") != 0)
                         {
                             cell = HtmlFontColour(lightRed) + "<b>" + cell;
+                        }
                         }
                         return cell;
                     }
