@@ -1026,7 +1026,6 @@ void RotatorMainWindow::upDateAntenna()
             }
 
 
-
             RotCapabilities rotCap = rotFactory->supported_rotators()->value(setupAntenna->currentAntenna.rotatorModel);
             if (rotCap.getEnableSelectDisplayDial() && !setupAntenna->currentAntenna.showCompassDialFlag)
             {
@@ -1256,7 +1255,9 @@ void RotatorMainWindow::checkMoving(int bearing)
         return;
     }
 
-    if ((abs(targetBearing - bearing) <= 2) && (oldBearing != bearing))
+    int tolerance = setupAntenna->currentAntenna.nearStopTolerance;
+
+    if (tolerance && (abs(targetBearing - bearing) <= tolerance) && (oldBearing != bearing))
     {
         if (rotTimeCount > 1)
         {
@@ -1264,6 +1265,7 @@ void RotatorMainWindow::checkMoving(int bearing)
             stopButton();
             sendStatusToLogStop();
         }
+        oldBearing = bearing;
     }
     else if (oldBearing != bearing)
     {

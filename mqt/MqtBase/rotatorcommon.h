@@ -197,6 +197,7 @@ public:
       //dest.enableRot = srce->enableRot;
       dest.forceDtr = srce->forceDtr;
       dest.forceRts = srce->forceRts;
+      dest.nearStopTolerance = srce->nearStopTolerance;
 
 
     }
@@ -243,6 +244,8 @@ public:
   int forceDtr = 0;
   int forceRts = 0;
   //bool enableRot = false;
+
+  int nearStopTolerance = 0;
 
 
 };
