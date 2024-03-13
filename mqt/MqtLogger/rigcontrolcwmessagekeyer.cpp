@@ -12,12 +12,15 @@
 
 
 #include <QSettings>
+#include <QString>
 #include "tlogcontainer.h"
 #include "tsinglelogframe.h"
 #include "voicekeyerfactory.h"
 #include "txvmrigsetupdialog.h"
 #include "txvmrigbuttondialog.h"
 #include "rigcontrolcwmessagekeyer.h"
+#include "voicekeyerCommonConstants.h"
+#include "MTrace.h"
 
 const char * STOPCW = "\xFF";
 
@@ -191,9 +194,10 @@ int RigControlCwMessageKeyer::setup(VoiceKeyerFactory *voiceKeyerFactory, int &m
 
 
 
-    txVmSetupDialog.setWindowTitle(tr("Rig Control CW Memory Setup"));
+    txVmSetupDialog.setWindowTitle(tr("Rig Control CW Memory Setup"));    
 
     txVmSetupDialog.setMaxNumOfButtonsLabel(maxNumButtons);
+
 
     QString allRadiosGrpName = ALL_RADIOS_GROUP_NAME;
     if (readSaveVoiceCWMemoryButtonByRadioNameFromIni(VoiceKeyerId::CW_RigControl))
@@ -312,20 +316,94 @@ int RigControlCwMessageKeyer::editButton(VoiceKeyerParams *vmData, QString title
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
     TxVmRigButtonDialog vmButtonDialog(tslf->txVmButtonsFrame);
 
-    vmButtonDialog.setWindowTitle(title);
-    vmButtonDialog.setVmData(vmData);
-    vmButtonDialog.setVmTypeLabelcwMemType(cwMemType);
+    QString radioManufacturer;   // used as group name
+    QString radioModel;
 
-    vmButtonDialog.setSerialMessageTextBoxVisible(false);
-
-    if (cwMemType == hamlibData::CW_MEMORY_TYPES::YAESU_MEM_RECALL)
+    if (readSaveVoiceCWMemoryButtonByRadioNameFromIni(VoiceKeyerId::CW_RigControl))
     {
-        vmButtonDialog.setCwMessageTextBoxVisible(false);
+        vmButtonDialog.setRadioNameLbl(vmData->getSelRadioName());
+        radioManufacturer = getCwRadioManufacturer(cwMemType);
+        radioModel = getRadioModel(vmData->getSelRadioName());
+
     }
     else
     {
-       vmButtonDialog.setCwMessageTextBoxVisible(true);
+        vmButtonDialog.setRadioNameLbl("All Radios");
+        radioManufacturer = "AllRadios";
+
     }
+
+    QStringList selectedRadio = vmData->getSelRadioName().split('/');
+
+
+    vmButtonDialog.setWindowTitle(title);
+    vmButtonDialog.setVmData(vmData);
+    vmButtonDialog.setVmTypeLabelcwMemType(radioManufacturer);
+    vmButtonDialog.setCwInfoPanelVisible(true);
+
+    QString validCharCwList;
+    if (getRigCWKeyerSupportedCharacters(validCharCwList, radioManufacturer))
+    {
+        vmButtonDialog.setCwValidatorCwCharList(validCharCwList);
+    }
+    else
+    {
+        trace(QString("Error retrieving supported CW Chars for manufacturer %1").arg(radioManufacturer));
+    }
+
+    int maxNumChars = 0;
+    if (getRigCWKeyerMaxMessageLength(maxNumChars, radioManufacturer))
+    {
+        vmButtonDialog.setCwValidatorMaxCwMessageLength(maxNumChars);
+        vmButtonDialog.setMaxNumberCwCharactersText(maxNumChars);
+    }
+    else
+    {
+        trace(QString("Error retrieving max CW Message Length for manufacturer %1").arg(radioManufacturer));
+        vmButtonDialog.setMaxNumberCwCharactersText(0);
+    }
+
+    QStringList listOfRadioModels;
+    getRigCWKeyerRadiosSupportSpecialCharacters(listOfRadioModels, radioManufacturer);
+
+    bool radioSupportSpecialChar = false;
+
+    if (!listOfRadioModels.isEmpty())
+    {
+        if (listOfRadioModels.contains(radioModel))
+        {
+            radioSupportSpecialChar = true;
+        }
+    }
+
+    vmButtonDialog.setCwSupportSpecialChar(radioSupportSpecialChar);
+
+    QMap<QString, QChar> specialCharMap;
+    if (radioSupportSpecialChar)
+    {
+        if (getRigCWKeyerSupportedSpecialCharacters(specialCharMap, radioManufacturer))
+        {
+            vmButtonDialog.setSpecialCwCharMap(specialCharMap);
+            vmButtonDialog.setCwSupportSpecialCharsGroupBoxVisible(true);
+        }
+
+
+    }
+    else
+    {
+        vmButtonDialog.setCwSupportSpecialCharsGroupBoxVisible(false);
+    }
+
+    vmButtonDialog.setSerialMessageTextBoxVisible(false);
+
+    if (cwMemType == hamlibData::CW_MEMORY_TYPES::YAESU_MEM_RECALL
+        || cwMemType == hamlibData::CW_MEMORY_TYPES::KENWOOD_MEM_RECALL
+        || cwMemType == hamlibData::CW_MEMORY_TYPES::ELECRAFT
+        || cwMemType == hamlibData::CW_MEMORY_TYPES::ICOM)
+    {
+        vmButtonDialog.setCwMessageTextBoxVisible(true);
+    }
+
 
     vmButtonDialog.setDialogForCatPttEom(usePttForEom);
 
@@ -333,5 +411,60 @@ int RigControlCwMessageKeyer::editButton(VoiceKeyerParams *vmData, QString title
     return ret;
 
 }
+
+
+QString RigControlCwMessageKeyer::getCwRadioManufacturer(int cwMemType)
+{
+    QString type;
+    if (cwMemType == hamlibData::CW_MEMORY_TYPES::ICOM)
+    {
+        type = "Icom";
+    }
+    else if (cwMemType == hamlibData::CW_MEMORY_TYPES::YAESU_MEM_RECALL)
+    {
+        type = "Yaesu";
+    }
+    else if (cwMemType == hamlibData::CW_MEMORY_TYPES::KENWOOD_MEM_RECALL)
+    {
+        type = "Kenwood";
+    }
+    else if (cwMemType == hamlibData::CW_MEMORY_TYPES::ELECRAFT)
+    {
+        type = "Elecraft";
+    }
+    else if (cwMemType == hamlibData::CW_MEMORY_TYPES::NONE)
+    {
+        type = "None";
+    }
+
+    return type;
+}
+
+
+QString RigControlCwMessageKeyer::getRadioModel(QString selectedRadio)
+{
+    QStringList rl = selectedRadio.split('/');
+    if (rl.length() == 2)
+    {
+        return rl[1];
+    }
+
+    return "";
+}
+
+
+CWRigKeyerValidator::CWRigKeyerValidator()
+{
+
+}
+
+QValidator::State CWRigKeyerValidator::validate(QString & input, int & /*pos*/) const
+{
+    input = input.toUpper();
+
+    return Acceptable;
+}
+
+
 
 

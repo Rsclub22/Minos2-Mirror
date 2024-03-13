@@ -3,7 +3,7 @@
 #include "regsettings.h"
 #include "txvmrigbuttondialog.h"
 #include "ui_txvmrigbuttondialog.h"
-#include "rigcontrolcommonconstants.h"
+
 
 const int MAX_CW_MESSAGE_LENGTH = 30;
 
@@ -61,20 +61,97 @@ void TxVmRigButtonDialog::setSerialMessageTextBoxVisible(bool visible)
     ui->serialMessageLabel->setVisible(visible);
 }
 
-// This will overwrite the label with cwMemType
-void TxVmRigButtonDialog::setVmTypeLabelcwMemType(int cwMemType)
+void TxVmRigButtonDialog::setCwValidatorCwCharList(QString validCwCharList)
 {
-    QString type;
-    if (cwMemType == hamlibData::CW_MEMORY_TYPES::ICOM)
+    validCwCharacterList = validCwCharList;
+    populateInfoPanelSupportedCwChars(validCwCharacterList);
+
+}
+
+void TxVmRigButtonDialog::populateInfoPanelSupportedCwChars(QString validCwCharList)
+{
+    QString alpha;
+    QString nonAlpha;
+
+    foreach (const QChar cwChar, validCwCharList)
     {
-        type = "Icom";
-    }
-    else if (cwMemType == hamlibData::CW_MEMORY_TYPES::YAESU_MEM_RECALL)
-    {
-        type = "Yaesu";
+        if (cwChar.isLetter())
+        {
+            alpha.append(cwChar);
+        }
+        else
+        {
+            nonAlpha.append(cwChar);
+        }
+
     }
 
-    ui->txVmTypeLbl->setText(QString("%1 - %2").arg(vmData->getType(), type ));
+
+    ui->listOfSupportedCwCharsLabel->setText(alpha + "\n" + nonAlpha);
+
+}
+
+void TxVmRigButtonDialog::populateInfoPanelSupportedSpecialChars()
+{
+    if (supportSpecialCwChars)
+    {
+        ui->listOfSupportedCwSpecialCharsLabel->setVisible(true);
+        QString displayText = supportedCwSpecialCharsList.join(',');
+        ui->listOfSupportedCwSpecialCharsLabel->setText(displayText);
+    }
+    else
+    {
+        ui->listOfSupportedCwSpecialCharsLabel->setVisible(false);
+
+    }
+}
+
+void TxVmRigButtonDialog::setMaxNumberCwCharactersText(int maxNumCwChars)
+{
+    ui->maxNumCwCharsTxt->setText(QString::number(maxNumCwChars));
+}
+
+void TxVmRigButtonDialog::setCwSupportCharsGroupBoxVisible(bool visible)
+{
+    ui->supportedCwCharsGroupBox->setVisible(visible);
+}
+
+void TxVmRigButtonDialog::setCwSupportSpecialCharsGroupBoxVisible(bool visible)
+{
+     ui->supportedSpecialCwCharsGroupBox->setVisible(visible);
+}
+
+void TxVmRigButtonDialog::setCwInfoPanelVisible(bool visible)
+{
+    ui->cwInfoFrame->setVisible(visible);
+    ui->cwCharacterInfoSupportLine->setVisible(visible);
+}
+
+
+void TxVmRigButtonDialog::setCwValidatorMaxCwMessageLength(int maxNumChars)
+{
+    maximumNumCwChars = maxNumChars;
+}
+
+
+
+void TxVmRigButtonDialog::setCwSupportSpecialChar(bool radioSupportSpecialChar)
+{
+    supportSpecialCwChars = radioSupportSpecialChar;
+}
+
+void TxVmRigButtonDialog::setSpecialCwCharMap(QMap<QString, QChar> &specialCharMap)
+{
+    supportedCwSpecialCharsList = specialCharMap.keys();
+    populateInfoPanelSupportedSpecialChars();
+
+}
+// This will overwrite the label with cwMemType
+void TxVmRigButtonDialog::setVmTypeLabelcwMemType(QString mfg)
+{
+
+
+    ui->txVmTypeLbl->setText(QString("%1 - %2").arg(vmData->getType(), mfg ));
 }
 
 
@@ -191,5 +268,10 @@ void TxVmRigButtonDialog::on_okButtonClicked()
 void TxVmRigButtonDialog::on_cancelbuttonClicked()
 {
     reject();
+}
+
+void TxVmRigButtonDialog::setCwCharValidator(CWRigKeyerValidator cwCharValidator)
+{
+    //ui->txCwMessageLineEdit->setClearButtonEnabled(cwCharValidator);
 }
 

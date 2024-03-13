@@ -15,9 +15,10 @@
 
 #include "voicekeyerbase.h"
 #include "voicekeyerfactory.h"
-#include "voicekeyerCommonConstants.h"
+
 
 #include <QObject>
+#include <QValidator>
 
 class RigControlCwMessageKeyer : public VoiceKeyerBase
 {
@@ -59,6 +60,10 @@ private:
     bool setCwModeAndRestoreCurrentMode = true;
 
 
+    QString getCwRadioManufacturer(int cwMemType);
+    QString getRadioModel(QString selectedRadio);
 };
+
+
 
 #endif // RIGCONTROLCWMESSAGEKEYER_H

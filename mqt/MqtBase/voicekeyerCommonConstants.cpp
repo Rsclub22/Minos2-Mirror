@@ -195,3 +195,6 @@ bool getRigCWKeyerSupportedSpecialCharacters(QMap<QString, QChar> &specialCharMa
 
 
 
+
+
+
