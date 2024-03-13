@@ -198,10 +198,10 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     kstPlanesFilterModel.setSourceModel(&kstPlanesModel);
     ui->planesView->setModel(&kstPlanesFilterModel);
 
-    meepDelegate = QSharedPointer<HtmlDelegate>( new HtmlDelegate(1.0, 1.0)) ;
-    messageDelegate = QSharedPointer<HtmlDelegate>( new HtmlDelegate(1.0, 1.0)) ;
-    CSDelegate = QSharedPointer<HtmlDelegate>( new HtmlDelegate(1.0, 1.0)) ;
-    PlanesDelegate = QSharedPointer<HtmlDelegate>( new HtmlDelegate(1.0, 1.0)) ;
+    meepDelegate = QSharedPointer<HtmlDelegate>( new HtmlDelegate("meepDelegate", 1.0, 1.0)) ;
+    messageDelegate = QSharedPointer<HtmlDelegate>( new HtmlDelegate("messageDelegate", 1.0, 1.0)) ;
+    CSDelegate = QSharedPointer<HtmlDelegate>( new HtmlDelegate("CSDelegate", 1.0, 1.0)) ;
+    PlanesDelegate = QSharedPointer<HtmlDelegate>( new HtmlDelegate("PlanesDelegate", 1.0, 1.0)) ;
 
     // these are used for sizing when adjust to content
     kstMessageModel.delegate = messageDelegate;

@@ -225,7 +225,7 @@ void ClusterMainWindow::doStartup()
 
     dxSpotView = new QTableView();
 
-    dxSpotViewDelegate = QSharedPointer<HtmlDelegate>( new HtmlDelegate(1.0, 1.0)) ;
+    dxSpotViewDelegate = QSharedPointer<HtmlDelegate>( new HtmlDelegate("dxSpotViewDelegate", 1.0, 1.0)) ;
 
     dxSpotDataModel->delegate = dxSpotViewDelegate;
 
@@ -282,7 +282,7 @@ void ClusterMainWindow::doStartup()
 
     sentSpotDataModel = new SentSpotDataModel();
     sentSpotView = new QTableView();
-    sentSpotViewDelegate = QSharedPointer<HtmlDelegate>( new HtmlDelegate(1.0, 1.0)) ;
+    sentSpotViewDelegate = QSharedPointer<HtmlDelegate>( new HtmlDelegate("sentSpotViewDelegate", 1.0, 1.0)) ;
     sentSpotDataModel->delegate = sentSpotViewDelegate;
 
     sentSpotProxyModel = new QSortFilterProxyModel();

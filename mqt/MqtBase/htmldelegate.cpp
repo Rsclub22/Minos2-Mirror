@@ -29,7 +29,7 @@
 #include "htmldelegate.h"
 
 
-HtmlDelegate::HtmlDelegate(qreal wmult, qreal hmult):wmult(wmult), hmult(hmult)
+HtmlDelegate::HtmlDelegate(const QString &t, qreal wmult, qreal hmult):table(t), wmult(wmult), hmult(hmult)
 {
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::listCompressionChanged,
             this, &HtmlDelegate::onListCompressionChanged);
@@ -44,6 +44,7 @@ void HtmlDelegate::onListCompressionChanged(qreal h)
 }
 void HtmlDelegate::paint( QPainter *painter, const QStyleOptionViewItem &poption, const QModelIndex &index ) const
 {
+    //return QStyledItemDelegate::paint(painter, poption, index);
     QStyleOptionViewItem option = poption; // kill const
 
     initStyleOption( &option, index );
@@ -55,7 +56,9 @@ void HtmlDelegate::paint( QPainter *painter, const QStyleOptionViewItem &poption
 
     // Painting item without text - gives highlighting etc
     option.text = QString();
-    style->drawControl( QStyle::CE_ItemViewItem, &option, painter );
+
+    // in Qt 6, we seem to need the final widget parameter, or we get a crash deep in Qt
+    style->drawControl( QStyle::CE_ItemViewItem, &option, painter, option.widget );
 
     QAbstractTextDocumentLayout::PaintContext ctx;
 
@@ -94,6 +97,7 @@ QSize HtmlDelegate::docSize(QString text) const
 
 void TestDelegate::paint ( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
+    // QStyledItemDelegate::paint(painter, option, index);
     HtmlDelegate::paint(painter, option, index);
 }
 

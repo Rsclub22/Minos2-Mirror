@@ -50,18 +50,18 @@ RigMemoryFrame::RigMemoryFrame(StackedInfoFrame *parent) :
     ui->rigMemTable->horizontalHeader()->setContextMenuPolicy( Qt::CustomContextMenu );
     ui->rigMemTable->horizontalHeader()->setSectionsMovable(true);
 
+    int lcf;
+    TContestApp::getContestApp() ->getIntDisplayProfile(edpListCompression, lcf);
+    delegate = QSharedPointer<HtmlDelegate>(new HtmlDelegate("RigMemoryFrame", 1.0, lcf/100.0)) ;
+    model.delegate = delegate;
+    ui->rigMemTable->setItemDelegate( delegate.data());
+
     connect( ui->rigMemTable->horizontalHeader(), &QHeaderView::customContextMenuRequested, this, &RigMemoryFrame::onRigMemTable_customContextMenuRequested );
 
     ui->rigMemTable->setSelectionMode(QAbstractItemView::ExtendedSelection);
 
     proxyModel.setSourceModel(&model);
     ui->rigMemTable->setModel(&proxyModel);
-
-    int lcf;
-    TContestApp::getContestApp() ->getIntDisplayProfile(edpListCompression, lcf);
-    delegate = QSharedPointer<HtmlDelegate>(new HtmlDelegate(1.0, lcf/100.0)) ;
-    model.delegate = delegate;
-    ui->rigMemTable->setItemDelegate( delegate.data());
 
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::TimerDistribution, this, &RigMemoryFrame::checkTimerTimer);
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::RigFreqChanged, this, &RigMemoryFrame::onRigFreqChanged);

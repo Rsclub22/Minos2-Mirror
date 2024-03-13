@@ -52,7 +52,7 @@ WsjtxFrame::WsjtxFrame(TSingleLogFrame *parent) :
 
     int lcf;
     TContestApp::getContestApp() ->getIntDisplayProfile(edpListCompression, lcf);
-    delegate = QSharedPointer<HtmlDelegate> (new HtmlDelegate(1.0, lcf/100.0));
+    delegate = QSharedPointer<HtmlDelegate> (new HtmlDelegate("WsjtxFrame", 1.0, lcf/100.0));
     ui->decodes_table_view_->setItemDelegate( delegate.data());
 
 
@@ -135,7 +135,7 @@ WsjtxFrame::WsjtxFrame(TSingleLogFrame *parent) :
     blackList =    QSharedPointer<QVector <QSharedPointer<BlCall> > >( new QVector<QSharedPointer<BlCall> > );
 
     blModel.setCallVector(blackList);
-    BLDelegate = QSharedPointer<HtmlDelegate>( new HtmlDelegate(1.0, 1.0)) ;
+    BLDelegate = QSharedPointer<HtmlDelegate>( new HtmlDelegate("BLDelegate", 1.0, 1.0)) ;
     blModel.delegate = BLDelegate;
 
     blFilterModel.setSourceModel(&blModel);

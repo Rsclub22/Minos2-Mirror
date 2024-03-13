@@ -45,7 +45,8 @@ QSOTableFrame::QSOTableFrame(QWidget *parent)
 
     int lcf;
     TContestApp::getContestApp() ->getIntDisplayProfile(edpListCompression, lcf);
-    delegate = QSharedPointer<HtmlDelegate>(new HtmlDelegate(1.0, lcf/100.0));
+//    delegate = QSharedPointer<HtmlDelegate>(new HtmlDelegate(1.0, lcf/100.0));
+    delegate = QSharedPointer<HtmlDelegate>(new HtmlDelegate("QSOTableFrame", 1.0, lcf/100.0));
 
     qsoModel.delegate = delegate;
 

@@ -35,7 +35,7 @@ DistrictFrame::DistrictFrame(StackedInfoFrame *parent) :
 
     int lcf;
     TContestApp::getContestApp() ->getIntDisplayProfile(edpListCompression, lcf);
-    delegate = QSharedPointer<HtmlDelegate>(new HtmlDelegate(1.0, lcf/100.0));
+    delegate = QSharedPointer<HtmlDelegate>(new HtmlDelegate("DistrictFrame", 1.0, lcf/100.0));
     model.delegate = delegate;
 
     ui->DistrictTable->setItemDelegate( delegate.data() );
