@@ -1257,7 +1257,13 @@ void RotatorMainWindow::checkMoving(int bearing)
 
     int tolerance = setupAntenna->currentAntenna.nearStopTolerance;
 
-    if (tolerance && (abs(targetBearing - bearing) <= tolerance) && (oldBearing != bearing))
+    if (oldBearing == bearing)
+    {
+        logMessage(QString("Rotator is on target"));
+        stopButton();
+        sendStatusToLogStop();
+    }
+    else if (tolerance && (abs(targetBearing - bearing) <= tolerance) && (oldBearing != bearing))
     {
         if (rotTimeCount > 1)
         {
