@@ -4,7 +4,7 @@
 #include <QDialog>
 #include <QValidator>
 #include "voicekeyerbase.h"
-#include "rigcontrolcommonconstants.h"
+
 
 namespace Ui {
 class TxVmRigButtonDialog;
@@ -18,10 +18,16 @@ public:
     {}
 
     QValidator::State validate(QString & input, int & /*pos*/) const override;
-    void setValidCwCharList(QStringList validCwCharList);
 
+    void setValidCwCharStr(QString cwValidCharStr_);
+    void setMaxNumCwChars(int maxNumChars_);
+    void setSupportedSpecialChars(QStringList supportedSpecialCwChars);
+    void setValidCwCharRegEx(QString cwValidCharRegEx);
 private:
-    QStringList validCwCharStrList;
+    QString validCwCharStr;
+    QRegExp validCwCharacterRegEx;
+    QStringList specialCharacters;
+    int maxNumChars = 0;
 };
 
 
@@ -43,7 +49,7 @@ public:
 
     void setRadioNameLbl(QString radioName);
     void setCwValidatorCwCharList(QString validCwCharList);
-    void setCwCharValidator(CWRigKeyerValidator cwCharValidator);
+    void setCwCharInputValidator();
     void setCwValidatorMaxCwMessageLength(int maxNumChars);
     void setCwSupportSpecialChar(bool radioSupportSpecialChar);
     void setSpecialCwCharMap(QMap<QString, QChar> &specialCharMap);
@@ -51,6 +57,7 @@ public:
     void setCwSupportSpecialCharsGroupBoxVisible(bool visible);
     void setCwInfoPanelVisible(bool visible);
     void setMaxNumberCwCharactersText(int maxNumCwChars);
+    void setCwValidatorCwCharRegEx(QString validCharCwRegEx_);
 private slots:
     void on_okButtonClicked();
     void on_cancelbuttonClicked();
@@ -70,6 +77,7 @@ private:
     CWRigKeyerValidator cwCharValidator;
 
     QString validCwCharacterList;
+    QString validCwCharacterRegEx;
     int maximumNumCwChars = 0;
     bool supportSpecialCwChars = false;
     QStringList supportedCwSpecialCharsList;
@@ -84,6 +92,7 @@ private:
 
     void populateInfoPanelSupportedSpecialChars();
     void populateInfoPanelSupportedCwChars(QString validCwCharList);
+
 };
 
 

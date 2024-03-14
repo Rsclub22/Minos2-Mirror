@@ -333,7 +333,7 @@ int RigControlCwMessageKeyer::editButton(VoiceKeyerParams *vmData, QString title
 
     }
 
-    QStringList selectedRadio = vmData->getSelRadioName().split('/');
+
 
 
     vmButtonDialog.setWindowTitle(title);
@@ -349,6 +349,16 @@ int RigControlCwMessageKeyer::editButton(VoiceKeyerParams *vmData, QString title
     else
     {
         trace(QString("Error retrieving supported CW Chars for manufacturer %1").arg(radioManufacturer));
+    }
+
+    QString validCharCwRegEx;
+    if (getRigCWKeyerSupportedCharactersRegEx(validCharCwRegEx, radioManufacturer))
+    {
+        vmButtonDialog.setCwValidatorCwCharRegEx(validCharCwRegEx);
+    }
+    else
+    {
+        trace(QString("Error retrieving supported CW Char RegEx for manufacturer %1").arg(radioManufacturer));
     }
 
     int maxNumChars = 0;
@@ -395,6 +405,7 @@ int RigControlCwMessageKeyer::editButton(VoiceKeyerParams *vmData, QString title
     }
 
     vmButtonDialog.setSerialMessageTextBoxVisible(false);
+    vmButtonDialog.setCwCharInputValidator();
 
     if (cwMemType == hamlibData::CW_MEMORY_TYPES::YAESU_MEM_RECALL
         || cwMemType == hamlibData::CW_MEMORY_TYPES::KENWOOD_MEM_RECALL
@@ -413,32 +424,7 @@ int RigControlCwMessageKeyer::editButton(VoiceKeyerParams *vmData, QString title
 }
 
 
-QString RigControlCwMessageKeyer::getCwRadioManufacturer(int cwMemType)
-{
-    QString type;
-    if (cwMemType == hamlibData::CW_MEMORY_TYPES::ICOM)
-    {
-        type = "Icom";
-    }
-    else if (cwMemType == hamlibData::CW_MEMORY_TYPES::YAESU_MEM_RECALL)
-    {
-        type = "Yaesu";
-    }
-    else if (cwMemType == hamlibData::CW_MEMORY_TYPES::KENWOOD_MEM_RECALL)
-    {
-        type = "Kenwood";
-    }
-    else if (cwMemType == hamlibData::CW_MEMORY_TYPES::ELECRAFT)
-    {
-        type = "Elecraft";
-    }
-    else if (cwMemType == hamlibData::CW_MEMORY_TYPES::NONE)
-    {
-        type = "None";
-    }
 
-    return type;
-}
 
 
 QString RigControlCwMessageKeyer::getRadioModel(QString selectedRadio)
@@ -453,17 +439,7 @@ QString RigControlCwMessageKeyer::getRadioModel(QString selectedRadio)
 }
 
 
-CWRigKeyerValidator::CWRigKeyerValidator()
-{
 
-}
-
-QValidator::State CWRigKeyerValidator::validate(QString & input, int & /*pos*/) const
-{
-    input = input.toUpper();
-
-    return Acceptable;
-}
 
 
 

@@ -1,6 +1,7 @@
 #include <QSettings>
 #include "voicekeyerCommonConstants.h"
 #include "AppStartup.h"
+#include "rigcontrolcommonconstants.h"
 
 
 
@@ -108,6 +109,33 @@ bool getRigCWKeyerSupportedCharacters(QString &supportedChars, QString radioMfg)
         config.beginGroup(radioMfg);
         supportedChars =  config.value("supportedCharacters", "").toString();
         config.endGroup();
+        if (supportedChars.isEmpty())
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    return false;    // error
+}
+
+bool getRigCWKeyerSupportedCharactersRegEx(QString &validCharCwRegEx, QString radioMfg)
+{
+    QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + CWKEYER_RADIO_COMMON_PARAMS_FILENAME + ".ini";
+    QSettings config(fileName, QSettings::IniFormat);
+
+    {
+        config.beginGroup(radioMfg);
+        validCharCwRegEx =  config.value("supportedCharRegEx", "").toString();
+        config.endGroup();
+        if (validCharCwRegEx.isEmpty())
+        {
+            return false;
+        }
+
+
+
         return true;
     }
 
@@ -191,6 +219,33 @@ bool getRigCWKeyerSupportedSpecialCharacters(QMap<QString, QChar> &specialCharMa
 
 }
 
+
+QString getCwRadioManufacturer(int cwMemType)
+{
+    QString type;
+    if (cwMemType == hamlibData::CW_MEMORY_TYPES::ICOM)
+    {
+        type = "Icom";
+    }
+    else if (cwMemType == hamlibData::CW_MEMORY_TYPES::YAESU_MEM_RECALL)
+    {
+        type = "Yaesu";
+    }
+    else if (cwMemType == hamlibData::CW_MEMORY_TYPES::KENWOOD_MEM_RECALL)
+    {
+        type = "Kenwood";
+    }
+    else if (cwMemType == hamlibData::CW_MEMORY_TYPES::ELECRAFT)
+    {
+        type = "Elecraft";
+    }
+    else if (cwMemType == hamlibData::CW_MEMORY_TYPES::NONE)
+    {
+        type = "None";
+    }
+
+    return type;
+}
 
 
 

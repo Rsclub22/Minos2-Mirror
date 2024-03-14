@@ -60,7 +60,7 @@ private:
     bool setCwModeAndRestoreCurrentMode = true;
 
 
-    QString getCwRadioManufacturer(int cwMemType);
+
     QString getRadioModel(QString selectedRadio);
 };
 

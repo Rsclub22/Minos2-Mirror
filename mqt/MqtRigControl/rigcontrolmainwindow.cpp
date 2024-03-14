@@ -36,6 +36,7 @@
 
 #include "rigcontrolmainwindow.h"
 #include "ui_rigcontrolmainwindow.h"
+#include "voicekeyerCommonConstants.h"
 
 RigControlMainWindow *mainWindow = nullptr;
 
@@ -1014,31 +1015,32 @@ bool RigControlMainWindow::checkSupportCwKeyerMemory()
             setCwMemIndOnOff(true);
             if (currentRadio.rigMfg_Name == "Yaesu")
             {
-                addCwKeyerMemoryStatusToRigCache(hamlibData::CW_MEMORY_TYPES::YAESU_MEM_RECALL);
+                addCwKeyerTypeToRigCache(hamlibData::CW_MEMORY_TYPES::YAESU_MEM_RECALL);
             }
             if (currentRadio.rigMfg_Name == "Kenwood")
             {
-                addCwKeyerMemoryStatusToRigCache(hamlibData::CW_MEMORY_TYPES::KENWOOD_MEM_RECALL);
+                addCwKeyerTypeToRigCache(hamlibData::CW_MEMORY_TYPES::KENWOOD_MEM_RECALL);
             }
             else if (currentRadio.rigMfg_Name == "Icom")
             {
-                addCwKeyerMemoryStatusToRigCache(hamlibData::CW_MEMORY_TYPES::ICOM);
+                addCwKeyerTypeToRigCache(hamlibData::CW_MEMORY_TYPES::ICOM);
             }
             else if (currentRadio.rigMfg_Name == "Elecraft")
             {
-                addCwKeyerMemoryStatusToRigCache(hamlibData::CW_MEMORY_TYPES::ELECRAFT);
+                addCwKeyerTypeToRigCache(hamlibData::CW_MEMORY_TYPES::ELECRAFT);
             }
             else
             {
                 // not supported
                 setCwMemIndVisible(false);
                 setCwMemIndOnOff(false);
-                addCwKeyerMemoryStatusToRigCache(hamlibData::CW_MEMORY_TYPES::NONE);
+                addCwKeyerTypeToRigCache(hamlibData::CW_MEMORY_TYPES::NONE);
 
                 return false;
             }
 
-
+            // This code is not needed as hamlib does not access stored cw memory locations like voice.
+            // leaving for now...
             if (selectedRadioSupportCap.getStartCwMemoryNumber() == 1)
             {
                 cwMemNum = selectedRadioSupportCap.getEndCwMemoryNumber();
@@ -1056,7 +1058,7 @@ bool RigControlMainWindow::checkSupportCwKeyerMemory()
 
     setCwMemIndVisible(false);
     setCwMemIndOnOff(false);
-    addCwKeyerMemoryStatusToRigCache(hamlibData::CW_MEMORY_TYPES::NONE);
+    addCwKeyerTypeToRigCache(hamlibData::CW_MEMORY_TYPES::NONE);
     return false;
 
 }
@@ -4135,16 +4137,16 @@ void RigControlMainWindow::addVoiceNumberMessagesToRigCache(int numMessages)
     msg->rigCache.setNumVoiceMessages(psname, numMessages);
 }
 
-void RigControlMainWindow::addCwKeyerMemoryStatusToRigCache(int cwMemType)
+void RigControlMainWindow::addCwKeyerTypeToRigCache(int cwMemType)
 {
-    logMessage(QString("Add CW Keyer Memory Status to rigcache = %1").arg(cwMemType));
+    logMessage(QString("Add CW Keyer Type to rigcache = %1").arg(getCwRadioManufacturer(cwMemType)));
     PubSubName psname(currentRadio.radioName);
     msg->rigCache.setCwMemAvail(psname, cwMemType);
 }
 
 void RigControlMainWindow::addCwKeyerNumberMessagesToRigCache(int numMessages)
 {
-    logMessage(QString("Add Number of Voice Memory Messages to rigcache = %1").arg(numMessages));
+    logMessage(QString("Add Number of Cw Memory Messages to rigcache = %1").arg(numMessages));
     PubSubName psname(currentRadio.radioName);
     msg->rigCache.setNumCwMessages(psname, numMessages);
 }

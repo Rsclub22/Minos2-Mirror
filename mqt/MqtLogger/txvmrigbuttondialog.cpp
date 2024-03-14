@@ -3,6 +3,7 @@
 #include "regsettings.h"
 #include "txvmrigbuttondialog.h"
 #include "ui_txvmrigbuttondialog.h"
+//#include "rigcontrolcommonconstants.h"
 
 
 const int MAX_CW_MESSAGE_LENGTH = 30;
@@ -65,7 +66,11 @@ void TxVmRigButtonDialog::setCwValidatorCwCharList(QString validCwCharList)
 {
     validCwCharacterList = validCwCharList;
     populateInfoPanelSupportedCwChars(validCwCharacterList);
+}
 
+void TxVmRigButtonDialog::setCwValidatorCwCharRegEx(QString validCharCwRegEx_)
+{
+    validCwCharacterRegEx = validCharCwRegEx_;
 }
 
 void TxVmRigButtonDialog::populateInfoPanelSupportedCwChars(QString validCwCharList)
@@ -270,8 +275,55 @@ void TxVmRigButtonDialog::on_cancelbuttonClicked()
     reject();
 }
 
-void TxVmRigButtonDialog::setCwCharValidator(CWRigKeyerValidator cwCharValidator)
+void TxVmRigButtonDialog::setCwCharInputValidator()
 {
-    //ui->txCwMessageLineEdit->setClearButtonEnabled(cwCharValidator);
+    cwCharValidator.setValidCwCharStr(validCwCharacterList);
+    cwCharValidator.setValidCwCharRegEx(validCwCharacterRegEx);
+    cwCharValidator.setMaxNumCwChars(maximumNumCwChars);
+    cwCharValidator.setSupportedSpecialChars(supportedCwSpecialCharsList);
+    ui->txCwMessageLineEdit->setValidator(&cwCharValidator);
 }
 
+
+/*
+   CW Message line input validator
+*/
+
+CWRigKeyerValidator::CWRigKeyerValidator()
+{
+
+}
+
+QValidator::State CWRigKeyerValidator::validate(QString & input, int & /*pos*/) const
+{
+    input = input.toUpper();
+
+    if (validCwCharacterRegEx.exactMatch(input))
+    {
+        return Acceptable;
+    }
+
+    return Invalid;
+
+
+}
+
+void CWRigKeyerValidator::setValidCwCharStr(QString cwValidCharStr_)
+{
+    validCwCharStr = cwValidCharStr_;
+}
+
+void CWRigKeyerValidator::setValidCwCharRegEx(QString cwValidCharRegEx)
+{
+    validCwCharacterRegEx = QRegExp(cwValidCharRegEx);
+}
+
+void CWRigKeyerValidator::setMaxNumCwChars(int maxNumChars_)
+{
+    maxNumChars = maxNumChars_;
+}
+
+void CWRigKeyerValidator::setSupportedSpecialChars(QStringList supportedSpecialCwChars)
+{
+    specialCharacters = supportedSpecialCwChars;
+}

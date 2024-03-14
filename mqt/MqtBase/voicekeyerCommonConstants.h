@@ -9,6 +9,7 @@
 
 
 
+
 namespace voiceKeyerCommon
 {
     // These are Minos max and min keyer buttons
@@ -54,10 +55,13 @@ void writeSaveVoiceCWMemoryButtonByRadioNameToIni(bool data, voiceKeyerCommon::V
 void getListOfRadioNamesForMemoryButtons(QStringList &radioNames, voiceKeyerCommon::VoiceKeyerId id);
 
 bool getRigCWKeyerSupportedSpecialCharacters(QMap<QString, QChar> &specialCharMap, QString radioMfg);
+bool getRigCWKeyerSupportedCharactersRegEx(QString &validCharCwRegEx, QString radioMfg);
 bool getRigCWKeyerRadiosSupportSpecialCharacters(QStringList &listOfRadioModels, QString radioMfg);
 bool getRigCWKeyerSupportedCharacters(QString &supportedChars, QString radioMfg);
 bool getRigCWMessageStoredInRadioFlag(bool &storedInRadio, QString radioMfg);
 bool getRigCWKeyerMaxMessageLength(int &messageLength, QString radioMfg);
+
+QString getCwRadioManufacturer(int cwMemType);
 
 
 #endif // VOICEKEYERCOMMONCONSTANTS_H
