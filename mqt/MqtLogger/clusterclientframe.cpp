@@ -954,8 +954,13 @@ void ClusterClientFrame::setContest(BaseContestLog *c)
                 }
                 else if (contestModeStr == hamlibData::PH)
                 {
-                    filterSettings.setModeFilter(hamlibData::USB, true);
-                    filterSettings.setModeFilter(hamlibData::LSB, true);
+                    filterSettings.setModeFilter(USB_MODE, true);
+                    filterSettings.setModeFilter(LSB_MODE, true);
+                }
+                else if (contestModeStr == hamlibData::RY || contestModeStr == hamlibData::PSK  )
+                {
+                    filterSettings.setModeFilter(RTTY_MODE, true);
+                    filterSettings.setModeFilter(PSK31_MODE, true);
                 }
                 else
                 {

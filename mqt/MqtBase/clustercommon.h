@@ -45,7 +45,7 @@ const QString JT65_MODE = "JT65";
 
 
 const QStringList clusterModes = QStringList() << NONE_MODE << CW_MODE << LSB_MODE << USB_MODE << FM_MODE << RTTY_MODE << PSK31_MODE << FT8_MODE << FT4_MODE << MSK144_MODE << JT65_MODE;
-const QStringList mgmModes = QStringList() << RTTY_MODE << PSK31_MODE << FT8_MODE << FT4_MODE << MSK144_MODE << JT65_MODE;
+const QStringList mgmModes = QStringList() << FT8_MODE << FT4_MODE << MSK144_MODE << JT65_MODE;
 
 const QStringList clusterPropModes = QStringList() << "TR" << "ES" << "MS" << "EME";
 enum bandPlanModeError {MODE_FREQ_MATCH, NO_MODE_FREQ_MATCH, MODE_NOT_FOUND, BAND_NOT_FOUND};
