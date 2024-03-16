@@ -209,6 +209,10 @@ QString DMButtonFrame::parseFKeyMessage(QString mess)
                 }
                 else if (macro == "CALL")
                 {
+                    txMess += call;
+                }
+                else if (macro == "SN")
+                {
                     txMess += serials;
                 }
                 else if (macro == "EXCH")
@@ -357,7 +361,11 @@ bool DMButtonFrame::parseFKeyString(QString s, QString mode)
 {
     QJsonParseError err;
     QJsonDocument json = QJsonDocument::fromJson(s.toUtf8(), &err);
-    if (!err.error)
+    if (err.error)
+    {
+        return false;
+    }
+    else
     {
         if( json.isArray())
         {
@@ -372,13 +380,13 @@ bool DMButtonFrame::parseFKeyString(QString s, QString mode)
 
                 if (!parseFKeyArray(run, name, mode) )
                 {
-
+                    // always returns true
                 }
 
                 QJsonArray sandp = namestruct.value("SandP").toArray();
                 if (!parseFKeyArray(sandp, name, mode) )
                 {
-
+                    // always returns true
                 }
             }
         }
