@@ -290,6 +290,12 @@ void RxBuffer::addChar(RXChar &c)
     }
     else
     {
+        if (c.getCh() == ' ' && buff[curLine].charCount() > 60)
+        {
+            RXChar c1;
+            c1.setCh('\n');
+            addChar(c1);  // word wrap
+        }
         buff[curLine].addChar(c);
     }
     //trace(QString("Add character <%1> %2 on line %3").arg(c.getCh()).arg(int(c.getCh().toLatin1())).arg(curLine));
