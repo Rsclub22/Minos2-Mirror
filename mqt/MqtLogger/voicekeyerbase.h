@@ -117,6 +117,7 @@ public:
     virtual bool getUsePttForEomFlag() = 0;
 
     virtual int setup(VoiceKeyerFactory *voiceKeyerFactory, int &maxNumButtons, int &numButtons, QString selectedRadioName) = 0;
+
     virtual int editButton(VoiceKeyerParams* vmData, QString title) = 0;
 
     virtual bool hasPip() const

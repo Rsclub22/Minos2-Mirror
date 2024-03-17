@@ -539,6 +539,7 @@ void TxVmButtonsFrame::setFrameState(QString voiceKeyerName)
         {
             setAvailIndicatorVisible(voiceCap.getHasAvailStatus());
             setAvailIndicatorForRadioOnOff(selectedRadio);
+
         }
         else
         {
@@ -617,10 +618,17 @@ void TxVmButtonsFrame::clearButtonLabels()
 
 void TxVmButtonsFrame::editActionSelected(int buttonNumber)
 {
-    if (voiceKeyerType == keyerTypes[VoiceKeyerId::None])
+    if (voiceKeyerType == keyerTypes[VoiceKeyerId::None]
+        || (voiceKeyerType == keyerTypes[VoiceKeyerId::RigControl] && !isVoiceMemAvail(selectedRadio))
+        || (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl] && !isCwMemTypeAvail(selectedRadio))
+        )
     {
+        trace(QString("[TxVmButtonsFrame] editActionSelected rigControl Voice Keyer Selected, but not available for this radio or no keyer selected"));
         return;
     }
+
+
+    trace(QString("[TxVmButtonsFrame] editActionSelected"));
 
     VoiceKeyerParams vmData;
     vmData.setType(voiceKeyerType);
@@ -665,21 +673,12 @@ void TxVmButtonsFrame::editActionSelected(int buttonNumber)
 
 void TxVmButtonsFrame::readActionSelected(int buttonNumber)
 {
-    if (voiceKeyerType == keyerTypes[VoiceKeyerId::None])
+    if (voiceKeyerType == keyerTypes[VoiceKeyerId::None]
+        || (voiceKeyerType == keyerTypes[VoiceKeyerId::RigControl] && !isVoiceMemAvail(selectedRadio))
+        || (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl] && !isCwMemTypeAvail(selectedRadio))
+        )
     {
-        trace(QString("[TxVmButtonsFrame] readActionSelected No Keyer Selected "));
-        return;
-    }
-
-
-    if (voiceKeyerType == keyerTypes[VoiceKeyerId::RigControl] && !isVoiceMemAvail(selectedRadio))
-    {
-        trace(QString("[TxVmButtonsFrame] readActionSelected rigControl Voice Keyer Selected, but not available for this radio "));
-        return;
-    }
-    else if (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl] && !isCwMemTypeAvail(selectedRadio))
-    {
-        trace(QString("[TxVmButtonsFrame] readActionSelected rigControl CW Message Keyer Selected, but not available for this radio "));
+        trace(QString("[TxVmButtonsFrame] readActionSelected rigControl Voice Keyer Selected, but not available for this radio or no keyer selected"));
         return;
     }
     trace(QString("[TxVmButtonsFrame] readActionSelected"));
@@ -811,13 +810,21 @@ void TxVmButtonsFrame::onVmStopClicked()
     buttonNumSent = NO_VM_BUTTON_ON;
 }
 
-// this probably should be called newActionSelected!
-void TxVmButtonsFrame::writeActionSelected(int buttonNumber)
+
+void TxVmButtonsFrame::newActionSelected(int buttonNumber)
 {
-    if (voiceKeyerType == keyerTypes[VoiceKeyerId::None])
+
+    if (voiceKeyerType == keyerTypes[VoiceKeyerId::None]
+        || (voiceKeyerType == keyerTypes[VoiceKeyerId::RigControl] && !isVoiceMemAvail(selectedRadio))
+        || (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl] && !isCwMemTypeAvail(selectedRadio))
+        )
     {
+        trace(QString("[TxVmButtonsFrame] newActionSelected rigControl Voice Keyer Selected, but not available for this radio or no keyer selected"));
         return;
     }
+
+    trace(QString("[TxVmButtonsFrame] newActionSelected Voice Keyer Selected"));
+
     VoiceKeyerParams vmData;
     vmData.clear();
 
@@ -1171,13 +1178,16 @@ bool TxVmButtonsFrame::isCwMemTypeAvail(PubSubName psn)
     if (allRadioDetails.contains(psn))
     {
         rd = allRadioDetails[psn];
-        if (rd.getCwMemType() == hamlibData::CW_MEMORY_TYPES::NONE)
+        if (rd.getCwMemType() == hamlibData::CW_MEMORY_TYPES::KENWOOD_MEM_RECALL
+            || rd.getCwMemType() == hamlibData::CW_MEMORY_TYPES::YAESU_MEM_RECALL
+            || rd.getCwMemType() == hamlibData::CW_MEMORY_TYPES::ICOM
+            || rd.getCwMemType() == hamlibData::CW_MEMORY_TYPES::ELECRAFT)
         {
-            return false;
+            return true;
         }
         else
         {
-            return true;
+            return false;
         }
     }
 
@@ -1405,7 +1415,7 @@ TxVoiceMemButton::TxVoiceMemButton(QToolButton *b, TxVmButtonsFrame *tvmbf, int 
     connect(shortKey, &QShortcut::activated, this, &TxVoiceMemButton::readActionSelected);
     connect(vmButton, &QToolButton::clicked, this, &TxVoiceMemButton::readActionSelected);
     connect(vmButton, &QToolButton::clicked, this, &TxVoiceMemButton::buttonSelected);
-    connect( newAction, &QAction::triggered, this, &TxVoiceMemButton::writeActionSelected);
+    connect( newAction, &QAction::triggered, this, &TxVoiceMemButton::newActionSelected);
     connect( editAction, &QAction::triggered, this, &TxVoiceMemButton::editActionSelected);
 
 
@@ -1431,12 +1441,14 @@ void TxVoiceMemButton::readActionSelected()
 void TxVoiceMemButton::editActionSelected()
 {
 
+    trace(QString("TxVoiceMemButton::editActionSelected from %1 %2").arg(sender()->metaObject()->className(), sender()->objectName()));
     txVmButtonsFrame->editActionSelected(memNo);
 
 }
-void TxVoiceMemButton::writeActionSelected()
+void TxVoiceMemButton::newActionSelected()
 {
-    txVmButtonsFrame->writeActionSelected(memNo);
+    trace(QString("TxVoiceMemButton::newActionSelected from %1 %2").arg(sender()->metaObject()->className(), sender()->objectName()));
+    txVmButtonsFrame->newActionSelected(memNo);
 }
 
 

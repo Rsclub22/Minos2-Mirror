@@ -32,12 +32,14 @@ public:
     void sendMsgNum(int buttonNum) override;
     void stopMsg(VoiceKeyerParams * vkParam) override;
 
+
     void sendCwMsg(QString message) override {Q_UNUSED(message)};
     void stopCwMsg() override {};
     void setCwMemType(int cwMemType) override {Q_UNUSED(cwMemType)};
     bool getSetCwModeAndRestoreFlag() override {return false;};
 
     virtual bool hasRecord() override {return false;}
+
 
 
 
@@ -62,7 +64,7 @@ private:
 
     bool usePttForEom = false;
 
-
+    bool radioKeyerAvail = false;
 
 
 };

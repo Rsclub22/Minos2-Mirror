@@ -110,8 +110,11 @@ void RigControlCwMessageKeyer::stopCwMsg()
 }
 
 
+
 bool RigControlCwMessageKeyer::readVmButtonParams(int buttonNum, VoiceKeyerParams &vmParams)
 {
+
+
 
     bool saveByRadioName = readSaveVoiceCWMemoryButtonByRadioNameFromIni(VoiceKeyerId::CW_RigControl);
 

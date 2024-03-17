@@ -71,6 +71,8 @@ void ExternalMqtKeyer::doRecording(VoiceKeyerParams *vkParam)
     emit LogContainer->sendKeyerRecord( vkParam->getvmButtonNum() );
 }
 
+
+
 bool ExternalMqtKeyer::readVmButtonParams(int buttonNum, VoiceKeyerParams &vmParams)
 {
     // This info should have come from the external keyer

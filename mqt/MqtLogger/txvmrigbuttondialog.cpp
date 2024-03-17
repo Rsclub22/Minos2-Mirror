@@ -66,6 +66,7 @@ void TxVmRigButtonDialog::setSerialMessageTextBoxVisible(bool visible)
     ui->serialMessageLabel->setVisible(visible);
 }
 
+
 void TxVmRigButtonDialog::setCwValidatorCwCharList(QString validCwCharList)
 {
     validCwCharacterList = validCwCharList;
@@ -349,9 +350,7 @@ QValidator::State CWRigKeyerValidator::validate(QString & input, int &/*pos*/) c
 
     input = input.toUpper();
 
-    //if (validCwCharacterRegEx.exactMatch(input))
-    //{
-    if (validCwCharStr.contains(input.right(1)))
+    if (input.length() <= maxNumChars && validCwCharStr.contains(input.right(1)))
     {
         return Acceptable;
     }

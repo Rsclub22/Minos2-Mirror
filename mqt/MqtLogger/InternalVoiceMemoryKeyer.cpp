@@ -125,6 +125,8 @@ void InternalVoiceMemoryKeyer::doRecording(VoiceKeyerParams * vkParam)
 
 }
 
+
+
 bool InternalVoiceMemoryKeyer::readVmButtonParams(int buttonNum, VoiceKeyerParams &vmParams)
 {
     QString fileName = VOICE_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + vmParams.getType() + ".ini";

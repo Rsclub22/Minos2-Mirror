@@ -49,7 +49,7 @@ private slots:
     void memoryShortCutSelected();
     void readActionSelected();
     void editActionSelected();
-    void writeActionSelected();
+    void newActionSelected();
     void buttonSelected();
 signals:
 
@@ -76,7 +76,7 @@ public:
     void readActionSel(int buttonNumber);
     void readActionSelected(int buttonNumber);
     void editActionSelected(int buttonNumber);
-    void writeActionSelected(int buttonNumber);
+    void newActionSelected(int buttonNumber);
 
     void setPttEnabled(bool state, PubSubName psn);
 
