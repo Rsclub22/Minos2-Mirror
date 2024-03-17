@@ -111,7 +111,11 @@ private:
 
     void setWordType(RxLine *rline, int offset, int endword);
     void startEngine();
-
+    
+    void classifyNumeric(RxLine *&rline, int offset, int endword, QString const &w,
+                   RXChar *&r);
+    int classifyCall(RxLine *&rline, int offset, int endword, QString const &w,
+                   RXChar *&r);
     void scanLine(int curLine);
     QString getSelectedRadio();
     bool setSelectedRadio(QString s);

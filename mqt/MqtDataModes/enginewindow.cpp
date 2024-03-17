@@ -538,8 +538,50 @@ void EngineWindow::onNewCharacter()
 
     ui->rxChars->setText();
 }
-void EngineWindow::scanLine(int curLine)
+void EngineWindow::classifyNumeric(RxLine *&rline, int offset, int endword,
+                             QString const &w, RXChar *&r) {
+    if (w == "599")
+    {
+        // RST
+        r->setRST(true);
+        setWordType(rline, offset, endword);
+    }
+    else if (w.size() <= 4)
+    {
+        // possible serial number
+        r->setSerial(true);
+        setWordType(rline, offset, endword);
+    }
+}
+int EngineWindow::classifyCall(RxLine *&rline, int offset, int endword,
+                             QString const &w, RXChar *&r)
 {
+    Callsign cs;
+    int res = cs.setFullCall(w);
+    if (res == CS_OK)
+    {
+        Callsign mycall = RemoteLogs::getRemoteLogs()->myCall();
+        if (mycall == cs)
+        {
+            r->setMyCall(true);
+        }
+        else
+        {
+            // look for it...
+            if (RemoteLogs::getRemoteLogs()->hasWorked(cs, rigBand, rigMode))
+            {
+                r->setWorkedCall(true);
+            }
+            else
+            {
+                r->setUnworkedCall(true);
+            }
+        }
+        setWordType(rline, offset, endword);
+    }
+    return res;
+}
+void EngineWindow::scanLine(int curLine) {
     RxLine *rline = rxBuff.getRxLine(curLine);
     rline->clearFlags();
     QString line = rline->toString();
@@ -559,45 +601,63 @@ void EngineWindow::scanLine(int curLine)
         {
             if (isPureNumeric(w))
             {
-                if (w == "599")
-                {
-                    // RST
-                    r->setRST(true);
-                    setWordType(rline, offset, endword);
-                }
-                else if (w.size() <= 4)
-                {
-                    // possible serial number
-                    r->setSerial(true);
-                    setWordType(rline, offset, endword);
-                }
+                classifyNumeric(rline, offset, endword, w, r);
             }
             else
             {
                 // look for callsigns, including our own
 
-                Callsign cs;
-                int res = cs.setFullCall(w);
-                if (res == CS_OK)
+                int res = classifyCall(rline, offset, endword, w, r);
+                if (res != CS_OK)
                 {
-                    Callsign mycall = RemoteLogs::getRemoteLogs()->myCall();
-                    if (mycall == cs)
+                    int woff = w.indexOf('/');
+                    if (woff > 0)
                     {
-                        r->setMyCall(true);
-                    }
-                    else
-                    {
-                        // look for it...
-                        if (RemoteLogs::getRemoteLogs()->hasWorked(cs, rigBand, rigMode))
+                        QStringList words2 = w.split('/');
+
+                        if (words2.count() >= 1)
                         {
-                            r->setWorkedCall(true);
+                            if (isPureNumeric(words2[0]))
+                            {
+                                RXChar *r1 = rline->getCharRef(offset);
+                                classifyNumeric(rline, offset, offset + woff, words2[0], r1);
+                            }
+                            else
+                            {
+                                RXChar *r1 = rline->getCharRef(offset);
+                                classifyCall(rline, offset, offset + woff, words2[0], r1);
+                            }
                         }
-                        else
+                        if (words2.count() >= 2 )
                         {
-                            r->setUnworkedCall(true);
+                            if (isPureNumeric(words2[1]))
+                            {
+                                RXChar *r1 = rline->getCharRef(offset + woff + 1);
+                                classifyNumeric(rline, offset + woff + 1, offset + woff + 1 + words2[1].length(), words2[1], r1);
+                            }
+                            else
+                            {
+                                RXChar *r1 = rline->getCharRef(offset + woff + 1);
+                                classifyCall(rline, offset + woff + 1, offset + woff + 1 + words2[1].length(), words2[1], r1);
+                            }
+                        }
+                        if (words2.count() >= 3 )
+                        {
+                            int woff = w.lastIndexOf('/');
+                            if (isPureNumeric(words2[2]))
+                            {
+                                RXChar *r1 = rline->getCharRef(offset + woff + 1);
+                                classifyNumeric(rline, offset + woff + 1, offset + woff + 1 + words2[2].length(), words2[2], r1);
+                            }
+                            else
+                            {
+                                RXChar *r1 = rline->getCharRef(offset + woff + 1);
+                                classifyCall(rline, offset + woff + 1, offset + woff + 1 + words2[2].length(), words2[2], r1);
+                            }
                         }
                     }
-                    setWordType(rline, offset, endword);
+
+
                 }
             }
         }
