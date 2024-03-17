@@ -228,11 +228,5 @@ QString getCwRadioManufacturer(int cwMemType)
 }
 
 
-bool checkSpecialCwCharactersValid(QString message, QStringList &specialChars)
-{
-
-}
-
-
 
 

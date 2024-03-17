@@ -35,7 +35,7 @@ public:
 
     virtual void stopMsg(VoiceKeyerParams *vkParams) override {Q_UNUSED(vkParams)};
 
-    virtual void sendCwMsg(const QString message) override;
+    virtual void sendCwMsg(VoiceKeyerParams &vmParams) override;
     virtual void stopCwMsg() override;
     virtual void setCwMemType(int cwMemType) override;
     bool getSetCwModeAndRestoreFlag() override;
@@ -62,6 +62,7 @@ private:
     bool radioKeyerAvail = false;
 
     QString getRadioModel(QString selectedRadio);
+
 };
 
 

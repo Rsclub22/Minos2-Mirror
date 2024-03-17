@@ -291,6 +291,13 @@ void TxVmButtonsFrame::loadButtonData()
     for (int i = 0; i < voiceMemButtonList.count(); i++)
     {
         VoiceKeyerParams vmData;
+
+        if ((voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl] || voiceKeyerType == keyerTypes[VoiceKeyerId::RigControl])
+            && !selectedRadio.getLocalName().isEmpty())
+        {
+            vmData.setSelRadioName(selectedRadio.getLocalName());
+        }
+
         if (vmData.getType().isEmpty())
         {
             vmData.setType(voiceKeyerType);
@@ -632,7 +639,11 @@ void TxVmButtonsFrame::editActionSelected(int buttonNumber)
 
     VoiceKeyerParams vmData;
     vmData.setType(voiceKeyerType);
-    vmData.setSelRadioName(selectedRadio.getLocalName());  // get current radio name
+    if ((voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl] || voiceKeyerType == keyerTypes[VoiceKeyerId::RigControl])
+        && !selectedRadio.getLocalName().isEmpty())
+    {
+        vmData.setSelRadioName(selectedRadio.getLocalName());
+    }
 
     if (txVoiceKeyer)
     {
@@ -696,7 +707,13 @@ void TxVmButtonsFrame::readActionSelected(int buttonNumber)
     }
 
     VoiceKeyerParams vmData;
+
     vmData.setType(voiceKeyerType);
+    if ((voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl] || voiceKeyerType == keyerTypes[VoiceKeyerId::RigControl])
+        && !selectedRadio.getLocalName().isEmpty())
+    {
+        vmData.setSelRadioName(selectedRadio.getLocalName());
+    }
     txVoiceKeyer->readVmButtonParams(buttonNumber, vmData);
 
 
@@ -721,7 +738,10 @@ void TxVmButtonsFrame::startVMMsg(int buttonNumber)
 
     if (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl])
     {
-        if (getCwMemType(selectedRadio) == hamlibData::CW_MEMORY_TYPES::ICOM)
+        if (getCwMemType(selectedRadio) == hamlibData::CW_MEMORY_TYPES::ICOM
+            || getCwMemType(selectedRadio) == hamlibData::CW_MEMORY_TYPES::ELECRAFT
+            || getCwMemType(selectedRadio) == hamlibData::CW_MEMORY_TYPES::KENWOOD_MEM_RECALL
+            || getCwMemType(selectedRadio) == hamlibData::CW_MEMORY_TYPES::YAESU_MEM_RECALL)
         {
             if (curMode != rigcommon::convertModeToQString(MODE::CW) && txVoiceKeyer->getSetCwModeAndRestoreFlag())
             {
@@ -736,17 +756,20 @@ void TxVmButtonsFrame::startVMMsg(int buttonNumber)
 
             VoiceKeyerParams vmData;
             vmData.setType(voiceKeyerType);
+
+            if ((voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl] || voiceKeyerType == keyerTypes[VoiceKeyerId::RigControl])
+                && !selectedRadio.getLocalName().isEmpty())
+            {
+                vmData.setSelRadioName(selectedRadio.getLocalName());
+            }
+
             txVoiceKeyer->readVmButtonParams(buttonNumber, vmData);
-            txVoiceKeyer->sendCwMsg(vmData.getVmCwMessage());
+            txVoiceKeyer->sendCwMsg(vmData);
             usePttForEomFlag = txVoiceKeyer->getUsePttForEomFlag();
 
 
         }
-        else if (getCwMemType(selectedRadio) == hamlibData::CW_MEMORY_TYPES::YAESU_MEM_RECALL)
-        {
-            usePttForEomFlag = txVoiceKeyer->getUsePttForEomFlag();
-            txVoiceKeyer->sendCwMsg(QString::number(buttonNumSent + 1));        // Yaesu recalls messages prestored on the radio
-        }
+
     }
     else
     {
@@ -870,25 +893,20 @@ void TxVmButtonsFrame::onRemoteConfigChanged()
     }
 
 
-    if (voiceKeyerType != keyerTypes[VoiceKeyerId::RigControl] || voiceKeyerType != keyerTypes[VoiceKeyerId::RigControl] ||voiceKeyerType != keyerTypes[VoiceKeyerId::CW_RigControl])
-    {
 
-    }
-    else
+    for (int i = 0; i < voiceMemButtonList.count(); i++)
     {
-        for (int i = 0; i < voiceMemButtonList.count(); i++)
+        VoiceKeyerParams vmData;
+        if (vmData.getType().isEmpty())
         {
-            VoiceKeyerParams vmData;
-            if (vmData.getType().isEmpty())
-            {
-                vmData.setType(voiceKeyerType);
-            }
-
-            txVoiceKeyer->readVmButtonParams(i, vmData);
-            vmKeyParamList[i] = vmData;
-            setRunButtonText(i, vmData.getVmName());
+            vmData.setType(voiceKeyerType);
         }
+
+        txVoiceKeyer->readVmButtonParams(i, vmData);
+        vmKeyParamList[i] = vmData;
+        setRunButtonText(i, vmData.getVmName());
     }
+
 
 }
 void TxVmButtonsFrame::onRemoteKeyerStarted(int key)
@@ -1158,6 +1176,8 @@ void TxVmButtonsFrame::setNumCwMessages(int numMsgs, PubSubName psn)
 }
 
 // This is max number of cw messages available on a radio
+// as hamlib does not use stored cw messages on radio
+// we will not use this.
 int TxVmButtonsFrame::getNumCwMessages(PubSubName psn)
 {
     RadioDetails rd;

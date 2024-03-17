@@ -4,7 +4,6 @@
 #include "KeyerJson.h"
 #include "voicekeyerbase.h"
 #include "voicekeyerfactory.h"
-#include "rigcontrolcommonconstants.h"
 
 class ExternalMqtKeyer:public VoiceKeyerBase
 {
@@ -29,7 +28,7 @@ public:
         return false;
     }
 
-    virtual void sendCwMsg(QString message) override {Q_UNUSED(message)};
+    void sendCwMsg(VoiceKeyerParams &vmParams) override {Q_UNUSED(vmParams)};
     virtual void stopCwMsg() override {};
     virtual void setCwMemType(int cwMemType) override {Q_UNUSED(cwMemType)};
     virtual bool getSetCwModeAndRestoreFlag() override {return false;};

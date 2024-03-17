@@ -314,6 +314,13 @@
           </property>
           <layout class="QHBoxLayout" name="horizontalLayout_11">
            <item>
+            <widget class="QLabel" name="label_5">
+             <property name="text">
+              <string>Precede with ^ Char</string>
+             </property>
+            </widget>
+           </item>
+           <item>
             <widget class="QLabel" name="listOfSupportedCwSpecialCharsLabel">
              <property name="text">
               <string/>

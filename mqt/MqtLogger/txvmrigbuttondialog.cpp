@@ -4,12 +4,14 @@
 #include "regsettings.h"
 #include "txvmrigbuttondialog.h"
 #include "ui_txvmrigbuttondialog.h"
-//#include "rigcontrolcommonconstants.h"
+#include "voicekeyerCommonConstants.h"
 
 #include <QDebug>
 
+
+
 const int MAX_CW_MESSAGE_LENGTH = 30;
-const QString specialCwCharEscapeChar = "^";
+
 
 TxVmRigButtonDialog::TxVmRigButtonDialog(QWidget *parent) :
     QDialog(parent),
@@ -266,7 +268,7 @@ void TxVmRigButtonDialog::on_okButtonClicked()
     bool allSpecialCharOK = false;
     QStringList specialCharErrorList;
 
-    int currentIndex = input.indexOf(specialCwCharEscapeChar);
+    int currentIndex = input.indexOf(voiceKeyerCommon::specialCwCharEscapeChar);
     while (currentIndex != -1)
     {
         specialCharPresent = true;
@@ -279,11 +281,11 @@ void TxVmRigButtonDialog::on_okButtonClicked()
         else
         {
             allSpecialCharOK = false;
-            spChar = specialCwCharEscapeChar + spChar;
+            spChar = voiceKeyerCommon::specialCwCharEscapeChar + spChar;
             specialCharErrorList.append(spChar);
         }
 
-        currentIndex = input.indexOf(specialCwCharEscapeChar, currentIndex + 1);
+        currentIndex = input.indexOf(voiceKeyerCommon::specialCwCharEscapeChar, currentIndex + 1);
 
     }
 
@@ -296,6 +298,12 @@ void TxVmRigButtonDialog::on_okButtonClicked()
         else
         {
             trace(QString("Error in special CW character in message %1").arg(specialCharErrorList.join(',')));
+            QMessageBox msgBox;
+            msgBox.setText(tr("%1 Special Characters ").arg(tr("Invalid")));
+            msgBox.setInformativeText(tr("These special characters are invalid for this radio: %1\nPlease edit or remove").arg(specialCharErrorList.join(',')));
+            msgBox.exec();
+            return;
+
         }
     }
 
@@ -321,7 +329,7 @@ void TxVmRigButtonDialog::on_cancelbuttonClicked()
 
 void TxVmRigButtonDialog::setCwCharInputValidator()
 {
-    cwCharValidator.setValidCwCharStr(validCwCharacterList + specialCwCharEscapeChar);
+    cwCharValidator.setValidCwCharStr(validCwCharacterList + voiceKeyerCommon::specialCwCharEscapeChar);
     cwCharValidator.setMaxNumCwChars(maximumNumCwChars);
     //cwCharValidator.setSupportedSpecialChars(supportedCwSpecialCharsList);
     ui->txCwMessageLineEdit->setValidator(&cwCharValidator);

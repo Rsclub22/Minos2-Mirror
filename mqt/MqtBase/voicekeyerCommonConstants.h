@@ -44,6 +44,8 @@ namespace voiceKeyerCommon
     const QString ALL_RADIOS_GROUP_NAME = "AllRadios";
 
     const int VOICEKEYER_MAX_NUMBUTTONS = 8;
+
+    const QString specialCwCharEscapeChar = "^";
 }
 
 
