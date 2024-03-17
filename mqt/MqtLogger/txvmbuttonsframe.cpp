@@ -717,8 +717,12 @@ void TxVmButtonsFrame::readActionSelected(int buttonNumber)
 
 void TxVmButtonsFrame::startVMMsg(int buttonNumber)
 {
-    trace("TxVmButtonsFrame::startVMMsg");
+    trace(QString("TxVmButtonsFrame::startVMMsg").arg(buttonNumber));
     buttonNumSent = buttonNumber;
+    if (buttonNumber >= voiceMemButtonList.count())
+    {
+        return;
+    }
     usePttForEomFlag = false;
 
     if (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl])
