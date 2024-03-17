@@ -120,27 +120,7 @@ bool getRigCWKeyerSupportedCharacters(QString &supportedChars, QString radioMfg)
     return false;    // error
 }
 
-bool getRigCWKeyerSupportedCharactersRegEx(QString &validCharCwRegEx, QString radioMfg)
-{
-    QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + CWKEYER_RADIO_COMMON_PARAMS_FILENAME + ".ini";
-    QSettings config(fileName, QSettings::IniFormat);
 
-    {
-        config.beginGroup(radioMfg);
-        validCharCwRegEx =  config.value("supportedCharRegEx", "").toString();
-        config.endGroup();
-        if (validCharCwRegEx.isEmpty())
-        {
-            return false;
-        }
-
-
-
-        return true;
-    }
-
-    return false;    // error
-}
 
 bool getRigCWKeyerRadiosSupportSpecialCharacters(QStringList &listOfRadioModels, QString radioMfg)
 {
@@ -248,7 +228,10 @@ QString getCwRadioManufacturer(int cwMemType)
 }
 
 
+bool checkSpecialCwCharactersValid(QString message, QStringList &specialChars)
+{
 
+}
 
 
 

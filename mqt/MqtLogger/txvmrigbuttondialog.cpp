@@ -1,12 +1,15 @@
 #include <QMessageBox>
 #include <QSettings>
+#include "MTrace.h"
 #include "regsettings.h"
 #include "txvmrigbuttondialog.h"
 #include "ui_txvmrigbuttondialog.h"
 //#include "rigcontrolcommonconstants.h"
 
+#include <QDebug>
 
 const int MAX_CW_MESSAGE_LENGTH = 30;
+const QString specialCwCharEscapeChar = "^";
 
 TxVmRigButtonDialog::TxVmRigButtonDialog(QWidget *parent) :
     QDialog(parent),
@@ -24,6 +27,7 @@ TxVmRigButtonDialog::TxVmRigButtonDialog(QWidget *parent) :
     connect(ui->buttonBox, &QDialogButtonBox::accepted, this, &TxVmRigButtonDialog::on_okButtonClicked);
     connect(ui->buttonBox, &QDialogButtonBox::rejected, this, &TxVmRigButtonDialog::on_cancelbuttonClicked);
     connect(ui->txCwMessageLineEdit, &QLineEdit::editingFinished, this, &TxVmRigButtonDialog::on_txCwMessageEditingFinshed);
+    connect(ui->txCwMessageLineEdit, &QLineEdit::cursorPositionChanged, this, &TxVmRigButtonDialog::onCwMessageCursorChanged);
     connect(ui->txSerialMessageLineEdit, &QLineEdit::editingFinished, this, &TxVmRigButtonDialog::on_txSerialMessageEditingFinshed);
     connect(ui->txVmRepeatPauseDur , &QLineEdit::editingFinished, this, &TxVmRigButtonDialog::onVmRepeatPauseDurEditingFinished);
     connect(ui->txVmMessageDur , &QLineEdit::editingFinished, this, &TxVmRigButtonDialog::onVmMessageDurEditingFinished);
@@ -68,10 +72,7 @@ void TxVmRigButtonDialog::setCwValidatorCwCharList(QString validCwCharList)
     populateInfoPanelSupportedCwChars(validCwCharacterList);
 }
 
-void TxVmRigButtonDialog::setCwValidatorCwCharRegEx(QString validCharCwRegEx_)
-{
-    validCwCharacterRegEx = validCharCwRegEx_;
-}
+
 
 void TxVmRigButtonDialog::populateInfoPanelSupportedCwChars(QString validCwCharList)
 {
@@ -145,12 +146,12 @@ void TxVmRigButtonDialog::setCwSupportSpecialChar(bool radioSupportSpecialChar)
     supportSpecialCwChars = radioSupportSpecialChar;
 }
 
-void TxVmRigButtonDialog::setSpecialCwCharMap(QMap<QString, QChar> &specialCharMap)
+void TxVmRigButtonDialog::setSpecialCwCharLists(QMap<QString, QChar> &specialCharMap)
 {
     supportedCwSpecialCharsList = specialCharMap.keys();
-    populateInfoPanelSupportedSpecialChars();
-
+    populateInfoPanelSupportedSpecialChars();   // for display
 }
+
 // This will overwrite the label with cwMemType
 void TxVmRigButtonDialog::setVmTypeLabelcwMemType(QString mfg)
 {
@@ -259,6 +260,48 @@ void TxVmRigButtonDialog::on_okButtonClicked()
         return;
     }
 
+    QString input = ui->txCwMessageLineEdit->text();
+    bool specialCharPresent = false;
+    bool allSpecialCharOK = false;
+    QStringList specialCharErrorList;
+
+    int currentIndex = input.indexOf(specialCwCharEscapeChar);
+    while (currentIndex != -1)
+    {
+        specialCharPresent = true;
+
+        QString spChar = input.mid(currentIndex + 1, 2);
+        if (supportedCwSpecialCharsList.contains(spChar))
+        {
+            allSpecialCharOK = true;
+        }
+        else
+        {
+            allSpecialCharOK = false;
+            spChar = specialCwCharEscapeChar + spChar;
+            specialCharErrorList.append(spChar);
+        }
+
+        currentIndex = input.indexOf(specialCwCharEscapeChar, currentIndex + 1);
+
+    }
+
+    if (specialCharPresent)
+    {
+        if (allSpecialCharOK)
+        {
+            trace(QString("Special CW character in message OK"));
+        }
+        else
+        {
+            trace(QString("Error in special CW character in message %1").arg(specialCharErrorList.join(',')));
+        }
+    }
+
+
+
+
+
     QString name = ui->txVmNameEdit->text();
     vmData->setVmName(name);
     vmData->setVmCwMessage(ui->txCwMessageLineEdit->text());
@@ -277,53 +320,61 @@ void TxVmRigButtonDialog::on_cancelbuttonClicked()
 
 void TxVmRigButtonDialog::setCwCharInputValidator()
 {
-    cwCharValidator.setValidCwCharStr(validCwCharacterList);
-    cwCharValidator.setValidCwCharRegEx(validCwCharacterRegEx);
+    cwCharValidator.setValidCwCharStr(validCwCharacterList + specialCwCharEscapeChar);
     cwCharValidator.setMaxNumCwChars(maximumNumCwChars);
-    cwCharValidator.setSupportedSpecialChars(supportedCwSpecialCharsList);
+    //cwCharValidator.setSupportedSpecialChars(supportedCwSpecialCharsList);
     ui->txCwMessageLineEdit->setValidator(&cwCharValidator);
 }
+
+void TxVmRigButtonDialog::onCwMessageCursorChanged()
+{
+    int length = ui->txCwMessageLineEdit->text().length();
+    ui->cwMsgLengthLabel->setText(QString::number(length));
+}
+
 
 
 /*
    CW Message line input validator
 */
 
-CWRigKeyerValidator::CWRigKeyerValidator()
+
+CWRigKeyerValidator::CWRigKeyerValidator(QObject* parent) : QValidator(parent)
 {
 
 }
 
-QValidator::State CWRigKeyerValidator::validate(QString & input, int & /*pos*/) const
+QValidator::State CWRigKeyerValidator::validate(QString & input, int &/*pos*/) const
 {
+
     input = input.toUpper();
 
-    if (validCwCharacterRegEx.exactMatch(input))
+    //if (validCwCharacterRegEx.exactMatch(input))
+    //{
+    if (validCwCharStr.contains(input.right(1)))
     {
         return Acceptable;
     }
+
 
     return Invalid;
 
 
 }
 
-void CWRigKeyerValidator::setValidCwCharStr(QString cwValidCharStr_)
+
+
+void CWRigKeyerValidator::setValidCwCharStr(const QString cwValidCharStr_)
 {
     validCwCharStr = cwValidCharStr_;
 }
 
-void CWRigKeyerValidator::setValidCwCharRegEx(QString cwValidCharRegEx)
-{
-    validCwCharacterRegEx = QRegExp(cwValidCharRegEx);
-}
+
 
 void CWRigKeyerValidator::setMaxNumCwChars(int maxNumChars_)
 {
     maxNumChars = maxNumChars_;
 }
 
-void CWRigKeyerValidator::setSupportedSpecialChars(QStringList supportedSpecialCwChars)
-{
-    specialCharacters = supportedSpecialCwChars;
-}
+
+

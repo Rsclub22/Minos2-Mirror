@@ -152,6 +152,13 @@
          <widget class="QLineEdit" name="txCwMessageLineEdit"/>
         </item>
         <item>
+         <widget class="QLabel" name="cwMsgLengthLabel">
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item>
          <widget class="QLabel" name="cwMessageTextLabel">
           <property name="text">
            <string>CW Message Text</string>

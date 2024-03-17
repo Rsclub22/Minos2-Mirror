@@ -351,15 +351,6 @@ int RigControlCwMessageKeyer::editButton(VoiceKeyerParams *vmData, QString title
         trace(QString("Error retrieving supported CW Chars for manufacturer %1").arg(radioManufacturer));
     }
 
-    QString validCharCwRegEx;
-    if (getRigCWKeyerSupportedCharactersRegEx(validCharCwRegEx, radioManufacturer))
-    {
-        vmButtonDialog.setCwValidatorCwCharRegEx(validCharCwRegEx);
-    }
-    else
-    {
-        trace(QString("Error retrieving supported CW Char RegEx for manufacturer %1").arg(radioManufacturer));
-    }
 
     int maxNumChars = 0;
     if (getRigCWKeyerMaxMessageLength(maxNumChars, radioManufacturer))
@@ -393,7 +384,7 @@ int RigControlCwMessageKeyer::editButton(VoiceKeyerParams *vmData, QString title
     {
         if (getRigCWKeyerSupportedSpecialCharacters(specialCharMap, radioManufacturer))
         {
-            vmButtonDialog.setSpecialCwCharMap(specialCharMap);
+            vmButtonDialog.setSpecialCwCharLists(specialCharMap);
             vmButtonDialog.setCwSupportSpecialCharsGroupBoxVisible(true);
         }
 

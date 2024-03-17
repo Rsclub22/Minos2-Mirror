@@ -10,25 +10,30 @@ namespace Ui {
 class TxVmRigButtonDialog;
 }
 
+
 class CWRigKeyerValidator:public QValidator
 {
+    Q_OBJECT
+
 public:
-    CWRigKeyerValidator();
+    CWRigKeyerValidator(QObject* parent = nullptr);
     virtual ~CWRigKeyerValidator() override
     {}
 
     QValidator::State validate(QString & input, int & /*pos*/) const override;
 
-    void setValidCwCharStr(QString cwValidCharStr_);
+    void setValidCwCharStr(const QString cwValidCharStr_);
     void setMaxNumCwChars(int maxNumChars_);
-    void setSupportedSpecialChars(QStringList supportedSpecialCwChars);
-    void setValidCwCharRegEx(QString cwValidCharRegEx);
+
+
 private:
+
     QString validCwCharStr;
-    QRegExp validCwCharacterRegEx;
-    QStringList specialCharacters;
     int maxNumChars = 0;
+
+
 };
+
 
 
 class TxVmRigButtonDialog : public QDialog
@@ -50,14 +55,15 @@ public:
     void setRadioNameLbl(QString radioName);
     void setCwValidatorCwCharList(QString validCwCharList);
     void setCwCharInputValidator();
+    void setCwCharInputValidatorDialogUi(Ui::TxVmRigButtonDialog *ui);
     void setCwValidatorMaxCwMessageLength(int maxNumChars);
     void setCwSupportSpecialChar(bool radioSupportSpecialChar);
-    void setSpecialCwCharMap(QMap<QString, QChar> &specialCharMap);
+    void setSpecialCwCharLists(QMap<QString, QChar> &specialCharMap);
     void setCwSupportCharsGroupBoxVisible(bool visible);
     void setCwSupportSpecialCharsGroupBoxVisible(bool visible);
     void setCwInfoPanelVisible(bool visible);
     void setMaxNumberCwCharactersText(int maxNumCwChars);
-    void setCwValidatorCwCharRegEx(QString validCharCwRegEx_);
+
 private slots:
     void on_okButtonClicked();
     void on_cancelbuttonClicked();
@@ -66,6 +72,7 @@ private slots:
     void onVmMessageDurEditingFinished();
     void on_txCwMessageEditingFinshed();
     void on_txSerialMessageEditingFinshed();
+    void onCwMessageCursorChanged();
 public Q_SLOTS:
     virtual void accept() override;
     virtual void reject() override;
@@ -77,10 +84,10 @@ private:
     CWRigKeyerValidator cwCharValidator;
 
     QString validCwCharacterList;
-    QString validCwCharacterRegEx;
     int maximumNumCwChars = 0;
     bool supportSpecialCwChars = false;
     QStringList supportedCwSpecialCharsList;
+
 
 
 
