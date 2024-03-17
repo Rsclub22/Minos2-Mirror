@@ -610,58 +610,29 @@ void EngineWindow::scanLine(int curLine) {
                 int res = classifyCall(rline, offset, endword, w, r);
                 if (res != CS_OK)
                 {
-                    int woff = w.indexOf('/');
-                    if (woff > 0)
+                    if (w.indexOf('/') > 0)
                     {
                         QStringList words2 = w.split('/');
+                        int woffset = offset;
+                        for(const auto &w:words2)
+                        {
+                            RXChar *r1 = rline->getCharRef(woffset);
+                            if (isPureNumeric(w))
+                            {
+                                classifyNumeric(rline, woffset, woffset + w.size(), w, r1);
+                            }
+                            else
+                            {
+                                classifyCall(rline, woffset, woffset + w.size(), w, r1);
+                            }
+                            woffset += w.size() + 1; // clear word and separator
+                        }
 
-                        if (words2.count() >= 1)
-                        {
-                            if (isPureNumeric(words2[0]))
-                            {
-                                RXChar *r1 = rline->getCharRef(offset);
-                                classifyNumeric(rline, offset, offset + woff, words2[0], r1);
-                            }
-                            else
-                            {
-                                RXChar *r1 = rline->getCharRef(offset);
-                                classifyCall(rline, offset, offset + woff, words2[0], r1);
-                            }
-                        }
-                        if (words2.count() >= 2 )
-                        {
-                            if (isPureNumeric(words2[1]))
-                            {
-                                RXChar *r1 = rline->getCharRef(offset + woff + 1);
-                                classifyNumeric(rline, offset + woff + 1, offset + woff + 1 + words2[1].length(), words2[1], r1);
-                            }
-                            else
-                            {
-                                RXChar *r1 = rline->getCharRef(offset + woff + 1);
-                                classifyCall(rline, offset + woff + 1, offset + woff + 1 + words2[1].length(), words2[1], r1);
-                            }
-                        }
-                        if (words2.count() >= 3 )
-                        {
-                            int woff = w.lastIndexOf('/');
-                            if (isPureNumeric(words2[2]))
-                            {
-                                RXChar *r1 = rline->getCharRef(offset + woff + 1);
-                                classifyNumeric(rline, offset + woff + 1, offset + woff + 1 + words2[2].length(), words2[2], r1);
-                            }
-                            else
-                            {
-                                RXChar *r1 = rline->getCharRef(offset + woff + 1);
-                                classifyCall(rline, offset + woff + 1, offset + woff + 1 + words2[2].length(), words2[2], r1);
-                            }
-                        }
                     }
-
-
                 }
             }
         }
-        offset += w.size() + 1;
+        offset += w.size() + 1; // clear word and separator
     }
 }
 void EngineWindow::rescan()
