@@ -379,9 +379,10 @@ void ContestContact::getReg1TestText(QString &sdest , bool noSerials)
 }
 static QString getCabrilloField(QString s, int len)
 {
-    s += QString(len - s.size(), ' ');
     if (s.isEmpty())
         s = QString(len, '-');
+
+    s += QString(len - s.size(), ' ');
 
     return s + " ";
 }
@@ -461,18 +462,15 @@ QSO:  3799 PH 1999-03-06 0712 HC8N           59 700    N5KO           59 CA     
             outstr += getCabrilloField(lcl->myloc.getLoc(), 6);
         }
     }
-    if (lcl->exchangeRequired.getValue())
+    if (lcl->locatorMandatoryField.getValue())
     {
         QString extra = lcl->location.getValue();
 
-        if (!sentExchange.getValue().isEmpty())
-        {
-            extra = sentExchange.getValue();
-        }
-        if (extra.isEmpty())
-        {
-            extra = "-";
-        }
+        outstr += getCabrilloField(extra, 6);
+    }
+    if (lcl->exchangeRequired.getValue())
+    {
+        QString extra = sentExchange.getValue();
         outstr += getCabrilloField(extra, 6);
     }
 
