@@ -674,6 +674,23 @@ bool isPureNumeric ( const QString &s )
     }
     return true;
 }
+bool isAlphaNumeric( const QString &s )
+{
+    int slen = s.length();
+    if ( slen == 0 )
+    {
+        return false;
+    }
+    for ( int i = 0; i < slen; i++ )
+    {
+        if ( !s[ i ].isLetterOrNumber())
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
 void saveHeaderColumns(QString fileName, QString tableName, QString layoutName, QHeaderView *hdr)
 {
     trace(QString("saveHeaderColumns %1 table %2").arg(layoutName,tableName));

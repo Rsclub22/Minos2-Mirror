@@ -240,7 +240,7 @@ int Callsign::validate( )
                 }
             suffix = mobileSuffix;
         }
-        if ( call.isEmpty() )
+        if ( call.isEmpty() && !isPureNumeric(p1) && isAlphaNumeric(p1))
         {
             // decide which is call and which is prefix - or is the whole thing broken
 

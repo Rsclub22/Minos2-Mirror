@@ -131,6 +131,7 @@ void CSVToStringList( const QString &s, QStringList &sl );
 QString anchoredPattern(const QString &expression);
 void adjustMargins(QLayout *layout, int ls, int cml, int cmt, int cmr, int cmb);
 bool isPureNumeric ( const QString &s );
+bool isAlphaNumeric( const QString &s );
 
 extern bool suppressSaveHeaders;
 
