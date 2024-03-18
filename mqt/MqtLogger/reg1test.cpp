@@ -232,7 +232,7 @@ bool reg1test::exportTest( QSharedPointer<QFile> expfd, bool noSerials )
    
    QString pver = QString("[END; Minos by G0GJV, version ")
                   + STRINGVERSION  + " " + PRERELEASETYPE
-                  + " ON " + QSysInfo::prettyProductName()
+                  + " on " + QSysInfo::prettyProductName()
                   + " " + QSysInfo::currentCpuArchitecture()
                   + "]";
    wr.lwrite( pver );
