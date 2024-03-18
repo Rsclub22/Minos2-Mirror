@@ -426,7 +426,8 @@ bool Calendar::parseFile ( const QString &fname )
                                 ic.finish = localToUTC ( ic.finish );
                             }
 
-                            ic.ppKmScoring = ( i.scoring == CalendarContest::perkms );
+                            ic.ppKmScoring = ( i.scoring == CalendarContest::perkms
+                                            || i.scoring == CalendarContest::uksmg);
 
                             QVector<CalendarSectionList> sList;
                             sList.append(bl.sectionList);

@@ -140,7 +140,7 @@ void ContestDetails::accept()
 
 int ContestDetails::exec()
 {
-    // If someone has created them by hand, make sure we reread them1
+    // If someone has created them by hand, make sure we reread them
     contestTransferObject->QTHBundle.checkLoaded();
     contestTransferObject->stationBundle.checkLoaded();
     contestTransferObject->entryBundle.checkLoaded();
@@ -931,6 +931,23 @@ void ContestDetails::setDetails( const IndividualContest &ic )
           contestTransferObject->otherMult.setValue(0);
           contestTransferObject->asymmetricMult.setValue(false);
           contestTransferObject->loc_multiplier = 1;
+       }
+       else if ( ic.mults == "B1" ) //B1 is uksmg
+       {
+           // DXCC, LOC, book number
+           contestTransferObject->usesBonus.setValue(false);
+           contestTransferObject->bonusType.setValue("");
+           contestTransferObject->districtBonus.setValue(false);
+
+           contestTransferObject->districtMult.setValue( false );
+           contestTransferObject->countryMult.setValue( true );
+           contestTransferObject->locMult.setValue( true );
+
+           contestTransferObject->exchangeRequired.setValue(true);
+           contestTransferObject->exchangeDashAllowed.setValue(true);
+           contestTransferObject->otherMult.setValue(2);
+           contestTransferObject->asymmetricMult.setValue(false);
+           contestTransferObject->loc_multiplier = 1;
        }
        else if ( ic.mults == "B6" )
        {
