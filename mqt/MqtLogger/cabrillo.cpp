@@ -363,7 +363,7 @@ bool Cabrillo::exportTest(QSharedPointer<QFile> expfd)
                    + STRINGVERSION  + " " + PRERELEASETYPE
                    + " on " + QSysInfo::prettyProductName()
                    + " " + QSysInfo::currentCpuArchitecture();
-    linelist[ static_cast< int> (PCreatedBy) ] = cabrilloLine( "CREATED_BY", pver );
+    linelist[ static_cast< int> (PCreatedBy) ] = cabrilloLine( "CREATED-BY", pver );
 
     linelist[ static_cast< int> (PContestName) ] = cabrilloLine( "CONTEST", ct->name.getValue()  /*, "Contest Name"*/ );
 
