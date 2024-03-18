@@ -359,11 +359,10 @@ bool Cabrillo::exportTest(QSharedPointer<QFile> expfd)
 
     cabrilloLine linelist[ static_cast<int>(LineCount) ];
 
-    QString pver = QString("[END; Minos by G0GJV, version ")
+    QString pver = QString("Minos by G0GJV, version ")
                    + STRINGVERSION  + " " + PRERELEASETYPE
                    + " on " + QSysInfo::prettyProductName()
-                   + " " + QSysInfo::currentCpuArchitecture()
-                   + "]";
+                   + " " + QSysInfo::currentCpuArchitecture();
     linelist[ static_cast< int> (PCreatedBy) ] = cabrilloLine( "CREATED_BY", pver );
 
     linelist[ static_cast< int> (PContestName) ] = cabrilloLine( "CONTEST", ct->name.getValue()  /*, "Contest Name"*/ );
