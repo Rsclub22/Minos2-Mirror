@@ -470,14 +470,7 @@ void BaseContact::getText(QString &dest, const BaseContestLog * const curcon, bo
          contactBuffs.buff2 = "XB ";
 
    strcpysp( contactBuffs.buff, comments.getValue(), 42 );
-   if ( !contactBuffs.buff.isEmpty() )
-   {
-      strcpysp( contactBuffs.buff2, contactBuffs.qthbuff, 20 );
-      contactBuffs.buff2 += " | ";
-      contactBuffs.buff2 += contactBuffs.buff;
-   }
-   else
-      strcpysp( contactBuffs.buff2, contactBuffs.qthbuff, 42 );
+   contactBuffs.buff2 += contactBuffs.buff;
 
    contactBuffs.buff.clear();
    int next = 0;
@@ -490,12 +483,20 @@ void BaseContact::getText(QString &dest, const BaseContestLog * const curcon, bo
 
    if ( curcon ->RSTMandatoryField.getValue() )
       next = placestr( contactBuffs.buff, reps.getValue(), next, 3 );
-   next = placestr( contactBuffs.buff, contactBuffs.ssbuff, next, -4 );
+
+   next = placestr( contactBuffs.buff, contactBuffs.ssbuff, next + 1, -4 );
+   // here exchange sent
+   next = placestr( contactBuffs.buff, sentExchange.getValue(), next + 1, 5 );
+
    if ( curcon ->RSTMandatoryField.getValue() )
-      next = placestr( contactBuffs.buff, repr.getValue(), next + 1, 3 );
+      next = placestr( contactBuffs.buff, repr.getValue(), next + 1, 4 );
+
+
    next = placestr( contactBuffs.buff, contactBuffs.srbuff, next, -4 );
 
    next = placestr( contactBuffs.buff, loc.getLoc(), next + 1, ( curcon ->allowLoc8.getValue() ) ? 8 : 6 );
+   // here exchange received
+   next = placestr( contactBuffs.buff, contactBuffs.qthbuff, next + 1, 5 );
 
    next = placestr( contactBuffs.buff, contactBuffs.brgbuff, next + 1, 4 );
    next = placestr( contactBuffs.buff, contactBuffs.scorebuff, next, -5 );

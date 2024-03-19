@@ -127,9 +127,9 @@ void ContestContact::getPrintFileText( QString &sdest, short maxlen )
       next = placestr( contactBuffs.buff2, timeOff.getDate( DTGPRINT ), next, 10 );
       next = placestr( contactBuffs.buff2, timeOff.getTime( DTGPRINT ), next + 1, 5 );
       next = placestr( contactBuffs.buff2, cs.getFullCall(), next + 1, 10 );
-      next = placestr( contactBuffs.buff2, reps.getValue(), next + 1, 3 );
+      next = placestr( contactBuffs.buff2, reps.getValue(), next + 1, 4 );
       next = placestr( contactBuffs.buff2, contactBuffs.ssbuff, next + 1, -4 );
-      next = placestr( contactBuffs.buff2, repr.getValue(), next + 1, 3 );
+      next = placestr( contactBuffs.buff2, repr.getValue(), next + 1, 4 );
       next = placestr( contactBuffs.buff2, contactBuffs.srbuff, next + 1, -4 );
       next = placestr( contactBuffs.buff2, loc.getLoc(), next + 1, clp->allowLoc8.getValue() ? 8 : 6 );
       if ( districtMult )

@@ -363,7 +363,6 @@ int MinosTestExport::exportQSO(QSharedPointer<QFile> expfd, const QSharedPointer
    lct->cs.addIfDirty( st, "callRx", dirty );
    lct->reps.addIfDirty( st, "rstTx", dirty );
    lct->serials.addIfDirty( st, "serialTx", dirty );
-   //   lct->extraText.addIfDirty(st, "exchangeTx", dirty);
    lct->repr.addIfDirty( st, "rstRx", dirty );
    lct->serialr.addIfDirty( st, "serialRx", dirty );
    lct->loc.addIfDirty( st, "locRx", dirty );

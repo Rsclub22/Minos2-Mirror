@@ -49,7 +49,6 @@ class MatchContact
       virtual bool operator<( const MatchContact& rhs ) const = 0;
       virtual bool operator==( const MatchContact& rhs ) const = 0;
       virtual bool operator!=( const MatchContact& rhs ) const = 0;
-      virtual void getText( QString &dest, BaseContestLog *const ct ) const = 0;
 };
 class BaseMatchContest
 {
@@ -107,7 +106,6 @@ class MatchListContact: public MatchContact
       virtual bool operator<( const MatchContact& rhs ) const override;
       virtual bool operator==( const MatchContact& rhs ) const override;
       virtual bool operator!=( const MatchContact& rhs ) const override;
-      virtual void getText(QString &dest, BaseContestLog *const ct ) const override;
 };
 class MatchLogContact: public MatchContact
 {
@@ -127,6 +125,5 @@ class MatchLogContact: public MatchContact
       virtual bool operator<( const MatchContact& rhs ) const override;
       virtual bool operator==( const MatchContact& rhs ) const override;
       virtual bool operator!=( const MatchContact& rhs ) const override;
-      virtual void getText( QString &dest, BaseContestLog *const ct ) const override;
 };
 #endif
