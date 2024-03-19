@@ -34,8 +34,6 @@ public Q_SLOTS:
 private:
     Ui::TEntryOptionsForm *ui;
 
-    void FormShow( );
-
     QSharedPointer<ContestDetailsTransferObject> ct;
     LoggerContestLog *inputContest = nullptr;
 
