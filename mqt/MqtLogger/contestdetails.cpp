@@ -729,6 +729,8 @@ void ContestDetails::setDetails( const IndividualContest &ic )
    ui->ContestNameEdit->setText(ic.description);                      // contest
    contestTransferObject->contestName.setValue(ic.description);
 
+   contestTransferObject->cabrilloName.setValue(ic.cabrilloName);
+
     setBandBoxes(ic.reg1band, QString());
 
     contestTransferObject->RSTMandatoryField.setValue(true);

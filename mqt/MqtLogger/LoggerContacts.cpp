@@ -653,6 +653,9 @@ QString ContestContact::getADIFLine()
 
     outstr += makeADIFField("APP_MINOS_CONTEST", ctName);
 
+    QString cabrilloName = lcl->getCabrilloName(ctName, lcl->cabrilloName.getValue(), lcl->calType.getValue());
+    outstr += makeADIFField("CONTEST_ID", cabrilloName);
+
     int zone = 0;
     lcl->QTHBundle.getIntProfile(eqpITUZone, zone);
     outstr+= makeADIFField("ITUZ", zone);

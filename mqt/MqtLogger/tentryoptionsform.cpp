@@ -38,6 +38,7 @@ TEntryOptionsForm::TEntryOptionsForm(QWidget* Owner, QSharedPointer<ContestDetai
     {
         tr("Date Range (Calculated)"),
         tr("Contest Name"),
+        tr("Cabrillo/ADIF Name"),
         tr("Band"),
         tr("Band Points Multiplier"),
         tr("Entrant name (or group)"),
@@ -90,6 +91,8 @@ TEntryOptionsForm::TEntryOptionsForm(QWidget* Owner, QSharedPointer<ContestDetai
 
     ui->OptionsScrollBox->setItem(r++, 0, dateRangeItem);
     ui->OptionsScrollBox->setItem(r++, 0, new QTableWidgetItem(ct->name.getValue()));
+    QString cabrilloName = BaseContestLog::getCabrilloName(ct->name.getValue(), ct->cabrilloName.getValue(), ct->calType.getValue());
+    ui->OptionsScrollBox->setItem(r++, 0, new QTableWidgetItem(cabrilloName));
     ui->OptionsScrollBox->setItem(r++, 0, new QTableWidgetItem(ct->contestBands.getValue()));
     int bpm = ct->bandPointsMultiplier.getValue();
     if (bpm == 0)
@@ -190,6 +193,7 @@ void TEntryOptionsForm::on_CloseButton_clicked()
     r++;  // date range not editable
 
     ct->name.setValue( ui->OptionsScrollBox->item(r++, 0)->text() );
+    ct->cabrilloName.setValue( ui->OptionsScrollBox->item(r++, 0)->text() );
     ct->contestBands.setValue( ui->OptionsScrollBox->item(r++, 0)->text() );
     int bpm = ui->OptionsScrollBox->item(r++, 0)->text().toInt();
     if (bpm == 0)

@@ -71,6 +71,44 @@ void BaseContestLog::setVersion(QString v)
 {
     appVersion.setValue(v);
 }
+QString BaseContestLog::getCabrilloName(QString contestName, QString cabrilloName, int calType)
+{
+    if (cabrilloName.isEmpty())
+    {
+        QString calTypeString;
+
+        switch (calType)
+        {
+        case ectVHF:
+        case ectHF:
+        case ectMwave:
+            calTypeString = "RSGB";
+            break;
+        case ectHFBARTG:
+            calTypeString = "BARTG";
+            break;
+        case ectVHFUKSMG:
+            calTypeString = "UKSMG";
+        default:
+        case ectVHFOther:
+        case ectHFOther:
+            break;      // leave empty
+        };
+
+        cabrilloName = contestName;
+        if (!calTypeString.isEmpty())
+        {
+            if (!cabrilloName.startsWith(calTypeString))
+            {
+                cabrilloName = calTypeString + " " + cabrilloName;
+            }
+            cabrilloName .replace(" ", "-");
+        }
+
+    }
+    return cabrilloName;
+}
+
 
 void BaseContestLog::clearCache()
 {
@@ -280,6 +318,8 @@ void BaseContestLog::clearDirty()
    mycall.clearDirty();
 
    name.clearDirty();
+   cabrilloName.clearDirty();
+   calType.clearDirty();
    location.clearDirty();
    myloc.clearDirty();
    allowLoc4.clearDirty();
@@ -326,6 +366,8 @@ void BaseContestLog::setDirty()
    protectedContest.setDirty();
    mycall.setDirty();
    name.setDirty();
+   cabrilloName.setDirty();
+   calType.setDirty();
    location.setDirty();
    myloc.setDirty();
    allowLoc4.setDirty();
@@ -1475,6 +1517,8 @@ void BaseContestLog::processMinosStanza( const QString &methodName, MinosTestImp
    {
       mt->getStructArgMemberValue( "version", appVersion );
       mt->getStructArgMemberValue( "name", name );
+      mt->getStructArgMemberValue( "cabrilloName", cabrilloName);
+      mt->getStructArgMemberValue( "calType", calType);
       mt->getStructArgMemberValue( "band", contestBands );
       mt->getStructArgMemberValue( "currentBand", currentBand );
       if (currentBand.getValue().isEmpty())

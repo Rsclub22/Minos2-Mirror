@@ -149,6 +149,10 @@ class BaseContestLog: public BaseLogList
       }
       MinosStringItem<QString> appVersion;
       MinosItem<bool> hfContest;
+      MinosStringItem<QString> cabrilloName;
+      MinosItem<int> calType;
+
+      static QString getCabrilloName(QString contestName, QString cabrilloName, int calType);
 
       MinosStringItem<QString> name;         // name of contest
       MinosStringItem<QString> location;

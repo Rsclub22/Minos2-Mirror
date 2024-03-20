@@ -96,6 +96,8 @@ void MinosTestExport::exportContest( QSharedPointer<QFile> expfd )
    ct->hfContest.addIfDirty(st, "hf", dirty);
    ct->appVersion.addIfDirty(st, "version", dirty);
    ct->name.addIfDirty( st, "name", dirty );
+   ct->cabrilloName.addIfDirty(st, "cabrilloName", dirty);
+   ct->calType.addIfDirty(st, "calType", dirty);
    ct->contestBands.addIfDirty( st, "band", dirty );
    ct->currentBand.addIfDirty( st, "currentBand", dirty );
    ct->bandsList.addIfDirty(st, "bandsList", dirty);
