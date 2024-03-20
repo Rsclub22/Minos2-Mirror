@@ -11,6 +11,7 @@ RadioDetails::RadioDetails()
   setRitEnableStatus(false);
   setRitMaxKHzFreq(MAX_RITFREQ);
   setCwMemType(hamlibData::CW_MEMORY_TYPES::NONE);
+  setRigKeyerSupportStopCmd(true);
 
 
 }
@@ -129,13 +130,13 @@ int RadioDetails::getCwMemType()
 {
     return cwMemType;
 }
-void RadioDetails::setNumCwMessages(int numMsgs)
+void RadioDetails::setRigKeyerSupportStopCmd(bool supportStopCmd)
 {
-    numCwMessages = numMsgs;
+    rigKeyerSupportStopCmd = supportStopCmd;
 }
-int RadioDetails::getNumCwMessages()
+bool RadioDetails::getRigKeyerSupportStopCmd()
 {
-    return numCwMessages;
+    return rigKeyerSupportStopCmd;
 }
 
 

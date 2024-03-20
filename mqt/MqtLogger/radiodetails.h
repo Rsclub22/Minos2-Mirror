@@ -38,8 +38,8 @@ public:
     void setNumVoiceMessages(int numMsgs);
     int getNumVoiceMessages();
     void setCwMemType(int cwMemType);
-    void setNumCwMessages(int numMsgs);
-    int getNumCwMessages();
+    void setRigKeyerSupportStopCmd(bool supportStopCmd);
+    bool getRigKeyerSupportStopCmd();
     int getCwMemType();
 private:
 
@@ -55,7 +55,7 @@ int pttType;
 bool voiceMemAvail;
 int numVoiceMessages;
 int cwMemType;
-int numCwMessages;
+bool rigKeyerSupportStopCmd;
 QString bandList;
 
 };

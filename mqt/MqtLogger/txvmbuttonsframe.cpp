@@ -144,10 +144,10 @@ void TxVmButtonsFrame::onVmSetupClicked()
         {
            maxNumOfVoiceMessages = getNumVoiceMessages(selectedRadio);
         }
-        else if (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl])
-        {
-            maxNumOfVoiceMessages = getNumCwMessages(selectedRadio);
-        }
+        //else if (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl])
+        //{
+       //     maxNumOfVoiceMessages = getNumCwMessages(selectedRadio);
+        //}
 
 
         if (txVoiceKeyer->setup(voiceKeyerFactory, maxNumOfVoiceMessages, txVoiceKeyer->numButtons, selectedRadio.getLocalName()) == QDialog::Accepted)
@@ -560,6 +560,7 @@ void TxVmButtonsFrame::setFrameState(QString voiceKeyerName)
             if (isCwMemTypeAvail(selectedRadio))
             {
                 txVoiceKeyer->setCwMemType(getCwMemType(selectedRadio));
+
             }
         }
 
@@ -568,6 +569,10 @@ void TxVmButtonsFrame::setFrameState(QString voiceKeyerName)
             setSaveButtonByRadionameText(selectedRadio.getLocalName());
             txVoiceKeyer->numButtons = getRadioUserSavedNumberOfButtons(selectedRadio.getLocalName());
             loadButtonData();
+            if (getCwMemType(selectedRadio) == hamlibData::CW_MEMORY_TYPES::ICOM)
+            {
+                ui->vmStopPb->setVisible(false);    // Icom does't support stop
+            }
         }
 
 
@@ -1157,39 +1162,36 @@ void TxVmButtonsFrame::setCwMemType(int cwMemType, PubSubName psn)
     updateVoiceMemAvailStateAndCwType();
 }
 
-void TxVmButtonsFrame::setNumCwMessages(int numMsgs, PubSubName psn)
+void TxVmButtonsFrame::setRigKeyerSupportStopFlag(bool supportStopCmd, PubSubName psn)
 {
     RadioDetails rd;
     if (allRadioDetails.contains(psn))
     {
         rd = allRadioDetails[psn];
-        rd.setNumCwMessages(numMsgs);
+        rd.setRigKeyerSupportStopCmd(supportStopCmd);
         allRadioDetails[psn] = rd;
     }
     else
     {
-        rd.setNumCwMessages(numMsgs);
+        rd.setRigKeyerSupportStopCmd(supportStopCmd);
         allRadioDetails[psn] = rd;
     }
 
     updateVoiceMemAvailStateAndCwType();
 }
 
-// This is max number of cw messages available on a radio
-// as hamlib does not use stored cw messages on radio
-// we will not use this.
-int TxVmButtonsFrame::getNumCwMessages(PubSubName psn)
+
+bool TxVmButtonsFrame::getRigKeyerSupportStopFlag(PubSubName psn)
 {
     RadioDetails rd;
     if (allRadioDetails.contains(psn))
     {
         rd = allRadioDetails[psn];
-        return rd.getNumCwMessages();
+        return rd.getRigKeyerSupportStopCmd();
     }
-    else
-    {
-        return MAXIMUM_BUTTONS;
-    }
+
+    return true;
+
 }
 
 bool TxVmButtonsFrame::isCwMemTypeAvail(PubSubName psn)

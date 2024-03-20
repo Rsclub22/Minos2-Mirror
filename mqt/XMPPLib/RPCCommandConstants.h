@@ -215,7 +215,7 @@ static const QString rigPttOnOff ("PttOnOff");
 static const QString rigVoiceMemAvail ("VoiceMemAvail");
 static const QString rigNumberVoiceMessages ("NumberOfVoiceMessages");
 static const QString rigCwMemType ("CwMemType");
-static const QString rigNumberCwMessages ("NumberOfCwMessages");
+static const QString rigKeyerMessageSupportStop ("KeyerSupportStopCmd");
 
 
 // KSTClient

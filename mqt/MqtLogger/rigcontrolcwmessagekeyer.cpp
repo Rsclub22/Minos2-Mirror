@@ -153,6 +153,10 @@ void RigControlCwMessageKeyer::sendCwMsg(VoiceKeyerParams &vmData)
         {
             cwMessageToTx.append('}');
         }
+        else if (cwMemType == hamlibData::CW_MEMORY_TYPES::KENWOOD_MEM_RECALL)
+        {
+            cwMessageToTx.append(';');
+        }
 
         TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
         tslf->sendRigTxCwMessage(cwMessageToTx);

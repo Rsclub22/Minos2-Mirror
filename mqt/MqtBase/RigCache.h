@@ -93,7 +93,7 @@ public:
     void setVoiceMemAvail(const PubSubName &name, bool voiceMemAvail);
     void setNumVoiceMessages(const PubSubName &name, int numMessages);
     void setCwMemAvail(const PubSubName &name, int cwType);
-    void setNumCwMessages(const PubSubName &name, int numMessages);
+    void setRigKeyerSupportStopFlag(const PubSubName &name, bool supportStopCmd);
     void setCwTxMessage(const PubSubName &name, const QString &msg);
 };
 

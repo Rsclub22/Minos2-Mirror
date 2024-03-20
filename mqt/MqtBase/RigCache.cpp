@@ -376,9 +376,9 @@ void RigCache::setCwMemAvail(const PubSubName &name, int cwMemType)
 {
     rigDetails[name].setCwMemType(cwMemType);
 }
-void RigCache::setNumCwMessages(const PubSubName &name, int numMessages)
+void RigCache::setRigKeyerSupportStopFlag(const PubSubName &name, bool supportStopCmd)
 {
-    rigDetails[name].setNumCweMessages(numMessages);
+    rigDetails[name].setRigKeyerMessageSupportStop(supportStopCmd);
 }
 void RigCache::publishState()
 {

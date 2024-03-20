@@ -84,7 +84,8 @@ public:
     void setVoiceMemAvail(bool avail, PubSubName psn);
     void setNumVoiceMessages(int numMsgs, PubSubName psn);
     void setCwMemType(int cwMemType, PubSubName psn);
-    void setNumCwMessages(int numMsgs, PubSubName psn);
+    void setRigKeyerSupportStopFlag(bool supportStopCmd, PubSubName psn);
+    bool getRigKeyerSupportStopFlag(PubSubName psn);
     void setPttState(bool state);
 
     void setSelectedRadio(PubSubName selectedRadio);

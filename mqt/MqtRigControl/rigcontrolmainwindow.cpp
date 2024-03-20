@@ -250,10 +250,11 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
     ui->selectRadioBox->clearFocus();
 
     // these are for test
+    cwMessageTestTimer = new QTimer(this);
     connect(ui->cwKeyerPb, &QPushButton::clicked, this, &RigControlMainWindow::onCwKeyerPbClicked);
     connect(ui->cwKeyerStopPb, &QPushButton::clicked, this, &RigControlMainWindow::onCwKeyerStopPbClicked);
     connect(ui->txPttTestPb, &QPushButton::clicked, this, &RigControlMainWindow::onTxPttTestPbClicked);
-
+    connect(cwMessageTestTimer, &QTimer::timeout, this, &RigControlMainWindow::onCWMessageTimerTimeout);
     ui->reconnectButton->setVisible(false);
 
 
@@ -333,42 +334,7 @@ void RigControlMainWindow::on_testRadioButton_clicked()
     setTestMode(!testMode);
 }
 
-// icom only
-void RigControlMainWindow::onCwKeyerPbClicked()
-{
-    QString msg = "1";
-    if (radio)
-    {
-        radio->sendMorse(rigStateDetails->curVfo, msg);
-    }
 
-}
-// icom only
-void RigControlMainWindow::onCwKeyerStopPbClicked()
-{
-    if(radio)
-    {
-        radio->stopMorse(rigStateDetails->curVfo);
-    }
-}
-
-void RigControlMainWindow::onTxPttTestPbClicked()
-{
-    static bool pttState = false;
-    if (radio)
-    {
-        if (pttState)
-        {
-            onSetPttOnOff(false);
-            pttState = false;
-        }
-        else
-        {
-            onSetPttOnOff(true);
-            pttState = true;
-        }
-    }
-}
 
 void RigControlMainWindow::onSetPttOnOff(bool pttOnState)
 {
@@ -422,6 +388,7 @@ void RigControlMainWindow::closeEvent(QCloseEvent *event)
 
     LogTimer.stop();
     pollTimer->stop();
+    cwMessageTestTimer->stop();
     RigCtldStatusTimer->stop();
 
     closeRadio();
@@ -979,6 +946,14 @@ bool RigControlMainWindow::checkSupportVoiceMemory()
                     addVoiceNumberMessagesToRigCache(voiceMemNum);
                 }
 
+                bool supportStopCmd = true;
+                if (currentRadio.rigMfg_Name == "Yaesu")
+                {
+                    supportStopCmd = false;
+                }
+
+                addSupportStopCmdToRigCache(supportStopCmd);
+
                 return true;
 
             }
@@ -1010,7 +985,7 @@ bool RigControlMainWindow::checkSupportCwKeyerMemory()
         if (radio)
         {
 
-            int cwMemNum = 0;
+
             setCwMemIndVisible(true);
             setCwMemIndOnOff(true);
             if (currentRadio.rigMfg_Name == "Yaesu")
@@ -1039,13 +1014,14 @@ bool RigControlMainWindow::checkSupportCwKeyerMemory()
                 return false;
             }
 
-            // This code is not needed as hamlib does not access stored cw memory locations like voice.
-            // leaving for now...
-            if (selectedRadioSupportCap.getStartCwMemoryNumber() == 1)
+
+            bool supportStopCmd = true;
+            if (currentRadio.rigMfg_Name == "Yaesu")
             {
-                cwMemNum = selectedRadioSupportCap.getEndCwMemoryNumber();
-                addCwKeyerNumberMessagesToRigCache(cwMemNum);
+                supportStopCmd = false;
             }
+
+            addSupportStopCmdToRigCache(supportStopCmd);
 
 
             return true;
@@ -1675,9 +1651,9 @@ int RigControlMainWindow::openRadio()
 void RigControlMainWindow::closeRadio()
 {
 
-    if (currentRadio.enablePTT)
+    if (currentRadio.enablePTT && rigStateDetails->curPttStatus)
     {
-        if (radio != nullptr)
+        if (radio && radioCommsOK)
         {
            onSetPttOnOff(false);     // turn off PTT in case it is on
         }
@@ -1871,7 +1847,26 @@ void RigControlMainWindow::getRadioInfo(bool pubNow)
         /*retCode = */getAndSendVfo();
     }
 
+    if (radioCommsOK && currentRadio.enablePTT)
+    {
+        if (currentRadio.pttType == serialCommonData::PTT_METHOD_CAT
+            || currentRadio.pttType == serialCommonData::PTT_METHOD_DTR
+            ||  currentRadio.pttType == serialCommonData::PTT_METHOD_RTS)
+        {
+            logMessage(QString("Get PTT Status"));
 
+            retCode = getTXStatus(rigStateDetails->curVfo);
+            if (retCode < 0)
+            {
+                // error
+                logMessage(QString("Get radioInfo: Get TXStatus error").arg(QString::number(retCode)));
+                radioError(retCode, "Request TX Status");
+            }
+
+        }
+
+
+    }
 
 
     if (radioCommsOK)
@@ -1988,33 +1983,33 @@ void RigControlMainWindow::getRadioInfo(bool pubNow)
 
     if (radioCommsOK && selectedRadioSupportCap.getSupportSMeter() && currentRadio.enableDisableCatFeature.sMeterEnable)
     {
-
-        logMessage(QString("Get Signal Strength"));
-        retCode = getSignalStrength(rigStateDetails->curVfo);
-        if (retCode < 0)
+        if (!rigStateDetails->curPttStatus)
         {
-            // error
-            logMessage(QString("Get radioInfo: Get signal strength error").arg(QString::number(retCode)));
-            radioError(retCode, tr("Request Signal Strength"));
+            logMessage(QString("Get Signal Strength"));
+            retCode = getSignalStrength(rigStateDetails->curVfo);
+            if (retCode < 0)
+            {
+                // error
+                logMessage(QString("Get radioInfo: Get signal strength error %1").arg(QString::number(retCode)));
+                radioError(retCode, tr("Request Signal Strength"));
+
+
+            }
         }
+        else
+        {
+            logMessage(QString("Transmitting skip get signal strength"));
+        }
+
 
     }
 
 
-    if (radioCommsOK && currentRadio.enablePTT)
-    {
-        if (currentRadio.pttType != serialCommonData::PTT_METHOD_CAT || currentRadio.pttType == serialCommonData::PTT_METHOD_DTR ||  currentRadio.pttType == serialCommonData::PTT_METHOD_RTS)
-        {
-            logMessage(QString("Get PTT Status"));
-            retCode = getTXStatus(rigStateDetails->curVfo);
-            if (retCode < 0)
-            {
-                // error
-                logMessage(QString("Get radioInfo: Get TXStatus error").arg(QString::number(retCode)));
-                radioError(retCode, "Request TX Status");
-            }
-        }
 
+
+    // test CW Message
+    if (radioCommsOK && isTestCwMessageRunning())
+    {
 
     }
 
@@ -3718,13 +3713,15 @@ void RigControlMainWindow::setSmeterVisible(bool visible)
 
 int RigControlMainWindow::getSignalStrength(VFO vfo)
 {
-    logMessage(QString("Get Signal Strength"));
-    int retCode = 0;
 
+    int retCode = 0;
     int value;
+
     if (radio)
     {
+
         retCode = radio->getSignalStrength(vfo, &value);
+
         if (retCode >= 0)
         {
             if (rigStateDetails->curSignalStrength != value)
@@ -3882,10 +3879,12 @@ int RigControlMainWindow::getTXStatus(VFO vfo)
 
    if (retCode >= 0)
    {
+       trace(QString("TXStatus = %1").arg(pttStatus ? "On" : "Off"));
+
        if (pttStatus != rigStateDetails->curPttStatus)
        {
            rigStateDetails->curPttStatus = pttStatus;
-           trace(QString("getTXStatus = %1").arg(rigStateDetails->curPttStatus ? "On" : "Off"));
+           trace(QString("TXStatus cxhanged to %1").arg(pttStatus ? "On" : "Off"));
            setRigControlPttState(rigStateDetails->curPttStatus);
        }
    }
@@ -3911,7 +3910,7 @@ int RigControlMainWindow::setTxState(VFO vfo, bool txState)
     return retCode;
 }
 
-
+/*
 bool RigControlMainWindow::readTestStandAloneFlag()
 {
     QString fileName;
@@ -3932,8 +3931,7 @@ bool RigControlMainWindow::readTestStandAloneFlag()
 
     return state;
 }
-
-
+*/
 
 
 
@@ -4144,11 +4142,11 @@ void RigControlMainWindow::addCwKeyerTypeToRigCache(int cwMemType)
     msg->rigCache.setCwMemAvail(psname, cwMemType);
 }
 
-void RigControlMainWindow::addCwKeyerNumberMessagesToRigCache(int numMessages)
+void RigControlMainWindow::addSupportStopCmdToRigCache(bool supportStopCmd)
 {
-    logMessage(QString("Add Number of Cw Memory Messages to rigcache = %1").arg(numMessages));
+    logMessage(QString("Add Support Stop message cmd to rigcache = %1").arg(supportStopCmd ? "True" :"False"));
     PubSubName psname(currentRadio.radioName);
-    msg->rigCache.setNumCwMessages(psname, numMessages);
+    msg->rigCache.setRigKeyerSupportStopFlag(psname, supportStopCmd);
 }
 
 void RigControlMainWindow::addPTTEnabledStatusToRigCache(bool status)
@@ -5266,6 +5264,142 @@ void RigControlMainWindow::setTxRxIndOnOff(bool state)
     }
 }
 
+
+/************************ Voice Message ************************************************/
+
+
+
+// hamlib sendVoiceMessage() funtion uses numbers 0 to max number of voicememory on the radio
+// activate voicemessage on most radios. Note! 0 is stop message, and 1 is the first message memory.
+// hamlib TS890S, if msgNum is 0, need to call seperate stop_voice_mem function.
+
+// 2023 added a seperate stopVoiceMessage from logger
+
+void RigControlMainWindow::onSetVoiceMessageNum(QString msgNum)
+{
+    bool ok = false;
+    int vmNum = msgNum.toInt(&ok);
+
+    if (radio && ok)
+    {
+        trace(QString("Send Voice Message number = %1").arg(msgNum));
+        radio->sendVoiceMessage(rigStateDetails->curVfo, vmNum);
+
+    }
+    else
+    {
+        trace(QString("send Voice Memory - radio empty, msgNum invalid"));
+    }
+
+}
+
+
+void RigControlMainWindow::onSetStopVoiceMessage(QString msg)
+{
+
+    Q_UNUSED(msg) // we don't use the message
+    if (radio)
+    {
+        if (selectedRadioSupportCap.getSupportStopVoiceMemory())
+        {
+            trace(QString("This radio supports hamlib stop_voice_mem function"));
+            radio->stop_voice_mem(rigStateDetails->curVfo);
+        }
+        else
+        {
+            trace(QString("This radio does not support stop voice mem function - send 0 to sendvoicemessage"));
+            radio->sendVoiceMessage(rigStateDetails->curVfo, 0);
+        }
+    }
+}
+
+
+
+/**************** CW Message ***************************************************/
+
+
+void RigControlMainWindow::onSetCwTxMessage(QString cwMsg)
+{
+
+    if (selectedRadioSupportCap.getSupportCwMemory() && currentRadio.enableDisableCatFeature.cWMemEnable)
+    {
+        if (radio && !cwMsg.isEmpty())
+        {
+            if (currentRadio.rigMfg_Name == "Kenwood"
+                || currentRadio.rigMfg_Name == "Yaesu")
+            {
+                trace(QString("Cw Tx Message Received from logger = %1 for radio %2").arg(cwMsg).arg(currentRadio.rigMfg_Name));
+                radio->sendMorse(rigStateDetails->curVfo, cwMsg);
+            }
+
+            // probably should store cwMessageType locally in rigcontrol or get from cache
+            if (currentRadio.rigModelNumber >= 1000 && currentRadio.rigModelNumber < 2000)
+            {
+                handleYaesuCwMessage(cwMsg);
+            }
+            else if (currentRadio.rigModelNumber >= 3000 && currentRadio.rigModelNumber < 4000)
+            {
+                handleIcomCwMessage(cwMsg);
+            }
+
+
+        }
+        else
+        {
+            trace(QString("Cw Tx Message is empty or radio not defined"));
+            return;
+        }
+    }
+
+}
+
+
+
+void RigControlMainWindow::handleIcomCwMessage(QString cwMsg)
+{
+
+    if (cwMsg.length() == 1)
+    {
+        trace(QString("Stop Message is = %1").arg(cwMsg));
+        QChar c = cwMsg.at(0);
+        if (c == QChar(65533))  // QChar value of '\xff'
+        {
+            // send stop CW
+            trace(QString("Icom Cw Tx Message Stop received from logger"));
+            radio->stopMorse(rigStateDetails->curVfo);
+        }
+        else
+        {
+            // error stop command incorrect!
+            trace(QString("Icom Cw Tx Message Stop Char incorrect = %1").arg(c));
+            return;
+        }
+
+
+    }
+    else
+    {
+        trace(QString("Icom Cw Tx Message Received from logger = %1").arg(cwMsg));
+        radio->sendMorse(rigStateDetails->curVfo, cwMsg);
+    }
+
+}
+
+
+
+void RigControlMainWindow::handleYaesuCwMessage(QString cwMsg)
+{
+    // Yaesu does not support a CW Message stop command
+    trace(QString("Yaesu Cw Tx Message Received from logger = %1").arg(cwMsg));
+    radio->sendMorse(rigStateDetails->curVfo, cwMsg);
+}
+
+
+
+
+
+
+
 /*********************************** test *********************************************/
 
 void RigControlMainWindow::selFreqClicked()
@@ -5290,6 +5424,103 @@ void RigControlMainWindow::testBoxesVisible(bool visible)
     ui->cwKeyerPb->setVisible(visible);
     ui->cwKeyerStopPb->setVisible(visible);
 }
+
+// Test CW Message Playback on radio.
+
+
+void RigControlMainWindow::onCwKeyerPbClicked()
+{
+    if (selectedRadioSupportCap.getSupportCwMemory() && currentRadio.enableDisableCatFeature.cWMemEnable)
+    {
+        if (radioCommsOK)
+        {
+            QString rigManufacturer = currentRadio.rigMfg_Name;
+            if (rigManufacturer == "Yaesu"
+                || rigManufacturer ==  "Kenwood"
+                || rigManufacturer == "Icom"
+                || rigManufacturer == "Elecraft")
+            {
+                QString fileName = RADIO_PATH_LOGGER() + FILENAME_RIGCONTROL_TEST_DATA;
+                QSettings  config(fileName, QSettings::IniFormat);
+
+                config.beginGroup(rigManufacturer);
+
+                QString cwMsg = config.value("cwTestMessage", "").toString();
+                config.endGroup();
+
+                int cwTXTimeoutDur = config.value("cwTxMessageTimeout", 10).toInt();
+
+                if (cwMsg.isEmpty())
+                {
+                    trace("Test CW message empty for radio " + rigManufacturer);
+                    return;
+                }
+
+                if (radio)
+                {
+                    if (rigStateDetails->curModeStr != hamlibData::CW)
+                    {
+                        setMode(hamlibData::CW, rigStateDetails->curVfo);
+                    }
+
+                    trace("Sending test CW Message: " + cwMsg);
+                    radio->sendMorse(rigStateDetails->curVfo, cwMsg);
+                    return;
+                }
+            }
+
+        }
+    }
+
+    trace("Error sending test CW Message! Radio not connected or CW Message not supported");
+
+}
+
+
+void RigControlMainWindow::onCwKeyerStopPbClicked()
+{
+    if(radio)
+    {
+        radio->stopMorse(rigStateDetails->curVfo);
+    }
+}
+
+
+bool RigControlMainWindow::isTestCwMessageRunning()
+{
+    if (cwMessageTestTimer->isActive())
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+void RigControlMainWindow::onCWMessageTimerTimeout()
+{
+
+}
+
+void RigControlMainWindow::onTxPttTestPbClicked()
+{
+    static bool pttState = false;
+    if (radio)
+    {
+        if (pttState)
+        {
+            onSetPttOnOff(false);
+            pttState = false;
+        }
+        else
+        {
+            onSetPttOnOff(true);
+            pttState = true;
+        }
+    }
+}
+
 
 
 void delay(int sec)
@@ -5364,116 +5595,6 @@ void RigControlMainWindow::showRitTestControl(bool state)
 
 
 
-// hamlib sendVoiceMessage() funtion uses numbers 0 to max number of voicememory on the radio
-// activate voicemessage on most radios. Note! 0 is stop message, and 1 is the first message memory.
-// hamlib TS890S, if msgNum is 0, need to call seperate stop_voice_mem function.
-
-// 2023 added a seperate stopVoiceMessage from logger
-
-void RigControlMainWindow::onSetVoiceMessageNum(QString msgNum)
-{
-    bool ok = false;
-    int vmNum = msgNum.toInt(&ok);
-
-    if (radio && ok)
-    {
-        trace(QString("Send Voice Message number = %1").arg(msgNum));
-        radio->sendVoiceMessage(rigStateDetails->curVfo, vmNum);
-
-    }
-    else
-    {
-        trace(QString("send Voice Memory - radio empty, msgNum invalid"));
-    }
-
-}
-
-
-void RigControlMainWindow::onSetStopVoiceMessage(QString msg)
-{
-
-   Q_UNUSED(msg) // we don't use the message
-   if (radio)
-   {
-       if (selectedRadioSupportCap.getSupportStopVoiceMemory())
-       {
-           trace(QString("This radio supports hamlib stop_voice_mem function"));
-           radio->stop_voice_mem(rigStateDetails->curVfo);
-       }
-       else
-       {
-           trace(QString("This radio does not support stop voice mem function - send 0 to sendvoicemessage"));
-           radio->sendVoiceMessage(rigStateDetails->curVfo, 0);
-       }
-   }
-}
-
-
-void RigControlMainWindow::onSetCwTxMessage(QString cwMsg)
-{
-
-    if (radio && !cwMsg.isEmpty())
-    {
-        // probably should store cwMessageType locally in rigcontrol or get from cache
-        if (currentRadio.rigModelNumber >= 1000 && currentRadio.rigModelNumber < 2000)
-        {
-            handleYaesuCwMessage(cwMsg);
-        }
-        else if (currentRadio.rigModelNumber >= 3000 && currentRadio.rigModelNumber < 4000)
-        {
-            handleIcomCwMessage(cwMsg);
-        }
-
-
-    }
-    else
-    {
-        trace(QString("Cw Tx Message is empty or radio not defined"));
-        return;
-    }
-
-}
-
-
-
-void RigControlMainWindow::handleIcomCwMessage(QString cwMsg)
-{
-
-    if (cwMsg.length() == 1)
-    {
-        trace(QString("Stop Message is = %1").arg(cwMsg));
-        QChar c = cwMsg.at(0);
-        if (c == QChar(65533))  // QChar value of '\xff'
-        {
-            // send stop CW
-            trace(QString("Icom Cw Tx Message Stop received from logger"));
-            radio->stopMorse(rigStateDetails->curVfo);
-        }
-        else
-        {
-            // error stop command incorrect!
-            trace(QString("Icom Cw Tx Message Stop Char incorrect = %1").arg(c));
-            return;
-        }
-
-
-    }
-    else
-    {
-        trace(QString("Icom Cw Tx Message Received from logger = %1").arg(cwMsg));
-        radio->sendMorse(rigStateDetails->curVfo, cwMsg);
-    }
-
-}
-
-
-
-void RigControlMainWindow::handleYaesuCwMessage(QString cwMsg)
-{
-    // Yaesu does not support a CW Message stop command
-    trace(QString("Yaesu Cw Tx Message Received from logger = %1").arg(cwMsg));
-    radio->sendMorse(rigStateDetails->curVfo, cwMsg);
-}
 
 void RigControlMainWindow::on_reconnectButton_clicked()
 {

@@ -153,7 +153,7 @@ public:
     void onSetVoiceMemAvail(bool avail, PubSubName psn);
     void onSetNumVoiceMessages(int numMsgs, PubSubName psn);
     void onSetCwMemType(int cwMemType, PubSubName psn);
-    void onSetNumCwMessages(int numMsgs, PubSubName psn);
+    void onRigKeyerMessageSupportStop(bool supportStopCmd, PubSubName psn);
     void sendRigTxCwMessage(QString msg);
 
     void on_SetMode(QString);

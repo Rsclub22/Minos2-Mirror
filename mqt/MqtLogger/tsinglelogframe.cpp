@@ -1983,13 +1983,13 @@ void TSingleLogFrame::onSetCwMemType(int cwMemType, PubSubName psn)
     }
 }
 
-void TSingleLogFrame::onSetNumCwMessages(int numMsgs, PubSubName psn)
+void TSingleLogFrame::onRigKeyerMessageSupportStop(bool supportStopCmd, PubSubName psn)
 {
     if ( this == LogContainer->getCurrentLogFrame() )
     {
         if ( this == LogContainer->getCurrentLogFrame() )
         {
-            txVmButtonsFrame->setNumCwMessages(numMsgs, psn);
+            txVmButtonsFrame->setRigKeyerSupportStopFlag(supportStopCmd, psn);
         }
     }
 }
