@@ -952,7 +952,7 @@ bool RigControlMainWindow::checkSupportVoiceMemory()
                     supportStopCmd = false;
                 }
 
-                addSupportStopCmdToRigCache(supportStopCmd);
+                addVoiceKeyerSupportStopCmdToRigCache(supportStopCmd);
 
                 return true;
 
@@ -992,7 +992,7 @@ bool RigControlMainWindow::checkSupportCwKeyerMemory()
             {
                 addCwKeyerTypeToRigCache(hamlibData::CW_MEMORY_TYPES::YAESU_MEM_RECALL);
             }
-            if (currentRadio.rigMfg_Name == "Kenwood")
+            else if (currentRadio.rigMfg_Name == "Kenwood")
             {
                 addCwKeyerTypeToRigCache(hamlibData::CW_MEMORY_TYPES::KENWOOD_MEM_RECALL);
             }
@@ -1014,14 +1014,14 @@ bool RigControlMainWindow::checkSupportCwKeyerMemory()
                 return false;
             }
 
-
             bool supportStopCmd = true;
             if (currentRadio.rigMfg_Name == "Yaesu")
             {
                 supportStopCmd = false;
             }
 
-            addSupportStopCmdToRigCache(supportStopCmd);
+
+            addCwKeyerSupportStopCmdToRigCache(supportStopCmd);
 
 
             return true;
@@ -1038,6 +1038,8 @@ bool RigControlMainWindow::checkSupportCwKeyerMemory()
     return false;
 
 }
+
+
 
 
 void RigControlMainWindow::checkSupportPtt()
@@ -1983,26 +1985,16 @@ void RigControlMainWindow::getRadioInfo(bool pubNow)
 
     if (radioCommsOK && selectedRadioSupportCap.getSupportSMeter() && currentRadio.enableDisableCatFeature.sMeterEnable)
     {
-        if (!rigStateDetails->curPttStatus)
+
+        logMessage(QString("Get Signal Strength"));
+        retCode = getSignalStrength(rigStateDetails->curVfo);
+        if (retCode < 0)
         {
-            logMessage(QString("Get Signal Strength"));
-            retCode = getSignalStrength(rigStateDetails->curVfo);
-            if (retCode < 0)
-            {
-                // error
-                logMessage(QString("Get radioInfo: Get signal strength error %1").arg(QString::number(retCode)));
-                radioError(retCode, tr("Request Signal Strength"));
-
-
-            }
+            // error
+            logMessage(QString("Get radioInfo: Get signal strength error %1").arg(QString::number(retCode)));
+            radioError(retCode, tr("Request Signal Strength"));
         }
-        else
-        {
-            logMessage(QString("Transmitting skip get signal strength"));
-        }
-
-
-    }
+   }
 
 
 
@@ -4135,6 +4127,13 @@ void RigControlMainWindow::addVoiceNumberMessagesToRigCache(int numMessages)
     msg->rigCache.setNumVoiceMessages(psname, numMessages);
 }
 
+void RigControlMainWindow::addVoiceKeyerSupportStopCmdToRigCache(bool supportStopCmd)
+{
+    logMessage(QString("Add Voice Keyer Support Stop message cmd to rigcache = %1").arg(supportStopCmd ? "True" :"False"));
+    PubSubName psname(currentRadio.radioName);
+    msg->rigCache.setRigVoiceKeyerSupportStopFlag(psname, supportStopCmd);
+}
+
 void RigControlMainWindow::addCwKeyerTypeToRigCache(int cwMemType)
 {
     logMessage(QString("Add CW Keyer Type to rigcache = %1").arg(getCwRadioManufacturer(cwMemType)));
@@ -4142,12 +4141,13 @@ void RigControlMainWindow::addCwKeyerTypeToRigCache(int cwMemType)
     msg->rigCache.setCwMemAvail(psname, cwMemType);
 }
 
-void RigControlMainWindow::addSupportStopCmdToRigCache(bool supportStopCmd)
+void RigControlMainWindow::addCwKeyerSupportStopCmdToRigCache(bool supportStopCmd)
 {
-    logMessage(QString("Add Support Stop message cmd to rigcache = %1").arg(supportStopCmd ? "True" :"False"));
+    logMessage(QString("Add CW Keyer Support Support Stop message cmd to rigcache = %1").arg(supportStopCmd ? "True" :"False"));
     PubSubName psname(currentRadio.radioName);
-    msg->rigCache.setRigKeyerSupportStopFlag(psname, supportStopCmd);
+    msg->rigCache.setRigCwKeyerSupportStopFlag(psname, supportStopCmd);
 }
+
 
 void RigControlMainWindow::addPTTEnabledStatusToRigCache(bool status)
 {
@@ -5440,15 +5440,16 @@ void RigControlMainWindow::onCwKeyerPbClicked()
                 || rigManufacturer == "Icom"
                 || rigManufacturer == "Elecraft")
             {
+                // This is an optional ini to allow manufacturer specific messages
                 QString fileName = RADIO_PATH_LOGGER() + FILENAME_RIGCONTROL_TEST_DATA;
                 QSettings  config(fileName, QSettings::IniFormat);
 
                 config.beginGroup(rigManufacturer);
 
-                QString cwMsg = config.value("cwTestMessage", "").toString();
+                QString cwMsg = config.value("cwTestMessage", "CQ CQ DE M0ABC").toString();
                 config.endGroup();
 
-                int cwTXTimeoutDur = config.value("cwTxMessageTimeout", 10).toInt();
+                int cwTXTimeoutDur = config.value("cwTxMessageTimeout", 25).toInt();
 
                 if (cwMsg.isEmpty())
                 {

@@ -521,7 +521,8 @@ private:
     void addVoiceMemStatusToRigCache(bool status);
     void addVoiceNumberMessagesToRigCache(int numMessages);
     void addCwKeyerTypeToRigCache(int cwMemType);
-    void addSupportStopCmdToRigCache(bool supportStopCmd);
+    void addCwKeyerSupportStopCmdToRigCache(bool supportStopCmd);
+    void addVoiceKeyerSupportStopCmdToRigCache(bool supportStopCmd);
     void addPTTEnabledStatusToRigCache(bool status);
     QString getRigCtldExePath();
     QString getRigCtldExeName();

@@ -144,10 +144,7 @@ void TxVmButtonsFrame::onVmSetupClicked()
         {
            maxNumOfVoiceMessages = getNumVoiceMessages(selectedRadio);
         }
-        //else if (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl])
-        //{
-       //     maxNumOfVoiceMessages = getNumCwMessages(selectedRadio);
-        //}
+
 
 
         if (txVoiceKeyer->setup(voiceKeyerFactory, maxNumOfVoiceMessages, txVoiceKeyer->numButtons, selectedRadio.getLocalName()) == QDialog::Accepted)
@@ -564,22 +561,40 @@ void TxVmButtonsFrame::setFrameState(QString voiceKeyerName)
             }
         }
 
+        ui->vmStopPb->setVisible(true);
+
         if (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl] || voiceKeyerType == keyerTypes[VoiceKeyerId::RigControl])
         {
             setSaveButtonByRadionameText(selectedRadio.getLocalName());
             txVoiceKeyer->numButtons = getRadioUserSavedNumberOfButtons(selectedRadio.getLocalName());
             loadButtonData();
-            if (getCwMemType(selectedRadio) == hamlibData::CW_MEMORY_TYPES::ICOM)
+
+
+            if (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl])
             {
-                ui->vmStopPb->setVisible(false);    // Icom does't support stop
+                if (!getRigCwKeyerSupportStopFlag(selectedRadio.getLocalName()))
+                {
+                    ui->vmStopPb->setVisible(false);
+                }
+                else
+                {
+                    ui->vmStopPb->setVisible(true);
+                }
+
+            }
+            else if (voiceKeyerType == keyerTypes[VoiceKeyerId::RigControl])
+            {
+                if (!getRigVoiceKeyerSupportStopFlag(selectedRadio.getLocalName()))
+                {
+                    ui->vmStopPb->setVisible(false);
+                }
+                else
+                {
+                    ui->vmStopPb->setVisible(true);
+                }
             }
         }
-
-
     }
-
-
-
 }
 
 
@@ -1162,18 +1177,18 @@ void TxVmButtonsFrame::setCwMemType(int cwMemType, PubSubName psn)
     updateVoiceMemAvailStateAndCwType();
 }
 
-void TxVmButtonsFrame::setRigKeyerSupportStopFlag(bool supportStopCmd, PubSubName psn)
+void TxVmButtonsFrame::setRigVoiceKeyerSupportStopFlag(bool supportStopCmd, PubSubName psn)
 {
     RadioDetails rd;
     if (allRadioDetails.contains(psn))
     {
         rd = allRadioDetails[psn];
-        rd.setRigKeyerSupportStopCmd(supportStopCmd);
+        rd.setRigVoiceKeyerSupportStopCmd(supportStopCmd);
         allRadioDetails[psn] = rd;
     }
     else
     {
-        rd.setRigKeyerSupportStopCmd(supportStopCmd);
+        rd.setRigVoiceKeyerSupportStopCmd(supportStopCmd);
         allRadioDetails[psn] = rd;
     }
 
@@ -1181,13 +1196,46 @@ void TxVmButtonsFrame::setRigKeyerSupportStopFlag(bool supportStopCmd, PubSubNam
 }
 
 
-bool TxVmButtonsFrame::getRigKeyerSupportStopFlag(PubSubName psn)
+bool TxVmButtonsFrame::getRigVoiceKeyerSupportStopFlag(PubSubName psn)
 {
     RadioDetails rd;
     if (allRadioDetails.contains(psn))
     {
         rd = allRadioDetails[psn];
-        return rd.getRigKeyerSupportStopCmd();
+        return rd.getRigVoiceKeyerSupportStopCmd();
+    }
+
+    return true;
+
+}
+
+
+void TxVmButtonsFrame::setRigCwKeyerSupportStopFlag(bool supportStopCmd, PubSubName psn)
+{
+    RadioDetails rd;
+    if (allRadioDetails.contains(psn))
+    {
+        rd = allRadioDetails[psn];
+        rd.setRigCwKeyerSupportStopCmd(supportStopCmd);
+        allRadioDetails[psn] = rd;
+    }
+    else
+    {
+        rd.setRigCwKeyerSupportStopCmd(supportStopCmd);
+        allRadioDetails[psn] = rd;
+    }
+
+    updateVoiceMemAvailStateAndCwType();
+}
+
+
+bool TxVmButtonsFrame::getRigCwKeyerSupportStopFlag(PubSubName psn)
+{
+    RadioDetails rd;
+    if (allRadioDetails.contains(psn))
+    {
+        rd = allRadioDetails[psn];
+        return rd.getRigCwKeyerSupportStopCmd();
     }
 
     return true;

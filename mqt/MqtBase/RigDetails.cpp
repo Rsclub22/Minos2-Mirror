@@ -22,6 +22,8 @@ RigDetails::RigDetails()
     _pttType.setInitialValue(static_cast<int>(serialCommonData::PTTMethodCodes::PTT_METHOD_CAT));
     _voiceMemAvail.setInitialValue(false);
     _cwMemType.setInitialValue(false);
+    _rigVoiceKeyerMessageSupportStop.setInitialValue(true);
+    _rigCwKeyerMessageSupportStop.setInitialValue(true);
 }
 
 RigDetails::RigDetails(QString s)
@@ -44,7 +46,9 @@ bool RigDetails::isDirty() const
             _pttEnabled.isDirty() ||
             _pttType.isDirty() ||
             _voiceMemAvail.isDirty() ||
-            _cwMemType.isDirty();
+            _cwMemType.isDirty() ||
+           _rigVoiceKeyerMessageSupportStop.isDirty() ||
+           _rigCwKeyerMessageSupportStop.isDirty();
 
 
 }
@@ -63,6 +67,8 @@ void RigDetails::clearDirty()
     _pttType.clearDirty();
     _voiceMemAvail.clearDirty();
     _cwMemType.clearDirty();
+    _rigVoiceKeyerMessageSupportStop.clearDirty();
+    _rigCwKeyerMessageSupportStop.clearDirty();
 
 
 }
@@ -81,6 +87,9 @@ void RigDetails::setDirty()
     _pttType.setDirty();
     _voiceMemAvail.setDirty();
     _cwMemType.setDirty();
+    _rigVoiceKeyerMessageSupportStop.setDirty();
+    _rigCwKeyerMessageSupportStop.setDirty();
+
 
 
 }
@@ -150,10 +159,15 @@ void RigDetails::setCwMemType(int cwMemType)
     _cwMemType.setValue(cwMemType);
 
 }
-void RigDetails::setRigKeyerMessageSupportStop(bool supportStopCmd)
+void RigDetails::setRigVoiceKeyerMessageSupportStop(bool supportStopCmd)
 {
-    _rigKeyerMessageSupportStop.setValue(supportStopCmd);
+    _rigVoiceKeyerMessageSupportStop.setValue(supportStopCmd);
 }
+void RigDetails::setRigCwKeyerMessageSupportStop(bool supportStopCmd)
+{
+    _rigCwKeyerMessageSupportStop.setValue(supportStopCmd);
+}
+
 
 
 QString RigDetails::pack() const
@@ -174,7 +188,8 @@ QString RigDetails::pack() const
     jv.insert(rpcConstants::rigVoiceMemAvail, voiceMemAvail().getValue());
     jv.insert(rpcConstants::rigNumberVoiceMessages, numVoiceMessages().getValue());
     jv.insert(rpcConstants::rigCwMemType, cwMemType().getValue());
-    jv.insert(rpcConstants::rigKeyerMessageSupportStop, rigKeyerMessageSupportStop().getValue());
+    jv.insert(rpcConstants::rigVoiceKeyerMessageSupportStop, rigVoiceKeyerMessageSupportStop().getValue());
+    jv.insert(rpcConstants::rigCwKeyerMessageSupportStop, rigCwKeyerMessageSupportStop().getValue());
 
 
     QJsonDocument json(jv);
@@ -204,7 +219,8 @@ void RigDetails::unpack(QString s)
         _voiceMemAvail.setValue(json.object().value(rpcConstants::rigVoiceMemAvail).toBool());
         _numVoiceMemMessages.setValue(json.object().value(rpcConstants::rigNumberVoiceMessages).toInt());
         _cwMemType.setValue(json.object().value(rpcConstants::rigCwMemType).toInt());
-        _rigKeyerMessageSupportStop.setValue(json.object().value(rpcConstants::rigKeyerMessageSupportStop).toBool());
+        _rigVoiceKeyerMessageSupportStop.setValue(json.object().value(rpcConstants::rigVoiceKeyerMessageSupportStop).toBool());
+        _rigCwKeyerMessageSupportStop.setValue(json.object().value(rpcConstants::rigCwKeyerMessageSupportStop).toBool());
 
     }
     else
@@ -274,8 +290,12 @@ MinosItem<int> RigDetails::cwMemType() const
 {
     return _cwMemType;
 }
-MinosItem<bool> RigDetails::rigKeyerMessageSupportStop() const
+MinosItem<bool> RigDetails::rigVoiceKeyerMessageSupportStop() const
 {
-    return _rigKeyerMessageSupportStop;
+    return _rigVoiceKeyerMessageSupportStop;
+}
+MinosItem<bool> RigDetails::rigCwKeyerMessageSupportStop() const
+{
+    return _rigCwKeyerMessageSupportStop;
 }
 

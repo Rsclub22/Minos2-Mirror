@@ -84,8 +84,10 @@ public:
     void setVoiceMemAvail(bool avail, PubSubName psn);
     void setNumVoiceMessages(int numMsgs, PubSubName psn);
     void setCwMemType(int cwMemType, PubSubName psn);
-    void setRigKeyerSupportStopFlag(bool supportStopCmd, PubSubName psn);
-    bool getRigKeyerSupportStopFlag(PubSubName psn);
+    void setRigVoiceKeyerSupportStopFlag(bool supportStopCmd, PubSubName psn);
+    bool getRigVoiceKeyerSupportStopFlag(PubSubName psn);
+    void setRigCwKeyerSupportStopFlag(bool supportStopCmd, PubSubName psn);
+    bool getRigCwKeyerSupportStopFlag(PubSubName psn);
     void setPttState(bool state);
 
     void setSelectedRadio(PubSubName selectedRadio);

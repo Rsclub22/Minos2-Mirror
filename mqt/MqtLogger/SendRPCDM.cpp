@@ -694,12 +694,20 @@ void TSendDM::notifyRigDetailChanges()
                     tslf->onSetCwMemType(selDetail.cwMemType().getValue(), psn);
                 }
             }
-            if (selDetail.rigKeyerMessageSupportStop().isDirty())
+            if (selDetail.rigVoiceKeyerMessageSupportStop().isDirty())
             {
                 for (int i = 0; i < frames.size(); i++)
                 {
                     TSingleLogFrame *tslf = frames[i];
-                    tslf->onRigKeyerMessageSupportStop(selDetail.rigKeyerMessageSupportStop().getValue(), psn);
+                    tslf->onRigVoiceKeyerMessageSupportStop(selDetail.rigVoiceKeyerMessageSupportStop().getValue(), psn);
+                }
+            }
+            if (selDetail.rigCwKeyerMessageSupportStop().isDirty())
+            {
+                for (int i = 0; i < frames.size(); i++)
+                {
+                    TSingleLogFrame *tslf = frames[i];
+                    tslf->onRigCwKeyerMessageSupportStop(selDetail.rigCwKeyerMessageSupportStop().getValue(), psn);
                 }
             }
 
