@@ -117,6 +117,8 @@ void ContestDetailsTransferObject::getFromContest(LoggerContestLog *ct)
     ageProtected = ct->ageProtected;
 
     name = ct->name;
+    cabrilloName = ct->cabrilloName;
+    calType = ct->calType;
     location = ct->location;
 
     mycall = ct->mycall;
@@ -231,6 +233,8 @@ void ContestDetailsTransferObject::setToContest(LoggerContestLog *ct)
     ct->ageProtected = ageProtected;
 
     ct->name = name;
+    ct->cabrilloName = cabrilloName;
+    ct->calType = calType;
     ct->location = location;
 
     ct->mycall = mycall;

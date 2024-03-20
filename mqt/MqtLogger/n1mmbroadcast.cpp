@@ -277,11 +277,10 @@ QString N1MMBroadcast::genContactStanza(QString type, BaseContestLog *b, QShared
          mode = mgmSubmode;
     }
 
-
     QString xml = QString("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n")
                   + "<" + type + ">\n"
                    + makeTag("app", "Minos")
-                   + makeTag("contestname", c->name.getValue())         //        <contestname>DXPEDITION</contestname>
+                  + makeTag("contestname", c->getCabrilloName(c->name.getValue(), c->cabrilloName.getValue(), c->calType.getValue()))         //        <contestname>DXPEDITION</contestname>
                    + makeTag("contestnr", "0")                          //        <contestnr>10</contestnr>
                    + makeTag("timestamp", tct->timeOff.getN1mmDTG())       //        <timestamp>2016-04-10 16:17:41</timestamp>
                    + makeTag("mycall", c->mycall.getFullCall())   //        <mycall>K8UT</mycall>

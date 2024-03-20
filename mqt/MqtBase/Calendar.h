@@ -126,6 +126,7 @@ class CalendarContest
         QString name;
         QString description;
         QString shortDescription;
+        QString cabrilloName;
         enum ScoreType{oneppq, perkms, desc, uksmg} scoring;
         bool iaru;
         QString mult;
@@ -155,6 +156,7 @@ class IndividualContest
         QString name;
         QString description;
         QString shortDescription;
+        QString cabrilloName;
         QString bands;
         QString reg1band;
         QString ukband;

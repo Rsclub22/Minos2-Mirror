@@ -390,6 +390,7 @@ bool Calendar::parseFile ( const QString &fname )
                             QString name = i.name.trimmed();
                             QString typeName = getTypeName ( name, calType );
                             QString mode = i.mode.trimmed();
+                            QString cabrilloName = i.cabrilloName.trimmed();
 
                             // This needs changing once the contests are sorted
                             // as e.g. 70MHz cumulatives are defined in two groups
@@ -401,6 +402,7 @@ bool Calendar::parseFile ( const QString &fname )
                             ic.typeName = typeName;
                             ic.description = desc;
                             ic.shortDescription = sdesc;
+                            ic.cabrilloName = cabrilloName;
                             ic.bands = bl.name;
                             ic.mode = mode;
 #if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
@@ -808,6 +810,7 @@ bool Calendar::parseContest ( TiXmlElement * tix )
                             else
                                 if ( checkElementName ( e, "cabrillo_name" ) )
                                 {
+                                    c.cabrilloName = e->GetText();
                                 }
                                 else
                                     if ( checkElementName ( e, "rst_type" ) )

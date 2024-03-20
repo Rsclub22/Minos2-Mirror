@@ -365,7 +365,8 @@ bool Cabrillo::exportTest(QSharedPointer<QFile> expfd)
                    + " " + QSysInfo::currentCpuArchitecture();
     linelist[ static_cast< int> (PCreatedBy) ] = cabrilloLine( "CREATED-BY", pver );
 
-    linelist[ static_cast< int> (PContestName) ] = cabrilloLine( "CONTEST", ct->name.getValue()  /*, "Contest Name"*/ );
+    QString cabrilloName = BaseContestLog::getCabrilloName(ct->name.getValue(), ct->cabrilloName.getValue(), ct->calType.getValue());
+    linelist[ static_cast< int> (PContestName) ] = cabrilloLine( "CONTEST", cabrilloName  /*, "Contest Name"*/ );
 
     linelist[ static_cast< int> (PCallUsed )] = cabrilloLine( "CALLSIGN", ct->mycall.getFullCall()  /*, "Callsign Used"*/ );
     linelist[ static_cast< int> (PGridLoc )] = cabrilloLine( "GRID-LOCATOR", ct->myloc.getLoc()  /*, "Locator Used"*/ );

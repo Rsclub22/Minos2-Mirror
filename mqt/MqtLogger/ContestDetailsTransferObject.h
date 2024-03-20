@@ -145,6 +145,8 @@ private:
     MinosItem<PubSubName> antennaName;
 
     MinosStringItem<QString> contestName;
+    MinosStringItem<QString> cabrilloName;
+    MinosItem<int> calType;
 
     // Most of this info is bundle related, and not relevant when monitored (?)
 
