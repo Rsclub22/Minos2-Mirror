@@ -35,6 +35,7 @@ class RigState
     MinosItem<bool> _pttState;
     MinosItem<bool> _setPttOnOff;
 
+
 public:
     RigState();
     RigState(QString s);
@@ -65,7 +66,8 @@ public:
     MinosItem<int> radioVolLevel() const;
     MinosItem<int> logVolLevel() const;
     MinosItem<bool> pttState() const;
-    MinosItem<bool> setPttOnOff() const;
+    MinosItem<bool> getPttOnOff() const;
+
 
     void setSelected(const QString &loggeruuid, const QString &selected);
     void setRadioFreq(Frequency freq);
@@ -84,6 +86,7 @@ public:
     void setRitRadioStatus(const bool status);
     void setPttState(const bool state);
     void setPttOnOff(const bool on);
+
 
     QStringList getSelectedLoggers();
     Frequency getRadioFreq();

@@ -146,6 +146,14 @@ bool RadioDetails::getRigCwKeyerSupportStopCmd()
 {
     return rigCwKeyerSupportStopCmd;
 }
+void RadioDetails::setRigModel(QString _rigModel)
+{
+    rigModel = _rigModel;
+}
+QString RadioDetails::getRigModel()
+{
+    return rigModel;
+}
 
 
 

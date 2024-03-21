@@ -144,6 +144,8 @@ public:
     void onSetPttType(int type, PubSubName psn);
     void on_SetPttState(bool state);
 
+    void onSetRigModel(QString rigModel, PubSubName psn);
+
     void setPlaceholders(QStringList nearMatches);
 
     void buildFrame(int slotNo);

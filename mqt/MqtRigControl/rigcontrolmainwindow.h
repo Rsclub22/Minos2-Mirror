@@ -556,6 +556,7 @@ private:
 
 
     bool isTestCwMessageRunning();
+    void addRigModelToRigCache(QString rigModel);
 private slots:
 
     void onStdInRead(QString);

@@ -122,7 +122,7 @@ bool getRigCWKeyerSupportedCharacters(QString &supportedChars, QString radioMfg)
 
 
 
-bool getRigCWKeyerRadiosSupportSpecialCharacters(QStringList &listOfRadioModels, QString radioMfg)
+bool getRigCWKeyerListOfRadiosSupportSpecialCharacters(QStringList &listOfRadioModels, QString radioMfg)
 {
     QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + CWKEYER_RADIO_COMMON_PARAMS_FILENAME + ".ini";
     QSettings config(fileName, QSettings::IniFormat);

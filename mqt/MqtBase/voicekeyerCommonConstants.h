@@ -57,7 +57,7 @@ void writeSaveVoiceCWMemoryButtonByRadioNameToIni(bool data, voiceKeyerCommon::V
 void getListOfRadioNamesForMemoryButtons(QStringList &radioNames, voiceKeyerCommon::VoiceKeyerId id);
 
 bool getRigCWKeyerSupportedSpecialCharacters(QMap<QString, QChar> &specialCharMap, QString radioMfg);
-bool getRigCWKeyerRadiosSupportSpecialCharacters(QStringList &listOfRadioModels, QString radioMfg);
+bool getRigCWKeyerListOfRadiosSupportSpecialCharacters(QStringList &listOfRadioModels, QString radioMfg);
 bool getRigCWKeyerSupportedCharacters(QString &supportedChars, QString radioMfg);
 bool getRigCWMessageStoredInRadioFlag(bool &storedInRadio, QString radioMfg);
 bool getRigCWKeyerMaxMessageLength(int &messageLength, QString radioMfg);

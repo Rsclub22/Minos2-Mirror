@@ -217,7 +217,7 @@ static const QString rigNumberVoiceMessages ("NumberOfVoiceMessages");
 static const QString rigCwMemType ("CwMemType");
 static const QString rigVoiceKeyerMessageSupportStop ("rigVoiceKeyerSupportStopCmd");
 static const QString rigCwKeyerMessageSupportStop ("rigCwKeyerSupportStopCmd");
-
+static const QString rigRigModel ("rigRigModel");
 
 // KSTClient
 static const QString KSTClientApp         ("mqtKSTClient");

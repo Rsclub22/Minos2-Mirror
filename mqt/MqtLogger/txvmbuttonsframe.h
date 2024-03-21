@@ -89,6 +89,7 @@ public:
     void setRigCwKeyerSupportStopFlag(bool supportStopCmd, PubSubName psn);
     bool getRigCwKeyerSupportStopFlag(PubSubName psn);
     void setPttState(bool state);
+    void setRigModel(QString rigModel, PubSubName psn);
 
     void setSelectedRadio(PubSubName selectedRadio);
     void setRadioIsConnected(bool connected);
@@ -161,7 +162,7 @@ private:
     void turnOffVMButton();
 
 
-    void updateVoiceMemAvailStateAndCwType();
+    void updateFrameState();
     void setTXStatusVisible(bool visible);
     void sendModeToRadio(const QString m);
     void setSaveButtonByRadionameText(QString selectedRadioName);
@@ -171,6 +172,8 @@ private:
     int getNumCwMessages(PubSubName psn);
     int getNumVoiceMessages(PubSubName psn);
     int getRadioUserSavedNumberOfButtons(QString selectedRadioName);
+    QString getRigModel(PubSubName psn);
+
 private slots:
 
     void onVoiceKeyerSelect(int idx);

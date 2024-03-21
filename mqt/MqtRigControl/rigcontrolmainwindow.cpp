@@ -988,6 +988,7 @@ bool RigControlMainWindow::checkSupportCwKeyerMemory()
 
             setCwMemIndVisible(true);
             setCwMemIndOnOff(true);
+            addRigModelToRigCache(currentRadio.rigModel);
             if (currentRadio.rigMfg_Name == "Yaesu")
             {
                 addCwKeyerTypeToRigCache(hamlibData::CW_MEMORY_TYPES::YAESU_MEM_RECALL);
@@ -1010,6 +1011,7 @@ bool RigControlMainWindow::checkSupportCwKeyerMemory()
                 setCwMemIndVisible(false);
                 setCwMemIndOnOff(false);
                 addCwKeyerTypeToRigCache(hamlibData::CW_MEMORY_TYPES::NONE);
+                addRigModelToRigCache("");
 
                 return false;
             }
@@ -4113,6 +4115,14 @@ void RigControlMainWindow::addVolStatusToRigCache(bool status)
 }
 
 
+void RigControlMainWindow::addRigModelToRigCache(QString rigModel)
+{
+    logMessage(QString("Add RigModel to rigcache = %1").arg(rigModel));
+    PubSubName psname(currentRadio.radioName);
+    msg->rigCache.setRigModel(psname, rigModel);
+}
+
+
 void RigControlMainWindow::addVoiceMemStatusToRigCache(bool status)
 {
     logMessage(QString("Add Voice Memory Status to rigcache = %1").arg(status  ? "True" : "False"));
@@ -4134,11 +4144,14 @@ void RigControlMainWindow::addVoiceKeyerSupportStopCmdToRigCache(bool supportSto
     msg->rigCache.setRigVoiceKeyerSupportStopFlag(psname, supportStopCmd);
 }
 
+
+// as we are now sending rigmodel to logger and it includes manufacturer and model number
+// we could despense with cwMemType and derive it from rigModel??
 void RigControlMainWindow::addCwKeyerTypeToRigCache(int cwMemType)
 {
     logMessage(QString("Add CW Keyer Type to rigcache = %1").arg(getCwRadioManufacturer(cwMemType)));
     PubSubName psname(currentRadio.radioName);
-    msg->rigCache.setCwMemAvail(psname, cwMemType);
+    msg->rigCache.setCwMemType(psname, cwMemType);
 }
 
 void RigControlMainWindow::addCwKeyerSupportStopCmdToRigCache(bool supportStopCmd)

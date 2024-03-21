@@ -131,6 +131,8 @@ void TxVmButtonsFrame::setVoiceNumMemButtonsVisible(int num)
     }
 }
 
+
+
 void TxVmButtonsFrame::onVmSetupClicked()
 {
     if (voiceKeyerType != keyerTypes[VoiceKeyerId::None])
@@ -498,7 +500,7 @@ void TxVmButtonsFrame::onVoiceKeyerSelect(int idx)
 
 }
 
-void TxVmButtonsFrame::updateVoiceMemAvailStateAndCwType()
+void TxVmButtonsFrame::updateFrameState()
 {
     setFrameState(ui->voiceKeyerSelect->currentText());
 }
@@ -659,6 +661,8 @@ void TxVmButtonsFrame::editActionSelected(int buttonNumber)
 
     VoiceKeyerParams vmData;
     vmData.setType(voiceKeyerType);
+    vmData.setRigModel(getRigModel(selectedRadio));
+
     if ((voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl] || voiceKeyerType == keyerTypes[VoiceKeyerId::RigControl])
         && !selectedRadio.getLocalName().isEmpty())
     {
@@ -889,6 +893,7 @@ void TxVmButtonsFrame::newActionSelected(int buttonNumber)
     vmData.setvmButtonNum(buttonNumber);
     vmData.setType(voiceKeyerType);
     vmData.setVkBase(txVoiceKeyer);
+    vmData.setRigModel(getRigModel(selectedRadio));
 
     int ret = txVoiceKeyer->editButton(&vmData, title);
     if (ret == QDialog::Accepted)
@@ -1054,7 +1059,7 @@ void TxVmButtonsFrame::setSelectedRadio(PubSubName selectedRadio_)
     {
         selectedRadio = selectedRadio_;
 
-        updateVoiceMemAvailStateAndCwType();
+        updateFrameState();
 
 
     }
@@ -1111,7 +1116,7 @@ void TxVmButtonsFrame::setVoiceMemAvail(bool avail, PubSubName psn)
         allRadioDetails[psn] = rd;
     }
 
-    updateVoiceMemAvailStateAndCwType();
+    updateFrameState();
 }
 
 void TxVmButtonsFrame::setNumVoiceMessages(int numMsgs, PubSubName psn)
@@ -1129,7 +1134,7 @@ void TxVmButtonsFrame::setNumVoiceMessages(int numMsgs, PubSubName psn)
         allRadioDetails[psn] = rd;
     }
 
-    updateVoiceMemAvailStateAndCwType();
+    updateFrameState();
 }
 
 // This is max number of voice messages available on a radio
@@ -1174,7 +1179,7 @@ void TxVmButtonsFrame::setCwMemType(int cwMemType, PubSubName psn)
         allRadioDetails[psn] = rd;
     }
 
-    updateVoiceMemAvailStateAndCwType();
+    updateFrameState();
 }
 
 void TxVmButtonsFrame::setRigVoiceKeyerSupportStopFlag(bool supportStopCmd, PubSubName psn)
@@ -1192,7 +1197,7 @@ void TxVmButtonsFrame::setRigVoiceKeyerSupportStopFlag(bool supportStopCmd, PubS
         allRadioDetails[psn] = rd;
     }
 
-    updateVoiceMemAvailStateAndCwType();
+    updateFrameState();
 }
 
 
@@ -1225,7 +1230,7 @@ void TxVmButtonsFrame::setRigCwKeyerSupportStopFlag(bool supportStopCmd, PubSubN
         allRadioDetails[psn] = rd;
     }
 
-    updateVoiceMemAvailStateAndCwType();
+    updateFrameState();
 }
 
 
@@ -1241,6 +1246,39 @@ bool TxVmButtonsFrame::getRigCwKeyerSupportStopFlag(PubSubName psn)
     return true;
 
 }
+
+void TxVmButtonsFrame::setRigModel(QString rigModel, PubSubName psn)
+{
+    RadioDetails rd;
+    if (allRadioDetails.contains(psn))
+    {
+        rd = allRadioDetails[psn];
+        rd.setRigModel(rigModel);
+        allRadioDetails[psn] = rd;
+    }
+    else
+    {
+        rd.setRigModel(rigModel);
+        allRadioDetails[psn] = rd;
+    }
+
+    updateFrameState();
+}
+
+QString TxVmButtonsFrame::getRigModel(PubSubName psn)
+{
+    RadioDetails rd;
+    if (allRadioDetails.contains(psn))
+    {
+        rd = allRadioDetails[psn];
+        return rd.getRigModel();
+    }
+
+    return "";
+
+}
+
+
 
 bool TxVmButtonsFrame::isCwMemTypeAvail(PubSubName psn)
 {

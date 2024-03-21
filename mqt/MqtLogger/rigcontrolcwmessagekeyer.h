@@ -61,7 +61,7 @@ private:
 
     bool radioKeyerAvail = false;
 
-    QString getRadioModel(QString selectedRadio);
+
 
 };
 

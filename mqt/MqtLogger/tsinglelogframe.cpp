@@ -1966,6 +1966,13 @@ void TSingleLogFrame::onSetVoiceMemAvail(bool avail, PubSubName psn)
         txVmButtonsFrame->setVoiceMemAvail(avail, psn);
     }
 }
+void TSingleLogFrame::onSetRigModel(QString rigModel, PubSubName psn)
+{
+    if ( this == LogContainer->getCurrentLogFrame() )
+    {
+        txVmButtonsFrame->setRigModel(rigModel, psn);
+    }
+}
 
 void TSingleLogFrame::onSetNumVoiceMessages(int numMsgs, PubSubName psn)
 {

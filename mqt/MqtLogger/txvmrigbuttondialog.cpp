@@ -155,12 +155,10 @@ void TxVmRigButtonDialog::setSpecialCwCharLists(QMap<QString, QChar> &specialCha
     populateInfoPanelSupportedSpecialChars();   // for display
 }
 
-// This will overwrite the label with cwMemType
-void TxVmRigButtonDialog::setVmTypeLabelcwMemType(QString mfg)
+// This will overwrite the label with cwMemType and radio manufacturer and model name
+void TxVmRigButtonDialog::setVmTypeLabelcwMemType(QString radioModel)
 {
-
-
-    ui->txVmTypeLbl->setText(QString("%1 - %2").arg(vmData->getType(), mfg ));
+    ui->txVmTypeLbl->setText(QString("%1 - %2").arg(vmData->getType()).arg(radioModel));
 }
 
 

@@ -96,13 +96,19 @@ void RigControlCwMessageKeyer::sendCwMsg(VoiceKeyerParams &vmData)
     {
         QString cwMessageToTx;
         QString radioManufacturer;
+        QStringList rmList;
         QString radioModel;
 
         if (readSaveVoiceCWMemoryButtonByRadioNameFromIni(VoiceKeyerId::CW_RigControl))
         {
 
             radioManufacturer = getCwRadioManufacturer(cwMemType);
-            radioModel = getRadioModel(vmData.getSelRadioName());
+            rmList = vmData.getRigModel().split(' ');
+            if (rmList.length() == 2)
+            {
+                radioModel = rmList[1].remove('-');
+            }
+
 
         }
         else
@@ -112,36 +118,32 @@ void RigControlCwMessageKeyer::sendCwMsg(VoiceKeyerParams &vmData)
         }
 
         QStringList listOfRadioModels;
-        getRigCWKeyerRadiosSupportSpecialCharacters(listOfRadioModels, radioManufacturer);
-        if (!listOfRadioModels.isEmpty())
+        getRigCWKeyerListOfRadiosSupportSpecialCharacters(listOfRadioModels, radioManufacturer);
+
+        if (!listOfRadioModels.isEmpty() && listOfRadioModels.contains(radioModel) && vmData.getVmCwMessage().contains(voiceKeyerCommon::specialCwCharEscapeChar))
         {
-            if (listOfRadioModels.contains(radioModel) && vmData.getVmCwMessage().contains(voiceKeyerCommon::specialCwCharEscapeChar))
+            // this radio supports special chars
+            QMap<QString, QChar> specialCharMap;
+            getRigCWKeyerSupportedSpecialCharacters(specialCharMap, radioManufacturer);
+            int currentIndex = 0;
+            while (currentIndex < vmData.getVmCwMessage().length())
             {
-                // this radio supports special chars
-                QMap<QString, QChar> specialCharMap;
-                getRigCWKeyerSupportedSpecialCharacters(specialCharMap, radioManufacturer);
-                int currentIndex = 0;
-                while (currentIndex < vmData.getVmCwMessage().length())
+                QString c = vmData.getVmCwMessage().mid(currentIndex, 1);
+                if (c != voiceKeyerCommon::specialCwCharEscapeChar)
                 {
-                    QString c = vmData.getVmCwMessage().mid(currentIndex, 1);
-                    if (c != voiceKeyerCommon::specialCwCharEscapeChar)
-                    {
-                        cwMessageToTx.append(c);
-                        currentIndex = currentIndex + 1;
-                    }
-                    else
-                    {
-                        QString sp = vmData.getVmCwMessage().mid(currentIndex + 1, 2);
-                        if (specialCharMap.contains(sp))
-                        {
-                            cwMessageToTx.append(specialCharMap[sp]);
-                        }
-
-                        currentIndex = currentIndex + 3;
-                    }
+                    cwMessageToTx.append(c);
+                    currentIndex = currentIndex + 1;
                 }
+                else
+                {
+                    QString sp = vmData.getVmCwMessage().mid(currentIndex + 1, 2);
+                    if (specialCharMap.contains(sp))
+                    {
+                        cwMessageToTx.append(specialCharMap[sp]);
+                    }
 
-
+                    currentIndex = currentIndex + 3;
+                }
             }
         }
         else
@@ -149,15 +151,8 @@ void RigControlCwMessageKeyer::sendCwMsg(VoiceKeyerParams &vmData)
             cwMessageToTx = vmData.getVmCwMessage();
         }
 
-        if (cwMemType == hamlibData::CW_MEMORY_TYPES::YAESU_MEM_RECALL)
-        {
-            cwMessageToTx.append('}');
-        }
-        else if (cwMemType == hamlibData::CW_MEMORY_TYPES::KENWOOD_MEM_RECALL)
-        {
-            cwMessageToTx.append(';');
-        }
 
+        trace(QString("Send Morse Message to radio : %1").arg(cwMessageToTx));
         TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
         tslf->sendRigTxCwMessage(cwMessageToTx);
     }
@@ -385,13 +380,18 @@ int RigControlCwMessageKeyer::editButton(VoiceKeyerParams *vmData, QString title
     TxVmRigButtonDialog vmButtonDialog(tslf->txVmButtonsFrame);
 
     QString radioManufacturer;   // used as group name
+    QStringList rmList;
     QString radioModel;
 
     if (readSaveVoiceCWMemoryButtonByRadioNameFromIni(VoiceKeyerId::CW_RigControl))
     {
         vmButtonDialog.setRadioNameLbl(vmData->getSelRadioName());
         radioManufacturer = getCwRadioManufacturer(cwMemType);
-        radioModel = getRadioModel(vmData->getSelRadioName());
+        rmList = vmData->getRigModel().split(' ');
+        if (rmList.length() == 2)
+        {
+            radioModel = rmList[1].remove('-');
+        }
 
     }
     else
@@ -406,7 +406,7 @@ int RigControlCwMessageKeyer::editButton(VoiceKeyerParams *vmData, QString title
 
     vmButtonDialog.setWindowTitle(title);
     vmButtonDialog.setVmData(vmData);
-    vmButtonDialog.setVmTypeLabelcwMemType(radioManufacturer);
+    vmButtonDialog.setVmTypeLabelcwMemType(vmData->getRigModel());
     vmButtonDialog.setCwInfoPanelVisible(true);
 
     QString validCharCwList;
@@ -433,7 +433,7 @@ int RigControlCwMessageKeyer::editButton(VoiceKeyerParams *vmData, QString title
     }
 
     QStringList listOfRadioModels;
-    getRigCWKeyerRadiosSupportSpecialCharacters(listOfRadioModels, radioManufacturer);
+    getRigCWKeyerListOfRadiosSupportSpecialCharacters(listOfRadioModels, radioManufacturer);
 
     bool radioSupportSpecialChar = false;
 
@@ -486,16 +486,6 @@ int RigControlCwMessageKeyer::editButton(VoiceKeyerParams *vmData, QString title
 
 
 
-QString RigControlCwMessageKeyer::getRadioModel(QString selectedRadio)
-{
-    QStringList rl = selectedRadio.split('/');
-    if (rl.length() == 2)
-    {
-        return rl[1];
-    }
-
-    return "";
-}
 
 
 

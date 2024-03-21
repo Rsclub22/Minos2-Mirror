@@ -43,6 +43,9 @@ public:
     void setRigCwKeyerSupportStopCmd(bool supportStopCmd);
     bool getRigCwKeyerSupportStopCmd();
     int getCwMemType();
+    void setRigModel(QString _rigModel);
+    QString getRigModel();
+
 private:
 
 double transVerterOffset;
@@ -60,6 +63,7 @@ int cwMemType;
 bool rigVoiceKeyerSupportStopCmd;
 bool rigCwKeyerSupportStopCmd;
 QString bandList;
+QString rigModel;
 
 };
 

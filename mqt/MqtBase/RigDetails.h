@@ -33,6 +33,7 @@ class RigDetails
     MinosItem<int> _cwMemType;
     MinosItem<bool> _rigVoiceKeyerMessageSupportStop;
     MinosItem<bool> _rigCwKeyerMessageSupportStop;
+    MinosItem<QString> _rigModel;
 
 
 public:
@@ -64,6 +65,7 @@ public:
     MinosItem<int> cwMemType() const;
     MinosItem<bool> rigVoiceKeyerMessageSupportStop() const;
     MinosItem<bool> rigCwKeyerMessageSupportStop() const;
+    MinosItem<QString> rigModel() const;
 
 
     void setSelected(const QString &loggeruuid, const QString &selected);
@@ -82,6 +84,7 @@ public:
     void setCwMemType(int cwMemType);
     void setRigVoiceKeyerMessageSupportStop(bool supportStop);
     void setRigCwKeyerMessageSupportStop(bool supportStop);
+    void setRigModel(QString);
 
 
 

@@ -670,6 +670,14 @@ void TSendDM::notifyRigDetailChanges()
                     tslf->onSetPttType(selDetail.pttType().getValue(), psn);
                 }
             }
+            if (selDetail.rigModel().isDirty())
+            {
+                for (int i = 0; i < frames.size(); i++)
+                {
+                    TSingleLogFrame *tslf = frames[i];
+                    tslf->onSetRigModel(selDetail.rigModel().getValue(), psn);
+                }
+            }
             if (selDetail.voiceMemAvail().isDirty())
             {
                 for (int i = 0; i < frames.size(); i++)
