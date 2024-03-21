@@ -1054,12 +1054,12 @@ The mode is %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../LoggerContacts.cpp" line="713"/>
+        <location filename="../LoggerContacts.cpp" line="716"/>
         <source>GJV file should have been opened read only!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../LoggerContacts.cpp" line="811"/>
+        <location filename="../LoggerContacts.cpp" line="814"/>
         <source>Invalid block number in contact block</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1073,13 +1073,13 @@ The mode is %2</source>
     </message>
     <message>
         <location filename="../contestdetails.ui" line="84"/>
-        <location filename="../contestdetails.cpp" line="1692"/>
+        <location filename="../contestdetails.cpp" line="1694"/>
         <source>HF Calendar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../contestdetails.ui" line="91"/>
-        <location filename="../contestdetails.cpp" line="1721"/>
+        <location filename="../contestdetails.cpp" line="1723"/>
         <source>VHF Calendar</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1351,7 +1351,7 @@ Score between 4 fig loc centres</source>
     </message>
     <message>
         <location filename="../contestdetails.cpp" line="199"/>
-        <location filename="../contestdetails.cpp" line="1503"/>
+        <location filename="../contestdetails.cpp" line="1505"/>
         <source>(None)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1387,19 +1387,19 @@ Score between 4 fig loc centres</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="1272"/>
+        <location filename="../contestdetails.cpp" line="1274"/>
         <source>Contest end is before contest start</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="1607"/>
+        <location filename="../contestdetails.cpp" line="1609"/>
         <source>This contest will be marked as protected.<byte value="xd"/>
 This is a permanent change that may be temporarily overridden.<byte value="xd"/>
 Please confirm this change by pressing &quot;Yes&quot;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="1655"/>
+        <location filename="../contestdetails.cpp" line="1657"/>
         <source>These settings are groups of settings that can be applied to a contest all in one go.<byte value="xd"/>
 <byte value="xd"/>
 There are four basic groups: - <byte value="xd"/>
@@ -1423,17 +1423,17 @@ Move between components of a group using the mouse or up/down arrow keys.<byte v
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="1749"/>
+        <location filename="../contestdetails.cpp" line="1751"/>
         <source>Microwave Calendar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="1828"/>
+        <location filename="../contestdetails.cpp" line="1830"/>
         <source>Are you sure you want to protect this contest?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="1835"/>
+        <location filename="../contestdetails.cpp" line="1837"/>
         <source>Are you sure you want to disable protection for this contest?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2325,7 +2325,7 @@ and send the .EDI file produced.<byte value="xd"/>
     </message>
     <message>
         <location filename="../MinosTestExport.cpp" line="56"/>
-        <location filename="../MinosTestExport.cpp" line="572"/>
+        <location filename="../MinosTestExport.cpp" line="574"/>
         <source>bad reply from write!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2338,7 +2338,7 @@ and send the .EDI file produced.<byte value="xd"/>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../n1mmbroadcast.cpp" line="398"/>
+        <location filename="../n1mmbroadcast.cpp" line="397"/>
         <source>CQ frequency</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2808,22 +2808,22 @@ No          - Discard changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2995"/>
+        <location filename="../qsologframe.cpp" line="2998"/>
         <source>&quot;Serial sent&quot; is too high - please confirm that this is correct?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2997"/>
+        <location filename="../qsologframe.cpp" line="3000"/>
         <source>Do you want to enter the missing contacts later?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="3390"/>
+        <location filename="../qsologframe.cpp" line="3393"/>
         <source>Start of QSOs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="3425"/>
+        <location filename="../qsologframe.cpp" line="3428"/>
         <source>End of QSOs</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4601,229 +4601,234 @@ does not exist; do you wish to download the latest calendars?</source>
     </message>
     <message>
         <location filename="../tentryoptionsform.cpp" line="41"/>
-        <source>Band</source>
+        <source>Cabrillo/ADIF Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../tentryoptionsform.cpp" line="42"/>
-        <source>Band Points Multiplier</source>
+        <source>Band</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../tentryoptionsform.cpp" line="43"/>
-        <source>Entrant name (or group)</source>
+        <source>Band Points Multiplier</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../tentryoptionsform.cpp" line="44"/>
-        <source>Station QTH 1</source>
+        <source>Entrant name (or group)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../tentryoptionsform.cpp" line="45"/>
-        <source>Station QTH 2</source>
+        <source>Station QTH 1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../tentryoptionsform.cpp" line="46"/>
-        <source>Section</source>
+        <source>Station QTH 2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../tentryoptionsform.cpp" line="47"/>
-        <source>Callsign as sent</source>
+        <source>Section</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../tentryoptionsform.cpp" line="48"/>
-        <source>Locator as sent</source>
+        <source>Callsign as sent</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../tentryoptionsform.cpp" line="49"/>
-        <source>Exchange/code/QTH as sent</source>
+        <source>Locator as sent</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../tentryoptionsform.cpp" line="50"/>
-        <source>Transmitter</source>
+        <source>Exchange/code/QTH as sent</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../tentryoptionsform.cpp" line="51"/>
-        <source>Transmit Power</source>
+        <source>Transmitter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../tentryoptionsform.cpp" line="52"/>
-        <source>Receiver</source>
+        <source>Transmit Power</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../tentryoptionsform.cpp" line="53"/>
-        <source>Antenna</source>
+        <source>Receiver</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../tentryoptionsform.cpp" line="54"/>
-        <source>Height above ground</source>
+        <source>Antenna</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../tentryoptionsform.cpp" line="55"/>
-        <source>Height above sea level</source>
+        <source>Height above ground</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../tentryoptionsform.cpp" line="56"/>
-        <source>(From QSOs) Operators Line 1</source>
+        <source>Height above sea level</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../tentryoptionsform.cpp" line="57"/>
-        <source>(From QSOs) Operators Line 2</source>
+        <source>(From QSOs) Operators Line 1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../tentryoptionsform.cpp" line="58"/>
-        <source>(Entry)Operators Line 1</source>
+        <source>(From QSOs) Operators Line 2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../tentryoptionsform.cpp" line="59"/>
-        <source>(Entry)Operators Line 2</source>
+        <source>(Entry)Operators Line 1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../tentryoptionsform.cpp" line="60"/>
+        <source>(Entry)Operators Line 2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../tentryoptionsform.cpp" line="61"/>
         <location filename="../tentryoptionsform.cpp" line="62"/>
         <location filename="../tentryoptionsform.cpp" line="63"/>
+        <location filename="../tentryoptionsform.cpp" line="64"/>
         <source>Conditions/Comments</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tentryoptionsform.cpp" line="64"/>
+        <location filename="../tentryoptionsform.cpp" line="65"/>
         <source>Name for Correspondence</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tentryoptionsform.cpp" line="65"/>
+        <location filename="../tentryoptionsform.cpp" line="66"/>
         <source>Callsign for Correspondence</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tentryoptionsform.cpp" line="66"/>
+        <location filename="../tentryoptionsform.cpp" line="67"/>
         <source>Address 1 for Correspondence</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tentryoptionsform.cpp" line="67"/>
+        <location filename="../tentryoptionsform.cpp" line="68"/>
         <source>Address 2 for Correspondence</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tentryoptionsform.cpp" line="68"/>
+        <location filename="../tentryoptionsform.cpp" line="69"/>
         <source>City for Correspondence</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tentryoptionsform.cpp" line="69"/>
+        <location filename="../tentryoptionsform.cpp" line="70"/>
         <source>Country for Correspondence</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tentryoptionsform.cpp" line="70"/>
+        <location filename="../tentryoptionsform.cpp" line="71"/>
         <source>Postcode for Correspondence</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tentryoptionsform.cpp" line="71"/>
+        <location filename="../tentryoptionsform.cpp" line="72"/>
         <source>Phone number for queries</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tentryoptionsform.cpp" line="72"/>
+        <location filename="../tentryoptionsform.cpp" line="73"/>
         <source>email address for queries</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tentryoptionsform.cpp" line="321"/>
+        <location filename="../tentryoptionsform.cpp" line="325"/>
         <source>GJV ContestLog files (*.gjv);;All Files (*.*);;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tentryoptionsform.cpp" line="322"/>
+        <location filename="../tentryoptionsform.cpp" line="326"/>
         <source>Save contest in GJV format as...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tentryoptionsform.cpp" line="326"/>
+        <location filename="../tentryoptionsform.cpp" line="330"/>
         <source>Minos ContestLog files (*.minos *.Minos);;All Files (*.*);;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tentryoptionsform.cpp" line="327"/>
+        <location filename="../tentryoptionsform.cpp" line="331"/>
         <source>Save contest in .minos format as...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tentryoptionsform.cpp" line="331"/>
+        <location filename="../tentryoptionsform.cpp" line="335"/>
         <source>ADIF files (*.adi);;All Files (*.*);;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tentryoptionsform.cpp" line="332"/>
+        <location filename="../tentryoptionsform.cpp" line="336"/>
         <source>Save contest in ADIF format as...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tentryoptionsform.cpp" line="336"/>
+        <location filename="../tentryoptionsform.cpp" line="340"/>
         <source>KML(GoogleEarth) files (*.kml);;All Files (*.*);;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tentryoptionsform.cpp" line="337"/>
+        <location filename="../tentryoptionsform.cpp" line="341"/>
         <source>Save contest in KML(GoogleEarth) format as...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tentryoptionsform.cpp" line="341"/>
+        <location filename="../tentryoptionsform.cpp" line="345"/>
         <source>Region 1 EDI files (*.edi);;All Files (*.*);;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tentryoptionsform.cpp" line="342"/>
+        <location filename="../tentryoptionsform.cpp" line="346"/>
         <source>Save contest in Region 1 EDI file format as...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tentryoptionsform.cpp" line="347"/>
+        <location filename="../tentryoptionsform.cpp" line="351"/>
         <source>Text output (*.txt);;All Files (*.*);;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tentryoptionsform.cpp" line="348"/>
+        <location filename="../tentryoptionsform.cpp" line="352"/>
         <source>Save contest in printable text format as...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tentryoptionsform.cpp" line="354"/>
+        <location filename="../tentryoptionsform.cpp" line="358"/>
         <source>Cabrillo files (*.log);;All Files (*.*);;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tentryoptionsform.cpp" line="355"/>
+        <location filename="../tentryoptionsform.cpp" line="359"/>
         <source>Save contest in Cabrillo file format as...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tentryoptionsform.cpp" line="379"/>
+        <location filename="../tentryoptionsform.cpp" line="383"/>
         <source>File is Read Only</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tentryoptionsform.cpp" line="394"/>
+        <location filename="../tentryoptionsform.cpp" line="398"/>
         <source>Failed to open Contest export file%1 : %2 </source>
         <translation type="unfinished"></translation>
     </message>
