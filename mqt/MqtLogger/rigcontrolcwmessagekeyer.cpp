@@ -12,12 +12,15 @@
 
 
 #include <QSettings>
+#include <QString>
 #include "tlogcontainer.h"
 #include "tsinglelogframe.h"
 #include "voicekeyerfactory.h"
 #include "txvmrigsetupdialog.h"
 #include "txvmrigbuttondialog.h"
 #include "rigcontrolcwmessagekeyer.h"
+#include "voicekeyerCommonConstants.h"
+#include "MTrace.h"
 
 const char * STOPCW = "\xFF";
 
@@ -87,12 +90,71 @@ void RigControlCwMessageKeyer::voiceKeyerInit(int &numButtons)
 
 
 
-void RigControlCwMessageKeyer::sendCwMsg(const QString message)
+void RigControlCwMessageKeyer::sendCwMsg(VoiceKeyerParams &vmData)
 {
-    if (!message.isEmpty())
+    if (!vmData.getVmCwMessage().isEmpty())
     {
+        QString cwMessageToTx;
+        QString radioManufacturer;
+        QStringList rmList;
+        QString radioModel;
+
+        if (readSaveVoiceCWMemoryButtonByRadioNameFromIni(VoiceKeyerId::CW_RigControl))
+        {
+
+            radioManufacturer = getCwRadioManufacturer(cwMemType);
+            rmList = vmData.getRigModel().split(' ');
+            if (rmList.length() == 2)
+            {
+                radioModel = rmList[1].remove('-');
+            }
+
+
+        }
+        else
+        {
+            radioManufacturer = "AllRadios";
+
+        }
+
+        QStringList listOfRadioModels;
+        getRigCWKeyerListOfRadiosSupportSpecialCharacters(listOfRadioModels, radioManufacturer);
+
+        if (!listOfRadioModels.isEmpty() && listOfRadioModels.contains(radioModel) && vmData.getVmCwMessage().contains(voiceKeyerCommon::specialCwCharEscapeChar))
+        {
+            // this radio supports special chars
+            QMap<QString, QChar> specialCharMap;
+            getRigCWKeyerSupportedSpecialCharacters(specialCharMap, radioManufacturer);
+            int currentIndex = 0;
+            while (currentIndex < vmData.getVmCwMessage().length())
+            {
+                QString c = vmData.getVmCwMessage().mid(currentIndex, 1);
+                if (c != voiceKeyerCommon::specialCwCharEscapeChar)
+                {
+                    cwMessageToTx.append(c);
+                    currentIndex = currentIndex + 1;
+                }
+                else
+                {
+                    QString sp = vmData.getVmCwMessage().mid(currentIndex + 1, 2);
+                    if (specialCharMap.contains(sp))
+                    {
+                        cwMessageToTx.append(specialCharMap[sp]);
+                    }
+
+                    currentIndex = currentIndex + 3;
+                }
+            }
+        }
+        else
+        {
+            cwMessageToTx = vmData.getVmCwMessage();
+        }
+
+
+        trace(QString("Send Morse Message to radio : %1").arg(cwMessageToTx));
         TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
-        tslf->sendRigTxCwMessage(message);
+        tslf->sendRigTxCwMessage(cwMessageToTx);
     }
 
 }
@@ -107,8 +169,11 @@ void RigControlCwMessageKeyer::stopCwMsg()
 }
 
 
+
 bool RigControlCwMessageKeyer::readVmButtonParams(int buttonNum, VoiceKeyerParams &vmParams)
 {
+
+
 
     bool saveByRadioName = readSaveVoiceCWMemoryButtonByRadioNameFromIni(VoiceKeyerId::CW_RigControl);
 
@@ -165,6 +230,7 @@ void RigControlCwMessageKeyer::saveVmButtonParams(const VoiceKeyerParams &vmPara
 
     config.setValue(newKey + "/type", vmParams.getType());
     config.setValue(newKey + "/name", vmParams.getVmName());
+    config.setValue(newKey + "/cwMessageText", vmParams.getVmCwMessage());
     config.setValue(newKey + "/repeatFlag", vmParams.getVmRepeatFlag());
     config.setValue(newKey + "/messageDuration", vmParams.getVmDuration());
     config.setValue(newKey + "/repeatPauseDuration", vmParams.getVmRepeatPauseDur());
@@ -191,9 +257,10 @@ int RigControlCwMessageKeyer::setup(VoiceKeyerFactory *voiceKeyerFactory, int &m
 
 
 
-    txVmSetupDialog.setWindowTitle(tr("Rig Control CW Memory Setup"));
+    txVmSetupDialog.setWindowTitle(tr("Rig Control CW Memory Setup"));    
 
     txVmSetupDialog.setMaxNumOfButtonsLabel(maxNumButtons);
+
 
     QString allRadiosGrpName = ALL_RADIOS_GROUP_NAME;
     if (readSaveVoiceCWMemoryButtonByRadioNameFromIni(VoiceKeyerId::CW_RigControl))
@@ -312,20 +379,101 @@ int RigControlCwMessageKeyer::editButton(VoiceKeyerParams *vmData, QString title
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
     TxVmRigButtonDialog vmButtonDialog(tslf->txVmButtonsFrame);
 
-    vmButtonDialog.setWindowTitle(title);
-    vmButtonDialog.setVmData(vmData);
-    vmButtonDialog.setVmTypeLabelcwMemType(cwMemType);
+    QString radioManufacturer;   // used as group name
+    QStringList rmList;
+    QString radioModel;
 
-    vmButtonDialog.setSerialMessageTextBoxVisible(false);
-
-    if (cwMemType == hamlibData::CW_MEMORY_TYPES::YAESU_MEM_RECALL)
+    if (readSaveVoiceCWMemoryButtonByRadioNameFromIni(VoiceKeyerId::CW_RigControl))
     {
-        vmButtonDialog.setCwMessageTextBoxVisible(false);
+        vmButtonDialog.setRadioNameLbl(vmData->getSelRadioName());
+        radioManufacturer = getCwRadioManufacturer(cwMemType);
+        rmList = vmData->getRigModel().split(' ');
+        if (rmList.length() == 2)
+        {
+            radioModel = rmList[1].remove('-');
+        }
+
     }
     else
     {
-       vmButtonDialog.setCwMessageTextBoxVisible(true);
+        vmButtonDialog.setRadioNameLbl("All Radios");
+        radioManufacturer = "AllRadios";
+
     }
+
+
+
+
+    vmButtonDialog.setWindowTitle(title);
+    vmButtonDialog.setVmData(vmData);
+    vmButtonDialog.setVmTypeLabelcwMemType(vmData->getRigModel());
+    vmButtonDialog.setCwInfoPanelVisible(true);
+
+    QString validCharCwList;
+    if (getRigCWKeyerSupportedCharacters(validCharCwList, radioManufacturer))
+    {
+        vmButtonDialog.setCwValidatorCwCharList(validCharCwList);
+    }
+    else
+    {
+        trace(QString("Error retrieving supported CW Chars for manufacturer %1").arg(radioManufacturer));
+    }
+
+
+    int maxNumChars = 0;
+    if (getRigCWKeyerMaxMessageLength(maxNumChars, radioManufacturer))
+    {
+        vmButtonDialog.setCwValidatorMaxCwMessageLength(maxNumChars);
+        vmButtonDialog.setMaxNumberCwCharactersText(maxNumChars);
+    }
+    else
+    {
+        trace(QString("Error retrieving max CW Message Length for manufacturer %1").arg(radioManufacturer));
+        vmButtonDialog.setMaxNumberCwCharactersText(0);
+    }
+
+    QStringList listOfRadioModels;
+    getRigCWKeyerListOfRadiosSupportSpecialCharacters(listOfRadioModels, radioManufacturer);
+
+    bool radioSupportSpecialChar = false;
+
+    if (!listOfRadioModels.isEmpty())
+    {
+        if (listOfRadioModels.contains(radioModel))
+        {
+            radioSupportSpecialChar = true;
+        }
+    }
+
+    vmButtonDialog.setCwSupportSpecialChar(radioSupportSpecialChar);
+
+    QMap<QString, QChar> specialCharMap;
+    if (radioSupportSpecialChar)
+    {
+        if (getRigCWKeyerSupportedSpecialCharacters(specialCharMap, radioManufacturer))
+        {
+            vmButtonDialog.setSpecialCwCharLists(specialCharMap);
+            vmButtonDialog.setCwSupportSpecialCharsGroupBoxVisible(true);
+        }
+
+
+    }
+    else
+    {
+        vmButtonDialog.setCwSupportSpecialCharsGroupBoxVisible(false);
+    }
+
+    vmButtonDialog.setSerialMessageTextBoxVisible(false);
+    vmButtonDialog.setCwCharInputValidator();
+
+    if (cwMemType == hamlibData::CW_MEMORY_TYPES::YAESU_MEM_RECALL
+        || cwMemType == hamlibData::CW_MEMORY_TYPES::KENWOOD_MEM_RECALL
+        || cwMemType == hamlibData::CW_MEMORY_TYPES::ELECRAFT
+        || cwMemType == hamlibData::CW_MEMORY_TYPES::ICOM)
+    {
+        vmButtonDialog.setCwMessageTextBoxVisible(true);
+    }
+
 
     vmButtonDialog.setDialogForCatPttEom(usePttForEom);
 
@@ -333,5 +481,15 @@ int RigControlCwMessageKeyer::editButton(VoiceKeyerParams *vmData, QString title
     return ret;
 
 }
+
+
+
+
+
+
+
+
+
+
 
 

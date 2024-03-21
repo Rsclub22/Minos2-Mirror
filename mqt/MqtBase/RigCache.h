@@ -55,6 +55,7 @@ public:
     void setVoiceMessageNum(const PubSubName &name, const QString &msgNum);
     void setStopVoiceMessage(const PubSubName &name, const QString &msg);
 
+    void setRigModel(const PubSubName &name, const QString &rigModel);
     void setRadioVolume(const PubSubName &name, const int level);
     void setLogVolume(const PubSubName &name, const int level);
     void setRadioMode(const PubSubName &name, const QString &mode);
@@ -92,8 +93,10 @@ public:
     void setPttOnOff(const PubSubName &name, bool onOff);
     void setVoiceMemAvail(const PubSubName &name, bool voiceMemAvail);
     void setNumVoiceMessages(const PubSubName &name, int numMessages);
-    void setCwMemAvail(const PubSubName &name, int cwType);
-    void setNumCwMessages(const PubSubName &name, int numMessages);
+    void setCwMemType(const PubSubName &name, int cwType);
+    void setRigVoiceKeyerSupportStopFlag(const PubSubName &name, bool supportStopCmd);
+    void setRigCwKeyerSupportStopFlag(const PubSubName &name, bool supportStopCmd);
+
     void setCwTxMessage(const PubSubName &name, const QString &msg);
 };
 

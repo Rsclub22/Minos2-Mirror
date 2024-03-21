@@ -18,13 +18,14 @@ public:
     virtual void sendMsgNum(int msgNum) override;
     virtual void stopMsg(VoiceKeyerParams *vkParam) override;
 
-    void sendCwMsg(QString message) override {Q_UNUSED(message)};
-    void stopCwMsg() override {};
-    void setCwMemType(int cwMemType) override {Q_UNUSED(cwMemType)};
-    bool getSetCwModeAndRestoreFlag() override {return false;};
+    void sendCwMsg(VoiceKeyerParams &vmParams) override {Q_UNUSED(vmParams)};
+    virtual void stopCwMsg() override {};
+    virtual void setCwMemType(int cwMemType) override {Q_UNUSED(cwMemType)};
+    virtual bool getSetCwModeAndRestoreFlag() override {return false;};
 
     virtual bool hasRecord() override{return true;}
     virtual void doRecording(VoiceKeyerParams *vkParam) override;
+
 
     //virtual bool hasTxStatus() const override
     //{

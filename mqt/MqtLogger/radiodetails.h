@@ -38,9 +38,14 @@ public:
     void setNumVoiceMessages(int numMsgs);
     int getNumVoiceMessages();
     void setCwMemType(int cwMemType);
-    void setNumCwMessages(int numMsgs);
-    int getNumCwMessages();
+    void setRigVoiceKeyerSupportStopCmd(bool supportStopCmd);
+    bool getRigVoiceKeyerSupportStopCmd();
+    void setRigCwKeyerSupportStopCmd(bool supportStopCmd);
+    bool getRigCwKeyerSupportStopCmd();
     int getCwMemType();
+    void setRigModel(QString _rigModel);
+    QString getRigModel();
+
 private:
 
 double transVerterOffset;
@@ -55,8 +60,10 @@ int pttType;
 bool voiceMemAvail;
 int numVoiceMessages;
 int cwMemType;
-int numCwMessages;
+bool rigVoiceKeyerSupportStopCmd;
+bool rigCwKeyerSupportStopCmd;
 QString bandList;
+QString rigModel;
 
 };
 

@@ -11,7 +11,8 @@ RadioDetails::RadioDetails()
   setRitEnableStatus(false);
   setRitMaxKHzFreq(MAX_RITFREQ);
   setCwMemType(hamlibData::CW_MEMORY_TYPES::NONE);
-
+  setRigVoiceKeyerSupportStopCmd(true);
+  setRigCwKeyerSupportStopCmd(true);
 
 }
 
@@ -129,13 +130,29 @@ int RadioDetails::getCwMemType()
 {
     return cwMemType;
 }
-void RadioDetails::setNumCwMessages(int numMsgs)
+void RadioDetails::setRigVoiceKeyerSupportStopCmd(bool supportStopCmd)
 {
-    numCwMessages = numMsgs;
+    rigVoiceKeyerSupportStopCmd = supportStopCmd;
 }
-int RadioDetails::getNumCwMessages()
+bool RadioDetails::getRigVoiceKeyerSupportStopCmd()
 {
-    return numCwMessages;
+    return rigVoiceKeyerSupportStopCmd;
+}
+void RadioDetails::setRigCwKeyerSupportStopCmd(bool supportStopCmd)
+{
+    rigCwKeyerSupportStopCmd = supportStopCmd;
+}
+bool RadioDetails::getRigCwKeyerSupportStopCmd()
+{
+    return rigCwKeyerSupportStopCmd;
+}
+void RadioDetails::setRigModel(QString _rigModel)
+{
+    rigModel = _rigModel;
+}
+QString RadioDetails::getRigModel()
+{
+    return rigModel;
 }
 
 

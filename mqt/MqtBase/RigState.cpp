@@ -15,6 +15,7 @@ RigState::RigState()
     _logVolLevel.setInitialValue(0);
     _pttState.setInitialValue(false);
     _setPttOnOff.setInitialValue(false);
+
 }
 
 RigState::RigState(QString s)
@@ -39,7 +40,7 @@ bool RigState::isDirty() const
             _logRitFreq.isDirty() ||
             _ritOnOffStatus.isDirty() ||
             _ritRadioStatus.isDirty() ||
-            _pttState.isDirty() ||
+            _pttState.isDirty() ||           
             _setPttOnOff.isDirty();
 }
 void RigState::clearDirty()
@@ -61,6 +62,7 @@ void RigState::clearDirty()
     _ritRadioStatus.clearDirty();
     _pttState.clearDirty();
     _setPttOnOff.clearDirty();
+
 }
 void RigState::setDirty()
 {
@@ -81,6 +83,7 @@ void RigState::setDirty()
     _ritRadioStatus.setDirty();
     _pttState.setDirty();
     _setPttOnOff.setDirty();
+
 }
 void RigState::setSelected(const QString &loggeruuid, const QString &selected)
 {
@@ -125,6 +128,7 @@ void RigState::setRadioMode(const QString &mode)
 {
     _radioMode.setValue(mode);
 }
+
 void RigState::setVoiceMessageNum(const QString msgNum)
 {
     _radioVoiceMessageNum.setValue(msgNum);
@@ -184,7 +188,8 @@ QString RigState::pack() const
     jv.insert(rpcConstants::rigRitOnOffStatus, ritOnOffStatus().getValue());
     jv.insert(rpcConstants::rigRitRadioStatus, ritRadioStatus().getValue());
     jv.insert(rpcConstants::rigPttState, pttState().getValue());
-    jv.insert(rpcConstants::rigPttOnOff, setPttOnOff().getValue());
+    jv.insert(rpcConstants::rigPttOnOff, getPttOnOff().getValue());
+
 
     QJsonDocument json(jv);
 
@@ -217,6 +222,7 @@ void RigState::unpack(QString s)
         _ritRadioStatus.setValue(json.object().value(rpcConstants::rigRitRadioStatus).toBool());
         _pttState.setValue(json.object().value(rpcConstants::rigPttState).toBool());
         _setPttOnOff.setValue(json.object().value(rpcConstants::rigPttOnOff).toBool());
+
     }
     else
     {
@@ -270,7 +276,6 @@ MinosStringItem<QString> RigState::logMode() const
     return _logMode;
 }
 
-
 MinosItem<ShortFreq> RigState::radioRitFreq() const
 {
     return _radioRitFreq;
@@ -309,7 +314,7 @@ MinosItem<bool> RigState::pttState() const
 {
     return _pttState;
 }
-MinosItem<bool> RigState::setPttOnOff() const
+MinosItem<bool> RigState::getPttOnOff() const
 {
     return _setPttOnOff;
 }

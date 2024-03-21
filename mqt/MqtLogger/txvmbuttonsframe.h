@@ -49,7 +49,7 @@ private slots:
     void memoryShortCutSelected();
     void readActionSelected();
     void editActionSelected();
-    void writeActionSelected();
+    void newActionSelected();
     void buttonSelected();
 signals:
 
@@ -76,7 +76,7 @@ public:
     void readActionSel(int buttonNumber);
     void readActionSelected(int buttonNumber);
     void editActionSelected(int buttonNumber);
-    void writeActionSelected(int buttonNumber);
+    void newActionSelected(int buttonNumber);
 
     void setPttEnabled(bool state, PubSubName psn);
 
@@ -84,8 +84,12 @@ public:
     void setVoiceMemAvail(bool avail, PubSubName psn);
     void setNumVoiceMessages(int numMsgs, PubSubName psn);
     void setCwMemType(int cwMemType, PubSubName psn);
-    void setNumCwMessages(int numMsgs, PubSubName psn);
+    void setRigVoiceKeyerSupportStopFlag(bool supportStopCmd, PubSubName psn);
+    bool getRigVoiceKeyerSupportStopFlag(PubSubName psn);
+    void setRigCwKeyerSupportStopFlag(bool supportStopCmd, PubSubName psn);
+    bool getRigCwKeyerSupportStopFlag(PubSubName psn);
     void setPttState(bool state);
+    void setRigModel(QString rigModel, PubSubName psn);
 
     void setSelectedRadio(PubSubName selectedRadio);
     void setRadioIsConnected(bool connected);
@@ -158,7 +162,7 @@ private:
     void turnOffVMButton();
 
 
-    void updateVoiceMemAvailStateAndCwType();
+    void updateFrameState();
     void setTXStatusVisible(bool visible);
     void sendModeToRadio(const QString m);
     void setSaveButtonByRadionameText(QString selectedRadioName);
@@ -168,6 +172,8 @@ private:
     int getNumCwMessages(PubSubName psn);
     int getNumVoiceMessages(PubSubName psn);
     int getRadioUserSavedNumberOfButtons(QString selectedRadioName);
+    QString getRigModel(PubSubName psn);
+
 private slots:
 
     void onVoiceKeyerSelect(int idx);

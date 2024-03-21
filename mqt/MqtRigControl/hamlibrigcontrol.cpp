@@ -937,6 +937,7 @@ int HamlibRigControl::setPtt(VFO vfo, bool state)
 {
 
     ptt_t pttState;
+
     if (state)
     {
         pttState = RIG_PTT_ON;

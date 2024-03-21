@@ -670,6 +670,14 @@ void TSendDM::notifyRigDetailChanges()
                     tslf->onSetPttType(selDetail.pttType().getValue(), psn);
                 }
             }
+            if (selDetail.rigModel().isDirty())
+            {
+                for (int i = 0; i < frames.size(); i++)
+                {
+                    TSingleLogFrame *tslf = frames[i];
+                    tslf->onSetRigModel(selDetail.rigModel().getValue(), psn);
+                }
+            }
             if (selDetail.voiceMemAvail().isDirty())
             {
                 for (int i = 0; i < frames.size(); i++)
@@ -694,12 +702,20 @@ void TSendDM::notifyRigDetailChanges()
                     tslf->onSetCwMemType(selDetail.cwMemType().getValue(), psn);
                 }
             }
-            if (selDetail.numCwMessages().isDirty())
+            if (selDetail.rigVoiceKeyerMessageSupportStop().isDirty())
             {
                 for (int i = 0; i < frames.size(); i++)
                 {
                     TSingleLogFrame *tslf = frames[i];
-                    tslf->onSetNumCwMessages(selDetail.numCwMessages().getValue(), psn);
+                    tslf->onRigVoiceKeyerMessageSupportStop(selDetail.rigVoiceKeyerMessageSupportStop().getValue(), psn);
+                }
+            }
+            if (selDetail.rigCwKeyerMessageSupportStop().isDirty())
+            {
+                for (int i = 0; i < frames.size(); i++)
+                {
+                    TSingleLogFrame *tslf = frames[i];
+                    tslf->onRigCwKeyerMessageSupportStop(selDetail.rigCwKeyerMessageSupportStop().getValue(), psn);
                 }
             }
 

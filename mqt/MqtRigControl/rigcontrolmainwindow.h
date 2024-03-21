@@ -303,11 +303,11 @@ private:
 
     bool hamlibOk = false;
 
-
-
     bool radioCommsOK = false;
 
+
     bool ritTestEnabled = false; // for test....
+    QTimer *cwMessageTestTimer;
 
 
     //SerialTVSwitch *serialTVSw = nullptr;
@@ -438,7 +438,7 @@ private:
 
     void clearTransVertSupport();
 
-    bool readTestStandAloneFlag();
+    //bool readTestStandAloneFlag();
     //void buildSupBandList(int radioIdx, int radioModelNumber, QStringList &bandList);
     void buildSupportedRadioBands(int radioIdx, int radioModelNumber, QStringList& supBandList);
     bool findSupRadioBand(const QString band, const QStringList& supBandsList);
@@ -520,8 +520,9 @@ private:
     void setupTransVerter();
     void addVoiceMemStatusToRigCache(bool status);
     void addVoiceNumberMessagesToRigCache(int numMessages);
-    void addCwKeyerMemoryStatusToRigCache(int cwMemType);
-    void addCwKeyerNumberMessagesToRigCache(int numMessages);
+    void addCwKeyerTypeToRigCache(int cwMemType);
+    void addCwKeyerSupportStopCmdToRigCache(bool supportStopCmd);
+    void addVoiceKeyerSupportStopCmdToRigCache(bool supportStopCmd);
     void addPTTEnabledStatusToRigCache(bool status);
     QString getRigCtldExePath();
     QString getRigCtldExeName();
@@ -554,6 +555,8 @@ private:
 
 
 
+    bool isTestCwMessageRunning();
+    void addRigModelToRigCache(QString rigModel);
 private slots:
 
     void onStdInRead(QString);
@@ -623,6 +626,7 @@ private slots:
     void on_testRadioButton_clicked();
 
     void on_traceDataComms_stateChanged(int arg1);
+    void onCWMessageTimerTimeout();
 };
 
 extern RigControlMainWindow *mainWindow;

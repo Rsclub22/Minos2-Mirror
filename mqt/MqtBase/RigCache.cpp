@@ -317,6 +317,10 @@ void RigCache::setVolumeStatus(const PubSubName &name, bool volumeStatus)
 {
     rigDetails[name].setVolumeStatus(volumeStatus);
 }
+void RigCache::setRigModel(const PubSubName &name, const QString &rigModel)
+{
+    rigDetails[name].setRigModel(rigModel);
+}
 
 void RigCache::setBandList(const PubSubName &name, const QString &bands)
 {
@@ -372,13 +376,17 @@ void RigCache::setNumVoiceMessages(const PubSubName &name, int numMessages)
 {
     rigDetails[name].setNumVoiceMessages(numMessages);
 }
-void RigCache::setCwMemAvail(const PubSubName &name, int cwMemType)
+void RigCache::setCwMemType(const PubSubName &name, int cwMemType)
 {
     rigDetails[name].setCwMemType(cwMemType);
 }
-void RigCache::setNumCwMessages(const PubSubName &name, int numMessages)
+void RigCache::setRigVoiceKeyerSupportStopFlag(const PubSubName &name, bool supportStopCmd)
 {
-    rigDetails[name].setNumCweMessages(numMessages);
+    rigDetails[name].setRigVoiceKeyerMessageSupportStop(supportStopCmd);
+}
+void RigCache::setRigCwKeyerSupportStopFlag(const PubSubName &name, bool supportStopCmd)
+{
+    rigDetails[name].setRigCwKeyerMessageSupportStop(supportStopCmd);
 }
 void RigCache::publishState()
 {

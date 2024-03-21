@@ -1,11 +1,17 @@
 #include <QMessageBox>
 #include <QSettings>
+#include "MTrace.h"
 #include "regsettings.h"
 #include "txvmrigbuttondialog.h"
 #include "ui_txvmrigbuttondialog.h"
-#include "rigcontrolcommonconstants.h"
+#include "voicekeyerCommonConstants.h"
+
+#include <QDebug>
+
+
 
 const int MAX_CW_MESSAGE_LENGTH = 30;
+
 
 TxVmRigButtonDialog::TxVmRigButtonDialog(QWidget *parent) :
     QDialog(parent),
@@ -23,6 +29,7 @@ TxVmRigButtonDialog::TxVmRigButtonDialog(QWidget *parent) :
     connect(ui->buttonBox, &QDialogButtonBox::accepted, this, &TxVmRigButtonDialog::on_okButtonClicked);
     connect(ui->buttonBox, &QDialogButtonBox::rejected, this, &TxVmRigButtonDialog::on_cancelbuttonClicked);
     connect(ui->txCwMessageLineEdit, &QLineEdit::editingFinished, this, &TxVmRigButtonDialog::on_txCwMessageEditingFinshed);
+    connect(ui->txCwMessageLineEdit, &QLineEdit::cursorPositionChanged, this, &TxVmRigButtonDialog::onCwMessageCursorChanged);
     connect(ui->txSerialMessageLineEdit, &QLineEdit::editingFinished, this, &TxVmRigButtonDialog::on_txSerialMessageEditingFinshed);
     connect(ui->txVmRepeatPauseDur , &QLineEdit::editingFinished, this, &TxVmRigButtonDialog::onVmRepeatPauseDurEditingFinished);
     connect(ui->txVmMessageDur , &QLineEdit::editingFinished, this, &TxVmRigButtonDialog::onVmMessageDurEditingFinished);
@@ -61,20 +68,97 @@ void TxVmRigButtonDialog::setSerialMessageTextBoxVisible(bool visible)
     ui->serialMessageLabel->setVisible(visible);
 }
 
-// This will overwrite the label with cwMemType
-void TxVmRigButtonDialog::setVmTypeLabelcwMemType(int cwMemType)
+
+void TxVmRigButtonDialog::setCwValidatorCwCharList(QString validCwCharList)
 {
-    QString type;
-    if (cwMemType == hamlibData::CW_MEMORY_TYPES::ICOM)
+    validCwCharacterList = validCwCharList;
+    populateInfoPanelSupportedCwChars(validCwCharacterList);
+}
+
+
+
+void TxVmRigButtonDialog::populateInfoPanelSupportedCwChars(QString validCwCharList)
+{
+    QString alpha;
+    QString nonAlpha;
+
+    foreach (const QChar cwChar, validCwCharList)
     {
-        type = "Icom";
-    }
-    else if (cwMemType == hamlibData::CW_MEMORY_TYPES::YAESU_MEM_RECALL)
-    {
-        type = "Yaesu";
+        if (cwChar.isLetter())
+        {
+            alpha.append(cwChar);
+        }
+        else
+        {
+            nonAlpha.append(cwChar);
+        }
+
     }
 
-    ui->txVmTypeLbl->setText(QString("%1 - %2").arg(vmData->getType(), type ));
+
+    ui->listOfSupportedCwCharsLabel->setText(alpha + "\n" + nonAlpha);
+
+}
+
+void TxVmRigButtonDialog::populateInfoPanelSupportedSpecialChars()
+{
+    if (supportSpecialCwChars)
+    {
+        ui->listOfSupportedCwSpecialCharsLabel->setVisible(true);
+        QString displayText = supportedCwSpecialCharsList.join(',');
+        ui->listOfSupportedCwSpecialCharsLabel->setText(displayText);
+    }
+    else
+    {
+        ui->listOfSupportedCwSpecialCharsLabel->setVisible(false);
+
+    }
+}
+
+void TxVmRigButtonDialog::setMaxNumberCwCharactersText(int maxNumCwChars)
+{
+    ui->maxNumCwCharsTxt->setText(QString::number(maxNumCwChars));
+}
+
+void TxVmRigButtonDialog::setCwSupportCharsGroupBoxVisible(bool visible)
+{
+    ui->supportedCwCharsGroupBox->setVisible(visible);
+}
+
+void TxVmRigButtonDialog::setCwSupportSpecialCharsGroupBoxVisible(bool visible)
+{
+     ui->supportedSpecialCwCharsGroupBox->setVisible(visible);
+}
+
+void TxVmRigButtonDialog::setCwInfoPanelVisible(bool visible)
+{
+    ui->cwInfoFrame->setVisible(visible);
+    ui->cwCharacterInfoSupportLine->setVisible(visible);
+}
+
+
+void TxVmRigButtonDialog::setCwValidatorMaxCwMessageLength(int maxNumChars)
+{
+    maximumNumCwChars = maxNumChars;
+}
+
+
+
+void TxVmRigButtonDialog::setCwSupportSpecialChar(bool radioSupportSpecialChar)
+{
+    supportSpecialCwChars = radioSupportSpecialChar;
+}
+
+void TxVmRigButtonDialog::setSpecialCwCharLists(QMap<QString, QChar> &specialCharMap)
+{
+    supportedCwSpecialCharsList = specialCharMap.keys();
+    populateInfoPanelSupportedSpecialChars();   // for display
+}
+
+// This will overwrite the label with cwMemType and radio manufacturer and model name
+void TxVmRigButtonDialog::setVmTypeLabelcwMemType(QString radioModel)
+{
+    ui->txVmTypeLbl->setText(QString("%1 - %2").arg(vmData->getType()).arg(radioModel));
 }
 
 
@@ -177,6 +261,54 @@ void TxVmRigButtonDialog::on_okButtonClicked()
         return;
     }
 
+    QString input = ui->txCwMessageLineEdit->text();
+    bool specialCharPresent = false;
+    bool allSpecialCharOK = false;
+    QStringList specialCharErrorList;
+
+    int currentIndex = input.indexOf(voiceKeyerCommon::specialCwCharEscapeChar);
+    while (currentIndex != -1)
+    {
+        specialCharPresent = true;
+
+        QString spChar = input.mid(currentIndex + 1, 2);
+        if (supportedCwSpecialCharsList.contains(spChar))
+        {
+            allSpecialCharOK = true;
+        }
+        else
+        {
+            allSpecialCharOK = false;
+            spChar = voiceKeyerCommon::specialCwCharEscapeChar + spChar;
+            specialCharErrorList.append(spChar);
+        }
+
+        currentIndex = input.indexOf(voiceKeyerCommon::specialCwCharEscapeChar, currentIndex + 1);
+
+    }
+
+    if (specialCharPresent)
+    {
+        if (allSpecialCharOK)
+        {
+            trace(QString("Special CW character in message OK"));
+        }
+        else
+        {
+            trace(QString("Error in special CW character in message %1").arg(specialCharErrorList.join(',')));
+            QMessageBox msgBox;
+            msgBox.setText(tr("%1 Special Characters ").arg(tr("Invalid")));
+            msgBox.setInformativeText(tr("These special characters are invalid for this radio: %1\nPlease edit or remove").arg(specialCharErrorList.join(',')));
+            msgBox.exec();
+            return;
+
+        }
+    }
+
+
+
+
+
     QString name = ui->txVmNameEdit->text();
     vmData->setVmName(name);
     vmData->setVmCwMessage(ui->txCwMessageLineEdit->text());
@@ -192,4 +324,62 @@ void TxVmRigButtonDialog::on_cancelbuttonClicked()
 {
     reject();
 }
+
+void TxVmRigButtonDialog::setCwCharInputValidator()
+{
+    cwCharValidator.setValidCwCharStr(validCwCharacterList + voiceKeyerCommon::specialCwCharEscapeChar);
+    cwCharValidator.setMaxNumCwChars(maximumNumCwChars);
+    //cwCharValidator.setSupportedSpecialChars(supportedCwSpecialCharsList);
+    ui->txCwMessageLineEdit->setValidator(&cwCharValidator);
+}
+
+void TxVmRigButtonDialog::onCwMessageCursorChanged()
+{
+    int length = ui->txCwMessageLineEdit->text().length();
+    ui->cwMsgLengthLabel->setText(QString::number(length));
+}
+
+
+
+/*
+   CW Message line input validator
+*/
+
+
+CWRigKeyerValidator::CWRigKeyerValidator(QObject* parent) : QValidator(parent)
+{
+
+}
+
+QValidator::State CWRigKeyerValidator::validate(QString & input, int &/*pos*/) const
+{
+
+    input = input.toUpper();
+
+    if (input.length() <= maxNumChars && validCwCharStr.contains(input.right(1)))
+    {
+        return Acceptable;
+    }
+
+
+    return Invalid;
+
+
+}
+
+
+
+void CWRigKeyerValidator::setValidCwCharStr(const QString cwValidCharStr_)
+{
+    validCwCharStr = cwValidCharStr_;
+}
+
+
+
+void CWRigKeyerValidator::setMaxNumCwChars(int maxNumChars_)
+{
+    maxNumChars = maxNumChars_;
+}
+
+
 
