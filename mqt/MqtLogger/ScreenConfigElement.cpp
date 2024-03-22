@@ -337,16 +337,18 @@ void ScreenConfigElement::removeRow(ScreenConfigRow *r)
 void ScreenConfigElement::addRowAfter(ScreenConfigRow *r)
 {
     int pos = 0;
+    int offset = 0;
     for (int i = 0; i < vbl->count(); i++)
     {
         if (vbl->itemAt(i)->widget() == r)
         {
             pos = i;
+            offset = 1;
             break;
         }
     }
     ScreenConfigRow *baseRow = new ScreenConfigRow(this);
-    vbl->insertWidget( pos + 1, baseRow);
+    vbl->insertWidget( pos + offset, baseRow);
     baseRow->addLeft(nullptr);
 
     screenConfigDialog->curScreen->checkAddButtons();

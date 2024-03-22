@@ -23,6 +23,10 @@ ScreenContact::ScreenContact(const ScreenContact &ct) : CheckableContact()
     // probably never used
     *this = ct;
 }
+ScreenContact &ScreenContact::operator =(const ScreenContact &)
+{
+    return *this;
+}
 void ScreenContact::initialise(BaseContestLog *ct , bool initReport)
 {
     contest = ct;

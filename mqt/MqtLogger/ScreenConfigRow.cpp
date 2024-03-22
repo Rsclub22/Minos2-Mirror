@@ -145,16 +145,18 @@ void ScreenConfigRow::unsplit()
 ScreenConfigElement *ScreenConfigRow::addRight(ScreenConfigElement *e)
 {
     int pos = 0;
+    int offset = 0;
     for (int i = 0; i < hbl->count(); i++)
     {
         if (hbl->itemAt(i)->widget() == e)
         {
             pos = i;
+            offset = 1;
             break;
         }
     }
     ScreenConfigElement *baseElement = new ScreenConfigElement(this);
-    hbl->insertWidget( pos + 1, baseElement);
+    hbl->insertWidget( pos + offset, baseElement);
 
     return baseElement;
 }

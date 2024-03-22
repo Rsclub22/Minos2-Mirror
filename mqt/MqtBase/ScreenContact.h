@@ -18,6 +18,8 @@ class ScreenContact: public CheckableContact
       ScreenContact();
       virtual ~ScreenContact();
       ScreenContact(const ScreenContact &ct);   // probably never used
+      ScreenContact& operator =(const ScreenContact &);
+
       virtual void copyFromArg(QSharedPointer<BaseContact> );   // this MIGHT just get used for dummy, for ops
       virtual void copyFromArg( ScreenContact & );    // used for partialSave
       void checkScreenContact( );
