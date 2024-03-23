@@ -7,6 +7,8 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 //---------------------------------------------------------------------------
+#include "QtUtils.h"
+
 #include "XMPPRPCParams.h"
 #include "XMPPEvents.h"
 #include "tinyxml.h"
@@ -811,7 +813,7 @@ TiXmlElement *RPCArgs::makeParamsNode( )
 {
    TiXmlElement * pNode = new TiXmlElement( "params" );
 
-   for ( auto const &i: qAsConst(args ))
+   for ( auto const &i: QASCONST(args ))
    {
       i->addParam( *pNode );
    }
@@ -896,7 +898,7 @@ QString RPCArgs::PrintArgs()
 {
    QString s;
 
-   for ( auto const &i: qAsConst(args ))
+   for ( auto const &i: QASCONST(args ))
    {
       s += i->print();
    }

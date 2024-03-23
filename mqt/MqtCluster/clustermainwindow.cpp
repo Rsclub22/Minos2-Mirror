@@ -1330,7 +1330,7 @@ void ClusterMainWindow::handleResendSpotToClientsCmds()
 QString ClusterMainWindow::getBandType(QString band)
 {
 
-    for (const auto &b: qAsConst(bands))
+    for (const auto &b: QASCONST(bands))
     {
         if (b->uk == band)
         {
@@ -2549,7 +2549,7 @@ void ClusterMainWindow::initFilterCheckBoxs()
     int mwRow = 0;
     int mwCol = 0;
 
-    for (auto const &b: qAsConst(bands))
+    for (auto const &b: QASCONST(bands))
     {
         QCheckBox *cb = new QCheckBox();
         connect(cb, &QCheckBox::clicked, this, [=]() {onbandCheckBoxStateChanged();});
@@ -2606,7 +2606,7 @@ void ClusterMainWindow::initFilterCheckBoxs()
 
 void ClusterMainWindow::loadBandFilterSettingsToTab()
 {
-    for (const auto &b: qAsConst(bands))
+    for (const auto &b: QASCONST(bands))
     {
         QString band = b->uk;
 
@@ -2620,7 +2620,7 @@ void ClusterMainWindow::saveBandFilterSettings()
     QSettings config(CLUSTER_SETTINGS_FILE(), QSettings::IniFormat);
     config.beginGroup("DXSPOT_Display_BandFilter");
 
-    for (auto const &b: qAsConst(bands))
+    for (auto const &b: QASCONST(bands))
     {
         QString band = b->name();
         QString iniBandName = b->normalisedName();
@@ -2645,7 +2645,7 @@ void ClusterMainWindow::readBandFilterSettings()
 {
     QSettings config(CLUSTER_SETTINGS_FILE(), QSettings::IniFormat);
     config.beginGroup("DXSPOT_Display_BandFilter");
-    for (auto const &b: qAsConst(bands))
+    for (auto const &b: QASCONST(bands))
     {
         QString band = b->uk;
         QString iniBandName = b->normalisedName();
@@ -2710,7 +2710,7 @@ void ClusterMainWindow::readStartEndScriptSettings()
 void ClusterMainWindow::setHfFilterControlsVisible()
 {
 
-    for (const auto &b: qAsConst(bands))
+    for (const auto &b: QASCONST(bands))
     {
         if (b->getType() == HF_BANDTYPE)
         {
@@ -2759,7 +2759,7 @@ void ClusterMainWindow::saveBandFilterOnSaveFlag()
 void ClusterMainWindow::onbandCheckBoxStateChanged( )
 {
     bool changed = false;
-    for (const auto &b: qAsConst(bands))
+    for (const auto &b: QASCONST(bands))
     {
         QString band = b->uk;
 
@@ -2797,7 +2797,7 @@ void ClusterMainWindow::onHfSelectBandPbPressed()
 
 void ClusterMainWindow::setAllHFBandsFilter(bool state)
 {
-    for (const auto &b: qAsConst(bands))
+    for (const auto &b: QASCONST(bands))
     {
         if (b->getType() == HF_BANDTYPE)
         {
@@ -2824,7 +2824,7 @@ void ClusterMainWindow::setBandsCheckBoxAndFilterFlag(const QString band, const 
 
 bool ClusterMainWindow::areAnyBandsChecked(QString bandType)
 {
-    for (const auto &b: qAsConst(bands))
+    for (const auto &b: QASCONST(bands))
     {
         if (b->getType() == bandType)
         {
@@ -2856,7 +2856,7 @@ void ClusterMainWindow::onVhfSelectBandPbPressed()
 
 void ClusterMainWindow::setAllVHFBandsFilter(bool state)
 {
-    for (const auto &b: qAsConst(bands))
+    for (const auto &b: QASCONST(bands))
     {
         if (b->getType() == VHF_BANDTYPE)
         {
@@ -2886,7 +2886,7 @@ void ClusterMainWindow::onUhfSelectBandPbPressed()
 
 void ClusterMainWindow::setAllUHFBandsFilter(bool state)
 {
-    for (const auto &b: qAsConst(bands))
+    for (const auto &b: QASCONST(bands))
     {
         if (b->getType() == MW_BANDTYPE)
         {

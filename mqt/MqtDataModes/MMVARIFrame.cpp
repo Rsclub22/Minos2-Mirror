@@ -1,6 +1,7 @@
 #include <QMenuBar>
 #include <QMenu>
 #include <QSplitter>
+#include "QtUtils.h"
 #include "MTrace.h"
 #include "rigcontrolcommonconstants.h"
 #include "rxbuffer.h"
@@ -516,7 +517,7 @@ void MMVARIFrame::OnRxChar(int /*rxChannel*/, QString strChar, int /*wChar*/)
 //      so you could use either of them as you like.
 
     trace(QString("RX chars %1 mark %2").arg(strChar).arg(markfreq));
-    for (const auto &c:qAsConst(strChar))
+    for (const auto &c:QASCONST(strChar))
     {
         RXChar rxch(c, 0, markfreq);
         engineWindow->rxBuff.addChar(rxch);

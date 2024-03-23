@@ -7,9 +7,10 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 #include <QDateTime>
+#include <QTextStream>
+#include "QtUtils.h"
 
 #include "fileutils.h"
-#include "MLogFile.h"
 #include "INIFile.h"
 #include "MShowMessageDlg.h"
 
@@ -100,7 +101,7 @@ INISection::INISection( INIFile *cb, const QString &name, bool valid )
 INISection::~INISection()
 {
     // delete all entries
-    for ( auto const &this_ent: qAsConst(entries))
+    for ( auto const &this_ent: QASCONST(entries))
     {
         delete this_ent ;
     }
@@ -116,7 +117,7 @@ bool INISection::isDirty( )
     if ( sectDirty )
         return true;
 
-    for ( auto const &thisEntry: qAsConst(entries))
+    for ( auto const &thisEntry: QASCONST(entries))
     {
         if ( thisEntry->isDirty() )
             return true;
@@ -126,7 +127,7 @@ bool INISection::isDirty( )
 void INISection::setClean( )
 {
     //walk all sections and set each clean
-    for ( auto const &thisEntry: qAsConst(entries))
+    for ( auto const &thisEntry: QASCONST(entries))
     {
         thisEntry->setClean();
     }
@@ -188,7 +189,7 @@ INIFile::~INIFile()
 {
     writePrivateProfileString( "", "", "" );
     // delete all sections
-    for ( auto const &thisSect: qAsConst(sections ))
+    for ( auto const &thisSect: QASCONST(sections ))
     {
         delete thisSect;
     }
@@ -205,7 +206,7 @@ bool INIFile::dupSection( const QString &oldname, const QString &newname )
         {
             INISection * oldsect = ( *thisSect );
             INISection *newsect = new INISection( this, newname, true );
-            for ( auto const &this_ent: qAsConst(oldsect->entries ))
+            for ( auto const &this_ent: QASCONST(oldsect->entries ))
             {
                 INIEntry *i = this_ent;
                 QString n = i->name;
@@ -243,7 +244,7 @@ bool INIFile::isDirty( )
     if ( fileDirty )
         return true;
 
-    for ( auto const &thisSect: qAsConst(sections ))
+    for ( auto const &thisSect: QASCONST(sections ))
     {
         if ( thisSect->isDirty() )
             return true;
@@ -253,7 +254,7 @@ bool INIFile::isDirty( )
 void INIFile::setClean( )
 {
     //walk all sections and set each clean
-    for ( auto const &thisSect: qAsConst(sections ))
+    for ( auto const &thisSect: QASCONST(sections ))
     {
         thisSect->setClean();
     }
@@ -275,7 +276,7 @@ bool INIFile::writeINIFile()
 
     QTextStream out(&inf);
 
-    for ( auto const &thisSect: qAsConst(sections ))
+    for ( auto const &thisSect: QASCONST(sections ))
     {
         const QString sname = thisSect->name;
 
@@ -285,7 +286,7 @@ bool INIFile::writeINIFile()
             out << s;
         }
 
-        for ( auto const &this_entry: qAsConst(thisSect ->entries ))
+        for ( auto const &this_entry: QASCONST(thisSect ->entries ))
         {
             const QString name = this_entry->name;
             const QString val = this_entry->getValue();
@@ -337,7 +338,7 @@ void INIFile::loadINIFile()
             return;			// no change, so don't re-read
 //        writePrivateProfileString( "", "", "" );    // this could overwrite anyone elses changes if we are dirty
 //                                                    // if we aren't dirty, it doesn't do anything
-        for ( auto const &thisSect: qAsConst(sections ))
+        for ( auto const &thisSect: QASCONST(sections ))
         {
             delete thisSect;
         }
@@ -438,7 +439,7 @@ int INIFile::getPrivateProfileList( const QString &Section,
         if ( Entry.isEmpty() )
         {
             /* build list of entry names in buffer */
-            for ( auto const &this_entry: qAsConst((*thisSect)->entries ))
+            for ( auto const &this_entry: QASCONST((*thisSect)->entries ))
             {
                 if ( this_entry->isValidEntry() )
                 {
@@ -564,7 +565,7 @@ bool INIFile::writePrivateProfileString(const QString &Section,
     {
         if ( thisSect != sections.end() )
         {
-            for ( auto const &this_ent: qAsConst((*thisSect)->entries ))
+            for ( auto const &this_ent: QASCONST((*thisSect)->entries ))
             {
                 delete this_ent;
             }
@@ -639,7 +640,7 @@ QStringList INIFile::getSections( )
 {
     loadINIFile();
     QStringList slist;
-    for ( auto const &thisSect: qAsConst(sections ))
+    for ( auto const &thisSect: QASCONST(sections ))
     {
         if ( thisSect->isValidSection() )
         {

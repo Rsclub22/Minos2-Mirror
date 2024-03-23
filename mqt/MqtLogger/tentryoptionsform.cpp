@@ -245,7 +245,7 @@ void TEntryOptionsForm::getContestOperators()
 {
     OperatorList operators;
 
-    for ( auto const &op: qAsConst(ct->oplist ))
+    for ( auto const &op: QASCONST(ct->oplist ))
     {
         operators.insert(op, op);
     }

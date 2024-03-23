@@ -2,6 +2,7 @@
 #include <QScrollBar>
 #include <QSettings>
 
+#include "QtUtils.h"
 #include "regsettings.h"
 #include "MShowMessageDlg.h"
 #include "StartConfig.h"
@@ -40,7 +41,7 @@ StartConfig::StartConfig(QWidget *parent, bool showAutoStart, QString curName) :
     elementFrames.clear();
 
 //    int offset = 0;
-    for (auto const &c:  qAsConst(minosConfig->configs[curConfigName].elelist))
+    for (auto const &c:  QASCONST(minosConfig->configs[curConfigName].elelist))
     {
         if (c->deleted)
             continue;
@@ -105,7 +106,7 @@ void StartConfig::checkEnabled()
     ui->StartButton->setEnabled(!running);
     ui->SetButton->setEnabled(!running);
     ui->StationIdEdit->setEnabled(!running);
-    for (auto const &e: qAsConst(elementFrames))
+    for (auto const &e: QASCONST(elementFrames))
     {
         e->setEnabled(!running);
     }
@@ -193,7 +194,7 @@ void StartConfig::on_SetButton_clicked()
 
 void StartConfig::copyFromScreen()
 {
-    for (auto const &e: qAsConst(elementFrames))
+    for (auto const &e: QASCONST(elementFrames))
     {
         e->saveElement();
     }

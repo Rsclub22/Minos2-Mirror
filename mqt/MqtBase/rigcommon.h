@@ -13,6 +13,7 @@
 #define RIGCOMMON_H
 
 #include <QComboBox>
+#include "QtUtils.h"
 #include "BandList.h"
 #include "rigcontrolcommonconstants.h"
 
@@ -95,7 +96,7 @@ public:
 
         BandList::getBandList().loadAllBands(bands);
 
-        for (const auto &b: qAsConst(bands))
+        for (const auto &b: QASCONST(bands))
         {
 
             supportBands.insert(b->name(), false);
@@ -106,7 +107,7 @@ public:
     SupportBands& operator=(const SupportBands &sbd)
     {
 
-        for (const auto &b: qAsConst(bands))
+        for (const auto &b: QASCONST(bands))
         {
             supportBands.insert(b->name(), sbd.getSupportBandFlag(b->name()));
         }
@@ -128,7 +129,7 @@ public:
 
     void clear()
     {
-        for (const auto &b: qAsConst(bands))
+        for (const auto &b: QASCONST(bands))
         {
             supportBands.insert(b->name(), false);
         }

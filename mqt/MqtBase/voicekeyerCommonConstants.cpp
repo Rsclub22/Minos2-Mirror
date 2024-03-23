@@ -1,10 +1,8 @@
 #include <QSettings>
+#include "QtUtils.h"
 #include "voicekeyerCommonConstants.h"
 #include "AppStartup.h"
 #include "rigcontrolcommonconstants.h"
-
-
-
 
 using namespace voiceKeyerCommon;
 
@@ -46,7 +44,7 @@ void getListOfRadioNamesForMemoryButtons(QStringList &radioNames, VoiceKeyerId i
 
     QStringList voiceMemoryKeys = config.childGroups();
 
-    for (const auto &name: qAsConst(voiceMemoryKeys))
+    for (const auto &name: QASCONST(voiceMemoryKeys))
     {
         if (name != ALL_RADIOS_GROUP_NAME)
         {

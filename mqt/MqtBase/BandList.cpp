@@ -19,6 +19,7 @@
     
 ======================================================================================*/
 #include <QSharedPointer>
+#include "QtUtils.h"
 
 #include "AppStartup.h"
 #include "INIFile.h"
@@ -110,7 +111,7 @@ QString ModeInfo::getType() const
 
 bool ModeInfo::isFreqOK(const Frequency &f, bool &excludedFreq)
 {
-    for(const auto &exc:qAsConst(exclusions))
+    for(const auto &exc:QASCONST(exclusions))
     {
         if (f >= exc->fExcLow && f <= exc->fExcHigh )
         {
@@ -351,7 +352,7 @@ bool BandList::parseBand ( TiXmlElement * e )
     {
         band->fcLow = band->fHigh;
         band->fcHigh = band->fLow;
-        for (const auto &mi:qAsConst(band->modes))
+        for (const auto &mi:QASCONST(band->modes))
         {
             if (mi->fcLow1 < band->fcLow)
             {
@@ -487,7 +488,7 @@ bool BandList::findBand ( const QString &psfreq, QSharedPointer<BandInfo> &bi )
     Frequency dvhffreq(ifreq * 1000000);
     Frequency dmwvfreq(ifreq * 1000000000);
 
-    for ( auto const &b: qAsConst(bandList ))
+    for ( auto const &b: QASCONST(bandList ))
     {
         if (
                 sfreq.compare(b->uk ) == 0
@@ -501,7 +502,7 @@ bool BandList::findBand ( const QString &psfreq, QSharedPointer<BandInfo> &bi )
             return true;
         }
     }
-    for ( auto const &b: qAsConst(bandList ))
+    for ( auto const &b: QASCONST(bandList ))
     {
         QString bandType = b->getType();
         Frequency bfhigh = b->fHigh;
@@ -539,7 +540,7 @@ bool BandList::findBand ( const QString &psfreq, QSharedPointer<BandInfo> &bi )
                     }
                 }
     }
-    for ( auto const &b: qAsConst(bandList ))
+    for ( auto const &b: QASCONST(bandList ))
     {
         // find in string isn't a massively good idea! But we are doing it after everything else has failed
         if ( b->uk.indexOf ( sfreq ) != -1
@@ -559,7 +560,7 @@ bool BandList::findBand ( const QString &psfreq, QSharedPointer<BandInfo> &bi )
 
 bool BandList::findBand(const Frequency &freq, QSharedPointer<BandInfo> &bi)
 {
-   for ( auto const &b: qAsConst(bandList ))
+   for ( auto const &b: QASCONST(bandList ))
    {
       if (b->fLow <= freq && b->fHigh >= freq)
       {
@@ -587,7 +588,7 @@ bool BandList::loadAllBands(QVector<QSharedPointer<BandInfo> > &bands, bool filt
 {
     bool filtret = false;
     bands.clear();
-    for ( auto const &b: qAsConst(bandList ))
+    for ( auto const &b: QASCONST(bandList ))
     {
         // don't use bands > 1THz (can't support Freq display)
         // (fortunate that there aren't any!)
@@ -617,7 +618,7 @@ bool BandList::checkValidBand(Frequency freq)
 
 QString BandList::findType(const QString &band) const
 {
-    for (const auto &b: qAsConst(bandList))
+    for (const auto &b: QASCONST(bandList))
     {
         if (b->uk == band)
         {
@@ -630,7 +631,7 @@ QString BandList::findType(const QString &band) const
 }
 QString BandList::findType(const Frequency &freq) const
 {
-    for (const auto &b: qAsConst(bandList))
+    for (const auto &b: QASCONST(bandList))
     {
         if (freq >= b->fLow && freq <= b->fHigh)
         {
@@ -684,7 +685,7 @@ void BandList::readEnabled()
 {
     QString filename = getDirectoryLocation(dlConfiguration) + "/bandsEnabled.ini";
     INIFile settings(filename);
-    for ( auto const &b: qAsConst(bandList ))
+    for ( auto const &b: QASCONST(bandList ))
     {
         b->enabled = settings.getPrivateProfileBool("General", "Enabled_" + b->normalisedName(), true);
     }
@@ -693,7 +694,7 @@ void BandList::updateEnabled()
 {
     QString filename = getDirectoryLocation(dlConfiguration) + "/bandsEnabled.ini";
     INIFile settings(filename);
-    for ( auto const &b: qAsConst(bandList ))
+    for ( auto const &b: QASCONST(bandList ))
     {
         settings.writePrivateProfileBool("General", "Enabled_" + b->normalisedName(), b->enabled);
     }

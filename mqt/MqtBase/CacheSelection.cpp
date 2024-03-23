@@ -1,3 +1,4 @@
+#include "QtUtils.h"
 #include <QJsonDocument>
 #include <QJsonParseError>
 #include <QJsonObject>
@@ -69,7 +70,7 @@ void CacheSelection::unpack(const QJsonValue &json)
         notSelected.push_back(iter.key());
     }
     QJsonArray selarray = json.toArray();
-    for (auto const &i: qAsConst(selarray))
+    for (auto const &i: QASCONST(selarray))
     {
         QJsonObject selstruct = i.toObject();
         QString logger = selstruct.value("logger").toString();

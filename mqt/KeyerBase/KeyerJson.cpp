@@ -4,6 +4,7 @@
 #include <QJsonParseError>
 #include <QJsonObject>
 #include <QJsonArray>
+#include "QtUtils.h"
 
 #include "MTrace.h"
 #include "KeyerJson.h"
@@ -78,7 +79,7 @@ bool KeyerJson::parseConfig(QString conf, bool incSliders)
             if (keys.isArray())
             {
                 QJsonArray ac = keys.toArray();
-                for (auto const &cf: qAsConst(ac))
+                for (auto const &cf: QASCONST(ac))
                 {
                     QJsonObject co = cf.toObject();
 

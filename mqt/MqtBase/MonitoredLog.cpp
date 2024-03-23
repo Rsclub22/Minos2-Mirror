@@ -1,3 +1,4 @@
+#include "QtUtils.h"
 #include "MTrace.h"
 #include "MinosRPC.h"
 #include "RPCCommandConstants.h"
@@ -235,7 +236,7 @@ void MonitoredLog::on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, cons
 
                             // rescan log and recreate callsign set
                             callsigns.clear();
-                            for(const auto &cct: qAsConst(contest->ctList))
+                            for(const auto &cct: QASCONST(contest->ctList))
                             {
                                 callsigns.insert(cct.wt.data());
                             }

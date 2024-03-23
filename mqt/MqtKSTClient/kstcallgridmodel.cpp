@@ -1,3 +1,4 @@
+#include "QtUtils.h"
 #include "kstcallgridmodel.h"
 #include "contest.h"
 #include "kstmainwindow.h"
@@ -34,7 +35,7 @@ void KstCallGridModel::setCallVector(QSharedPointer<QVector<QSharedPointer<KstUs
 {
     beginResetModel();
     callVector = pcallVector;
-    for (auto const &kstuser: qAsConst(*callVector))
+    for (auto const &kstuser: QASCONST(*callVector))
     {
         checkDistBear(kstuser);
     }
@@ -189,7 +190,7 @@ QVariant KstCallGridModel::data( const QModelIndex &index, int role ) const
             QString col;
             if (crec->planes.count())
             {
-                for (auto const &i: qAsConst(crec->planes))
+                for (auto const &i: QASCONST(crec->planes))
                 {
                     if (i.minutes != 0)
                         break;
@@ -296,7 +297,7 @@ QVariant KstCallGridModel::data( const QModelIndex &index, int role ) const
             int zcount = 0;
             if (crec->planes.count())
             {
-                for (auto const &i: qAsConst(crec->planes))
+                for (auto const &i: QASCONST(crec->planes))
                 {
                     if (i.minutes != 0)
                         break;
@@ -405,7 +406,7 @@ bool KstCallGridSortFilterModel::filterAcceptsRow(int sourceRow, const QModelInd
         {
             if (filterDxcc)
             {
-                for (auto const &filterSyn: qAsConst( filterSyns))
+                for (auto const &filterSyn: QASCONST( filterSyns))
                 {
                     if (!filterSyn.isEmpty())
                     {
@@ -416,7 +417,7 @@ bool KstCallGridSortFilterModel::filterAcceptsRow(int sourceRow, const QModelInd
             }
             else
             {
-                for (auto const &filterString: qAsConst( filterStrings))
+                for (auto const &filterString: QASCONST( filterStrings))
                 {
                     if (!filterString.isEmpty())
                     {
@@ -457,7 +458,7 @@ void KstCallGridSortFilterModel::setFilterString(QString f)
     filterStrings = f.split(" ", QString::SkipEmptyParts);
 #endif
     filterSyns.clear();
-    for (auto const &filterString: qAsConst( filterStrings))
+    for (auto const &filterString: QASCONST( filterStrings))
     {
         if (!filterString.isEmpty())
         {

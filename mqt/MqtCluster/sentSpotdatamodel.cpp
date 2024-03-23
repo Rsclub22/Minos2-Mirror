@@ -10,6 +10,7 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
+#include "QtUtils.h"
 #include "cutils.h"
 #include "sentSpotdatamodel.h"
 
@@ -23,7 +24,7 @@ SentSpotDataModel::SentSpotDataModel(QObject *parent)
 
 SentSpotDataModel::~SentSpotDataModel()
 {
-    for(auto const &s: qAsConst(sentSpotData))
+    for(auto const &s: QASCONST(sentSpotData))
     {
         delete s;
     }

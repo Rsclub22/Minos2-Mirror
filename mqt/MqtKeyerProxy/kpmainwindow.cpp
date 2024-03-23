@@ -1,6 +1,7 @@
 #include <QtSerialPort/QSerialPort>
 #include <QtSerialPort/QSerialPortInfo>
 #include <QFileDialog>
+#include "QtUtils.h"
 #include "AppStartup.h"
 #include "regsettings.h"
 #include "LogEvents.h"
@@ -101,7 +102,7 @@ void KPMainWindow::fillPortsInfo(QComboBox* comportSel)
     comportSel->addItem("");
 
     QList<QSerialPortInfo> availablePorts = QSerialPortInfo::availablePorts();
-    for (auto const &info: qAsConst(availablePorts))
+    for (auto const &info: QASCONST(availablePorts))
     {
         QStringList list;
         description = info.description();

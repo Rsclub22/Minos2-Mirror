@@ -1,4 +1,5 @@
 #include <QSettings>
+#include "QtUtils.h"
 #include "AppStartup.h"
 #include "regsettings.h"
 #include "contacts.h"
@@ -375,7 +376,7 @@ void StatisticsDisplay::doRecalc()
     }
 
     // First scan the contest to get all the time slots and all the band/mode slots
-    for ( auto const &c: qAsConst(ct->ctList ))
+    for ( auto const &c: QASCONST(ct->ctList ))
     {
         QDateTime cdtg = c.wt->timeOff.getQDT();
         int sno = contestStart.secsTo(cdtg)/60;
@@ -428,9 +429,9 @@ void StatisticsDisplay::doRecalc()
 
     }
 
-    for (auto const &c:qAsConst(contestSlots))
+    for (auto const &c:QASCONST(contestSlots))
     {
-        for (auto const &b: qAsConst(c.modesMap))
+        for (auto const &b: QASCONST(c.modesMap))
         {
             if (!bandStrings.contains(trAll))
             {
@@ -442,7 +443,7 @@ void StatisticsDisplay::doRecalc()
                 bandStrings.append(band);
                 bandStrings.sort();
             }
-            for (auto const &m: qAsConst(b.modes))
+            for (auto const &m: QASCONST(b.modes))
             {
                 QString mode = m.mode;
                 if (!modeStrings.contains(trAll))
@@ -523,7 +524,7 @@ void StatisticsDisplay::doRecalc()
     // need to get bandinfo for each bandstring, then sort it decently in frequency order
 
     BandList &blist = BandList::getBandList();
-    for(auto const &b:qAsConst(bandStrings))
+    for(auto const &b:QASCONST(bandStrings))
     {
         QSharedPointer<BandInfo>  bi;
         bool bandOK = blist.findBand(b, bi);
@@ -563,7 +564,7 @@ void StatisticsDisplay::doRecalc()
     curBand = 0;
     if (bandStrings.size() > 1)
     {
-        for(auto const &b:qAsConst(bandStrings))
+        for(auto const &b:QASCONST(bandStrings))
         {
             ui->tabBar->addTab( b );
         }

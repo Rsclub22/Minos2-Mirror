@@ -61,7 +61,7 @@ void RadioSettingDialog::initialise()
         int row = 0;
         int col = 0;
 
-        for (const auto &b: qAsConst(bands))
+        for (const auto &b: QASCONST(bands))
         {
             QLineEdit *qle = new QLineEdit();
             qle->setClearButtonEnabled(true);
@@ -90,7 +90,7 @@ void RadioSettingDialog::initialise()
         int row = 0;
         int col = 0;
 
-        for (const auto &b: qAsConst(bands))
+        for (const auto &b: QASCONST(bands))
         {
             QLineEdit *qle = new QLineEdit();
             qle->setClearButtonEnabled(true);
@@ -119,7 +119,7 @@ void RadioSettingDialog::initialise()
         int row = 0;
         int col = 0;
 
-        for (const auto &b: qAsConst(bands))
+        for (const auto &b: QASCONST(bands))
         {
             QLineEdit *qle = new QLineEdit();
             qle->setClearButtonEnabled(true);
@@ -148,7 +148,7 @@ void RadioSettingDialog::initialise()
         int row = 0;
         int col = 0;
 
-        for (const auto &b: qAsConst(bands))
+        for (const auto &b: QASCONST(bands))
         {
             QLineEdit *qle = new QLineEdit();
             qle->setClearButtonEnabled(true);
@@ -178,7 +178,7 @@ void RadioSettingDialog::initialise()
         int row = 0;
         int col = 0;
 
-        for (const auto &b: qAsConst(bands))
+        for (const auto &b: QASCONST(bands))
         {
             QLineEdit *qle = new QLineEdit();
             qle->setClearButtonEnabled(true);
@@ -208,7 +208,7 @@ void RadioSettingDialog::initialise()
         int row = 0;
         int col = 0;
 
-        for (const auto &b: qAsConst(bands))
+        for (const auto &b: QASCONST(bands))
         {
             QLineEdit *qle = new QLineEdit();
             qle->setClearButtonEnabled(true);
@@ -696,7 +696,7 @@ void RadioSettingDialog::saveSettings()
 void RadioSettingDialog::saveModePresetFreqSettings(QString mode, QSettings &config)
 {
     config.beginGroup(mode);
-    for (const auto &b: qAsConst(bands))
+    for (const auto &b: QASCONST(bands))
     {
         if (presetFreq.isDirty(mode, b->uk))
         {
@@ -709,7 +709,7 @@ void RadioSettingDialog::saveModePresetFreqSettings(QString mode, QSettings &con
 
 void RadioSettingDialog::saveBandSwData()
 {
-    for(const auto &b: qAsConst(bands))
+    for(const auto &b: QASCONST(bands))
     {
         QString bandIni;
         bandIni = b->normalisedName();
@@ -801,7 +801,7 @@ void RadioSettingDialog::loadSettingsToDialog()
         mgmPresetLineEditList[i]->setText(presetFreq.getPresetFreq(freqPresetData::PRESET_MODE_MGM, bands[i].data()->uk).convertFreqStrDispSingleNoTrailZero());
     }
 
-    for(const auto &b: qAsConst( bands))
+    for(const auto &b: QASCONST( bands))
     {
         QString iniBand = b->normalisedName();
         QString bandData = readBandSwitchDataFromIni(iniBand);
@@ -823,7 +823,7 @@ void RadioSettingDialog::loadSettingsToDialog()
 
 void RadioSettingDialog::enableBandSwLineEdits(bool enabled)
 {
-    for (const auto &b: qAsConst(bands))
+    for (const auto &b: QASCONST(bands))
     {
         bandSwDetails.value(b->uk).bandSwLineEdit->setEnabled(enabled);
         bandSwDetails.value(b->uk).bandSwLabel->setEnabled(enabled);

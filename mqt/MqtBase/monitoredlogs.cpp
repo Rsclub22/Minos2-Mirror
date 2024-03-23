@@ -6,6 +6,7 @@
 #include <QCheckBox>
 #include <QSettings>
 
+#include "QtUtils.h"
 #include "AppStartup.h"
 #include "MonitorTreeModel.h"
 #include "MonitoredLog.h"
@@ -56,7 +57,7 @@ MonitoredLogs::~MonitoredLogs()
 void MonitoredLogs::on_monitorTimeout()
 {
 
-    for ( auto const &s: qAsConst(RemoteLogs::getRemoteLogs()->stationList) )
+    for ( auto const &s: QASCONST(RemoteLogs::getRemoteLogs()->stationList) )
     {
 
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
@@ -118,7 +119,7 @@ void MonitoredLogs::syncStations()
 
           // clang complains that snode may leak - but it gets taken over by the tree
           TreeNode *snode = new RouterTreeNode(root, (*s)->name);
-          for ( auto const &l: qAsConst(s.value()->slotList) )
+          for ( auto const &l: QASCONST(s.value()->slotList) )
           {
              /*TreeNode *lnode =*/ new LogTreeNode(snode, l);
           }
@@ -133,7 +134,7 @@ void MonitoredLogs::syncStations()
 
        allStations.sort();
        allStations.removeDuplicates();
-       for (const auto &sn:qAsConst(allStations))
+       for (const auto &sn:QASCONST(allStations))
        {
           QCheckBox *scb = new QCheckBox(autoStationsBox);
           scb->setText(sn);

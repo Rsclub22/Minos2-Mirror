@@ -536,7 +536,7 @@ void ContestDetails::setDetails(  )
    int j = 0;
    int crow = 0;
 
-   for(auto const &c: qAsConst(scf.configs) )
+   for(auto const &c: QASCONST(scf.configs) )
    {
        if (c.name == curConfigName)
            crow = j;
@@ -559,7 +559,7 @@ void ContestDetails::refreshOps()
       ui->SecondOpComboBox->clear();
       //bool addCall = true;
       QStringList ops;
-      for ( auto const &i: qAsConst(contestTransferObject->oplist ))
+      for ( auto const &i: QASCONST(contestTransferObject->oplist ))
       {
           if (!i.isEmpty())
             ops.append(i);
@@ -603,7 +603,7 @@ void ContestDetails::setBandBoxes(QString bandStr, QString bandsList)
 
             allBandChkBoxMap.clear();
 
-            for (auto const &b: qAsConst(blist.bandList))
+            for (auto const &b: QASCONST(blist.bandList))
             {
                 if (b->getType() == HF_BANDTYPE && b->enabled && b->contestAllowed)
                 {
@@ -616,7 +616,7 @@ void ContestDetails::setBandBoxes(QString bandStr, QString bandsList)
                 }
             }
         }
-        for(QCheckBox *c:qAsConst(allBandChkBoxMap))
+        for(QCheckBox *c:QASCONST(allBandChkBoxMap))
         {
             c->setChecked(false);
         }
@@ -640,7 +640,7 @@ void ContestDetails::setBandBoxes(QString bandStr, QString bandsList)
                 bool bs8020 = bandStr == "80m-20m";
                 bool bs8040 = bandStr == "80m-40m";
 
-                for(QCheckBox *c:qAsConst(allBandChkBoxMap))
+                for(QCheckBox *c:QASCONST(allBandChkBoxMap))
                 {
                     QString ctext = c->text();
 
@@ -666,7 +666,7 @@ void ContestDetails::setBandBoxes(QString bandStr, QString bandsList)
             else
             {
                 QStringList bll = bandsList.split(";");
-                for(const auto &bs: qAsConst(bll))
+                for(const auto &bs: QASCONST(bll))
                 {
                     QStringList bsl = bs.split(" ");
                     if (bsl.count() == 3)
@@ -693,7 +693,7 @@ void ContestDetails::setBandBoxes(QString bandStr, QString bandsList)
         ui->BandComboBox->addItem( trAllHf );
     }
 
-    for (auto const &b: qAsConst(blist.bandList))
+    for (auto const &b: QASCONST(blist.bandList))
     {
         if (b->enabled  && b->contestAllowed)
         {

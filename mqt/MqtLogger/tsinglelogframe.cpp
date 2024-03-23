@@ -1039,7 +1039,7 @@ void TSingleLogFrame::closeContest()
 
 void TSingleLogFrame::addAllQSOsToBandmap()
 {
-    for ( auto const &c: qAsConst(contest->ctList ))
+    for ( auto const &c: QASCONST(contest->ctList ))
     {
         QSharedPointer<BaseContact> cct = c.wt;
 
@@ -1556,7 +1556,7 @@ void TSingleLogFrame::goSerial( )
     while ( serial == -1 );
 
     QSharedPointer<BaseContact> cfu;
-    for ( auto const &c: qAsConst(contest->ctList ))
+    for ( auto const &c: QASCONST(contest->ctList ))
     {
         bool ok;
         int s = c.wt->serials.getValue().toInt(&ok );

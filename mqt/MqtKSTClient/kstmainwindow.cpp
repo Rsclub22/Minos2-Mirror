@@ -2,6 +2,7 @@
 #include <QSettings>
 #include <QKeyEvent>
 
+#include "QtUtils.h"
 #include "RPCCommandConstants.h"
 #include "regsettings.h"
 #include "AppStartup.h"
@@ -91,7 +92,7 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
 
     QStringList selections = chatSelection.split(":");
 
-    for (auto const &i: qAsConst(selections))
+    for (auto const &i: QASCONST(selections))
     {
         int s = i.toInt();
         if (s <= 4 && s > 0)
@@ -311,7 +312,7 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     asl = QSharedPointer<AirScoutLink>(new AirScoutLink());
     connect(asl.data(), &AirScoutLink::acChanged, this, &KSTMainWindow::acChanged);
 
-    for(auto const &s: qAsConst(AirScoutLink::ASBandStrings))
+    for(auto const &s: QASCONST(AirScoutLink::ASBandStrings))
     {
         ui->asBandCombo->addItem(AirScoutLink::tr(s));
     }
@@ -752,7 +753,7 @@ void KSTMainWindow::analyseKstMessage(QString atj)
         }
         kst->otherDistance = -2;
         bool found = false;
-        for(auto const &msg: qAsConst(*messageVector))
+        for(auto const &msg: QASCONST(*messageVector))
         {
             if (kst->fullLine == msg->fullLine)
             {
@@ -843,7 +844,7 @@ void KSTMainWindow::analyseKstMessage(QString atj)
         // LOC|Unix time|callsign|locator|
 
         int row = 0;
-        for (auto const &l: qAsConst(*callVector))
+        for (auto const &l: QASCONST(*callVector))
         {
             if (l->call.getFullCall() == sl[2] )
             {
@@ -948,7 +949,7 @@ void KSTMainWindow::analyseKstMessage(QString atj)
             sendKST(msg);
             recLoc = myLoc;
             kstCallModel.locator = myLoc;
-            for (auto const &l: qAsConst(*callVector))
+            for (auto const &l: QASCONST(*callVector))
             {
                 l->distance = -1;
             }
@@ -1310,7 +1311,7 @@ bool KSTMainWindow::doConfiguration(bool showForm)
 
         if (showForm)
         {
-            for (auto const &l: qAsConst(*callVector))
+            for (auto const &l: QASCONST(*callVector))
             {
                 l->distance = -1;
             }
@@ -1487,7 +1488,7 @@ void KSTMainWindow::doLoginChanges()
     if (detached)
     {
         QSharedPointer<QVector<QSharedPointer<KstUser> > > newCallVector(new QVector<QSharedPointer<KstUser> >);
-        for(auto const &i: qAsConst(*callVector))
+        for(auto const &i: QASCONST(*callVector))
         {
             int c = i->chat;
             if (kstLoggedIn.contains(c))
@@ -1812,7 +1813,7 @@ void KSTMainWindow::on_asBandCombo_currentIndexChanged(int band)
     {
         if (asl && getASActive())
         {
-            for (auto const &kstuser: qAsConst(*callVector))
+            for (auto const &kstuser: QASCONST(*callVector))
             {
                 kstuser->planes.clear();
                 kstuser->planeResponseSeen = false;
@@ -1834,7 +1835,7 @@ void KSTMainWindow::on_ASActivecb_stateChanged(int state)
     {
         if (asl && getASActive())
         {
-            for (auto const &kstuser: qAsConst(*callVector))
+            for (auto const &kstuser: QASCONST(*callVector))
             {
                 kstuser->planes.clear();
                 kstuser->planeResponseSeen = false;

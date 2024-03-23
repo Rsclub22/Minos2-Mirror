@@ -1,4 +1,3 @@
-#include "delayedaction.h"
 #include <QSettings>
 #include <QTimer>
 #include <QKeyEvent>
@@ -8,12 +7,14 @@
 #include <QJsonObject>
 #include <QJsonArray>
 
-
 #ifdef Q_OS_WIN
 #include <windows.h>
 #include <mmsystem.h>
 #endif
 
+#include "QtUtils.h"
+
+#include "delayedaction.h"
 #include "regsettings.h"
 #include "AppStartup.h"
 #include "MinosRPC.h"
@@ -155,7 +156,7 @@ DMMainWindow::~DMMainWindow()
 
 void DMMainWindow::closeAllEngines()
 {
-    for (const auto &e:qAsConst(engines))
+    for (const auto &e:QASCONST(engines))
     {
         e->close();
         e->deleteLater();
@@ -234,7 +235,7 @@ void DMMainWindow::onNewStanzas()
 {
     // we need to re-analyse the display, especially when we have a new QSO
 
-    for (const auto &e:qAsConst(engines))
+    for (const auto &e:QASCONST(engines))
     {
         e->rescan();
     }
@@ -243,21 +244,21 @@ void DMMainWindow::onLogChanged(QSharedPointer<MonitoredLog> /*ml*/)
 {
     // we need to re-analyse the display, as current log has changed
 
-    for (const auto &e:qAsConst(engines))
+    for (const auto &e:QASCONST(engines))
     {
         e->rescan();
     }
 }
 void DMMainWindow::onLogStarted(QSharedPointer<MonitoredLog> /*ml*/)
 {
-    for (const auto &e:qAsConst(engines))
+    for (const auto &e:QASCONST(engines))
     {
         e->rescan();
     }
 }
 void DMMainWindow::onLogClosed(QSharedPointer<MonitoredLog> /*ml*/)
 {
-    for (const auto &e:qAsConst(engines))
+    for (const auto &e:QASCONST(engines))
     {
         e->rescan();
     }
@@ -336,7 +337,7 @@ void DMMainWindow::sendPressed(QString d, int c)
 
     // search the engines for the one selected as sender
     bool sent = false;
-    for (const auto &e:qAsConst(engines))
+    for (const auto &e:QASCONST(engines))
     {
         if (e->engineName == m)
         {

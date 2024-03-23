@@ -1,3 +1,4 @@
+#include "QtUtils.h"
 #include <QSettings>
 
 #include "regsettings.h"
@@ -87,7 +88,7 @@ void StartConfigManager::showDetails()
     int crow = -1;
 
     int j = 0;
-    for(auto const &i: qAsConst(minosConfig->configs ))
+    for(auto const &i: QASCONST(minosConfig->configs ))
     {
         if (i.configName == curConfigName)
            crow = j;

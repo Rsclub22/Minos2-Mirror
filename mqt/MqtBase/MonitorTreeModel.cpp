@@ -1,3 +1,4 @@
+#include "QtUtils.h"
 #include "MonitoredLog.h"
 #include "MonitorTreeModel.h"
 
@@ -55,7 +56,7 @@ int TreeNode::childNumber() const
 }
 void TreeNode::clear()
 {
-    for ( auto const &tn: qAsConst(nodes) )
+    for ( auto const &tn: QASCONST(nodes) )
     {
         delete tn;
     }

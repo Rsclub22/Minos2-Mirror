@@ -1,3 +1,4 @@
+#include "QtUtils.h"
 #include "airscoutlink.h"
 #include "delayedaction.h"
 
@@ -81,7 +82,7 @@ void AirScoutLink::sendToAllBroadcast(QByteArray *packet)
     QList<QNetworkInterface> ifaces = QNetworkInterface::allInterfaces();
 
     // Interfaces iteration
-    for (auto const &i: qAsConst(ifaces))
+    for (auto const &i: QASCONST(ifaces))
     {
         if (i.flags().testFlag(QNetworkInterface::IsLoopBack))
             continue;
@@ -90,7 +91,7 @@ void AirScoutLink::sendToAllBroadcast(QByteArray *packet)
         QList<QNetworkAddressEntry> addrs = i.addressEntries();
 
         // And for any IP address, if it is IPv4 and the interface is active, send the packet
-        for (auto const &a: qAsConst(addrs))
+        for (auto const &a: QASCONST(addrs))
         {
             if ((a.ip().protocol() == QAbstractSocket::IPv4Protocol) && (a.broadcast().toString() != ""))
             {
@@ -112,7 +113,7 @@ qint64 AirScoutLink::sendMessage(QString messagetype, QString messageText)
 
     int cs = 0;
     QByteArray packet = QByteArray(mess.toUtf8());
-    for(auto const &c: qAsConst(packet))
+    for(auto const &c: QASCONST(packet))
     {
         cs += c;
     }
@@ -278,7 +279,7 @@ void AirScoutLink::onReadyRead()
                     }
 
                     std::sort(user->planes.begin(), user->planes.end());
-                    for(auto const &ac: qAsConst(user->planes))
+                    for(auto const &ac: QASCONST(user->planes))
                     {
                         ac.traceAircaft();
                     }
@@ -305,7 +306,7 @@ void AirScoutLink::usersChanged(QSharedPointer<QVector<QSharedPointer<KstUser> >
     if (mainWindow->getASActive())
     {
         watchList.clear();
-        for(auto const &user: qAsConst(*callVector))
+        for(auto const &user: QASCONST(*callVector))
         {
             if (user->call == mainWindow->getMyCallsign())
                 continue;
@@ -328,7 +329,7 @@ void AirScoutLink::usersChanged(QSharedPointer<QVector<QSharedPointer<KstUser> >
         if (watchList.count() > 0)
         {
             QString watch = watchFreq;
-            for(auto const &user: qAsConst(watchList))
+            for(auto const &user: QASCONST(watchList))
             {
                 QString ent = "," + user->call.realCall + "," + user->loc;
                 watch.append(ent);

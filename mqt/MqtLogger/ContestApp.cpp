@@ -284,7 +284,7 @@ bool TContestApp::insertContest(BaseContestLog * p, int sno )
          return true;
       }
    }
-   for ( auto const &cs: qAsConst(contestSlotList ))
+   for ( auto const &cs: QASCONST(contestSlotList ))
    {
       if ( !cs->slot )
       {
@@ -322,7 +322,7 @@ bool TContestApp::insertList(ContactList * p, int sno )
          return true;
       }
    }
-   for ( auto const &cs: qAsConst(listSlotList ))
+   for ( auto const &cs: QASCONST(listSlotList ))
    {
       if (cs && !cs->slot )
       {
@@ -339,7 +339,7 @@ bool TContestApp::insertList(ContactList * p, int sno )
 
 bool TContestApp::isListOpen( const QString fn )
 {
-    for (auto const &i: qAsConst(listSlotList ))
+    for (auto const &i: QASCONST(listSlotList ))
    {
       if ( isOpen( i, fn ) )
       {
@@ -351,7 +351,7 @@ bool TContestApp::isListOpen( const QString fn )
 }
 bool TContestApp::isContestOpen(const QString fn )
 {
-   for ( auto const &i: qAsConst(TContestApp::getContestApp() ->contestSlotList ))
+   for ( auto const &i: QASCONST(TContestApp::getContestApp() ->contestSlotList ))
    {
       if ( isOpen( i, fn ) )
       {
@@ -420,7 +420,7 @@ void TContestApp::writeContestList()
         // build a stripped, renumbered list
         int newSlotNo = 0;
         ContestSlotList newContestSlotList;
-        for ( auto const &cs:  qAsConst(contestSlotList))
+        for ( auto const &cs:  QASCONST(contestSlotList))
         {
             if (cs)
             {
@@ -437,7 +437,7 @@ void TContestApp::writeContestList()
         contestSlotList = newContestSlotList;
 
         // and write it out
-        for ( auto const &cs:  qAsConst(contestSlotList))
+        for ( auto const &cs:  QASCONST(contestSlotList))
         {
             BaseContestLog * ct = cs->slot;
             if ( !ct )
@@ -470,7 +470,7 @@ void TContestApp::writeListsList()
         // build a stripped, renumbered list
         int newSlotNo = 0;
         ListSlotList newListSlotList;
-        for ( auto const &cs:  qAsConst(listSlotList))
+        for ( auto const &cs:  QASCONST(listSlotList))
         {
             if (cs) // after all, we may have just got rid of one...
             {
@@ -490,7 +490,7 @@ void TContestApp::writeListsList()
         // and write it out
         listsPreloadBundle.clearProfileSection( false );
 
-        for ( auto const &cs: qAsConst(listSlotList))
+        for ( auto const &cs: QASCONST(listSlotList))
         {
             if (cs)
             {
@@ -511,7 +511,7 @@ void TContestApp::writeListsList()
 QVector<BaseContestLog *> TContestApp::getContestList()
 {
    QVector<BaseContestLog *> logList;
-   for ( auto const &cs: qAsConst(contestSlotList ))
+   for ( auto const &cs: QASCONST(contestSlotList ))
    {
       BaseContestLog * ct = cs->slot;
       if ( !ct )

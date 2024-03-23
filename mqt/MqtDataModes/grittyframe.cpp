@@ -6,6 +6,7 @@
 #include <QJsonArray>
 
 
+#include "QtUtils.h"
 #include "AppStartup.h"
 #include "MTrace.h"
 #include "delayedaction.h"
@@ -394,7 +395,7 @@ void GrittyFrame::analyseGrittyMessage(QString m)
                     RXChar rxch('\n', 0, markFrequency);
                     engineWindow->rxBuff.addChar(rxch);
                 }
-                for (auto c:qAsConst(ch))
+                for (auto c:QASCONST(ch))
                 {
                     // markFrequency will be zero - we don't get it from gritty
                     RXChar rxch(c, deleteCount, markFrequency);

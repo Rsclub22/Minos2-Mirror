@@ -1,4 +1,5 @@
 #include <QSettings>
+#include "QtUtils.h"
 
 #include "remotelogs.h"
 #include "MTrace.h"
@@ -49,7 +50,7 @@ void RemoteLogs::testAutoStart()
 #endif
     }
 
-    for ( auto const &s: qAsConst(stationList) )
+    for ( auto const &s: QASCONST(stationList) )
     {
         // if never set, autostations will be empty, so take all
         if (autoStations.size() == 0 || autoStations.contains(s->name))
@@ -67,7 +68,7 @@ void RemoteLogs::testAutoStart()
 }
 bool RemoteLogs::hasWorked(const Callsign &cs, QString band, QString mode)
 {
-    for ( auto const &s: qAsConst(stationList) )
+    for ( auto const &s: QASCONST(stationList) )
     {
 
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
@@ -96,7 +97,7 @@ bool RemoteLogs::hasWorked(const Callsign &cs, QString band, QString mode)
 }
 void RemoteLogs::traceCS()
 {
-    for ( auto const &s: qAsConst(stationList) )
+    for ( auto const &s: QASCONST(stationList) )
     {
 
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
@@ -107,7 +108,7 @@ void RemoteLogs::traceCS()
        {
             if ((*l)->enabled() && (*l)->getState() != psRevoked && s->currentLog == *l)
             {
-                for (const auto &cs:qAsConst((*l)->getCallsigns()))
+                for (const auto &cs:QASCONST((*l)->getCallsigns()))
                 {
                     trace(cs.dct->cs.getFullCall());
                 }
@@ -118,7 +119,7 @@ void RemoteLogs::traceCS()
 }
 Callsign RemoteLogs::myCall()
 {
-    for ( auto const &s: qAsConst(stationList) )
+    for ( auto const &s: QASCONST(stationList) )
     {
 
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)

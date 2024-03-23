@@ -1,3 +1,4 @@
+#include "QtUtils.h"
 #include "MShowMessageDlg.h"
 #include "rxbuffer.h"
 #include "MTrace.h"
@@ -49,11 +50,11 @@ TestFrame::TestFrame(EngineWindow *parent, QLineEdit */*sendEdit*/, QString /*fn
     connect(engineWindow, &EngineWindow::sendCharactersDown, this, &TestFrame::onSendCharacters);
     connect(engineWindow, &EngineWindow::rigModeFreq, this, &TestFrame::onRigModeFreq);
 
-//    for(const auto &s:qAsConst(testData))
+//    for(const auto &s:QASCONST(testData))
 //    {
 //        trace(QString("Response %1").arg(s));
 //        bool newLine = true;
-//        for (auto c:qAsConst(s))
+//        for (auto c:QASCONST(s))
 //        {
 //            RXChar rxch(c, newLine, 0, markFrequency);
 //            newLine = false;
@@ -95,7 +96,7 @@ void TestFrame::onTimeout()
 //        QString s = QString::number(n);
 //        n++;
 //        bool newLine = true;
-//        for (auto c:qAsConst(s))
+//        for (auto c:QASCONST(s))
 //        {
 //            RXChar rxch(c, newLine, 0, markFrequency);
 //            newLine = false;
@@ -122,7 +123,7 @@ void TestFrame::sendMode(QString mode)
     QString nm = "New mode set: " +  mode;
     RXChar rxchn('\n', 0, markFrequency);
     engineWindow->rxBuff.addChar(rxchn);
-    for (auto c:qAsConst(nm))
+    for (auto c:QASCONST(nm))
     {
         RXChar rxch(c, 0, markFrequency);
         newLine = false;

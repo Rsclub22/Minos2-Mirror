@@ -64,7 +64,7 @@ TxVmButtonsFrame::~TxVmButtonsFrame()
 {
     delete ui;
 
-    for(const auto &b: qAsConst(txVmButtonMap))
+    for(const auto &b: QASCONST(txVmButtonMap))
     {
         delete b;
     }

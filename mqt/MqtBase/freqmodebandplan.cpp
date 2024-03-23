@@ -10,6 +10,7 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
+#include "QtUtils.h"
 
 #include "BandList.h"
 #include "freqmodebandplan.h"
@@ -26,12 +27,12 @@ bool freqModeBandPlan::loadBandsFromBandList()
 {
     bandModeFreqList.clear();
     BandList &blist = BandList::getBandList();
-    for (auto const &b: qAsConst(blist.bandList))
+    for (auto const &b: QASCONST(blist.bandList))
     {
         if (b->enabled)
         {
             QMap<QString, ModeFreqDetail<Frequency>> modeFreqList;
-            for (auto const &m: qAsConst(b->modes))
+            for (auto const &m: QASCONST(b->modes))
             {
                 ModeFreqDetail<Frequency> mfl;
 
@@ -64,19 +65,19 @@ bool freqModeBandPlan::loadExclusionsFromBandList()
 {
     bandModeFreqList.clear();
     BandList &blist = BandList::getBandList();
-    for (auto const &b: qAsConst(blist.bandList))
+    for (auto const &b: QASCONST(blist.bandList))
     {
         if (b->enabled)
         {
             QMap<QString, ModeFreqDetail<Frequency>> modeFreqList;
-            for (auto const &m: qAsConst(b->modes))
+            for (auto const &m: QASCONST(b->modes))
             {
                 ModeFreqDetail<Frequency> mfl;
                 if (b->fLow < m->fcLow1)
                 {
                     addPair(mfl, b->fLow, m->fcLow1);
                 }
-                for (auto const &e: qAsConst(m->exclusions))
+                for (auto const &e: QASCONST(m->exclusions))
                 {
                     addPair(mfl, e->fExcLow, e->fExcHigh);
                 }

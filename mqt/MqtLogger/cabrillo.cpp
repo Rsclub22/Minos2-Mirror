@@ -334,7 +334,7 @@ bool Cabrillo::exportTest(QSharedPointer<QFile> expfd)
     if ( ltot == 0 )
        ltot = 1;
 
-    for(auto const &dct: qAsConst(ct->ctList))
+    for(auto const &dct: QASCONST(ct->ctList))
     {
        QSharedPointer<BaseContact> cct = dct.wt;
        // Extract comments for "Remarks" section
@@ -413,7 +413,7 @@ bool Cabrillo::exportTest(QSharedPointer<QFile> expfd)
 
     // and then the contact list
 
-    for(auto const &dct: qAsConst(ct->ctList))
+    for(auto const &dct: QASCONST(ct->ctList))
     {
         QSharedPointer<BaseContact> cct = dct.wt;
 

@@ -8,6 +8,7 @@
 /////////////////////////////////////////////////////////////////////////////
 //---------------------------------------------------------------------------
 #include <QUuid>
+#include "QtUtils.h"
 #include "AppStartup.h"
 #include "MTrace.h"
 #include <QNetworkDatagram>
@@ -80,7 +81,7 @@ TZConf::TZConf( )
 }
 TZConf::~TZConf( )
 {
-    for ( auto const &s: qAsConst(routerList ))
+    for ( auto const &s: QASCONST(routerList ))
    {
       delete s;
    }
@@ -210,7 +211,7 @@ bool TZConf::sendMessage( )
         sendBeaconResponse = QDateTime();
         reqBeacon = true;
     }
-    for (auto const &t: qAsConst(TxSocks))
+    for (auto const &t: QASCONST(TxSocks))
     {
         QString mess = getZConfString(reqBeacon, t->qua.ip().toString());
         t->sendMessage(mess);
@@ -282,7 +283,7 @@ void TZConf::readRouterListFile()
    QStringList sl = routers.childGroups();
 
 //   trace(QString::number(sl.size()) + " child groups");
-   for ( auto const &i: qAsConst(sl ))
+   for ( auto const &i: QASCONST(sl ))
    {
       routers.beginGroup(i);
 

@@ -1,6 +1,7 @@
 #ifndef CLUSTERCOMMON_H
 #define CLUSTERCOMMON_H
 
+#include "QtUtils.h"
 
 #include <QList>
 #include <QColor>
@@ -503,7 +504,7 @@ public:
     {
         DefaultDistanceIniName ddin;
 
-        for (const auto &b:qAsConst( bands))
+        for (const auto &b:QASCONST( bands))
         {
 
             QString band = b->uk;

@@ -1026,7 +1026,7 @@ bool LoggerContestLog::exportGJV(QSharedPointer<QFile>fd )
 
    bool inDump = false;
 
-   for ( auto const &i: qAsConst(ctList ))
+   for ( auto const &i: QASCONST(ctList ))
    {
       QSharedPointer<BaseContact> lct = i.wt;
       // we need to test for "in dump"
@@ -1073,7 +1073,7 @@ bool LoggerContestLog::exportADIF(QSharedPointer<QFile> expfd )
       MinosParameters::getMinosParameters() ->mshowMessage( tr("bad reply from write!") );
    }
 
-   for ( auto const &i: qAsConst(ctList ))
+   for ( auto const &i: QASCONST(ctList ))
    {
       QSharedPointer<BaseContact> lct = i.wt;
       QString l = lct ->getADIFLine();
@@ -1190,7 +1190,7 @@ bool LoggerContestLog::exportKML(QSharedPointer<QFile> expfd )
    typedef QMap <QString, cmap> smap;       // map by prefix
    smap countries;
 
-   for ( auto const &i: qAsConst(ctList ))
+   for ( auto const &i: QASCONST(ctList ))
    {
       QSharedPointer<BaseContact> ct = i.wt;
       if ( ct->ctryMult )
@@ -1670,7 +1670,7 @@ void LoggerContestLog::processMinosStanza( const QString &methodName, MinosTestI
                                        bool filterFlag = false;
                                        int distance = 0;
 
-                                       for(const auto &b: qAsConst(bands))
+                                       for(const auto &b: QASCONST(bands))
                                        {
                                             QString bandIni = "bandFilter" + b->normalisedName();
                                             QString distIni = "distanceFilter" + b->normalisedName();

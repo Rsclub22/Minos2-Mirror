@@ -1,4 +1,5 @@
 #include <QProcessEnvironment>
+#include "QtUtils.h"
 #include "ServerEvent.h"
 #include "MinosConnection.h"
 #include "MTrace.h"
@@ -49,12 +50,12 @@ void MinosRPC::on_connectedTimeout()
         RPCPubSub::initialisePubSub( new TRPCCallback <MinosRPC> ( this, &MinosRPC::notifyCallback ) );
         RPCPubSub::subscribe(rpcConstants::StationCategory);
 
-        for (auto const &p: qAsConst(remoteSubscriptions))
+        for (auto const &p: QASCONST(remoteSubscriptions))
         {
             RPCPubSub::subscribeRemote( p.first, p.second );
         }
 
-        for (auto const &c: qAsConst(subscriptions))
+        for (auto const &c: QASCONST(subscriptions))
         {
             RPCPubSub::subscribe( c );
         }
@@ -199,7 +200,7 @@ void MinosRPC::routerNotify( AnalysePubSubNotify &an)
                 {
                     providers[sub].push_back(prov);
                 }
-                for(const auto &s: qAsConst(postSubs[sub]))
+                for(const auto &s: QASCONST(postSubs[sub]))
                 {
                     RPCPubSub::subscribeRemote(prov.routerName, s);
                 }
@@ -268,7 +269,7 @@ void MinosRPC::notifyCallback( bool err, QSharedPointer<MinosRPCObj>mro, const Q
        }
 
        //trace(QString("notificationOK is %1").arg(notificationOK));
-       for (const auto &s:qAsConst(routerSubs))
+       for (const auto &s:QASCONST(routerSubs))
        {
            //trace(QString("Category %1 s %2").arg(category).arg(s));
            if (category == s)

@@ -3,6 +3,7 @@
 #include <QStatusBar>
 #include <QSettings>
 
+#include "QtUtils.h"
 #include "regsettings.h"
 #include "MTrace.h"
 
@@ -52,7 +53,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QString currentLang = getCurrentLanguage();
 
     QVector<Translation> languages = getLanguages();
-    for(auto const &l: qAsConst(languages))
+    for(auto const &l: QASCONST(languages))
     {
         QAction *act =  new QAction(this);
         act->setText(l.dispName);
@@ -192,7 +193,7 @@ void MainWindow::LanguageAcceptActionExecute()
         QString selText = action->text();
 
         QVector<Translation> languages = getLanguages();
-        for(auto const &l: qAsConst(languages))
+        for(auto const &l: QASCONST(languages))
         {
             if (l.dispName == selText)
             {

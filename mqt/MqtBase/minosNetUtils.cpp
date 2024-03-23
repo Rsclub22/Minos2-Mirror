@@ -1,6 +1,7 @@
+#include <QLineEdit>
+#include "QtUtils.h"
 #include "minosNetUtils.h"
 
-#include <QLineEdit>
 
 bool isHostLocal(const QString &host)
 {
@@ -32,7 +33,7 @@ bool processNetAddress(QLineEdit* networkAddBox, QString& netAddress, bool& radi
         else
         {
             QList<QHostAddress>addresses = connaddr.addresses();
-            for (const auto &addr: qAsConst(addresses))
+            for (const auto &addr: QASCONST(addresses))
             {
                 if (QAbstractSocket::IPv4Protocol == addr.protocol())
                 {

@@ -40,7 +40,7 @@ DMButtonFrame::DMButtonFrame(QWidget *parent) :
     fButtons << ui->F7Button << ui->F8Button << ui->F9Button << ui->F10Button << ui->F11Button << ui->F12Button;
 
     int i = Qt::Key_F1;
-    for (auto b: qAsConst(fButtons))
+    for (auto b: QASCONST(fButtons))
     {
         b->setProperty("KeyNo", i++);
         b->setText("");
@@ -336,7 +336,7 @@ void DMButtonFrame::parseFKeyFile(QString fname, QString mode)
 }
 bool DMButtonFrame::parseFKeyArray(QJsonArray s, QString keyset, QString mode)
 {
-    for (const auto &v:qAsConst(s))
+    for (const auto &v:QASCONST(s))
     {
         if (v.isArray())
         {
@@ -370,7 +370,7 @@ bool DMButtonFrame::parseFKeyString(QString s, QString mode)
         if( json.isArray())
         {
             QJsonArray namearray = json.array();
-            for (auto const &n: qAsConst(namearray))
+            for (auto const &n: QASCONST(namearray))
             {
                 QJsonObject namestruct = n.toObject();
                 QString name = namestruct.value("Name").toString();

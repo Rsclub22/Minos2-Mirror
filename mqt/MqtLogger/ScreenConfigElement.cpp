@@ -1,6 +1,7 @@
 #include <QStandardItemModel>
 #include <QListView>
 
+#include "QtUtils.h"
 #include "MMessageDialog.h"
 #include "ScreenConfigFile.h"
 #include "ScreenConfigScreen.h"
@@ -39,7 +40,7 @@ QVector <SCTypeOption> ScreenConfigElement::scoptions =
 };
 SCType ScreenConfigElement::getScreenType(QString s)
 {
-    for(auto const  &opt: qAsConst(scoptions))
+    for(auto const  &opt: QASCONST(scoptions))
     {
         if ((opt.s == s) || (tr(opt.s) == s))
             return opt.type;
@@ -48,7 +49,7 @@ SCType ScreenConfigElement::getScreenType(QString s)
 }
 const char * ScreenConfigElement::getRawScreenTypeString(SCType t)
 {
-    for(auto const  &opt: qAsConst(scoptions))
+    for(auto const  &opt: QASCONST(scoptions))
     {
         if (opt.type == t)
             return opt.s;
@@ -58,7 +59,7 @@ const char * ScreenConfigElement::getRawScreenTypeString(SCType t)
 }
 const char * ScreenConfigElement::getRawScreenHint(SCType t)
 {
-    for(auto const  &opt: qAsConst(scoptions))
+    for(auto const  &opt: QASCONST(scoptions))
     {
         if (opt.type == t)
             return opt.hint;
@@ -105,7 +106,7 @@ ScreenConfigElement::ScreenConfigElement(ScreenConfigRow *parentrow, ScreenConfi
     ui->elementTypeCombo->clear();
     int i = 0;
     int row = -1;
-    for(auto const  &opt: qAsConst(scoptions))
+    for(auto const  &opt: QASCONST(scoptions))
     {
         if (opt.type == sctMainScreen || opt.type == sctScreen)
         {
@@ -141,7 +142,7 @@ ScreenConfigElement::ScreenConfigElement(ScreenConfigRow *parentrow, ScreenConfi
     qobject_cast<QListView *>(ui->elementTypeCombo->view())->setRowHidden(pind.row(), true);
 
     i = 0;
-    for(auto const &opt: qAsConst(StackedInfoFrame::auxoptions))
+    for(auto const &opt: QASCONST(StackedInfoFrame::auxoptions))
     {
         QString s = StackedInfoFrame::getTrAuxTypeString(opt.type);
         ui->auxTypeCombo->addItem(s, opt.type);

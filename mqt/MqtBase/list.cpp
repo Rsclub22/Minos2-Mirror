@@ -6,6 +6,7 @@
 // COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2008
 //
 /////////////////////////////////////////////////////////////////////////////
+#include "QtUtils.h"
 #include "cutils.h"
 #include "ListContact.h"
 #include "fileutils.h"
@@ -20,7 +21,7 @@ ContactList::ContactList() :
 }
 ContactList::~ContactList()
 {
-    for ( auto const &i: qAsConst(ctList) )
+    for ( auto const &i: QASCONST(ctList) )
        delete i;
 }
 bool ContactList::initialise( int sno )
@@ -77,7 +78,7 @@ bool ContactList::cslLoad( )
        name = fn;
 
        bool firstLine = true;
-       for ( auto const &parts:  qAsConst(readData) )
+       for ( auto const &parts:  QASCONST(readData) )
        {
            if (parts.size() == 0 || parts[0].size() == 0 ||  !(parts[0][0].isLetter() || parts[0][0].isNumber()))
                continue;

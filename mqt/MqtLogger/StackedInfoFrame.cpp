@@ -19,7 +19,7 @@ QVector <AuxTypeOption> StackedInfoFrame::auxoptions = {
 
 AuxEntries StackedInfoFrame::getAuxEntryType(QString s)
 {
-    for(auto const &opt: qAsConst(auxoptions))
+    for(auto const &opt: QASCONST(auxoptions))
     {
         if (tr(opt.s) == s || (opt.s == s))
             return opt.type;
@@ -29,7 +29,7 @@ AuxEntries StackedInfoFrame::getAuxEntryType(QString s)
 
 const char * StackedInfoFrame::getRawAuxTypeString(AuxEntries t)
 {
-    for(auto const &opt: qAsConst(auxoptions))
+    for(auto const &opt: QASCONST(auxoptions))
     {
         if (opt.type == t)
             return opt.s;
@@ -57,7 +57,7 @@ StackedInfoFrame::StackedInfoFrame(QWidget *parent, int instance, TSingleLogFram
 
     BandList &blist = BandList::getBandList();
 
-    for (const auto &b:qAsConst(blist.bandList))
+    for (const auto &b:QASCONST(blist.bandList))
     {
        bool hf = b->getType() == HF_BANDTYPE;
        if (hf && b->enabled && b->contestAllowed)
@@ -70,7 +70,7 @@ StackedInfoFrame::StackedInfoFrame(QWidget *parent, int instance, TSingleLogFram
 
     ui->infoCombo->clear();
     int i = 0;
-    for(auto const &opt:qAsConst( auxoptions))
+    for(auto const &opt:QASCONST( auxoptions))
     {
         ui->infoCombo->addItem(tr(opt.s), opt.type);
         ui->infoCombo->setItemData( i++, tr(opt.hint), Qt::ToolTipRole );
@@ -349,7 +349,7 @@ void StackedInfoFrame::setContest(LoggerContestLog *ct)
             QStringList vtabs;
             QStringList bll = contest->bandsList.getValue().split(";");
 
-            for(const auto &bs: qAsConst(bll))
+            for(const auto &bs: QASCONST(bll))
             {
                 QStringList bsl = bs.split(" ");
                 if (bsl.count() == 3)

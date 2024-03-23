@@ -207,9 +207,9 @@ void MonitorMain::on_searchSplitter_splitterMoved(int /*pos*/, int /*index*/)
 
 void MonitorMain::closeTab(MonitoringFrame *cttab)
 {
-    for ( auto const &s: qAsConst(RemoteLogs::getRemoteLogs()->stationList) )
+    for ( auto const &s: QASCONST(RemoteLogs::getRemoteLogs()->stationList) )
     {
-        for ( auto const &l: qAsConst(s->slotList) )
+        for ( auto const &l: QASCONST(s->slotList) )
         {
             if (l->getFrame() == cttab)
             {

@@ -6,6 +6,7 @@
 // COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2008
 //
 /////////////////////////////////////////////////////////////////////////////
+#include "QtUtils.h"
 #include "contest.h"
 #include "cutils.h"
 #include "BandList.h"
@@ -396,7 +397,7 @@ void ScreenContact::score()
 
            LocSquare *ls = nullptr;
 
-           for ( auto const &i: qAsConst(contest->locs[band].llist) )
+           for ( auto const &i: QASCONST(contest->locs[band].llist) )
            {
                LocSquare *locsq = i.wt.data();
                if ( strnicmp ( locsq ->loc, letters, 2 ) == 0 )

@@ -12,6 +12,7 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
+#include "QtUtils.h"
 #include "MinosRPC.h"
 #include "ConfigFile.h"
 #include "RPCCommandConstants.h"
@@ -70,7 +71,7 @@ QrzServerRpc::~QrzServerRpc()
 
 void QrzServerRpc::sendQrzResponseToClusterServer(QString dxCall, QString dxQra, QString dxCallState, QString spotterCall, QString spotterQra, QString spotterCallState)
 {
-    for (auto const &s: qAsConst(serverList))
+    for (auto const &s: QASCONST(serverList))
     {
 
         trace(QString("Send Qrz Response to Cluster Server = %1").arg(s.app));
@@ -93,7 +94,7 @@ void QrzServerRpc::sendQrzResponseToClusterServer(QString dxCall, QString dxQra,
 
 void QrzServerRpc::sendQrzResponseToLoggerDisplay(QrzCallsignData qrzCallsignData, QString state, QString fromStationName, QString uuid)
 {
-    for (auto const &s: qAsConst(serverList))
+    for (auto const &s: QASCONST(serverList))
     {
         if (s.app == fromStationName)
         {
@@ -137,7 +138,7 @@ void QrzServerRpc::sendQrzLoggedState(bool state, QString stateMessage)
 {
     QString logState;
     trace(QString("sendQrzLoggedState: state = %1, stateMessage = %2").arg(state ? "logged on" : "logged off", stateMessage));
-    for (auto const &s: qAsConst(serverList))
+    for (auto const &s: QASCONST(serverList))
     {
         trace(QString("Send Qrz Logged State %1 to Server = %2").arg(state ? "logged on" : "logged off", s.app));
         RPCGeneralClient rpc(rpcConstants::qrzMethod);

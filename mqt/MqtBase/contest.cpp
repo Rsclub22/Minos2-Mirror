@@ -8,7 +8,7 @@
 /////////////////////////////////////////////////////////////////////////////
 #include <QHostInfo>
 #include <cmath>
-#include "AppStartup.h"
+#include "QtUtils.h"
 #include "calcs.h"
 #include "contacts.h"
 #include "cutils.h"
@@ -123,7 +123,7 @@ void BaseContestLog::refreshCache()
     {
         clearCache();
         int offset = 0;
-        for ( auto const &c: qAsConst(ctList ))
+        for ( auto const &c: QASCONST(ctList ))
         {
             ctPointerIndexMap[c.wt.data()] = offset;
             ctIndexCache.push_back(c.wt);
@@ -356,7 +356,7 @@ void BaseContestLog::clearDirty()
    DTGEnd.clearDirty();
    currentOp1.clearDirty();
    currentOp2.clearDirty();
-   for ( auto const &i: qAsConst(ctList) )
+   for ( auto const &i: QASCONST(ctList) )
    {
       i.wt->clearDirty();
    }
@@ -405,7 +405,7 @@ void BaseContestLog::setDirty()
    currentOp1.setDirty();
    currentOp2.setDirty();
 
-   for ( auto const &i: qAsConst(ctList) )
+   for ( auto const &i: QASCONST(ctList) )
    {
       i.wt->setDirty();
    }
@@ -413,7 +413,7 @@ void BaseContestLog::setDirty()
 
 QSharedPointer<BaseContact> BaseContestLog::findContact(CheckableContact *cct) const
 {
-    for ( auto const &i: qAsConst(ctList) )
+    for ( auto const &i: QASCONST(ctList) )
     {
        // linear search
        if (i.wt.data() == cct)
@@ -847,7 +847,7 @@ void BaseContestLog::updateStats( int p1, int p2 )
 int BaseContestLog::getValidQSOs()
 {
    int nvalid = 0;
-   for(auto const &i: qAsConst(ctList))
+   for(auto const &i: QASCONST(ctList))
    {
       QSharedPointer<BaseContact> dct = i.wt;
 
@@ -882,7 +882,7 @@ static void isBestDX( QSharedPointer<BaseContact> cct, QSharedPointer<BaseContac
 QSharedPointer<BaseContact> BaseContestLog::getBestDX( )
 {
    QSharedPointer<BaseContact> bestDX;
-   for ( auto const &i: qAsConst(ctList) )
+   for ( auto const &i: QASCONST(ctList) )
       isBestDX( i.wt, &bestDX );
    return bestDX;
 }
@@ -1025,7 +1025,7 @@ void BaseContestLog::scanContest( )
 
    validateLoc();
 
-   for(auto const &wnct: qAsConst(ctList))
+   for(auto const &wnct: QASCONST(ctList))
    {
       // get the next contact in sequence and do any required scan checks
       QSharedPointer<BaseContact> nct = wnct.wt;
@@ -1055,7 +1055,7 @@ void BaseContestLog::getScoresTo(ContestScore &cs, QDateTime limit)
    cs.bonus = 0;
    cs.nbonus = 0;
 
-   for(auto const &i: qAsConst(ctList))
+   for(auto const &i: QASCONST(ctList))
    {
        // get the next contact in sequence and do any required scan checks
       QSharedPointer<BaseContact> nct = i.wt;
@@ -1709,7 +1709,7 @@ bool BaseContestLog::getStanza( unsigned int /*stanza*/, QString & /*stanzaData*
 //====================================================================
 QSharedPointer<BaseContact> BaseContestLog::findNextUnfilledContact()
 {
-    for ( auto const &i: qAsConst( ctList) )
+    for ( auto const &i: QASCONST( ctList) )
    {
       if ( i.wt ->contactFlags.getValue() & TO_BE_ENTERED )
       {
@@ -1958,7 +1958,7 @@ int BaseContestLog::getNctry() const
 int BaseContestLog::getDistrictsWorked( const QString &item )
 {
     int n = 0;
-    for(auto &dc: qAsConst(districtWorked))
+    for(auto &dc: QASCONST(districtWorked))
     {
         if (dc.contains(item))
         {
@@ -1971,7 +1971,7 @@ int BaseContestLog::getDistrictsWorked( const QString &item )
 int BaseContestLog::getCountriesWorked( const QString &item )
 {
     int n = 0;
-    for(auto &dc: qAsConst(countryWorked))
+    for(auto &dc: QASCONST(countryWorked))
     {
         if (dc.contains(item))
         {

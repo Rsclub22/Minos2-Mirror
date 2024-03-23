@@ -89,7 +89,7 @@ void ClusterClientFilterDialog::initCheckFilterTab()
 
         // bands only contains displayable bands (<10GHz) and is sorted
 
-        for (auto const &b: qAsConst(bands))
+        for (auto const &b: QASCONST(bands))
         {
             QCheckBox *cb = new QCheckBox();
             allBandChkBoxList << cb;
@@ -148,7 +148,7 @@ void ClusterClientFilterDialog::initCheckFilterTab()
     mwvbl->setContentsMargins(1, 1, 1, 1);
     ui->mwScrollAreaWidgetContents->setLayout(mwvbl);
 
-    for (const auto &b:qAsConst(bands))
+    for (const auto &b:QASCONST(bands))
     {
         QWidget *p = nullptr;
         if (b->getType() == HF_BANDTYPE)
@@ -337,7 +337,7 @@ void ClusterClientFilterDialog::filtersAccepted()
 
 
     // check bandfilter changed
-    for (const auto &b: qAsConst(bands))
+    for (const auto &b: QASCONST(bands))
     {
         QString band = b->uk;
 
@@ -380,7 +380,7 @@ void ClusterClientFilterDialog::filtersAccepted()
     }
 
 
-    for (const auto &b: qAsConst(bands))
+    for (const auto &b: QASCONST(bands))
     {
         QString band = b->uk;
         if (filterSettings.getBandFilter(band))
@@ -397,7 +397,7 @@ void ClusterClientFilterDialog::filtersAccepted()
     }
 
 
-    for (const auto &b: qAsConst(bands))
+    for (const auto &b: QASCONST(bands))
     {
         QString band = b->uk;
 
@@ -415,7 +415,7 @@ void ClusterClientFilterDialog::filtersAccepted()
     }
 
 
-    for (const auto &b: qAsConst(bands))
+    for (const auto &b: QASCONST(bands))
     {
         QString band = b->uk;
 
@@ -550,7 +550,7 @@ void ClusterClientFilterDialog::closeEvent (QCloseEvent *event)
 
 void ClusterClientFilterDialog::copyBandFiltersToDialog()
 {
-    for (const auto &b: qAsConst(bands))
+    for (const auto &b: QASCONST(bands))
     {
         bandCheckBoxes.value(b->uk).bandChkBox->setChecked(filterSettings.getBandFilter(b->uk));
     }
@@ -566,7 +566,7 @@ void ClusterClientFilterDialog::setHFVisible(bool state)
 
 
 
-    for (const auto &b: qAsConst(bands))
+    for (const auto &b: QASCONST(bands))
     {
         if (b->getType() == HF_BANDTYPE)
         {
@@ -704,7 +704,7 @@ void ClusterClientFilterDialog::clearAllFilters()
 
 void ClusterClientFilterDialog::setBandsCheckBox(QString bandType, bool state)
 {
-    for (const auto &b: qAsConst(bands))
+    for (const auto &b: QASCONST(bands))
     {
         if (b->getType() == bandType)
         {
@@ -716,7 +716,7 @@ void ClusterClientFilterDialog::setBandsCheckBox(QString bandType, bool state)
 
 bool ClusterClientFilterDialog::areAnyBandsChecked(QString bandType)
 {
-    for (const auto &b: qAsConst(bands))
+    for (const auto &b: QASCONST(bands))
     {
         if (b->getType() == bandType)
         {
@@ -734,7 +734,7 @@ bool ClusterClientFilterDialog::areAnyBandsChecked(QString bandType)
 void ClusterClientFilterDialog::restoreBands()
 {
 
-    for (const auto &b: qAsConst(bands))
+    for (const auto &b: QASCONST(bands))
     {
         QString band = b->uk;
 
@@ -1264,7 +1264,7 @@ void ClusterClientFilterDialog::importFilterToWidgetList(QStringList &listOfFilt
 void ClusterClientFilterDialog::enableDistanceFields()
 {
 
-    for (const auto &b: qAsConst(bands))
+    for (const auto &b: QASCONST(bands))
     {
         QString band = b->uk;
 
@@ -1390,7 +1390,7 @@ void ClusterClientFilterDialog::setDefDistances(QString bandType)
 
 
 
-    for (const auto &b: qAsConst(bands))
+    for (const auto &b: QASCONST(bands))
     {
         QString band = b->uk;
 
@@ -1452,7 +1452,7 @@ void ClusterClientFilterDialog::onMwClearAllIgnorePbClicked()
 
 void ClusterClientFilterDialog::setIgnoreDistCheckBox(QString bandType, bool state)
 {
-    for (const auto &b: qAsConst(bands))
+    for (const auto &b: QASCONST(bands))
     {
         QString band = b->uk;
 
@@ -1504,7 +1504,7 @@ void ClusterClientFilterDialog::onMwClearAllEmptyDistPbClicked()
 
 void ClusterClientFilterDialog::setEmptyDistCheckBox(QString bandType, bool state)
 {
-    for (const auto &b: qAsConst(bands))
+    for (const auto &b: QASCONST(bands))
     {
         if(b->getType() == bandType)
         {

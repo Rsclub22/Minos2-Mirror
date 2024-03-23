@@ -110,7 +110,7 @@ bool AddRadioDialog::checkNameAlreadyExists(QString radioName)
     msgBox.setModal( true );
     msgBox.setWindowTitle(tr("Error Radio Name"));
 
-    for (const auto &r: qAsConst(rList))
+    for (const auto &r: QASCONST(rList))
     {
         if (availRadioData->value(r)->radioName == radioName && availRadioData->value(r)->markForDeletion)
         {

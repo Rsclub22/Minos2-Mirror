@@ -4,6 +4,7 @@
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QFile>
+#include "QtUtils.h"
 #include "AppStartup.h"
 #include "MShowMessageDlg.h"
 #include "profiles.h"
@@ -172,7 +173,7 @@ void ScreenConfigFile::procRows(QVector<SCRow> &elerows, QJsonArray &rows)
     {
         SCRow scrow;
         QJsonArray elearray = r.toArray();
-        for (auto const &e: qAsConst(elearray))
+        for (auto const &e: QASCONST(elearray))
         {
             SCElement scele;
             QJsonObject ele = e.toObject();
@@ -257,7 +258,7 @@ bool ScreenConfigFile::parseConfigString(QString s)
         if( json.isArray())
         {
             QJsonArray namearray = json.array();
-            for (auto const &n: qAsConst(namearray))
+            for (auto const &n: QASCONST(namearray))
             {
                 SC config;
                 QJsonObject namestruct = n.toObject();

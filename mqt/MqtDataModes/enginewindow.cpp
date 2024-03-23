@@ -1,6 +1,7 @@
 #include <QSettings>
 #include <QTimer>
 #include <QKeyEvent>
+#include "QtUtils.h"
 
 #ifdef Q_OS_WIN
 #include <windows.h>
@@ -90,7 +91,7 @@ EngineWindow::EngineWindow(QWidget *parent)
     fButtons << ui->F7Button << ui->F8Button << ui->F9Button << ui->F10Button << ui->F11Button << ui->F12Button;
 
     int i = Qt::Key_F1;
-    for (auto b: qAsConst(fButtons))
+    for (auto b: QASCONST(fButtons))
     {
         b->setProperty("KeyNo", i++);
         b->setText("");
@@ -248,7 +249,7 @@ void EngineWindow::on_notify(AnalysePubSubNotify an, const QString /*from*/ )
                 {
                     int i = 0;
                     QJsonArray keyarray = json.array();
-                    for (auto const &k: qAsConst(keyarray))
+                    for (auto const &k: QASCONST(keyarray))
                     {
                         if (i >= 12)
                         {
@@ -327,7 +328,7 @@ QStringList EngineWindow::populateRig()
 {
     QStringList cb;
     cb.append("");
-    for (const auto &r: qAsConst(rigCache.getRigList()))
+    for (const auto &r: QASCONST(rigCache.getRigList()))
     {
         if (!r.isEmpty() )
         {
@@ -593,7 +594,7 @@ void EngineWindow::scanLine(int curLine) {
     QStringList words = line.split(separator);
     int offset = 0;
     int endword = 0;
-    for(const auto &w:qAsConst(words))
+    for(const auto &w:QASCONST(words))
     {
         endword = offset + w.size();
         RXChar *r = rline->getCharRef(offset);

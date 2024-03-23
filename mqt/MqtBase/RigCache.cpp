@@ -1,3 +1,4 @@
+#include "QtUtils.h"
 #include "RigCache.h"
 #include "AnalysePubSubNotify.h"
 #include "MinosRPC.h"
@@ -65,7 +66,7 @@ void RigCache::addRigList(const QString &s)
         lpsn = PubSubName(list[0]);
         QVector<PubSubName> newRigList;
 
-        for(auto const &psn: qAsConst(rigList))
+        for(auto const &psn: QASCONST(rigList))
         {
             if (lpsn.router() != psn.router() || lpsn.appName() != psn.appName())
             {
@@ -75,7 +76,7 @@ void RigCache::addRigList(const QString &s)
         rigList = newRigList;
 
     }
-    for(auto const &l: qAsConst(list))
+    for(auto const &l: QASCONST(list))
     {
         // add all of the list to rig list
         PubSubName psn(l);
@@ -112,7 +113,7 @@ void RigCache::addRigList(const QString &s)
         }
         rigStates = newstates;
     }
-    for(auto const &psn: qAsConst(rigList))
+    for(auto const &psn: QASCONST(rigList))
     {
         if (!rigDetails.contains(psn))
         {

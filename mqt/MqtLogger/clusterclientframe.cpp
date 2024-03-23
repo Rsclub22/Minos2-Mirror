@@ -50,7 +50,7 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     traceMsg(QString("Starting"));
 
     BandList::getBandList().loadAllBands(bands, false);
-    for (auto const &b: qAsConst(bands))
+    for (auto const &b: QASCONST(bands))
     {
         clusterBands << b->uk;
     }
@@ -191,7 +191,7 @@ ClusterClientFrame::~ClusterClientFrame()
     delete ui;
     delete dxSpotDataModel;
 
-    for(auto const &m: qAsConst(filterProxyModelList))
+    for(auto const &m: QASCONST(filterProxyModelList))
     {
         delete m;
     }
@@ -974,7 +974,7 @@ void ClusterClientFrame::setContest(BaseContestLog *c)
                 defaultDistIniNames.initClusterFilterIdAndNames(bands);
 
 
-                for (const auto &b: qAsConst(bands))
+                for (const auto &b: QASCONST(bands))
                 {
                     QString band = b->uk;
                     DefaultDistanceIniName ddin = defaultDistIniNames.getDefaultDistIniName(band);

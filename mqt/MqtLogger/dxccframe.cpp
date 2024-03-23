@@ -315,7 +315,7 @@ bool DXCCSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex
     int worked = ct->getCountriesWorked(band, bp);
 
     bool makeVisible = false;
-    for ( auto const &c: qAsConst(contlist ))
+    for ( auto const &c: QASCONST(contlist ))
     {
         if ( ce->getContinent() == c.continent )
         {

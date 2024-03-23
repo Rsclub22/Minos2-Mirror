@@ -8,6 +8,7 @@
 /////////////////////////////////////////////////////////////////////////////
 //---------------------------------------------------------------------------
 
+#include "QtUtils.h"
 #include "portconf.h"
 #include "controlport.h"
 
@@ -33,7 +34,7 @@ commonController::commonController(QWidget *p ):parent(p)
 void commonController::closeDown()
 {
    // close down each port
-   for ( auto const &icp: qAsConst(portChain) )
+   for ( auto const &icp: QASCONST(portChain) )
    {
       delete ( icp );
    }
@@ -55,7 +56,7 @@ void commonController::tickEvent()        // this will often be an interrupt rou
 void commonController::checkControls( )
 {
    // loop through ports, checkControls on each
-    for ( auto const &icp: qAsConst(portChain) )
+    for ( auto const &icp: QASCONST(portChain) )
    {
       icp->checkControls();
    }
@@ -63,7 +64,7 @@ void commonController::checkControls( )
 commonPort *commonController::createPort( const PortConfig &port )
 {
     commonPort * cp = nullptr;
-    for(auto const &ni: qAsConst(portChain))
+    for(auto const &ni: QASCONST(portChain))
     {
         if (ni->portName == port.name)
         {
@@ -100,7 +101,7 @@ commonPort *commonController::createPort( const PortConfig &port )
 commonLineControl *commonController::findLine( const QString &name, bool lineIn )
 {
    commonLineControl * clc = nullptr;
-   for ( auto const &icp: qAsConst(portChain) )
+   for ( auto const &icp: QASCONST(portChain) )
    {
       clc = icp->findLine( name, lineIn );
       if ( clc )

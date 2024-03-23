@@ -7,6 +7,7 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 //---------------------------------------------------------------------------
+#include "QtUtils.h"
 #include "PubSubServer.h"
 
 QVector<RPCRouterSubscriber *> routerSubscribeList;
@@ -31,7 +32,7 @@ void RPCRouterPubSub::routerSubscribeRemote( const QString &router, const QStrin
 }
 void RPCRouterPubSub::routerReconnectRemotePubSub( const QString &router )
 {
-   for ( auto const &s: qAsConst(routerSubscribeList ))
+   for ( auto const &s: QASCONST(routerSubscribeList ))
    {
       if ( s && s->getRouter() == router )
       {
@@ -63,7 +64,7 @@ RPCRouterSubscriber::RPCRouterSubscriber(const QString &router, const QString &c
 void RPCRouterSubscriber::testAndSubscribe( const QString &router, const QString &cat )
 {
     RPCRouterSubscriber * sub = nullptr;
-    for ( auto const &s: qAsConst(routerSubscribeList ))
+    for ( auto const &s: QASCONST(routerSubscribeList ))
    {
       if ( s ->isRemoteEqual( router, cat ) )
       {

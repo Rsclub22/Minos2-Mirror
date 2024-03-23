@@ -28,7 +28,7 @@ RotPresets::RotPresets(QWidget *parent) :
 RotPresets::~RotPresets()
 {
     delete ui;
-    for(auto const &b: qAsConst(presetButton))
+    for(auto const &b: QASCONST(presetButton))
     {
         delete b;
     }
@@ -36,7 +36,7 @@ RotPresets::~RotPresets()
 }
 void RotPresets::clearPresetData()
 {
-    for(auto const &b: qAsConst(rotPresetData))
+    for(auto const &b: QASCONST(rotPresetData))
     {
         delete b;
     }

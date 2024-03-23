@@ -130,7 +130,7 @@ void TCalendarForm::LoadGrid ( Calendar &cal )
     int row = 0;
     int nextContest = -1;
     QDateTime now = QDateTime::currentDateTime();
-    for ( auto const &c: qAsConst(cal.calendar ))
+    for ( auto const &c: QASCONST(cal.calendar ))
     {
         col = 0;
         ui->CalendarGrid->setItem( row, col++, new QTableWidgetItem( c.description ) );

@@ -7,6 +7,7 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 #include <QString>
+#include "QtUtils.h"
 #include "AppStartup.h"
 #include "tinyxml.h"
 #include "TinyUtils.h"
@@ -90,7 +91,7 @@ void PortConfigure::SetEnable( TiXmlElement *e, commonController &monitor )
       // now create the port
       commonPort *p = monitor.createPort( pc );
       // and loop through the lines adding the relevant lineConfig lines to it
-      for ( auto const &i: qAsConst(linemap) )
+      for ( auto const &i: QASCONST(linemap) )
       {
          if ( pname == i.portName )
          {

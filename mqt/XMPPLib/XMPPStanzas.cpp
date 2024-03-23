@@ -7,6 +7,7 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 //---------------------------------------------------------------------------
+#include "QtUtils.h"
 
 #include "XMPPStanzas.h"
 #include "tinyxml.h"
@@ -53,7 +54,7 @@ RPCAction::~RPCAction()
 QString RPCAction::print()
 {
    QString s = "From: " + getFrom() + " To: " + getTo() + "\r\n";
-   for ( auto const &i: qAsConst(args) )
+   for ( auto const &i: QASCONST(args) )
    {
       s += i->print();
    }
@@ -163,7 +164,7 @@ QString RPCRequest::print()
 QString RPCRequest::analyse()
 {
    QString s = methodName + " id " + getId() +(!from.isEmpty()?(" from " + from):QString()) + (!to.isEmpty()?(" to " + to):QString()) + " : ";
-   for ( auto const &i: qAsConst(args ))
+   for ( auto const &i: QASCONST(args ))
    {
       s += i->analyse();
    }

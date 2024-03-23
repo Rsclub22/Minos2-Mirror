@@ -1,3 +1,4 @@
+#include "QtUtils.h"
 #include "checkmodeagainstfreq.h"
 #include "clustercommon.h"
 #include "rigcontrolcommonconstants.h"
@@ -16,7 +17,7 @@ QString checkModeAgainstFreq::getMode(const QString &band, Frequency freq)
         for (QMap<QString, ModeFreqDetail<Frequency> >::const_iterator i = modeList.constBegin(); i != modeList.constEnd(); i++)
         {
             ModeFreqDetail<Frequency> freqs = i.value();
-            for (auto const &freqLimits: qAsConst(freqs.freq))
+            for (auto const &freqLimits: QASCONST(freqs.freq))
             {
                 if (freqLimits.count() == 0)
                     continue;

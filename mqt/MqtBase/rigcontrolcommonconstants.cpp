@@ -1,3 +1,4 @@
+#include "QtUtils.h"
 #include "rigcontrolcommonconstants.h"
 #include "AppStartup.h"
 #include "BandList.h"
@@ -197,7 +198,7 @@ void PresetFreq::setLastFreq(const QString mode, const QString band, const Frequ
 
 void PresetFreq::copyAllPrevFreqToLastFreqByMode(const QString mode, const QVector<QSharedPointer<BandInfo> > &bands)
 {
-    for (const auto &b: qAsConst(bands))
+    for (const auto &b: QASCONST(bands))
     {
         Frequency f = getPresetFreq(mode, b->uk);
         setLastFreq(mode, b->uk, f);

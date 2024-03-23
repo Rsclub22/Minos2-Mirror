@@ -1659,7 +1659,7 @@ void WsjtxFrame::showBlackList()
 
 bool WsjtxFrame::blackListContains(const BlCall &bl)
 {
-    for(const auto &b:qAsConst(*blackList))
+    for(const auto &b:QASCONST(*blackList))
     {
         if (*b == bl)
         {

@@ -261,7 +261,7 @@ void RigSetupForm::setupRadioModel(QString radioModel)
              setTransVertSwVisible(true);
              setEnableLocalTransVertSwVisible(true);
              QStringList tvList = radioData->transVertSettings.keys();
-             for(const auto &tv: qAsConst(tvList))
+             for(const auto &tv: QASCONST(tvList))
              {
                  transVertTab.value(tv)->setEnableTransVertSwBoxVisible(true);
              }
@@ -1007,7 +1007,7 @@ void RigSetupForm::enableTransVertSwSel(bool /*flag*/)
     {
         radioData->enableTransSwitch = checked;
         QStringList tvList = radioData->transVertSettings.keys();
-        for(const auto &tv: qAsConst(tvList))
+        for(const auto &tv: QASCONST(tvList))
         {
             transVertTab.value(tv)->setEnableTransVertSwBoxVisible(checked);
         }
@@ -1036,7 +1036,7 @@ void RigSetupForm::setEnableTransVertSw(bool b)
     ui->enableTransVertSw->setChecked(b);
 
     QStringList tvList = radioData->transVertSettings.keys();
-    for(const auto &tv: qAsConst(tvList))
+    for(const auto &tv: QASCONST(tvList))
     {
         transVertTab.value(tv)->setEnableTransVertSwBoxVisible(b);
     }
@@ -1653,7 +1653,7 @@ void RigSetupForm::initSupBandsChkBoxs()
 
     QGridLayout *gl = new QGridLayout();
     ui->supBandsFrame->setLayout(gl);
-    for (const auto &b: qAsConst(bands))
+    for (const auto &b: QASCONST(bands))
     {
         SupCheckBoxData scbd;
         QCheckBox *cb = new QCheckBox(ui->supBandsFrame);
@@ -1727,7 +1727,7 @@ void RigSetupForm::setSupportBandChkBox(QString band, bool checked)
 
 void RigSetupForm::setSupportBandCheckBoxVisible(bool visible)
 {
-    for (const auto &b: qAsConst(bands))   // do we need this as the visibility of the groupbox manages the individual checkboxes
+    for (const auto &b: QASCONST(bands))   // do we need this as the visibility of the groupbox manages the individual checkboxes
     {
        if (allSupBandsChkBoxesMap.contains(b->name()))
        {
@@ -1740,7 +1740,7 @@ void RigSetupForm::setSupportBandCheckBoxVisible(bool visible)
 
 bool RigSetupForm::isAnySupportBandChecked()
 {
-    for (const auto &b: qAsConst(bands))
+    for (const auto &b: QASCONST(bands))
     {
         if (allSupBandsChkBoxesMap.contains(b->name()))
         {

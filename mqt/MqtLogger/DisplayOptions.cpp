@@ -105,7 +105,7 @@ void DisplayOptions::initialise()
     QStringList sl;
 
     int n = 0;
-    for(auto const &l: qAsConst(languages))
+    for(auto const &l: QASCONST(languages))
     {
         sl.append(l.dispName);
         if (l.code == currentLang)
@@ -413,7 +413,7 @@ void DisplayOptions::doLanguageChange()
         QString selText = ui->LanguageComboBox->currentText();
 
         QVector<Translation> languages = getLanguages();
-        for(auto const &l: qAsConst(languages))
+        for(auto const &l: QASCONST(languages))
         {
             if (l.dispName == selText)
             {

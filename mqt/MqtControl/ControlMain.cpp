@@ -1,5 +1,6 @@
 #include <QSettings>
 #include <QCloseEvent>
+#include "QtUtils.h"
 #include "regsettings.h"
 #include "AppStartup.h"
 #include "MinosRPC.h"
@@ -64,7 +65,7 @@ void ControlMain::getRouterAppCatMap()
 
     QMap<QString,QVector< QSharedPointer<Connectable> > > routerAppCatMap;
 
-    for ( auto const &c: qAsConst(connectables) )
+    for ( auto const &c: QASCONST(connectables) )
     {
         if (c->appType == "None")
         {

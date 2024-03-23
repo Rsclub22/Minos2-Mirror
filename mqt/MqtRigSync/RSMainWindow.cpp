@@ -1,5 +1,6 @@
 #include <QThread>
 #include <QSettings>
+#include "QtUtils.h"
 #include "AppStartup.h"
 #include "regsettings.h"
 #include "RPCCommandConstants.h"
@@ -92,7 +93,7 @@ void RSMainWindow::configure()
     QStringList sv;
     RSConfigure rsc(this);
 
-    for (const auto &r: qAsConst(rigCache.getRigList()))
+    for (const auto &r: QASCONST(rigCache.getRigList()))
     {
         QString s = r.getRouterApp();
         sv.append(s);
@@ -317,7 +318,7 @@ void RSMainWindow::on_notify( AnalysePubSubNotify an, const QString /*from*/ )
                 return;
         }
 
-        for (const auto &r: qAsConst(rigCache.getRigList()))
+        for (const auto &r: QASCONST(rigCache.getRigList()))
         {
             if (r.getRouterApp() == mainRig.server)
             {
@@ -526,7 +527,7 @@ QStringList SyncRadio::populateRig()
 {
     QStringList cb;
     cb.append("");
-    for (const auto &r: qAsConst(rigCache.getRigList()))
+    for (const auto &r: QASCONST(rigCache.getRigList()))
     {
         if (!r.isEmpty() && r.getRouterApp() == server )
         {

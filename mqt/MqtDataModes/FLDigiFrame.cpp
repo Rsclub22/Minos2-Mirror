@@ -1,4 +1,5 @@
 #include <QDateTime>
+#include "QtUtils.h"
 
 #include "AppStartup.h"
 #include "MTrace.h"
@@ -304,7 +305,7 @@ void FLDigiFrame::addText(const QString &t)
 {
     RXChar rxch('\n', 0, markFrequency);
     engineWindow->rxBuff.addChar(rxch);
-    for(const auto &s:qAsConst(t))
+    for(const auto &s:QASCONST(t))
     {
         RXChar rxch(s, 0, markFrequency);
         engineWindow->rxBuff.addChar(rxch);
@@ -327,7 +328,7 @@ void FLDigiFrame::myResponseMethod(QVariant &v)
             addText("Response: ");
             RXChar rxch('\n', 0, markFrequency);
             engineWindow->rxBuff.addChar(rxch);
-            for (auto c:qAsConst(s))
+            for (auto c:QASCONST(s))
             {
                 RXChar rxch(c, 0, markFrequency);
                 engineWindow->rxBuff.addChar(rxch);
@@ -340,12 +341,12 @@ void FLDigiFrame::myResponseMethod(QVariant &v)
     {
         QStringList sl = v.toStringList();
 
-        for(const auto &s:qAsConst(sl))
+        for(const auto &s:QASCONST(sl))
         {
             trace(QString("Response %1").arg(s));
             RXChar rxch('\n', 0, markFrequency);
             engineWindow->rxBuff.addChar(rxch);
-            for (auto c:qAsConst(s))
+            for (auto c:QASCONST(s))
             {
                 RXChar rxch(c, 0, markFrequency);
                 engineWindow->rxBuff.addChar(rxch);
@@ -371,7 +372,7 @@ void FLDigiFrame::myCarrierResponseMethod(QVariant &v)
     {
         QStringList sl = v.toStringList();
 
-        for(const auto &s:qAsConst(sl))
+        for(const auto &s:QASCONST(sl))
         {
             //trace(QString("Carrier 2 %1").arg(s));
             markFrequency = s.toInt() - carrierOffsetFromMark;
@@ -390,7 +391,7 @@ void FLDigiFrame::myTxResponseMethod(QVariant &v)
             trace(QString("TXResponse %1").arg(s));
             RXChar rxch('\n', 0, markFrequency);
             engineWindow->rxBuff.addChar(rxch);
-            for (auto c:qAsConst(s))
+            for (auto c:QASCONST(s))
             {
                 RXChar rxch(c, 0, markFrequency);
                 engineWindow->rxBuff.addChar(rxch);
@@ -401,12 +402,12 @@ void FLDigiFrame::myTxResponseMethod(QVariant &v)
     {
         QStringList sl = v.toStringList();
 
-        for(const auto &s:qAsConst(sl))
+        for(const auto &s:QASCONST(sl))
         {
             trace(QString("TXResponse %1").arg(s));
             RXChar rxch('\n', 0, markFrequency);
             engineWindow->rxBuff.addChar(rxch);
-            for (auto c:qAsConst(s))
+            for (auto c:QASCONST(s))
             {
                 RXChar rxch(c, 0, markFrequency);
                 engineWindow->rxBuff.addChar(rxch);
@@ -424,7 +425,7 @@ void FLDigiFrame::myRxResponseMethod(QVariant &v)
         {
             trace(QString("RXResponse %1").arg(s));
 
-            for (auto c:qAsConst(s))
+            for (auto c:QASCONST(s))
             {
                 RXChar rxch(c, 0, markFrequency);
                 engineWindow->rxBuff.addChar(rxch);
@@ -435,12 +436,12 @@ void FLDigiFrame::myRxResponseMethod(QVariant &v)
     {
         QStringList sl = v.toStringList();
 
-        for(const auto &s:qAsConst(sl))
+        for(const auto &s:QASCONST(sl))
         {
             trace(QString("RXResponse %1").arg(s));
             RXChar rxch('\n', 0, markFrequency);
             engineWindow->rxBuff.addChar(rxch);
-            for (auto c:qAsConst(s))
+            for (auto c:QASCONST(s))
             {
                 RXChar rxch(c, 0, markFrequency);
                 engineWindow->rxBuff.addChar(rxch);

@@ -1,3 +1,5 @@
+#include "QtUtils.h"
+
 #include "checkoperatingfreq.h"
 #include "rigcontrolcommonconstants.h"
 
@@ -21,7 +23,7 @@ int CheckOperatingFreq::freqValid(const QString &band, const QString &mode, cons
         if (modeList.contains(m))
         {
             freqs = modeList.value(m);
-            for (auto const &freqLimits: qAsConst(freqs.freq))
+            for (auto const &freqLimits: QASCONST(freqs.freq))
             {
                 if (freqLimits.count() == 0)
                     continue;

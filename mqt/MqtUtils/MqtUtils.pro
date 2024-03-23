@@ -36,6 +36,7 @@ SOURCES += \
     minossplitter.cpp
 
 HEADERS += \
+    QtUtils.h \
     SecondInstall.h \
     WindowsAppId.h \
     baseconstants.h \

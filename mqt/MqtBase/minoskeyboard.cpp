@@ -1,7 +1,7 @@
+#include <QKeyEvent>
+#include "QtUtils.h"
 #include "minoskeyboard.h"
 #include "ui_minoskeyboard.h"
-
-#include <QKeyEvent>
 
 MinosKeyboard::MinosKeyboard(QWidget *parent) :
     QFrame(parent),
@@ -12,7 +12,7 @@ MinosKeyboard::MinosKeyboard(QWidget *parent) :
     QList<QPushButton *> pushButtons = findChildren<QPushButton *>();
 
     setFocusPolicy(Qt::NoFocus);
-    for (auto const &t: qAsConst(pushButtons))
+    for (auto const &t: QASCONST(pushButtons))
     {
         t->setFocusPolicy(Qt::NoFocus);
         if (t == ui->tabButton)

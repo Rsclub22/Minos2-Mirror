@@ -44,7 +44,7 @@ void TSendDM::getRouterAppCatMap()
     connectables = config->getConnectables();
 
     QMap<QString,QVector< QSharedPointer<Connectable> > > routerAppCatMap;
-    for ( const auto &i: qAsConst(connectables))
+    for ( const auto &i: QASCONST(connectables))
     {
         if (i->appType == "None")
         {
@@ -590,7 +590,7 @@ void TSendDM::notifyRigDetailChanges()
 {
     QVector<PubSubName> riglist = rigCache.getRigList();
     QVector<TSingleLogFrame *> frames = LogContainer->getLogFrames();
-    for (auto const &psn: qAsConst(riglist))
+    for (auto const &psn: QASCONST(riglist))
     {
         RigDetails& selDetail = rigCache.getDetails(psn);
         if (selDetail.isDirty())
@@ -598,49 +598,49 @@ void TSendDM::notifyRigDetailChanges()
             traceMsg(QString("notifyRigDetailChanges: %1 is dirty, send to rigcontrol").arg(psn.toString()));
             if (selDetail.transverterOffset().isDirty())
             {
-                for (auto const &tslf: qAsConst(frames))
+                for (auto const &tslf: QASCONST(frames))
                 {
                     tslf->on_SetTransVertOffset(selDetail.transverterOffset().getValue(), psn);
                 }
             }
             if (selDetail.transverterSwitch().isDirty())
             {
-                for (auto const &tslf: qAsConst(frames))
+                for (auto const &tslf: QASCONST(frames))
                 {
                     tslf->on_SetTransVertSwitch(selDetail.transverterSwitch().getValue(), psn);
                 }
             }
             if (selDetail.transverterEnabled().isDirty())
             {
-                for (auto const &tslf: qAsConst(frames))
+                for (auto const &tslf: QASCONST(frames))
                 {
                     tslf->on_SetTransVertEnabled(selDetail.transverterEnabled().getValue(), psn);
                 }
             }
             if (selDetail.transverterStatus().isDirty())
             {
-                for (auto const &tslf: qAsConst(frames))
+                for (auto const &tslf: QASCONST(frames))
                 {
                     tslf->on_SetTransVertStatus(selDetail.transverterStatus().getValue(), psn);
                 }
             }
             if (selDetail.volumeStatus().isDirty())
             {
-                for (auto const &tslf: qAsConst(frames))
+                for (auto const &tslf: QASCONST(frames))
                 {
                     tslf->on_SetVolumeStatus(selDetail.volumeStatus().getValue(), psn);
                 }
             }
             if (selDetail.ritEnableStatus().isDirty())
             {
-                for (auto const &tslf: qAsConst(frames))
+                for (auto const &tslf: QASCONST(frames))
                 {
                     tslf->on_SetRitEnableStatus(selDetail.ritEnableStatus().getValue(), psn);
                 }
             }
             if (selDetail.ritMaxKHzFreq().isDirty())
             {
-                for (auto const &tslf: qAsConst(frames))
+                for (auto const &tslf: QASCONST(frames))
                 {
                     tslf->on_SetRitMaxKHzFreq(selDetail.ritMaxKHzFreq().getValue(), psn);
 
@@ -649,7 +649,7 @@ void TSendDM::notifyRigDetailChanges()
 
             if (selDetail.bandList().isDirty())
             {
-                for (auto const &tslf: qAsConst(frames))
+                for (auto const &tslf: QASCONST(frames))
                 {
                     tslf->on_SetBandList(selDetail.bandList().getValue(), psn);
                 }
@@ -737,7 +737,7 @@ void TSendDM::notifyRigChanges()
         if (!selStateUuid.isEmpty())
         {
             QVector<TSingleLogFrame *> frames = LogContainer->getLogFrames();
-            for (auto const &tslf: qAsConst(frames))
+            for (auto const &tslf: QASCONST(frames))
             {
                 if (tslf->getContest() == nullptr)
                 {
@@ -805,7 +805,7 @@ void TSendDM::notifyRotChanges()
         if (!selStateUuid.isEmpty())
         {
             QVector<TSingleLogFrame *> frames = LogContainer->getLogFrames();
-            for (auto const &tslf: qAsConst(frames))
+            for (auto const &tslf: QASCONST(frames))
             {
                 if (tslf->getContest() == nullptr)
                 {
@@ -1172,7 +1172,7 @@ QStringList TSendDM::rotators()
 {
     QStringList sl;
     QVector<PubSubName> rotlist = rotatorCache.getRotList();
-    for(auto const &psn: qAsConst(rotlist))
+    for(auto const &psn: QASCONST(rotlist))
     {
         QString antname = psn.toString();
         sl.append(antname);
@@ -1184,7 +1184,7 @@ QStringList TSendDM::rigs()
 {
     QStringList sl;
     QVector<PubSubName> riglist = rigCache.getRigList();
-    for (const auto &psn: qAsConst(riglist))
+    for (const auto &psn: QASCONST(riglist))
     {
         QString rigname = psn.toString();
         sl.append(rigname);

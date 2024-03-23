@@ -14,6 +14,8 @@
 #ifndef BANDMAPCOMMON_H
 #define BANDMAPCOMMON_H
 
+#include "QtUtils.h"
+
 #include <QString>
 #include <QMap>
 #include <QStringList>
@@ -55,7 +57,7 @@ public:
         QVector <QSharedPointer<BandInfo> > bands;
         BandList::getBandList().loadAllBands(bands);
 
-        for(const auto &b: qAsConst(bands))
+        for(const auto &b: QASCONST(bands))
         {
             QString profile = b->normalisedName();
             profile = "bandmapStartZoomLevel_" + profile;

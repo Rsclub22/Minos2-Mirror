@@ -50,7 +50,7 @@ void ClusterBandmapConfigure::initialise()
     int vhfRow = 0;
     int vhfCol = 0;
 
-    for (const auto &b: qAsConst(bands))
+    for (const auto &b: QASCONST(bands))
     {
         QLineEdit *qle = new QLineEdit();
         qle->setClearButtonEnabled(true);
@@ -177,7 +177,7 @@ void ClusterBandmapConfigure::initialise()
      ui->scrollAreaWidgetContents->setLayout(vbl);
 
      bandLimits.clear();
-     for (const auto &b: qAsConst(bands))
+     for (const auto &b: QASCONST(bands))
      {
          QFrame *bFrame = new QFrame;
          QHBoxLayout *hbl = new QHBoxLayout;
@@ -227,7 +227,7 @@ void ClusterBandmapConfigure::initialise()
 bool ClusterBandmapConfigure::check()
 {
     bool valid = true;
-    for (const auto &bl : qAsConst(bandLimits))
+    for (const auto &bl : QASCONST(bandLimits))
     {
         QString freq = bl.sValue();
         if (!valInputFreq(freq, tr(RADIO_FREQ_EDIT_ERR_MSG)))
@@ -271,7 +271,7 @@ void ClusterBandmapConfigure::finalise()
     TContestApp::getContestApp() ->loggerBundle.flushProfile();
 
     bool limitsChanged = false;
-    for (const auto &bl : qAsConst(bandLimits))
+    for (const auto &bl : QASCONST(bandLimits))
     {
         if (bl.finalise())
         {
@@ -322,7 +322,7 @@ void ClusterBandmapConfigure::onDistanceEditingFinished(QLineEdit *distLineEdit)
 
 QString ClusterBandmapConfigure::findBandKey(QLineEdit *distLineEdit)
 {
-    for (const auto &b: qAsConst(bands))
+    for (const auto &b: QASCONST(bands))
     {
         QString band = b->uk;
         if (distanceValues.value(band).distLineEdit == distLineEdit)
@@ -349,7 +349,7 @@ void ClusterBandmapConfigure::saveDistances()
     QSettings config(CLUSTER_FILTER_FILE(), QSettings::IniFormat);
     config.beginGroup("Default Distance");
 
-    for (const auto &b: qAsConst(bands))
+    for (const auto &b: QASCONST(bands))
     {
         QString band = b->uk;
         if (distanceValues.value(band).changed && distanceValues.value(band).distance != DEFAULT_FILTER_DISTANCE)

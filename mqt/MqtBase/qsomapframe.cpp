@@ -336,7 +336,7 @@ void QSOMapFrame::doRedraw(const BaseContestLog *ctest, bool grid, bool lines, b
 
     locs.clear();
 
-    for ( auto const &c: qAsConst(ct->ctList ))
+    for ( auto const &c: QASCONST(ct->ctList ))
     {
         QSharedPointer<BaseContact> cct = c.wt;
 
@@ -353,7 +353,7 @@ void QSOMapFrame::doRedraw(const BaseContestLog *ctest, bool grid, bool lines, b
         showContact(ct, cct);
     }
 
-    for( auto const &s: qAsConst(spotQueue))
+    for( auto const &s: QASCONST(spotQueue))
     {
         drawSpot(s);
     }
@@ -476,7 +476,7 @@ void QSOMapFrame::showContact(const BaseContestLog *c, const QSharedPointer<Base
         callInfo << (drawLine?"true":"false");
         emit callSig(callInfo);
 
-        for( auto const &s: qAsConst(spotQueue))
+        for( auto const &s: QASCONST(spotQueue))
         {
             if (s->getDxCall() == lct->cs)
             {

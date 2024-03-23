@@ -412,7 +412,7 @@ void MinosTestExport::exportClusterFilter(QSharedPointer<QFile> expfd)
 
         QVector<QSharedPointer<BandInfo> > bands;
         BandList::getBandList().loadAllBands(bands, false);
-        for(const auto &b: qAsConst(bands))
+        for(const auto &b: QASCONST(bands))
         {
              QString bandIni = "bandFilter" + b->normalisedName();
              QString distIni = "distanceFilter" + b->normalisedName();
@@ -629,7 +629,7 @@ int MinosTestExport::exportTest( QSharedPointer<QFile> expfd, int mindump, int m
 
 
    bool inDump = false;
-   for(auto const &dct: qAsConst(ct->ctList))
+   for(auto const &dct: QASCONST(ct->ctList))
    {
        QSharedPointer<BaseContact> lct = dct.wt;
 

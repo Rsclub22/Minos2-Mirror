@@ -7,9 +7,9 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 #include <QRegularExpression>
+#include "QtUtils.h"
 #include "AppStartup.h"
 #include "cutils.h"
-#include "contacts.h"
 #include "MultsImpl.h"
 
 
@@ -315,7 +315,7 @@ int CountryEntry::districtLimit()
     if ( distLimit >= 0 )
         return distLimit;
 
-    for (auto &dc: qAsConst(GlistList::distCounts))
+    for (auto &dc: QASCONST(GlistList::distCounts))
     {
         if ( basePrefix.compare( dc.prefix, Qt::CaseSensitive ) == 0 )
         {
@@ -959,7 +959,7 @@ QVector<QSharedPointer<DistrictEntry> > &MultListsImpl::getDistList()
 {
     if (distVector.size() == 0)
     {
-        for (auto &d: qAsConst(distList))
+        for (auto &d: QASCONST(distList))
         {
             distVector.push_back(d.wt);
         }
@@ -977,7 +977,7 @@ QVector<QSharedPointer<CountryEntry> > &MultListsImpl::getCountryList()
 {
     if (countryVector.size() == 0)
     {
-        for (auto &d: qAsConst(ctryList))
+        for (auto &d: QASCONST(ctryList))
         {
             countryVector.push_back(d.wt);
         }

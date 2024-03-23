@@ -1,3 +1,4 @@
+#include "QtUtils.h"
 #include "kstmainwindow.h"
 #include "kstmessagegridmodel.h"
 //==========================================================================================
@@ -22,7 +23,7 @@ void KstMessageGridModel::setChatVector(QSharedPointer<QVector <QSharedPointer<K
 {
     beginResetModel();
     messageVector = pchatVector;
-    for ( auto const &kstline: qAsConst(*messageVector))
+    for ( auto const &kstline: QASCONST(*messageVector))
     {
         if (kstline->distance == -2)
         {
@@ -271,7 +272,7 @@ bool KstMessageGridSortFilterModel::filterAcceptsRow(int sourceRow, const QModel
 
     if (!filterStrings.isEmpty())
     {
-        for (auto const &filterString: qAsConst( filterStrings))
+        for (auto const &filterString: QASCONST( filterStrings))
         {
             if (!filterString.isEmpty())
             {
@@ -355,7 +356,7 @@ bool KstMeepGridSortFilterModel::filterAcceptsRow(int sourceRow, const QModelInd
 
     if (!showLine && !filterStrings.isEmpty())
     {
-        for (auto const &filterString: qAsConst( filterStrings))
+        for (auto const &filterString: QASCONST( filterStrings))
         {
             if (!filterString.isEmpty())
             {

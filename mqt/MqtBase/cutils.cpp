@@ -15,6 +15,7 @@
 #include <QMenu>
 #include <qnamespace.h>
 #include <cstring>
+#include "QtUtils.h"
 
 #include "PubSubName.h"
 #include "cutils.h"
@@ -741,7 +742,7 @@ void setHeaderColumns(QString hLine, QHeaderView *hdr)
     QStringList sl = hLine.split(";");
 
     int lp = 0;
-    for(QString s:qAsConst(sl))
+    for(QString s:QASCONST(sl))
     {
         if (s[0] == '(')
         {
@@ -894,7 +895,7 @@ void comboSetUniqueNames(QStringList nameList, QComboBox *cb)
 {
     QVector<PubSubName> names;
 
-    for(const auto &s: qAsConst(nameList))
+    for(const auto &s: QASCONST(nameList))
     {
         // get unique names
         names.push_back(PubSubName(s));

@@ -2,6 +2,7 @@
 #include <QJsonParseError>
 #include <QJsonObject>
 #include <QJsonArray>
+#include "QtUtils.h"
 #include "MinosRPC.h"
 #include "RPCCommandConstants.h"
 #include "rotatorcommon.h"
@@ -50,7 +51,7 @@ void RotatorCache::addRotList(const QString &s)
         lpsn = PubSubName(list[0]);
         QVector<PubSubName> newRotList;
 
-        for(auto const &psn: qAsConst(rotList))
+        for(auto const &psn: QASCONST(rotList))
         {
             if (lpsn.router() != psn.router() || lpsn.appName() != psn.appName())
             {
@@ -60,7 +61,7 @@ void RotatorCache::addRotList(const QString &s)
         rotList = newRotList;
 
     }
-    for(auto const &l: qAsConst(list))
+    for(auto const &l: QASCONST(list))
     {
         // add all of the list to rot list
         PubSubName psn(l);
@@ -97,7 +98,7 @@ void RotatorCache::addRotList(const QString &s)
         }
         rotStates = newstates;
     }
-    for(auto const &psn: qAsConst(rotList))
+    for(auto const &psn: QASCONST(rotList))
     {
         if (!rotDetails.contains(psn))
         {

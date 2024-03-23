@@ -7,7 +7,7 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 //---------------------------------------------------------------------------
-
+#include "QtUtils.h"
 #include "RPCPubSub.h"
 #include "PubSubClient.h"
 bool RPCPubSub::connected = false;
@@ -41,14 +41,14 @@ void RPCPubSub::subscribeRemote( const QString &router, const QString &category 
 void RPCPubSub::reconnectPubSub( )
 {
    // iterate the publish and subscribe objects and re-do them
-   for ( auto const &i: qAsConst(publishList ))
+   for ( auto const &i: QASCONST(publishList ))
    {
       if ( i )
       {
          i->rePublish();
       }
    }
-   for ( auto const &i: qAsConst(subscribeList ))
+   for ( auto const &i: QASCONST(subscribeList ))
    {
       if ( i )
       {

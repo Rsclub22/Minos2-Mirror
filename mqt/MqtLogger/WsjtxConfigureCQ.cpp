@@ -1,3 +1,4 @@
+#include "QtUtils.h"
 #include "ContestApp.h"
 #include "cutils.h"
 
@@ -21,14 +22,14 @@ WsjtxConfigureCQ::WsjtxConfigureCQ(QWidget *parent) :
     QStringList sl;
     CSVToStringList(testCQ, sl);
 
-    for(auto &s: qAsConst(sl))
+    for(auto &s: QASCONST(sl))
     {
         ui->testCQ->appendPlainText(s);
     }
 
     CSVToStringList(nontestCQ, sl);
 
-    for(auto &s: qAsConst(sl))
+    for(auto &s: QASCONST(sl))
     {
         ui->notTestCQ->appendPlainText(s);
     }

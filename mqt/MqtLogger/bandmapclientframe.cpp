@@ -770,7 +770,7 @@ void BandmapClientFrame::getBandLimitsFromBandListXML()
     BandList blist = BandList::getBandList();
     QSharedPointer<BandInfo>  bi;
 
-    for(const auto &bi: qAsConst(blist.bandList))
+    for(const auto &bi: QASCONST(blist.bandList))
     {
         if (bi->uk == contestBandStr)
         {

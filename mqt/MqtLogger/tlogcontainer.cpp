@@ -502,7 +502,7 @@ void TLogContainer::closeEvent(QCloseEvent *event)
 
     MinosConfig::getMinosConfig() ->askStop();
 
-    for ( auto const &l: qAsConst(TContestApp::getContestApp() ->listSlotList ))
+    for ( auto const &l: QASCONST(TContestApp::getContestApp() ->listSlotList ))
     {
        if ( l )
        {
@@ -1155,7 +1155,7 @@ void TLogContainer::FileOpenActionExecute()
                        InitialDir,  // dir
                        Filter
                        );
-    for (auto const &fname: qAsConst(fnames))
+    for (auto const &fname: QASCONST(fnames))
     {
         BaseContestLog *ct = nullptr;
         if ( !fname.isEmpty() )
@@ -1734,7 +1734,7 @@ void TLogContainer::closeSlot(int t, bool addToMRU)
             TMatchThread::InitialiseMatchThread();
           }
 
-          for(auto cpc: qAsConst(LogContainer->contestPageControls))
+          for(auto cpc: QASCONST(LogContainer->contestPageControls))
           {
               // This deletes TSingleLogFrame first, along
               // with all of the screen components
@@ -1775,7 +1775,7 @@ QStringList TLogContainer::getSessions()
     QStringList sessionlst = app ->logsPreloadBundle.getSections();
     QStringList newSessionList;
     sessionlst.sort();
-    for (auto const &s: qAsConst(sessionlst))
+    for (auto const &s: QASCONST(sessionlst))
     {
         if (s != app ->logsPreloadBundle.noneBundle && s!= app->preloadsect)
         {
@@ -1803,7 +1803,7 @@ void TLogContainer::updateLayoutsMenu()
 
         ScreenConfigFile &scf = ScreenConfigFile::getScreenConfigFile(this);
 
-        for(auto const &c: qAsConst(scf.configs ))
+        for(auto const &c: QASCONST(scf.configs ))
         {
             QAction *act =  new QAction(this);
             if (c.name == defaultLayout)
@@ -1879,7 +1879,7 @@ void TLogContainer::updateSessionActions()
 
     sessionManagerAction  = newAction(QT_TR_NOOP("&Manage Contest Sets..."), sessionsMenu, &TLogContainer::sessionManageExecute);
     QStringList sessionlst = getSessions();
-    for (auto const &s: qAsConst(sessionlst))
+    for (auto const &s: QASCONST(sessionlst))
     {
         if (s == app->preloadsect)
         {
@@ -1977,7 +1977,7 @@ BaseContestLog *TLogContainer::loadSession( QString sessName)
     if (slotlst.count())
     {
         QStringList pathlst;
-        for ( auto const &s: qAsConst(slotlst ))
+        for ( auto const &s: QASCONST(slotlst ))
         {
             // get each value
             QString ent;
@@ -2191,7 +2191,7 @@ void TLogContainer::doListOpenActionExecute(QWidget *p)
                        Filter
                        );
 
-    for (auto const &fname: qAsConst(fnames))
+    for (auto const &fname: QASCONST(fnames))
     {
          addListSlot( p, fname, -1, false );
     }
@@ -2397,7 +2397,7 @@ void TLogContainer::stealFocus()
        if (doSteal)
            {
         // Bring window(s) to top
-        for(auto cpc: qAsConst(LogContainer->contestPageControls))
+        for(auto cpc: QASCONST(LogContainer->contestPageControls))
         {
             // it would be nice to end with the primary pane...
             if (cpc)
