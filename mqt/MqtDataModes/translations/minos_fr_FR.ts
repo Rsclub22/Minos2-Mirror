@@ -270,12 +270,12 @@
     </message>
     <message>
         <location filename="../enginewindow.ui" line="124"/>
-        <location filename="../enginewindow.cpp" line="705"/>
+        <location filename="../enginewindow.cpp" line="751"/>
         <source>Show Back Data</source>
         <translation>Afficher les données arrière [huh???]</translation>
     </message>
     <message>
-        <location filename="../enginewindow.cpp" line="710"/>
+        <location filename="../enginewindow.cpp" line="756"/>
         <source>Hide Back Data</source>
         <translation>Masquer les données arrière [huh???]</translation>
     </message>
@@ -299,22 +299,22 @@
 <context>
     <name>MMVARIFrame</name>
     <message>
-        <location filename="../MMVARIFrame.cpp" line="80"/>
+        <location filename="../MMVARIFrame.cpp" line="81"/>
         <source>RX/TX state</source>
         <translation>RX/TX État</translation>
     </message>
     <message>
-        <location filename="../MMVARIFrame.cpp" line="89"/>
+        <location filename="../MMVARIFrame.cpp" line="90"/>
         <source>Move the cursor to keep it centered on a signal if the frequency changes slightly</source>
         <translation>Déplacer le curseur pour le maintenir centré sur un signal si la fréquence change légèrement</translation>
     </message>
     <message>
-        <location filename="../MMVARIFrame.cpp" line="96"/>
+        <location filename="../MMVARIFrame.cpp" line="97"/>
         <source>When NET is on the TX frequency follows the RX frequency </source>
         <translation>Lorsque NET est sur la fréquence TX suit la fréquence RX </translation>
     </message>
     <message>
-        <location filename="../MMVARIFrame.cpp" line="102"/>
+        <location filename="../MMVARIFrame.cpp" line="103"/>
         <source>Align the transmit frequency to the receive frequency</source>
         <translation>Aligner la fréquence TX sur la fréquence RX</translation>
     </message>

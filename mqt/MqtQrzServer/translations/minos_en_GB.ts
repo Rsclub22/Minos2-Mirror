@@ -150,17 +150,17 @@
 <context>
     <name>QrzServerRpc</name>
     <message>
-        <location filename="../qrzserverrpc.cpp" line="28"/>
+        <location filename="../qrzserverrpc.cpp" line="29"/>
         <source>Available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qrzserverrpc.cpp" line="29"/>
+        <location filename="../qrzserverrpc.cpp" line="30"/>
         <source>Not Available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qrzserverrpc.cpp" line="30"/>
+        <location filename="../qrzserverrpc.cpp" line="31"/>
         <source>No Contact</source>
         <translation type="unfinished"></translation>
     </message>

@@ -367,47 +367,47 @@ C - Clear cmd
 <context>
     <name>SentSpotDataModel</name>
     <message>
-        <location filename="../sentSpotdatamodel.cpp" line="41"/>
+        <location filename="../sentSpotdatamodel.cpp" line="42"/>
         <source>UTC</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sentSpotdatamodel.cpp" line="43"/>
+        <location filename="../sentSpotdatamodel.cpp" line="44"/>
         <source>Freq</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sentSpotdatamodel.cpp" line="45"/>
+        <location filename="../sentSpotdatamodel.cpp" line="46"/>
         <source>Dx</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sentSpotdatamodel.cpp" line="47"/>
+        <location filename="../sentSpotdatamodel.cpp" line="48"/>
         <source>Loc</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sentSpotdatamodel.cpp" line="49"/>
+        <location filename="../sentSpotdatamodel.cpp" line="50"/>
         <source>Comment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sentSpotdatamodel.cpp" line="51"/>
+        <location filename="../sentSpotdatamodel.cpp" line="52"/>
         <source>Status</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sentSpotdatamodel.cpp" line="53"/>
+        <location filename="../sentSpotdatamodel.cpp" line="54"/>
         <source>Reason</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sentSpotdatamodel.cpp" line="146"/>
+        <location filename="../sentSpotdatamodel.cpp" line="147"/>
         <source>OK</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sentSpotdatamodel.cpp" line="150"/>
+        <location filename="../sentSpotdatamodel.cpp" line="151"/>
         <source>Failed</source>
         <translation type="unfinished"></translation>
     </message>
@@ -498,6 +498,16 @@ C - Clear cmd
         <location filename="../setupdialog.cpp" line="167"/>
         <source>%1 minutes has been entered
 The time to live must be between %2 minutes and %3 minutes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../setupdialog.cpp" line="563"/>
+        <source>Delete Cluster Node</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../setupdialog.cpp" line="563"/>
+        <source>Are you sure you want to delete a cluster node?</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

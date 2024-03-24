@@ -54,7 +54,27 @@
         <translation>Limite de distance</translation>
     </message>
     <message>
-        <location filename="../MonitorMain.cpp" line="91"/>
+        <location filename="../MonitorMain.ui" line="222"/>
+        <source>Show Locs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../MonitorMain.ui" line="229"/>
+        <source>Top Left</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../MonitorMain.ui" line="239"/>
+        <source>Bottom Right</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../MonitorMain.ui" line="264"/>
+        <source>NB Showing Loc can make the display very slow, so restrict the area as much as possible.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../MonitorMain.cpp" line="92"/>
         <source>Close tab</source>
         <translation>Fermer l&apos;onglet</translation>
     </message>
@@ -63,7 +83,7 @@
     <name>MonitoringFrame</name>
     <message>
         <location filename="../MonitoringFrame.ui" line="62"/>
-        <location filename="../MonitoringFrame.cpp" line="205"/>
+        <location filename="../MonitoringFrame.cpp" line="209"/>
         <source>Show Map</source>
         <translation>Afficher la Carte</translation>
     </message>

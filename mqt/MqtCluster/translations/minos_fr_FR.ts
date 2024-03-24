@@ -425,47 +425,47 @@ C - Effacer cmd
 <context>
     <name>SentSpotDataModel</name>
     <message>
-        <location filename="../sentSpotdatamodel.cpp" line="41"/>
+        <location filename="../sentSpotdatamodel.cpp" line="42"/>
         <source>UTC</source>
         <translation>UTC</translation>
     </message>
     <message>
-        <location filename="../sentSpotdatamodel.cpp" line="43"/>
+        <location filename="../sentSpotdatamodel.cpp" line="44"/>
         <source>Freq</source>
         <translation>Fréquence</translation>
     </message>
     <message>
-        <location filename="../sentSpotdatamodel.cpp" line="45"/>
+        <location filename="../sentSpotdatamodel.cpp" line="46"/>
         <source>Dx</source>
         <translation>DX</translation>
     </message>
     <message>
-        <location filename="../sentSpotdatamodel.cpp" line="47"/>
+        <location filename="../sentSpotdatamodel.cpp" line="48"/>
         <source>Loc</source>
         <translation>Locator</translation>
     </message>
     <message>
-        <location filename="../sentSpotdatamodel.cpp" line="49"/>
+        <location filename="../sentSpotdatamodel.cpp" line="50"/>
         <source>Comment</source>
         <translation>Commentaire</translation>
     </message>
     <message>
-        <location filename="../sentSpotdatamodel.cpp" line="51"/>
+        <location filename="../sentSpotdatamodel.cpp" line="52"/>
         <source>Status</source>
         <translation>Statut</translation>
     </message>
     <message>
-        <location filename="../sentSpotdatamodel.cpp" line="53"/>
+        <location filename="../sentSpotdatamodel.cpp" line="54"/>
         <source>Reason</source>
         <translation>Raison</translation>
     </message>
     <message>
-        <location filename="../sentSpotdatamodel.cpp" line="146"/>
+        <location filename="../sentSpotdatamodel.cpp" line="147"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../sentSpotdatamodel.cpp" line="150"/>
+        <location filename="../sentSpotdatamodel.cpp" line="151"/>
         <source>Failed</source>
         <translation>Echec</translation>
     </message>
@@ -558,6 +558,16 @@ C - Effacer cmd
 The time to live must be between %2 minutes and %3 minutes</source>
         <translation>%1 minutes a été entrée
 La durée de vie doit être comprise entre %2 minutes et %3 minutes</translation>
+    </message>
+    <message>
+        <location filename="../setupdialog.cpp" line="563"/>
+        <source>Delete Cluster Node</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../setupdialog.cpp" line="563"/>
+        <source>Are you sure you want to delete a cluster node?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
