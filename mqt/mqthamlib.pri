@@ -3,12 +3,12 @@
 
 HAMLIBVERSION=4.6
 DEFINES += HAMLIBVERSION=\\\"$$HAMLIBVERSION\\\"
-message(Using hamlib V$$HAMLIBVERSION)
+# message(Using hamlib V$$HAMLIBVERSION)
 
 win32: {
     contains(QT_ARCH, i386) {
     HAMLIBDIR = $$absolute_path(../../hamlib-w32-$$HAMLIBVERSION)
-    message(Hamlib path is $$HAMLIBDIR)
+#    message(Hamlib path is $$HAMLIBDIR)
     }
     contains(QT_ARCH, x86_64) {
     HAMLIBDIR = $$absolute_path(../../hamlib-w64-$$HAMLIBVERSION)
