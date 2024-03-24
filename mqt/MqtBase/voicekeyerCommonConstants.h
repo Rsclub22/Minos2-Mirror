@@ -46,6 +46,9 @@ namespace voiceKeyerCommon
     const int VOICEKEYER_MAX_NUMBUTTONS = 8;
 
     const QString specialCwCharEscapeChar = "^";
+
+    const QString STOP_VOICE_MESSAGE = "STOPVOICE";
+    const QString STOP_CW_MESSAGE = "STOPCW";
 }
 
 

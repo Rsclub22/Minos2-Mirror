@@ -3,7 +3,7 @@
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //                      CW Message Keyer
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2023
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2024
 //
 //
 //
@@ -22,7 +22,7 @@
 #include "voicekeyerCommonConstants.h"
 #include "MTrace.h"
 
-const char * STOPCW = "\xFF";
+
 
 using namespace voiceKeyerCommon;
 
@@ -120,7 +120,10 @@ void RigControlCwMessageKeyer::sendCwMsg(VoiceKeyerParams &vmData)
         QStringList listOfRadioModels;
         getRigCWKeyerListOfRadiosSupportSpecialCharacters(listOfRadioModels, radioManufacturer);
 
-        if (!listOfRadioModels.isEmpty() && listOfRadioModels.contains(radioModel) && vmData.getVmCwMessage().contains(voiceKeyerCommon::specialCwCharEscapeChar))
+        if (!listOfRadioModels.isEmpty()
+            && listOfRadioModels.contains(radioModel)
+            && vmData.getVmCwMessage().contains(voiceKeyerCommon::specialCwCharEscapeChar)
+            && cwMemType != hamlibData::CW_MEMORY_TYPES::ICOM)          // we don't need to convert for Icom radios
         {
             // this radio supports special chars
             QMap<QString, QChar> specialCharMap;
@@ -165,7 +168,7 @@ void RigControlCwMessageKeyer::stopCwMsg()
 {
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
 
-    tslf->sendRigTxCwMessage(STOPCW);
+    tslf->sendRigStopTxVoiceMessage(STOP_CW_MESSAGE);
 }
 
 

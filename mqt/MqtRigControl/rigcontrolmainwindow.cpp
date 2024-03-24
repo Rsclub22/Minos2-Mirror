@@ -1978,7 +1978,7 @@ void RigControlMainWindow::getRadioInfo(bool pubNow)
         if (retCode < 0)
         {
             // error
-            logMessage(QString("Get radioInfo: Get Volume error").arg(QString::number(retCode)));
+            logMessage(QString("Get radioInfo: Get Volume error %1").arg(QString::number(retCode)));
             radioError(retCode, tr("Request Volume"));
         }
 
@@ -5306,23 +5306,37 @@ void RigControlMainWindow::onSetVoiceMessageNum(QString msgNum)
 
 }
 
-
+// also use this for stop CW Message
 void RigControlMainWindow::onSetStopVoiceMessage(QString msg)
 {
+    trace(QString("onSetStopVoiceMessage = %1").arg(msg));
 
-    Q_UNUSED(msg) // we don't use the message
     if (radio)
     {
-        if (selectedRadioSupportCap.getSupportStopVoiceMemory())
+
+        if (msg == voiceKeyerCommon::STOP_VOICE_MESSAGE)
         {
-            trace(QString("This radio supports hamlib stop_voice_mem function"));
-            radio->stop_voice_mem(rigStateDetails->curVfo);
+            if (selectedRadioSupportCap.getSupportStopVoiceMemory())
+            {
+                trace(QString("This radio supports hamlib stop_voice_mem function"));
+                radio->stop_voice_mem(rigStateDetails->curVfo);
+            }
+            else
+            {
+                trace(QString("This radio does not support stop voice mem - send 0 to sendvoicemessage"));
+                radio->sendVoiceMessage(rigStateDetails->curVfo, 0);
+            }
         }
-        else
+        else if (msg == voiceKeyerCommon::STOP_CW_MESSAGE)
         {
-            trace(QString("This radio does not support stop voice mem function - send 0 to sendvoicemessage"));
-            radio->sendVoiceMessage(rigStateDetails->curVfo, 0);
+            if (selectedRadioSupportCap.getSupportStopVoiceMemory())
+            {
+                trace(QString("This radio supports hamlib stop_morse function"));
+                radio->stopMorse(rigStateDetails->curVfo);
+            }
         }
+
+
     }
 }
 
@@ -5339,21 +5353,22 @@ void RigControlMainWindow::onSetCwTxMessage(QString cwMsg)
         if (radio && !cwMsg.isEmpty())
         {
             if (currentRadio.rigMfg_Name == "Kenwood"
-                || currentRadio.rigMfg_Name == "Yaesu")
+                || currentRadio.rigMfg_Name == "Yaesu"
+                || currentRadio.rigMfg_Name == "Icom")
             {
                 trace(QString("Cw Tx Message Received from logger = %1 for radio %2").arg(cwMsg).arg(currentRadio.rigMfg_Name));
                 radio->sendMorse(rigStateDetails->curVfo, cwMsg);
             }
 
             // probably should store cwMessageType locally in rigcontrol or get from cache
-            if (currentRadio.rigModelNumber >= 1000 && currentRadio.rigModelNumber < 2000)
-            {
-                handleYaesuCwMessage(cwMsg);
-            }
-            else if (currentRadio.rigModelNumber >= 3000 && currentRadio.rigModelNumber < 4000)
-            {
-                handleIcomCwMessage(cwMsg);
-            }
+            //if (currentRadio.rigModelNumber >= 1000 && currentRadio.rigModelNumber < 2000)
+            //{
+            //    handleYaesuCwMessage(cwMsg);
+            //}
+            //else if (currentRadio.rigModelNumber >= 3000 && currentRadio.rigModelNumber < 4000)
+            //{
+            //    handleIcomCwMessage(cwMsg);
+            //}
 
 
         }

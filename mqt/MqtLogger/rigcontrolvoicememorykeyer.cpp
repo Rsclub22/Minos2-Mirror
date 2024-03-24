@@ -77,7 +77,7 @@ void RigControlVoiceMemoryKeyer::stopMsg(VoiceKeyerParams *vkParams)
 {
     Q_UNUSED(vkParams)
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
-    tslf->sendRigStopTxVoiceMessage("Stop Voice Msg");
+    tslf->sendRigStopTxVoiceMessage(STOP_VOICE_MESSAGE);
 }
 
 
