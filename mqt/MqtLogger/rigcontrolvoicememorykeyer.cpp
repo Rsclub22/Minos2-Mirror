@@ -240,11 +240,13 @@ int RigControlVoiceMemoryKeyer::setup(VoiceKeyerFactory *voiceKeyerFactory, int 
 }
 
 
-void RigControlVoiceMemoryKeyer::setRadioParams(int radioMaxNumButtons_, QString selectedRadioName_)
+void RigControlVoiceMemoryKeyer::setRadioParams(int radioMaxNumButtons_, QString selectedRadioName_, int pttType_, bool pttEnabled_)
 {
 
     selectedRadioName = selectedRadioName_;
     radioMaxNumButtons = radioMaxNumButtons_;
+    pttType = pttType_;
+    pttEnabled = pttEnabled_;
 }
 
 

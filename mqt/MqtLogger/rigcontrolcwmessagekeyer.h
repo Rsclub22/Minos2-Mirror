@@ -13,6 +13,7 @@
 #ifndef RIGCONTROLCWMESSAGEKEYER_H
 #define RIGCONTROLCWMESSAGEKEYER_H
 
+#include "serialCommonData.h"
 #include "voicekeyerbase.h"
 #include "voicekeyerfactory.h"
 
@@ -49,7 +50,7 @@ public:
     virtual void saveVmButtonParams(const VoiceKeyerParams &vmParams) override;
 
     virtual int setup(VoiceKeyerFactory *voiceKeyerFactory, int &maxNumButtons, int &numButtons, QString selectedRadioName) override;
-    virtual void setRadioParams(int radioMaxNumButtons, QString selectedRadioName) override;
+    virtual void setRadioParams(int radioMaxNumButtons, QString selectedRadioName, int pttType_, bool pttEnabled_) override;
 
     virtual int editButton(VoiceKeyerParams* vmData, QString title) override;
 
@@ -60,6 +61,8 @@ private:
 
     int cwMemType;
     bool usePttForEom = false;
+    int pttType = serialCommonData::PTT_METHOD_NONE;
+    bool pttEnabled = false;
     bool setCwModeAndRestoreCurrentMode = true;
 
     bool radioKeyerAvail = false;

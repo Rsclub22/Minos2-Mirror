@@ -47,7 +47,7 @@ void InternalVoiceMemoryKeyer::registerVoiceKeyer(VoiceKeyerFactory::VmKeyers* v
     (*vmKeyersList)[keyerName] = voiceMemCap;
 
 }
-void InternalVoiceMemoryKeyer::voiceKeyerInit(int &numbButtons)
+void InternalVoiceMemoryKeyer::voiceKeyerInit(int &numButtons)
 {
     sblog = true;
 

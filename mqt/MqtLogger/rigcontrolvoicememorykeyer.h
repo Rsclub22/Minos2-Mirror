@@ -18,6 +18,7 @@
 #include <QObject>
 #include "voicekeyerbase.h"
 #include "voicekeyerfactory.h"
+#include "serialCommonData.h"
 
 class RigControlVoiceMemoryKeyer : public VoiceKeyerBase
 {
@@ -32,7 +33,7 @@ public:
     void sendMsgNum(int buttonNum) override;
     void stopMsg(VoiceKeyerParams * vkParam) override;
 
-    virtual void setRadioParams(int radioMaxNumButtons, QString selectedRadioName) override;
+    virtual void setRadioParams(int radioMaxNumButtons, QString selectedRadioName, int pttType_, bool pttEnabled_) override;
 
 
     void sendCwMsg(VoiceKeyerParams &vmParams) override {Q_UNUSED(vmParams)};
@@ -67,6 +68,8 @@ signals:
 private:
 
     bool usePttForEom = false;
+    int pttType = serialCommonData::PTT_METHOD_NONE;
+    bool pttEnabled = false;
 
     bool radioKeyerAvail = false;
 

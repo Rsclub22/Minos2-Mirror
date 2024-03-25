@@ -408,10 +408,12 @@ int RigControlCwMessageKeyer::setup(VoiceKeyerFactory *voiceKeyerFactory, int &m
 }
 
 
-void RigControlCwMessageKeyer::setRadioParams(int radioMaxNumButtons_, QString selectedRadioName_)
+void RigControlCwMessageKeyer::setRadioParams(int radioMaxNumButtons_, QString selectedRadioName_, int pttType_, bool pttEnabled_)
 {
     selectedRadioName = selectedRadioName_;
     radioMaxNumButtons = radioMaxNumButtons_;
+    pttType = pttType_;
+    pttEnabled = pttEnabled_;
 }
 
 

@@ -61,6 +61,7 @@ private:
     int memNo;
 
 
+
 };
 
 class TxVmButtonsFrame : public QGroupBox
@@ -171,10 +172,13 @@ private:
     void checkCommonIniFileVersion(QString voiceKeyerType);
     int getNumCwMessages(PubSubName psn);
     int getNumVoiceMessages(PubSubName psn);
-    //int getRadioUserSavedNumberOfButtons(QString selectedRadioName);
-    //void getRadioCommonData(QString selectedRadioName, bool &usePttForEom, int &userNumberButtons);
     QString getRigModel(PubSubName psn);
 
+    int getPttType(PubSubName psn);
+    void setPttTypeLabelsVisible(bool visible);
+    void setPttTypeText(int pttType);
+    bool getPttEnabled(PubSubName psn);
+    void setPttEnabledIndicatorOnOff(bool on);
 private slots:
 
     void onVoiceKeyerSelect(int idx);
