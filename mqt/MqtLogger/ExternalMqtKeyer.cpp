@@ -48,6 +48,8 @@ void ExternalMqtKeyer::registerVoiceKeyer(VoiceKeyerFactory::VmKeyers* vmKeyersL
 
 void ExternalMqtKeyer::voiceKeyerInit(int &numButtons)
 {
+
+
     trace("ExternalMqtKeyer::voiceKyerInit");
 
     numButtons = VOICEKEYER_MAX_NUMBUTTONS;

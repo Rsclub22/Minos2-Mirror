@@ -171,7 +171,8 @@ private:
     void checkCommonIniFileVersion(QString voiceKeyerType);
     int getNumCwMessages(PubSubName psn);
     int getNumVoiceMessages(PubSubName psn);
-    int getRadioUserSavedNumberOfButtons(QString selectedRadioName);
+    //int getRadioUserSavedNumberOfButtons(QString selectedRadioName);
+    //void getRadioCommonData(QString selectedRadioName, bool &usePttForEom, int &userNumberButtons);
     QString getRigModel(PubSubName psn);
 
 private slots:

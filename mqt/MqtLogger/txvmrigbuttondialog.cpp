@@ -60,6 +60,7 @@ void TxVmRigButtonDialog::setCwMessageTextBoxVisible(bool visible)
 {
     ui->txCwMessageLineEdit->setVisible(visible);
     ui->cwMessageTextLabel->setVisible(visible);
+    ui->cwMsgLengthLabel->setVisible(visible);
 }
 
 void TxVmRigButtonDialog::setSerialMessageTextBoxVisible(bool visible)

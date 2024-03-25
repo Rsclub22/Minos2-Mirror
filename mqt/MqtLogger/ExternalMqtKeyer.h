@@ -42,6 +42,7 @@ public:
     virtual bool getUsePttForEomFlag() override;
 
     virtual int setup(VoiceKeyerFactory *voiceKeyerFactory, int &maxNumButtons, int &numButtons, QString selectedRadio) override;
+    virtual void setRadioParams(int radioMaxNumButtons, QString selectedRadioName) override{Q_UNUSED(radioMaxNumButtons) Q_UNUSED(selectedRadioName)};
     virtual int editButton(VoiceKeyerParams* vmData, QString title) override;
 
 

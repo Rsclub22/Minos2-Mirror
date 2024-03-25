@@ -32,6 +32,8 @@ public:
     void sendMsgNum(int buttonNum) override;
     void stopMsg(VoiceKeyerParams * vkParam) override;
 
+    virtual void setRadioParams(int radioMaxNumButtons, QString selectedRadioName) override;
+
 
     void sendCwMsg(VoiceKeyerParams &vmParams) override {Q_UNUSED(vmParams)};
     void stopCwMsg() override {};
@@ -52,10 +54,12 @@ public:
     void saveVmButtonParams(const VoiceKeyerParams &vmParams) override;
 
     virtual int setup(VoiceKeyerFactory *voiceKeyerFactory, int &maxNumButtons, int &numButtons, QString selectedRadioName) override;
+
     virtual int editButton(VoiceKeyerParams* vmData, QString title) override;
 
 
 
+    void setUsePttForEom(bool usePttForEom_);
 signals:
 
 
@@ -66,7 +70,11 @@ private:
 
     bool radioKeyerAvail = false;
 
+    int radioMaxNumButtons = 0;
+    QString selectedRadioName;
 
+
+    void getRadioCommonData(bool &usePttForEom, int &userNumberButtons, int radioMaxNumButtons);
 };
 
 #endif // RIGCONTROLVOICEMEMORYKEYER_H

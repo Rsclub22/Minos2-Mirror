@@ -49,10 +49,13 @@ public:
     virtual void saveVmButtonParams(const VoiceKeyerParams &vmParams) override;
 
     virtual int setup(VoiceKeyerFactory *voiceKeyerFactory, int &maxNumButtons, int &numButtons, QString selectedRadioName) override;
+    virtual void setRadioParams(int radioMaxNumButtons, QString selectedRadioName) override;
+
     virtual int editButton(VoiceKeyerParams* vmData, QString title) override;
 
 
 
+    bool setUsePttForEom(bool usePttForEom_);
 private:
 
     int cwMemType;
@@ -60,9 +63,12 @@ private:
     bool setCwModeAndRestoreCurrentMode = true;
 
     bool radioKeyerAvail = false;
+    int radioMaxNumButtons = 0;
+    QString selectedRadioName;
 
 
 
+    void getRadioCommonData(bool &usePttForEom, int &userNumberButtons, int radioMaxNumButtons);
 };
 
 

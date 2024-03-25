@@ -20,6 +20,7 @@
 class VoiceKeyerBase;
 class VoiceKeyerFactory;
 
+
 const int REPEAT_DUR_MIN = 0;
 const int REPEAT_DUR_MAX = 180; // secs
 
@@ -121,7 +122,7 @@ public:
     virtual bool getUsePttForEomFlag() = 0;
 
     virtual int setup(VoiceKeyerFactory *voiceKeyerFactory, int &maxNumButtons, int &numButtons, QString selectedRadioName) = 0;
-
+    virtual void setRadioParams(int radioMaxNumButtons, QString selectedRadioName) = 0;
     virtual int editButton(VoiceKeyerParams* vmData, QString title) = 0;
 
     virtual bool hasPip() const

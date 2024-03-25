@@ -7,6 +7,8 @@ class RadioDetails
 {
 public:
     RadioDetails();
+
+
     void setTransVerterOffset(double offset);
     double getTransVerterOffset();
     void setTransVertSwitch(int switchNum);
