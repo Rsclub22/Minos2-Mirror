@@ -557,6 +557,7 @@ private:
 
     bool isTestCwMessageRunning();
     void addRigModelToRigCache(QString rigModel);
+    void setTestPttButtonIndOnOff(bool state);
 private slots:
 
     void onStdInRead(QString);

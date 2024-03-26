@@ -946,11 +946,11 @@ bool RigControlMainWindow::checkSupportVoiceMemory()
                     addVoiceNumberMessagesToRigCache(voiceMemNum);
                 }
 
-                bool supportStopCmd = true;
-                if (currentRadio.rigMfg_Name == "Yaesu")
-                {
-                    supportStopCmd = false;
-                }
+                bool supportStopCmd = true;  // hamlib Yaesu doesn't support stop function, use msg no. 0 to stop.
+                //if (currentRadio.rigMfg_Name == "Yaesu")
+                //{
+                //    supportStopCmd = false;
+                //}
 
                 addVoiceKeyerSupportStopCmdToRigCache(supportStopCmd);
 
@@ -5278,6 +5278,10 @@ void RigControlMainWindow::setTxRxIndOnOff(bool state)
 }
 
 
+
+
+
+
 /************************ Voice Message ************************************************/
 
 
@@ -5318,8 +5322,20 @@ void RigControlMainWindow::onSetStopVoiceMessage(QString msg)
         {
             if (selectedRadioSupportCap.getSupportStopVoiceMemory())
             {
-                trace(QString("This radio supports hamlib stop_voice_mem function"));
-                radio->stop_voice_mem(rigStateDetails->curVfo);
+                if (currentRadio.rigMfg_Name == "YAESU")
+                {
+                   // hamlib does not have a Yaesu stop_voice_mem function
+                   // use sendVoiceMessage with msg number = 0 to stop message.
+                   trace(QString("This is a Yaesu radio, send a 0 to stop voice message"));
+                   radio->sendVoiceMessage(rigStateDetails->curVfo, 0);
+
+                }
+                else
+                {
+                    trace(QString("This radio supports hamlib stop_voice_mem function"));
+                    radio->stop_voice_mem(rigStateDetails->curVfo);
+                }
+
             }
             else
             {
@@ -5539,18 +5555,30 @@ void RigControlMainWindow::onTxPttTestPbClicked()
     {
         if (pttState)
         {
-            onSetPttOnOff(false);
             pttState = false;
+            onSetPttOnOff(pttState);
+            setTestPttButtonIndOnOff(pttState);
         }
         else
         {
-            onSetPttOnOff(true);
             pttState = true;
+            onSetPttOnOff(pttState);
+            setTestPttButtonIndOnOff(pttState);
         }
     }
 }
 
-
+void RigControlMainWindow::setTestPttButtonIndOnOff(bool state)
+{
+    if (state)
+    {
+        ui->txPttTestPb->setStyleSheet(TX_RX_INDICATOR_ON);
+    }
+    else
+    {
+        ui->txPttTestPb->setStyleSheet(BACKGROUND_GREY);
+    }
+}
 
 void delay(int sec)
 {

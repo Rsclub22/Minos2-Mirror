@@ -170,7 +170,10 @@ void TxVmButtonsFrame::onVmSetupClicked()
             if (txVoiceKeyer->numButtons != oldnb)
             {
                 setVoiceNumMemButtonsVisible(txVoiceKeyer->numButtons);
+
             }
+
+            setEomLabelText(txVoiceKeyer->getUsePttForEomFlag());
 
         }
     }
@@ -197,6 +200,7 @@ void TxVmButtonsFrame::logRadioSettingsChanged(QSharedPointer<RadioSettingsDialo
 
         setPttTypeText(getPttType(selectedRadio));
         setPttEnabledIndicatorOnOff(getPttEnabled(selectedRadio));
+        setEomLabelText(txVoiceKeyer->getUsePttForEomFlag());
 
 
         txVoiceKeyer->voiceKeyerInit(txVoiceKeyer->numButtons);
@@ -519,6 +523,7 @@ void TxVmButtonsFrame::setFrameState(QString voiceKeyerName)
        setTXStatusVisible(false);
        ui->buttonSelectionLbl->setVisible(false);
        ui->saveByRadioNameText->setVisible(false);
+       setEomTypeLabelsVisible(false);
 
     }
     else
@@ -564,6 +569,8 @@ void TxVmButtonsFrame::setFrameState(QString voiceKeyerName)
             setPttTypeLabelsVisible(true);
             setPttTypeText(getPttType(selectedRadio));
             setPttEnabledIndicatorOnOff(getPttEnabled(selectedRadio));
+            setEomTypeLabelsVisible(true);
+            setEomLabelText(txVoiceKeyer->getUsePttForEomFlag());
             loadButtonData();
 
 
@@ -754,9 +761,10 @@ void TxVmButtonsFrame::startVMMsg(int buttonNumber)
 
     }
 
-    setRepeatIndicatorOnOff(vmData.getVmRepeatFlag());
+
     vmData.setType(voiceKeyerType);
     txVoiceKeyer->readVmButtonParams(buttonNumber, vmData);
+    setRepeatIndicatorOnOff(vmData.getVmRepeatFlag());
 
     if (vmData.getVmName().isEmpty())
     {
@@ -1500,6 +1508,25 @@ void TxVmButtonsFrame::setPttEnabledIndicatorOnOff(bool on)
     }
 
 }
+
+void TxVmButtonsFrame::setEomTypeLabelsVisible(bool visible)
+{
+    ui->eomLabel->setVisible(visible);
+    ui->eomText->setVisible(visible);
+}
+
+void TxVmButtonsFrame::setEomLabelText(bool catEom)
+{
+    if (catEom)
+    {
+        ui->eomText->setText("CAT");
+    }
+    else
+    {
+        ui->eomText->setText("Timer");
+    }
+}
+
 
 
 void TxVmButtonsFrame::fKey(BaseContestLog *c, int key, int /*carrier*/)

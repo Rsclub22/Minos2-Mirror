@@ -179,6 +179,8 @@ private:
     void setPttTypeText(int pttType);
     bool getPttEnabled(PubSubName psn);
     void setPttEnabledIndicatorOnOff(bool on);
+    void setEomTypeLabelsVisible(bool visible);
+    void setEomLabelText(bool catEom);
 private slots:
 
     void onVoiceKeyerSelect(int idx);
