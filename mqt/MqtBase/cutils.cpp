@@ -13,6 +13,7 @@
 #include <QSettings>
 #include <QToolButton>
 #include <QMenu>
+#include <QDateTime>
 #include <qnamespace.h>
 #include <cstring>
 #include "QtUtils.h"
@@ -1016,4 +1017,21 @@ void clearLayout(QLayout *layout)
         }
     }
 //    trace("Exit clearLayout");
+}
+void delay(int sec)
+{
+    QTime dieTime= QTime::currentTime().addSecs(sec);
+    while (QTime::currentTime() < dieTime)
+    {
+        QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
+    }
+}
+
+void sleepFor(qint64 milliseconds)
+{
+    qint64 timeToExitFunction = QDateTime::currentMSecsSinceEpoch() + milliseconds;
+    while(timeToExitFunction > QDateTime::currentMSecsSinceEpoch())
+    {
+        QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
+    }
 }

@@ -20,6 +20,7 @@
 #include <QMetaType>
 #include <QDir>
 
+#include "cutils.h"
 #include "regsettings.h"
 #include "serialCommonData.h"
 #include "MShowMessageDlg.h"
@@ -5549,28 +5550,6 @@ void RigControlMainWindow::onTxPttTestPbClicked()
         }
     }
 }
-
-
-
-void delay(int sec)
-{
-    QTime dieTime= QTime::currentTime().addSecs(sec);
-    while (QTime::currentTime() < dieTime)
-    {
-        QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
-    }
-}
-
-void sleepFor(qint64 milliseconds)
-{
-    qint64 timeToExitFunction = QDateTime::currentMSecsSinceEpoch() + milliseconds;
-    while(timeToExitFunction > QDateTime::currentMSecsSinceEpoch())
-    {
-        QApplication::processEvents(QEventLoop::AllEvents, 100);
-    }
-}
-
-
 
 /*
 void RigControlMainWindow::testIncRit(int )

@@ -1998,7 +1998,7 @@ BaseContestLog *TLogContainer::loadSession( QString sessName)
             {
                 addSlot( nullptr, pathlst[ i ], false, slotno, false );
                 // spin the event loop...
-                qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
+                QCoreApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
             }
         }
 

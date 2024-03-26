@@ -53,10 +53,6 @@ namespace Ui {
 class RotatorMainWindow;
 }
 
-void delay(int sec);
-void sleepFor(qint64 milliseconds);
-
-
 class RotatorMainWindow : public QMainWindow
 {
     Q_OBJECT

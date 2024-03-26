@@ -2028,26 +2028,6 @@ void RotatorMainWindow::sendStatusToLogError()
     sendStatusLogger();
 }
 
-
-void delay(int sec)
-{
-    QTime dieTime= QTime::currentTime().addSecs(sec);
-    while (QTime::currentTime() < dieTime)
-    {
-        QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
-    }
-}
-
-void sleepFor(qint64 milliseconds)
-{
-    qint64 timeToExitFunction = QDateTime::currentMSecsSinceEpoch() + milliseconds;
-    while(timeToExitFunction > QDateTime::currentMSecsSinceEpoch())
-    {
-        QApplication::processEvents(QEventLoop::AllEvents, 100);
-    }
-}
-
-
 void RotatorMainWindow::about()
 {
     QMessageBox::about(this, tr("Minos Rotator"), tr("Minos Rotator\nCopyright D Balharrie G8FKH/M0DGB 2016 - 2018"));

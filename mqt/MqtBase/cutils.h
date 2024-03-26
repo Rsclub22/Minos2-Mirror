@@ -146,4 +146,8 @@ void comboSetUniqueNames(QStringList nameList, QComboBox *cb);
 
 void clearLayout(QLayout *layout);
 void removeFrameBoxes(QLayout *layout);
+
+void delay(int sec);
+void sleepFor(qint64 milliseconds);
+
 #endif

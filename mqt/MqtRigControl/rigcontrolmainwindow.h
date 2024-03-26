@@ -63,12 +63,6 @@ namespace rigCtldTrace {
 
 //#define RIGCONTROL_TEST
 
-void delay(int sec);
-void sleepFor(qint64 milliseconds);
-
-
-
-
 class LoggerRequests
 {
 
