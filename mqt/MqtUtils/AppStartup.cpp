@@ -225,14 +225,14 @@ void appStartup(const QString &pappName)
     QApplication *qa = dynamic_cast<QApplication *>(QApplication::instance());
 #if QT_VERSION >= QT_VERSION_CHECK(6, 1, 0)
 
-    QStyle *s = qa->style();
+    QStyle *s = QApplication::style();
     if (s->name() == "windows11")
     {
         // The Windows 11 style has spinbox with up and down side by side, not above each other
         // And it doesn't appear to get the width right - the buttons eat the edit area
         // If this changes, we may start using it
         // NB this only affects Qt 6.7 and above
-        qa->setStyle("windows");
+        QApplication::setStyle("windowsvista");
     }
 #endif
     qa->setStyleSheet(QString("[readOnly=\"true\"] { background-color: %0 }").arg(qa->palette().color(QPalette::Window).name(QColor::HexRgb)));
