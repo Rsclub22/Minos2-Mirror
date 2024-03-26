@@ -1745,8 +1745,11 @@ void TLogContainer::closeSlot(int t, bool addToMRU)
                   {
                       ContestPage *cp = (*page);
                       cpc->pages.remove(bct);
-                      cp->deleteLater();
-                      cpc->removeTab(cpc->indexOf(cp));
+                      if (cp)
+                      {
+                          cp->deleteLater();
+                          cpc->removeTab(cpc->indexOf(cp));
+                      }
                   }
               }
           }
