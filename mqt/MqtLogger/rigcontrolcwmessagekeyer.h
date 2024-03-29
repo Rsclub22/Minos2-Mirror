@@ -44,7 +44,7 @@ public:
     virtual bool hasRecord() override {return false;}
 
     virtual void setPttOnOff(bool onOff) override;
-    virtual bool getUsePttForEomFlag() override;
+    virtual int getSelectedEomType() override;
 
     virtual bool readVmButtonParams(int buttonNum, VoiceKeyerParams &vmParams) override;
     virtual void saveVmButtonParams(const VoiceKeyerParams &vmParams) override;
@@ -56,11 +56,13 @@ public:
 
 
 
-    bool setUsePttForEom(bool usePttForEom_);
+    void setUseCATPttForEom(bool usePttForEom_);
+    void setSelectedEomType(int selectedEomType_);
+
 private:
 
     int cwMemType;
-    bool usePttForEom = false;
+    int selectedEomType = voiceKeyerCommon::VoiceCwKeyerEomTypes::Eom_None;
     int pttType = serialCommonData::PTT_METHOD_NONE;
     bool pttEnabled = false;
     bool setCwModeAndRestoreCurrentMode = true;
@@ -71,7 +73,7 @@ private:
 
 
 
-    void getRadioCommonData(bool &usePttForEom, int &userNumberButtons, int radioMaxNumButtons);
+    void getRadioCommonData(int &selectedEomType, int &userNumberButtons, int radioMaxNumButtons);
 };
 
 

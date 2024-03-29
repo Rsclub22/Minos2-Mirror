@@ -13,7 +13,7 @@
 namespace voiceKeyerCommon
 {
     // These are Minos max and min keyer buttons
-    // Rigcontrol with hamlib will provide max number of memories the
+    // Rigcontrol with hamlib will provide max number of voice memories the
     // radio will support.
 
     const int MAXIMUM_BUTTONS = 8;
@@ -27,6 +27,13 @@ namespace voiceKeyerCommon
         SerialControl,    // Sends user serial message to control external voice keyer
         InternalVoiceKeyer,
         ExternalVoiceKeyer
+    };
+
+    enum VoiceCwKeyerEomTypes
+    {
+        Eom_None = 0,
+        CAT,
+        Timer,
     };
 
     const QStringList keyerTypes = {"", "Voice RigControl", "CW RigControl", "SerialControl", "Internal", "mqtKeyer"};

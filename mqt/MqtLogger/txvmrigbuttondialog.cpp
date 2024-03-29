@@ -193,10 +193,19 @@ void TxVmRigButtonDialog::on_txSerialMessageEditingFinshed()
 
 }
 
-void TxVmRigButtonDialog::setDialogForCatPttEom(bool state)
+void TxVmRigButtonDialog::setDialogForEomType(int eomType)
 {
-    ui->messageDurLbl->setVisible(!state);
-    ui->txVmMessageDur->setVisible(!state);
+    if (eomType == voiceKeyerCommon::VoiceCwKeyerEomTypes::Timer)
+    {
+        ui->messageDurLbl->setVisible(true);
+        ui->txVmMessageDur->setVisible(true);
+    }
+    else
+    {
+        ui->messageDurLbl->setVisible(false);
+        ui->txVmMessageDur->setVisible(false);
+    }
+
 }
 
 bool TxVmRigButtonDialog::checkLengthOfCwMessage(int length)

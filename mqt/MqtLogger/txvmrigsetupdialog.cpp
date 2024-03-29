@@ -3,7 +3,7 @@
 #include "regsettings.h"
 #include "txvmrigsetupdialog.h"
 #include "ui_txvmrigsetupdialog.h"
-
+#include "serialCommonData.h"
 
 
 TxVmRigSetupDialog::TxVmRigSetupDialog(VoiceKeyerCapabilities voiceCap_, int maxNumButtons_, int nb, QWidget *parent) :
@@ -65,6 +65,8 @@ void TxVmRigSetupDialog::initSetup()
     }
 
 
+
+
     connect(ui->numButtons, QOverload<int>::of(&QSpinBox::valueChanged), this, &TxVmRigSetupDialog::onNumButtonsValueChanged);
 
 
@@ -78,15 +80,45 @@ void TxVmRigSetupDialog::setSetupRadioGroupBoxTitle(QString selectedRadioName)
     ui->setupRadioGroupBox->setTitle(selectedRadioName);
 }
 
-void TxVmRigSetupDialog::setPttEOMChkBoxVisible(bool visible)
+void TxVmRigSetupDialog::setPttEomGroupBoxVisible(bool visible)
 {
-    ui->pttEOMChkBox->setVisible(visible);
+    ui->EomGroupBox->setVisible(visible);
 }
 
 
-void TxVmRigSetupDialog::setPttEOMChkBoxChecked(bool checked)
+void TxVmRigSetupDialog::setEomRadioButtons(int eomType)
 {
-    ui->pttEOMChkBox->setChecked(checked);
+    if (eomType == voiceKeyerCommon::VoiceCwKeyerEomTypes::CAT)
+    {
+        ui->catEomRb->setChecked(true);
+        ui->timerEomRb->setChecked(false);
+    }
+    else if (eomType == voiceKeyerCommon::VoiceCwKeyerEomTypes::Timer)
+    {
+        ui->catEomRb->setChecked(false);
+        ui->timerEomRb->setChecked(true);
+    }
+    else
+    {
+        ui->catEomRb->setChecked(false);
+        ui->timerEomRb->setChecked(false);
+    }
+}
+
+
+int TxVmRigSetupDialog::getSelectedEomType()
+{
+    int selectedType = voiceKeyerCommon::VoiceCwKeyerEomTypes::Eom_None;
+    if (ui->catEomRb->isChecked())
+    {
+        selectedType = voiceKeyerCommon::VoiceCwKeyerEomTypes::CAT;
+    }
+    else if (ui->timerEomRb->isChecked())
+    {
+        selectedType = voiceKeyerCommon::VoiceCwKeyerEomTypes::Timer;
+    }
+
+    return selectedType;
 }
 
 void TxVmRigSetupDialog::setSwitchToCwVisible(bool visible)
@@ -95,17 +127,13 @@ void TxVmRigSetupDialog::setSwitchToCwVisible(bool visible)
 }
 
 
+
+
 void TxVmRigSetupDialog::setSwitchToCwChecked(bool checked)
 {
     ui->switchToCw->setChecked(checked);
 }
 
-
-
-bool TxVmRigSetupDialog::getCatPttForEomState()
-{
-    return ui->pttEOMChkBox->isChecked();
-}
 
 bool TxVmRigSetupDialog::getSetCwModeAndRestoreState()
 {

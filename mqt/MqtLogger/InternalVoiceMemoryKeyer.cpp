@@ -174,9 +174,9 @@ void InternalVoiceMemoryKeyer::onDoPTT(bool onOff)
     setPttOnOff(onOff);
 }
 
-bool InternalVoiceMemoryKeyer::getUsePttForEomFlag()
+int InternalVoiceMemoryKeyer::getSelectedEomType()
 {
-    return usePttForEom;
+    return selectedEomType;
 }
 
 int InternalVoiceMemoryKeyer::setup(VoiceKeyerFactory *voiceKeyerFactory, int &maxNumButtons, int &numButtons, QString selectedRadio)

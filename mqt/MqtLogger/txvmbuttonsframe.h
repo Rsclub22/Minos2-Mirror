@@ -123,7 +123,7 @@ private:
     QTimer* repeatPauseTimer;
     int buttonNumSent ;
 
-    bool usePttForEomFlag = false;
+    int selectedEomType = voiceKeyerCommon::VoiceCwKeyerEomTypes::Eom_None;
 
     QList<QToolButton*> voiceMemButtonList;
 
@@ -180,7 +180,8 @@ private:
     bool getPttEnabled(PubSubName psn);
     void setPttEnabledIndicatorOnOff(bool on);
     void setEomTypeLabelsVisible(bool visible);
-    void setEomLabelText(bool catEom);
+    void setEomLabelText(int selectedEomType);
+    void setErrorMessageVisible(bool visible);
 private slots:
 
     void onVoiceKeyerSelect(int idx);

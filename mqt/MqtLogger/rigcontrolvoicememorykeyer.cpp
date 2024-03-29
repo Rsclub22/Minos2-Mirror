@@ -51,22 +51,22 @@ void RigControlVoiceMemoryKeyer::setPttOnOff(bool onOff)
     Q_UNUSED(onOff)
 }
 
-void RigControlVoiceMemoryKeyer::setUsePttForEom(bool usePttForEom_)
+void RigControlVoiceMemoryKeyer::setSelectedEomType(int selectedEomType_)
 {
-    usePttForEom = usePttForEom_;
+    selectedEomType = selectedEomType_;
 }
 
 
-bool RigControlVoiceMemoryKeyer::getUsePttForEomFlag()
+int RigControlVoiceMemoryKeyer::getSelectedEomType()
 {
-    return usePttForEom;
+    return selectedEomType;
 }
 
 
 void RigControlVoiceMemoryKeyer::voiceKeyerInit(int &numButtons)
 {
     int userNumberButtons = 0;
-    getRadioCommonData(usePttForEom, userNumberButtons, radioMaxNumButtons);
+    getRadioCommonData(selectedEomType, userNumberButtons, radioMaxNumButtons);
     numButtons = userNumberButtons;
 
 }
@@ -184,27 +184,30 @@ int RigControlVoiceMemoryKeyer::setup(VoiceKeyerFactory *voiceKeyerFactory, int 
 
     if (voiceCap.getUseCatPTTForEom())
     {
-        txVmSetupDialog.setPttEOMChkBoxVisible(true);
 
-        if (readSaveVoiceCWMemoryButtonByRadioNameFromIni(VoiceKeyerId::RigControl))
+        txVmSetupDialog.setPttEomGroupBoxVisible(true);
+
+        if (pttType == serialCommonData::PTTMethodCodes::PTT_METHOD_CAT)
         {
-            buttonConfig.beginGroup(selectedRadioName.replace('/', '_'));
-            txVmSetupDialog.setPttEOMChkBoxChecked(buttonConfig.value("UseCatPttForEom", false).toBool());
 
-            buttonConfig.endGroup();
+            if (readSaveVoiceCWMemoryButtonByRadioNameFromIni(VoiceKeyerId::RigControl))
+            {
+                buttonConfig.beginGroup(selectedRadioName.replace('/', '_'));
+                txVmSetupDialog.setEomRadioButtons(buttonConfig.value("endOfMessageType", voiceKeyerCommon::VoiceCwKeyerEomTypes::Eom_None).toInt());
+
+                buttonConfig.endGroup();
+            }
+            else
+            {
+                config.beginGroup(allRadiosGrpName);
+                txVmSetupDialog.setEomRadioButtons(buttonConfig.value("endOfMessageType", voiceKeyerCommon::VoiceCwKeyerEomTypes::Eom_None).toInt());
+                buttonConfig.endGroup();
+            }
         }
-        else
-        {
-            config.beginGroup(allRadiosGrpName);
-            txVmSetupDialog.setPttEOMChkBoxChecked(buttonConfig.value("UseCatPttForEom", false).toBool());
-            buttonConfig.endGroup();
-        }
-
-
     }
     else
     {
-        txVmSetupDialog.setPttEOMChkBoxVisible(false);
+        txVmSetupDialog.setPttEomGroupBoxVisible(false);
     }
 
 
@@ -230,10 +233,10 @@ int RigControlVoiceMemoryKeyer::setup(VoiceKeyerFactory *voiceKeyerFactory, int 
         }
 
         buttonConfig.setValue("NumButtons", numButtons);
-        buttonConfig.setValue("UseCatPttForEom", txVmSetupDialog.getCatPttForEomState() );
+        buttonConfig.setValue("endOfMessageType", txVmSetupDialog.getSelectedEomType());
         buttonConfig.endGroup();
 
-        usePttForEom = txVmSetupDialog.getCatPttForEomState();
+        selectedEomType = txVmSetupDialog.getSelectedEomType();
 
     }
     return ret;
@@ -250,7 +253,7 @@ void RigControlVoiceMemoryKeyer::setRadioParams(int radioMaxNumButtons_, QString
 }
 
 
-void RigControlVoiceMemoryKeyer::getRadioCommonData(bool &usePttForEom, int &userNumberButtons, int radioMaxNumButtons)
+void RigControlVoiceMemoryKeyer::getRadioCommonData(int &selectedEomType, int &userNumberButtons, int radioMaxNumButtons)
 {
     int numButtons = 0;
 
@@ -272,7 +275,7 @@ void RigControlVoiceMemoryKeyer::getRadioCommonData(bool &usePttForEom, int &use
 
     config.beginGroup(groupName);
     numButtons = config.value("NumButtons", -1).toInt();
-    usePttForEom = config.value("UseCatPttForEom", false).toBool();
+    selectedEomType = config.value("endOfMessageType", voiceKeyerCommon::VoiceCwKeyerEomTypes::Eom_None).toInt();
     config.endGroup();
 
     if (numButtons == -1)   // no user button number saved
@@ -304,7 +307,7 @@ int RigControlVoiceMemoryKeyer::editButton(VoiceKeyerParams *vmData, QString tit
     vmButtonDialog.setWindowTitle(title);
     vmButtonDialog.setVmData(vmData);
     vmButtonDialog.setCwMessageTextBoxVisible(false);
-    vmButtonDialog.setDialogForCatPttEom(usePttForEom);
+    vmButtonDialog.setDialogForEomType(selectedEomType);
     vmButtonDialog.setSerialMessageTextBoxVisible(false);
     vmButtonDialog.setCwInfoPanelVisible(false);
 

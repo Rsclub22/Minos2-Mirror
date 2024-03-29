@@ -173,7 +173,7 @@ void TxVmButtonsFrame::onVmSetupClicked()
 
             }
 
-            setEomLabelText(txVoiceKeyer->getUsePttForEomFlag());
+            setEomLabelText(txVoiceKeyer->getSelectedEomType());
 
         }
     }
@@ -200,7 +200,7 @@ void TxVmButtonsFrame::logRadioSettingsChanged(QSharedPointer<RadioSettingsDialo
 
         setPttTypeText(getPttType(selectedRadio));
         setPttEnabledIndicatorOnOff(getPttEnabled(selectedRadio));
-        setEomLabelText(txVoiceKeyer->getUsePttForEomFlag());
+        setEomLabelText(txVoiceKeyer->getSelectedEomType());
 
 
         txVoiceKeyer->voiceKeyerInit(txVoiceKeyer->numButtons);
@@ -570,7 +570,7 @@ void TxVmButtonsFrame::setFrameState(QString voiceKeyerName)
             setPttTypeText(getPttType(selectedRadio));
             setPttEnabledIndicatorOnOff(getPttEnabled(selectedRadio));
             setEomTypeLabelsVisible(true);
-            setEomLabelText(txVoiceKeyer->getUsePttForEomFlag());
+            setEomLabelText(txVoiceKeyer->getSelectedEomType());
             loadButtonData();
 
 
@@ -749,7 +749,7 @@ void TxVmButtonsFrame::startVMMsg(int buttonNumber)
 {
     trace("TxVmButtonsFrame::startVMMsg");
     buttonNumSent = buttonNumber;
-    usePttForEomFlag = false;
+    selectedEomType = voiceKeyerCommon::VoiceCwKeyerEomTypes::Eom_None;
 
     VoiceKeyerParams vmData;
 
@@ -799,9 +799,9 @@ void TxVmButtonsFrame::startVMMsg(int buttonNumber)
         txVoiceKeyer->sendMsgNum(buttonNumSent);
     }
 
-    usePttForEomFlag = txVoiceKeyer->getUsePttForEomFlag();
+    selectedEomType = txVoiceKeyer->getSelectedEomType();
 
-    if (!usePttForEomFlag)
+    if (selectedEomType == voiceKeyerCommon::VoiceCwKeyerEomTypes::Timer)
     {
         int msgDur = vmKeyParamList[buttonNumber].getVmDuration() * 1000;
         if (msgDur > 0)
@@ -975,7 +975,7 @@ void TxVmButtonsFrame::onMsgDurTimerTimeout()
 {
     if (buttonNumSent >= 0)
     {
-        if (vmKeyParamList[buttonNumSent].getVmDuration() > 0 || usePttForEomFlag)
+        if (vmKeyParamList[buttonNumSent].getVmDuration() > 0 || selectedEomType == voiceKeyerCommon::VoiceCwKeyerEomTypes::CAT)
         {
         // message duration of zero means that there shouldn't be a timer running
             if (vmKeyParamList[buttonNumSent].getVmRepeatFlag())
@@ -1440,6 +1440,12 @@ void TxVmButtonsFrame::setRepeatIndicatorOnOff(bool on)
 
 }
 
+void TxVmButtonsFrame::setErrorMessageVisible(bool visible)
+{
+    ui->errorTitleLabel->setVisible(visible);
+    ui->errorMeassageLabel->setVisible(visible);
+}
+
 void TxVmButtonsFrame::setPttState(bool state)
 {
     if (pttState != state)
@@ -1456,7 +1462,7 @@ void TxVmButtonsFrame::setPttState(bool state)
 void TxVmButtonsFrame::pttStopMessage(bool state)
 {
    trace(QString("[TxVmButtonsFrame] pttStopMessage state = %1").arg(state ? "true" : "false"));
-   if (usePttForEomFlag)
+   if (selectedEomType == voiceKeyerCommon::VoiceCwKeyerEomTypes::CAT)
    {
        trace(QString("[TxVmButtonsFrame] Using PTT for EOM Flag"));
        if (txVoiceKeyer && txVoiceKeyer->doRepeatFromLogger() && !state)
@@ -1515,15 +1521,19 @@ void TxVmButtonsFrame::setEomTypeLabelsVisible(bool visible)
     ui->eomText->setVisible(visible);
 }
 
-void TxVmButtonsFrame::setEomLabelText(bool catEom)
+void TxVmButtonsFrame::setEomLabelText(int selectedEomType)
 {
-    if (catEom)
+    if (selectedEomType == voiceKeyerCommon::VoiceCwKeyerEomTypes::CAT)
     {
         ui->eomText->setText("CAT");
     }
-    else
+    else if (selectedEomType == voiceKeyerCommon::VoiceCwKeyerEomTypes::Timer)
     {
         ui->eomText->setText("Timer");
+    }
+    else if (selectedEomType == voiceKeyerCommon::VoiceCwKeyerEomTypes::Eom_None)
+    {
+        ui->eomText->setText("None");
     }
 }
 

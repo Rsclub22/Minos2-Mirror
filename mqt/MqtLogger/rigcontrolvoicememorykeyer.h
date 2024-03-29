@@ -49,7 +49,7 @@ public:
 
     //int getKeyerState(int &state) override;
     void setPttOnOff(bool onOff) override;
-    bool getUsePttForEomFlag() override;
+    int getSelectedEomType() override;
 
     bool readVmButtonParams(int buttonNum, VoiceKeyerParams &vmParams) override;
     void saveVmButtonParams(const VoiceKeyerParams &vmParams) override;
@@ -58,16 +58,15 @@ public:
 
     virtual int editButton(VoiceKeyerParams* vmData, QString title) override;
 
+    void setSelectedEomType(int selectedEomType_);
 
-
-    void setUsePttForEom(bool usePttForEom_);
 signals:
 
 
 
 private:
 
-    bool usePttForEom = false;
+    int selectedEomType = voiceKeyerCommon::VoiceCwKeyerEomTypes::Eom_None;
     int pttType = serialCommonData::PTT_METHOD_NONE;
     bool pttEnabled = false;
 
@@ -77,7 +76,7 @@ private:
     QString selectedRadioName;
 
 
-    void getRadioCommonData(bool &usePttForEom, int &userNumberButtons, int radioMaxNumButtons);
+    void getRadioCommonData(int &usePttForEom, int &userNumberButtons, int radioMaxNumButtons);
 };
 
 #endif // RIGCONTROLVOICEMEMORYKEYER_H
