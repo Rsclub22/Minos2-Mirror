@@ -182,6 +182,8 @@ private:
     void setEomTypeLabelsVisible(bool visible);
     void setEomLabelText(int selectedEomType);
     void setErrorMessageVisible(bool visible);
+    void setKeyerIndicatorGroupBoxVisible(bool visible);
+    void setPttIndicatorGroupBoxVisible(bool visible);
 private slots:
 
     void onVoiceKeyerSelect(int idx);

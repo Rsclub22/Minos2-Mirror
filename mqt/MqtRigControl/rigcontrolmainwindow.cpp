@@ -1099,6 +1099,7 @@ void RigControlMainWindow::checkSupportPtt()
               }
 
               addPTTEnabledStatusToRigCache(true);
+              sendPttTypeLogger();
               ui->txPttTestPb->setVisible(true);
             }
             else
@@ -1106,6 +1107,7 @@ void RigControlMainWindow::checkSupportPtt()
                 setPttIndOnOff(false);
                 ui->pttLbl->setText("");
                 addPTTEnabledStatusToRigCache(false);
+                sendPttTypeLogger();
                 ui->txPttTestPb->setVisible(false);
             }
 
@@ -1118,6 +1120,7 @@ void RigControlMainWindow::checkSupportPtt()
             setPttGroupItemsVisible(false);
             setPttIndOnOff(false);
             addPTTEnabledStatusToRigCache(false);
+            sendPttTypeLogger();
 
          }
     }
@@ -4169,6 +4172,9 @@ void RigControlMainWindow::addPTTEnabledStatusToRigCache(bool status)
     msg->rigCache.setPttEnabled(psname, status);
 }
 
+
+
+
 void RigControlMainWindow::sendTransVertEnabled(bool status)
 {
     logMessage(QString("Send Transvert Enabled to logger = %1").arg(status  ? "True" : "False"));
@@ -4269,12 +4275,15 @@ void RigControlMainWindow::sendPttEnabledLogger()
     PubSubName psname(currentRadio.radioName);
     msg->rigCache.setPttEnabled(psname, currentRadio.enablePTT);
 }
+
 void RigControlMainWindow::sendPttStateLogger()
 {
     logMessage(QString("Send Ptt State = %1 to logger").arg(rigStateDetails->curPttStatus ? "TX" : "RX"));
     PubSubName psname(currentRadio.radioName);
     msg->rigCache.setPttState(psname, rigStateDetails->curPttStatus);
 }
+
+
 
 void RigControlMainWindow::onLaunchSetup()
 {

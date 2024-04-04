@@ -156,8 +156,8 @@ void TxVmRigButtonDialog::setSpecialCwCharLists(QMap<QString, QChar> &specialCha
     populateInfoPanelSupportedSpecialChars();   // for display
 }
 
-// This will overwrite the label with cwMemType and radio manufacturer and model name
-void TxVmRigButtonDialog::setVmTypeLabelcwMemType(QString radioModel)
+
+void TxVmRigButtonDialog::setVmTypeAndRadioModelLabel(QString radioModel)
 {
     ui->txVmTypeLbl->setText(QString("%1 - %2").arg(vmData->getType()).arg(radioModel));
 }
@@ -166,7 +166,6 @@ void TxVmRigButtonDialog::setVmTypeLabelcwMemType(QString radioModel)
 void TxVmRigButtonDialog::setVmData(VoiceKeyerParams* vmData_)
 {
     vmData = vmData_;
-    ui->txVmTypeLbl->setText(vmData->getType());
     ui->txVmNameEdit->setText(vmData->getVmName());
     ui->txCwMessageLineEdit->setText(vmData->getVmCwMessage());
     ui->txVmRepeatChkBox->setChecked(vmData->getVmRepeatFlag());

@@ -96,7 +96,7 @@ void RigControlCwMessageKeyer::getRadioCommonData(int &selectedEomType, int &use
 {
     int numButtons = 0;
 
-    QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[VoiceKeyerId::RigControl] + ".ini";
+    QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[VoiceKeyerId::CW_RigControl] + ".ini";
     QSettings readCommonConfig(fileName, QSettings::IniFormat);
 
     QString groupName;
@@ -109,7 +109,7 @@ void RigControlCwMessageKeyer::getRadioCommonData(int &selectedEomType, int &use
         groupName = ALL_RADIOS_GROUP_NAME;
     }
 
-    fileName = VOICE_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[VoiceKeyerId::RigControl] + ".ini";
+    fileName = VOICE_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[VoiceKeyerId::CW_RigControl] + ".ini";
     QSettings config(fileName, QSettings::IniFormat);
 
     config.beginGroup(groupName);
@@ -317,14 +317,9 @@ int RigControlCwMessageKeyer::setup(VoiceKeyerFactory *voiceKeyerFactory, int &m
     {
         txVmSetupDialog.setPttEomGroupBoxVisible(true);
 
-
-
-
-
-
         if (readSaveVoiceCWMemoryButtonByRadioNameFromIni(VoiceKeyerId::CW_RigControl))
         {
-            buttonConfig.beginGroup(selectedRadioName);
+            buttonConfig.beginGroup(selectedRadioName.replace('/', '_'));
             txVmSetupDialog.setEomRadioButtons(buttonConfig.value("endOfMessageType", voiceKeyerCommon::VoiceCwKeyerEomTypes::Eom_None).toInt());
 
             buttonConfig.endGroup();
@@ -352,7 +347,7 @@ int RigControlCwMessageKeyer::setup(VoiceKeyerFactory *voiceKeyerFactory, int &m
 
         if (readSaveVoiceCWMemoryButtonByRadioNameFromIni(VoiceKeyerId::CW_RigControl))
         {
-            buttonConfig.beginGroup(selectedRadioName);
+            buttonConfig.beginGroup(selectedRadioName.replace('/', '_'));
             txVmSetupDialog.setSwitchToCwChecked(buttonConfig.value("SwitchToCwMode", true).toBool());
             buttonConfig.endGroup();
         }
@@ -461,7 +456,7 @@ int RigControlCwMessageKeyer::editButton(VoiceKeyerParams *vmData, QString title
 
     vmButtonDialog.setWindowTitle(title);
     vmButtonDialog.setVmData(vmData);
-    vmButtonDialog.setVmTypeLabelcwMemType(vmData->getRigModel());
+    vmButtonDialog.setVmTypeAndRadioModelLabel(vmData->getRigModel());
     vmButtonDialog.setCwInfoPanelVisible(true);
 
     QString validCharCwList;
