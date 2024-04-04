@@ -205,6 +205,7 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
     ui->zoomSpinner->setMinimum(dialData::MIN_ZOOM_LEVEL);
     ui->zoomSpinner->setMaximum(dialData::MAX_ZOOM_LEVEL);
 
+    bmsdb = QSharedPointer<BandMapSpotDB>(new BandMapSpotDB());
 }
 void BandmapClientFrame::on_doSplitterChanges(BaseContestLog *b)
 {
@@ -259,6 +260,18 @@ BandmapClientFrame::~BandmapClientFrame()
     delete freqDisplayPalette;
     bandmapView->deleteLater();
 
+}
+
+void BandmapClientFrame::refreshLocalSpots()
+{
+    QVector<QSharedPointer<ClusterSpotData> > spots = bmsdb->getRecords(ct->cfileName);
+
+    for (auto const &s:QASCONST(spots))
+    {
+        //  NONE, CLUSTER, CLUSTER_MARKED, LOGGED, MARKED, SAVED, CQ, DELETED}
+        logSpotQueue.append(s);
+        checkNewBandMapSpots();
+    }
 }
 
 
@@ -453,14 +466,20 @@ void BandmapClientFrame::on_memoryActionSelected()
 
 void BandmapClientFrame::on_clearSpotActionSelected()
 {
-    if (bandmapView->getSelectedSpotDataPtr()->getIsSelected())
+    ClusterSpotData* selSpot = bandmapView->getSelectedSpotDataPtr();
+    if (selSpot->getIsSelected())
     {
         int ret = QMessageBox::warning(this, tr("Bandmap"),
-                                       tr("Please confirm you want to delete this spot - %1?").arg(bandmapView->getSelectedSpotDataPtr()->getDxCallStr()),
+                                       tr("Please confirm you want to delete this spot - %1?").arg(selSpot->getDxCallStr()),
                                        QMessageBox::Yes | QMessageBox::No);
         if (ret == QMessageBox::Yes)
         {
-            traceMsg(QString("menu clear spot selected for callsign %1").arg(bandmapView->getSelectedSpotDataPtr()->getDxCallStr()));
+            traceMsg(QString("menu clear spot selected for callsign %1").arg(selSpot->getDxCallStr()));
+            selSpot->setSpotType(bandmapSpotType::DELETED);
+            if (selSpot->getSpotType() != bandmapSpotType::CLUSTER && selSpot->getSpotType() != bandmapSpotType::CLUSTER_MARKED)
+            {
+                bmsdb->createRecord( selSpot, ct->cfileName);
+            }
             bandmapSpotProxyModel->removeRows(bandmapView->getSelectedSpotDataRowNum(), 1);
             bandmapView->clearSelectedSpotData();
             bandmapView->bandmapUpdate(true);
@@ -498,11 +517,13 @@ void BandmapClientFrame::on_clearClusterSpotsActionSelected()
 
             for (int row = 0; row < bandmapDataModel->rowCount(); row++)
             {
-                bandmapSpotType::SPOT_TYPE savedSpotType = static_cast<bandmapSpotType::SPOT_TYPE>(bandmapDataModel->data(bandmapDataModel->index(row, SPOT_TYPE_COL_NUM ),  BMP_DataStoredRole).toInt());
+                QSharedPointer<ClusterSpotData> bsd = bandmapDataModel->getBandmapDataRow(row);
+
+                bandmapSpotType::SPOT_TYPE savedSpotType = bsd->getSpotType();
                 if (savedSpotType == bandmapSpotType::CLUSTER )
                 {
                     // delete the old logged/saved entry, add the new one
-                    bandmapDataModel->setData(bandmapDataModel->index(row, SPOT_TYPE_COL_NUM ), bandmapSpotType::DELETED, BMP_DataStoredRole);
+                    bsd->setSpotType(bandmapSpotType::DELETED);
                 }
             }
             purgeSpots();
@@ -641,6 +662,14 @@ void BandmapClientFrame::context_clearSpotActionSelected()
     if (ret == QMessageBox::Yes)
     {
         traceMsg(QString("menu clear spot selected for callsign %1").arg(contextMenuSelectedSpotData.getDxCallStr()));
+
+        QSharedPointer<ClusterSpotData> bsd = bandmapDataModel->getBandmapDataRow(contextMenuSelectedSpotDataRowNum);
+        bsd->setSpotType(bandmapSpotType::DELETED);
+        if (bsd->getSpotType() != bandmapSpotType::CLUSTER && bsd->getSpotType() != bandmapSpotType::CLUSTER_MARKED)
+        {
+            bmsdb->createRecord(bsd, ct->cfileName);
+        }
+
         bandmapSpotProxyModel->removeRows(contextMenuSelectedSpotDataRowNum, 1);
         bandmapView->bandmapUpdate(true);
     }
@@ -913,7 +942,8 @@ void BandmapClientFrame::checkNewBandMapSpots()
         {
             for (int i = 0; i < logSpotQueue.count(); i++)
             {
-                traceMsg(QString("New Logger Spot: %1 %2 %3 %4").arg(logSpotQueue[i]->spotName(),  logSpotQueue[i]->getDxCallStr(), logSpotQueue[i]->getFreq().traceStr(), logSpotQueue[i]->getDxLocator()));
+                QString mess = QString("New Logger Spot: %1 %2 %3 %4").arg(logSpotQueue[i]->spotName(),  logSpotQueue[i]->getDxCallStr(), logSpotQueue[i]->getFreq().traceStr(), logSpotQueue[i]->getDxLocator());
+                traceMsg(mess);
                 addLogSpotToBandmapTable(logSpotQueue[i]);
                 doUpdate = true;
             }
@@ -961,7 +991,41 @@ void BandmapClientFrame::addLogSpotToBandmapTable(QSharedPointer<ClusterSpotData
         MinosLoggerEvents::SendBroadcastSpot(spot);
         return;
     }
+    if (spot->getSpotType() == bandmapSpotType::DELETED)
+    {
+        // we need to find the spot that was deleted, and delete it again
+        Callsign loggedCall = spot->getDxCall();
+        QString band = spot->getBand();
 
+        for (int row = 0; row < bandmapDataModel->rowCount(); row++)
+        {
+            QSharedPointer<ClusterSpotData> bsd = bandmapDataModel->getBandmapDataRow(row);
+
+            const Callsign &savedCs = bsd->getDxCall();
+            QString savedBand = bsd->getBand();
+
+            if (ct->isHF() && savedBand != band )
+            {
+                continue;
+            }
+
+            if (savedCs == loggedCall )
+            {
+                bandmapSpotType::SPOT_TYPE savedSpotType = bsd->getSpotType();
+                if (savedSpotType == bandmapSpotType::LOGGED || savedSpotType == bandmapSpotType::SAVED)
+                {
+                    // delete the old logged/saved entry, add the new one
+                    bsd->setSpotType(bandmapSpotType::DELETED);
+                    MinosLoggerEvents::SendBroadcastSpot(bsd);
+                    continue;
+                }
+            }
+        }
+        purgeSpots();
+        bandmapView->bandmapUpdate(true);
+
+        return;
+    }
     // look for an existing spot if the marker is a LOGGED or SAVE type
 //    enum SPOT_TYPE {NONE, CLUSTER, CLUSTER_MARKED, LOGGED, MARKED, SAVED, CQ, DELETED};
 
@@ -1002,6 +1066,7 @@ void BandmapClientFrame::addLogSpotToBandmapTable(QSharedPointer<ClusterSpotData
                     {
                         // delete the old logged/saved entry, add the new one
                         bsd->setSpotType(bandmapSpotType::DELETED);
+                        bmsdb->createRecord(bsd, ct->cfileName);
                         MinosLoggerEvents::SendBroadcastSpot(bsd);
                         continue;
                     }
@@ -1123,6 +1188,10 @@ void BandmapClientFrame::addLogSpotToBandmapTable(QSharedPointer<ClusterSpotData
                         // delete existing and later it will be re-added
                         traceMsg(QString("AddLogSpot Callsign removed - %1").arg(savedCall.getFullCall()));
                         bsd->setSpotType(bandmapSpotType::DELETED);
+                        if (bsd->getSpotType() != bandmapSpotType::CLUSTER && bsd->getSpotType() != bandmapSpotType::CLUSTER_MARKED)
+                        {
+                            bmsdb->createRecord(bsd, ct->cfileName);
+                        }
                     }
                 }
             }
@@ -1187,7 +1256,7 @@ void BandmapClientFrame::addRemoveCQSpot(QSharedPointer<ClusterSpotData>  spot)
             {
                 QSharedPointer<ClusterSpotData> bsd = bandmapDataModel->getBandmapDataRow(row);
                 MinosLoggerEvents::SendBroadcastSpot(bsd, true);
-                bandmapDataModel->setData(bandmapDataModel->index(row, SPOT_TYPE_COL_NUM ), bandmapSpotType::DELETED, BMP_DataStoredRole);
+                bsd->setSpotType(bandmapSpotType::DELETED);
             }
         }
     }
@@ -1628,7 +1697,7 @@ void BandmapClientFrame::purgeSpots()
     if (!ct || ct->isReadOnly())
         return;
 
-    if (timeToLive > 0 && !holdUpdateFlag)      // don't purge spots if == 0 and holdupdateflag is on
+    if (!holdUpdateFlag)
     {
         if (bandmapDataModel->rowCount() > 0)
         {
@@ -1638,18 +1707,20 @@ void BandmapClientFrame::purgeSpots()
            int idx = bandmapDataModel->rowCount() - 1;
            while (idx >= 0 && bandmapDataModel->rowCount() > 0)
            {
-               spotType = static_cast<bandmapSpotType::SPOT_TYPE>(bandmapDataModel->data(bandmapDataModel->index(idx, SPOT_TYPE_COL_NUM), BMP_DataStoredRole).toInt());
-               if (spotType == bandmapSpotType::CLUSTER)
+               QSharedPointer<ClusterSpotData> bsd = bandmapDataModel->getBandmapDataRow(idx);
+
+               spotType = bsd->getSpotType();
+               if (spotType == bandmapSpotType::CLUSTER && timeToLive > 0)
                {
-                   if (spotTimedOut(bandmapDataModel->data(bandmapDataModel->index(idx, RXTIME_COL_NUM), BMP_DataStoredRole).toLongLong(), timeToLive))
+                   if (spotTimedOut(bsd->getRxTime(), timeToLive))
                    {
-                       traceMsg(QString("Cluster Spot purged - %1").arg(bandmapDataModel->data(bandmapDataModel->index(idx, DXSPOT_CALL_COL_NUM), BMP_DataStoredRole).toString()));
+                       traceMsg(QString("Cluster Spot purged - %1").arg(bsd->getDxCall().getFullCall()));
                        bandmapDataModel->removeRows(idx, 1, QModelIndex());
                    }
                }
                else if (spotType == bandmapSpotType::DELETED)
                {
-                   traceMsg(QString("Deleted Spot purged - %1").arg(bandmapDataModel->data(bandmapDataModel->index(idx, DXSPOT_CALL_COL_NUM), BMP_DataStoredRole).toString()));
+                   traceMsg(QString("Deleted Spot purged - %1").arg(bsd->getDxCall().getFullCall()));
                    bandmapDataModel->removeRows(idx, 1, QModelIndex());
                }
 
@@ -1715,6 +1786,7 @@ void BandmapClientFrame::on_AfterLogContact(BaseContestLog *c, QSharedPointer<Ba
         }
 
         logSpotQueue.append(spot);
+        bmsdb->createRecord(spot, ct->cfileName);
     }
 }
 
@@ -1763,6 +1835,8 @@ void BandmapClientFrame::setCQFreq()
         spot->setOffRunFreq(offRunFreq);
 
         logSpotQueue.append(spot);
+        //CQ freq is in .minos
+        // bmsdb->createRecord(spot, ct->cfileName);
     }
 }
 
@@ -1797,6 +1871,7 @@ void BandmapClientFrame::setBandmapMarkFreq(Frequency _freq, QString mode)
         spot->setDistrict("????");
 
         logSpotQueue.append(spot);
+        bmsdb->createRecord(spot, ct->cfileName);
     }
 }
 
@@ -1831,6 +1906,7 @@ void BandmapClientFrame::setBandmapSaveFreq(QString cs, Frequency _freq, QString
         spot->setDistrict(exchange);
 
         logSpotQueue.append(spot);
+        bmsdb->createRecord(spot, ct->cfileName);
     }
 }
 

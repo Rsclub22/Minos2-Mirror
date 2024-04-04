@@ -1039,15 +1039,16 @@ void TSingleLogFrame::closeContest()
 
 void TSingleLogFrame::addAllQSOsToBandmap()
 {
-    for ( auto const &c: QASCONST(contest->ctList ))
-    {
-        QSharedPointer<BaseContact> cct = c.wt;
+    bandmapControlFrame->refreshLocalSpots();
+    // for ( auto const &c: QASCONST(contest->ctList ))
+    // {
+    //     QSharedPointer<BaseContact> cct = c.wt;
 
-        if ( cct->notValidContact() )
-           continue;
+    //     if ( cct->notValidContact() )
+    //        continue;
 
-        bandmapControlFrame->on_AfterLogContact(contest, cct);
-    }
+    //     bandmapControlFrame->on_AfterLogContact(contest, cct);
+    // }
 }
 void TSingleLogFrame::startNextEntry()
 {

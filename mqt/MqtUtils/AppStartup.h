@@ -30,7 +30,7 @@ enum DirectoryLocation {dlBinaries
                          ,dlLogs
                          ,dlDocs
                          ,dlTraceLog
-                         ,dlQRZDB
+                         ,dlDB
 };
 
 extern QString getDirectoryLocation(DirectoryLocation, QString runDir = ".");

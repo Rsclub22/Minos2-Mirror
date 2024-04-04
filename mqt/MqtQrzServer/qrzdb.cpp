@@ -11,9 +11,9 @@ QRZDB::QRZDB(QObject *parent)
 {
     qdb = QSqlDatabase::addDatabase("QSQLITE");
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-    qdb.setDatabaseName(getDirectoryLocation(dlQRZDB) + "/qrzdb6");
+    qdb.setDatabaseName(getDirectoryLocation(dlDB) + "/qrzdb6");
 #else
-    qdb.setDatabaseName(getDirectoryLocation(dlQRZDB) + "/qrzdb5");
+    qdb.setDatabaseName(getDirectoryLocation(dlDB) + "/qrzdb5");
 #endif
 
     if (!qdb.open())
@@ -49,6 +49,7 @@ QRZDB::QRZDB(QObject *parent)
           if(cquery.exec())
           {
               trace("QRZ database created successfully");
+              // Original table def didn't have "message" column, so add it now in case
               QSqlQuery rquery;
               rquery.prepare("ALTER TABLE QRZ ADD message TEXT");
               if (rquery.exec())

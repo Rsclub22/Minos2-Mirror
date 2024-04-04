@@ -626,7 +626,7 @@ QString getDirectoryLocation(DirectoryLocation dl, QString runDir /* = "."*/)
         dirLoc = libAppSupportPath + "/TraceLog";
         break;
 
-    case dlQRZDB:
+    case dlDB:
         dirLoc = libAppSupportPath;
         break;
 #else
@@ -658,7 +658,7 @@ QString getDirectoryLocation(DirectoryLocation dl, QString runDir /* = "."*/)
         dirLoc = runDir + "/TraceLog";
         break;
 
-    case dlQRZDB:
+    case dlDB:
         dirLoc = runDir;
         break;
 
@@ -699,8 +699,8 @@ QString getDirectoryLocation(DirectoryLocation dl, QString runDir /* = "."*/)
         dltype = "dlTraceLog";
         break;
 
-    case dlQRZDB:
-        dltype = "dlQRZDB";
+    case dlDB:
+        dltype = "dlDB";
         break;
     }
     //trace(QString("%1: %2").arg(dltype, dirLoc));

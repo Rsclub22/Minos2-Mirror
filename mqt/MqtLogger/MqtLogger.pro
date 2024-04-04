@@ -12,6 +12,7 @@ QT       += widgets
 QT       += network
 QT       += charts
 QT       += serialport
+QT       += sql
 
 equals(INC_MAP, 1): {
 QT += qml
@@ -74,6 +75,7 @@ SOURCES += \
     bandmapclientfilterdialog.cpp \
     bandmapdatamodel.cpp \
     bandmapgraphicspanel.cpp \
+    bandmapspotdb.cpp \
     bandmapspotmarker.cpp \
     bandselbuttons.cpp \
     cabrillo.cpp \
@@ -177,6 +179,7 @@ HEADERS  += \
     bandmapclientfilterdialog.h \
     bandmapdatamodel.h \
     bandmapgraphicspanel.h \
+    bandmapspotdb.h \
     bandmapspotmarker.h \
     bandselbuttons.h \
     cabrillo.h \

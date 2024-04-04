@@ -26,6 +26,7 @@
 #include "checkmodeagainstfreq.h"
 #include "checkoperatingfreq.h"
 #include "cutils.h"
+#include "bandmapspotdb.h"
 
 
 
@@ -45,6 +46,8 @@ public:
     ~BandmapClientFrame() override;
 
     QTimer* mouseInFrameTimer = nullptr;
+
+    void refreshLocalSpots();
 
     void setFreq(Frequency);
     void setContestBandMode(QString band, QString mode);
@@ -123,6 +126,7 @@ private:
     bool offRunFreq = false;
 
     // spots from logger
+    QSharedPointer<BandMapSpotDB> bmsdb;
     QVector<QSharedPointer<ClusterSpotData> > logSpotQueue;
 
     BandmapView *bandmapView = nullptr;

@@ -21,9 +21,6 @@ public:
 
 private:
     QSqlDatabase qdb;
-
-signals:
-
 };
 
 #endif // QRZDB_H
