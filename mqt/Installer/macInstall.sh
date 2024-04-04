@@ -6,17 +6,18 @@ echo $OSTYPE
 SCRIPT=$(basename $0)
 DIR=$(echo `pwd`/../..)
 QTDIR=~/Qt/6.6.1/macos
+BUILDDIR="build/install"
 
 cd $DIR
 echo Working Dir: $DIR
 
 git pull origin
 
-if [ ! -d ./build ]; then
-   mkdir build 
+if [ ! -d ./$BUILDDIR ]; then
+   mkdir $BUILDDIR 
 fi
 
-cd build
+cd $BUILDDIR
 
 qmake ../mqt/mqt.pro -config release
 retVal=$? 
@@ -53,7 +54,7 @@ mkdir ./minos-runtime
 
 cd ./minos-runtime
 
-cp -r ../Minos2/build/MqtLogger/MqtLogger.app .
+cp -r ../Minos2/$BUILDDIR/MqtLogger/MqtLogger.app .
 cd MqtLogger.app/Contents/Resources
 
 mkdir Configuration
@@ -68,12 +69,12 @@ do
   for j in MqtAppStarter MqtChat MqtCluster MqtControl MqtKeyer MqtKSTClient MqtLogger MqtMonitor MqtQrzServer MqtRigControl MqtRigRecorder MqtRigSync MqtRotator MqtServer
   do
     lconvert -verbose -o Bin/translations/${j}_${i}.qm \
-    $DIR/build/${j}/translations/minos_${i}.qm \
-    $DIR/build/TinyXML/translations/minos_${i}.qm \
-    $DIR/build/XMPPLib/translations/minos_${i}.qm \
-    $DIR/build/MqtBase/translations/minos_${i}.qm \
-    $DIR/build/KeyerBase/translations/minos_${i}.qm \
-    $DIR/build/${j}/translations/minos_${i}.qm
+    $DIR/$BUILDDIR/${j}/translations/minos_${i}.qm \
+    $DIR/$BUILDDIR/TinyXML/translations/minos_${i}.qm \
+    $DIR/$BUILDDIR/XMPPLib/translations/minos_${i}.qm \
+    $DIR/$BUILDDIR/MqtBase/translations/minos_${i}.qm \
+    $DIR/$BUILDDIR/KeyerBase/translations/minos_${i}.qm \
+    $DIR/$BUILDDIR/${j}/translations/minos_${i}.qm
   done
 done
 
@@ -81,7 +82,7 @@ cp $QTDIR/translations/qt*.qm Bin/translations
 
 for j in MqtAppStarter MqtChat MqtCluster MqtControl MqtKeyer MqtKSTClient MqtMonitor MqtQrzServer MqtRigControl MqtRigRecorder MqtRigSync MqtRotator MqtServer
 do
-  cp -r $DIR/build/${j}/${j}.app Bin
+  cp -r $DIR/$BUILDDIR/${j}/${j}.app Bin
 done
 
 cd ../../..

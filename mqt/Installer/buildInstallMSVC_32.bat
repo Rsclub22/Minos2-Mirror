@@ -7,12 +7,12 @@ call "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build
 echo on
 
 if "%1"=="SECONDINSTALL"  goto second
-set builddir=build
+set builddir=build\install
  goto notsecond
  :second
 set qmakeparam="SECONDINSTALL=true"
 set innoparam="/DSECONDINSTALL"
-set builddir=buildbeta
+set builddir=build\installBbeta
  :notsecond
 
 set QtKit=C:\temp\QT6_32\bin

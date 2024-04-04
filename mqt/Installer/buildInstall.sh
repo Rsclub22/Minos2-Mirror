@@ -10,12 +10,12 @@ DIR=$(echo ${SCRIPT%/*}/../..)
 cd $DIR
 
 if [[ "$1" == "SECONDINSTALL" ]]; then
-    BUILDDIR="buildBeta"
+    BUILDDIR="build/installBeta"
     QMAKEPARAM="SECONDINSTALL=true"
     RUNTIME="runtime-beta"
     INTERMEDIATE="minos-runtime-beta"
 else
-    BUILDDIR="build"
+    BUILDDIR="build/install"
     RUNTIME="runtime"
     INTERMEDIATE="minos-runtime"
 fi
