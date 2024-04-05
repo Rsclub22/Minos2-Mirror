@@ -2,23 +2,46 @@
 #include <QSqlRecord>
 #include <QSqlError>
 #include <QVariant>
+#include <QDir>
 #include "AppStartup.h"
 #include "MTrace.h"
+#include "fileutils.h"
+#include "qrzserverminosparameters.h"
 #include "qrzdb.h"
 
 QRZDB::QRZDB(QObject *parent)
     : QObject{parent}
 {
     qdb = QSqlDatabase::addDatabase("QSQLITE");
+
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-    qdb.setDatabaseName(getDirectoryLocation(dlDB) + "/qrzdb6");
+    QString dbName = getDirectoryLocation(dlDB) + "/qrzdb6";
 #else
-    qdb.setDatabaseName(getDirectoryLocation(dlDB) + "/qrzdb5");
+    QString dbName = getDirectoryLocation(dlDB) + "/qrzdb5";
 #endif
+
+    if (!FileExists(dbName))
+    {
+        trace(QString("%1 doesn't exist"));
+    }
+    else
+    {
+        if (!FileExists(dbName + ".db"))
+        {
+            QDir r(getDirectoryLocation(dlDB));
+            if ( !r.rename( dbName, dbName + ".db" ) )
+            {
+                QrzServerMinosParameters::getMinosParameters() ->mshowMessage( tr( "Failed to rename\n%1\n as \n%2\n\nPlease choose a new name.").arg(dbName, dbName + ".db") );
+            }
+        }
+    }
+    dbName += ".db";
+
+    qdb.setDatabaseName(dbName);
 
     if (!qdb.open())
     {
-       trace("Error: connection with database failed");
+        trace(QString("Error: connection with database %1 failed %2").arg(dbName, qdb.lastError().text()));
     }
     else
     {
@@ -43,12 +66,11 @@ QRZDB::QRZDB(QObject *parent)
        "message TEXT"
        ") ";
 
-          // you should check if args are ok first...
-          QSqlQuery cquery;
+       QSqlQuery cquery;
           cquery.prepare(createQuery);
           if(cquery.exec())
           {
-              trace("QRZ database created successfully");
+              trace(QString("QRZ database %1 created successfully").arg(dbName));
               // Original table def didn't have "message" column, so add it now in case
               QSqlQuery rquery;
               rquery.prepare("ALTER TABLE QRZ ADD message TEXT");
