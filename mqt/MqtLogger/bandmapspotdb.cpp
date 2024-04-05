@@ -10,15 +10,18 @@
 BandMapSpotDB::BandMapSpotDB(QObject *parent): QObject(parent)
 {
     qdb = QSqlDatabase::addDatabase("QSQLITE");
+
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-    qdb.setDatabaseName(getDirectoryLocation(dlDB) + "/lspotsdb6.db");
+    QString dbName = getDirectoryLocation(dlDB) + "/qrzdb6.db";
 #else
-    qdb.setDatabaseName(getDirectoryLocation(dlDB) + "/lspotsdb5.db");
+    QString dbName = getDirectoryLocation(dlDB) + "/qrzdb5.db";
 #endif
+
+    qdb.setDatabaseName(dbName);
 
     if (!qdb.open())
     {
-        trace("BandMapSpotDB Error: connection with database failed");
+        trace(QString("Error: connection with database %1 failed %2").arg(dbName, qdb.lastError().text()));
     }
     else
     {
@@ -40,12 +43,11 @@ BandMapSpotDB::BandMapSpotDB(QObject *parent): QObject(parent)
                               "CQResp TEXT"
                               ") ";
 
-        // you should check if args are ok first...
         QSqlQuery cquery;
         bool cres = cquery.prepare(createQuery);
         if(cres && cquery.exec())
         {
-            trace("BandMapSpotDB LSPOTS database created successfully");
+            trace(QString("BandMapSpotDB %1 database created successfully").arg(dbName));
             {
                 QString createIndexQuery = "CREATE INDEX IF NOT EXISTS lspot_idx ON LSPOTS (id)";
                 QSqlQuery query;
