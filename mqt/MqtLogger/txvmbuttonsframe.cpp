@@ -783,7 +783,7 @@ void TxVmButtonsFrame::readActionSelected(int buttonNumber)
 
 void TxVmButtonsFrame::startVMMsg(int buttonNumber)
 {
-    trace(QString("TxVmButtonsFrame::startVMMsg").arg(buttonNumber));
+    trace(QString("TxVmButtonsFrame::startVMMsg button Number = %1").arg(buttonNumber));
     buttonNumSent = buttonNumber;
     if (buttonNumber >= voiceMemButtonList.count())
     {
@@ -1020,9 +1020,11 @@ void TxVmButtonsFrame::onMsgDurTimerTimeout()
 {
     if (buttonNumSent >= 0)
     {
-        if (vmKeyParamList[buttonNumSent].getVmDuration() > 0 || selectedEomType == voiceKeyerCommon::VoiceCwKeyerEomTypes::CAT)
+        if (vmKeyParamList[buttonNumSent].getVmDuration() > 0
+            || selectedEomType == voiceKeyerCommon::VoiceCwKeyerEomTypes::CAT
+            || txVoiceKeyer->getSelectedEomType() == voiceKeyerCommon::VoiceCwKeyerEomTypes::InternalSoundCardVoiceKeyer)
         {
-        // message duration of zero means that there shouldn't be a timer running
+        // message duration of zero means that there shouldn't be a message timer running
             if (vmKeyParamList[buttonNumSent].getVmRepeatFlag())
             {
                 int repeatPauseDur = vmKeyParamList[buttonNumSent].getVmRepeatPauseDur() * 1000;

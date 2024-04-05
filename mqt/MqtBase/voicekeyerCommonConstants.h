@@ -34,6 +34,7 @@ namespace voiceKeyerCommon
         Eom_None = 0,
         CAT,
         Timer,
+        InternalSoundCardVoiceKeyer
     };
 
     const QStringList keyerTypes = {"", "Voice RigControl", "CW RigControl", "SerialControl", "Internal", "mqtKeyer"};

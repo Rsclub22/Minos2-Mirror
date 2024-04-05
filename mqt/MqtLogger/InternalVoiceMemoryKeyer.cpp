@@ -166,19 +166,20 @@ void InternalVoiceMemoryKeyer::setPttOnOff(bool onOff)
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
     if (tslf)
     {
+        trace(QString("InternalVoiceMemory setPttOnOff = %1").arg((onOff ? "On" : "Off")));
         LogContainer->sendDM->sendRigControlPttOnOff(tslf, onOff);
     }
 }
 void InternalVoiceMemoryKeyer::onDoPTT(bool onOff)
 {
-    static bool pttState = false;
+    //static bool pttState = false;
     setPttOnOff(onOff);
 
-    if (pttState != onOff)
-    {
-        pttState = onOff;
-        emit internalVoiceMemoryKeyerPlayState(pttState);
-    }
+    //if (pttState != onOff)
+    //{
+    //    pttState = onOff;
+    //    emit internalVoiceMemoryKeyerPlayState(pttState);
+    //}
 
 }
 
@@ -218,3 +219,7 @@ int InternalVoiceMemoryKeyer::editButton(VoiceKeyerParams *vmData, QString title
     return ret;
 
 }
+
+
+
+
