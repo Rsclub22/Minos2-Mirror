@@ -117,10 +117,10 @@
     <name>BandmapClientFrame</name>
     <message>
         <location filename="../bandmapclientframe.ui" line="32"/>
-        <location filename="../bandmapclientframe.cpp" line="458"/>
-        <location filename="../bandmapclientframe.cpp" line="475"/>
-        <location filename="../bandmapclientframe.cpp" line="492"/>
-        <location filename="../bandmapclientframe.cpp" line="638"/>
+        <location filename="../bandmapclientframe.cpp" line="472"/>
+        <location filename="../bandmapclientframe.cpp" line="494"/>
+        <location filename="../bandmapclientframe.cpp" line="511"/>
+        <location filename="../bandmapclientframe.cpp" line="659"/>
         <source>Bandmap</source>
         <translatorcomment>Bandmap???</translatorcomment>
         <translation>Carte des bandes</translation>
@@ -249,48 +249,48 @@
         <translation>Déplacer le spot sur la fréquence actuelle</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="459"/>
-        <location filename="../bandmapclientframe.cpp" line="639"/>
+        <location filename="../bandmapclientframe.cpp" line="473"/>
+        <location filename="../bandmapclientframe.cpp" line="660"/>
         <source>Please confirm you want to delete this spot - %1?</source>
         <translation>Veuillez confirmer que vous souhaitez supprimer ce Spot - %1?</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="476"/>
+        <location filename="../bandmapclientframe.cpp" line="495"/>
         <source>Please confirm you want to delete all the spots in the bandmap?</source>
         <translation>Voulez-vous vraiment supprimer tous les Spots de Bandmap?</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="493"/>
+        <location filename="../bandmapclientframe.cpp" line="512"/>
         <source>Please confirm you want to delete all the cluster spots in the bandmap?</source>
         <translation>Voulez-vous vraiment supprimer tous les Spots de cluster dans le Bandmap?</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="672"/>
+        <location filename="../bandmapclientframe.cpp" line="701"/>
         <source>Filter %1</source>
         <translation>Filtre %1</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1584"/>
+        <location filename="../bandmapclientframe.cpp" line="1653"/>
         <source>Mouse in frame, updates paused</source>
         <translation>Souris dans le cadre, mises à jour suspendues</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1317"/>
+        <location filename="../bandmapclientframe.cpp" line="1386"/>
         <source>Cluster Server Not Running</source>
         <translation>Le Serveur du Cluster ne fonctionne pas</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1350"/>
+        <location filename="../bandmapclientframe.cpp" line="1419"/>
         <source>Connected</source>
         <translation>Connecté</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1360"/>
+        <location filename="../bandmapclientframe.cpp" line="1429"/>
         <source>Disconnected</source>
         <translation>Déconnecté</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1472"/>
+        <location filename="../bandmapclientframe.cpp" line="1541"/>
         <source>Freq out of band</source>
         <translation>Fréquence hors bande</translation>
     </message>
@@ -2218,7 +2218,7 @@ Déplacez-vous entre les composants d&apos;un groupe à l&apos;aide de la souris
 <context>
     <name>InternalVoiceMemoryKeyer</name>
     <message>
-        <location filename="../InternalVoiceMemoryKeyer.cpp" line="191"/>
+        <location filename="../InternalVoiceMemoryKeyer.cpp" line="196"/>
         <source>Internal Voice Memory Setup</source>
         <translation>Configuration de la mémoire vocale interne</translation>
     </message>
@@ -3350,7 +3350,7 @@ Non - Ignorer les modifications</translation>
 <context>
     <name>RigControlCwMessageKeyer</name>
     <message>
-        <location filename="../rigcontrolcwmessagekeyer.cpp" line="263"/>
+        <location filename="../rigcontrolcwmessagekeyer.cpp" line="301"/>
         <source>Rig Control CW Memory Setup</source>
         <translation>Configuration de la mémoire de CW</translation>
     </message>
@@ -3485,7 +3485,7 @@ Non - Ignorer les modifications</translation>
 <context>
     <name>RigControlVoiceMemoryKeyer</name>
     <message>
-        <location filename="../rigcontrolvoicememorykeyer.cpp" line="162"/>
+        <location filename="../rigcontrolvoicememorykeyer.cpp" line="168"/>
         <source>Rig Control Voice Memory Setup</source>
         <translation>Configuration de la mémoire de voix</translation>
     </message>
@@ -5516,7 +5516,7 @@ Veuillez choisir un nouveau nom.</translation>
         <translation>Analyse de %1 terminée; regarder dans le journal de suivi pour l&apos;analyse.</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="2347"/>
+        <location filename="../tlogcontainer.cpp" line="2350"/>
         <source>Minos Contest Logger Application</source>
         <translation>Application Minos Contest Logger</translation>
     </message>
@@ -5551,7 +5551,7 @@ Veuillez confirmer cette action en appuyant sur &quot;Oui&quot;.</translation>
     </message>
     <message>
         <location filename="../tlogcontainer.cpp" line="1622"/>
-        <location filename="../tlogcontainer.cpp" line="2149"/>
+        <location filename="../tlogcontainer.cpp" line="2152"/>
         <source>Loading </source>
         <translation>Chargement </translation>
     </message>
@@ -5561,32 +5561,32 @@ Veuillez confirmer cette action en appuyant sur &quot;Oui&quot;.</translation>
         <translation>Fichier du Concours </translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1790"/>
+        <location filename="../tlogcontainer.cpp" line="1793"/>
         <source>Configure Screen Layouts...</source>
         <translation>Configurer la disposition de l&apos;écran...</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1880"/>
+        <location filename="../tlogcontainer.cpp" line="1883"/>
         <source>&amp;Manage Contest Sets...</source>
         <translation>&amp;Gérer les ensembles de Concours ...</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="2151"/>
+        <location filename="../tlogcontainer.cpp" line="2154"/>
         <source>List file </source>
         <translation>Fichier de liste </translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="2161"/>
+        <location filename="../tlogcontainer.cpp" line="2164"/>
         <source>Open List %1?</source>
         <translation>Ouvrir la liste %1?</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="2185"/>
+        <location filename="../tlogcontainer.cpp" line="2188"/>
         <source>Contact list files (*.csl);;All Files (*.*)</source>
         <translation>Fichiers de la liste de contacts (* .csl) ;; Tous les fichiers (*. *)</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="2189"/>
+        <location filename="../tlogcontainer.cpp" line="2192"/>
         <source>Open Archive List</source>
         <translation>Ouvrir la liste des archives</translation>
     </message>
@@ -5896,17 +5896,17 @@ Veuillez confirmer cette action en appuyant sur &quot;Oui&quot;.</translation>
         <translation>Enregistrer le Log importé en tant que fichier .minos</translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1534"/>
+        <location filename="../tsinglelogframe.cpp" line="1535"/>
         <source>No unfilled contacts</source>
         <translation>Pas de contacts  non remplis</translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1553"/>
+        <location filename="../tsinglelogframe.cpp" line="1554"/>
         <source>Please give serial wanted</source>
         <translation>Numéro de série requis</translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1575"/>
+        <location filename="../tsinglelogframe.cpp" line="1576"/>
         <source>Serial number %1 not found</source>
         <translation>Numéro de série %1 introuvable</translation>
     </message>
@@ -5976,99 +5976,144 @@ Last %8 Mins: %9 QSO %10 pts %11 mults<byte value="xd"/>
         <translation>TX Keyer</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.ui" line="62"/>
+        <location filename="../txvmbuttonsframe.ui" line="41"/>
+        <source>Keyer</source>
+        <translation type="unfinished">Keyer</translation>
+    </message>
+    <message>
+        <location filename="../txvmbuttonsframe.ui" line="49"/>
         <source>Avail</source>
         <translation>Disponible</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.ui" line="108"/>
+        <location filename="../txvmbuttonsframe.ui" line="87"/>
         <source>Repeat</source>
         <translation>Répéter</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.ui" line="158"/>
+        <location filename="../txvmbuttonsframe.ui" line="125"/>
+        <source>EOM:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../txvmbuttonsframe.ui" line="163"/>
+        <source>PTT</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../txvmbuttonsframe.ui" line="173"/>
+        <source>Enabled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../txvmbuttonsframe.ui" line="213"/>
         <source>TX Status</source>
         <translation>État de TX</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.ui" line="219"/>
+        <location filename="../txvmbuttonsframe.ui" line="32"/>
         <source>Setup</source>
         <translation>Configurer</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.ui" line="245"/>
+        <location filename="../txvmbuttonsframe.ui" line="251"/>
+        <source>Type:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../txvmbuttonsframe.ui" line="297"/>
         <source>Pip</source>
         <translatorcomment>What of #Setup?</translatorcomment>
         <translation>Pip</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.ui" line="265"/>
+        <location filename="../txvmbuttonsframe.ui" line="315"/>
         <source>Button Selection for Radio:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.ui" line="296"/>
-        <location filename="../txvmbuttonsframe.ui" line="303"/>
-        <location filename="../txvmbuttonsframe.ui" line="310"/>
-        <location filename="../txvmbuttonsframe.ui" line="317"/>
-        <location filename="../txvmbuttonsframe.ui" line="328"/>
-        <location filename="../txvmbuttonsframe.ui" line="335"/>
-        <location filename="../txvmbuttonsframe.ui" line="342"/>
-        <location filename="../txvmbuttonsframe.ui" line="349"/>
+        <location filename="../txvmbuttonsframe.ui" line="344"/>
+        <source>Error:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../txvmbuttonsframe.ui" line="351"/>
+        <source>TextLabel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../txvmbuttonsframe.ui" line="394"/>
+        <location filename="../txvmbuttonsframe.ui" line="401"/>
+        <location filename="../txvmbuttonsframe.ui" line="408"/>
+        <location filename="../txvmbuttonsframe.ui" line="415"/>
+        <location filename="../txvmbuttonsframe.ui" line="452"/>
+        <location filename="../txvmbuttonsframe.ui" line="459"/>
+        <location filename="../txvmbuttonsframe.ui" line="466"/>
+        <location filename="../txvmbuttonsframe.ui" line="473"/>
         <source>...</source>
         <translation>...</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.ui" line="373"/>
+        <location filename="../txvmbuttonsframe.ui" line="497"/>
         <source>Stop</source>
         <translation>Arrêter</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="683"/>
-        <location filename="../txvmbuttonsframe.cpp" line="891"/>
+        <location filename="../txvmbuttonsframe.cpp" line="728"/>
+        <location filename="../txvmbuttonsframe.cpp" line="928"/>
         <source>Rig CW Message</source>
         <translation>Message CW d&apos;apparat</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="687"/>
-        <location filename="../txvmbuttonsframe.cpp" line="895"/>
+        <location filename="../txvmbuttonsframe.cpp" line="732"/>
+        <location filename="../txvmbuttonsframe.cpp" line="932"/>
         <source>Voice Memory</source>
         <translation>Mémoire de voix</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="689"/>
+        <location filename="../txvmbuttonsframe.cpp" line="734"/>
         <source>%1 %2 - Edit</source>
         <translation>%1 %2 - Modifier</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="522"/>
+        <location filename="../txvmbuttonsframe.cpp" line="532"/>
         <source>To use the external keyer mqtKeyer must be running and connected</source>
         <translation>Pour utiliser le keyer externe, mqtKeyer doit être en cours d&apos;exécution et connecté</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="897"/>
+        <location filename="../txvmbuttonsframe.cpp" line="934"/>
         <source>%1 %2 - New</source>
         <translation>%1 %2 - Nouveau</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1350"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1428"/>
         <source>Rig Voice Keyer Available</source>
         <translation>Mémoire de voix disponible</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1354"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1432"/>
         <source>Rig CW Messages Available</source>
         <translation>Message CW disponible</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1459"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1553"/>
         <source>TX On</source>
         <translation>TX Actif</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1465"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1559"/>
         <source>TX Off</source>
         <translation>TX Éteint</translation>
+    </message>
+    <message>
+        <location filename="../txvmbuttonsframe.cpp" line="1569"/>
+        <source>PTT Enabled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../txvmbuttonsframe.cpp" line="1575"/>
+        <source>PTT Disabled</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -6341,49 +6386,49 @@ Through</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmrigbuttondialog.cpp" line="206"/>
+        <location filename="../txvmrigbuttondialog.cpp" line="215"/>
         <source>CW Message too long - Max %1 chars.</source>
         <translation>Message CW trop long - Max %1 caractères.</translation>
     </message>
     <message>
-        <location filename="../txvmrigbuttondialog.cpp" line="217"/>
-        <location filename="../txvmrigbuttondialog.cpp" line="247"/>
+        <location filename="../txvmrigbuttondialog.cpp" line="226"/>
+        <location filename="../txvmrigbuttondialog.cpp" line="256"/>
         <source>Repeat Pause</source>
         <translation>Répéter la pause</translation>
     </message>
     <message>
-        <location filename="../txvmrigbuttondialog.cpp" line="223"/>
-        <location filename="../txvmrigbuttondialog.cpp" line="253"/>
+        <location filename="../txvmrigbuttondialog.cpp" line="232"/>
+        <location filename="../txvmrigbuttondialog.cpp" line="262"/>
         <source>Message</source>
         <translation>Message</translation>
     </message>
     <message>
-        <location filename="../txvmrigbuttondialog.cpp" line="237"/>
+        <location filename="../txvmrigbuttondialog.cpp" line="246"/>
         <source>%1 Duration </source>
         <translation>%1 Durée </translation>
     </message>
     <message>
-        <location filename="../txvmrigbuttondialog.cpp" line="237"/>
+        <location filename="../txvmrigbuttondialog.cpp" line="246"/>
         <source> - out of range</source>
         <translation> - hors de limite</translation>
     </message>
     <message>
-        <location filename="../txvmrigbuttondialog.cpp" line="238"/>
+        <location filename="../txvmrigbuttondialog.cpp" line="247"/>
         <source>Please set value between 0 and 180 seconds</source>
         <translation>Entrer un value entre 0 et 180 secondes SVP</translation>
     </message>
     <message>
-        <location filename="../txvmrigbuttondialog.cpp" line="300"/>
+        <location filename="../txvmrigbuttondialog.cpp" line="309"/>
         <source>%1 Special Characters </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmrigbuttondialog.cpp" line="300"/>
+        <location filename="../txvmrigbuttondialog.cpp" line="309"/>
         <source>Invalid</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmrigbuttondialog.cpp" line="301"/>
+        <location filename="../txvmrigbuttondialog.cpp" line="310"/>
         <source>These special characters are invalid for this radio: %1
 Please edit or remove</source>
         <translation type="unfinished"></translation>
@@ -6408,11 +6453,25 @@ Please edit or remove</source>
     </message>
     <message>
         <location filename="../txvmrigsetupdialog.ui" line="98"/>
-        <source>Use CAT PTT For EOM</source>
-        <translation>Utiliser CAT PTT pour EOM</translation>
+        <source>EOM</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmrigsetupdialog.ui" line="105"/>
+        <location filename="../txvmrigsetupdialog.ui" line="104"/>
+        <source>CAT</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../txvmrigsetupdialog.ui" line="111"/>
+        <source>Timer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use CAT PTT For EOM</source>
+        <translation type="vanished">Utiliser CAT PTT pour EOM</translation>
+    </message>
+    <message>
+        <location filename="../txvmrigsetupdialog.ui" line="134"/>
         <source>Switch to CW Mode and then Restore Current Mode</source>
         <translation>Changer en Mode CW, puis restaurer le Mode Actuel</translation>
     </message>
@@ -6420,12 +6479,12 @@ Please edit or remove</source>
 <context>
     <name>TxVoiceMemButton</name>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1526"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1679"/>
         <source>&amp;New</source>
         <translation>&amp;Nouveau</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1527"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1680"/>
         <source>&amp;Edit</source>
         <translation>&amp;Modifier</translation>
     </message>
@@ -6694,17 +6753,16 @@ Inclure le &quot;CQ&quot; ainsi que le type</translation>
         <translation>Port COM</translation>
     </message>
     <message>
-        <location filename="../txVmInternalSetupDialog.ui" line="48"/>
         <source>Use CAT PTT For EOM</source>
-        <translation>Utiliser CAT PTT pour EOM</translation>
+        <translation type="vanished">Utiliser CAT PTT pour EOM</translation>
     </message>
     <message>
-        <location filename="../txVmInternalSetupDialog.ui" line="57"/>
+        <location filename="../txVmInternalSetupDialog.ui" line="50"/>
         <source>Input Channel</source>
         <translation>Canal d&apos;entrée</translation>
     </message>
     <message>
-        <location filename="../txVmInternalSetupDialog.ui" line="71"/>
+        <location filename="../txVmInternalSetupDialog.ui" line="64"/>
         <source>Output Channel</source>
         <translation>Canal de sortie</translation>
     </message>
