@@ -147,6 +147,8 @@ signals:
     void vmVoiceKeyPressed(int msgNum);
     void vmVoiceKeyStopPressed();
 
+    void internalVoiceMemoryKeyerPlayState(bool onOff);
+
     void remoteConfigChanged();
     void remoteKeyerStopped();
     void remoteKeyerStarted(int key);

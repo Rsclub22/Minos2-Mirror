@@ -110,10 +110,7 @@ void ExternalMqtKeyer::setPttOnOff(bool onOff)
     Q_UNUSED(onOff)
 }
 
-int ExternalMqtKeyer::getSelectedEomType()
-{
-    return selectedEomType;
-}
+
 
 int ExternalMqtKeyer::setup(VoiceKeyerFactory *voiceKeyerFactory, int &maxNumButtons, int &numButtons, QString selectedRadioName)
 {

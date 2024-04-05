@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>525</width>
+    <width>561</width>
     <height>242</height>
    </rect>
   </property>
@@ -73,7 +73,7 @@
              </widget>
             </item>
             <item>
-             <widget class="Line" name="line">
+             <widget class="Line" name="vmAvailIndicatorLine">
               <property name="orientation">
                <enum>Qt::Vertical</enum>
               </property>
@@ -111,7 +111,7 @@
                </widget>
               </item>
               <item>
-               <widget class="Line" name="line_2">
+               <widget class="Line" name="vmRepeatLine">
                 <property name="orientation">
                  <enum>Qt::Vertical</enum>
                 </property>

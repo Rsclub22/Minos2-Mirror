@@ -117,3 +117,5 @@ void txVmInternalSetupDialog::outChannelCB_currentTextChanged(const QString &arg
     SoundSystemDriver::getSbDriver()->closedown();
     SoundSystemDriver::getSbDriver()->initialise(ui->inChannelCB->currentText(), ui->outChannelCB->currentText(), "", "");
 }
+
+

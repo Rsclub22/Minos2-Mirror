@@ -195,7 +195,7 @@ void TxVmButtonsFrame::logRadioSettingsChanged(QSharedPointer<RadioSettingsDialo
 {
     Q_UNUSED(logRadioSettingsFlags)
 
-    if (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl] || voiceKeyerType == keyerTypes[VoiceKeyerId::RigControl])
+    if (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl] || voiceKeyerType == keyerTypes[VoiceKeyerId::RigControl] || voiceKeyerType == keyerTypes[VoiceKeyerId::InternalVoiceKeyer])
     {
         setSaveButtonByRadionameText(selectedRadio.getLocalName());
         if (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl])
@@ -235,6 +235,7 @@ void TxVmButtonsFrame::createKeyer(QString voiceKeyerName)
                 connect(txVoiceKeyer.data(), &VoiceKeyerBase::remoteConfigChanged, this, &TxVmButtonsFrame::onRemoteConfigChanged, Qt::UniqueConnection);
                 connect(txVoiceKeyer.data(), &VoiceKeyerBase::remoteKeyerStopped, this, &TxVmButtonsFrame::onRemoteKeyerStopped, Qt::UniqueConnection);
                 connect(txVoiceKeyer.data(), &VoiceKeyerBase::remoteKeyerStarted, this, &TxVmButtonsFrame::onRemoteKeyerStarted, Qt::UniqueConnection);
+                connect(txVoiceKeyer.data(), &VoiceKeyerBase::internalVoiceMemoryKeyerPlayState, this, &TxVmButtonsFrame::onInternalVoiceMemoryPlayState);
 
                 txVoiceKeyer->voiceKeyerInit(txVoiceKeyer->numButtons);
 
@@ -620,6 +621,13 @@ void TxVmButtonsFrame::setFrameState(QString voiceKeyerName)
                 }
             }
         }
+        else if (voiceKeyerType == keyerTypes[VoiceKeyerId::InternalVoiceKeyer])
+        {
+            setPttTypeLabelsVisible(true);
+            setPttTypeText(getPttType(selectedRadio));
+            setPttEnabledIndicatorOnOff(getPttEnabled(selectedRadio));
+            loadButtonData();
+        }
         else
         {
             ui->buttonSelectionLbl->setVisible(false);
@@ -882,7 +890,11 @@ void TxVmButtonsFrame::onVmStopClicked()
     }
     setRepeatIndicatorOnOff(false);
     buttonNumSent = NO_VM_BUTTON_ON;
+
 }
+
+
+
 
 
 void TxVmButtonsFrame::newActionSelected(int buttonNumber)
@@ -1056,6 +1068,9 @@ void TxVmButtonsFrame::turnOffVMButton()
 
 void TxVmButtonsFrame::onRepeatPauseTimerTimeout()
 {
+
+    repeatPauseTimer->stop();
+
     if (txVoiceKeyer->doRepeatFromLogger())
     {
         if (buttonNumSent >= 0)
@@ -1072,7 +1087,7 @@ void TxVmButtonsFrame::onRepeatPauseTimerTimeout()
            }
         }
     }
-    repeatPauseTimer->stop();
+
 
 
 }
@@ -1387,6 +1402,7 @@ void TxVmButtonsFrame::setAvailIndicatorVisible(bool visible)
 
     ui->availLabel->setVisible(visible);
     ui->availIndicator->setVisible(visible);
+    ui->vmAvailIndicatorLine->setVisible(visible);
 
 }
 
@@ -1618,6 +1634,24 @@ void TxVmButtonsFrame::setContest(BaseContestLog *c)
 void TxVmButtonsFrame::sendModeToRadio(const QString m)
 {
     emit sendRadioMode(m);
+}
+
+
+void TxVmButtonsFrame::onInternalVoiceMemoryPlayState(bool playing)
+{
+    if (playing)
+    {
+        qDebug() << "internal is playing";
+    }
+    else
+    {
+       qDebug() << "internal has stopped";
+        onMsgDurTimerTimeout();
+    }
+    //if (!playing)
+   // {
+   //
+   // }
 }
 
 //*******************TX Voice Memory Button *************************//

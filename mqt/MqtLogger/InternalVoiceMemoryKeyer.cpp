@@ -171,13 +171,18 @@ void InternalVoiceMemoryKeyer::setPttOnOff(bool onOff)
 }
 void InternalVoiceMemoryKeyer::onDoPTT(bool onOff)
 {
+    static bool pttState = false;
     setPttOnOff(onOff);
+
+    if (pttState != onOff)
+    {
+        pttState = onOff;
+        emit internalVoiceMemoryKeyerPlayState(pttState);
+    }
+
 }
 
-int InternalVoiceMemoryKeyer::getSelectedEomType()
-{
-    return selectedEomType;
-}
+
 
 int InternalVoiceMemoryKeyer::setup(VoiceKeyerFactory *voiceKeyerFactory, int &maxNumButtons, int &numButtons, QString selectedRadio)
 {

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>351</width>
+    <height>320</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -41,13 +41,6 @@
       </widget>
      </item>
     </layout>
-   </item>
-   <item>
-    <widget class="QCheckBox" name="pttEOMChkBox">
-     <property name="text">
-      <string>Use CAT PTT For EOM</string>
-     </property>
-    </widget>
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_10">

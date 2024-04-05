@@ -184,6 +184,7 @@ private:
     void setErrorMessageVisible(bool visible);
     void setKeyerIndicatorGroupBoxVisible(bool visible);
     void setPttIndicatorGroupBoxVisible(bool visible);
+
 private slots:
 
     void onVoiceKeyerSelect(int idx);
@@ -199,6 +200,7 @@ private slots:
     void onRemoteKeyerStopped();
     void on_pipCb_stateChanged(int arg1);
     void onExtConnectTimer();
+    void onInternalVoiceMemoryPlayState(bool playing);
 };
 
 #endif // TXVMBUTTONSFRAME_H
