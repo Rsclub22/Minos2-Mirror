@@ -18,6 +18,7 @@
 #include <QObject>
 #include "voicekeyerbase.h"
 #include "voicekeyerfactory.h"
+#include "serialCommonData.h"
 
 class RigControlVoiceMemoryKeyer : public VoiceKeyerBase
 {
@@ -31,6 +32,8 @@ public:
     void voiceKeyerInit(int &numButtons) override;
     void sendMsgNum(int buttonNum) override;
     void stopMsg(VoiceKeyerParams * vkParam) override;
+
+    virtual void setRadioParams(int radioMaxNumButtons, QString selectedRadioName, int pttType_, bool pttEnabled_) override;
 
 
     void sendCwMsg(VoiceKeyerParams &vmParams) override {Q_UNUSED(vmParams)};
@@ -46,15 +49,16 @@ public:
 
     //int getKeyerState(int &state) override;
     void setPttOnOff(bool onOff) override;
-    bool getUsePttForEomFlag() override;
+    int getSelectedEomType() override;
 
     bool readVmButtonParams(int buttonNum, VoiceKeyerParams &vmParams) override;
     void saveVmButtonParams(const VoiceKeyerParams &vmParams) override;
 
     virtual int setup(VoiceKeyerFactory *voiceKeyerFactory, int &maxNumButtons, int &numButtons, QString selectedRadioName) override;
+
     virtual int editButton(VoiceKeyerParams* vmData, QString title) override;
 
-
+    void setSelectedEomType(int selectedEomType_);
 
 signals:
 
@@ -62,11 +66,17 @@ signals:
 
 private:
 
-    bool usePttForEom = false;
+    int selectedEomType = voiceKeyerCommon::VoiceCwKeyerEomTypes::Eom_None;
+    int pttType = serialCommonData::PTT_METHOD_NONE;
+    bool pttEnabled = false;
 
     bool radioKeyerAvail = false;
 
+    int radioMaxNumButtons = 0;
+    QString selectedRadioName;
 
+
+    void getRadioCommonData(int &usePttForEom, int &userNumberButtons, int radioMaxNumButtons);
 };
 
 #endif // RIGCONTROLVOICEMEMORYKEYER_H

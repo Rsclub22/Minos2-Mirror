@@ -272,6 +272,7 @@ const QString PTT_INDICATOR_OFF = QString("background-color: white ;\n");
 const QString TX_RX_INDICATOR_ON = QString("background-color: orange; \n");
 const QString TX_RX_INDICATOR_OFF = QString("background-color: white; \n");
 
+const QString BACKGROUND_GREY = QString("#f0f0f0");
 
 enum RIGCTLD_INDICATOR_ID  {RIGCTLD_IND_EXT, RIGCTLD_IND_INT, RIGCTLD_IND_OFF};
 

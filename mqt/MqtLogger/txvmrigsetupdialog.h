@@ -5,6 +5,7 @@
 #include "voicekeyerfactory.h"
 #include "voicekeyerCommonConstants.h"
 
+
 namespace Ui {
 class TxVmRigSetupDialog;
 }
@@ -23,13 +24,17 @@ public:
 
     bool getCatPttForEomState();
     bool getSetCwModeAndRestoreState();
-    void setPttEOMChkBoxVisible(bool visible);
-    void setPttEOMChkBoxChecked(bool checked);
     void setSwitchToCwVisible(bool visible);
     void setSwitchToCwChecked(bool checked);
-     void setSetupRadioGroupBoxTitle(QString selectedRadioName);
-     void setMaxNumOfButtons(int maxNumButtons);
-     void setMaxNumOfButtonsLabel(int maxNumButtons);
+    void setSetupRadioGroupBoxTitle(QString selectedRadioName);
+    void setMaxNumOfButtons(int maxNumButtons);
+    void setMaxNumOfButtonsLabel(int maxNumButtons);
+
+    void setPttEomGroupBoxVisible(bool visible);
+    void setEomRadioButtons(int eomType);
+    int getSelectedEomType();
+
+
 private slots:
 
     void onNumButtonsValueChanged(int num);
@@ -49,8 +54,10 @@ private:
     int numButtons = MININUM_BUTTONS;
     int maxNumButtons = MAXIMUM_BUTTONS;
 
+
     void initSetup();
     void doCloseEvent();
+
 
 };
 

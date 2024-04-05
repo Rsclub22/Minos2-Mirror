@@ -64,14 +64,19 @@ void RigControlCwMessageKeyer::registerVoiceKeyer(VoiceKeyerFactory::VmKeyers* v
 
 }
 
+void RigControlCwMessageKeyer::setSelectedEomType(int selectedEomType_)
+{
+    selectedEomType = selectedEomType_;
+}
+
 void RigControlCwMessageKeyer::setPttOnOff(bool onOff)
 {
     Q_UNUSED(onOff)
 }
 
-bool RigControlCwMessageKeyer::getUsePttForEomFlag()
+int RigControlCwMessageKeyer::getSelectedEomType()
 {
-    return usePttForEom;
+    return selectedEomType;
 }
 
 bool RigControlCwMessageKeyer::getSetCwModeAndRestoreFlag()
@@ -81,11 +86,44 @@ bool RigControlCwMessageKeyer::getSetCwModeAndRestoreFlag()
 
 void RigControlCwMessageKeyer::voiceKeyerInit(int &numButtons)
 {
+    int userNumberButtons = 0;
+    getRadioCommonData(selectedEomType, userNumberButtons, radioMaxNumButtons);
+    numButtons = userNumberButtons;
+}
+
+
+void RigControlCwMessageKeyer::getRadioCommonData(int &selectedEomType, int &userNumberButtons, int radioMaxNumButtons)
+{
+    int numButtons = 0;
+
     QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[VoiceKeyerId::CW_RigControl] + ".ini";
+    QSettings readCommonConfig(fileName, QSettings::IniFormat);
+
+    QString groupName;
+    if (readCommonConfig.value("Common/SaveButtonByRadioName", false).toBool())
+    {
+        groupName = selectedRadioName.replace('/', '_');
+    }
+    else
+    {
+        groupName = ALL_RADIOS_GROUP_NAME;
+    }
+
+    fileName = VOICE_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[VoiceKeyerId::CW_RigControl] + ".ini";
     QSettings config(fileName, QSettings::IniFormat);
-    numButtons = config.value("Common/NumButtons", VOICEKEYER_MAX_NUMBUTTONS).toInt();
-    usePttForEom = config.value("Common/UseCatPttForEom", true).toBool();
-    setCwModeAndRestoreCurrentMode = config.value("Common/SwitchToCwMode", true).toBool();
+
+    config.beginGroup(groupName);
+    numButtons = config.value("NumButtons", -1).toInt();
+    selectedEomType = config.value("endOfMessageType", voiceKeyerCommon::VoiceCwKeyerEomTypes::Eom_None).toInt();
+    setCwModeAndRestoreCurrentMode = config.value("SwitchToCwMode", true).toBool();
+    config.endGroup();
+
+    if (numButtons == -1)   // no user button number saved
+    {
+        numButtons = radioMaxNumButtons;  // radio specific number of voice messages
+    }
+
+    userNumberButtons =  numButtons;
 }
 
 
@@ -277,19 +315,19 @@ int RigControlCwMessageKeyer::setup(VoiceKeyerFactory *voiceKeyerFactory, int &m
 
     if (voiceCap.getUseCatPTTForEom())
     {
-        txVmSetupDialog.setPttEOMChkBoxVisible(true);
+        txVmSetupDialog.setPttEomGroupBoxVisible(true);
 
         if (readSaveVoiceCWMemoryButtonByRadioNameFromIni(VoiceKeyerId::CW_RigControl))
         {
-            buttonConfig.beginGroup(selectedRadioName);
-            txVmSetupDialog.setPttEOMChkBoxChecked(buttonConfig.value("UseCatPttForEom", false).toBool());
+            buttonConfig.beginGroup(selectedRadioName.replace('/', '_'));
+            txVmSetupDialog.setEomRadioButtons(buttonConfig.value("endOfMessageType", voiceKeyerCommon::VoiceCwKeyerEomTypes::Eom_None).toInt());
 
             buttonConfig.endGroup();
         }
         else
         {
             config.beginGroup(allRadiosGrpName);
-            txVmSetupDialog.setPttEOMChkBoxChecked(buttonConfig.value("UseCatPttForEom", false).toBool());
+            txVmSetupDialog.setEomRadioButtons(buttonConfig.value("endOfMessageType", voiceKeyerCommon::VoiceCwKeyerEomTypes::Eom_None).toInt());
             buttonConfig.endGroup();
         }
 
@@ -297,7 +335,7 @@ int RigControlCwMessageKeyer::setup(VoiceKeyerFactory *voiceKeyerFactory, int &m
     }
     else
     {
-        txVmSetupDialog.setPttEOMChkBoxVisible(false);
+        txVmSetupDialog.setPttEomGroupBoxVisible(false);
     }
 
 
@@ -309,7 +347,7 @@ int RigControlCwMessageKeyer::setup(VoiceKeyerFactory *voiceKeyerFactory, int &m
 
         if (readSaveVoiceCWMemoryButtonByRadioNameFromIni(VoiceKeyerId::CW_RigControl))
         {
-            buttonConfig.beginGroup(selectedRadioName);
+            buttonConfig.beginGroup(selectedRadioName.replace('/', '_'));
             txVmSetupDialog.setSwitchToCwChecked(buttonConfig.value("SwitchToCwMode", true).toBool());
             buttonConfig.endGroup();
         }
@@ -354,11 +392,11 @@ int RigControlCwMessageKeyer::setup(VoiceKeyerFactory *voiceKeyerFactory, int &m
 
 
         buttonConfig.setValue("NumButtons", numButtons);
-        buttonConfig.setValue("UseCatPttForEom", txVmSetupDialog.getCatPttForEomState() );
+        buttonConfig.setValue("endOfMessageType", txVmSetupDialog.getSelectedEomType());
         buttonConfig.setValue("SwitchToCwMode", txVmSetupDialog.getSetCwModeAndRestoreState());
         buttonConfig.endGroup();
 
-        usePttForEom = txVmSetupDialog.getCatPttForEomState();
+        selectedEomType = txVmSetupDialog.getSelectedEomType();
         setCwModeAndRestoreCurrentMode = txVmSetupDialog.getSetCwModeAndRestoreState();
 
 
@@ -367,6 +405,15 @@ int RigControlCwMessageKeyer::setup(VoiceKeyerFactory *voiceKeyerFactory, int &m
     return ret;
 
 
+}
+
+
+void RigControlCwMessageKeyer::setRadioParams(int radioMaxNumButtons_, QString selectedRadioName_, int pttType_, bool pttEnabled_)
+{
+    selectedRadioName = selectedRadioName_;
+    radioMaxNumButtons = radioMaxNumButtons_;
+    pttType = pttType_;
+    pttEnabled = pttEnabled_;
 }
 
 
@@ -409,7 +456,7 @@ int RigControlCwMessageKeyer::editButton(VoiceKeyerParams *vmData, QString title
 
     vmButtonDialog.setWindowTitle(title);
     vmButtonDialog.setVmData(vmData);
-    vmButtonDialog.setVmTypeLabelcwMemType(vmData->getRigModel());
+    vmButtonDialog.setVmTypeAndRadioModelLabel(vmData->getRigModel());
     vmButtonDialog.setCwInfoPanelVisible(true);
 
     QString validCharCwList;
@@ -478,7 +525,7 @@ int RigControlCwMessageKeyer::editButton(VoiceKeyerParams *vmData, QString title
     }
 
 
-    vmButtonDialog.setDialogForCatPttEom(usePttForEom);
+    vmButtonDialog.setDialogForEomType(selectedEomType);
 
     int ret = vmButtonDialog.exec();
     return ret;

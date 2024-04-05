@@ -51,25 +51,31 @@ void RigControlVoiceMemoryKeyer::setPttOnOff(bool onOff)
     Q_UNUSED(onOff)
 }
 
-bool RigControlVoiceMemoryKeyer::getUsePttForEomFlag()
+void RigControlVoiceMemoryKeyer::setSelectedEomType(int selectedEomType_)
 {
-    return usePttForEom;
+    selectedEomType = selectedEomType_;
+}
+
+
+int RigControlVoiceMemoryKeyer::getSelectedEomType()
+{
+    return selectedEomType;
 }
 
 
 void RigControlVoiceMemoryKeyer::voiceKeyerInit(int &numButtons)
 {
-    QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[VoiceKeyerId::RigControl] + ".ini";
-    QSettings config(fileName, QSettings::IniFormat);
-    numButtons = config.value("Common/NumButtons", VOICEKEYER_MAX_NUMBUTTONS).toInt();
-    usePttForEom = config.value("Common/UseCatPttForEom", true).toBool();
+    int userNumberButtons = 0;
+    getRadioCommonData(selectedEomType, userNumberButtons, radioMaxNumButtons);
+    numButtons = userNumberButtons;
+
 }
 
 void RigControlVoiceMemoryKeyer::sendMsgNum(int buttonNum)
 {
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
 
-    tslf->sendRigTxVoiceMessage(QString::number(buttonNum +1));  // add for Icom message Number
+    tslf->sendRigTxVoiceMessage(QString::number(buttonNum +1));  // add for message Number, 0 is normally stop
 
 }
 
@@ -165,6 +171,7 @@ int RigControlVoiceMemoryKeyer::setup(VoiceKeyerFactory *voiceKeyerFactory, int 
     txVmSetupDialog.setMaxNumOfButtonsLabel(maxNumButtons);
 
     QString allRadiosGrpName = ALL_RADIOS_GROUP_NAME;
+
     if (readSaveVoiceCWMemoryButtonByRadioNameFromIni(VoiceKeyerId::RigControl))
     {
         txVmSetupDialog.setSetupRadioGroupBoxTitle(selectedRadioName);
@@ -177,27 +184,30 @@ int RigControlVoiceMemoryKeyer::setup(VoiceKeyerFactory *voiceKeyerFactory, int 
 
     if (voiceCap.getUseCatPTTForEom())
     {
-        txVmSetupDialog.setPttEOMChkBoxVisible(true);
 
-        if (readSaveVoiceCWMemoryButtonByRadioNameFromIni(VoiceKeyerId::RigControl))
+        txVmSetupDialog.setPttEomGroupBoxVisible(true);
+
+        if (pttType == serialCommonData::PTTMethodCodes::PTT_METHOD_CAT)
         {
-            buttonConfig.beginGroup(selectedRadioName);
-            txVmSetupDialog.setPttEOMChkBoxChecked(buttonConfig.value("UseCatPttForEom", false).toBool());
 
-            buttonConfig.endGroup();
+            if (readSaveVoiceCWMemoryButtonByRadioNameFromIni(VoiceKeyerId::RigControl))
+            {
+                buttonConfig.beginGroup(selectedRadioName.replace('/', '_'));
+                txVmSetupDialog.setEomRadioButtons(buttonConfig.value("endOfMessageType", voiceKeyerCommon::VoiceCwKeyerEomTypes::Eom_None).toInt());
+
+                buttonConfig.endGroup();
+            }
+            else
+            {
+                config.beginGroup(allRadiosGrpName);
+                txVmSetupDialog.setEomRadioButtons(buttonConfig.value("endOfMessageType", voiceKeyerCommon::VoiceCwKeyerEomTypes::Eom_None).toInt());
+                buttonConfig.endGroup();
+            }
         }
-        else
-        {
-            config.beginGroup(allRadiosGrpName);
-            txVmSetupDialog.setPttEOMChkBoxChecked(buttonConfig.value("UseCatPttForEom", false).toBool());
-            buttonConfig.endGroup();
-        }
-
-
     }
     else
     {
-        txVmSetupDialog.setPttEOMChkBoxVisible(false);
+        txVmSetupDialog.setPttEomGroupBoxVisible(false);
     }
 
 
@@ -223,14 +233,59 @@ int RigControlVoiceMemoryKeyer::setup(VoiceKeyerFactory *voiceKeyerFactory, int 
         }
 
         buttonConfig.setValue("NumButtons", numButtons);
-        buttonConfig.setValue("UseCatPttForEom", txVmSetupDialog.getCatPttForEomState() );
+        buttonConfig.setValue("endOfMessageType", txVmSetupDialog.getSelectedEomType());
         buttonConfig.endGroup();
 
-        usePttForEom = txVmSetupDialog.getCatPttForEomState();
+        selectedEomType = txVmSetupDialog.getSelectedEomType();
 
     }
     return ret;
 }
+
+
+void RigControlVoiceMemoryKeyer::setRadioParams(int radioMaxNumButtons_, QString selectedRadioName_, int pttType_, bool pttEnabled_)
+{
+
+    selectedRadioName = selectedRadioName_;
+    radioMaxNumButtons = radioMaxNumButtons_;
+    pttType = pttType_;
+    pttEnabled = pttEnabled_;
+}
+
+
+void RigControlVoiceMemoryKeyer::getRadioCommonData(int &selectedEomType, int &userNumberButtons, int radioMaxNumButtons)
+{
+    int numButtons = 0;
+
+    QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[VoiceKeyerId::RigControl] + ".ini";
+    QSettings readCommonConfig(fileName, QSettings::IniFormat);
+
+    QString groupName;
+    if (readCommonConfig.value("Common/SaveButtonByRadioName", false).toBool())
+    {
+        groupName = selectedRadioName.replace('/', '_');
+    }
+    else
+    {
+        groupName = ALL_RADIOS_GROUP_NAME;
+    }
+
+    fileName = VOICE_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[VoiceKeyerId::RigControl] + ".ini";
+    QSettings config(fileName, QSettings::IniFormat);
+
+    config.beginGroup(groupName);
+    numButtons = config.value("NumButtons", -1).toInt();
+    selectedEomType = config.value("endOfMessageType", voiceKeyerCommon::VoiceCwKeyerEomTypes::Eom_None).toInt();
+    config.endGroup();
+
+    if (numButtons == -1)   // no user button number saved
+    {
+        numButtons = radioMaxNumButtons;  // radio specific number of voice messages
+    }
+
+    userNumberButtons =  numButtons;
+}
+
 
 
 
@@ -251,8 +306,9 @@ int RigControlVoiceMemoryKeyer::editButton(VoiceKeyerParams *vmData, QString tit
 
     vmButtonDialog.setWindowTitle(title);
     vmButtonDialog.setVmData(vmData);
+    vmButtonDialog.setVmTypeAndRadioModelLabel(vmData->getRigModel());
     vmButtonDialog.setCwMessageTextBoxVisible(false);
-    vmButtonDialog.setDialogForCatPttEom(usePttForEom);
+    vmButtonDialog.setDialogForEomType(selectedEomType);
     vmButtonDialog.setSerialMessageTextBoxVisible(false);
     vmButtonDialog.setCwInfoPanelVisible(false);
 

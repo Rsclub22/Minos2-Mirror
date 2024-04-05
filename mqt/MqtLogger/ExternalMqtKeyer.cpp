@@ -48,6 +48,8 @@ void ExternalMqtKeyer::registerVoiceKeyer(VoiceKeyerFactory::VmKeyers* vmKeyersL
 
 void ExternalMqtKeyer::voiceKeyerInit(int &numButtons)
 {
+
+
     trace("ExternalMqtKeyer::voiceKyerInit");
 
     numButtons = VOICEKEYER_MAX_NUMBUTTONS;
@@ -108,10 +110,7 @@ void ExternalMqtKeyer::setPttOnOff(bool onOff)
     Q_UNUSED(onOff)
 }
 
-bool ExternalMqtKeyer::getUsePttForEomFlag()
-{
-    return usePttForEom;
-}
+
 
 int ExternalMqtKeyer::setup(VoiceKeyerFactory *voiceKeyerFactory, int &maxNumButtons, int &numButtons, QString selectedRadioName)
 {

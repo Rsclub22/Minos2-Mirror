@@ -61,6 +61,7 @@ private:
     int memNo;
 
 
+
 };
 
 class TxVmButtonsFrame : public QGroupBox
@@ -122,7 +123,7 @@ private:
     QTimer* repeatPauseTimer;
     int buttonNumSent ;
 
-    bool usePttForEomFlag = false;
+    int selectedEomType = voiceKeyerCommon::VoiceCwKeyerEomTypes::Eom_None;
 
     QList<QToolButton*> voiceMemButtonList;
 
@@ -171,8 +172,18 @@ private:
     void checkCommonIniFileVersion(QString voiceKeyerType);
     int getNumCwMessages(PubSubName psn);
     int getNumVoiceMessages(PubSubName psn);
-    int getRadioUserSavedNumberOfButtons(QString selectedRadioName);
     QString getRigModel(PubSubName psn);
+
+    int getPttType(PubSubName psn);
+    void setPttTypeLabelsVisible(bool visible);
+    void setPttTypeText(int pttType);
+    bool getPttEnabled(PubSubName psn);
+    void setPttEnabledIndicatorOnOff(bool on);
+    void setEomTypeLabelsVisible(bool visible);
+    void setEomLabelText(int selectedEomType);
+    void setErrorMessageVisible(bool visible);
+    void setKeyerIndicatorGroupBoxVisible(bool visible);
+    void setPttIndicatorGroupBoxVisible(bool visible);
 
 private slots:
 
@@ -189,6 +200,7 @@ private slots:
     void onRemoteKeyerStopped();
     void on_pipCb_stateChanged(int arg1);
     void onExtConnectTimer();
+    void onInternalVoiceMemoryPlayState(bool playing);
 };
 
 #endif // TXVMBUTTONSFRAME_H

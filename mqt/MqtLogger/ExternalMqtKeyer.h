@@ -39,9 +39,10 @@ public:
     virtual bool readVmButtonParams(int buttonNum, VoiceKeyerParams &vmParams) override;
     virtual void saveVmButtonParams(const VoiceKeyerParams &vmParams) override;
     virtual void setPttOnOff(bool onOff) override;
-    virtual bool getUsePttForEomFlag() override;
+    virtual int getSelectedEomType() override {return voiceKeyerCommon::VoiceCwKeyerEomTypes::Eom_None;};
 
     virtual int setup(VoiceKeyerFactory *voiceKeyerFactory, int &maxNumButtons, int &numButtons, QString selectedRadio) override;
+    virtual void setRadioParams(int radioMaxNumButtons, QString selectedRadioName, int pttType_, bool pttEnabled_) override{Q_UNUSED(radioMaxNumButtons) Q_UNUSED(selectedRadioName) Q_UNUSED(pttType_) Q_UNUSED(pttEnabled_)};
     virtual int editButton(VoiceKeyerParams* vmData, QString title) override;
 
 
@@ -69,7 +70,6 @@ private slots:
 
 private:
 
-    bool usePttForEom = false;
 
 };
 

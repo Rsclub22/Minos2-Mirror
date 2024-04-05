@@ -60,6 +60,7 @@ void TxVmRigButtonDialog::setCwMessageTextBoxVisible(bool visible)
 {
     ui->txCwMessageLineEdit->setVisible(visible);
     ui->cwMessageTextLabel->setVisible(visible);
+    ui->cwMsgLengthLabel->setVisible(visible);
 }
 
 void TxVmRigButtonDialog::setSerialMessageTextBoxVisible(bool visible)
@@ -155,8 +156,8 @@ void TxVmRigButtonDialog::setSpecialCwCharLists(QMap<QString, QChar> &specialCha
     populateInfoPanelSupportedSpecialChars();   // for display
 }
 
-// This will overwrite the label with cwMemType and radio manufacturer and model name
-void TxVmRigButtonDialog::setVmTypeLabelcwMemType(QString radioModel)
+
+void TxVmRigButtonDialog::setVmTypeAndRadioModelLabel(QString radioModel)
 {
     ui->txVmTypeLbl->setText(QString("%1 - %2").arg(vmData->getType()).arg(radioModel));
 }
@@ -165,7 +166,6 @@ void TxVmRigButtonDialog::setVmTypeLabelcwMemType(QString radioModel)
 void TxVmRigButtonDialog::setVmData(VoiceKeyerParams* vmData_)
 {
     vmData = vmData_;
-    ui->txVmTypeLbl->setText(vmData->getType());
     ui->txVmNameEdit->setText(vmData->getVmName());
     ui->txCwMessageLineEdit->setText(vmData->getVmCwMessage());
     ui->txVmRepeatChkBox->setChecked(vmData->getVmRepeatFlag());
@@ -192,10 +192,19 @@ void TxVmRigButtonDialog::on_txSerialMessageEditingFinshed()
 
 }
 
-void TxVmRigButtonDialog::setDialogForCatPttEom(bool state)
+void TxVmRigButtonDialog::setDialogForEomType(int eomType)
 {
-    ui->messageDurLbl->setVisible(!state);
-    ui->txVmMessageDur->setVisible(!state);
+    if (eomType == voiceKeyerCommon::VoiceCwKeyerEomTypes::Timer)
+    {
+        ui->messageDurLbl->setVisible(true);
+        ui->txVmMessageDur->setVisible(true);
+    }
+    else
+    {
+        ui->messageDurLbl->setVisible(false);
+        ui->txVmMessageDur->setVisible(false);
+    }
+
 }
 
 bool TxVmRigButtonDialog::checkLengthOfCwMessage(int length)

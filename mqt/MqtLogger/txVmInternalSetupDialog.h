@@ -26,6 +26,7 @@ public:
 
     int getNumButtons(){return numButtons;}
 
+
 private slots:
 
     void inChannelCB_currentTextChanged(const QString &arg1);

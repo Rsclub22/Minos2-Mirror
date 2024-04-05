@@ -1,6 +1,7 @@
 #include "radiodetails.h"
 #include "rigcommon.h"
 
+
 RadioDetails::RadioDetails()
 {
 
@@ -10,7 +11,10 @@ RadioDetails::RadioDetails()
   setVolumeStatus(false);
   setRitEnableStatus(false);
   setRitMaxKHzFreq(MAX_RITFREQ);
+  setPttType(0);
+  setNumVoiceMessages(8);
   setCwMemType(hamlibData::CW_MEMORY_TYPES::NONE);
+
   setRigVoiceKeyerSupportStopCmd(true);
   setRigCwKeyerSupportStopCmd(true);
 

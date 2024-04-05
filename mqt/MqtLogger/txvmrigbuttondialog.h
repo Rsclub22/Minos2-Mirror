@@ -48,8 +48,8 @@ public:
     void setCwMessageTextBoxVisible(bool state);
     void setCwMessageLineEditVisible(bool visible);
     void setSerialMessageTextBoxVisible(bool visible);
-    void setVmTypeLabelcwMemType(QString mfg);
-    void setDialogForCatPttEom(bool state);
+    void setVmTypeAndRadioModelLabel(QString mfg);
+    void setDialogForEomType(int eomType);
 
 
     void setRadioNameLbl(QString radioName);
