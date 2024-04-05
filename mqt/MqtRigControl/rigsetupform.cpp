@@ -373,6 +373,7 @@ void RigSetupForm::setDialogBoxesVisibleForNone()
 {
     setPortTypeNetworkRadioButtonChecked(false);
     setPortTypeSerialRadioButtonChecked(false);
+    setPortTypeWidgetsVisible(false);
     serialDataEntryVisible(false);
     advancedSerialDataEntryVisible(false);
     setAdvancedCommsChkBoxVisible(false);
