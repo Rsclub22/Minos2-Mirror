@@ -172,14 +172,10 @@ void InternalVoiceMemoryKeyer::setPttOnOff(bool onOff)
 }
 void InternalVoiceMemoryKeyer::onDoPTT(bool onOff)
 {
-    //static bool pttState = false;
-    setPttOnOff(onOff);
 
-    //if (pttState != onOff)
-    //{
-    //    pttState = onOff;
-    //    emit internalVoiceMemoryKeyerPlayState(pttState);
-    //}
+    setPttOnOff(onOff);
+    emit internalVoiceMemoryKeyerPlayState(onOff);
+
 
 }
 

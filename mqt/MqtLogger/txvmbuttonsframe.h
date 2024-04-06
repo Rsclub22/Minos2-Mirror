@@ -62,6 +62,7 @@ private:
 
 
 
+
 };
 
 class TxVmButtonsFrame : public QGroupBox
@@ -184,6 +185,8 @@ private:
     void setErrorMessageVisible(bool visible);
     void setKeyerIndicatorGroupBoxVisible(bool visible);
     void setPttIndicatorGroupBoxVisible(bool visible);
+
+    void logMessage(QString msg);
 
 private slots:
 

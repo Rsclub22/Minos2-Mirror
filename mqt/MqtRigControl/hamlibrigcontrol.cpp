@@ -32,12 +32,15 @@ const char* HamlibRigControl::hamlibErrorMsg[] =  {QT_TR_NOOP("No Error, operati
                                                    QT_TR_NOOP("Command rejected by the rig"),
                                                    QT_TR_NOOP("Command performed, but arg truncated"),
                                                    QT_TR_NOOP("Function not available"),
-                                                   QT_TR_NOOP("VFO not targetable"),
-                                                   QT_TR_NOOP("Error talking on the bus"),
-                                                   QT_TR_NOOP("Collision on the bus"),
+                                                   QT_TR_NOOP("Target VFO unaccessible"),
+                                                   QT_TR_NOOP("Communication bus error"),
+                                                   QT_TR_NOOP("Communication bus collision"),
                                                    QT_TR_NOOP("NULL RIG handle or any invalid pointer parameter in get arg"),
                                                    QT_TR_NOOP("Invalid VFO"),
-                                                   QT_TR_NOOP("RIG_EDOM")};
+                                                   QT_TR_NOOP("Argument out of domain of func"),
+                                                   QT_TR_NOOP("Function deprecated"),
+                                                   QT_TR_NOOP("Security error password not provided or crypto failure"),
+                                                   QT_TR_NOOP("Rig is not powered on")};
 
 
 
@@ -119,7 +122,7 @@ int register_callback(rig_model_t rig_model, void *callback_data)
 
     bool supportSMeter = (rig_get_caps_int(rig_model, RIG_CAPS_HAS_GET_LEVEL) & RIG_LEVEL_STRENGTH) == RIG_LEVEL_STRENGTH;
 
-    // hamlib 4.5 - Dummy need to enable PTT to use PTT, so disable for now
+
     bool supportGetPtt = false;
     bool supportSetPtt = false;
 
@@ -143,11 +146,11 @@ int register_callback(rig_model_t rig_model, void *callback_data)
 
     }
 
-    if (!key.contains("Hamlib Dummy"))
-    {
-        supportGetPtt = rig_get_function_ptr(rig_model, RIG_FUNCTION_GET_PTT) ? true:false;
-        supportSetPtt = rig_get_function_ptr(rig_model, RIG_FUNCTION_SET_PTT) ? true:false;
-    }
+
+
+    supportGetPtt = rig_get_function_ptr(rig_model, RIG_FUNCTION_GET_PTT) ? true:false;
+    supportSetPtt = rig_get_function_ptr(rig_model, RIG_FUNCTION_SET_PTT) ? true:false;
+
 
     bool supportGetVox = rig_has_get_func(myRig, RIG_FUNC_VOX) ? true:false;
     bool supportSetVox = rig_has_get_func(myRig, RIG_FUNC_VOX) ? true:false;
@@ -190,6 +193,7 @@ int register_callback(rig_model_t rig_model, void *callback_data)
 
     // below to get a parameter dump for development... edit required parameters...
     //trace(QString("%1\t%2\t%3\t%4\tportType = %5\tpttPortType = %6").arg(manufacturerName + " " + modelName).arg(rig_model).arg(supportCwMem ? "True" : "False").arg(supportVoiceMem ? "True" : "False").arg(port_type).arg(supportPttPortType));
+    //trace(QString("%1\t%2\t%3\t%4\tportType = %5\tpttPortType = %6\tsupport getPtt = %7\tSupport SetPtt = %8").arg(manufacturerName + " " + modelName).arg(rig_model).arg(supportCwMem ? "True" : "False").arg(supportVoiceMem ? "True" : "False").arg(port_type).arg(supportPttPortType).arg(supportGetPtt ? "Yes" : "No").arg(supportSetPtt ? "Yes" : "No"));
 
 
     RigCapabilities rigCap;
