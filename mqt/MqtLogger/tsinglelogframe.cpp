@@ -721,7 +721,6 @@ void TSingleLogFrame::buildRow(ContestPage *cp, SCRow &scrow, int &auxInstance, 
                 {
                     hs->addWidget(bandmapControlFrame);
                     bandmapControlFrame->setVisible(true);
-                    bandmapControlFrame->setContest(ct);
                     setBandmapLoaded(true);
                     break;
 
@@ -903,6 +902,7 @@ void TSingleLogFrame::buildScreenLayout(int slotNo)
     FKHRotControlFrame->setContest(ct);
     dmButtonFrame->setContest(ct);
     txVmButtonsFrame->setContest(ct);
+    bandmapControlFrame->setContest(ct);
 
     LogContainer->raise();  // get it back in front
 
