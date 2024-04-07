@@ -12,9 +12,9 @@ BandMapSpotDB::BandMapSpotDB(QObject *parent): QObject(parent)
     qdb = QSqlDatabase::addDatabase("QSQLITE");
 
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-    QString dbName = getDirectoryLocation(dlDB) + "/qrzdb6.db";
+    QString dbName = getDirectoryLocation(dlDB) + "/lspotsdb6.db";
 #else
-    QString dbName = getDirectoryLocation(dlDB) + "/qrzdb5.db";
+    QString dbName = getDirectoryLocation(dlDB) + "/lspotsdb5.db";
 #endif
 
     qdb.setDatabaseName(dbName);
