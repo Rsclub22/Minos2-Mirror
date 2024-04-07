@@ -102,6 +102,7 @@ public:
     void rxDMWord(QString rxWord, int markFreq);
     void DMKey(int key);
     bool getSandP();
+    void setCallPlaceholder(QString call);
 private:
     ScreenContact *partialContact; // contact being edited on screen
     virtual bool eventFilter(QObject *obj, QEvent *event) override;

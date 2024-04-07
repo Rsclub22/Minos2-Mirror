@@ -3680,6 +3680,48 @@ void QSOLogFrame::onQrzButtonClicked()
 
 
 }
+void QSOLogFrame::setCallPlaceholder(QString call)
+{
+    if (!contest)
+        return;
+    ScreenContact scc;
+    QString callText = ui->CallsignFrame->getTextEditEdit()->text();
+    QString locText = ui->LocFrame->getTextEditEdit()->text();
+    QString qthText = ui->QTHFrame->getTextEditEdit()->text();
+    if (callText.isEmpty() && locText.isEmpty() && qthText.isEmpty())
+    {
+        ui->CallsignFrame->getTextEditEdit()->setPlaceholderText(call);
+        scc.initialise(contest, false);
+        scc.cs.setFullCall(call);
+        scc.loc.setLoc(QString());
+        scc.mode.setValue(QString());
+
+        scc.timeOn = dtg(true);
+        scc.timeOff = dtg(true);
+        QString cb;
+        Frequency f = contest->getTxFreqBand(Frequency(), cb);
+        scc.setFrequency(f, cb);
+
+        scc.checkScreenContact();
+        if ( scc.cs.getValRes() == ERR_DUPCS)
+        {
+            setEditStyleSheet(ui->CallsignFrame->getTextEditEdit(),ssLineEditFrLightRedBkBk);
+        }
+        else
+        {
+            setEditStyleSheet(ui->CallsignFrame->getTextEditEdit(),ssLineEditOK);
+        }
+    }
+    else
+    {
+        ui->CallsignFrame->getTextEditEdit()->setPlaceholderText("");
+    }
+    if (callText.isEmpty() && locText.isEmpty())
+    {
+        MinosLoggerEvents::SendScreenContactChanged(&scc, contest, baseName);
+    }
+
+}
 
 void QSOLogFrame::setPlaceholders(QStringList nearMatches)
 {

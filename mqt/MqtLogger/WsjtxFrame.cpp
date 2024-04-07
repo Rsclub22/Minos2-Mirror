@@ -1018,6 +1018,11 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
 
         decodes_model_->add_decode ();
         ui->decodes_table_view_->scrollToBottom ();
+
+        // IF transmitting (we are)
+        // send toCall to logger so it can placeholder it
+
+        tslf->setCallPlaceholder(dc.toCall.getFullCall());
         decodeStartSize++;
     }
     currentlyDecoding = decoding;
@@ -1392,6 +1397,12 @@ void WsjtxFrame::on_testButton_clicked()
             update_status ("test", Frequency(144174000), "FT8", "","0", "FT8", false, false, false, 0, 0
                                     , "G0GJV", "IO91", "JO01"
                                     , false, "", false, 0, 0, 0, "", "");
+            update_status ("test", Frequency(144174000), "FT8", "","0", "FT8", false, true, false, 0, 0
+                          , "G0GJV", "IO91", "JO01"
+                          , false, "", false, 0, 0, 0, "", "G4DDN G0GJV +01");
+            update_status ("test", Frequency(144174000), "FT8", "","0", "FT8", false, false, false, 0, 0
+                          , "G0GJV", "IO91", "JO01"
+                          , false, "", false, 0, 0, 0, "", "G4DDN G0GJV +01");
 #endif
 
 }

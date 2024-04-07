@@ -1961,6 +1961,10 @@ void TSingleLogFrame::on_SetPttState(bool state)
         txVmButtonsFrame->setPttState(state);
     }
 }
+void TSingleLogFrame::setCallPlaceholder(QString call)
+{
+    GJVQSOLogFrame->setCallPlaceholder(call);
+}
 
 void TSingleLogFrame::setPlaceholders(QStringList nearMatches)
 {

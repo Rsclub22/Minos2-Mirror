@@ -176,6 +176,7 @@ public:
 
     void xferFromKST(QString call, QString loc, QString freq);
 
+    void setCallPlaceholder(QString call);
 private:
     QString curScreenLayout;
 
