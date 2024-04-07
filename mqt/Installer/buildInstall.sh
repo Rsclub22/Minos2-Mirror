@@ -28,7 +28,7 @@ fi
 
 cd $BUILDDIR
 
-qmake $QMAKEPARAM ../mqt/mqt.pro
+qmake $QMAKEPARAM ../../mqt/mqt.pro
 
 retVal=$?
 if [ $retVal -ne 0 ]; then

@@ -19,7 +19,7 @@ fi
 
 cd $BUILDDIR
 
-qmake ../mqt/mqt.pro -config release
+qmake ../../mqt/mqt.pro -config release
 retVal=$? 
 
 if [ $retVal -ne 0 ]; then

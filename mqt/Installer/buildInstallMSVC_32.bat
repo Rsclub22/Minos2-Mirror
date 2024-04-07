@@ -39,7 +39,7 @@ REM git pull origin master
 if not exist %builddir% mkdir %builddir%
 cd %builddir%
 
-qmake.exe %qmakeparam% ..\mqt\mqt.pro
+qmake.exe %qmakeparam% ..\..\mqt\mqt.pro
 
 IF %ERRORLEVEL% == 0 goto make
   echo qmake failed; please fix errors and rebuild
