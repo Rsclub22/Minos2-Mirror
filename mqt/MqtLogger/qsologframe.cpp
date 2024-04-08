@@ -3719,6 +3719,21 @@ void QSOLogFrame::setCallPlaceholder(QString call)
     if (callText.isEmpty() && locText.isEmpty())
     {
         MinosLoggerEvents::SendScreenContactChanged(&scc, contest, baseName);
+        // test for auto QRZ, if so, do so
+        bool autoQRZ;
+        if (contest->isHF())
+        {
+            TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpAutoQRZWSJTHF, autoQRZ );
+        }
+        else
+        {
+            TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpAutoQRZWSJTVHF, autoQRZ );
+        }
+        if (autoQRZ)
+        {
+            onQrzButtonClicked();
+        }
+
     }
 
 }
