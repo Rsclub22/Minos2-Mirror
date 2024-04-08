@@ -8,7 +8,7 @@ set builddir=build\install
  :second
 set qmakeparam="SECONDINSTALL=true"
 set innoparam="/DSECONDINSTALL"
-set builddir=build/installBeta
+set builddir=build\installBeta
  :notsecond
 
 set QtTools=C:\Qt\Tools\mingw810_32\bin
