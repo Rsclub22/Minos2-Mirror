@@ -175,7 +175,7 @@ void StartConfigManager::on_editButton_clicked()
 {
     StartConfig startConfig(this, showAutoStart, curConfigName);
     startConfig.exec();
-
+    checkEnabled();
 }
 
 void StartConfigManager::on_newButton_clicked()
