@@ -14,7 +14,7 @@ echo Working Dir: $DIR
 git pull origin
 
 if [ ! -d ./$BUILDDIR ]; then
-   mkdir $BUILDDIR 
+   mkdir -p $BUILDDIR 
 fi
 
 cd $BUILDDIR
