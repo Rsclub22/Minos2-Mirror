@@ -825,28 +825,28 @@ void rotSetupForm::antennaOffSetSelected()
 {
     QMessageBox messageBox;
 
-    if (ui->antOffset->text() != "")
+    if (ui->antOffset->text() == "")
     {
-        int offset = ui->antOffset->text().toInt();
-        if (offset < minOffset || offset > maxOffset)
+        ui->antOffset->setText("0");
+    }
+
+    int offset = ui->antOffset->text().toInt();
+    if (offset < minOffset || offset > maxOffset)
+    {
+        ui->antOffset->setText("0");
+        QString msg = tr("Value must be between %1 and %2").arg(minOffset).arg(maxOffset);
+        messageBox.critical(this, tr("Antenna Offset Error"), msg);
+
+    }
+    else
+    {
+
+        if (offset  != antennaData->antennaOffset)
         {
-            ui->antOffset->setText("0");
-            QString msg = tr("Value must be between %1 and %2").arg(minOffset).arg(maxOffset);
-            messageBox.critical(this, tr("Antenna Offset Error"), msg);
+            antennaData->antennaOffset = offset;
+            antennaValueChanged = true;
 
         }
-        else
-        {
-
-            if (offset  != antennaData->antennaOffset)
-            {
-                antennaData->antennaOffset = offset;
-                antennaValueChanged = true;
-
-            }
-
-        }
-
 
     }
 }
