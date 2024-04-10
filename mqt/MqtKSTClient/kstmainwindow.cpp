@@ -80,8 +80,8 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
 
     if (needTransfer)
     {
-        RegSettings rsettings;
-        getSettings(rsettings.getSettings());
+        QSettings rsettings;    // NOT RegSettings
+        getSettings(rsettings);
         doConfiguration(false); // transfer everything to INI file
     }
     else
