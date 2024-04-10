@@ -820,7 +820,7 @@ void RotControlFrame::checkConnection()
     QString loggerUuid = LogContainer->sendDM->getLoggerUuid();
     PubSubName rotSelected = LogContainer->sendDM->getSelectedRot(loggerUuid);
 
-    if (rotSelected.isEmpty())
+    if (rotSelected.isEmpty() || !isRotatorLoaded())
     {
         // clear the rot selection
 

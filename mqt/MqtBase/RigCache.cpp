@@ -38,6 +38,14 @@ void RigCache::setStateDisconnected(const AnalysePubSubNotify & an)
     RigState &as = rigStates[PubSubName(an)];
     as.setStatus(RIG_STATUS_DISCONNECTED);
 }
+void RigCache::setStateDisconnected()
+{
+    for(QMap<PubSubName, RigState>::iterator i = rigStates.begin(); i != rigStates.end(); i++ )
+    {
+        i.value().setStatus(RIG_STATUS_DISCONNECTED);
+    }
+
+}
 
 QString RigCache::getDetailsString(const PubSubName &name) const
 {

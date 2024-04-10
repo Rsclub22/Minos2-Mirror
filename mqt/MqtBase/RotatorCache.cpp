@@ -142,6 +142,15 @@ void RotatorCache::setStateDisconnected(const AnalysePubSubNotify &an)
     AntennaState &as = rotStates[PubSubName(an)];
     as.setStatus(ROT_STATUS_DISCONNECTED);
 }
+void RotatorCache::setStateDisconnected()
+{
+    for(QMap<PubSubName, AntennaState>::iterator i = rotStates.begin(); i != rotStates.end(); i++ )
+    {
+        i.value().setStatus(RIG_STATUS_DISCONNECTED);
+    }
+
+}
+
 QString RotatorCache::getPresetsString(const PubSubName &name) const
 {
     PubSubName n(name);

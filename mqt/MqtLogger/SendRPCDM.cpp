@@ -28,6 +28,7 @@ TSendDM::TSendDM(QWidget* Owner )
     MinosRPC *rpc = MinosRPC::getMinosRPC(getAppStartupName());
     connect(rpc, &MinosRPC::routerCall, this, &TSendDM::on_routerCall);
     connect(rpc, &MinosRPC::notify, this, &TSendDM::on_notify);
+    connect(rpc, &MinosRPC::routerClosed, this, &TSendDM::routerClosed);
 
 }
 TSendDM::~TSendDM()
@@ -958,10 +959,12 @@ void TSendDM::on_notify( AnalysePubSubNotify an, const QString /*from*/ )
 
             if ( an.getCategory() == rpcConstants::rigStateCategory)
             {
+                radioLoaded = false;
                 rigCache.setStateDisconnected(an);
             }
             else if ( an.getCategory() == rpcConstants::rotatorStateCategory )
             {
+                rotatorLoaded = false;
                 rotatorCache.setStateDisconnected(an);
             }
             else if (an.getCategory() == rpcConstants::KeyerCategory)
@@ -969,6 +972,11 @@ void TSendDM::on_notify( AnalysePubSubNotify an, const QString /*from*/ )
                 keyerApp = PubSubName();
                 LogContainer->setCaption(QString());
 
+            }
+            else if (an.getCategory() == rpcConstants::clusterCategory)
+            {
+                clusterServerLoaded = false;
+                emit setClusterState((tr("Disconnected")) + "<>Disconnected");
             }
         }
         else if (an.getState() == psNotConnected)
@@ -1011,6 +1019,28 @@ void TSendDM::on_notify( AnalysePubSubNotify an, const QString /*from*/ )
     if (tslf)
         tslf->checkConnections();
 }
+void TSendDM::routerClosed()
+{
+    traceMsg("routerClosed received");
+
+    clusterServerLoaded = false;
+    clusterConnected = false;
+    emit setClusterState((tr("Disconnected")) + "<>Disconnected");
+
+    radioLoaded = false;
+    rigCache.setStateDisconnected();
+
+    rotatorLoaded = false;
+    rotatorCache.setStateDisconnected();
+
+    keyerApp = PubSubName();
+    LogContainer->setCaption(QString());
+
+    TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
+    if (tslf)
+        tslf->checkConnections();
+}
+
 //---------------------------------------------------------------------------
 void TSendDM::on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString from )
 {
@@ -1200,7 +1230,6 @@ const RigDetails &TSendDM::getRigDetails(const QString &name)
 {
     return rigCache.getDetails(PubSubName(name));
 }
-
 void TSendDM::traceMsg(QString msg)
 {
     trace(QString("[SendRPCDM] %1").arg(msg));

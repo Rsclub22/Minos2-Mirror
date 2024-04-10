@@ -148,10 +148,13 @@ signals:
     void routerCall( bool err, QSharedPointer<MinosRPCObj>mro, const QString from);
 
     void provider(Provider, QString cat);
+    void routerClosed();
 
 private slots:
 
     void on_connectedTimeout();
+public slots:
+    void on_routerClosed();
 };
 
 #endif // MINOSRPC_H

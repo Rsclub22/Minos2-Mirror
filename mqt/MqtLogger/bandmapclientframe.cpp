@@ -287,7 +287,7 @@ void BandmapClientFrame::on_waitClusterServerLoadedTimeout()
     else
     {
         timeoutCount++;
-        if (timeoutCount == 30 * 4)
+        if (timeoutCount >= 30 * 4)
         {
             //timed out
             waitClusterServerLoadedTimer->stop();

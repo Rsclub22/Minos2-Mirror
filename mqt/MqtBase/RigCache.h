@@ -33,6 +33,7 @@ public:
     }
     void setStateString(const AnalysePubSubNotify & an);
     void setStateDisconnected(const AnalysePubSubNotify & an);
+    void setStateDisconnected();
     QString getDetailsString(const PubSubName &name) const;
     void setDetailsString(const AnalysePubSubNotify & an);
 

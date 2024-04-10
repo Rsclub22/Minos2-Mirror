@@ -2,6 +2,7 @@
 
 #include "MinosRPC.h"
 #include "RPCPubSub.h"
+#include "SendRPCDM.h"
 #include "tlogcontainer.h"
 #include "tsinglelogframe.h"
 #include "ui_qrzdisplayframe.h"
@@ -45,13 +46,19 @@ QrzDisplayFrame::QrzDisplayFrame(QWidget *parent) :
     serverPingTimer = new QTimer(this);
     connect (serverPingTimer, &QTimer::timeout, this, [=](){onServerPingTimerTimeout();});
     serverPingTimer->start(PINGTIMER_DURATION);
+
+    connect(MinosRPC::getMinosRPC(), &MinosRPC::routerClosed, this, &QrzDisplayFrame::routerClosed);
 }
 
 QrzDisplayFrame::~QrzDisplayFrame()
 {
     delete ui;
 }
-
+void QrzDisplayFrame::routerClosed()
+{
+    trace("QrzDisplayFrame::routerClosed received");
+    onServerPingTimerTimeout();
+}
 void QrzDisplayFrame::onSearchQrzReturnPressed()
 {
     if (!ui->searchQrzLineEdit->text().isEmpty())
@@ -520,4 +527,3 @@ void QrzDisplayServerRpc::on_routerCall(bool err, QSharedPointer<MinosRPCObj> mr
         }
     }
 }
-

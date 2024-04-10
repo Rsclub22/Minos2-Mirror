@@ -127,6 +127,8 @@ bool MinosAppConnection::closeConnection()
    // close down the socket connection
     sock->close();
 
+   trace("MinosAppConnection Sending routerClosed");
+   emit routerClosed();
     return true;
 }
 //---------------------------------------------------------------------------

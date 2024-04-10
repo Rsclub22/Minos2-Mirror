@@ -44,6 +44,7 @@ void MinosRPC::on_connectedTimeout()
         MinosRPCObj::addRouterObj( QSharedPointer<MinosRPCObj>(new RPCGeneralRouter( new TRPCCallback <MinosRPC> ( this, &MinosRPC::routerCallback ) ) ) );
         XMPPInitialise( appName );
         connected = true;
+        connect(MinosAppConnection::minosAppConnection, &MinosAppConnection::routerClosed, this, &MinosRPC::routerClosed);
     }
     if ( connected && !subscribed )
     {
@@ -62,6 +63,12 @@ void MinosRPC::on_connectedTimeout()
 
         subscribed = true;
     }
+}
+
+void MinosRPC::on_routerClosed()
+{
+    trace("routerClosed received; re-emitting");
+    emit routerClosed();
 }
 
 void MinosRPC::setAppName(const QString &n)

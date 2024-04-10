@@ -37,6 +37,7 @@ private slots:
     void onBearingMouseDoubleClicked();
     void onNameTextMouseDoubleClicked();
 
+    void routerClosed();
 private:
     Ui::QrzDisplayFrame *ui;
     BaseContestLog *ct = nullptr;

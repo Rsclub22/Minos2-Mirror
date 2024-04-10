@@ -1754,8 +1754,8 @@ void TSingleLogFrame::on_setClusterTXSpotEnableState(QString state)
 
 void TSingleLogFrame::on_clusterServerState(QString state)
 {
-    bandmapControlFrame->setClusterServerState(state);
     clusterControlFrame->setClusterServerState(state);
+    bandmapControlFrame->setClusterServerState(state);
 }
 
 //---------------------------------------------------------------------------

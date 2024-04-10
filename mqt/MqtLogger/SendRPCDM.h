@@ -136,7 +136,8 @@ private slots:
       void on_routerCall( bool err, QSharedPointer<MinosRPCObj>mro, const QString from );
       void on_notify(AnalysePubSubNotify an, const QString from );
 
-signals:
+      void routerClosed();
+  signals:
       //void setBandMapLoaded();
 
       void RotatorLoaded();

@@ -51,11 +51,14 @@ class MinosAppConnection:public QObject, RPCDispatcher
 
       void sendAction( XStanza *a );
 
-private slots:
+  private slots:
       void on_waitConnectTimeout();
       void on_readyRead();
       void on_connected();
       void on_disconnected();
+
+  signals:
+      void routerClosed();
 
 };
 #endif

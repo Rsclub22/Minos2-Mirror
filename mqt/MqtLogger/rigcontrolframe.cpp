@@ -2168,7 +2168,7 @@ void RigControlFrame::checkConnection()
 {
     QString loggerUuid = LogContainer->sendDM->getLoggerUuid();
     PubSubName rigSelected = LogContainer->sendDM->getSelectedRig(loggerUuid);
-    if (rigSelected.isEmpty())
+    if (rigSelected.isEmpty() || !isRadioLoaded())
     {
         // clear the rig selection
 
