@@ -13,17 +13,17 @@
 
 // I've duplicated the strings to make their translation easier.
 
-const char * FREQ_EDIT_ERR_MSG = QT_TRANSLATE_NOOP("FrequencyDisplay", "Frequency has invalid characters or missing periods.\r\n\r\nThe format required is (e.g.) 1296.3, 144.32 or 144.290123\r\n");
-const char * RADIO_FREQ_EDIT_ERR_MSG = QT_TRANSLATE_NOOP("FrequencyDisplay", "Radio Frequency has invalid characters or missing periods.\r\n\r\nThe format required is (e.g.) 1296.3, 144.32 or 144.290123\r\n");
-const char * TARGET_FREQ_EDIT_ERR_MSG = QT_TRANSLATE_NOOP("FrequencyDisplay", "Target Frequency has invalid characters or missing periods.\r\n\r\nThe format required is (e.g.) 1296.3, 144.32 or 144.290123\r\n");
+const char * FREQ_EDIT_ERR_MSG = QT_TRANSLATE_NOOP("FrequencyDisplay", "Frequency has invalid characters or missing periods.\n\nThe format required is (e.g.) 1296.3, 144.32 or 144.290123\n");
+const char * RADIO_FREQ_EDIT_ERR_MSG = QT_TRANSLATE_NOOP("FrequencyDisplay", "Radio Frequency has invalid characters or missing periods.\n\nThe format required is (e.g.) 1296.3, 144.32 or 144.290123\n");
+const char * TARGET_FREQ_EDIT_ERR_MSG = QT_TRANSLATE_NOOP("FrequencyDisplay", "Target Frequency has invalid characters or missing periods.\n\nThe format required is (e.g.) 1296.3, 144.32 or 144.290123\n");
 
 // add delimiter to string for display
 // input string should just be digits
 
 
+QRegularExpression f1rx = QRegularExpression(anchoredPattern("\\d{1,6}\\.\\d{1,6}"));  // match ghz_mhz.khz_hz
 bool validateFreqTxtInput(QString f)
 {
-    QRegularExpression f1rx = QRegularExpression(anchoredPattern("\\d{1,6}\\.\\d{1,6}"));  // match ghz_mhz.khz_hz
     QRegularExpressionMatch f1rxm = f1rx.match(f);
     if (f1rxm.hasMatch())
     {

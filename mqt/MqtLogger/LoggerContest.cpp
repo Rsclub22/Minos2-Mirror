@@ -1059,11 +1059,11 @@ bool LoggerContestLog::exportADIF(QSharedPointer<QFile> expfd )
    // ADIF format file entry
    // OP header
    // and EOH
-   QString header = tr("Exported by Minos VHF logging system Version %1 %2").arg(STRINGVERSION, PRERELEASETYPE) + "\r\n\r\n";
+   QString header = tr("Exported by Minos VHF logging system Version %1 %2").arg(STRINGVERSION, PRERELEASETYPE) + "\n\n";
 
-   header += tr( "From file %1" ).arg(cfileName) + "\r\n\r\n";
+   header += tr( "From file %1" ).arg(cfileName) + "\n\n";
 
-   header += "<EOH>\r\n";
+   header += "<EOH>\n";
 
    QByteArray bh = header.toUtf8();
 
@@ -1085,7 +1085,7 @@ bool LoggerContestLog::exportADIF(QSharedPointer<QFile> expfd )
          {
             MinosParameters::getMinosParameters() ->mshowMessage( tr("bad reply from write!") );
          }
-         const char *EOR = "<EOR>\r\n";
+         const char *EOR = "<EOR>\n";
          ret = expfd->write(EOR, strlen( EOR ));
          if ( ret != static_cast< int >(strlen( EOR )) )
          {
@@ -1290,8 +1290,8 @@ bool LoggerContestLog::exportKML(QSharedPointer<QFile> expfd )
 
 
    QTextStream ts( expfd.data() );
-   ts << kml.join( "\r\n" );
-   ts << "\r\n";
+   ts << kml.join( "\n" );
+   ts << "\n";
 
    return true;
 

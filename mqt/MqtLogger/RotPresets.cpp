@@ -202,7 +202,7 @@ void RotPresets::setRotPresetButData(int buttonNumber, RotPresetData& editData)
 
 void RotPresets::rotPresetButtonUpdate(int buttonNumber, RotPresetData& editData)
 {
-    presetButton[buttonNumber]->presetButton->setText(QString("%1: %2\r\n%3").arg(QString::number(buttonNumber + 1), editData.name, editData.bearing) );
+    presetButton[buttonNumber]->presetButton->setText(QString("%1: %2\n%3").arg(QString::number(buttonNumber + 1), editData.name, editData.bearing) );
     QString tTipStr = tr("Bearing = %1").arg(editData.bearing);
     presetButton[buttonNumber]->presetButton->setToolTip(tTipStr);
 }

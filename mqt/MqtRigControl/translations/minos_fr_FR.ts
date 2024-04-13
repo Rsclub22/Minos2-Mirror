@@ -744,6 +744,13 @@ Copyright D Balharrie G8FKH/M0DGB 2024</source>
 Copyright D Balharrie G8FKH/M0DGB 2023 {8F?} {0D?} {8F?} {0D?} {2024?}</translation>
     </message>
     <message>
+        <location filename="../rigcontrolmainwindow.cpp" line="4618"/>
+        <source>The Radio configuration files in %1 are from an old incompatible version of Minos.
+
+Please delete them and set up the radios again</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Minos QT RigControl
 Copyright D Balharrie G8FKH/M0DGB 2019</source>
         <translation type="vanished">Minos QT RigControl
@@ -766,11 +773,10 @@ Copyright D Balharrie G8FKH/M0DGB 2023 {8F?} {0D?}</translation>
         <translation>Tous les fiches</translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="4618"/>
         <source>The Radio configuration files in %1 are from an old incompatible version of Minos.<byte value="xd"/>
 <byte value="xd"/>
 Please delete them and set up the radios again</source>
-        <translation>Les fichiers de configuration de la radio dans %1 proviennent d&apos;une ancienne version incompatible de Minos.
+        <translation type="vanished">Les fichiers de configuration de la radio dans %1 proviennent d&apos;une ancienne version incompatible de Minos.
 
 Veuillez les supprimer et configurer à nouveau les radios</translation>
     </message>

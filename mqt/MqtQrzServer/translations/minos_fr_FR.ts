@@ -2,6 +2,19 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="fr_FR">
 <context>
+    <name>QRZDB</name>
+    <message>
+        <location filename="../qrzdb.cpp" line="34"/>
+        <source>Failed to rename
+%1
+ as 
+%2
+
+Please choose a new name.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>QrzConfigureDialog</name>
     <message>
         <location filename="../qrzconfiguredialog.ui" line="14"/>

@@ -266,13 +266,13 @@ void RPCParamStruct::addNode( TiXmlElement &node ) const
 }
 QString RPCParamStruct::print() const
 {
-   QString s = "Struct\r\n";
+   QString s = "Struct\n";
    for ( auto const &i: elements )
    {
-      s += "Member name " + i->name + "\r\n";
+      s += "Member name " + i->name + "\n";
       s += i->print();
    }
-   s += "End Struct\r\n";
+   s += "End Struct\n";
    return s;
 }
 QString RPCParamStruct::analyse() const
@@ -442,12 +442,12 @@ void RPCParamArray::addNode( TiXmlElement &node ) const
 }
 QString RPCParamArray::print() const
 {
-   QString s = "Array\r\n";
+   QString s = "Array\n";
    for ( auto const &i: elements )
    {
       s += i->print();
    }
-   s += "End Array\r\n";
+   s += "End Array\n";
    return s;
 }
 QString RPCParamArray::analyse() const
@@ -503,7 +503,7 @@ void RPCIntParam::addNode( TiXmlElement &node ) const
 QString RPCIntParam::print() const
 {
    char buff[ 128 ];
-   snprintf( buff, 127, "Integer value %d\r\n", value );
+   snprintf( buff, 127, "Integer value %d\n", value );
    return QString( buff );
 }
 QString RPCIntParam::analyse() const
@@ -543,7 +543,7 @@ void RPCInt64Param::addNode( TiXmlElement &node ) const
 }
 QString RPCInt64Param::print() const
 {
-    QString buff = QString("qint64 value %1\r\n").arg(value);
+    QString buff = QString("qint64 value %1\n").arg(value);
     return buff;
 }
 QString RPCInt64Param::analyse() const
@@ -584,8 +584,8 @@ void RPCBooleanParam::addNode( TiXmlElement &node ) const
 QString RPCBooleanParam::print() const
 {
    if ( value )
-      return "Boolean value true\r\n";
-   return "Boolean value false\r\n";
+      return "Boolean value true\n";
+   return "Boolean value false\n";
 }
 QString RPCBooleanParam::analyse() const
 {
@@ -628,7 +628,7 @@ void RPCDoubleParam::addNode( TiXmlElement &node ) const
 QString RPCDoubleParam::print() const
 {
    char buff[ 128 ];
-   snprintf( buff, 127, "double value %f\r\n", value );
+   snprintf( buff, 127, "double value %f\n", value );
    return QString( buff );
 }
 QString RPCDoubleParam::analyse() const
@@ -669,7 +669,7 @@ void RPCStringParam::addNode( TiXmlElement &node ) const
 }
 QString RPCStringParam::print() const
 {
-   QString p = "String value \"" + value + "\"\r\n";
+   QString p = "String value \"" + value + "\"\n";
    return p;
 }
 QString RPCStringParam::analyse() const
@@ -707,7 +707,7 @@ void RPCDtgParam::addNode( TiXmlElement &node ) const
 }
 QString RPCDtgParam::print() const
 {
-   return "dateTime.iso8601 value \"" + value + "\"\r\n";
+   return "dateTime.iso8601 value \"" + value + "\"\n";
 }
 QString RPCDtgParam::analyse() const
 {
@@ -753,7 +753,7 @@ void RPCBase64Param::addNode( TiXmlElement &node ) const
 }
 QString RPCBase64Param::print() const
 {
-   return "Base64 value \"" + value + "\"\r\n";
+   return "Base64 value \"" + value + "\"\n";
 }
 QString RPCBase64Param::analyse() const
 {

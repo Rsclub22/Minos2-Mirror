@@ -727,13 +727,6 @@ Copyright D Balharrie G8FKH/M0DGB 2024</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="4618"/>
-        <source>The Radio configuration files in %1 are from an old incompatible version of Minos.<byte value="xd"/>
-<byte value="xd"/>
-Please delete them and set up the radios again</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../rigcontrolmainwindow.cpp" line="4673"/>
         <source>App Instance Name  = %1
 
@@ -900,6 +893,13 @@ Please delete them and set up the radios again</source>
         <location filename="../rigcontrolmainwindow.cpp" line="4745"/>
         <source>Rigctld path = %1
 </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rigcontrolmainwindow.cpp" line="4618"/>
+        <source>The Radio configuration files in %1 are from an old incompatible version of Minos.
+
+Please delete them and set up the radios again</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

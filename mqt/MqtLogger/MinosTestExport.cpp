@@ -15,12 +15,12 @@
 
 //==============================================================================
 const char * MinosTestExport::fileHeader =
-                         QT_TR_NOOP("====================================================\r\n"
-                         "\r\nDO NOT SEND THIS FILE AS YOUR ENTRY!\r\n\r\n"
-                         "Use \"File\" | \"Produce Entry/Export File...\"\r\n"
-                         "Export as Reg1Test(entry)\r\n"
-                         "and send the .EDI file produced.\r\n"
-                         "====================================================\r\n")
+                         QT_TR_NOOP("====================================================\n"
+                         "\nDO NOT SEND THIS FILE AS YOUR ENTRY!\n\n"
+                         "Use \"File\" | \"Produce Entry/Export File...\"\n"
+                         "Export as Reg1Test(entry)\n"
+                         "and send the .EDI file produced.\n"
+                         "====================================================\n")
                          ;
 //==============================================================================
 MinosTestExport::MinosTestExport( LoggerContestLog * const ct ) : ct( ct ),
@@ -42,7 +42,7 @@ void MinosTestExport::sendRequest(QSharedPointer<QFile> expfd, const QString &cm
    RPCRequest *m = new RPCRequest( "", cmd );
    m->args = MArgs->args;
 
-   TIXML_STRING req = m->getActionMessage() + "\r\n";
+   TIXML_STRING req = m->getActionMessage() + "\n";
    trace(QString(req.c_str()));
 
    qint64 fpos = expfd->size();
@@ -582,7 +582,7 @@ int MinosTestExport::exportAllDetails(QSharedPointer<QFile> minosContestFile, bo
    {
       //      QString lbuff = "<?xml version='1.0'?><stream:stream xmlns:stream='http://etherx.jabber.org/streams' xmlns='jabber:client' version='1.0'>" ;
       QString lbuff = "<?xml version='1.0'?><stream:stream xmlns:stream='http://minos.goodey.org.uk/streams' xmlns='minos:client' version='1.0'>" ;
-      lbuff += "\r\n<!--\r\n" + tr(fileHeader) + "-->\r\n";
+      lbuff += "\n<!--\n" + tr(fileHeader) + "-->\n";
 
       writeFile(minosContestFile, lbuff);
 
@@ -609,7 +609,7 @@ int MinosTestExport::exportTest( QSharedPointer<QFile> expfd, int mindump, int m
 {
    exp_stanzaCount = 0;
    QString lbuff = "<?xml version='1.0'?><stream:stream xmlns:stream='http://minos.goodey.org.uk/streams' xmlns='minos:client' version='1.0'>" ;
-   lbuff += "\r\n<!--\r\n" + tr(fileHeader) + "-->\r\n";
+   lbuff += "\n<!--\n" + tr(fileHeader) + "-->\n";
    writeFile(expfd, lbuff);
 
    // export a sequence of Minos stanzas

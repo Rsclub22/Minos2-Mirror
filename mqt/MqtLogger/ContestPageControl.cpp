@@ -59,7 +59,7 @@ bool ContestPageControl::eventFilter(QObject */*obj*/, QEvent *event)
             {
                 pc->setScore( statbuf );
                 QString fname = GetFullPath(pc->cfileName);
-                QString toolTip = fname + "\r\n" + statbuf;
+                QString toolTip = fname + "\n" + statbuf;
                 if (!pc->isReadOnly())
                 {
                     LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( pc);
@@ -71,7 +71,7 @@ bool ContestPageControl::eventFilter(QObject */*obj*/, QEvent *event)
                        Frequency cq = m.freq;
                        if (!cq.isClear())
                        {
-                            toolTip += "\r\n" + tr("Run Frequency 1") + " " + cq.convertFreqStrDisp();
+                            toolTip += "\n" + tr("Run Frequency 1") + " " + cq.convertFreqStrDisp();
                        }
 
                     }
@@ -81,7 +81,7 @@ bool ContestPageControl::eventFilter(QObject */*obj*/, QEvent *event)
                        Frequency cq = m.freq;
                        if (!cq.isClear())
                        {
-                            toolTip += "\r\n" + tr("Run Frequency 2") + " " + cq.convertFreqStrDisp();
+                            toolTip += "\n" + tr("Run Frequency 2") + " " + cq.convertFreqStrDisp();
                        }
 
                     }

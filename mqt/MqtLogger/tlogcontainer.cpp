@@ -1363,7 +1363,7 @@ void TLogContainer::ExitClearActionExecute()
     // Confirm...
 
 #ifdef Q_OS_WIN
-    if (!mShowYesNoMessage(this, tr("This action will clear geometry entries for all of the apps within Minos.\r\n\r\n"
+    if (!mShowYesNoMessage(this, tr("This action will clear geometry entries for all of the apps within Minos.\n\n"
                                   "Please confirm this action by pressing \"Yes\".") ))
     {
        return;

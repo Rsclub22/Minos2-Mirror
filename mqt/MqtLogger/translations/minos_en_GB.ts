@@ -366,7 +366,7 @@ The mode is %2</source>
 <context>
     <name>BlModel</name>
     <message>
-        <location filename="../WsjtxFrame.cpp" line="1696"/>
+        <location filename="../WsjtxFrame.cpp" line="1707"/>
         <source>Call</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1386,6 +1386,37 @@ Score between 4 fig loc centres</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../contestdetails.cpp" line="1630"/>
+        <source>This contest will be marked as protected.
+This is a permanent change that may be temporarily overridden.
+Please confirm this change by pressing &quot;Yes&quot;.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../contestdetails.cpp" line="1678"/>
+        <source>These settings are groups of settings that can be applied to a contest all in one go.
+
+There are four basic groups: - 
+
+Contest - for the description, bands, multipliers and time of a contest
+Entry - all the extra bits for a real entry - callsign, group, contact details.
+Station - Rig details, antenna, antenna height.
+QTH - where the station is, height above sea level, Locator.
+
+To use them select from the drop down lists, or for Contest, use the &quot;VHF Calendar&quot; button.
+Any group set to &quot;&lt;none&gt;&quot; will be ignored.
+
+If the setting you want isn&apos;t there, press the &quot;Edit&quot; button for the group.
+
+This brings up a dialog where you can define a new setting, copy an existing setting, or delete an existing setting
+
+Click on the setting name on the left to select an existing setting and then its components are shown in the right hand pane, and can be edited individually.
+
+Move between components of a group using the mouse or up/down arrow keys.
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../contestdetails.cpp" line="46"/>
         <source>All HF</source>
         <translation type="unfinished"></translation>
@@ -1413,37 +1444,6 @@ Score between 4 fig loc centres</source>
     <message>
         <location filename="../contestdetails.cpp" line="1291"/>
         <source>Contest end is before contest start</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../contestdetails.cpp" line="1630"/>
-        <source>This contest will be marked as protected.<byte value="xd"/>
-This is a permanent change that may be temporarily overridden.<byte value="xd"/>
-Please confirm this change by pressing &quot;Yes&quot;.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../contestdetails.cpp" line="1678"/>
-        <source>These settings are groups of settings that can be applied to a contest all in one go.<byte value="xd"/>
-<byte value="xd"/>
-There are four basic groups: - <byte value="xd"/>
-<byte value="xd"/>
-Contest - for the description, bands, multipliers and time of a contest<byte value="xd"/>
-Entry - all the extra bits for a real entry - callsign, group, contact details.<byte value="xd"/>
-Station - Rig details, antenna, antenna height.<byte value="xd"/>
-QTH - where the station is, height above sea level, Locator.<byte value="xd"/>
-<byte value="xd"/>
-To use them select from the drop down lists, or for Contest, use the &quot;VHF Calendar&quot; button.<byte value="xd"/>
-Any group set to &quot;&lt;none&gt;&quot; will be ignored.<byte value="xd"/>
-<byte value="xd"/>
-If the setting you want isn&apos;t there, press the &quot;Edit&quot; button for the group.<byte value="xd"/>
-<byte value="xd"/>
-This brings up a dialog where you can define a new setting, copy an existing setting, or delete an existing setting<byte value="xd"/>
-<byte value="xd"/>
-Click on the setting name on the left to select an existing setting and then its components are shown in the right hand pane, and can be edited individually.<byte value="xd"/>
-<byte value="xd"/>
-Move between components of a group using the mouse or up/down arrow keys.<byte value="xd"/>
-</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2443,14 +2443,14 @@ Double click on an edge square to extend the area of the map.</source>
     <name>MinosTestExport</name>
     <message>
         <location filename="../MinosTestExport.cpp" line="18"/>
-        <source>====================================================<byte value="xd"/>
-<byte value="xd"/>
-DO NOT SEND THIS FILE AS YOUR ENTRY!<byte value="xd"/>
-<byte value="xd"/>
-Use &quot;File&quot; | &quot;Produce Entry/Export File...&quot;<byte value="xd"/>
-Export as Reg1Test(entry)<byte value="xd"/>
-and send the .EDI file produced.<byte value="xd"/>
-====================================================<byte value="xd"/>
+        <source>====================================================
+
+DO NOT SEND THIS FILE AS YOUR ENTRY!
+
+Use &quot;File&quot; | &quot;Produce Entry/Export File...&quot;
+Export as Reg1Test(entry)
+and send the .EDI file produced.
+====================================================
 </source>
         <translation type="unfinished"></translation>
     </message>
@@ -2600,14 +2600,14 @@ and send the .EDI file produced.<byte value="xd"/>
     <name>PrintFile</name>
     <message>
         <location filename="../PrintFile.cpp" line="19"/>
-        <source>====================================================<byte value="xd"/>
-<byte value="xd"/>
-DO NOT SEND THIS FILE AS YOUR ENTRY!<byte value="xd"/>
-<byte value="xd"/>
-Use &quot;File&quot; | &quot;Produce Entry/Export File...&quot;<byte value="xd"/>
-Export as Reg1Test(entry)<byte value="xd"/>
-and send the .EDI file produced.<byte value="xd"/>
-====================================================<byte value="xd"/>
+        <source>====================================================
+
+DO NOT SEND THIS FILE AS YOUR ENTRY!
+
+Use &quot;File&quot; | &quot;Produce Entry/Export File...&quot;
+Export as Reg1Test(entry)
+and send the .EDI file produced.
+====================================================
 </source>
         <translation type="unfinished"></translation>
     </message>
@@ -3060,47 +3060,47 @@ No          - Discard changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qrzdisplayframe.cpp" line="38"/>
+        <location filename="../qrzdisplayframe.cpp" line="39"/>
         <source>Double Click to transfer Callsign, Locator and Name to log</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qrzdisplayframe.cpp" line="39"/>
+        <location filename="../qrzdisplayframe.cpp" line="40"/>
         <source>Double Click to transfer locator to log</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qrzdisplayframe.cpp" line="40"/>
+        <location filename="../qrzdisplayframe.cpp" line="41"/>
         <source>Double Click to transfer Bearing to rotator control</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qrzdisplayframe.cpp" line="41"/>
+        <location filename="../qrzdisplayframe.cpp" line="42"/>
         <source>Double Click to transfer Name to comments in log</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qrzdisplayframe.cpp" line="43"/>
+        <location filename="../qrzdisplayframe.cpp" line="44"/>
         <source>Note! Qrz XML subscription required to get QRA</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qrzdisplayframe.cpp" line="69"/>
+        <location filename="../qrzdisplayframe.cpp" line="76"/>
         <source>Search callsign invalid</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qrzdisplayframe.cpp" line="186"/>
+        <location filename="../qrzdisplayframe.cpp" line="193"/>
         <source>DB hits %1 QRZ requests %2 DB Size %3 records</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qrzdisplayframe.cpp" line="239"/>
+        <location filename="../qrzdisplayframe.cpp" line="246"/>
         <source>Connected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qrzdisplayframe.cpp" line="243"/>
+        <location filename="../qrzdisplayframe.cpp" line="250"/>
         <source>Disconnected</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3108,17 +3108,17 @@ No          - Discard changes</source>
 <context>
     <name>QrzDisplayServerRpc</name>
     <message>
-        <location filename="../qrzdisplayframe.cpp" line="258"/>
+        <location filename="../qrzdisplayframe.cpp" line="265"/>
         <source>Available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qrzdisplayframe.cpp" line="259"/>
+        <location filename="../qrzdisplayframe.cpp" line="266"/>
         <source>Not Available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qrzdisplayframe.cpp" line="260"/>
+        <location filename="../qrzdisplayframe.cpp" line="267"/>
         <source>No Contact</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4246,13 +4246,13 @@ Protected</source>
     </message>
     <message>
         <location filename="../ScreenConfigScreen.cpp" line="346"/>
-        <source>Please select (by mouse click) the top and bottom rows for the (right) column.<byte value="xd"/>
+        <source>Please select (by mouse click) the top and bottom rows for the (right) column.
 The row background will change colour when selected.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ScreenConfigScreen.cpp" line="378"/>
-        <source>Please select (by mouse click) the top and bottom rows for the (left) column.<byte value="xd"/>
+        <source>Please select (by mouse click) the top and bottom rows for the (left) column.
 The row background will change colour when selected.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5372,6 +5372,13 @@ Please choose a new name.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../tlogcontainer.cpp" line="1366"/>
+        <source>This action will clear geometry entries for all of the apps within Minos.
+
+Please confirm this action by pressing &quot;Yes&quot;.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../tlogcontainer.cpp" line="1380"/>
         <source>Clear registry only works under Windows</source>
         <translation type="unfinished"></translation>
@@ -5399,13 +5406,6 @@ Please choose a new name.</source>
     <message>
         <location filename="../tlogcontainer.cpp" line="1344"/>
         <source>You may need to close and reload Minos to have these settings applied</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../tlogcontainer.cpp" line="1366"/>
-        <source>This action will clear geometry entries for all of the apps within Minos.<byte value="xd"/>
-<byte value="xd"/>
-Please confirm this action by pressing &quot;Yes&quot;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -5508,6 +5508,15 @@ Please confirm this action by pressing &quot;Yes&quot;.</source>
     <message>
         <location filename="../tqsoeditdlg.cpp" line="85"/>
         <source>Editing QSO</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>TSendDM</name>
+    <message>
+        <location filename="../SendRPCDM.cpp" line="979"/>
+        <location filename="../SendRPCDM.cpp" line="1028"/>
+        <source>Disconnected</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -5763,17 +5772,17 @@ One New Multiplier is equivalent to %2 Average QSOs%3</source>
     </message>
     <message>
         <location filename="../tstatsdispframe.cpp" line="159"/>
-        <source>Last %1 Mins: %2 QSO %3 pts %4 bonus<byte value="xd"/>
+        <source>Last %1 Mins: %2 QSO %3 pts %4 bonus
 (Previous %5; %6; %7)
-Last %8 Mins: %9 QSO %10 pts %11 bonus<byte value="xd"/>
+Last %8 Mins: %9 QSO %10 pts %11 bonus
 (Previous %12; %13; %14)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../tstatsdispframe.cpp" line="168"/>
-        <source>Last %1 Mins: %2 QSO %3 pts %4 mults<byte value="xd"/>
+        <source>Last %1 Mins: %2 QSO %3 pts %4 mults
 (Previous %5; %6; %7)
-Last %8 Mins: %9 QSO %10 pts %11 mults<byte value="xd"/>
+Last %8 Mins: %9 QSO %10 pts %11 mults
 (Previous %12; %13; %14)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6512,13 +6521,13 @@ Include the CQ as well as the type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxFrame.cpp" line="1520"/>
-        <location filename="../WsjtxFrame.cpp" line="1524"/>
+        <location filename="../WsjtxFrame.cpp" line="1531"/>
+        <location filename="../WsjtxFrame.cpp" line="1535"/>
         <source>WSJT-X recording Files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxFrame.cpp" line="1521"/>
+        <location filename="../WsjtxFrame.cpp" line="1532"/>
         <source>All Files</source>
         <translation type="unfinished"></translation>
     </message>

@@ -156,8 +156,8 @@ void TStatsDispFrame::reInitialiseStats()
 
       if (ct->usesBonus.getValue())
       {
-          lbuff = tr( "Last %1 Mins: %2 QSO %3 pts %4 bonus\r\n(Previous %5; %6; %7)"
-                               "\nLast %8 Mins: %9 QSO %10 pts %11 bonus\r\n(Previous %12; %13; %14)" )
+          lbuff = tr( "Last %1 Mins: %2 QSO %3 pts %4 bonus\n(Previous %5; %6; %7)"
+                               "\nLast %8 Mins: %9 QSO %10 pts %11 bonus\n(Previous %12; %13; %14)" )
                               .arg(sp1)  .arg(ct->QSO1) .arg(ct->kms1) .arg(ct->bonus1)
                               .arg(ct->QSO1p) .arg(ct->kms1p) .arg(ct->bonus1p)
                               .arg(sp2) .arg(ct->QSO2) .arg(ct->kms2) .arg(ct->bonus2)
@@ -165,14 +165,14 @@ void TStatsDispFrame::reInitialiseStats()
       }
       else
       {
-        lbuff = tr( "Last %1 Mins: %2 QSO %3 pts %4 mults\r\n(Previous %5; %6; %7)"
-                             "\nLast %8 Mins: %9 QSO %10 pts %11 mults\r\n(Previous %12; %13; %14)" )
+        lbuff = tr( "Last %1 Mins: %2 QSO %3 pts %4 mults\n(Previous %5; %6; %7)"
+                             "\nLast %8 Mins: %9 QSO %10 pts %11 mults\n(Previous %12; %13; %14)" )
                             .arg(sp1)  .arg(ct->QSO1) .arg(ct->kms1) .arg(ct->mults1)
                             .arg(ct->QSO1p) .arg(ct->kms1p) .arg(ct->mults1p)
                             .arg(sp2) .arg(ct->QSO2) .arg(ct->kms2) .arg(ct->mults2)
                             .arg(ct->QSO2p) .arg(ct->kms2p) .arg(ct->mults2p);
       }
-      ui->SLabel1->setText( buff + "\r\n\r\n" + lbuff );
+      ui->SLabel1->setText( buff + "\n\n" + lbuff );
    }
 }
 //---------------------------------------------------------------------------

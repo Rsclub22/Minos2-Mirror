@@ -25,10 +25,14 @@
     </message>
     <message>
         <location filename="../ConfigFile.cpp" line="881"/>
+        <source>A local server is required.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>A local server is required.<byte value="xd"/>
 <byte value="xd"/>
 </source>
-        <translation>Server locale requis.
+        <translation type="vanished">Server locale requis.
 
 </translation>
     </message>
@@ -57,12 +61,10 @@
         <translation> Le chemin exécutable déduit n&apos;existe pas ou n&apos;est pas exécutable&#xa0;: [why inferred???]</translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="963"/>
-        <location filename="../ConfigFile.cpp" line="971"/>
         <source>
 
 </source>
-        <translation type="unfinished">[???? what???]</translation>
+        <translation type="obsolete">[???? what???]</translation>
     </message>
     <message>
         <location filename="../ConfigFile.cpp" line="971"/>

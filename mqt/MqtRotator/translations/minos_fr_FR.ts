@@ -289,13 +289,19 @@ utiliser un autre nom SVP</translation>
         <translation>Modifier le nom de l&apos;antenne</translation>
     </message>
     <message>
-        <location filename="../rotsetupdialog.cpp" line="80"/>
         <source>The Rotator configuration files in %1 are from an old incompatible version of Minos.<byte value="xd"/>
 <byte value="xd"/>
 Please delete them and set up the rotators again</source>
-        <translation>Les fichiers de configuration du rotateur dans %1 proviennent d&apos;une ancienne version incompatible de Minos.
+        <translation type="vanished">Les fichiers de configuration du rotateur dans %1 proviennent d&apos;une ancienne version incompatible de Minos.
 
 Veuillez les supprimer et configurer les rotateurs à nouveau</translation>
+    </message>
+    <message>
+        <location filename="../rotsetupdialog.cpp" line="80"/>
+        <source>The Rotator configuration files in %1 are from an old incompatible version of Minos.
+
+Please delete them and set up the rotators again</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../rotsetupdialog.cpp" line="654"/>
@@ -1095,12 +1101,12 @@ Voulez-vous recharger les paramètres de l&apos;antenne maintenant?</translation
         <translation>Numéro de Port de réseau hors plage</translation>
     </message>
     <message>
-        <location filename="../rotsetupform.cpp" line="834"/>
+        <location filename="../rotsetupform.cpp" line="837"/>
         <source>Value must be between %1 and %2</source>
         <translation>La valeur doit être comprise entre %1 et %2</translation>
     </message>
     <message>
-        <location filename="../rotsetupform.cpp" line="835"/>
+        <location filename="../rotsetupform.cpp" line="838"/>
         <source>Antenna Offset Error</source>
         <translation>Erreur de décalage d&apos;antenne</translation>
     </message>

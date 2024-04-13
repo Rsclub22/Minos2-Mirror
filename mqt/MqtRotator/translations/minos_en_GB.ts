@@ -287,8 +287,8 @@ Please enter a name for the antenna</source>
     </message>
     <message>
         <location filename="../rotsetupdialog.cpp" line="80"/>
-        <source>The Rotator configuration files in %1 are from an old incompatible version of Minos.<byte value="xd"/>
-<byte value="xd"/>
+        <source>The Rotator configuration files in %1 are from an old incompatible version of Minos.
+
 Please delete them and set up the rotators again</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1043,12 +1043,12 @@ Do you want to reload the settings for the antenna now?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotsetupform.cpp" line="834"/>
+        <location filename="../rotsetupform.cpp" line="837"/>
         <source>Value must be between %1 and %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotsetupform.cpp" line="835"/>
+        <location filename="../rotsetupform.cpp" line="838"/>
         <source>Antenna Offset Error</source>
         <translation type="unfinished"></translation>
     </message>

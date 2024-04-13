@@ -343,7 +343,7 @@ void ScreenConfigScreen::on_addColumnRightButton_clicked()
 
     if (topRow < 0 || topRow == bottomRow)
     {
-        mShowMessage(tr("Please select (by mouse click) the top and bottom rows for the (right) column.\r\n"
+        mShowMessage(tr("Please select (by mouse click) the top and bottom rows for the (right) column.\n"
                      "The row background will change colour when selected."), this);
     }
     else
@@ -375,7 +375,7 @@ void ScreenConfigScreen::on_addColumnLeftButton_clicked()
     int bottomRow = getBottomRow(e);
     if (topRow < 0 || topRow == bottomRow)
     {
-        mShowMessage(tr("Please select (by mouse click) the top and bottom rows for the (left) column.\r\n"
+        mShowMessage(tr("Please select (by mouse click) the top and bottom rows for the (left) column.\n"
                      "The row background will change colour when selected."), this);
     }
     else

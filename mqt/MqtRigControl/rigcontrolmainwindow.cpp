@@ -4615,7 +4615,7 @@ void RigControlMainWindow::checkIniFileVersion()
 
         if (version != "2")
         {
-            mShowMessage(tr("The Radio configuration files in %1 are from an old incompatible version of Minos.\r\n\r\n"
+            mShowMessage(tr("The Radio configuration files in %1 are from an old incompatible version of Minos.\n\n"
                             "Please delete them and set up the radios again").arg(RADIO_PATH_LOGGER()), parentWidget());
             exit(10);
         }

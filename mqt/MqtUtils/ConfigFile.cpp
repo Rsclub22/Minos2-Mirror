@@ -878,7 +878,7 @@ QString MinosConfig::checkConfig(QString name)
 
     if (eleListSize && !routerPresent)
     {
-        reqErrs += tr("A local server is required.\r\n\r\n") ;
+        reqErrs += tr("A local server is required.") + "\n\n" ;
     }
 
     //Check that the name is not blank, and only has allowed characters
@@ -960,7 +960,7 @@ QString MinosConfig::checkConfig(QString name)
                     QString program = ele->inferExecutable();
                     if (!FileExecutable(program))
                     {
-                        reqErrs += "<" + ele->appType + ">" + tr(" Inferred Executable path does not exist or is not executable:") + " " + program + tr("\n\n");
+                        reqErrs += "<" + ele->appType + ">" + tr(" Inferred Executable path does not exist or is not executable:") + " " + program + "\n\n";
                     }
                 }
                 else
@@ -968,7 +968,7 @@ QString MinosConfig::checkConfig(QString name)
                     if (!FileExecutable(ele->commandLine))
                     {
                         QDir mydir(".");
-                        reqErrs += "<" + ele->appType + ">" + tr(" Executable path does not exist or is not executable:") + " " + mydir.absolutePath() + ele->commandLine + tr("\n\n");
+                        reqErrs += "<" + ele->appType + ">" + tr(" Executable path does not exist or is not executable:") + " " + mydir.absolutePath() + ele->commandLine + "\n\n";
                     }
                 }
 

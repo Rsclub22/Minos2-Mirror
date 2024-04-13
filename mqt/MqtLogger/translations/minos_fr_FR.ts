@@ -372,7 +372,7 @@ Le mode calculé est %2</translation>
 <context>
     <name>BlModel</name>
     <message>
-        <location filename="../WsjtxFrame.cpp" line="1696"/>
+        <location filename="../WsjtxFrame.cpp" line="1707"/>
         <source>Call</source>
         <translation>Indicatif d&apos;appel [???]</translation>
     </message>
@@ -1403,6 +1403,37 @@ Comptabiliser entre Locators de 4 caractères</translation>
         <translation>Détails de l&apos;entrée du Concours - %1</translation>
     </message>
     <message>
+        <location filename="../contestdetails.cpp" line="1630"/>
+        <source>This contest will be marked as protected.
+This is a permanent change that may be temporarily overridden.
+Please confirm this change by pressing &quot;Yes&quot;.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../contestdetails.cpp" line="1678"/>
+        <source>These settings are groups of settings that can be applied to a contest all in one go.
+
+There are four basic groups: - 
+
+Contest - for the description, bands, multipliers and time of a contest
+Entry - all the extra bits for a real entry - callsign, group, contact details.
+Station - Rig details, antenna, antenna height.
+QTH - where the station is, height above sea level, Locator.
+
+To use them select from the drop down lists, or for Contest, use the &quot;VHF Calendar&quot; button.
+Any group set to &quot;&lt;none&gt;&quot; will be ignored.
+
+If the setting you want isn&apos;t there, press the &quot;Edit&quot; button for the group.
+
+This brings up a dialog where you can define a new setting, copy an existing setting, or delete an existing setting
+
+Click on the setting name on the left to select an existing setting and then its components are shown in the right hand pane, and can be edited individually.
+
+Move between components of a group using the mouse or up/down arrow keys.
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../contestdetails.cpp" line="46"/>
         <source>All HF</source>
         <translation>Toutes HF</translation>
@@ -1433,16 +1464,14 @@ Comptabiliser entre Locators de 4 caractères</translation>
         <translation>Fin du concours avant début du concours</translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="1630"/>
         <source>This contest will be marked as protected.<byte value="xd"/>
 This is a permanent change that may be temporarily overridden.<byte value="xd"/>
 Please confirm this change by pressing &quot;Yes&quot;.</source>
-        <translation>Ce Concours sera marqué comme protégé.
+        <translation type="vanished">Ce Concours sera marqué comme protégé.
 Il s&apos;agit d&apos;un changement permanent qui peut être temporairement annulé.
 Veuillez confirmer cette modification en appuyant sur &quot;Oui&quot;.</translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="1678"/>
         <source>These settings are groups of settings that can be applied to a contest all in one go.<byte value="xd"/>
 <byte value="xd"/>
 There are four basic groups: - <byte value="xd"/>
@@ -1467,7 +1496,7 @@ Move between components of a group using the mouse or up/down arrow keys.<byte v
 
 TO BE CHECKED CAREFULLY:
 </translatorcomment>
-        <translation>Ces paramètres sont des groupes de paramètres qui peuvent être appliqués à un concours en une seule fois.
+        <translation type="vanished">Ces paramètres sont des groupes de paramètres qui peuvent être appliqués à un concours en une seule fois.
 
 Il existe quatre groupes de base: - 
 
@@ -2492,7 +2521,6 @@ Double-cliquer sur un carré d&apos;arête pour étendre la zone de la carte.</t
 <context>
     <name>MinosTestExport</name>
     <message>
-        <location filename="../MinosTestExport.cpp" line="18"/>
         <source>====================================================<byte value="xd"/>
 <byte value="xd"/>
 DO NOT SEND THIS FILE AS YOUR ENTRY!<byte value="xd"/>
@@ -2503,7 +2531,7 @@ and send the .EDI file produced.<byte value="xd"/>
 ====================================================<byte value="xd"/>
 </source>
         <translatorcomment>ANOTHER FUNNY WHITESPACE ISSUE</translatorcomment>
-        <translation>====================================================<byte value="xd"/>
+        <translation type="vanished">====================================================<byte value="xd"/>
 <byte value="xd"/>
 N&apos;ENVOYEZ PAS CE FICHIER COMME VOTRE ENTRÉE!<byte value="xd"/>
 <byte value="xd"/>
@@ -2512,6 +2540,19 @@ Exporter en tant que Reg1Test (entrée)<byte value="xd"/>
 et envoyer le fichier .EDI produit.<byte value="xd"/>
 ====================================================<byte value="xd"/>
 </translation>
+    </message>
+    <message>
+        <location filename="../MinosTestExport.cpp" line="18"/>
+        <source>====================================================
+
+DO NOT SEND THIS FILE AS YOUR ENTRY!
+
+Use &quot;File&quot; | &quot;Produce Entry/Export File...&quot;
+Export as Reg1Test(entry)
+and send the .EDI file produced.
+====================================================
+</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../MinosTestExport.cpp" line="51"/>
@@ -2659,7 +2700,6 @@ et envoyer le fichier .EDI produit.<byte value="xd"/>
 <context>
     <name>PrintFile</name>
     <message>
-        <location filename="../PrintFile.cpp" line="19"/>
         <source>====================================================<byte value="xd"/>
 <byte value="xd"/>
 DO NOT SEND THIS FILE AS YOUR ENTRY!<byte value="xd"/>
@@ -2670,7 +2710,7 @@ and send the .EDI file produced.<byte value="xd"/>
 ====================================================<byte value="xd"/>
 </source>
         <translatorcomment>ANOTHER FUNNY WHITESPACE ISSUE</translatorcomment>
-        <translation>====================================================<byte value="xd"/>
+        <translation type="vanished">====================================================<byte value="xd"/>
 <byte value="xd"/>
 N&apos;ENVOYEZ PAS CE FICHIER COMME VOTRE ENTRÉE!<byte value="xd"/>
 <byte value="xd"/>
@@ -2679,6 +2719,19 @@ Exporter en tant que Reg1Test (entrée)<byte value="xd"/>
 et envoyer le fichier .EDI produit.<byte value="xd"/>
 ====================================================<byte value="xd"/>
 </translation>
+    </message>
+    <message>
+        <location filename="../PrintFile.cpp" line="19"/>
+        <source>====================================================
+
+DO NOT SEND THIS FILE AS YOUR ENTRY!
+
+Use &quot;File&quot; | &quot;Produce Entry/Export File...&quot;
+Export as Reg1Test(entry)
+and send the .EDI file produced.
+====================================================
+</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3135,47 +3188,47 @@ Non - Ignorer les modifications</translation>
         <translation>Chercher</translation>
     </message>
     <message>
-        <location filename="../qrzdisplayframe.cpp" line="38"/>
+        <location filename="../qrzdisplayframe.cpp" line="39"/>
         <source>Double Click to transfer Callsign, Locator and Name to log</source>
         <translation>Double-cliquer pour transférer le Locator, le Direction, et le nom vers le journal</translation>
     </message>
     <message>
-        <location filename="../qrzdisplayframe.cpp" line="39"/>
+        <location filename="../qrzdisplayframe.cpp" line="40"/>
         <source>Double Click to transfer locator to log</source>
         <translation>Double-cliquer pour transférer le Locator vers le journal</translation>
     </message>
     <message>
-        <location filename="../qrzdisplayframe.cpp" line="40"/>
+        <location filename="../qrzdisplayframe.cpp" line="41"/>
         <source>Double Click to transfer Bearing to rotator control</source>
         <translation>Double-cliquer pour transférer le Direction au contrôle du rotateur</translation>
     </message>
     <message>
-        <location filename="../qrzdisplayframe.cpp" line="41"/>
+        <location filename="../qrzdisplayframe.cpp" line="42"/>
         <source>Double Click to transfer Name to comments in log</source>
         <translation>Double-cliquer pour transférer le nom vers les commentaires journal</translation>
     </message>
     <message>
-        <location filename="../qrzdisplayframe.cpp" line="43"/>
+        <location filename="../qrzdisplayframe.cpp" line="44"/>
         <source>Note! Qrz XML subscription required to get QRA</source>
         <translation>Noter! Abonnement QRZ XML requis pour obtenir QRA</translation>
     </message>
     <message>
-        <location filename="../qrzdisplayframe.cpp" line="69"/>
+        <location filename="../qrzdisplayframe.cpp" line="76"/>
         <source>Search callsign invalid</source>
         <translation>Indicatif invalide dans la recherche</translation>
     </message>
     <message>
-        <location filename="../qrzdisplayframe.cpp" line="186"/>
+        <location filename="../qrzdisplayframe.cpp" line="193"/>
         <source>DB hits %1 QRZ requests %2 DB Size %3 records</source>
         <translation>DB coups %1 requêtes QRZ %2 taille de DB %3 enregistrements</translation>
     </message>
     <message>
-        <location filename="../qrzdisplayframe.cpp" line="239"/>
+        <location filename="../qrzdisplayframe.cpp" line="246"/>
         <source>Connected</source>
         <translation>Connecté</translation>
     </message>
     <message>
-        <location filename="../qrzdisplayframe.cpp" line="243"/>
+        <location filename="../qrzdisplayframe.cpp" line="250"/>
         <source>Disconnected</source>
         <translation>Déconnecté</translation>
     </message>
@@ -3183,17 +3236,17 @@ Non - Ignorer les modifications</translation>
 <context>
     <name>QrzDisplayServerRpc</name>
     <message>
-        <location filename="../qrzdisplayframe.cpp" line="258"/>
+        <location filename="../qrzdisplayframe.cpp" line="265"/>
         <source>Available</source>
         <translation>Disponible</translation>
     </message>
     <message>
-        <location filename="../qrzdisplayframe.cpp" line="259"/>
+        <location filename="../qrzdisplayframe.cpp" line="266"/>
         <source>Not Available</source>
         <translation>Indisponible</translation>
     </message>
     <message>
-        <location filename="../qrzdisplayframe.cpp" line="260"/>
+        <location filename="../qrzdisplayframe.cpp" line="267"/>
         <source>No Contact</source>
         <translation>Aucun contact</translation>
     </message>
@@ -4326,18 +4379,28 @@ Protected</source>
         <translation>Ajouter une colonne à droite</translation>
     </message>
     <message>
-        <location filename="../ScreenConfigScreen.cpp" line="346"/>
         <source>Please select (by mouse click) the top and bottom rows for the (right) column.<byte value="xd"/>
 The row background will change colour when selected.</source>
-        <translation>Veuillez sélectionner en cliquant sur les rangées supérieures et inférieures pour la colonne de droite.
+        <translation type="vanished">Veuillez sélectionner en cliquant sur les rangées supérieures et inférieures pour la colonne de droite.
 L&apos;arrière-plan de la ligne change de couleur lorsqu&apos;elle est sélectionnée.</translation>
     </message>
     <message>
-        <location filename="../ScreenConfigScreen.cpp" line="378"/>
         <source>Please select (by mouse click) the top and bottom rows for the (left) column.<byte value="xd"/>
 The row background will change colour when selected.</source>
-        <translation>Veuillez sélectionner en cliquant sur les rangées supérieures et inférieures pour la colonne de gauche.
+        <translation type="vanished">Veuillez sélectionner en cliquant sur les rangées supérieures et inférieures pour la colonne de gauche.
 L&apos;arrière-plan de la ligne change de couleur lorsqu&apos;elle est sélectionnée.</translation>
+    </message>
+    <message>
+        <location filename="../ScreenConfigScreen.cpp" line="346"/>
+        <source>Please select (by mouse click) the top and bottom rows for the (right) column.
+The row background will change colour when selected.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ScreenConfigScreen.cpp" line="378"/>
+        <source>Please select (by mouse click) the top and bottom rows for the (left) column.
+The row background will change colour when selected.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -5480,6 +5543,13 @@ Veuillez choisir un nouveau nom.</translation>
         <translation>Importer %1 Concours</translation>
     </message>
     <message>
+        <location filename="../tlogcontainer.cpp" line="1366"/>
+        <source>This action will clear geometry entries for all of the apps within Minos.
+
+Please confirm this action by pressing &quot;Yes&quot;.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../tlogcontainer.cpp" line="1380"/>
         <source>Clear registry only works under Windows</source>
         <translation>L&apos;effacement des registres ne fonctionne que sous Windows</translation>
@@ -5531,11 +5601,10 @@ Veuillez choisir un nouveau nom.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1366"/>
         <source>This action will clear geometry entries for all of the apps within Minos.<byte value="xd"/>
 <byte value="xd"/>
 Please confirm this action by pressing &quot;Yes&quot;.</source>
-        <translation>Cette action effacera les entrées de géométrie pour toutes les applications de Minos.
+        <translation type="vanished">Cette action effacera les entrées de géométrie pour toutes les applications de Minos.
 
 Veuillez confirmer cette action en appuyant sur &quot;Oui&quot;.</translation>
     </message>
@@ -5651,6 +5720,15 @@ Veuillez confirmer cette action en appuyant sur &quot;Oui&quot;.</translation>
         <location filename="../tqsoeditdlg.cpp" line="85"/>
         <source>Editing QSO</source>
         <translation>Modification du QSO</translation>
+    </message>
+</context>
+<context>
+    <name>TSendDM</name>
+    <message>
+        <location filename="../SendRPCDM.cpp" line="979"/>
+        <location filename="../SendRPCDM.cpp" line="1028"/>
+        <source>Disconnected</source>
+        <translation type="unfinished">Déconnecté</translation>
     </message>
 </context>
 <context>
@@ -5942,22 +6020,36 @@ Un nouveau multiplicateur équivaut à%2 QSO moyens%3</translation>
     </message>
     <message>
         <location filename="../tstatsdispframe.cpp" line="159"/>
+        <source>Last %1 Mins: %2 QSO %3 pts %4 bonus
+(Previous %5; %6; %7)
+Last %8 Mins: %9 QSO %10 pts %11 bonus
+(Previous %12; %13; %14)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../tstatsdispframe.cpp" line="168"/>
+        <source>Last %1 Mins: %2 QSO %3 pts %4 mults
+(Previous %5; %6; %7)
+Last %8 Mins: %9 QSO %10 pts %11 mults
+(Previous %12; %13; %14)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Last %1 Mins: %2 QSO %3 pts %4 bonus<byte value="xd"/>
 (Previous %5; %6; %7)
 Last %8 Mins: %9 QSO %10 pts %11 bonus<byte value="xd"/>
 (Previous %12; %13; %14)</source>
-        <translation>%1 dernières minutes:%2 QSO%3 pts%4 bonus
+        <translation type="vanished">%1 dernières minutes:%2 QSO%3 pts%4 bonus
 (%5;%6;%7 précédents)
 %8 dernières minutes:%9 QSO%10 pts%11 bonus
 (%12;%13;%14 précédents)</translation>
     </message>
     <message>
-        <location filename="../tstatsdispframe.cpp" line="168"/>
         <source>Last %1 Mins: %2 QSO %3 pts %4 mults<byte value="xd"/>
 (Previous %5; %6; %7)
 Last %8 Mins: %9 QSO %10 pts %11 mults<byte value="xd"/>
 (Previous %12; %13; %14)</source>
-        <translation>%1 dernières minutes: %2 QSO %3 pts %4 mults
+        <translation type="vanished">%1 dernières minutes: %2 QSO %3 pts %4 mults
 (%5; %6; %7  précédents)
 %8 dernières minutes:%9 QSO%10 pts%11 mults
 (%12;%13;%14 précédents)</translation>
@@ -6705,13 +6797,13 @@ Inclure le &quot;CQ&quot; ainsi que le type</translation>
         <translation>Mauvais bande</translation>
     </message>
     <message>
-        <location filename="../WsjtxFrame.cpp" line="1520"/>
-        <location filename="../WsjtxFrame.cpp" line="1524"/>
+        <location filename="../WsjtxFrame.cpp" line="1531"/>
+        <location filename="../WsjtxFrame.cpp" line="1535"/>
         <source>WSJT-X recording Files</source>
         <translation>Fichiers d&apos;enregistrement WSJT-X</translation>
     </message>
     <message>
-        <location filename="../WsjtxFrame.cpp" line="1521"/>
+        <location filename="../WsjtxFrame.cpp" line="1532"/>
         <source>All Files</source>
         <translation>Tous les fichiers</translation>
     </message>

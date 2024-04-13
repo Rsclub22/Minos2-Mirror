@@ -53,7 +53,7 @@ RPCAction::~RPCAction()
 }
 QString RPCAction::print()
 {
-   QString s = "From: " + getFrom() + " To: " + getTo() + "\r\n";
+   QString s = "From: " + getFrom() + " To: " + getTo() + "\n";
    for ( auto const &i: QASCONST(args) )
    {
       s += i->print();
@@ -157,7 +157,7 @@ TIXML_STRING RPCRequest::getActionMessage( )
 }
 QString RPCRequest::print()
 {
-   QString s = "Request\r\n";
+   QString s = "Request\n";
    s += RPCAction::print();
    return s;
 }

@@ -37,7 +37,7 @@ void clearBuffer( )
    memset( diskBuffer, '#', bsize );
    diskBuffer[ bsize ] = 0;
 }
-static const char *noeditstr = "\r\n!!BINARY FILE DO NOT EDIT!!\r\n";
+static const char *noeditstr = "\n!!BINARY FILE DO NOT EDIT!!\n";
 const int noeditlength = 32;
 
 void strtobuf( const QString &str )
@@ -189,7 +189,7 @@ void writer::lwrite( const QString &s )
 
 void writer::lwrite( const char *b )
 {
-   QString l = QString( b ) + "\r\n";
+   QString l = QString( b ) + "\n";
 
    qint64 ret = expfd->write(l.toUtf8());
    if ( ret != static_cast<int >(l.toUtf8().size()) )

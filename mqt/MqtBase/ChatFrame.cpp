@@ -40,7 +40,7 @@ void ChatFrame::ChatServerList(QMap<Provider, ChatServerApp> serverList)
     for(QMap<Provider, ChatServerApp>::iterator i = serverList.begin(); i != serverList.end(); i++)
     {
         Frequency f = i.value().freq;
-        QString state = ChatServer::tr(ChatServer::stateIndicator[i.key().state]) + " " + i.key().app + "\r\n" + f.str();
+        QString state = ChatServer::tr(ChatServer::stateIndicator[i.key().state]) + " " + i.key().app + "\n" + f.str();
         ui->StationList->addItem( state );
     }
 }

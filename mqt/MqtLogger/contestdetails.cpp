@@ -1627,8 +1627,8 @@ void ContestDetails::on_OKButton_clicked()
 
     if (ui->ProtectedOption->isChecked() && ! contestTransferObject->isProtected())
     {
-       if (!mShowYesNoMessage(this, tr("This contest will be marked as protected.\r\n"
-                                     "This is a permanent change that may be temporarily overridden.\r\n"
+       if (!mShowYesNoMessage(this, tr("This contest will be marked as protected.\n"
+                                     "This is a permanent change that may be temporarily overridden.\n"
                                      "Please confirm this change by pressing \"Yes\"." )))
        {
           return;
@@ -1677,28 +1677,28 @@ void ContestDetails::on_CancelButton_clicked()
 const char * ContestDetails::BSHelpText =
    QT_TR_NOOP("These settings are groups of settings that can "
    "be applied to a contest all in one go."
-   "\r\n\r\n"
-   "There are four basic groups: - \r\n\r\n"
-   "Contest - for the description, bands, multipliers and time of a contest\r\n"
-   "Entry - all the extra bits for a real entry - callsign, group, contact details.\r\n"
-   "Station - Rig details, antenna, antenna height.\r\n"
-   "QTH - where the station is, height above sea level, Locator.\r\n"
-   "\r\n"
+   "\n\n"
+   "There are four basic groups: - \n\n"
+   "Contest - for the description, bands, multipliers and time of a contest\n"
+   "Entry - all the extra bits for a real entry - callsign, group, contact details.\n"
+   "Station - Rig details, antenna, antenna height.\n"
+   "QTH - where the station is, height above sea level, Locator.\n"
+   "\n"
    "To use them select from the drop down lists, or for Contest, use the "
-   "\"VHF Calendar\" button.\r\n"
-   "Any group set to \"<none>\" will be ignored.\r\n"
-   "\r\n"
+   "\"VHF Calendar\" button.\n"
+   "Any group set to \"<none>\" will be ignored.\n"
+   "\n"
    "If the setting you want isn't there, press the \"Edit\" "
-   "button for the group.\r\n"
-   "\r\n"
+   "button for the group.\n"
+   "\n"
    "This brings up a dialog where you can define a new setting, "
-   "copy an existing setting, or delete an existing setting\r\n"
-   "\r\n"
+   "copy an existing setting, or delete an existing setting\n"
+   "\n"
    "Click on the setting name on the left to select an existing setting "
    "and then its components are shown in the right hand pane, and "
-   "can be edited individually.\r\n"
-   "\r\n"
-   "Move between components of a group using the mouse or up/down arrow keys.\r\n")
+   "can be edited individually.\n"
+   "\n"
+   "Move between components of a group using the mouse or up/down arrow keys.\n")
    ;
 
 void ContestDetails::doCalendarButton(QString dtitle, CalType calt)

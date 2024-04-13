@@ -1269,12 +1269,11 @@
 <context>
     <name>FrequencyDisplay</name>
     <message>
-        <location filename="../rigutils.cpp" line="16"/>
         <source>Frequency has invalid characters or missing periods.<byte value="xd"/>
 <byte value="xd"/>
 The format required is (e.g.) 1296.3, 144.32 or 144.290123<byte value="xd"/>
 </source>
-        <translation>La fréquence comporte des caractères non valides ou des périodes manquantes.<byte value="xd"/>
+        <translation type="vanished">La fréquence comporte des caractères non valides ou des périodes manquantes.<byte value="xd"/>
 <byte value="xd"/>
 Le format requis est (par exemple) 1296.3, 144.32 ou 144.290123<byte value="xd"/>
 <byte value="xd"/>
@@ -1282,12 +1281,11 @@ Attention: &quot;.&quot; pas &quot;,&quot;<byte value="xd"/>
 </translation>
     </message>
     <message>
-        <location filename="../rigutils.cpp" line="17"/>
         <source>Radio Frequency has invalid characters or missing periods.<byte value="xd"/>
 <byte value="xd"/>
 The format required is (e.g.) 1296.3, 144.32 or 144.290123<byte value="xd"/>
 </source>
-        <translation>La fréquence a des caractères invalides ou des périodes manquantes.<byte value="xd"/>
+        <translation type="vanished">La fréquence a des caractères invalides ou des périodes manquantes.<byte value="xd"/>
 <byte value="xd"/>
 Le format requis est (par exemple) 1296.3, 144.32 ou 144.290123<byte value="xd"/>
 <byte value="xd"/>
@@ -1295,17 +1293,40 @@ Attention: &quot;.&quot; pas &quot;,&quot;<byte value="xd"/>
 </translation>
     </message>
     <message>
-        <location filename="../rigutils.cpp" line="18"/>
         <source>Target Frequency has invalid characters or missing periods.<byte value="xd"/>
 <byte value="xd"/>
 The format required is (e.g.) 1296.3, 144.32 or 144.290123<byte value="xd"/>
 </source>
-        <translation>La fréquence cible comporte des caractères non valides ou des périodes manquantes.<byte value="xd"/>
+        <translation type="vanished">La fréquence cible comporte des caractères non valides ou des périodes manquantes.<byte value="xd"/>
 <byte value="xd"/>
 Le format requis est (par exemple) 1296.3, 144.32 ou 144.290123<byte value="xd"/>
 <byte value="xd"/>
 Attention: &quot;.&quot; pas &quot;,&quot;<byte value="xd"/>
 </translation>
+    </message>
+    <message>
+        <location filename="../rigutils.cpp" line="16"/>
+        <source>Frequency has invalid characters or missing periods.
+
+The format required is (e.g.) 1296.3, 144.32 or 144.290123
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rigutils.cpp" line="17"/>
+        <source>Radio Frequency has invalid characters or missing periods.
+
+The format required is (e.g.) 1296.3, 144.32 or 144.290123
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rigutils.cpp" line="18"/>
+        <source>Target Frequency has invalid characters or missing periods.
+
+The format required is (e.g.) 1296.3, 144.32 or 144.290123
+</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
