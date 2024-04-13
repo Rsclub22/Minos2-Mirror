@@ -1,6 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>MMTTYFrame</class>
- <widget name="MMTTYFrame" class="QFrame">
+ <widget class="QFrame" name="MMTTYFrame">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -10,7 +11,9 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Frame</string>
+   <string/>
   </property>
  </widget>
+ <resources/>
+ <connections/>
 </ui>

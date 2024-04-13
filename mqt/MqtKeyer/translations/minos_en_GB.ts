@@ -150,11 +150,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../KeyerMain.ui" line="465"/>
-        <source>TextLabel</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../KeyerMain.ui" line="487"/>
         <source>Setup Script (alsactl)</source>
         <translation type="unfinished"></translation>

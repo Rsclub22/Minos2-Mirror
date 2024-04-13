@@ -505,6 +505,25 @@ Certaines radios / interfaces peuvent nécessiter de forcer DTR ou RTS au niveau
         <translation>RigControl: Erreur d&apos;ouverture de la radio</translation>
     </message>
     <message>
+        <location filename="../rigcontrolmainwindow.cpp" line="166"/>
+        <source>Installed hamlib version %1 is incompatible.
+It should be version %2 or greater.
+
+Please check your installation.
+You will not be able to select a radio until this is rectified!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rigcontrolmainwindow.cpp" line="172"/>
+        <source>Hamlib Version Test conversion error!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rigcontrolmainwindow.cpp" line="172"/>
+        <source>Hamlib Version Test conversion error. Please report error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../rigcontrolmainwindow.cpp" line="1404"/>
         <source>Connected via Rigctld: %1 - %2</source>
         <translation>Connecté via Rigctld: %1 - %2</translation>
@@ -543,25 +562,6 @@ Certaines radios / interfaces peuvent nécessiter de forcer DTR ou RTS au niveau
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="166"/>
         <source>RigControl Hamlib Library Version Error!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="166"/>
-        <source>Installed hamlib version %1 is imcompatible.
-It should be version %2 or greater.
-
-Please check your installation.
-You will not be able to select a radio until this is rectified!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="172"/>
-        <source>Hambib Version test Conversion Error!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="172"/>
-        <source>Hamlib Version test conversion error. Please report error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

@@ -485,6 +485,25 @@ Please delete them and set up the rotators again</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../rotatormainwindow.cpp" line="182"/>
+        <source>Installed hamlib version %1 is incompatible.
+It should be version %2 or greater.
+
+Please check your installation.
+You will not be able to select a rotator until this is rectified!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rotatormainwindow.cpp" line="188"/>
+        <source>Hamlib Version Test eonversion error!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rotatormainwindow.cpp" line="188"/>
+        <source>Hamlib Version Test conversion error. Please report error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../rotatormainwindow.cpp" line="453"/>
         <source>Please select an Antenna</source>
         <translation type="unfinished"></translation>
@@ -585,25 +604,6 @@ Please enter %1 - %2</source>
     <message>
         <location filename="../rotatormainwindow.cpp" line="182"/>
         <source>Rotator Hamlib Library Version Error!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../rotatormainwindow.cpp" line="182"/>
-        <source>Installed hamlib version %1 is imcompatible.
-It should be version %2 or greater.
-
-Please check your installation.
-You will not be able to select a radio until this is rectified!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../rotatormainwindow.cpp" line="188"/>
-        <source>Hambib Version test Conversion Error!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../rotatormainwindow.cpp" line="188"/>
-        <source>Hamlib Version test conversion error. Please report error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

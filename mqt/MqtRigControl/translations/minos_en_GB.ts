@@ -528,25 +528,6 @@ Some radios/interfaces may require Force DTR or Force RTS to be set High, to pow
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="166"/>
-        <source>Installed hamlib version %1 is imcompatible.
-It should be version %2 or greater.
-
-Please check your installation.
-You will not be able to select a radio until this is rectified!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="172"/>
-        <source>Hambib Version test Conversion Error!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="172"/>
-        <source>Hamlib Version test conversion error. Please report error</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../rigcontrolmainwindow.cpp" line="269"/>
         <source>Error: Installed hamlib version %1 is incorrect, should be version %2 or greater</source>
         <translation type="unfinished"></translation>
@@ -893,6 +874,25 @@ Copyright D Balharrie G8FKH/M0DGB 2024</source>
         <location filename="../rigcontrolmainwindow.cpp" line="4745"/>
         <source>Rigctld path = %1
 </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rigcontrolmainwindow.cpp" line="166"/>
+        <source>Installed hamlib version %1 is incompatible.
+It should be version %2 or greater.
+
+Please check your installation.
+You will not be able to select a radio until this is rectified!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rigcontrolmainwindow.cpp" line="172"/>
+        <source>Hamlib Version Test conversion error!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rigcontrolmainwindow.cpp" line="172"/>
+        <source>Hamlib Version Test conversion error. Please report error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

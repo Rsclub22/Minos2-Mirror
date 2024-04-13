@@ -163,19 +163,19 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
 
         if (hamlibCheckErrorNum == -2 )
         {
-            QMessageBox::critical(nullptr, tr("RigControl Hamlib Library Version Error!"), tr("Installed hamlib version %1 is imcompatible.\nIt should be version %2 or greater.\n\nPlease check your installation.\nYou will not be able to select a radio until this is rectified!").arg(hamlib_version).arg(MINIMUM_HAMLIB_VERSION), QMessageBox::Ok);
+            QMessageBox::critical(nullptr, tr("RigControl Hamlib Library Version Error!"), tr("Installed hamlib version %1 is incompatible.\nIt should be version %2 or greater.\n\nPlease check your installation.\nYou will not be able to select a radio until this is rectified!").arg(hamlib_version).arg(MINIMUM_HAMLIB_VERSION), QMessageBox::Ok);
             logMessage(QString("Error version number conversion to int failed - installed version = %1, minimum version = %2").arg(hamlib_version).arg(MINIMUM_HAMLIB_VERSION)); // error)
         }
         else if (hamlibCheckErrorNum == -1 )
         {
             // we should not get here....
-            QMessageBox::critical(nullptr, tr("Hambib Version test Conversion Error!"), tr("Hamlib Version test conversion error. Please report error"));
+            QMessageBox::critical(nullptr, tr("Hamlib Version Test conversion error!"), tr("Hamlib Version Test conversion error. Please report error"));
             logMessage(QString("Error version number conversion to int failed - installed version = %1, minimum version = %2").arg(hamlib_version).arg(MINIMUM_HAMLIB_VERSION));
         }
         else if (hamlibCheckErrorNum == -3)
         {
             //we should not get here...
-            logMessage(QString("Error: checkhamlibVersion faile error code = %1").arg(hamlibCheckErrorNum));
+            logMessage(QString("Error: checkhamlibVersion fails error code = %1").arg(hamlibCheckErrorNum));
         }
 
 

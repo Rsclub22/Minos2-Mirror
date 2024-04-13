@@ -4,11 +4,6 @@
 <context>
     <name>BandSwitchFrame</name>
     <message>
-        <location filename="../BandSwitchFrame.ui" line="14"/>
-        <source>Frame</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../BandSwitchFrame.ui" line="20"/>
         <source>HF Band Switching</source>
         <translation type="unfinished"></translation>
@@ -418,24 +413,24 @@ The mode is %2</source>
     </message>
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="40"/>
-        <source>CW Tuning - add to map</source>
+        <source>Add Spot to Bandmap Tuning (CW) Tolerance</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="52"/>
         <location filename="../Clusterbandmapconfigure.ui" line="90"/>
         <location filename="../Clusterbandmapconfigure.ui" line="128"/>
-        <source>Add Spot to Bandmap Tuning Tolerance Hz</source>
+        <source>Hz</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="78"/>
-        <source>Data Tuning - add to map</source>
+        <source>Add Spot to Bandmap Tuning (Data) Tolerance</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="116"/>
-        <source>Phone Tuning - add to map</source>
+        <source>Add Spot to Bandmap Tuning (Phone) Tolerance</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1463,14 +1458,6 @@ Move between components of a group using the mouse or up/down arrow keys.
     </message>
 </context>
 <context>
-    <name>ContestPage</name>
-    <message>
-        <location filename="../ContestPage.ui" line="14"/>
-        <source>Frame</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>ContestPageControl</name>
     <message>
         <location filename="../ContestPageControl.ui" line="14"/>
@@ -1501,11 +1488,6 @@ Move between components of a group using the mouse or up/down arrow keys.
 </context>
 <context>
     <name>DMButtonFrame</name>
-    <message>
-        <location filename="../dmbuttonframe.ui" line="14"/>
-        <source>Frame</source>
-        <translation type="unfinished"></translation>
-    </message>
     <message>
         <location filename="../dmbuttonframe.ui" line="39"/>
         <location filename="../dmbuttonframe.ui" line="46"/>
@@ -1881,11 +1863,6 @@ Move between components of a group using the mouse or up/down arrow keys.
 <context>
     <name>DeletedRadioForVoiceCwMemoryButtonsDialog</name>
     <message>
-        <location filename="../deletedradioforvoicecwmemorybuttonsdialog.ui" line="19"/>
-        <source>Dialog</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../deletedradioforvoicecwmemorybuttonsdialog.cpp" line="27"/>
         <source>Delete RigControl Radios - Voice Keyer Memories</source>
         <translation type="unfinished"></translation>
@@ -1909,11 +1886,6 @@ Move between components of a group using the mouse or up/down arrow keys.
 </context>
 <context>
     <name>DisplayOptions</name>
-    <message>
-        <location filename="../DisplayOptions.ui" line="14"/>
-        <source>Frame</source>
-        <translation type="unfinished"></translation>
-    </message>
     <message>
         <location filename="../DisplayOptions.ui" line="27"/>
         <source>Font</source>
@@ -2380,7 +2352,7 @@ Double click on an edge square to extend the area of the map.</source>
     <name>ManageAdifDialog</name>
     <message>
         <location filename="../manageadifdialog.ui" line="14"/>
-        <source>Dialog</source>
+        <source>Manage ADIF</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2965,20 +2937,7 @@ No          - Discard changes</source>
     </message>
 </context>
 <context>
-    <name>QSOTableFrame</name>
-    <message>
-        <location filename="../qsotableframe.ui" line="14"/>
-        <source>Frame</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>QrzDisplayFrame</name>
-    <message>
-        <location filename="../qrzdisplayframe.ui" line="14"/>
-        <source>Frame</source>
-        <translation type="unfinished"></translation>
-    </message>
     <message>
         <location filename="../qrzdisplayframe.ui" line="22"/>
         <source>QRZ</source>
@@ -4219,11 +4178,6 @@ Protected</source>
 </context>
 <context>
     <name>ScreenConfigScreen</name>
-    <message>
-        <location filename="../ScreenConfigScreen.ui" line="14"/>
-        <source>Frame</source>
-        <translation type="unfinished"></translation>
-    </message>
     <message>
         <location filename="../ScreenConfigScreen.ui" line="39"/>
         <source>Screen Name</source>
@@ -5857,11 +5811,6 @@ Last %8 Mins: %9 QSO %10 pts %11 mults
     <message>
         <location filename="../txvmbuttonsframe.ui" line="344"/>
         <source>Error:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../txvmbuttonsframe.ui" line="351"/>
-        <source>TextLabel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

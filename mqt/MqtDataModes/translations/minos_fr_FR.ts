@@ -283,17 +283,15 @@
 <context>
     <name>GrittyFrame</name>
     <message>
-        <location filename="../grittyframe.ui" line="13"/>
         <source>Frame</source>
-        <translation>Cadre</translation>
+        <translation type="vanished">Cadre</translation>
     </message>
 </context>
 <context>
     <name>MMTTYFrame</name>
     <message>
-        <location filename="../MMTTYFrame.ui" line="13"/>
         <source>Frame</source>
-        <translation>Cadre</translation>
+        <translation type="vanished">Cadre</translation>
     </message>
 </context>
 <context>
@@ -322,9 +320,8 @@
 <context>
     <name>TestFrame</name>
     <message>
-        <location filename="../testframe.ui" line="13"/>
         <source>Frame</source>
-        <translation>Cadre</translation>
+        <translation type="vanished">Cadre</translation>
     </message>
 </context>
 </TS>

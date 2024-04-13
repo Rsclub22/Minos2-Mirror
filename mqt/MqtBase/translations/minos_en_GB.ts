@@ -1984,11 +1984,6 @@ Please enter another bearing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../StartConfig.ui" line="139"/>
-        <source>TextLabel</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../StartConfig.ui" line="159"/>
         <source>Save and Close</source>
         <translation type="unfinished"></translation>

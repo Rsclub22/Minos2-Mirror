@@ -462,7 +462,7 @@
         <item>
          <widget class="QLabel" name="actualRate">
           <property name="text">
-           <string>TextLabel</string>
+           <string/>
           </property>
          </widget>
         </item>

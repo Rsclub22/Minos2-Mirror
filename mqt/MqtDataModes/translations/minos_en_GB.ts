@@ -273,22 +273,6 @@
     </message>
 </context>
 <context>
-    <name>GrittyFrame</name>
-    <message>
-        <location filename="../grittyframe.ui" line="13"/>
-        <source>Frame</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>MMTTYFrame</name>
-    <message>
-        <location filename="../MMTTYFrame.ui" line="13"/>
-        <source>Frame</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>MMVARIFrame</name>
     <message>
         <location filename="../MMVARIFrame.cpp" line="81"/>
@@ -308,14 +292,6 @@
     <message>
         <location filename="../MMVARIFrame.cpp" line="103"/>
         <source>Align the transmit frequency to the receive frequency</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>TestFrame</name>
-    <message>
-        <location filename="../testframe.ui" line="13"/>
-        <source>Frame</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

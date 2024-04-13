@@ -2094,9 +2094,8 @@ Entrer une autre direction SVP</translation>
         <translation>Annuler</translation>
     </message>
     <message>
-        <location filename="../StartConfig.ui" line="139"/>
         <source>TextLabel</source>
-        <translation>TEXTLABEL</translation>
+        <translation type="vanished">TEXTLABEL</translation>
     </message>
     <message>
         <location filename="../StartConfig.ui" line="159"/>

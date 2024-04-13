@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Frame</string>
+   <string/>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_6">
    <item>
@@ -667,7 +667,7 @@
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="locButtonGroup"/>
   <buttongroup name="otButtonGroup"/>
+  <buttongroup name="locButtonGroup"/>
  </buttongroups>
 </ui>

@@ -37,7 +37,7 @@
            <item>
             <widget class="QCheckBox" name="tuningAddMapCWcb">
              <property name="text">
-              <string>CW Tuning - add to map</string>
+              <string>Add Spot to Bandmap Tuning (CW) Tolerance</string>
              </property>
             </widget>
            </item>
@@ -49,7 +49,7 @@
          <item>
           <widget class="QLabel" name="label_4">
            <property name="text">
-            <string>Add Spot to Bandmap Tuning Tolerance Hz</string>
+            <string>Hz</string>
            </property>
           </widget>
          </item>
@@ -75,7 +75,7 @@
            <item>
             <widget class="QCheckBox" name="tuningAddMapDatacb">
              <property name="text">
-              <string>Data Tuning - add to map</string>
+              <string>Add Spot to Bandmap Tuning (Data) Tolerance</string>
              </property>
             </widget>
            </item>
@@ -87,7 +87,7 @@
          <item>
           <widget class="QLabel" name="label_5">
            <property name="text">
-            <string>Add Spot to Bandmap Tuning Tolerance Hz</string>
+            <string>Hz</string>
            </property>
           </widget>
          </item>
@@ -113,7 +113,7 @@
            <item>
             <widget class="QCheckBox" name="tuningAddMapPhonecb">
              <property name="text">
-              <string>Phone Tuning - add to map</string>
+              <string>Add Spot to Bandmap Tuning (Phone) Tolerance</string>
              </property>
             </widget>
            </item>
@@ -125,7 +125,7 @@
          <item>
           <widget class="QLabel" name="label_6">
            <property name="text">
-            <string>Add Spot to Bandmap Tuning Tolerance Hz</string>
+            <string>Hz</string>
            </property>
           </widget>
          </item>
@@ -347,8 +347,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>718</width>
-            <height>542</height>
+            <width>716</width>
+            <height>393</height>
            </rect>
           </property>
          </widget>
