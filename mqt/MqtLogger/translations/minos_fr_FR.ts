@@ -2043,6 +2043,16 @@ Déplacez-vous entre les composants d&apos;un groupe à l&apos;aide de la souris
         <translation>Afficher une seule bande dans le prochain contact [???length]</translation>
     </message>
     <message>
+        <location filename="../DisplayOptions.ui" line="351"/>
+        <source>Top Left Locator of QSO Map</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../DisplayOptions.ui" line="361"/>
+        <source>Bottom Right Locator of QSO Map</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../DisplayOptions.ui" line="389"/>
         <source>Display of Operating Time</source>
         <translation>Affichage du temps de l&apos;opérateur</translation>
@@ -2125,16 +2135,6 @@ Déplacez-vous entre les composants d&apos;un groupe à l&apos;aide de la souris
     <message>
         <location filename="../DisplayOptions.ui" line="344"/>
         <source>Show Loc</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../DisplayOptions.ui" line="351"/>
-        <source>Top Left Loc</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../DisplayOptions.ui" line="361"/>
-        <source>Bottom Right Loc</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

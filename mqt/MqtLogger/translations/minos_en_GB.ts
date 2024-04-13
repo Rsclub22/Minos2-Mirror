@@ -2008,12 +2008,12 @@ Move between components of a group using the mouse or up/down arrow keys.
     </message>
     <message>
         <location filename="../DisplayOptions.ui" line="351"/>
-        <source>Top Left Loc</source>
+        <source>Top Left Locator of QSO Map</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../DisplayOptions.ui" line="361"/>
-        <source>Bottom Right Loc</source>
+        <source>Bottom Right Locator of QSO Map</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
