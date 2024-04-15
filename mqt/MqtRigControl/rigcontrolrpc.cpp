@@ -198,7 +198,7 @@ void RigControlRpc::on_routerCall( bool err, QSharedPointer<MinosRPCObj>mro, con
                 if ( psPttOnOff->getBoolean(pttOnOff))
                 {
                     // here you handle what the logger has sent to us
-                    trace(QString("Rig RPC: Ptt On/Off From Logger = %1").arg(pttOnOff ? "On" : "Off"));
+                    trace(QString("Rig RPC: PTT On/Off From Logger = %1").arg(pttOnOff ? "On" : "Off"));
                     emit setPttOnOff(pttOnOff);
                 }
             }

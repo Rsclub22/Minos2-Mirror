@@ -751,6 +751,24 @@ Please delete them and set up the radios again</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../rigcontrolmainwindow.cpp" line="4816"/>
+        <source>PTT control port Type = %1
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rigcontrolmainwindow.cpp" line="4817"/>
+        <source>Get PTT = %1
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rigcontrolmainwindow.cpp" line="4818"/>
+        <source>Set PTT = %1
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Minos QT RigControl
 Copyright D Balharrie G8FKH/M0DGB 2019</source>
         <translation type="vanished">Minos QT RigControl
@@ -1095,24 +1113,6 @@ Veuillez les supprimer et configurer à nouveau les radios</translation>
 </source>
         <translation>La Radio supporte de définir la fréquence RIT = %1
 </translation>
-    </message>
-    <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="4816"/>
-        <source>Ptt control port Type = %1
-</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="4817"/>
-        <source>Get Ptt = %1
-</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="4818"/>
-        <source>Set Ptt = %1
-</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="4819"/>
@@ -1554,9 +1554,8 @@ Corriger les entrées du convertisseur SVP.</translation>
         <translation>Volume</translation>
     </message>
     <message>
-        <location filename="../rigsetupform.ui" line="469"/>
         <source>CAT Ptt</source>
-        <translation>CAT PTT</translation>
+        <translation type="vanished">CAT PTT</translation>
     </message>
     <message>
         <location filename="../rigsetupform.ui" line="476"/>
@@ -1592,6 +1591,11 @@ Corriger les entrées du convertisseur SVP.</translation>
         <location filename="../rigsetupform.ui" line="440"/>
         <source>Enable/Disable  CAT  Features</source>
         <translation>Activer/Désactiver les fonctionnalités CAT</translation>
+    </message>
+    <message>
+        <location filename="../rigsetupform.ui" line="469"/>
+        <source>CAT PTT</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../rigsetupform.ui" line="531"/>

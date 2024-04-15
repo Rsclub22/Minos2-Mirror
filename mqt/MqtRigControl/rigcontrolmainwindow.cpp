@@ -339,14 +339,14 @@ void RigControlMainWindow::on_testRadioButton_clicked()
 
 void RigControlMainWindow::onSetPttOnOff(bool pttOnState)
 {
-    trace(QString("Ptt On/Off message from Logger - %1").arg(pttOnState ? "On" : "Off"));
+    trace(QString("PTT On/Off message from Logger - %1").arg(pttOnState ? "On" : "Off"));
 
     setPttOnOff(pttOnState);
 }
 
 void RigControlMainWindow::setPttOnOff(bool pttOnState)
 {
-    trace(QString("Set Ptt On/Off State: %1").arg(pttOnState ? "On" : "Off") );
+    trace(QString("Set PTT On/Off State: %1").arg(pttOnState ? "On" : "Off") );
 
     if (radio)
     {
@@ -4265,21 +4265,21 @@ void RigControlMainWindow::sendMaxRitFreqLogger()
 
 void RigControlMainWindow::sendPttTypeLogger()
 {
-    logMessage(QString("Send Ptt Type = %1 to logger").arg(serialCommonData::pttMethodStr[currentRadio.pttType]));
+    logMessage(QString("Send PTT Type = %1 to logger").arg(serialCommonData::pttMethodStr[currentRadio.pttType]));
     PubSubName psname(currentRadio.radioName);
     msg->rigCache.setPttType(psname, currentRadio.pttType);
 }
 
 void RigControlMainWindow::sendPttEnabledLogger()
 {
-    logMessage(QString("Send Ptt Enabled = %1 to logger").arg(currentRadio.enablePTT ? "Yes" : "No"));
+    logMessage(QString("Send PTT Enabled = %1 to logger").arg(currentRadio.enablePTT ? "Yes" : "No"));
     PubSubName psname(currentRadio.radioName);
     msg->rigCache.setPttEnabled(psname, currentRadio.enablePTT);
 }
 
 void RigControlMainWindow::sendPttStateLogger()
 {
-    logMessage(QString("Send Ptt State = %1 to logger").arg(rigStateDetails->curPttStatus ? "TX" : "RX"));
+    logMessage(QString("Send PTT State = %1 to logger").arg(rigStateDetails->curPttStatus ? "TX" : "RX"));
     PubSubName psname(currentRadio.radioName);
     msg->rigCache.setPttState(psname, rigStateDetails->curPttStatus);
 }
@@ -4813,9 +4813,9 @@ void RigControlMainWindow::aboutRigConfig()
         {
             pttPortTypeStr = "cat";     // Note A radio may support CAT, but a user may decide to use RTS or DTR instead
         }
-        msg.append(tr("Ptt control port Type = %1\n").arg((pttPortTypeStr)));
-        msg.append(tr("Get Ptt = %1\n").arg((selectedRadioSupportCap.getSupportGetPtt() ? "True" : "False")));
-        msg.append(tr("Set Ptt = %1\n").arg((selectedRadioSupportCap.getSupportSetPtt() ? "True" : "False")));
+        msg.append(tr("PTT control port Type = %1\n").arg((pttPortTypeStr)));
+        msg.append(tr("Get PTT = %1\n").arg((selectedRadioSupportCap.getSupportGetPtt() ? "True" : "False")));
+        msg.append(tr("Set PTT = %1\n").arg((selectedRadioSupportCap.getSupportSetPtt() ? "True" : "False")));
         msg.append(tr("Get Vox = %1\n").arg((selectedRadioSupportCap.getSupportGetVox() ? "True" : "False")));
         msg.append(tr("Set Vox = %1\n").arg((selectedRadioSupportCap.getSupportSetVox() ? "True" : "False")));
         msg.append(tr("Get Vox = %1\n").arg((selectedRadioSupportCap.getSupportGetVox() ? "True" : "False")));
@@ -4975,9 +4975,9 @@ void RigControlMainWindow::dumpRadioToTraceLog()
         {
             pttPortTypeStr = "cat";     // Note A radio may support CAT, but a user may decide to use RTS or DTR instead
         }
-        trace(QString("Ptt control port Type = %1").arg((pttPortTypeStr)));
-        trace(QString("Get Ptt = %1").arg((selectedRadioSupportCap.getSupportGetPtt() ? "True" : "False")));
-        trace(QString("Set Ptt = %1").arg((selectedRadioSupportCap.getSupportSetPtt() ? "True" : "False")));
+        trace(QString("PTT control port Type = %1").arg((pttPortTypeStr)));
+        trace(QString("Get PTT = %1").arg((selectedRadioSupportCap.getSupportGetPtt() ? "True" : "False")));
+        trace(QString("Set PTT = %1").arg((selectedRadioSupportCap.getSupportSetPtt() ? "True" : "False")));
         trace(QString("Get Vox = %1").arg((selectedRadioSupportCap.getSupportGetVox() ? "True" : "False")));
         trace(QString("Set Vox = %1").arg((selectedRadioSupportCap.getSupportSetVox() ? "True" : "False")));
         trace(QString("Get Vox = %1").arg((selectedRadioSupportCap.getSupportGetVox() ? "True" : "False")));

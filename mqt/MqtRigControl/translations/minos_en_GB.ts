@@ -871,6 +871,24 @@ Copyright D Balharrie G8FKH/M0DGB 2024</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../rigcontrolmainwindow.cpp" line="4816"/>
+        <source>PTT control port Type = %1
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rigcontrolmainwindow.cpp" line="4817"/>
+        <source>Get PTT = %1
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rigcontrolmainwindow.cpp" line="4818"/>
+        <source>Set PTT = %1
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../rigcontrolmainwindow.cpp" line="4745"/>
         <source>Rigctld path = %1
 </source>
@@ -996,24 +1014,6 @@ Please delete them and set up the radios again</source>
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="4801"/>
         <source>Radio Supports Set RIT Freq = %1
-</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="4816"/>
-        <source>Ptt control port Type = %1
-</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="4817"/>
-        <source>Get Ptt = %1
-</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="4818"/>
-        <source>Set Ptt = %1
 </source>
         <translation type="unfinished"></translation>
     </message>
@@ -1435,11 +1435,6 @@ Please correct the transverter entries.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigsetupform.ui" line="469"/>
-        <source>CAT Ptt</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../rigsetupform.ui" line="476"/>
         <source>Voice TX Mem</source>
         <translation type="unfinished"></translation>
@@ -1472,6 +1467,11 @@ Please correct the transverter entries.</source>
     <message>
         <location filename="../rigsetupform.ui" line="440"/>
         <source>Enable/Disable  CAT  Features</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rigsetupform.ui" line="469"/>
+        <source>CAT PTT</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

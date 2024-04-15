@@ -185,7 +185,7 @@ RotatorMainWindow::RotatorMainWindow(QWidget *parent) :
         else if (hamlibCheckErrorNum == -1 )
         {
             // we should not get here....
-            QMessageBox::critical(nullptr, tr("Hamlib Version Test eonversion error!"), tr("Hamlib Version Test conversion error. Please report error"));
+            QMessageBox::critical(nullptr, tr("Hamlib Version Test conversion error!"), tr("Hamlib Version Test conversion error. Please report error"));
             logMessage(QString("Error version number conversion to int failed - installed version = %1, minimum version = %2").arg(hamlib_version).arg(MINIMUM_HAMLIB_VERSION));
         }
         else if (hamlibCheckErrorNum == -3)

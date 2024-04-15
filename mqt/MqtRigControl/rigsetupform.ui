@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1192</width>
-    <height>475</height>
+    <height>550</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -466,7 +466,7 @@
             <item>
              <widget class="QCheckBox" name="enableCatPttCatFeatureChkBox">
               <property name="text">
-               <string>CAT Ptt</string>
+               <string>CAT PTT</string>
               </property>
              </widget>
             </item>
