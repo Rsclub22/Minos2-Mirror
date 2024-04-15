@@ -150,10 +150,6 @@
         <translation>Port IP</translation>
     </message>
     <message>
-        <source>TextLabel</source>
-        <translation type="vanished">????????????????????????????????????Testlabel</translation>
-    </message>
-    <message>
         <location filename="../KeyerMain.ui" line="487"/>
         <source>Setup Script (alsactl)</source>
         <translatorcomment>Script d&apos;installation (alsactl)</translatorcomment>

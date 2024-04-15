@@ -29,14 +29,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>A local server is required.<byte value="xd"/>
-<byte value="xd"/>
-</source>
-        <translation type="vanished">Server locale requis.
-
-</translation>
-    </message>
-    <message>
         <location filename="../ConfigFile.cpp" line="896"/>
         <source> contains bad characters [ and/or ]</source>
         <translation> contient de mauvais caractères [et / ou]</translation>

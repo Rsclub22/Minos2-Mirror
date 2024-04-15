@@ -46,14 +46,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Start All</source>
-        <translation type="vanished">Démarrer tout</translation>
-    </message>
-    <message>
-        <source>Stop All</source>
-        <translation type="vanished">Arrêter tout</translation>
-    </message>
-    <message>
         <location filename="../dmmainwindow.cpp" line="352"/>
         <source>No DataMode sender configured</source>
         <translation>Aucun expéditeur DataMode configuré</translation>
@@ -281,20 +273,6 @@
     </message>
 </context>
 <context>
-    <name>GrittyFrame</name>
-    <message>
-        <source>Frame</source>
-        <translation type="vanished">Cadre</translation>
-    </message>
-</context>
-<context>
-    <name>MMTTYFrame</name>
-    <message>
-        <source>Frame</source>
-        <translation type="vanished">Cadre</translation>
-    </message>
-</context>
-<context>
     <name>MMVARIFrame</name>
     <message>
         <location filename="../MMVARIFrame.cpp" line="81"/>
@@ -315,13 +293,6 @@
         <location filename="../MMVARIFrame.cpp" line="103"/>
         <source>Align the transmit frequency to the receive frequency</source>
         <translation>Aligner la fréquence TX sur la fréquence RX</translation>
-    </message>
-</context>
-<context>
-    <name>TestFrame</name>
-    <message>
-        <source>Frame</source>
-        <translation type="vanished">Cadre</translation>
     </message>
 </context>
 </TS>

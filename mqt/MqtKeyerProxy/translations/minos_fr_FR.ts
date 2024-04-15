@@ -140,7 +140,7 @@
     <message>
         <location filename="../serialPTT.h" line="42"/>
         <source>Device Not Found</source>
-        <translation> Périphérique introuvable</translation>
+        <translation>Périphérique introuvable</translation>
     </message>
     <message>
         <location filename="../serialPTT.h" line="42"/>

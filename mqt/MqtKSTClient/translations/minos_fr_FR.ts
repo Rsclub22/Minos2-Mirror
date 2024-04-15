@@ -299,7 +299,7 @@ l&apos;indicatif sélectionné</translation>
     <message>
         <location filename="../kstmainwindow.ui" line="274"/>
         <source>Send to Logger</source>
-        <translation type="unfinished"></translation>
+        <translation>Envoyer au Logger</translation>
     </message>
     <message>
         <location filename="../kstmainwindow.ui" line="389"/>

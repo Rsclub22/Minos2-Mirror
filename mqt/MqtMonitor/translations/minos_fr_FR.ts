@@ -56,22 +56,22 @@
     <message>
         <location filename="../MonitorMain.ui" line="222"/>
         <source>Show Locs</source>
-        <translation type="unfinished"></translation>
+        <translation>Afficher Locators</translation>
     </message>
     <message>
         <location filename="../MonitorMain.ui" line="229"/>
         <source>Top Left</source>
-        <translation type="unfinished"></translation>
+        <translation>En haut à gauche</translation>
     </message>
     <message>
         <location filename="../MonitorMain.ui" line="239"/>
         <source>Bottom Right</source>
-        <translation type="unfinished"></translation>
+        <translation>En bas à droite</translation>
     </message>
     <message>
         <location filename="../MonitorMain.ui" line="264"/>
         <source>NB Showing Loc can make the display very slow, so restrict the area as much as possible.</source>
-        <translation type="unfinished"></translation>
+        <translation>NB L&amp;apos;affichage des Locators peut être très lent, alors limiter la zone autant que possible.</translation>
     </message>
     <message>
         <location filename="../MonitorMain.cpp" line="92"/>

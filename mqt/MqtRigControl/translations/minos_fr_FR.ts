@@ -275,10 +275,6 @@ Vérifier le tracelog Rigcontrol</translation>
         <translation>En utilisant: </translation>
     </message>
     <message>
-        <source>Current Radio Config</source>
-        <translation type="vanished">Configuration radio actuelle</translation>
-    </message>
-    <message>
         <location filename="../rigcontrolmainwindow.ui" line="207"/>
         <location filename="../rigcontrolmainwindow.cpp" line="311"/>
         <source>Test Radio</source>
@@ -292,7 +288,7 @@ Vérifier le tracelog Rigcontrol</translation>
     <message>
         <location filename="../rigcontrolmainwindow.ui" line="39"/>
         <source>Setup</source>
-        <translation type="unfinished"></translation>
+        <translation>Configuration</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.ui" line="54"/>
@@ -307,7 +303,7 @@ Vérifier le tracelog Rigcontrol</translation>
     <message>
         <location filename="../rigcontrolmainwindow.ui" line="91"/>
         <source>Select</source>
-        <translation type="unfinished"></translation>
+        <translation>Sélectionner</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.ui" line="422"/>
@@ -740,8 +736,8 @@ Command: %4</translation>
         <location filename="../rigcontrolmainwindow.cpp" line="4002"/>
         <source>Minos QT RigControl
 Copyright D Balharrie G8FKH/M0DGB 2024</source>
-        <translation type="unfinished">Minos QT RigControl
-Copyright D Balharrie G8FKH/M0DGB 2023 {8F?} {0D?} {8F?} {0D?} {2024?}</translation>
+        <translation>Minos QT RigControl
+Copyright D Balharrie G8FKH/M0DGB 2024</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="4618"/>
@@ -769,12 +765,6 @@ Please delete them and set up the radios again</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Minos QT RigControl
-Copyright D Balharrie G8FKH/M0DGB 2019</source>
-        <translation type="vanished">Minos QT RigControl
-Copyright D Balharrie G8FKH/M0DGB 2019</translation>
-    </message>
-    <message>
         <location filename="../rigcontrolmainwindow.cpp" line="4335"/>
         <source>Select Rigctld Program</source>
         <translation>Sélectionner le programme Rigctld</translation>
@@ -789,14 +779,6 @@ Copyright D Balharrie G8FKH/M0DGB 2023 {8F?} {0D?}</translation>
         <location filename="../rigcontrolmainwindow.cpp" line="4344"/>
         <source>All Files</source>
         <translation>Tous les fiches</translation>
-    </message>
-    <message>
-        <source>The Radio configuration files in %1 are from an old incompatible version of Minos.<byte value="xd"/>
-<byte value="xd"/>
-Please delete them and set up the radios again</source>
-        <translation type="vanished">Les fichiers de configuration de la radio dans %1 proviennent d&apos;une ancienne version incompatible de Minos.
-
-Veuillez les supprimer et configurer à nouveau les radios</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="4673"/>
@@ -961,12 +943,6 @@ Veuillez les supprimer et configurer à nouveau les radios</translation>
 </translation>
     </message>
     <message>
-        <source>Using rigctld daemon = %1
-</source>
-        <translation type="vanished">Utilisation du démon RigCtld = %1
-</translation>
-    </message>
-    <message>
         <location filename="../rigcontrolmainwindow.cpp" line="4780"/>
         <location filename="../rigcontrolmainwindow.cpp" line="4792"/>
         <location filename="../rigcontrolmainwindow.cpp" line="4796"/>
@@ -993,12 +969,6 @@ Veuillez les supprimer et configurer à nouveau les radios</translation>
         <source>Rigctld path = %1
 </source>
         <translation>Dossier de RigCtld = %1
-</translation>
-    </message>
-    <message>
-        <source>Rigctld name = %1
-</source>
-        <translation type="vanished">Nomr de RigCtld = %1
 </translation>
     </message>
     <message>

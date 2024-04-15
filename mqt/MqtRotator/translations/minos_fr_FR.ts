@@ -186,7 +186,7 @@ utiliser un autre nom SVP</translation>
     <message>
         <location filename="../minoscompass.cpp" line="296"/>
         <source>Stop</source>
-        <translation type="unfinished">Arrêter</translation>
+        <translation>Arrêter</translation>
     </message>
 </context>
 <context>
@@ -289,19 +289,13 @@ utiliser un autre nom SVP</translation>
         <translation>Modifier le nom de l&apos;antenne</translation>
     </message>
     <message>
-        <source>The Rotator configuration files in %1 are from an old incompatible version of Minos.<byte value="xd"/>
-<byte value="xd"/>
-Please delete them and set up the rotators again</source>
-        <translation type="vanished">Les fichiers de configuration du rotateur dans %1 proviennent d&apos;une ancienne version incompatible de Minos.
-
-Veuillez les supprimer et configurer les rotateurs à nouveau</translation>
-    </message>
-    <message>
         <location filename="../rotsetupdialog.cpp" line="80"/>
         <source>The Rotator configuration files in %1 are from an old incompatible version of Minos.
 
 Please delete them and set up the rotators again</source>
-        <translation type="unfinished"></translation>
+        <translation>Les fichiers de configuration du rotateur dans %1 proviennent d&amp;apos;une ancienne version incompatible de Minos.
+
+Veuillez les supprimer et configurer les rotateurs à nouveau</translation>
     </message>
     <message>
         <location filename="../rotsetupdialog.cpp" line="654"/>
@@ -357,7 +351,7 @@ Please delete them and set up the rotators again</source>
     <message>
         <location filename="../rotatormainwindow.ui" line="39"/>
         <source>Setup</source>
-        <translation type="unfinished"></translation>
+        <translation>Configuration</translation>
     </message>
     <message>
         <location filename="../rotatormainwindow.ui" line="65"/>
@@ -368,7 +362,7 @@ Please delete them and set up the rotators again</source>
         <location filename="../rotatormainwindow.ui" line="103"/>
         <location filename="../rotatormainwindow.ui" line="114"/>
         <source>Select</source>
-        <translation type="unfinished"></translation>
+        <translation>Sélectionner</translation>
     </message>
     <message>
         <location filename="../rotatormainwindow.ui" line="654"/>
@@ -385,10 +379,6 @@ Please delete them and set up the rotators again</source>
         <location filename="../rotatormainwindow.ui" line="689"/>
         <source>Back</source>
         <translation>En arrière</translation>
-    </message>
-    <message>
-        <source>Antenna Select</source>
-        <translation type="vanished">Sélection d&apos;antenne</translation>
     </message>
     <message>
         <location filename="../rotatormainwindow.ui" line="128"/>
@@ -428,7 +418,7 @@ Please delete them and set up the rotators again</source>
     <message>
         <location filename="../rotatormainwindow.ui" line="298"/>
         <source>Turn to</source>
-        <translation type="unfinished"></translation>
+        <translation>Tourner à</translation>
     </message>
     <message>
         <location filename="../rotatormainwindow.ui" line="317"/>
@@ -544,7 +534,7 @@ You will not be able to select a rotator until this is rectified!</source>
         <location filename="../rotatormainwindow.cpp" line="553"/>
         <location filename="../rotatormainwindow.cpp" line="559"/>
         <source>Connected</source>
-        <translation type="unfinished"></translation>
+        <translation>Connecté</translation>
     </message>
     <message>
         <location filename="../rotatormainwindow.cpp" line="554"/>

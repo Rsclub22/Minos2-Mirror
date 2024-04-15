@@ -125,21 +125,9 @@
         <translation>Filtrer les spots envoyés au journal</translation>
     </message>
     <message>
-        <source>Override Log</source>
-        <translation type="vanished">Ignorer le journal</translation>
-    </message>
-    <message>
-        <source>HF Filter On</source>
-        <translation type="vanished">Filtre HF activé</translation>
-    </message>
-    <message>
         <location filename="../clustermainwindow.ui" line="580"/>
         <source>VHF/MW</source>
         <translation>VHF/MO</translation>
-    </message>
-    <message>
-        <source>VHF/MW Filter On</source>
-        <translation type="vanished">Filtre VHF/MO activé</translation>
     </message>
     <message>
         <location filename="../clustermainwindow.ui" line="555"/>
@@ -147,33 +135,9 @@
         <translation>Enregistrer les paramètres de filtre à la fermeture</translation>
     </message>
     <message>
-        <source>Configure</source>
-        <translation type="vanished">Configurer</translation>
-    </message>
-    <message>
-        <source>Help</source>
-        <translation type="vanished">Aide</translation>
-    </message>
-    <message>
-        <source>Actions</source>
-        <translation type="vanished">Actions</translation>
-    </message>
-    <message>
-        <source>Setup</source>
-        <translation type="vanished">Configuration</translation>
-    </message>
-    <message>
         <location filename="../clustermainwindow.ui" line="57"/>
         <source>Clear All Spots</source>
         <translation>Effacer tous les Spots</translation>
-    </message>
-    <message>
-        <source>About</source>
-        <translation type="vanished">A propos</translation>
-    </message>
-    <message>
-        <source>User Command Shortcuts</source>
-        <translation type="vanished">Raccourcis des commandes utilisateur</translation>
     </message>
     <message>
         <location filename="../clustermainwindow.cpp" line="42"/>
@@ -562,12 +526,12 @@ La durée de vie doit être comprise entre %2 minutes et %3 minutes</translation
     <message>
         <location filename="../setupdialog.cpp" line="563"/>
         <source>Delete Cluster Node</source>
-        <translation type="unfinished"></translation>
+        <translation>Supprimer le Nœud de Cluster</translation>
     </message>
     <message>
         <location filename="../setupdialog.cpp" line="563"/>
         <source>Are you sure you want to delete a cluster node?</source>
-        <translation type="unfinished"></translation>
+        <translation>Voulez-vous vraiment supprimer le nœud de cluster?</translation>
     </message>
 </context>
 <context>

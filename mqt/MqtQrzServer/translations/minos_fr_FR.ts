@@ -100,10 +100,6 @@ Please choose a new name.</source>
         <translation>Connexion à QRZ.com avec l&apos;indicatif : %1</translation>
     </message>
     <message>
-        <source>OpenSSSL version built is is %1</source>
-        <translation type="vanished">Version OpenSSL construite est %1 ???]</translation>
-    </message>
-    <message>
         <location filename="../qrzservermainwindow.cpp" line="337"/>
         <source>SSL not supported on this system.</source>
         <translation>SSL n&apos;est pas supporté par cette système.</translation>
@@ -180,10 +176,6 @@ Please choose a new name.</source>
         <location filename="../qrzserverrpc.cpp" line="31"/>
         <source>No Contact</source>
         <translation>Aucun contact</translation>
-    </message>
-    <message>
-        <source>%1 changed state to %2</source>
-        <translation type="vanished">%1 a changé d&apos;état en %2</translation>
     </message>
 </context>
 </TS>

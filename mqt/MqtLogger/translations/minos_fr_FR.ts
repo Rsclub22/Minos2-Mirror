@@ -4,10 +4,6 @@
 <context>
     <name>BandSwitchFrame</name>
     <message>
-        <source>Frame</source>
-        <translation type="vanished">Cadre</translation>
-    </message>
-    <message>
         <location filename="../BandSwitchFrame.ui" line="20"/>
         <source>HF Band Switching</source>
         <translation>Commutation de bande HF</translation>
@@ -422,10 +418,6 @@ Le mode calculé est %2</translation>
         <translation>Désactiver la bande de couleurs de fréquence de fonctionnement</translation>
     </message>
     <message>
-        <source>Tuning - add to map</source>
-        <translation type="vanished">Réglage - ajouter à Bandmap</translation>
-    </message>
-    <message>
         <location filename="../Clusterbandmapconfigure.ui" line="40"/>
         <source>Add Spot to Bandmap Tuning (CW) Tolerance</source>
         <translation type="unfinished"></translation>
@@ -435,7 +427,7 @@ Le mode calculé est %2</translation>
         <location filename="../Clusterbandmapconfigure.ui" line="90"/>
         <location filename="../Clusterbandmapconfigure.ui" line="128"/>
         <source>Hz</source>
-        <translation type="unfinished"></translation>
+        <translation>Hz</translation>
     </message>
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="78"/>
@@ -516,11 +508,6 @@ Le mode calculé est %2</translation>
         <location filename="../Clusterbandmapconfigure.ui" line="30"/>
         <source>Bandmap General</source>
         <translation>Bandmap général</translation>
-    </message>
-    <message>
-        <source>Add Spot to Bandmap Tuning Tolerance khz</source>
-        <translatorcomment>???</translatorcomment>
-        <translation type="vanished">Ajouter Spot à Bandmap: Tolérance de réglage (Khz)</translation>
     </message>
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="14"/>
@@ -1119,13 +1106,13 @@ Le mode calculé est %2</translation>
         <location filename="../contestdetails.ui" line="105"/>
         <location filename="../contestdetails.cpp" line="1748"/>
         <source>UKSMG Calendar</source>
-        <translation type="unfinished"></translation>
+        <translation>Calendrier UKSMG</translation>
     </message>
     <message>
         <location filename="../contestdetails.ui" line="112"/>
         <location filename="../contestdetails.cpp" line="1754"/>
         <source>BARTG Calendar</source>
-        <translation type="unfinished"></translation>
+        <translation>Calendrier BARTG</translation>
     </message>
     <message>
         <location filename="../contestdetails.ui" line="123"/>
@@ -1406,7 +1393,9 @@ Comptabiliser entre Locators de 4 caractères</translation>
         <source>This contest will be marked as protected.
 This is a permanent change that may be temporarily overridden.
 Please confirm this change by pressing &quot;Yes&quot;.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ce Concours sera marqué comme protégé.
+Il s&amp;apos;agit d&amp;apos;un changement permanent qui peut être temporairement annulé.
+Veuillez confirmer cette modification en appuyant sur &amp;quot;Oui&amp;quot;.</translation>
     </message>
     <message>
         <location filename="../contestdetails.cpp" line="1678"/>
@@ -1430,7 +1419,26 @@ Click on the setting name on the left to select an existing setting and then its
 
 Move between components of a group using the mouse or up/down arrow keys.
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Ces paramètres sont des groupes de paramètres qui peuvent être appliqués à un concours en une seule fois.
+
+Il existe quatre groupes de base: -
+
+* Concours - pour la description, les groupes, les multiplicateurs et la durée d&amp;apos;un Concours
+* Entrée - tous les détails supplémentaires pour une entrée réelle - indicatif, groupe, coordonnées.
+* Station - Détails de l&amp;apos;installation, antenne, hauteur de l&amp;apos;antenne.
+* QTH - où se trouve la station, hauteur au-dessus du niveau de la mer, Locator.
+
+Pour les utiliser, sélectionnez dans les listes déroulantes ou pour le Concours, utilisez le bouton &amp;quot;Calendrier VHF&amp;quot;.
+Tout groupe défini sur &amp;quot;&amp;lt;aucun&amp;gt;&amp;quot; sera ignoré.
+
+Si le paramètre souhaité n&amp;apos;est pas là, appuyez sur le bouton &amp;quot;Modifier&amp;quot; du groupe.
+
+Cela ouvre une boîte de dialogue dans laquelle vous pouvez définir un nouveau paramètre, copier un paramètre existant ou supprimer un paramètre existant
+
+Cliquez sur le nom du paramètre à gauche pour sélectionner un paramètre existant, puis ses composants sont affichés dans le volet de droite et peuvent être modifiés individuellement.
+
+Déplacez-vous entre les composants d&amp;apos;un groupe à l&amp;apos;aide de la souris ou des touches fléchées haut / bas.
+</translation>
     </message>
     <message>
         <location filename="../contestdetails.cpp" line="46"/>
@@ -1463,60 +1471,6 @@ Move between components of a group using the mouse or up/down arrow keys.
         <translation>Fin du concours avant début du concours</translation>
     </message>
     <message>
-        <source>This contest will be marked as protected.<byte value="xd"/>
-This is a permanent change that may be temporarily overridden.<byte value="xd"/>
-Please confirm this change by pressing &quot;Yes&quot;.</source>
-        <translation type="vanished">Ce Concours sera marqué comme protégé.
-Il s&apos;agit d&apos;un changement permanent qui peut être temporairement annulé.
-Veuillez confirmer cette modification en appuyant sur &quot;Oui&quot;.</translation>
-    </message>
-    <message>
-        <source>These settings are groups of settings that can be applied to a contest all in one go.<byte value="xd"/>
-<byte value="xd"/>
-There are four basic groups: - <byte value="xd"/>
-<byte value="xd"/>
-Contest - for the description, bands, multipliers and time of a contest<byte value="xd"/>
-Entry - all the extra bits for a real entry - callsign, group, contact details.<byte value="xd"/>
-Station - Rig details, antenna, antenna height.<byte value="xd"/>
-QTH - where the station is, height above sea level, Locator.<byte value="xd"/>
-<byte value="xd"/>
-To use them select from the drop down lists, or for Contest, use the &quot;VHF Calendar&quot; button.<byte value="xd"/>
-Any group set to &quot;&lt;none&gt;&quot; will be ignored.<byte value="xd"/>
-<byte value="xd"/>
-If the setting you want isn&apos;t there, press the &quot;Edit&quot; button for the group.<byte value="xd"/>
-<byte value="xd"/>
-This brings up a dialog where you can define a new setting, copy an existing setting, or delete an existing setting<byte value="xd"/>
-<byte value="xd"/>
-Click on the setting name on the left to select an existing setting and then its components are shown in the right hand pane, and can be edited individually.<byte value="xd"/>
-<byte value="xd"/>
-Move between components of a group using the mouse or up/down arrow keys.<byte value="xd"/>
-</source>
-        <translatorcomment>WHITESPACE ISSUE
-
-TO BE CHECKED CAREFULLY:
-</translatorcomment>
-        <translation type="vanished">Ces paramètres sont des groupes de paramètres qui peuvent être appliqués à un concours en une seule fois.
-
-Il existe quatre groupes de base: - 
-
-* Concours - pour la description, les groupes, les multiplicateurs et la durée d&apos;un Concours
-* Entrée - tous les détails supplémentaires pour une entrée réelle - indicatif, groupe, coordonnées.
-* Station - Détails de l&apos;installation, antenne, hauteur de l&apos;antenne.
-* QTH - où se trouve la station, hauteur au-dessus du niveau de la mer, Locator.
-
-Pour les utiliser, sélectionnez dans les listes déroulantes ou pour le Concours, utilisez le bouton &quot;Calendrier VHF&quot;.
-Tout groupe défini sur &quot;&lt;aucun&gt;&quot; sera ignoré.
-
-Si le paramètre souhaité n&apos;est pas là, appuyez sur le bouton &quot;Modifier&quot; du groupe.
-
-Cela ouvre une boîte de dialogue dans laquelle vous pouvez définir un nouveau paramètre, copier un paramètre existant ou supprimer un paramètre existant
-
-Cliquez sur le nom du paramètre à gauche pour sélectionner un paramètre existant, puis ses composants sont affichés dans le volet de droite et peuvent être modifiés individuellement.
-
-Déplacez-vous entre les composants d&apos;un groupe à l&apos;aide de la souris ou des touches fléchées haut / bas.
-</translation>
-    </message>
-    <message>
         <location filename="../contestdetails.cpp" line="1742"/>
         <source>Microwave Calendar</source>
         <translation>Calendrier Microonde</translation>
@@ -1530,13 +1484,6 @@ Déplacez-vous entre les composants d&apos;un groupe à l&apos;aide de la souris
         <location filename="../contestdetails.cpp" line="1817"/>
         <source>Are you sure you want to disable protection for this contest?</source>
         <translation>Voulez-vous vraiment désactiver la protection pour ce Concours?</translation>
-    </message>
-</context>
-<context>
-    <name>ContestPage</name>
-    <message>
-        <source>Frame</source>
-        <translation type="vanished">Cadre</translation>
     </message>
 </context>
 <context>
@@ -1570,10 +1517,6 @@ Déplacez-vous entre les composants d&apos;un groupe à l&apos;aide de la souris
 </context>
 <context>
     <name>DMButtonFrame</name>
-    <message>
-        <source>Frame</source>
-        <translation type="vanished">Cadre</translation>
-    </message>
     <message>
         <location filename="../dmbuttonframe.ui" line="39"/>
         <location filename="../dmbuttonframe.ui" line="46"/>
@@ -1967,7 +1910,7 @@ Déplacez-vous entre les composants d&apos;un groupe à l&apos;aide de la souris
     <message>
         <location filename="../deletedradioforvoicecwmemorybuttonsdialog.cpp" line="108"/>
         <source>Remove Radio</source>
-        <translation type="unfinished"></translation>
+        <translation>Supprimer le Radio</translation>
     </message>
     <message>
         <location filename="../deletedradioforvoicecwmemorybuttonsdialog.cpp" line="109"/>
@@ -1978,10 +1921,6 @@ Déplacez-vous entre les composants d&apos;un groupe à l&apos;aide de la souris
 </context>
 <context>
     <name>DisplayOptions</name>
-    <message>
-        <source>Frame</source>
-        <translation type="vanished">Cadre</translation>
-    </message>
     <message>
         <location filename="../DisplayOptions.ui" line="27"/>
         <source>Font</source>
@@ -2451,87 +2390,66 @@ Double-cliquer sur un carré d&apos;arête pour étendre la zone de la carte.</t
     <message>
         <location filename="../manageadifdialog.ui" line="14"/>
         <source>Manage ADIF</source>
-        <translation type="unfinished"></translation>
+        <translation>Gérer ADIF</translation>
     </message>
     <message>
         <location filename="../manageadifdialog.ui" line="25"/>
         <source>...</source>
-        <translation type="unfinished">...</translation>
+        <translation>...</translation>
     </message>
     <message>
         <location filename="../manageadifdialog.ui" line="36"/>
         <source>Monitor</source>
-        <translation type="unfinished"></translation>
+        <translation>Moniteur</translation>
     </message>
     <message>
         <location filename="../manageadifdialog.ui" line="43"/>
         <source>Append existing contents</source>
-        <translation type="unfinished"></translation>
+        <translation>Ajouter du contenu existant</translation>
     </message>
     <message>
         <location filename="../manageadifdialog.ui" line="63"/>
         <source>Append to Log</source>
-        <translation type="unfinished"></translation>
+        <translation>Ajouter au journal</translation>
     </message>
     <message>
         <location filename="../manageadifdialog.ui" line="74"/>
         <source>Stop Monitor</source>
-        <translation type="unfinished"></translation>
+        <translation>Arrêter Moniteur</translation>
     </message>
     <message>
         <location filename="../manageadifdialog.ui" line="124"/>
         <source>OK</source>
-        <translation type="unfinished">OK</translation>
+        <translation>OK</translation>
     </message>
     <message>
         <location filename="../manageadifdialog.cpp" line="73"/>
         <source>ADIF files (*.adi);;All Files (*.*)</source>
-        <translation type="unfinished">Fichiers ADIF (* .adi) ;; Tous les fichiers (*. *)</translation>
+        <translation>Fichiers ADIF (* .adi) ;; Tous les fichiers (*. *)</translation>
     </message>
     <message>
         <location filename="../manageadifdialog.cpp" line="77"/>
         <source>Open ADIF file</source>
-        <translation type="unfinished"></translation>
+        <translation>Ouvrir le fichiers ADIF</translation>
     </message>
     <message>
         <location filename="../manageadifdialog.cpp" line="136"/>
         <source>No current contest</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../manageadifdialog.cpp" line="172"/>
         <source>Failed to open ADIF file %1 : %2</source>
-        <translation type="unfinished">L&apos;ouverture du fichier ADIF %1 a échoué : %2</translation>
+        <translation>L&apos;ouverture du fichier ADIF %1 a échoué : %2</translation>
     </message>
     <message>
         <location filename="../manageadifdialog.cpp" line="181"/>
         <source>Failed to append %1</source>
-        <translation type="unfinished">Échec de l&apos;ajout de %1</translation>
+        <translation>Échec de l&apos;ajout de %1</translation>
     </message>
 </context>
 <context>
     <name>MinosTestExport</name>
-    <message>
-        <source>====================================================<byte value="xd"/>
-<byte value="xd"/>
-DO NOT SEND THIS FILE AS YOUR ENTRY!<byte value="xd"/>
-<byte value="xd"/>
-Use &quot;File&quot; | &quot;Produce Entry/Export File...&quot;<byte value="xd"/>
-Export as Reg1Test(entry)<byte value="xd"/>
-and send the .EDI file produced.<byte value="xd"/>
-====================================================<byte value="xd"/>
-</source>
-        <translatorcomment>ANOTHER FUNNY WHITESPACE ISSUE</translatorcomment>
-        <translation type="vanished">====================================================<byte value="xd"/>
-<byte value="xd"/>
-N&apos;ENVOYEZ PAS CE FICHIER COMME VOTRE ENTRÉE!<byte value="xd"/>
-<byte value="xd"/>
-Utilisez &quot;Fichier&quot; | &quot;Produire un fichier d&apos;entrée / d&apos;exportation ...&quot;<byte value="xd"/>
-Exporter en tant que Reg1Test (entrée)<byte value="xd"/>
-et envoyer le fichier .EDI produit.<byte value="xd"/>
-====================================================<byte value="xd"/>
-</translation>
-    </message>
     <message>
         <location filename="../MinosTestExport.cpp" line="18"/>
         <source>====================================================
@@ -2543,7 +2461,15 @@ Export as Reg1Test(entry)
 and send the .EDI file produced.
 ====================================================
 </source>
-        <translation type="unfinished"></translation>
+        <translation>====================================================
+
+N&amp;apos;ENVOYEZ PAS CE FICHIER COMME VOTRE ENTRÉE!
+
+Utilisez &amp;quot;Fichier&amp;quot; | &amp;quot;Produire un fichier d&amp;apos;entrée / d&amp;apos;exportation ...&amp;quot;
+Exporter en tant que Reg1Test (entrée)
+et envoyer le fichier .EDI produit.
+====================================================
+</translation>
     </message>
     <message>
         <location filename="../MinosTestExport.cpp" line="51"/>
@@ -2691,27 +2617,6 @@ and send the .EDI file produced.
 <context>
     <name>PrintFile</name>
     <message>
-        <source>====================================================<byte value="xd"/>
-<byte value="xd"/>
-DO NOT SEND THIS FILE AS YOUR ENTRY!<byte value="xd"/>
-<byte value="xd"/>
-Use &quot;File&quot; | &quot;Produce Entry/Export File...&quot;<byte value="xd"/>
-Export as Reg1Test(entry)<byte value="xd"/>
-and send the .EDI file produced.<byte value="xd"/>
-====================================================<byte value="xd"/>
-</source>
-        <translatorcomment>ANOTHER FUNNY WHITESPACE ISSUE</translatorcomment>
-        <translation type="vanished">====================================================<byte value="xd"/>
-<byte value="xd"/>
-N&apos;ENVOYEZ PAS CE FICHIER COMME VOTRE ENTRÉE!<byte value="xd"/>
-<byte value="xd"/>
-Utilisez &quot;Fichier&quot; | &quot;Produire un fichier d&apos;entrée / d&apos;exportation ...&quot;<byte value="xd"/>
-Exporter en tant que Reg1Test (entrée)<byte value="xd"/>
-et envoyer le fichier .EDI produit.<byte value="xd"/>
-====================================================<byte value="xd"/>
-</translation>
-    </message>
-    <message>
         <location filename="../PrintFile.cpp" line="19"/>
         <source>====================================================
 
@@ -2722,7 +2627,15 @@ Export as Reg1Test(entry)
 and send the .EDI file produced.
 ====================================================
 </source>
-        <translation type="unfinished"></translation>
+        <translation>====================================================
+
+N&amp;apos;ENVOYEZ PAS CE FICHIER COMME VOTRE ENTRÉE!
+
+Utilisez &amp;quot;Fichier&amp;quot; | &amp;quot;Produire un fichier d&amp;apos;entrée / d&amp;apos;exportation ...&amp;quot;
+Exporter en tant que Reg1Test (entrée)
+et envoyer le fichier .EDI produit.
+====================================================
+</translation>
     </message>
 </context>
 <context>
@@ -3092,10 +3005,6 @@ Non - Ignorer les modifications</translation>
 </context>
 <context>
     <name>QrzDisplayFrame</name>
-    <message>
-        <source>Frame</source>
-        <translation type="vanished">Cadre</translation>
-    </message>
     <message>
         <location filename="../qrzdisplayframe.ui" line="22"/>
         <source>QRZ</source>
@@ -4343,10 +4252,6 @@ Protected</source>
 <context>
     <name>ScreenConfigScreen</name>
     <message>
-        <source>Frame</source>
-        <translation type="vanished">Cadre</translation>
-    </message>
-    <message>
         <location filename="../ScreenConfigScreen.ui" line="39"/>
         <source>Screen Name</source>
         <translation>Nom de l&apos;écran</translation>
@@ -4367,28 +4272,18 @@ Protected</source>
         <translation>Ajouter une colonne à droite</translation>
     </message>
     <message>
-        <source>Please select (by mouse click) the top and bottom rows for the (right) column.<byte value="xd"/>
-The row background will change colour when selected.</source>
-        <translation type="vanished">Veuillez sélectionner en cliquant sur les rangées supérieures et inférieures pour la colonne de droite.
-L&apos;arrière-plan de la ligne change de couleur lorsqu&apos;elle est sélectionnée.</translation>
-    </message>
-    <message>
-        <source>Please select (by mouse click) the top and bottom rows for the (left) column.<byte value="xd"/>
-The row background will change colour when selected.</source>
-        <translation type="vanished">Veuillez sélectionner en cliquant sur les rangées supérieures et inférieures pour la colonne de gauche.
-L&apos;arrière-plan de la ligne change de couleur lorsqu&apos;elle est sélectionnée.</translation>
-    </message>
-    <message>
         <location filename="../ScreenConfigScreen.cpp" line="346"/>
         <source>Please select (by mouse click) the top and bottom rows for the (right) column.
 The row background will change colour when selected.</source>
-        <translation type="unfinished"></translation>
+        <translation>Veuillez sélectionner en cliquant sur les rangées supérieures et inférieures pour la colonne de droite.
+L&amp;apos;arrière-plan de la ligne change de couleur lorsqu&amp;apos;elle est sélectionnée.</translation>
     </message>
     <message>
         <location filename="../ScreenConfigScreen.cpp" line="378"/>
         <source>Please select (by mouse click) the top and bottom rows for the (left) column.
 The row background will change colour when selected.</source>
-        <translation type="unfinished"></translation>
+        <translation>Veuillez sélectionner en cliquant sur les rangées supérieures et inférieures pour la colonne de gauche.
+L&amp;apos;arrière-plan de la ligne change de couleur lorsqu&amp;apos;elle est sélectionnée.</translation>
     </message>
 </context>
 <context>
@@ -4745,12 +4640,12 @@ n&apos;existe pas; télécharger les derniers calendriers&#xa0;?</translation>
     <message>
         <location filename="../tcalendarform.cpp" line="322"/>
         <source>Select Contest from UKSMG Calendar</source>
-        <translation type="unfinished"></translation>
+        <translation>Sélectionner le Concours  dans le calendrier UKSMG</translation>
     </message>
     <message>
         <location filename="../tcalendarform.cpp" line="334"/>
         <source>Failed to load the UKSMG calendar file</source>
-        <translation type="unfinished"></translation>
+        <translation>Le chargement du fichier du calendrier UKSMG a échoué</translation>
     </message>
     <message>
         <location filename="../tcalendarform.cpp" line="348"/>
@@ -4921,7 +4816,7 @@ n&apos;existe pas; télécharger les derniers calendriers&#xa0;?</translation>
     <message>
         <location filename="../tentryoptionsform.cpp" line="41"/>
         <source>Cabrillo/ADIF Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Nom de Cabrillo/ADIF</translation>
     </message>
     <message>
         <location filename="../tentryoptionsform.cpp" line="42"/>
@@ -5282,10 +5177,6 @@ n&apos;existe pas; télécharger les derniers calendriers&#xa0;?</translation>
         <translation>Logs</translation>
     </message>
     <message>
-        <source>Enter</source>
-        <translation type="vanished">Entrer</translation>
-    </message>
-    <message>
         <location filename="../tlogcontainer.cpp" line="477"/>
         <source>Overwrite</source>
         <translation>Écraser</translation>
@@ -5329,10 +5220,6 @@ n&apos;existe pas; télécharger les derniers calendriers&#xa0;?</translation>
         <location filename="../tlogcontainer.cpp" line="675"/>
         <source>Produce Entry/Export File...</source>
         <translation>Produire un fichier d&apos;entrée / d&apos;exportation ...</translation>
-    </message>
-    <message>
-        <source>Append ADIF file to contest...</source>
-        <translation type="vanished">Ajouter le fichier ADIF au Concours ...</translation>
     </message>
     <message>
         <location filename="../tlogcontainer.cpp" line="682"/>
@@ -5445,10 +5332,6 @@ n&apos;existe pas; télécharger les derniers calendriers&#xa0;?</translation>
         <translation>Annuler</translation>
     </message>
     <message>
-        <source>Create Entry and send to RSGB</source>
-        <translation type="vanished">Créer l&apos;entrée et envoyer à RSGB</translation>
-    </message>
-    <message>
         <location filename="../tlogcontainer.cpp" line="763"/>
         <source>Help...</source>
         <translation>Aide...</translation>
@@ -5535,28 +5418,14 @@ Veuillez choisir un nouveau nom.</translation>
         <source>This action will clear geometry entries for all of the apps within Minos.
 
 Please confirm this action by pressing &quot;Yes&quot;.</source>
-        <translation type="unfinished"></translation>
+        <translation>Cette action effacera les entrées de géométrie pour toutes les applications de Minos.
+
+Veuillez confirmer cette action en appuyant sur &amp;quot;Oui&amp;quot;.</translation>
     </message>
     <message>
         <location filename="../tlogcontainer.cpp" line="1380"/>
         <source>Clear registry only works under Windows</source>
         <translation>L&apos;effacement des registres ne fonctionne que sous Windows</translation>
-    </message>
-    <message>
-        <source>ADIF files (*.adi);;All Files (*.*)</source>
-        <translation type="vanished">Fichiers ADIF (* .adi) ;; Tous les fichiers (*. *)</translation>
-    </message>
-    <message>
-        <source>Open ADIF for append</source>
-        <translation type="vanished">Ouvrir ADIF pour ajouter</translation>
-    </message>
-    <message>
-        <source>Failed to open ADIF file %1 : %2</source>
-        <translation type="vanished">L&apos;ouverture du fichier ADIF %1 a échoué : %2</translation>
-    </message>
-    <message>
-        <source>Failed to append %1</source>
-        <translation type="vanished">Échec de l&apos;ajout de %1</translation>
     </message>
     <message>
         <location filename="../tlogcontainer.cpp" line="1433"/>
@@ -5586,15 +5455,7 @@ Please confirm this action by pressing &quot;Yes&quot;.</source>
     <message>
         <location filename="../tlogcontainer.cpp" line="679"/>
         <source>Manage ADIF files</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>This action will clear geometry entries for all of the apps within Minos.<byte value="xd"/>
-<byte value="xd"/>
-Please confirm this action by pressing &quot;Yes&quot;.</source>
-        <translation type="vanished">Cette action effacera les entrées de géométrie pour toutes les applications de Minos.
-
-Veuillez confirmer cette action en appuyant sur &quot;Oui&quot;.</translation>
+        <translation>Gérer les fichiers ADIF</translation>
     </message>
     <message>
         <location filename="../tlogcontainer.cpp" line="1533"/>
@@ -5682,17 +5543,6 @@ Veuillez confirmer cette action en appuyant sur &quot;Oui&quot;.</translation>
     </message>
 </context>
 <context>
-    <name>TMinosBSHelpForm</name>
-    <message>
-        <source>Minos Help</source>
-        <translation type="vanished">Aide Minos</translation>
-    </message>
-    <message>
-        <source>Close</source>
-        <translation type="vanished">Fermer</translation>
-    </message>
-</context>
-<context>
     <name>TQSOEditDlg</name>
     <message>
         <location filename="../tqsoeditdlg.ui" line="14"/>
@@ -5716,73 +5566,45 @@ Veuillez confirmer cette action en appuyant sur &quot;Oui&quot;.</translation>
         <location filename="../SendRPCDM.cpp" line="979"/>
         <location filename="../SendRPCDM.cpp" line="1028"/>
         <source>Disconnected</source>
-        <translation type="unfinished">Déconnecté</translation>
+        <translation>Déconnecté</translation>
     </message>
 </context>
 <context>
     <name>TSessionManager</name>
     <message>
-        <source>Manage Log Sets</source>
-        <translation type="vanished">Gerer les ensembles de Logs</translation>
-    </message>
-    <message>
-        <source>New Log Set</source>
-        <translation type="vanished">Nouvel ensemble de Logs</translation>
-    </message>
-    <message>
-        <source>Clone Log Set</source>
-        <translation type="vanished">Cloner l&apos;ensemble de Logs</translation>
-    </message>
-    <message>
-        <source>Delete Log Set</source>
-        <translation type="vanished">Supprimer l&apos;ensemble de Logs</translation>
-    </message>
-    <message>
-        <source>Rename Log Set</source>
-        <translation type="vanished">Renommer l&apos;ensemble de Logs</translation>
-    </message>
-    <message>
-        <source>Log Sets</source>
-        <translation type="vanished">Les ensembles de Logs</translation>
-    </message>
-    <message>
-        <source>Entries in Log Sets</source>
-        <translation type="vanished">Entrée dans les ensembles de Logs</translation>
-    </message>
-    <message>
         <location filename="../TSessionManager.ui" line="14"/>
         <source>Manage Contest Sets</source>
-        <translation type="unfinished">Gérer les ensembles de Concours</translation>
+        <translation>Gérer les ensembles de Concours</translation>
     </message>
     <message>
         <location filename="../TSessionManager.ui" line="27"/>
         <source>New Contest Set</source>
-        <translation type="unfinished"></translation>
+        <translation>Nouveau Ensemble de Concours</translation>
     </message>
     <message>
         <location filename="../TSessionManager.ui" line="34"/>
         <source>Clone Contest Set</source>
-        <translation type="unfinished"></translation>
+        <translation>Cloner Ensemble de Concours</translation>
     </message>
     <message>
         <location filename="../TSessionManager.ui" line="41"/>
         <source>Delete Contest Set</source>
-        <translation type="unfinished"></translation>
+        <translation>Supprimer Ensemble de Concours</translation>
     </message>
     <message>
         <location filename="../TSessionManager.ui" line="48"/>
         <source>Rename Contest Set</source>
-        <translation type="unfinished"></translation>
+        <translation>Renommer Ensemble de Concours</translation>
     </message>
     <message>
         <location filename="../TSessionManager.ui" line="80"/>
         <source>Contest Sets</source>
-        <translation type="unfinished">Ensembles de Concours</translation>
+        <translation>Ensembles de Concours</translation>
     </message>
     <message>
         <location filename="../TSessionManager.ui" line="94"/>
         <source>Entries in Contest Sets</source>
-        <translation type="unfinished"></translation>
+        <translation>Inscriptions dans les Ensembles de Concours</translation>
     </message>
     <message>
         <location filename="../TSessionManager.ui" line="125"/>
@@ -5825,13 +5647,9 @@ Veuillez confirmer cette action en appuyant sur &quot;Oui&quot;.</translation>
         <translation>Donner un nom à la nouvelle session</translation>
     </message>
     <message>
-        <source>Give name for new log set</source>
-        <translation type="vanished">Donner un nom au nouvel ensemble de Logs</translation>
-    </message>
-    <message>
         <location filename="../TSessionManager.cpp" line="263"/>
         <source>Give name for new contest set</source>
-        <translation type="unfinished"></translation>
+        <translation>Nom du nouvel Ensemble de Concours</translation>
     </message>
     <message>
         <location filename="../TSessionManager.cpp" line="292"/>
@@ -5846,11 +5664,7 @@ Veuillez confirmer cette action en appuyant sur &quot;Oui&quot;.</translation>
     <message>
         <location filename="../TSessionManager.cpp" line="349"/>
         <source>Give new name for contest set %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Give new name for log set %1</source>
-        <translation type="vanished">Donner un nouveau nom a l&apos;ensemble de Logs %1</translation>
+        <translation>Nouveau nom d&amp;apos;Ensemble de Concours %1</translation>
     </message>
 </context>
 <context>
@@ -6012,7 +5826,10 @@ Un nouveau multiplicateur équivaut à%2 QSO moyens%3</translation>
 (Previous %5; %6; %7)
 Last %8 Mins: %9 QSO %10 pts %11 bonus
 (Previous %12; %13; %14)</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 dernières minutes:%2 QSO%3 pts%4 bonus
+(%5;%6;%7 précédents)
+%8 dernières minutes:%9 QSO%10 pts%11 bonus
+(%12;%13;%14 précédents)</translation>
     </message>
     <message>
         <location filename="../tstatsdispframe.cpp" line="168"/>
@@ -6020,27 +5837,10 @@ Last %8 Mins: %9 QSO %10 pts %11 bonus
 (Previous %5; %6; %7)
 Last %8 Mins: %9 QSO %10 pts %11 mults
 (Previous %12; %13; %14)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Last %1 Mins: %2 QSO %3 pts %4 bonus<byte value="xd"/>
-(Previous %5; %6; %7)
-Last %8 Mins: %9 QSO %10 pts %11 bonus<byte value="xd"/>
-(Previous %12; %13; %14)</source>
-        <translation type="vanished">%1 dernières minutes:%2 QSO%3 pts%4 bonus
-(%5;%6;%7 précédents)
-%8 dernières minutes:%9 QSO%10 pts%11 bonus
-(%12;%13;%14 précédents)</translation>
-    </message>
-    <message>
-        <source>Last %1 Mins: %2 QSO %3 pts %4 mults<byte value="xd"/>
-(Previous %5; %6; %7)
-Last %8 Mins: %9 QSO %10 pts %11 mults<byte value="xd"/>
-(Previous %12; %13; %14)</source>
-        <translation type="vanished">%1 dernières minutes: %2 QSO %3 pts %4 mults
+        <translation>%1 dernières minutes: %2 QSO %3 pts %4 mults
 (%5; %6; %7  précédents)
 %8 dernières minutes:%9 QSO%10 pts%11 mults
-(%12;%13;%14 précédents)</translation>
+(%12;%13;%14 précédents</translation>
     </message>
 </context>
 <context>
@@ -6058,7 +5858,7 @@ Last %8 Mins: %9 QSO %10 pts %11 mults<byte value="xd"/>
     <message>
         <location filename="../txvmbuttonsframe.ui" line="41"/>
         <source>Keyer</source>
-        <translation type="unfinished">Keyer</translation>
+        <translation>Keyer</translation>
     </message>
     <message>
         <location filename="../txvmbuttonsframe.ui" line="49"/>
@@ -6073,17 +5873,17 @@ Last %8 Mins: %9 QSO %10 pts %11 mults<byte value="xd"/>
     <message>
         <location filename="../txvmbuttonsframe.ui" line="125"/>
         <source>EOM:</source>
-        <translation type="unfinished"></translation>
+        <translation>EOM:</translation>
     </message>
     <message>
         <location filename="../txvmbuttonsframe.ui" line="163"/>
         <source>PTT</source>
-        <translation type="unfinished"></translation>
+        <translation>PTT</translation>
     </message>
     <message>
         <location filename="../txvmbuttonsframe.ui" line="173"/>
         <source>Enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Activé</translation>
     </message>
     <message>
         <location filename="../txvmbuttonsframe.ui" line="213"/>
@@ -6098,7 +5898,7 @@ Last %8 Mins: %9 QSO %10 pts %11 mults<byte value="xd"/>
     <message>
         <location filename="../txvmbuttonsframe.ui" line="251"/>
         <source>Type:</source>
-        <translation type="unfinished"></translation>
+        <translation>Type:</translation>
     </message>
     <message>
         <location filename="../txvmbuttonsframe.ui" line="297"/>
@@ -6114,7 +5914,7 @@ Last %8 Mins: %9 QSO %10 pts %11 mults<byte value="xd"/>
     <message>
         <location filename="../txvmbuttonsframe.ui" line="344"/>
         <source>Error:</source>
-        <translation type="unfinished"></translation>
+        <translation>Erreur:</translation>
     </message>
     <message>
         <location filename="../txvmbuttonsframe.ui" line="394"/>
@@ -6183,12 +5983,12 @@ Last %8 Mins: %9 QSO %10 pts %11 mults<byte value="xd"/>
     <message>
         <location filename="../txvmbuttonsframe.cpp" line="1569"/>
         <source>PTT Enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>PTT activé</translation>
     </message>
     <message>
         <location filename="../txvmbuttonsframe.cpp" line="1575"/>
         <source>PTT Disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>PTT Désactivé</translation>
     </message>
 </context>
 <context>
@@ -6408,7 +6208,7 @@ Through</source>
     <message>
         <location filename="../txvmrigbuttondialog.ui" line="79"/>
         <source>Radio:</source>
-        <translation type="unfinished"></translation>
+        <translation>Radio:</translation>
     </message>
     <message>
         <location filename="../txvmrigbuttondialog.ui" line="130"/>
@@ -6500,7 +6300,7 @@ Through</source>
     <message>
         <location filename="../txvmrigbuttondialog.cpp" line="309"/>
         <source>Invalid</source>
-        <translation type="unfinished"></translation>
+        <translation>Invalide</translation>
     </message>
     <message>
         <location filename="../txvmrigbuttondialog.cpp" line="310"/>
@@ -6529,21 +6329,17 @@ Please edit or remove</source>
     <message>
         <location filename="../txvmrigsetupdialog.ui" line="98"/>
         <source>EOM</source>
-        <translation type="unfinished"></translation>
+        <translation>EOM</translation>
     </message>
     <message>
         <location filename="../txvmrigsetupdialog.ui" line="104"/>
         <source>CAT</source>
-        <translation type="unfinished"></translation>
+        <translation>CAT</translation>
     </message>
     <message>
         <location filename="../txvmrigsetupdialog.ui" line="111"/>
         <source>Timer</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Use CAT PTT For EOM</source>
-        <translation type="vanished">Utiliser CAT PTT pour EOM</translation>
     </message>
     <message>
         <location filename="../txvmrigsetupdialog.ui" line="134"/>
@@ -6826,10 +6622,6 @@ Inclure le &quot;CQ&quot; ainsi que le type</translation>
         <location filename="../txVmInternalSetupDialog.ui" line="39"/>
         <source>Comport</source>
         <translation>Port COM</translation>
-    </message>
-    <message>
-        <source>Use CAT PTT For EOM</source>
-        <translation type="vanished">Utiliser CAT PTT pour EOM</translation>
     </message>
     <message>
         <location filename="../txVmInternalSetupDialog.ui" line="50"/>

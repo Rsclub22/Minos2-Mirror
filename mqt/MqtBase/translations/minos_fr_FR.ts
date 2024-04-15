@@ -365,14 +365,6 @@
         <translation>WSJTX: Port de rediffusion</translation>
     </message>
     <message>
-        <source>Help file</source>
-        <translation type="vanished">Fichier d&apos;aide</translation>
-    </message>
-    <message>
-        <source>Help entry point</source>
-        <translation type="vanished">Point d&apos;entrée d&apos;aide</translation>
-    </message>
-    <message>
         <location filename="../profiles.cpp" line="106"/>
         <source>PDF documentation file</source>
         <translation>Fichier de documentation PDF (En anglais)</translation>
@@ -467,10 +459,6 @@
         <source>Limit Cluster spot distance on map</source>
         <translatorcomment>Limiter la distance du Spot sur la carte Cluster </translatorcomment>
         <translation></translation>
-    </message>
-    <message>
-        <source>Add to Bandmap tuning tolerance</source>
-        <translation type="vanished">Bandmap: Ajouter la tolérance de réglage</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="132"/>
@@ -1132,14 +1120,7 @@
     <message>
         <location filename="../profiles.cpp" line="25"/>
         <source>Default Set</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>Default Log Session</name>
-    <message>
-        <source>Default Session</source>
-        <translation type="vanished">Session par défaut</translation>
+        <translation>??</translation>
     </message>
 </context>
 <context>
@@ -1269,42 +1250,6 @@
 <context>
     <name>FrequencyDisplay</name>
     <message>
-        <source>Frequency has invalid characters or missing periods.<byte value="xd"/>
-<byte value="xd"/>
-The format required is (e.g.) 1296.3, 144.32 or 144.290123<byte value="xd"/>
-</source>
-        <translation type="vanished">La fréquence comporte des caractères non valides ou des périodes manquantes.<byte value="xd"/>
-<byte value="xd"/>
-Le format requis est (par exemple) 1296.3, 144.32 ou 144.290123<byte value="xd"/>
-<byte value="xd"/>
-Attention: &quot;.&quot; pas &quot;,&quot;<byte value="xd"/>
-</translation>
-    </message>
-    <message>
-        <source>Radio Frequency has invalid characters or missing periods.<byte value="xd"/>
-<byte value="xd"/>
-The format required is (e.g.) 1296.3, 144.32 or 144.290123<byte value="xd"/>
-</source>
-        <translation type="vanished">La fréquence a des caractères invalides ou des périodes manquantes.<byte value="xd"/>
-<byte value="xd"/>
-Le format requis est (par exemple) 1296.3, 144.32 ou 144.290123<byte value="xd"/>
-<byte value="xd"/>
-Attention: &quot;.&quot; pas &quot;,&quot;<byte value="xd"/>
-</translation>
-    </message>
-    <message>
-        <source>Target Frequency has invalid characters or missing periods.<byte value="xd"/>
-<byte value="xd"/>
-The format required is (e.g.) 1296.3, 144.32 or 144.290123<byte value="xd"/>
-</source>
-        <translation type="vanished">La fréquence cible comporte des caractères non valides ou des périodes manquantes.<byte value="xd"/>
-<byte value="xd"/>
-Le format requis est (par exemple) 1296.3, 144.32 ou 144.290123<byte value="xd"/>
-<byte value="xd"/>
-Attention: &quot;.&quot; pas &quot;,&quot;<byte value="xd"/>
-</translation>
-    </message>
-    <message>
         <location filename="../rigutils.cpp" line="16"/>
         <source>Frequency has invalid characters or missing periods.
 
@@ -1335,54 +1280,6 @@ The format required is (e.g.) 1296.3, 144.32 or 144.290123
         <location filename="../MultsImpl.cpp" line="65"/>
         <source>prefix synonyms file</source>
         <translation>Fichier de synonymes de préfixe</translation>
-    </message>
-</context>
-<context>
-    <name>HelpBrowser</name>
-    <message>
-        <source>Help Browser</source>
-        <translation type="vanished">Navigateur d&apos;aide</translation>
-    </message>
-    <message>
-        <source>Contents</source>
-        <translation type="vanished">Contenu</translation>
-    </message>
-    <message>
-        <source>Index</source>
-        <translation type="vanished">Index</translation>
-    </message>
-    <message>
-        <source>Look for:</source>
-        <translation type="vanished">Chercher:</translation>
-    </message>
-    <message>
-        <source>Close</source>
-        <translation type="vanished">Fermer</translation>
-    </message>
-    <message>
-        <source>Back</source>
-        <translation type="vanished">Retour</translation>
-    </message>
-    <message>
-        <source>Left</source>
-        <translatorcomment>Context? La gauche?</translatorcomment>
-        <translation type="vanished">à gauche</translation>
-    </message>
-    <message>
-        <source>Forward</source>
-        <translation type="vanished">Vers l&apos;avant</translation>
-    </message>
-    <message>
-        <source>Right</source>
-        <translation type="vanished">à droite</translation>
-    </message>
-    <message>
-        <source>Choose</source>
-        <translation type="vanished">Choisir</translation>
-    </message>
-    <message>
-        <source>Select topic for: </source>
-        <translation type="vanished">Sélectionner le sujet pour: </translation>
     </message>
 </context>
 <context>
@@ -2092,10 +1989,6 @@ Entrer une autre direction SVP</translation>
         <location filename="../StartConfig.ui" line="119"/>
         <source>Cancel</source>
         <translation>Annuler</translation>
-    </message>
-    <message>
-        <source>TextLabel</source>
-        <translation type="vanished">TEXTLABEL</translation>
     </message>
     <message>
         <location filename="../StartConfig.ui" line="159"/>
