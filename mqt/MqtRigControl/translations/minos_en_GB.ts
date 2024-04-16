@@ -155,7 +155,7 @@ Please enter a name for the radio</source>
     </message>
     <message>
         <location filename="../hamlibrigcontrol.cpp" line="1635"/>
-        <source>hamlib Errorcode too large!</source>
+        <source>Hamlib Errorcode too large!</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -251,11 +251,6 @@ Check Rigcontrol tracelog</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.ui" line="54"/>
-        <source>Configure Rigctld Program</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../rigcontrolmainwindow.ui" line="61"/>
         <source>Show Current Radio Config</source>
         <translation type="unfinished"></translation>
@@ -293,6 +288,11 @@ Check Rigcontrol tracelog</source>
     <message>
         <location filename="../rigcontrolmainwindow.ui" line="183"/>
         <source>Reconnect</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rigcontrolmainwindow.ui" line="54"/>
+        <source>Select RigControl path</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -335,6 +335,12 @@ Check Rigcontrol tracelog</source>
     <message>
         <location filename="../rigcontrolmainwindow.ui" line="571"/>
         <source>TVert Sw:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rigcontrolmainwindow.ui" line="615"/>
+        <source>rigctld
+Active</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -425,12 +431,6 @@ Check Rigcontrol tracelog</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.ui" line="615"/>
-        <source>RigCtld
-Active</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../rigcontrolmainwindow.ui" line="68"/>
         <source>Trace Data Comms</source>
         <translation type="unfinished"></translation>
@@ -460,35 +460,9 @@ Do you want to reload the settings for the radio now?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="1370"/>
-        <source>Attempting to communicate with radio via Rigctld - %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="1377"/>
-        <source>Test Radio Connection via Rigctld
-
-Minos tried to read the radio frequency,
-but nothing was received from the radio.
-
-Please check connections and/or settings.
-Some radios/interfaces may require Force DTR or Force RTS to be set High, to power the interface.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="1391"/>
-        <source>Radio Opened Rigctld: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../rigcontrolmainwindow.cpp" line="1349"/>
         <location filename="../rigcontrolmainwindow.cpp" line="1490"/>
         <source>RigControl Open Radio Error</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="1404"/>
-        <source>Connected via Rigctld: %1 - %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -528,8 +502,17 @@ Some radios/interfaces may require Force DTR or Force RTS to be set High, to pow
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../rigcontrolmainwindow.cpp" line="166"/>
+        <source>Installed Hamlib version %1 is incompatible.
+It should be version %2 or greater.
+
+Please check your installation.
+You will not be able to select a radio until this is rectified!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../rigcontrolmainwindow.cpp" line="269"/>
-        <source>Error: Installed hamlib version %1 is incorrect, should be version %2 or greater</source>
+        <source>Error: Installed Hamlib version %1 is incorrect, should be version %2 or greater</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -546,6 +529,32 @@ Some radios/interfaces may require Force DTR or Force RTS to be set High, to pow
         <location filename="../rigcontrolmainwindow.cpp" line="598"/>
         <location filename="../rigcontrolmainwindow.cpp" line="603"/>
         <source>Radio No Longer Exists, please add</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rigcontrolmainwindow.cpp" line="1370"/>
+        <source>Attempting to communicate with radio via rigctld - %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rigcontrolmainwindow.cpp" line="1377"/>
+        <source>Test Radio Connection via rigctld
+
+Minos tried to read the radio frequency,
+but nothing was received from the radio.
+
+Please check connections and/or settings.
+Some radios/interfaces may require Force DTR or Force RTS to be set High, to power the interface.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rigcontrolmainwindow.cpp" line="1391"/>
+        <source>Radio Opened rigctld: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rigcontrolmainwindow.cpp" line="1404"/>
+        <source>Connected via rigctld: %1 - %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -789,8 +798,33 @@ Copyright D Balharrie G8FKH/M0DGB 2024</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="4722"/>
-        <source>Using external hamlib rigctld daemon</source>
+        <location filename="../rigcontrolmainwindow.cpp" line="4832"/>
+        <source>Send CW Memory = %1
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rigcontrolmainwindow.cpp" line="4835"/>
+        <source>Start CW Memory Message Number = %1
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rigcontrolmainwindow.cpp" line="4836"/>
+        <source>End CW Memory Message Number = %1
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rigcontrolmainwindow.cpp" line="4838"/>
+        <source>Stop CW Memory = %1
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rigcontrolmainwindow.cpp" line="4839"/>
+        <source>wait CW Memory = %1
+</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -895,15 +929,6 @@ Copyright D Balharrie G8FKH/M0DGB 2024</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="166"/>
-        <source>Installed hamlib version %1 is incompatible.
-It should be version %2 or greater.
-
-Please check your installation.
-You will not be able to select a radio until this is rectified!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../rigcontrolmainwindow.cpp" line="172"/>
         <source>Hamlib Version Test conversion error!</source>
         <translation type="unfinished"></translation>
@@ -918,6 +943,11 @@ You will not be able to select a radio until this is rectified!</source>
         <source>The Radio configuration files in %1 are from an old incompatible version of Minos.
 
 Please delete them and set up the radios again</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rigcontrolmainwindow.cpp" line="4722"/>
+        <source>Using external Hamlib rigctld daemon</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1063,36 +1093,6 @@ Please delete them and set up the radios again</source>
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="4831"/>
         <source>Stop Voice Memory = %1
-</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="4832"/>
-        <source>Send Cw Memory = %1
-</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="4835"/>
-        <source>Start Cw Memory Message Number = %1
-</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="4836"/>
-        <source>End Cw Memory Message Number = %1
-</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="4838"/>
-        <source>Stop Cw Memory = %1
-</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="4839"/>
-        <source>wait Cw Memory = %1
 </source>
         <translation type="unfinished"></translation>
     </message>

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>976</width>
-    <height>581</height>
+    <width>1112</width>
+    <height>587</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -32,7 +32,7 @@
             <bool>true</bool>
            </property>
            <property name="currentIndex">
-            <number>1</number>
+            <number>0</number>
            </property>
            <widget class="MinosCustomTab" name="setupTab">
             <attribute name="title">
@@ -51,7 +51,7 @@
                <item>
                 <widget class="QPushButton" name="configRigctld">
                  <property name="text">
-                  <string>Configure Rigctld Program</string>
+                  <string>Select RigControl path</string>
                  </property>
                 </widget>
                </item>
@@ -612,7 +612,7 @@
              <item>
               <widget class="QLabel" name="rigCtldIndicatorLabel">
                <property name="text">
-                <string>RigCtld
+                <string>rigctld
 Active</string>
                </property>
               </widget>

@@ -437,17 +437,17 @@
     <message>
         <location filename="../profiles.cpp" line="125"/>
         <source>Show QSO Map Locators</source>
-        <translation type="unfinished"></translation>
+        <translation>Afficher Locators de QSO Map</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="126"/>
         <source>Show QSO Map Locators Top Left</source>
-        <translation type="unfinished"></translation>
+        <translation>Locators en haut à gauche de QSO Map</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="127"/>
         <source>Show QSO Map Locators Bottom Right</source>
-        <translation type="unfinished"></translation>
+        <translation>Locators en bas a droite de QSO Map</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="129"/>
@@ -463,32 +463,32 @@
     <message>
         <location filename="../profiles.cpp" line="132"/>
         <source>Add to Bandmap tuning CW enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Ajouter au Bandmap CW réglage activé</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="133"/>
         <source>Add to Bandmap tuning Data enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Ajouter au Bandmap Données réglage activé</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="134"/>
         <source>Add to Bandmap tuning Phone enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Ajouter au Bandmap Voix réglage activé</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="135"/>
         <source>Add to Bandmap tuning tolerance CW</source>
-        <translation type="unfinished"></translation>
+        <translation>Tolérance de réglage pour CW Ajouter à la Bandmap</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="136"/>
         <source>Add to Bandmap tuning tolerance Phone</source>
-        <translation type="unfinished"></translation>
+        <translation>Tolérance de réglage pour Voix Ajouter à la Bandmap</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="137"/>
         <source>Add to Bandmap tuning tolerance Data</source>
-        <translation type="unfinished"></translation>
+        <translation>Tolérance de réglage pour Donnees Ajouter à la Bandmap</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="139"/>
@@ -1120,7 +1120,7 @@
     <message>
         <location filename="../profiles.cpp" line="25"/>
         <source>Default Set</source>
-        <translation>??</translation>
+        <translation>Ensemble défaut</translation>
     </message>
 </context>
 <context>
@@ -1255,7 +1255,12 @@
 
 The format required is (e.g.) 1296.3, 144.32 or 144.290123
 </source>
-        <translation type="unfinished"></translation>
+        <translation>La fréquence comporte des caractères non valides ou des périodes manquantes.
+
+Le format requis est (par exemple) 1296.3, 144.32 ou 144.290123
+
+Attention: &quot;.&quot; pas &quot;,&quot;
+</translation>
     </message>
     <message>
         <location filename="../rigutils.cpp" line="17"/>
@@ -1263,7 +1268,12 @@ The format required is (e.g.) 1296.3, 144.32 or 144.290123
 
 The format required is (e.g.) 1296.3, 144.32 or 144.290123
 </source>
-        <translation type="unfinished"></translation>
+        <translation>La fréquence a des caractères invalides ou des périodes manquantes.
+
+Le format requis est (par exemple) 1296.3, 144.32 ou 144.290123
+
+Attention: &quot;.&quot; pas &quot;,&quot;
+</translation>
     </message>
     <message>
         <location filename="../rigutils.cpp" line="18"/>
@@ -1271,7 +1281,12 @@ The format required is (e.g.) 1296.3, 144.32 or 144.290123
 
 The format required is (e.g.) 1296.3, 144.32 or 144.290123
 </source>
-        <translation type="unfinished"></translation>
+        <translation>La fréquence cible comporte des caractères non valides ou des périodes manquantes.
+
+Le format requis est (par exemple) 1296.3, 144.32 ou 144.290123
+
+Attention: &quot;.&quot; pas &quot;,&quot;
+</translation>
     </message>
 </context>
 <context>
@@ -2095,8 +2110,7 @@ Entrer une autre direction SVP</translation>
     <message>
         <location filename="../StatisticsDisplay.cpp" line="193"/>
         <source>ALL</source>
-        <translation>Tous [Context?]
-</translation>
+        <translation>Tous</translation>
     </message>
     <message>
         <location filename="../StatisticsDisplay.ui" line="14"/>

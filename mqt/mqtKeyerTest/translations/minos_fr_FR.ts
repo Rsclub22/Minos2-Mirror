@@ -16,7 +16,7 @@
     <message>
         <location filename="../mqtktWaveShowDialog.ui" line="58"/>
         <source>Close</source>
-        <translation>Fermer?</translation>
+        <translation type="unfinished">Fermer?</translation>
     </message>
     <message>
         <location filename="../mqtktWaveShowDialog.cpp" line="136"/>

@@ -22,7 +22,7 @@
 RotatorFactory::RotatorFactory(bool tracecommFlag, QObject *parent) : QObject(parent)
 {
 
-    trace(QString("RotatorFactory: adding hamlib rotators"));
+    trace(QString("RotatorFactory: adding Hamlib rotators"));
     HamlibRotControl::setTraceCommsFlag(tracecommFlag);
     HamlibRotControl::register_rotators(&rotatorsList);
 

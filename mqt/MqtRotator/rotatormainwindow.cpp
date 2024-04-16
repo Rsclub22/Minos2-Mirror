@@ -171,7 +171,7 @@ RotatorMainWindow::RotatorMainWindow(QWidget *parent) :
 
     hamlibOk = false;
 
-    logMessage(QString("Checking installed hamlib version"));
+    logMessage(QString("Checking installed Hamlib version"));
     int hamlibCheckErrorNum = checkHamlibVersionIsValid(hamlibOk, hamlib_version, MINIMUM_HAMLIB_VERSION);
 
     if (hamlibCheckErrorNum < 0)
@@ -179,7 +179,7 @@ RotatorMainWindow::RotatorMainWindow(QWidget *parent) :
 
         if (hamlibCheckErrorNum == -2 )
         {
-            QMessageBox::critical(nullptr, tr("Rotator Hamlib Library Version Error!"), tr("Installed hamlib version %1 is incompatible.\nIt should be version %2 or greater.\n\nPlease check your installation.\nYou will not be able to select a rotator until this is rectified!").arg(hamlib_version).arg(MINIMUM_HAMLIB_VERSION), QMessageBox::Ok);
+            QMessageBox::critical(nullptr, tr("Rotator Hamlib Library Version Error!"), tr("Installed Hamlib version %1 is incompatible.\nIt should be version %2 or greater.\n\nPlease check your installation.\nYou will not be able to select a rotator until this is rectified!").arg(hamlib_version).arg(MINIMUM_HAMLIB_VERSION), QMessageBox::Ok);
             logMessage(QString("Error version number conversion to int failed - installed version = %1, minimum version = %2").arg(hamlib_version).arg(MINIMUM_HAMLIB_VERSION)); // error)
         }
         else if (hamlibCheckErrorNum == -1 )
@@ -203,7 +203,7 @@ RotatorMainWindow::RotatorMainWindow(QWidget *parent) :
     }
     else
     {
-        showStatusMessage(tr("Error: Installed hamlib version %1 is incorrect, should be version %2 or greater").arg(hamlib_version).arg(MINIMUM_HAMLIB_VERSION));
+        showStatusMessage(tr("Error: Installed Hamlib version %1 is incorrect, should be version %2 or greater").arg(hamlib_version).arg(MINIMUM_HAMLIB_VERSION));
     }
 
 

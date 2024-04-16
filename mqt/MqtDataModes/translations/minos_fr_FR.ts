@@ -33,17 +33,17 @@
         <location filename="../dmmainwindow.cpp" line="165"/>
         <location filename="../dmmainwindow.cpp" line="326"/>
         <source>Start All Engines</source>
-        <translation type="unfinished"></translation>
+        <translation>Démarrer tous modules de traitement</translation>
     </message>
     <message>
         <location filename="../dmmainwindow.cpp" line="277"/>
         <source>Any changes will only be actioned when you stop and restart the engines.</source>
-        <translation type="unfinished"></translation>
+        <translation>Arrêter et redémarrer les modules de traitement pour appliquer les modifications.</translation>
     </message>
     <message>
         <location filename="../dmmainwindow.cpp" line="305"/>
         <source>Stop All Engines</source>
-        <translation type="unfinished"></translation>
+        <translation>Arrêter tous modules de traitement</translation>
     </message>
     <message>
         <location filename="../dmmainwindow.cpp" line="352"/>

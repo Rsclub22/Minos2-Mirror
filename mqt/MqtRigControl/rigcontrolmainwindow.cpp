@@ -155,7 +155,7 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
 
     hamlibOk = false;
 
-    logMessage(QString("Checking installed hamlib version"));
+    logMessage(QString("Checking installed Hamlib version"));
     int hamlibCheckErrorNum = checkHamlibVersionIsValid(hamlibOk, hamlib_version, MINIMUM_HAMLIB_VERSION);
 
     if (hamlibCheckErrorNum < 0)
@@ -163,7 +163,7 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
 
         if (hamlibCheckErrorNum == -2 )
         {
-            QMessageBox::critical(nullptr, tr("RigControl Hamlib Library Version Error!"), tr("Installed hamlib version %1 is incompatible.\nIt should be version %2 or greater.\n\nPlease check your installation.\nYou will not be able to select a radio until this is rectified!").arg(hamlib_version).arg(MINIMUM_HAMLIB_VERSION), QMessageBox::Ok);
+            QMessageBox::critical(nullptr, tr("RigControl Hamlib Library Version Error!"), tr("Installed Hamlib version %1 is incompatible.\nIt should be version %2 or greater.\n\nPlease check your installation.\nYou will not be able to select a radio until this is rectified!").arg(hamlib_version).arg(MINIMUM_HAMLIB_VERSION), QMessageBox::Ok);
             logMessage(QString("Error version number conversion to int failed - installed version = %1, minimum version = %2").arg(hamlib_version).arg(MINIMUM_HAMLIB_VERSION)); // error)
         }
         else if (hamlibCheckErrorNum == -1 )
@@ -187,7 +187,7 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
     if (hamlibOk)
     {
 
-        logMessage(QString("installed hamlib version %1 is OK").arg(hamlib_version));
+        logMessage(QString("installed Hamlib version %1 is OK").arg(hamlib_version));
 
         // init cache with radio data
         trace(QString("rigcontrol: Started by logger appname = %1").arg(appName));
@@ -266,7 +266,7 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
 
     if (!hamlibOk)
     {
-        showStatusMessage(tr("Error: Installed hamlib version %1 is incorrect, should be version %2 or greater").arg(hamlib_version).arg(MINIMUM_HAMLIB_VERSION));
+        showStatusMessage(tr("Error: Installed Hamlib version %1 is incorrect, should be version %2 or greater").arg(hamlib_version).arg(MINIMUM_HAMLIB_VERSION));
     }
 
     trace("*** Rig App Started ***");
@@ -1367,14 +1367,14 @@ int RigControlMainWindow::openRigCtldRadio(bool localRigCtld)
     {
 
         int retCode = Rig_OK;
-        showStatusMessage(tr("Attempting to communicate with radio via Rigctld - %1").arg(currentRadio.rigModel));
+        showStatusMessage(tr("Attempting to communicate with radio via rigctld - %1").arg(currentRadio.rigModel));
         retCode = radio->getFrequency(VFO::CURRENT_VFO, rigStateDetails->rfrequency);
 
 
         if (retCode < Rig_OK)
         {
             logMessage(QString("openRigctldRadio: Test Communication - Get Freq error, code = %1").arg(QString::number(retCode)));
-            radioError(retCode, tr("Test Radio Connection via Rigctld\n\nMinos tried to read the radio frequency,\nbut nothing was received from the radio.\n\nPlease check connections and/or settings.\nSome radios/interfaces may require Force DTR or Force RTS to be set High, to power the interface."));
+            radioError(retCode, tr("Test Radio Connection via rigctld\n\nMinos tried to read the radio frequency,\nbut nothing was received from the radio.\n\nPlease check connections and/or settings.\nSome radios/interfaces may require Force DTR or Force RTS to be set High, to power the interface."));
             //sendStatusToLogDisConnected();
             return OPEN_FAILED;
         }
@@ -1388,7 +1388,7 @@ int RigControlMainWindow::openRigCtldRadio(bool localRigCtld)
     if (radioCommsOK)
     {
         logMessage(QString("openRigctldRadio: Radio Opened %1").arg(currentRadio.rigModel));
-        showStatusMessage(tr("Radio Opened Rigctld: %1").arg(currentRadio.rigModel));
+        showStatusMessage(tr("Radio Opened rigctld: %1").arg(currentRadio.rigModel));
 
         if (currentRadio.portType == RigCapConstants::PortType::serial)
         {
@@ -1401,7 +1401,7 @@ int RigControlMainWindow::openRigCtldRadio(bool localRigCtld)
 
         else if (currentRadio.portType == RigCapConstants::PortType::none)
         {
-            showStatusMessage(tr("Connected via Rigctld: %1 - %2").arg(currentRadio.rigMfg_Name, currentRadio.rigModelName));
+            showStatusMessage(tr("Connected via rigctld: %1 - %2").arg(currentRadio.rigMfg_Name, currentRadio.rigModelName));
         }
 
     }
@@ -4719,7 +4719,7 @@ void RigControlMainWindow::aboutRigConfig()
             }
             else
             {
-                msg.append(tr("Using external hamlib rigctld daemon"));
+                msg.append(tr("Using external Hamlib rigctld daemon"));
             }
 
 
@@ -4829,14 +4829,14 @@ void RigControlMainWindow::aboutRigConfig()
 
         }
         msg.append(tr("Stop Voice Memory = %1\n").arg((selectedRadioSupportCap.getSupportStopVoiceMemory() ? "True" : "False")));
-        msg.append(tr("Send Cw Memory = %1\n").arg((selectedRadioSupportCap.getSupportCwMemory() ? "True" : "False")));
+        msg.append(tr("Send CW Memory = %1\n").arg((selectedRadioSupportCap.getSupportCwMemory() ? "True" : "False")));
         if (selectedRadioSupportCap.getSupportCwMemory())
         {
-            msg.append(tr("Start Cw Memory Message Number = %1\n").arg(selectedRadioSupportCap.getStartCwMemoryNumber()));
-            msg.append(tr("End Cw Memory Message Number = %1\n").arg(selectedRadioSupportCap.getEndCwMemoryNumber()));
+            msg.append(tr("Start CW Memory Message Number = %1\n").arg(selectedRadioSupportCap.getStartCwMemoryNumber()));
+            msg.append(tr("End CW Memory Message Number = %1\n").arg(selectedRadioSupportCap.getEndCwMemoryNumber()));
         }
-        msg.append(tr("Stop Cw Memory = %1\n").arg((selectedRadioSupportCap.getSupportCwMemoryStop() ? "True" : "False")));
-        msg.append(tr("wait Cw Memory = %1\n").arg((selectedRadioSupportCap.getSupportCwMemoryWait() ? "True" : "False")));
+        msg.append(tr("Stop CW Memory = %1\n").arg((selectedRadioSupportCap.getSupportCwMemoryStop() ? "True" : "False")));
+        msg.append(tr("wait CW Memory = %1\n").arg((selectedRadioSupportCap.getSupportCwMemoryWait() ? "True" : "False")));
 
 
         if (rigCap.getPollData())
@@ -4991,7 +4991,7 @@ void RigControlMainWindow::dumpRadioToTraceLog()
 
         }
         trace(QString("Stop Voice Memory = %1").arg((selectedRadioSupportCap.getSupportStopVoiceMemory() ? "True" : "False")));
-        trace(QString("Send Cw Memory = %1").arg((selectedRadioSupportCap.getSupportCwMemory() ? "True" : "False")));
+        trace(QString("Send CW Memory = %1").arg((selectedRadioSupportCap.getSupportCwMemory() ? "True" : "False")));
         if (selectedRadioSupportCap.getSupportCwMemory())
         {
             trace(QString("Start Cw Memory Message Number = %1").arg(selectedRadioSupportCap.getStartCwMemoryNumber()));

@@ -131,7 +131,7 @@ Please enter a name for the antenna</source>
     </message>
     <message>
         <location filename="../hamlibRotcontrol.cpp" line="484"/>
-        <source>hamlib Errorcode too large!</source>
+        <source>Hamlib Errorcode too large!</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -485,17 +485,13 @@ Please delete them and set up the rotators again</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.cpp" line="182"/>
-        <source>Installed hamlib version %1 is incompatible.
-It should be version %2 or greater.
-
-Please check your installation.
-You will not be able to select a rotator until this is rectified!</source>
+        <location filename="../rotatormainwindow.cpp" line="188"/>
+        <source>Hamlib Version Test conversion error. Please report error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.cpp" line="188"/>
-        <source>Hamlib Version Test conversion error. Please report error</source>
+        <location filename="../rotatormainwindow.cpp" line="206"/>
+        <source>Error: Installed Hamlib version %1 is incorrect, should be version %2 or greater</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -602,13 +598,17 @@ Please enter %1 - %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.cpp" line="188"/>
-        <source>Hamlib Version Test conversion error!</source>
+        <location filename="../rotatormainwindow.cpp" line="182"/>
+        <source>Installed Hamlib version %1 is incompatible.
+It should be version %2 or greater.
+
+Please check your installation.
+You will not be able to select a rotator until this is rectified!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.cpp" line="206"/>
-        <source>Error: Installed hamlib version %1 is incorrect, should be version %2 or greater</source>
+        <location filename="../rotatormainwindow.cpp" line="188"/>
+        <source>Hamlib Version Test conversion error!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

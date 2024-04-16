@@ -80,7 +80,7 @@
     <message>
         <location filename="../WaveShowDialog.ui" line="14"/>
         <source>Wave Display</source>
-        <translation>affichage Wave</translation>
+        <translation>Affichage de Wave</translation>
     </message>
     <message>
         <location filename="../WaveShowDialog.ui" line="38"/>

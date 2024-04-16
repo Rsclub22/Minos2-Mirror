@@ -26,7 +26,7 @@
     <message>
         <location filename="../ConfigFile.cpp" line="881"/>
         <source>A local server is required.</source>
-        <translation type="unfinished"></translation>
+        <translation>Un serveur local est requis.</translation>
     </message>
     <message>
         <location filename="../ConfigFile.cpp" line="896"/>

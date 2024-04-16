@@ -6,7 +6,7 @@
     <message>
         <location filename="../maiaObject.cpp" line="314"/>
         <source>parse error: invalid xml-rpc. not conforming to spec.</source>
-        <translation type="unfinished"></translation>
+        <translation>Erreur d&apos;analyse&#xa0;:&#xa0;xml-rpc non valide. Non conforme aux spécifications.</translation>
     </message>
 </context>
 </TS>

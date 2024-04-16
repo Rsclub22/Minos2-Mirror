@@ -11,7 +11,12 @@
 %2
 
 Please choose a new name.</source>
-        <translation type="unfinished"></translation>
+        <translation>Échec du changement de nom
+%1
+    comme
+%2
+
+Veuillez choisir un nouveau nom.</translation>
     </message>
 </context>
 <context>

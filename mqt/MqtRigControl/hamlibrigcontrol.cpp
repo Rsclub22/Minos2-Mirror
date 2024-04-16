@@ -1632,7 +1632,7 @@ int RigControl::getRigModelIndex()
 
      if (errorCode > static_cast<int>(sizeof(hamlibErrorMsg)/sizeof(const char *)))
      {
-         return tr("hamlib Errorcode too large!");
+         return tr("Hamlib Errorcode too large!");
      }
      return tr(hamlibErrorMsg[errorCode]);
  }

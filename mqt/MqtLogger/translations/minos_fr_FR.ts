@@ -420,7 +420,7 @@ Le mode calculé est %2</translation>
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="40"/>
         <source>Add Spot to Bandmap Tuning (CW) Tolerance</source>
-        <translation type="unfinished"></translation>
+        <translation>Ajouter un spot à la  Bandmap (CW) Tolérance de réglage</translation>
     </message>
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="52"/>
@@ -432,12 +432,12 @@ Le mode calculé est %2</translation>
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="78"/>
         <source>Add Spot to Bandmap Tuning (Data) Tolerance</source>
-        <translation type="unfinished"></translation>
+        <translation>Ajouter un spot à la  Bandmap (Données) Tolérance de réglage</translation>
     </message>
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="116"/>
         <source>Add Spot to Bandmap Tuning (Phone) Tolerance</source>
-        <translation type="unfinished"></translation>
+        <translation>Ajouter un spot à la  Bandmap (Voix) Tolérance de réglage</translation>
     </message>
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="150"/>
@@ -1900,12 +1900,12 @@ Déplacez-vous entre les composants d&amp;apos;un groupe à l&amp;apos;aide de l
     <message>
         <location filename="../deletedradioforvoicecwmemorybuttonsdialog.cpp" line="27"/>
         <source>Delete RigControl Radios - Voice Keyer Memories</source>
-        <translation type="unfinished"></translation>
+        <translation>Supprimer les radios RigControl - Mémoires du keyeur vocal</translation>
     </message>
     <message>
         <location filename="../deletedradioforvoicecwmemorybuttonsdialog.cpp" line="35"/>
         <source>Delete RigControl Radios - CW Keyer Memories</source>
-        <translation type="unfinished"></translation>
+        <translation>Supprimer les radios RigControl - Mémoires du keyeur CW</translation>
     </message>
     <message>
         <location filename="../deletedradioforvoicecwmemorybuttonsdialog.cpp" line="108"/>
@@ -1916,7 +1916,8 @@ Déplacez-vous entre les composants d&amp;apos;un groupe à l&amp;apos;aide de l
         <location filename="../deletedradioforvoicecwmemorybuttonsdialog.cpp" line="109"/>
         <source>Do you want to delete these radios?
 %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Voulez-vous supprimer ces radios&#xa0;?
+%1</translation>
     </message>
 </context>
 <context>
@@ -1984,12 +1985,12 @@ Déplacez-vous entre les composants d&amp;apos;un groupe à l&amp;apos;aide de l
     <message>
         <location filename="../DisplayOptions.ui" line="351"/>
         <source>Top Left Locator of QSO Map</source>
-        <translation type="unfinished"></translation>
+        <translation>Locator en haut à gauche de la carte de QSO</translation>
     </message>
     <message>
         <location filename="../DisplayOptions.ui" line="361"/>
         <source>Bottom Right Locator of QSO Map</source>
-        <translation type="unfinished"></translation>
+        <translation>Locator en bas à droite de la carte de QSO</translation>
     </message>
     <message>
         <location filename="../DisplayOptions.ui" line="389"/>
@@ -2069,12 +2070,12 @@ Déplacez-vous entre les composants d&amp;apos;un groupe à l&amp;apos;aide de l
     <message>
         <location filename="../DisplayOptions.ui" line="335"/>
         <source>NB Showing Loc can make the display very slow, so restrict the area as much as possible.</source>
-        <translation type="unfinished"></translation>
+        <translation>NB L&apos;affichage du Locator peut rendre l&apos;affichage très lent, alors limitez la zone autant que possible.</translation>
     </message>
     <message>
         <location filename="../DisplayOptions.ui" line="344"/>
         <source>Show Loc</source>
-        <translation type="unfinished"></translation>
+        <translation>Afficher Locator</translation>
     </message>
     <message>
         <location filename="../DisplayOptions.ui" line="443"/>
@@ -3185,22 +3186,22 @@ Non - Ignorer les modifications</translation>
     <message>
         <location filename="../radiosettingdialog.ui" line="75"/>
         <source>Voice Memory Buttons - Save by Radio Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Boutons de Mémoire Vocale - Enregistrer par nom de radio</translation>
     </message>
     <message>
         <location filename="../radiosettingdialog.ui" line="82"/>
         <source>Delete Voice Memory Button Radios</source>
-        <translation type="unfinished"></translation>
+        <translation>????????????????????</translation>
     </message>
     <message>
         <location filename="../radiosettingdialog.ui" line="106"/>
         <source>CW Memory Buttons - Save by Radio Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Boutons de Mémoire CW - Enregistrer par nom de radio</translation>
     </message>
     <message>
         <location filename="../radiosettingdialog.ui" line="113"/>
         <source>Delete CW Memory Button Radios</source>
-        <translation type="unfinished"></translation>
+        <translation>????????????????</translation>
     </message>
     <message>
         <location filename="../radiosettingdialog.ui" line="154"/>
@@ -5909,7 +5910,7 @@ Last %8 Mins: %9 QSO %10 pts %11 mults
     <message>
         <location filename="../txvmbuttonsframe.ui" line="315"/>
         <source>Button Selection for Radio:</source>
-        <translation type="unfinished"></translation>
+        <translation>Sélection des boutons pour la Radio&#xa0;:</translation>
     </message>
     <message>
         <location filename="../txvmbuttonsframe.ui" line="344"/>
@@ -6243,22 +6244,23 @@ Through</source>
     <message>
         <location filename="../txvmrigbuttondialog.ui" line="279"/>
         <source>Max Num CW Chars:</source>
-        <translation type="unfinished"></translation>
+        <translation>Nombre maximum de caractères CW:</translation>
     </message>
     <message>
         <location filename="../txvmrigbuttondialog.ui" line="297"/>
         <source>Supported CW Chars</source>
-        <translation type="unfinished"></translation>
+        <translation>Caractères CW supporté</translation>
     </message>
     <message>
         <location filename="../txvmrigbuttondialog.ui" line="315"/>
         <source>Supported Special  CW Chars</source>
-        <translation type="unfinished"></translation>
+        <translation>Caractères CW spéciaux supporté</translation>
     </message>
     <message>
         <location filename="../txvmrigbuttondialog.ui" line="330"/>
         <source>Precede with ^ Char Eg: ^SN</source>
-        <translation type="unfinished"></translation>
+        <translation>Précéder du caractère ^
+Par exemple&#xa0;: ^SN</translation>
     </message>
     <message>
         <location filename="../txvmrigbuttondialog.cpp" line="215"/>
@@ -6295,7 +6297,7 @@ Through</source>
     <message>
         <location filename="../txvmrigbuttondialog.cpp" line="309"/>
         <source>%1 Special Characters </source>
-        <translation type="unfinished"></translation>
+        <translation>%1 Caractères spéciaux </translation>
     </message>
     <message>
         <location filename="../txvmrigbuttondialog.cpp" line="309"/>
@@ -6306,7 +6308,8 @@ Through</source>
         <location filename="../txvmrigbuttondialog.cpp" line="310"/>
         <source>These special characters are invalid for this radio: %1
 Please edit or remove</source>
-        <translation type="unfinished"></translation>
+        <translation>Ces caractères spéciaux ne sont pas valides pour cette radio&#xa0;: %1
+Veuillez modifier ou supprimer</translation>
     </message>
 </context>
 <context>
@@ -6314,7 +6317,7 @@ Please edit or remove</source>
     <message>
         <location filename="../txvmrigsetupdialog.ui" line="41"/>
         <source>Max Avail Buttons:</source>
-        <translation type="unfinished"></translation>
+        <translation>Nombre maximum de boutons disponibles&#xa0;:</translation>
     </message>
     <message>
         <location filename="../txvmrigsetupdialog.ui" line="75"/>
@@ -6339,7 +6342,7 @@ Please edit or remove</source>
     <message>
         <location filename="../txvmrigsetupdialog.ui" line="111"/>
         <source>Timer</source>
-        <translation type="unfinished"></translation>
+        <translation>Minuteur</translation>
     </message>
     <message>
         <location filename="../txvmrigsetupdialog.ui" line="134"/>

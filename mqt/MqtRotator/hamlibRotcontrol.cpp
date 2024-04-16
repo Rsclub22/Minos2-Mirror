@@ -481,7 +481,7 @@ QString HamlibRotControl::getErrorMsgText(int errorCode)
 
     if (errorCode > static_cast<int>(sizeof(hamlibErrorMsg)/sizeof(const char *)))
     {
-        return tr("hamlib Errorcode too large!");
+        return tr("Hamlib Errorcode too large!");
     }
     return tr(hamlibErrorMsg[errorCode]);
 }
@@ -489,7 +489,7 @@ QString HamlibRotControl::getErrorMsgText(int errorCode)
 
 QString HamlibRotControl::getLibraryName()
 {
-    return QString("hamlib");
+    return QString("Hamlib");
 }
 
 

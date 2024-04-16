@@ -336,7 +336,7 @@ void RigControlRpc::on_routerCall( bool err, QSharedPointer<MinosRPCObj>mro, con
                 if ( psCwMessage->getString( cwMsg ) )
                 {
                     // here you handle what the logger has sent to us
-                    trace(QString("Rig RPC: Cw Message Number From Logger = %1").arg(cwMsg));
+                    trace(QString("Rig RPC: CW Message Number From Logger = %1").arg(cwMsg));
                     emit setCwTXMessage(cwMsg);
                 }
             }
