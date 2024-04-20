@@ -976,6 +976,7 @@ void TSendDM::on_notify( AnalysePubSubNotify an, const QString /*from*/ )
             else if (an.getCategory() == rpcConstants::clusterCategory)
             {
                 clusterServerLoaded = false;
+                clusterConnected = false;
                 emit setClusterState((tr("Disconnected")) + "<>Disconnected");
             }
         }
