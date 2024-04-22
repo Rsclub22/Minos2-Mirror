@@ -318,6 +318,7 @@ private:
     void setRigControlPanelTitle();
     bool getRadioReadOnlyFlag();
 
+    void dumpLoggerRadioOptionSettings();
 };
 
 
