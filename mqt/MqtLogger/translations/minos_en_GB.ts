@@ -2142,7 +2142,7 @@ Move between components of a group using the mouse or up/down arrow keys.
 <context>
     <name>InternalVoiceMemoryKeyer</name>
     <message>
-        <location filename="../InternalVoiceMemoryKeyer.cpp" line="196"/>
+        <location filename="../InternalVoiceMemoryKeyer.cpp" line="193"/>
         <source>Internal Voice Memory Setup</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3090,142 +3090,152 @@ No          - Discard changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../radiosettingdialog.ui" line="38"/>
+        <location filename="../radiosettingdialog.ui" line="86"/>
         <source>Turn Off Operating Frequency Colour in Radio Freq Dial</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../radiosettingdialog.ui" line="45"/>
+        <location filename="../radiosettingdialog.ui" line="53"/>
         <source>Contest Start - Ignore Preset Frequency</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../radiosettingdialog.ui" line="52"/>
+        <location filename="../radiosettingdialog.ui" line="40"/>
+        <source>Read Only</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../radiosettingdialog.ui" line="47"/>
+        <source>Radio Write Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../radiosettingdialog.ui" line="60"/>
         <source>Contest Change - Ignore Previous Frequency</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../radiosettingdialog.ui" line="59"/>
+        <location filename="../radiosettingdialog.ui" line="67"/>
         <source>Contest Change - Restore Contest Mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../radiosettingdialog.ui" line="66"/>
+        <location filename="../radiosettingdialog.ui" line="74"/>
         <source>Set RIT when calling CQ (radio permitting)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../radiosettingdialog.ui" line="75"/>
+        <location filename="../radiosettingdialog.ui" line="95"/>
         <source>Voice Memory Buttons - Save by Radio Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../radiosettingdialog.ui" line="82"/>
+        <location filename="../radiosettingdialog.ui" line="102"/>
         <source>Delete Voice Memory Button Radios</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../radiosettingdialog.ui" line="106"/>
+        <location filename="../radiosettingdialog.ui" line="126"/>
         <source>CW Memory Buttons - Save by Radio Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../radiosettingdialog.ui" line="113"/>
+        <location filename="../radiosettingdialog.ui" line="133"/>
         <source>Delete CW Memory Button Radios</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../radiosettingdialog.ui" line="154"/>
+        <location filename="../radiosettingdialog.ui" line="174"/>
         <source>Radio Frequency Presets</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../radiosettingdialog.ui" line="160"/>
+        <location filename="../radiosettingdialog.ui" line="180"/>
         <source>Enter a frequency to be recalled when selecting a band for each mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../radiosettingdialog.ui" line="177"/>
+        <location filename="../radiosettingdialog.ui" line="197"/>
         <source>CW</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../radiosettingdialog.ui" line="190"/>
+        <location filename="../radiosettingdialog.ui" line="210"/>
         <source>Phone</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../radiosettingdialog.ui" line="203"/>
+        <location filename="../radiosettingdialog.ui" line="223"/>
         <source>MGM</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../radiosettingdialog.ui" line="213"/>
+        <location filename="../radiosettingdialog.ui" line="233"/>
         <source>RTTY</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../radiosettingdialog.ui" line="230"/>
+        <location filename="../radiosettingdialog.ui" line="250"/>
         <source>PSK</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../radiosettingdialog.ui" line="251"/>
+        <location filename="../radiosettingdialog.ui" line="271"/>
         <source>Band Switch</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../radiosettingdialog.ui" line="274"/>
+        <location filename="../radiosettingdialog.ui" line="294"/>
         <source>Allows external device notification of band without using Minos Rigcontrol</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../radiosettingdialog.ui" line="300"/>
+        <location filename="../radiosettingdialog.ui" line="320"/>
         <source>Enable Band Switch</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../radiosettingdialog.ui" line="307"/>
+        <location filename="../radiosettingdialog.ui" line="327"/>
         <source>Enable Band Switch Serial Control</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../radiosettingdialog.ui" line="314"/>
+        <location filename="../radiosettingdialog.ui" line="334"/>
         <source>Comport</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../radiosettingdialog.ui" line="356"/>
+        <location filename="../radiosettingdialog.ui" line="376"/>
         <source>Bandswitch Messages</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../radiosettingdialog.cpp" line="425"/>
+        <location filename="../radiosettingdialog.cpp" line="433"/>
         <source>Invalid Phone Preset Frequency for %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../radiosettingdialog.cpp" line="442"/>
+        <location filename="../radiosettingdialog.cpp" line="450"/>
         <source>Invalid RTTY Preset Frequency for %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../radiosettingdialog.cpp" line="459"/>
+        <location filename="../radiosettingdialog.cpp" line="467"/>
         <source>Invalid PSK Preset Frequency for %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../radiosettingdialog.cpp" line="476"/>
+        <location filename="../radiosettingdialog.cpp" line="484"/>
         <source>Invalid MGM Preset Frequency for %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../radiosettingdialog.cpp" line="555"/>
+        <location filename="../radiosettingdialog.cpp" line="563"/>
         <source>Frequency %1 should be avoided as part of the bandplan for %2/%3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../radiosettingdialog.cpp" line="559"/>
+        <location filename="../radiosettingdialog.cpp" line="567"/>
         <source>Frequency %1 is out of band/mode for %2/%3</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3241,11 +3251,6 @@ No          - Discard changes</source>
 <context>
     <name>RigControlFrame</name>
     <message>
-        <location filename="../rigcontrolframe.ui" line="32"/>
-        <source>Rig Control</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../rigcontrolframe.ui" line="55"/>
         <source>...</source>
         <translation type="unfinished"></translation>
@@ -3256,110 +3261,110 @@ No          - Discard changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.ui" line="130"/>
+        <location filename="../rigcontrolframe.ui" line="129"/>
         <source>999.999.999.999</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.ui" line="133"/>
+        <location filename="../rigcontrolframe.ui" line="132"/>
         <source>000.000.000.000</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.ui" line="146"/>
+        <location filename="../rigcontrolframe.ui" line="145"/>
         <source>+</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.ui" line="158"/>
+        <location filename="../rigcontrolframe.ui" line="157"/>
         <source>Reset Frequency in Band</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.ui" line="194"/>
+        <location filename="../rigcontrolframe.ui" line="193"/>
         <source>RIT</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.ui" line="204"/>
-        <location filename="../rigcontrolframe.cpp" line="606"/>
+        <location filename="../rigcontrolframe.ui" line="203"/>
+        <location filename="../rigcontrolframe.cpp" line="610"/>
         <source>On</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.ui" line="233"/>
+        <location filename="../rigcontrolframe.ui" line="231"/>
         <source>Clr</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.ui" line="259"/>
+        <location filename="../rigcontrolframe.ui" line="257"/>
         <source>TxVert:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.ui" line="302"/>
+        <location filename="../rigcontrolframe.ui" line="300"/>
         <source>Mode:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.ui" line="309"/>
-        <location filename="../rigcontrolframe.ui" line="323"/>
+        <location filename="../rigcontrolframe.ui" line="307"/>
+        <location filename="../rigcontrolframe.ui" line="321"/>
         <source>USB</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.ui" line="316"/>
+        <location filename="../rigcontrolframe.ui" line="314"/>
         <source>:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.ui" line="347"/>
+        <location filename="../rigcontrolframe.ui" line="345"/>
         <source>Vol</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="613"/>
+        <location filename="../rigcontrolframe.cpp" line="617"/>
         <source>Off</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1231"/>
+        <location filename="../rigcontrolframe.cpp" line="1239"/>
         <source>Selected radio details were not found, please add radio or restart rigcontrol!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1267"/>
+        <location filename="../rigcontrolframe.cpp" line="1275"/>
         <source>Radio Bandlist is empty!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1276"/>
+        <location filename="../rigcontrolframe.cpp" line="1284"/>
         <source>Radio has no available bands</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1373"/>
-        <location filename="../rigcontrolframe.cpp" line="2246"/>
+        <location filename="../rigcontrolframe.cpp" line="1381"/>
+        <location filename="../rigcontrolframe.cpp" line="2305"/>
         <source>No %1 Band found for this radio!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1485"/>
+        <location filename="../rigcontrolframe.cpp" line="1493"/>
         <source>Freq out of contest band</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1637"/>
+        <location filename="../rigcontrolframe.cpp" line="1645"/>
         <source>Error: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1646"/>
+        <location filename="../rigcontrolframe.cpp" line="1654"/>
         <source>Connected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1667"/>
+        <location filename="../rigcontrolframe.cpp" line="1675"/>
         <source>Disconnected</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3730,58 +3735,53 @@ No          - Discard changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.ui" line="17"/>
-        <source>Run Frequencies</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../runbuttonsframe.ui" line="65"/>
         <location filename="../runbuttonsframe.ui" line="78"/>
         <source>...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="83"/>
+        <location filename="../runbuttonsframe.cpp" line="85"/>
         <source>Connected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="89"/>
+        <location filename="../runbuttonsframe.cpp" line="91"/>
         <source>Disconnected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="348"/>
+        <location filename="../runbuttonsframe.cpp" line="350"/>
         <source>Run</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="377"/>
+        <location filename="../runbuttonsframe.cpp" line="379"/>
         <source>Run %1 - Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="430"/>
+        <location filename="../runbuttonsframe.cpp" line="432"/>
         <source>Restore .%1    </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="431"/>
+        <location filename="../runbuttonsframe.cpp" line="433"/>
         <source>Restore freq: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="425"/>
+        <location filename="../runbuttonsframe.cpp" line="427"/>
         <source>Freq: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="359"/>
+        <location filename="../runbuttonsframe.cpp" line="361"/>
         <source>Run %1 - Set</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="426"/>
+        <location filename="../runbuttonsframe.cpp" line="428"/>
         <source>Mode: </source>
         <translation type="unfinished"></translation>
     </message>
@@ -3789,17 +3789,17 @@ No          - Discard changes</source>
 <context>
     <name>RunMemoryButton</name>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="605"/>
+        <location filename="../runbuttonsframe.cpp" line="637"/>
         <source>&amp;Off</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="614"/>
+        <location filename="../runbuttonsframe.cpp" line="646"/>
         <source>&amp;Set</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="622"/>
+        <location filename="../runbuttonsframe.cpp" line="654"/>
         <source>&amp;Clear</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5306,7 +5306,7 @@ Please choose a new name.</source>
     </message>
     <message>
         <location filename="../tlogcontainer.cpp" line="1150"/>
-        <location filename="../tlogcontainer.cpp" line="1429"/>
+        <location filename="../tlogcontainer.cpp" line="1428"/>
         <source>Minos contest files (*.minos *.Minos);;All Files (*.*)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5326,90 +5326,90 @@ Please choose a new name.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1366"/>
+        <location filename="../tlogcontainer.cpp" line="1365"/>
         <source>This action will clear geometry entries for all of the apps within Minos.
 
 Please confirm this action by pressing &quot;Yes&quot;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1380"/>
+        <location filename="../tlogcontainer.cpp" line="1379"/>
         <source>Clear registry only works under Windows</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1433"/>
+        <location filename="../tlogcontainer.cpp" line="1432"/>
         <source>Open contest for Analysis</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1445"/>
+        <location filename="../tlogcontainer.cpp" line="1444"/>
         <source>Failed to open Contest Log file %1 : %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1453"/>
+        <location filename="../tlogcontainer.cpp" line="1452"/>
         <source>Analysis of %1 complete; look in the trace log for analysis.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="2350"/>
+        <location filename="../tlogcontainer.cpp" line="2349"/>
         <source>Minos Contest Logger Application</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1344"/>
+        <location filename="../tlogcontainer.cpp" line="1343"/>
         <source>You may need to close and reload Minos to have these settings applied</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1533"/>
+        <location filename="../tlogcontainer.cpp" line="1532"/>
         <source>Contest Sets</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1622"/>
+        <location filename="../tlogcontainer.cpp" line="1621"/>
         <source>Creating </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1622"/>
-        <location filename="../tlogcontainer.cpp" line="2152"/>
+        <location filename="../tlogcontainer.cpp" line="1621"/>
+        <location filename="../tlogcontainer.cpp" line="2151"/>
         <source>Loading </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1624"/>
+        <location filename="../tlogcontainer.cpp" line="1623"/>
         <source>Contest file </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1793"/>
+        <location filename="../tlogcontainer.cpp" line="1792"/>
         <source>Configure Screen Layouts...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1883"/>
+        <location filename="../tlogcontainer.cpp" line="1882"/>
         <source>&amp;Manage Contest Sets...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="2154"/>
+        <location filename="../tlogcontainer.cpp" line="2153"/>
         <source>List file </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="2164"/>
+        <location filename="../tlogcontainer.cpp" line="2163"/>
         <source>Open List %1?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="2188"/>
+        <location filename="../tlogcontainer.cpp" line="2187"/>
         <source>Contact list files (*.csl);;All Files (*.*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="2192"/>
+        <location filename="../tlogcontainer.cpp" line="2191"/>
         <source>Open Archive List</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5468,8 +5468,8 @@ Please confirm this action by pressing &quot;Yes&quot;.</source>
 <context>
     <name>TSendDM</name>
     <message>
-        <location filename="../SendRPCDM.cpp" line="979"/>
-        <location filename="../SendRPCDM.cpp" line="1028"/>
+        <location filename="../SendRPCDM.cpp" line="981"/>
+        <location filename="../SendRPCDM.cpp" line="1030"/>
         <source>Disconnected</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5858,32 +5858,32 @@ Last %8 Mins: %9 QSO %10 pts %11 mults
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1428"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1462"/>
         <source>Rig Voice Keyer Available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1432"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1466"/>
         <source>Rig CW Messages Available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1553"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1588"/>
         <source>TX On</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1559"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1594"/>
         <source>TX Off</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1569"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1604"/>
         <source>PTT Enabled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1575"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1610"/>
         <source>PTT Disabled</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6245,12 +6245,12 @@ Please edit or remove</source>
 <context>
     <name>TxVoiceMemButton</name>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1679"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1720"/>
         <source>&amp;New</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1680"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1721"/>
         <source>&amp;Edit</source>
         <translation type="unfinished"></translation>
     </message>
