@@ -1328,8 +1328,7 @@ void TLogContainer::OptionsActionExecute()
 
     if (od.exec() == QDialog::Accepted)
     {
-
-        // This is a somwhat clumsy method...
+       // This is a somwhat clumsy method...
         openSerialTVSwitch();
     }
 }

@@ -163,6 +163,7 @@ private slots:
     void on_resetBandFreqButton_clicked();
 
     void on_QSOMargins();
+
 private:
     virtual bool eventFilter(QObject *obj, QEvent *event) override;
 
@@ -314,6 +315,10 @@ private:
     void sendVmButtonFrameRadioConnected(bool connected);
     QString getSelectedRadio();
     bool setSelectedRadio(QString s);
+    void setRigControlPanelTitle();
+    bool getRadioReadOnlyFlag();
+
+    void dumpLoggerRadioOptionSettings();
 };
 
 

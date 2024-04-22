@@ -43,6 +43,8 @@ RunButtonsFrame::RunButtonsFrame(QWidget *parent) :
 
     initRunMemoryButton();
 
+    setRunButtonsFrameTitle();
+
     chkRunFreqTimer = new QTimer(this);
     connect(chkRunFreqTimer, &QTimer::timeout, this, &RunButtonsFrame::on_radioFreqCheckTimer);
 }
@@ -581,6 +583,36 @@ void RunButtonsFrame::setCallFreq()
         runButWriteActSel(buttonNumber);
     }
 }
+
+
+void RunButtonsFrame::logRadioSettingsChanged(QSharedPointer<RadioSettingsDialogChangeFlag> /*logRadioSettingsFlags*/)
+{
+    setRunButtonsFrameTitle();
+}
+
+
+void RunButtonsFrame::setRunButtonsFrameTitle()
+{
+    if (getRadioReadOnlyFlag())
+    {
+        setTitle("Run Frequencies - Read Only");
+    }
+    else
+    {
+        setTitle("Run Frequencies");
+    }
+
+}
+
+
+bool RunButtonsFrame::getRadioReadOnlyFlag()
+{
+
+    bool state;
+    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpContestRadioReadOnly, state );
+    return state;
+}
+
 
 //*******************Run Memory Button *************************//
 

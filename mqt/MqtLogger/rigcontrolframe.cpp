@@ -123,6 +123,10 @@ RigControlFrame::RigControlFrame(TSingleLogFrame *parent):
 
     connect(LogContainer->sendDM, &TSendDM::setRadioLoaded, this, &RigControlFrame::on_RadioLoaded);
 
+    setRigControlPanelTitle();
+
+    dumpLoggerRadioOptionSettings();
+
     ui->resetBandFreqFrame->hide();
 
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::QSOMargins, this, &RigControlFrame::on_QSOMargins);
@@ -617,6 +621,10 @@ void RigControlFrame::logRadioSettingsChanged(QSharedPointer<RadioSettingsDialog
 {
     // update preset freqs
     tslf->bandSwitchFrame->readPresetFreqsFromIni(bands);
+
+    setRigControlPanelTitle();
+
+    dumpLoggerRadioOptionSettings();
 }
 
 void RigControlFrame::changeMainRadioFreq()
@@ -2092,6 +2100,33 @@ bool RigControlFrame::checkFreqOK(const Frequency &freq)
     }
 }
 
+
+
+
+
+
+void RigControlFrame::setRigControlPanelTitle()
+{
+    if (getRadioReadOnlyFlag())
+    {
+        ui->rigControlPanelTitle->setText("RigControl - Read Only");
+    }
+    else
+    {
+        ui->rigControlPanelTitle->setText("RigControl");
+    }
+
+}
+
+
+bool RigControlFrame::getRadioReadOnlyFlag()
+{
+
+    bool state;
+    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpContestRadioReadOnly, state );
+    return state;
+}
+
 void RigControlFrame::traceMsg(QString msg)
 {
 
@@ -2160,6 +2195,30 @@ void RigControlFrame::sendVmButtonFrameRadioConnected(bool connected)
        txVmButtonsFrame->setRadioIsConnected(connected);
     }
 
+}
+
+
+void RigControlFrame::dumpLoggerRadioOptionSettings()
+{
+    bool state;
+    traceMsg(QString("Logger Radio Options Current Settings"));
+    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpContestRadioReadOnly, state );
+    traceMsg(QString("Radio Read Only = %1").arg(state ? "True" : "False"));
+
+    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpContestStartIgnorePresetFreq, state );
+    traceMsg(QString("Contest Start - Ignore Preset Frequency = %1").arg(state ? "True" : "False"));
+
+    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpContestChangeIgnorePreviousFreq, state );
+    traceMsg(QString("Contest Change - Ignore Previous Frequency = %1").arg(state ? "True" : "False"));
+
+    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpContestChangeRestoreContestMode, state );
+    traceMsg(QString("Contest Change - Restore Contest Mode = %1").arg(state ? "True" : "False"));
+
+    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpContestTurnOffOperatingFreqColorRadioDial, state );
+    traceMsg(QString("Turn Off Operating Freq Color Radio Dial = %1").arg(state ? "True" : "False"));
+
+    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpCQRit, state );
+    traceMsg(QString("CQ RIT = %1").arg(state ? "True" : "False"));
 }
 
 //-----------------------------------------------------------------------------------
@@ -2249,4 +2308,6 @@ void RigControlFrame::on_resetBandFreqButton_clicked()
     }
     sendRigFreq(freqToSend);
 }
+
+
 

@@ -75,6 +75,7 @@ private slots:
     void onSaveCwMemoryButtonByRadioNameChkBoxClicked();
     void onDeleteVoiceMemoryButtonRadiosPushButtonClicked();
     void onDeleteCwMemoryButtonRadiosPushButtonClicked();
+    void onRadioReadOnlyCheckBoxChanged();
 private:
     Ui::RadioSettingDialog *ui;
 
@@ -109,6 +110,7 @@ private:
 
 
     ConfigurationOption turnOffColourRadioFreqDial;
+    ConfigurationOption contestRadioReadOnly;
     ConfigurationOption contestStartIgnorePresetFreq;
     ConfigurationOption contestChangeIgnorePreviousFreq;
     ConfigurationOption constestChangeRestoreContestMode;

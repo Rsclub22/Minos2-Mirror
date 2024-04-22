@@ -166,6 +166,8 @@ public:
     void on_SetVolume(int level);
     void on_SetRadioStatus(QString);
 
+    bool getRadioReadOnlyFlag();
+
     void on_RotatorPresetList(QString);
     void on_RotatorStatus(QString);
     void on_RotatorBearing(QString);
@@ -207,6 +209,9 @@ private:
 
     void setQrzDisplayFrameLoaded(bool loaded);
     void doSendEntry(QString expName);
+
+
+
 private slots:
     void on_ContestPageChanged();
     void onOtherMatchTreeFocused(QObject *, bool in, QFocusEvent *);

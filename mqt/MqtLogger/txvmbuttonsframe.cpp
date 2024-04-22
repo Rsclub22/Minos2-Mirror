@@ -155,7 +155,7 @@ void TxVmButtonsFrame::onVmSetupClicked()
     if ((voiceKeyerType == keyerTypes[VoiceKeyerId::RigControl] && !isVoiceMemAvail(selectedRadio))
         || (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl] && !isCwMemTypeAvail(selectedRadio)))
     {
-        trace(QString("[TxVmButtonsFrame] Setup Selected rigControl Keyer Selected, but not available for this radio or no keyer selected"));
+        logMessage(QString("Setup Selected rigControl Keyer Selected, but not available for this radio or no keyer selected"));
         return;
     }
 
@@ -230,7 +230,7 @@ void TxVmButtonsFrame::createKeyer(QString voiceKeyerName)
             txVoiceKeyer = QSharedPointer<VoiceKeyerBase>(voiceKeyerFactory->createVoiceKeyer(voiceCap.getVmIdNum()));
             if (txVoiceKeyer)
             {
-                trace(QString("[Voice Keyer] Voice Keyer type selected = %1").arg(voiceCap.getKeyerName()));
+                logMessage(QString("Voice Keyer type selected = %1").arg(voiceCap.getKeyerName()));
 
                 connect(txVoiceKeyer.data(), &VoiceKeyerBase::remoteConfigChanged, this, &TxVmButtonsFrame::onRemoteConfigChanged, Qt::UniqueConnection);
                 connect(txVoiceKeyer.data(), &VoiceKeyerBase::remoteKeyerStopped, this, &TxVmButtonsFrame::onRemoteKeyerStopped, Qt::UniqueConnection);
@@ -488,7 +488,7 @@ void TxVmButtonsFrame::onVoiceKeyerSelect(int idx)
         return;
 
     QString voiceKeyerName = ui->voiceKeyerSelect->currentText();
-    trace(QString("keyer select name = %1").arg( ui->voiceKeyerSelect->currentText()));
+    logMessage(QString("onVoiceKeyerSelect - keyer select name = %1").arg( ui->voiceKeyerSelect->currentText()));
 
     QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + VOICEKEYER_COMMON_PARAMS_FILENAME;
     QSettings config(fileName, QSettings::IniFormat);
@@ -688,12 +688,12 @@ void TxVmButtonsFrame::editActionSelected(int buttonNumber)
     if((voiceKeyerType == keyerTypes[VoiceKeyerId::RigControl] && !isVoiceMemAvail(selectedRadio))
         || (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl] && !isCwMemTypeAvail(selectedRadio)))
     {
-        trace(QString("[TxVmButtonsFrame] editActionSelected rigControl voice or cw Keyer Selected, but not available for this radio or no keyer selected"));
+        logMessage(QString("editActionSelected - rigControl voice or cw Keyer Selected, but not available for this radio or no keyer selected"));
         return;
     }
 
 
-    trace(QString("[TxVmButtonsFrame] editActionSelected"));
+    logMessage(QString("editActionSelected"));
 
     VoiceKeyerParams vmData;
     vmData.setType(voiceKeyerType);
@@ -720,7 +720,7 @@ void TxVmButtonsFrame::editActionSelected(int buttonNumber)
         vmData.setVkBase(txVoiceKeyer);
 
 
-        trace(QString("[txVmButtonsFrame] edit selected button no = %1").arg(buttonNumber));
+        logMessage(QString("- edit selected button no = %1").arg(buttonNumber));
 
         QString title1 = "";
         if (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl])
@@ -754,10 +754,10 @@ void TxVmButtonsFrame::readActionSelected(int buttonNumber)
     if ((voiceKeyerType == keyerTypes[VoiceKeyerId::RigControl] && !isVoiceMemAvail(selectedRadio))
         || (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl] && !isCwMemTypeAvail(selectedRadio)))
     {
-        trace(QString("[TxVmButtonsFrame] readActionSelected rigControl Voice CW Keyer Selected, but not available for this radio or no keyer selected"));
+        logMessage(QString("- readActionSelected rigControl Voice CW Keyer Selected, but not available for this radio or no keyer selected"));
         return;
     }
-    trace(QString("[TxVmButtonsFrame] readActionSelected"));
+    logMessage(QString("- readActionSelected"));
 
     if (voiceKeyerType == keyerTypes[VoiceKeyerId::RigControl])
     {
@@ -766,7 +766,7 @@ void TxVmButtonsFrame::readActionSelected(int buttonNumber)
                 && curMode != rigcommon::convertModeToQString(MODE::FM)
                 && curMode != hamlibData::PH)
         {
-            trace(QString("Mode needs to be a phone type for rigcontrol Voice Message, current mode = %1").arg(curMode));
+            logMessage(QString("Mode needs to be a phone type for rigcontrol Voice Message, current mode = %1").arg(curMode));
             return;
         }
     }
@@ -783,7 +783,7 @@ void TxVmButtonsFrame::readActionSelected(int buttonNumber)
 
 void TxVmButtonsFrame::startVMMsg(int buttonNumber)
 {
-    trace(QString("TxVmButtonsFrame::startVMMsg").arg(buttonNumber));
+    logMessage(QString("- startVMMsg button Number = %1").arg(buttonNumber));
     buttonNumSent = buttonNumber;
     if (buttonNumber >= voiceMemButtonList.count())
     {
@@ -809,7 +809,7 @@ void TxVmButtonsFrame::startVMMsg(int buttonNumber)
 
     if (vmData.getVmName().isEmpty())
     {
-        trace(QString("startVMMsg - Button name empty, do not run message"));
+        logMessage(QString("- startVMMsg - Button name empty, do not run message"));
         return;
     }
 
@@ -847,7 +847,7 @@ void TxVmButtonsFrame::startVMMsg(int buttonNumber)
         int msgDur = vmKeyParamList[buttonNumber].getVmDuration() * 1000;
         if (msgDur > 0)
         {
-            trace(QString("msgDurTimer->start(%1)").arg(msgDur));
+            logMessage(QString("- msgDurTimer->start(%1)").arg(msgDur));
             msgDurTimer->start(msgDur);
         }
     }
@@ -910,17 +910,17 @@ void TxVmButtonsFrame::newActionSelected(int buttonNumber)
         || (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl] && !isCwMemTypeAvail(selectedRadio))
         )
     {
-        trace(QString("[TxVmButtonsFrame] newActionSelected rigControl Voice Keyer Selected, but not available for this radio or no keyer selected"));
+        logMessage(QString("- newActionSelected rigControl Voice Keyer Selected, but not available for this radio or no keyer selected"));
         return;
     }
 
-    trace(QString("[TxVmButtonsFrame] newActionSelected Voice Keyer Selected"));
+    logMessage(QString("- newActionSelected Voice Keyer Selected"));
 
     VoiceKeyerParams vmData;
     vmData.clear();
 
 
-    trace(QString("[txVmButtonsFrame] write selected button no = %1").arg(buttonNumber));
+    logMessage(QString("- write selected button no = %1").arg(buttonNumber));
 
     QString title1 = "";
     if (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl])
@@ -991,7 +991,7 @@ void TxVmButtonsFrame::onRemoteKeyerStarted(int key)
     int msgDur = vmKeyParamList[buttonNumSent].getVmDuration() * 1000;
     if (msgDur > 0)
     {
-        trace(QString("msgDurTimer->start(%1)").arg(msgDur));
+        logMessage(QString("- msgDurTimer->start(%1)").arg(msgDur));
         msgDurTimer->start(msgDur);
     }
     txVmButtonMap[buttonNumSent]->showButtonOnOff(true);
@@ -1020,9 +1020,16 @@ void TxVmButtonsFrame::onMsgDurTimerTimeout()
 {
     if (buttonNumSent >= 0)
     {
-        if (vmKeyParamList[buttonNumSent].getVmDuration() > 0 || selectedEomType == voiceKeyerCommon::VoiceCwKeyerEomTypes::CAT)
+        if (vmKeyParamList[buttonNumSent].getVmDuration() > 0
+            || selectedEomType == voiceKeyerCommon::VoiceCwKeyerEomTypes::CAT
+            || txVoiceKeyer->getSelectedEomType() == voiceKeyerCommon::VoiceCwKeyerEomTypes::InternalSoundCardVoiceKeyer)
         {
-        // message duration of zero means that there shouldn't be a timer running
+            if (voiceKeyerType == keyerTypes[VoiceKeyerId::InternalVoiceKeyer])
+            {
+                txVoiceKeyer->stopMsg(nullptr); // ensure the sbdriver is stopped
+            }
+
+            // message duration of zero means that there shouldn't be a message timer running
             if (vmKeyParamList[buttonNumSent].getVmRepeatFlag())
             {
                 int repeatPauseDur = vmKeyParamList[buttonNumSent].getVmRepeatPauseDur() * 1000;
@@ -1035,6 +1042,8 @@ void TxVmButtonsFrame::onMsgDurTimerTimeout()
         }
 
     }
+
+
     msgDurTimer->stop();
 
 
@@ -1082,7 +1091,7 @@ void TxVmButtonsFrame::onRepeatPauseTimerTimeout()
         {
            if (vmKeyParamList[buttonNumSent].getVmRepeatFlag())
            {
-               trace("TxVmButtonsFrame::onRepeatPauseTimerTimeout()");
+               logMessage("- onRepeatPauseTimerTimeout()");
                startVMMsg(buttonNumSent);
 
            }
@@ -1120,6 +1129,8 @@ void TxVmButtonsFrame::setSelectedRadio(PubSubName selectedRadio_)
 
 void TxVmButtonsFrame::setPttEnabled(bool state, PubSubName psn)
 {
+    logMessage(QString("setPttEnabled = %1, radio = %2").arg(state ? "Enabled" : "Disabled").arg(psn.getLocalName()));
+
     RadioDetails rd;
     if (allRadioDetails.contains(psn))
     {
@@ -1151,6 +1162,9 @@ bool TxVmButtonsFrame::getPttEnabled(PubSubName psn)
 
 void TxVmButtonsFrame::setPttType(int type, PubSubName psn)
 {
+
+    logMessage(QString("setPttType = %1, selectedRadio = %2").arg(type).arg(psn.getLocalName()));
+
     RadioDetails rd;
     if (allRadioDetails.contains(psn))
     {
@@ -1187,6 +1201,9 @@ int TxVmButtonsFrame::getPttType(PubSubName psn)
 
 void TxVmButtonsFrame::setVoiceMemAvail(bool avail, PubSubName psn)
 {
+
+    logMessage(QString("setVoiceMemAvail = %1, radio = %2").arg(avail ? "Yes" : "No").arg(psn.getLocalName()));
+
     RadioDetails rd;
     if (allRadioDetails.contains(psn))
     {
@@ -1203,8 +1220,22 @@ void TxVmButtonsFrame::setVoiceMemAvail(bool avail, PubSubName psn)
     updateFrameState();
 }
 
+bool TxVmButtonsFrame::isVoiceMemAvail(PubSubName psn)
+{
+    RadioDetails rd;
+    if (allRadioDetails.contains(psn))
+    {
+        rd = allRadioDetails[psn];
+        return rd.getVoiceMemAvail();
+    }
+
+    return false;
+}
+
 void TxVmButtonsFrame::setNumVoiceMessages(int numMsgs, PubSubName psn)
 {
+    logMessage(QString("setNumVoiceMessages = %1, radio = %2").arg(numMsgs).arg(psn.getLocalName()));
+
     RadioDetails rd;
     if (allRadioDetails.contains(psn))
     {
@@ -1237,22 +1268,15 @@ int TxVmButtonsFrame::getNumVoiceMessages(PubSubName psn)
     }
 }
 
-bool TxVmButtonsFrame::isVoiceMemAvail(PubSubName psn)
-{
-    RadioDetails rd;
-    if (allRadioDetails.contains(psn))
-    {
-        rd = allRadioDetails[psn];
-        return rd.getVoiceMemAvail();
-    }
 
-    return false;
-}
 
 
 
 void TxVmButtonsFrame::setRigVoiceKeyerSupportStopFlag(bool supportStopCmd, PubSubName psn)
 {
+
+    logMessage(QString("setRigVoiceKeyerSupportStopFlag = %1, radio = %2").arg(supportStopCmd ? "Yes" : "No").arg(psn.getLocalName()));
+
     RadioDetails rd;
     if (allRadioDetails.contains(psn))
     {
@@ -1286,6 +1310,9 @@ bool TxVmButtonsFrame::getRigVoiceKeyerSupportStopFlag(PubSubName psn)
 
 void TxVmButtonsFrame::setRigCwKeyerSupportStopFlag(bool supportStopCmd, PubSubName psn)
 {
+    logMessage(QString("setRigCwKeyerSupportStopFlag = %1, radio = %2").arg(supportStopCmd ? "Yes" : "No").arg(psn.getLocalName()));
+
+
     RadioDetails rd;
     if (allRadioDetails.contains(psn))
     {
@@ -1318,6 +1345,10 @@ bool TxVmButtonsFrame::getRigCwKeyerSupportStopFlag(PubSubName psn)
 
 void TxVmButtonsFrame::setRigModel(QString rigModel, PubSubName psn)
 {
+
+    logMessage(QString("setRigModel = %1, radio = %2").arg(rigModel).arg(psn.getLocalName()));
+
+
     RadioDetails rd;
     if (allRadioDetails.contains(psn))
     {
@@ -1374,6 +1405,9 @@ bool TxVmButtonsFrame::isCwMemTypeAvail(PubSubName psn)
 
 void TxVmButtonsFrame::setCwMemType(int cwMemType, PubSubName psn)
 {
+    logMessage(QString("setCwMemType = %1, radio = %2").arg(cwMemType).arg(psn.getLocalName()));
+
+
     RadioDetails rd;
     if (allRadioDetails.contains(psn))
     {
@@ -1523,10 +1557,11 @@ void TxVmButtonsFrame::setPttState(bool state)
 
 void TxVmButtonsFrame::pttStopMessage(bool state)
 {
-   trace(QString("[TxVmButtonsFrame] pttStopMessage state = %1").arg(state ? "true" : "false"));
-   if (selectedEomType == voiceKeyerCommon::VoiceCwKeyerEomTypes::CAT)
+   logMessage(QString("pttStopMessage state = %1").arg(state ? "true" : "false"));
+
+    if (selectedEomType == voiceKeyerCommon::VoiceCwKeyerEomTypes::CAT)
    {
-       trace(QString("[TxVmButtonsFrame] Using PTT for EOM Flag"));
+       logMessage(QString("Using PTT for EOM Flag"));
        if (txVoiceKeyer && txVoiceKeyer->doRepeatFromLogger() && !state)
        {
             onMsgDurTimerTimeout();
@@ -1534,7 +1569,7 @@ void TxVmButtonsFrame::pttStopMessage(bool state)
    }
    else
    {
-       trace(QString("[TxVmButtonsFrame] Ignoring PTT for EOM Flag"));
+       logMessage(QString("Ignoring PTT for EOM Flag"));
    }
 
 
@@ -1659,6 +1694,12 @@ void TxVmButtonsFrame::onInternalVoiceMemoryPlayState(bool playing)
    // }
 }
 
+void TxVmButtonsFrame::logMessage(QString msg)
+{
+    trace(QString("[TxVmButtonsFrame] %1").arg(msg));
+}
+
+
 //*******************TX Voice Memory Button *************************//
 
 TxVoiceMemButton::TxVoiceMemButton(QToolButton *b, TxVmButtonsFrame *tvmbf, int no)
@@ -1740,5 +1781,7 @@ void TxVoiceMemButton::showButtonOnOff(bool state)
         vmButton->setStyleSheet(VM_BUTTON_OFF_STYLE);
     }
 }
+
+
 
 

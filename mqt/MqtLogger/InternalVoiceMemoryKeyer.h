@@ -36,7 +36,7 @@ public:
     virtual bool readVmButtonParams(int buttonNum, VoiceKeyerParams &vmParams) override;
     virtual void saveVmButtonParams(const VoiceKeyerParams &vmParams) override;
     virtual void setPttOnOff(bool onOff) override;
-    virtual int getSelectedEomType() override {return voiceKeyerCommon::VoiceCwKeyerEomTypes::Eom_None;};
+    virtual int getSelectedEomType() override {return voiceKeyerCommon::VoiceCwKeyerEomTypes::InternalSoundCardVoiceKeyer;};
 
 
     virtual int setup(VoiceKeyerFactory *voiceKeyerFactory, int &maxNumButtons, int &numButtons, QString selectedRadioName) override;

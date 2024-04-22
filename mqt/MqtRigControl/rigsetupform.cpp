@@ -158,12 +158,6 @@ void RigSetupForm::setupRadioModel(QString radioModel)
 
         RigCapabilities rigCap = rigFactory->supported_rigs()->value(radioData->rigModel);
 
-
-        //radioData->rigModelNumber = rigFactory->supported_rigs()->value(radioData->rigModel).rigModelNumber;
-        //radioData->rigModelName = rigFactory->supported_rigs()->value(radioData->rigModel).rigModelName;
-        //radioData->rigMfg_Name = rigFactory->supported_rigs()->value(radioData->rigModel).rigManufacturer;
-        //radioData->portType = rigFactory->supported_rigs()->value(radioData->rigModel).portType;
-
         radioData->rigModelNumber = rigCap.getRigModelNumber();
         radioData->rigModelName = rigCap.getRigModelName();
         radioData->rigMfg_Name = rigCap.getRigManufacturer();
@@ -327,10 +321,10 @@ void RigSetupForm::setupRadioModel(QString radioModel)
          else if (rigCap.getSupportPttPortType() == RigCapConstants::PttPortType::RIG_PTT_NONE)
          {
 
-            // support Serial PTT only
-            catPTT = false;
-            serialPTT = true;
-            setPttInitialState(catPTT, serialPTT);
+             // support Serial PTT only
+             catPTT = false;
+             serialPTT = true;
+             setPttInitialState(catPTT, serialPTT);
          }
 
 
@@ -373,6 +367,7 @@ void RigSetupForm::setDialogBoxesVisibleForNone()
 {
     setPortTypeNetworkRadioButtonChecked(false);
     setPortTypeSerialRadioButtonChecked(false);
+    setPortTypeWidgetsVisible(false);
     serialDataEntryVisible(false);
     advancedSerialDataEntryVisible(false);
     setAdvancedCommsChkBoxVisible(false);
@@ -2280,20 +2275,15 @@ void RigSetupForm::onPttEnableSelected(bool /*checked*/)
 
 void RigSetupForm::onPttCatEnableClicked(bool /*checked*/)
 {
-    if (ui->pttCatSelectRadioButton->isChecked() /* && (static_cast<serialCommonData::PTTMethodCodes>(radioData->pttType) != serialCommonData::PTTMethodCodes::PTT_METHOD_CAT)*/)
-    {
-        radioData->pttType = static_cast<int>(serialCommonData::PTTMethodCodes::PTT_METHOD_CAT);
-    }
-
     if (ui->pttCatSelectRadioButton->isChecked())
     {
+        radioData->pttType = static_cast<int>(serialCommonData::PTTMethodCodes::PTT_METHOD_CAT);
         pttComportSelDisabled(true);
         setForceRTSDisabled(false);
         setForceDTRDisabled(false);
-
     }
 
-}
+ }
 
 
 void RigSetupForm::pttComportSelDisabled(bool state)
@@ -2305,13 +2295,10 @@ void RigSetupForm::onPttDtrEnableClicked(bool /*checked*/)
 {
 
 
-    if (ui->pttDTRSelectRadioButton->isChecked() /* && (static_cast<serialCommonData::PTTMethodCodes>(radioData->pttType) != serialCommonData::PTTMethodCodes::PTT_METHOD_DTR)*/)
-    {
-        radioData->pttType = static_cast<int>(serialCommonData::PTTMethodCodes::PTT_METHOD_DTR);
-    }
-
     if (ui->pttDTRSelectRadioButton->isChecked())
     {
+        radioData->pttType = static_cast<int>(serialCommonData::PTTMethodCodes::PTT_METHOD_DTR);
+
         ui->pttComportSel->setDisabled(false);
         if (isPttComportEqualCatComport())
         {
@@ -2323,7 +2310,14 @@ void RigSetupForm::onPttDtrEnableClicked(bool /*checked*/)
             setForceDTRDisabled(false);
         }
 
+        if (radioData->pttSerialPort.isEmpty())
+        {
+            showPleaseSelectPttComportDialogue();
+        }
+
     }
+
+
 
 
 }
@@ -2337,13 +2331,12 @@ void RigSetupForm::setPttComportToolTip(QString toolTip)
 
 void RigSetupForm::onPttRtsEnableClicked(bool /*checked*/)
 {
-    if (ui->pttRTSSelectRadioButton->isChecked() /*&& (static_cast<serialCommonData::PTTMethodCodes>(radioData->pttType) != serialCommonData::PTTMethodCodes::PTT_METHOD_RTS)*/)
-    {
-            radioData->pttType = static_cast<int>(serialCommonData::PTTMethodCodes::PTT_METHOD_RTS);
-    }
-
     if (ui->pttRTSSelectRadioButton->isChecked())
     {
+        radioData->pttType = static_cast<int>(serialCommonData::PTTMethodCodes::PTT_METHOD_RTS);
+
+
+
         ui->pttComportSel->setDisabled(false);
         if (isPttComportEqualCatComport())
         {
@@ -2355,9 +2348,21 @@ void RigSetupForm::onPttRtsEnableClicked(bool /*checked*/)
         {
             setForceDTRDisabled(false);
         }
+
+        if (radioData->pttSerialPort.isEmpty())
+        {
+            showPleaseSelectPttComportDialogue();
+        }
     }
 
+}
 
+
+void RigSetupForm::showPleaseSelectPttComportDialogue()
+{
+    QMessageBox msgBox;
+    msgBox.setText(tr("Please select a Comport to use with PTT RTS or DTR!"));
+    msgBox.exec();
 }
 
 void RigSetupForm::onPttComportSelActivated(int /*idx*/)

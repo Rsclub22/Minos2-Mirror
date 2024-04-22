@@ -17,6 +17,7 @@
 #include "tsinglelogframe.h"
 #include "tlogcontainer.h"
 #include "SendRPCDM.h"
+#include "ContestApp.h"
 //---------------------------------------------------------------------------
 TSendDM::TSendDM(QWidget* Owner )
     : QObject( Owner )
@@ -1231,6 +1232,9 @@ const RigDetails &TSendDM::getRigDetails(const QString &name)
 {
     return rigCache.getDetails(PubSubName(name));
 }
+
+
+
 void TSendDM::traceMsg(QString msg)
 {
     trace(QString("[SendRPCDM] %1").arg(msg));

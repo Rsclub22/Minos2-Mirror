@@ -243,7 +243,11 @@ void RadioSettingDialog::initialise()
     freqPresetReadSettings(presetFreq, bands); // static
 
     //===========================================================================================================
+
+    connect(ui->radioReadOnlyCheckBox, &QCheckBox::stateChanged, this, [=]() {onRadioReadOnlyCheckBoxChanged();});
+
     turnOffColourRadioFreqDial.initialise(&TContestApp::getContestApp() ->loggerBundle, elpContestTurnOffOperatingFreqColorRadioDial, ui->turnOffColourRadioFreqDialChkBox);
+    contestRadioReadOnly.initialise(&TContestApp::getContestApp()->loggerBundle, elpContestRadioReadOnly, ui->radioReadOnlyCheckBox);
     contestStartIgnorePresetFreq.initialise(&TContestApp::getContestApp() ->loggerBundle,elpContestStartIgnorePresetFreq, ui->contestStartIgnorePresetFreqChkBox );
     contestChangeIgnorePreviousFreq.initialise(&TContestApp::getContestApp() ->loggerBundle, elpContestChangeIgnorePreviousFreq, ui->contestChangeIgnorePreviousFreqChkBox );
     constestChangeRestoreContestMode.initialise(&TContestApp::getContestApp() ->loggerBundle, elpContestChangeRestoreContestMode, ui->constestChangeRestoreContestModeChkBox );
@@ -333,6 +337,10 @@ void RadioSettingDialog::finalise()
     if (turnOffColourRadioFreqDial.finalise())
     {
         logRadioSettingsChangeFlag->operatingFreqColor = true;
+    }
+    if (contestRadioReadOnly.finalise())
+    {
+        logRadioSettingsChangeFlag->radioReadOnly = true;
     }
     if (contestStartIgnorePresetFreq.finalise( ))
     {
@@ -580,7 +588,21 @@ void RadioSettingDialog::onEnableSerialBandSwChkBox()
 
 }
 
-
+void RadioSettingDialog::onRadioReadOnlyCheckBoxChanged()
+{
+    if (ui->radioReadOnlyCheckBox->isChecked())
+    {
+        ui->CQRitChkBox->setChecked(false);
+        ui->contestChangeIgnorePreviousFreqChkBox->setChecked(true);
+        ui->contestStartIgnorePresetFreqChkBox->setChecked(true);
+        ui->constestChangeRestoreContestModeChkBox->setChecked(false);
+        ui->radioWriteSettingsGroupBox->setDisabled(true);
+    }
+    else
+    {
+        ui->radioWriteSettingsGroupBox->setDisabled(false);
+    }
+}
 
 void RadioSettingDialog::onSaveVoiceMemoryButtonByRadioNameChkBoxClicked()
 {

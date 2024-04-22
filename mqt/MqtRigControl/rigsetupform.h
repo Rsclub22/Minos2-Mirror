@@ -349,6 +349,7 @@ private:
 
     void onPortTypeSerialRadioButtonClicked();
     void onPortTypeNetworkRadioButtonClicked();
+    void showPleaseSelectPttComportDialogue();
 };
 
 #endif // RIGSETUPFORM_H

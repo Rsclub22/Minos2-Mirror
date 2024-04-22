@@ -646,7 +646,7 @@ void RigControlMainWindow::upDateRadio(QString radioName)
 
         dumpRadioToTraceLog();
 
-        trace(QString("Supports reading Vfo = %1").arg(selectedRadioSupportCap.getSupportGetVfo() ? "true" : "false"));
+        logMessage(QString("Update Radio - Supports reading Vfo = %1").arg(selectedRadioSupportCap.getSupportGetVfo() ? "true" : "false"));
 
 
 
@@ -656,11 +656,11 @@ void RigControlMainWindow::upDateRadio(QString radioName)
             retCode = radio->getVfo(&rigStateDetails->curVfo);
             if (retCode != RIG_OK)
             {
-                trace(QString("GetVfo Error: %1").arg(retCode));
+                trace(QString("Update Radio - GetVfo Error: %1").arg(retCode));
             }
             else
             {
-                trace(QString("Get initial vfo = %1").arg(vfoToStr(rigStateDetails->curVfo)));
+                trace(QString("Update Radio - Get initial vfo = %1").arg(vfoToStr(rigStateDetails->curVfo)));
 
             }
 
@@ -668,12 +668,12 @@ void RigControlMainWindow::upDateRadio(QString radioName)
 
             // this is a test for hamlib, check radio supports targetted VFO's in hamlib
             // FT857 and FT897 don't in hamlib
-            trace(QString("Check radio can setMode with supported VFO, curVfo = %1").arg(vfoToStr(rigStateDetails->curVfo)));
+            logMessage(QString("Check radio can setMode with supported VFO, curVfo = %1").arg(vfoToStr(rigStateDetails->curVfo)));
             retCode = radio->setMode(rigStateDetails->curVfo, MODE::USB);
             if (retCode != RIG_OK)
             {
                 // no doesn't support targetted Vfo, default to Current Vfo
-                trace(QString("Does not support targetted Vfo, use Current_VFO"));
+                trace(QString("Update Radio - Does not support targetted Vfo, use Current_VFO"));
 
                 rigStateDetails->curVfo = CURRENT_VFO;
                 selectedRadioSupportCap.setSupportGetVfo(false);      // don't bother with Vfo selection
@@ -685,11 +685,11 @@ void RigControlMainWindow::upDateRadio(QString radioName)
             rigStateDetails->curVfo = CURRENT_VFO;
         }
 
-        trace(QString("Supports writing Vfo = %1").arg(selectedRadioSupportCap.getSupportSetVfo() ? "true" : "false"));
-        trace(QString("VFO = %1").arg(vfoToStr(rigStateDetails->curVfo)));
+        trace(QString("Update Radio - Supports writing Vfo = %1").arg(selectedRadioSupportCap.getSupportSetVfo() ? "true" : "false"));
+        trace(QString("Update Radio - VFO = %1").arg(vfoToStr(rigStateDetails->curVfo)));
 
         ui->usingLibText->setText(radio->getLibraryName());
-        trace(QString("Using library = %1").arg(radio->getLibraryName()));
+        trace(QString("Update Radio - Using library = %1").arg(radio->getLibraryName()));
         if (currentRadio.rigModelNumber == hamlibData::RIGCTL)     // is it rigctl?
         {
             getRigctldNames(currentRadio.networkAdd, currentRadio.networkPort.toUShort());
@@ -705,14 +705,17 @@ void RigControlMainWindow::upDateRadio(QString radioName)
             }
         }
 
+        logMessage(QString("Update Radio - Setup Transverters"));
         setupTransVerter();
 
         saveCurrentRadio(currentRadioName);
 
         ui->radioNameDisp->setText(currentRadio.radioName);
 
+        logMessage(QString("Update Radio - Build Supported Bandlist"));
         buildSupBandList(&currentRadio, currentRadio.radioTransSupBands);
 
+        logMessage(QString("Update Radio - check Supported Cat Features"));
         checkSupportCatFeatures();
 
 
@@ -721,7 +724,7 @@ void RigControlMainWindow::upDateRadio(QString radioName)
         if (testMode)
         {
 
-            logMessage(QString("Update Radio: Set Mode USB Standalone"));
+            logMessage(QString("Update Radio - Set Mode USB Standalone"));
             // initialise rig state
 
             loggerRequests->slogMode = hamlibData::USB;
@@ -730,11 +733,12 @@ void RigControlMainWindow::upDateRadio(QString radioName)
         }
         else
         {
-            logMessage(QString("Update Radio: Logger Set Freq = %1, Set Mode = %2").arg(loggerRequests->selRadioFreq.traceStr(), loggerRequests->selRadioMode));
+            logMessage(QString("Update Radio - Logger Set Freq = %1, Set Mode = %2").arg(loggerRequests->selRadioFreq.traceStr(), loggerRequests->selRadioMode));
             loggerSetFreq(loggerRequests->selRadioFreq);
             loggerSetMode(loggerRequests->selRadioMode);
         }
 
+        logMessage(QString("Update Radio - Get Initial Radio Info"));
         getRadioInfo(DONT_PUBLISH_NOW);
 
         sendRitEnableStatusLogger();
@@ -755,24 +759,24 @@ void RigControlMainWindow::upDateRadio(QString radioName)
                 msgOffSet = msgOffSet * -1;
                 if (msgOffSet > radioOpenMessages.count())
                 {
-                    trace(QString("UpdateRadio: Radio Failed to Connect - Error Message Number out of range = %1").arg(msgOffSet));
+                    logMessage(QString("Update Radio - Radio Failed to Connect - Error Message Number out of range = %1").arg(msgOffSet));
                 }
             }
         }
 
 
-        trace(QString("#### Radio Failed to connect Error Code = %1, %2  ####").arg(radioOpenStat).arg(radioOpenMessages[radioOpenStat * -1]));
+        logMessage(QString("Update Radio - #### Radio Failed to connect Error Code = %1, %2  ####").arg(radioOpenStat).arg(radioOpenMessages[radioOpenStat * -1]));
         sendStatusToLogDisConnected();
 
     }
 
     if (!testMode)
     {
-        trace(QString("publish to logger"));
-        // this publishes all the changes
-        msg->rigCache.publish();
+        logMessage(QString("Update Radio - publish to logger"));
+        msg->rigCache.publish();        // publishes all the changes
+        logMessage(QString("Update Radio - send radio change complete to logger"));
         sendRadioSwitchCompleteToLogger();
-        msg->rigCache.publish();
+        msg->rigCache.publish();        // publish all changes are complete
 
     }
 }
@@ -1088,7 +1092,7 @@ void RigControlMainWindow::checkSupportPtt()
               }
               else if (pttType == serialCommonData::PTT_METHOD_RTS)
               {
-                 ui->pttLbl->setText("RTS");
+                  ui->pttLbl->setText("RTS");
               }
               else if (pttType == serialCommonData::PTT_METHOD_DTR)
               {
@@ -1857,21 +1861,40 @@ void RigControlMainWindow::getRadioInfo(bool pubNow)
 
     if (radioCommsOK && currentRadio.enablePTT)
     {
-        if (currentRadio.pttType == serialCommonData::PTT_METHOD_CAT
-            || currentRadio.pttType == serialCommonData::PTT_METHOD_DTR
-            ||  currentRadio.pttType == serialCommonData::PTT_METHOD_RTS)
+        if (currentRadio.pttType == serialCommonData::PTT_METHOD_CAT)
         {
-            logMessage(QString("Get PTT Status"));
+            logMessage(QString("Get CAT PTT Status"));
 
             retCode = getTXStatus(rigStateDetails->curVfo);
             if (retCode < 0)
             {
                 // error
-                logMessage(QString("Get radioInfo: Get TXStatus error").arg(QString::number(retCode)));
+                logMessage(QString("Get radioInfo: Get CAT TXStatus error").arg(QString::number(retCode)));
                 radioError(retCode, "Request TX Status");
             }
-
         }
+        else if (currentRadio.pttType == serialCommonData::PTT_METHOD_DTR ||  currentRadio.pttType == serialCommonData::PTT_METHOD_RTS)
+        {
+            if (!currentRadio.pttSerialPort.isEmpty())
+            {
+                logMessage(QString("Get Serial PTT Status for Comport %1 and Control Line Type %2").arg(currentRadio.pttSerialPort).arg(currentRadio.pttType));
+
+                retCode = getTXStatus(rigStateDetails->curVfo);
+                if (retCode < 0)
+                {
+                    // error
+                    logMessage(QString("Get radioInfo: Get RTS/DTR TXStatus error").arg(QString::number(retCode)));
+                    radioError(retCode, "Request TX Status");
+                }
+            }
+            else
+            {
+                // no serial comport defined for PTT
+                logMessage(QString("Get radioInfo: No comport defined for Serial PTT control"));
+
+            }
+        }
+
 
 
     }
@@ -4814,6 +4837,7 @@ void RigControlMainWindow::aboutRigConfig()
             pttPortTypeStr = "cat";     // Note A radio may support CAT, but a user may decide to use RTS or DTR instead
         }
         msg.append(tr("PTT control port Type = %1\n").arg((pttPortTypeStr)));
+        msg.append(tr("PTT serial comport = %1").arg(currentRadio.pttSerialPort));
         msg.append(tr("Get PTT = %1\n").arg((selectedRadioSupportCap.getSupportGetPtt() ? "True" : "False")));
         msg.append(tr("Set PTT = %1\n").arg((selectedRadioSupportCap.getSupportSetPtt() ? "True" : "False")));
         msg.append(tr("Get Vox = %1\n").arg((selectedRadioSupportCap.getSupportGetVox() ? "True" : "False")));
@@ -4978,6 +5002,10 @@ void RigControlMainWindow::dumpRadioToTraceLog()
         trace(QString("PTT control port Type = %1").arg((pttPortTypeStr)));
         trace(QString("Get PTT = %1").arg((selectedRadioSupportCap.getSupportGetPtt() ? "True" : "False")));
         trace(QString("Set PTT = %1").arg((selectedRadioSupportCap.getSupportSetPtt() ? "True" : "False")));
+        trace(QString("Ptt control port Type = %1").arg((pttPortTypeStr)));
+        trace(QString("Ptt serial comport = %1").arg(currentRadio.pttSerialPort));
+        trace(QString("Get Ptt = %1").arg((selectedRadioSupportCap.getSupportGetPtt() ? "True" : "False")));
+        trace(QString("Set Ptt = %1").arg((selectedRadioSupportCap.getSupportSetPtt() ? "True" : "False")));
         trace(QString("Get Vox = %1").arg((selectedRadioSupportCap.getSupportGetVox() ? "True" : "False")));
         trace(QString("Set Vox = %1").arg((selectedRadioSupportCap.getSupportSetVox() ? "True" : "False")));
         trace(QString("Get Vox = %1").arg((selectedRadioSupportCap.getSupportGetVox() ? "True" : "False")));
@@ -5503,7 +5531,7 @@ void RigControlMainWindow::onCwKeyerPbClicked()
                 QString cwMsg = config.value("cwTestMessage", "CQ CQ DE M0ABC").toString();
                 config.endGroup();
 
-                int cwTXTimeoutDur = config.value("cwTxMessageTimeout", 25).toInt();
+                //int cwTXTimeoutDur = config.value("cwTxMessageTimeout", 25).toInt();
 
                 if (cwMsg.isEmpty())
                 {

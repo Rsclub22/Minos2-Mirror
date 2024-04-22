@@ -1897,6 +1897,11 @@ void TSingleLogFrame::onLogRadioSettingsChanged(QSharedPointer<RadioSettingsDial
         txVmButtonsFrame->logRadioSettingsChanged(logRadioSettingsFlags);
     }
 
+    if (runButtonsFrame)
+    {
+        runButtonsFrame->logRadioSettingsChanged(logRadioSettingsFlags);
+    }
+
 }
 
 void TSingleLogFrame::on_SetRadioList()
@@ -2065,7 +2070,8 @@ void TSingleLogFrame::sendRigTxCwMessage(QString msg)
 
 void TSingleLogFrame::sendRadioFreq(Frequency freq)
 {
-    if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
+    if (contest && contest == TContestApp::getContestApp() ->getCurrentContest()
+        && !getRadioReadOnlyFlag())
     {
         trace("sendKeyerStop from TSingleLogFrame::sendRadioFreq");
         sendKeyerStop();    // don't keep calling while tuning!
@@ -2088,6 +2094,13 @@ void TSingleLogFrame::sendRadioFreq(Frequency freq)
         }
 
     }
+    else
+    {
+        if (getRadioReadOnlyFlag())
+        {
+            trace("sendRadioFreq - radio in read only mode");
+        }
+    }
 }
 
 void TSingleLogFrame::sendBandToRig(QString band)
@@ -2108,9 +2121,14 @@ void TSingleLogFrame::sendBandToRig(QString band)
 
 void TSingleLogFrame::sendRadioRitFreq(ShortFreq freq)
 {
-    if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
+    if (contest && contest == TContestApp::getContestApp() ->getCurrentContest()
+        && !getRadioReadOnlyFlag())
     {
         LogContainer->sendDM->sendRigControlRitFreq(this, freq);
+    }
+    else
+    {
+        trace("sendRadioRitFreq - radio in read only mode");
     }
 }
 
@@ -2125,19 +2143,29 @@ void TSingleLogFrame::sendRadioRitStatus(bool status)
 
 void TSingleLogFrame::sendRadioVolume(int level)
 {
-    if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
+    if (contest && contest == TContestApp::getContestApp() ->getCurrentContest()
+        && !getRadioReadOnlyFlag())
     {
         LogContainer->sendDM->sendRigControlVolumeLevel(this, level);
+    }
+    else
+    {
+        trace("sendRadioVolume - radio in read only mode");
     }
 }
 
 void TSingleLogFrame::sendRadioMode(QString mode)
 {
-    if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
+    if (contest && contest == TContestApp::getContestApp() ->getCurrentContest()
+        && !getRadioReadOnlyFlag())
     {
         trace("sendKeyerStop from TSingleLogFrame::sendRadioMode");
         sendKeyerStop();    // don't keep calling while tuning!
         LogContainer->sendDM->sendRigControlMode(this, mode);
+    }
+    else
+    {
+        trace("sendRadioMode - radio in read only mode");
     }
 }
 
@@ -2203,6 +2231,18 @@ void TSingleLogFrame::sendSelectRotator(const QString &s)
         }
     }
 }
+
+
+bool TSingleLogFrame::getRadioReadOnlyFlag()
+{
+
+    bool state;
+    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpContestRadioReadOnly, state );
+    return state;
+}
+
+
+
 //---------------------------------------------------------------------------
 
 // RotatorControl

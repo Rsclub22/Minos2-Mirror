@@ -145,6 +145,7 @@ BundleFile::BundleFile( PROFILES p )
 
         entries.push_back( QSharedPointer<ProfileEntry> (new ProfileEntry(elpContestTurnOffOperatingFreqColorRadioDial, "turnOffOperatingColorRadioDial", false, QT_TR_NOOP("Radio Dial - Turn Off Operating Colour"), QT_TR_NOOP("Radio Dial - Turn Off Operating Colour"), false)));
 
+        entries.push_back( QSharedPointer<ProfileEntry> (new ProfileEntry(elpContestRadioReadOnly, "contestRadioReadOny", false, QT_TR_NOOP("Contest - Radio Read Only"), QT_TR_NOOP("Contest - Radio Read Only"), false)));
         entries.push_back( QSharedPointer<ProfileEntry> (new ProfileEntry(elpContestStartIgnorePresetFreq, "contestStartIgnorePresetFreq", false, QT_TR_NOOP("Contest Start - Ignore Preset Frequency"), QT_TR_NOOP("Contest Start - Ignore Preset Frequency"), false)));
         entries.push_back( QSharedPointer<ProfileEntry> (new ProfileEntry(elpContestChangeIgnorePreviousFreq, "contestChangeIgnorePreviousFreq", false, QT_TR_NOOP("Contest Change - Ignore Previous Frequency"), QT_TR_NOOP("Contest Change - Ignore Previous Frequency"), false)));
         entries.push_back( QSharedPointer<ProfileEntry> (new ProfileEntry(elpContestChangeRestoreContestMode, "contestChangeRestoreContestMode", false, QT_TR_NOOP("Contest Change - Restore Contest Mode"), QT_TR_NOOP("Contest Change - Restore Contest Mode"), false)));
