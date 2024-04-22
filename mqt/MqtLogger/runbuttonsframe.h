@@ -87,6 +87,7 @@ public:
 
     void setCallFreq();
     void setFreq(Frequency freq);
+    void logRadioSettingsChanged(QSharedPointer<RadioSettingsDialogChangeFlag>);
 private:
     Ui::RunButtonsFrame *ui;
     LoggerContestLog *ct = nullptr;
@@ -113,6 +114,8 @@ private:
     int otherButton(int buttonNumber);
 
     void chkRunFreq();
+    void setRunButtonsFrameTitle();
+    bool getRadioReadOnlyFlag();
 signals:
     void sendRunOnFlag(Frequency, QString mode, bool);
     void sendRunOffFreqFlag(Frequency, bool);

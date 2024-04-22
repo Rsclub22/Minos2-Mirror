@@ -311,6 +311,7 @@ public:
     void clear()
     {
         operatingFreqColor = false;
+        radioReadOnly = false;
         ignorePresetFreq = false;
         ignorePreviousFreq = false;
         restoreContestMode = false;
@@ -329,6 +330,7 @@ public:
     bool isChanged()
     {
         return operatingFreqColor ||
+        radioReadOnly ||
         ignorePresetFreq ||
         ignorePreviousFreq ||
         restoreContestMode ||
@@ -346,6 +348,7 @@ public:
 
 
     bool operatingFreqColor;
+    bool radioReadOnly;
     bool ignorePresetFreq;
     bool ignorePreviousFreq;
     bool restoreContestMode;

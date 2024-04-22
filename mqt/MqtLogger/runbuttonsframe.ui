@@ -6,15 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>108</width>
-    <height>119</height>
+    <width>323</width>
+    <height>194</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Call Freqs</string>
   </property>
   <property name="title">
-   <string>Run Frequencies</string>
+   <string/>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>

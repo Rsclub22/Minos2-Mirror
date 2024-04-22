@@ -87,6 +87,7 @@ enum LOGGERPROFILE {
     elpBandmapInvert,
     elpCQRit,
 
+    elpContestRadioReadOnly,
     elpContestStartIgnorePresetFreq,
     elpContestChangeIgnorePreviousFreq,
     elpContestChangeRestoreContestMode,

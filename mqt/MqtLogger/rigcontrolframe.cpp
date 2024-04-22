@@ -123,6 +123,8 @@ RigControlFrame::RigControlFrame(TSingleLogFrame *parent):
 
     connect(LogContainer->sendDM, &TSendDM::setRadioLoaded, this, &RigControlFrame::on_RadioLoaded);
 
+    setRigControlPanelTitle();
+
     ui->resetBandFreqFrame->hide();
 
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::QSOMargins, this, &RigControlFrame::on_QSOMargins);
@@ -617,6 +619,8 @@ void RigControlFrame::logRadioSettingsChanged(QSharedPointer<RadioSettingsDialog
 {
     // update preset freqs
     tslf->bandSwitchFrame->readPresetFreqsFromIni(bands);
+
+    setRigControlPanelTitle();
 }
 
 void RigControlFrame::changeMainRadioFreq()
@@ -2090,6 +2094,33 @@ bool RigControlFrame::checkFreqOK(const Frequency &freq)
     {
         return false;
     }
+}
+
+
+
+
+
+
+void RigControlFrame::setRigControlPanelTitle()
+{
+    if (getRadioReadOnlyFlag())
+    {
+        ui->rigControlPanelTitle->setText("RigControl - Read Only");
+    }
+    else
+    {
+        ui->rigControlPanelTitle->setText("RigControl");
+    }
+
+}
+
+
+bool RigControlFrame::getRadioReadOnlyFlag()
+{
+
+    bool state;
+    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpContestRadioReadOnly, state );
+    return state;
 }
 
 void RigControlFrame::traceMsg(QString msg)
