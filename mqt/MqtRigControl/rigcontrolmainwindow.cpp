@@ -1668,6 +1668,7 @@ void RigControlMainWindow::closeRadio()
         if (radio && radioCommsOK)
         {
            onSetPttOnOff(false);     // turn off PTT in case it is on
+           setTestPttButtonIndOnOff(false);
         }
 
     }
