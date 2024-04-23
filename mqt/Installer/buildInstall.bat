@@ -101,6 +101,9 @@ call powershell.exe "& {Invoke-WebRequest http://www.rsgbcc.org/vhf/hfcontests24
 call powershell.exe "& {Invoke-WebRequest http://microwave.rsgbcc.org/microcontests23.xml -Outfile microcontests23.xml}"
 call powershell.exe "& {Invoke-WebRequest http://microwave.rsgbcc.org/microcontests24.xml -Outfile microcontests24.xml}"
 
+call powershell.exe "& {Invoke-WebRequest http://bartg.rsgbcc.org/bartgcontests23.xml -Outfile bartgcontests23.xml}"
+call powershell.exe "& {Invoke-WebRequest http://bartg.rsgbcc.org/bartgcontests24.xml -Outfile bartgcontests24.xml}"
+
 
 cd ../Bin
 

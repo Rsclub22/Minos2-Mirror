@@ -136,6 +136,10 @@ wget https://www.rsgbcc.org/vhf/hfcontests24.xml -O hfcontests24.xml
 wget https://microwave.rsgbcc.org/microcontests23.xml -O microcontests23.xml
 wget https://microwave.rsgbcc.org/microcontests24.xml -O microcontests24.xml
 
+
+wget https://microwave.rsgbcc.org/bartgcontests23.xml -O bartgcontests23.xml
+wget https://microwave.rsgbcc.org/bartgcontests24.xml -O bartgcontests24.xml
+
 cd ..
 
 
