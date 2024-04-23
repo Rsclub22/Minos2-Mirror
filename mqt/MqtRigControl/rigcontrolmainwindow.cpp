@@ -5589,21 +5589,23 @@ void RigControlMainWindow::onCWMessageTimerTimeout()
 
 void RigControlMainWindow::onTxPttTestPbClicked()
 {
-    static bool pttState = false;
+
     if (radio)
     {
-        if (pttState)
+        if (rigStateDetails->curPttStatus)
         {
-            pttState = false;
-            onSetPttOnOff(pttState);
-            setTestPttButtonIndOnOff(pttState);
+            rigStateDetails->curPttStatus = false;
+
         }
         else
         {
-            pttState = true;
-            onSetPttOnOff(pttState);
-            setTestPttButtonIndOnOff(pttState);
+            rigStateDetails->curPttStatus = true;
+
         }
+
+        onSetPttOnOff(rigStateDetails->curPttStatus);
+        setTestPttButtonIndOnOff(rigStateDetails->curPttStatus);
+        setRigControlPttState(rigStateDetails->curPttStatus);
     }
 }
 
