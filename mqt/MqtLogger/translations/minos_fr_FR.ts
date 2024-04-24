@@ -4480,7 +4480,7 @@ L&amp;apos;arrière-plan de la ligne change de couleur lorsqu&amp;apos;elle est 
     <name>TCalendarDownload</name>
     <message>
         <location filename="../tcalendardownload.ui" line="14"/>
-        <source>Donload Calendar Files</source>
+        <source>Download Calendar Files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

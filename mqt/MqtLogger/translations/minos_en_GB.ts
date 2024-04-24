@@ -4395,7 +4395,7 @@ The row background will change colour when selected.</source>
     <name>TCalendarDownload</name>
     <message>
         <location filename="../tcalendardownload.ui" line="14"/>
-        <source>Donload Calendar Files</source>
+        <source>Download Calendar Files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
