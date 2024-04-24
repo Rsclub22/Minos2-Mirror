@@ -108,6 +108,7 @@ SOURCES += \
     runbuttonsframe.cpp \
     taboutbox.cpp \
     tbundleframe.cpp \
+    tcalendardownload.cpp \
     tcalendarform.cpp \
     tclockdlg.cpp \
     tentryoptionsform.cpp \
@@ -212,6 +213,7 @@ HEADERS  += \
     runbuttonsframe.h \
     taboutbox.h \
     tbundleframe.h \
+    tcalendardownload.h \
     tcalendarform.h \
     tclockdlg.h \
     tentryoptionsform.h \
@@ -286,6 +288,7 @@ FORMS    += \
     runbuttonsframe.ui \
     taboutbox.ui \
     tbundleframe.ui \
+    tcalendardownload.ui \
     tcalendarform.ui \
     tclockdlg.ui \
     TClockFrame.ui \

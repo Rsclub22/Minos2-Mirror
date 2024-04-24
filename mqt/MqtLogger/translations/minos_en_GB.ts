@@ -4392,6 +4392,29 @@ The row background will change colour when selected.</source>
     </message>
 </context>
 <context>
+    <name>TCalendarDownload</name>
+    <message>
+        <location filename="../tcalendardownload.ui" line="14"/>
+        <source>Donload Calendar Files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../tcalendardownload.ui" line="20"/>
+        <source>Downloading Calendar Files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../tcalendardownload.cpp" line="41"/>
+        <source>Something is wrong - SSL not supported on this system.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../tcalendardownload.cpp" line="71"/>
+        <source>%1 of %2 files downloaded. We don&apos;t expect to load them all.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>TCalendarForm</name>
     <message>
         <location filename="../tcalendarform.ui" line="14"/>
@@ -4429,7 +4452,7 @@ The row background will change colour when selected.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tcalendarform.cpp" line="89"/>
+        <location filename="../tcalendarform.cpp" line="90"/>
         <source>This year&apos;s calendar file
 
 %1
@@ -4438,138 +4461,138 @@ does not exist; do you wish to download the latest calendars?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tcalendarform.cpp" line="116"/>
+        <location filename="../tcalendarform.cpp" line="117"/>
         <source>Contest Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tcalendarform.cpp" line="117"/>
+        <location filename="../tcalendarform.cpp" line="118"/>
         <source>Band</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tcalendarform.cpp" line="118"/>
+        <location filename="../tcalendarform.cpp" line="119"/>
         <source>Start (UTC)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tcalendarform.cpp" line="119"/>
+        <location filename="../tcalendarform.cpp" line="120"/>
         <source>Finish (UTC)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tcalendarform.cpp" line="122"/>
+        <location filename="../tcalendarform.cpp" line="123"/>
         <source>Scoring</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tcalendarform.cpp" line="123"/>
+        <location filename="../tcalendarform.cpp" line="124"/>
         <source>Mults</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tcalendarform.cpp" line="125"/>
+        <location filename="../tcalendarform.cpp" line="126"/>
         <source>Sections</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tcalendarform.cpp" line="128"/>
+        <location filename="../tcalendarform.cpp" line="129"/>
         <source>Special Rules</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tcalendarform.cpp" line="143"/>
+        <location filename="../tcalendarform.cpp" line="144"/>
         <source>1Pt/Km</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tcalendarform.cpp" line="143"/>
+        <location filename="../tcalendarform.cpp" line="144"/>
         <source>1Pt/QSO</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tcalendarform.cpp" line="199"/>
+        <location filename="../tcalendarform.cpp" line="200"/>
         <source>Failed to load the HF calendar file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tcalendarform.cpp" line="200"/>
-        <location filename="../tcalendarform.cpp" line="223"/>
-        <location filename="../tcalendarform.cpp" line="246"/>
-        <location filename="../tcalendarform.cpp" line="268"/>
-        <location filename="../tcalendarform.cpp" line="290"/>
-        <location filename="../tcalendarform.cpp" line="313"/>
-        <location filename="../tcalendarform.cpp" line="335"/>
+        <location filename="../tcalendarform.cpp" line="201"/>
+        <location filename="../tcalendarform.cpp" line="224"/>
+        <location filename="../tcalendarform.cpp" line="247"/>
+        <location filename="../tcalendarform.cpp" line="269"/>
+        <location filename="../tcalendarform.cpp" line="291"/>
+        <location filename="../tcalendarform.cpp" line="314"/>
+        <location filename="../tcalendarform.cpp" line="336"/>
         <source>No file loaded</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tcalendarform.cpp" line="209"/>
+        <location filename="../tcalendarform.cpp" line="210"/>
         <source>Select Contest from BARTG Calendar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tcalendarform.cpp" line="222"/>
+        <location filename="../tcalendarform.cpp" line="223"/>
         <source>Failed to load the BARTG calendar file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tcalendarform.cpp" line="232"/>
+        <location filename="../tcalendarform.cpp" line="233"/>
         <source>Select Contest from VHF Calendar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tcalendarform.cpp" line="245"/>
+        <location filename="../tcalendarform.cpp" line="246"/>
         <source>Failed to load the VHF calendar file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tcalendarform.cpp" line="255"/>
+        <location filename="../tcalendarform.cpp" line="256"/>
         <source>Select Contest from HF other Calendar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tcalendarform.cpp" line="267"/>
+        <location filename="../tcalendarform.cpp" line="268"/>
         <source>Failed to load the HF other calendar file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tcalendarform.cpp" line="277"/>
+        <location filename="../tcalendarform.cpp" line="278"/>
         <source>Select Contest from VHF other Calendar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tcalendarform.cpp" line="289"/>
+        <location filename="../tcalendarform.cpp" line="290"/>
         <source>Failed to load the VHF other calendar file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tcalendarform.cpp" line="299"/>
+        <location filename="../tcalendarform.cpp" line="300"/>
         <source>Select Contest from Microwave Calendar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tcalendarform.cpp" line="312"/>
+        <location filename="../tcalendarform.cpp" line="313"/>
         <source>Failed to load the Microwave calendar file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tcalendarform.cpp" line="322"/>
+        <location filename="../tcalendarform.cpp" line="323"/>
         <source>Select Contest from UKSMG Calendar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tcalendarform.cpp" line="334"/>
+        <location filename="../tcalendarform.cpp" line="335"/>
         <source>Failed to load the UKSMG calendar file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tcalendarform.cpp" line="348"/>
+        <location filename="../tcalendarform.cpp" line="352"/>
         <source>Something is wrong - SSL not supported on this system.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tcalendarform.cpp" line="377"/>
+        <location filename="../tcalendarform.cpp" line="381"/>
         <source>%1 of %2 files downloaded. We don&apos;t expect to load them all.</source>
         <translation type="unfinished"></translation>
     </message>

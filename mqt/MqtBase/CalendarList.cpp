@@ -24,9 +24,14 @@ QString calendarNameString[] =
     };
 
 //---------------------------------------------------------------------------
+QString CalendarYear::getFileName()
+{
+    return calendarNameString[ type ] + yearString() + ".xml";
+}
+
 QString CalendarYear::getPath()
 {
-    QString path =  getDirectoryLocation(dlConfiguration) + "/" + calendarNameString[ type ] + yearString() + ".xml";
+    QString path =  getDirectoryLocation(dlConfiguration) + "/" + getFileName();
     return path;
 }
 QString CalendarYear::getURL()
@@ -61,9 +66,14 @@ QString VHFOtherCalendarYear::getSite()
 {
     return "";
 }
+
+QString VHFOtherCalendarYear::getFileName()
+{
+    return calendarNameString[ type ] + ".xml";
+}
 QString VHFOtherCalendarYear::getPath()
 {
-    QString p = getDirectoryLocation(dlConfiguration) + "/" +  calendarNameString[ type ] + ".xml";
+    QString p = getDirectoryLocation(dlConfiguration) + "/" + getFileName() ;
     return p;
 }
 QString VHFOtherCalendarYear::getURL()
@@ -76,9 +86,14 @@ QString HFOtherCalendarYear::getSite()
 {
     return "";
 }
+
+QString HFOtherCalendarYear::getFileName()
+{
+    return calendarNameString[ type ] + ".xml";
+}
 QString HFOtherCalendarYear::getPath()
 {
-    QString p = getDirectoryLocation(dlConfiguration) + "/" + calendarNameString[ type ] + ".xml";
+    QString p = getDirectoryLocation(dlConfiguration) + "/" + getFileName();
     return p;
 }
 QString HFOtherCalendarYear::getURL()
@@ -91,9 +106,14 @@ QString CTYCalendarYear::getSite()
 {
     return "https://www.country-files.com/cty/cty.dat";
 }
+
+QString CTYCalendarYear::getFileName()
+{
+    return "cty.dat";
+}
 QString CTYCalendarYear::getPath()
 {
-    QString p = getDirectoryLocation(dlConfiguration) + "/cty.dat";
+    QString p = getDirectoryLocation(dlConfiguration) + "/" + getFileName();
     return p;
 }
 QString CTYCalendarYear::getURL()
@@ -105,9 +125,14 @@ QString ClubListCalendarYear::getSite()
 {
     return "https://www.rsgbcc.org/cgi-bin/vhfenter.pl?afsdownload=y";
 }
+
+QString ClubListCalendarYear::getFileName()
+{
+    return "clublist.txt";
+}
 QString ClubListCalendarYear::getPath()
 {
-    QString p = getDirectoryLocation(dlConfiguration) + "/clublist.txt";
+    QString p = getDirectoryLocation(dlConfiguration) + "/" + getFileName();
     return p;
 }
 QString ClubListCalendarYear::getURL()
@@ -210,3 +235,4 @@ bool CalendarYear::downloadFile ( bool showError, QWidget *parent )
     }
     return false;
 }
+

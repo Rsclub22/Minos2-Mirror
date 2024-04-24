@@ -1,10 +1,11 @@
+//#include <QSslSocket>
 #include "regsettings.h"
-#include "MTrace.h"
+//#include "MTrace.h"
 #include "MMessageDialog.h"
 #include "MShowMessageDlg.h"
 #include "fileutils.h"
 #include "tlogcontainer.h"
-#include <QSslSocket>
+#include "tcalendardownload.h"
 #include "tcalendarform.h"
 #include "ui_tcalendarform.h"
 
@@ -341,6 +342,9 @@ void TCalendarForm::FormShow ( )
 }
 void TCalendarForm::downloadFiles()
 {
+    TCalendarDownload dl;
+    dl.exec();
+#ifdef RUBBISH
     trace(QString("OpenSSL version build is %1").arg(QSslSocket::sslLibraryBuildVersionString()));
     if (!QSslSocket::supportsSsl())
     {
@@ -375,6 +379,7 @@ void TCalendarForm::downloadFiles()
     }
 
     mShowMessage( tr("%1 of %2 files downloaded. We don't expect to load them all.").arg(fileCount).arg(yearList.size()), this);
+#endif
 }
 //---------------------------------------------------------------------------
 
