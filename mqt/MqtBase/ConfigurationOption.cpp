@@ -31,9 +31,17 @@ void ConfigurationOption::initialise(SettingsBundle *pset, int popt, QCheckBox *
     cb = pcb;
 
     set->getBoolProfile( opt, bInitial );
+
     cb->setChecked(bInitial);
 
+
+
+
 }
+
+
+
+
 void ConfigurationOption::initialise(SettingsBundle *pset, int popt, QSpinBox *psb)
 {
     set = pset;

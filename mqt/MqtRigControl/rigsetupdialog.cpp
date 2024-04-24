@@ -452,6 +452,7 @@ void RigSetupDialog::addRadio()
     radioTab.value(radioName)->setPollInterval(RIG_DEFAULT_POLLINTERVAL);
 
     loadAvailComportsToTab(radioName);
+    loadAvailPttComportsToTab(radioName);
 
     // initial settings
     radioTab.value(radioName)->setDataSpeed("9600");

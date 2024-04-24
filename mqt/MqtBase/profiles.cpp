@@ -149,10 +149,7 @@ BundleFile::BundleFile( PROFILES p )
         entries.push_back( QSharedPointer<ProfileEntry> (new ProfileEntry(elpContestStartIgnorePresetFreq, "contestStartIgnorePresetFreq", false, QT_TR_NOOP("Contest Start - Ignore Preset Frequency"), QT_TR_NOOP("Contest Start - Ignore Preset Frequency"), false)));
         entries.push_back( QSharedPointer<ProfileEntry> (new ProfileEntry(elpContestChangeIgnorePreviousFreq, "contestChangeIgnorePreviousFreq", false, QT_TR_NOOP("Contest Change - Ignore Previous Frequency"), QT_TR_NOOP("Contest Change - Ignore Previous Frequency"), false)));
         entries.push_back( QSharedPointer<ProfileEntry> (new ProfileEntry(elpContestChangeRestoreContestMode, "contestChangeRestoreContestMode", false, QT_TR_NOOP("Contest Change - Restore Contest Mode"), QT_TR_NOOP("Contest Change - Restore Contest Mode"), false)));
-
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpBandMapTurnOffOperatingFreqStrip , "bandmapTurnOffOperatingFreqStrip", false, QT_TR_NOOP("Bandmap Turn Off Operating Freq Colour Strip"), QT_TR_NOOP("Bandmap Turn Off Operating Freq Colour Strip"), false ) ) );
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpBandMapFollowRadioModeOperatingFreqStrip , "bandmapFollowRadioModeOperatingFreqStrip", true, QT_TR_NOOP("Bandmap Follow Radio Mode on Operating Freq Colour Strip"), QT_TR_NOOP("Bandmap Follow Radio Mode on Operating Freq Colour Strip"), false ) ) );
-
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpBandMapMouseInFrameDelay , "bandMapMouseInFrameDelay", false, QT_TR_NOOP("Bandmap Delay when mouse in frame"), QT_TR_NOOP("Bandmap Delay when mouse in frame"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpShowDerivedLoc, "bandMapShowDerivedLoc", true, QT_TR_NOOP("Bandmap show derived loc"), QT_TR_NOOP("Bandmap show derived loc"), true ) ) );
 

@@ -19,6 +19,7 @@
 #include "rigcontrolcommonconstants.h"
 
 #include "ContestApp.h"
+#include "AppStartup.h"
 #include "rigutils.h"
 #include "tlogcontainer.h"
 #include "MTrace.h"
@@ -244,15 +245,19 @@ void RadioSettingDialog::initialise()
 
     //===========================================================================================================
 
-    connect(ui->radioReadOnlyCheckBox, &QCheckBox::stateChanged, this, [=]() {onRadioReadOnlyCheckBoxChanged();});
+    connect(ui->radioReadOnlyCheckBox, &QCheckBox::clicked, this, [=]() {onRadioReadOnlyCheckBoxClicked();});
 
     turnOffColourRadioFreqDial.initialise(&TContestApp::getContestApp() ->loggerBundle, elpContestTurnOffOperatingFreqColorRadioDial, ui->turnOffColourRadioFreqDialChkBox);
+
     contestRadioReadOnly.initialise(&TContestApp::getContestApp()->loggerBundle, elpContestRadioReadOnly, ui->radioReadOnlyCheckBox);
     contestStartIgnorePresetFreq.initialise(&TContestApp::getContestApp() ->loggerBundle,elpContestStartIgnorePresetFreq, ui->contestStartIgnorePresetFreqChkBox );
     contestChangeIgnorePreviousFreq.initialise(&TContestApp::getContestApp() ->loggerBundle, elpContestChangeIgnorePreviousFreq, ui->contestChangeIgnorePreviousFreqChkBox );
     constestChangeRestoreContestMode.initialise(&TContestApp::getContestApp() ->loggerBundle, elpContestChangeRestoreContestMode, ui->constestChangeRestoreContestModeChkBox );
     CQRit.initialise(&TContestApp::getContestApp() ->loggerBundle, elpCQRit, ui->CQRitChkBox);
-
+    if (ui->radioReadOnlyCheckBox->isChecked())
+    {
+        ui->radioWriteSettingsGroupBox->setDisabled(true);
+    }
     //===========================================================================================================
     ui->enableBandSwChkBox->setChecked(readEnableBandSwitchFromIni());
 
@@ -588,21 +593,37 @@ void RadioSettingDialog::onEnableSerialBandSwChkBox()
 
 }
 
-void RadioSettingDialog::onRadioReadOnlyCheckBoxChanged()
+void RadioSettingDialog::onRadioReadOnlyCheckBoxClicked()
 {
     if (ui->radioReadOnlyCheckBox->isChecked())
     {
-        ui->CQRitChkBox->setChecked(false);
+        // save current settings
+        writeIgnorePresetFreqFlagSavedSettingFlag(ui->contestStartIgnorePresetFreqChkBox->isChecked());
+        writeContestChangeIgnorePreviousFreqFlagSavedSettingFlag(ui->contestChangeIgnorePreviousFreqChkBox->isChecked());
+        writeContestChangeRestoreContestModeSavedSettingFlag(ui->constestChangeRestoreContestModeChkBox->isChecked());
+        writeCqRitSavedSettingFlag(ui->CQRitChkBox->isChecked());
+
+        //set readonly settings
         ui->contestChangeIgnorePreviousFreqChkBox->setChecked(true);
         ui->contestStartIgnorePresetFreqChkBox->setChecked(true);
         ui->constestChangeRestoreContestModeChkBox->setChecked(false);
+        ui->CQRitChkBox->setChecked(false);
+
         ui->radioWriteSettingsGroupBox->setDisabled(true);
     }
     else
     {
+        // restore settings prior to read only mode
+        ui->contestStartIgnorePresetFreqChkBox->setChecked(readIgnorePresetFreqFlagSavedSettingFlag());
+        ui->contestChangeIgnorePreviousFreqChkBox->setChecked(readContestChangeIgnorePreviousFreqFlagSavedSettingFlag());
+        ui->constestChangeRestoreContestModeChkBox->setChecked(readContestChangeRestoreContestModeSavedSettingFlag());
+        ui->CQRitChkBox->setChecked(readCqRitSavedSettingFlag());
+
         ui->radioWriteSettingsGroupBox->setDisabled(false);
     }
 }
+
+
 
 void RadioSettingDialog::onSaveVoiceMemoryButtonByRadioNameChkBoxClicked()
 {
@@ -855,4 +876,79 @@ void RadioSettingDialog::enableBandSwLineEdits(bool enabled)
     ui->enableSerialBandSwChkBox->setEnabled(enabled);
     ui->bandSwCombo->setEnabled(enabled);
     ui->comportLabel->setEnabled(enabled);
+}
+
+/*** Save settings before radio read only enabled, to restore if read only deselected ****/
+
+bool RadioSettingDialog::readIgnorePresetFreqFlagSavedSettingFlag()
+{
+
+    return loggerIniSettingsGetBool(savedSettings.CONTEST_START_IGNORE_PRESET_FREQ_SAVED_SETTING_KEY);
+}
+
+void RadioSettingDialog::writeIgnorePresetFreqFlagSavedSettingFlag(const bool state)
+{
+    loggerIniSettingsSetBool(savedSettings.CONTEST_START_IGNORE_PRESET_FREQ_SAVED_SETTING_KEY, state);
+}
+
+
+
+bool RadioSettingDialog::readContestChangeIgnorePreviousFreqFlagSavedSettingFlag()
+{
+
+    return loggerIniSettingsGetBool(savedSettings.CONTEST_CHANGE_IGNORE_PREVIOUS_FREQ_SAVED_SETTING_KEY);
+
+}
+
+void RadioSettingDialog::writeContestChangeIgnorePreviousFreqFlagSavedSettingFlag(const bool state)
+{
+    loggerIniSettingsSetBool(savedSettings.CONTEST_CHANGE_IGNORE_PREVIOUS_FREQ_SAVED_SETTING_KEY, state);
+}
+
+bool RadioSettingDialog::readContestChangeRestoreContestModeSavedSettingFlag()
+{
+    return loggerIniSettingsGetBool(savedSettings.CONTEST_CHANGE_RESTORE_CONTEST_MODE_SAVED_SETTING_KEY);
+}
+
+void RadioSettingDialog::writeContestChangeRestoreContestModeSavedSettingFlag(const bool state)
+{
+    loggerIniSettingsSetBool(savedSettings.CONTEST_CHANGE_RESTORE_CONTEST_MODE_SAVED_SETTING_KEY, state);
+}
+
+bool RadioSettingDialog::readCqRitSavedSettingFlag()
+{
+    return loggerIniSettingsGetBool(savedSettings.CQ_RIT_SAVED_SETTING_KEY);
+}
+
+void RadioSettingDialog::writeCqRitSavedSettingFlag(const bool state)
+{
+    loggerIniSettingsSetBool(savedSettings.CQ_RIT_SAVED_SETTING_KEY, state);
+}
+
+
+void RadioSettingDialog::loggerIniSettingsSetBool(const QString key, const bool value)
+{
+    QString filename = CONFIGURATION_FILEPATH_LOGGER() + savedSettings.MINOS_LOGGER_CONFIG_FILENAME;
+    QSettings config(filename, QSettings::IniFormat);
+    config.beginGroup(savedSettings.LOGGER_INI_DEFAULT_GROUP_NAME);
+    config.setValue(key, value);
+    config.endGroup();
+
+}
+
+bool RadioSettingDialog::loggerIniSettingsGetBool(const QString key)
+{
+    bool state = false;
+    QString filename = CONFIGURATION_FILEPATH_LOGGER() + savedSettings.MINOS_LOGGER_CONFIG_FILENAME;
+    QSettings config(filename, QSettings::IniFormat);
+    config.beginGroup(savedSettings.LOGGER_INI_DEFAULT_GROUP_NAME);
+    state = config.value(key, false).toBool();
+    config.endGroup();
+
+    return state;
+}
+
+QString RadioSettingDialog::CONFIGURATION_FILEPATH_LOGGER()
+{
+    return getDirectoryLocation(dlConfiguration) + "/";
 }
