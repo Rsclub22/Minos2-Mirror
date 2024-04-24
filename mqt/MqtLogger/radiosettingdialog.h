@@ -34,6 +34,17 @@ public:
 
 using namespace voiceKeyerCommon;
 
+struct SAVED_SETTINGS { // to silence clang
+
+    const QString LOGGER_INI_DEFAULT_GROUP_NAME = "Default";
+    const QString CONTEST_START_IGNORE_PRESET_FREQ_SAVED_SETTING_KEY = "contestStartIgnorePresetFreqSavedSetting";
+    const QString CONTEST_CHANGE_IGNORE_PREVIOUS_FREQ_SAVED_SETTING_KEY = "contestChangeIgnorePreviousFreqSavedSetting";
+    const QString CONTEST_CHANGE_RESTORE_CONTEST_MODE_SAVED_SETTING_KEY = "contestChangeRestoreContestModeSavedSetting";
+    const QString CQ_RIT_SAVED_SETTING_KEY = "CQRitSavedSetting";
+    const QString MINOS_LOGGER_CONFIG_FILENAME = "MinosLogger.ini";
+};
+
+
 class RadioSettingDialog : public QFrame
 {
     Q_OBJECT
@@ -75,7 +86,7 @@ private slots:
     void onSaveCwMemoryButtonByRadioNameChkBoxClicked();
     void onDeleteVoiceMemoryButtonRadiosPushButtonClicked();
     void onDeleteCwMemoryButtonRadiosPushButtonClicked();
-    void onRadioReadOnlyCheckBoxChanged();
+    void onRadioReadOnlyCheckBoxClicked();
 private:
     Ui::RadioSettingDialog *ui;
 
@@ -116,6 +127,8 @@ private:
     ConfigurationOption constestChangeRestoreContestMode;
     ConfigurationOption CQRit;
 
+    SAVED_SETTINGS savedSettings;
+
     bool checkInBand(Frequency freq, const QString &band, const QString &mode);
     void getFreq(QLineEdit* f_box, int band);
 
@@ -132,6 +145,17 @@ private:
     void saveCwMemoryButtonByRadioNameCheckBox();
     void setDeleteMemoryButtonRadiosPushButtonVisible(bool visible, VoiceKeyerId id);
     void deleteMemoryButtonRadios(VoiceKeyerId id);
+    bool readIgnorePresetFreqFlagSavedSettingFlag();
+    bool readContestChangeIgnorePreviousFreqFlagSavedSettingFlag();
+    bool readContestChangeRestoreContestModeSavedSettingFlag();
+    bool readCqRitSavedSettingFlag();
+    QString CONFIGURATION_FILEPATH_LOGGER();
+    void loggerIniSettingsSetBool(const QString key, const bool value);
+    bool loggerIniSettingsGetBool(const QString key);
+    void writeCqRitSavedSettingFlag(const bool state);
+    void writeContestChangeRestoreContestModeSavedSettingFlag(const bool state);
+    void writeContestChangeIgnorePreviousFreqFlagSavedSettingFlag(const bool state);
+    void writeIgnorePresetFreqFlagSavedSettingFlag(const bool state);
 };
 
 #endif // RADIOSETTINGDIALOG_H

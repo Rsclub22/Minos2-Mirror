@@ -25,6 +25,9 @@ class ConfigurationOption
     QString section;
     QString key;
 
+
+
+
 public:
     ConfigurationOption()
     {}
@@ -38,6 +41,7 @@ public:
     bool value() const;
     QString sValue() const;
     int iValue() const;
+
 };
 
 #endif // CONFIGURATIONOPTION_H
