@@ -3210,32 +3210,32 @@ No          - Discard changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../radiosettingdialog.cpp" line="433"/>
+        <location filename="../radiosettingdialog.cpp" line="438"/>
         <source>Invalid Phone Preset Frequency for %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../radiosettingdialog.cpp" line="450"/>
+        <location filename="../radiosettingdialog.cpp" line="455"/>
         <source>Invalid RTTY Preset Frequency for %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../radiosettingdialog.cpp" line="467"/>
+        <location filename="../radiosettingdialog.cpp" line="472"/>
         <source>Invalid PSK Preset Frequency for %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../radiosettingdialog.cpp" line="484"/>
+        <location filename="../radiosettingdialog.cpp" line="489"/>
         <source>Invalid MGM Preset Frequency for %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../radiosettingdialog.cpp" line="563"/>
+        <location filename="../radiosettingdialog.cpp" line="568"/>
         <source>Frequency %1 should be avoided as part of the bandplan for %2/%3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../radiosettingdialog.cpp" line="567"/>
+        <location filename="../radiosettingdialog.cpp" line="572"/>
         <source>Frequency %1 is out of band/mode for %2/%3</source>
         <translation type="unfinished"></translation>
     </message>

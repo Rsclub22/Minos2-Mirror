@@ -3279,32 +3279,32 @@ Non - Ignorer les modifications</translation>
         <translation>Messages du commutateur de bande</translation>
     </message>
     <message>
-        <location filename="../radiosettingdialog.cpp" line="433"/>
+        <location filename="../radiosettingdialog.cpp" line="438"/>
         <source>Invalid Phone Preset Frequency for %1</source>
         <translation>Fréquence de Phone prédéfinie non valide pour %1</translation>
     </message>
     <message>
-        <location filename="../radiosettingdialog.cpp" line="450"/>
+        <location filename="../radiosettingdialog.cpp" line="455"/>
         <source>Invalid RTTY Preset Frequency for %1</source>
         <translation>Fréquence RTTY non valide pour %1</translation>
     </message>
     <message>
-        <location filename="../radiosettingdialog.cpp" line="467"/>
+        <location filename="../radiosettingdialog.cpp" line="472"/>
         <source>Invalid PSK Preset Frequency for %1</source>
         <translation>Fréquence PSK non valide pour %1</translation>
     </message>
     <message>
-        <location filename="../radiosettingdialog.cpp" line="484"/>
+        <location filename="../radiosettingdialog.cpp" line="489"/>
         <source>Invalid MGM Preset Frequency for %1</source>
         <translation>Fréquence de MGM prédéfinie non valide pour %1</translation>
     </message>
     <message>
-        <location filename="../radiosettingdialog.cpp" line="563"/>
+        <location filename="../radiosettingdialog.cpp" line="568"/>
         <source>Frequency %1 should be avoided as part of the bandplan for %2/%3</source>
         <translation>Fréquence %1 doit être évitée dans le cadre du plan de bande pour %2/%3</translation>
     </message>
     <message>
-        <location filename="../radiosettingdialog.cpp" line="567"/>
+        <location filename="../radiosettingdialog.cpp" line="572"/>
         <source>Frequency %1 is out of band/mode for %2/%3</source>
         <translation>Fréquence %1 est hors bande/mode pour %2/%3</translation>
     </message>
