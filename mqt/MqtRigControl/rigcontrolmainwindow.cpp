@@ -1086,19 +1086,19 @@ void RigControlMainWindow::checkSupportPtt()
 
               serialCommonData::PTTMethodCodes pttType = static_cast<serialCommonData::PTTMethodCodes>(currentRadio.pttType);
 
-              if (pttType == serialCommonData::PTT_METHOD_CAT)
+              if (pttType == serialCommonData::PTTMethodCodes::PTT_METHOD_CAT)
               {
                   ui->pttLbl->setText("CAT");
               }
-              else if (pttType == serialCommonData::PTT_METHOD_RTS)
+              else if (pttType == serialCommonData::PTTMethodCodes::PTT_METHOD_RTS)
               {
                   ui->pttLbl->setText("RTS");
               }
-              else if (pttType == serialCommonData::PTT_METHOD_DTR)
+              else if (pttType == serialCommonData::PTTMethodCodes::PTT_METHOD_DTR)
               {
                  ui->pttLbl->setText("DTR");
               }
-              else if (pttType == serialCommonData::PTT_METHOD_NONE)
+              else if (pttType == serialCommonData::PTTMethodCodes::PTT_METHOD_NONE)
               {
                  ui->pttLbl->setText("None");
               }
@@ -1267,9 +1267,9 @@ int RigControlMainWindow::openRigCtldRadio(bool localRigCtld)
         QString handshake;
         QString rtsState;
 
-        parity = serialData::rigctldParityStr[currentRadio.parity];
+        parity = serialData::rigctldParityStr[static_cast<int>(currentRadio.parity)];
 
-        handshake = serialData::rigctldHandshakeStr[currentRadio.handshake];
+        handshake = serialData::rigctldHandshakeStr[static_cast<int>(currentRadio.handshake)];
 
 
         if (handshake == serialData::rigctldHandshakeStr[RIG_HANDSHAKE_HARDWARE])
@@ -1278,13 +1278,11 @@ int RigControlMainWindow::openRigCtldRadio(bool localRigCtld)
         }
         else
         {
-            rtsState = serialData::rigctldForceLinesStr[currentRadio.forceRts];
+            rtsState = serialData::rigctldForceLinesStr[static_cast<int>(currentRadio.forceRts)];
         }
 
-        QString dtrState = serialData::rigctldForceLinesStr[currentRadio.forceDtr];
+        QString dtrState = serialData::rigctldForceLinesStr[static_cast<int>(currentRadio.forceDtr)];
 
-        QString mfgName = currentRadio.rigMfg_Name;
-        int rmNumber = currentRadio.rigModelNumber;
 
         RigCtldParameters rigCtldPar;
 
@@ -1416,7 +1414,7 @@ int RigControlMainWindow::openRigCtldRadio(bool localRigCtld)
 
             showStatusMessage(QString("Connected via RigCtld: %1 - %2, %3, %4, %5, %6, %7, Handshake %8, ForceDTR %9, ForceRTS %10")
                               .arg(currentRadio.rigMfg_Name).arg(currentRadio.rigModelName).trimmed().arg(currentRadio.comport).arg(currentRadio.baudrate).arg(currentRadio.databits)
-                              .arg(currentRadio.stopbits).arg(serialCommonData::parityStr[currentRadio.parity]).arg(serialCommonData::handshakeStr[currentRadio.handshake]).arg(serialCommonData::forceLinesStr[currentRadio.forceDtr]).arg(serialCommonData::forceLinesStr[currentRadio.forceRts]));
+                                  .arg(currentRadio.stopbits).arg(serialCommonData::parityStr[static_cast<int>(currentRadio.parity)]).arg(serialCommonData::handshakeStr[static_cast<int>(currentRadio.handshake)]).arg(serialCommonData::forceLinesStr[static_cast<int>(currentRadio.forceDtr)]).arg(serialCommonData::forceLinesStr[static_cast<int>(currentRadio.forceRts)]));
         }
 
 
@@ -1641,7 +1639,7 @@ int RigControlMainWindow::openRadio()
         {
             showStatusMessage(tr("Connected: %1 - %2, %3, %4, %5, %6, %7, Handshake %8, ForceDTR %9, ForceRTS %10")
                               .arg(currentRadio.radioName).arg(currentRadio.rigModelName).trimmed().arg(currentRadio.comport).arg(currentRadio.baudrate).arg(currentRadio.databits)
-                              .arg(currentRadio.stopbits).arg(serialCommonData::parityStr[currentRadio.parity]).arg(serialCommonData::handshakeStr[currentRadio.handshake]).arg(serialCommonData::forceLinesStr[currentRadio.forceDtr]).arg(serialCommonData::forceLinesStr[currentRadio.forceRts]));
+                                  .arg(currentRadio.stopbits).arg(serialCommonData::parityStr[static_cast<int>(currentRadio.parity)]).arg(serialCommonData::handshakeStr[static_cast<int>(currentRadio.handshake)]).arg(serialCommonData::forceLinesStr[static_cast<int>(currentRadio.forceDtr)]).arg(serialCommonData::forceLinesStr[static_cast<int>(currentRadio.forceRts)]));
         }
         else if (currentRadio.portType == RigCapConstants::PortType::network)
         {
@@ -1879,7 +1877,7 @@ void RigControlMainWindow::getRadioInfo(bool pubNow)
 
     if (radioCommsOK && currentRadio.enablePTT)
     {
-        if (currentRadio.pttType == serialCommonData::PTT_METHOD_CAT)
+        if (currentRadio.pttType == serialCommonData::PTTMethodCodes::PTT_METHOD_CAT)
         {
             logMessage(QString("Get CAT PTT Status"));
 
@@ -1891,11 +1889,11 @@ void RigControlMainWindow::getRadioInfo(bool pubNow)
                 radioError(retCode, "Request TX Status");
             }
         }
-        else if (currentRadio.pttType == serialCommonData::PTT_METHOD_DTR ||  currentRadio.pttType == serialCommonData::PTT_METHOD_RTS)
+        else if (currentRadio.pttType == serialCommonData::PTTMethodCodes::PTT_METHOD_DTR ||  currentRadio.pttType == serialCommonData::PTTMethodCodes::PTT_METHOD_RTS)
         {
             if (!currentRadio.pttSerialPort.isEmpty())
             {
-                logMessage(QString("Get Serial PTT Status for Comport %1 and Control Line Type %2").arg(currentRadio.pttSerialPort).arg(currentRadio.pttType));
+                logMessage(QString("Get Serial PTT Status for Comport %1 and Control Line Type %2").arg(currentRadio.pttSerialPort, serialCommonData::pttMethodStr[static_cast<int>(currentRadio.pttType)]));
 
                 retCode = getTXStatus(rigStateDetails->curVfo);
                 if (retCode < 0)
@@ -4309,9 +4307,9 @@ void RigControlMainWindow::sendMaxRitFreqLogger()
 
 void RigControlMainWindow::sendPttTypeLogger()
 {
-    logMessage(QString("Send PTT Type = %1 to logger").arg(serialCommonData::pttMethodStr[currentRadio.pttType]));
+    logMessage(QString("Send PTT Type = %1 to logger").arg(serialCommonData::pttMethodStr[static_cast<int>(currentRadio.pttType)]));
     PubSubName psname(currentRadio.radioName);
-    msg->rigCache.setPttType(psname, currentRadio.pttType);
+    msg->rigCache.setPttType(psname, static_cast<int>(currentRadio.pttType));
 }
 
 void RigControlMainWindow::sendPttEnabledLogger()
@@ -4455,13 +4453,13 @@ void RigControlMainWindow::getRadioConfigData(scatParams *radioData, QString rad
     radioData->comport = config.value("comport", "").toString();
     radioData->baudrate = config.value("baudrate", 9600).toInt();
     radioData->databits = config.value("databits", 8).toInt();
-    radioData->parity = config.value("parity", 0).toInt();
+    radioData->parity = static_cast<serialCommonData::serialParityCodes>(config.value("parity", 0).toInt());
     radioData->stopbits = config.value("stopbits", 1).toInt();
-    radioData->handshake = config.value("handshake", 0).toInt();
-    radioData->forceDtr = config.value("forceDTR", 0).toInt();
-    radioData->forceRts= config.value("forceRTS", 0).toInt();
+    radioData->handshake = static_cast<serialCommonData::s_handshakeCodes>(config.value("handshake", 0).toInt());
+    radioData->forceDtr = static_cast<serialCommonData::s_forceLinesCodes>(config.value("forceDTR", 0).toInt());
+    radioData->forceRts= static_cast<serialCommonData::s_forceLinesCodes>(config.value("forceRTS", 0).toInt());
     radioData->enablePTT = config.value("enablePtt", false).toBool();
-    radioData->pttType = config.value("pttType", static_cast<int>(serialCommonData::PTTMethodCodes::PTT_METHOD_NONE)).toInt();
+    radioData->pttType = static_cast<serialCommonData::PTTMethodCodes>(config.value("pttType", 0).toInt());
     radioData->pttSerialPort = config.value("pttSerialPort", "").toString();
     radioData->pollInterval = config.value("radioPollInterval", "1").toString();
     radioData->rigCtldEnable = config.value("rigCtldEnable", false).toBool();
@@ -4798,10 +4796,10 @@ void RigControlMainWindow::aboutRigConfig()
                 msg.append(tr("Baudrate = %1\n").arg(currentRadio.baudrate));
                 msg.append(tr("Data bits = %1\n").arg(currentRadio.databits));
                 msg.append(tr("Stop bits = %1\n").arg(QString::number(currentRadio.stopbits)));
-                msg.append(tr("Parity = %1\n").arg(serialCommonData::parityStr[currentRadio.parity]));
-                msg.append(tr("Handshake = %1\n").arg(serialCommonData::handshakeStr[currentRadio.handshake]));
-                msg.append(tr("ForceDTR = %1\n").arg(serialCommonData::forceLinesStr[currentRadio.forceDtr]));
-                msg.append(tr("ForceRTS = %1\n").arg(serialCommonData::forceLinesStr[currentRadio.forceRts]));
+                msg.append(tr("Parity = %1\n").arg(serialCommonData::parityStr[static_cast<int>(currentRadio.parity)]));
+                msg.append(tr("Handshake = %1\n").arg(serialCommonData::handshakeStr[static_cast<int>(currentRadio.handshake)]));
+                msg.append(tr("ForceDTR = %1\n").arg(serialCommonData::forceLinesStr[static_cast<int>(currentRadio.forceDtr)]));
+                msg.append(tr("ForceRTS = %1\n").arg(serialCommonData::forceLinesStr[static_cast<int>(currentRadio.forceRts)]));
 
             }
             else if (currentRadio.portType == RigCapConstants::PortType::network)
@@ -4985,10 +4983,10 @@ void RigControlMainWindow::dumpRadioToTraceLog()
                 trace(QString("Data bits = %1").arg(currentRadio.databits));
                 trace(QString("Baudrate = %1").arg(currentRadio.baudrate));
                 trace(QString("Stop bits = %1").arg(QString::number(currentRadio.stopbits)));
-                trace(QString("Parity = %1").arg(serialCommonData::parityStr[currentRadio.parity]));
-                trace(QString("Handshake = %1").arg(serialCommonData::handshakeStr[currentRadio.handshake]));
-                trace(QString("ForceDTR = %1").arg(serialCommonData::forceLinesStr[currentRadio.forceDtr]));
-                trace(QString("ForceRTS = %1").arg(serialCommonData::forceLinesStr[currentRadio.forceRts]));
+                trace(QString("Parity = %1").arg(serialCommonData::parityStr[static_cast<int>(currentRadio.parity)]));
+                trace(QString("Handshake = %1").arg(serialCommonData::handshakeStr[static_cast<int>(currentRadio.handshake)]));
+                trace(QString("ForceDTR = %1").arg(serialCommonData::forceLinesStr[static_cast<int>(currentRadio.forceDtr)]));
+                trace(QString("ForceRTS = %1").arg(serialCommonData::forceLinesStr[static_cast<int>(currentRadio.forceRts)]));
 
             }
             else if (currentRadio.portType == RigCapConstants::PortType::usb)

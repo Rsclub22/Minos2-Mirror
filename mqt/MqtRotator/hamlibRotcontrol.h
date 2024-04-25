@@ -125,7 +125,7 @@ private:
     //int serialP;
 
 
-    serial_parity_e getSerialParityCode(int index){return parityCodes[index];}
+    serial_parity_e getSerialParityCode(int index){ return parityCodes[index];}
     serial_handshake_e getSerialHandshakeCode(int index){return handshakeCodes[index];}
     serial_force_Lines_e getSerialForceLineCode(int index){return forceLinesCodes[index];}
 

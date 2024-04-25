@@ -332,11 +332,12 @@ int HamlibRigControl::rigInit(scatParams &currentRadio, bool useRigCtld)
             if (my_rig->state.rigport.parm.serial.handshake != RIG_HANDSHAKE_HARDWARE)
             {
 
-                if (currentRadio.forceRts)
+                if (currentRadio.forceRts == serialCommonData::s_forceLinesCodes::FORCE_LINE_ON)
                 {
                     my_rig->state.rigport.parm.serial.rts_state = RIG_SIGNAL_ON;
                 }
-                else
+                else if (currentRadio.forceRts == serialCommonData::s_forceLinesCodes::FORCE_LINE_OFF
+                           || currentRadio.forceRts == serialCommonData::s_forceLinesCodes::FORCE_LINE_NONE)
                 {
 
                     my_rig->state.rigport.parm.serial.rts_state = RIG_SIGNAL_UNSET;
@@ -370,7 +371,7 @@ int HamlibRigControl::rigInit(scatParams &currentRadio, bool useRigCtld)
 
             serialCommonData::PTTMethodCodes pttType = static_cast<serialCommonData::PTTMethodCodes>(currentRadio.pttType);
 
-            if (pttType != serialCommonData::PTT_METHOD_CAT && pttType != serialCommonData::PTT_METHOD_NONE)
+            if (pttType != serialCommonData::PTTMethodCodes::PTT_METHOD_CAT && pttType != serialCommonData::PTTMethodCodes::PTT_METHOD_NONE)
             {
                 if (!currentRadio.pttSerialPort.isEmpty())
                 {
@@ -384,12 +385,12 @@ int HamlibRigControl::rigInit(scatParams &currentRadio, bool useRigCtld)
 
                 }
 
-                if (pttType == serialCommonData::PTT_METHOD_DTR)
+                if (pttType == serialCommonData::PTTMethodCodes::PTT_METHOD_DTR)
                 {
                    setConfigurationParameter("ptt_type", "DTR");
 
                 }
-                else if (pttType == serialCommonData::PTT_METHOD_RTS)
+                else if (pttType == serialCommonData::PTTMethodCodes::PTT_METHOD_RTS)
                 {
 
                     setConfigurationParameter("ptt_type", "RTS");

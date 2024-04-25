@@ -16,6 +16,7 @@
 
 #include <QObject>
 #include <QSharedPointer>
+#include "serialCommonData.h"
 
 class VoiceKeyerBase;
 class VoiceKeyerFactory;
@@ -122,7 +123,7 @@ public:
     virtual int getSelectedEomType() = 0;
 
     virtual int setup(VoiceKeyerFactory *voiceKeyerFactory, int &maxNumButtons, int &numButtons, QString selectedRadioName) = 0;
-    virtual void setRadioParams(int radioMaxNumButtons, QString selectedRadioName, int pttType_, bool pttEnabled_) = 0;
+    virtual void setRadioParams(int radioMaxNumButtons, QString selectedRadioName, serialCommonData::PTTMethodCodes pttType_, bool pttEnabled_) = 0;
     virtual int editButton(VoiceKeyerParams* vmData, QString title) = 0;
 
     virtual bool hasPip() const

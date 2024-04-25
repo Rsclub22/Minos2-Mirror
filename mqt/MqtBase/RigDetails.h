@@ -15,6 +15,7 @@
 #include "CacheSelection.h"
 #include "minositem.h"
 
+
 class RigDetails
 {
     CacheSelection _selected;

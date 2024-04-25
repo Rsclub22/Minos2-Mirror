@@ -5,16 +5,17 @@
 
 namespace serialCommonData
 {
-    enum s_parityCodes  {PARITY_NONE, PARITY_ODD, PARITY_EVEN, PARITY_MARK, PARITY_SPACE};
-    const s_parityCodes parityCodesList[] = {PARITY_NONE, PARITY_ODD, PARITY_EVEN, PARITY_MARK, PARITY_SPACE};
+    enum class serialParityCodes  {PARITY_NONE, PARITY_ODD, PARITY_EVEN, PARITY_MARK, PARITY_SPACE};
+    const serialParityCodes parityCodesList[] = {serialParityCodes::PARITY_NONE, serialParityCodes::PARITY_ODD,
+                                                 serialParityCodes::PARITY_EVEN, serialParityCodes::PARITY_MARK, serialParityCodes::PARITY_SPACE};
     const QStringList parityStr = QStringList() << "None" << "Odd" << "Even" << "Mark" << "Space";
 
-    enum s_handshakeCodes {HANDSHAKE_NONE, HANDSHAKE_XONXOFF, HANDSHAKE_HARDWARE };
-    const s_handshakeCodes handshakeCodesList[] = {HANDSHAKE_NONE, HANDSHAKE_XONXOFF, HANDSHAKE_HARDWARE };
+    enum class s_handshakeCodes {HANDSHAKE_NONE, HANDSHAKE_XONXOFF, HANDSHAKE_HARDWARE };
+    const s_handshakeCodes handshakeCodesList[] = {s_handshakeCodes::HANDSHAKE_NONE, s_handshakeCodes::HANDSHAKE_XONXOFF, s_handshakeCodes::HANDSHAKE_HARDWARE };
     const QStringList handshakeStr = QStringList() << "None" << "XON/XOFF" << "CTS/RTS";
 
-    enum s_forceLinesCodes {FORCE_LINE_NONE, FORCE_LINE_OFF, FORCE_LINE_ON};
-    const s_forceLinesCodes forceLinesCodesList[] = {FORCE_LINE_NONE, FORCE_LINE_OFF, FORCE_LINE_ON};
+    enum class s_forceLinesCodes {FORCE_LINE_NONE, FORCE_LINE_OFF, FORCE_LINE_ON};
+    const s_forceLinesCodes forceLinesCodesList[] = {s_forceLinesCodes::FORCE_LINE_NONE, s_forceLinesCodes::FORCE_LINE_OFF, s_forceLinesCodes::FORCE_LINE_ON};
     const QStringList forceLinesStr = QStringList() << "None" << "High" << "Low";
     const QStringList forceLinstStr_Trans = QStringList() << "None" << "High" << "Low";
 
@@ -23,9 +24,9 @@ namespace serialCommonData
     const QStringList stopbitsStr = QStringList()<< "" << "1" << "2";
     const QStringList pollTimeStr  = QStringList() << "0.5" << "1" << "2" << "3";
 
-    enum PTTMethodCodes {PTT_METHOD_VOX, PTT_METHOD_CAT, PTT_METHOD_DTR, PTT_METHOD_RTS, PTT_METHOD_NONE};
-    const PTTMethodCodes pttMethodCodesList[] = {PTT_METHOD_VOX, PTT_METHOD_CAT, PTT_METHOD_DTR, PTT_METHOD_RTS, PTT_METHOD_NONE};
-    const QStringList pttMethodStr = QStringList() << "VOX" << "CAT" << "DTR" << "RTS" << "NONE" ;
+    enum class PTTMethodCodes {PTT_METHOD_VOX, PTT_METHOD_CAT, PTT_METHOD_DTR, PTT_METHOD_RTS, PTT_METHOD_NONE };
+    const PTTMethodCodes pttMethodCodesList[] = {PTTMethodCodes::PTT_METHOD_VOX, PTTMethodCodes::PTT_METHOD_CAT, PTTMethodCodes::PTT_METHOD_DTR, PTTMethodCodes::PTT_METHOD_RTS, PTTMethodCodes::PTT_METHOD_NONE };
+    const QStringList pttMethodStr = QStringList()  << "NONE" << "VOX" << "CAT" << "DTR" << "RTS" << "NONE";
 }
 
 

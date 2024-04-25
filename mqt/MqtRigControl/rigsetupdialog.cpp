@@ -157,10 +157,10 @@ void RigSetupDialog::loadSettingsToTab(int tabNum, QString tabName)
     radioTab.value(tabName)->setDataSpeed(QString::number(availRadioData.value(tabName)->baudrate));
     radioTab.value(tabName)->setDataBits(QString::number(availRadioData.value(tabName)->databits));
     radioTab.value(tabName)->setStopBits(QString::number(availRadioData.value(tabName)->stopbits));
-    radioTab.value(tabName)->setParityBits(availRadioData.value(tabName)->parity);
-    radioTab.value(tabName)->setHandshake(availRadioData.value(tabName)->handshake);
-    radioTab.value(tabName)->setForceDTRComboBox(availRadioData.value(tabName)->forceDtr);
-    radioTab.value(tabName)->setForceRTSComboBox(availRadioData.value(tabName)->forceRts);
+    radioTab.value(tabName)->setParityBits(static_cast<int>(availRadioData.value(tabName)->parity));
+    radioTab.value(tabName)->setHandshake(static_cast<int>(availRadioData.value(tabName)->handshake));
+    radioTab.value(tabName)->setForceDTRComboBox(static_cast<int>(availRadioData.value(tabName)->forceDtr));
+    radioTab.value(tabName)->setForceRTSComboBox(static_cast<int>(availRadioData.value(tabName)->forceRts));
     radioTab.value(tabName)->setNetAddress(availRadioData.value(tabName)->networkAdd);
     radioTab.value(tabName)->setNetPortNum(availRadioData.value(tabName)->networkPort);
 
@@ -191,7 +191,7 @@ void RigSetupDialog::loadSettingsToTab(int tabNum, QString tabName)
     {
         radioTab.value(tabName)->setDialogBoxesVisibleForSerial();
 
-        if (radioTab.value(tabName)->getRadioData()->handshake == RIG_HANDSHAKE_HARDWARE) // CTS/RTS enabled
+        if (radioTab.value(tabName)->getRadioData()->handshake == serialCommonData::s_handshakeCodes::HANDSHAKE_HARDWARE) // CTS/RTS enabled
         {
             radioTab.value(tabName)->setForceRTSDisabled(true);
         }
@@ -1076,13 +1076,13 @@ void RigSetupDialog::saveRadioData(QSharedPointer<scatParams> radioData, QSettin
     config.setValue("comport", radioData->comport);
     config.setValue("baudrate", radioData->baudrate);
     config.setValue("databits", radioData->databits);
-    config.setValue("parity", radioData->parity);
+    config.setValue("parity", static_cast<int>(radioData->parity));
     config.setValue("stopbits", radioData->stopbits);
-    config.setValue("handshake", radioData->handshake);
-    config.setValue("forceDTR", radioData->forceDtr);
-    config.setValue("forceRTS", radioData->forceRts);
+    config.setValue("handshake", static_cast<int>(radioData->handshake));
+    config.setValue("forceDTR", static_cast<int>(radioData->forceDtr));
+    config.setValue("forceRTS", static_cast<int>(radioData->forceRts));
     config.setValue("enablePtt", radioData->enablePTT);
-    config.setValue("pttType", radioData->pttType);
+    config.setValue("pttType", static_cast<int>(radioData->pttType));
     config.setValue("pttSerialPort", radioData->pttSerialPort);
     config.setValue("radioPollInterval", radioData->pollInterval);
     config.setValue("rigCtldEnable", radioData->rigCtldEnable);
@@ -1142,13 +1142,13 @@ void RigSetupDialog::getRadioSetting(QSharedPointer<scatParams> radioData, QStri
     radioData->comport = config.value("comport", "").toString();
     radioData->baudrate = config.value("baudrate", 9600).toInt();
     radioData->databits = config.value("databits", 8).toInt();
-    radioData->parity = config.value("parity", 0).toInt();
+    radioData->parity = static_cast<serialCommonData::serialParityCodes>(config.value("parity", 0).toInt());
     radioData->stopbits = config.value("stopbits", 1).toInt();
-    radioData->handshake = config.value("handshake", 0).toInt();
-    radioData->forceDtr = config.value("forceDTR", 0).toInt();
-    radioData->forceRts= config.value("forceRTS", 0).toInt();
+    radioData->handshake = static_cast<serialCommonData::s_handshakeCodes>(config.value("handshake", 0).toInt());
+    radioData->forceDtr = static_cast<serialCommonData::s_forceLinesCodes>(config.value("forceDTR", 0).toInt());
+    radioData->forceRts= static_cast<serialCommonData::s_forceLinesCodes>(config.value("forceRTS", 0).toInt());
     radioData->enablePTT = config.value("enablePtt", false).toBool();
-    radioData->pttType = config.value("pttType", serialCommonData::PTTMethodCodes::PTT_METHOD_CAT).toInt();
+    radioData->pttType = static_cast<serialCommonData::PTTMethodCodes>(config.value("pttType", 0).toInt());
     radioData->pttSerialPort = config.value("pttSerialPort", "").toString();
     radioData->pollInterval = config.value("radioPollInterval", "1").toString();
     radioData->rigCtldEnable = config.value("rigCtldEnable", false).toBool();

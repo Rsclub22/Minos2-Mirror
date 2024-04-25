@@ -42,7 +42,7 @@ public:
     virtual int getSelectedEomType() override {return voiceKeyerCommon::VoiceCwKeyerEomTypes::Eom_None;};
 
     virtual int setup(VoiceKeyerFactory *voiceKeyerFactory, int &maxNumButtons, int &numButtons, QString selectedRadio) override;
-    virtual void setRadioParams(int radioMaxNumButtons, QString selectedRadioName, int pttType_, bool pttEnabled_) override{Q_UNUSED(radioMaxNumButtons) Q_UNUSED(selectedRadioName) Q_UNUSED(pttType_) Q_UNUSED(pttEnabled_)};
+    virtual void setRadioParams(int radioMaxNumButtons, QString selectedRadioName, serialCommonData::PTTMethodCodes pttType_, bool pttEnabled_) override{Q_UNUSED(radioMaxNumButtons) Q_UNUSED(selectedRadioName) Q_UNUSED(pttType_) Q_UNUSED(pttEnabled_)};
     virtual int editButton(VoiceKeyerParams* vmData, QString title) override;
 
 

@@ -684,7 +684,7 @@ void RigSetupForm::setStopBits(QString stop)
 
 void RigSetupForm::comParitySelected(int)
 {
-    if (serialCommonData::parityCodesList[ui->comParityBox->currentIndex()] != radioData->parity)
+    if (static_cast<serialCommonData::serialParityCodes>(serialCommonData::parityCodesList[ui->comParityBox->currentIndex()]) != radioData->parity)
     {
         radioData->parity = serialCommonData::parityCodesList[ui->comParityBox->currentIndex()];
 
@@ -702,8 +702,8 @@ void RigSetupForm::comHandShakeSelected()
 {
     if (serialCommonData::handshakeCodesList[ui->comHandShakeBox->currentIndex()] != radioData->handshake)
     {
-        radioData->handshake = serialCommonData::handshakeCodesList[ui->comHandShakeBox->currentIndex()];
-        if (radioData->handshake == serialCommonData::HANDSHAKE_HARDWARE)  // RTS/CTS selected
+        radioData->handshake = static_cast<serialCommonData::s_handshakeCodes>(serialCommonData::handshakeCodesList[ui->comHandShakeBox->currentIndex()]);
+        if (radioData->handshake == serialCommonData::s_handshakeCodes::HANDSHAKE_HARDWARE)  // RTS/CTS selected
         {
            setForceRTSDisabled(true);
         }
@@ -2277,7 +2277,7 @@ void RigSetupForm::onPttCatEnableClicked(bool /*checked*/)
 {
     if (ui->pttCatSelectRadioButton->isChecked())
     {
-        radioData->pttType = static_cast<int>(serialCommonData::PTTMethodCodes::PTT_METHOD_CAT);
+        radioData->pttType = serialCommonData::PTTMethodCodes::PTT_METHOD_CAT;
         pttComportSelDisabled(true);
         setForceRTSDisabled(false);
         setForceDTRDisabled(false);
@@ -2297,7 +2297,7 @@ void RigSetupForm::onPttDtrEnableClicked(bool /*checked*/)
 
     if (ui->pttDTRSelectRadioButton->isChecked())
     {
-        radioData->pttType = static_cast<int>(serialCommonData::PTTMethodCodes::PTT_METHOD_DTR);
+        radioData->pttType = serialCommonData::PTTMethodCodes::PTT_METHOD_DTR;
 
         ui->pttComportSel->setDisabled(false);
         if (isPttComportEqualCatComport())
@@ -2333,7 +2333,7 @@ void RigSetupForm::onPttRtsEnableClicked(bool /*checked*/)
 {
     if (ui->pttRTSSelectRadioButton->isChecked())
     {
-        radioData->pttType = static_cast<int>(serialCommonData::PTTMethodCodes::PTT_METHOD_RTS);
+        radioData->pttType = serialCommonData::PTTMethodCodes::PTT_METHOD_RTS;
 
 
 
@@ -2389,7 +2389,7 @@ void RigSetupForm::onPttComportSelActivated(int /*idx*/)
                         || radioData->forceRts == serialCommonData::s_forceLinesCodes::FORCE_LINE_OFF)
                 {
                     radioData->forceRts = serialCommonData::s_forceLinesCodes::FORCE_LINE_NONE;
-                    setForceRTSComboBox(radioData->forceRts);
+                    setForceRTSComboBox(static_cast<int>(radioData->forceRts));
                 }
             }
             else if (ui->pttDTRSelectRadioButton->isChecked())
@@ -2400,7 +2400,7 @@ void RigSetupForm::onPttComportSelActivated(int /*idx*/)
                         || radioData->forceDtr == serialCommonData::s_forceLinesCodes::FORCE_LINE_OFF)
                 {
                     radioData->forceDtr = serialCommonData::s_forceLinesCodes::FORCE_LINE_NONE;
-                    setForceDTRComboBox(radioData->forceDtr);
+                    setForceDTRComboBox(static_cast<int>(radioData->forceDtr));
                 }
             }
         }

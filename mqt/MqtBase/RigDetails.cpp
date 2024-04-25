@@ -5,7 +5,6 @@
 #include "RPCCommandConstants.h"
 #include "RigDetails.h"
 #include "rigcommon.h"
-#include "serialCommonData.h"
 #include "MTrace.h"
 
 RigDetails::RigDetails()

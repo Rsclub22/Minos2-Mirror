@@ -535,16 +535,16 @@ int RotatorMainWindow::openRotator()
             QString base = tr("Connected");
 
             QString extra= tr("Connected to: %1 - %2, %3, %4, %5, %6, %7,  Handshake %8, ForceDTR %9, ForceRTS %10")
-                                .arg(setupAntenna->currentAntenna.antennaName
-                                     ,setupAntenna->currentAntenna.rotatorModel
-                                     ,setupAntenna->currentAntenna.comport)
-                                  .arg(setupAntenna->currentAntenna.baudrate)
-                                  .arg(setupAntenna->currentAntenna.databits)
-                                  .arg(setupAntenna->currentAntenna.stopbits)
-                                  .arg(serialCommonData::parityStr[setupAntenna->currentAntenna.parity]
-                                  ,serialCommonData::handshakeStr[setupAntenna->currentAntenna.handshake]
-                                  ,serialCommonData::forceLinesStr[setupAntenna->currentAntenna.forceDtr]
-                                  ,serialCommonData::forceLinesStr[setupAntenna->currentAntenna.forceRts]);
+                                .arg(setupAntenna->currentAntenna.antennaName)
+                                .arg(setupAntenna->currentAntenna.rotatorModel)
+                                .arg(setupAntenna->currentAntenna.comport)
+                                .arg(setupAntenna->currentAntenna.baudrate)
+                                .arg(setupAntenna->currentAntenna.databits)
+                                .arg(setupAntenna->currentAntenna.stopbits)
+                                .arg(serialCommonData::parityStr[static_cast<int>(setupAntenna->currentAntenna.parity)])
+                                .arg(serialCommonData::handshakeStr[static_cast<int>(setupAntenna->currentAntenna.handshake)])
+                                .arg(serialCommonData::forceLinesStr[static_cast<int>(setupAntenna->currentAntenna.forceDtr)])
+                                .arg(serialCommonData::forceLinesStr[static_cast<int>(setupAntenna->currentAntenna.forceRts)]);
 
             showStatusMessage(base, extra);
         }
@@ -2516,10 +2516,10 @@ void RotatorMainWindow::aboutRotatorConfig()
             msg.append(tr("Baudrate = %1\n").arg(QString::number(setupAntenna->currentAntenna.baudrate)));
             msg.append(tr("Databits = %1\n").arg(QString::number(setupAntenna->currentAntenna.databits)));
             msg.append(tr("Stop bits = %1\n").arg(QString::number(setupAntenna->currentAntenna.stopbits)));
-            msg.append(tr("Parity = %1\n").arg(serialCommonData::parityStr[setupAntenna->currentAntenna.parity]));
-            msg.append(tr("Handshake = %1\n").arg(serialCommonData::handshakeStr[setupAntenna->currentAntenna.handshake]));
-            msg.append(tr("ForceDTR = %1\n").arg(serialCommonData::forceLinesStr[setupAntenna->currentAntenna.forceDtr]));
-            msg.append(tr("ForceRTS = %1\n").arg(serialCommonData::forceLinesStr[setupAntenna->currentAntenna.forceRts]));
+            msg.append(tr("Parity = %1\n").arg(serialCommonData::parityStr[static_cast<int>(setupAntenna->currentAntenna.parity)]));
+            msg.append(tr("Handshake = %1\n").arg(serialCommonData::handshakeStr[static_cast<int>(setupAntenna->currentAntenna.handshake)]));
+            msg.append(tr("ForceDTR = %1\n").arg(serialCommonData::forceLinesStr[static_cast<int>(setupAntenna->currentAntenna.forceDtr)]));
+            msg.append(tr("ForceRTS = %1\n").arg(serialCommonData::forceLinesStr[static_cast<int>(setupAntenna->currentAntenna.forceRts)]));
         }
         msg.append(tr("Antenna Offset = %1\n").arg(QString::number(setupAntenna->currentAntenna.antennaOffset)));
         msg.append(tr("Current Rotator Type = %1\n").arg(endStopNames[setupAntenna->currentAntenna.endStopType]));
@@ -2589,10 +2589,10 @@ void RotatorMainWindow::dumpRotatorToTraceLog()
             trace(QString("Baudrate = %1").arg(QString::number(setupAntenna->currentAntenna.baudrate)));
             trace(QString("Databits = %1").arg(QString::number(setupAntenna->currentAntenna.databits)));
             trace(QString("Stop bits = %1").arg(QString::number(setupAntenna->currentAntenna.stopbits)));
-            trace(QString("Parity = %1").arg(serialCommonData::parityStr[setupAntenna->currentAntenna.parity]));
-            trace(QString("Handshake = %1").arg(serialCommonData::handshakeStr[setupAntenna->currentAntenna.handshake]));
-            trace(QString("ForceDTR = %1").arg(serialCommonData::forceLinesStr[setupAntenna->currentAntenna.forceDtr]));
-            trace(QString("ForceRTS = %1").arg(serialCommonData::forceLinesStr[setupAntenna->currentAntenna.forceRts]));
+            trace(QString("Parity = %1").arg(serialCommonData::parityStr[static_cast<int>(setupAntenna->currentAntenna.parity)]));
+            trace(QString("Handshake = %1").arg(serialCommonData::handshakeStr[static_cast<int>(setupAntenna->currentAntenna.handshake)]));
+            trace(QString("ForceDTR = %1").arg(serialCommonData::forceLinesStr[static_cast<int>(setupAntenna->currentAntenna.forceDtr)]));
+            trace(QString("ForceRTS = %1").arg(serialCommonData::forceLinesStr[static_cast<int>(setupAntenna->currentAntenna.forceRts)]));
 
 
         }

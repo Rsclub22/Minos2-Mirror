@@ -133,18 +133,19 @@ int HamlibRotControl::rotInit(srotParams &selectedAntenna)
         my_rot->state.rotport.parm.serial.rate = selectedAntenna.baudrate;
         my_rot->state.rotport.parm.serial.data_bits = selectedAntenna.databits;
         my_rot->state.rotport.parm.serial.stop_bits = selectedAntenna.stopbits;
-        my_rot->state.rotport.parm.serial.parity = getSerialParityCode(selectedAntenna.parity);
-        my_rot->state.rotport.parm.serial.handshake = getSerialHandshakeCode(selectedAntenna.handshake);
+        my_rot->state.rotport.parm.serial.parity = getSerialParityCode(static_cast<int>(selectedAntenna.parity));
+        my_rot->state.rotport.parm.serial.handshake = getSerialHandshakeCode(static_cast<int>(selectedAntenna.handshake));
 
 
         if (my_rot->state.rotport.parm.serial.handshake != RIG_HANDSHAKE_HARDWARE)
         {
 
-            if (selectedAntenna.forceRts)
+            if (selectedAntenna.forceRts == serialCommonData::s_forceLinesCodes::FORCE_LINE_ON)
             {
                 my_rot->state.rotport.parm.serial.rts_state = RIG_SIGNAL_ON;
             }
-            else
+            else if (selectedAntenna.forceRts == serialCommonData::s_forceLinesCodes::FORCE_LINE_OFF
+                       || selectedAntenna.forceRts == serialCommonData::s_forceLinesCodes::FORCE_LINE_NONE)
             {
 
                 my_rot->state.rotport.parm.serial.rts_state = RIG_SIGNAL_UNSET;
