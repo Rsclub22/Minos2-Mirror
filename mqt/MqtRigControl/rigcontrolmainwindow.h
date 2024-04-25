@@ -105,6 +105,76 @@ public:
     int rigCtldConnectDelay;
 };
 
+class RigCtldParameters
+{
+
+public:
+
+    RigCtldParameters(){}
+
+    void setManufacturer(QString mfg){manufacturer = mfg;}
+    QString getManufacturer(){return manufacturer;}
+
+    void setModelNumber(QString modelNumber_){modelNumber = modelNumber_;}
+    QString getModelNumber(){return modelNumber;}
+
+    void setComport(QString comport_){comport = comport_;}
+    QString getComport(){return comport;}
+
+    void setBaudRate(QString baudRate_){baudRate = baudRate_;}
+    QString getBaudRate(){return baudRate;}
+
+    void setDataBits(QString dataBits_){dataBits = dataBits_;}
+    QString getDataBits(){return dataBits;}
+
+    void setCiv(QString civ_){civ = civ_;}
+    QString getCiv(){return civ;}
+
+    void setNetworkAddress(QString netAdd_){netAdd = netAdd_;}
+    QString getNetworkAddress(){return netAdd;}
+
+    void setPortNum(QString portNum_){portNum = portNum_;}
+    QString getPortNum(){return portNum;}
+
+    void setStopBits(QString stopBits_){stopBits = stopBits_;}
+    QString getStopBits(){return stopBits;}
+
+    void setParity(QString parity_){parity = parity_;}
+    QString getParity(){return parity;}
+
+    void setHandshake(QString handshake_){handshake = handshake_;}
+    QString getHandshake(){return handshake;}
+
+    void setRtsState(QString rtsState_){rtsState = rtsState_;}
+    QString getRtsState(){return rtsState;}
+
+    void setDtrState(QString dtrState_){dtrState = dtrState_;}
+    QString getDtrState(){return dtrState;}
+
+    void setTraceCode(rigCtldTrace::rigCtldTraceCodes traceCode_){traceCode = traceCode_;}
+    rigCtldTrace::rigCtldTraceCodes getTraceCode(){return traceCode;}
+
+private:
+
+    QString manufacturer;
+    QString modelNumber;
+    QString comport;
+    QString baudRate;
+    QString dataBits;
+    QString civ;
+    QString netAdd;
+    QString portNum;
+    QString stopBits;
+    QString parity;
+    QString handshake;
+    QString rtsState;
+    QString dtrState;
+    rigCtldTrace::rigCtldTraceCodes traceCode;
+
+
+
+};
+
 
 /*
 class RigSupCapabilities
@@ -445,7 +515,8 @@ private:
     void sendTransVertEnabled(bool status);
 
 
-    void runRigCtlDaemon(const QString manufacturer, const QString model, const QString comport, const QString baudRate, const QString dataBits, const QString civ, const QString netAdd, const QString portNum, const QString stopBits, const QString parity, const QString handshake, const QString rtsState, const QString dtrState, rigCtldTrace::rigCtldTraceCodes diagnostics);
+    //void runRigCtlDaemon(const QString manufacturer, const QString model, const QString comport, const QString baudRate, const QString dataBits, const QString civ, const QString netAdd, const QString portNum, const QString stopBits, const QString parity, const QString handshake, const QString rtsState, const QString dtrState, rigCtldTrace::rigCtldTraceCodes diagnostics);
+    void runRigCtlDaemon(RigCtldParameters &rigCtldPar);
 
 
     int openRigCtldRadio(bool localRigCtld);

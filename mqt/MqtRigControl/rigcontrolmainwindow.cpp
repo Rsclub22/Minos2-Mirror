@@ -1283,34 +1283,51 @@ int RigControlMainWindow::openRigCtldRadio(bool localRigCtld)
 
         QString dtrState = serialData::rigctldForceLinesStr[currentRadio.forceDtr];
 
-
-        // start rigctld
-        trace(QString("openRigCtldRadio: starting rigctld"));
-        trace(QString("rigctld parameters - %1, %2, %3, %4, %5, %6, %7, %8, %9, %10, %11, %12, %13, %14, %15")
-                                                .arg(currentRadio.rigMfg_Name)
-                                                .arg(QString::number(currentRadio.rigModelNumber))
-                                                .arg(currentRadio.comport)
-                                                .arg(QString::number(currentRadio.baudrate))
-                                                .arg(QString::number(currentRadio.databits))
-                                                .arg(currentRadio.civAddress)
-                                                .arg(currentRadio.rigCtldNetworkAdd)
-                                                .arg(currentRadio.rigCtldNetworkPort)
-                                                .arg(QString::number(currentRadio.stopbits))
-                                                .arg(QString::number(currentRadio.stopbits))
-                                                .arg(parity)
-                                                .arg(handshake)
-                                                .arg(rtsState)
-                                                .arg(dtrState)
-                                                .arg(traceCode));
-
         QString mfgName = currentRadio.rigMfg_Name;
         int rmNumber = currentRadio.rigModelNumber;
 
-        runRigCtlDaemon(mfgName, QString::number(rmNumber), currentRadio.comport,
-                                                   QString::number(currentRadio.baudrate), QString::number(currentRadio.databits), currentRadio.civAddress, currentRadio.rigCtldNetworkAdd, currentRadio.rigCtldNetworkPort,
-                                                   QString::number(currentRadio.stopbits), parity, handshake, rtsState, dtrState, traceCode);
+        RigCtldParameters rigCtldPar;
+
+        rigCtldPar.setManufacturer(currentRadio.rigMfg_Name);
+        rigCtldPar.setManufacturer(QString::number(currentRadio.rigModelNumber));
+        rigCtldPar.setComport(currentRadio.comport);
+        rigCtldPar.setBaudRate(QString::number(currentRadio.baudrate));
+        rigCtldPar.setDataBits(QString::number(currentRadio.databits));
+        rigCtldPar.setCiv(currentRadio.civAddress.trimmed());
+        rigCtldPar.setNetworkAddress(currentRadio.rigCtldNetworkAdd.trimmed());
+        rigCtldPar.setPortNum(currentRadio.rigCtldNetworkPort.trimmed());
+        rigCtldPar.setStopBits(QString::number(currentRadio.stopbits));
+        rigCtldPar.setParity(parity);
+        rigCtldPar.setHandshake(handshake);
+        rigCtldPar.setRtsState(rtsState);
+        rigCtldPar.setDtrState(dtrState);
+        rigCtldPar.setTraceCode(traceCode);
+
+        // start rigctld
+        trace(QString("openRigCtldRadio: starting rigctld"));
+        trace(QString("rigctld parameters - %1, %2, %3, %4, %5, %6, %7, %8, %9, %10, %11, %12, %13, %14")
+                                                .arg(rigCtldPar.getManufacturer())
+                                                .arg(rigCtldPar.getModelNumber())
+                                                .arg(rigCtldPar.getComport())
+                                                .arg(rigCtldPar.getBaudRate())
+                                                .arg(rigCtldPar.getBaudRate())
+                                                .arg(rigCtldPar.getCiv())
+                                                .arg(rigCtldPar.getNetworkAddress())
+                                                .arg(rigCtldPar.getPortNum())
+                                                .arg(rigCtldPar.getStopBits())
+                                                .arg(rigCtldPar.getParity())
+                                                .arg(rigCtldPar.getHandshake())
+                                                .arg(rigCtldPar.getRtsState())
+                                                .arg(rigCtldPar.getDtrState())
+                                                .arg(rigCtldPar.getTraceCode()));
 
 
+
+//        runRigCtlDaemon(mfgName, QString::number(rmNumber), currentRadio.comport,
+//                                                   QString::number(currentRadio.baudrate), QString::number(currentRadio.databits), currentRadio.civAddress, currentRadio.rigCtldNetworkAdd, currentRadio.rigCtldNetworkPort,
+//                                                   QString::number(currentRadio.stopbits), parity, handshake, rtsState, dtrState, traceCode);
+
+        runRigCtlDaemon(rigCtldPar);
 
         // wait for rigctld to start
         int waitStartDur = 500;
@@ -2613,42 +2630,45 @@ void RigControlMainWindow::clrRigctldNames()
 }
 
 
-void RigControlMainWindow::runRigCtlDaemon(const QString manufacturer, const QString model, const QString comport,
-                                           const QString baudRate, const QString dataBits, const QString civ, const QString netAdd, const QString portNum,
-                                           const QString stopBits, const QString parity, const QString handshake, const QString rtsState, const QString dtrState,
-                                           rigCtldTrace::rigCtldTraceCodes diagnostics)
+//void RigControlMainWindow::runRigCtlDaemon(const QString manufacturer, const QString model, const QString comport,
+//                                           const QString baudRate, const QString dataBits, const QString civ, const QString netAdd, const QString portNum,
+//                                           const QString stopBits, const QString parity, const QString handshake, const QString rtsState, const QString dtrState,
+//                                           rigCtldTrace::rigCtldTraceCodes diagnostics)
+
+
+void RigControlMainWindow::runRigCtlDaemon(RigCtldParameters &rigctldPar)
 {
     QString program = getRigCtldExePath() + getRigCtldExeName();
 
     QStringList arguments;
 
 #if defined Q_OS_WIN32
-    QString serPort = comport.trimmed();
+    QString serPort = rigctldPar.getComport();
 #elif defined Q_OS_LINUX
-    QString serPort = "/dev/" + comport.trimmed();
+    QString serPort = "/dev/" + rigctldPar.getComport();
 #elif defined Q_OS_MAC
-    QString serPort = "/dev/" + comport.trimmed();
+    QString serPort = "/dev/" + rigctldPar.getComport();
 #endif
 
     QStringList parityNames;
     QString parityName;
-    QString networkAdd = netAdd.trimmed();
-    QString networkPort = portNum.trimmed();
+    QString networkAdd = rigctldPar.getNetworkAddress();
+    QString networkPort = rigctldPar.getPortNum();
 
     if (currentRadio.portType == RigCapConstants::PortType::serial)
     {
         //parityNames = radio->getParityCodeNames();
         //parityName = parity;
-        arguments << "-m" + model.trimmed() << "-r" + serPort  << "-s" + baudRate.trimmed() << "--set-conf=data_bits=" + dataBits.trimmed() << "--set-conf=stop_bits=" + stopBits.trimmed()
-                  << "--set-conf=serial_parity=" + parity.trimmed() << "--set-conf=serial_handshake=" + handshake.trimmed() << "--set-conf=rts_state=" + rtsState.trimmed() << "--set-conf=dtr_state=" + dtrState.trimmed();
+        arguments << "-m" + rigctldPar.getModelNumber() << "-r" + serPort  << "-s" + rigctldPar.getBaudRate() << "--set-conf=data_bits=" + rigctldPar.getDataBits() << "--set-conf=stop_bits=" + rigctldPar.getStopBits()
+                  << "--set-conf=serial_parity=" + rigctldPar.getParity() << "--set-conf=serial_handshake=" + rigctldPar.getHandshake() << "--set-conf=rts_state=" + rigctldPar.getRtsState() << "--set-conf=dtr_state=" + rigctldPar.getDtrState();
 
-        if (manufacturer == "Icom")
+        if (rigctldPar.getManufacturer() == "Icom")
         {
-            if (!civ.isEmpty())
+            if (!rigctldPar.getCiv().isEmpty())
             {
-               arguments << "--set-conf=civaddr=" + civ.trimmed();
+               arguments << "--set-conf=civaddr=" + rigctldPar.getCiv();
 
-               trace(QString("runRigCtlDaemon:: using icom civ address = %1").arg(civ.trimmed()));
+               trace(QString("runRigCtlDaemon:: using icom civ address = %1").arg(rigctldPar.getCiv()));
 
             }
         }
@@ -2656,7 +2676,7 @@ void RigControlMainWindow::runRigCtlDaemon(const QString manufacturer, const QSt
     else if (currentRadio.portType == RigCapConstants::PortType::none)
     {
         // for dummy radio
-        arguments << "-m" + model.trimmed();
+        arguments << "-m" + rigctldPar.getModelNumber();
     }
 
     // this is the rigctld network address usually local host 127.0.0.1 and port usually 4532
@@ -2685,13 +2705,13 @@ void RigControlMainWindow::runRigCtlDaemon(const QString manufacturer, const QSt
         trace(QString("runRigCtlDaemon:: port address is empty - using default %1").arg(networkPort));
     }
 
-    if (diagnostics != rigCtldTrace::rigCtldTraceCodes::rctNONE)
+    if (rigctldPar.getTraceCode() != rigCtldTrace::rigCtldTraceCodes::rctNONE)
     {
-        arguments << rigCtldTrace::rigCtldTraceStr[diagnostics];
+        arguments << rigCtldTrace::rigCtldTraceStr[rigctldPar.getTraceCode()];
     }
 
     trace(QString("runRigCtlDaemon:: start rigCtlD - manufacturer = %1, model = %2, comport = %3, baudrate = %4, databits = %5, stopbits = %6, parity = %7, handshake = %8, rtsState = %9, dtrState = %10, civ = %11, netaddress = %12, netPort = %13")
-          .arg(manufacturer).arg(model).arg(serPort).arg(baudRate).arg(dataBits).arg(stopBits).arg(parityName).arg(handshake).arg(rtsState).arg(dtrState).arg(civ).arg(networkAdd).arg(networkPort));
+          .arg(rigctldPar.getManufacturer()).arg(rigctldPar.getModelNumber()).arg(rigctldPar.getComport()).arg(rigctldPar.getBaudRate()).arg(rigctldPar.getDataBits()).arg(rigctldPar.getStopBits()).arg(parityName).arg(rigctldPar.getHandshake()).arg(rigctldPar.getRtsState()).arg(rigctldPar.getDtrState()).arg(rigctldPar.getCiv()).arg(rigctldPar.getNetworkAddress()).arg(rigctldPar.getPortNum()));
 
 //    trace(arguments.join(" ; "));
     rigCtldProcess->start(program, arguments);
