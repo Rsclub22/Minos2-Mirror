@@ -187,7 +187,7 @@ int RigControlVoiceMemoryKeyer::setup(VoiceKeyerFactory *voiceKeyerFactory, int 
 
         txVmSetupDialog.setPttEomGroupBoxVisible(true);
 
-        if (pttType == serialCommonData::PTTMethodCodes::PTT_METHOD_CAT)
+        if (pttType == serialCommonData::MINOS_PTT_TYPES::PTT_TYPE_CAT)
         {
 
             if (readSaveVoiceCWMemoryButtonByRadioNameFromIni(VoiceKeyerId::RigControl))
@@ -243,7 +243,7 @@ int RigControlVoiceMemoryKeyer::setup(VoiceKeyerFactory *voiceKeyerFactory, int 
 }
 
 
-void RigControlVoiceMemoryKeyer::setRadioParams(int radioMaxNumButtons_, QString selectedRadioName_, serialCommonData::PTTMethodCodes pttType_, bool pttEnabled_)
+void RigControlVoiceMemoryKeyer::setRadioParams(int radioMaxNumButtons_, QString selectedRadioName_, serialCommonData::MINOS_PTT_TYPES pttType_, bool pttEnabled_)
 {
 
     selectedRadioName = selectedRadioName_;

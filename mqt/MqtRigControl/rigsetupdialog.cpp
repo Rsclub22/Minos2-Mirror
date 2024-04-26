@@ -182,12 +182,12 @@ void RigSetupDialog::loadSettingsToTab(int tabNum, QString tabName)
     radioTab.value(tabName)->setEnableLocalTransVertSw(availRadioData.value(tabName)->enableLocTVSwMsg);
 
 
-    if (availRadioData.value(tabName)->portType == RigCapConstants::PortType::network)
+    if (availRadioData.value(tabName)->catPortType == RigCapConstants::PortType::network)
     {
         radioTab.value(tabName)->setDialogBoxesVisibleForNetwork();
 
     }
-    else if (availRadioData.value(tabName)->portType == RigCapConstants::PortType::serial)
+    else if (availRadioData.value(tabName)->catPortType == RigCapConstants::PortType::serial)
     {
         radioTab.value(tabName)->setDialogBoxesVisibleForSerial();
 
@@ -201,7 +201,7 @@ void RigSetupDialog::loadSettingsToTab(int tabNum, QString tabName)
         }
 
     }
-    else if (availRadioData.value(tabName)->portType == RigCapConstants::PortType::none)
+    else if (availRadioData.value(tabName)->catPortType == RigCapConstants::PortType::none)
     {
         radioTab.value(tabName)->setDialogBoxesVisibleForNone();
 
@@ -220,7 +220,7 @@ void RigSetupDialog::loadSettingsToTab(int tabNum, QString tabName)
     bool catPTT = true;     // This is radio PTT capability true = CAT PTT
     bool serialPTT = true;
 
-    if (rigCap.getSupportPttPortType() == RigCapConstants::PttPortType::RIG_PTT_RIG && rigCap.getRigManufacturer() == OMINRIG_MFR_NAME)
+    if (rigCap.getSupportPttPortType() == RigCapConstants::RigPttPortType::RIG_PTT_RIG && rigCap.getRigManufacturer() == OMINRIG_MFR_NAME)
     {
        // support CAT PTT only
 
@@ -228,15 +228,15 @@ void RigSetupDialog::loadSettingsToTab(int tabNum, QString tabName)
        serialPTT = false;
        radioTab.value(tabName)->setPttInitialState(catPTT, serialPTT);
     }
-    else if (rigCap.getSupportPttPortType() == RigCapConstants::PttPortType::RIG_PTT_RIG
-            || rigCap.getSupportPttPortType() == RigCapConstants::PttPortType::RIG_PTT_RIG_MICDATA)
+    else if (rigCap.getSupportPttPortType() == RigCapConstants::RigPttPortType::RIG_PTT_RIG
+            || rigCap.getSupportPttPortType() == RigCapConstants::RigPttPortType::RIG_PTT_RIG_MICDATA)
     {
         // support CAT PTT and Serial PTT
         catPTT = true;
         serialPTT = true;
         radioTab.value(tabName)->setPttInitialState(catPTT, serialPTT);
     }
-    else if (rigCap.getSupportPttPortType() == RigCapConstants::PttPortType::RIG_PTT_NONE)
+    else if (rigCap.getSupportPttPortType() == RigCapConstants::RigPttPortType::RIG_PTT_NONE)
     {
 
        // support Serial PTT only
@@ -251,19 +251,19 @@ void RigSetupDialog::loadSettingsToTab(int tabNum, QString tabName)
 
 
     // These are user selections in Minos
-    if (availRadioData.value(tabName)->pttType == serialCommonData::PTTMethodCodes::PTT_METHOD_CAT)
+    if (availRadioData.value(tabName)->pttType == serialCommonData::MINOS_PTT_TYPES::PTT_TYPE_CAT)
     {
         radioTab.value(tabName)->setPttCatSelectRadioButtonChecked(true);
 
     }
-    else if (availRadioData.value(tabName)->pttType == serialCommonData::PTTMethodCodes::PTT_METHOD_RTS)
+    else if (availRadioData.value(tabName)->pttType == serialCommonData::MINOS_PTT_TYPES::PTT_TYPE_RTS)
     {
         radioTab.value(tabName)->setPttRtsSelectRadioButtonChecked(true);
         radioTab.value(tabName)->pttComportSelDisabled(false);
 
 
     }
-    else if (availRadioData.value(tabName)->pttType == serialCommonData::PTTMethodCodes::PTT_METHOD_DTR)
+    else if (availRadioData.value(tabName)->pttType == serialCommonData::MINOS_PTT_TYPES::PTT_TYPE_DTR)
     {
         radioTab.value(tabName)->setPttDtrSelectRadioButtonChecked(true);
         radioTab.value(tabName)->pttComportSelDisabled(false);
@@ -1071,7 +1071,7 @@ void RigSetupDialog::saveRadioData(QSharedPointer<scatParams> radioData, QSettin
     config.setValue("radioName", radioData->radioName);
     config.setValue("radioModel", radioData->rigModel);
     config.setValue("civAddress", radioData->civAddress);
-    config.setValue("portType", radioData->portType);
+    config.setValue("portType", radioData->catPortType);
     config.setValue("advancedComms", radioData->advancedCommsFlag);
     config.setValue("comport", radioData->comport);
     config.setValue("baudrate", radioData->baudrate);
@@ -1137,7 +1137,7 @@ void RigSetupDialog::getRadioSetting(QSharedPointer<scatParams> radioData, QStri
     radioData->radioName = config.value("radioName", "").toString();
     radioData->rigModel = config.value("radioModel", "").toString();
     radioData->civAddress = config.value("civAddress", "").toString();
-    radioData->portType = config.value("portType", RigCapConstants::PortType::serial).toInt();
+    radioData->catPortType = config.value("portType", RigCapConstants::PortType::serial).toInt();
     radioData->advancedCommsFlag = config.value("advancedComms", false).toBool();
     radioData->comport = config.value("comport", "").toString();
     radioData->baudrate = config.value("baudrate", 9600).toInt();
@@ -1148,7 +1148,7 @@ void RigSetupDialog::getRadioSetting(QSharedPointer<scatParams> radioData, QStri
     radioData->forceDtr = static_cast<serialCommonData::s_forceLinesCodes>(config.value("forceDTR", 0).toInt());
     radioData->forceRts= static_cast<serialCommonData::s_forceLinesCodes>(config.value("forceRTS", 0).toInt());
     radioData->enablePTT = config.value("enablePtt", false).toBool();
-    radioData->pttType = static_cast<serialCommonData::PTTMethodCodes>(config.value("pttType", 0).toInt());
+    radioData->pttType = static_cast<serialCommonData::MINOS_PTT_TYPES>(config.value("pttType", 0).toInt());
     radioData->pttSerialPort = config.value("pttSerialPort", "").toString();
     radioData->pollInterval = config.value("radioPollInterval", "1").toString();
     radioData->rigCtldEnable = config.value("rigCtldEnable", false).toBool();

@@ -92,7 +92,7 @@ void RigCapabilities::clear()
     supportSetRitState = false;
     supportGetRitMax = false;
     supportSMeter = false;
-    supportPttPortType = RigCapConstants::PttPortType::RIG_PTT_NONE;
+    supportPttPortType = RigCapConstants::RigPttPortType::RIG_PTT_NONE;
     supportGetPtt = false;
     supportSetPtt = false;
     supportGetVox = false;
@@ -239,11 +239,11 @@ bool RigCapabilities::getSupportSMeter() const
     return supportSMeter;
 }
 
-void RigCapabilities::setSupportPttPortType(RigCapConstants::PttPortType supportPttPortType_)
+void RigCapabilities::setSupportPttPortType(RigCapConstants::RigPttPortType supportPttPortType_)
 {
     supportPttPortType = supportPttPortType_;
 }
-RigCapConstants::PttPortType  RigCapabilities::getSupportPttPortType()
+RigCapConstants::RigPttPortType  RigCapabilities::getSupportPttPortType()
 {
     return supportPttPortType;
 }

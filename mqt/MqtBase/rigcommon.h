@@ -3,7 +3,7 @@
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //                      Rotator Control
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2018
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2018 - 2024
 //
 //
 //
@@ -246,13 +246,13 @@ public:
   serialCommonData::s_handshakeCodes handshake = serialCommonData::s_handshakeCodes::HANDSHAKE_NONE;
   serialCommonData::s_forceLinesCodes forceDtr = serialCommonData::s_forceLinesCodes::FORCE_LINE_NONE;
   serialCommonData::s_forceLinesCodes forceRts = serialCommonData::s_forceLinesCodes::FORCE_LINE_NONE;
-  int portType = 0;
+  int catPortType = 0;
   bool advancedCommsFlag = false;
   QString networkAdd;
   QString networkPort;
   bool enablePTT  = false;
   QString pttSerialPort;
-  serialCommonData::PTTMethodCodes pttType = serialCommonData::PTTMethodCodes::PTT_METHOD_NONE;
+  serialCommonData::MINOS_PTT_TYPES pttType = serialCommonData::MINOS_PTT_TYPES::PTT_TYPE_NONE;
   bool rigCtldEnable = false;
   bool startMinosRigCtld = true;
   QString rigCtldNetworkAdd;

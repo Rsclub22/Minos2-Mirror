@@ -50,7 +50,7 @@ public:
     virtual void saveVmButtonParams(const VoiceKeyerParams &vmParams) override;
 
     virtual int setup(VoiceKeyerFactory *voiceKeyerFactory, int &maxNumButtons, int &numButtons, QString selectedRadioName) override;
-    virtual void setRadioParams(int radioMaxNumButtons, QString selectedRadioName, serialCommonData::PTTMethodCodes pttType_, bool pttEnabled_) override;
+    virtual void setRadioParams(int radioMaxNumButtons, QString selectedRadioName, serialCommonData::MINOS_PTT_TYPES pttType_, bool pttEnabled_) override;
 
     virtual int editButton(VoiceKeyerParams* vmData, QString title) override;
 
@@ -63,7 +63,7 @@ private:
 
     int cwMemType;
     int selectedEomType = voiceKeyerCommon::VoiceCwKeyerEomTypes::Eom_None;
-    serialCommonData::PTTMethodCodes pttType = serialCommonData::PTTMethodCodes::PTT_METHOD_NONE;
+    serialCommonData::MINOS_PTT_TYPES pttType = serialCommonData::MINOS_PTT_TYPES::PTT_TYPE_NONE;
     bool pttEnabled = false;
     bool setCwModeAndRestoreCurrentMode = true;
 

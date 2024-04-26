@@ -125,7 +125,7 @@ void TxVmButtonsFrame::setPttTypeLabelsVisible(bool visible)
     ui->pttTypeText->setVisible(visible);
 }
 
-void TxVmButtonsFrame::setPttTypeText(serialCommonData::PTTMethodCodes pttType)
+void TxVmButtonsFrame::setPttTypeText(serialCommonData::MINOS_PTT_TYPES pttType)
 {
 
     ui->pttTypeText->setText(serialCommonData::pttMethodStr[static_cast<int>(pttType)]);
@@ -1182,27 +1182,27 @@ void TxVmButtonsFrame::setPttType(int type, PubSubName psn)
 
 
 
-serialCommonData::PTTMethodCodes TxVmButtonsFrame::getPttType(PubSubName psn)
+serialCommonData::MINOS_PTT_TYPES TxVmButtonsFrame::getPttType(PubSubName psn)
 {
 
-    // convert int back to PTTMethodCode type
+    // convert int back to MINOS_PTT_TYPES
 
     RadioDetails rd;
     if (allRadioDetails.contains(psn))
     {
         rd = allRadioDetails[psn];
-        return static_cast<serialCommonData::PTTMethodCodes>(rd.getPttType());
+        return static_cast<serialCommonData::MINOS_PTT_TYPES>(rd.getPttType());
     }
 
 
-    return serialCommonData::PTTMethodCodes::PTT_METHOD_NONE;
+    return serialCommonData::MINOS_PTT_TYPES::PTT_TYPE_NONE;
 
 }
 
 void TxVmButtonsFrame::setVoiceMemAvail(bool avail, PubSubName psn)
 {
 
-    logMessage(QString("setVoiceMemAvail = %1, radio = %2").arg(avail ? "Yes" : "No").arg(psn.getLocalName()));
+    logMessage(QString("setVoiceMemAvail = %1, radio = %2").arg(avail ? "Yes" : "No", psn.getLocalName()));
 
     RadioDetails rd;
     if (allRadioDetails.contains(psn))
@@ -1234,7 +1234,7 @@ bool TxVmButtonsFrame::isVoiceMemAvail(PubSubName psn)
 
 void TxVmButtonsFrame::setNumVoiceMessages(int numMsgs, PubSubName psn)
 {
-    logMessage(QString("setNumVoiceMessages = %1, radio = %2").arg(numMsgs).arg(psn.getLocalName()));
+    logMessage(QString("setNumVoiceMessages = %1, radio = %2").arg(QString::number(numMsgs), psn.getLocalName()));
 
     RadioDetails rd;
     if (allRadioDetails.contains(psn))

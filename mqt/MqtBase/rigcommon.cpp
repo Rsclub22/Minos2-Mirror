@@ -181,13 +181,13 @@ void scatParams::clear()
     handshake = serialCommonData::s_handshakeCodes::HANDSHAKE_NONE;
     forceDtr = serialCommonData::s_forceLinesCodes::FORCE_LINE_NONE;
     forceRts = serialCommonData::s_forceLinesCodes::FORCE_LINE_NONE;
-    portType = 0;
+    catPortType = 0;
     advancedCommsFlag = false;
     networkAdd.clear();
     networkPort.clear();
     enablePTT  = false;
     pttSerialPort.clear();
-    pttType = serialCommonData::PTTMethodCodes::PTT_METHOD_NONE;
+    pttType = serialCommonData::MINOS_PTT_TYPES::PTT_TYPE_NONE;
     rigCtldEnable = false;
     startMinosRigCtld = true;
     rigCtldNetworkAdd.clear();
@@ -236,7 +236,7 @@ bool scatParams::compareEqual(QSharedPointer <scatParams> radParams)
         handshake == radParams->handshake &&
         forceDtr == radParams->forceDtr &&
         forceRts == radParams->forceRts &&
-        portType == radParams->portType &&
+        catPortType == radParams->catPortType &&
         advancedCommsFlag == radParams->advancedCommsFlag &&
         networkAdd == radParams->networkAdd &&
         networkPort == radParams->networkPort &&
@@ -296,7 +296,7 @@ bool scatParams::compareNotEqual(const QSharedPointer<scatParams> radParams)
             handshake != radParams->handshake ||
             forceDtr != radParams->forceDtr ||
             forceRts != radParams->forceRts ||
-            portType != radParams->portType ||
+            catPortType != radParams->catPortType ||
             advancedCommsFlag != radParams->advancedCommsFlag ||
             networkAdd != radParams->networkAdd ||
             networkPort != radParams->networkPort ||
@@ -394,7 +394,7 @@ void scatParams::scatParamsCopy(const QSharedPointer<scatParams> srce)
     handshake = srce->handshake;
     forceDtr = srce->forceDtr;
     forceRts = srce->forceRts;
-    portType = srce->portType;
+    catPortType = srce->catPortType;
     advancedCommsFlag = srce->advancedCommsFlag;
     networkAdd = srce->networkAdd;
     networkPort = srce->networkPort;

@@ -33,7 +33,7 @@ public:
     void sendMsgNum(int buttonNum) override;
     void stopMsg(VoiceKeyerParams * vkParam) override;
 
-    virtual void setRadioParams(int radioMaxNumButtons, QString selectedRadioName, serialCommonData::PTTMethodCodes pttType_, bool pttEnabled_) override;
+    virtual void setRadioParams(int radioMaxNumButtons, QString selectedRadioName, serialCommonData::MINOS_PTT_TYPES pttType_, bool pttEnabled_) override;
 
 
     void sendCwMsg(VoiceKeyerParams &vmParams) override {Q_UNUSED(vmParams)};
@@ -67,7 +67,7 @@ signals:
 private:
 
     int selectedEomType = voiceKeyerCommon::VoiceCwKeyerEomTypes::Eom_None;
-    serialCommonData::PTTMethodCodes pttType = serialCommonData::PTTMethodCodes::PTT_METHOD_NONE;
+    serialCommonData::MINOS_PTT_TYPES pttType = serialCommonData::MINOS_PTT_TYPES::PTT_TYPE_NONE;
     bool pttEnabled = false;
 
     bool radioKeyerAvail = false;

@@ -161,7 +161,7 @@ void RigSetupForm::setupRadioModel(QString radioModel)
         radioData->rigModelNumber = rigCap.getRigModelNumber();
         radioData->rigModelName = rigCap.getRigModelName();
         radioData->rigMfg_Name = rigCap.getRigManufacturer();
-        radioData->portType = rigCap.getPortType();
+        radioData->catPortType = rigCap.getPortType();
 
         if (rigCap.getPollData())
         {
@@ -302,7 +302,7 @@ void RigSetupForm::setupRadioModel(QString radioModel)
          bool catPTT = true;     // This is radio PTT capability true = CAT PTT
          bool serialPTT = true;
 
-         if (rigCap.getSupportPttPortType() == RigCapConstants::PttPortType::RIG_PTT_RIG && rigCap.getRigManufacturer() == OMINRIG_MFR_NAME)
+         if (rigCap.getSupportPttPortType() == RigCapConstants::RigPttPortType::RIG_PTT_RIG && rigCap.getRigManufacturer() == OMINRIG_MFR_NAME)
          {
             // support CAT PTT only
 
@@ -310,15 +310,15 @@ void RigSetupForm::setupRadioModel(QString radioModel)
             serialPTT = false;
             setPttInitialState(catPTT, serialPTT);
          }
-         else if (rigCap.getSupportPttPortType() == RigCapConstants::PttPortType::RIG_PTT_RIG
-                 || rigCap.getSupportPttPortType() == RigCapConstants::PttPortType::RIG_PTT_RIG_MICDATA)
+         else if (rigCap.getSupportPttPortType() == RigCapConstants::RigPttPortType::RIG_PTT_RIG
+                 || rigCap.getSupportPttPortType() == RigCapConstants::RigPttPortType::RIG_PTT_RIG_MICDATA)
          {
              // support CAT PTT and Serial PTT
              catPTT = true;
              serialPTT = true;
              setPttInitialState(catPTT, serialPTT);
          }
-         else if (rigCap.getSupportPttPortType() == RigCapConstants::PttPortType::RIG_PTT_NONE)
+         else if (rigCap.getSupportPttPortType() == RigCapConstants::RigPttPortType::RIG_PTT_NONE)
          {
 
              // support Serial PTT only
@@ -496,7 +496,7 @@ void RigSetupForm::onPortTypeSerialRadioButtonClicked()
     if (ui->portTypeSerialRadioButton->isChecked())
     {
         setDialogBoxesVisibleForSerial();
-        radioData->portType = RigCapConstants::PortType::serial;
+        radioData->catPortType = RigCapConstants::PortType::serial;
     }
 
 
@@ -515,7 +515,7 @@ void RigSetupForm::onPortTypeNetworkRadioButtonClicked()
     if (ui->portTypeNetworkRadioButton->isChecked())
     {
         setDialogBoxesVisibleForNetwork();
-        radioData->portType = RigCapConstants::PortType::network;
+        radioData->catPortType = RigCapConstants::PortType::network;
     }
 }
 
@@ -2277,7 +2277,7 @@ void RigSetupForm::onPttCatEnableClicked(bool /*checked*/)
 {
     if (ui->pttCatSelectRadioButton->isChecked())
     {
-        radioData->pttType = serialCommonData::PTTMethodCodes::PTT_METHOD_CAT;
+        radioData->pttType = serialCommonData::MINOS_PTT_TYPES::PTT_TYPE_CAT;
         pttComportSelDisabled(true);
         setForceRTSDisabled(false);
         setForceDTRDisabled(false);
@@ -2297,7 +2297,7 @@ void RigSetupForm::onPttDtrEnableClicked(bool /*checked*/)
 
     if (ui->pttDTRSelectRadioButton->isChecked())
     {
-        radioData->pttType = serialCommonData::PTTMethodCodes::PTT_METHOD_DTR;
+        radioData->pttType = serialCommonData::MINOS_PTT_TYPES::PTT_TYPE_DTR;
 
         ui->pttComportSel->setDisabled(false);
         if (isPttComportEqualCatComport())
@@ -2333,7 +2333,7 @@ void RigSetupForm::onPttRtsEnableClicked(bool /*checked*/)
 {
     if (ui->pttRTSSelectRadioButton->isChecked())
     {
-        radioData->pttType = serialCommonData::PTTMethodCodes::PTT_METHOD_RTS;
+        radioData->pttType = serialCommonData::MINOS_PTT_TYPES::PTT_TYPE_RTS;
 
 
 

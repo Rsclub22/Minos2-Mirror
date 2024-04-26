@@ -126,20 +126,20 @@ int register_callback(rig_model_t rig_model, void *callback_data)
     bool supportGetPtt = false;
     bool supportSetPtt = false;
 
-    auto supportPttPortType = RigCapConstants::PttPortType::RIG_PTT_NONE;
+    auto supportPttPortType = RigCapConstants::RigPttPortType::RIG_PTT_NONE;
 
     switch (rig_get_caps_int(rig_model, RIG_CAPS_PTT_TYPE))
     {
         case RIG_PTT_NONE:
-            supportPttPortType = RigCapConstants::PttPortType::RIG_PTT_NONE;
+            supportPttPortType = RigCapConstants::RigPttPortType::RIG_PTT_NONE;
         break;
 
         case RIG_PTT_RIG:       // CAT PTT
-            supportPttPortType = RigCapConstants::PttPortType::RIG_PTT_RIG;
+            supportPttPortType = RigCapConstants::RigPttPortType::RIG_PTT_RIG;
         break;
 
         case RIG_PTT_RIG_MICDATA:  // CAT PTT
-            supportPttPortType = RigCapConstants::PttPortType::RIG_PTT_RIG_MICDATA;
+            supportPttPortType = RigCapConstants::RigPttPortType::RIG_PTT_RIG_MICDATA;
         break;
         default:
         {}
@@ -316,7 +316,7 @@ int HamlibRigControl::rigInit(scatParams &currentRadio, bool useRigCtld)
     }
     else
     {
-        if (currentRadio.portType == RigCapConstants::PortType::serial)
+        if (currentRadio.catPortType == RigCapConstants::PortType::serial)
         //if (rig_port_e(currentRadio.portType) == RIG_PORT_SERIAL)
         {
             comport.append(currentRadio.comport);
@@ -345,7 +345,7 @@ int HamlibRigControl::rigInit(scatParams &currentRadio, bool useRigCtld)
             }
 
         }
-        else if (currentRadio.portType == RigCapConstants::PortType::network || currentRadio.portType == RigCapConstants::PortType::udp)
+        else if (currentRadio.catPortType == RigCapConstants::PortType::network || currentRadio.catPortType == RigCapConstants::PortType::udp)
         //else if (rig_port_e(currentRadio.portType) == RIG_PORT_NETWORK || rig_port_e(currentRadio.portType) == RIG_PORT_UDP_NETWORK)
         {
             QString netAdd;
@@ -359,7 +359,7 @@ int HamlibRigControl::rigInit(scatParams &currentRadio, bool useRigCtld)
             }
             strncpy(my_rig->state.rigport.pathname, QString(netAdd + ":" + currentRadio.networkPort).toLatin1().data(), HAMLIB_FILPATHLEN - 1);
         }
-        else if (currentRadio.portType == RigCapConstants::PortType::none)
+        else if (currentRadio.catPortType == RigCapConstants::PortType::none)
         {
             strncpy(my_rig->state.rigport.pathname, QString("").toLatin1().data(), HAMLIB_FILPATHLEN - 1);
         }
@@ -369,9 +369,9 @@ int HamlibRigControl::rigInit(scatParams &currentRadio, bool useRigCtld)
         if (currentRadio.enablePTT)
         {
 
-            serialCommonData::PTTMethodCodes pttType = static_cast<serialCommonData::PTTMethodCodes>(currentRadio.pttType);
+            serialCommonData::MINOS_PTT_TYPES pttType = currentRadio.pttType;
 
-            if (pttType != serialCommonData::PTTMethodCodes::PTT_METHOD_CAT && pttType != serialCommonData::PTTMethodCodes::PTT_METHOD_NONE)
+            if (pttType != serialCommonData::MINOS_PTT_TYPES::PTT_TYPE_CAT && pttType != serialCommonData::MINOS_PTT_TYPES::PTT_TYPE_NONE)
             {
                 if (!currentRadio.pttSerialPort.isEmpty())
                 {
@@ -385,12 +385,12 @@ int HamlibRigControl::rigInit(scatParams &currentRadio, bool useRigCtld)
 
                 }
 
-                if (pttType == serialCommonData::PTTMethodCodes::PTT_METHOD_DTR)
+                if (pttType == serialCommonData::MINOS_PTT_TYPES::PTT_TYPE_DTR)
                 {
                    setConfigurationParameter("ptt_type", "DTR");
 
                 }
-                else if (pttType == serialCommonData::PTTMethodCodes::PTT_METHOD_RTS)
+                else if (pttType == serialCommonData::MINOS_PTT_TYPES::PTT_TYPE_RTS)
                 {
 
                     setConfigurationParameter("ptt_type", "RTS");
