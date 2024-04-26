@@ -238,7 +238,7 @@ public:
   //int maxBaudRate = 0;
   //int minBaudRate = 0;
   int baudrate = 0;
-  serialCommonData::serialParityCodes parity = serialCommonData::serialParityCodes::PARITY_NONE;
+  serialCommonData::serialParityCodes parity = serialCommonData::serialParityCodes::MINOS_PARITY_NONE;
   int stopbits = 0;
   int databits = 0;
   serialCommonData::s_handshakeCodes handshake = serialCommonData::s_handshakeCodes::HANDSHAKE_NONE;

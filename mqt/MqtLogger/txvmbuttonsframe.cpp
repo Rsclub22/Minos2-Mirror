@@ -125,13 +125,10 @@ void TxVmButtonsFrame::setPttTypeLabelsVisible(bool visible)
     ui->pttTypeText->setVisible(visible);
 }
 
-void TxVmButtonsFrame::setPttTypeText(int pttType)
+void TxVmButtonsFrame::setPttTypeText(serialCommonData::PTTMethodCodes pttType)
 {
-    if (pttType >= 0 && pttType < serialCommonData::pttMethodStr.length() )
-    {
-        ui->pttTypeText->setText(serialCommonData::pttMethodStr[pttType]);
-    }
 
+    ui->pttTypeText->setText(serialCommonData::pttMethodStr[static_cast<int>(pttType)]);
 }
 
 void TxVmButtonsFrame::setVoiceNumMemButtonsVisible(int num)
@@ -1185,17 +1182,20 @@ void TxVmButtonsFrame::setPttType(int type, PubSubName psn)
 
 
 
-int TxVmButtonsFrame::getPttType(PubSubName psn)
+serialCommonData::PTTMethodCodes TxVmButtonsFrame::getPttType(PubSubName psn)
 {
+
+    // convert int back to PTTMethodCode type
+
     RadioDetails rd;
     if (allRadioDetails.contains(psn))
     {
         rd = allRadioDetails[psn];
-        return rd.getPttType();
+        return static_cast<serialCommonData::PTTMethodCodes>(rd.getPttType());
     }
 
 
-    return serialCommonData::PTT_METHOD_NONE;
+    return serialCommonData::PTTMethodCodes::PTT_METHOD_NONE;
 
 }
 

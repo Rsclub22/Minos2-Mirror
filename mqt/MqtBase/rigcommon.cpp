@@ -175,7 +175,7 @@ void scatParams::clear()
     pollInterval = RIG_DEFAULT_POLLINTERVAL;
     civAddress.clear();
     baudrate = 0;
-    parity = serialCommonData::serialParityCodes::PARITY_NONE;
+    parity = serialCommonData::serialParityCodes::MINOS_PARITY_NONE;
     stopbits = 0;
     databits = 0;
     handshake = serialCommonData::s_handshakeCodes::HANDSHAKE_NONE;

@@ -175,9 +175,9 @@ private:
     int getNumVoiceMessages(PubSubName psn);
     QString getRigModel(PubSubName psn);
 
-    int getPttType(PubSubName psn);
+    serialCommonData::PTTMethodCodes getPttType(PubSubName psn);
     void setPttTypeLabelsVisible(bool visible);
-    void setPttTypeText(int pttType);
+    void setPttTypeText(serialCommonData::PTTMethodCodes pttType);
     bool getPttEnabled(PubSubName psn);
     void setPttEnabledIndicatorOnOff(bool on);
     void setEomTypeLabelsVisible(bool visible);

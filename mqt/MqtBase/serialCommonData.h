@@ -5,8 +5,8 @@
 
 namespace serialCommonData
 {
-    enum class serialParityCodes  {PARITY_NONE, PARITY_ODD, PARITY_EVEN, PARITY_MARK, PARITY_SPACE};
-    const serialParityCodes parityCodesList[] = {serialParityCodes::PARITY_NONE, serialParityCodes::PARITY_ODD, serialParityCodes::PARITY_EVEN, serialParityCodes::PARITY_MARK, serialParityCodes::PARITY_SPACE};
+    enum class serialParityCodes  {MINOS_PARITY_NONE, MINOS_PARITY_ODD, MINOS_PARITY_EVEN, MINOS_PARITY_MARK, MINOS_PARITY_SPACE};  // added MINOS_ to prevent compile errors - clash with PARITY_NONE defined in windows.h
+    const serialParityCodes parityCodesList[] = {serialParityCodes::MINOS_PARITY_NONE, serialParityCodes::MINOS_PARITY_ODD, serialParityCodes::MINOS_PARITY_EVEN, serialParityCodes::MINOS_PARITY_MARK, serialParityCodes::MINOS_PARITY_SPACE};
     const QStringList parityStr = QStringList() << "None" << "Odd" << "Even" << "Mark" << "Space";
 
     enum  class s_handshakeCodes {HANDSHAKE_NONE, HANDSHAKE_XONXOFF, HANDSHAKE_HARDWARE };

@@ -240,7 +240,7 @@ public:
   QString pollInterval = RIG_DEFAULT_POLLINTERVAL;
   QString civAddress;
   int baudrate = 0; /**<  serial port baudrate*/
-  serialCommonData::serialParityCodes parity = serialCommonData::serialParityCodes::PARITY_NONE;
+  serialCommonData::serialParityCodes parity = serialCommonData::serialParityCodes::MINOS_PARITY_NONE;
   int stopbits = 0;
   int databits = 0;
   serialCommonData::s_handshakeCodes handshake = serialCommonData::s_handshakeCodes::HANDSHAKE_NONE;
