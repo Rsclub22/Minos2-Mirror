@@ -24,8 +24,8 @@ namespace serialCommonData
     const QStringList pollTimeStr  = QStringList() << "0.5" << "1" << "2" << "3";
 
     enum  class MINOS_PTT_TYPES {PTT_TYPE_NONE, PTT_TYPE_VOX, PTT_TYPE_CAT, PTT_TYPE_DTR, PTT_TYPE_RTS};
-    const MINOS_PTT_TYPES pttMethodCodesList[] = { MINOS_PTT_TYPES::PTT_TYPE_NONE, MINOS_PTT_TYPES::PTT_TYPE_VOX, MINOS_PTT_TYPES::PTT_TYPE_CAT, MINOS_PTT_TYPES::PTT_TYPE_DTR, MINOS_PTT_TYPES::PTT_TYPE_RTS};
-    const QStringList pttMethodStr = QStringList() << "NONE" << "VOX" << "CAT" << "DTR" << "RTS" ;
+    const MINOS_PTT_TYPES pttTypeCodesList[] = { MINOS_PTT_TYPES::PTT_TYPE_NONE, MINOS_PTT_TYPES::PTT_TYPE_VOX, MINOS_PTT_TYPES::PTT_TYPE_CAT, MINOS_PTT_TYPES::PTT_TYPE_DTR, MINOS_PTT_TYPES::PTT_TYPE_RTS};
+    const QStringList pttTypeStr = QStringList() << "NONE" << "VOX" << "CAT" << "DTR" << "RTS" ;
 }
 
 

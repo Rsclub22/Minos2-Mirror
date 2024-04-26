@@ -492,6 +492,7 @@ void RigSetupForm::CIVEditVisible(bool visible)
 
 void RigSetupForm::onPortTypeSerialRadioButtonClicked()
 {
+    // This selection overirides the cat portType retrieved from hamlib.
 
     if (ui->portTypeSerialRadioButton->isChecked())
     {
@@ -511,6 +512,7 @@ void RigSetupForm::setPortTypeSerialRadioButtonChecked(bool checked)
 
 void RigSetupForm::onPortTypeNetworkRadioButtonClicked()
 {
+    // This selection overirides the cat portType retrieved from hamlib.
 
     if (ui->portTypeNetworkRadioButton->isChecked())
     {

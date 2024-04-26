@@ -1287,11 +1287,11 @@ int RigControlMainWindow::openRigCtldRadio(bool localRigCtld)
         RigCtldParameters rigCtldPar;
 
         rigCtldPar.setManufacturer(currentRadio.rigMfg_Name);
-        rigCtldPar.setManufacturer(QString::number(currentRadio.rigModelNumber));
+        rigCtldPar.setModelNumber(QString::number(currentRadio.rigModelNumber));
         rigCtldPar.setComport(currentRadio.comport);
         rigCtldPar.setBaudRate(QString::number(currentRadio.baudrate));
         rigCtldPar.setDataBits(QString::number(currentRadio.databits));
-        rigCtldPar.setCiv(currentRadio.civAddress.trimmed());
+        rigCtldPar.setCiv(currentRadio.civAddress.trimmed().trimmed());
         rigCtldPar.setNetworkAddress(currentRadio.rigCtldNetworkAdd.trimmed());
         rigCtldPar.setPortNum(currentRadio.rigCtldNetworkPort.trimmed());
         rigCtldPar.setStopBits(QString::number(currentRadio.stopbits));
@@ -1300,10 +1300,13 @@ int RigControlMainWindow::openRigCtldRadio(bool localRigCtld)
         rigCtldPar.setRtsState(rtsState);
         rigCtldPar.setDtrState(dtrState);
         rigCtldPar.setTraceCode(traceCode);
+        rigCtldPar.setPttEnabled(currentRadio.enablePTT);
+        rigCtldPar.setPttComport(currentRadio.pttSerialPort);
+        rigCtldPar.setPttType(currentRadio.pttType);
 
         // start rigctld
         trace(QString("openRigCtldRadio: starting rigctld"));
-        trace(QString("rigctld parameters - %1, %2, %3, %4, %5, %6, %7, %8, %9, %10, %11, %12, %13, %14")
+        trace(QString("rigctld parameters - %1, %2, %3, %4, %5, %6, %7, %8, %9, %10, %11, %12, %13, %14, %15, %16, %17")
                                                 .arg(rigCtldPar.getManufacturer())
                                                 .arg(rigCtldPar.getModelNumber())
                                                 .arg(rigCtldPar.getComport())
@@ -1317,7 +1320,10 @@ int RigControlMainWindow::openRigCtldRadio(bool localRigCtld)
                                                 .arg(rigCtldPar.getHandshake())
                                                 .arg(rigCtldPar.getRtsState())
                                                 .arg(rigCtldPar.getDtrState())
-                                                .arg(rigCtldPar.getTraceCode()));
+                                                .arg(rigCtldPar.getTraceCode())
+                                                .arg(rigCtldPar.getPttEnabled() ? "PTT Enabled" : "PTT Disabled")
+                                                .arg(rigCtldPar.getPttComport())
+                                                .arg(serialCommonData::pttTypeStr[static_cast<int>(rigCtldPar.getPttType())]));
 
 
 
@@ -1893,7 +1899,7 @@ void RigControlMainWindow::getRadioInfo(bool pubNow)
         {
             if (!currentRadio.pttSerialPort.isEmpty())
             {
-                logMessage(QString("Get Serial PTT Status for Comport %1 and Control Line Type %2").arg(currentRadio.pttSerialPort, serialCommonData::pttMethodStr[static_cast<int>(currentRadio.pttType)]));
+                logMessage(QString("Get Serial PTT Status for Comport %1 and Control Line Type %2").arg(currentRadio.pttSerialPort, serialCommonData::pttTypeStr[static_cast<int>(currentRadio.pttType)]));
 
                 retCode = getTXStatus(rigStateDetails->curVfo);
                 if (retCode < 0)
@@ -2703,13 +2709,59 @@ void RigControlMainWindow::runRigCtlDaemon(RigCtldParameters &rigctldPar)
         trace(QString("runRigCtlDaemon:: port address is empty - using default %1").arg(networkPort));
     }
 
+    if (rigctldPar.getPttEnabled())
+    {
+        trace(QString("runRigCtlDaemon:: PTT Enabled"));
+
+        if (rigctldPar.getPttType() == serialCommonData::MINOS_PTT_TYPES::PTT_TYPE_DTR
+            || rigctldPar.getPttType() == serialCommonData::MINOS_PTT_TYPES::PTT_TYPE_RTS)
+        {
+            trace(QString("runRigCtlDaemon:: Serial %1 PTT control selected").arg(serialCommonData::pttTypeStr[static_cast<int>(rigctldPar.getPttType())]));
+            // we are using serial PTT control
+            if (!rigctldPar.getPttComport().isEmpty())
+            {
+                arguments << QString("--ptt-file=%1").arg(rigctldPar.getPttComport());
+                arguments << QString("--ptt-type=%2").arg(serialCommonData::pttTypeStr[static_cast<int>(rigctldPar.getPttType())]);
+            }
+            else
+            {
+                trace(QString("runRigCtlDaemon:: Error Serial PTT Comport Empty = %1!").arg(rigctldPar.getPttComport()));
+            }
+
+        }
+        else
+        {
+            if (rigctldPar.getPttType() == serialCommonData::MINOS_PTT_TYPES::PTT_TYPE_CAT)
+            {
+                trace(QString("runRigCtlDaemon:: CAT selected"));
+                arguments << QString("--ptt-type=RIG");
+            }
+            else
+            {
+                trace(QString("runRigCtlDaemon:: Error PTT Type %1 selected").arg(serialCommonData::pttTypeStr[static_cast<int>(rigctldPar.getPttType())]));
+            }
+        }
+    }
+
+
+
+
+
     if (rigctldPar.getTraceCode() != rigCtldTrace::rigCtldTraceCodes::rctNONE)
     {
         arguments << rigCtldTrace::rigCtldTraceStr[rigctldPar.getTraceCode()];
     }
 
-    trace(QString("runRigCtlDaemon:: start rigCtlD - manufacturer = %1, model = %2, comport = %3, baudrate = %4, databits = %5, stopbits = %6, parity = %7, handshake = %8, rtsState = %9, dtrState = %10, civ = %11, netaddress = %12, netPort = %13")
-          .arg(rigctldPar.getManufacturer()).arg(rigctldPar.getModelNumber()).arg(rigctldPar.getComport()).arg(rigctldPar.getBaudRate()).arg(rigctldPar.getDataBits()).arg(rigctldPar.getStopBits()).arg(parityName).arg(rigctldPar.getHandshake()).arg(rigctldPar.getRtsState()).arg(rigctldPar.getDtrState()).arg(rigctldPar.getCiv()).arg(rigctldPar.getNetworkAddress()).arg(rigctldPar.getPortNum()));
+
+    trace(QString("runRigCtlDaemon:: start rigCtlD - manufacturer = %1, model = %2, comport = %3, baudrate = %4, databits = %5, stopbits = %6, parity = %7, handshake = %8, rtsState = %9, dtrState = %10, civ = %11, netaddress = %12, netPort = %13, pttComport = %14, pttType = %15 ")
+          .arg(rigctldPar.getManufacturer()).arg(rigctldPar.getModelNumber())
+              .arg(rigctldPar.getComport()).arg(rigctldPar.getBaudRate())
+              .arg(rigctldPar.getDataBits()).arg(rigctldPar.getStopBits())
+              .arg(parityName).arg(rigctldPar.getHandshake())
+              .arg(rigctldPar.getRtsState()).arg(rigctldPar.getDtrState())
+              .arg(rigctldPar.getCiv()).arg(rigctldPar.getNetworkAddress())
+              .arg(rigctldPar.getPortNum()).arg(rigctldPar.getPttComport())
+              .arg(serialCommonData::pttTypeStr[static_cast<int>(rigctldPar.getPttType())]));
 
 //    trace(arguments.join(" ; "));
     rigCtldProcess->start(program, arguments);
@@ -4307,7 +4359,7 @@ void RigControlMainWindow::sendMaxRitFreqLogger()
 
 void RigControlMainWindow::sendPttTypeLogger()
 {
-    logMessage(QString("Send PTT Type = %1 to logger").arg(serialCommonData::pttMethodStr[static_cast<int>(currentRadio.pttType)]));
+    logMessage(QString("Send PTT Type = %1 to logger").arg(serialCommonData::pttTypeStr[static_cast<int>(currentRadio.pttType)]));
     PubSubName psname(currentRadio.radioName);
     msg->rigCache.setPttType(psname, static_cast<int>(currentRadio.pttType));
 }

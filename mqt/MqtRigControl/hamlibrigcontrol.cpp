@@ -83,6 +83,9 @@ int register_callback(rig_model_t rig_model, void *callback_data)
 
     QString key = QString("%1 %2").arg(manufacturerName, modelName);
 
+    // hamlib currently only supplies one cat port type. Minos can select either serial or network overiding the supplied
+    // hamlib port type. The user will need to verify the Minos selected port type is supported by the radio.
+
     auto port_type = RigCapConstants::PortType::none;
 
     switch(rig_get_caps_int(rig_model, RIG_CAPS_PORT_TYPE))

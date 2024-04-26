@@ -154,6 +154,15 @@ public:
     void setTraceCode(rigCtldTrace::rigCtldTraceCodes traceCode_){traceCode = traceCode_;}
     rigCtldTrace::rigCtldTraceCodes getTraceCode(){return traceCode;}
 
+    void setPttEnabled(bool pttEnabled_){pttEnabled = pttEnabled_;}
+    bool getPttEnabled(){return pttEnabled;}
+
+    void setPttComport(QString pttComport_){pttComport = pttComport_;}
+    QString getPttComport(){return pttComport;}
+
+    void setPttType(serialCommonData::MINOS_PTT_TYPES pttType_){pttType = pttType_;}
+    serialCommonData::MINOS_PTT_TYPES getPttType(){return pttType;}
+
 private:
 
     QString manufacturer;
@@ -169,6 +178,9 @@ private:
     QString handshake;
     QString rtsState;
     QString dtrState;
+    bool pttEnabled = false;
+    serialCommonData::MINOS_PTT_TYPES pttType;
+    QString pttComport;
     rigCtldTrace::rigCtldTraceCodes traceCode;
 
 

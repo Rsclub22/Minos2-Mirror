@@ -128,7 +128,7 @@ void TxVmButtonsFrame::setPttTypeLabelsVisible(bool visible)
 void TxVmButtonsFrame::setPttTypeText(serialCommonData::MINOS_PTT_TYPES pttType)
 {
 
-    ui->pttTypeText->setText(serialCommonData::pttMethodStr[static_cast<int>(pttType)]);
+    ui->pttTypeText->setText(serialCommonData::pttTypeStr[static_cast<int>(pttType)]);
 }
 
 void TxVmButtonsFrame::setVoiceNumMemButtonsVisible(int num)
