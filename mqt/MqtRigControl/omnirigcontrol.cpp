@@ -504,7 +504,7 @@ void OmnirigControl::register_rigs(RigFactory::Rigs* rigsList, int id1, int id2)
     rigCap.setSupportSetRitState(false);
     rigCap.setSupportGetRitMax(false);
     rigCap.setSupportSMeter(false);
-    rigCap.setSupportPttPortType(RigCapConstants::PttPortType::RIG_PTT_RIG);
+    rigCap.setSupportPttPortType(RigCapConstants::RigPttPortType::RIG_PTT_RIG);
     rigCap.setSupportGetPtt(true);
     rigCap.setSupportSetPtt(true);
     rigCap.setSupportGetVox(false);

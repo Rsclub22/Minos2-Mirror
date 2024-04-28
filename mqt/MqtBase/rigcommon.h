@@ -3,7 +3,7 @@
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //                      Rotator Control
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2018
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2018 - 2024
 //
 //
 //
@@ -16,6 +16,7 @@
 #include "QtUtils.h"
 #include "BandList.h"
 #include "rigcontrolcommonconstants.h"
+#include "serialCommonData.h"
 
 static const char blankString[] = QT_TRANSLATE_NOOP("SettingsDialog", "N/A");
 
@@ -32,6 +33,8 @@ const int MAX_RITFREQ = 9999;
 
 auto constexpr OMNIRIG_NAME = "Omnirig";
 auto constexpr OMINRIG_MFR_NAME = "Afreet";
+
+
 
 class TransVertParams
 {
@@ -237,19 +240,19 @@ public:
   QString pollInterval = RIG_DEFAULT_POLLINTERVAL;
   QString civAddress;
   int baudrate = 0; /**<  serial port baudrate*/
-  int parity = 0;
+  serialCommonData::serialParityCodes parity = serialCommonData::serialParityCodes::MINOS_PARITY_NONE;
   int stopbits = 0;
   int databits = 0;
-  int handshake = 0;
-  int forceDtr = 0;
-  int forceRts = 0;
-  int portType = 0;
+  serialCommonData::s_handshakeCodes handshake = serialCommonData::s_handshakeCodes::HANDSHAKE_NONE;
+  serialCommonData::s_forceLinesCodes forceDtr = serialCommonData::s_forceLinesCodes::FORCE_LINE_NONE;
+  serialCommonData::s_forceLinesCodes forceRts = serialCommonData::s_forceLinesCodes::FORCE_LINE_NONE;
+  int catPortType = 0;
   bool advancedCommsFlag = false;
   QString networkAdd;
   QString networkPort;
   bool enablePTT  = false;
   QString pttSerialPort;
-  int pttType = 0;
+  serialCommonData::MINOS_PTT_TYPES pttType = serialCommonData::MINOS_PTT_TYPES::PTT_TYPE_NONE;
   bool rigCtldEnable = false;
   bool startMinosRigCtld = true;
   QString rigCtldNetworkAdd;

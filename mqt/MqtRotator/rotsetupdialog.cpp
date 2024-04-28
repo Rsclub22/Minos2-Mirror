@@ -206,10 +206,10 @@ void RotSetupDialog::loadSettingsToTab(int tabNum)
         antennaTab[tabNum]->setDataSpeed(QString::number(availAntData[tabNum]->baudrate));
         antennaTab[tabNum]->setDataBits(QString::number(availAntData[tabNum]->databits));
         antennaTab[tabNum]->setStopBits(QString::number(availAntData[tabNum]->stopbits));
-        antennaTab[tabNum]->setParityBits(availAntData[tabNum]->parity);
-        antennaTab[tabNum]->setHandshake(availAntData[tabNum]->handshake);
-        antennaTab[tabNum]->setForceDTR(availAntData[tabNum]->forceDtr);
-        antennaTab[tabNum]->setForceRTS(availAntData[tabNum]->forceRts);
+        antennaTab[tabNum]->setParityBits(static_cast<int>(availAntData[tabNum]->parity));
+        antennaTab[tabNum]->setHandshake(static_cast<int>(availAntData[tabNum]->handshake));
+        antennaTab[tabNum]->setForceDTR(static_cast<int>(availAntData[tabNum]->forceDtr));
+        antennaTab[tabNum]->setForceRTS(static_cast<int>(availAntData[tabNum]->forceRts));
 
         antennaTab[tabNum]->setNetAddress(availAntData[tabNum]->networkAdd);
         antennaTab[tabNum]->setNetPortNum(availAntData[tabNum]->networkPort);
@@ -433,11 +433,11 @@ void RotSetupDialog::saveSettings()
             config.setValue("comport", availAntData[i]->comport);
             config.setValue("baudrate", availAntData[i]->baudrate);
             config.setValue("databits", availAntData[i]->databits);
-            config.setValue("parity", availAntData[i]->parity);
+            config.setValue("parity", static_cast<int>(availAntData[i]->parity));
             config.setValue("stopbits", availAntData[i]->stopbits);
-            config.setValue("handshake", availAntData[i]->handshake);
-            config.setValue("forceDTR", availAntData[i]->forceDtr);
-            config.setValue("forceRTS", availAntData[i]->forceRts);
+            config.setValue("handshake", static_cast<int>(availAntData[i]->handshake));
+            config.setValue("forceDTR", static_cast<int>(availAntData[i]->forceDtr));
+            config.setValue("forceRTS", static_cast<int>(availAntData[i]->forceRts));
             config.setValue("advancedComms", availAntData[i]->advancedCommsFlag);
             config.setValue("netAddress", availAntData[i]->networkAdd);
             config.setValue("netPort", availAntData[i]->networkPort);
@@ -488,11 +488,11 @@ void RotSetupDialog::getAvailAntenna(int antNum, QSettings& config)
     availAntData[antNum]->comport = config.value("comport", "").toString();
     availAntData[antNum]->baudrate = config.value("baudrate", 9600).toInt();
     availAntData[antNum]->databits = config.value("databits", 8).toInt();
-    availAntData[antNum]->parity = config.value("parity", 0).toInt();
+    availAntData[antNum]->parity = static_cast<serialCommonData::serialParityCodes>(config.value("parity", 0).toInt());
     availAntData[antNum]->stopbits = config.value("stopbits", 1).toInt();
-    availAntData[antNum]->handshake = config.value("handshake", 0).toInt();
-    availAntData[antNum]->forceDtr = config.value("forceDTR", 0).toInt();
-    availAntData[antNum]->forceRts= config.value("forceRTS", 0).toInt();
+    availAntData[antNum]->handshake = static_cast<serialCommonData::s_handshakeCodes>(config.value("handshake", 0).toInt());
+    availAntData[antNum]->forceDtr = static_cast<serialCommonData::s_forceLinesCodes>(config.value("forceDTR", 0).toInt());
+    availAntData[antNum]->forceRts= static_cast<serialCommonData::s_forceLinesCodes>(config.value("forceRTS", 0).toInt());
     availAntData[antNum]->networkAdd = config.value("netAddress", "").toString();
     availAntData[antNum]->networkPort = config.value("netPort", "").toString();
     availAntData[antNum]->advancedCommsFlag = config.value("advancedComms", false).toBool();

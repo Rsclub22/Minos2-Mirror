@@ -204,6 +204,7 @@ HEADERS += \
     rotpresetdialog.h \
     ScreenContact.h \
     StartConfig.h \
+    serialCommonData.h \
     serialdata.h \
     serialtvswitch.h \
     spotbasedata.h \

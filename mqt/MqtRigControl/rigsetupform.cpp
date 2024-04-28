@@ -161,7 +161,7 @@ void RigSetupForm::setupRadioModel(QString radioModel)
         radioData->rigModelNumber = rigCap.getRigModelNumber();
         radioData->rigModelName = rigCap.getRigModelName();
         radioData->rigMfg_Name = rigCap.getRigManufacturer();
-        radioData->portType = rigCap.getPortType();
+        radioData->catPortType = rigCap.getPortType();
 
         if (rigCap.getPollData())
         {
@@ -302,7 +302,7 @@ void RigSetupForm::setupRadioModel(QString radioModel)
          bool catPTT = true;     // This is radio PTT capability true = CAT PTT
          bool serialPTT = true;
 
-         if (rigCap.getSupportPttPortType() == RigCapConstants::PttPortType::RIG_PTT_RIG && rigCap.getRigManufacturer() == OMINRIG_MFR_NAME)
+         if (rigCap.getSupportPttPortType() == RigCapConstants::RigPttPortType::RIG_PTT_RIG && rigCap.getRigManufacturer() == OMINRIG_MFR_NAME)
          {
             // support CAT PTT only
 
@@ -310,15 +310,15 @@ void RigSetupForm::setupRadioModel(QString radioModel)
             serialPTT = false;
             setPttInitialState(catPTT, serialPTT);
          }
-         else if (rigCap.getSupportPttPortType() == RigCapConstants::PttPortType::RIG_PTT_RIG
-                 || rigCap.getSupportPttPortType() == RigCapConstants::PttPortType::RIG_PTT_RIG_MICDATA)
+         else if (rigCap.getSupportPttPortType() == RigCapConstants::RigPttPortType::RIG_PTT_RIG
+                 || rigCap.getSupportPttPortType() == RigCapConstants::RigPttPortType::RIG_PTT_RIG_MICDATA)
          {
              // support CAT PTT and Serial PTT
              catPTT = true;
              serialPTT = true;
              setPttInitialState(catPTT, serialPTT);
          }
-         else if (rigCap.getSupportPttPortType() == RigCapConstants::PttPortType::RIG_PTT_NONE)
+         else if (rigCap.getSupportPttPortType() == RigCapConstants::RigPttPortType::RIG_PTT_NONE)
          {
 
              // support Serial PTT only
@@ -492,11 +492,12 @@ void RigSetupForm::CIVEditVisible(bool visible)
 
 void RigSetupForm::onPortTypeSerialRadioButtonClicked()
 {
+    // This selection overirides the cat portType retrieved from hamlib.
 
     if (ui->portTypeSerialRadioButton->isChecked())
     {
         setDialogBoxesVisibleForSerial();
-        radioData->portType = RigCapConstants::PortType::serial;
+        radioData->catPortType = RigCapConstants::PortType::serial;
     }
 
 
@@ -511,11 +512,12 @@ void RigSetupForm::setPortTypeSerialRadioButtonChecked(bool checked)
 
 void RigSetupForm::onPortTypeNetworkRadioButtonClicked()
 {
+    // This selection overirides the cat portType retrieved from hamlib.
 
     if (ui->portTypeNetworkRadioButton->isChecked())
     {
         setDialogBoxesVisibleForNetwork();
-        radioData->portType = RigCapConstants::PortType::network;
+        radioData->catPortType = RigCapConstants::PortType::network;
     }
 }
 
@@ -684,7 +686,7 @@ void RigSetupForm::setStopBits(QString stop)
 
 void RigSetupForm::comParitySelected(int)
 {
-    if (serialCommonData::parityCodesList[ui->comParityBox->currentIndex()] != radioData->parity)
+    if (static_cast<serialCommonData::serialParityCodes>(serialCommonData::parityCodesList[ui->comParityBox->currentIndex()]) != radioData->parity)
     {
         radioData->parity = serialCommonData::parityCodesList[ui->comParityBox->currentIndex()];
 
@@ -702,8 +704,8 @@ void RigSetupForm::comHandShakeSelected()
 {
     if (serialCommonData::handshakeCodesList[ui->comHandShakeBox->currentIndex()] != radioData->handshake)
     {
-        radioData->handshake = serialCommonData::handshakeCodesList[ui->comHandShakeBox->currentIndex()];
-        if (radioData->handshake == serialCommonData::HANDSHAKE_HARDWARE)  // RTS/CTS selected
+        radioData->handshake = static_cast<serialCommonData::s_handshakeCodes>(serialCommonData::handshakeCodesList[ui->comHandShakeBox->currentIndex()]);
+        if (radioData->handshake == serialCommonData::s_handshakeCodes::HANDSHAKE_HARDWARE)  // RTS/CTS selected
         {
            setForceRTSDisabled(true);
         }
@@ -2277,7 +2279,7 @@ void RigSetupForm::onPttCatEnableClicked(bool /*checked*/)
 {
     if (ui->pttCatSelectRadioButton->isChecked())
     {
-        radioData->pttType = static_cast<int>(serialCommonData::PTTMethodCodes::PTT_METHOD_CAT);
+        radioData->pttType = serialCommonData::MINOS_PTT_TYPES::PTT_TYPE_CAT;
         pttComportSelDisabled(true);
         setForceRTSDisabled(false);
         setForceDTRDisabled(false);
@@ -2297,7 +2299,7 @@ void RigSetupForm::onPttDtrEnableClicked(bool /*checked*/)
 
     if (ui->pttDTRSelectRadioButton->isChecked())
     {
-        radioData->pttType = static_cast<int>(serialCommonData::PTTMethodCodes::PTT_METHOD_DTR);
+        radioData->pttType = serialCommonData::MINOS_PTT_TYPES::PTT_TYPE_DTR;
 
         ui->pttComportSel->setDisabled(false);
         if (isPttComportEqualCatComport())
@@ -2333,7 +2335,7 @@ void RigSetupForm::onPttRtsEnableClicked(bool /*checked*/)
 {
     if (ui->pttRTSSelectRadioButton->isChecked())
     {
-        radioData->pttType = static_cast<int>(serialCommonData::PTTMethodCodes::PTT_METHOD_RTS);
+        radioData->pttType = serialCommonData::MINOS_PTT_TYPES::PTT_TYPE_RTS;
 
 
 
@@ -2389,7 +2391,7 @@ void RigSetupForm::onPttComportSelActivated(int /*idx*/)
                         || radioData->forceRts == serialCommonData::s_forceLinesCodes::FORCE_LINE_OFF)
                 {
                     radioData->forceRts = serialCommonData::s_forceLinesCodes::FORCE_LINE_NONE;
-                    setForceRTSComboBox(radioData->forceRts);
+                    setForceRTSComboBox(static_cast<int>(radioData->forceRts));
                 }
             }
             else if (ui->pttDTRSelectRadioButton->isChecked())
@@ -2400,7 +2402,7 @@ void RigSetupForm::onPttComportSelActivated(int /*idx*/)
                         || radioData->forceDtr == serialCommonData::s_forceLinesCodes::FORCE_LINE_OFF)
                 {
                     radioData->forceDtr = serialCommonData::s_forceLinesCodes::FORCE_LINE_NONE;
-                    setForceDTRComboBox(radioData->forceDtr);
+                    setForceDTRComboBox(static_cast<int>(radioData->forceDtr));
                 }
             }
         }

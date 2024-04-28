@@ -5,7 +5,6 @@
 #include "RPCCommandConstants.h"
 #include "RigDetails.h"
 #include "rigcommon.h"
-#include "serialCommonData.h"
 #include "MTrace.h"
 
 RigDetails::RigDetails()
@@ -19,7 +18,7 @@ RigDetails::RigDetails()
     _ritEnableStatus.setInitialValue(false);
     _ritMaxKHzFreq.setInitialValue(MAX_RITFREQ);
     _pttEnabled.setInitialValue(false);
-    _pttType.setInitialValue(static_cast<int>(serialCommonData::PTTMethodCodes::PTT_METHOD_CAT));
+    _pttType.setInitialValue(static_cast<int>(serialCommonData::MINOS_PTT_TYPES::PTT_TYPE_CAT));
     _voiceMemAvail.setInitialValue(false);
     _cwMemType.setInitialValue(hamlibData::CW_MEMORY_TYPES::NONE);
     _rigVoiceKeyerMessageSupportStop.setInitialValue(true);

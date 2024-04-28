@@ -14,6 +14,7 @@
 
 #include "rigcontrolcommonconstants.h"
 #include <QCoreApplication>
+#include "serialCommonData.h"
 class RotPresetData
 {
     Q_DECLARE_TR_FUNCTIONS(RotPresetData)
@@ -237,12 +238,12 @@ public:
   //int maxBaudRate = 0;
   //int minBaudRate = 0;
   int baudrate = 0;
-  int parity = 0;
+  serialCommonData::serialParityCodes parity = serialCommonData::serialParityCodes::MINOS_PARITY_NONE;
   int stopbits = 0;
   int databits = 0;
-  int handshake = 0;
-  int forceDtr = 0;
-  int forceRts = 0;
+  serialCommonData::s_handshakeCodes handshake = serialCommonData::s_handshakeCodes::HANDSHAKE_NONE;
+  serialCommonData::s_forceLinesCodes forceDtr = serialCommonData::s_forceLinesCodes::FORCE_LINE_NONE;
+  serialCommonData::s_forceLinesCodes forceRts = serialCommonData::s_forceLinesCodes::FORCE_LINE_NONE;
   //bool enableRot = false;
 
   int nearStopTolerance = 0;

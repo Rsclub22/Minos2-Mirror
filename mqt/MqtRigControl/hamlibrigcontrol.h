@@ -148,8 +148,17 @@ private:
 
     vfo_t hamlibVfoNames[3] = {RIG_VFO_CURR, RIG_VFO_A, RIG_VFO_B};
 
-    serial_parity_e getSerialParityCode(int index){return parityCodes[index];}
-    serial_handshake_e getSerialHandshakeCode(int index){return handshakeCodes[index];}
+    serial_parity_e getSerialParityCode(serialCommonData::serialParityCodes index)
+    {
+        serial_parity_e parityCode = parityCodes[static_cast<int>(index)];
+        return parityCode;
+    }
+
+    serial_handshake_e getSerialHandshakeCode(serialCommonData::s_handshakeCodes index)
+    {
+        serial_handshake_e handShakeCode = handshakeCodes[static_cast<int>(index)];
+        return handShakeCode;
+    }
     serial_force_Lines_e getSerialForceLineCode(int index){return forceLinesCodes[index];}
 
     bool rigConnected;

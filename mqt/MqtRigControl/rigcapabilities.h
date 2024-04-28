@@ -3,7 +3,7 @@
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //                      Rig Control
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2023
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2024
 //
 //
 //
@@ -24,7 +24,7 @@ namespace RigCapConstants
 
     // These are the PTT capabilities from hamlib. Most radios are RIG_PTT_NONE, RIG_PTT_RIG and RIG_PTT_RIG_MICDATA
     // we will use RIG_PTT_NONE to disable CAT PTT and allow Hardware PTT
-    enum PttPortType {RIG_PTT_NONE = 0,       /*!< No PTT available */
+    enum RigPttPortType {RIG_PTT_NONE = 0,       /*!< No PTT available */
                       RIG_PTT_RIG,            /*!< Legacy PTT (CAT PTT) */
                       RIG_PTT_SERIAL_DTR,     /*!< PTT control through serial DTR signal */
                       RIG_PTT_SERIAL_RTS,     /*!< PTT control through serial RTS signal */
@@ -95,8 +95,8 @@ public:
     void setSupportSMeter(bool supportSMeter_);
     bool getSupportSMeter()const;
 
-    void setSupportPttPortType(RigCapConstants::PttPortType supportPttPortType_);
-    RigCapConstants::PttPortType  getSupportPttPortType();
+    void setSupportPttPortType(RigCapConstants::RigPttPortType supportPttPortType_);
+    RigCapConstants::RigPttPortType  getSupportPttPortType();
 
     void setSupportGetPtt(bool supportGetPtt_);
     bool getSupportGetPtt()const;
@@ -172,7 +172,7 @@ private:
   bool supportSetRitState;
   bool supportGetRitMax;
   bool supportSMeter;
-  RigCapConstants::PttPortType supportPttPortType = RigCapConstants::PttPortType::RIG_PTT_NONE;
+  RigCapConstants::RigPttPortType supportPttPortType = RigCapConstants::RigPttPortType::RIG_PTT_NONE;
   bool supportGetPtt;
   bool supportSetPtt;
   bool supportGetVox;

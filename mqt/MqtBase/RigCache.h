@@ -4,6 +4,7 @@
 #include "RigState.h"
 #include "RigDetails.h"
 
+
 class RigCache
 {
     QMap<PubSubName, RigState> rigStates;
