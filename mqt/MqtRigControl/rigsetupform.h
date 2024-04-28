@@ -220,6 +220,8 @@ public:
 
     void setPortTypeWidgetsVisible(bool visible);
     void setComportErrorTxtVisible(bool visible);
+    RigCapConstants::PortType getCatComportType(QString radioModel);
+
 public slots:
     void comSpeedSelected();
     void comDataBitsSelected();
