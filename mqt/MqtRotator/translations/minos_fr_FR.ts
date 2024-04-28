@@ -133,7 +133,7 @@ utiliser un autre nom SVP</translation>
         <translation>RIG_EDOM WHAT????   APJ21</translation>
     </message>
     <message>
-        <location filename="../hamlibRotcontrol.cpp" line="484"/>
+        <location filename="../hamlibRotcontrol.cpp" line="485"/>
         <source>Hamlib Errorcode too large!</source>
         <translation type="unfinished"></translation>
     </message>

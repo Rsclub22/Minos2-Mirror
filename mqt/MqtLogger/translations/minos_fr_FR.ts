@@ -5966,29 +5966,29 @@ Last %8 Mins: %9 QSO %10 pts %11 mults
         <translation>Arrêter</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="728"/>
-        <location filename="../txvmbuttonsframe.cpp" line="928"/>
+        <location filename="../txvmbuttonsframe.cpp" line="725"/>
+        <location filename="../txvmbuttonsframe.cpp" line="925"/>
         <source>Rig CW Message</source>
         <translation>Message CW d&apos;apparat</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="732"/>
-        <location filename="../txvmbuttonsframe.cpp" line="932"/>
+        <location filename="../txvmbuttonsframe.cpp" line="729"/>
+        <location filename="../txvmbuttonsframe.cpp" line="929"/>
         <source>Voice Memory</source>
         <translation>Mémoire de voix</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="734"/>
+        <location filename="../txvmbuttonsframe.cpp" line="731"/>
         <source>%1 %2 - Edit</source>
         <translation>%1 %2 - Modifier</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="532"/>
+        <location filename="../txvmbuttonsframe.cpp" line="529"/>
         <source>To use the external keyer mqtKeyer must be running and connected</source>
         <translation>Pour utiliser le keyer externe, mqtKeyer doit être en cours d&apos;exécution et connecté</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="934"/>
+        <location filename="../txvmbuttonsframe.cpp" line="931"/>
         <source>%1 %2 - New</source>
         <translation>%1 %2 - Nouveau</translation>
     </message>
