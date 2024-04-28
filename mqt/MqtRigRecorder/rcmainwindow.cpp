@@ -47,7 +47,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-    connect(stdinReader, &StdInReader::stdinLine, this, &MainWindow::onStdInRead);
+    connect(stdinReader.data(), &StdInReader::stdinLine, this, &MainWindow::onStdInRead);
 
     if (rass.inputDevices.count() == 0)
     {

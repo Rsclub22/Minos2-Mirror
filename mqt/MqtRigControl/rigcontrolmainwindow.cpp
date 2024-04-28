@@ -63,7 +63,7 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
 
     serialData::translateSerialData();
 
-    connect(stdinReader, &StdInReader::stdinLine, this, &RigControlMainWindow::onStdInRead);
+    connect(stdinReader.data(), &StdInReader::stdinLine, this, &RigControlMainWindow::onStdInRead);
 
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
     appName = env.value("MQTRPCNAME", "") ;

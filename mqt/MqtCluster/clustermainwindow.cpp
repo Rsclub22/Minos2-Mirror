@@ -107,7 +107,7 @@ void ClusterMainWindow::connectToCluster()
 void ClusterMainWindow::doStartup()
 {
 
-    connect(stdinReader, &StdInReader::stdinLine, this, &ClusterMainWindow::onStdInRead);
+    connect(stdinReader.data(), &StdInReader::stdinLine, this, &ClusterMainWindow::onStdInRead);
 
     MinosRPC *rpc = MinosRPC::getMinosRPC(getAppStartupName());
     Q_UNUSED(rpc)

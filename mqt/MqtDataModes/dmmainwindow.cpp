@@ -107,7 +107,7 @@ DMMainWindow::DMMainWindow(QWidget *parent)
 
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-    connect(stdinReader, &StdInReader::stdinLine, this, &DMMainWindow::onStdInRead);
+    connect(stdinReader.data(), &StdInReader::stdinLine, this, &DMMainWindow::onStdInRead);
 
     QString appName = getAppStartupName();
     MinosRPC *rpc = MinosRPC::getMinosRPC(appName);

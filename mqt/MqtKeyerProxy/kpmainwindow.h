@@ -28,7 +28,7 @@ private:
     Ui::KPMainWindow *ui;
     QProcess *runner = nullptr;
     QTimer CloseTimer;
-    StdInReader *stdinReader = new StdInReader(this);
+    QSharedPointer<StdInReader> stdinReader = QSharedPointer<StdInReader>(new StdInReader(this));
     KPRPCServer *kpc = nullptr;
 
     QString oldHost;
