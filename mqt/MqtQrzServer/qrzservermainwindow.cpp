@@ -49,7 +49,7 @@ QrzServerMainWindow::QrzServerMainWindow(QWidget *parent)
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     trace("Connect to stdinRead");  // This connect doesn't appear to work for some time!
-    connect(stdinReader, &StdInReader::stdinLine, this, &QrzServerMainWindow::onStdInRead);
+    connect(stdinReader.data(), &StdInReader::stdinLine, this, &QrzServerMainWindow::onStdInRead);
 
     RegSettings settings;
     QByteArray geometry = settings.getSettings().value("geometry").toByteArray();

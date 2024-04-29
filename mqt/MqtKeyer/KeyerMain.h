@@ -113,7 +113,7 @@ private:
     QTimer lineTimer;
     QTimer CaptionTimer;
 
-    StdInReader *stdinReader = new StdInReader(this);
+    QSharedPointer<StdInReader> stdinReader = QSharedPointer<StdInReader>(new StdInReader(this));
 
     SliderSpinner *recordFrame = nullptr;
     SliderSpinner *replayFrame = nullptr;

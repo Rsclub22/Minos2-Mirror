@@ -38,6 +38,7 @@ class CalendarYear:public QObject
         bool loaded = false;
         int yearOffset = 0;
         CalType type = ectVHF;
+        virtual QString getFileName();
         virtual QString getPath();
         virtual QString getURL();
 private slots:
@@ -82,6 +83,7 @@ class HFOtherCalendarYear : public CalendarYear
         HFOtherCalendarYear ( int year ) : CalendarYear ( ectHFOther, year )
         {
         }
+        virtual QString getFileName();
         virtual QString getPath();
         virtual QString getURL();
 };
@@ -92,6 +94,7 @@ class VHFOtherCalendarYear : public CalendarYear
         VHFOtherCalendarYear ( int year ) : CalendarYear ( ectVHFOther, year )
         {
         }
+        virtual QString getFileName();
         virtual QString getPath();
         virtual QString getURL();
 };
@@ -111,6 +114,7 @@ class CTYCalendarYear : public CalendarYear
         CTYCalendarYear ( int year ) : CalendarYear ( ectVHFOther, year )
         {
         }
+        virtual QString getFileName();
         virtual QString getPath();
         virtual QString getURL();
 };
@@ -121,6 +125,7 @@ class ClubListCalendarYear : public CalendarYear
         ClubListCalendarYear ( int year ) : CalendarYear ( ectVHF, year )
         {
         }
+        virtual QString getFileName();
         virtual QString getPath();
         virtual QString getURL();
         virtual bool downloadProvisionalFile (bool);

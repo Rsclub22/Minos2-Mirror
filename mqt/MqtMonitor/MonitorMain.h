@@ -102,7 +102,7 @@ private:
     QAction *closeMonitoredLog;
     int splitterHandleWidth;
 
-    StdInReader *stdinReader = new StdInReader(this);
+    QSharedPointer<StdInReader> stdinReader = QSharedPointer<StdInReader>(new StdInReader(this));
 
     QTimer *monitorTimer;
 

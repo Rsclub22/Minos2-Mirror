@@ -89,7 +89,7 @@ private:
     WsjtxLink wsjtxLink;
     bool firstTime = true;
 
-    StdInReader *stdinReader = new StdInReader(this);
+    QSharedPointer<StdInReader> stdinReader = QSharedPointer<StdInReader>(new StdInReader(this));
 
     QTimer SyncTimer;
 

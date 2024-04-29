@@ -36,7 +36,7 @@ public:
 
 private:
     Ui::DMMainWindow *ui;
-    StdInReader *stdinReader = new StdInReader(this);
+    QSharedPointer<StdInReader> stdinReader = QSharedPointer<StdInReader>(new StdInReader(this));
 
     MonitoredLogs *logsTreeView = nullptr;
 

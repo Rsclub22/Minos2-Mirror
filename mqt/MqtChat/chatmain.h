@@ -21,7 +21,7 @@ public:
 private:
     Ui::MainWindow *ui;
     QTimer CloseTimer;
-    StdInReader *stdinReader = new StdInReader(this);
+    QSharedPointer<StdInReader> stdinReader = QSharedPointer<StdInReader>(new StdInReader(this));
 
     virtual void closeEvent(QCloseEvent *event) override;
     virtual void resizeEvent(QResizeEvent *event) override;

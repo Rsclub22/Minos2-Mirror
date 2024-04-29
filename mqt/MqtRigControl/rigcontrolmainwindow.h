@@ -335,7 +335,7 @@ public:
 private:
 
     Ui::RigControlMainWindow *ui;
-    StdInReader *stdinReader = new StdInReader(this);
+    QSharedPointer<StdInReader> stdinReader = QSharedPointer<StdInReader>(new StdInReader(this));
     bool closeApp = false;
     RigControlRpc *msg = nullptr;
 

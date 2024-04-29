@@ -249,7 +249,7 @@ private slots:
 
 private:
     Ui::KSTMainWindow *ui;
-    StdInReader *stdinReader = new StdInReader(this);
+    QSharedPointer<StdInReader> stdinReader = QSharedPointer<StdInReader>(new StdInReader(this));
 
     KSTMonitoredLogs* ml = nullptr;
 

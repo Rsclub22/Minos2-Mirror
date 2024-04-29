@@ -146,8 +146,7 @@ private:
     int dbRequests = 0;
     int qrzRequests = 0;
 
-    StdInReader *stdinReader = new StdInReader(this);
-    //QString appName = "";
+    QSharedPointer<StdInReader> stdinReader = QSharedPointer<StdInReader>(new StdInReader(this));
 
     QTimer LogTimer;
     QTimer *pingStateTimer;

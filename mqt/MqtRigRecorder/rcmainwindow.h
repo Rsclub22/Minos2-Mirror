@@ -61,7 +61,7 @@ private:
     bool started = false;
     bool stopped = false;
 
-    StdInReader *stdinReader = new StdInReader(this);
+    QSharedPointer<StdInReader> stdinReader = QSharedPointer<StdInReader>(new StdInReader(this));
     QTimer closeTimer;
 
     bool closing = false;

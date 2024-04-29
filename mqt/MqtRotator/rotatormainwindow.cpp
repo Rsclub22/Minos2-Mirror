@@ -59,7 +59,7 @@ RotatorMainWindow::RotatorMainWindow(QWidget *parent) :
         shiftShortCutKeyList.append(new QShortcut(QKeySequence(presetMenuShortCutKeys[i]), this));
     }
 
-    connect(stdinReader, &StdInReader::stdinLine, this, &RotatorMainWindow::onStdInRead);
+    connect(stdinReader.data(), &StdInReader::stdinLine, this, &RotatorMainWindow::onStdInRead);
 
     // get the antenna name from host process
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();

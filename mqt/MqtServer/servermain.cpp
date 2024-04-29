@@ -21,7 +21,7 @@ ServerMain::ServerMain(QWidget *parent) :
     ui->setupUi(this);
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-    connect(stdinReader, &StdInReader::stdinLine, this, &ServerMain::onStdInRead);
+    connect(stdinReader.data(), &StdInReader::stdinLine, this, &ServerMain::onStdInRead);
 
     createCloseEvent();
     RegSettings settings;
