@@ -2773,8 +2773,13 @@ void RigControlMainWindow::rigCtldMessage()
 {
     if (rigCtldProcess->state() == QProcess::Running)
     {
-        QString line = rigCtldProcess->readLine();
-        trace(QString("rigCtld-StandardOut:: %1").arg(line));
+        for (;;)
+        {
+            QString line = rigCtldProcess->readLine();
+            if (line.isEmpty())
+                break;
+            trace(QString("rigCtld-StandardOut:: %1").arg(line));
+        }
     }
 
 
@@ -2785,8 +2790,13 @@ void RigControlMainWindow::rigCtldErrorMessage()
 {
     if (rigCtldProcess->state() == QProcess::Running)
     {
-        QString r = rigCtldProcess->readAllStandardError();
-        trace(QString("rigCtld-ErrorOut:: %1").arg(r));
+        for (;;)
+        {
+            QString r = rigCtldProcess->readAllStandardError();
+            if (r.isEmpty())
+                break;
+            trace(QString("rigCtld-ErrorOut:: %1").arg(r));
+        }
     }
 }
 
