@@ -492,7 +492,7 @@ void FLDigiFrame::on_readyReadStandardOutput()
 {
     if (fldigiProcess)
     {
-        QString line = fldigiProcess->readLine();
+        QString line = fldigiProcess->readAllStandardOutput();
         trace("FLDigi:stdOut:" + line);
     }
 }
