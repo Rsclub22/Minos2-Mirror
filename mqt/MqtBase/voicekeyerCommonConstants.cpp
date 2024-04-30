@@ -46,7 +46,7 @@ void getListOfRadioNamesForMemoryButtons(QStringList &radioNames, VoiceKeyerId i
 
     for (const auto &name: QASCONST(voiceMemoryKeys))
     {
-        if (name != ALL_RADIOS_GROUP_NAME)
+        if (name != ALL_RADIOS_GROUP_NAME && name != "Common")
         {
             if (!radioNames.contains(name))
             {

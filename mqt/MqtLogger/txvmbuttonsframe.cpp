@@ -501,6 +501,8 @@ void TxVmButtonsFrame::onVoiceKeyerSelect(int idx)
         createKeyer(voiceKeyerName);
         setFrameState(voiceKeyerName);
     });
+
+
     extKeyerConnectTimer->start(1000);
 
     ui->voiceKeyerSelect->repaint();   // or the combo doesn't update
