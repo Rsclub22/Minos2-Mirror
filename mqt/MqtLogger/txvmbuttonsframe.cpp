@@ -580,7 +580,9 @@ void TxVmButtonsFrame::setFrameState(QString voiceKeyerName)
 
         ui->vmStopPb->setVisible(true);
 
-        if (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl] || voiceKeyerType == keyerTypes[VoiceKeyerId::RigControl])
+        if (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl]
+            || voiceKeyerType == keyerTypes[VoiceKeyerId::RigControl]
+            || voiceKeyerType == keyerTypes[VoiceKeyerId::InternalVoiceKeyer])
         {
             setSaveButtonByRadionameText(selectedRadio.getLocalName());
 
@@ -1627,6 +1629,10 @@ void TxVmButtonsFrame::setEomLabelText(int selectedEomType)
     else if (selectedEomType == voiceKeyerCommon::VoiceCwKeyerEomTypes::Timer)
     {
         ui->eomText->setText("Timer");
+    }
+    else if (selectedEomType == voiceKeyerCommon::VoiceCwKeyerEomTypes::InternalSoundCardVoiceKeyer)
+    {
+        ui->eomText->setText("EOF");
     }
     else if (selectedEomType == voiceKeyerCommon::VoiceCwKeyerEomTypes::Eom_None)
     {
