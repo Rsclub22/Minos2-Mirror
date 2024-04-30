@@ -438,7 +438,7 @@ void MMTTYFrame::on_readyReadStandardOutput()
 {
     if (rttyProcess)
     {
-        QString line = rttyProcess->readLine();
+        QString line = rttyProcess->readAllStandardOutput();
         trace(rttyEngine + ":stdOut:" + line);
     }
 }

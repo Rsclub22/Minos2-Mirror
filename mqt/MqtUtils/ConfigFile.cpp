@@ -394,7 +394,7 @@ void RunConfigElement::on_readyReadStandardOutput()
 {
     if (runner)
     {
-        QString line = runner->readLine();
+        QString line = runner->readAllStandardOutput();
         trace(name + ":stdOut:" + line);
         emit MinosConfig::getMinosConfig()->stdOutLine(line);
     }

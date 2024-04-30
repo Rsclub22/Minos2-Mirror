@@ -283,7 +283,7 @@ void GrittyFrame::on_readyReadStandardOutput()
 {
     if (grittyProcess)
     {
-        QString line = grittyProcess->readLine();
+        QString line = grittyProcess->readAllStandardOutput();
         trace(engineName + " stdOut:" + line);
     }
 }

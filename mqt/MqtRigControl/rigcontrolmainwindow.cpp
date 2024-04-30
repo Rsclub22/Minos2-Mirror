@@ -2773,11 +2773,9 @@ void RigControlMainWindow::rigCtldMessage()
 {
     if (rigCtldProcess->state() == QProcess::Running)
     {
-        QString line = rigCtldProcess->readLine();
+        QString line = rigCtldProcess->readAllStandardOutput();
         trace(QString("rigCtld-StandardOut:: %1").arg(line));
     }
-
-
 }
 
 
