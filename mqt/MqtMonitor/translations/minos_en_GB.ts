@@ -44,32 +44,37 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MonitorMain.ui" line="168"/>
+        <location filename="../MonitorMain.ui" line="161"/>
+        <source>Show Navigation Buttons</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../MonitorMain.ui" line="175"/>
         <source>Show spots</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MonitorMain.ui" line="188"/>
+        <location filename="../MonitorMain.ui" line="195"/>
         <source>Dist Limit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MonitorMain.ui" line="222"/>
+        <location filename="../MonitorMain.ui" line="229"/>
         <source>Show Locs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MonitorMain.ui" line="229"/>
+        <location filename="../MonitorMain.ui" line="236"/>
         <source>Top Left</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MonitorMain.ui" line="239"/>
+        <location filename="../MonitorMain.ui" line="246"/>
         <source>Bottom Right</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MonitorMain.ui" line="264"/>
+        <location filename="../MonitorMain.ui" line="271"/>
         <source>NB Showing Loc can make the display very slow, so restrict the area as much as possible.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -83,7 +88,7 @@
     <name>MonitoringFrame</name>
     <message>
         <location filename="../MonitoringFrame.ui" line="62"/>
-        <location filename="../MonitoringFrame.cpp" line="209"/>
+        <location filename="../MonitoringFrame.cpp" line="210"/>
         <source>Show Map</source>
         <translation type="unfinished"></translation>
     </message>

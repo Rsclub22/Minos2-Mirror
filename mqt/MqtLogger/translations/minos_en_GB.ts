@@ -2008,76 +2008,81 @@ Move between components of a group using the mouse or up/down arrow keys.
     </message>
     <message>
         <location filename="../DisplayOptions.ui" line="351"/>
-        <source>Top Left Locator of QSO Map</source>
+        <source>Top Left Labelled Locator</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../DisplayOptions.ui" line="361"/>
-        <source>Bottom Right Locator of QSO Map</source>
+        <source>Bottom Right Labelled Locator</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../DisplayOptions.ui" line="389"/>
+        <location filename="../DisplayOptions.ui" line="384"/>
+        <source>Show Navigation Buttons</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../DisplayOptions.ui" line="396"/>
         <source>Display of Operating Time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../DisplayOptions.ui" line="395"/>
+        <location filename="../DisplayOptions.ui" line="402"/>
         <source>None</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../DisplayOptions.ui" line="405"/>
+        <location filename="../DisplayOptions.ui" line="412"/>
         <source>RSGB (Multiple 1 hour gaps)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../DisplayOptions.ui" line="415"/>
+        <location filename="../DisplayOptions.ui" line="422"/>
         <source>IARU R1 (Single 2 hour gap)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../DisplayOptions.ui" line="443"/>
+        <location filename="../DisplayOptions.ui" line="450"/>
         <source>Set List Spacing Compression Value as percentage</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../DisplayOptions.ui" line="477"/>
+        <location filename="../DisplayOptions.ui" line="484"/>
         <source>QSO Field expansion as percentage</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../DisplayOptions.ui" line="511"/>
+        <location filename="../DisplayOptions.ui" line="518"/>
         <source>Layouts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../DisplayOptions.ui" line="517"/>
+        <location filename="../DisplayOptions.ui" line="524"/>
         <source>Spacing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../DisplayOptions.ui" line="550"/>
+        <location filename="../DisplayOptions.ui" line="557"/>
         <source>Content Margins</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../DisplayOptions.ui" line="556"/>
+        <location filename="../DisplayOptions.ui" line="563"/>
         <source>L</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../DisplayOptions.ui" line="573"/>
+        <location filename="../DisplayOptions.ui" line="580"/>
         <source>T</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../DisplayOptions.ui" line="590"/>
+        <location filename="../DisplayOptions.ui" line="597"/>
         <source>R</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../DisplayOptions.ui" line="607"/>
+        <location filename="../DisplayOptions.ui" line="614"/>
         <source>B</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2087,7 +2092,7 @@ Move between components of a group using the mouse or up/down arrow keys.
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../DisplayOptions.cpp" line="365"/>
+        <location filename="../DisplayOptions.cpp" line="368"/>
         <source>Font setting will not work while the QT_QPA_PLATFORMTHEME environment variable is set to qt5ct</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5694,27 +5699,27 @@ Please confirm this action by pressing &quot;Yes&quot;.</source>
 <context>
     <name>TSingleLogFrame</name>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="995"/>
+        <location filename="../tsinglelogframe.cpp" line="997"/>
         <source>Failed to open %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1009"/>
+        <location filename="../tsinglelogframe.cpp" line="1011"/>
         <source>Save imported log as a .minos file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1535"/>
+        <location filename="../tsinglelogframe.cpp" line="1537"/>
         <source>No unfilled contacts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1554"/>
+        <location filename="../tsinglelogframe.cpp" line="1556"/>
         <source>Please give serial wanted</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1576"/>
+        <location filename="../tsinglelogframe.cpp" line="1578"/>
         <source>Serial number %1 not found</source>
         <translation type="unfinished"></translation>
     </message>

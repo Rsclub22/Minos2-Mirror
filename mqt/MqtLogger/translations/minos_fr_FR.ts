@@ -1983,32 +1983,30 @@ Déplacez-vous entre les composants d&amp;apos;un groupe à l&amp;apos;aide de l
         <translation>Afficher une seule bande dans le prochain contact [???length]</translation>
     </message>
     <message>
-        <location filename="../DisplayOptions.ui" line="351"/>
         <source>Top Left Locator of QSO Map</source>
-        <translation>Locator en haut à gauche de la carte de QSO</translation>
+        <translation type="vanished">Locator en haut à gauche de la carte de QSO</translation>
     </message>
     <message>
-        <location filename="../DisplayOptions.ui" line="361"/>
         <source>Bottom Right Locator of QSO Map</source>
-        <translation>Locator en bas à droite de la carte de QSO</translation>
+        <translation type="vanished">Locator en bas à droite de la carte de QSO</translation>
     </message>
     <message>
-        <location filename="../DisplayOptions.ui" line="389"/>
+        <location filename="../DisplayOptions.ui" line="396"/>
         <source>Display of Operating Time</source>
         <translation>Affichage du temps de l&apos;opérateur</translation>
     </message>
     <message>
-        <location filename="../DisplayOptions.ui" line="395"/>
+        <location filename="../DisplayOptions.ui" line="402"/>
         <source>None</source>
         <translation>Aucun</translation>
     </message>
     <message>
-        <location filename="../DisplayOptions.ui" line="405"/>
+        <location filename="../DisplayOptions.ui" line="412"/>
         <source>RSGB (Multiple 1 hour gaps)</source>
         <translation>RSGB (Plusieurs intervalles d&apos;une heure)</translation>
     </message>
     <message>
-        <location filename="../DisplayOptions.ui" line="415"/>
+        <location filename="../DisplayOptions.ui" line="422"/>
         <source>IARU R1 (Single 2 hour gap)</source>
         <translation>IARU R1 (Intervalle unique de 2 heures)</translation>
     </message>
@@ -2078,52 +2076,67 @@ Déplacez-vous entre les composants d&amp;apos;un groupe à l&amp;apos;aide de l
         <translation>Afficher Locator</translation>
     </message>
     <message>
-        <location filename="../DisplayOptions.ui" line="443"/>
+        <location filename="../DisplayOptions.ui" line="351"/>
+        <source>Top Left Labelled Locator</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../DisplayOptions.ui" line="361"/>
+        <source>Bottom Right Labelled Locator</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../DisplayOptions.ui" line="384"/>
+        <source>Show Navigation Buttons</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../DisplayOptions.ui" line="450"/>
         <source>Set List Spacing Compression Value as percentage</source>
         <translation>Définir la valeur de compression d&apos;espacement de liste en pourcentage</translation>
     </message>
     <message>
-        <location filename="../DisplayOptions.ui" line="477"/>
+        <location filename="../DisplayOptions.ui" line="484"/>
         <source>QSO Field expansion as percentage</source>
         <translation>Expansion du détails du QSO en pourcentage</translation>
     </message>
     <message>
-        <location filename="../DisplayOptions.ui" line="511"/>
+        <location filename="../DisplayOptions.ui" line="518"/>
         <source>Layouts</source>
         <translation>Présentations</translation>
     </message>
     <message>
-        <location filename="../DisplayOptions.ui" line="517"/>
+        <location filename="../DisplayOptions.ui" line="524"/>
         <source>Spacing</source>
         <translation>Espacement</translation>
     </message>
     <message>
-        <location filename="../DisplayOptions.ui" line="550"/>
+        <location filename="../DisplayOptions.ui" line="557"/>
         <source>Content Margins</source>
         <translation>Marges de content</translation>
     </message>
     <message>
-        <location filename="../DisplayOptions.ui" line="556"/>
+        <location filename="../DisplayOptions.ui" line="563"/>
         <source>L</source>
         <translation>L</translation>
     </message>
     <message>
-        <location filename="../DisplayOptions.ui" line="573"/>
+        <location filename="../DisplayOptions.ui" line="580"/>
         <source>T</source>
         <translation>T</translation>
     </message>
     <message>
-        <location filename="../DisplayOptions.ui" line="590"/>
+        <location filename="../DisplayOptions.ui" line="597"/>
         <source>R</source>
         <translation>R</translation>
     </message>
     <message>
-        <location filename="../DisplayOptions.ui" line="607"/>
+        <location filename="../DisplayOptions.ui" line="614"/>
         <source>B</source>
         <translation>B</translation>
     </message>
     <message>
-        <location filename="../DisplayOptions.cpp" line="365"/>
+        <location filename="../DisplayOptions.cpp" line="368"/>
         <source>Font setting will not work while the QT_QPA_PLATFORMTHEME environment variable is set to qt5ct</source>
         <translation>Les paramètres de police ne fonctionneront pas si la variable d&apos;environnement QT_QPA_PLATFORMTHEME est définie sur qt5ct</translation>
     </message>
@@ -5798,27 +5811,27 @@ Veuillez confirmer cette action en appuyant sur &amp;quot;Oui&amp;quot;.</transl
 <context>
     <name>TSingleLogFrame</name>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="995"/>
+        <location filename="../tsinglelogframe.cpp" line="997"/>
         <source>Failed to open %1</source>
         <translation>L&apos;Ouverture échoué %1</translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1009"/>
+        <location filename="../tsinglelogframe.cpp" line="1011"/>
         <source>Save imported log as a .minos file</source>
         <translation>Enregistrer le Log importé en tant que fichier .minos</translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1535"/>
+        <location filename="../tsinglelogframe.cpp" line="1537"/>
         <source>No unfilled contacts</source>
         <translation>Pas de contacts  non remplis</translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1554"/>
+        <location filename="../tsinglelogframe.cpp" line="1556"/>
         <source>Please give serial wanted</source>
         <translation>Numéro de série requis</translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1576"/>
+        <location filename="../tsinglelogframe.cpp" line="1578"/>
         <source>Serial number %1 not found</source>
         <translation>Numéro de série %1 introuvable</translation>
     </message>
