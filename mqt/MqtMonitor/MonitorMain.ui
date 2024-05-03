@@ -156,6 +156,13 @@
                   </widget>
                  </item>
                  <item>
+                  <widget class="QCheckBox" name="showNav">
+                   <property name="text">
+                    <string>Show Navigation Buttons</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
                   <layout class="QHBoxLayout" name="horizontalLayout_6"/>
                  </item>
                 </layout>

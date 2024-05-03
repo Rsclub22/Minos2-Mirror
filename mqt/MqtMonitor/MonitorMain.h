@@ -41,6 +41,7 @@ public:
     bool showLoc = true;
     QString locTL;
     QString locBR;
+    bool showNav = true;
 
     void closeTab(MonitoringFrame *tab);
 
@@ -94,6 +95,8 @@ private slots:
     void on_locBR_editingFinished();
 
     void onLogChanged(QSharedPointer<MonitoredLog>);
+    void on_showNav_stateChanged(int arg1);
+
 private:
     Ui::MonitorMain *ui;
     UpperCaseValidator ucValidator;

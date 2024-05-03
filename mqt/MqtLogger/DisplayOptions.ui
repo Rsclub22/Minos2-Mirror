@@ -348,7 +348,7 @@
         <item>
          <widget class="QLabel" name="label_3">
           <property name="text">
-           <string>Top Left Locator of QSO Map</string>
+           <string>Top Left Labelled Locator</string>
           </property>
          </widget>
         </item>
@@ -358,7 +358,7 @@
         <item>
          <widget class="QLabel" name="label_7">
           <property name="text">
-           <string>Bottom Right Locator of QSO Map</string>
+           <string>Bottom Right Labelled Locator</string>
           </property>
          </widget>
         </item>
@@ -377,6 +377,13 @@
            </size>
           </property>
          </spacer>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="QSOMapShowNav">
+          <property name="text">
+           <string>Show Navigation Buttons</string>
+          </property>
+         </widget>
         </item>
        </layout>
       </item>
@@ -667,7 +674,7 @@
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="otButtonGroup"/>
   <buttongroup name="locButtonGroup"/>
+  <buttongroup name="otButtonGroup"/>
  </buttongroups>
 </ui>

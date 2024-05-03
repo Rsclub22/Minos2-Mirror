@@ -42,6 +42,7 @@ void DisplayOptions::initialise()
     ShowQSOMapShowLoc.initialise(&TContestApp::getContestApp() ->loggerBundle, elpShowMapLoc, ui->QSOMapShowLoc);
     ShowQSOMapTLLoc.initialise(&TContestApp::getContestApp() ->loggerBundle, elpShowMapTLLoc, ui->QSOMapTLLoc, "IP40");
     ShowQSOMapBRLoc.initialise(&TContestApp::getContestApp() ->loggerBundle, elpShowMapBRLoc, ui->QSOMapBRLoc, "KM00");
+    ShowQSOMapShowNav.initialise(&TContestApp::getContestApp() ->loggerBundle, elpShowMapNav, ui->QSOMapShowNav);
 
     MapShowCluster.initialise(&TContestApp::getContestApp() ->loggerBundle, elpMapShowCluster, ui->mapShowCluster);
     MapClusterDistance.initialise(&TContestApp::getContestApp() ->loggerBundle, elpMapClusterDistance, ui->mapClusterDistance);
@@ -211,9 +212,10 @@ void DisplayOptions::finalise()
     bool showLocChanged = ShowQSOMapShowLoc.finalise();
     bool mapTLChanged = ShowQSOMapTLLoc.finalise();
     bool mapBRChanged = ShowQSOMapBRLoc.finalise();
+    bool showNavChanged = ShowQSOMapShowNav.finalise();
 
     if (gchanged || lchanged || mscchanged || mcdchanged
-        || showLocChanged || mapTLChanged || mapBRChanged)
+        || showLocChanged || mapTLChanged || mapBRChanged || showNavChanged)
     {
         MinosLoggerEvents::SendRedrawQSOMap(ShowQSOMapGrid.value(),
                                             ShowQSOMapLines.value(),
@@ -221,7 +223,8 @@ void DisplayOptions::finalise()
                                             MapClusterDistance.iValue(),
                                             ShowQSOMapShowLoc.value(),
                                             ShowQSOMapTLLoc.sValue(),
-                                            ShowQSOMapBRLoc.sValue()
+                                            ShowQSOMapBRLoc.sValue(),
+                                            ShowQSOMapShowNav.value()
                                             );
     }
 

@@ -42,6 +42,7 @@ private:
     ConfigurationOption ShowQSOMapShowLoc;
     ConfigurationOption ShowQSOMapTLLoc;
     ConfigurationOption ShowQSOMapBRLoc;
+    ConfigurationOption ShowQSOMapShowNav;
     ConfigurationOption MapShowCluster;
     ConfigurationOption MapClusterDistance;
 

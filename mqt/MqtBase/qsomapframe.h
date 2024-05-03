@@ -26,7 +26,7 @@ public:
     void setContest(BaseContestLog *, bool monitor, bool grid, bool lines
                     , bool spots, int spotDistance
                     , bool sl, QString tl, QString br
-);
+                    , bool sn);
 
 private:
     Ui::QSOMapFrame *ui;
@@ -43,6 +43,7 @@ private:
     bool showLoc = true;
     QString locTL;
     QString locBR;
+    bool showNav = true;
 
     QString mCentreLat;
     QString mCentreLon;
@@ -58,7 +59,7 @@ private:
     void startMap();
     void stopMap();
     void doRedraw(const BaseContestLog *c, bool grid, bool lines, bool spots, int spotDistance
-                  ,bool sl, QString tl, QString br);
+                  , bool sl, QString tl, QString br, bool sn);
     void drawSpot(QSharedPointer<ClusterSpotData>);
 
     void showContact(const BaseContestLog *c, const QSharedPointer<BaseContact> lct);
@@ -75,6 +76,7 @@ signals:
     void showLocs(QVariant sl);
     void showLocsTL(QVariant tl);
     void showLocsBR(QVariant br);
+    void showNavb(QVariant sn);
     void clearAll();
 
 private slots:
@@ -85,7 +87,7 @@ private slots:
     void onContestBandChanged(BaseContestLog *c);
 public slots:
     void on_AfterLogContact(const BaseContestLog *c, const QSharedPointer<BaseContact> lct);
-    void on_redrawQSOMap(bool grid, bool lines, bool spots, int sd, bool sl, QString tl, QString br);
+    void on_redrawQSOMap(bool grid, bool lines, bool spots, int sd, bool sl, QString tl, QString br, bool sn);
 
 };
 
