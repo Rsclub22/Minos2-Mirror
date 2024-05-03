@@ -11,7 +11,7 @@ extern QSharedPointer<QQmlApplicationEngine> appQmlEngine;
 #include <QMouseEvent>
 #include <QVBoxLayout>
 #include <QTimer>
-//#include <math.h>
+#include <cmath>
 
 #include "MTrace.h"
 #include "calcs.h"

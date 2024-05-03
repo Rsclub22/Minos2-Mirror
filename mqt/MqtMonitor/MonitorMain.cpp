@@ -6,7 +6,7 @@
 #include "MinosLoggerEvents.h"
 #include "ScreenContact.h"
 #include "MatchThread.h"
-#include "cutils.h"
+//#include "cutils.h"
 #include "remotelogs.h"
 #include "MonitoredLog.h"
 #include "MonitoringFrame.h"
@@ -524,7 +524,7 @@ void MonitorMain::on_showLocs_stateChanged(int /*arg1*/)
 }
 
 
-void MonitorMain::on_showNav_stateChanged(int arg1)
+void MonitorMain::on_showNav_stateChanged(int /*arg1*/)
 {
     QSettings settings(iniName, QSettings::IniFormat);
     showNav = ui->showNav->isChecked();

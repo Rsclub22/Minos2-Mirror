@@ -1998,91 +1998,91 @@ Move between components of a group using the mouse or up/down arrow keys.
     </message>
     <message>
         <location filename="../DisplayOptions.ui" line="335"/>
-        <source>NB Showing Loc can make the display very slow, so restrict the area as much as possible.</source>
+        <source>NB Showing Labelled Locators can make the display very slow, so restrict the area as much as possible.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../DisplayOptions.ui" line="344"/>
+        <location filename="../DisplayOptions.ui" line="347"/>
         <source>Show Loc</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../DisplayOptions.ui" line="351"/>
+        <location filename="../DisplayOptions.ui" line="354"/>
         <source>Top Left Labelled Locator</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../DisplayOptions.ui" line="361"/>
+        <location filename="../DisplayOptions.ui" line="364"/>
         <source>Bottom Right Labelled Locator</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../DisplayOptions.ui" line="384"/>
+        <location filename="../DisplayOptions.ui" line="387"/>
         <source>Show Navigation Buttons</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../DisplayOptions.ui" line="396"/>
+        <location filename="../DisplayOptions.ui" line="399"/>
         <source>Display of Operating Time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../DisplayOptions.ui" line="402"/>
+        <location filename="../DisplayOptions.ui" line="405"/>
         <source>None</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../DisplayOptions.ui" line="412"/>
+        <location filename="../DisplayOptions.ui" line="415"/>
         <source>RSGB (Multiple 1 hour gaps)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../DisplayOptions.ui" line="422"/>
+        <location filename="../DisplayOptions.ui" line="425"/>
         <source>IARU R1 (Single 2 hour gap)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../DisplayOptions.ui" line="450"/>
+        <location filename="../DisplayOptions.ui" line="453"/>
         <source>Set List Spacing Compression Value as percentage</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../DisplayOptions.ui" line="484"/>
+        <location filename="../DisplayOptions.ui" line="487"/>
         <source>QSO Field expansion as percentage</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../DisplayOptions.ui" line="518"/>
+        <location filename="../DisplayOptions.ui" line="521"/>
         <source>Layouts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../DisplayOptions.ui" line="524"/>
+        <location filename="../DisplayOptions.ui" line="527"/>
         <source>Spacing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../DisplayOptions.ui" line="557"/>
+        <location filename="../DisplayOptions.ui" line="560"/>
         <source>Content Margins</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../DisplayOptions.ui" line="563"/>
+        <location filename="../DisplayOptions.ui" line="566"/>
         <source>L</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../DisplayOptions.ui" line="580"/>
+        <location filename="../DisplayOptions.ui" line="583"/>
         <source>T</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../DisplayOptions.ui" line="597"/>
+        <location filename="../DisplayOptions.ui" line="600"/>
         <source>R</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../DisplayOptions.ui" line="614"/>
+        <location filename="../DisplayOptions.ui" line="617"/>
         <source>B</source>
         <translation type="unfinished"></translation>
     </message>

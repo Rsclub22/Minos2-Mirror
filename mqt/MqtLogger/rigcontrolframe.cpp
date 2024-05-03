@@ -12,7 +12,7 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-#include <math.h>
+//#include <math.h>
 #include "ContestApp.h"
 #include "MShowMessageDlg.h"
 #include "tlogcontainer.h"

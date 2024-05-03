@@ -1991,22 +1991,22 @@ Déplacez-vous entre les composants d&amp;apos;un groupe à l&amp;apos;aide de l
         <translation type="vanished">Locator en bas à droite de la carte de QSO</translation>
     </message>
     <message>
-        <location filename="../DisplayOptions.ui" line="396"/>
+        <location filename="../DisplayOptions.ui" line="399"/>
         <source>Display of Operating Time</source>
         <translation>Affichage du temps de l&apos;opérateur</translation>
     </message>
     <message>
-        <location filename="../DisplayOptions.ui" line="402"/>
+        <location filename="../DisplayOptions.ui" line="405"/>
         <source>None</source>
         <translation>Aucun</translation>
     </message>
     <message>
-        <location filename="../DisplayOptions.ui" line="412"/>
+        <location filename="../DisplayOptions.ui" line="415"/>
         <source>RSGB (Multiple 1 hour gaps)</source>
         <translation>RSGB (Plusieurs intervalles d&apos;une heure)</translation>
     </message>
     <message>
-        <location filename="../DisplayOptions.ui" line="422"/>
+        <location filename="../DisplayOptions.ui" line="425"/>
         <source>IARU R1 (Single 2 hour gap)</source>
         <translation>IARU R1 (Intervalle unique de 2 heures)</translation>
     </message>
@@ -2066,72 +2066,76 @@ Déplacez-vous entre les composants d&amp;apos;un groupe à l&amp;apos;aide de l
         <translation>Limiter la distance du Cluster</translation>
     </message>
     <message>
-        <location filename="../DisplayOptions.ui" line="335"/>
         <source>NB Showing Loc can make the display very slow, so restrict the area as much as possible.</source>
-        <translation>NB L&apos;affichage du Locator peut rendre l&apos;affichage très lent, alors limitez la zone autant que possible.</translation>
+        <translation type="vanished">NB L&apos;affichage du Locator peut rendre l&apos;affichage très lent, alors limitez la zone autant que possible.</translation>
     </message>
     <message>
-        <location filename="../DisplayOptions.ui" line="344"/>
+        <location filename="../DisplayOptions.ui" line="335"/>
+        <source>NB Showing Labelled Locators can make the display very slow, so restrict the area as much as possible.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../DisplayOptions.ui" line="347"/>
         <source>Show Loc</source>
         <translation>Afficher Locator</translation>
     </message>
     <message>
-        <location filename="../DisplayOptions.ui" line="351"/>
+        <location filename="../DisplayOptions.ui" line="354"/>
         <source>Top Left Labelled Locator</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../DisplayOptions.ui" line="361"/>
+        <location filename="../DisplayOptions.ui" line="364"/>
         <source>Bottom Right Labelled Locator</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../DisplayOptions.ui" line="384"/>
+        <location filename="../DisplayOptions.ui" line="387"/>
         <source>Show Navigation Buttons</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../DisplayOptions.ui" line="450"/>
+        <location filename="../DisplayOptions.ui" line="453"/>
         <source>Set List Spacing Compression Value as percentage</source>
         <translation>Définir la valeur de compression d&apos;espacement de liste en pourcentage</translation>
     </message>
     <message>
-        <location filename="../DisplayOptions.ui" line="484"/>
+        <location filename="../DisplayOptions.ui" line="487"/>
         <source>QSO Field expansion as percentage</source>
         <translation>Expansion du détails du QSO en pourcentage</translation>
     </message>
     <message>
-        <location filename="../DisplayOptions.ui" line="518"/>
+        <location filename="../DisplayOptions.ui" line="521"/>
         <source>Layouts</source>
         <translation>Présentations</translation>
     </message>
     <message>
-        <location filename="../DisplayOptions.ui" line="524"/>
+        <location filename="../DisplayOptions.ui" line="527"/>
         <source>Spacing</source>
         <translation>Espacement</translation>
     </message>
     <message>
-        <location filename="../DisplayOptions.ui" line="557"/>
+        <location filename="../DisplayOptions.ui" line="560"/>
         <source>Content Margins</source>
         <translation>Marges de content</translation>
     </message>
     <message>
-        <location filename="../DisplayOptions.ui" line="563"/>
+        <location filename="../DisplayOptions.ui" line="566"/>
         <source>L</source>
         <translation>L</translation>
     </message>
     <message>
-        <location filename="../DisplayOptions.ui" line="580"/>
+        <location filename="../DisplayOptions.ui" line="583"/>
         <source>T</source>
         <translation>T</translation>
     </message>
     <message>
-        <location filename="../DisplayOptions.ui" line="597"/>
+        <location filename="../DisplayOptions.ui" line="600"/>
         <source>R</source>
         <translation>R</translation>
     </message>
     <message>
-        <location filename="../DisplayOptions.ui" line="614"/>
+        <location filename="../DisplayOptions.ui" line="617"/>
         <source>B</source>
         <translation>B</translation>
     </message>

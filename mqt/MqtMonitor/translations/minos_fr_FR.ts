@@ -59,24 +59,36 @@
         <translation>Limite de distance</translation>
     </message>
     <message>
-        <location filename="../MonitorMain.ui" line="229"/>
+        <location filename="../MonitorMain.ui" line="227"/>
         <source>Show Locs</source>
         <translation>Afficher Locators</translation>
     </message>
     <message>
-        <location filename="../MonitorMain.ui" line="236"/>
+        <location filename="../MonitorMain.ui" line="234"/>
+        <source>Top Left Labelled Locator</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../MonitorMain.ui" line="261"/>
+        <source>Bottom Right Labelled Locator</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../MonitorMain.ui" line="288"/>
+        <source>NB Showing Labelled Locators can make the display very slow, so restrict the area as much as possible.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Top Left</source>
-        <translation>En haut à gauche</translation>
+        <translation type="vanished">En haut à gauche</translation>
     </message>
     <message>
-        <location filename="../MonitorMain.ui" line="246"/>
         <source>Bottom Right</source>
-        <translation>En bas à droite</translation>
+        <translation type="vanished">En bas à droite</translation>
     </message>
     <message>
-        <location filename="../MonitorMain.ui" line="271"/>
         <source>NB Showing Loc can make the display very slow, so restrict the area as much as possible.</source>
-        <translation>NB L&amp;apos;affichage des Locators peut être très lent, alors limiter la zone autant que possible.</translation>
+        <translation type="vanished">NB L&amp;apos;affichage des Locators peut être très lent, alors limiter la zone autant que possible.</translation>
     </message>
     <message>
         <location filename="../MonitorMain.cpp" line="92"/>

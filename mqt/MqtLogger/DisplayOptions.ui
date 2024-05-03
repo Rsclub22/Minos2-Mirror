@@ -332,7 +332,10 @@
       <item>
        <widget class="QLabel" name="label_8">
         <property name="text">
-         <string>NB Showing Loc can make the display very slow, so restrict the area as much as possible.</string>
+         <string>NB Showing Labelled Locators can make the display very slow, so restrict the area as much as possible.</string>
+        </property>
+        <property name="wordWrap">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
@@ -674,7 +677,7 @@
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="locButtonGroup"/>
   <buttongroup name="otButtonGroup"/>
+  <buttongroup name="locButtonGroup"/>
  </buttongroups>
 </ui>

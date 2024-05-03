@@ -59,23 +59,23 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MonitorMain.ui" line="229"/>
+        <location filename="../MonitorMain.ui" line="227"/>
         <source>Show Locs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MonitorMain.ui" line="236"/>
-        <source>Top Left</source>
+        <location filename="../MonitorMain.ui" line="234"/>
+        <source>Top Left Labelled Locator</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MonitorMain.ui" line="246"/>
-        <source>Bottom Right</source>
+        <location filename="../MonitorMain.ui" line="261"/>
+        <source>Bottom Right Labelled Locator</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MonitorMain.ui" line="271"/>
-        <source>NB Showing Loc can make the display very slow, so restrict the area as much as possible.</source>
+        <location filename="../MonitorMain.ui" line="288"/>
+        <source>NB Showing Labelled Locators can make the display very slow, so restrict the area as much as possible.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
