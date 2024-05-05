@@ -23,12 +23,19 @@ void StdInReader::run()
     QTextStream stdinStream(stdin, QIODevice::ReadOnly);
 
     QString line;
-    for (;;)
+    while (true)
     {
         line = stdinStream.readLine();
+
         if (line.isNull())
-            break;          // catch stdin being closed by the other end
+            break;
+
         emit stdinLine(line);
+
+        if (line.indexOf("Shutdown", 0, Qt::CaseInsensitive) >= 0)
+        {
+            break;
+        }
     }
 }
 void StdInReader::setShowApp(bool state)
