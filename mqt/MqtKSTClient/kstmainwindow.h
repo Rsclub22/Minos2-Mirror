@@ -83,8 +83,8 @@ class KSTMainWindow : public QMainWindow
     bool started = false;
 
     QString msgbuf;
-    QStringList filelines;
-    int curline = 0;
+    //QStringList filelines;
+    //int curline = 0;
 
     int messageChatFilter = 0;
     int CSChatFilter = 0;

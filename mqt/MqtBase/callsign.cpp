@@ -46,8 +46,9 @@ Callsign::~Callsign()
 {
    // nothing needed
 }
-int Callsign::setFullCall(const QString &pcs)
+int Callsign::setFullCall(const QString &pcs, bool at)
 {
+    allowTail = at;
     fullCall.setValue( pcs.trimmed().toUpper() );
     return reValidate();
 }
@@ -130,6 +131,15 @@ int Callsign::validate( )
         return valRes;
 
     QString cs = fullCall.getValue();
+
+    if (allowTail)
+    {
+        int hyphen = cs.indexOf("-");
+        if (hyphen > 0)
+        {
+            cs = cs.left(hyphen);
+        }
+    }
 
     valRes = ERR_NOCS;
     int cslen = cs.length();

@@ -871,7 +871,7 @@ void KSTMainWindow::analyseKstMessage(QString atj)
 
         QSharedPointer<KstUser> test(new KstUser());
         test->chat = sl[1].toInt();
-        test->call.setFullCall(sl[2]);
+        test->call.setFullCall(sl[2], true); // allow e.g. G0GJV-7
         test->name = sl[3];
         test->loc = sl[4];
 
@@ -2019,6 +2019,12 @@ void KSTMainWindow::on_loggerXferButton_clicked()
         QSharedPointer<KstUser> user = callVector->at(r);
         QString call = user->call.getFullCall();
         QString loc = user->loc;
+
+        int hyphen = call.indexOf("-");
+        if (hyphen > 0)
+        {
+            call = call.left(hyphen);
+        }
 
         for(const auto &router: routerList)
         {
