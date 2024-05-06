@@ -13,7 +13,7 @@ StdInReader::StdInReader(QMainWindow *m):qmw(m)
 StdInReader::~StdInReader()
 {
     terminate();
-    wait();
+    wait(1000);
 }
 
 void StdInReader::run()
