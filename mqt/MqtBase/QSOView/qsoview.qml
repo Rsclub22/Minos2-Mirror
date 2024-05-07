@@ -101,7 +101,7 @@ Frame {
             columns:2
             anchors.fill: parent
 
-            Button {
+            ToolButton {
                 id: upButton
                 Layout.row:0
                 Layout.columnSpan: 2
@@ -112,7 +112,7 @@ Frame {
                     mapOfEurope.pan(0, -10)
                 }
             }
-            Button {
+            ToolButton {
                 id: leftButton
                 Layout.row:1
                 Layout.column: 0
@@ -122,7 +122,7 @@ Frame {
                     mapOfEurope.pan(-10, 0)
                 }
             }
-            Button {
+            ToolButton {
                 id: rightButton
                 Layout.row:1
                 Layout.column: 1
@@ -132,7 +132,7 @@ Frame {
                     mapOfEurope.pan(10, 0)
                 }
             }
-            Button {
+            ToolButton {
                 id: downButton
                 Layout.row:2
                 Layout.columnSpan: 2
@@ -143,7 +143,7 @@ Frame {
                     onClicked:mapOfEurope.pan(0, 10)
                 }
             }
-            Button {
+            ToolButton {
                 id: plusButton
                 Layout.row:3
                 Layout.column: 0
@@ -153,7 +153,7 @@ Frame {
                     mapOfEurope.zoomLevel=mapOfEurope.zoomLevel + 0.1
                 }
             }
-            Button {
+            ToolButton {
                 id: minusButton
                 Layout.row:3
                 Layout.column: 1
