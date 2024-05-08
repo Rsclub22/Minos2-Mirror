@@ -966,6 +966,19 @@ void BandmapClientFrame::addDxSpotToBandmapTable(QSharedPointer<ClusterSpotData>
         return; // spot logged or marked and moved
     }
 
+    QString loc = spot->getDxLocator();
+    if (loc.isEmpty())
+    {
+        Callsign call = spot->getDxCall();
+        if (loc.isEmpty())
+        {
+            // If we have worked them, fill in locator
+            // This happens when we save just the call for someone we worked from CQ
+            loc = ct->getLocForCall(call);  // returns empty string if not worked
+        }
+        spot->setDxLocator(loc);
+    }
+
     traceMsg(QString("Add Cluster Spot to Bandmap %1, %2, %3, %4, dxLocatorIsFromNode = %5")
              .arg(spot->getDxCall().getFullCall(), spot->getFreq().traceStr(), spot->getMode())
                   .arg(spot->getDxLocatorWorked())
@@ -1100,6 +1113,7 @@ void BandmapClientFrame::addLogSpotToBandmapTable(QSharedPointer<ClusterSpotData
                 // If we have worked them, fill in locator
                 // This happens when we save just the call for someone we worked from CQ
                 loc = ct->getLocForCall(call);
+                spot->setDxLocator(loc);
             }
             if (!loc.isEmpty() || call.getValRes() == CS_OK)
             {
