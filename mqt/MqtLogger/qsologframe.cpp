@@ -2798,9 +2798,16 @@ void QSOLogFrame::doGJVEditChange( QObject *Sender )
     }
 }
 
-void QSOLogFrame::on_ModeButton_clicked()
+void QSOLogFrame::on_ModeButton_clicked(const QString & m)
 {
-    mode = ui->ModeButton->text();
+    if (m.isEmpty())
+    {
+        mode = ui->ModeButton->text();
+    }
+    else
+    {
+        mode = m;
+    }
     if (isRadioLoaded() && radioConnected && !radioError)
     {
         qsoLogModeFlag = true;  // stop updates from rigcontrol
@@ -2872,14 +2879,6 @@ void QSOLogFrame::logScreenEntry( )
    {
       return ;
    }
-   QSharedPointer<BaseContact> lct = selectedContact;
-   if (!lct)
-   {
-        lct = ct->addContact( ctmax, 0, false, false, screenContact.mode.getValue(), screenContact.mgmSubmode, dtg(true), curFreq );	// "current" doesn't get flag, don't save ContestLog yet
-
-        TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
-        tslf->QSOListFrame->insertRow(contest->ctList.count());
-   }
 
    if ( screenContact.mode.getValue().compare( hamlibData::MGM, Qt::CaseInsensitive ) != 0
         && screenContact.mode.getValue().compare( hamlibData::RY, Qt::CaseInsensitive ) != 0
@@ -2889,26 +2888,50 @@ void QSOLogFrame::logScreenEntry( )
        bool contactmodeCW = ( screenContact.reps.size() == 3 && screenContact.repr.size() == 3 );
        bool curmodeCW = ( screenContact.mode.getValue().compare( hamlibData::CW, Qt::CaseInsensitive ) == 0 );
 
-       if ( !edit && contactmodeCW != curmodeCW )
+       if ( !edit && contactmodeCW != curmodeCW && ui->ModeButton->isVisible())
        {
           // ask if change...
           if ( !curmodeCW )
           {
              if ( MinosParameters::getMinosParameters() ->yesNoMessage( this, tr("Change mode to CW?") ) )
              {
-                screenContact.mode.setValue(hamlibData::CW);
+                on_ModeButton_clicked(hamlibData::CW);
+                MinosParameters::getMinosParameters() ->mshowMessage(tr("Please check the signal reports, and log the contact"), this);
+                return;
              }
           }
           else
           {
-             if ( MinosParameters::getMinosParameters() ->yesNoMessage( this, tr("Change mode to USB?") ) )
-             {
-                screenContact.mode.setValue(hamlibData::USB);
-             }
+              if (ct->isHF())
+              {
+                  if ( MinosParameters::getMinosParameters() ->yesNoMessage( this, tr("Change mode to PH?") ) )
+                  {
+                      on_ModeButton_clicked(hamlibData::PH);
+                      MinosParameters::getMinosParameters() ->mshowMessage(tr("Please check the signal reports, and log the contact"), this);
+                      return;
+                  }
+              }
+              else
+              {
+                  if ( MinosParameters::getMinosParameters() ->yesNoMessage( this, tr("Change mode to USB?") ) )
+                  {
+                      on_ModeButton_clicked(hamlibData::USB);
+                      MinosParameters::getMinosParameters() ->mshowMessage(tr("Please check the signal reports, and log the contact"), this);
+                      return;
+                  }
+              }
           }
        }
    }
-   ct->currentMode.setValue( screenContact.mode );
+   QSharedPointer<BaseContact> lct = selectedContact;
+   if (!lct)
+   {
+       lct = ct->addContact( ctmax, 0, false, false, screenContact.mode.getValue(), screenContact.mgmSubmode, dtg(true), curFreq );	// "current" doesn't get flag, don't save ContestLog yet
+
+       TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
+       tslf->QSOListFrame->insertRow(contest->ctList.count());
+   }
+//   ct->currentMode.setValue( screenContact.mode );
    screenContact.op1 = ct->currentOp1.getValue() ;
    screenContact.op2 = ct->currentOp2.getValue();
 

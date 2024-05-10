@@ -322,7 +322,7 @@ private slots:
     void onQTHEdit_textChanged(const QString &arg1);
     void onCallsignEdit_textChanged(const QString &arg1);
     void onLocEdit_textChanged(const QString &arg1);
-    void on_ModeButton_clicked();
+    void on_ModeButton_clicked(const QString &m = QString());
     void on_InsertBeforeButton_clicked();
     void on_InsertAfterButton_clicked();
     void on_PriorButton_clicked();
