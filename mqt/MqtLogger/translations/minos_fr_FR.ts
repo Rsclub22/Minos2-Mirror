@@ -265,27 +265,27 @@
         <translation>Filtre %1</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1653"/>
+        <location filename="../bandmapclientframe.cpp" line="1667"/>
         <source>Mouse in frame, updates paused</source>
         <translation>Souris dans le cadre, mises à jour suspendues</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1386"/>
+        <location filename="../bandmapclientframe.cpp" line="1400"/>
         <source>Cluster Server Not Running</source>
         <translation>Le Serveur du Cluster ne fonctionne pas</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1419"/>
+        <location filename="../bandmapclientframe.cpp" line="1433"/>
         <source>Connected</source>
         <translation>Connecté</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1429"/>
+        <location filename="../bandmapclientframe.cpp" line="1443"/>
         <source>Disconnected</source>
         <translation>Déconnecté</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1541"/>
+        <location filename="../bandmapclientframe.cpp" line="1555"/>
         <source>Freq out of band</source>
         <translation>Fréquence hors bande</translation>
     </message>
@@ -1983,14 +1983,6 @@ Déplacez-vous entre les composants d&amp;apos;un groupe à l&amp;apos;aide de l
         <translation>Afficher une seule bande dans le prochain contact [???length]</translation>
     </message>
     <message>
-        <source>Top Left Locator of QSO Map</source>
-        <translation type="vanished">Locator en haut à gauche de la carte de QSO</translation>
-    </message>
-    <message>
-        <source>Bottom Right Locator of QSO Map</source>
-        <translation type="vanished">Locator en bas à droite de la carte de QSO</translation>
-    </message>
-    <message>
         <location filename="../DisplayOptions.ui" line="399"/>
         <source>Display of Operating Time</source>
         <translation>Affichage du temps de l&apos;opérateur</translation>
@@ -2066,13 +2058,9 @@ Déplacez-vous entre les composants d&amp;apos;un groupe à l&amp;apos;aide de l
         <translation>Limiter la distance du Cluster</translation>
     </message>
     <message>
-        <source>NB Showing Loc can make the display very slow, so restrict the area as much as possible.</source>
-        <translation type="vanished">NB L&apos;affichage du Locator peut rendre l&apos;affichage très lent, alors limitez la zone autant que possible.</translation>
-    </message>
-    <message>
         <location filename="../DisplayOptions.ui" line="335"/>
         <source>NB Showing Labelled Locators can make the display very slow, so restrict the area as much as possible.</source>
-        <translation type="unfinished"></translation>
+        <translation>NB L&amp;apos;affichage du Locators étiquetés peut rendre l&amp;apos;affichage très lent, alors limitez la zone autant que possible.</translation>
     </message>
     <message>
         <location filename="../DisplayOptions.ui" line="347"/>
@@ -2082,17 +2070,17 @@ Déplacez-vous entre les composants d&amp;apos;un groupe à l&amp;apos;aide de l
     <message>
         <location filename="../DisplayOptions.ui" line="354"/>
         <source>Top Left Labelled Locator</source>
-        <translation type="unfinished"></translation>
+        <translation>Locators etiquetés - en haut à gauche</translation>
     </message>
     <message>
         <location filename="../DisplayOptions.ui" line="364"/>
         <source>Bottom Right Labelled Locator</source>
-        <translation type="unfinished"></translation>
+        <translation>Locators etiquetés - en bas à droite</translation>
     </message>
     <message>
         <location filename="../DisplayOptions.ui" line="387"/>
         <source>Show Navigation Buttons</source>
-        <translation type="unfinished"></translation>
+        <translation>Afficher les boutons de navigation</translation>
     </message>
     <message>
         <location filename="../DisplayOptions.ui" line="453"/>
@@ -3187,12 +3175,12 @@ Non - Ignorer les modifications</translation>
     <message>
         <location filename="../radiosettingdialog.ui" line="40"/>
         <source>Read Only</source>
-        <translation type="unfinished">Lecture seulement</translation>
+        <translation>Lecture seulement</translation>
     </message>
     <message>
         <location filename="../radiosettingdialog.ui" line="47"/>
         <source>Radio Write Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Paramètres d&apos;écriture radio</translation>
     </message>
     <message>
         <location filename="../radiosettingdialog.ui" line="60"/>
@@ -3218,7 +3206,7 @@ Non - Ignorer les modifications</translation>
     <message>
         <location filename="../radiosettingdialog.ui" line="102"/>
         <source>Delete Voice Memory Button Radios</source>
-        <translation>????????????????????</translation>
+        <translation>Boutons de Mémoire Vocale - Supprimer</translation>
     </message>
     <message>
         <location filename="../radiosettingdialog.ui" line="126"/>
@@ -3228,7 +3216,7 @@ Non - Ignorer les modifications</translation>
     <message>
         <location filename="../radiosettingdialog.ui" line="133"/>
         <source>Delete CW Memory Button Radios</source>
-        <translation>????????????????</translation>
+        <translation>Boutons de Mémoire CW - Supprimer</translation>
     </message>
     <message>
         <location filename="../radiosettingdialog.ui" line="174"/>
@@ -3336,10 +3324,6 @@ Non - Ignorer les modifications</translation>
 </context>
 <context>
     <name>RigControlFrame</name>
-    <message>
-        <source>Rig Control</source>
-        <translation type="vanished">Contrôle de l&apos;appareil</translation>
-    </message>
     <message>
         <location filename="../rigcontrolframe.ui" line="55"/>
         <source>...</source>
@@ -3824,10 +3808,6 @@ Non - Ignorer les modifications</translation>
         <location filename="../runbuttonsframe.ui" line="14"/>
         <source>Call Freqs</source>
         <translation>Fréquences d&apos;appel</translation>
-    </message>
-    <message>
-        <source>Run Frequencies</source>
-        <translation type="vanished">Fréquences d&apos;operation</translation>
     </message>
     <message>
         <location filename="../runbuttonsframe.ui" line="65"/>
@@ -4498,22 +4478,22 @@ L&amp;apos;arrière-plan de la ligne change de couleur lorsqu&amp;apos;elle est 
     <message>
         <location filename="../tcalendardownload.ui" line="14"/>
         <source>Download Calendar Files</source>
-        <translation type="unfinished"></translation>
+        <translation>Telecharger des fichiers de calendrier</translation>
     </message>
     <message>
         <location filename="../tcalendardownload.ui" line="20"/>
         <source>Downloading Calendar Files</source>
-        <translation type="unfinished"></translation>
+        <translation>Telechargement de fichiers de calendrier</translation>
     </message>
     <message>
         <location filename="../tcalendardownload.cpp" line="41"/>
         <source>Something is wrong - SSL not supported on this system.</source>
-        <translation type="unfinished">SSL n&apos;est pas pris en charge sur ce système.</translation>
+        <translation>Erreur: SSL n&apos;est pas pris en charge sur ce système.</translation>
     </message>
     <message>
         <location filename="../tcalendardownload.cpp" line="71"/>
         <source>%1 of %2 files downloaded. We don&apos;t expect to load them all.</source>
-        <translation type="unfinished">%1 des fichiers%2 téléchargés. Nous ne nous attendons pas à tous les télécharger.</translation>
+        <translation>%1 des fichiers%2 téléchargés. Nous ne nous attendons pas à tous les télécharger.</translation>
     </message>
 </context>
 <context>

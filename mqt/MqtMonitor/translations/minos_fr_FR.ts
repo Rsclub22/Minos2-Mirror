@@ -46,7 +46,7 @@
     <message>
         <location filename="../MonitorMain.ui" line="161"/>
         <source>Show Navigation Buttons</source>
-        <translation type="unfinished"></translation>
+        <translation>Afficher les boutons de navigation</translation>
     </message>
     <message>
         <location filename="../MonitorMain.ui" line="175"/>
@@ -66,29 +66,17 @@
     <message>
         <location filename="../MonitorMain.ui" line="234"/>
         <source>Top Left Labelled Locator</source>
-        <translation type="unfinished"></translation>
+        <translation>Locators etiquetés - en haut à gauche</translation>
     </message>
     <message>
         <location filename="../MonitorMain.ui" line="261"/>
         <source>Bottom Right Labelled Locator</source>
-        <translation type="unfinished"></translation>
+        <translation>Locators etiquetés - en bas à droite</translation>
     </message>
     <message>
         <location filename="../MonitorMain.ui" line="288"/>
         <source>NB Showing Labelled Locators can make the display very slow, so restrict the area as much as possible.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Top Left</source>
-        <translation type="vanished">En haut à gauche</translation>
-    </message>
-    <message>
-        <source>Bottom Right</source>
-        <translation type="vanished">En bas à droite</translation>
-    </message>
-    <message>
-        <source>NB Showing Loc can make the display very slow, so restrict the area as much as possible.</source>
-        <translation type="vanished">NB L&amp;apos;affichage des Locators peut être très lent, alors limiter la zone autant que possible.</translation>
+        <translation>NB L&amp;apos;affichage des Locators peut être très lent, alors limiter la zone autant que possible.</translation>
     </message>
     <message>
         <location filename="../MonitorMain.cpp" line="92"/>

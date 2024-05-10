@@ -452,7 +452,7 @@
     <message>
         <location filename="../profiles.cpp" line="128"/>
         <source>Show QSO Map Navigation Buttons</source>
-        <translation type="unfinished"></translation>
+        <translation>Afficher boutons de navigation de QSO Map</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="130"/>
@@ -528,7 +528,7 @@
     <message>
         <location filename="../profiles.cpp" line="149"/>
         <source>Contest - Radio Read Only</source>
-        <translation type="unfinished"></translation>
+        <translation>[**********************************]</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="150"/>
@@ -549,10 +549,6 @@
         <location filename="../profiles.cpp" line="153"/>
         <source>Bandmap Turn Off Operating Freq Colour Strip</source>
         <translation>Désactiver la bande de couleur de fréquence</translation>
-    </message>
-    <message>
-        <source>Bandmap Follow Radio Mode on Operating Freq Colour Strip</source>
-        <translation type="vanished">Bandmap: Suivre le mode Radio sur la bande de couleur de fréquence</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="154"/>

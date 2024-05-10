@@ -129,49 +129,37 @@ Please enter a name for the radio</source>
     <message>
         <location filename="../hamlibrigcontrol.cpp" line="35"/>
         <source>Target VFO unaccessible</source>
-        <translation type="unfinished"></translation>
+        <translation>Cible VFO inaccessible</translation>
     </message>
     <message>
         <location filename="../hamlibrigcontrol.cpp" line="36"/>
         <source>Communication bus error</source>
-        <translation type="unfinished"></translation>
+        <translation>Erreur du bus de communication</translation>
     </message>
     <message>
         <location filename="../hamlibrigcontrol.cpp" line="37"/>
         <source>Communication bus collision</source>
-        <translation type="unfinished"></translation>
+        <translation>Collision du bus de communication</translation>
     </message>
     <message>
         <location filename="../hamlibrigcontrol.cpp" line="40"/>
         <source>Argument out of domain of func</source>
-        <translation type="unfinished"></translation>
+        <translation>Argument hors du domaine de la fonction [huh]???</translation>
     </message>
     <message>
         <location filename="../hamlibrigcontrol.cpp" line="41"/>
         <source>Function deprecated</source>
-        <translation type="unfinished"></translation>
+        <translation>Fonction obsolète</translation>
     </message>
     <message>
         <location filename="../hamlibrigcontrol.cpp" line="42"/>
         <source>Security error password not provided or crypto failure</source>
-        <translation type="unfinished"></translation>
+        <translation>Erreur de sécurité : mot de passe non fourni ou échec de chiffrement</translation>
     </message>
     <message>
         <location filename="../hamlibrigcontrol.cpp" line="43"/>
         <source>Rig is not powered on</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>VFO not targetable</source>
-        <translation type="vanished">VFO non atteignable</translation>
-    </message>
-    <message>
-        <source>Error talking on the bus</source>
-        <translation type="vanished">Erreur de communication sur le bus</translation>
-    </message>
-    <message>
-        <source>Collision on the bus</source>
-        <translation type="vanished">Collision de données sur le bus</translation>
+        <translation>L&apos;appareil n&apos;est pas sous tension</translation>
     </message>
     <message>
         <location filename="../hamlibrigcontrol.cpp" line="38"/>
@@ -184,17 +172,9 @@ Please enter a name for the radio</source>
         <translation>VFO invalide</translation>
     </message>
     <message>
-        <source>RIG_EDOM</source>
-        <translation type="vanished">Erreur interne - RIG_EDOM</translation>
-    </message>
-    <message>
         <location filename="../hamlibrigcontrol.cpp" line="1643"/>
         <source>Hamlib Errorcode too large!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>hamlib Errorcode too large!</source>
-        <translation type="vanished">Code d&apos;erreur de hamlib trop grand!</translation>
+        <translation>Code d&apos;erreur de Hamlib trop grand!</translation>
     </message>
 </context>
 <context>
@@ -287,7 +267,7 @@ Vérifier le tracelog Rigcontrol</translation>
     <message>
         <location filename="../rigcontrolmainwindow.ui" line="54"/>
         <source>Select RigControl path</source>
-        <translation type="unfinished"></translation>
+        <translation>Sélectionner le programme Rigctld</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.ui" line="107"/>
@@ -329,10 +309,6 @@ Vérifier le tracelog Rigcontrol</translation>
         <location filename="../rigcontrolmainwindow.ui" line="39"/>
         <source>Setup</source>
         <translation>Configuration</translation>
-    </message>
-    <message>
-        <source>Configure Rigctld Program</source>
-        <translation type="vanished">Configurer Rigctld</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.ui" line="61"/>
@@ -384,7 +360,8 @@ Vérifier le tracelog Rigcontrol</translation>
         <location filename="../rigcontrolmainwindow.ui" line="615"/>
         <source>rigctld
 Active</source>
-        <translation type="unfinished"></translation>
+        <translation>rigctld
+actif</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.ui" line="643"/>
@@ -475,12 +452,6 @@ Active</source>
         <translation>Keyer  de Mémoire de radio</translation>
     </message>
     <message>
-        <source>RigCtld
-Active</source>
-        <translation type="vanished">RigCtld
-Actif</translation>
-    </message>
-    <message>
         <location filename="../rigcontrolmainwindow.ui" line="68"/>
         <source>Trace Data Comms</source>
         <translation>Suivre la communication de données</translation>
@@ -511,47 +482,10 @@ Voulez-vous recharger les paramètres de cette radio?</translation>
         <translation>RigCtld ouvrir la radio</translation>
     </message>
     <message>
-        <source>Attempting to communicate with radio via Rigctld - %1</source>
-        <translation type="vanished">Essai de communication avec la radio via Rigctld - %1</translation>
-    </message>
-    <message>
-        <source>Test Radio Connection via Rigctld
-
-Minos tried to read the radio frequency,
-but nothing was received from the radio.
-
-Please check connections and/or settings.
-Some radios/interfaces may require Force DTR or Force RTS to be set High, to power the interface.</source>
-        <translatorcomment>DUPE?</translatorcomment>
-        <translation type="vanished">Test de la connexion radio via Rigctld
-
-Minos a essayé de lire la fréquence radio,
-mais rien n&apos;a été reçu de la radio.
-
-Vérifiez les connexions et / ou les paramètres.
-Certaines radios / interfaces peuvent nécessiter de forcer DTR ou RTS au niveau haut pour alimenter l&apos;interface.</translation>
-    </message>
-    <message>
-        <source>Radio Opened Rigctld: %1</source>
-        <translation type="vanished">Radio ouverte Rigctld: %1</translation>
-    </message>
-    <message>
         <location filename="../rigcontrolmainwindow.cpp" line="1374"/>
         <location filename="../rigcontrolmainwindow.cpp" line="1515"/>
         <source>RigControl Open Radio Error</source>
         <translation>RigControl: Erreur d&apos;ouverture de la radio</translation>
-    </message>
-    <message>
-        <source>Installed hamlib version %1 is incompatible.
-It should be version %2 or greater.
-
-Please check your installation.
-You will not be able to select a radio until this is rectified!</source>
-        <translation type="vanished">La version %1 de Hamlib installée est incompatible.
-Il doit s&amp;apos;agir de la version %2 ou supérieure.
-
-Veuillez vérifier votre installation.
-Vous ne pourrez pas sélectionner un radio tant que cela ne sera pas corrigé&amp;#xa0;!</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="172"/>
@@ -562,10 +496,6 @@ Vous ne pourrez pas sélectionner un radio tant que cela ne sera pas corrigé&am
         <location filename="../rigcontrolmainwindow.cpp" line="172"/>
         <source>Hamlib Version Test conversion error. Please report error</source>
         <translation>Erreur de conversion du test de version Hamlib. Veuillez signaler une erreur</translation>
-    </message>
-    <message>
-        <source>Connected via Rigctld: %1 - %2</source>
-        <translation type="vanished">Connecté via Rigctld: %1 - %2</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="1437"/>
@@ -604,10 +534,6 @@ Vous ne pourrez pas sélectionner un radio tant que cela ne sera pas corrigé&am
         <translation>Erreur de version RigControl Hamlib !</translation>
     </message>
     <message>
-        <source>Error: Installed hamlib version %1 is incorrect, should be version %2 or greater</source>
-        <translation type="vanished">Erreur: La version %1 de Hamlib installée est incorrecte, elle doit être la version %2 ou supérieure</translation>
-    </message>
-    <message>
         <location filename="../rigcontrolmainwindow.cpp" line="300"/>
         <source>Set Radio from Logger</source>
         <translation>Régler la radio à partir de Logger</translation>
@@ -626,7 +552,7 @@ Vous ne pourrez pas sélectionner un radio tant que cela ne sera pas corrigé&am
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="1395"/>
         <source>Attempting to communicate with radio via rigctld - %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Essai de communication avec la radio par rigctld- %1</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="1402"/>
@@ -637,17 +563,23 @@ but nothing was received from the radio.
 
 Please check connections and/or settings.
 Some radios/interfaces may require Force DTR or Force RTS to be set High, to power the interface.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tester la connexion radio via rigctld
+
+Minos a essayé de lire la fréquence radio,
+mais rien n&apos;a été reçu de la radio.
+
+Vérifier les connexions et/ou les paramètres.
+Certaines radios/interfaces peuvent nécessiter que Force DTR ou Force RTS soit réglé sur Haut pour alimenter l&apos;interface.!Force?</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="1416"/>
         <source>Radio Opened rigctld: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>La radio a été ouverte par rigctld: %1</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="1429"/>
         <source>Connected via rigctld: %1 - %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Connecté par rigctld: %1 - %2</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="1498"/>
@@ -819,7 +751,7 @@ Veuillez les supprimer et configurer les radios à nouveau</translation>
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="4814"/>
         <source>Using external Hamlib rigctld daemon</source>
-        <translation type="unfinished"></translation>
+        <translation>Utilisation du Hamlib démon rigctld externe</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="4908"/>
@@ -831,7 +763,7 @@ Veuillez les supprimer et configurer les radios à nouveau</translation>
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="4909"/>
         <source>PTT serial comport = %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Port série PTT = %1</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="4910"/>
@@ -851,36 +783,41 @@ Veuillez les supprimer et configurer les radios à nouveau</translation>
         <location filename="../rigcontrolmainwindow.cpp" line="4925"/>
         <source>Send CW Memory = %1
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Envoyer la Mémoire CW = %1
+</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="4928"/>
         <source>Start CW Memory Message Number = %1
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Démarrager Message de la mémoire CW = %1
+</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="4929"/>
         <source>End CW Memory Message Number = %1
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Finir Message de la mémoire CW = %1
+</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="4931"/>
         <source>Stop CW Memory = %1
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Arrêter la Mémoire CW = %1
+</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="4932"/>
         <source>wait CW Memory = %1
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Attends la Mémoire CW = %1
+</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="4427"/>
         <source>Select Rigctld Program</source>
-        <translation>Sélectionner le programme Rigctld</translation>
+        <translation>Sélectionner le programme rigctld</translation>
     </message>
     <message>
         <source>Minos QT RigControl
@@ -989,10 +926,6 @@ Copyright D Balharrie G8FKH/M0DGB 2023 {8F?} {0D?}</translation>
 </translation>
     </message>
     <message>
-        <source>Using external hamlib rigctld daemon</source>
-        <translation type="vanished">Utilisation du démon de Hamlib Rigctld externe</translation>
-    </message>
-    <message>
         <location filename="../rigcontrolmainwindow.cpp" line="4821"/>
         <location filename="../rigcontrolmainwindow.cpp" line="4830"/>
         <source>Using rigctld default network address.
@@ -1092,12 +1025,16 @@ It should be version %2 or greater.
 
 Please check your installation.
 You will not be able to select a radio until this is rectified!</source>
-        <translation type="unfinished"></translation>
+        <translation>La version %1 de Hamlib installée est incompatible.
+Il doit s&apos;agir de la version %2 ou supérieure.
+
+Veuillez vérifier votre installation.
+Vous ne pourrez pas sélectionner un radio tant que cela ne sera pas corrigé !</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="269"/>
         <source>Error: Installed Hamlib version %1 is incorrect, should be version %2 or greater</source>
-        <translation type="unfinished"></translation>
+        <translation>Erreur: La version %1 de Hamlib installée est incorrecte, elle doit être la version %2 ou supérieure</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="4825"/>
@@ -1239,7 +1176,7 @@ You will not be able to select a radio until this is rectified!</source>
         <location filename="../rigcontrolmainwindow.cpp" line="4916"/>
         <source>Get and Set Antenna Switch = %1
 </source>
-        <translation>Obtenir et définir ???????</translation>
+        <translation type="unfinished">Obtenir et définir ???????</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="4917"/>
@@ -1267,36 +1204,6 @@ You will not be able to select a radio until this is rectified!</source>
         <source>Stop Voice Memory = %1
 </source>
         <translation>Arrêter la Mémoire Vocale = %1
-</translation>
-    </message>
-    <message>
-        <source>Send Cw Memory = %1
-</source>
-        <translation type="vanished">Envoyer la Mémoire CW = %1
-</translation>
-    </message>
-    <message>
-        <source>Start Cw Memory Message Number = %1
-</source>
-        <translation type="vanished">Démarrager Message de la mémoire CW  = %1
-</translation>
-    </message>
-    <message>
-        <source>End Cw Memory Message Number = %1
-</source>
-        <translation type="vanished">Finir Message de la mémoire CW  = %1
-</translation>
-    </message>
-    <message>
-        <source>Stop Cw Memory = %1
-</source>
-        <translation type="vanished">Arrêter la Mémoire CW = %1
-</translation>
-    </message>
-    <message>
-        <source>wait Cw Memory = %1
-</source>
-        <translation type="vanished">Wait CW Memory = %1
 </translation>
     </message>
     <message>
@@ -1524,7 +1431,7 @@ utiliser un autre nom SVP</translation>
     <message>
         <location filename="../rigsetupform.cpp" line="2366"/>
         <source>Please select a Comport to use with PTT RTS or DTR!</source>
-        <translation type="unfinished"></translation>
+        <translation>Sélectionner un port à utiliser avec PTT RTS ou DTR SVP!</translation>
     </message>
 </context>
 <context>
@@ -1663,10 +1570,6 @@ Corriger les entrées du convertisseur SVP.</translation>
         <location filename="../rigsetupform.ui" line="462"/>
         <source>Volume</source>
         <translation>Volume</translation>
-    </message>
-    <message>
-        <source>CAT Ptt</source>
-        <translation type="vanished">CAT PTT</translation>
     </message>
     <message>
         <location filename="../rigsetupform.ui" line="476"/>
