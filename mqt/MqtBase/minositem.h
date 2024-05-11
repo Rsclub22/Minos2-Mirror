@@ -10,7 +10,7 @@ template < class itemtype >
 class MinosItem
 {
 private:
-    virtual itemtype &operator=(const itemtype &r)
+    itemtype &operator=(const itemtype &r)
     {
         setValue(r);
         return val;
