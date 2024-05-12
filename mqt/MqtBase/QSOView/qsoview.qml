@@ -96,6 +96,9 @@ Frame {
             top:parent.top
             right:parent.right
         }
+        background: Rectangle {
+            color:setColorAlpha("lightgrey", 0.25)
+        }
         GridLayout {
             id: gridLayout
             columns:2
@@ -165,10 +168,10 @@ Frame {
             }
         }
     }
-
     function setColorAlpha(color, alpha) {
         return Qt.hsla(color.hslHue, color.hslSaturation, color.hslLightness, alpha)
     }
+
     function drawGrid()
     {
         if (showGrid)
