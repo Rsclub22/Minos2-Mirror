@@ -441,6 +441,13 @@ void BandmapView::doBandmapUpdate()
         if (updateRequired)
         {
             dial->update();
+            BandmapSortFilterProxyModel *pm = dynamic_cast<BandmapSortFilterProxyModel *>(model());
+            QString pms = pm->getFilterString();
+            if (!pm->getFilterString().isEmpty())
+            {
+                // don't incur the overhead unless we ARE filtering
+                pm->setFilterString(pms);
+            }
             // delay the spots until any dial update has happened
             delayedAction(this, [=](){
                 drawBandMapSpots();

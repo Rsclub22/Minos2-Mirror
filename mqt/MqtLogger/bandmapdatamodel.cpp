@@ -482,6 +482,11 @@ void BandmapSortFilterProxyModel::setFilterString(QString f)
     invalidateFilter();
 }
 
+QString BandmapSortFilterProxyModel::getFilterString()
+{
+    return filterString;
+}
+
 bool BandmapSortFilterProxyModel::lessThan(const QModelIndex &left,
                       const QModelIndex &right) const
 {
