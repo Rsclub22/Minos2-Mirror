@@ -804,11 +804,13 @@ void TxVmButtonsFrame::startVMMsg(int buttonNumber)
     txVoiceKeyer->readVmButtonParams(buttonNumber, vmData);
     setRepeatIndicatorOnOff(vmData.getVmRepeatFlag());
 
-    if (vmData.getVmName().isEmpty())
-    {
-        logMessage(QString("- startVMMsg - Button name empty, do not run message"));
-        return;
-    }
+    // Even if name is empty, operator expects pressing it to work!
+
+    // if (vmData.getVmName().isEmpty())
+    // {
+    //     logMessage(QString("- startVMMsg - Button name empty, do not run message"));
+    //     return;
+    // }
 
     if (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl])
     {
