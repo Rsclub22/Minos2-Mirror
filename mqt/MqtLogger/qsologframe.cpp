@@ -157,7 +157,7 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
     ui->QTHFrame->getTextEditlabel()->setText("<b>" + QTHLabelString);
     connect(ui->QTHFrame->getTextEditEdit(), &QLineEdit::textChanged, this, &QSOLogFrame::onQTHEdit_textChanged);
 
-    ui->commentsFrame->setup("Comments", this, true, horizontal);
+    ui->commentsFrame->setup("Comments", this, false, horizontal);
     CommentsFW = new FocusWatcher(ui->commentsFrame->getTextEditEdit());
     ui->commentsFrame->getTextEditlabel()->setText("<b>" + CommentsLabelString);
 
