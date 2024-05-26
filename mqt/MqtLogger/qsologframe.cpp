@@ -259,6 +259,13 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
     on_ShowOperators();
     on_QSOMargins();
     checkQRZClusterBandmapShowing();
+
+    connect(qApp,&QApplication::applicationStateChanged, this, &QSOLogFrame::appStateChanged);
+}
+void QSOLogFrame::appStateChanged(Qt::ApplicationState state)
+{
+    if (state == Qt::ApplicationActive)
+        delayFocusChange = true;
 }
 void QSOLogFrame::onContestBandChanged(BaseContestLog *c)
 {
@@ -619,11 +626,17 @@ void QSOLogFrame::focusChange(QObject *obj, bool in, QFocusEvent *event)
             SecondOpComboBox_Exit();
         }
     }
-    checkQsoFrameColour();
+
+    if (!delayFocusChange)
+    {
+        checkQsoFrameColour();
+    }
+    delayFocusChange = false;
 }
 bool QSOLogFrame::frameHasFocus()
 {
-    if (ui->CallsignFrame->getTextEditEdit()->hasFocus()
+    if (frameHasFocusForced
+            || ui->CallsignFrame->getTextEditEdit()->hasFocus()
             || ui->RSTTxFrame->getTextEditEdit()->hasFocus()
             || ui->SerTxFrame->getTextEditEdit()->hasFocus()
             || ui->RSTRxFrame->getTextEditEdit()->hasFocus()
@@ -4130,6 +4143,7 @@ void QSOLogFrame::on_callRb_clicked()
 {
     // Make sure we have a call frequency
 
+    frameHasFocusForced = true;
     if (ui->callRb->isChecked())
     {
         TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
@@ -4139,6 +4153,7 @@ void QSOLogFrame::on_callRb_clicked()
         }
     }
     MinosLoggerEvents::SendSandPChanged(getSandP());
+    frameHasFocusForced = false;
 }
 void QSOLogFrame::on_SandPrb_clicked()
 {

@@ -206,6 +206,9 @@ private:
 
     ValidatedControl *freqIl;
 
+    bool frameHasFocusForced = false;
+    bool delayFocusChange = true;
+
     QWidget *getNextInvalid(QWidget *&firstInvalid);
 
     bool isRotatorLoaded();
@@ -356,6 +359,7 @@ private slots:
 
     void on_SandPrb_clicked();
     void onContestBandChanged(BaseContestLog *c);
+    void appStateChanged(Qt::ApplicationState state);
 public slots:
     void setXferEnabled(bool s, BaseContestLog *c, QString basename);
 
