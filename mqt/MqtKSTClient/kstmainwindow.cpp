@@ -359,6 +359,7 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
 
 KSTMainWindow::~KSTMainWindow()
 {
+    asl.reset();
     delete ui;
 }
 void KSTMainWindow::resizeEvent(QResizeEvent * event)
@@ -452,7 +453,7 @@ void KSTMainWindow::onLogClosed(QSharedPointer<MonitoredLog> /*ml*/)
 }
 void KSTMainWindow::userCallTimerTimer()
 {
-    if (asl && getASActive() && callVectorChanged)
+    if (asl && getASActive() && callVectorChanged && callVector)
     {
         asl->usersChanged(callVector);
         callVectorChanged = false;
@@ -568,7 +569,8 @@ int KSTMainWindow::getMaxDistance() const
 
 bool KSTMainWindow::getASActive() const
 {
-    return ui->ASActivecb->isChecked();
+    bool ret = ui->ASActivecb->isChecked();
+    return ret;
 }
 
 ASBand KSTMainWindow::getASActiveBand() const

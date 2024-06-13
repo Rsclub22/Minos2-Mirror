@@ -46,15 +46,15 @@ AirScoutLink::AirScoutLink():
 }
 AirScoutLink::~AirScoutLink()
 {
+    ASTimer.stop();
     qus->abort();   // make sure we don't get any more reads passed
 }
 void AirScoutLink::onTimeout()
 {
-    if (mainWindow->getASActive())
+    if (mainWindow && mainWindow->getASActive())
     {
         QDateTime now = QDateTime::currentDateTime();
         QDateTime timeoutTime = lastASSEnd.addSecs(mainWindow->getASTimeout());
-        if (lastASSEnd.isValid() && now > timeoutTime)
         {
             // send again...
             assetPathInProgress = false;
@@ -303,7 +303,7 @@ void AirScoutLink::onReadyRead()
 
 void AirScoutLink::usersChanged(QSharedPointer<QVector<QSharedPointer<KstUser> > > callVector)
 {
-    if (mainWindow->getASActive())
+    if (mainWindow && mainWindow->getASActive())
     {
         watchList.clear();
         for(auto const &user: QASCONST(*callVector))
@@ -383,7 +383,7 @@ void AirScoutLink::askNearest(int row)
     if (assetPathInProgress)
         return;
 
-    if (mainWindow->getASActive() && watchList.size())
+    if (mainWindow && mainWindow->getASActive() && watchList.size())
     {
         if ((row < 0) || (++row > watchList.size() - 1))
         {
