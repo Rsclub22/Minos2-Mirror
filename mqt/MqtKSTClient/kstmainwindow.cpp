@@ -1941,7 +1941,10 @@ void KSTMainWindow::scrollMesToBottom()
         delayedAction(this, [=]()
         {
             QModelIndex mesIndex = kstMessageFilterModel.index(kstMessageFilterModel.rowCount() - 1, 0);
-            ui->messageTable->scrollTo(mesIndex, QAbstractItemView::PositionAtBottom);
+            if (mesIndex.isValid())
+            {
+                ui->messageTable->scrollTo(mesIndex, QAbstractItemView::PositionAtBottom);
+            }
         });
     }
 }
@@ -1951,7 +1954,10 @@ void KSTMainWindow::scrollMeepToBotton()
     delayedAction(this, [=]()
     {
         QModelIndex meepIndex = kstMeepFilterModel.index(kstMeepFilterModel.rowCount() - 1, 0);
-        ui->meepTable->scrollTo(meepIndex, QAbstractItemView::PositionAtBottom);
+        if (meepIndex.isValid())
+        {
+            ui->meepTable->scrollTo(meepIndex, QAbstractItemView::PositionAtBottom);
+        }
     });
 }
 
