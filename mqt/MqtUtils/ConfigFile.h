@@ -3,6 +3,7 @@
 #include <QWidget>
 #include <QProcess>
 #include <QMap>
+#include <QLocalSocket>
 
 #include "INIFile.h"
 //---------------------------------------------------------------------------
@@ -57,6 +58,7 @@ class RunConfigElement: public QObject
     Q_OBJECT
 private:  	// User declarations
     QProcess *runner = nullptr;
+    QLocalSocket *localSocket = nullptr;
 public:  		// User declarations
     bool newElement = false;
     bool deleted = false;

@@ -4174,3 +4174,4 @@ bool QSOLogFrame::getSandP()
 {
     return ui->SandPrb->isChecked();
 }
+

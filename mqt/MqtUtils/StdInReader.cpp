@@ -1,6 +1,8 @@
 #include <QTextStream>
 #include <QIODevice>
 #include <QProcessEnvironment>
+#include <QLocalServer>
+#include <QLocalSocket>
 
 #include "AppStartup.h"
 #include "StdInReader.h"
@@ -10,39 +12,62 @@ StdInReader::StdInReader(QMainWindow *m):qmw(m)
 {
     connect(this, &StdInReader::stdinLine, this, &StdInReader::executeStdIn);
 
-    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
-    QString appStartupName = env.value("MQTRPCNAME", "") ;
-    if (!appStartupName.isEmpty())
+    appName = getAppStartupName();
+
+    localServer = new QLocalServer(this);
+    connect(localServer, &QLocalServer::newConnection, this, &StdInReader::newLocalConnection);
+    trace(QString("About to listen on %1").arg(appName));
+    if(!localServer->listen(appName))
     {
-        start();
+
+        // The monitor failure, may beWhen a program crashes, residual process service led, removal
+        if(localServer->serverError() == QAbstractSocket::AddressInUseError) {
+            QLocalServer::removeServer(appName); // <-- A key
+            localServer->listen(appName); // Listen again
+        }
     }
+
 }
 StdInReader::~StdInReader()
 {
-    terminate();
-    wait(1000);
+    if (localSocket)
+    {
+        localSocket->close();
+    }
+    if (localServer)
+    {
+        localServer->close();
+    }
 }
-
-void StdInReader::run()
+void StdInReader::newLocalConnection()
 {
-    // called by QThread from start()
+    trace(QString("StdInReader::newLocalConnection()"));
+    if (!localSocket)
+    {
+        trace(QString("StdInReader::newLocalConnection() - no local socket"));
+        localSocket = localServer->nextPendingConnection();
+        if(localSocket)
+        {
+            trace(QString("StdInReader::newLocalConnection() - connecting readyRead"));
+            connect(localSocket, &QLocalSocket::readyRead, this, &StdInReader::onReadyRead);
+        }
+    }
+}
+void StdInReader::onReadyRead()
+{
+    trace(QString("StdInReader::onReadyRead()"));
 
-    QTextStream stdinStream(stdin, QIODevice::ReadOnly);
+    QTextStream stdinStream(localSocket);
 
     QString line;
-    while (true)
+
+    line = stdinStream.readLine();
+
+    while (!line.isNull())
     {
-        line = stdinStream.readLine();
-
-        if (line.isNull())
-            break;
-
+        trace(QString("StdInReader::onReadyRead() %1").arg(line));
         emit stdinLine(line);
-
-        if (line.indexOf("Shutdown", 0, Qt::CaseInsensitive) >= 0)
-        {
-            break;
-        }
+        line = stdinStream.readLine();
     }
 }
 void StdInReader::setShowApp(bool state)
