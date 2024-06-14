@@ -1,5 +1,6 @@
 #include <QTextStream>
 #include <QIODevice>
+#include <QProcessEnvironment>
 
 #include "AppStartup.h"
 #include "StdInReader.h"
@@ -8,7 +9,13 @@
 StdInReader::StdInReader(QMainWindow *m):qmw(m)
 {
     connect(this, &StdInReader::stdinLine, this, &StdInReader::executeStdIn);
-    start();
+
+    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+    QString appStartupName = env.value("MQTRPCNAME", "") ;
+    if (!appStartupName.isEmpty())
+    {
+        start();
+    }
 }
 StdInReader::~StdInReader()
 {
