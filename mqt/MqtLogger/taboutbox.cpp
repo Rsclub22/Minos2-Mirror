@@ -28,7 +28,7 @@ QString TAboutBox::creditsText = QString(
     "<br><h3>%6</h3>"
     "<br> Neil Yorke M0NKE"
     "<br><h3>%7</h3>"
-    "<br> Peter Burton G3ZPB"
+    "<br> Peter Burton G3ZPB (SK)"
     "<br><h3>%8</h3>"
     "<br>Ken Punshon G4APJ, Jacques Lepoil F1BHL"
     "<br><h3>%9</h3>"
