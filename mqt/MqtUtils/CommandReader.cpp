@@ -5,17 +5,17 @@
 #include <QLocalSocket>
 
 #include "AppStartup.h"
-#include "StdInReader.h"
+#include "CommandReader.h"
 #include "MTrace.h"
 
-StdInReader::StdInReader(QMainWindow *m):qmw(m)
+CommandReader::CommandReader(QMainWindow *m):qmw(m)
 {
-    connect(this, &StdInReader::stdinLine, this, &StdInReader::executeStdIn);
+    connect(this, &CommandReader::commandLine, this, &CommandReader::executeCommand);
 
     appName = getAppStartupName();
 
     localServer = new QLocalServer(this);
-    connect(localServer, &QLocalServer::newConnection, this, &StdInReader::newLocalConnection);
+    connect(localServer, &QLocalServer::newConnection, this, &CommandReader::newLocalConnection);
     trace(QString("About to listen on %1").arg(appName));
     if(!localServer->listen(appName))
     {
@@ -28,7 +28,7 @@ StdInReader::StdInReader(QMainWindow *m):qmw(m)
     }
 
 }
-StdInReader::~StdInReader()
+CommandReader::~CommandReader()
 {
     if (localSocket)
     {
@@ -39,38 +39,38 @@ StdInReader::~StdInReader()
         localServer->close();
     }
 }
-void StdInReader::newLocalConnection()
+void CommandReader::newLocalConnection()
 {
-    trace(QString("StdInReader::newLocalConnection()"));
+    trace(QString("CommandReader::newLocalConnection()"));
     if (!localSocket)
     {
-        trace(QString("StdInReader::newLocalConnection() - no local socket"));
+        trace(QString("CommandReader::newLocalConnection() - no local socket"));
         localSocket = localServer->nextPendingConnection();
         if(localSocket)
         {
-            trace(QString("StdInReader::newLocalConnection() - connecting readyRead"));
-            connect(localSocket, &QLocalSocket::readyRead, this, &StdInReader::onReadyRead);
+            trace(QString("CommandReader::newLocalConnection() - connecting readyRead"));
+            connect(localSocket, &QLocalSocket::readyRead, this, &CommandReader::onReadyRead);
         }
     }
 }
-void StdInReader::onReadyRead()
+void CommandReader::onReadyRead()
 {
-    trace(QString("StdInReader::onReadyRead()"));
+    trace(QString("CommandReader::onReadyRead()"));
 
-    QTextStream stdinStream(localSocket);
+    QTextStream commandStream(localSocket);
 
     QString line;
 
-    line = stdinStream.readLine();
+    line = commandStream.readLine();
 
     while (!line.isNull())
     {
-        trace(QString("StdInReader::onReadyRead() %1").arg(line));
-        emit stdinLine(line);
-        line = stdinStream.readLine();
+        trace(QString("CommandReader::onReadyRead() %1").arg(line));
+        emit commandLine(line);
+        line = commandStream.readLine();
     }
 }
-void StdInReader::setShowApp(bool state)
+void CommandReader::setShowApp(bool state)
 {
     if (qmw)
     {
@@ -78,9 +78,9 @@ void StdInReader::setShowApp(bool state)
         qmw->setVisible(state);
     }
 }
-void StdInReader::executeStdIn(QString cmd)
+void CommandReader::executeCommand(QString cmd)
 {
-    trace("Command read from stdin: " + cmd);
+    trace("Command read from commandReader: " + cmd);
     if (cmd.indexOf("ShowServers", 0, Qt::CaseInsensitive) >= 0)
         setShowApp(true);
     if (cmd.indexOf("HideServers", 0, Qt::CaseInsensitive) >= 0)

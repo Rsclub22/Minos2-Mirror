@@ -7,7 +7,7 @@
 #include <QVector>
 #include <QSortFilterProxyModel>
 #include "BandList.h"
-#include "StdInReader.h"
+#include "CommandReader.h"
 #include "qttelnet.h"
 #include "clustercommands.h"
 #include "setupdialog.h"
@@ -240,7 +240,7 @@ private slots:
     void sentSpotView_sectionResized(int, int, int);
     void LogTimerTimer();
 
-    void onStdInRead(QString cmd);
+    void onCommandRead(QString cmd);
     void loggedOut();
 
 
@@ -257,7 +257,7 @@ signals:
     void disconnectTimerfinished();
 private:
     Ui::ClusterMainWindow *ui;
-    QSharedPointer<StdInReader> stdinReader = QSharedPointer<StdInReader>(new StdInReader(this));
+    QSharedPointer<CommandReader> commandReader = QSharedPointer<CommandReader>(new CommandReader(this));
 
     QTimer LogTimer;
     QTimer *disconnectTimer;

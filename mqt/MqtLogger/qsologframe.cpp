@@ -79,6 +79,8 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    connect(ui->ModeButton, &QToolButton::clicked, this,&QSOLogFrame::onModeButtonClicked);
+
     TContestApp::getContestApp() ->getBoolDisplayProfile( edpExpertMode, expert );
     TContestApp::getContestApp() ->getBoolDisplayProfile( edpAlternateFKeys, altFKeys );
 
@@ -2811,7 +2813,12 @@ void QSOLogFrame::doGJVEditChange( QObject *Sender )
     }
 }
 
-void QSOLogFrame::on_ModeButton_clicked(const QString & m)
+void QSOLogFrame::onModeButtonClicked(bool)
+{
+    onModeButtonClickeds(QString());
+}
+
+void QSOLogFrame::onModeButtonClickeds(const QString & m)
 {
     if (m.isEmpty())
     {
@@ -2908,7 +2915,7 @@ void QSOLogFrame::logScreenEntry( )
           {
              if ( MinosParameters::getMinosParameters() ->yesNoMessage( this, tr("Change mode to CW?") ) )
              {
-                on_ModeButton_clicked(hamlibData::CW);
+                onModeButtonClickeds(hamlibData::CW);
                 MinosParameters::getMinosParameters() ->mshowMessage(tr("Please check the signal reports, and log the contact"), this);
                 return;
              }
@@ -2919,7 +2926,7 @@ void QSOLogFrame::logScreenEntry( )
               {
                   if ( MinosParameters::getMinosParameters() ->yesNoMessage( this, tr("Change mode to PH?") ) )
                   {
-                      on_ModeButton_clicked(hamlibData::PH);
+                      onModeButtonClickeds(hamlibData::PH);
                       MinosParameters::getMinosParameters() ->mshowMessage(tr("Please check the signal reports, and log the contact"), this);
                       return;
                   }
@@ -2928,7 +2935,7 @@ void QSOLogFrame::logScreenEntry( )
               {
                   if ( MinosParameters::getMinosParameters() ->yesNoMessage( this, tr("Change mode to USB?") ) )
                   {
-                      on_ModeButton_clicked(hamlibData::USB);
+                      onModeButtonClickeds(hamlibData::USB);
                       MinosParameters::getMinosParameters() ->mshowMessage(tr("Please check the signal reports, and log the contact"), this);
                       return;
                   }

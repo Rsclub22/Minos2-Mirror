@@ -4,7 +4,7 @@
 #include <QMainWindow>
 #include <QComboBox>
 #include "RigCache.h"
-#include "StdInReader.h"
+#include "CommandReader.h"
 #include "XMPPRPCObj.h"
 #include "n1mmlink.h"
 #include "wsjtxlink.h"
@@ -89,7 +89,7 @@ private:
     WsjtxLink wsjtxLink;
     bool firstTime = true;
 
-    QSharedPointer<StdInReader> stdinReader = QSharedPointer<StdInReader>(new StdInReader(this));
+    QSharedPointer<CommandReader> commandReader = QSharedPointer<CommandReader>(new CommandReader(this));
 
     QTimer SyncTimer;
 

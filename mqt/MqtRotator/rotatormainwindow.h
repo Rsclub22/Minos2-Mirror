@@ -25,7 +25,7 @@
 #include <QShortcut>
 #include <QTimer>
 
-#include "StdInReader.h"
+#include "CommandReader.h"
 #include "rotatorRpc.h"
 #include "rotatorbase.h"
 #include "rotatorfactory.h"
@@ -88,7 +88,7 @@ signals:
 private:
     Ui::RotatorMainWindow *ui;
 
-    QSharedPointer<StdInReader> stdinReader = QSharedPointer<StdInReader>(new StdInReader(this));
+    QSharedPointer<CommandReader> commandReader = QSharedPointer<CommandReader>(new CommandReader(this));
 
     bool closeApp = false;
     RotatorRpc *msg;
@@ -198,7 +198,7 @@ public slots:
 private slots:
     void LogTimerTimer( );
 
-    void onStdInRead(QString);
+    void onCommandRead(QString);
 
     void onLoggerSelectAntenna(PubSubName);
     void onLoggerSetRotation(int direction, int angle);

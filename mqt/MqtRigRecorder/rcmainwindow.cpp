@@ -47,7 +47,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-    connect(stdinReader.data(), &StdInReader::stdinLine, this, &MainWindow::onStdInRead);
+    connect(commandReader.data(), &CommandReader::commandLine, this, &MainWindow::onCommandRead);
 
     if (rass.inputDevices.count() == 0)
     {
@@ -145,12 +145,12 @@ void MainWindow::changeEvent( QEvent* e )
         settings.getSettings().setValue("RigRecorderMain/geometry", saveGeometry());
     }
 }
-void MainWindow::onStdInRead(QString cmd)
+void MainWindow::onCommandRead(QString cmd)
 {
     bool doClose = false;
     if (cmd.indexOf("Shutdown", 0, Qt::CaseInsensitive) >= 0)
     {
-        trace("MainWindow::onStdInRead - Start shutdown");
+        trace("MainWindow::onCommandRead - Start shutdown");
         doClose = true;
 
         closing = true;

@@ -48,8 +48,8 @@ QrzServerMainWindow::QrzServerMainWindow(QWidget *parent)
     ui->setupUi(this);
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-    trace("Connect to stdinRead");  // This connect doesn't appear to work for some time!
-    connect(stdinReader.data(), &StdInReader::stdinLine, this, &QrzServerMainWindow::onStdInRead);
+    trace("Connect to commandRead");  // This connect doesn't appear to work for some time!
+    connect(commandReader.data(), &CommandReader::commandLine, this, &QrzServerMainWindow::onCommandRead);
 
     RegSettings settings;
     QByteArray geometry = settings.getSettings().value("geometry").toByteArray();
@@ -180,9 +180,9 @@ void QrzServerMainWindow::onPingStateTimerTimeout()
         QrzServerRpc::getQrzServerRpc()->sendQrzLoggedState(qrzServerStateFlags.getQrzLoggedOnFlag(), stateErrorMessage);
 }
 
-void QrzServerMainWindow::onStdInRead(QString cmd)
+void QrzServerMainWindow::onCommandRead(QString cmd)
 {
-    trace(QString("onStdInRead %1").arg(cmd));
+    trace(QString("onCommandRead %1").arg(cmd));
     if (cmd.indexOf("Shutdown", 0, Qt::CaseInsensitive) >= 0)
     {
         close();

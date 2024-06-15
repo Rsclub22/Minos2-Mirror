@@ -12,6 +12,7 @@
 #include "AppStartup.h"
 #include "LogEvents.h"
 #include "SecondInstall.h"
+#include "delayedaction.h"
 #include "fileutils.h"
 #include "ConfigFile.h"
 #include "MTrace.h"
@@ -285,19 +286,25 @@ void RunConfigElement::createProcess()
         trace(runarg);
 #endif
 
-        if (runner)
+        delayedAction(this, [=]()
         {
-            // and error will have removed runner!
-            if (hideApp)
-                sendCommand("HideServers");
-            else
-                sendCommand("ShowServers");
+            // NB a lambda function
 
-            QString fontCommand = "Font " + QApplication::font().toString();
-            sendCommand(fontCommand);
+            if (runner)
+            {
+                // and error will have removed runner!
+                if (hideApp)
+                    sendCommand("HideServers");
+                else
+                    sendCommand("ShowServers");
 
-             MinosConfigEvents::sendStealFocus();
-        }
+                QString fontCommand = "Font " + QApplication::font().toString();
+                sendCommand(fontCommand);
+
+                 MinosConfigEvents::sendStealFocus();
+            }
+        }, 500
+        );
     }
 }
 void RunConfigElement::askStopProcess()
@@ -367,6 +374,7 @@ void RunConfigElement::sendCommand(const QString & cmd)
         if (localSocket)
         {
             qint64 res = localSocket->write( command );
+            localSocket->waitForBytesWritten(500);
             if (res < 0)
             {
                 trace(QString("Failed to write %1 to runner %2").arg(cmd, name));
@@ -394,6 +402,9 @@ void RunConfigElement::on_finished(int err, QProcess::ExitStatus exitStatus)
         runner->deleteLater();
         runner = nullptr;
         localSocket->close();
+        localSocket->deleteLater();
+        localSocket = nullptr;
+
     }
     if (stopping)
     {
@@ -412,6 +423,10 @@ void RunConfigElement::on_error(QProcess::ProcessError error)
     trace(name + ":error:" + QString::number(error));
     runner->deleteLater();
     runner = nullptr;
+    localSocket->close();
+    localSocket->deleteLater();
+    localSocket = nullptr;
+
 }
 
 void RunConfigElement::on_readyReadStandardError()

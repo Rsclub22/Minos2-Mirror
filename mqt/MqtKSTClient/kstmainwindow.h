@@ -5,7 +5,7 @@
 #include <QTcpSocket>
 #include <QRadioButton>
 #include <QCheckBox>
-#include "StdInReader.h"
+#include "CommandReader.h"
 #include "kstcallgridmodel.h"
 #include "kstmessagegridmodel.h"
 #include "airscoutlink.h"
@@ -249,7 +249,7 @@ private slots:
 
 private:
     Ui::KSTMainWindow *ui;
-    QSharedPointer<StdInReader> stdinReader = QSharedPointer<StdInReader>(new StdInReader(this));
+    QSharedPointer<CommandReader> commandReader = QSharedPointer<CommandReader>(new CommandReader(this));
 
     KSTMonitoredLogs* ml = nullptr;
 

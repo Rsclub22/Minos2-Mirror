@@ -17,13 +17,13 @@ CONFIG += staticlib
 else:*g++*:CONFIG(debug, debug|release):QMAKE_CXXFLAGS_WARN_ON += -Wno-reorder -Wold-style-cast
 
 SOURCES += \
+    CommandReader.cpp \
     SecondInstall.cpp \
     WindowsAppId.cpp \
     delayedaction.cpp \
     fileutils.cpp \
     ConfigFile.cpp \
     AppStartup.cpp \
-    StdInReader.cpp \
     MLogFile.cpp \
     MTrace.cpp \
     LogEvents.cpp \
@@ -36,6 +36,7 @@ SOURCES += \
     minossplitter.cpp
 
 HEADERS += \
+    CommandReader.h \
     QtUtils.h \
     SecondInstall.h \
     WindowsAppId.h \
@@ -44,7 +45,6 @@ HEADERS += \
     fileutils.h \
     ConfigFile.h \
     AppStartup.h \
-    StdInReader.h \
     MLogFile.h \
     MTrace.h \
     LogEvents.h \

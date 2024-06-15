@@ -59,7 +59,7 @@ RotatorMainWindow::RotatorMainWindow(QWidget *parent) :
         shiftShortCutKeyList.append(new QShortcut(QKeySequence(presetMenuShortCutKeys[i]), this));
     }
 
-    connect(stdinReader.data(), &StdInReader::stdinLine, this, &RotatorMainWindow::onStdInRead);
+    connect(commandReader.data(), &CommandReader::commandLine, this, &RotatorMainWindow::onCommandRead);
 
     // get the antenna name from host process
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
@@ -265,11 +265,11 @@ void RotatorMainWindow::logMessage( QString s )
            trace( s );
 }
 
-void RotatorMainWindow::onStdInRead(QString cmd)
+void RotatorMainWindow::onCommandRead(QString cmd)
 {
     if (cmd.indexOf("Shutdown", 0, Qt::CaseInsensitive) >= 0)
     {
-        trace("onStdInRead - Start shutdown");
+        trace("onCommandRead - Start shutdown");
         close();
 
         closeApp = true;

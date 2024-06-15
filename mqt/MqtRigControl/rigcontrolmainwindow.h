@@ -24,7 +24,7 @@
 
 #include "BandList.h"
 #include "PubSubName.h"
-#include "StdInReader.h"
+#include "CommandReader.h"
 #include "serialtvswitch.h"
 #include "rigcommon.h"
 #include "rigbase.h"
@@ -335,7 +335,7 @@ public:
 private:
 
     Ui::RigControlMainWindow *ui;
-    QSharedPointer<StdInReader> stdinReader = QSharedPointer<StdInReader>(new StdInReader(this));
+    QSharedPointer<CommandReader> commandReader = QSharedPointer<CommandReader>(new CommandReader(this));
     bool closeApp = false;
     RigControlRpc *msg = nullptr;
 
@@ -637,7 +637,7 @@ private:
     void setTestPttButtonIndOnOff(bool state);
 private slots:
 
-    void onStdInRead(QString);
+    void onCommandRead(QString);
     void saveTraceLogFlag(bool);
 
     void getRadioInfo(bool pubNow);

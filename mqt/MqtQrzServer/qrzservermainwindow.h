@@ -23,7 +23,7 @@
 #include <QNetworkReply>
 #include <QTimer>
 
-#include "StdInReader.h"
+#include "CommandReader.h"
 #include "qrzServerCommon.h"
 
 QT_BEGIN_NAMESPACE
@@ -127,7 +127,7 @@ private slots:
     void quit();
     void LogTimerTimer();
     void onConfigure();
-    void onStdInRead(QString cmd);
+    void onCommandRead(QString cmd);
 
     void onClusterQrzMessage(QrzServerMessage qrzRequest);
     void handleQrzRequests();
@@ -146,7 +146,7 @@ private:
     int dbRequests = 0;
     int qrzRequests = 0;
 
-    QSharedPointer<StdInReader> stdinReader = QSharedPointer<StdInReader>(new StdInReader(this));
+    QSharedPointer<CommandReader> commandReader = QSharedPointer<CommandReader>(new CommandReader(this));
 
     QTimer LogTimer;
     QTimer *pingStateTimer;

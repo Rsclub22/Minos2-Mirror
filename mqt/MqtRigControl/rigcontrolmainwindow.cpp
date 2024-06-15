@@ -63,7 +63,7 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
 
     serialData::translateSerialData();
 
-    connect(stdinReader.data(), &StdInReader::stdinLine, this, &RigControlMainWindow::onStdInRead);
+    connect(commandReader.data(), &CommandReader::commandLine, this, &RigControlMainWindow::onCommandRead);
 
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
     appName = env.value("MQTRPCNAME", "") ;
@@ -402,12 +402,12 @@ void RigControlMainWindow::closeEvent(QCloseEvent *event)
     QWidget::closeEvent(event);
 }
 
-void RigControlMainWindow::onStdInRead(QString cmd)
+void RigControlMainWindow::onCommandRead(QString cmd)
 {
     bool doClose = false;
     if (cmd.indexOf("Shutdown", 0, Qt::CaseInsensitive) >= 0)
     {
-        trace("onStdInRead - Start shutdown");
+        trace("onCommandRead - Start shutdown");
         closeApp = true;
         closeRadio();
         doClose = true;

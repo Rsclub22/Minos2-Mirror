@@ -1,11 +1,11 @@
-#ifndef STDINREADER_H
-#define STDINREADER_H
+#ifndef COMMANDREADER_H
+#define COMMANDREADER_H
 #include <QThread>
 #include <QMainWindow>
 
 class QLocalServer;
 class QLocalSocket;
-class StdInReader: public QObject
+class CommandReader: public QObject
 {
     Q_OBJECT
 
@@ -19,11 +19,11 @@ class StdInReader: public QObject
 
 
 public:
-    StdInReader(QMainWindow *m);
-    ~StdInReader();
+    CommandReader(QMainWindow *m);
+    ~CommandReader();
 
 private slots:
-    void executeStdIn(QString cmd);
+    void executeCommand(QString cmd);
 
     // A trigger new connections
     void newLocalConnection();
@@ -31,7 +31,7 @@ private slots:
 
     void onReadyRead();
 signals:
-    void stdinLine(QString);
+    void commandLine(QString);
 };
 
-#endif // STDINREADER_H
+#endif // COMMANDREADER_H

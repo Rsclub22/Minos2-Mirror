@@ -3,7 +3,7 @@
 
 #include <QMainWindow>
 #include "AnalysePubSubNotify.h"
-#include "StdInReader.h"
+#include "CommandReader.h"
 #include "qtimer.h"
 #include "rrsoundsys.h"
 
@@ -51,7 +51,7 @@ private slots:
     void on_notify(AnalysePubSubNotify an, const QString from);
     void on_contestLinkCB_stateChanged(int arg1);
 
-    void onStdInRead(QString cmd);
+    void onCommandRead(QString cmd);
 private:
     Ui::MainWindow *ui;
     RRRtAudioSoundSystem rass;
@@ -61,7 +61,7 @@ private:
     bool started = false;
     bool stopped = false;
 
-    QSharedPointer<StdInReader> stdinReader = QSharedPointer<StdInReader>(new StdInReader(this));
+    QSharedPointer<CommandReader> commandReader = QSharedPointer<CommandReader>(new CommandReader(this));
     QTimer closeTimer;
 
     bool closing = false;

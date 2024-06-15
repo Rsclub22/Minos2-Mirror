@@ -107,7 +107,7 @@ DMMainWindow::DMMainWindow(QWidget *parent)
 
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-    connect(stdinReader.data(), &StdInReader::stdinLine, this, &DMMainWindow::onStdInRead);
+    connect(commandReader.data(), &CommandReader::commandLine, this, &DMMainWindow::onCommandRead);
 
     QString appName = getAppStartupName();
     MinosRPC *rpc = MinosRPC::getMinosRPC(appName);
@@ -206,7 +206,7 @@ void DMMainWindow::changeEvent( QEvent* e )
     QMainWindow::changeEvent(e);
 }
 
-void DMMainWindow::onStdInRead(QString cmd)
+void DMMainWindow::onCommandRead(QString cmd)
 {
     if (cmd.indexOf("Shutdown", 0, Qt::CaseInsensitive) >= 0)
     {

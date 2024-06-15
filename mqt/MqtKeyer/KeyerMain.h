@@ -7,7 +7,7 @@
 #include "KeyerJson.h"
 #include "CompressorParams.h"
 #include "SliderSpinner.h"
-#include "StdInReader.h"
+#include "CommandReader.h"
 #include "qtimer.h"
 #include "vudata.h"
 
@@ -113,7 +113,7 @@ private:
     QTimer lineTimer;
     QTimer CaptionTimer;
 
-    QSharedPointer<StdInReader> stdinReader = QSharedPointer<StdInReader>(new StdInReader(this));
+    QSharedPointer<CommandReader> commandReader = QSharedPointer<CommandReader>(new CommandReader(this));
 
     SliderSpinner *recordFrame = nullptr;
     SliderSpinner *replayFrame = nullptr;

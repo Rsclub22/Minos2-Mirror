@@ -8,7 +8,7 @@
 #include "ScreenContact.h"
 #include "MonitoredLog.h"
 #include "MonitoringFrame.h"
-#include "StdInReader.h"
+#include "CommandReader.h"
 #include "cutils.h"
 
 
@@ -105,7 +105,7 @@ private:
     QAction *closeMonitoredLog;
     int splitterHandleWidth;
 
-    QSharedPointer<StdInReader> stdinReader = QSharedPointer<StdInReader>(new StdInReader(this));
+    QSharedPointer<CommandReader> commandReader = QSharedPointer<CommandReader>(new CommandReader(this));
 
     QTimer *monitorTimer;
 

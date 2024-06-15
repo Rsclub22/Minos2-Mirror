@@ -107,7 +107,7 @@ void ClusterMainWindow::connectToCluster()
 void ClusterMainWindow::doStartup()
 {
 
-    connect(stdinReader.data(), &StdInReader::stdinLine, this, &ClusterMainWindow::onStdInRead);
+    connect(commandReader.data(), &CommandReader::commandLine, this, &ClusterMainWindow::onCommandRead);
 
     MinosRPC *rpc = MinosRPC::getMinosRPC(getAppStartupName());
     Q_UNUSED(rpc)
@@ -2030,7 +2030,7 @@ void ClusterMainWindow::closeEvent(QCloseEvent *event)
 }
 
 
-void ClusterMainWindow::onStdInRead(QString cmd)
+void ClusterMainWindow::onCommandRead(QString cmd)
 {
     if (cmd.indexOf("Shutdown", 0, Qt::CaseInsensitive) >= 0)
     {
