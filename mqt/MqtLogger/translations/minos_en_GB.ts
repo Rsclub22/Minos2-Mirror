@@ -291,38 +291,38 @@
 <context>
     <name>BandmapView</name>
     <message>
-        <location filename="../bandmapview.cpp" line="1341"/>
+        <location filename="../bandmapview.cpp" line="1348"/>
         <source>%1%2CQ Frequency @ .%3%4%5</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1373"/>
+        <location filename="../bandmapview.cpp" line="1380"/>
         <source>New</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1489"/>
+        <location filename="../bandmapview.cpp" line="1496"/>
         <source>min</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1506"/>
+        <location filename="../bandmapview.cpp" line="1513"/>
         <source>CQ Frequency = %1
 The mode is %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1534"/>
+        <location filename="../bandmapview.cpp" line="1541"/>
         <source>The computed mode is</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1537"/>
+        <location filename="../bandmapview.cpp" line="1544"/>
         <source>The mode is</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1544"/>
+        <location filename="../bandmapview.cpp" line="1551"/>
         <source>%1 - %2, %3, %4, %5 [%6 %7 @ %8 min] 
 %9 %10
 %11
@@ -2620,7 +2620,7 @@ to</source>
     </message>
     <message>
         <location filename="../qsologframe.ui" line="171"/>
-        <location filename="../qsologframe.cpp" line="827"/>
+        <location filename="../qsologframe.cpp" line="842"/>
         <source>Catch-up (Post Entry)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2725,28 +2725,28 @@ to</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="113"/>
+        <location filename="../qsologframe.cpp" line="115"/>
         <source>Sent by Me</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="115"/>
+        <location filename="../qsologframe.cpp" line="117"/>
         <source>Sent by Them</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="106"/>
+        <location filename="../qsologframe.cpp" line="108"/>
         <source>Serial Tx</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="94"/>
-        <location filename="../qsologframe.cpp" line="111"/>
+        <location filename="../qsologframe.cpp" line="96"/>
+        <location filename="../qsologframe.cpp" line="113"/>
         <source>Comments</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2537"/>
+        <location filename="../qsologframe.cpp" line="2552"/>
         <source>No QSO entry field focussed!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2816,74 +2816,74 @@ to</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="87"/>
+        <location filename="../qsologframe.cpp" line="89"/>
         <source>Call%1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="88"/>
         <location filename="../qsologframe.cpp" line="90"/>
+        <location filename="../qsologframe.cpp" line="92"/>
         <source>Rep%1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="89"/>
+        <location filename="../qsologframe.cpp" line="91"/>
         <source>Sn</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="91"/>
+        <location filename="../qsologframe.cpp" line="93"/>
         <source>Sn%1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="92"/>
-        <location filename="../qsologframe.cpp" line="109"/>
+        <location filename="../qsologframe.cpp" line="94"/>
+        <location filename="../qsologframe.cpp" line="111"/>
         <source>Loc%1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="93"/>
+        <location filename="../qsologframe.cpp" line="95"/>
         <source>Exch%1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="104"/>
+        <location filename="../qsologframe.cpp" line="106"/>
         <source>Callsign%1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="105"/>
+        <location filename="../qsologframe.cpp" line="107"/>
         <source>RS(T)Tx%1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="107"/>
+        <location filename="../qsologframe.cpp" line="109"/>
         <source>RS(T)Rx%1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="108"/>
+        <location filename="../qsologframe.cpp" line="110"/>
         <source>Serial Rx%1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="110"/>
+        <location filename="../qsologframe.cpp" line="112"/>
         <source>Exchange%1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="652"/>
+        <location filename="../qsologframe.cpp" line="667"/>
         <source>Return to Log</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="836"/>
+        <location filename="../qsologframe.cpp" line="851"/>
         <source>End Catch-up</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2283"/>
+        <location filename="../qsologframe.cpp" line="2298"/>
         <source>This Contact has changed: Shall I log the changes?
 
 Yes         - Log as shown
@@ -2891,52 +2891,64 @@ No          - Discard changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2519"/>
+        <location filename="../qsologframe.cpp" line="2534"/>
         <source>Read Only</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2523"/>
+        <location filename="../qsologframe.cpp" line="2538"/>
         <source>Protected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2527"/>
+        <location filename="../qsologframe.cpp" line="2542"/>
         <source>Protected by age of contest</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2897"/>
+        <location filename="../qsologframe.cpp" line="2916"/>
         <source>Change mode to CW?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2904"/>
+        <location filename="../qsologframe.cpp" line="2919"/>
+        <location filename="../qsologframe.cpp" line="2930"/>
+        <location filename="../qsologframe.cpp" line="2939"/>
+        <source>Please check the signal reports, and log the contact</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qsologframe.cpp" line="2927"/>
+        <source>Change mode to PH?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qsologframe.cpp" line="2936"/>
         <source>Change mode to USB?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2950"/>
+        <location filename="../qsologframe.cpp" line="2993"/>
         <source>Spot Last Logged (%1) </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="3021"/>
+        <location filename="../qsologframe.cpp" line="3064"/>
         <source>&quot;Serial sent&quot; is too high - please confirm that this is correct?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="3023"/>
+        <location filename="../qsologframe.cpp" line="3066"/>
         <source>Do you want to enter the missing contacts later?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="3431"/>
+        <location filename="../qsologframe.cpp" line="3477"/>
         <source>Start of QSOs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="3466"/>
+        <location filename="../qsologframe.cpp" line="3512"/>
         <source>End of QSOs</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3349,7 +3361,7 @@ No          - Discard changes</source>
     </message>
     <message>
         <location filename="../rigcontrolframe.cpp" line="1381"/>
-        <location filename="../rigcontrolframe.cpp" line="2305"/>
+        <location filename="../rigcontrolframe.cpp" line="2307"/>
         <source>No %1 Band found for this radio!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5865,13 +5877,13 @@ Last %8 Mins: %9 QSO %10 pts %11 mults
     </message>
     <message>
         <location filename="../txvmbuttonsframe.cpp" line="725"/>
-        <location filename="../txvmbuttonsframe.cpp" line="925"/>
+        <location filename="../txvmbuttonsframe.cpp" line="927"/>
         <source>Rig CW Message</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../txvmbuttonsframe.cpp" line="729"/>
-        <location filename="../txvmbuttonsframe.cpp" line="929"/>
+        <location filename="../txvmbuttonsframe.cpp" line="931"/>
         <source>Voice Memory</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5881,37 +5893,37 @@ Last %8 Mins: %9 QSO %10 pts %11 mults
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="931"/>
+        <location filename="../txvmbuttonsframe.cpp" line="933"/>
         <source>%1 %2 - New</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1462"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1464"/>
         <source>Rig Voice Keyer Available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1466"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1468"/>
         <source>Rig CW Messages Available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1588"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1590"/>
         <source>TX On</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1594"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1596"/>
         <source>TX Off</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1604"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1606"/>
         <source>PTT Enabled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1610"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1612"/>
         <source>PTT Disabled</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6273,12 +6285,12 @@ Please edit or remove</source>
 <context>
     <name>TxVoiceMemButton</name>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1720"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1722"/>
         <source>&amp;New</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1721"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1723"/>
         <source>&amp;Edit</source>
         <translation type="unfinished"></translation>
     </message>
