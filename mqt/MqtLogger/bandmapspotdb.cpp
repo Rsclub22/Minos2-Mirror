@@ -68,7 +68,7 @@ BandMapSpotDB::BandMapSpotDB(QObject *parent): QObject(parent)
             {
                 if (query.next())
                 {
-                    trace(QString("BandMapSpotDB %1 spot records retrieved").arg(query.value(0).toString()));
+                    trace(QString("BandMapSpotDB %1 spot records in DB").arg(query.value(0).toString()));
                 }
                 else
                 {

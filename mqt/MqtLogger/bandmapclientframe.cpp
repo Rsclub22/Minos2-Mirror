@@ -1251,6 +1251,11 @@ void BandmapClientFrame::addLogSpotToBandmapTable(QSharedPointer<ClusterSpotData
         spot->setDxBrg(spot->getDxBrg());
         spot->setRotBrg(rotBrg);
         spot->setRotConnected(rotatorConnected);
+        if (spot->getSpotType() == bandmapSpotType::LOGGED)
+        {
+            spot->setDxCallWorked(true);
+            spot->setDxLocatorWorked(true);
+        }
 
         bandmapDataModel->rowData.push_back(spot);
 

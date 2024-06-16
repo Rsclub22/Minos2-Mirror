@@ -1402,7 +1402,7 @@ void BandmapView::assembleSpotMsg(int row, QString& markerMsg)
         }
         if (locWkd && !dxLocFromNodeFlag)
         {
-            locator = QString("%1%2%3").arg(HtmlFontColour(CALLSIGN_WORKED_COLOUR), dxLoc, HtmlFontColour(NOT_WORKED_COLOUR));
+            locator = QString("%1%2%3").arg(HtmlFontColour(LOCATOR_WORKED_COLOUR), dxLoc, HtmlFontColour(NOT_WORKED_COLOUR));
         }
         else
         {
