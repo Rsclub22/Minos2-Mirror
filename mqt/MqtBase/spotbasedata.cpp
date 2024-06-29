@@ -92,6 +92,7 @@ QString ClusterSpotData::spotName()
     };
 
 }
+
 //======================================================================================================
 
 QSharedPointer<ClusterSpotData> stringToDxSpot(QString spot, BaseContestLog *ct, qlonglong &timeToLive)

@@ -184,10 +184,14 @@ public:
     QString spotName();
     static QString spotName(bandmapSpotType::SPOT_TYPE _spotType);
 
-
     bool getCqResponse() const {return cqResponse;}
     void setCqResponse(bool value) {cqResponse = value;}
+
+    int getRecNo() const {return recno;}
+    void setRecNo(int value) {recno = value;}
 private:
+
+    int recno = -1;  // for spots DB
 
     // from SpotBaseData
 

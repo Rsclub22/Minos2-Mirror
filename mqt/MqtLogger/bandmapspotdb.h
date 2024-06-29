@@ -16,6 +16,14 @@ public:
     bool createRecord(QSharedPointer<ClusterSpotData>csData, QString id);
     bool createRecord(ClusterSpotData *spot, QString id);
 
+    bool deleteRecord(QSharedPointer<ClusterSpotData> spot);
+    bool deleteRecord(ClusterSpotData *spot);
+
+    bool deleteAllRecords(QString id);
+
+    bool modifyRecord(QSharedPointer<ClusterSpotData> spot);
+    bool modifyRecord(ClusterSpotData *spot);
+
     QVector<QSharedPointer<ClusterSpotData> > getRecords(const QString id);
 
     int getRecordCount();
