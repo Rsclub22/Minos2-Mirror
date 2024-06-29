@@ -16,12 +16,13 @@
 #include <QDateTime>
 #include <qnamespace.h>
 #include <cstring>
-#include "QtUtils.h"
 
+#include "QtUtils.h"
 #include "PubSubName.h"
 #include "cutils.h"
 #include "MTrace.h"
 #include "MinosParameters.h"
+#include "fileutils.h"
 
 const double pi = 3.141592653 ;  /* pi */
 const double dr = pi / 180.0;      // degree to radian conversion factor
@@ -370,7 +371,7 @@ CsvReader::CsvReader(QChar sep):sep(sep){}
 bool CsvReader::parseCsv(const QString &fileName, QList<QStringList> &csv)
 {
     QFile file (fileName);
-    if (file.open(QIODevice::ReadOnly))
+    if (FileExists(fileName) && file.open(QIODevice::ReadOnly))
     {
         static QRegularExpression rer("\r");
         QString data = file.readAll();
