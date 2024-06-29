@@ -423,10 +423,12 @@ void RunConfigElement::on_error(QProcess::ProcessError error)
     trace(name + ":error:" + QString::number(error));
     runner->deleteLater();
     runner = nullptr;
-    localSocket->close();
-    localSocket->deleteLater();
-    localSocket = nullptr;
-
+    if (localSocket)
+    {
+        localSocket->close();
+        localSocket->deleteLater();
+        localSocket = nullptr;
+    }
 }
 
 void RunConfigElement::on_readyReadStandardError()
