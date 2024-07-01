@@ -2276,6 +2276,10 @@ void ClusterMainWindow::userCmdButtonEdit(QStringList userCommands, QString tabS
             }
         }
     }
+    else
+    {
+        userCmdButtonWrite(tabSelected, buttonNumber);
+    }
 }
 
 
