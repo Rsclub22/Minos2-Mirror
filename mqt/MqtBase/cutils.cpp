@@ -1036,3 +1036,28 @@ void sleepFor(qint64 milliseconds)
         QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
     }
 }
+QString formatTime( qlonglong s )
+{
+    int i = 0;
+    QString suff;
+    while ( s >= 24 * 60 )
+    {
+        s -= 24 * 60;
+        i++;
+    }
+
+    QString pref;
+    if ( i > 0 )
+    {
+        pref = QString::number( i ) + "/";
+        suff = " d/hh:mm";
+    }
+    else
+    {
+        suff = " hh:mm";
+    }
+    QTime qt(0, 0);
+    qt = qt.addSecs( s * 60 );
+    QString t = pref + qt.toString ( "hh:mm" ) + suff;
+    return t;
+}
