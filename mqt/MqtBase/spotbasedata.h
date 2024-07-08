@@ -50,7 +50,10 @@ public:
     void setRxTime(const qint64 rxTime_){rxTime = rxTime_;}
     qint64 getRxTime() const {return rxTime;}
 
-    void setSpotDateTime(const QDateTime spotDateTime_) {spotDateTime = spotDateTime_;}
+    void setSpotDateTime(const QDateTime spotDateTime_)
+    {
+        spotDateTime = spotDateTime_;
+    }
     QDateTime getSpotDateTime() const {return spotDateTime;}
 
     QString getSpotTime() const

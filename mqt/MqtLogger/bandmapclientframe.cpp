@@ -266,12 +266,15 @@ void BandmapClientFrame::refreshLocalSpots()
 {
     trace("refreshLocalSpots");
     QVector<QSharedPointer<ClusterSpotData> > spots = bmsdb->getRecords(ct->cfileName);
+    trace(QString("refreshLocalSpots %1 records for %2").arg(spots.count()).arg(ct->cfileName));
 
     for (auto const &s:QASCONST(spots))
     {
         // if cluster, then use spotqueue
         //  NONE, CLUSTER, CLUSTER_MARKED, LOGGED, MARKED, SAVED, CQ, DELETED}
 
+        QString mess = QString("refreshLocalSpots: %1 %2 %3 %4").arg(s->spotName(),  s->getDxCallStr(), s->getFreq().traceStr(), s->getDxLocator());
+        trace(mess);
         if (s->getSpotType() == bandmapSpotType::DELETED)
         {
 
@@ -1002,6 +1005,10 @@ void BandmapClientFrame::addDxSpotToBandmapTable(QSharedPointer<ClusterSpotData>
         }
         spot->setDxLocator(loc);
     }
+
+    qint64 logTime = spot->getSpotDateTime().toMSecsSinceEpoch() / 1000;
+    //QString logTimeStr = spot->getSpotDateTime().time().toString("HH:mm");
+    spot->setRxTime(logTime);
 
     traceMsg(QString("Add Cluster Spot to Bandmap %1, %2, %3, %4, dxLocatorIsFromNode = %5")
              .arg(spot->getDxCall().getFullCall(), spot->getFreq().traceStr(), spot->getMode())
