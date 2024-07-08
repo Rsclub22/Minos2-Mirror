@@ -84,6 +84,19 @@ BandMapSpotDB::BandMapSpotDB(QObject *parent): QObject(parent)
             }
         }
         {
+            QSqlQuery amQuery;
+            bool amres = amQuery.prepare("ALTER TABLE LSPOTS ADD spottype TEXT");
+            if (amres)
+            {
+                bool qres = amQuery.exec();
+                if (!qres)
+                {
+                    QString mess = QString("BandMapSpotDB add field error: %1").arg(amQuery.lastError().text());
+                    trace(mess);
+                }
+            }
+        }
+        {
             QSqlQuery query;
             query.prepare("SELECT COUNT(*) FROM LSPOTS");
             if (query.exec())
@@ -123,15 +136,16 @@ bool BandMapSpotDB::createRecord(ClusterSpotData *spot, QString id)
     }
     QSqlQuery query;
     QString create =         "INSERT INTO LSPOTS "
-                     "(id, type, callsign, band, mode, loc, dist, freq, dtg, rmOn, offRF, CQResp)"
+                     "(id, type, spottype, callsign, band, mode, loc, dist, freq, dtg, rmOn, offRF, CQResp)"
                      " VALUES "
-                     "(:id, :type, :callsign, :band, :mode, :loc, :dist, :freq, :dtg, :rmOn, :offRF, :CQResp)";
+                     "(:id, :type, :dpottype :callsign, :band, :mode, :loc, :dist, :freq, :dtg, :rmOn, :offRF, :CQResp)";
     bool prepres = query.prepare(create);
 
     if (prepres)
     {
         query.bindValue(":id", id);
         query.bindValue(":type", spot->getSpotType());
+        query.bindValue(":spottype", spot->spotName());
         query.bindValue(":callsign", spot->getDxCall().getFullCall());
         query.bindValue(":band", spot->getBand());
         query.bindValue(":mode", spot->getMode());
@@ -191,7 +205,7 @@ bool BandMapSpotDB::modifyRecord(ClusterSpotData *spot)
     int recid = -1;
     QSqlQuery query;
     QString mod = "UPDATE LSPOTS SET "
-                  "type=:type, callsign=:callsign, band=:band, mode=:mode, loc=:loc, dist=:dist, freq=:freq,"
+                  "type=:type, spottype=:spottype, callsign=:callsign, band=:band, mode=:mode, loc=:loc, dist=:dist, freq=:freq,"
                   " dtg=:dtg, rmOn=:rmOn, offRF=:offRF, CQResp=:CQResp"
                   " WHERE "
                   " recno=:recId";
@@ -201,6 +215,7 @@ bool BandMapSpotDB::modifyRecord(ClusterSpotData *spot)
     {
         query.bindValue(":recId", spot->getRecNo());
         query.bindValue(":type", spot->getSpotType());
+        query.bindValue(":spottype", spot->spotName());
         query.bindValue(":callsign", spot->getDxCall().getFullCall());
         query.bindValue(":band", spot->getBand());
         query.bindValue(":mode", spot->getMode());
