@@ -22,7 +22,7 @@ QRZDB::QRZDB(QObject *parent)
 
     if (!FileExists(dbName))
     {
-        trace(QString("%1 doesn't exist"));
+        trace(QString("%1 doesn't exist").arg(dbName));
     }
     else
     {
