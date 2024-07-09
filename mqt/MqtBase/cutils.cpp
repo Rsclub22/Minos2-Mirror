@@ -1045,6 +1045,10 @@ QString formatTime( qlonglong s )
         s -= 24 * 60;
         i++;
     }
+    QTime qt(0, 0);
+    qt = qt.addSecs( s * 60 );
+
+    QString ts = "hh:mm";
 
     QString pref;
     if ( i > 0 )
@@ -1054,10 +1058,16 @@ QString formatTime( qlonglong s )
     }
     else
     {
-        suff = " hh:mm";
+        if (i > 60)
+        {
+            suff = " hh:mm";
+        }
+        else
+        {
+            ts = "mm";
+            suff = " min";
+        }
     }
-    QTime qt(0, 0);
-    qt = qt.addSecs( s * 60 );
-    QString t = pref + qt.toString ( "hh:mm" ) + suff;
+    QString t = pref + qt.toString ( ts ) + suff;
     return t;
 }
