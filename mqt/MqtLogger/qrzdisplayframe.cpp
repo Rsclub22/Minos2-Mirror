@@ -158,9 +158,9 @@ void QrzDisplayFrame::onLoggerQrzReply(QrzCallsignData cd, QString qrzReplyState
         {
             //QString source = cd.getDataSource();
             ui->callsignText->setText(cd.getCallsign());
-            ui->nameText->setText(cd.getFirstName().left(20));
-            ui->addr1Text->setText(cd.getAddr1().left(20));
-            ui->addr2Text->setText(cd.getAddr2().left(20));
+            ui->nameText->setText(cd.getFirstName() + " "+ cd.getName());
+            ui->addr1Text->setText(cd.getAddr1());
+            ui->addr2Text->setText(cd.getAddr2());
             ui->qraText->setText(cd.getQra());
             if (!cd.getQra().isEmpty())
             {
