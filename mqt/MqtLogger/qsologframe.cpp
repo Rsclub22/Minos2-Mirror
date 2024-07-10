@@ -3257,11 +3257,9 @@ void QSOLogFrame::transferDetails(QString cs, const QString loc, QString exchang
     }
 
     ui->CallsignFrame->getTextEditEdit()->setText(cs);
-    if (!loc.isEmpty())
-    {
-        ui->LocFrame->getTextEditEdit()->setText(loc);
-    }
-    if ( contest->exchangeRequired.getValue() && !exchange.isEmpty() )
+    ui->LocFrame->getTextEditEdit()->setText(loc);
+
+    if ( contest->exchangeRequired.getValue())
     {
         ui->QTHFrame->getTextEditEdit()->setText(exchange);
     }
