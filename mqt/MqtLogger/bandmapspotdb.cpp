@@ -31,6 +31,7 @@ BandMapSpotDB::BandMapSpotDB(QObject *parent): QObject(parent)
                               "recno INTEGER PRIMARY KEY AUTOINCREMENT,"
                               "id TEXT,"
                               "type TEXT,"
+                              "spottype TEXT,"
                               "callsign TEXT,"
                               "band TEXT,"
                               "mode TEXT,"
@@ -138,7 +139,7 @@ bool BandMapSpotDB::createRecord(ClusterSpotData *spot, QString id)
     QString create =         "INSERT INTO LSPOTS "
                      "(id, type, spottype, callsign, band, mode, loc, dist, freq, dtg, rmOn, offRF, CQResp)"
                      " VALUES "
-                     "(:id, :type, :dpottype :callsign, :band, :mode, :loc, :dist, :freq, :dtg, :rmOn, :offRF, :CQResp)";
+                     "(:id, :type, :spottype, :callsign, :band, :mode, :loc, :dist, :freq, :dtg, :rmOn, :offRF, :CQResp)";
     bool prepres = query.prepare(create);
 
     if (prepres)
