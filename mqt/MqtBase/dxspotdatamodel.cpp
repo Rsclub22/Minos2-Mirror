@@ -230,8 +230,8 @@ QVariant DxSpotDataModel::data(const QModelIndex &index, int role) const
             case DXLOC_FROM_NODE_FLAG_COL_NUM:
                 d = QChar(dxSpot->getDxLocatorIsFromNode());
             break;
-            case DXCLUSTER_SPOT_TYPE:
-                d = dxSpot->getClusterSpotType();
+            case DXCLUSTER_SHOW_SPOT_TYPE:
+                d = dxSpot->isShowSpotType()?clusterSpotType::SHOW_DXSPOT_TYPE:clusterSpotType::DXSPOT_TYPE;
             break;
             default:
                 d = "";
@@ -298,8 +298,8 @@ QVariant DxSpotDataModel::data(const QModelIndex &index, int role) const
             case DXBANDSTR_COL_NUM:
                 d = dxSpot->getBand();
             break;
-            case DXCLUSTER_SPOT_TYPE:
-                d = dxSpot->getClusterSpotType();
+            case DXCLUSTER_SHOW_SPOT_TYPE:
+                d = dxSpot->isShowSpotType()?clusterSpotType::SHOW_DXSPOT_TYPE:clusterSpotType::DXSPOT_TYPE;
             break;
 
 
@@ -373,8 +373,8 @@ bool DxSpotDataModel::setData(const QModelIndex & index, const QVariant & value,
             case DXBANDSTR_COL_NUM:
                 dxSpot->setBand(value.toString());
             break;
-            case DXCLUSTER_SPOT_TYPE:
-                dxSpot->setClusterSpotType(value.toString());
+            case DXCLUSTER_SHOW_SPOT_TYPE:
+                dxSpot->setShowSpotType(value.toBool());
             break;
             default:
                 return false;

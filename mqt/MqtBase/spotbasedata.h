@@ -26,11 +26,10 @@ namespace bandmapSpotType {
 enum SPOT_TYPE {NONE, CLUSTER, CLUSTER_MARKED, LOGGED, MARKED, SAVED, CQ, DELETED};
 
 }
-
 namespace clusterSpotType {
 
-extern const char * DXSPOT_TYPE;
-extern const char * SHOW_DXSPOT_TYPE;
+const QString DXSPOT_TYPE = "dxSpotType";
+const QString SHOW_DXSPOT_TYPE = "showDxSpotType";
 
 }
 
@@ -44,8 +43,8 @@ public:
 
     bool sameSpotAs(QSharedPointer<ClusterSpotData> cpd);
 
-    void setClusterSpotType(const QString clusterSpotType_){clusterSpotType = clusterSpotType_;}
-    QString getClusterSpotType()const {return clusterSpotType;}
+    void setShowSpotType(bool sst){showSpotType = sst;}
+    bool isShowSpotType()const {return showSpotType;}
 
     void setRxTime(const qint64 rxTime_){rxTime = rxTime_;}
     qint64 getRxTime() const {return rxTime;}
@@ -200,7 +199,7 @@ private:
 
     qint64 rxTime = 0;
     QDateTime spotDateTime;
-    QString clusterSpotType;
+    bool showSpotType;
     QString band;
     QString bandType;
     QString mode;

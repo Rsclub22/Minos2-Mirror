@@ -17,13 +17,6 @@
 
 #include "spotbasedata.h"
 
-namespace clusterSpotType {
-
-const char * DXSPOT_TYPE = "dxSpotType";
-const char * SHOW_DXSPOT_TYPE = "showDxSpotType";
-
-}
-
 ClusterSpotData::ClusterSpotData()
 {
     qRegisterMetaType< QSharedPointer<ClusterSpotData> > ( "QSharedPointer<ClusterSpotData>" );
@@ -37,7 +30,7 @@ bool ClusterSpotData::sameSpotAs(QSharedPointer<ClusterSpotData> cpd)
 {
     // to say two spots are the same we don't need a full equality operator
     return rxTime == cpd->rxTime &&
-            clusterSpotType == cpd->clusterSpotType &&
+            showSpotType == cpd->showSpotType &&
             spotDateTime == cpd->spotDateTime &&
             band == cpd->band &&
             bandType == cpd->bandType &&
@@ -185,11 +178,9 @@ QSharedPointer<ClusterSpotData> stringToDxSpot(QString spot, BaseContestLog *ct,
 
             trace(QString("Create Cluster Spot %1, %2, %3, %4").arg(spotlist[DXCALL], spotlist[DXFREQ], spotlist[DXMODESTR], spotlist[DXLOCATOR]));
 
-            QString cst = spotlist[DX_CLUSTER_SPOT_TYPE];
-
             res = QSharedPointer<ClusterSpotData>(new ClusterSpotData());
 
-            res->setClusterSpotType(cst);
+            res->setShowSpotType(false);
             res->setRxTime(rxTime);
             res->setSpotDateTime(spotDateTime);
             res->setFreq(spotlist[DXFREQ]);

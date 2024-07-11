@@ -294,7 +294,7 @@ void ClusterClientFrame::setupDXSpotView()
     dxSpotView->setColumnHidden(DXSPOT_PROP_MODE_COL_NUM, true);
     dxSpotView->setColumnHidden(DATE_COL_NUM, true);
     dxSpotView->setColumnHidden(DXBANDSTR_COL_NUM, true);
-    dxSpotView->setColumnHidden(DXCLUSTER_SPOT_TYPE, true);
+    dxSpotView->setColumnHidden(DXCLUSTER_SHOW_SPOT_TYPE, true);
 }
 
 
@@ -350,7 +350,7 @@ void ClusterClientFrame::setupSearchSpotView()
     searchView->setColumnHidden(DXSPOT_PROP_MODE_COL_NUM, true);
     searchView->setColumnHidden(DATE_COL_NUM, true);
     searchView->setColumnHidden(DXBANDSTR_COL_NUM, true);
-    searchView->setColumnHidden(DXCLUSTER_SPOT_TYPE, true);
+    searchView->setColumnHidden(DXCLUSTER_SHOW_SPOT_TYPE, true);
 
 }
 
@@ -414,7 +414,7 @@ void ClusterClientFrame::setupCallsignSpotView()
     callSignView->setColumnHidden(DXSPOT_PROP_MODE_COL_NUM, true);
     callSignView->setColumnHidden(DATE_COL_NUM, true);
     callSignView->setColumnHidden(DXBANDSTR_COL_NUM, true);
-    callSignView->setColumnHidden(DXCLUSTER_SPOT_TYPE, true);
+    callSignView->setColumnHidden(DXCLUSTER_SHOW_SPOT_TYPE, true);
 
 
 
@@ -476,7 +476,7 @@ void ClusterClientFrame::setupLocatorSpotView()
     locatorView->setColumnHidden(DXSPOT_PROP_MODE_COL_NUM, true);
     locatorView->setColumnHidden(DATE_COL_NUM, true);
     locatorView->setColumnHidden(DXBANDSTR_COL_NUM, true);
-    locatorView->setColumnHidden(DXCLUSTER_SPOT_TYPE, true);
+    locatorView->setColumnHidden(DXCLUSTER_SHOW_SPOT_TYPE, true);
 }
 
 
@@ -717,7 +717,7 @@ void ClusterClientFrame::addDxSpotToTable(const QString spot)
     if (newSpot)
     {
         // if spot has been resent or is a ShowDx spot requested by a command or restart of server
-        if (resentSpot || newSpot->getClusterSpotType() == clusterSpotType::SHOW_DXSPOT_TYPE)
+        if (resentSpot || newSpot->isShowSpotType())
         {
             if (checkspotExists(newSpot))
             {

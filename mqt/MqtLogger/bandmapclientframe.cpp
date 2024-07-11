@@ -362,7 +362,7 @@ void BandmapClientFrame::on_markSpotActionSelected()
         bandmapSpotType::SPOT_TYPE spotType = selSpot->getSpotType();
         if (spotType == bandmapSpotType::CLUSTER)
         {
-            selSpot->setClusterSpotType(ClusterSpotData::spotName(bandmapSpotType::CLUSTER_MARKED));
+            selSpot->setSpotType(bandmapSpotType::CLUSTER_MARKED);
             bmsdb->modifyRecord(selSpot);
             bandmapView->bandmapUpdate(true);
         }
@@ -379,7 +379,7 @@ void BandmapClientFrame::on_unMarkSpotActionSelected()
         bandmapSpotType::SPOT_TYPE spotType = selSpot->getSpotType();
         if (spotType == bandmapSpotType::CLUSTER_MARKED)
         {
-            selSpot->setClusterSpotType(ClusterSpotData::spotName(bandmapSpotType::CLUSTER));
+            selSpot->setSpotType(bandmapSpotType::CLUSTER);
             bmsdb->modifyRecord(selSpot);
             bandmapView->bandmapUpdate(true);
         }
@@ -585,7 +585,7 @@ void BandmapClientFrame::context_markSpotActionSelected()
     bandmapSpotType::SPOT_TYPE spotType = selSpot->getSpotType();
     if (spotType == bandmapSpotType::CLUSTER)
     {
-        selSpot->setClusterSpotType(ClusterSpotData::spotName(bandmapSpotType::CLUSTER_MARKED));
+        selSpot->setSpotType(bandmapSpotType::CLUSTER_MARKED);
         bmsdb->modifyRecord(selSpot);
         bandmapView->bandmapUpdate(true);
     }
@@ -598,7 +598,7 @@ void BandmapClientFrame::context_unMarkSpotActionSelected()
     bandmapSpotType::SPOT_TYPE spotType = selSpot->getSpotType();
     if (spotType == bandmapSpotType::CLUSTER_MARKED)
     {
-        selSpot->setClusterSpotType(ClusterSpotData::spotName(bandmapSpotType::CLUSTER));
+        selSpot->setSpotType(bandmapSpotType::CLUSTER);
         bmsdb->modifyRecord(selSpot);
         bandmapView->bandmapUpdate(true);
     }
