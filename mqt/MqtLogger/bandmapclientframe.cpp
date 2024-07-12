@@ -1670,8 +1670,10 @@ bool BandmapClientFrame::event(QEvent *event)
            {
                checkNewBandMapSpots();
            }
-           setHoldUpdateFlag(false);
        }
+       // come what may, release on exit
+       // (Have seen it not happen on Mac)
+       setHoldUpdateFlag(false);
    }
    return QWidget::event(event);
 }
