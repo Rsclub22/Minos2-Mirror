@@ -1618,9 +1618,10 @@ void RigSetupForm::loadEnableShowCatFeaturesBox(RigCapabilities &rigCap)
         ui->enableCwTxMemCatFeatureChkBox->setVisible(false);
     }
 
-    if (ui->enableCwTxMemCatFeatureChkBox->isVisible()|| ui->enableVoiceTxMemCatFeatureChkBox->isVisible()
-            || ui->enableCatPttCatFeatureChkBox->isVisible() || ui->enableVolCatFeatureChkBox->isVisible()
-            || ui->enableSMeterCatFeatureChkBox->isVisible() || ui->enableRitCatFeatureChkBox->isVisible())
+    if (rigCap.getSupportGetRit() || rigCap.getSupportSetRit()
+        || rigCap.getSupportSMeter() || rigCap.getSupportVolume()
+        || (rigCap.getSupportGetPtt() && rigCap.getSupportSetPtt())
+        || rigCap.getSupportVoiceMemory() ||rigCap.getSupportCwMemory())
     {
         ui->enableCatFeaturesChkBox->setVisible(true);
     }
