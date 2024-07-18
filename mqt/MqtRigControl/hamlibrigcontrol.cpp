@@ -692,44 +692,7 @@ rmode_t HamlibRigControl::mapMode(QString mode) const
 // Note not all radios support reading the VFO
 
 
-bool HamlibRigControl::supportReadVfo(int rigNumber)
-{
-    RIG *myRig;
-    myRig = rig_init(rigNumber);
-    if (myRig)
-    {
-        if (myRig->caps->get_vfo == nullptr)
-        {
-            return false;
-        }
-        else
-        {
-            return true;
-        }
-    }
 
-    return false;
-}
-
-
-bool HamlibRigControl::supportWriteVfo(int rigNumber)
-{
-    RIG *myRig;
-    myRig = rig_init(rigNumber);
-    if (myRig)
-    {
-        if (myRig->caps->set_vfo == nullptr)
-        {
-            return false;
-        }
-        else
-        {
-            return true;
-        }
-    }
-
-    return false;
-}
 
 int HamlibRigControl::getVfo(VFO *vfo)
 {
@@ -822,44 +785,6 @@ int HamlibRigControl::clearRit(VFO vfo)
 }
 
 
-bool HamlibRigControl::supportReadRit(int rigNumber)
-{
-    RIG *myRig;
-    myRig = rig_init(rigNumber);
-    if (myRig)
-    {
-        if (myRig->caps->get_rit == nullptr)
-        {
-            return false;
-        }
-        else
-        {
-            return true;
-        }
-    }
-    return false;
-}
-
-
-bool HamlibRigControl::supportWriteRit(int rigNumber)
-{
-    RIG *myRig;
-    myRig = rig_init(rigNumber);
-    if (myRig)
-    {
-        if (myRig->caps->set_rit == nullptr)
-        {
-            return false;
-
-        }
-        else
-        {
-            return true;
-
-        }
-    }
-    return false;
-}
 
 
 
@@ -883,35 +808,7 @@ int HamlibRigControl::getRitState(VFO vfo, bool& state)
 
 
 
-bool HamlibRigControl::supportWriteRitState(int rigNumber)
-{
-    RIG *myRig;
-    myRig = rig_init(rigNumber);
-    setting_t state =  rig_has_set_func(myRig, RIG_FUNC_RIT);
-    if (state & RIG_FUNC_RIT)
-    {
-        return true;
-    }
 
-    return false;
-
-}
-
-
-
-
-bool HamlibRigControl::supportReadRitState(int rigNumber)
-{
-    RIG *myRig;
-    myRig = rig_init(rigNumber);
-    setting_t state = rig_has_get_func(myRig, RIG_FUNC_RIT);
-    if (state & RIG_FUNC_RIT)
-    {
-        return true;
-    }
-
-    return false;
-}
 
 int HamlibRigControl::getMaxRitFreq(int rigNumber)
 {
@@ -960,49 +857,13 @@ int HamlibRigControl::setPtt(VFO vfo, bool state)
 
 }
 
-bool HamlibRigControl::supportGetPtt(int rigNumber)
-{
-    RIG *myRig;
-    myRig = rig_init(rigNumber);
-    return myRig->caps->get_ptt ? true:false;
-}
 
-bool HamlibRigControl::supportSetPtt(int rigNumber)
-{
-    RIG *myRig;
-    myRig = rig_init(rigNumber);
-    return myRig->caps->set_ptt ? true:false;
-}
 
 /************* VOX *********************/
 
 
 
-bool HamlibRigControl::supportSetVox(int rigNumber)
-{
-    RIG *myRig;
-    myRig= rig_init(rigNumber);
-    setting_t state = rig_has_set_func(myRig, RIG_FUNC_VOX);
-    if (state & RIG_FUNC_VOX)
-    {
-        return true;
-    }
 
-    return false;
-}
-
-bool HamlibRigControl::supportGetVoX(int rigNumber)
-{
-    RIG *myRig;
-    myRig= rig_init(rigNumber);
-    setting_t state = rig_has_get_func(myRig, RIG_FUNC_VOX);
-    if (state & RIG_FUNC_VOX)
-    {
-        return true;
-    }
-
-    return false;
-}
 
 int HamlibRigControl::setVoxState(VFO vfo, bool state)
 {
@@ -1045,42 +906,7 @@ pbwidth_t HamlibRigControl::passbandWide(rmode_t mode)
 /*************** Volume Level Control  ********************************/
 
 
-bool HamlibRigControl::supportVolControl(int rigNumber)
-{
-    //if (rigNumber == 237)   // if rig is TS590SG ignore volume as it has a bug...
-    //{
-    //    return false;
-    //}
 
-    if ((rigHasGetLevel(rigNumber, RIG_LEVEL_AF) == RIG_LEVEL_AF) && (rigHasSetLevel(rigNumber, RIG_LEVEL_AF) == RIG_LEVEL_AF))
-    {
-        return true;
-    }
-    else
-    {
-
-        return false;
-    }
-}
-
-
-bool HamlibRigControl::supportVolume(int rigNumber)
-{
-    //if (rigNumber == 237)   // if rig is TS590SG ignore volume as it has a bug...
-    //{
-    //    return false;
-    //}
-
-    if ((rigHasGetLevel(rigNumber, RIG_LEVEL_AF) == RIG_LEVEL_AF) && (rigHasSetLevel(rigNumber, RIG_LEVEL_AF) == RIG_LEVEL_AF))
-    {
-        return true;
-    }
-    else
-    {
-
-        return false;
-    }
-}
 
 int HamlibRigControl::setVolume(VFO vfo, float val)
 {
@@ -1105,18 +931,7 @@ int HamlibRigControl::getVolume(VFO vfo, float *val)
 /*************** Signal Strength Level Control  ********************************/
 
 
-bool HamlibRigControl::supportSignalStrength(int modelNumber)
-{
 
-    return rigHasGetLevel(modelNumber, RIG_LEVEL_STRENGTH);
-}
-
-/*
-bool HamlibRigControl::supportSMeter(int modelNumber)
-{
-    return rigHasGetLevel(modelNumber, RIG_LEVEL_STRENGTH);
-}
-*/
 int HamlibRigControl::getSignalStrength(VFO vfo, int *value)
 {
     int retCode = RIG_OK;
@@ -1140,18 +955,7 @@ int HamlibRigControl::sendVoiceMessage(VFO vfo, int vmNum)
 
 }
 
-bool HamlibRigControl::supportVoiceMemory(int rigNumber)
-{
-    RIG *myRig;
-    myRig = rig_init(rigNumber);
-    if (myRig)
-    {
-        return my_rig->caps->send_voice_mem ? true:false;
-    }
 
-    return false;
-
-}
 
 // this is to support stop on TS890S. It does not use voice message number 0 to stop the message
 // but sends a seperate parameter 1 to start message, 0 to stop message. hamlib remembers the message
@@ -1160,19 +964,6 @@ bool HamlibRigControl::supportVoiceMemory(int rigNumber)
 int HamlibRigControl::stop_voice_mem(VFO vfo)
 {
     return rig_stop_voice_mem(my_rig, hamlibVfoNames[vfo]);
-}
-
-bool HamlibRigControl::supportStopVoiceMem(int rigNumber)
-{
-    RIG *myRig;
-    myRig = rig_init(rigNumber);
-    if (myRig)
-    {
-        return my_rig->caps->stop_voice_mem ? true:false;
-    }
-
-    return false;
-
 }
 
 
@@ -1197,50 +988,7 @@ int HamlibRigControl::waitMorse(VFO vfo)
     return rig_wait_morse(my_rig, hamlibVfoNames[vfo]);
 }
 
-bool HamlibRigControl::supportSendMorse(int rigNumber)
-{
 
-    RIG *myRig;
-    myRig = rig_init(rigNumber);
-    if (myRig)
-    {
-        return my_rig->caps->send_morse ? true:false;
-
-    }
-
-    return false;
-
-}
-
-bool HamlibRigControl::supportStopMorse(int rigNumber)
-{
-
-    RIG *myRig;
-    myRig = rig_init(rigNumber);
-    if (myRig)
-    {
-        return my_rig->caps->stop_morse ? true:false;
-
-    }
-
-    return false;
-
-}
-
-bool HamlibRigControl::supportWaitMorse(int rigNumber)
-{
-
-    RIG *myRig;
-    myRig = rig_init(rigNumber);
-    if (myRig)
-    {
-        return my_rig->caps->wait_morse ? true:false;
-
-    }
-
-    return false;
-
-}
 
 /***************** Memory Channels *****************************/
 
@@ -1409,229 +1157,6 @@ int HamlibRigControl::getConfigurationParameter(QString cfgparam, QString* value
 
 
 
-/*
-void RigControl::getRigList()
-{
-
-    if(!riglistLoaded)
-    {
-        capsList.clear();
-        rig_load_all_backends();
-        rig_list_foreach(collect,nullptr);
-        qSort(capsList.begin(),capsList.end(),model_Sort);
-        riglistLoaded=true;
-    }
-}
-
-
-
-bool RigControl::getRigList(QComboBox *cb)
-{
-    int i;
-    rig_port_e portType = RIG_PORT_NONE;
-
-    if(capsList.count()==0) return false;
-    QStringList sl;
-    // add blank at beginning
-    //sl << "";
-    for (i = 0;i < capsList.count(); i++)
-    {
-
-        QString t;
-        t = QString::number(capsList.at(i)->rig_model);
-        if (t.trimmed() != "2")      // don't display rigctl model
-        {
-            t = t.rightJustified(5,' ')+", ";
-            t+= capsList.at(i)->mfg_name;
-            t+= ", ";
-            t+= capsList.at(i)->model_name;
-            if (getPortType(capsList.at(i)->rig_model, &portType) != -1)
-            {
-                if (portType == RIG_PORT_NONE || portType == RIG_PORT_SERIAL  || portType == RIG_PORT_NETWORK || portType == RIG_PORT_UDP_NETWORK)
-                {
-                    sl << t;        // only add these portTypes
-                }
-            }
-
-        }
-
-   }
-   std::sort(sl.begin(), sl.end());
-   cb->addItems(sl);
-   return true;
-}
-*/
-/********************** Antenna Switching ---------------------------------*/
-
-/*
-int RigControl::getAntSwNum(vfo_t vfo)
-{
-    int antNum = 0;
-    int retCode = 0;
-    // api has changed *********************************************************
-    //retCode = rig_get_ant(my_rig, vfo, &antNum);
-    //if (retCode < 0)
-    //{
-    //    return retCode;
-    //}
-
-    return antNum;
-
-}
-
-
-
-int RigControl::setAntSwNum(vfo_t vfo, ant_t antNum)
-{
-    int retCode = 0;
-    // api has changed *********************************************************
-    //retCode = rig_set_ant(my_rig, vfo, antNum);
-    return retCode;
-}
-
-
-int HamlibRigControl::supportAntSw(int rigNumber, bool *antSwFlag)
-{
-    int retCode = RIG_OK;
-    RIG *myRig;
-    myRig = rig_init(rigNumber);
-    if (myRig)
-    {
-        if (myRig->caps->get_ant == nullptr || myRig->caps->set_ant == nullptr)
-        {
-            *antSwFlag = false;
-            return retCode;
-        }
-        else
-        {
-            *antSwFlag = true;
-            return retCode;
-        }
-    }
-
-    return retCode = -14;
-
-}
-*/
-
-/**************************************** ***********************************************/
-
-/*
-int RigControl::getPortType(int rigNumber, rig_port_e *portType)
-{
-
-    int retCode = 0;
-    RIG *my_rig;
-    my_rig = rig_init(rigNumber);
-    if (my_rig != nullptr)
-    {
-        *portType = my_rig->caps->port_type;
-        return retCode;
-    }
-
-    retCode = -1;
-    return retCode;
-
-}
-
-// true set DTR state, false unset DTR state
-int RigControl::setDtrState( const bool state)
-{
-    int retCode = 0;
-    retCode = rig_set_conf(my_rig, rig_token_lookup(my_rig, "dtr_state"), state ? "ON" : "OFF");
-
-    return retCode;
-}
-
-
-// true set RTS state, false unset RTS state
-int RigControl::setRtsState( const bool state)
-{
-    int retCode = 0;
-    retCode = rig_set_conf(my_rig, rig_token_lookup(my_rig, "rts_state"), state ? "ON" : "OFF");
-    return retCode;
-}
-
-
-
-
-int RigControl::setRetryNumber(const QString retries)
-{
-    return rig_set_conf(my_rig, rig_token_lookup(my_rig, "retry") , retries.toLatin1().data());
-
-}
-
-int RigControl::setTimeoutDur(const QString timeoutDur)
-{
-    return rig_set_conf(my_rig, rig_token_lookup(my_rig, "timeout") , timeoutDur.toLatin1().data());
-
-}
-
-
-
-
-
-int RigControl::getModelInfo(QString radioModel, int *radioModelNumber, QString *radioMfgName, QString *radioModelName)
-{
-    bool ok;
-    int number;
-    QStringList modelInfo = radioModel.remove('\x20').split(',');
-    if (modelInfo.length() == 3)
-    {
-        number = modelInfo[0].toInt(&ok);
-        if (!ok)
-        {
-           return -1;
-        }
-
-        *radioModelNumber = number;
-
-        //modelInfo = modelInfo[1].split(',');
-        //if (modelInfo.length() > 0)
-
-        *radioMfgName = modelInfo[1].trimmed();
-        *radioModelName = modelInfo[2].trimmed();
-        return 0;
-
-
-    }
-
-    return -1;
-
-}
-
-*/
-
-/*
-
-const char * RigControl::getModel_Name(int idx)
-{
-
-    if(idx<0) return 0;
-    return capsList.at(idx)->model_name;
-}
-
-
-int RigControl::getRigModelIndex()
-{
-    int i;
-    QString t=catParams.radioModel;
-    t=t.remove(0,5);
-    t=t.simplified();
-    QStringList sl=t.split(",");
-    if(sl.count()==1) sl.append("");
-    for(i=0;i<capsList.count();i++)
-    {
-        if((capsList.at(i)->mfg_name==sl.at(0)) && (capsList.at(i)->model_name==sl.at(1)))
-        {
-            return i;
-        }
-    }
-    return -1;
-}
-
-
-*/
 
 
 
@@ -1651,11 +1176,7 @@ QString HamlibRigControl::getLibraryName()
     return QString("hamlib");
 }
 
-//QStringList RigControl::gethamlibErrorMsg()
-//{
 
-//    return serialData::hamlibErrorMsg;
-//}
 
 QString HamlibRigControl::getRigLibVersion()
 {
