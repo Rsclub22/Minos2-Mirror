@@ -66,8 +66,6 @@ public:
 
     int getSignalStrength(VFO vfo, int *value) override;
 
-    QString getRigLibVersion() override;
-    QString getLibraryName() override;
     QString getErrorMsgText(int errorCode) override;
 
 

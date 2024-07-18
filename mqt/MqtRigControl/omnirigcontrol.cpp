@@ -494,7 +494,8 @@ void OmnirigControl::register_rigs(RigFactory::Rigs* rigsList, int id1, int id2)
     rigCap.setRigName(OMNIRIG_NAME);
     rigCap.setRigModelName(OmniRigOneName);
     rigCap.setRigModelNumber(id1);
-
+    rigCap.setLibraryName("Omnirig");
+    rigCap.setLibraryVersion(OmnirigControl::getRigLibVersion());
     rigCap.setSupportGetSupBands(true);
     rigCap.setSupportGetVfo(false);
     rigCap.setSupportSetVfo(false);
@@ -984,7 +985,24 @@ int OmnirigControl::getSignalStrength(VFO vfo, int *value)
 
 QString OmnirigControl::getRigLibVersion()
 {
+    trace("get Omnirig Version Number");
+
+    OmniRig::OmniRigX* omni_rig = new OmniRig::OmniRigX();
+
+    if (omni_rig->isNull())
+    {
+
+        return QString("lib ver com failed to start");
+    }
+
+
     QString v = QString::number(omni_rig->SoftwareVersion()).toLocal8Bit ();
+
+    if (omni_rig)
+    {
+        omni_rig->clear();
+
+    }
 
     return QString("Omnirig V%1").arg(v);
 }
@@ -999,10 +1017,7 @@ QString OmnirigControl::getErrorMsgText(int errorCode)
 }
 
 
-QString OmnirigControl::getLibraryName()
-{
-    return QString("Omnirig");
-}
+
 
 int OmnirigControl::getRit(VFO vfo, ShortFreq &ritfreq)
 {

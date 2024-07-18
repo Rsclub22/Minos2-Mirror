@@ -68,6 +68,12 @@ public:
     void setRigModelNumber(int rigModelNumber_);
     int getRigModelNumber()const;
 
+    void setLibraryName(QString libraryName_);
+    QString getLibraryName();
+
+    void setLibraryVersion(QString libraryVersion_);
+    QString getLibraryVersion();
+
     void setSupportGetSupBands(bool supportGetSupBands_);
     bool getSupportGetSupBands()const;
 
@@ -163,6 +169,8 @@ private:
   QString rigName;
   QString rigModelName;       // combined manufacturer and rig names
   int rigModelNumber;
+  QString libraryName;
+  QString libraryVersion;
   bool supportGetSupBands;
   bool supportGetVfo;
   bool supportSetVfo;

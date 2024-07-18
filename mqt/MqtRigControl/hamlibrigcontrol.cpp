@@ -206,6 +206,8 @@ int register_callback(rig_model_t rig_model, void *callback_data)
     rigCap.setRigName(modelName);
     rigCap.setRigModelName(key);
     rigCap.setRigModelNumber(rig_model);
+    rigCap.setLibraryName("hamlib");
+    rigCap.setLibraryVersion(hamlib_version);
     rigCap.setSupportGetSupBands(true);
     rigCap.setSupportGetVfo(supportGetVfo);
     rigCap.setSupportSetVfo(supportSetVfo);
@@ -1170,19 +1172,6 @@ int HamlibRigControl::getConfigurationParameter(QString cfgparam, QString* value
      return tr(hamlibErrorMsg[errorCode]);
  }
 
-
-QString HamlibRigControl::getLibraryName()
-{
-    return QString("hamlib");
-}
-
-
-
-QString HamlibRigControl::getRigLibVersion()
-{
-    QString ver = hamlib_version;
-    return ver;
-}
 
 
 bool model_Sort(const rig_caps *caps1,const rig_caps *caps2)

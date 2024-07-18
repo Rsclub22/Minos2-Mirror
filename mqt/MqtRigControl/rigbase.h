@@ -67,12 +67,7 @@ public:
     virtual int setConfigurationParameter(QString cfgparam, QString value) = 0;
     virtual int getConfigurationParameter(QString cfgparam, QString *value) = 0;
 
-
-    virtual QString getRigLibVersion() = 0;
-    virtual QString getLibraryName() = 0;
     virtual QString getErrorMsgText(int errorCode) = 0;
-
-
 
     virtual int sendVoiceMessage(VFO vfo, int vmNum) = 0;
 
