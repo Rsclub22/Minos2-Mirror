@@ -906,42 +906,42 @@
 <context>
     <name>ClusterSpotData</name>
     <message>
-        <location filename="../spotbasedata.cpp" line="68"/>
+        <location filename="../spotbasedata.cpp" line="61"/>
         <source>NONE</source>
         <translation>AUCUN</translation>
     </message>
     <message>
-        <location filename="../spotbasedata.cpp" line="71"/>
+        <location filename="../spotbasedata.cpp" line="64"/>
         <source>CLUSTER</source>
         <translation>CLUSTER</translation>
     </message>
     <message>
-        <location filename="../spotbasedata.cpp" line="74"/>
+        <location filename="../spotbasedata.cpp" line="67"/>
         <source>CLUSTER MARKED</source>
         <translation>CLUSTER MARQUÉ</translation>
     </message>
     <message>
-        <location filename="../spotbasedata.cpp" line="77"/>
+        <location filename="../spotbasedata.cpp" line="70"/>
         <source>LOGGED</source>
         <translation>ENREGISTRÉ</translation>
     </message>
     <message>
-        <location filename="../spotbasedata.cpp" line="80"/>
+        <location filename="../spotbasedata.cpp" line="73"/>
         <source>MARKED</source>
         <translation>MARQUÉ</translation>
     </message>
     <message>
-        <location filename="../spotbasedata.cpp" line="83"/>
+        <location filename="../spotbasedata.cpp" line="76"/>
         <source>SAVED</source>
         <translation>SAUVÉ</translation>
     </message>
     <message>
-        <location filename="../spotbasedata.cpp" line="86"/>
+        <location filename="../spotbasedata.cpp" line="79"/>
         <source>CQ</source>
         <translation>CQ</translation>
     </message>
     <message>
-        <location filename="../spotbasedata.cpp" line="89"/>
+        <location filename="../spotbasedata.cpp" line="82"/>
         <source>DELETED</source>
         <translation>SUPPRIMÉ</translation>
     </message>
@@ -1321,6 +1321,65 @@ Attention: &quot;.&quot; pas &quot;,&quot;
         <location filename="../MonitorTreeModel.cpp" line="87"/>
         <source>Enabled</source>
         <translation>Activé</translation>
+    </message>
+</context>
+<context>
+    <name>ManageHamlib</name>
+    <message>
+        <location filename="../managehamlib.ui" line="14"/>
+        <source>Manage Hamlib</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../managehamlib.ui" line="20"/>
+        <source>Hamlib Path</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../managehamlib.ui" line="43"/>
+        <source>Revert Hamlib</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../managehamlib.ui" line="63"/>
+        <source>Update Hamlib</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../managehamlib.ui" line="87"/>
+        <source>Cancel</source>
+        <translation type="unfinished">Annuler</translation>
+    </message>
+    <message>
+        <location filename="../managehamlib.cpp" line="35"/>
+        <source>Failed to load libhamlib-4.dll %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../managehamlib.cpp" line="241"/>
+        <location filename="../managehamlib.cpp" line="248"/>
+        <location filename="../managehamlib.cpp" line="284"/>
+        <source>Failed to rename %1 to %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../managehamlib.cpp" line="252"/>
+        <source>Hamlib Update successful 
+
+New Hamlib will be used after restart</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../managehamlib.cpp" line="289"/>
+        <source>Hamlib successfully reverted 
+
+Reverted Hamlib will be used after restart</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../managehamlib.cpp" line="301"/>
+        <source>No Hamlib update found that could be reverted</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1813,7 +1872,7 @@ Attention: &quot;.&quot; pas &quot;,&quot;
 <context>
     <name>QWidget</name>
     <message>
-        <location filename="../cutils.cpp" line="857"/>
+        <location filename="../cutils.cpp" line="858"/>
         <source>Reset Columns</source>
         <comment>createColumnsMenu</comment>
         <translation>Réinitialiser les colonnes</translation>

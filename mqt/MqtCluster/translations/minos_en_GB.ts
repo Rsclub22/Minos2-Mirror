@@ -176,7 +176,7 @@
     </message>
     <message>
         <location filename="../clustermainwindow.cpp" line="126"/>
-        <location filename="../clustermainwindow.cpp" line="2983"/>
+        <location filename="../clustermainwindow.cpp" line="2987"/>
         <source>Minos Cluster Server</source>
         <translation type="unfinished"></translation>
     </message>
@@ -297,28 +297,28 @@ Do you want to enter\change your details?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="2310"/>
+        <location filename="../clustermainwindow.cpp" line="2314"/>
         <source>Cluster %1 User Command Clear</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="2311"/>
+        <location filename="../clustermainwindow.cpp" line="2315"/>
         <source>Do you really want to clear cluster %1 user command number:%2?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="2983"/>
+        <location filename="../clustermainwindow.cpp" line="2987"/>
         <source>Minos Cluster
 Copyright D Balharrie G8FKH/M0DGB 2016 - 2020</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="2989"/>
+        <location filename="../clustermainwindow.cpp" line="2993"/>
         <source>Cluster Node User Command Shortcut Keys</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="2990"/>
+        <location filename="../clustermainwindow.cpp" line="2994"/>
         <source>VHF/UHF User Commands
 
 Send Cmd
