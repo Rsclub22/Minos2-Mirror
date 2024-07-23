@@ -3,10 +3,13 @@ Post 2.6.0.0
 getDirectoryLocation - allows for Mac differences
 
 Full Hamlib 4.6 (when released)
+Hamlib update (Windows only)
 Rig memory work
 Future proofing of hamlib interface
 Mac changes
 Datamode fixes
 "Manage ADIF" - monitoring of QSOs from an ADIF export
 BARTG and UKSMG calendars
+Calendar files download progress dialog
 Re-work Rotator and RigControl GUI using tabs to reduce real estate
+Spots DB
