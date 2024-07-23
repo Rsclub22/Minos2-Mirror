@@ -704,7 +704,9 @@ void TLogContainer::setupMenus()
     LocCalcAction = newAction(QT_TR_NOOP("Locator Calculator..."), ui->menuTools, &TLogContainer::LocCalcActionExecute);
 
     CorrectDateTimeAction = newAction(QT_TR_NOOP("Correct Date/Time..."), ui->menuTools, &TLogContainer::CorrectDateTimeActionExecute);
+#ifdef Q_OS_WIN
     ManageHamlibAction = newAction(QT_TR_NOOP("Manage Hamlib..."), ui->menuTools, &TLogContainer::ManageHamlibActionExecute);
+#endif
     ui->menuTools->addSeparator();
 
     OptionsAction = newAction(QT_TR_NOOP("Options..."), ui->menuTools, &TLogContainer::OptionsActionExecute, QAction::PreferencesRole);

@@ -33,6 +33,7 @@ private slots:
     void ExitActionExecute();
     void FontEditAcceptActionExecute();
     void LanguageAcceptActionExecute();
+    void ManageHamlibActionExecute();
 
 private:
     Ui::MainWindow *ui;
@@ -43,6 +44,7 @@ private:
     QMenu *languagesMenu;
     QAction *FontEditAcceptAction;
     QAction *LanguageAcceptAction;
+    QAction *ManageHamlibAction;
     QAction *ExitAction;
     QAction *lastLanguageSelected = nullptr;
 

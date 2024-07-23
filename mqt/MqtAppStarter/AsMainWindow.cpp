@@ -4,6 +4,7 @@
 #include <QSettings>
 
 #include "QtUtils.h"
+#include "managehamlib.h"
 #include "regsettings.h"
 #include "MTrace.h"
 
@@ -48,6 +49,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ExitAction = newAction(QT_TR_NOOP("E&xit Minos Application Starter"), ui->menuFile, &MainWindow::ExitActionExecute);
     FontEditAcceptAction = newAction(QT_TR_NOOP("Select &Font..."), ui->menuTools, &MainWindow::FontEditAcceptActionExecute);
+    ManageHamlibAction = newAction(QT_TR_NOOP("Manage &Hamlib..."), ui->menuTools, &MainWindow::ManageHamlibActionExecute);
     languagesMenu = newMenu(ui->menuTools, QT_TR_NOOP("Select &Language"));
 
     QString currentLang = getCurrentLanguage();
@@ -206,6 +208,12 @@ void MainWindow::LanguageAcceptActionExecute()
             MinosConfig::getMinosConfig() ->bounce();
         }
     }
+}
+
+void MainWindow::ManageHamlibActionExecute()
+{
+    ManageHamlib mhl(this);
+    mhl.exec();
 }
 
 void MainWindow::on_appsButton_clicked()
