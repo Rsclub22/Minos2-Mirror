@@ -1058,7 +1058,7 @@ QString formatTime( qlonglong s )
     }
     else
     {
-        if (i > 60)
+        if (s > 60)
         {
             suff = " hh:mm";
         }
