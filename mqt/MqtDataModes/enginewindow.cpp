@@ -83,7 +83,6 @@ EngineWindow::EngineWindow(QWidget *parent)
     ui->variFrame->setVisible(false);
 
     connect(&rxBuff, &RxBuffer::newCharacter, this, &EngineWindow::onNewCharacter);
-    connect(&rxBuff, &RxBuffer::newBackLine, this, &EngineWindow::onNewBackLine);
 
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
@@ -100,8 +99,6 @@ EngineWindow::EngineWindow(QWidget *parent)
 
     installEventFilter(this);
 
-    ui->backData->setVisible(false);
-
     watchDog = new QTimer(this);
     connect(watchDog, &QTimer::timeout, this, &EngineWindow::onWatchdogTimer);
 
@@ -116,6 +113,8 @@ EngineWindow::EngineWindow(QWidget *parent)
         startEngine();
         started = true;
     });
+
+    ui->testString->setText(EngineConfigure::getTestString());
 }
 
 EngineWindow::~EngineWindow()
@@ -338,12 +337,6 @@ QStringList EngineWindow::populateRig()
     cb.removeDuplicates();
     cb.sort();
     return cb;
-}
-
-void EngineWindow::onNewBackLine(QString s)
-{
-    ui->backData->addItem(s);
-    ui->backData->scrollToBottom();
 }
 
 void EngineWindow::onTxChanged(bool ptt)
@@ -744,20 +737,6 @@ void EngineWindow::on_stopButton_clicked()
     doSendButton_clicked("", 0);
 }
 
-void EngineWindow::on_backDataButton_clicked()
-{
-    if (ui->backData->isVisible())
-    {
-        ui->backDataButton->setText(tr("Show Back Data"));
-        ui->backData->setVisible(false);
-    }
-    else
-    {
-        ui->backDataButton->setText(tr("Hide Back Data"));
-        ui->backData->setVisible(true);
-    }
-}
-
 //void EngineWindow::on_actionBPSK31_triggered()
 //{
 //    ui->actionBPSK63->setChecked(false);
@@ -791,6 +770,27 @@ void EngineWindow::on_splitter_splitterMoved(int /*pos*/, int /*index*/)
     RegSettings settings;
     QByteArray state = ui->splitter->saveState();
     settings.getSettings().setValue(splitterStr , state);
+
+}
+
+
+void EngineWindow::on_setTestButton_clicked()
+{
+    EngineConfigure::setTestString(ui->sendEdit->text().trimmed());
+    ui->testString->setText(EngineConfigure::getTestString());
+}
+
+
+void EngineWindow::on_testButton_clicked()
+{
+    QString data = EngineConfigure::getTestString();
+    if (data.isEmpty())
+    {
+        data = "test";
+    }
+    ui->sendEdit->setText(data.trimmed());
+
+    doSendButton_clicked(data, 0);
 
 }
 

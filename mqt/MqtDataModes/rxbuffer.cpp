@@ -256,17 +256,6 @@ void RxBuffer::addChar(RXChar &c)
     {
         //trace(QString("Implement newline from line %1").arg(curLine));
 
-        int nextLine = curLine + 2;
-        if (nextLine >= buffSize)
-        {
-            nextLine = 0;
-        }
-        if (buff[nextLine].charCount() > 0)
-        {
-            QString line = buff[nextLine].toString();
-            emit newBackLine(line);
-        }
-
         curLine++;
         if (curLine >= buffSize)
         {

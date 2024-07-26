@@ -97,7 +97,6 @@ public:
 
 signals:
     void newCharacter();
-    void newBackLine(QString);
 };
 
 #endif // RXBUFFER_H

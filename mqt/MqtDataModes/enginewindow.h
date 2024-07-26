@@ -131,8 +131,6 @@ public slots:
 private slots:
     void on_notify(AnalysePubSubNotify an, const QString from);
 
-    void onNewBackLine(QString);
-
     void on_sendButton_clicked();
 
     void onNewCharacter();
@@ -144,10 +142,11 @@ private slots:
     void fKey(int key);
 
     void on_stopButton_clicked();
-    void on_backDataButton_clicked();
 
     void onWatchdogTimer();
 
     void on_splitter_splitterMoved(int pos, int index);
+    void on_setTestButton_clicked();
+    void on_testButton_clicked();
 };
 #endif // ENGINEWINDOW_H
