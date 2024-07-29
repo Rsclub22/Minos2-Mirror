@@ -288,7 +288,7 @@ bool LoggerContestLog::initialise( const QString &fn, bool newFile, int slotno )
    // open the LoggerContestLog file
 
 
-   cfileName = fn;
+   cfileName = GetFullPath(fn);
    QString ext = ExtractFileExt( fn );
    publishedName = ExtractFileName( fn );
    if ( ext.compare(".gjv", Qt::CaseInsensitive ) == 0 )
