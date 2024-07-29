@@ -11,7 +11,9 @@
 #include "managehamlib.h"
 #include "ui_managehamlib.h"
 
+#ifdef Q_OS_WIN
 #include <windows.h>
+#endif
 
 ManageHamlib::ManageHamlib(QWidget *parent)
     : QDialog(parent)
