@@ -3866,7 +3866,7 @@ void QSOLogFrame::setPlaceholders(QStringList nearMatches)
             setEditStyleSheet(ui->CallsignFrame->getTextEditEdit(),ssLineEditOK);
         }
     }
-    if (callText.isEmpty() && locText.isEmpty())
+    if (callText.isEmpty() && locText.isEmpty() && qthText.isEmpty())
     {
         MinosLoggerEvents::SendScreenContactChanged(&scc, contest, baseName);
     }
