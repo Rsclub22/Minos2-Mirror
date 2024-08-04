@@ -25,14 +25,40 @@ ManageHamlib::~ManageHamlib()
 {
     delete ui;
 }
+#ifdef Q_OS_WIN
+QString lastError( DWORD erno )
+{
+    LPVOID lpMsgBuf;
 
+    FormatMessage(
+        FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
+        NULL,
+        erno,
+        MAKELANGID( LANG_NEUTRAL, SUBLANG_DEFAULT ),    // Default language
+        ( LPTSTR ) & lpMsgBuf,
+        0,
+        NULL
+        );
+    const wchar_t * s;
+    s = reinterpret_cast<const wchar_t*>( lpMsgBuf );
+    QString qs = QString("%1").arg(s);
+
+    // Free the buffer.
+    LocalFree( lpMsgBuf );
+    return qs;
+}
+QString lastError( void )
+{
+    return lastError( GetLastError() );
+}
+#endif
 bool ManageHamlib::checkHamlib()
 {
 #ifdef Q_OS_WIN
     HMODULE h = LoadLibraryA("libhamlib-4.dll");
     if (!h)
     {
-        QString mess = tr("Failed to load libhamlib-4.dll %1").arg(GetLastError());
+        QString mess = tr("Failed to load libhamlib-4.dll %1").arg(lastError());
         trace(mess);
         mShowMessage(mess, this);
         return false;
