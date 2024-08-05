@@ -40,7 +40,7 @@ WinkeyerControl::WinkeyerControl(QObject *parent)
     newWinkeyStateStoragePtr = QSharedPointer<WinkeyerStateStorage>::create();
     newWinkeyStateStoragePtr->setWkstate(newWinkeyerStatePtr);
 
-    QString fileName = "winkeyerSettings.ini";
+    QString fileName = WINKEYER_PATH_LOGGER() + WINKEYER_CONFIG_FILENAME;
     QSettings  winkeyerConfig(fileName, QSettings::IniFormat);
     currentWinkeyStateStoragePtr->loadWinkeyerStateStorageFromFile(winkeyerConfig);
 
@@ -64,17 +64,22 @@ QSharedPointer<WinkeyerStateStorage> WinkeyerControl::getCurrentWinkeyStateStora
 {
     return currentWinkeyStateStoragePtr;
 }
+
+void WinkeyerControl::setNewWinkeyStateStoragePtr(QSharedPointer<WinkeyerStateStorage> newPtr) {
+    newWinkeyStateStoragePtr = newPtr;
+}
+
 QSharedPointer<WinkeyerStateStorage> WinkeyerControl::getNewWinkeyStateStoragePtr()
 {
    return newWinkeyStateStoragePtr;
 }
 
 
-int WinkeyerControl::initComport(QString comport)
+int WinkeyerControl::initComport(QString comport, int baudrate)
 {
 
     serialPort->setPortName(comport);
-    serialPort->setBaudRate(QSerialPort::Baud1200);
+    serialPort->setBaudRate(baudrate);
     serialPort->setDataBits(QSerialPort::Data8);
     serialPort->setParity(QSerialPort::NoParity);
     serialPort->setStopBits(QSerialPort::OneStop);
@@ -117,6 +122,11 @@ void WinkeyerControl::stop()
 bool WinkeyerControl::isSerialPortOpen()
 {
     return serialPort->isOpen();
+}
+
+void WinkeyerControl::serialPortClose()
+{
+    serialPort->close();
 }
 
 

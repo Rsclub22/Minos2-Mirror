@@ -42,14 +42,15 @@ private slots:
     void handleSetupPushButton();
 
 
+    void onTextChanged(const QString &text);
 private:
     Ui::WinkeyerMainWindow *ui;
     WinkeyerControl *winkeyerControl;
-    QSharedPointer<WinkeyerState> currentWinkeyerStatePtr;
-    QSharedPointer<WinkeyerStateStorage> currentWinkeyStateStoragePtr;
+    //QSharedPointer<WinkeyerState> currentWinkeyerStatePtr;
+    //QSharedPointer<WinkeyerStateStorage> currentWinkeyStateStoragePtr;
 
-    QSharedPointer<WinkeyerState> newWinkeyerStatePtr;
-    QSharedPointer<WinkeyerStateStorage> newWinkeyStateStoragePtr;
+    //QSharedPointer<WinkeyerState> newWinkeyerStatePtr;
+    //QSharedPointer<WinkeyerStateStorage> newWinkeyStateStoragePtr;
 
 
 
@@ -57,6 +58,7 @@ private:
 
 
 
+    void handleKeyboardChar(QChar kbdChar);
 };
 
 #endif // WINKEYERMAINWINDOW_H

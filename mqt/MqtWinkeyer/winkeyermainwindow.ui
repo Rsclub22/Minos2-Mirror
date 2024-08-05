@@ -25,7 +25,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QLineEdit" name="textLineEdit"/>
+       <widget class="QLineEdit" name="sendTextLineEdit"/>
       </item>
       <item>
        <spacer name="verticalSpacer_2">

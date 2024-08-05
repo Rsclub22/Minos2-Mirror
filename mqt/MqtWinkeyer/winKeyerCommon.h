@@ -260,6 +260,13 @@ const quint8 CMD_TBL_END =  0x1F;
 #define WK_NOT_OPEN             -9
 #define COM_PURGE_FAILED       -10
 
+const quint8 KBD_BACKSPACE = 0x08;
+const quint8 KBD_CR = 0x0d;
+const quint8 KBD_ESC = 0x1b;
+
+QString WINKEYER_PATH_LOGGER();
+const QString WINKEYER_CONFIG_FILENAME = "winkeyerConfig.ini";
+
 const QStringList adminCmdNames = {"CAL", "RESET", "OPEN", "CLOSE",
                                     "ECHO", "A2DPDL", "A2DPOT",
                                     "STATE", "DEBUG", "GETVERS",
@@ -472,7 +479,35 @@ public:
 
     WinkeyerStateStorage(){}
 
+    WinkeyerStateStorage(const WinkeyerStateStorage &other)
+    {
+        copy(other);
+    }
 
+    WinkeyerStateStorage& operator=(const WinkeyerStateStorage &other)
+    {
+        if (this != &other) {
+            copy(other);
+        }
+        return *this;
+    }
+
+    void copy(const WinkeyerStateStorage &other)
+    {
+        comport = other.comport;
+        baudrate = other.baudrate;
+        wkState = QSharedPointer<WinkeyerState>::create(*other.wkState);
+        x2mode = other.x2mode;
+        WKrtty = other.WKrtty;
+        RYmode = other.RYmode;
+        STvolume = other.STvolume;
+        msg1Buf = other.msg1Buf;
+        msg2Buf = other.msg2Buf;
+        msg3Buf = other.msg3Buf;
+        msg4Buf = other.msg4Buf;
+        msg5Buf = other.msg5Buf;
+        msg6Buf = other.msg6Buf;
+    }
 
     void setComport(const QString comport_)
     {
@@ -605,8 +640,8 @@ public:
     {
         config.beginGroup("winkeyerstate");
 
-        setComport(config.value("comport", (DEFAULT_COMPORT)).toString());
-        setBaudrate(static_cast<QString>(config.value("baudrate", (DEFAULT_BAUDRATE)).toString()));
+        setComport(config.value("comport", DEFAULT_COMPORT).toString());
+        setBaudrate(config.value("baudrate", DEFAULT_BAUDRATE).toString());
         getWkState()->setModereg(static_cast<quint8>(config.value("modeReg", static_cast<int>(DEFAULT_MODEREG)).toInt()));
         getWkState()->setSpeed(static_cast<quint8>(config.value("speed", static_cast<int>(DEFAULT_SPEED)).toInt()));
         getWkState()->setStconst(static_cast<quint8>(config.value("stconst", static_cast<int>(DEFAULT_STCONST)).toInt()));

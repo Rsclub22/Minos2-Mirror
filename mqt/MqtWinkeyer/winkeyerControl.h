@@ -38,15 +38,16 @@ public:
     explicit WinkeyerControl(QObject *parent = nullptr);
     ~WinkeyerControl();
 
-   // bool openSerialPort(const QString &portName, int baudRate);
-   // void closeSerialPort();
 
     void enqueueData(const QByteArray &data);
 
     void openWinKeyer();
     void closeWinKeyer();
 
-    int initComport(QString comport);
+    int initComport(QString comport, int baudrate);
+    void serialPortClose();
+
+
     void start();
     void stop();
 
@@ -154,6 +155,8 @@ public:
     bool getWK3Flag();
 
     QSharedPointer<WinkeyerStateStorage> getCurrentWinkeyStateStoragePtr();
+
+    void setNewWinkeyStateStoragePtr(QSharedPointer<WinkeyerStateStorage> newPtr);
     QSharedPointer<WinkeyerStateStorage> getNewWinkeyStateStoragePtr();
 
     int wkSendBufferedChar(quint8 ch);
@@ -188,6 +191,7 @@ public:
     int wkBufferedHscw(quint8 wpm);
     int wkCancelBufferedWpm();
     int wkBufferedNull();
+
 
 
 signals:
@@ -281,6 +285,7 @@ private:
 
     QSharedPointer<WinkeyerState> currentWinkeyerStatePtr;
     QSharedPointer<WinkeyerState> newWinkeyerStatePtr;
+
     QSharedPointer<WinkeyerStateStorage> currentWinkeyStateStoragePtr;
     QSharedPointer<WinkeyerStateStorage> newWinkeyStateStoragePtr;
 
