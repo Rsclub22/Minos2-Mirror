@@ -607,16 +607,28 @@ void RigControlMainWindow::upDateRadio(QString radioName)
 
     }
 
-
-
-
-
     // found radio, update currentRadio from selected radiodata
 
     currentRadioName = radioName;
 
     // get current radio user settings
     updateCurrentRadioFromAvailRadios(currentRadioName);
+
+    if (!rigFactory->supported_rigs()->contains(currentRadio.rigModel))
+    {
+        // No longer available.
+        QMessageBox msgBox;
+        msgBox.setWindowTitle(tr("RigControl Select Radio"));
+        QString mess = tr("Radio type \"%1\" no longer exists in Hamlib, Please choose something different")
+                           .arg(currentRadio.rigModel);
+        sendStatusToLogError(mess);
+        msg->rigCache.publish();        // publish all changes are complete
+
+        msgBox.setText(mess);
+        msgBox.exec();
+
+        return;
+    }
 
     // get the selected radio rig  capabilities
 
