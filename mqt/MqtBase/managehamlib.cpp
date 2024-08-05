@@ -15,6 +15,9 @@
 #include <windows.h>
 #endif
 
+#ifndef _MSC_FULL_VER
+#pragma GCC diagnostic ignored "-Wold-style-cast"
+#endif
 ManageHamlib::ManageHamlib(QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::ManageHamlib)
@@ -71,7 +74,7 @@ bool ManageHamlib::checkHamlib()
     int blen = 1024;
     while (!lenOK)
     {
-        wchar_t buff[blen];
+        wchar_t *buff = new wchar_t[blen];
         int len = GetModuleFileName(h, buff, blen);
         if (len == blen)
         {
@@ -94,6 +97,7 @@ bool ManageHamlib::checkHamlib()
             hamlibDLLPath = QString::fromWCharArray(buff);
             trace(QString("ManageHamlib %1").arg(hamlibDLLPath));
         }
+        delete [] buff;
     }
 
     ui->hamlibPathLabel->setText(hamlibDLLPath);
