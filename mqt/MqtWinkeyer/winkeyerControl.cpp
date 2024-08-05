@@ -1009,6 +1009,7 @@ int WinkeyerControl::wkSendBufferedChar(quint8 ch)
     }
 
     return WK_NOT_OPEN;
+    return WK_SUCCESS;
 }
 
 // set/clear Wk's PTT Output

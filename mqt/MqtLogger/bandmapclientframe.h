@@ -183,7 +183,7 @@ private:
     void handleDxSpots(QVector<QString> &spotQueue);
     void clusterStatusIndicatorToggle(bool on);
     void addDxSpotToBandmapTable(QSharedPointer<ClusterSpotData> spot);
-    bool checkSpotInTable(QSharedPointer<ClusterSpotData> spot);
+    bool checkSpotInTable(QSharedPointer<ClusterSpotData> newSpot);
     void sendFreqToRig(Frequency freq);
 
     bool event(QEvent *event) override;

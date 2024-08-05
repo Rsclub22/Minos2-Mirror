@@ -1,6 +1,3 @@
-
-
-
 include($$PWD/../mqt.pri)
 include($$PWD/../mqtapplibs.pri)
 
@@ -8,6 +5,8 @@ QT       += core gui
 QT       += widgets
 QT       += network
 QT  += serialport
+
+RC_ICONS += ../minos.ico
 
 TARGET = MqtWinkeyer
 TEMPLATE = app

@@ -203,7 +203,6 @@ bool BandMapSpotDB::modifyRecord(QSharedPointer<ClusterSpotData> spot)
 }
 bool BandMapSpotDB::modifyRecord(ClusterSpotData *spot)
 {
-    int recid = -1;
     QSqlQuery query;
     QString mod = "UPDATE LSPOTS SET "
                   "type=:type, spottype=:spottype, callsign=:callsign, band=:band, mode=:mode, loc=:loc, dist=:dist, freq=:freq,"
@@ -239,7 +238,7 @@ bool BandMapSpotDB::modifyRecord(ClusterSpotData *spot)
         {
             trace(QString("BandMapSpotDB::modifyRecord spot callsign %1 spottype %2 recid %3")
                       .arg(spot->getDxCall().getFullCall(), ClusterSpotData::spotName(spot->getSpotType()))
-                      .arg(recid)
+                      .arg(spot->getRecNo())
                   );
             return true;
         }

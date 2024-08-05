@@ -67,7 +67,7 @@ const quint8 USEPTT =    0x01;       // Pin 5 = PTT
 const quint8 NONSTICK =  0x80;       // Disable paddle watchdog when = 1
 const quint8 PDL_ECHO =  0x40;       // Paddle echo enabled when = 1
 const quint8 NIAMBIC =   0x20;       // Iambic mode when 0
-const quint8 KEYERMODE = 0x10;       // if NIAMBIC=0 then 0=B/1=A \
+const quint8 KEYERMODE = 0x10;       // if NIAMBIC=0 then 0=B/1=A
                                      // if NIAMBIC=1 then 0=Ultimatic/1=Bug mode
 const quint8 PDL_SWAP =  0x08;       // Swap paddle left/right
 const quint8 SER_ECHO =  0x04;       // Serial echo enabled when = 1
