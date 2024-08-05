@@ -5,6 +5,7 @@ SUBDIRS += \
     MqtBase \
     MqtDataModes \
     MqtUtils \
+    MqtWinkeyer \
     TinyXML \
     XMPPLib \
     RPCTest \
