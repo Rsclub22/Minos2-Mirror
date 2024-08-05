@@ -43,68 +43,47 @@ public:
     //virtual MODE convertQStrMode(QString mode) = 0;
     virtual bool modeSupported(MODE mode, Frequency f) = 0;
 
-    virtual bool supportVolControl(int rigNumber) = 0;
     virtual int setVolume(VFO vfo, float val) = 0;
     virtual int getVolume(VFO vfo, float *val) = 0;
 
-    virtual bool supportReadRit(int rigModelNumber) = 0;
-    virtual bool supportWriteRit(int rigModelNumber) = 0;
+
     virtual int getRit(VFO vfo, ShortFreq &ritfreq) = 0;
     virtual int setRit(VFO vfo, const ShortFreq &ritfreq) = 0;
     virtual int getMaxRitFreq(int rigNumber) = 0;
 
-    virtual bool supportReadRitState(int rigModelNumber) = 0;
-    virtual bool supportWriteRitState(int rigModelNumber) = 0;
     virtual int setRitState(VFO vfo, bool state) = 0;
     virtual int getRitState(VFO vfo, bool& state) = 0;
 
     virtual int clearRit(VFO vfo) = 0;
 
-    virtual bool supportReadVfo(int rigModelNumber) = 0;
-    virtual bool supportWriteVfo(int rigModelNumber) = 0;
-
     virtual int setVfo(VFO vfo) = 0;
     virtual int getVfo(VFO *vfo) = 0;
 
-    virtual bool supportSetVox(int rigModelNumber) = 0;
     virtual int setVoxState(VFO vfo, bool state) = 0;
-    virtual bool supportGetVoX(int rigNumber) = 0;
     virtual int getVoxState(VFO vfo, bool &state) = 0;
 
-    virtual bool supportSignalStrength(int rigModelNumber) = 0;
     virtual int getSignalStrength(VFO vfo, int *value) = 0;
 
     virtual int setConfigurationParameter(QString cfgparam, QString value) = 0;
     virtual int getConfigurationParameter(QString cfgparam, QString *value) = 0;
 
-
-    virtual QString getRigLibVersion() = 0;
-    virtual QString getLibraryName() = 0;
     virtual QString getErrorMsgText(int errorCode) = 0;
 
-
-
     virtual int sendVoiceMessage(VFO vfo, int vmNum) = 0;
-    virtual bool supportVoiceMemory(int rigNumber) = 0;
+
 
     virtual int stop_voice_mem(VFO  vfo) = 0;
-    virtual bool supportStopVoiceMem(int rigNumber) = 0;
+
 
     virtual int sendMorse(VFO vfo, QString msg) = 0;
     virtual int stopMorse(VFO vfo) = 0;
     //virtual int waitMorsePtt(VFO vfo) = 0;
     virtual int waitMorse(VFO vfo) = 0;
-    virtual bool supportSendMorse(int rigNumber) = 0;
-    virtual bool supportStopMorse(int rigNumber) = 0;
-    virtual bool supportWaitMorse(int rigNumber) = 0;
-
-
 
     virtual int getPttStatus(VFO vfo, bool& state) = 0;
     virtual int setPtt(VFO vfo, bool state) = 0;
 
-    virtual bool supportGetPtt(int rigNumber) = 0;
-    virtual bool supportSetPtt(int rigNumber) = 0;
+
 
 
 

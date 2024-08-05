@@ -254,6 +254,8 @@ void RigSetupDialog::loadSettingsToTab(int tabNum, QString tabName)
     if (availRadioData.value(tabName)->pttType == serialCommonData::MINOS_PTT_TYPES::PTT_TYPE_CAT)
     {
         radioTab.value(tabName)->setPttCatSelectRadioButtonChecked(true);
+        radioTab.value(tabName)->pttComportSelDisabled(true);
+
 
     }
     else if (availRadioData.value(tabName)->pttType == serialCommonData::MINOS_PTT_TYPES::PTT_TYPE_RTS)
@@ -276,6 +278,7 @@ void RigSetupDialog::loadSettingsToTab(int tabNum, QString tabName)
     {
 
         radioTab.value(tabName)->setPttCatSelectRadioButtonVisible(true);
+        radioTab.value(tabName)->setCatFeaturesEnableChkBoxVisible(true);
 
 
         if (availRadioData.value(tabName)->enableDisableCatFeature.catEnable)
@@ -297,6 +300,7 @@ void RigSetupDialog::loadSettingsToTab(int tabNum, QString tabName)
     {
         radioTab.value(tabName)->setPttCatSelectRadioButtonVisible(false);
         radioTab.value(tabName)->setSerialPttControlsVisible(true);
+        radioTab.value(tabName)->setCatFeaturesEnableChkBoxVisible(false);
 
     }
 
@@ -398,12 +402,12 @@ void RigSetupDialog::loadSettingsToTab(int tabNum, QString tabName)
         radioTab.value(tabName)->setPortTypeWidgetsVisible(false);
 
     }
-    else
+    /*else
     {
         // hamlib
         radioTab.value(tabName)->setCatFeaturesEnableChkBoxVisible(true);
         //radioTab.value(tabName)->setPortTypeWidgetsVisible(true);
-    }
+    }*/
 
 
 
@@ -467,9 +471,14 @@ void RigSetupDialog::addRadio()
     radioTab.value(radioName)->setParityBits(0);
     radioTab.value(radioName)->comParitySelected(true);
 
+    //  force RTS - to enable USB adaptors
+    // but can conflict with serial PTT control
+    if (radioTab.value(radioName)->getCatComportType(radioModel) == RigCapConstants::PortType::serial)
+    {
+        radioTab.value(radioName)->setForceRTSComboBox(1);
+        radioTab.value(radioName)->on_forceRTSSelected();
+    }
 
-    radioTab.value(radioName)->setForceRTSComboBox(1);
-    radioTab.value(radioName)->on_forceRTSSelected();
 
 
 

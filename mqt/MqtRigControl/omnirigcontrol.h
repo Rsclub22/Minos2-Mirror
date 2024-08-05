@@ -54,25 +54,19 @@ public:
     int setMode(VFO vfo, MODE mode) override;
     bool modeSupported(MODE mode, Frequency f) override;
 
-    bool supportVolControl(int rigNumber) override;
     int setVolume(VFO vfo, float val) override;
     int getVolume(VFO vfo, float *val) override;
 
-    bool supportSignalStrength(int modelNumber) override;
     int getSignalStrength(VFO vfo, int *value) override;
 
-    QString getRigLibVersion() override;
-    QString getLibraryName() override;
+    static QString getRigLibVersion();
     QString getErrorMsgText(int errorCode) override;
 
-    bool supportReadRit(int rigModelNumber) override;
-    bool supportWriteRit(int rigModelNumber) override;
+
     int getRit(VFO vfo, ShortFreq &ritfreq) override;
     int setRit(VFO vfo, const ShortFreq &ritfreq) override;
     int getMaxRitFreq(int rigNumber) override;
 
-    bool supportReadRitState(int rigModelNumber) override;
-    bool supportWriteRitState(int rigModelNumber) override;
     int setRitState(VFO vfo, bool state) override;
     int getRitState(VFO vfo, bool& state) override;
     int clearRit(VFO vfo) override;
@@ -81,8 +75,6 @@ public:
     void setTraceComms(bool value) override;
     bool getTraceComms() override;
 
-    bool supportReadVfo(int rigNumber) override;
-    bool supportWriteVfo(int rigNumber) override;
     int setVfo(VFO vfo) override;
     int getVfo(VFO *vfo) override;
 
@@ -90,28 +82,19 @@ public:
     int getConfigurationParameter(QString cfgparam, QString *value) override;
 
     int sendVoiceMessage(VFO vfo, int vmNum) override;
-    bool supportVoiceMemory(int rigNumber) override;
 
     int stop_voice_mem(VFO vfo)  override;
-    bool supportStopVoiceMem(int rigNumber) override;
 
     int sendMorse(VFO vfo, QString msg) override;
     int stopMorse(VFO vfo) override;
     //int waitMorsePtt(VFO vfo) override;
     int waitMorse(VFO vfo) override;
-    bool supportSendMorse(int rigNumber) override;
-    bool supportStopMorse(int rigNumber) override;
-    bool supportWaitMorse(int rigNumber) override;
 
 
     int getPttStatus(VFO vfo, bool &state) override;
     int setPtt(VFO vfo, bool state) override;
-    bool supportGetPtt(int rigNumber) override;
-    bool supportSetPtt(int rigNumber) override;
 
-    bool supportSetVox(int rigModelNumber) override;
     int setVoxState(VFO vfo, bool state) override;
-    bool supportGetVoX(int rigNumber) override;
     int getVoxState(VFO vfo, bool &state) override;
 
 

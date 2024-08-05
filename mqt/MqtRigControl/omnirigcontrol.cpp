@@ -494,7 +494,8 @@ void OmnirigControl::register_rigs(RigFactory::Rigs* rigsList, int id1, int id2)
     rigCap.setRigName(OMNIRIG_NAME);
     rigCap.setRigModelName(OmniRigOneName);
     rigCap.setRigModelNumber(id1);
-
+    rigCap.setLibraryName("Omnirig");
+    rigCap.setLibraryVersion(OmnirigControl::getRigLibVersion());
     rigCap.setSupportGetSupBands(true);
     rigCap.setSupportGetVfo(false);
     rigCap.setSupportSetVfo(false);
@@ -924,31 +925,7 @@ bool OmnirigControl::modeSupported(MODE /*mode*/, Frequency /*f*/)
     return true;
 }
 
-bool OmnirigControl::supportReadVfo(int rigNumber)
-{
-    Q_UNUSED(rigNumber)
-    if ((readable_params & (OmniRig::PM_VFOA | OmniRig::PM_VFOAA | OmniRig::PM_VFOB | OmniRig::PM_VFOBB)) && !rig_type.contains("IC"))
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-}
 
-bool OmnirigControl::supportWriteVfo(int rigNumber)
-{
-    Q_UNUSED(rigNumber)
-    if ((writable_params & (OmniRig::PM_VFOA | OmniRig::PM_VFOAA | OmniRig::PM_VFOB | OmniRig::PM_VFOBB)) && !rig_type.contains("IC"))
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-}
 
 int OmnirigControl::setVfo(VFO vfo)
 {
@@ -976,12 +953,7 @@ int OmnirigControl::getVfo(VFO *vfo)
 
 }
 
-bool OmnirigControl::supportVolControl(int rigNumber)
-{
-    // not supported
-    Q_UNUSED(rigNumber)
-    return false;
-}
+
 
 int OmnirigControl::setVolume(VFO vfo, float val)
 {
@@ -1002,12 +974,7 @@ int OmnirigControl::getVolume(VFO vfo, float *val)
     return omnirigError(OMNIRIG_NOT_SUPPORTED);
 }
 
-bool OmnirigControl::supportSignalStrength(int modelNumber)
-{
-    Q_UNUSED(modelNumber)
-    // not supported
-    return false;
-}
+
 int OmnirigControl::getSignalStrength(VFO vfo, int *value)
 {
     traceMsg(QString(" GetSignal Strength"));
@@ -1018,7 +985,24 @@ int OmnirigControl::getSignalStrength(VFO vfo, int *value)
 
 QString OmnirigControl::getRigLibVersion()
 {
+    trace("get Omnirig Version Number");
+
+    OmniRig::OmniRigX* omni_rig = new OmniRig::OmniRigX();
+
+    if (omni_rig->isNull())
+    {
+
+        return QString("lib ver com failed to start");
+    }
+
+
     QString v = QString::number(omni_rig->SoftwareVersion()).toLocal8Bit ();
+
+    if (omni_rig)
+    {
+        omni_rig->clear();
+
+    }
 
     return QString("Omnirig V%1").arg(v);
 }
@@ -1033,10 +1017,7 @@ QString OmnirigControl::getErrorMsgText(int errorCode)
 }
 
 
-QString OmnirigControl::getLibraryName()
-{
-    return QString("Omnirig");
-}
+
 
 int OmnirigControl::getRit(VFO vfo, ShortFreq &ritfreq)
 {
@@ -1094,33 +1075,8 @@ int OmnirigControl::clearRit(VFO vfo)
     return omnirigError(OMNIRIG_OK);
 }
 
-bool OmnirigControl::supportReadRit(int rigModelNumber)
-{
-    Q_UNUSED(rigModelNumber)
-    return rig->IsParamReadable(OmniRig::PM_RIT0);
 
-}
 
-bool OmnirigControl::supportWriteRit(int rigModelNumber)
-{
-    Q_UNUSED(rigModelNumber)
-    return rig->IsParamWriteable(OmniRig::PM_RIT0);
-}
-
-bool OmnirigControl::supportReadRitState(int rigModelNumber)
-{
-    Q_UNUSED(rigModelNumber)
-
-    return rig->IsParamReadable(OmniRig::PM_RIT0);
-
-}
-
-bool OmnirigControl::supportWriteRitState(int rigModelNumber)
-{
-    Q_UNUSED(rigModelNumber)
-
-    return rig->IsParamWriteable(OmniRig::PM_RIT0);
-}
 
 
 int OmnirigControl::getMaxRitFreq(int rigModelNumber)
@@ -1152,11 +1108,7 @@ int OmnirigControl::sendVoiceMessage(VFO vfo, int vmNum)
     return omnirigError(OMNIRIG_NOT_SUPPORTED);
 }
 
-bool OmnirigControl::supportVoiceMemory(int rigModelNumber)
-{
-    Q_UNUSED(rigModelNumber);
-    return false;
-}
+
 
 int OmnirigControl::stop_voice_mem(VFO vfo)
 {
@@ -1166,11 +1118,7 @@ int OmnirigControl::stop_voice_mem(VFO vfo)
 }
 
 
-bool OmnirigControl::supportStopVoiceMem(int rigModelNumber)
-{
-    Q_UNUSED(rigModelNumber);
-    return false;
-}
+
 
 int OmnirigControl::sendMorse(VFO vfo, QString msg)
 {
@@ -1196,23 +1144,6 @@ int OmnirigControl::waitMorse(VFO vfo)
 
 
 
-bool OmnirigControl::supportSendMorse(int rigModelNumber)
-{
-    Q_UNUSED(rigModelNumber);
-    return false;
-}
-bool OmnirigControl::supportStopMorse(int rigModelNumber)
-{
-    Q_UNUSED(rigModelNumber);
-    return false;
-}
-bool OmnirigControl::supportWaitMorse(int rigModelNumber)
-{
-   Q_UNUSED(rigModelNumber);
-    return false;
-}
-
-
 
 int OmnirigControl::getPttStatus(VFO vfo, bool &state)
 {
@@ -1231,23 +1162,6 @@ int OmnirigControl::setPtt(VFO vfo, bool state)
 
 
 
-bool OmnirigControl::supportGetPtt(int rigModelNumber)
-{
-    Q_UNUSED(rigModelNumber);
-    return false;
-}
-bool OmnirigControl::supportSetPtt(int rigModelNumber)
-{
-    Q_UNUSED(rigModelNumber);
-    return false;
-}
-
-
-bool OmnirigControl::supportSetVox(int rigModelNumber)
-{
-    Q_UNUSED(rigModelNumber);
-    return false;
-}
 
 int OmnirigControl::setVoxState(VFO vfo, bool state)
 {
@@ -1256,11 +1170,7 @@ int OmnirigControl::setVoxState(VFO vfo, bool state)
     return omnirigError(OMNIRIG_NOT_SUPPORTED);
 }
 
-bool OmnirigControl::supportGetVoX(int rigModelNumber)
-{
-    Q_UNUSED(rigModelNumber);
-    return false;
-}
+
 
 int OmnirigControl::getVoxState(VFO vfo, bool &state)
 {

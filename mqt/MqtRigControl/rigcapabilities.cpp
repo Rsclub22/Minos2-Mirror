@@ -43,6 +43,8 @@ RigCapabilities & RigCapabilities::operator= ( const RigCapabilities &rigcap)
     rigManufacturer = rigcap.rigManufacturer;
     rigModelName = rigcap.rigModelName;
     rigModelNumber = rigcap.rigModelNumber;
+    libraryName = rigcap.libraryName;
+    libraryVersion = rigcap.libraryVersion;
     supportGetSupBands = rigcap.supportGetSupBands;
     supportGetVfo = rigcap.supportGetVfo;
     supportSetVfo = rigcap.supportSetVfo;
@@ -83,6 +85,8 @@ void RigCapabilities::clear()
     rigName = "";
     rigModelName = "";
     rigModelNumber = 0;
+    libraryName = "";
+    libraryVersion = "";
     supportGetSupBands = false;
     supportGetVfo = false;
     supportSetVfo = false;
@@ -156,6 +160,24 @@ void RigCapabilities::setRigModelNumber(int rigModelNumber_)
 int RigCapabilities::getRigModelNumber() const
 {
     return rigModelNumber;
+}
+
+void RigCapabilities::setLibraryName(QString libraryName_)
+{
+    libraryName = libraryName_;
+}
+QString RigCapabilities::getLibraryName()
+{
+    return libraryName;
+}
+
+void RigCapabilities::setLibraryVersion(QString libraryVersion_)
+{
+    libraryVersion = libraryVersion_;
+}
+QString RigCapabilities::getLibraryVersion()
+{
+    return libraryVersion;
 }
 
 void RigCapabilities::setSupportGetSupBands(bool supportGetSupBands_)

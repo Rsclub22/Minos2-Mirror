@@ -700,8 +700,8 @@ void RigControlMainWindow::upDateRadio(QString radioName)
         trace(QString("Update Radio - Supports writing Vfo = %1").arg(selectedRadioSupportCap.getSupportSetVfo() ? "true" : "false"));
         trace(QString("Update Radio - VFO = %1").arg(vfoToStr(rigStateDetails->curVfo)));
 
-        ui->usingLibText->setText(radio->getLibraryName());
-        trace(QString("Update Radio - Using library = %1").arg(radio->getLibraryName()));
+        ui->usingLibText->setText(rigStateDetails->rigCap.getLibraryName());
+        trace(QString("Update Radio - Using library = %1").arg(rigStateDetails->rigCap.getLibraryName()));
         if (currentRadio.rigModelNumber == hamlibData::RIGCTL)     // is it rigctl?
         {
             getRigctldNames(currentRadio.networkAdd, currentRadio.networkPort.toUShort());
@@ -1538,7 +1538,7 @@ int RigControlMainWindow::openRadio()
 
     if (rigStateDetails->rigCap.getRigManufacturer() != OMINRIG_MFR_NAME)
     {
-        logMessage(QString("Hamlib Library Version = %1").arg(radio->getRigLibVersion()));     // show library version in trace log before connection.
+        logMessage(QString("Hamlib Library Version = %1").arg(rigStateDetails->rigCap.getLibraryVersion()));     // show library version in trace log before connection.
     }
 
 
@@ -1570,7 +1570,7 @@ int RigControlMainWindow::openRadio()
 
         if (rigStateDetails->rigCap.getRigManufacturer() == OMINRIG_MFR_NAME)
         {
-            logMessage(QString("Library Version = %1").arg(radio->getRigLibVersion()));    // Omnirig COM needs to exist to do this..
+            logMessage(QString("Library Version = %1").arg(rigStateDetails->rigCap.getLibraryVersion()));    // Omnirig COM needs to exist to do this..
         }
     }
 
@@ -3939,9 +3939,8 @@ void RigControlMainWindow::radioError(int errorCode, QString cmd)
 
         if (radio)
         {
-            logMessage(QString("%1 library Error - Code = %2 - %3").arg(radio->getLibraryName()).arg(errorCode).arg(errorMsg));
-
-            QMessageBox::critical(this, tr("RigControl %1 library Error").arg(radio->getLibraryName()), tr("%1\n%2 - %3\nCommand: %4").arg(currentRadio.radioName).arg(errorCode).arg(errorMsg, cmd));
+            logMessage(QString("%1 library Error - Code = %2 - %3").arg(rigStateDetails->rigCap.getLibraryName()).arg(errorCode).arg(errorMsg));
+            QMessageBox::critical(this, tr("RigControl %1 library Error").arg(rigStateDetails->rigCap.getLibraryName()), tr("%1\n%2 - %3\nCommand: %4").arg(currentRadio.radioName).arg(errorCode).arg(errorMsg, cmd));
         }
 
     }
@@ -4779,7 +4778,7 @@ void RigControlMainWindow::aboutRigConfig()
     {
         if (radio != nullptr)
         {
-            msg.append(tr("Hamlib Version = %1\n").arg(radio->getRigLibVersion()));
+            msg.append(tr("Hamlib Version = %1\n").arg(rigStateDetails->rigCap.getLibraryVersion()));
         }
         else
         {
@@ -4969,7 +4968,7 @@ void RigControlMainWindow::dumpRadioToTraceLog()
         trace(QString("App Instance Name  = %1").arg(appName));
         if (radio != nullptr)
         {
-           trace(QString("Library Version = %1").arg(radio->getRigLibVersion()));
+           trace(QString("Library Version = %1").arg(rigStateDetails->rigCap.getLibraryVersion()));
         }
         else
         {

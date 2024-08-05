@@ -149,7 +149,7 @@ void RigSetupForm::radioModelSelected()
 
 void RigSetupForm::setupRadioModel(QString radioModel)
 {
-// need to do something is selection is empty!!!!!!!!!!!!!!!!!!!!!!!!
+
 
     if (radioModel != radioData->rigModel)
     {
@@ -287,7 +287,7 @@ void RigSetupForm::setupRadioModel(QString radioModel)
          {
              // hamlib
              setCatFeaturesEnableChkBoxVisible(true);
-             setPortTypeWidgetsVisible(true);
+             //setPortTypeWidgetsVisible(true);
 
          }
 
@@ -399,7 +399,11 @@ void RigSetupForm::setRadioModel(QString m)
 }
 
 
-
+RigCapConstants::PortType RigSetupForm::getCatComportType(QString radioModel)
+{
+    RigCapabilities rigCap = rigFactory->supported_rigs()->value(radioData->rigModel);
+    return rigCap.getPortType();
+}
 
 /********************** CIV Entry ***********************/
 
@@ -1587,11 +1591,11 @@ void RigSetupForm::loadEnableShowCatFeaturesBox(RigCapabilities &rigCap)
     ui->enableCatPttCatFeatureChkBox->setChecked(radioData->enableDisableCatFeature.catEnable);
     if (rigCap.getSupportGetPtt() && rigCap.getSupportSetPtt())
     {
-        ui->enableCatPttCatFeatureChkBox->setVisible(true);
+        setCatFeaturesEnableChkBoxVisible(true);
     }
     else
     {
-        ui->enableCatPttCatFeatureChkBox->setVisible(false);
+        setCatFeaturesEnableChkBoxVisible(false);
     }
 
     ui->enableVoiceTxMemCatFeatureChkBox->setChecked(radioData->enableDisableCatFeature.voiceMemEnable);
@@ -1614,9 +1618,10 @@ void RigSetupForm::loadEnableShowCatFeaturesBox(RigCapabilities &rigCap)
         ui->enableCwTxMemCatFeatureChkBox->setVisible(false);
     }
 
-    if (ui->enableCwTxMemCatFeatureChkBox->isVisible()|| ui->enableVoiceTxMemCatFeatureChkBox->isVisible()
-            || ui->enableCatPttCatFeatureChkBox->isVisible() || ui->enableVolCatFeatureChkBox->isVisible()
-            || ui->enableSMeterCatFeatureChkBox->isVisible() || ui->enableRitCatFeatureChkBox->isVisible())
+    if (rigCap.getSupportGetRit() || rigCap.getSupportSetRit()
+        || rigCap.getSupportSMeter() || rigCap.getSupportVolume()
+        || (rigCap.getSupportGetPtt() && rigCap.getSupportSetPtt())
+        || rigCap.getSupportVoiceMemory() ||rigCap.getSupportCwMemory())
     {
         ui->enableCatFeaturesChkBox->setVisible(true);
     }
@@ -2074,6 +2079,7 @@ void RigSetupForm::setPttInitialState(bool setCatPTT, bool setSerialPTT)
     setPTTEnableCheckBox(false);
 
     setPttCatSelectRadioButtonVisible(setCatPTT);
+    setCatFeaturesEnableChkBoxVisible(setCatPTT);
     ui->pttCatSelectRadioButton->setChecked(false);
 
     setSerialPttControlsVisible(setSerialPTT);
@@ -2323,6 +2329,8 @@ void RigSetupForm::onPttDtrEnableClicked(bool /*checked*/)
 
 
 }
+
+
 
 
 void RigSetupForm::setPttComportToolTip(QString toolTip)
