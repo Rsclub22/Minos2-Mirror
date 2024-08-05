@@ -83,10 +83,12 @@ void WinkeyerMainWindow::handleWinKeyerOpenStatus(bool open)
     if (open)
     {
         ui->openStatusLabel->setText("Open");
+        winkeyerControl->setIsWKOpen(true);
     }
     else
     {
         ui->openStatusLabel->setText("Closed");
+        winkeyerControl->setIsWKOpen(false);
     }
 
 }

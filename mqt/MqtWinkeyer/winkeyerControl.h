@@ -52,6 +52,10 @@ public:
     void stop();
 
     bool isSerialPortOpen();
+
+    bool getIsWkOpen();
+    void setIsWKOpen(bool open);
+
     void wk_st_freq(quint8 value);
 
     void SetWEchoBack(quint8 value);
@@ -191,6 +195,7 @@ public:
     int wkBufferedHscw(quint8 wpm);
     int wkCancelBufferedWpm();
     int wkBufferedNull();
+
 
 
 

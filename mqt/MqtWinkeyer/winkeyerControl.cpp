@@ -129,6 +129,16 @@ void WinkeyerControl::serialPortClose()
     serialPort->close();
 }
 
+bool WinkeyerControl::getIsWkOpen()
+{
+    return wkIsOpen;
+}
+
+void WinkeyerControl::setIsWKOpen(bool open)
+{
+    wkIsOpen = open;
+}
+
 
 void WinkeyerControl::handleDataReceived(const QByteArray &data)
 {
@@ -990,9 +1000,15 @@ int WinkeyerControl::wkGetXoffStatus()
 
 int WinkeyerControl::wkSendBufferedChar(quint8 ch)
 {
-    QByteArray c;
-    c.append(ch);
-    txQueue.enqueue(c);
+    if (wkIsOpen)
+    {
+        QByteArray c;
+        c.append(ch);
+        enqueueData(c);
+        return WK_SUCCESS;
+    }
+
+    return WK_NOT_OPEN;
 }
 
 // set/clear Wk's PTT Output

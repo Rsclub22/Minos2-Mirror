@@ -14,7 +14,7 @@
 /////////////////////////////////////////////////////////////////////////////
 #include <QDebug>
 
-#include "winkeyerControl.h""
+#include "winkeyerControl.h"
 #include "TxThread.h"
 
 TxThread::TxThread(WinkeyerControl *winkeyerControl, QObject *parent)
