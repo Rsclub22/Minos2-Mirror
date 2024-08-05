@@ -400,7 +400,7 @@ void TSingleLogFrame::clearScreenLayout(bool clearAllTabs)
     wsjtxFrame->setContest(nullptr);
     clusterControlFrame->setContest(nullptr);
     bandmapControlFrame->setContest(nullptr);
-    qsoMapFrame->setContest(nullptr, false, false, false, false, 0, false, QString(), QString());
+    qsoMapFrame->setContest(nullptr, false, false, false, false, 0, false, QString(), QString(), false);
     dmButtonFrame->setContest(nullptr);
 
     setBandmapLoaded(false);
@@ -753,13 +753,15 @@ void TSingleLogFrame::buildRow(ContestPage *cp, SCRow &scrow, int &auxInstance, 
                     TContestApp::getContestApp() ->loggerBundle.getIntProfile( elpMapClusterDistance, sd );
 
                     bool showLoc = true;
-                    TContestApp::getContestApp() ->loggerBundle.getIntProfile( elpShowMapLoc, sd );
+                    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpShowMapLoc, showLoc );
                     QString tl;
                     TContestApp::getContestApp() ->loggerBundle.getStringProfile( elpShowMapTLLoc, tl );
                     QString br;
                     TContestApp::getContestApp() ->loggerBundle.getStringProfile( elpShowMapBRLoc, br );
+                    bool showNav = true;
+                    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpShowMapNav, showNav );
 
-                    qsoMapFrame->setContest(ct, false, grid, lines, spots, sd, showLoc, tl, br);
+                    qsoMapFrame->setContest(ct, false, grid, lines, spots, sd, showLoc, tl, br, showNav);
                     break;
                 }
                 case sctDMButtons:

@@ -79,6 +79,8 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    connect(ui->ModeButton, &QToolButton::clicked, this,&QSOLogFrame::onModeButtonClicked);
+
     TContestApp::getContestApp() ->getBoolDisplayProfile( edpExpertMode, expert );
     TContestApp::getContestApp() ->getBoolDisplayProfile( edpAlternateFKeys, altFKeys );
 
@@ -157,7 +159,7 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
     ui->QTHFrame->getTextEditlabel()->setText("<b>" + QTHLabelString);
     connect(ui->QTHFrame->getTextEditEdit(), &QLineEdit::textChanged, this, &QSOLogFrame::onQTHEdit_textChanged);
 
-    ui->commentsFrame->setup("Comments", this, true, horizontal);
+    ui->commentsFrame->setup("Comments", this, false, horizontal);
     CommentsFW = new FocusWatcher(ui->commentsFrame->getTextEditEdit());
     ui->commentsFrame->getTextEditlabel()->setText("<b>" + CommentsLabelString);
 
@@ -259,6 +261,13 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
     on_ShowOperators();
     on_QSOMargins();
     checkQRZClusterBandmapShowing();
+
+    connect(qApp,&QApplication::applicationStateChanged, this, &QSOLogFrame::appStateChanged);
+}
+void QSOLogFrame::appStateChanged(Qt::ApplicationState state)
+{
+    if (state == Qt::ApplicationActive)
+        delayFocusChange = true;
 }
 void QSOLogFrame::onContestBandChanged(BaseContestLog *c)
 {
@@ -619,11 +628,17 @@ void QSOLogFrame::focusChange(QObject *obj, bool in, QFocusEvent *event)
             SecondOpComboBox_Exit();
         }
     }
-    checkQsoFrameColour();
+
+    if (!delayFocusChange)
+    {
+        checkQsoFrameColour();
+    }
+    delayFocusChange = false;
 }
 bool QSOLogFrame::frameHasFocus()
 {
-    if (ui->CallsignFrame->getTextEditEdit()->hasFocus()
+    if (frameHasFocusForced
+            || ui->CallsignFrame->getTextEditEdit()->hasFocus()
             || ui->RSTTxFrame->getTextEditEdit()->hasFocus()
             || ui->SerTxFrame->getTextEditEdit()->hasFocus()
             || ui->RSTRxFrame->getTextEditEdit()->hasFocus()
@@ -2798,9 +2813,21 @@ void QSOLogFrame::doGJVEditChange( QObject *Sender )
     }
 }
 
-void QSOLogFrame::on_ModeButton_clicked()
+void QSOLogFrame::onModeButtonClicked(bool)
 {
-    mode = ui->ModeButton->text();
+    onModeButtonClickeds(QString());
+}
+
+void QSOLogFrame::onModeButtonClickeds(const QString & m)
+{
+    if (m.isEmpty())
+    {
+        mode = ui->ModeButton->text();
+    }
+    else
+    {
+        mode = m;
+    }
     if (isRadioLoaded() && radioConnected && !radioError)
     {
         qsoLogModeFlag = true;  // stop updates from rigcontrol
@@ -2872,14 +2899,6 @@ void QSOLogFrame::logScreenEntry( )
    {
       return ;
    }
-   QSharedPointer<BaseContact> lct = selectedContact;
-   if (!lct)
-   {
-        lct = ct->addContact( ctmax, 0, false, false, screenContact.mode.getValue(), screenContact.mgmSubmode, dtg(true), curFreq );	// "current" doesn't get flag, don't save ContestLog yet
-
-        TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
-        tslf->QSOListFrame->insertRow(contest->ctList.count());
-   }
 
    if ( screenContact.mode.getValue().compare( hamlibData::MGM, Qt::CaseInsensitive ) != 0
         && screenContact.mode.getValue().compare( hamlibData::RY, Qt::CaseInsensitive ) != 0
@@ -2889,26 +2908,50 @@ void QSOLogFrame::logScreenEntry( )
        bool contactmodeCW = ( screenContact.reps.size() == 3 && screenContact.repr.size() == 3 );
        bool curmodeCW = ( screenContact.mode.getValue().compare( hamlibData::CW, Qt::CaseInsensitive ) == 0 );
 
-       if ( !edit && contactmodeCW != curmodeCW )
+       if ( !edit && contactmodeCW != curmodeCW && ui->ModeButton->isVisible())
        {
           // ask if change...
           if ( !curmodeCW )
           {
              if ( MinosParameters::getMinosParameters() ->yesNoMessage( this, tr("Change mode to CW?") ) )
              {
-                screenContact.mode.setValue(hamlibData::CW);
+                onModeButtonClickeds(hamlibData::CW);
+                MinosParameters::getMinosParameters() ->mshowMessage(tr("Please check the signal reports, and log the contact"), this);
+                return;
              }
           }
           else
           {
-             if ( MinosParameters::getMinosParameters() ->yesNoMessage( this, tr("Change mode to USB?") ) )
-             {
-                screenContact.mode.setValue(hamlibData::USB);
-             }
+              if (ct->isHF())
+              {
+                  if ( MinosParameters::getMinosParameters() ->yesNoMessage( this, tr("Change mode to PH?") ) )
+                  {
+                      onModeButtonClickeds(hamlibData::PH);
+                      MinosParameters::getMinosParameters() ->mshowMessage(tr("Please check the signal reports, and log the contact"), this);
+                      return;
+                  }
+              }
+              else
+              {
+                  if ( MinosParameters::getMinosParameters() ->yesNoMessage( this, tr("Change mode to USB?") ) )
+                  {
+                      onModeButtonClickeds(hamlibData::USB);
+                      MinosParameters::getMinosParameters() ->mshowMessage(tr("Please check the signal reports, and log the contact"), this);
+                      return;
+                  }
+              }
           }
        }
    }
-   ct->currentMode.setValue( screenContact.mode );
+   QSharedPointer<BaseContact> lct = selectedContact;
+   if (!lct)
+   {
+       lct = ct->addContact( ctmax, 0, false, false, screenContact.mode.getValue(), screenContact.mgmSubmode, dtg(true), curFreq );	// "current" doesn't get flag, don't save ContestLog yet
+
+       TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
+       tslf->QSOListFrame->insertRow(contest->ctList.count());
+   }
+//   ct->currentMode.setValue( screenContact.mode );
    screenContact.op1 = ct->currentOp1.getValue() ;
    screenContact.op2 = ct->currentOp2.getValue();
 
@@ -3215,7 +3258,8 @@ void QSOLogFrame::transferDetails(QString cs, const QString loc, QString exchang
 
     ui->CallsignFrame->getTextEditEdit()->setText(cs);
     ui->LocFrame->getTextEditEdit()->setText(loc);
-    if ( contest->exchangeRequired.getValue() )
+
+    if ( contest->exchangeRequired.getValue())
     {
         ui->QTHFrame->getTextEditEdit()->setText(exchange);
     }
@@ -3822,7 +3866,7 @@ void QSOLogFrame::setPlaceholders(QStringList nearMatches)
             setEditStyleSheet(ui->CallsignFrame->getTextEditEdit(),ssLineEditOK);
         }
     }
-    if (callText.isEmpty() && locText.isEmpty())
+    if (callText.isEmpty() && locText.isEmpty() && qthText.isEmpty())
     {
         MinosLoggerEvents::SendScreenContactChanged(&scc, contest, baseName);
     }
@@ -4104,6 +4148,7 @@ void QSOLogFrame::on_callRb_clicked()
 {
     // Make sure we have a call frequency
 
+    frameHasFocusForced = true;
     if (ui->callRb->isChecked())
     {
         TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
@@ -4113,6 +4158,7 @@ void QSOLogFrame::on_callRb_clicked()
         }
     }
     MinosLoggerEvents::SendSandPChanged(getSandP());
+    frameHasFocusForced = false;
 }
 void QSOLogFrame::on_SandPrb_clicked()
 {
@@ -4133,3 +4179,4 @@ bool QSOLogFrame::getSandP()
 {
     return ui->SandPrb->isChecked();
 }
+

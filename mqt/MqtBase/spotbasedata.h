@@ -26,11 +26,10 @@ namespace bandmapSpotType {
 enum SPOT_TYPE {NONE, CLUSTER, CLUSTER_MARKED, LOGGED, MARKED, SAVED, CQ, DELETED};
 
 }
-
 namespace clusterSpotType {
 
-extern const char * DXSPOT_TYPE;
-extern const char * SHOW_DXSPOT_TYPE;
+const QString DXSPOT_TYPE = "dxSpotType";
+const QString SHOW_DXSPOT_TYPE = "showDxSpotType";
 
 }
 
@@ -44,13 +43,16 @@ public:
 
     bool sameSpotAs(QSharedPointer<ClusterSpotData> cpd);
 
-    void setClusterSpotType(const QString clusterSpotType_){clusterSpotType = clusterSpotType_;}
-    QString getClusterSpotType()const {return clusterSpotType;}
+    void setShowSpotType(bool sst){showSpotType = sst;}
+    bool isShowSpotType()const {return showSpotType;}
 
     void setRxTime(const qint64 rxTime_){rxTime = rxTime_;}
     qint64 getRxTime() const {return rxTime;}
 
-    void setSpotDateTime(const QDateTime spotDateTime_) {spotDateTime = spotDateTime_;}
+    void setSpotDateTime(const QDateTime spotDateTime_)
+    {
+        spotDateTime = spotDateTime_;
+    }
     QDateTime getSpotDateTime() const {return spotDateTime;}
 
     QString getSpotTime() const
@@ -184,16 +186,20 @@ public:
     QString spotName();
     static QString spotName(bandmapSpotType::SPOT_TYPE _spotType);
 
-
     bool getCqResponse() const {return cqResponse;}
     void setCqResponse(bool value) {cqResponse = value;}
+
+    int getRecNo() const {return recno;}
+    void setRecNo(int value) {recno = value;}
 private:
+
+    int recno = -1;  // for spots DB
 
     // from SpotBaseData
 
     qint64 rxTime = 0;
     QDateTime spotDateTime;
-    QString clusterSpotType;
+    bool showSpotType;
     QString band;
     QString bandType;
     QString mode;

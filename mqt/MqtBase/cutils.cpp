@@ -16,12 +16,13 @@
 #include <QDateTime>
 #include <qnamespace.h>
 #include <cstring>
-#include "QtUtils.h"
 
+#include "QtUtils.h"
 #include "PubSubName.h"
 #include "cutils.h"
 #include "MTrace.h"
 #include "MinosParameters.h"
+#include "fileutils.h"
 
 const double pi = 3.141592653 ;  /* pi */
 const double dr = pi / 180.0;      // degree to radian conversion factor
@@ -370,7 +371,7 @@ CsvReader::CsvReader(QChar sep):sep(sep){}
 bool CsvReader::parseCsv(const QString &fileName, QList<QStringList> &csv)
 {
     QFile file (fileName);
-    if (file.open(QIODevice::ReadOnly))
+    if (FileExists(fileName) && file.open(QIODevice::ReadOnly))
     {
         static QRegularExpression rer("\r");
         QString data = file.readAll();
@@ -1034,4 +1035,39 @@ void sleepFor(qint64 milliseconds)
     {
         QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
     }
+}
+QString formatTime( qlonglong s )
+{
+    int i = 0;
+    QString suff;
+    while ( s >= 24 * 60 )
+    {
+        s -= 24 * 60;
+        i++;
+    }
+    QTime qt(0, 0);
+    qt = qt.addSecs( s * 60 );
+
+    QString ts = "hh:mm";
+
+    QString pref;
+    if ( i > 0 )
+    {
+        pref = QString::number( i ) + "/";
+        suff = " d/hh:mm";
+    }
+    else
+    {
+        if (s > 60)
+        {
+            suff = " hh:mm";
+        }
+        else
+        {
+            ts = "mm";
+            suff = " min";
+        }
+    }
+    QString t = pref + qt.toString ( ts ) + suff;
+    return t;
 }

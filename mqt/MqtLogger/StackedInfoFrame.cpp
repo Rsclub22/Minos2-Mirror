@@ -161,6 +161,7 @@ void StackedInfoFrame::setTabVisibility()
         ui->tabbar->setVisible(false);
         return;
     }
+
     bool setTabsVisible = (contest->isHF() && ui->tabbar->count() > 1);
 
     QString a = ui->infoCombo->currentText();
@@ -378,18 +379,12 @@ void StackedInfoFrame::setContest(LoggerContestLog *ct)
                 setTabsVisible = false;
             }
 
-            for(const QString &t:vtabs)
+            for (int i = ui->tabbar->count() - 1; i > 0; i--)
             {
-                Q_UNUSED(t)
-                for (int i = 0; i < ui->tabbar->count(); i++)
+                QString bt = ui->tabbar->tabText(i);
+                if (!vtabs.contains(bt))
                 {
-                    QString bt = ui->tabbar->tabText(i);
-                    if (vtabs.contains(bt))
-                    {
-                        continue;
-                    }
                     ui->tabbar->removeTab(i);
-                    break;
                 }
             }
 

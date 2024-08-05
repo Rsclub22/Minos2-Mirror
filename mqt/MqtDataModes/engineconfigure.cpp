@@ -30,6 +30,27 @@ void EngineConfigure::setEnginePath(QSettings &settings, QString engine, QString
     return getEnginePath(settings, engine);
 }
 
+/*static*/ void EngineConfigure::setTestString(QSettings &settings, QString t)
+{
+    settings.setValue("TestString", t);
+}
+/*static*/ void EngineConfigure::setTestString(QString t)
+{
+    QSettings settings(getDirectoryLocation(dlConfiguration) + "/DataModes.ini", QSettings::IniFormat);
+    setTestString(settings, t);
+
+}
+/*static*/ QString EngineConfigure::getTestString(QSettings &settings)
+{
+    QString t = settings.value("TestString").toString();
+    return t;
+}
+/*static*/ QString EngineConfigure::getTestString()
+{
+    QSettings settings(getDirectoryLocation(dlConfiguration) + "/DataModes.ini", QSettings::IniFormat);
+    return getTestString(settings);
+
+}
 
 void EngineConfigure::setSpeed(QSettings &settings, QString mode, QString speed)
 {

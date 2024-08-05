@@ -192,7 +192,8 @@ void MonitoringFrame::on_mapButton_clicked()
         bool showLoc = monitorMain->showLoc;
         QString tl = monitorMain->locTL;
         QString br = monitorMain->locBR;
-        qsoMapFrame->setContest(ct, true, grid, lines, spots, sd, showLoc, tl, br );
+        bool showNav = monitorMain->showNav;
+        qsoMapFrame->setContest(ct, true, grid, lines, spots, sd, showLoc, tl, br, showNav );
         qsoMapFrame->setVisible(true);
     }
     else

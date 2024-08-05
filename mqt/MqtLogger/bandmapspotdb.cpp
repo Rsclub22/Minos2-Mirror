@@ -31,6 +31,7 @@ BandMapSpotDB::BandMapSpotDB(QObject *parent): QObject(parent)
                               "recno INTEGER PRIMARY KEY AUTOINCREMENT,"
                               "id TEXT,"
                               "type TEXT,"
+                              "spottype TEXT,"
                               "callsign TEXT,"
                               "band TEXT,"
                               "mode TEXT,"
@@ -40,7 +41,8 @@ BandMapSpotDB::BandMapSpotDB(QObject *parent): QObject(parent)
                               "dtg TEXT,"
                               "rmOn TEXT,"
                               "offRF TEXT,"
-                              "CQResp TEXT"
+                              "CQResp TEXT,"
+                              "mark BOOLEAN"
                               ") ";
 
         QSqlQuery cquery;
@@ -48,6 +50,7 @@ BandMapSpotDB::BandMapSpotDB(QObject *parent): QObject(parent)
         if(cres && cquery.exec())
         {
             trace(QString("BandMapSpotDB %1 database created successfully").arg(dbName));
+
             {
                 QString createIndexQuery = "CREATE INDEX IF NOT EXISTS lspot_idx ON LSPOTS (id)";
                 QSqlQuery query;
@@ -62,13 +65,46 @@ BandMapSpotDB::BandMapSpotDB(QObject *parent): QObject(parent)
                     }
                 }
             }
+        }
+        else
+        {
+            trace(QString("BandMapSpotDB create DB error: %1").arg(cquery.lastError().text()));
+        }
+
+        {
+            QSqlQuery amQuery;
+            bool amres = amQuery.prepare("ALTER TABLE LSPOTS ADD mark BOOLEAN");
+            if (amres)
+            {
+                bool qres = amQuery.exec();
+                if (!qres)
+                {
+                    QString mess = QString("BandMapSpotDB add field error: %1").arg(amQuery.lastError().text());
+                    trace(mess);
+                }
+            }
+        }
+        {
+            QSqlQuery amQuery;
+            bool amres = amQuery.prepare("ALTER TABLE LSPOTS ADD spottype TEXT");
+            if (amres)
+            {
+                bool qres = amQuery.exec();
+                if (!qres)
+                {
+                    QString mess = QString("BandMapSpotDB add field error: %1").arg(amQuery.lastError().text());
+                    trace(mess);
+                }
+            }
+        }
+        {
             QSqlQuery query;
             query.prepare("SELECT COUNT(*) FROM LSPOTS");
             if (query.exec())
             {
                 if (query.next())
                 {
-                    trace(QString("BandMapSpotDB %1 spot records retrieved").arg(query.value(0).toString()));
+                    trace(QString("BandMapSpotDB %1 spot records in DB").arg(query.value(0).toString()));
                 }
                 else
                 {
@@ -80,12 +116,7 @@ BandMapSpotDB::BandMapSpotDB(QObject *parent): QObject(parent)
                 trace(QString("BandMapSpotDB select count(*) exec error: %1").arg(query.lastError().text()));
             }
         }
-        else
-        {
-            trace(QString("BandMapSpotDB create DB error: %1").arg(cquery.lastError().text()));
-        }
     }
-
 }
 
 BandMapSpotDB::~BandMapSpotDB()
@@ -99,18 +130,23 @@ bool BandMapSpotDB::createRecord(QSharedPointer<ClusterSpotData> spot, QString i
 }
 bool BandMapSpotDB::createRecord(ClusterSpotData *spot, QString id)
 {
+    int recid = spot->getRecNo();
+    if (recid >= 0)
+    {
+        return true;
+    }
     QSqlQuery query;
-    bool prepres = query.prepare(
-        "INSERT INTO LSPOTS "
-        "(id, type, callsign, band, mode, loc, dist, freq, dtg, rmOn, offRF, CQResp)"
-        " VALUES "
-        "(:id, :type, :callsign, :band, :mode, :loc, :dist, :freq, :dtg, :rmOn, :offRF, :CQResp)"
-        );
+    QString create =         "INSERT INTO LSPOTS "
+                     "(id, type, spottype, callsign, band, mode, loc, dist, freq, dtg, rmOn, offRF, CQResp)"
+                     " VALUES "
+                     "(:id, :type, :spottype, :callsign, :band, :mode, :loc, :dist, :freq, :dtg, :rmOn, :offRF, :CQResp)";
+    bool prepres = query.prepare(create);
 
     if (prepres)
     {
         query.bindValue(":id", id);
         query.bindValue(":type", spot->getSpotType());
+        query.bindValue(":spottype", spot->spotName());
         query.bindValue(":callsign", spot->getDxCall().getFullCall());
         query.bindValue(":band", spot->getBand());
         query.bindValue(":mode", spot->getMode());
@@ -131,14 +167,134 @@ bool BandMapSpotDB::createRecord(ClusterSpotData *spot, QString id)
 
         if(query.exec())
         {
-            trace(QString("BandMapSpotDB::createRecord spot callsign %1 spottype %2").arg(spot->getDxCall().getFullCall(), ClusterSpotData::spotName(spot->getSpotType())));
+            //select seq from sqlite_sequence where name="table_name"
+            QSqlQuery query;
+            bool prepres = query.prepare("SELECT SEQ FROM sqlite_sequence WHERE name = \"LSPOTS\" ");
+            if (prepres)
+            {
+                if (query.exec() && query.next())
+                {
+                    recid = query.value(0).toInt();
+                    spot->setRecNo(recid);
+                }
+            }
+            trace(QString("BandMapSpotDB::createRecord spot callsign %1 spottype %2 recid %3")
+                      .arg(spot->getDxCall().getFullCall(), ClusterSpotData::spotName(spot->getSpotType()))
+                      .arg(recid)
+                  );
             return true;
         }
         else
         {
+            trace(create);
             trace(QString("BandMapSpotDB::createRecord error:").arg(query.lastError().text()));
         }
     }
+    else
+    {
+        trace(create);
+        trace(QString("BandMapSpotDB::createRecord prepare error:").arg(query.lastError().text()));
+    }
+    return false;
+}
+bool BandMapSpotDB::modifyRecord(QSharedPointer<ClusterSpotData> spot)
+{
+    return modifyRecord(spot.data());
+}
+bool BandMapSpotDB::modifyRecord(ClusterSpotData *spot)
+{
+    int recid = -1;
+    QSqlQuery query;
+    QString mod = "UPDATE LSPOTS SET "
+                  "type=:type, spottype=:spottype, callsign=:callsign, band=:band, mode=:mode, loc=:loc, dist=:dist, freq=:freq,"
+                  " dtg=:dtg, rmOn=:rmOn, offRF=:offRF, CQResp=:CQResp"
+                  " WHERE "
+                  " recno=:recId";
+    bool prepres = query.prepare(mod);
+
+    if (prepres)
+    {
+        query.bindValue(":recId", spot->getRecNo());
+        query.bindValue(":type", spot->getSpotType());
+        query.bindValue(":spottype", spot->spotName());
+        query.bindValue(":callsign", spot->getDxCall().getFullCall());
+        query.bindValue(":band", spot->getBand());
+        query.bindValue(":mode", spot->getMode());
+        query.bindValue(":loc", spot->getDxLocator());
+        query.bindValue(":dist", spot->getDxDist());
+        query.bindValue(":freq", spot->getFreq().str());
+        dtg sdtg(false);
+        sdtg.setDateTime(spot->getSpotDateTime());
+        query.bindValue(":dtg", sdtg.getIsoDTG());
+        query.bindValue(":rmOn", spot->getRunModeOn());
+        query.bindValue(":offRF", spot->getOffRunFreq());
+        query.bindValue(":CQResp", spot->getCqResponse());
+
+        // // derived
+        // spot->getDxBrg();
+        // spot->getDxCallWorked();
+        // spot->getDxLocatorWorked();
+
+        if(query.exec())
+        {
+            trace(QString("BandMapSpotDB::modifyRecord spot callsign %1 spottype %2 recid %3")
+                      .arg(spot->getDxCall().getFullCall(), ClusterSpotData::spotName(spot->getSpotType()))
+                      .arg(recid)
+                  );
+            return true;
+        }
+        else
+        {
+            trace(mod);
+            trace(QString("BandMapSpotDB::modifyRecord error:").arg(query.lastError().text()));
+        }
+    }
+    else
+    {
+        trace(mod);
+        trace(QString("BandMapSpotDB::modifyRecord prepare error:").arg(query.lastError().text()));
+    }
+    return false;
+}
+bool BandMapSpotDB::deleteRecord(QSharedPointer<ClusterSpotData> spot)
+{
+    return deleteRecord(spot.data());
+}
+bool BandMapSpotDB::deleteRecord(ClusterSpotData *spot)
+{
+    QSqlQuery query;
+    bool prepres = query.prepare("DELETE FROM LSPOTS WHERE recno=(:recid)");
+    if (prepres)
+    {
+        int recid = spot->getRecNo();
+        query.bindValue(":recid", recid);
+        if (query.exec())
+        {
+            trace(QString("BandMapSpotDB::deleteRecord spot callsign %1 spottype %2 recid %3")
+                      .arg(spot->getDxCall().getFullCall(), ClusterSpotData::spotName(spot->getSpotType()))
+                      .arg(recid));
+            return true;
+        }
+    }
+    trace(QString("BandMapSpotDB::deleteRecord prepare error:").arg(query.lastError().text()));
+    return false;
+}
+
+bool BandMapSpotDB::deleteAllRecords(QString id)
+{
+    QSqlQuery query;
+    bool prepres = query.prepare("DELETE FROM LSPOTS WHERE id=(:id)");
+    if (prepres)
+    {
+        query.bindValue(":id", id);
+        if (query.exec())
+        {
+            trace(QString("BandMapSpotDB::deleteAllRecords spot id %1")
+                      .arg(id));
+            return true;
+        }
+    }
+    trace(QString("BandMapSpotDB::deleteAllRecords error:").arg(query.lastError().text()));
     return false;
 }
 
@@ -153,7 +309,7 @@ QVector<QSharedPointer<ClusterSpotData> > BandMapSpotDB::getRecords(const QStrin
         query.bindValue(":id", id);
         if (query.exec())
         {
-
+            int recno = query.record().indexOf("recno");
             int idCallsign = query.record().indexOf("callsign");
             int idType = query.record().indexOf("type");
             int idBand = query.record().indexOf("band");
@@ -171,6 +327,7 @@ QVector<QSharedPointer<ClusterSpotData> > BandMapSpotDB::getRecords(const QStrin
                 QString type = query.value(idType).toString();
                 QSharedPointer<ClusterSpotData> spot(new ClusterSpotData(static_cast<bandmapSpotType::SPOT_TYPE>(type.toInt())));
 
+                spot->setRecNo(query.value(recno).toInt());
                 spot->setDxCall(query.value(idCallsign).toString());
                 spot->setBand(query.value(idBand).toString());
                 spot->setMode(query.value(idMode).toString());

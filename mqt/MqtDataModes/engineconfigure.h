@@ -21,6 +21,10 @@ public:
     explicit EngineConfigure(DMMainWindow *parent = nullptr);
     ~EngineConfigure();
 
+    static void setTestString(QSettings &settings, QString);
+    static void setTestString(QString);
+    static QString getTestString(QSettings &settings);
+    static QString getTestString();
 
     static QString getEnginePath(QSettings &settings, QString engine);
     static QString getEnginePath(QString engine);

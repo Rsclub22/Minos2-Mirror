@@ -4,7 +4,7 @@
 #include <QMainWindow>
 #include "CommonMonitor.h"
 #include "RigCache.h"
-#include "StdInReader.h"
+#include "CommandReader.h"
 
 namespace Ui {
 class ControlMain;
@@ -45,7 +45,7 @@ private:
     RigCache rigCache;
     PubSubName rigSelected;
 
-    QSharedPointer<StdInReader> stdinReader = QSharedPointer<StdInReader>(new StdInReader(this));
+    QSharedPointer<CommandReader> commandReader = QSharedPointer<CommandReader>(new CommandReader(this));
     QTimer LogTimer;
     QTimer formShowTimer;
 

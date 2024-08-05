@@ -6,7 +6,7 @@
 #include "MinosLoggerEvents.h"
 #include "ScreenContact.h"
 #include "MatchThread.h"
-#include "cutils.h"
+//#include "cutils.h"
 #include "remotelogs.h"
 #include "MonitoredLog.h"
 #include "MonitoringFrame.h"
@@ -127,6 +127,8 @@ MonitorMain::MonitorMain(QWidget *parent) :
     ui->locTL->setText(locTL);
     locBR = isettings.value("mapShowLocBR", "KM40").toString();
     ui->locBR->setText(locBR);
+    showNav = isettings.value("mapShowNav", true).toBool();
+    ui->showNav->setChecked(showNav);
 }
 
 MonitorMain::~MonitorMain()
@@ -478,7 +480,7 @@ void MonitorMain::on_showGridcb_stateChanged(int /*arg1*/)
     QSOGrid = ui->showGridcb->isChecked();
     settings.setValue("showQSOGrid", QSOGrid);
     MinosLoggerEvents::SendRedrawQSOMap(QSOGrid, QSOLines, mapShowSpots, clusterDistanceLimit
-                                        , showLoc, locTL, locBR);
+                                        , showLoc, locTL, locBR, showNav);
 }
 
 
@@ -488,7 +490,7 @@ void MonitorMain::on_showLinescb_stateChanged(int /*arg1*/)
     QSOLines = ui->showLinescb->isChecked();
     settings.setValue("showQSOLines", QSOLines);
     MinosLoggerEvents::SendRedrawQSOMap(QSOGrid, QSOLines, mapShowSpots, clusterDistanceLimit
-                                        , showLoc, locTL, locBR);
+                                        , showLoc, locTL, locBR, showNav);
 }
 
 
@@ -498,7 +500,7 @@ void MonitorMain::on_mapShowSpots_stateChanged(int /*arg1*/)
     mapShowSpots = ui->mapShowSpots->isChecked();
     settings.setValue("mapShowSpots", mapShowSpots);
     MinosLoggerEvents::SendRedrawQSOMap(QSOGrid, QSOLines, mapShowSpots, clusterDistanceLimit
-                                        , showLoc, locTL, locBR);
+                                        , showLoc, locTL, locBR, showNav);
 }
 
 
@@ -508,7 +510,7 @@ void MonitorMain::on_clusterDistanceLimit_valueChanged(int /*arg1*/)
     clusterDistanceLimit = ui->clusterDistanceLimit->value();
     settings.setValue("clusterDistanceLimit", clusterDistanceLimit);
     MinosLoggerEvents::SendRedrawQSOMap(QSOGrid, QSOLines, mapShowSpots, clusterDistanceLimit
-                                        , showLoc, locTL, locBR);
+                                        , showLoc, locTL, locBR, showNav);
 }
 
 
@@ -518,17 +520,25 @@ void MonitorMain::on_showLocs_stateChanged(int /*arg1*/)
     showLoc = ui->showLocs->isChecked();
     settings.setValue("mapShowLoc", showLoc);
     MinosLoggerEvents::SendRedrawQSOMap(QSOGrid, QSOLines, mapShowSpots, clusterDistanceLimit
-                                        , showLoc, locTL, locBR);
+                                        , showLoc, locTL, locBR, showNav);
 }
 
 
+void MonitorMain::on_showNav_stateChanged(int /*arg1*/)
+{
+    QSettings settings(iniName, QSettings::IniFormat);
+    showNav = ui->showNav->isChecked();
+    settings.setValue("mapShowNav", showNav);
+    MinosLoggerEvents::SendRedrawQSOMap(QSOGrid, QSOLines, mapShowSpots, clusterDistanceLimit
+                                        , showLoc, locTL, locBR, showNav);
+}
 void MonitorMain::on_locTL_editingFinished()
 {
     QSettings settings(iniName, QSettings::IniFormat);
     locTL = ui->locTL->text();
     settings.setValue("mapShowLocTL", locTL);
     MinosLoggerEvents::SendRedrawQSOMap(QSOGrid, QSOLines, mapShowSpots, clusterDistanceLimit
-                                        , showLoc, locTL, locBR);
+                                        , showLoc, locTL, locBR, showNav);
 }
 
 
@@ -538,5 +548,7 @@ void MonitorMain::on_locBR_editingFinished()
     locBR = ui->locBR->text();
     settings.setValue("mapShowLocBR", locBR);
     MinosLoggerEvents::SendRedrawQSOMap(QSOGrid, QSOLines, mapShowSpots, clusterDistanceLimit
-                                        , showLoc, locTL, locBR);
+                                        , showLoc, locTL, locBR, showNav);
 }
+
+

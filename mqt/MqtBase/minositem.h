@@ -10,7 +10,7 @@ template < class itemtype >
 class MinosItem
 {
 private:
-    virtual itemtype &operator=(const itemtype &r)
+    itemtype &operator=(const itemtype &r)
     {
         setValue(r);
         return val;
@@ -31,14 +31,6 @@ private:
          d |= dirty;
          return val;
       }
-//      void setValue( itemtype t )
-//      {
-//         if ( val != t )        // so all item classes need != operator
-//         {
-//            dirty = true;
-//            val = t;
-//         }
-//      }
       void setValue( const itemtype &t )
       {
          if ( val != t )        // so all item classes need != operator
@@ -103,6 +95,7 @@ private:
          }
       }
 };
+//============================================================================
 template < class QString >
 class MinosStringItem : public MinosItem<QString>
 {
@@ -130,6 +123,7 @@ public:
        MinosItem<QString>::val = t;
     }
 };
+//============================================================================
 template < class Frequency >
 class MinosFrequencyItem : public MinosItem<Frequency>
 {

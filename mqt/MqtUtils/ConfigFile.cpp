@@ -7,10 +7,12 @@
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QDir>
+#include <QThread>
 
 #include "AppStartup.h"
 #include "LogEvents.h"
 #include "SecondInstall.h"
+#include "delayedaction.h"
 #include "fileutils.h"
 #include "ConfigFile.h"
 #include "MTrace.h"
@@ -284,19 +286,25 @@ void RunConfigElement::createProcess()
         trace(runarg);
 #endif
 
-        if (runner)
+        delayedAction(this, [=]()
         {
-            // and error will have removed runner!
-            if (hideApp)
-                sendCommand("HideServers");
-            else
-                sendCommand("ShowServers");
+            // NB a lambda function
 
-            QString fontCommand = "Font " + QApplication::font().toString();
-            sendCommand(fontCommand);
+            if (runner)
+            {
+                // and error will have removed runner!
+                if (hideApp)
+                    sendCommand("HideServers");
+                else
+                    sendCommand("ShowServers");
 
-             MinosConfigEvents::sendStealFocus();
-        }
+                QString fontCommand = "Font " + QApplication::font().toString();
+                sendCommand(fontCommand);
+
+                 MinosConfigEvents::sendStealFocus();
+            }
+        }, 500
+        );
     }
 }
 void RunConfigElement::askStopProcess()
@@ -335,14 +343,46 @@ void RunConfigElement::sendCommand(const QString & cmd)
              sendCommand("ShowServers");
         }
         QByteArray command = (cmd + "\n").toUtf8();
-        qint64 res = runner->write( command );
-        if (res < 0)
+        if (!localSocket)
         {
-            trace(QString("Failed to write %1 to runner %2").arg(cmd, name));
+            trace(QString("Creating local socket to bind to %1").arg(name));
+            localSocket = new QLocalSocket();
+
+            bool connected = false;
+            int connectCount = 10;
+            while (!connected && connectCount-- > 0)
+            {
+                localSocket->connectToServer(name);
+
+                connected = localSocket->waitForConnected(500);
+                if (!connected)
+                {
+                    trace(QString("Failed to connect %1").arg(localSocket->errorString()));
+                    QThread::msleep(500);
+                }
+                else
+                {
+                    trace(QString("Connected to %1").arg(name));
+                }
+            }
+            if (!connected)
+            {
+                delete localSocket;
+                localSocket = nullptr;
+            }
         }
-        else
+        if (localSocket)
         {
-            trace(QString("Wrote %1 to runner %2").arg(cmd, name));
+            qint64 res = localSocket->write( command );
+            localSocket->waitForBytesWritten(500);
+            if (res < 0)
+            {
+                trace(QString("Failed to write %1 to runner %2").arg(cmd, name));
+            }
+            else
+            {
+                trace(QString("Wrote %1 to runner %2").arg(cmd, name));
+            }
         }
     }
 }
@@ -361,6 +401,10 @@ void RunConfigElement::on_finished(int err, QProcess::ExitStatus exitStatus)
         runner->closeWriteChannel();
         runner->deleteLater();
         runner = nullptr;
+        localSocket->close();
+        localSocket->deleteLater();
+        localSocket = nullptr;
+
     }
     if (stopping)
     {
@@ -379,6 +423,12 @@ void RunConfigElement::on_error(QProcess::ProcessError error)
     trace(name + ":error:" + QString::number(error));
     runner->deleteLater();
     runner = nullptr;
+    if (localSocket)
+    {
+        localSocket->close();
+        localSocket->deleteLater();
+        localSocket = nullptr;
+    }
 }
 
 void RunConfigElement::on_readyReadStandardError()

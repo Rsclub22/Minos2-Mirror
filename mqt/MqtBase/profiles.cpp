@@ -125,6 +125,7 @@ BundleFile::BundleFile( PROFILES p )
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpShowMapLoc, "ShowQSOMapLocs", true, QT_TR_NOOP("Show QSO Map Locators"), QT_TR_NOOP("Show QSO Map Locators"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpShowMapTLLoc, "ShowQSOMapLocTL", "IP40", QT_TR_NOOP("Show QSO Map Locators Top Left"), QT_TR_NOOP("Show QSO Map Locators Top Left"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpShowMapBRLoc, "ShowQSOMapLocBR", "KM40", QT_TR_NOOP("Show QSO Map Locators Bottom Right"), QT_TR_NOOP("Show QSO Map Locators Bottom Right"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpShowMapNav, "ShowQSOMapNav", true, QT_TR_NOOP("Show QSO Map Navigation Buttons"), QT_TR_NOOP("Show QSO Map Navigation Buttons"), false ) ) );
 
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpMapShowCluster, "MapShowCluster", true, QT_TR_NOOP("Show Cluster spots on map"), QT_TR_NOOP("Show Cluster spots on map"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpMapClusterDistance, "MapClusterDistance", 0, QT_TR_NOOP("Limit Cluster spot distance on map"), QT_TR_NOOP("Limit Cluster spot distance on map"), false ) ) );

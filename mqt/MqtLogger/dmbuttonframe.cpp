@@ -147,9 +147,9 @@ void DMButtonFrame::showFButtons(bool s)
         }
         ui->FButtonFrame->setEnabled(true);
 
-        QString fkeys = getFKeysString();
+        QString fkeystring = getFKeysString();
 
-        rpc->publish( rpcConstants::DMCat, rpcConstants::DMFKeys, fkeys, psPublished );
+        rpc->publish( rpcConstants::DMCat, rpcConstants::DMFKeys, fkeystring, psPublished );
 
     }
     else if (fkeys["Digi"][currentName].size() == 0)

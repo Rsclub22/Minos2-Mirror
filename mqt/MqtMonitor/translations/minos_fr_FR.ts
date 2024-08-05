@@ -44,33 +44,38 @@
         <translation>Afficher les Lignes</translation>
     </message>
     <message>
-        <location filename="../MonitorMain.ui" line="168"/>
+        <location filename="../MonitorMain.ui" line="161"/>
+        <source>Show Navigation Buttons</source>
+        <translation>Afficher les boutons de navigation</translation>
+    </message>
+    <message>
+        <location filename="../MonitorMain.ui" line="175"/>
         <source>Show spots</source>
         <translation>Afficher les Spots</translation>
     </message>
     <message>
-        <location filename="../MonitorMain.ui" line="188"/>
+        <location filename="../MonitorMain.ui" line="195"/>
         <source>Dist Limit</source>
         <translation>Limite de distance</translation>
     </message>
     <message>
-        <location filename="../MonitorMain.ui" line="222"/>
+        <location filename="../MonitorMain.ui" line="227"/>
         <source>Show Locs</source>
         <translation>Afficher Locators</translation>
     </message>
     <message>
-        <location filename="../MonitorMain.ui" line="229"/>
-        <source>Top Left</source>
-        <translation>En haut à gauche</translation>
+        <location filename="../MonitorMain.ui" line="234"/>
+        <source>Top Left Labelled Locator</source>
+        <translation>Locators etiquetés - en haut à gauche</translation>
     </message>
     <message>
-        <location filename="../MonitorMain.ui" line="239"/>
-        <source>Bottom Right</source>
-        <translation>En bas à droite</translation>
+        <location filename="../MonitorMain.ui" line="261"/>
+        <source>Bottom Right Labelled Locator</source>
+        <translation>Locators etiquetés - en bas à droite</translation>
     </message>
     <message>
-        <location filename="../MonitorMain.ui" line="264"/>
-        <source>NB Showing Loc can make the display very slow, so restrict the area as much as possible.</source>
+        <location filename="../MonitorMain.ui" line="288"/>
+        <source>NB Showing Labelled Locators can make the display very slow, so restrict the area as much as possible.</source>
         <translation>NB L&amp;apos;affichage des Locators peut être très lent, alors limiter la zone autant que possible.</translation>
     </message>
     <message>
@@ -83,7 +88,7 @@
     <name>MonitoringFrame</name>
     <message>
         <location filename="../MonitoringFrame.ui" line="62"/>
-        <location filename="../MonitoringFrame.cpp" line="209"/>
+        <location filename="../MonitoringFrame.cpp" line="210"/>
         <source>Show Map</source>
         <translation>Afficher la Carte</translation>
     </message>

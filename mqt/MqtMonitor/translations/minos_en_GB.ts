@@ -44,33 +44,38 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MonitorMain.ui" line="168"/>
+        <location filename="../MonitorMain.ui" line="161"/>
+        <source>Show Navigation Buttons</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../MonitorMain.ui" line="175"/>
         <source>Show spots</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MonitorMain.ui" line="188"/>
+        <location filename="../MonitorMain.ui" line="195"/>
         <source>Dist Limit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MonitorMain.ui" line="222"/>
+        <location filename="../MonitorMain.ui" line="227"/>
         <source>Show Locs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MonitorMain.ui" line="229"/>
-        <source>Top Left</source>
+        <location filename="../MonitorMain.ui" line="234"/>
+        <source>Top Left Labelled Locator</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MonitorMain.ui" line="239"/>
-        <source>Bottom Right</source>
+        <location filename="../MonitorMain.ui" line="261"/>
+        <source>Bottom Right Labelled Locator</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MonitorMain.ui" line="264"/>
-        <source>NB Showing Loc can make the display very slow, so restrict the area as much as possible.</source>
+        <location filename="../MonitorMain.ui" line="288"/>
+        <source>NB Showing Labelled Locators can make the display very slow, so restrict the area as much as possible.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -83,7 +88,7 @@
     <name>MonitoringFrame</name>
     <message>
         <location filename="../MonitoringFrame.ui" line="62"/>
-        <location filename="../MonitoringFrame.cpp" line="209"/>
+        <location filename="../MonitoringFrame.cpp" line="210"/>
         <source>Show Map</source>
         <translation type="unfinished"></translation>
     </message>

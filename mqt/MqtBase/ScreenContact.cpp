@@ -276,8 +276,7 @@ void ScreenContact::checkScreenContact( )
 
 void ScreenContact::score()
 {
-    // this is only called from wsjt-x decodeMessage::checkAsContact()
-    // which only affects the screen contact, not the contest
+    // This only affects the screen contact, not the contest
 
     // checkContact should already have run
 

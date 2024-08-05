@@ -206,6 +206,9 @@ private:
 
     ValidatedControl *freqIl;
 
+    bool frameHasFocusForced = false;
+    bool delayFocusChange = true;
+
     QWidget *getNextInvalid(QWidget *&firstInvalid);
 
     bool isRotatorLoaded();
@@ -322,7 +325,9 @@ private slots:
     void onQTHEdit_textChanged(const QString &arg1);
     void onCallsignEdit_textChanged(const QString &arg1);
     void onLocEdit_textChanged(const QString &arg1);
-    void on_ModeButton_clicked();
+    void onModeButtonClicked(bool);
+    void onModeButtonClickeds(const QString &m);
+
     void on_InsertBeforeButton_clicked();
     void on_InsertAfterButton_clicked();
     void on_PriorButton_clicked();
@@ -356,6 +361,7 @@ private slots:
 
     void on_SandPrb_clicked();
     void onContestBandChanged(BaseContestLog *c);
+    void appStateChanged(Qt::ApplicationState state);
 public slots:
     void setXferEnabled(bool s, BaseContestLog *c, QString basename);
 

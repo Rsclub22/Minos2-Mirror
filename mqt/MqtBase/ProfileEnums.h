@@ -69,6 +69,7 @@ enum LOGGERPROFILE {
     elpShowMapLoc,
     elpShowMapTLLoc,
     elpShowMapBRLoc,
+    elpShowMapNav,
     elpMapShowCluster,
     elpMapClusterDistance,
 

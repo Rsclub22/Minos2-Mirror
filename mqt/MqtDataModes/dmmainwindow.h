@@ -5,7 +5,7 @@
 #include <QTimer>
 #include <QMap>
 
-#include "StdInReader.h"
+#include "CommandReader.h"
 #include "XMPPRPCObj.h"
 
 QT_BEGIN_NAMESPACE
@@ -36,7 +36,7 @@ public:
 
 private:
     Ui::DMMainWindow *ui;
-    QSharedPointer<StdInReader> stdinReader = QSharedPointer<StdInReader>(new StdInReader(this));
+    QSharedPointer<CommandReader> commandReader = QSharedPointer<CommandReader>(new CommandReader(this));
 
     MonitoredLogs *logsTreeView = nullptr;
 
@@ -63,7 +63,7 @@ private slots:
 
     void LogTimerTimer();
 
-    void onStdInRead(QString cmd);
+    void onCommandRead(QString cmd);
 
     void onNewLog(QSharedPointer<MonitoredLog> ml);
 

@@ -21,7 +21,7 @@ ServerMain::ServerMain(QWidget *parent) :
     ui->setupUi(this);
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-    connect(stdinReader.data(), &StdInReader::stdinLine, this, &ServerMain::onStdInRead);
+    connect(commandReader.data(), &CommandReader::commandLine, this, &ServerMain::onCommandRead);
 
     createCloseEvent();
     RegSettings settings;
@@ -54,7 +54,7 @@ ServerMain::~ServerMain()
 {
     delete ui;
 }
-void ServerMain::onStdInRead(QString cmd)
+void ServerMain::onCommandRead(QString cmd)
 {
     if (cmd.indexOf("Shutdown", 0, Qt::CaseInsensitive) >= 0)
     {

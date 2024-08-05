@@ -107,7 +107,7 @@ void ClusterMainWindow::connectToCluster()
 void ClusterMainWindow::doStartup()
 {
 
-    connect(stdinReader.data(), &StdInReader::stdinLine, this, &ClusterMainWindow::onStdInRead);
+    connect(commandReader.data(), &CommandReader::commandLine, this, &ClusterMainWindow::onCommandRead);
 
     MinosRPC *rpc = MinosRPC::getMinosRPC(getAppStartupName());
     Q_UNUSED(rpc)
@@ -274,7 +274,7 @@ void ClusterMainWindow::doStartup()
     dxSpotView->setColumnHidden(DATE_COL_NUM, true);
     dxSpotView->setColumnHidden(DXLOC_FROM_NODE_FLAG_COL_NUM, true);
     dxSpotView->setColumnHidden(DATE_TIME_COL_NUM, true);
-    dxSpotView->setColumnHidden(DXCLUSTER_SPOT_TYPE, true);
+    dxSpotView->setColumnHidden(DXCLUSTER_SHOW_SPOT_TYPE, true);
 
 
 
@@ -1137,7 +1137,7 @@ int ClusterMainWindow::upackShowDxSpot(const QString txt, QSharedPointer<Cluster
 
     trace(QString("UnpackShowDXSpot - %1").arg(txt));
 
-    newSpot->setClusterSpotType(clusterSpotType::SHOW_DXSPOT_TYPE);
+    newSpot->setShowSpotType(true);
 
 #if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
     dxMsg = txt.split(rews, Qt::SkipEmptyParts);
@@ -1383,7 +1383,7 @@ void ClusterMainWindow::resendAllSpotsToClients(ResendSpotCommand cmd)
 QString ClusterMainWindow::assembleSpotMsgToSendToClients(const QSharedPointer<ClusterSpotData> spotData, const QString timeToLive)
 {
     QString spotMsg = QString("%1:%2:%3:%4:%5:%6:%7:%8")
-                       .arg(spotData->getClusterSpotType(), // %1
+                       .arg(spotData->isShowSpotType()?clusterSpotType::SHOW_DXSPOT_TYPE:clusterSpotType::DXSPOT_TYPE, // %1
                        spotData->getDxCallStr(),           // %2
                        spotData->getDxLocator(),            // %3
                        spotData->getDxLocatorIsFromNode() ? "locFromNode-true" : "locFromNode-false", // %4
@@ -1577,7 +1577,7 @@ int ClusterMainWindow::upackDxSpot(QString txt, QSharedPointer<ClusterSpotData> 
 
     trace(QString("UnpackDXSpot - %1").arg(txt));
 
-    newSpot->setClusterSpotType(clusterSpotType::DXSPOT_TYPE);
+    newSpot->setShowSpotType(false);
 
     int timePos = 0;
 
@@ -2030,7 +2030,7 @@ void ClusterMainWindow::closeEvent(QCloseEvent *event)
 }
 
 
-void ClusterMainWindow::onStdInRead(QString cmd)
+void ClusterMainWindow::onCommandRead(QString cmd)
 {
     if (cmd.indexOf("Shutdown", 0, Qt::CaseInsensitive) >= 0)
     {
@@ -2275,6 +2275,10 @@ void ClusterMainWindow::userCmdButtonEdit(QStringList userCommands, QString tabS
                 }
             }
         }
+    }
+    else
+    {
+        userCmdButtonWrite(tabSelected, buttonNumber);
     }
 }
 

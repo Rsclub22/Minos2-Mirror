@@ -8,7 +8,7 @@
 #include "ScreenContact.h"
 #include "MonitoredLog.h"
 #include "MonitoringFrame.h"
-#include "StdInReader.h"
+#include "CommandReader.h"
 #include "cutils.h"
 
 
@@ -41,6 +41,7 @@ public:
     bool showLoc = true;
     QString locTL;
     QString locBR;
+    bool showNav = true;
 
     void closeTab(MonitoringFrame *tab);
 
@@ -94,6 +95,8 @@ private slots:
     void on_locBR_editingFinished();
 
     void onLogChanged(QSharedPointer<MonitoredLog>);
+    void on_showNav_stateChanged(int arg1);
+
 private:
     Ui::MonitorMain *ui;
     UpperCaseValidator ucValidator;
@@ -102,7 +105,7 @@ private:
     QAction *closeMonitoredLog;
     int splitterHandleWidth;
 
-    QSharedPointer<StdInReader> stdinReader = QSharedPointer<StdInReader>(new StdInReader(this));
+    QSharedPointer<CommandReader> commandReader = QSharedPointer<CommandReader>(new CommandReader(this));
 
     QTimer *monitorTimer;
 

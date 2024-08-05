@@ -40,7 +40,7 @@
 
 #include "levelmeter.h"
 
-#include <math.h>
+#include <cmath>
 
 #include <QPainter>
 #include <QTimer>

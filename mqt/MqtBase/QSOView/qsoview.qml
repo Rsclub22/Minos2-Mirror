@@ -1,5 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.15
 import QtPositioning 5.15
 import QtLocation 5.15
 
@@ -18,6 +19,7 @@ Frame {
     property int locTLLon: 0
     property int locBRLat: 0
     property int locBRLon: 0
+    property bool showNav: true
 
     property string homeLat: "0.0"
     property string homeLon: "0.0"
@@ -88,9 +90,88 @@ Frame {
 
     } // end map
 
+    Frame {
+        id: navPanel
+        anchors{
+            top:parent.top
+            right:parent.right
+        }
+        background: Rectangle {
+            color:setColorAlpha("lightgrey", 0.25)
+        }
+        GridLayout {
+            id: gridLayout
+            columns:2
+            anchors.fill: parent
+
+            ToolButton {
+                id: upButton
+                Layout.row:0
+                Layout.columnSpan: 2
+                Layout.alignment: Qt.AlignHCenter
+                text:"^"
+                enabled:true
+                onClicked: {
+                    mapOfEurope.pan(0, -10)
+                }
+            }
+            ToolButton {
+                id: leftButton
+                Layout.row:1
+                Layout.column: 0
+                text:"<"
+                enabled:true
+                onClicked: {
+                    mapOfEurope.pan(-10, 0)
+                }
+            }
+            ToolButton {
+                id: rightButton
+                Layout.row:1
+                Layout.column: 1
+                text:">"
+                enabled:true
+                onClicked: {
+                    mapOfEurope.pan(10, 0)
+                }
+            }
+            ToolButton {
+                id: downButton
+                Layout.row:2
+                Layout.columnSpan: 2
+                Layout.alignment: Qt.AlignHCenter
+                text:"V"
+                enabled:true
+                onClicked: {
+                    onClicked:mapOfEurope.pan(0, 10)
+                }
+            }
+            ToolButton {
+                id: plusButton
+                Layout.row:3
+                Layout.column: 0
+                text:"+"
+                enabled:true
+                onClicked: {
+                    mapOfEurope.zoomLevel=mapOfEurope.zoomLevel + 0.1
+                }
+            }
+            ToolButton {
+                id: minusButton
+                Layout.row:3
+                Layout.column: 1
+                text:"-"
+                enabled:true
+                onClicked: {
+                    mapOfEurope.zoomLevel=mapOfEurope.zoomLevel - 0.1
+                }
+            }
+        }
+    }
     function setColorAlpha(color, alpha) {
         return Qt.hsla(color.hslHue, color.hslSaturation, color.hslLightness, alpha)
     }
+
     function drawGrid()
     {
         if (showGrid)
@@ -264,6 +345,8 @@ MapPolyline
 
         mapOfEurope.addMapItem(cm)
         drawGrid()
+
+        navPanel.visible = showNav
     }
 
     function newHome(callInfo)
@@ -366,6 +449,10 @@ MapPolyline
     function setShowLocs(sl)
     {
         showLocs = sl;
+    }
+    function setShowNav(sn)
+    {
+        showNav = sn;
     }
     function setShowLocsTL(tl)
     {

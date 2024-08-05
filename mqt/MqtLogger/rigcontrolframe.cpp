@@ -12,7 +12,7 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-#include <math.h>
+//#include <math.h>
 #include "ContestApp.h"
 #include "MShowMessageDlg.h"
 #include "tlogcontainer.h"
@@ -1996,36 +1996,38 @@ void RigControlFrame::mgmLabelVisible(bool state)
 
 void RigControlFrame::setFreqTextLegalColour(const Frequency _freq, QString mode)
 {
-    bool legalOperatingFreqFlag;
-    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpContestTurnOffOperatingFreqColorRadioDial, legalOperatingFreqFlag );
-
-
-    if (checkFreqIsLegal(_freq, mode))
+    if (ct)
     {
+        bool legalOperatingFreqFlag;
+        TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpContestTurnOffOperatingFreqColorRadioDial, legalOperatingFreqFlag );
 
-        freqDisplayPalette->setColor(QPalette::Text, Qt::black);
-        ui->freqInput->setPalette(*freqDisplayPalette);
 
-
-        legalFreq = true;
-    }
-    else
-    {
-
-        if (!legalOperatingFreqFlag)
+        if (checkFreqIsLegal(_freq, mode))
         {
-            freqDisplayPalette->setColor(QPalette::Text,Qt::red);
+
+            freqDisplayPalette->setColor(QPalette::Text, Qt::black);
             ui->freqInput->setPalette(*freqDisplayPalette);
+
+
+            legalFreq = true;
         }
         else
         {
-            freqDisplayPalette->setColor(QPalette::Text, Qt::black);
-            ui->freqInput->setPalette(*freqDisplayPalette);
+
+            if (!legalOperatingFreqFlag)
+            {
+                freqDisplayPalette->setColor(QPalette::Text,Qt::red);
+                ui->freqInput->setPalette(*freqDisplayPalette);
+            }
+            else
+            {
+                freqDisplayPalette->setColor(QPalette::Text, Qt::black);
+                ui->freqInput->setPalette(*freqDisplayPalette);
+            }
+
+            legalFreq = false;
         }
-
-        legalFreq = false;
     }
-
 }
 
 

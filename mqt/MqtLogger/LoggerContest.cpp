@@ -288,7 +288,7 @@ bool LoggerContestLog::initialise( const QString &fn, bool newFile, int slotno )
    // open the LoggerContestLog file
 
 
-   cfileName = fn;
+   cfileName = GetFullPath(fn);
    QString ext = ExtractFileExt( fn );
    publishedName = ExtractFileName( fn );
    if ( ext.compare(".gjv", Qt::CaseInsensitive ) == 0 )
@@ -329,7 +329,7 @@ bool LoggerContestLog::initialise( const QString &fn, bool newFile, int slotno )
       QIODevice::OpenMode om = QIODevice::ReadWrite | QIODevice::Unbuffered;
       QSharedPointer<QFile> contestFile(new QFile(fn));
 
-      if (!contestFile->open(om))
+      if (!FileExists(fn) || !contestFile->open(om))
       {
           // isWriteable doesn't give good results on Windows
           om = QIODevice::ReadOnly;

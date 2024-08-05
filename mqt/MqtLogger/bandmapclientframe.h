@@ -291,7 +291,7 @@ public:
 
 
         if (event->type() == QEvent::Enter)
-     {
+        {
             bandmapFrame->setHoldUpdateFlag(true);
         }
         else if (event->type() == QEvent::Leave)
@@ -302,6 +302,8 @@ public:
                bandmapFrame->buttonHandleDxSpots();
             }
 
+            // come what may, release on exit
+            // (Have seen it not happen on Mac)
             bandmapFrame->setHoldUpdateFlag(false);
 
         }

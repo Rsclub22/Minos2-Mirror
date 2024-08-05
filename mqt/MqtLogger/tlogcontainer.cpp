@@ -45,6 +45,7 @@
 #include "OptionsDialog.h"
 #include "bandmapclientframe.h"
 #include "StatisticsDisplay.h"
+#include "managehamlib.h"
 #include "MTrace.h"
 #include "RPCPubSub.h"
 #include "MinosConnection.h"
@@ -703,6 +704,9 @@ void TLogContainer::setupMenus()
     LocCalcAction = newAction(QT_TR_NOOP("Locator Calculator..."), ui->menuTools, &TLogContainer::LocCalcActionExecute);
 
     CorrectDateTimeAction = newAction(QT_TR_NOOP("Correct Date/Time..."), ui->menuTools, &TLogContainer::CorrectDateTimeActionExecute);
+#ifdef Q_OS_WIN
+    ManageHamlibAction = newAction(QT_TR_NOOP("Manage Hamlib..."), ui->menuTools, &TLogContainer::ManageHamlibActionExecute);
+#endif
     ui->menuTools->addSeparator();
 
     OptionsAction = newAction(QT_TR_NOOP("Options..."), ui->menuTools, &TLogContainer::OptionsActionExecute, QAction::PreferencesRole);
@@ -1458,6 +1462,11 @@ void TLogContainer::CorrectDateTimeActionExecute()
     cdlg.exec();
 }
 
+void TLogContainer::ManageHamlibActionExecute()
+{
+    ManageHamlib mhl(this);
+    mhl.exec();
+}
 void TLogContainer::GoToSerialActionExecute()
 {
     BaseContestLog * ct = TContestApp::getContestApp() ->getCurrentContest();

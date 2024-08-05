@@ -1,7 +1,7 @@
 #ifndef MQTLOGCOMPRESSOR_H
 #define MQTLOGCOMPRESSOR_H
 
-#include <math.h>
+#include <cmath>
 
 class MqtLogCompressor
 {

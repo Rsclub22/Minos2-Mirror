@@ -441,6 +441,13 @@ void BandmapView::doBandmapUpdate()
         if (updateRequired)
         {
             dial->update();
+            BandmapSortFilterProxyModel *pm = dynamic_cast<BandmapSortFilterProxyModel *>(model());
+            QString pms = pm->getFilterString();
+            if (!pm->getFilterString().isEmpty())
+            {
+                // don't incur the overhead unless we ARE filtering
+                pm->setFilterString(pms);
+            }
             // delay the spots until any dial update has happened
             delayedAction(this, [=](){
                 drawBandMapSpots();
@@ -1395,7 +1402,7 @@ void BandmapView::assembleSpotMsg(int row, QString& markerMsg)
         }
         if (locWkd && !dxLocFromNodeFlag)
         {
-            locator = QString("%1%2%3").arg(HtmlFontColour(CALLSIGN_WORKED_COLOUR), dxLoc, HtmlFontColour(NOT_WORKED_COLOUR));
+            locator = QString("%1%2%3").arg(HtmlFontColour(LOCATOR_WORKED_COLOUR), dxLoc, HtmlFontColour(NOT_WORKED_COLOUR));
         }
         else
         {
@@ -1485,10 +1492,11 @@ void BandmapView::assembleSpotMsg(int row, QString& markerMsg)
         markSym = HtmlFontColour(CLUSTER_SPOT_COLOUR) + "*" + HtmlFontColour(MARKED_SPOT_COLOUR) + "#" + HtmlFontColour(NOT_WORKED_COLOUR);
     }
 
-    qlonglong elapsedTime = spotElapsedTime(spotTime) / 60;
-    QString elapsedTimeStr = QString::number(elapsedTime) + " " + tr("min");
+    qlonglong st = model()->data(model()->index(row, RXTIME_COL_NUM), BMP_DataStoredRole).toLongLong();
+    qlonglong elapsedTime = spotElapsedTime(st) / 60;
+    QString etc = formatTime(elapsedTime);
 
-    QString msg = QString("%1%2 @ .%3 %4 %5 %6 %7 %8 %9%10").arg(bLineStart, callsign, freq.extractKhz(), locator, distance).arg(bearing, elapsedTimeStr, markSym, newSpotMsg, bLineEnd);
+    QString msg = QString("%1%2 @ .%3 %4 %5 %6 %7 %8 %9%10").arg(bLineStart, callsign, freq.extractKhz(), locator, distance).arg(bearing, etc, markSym, newSpotMsg, bLineEnd);
 
     if (model()->data(model()->index(row, SPOT_IS_SELECTED_COL_NUM), BMP_DataStoredRole).toBool())
     {
@@ -1506,7 +1514,6 @@ void BandmapView::assembleCqToolTip(int row, Frequency freq, QString& toolTipMsg
     QString msg = tr("CQ Frequency = %1\nThe mode is %2").arg(freq.convertFreqStrDisp(), mode);
     toolTipMsg = msg;
 }
-
 
 void BandmapView::assembleToolTip(int row, Frequency freq, QString& toolTipMsg)
 {
@@ -1539,11 +1546,11 @@ void BandmapView::assembleToolTip(int row, Frequency freq, QString& toolTipMsg)
 
     qlonglong spotTime = model()->data(model()->index(row, RXTIME_COL_NUM), BMP_DataStoredRole).toLongLong();
     qlonglong elapsedTime = spotElapsedTime(spotTime) / 60;
-    QString elapsedTimeStr = QString::number(elapsedTime);
+    QString etc = formatTime(elapsedTime);
 
-    QString msg = tr("%1 - %2, %3, %4, %5 [%6 %7 @ %8 min] \n%9 %10\n%11\n%12")
+    QString msg = tr("%1 - %2, %3, %4, %5 [%6 %7 @ %8] \n%9 %10\n%11\n%12")
                                             .arg(callsign, freq.convertFreqStrDisp(), locator, bearing, distance)
-                                            .arg(spotterCallsign, spotterLocator, elapsedTimeStr, spotModeMsg, computedMode, spotterComment, spotName);
+                                            .arg(spotterCallsign, spotterLocator, etc, spotModeMsg, computedMode, spotterComment, spotName);
 
     toolTipMsg = msg;
 }

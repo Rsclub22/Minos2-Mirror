@@ -58,7 +58,7 @@ class Callsign
           valRes = CS_NOT_VALIDATED;
       }
 
-      int setFullCall(const QString &pcs);
+      int setFullCall(const QString &pcs, bool allowTail = false);
       QString getFullCall() const
       {
           return fullCall.getValue();
@@ -83,6 +83,8 @@ class Callsign
 private:
       int valRes = CS_NOT_VALIDATED;   // current validation result
       MinosStringItem<QString> fullCall; // full call
+      bool allowTail = false;
+
 
       int validate( );
       bool isValidStructure();

@@ -1,7 +1,7 @@
 #ifndef KPMAINWINDOW_H
 #define KPMAINWINDOW_H
 
-#include "StdInReader.h"
+#include "CommandReader.h"
 #include "vudata.h"
 #include <QMainWindow>
 #include <QProcess>
@@ -28,7 +28,7 @@ private:
     Ui::KPMainWindow *ui;
     QProcess *runner = nullptr;
     QTimer CloseTimer;
-    QSharedPointer<StdInReader> stdinReader = QSharedPointer<StdInReader>(new StdInReader(this));
+    QSharedPointer<CommandReader> commandReader = QSharedPointer<CommandReader>(new CommandReader(this));
     KPRPCServer *kpc = nullptr;
 
     QString oldHost;

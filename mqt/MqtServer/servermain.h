@@ -4,7 +4,7 @@
 #include <QMainWindow>
 #include <QTimer>
 
-#include "StdInReader.h"
+#include "CommandReader.h"
 #include "minoslistener.h"
 #include "ServerDetails.h"
 
@@ -31,7 +31,7 @@ public:
     virtual void changeEvent( QEvent* e ) override;
 
 private slots:
-    void onStdInRead(QString);
+    void onCommandRead(QString);
 
     void on_CloseButton_clicked();
     void LogTimerTimer( );
@@ -40,7 +40,7 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-    QSharedPointer<StdInReader> stdinReader = QSharedPointer<StdInReader>(new StdInReader(this));
+    QSharedPointer<CommandReader> commandReader = QSharedPointer<CommandReader>(new CommandReader(this));
     QSharedPointer<MinosClientListener> clientListener;
     QSharedPointer<MinosRouterListener> routerListener;
     QSharedPointer<TZConf> ZConf;

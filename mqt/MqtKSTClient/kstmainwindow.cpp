@@ -359,6 +359,7 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
 
 KSTMainWindow::~KSTMainWindow()
 {
+    asl.reset();
     delete ui;
 }
 void KSTMainWindow::resizeEvent(QResizeEvent * event)
@@ -452,7 +453,7 @@ void KSTMainWindow::onLogClosed(QSharedPointer<MonitoredLog> /*ml*/)
 }
 void KSTMainWindow::userCallTimerTimer()
 {
-    if (asl && getASActive() && callVectorChanged)
+    if (asl && getASActive() && callVectorChanged && callVector)
     {
         asl->usersChanged(callVector);
         callVectorChanged = false;
@@ -568,7 +569,8 @@ int KSTMainWindow::getMaxDistance() const
 
 bool KSTMainWindow::getASActive() const
 {
-    return ui->ASActivecb->isChecked();
+    bool ret = ui->ASActivecb->isChecked();
+    return ret;
 }
 
 ASBand KSTMainWindow::getASActiveBand() const
@@ -871,7 +873,7 @@ void KSTMainWindow::analyseKstMessage(QString atj)
 
         QSharedPointer<KstUser> test(new KstUser());
         test->chat = sl[1].toInt();
-        test->call.setFullCall(sl[2]);
+        test->call.setFullCall(sl[2], true); // allow e.g. G0GJV-7
         test->name = sl[3];
         test->loc = sl[4];
 
@@ -1941,7 +1943,10 @@ void KSTMainWindow::scrollMesToBottom()
         delayedAction(this, [=]()
         {
             QModelIndex mesIndex = kstMessageFilterModel.index(kstMessageFilterModel.rowCount() - 1, 0);
-            ui->messageTable->scrollTo(mesIndex, QAbstractItemView::PositionAtBottom);
+            if (mesIndex.isValid())
+            {
+                ui->messageTable->scrollTo(mesIndex, QAbstractItemView::PositionAtBottom);
+            }
         });
     }
 }
@@ -1951,7 +1956,10 @@ void KSTMainWindow::scrollMeepToBotton()
     delayedAction(this, [=]()
     {
         QModelIndex meepIndex = kstMeepFilterModel.index(kstMeepFilterModel.rowCount() - 1, 0);
-        ui->meepTable->scrollTo(meepIndex, QAbstractItemView::PositionAtBottom);
+        if (meepIndex.isValid())
+        {
+            ui->meepTable->scrollTo(meepIndex, QAbstractItemView::PositionAtBottom);
+        }
     });
 }
 
@@ -2019,6 +2027,12 @@ void KSTMainWindow::on_loggerXferButton_clicked()
         QSharedPointer<KstUser> user = callVector->at(r);
         QString call = user->call.getFullCall();
         QString loc = user->loc;
+
+        int hyphen = call.indexOf("-");
+        if (hyphen > 0)
+        {
+            call = call.left(hyphen);
+        }
 
         for(const auto &router: routerList)
         {

@@ -70,6 +70,7 @@ SOURCES += \
     MatchThread.cpp \
     MatchTreeFrame.cpp \
     locator.cpp \
+    managehamlib.cpp \
     minosNetUtils.cpp \
     minoscustomtab.cpp \
     minositem.cpp \
@@ -168,6 +169,7 @@ HEADERS += \
     MatchThread.h \
     MatchTreeFrame.h \
     locator.h \
+    managehamlib.h \
     minosNetUtils.h \
     minoscustomtab.h \
     minositem.h \
@@ -235,6 +237,7 @@ FORMS += \
     MatchTreeFrame.ui \
     StartConfigManager.ui \
     StatisticsDisplay.ui \
+    managehamlib.ui \
     minoskeyboard.ui \
     monitoredlogs.ui \
     rotpresetdialog.ui \

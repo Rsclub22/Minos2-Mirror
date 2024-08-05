@@ -241,8 +241,8 @@ QVariant BandmapDataModel::data(const QModelIndex &index, int role) const
             case DX_DISTRICT_WORKED_COL_NUM:
                 d = bandmapSpot->getDistrictWorked();
             break;
-            case DXCLUSTER_SPOT_TYPE:
-                d = bandmapSpot->getClusterSpotType();
+            case DXCLUSTER_SHOW_SPOT_TYPE:
+                d = bandmapSpot->isShowSpotType()?clusterSpotType::SHOW_DXSPOT_TYPE:clusterSpotType::DXSPOT_TYPE;
             break;
             default:
             d = "";
@@ -343,8 +343,8 @@ bool BandmapDataModel::setData(const QModelIndex & index, const QVariant & value
             case DX_DISTRICT_WORKED_COL_NUM:
                 bandmapSpot->setDistrictWorked(value.toBool());
             break;
-            case DXCLUSTER_SPOT_TYPE:
-                bandmapSpot->setClusterSpotType(value.toString());
+            case DXCLUSTER_SHOW_SPOT_TYPE:
+                bandmapSpot->setShowSpotType(value.toBool());
             break;
 
             default:
@@ -480,6 +480,11 @@ void BandmapSortFilterProxyModel::setFilterString(QString f)
 {
     filterString = f;
     invalidateFilter();
+}
+
+QString BandmapSortFilterProxyModel::getFilterString()
+{
+    return filterString;
 }
 
 bool BandmapSortFilterProxyModel::lessThan(const QModelIndex &left,

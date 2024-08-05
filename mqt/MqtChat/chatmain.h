@@ -4,7 +4,7 @@
 #include <QMainWindow>
 #include <QTimer>
 
-#include "StdInReader.h"
+#include "CommandReader.h"
 
 namespace Ui {
 class MainWindow;
@@ -21,7 +21,7 @@ public:
 private:
     Ui::MainWindow *ui;
     QTimer CloseTimer;
-    QSharedPointer<StdInReader> stdinReader = QSharedPointer<StdInReader>(new StdInReader(this));
+    QSharedPointer<CommandReader> commandReader = QSharedPointer<CommandReader>(new CommandReader(this));
 
     virtual void closeEvent(QCloseEvent *event) override;
     virtual void resizeEvent(QResizeEvent *event) override;

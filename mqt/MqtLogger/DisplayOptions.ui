@@ -332,7 +332,10 @@
       <item>
        <widget class="QLabel" name="label_8">
         <property name="text">
-         <string>NB Showing Loc can make the display very slow, so restrict the area as much as possible.</string>
+         <string>NB Showing Labelled Locators can make the display very slow, so restrict the area as much as possible.</string>
+        </property>
+        <property name="wordWrap">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
@@ -348,7 +351,7 @@
         <item>
          <widget class="QLabel" name="label_3">
           <property name="text">
-           <string>Top Left Locator of QSO Map</string>
+           <string>Top Left Labelled Locator</string>
           </property>
          </widget>
         </item>
@@ -358,7 +361,7 @@
         <item>
          <widget class="QLabel" name="label_7">
           <property name="text">
-           <string>Bottom Right Locator of QSO Map</string>
+           <string>Bottom Right Labelled Locator</string>
           </property>
          </widget>
         </item>
@@ -377,6 +380,13 @@
            </size>
           </property>
          </spacer>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="QSOMapShowNav">
+          <property name="text">
+           <string>Show Navigation Buttons</string>
+          </property>
+         </widget>
         </item>
        </layout>
       </item>
