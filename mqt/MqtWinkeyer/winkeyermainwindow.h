@@ -18,7 +18,7 @@
 #include <QMainWindow>
 #include <QSharedPointer>
 #include "winkeyerControl.h"
-#include "winKeyerCommon.h"
+#include "CommandReader.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -34,6 +34,10 @@ public:
     WinkeyerMainWindow(QWidget *parent = nullptr);
     ~WinkeyerMainWindow();
 
+    virtual void resizeEvent(QResizeEvent *event) override;
+    virtual void moveEvent(QMoveEvent *event) override;
+    virtual void changeEvent( QEvent* e ) override;
+
 private slots:
     void on_sendPushButton_clicked(); // Slot for send button click
 
@@ -43,22 +47,25 @@ private slots:
 
 
     void onTextChanged(const QString &text);
+    void onCommandRead(QString cmd);
 private:
     Ui::WinkeyerMainWindow *ui;
     WinkeyerControl *winkeyerControl;
-    //QSharedPointer<WinkeyerState> currentWinkeyerStatePtr;
-    //QSharedPointer<WinkeyerStateStorage> currentWinkeyStateStoragePtr;
 
-    //QSharedPointer<WinkeyerState> newWinkeyerStatePtr;
-    //QSharedPointer<WinkeyerStateStorage> newWinkeyStateStoragePtr;
+    QSharedPointer<CommandReader> commandReader = QSharedPointer<CommandReader>(new CommandReader(this));
 
+    QTimer LogTimer;
 
+    void closeEvent(QCloseEvent *event) override;
 
     void openWinKeyerSetupDialog();
 
 
 
     void handleKeyboardChar(QChar kbdChar);
+    void LogTimerTimer();
+    void saveWinkeyerSettings();
+    void updateStatusBarMessage(QString serialErrorMsg, QString wkStatusMsg);
 };
 
 #endif // WINKEYERMAINWINDOW_H

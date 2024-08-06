@@ -26,6 +26,7 @@
 #include <QSharedPointer>
 #include <QSettings>
 #include <QDebug>
+#include "PublishState.h"
 
 /*****************************************
 *       Winkey status byte
@@ -287,6 +288,17 @@ const QStringList sidetoneListStr = QStringList() << "3759" << "1879" << "1252" 
                                                   << "752" << "625" << "535" << "469"
                                                   << "417" << "375";
 const QStringList hangtimeListStr = QStringList() << "1.0 Word" << "1.3 Word" << "1.6 Word" << "2.0 Word";
+
+class WinkeyerServer
+{
+public:
+    QString routerName;
+    QString app;
+    QString publisherProgram;
+    PublishState state;
+
+};
+
 
 class WinkeyerState
 {

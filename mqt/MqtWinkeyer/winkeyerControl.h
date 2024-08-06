@@ -199,6 +199,8 @@ public:
 
 
 
+    int wkSendDefaults(QSharedPointer<WinkeyerStateStorage> state);
+    QString getSerialPortErrorMsg();
 signals:
     void dataReceived(const QByteArray &data);
     void writeData(const QByteArray &data);

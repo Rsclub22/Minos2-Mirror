@@ -96,6 +96,12 @@ int WinkeyerControl::initComport(QString comport, int baudrate)
 }
 
 
+QString WinkeyerControl::getSerialPortErrorMsg()
+{
+    return serialPort->errorString();
+}
+
+
 
 
 
@@ -686,6 +692,66 @@ bool WinkeyerControl::getWK3Flag()
 
 
 // set sidetone frequency
+
+
+int WinkeyerControl::wkSendDefaults(QSharedPointer<WinkeyerStateStorage> state)
+{
+    if (wkIsOpen)
+    {
+        newWinkeyStateStoragePtr->getWkState()->setModereg(state->getWkState()->getModereg());
+        currentWinkeyStateStoragePtr->getWkState()->setModereg(state->getWkState()->getModereg());
+
+        newWinkeyStateStoragePtr->getWkState()->setSpeed(state->getWkState()->getSpeed());
+        currentWinkeyStateStoragePtr->getWkState()->setSpeed(state->getWkState()->getSpeed());
+
+        newWinkeyStateStoragePtr->getWkState()->setStconst(state->getWkState()->getStconst());
+        currentWinkeyStateStoragePtr->getWkState()->setStconst(state->getWkState()->getStconst());
+
+        newWinkeyStateStoragePtr->getWkState()->setWeight(state->getWkState()->getWeight());
+        currentWinkeyStateStoragePtr->getWkState()->setWeight(state->getWkState()->getWeight());
+
+        newWinkeyStateStoragePtr->getWkState()->setLeadin(state->getWkState()->getLeadin());
+        currentWinkeyStateStoragePtr->getWkState()->setLeadin(state->getWkState()->getLeadin());
+
+        newWinkeyStateStoragePtr->getWkState()->setTail(state->getWkState()->getTail());
+        currentWinkeyStateStoragePtr->getWkState()->setTail(state->getWkState()->getTail());
+
+        newWinkeyStateStoragePtr->getWkState()->setMinwpm(state->getWkState()->getMinwpm());
+        currentWinkeyStateStoragePtr->getWkState()->setMinwpm(state->getWkState()->getMinwpm());
+
+        newWinkeyStateStoragePtr->getWkState()->setWpmrange(state->getWkState()->getWpmrange());
+        currentWinkeyStateStoragePtr->getWkState()->setWpmrange(state->getWkState()->getWpmrange());
+
+        newWinkeyStateStoragePtr->getWkState()->setXtnd(state->getWkState()->getXtnd());
+        currentWinkeyStateStoragePtr->getWkState()->setXtnd(state->getWkState()->getXtnd());
+
+        newWinkeyStateStoragePtr->getWkState()->setKcomp(state->getWkState()->getKcomp());
+        currentWinkeyStateStoragePtr->getWkState()->setKcomp(state->getWkState()->getKcomp());
+
+        newWinkeyStateStoragePtr->getWkState()->setFarns(state->getWkState()->getFarns());
+        currentWinkeyStateStoragePtr->getWkState()->setFarns(state->getWkState()->getFarns());
+
+        newWinkeyStateStoragePtr->getWkState()->setSampadj(state->getWkState()->getSampadj());
+        currentWinkeyStateStoragePtr->getWkState()->setSampadj(state->getWkState()->getSampadj());
+
+        newWinkeyStateStoragePtr->getWkState()->setDitdahratio(state->getWkState()->getDitdahratio());
+        currentWinkeyStateStoragePtr->getWkState()->setDitdahratio(state->getWkState()->getDitdahratio());
+
+        newWinkeyStateStoragePtr->getWkState()->setPincfg(state->getWkState()->getPincfg());
+        currentWinkeyStateStoragePtr->getWkState()->setPincfg(state->getWkState()->getPincfg());
+
+        newWinkeyStateStoragePtr->getWkState()->setX1mode(state->getWkState()->getX1mode());
+        currentWinkeyStateStoragePtr->getWkState()->setX1mode(state->getWkState()->getX1mode());
+
+        setDoBlock(true);       // kick off sending data to winkeyer
+
+        return WK_SUCCESS;
+    }
+    else
+    {
+        return WK_NOT_OPEN;
+    }
+}
 
 int WinkeyerControl::wkSetSidetoneFreq(quint8 value)
 {
