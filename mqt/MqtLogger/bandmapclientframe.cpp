@@ -563,27 +563,32 @@ void BandmapClientFrame::on_clearSpotActionSelected()
     if (selRow > 0)
     {
         QSharedPointer<ClusterSpotData> selSpot = bandmapDataModel->getBandmapDataRow(selRow);
+        doClearSpotSelected(selSpot.data(), selRow);
     }
 }
 void BandmapClientFrame::context_clearSpotActionSelected()
 {
-    doClearSpotSelected(&contextMenuSelectedSpotData);
+    doClearSpotSelected(&contextMenuSelectedSpotData, contextMenuSelectedSpotDataRowNum);
 }
-void BandmapClientFrame::doClearSpotSelected(ClusterSpotData *sd)
+void BandmapClientFrame::doClearSpotSelected(ClusterSpotData *sd, int selRow)
 {
 
     int ret = QMessageBox::warning(this, tr("Bandmap"),
-                                   tr("Please confirm you want to delete this spot - %1?").arg(sd->getDxCallStr()),
+                                   tr("Please confirm you want to delete this spot - %1 (%2)?")
+                                       .arg(sd->getDxCallStr()).arg(sd->getRecNo()),
                                    QMessageBox::Yes | QMessageBox::No);
     if (ret == QMessageBox::Yes)
     {
-        traceMsg(QString("clear spot selected for callsign %1").arg(sd->getDxCallStr()));
-        sd->setSpotType(bandmapSpotType::DELETED);
+        traceMsg(QString("clear spot selected for callsign %1 id %2")
+                     .arg(sd->getDxCallStr())
+                     .arg(sd->getRecNo()));
 
         bmsdb->deleteRecord( sd);
+        sd->setSpotType(bandmapSpotType::DELETED);
 
-        bandmapSpotProxyModel->removeRows(bandmapView->getSelectedSpotDataRowNum(), 1);
+        bandmapSpotProxyModel->removeRows(selRow, 1);
         bandmapView->clearSelectedSpotData();
+        purgeSpots();
         bandmapView->bandmapUpdate(true);
     }
 }

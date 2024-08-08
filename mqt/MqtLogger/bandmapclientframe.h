@@ -213,7 +213,7 @@ private:
     void doBearingSelected(ClusterSpotData *sd);
     void doLogSelected(ClusterSpotData *sd);
     void doMemorySelected(ClusterSpotData *sd);
-    void doClearSpotSelected(ClusterSpotData *sd);
+    void doClearSpotSelected(ClusterSpotData *sd, int selRow);
     void doClearClusterSpotsSelected();
 protected:
 

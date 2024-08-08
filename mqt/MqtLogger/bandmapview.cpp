@@ -851,6 +851,14 @@ void BandmapView::getSpotData(int &selectedSpotDataRowNum, int selectedSpotViewR
 
     if (selectedSpotDataRowNum >= 0 && selectedSpotDataRowNum < model()->rowCount())
     {
+        QAbstractItemModel *atm = model();
+        BandmapSortFilterProxyModel *bmm = dynamic_cast<BandmapSortFilterProxyModel *>(atm);
+
+
+        ClusterSpotData *pselectedSpot = bmm->getBandmapDataRow(selectedSpotDataRowNum).data();
+
+
+        selectedSpot.setRecNo(pselectedSpot->getRecNo());
         selectedSpot.setSpotTime(model()->data(model()->index(selectedSpotDataRowNum, TIME_COL_NUM), BMP_DataStoredRole).toString());
         selectedSpot.setFreq(qvariant_cast<Frequency>(model()->data(model()->index(selectedSpotDataRowNum, FREQ_COL_NUM), BMP_DataStoredRole)));
         selectedSpot.setDxCall(model()->data(model()->index(selectedSpotDataRowNum, DXSPOT_CALL_COL_NUM), BMP_DataStoredRole).toString());

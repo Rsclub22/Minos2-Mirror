@@ -176,12 +176,16 @@ bool BandMapSpotDB::createRecord(ClusterSpotData *spot, QString id)
                 {
                     recid = query.value(0).toInt();
                     spot->setRecNo(recid);
+                    trace(QString("BandMapSpotDB::createRecord spot callsign %1 spottype %2 recid %3")
+                              .arg(spot->getDxCall().getFullCall(), ClusterSpotData::spotName(spot->getSpotType()))
+                              .arg(recid)
+                          );
+                }
+                else
+                {
+                    trace(QString("BandMapSpotDB::createRecord error:").arg(query.lastError().text()));
                 }
             }
-            trace(QString("BandMapSpotDB::createRecord spot callsign %1 spottype %2 recid %3")
-                      .arg(spot->getDxCall().getFullCall(), ClusterSpotData::spotName(spot->getSpotType()))
-                      .arg(recid)
-                  );
             return true;
         }
         else
