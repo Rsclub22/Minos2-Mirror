@@ -201,12 +201,17 @@ public:
 
     int wkSendDefaults(QSharedPointer<WinkeyerStateStorage> state);
     QString getSerialPortErrorMsg();
+    void wakeUpTxThread();
 signals:
     void dataReceived(const QByteArray &data);
     void writeData(const QByteArray &data);
 
     void winKeyerOpenStatus(bool open);
 
+    void wk_XoffStatus(QString status);
+    void wk_BreakInStatus(QString status);
+    void wk_KBusyStatus(QString status);
+    void wk_KWaitStatus(QString status);
 
 private slots:
     void handleDataReceived(const QByteArray &data);

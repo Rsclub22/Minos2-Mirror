@@ -55,11 +55,19 @@ WinkeyerMainWindow::WinkeyerMainWindow(QWidget *parent)
     MinosRPC *rpc = MinosRPC::getMinosRPC(appName);
     Q_UNUSED(rpc)
 
+    addWinkeyerStatusObjectsToStatusBar();
+
    // connect (WinkeyerRpc::getWinKeyerRpc(), &WinkeyerRpc::winkeyerMsg, this, &WinkeyerMainWindow::onwinkeyerMessage);
    // connect (WinkeyerRpc::getWinkeyerRpcc(), &WinkeyerRpc::loggerWinkeyerMsg, this, &WinkeyerMainWindow::onLoggerWinkeyerMsg);
 
-    connect(winkeyerControl, &WinkeyerControl::winKeyerOpenStatus, this, &WinkeyerMainWindow::handleWinKeyerOpenStatus);
-    connect(ui->setupPushButton, &QPushButton::clicked, this, &WinkeyerMainWindow::handleSetupPushButton);
+    connect(winkeyerControl, &WinkeyerControl::winKeyerOpenStatus, this, &WinkeyerMainWindow::onHandleWinKeyerOpenStatus);
+    connect(winkeyerControl, &WinkeyerControl::wk_XoffStatus, this, [=](const QString &status) {onHandleXoffStatus(status);});
+    connect(winkeyerControl, &WinkeyerControl::wk_BreakInStatus, this, [=](const QString &status) {onHandleBreakInStatus(status);});
+    connect(winkeyerControl, &WinkeyerControl::wk_KBusyStatus, this, [=](const QString &status) {onHandleKBusyStatus(status);});
+    connect(winkeyerControl, &WinkeyerControl::wk_KWaitStatus, this, [=](const QString &status) {onHandleKWaitStatus(status);});
+
+
+    connect(ui->setupPushButton, &QPushButton::clicked, this, &WinkeyerMainWindow::onHandleSetupPushButton);
     connect(ui->sendTextLineEdit, &QLineEdit::textChanged, this, &WinkeyerMainWindow::onTextChanged);
 
 
@@ -120,7 +128,7 @@ void WinkeyerMainWindow::closeEvent(QCloseEvent *event)
     RegSettings settings;
     settings.getSettings().setValue("geometry", saveGeometry());
 
-    saveWinkeyerSettings();
+    //saveWinkeyerSettings();
 
     QWidget::closeEvent(event);
 }
@@ -162,7 +170,7 @@ void WinkeyerMainWindow::on_openPushButton_clicked()
     if (winkeyerControl->getIsWkOpen())
     {
         // open so lets close
-        saveWinkeyerSettings();
+        saveWinkeyerSettings(winkeyerControl->getCurrentWinkeyStateStoragePtr());
         //winkeyerControl->setWk1Mode();
         winkeyerControl->closeWinKeyer();
         winkeyerControl->setIsWKOpen(false);
@@ -186,7 +194,7 @@ void WinkeyerMainWindow::on_openPushButton_clicked()
 
 
 
-void WinkeyerMainWindow::handleWinKeyerOpenStatus(bool open)
+void WinkeyerMainWindow::onHandleWinKeyerOpenStatus(bool open)
 {
 
 
@@ -198,6 +206,7 @@ void WinkeyerMainWindow::handleWinKeyerOpenStatus(bool open)
         winkeyerControl->setIsWKOpen(true);
 
         winkeyerControl->wkSendDefaults(winkeyerControl->getCurrentWinkeyStateStoragePtr());
+        winkeyerControl->wakeUpTxThread();
     }
     else
     {
@@ -210,7 +219,7 @@ void WinkeyerMainWindow::handleWinKeyerOpenStatus(bool open)
 }
 
 
-void WinkeyerMainWindow::handleSetupPushButton()
+void WinkeyerMainWindow::onHandleSetupPushButton()
 {
     openWinKeyerSetupDialog();
 }
@@ -253,14 +262,18 @@ void WinkeyerMainWindow::openWinKeyerSetupDialog()
             }
 
             // current keyer settings are updated as data sent to Winkeyer.
-            // settings are saved to file on app exit
+            winkeyerControl->wakeUpTxThread();  // send changes to Winkeyer
+
+
+            saveWinkeyerSettings(winkeyerControl->getNewWinkeyStateStoragePtr());
         }
     }
 }
 
 
 
-void WinkeyerMainWindow::onTextChanged(const QString &text) {
+void WinkeyerMainWindow::onTextChanged(const QString &text)
+{
     static QString oldText;
     if (text.length() > oldText.length()) {
         QChar newChar = text[text.length() - 1];
@@ -269,8 +282,30 @@ void WinkeyerMainWindow::onTextChanged(const QString &text) {
     oldText = text;
 }
 
+void WinkeyerMainWindow::onHandleXoffStatus(QString status)
+{
+    xoffStatus->setText(status);
+
+}
+
+void WinkeyerMainWindow::onHandleBreakInStatus(QString status)
+{
+    breakInStatus->setText(status);
+
+}
+
+void WinkeyerMainWindow::onHandleKBusyStatus(QString status)
+{
+    busyStatus->setText(status);
+
+}
 
 
+void WinkeyerMainWindow::onHandleKWaitStatus(QString status)
+{
+    waitStatus->setText(status);
+
+}
 
 void WinkeyerMainWindow::handleKeyboardChar(QChar kbdChar)
 {
@@ -296,14 +331,33 @@ void WinkeyerMainWindow::handleKeyboardChar(QChar kbdChar)
 
 
 
-void WinkeyerMainWindow::saveWinkeyerSettings()
+void WinkeyerMainWindow::saveWinkeyerSettings(QSharedPointer<WinkeyerStateStorage> winkeySettings)
 {
     QString fileName = WINKEYER_PATH_LOGGER() + WINKEYER_CONFIG_FILENAME;
     QSettings  winkeyerConfig(fileName, QSettings::IniFormat);
-    winkeyerControl->getCurrentWinkeyStateStoragePtr()->saveWinkeyerStateStorageToFile(winkeyerConfig);
+    winkeySettings->saveWinkeyerStateStorageToFile(winkeyerConfig);
 }
 
 
+void WinkeyerMainWindow::addWinkeyerStatusObjectsToStatusBar()
+{
+    // create labels and set initial text
+    xoffStatus = new QLabel();
+    xoffStatus->setText("    ");
+    breakInStatus = new QLabel();
+    breakInStatus->setText("     ");
+    busyStatus = new QLabel();
+    busyStatus->setText("    ");
+    waitStatus = new QLabel();
+    waitStatus->setText("    ");
+
+    ui->statusbar->addPermanentWidget(xoffStatus);
+    ui->statusbar->addPermanentWidget(breakInStatus);
+    ui->statusbar->addPermanentWidget(busyStatus);
+    ui->statusbar->addPermanentWidget(waitStatus);
+
+
+}
 
 void WinkeyerMainWindow::updateStatusBarMessage(QString serialErrorMsg, QString wkStatusMsg)
 {
@@ -328,7 +382,7 @@ void WinkeyerMainWindow::updateStatusBarMessage(QString serialErrorMsg, QString 
         serialErrorMessage = QString("Error: %1").arg(serialErrorMessage);
     }
 
-    ui->statusbar->showMessage(QString("Serial: %1, %2, %3 %4 - Keyer Status: %5")
+    ui->statusbar->showMessage(QString("Serial: %1, %2, %3 %4 | Keyer Status: %5")
                                    .arg(serialOpen)
                                    .arg(winkeyerControl->getCurrentWinkeyStateStoragePtr()->getComport())
                                    .arg(QString(DEFAULT_BAUDRATE))

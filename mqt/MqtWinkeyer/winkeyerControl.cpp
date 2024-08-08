@@ -43,6 +43,7 @@ WinkeyerControl::WinkeyerControl(QObject *parent)
     QString fileName = WINKEYER_PATH_LOGGER() + WINKEYER_CONFIG_FILENAME;
     QSettings  winkeyerConfig(fileName, QSettings::IniFormat);
     currentWinkeyStateStoragePtr->loadWinkeyerStateStorageFromFile(winkeyerConfig);
+    newWinkeyStateStoragePtr->loadWinkeyerStateStorageFromFile(winkeyerConfig);     // make sure they are both the same at start
 
     serialTimeoutTimer = new QTimer(this);
     serialTimeoutTimer->setSingleShot(true);
@@ -229,7 +230,12 @@ void WinkeyerControl::enqueueData(const QByteArray &data)
     qDebug() << "Data added to TxQueue and thread notified";
 }
 
-
+void WinkeyerControl::wakeUpTxThread()
+{
+    QMutexLocker locker(&mutex);
+    txCondition.wakeOne();
+    qDebug() << "Setup changed and thread notified";
+}
 
 void WinkeyerControl::closeWinKeyer()
 {
@@ -329,44 +335,40 @@ void WinkeyerControl::statusChanged(quint8 status)
 
     if (g_wkStatus & XOFF)
     {
-        //SetDlgItemText(g_hMainDlg, IDC_XOFF, "Xoff");
+        emit wk_XoffStatus("Xoff");
+
     }
     else
     {
-        //SetDlgItemText(g_hMainDlg, IDC_XOFF, " ");
+        emit wk_XoffStatus("    ");
     }
+
 
     if (g_wkStatus & BREAKIN)
     {
-
-    }
-
-    if (g_wkStatus & BREAKIN)
-    {
-        //g_activeMsg = 0;
-        //SetDlgItemText(g_hMainDlg, IDC_BREAKIN, "BrkIn");
+        emit wk_BreakInStatus("BrkIn");
     }
     else
     {
-        //SetDlgItemText(g_hMainDlg, IDC_BREAKIN, " ");
+        emit wk_BreakInStatus("     ");
     }
 
     if (g_wkStatus & KBUSY)
     {
-        //SetDlgItemText(g_hMainDlg, IDC_BUSY, "Busy");
+        emit wk_KBusyStatus("Busy");
     }
     else
     {
-        //SetDlgItemText(g_hMainDlg, IDC_BUSY, " ");
+        emit wk_KBusyStatus("    ");
     }
 
     if (g_wkStatus & KWAIT)
     {
-        //SetDlgItemText(g_hMainDlg, IDC_WAITSTATUS, "Wait");
+        emit wk_KWaitStatus("Wait");
     }
     else
     {
-        //SetDlgItemText(g_hMainDlg, IDC_WAITSTATUS, " ");
+        emit wk_KWaitStatus("    ");
     }
 }
 
@@ -395,6 +397,7 @@ void WinkeyerControl::completeOpenCmd()
     activeSerialCmd = ADMIN_NONE;
     winKeyerOpenFlag = true;
     emit winKeyerOpenStatus(true);
+
 }
 
 void WinkeyerControl::stopSerialTimeout()
@@ -752,6 +755,8 @@ int WinkeyerControl::wkSendDefaults(QSharedPointer<WinkeyerStateStorage> state)
         return WK_NOT_OPEN;
     }
 }
+
+// set sidetone frequency
 
 int WinkeyerControl::wkSetSidetoneFreq(quint8 value)
 {
