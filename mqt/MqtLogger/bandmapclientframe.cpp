@@ -574,8 +574,8 @@ void BandmapClientFrame::doClearSpotSelected(ClusterSpotData *sd, int selRow)
 {
 
     int ret = QMessageBox::warning(this, tr("Bandmap"),
-                                   tr("Please confirm you want to delete this spot - %1 (%2)?")
-                                       .arg(sd->getDxCallStr()).arg(sd->getRecNo()),
+                                   tr("Please confirm you want to delete this spot - %1?")
+                                       .arg(sd->getDxCallStr()),
                                    QMessageBox::Yes | QMessageBox::No);
     if (ret == QMessageBox::Yes)
     {
