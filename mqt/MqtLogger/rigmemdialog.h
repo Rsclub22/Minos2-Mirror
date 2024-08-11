@@ -37,7 +37,9 @@ public:
 
     void setLogData(memoryData::memData*, int buttonNumber, LoggerContestLog *ct);
 
-
+public slots:
+    void reject() override;
+    void accept() override;
 private slots:
     void on_okButton_clicked();
     void on_cancelButton_clicked();
@@ -51,6 +53,7 @@ private:
     memoryData::memData *logData;
     int memoryNumber;
 
+    void doCloseEvent();
 
 };
 

@@ -15,7 +15,9 @@ class ManageHamlib : public QDialog
 public:
     explicit ManageHamlib(QWidget *parent = nullptr);
     ~ManageHamlib();
-
+public slots:
+    void reject() override;
+    void accept() override;
 private slots:
     void on_cancelButton_clicked();
     void on_updateHamlibButton_clicked();
@@ -30,6 +32,7 @@ private:
 
     bool downloadFile(QString url, QString path, bool showError, QWidget *parent);
     bool checkHamlib();
+    void doCloseEvent();
 };
 
 #endif // MANAGEHAMLIB_H

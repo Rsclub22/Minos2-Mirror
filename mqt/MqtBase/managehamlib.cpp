@@ -3,12 +3,14 @@
 #include <QNetworkRequest>
 #include <QFile>
 #include <QDir>
+#include <QSettings>
 #include "MShowMessageDlg.h"
 #include "MTrace.h"
 #include "ServerEvent.h"
 #include "ConfigFile.h"
 #include "fileutils.h"
 #include "managehamlib.h"
+#include "regsettings.h"
 #include "ui_managehamlib.h"
 
 #ifdef Q_OS_WIN
@@ -23,12 +25,32 @@ ManageHamlib::ManageHamlib(QWidget *parent)
     , ui(new Ui::ManageHamlib)
 {
     ui->setupUi(this);
+    RegSettings settings;
+    QByteArray geometry = settings.getSettings().value("ManageHamlib/geometry").toByteArray();
+    if (geometry.size() > 0)
+        restoreGeometry(geometry);
+
     checkHamlib();
 }
 
 ManageHamlib::~ManageHamlib()
 {
     delete ui;
+}
+void ManageHamlib::doCloseEvent()
+{
+    RegSettings settings;
+    settings.getSettings().setValue("ManageHamlib/geometry", saveGeometry());
+}
+void ManageHamlib::reject()
+{
+    doCloseEvent();
+    QDialog::reject();
+}
+void ManageHamlib::accept()
+{
+    doCloseEvent();
+    QDialog::accept();
 }
 #ifdef Q_OS_WIN
 QString lastError( DWORD erno )

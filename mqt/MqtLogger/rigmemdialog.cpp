@@ -13,6 +13,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include <QMessageBox>
+#include "regsettings.h"
 #include "rigmemcommondata.h"
 #include "rigutils.h"
 #include "rotatorcommon.h"
@@ -33,6 +34,11 @@ RigMemDialog::RigMemDialog(QWidget *parent) :
     ui->setupUi(this);
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
+    RegSettings settings;
+    QByteArray geometry = settings.getSettings().value("RigMem/geometry").toByteArray();
+    if (geometry.size() > 0)
+        restoreGeometry(geometry);
+
     ui->callSignLineEdit->setValidator(&ucValidator);
     ui->locatorLineEdit->setValidator(&ucValidator);
 
@@ -47,7 +53,21 @@ RigMemDialog::~RigMemDialog()
     delete ui;
 }
 
-
+void RigMemDialog::doCloseEvent()
+{
+    RegSettings settings;
+    settings.getSettings().setValue("RigMem/geometry", saveGeometry());
+}
+void RigMemDialog::reject()
+{
+    doCloseEvent();
+    QDialog::reject();
+}
+void RigMemDialog::accept()
+{
+    doCloseEvent();
+    QDialog::accept();
+}
 
 void RigMemDialog::onFreqEditFinish()
 {
