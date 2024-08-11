@@ -91,6 +91,7 @@ SOURCES += \
     locframe.cpp \
     main.cpp \
     manageadifdialog.cpp \
+    managebandmapspotsdb.cpp \
     n1mmbroadcast.cpp \
     n1mmbroadcastconfig.cpp \
     qrzdisplayframe.cpp \
@@ -195,6 +196,7 @@ HEADERS  += \
     locTreeFrame.h \
     locframe.h \
     manageadifdialog.h \
+    managebandmapspotsdb.h \
     n1mmbroadcast.h \
     n1mmbroadcastconfig.h \
     printfile.h \
@@ -269,6 +271,7 @@ FORMS    += \
     locframe.ui \
     locTreeFrame.ui \
     manageadifdialog.ui \
+    managebandmapspotsdb.ui \
     n1mmbroadcastconfig.ui \
     qrzdisplayframe.ui \
     qsologframe.ui \

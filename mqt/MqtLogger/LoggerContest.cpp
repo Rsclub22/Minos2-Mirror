@@ -406,7 +406,7 @@ bool LoggerContestLog::initialise( const QString &fn, bool newFile, int slotno )
       {
          return false;
       }
-      // and create the ADIF manger if required
+      // and create the ADIF manager if required
       QString wadif = watchedADIFFile.getValue();
       if (!wadif.isEmpty())
       {

@@ -6,6 +6,14 @@
 
 #include "spotbasedata.h"
 
+class ContestDbEntry
+{
+public:
+    QString name;
+    int entries = 0;
+    bool selected = false;
+};
+
 class BandMapSpotDB: public QObject
 {
     Q_OBJECT
@@ -27,6 +35,8 @@ public:
     QVector<QSharedPointer<ClusterSpotData> > getRecords(const QString id);
 
     int getRecordCount();
+    QVector<ContestDbEntry> getContests();
+    void deleteRecords(QStringList nameList);
 
     void resetDB();
 
