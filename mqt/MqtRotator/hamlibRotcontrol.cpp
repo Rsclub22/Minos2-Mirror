@@ -39,7 +39,12 @@ const char* HamlibRotControl::hamlibErrorMsg[] =  {QT_TR_NOOP("No Error, operati
                                                 QT_TR_NOOP("Collision on the bus"),
                                                 QT_TR_NOOP("NULL RIG handle or any invalid pointer parameter in get arg"),
                                                 QT_TR_NOOP("Invalid VFO"),
-                                                QT_TR_NOOP("RIG_EDOM")};
+                                                QT_TR_NOOP("Argument out of domain of func"),
+                                                QT_TR_NOOP("Function deprecated"),
+                                                QT_TR_NOOP("Security error password not provided or crypto failure"),
+                                                QT_TR_NOOP("Rig is not powered on"),
+                                                QT_TR_NOOP("Limit exceeded ")
+                                            };
 
 #define SPID_DELAY 500
 static QList<const rot_caps *> capsList;
