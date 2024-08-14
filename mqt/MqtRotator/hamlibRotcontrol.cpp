@@ -370,6 +370,10 @@ int HamlibRotControl::stop_rotation()
     int retCode = RIG_OK;
     retCode = rot_stop(my_rot);
 
+    if (my_rot->caps->rot_model == ROT_MODEL_SPID_ROT1PROG || my_rot->caps->rot_model == ROT_MODEL_SPID_ROT2PROG)
+    {
+        QThread::msleep(SPID_DELAY);
+    }
 
     return retCode;
 }
