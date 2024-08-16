@@ -120,7 +120,6 @@ RotatorMainWindow::RotatorMainWindow(QWidget *parent) :
     setupLog = new LogDialog;
     pollTimer = new QTimer(this);
 
-    selectAntenna = new QComboBox;
     rotlog = new RotatorLog;
 
     status = new QLabel;
@@ -155,8 +154,6 @@ RotatorMainWindow::RotatorMainWindow(QWidget *parent) :
     initActionsConnections();
 
     checkTestBearingBox();
-
-    selectAntenna = ui->selectAntennaBox;
 
     setupAntenna->setAppName(appName);
 
@@ -949,10 +946,10 @@ void RotatorMainWindow::updatePresetLabels()
 
 void RotatorMainWindow::initSelectAntennaBox()
 {
-    selectAntenna->addItem("");
+    ui->selectAntennaBox->addItem("");
     for (int i= 0; i < setupAntenna->numAvailAntennas; i++)
     {
-        selectAntenna->addItem(setupAntenna->availAntData[i]->antennaName);
+        ui->selectAntennaBox->addItem(setupAntenna->availAntData[i]->antennaName);
     }
     sendAntennaListLogger();
 
@@ -2083,10 +2080,10 @@ void RotatorMainWindow::currentAntennaSettingChanged(QString antennaName)
                          QMessageBox::Cancel ) )
     {
         case QMessageBox::Yes:
-            if (selectAntenna->currentText() != antennaName)
+            if (ui->selectAntennaBox->currentText() != antennaName)
             {
                 bool ok;
-                selectAntenna->setCurrentIndex(setupAntenna->currentAntenna.antennaNumber.toInt(&ok, 10));
+                ui->selectAntennaBox->setCurrentIndex(setupAntenna->currentAntenna.antennaNumber.toInt(&ok, 10));
             }
             upDateAntenna();
             break;
@@ -2105,10 +2102,10 @@ void RotatorMainWindow::currentAntennaSettingChanged(QString antennaName)
 
 void RotatorMainWindow::updateSelectAntennaBox()
 {
-    int curidx = selectAntenna->currentIndex();
-    selectAntenna->clear();
+    int curidx = ui->selectAntennaBox->currentIndex();
+    ui->selectAntennaBox->clear();
     initSelectAntennaBox();
-    selectAntenna->setCurrentIndex(curidx);
+    ui->selectAntennaBox->setCurrentIndex(curidx);
 }
 
 

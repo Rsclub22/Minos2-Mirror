@@ -93,7 +93,7 @@ int RotCapabilities::getMinRot() const
 
 void RotCapabilities::setMaxRot(int maxRot_)
 {
-    minRot = maxRot_;
+    maxRot = maxRot_;
 }
 int RotCapabilities::getMaxRot() const
 {
