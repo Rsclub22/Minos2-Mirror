@@ -155,9 +155,6 @@ void rotSetupForm::setupRotatorModel(QString rotatorModel)
                     sStopButtonsVisible(false);
                     setSStopOffButChecked(true);
                 }
-
-
-
             }
             else if (antennaData->endStopType == ROT_0_450)
             {
@@ -166,15 +163,13 @@ void rotSetupForm::setupRotatorModel(QString rotatorModel)
                 ui->chkOverrun->setChecked(true);
                 sStopButtonsVisible(false);
                 setSStopOffButChecked(true);
-
             }
-            else
+            else if (antennaData->endStopType == ROT_NEG180_540)
             {
-                ui->chkOverrun->setVisible(false);
-                ui->chkOverrun->setChecked(false);
+                ui->chkOverrun->setVisible(true);
+                ui->chkOverrun->setChecked(true);
                 sStopButtonsVisible(false);
                 setSStopOffButChecked(true);
-
             }
 
             if (antennaData->portType == RotCapConstants::PortType::network)
