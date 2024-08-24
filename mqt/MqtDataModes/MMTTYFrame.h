@@ -52,6 +52,7 @@ private:
 
     WId getTempId()
     {
+        // winId should be the HWND of the widget
         return t->winId();
     }
 
