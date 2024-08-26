@@ -34,6 +34,8 @@ public:
     QMap<QString, int> inDeviceIds;
     QMap<QString, int> outDeviceIds;
 
+    QString configFile;
+
 private:
     Ui::DMMainWindow *ui;
     QSharedPointer<CommandReader> commandReader = QSharedPointer<CommandReader>(new CommandReader(this));
@@ -67,6 +69,8 @@ private slots:
 
     void onNewLog(QSharedPointer<MonitoredLog> ml);
 
+    void on_dataConfigBrowse_clicked();
+
     void on_configureButton_clicked();
     void on_startButton_clicked();
     void sendPressed(QString d, int c);
@@ -75,6 +79,7 @@ private slots:
     void onLogStarted(QSharedPointer<MonitoredLog> ml);
     void onLogClosed(QSharedPointer<MonitoredLog> ml);
     void engineDestroyed(QObject *d);
+
 signals:
     void setSpeeds(QString b, QString r);
 

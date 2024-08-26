@@ -52,9 +52,13 @@ private slots:
     void on_contestLinkCB_stateChanged(int arg1);
 
     void onCommandRead(QString cmd);
+    void on_rrConfigBrowse_clicked();
+
 private:
     Ui::MainWindow *ui;
     RRRtAudioSoundSystem rass;
+
+    QString configFile;
 
     QDateTime tstart;
     QDateTime tend;
@@ -66,6 +70,8 @@ private:
 
     bool closing = false;
     bool inVolChange = false;
+
+    void doConfig();
 
     virtual void closeEvent(QCloseEvent *event) override;
     virtual void resizeEvent(QResizeEvent *event) override;

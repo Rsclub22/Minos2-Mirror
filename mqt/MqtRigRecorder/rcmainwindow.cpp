@@ -69,8 +69,32 @@ MainWindow::MainWindow(QWidget *parent)
     ui->inChannelCB_2->addItem(QString());
     ui->inChannelCB_2->addItems(rass.inputDevices);
 
-    QString filename = getDirectoryLocation(dlConfiguration) + "/RigRecorder.ini";
-    QSettings settings(filename, QSettings::IniFormat);
+
+    connect(ui->inChannelCB, &QComboBox::currentTextChanged, this, &MainWindow::inChannelCB_currentTextChanged);
+    connect(ui->inChannelCB_2, &QComboBox::currentTextChanged, this, &MainWindow::inChannelCB_2_currentTextChanged);
+
+    MinosRPC *rpc = MinosRPC::getMinosRPC(getAppStartupName(), true);
+    connect(rpc, &MinosRPC::notify, this, &MainWindow::on_notify);
+
+    QStringList sv = {rpcConstants::monitorLogCategory};
+    rpc->findProviders(rpcConstants::LoggerCategory, sv);
+
+    doConfig();
+}
+
+void MainWindow::doConfig()
+{
+    QSettings csettings(getDirectoryLocation(dlConfiguration) + "/RigRecorderSelect.ini", QSettings::IniFormat);
+    configFile = csettings.value("ConfigurationFile").toString();
+    if (configFile.isEmpty())
+    {
+        configFile = getDirectoryLocation(dlConfiguration) + "/RigRecorder/RigRecorder.ini";
+        csettings.setValue("ConfigurationFile", configFile);
+    }
+
+    ui->rrConfigEdit->setText(configFile);
+
+    QSettings settings(configFile, QSettings::IniFormat);
 
     QString indev = settings.value(indevKey).toString();
 
@@ -85,9 +109,6 @@ MainWindow::MainWindow(QWidget *parent)
 
     int cycleTime = settings.value(cycleRateKey, 10).toInt();
     ui->rotInterval->setValue(cycleTime);
-
-    connect(ui->inChannelCB, &QComboBox::currentTextChanged, this, &MainWindow::inChannelCB_currentTextChanged);
-    connect(ui->inChannelCB_2, &QComboBox::currentTextChanged, this, &MainWindow::inChannelCB_2_currentTextChanged);
 
     trace("About to initialise audio");
     rass.setRate(11025);
@@ -113,13 +134,8 @@ MainWindow::MainWindow(QWidget *parent)
     bool link = settings.value("ContestLink", false).toBool();
     ui->contestLinkCB->setChecked(link);
 
-    MinosRPC *rpc = MinosRPC::getMinosRPC(getAppStartupName(), true);
-    connect(rpc, &MinosRPC::notify, this, &MainWindow::on_notify);
-
-    QStringList sv = {rpcConstants::monitorLogCategory};
-    rpc->findProviders(rpcConstants::LoggerCategory, sv);
+    settings.setValue("configured", true); // make sure the config file is created;
 }
-
 MainWindow::~MainWindow()
 {
     delete ui;
@@ -252,8 +268,8 @@ void MainWindow::on_baseFileBrowse_clicked()
     if (!fileName.isEmpty())
     {
         ui->baseFilename->setText(fileName);
-        QString filename = getDirectoryLocation(dlConfiguration) + "/RigRecorder.ini";
-        QSettings settings(filename, QSettings::IniFormat);
+
+        QSettings settings(configFile, QSettings::IniFormat);
         settings.setValue(baseFileKey, fileName);
     }
 }
@@ -262,8 +278,7 @@ void MainWindow::inChannelCB_currentTextChanged(const QString &arg1)
 {
     if (!closing)
     {
-        QString filename = getDirectoryLocation(dlConfiguration) + "/RigRecorder.ini";
-        QSettings settings(filename, QSettings::IniFormat);
+        QSettings settings(configFile, QSettings::IniFormat);
         settings.setValue(indevKey, arg1);
 
         trace("About to re-initialise audio");
@@ -276,8 +291,7 @@ void MainWindow::inChannelCB_2_currentTextChanged(const QString &arg1)
 {
     if (!closing)
     {
-        QString filename = getDirectoryLocation(dlConfiguration) + "/RigRecorder.ini";
-        QSettings settings(filename, QSettings::IniFormat);
+        QSettings settings(configFile, QSettings::IniFormat);
         settings.setValue(indevKey2, arg1);
 
         trace("About to re-initialise audio");
@@ -291,8 +305,7 @@ void MainWindow::on_baseFilename_editingFinished()
 {
     if (!closing)
     {
-        QString filename = getDirectoryLocation(dlConfiguration) + "/RigRecorder.ini";
-        QSettings settings(filename, QSettings::IniFormat);
+        QSettings settings(configFile, QSettings::IniFormat);
         settings.setValue(baseFileKey, ui->baseFilename->text());
     }
 }
@@ -301,8 +314,7 @@ void MainWindow::on_rotInterval_editingFinished()
 {
     if (!closing)
     {
-        QString filename = getDirectoryLocation(dlConfiguration) + "/RigRecorder.ini";
-        QSettings settings(filename, QSettings::IniFormat);
+        QSettings settings(configFile, QSettings::IniFormat);
         settings.setValue(cycleRateKey, ui->rotInterval->value());
     }
 }
@@ -333,8 +345,7 @@ void MainWindow::on_recordSlider_valueChanged(int position)
 {
     if (!inVolChange)
     {
-        QString filename = getDirectoryLocation(dlConfiguration) + "/RigRecorder.ini";
-        QSettings settings(filename, QSettings::IniFormat);
+        QSettings settings(configFile, QSettings::IniFormat);
         settings.setValue("RecordLevel", position);
     }
     setVolumeMults();
@@ -344,8 +355,7 @@ void MainWindow::on_monoCb_stateChanged(int /*arg1*/)
 {
     bool mono = ui->monoCb->isChecked();
     rass.setMono(mono);
-    QString filename = getDirectoryLocation(dlConfiguration) + "/RigRecorder.ini";
-    QSettings settings(filename, QSettings::IniFormat);
+    QSettings settings(configFile, QSettings::IniFormat);
     settings.setValue("Mono", mono);
 }
 void MainWindow::on_recordLevel_2_valueChanged(double arg1)
@@ -360,8 +370,7 @@ void MainWindow::on_recordSlider_2_valueChanged(int position)
 {
     if (!inVolChange)
     {
-        QString filename = getDirectoryLocation(dlConfiguration) + "/RigRecorder.ini";
-        QSettings settings(filename, QSettings::IniFormat);
+        QSettings settings(configFile, QSettings::IniFormat);
         settings.setValue("RecordLevel2", position);
     }
     setVolumeMults();
@@ -370,8 +379,7 @@ void MainWindow::on_recordSlider_2_valueChanged(int position)
 void MainWindow::on_contestLinkCB_stateChanged(int /*arg1*/)
 {
     bool link = ui->contestLinkCB->isChecked();
-    QString filename = getDirectoryLocation(dlConfiguration) + "/RigRecorder.ini";
-    QSettings settings(filename, QSettings::IniFormat);
+    QSettings settings(configFile, QSettings::IniFormat);
     settings.setValue("ContestLink", link);
 }
 
@@ -410,5 +418,41 @@ void MainWindow::on_notify(AnalysePubSubNotify an, const QString /*from*/ )
             }
         }
     }
+}
+
+
+void MainWindow::on_rrConfigBrowse_clicked()
+{
+    on_stopRecButton_clicked();
+
+    stopped = true;
+    started = false;
+    QString InitialDir = ExtractFileDir(configFile);
+
+    QFileInfo qf(InitialDir);
+
+    InitialDir = qf.canonicalFilePath();
+
+    QString Filter = tr("INI (*.ini);;"
+                        "All Files (*.*)") ;
+
+    QString fname = QFileDialog::getOpenFileName( this,
+                                                 tr("Rig Recorder Configuration file"),
+                                                 configFile,  // dir
+                                                 Filter
+                                                 );
+
+    if (!fname.isEmpty())
+    {
+        ui->rrConfigEdit->setText(fname);
+        configFile = fname;
+        QSettings csettings(getDirectoryLocation(dlConfiguration) + "/DataModeSelect.ini", QSettings::IniFormat);
+        csettings.setValue("ConfigurationFile", configFile);
+    }
+
+    started = false;
+    stopped = false;
+
+    doConfig();
 }
 
