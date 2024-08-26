@@ -30,6 +30,7 @@
     </message>
     <message>
         <location filename="../rcmainwindow.ui" line="246"/>
+        <location filename="../rcmainwindow.ui" line="334"/>
         <source>...</source>
         <translation>...</translation>
     </message>
@@ -51,6 +52,11 @@
     </message>
     <message>
         <location filename="../rcmainwindow.ui" line="324"/>
+        <source>Configuration File</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rcmainwindow.ui" line="354"/>
         <source>Stop Record</source>
         <translation>Arrêter l&apos;enregistrement</translation>
     </message>
@@ -60,14 +66,24 @@
         <translation>Aucun périphérique d&apos;entrée audio disponible</translation>
     </message>
     <message>
-        <location filename="../rcmainwindow.cpp" line="245"/>
+        <location filename="../rcmainwindow.cpp" line="261"/>
         <source>Record Files (*.wav);;All Files (*.*)</source>
         <translation>Fichiers d&apos;enregistrement (* .wav) ;; Tous les fichiers (*. *)</translation>
     </message>
     <message>
-        <location filename="../rcmainwindow.cpp" line="248"/>
+        <location filename="../rcmainwindow.cpp" line="264"/>
         <source>Recorded Files</source>
         <translation>Fichiers enregistrés</translation>
+    </message>
+    <message>
+        <location filename="../rcmainwindow.cpp" line="436"/>
+        <source>INI (*.ini);;All Files (*.*)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rcmainwindow.cpp" line="440"/>
+        <source>Rig Recorder Configuration file</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

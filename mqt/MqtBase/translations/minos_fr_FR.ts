@@ -1351,33 +1351,33 @@ Attention: &quot;.&quot; pas &quot;,&quot;
         <translation type="unfinished">Annuler</translation>
     </message>
     <message>
-        <location filename="../managehamlib.cpp" line="66"/>
+        <location filename="../managehamlib.cpp" line="88"/>
         <source>Failed to load libhamlib-4.dll %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../managehamlib.cpp" line="273"/>
-        <location filename="../managehamlib.cpp" line="280"/>
-        <location filename="../managehamlib.cpp" line="316"/>
+        <location filename="../managehamlib.cpp" line="295"/>
+        <location filename="../managehamlib.cpp" line="302"/>
+        <location filename="../managehamlib.cpp" line="338"/>
         <source>Failed to rename %1 to %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../managehamlib.cpp" line="284"/>
+        <location filename="../managehamlib.cpp" line="306"/>
         <source>Hamlib Update successful 
 
 New Hamlib will be used after restart</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../managehamlib.cpp" line="321"/>
+        <location filename="../managehamlib.cpp" line="343"/>
         <source>Hamlib successfully reverted 
 
 Reverted Hamlib will be used after restart</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../managehamlib.cpp" line="333"/>
+        <location filename="../managehamlib.cpp" line="355"/>
         <source>No Hamlib update found that could be reverted</source>
         <translation type="unfinished"></translation>
     </message>
