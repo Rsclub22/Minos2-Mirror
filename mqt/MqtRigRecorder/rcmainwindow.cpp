@@ -65,6 +65,10 @@ MainWindow::MainWindow(QWidget *parent)
     connect(&closeTimer, &QTimer::timeout, this, &MainWindow::onCloseTimer);
     closeTimer.start(100);
 
+    trace("About to initialise audio");
+    rass.setRate(11025);
+    rass.setVUCallBack( &::volcallback );
+
     ui->inChannelCB->addItems(rass.inputDevices);
     ui->inChannelCB_2->addItem(QString());
     ui->inChannelCB_2->addItems(rass.inputDevices);
@@ -109,10 +113,6 @@ void MainWindow::doConfig()
 
     int cycleTime = settings.value(cycleRateKey, 10).toInt();
     ui->rotInterval->setValue(cycleTime);
-
-    trace("About to initialise audio");
-    rass.setRate(11025);
-    rass.setVUCallBack( &::volcallback );
 
     rass.initialise(ui->inChannelCB->currentText(), ui->inChannelCB_2->currentText());
 
