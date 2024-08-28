@@ -5,7 +5,7 @@ set -x
 echo $OSTYPE
 SCRIPT=$(basename $0)
 DIR=$(echo `pwd`/../..)
-QTDIR=~/Qt/6.7.0/macos
+QTDIR=~/Qt/6.7.2/macos
 BUILDDIR="build/install"
 
 cd $DIR
@@ -35,16 +35,18 @@ if [ $retVal -ne 0 ]; then
     exit $retVal 
 fi
 
+echo Current Dir: `pwd`
+
   for j in TinyXML XMPPLib KeyerBase MqtBase MqtUtils MqtAppStarter MqtChat MqtCluster MqtControl MqtKeyer MqtKSTClient MqtLogger MqtMonitor MqtQrzServer MqtRigControl MqtRigSync MqtRigRecorder MqtRotator MqtServer
   do
-    lrelease -verbose ../mqt/${j}/${j}.pro
+    lrelease -verbose ../../mqt/${j}/${j}.pro
     if [ ! -d ${j}/translations ]; then
         mkdir ${j}/translations
     fi
-    mv ../mqt/${j}/translations/*.qm ${j}/translations
+    mv ../../mqt/${j}/translations/*.qm ${j}/translations
   done
 
-cd ../..
+cd ../../..
 
 if [ -d ./minos-runtime ]; then
   sudo rm -rf ./minos-runtime 
