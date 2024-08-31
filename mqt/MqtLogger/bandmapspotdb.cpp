@@ -176,12 +176,16 @@ bool BandMapSpotDB::createRecord(ClusterSpotData *spot, QString id)
                 {
                     recid = query.value(0).toInt();
                     spot->setRecNo(recid);
+                    trace(QString("BandMapSpotDB::createRecord spot callsign %1 spottype %2 recid %3")
+                              .arg(spot->getDxCall().getFullCall(), ClusterSpotData::spotName(spot->getSpotType()))
+                              .arg(recid)
+                          );
+                }
+                else
+                {
+                    trace(QString("BandMapSpotDB::createRecord error:").arg(query.lastError().text()));
                 }
             }
-            trace(QString("BandMapSpotDB::createRecord spot callsign %1 spottype %2 recid %3")
-                      .arg(spot->getDxCall().getFullCall(), ClusterSpotData::spotName(spot->getSpotType()))
-                      .arg(recid)
-                  );
             return true;
         }
         else
@@ -363,6 +367,64 @@ int BandMapSpotDB::getRecordCount()
         return recs;
     }
     return -1;
+}
+
+QVector<ContestDbEntry > BandMapSpotDB::getContests()
+{
+    QVector<ContestDbEntry > contests;
+    QSqlQuery query;
+    query.prepare("SELECT distinct id FROM LSPOTS");
+    if (query.exec())
+    {
+        while (query.next())
+        {
+            QString name = query.value(0).toString();
+            ContestDbEntry cde;
+            cde.name = name;
+
+            QSqlQuery cquery;
+            cquery.prepare(QString("SELECT COUNT(*) FROM LSPOTS WHERE id='%1'").arg(name));
+            if (cquery.exec() && cquery.next())
+            {
+                int recs = cquery.value(0).toInt();
+                cde.entries = recs;
+            }
+            else
+            {
+                QString mess = QString("BandMapSpotDB::getContests error:%1 for %2").arg(cquery.lastError().text(), name);
+                trace(mess);
+            }
+            contests.push_back(cde);
+        }
+    }
+    return contests;
+}
+
+void BandMapSpotDB::deleteRecords(QStringList nameList)
+{
+    QSqlQuery query;
+    bool prepres = query.prepare("DELETE FROM LSPOTS WHERE id=(:id)");
+    if (prepres)
+    {
+        for(auto &s:nameList)
+        {
+            query.bindValue(":id", s);
+            if (query.exec())
+            {
+                trace(QString("BandMapSpotDB::deleteRecordsname OK %1")
+                          .arg(s));
+            }
+            else
+            {
+                trace(QString("BandMapSpotDB::deleteRecordsnames failed %1 %2")
+                          .arg(s, query.lastError().text()));
+            }
+        }
+    }
+    else
+    {
+    trace(QString("BandMapSpotDB::deleteRecords prepare error: %1").arg(query.lastError().text()));
+    }
 }
 
 void BandMapSpotDB::resetDB()

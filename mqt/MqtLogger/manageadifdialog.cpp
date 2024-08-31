@@ -11,7 +11,7 @@
 #include "LoggerContest.h"
 #include "AdifImport.h"
 #include "contest.h"
-#include "fileutils.h"
+#include "regsettings.h"
 #include "tlogcontainer.h"
 #include "tsinglelogframe.h"
 
@@ -30,6 +30,14 @@ ManageAdifDialog::ManageAdifDialog(QWidget *parent)
     , ui(new Ui::ManageAdifDialog)
 {
     ui->setupUi(this);
+    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
+
+    RegSettings settings;
+    QByteArray geometry = settings.getSettings().value("ManageAdif/geometry").toByteArray();
+    if (geometry.size() > 0)
+        restoreGeometry(geometry);
+
+
     BaseContestLog * ct = TContestApp::getContestApp() ->getCurrentContest();
     lt = dynamic_cast<LoggerContestLog *>(ct);
 
@@ -56,7 +64,21 @@ ManageAdifDialog::~ManageAdifDialog()
 {
     delete ui;
 }
-
+void ManageAdifDialog::doCloseEvent()
+{
+    RegSettings settings;
+    settings.getSettings().setValue("ManageAdif/geometry", saveGeometry());
+}
+void ManageAdifDialog::reject()
+{
+    doCloseEvent();
+    QDialog::reject();
+}
+void ManageAdifDialog::accept()
+{
+    doCloseEvent();
+    QDialog::accept();
+}
 void ManageAdifDialog::on_OKButton_clicked()
 {
     accept();

@@ -1,3 +1,4 @@
+#include "fileutils.h"
 #include <QSettings>
 #include <QTimer>
 #include <QKeyEvent>
@@ -6,6 +7,7 @@
 #include <QJsonParseError>
 #include <QJsonObject>
 #include <QJsonArray>
+#include <QFileDialog>
 
 #ifdef Q_OS_WIN
 #include <windows.h>
@@ -103,7 +105,18 @@ DMMainWindow::DMMainWindow(QWidget *parent)
 
 #endif
 
-    RemoteLogs::setSettingsFile(getDirectoryLocation(dlConfiguration) + "/DataModes.ini");
+    QSettings csettings(getDirectoryLocation(dlConfiguration) + "/DataModeSelect.ini", QSettings::IniFormat);
+    configFile = csettings.value("ConfigurationFile").toString();
+    if (configFile.isEmpty())
+    {
+        configFile = getDirectoryLocation(dlConfiguration) + "/DataModes/DataModes.ini";
+        csettings.setValue("ConfigurationFile", configFile);
+    }
+    csettings.setValue("configured", true); // make sure the config file is created;
+
+    ui->dataConfigEdit->setText(configFile);
+
+    RemoteLogs::setSettingsFile(configFile);
 
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
@@ -329,7 +342,7 @@ void DMMainWindow::engineDestroyed(QObject *d)
 }
 void DMMainWindow::sendPressed(QString d, int c)
 {
-    QSettings settings(getDirectoryLocation(dlConfiguration) + "/DataModes.ini", QSettings::IniFormat);
+    QSettings settings(configFile, QSettings::IniFormat);
 
     QString m = settings.value("Sender").toString();
 
@@ -386,6 +399,43 @@ void DMMainWindow::on_routerCall(bool err, QSharedPointer<MinosRPCObj>mro, const
         else if (call == rpcConstants::DMStopTransmit)
         {
             sendPressed("", 0);
+        }
+    }
+}
+
+void DMMainWindow::on_dataConfigBrowse_clicked()
+{
+    bool doRestart = false;
+    if  (!engines.isEmpty())
+    {
+        on_startButton_clicked();
+        doRestart = true;
+    }
+
+    QString InitialDir = ExtractFileDir(configFile);
+
+    QFileInfo qf(InitialDir);
+
+    InitialDir = qf.canonicalFilePath();
+
+    QString Filter = tr("INI (*.ini);;"
+                        "All Files (*.*)") ;
+
+    QString fname = QFileDialog::getOpenFileName( this,
+                                                 tr("Datamodes Configuration file"),
+                                                 configFile,  // dir
+                                                 Filter
+                                                 );
+
+    if (!fname.isEmpty())
+    {
+        ui->dataConfigEdit->setText(fname);
+        configFile = fname;
+        QSettings csettings(getDirectoryLocation(dlConfiguration) + "/DataModeSelect.ini", QSettings::IniFormat);
+        csettings.setValue("ConfigurationFile", configFile);
+        if (doRestart)
+        {
+            on_startButton_clicked();
         }
     }
 }

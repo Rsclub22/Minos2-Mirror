@@ -55,6 +55,9 @@ QSOTableFrame::QSOTableFrame(QWidget *parent)
     QSOTable->verticalHeader()->setDefaultSectionSize(ms.height() );
     QSOTable->verticalHeader()->setMinimumSectionSize(10);
 
+    QSOTable->setModel(&qsoModel);
+
+
     connect( QSOTable->horizontalHeader(), &QHeaderView::customContextMenuRequested, this, &QSOTableFrame::onQSOGrid_customContextMenuRequested );
     connect( QSOTable->horizontalHeader(), &QHeaderView::sectionMoved, this, &QSOTableFrame::onQSOGrid_sectionMoved);
 

@@ -208,6 +208,13 @@ private:
     void ShowFilter();
 
     void restoreSplitters();
+    void doMarkSpot(int selRow);
+    void doUnMarkSpot(int selRow);
+    void doBearingSelected(ClusterSpotData *sd);
+    void doLogSelected(ClusterSpotData *sd);
+    void doMemorySelected(ClusterSpotData *sd);
+    void doClearSpotSelected(ClusterSpotData *sd, int selRow);
+    void doClearClusterSpotsSelected();
 protected:
 
     void keyPressEvent(QKeyEvent *event) override;

@@ -12,6 +12,7 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 #include <QMessageBox>
+#include "regsettings.h"
 #include "rigmemcommondata.h"
 #include "rigutils.h"
 #include "tsinglelogframe.h"
@@ -28,6 +29,11 @@ RunButtonDialog::RunButtonDialog(QWidget *parent) :
     ui->setupUi(this);
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
+    RegSettings settings;
+    QByteArray geometry = settings.getSettings().value("RunButtons/geometry").toByteArray();
+    if (geometry.size() > 0)
+        restoreGeometry(geometry);
+
     ui->freqLineEdit->setFocus();
     // validate the input
     connect(ui->freqLineEdit, &QLineEdit::editingFinished, this, &RunButtonDialog::onFreqEditFinish);
@@ -35,7 +41,21 @@ RunButtonDialog::RunButtonDialog(QWidget *parent) :
 }
 
 
-
+void RunButtonDialog::doCloseEvent()
+{
+    RegSettings settings;
+    settings.getSettings().setValue("RunButtons/geometry", saveGeometry());
+}
+void RunButtonDialog::reject()
+{
+    doCloseEvent();
+    QDialog::reject();
+}
+void RunButtonDialog::accept()
+{
+    doCloseEvent();
+    QDialog::accept();
+}
 
 RunButtonDialog::~RunButtonDialog()
 {

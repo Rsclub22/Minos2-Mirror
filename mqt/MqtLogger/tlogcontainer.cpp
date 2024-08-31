@@ -7,6 +7,7 @@
 #include <QScreen>
 
 #include "manageadifdialog.h"
+#include "managebandmapspotsdb.h"
 #include "regsettings.h"
 #include "AppStartup.h"
 #include "MMessageDialog.h"
@@ -707,6 +708,8 @@ void TLogContainer::setupMenus()
 #ifdef Q_OS_WIN
     ManageHamlibAction = newAction(QT_TR_NOOP("Manage Hamlib..."), ui->menuTools, &TLogContainer::ManageHamlibActionExecute);
 #endif
+    manageSpotDatabaseAction = newAction(QT_TR_NOOP("Manage Bandmap Spots Database..."), ui->menuTools, &TLogContainer::on_manageSpotsDatabaseActionSelected);
+
     ui->menuTools->addSeparator();
 
     OptionsAction = newAction(QT_TR_NOOP("Options..."), ui->menuTools, &TLogContainer::OptionsActionExecute, QAction::PreferencesRole);
@@ -1466,6 +1469,11 @@ void TLogContainer::ManageHamlibActionExecute()
 {
     ManageHamlib mhl(this);
     mhl.exec();
+}
+void TLogContainer::on_manageSpotsDatabaseActionSelected()
+{
+    ManageBandmapSpotsDb mbsd(this);
+    mbsd.exec();
 }
 void TLogContainer::GoToSerialActionExecute()
 {

@@ -166,6 +166,7 @@ private:
     QAction *AnalyseMinosLogAction = nullptr;
     QAction *CorrectDateTimeAction = nullptr;
     QAction *ManageHamlibAction = nullptr;
+    QAction* manageSpotDatabaseAction = nullptr;
     QAction *ScreenConfigAction = nullptr;
     QAction *AdvancedOptionsAction = nullptr;
     QAction *CheckUpdatesAction = nullptr;
@@ -247,6 +248,7 @@ private slots:
     void stealFocus();
     void StatsActionExecute();
     void ManageHamlibActionExecute();
+    void on_manageSpotsDatabaseActionSelected();
 public slots:
     void onArgsReceived(QString conarg);
     void ListOpenActionExecute();

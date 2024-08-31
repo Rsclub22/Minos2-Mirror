@@ -25,8 +25,8 @@
 #include <QMutex>
 #include <QWaitCondition>
 #include <QByteArray>
-#include "RxThread.h"
-#include "TxThread.h"
+#include "rxthread.h"
+#include "txthread.h"
 #include "winKeyerCommon.h"
 
 

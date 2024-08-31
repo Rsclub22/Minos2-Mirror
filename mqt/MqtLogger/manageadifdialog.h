@@ -16,7 +16,9 @@ class ManageAdifDialog : public QDialog
 public:
     explicit ManageAdifDialog(QWidget *parent = nullptr);
     ~ManageAdifDialog();
-
+public slots:
+    void reject() override;
+    void accept() override;
 private slots:
     void on_OKButton_clicked();
 
@@ -31,6 +33,8 @@ private slots:
 private:
     Ui::ManageAdifDialog *ui;
     LoggerContestLog * lt = nullptr;
+    void doCloseEvent();
+
 };
 
 #endif // MANAGEADIFDIALOG_H

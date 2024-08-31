@@ -172,7 +172,12 @@ Please enter a name for the radio</source>
         <translation>VFO invalide</translation>
     </message>
     <message>
-        <location filename="../hamlibrigcontrol.cpp" line="1170"/>
+        <location filename="../hamlibrigcontrol.cpp" line="44"/>
+        <source>Limit exceeded </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../hamlibrigcontrol.cpp" line="1172"/>
         <source>Hamlib Errorcode too large!</source>
         <translation>Code d&apos;erreur de Hamlib trop grand!</translation>
     </message>

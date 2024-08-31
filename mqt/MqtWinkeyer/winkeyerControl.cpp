@@ -17,8 +17,8 @@
 /////////////////////////////////////////////////////////////////////////////
 #include <QDebug>
 #include "winkeyerControl.h"
-#include "TxThread.h"
-#include "RxThread.h"
+#include "txthread.h"
+#include "rxthread.h"
 #include "winKeyerCommon.h"
 
 WinkeyerControl::WinkeyerControl(QObject *parent)
@@ -1083,6 +1083,7 @@ int WinkeyerControl::wkSendBufferedChar(quint8 ch)
     }
 
     return WK_NOT_OPEN;
+    return WK_SUCCESS;
     return WK_SUCCESS;
 }
 

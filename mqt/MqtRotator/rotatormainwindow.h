@@ -107,7 +107,6 @@ private:
     QList<QShortcut *> shortCutKeyList;
     QList<QShortcut *> shiftShortCutKeyList;
 
-    QComboBox *selectAntenna;
     QString appName = "";
     QLabel *status;
     QLabel *offSetlbl;

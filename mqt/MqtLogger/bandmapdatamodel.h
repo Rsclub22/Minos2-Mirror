@@ -70,6 +70,9 @@ public:
     void setFilterString(QString f);
     QString getFilterString();
     bool lessThan(const QModelIndex &left, const QModelIndex &right) const override;
+
+    QSharedPointer<ClusterSpotData> getBandmapDataRow(int row);
+
 };
 
 #endif // BANDMAPDATAMODEL_H

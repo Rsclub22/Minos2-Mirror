@@ -17,6 +17,7 @@
 
 #include "MinosRPC.h"
 #include "dmbuttonframe.h"
+#include "fileutils.h"
 #include "tlogcontainer.h"
 #include "tsinglelogframe.h"
 #include "MTrace.h"
@@ -36,6 +37,24 @@ DMButtonFrame::DMButtonFrame(QWidget *parent) :
 
     TContestApp::getContestApp() ->loggerBundle.getStringProfile( elpDigiFunctionKeyFile, fkeyFileName );
 
+    // If we haven't already done so, copy issue fkey file to a local copy
+    // so that an installation can overwrite the original without losing
+    // our changes.
+
+    QSharedPointer<ProfileEntry> &dfkd = TContestApp::getContestApp() ->loggerBundle.bundleFile->GetKey( elpDigiFunctionKeyFile );
+
+    if (dfkd->sdefaultval == fkeyFileName)
+    {
+        QString dstItemPath = ExtractFileDir(fkeyFileName);
+        QString fname = ExtractFileName(fkeyFileName);
+        QString dname = "my_" + fname;
+        dstItemPath = dstItemPath + "/" + dname;
+        if (!FileExists(dstItemPath))
+        {
+            QFile::copy(fkeyFileName, dstItemPath);
+            fkeyFileName = dstItemPath;
+        }
+    }
     fButtons << ui->F1Button << ui->F2Button << ui->F3Button << ui->F4Button << ui->F5Button << ui->F6Button;
     fButtons << ui->F7Button << ui->F8Button << ui->F9Button << ui->F10Button << ui->F11Button << ui->F12Button;
 

@@ -61,7 +61,7 @@ Please choose a new name.</source>
     <name>QrzServerMainWindow</name>
     <message>
         <location filename="../qrzservermainwindow.ui" line="14"/>
-        <source>QrzServerMainWindow</source>
+        <source>QRZ Server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

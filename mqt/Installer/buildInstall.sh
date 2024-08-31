@@ -45,11 +45,11 @@ fi
 
   for j in TinyXML XMPPLib KeyerBase MqtBase MqtUtils MqtAppStarter MqtChat MqtCluster MqtControl MqtDataModes MqtKeyer MqtKeyerProxy MqtKSTClient MqtLogger MqtMonitor MqtQrzServer MqtRigControl MqtRigSync MqtRigRecorder MqtRotator MqtServer
   do
-    lrelease -verbose ../mqt/${j}/${j}.pro
+    lrelease -verbose ../../mqt/${j}/${j}.pro
     if [ ! -d ${j}/translations ]; then
         mkdir ${j}/translations
     fi
-    mv ../mqt/${j}/translations/*.qm ${j}/translations
+    mv ../../mqt/${j}/translations/*.qm ${j}/translations
   done
 
 cd ../..

@@ -236,7 +236,9 @@ void MMTTYFrame::closeFrame()
         active = false;
 
         rttyProcess->waitForFinished(1000);
+        rttyProcess->deleteLater();
 
+        rttyProcess = nullptr;
         mttyHWnd = 0;
     }
 }
@@ -247,12 +249,23 @@ void MMTTYFrame::msgEventFilter(MSG *msg, long */*result*/ )
         long l = msg->lParam;
         int w = msg->wParam;
 
+        if (w < TXM_HANDLE)
+        {
+            return;
+        }
         // messages from decoder
         switch(w)
         {
         case TXM_HANDLE:
-            mttyHWnd = reinterpret_cast<HWND>(l);
-            ::PostMessage(mttyHWnd, uMSG_MMTTY, RXM_HANDLE, getTempId());
+        {
+            if (l)
+            {
+                qint16 h16 = l & 0xffff;
+                long h= h16;
+                mttyHWnd = reinterpret_cast<HWND>(h);
+                ::PostMessage(mttyHWnd, uMSG_MMTTY, RXM_HANDLE, getTempId());
+            }
+        }
             break;
         case TXM_REQHANDLE:
             ::PostMessage(mttyHWnd, uMSG_MMTTY, RXM_HANDLE, getTempId());
@@ -342,7 +355,6 @@ void MMTTYFrame::msgEventFilter(MSG *msg, long */*result*/ )
         }
     }
 }
-
 void MMTTYFrame::runRttyEngine(QString app, QStringList opts)
 {
     rttyEngine = app;
@@ -360,7 +372,7 @@ void MMTTYFrame::runRttyEngine(QString app, QStringList opts)
     QString k = QString("MMTTY");
 
     // This works... but hMapFile.create doesn't work!
-    HANDLE m_hComFile = static_cast<HANDLE>(::CreateFileMappingW(HANDLE(0xffffffff), NULL, PAGE_READWRITE, 0, sizeof(COMARRAY), m));
+    HANDLE m_hComFile = static_cast<HANDLE>(::CreateFileMappingW(INVALID_HANDLE_VALUE, NULL, PAGE_READWRITE, 0, sizeof(COMARRAY), m));
     Q_UNUSED(m_hComFile)
 
     hMapFile.setNativeKey(k);
@@ -394,6 +406,7 @@ void MMTTYFrame::createProcess()
     connect (rttyProcess, &QProcess::readyReadStandardError, this, &MMTTYFrame::on_readyReadStandardError);
     connect (rttyProcess, &QProcess::readyReadStandardOutput, this, &MMTTYFrame::on_readyReadStandardOutput);
 
+    trace(QString ("rttyEngineOpts %1").arg(rttyEngineOpts.join("; ")));
     rttyProcess->start(rttyEngine, rttyEngineOpts, QProcess::ReadWrite);
     active = true;
 }
@@ -409,8 +422,9 @@ void MMTTYFrame::on_finished(int err, QProcess::ExitStatus exitStatus)
     {
 
         rttyProcess->closeWriteChannel();
-        rttyProcess->deleteLater();
+        QProcess *r = rttyProcess;
         rttyProcess = nullptr;
+        r->deleteLater();
     }
     if (active)
     {
@@ -421,8 +435,12 @@ void MMTTYFrame::on_finished(int err, QProcess::ExitStatus exitStatus)
 void MMTTYFrame::on_error(QProcess::ProcessError error)
 {
     trace(rttyEngine + ":error:" + QString::number(error));
-    rttyProcess->deleteLater();
-    rttyProcess = nullptr;
+    if (rttyProcess)
+    {
+        QProcess *r = rttyProcess;
+        rttyProcess = nullptr;
+        r->deleteLater();
+    }
 }
 
 void MMTTYFrame::on_readyReadStandardError()

@@ -524,3 +524,10 @@ bool BandmapSortFilterProxyModel::lessThan(const QModelIndex &left,
 
     return false;
 }
+
+QSharedPointer<ClusterSpotData> BandmapSortFilterProxyModel::getBandmapDataRow(int row)
+{
+    BandmapDataModel *bmm = dynamic_cast<BandmapDataModel *>(sourceModel());
+    QModelIndex ri = bmm->index(row, 0);
+    return bmm->getBandmapDataRow(ri.row());
+}

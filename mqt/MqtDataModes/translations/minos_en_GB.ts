@@ -20,34 +20,54 @@
     </message>
     <message>
         <location filename="../dmmainwindow.ui" line="53"/>
+        <source>Configuration File</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dmmainwindow.ui" line="67"/>
+        <source>...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dmmainwindow.ui" line="87"/>
         <source>Configure</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dmmainwindow.cpp" line="72"/>
+        <location filename="../dmmainwindow.cpp" line="74"/>
         <source>Default Device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dmmainwindow.cpp" line="145"/>
-        <location filename="../dmmainwindow.cpp" line="165"/>
-        <location filename="../dmmainwindow.cpp" line="326"/>
+        <location filename="../dmmainwindow.cpp" line="158"/>
+        <location filename="../dmmainwindow.cpp" line="178"/>
+        <location filename="../dmmainwindow.cpp" line="339"/>
         <source>Start All Engines</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dmmainwindow.cpp" line="277"/>
+        <location filename="../dmmainwindow.cpp" line="290"/>
         <source>Any changes will only be actioned when you stop and restart the engines.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dmmainwindow.cpp" line="305"/>
+        <location filename="../dmmainwindow.cpp" line="318"/>
         <source>Stop All Engines</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dmmainwindow.cpp" line="352"/>
+        <location filename="../dmmainwindow.cpp" line="365"/>
         <source>No DataMode sender configured</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dmmainwindow.cpp" line="421"/>
+        <source>INI (*.ini);;All Files (*.*)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dmmainwindow.cpp" line="425"/>
+        <source>Datamodes Configuration file</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -205,12 +225,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../engineconfigure.cpp" line="411"/>
+        <location filename="../engineconfigure.cpp" line="439"/>
         <source>Engine Files (*.ocx *.exe);;All Files (*.*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../engineconfigure.cpp" line="415"/>
+        <location filename="../engineconfigure.cpp" line="443"/>
         <source>%1 Engine Executable</source>
         <translation type="unfinished"></translation>
     </message>
