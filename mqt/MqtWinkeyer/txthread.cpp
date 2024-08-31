@@ -37,14 +37,14 @@ void TxThread::run()
     while (true)
     {
         QMutexLocker locker(&winkeyerControl->mutex);
-        qDebug() << "Mutex locked";
+        //qDebug() << "Mutex locked";
 
         // Wait until there is data to send or termination signal
-        while (winkeyerControl->txQueue.isEmpty() && !shouldTerminate)
+        while (winkeyerControl->txQueue.isEmpty() && !shouldTerminate && !(winkeyerControl->getWkStatus1() & XOFF))
         {
-             qDebug() << "Thread waiting on condition variable";
+             //qDebug() << "Thread waiting on condition variable";
             winkeyerControl->txCondition.wait(&winkeyerControl->mutex);
-             qDebug() << "Thread woke up, checking immediate commands";
+             //qDebug() << "Thread woke up, checking immediate commands";
             // Process immediate commands first
             processImmediateCommands();
 
@@ -65,11 +65,11 @@ void TxThread::run()
 
 
         // Now that the condition is met, dequeue the data
-        if (!winkeyerControl->txQueue.isEmpty())
+        if (!winkeyerControl->txQueue.isEmpty() )
         {
             QByteArray data = winkeyerControl->txQueue.dequeue();
             locker.unlock();
-            qDebug() << "txthread write Data";
+            //qDebug() << "txthread write Data";
             // Write data immediately
             emit writeData(data);
 

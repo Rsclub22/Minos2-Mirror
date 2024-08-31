@@ -152,6 +152,7 @@ void WinkeyerControl::handleDataReceived(const QByteArray &data)
 
     for (quint8 value : data)
     {
+        qDebug() << "received data = " << value;
         if (activeSerialCmd != ADMIN_NONE)
         {
             if (activeSerialCmd == ADMIN_ECHO)
@@ -194,7 +195,9 @@ void WinkeyerControl::handleDataReceived(const QByteArray &data)
 
             if ((value & 0xC0) == 0xC0)
             {
+                qDebug() << "set wkStatus1 = " << (value & 0x3f);
                 setWkStatus1(value & 0x3f);
+
                 if (getWkStatus1() & BREAKIN)
                 {
                     setBreakinClear(true);
