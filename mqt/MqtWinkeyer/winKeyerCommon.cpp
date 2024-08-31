@@ -13,6 +13,13 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 #include "winKeyerCommon.h"
+#include "AppStartup.h"
+
+
+QString WINKEYER_PATH_LOGGER()
+{
+    return getDirectoryLocation(dlConfiguration) + "/Winkeyer/";
+}
 
 
 

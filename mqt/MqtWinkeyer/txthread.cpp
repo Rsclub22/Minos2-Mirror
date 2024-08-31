@@ -32,15 +32,22 @@ void TxThread::run()
     connect(timer, &QTimer::timeout, &eventLoop, &QEventLoop::quit);
     timer->setInterval(3);  // 3 ms interval
 
+    qDebug() << "txthread started running";
+
     while (true)
     {
         QMutexLocker locker(&winkeyerControl->mutex);
-
+        //qDebug() << "Mutex locked";
 
         // Wait until there is data to send or termination signal
-        while (winkeyerControl->txQueue.isEmpty() && !shouldTerminate)
+        while (winkeyerControl->txQueue.isEmpty() && !shouldTerminate && !(winkeyerControl->getWkStatus1() & XOFF))
         {
+             //qDebug() << "Thread waiting on condition variable";
             winkeyerControl->txCondition.wait(&winkeyerControl->mutex);
+             //qDebug() << "Thread woke up, checking immediate commands";
+            // Process immediate commands first
+            processImmediateCommands();
+
         }
 
 
@@ -48,24 +55,28 @@ void TxThread::run()
         // Break the loop if termination is requested
         if (shouldTerminate)
         {
+            qDebug() << "thread terminating";
             break;
         }
 
-        // Process immediate commands first
-        processImmediateCommands();
+
+
+
+
 
         // Now that the condition is met, dequeue the data
-        if (!winkeyerControl->txQueue.isEmpty())
+        if (!winkeyerControl->txQueue.isEmpty() )
         {
             QByteArray data = winkeyerControl->txQueue.dequeue();
             locker.unlock();
-
+            //qDebug() << "txthread write Data";
             // Write data immediately
             emit writeData(data);
 
             // Optional pacing delay for next iteration
             timer->start();
             eventLoop.exec(); // This will block until timer timeout
+            locker.relock();    // relock mutex before checking queue again
         }
 
     }
@@ -85,12 +96,21 @@ void TxThread::writeABuffer(const QByteArray &data)
     emit writeData(data);
 }
 
+
+// Should only be called when Mutex is already locked!
+
 void TxThread::processImmediateCommands()
 {
+
+    bool commandAdded = false;
+
     if (winkeyerControl->breakinClear)
     {
         winkeyerControl->breakinClear = false;
         // Clear buffers and reset state...
+
+        //commandAdded = true;
+
     }
     if (winkeyerControl->newClear)
     {
@@ -98,6 +118,7 @@ void TxThread::processImmediateCommands()
         QByteArray cmd;
         cmd.append(CLRBUF_CMD);
         winkeyerControl->txQueue.prepend(cmd);
+        commandAdded = true;
     }
 
     // Check and process other immediate commands ...
@@ -109,6 +130,7 @@ void TxThread::processImmediateCommands()
         cmd.append(SPEED_CMD);
         cmd.append(winkeyerControl->getCurrentWinkeyStateStoragePtr()->getWkState()->getSpeed());
         winkeyerControl->txQueue.prepend(cmd);
+        commandAdded = true;
     }
     if (winkeyerControl->getCurrentWinkeyStateStoragePtr()->getWkState()->getMinwpm() != winkeyerControl->getNewWinkeyStateStoragePtr()->getWkState()->getMinwpm() ||
         winkeyerControl->getCurrentWinkeyStateStoragePtr()->getWkState()->getWpmrange() != winkeyerControl->getNewWinkeyStateStoragePtr()->getWkState()->getWpmrange())
@@ -121,6 +143,7 @@ void TxThread::processImmediateCommands()
         cmd.append(winkeyerControl->getCurrentWinkeyStateStoragePtr()->getWkState()->getWpmrange());
         cmd.append(CMD_END);
         winkeyerControl->txQueue.prepend(cmd);
+        commandAdded = true;
 
     }
     if (winkeyerControl->getCurrentWinkeyStateStoragePtr()->getWkState()->getStconst() != winkeyerControl->getNewWinkeyStateStoragePtr()->getWkState()->getStconst())
@@ -130,6 +153,7 @@ void TxThread::processImmediateCommands()
         cmd.append(FREQ_CMD);
         cmd.append(winkeyerControl->getCurrentWinkeyStateStoragePtr()->getWkState()->getStconst());
         winkeyerControl->txQueue.prepend(cmd);
+        commandAdded = true;
     }
     if (winkeyerControl->getCurrentWinkeyStateStoragePtr()->getWkState()->getWeight() != winkeyerControl->getNewWinkeyStateStoragePtr()->getWkState()->getWeight())
     {
@@ -138,6 +162,7 @@ void TxThread::processImmediateCommands()
         cmd.append(WEIGHT_CMD);
         cmd.append(winkeyerControl->getCurrentWinkeyStateStoragePtr()->getWkState()->getWeight());
         winkeyerControl->txQueue.prepend(cmd);
+        commandAdded = true;
     }
     if (winkeyerControl->getCurrentWinkeyStateStoragePtr()->getWkState()->getLeadin() != winkeyerControl->getNewWinkeyStateStoragePtr()->getWkState()->getLeadin() ||
         winkeyerControl->getCurrentWinkeyStateStoragePtr()->getWkState()->getTail() != winkeyerControl->getNewWinkeyStateStoragePtr()->getWkState()->getTail())
@@ -149,6 +174,7 @@ void TxThread::processImmediateCommands()
         cmd.append(winkeyerControl->getCurrentWinkeyStateStoragePtr()->getWkState()->getLeadin());
         cmd.append(winkeyerControl->getCurrentWinkeyStateStoragePtr()->getWkState()->getTail());
         winkeyerControl->txQueue.prepend(cmd);
+        commandAdded = true;
 
     }
     if (winkeyerControl->getCurrentWinkeyStateStoragePtr()->getWkState()->getXtnd() != winkeyerControl->getNewWinkeyStateStoragePtr()->getWkState()->getXtnd())
@@ -158,6 +184,7 @@ void TxThread::processImmediateCommands()
         cmd.append(XTND_CMD);
         cmd.append(winkeyerControl->getCurrentWinkeyStateStoragePtr()->getWkState()->getXtnd());
         winkeyerControl->txQueue.prepend(cmd);
+        commandAdded = true;
     }
     if (winkeyerControl->getCurrentWinkeyStateStoragePtr()->getWkState()->getKcomp() != winkeyerControl->getNewWinkeyStateStoragePtr()->getWkState()->getKcomp())
     {
@@ -166,6 +193,7 @@ void TxThread::processImmediateCommands()
         cmd.append(KCOMP_CMD);
         cmd.append(winkeyerControl->getCurrentWinkeyStateStoragePtr()->getWkState()->getKcomp());
         winkeyerControl->txQueue.prepend(cmd);
+        commandAdded = true;
     }
     if (winkeyerControl->getCurrentWinkeyStateStoragePtr()->getWkState()->getFarns() != winkeyerControl->getNewWinkeyStateStoragePtr()->getWkState()->getFarns())
     {
@@ -174,6 +202,7 @@ void TxThread::processImmediateCommands()
         cmd.append(SETFARNS_CMD);
         cmd.append(winkeyerControl->getCurrentWinkeyStateStoragePtr()->getWkState()->getFarns());
         winkeyerControl->txQueue.prepend(cmd);
+        commandAdded = true;
     }
     if (winkeyerControl->getCurrentWinkeyStateStoragePtr()->getWkState()->getSampadj() != winkeyerControl->getNewWinkeyStateStoragePtr()->getWkState()->getSampadj())
     {
@@ -182,6 +211,7 @@ void TxThread::processImmediateCommands()
         cmd.append(SAMPADJ_CMD);
         cmd.append(winkeyerControl->getCurrentWinkeyStateStoragePtr()->getWkState()->getSampadj());
         winkeyerControl->txQueue.prepend(cmd);
+        commandAdded = true;
     }
     if (winkeyerControl->getCurrentWinkeyStateStoragePtr()->getWkState()->getDitdahratio() != winkeyerControl->getNewWinkeyStateStoragePtr()->getWkState()->getDitdahratio())
     {
@@ -190,6 +220,7 @@ void TxThread::processImmediateCommands()
         cmd.append(DUTY_CMD);
         cmd.append(winkeyerControl->getCurrentWinkeyStateStoragePtr()->getWkState()->getDitdahratio());
         winkeyerControl->txQueue.prepend(cmd);
+        commandAdded = true;
     }
     if (winkeyerControl->getCurrentWinkeyStateStoragePtr()->getWkState()->getModereg() != winkeyerControl->getNewWinkeyStateStoragePtr()->getWkState()->getModereg())
     {
@@ -198,6 +229,7 @@ void TxThread::processImmediateCommands()
         cmd.append(MODE_CMD);
         cmd.append(winkeyerControl->getCurrentWinkeyStateStoragePtr()->getWkState()->getModereg());
         winkeyerControl->txQueue.prepend(cmd);
+        commandAdded = true;
     }
     if (winkeyerControl->getCurrentWinkeyStateStoragePtr()->getWkState()->getX1mode() != winkeyerControl->getNewWinkeyStateStoragePtr()->getWkState()->getX1mode())
     {
@@ -207,6 +239,7 @@ void TxThread::processImmediateCommands()
         cmd.append(ADMIN_LDX1MODE);
         cmd.append(winkeyerControl->getCurrentWinkeyStateStoragePtr()->getWkState()->getX1mode());
         winkeyerControl->txQueue.prepend(cmd);
+        commandAdded = true;
     }
     if (winkeyerControl->getCurrentWinkeyStateStoragePtr()->getWkState()->getPincfg() != winkeyerControl->getNewWinkeyStateStoragePtr()->getWkState()->getPincfg())
     {
@@ -215,6 +248,7 @@ void TxThread::processImmediateCommands()
         cmd.append(PINCFG_CMD);
         cmd.append(winkeyerControl->getCurrentWinkeyStateStoragePtr()->getWkState()->getPincfg());
         winkeyerControl->txQueue.prepend(cmd);
+        commandAdded = true;
     }
     if (winkeyerControl->getcurTune() != winkeyerControl->getNewTune())
     {
@@ -223,6 +257,7 @@ void TxThread::processImmediateCommands()
         cmd.append(KEYIMM_CMD);
         cmd.append(winkeyerControl->getcurTune() ? 1 :0);
         winkeyerControl->txQueue.prepend(cmd);
+        commandAdded = true;
     }
     if (winkeyerControl->getDoGetPot())
     {
@@ -230,6 +265,7 @@ void TxThread::processImmediateCommands()
         QByteArray cmd;
         cmd.append(GETPOT_CMD);
         winkeyerControl->txQueue.prepend(cmd);
+        commandAdded = true;
     }
     if (winkeyerControl->getCurPause() != winkeyerControl->getNewPause())
     {
@@ -237,6 +273,7 @@ void TxThread::processImmediateCommands()
         QByteArray cmd;
         cmd.append(PAUSE_CMD ? 1 : 0);
         winkeyerControl->txQueue.prepend(cmd);
+        commandAdded = true;
     }
     if (winkeyerControl->getCurDirect() != winkeyerControl->getNewDirect())
     {
@@ -245,6 +282,7 @@ void TxThread::processImmediateCommands()
         cmd.append(DIRECTKEY_CMD);
         cmd.append(winkeyerControl->getCurDirect());
         winkeyerControl->txQueue.prepend(cmd);
+        commandAdded = true;
     }
     if (winkeyerControl->getDumpState())
     {
@@ -253,6 +291,7 @@ void TxThread::processImmediateCommands()
         cmd.append(ADMIN_CMD);
         cmd.append(ADMIN_STATE);
         winkeyerControl->txQueue.prepend(cmd);
+        commandAdded = true;
     }
     if (winkeyerControl->getNewX2mode())
     {
@@ -262,6 +301,7 @@ void TxThread::processImmediateCommands()
         cmd.append(ADMIN_LDX2MODE);
         cmd.append(winkeyerControl->getX2modeValue());
         winkeyerControl->txQueue.prepend(cmd);
+        commandAdded = true;
     }
     if (winkeyerControl->getNewVolume())
     {
@@ -271,6 +311,7 @@ void TxThread::processImmediateCommands()
         cmd.append(ADMIN_SETVOL);
         cmd.append(winkeyerControl->getVolumeValue());
         winkeyerControl->txQueue.prepend(cmd);
+        commandAdded = true;
     }
     if (winkeyerControl->getNewRTTY())
     {
@@ -281,6 +322,7 @@ void TxThread::processImmediateCommands()
         cmd.append(winkeyerControl->getRttyValue1());
         cmd.append(winkeyerControl->getRttyValue2());
         winkeyerControl->txQueue.prepend(cmd);
+        commandAdded = true;
     }
     if (winkeyerControl->getDumpDebug())
     {
@@ -289,6 +331,7 @@ void TxThread::processImmediateCommands()
         cmd.append(ADMIN_CMD);
         cmd.append(ADMIN_DEBUG);
         winkeyerControl->txQueue.prepend(cmd);
+        commandAdded = true;
     }
     if (winkeyerControl->getDumpPdl())
     {
@@ -297,6 +340,7 @@ void TxThread::processImmediateCommands()
         cmd.append(ADMIN_CMD);
         cmd.append(ADMIN_A2DPDL);
         winkeyerControl->txQueue.prepend(cmd);
+        commandAdded = true;
     }
     if (winkeyerControl->getDumpPot())
     {
@@ -305,6 +349,7 @@ void TxThread::processImmediateCommands()
         cmd.append(ADMIN_CMD);
         cmd.append(ADMIN_A2DPOT);
         winkeyerControl->txQueue.prepend(cmd);
+        commandAdded = true;
     }
     if (winkeyerControl->getDoBlock())
     {
@@ -329,6 +374,7 @@ void TxThread::processImmediateCommands()
         cmd.append(GETPOT_CMD);
         cmd.append(GETSTAT_CMD);
         winkeyerControl->txQueue.prepend(cmd);
+        commandAdded = true;
     }
     if (winkeyerControl->getDoSoftReset())
     {
@@ -337,6 +383,7 @@ void TxThread::processImmediateCommands()
         cmd.append(ADMIN_CMD);
         cmd.append(ADMIN_RESET);
         winkeyerControl->txQueue.prepend(cmd);
+        commandAdded = true;
     }
     if (winkeyerControl->getDoBackSpace())
     {
@@ -350,6 +397,7 @@ void TxThread::processImmediateCommands()
         cmd.append(HSCW_CMD);
         cmd.append(winkeyerControl->getHscwValue() );
         winkeyerControl->txQueue.prepend(cmd);
+        commandAdded = true;
     }
     if (winkeyerControl->getWK1Flag())
     {
@@ -358,6 +406,7 @@ void TxThread::processImmediateCommands()
         cmd.append(HSCW_CMD);
         cmd.append(ADMIN_SETWK1);
         winkeyerControl->txQueue.prepend(cmd);
+        commandAdded = true;
     }
     if (winkeyerControl->getWK2Flag())
     {
@@ -366,6 +415,7 @@ void TxThread::processImmediateCommands()
         cmd.append(HSCW_CMD);
         cmd.append(ADMIN_SETWK2);
         winkeyerControl->txQueue.prepend(cmd);
+        commandAdded = true;
     }
     if (winkeyerControl->getWK3Flag())
     {
@@ -374,6 +424,7 @@ void TxThread::processImmediateCommands()
         cmd.append(HSCW_CMD);
         cmd.append(ADMIN_SETWK3);
         winkeyerControl->txQueue.prepend(cmd);
+        commandAdded = true;
     }
     if (winkeyerControl->getCloseTxFlag())
     {
@@ -382,6 +433,19 @@ void TxThread::processImmediateCommands()
         cmd.append(ADMIN_CMD);
         cmd.append(ADMIN_CLOSE);
         winkeyerControl->txQueue.prepend(cmd);
+        commandAdded = true;
+    }
+
+
+    if (commandAdded)
+    {
+        qDebug() << "Immediate command added, waking thread";
+        // Wake up the thread to process the new command
+        winkeyerControl->txCondition.wakeOne();
+    }
+    else
+    {
+         qDebug() << "No immediate commands to process";
     }
 
 

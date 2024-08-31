@@ -40,9 +40,10 @@ WinkeyerControl::WinkeyerControl(QObject *parent)
     newWinkeyStateStoragePtr = QSharedPointer<WinkeyerStateStorage>::create();
     newWinkeyStateStoragePtr->setWkstate(newWinkeyerStatePtr);
 
-    QString fileName = "winkeyerSettings.ini";
+    QString fileName = WINKEYER_PATH_LOGGER() + WINKEYER_CONFIG_FILENAME;
     QSettings  winkeyerConfig(fileName, QSettings::IniFormat);
     currentWinkeyStateStoragePtr->loadWinkeyerStateStorageFromFile(winkeyerConfig);
+    newWinkeyStateStoragePtr->loadWinkeyerStateStorageFromFile(winkeyerConfig);     // make sure they are both the same at start
 
     serialTimeoutTimer = new QTimer(this);
     serialTimeoutTimer->setSingleShot(true);
@@ -64,17 +65,22 @@ QSharedPointer<WinkeyerStateStorage> WinkeyerControl::getCurrentWinkeyStateStora
 {
     return currentWinkeyStateStoragePtr;
 }
+
+void WinkeyerControl::setNewWinkeyStateStoragePtr(QSharedPointer<WinkeyerStateStorage> newPtr) {
+    newWinkeyStateStoragePtr = newPtr;
+}
+
 QSharedPointer<WinkeyerStateStorage> WinkeyerControl::getNewWinkeyStateStoragePtr()
 {
    return newWinkeyStateStoragePtr;
 }
 
 
-int WinkeyerControl::initComport(QString comport)
+int WinkeyerControl::initComport(QString comport, int baudrate)
 {
 
     serialPort->setPortName(comport);
-    serialPort->setBaudRate(QSerialPort::Baud1200);
+    serialPort->setBaudRate(baudrate);
     serialPort->setDataBits(QSerialPort::Data8);
     serialPort->setParity(QSerialPort::NoParity);
     serialPort->setStopBits(QSerialPort::OneStop);
@@ -88,6 +94,12 @@ int WinkeyerControl::initComport(QString comport)
         //errMsg = serialPort->errorString();
 
 
+}
+
+
+QString WinkeyerControl::getSerialPortErrorMsg()
+{
+    return serialPort->errorString();
 }
 
 
@@ -119,12 +131,28 @@ bool WinkeyerControl::isSerialPortOpen()
     return serialPort->isOpen();
 }
 
+void WinkeyerControl::serialPortClose()
+{
+    serialPort->close();
+}
+
+bool WinkeyerControl::getIsWkOpen()
+{
+    return wkIsOpen;
+}
+
+void WinkeyerControl::setIsWKOpen(bool open)
+{
+    wkIsOpen = open;
+}
+
 
 void WinkeyerControl::handleDataReceived(const QByteArray &data)
 {
 
     for (quint8 value : data)
     {
+        qDebug() << "received data = " << value;
         if (activeSerialCmd != ADMIN_NONE)
         {
             if (activeSerialCmd == ADMIN_ECHO)
@@ -167,7 +195,9 @@ void WinkeyerControl::handleDataReceived(const QByteArray &data)
 
             if ((value & 0xC0) == 0xC0)
             {
+                qDebug() << "set wkStatus1 = " << (value & 0x3f);
                 setWkStatus1(value & 0x3f);
+
                 if (getWkStatus1() & BREAKIN)
                 {
                     setBreakinClear(true);
@@ -203,7 +233,12 @@ void WinkeyerControl::enqueueData(const QByteArray &data)
     qDebug() << "Data added to TxQueue and thread notified";
 }
 
-
+void WinkeyerControl::wakeUpTxThread()
+{
+    QMutexLocker locker(&mutex);
+    txCondition.wakeOne();
+    qDebug() << "Setup changed and thread notified";
+}
 
 void WinkeyerControl::closeWinKeyer()
 {
@@ -303,44 +338,40 @@ void WinkeyerControl::statusChanged(quint8 status)
 
     if (g_wkStatus & XOFF)
     {
-        //SetDlgItemText(g_hMainDlg, IDC_XOFF, "Xoff");
+        emit wk_XoffStatus("Xoff");
+
     }
     else
     {
-        //SetDlgItemText(g_hMainDlg, IDC_XOFF, " ");
+        emit wk_XoffStatus("    ");
     }
+
 
     if (g_wkStatus & BREAKIN)
     {
-
-    }
-
-    if (g_wkStatus & BREAKIN)
-    {
-        //g_activeMsg = 0;
-        //SetDlgItemText(g_hMainDlg, IDC_BREAKIN, "BrkIn");
+        emit wk_BreakInStatus("BrkIn");
     }
     else
     {
-        //SetDlgItemText(g_hMainDlg, IDC_BREAKIN, " ");
+        emit wk_BreakInStatus("     ");
     }
 
     if (g_wkStatus & KBUSY)
     {
-        //SetDlgItemText(g_hMainDlg, IDC_BUSY, "Busy");
+        emit wk_KBusyStatus("Busy");
     }
     else
     {
-        //SetDlgItemText(g_hMainDlg, IDC_BUSY, " ");
+        emit wk_KBusyStatus("    ");
     }
 
     if (g_wkStatus & KWAIT)
     {
-        //SetDlgItemText(g_hMainDlg, IDC_WAITSTATUS, "Wait");
+        emit wk_KWaitStatus("Wait");
     }
     else
     {
-        //SetDlgItemText(g_hMainDlg, IDC_WAITSTATUS, " ");
+        emit wk_KWaitStatus("    ");
     }
 }
 
@@ -369,6 +400,7 @@ void WinkeyerControl::completeOpenCmd()
     activeSerialCmd = ADMIN_NONE;
     winKeyerOpenFlag = true;
     emit winKeyerOpenStatus(true);
+
 }
 
 void WinkeyerControl::stopSerialTimeout()
@@ -664,6 +696,68 @@ bool WinkeyerControl::getWK3Flag()
 
 // immediate commands
 
+
+// set sidetone frequency
+
+
+int WinkeyerControl::wkSendDefaults(QSharedPointer<WinkeyerStateStorage> state)
+{
+    if (wkIsOpen)
+    {
+        newWinkeyStateStoragePtr->getWkState()->setModereg(state->getWkState()->getModereg());
+        currentWinkeyStateStoragePtr->getWkState()->setModereg(state->getWkState()->getModereg());
+
+        newWinkeyStateStoragePtr->getWkState()->setSpeed(state->getWkState()->getSpeed());
+        currentWinkeyStateStoragePtr->getWkState()->setSpeed(state->getWkState()->getSpeed());
+
+        newWinkeyStateStoragePtr->getWkState()->setStconst(state->getWkState()->getStconst());
+        currentWinkeyStateStoragePtr->getWkState()->setStconst(state->getWkState()->getStconst());
+
+        newWinkeyStateStoragePtr->getWkState()->setWeight(state->getWkState()->getWeight());
+        currentWinkeyStateStoragePtr->getWkState()->setWeight(state->getWkState()->getWeight());
+
+        newWinkeyStateStoragePtr->getWkState()->setLeadin(state->getWkState()->getLeadin());
+        currentWinkeyStateStoragePtr->getWkState()->setLeadin(state->getWkState()->getLeadin());
+
+        newWinkeyStateStoragePtr->getWkState()->setTail(state->getWkState()->getTail());
+        currentWinkeyStateStoragePtr->getWkState()->setTail(state->getWkState()->getTail());
+
+        newWinkeyStateStoragePtr->getWkState()->setMinwpm(state->getWkState()->getMinwpm());
+        currentWinkeyStateStoragePtr->getWkState()->setMinwpm(state->getWkState()->getMinwpm());
+
+        newWinkeyStateStoragePtr->getWkState()->setWpmrange(state->getWkState()->getWpmrange());
+        currentWinkeyStateStoragePtr->getWkState()->setWpmrange(state->getWkState()->getWpmrange());
+
+        newWinkeyStateStoragePtr->getWkState()->setXtnd(state->getWkState()->getXtnd());
+        currentWinkeyStateStoragePtr->getWkState()->setXtnd(state->getWkState()->getXtnd());
+
+        newWinkeyStateStoragePtr->getWkState()->setKcomp(state->getWkState()->getKcomp());
+        currentWinkeyStateStoragePtr->getWkState()->setKcomp(state->getWkState()->getKcomp());
+
+        newWinkeyStateStoragePtr->getWkState()->setFarns(state->getWkState()->getFarns());
+        currentWinkeyStateStoragePtr->getWkState()->setFarns(state->getWkState()->getFarns());
+
+        newWinkeyStateStoragePtr->getWkState()->setSampadj(state->getWkState()->getSampadj());
+        currentWinkeyStateStoragePtr->getWkState()->setSampadj(state->getWkState()->getSampadj());
+
+        newWinkeyStateStoragePtr->getWkState()->setDitdahratio(state->getWkState()->getDitdahratio());
+        currentWinkeyStateStoragePtr->getWkState()->setDitdahratio(state->getWkState()->getDitdahratio());
+
+        newWinkeyStateStoragePtr->getWkState()->setPincfg(state->getWkState()->getPincfg());
+        currentWinkeyStateStoragePtr->getWkState()->setPincfg(state->getWkState()->getPincfg());
+
+        newWinkeyStateStoragePtr->getWkState()->setX1mode(state->getWkState()->getX1mode());
+        currentWinkeyStateStoragePtr->getWkState()->setX1mode(state->getWkState()->getX1mode());
+
+        setDoBlock(true);       // kick off sending data to winkeyer
+
+        return WK_SUCCESS;
+    }
+    else
+    {
+        return WK_NOT_OPEN;
+    }
+}
 
 // set sidetone frequency
 
@@ -980,9 +1074,16 @@ int WinkeyerControl::wkGetXoffStatus()
 
 int WinkeyerControl::wkSendBufferedChar(quint8 ch)
 {
-    QByteArray c;
-    c.append(ch);
-    txQueue.enqueue(c);
+    if (wkIsOpen)
+    {
+        QByteArray c;
+        c.append(ch);
+        enqueueData(c);
+        return WK_SUCCESS;
+    }
+
+    return WK_NOT_OPEN;
+    return WK_SUCCESS;
     return WK_SUCCESS;
 }
 

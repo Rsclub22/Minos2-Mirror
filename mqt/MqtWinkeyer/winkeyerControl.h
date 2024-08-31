@@ -38,19 +38,24 @@ public:
     explicit WinkeyerControl(QObject *parent = nullptr);
     ~WinkeyerControl();
 
-   // bool openSerialPort(const QString &portName, int baudRate);
-   // void closeSerialPort();
 
     void enqueueData(const QByteArray &data);
 
     void openWinKeyer();
     void closeWinKeyer();
 
-    int initComport(QString comport);
+    int initComport(QString comport, int baudrate);
+    void serialPortClose();
+
+
     void start();
     void stop();
 
     bool isSerialPortOpen();
+
+    bool getIsWkOpen();
+    void setIsWKOpen(bool open);
+
     void wk_st_freq(quint8 value);
 
     void SetWEchoBack(quint8 value);
@@ -154,6 +159,8 @@ public:
     bool getWK3Flag();
 
     QSharedPointer<WinkeyerStateStorage> getCurrentWinkeyStateStoragePtr();
+
+    void setNewWinkeyStateStoragePtr(QSharedPointer<WinkeyerStateStorage> newPtr);
     QSharedPointer<WinkeyerStateStorage> getNewWinkeyStateStoragePtr();
 
     int wkSendBufferedChar(quint8 ch);
@@ -190,12 +197,21 @@ public:
     int wkBufferedNull();
 
 
+
+
+    int wkSendDefaults(QSharedPointer<WinkeyerStateStorage> state);
+    QString getSerialPortErrorMsg();
+    void wakeUpTxThread();
 signals:
     void dataReceived(const QByteArray &data);
     void writeData(const QByteArray &data);
 
     void winKeyerOpenStatus(bool open);
 
+    void wk_XoffStatus(QString status);
+    void wk_BreakInStatus(QString status);
+    void wk_KBusyStatus(QString status);
+    void wk_KWaitStatus(QString status);
 
 private slots:
     void handleDataReceived(const QByteArray &data);
@@ -281,6 +297,7 @@ private:
 
     QSharedPointer<WinkeyerState> currentWinkeyerStatePtr;
     QSharedPointer<WinkeyerState> newWinkeyerStatePtr;
+
     QSharedPointer<WinkeyerStateStorage> currentWinkeyStateStoragePtr;
     QSharedPointer<WinkeyerStateStorage> newWinkeyStateStoragePtr;
 

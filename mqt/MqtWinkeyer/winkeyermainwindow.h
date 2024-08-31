@@ -17,8 +17,9 @@
 
 #include <QMainWindow>
 #include <QSharedPointer>
+#include <QLabel>
 #include "winkeyerControl.h"
-#include "winKeyerCommon.h"
+#include "CommandReader.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -34,29 +35,49 @@ public:
     WinkeyerMainWindow(QWidget *parent = nullptr);
     ~WinkeyerMainWindow();
 
+    virtual void resizeEvent(QResizeEvent *event) override;
+    virtual void moveEvent(QMoveEvent *event) override;
+    virtual void changeEvent( QEvent* e ) override;
+
 private slots:
     void on_sendPushButton_clicked(); // Slot for send button click
 
     void on_openPushButton_clicked();
-    void handleWinKeyerOpenStatus(bool open);
-    void handleSetupPushButton();
+    void onHandleWinKeyerOpenStatus(bool open);
+    void onHandleSetupPushButton();
 
 
+    void onTextChanged(const QString &text);
+    void onCommandRead(QString cmd);
+    void onHandleXoffStatus(QString status);
+    void onHandleBreakInStatus(QString status);
+    void onHandleKBusyStatus(QString status);
+    void onHandleKWaitStatus(QString status);
 private:
     Ui::WinkeyerMainWindow *ui;
     WinkeyerControl *winkeyerControl;
-    QSharedPointer<WinkeyerState> currentWinkeyerStatePtr;
-    QSharedPointer<WinkeyerStateStorage> currentWinkeyStateStoragePtr;
 
-    QSharedPointer<WinkeyerState> newWinkeyerStatePtr;
-    QSharedPointer<WinkeyerStateStorage> newWinkeyStateStoragePtr;
+    QSharedPointer<CommandReader> commandReader = QSharedPointer<CommandReader>(new CommandReader(this));
+
+    QTimer LogTimer;
+
+    QLabel *xoffStatus;
+    QLabel *breakInStatus;
+    QLabel *busyStatus;
+    QLabel *waitStatus;
 
 
+    void closeEvent(QCloseEvent *event) override;
 
     void openWinKeyerSetupDialog();
 
 
 
+    void handleKeyboardChar(QChar kbdChar);
+    void LogTimerTimer();
+    void saveWinkeyerSettings(QSharedPointer<WinkeyerStateStorage> winkeySettings);
+    void updateStatusBarMessage(QString serialErrorMsg, QString wkStatusMsg);
+    void addWinkeyerStatusObjectsToStatusBar();
 };
 
 #endif // WINKEYERMAINWINDOW_H

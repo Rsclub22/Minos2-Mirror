@@ -29,8 +29,7 @@ WinKeyerSetupDialog::WinKeyerSetupDialog(QWidget *parent)
 
     setupWinkeyStateStoragePtr->setWkstate(setupWinkeyerStatePtr);
 
-    QString fileName = "winkeyerSettings.ini";
-
+    QString fileName = WINKEYER_PATH_LOGGER() + WINKEYER_CONFIG_FILENAME;
     QSettings  winkeyerConfig(fileName, QSettings::IniFormat);
     setupWinkeyStateStoragePtr->loadWinkeyerStateStorageFromFile(winkeyerConfig);
 

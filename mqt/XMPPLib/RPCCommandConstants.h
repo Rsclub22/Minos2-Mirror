@@ -131,6 +131,13 @@ static const QString keyerReport         ("Report");
 
 static const QString keyerProxyApp       {"mqtKeyerProxy"};
 
+
+// Winkeyer
+static const QString winkeyerApp           ("mqtWinKeyer");
+static const QString winkeyerDisplayApp    ("winkeyerDisplayApp");
+
+
+
 // Control
 static const QString controlApp         ("mqtControl");
 static const QString lineControlCategory ("LineControl");

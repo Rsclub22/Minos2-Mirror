@@ -144,33 +144,52 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../winkeyermainwindow.ui" line="23"/>
-        <source>Text To Send</source>
+        <location filename="../winkeyermainwindow.ui" line="46"/>
+        <source>Keyer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../winkeyermainwindow.ui" line="50"/>
+        <location filename="../winkeyermainwindow.ui" line="54"/>
+        <source>Echo CW</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../winkeyermainwindow.ui" line="70"/>
+        <source>Send CW</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../winkeyermainwindow.ui" line="84"/>
         <source>Send</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../winkeyermainwindow.ui" line="74"/>
+        <location filename="../winkeyermainwindow.ui" line="93"/>
         <source>Open</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../winkeyermainwindow.ui" line="81"/>
-        <source>Closed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../winkeyermainwindow.ui" line="90"/>
+        <location filename="../winkeyermainwindow.ui" line="28"/>
+        <location filename="../winkeyermainwindow.ui" line="40"/>
         <source>Setup</source>
         <translation type="unfinished"></translation>
     </message>
+</context>
+<context>
+    <name>WinkeyerRpc</name>
     <message>
-        <location filename="../winkeyermainwindow.ui" line="99"/>
-        <source>Status:</source>
+        <location filename="../winkeyerrpc.cpp" line="27"/>
+        <source>Available</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../winkeyerrpc.cpp" line="28"/>
+        <source>Not Available</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../winkeyerrpc.cpp" line="29"/>
+        <source>No Contact</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
