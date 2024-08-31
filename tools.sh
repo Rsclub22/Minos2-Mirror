@@ -22,14 +22,15 @@ apt-get install libqt5charts5-dev -y
 # QML needed for maps, but it all seems broken under Linux
 # so for now we leave it out
 
-#apt-get install qtdeclarative5-dev -y
-#apt-get install qml-module-qtquick-controls2 -y
-#apt-get install qtlocation5-dev -y
-#apt-get install qtpositioning-dev -y
-#apt-get install qml-module-qtlocation -y
-#apt-get install qml-module-qtpositioning -y
+apt-get install qtdeclarative5-dev -y
+apt-get install qml-module-qtquick-controls2 -y
+apt-get install qml-module-qtquick-layouts2 -y
+apt-get install qtlocation5-dev -y
+apt-get install qtpositioning-dev -y
+apt-get install qml-module-qtlocation -y
+apt-get install qml-module-qtpositioning -y
 
-#apt-get install libglu1-mesa-dev freeglut3-dev mesa-common-dev -y
+apt-get install libglu1-mesa-dev freeglut3-dev mesa-common-dev mesa-utils -y
 
 # ubuntu 21 doesn't seem to have g++ by default
 
