@@ -49,7 +49,7 @@ fi
     if [ ! -d ${j}/translations ]; then
         mkdir ${j}/translations
     fi
-    mv ../mqt/${j}/translations/*.qm ${j}/translations
+    mv ../../mqt/${j}/translations/*.qm ${j}/translations
   done
 
 cd ../..
