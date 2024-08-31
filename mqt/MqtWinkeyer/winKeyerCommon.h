@@ -261,9 +261,9 @@ const quint8 CMD_TBL_END =  0x1F;
 #define WK_NOT_OPEN             -9
 #define COM_PURGE_FAILED       -10
 
-const quint8 KBD_BACKSPACE = 0x08;
-const quint8 KBD_CR = 0x0d;
-const quint8 KBD_ESC = 0x1b;
+const QChar KBD_BACKSPACE(0x08);
+const QChar KBD_CR(0x0d);
+const QChar KBD_ESC(0x1b);
 
 QString WINKEYER_PATH_LOGGER();
 const QString WINKEYER_CONFIG_FILENAME = "winkeyerConfig.ini";
