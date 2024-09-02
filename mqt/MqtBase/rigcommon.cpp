@@ -440,7 +440,7 @@ void EnableDisableCatFeature::clear()
     volumeEnable = true;
     voiceMemEnable = true;
     cWMemEnable = true;
-    catEnable = true;
+    catPttEnable = true;
 }
 
 
@@ -452,7 +452,7 @@ bool EnableDisableCatFeature::operator ==(const EnableDisableCatFeature &edcf)
         volumeEnable == edcf.volumeEnable &&
         voiceMemEnable == edcf.voiceMemEnable &&
         cWMemEnable == edcf.cWMemEnable &&
-        catEnable == edcf.catEnable)
+        catPttEnable == edcf.catPttEnable)
     {
         return true;
     }
@@ -467,7 +467,7 @@ bool EnableDisableCatFeature::operator !=(const EnableDisableCatFeature &edcf)
         volumeEnable != edcf.volumeEnable ||
         voiceMemEnable != edcf.voiceMemEnable ||
         cWMemEnable != edcf.cWMemEnable ||
-        catEnable != edcf.catEnable)
+        catPttEnable != edcf.catPttEnable)
     {
         return true;
     }
@@ -483,7 +483,7 @@ EnableDisableCatFeature& EnableDisableCatFeature::operator =(const EnableDisable
     volumeEnable = edcf.volumeEnable;
     voiceMemEnable = edcf.voiceMemEnable;
     cWMemEnable = edcf.cWMemEnable;
-    catEnable = edcf.catEnable;
+    catPttEnable = edcf.catPttEnable;
 
     return *this;
 }

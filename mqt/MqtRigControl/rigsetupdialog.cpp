@@ -281,7 +281,7 @@ void RigSetupDialog::loadSettingsToTab(int tabNum, QString tabName)
         radioTab.value(tabName)->setCatFeaturesEnableChkBoxVisible(true);
 
 
-        if (availRadioData.value(tabName)->enableDisableCatFeature.catEnable)
+        if (availRadioData.value(tabName)->enableDisableCatFeature.catPttEnable)
         {
             radioTab.value(tabName)->setPttCatSelectRadioButtonDisabled(false);
 
@@ -1101,7 +1101,7 @@ void RigSetupDialog::saveRadioData(QSharedPointer<scatParams> radioData, QSettin
     config.setValue("volumeEnable", radioData->enableDisableCatFeature.volumeEnable);
     config.setValue("voiceMemEnable", radioData->enableDisableCatFeature.voiceMemEnable);
     config.setValue("cWMemEnable", radioData->enableDisableCatFeature.cWMemEnable);
-    config.setValue("catEnable", radioData->enableDisableCatFeature.catEnable);
+    config.setValue("catPttEnable", radioData->enableDisableCatFeature.catPttEnable);
 
     for (const auto &b: QASCONST(bands))
     {
@@ -1168,7 +1168,7 @@ void RigSetupDialog::getRadioSetting(QSharedPointer<scatParams> radioData, QStri
     radioData->enableDisableCatFeature.volumeEnable = config.value("volumeEnable", true).toBool();
     radioData->enableDisableCatFeature.voiceMemEnable = config.value("voiceMemEnable", true).toBool();
     radioData->enableDisableCatFeature.cWMemEnable = config.value("cWMemEnable", true).toBool();
-    radioData->enableDisableCatFeature.catEnable = config.value("catEnable", true).toBool();
+    radioData->enableDisableCatFeature.catPttEnable = config.value("catPttEnable", true).toBool();
 
 
     for (const auto &b: QASCONST(bands))

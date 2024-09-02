@@ -271,10 +271,12 @@ void RigSetupForm::setupRadioModel(QString radioModel)
          }
 
          setCatFeaturesEnableChkBoxVisible(true);
-         setAdvancedCommsFlag(false);
+
          setEnableDisableCatFeaturesGroupVisible(true);
 
+         loadEnableShowCatFeaturesBox(rigCap);
 
+         setAdvancedCommsFlag(false);
 
          // Omnirig
 
@@ -1496,10 +1498,10 @@ void RigSetupForm::onEnableVolCatFeatureClicked()
 void RigSetupForm::onEnableCatPttCatFeatureClicked()
 {
     bool checked = ui->enableCatPttCatFeatureChkBox->isChecked();
-    if (radioData->enableDisableCatFeature.catEnable != checked)
+    if (radioData->enableDisableCatFeature.catPttEnable != checked)
     {
 
-        radioData->enableDisableCatFeature.catEnable = checked;
+        radioData->enableDisableCatFeature.catPttEnable = checked;
         //if (!(ui->pttDTRSelectRadioButton->isChecked() || ui->pttRTSSelectRadioButton->isChecked()))
         //{
         //    ui->pttCatSelectRadioButton->setChecked(checked);  // change the state of the ptt group CAT radio button
@@ -1548,6 +1550,7 @@ void RigSetupForm::onEnableCatFeaturesClicked()
 
 
 
+
 void RigSetupForm::loadEnableShowCatFeaturesBox(RigCapabilities &rigCap)
 {
     ui->enableCatFeaturesChkBox->setChecked(radioData->enableDisableCatFeature.enableDisplay);
@@ -1591,7 +1594,7 @@ void RigSetupForm::loadEnableShowCatFeaturesBox(RigCapabilities &rigCap)
         ui->enableVolCatFeatureChkBox->setVisible(false);
     }
 
-    ui->enableCatPttCatFeatureChkBox->setChecked(radioData->enableDisableCatFeature.catEnable);
+    ui->enableCatPttCatFeatureChkBox->setChecked(radioData->enableDisableCatFeature.catPttEnable);
     if (rigCap.getSupportGetPtt() && rigCap.getSupportSetPtt())
     {
         setCatFeaturesEnableChkBoxVisible(true);

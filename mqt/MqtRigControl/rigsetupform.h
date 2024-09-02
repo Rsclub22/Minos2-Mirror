@@ -354,6 +354,7 @@ private:
     void onPortTypeSerialRadioButtonClicked();
     void onPortTypeNetworkRadioButtonClicked();
     void showPleaseSelectPttComportDialogue();
+    void initCatFeatures(RigCapabilities &rigCap);
 };
 
 #endif // RIGSETUPFORM_H
