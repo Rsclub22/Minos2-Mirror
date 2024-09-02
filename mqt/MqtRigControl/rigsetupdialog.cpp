@@ -402,12 +402,6 @@ void RigSetupDialog::loadSettingsToTab(int tabNum, QString tabName)
         radioTab.value(tabName)->setPortTypeWidgetsVisible(false);
 
     }
-    /*else
-    {
-        // hamlib
-        radioTab.value(tabName)->setCatFeaturesEnableChkBoxVisible(true);
-        //radioTab.value(tabName)->setPortTypeWidgetsVisible(true);
-    }*/
 
 
 

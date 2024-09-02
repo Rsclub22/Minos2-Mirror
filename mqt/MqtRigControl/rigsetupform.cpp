@@ -271,7 +271,7 @@ void RigSetupForm::setupRadioModel(QString radioModel)
          }
 
          setCatFeaturesEnableChkBoxVisible(true);
-         setAdvancedCommsFlag(true);
+         setAdvancedCommsFlag(false);
          setEnableDisableCatFeaturesGroupVisible(true);
 
 
