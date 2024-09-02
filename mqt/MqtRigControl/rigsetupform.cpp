@@ -2479,40 +2479,7 @@ void RigSetupForm::onPttComportSelActivated(int /*idx*/)
             }
 
 
-                /*
-
-                if (ui->pttRTSSelectRadioButton->isChecked())
-                {
-                    setForceRTSDisabled(true);
-                    setForceDTRDisabled(false);
-                    if (radioData->forceRts == serialCommonData::s_forceLinesCodes::FORCE_LINE_ON
-                            || radioData->forceRts == serialCommonData::s_forceLinesCodes::FORCE_LINE_OFF)
-                    {
-                        radioData->forceRts = serialCommonData::s_forceLinesCodes::FORCE_LINE_NONE;
-                        setForceRTSComboBox(static_cast<int>(radioData->forceRts));
-                    }
-                }
-                else if (ui->pttDTRSelectRadioButton->isChecked())
-                {
-                    setForceDTRDisabled(true);
-                    setForceRTSDisabled(false);
-                    if (radioData->forceDtr == serialCommonData::s_forceLinesCodes::FORCE_LINE_ON
-                            || radioData->forceDtr == serialCommonData::s_forceLinesCodes::FORCE_LINE_OFF)
-                    {
-                        radioData->forceDtr = serialCommonData::s_forceLinesCodes::FORCE_LINE_NONE;
-                        setForceDTRComboBox(static_cast<int>(radioData->forceDtr));
-                    }
-                }
-            }
-            else
-            {
-                setForceDTRDisabled(false);
-                setForceRTSDisabled(false);
-            }
-*/
-
-
-        }
+         }
     }
 
 }
