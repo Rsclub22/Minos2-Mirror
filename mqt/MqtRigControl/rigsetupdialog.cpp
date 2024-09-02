@@ -458,6 +458,10 @@ void RigSetupDialog::addRadio()
     loadAvailComportsToTab(radioName);
     loadAvailPttComportsToTab(radioName);
 
+
+
+    /******* we should conisder moving this to actual radio selection ???? *****/
+
     // initial settings
     radioTab.value(radioName)->setDataSpeed("9600");
     radioTab.value(radioName)->comSpeedSelected();

@@ -282,6 +282,7 @@ void RigSetupForm::setupRadioModel(QString radioModel)
              setPttCatSelectRadioButtonChecked(false);
              setPttCatSelectRadioButtonVisible(true);
 
+
          }
          else
          {
