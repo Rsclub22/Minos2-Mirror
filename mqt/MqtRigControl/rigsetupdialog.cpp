@@ -446,13 +446,6 @@ void RigSetupDialog::addRadio()
     radioTab.value(radioName)->setupRadioModel(radioModel);
 
 
-    radioTab.value(radioName)->setAdvancedCommsFlag(false);
-
-
-
-    radioTab.value(radioName)->setEnableDisableCatFeaturesGroupVisible(false);
-
-
     radioTab.value(radioName)->setPollInterval(RIG_DEFAULT_POLLINTERVAL);
 
     loadAvailComportsToTab(radioName);

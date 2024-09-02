@@ -270,6 +270,11 @@ void RigSetupForm::setupRadioModel(QString radioModel)
              setLocTVSWComportVisible(false);
          }
 
+         setCatFeaturesEnableChkBoxVisible(true);
+         setAdvancedCommsFlag(true);
+         setEnableDisableCatFeaturesGroupVisible(true);
+
+
 
          // Omnirig
 
@@ -281,16 +286,13 @@ void RigSetupForm::setupRadioModel(QString radioModel)
              setSerialPttControlsVisible(false);
              setPttCatSelectRadioButtonChecked(false);
              setPttCatSelectRadioButtonVisible(true);
+             setCatFeaturesEnableChkBoxVisible(false);
+             setAdvancedCommsFlag(false);
+             setEnableDisableCatFeaturesGroupVisible(false);
 
 
          }
-         else
-         {
-             // hamlib
-             setCatFeaturesEnableChkBoxVisible(true);
-             //setPortTypeWidgetsVisible(true);
 
-         }
 
 
          // serial ptt comport loaded with other comports
@@ -1624,14 +1626,16 @@ void RigSetupForm::loadEnableShowCatFeaturesBox(RigCapabilities &rigCap)
         || (rigCap.getSupportGetPtt() && rigCap.getSupportSetPtt())
         || rigCap.getSupportVoiceMemory() ||rigCap.getSupportCwMemory())
     {
-        ui->enableCatFeaturesChkBox->setVisible(true);
+        setCatFeaturesEnableChkBoxVisible(true);
     }
     else
     {
-        ui->enableCatFeaturesChkBox->setVisible(false);
+        setCatFeaturesEnableChkBoxVisible(false);
     }
 
 }
+
+
 
 
 

@@ -197,6 +197,7 @@ public:
     void setPttComportToolTip(QString toolTip);
 
     void setPttInitialState(bool catPTT, bool serialPTT);
+
     void setEnableDisableCatFeaturesGroupVisible(bool visible);
     void setPttCatSelectRadioButtonChecked(bool checked);
     void setPttCatSelectRadioButtonVisible(bool visible);
@@ -221,6 +222,7 @@ public:
     void setPortTypeWidgetsVisible(bool visible);
     void setComportErrorTxtVisible(bool visible);
     RigCapConstants::PortType getCatComportType(QString radioModel);
+
 
 public slots:
     void comSpeedSelected();

@@ -512,7 +512,7 @@ void OmnirigControl::register_rigs(RigFactory::Rigs* rigsList, int id1, int id2)
     rigCap.setSupportSetVox(false);
     rigCap.setSupportVolume(false);
     rigCap.setSupportAntSw(false);
-    rigCap.setSupportRigCtld(true);
+    rigCap.setSupportRigCtld(false);
     rigCap.setSupportVoiceMemory(false);
     rigCap.setStartVoiceMemoryNumber(0);
     rigCap.setEndVoiceMemoryNumber(0);
