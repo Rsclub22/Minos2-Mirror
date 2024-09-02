@@ -2093,7 +2093,10 @@ void RigSetupForm::setPttInitialState(bool setCatPTT, bool setSerialPTT)
     setSerialPttControlsVisible(setSerialPTT);
     setPttComport("");
 
-    setPTTEnableCheckBox(false);
+    setPttDTRSelectRadioButtonEnabled(false);
+    setPttRTSSelectRadioButtonEnabled(false);
+
+
     ui->pttGroupBox->setVisible(false);
 }
 
@@ -2127,6 +2130,17 @@ void RigSetupForm::setPTTEnableCheckBox(bool checked)
 void RigSetupForm::setPTTCheckBoxDisabled(bool disabled)
 {
     ui->pttEnable->setDisabled(disabled);
+}
+
+
+void RigSetupForm::setPttDTRSelectRadioButtonEnabled(bool enabled)
+{
+    ui->pttDTRSelectRadioButton->setEnabled(enabled);
+}
+
+void RigSetupForm::setPttRTSSelectRadioButtonEnabled(bool enabled)
+{
+   ui->pttRTSSelectRadioButton->setEnabled(enabled);
 }
 
 
@@ -2262,6 +2276,7 @@ void RigSetupForm::onPttEnableSelected(bool /*checked*/)
         radioData->enablePTT = checked;
         //setSerialPttControlsVisible(checked);
         setPttGroupBoxVisible(checked);
+        /*
         if (checked)
         {
             if (isPttComportEqualCatComport())
@@ -2283,6 +2298,7 @@ void RigSetupForm::onPttEnableSelected(bool /*checked*/)
            setForceDTRDisabled(false);
            setForceRTSDisabled(false);
         }
+        */
 
     }
 
@@ -2386,49 +2402,117 @@ void RigSetupForm::showPleaseSelectPttComportDialogue()
 void RigSetupForm::onPttComportSelActivated(int /*idx*/)
 {
 
-    if (ui->pttComportSel->currentText() != radioData->pttSerialPort)
+    // hamlib
+
+    if (ui->portTypeSerialRadioButton->isChecked())
     {
-        radioData->pttSerialPort = ui->pttComportSel->currentText();
-
-        if (isPttComportEqualCatComport())
+        if (ui->comPortBox->currentText().isEmpty())
         {
-            if (!radioData->advancedCommsFlag)
+
+
+            // warn no CAT Comport selected
+            QMessageBox msgBox;
+            msgBox.setIcon(QMessageBox::Warning);
+            msgBox.setWindowTitle("No Serial CAT Comport Selected");
+            msgBox.setText("Please select a CAT Serial Comport before selecting PTT Serial Comport");
+
+            msgBox.setStandardButtons(QMessageBox::Ok);
+            msgBox.setDefaultButton(QMessageBox::Ok);
+
+            msgBox.exec();
+
+            ui->pttComportSel->setCurrentText("");
+
+            return;
+
+        }
+
+
+        if (ui->pttComportSel->currentText() != radioData->pttSerialPort)
+        {
+            radioData->pttSerialPort = ui->pttComportSel->currentText();
+
+            if (isPttComportEqualCatComport())
             {
-                radioData->advancedCommsFlag = true;
-                ui->advancedCommsChkBox->setChecked(true);
-                advancedSerialDataEntryVisible(true);
+                if (!radioData->advancedCommsFlag)
+                {
+                    radioData->advancedCommsFlag = true;
+                    ui->advancedCommsChkBox->setChecked(true);
+                    advancedSerialDataEntryVisible(true);
+                }
+
+
+                if (radioData->forceRts == serialCommonData::s_forceLinesCodes::FORCE_LINE_NONE)
+                {
+                   setPttRTSSelectRadioButtonEnabled(true);
+                }
+                else
+                {
+                   // disable if set to force High or Low
+                   setPttRTSSelectRadioButtonEnabled(false);
+                }
+
+                if (radioData->forceDtr == serialCommonData::s_forceLinesCodes::FORCE_LINE_NONE)
+                {
+                   setPttDTRSelectRadioButtonEnabled(true);
+                }
+                else
+                {
+                   // disable if set to force High or Low
+                   setPttDTRSelectRadioButtonEnabled(false);
+                }
+
+
+            }
+            else
+            {
+                setPttRTSSelectRadioButtonEnabled(true);
+                setPttDTRSelectRadioButtonEnabled(true);
+                if (!ui->forceDtrBox->isEnabled())
+                {
+                    setForceDTRDisabled(false);
+                }
+                if (!ui->forceRtsBox->isEnabled())
+                {
+                    setForceRTSDisabled(false);
+                }
             }
 
-            if (ui->pttRTSSelectRadioButton->isChecked())
+
+                /*
+
+                if (ui->pttRTSSelectRadioButton->isChecked())
+                {
+                    setForceRTSDisabled(true);
+                    setForceDTRDisabled(false);
+                    if (radioData->forceRts == serialCommonData::s_forceLinesCodes::FORCE_LINE_ON
+                            || radioData->forceRts == serialCommonData::s_forceLinesCodes::FORCE_LINE_OFF)
+                    {
+                        radioData->forceRts = serialCommonData::s_forceLinesCodes::FORCE_LINE_NONE;
+                        setForceRTSComboBox(static_cast<int>(radioData->forceRts));
+                    }
+                }
+                else if (ui->pttDTRSelectRadioButton->isChecked())
+                {
+                    setForceDTRDisabled(true);
+                    setForceRTSDisabled(false);
+                    if (radioData->forceDtr == serialCommonData::s_forceLinesCodes::FORCE_LINE_ON
+                            || radioData->forceDtr == serialCommonData::s_forceLinesCodes::FORCE_LINE_OFF)
+                    {
+                        radioData->forceDtr = serialCommonData::s_forceLinesCodes::FORCE_LINE_NONE;
+                        setForceDTRComboBox(static_cast<int>(radioData->forceDtr));
+                    }
+                }
+            }
+            else
             {
-                setForceRTSDisabled(true);
                 setForceDTRDisabled(false);
-                if (radioData->forceRts == serialCommonData::s_forceLinesCodes::FORCE_LINE_ON
-                        || radioData->forceRts == serialCommonData::s_forceLinesCodes::FORCE_LINE_OFF)
-                {
-                    radioData->forceRts = serialCommonData::s_forceLinesCodes::FORCE_LINE_NONE;
-                    setForceRTSComboBox(static_cast<int>(radioData->forceRts));
-                }
-            }
-            else if (ui->pttDTRSelectRadioButton->isChecked())
-            {
-                setForceDTRDisabled(true);
                 setForceRTSDisabled(false);
-                if (radioData->forceDtr == serialCommonData::s_forceLinesCodes::FORCE_LINE_ON
-                        || radioData->forceDtr == serialCommonData::s_forceLinesCodes::FORCE_LINE_OFF)
-                {
-                    radioData->forceDtr = serialCommonData::s_forceLinesCodes::FORCE_LINE_NONE;
-                    setForceDTRComboBox(static_cast<int>(radioData->forceDtr));
-                }
             }
-        }
-        else
-        {
-            setForceDTRDisabled(false);
-            setForceRTSDisabled(false);
-        }
+*/
 
 
+        }
     }
 
 }

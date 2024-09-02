@@ -224,6 +224,8 @@ public:
     RigCapConstants::PortType getCatComportType(QString radioModel);
 
 
+    void setPttRTSSelectRadioButtonEnabled(bool enabled);
+    void setPttDTRSelectRadioButtonEnabled(bool enabled);
 public slots:
     void comSpeedSelected();
     void comDataBitsSelected();
