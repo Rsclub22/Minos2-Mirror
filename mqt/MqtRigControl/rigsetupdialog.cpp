@@ -459,7 +459,7 @@ void RigSetupDialog::addRadio()
 
     /******* we should conisder moving this to actual radio selection ???? *****/
 
-    // initial settings
+    /*// initial settings
     radioTab.value(radioName)->setDataSpeed("9600");
     radioTab.value(radioName)->comSpeedSelected();
 
@@ -479,7 +479,7 @@ void RigSetupDialog::addRadio()
         radioTab.value(radioName)->setForceRTSComboBox(1);
         radioTab.value(radioName)->on_forceRTSSelected();
     }
-
+*/
 
 
 

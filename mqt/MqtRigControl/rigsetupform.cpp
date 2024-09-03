@@ -278,6 +278,9 @@ void RigSetupForm::setupRadioModel(QString radioModel)
 
         setAdvancedCommsFlag(false);
 
+
+
+
         // serial ptt comport loaded with other comports
         //radioTab.value(tabName)->setPttTypeRadioButtons(availRadioData.value(tabName)->pttType);
 
@@ -305,6 +308,30 @@ void RigSetupForm::setupRadioModel(QString radioModel)
             setCatFeaturesEnableChkBoxVisible(false);
             setAdvancedCommsFlag(false);
             setEnableDisableCatFeaturesGroupVisible(false);
+        }
+
+
+        // initial settings
+        setDataSpeed("9600");
+        comSpeedSelected();
+
+        setDataBits("8");
+        comDataBitsSelected();
+
+        setStopBits("1");
+        comStopBitsSelected();
+
+        setParityBits(0);
+        comParitySelected(true);
+
+
+
+        //  force RTS - to enable USB adaptors
+        // but can conflict with serial PTT control
+        if (getCatComportType(radioModel) == RigCapConstants::PortType::serial)
+        {
+            setForceRTSComboBox(1);
+            on_forceRTSSelected();
         }
 
     }
@@ -836,6 +863,7 @@ void RigSetupForm::on_forceRTSSelected()
             if (isForceRtsBoxSetToNone())
             {
                 setPttRTSDisabled(false);
+
             }
             else
             {
@@ -2140,7 +2168,16 @@ void RigSetupForm::setPttInitialState(bool setCatPTT, bool setSerialPTT)
 
     setPttCatSelectRadioButtonVisible(setCatPTT);
     setCatFeaturesEnableChkBoxVisible(setCatPTT);
-    ui->pttCatSelectRadioButton->setChecked(false);
+    if (setCatPTT)
+    {
+        ui->pttCatSelectRadioButton->setChecked(true);
+        setPttComportSelDisabled(true);
+    }
+    else
+    {
+        ui->pttCatSelectRadioButton->setChecked(false);
+    }
+
 
     setSerialPttControlsVisible(setSerialPTT);
     setPttComport("");
