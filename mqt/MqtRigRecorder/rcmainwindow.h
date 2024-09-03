@@ -78,6 +78,7 @@ private:
     virtual void moveEvent(QMoveEvent *event) override;
     virtual void changeEvent( QEvent* e ) override;
     void setVolumeMults();
+    void setConfigDisplay(QString s);
 };
 extern MainWindow *mainWindow;
 #endif // RCMAINWINDOW_H
