@@ -65,8 +65,8 @@ RigSetupForm::RigSetupForm(RigFactory* rigFactory_, QSharedPointer<scatParams> _
     rigCtldItemsVisible(false);
 
     connect(ui->radioModelBox, QOverload<int>::of(&QComboBox::activated), this, &RigSetupForm::radioModelSelected);
-    connect(ui->portTypeSerialRadioButton,  &QCheckBox::clicked, this, &RigSetupForm::onPortTypeSerialRadioButtonClicked);
-    connect(ui->portTypeNetworkRadioButton,  &QCheckBox::clicked, this, &RigSetupForm::onPortTypeNetworkRadioButtonClicked);
+    connect(ui->portTypeSerialRadioButton,  &QRadioButton::clicked, this, &RigSetupForm::onPortTypeSerialRadioButtonClicked);
+    connect(ui->portTypeNetworkRadioButton,  &QRadioButton::clicked, this, &RigSetupForm::onPortTypeNetworkRadioButtonClicked);
     connect(ui->comPortBox, QOverload<int>::of(&QComboBox::activated), this, &RigSetupForm::comportSelected);
     connect(ui->comSpeedBox, QOverload<int>::of(&QComboBox::activated), this, &RigSetupForm::comSpeedSelected);
     connect(ui->comDataBitsBox, QOverload<int>::of(&QComboBox::activated), this, &RigSetupForm::comDataBitsSelected);
@@ -87,9 +87,9 @@ RigSetupForm::RigSetupForm(RigFactory* rigFactory_, QSharedPointer<scatParams> _
 
 
     connect(ui->pttEnable, &QCheckBox::clicked, this, &RigSetupForm::onPttEnableSelected);
-    connect(ui->pttCatSelectRadioButton, &QCheckBox::clicked, this, &RigSetupForm::onPttCatEnableClicked);
-    connect(ui->pttDTRSelectRadioButton, &QCheckBox::clicked, this, &RigSetupForm::onPttDtrEnableClicked);
-    connect(ui->pttRTSSelectRadioButton, &QCheckBox::clicked, this, &RigSetupForm::onPttRtsEnableClicked);
+    connect(ui->pttCatSelectRadioButton, &QRadioButton::clicked, this, &RigSetupForm::onPttCatEnableClicked);
+    connect(ui->pttDTRSelectRadioButton, &QRadioButton::clicked, this, &RigSetupForm::onPttDtrEnableClicked);
+    connect(ui->pttRTSSelectRadioButton, &QRadioButton::clicked, this, &RigSetupForm::onPttRtsEnableClicked);
     connect(ui->pttComportSel, QOverload<int>::of(&QComboBox::activated), this, &RigSetupForm::onPttComportSelActivated);
 
     connect(ui->enableRitCatFeatureChkBox, &QCheckBox::clicked, this, &RigSetupForm::onEnableRitCatFeatureClicked);
@@ -235,108 +235,117 @@ void RigSetupForm::setupRadioModel(QString radioModel)
 
         // display the correct transverter settings
 
-         setLocTVSwComport(radioData->locTVSwComport);
+        setLocTVSwComport(radioData->locTVSwComport);
 
-         setTransVertSelected(radioData->transVertEnable);
-         if (radioData->transVertEnable)
-         {
-             setTransVertSwVisible(true);
-             setEnableLocalTransVertSwVisible(false);
-         }
-         else
-         {
-             setTransVertSwVisible(false);
-             setEnableLocalTransVertSwVisible(false);
-             setLocTVSWComportVisible(false);
-         }
+        setTransVertSelected(radioData->transVertEnable);
+        if (radioData->transVertEnable)
+        {
+            setTransVertSwVisible(true);
+            setEnableLocalTransVertSwVisible(false);
+        }
+        else
+        {
+            setTransVertSwVisible(false);
+            setEnableLocalTransVertSwVisible(false);
+            setLocTVSWComportVisible(false);
+        }
 
-         if (radioData->transVertEnable && radioData->enableTransSwitch)
-         {
-             setTransVertSwVisible(true);
-             setEnableLocalTransVertSwVisible(true);
-             QStringList tvList = radioData->transVertSettings.keys();
-             for(const auto &tv: QASCONST(tvList))
-             {
-                 transVertTab.value(tv)->setEnableTransVertSwBoxVisible(true);
-             }
-         }
+        if (radioData->transVertEnable && radioData->enableTransSwitch)
+        {
+            setTransVertSwVisible(true);
+            setEnableLocalTransVertSwVisible(true);
+            QStringList tvList = radioData->transVertSettings.keys();
+            for(const auto &tv: QASCONST(tvList))
+            {
+                transVertTab.value(tv)->setEnableTransVertSwBoxVisible(true);
+            }
+        }
 
-         if (radioData->transVertEnable && radioData->enableTransSwitch && radioData->enableLocTVSwMsg)
-         {
-             setLocTVSWComportVisible(true);
-         }
-         else
-         {
-             setLocTVSWComportVisible(false);
-         }
+        if (radioData->transVertEnable && radioData->enableTransSwitch && radioData->enableLocTVSwMsg)
+        {
+            setLocTVSWComportVisible(true);
+        }
+        else
+        {
+            setLocTVSWComportVisible(false);
+        }
 
-         setCatFeaturesEnableChkBoxVisible(true);
+        setCatFeaturesEnableChkBoxVisible(true);
 
-         setEnableDisableCatFeaturesGroupVisible(true);
+        setEnableDisableCatFeaturesGroupVisible(true);
 
-         loadEnableShowCatFeaturesBox(rigCap);
+        loadEnableShowCatFeaturesBox(rigCap);
 
-         setAdvancedCommsFlag(false);
+        setAdvancedCommsFlag(false);
 
-         // Omnirig
+        // serial ptt comport loaded with other comports
+        //radioTab.value(tabName)->setPttTypeRadioButtons(availRadioData.value(tabName)->pttType);
 
-         if (rigCap.getRigManufacturer() == OMINRIG_MFR_NAME)
-         {
-             setCatFeaturesEnableChkBoxVisible(false);
-             setPortTypeWidgetsVisible(false);
-             setComportErrorTxtVisible(false);
-             setSerialPttControlsVisible(false);
-             setPttCatSelectRadioButtonChecked(false);
-             setPttCatSelectRadioButtonVisible(true);
-             setCatFeaturesEnableChkBoxVisible(false);
-             setAdvancedCommsFlag(false);
-             setEnableDisableCatFeaturesGroupVisible(false);
+        // When radio reports CAT PTT, we also allow option of Serial PTT
+        // When radio reports CAT NONE, we only allow option of Serial PTT
+        // Note Omnirig only CAT PTT
 
+        bool catPTT = true;     // This is radio PTT capability true = CAT PTT
+        bool serialPTT = true;
 
-         }
+        determineSupportedPttType(rigCap, catPTT, serialPTT);
 
+        setPttInitialState(catPTT, serialPTT);
 
+        // Omnirig
 
-         // serial ptt comport loaded with other comports
-         //radioTab.value(tabName)->setPttTypeRadioButtons(availRadioData.value(tabName)->pttType);
-
-         // When radio reports CAT PTT, we also allow option of Serial PTT
-         // When radio reports CAT NONE, we only allow option of Serial PTT
-         // Note Omnirig only CAT PTT
-
-         bool catPTT = true;     // This is radio PTT capability true = CAT PTT
-         bool serialPTT = true;
-
-         if (rigCap.getSupportPttPortType() == RigCapConstants::RigPttPortType::RIG_PTT_RIG && rigCap.getRigManufacturer() == OMINRIG_MFR_NAME)
-         {
-            // support CAT PTT only
-
-            catPTT = true;
-            serialPTT = false;
-            setPttInitialState(catPTT, serialPTT);
-         }
-         else if (rigCap.getSupportPttPortType() == RigCapConstants::RigPttPortType::RIG_PTT_RIG
-                 || rigCap.getSupportPttPortType() == RigCapConstants::RigPttPortType::RIG_PTT_RIG_MICDATA)
-         {
-             // support CAT PTT and Serial PTT
-             catPTT = true;
-             serialPTT = true;
-             setPttInitialState(catPTT, serialPTT);
-         }
-         else if (rigCap.getSupportPttPortType() == RigCapConstants::RigPttPortType::RIG_PTT_NONE)
-         {
-
-             // support Serial PTT only
-             catPTT = false;
-             serialPTT = true;
-             setPttInitialState(catPTT, serialPTT);
-         }
-
-
+        if (rigCap.getRigManufacturer() == OMINRIG_MFR_NAME)
+        {
+            setCatFeaturesEnableChkBoxVisible(false);
+            setPortTypeWidgetsVisible(false);
+            setComportErrorTxtVisible(false);
+            setSerialPttControlsVisible(false);
+            setPttCatSelectRadioButtonChecked(false);
+            setPttCatSelectRadioButtonVisible(true);
+            setCatFeaturesEnableChkBoxVisible(false);
+            setAdvancedCommsFlag(false);
+            setEnableDisableCatFeaturesGroupVisible(false);
+        }
 
     }
 
 
+}
+
+
+
+void RigSetupForm::determineSupportedPttType(RigCapabilities &rigCap, bool &catPTT, bool &serialPTT)
+{
+    // When radio reports CAT PTT, we also allow option of Serial PTT
+    // When radio reports CAT NONE, we only allow option of Serial PTT
+    // Note Omnirig only CAT PTT
+
+
+
+    if (rigCap.getSupportPttPortType() == RigCapConstants::RigPttPortType::RIG_PTT_RIG && rigCap.getRigManufacturer() == OMINRIG_MFR_NAME)
+    {
+        // support CAT PTT only
+
+        catPTT = true;
+        serialPTT = false;
+
+    }
+    else if (rigCap.getSupportPttPortType() == RigCapConstants::RigPttPortType::RIG_PTT_RIG
+             || rigCap.getSupportPttPortType() == RigCapConstants::RigPttPortType::RIG_PTT_RIG_MICDATA)
+    {
+        // support CAT PTT and Serial PTT
+        catPTT = true;
+        serialPTT = true;
+
+    }
+    else if (rigCap.getSupportPttPortType() == RigCapConstants::RigPttPortType::RIG_PTT_NONE)
+    {
+
+        // support Serial PTT only
+        catPTT = false;
+        serialPTT = true;
+
+    }
 }
 
 
@@ -623,6 +632,31 @@ void RigSetupForm::loadRadioComports()
     fillPortsInfo(ui->comPortBox);
 }
 
+
+bool RigSetupForm::isItASerialCatDevice()
+{
+    return ui->portTypeSerialRadioButton->isChecked();
+}
+
+bool RigSetupForm::isACatSerialPortSelected()
+{
+    return !ui->comPortBox->currentText().isEmpty();
+}
+
+void RigSetupForm::noCatSerialPortWarning()
+{
+    // warn no CAT Comport selected
+    QMessageBox msgBox;
+    msgBox.setIcon(QMessageBox::Warning);
+    msgBox.setWindowTitle("No Serial CAT Comport Selected");
+    msgBox.setText("Please select a CAT Serial Comport before selecting PTT Serial Comport");
+
+    msgBox.setStandardButtons(QMessageBox::Ok);
+    msgBox.setDefaultButton(QMessageBox::Ok);
+
+    msgBox.exec();
+}
+
 /***************************** Data Speed *************************/
 
 
@@ -754,7 +788,7 @@ void RigSetupForm::on_forceDTRSelected()
 
         if (isPttComportEqualCatComport())
         {
-            if (radioData->forceDtr == serialCommonData::s_forceLinesCodes::FORCE_LINE_NONE)
+            if (isForceDtrBoxSetToNone())
             {
                 setPttDTRDisabled(false);
             }
@@ -769,7 +803,15 @@ void RigSetupForm::on_forceDTRSelected()
 
 }
 
+bool RigSetupForm::isForceDtrBoxSetToNone()
+{
+    if (radioData->forceDtr == serialCommonData::s_forceLinesCodes::FORCE_LINE_NONE)
+    {
+        return true;
+    }
 
+    return false;
+}
 
 void RigSetupForm::setForceDTRDisabled(bool state)
 {
@@ -791,7 +833,7 @@ void RigSetupForm::on_forceRTSSelected()
         radioData->forceRts = serialCommonData::forceLinesCodesList[ui->forceRtsBox->currentIndex()];
         if (isPttComportEqualCatComport())
         {
-            if (radioData->forceRts == serialCommonData::s_forceLinesCodes::FORCE_LINE_NONE)
+            if (isForceRtsBoxSetToNone())
             {
                 setPttRTSDisabled(false);
             }
@@ -802,6 +844,16 @@ void RigSetupForm::on_forceRTSSelected()
         }
 
     }
+}
+
+bool RigSetupForm::isForceRtsBoxSetToNone()
+{
+    if (radioData->forceRts == serialCommonData::s_forceLinesCodes::FORCE_LINE_NONE)
+    {
+        return true;
+    }
+
+    return false;
 }
 
 void RigSetupForm::setForceRTSDisabled(bool state)
@@ -2093,8 +2145,9 @@ void RigSetupForm::setPttInitialState(bool setCatPTT, bool setSerialPTT)
     setSerialPttControlsVisible(setSerialPTT);
     setPttComport("");
 
-    setPttDTRSelectRadioButtonEnabled(false);
-    setPttRTSSelectRadioButtonEnabled(false);
+
+    setPttDTRSelectRadioButtonEnabled(true);
+    setPttRTSSelectRadioButtonEnabled(true);
 
 
     ui->pttGroupBox->setVisible(false);
@@ -2167,7 +2220,10 @@ void RigSetupForm::setPttCatSelectRadioButtonDisabled(bool disabled)
 
 void RigSetupForm::setPttDtrSelectRadioButtonChecked(bool checked)
 {
+    ui->pttDTRSelectRadioButton->setAutoExclusive(false);  // allow deselection of radiobutton
     ui->pttDTRSelectRadioButton->setChecked(checked);
+    ui->pttDTRSelectRadioButton->setAutoExclusive(true);
+
 }
 
 
@@ -2179,7 +2235,10 @@ void RigSetupForm::setPttDtrSelectRadioButtonVisible(bool visible)
 
 void RigSetupForm::setPttRtsSelectRadioButtonChecked(bool checked)
 {
+    ui->pttRTSSelectRadioButton->setAutoExclusive(false); // allow deselection of radiobutton
     ui->pttRTSSelectRadioButton->setChecked(checked);
+    ui->pttRTSSelectRadioButton->setAutoExclusive(true);
+
 }
 
 
@@ -2310,7 +2369,7 @@ void RigSetupForm::onPttCatEnableClicked(bool /*checked*/)
     if (ui->pttCatSelectRadioButton->isChecked())
     {
         radioData->pttType = serialCommonData::MINOS_PTT_TYPES::PTT_TYPE_CAT;
-        pttComportSelDisabled(true);
+        setPttComportSelDisabled(true);
         setForceRTSDisabled(false);
         setForceDTRDisabled(false);
     }
@@ -2318,14 +2377,24 @@ void RigSetupForm::onPttCatEnableClicked(bool /*checked*/)
  }
 
 
-void RigSetupForm::pttComportSelDisabled(bool state)
+void RigSetupForm::setPttComportSelDisabled(bool state)
 {
     ui->pttComportSel->setDisabled(state);
+    ui->pttComportLbl->setDisabled(state);
 }
 
 void RigSetupForm::onPttDtrEnableClicked(bool /*checked*/)
 {
 
+    if (isItASerialCatDevice())
+    {
+        if (!isACatSerialPortSelected())
+        {
+            noCatSerialPortWarning();
+            setPttDtrSelectRadioButtonChecked(false);
+            return;
+        }
+    }
 
     if (ui->pttDTRSelectRadioButton->isChecked())
     {
@@ -2365,6 +2434,19 @@ void RigSetupForm::setPttComportToolTip(QString toolTip)
 
 void RigSetupForm::onPttRtsEnableClicked(bool /*checked*/)
 {
+
+    if (isItASerialCatDevice())
+    {
+        if (!isACatSerialPortSelected())
+        {
+            noCatSerialPortWarning();
+            setPttRtsSelectRadioButtonChecked(false);
+            return;
+        }
+    }
+
+
+
     if (ui->pttRTSSelectRadioButton->isChecked())
     {
         radioData->pttType = serialCommonData::MINOS_PTT_TYPES::PTT_TYPE_RTS;
@@ -2404,23 +2486,11 @@ void RigSetupForm::onPttComportSelActivated(int /*idx*/)
 
     // hamlib
 
-    if (ui->portTypeSerialRadioButton->isChecked())
+    if (isItASerialCatDevice())
     {
-        if (ui->comPortBox->currentText().isEmpty())
+        if (!isACatSerialPortSelected())
         {
-
-
-            // warn no CAT Comport selected
-            QMessageBox msgBox;
-            msgBox.setIcon(QMessageBox::Warning);
-            msgBox.setWindowTitle("No Serial CAT Comport Selected");
-            msgBox.setText("Please select a CAT Serial Comport before selecting PTT Serial Comport");
-
-            msgBox.setStandardButtons(QMessageBox::Ok);
-            msgBox.setDefaultButton(QMessageBox::Ok);
-
-            msgBox.exec();
-
+            noCatSerialPortWarning();
             ui->pttComportSel->setCurrentText("");
 
             return;
@@ -2450,6 +2520,7 @@ void RigSetupForm::onPttComportSelActivated(int /*idx*/)
                 {
                    // disable if set to force High or Low
                    setPttRTSSelectRadioButtonEnabled(false);
+                   setForceRTSDisabled(true);
                 }
 
                 if (radioData->forceDtr == serialCommonData::s_forceLinesCodes::FORCE_LINE_NONE)
@@ -2460,6 +2531,7 @@ void RigSetupForm::onPttComportSelActivated(int /*idx*/)
                 {
                    // disable if set to force High or Low
                    setPttDTRSelectRadioButtonEnabled(false);
+                   setForceDTRDisabled(true);
                 }
 
 
