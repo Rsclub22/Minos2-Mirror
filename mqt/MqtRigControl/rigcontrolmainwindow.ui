@@ -6,15 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1112</width>
-    <height>587</height>
+    <width>844</width>
+    <height>639</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Minos Rig Control</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QVBoxLayout" name="verticalLayout_11">
+   <layout class="QVBoxLayout" name="verticalLayout_12">
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout_5">
       <item>
@@ -223,80 +223,165 @@
                  </item>
                 </layout>
                </item>
-               <item>
-                <layout class="QHBoxLayout" name="horizontalLayout_9">
-                 <item>
-                  <widget class="QPushButton" name="selFreq">
-                   <property name="text">
-                    <string>Select Freq</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QLineEdit" name="freqInputBox">
-                   <property name="clearButtonEnabled">
-                    <bool>true</bool>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <spacer name="horizontalSpacer">
-                   <property name="orientation">
-                    <enum>Qt::Horizontal</enum>
-                   </property>
-                   <property name="sizeHint" stdset="0">
-                    <size>
-                     <width>98</width>
-                     <height>17</height>
-                    </size>
-                   </property>
-                  </spacer>
-                 </item>
-                </layout>
-               </item>
-               <item>
-                <layout class="QHBoxLayout" name="horizontalLayout_16">
-                 <item>
-                  <widget class="QPushButton" name="txPttTestPb">
-                   <property name="text">
-                    <string>TX PTT Test</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <spacer name="horizontalSpacer_6">
-                   <property name="orientation">
-                    <enum>Qt::Horizontal</enum>
-                   </property>
-                   <property name="sizeHint" stdset="0">
-                    <size>
-                     <width>40</width>
-                     <height>20</height>
-                    </size>
-                   </property>
-                  </spacer>
-                 </item>
-                </layout>
-               </item>
-               <item>
-                <layout class="QHBoxLayout" name="horizontalLayout_37">
-                 <item>
-                  <widget class="QPushButton" name="cwKeyerPb">
-                   <property name="text">
-                    <string>CW Keyer</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QPushButton" name="cwKeyerStopPb">
-                   <property name="text">
-                    <string>Stop</string>
-                   </property>
-                  </widget>
-                 </item>
-                </layout>
-               </item>
               </layout>
+             </item>
+             <item>
+              <widget class="QGroupBox" name="testActionsGroupBox">
+               <property name="title">
+                <string>Test Actions</string>
+               </property>
+               <layout class="QVBoxLayout" name="verticalLayout_11">
+                <item>
+                 <layout class="QHBoxLayout" name="horizontalLayout_33">
+                  <item>
+                   <widget class="QRadioButton" name="selectRadioFromLoggerRb">
+                    <property name="text">
+                     <string>Select Radio From Logger </string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QRadioButton" name="selectRadioFromRigControlRb">
+                    <property name="text">
+                     <string>Select Radio From Rigcontrol</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+                <item>
+                 <layout class="QHBoxLayout" name="horizontalLayout_9">
+                  <item>
+                   <widget class="QPushButton" name="selFreq">
+                    <property name="text">
+                     <string>Select Freq</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QLineEdit" name="freqInputBox">
+                    <property name="clearButtonEnabled">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <spacer name="horizontalSpacer">
+                    <property name="orientation">
+                     <enum>Qt::Horizontal</enum>
+                    </property>
+                    <property name="sizeHint" stdset="0">
+                     <size>
+                      <width>98</width>
+                      <height>17</height>
+                     </size>
+                    </property>
+                   </spacer>
+                  </item>
+                 </layout>
+                </item>
+                <item>
+                 <layout class="QHBoxLayout" name="horizontalLayout_10">
+                  <item>
+                   <layout class="QVBoxLayout" name="verticalLayout_5"/>
+                  </item>
+                  <item>
+                   <widget class="QSpinBox" name="setRitSpinner"/>
+                  </item>
+                  <item>
+                   <widget class="QPushButton" name="testRitButton">
+                    <property name="text">
+                     <string>RIT</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <spacer name="horizontalSpacer_13">
+                    <property name="orientation">
+                     <enum>Qt::Horizontal</enum>
+                    </property>
+                    <property name="sizeHint" stdset="0">
+                     <size>
+                      <width>40</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                   </spacer>
+                  </item>
+                 </layout>
+                </item>
+                <item>
+                 <layout class="QHBoxLayout" name="horizontalLayout_16">
+                  <item>
+                   <widget class="QPushButton" name="txPttTestPb">
+                    <property name="text">
+                     <string>TX PTT Test</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <spacer name="horizontalSpacer_6">
+                    <property name="orientation">
+                     <enum>Qt::Horizontal</enum>
+                    </property>
+                    <property name="sizeHint" stdset="0">
+                     <size>
+                      <width>40</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                   </spacer>
+                  </item>
+                 </layout>
+                </item>
+                <item>
+                 <layout class="QHBoxLayout" name="horizontalLayout_37">
+                  <item>
+                   <widget class="QPushButton" name="cwKeyerPb">
+                    <property name="text">
+                     <string>CW Keyer</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QPushButton" name="cwKeyerStopPb">
+                    <property name="text">
+                     <string>Stop</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+                <item>
+                 <layout class="QHBoxLayout" name="horizontalLayout_30">
+                  <item>
+                   <widget class="QLabel" name="voiceMessageTestLabel">
+                    <property name="text">
+                     <string>Voice Message</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QSpinBox" name="voiceMessageSpinBox"/>
+                  </item>
+                  <item>
+                   <widget class="QPushButton" name="voiceMessagePlayPB">
+                    <property name="text">
+                     <string>Play</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QPushButton" name="voiceMessageStopPB">
+                    <property name="text">
+                     <string>Stop</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+               </layout>
+              </widget>
              </item>
              <item>
               <spacer name="verticalSpacer_3">
@@ -736,23 +821,6 @@ Active</string>
              <layout class="QHBoxLayout" name="horizontalLayout_19">
               <item>
                <layout class="QHBoxLayout" name="horizontalLayout_11">
-                <item>
-                 <layout class="QHBoxLayout" name="horizontalLayout_10">
-                  <item>
-                   <layout class="QVBoxLayout" name="verticalLayout_5"/>
-                  </item>
-                  <item>
-                   <widget class="QSpinBox" name="setRitSpinner"/>
-                  </item>
-                  <item>
-                   <widget class="QPushButton" name="testRitButton">
-                    <property name="text">
-                     <string>RIT</string>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
-                </item>
                 <item>
                  <layout class="QHBoxLayout" name="horizontalLayout_4">
                   <item>
