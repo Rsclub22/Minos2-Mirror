@@ -3,7 +3,7 @@
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //                      Rig Control
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2023
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2024
 //
 //
 //
@@ -2580,10 +2580,18 @@ void RigSetupForm::onPttComportSelActivated(int /*idx*/)
                 if (!ui->forceDtrBox->isEnabled())
                 {
                     setForceDTRDisabled(false);
+                    if (ui->pttDTRSelectRadioButton->isChecked())
+                    {
+                        setPttDtrSelectRadioButtonChecked(false);
+                    }
                 }
                 if (!ui->forceRtsBox->isEnabled())
                 {
                     setForceRTSDisabled(false);
+                    if (ui->pttRTSSelectRadioButton->isChecked())
+                    {
+                        setPttRtsSelectRadioButtonChecked(false);
+                    }
                 }
             }
 
