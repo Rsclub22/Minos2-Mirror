@@ -5588,6 +5588,8 @@ void RigControlMainWindow::setTestMode(bool test)
         if (!testMode)
         {
             testMode = true;
+            liveRadio = currentRadioName;
+            trace("save liveRadio " + liveRadio);
 
             if (hamlibOk)
             {
@@ -5605,9 +5607,7 @@ void RigControlMainWindow::setTestMode(bool test)
             {
                 ui->selectRadioFromLoggerRb->setChecked(true);
                 setSelectRadioBoxVisible(false);
-                liveRadio = currentRadioName;
                 upDateRadio(liveRadio);
-                trace("save liveRadio " + liveRadio);
                 logMessage((QString("Test Radio Logger Mode")));
             }
         }
@@ -5864,6 +5864,7 @@ void RigControlMainWindow::onSelectRadioFromLoggerClicked()
     if (ui->selectRadioFromLoggerRb->isChecked())
     {
        setSelectRadioBoxVisible(false);
+       closeRadio();
     }
 
 }
@@ -5873,6 +5874,7 @@ void RigControlMainWindow::onSelectRadioFromRigControlClicked()
     if (ui->selectRadioFromRigControlRb->isChecked())
     {
         setSelectRadioBoxVisible(true);
+        closeRadio();
     }
 
 }
