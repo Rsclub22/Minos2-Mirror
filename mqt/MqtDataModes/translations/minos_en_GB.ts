@@ -40,33 +40,33 @@
     </message>
     <message>
         <location filename="../dmmainwindow.cpp" line="158"/>
-        <location filename="../dmmainwindow.cpp" line="178"/>
-        <location filename="../dmmainwindow.cpp" line="339"/>
+        <location filename="../dmmainwindow.cpp" line="188"/>
+        <location filename="../dmmainwindow.cpp" line="349"/>
         <source>Start All Engines</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dmmainwindow.cpp" line="290"/>
+        <location filename="../dmmainwindow.cpp" line="300"/>
         <source>Any changes will only be actioned when you stop and restart the engines.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dmmainwindow.cpp" line="318"/>
+        <location filename="../dmmainwindow.cpp" line="328"/>
         <source>Stop All Engines</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dmmainwindow.cpp" line="365"/>
+        <location filename="../dmmainwindow.cpp" line="375"/>
         <source>No DataMode sender configured</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dmmainwindow.cpp" line="421"/>
+        <location filename="../dmmainwindow.cpp" line="431"/>
         <source>INI (*.ini);;All Files (*.*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dmmainwindow.cpp" line="425"/>
+        <location filename="../dmmainwindow.cpp" line="435"/>
         <source>Datamodes Configuration file</source>
         <translation type="unfinished"></translation>
     </message>
