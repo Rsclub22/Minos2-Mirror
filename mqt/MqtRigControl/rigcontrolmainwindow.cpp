@@ -4540,7 +4540,7 @@ void RigControlMainWindow::getRadioConfigData(scatParams *radioData, QString rad
     radioData->enableDisableCatFeature.volumeEnable = config.value("volumeEnable", true).toBool();
     radioData->enableDisableCatFeature.voiceMemEnable = config.value("voiceMemEnable", true).toBool();
     radioData->enableDisableCatFeature.cWMemEnable = config.value("cWMemEnable", true).toBool();
-    radioData->enableDisableCatFeature.catEnable = config.value("catEnable", true).toBool();
+    radioData->enableDisableCatFeature.catPttEnable = config.value("catPttEnable", true).toBool();
 
 
     for (const auto &b: QASCONST(bands))
@@ -4708,15 +4708,15 @@ void RigControlMainWindow::checkIniFileVersion()
     if (numAvailRadios > 0)
     {
         QString version = settings.value("Version/version", QString()).toString();
-        if (version == "1")
+        if (version == "1" || version == "2")
         {
-            updateAvailRadiosToVersion2(settings, availRadios, numAvailRadios);
+            updateAvailRadiosToVersion3(version, settings, availRadios, numAvailRadios);
         }
 
         // check version again
         version = settings.value("Version/version", QString()).toString();
 
-        if (version != "2")
+        if (version != "3")
         {
             mShowMessage(tr("The Radio configuration files in %1 are from an old incompatible version of Minos.\n\n"
                             "Please delete them and set up the radios again").arg(RADIO_PATH_LOGGER()), parentWidget());
@@ -4730,40 +4730,61 @@ void RigControlMainWindow::checkIniFileVersion()
 }
 
 
-void RigControlMainWindow::updateAvailRadiosToVersion2(QSettings& settings, QStringList &availRadios, int numAvailRadios)
+void RigControlMainWindow::updateAvailRadiosToVersion3(QString version, QSettings& settings, QStringList &availRadios, int numAvailRadios)
 {
         QString radioModel;
         QStringList spList;
         QString radio;
 
-
-        for (int i = 0; i < numAvailRadios; i++)
+        if (version == "1")
         {
-            radio = availRadios[i] + "/radioModel";
-            radioModel = settings.value(radio, QString()).toString();
-            if (radioModel.contains(','))
+            for (int i = 0; i < numAvailRadios; i++)
             {
-                spList = radioModel.split(',');
-                if (spList.count() == 3)
+                radio = availRadios[i] + "/radioModel";
+                radioModel = settings.value(radio, QString()).toString();
+                if (radioModel.contains(','))
                 {
-                    radioModel = spList[1].trimmed() + " " + spList[2].trimmed();
-                    settings.setValue(radio, radioModel);
+                    spList = radioModel.split(',');
+                    if (spList.count() == 3)
+                    {
+                        radioModel = spList[1].trimmed() + " " + spList[2].trimmed();
+                        settings.setValue(radio, radioModel);
+
+                    }
 
                 }
 
+                // remove redundant settings
+                radio = availRadios[i];
+                settings.remove(radio + "/radioMfgName");
+                settings.remove(radio + "/radioModelName");
+                settings.remove(radio + "/radioModelName");
+                settings.remove(radio + "/radioModelNumber");
             }
+        }
+        else if (version == "2")
+        {
+            bool catPttEnable;
 
-            // remove redundant settings
-            radio = availRadios[i];
-            settings.remove(radio + "/radioMfgName");
-            settings.remove(radio + "/radioModelName");
-            settings.remove(radio + "/radioModelName");
-            settings.remove(radio + "/radioModelNumber");
+            for (int i = 0; i < numAvailRadios; i++)
+            {
+                radio = availRadios[i];
+
+                if (settings.contains(radio + "/catEnable"))
+                {
+                    catPttEnable = settings.value(radio + "/catEnable", true).toBool();
+                    settings.remove(radio + "/catEnable");
+                    settings.setValue(radio + "/catPttEnable", catPttEnable);
+                }
+
+
+
+            }
 
 
         }
 
-        settings.setValue("Version/version", "2");
+        settings.setValue("Version/version", "3");
 }
 
 

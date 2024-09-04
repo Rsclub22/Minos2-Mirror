@@ -191,12 +191,13 @@ public:
 
 
     bool isPttComportEqualCatComport() const;
-    void pttComportSelDisabled(bool state);
+    void setPttComportSelDisabled(bool state);
 
 
     void setPttComportToolTip(QString toolTip);
 
     void setPttInitialState(bool catPTT, bool serialPTT);
+
     void setEnableDisableCatFeaturesGroupVisible(bool visible);
     void setPttCatSelectRadioButtonChecked(bool checked);
     void setPttCatSelectRadioButtonVisible(bool visible);
@@ -222,12 +223,28 @@ public:
     void setComportErrorTxtVisible(bool visible);
     RigCapConstants::PortType getCatComportType(QString radioModel);
 
+
+    void setPttRTSSelectRadioButtonEnabled(bool enabled);
+    void setPttDTRSelectRadioButtonEnabled(bool enabled);
+    void determineSupportedPttType(RigCapabilities &rigCap, bool &catPTT, bool &serialPTT);
+
+
+    bool isItASerialCatDevice();
+    bool isACatSerialPortSelected();
+    void noCatSerialPortWarning();
+    bool isForceDtrBoxSetToNone();
+    bool isForceRtsBoxSetToNone();
+    void setPttRTSDisabled(bool state);
+    void setPttDTRDisabled(bool state);
+
 public slots:
     void comSpeedSelected();
     void comDataBitsSelected();
     void comStopBitsSelected();
     void comParitySelected(int);
     void on_forceRTSSelected();
+
+
 
 signals:
     void transVertTabAdded(int);
@@ -345,13 +362,13 @@ private:
 
 
 
-    void setPttRTSDisabled(bool state);
-    void setPttDTRDisabled(bool state);
+
 
 
     void onPortTypeSerialRadioButtonClicked();
     void onPortTypeNetworkRadioButtonClicked();
     void showPleaseSelectPttComportDialogue();
+    void initCatFeatures(RigCapabilities &rigCap);
 };
 
 #endif // RIGSETUPFORM_H

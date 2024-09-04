@@ -184,7 +184,7 @@ public:
     bool volumeEnable = true;
     bool voiceMemEnable = true;
     bool cWMemEnable = true;
-    bool catEnable = true;
+    bool catPttEnable = true;
 
 };
 

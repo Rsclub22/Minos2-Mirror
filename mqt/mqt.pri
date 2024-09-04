@@ -47,6 +47,8 @@ CONFIG(release, debug|release): QMAKE_CXXFLAGS_WARN_ON += -Wno-deprecated-declar
 CONFIG(debug, debug|release):QMAKE_CXXFLAGS_WARN_ON += -Wno-deprecated-declarations -Wno-reorder -Wold-style-cast  -Winvalid-pch
 
 } else {
+INC_MAP = 1
+DEFINES += INC_MAP
 *g++*:CONFIG(release, debug|release): QMAKE_CXXFLAGS_WARN_ON += -Wno-deprecated-declarations -Wno-reorder -Wold-style-cast -DNDEBUG  -Winvalid-pch
 else:*g++*:CONFIG(debug, debug|release):QMAKE_CXXFLAGS_WARN_ON += -Wno-deprecated-declarations -Wno-reorder -Wold-style-cast  -Winvalid-pch
 }

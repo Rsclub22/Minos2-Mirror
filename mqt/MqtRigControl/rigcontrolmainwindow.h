@@ -609,7 +609,7 @@ private:
     void readTranVerterSetting(scatParams *radio, QString transvertName, QSettings &config);
     void getRadioConfigData(scatParams *radio, QString radioName);
     void checkIniFileVersion();
-    void updateAvailRadiosToVersion2(QSettings &settings, QStringList &availRadios, int numAvailRadios);
+    void updateAvailRadiosToVersion3(QString version, QSettings &settings, QStringList &availRadios, int numAvailRadios);
 
     void getAvailRadiosList(QStringList &availRadios);
     void readCurrentRadio(QString &currentRadioName);

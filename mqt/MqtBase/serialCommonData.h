@@ -13,8 +13,8 @@ namespace serialCommonData
     const s_handshakeCodes handshakeCodesList[] = {s_handshakeCodes::HANDSHAKE_NONE, s_handshakeCodes::HANDSHAKE_XONXOFF, s_handshakeCodes::HANDSHAKE_HARDWARE };
     const QStringList handshakeStr = QStringList() << "None" << "XON/XOFF" << "CTS/RTS";
 
-    enum  class s_forceLinesCodes {FORCE_LINE_NONE, FORCE_LINE_OFF, FORCE_LINE_ON};
-    const s_forceLinesCodes forceLinesCodesList[] = {s_forceLinesCodes::FORCE_LINE_NONE, s_forceLinesCodes::FORCE_LINE_OFF, s_forceLinesCodes::FORCE_LINE_ON};
+    enum  class s_forceLinesCodes {FORCE_LINE_NONE, FORCE_LINE_ON, FORCE_LINE_OFF};
+    const s_forceLinesCodes forceLinesCodesList[] = {s_forceLinesCodes::FORCE_LINE_NONE, s_forceLinesCodes::FORCE_LINE_ON, s_forceLinesCodes::FORCE_LINE_OFF};
     const QStringList forceLinesStr = QStringList() << "None" << "High" << "Low";
     const QStringList forceLinstStr_Trans = QStringList() << "None" << "High" << "Low";
 

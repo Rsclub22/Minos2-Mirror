@@ -220,30 +220,11 @@ void RigSetupDialog::loadSettingsToTab(int tabNum, QString tabName)
     bool catPTT = true;     // This is radio PTT capability true = CAT PTT
     bool serialPTT = true;
 
-    if (rigCap.getSupportPttPortType() == RigCapConstants::RigPttPortType::RIG_PTT_RIG && rigCap.getRigManufacturer() == OMINRIG_MFR_NAME)
-    {
-       // support CAT PTT only
+    radioTab.value(tabName)->determineSupportedPttType(rigCap, catPTT, serialPTT);
 
-       catPTT = true;
-       serialPTT = false;
-       radioTab.value(tabName)->setPttInitialState(catPTT, serialPTT);
-    }
-    else if (rigCap.getSupportPttPortType() == RigCapConstants::RigPttPortType::RIG_PTT_RIG
-            || rigCap.getSupportPttPortType() == RigCapConstants::RigPttPortType::RIG_PTT_RIG_MICDATA)
-    {
-        // support CAT PTT and Serial PTT
-        catPTT = true;
-        serialPTT = true;
-        radioTab.value(tabName)->setPttInitialState(catPTT, serialPTT);
-    }
-    else if (rigCap.getSupportPttPortType() == RigCapConstants::RigPttPortType::RIG_PTT_NONE)
-    {
+    radioTab.value(tabName)->setPttInitialState(catPTT, serialPTT);
 
-       // support Serial PTT only
-       catPTT = false;
-       serialPTT = true;
-       radioTab.value(tabName)->setPttInitialState(catPTT, serialPTT);
-    }
+
 
 
     // now load the PTT settings
@@ -254,56 +235,85 @@ void RigSetupDialog::loadSettingsToTab(int tabNum, QString tabName)
     if (availRadioData.value(tabName)->pttType == serialCommonData::MINOS_PTT_TYPES::PTT_TYPE_CAT)
     {
         radioTab.value(tabName)->setPttCatSelectRadioButtonChecked(true);
-        radioTab.value(tabName)->pttComportSelDisabled(true);
+        radioTab.value(tabName)->setPttComportSelDisabled(true);
 
-
-    }
-    else if (availRadioData.value(tabName)->pttType == serialCommonData::MINOS_PTT_TYPES::PTT_TYPE_RTS)
-    {
-        radioTab.value(tabName)->setPttRtsSelectRadioButtonChecked(true);
-        radioTab.value(tabName)->pttComportSelDisabled(false);
-
-
-    }
-    else if (availRadioData.value(tabName)->pttType == serialCommonData::MINOS_PTT_TYPES::PTT_TYPE_DTR)
-    {
-        radioTab.value(tabName)->setPttDtrSelectRadioButtonChecked(true);
-        radioTab.value(tabName)->pttComportSelDisabled(false);
-
-    }
-
-
-
-    if (catPTT)
-    {
-
-        radioTab.value(tabName)->setPttCatSelectRadioButtonVisible(true);
-        radioTab.value(tabName)->setCatFeaturesEnableChkBoxVisible(true);
-
-
-        if (availRadioData.value(tabName)->enableDisableCatFeature.catEnable)
+        if (availRadioData.value(tabName)->enableDisableCatFeature.catPttEnable)
         {
             radioTab.value(tabName)->setPttCatSelectRadioButtonDisabled(false);
 
         }
         else
         {
-           radioTab.value(tabName)->setPttCatSelectRadioButtonDisabled(true);
+            radioTab.value(tabName)->setPttCatSelectRadioButtonDisabled(true);
 
         }
 
 
-
-
     }
-    else if (serialPTT)
+    else if (availRadioData.value(tabName)->pttType == serialCommonData::MINOS_PTT_TYPES::PTT_TYPE_RTS)
     {
-        radioTab.value(tabName)->setPttCatSelectRadioButtonVisible(false);
+        radioTab.value(tabName)->setPttRtsSelectRadioButtonChecked(true);
+        radioTab.value(tabName)->setPttComportSelDisabled(false);
+
+
+
+        if (availRadioData.value(tabName)->pttSerialPort == availRadioData.value(tabName)->comport)
+        {
+            radioTab.value(tabName)->setForceRTSDisabled(true);
+        }
+
+        if (!catPTT)
+        {
+            radioTab.value(tabName)->setPttCatSelectRadioButtonVisible(false);
+            radioTab.value(tabName)->setCatFeaturesEnableChkBoxVisible(false);
+        }
+
         radioTab.value(tabName)->setSerialPttControlsVisible(true);
-        radioTab.value(tabName)->setCatFeaturesEnableChkBoxVisible(false);
+
+
+
+
 
     }
+    else if (availRadioData.value(tabName)->pttType == serialCommonData::MINOS_PTT_TYPES::PTT_TYPE_DTR)
+    {
+        radioTab.value(tabName)->setPttDtrSelectRadioButtonChecked(true);
+        radioTab.value(tabName)->setPttComportSelDisabled(false);
 
+        if (availRadioData.value(tabName)->pttSerialPort == availRadioData.value(tabName)->comport)
+        {
+            radioTab.value(tabName)->setForceRTSDisabled(true);
+        }
+
+        if (!catPTT)
+        {
+            radioTab.value(tabName)->setPttCatSelectRadioButtonVisible(false);
+            radioTab.value(tabName)->setCatFeaturesEnableChkBoxVisible(false);
+        }
+
+        radioTab.value(tabName)->setSerialPttControlsVisible(true);
+    }
+
+    if (radioTab.value(tabName)->isPttComportEqualCatComport())
+    {
+        if (radioTab.value(tabName)->isForceRtsBoxSetToNone())
+        {
+            radioTab.value(tabName)->setPttRTSDisabled(false);
+        }
+        else
+        {
+            radioTab.value(tabName)->setPttRTSDisabled(true);
+        }
+
+        if (radioTab.value(tabName)->isForceDtrBoxSetToNone())
+        {
+            radioTab.value(tabName)->setPttDTRDisabled(false);
+        }
+        else
+        {
+            radioTab.value(tabName)->setPttDTRDisabled(true);
+        }
+    }
 
     // enable PTT checkbox and make groupbox visible
     radioTab.value(tabName)->setPTTEnableCheckBox(availRadioData.value(tabName)->enablePTT);
@@ -402,12 +412,6 @@ void RigSetupDialog::loadSettingsToTab(int tabNum, QString tabName)
         radioTab.value(tabName)->setPortTypeWidgetsVisible(false);
 
     }
-    /*else
-    {
-        // hamlib
-        radioTab.value(tabName)->setCatFeaturesEnableChkBoxVisible(true);
-        //radioTab.value(tabName)->setPortTypeWidgetsVisible(true);
-    }*/
 
 
 
@@ -446,19 +450,16 @@ void RigSetupDialog::addRadio()
     radioTab.value(radioName)->setupRadioModel(radioModel);
 
 
-    radioTab.value(radioName)->setAdvancedCommsFlag(false);
-
-
-
-    radioTab.value(radioName)->setEnableDisableCatFeaturesGroupVisible(false);
-
-
     radioTab.value(radioName)->setPollInterval(RIG_DEFAULT_POLLINTERVAL);
 
     loadAvailComportsToTab(radioName);
     loadAvailPttComportsToTab(radioName);
 
-    // initial settings
+
+
+    /******* we should conisder moving this to actual radio selection ???? *****/
+
+    /*// initial settings
     radioTab.value(radioName)->setDataSpeed("9600");
     radioTab.value(radioName)->comSpeedSelected();
 
@@ -478,7 +479,7 @@ void RigSetupDialog::addRadio()
         radioTab.value(radioName)->setForceRTSComboBox(1);
         radioTab.value(radioName)->on_forceRTSSelected();
     }
-
+*/
 
 
 
@@ -1110,7 +1111,7 @@ void RigSetupDialog::saveRadioData(QSharedPointer<scatParams> radioData, QSettin
     config.setValue("volumeEnable", radioData->enableDisableCatFeature.volumeEnable);
     config.setValue("voiceMemEnable", radioData->enableDisableCatFeature.voiceMemEnable);
     config.setValue("cWMemEnable", radioData->enableDisableCatFeature.cWMemEnable);
-    config.setValue("catEnable", radioData->enableDisableCatFeature.catEnable);
+    config.setValue("catPttEnable", radioData->enableDisableCatFeature.catPttEnable);
 
     for (const auto &b: QASCONST(bands))
     {
@@ -1177,7 +1178,7 @@ void RigSetupDialog::getRadioSetting(QSharedPointer<scatParams> radioData, QStri
     radioData->enableDisableCatFeature.volumeEnable = config.value("volumeEnable", true).toBool();
     radioData->enableDisableCatFeature.voiceMemEnable = config.value("voiceMemEnable", true).toBool();
     radioData->enableDisableCatFeature.cWMemEnable = config.value("cWMemEnable", true).toBool();
-    radioData->enableDisableCatFeature.catEnable = config.value("catEnable", true).toBool();
+    radioData->enableDisableCatFeature.catPttEnable = config.value("catPttEnable", true).toBool();
 
 
     for (const auto &b: QASCONST(bands))
