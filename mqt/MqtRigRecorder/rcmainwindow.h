@@ -70,6 +70,7 @@ private:
 
     bool closing = false;
     bool inVolChange = false;
+    bool inConfig = false;
 
     void doConfig();
 

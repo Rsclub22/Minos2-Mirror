@@ -87,6 +87,8 @@ MainWindow::MainWindow(QWidget *parent)
 
 void MainWindow::doConfig()
 {
+    inConfig = true;
+
     QSettings csettings(getDirectoryLocation(dlConfiguration) + "/RigRecorderSelect.ini", QSettings::IniFormat);
     configFile = csettings.value("ConfigurationFile").toString();
     if (configFile.isEmpty())
@@ -121,8 +123,11 @@ void MainWindow::doConfig()
     inVolChange = true;
 
     int recordLevel = settings.value("RecordLevel", 0).toInt();
-
     ui->recordSlider->setValue(recordLevel);
+
+    int recordLevel2 = settings.value("RecordLevel2", 0).toInt();
+
+    ui->recordSlider_2->setValue(recordLevel2);
 
     inVolChange = false;
 
@@ -134,6 +139,7 @@ void MainWindow::doConfig()
     ui->contestLinkCB->setChecked(link);
 
     settings.setValue("configured", true); // make sure the config file is created;
+    inConfig = false;
 }
 void MainWindow::setConfigDisplay(QString s)
 {
@@ -285,7 +291,7 @@ void MainWindow::on_baseFileBrowse_clicked()
 
 void MainWindow::inChannelCB_currentTextChanged(const QString &arg1)
 {
-    if (!closing)
+    if (!closing && !inConfig)
     {
         QSettings settings(configFile, QSettings::IniFormat);
         settings.setValue(indevKey, arg1);
@@ -298,7 +304,7 @@ void MainWindow::inChannelCB_currentTextChanged(const QString &arg1)
 }
 void MainWindow::inChannelCB_2_currentTextChanged(const QString &arg1)
 {
-    if (!closing)
+    if (!closing && !inConfig)
     {
         QSettings settings(configFile, QSettings::IniFormat);
         settings.setValue(indevKey2, arg1);

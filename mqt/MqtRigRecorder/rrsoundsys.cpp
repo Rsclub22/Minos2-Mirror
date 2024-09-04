@@ -170,7 +170,7 @@ void RRRtAudioSoundSystem::stop()
 
     wThread->terminated = true;
     bufferNotEmpty.wakeAll();
-    wThread->wait();
+    wThread->wait(1000);
 
     if (audio->isStreamRunning())
     {
@@ -486,7 +486,7 @@ void RRRtAudioSoundSystem::stopInput()
     inputEnabled = false;
      mutex.lock();
      if (recIndex - writeIndex >= RINGBUFFERSIZE - 1)     // not correct... we want "caught up"
-         bufferNotFull.wait(&mutex);
+         bufferNotFull.wait(&mutex, 1000);
      mutex.unlock();
 
      closeFlag = true;;  // mark to close
