@@ -3,7 +3,7 @@
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //                      Rig Control
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2023
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2024
 //
 //
 //
@@ -2257,9 +2257,18 @@ void RigSetupForm::setPttCatSelectRadioButtonDisabled(bool disabled)
 
 void RigSetupForm::setPttDtrSelectRadioButtonChecked(bool checked)
 {
-    ui->pttDTRSelectRadioButton->setAutoExclusive(false);  // allow deselection of radiobutton
+    if (!checked)
+    {
+        ui->pttDTRSelectRadioButton->setAutoExclusive(false);  // allow deselection of radiobutton
+    }
+
     ui->pttDTRSelectRadioButton->setChecked(checked);
-    ui->pttDTRSelectRadioButton->setAutoExclusive(true);
+
+    if (!checked)
+    {
+        ui->pttDTRSelectRadioButton->setAutoExclusive(true);
+    }
+
 
 }
 
@@ -2272,9 +2281,18 @@ void RigSetupForm::setPttDtrSelectRadioButtonVisible(bool visible)
 
 void RigSetupForm::setPttRtsSelectRadioButtonChecked(bool checked)
 {
-    ui->pttRTSSelectRadioButton->setAutoExclusive(false); // allow deselection of radiobutton
+    if (!checked)
+    {
+        ui->pttRTSSelectRadioButton->setAutoExclusive(false); // allow deselection of radiobutton
+    }
+
     ui->pttRTSSelectRadioButton->setChecked(checked);
-    ui->pttRTSSelectRadioButton->setAutoExclusive(true);
+
+    if (!checked)
+    {
+        ui->pttRTSSelectRadioButton->setAutoExclusive(true);
+    }
+
 
 }
 
@@ -2298,71 +2316,7 @@ void RigSetupForm::setPttComport(QString p)
 }
 
 
-/*
-void RigSetupForm::setPttTypeRadioButtons(int type)
-{
 
-
-    serialCommonData::PTTMethodCodes pttType = static_cast<serialCommonData::PTTMethodCodes>(type);
-
-    if (pttType == serialCommonData::PTTMethodCodes::PTT_METHOD_CAT)
-    {
-        if (radioData->enableDisableCatFeature.catEnable)
-        {
-            ui->pttCatEnable->setChecked(false);
-
-        }
-
-        ui->pttCatEnable->setChecked(true);
-        pttComportSelDisabled(true);
-        if (isPttComportEqualCatComport())
-        {
-            if (radioData->handshake != RIG_HANDSHAKE_HARDWARE
-                    || radioData->forceRts == serialCommonData::s_forceLinesCodes::FORCE_LINE_NONE)
-            {
-                setForceRTSDisabled(false);
-            }
-            else
-            {
-                setForceRTSDisabled(true);
-            }
-            if (radioData->forceDtr == serialCommonData::s_forceLinesCodes::FORCE_LINE_NONE)
-            {
-                setForceDTRDisabled(false);
-            }
-            else
-            {
-                setForceDTRDisabled(true);
-            }
-        }
-        else
-        {
-            setForceRTSDisabled(false);
-            setForceDTRDisabled(false);
-        }
-
-    }
-    else if (pttType == serialCommonData::PTTMethodCodes::PTT_METHOD_RTS)
-    {
-        ui->pttRTSEnable->setChecked(true);
-        pttComportSelDisabled(false);
-        if (isPttComportEqualCatComport())
-        {
-            setForceRTSDisabled(true);
-        }
-    }
-    else if (pttType == serialCommonData::PTTMethodCodes::PTT_METHOD_DTR)
-    {
-        ui->pttDTREnable->setChecked(true);
-        if (isPttComportEqualCatComport())
-        {
-            setForceDTRDisabled(true);
-        }
-    }
-
-
-}
-*/
 void RigSetupForm::onPttEnableSelected(bool /*checked*/)
 {
 
@@ -2580,10 +2534,18 @@ void RigSetupForm::onPttComportSelActivated(int /*idx*/)
                 if (!ui->forceDtrBox->isEnabled())
                 {
                     setForceDTRDisabled(false);
+                    if (ui->pttDTRSelectRadioButton->isChecked())
+                    {
+                        setPttDtrSelectRadioButtonChecked(false);
+                    }
                 }
                 if (!ui->forceRtsBox->isEnabled())
                 {
                     setForceRTSDisabled(false);
+                    if (ui->pttRTSSelectRadioButton->isChecked())
+                    {
+                        setPttRtsSelectRadioButtonChecked(false);
+                    }
                 }
             }
 

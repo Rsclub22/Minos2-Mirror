@@ -23,7 +23,7 @@
 namespace maskData
 {
 
-const QStringList freqMask = { "9.999",
+inline const QStringList freqMask = { "9.999",
                          "99.999",
                          "999.999",
                          "9.999.999",
@@ -38,13 +38,13 @@ const QStringList freqMask = { "9.999",
 namespace memDefData
 {
 
-const QString DEFAULT_CALLSIGN = "";
+inline const QString DEFAULT_CALLSIGN = "";
 //const QString DEFAULT_FREQ = "0000000000";
-const QString DEFAULT_FREQ = "";
-const QString DEFAULT_MODE = hamlibData::USB;
-const QString DEFAULT_LOCATOR = "";
-const int DEFAULT_BEARING = 0;
-const QString DEFAULT_TIME = "00:00";
+inline const QString DEFAULT_FREQ = "";
+inline const QString DEFAULT_MODE = hamlibData::USB;
+inline const QString DEFAULT_LOCATOR = "";
+inline const int DEFAULT_BEARING = 0;
+inline const QString DEFAULT_TIME = "00:00";
 
 }
 
@@ -112,7 +112,7 @@ namespace runButData
 
 const int NUM_RUNBUTTONS = 2;
 
-const QStringList runButTitle = {
+inline const QStringList runButTitle = {
     "Run 1 ([) ",
     "Run 2 (]) "
 };

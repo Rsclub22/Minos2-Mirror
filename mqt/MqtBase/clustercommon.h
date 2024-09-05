@@ -21,38 +21,38 @@ class BandInfo;
 
 // Files
 QString CLUSTER_PATH();
-const QString CLUSTER_SITES = "ClusterSites.ini";
-const QString CLUSTER_COMMANDS = "ClusterCommands.ini";
-const QString CLUSTER_START_FILE = "cluster_start.txt";
-const QString CLUSTER_END_FILE = "cluster_end.txt";
-const QString CLUSTER_START_HF_FILE = "cluster_start_hf.txt";
-const QString CLUSTER_END_HF_FILE = "cluster_end_hf.txt";
-const QString CLUSTER_LOCATORLIST_DIR = "locatorFilterLists/";
-const QString CLUSTER_CALLSIGNLIST_DIR = "callsignFilterLists/";
+inline const QString CLUSTER_SITES = "ClusterSites.ini";
+inline const QString CLUSTER_COMMANDS = "ClusterCommands.ini";
+inline const QString CLUSTER_START_FILE = "cluster_start.txt";
+inline const QString CLUSTER_END_FILE = "cluster_end.txt";
+inline const QString CLUSTER_START_HF_FILE = "cluster_start_hf.txt";
+inline const QString CLUSTER_END_HF_FILE = "cluster_end_hf.txt";
+inline const QString CLUSTER_LOCATORLIST_DIR = "locatorFilterLists/";
+inline const QString CLUSTER_CALLSIGNLIST_DIR = "callsignFilterLists/";
 QString CLUSTER_SETTINGS_FILE();
 QString CLUSTER_FILTER_FILE();
 
-const QString NONE_MODE = "NONE";
-const QString CW_MODE = "CW";
-const QString USB_MODE = "USB";
-const QString LSB_MODE = "LSB";
-const QString FM_MODE = "FM";
-const QString RTTY_MODE = "RTTY";
-const QString PSK31_MODE = "PSK31";
-const QString FT8_MODE = "FT8";
-const QString FT4_MODE = "FT4";
-const QString MSK144_MODE = "MSK144";
-const QString JT65_MODE = "JT65";
+inline const QString NONE_MODE = "NONE";
+inline const QString CW_MODE = "CW";
+inline const QString USB_MODE = "USB";
+inline const QString LSB_MODE = "LSB";
+inline const QString FM_MODE = "FM";
+inline const QString RTTY_MODE = "RTTY";
+inline const QString PSK31_MODE = "PSK31";
+inline const QString FT8_MODE = "FT8";
+inline const QString FT4_MODE = "FT4";
+inline const QString MSK144_MODE = "MSK144";
+inline const QString JT65_MODE = "JT65";
 
 
-const QStringList clusterModes = QStringList() << NONE_MODE << CW_MODE << LSB_MODE << USB_MODE << FM_MODE << RTTY_MODE << PSK31_MODE << FT8_MODE << FT4_MODE << MSK144_MODE << JT65_MODE;
-const QStringList mgmModes = QStringList() << FT8_MODE << FT4_MODE << MSK144_MODE << JT65_MODE;
+inline const QStringList clusterModes = QStringList() << NONE_MODE << CW_MODE << LSB_MODE << USB_MODE << FM_MODE << RTTY_MODE << PSK31_MODE << FT8_MODE << FT4_MODE << MSK144_MODE << JT65_MODE;
+inline const QStringList mgmModes = QStringList() << FT8_MODE << FT4_MODE << MSK144_MODE << JT65_MODE;
 
-const QStringList clusterPropModes = QStringList() << "TR" << "ES" << "MS" << "EME";
+inline const QStringList clusterPropModes = QStringList() << "TR" << "ES" << "MS" << "EME";
 enum bandPlanModeError {MODE_FREQ_MATCH, NO_MODE_FREQ_MATCH, MODE_NOT_FOUND, BAND_NOT_FOUND};
 
 enum clusterErrorCode {SPOT_OK, NO_SPOT_TIME, SPOT_DATETIME_INVALID, SPOT_TOO_MANY_SECTIONS, DISCARD_HF_SPOT, DISCARD_SPOT_NOT_CONTEST_BAND, GET_PREFIX_FAILED};
-const QStringList clusterErrorMsg = QStringList() << "Spot OK" << "SpotTime not found" << "Spot DateTime Invalid" << "Spot too many sections"
+inline const QStringList clusterErrorMsg = QStringList() << "Spot OK" << "SpotTime not found" << "Spot DateTime Invalid" << "Spot too many sections"
                                                   << "Discard HF Spot" << "getPrefix failed to find QRA" << "AskQrz Failed to Find QRA";
 
 // OffSet to items in spot message - Note! add 1 for raw message as that has "DXSPOT" as header
@@ -107,19 +107,19 @@ const int CQ_RESPONSE_COL = 26;    // used in bandmap
 const int DX_DISTRICT_COL_NUM = 27;   // used in bandmap
 const int DX_DISTRICT_WORKED_COL_NUM = 28; // used in bandmap
 
-const QString SPOT_TX_ON = "TxSpotOn";
-const QString SPOT_TX_OFF = "TxSpotOff";
+inline const QString SPOT_TX_ON = "TxSpotOn";
+inline const QString SPOT_TX_OFF = "TxSpotOff";
 
 const QChar SPOT_DATA_SEPERATOR = ':';
 // Only locators in Europe
 // use [I-Li-l][P-Lp-l] here??
-const QRegularExpression FULL_LOC_EXP = QRegularExpression("[I,i,J,j,K,k,L,l][P,p,O,o,N,n,M,m,L,l]\\d\\d[A-Za-z][A-Za-z]");
-const QRegularExpression PART_LOC_EXP = QRegularExpression("[I,i,J,j,K,k,L,l][P,p,O,o,N,n,M,m,L,l]\\d\\d\\W");
-const QRegularExpression SEARCH_LOC_EXP = QRegularExpression("[I,i,J,j,K,k,L,l][P,p,O,o,N,n,M,m,L,l]\\d\\d");
+inline const QRegularExpression FULL_LOC_EXP = QRegularExpression("[I,i,J,j,K,k,L,l][P,p,O,o,N,n,M,m,L,l]\\d\\d[A-Za-z][A-Za-z]");
+inline const QRegularExpression PART_LOC_EXP = QRegularExpression("[I,i,J,j,K,k,L,l][P,p,O,o,N,n,M,m,L,l]\\d\\d\\W");
+inline const QRegularExpression SEARCH_LOC_EXP = QRegularExpression("[I,i,J,j,K,k,L,l][P,p,O,o,N,n,M,m,L,l]\\d\\d");
 
-const QRegularExpression FULL_LOC_EXP_HF = QRegularExpression("[A-Ra-r][A-Ra-r]\\d\\d[A-Za-z][A-Za-z]");
-const QRegularExpression PART_LOC_EXP_HF = QRegularExpression("[A-Ra-r][A-Ra-r]\\d\\d\\W");
-const QRegularExpression SEARCH_LOC_EXP_HF = QRegularExpression("[A-Ra-r][A-Ra-r]\\d\\d");
+inline const QRegularExpression FULL_LOC_EXP_HF = QRegularExpression("[A-Ra-r][A-Ra-r]\\d\\d[A-Za-z][A-Za-z]");
+inline const QRegularExpression PART_LOC_EXP_HF = QRegularExpression("[A-Ra-r][A-Ra-r]\\d\\d\\W");
+inline const QRegularExpression SEARCH_LOC_EXP_HF = QRegularExpression("[A-Ra-r][A-Ra-r]\\d\\d");
 
 const int START_HF = 0; // index bandlist table
 const int END_HF = 5;
@@ -130,15 +130,15 @@ const int MAX_TTL = 180;
 const int NEW_SPOT_TIME = 3 * 60;  //seconds
 
 // cluster tab text colours
-const QColor CLUSTER_TAB_SELECT_COLOR = Qt::red;
-const QColor CLUSTER_TAB_NOT_SELECT_COLOR = Qt::black;
+inline const QColor CLUSTER_TAB_SELECT_COLOR = Qt::red;
+inline const QColor CLUSTER_TAB_NOT_SELECT_COLOR = Qt::black;
 
 // Message headers
-const QString DXSPOT = "DXSPOT:";
+inline const QString DXSPOT = "DXSPOT:";
 //const QString TIMETOLIVE = "TIMETOLIVE:";
-const QString CLUSTER_STATUS = "CLUSTER_STATUS!";
-const QChar CLUSTER_STAT_DELIMITER = '!';
-const QString RESENTSPOT = "RESENTSPOT:";
+inline const QString CLUSTER_STATUS = "CLUSTER_STATUS!";
+inline const QChar CLUSTER_STAT_DELIMITER = '!';
+inline const QString RESENTSPOT = "RESENTSPOT:";
 
 // Filter entry delimiter
 const QChar FILTER_DELIMITER = ',';
@@ -156,38 +156,38 @@ const int CALLSIGNUP = 1 << 1;
 const int LOCATORUP = 1 << 2;
 
 // Colour of text for worked callsign and locators in cluster views
-const QColor CALLSIGN_WORKED_COLOUR = Qt::red;
-const QColor LOCATOR_WORKED_COLOUR = Qt::red;
-const QColor SPOT_TO_MEMORY = Qt::blue;
-const QColor NO_SPOT_TO_MEMORY = Qt::black;
-const QColor NOT_WORKED_COLOUR = Qt::black;
-const QColor MARKED_SPOT_COLOUR = Qt::magenta;
-const QColor CLUSTER_SPOT_COLOUR = Qt::darkGreen;
-const QColor BANDMAP_NEW_COLOUR = Qt::blue;
-const QColor CQ_FREQ_COLOUR = Qt::red;
+inline const QColor CALLSIGN_WORKED_COLOUR = Qt::red;
+inline const QColor LOCATOR_WORKED_COLOUR = Qt::red;
+inline const QColor SPOT_TO_MEMORY = Qt::blue;
+inline const QColor NO_SPOT_TO_MEMORY = Qt::black;
+inline const QColor NOT_WORKED_COLOUR = Qt::black;
+inline const QColor MARKED_SPOT_COLOUR = Qt::magenta;
+inline const QColor CLUSTER_SPOT_COLOUR = Qt::darkGreen;
+inline const QColor BANDMAP_NEW_COLOUR = Qt::blue;
+inline const QColor CQ_FREQ_COLOUR = Qt::red;
 
 // Callsign Edit Shortcuts
-const QString ADD_CALLSIGN_KEY = "Ctrl-a";
-const QString EDIT_CALLSIGN_KEY = "Ctrl-e";
-const QString DEL_CALLSIGN_KEY = "Ctrl-d";
+inline const QString ADD_CALLSIGN_KEY = "Ctrl-a";
+inline const QString EDIT_CALLSIGN_KEY = "Ctrl-e";
+inline const QString DEL_CALLSIGN_KEY = "Ctrl-d";
 
-const QChar CLUSTER_START_COMMENT_DELIMTER = '#';
+inline const QChar CLUSTER_START_COMMENT_DELIMTER = '#';
 
-const QString NEWSPOT_INDICATOR_OFF_STYLE = QString("background-color: Gainsboro ;\n");
-const QString NEWSPOT_INDICATOR_ON_STYLE = QString("background-color: Sandybrown ;\n");
-const QString STATUS_INDICATOR_DISCONNECT_STYLE = QString("background-color: Gainsboro;\n");
-const QString STATUS_INDICATOR_CONNECT_STYLE = QString("background-color: Sandybrown;\n");
+inline const QString NEWSPOT_INDICATOR_OFF_STYLE = QString("background-color: Gainsboro ;\n");
+inline const QString NEWSPOT_INDICATOR_ON_STYLE = QString("background-color: Sandybrown ;\n");
+inline const QString STATUS_INDICATOR_DISCONNECT_STYLE = QString("background-color: Gainsboro;\n");
+inline const QString STATUS_INDICATOR_CONNECT_STYLE = QString("background-color: Sandybrown;\n");
 
-const QString LOG_FILTER_INDICATOR_ON_STYLE = QString("background-color: Sandybrown ; border-style: outset; border-width: 1px; border-color: black; min-width: 5em; padding: 3px;\n");
-const QString LOG_FILTER_INDICATOR_OFF_STYLE = QString("background-color: Gainsboro ; border-style: outset; border-width: 1px; border-color: black; min-width: 5em; padding: 3px;\n");
+inline const QString LOG_FILTER_INDICATOR_ON_STYLE = QString("background-color: Sandybrown ; border-style: outset; border-width: 1px; border-color: black; min-width: 5em; padding: 3px;\n");
+inline const QString LOG_FILTER_INDICATOR_OFF_STYLE = QString("background-color: Gainsboro ; border-style: outset; border-width: 1px; border-color: black; min-width: 5em; padding: 3px;\n");
 
 
 // resend clusterspots to client commands
 enum resendFrameId {ALL_CLIENTS = -1, CLUSTER_CLIENT = 0, BANDMAP_CLIENT};
-const QString RESEND_ALL_SPOTS = "resendAll";
-const QString IGNORE_BANDMASK = "ignore_bandmask";
+inline const QString RESEND_ALL_SPOTS = "resendAll";
+inline const QString IGNORE_BANDMASK = "ignore_bandmask";
 
-const QString ASKQRZ_FAILEDQRA = "xxxxxx";
+inline const QString ASKQRZ_FAILEDQRA = "xxxxxx";
 
 QDateTime getSpotDateTime(const QString spotDate, const QString spotTime);
 

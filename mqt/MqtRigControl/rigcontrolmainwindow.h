@@ -3,7 +3,7 @@
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //                      Rig Control
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2017 - 2023
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2017 - 2024
 //
 // Interprocess Control Logic
 // COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2017
@@ -188,52 +188,7 @@ private:
 };
 
 
-/*
-class RigSupCapabilities
-{
-public:
-    RigSupCapabilities(){clear();}
 
-
-    void clear()
-    {
-        supVolume = false;
-        supSignalStrength = false;
-        radioSupGetRit = false;
-        radioSupSetRit = false;
-        radioSupGetRitState = false;
-        radioSupSetRitState = false;
-        supportGetVfo = false;
-        supportSetVfo = false;
-        supportGetPtt = false;
-        supportSetPtt = false;
-        supportVoiceMemory = false;
-        supportStopVoiceMemory = false;
-        suportSendMorse = false;
-        supportStopMorse = false;
-        supportWaitMorse = false;
-
-    }
-
-    bool supVolume;     // radio supports volume
-    bool supSignalStrength;
-    bool radioSupGetRit;
-    bool radioSupSetRit;
-    bool radioSupGetRitState;
-    bool radioSupSetRitState;
-    bool supportGetVfo;
-    bool supportSetVfo;
-    bool supportGetPtt;
-    bool supportSetPtt;
-    bool supportVoiceMemory;
-    bool supportStopVoiceMemory;
-    bool suportSendMorse;
-    bool supportStopMorse;
-    bool supportWaitMorse;
-
-};
-
-*/
 
 class RigStateDetails
 {
@@ -332,6 +287,7 @@ public:
 
     const QString version = "2.20";
 
+
 private:
 
     Ui::RigControlMainWindow *ui;
@@ -382,7 +338,7 @@ private:
     bool radioCommsOK = false;
 
 
-    bool ritTestEnabled = false; // for test....
+
     QTimer *cwMessageTestTimer;
 
 
@@ -460,7 +416,7 @@ private:
 
     QString getBand(const Frequency &freq);
 
-    void testBoxesVisible(bool visible);
+
 
     void upDateRadio(QString radioName);
     //void loadBands();
@@ -501,33 +457,25 @@ private:
     void setRitGetSetFreqIndicatorVisible(bool state);
     void ritSetFreqIndicatorToggle(bool state);
     void ritGetFreqIndicatorToggle(bool state);
-    //void saveRitEnableChk(bool state);
-    //bool readRitEnableChk();
+
 
     void getRigctldNames(QString address, quint16 port);
     void clrRigctldNames();
 
-    //bool findSupRadioBand(const QString band);
-    //void buildSupportedRadioBands(int radioModelNumber);
-    //void buildSupBandList(int radioModelNumber);
-    //bool findSupTransBand(const QString band);
+
 
     void clearTransVertSupport();
 
-    //bool readTestStandAloneFlag();
-    //void buildSupBandList(int radioIdx, int radioModelNumber, QStringList &bandList);
+
     void buildSupportedRadioBands(int radioIdx, int radioModelNumber, QStringList& supBandList);
     bool findSupRadioBand(const QString band, const QStringList& supBandsList);
-    //bool findSupTransBand(const QString band, const int radioIdx);
-    //void sendBandListLogger(const int radioIdx, const QStringList &supBandList);
 
-    //void initCacheData();
+
 
     void addVolStatusToRigCache(bool status);
     void sendTransVertEnabled(bool status);
 
 
-    //void runRigCtlDaemon(const QString manufacturer, const QString model, const QString comport, const QString baudRate, const QString dataBits, const QString civ, const QString netAdd, const QString portNum, const QString stopBits, const QString parity, const QString handshake, const QString rtsState, const QString dtrState, rigCtldTrace::rigCtldTraceCodes diagnostics);
     void runRigCtlDaemon(RigCtldParameters &rigCtldPar);
 
 
@@ -547,9 +495,6 @@ private:
 
     void setSmeterVisible(bool visible);
 
-    //void addBandListToRigCache(const int radioIdx, const QStringList &supBandList);
-
-
 
     int getRxFreq(VFO vfo);
     void processRxFrequencyForDisplay();
@@ -557,7 +502,7 @@ private:
     int getAndSendVfo();
     void sendMaxRitFreqLogger();
 
-    void showRitTestControl(bool state);
+
 
     void getAndSendTransVertSwNum(QString transvertName);
     bool findTransverter(QString &transVerterBand, QString band);
@@ -634,7 +579,14 @@ private:
 
     bool isTestCwMessageRunning();
     void addRigModelToRigCache(QString rigModel);
+
+    void setTestControlsVisible(bool visible);
     void setTestPttButtonIndOnOff(bool state);
+    void setRitTestControlsVisible(bool visible);
+    void setPttTestControlsVisible(bool visible);
+
+    void setCwMemTestControlsVisible(bool visible);
+    void setVoiceMemTestControlsVisible(bool visible);
 private slots:
 
     void onCommandRead(QString);
@@ -705,6 +657,11 @@ private slots:
 
     void on_traceDataComms_stateChanged(int arg1);
     void onCWMessageTimerTimeout();
+    void onSelectRadioFromLoggerClicked();
+    void onSelectRadioFromRigControlClicked();
+    void onVoiceMessageSpinBoxTextChanged();
+    void onVoiceMessagePlayClicked();
+    void onVoiceMessageStopClicked();
 };
 
 extern RigControlMainWindow *mainWindow;

@@ -69,7 +69,9 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
     appName = env.value("MQTRPCNAME", "") ;
 
     writeWindowTitle(appName);
-    testMode = (appName.length() == 0);
+    //testMode = (appName.length() == 0);
+
+    testMode = false;
 
     createCloseEvent();
 
@@ -136,22 +138,7 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
     rigStateDetails->RTTYModes = config.value("RTTY_Modes/RTTYModes", "").toStringList();
     rigStateDetails->PSKModes = config.value("PSK_Modes/PSKModes", "").toStringList();
 
-    ritTestEnabled = config.value("Rit_Test_Control/Rit_test_on", false).toBool();
-    if (ritTestEnabled)
-    {
-        // rit test
-
-        ui->setRitSpinner->setSingleStep(100);
-        connect(ui->setRitSpinner, QOverload<int>::of(&QSpinBox::valueChanged), this, &RigControlMainWindow::testIncRit);
-        connect(ui->testRitButton, &QPushButton::clicked, this, &RigControlMainWindow::ritbuttontoggle);
-
-    }
-    else
-    {
-        showRitTestControl(false);
-    }
-
-
+    //ritTestEnabled = config.value("Rit_Test_Control/Rit_test_on", false).toBool();
 
     hamlibOk = false;
 
@@ -202,15 +189,26 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
 
     serialTVSw = new SerialTVSwitch();     // create local serial sw
 
-    setSelectRadioBoxVisible(false);
-    setRadioNameLabelVisible(false);
-    testBoxesVisible(false);
 
 
-    // connected to logger don't show radio selectbox
-    setSelectRadioBoxVisible(testMode);
-    testBoxesVisible(testMode);
-    setRadioNameLabelVisible(!testMode);
+    if (appName.isEmpty())
+    {
+        // standalone mode
+        ui->testRadioButton->setVisible(false);
+        setTestControlsVisible(false);
+        setTestMode(true);
+    }
+    else
+    {
+        // started by logger don't show radio selectbox
+        setSelectRadioBoxVisible(testMode);
+        ui->testActionsGroupBox->setVisible(false);
+        setTestControlsVisible(testMode);
+        setRadioNameLabelVisible(!testMode);
+    }
+
+
+
 
 
     pollTimer = new QTimer(this);
@@ -240,23 +238,16 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
 
     initialiseSupportedRadioDisplay();
 
-    if (hamlibOk)
-    {
-        setTestMode(testMode);
-    }
+    //if (hamlibOk)
+    //{
+    //    setTestMode(testMode);
+   // }
 
 
     setPolltime(1000);
 
     ui->selectRadioBox->clearFocus();
 
-    // these are for test
-    cwMessageTestTimer = new QTimer(this);
-    connect(ui->cwKeyerPb, &QPushButton::clicked, this, &RigControlMainWindow::onCwKeyerPbClicked);
-    connect(ui->cwKeyerStopPb, &QPushButton::clicked, this, &RigControlMainWindow::onCwKeyerStopPbClicked);
-    connect(ui->txPttTestPb, &QPushButton::clicked, this, &RigControlMainWindow::onTxPttTestPbClicked);
-    connect(cwMessageTestTimer, &QTimer::timeout, this, &RigControlMainWindow::onCWMessageTimerTimeout);
-    ui->reconnectButton->setVisible(false);
 
 
 
@@ -278,61 +269,6 @@ RigControlMainWindow::~RigControlMainWindow()
 
     delete ui;
     delete msg;
-}
-void RigControlMainWindow::setTestMode(bool test)
-{
-    trace(QString("testMode is %1 test parameter is %2").arg(testMode).arg(test));
-    if (test)
-    {
-        if (!testMode)
-        {
-            testMode = true;
-            liveRadio = currentRadioName;
-            trace("save liveRadio " + liveRadio);
-
-            if (hamlibOk)
-            {
-                updateSelectRadioBox();     // we don't want to update radiolist if hamlib version is incorrect
-            }
-
-        }
-        logMessage((QString("Read Current Radio for Local selection")));
-        ui->testRadioButton->setText(tr("Set Radio from Logger"));
-    }
-    else
-    {
-        if (testMode)
-        {
-            trace("restore liveRadio " + liveRadio);;
-            testMode = false;
-            upDateRadio(liveRadio);
-            msg->rigCache.invalidate();
-        }
-        ui->testRadioButton->setText(tr("Test Radio"));
-        logMessage((QString("Radio Selection for Current Radio, for AppName %1, will be from logger").arg(appName)));
-
-//        readCurrentRadio(currentRadioName);
-
-//        if (!availRadiosContains(currentRadioName))
-//        {
-//            logMessage(QString("No radio found for this rigcontrol, %1").arg(appName));
-//            QString errmsg = HtmlFontColour(Qt::red) + tr("Please select a radio!");
-//            showStatusMessage(errmsg);
-//            sendStatusLogger(errmsg);
-//        }
-//        else
-//        {
-//            ui->selectRadioBox->setCurrentText(currentRadioName);
-//        }
-    }
-    setSelectRadioBoxVisible(testMode);
-    testBoxesVisible(testMode);
-    setRadioNameLabelVisible(!testMode);
-}
-
-void RigControlMainWindow::on_testRadioButton_clicked()
-{
-    setTestMode(!testMode);
 }
 
 
@@ -448,13 +384,30 @@ void RigControlMainWindow::initActionsConnections()
     connect(msg, &RigControlRpc::rereadConfig, this, &RigControlMainWindow::updateRigDetailsCache);
 
 
+    // test
 
-    // standalone test
+     connect(ui->txPttTestPb, &QPushButton::clicked, this, &RigControlMainWindow::onTxPttTestPbClicked);
+
+
+    cwMessageTestTimer = new QTimer(this);
+    connect(cwMessageTestTimer, &QTimer::timeout, this, &RigControlMainWindow::onCWMessageTimerTimeout);
+    connect(ui->cwKeyerPb, &QPushButton::clicked, this, &RigControlMainWindow::onCwKeyerPbClicked);
+    connect(ui->cwKeyerStopPb, &QPushButton::clicked, this, &RigControlMainWindow::onCwKeyerStopPbClicked);
+
     connect(ui->selFreq, &QPushButton::clicked,  this, &RigControlMainWindow::selFreqClicked);
     connect(ui->freqInputBox, &QLineEdit::editingFinished,  this, &RigControlMainWindow::selFreqClicked);
+    connect(ui->selectRadioFromLoggerRb, &QRadioButton::clicked, this, &RigControlMainWindow::onSelectRadioFromLoggerClicked);
+    connect(ui->selectRadioFromRigControlRb, &QRadioButton::clicked, this, &RigControlMainWindow::onSelectRadioFromRigControlClicked);
+    connect(ui->voiceMessageSpinBox, &QSpinBox::textChanged, this, &RigControlMainWindow::onVoiceMessageSpinBoxTextChanged);
+    connect(ui->voiceMessagePlayPB, &QPushButton::clicked, this, &RigControlMainWindow::onVoiceMessagePlayClicked);
+    connect(ui->voiceMessageStopPB, &QPushButton::clicked, this, &RigControlMainWindow::onVoiceMessageStopClicked);
+
+    ui->setRitSpinner->setSingleStep(100);
+    connect(ui->setRitSpinner, QOverload<int>::of(&QSpinBox::valueChanged), this, &RigControlMainWindow::testIncRit);
+    connect(ui->testRitButton, &QPushButton::clicked, this, &RigControlMainWindow::ritbuttontoggle);
 
 
-
+    ui->reconnectButton->setVisible(false);
 }
 
 
@@ -912,10 +865,11 @@ void RigControlMainWindow::checkSupportRit()
 
 
         setRitFreqDisplayVisible(true);
-        if (ritTestEnabled)
+
+        if (testMode)
         {
 
-            showRitTestControl(true);
+            setRitTestControlsVisible(true);
         }
 
         setRitGetSetFreqIndicatorVisible(true);
@@ -932,6 +886,12 @@ void RigControlMainWindow::checkSupportRit()
         setRitFreqDisplayVisible(false);
         setRitGetSetFreqIndicatorVisible(false);
         clearSupportRitFlags();
+
+        if (testMode)
+        {
+
+            setRitTestControlsVisible(false);
+        }
 
 
     }
@@ -971,17 +931,23 @@ bool RigControlMainWindow::checkSupportVoiceMemory()
 
                 addVoiceKeyerSupportStopCmdToRigCache(supportStopCmd);
 
+                if (testMode)
+                {
+                    setVoiceMemTestControlsVisible(true);
+                    ui->voiceMessageSpinBox->setMaximum(voiceMemNum);
+                }
+
                 return true;
 
             }
-            //else
-            //{
-            //    setVoiceMemIndVisible(false);
-            //    setVoiceMemIndOnOff(false);
-            //    addVoiceMemStatusToRigCache(false);
-            //    return false;
+            else
+            {
+                if (testMode)
+                {
+                    setVoiceMemTestControlsVisible(false);
+                }
+            }
 
-           // }
         }
     }
 
@@ -1029,6 +995,10 @@ bool RigControlMainWindow::checkSupportCwKeyerMemory()
                 setCwMemIndOnOff(false);
                 addCwKeyerTypeToRigCache(hamlibData::CW_MEMORY_TYPES::NONE);
                 addRigModelToRigCache("");
+                if (testMode)
+                {
+                    setCwMemTestControlsVisible(false);
+                }
 
                 return false;
             }
@@ -1037,6 +1007,11 @@ bool RigControlMainWindow::checkSupportCwKeyerMemory()
             if (currentRadio.rigMfg_Name == "Yaesu")
             {
                 supportStopCmd = false;
+            }
+
+            if (testMode)
+            {
+                setCwMemTestControlsVisible(true);
             }
 
 
@@ -1118,6 +1093,11 @@ void RigControlMainWindow::checkSupportPtt()
               addPTTEnabledStatusToRigCache(true);
               sendPttTypeLogger();
               ui->txPttTestPb->setVisible(true);
+
+              if (testMode)
+              {
+                  setPttTestControlsVisible(true);
+              }
             }
             else
             {
@@ -1126,6 +1106,12 @@ void RigControlMainWindow::checkSupportPtt()
                 addPTTEnabledStatusToRigCache(false);
                 sendPttTypeLogger();
                 ui->txPttTestPb->setVisible(false);
+
+                if (testMode)
+                {
+                    setPttTestControlsVisible(false);
+                }
+
             }
 
             setTxRxIndOnOff(false);
@@ -1337,11 +1323,6 @@ int RigControlMainWindow::openRigCtldRadio(bool localRigCtld)
                                                 .arg(rigCtldPar.getPttComport())
                                                 .arg(serialCommonData::pttTypeStr[static_cast<int>(rigCtldPar.getPttType())]));
 
-
-
-//        runRigCtlDaemon(mfgName, QString::number(rmNumber), currentRadio.comport,
-//                                                   QString::number(currentRadio.baudrate), QString::number(currentRadio.databits), currentRadio.civAddress, currentRadio.rigCtldNetworkAdd, currentRadio.rigCtldNetworkPort,
-//                                                   QString::number(currentRadio.stopbits), parity, handshake, rtsState, dtrState, traceCode);
 
         runRigCtlDaemon(rigCtldPar);
 
@@ -1695,6 +1676,12 @@ int RigControlMainWindow::openRadio()
 
 void RigControlMainWindow::closeRadio()
 {
+
+    if (testMode)
+    {
+       setTestControlsVisible(false);
+    }
+
 
     if (currentRadio.enablePTT && rigStateDetails->curPttStatus)
     {
@@ -2646,10 +2633,6 @@ void RigControlMainWindow::clrRigctldNames()
 }
 
 
-//void RigControlMainWindow::runRigCtlDaemon(const QString manufacturer, const QString model, const QString comport,
-//                                           const QString baudRate, const QString dataBits, const QString civ, const QString netAdd, const QString portNum,
-//                                           const QString stopBits, const QString parity, const QString handshake, const QString rtsState, const QString dtrState,
-//                                           rigCtldTrace::rigCtldTraceCodes diagnostics)
 
 
 void RigControlMainWindow::runRigCtlDaemon(RigCtldParameters &rigctldPar)
@@ -5585,6 +5568,78 @@ void RigControlMainWindow::handleYaesuCwMessage(QString cwMsg)
 
 /*********************************** test *********************************************/
 
+
+void RigControlMainWindow::setTestMode(bool test)
+{
+    trace(QString("testMode is %1 test parameter is %2").arg(testMode).arg(test));
+    if (test)
+    {
+        ui->testActionsGroupBox->setVisible(true);
+
+        if (!testMode)
+        {
+            testMode = true;
+            liveRadio = currentRadioName;
+            trace("save liveRadio " + liveRadio);
+
+            if (hamlibOk)
+            {
+                updateSelectRadioBox();     // we don't want to update radiolist if hamlib version is incorrect
+            }
+
+            if (appName.isEmpty())
+            {
+                // we are running local
+                ui->selectRadioFromLoggerRb->setVisible(false);
+                ui->selectRadioFromRigControlRb->setVisible(false);
+                logMessage((QString("Test Radio StandAlone Mode")));
+            }
+            else
+            {
+                ui->selectRadioFromLoggerRb->setChecked(true);
+                setSelectRadioBoxVisible(false);
+                upDateRadio(liveRadio);
+                logMessage((QString("Test Radio Logger Mode")));
+            }
+        }
+
+
+
+    }
+    else
+    {
+        if (testMode)
+        {
+            trace("restore liveRadio " + liveRadio);;
+            testMode = false;
+            upDateRadio(liveRadio);
+            msg->rigCache.invalidate();
+            ui->testActionsGroupBox->setVisible(false);
+        }
+
+        logMessage((QString("Radio Selection for Current Radio, for AppName %1, will be from logger").arg(appName)));
+
+
+    }
+    //setSelectRadioBoxVisible(testMode);
+    //testBoxesVisible(testMode);
+    //setRadioNameLabelVisible(!testMode);
+
+
+
+
+
+}
+
+void RigControlMainWindow::on_testRadioButton_clicked()
+{
+    setTestMode(!testMode);
+}
+
+
+
+
+
 void RigControlMainWindow::selFreqClicked()
 {
     // check freq valid format
@@ -5599,14 +5654,43 @@ void RigControlMainWindow::selFreqClicked()
     }
 }
 
-void RigControlMainWindow::testBoxesVisible(bool visible)
+void RigControlMainWindow::setTestControlsVisible(bool visible)
 {
-    ui->selFreq->setVisible(visible);
-    ui->freqInputBox->setVisible(visible);
+    setRitTestControlsVisible(visible);
+    setPttTestControlsVisible(visible);
+    setCwMemTestControlsVisible(visible);
+    setVoiceMemTestControlsVisible(visible);
+}
+
+
+void RigControlMainWindow::setRitTestControlsVisible(bool visible)
+{
+    ui->setRitSpinner->setVisible(visible);
+    ui->testRitButton->setVisible(visible);
+}
+
+
+void RigControlMainWindow::setPttTestControlsVisible(bool visible)
+{
     ui->txPttTestPb->setVisible(visible);
+}
+
+void RigControlMainWindow::setCwMemTestControlsVisible(bool visible)
+{
     ui->cwKeyerPb->setVisible(visible);
     ui->cwKeyerStopPb->setVisible(visible);
+
 }
+
+
+void RigControlMainWindow::setVoiceMemTestControlsVisible(bool visible)
+{
+    ui->voiceMessageTestLabel->setVisible(visible);
+    ui->voiceMessageSpinBox->setVisible(visible);
+    ui->voiceMessagePlayPB->setVisible(visible);
+    ui->voiceMessageStopPB->setVisible(visible);
+}
+
 
 // Test CW Message Playback on radio.
 
@@ -5765,14 +5849,42 @@ void RigControlMainWindow::ritbuttontoggle()
 
 }
 
-void RigControlMainWindow::showRitTestControl(bool state)
+
+void RigControlMainWindow::onSelectRadioFromLoggerClicked()
 {
-    ui->testRitButton->setVisible(state);
-    ui->setRitSpinner->setVisible(state);
+    if (ui->selectRadioFromLoggerRb->isChecked())
+    {
+       setSelectRadioBoxVisible(false);
+       closeRadio();
+    }
+
+}
+
+void RigControlMainWindow::onSelectRadioFromRigControlClicked()
+{
+    if (ui->selectRadioFromRigControlRb->isChecked())
+    {
+        setSelectRadioBoxVisible(true);
+        closeRadio();
+    }
+
+}
+
+void RigControlMainWindow::onVoiceMessageSpinBoxTextChanged()
+{
+
+}
+
+void RigControlMainWindow::onVoiceMessagePlayClicked()
+{
+
 }
 
 
+void RigControlMainWindow::onVoiceMessageStopClicked()
+{
 
+}
 
 void RigControlMainWindow::on_reconnectButton_clicked()
 {
