@@ -1324,11 +1324,6 @@ int RigControlMainWindow::openRigCtldRadio(bool localRigCtld)
                                                 .arg(serialCommonData::pttTypeStr[static_cast<int>(rigCtldPar.getPttType())]));
 
 
-
-//        runRigCtlDaemon(mfgName, QString::number(rmNumber), currentRadio.comport,
-//                                                   QString::number(currentRadio.baudrate), QString::number(currentRadio.databits), currentRadio.civAddress, currentRadio.rigCtldNetworkAdd, currentRadio.rigCtldNetworkPort,
-//                                                   QString::number(currentRadio.stopbits), parity, handshake, rtsState, dtrState, traceCode);
-
         runRigCtlDaemon(rigCtldPar);
 
         // wait for rigctld to start
@@ -2638,10 +2633,6 @@ void RigControlMainWindow::clrRigctldNames()
 }
 
 
-//void RigControlMainWindow::runRigCtlDaemon(const QString manufacturer, const QString model, const QString comport,
-//                                           const QString baudRate, const QString dataBits, const QString civ, const QString netAdd, const QString portNum,
-//                                           const QString stopBits, const QString parity, const QString handshake, const QString rtsState, const QString dtrState,
-//                                           rigCtldTrace::rigCtldTraceCodes diagnostics)
 
 
 void RigControlMainWindow::runRigCtlDaemon(RigCtldParameters &rigctldPar)

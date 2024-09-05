@@ -37,26 +37,26 @@ namespace voiceKeyerCommon
         InternalSoundCardVoiceKeyer
     };
 
-    const QStringList keyerTypes = {"", "Voice RigControl", "CW RigControl", "SerialControl", "Internal", "mqtKeyer"};
+    inline const QStringList keyerTypes = {"", "Voice RigControl", "CW RigControl", "SerialControl", "Internal", "mqtKeyer"};
 
-    const QString VOICEKEYER_COMMON_KEY = "commonParams";
+    inline const QString VOICEKEYER_COMMON_KEY = "commonParams";
 
-    //const QString VOICE_KEYER_PATH = "./Configuration/VoiceKeyer/";
-    const QString VOICE_KEYER_BASE_FILE_NAME = "txVoiceMemory";
-    //const QString VOICEKEYER_COMMON_PARAMS_PATH = VOICE_KEYER_PATH + "CommonParams/";
-    const QString VOICEKEYER_COMMON_PARAMS_FILENAME = "txVoiceKeyCommonParams.ini";
-    const QString VOICEKEYER_COMMON_PARAMS_GROUPNAME = VOICEKEYER_COMMON_KEY;
-    const QString CWKEYER_RADIO_COMMON_PARAMS_FILENAME = "cwRadioParams";
-    const QString CW_MESSAGE_BASE_FILE_NAME = "txCwMemory";
+    //inline const QString VOICE_KEYER_PATH = "./Configuration/VoiceKeyer/";
+    inline const QString VOICE_KEYER_BASE_FILE_NAME = "txVoiceMemory";
+    //inline const QString VOICEKEYER_COMMON_PARAMS_PATH = VOICE_KEYER_PATH + "CommonParams/";
+    inline const QString VOICEKEYER_COMMON_PARAMS_FILENAME = "txVoiceKeyCommonParams.ini";
+    inline const QString VOICEKEYER_COMMON_PARAMS_GROUPNAME = VOICEKEYER_COMMON_KEY;
+    inline const QString CWKEYER_RADIO_COMMON_PARAMS_FILENAME = "cwRadioParams";
+    inline const QString CW_MESSAGE_BASE_FILE_NAME = "txCwMemory";
 
-    const QString ALL_RADIOS_GROUP_NAME = "AllRadios";
+    inline const QString ALL_RADIOS_GROUP_NAME = "AllRadios";
 
-    const int VOICEKEYER_MAX_NUMBUTTONS = 8;
+    inline const int VOICEKEYER_MAX_NUMBUTTONS = 8;
 
-    const QString specialCwCharEscapeChar = "^";
+    inline const QString specialCwCharEscapeChar = "^";
 
-    const QString STOP_VOICE_MESSAGE = "STOPVOICE";
-    const QString STOP_CW_MESSAGE = "STOPCW";
+    inline const QString STOP_VOICE_MESSAGE = "STOPVOICE";
+    inline const QString STOP_CW_MESSAGE = "STOPCW";
 }
 
 

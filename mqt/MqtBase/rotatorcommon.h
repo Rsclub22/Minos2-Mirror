@@ -48,23 +48,23 @@ const int ROTATE_MOVE_TIMEOUT = 5;
 
 // Rotator Keys
 
-const QString ROTATE_CW_KEY = "Ctrl+r";
-const QString ROTATE_CCW_KEY = "Ctrl+l";
-const QString ROTATE_STOP_KEY = "Ctrl+s";
-const QString ROTATE_TURN_KEY = "Ctrl+t";
+inline const QString ROTATE_CW_KEY = "Ctrl+r";
+inline const QString ROTATE_CCW_KEY = "Ctrl+l";
+inline const QString ROTATE_STOP_KEY = "Ctrl+s";
+inline const QString ROTATE_TURN_KEY = "Ctrl+t";
 
-const QString ROTATE_PRESET1 = "Ctrl+1";
-const QString ROTATE_PRESET2 = "Ctrl+2";
-const QString ROTATE_PRESET3 = "Ctrl+3";
-const QString ROTATE_PRESET4 = "Ctrl+4";
-const QString ROTATE_PRESET5 = "Ctrl+5";
-const QString ROTATE_PRESET6 = "Ctrl+6";
-const QString ROTATE_PRESET7 = "Ctrl+7";
-const QString ROTATE_PRESET8 = "Ctrl+8";
-const QString ROTATE_PRESET9 = "Ctrl+9";
-const QString ROTATE_PRESET10 = "Ctrl+0";
+inline const QString ROTATE_PRESET1 = "Ctrl+1";
+inline const QString ROTATE_PRESET2 = "Ctrl+2";
+inline const QString ROTATE_PRESET3 = "Ctrl+3";
+inline const QString ROTATE_PRESET4 = "Ctrl+4";
+inline const QString ROTATE_PRESET5 = "Ctrl+5";
+inline const QString ROTATE_PRESET6 = "Ctrl+6";
+inline const QString ROTATE_PRESET7 = "Ctrl+7";
+inline const QString ROTATE_PRESET8 = "Ctrl+8";
+inline const QString ROTATE_PRESET9 = "Ctrl+9";
+inline const QString ROTATE_PRESET10 = "Ctrl+0";
 
-const QStringList presetShortCutKeys = {
+inline const QStringList presetShortCutKeys = {
                                             ROTATE_PRESET1, ROTATE_PRESET2,
                                             ROTATE_PRESET3, ROTATE_PRESET4,
                                             ROTATE_PRESET5, ROTATE_PRESET6,
@@ -73,18 +73,18 @@ const QStringList presetShortCutKeys = {
                                         };
 
 
-const QString ROTATE_PRESET_MENU1 = "Ctrl+Alt+1";
-const QString ROTATE_PRESET_MENU2 = "Ctrl+Alt+2";
-const QString ROTATE_PRESET_MENU3 = "Ctrl+Alt+3";
-const QString ROTATE_PRESET_MENU4 = "Ctrl+Alt+4";
-const QString ROTATE_PRESET_MENU5 = "Ctrl+Alt+5";
-const QString ROTATE_PRESET_MENU6 = "Ctrl+Alt+6";
-const QString ROTATE_PRESET_MENU7 = "Ctrl+Alt+7";
-const QString ROTATE_PRESET_MENU8 = "Ctrl+Alt+8";
-const QString ROTATE_PRESET_MENU9 = "Ctrl+Alt+9";
-const QString ROTATE_PRESET_MENU0 = "Ctrl+Alt+0";
+inline const QString ROTATE_PRESET_MENU1 = "Ctrl+Alt+1";
+inline const QString ROTATE_PRESET_MENU2 = "Ctrl+Alt+2";
+inline const QString ROTATE_PRESET_MENU3 = "Ctrl+Alt+3";
+inline const QString ROTATE_PRESET_MENU4 = "Ctrl+Alt+4";
+inline const QString ROTATE_PRESET_MENU5 = "Ctrl+Alt+5";
+inline const QString ROTATE_PRESET_MENU6 = "Ctrl+Alt+6";
+inline const QString ROTATE_PRESET_MENU7 = "Ctrl+Alt+7";
+inline const QString ROTATE_PRESET_MENU8 = "Ctrl+Alt+8";
+inline const QString ROTATE_PRESET_MENU9 = "Ctrl+Alt+9";
+inline const QString ROTATE_PRESET_MENU0 = "Ctrl+Alt+0";
 
-const QStringList presetMenuShortCutKeys = {
+inline const QStringList presetMenuShortCutKeys = {
                                                         ROTATE_PRESET_MENU1, ROTATE_PRESET_MENU2,
                                                         ROTATE_PRESET_MENU3, ROTATE_PRESET_MENU4,
                                                         ROTATE_PRESET_MENU5, ROTATE_PRESET_MENU6,
@@ -103,38 +103,38 @@ const int ROTATE_ENDSTOP_TOLERANCE = 0;
 
 
 // Status messages sent to minos logger
-const QString ROT_STATUS_CONNECTED  = "Connected";
-const QString ROT_STATUS_DISCONNECTED = "Disconnected";
-const QString ROT_STATUS_ERROR = "Error";
+inline const QString ROT_STATUS_CONNECTED  = "Connected";
+inline const QString ROT_STATUS_DISCONNECTED = "Disconnected";
+inline const QString ROT_STATUS_ERROR = "Error";
 
-const QString ROT_STATUS_ROTATE_CCW = "Rotating CCW";
-const QString ROT_STATUS_ROTATE_CW = "Rotating CW";
-const QString ROT_STATUS_STOP = "Stop";
-const QString ROT_STATUS_TURN_TO = "Turning to bearing";
+inline const QString ROT_STATUS_ROTATE_CCW = "Rotating CCW";
+inline const QString ROT_STATUS_ROTATE_CW = "Rotating CW";
+inline const QString ROT_STATUS_STOP = "Stop";
+inline const QString ROT_STATUS_TURN_TO = "Turning to bearing";
 
 // Bearing Log
-const QString BEARINGLOG_FILETYPE = ".log";
+inline const QString BEARINGLOG_FILETYPE = ".log";
 
 // File Name Constants
 
-const QString LOCAL_ANTENNA = "Local";
+inline const QString LOCAL_ANTENNA = "Local";
 
 QString CONFIGURATION_FILEPATH_LOGGER();
 QString CONFIGURATION_FILEPATH_LOCAL();
 
-const QString MINOS_ROTATOR_CONFIG_FILE = "MinosRotatorConfig.ini";
+inline const QString MINOS_ROTATOR_CONFIG_FILE = "MinosRotatorConfig.ini";
 //const QString ROTATOR_DATA_FILE = "rotators.ini";
 QString PST_CONFIG_FILE();
 
 QString ANTENNA_PATH_LOGGER();
 QString ANTENNA_PATH_LOCAL();
-const QString FILENAME_AVAIL_ANTENNAS = "AvailAntenna.ini";
-const QString FILENAME_CURRENT_ANTENNA = "CurrentAntenna.ini";
+inline const QString FILENAME_AVAIL_ANTENNAS = "AvailAntenna.ini";
+inline const QString FILENAME_CURRENT_ANTENNA = "CurrentAntenna.ini";
 
 // Rotator Types
 // ROT_180_180 is ROT_0_360 set to southstop.
 enum endStop {ROT_NEG180_180, ROT_0_360, ROT_0_450, ROT_NEG180_540, ROT_180_180};
-const QStringList endStopNames = (QStringList() << "ROT_NEG180_180" << "ROT_0_360" << "ROT_0_450" << "ROT_NEG180_540" << "ROT_180_180");
+inline const QStringList endStopNames = (QStringList() << "ROT_NEG180_180" << "ROT_0_360" << "ROT_0_450" << "ROT_NEG180_540" << "ROT_180_180");
 
 // Defines the South Stop Types
 // S_STOPINV when a rotator is mounted inverted normal N Stop is now S Stop. Feedback is South 0 Degrees through 360 at South
@@ -147,8 +147,8 @@ enum overlapStat { NO_OVERLAP, NEG_OVERLAP, POS_OVERLAP};
 
 // Pushbutton Styles
 
-const QString BUTTON_ON_STYLE = QString("background-color: Sandybrown ; border-style: outset; border-width: 1px; border-color: black; min-width: 5em; padding: 3px;\n");
-const QString BUTTON_OFF_STYLE = QString("background-color: Gainsboro ; border-style: outset; border-width: 1px; border-color: black; min-width: 5em; padding: 3px;\n");
+inline const QString BUTTON_ON_STYLE = QString("background-color: Sandybrown ; border-style: outset; border-width: 1px; border-color: black; min-width: 5em; padding: 3px;\n");
+inline const QString BUTTON_OFF_STYLE = QString("background-color: Gainsboro ; border-style: outset; border-width: 1px; border-color: black; min-width: 5em; padding: 3px;\n");
 
 extern const QStringList presetButtonLabels;
 
