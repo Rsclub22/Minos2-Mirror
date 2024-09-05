@@ -218,6 +218,15 @@ bool RigControlCwMessageKeyer::readVmButtonParams(int buttonNum, VoiceKeyerParam
 
     bool saveByRadioName = readSaveVoiceCWMemoryButtonByRadioNameFromIni(VoiceKeyerId::CW_RigControl);
 
+    QString runStateTxt;
+    if(vmParams.getSAndPState())
+    {
+        runStateTxt = "_SANDP";
+    }
+    else
+    {
+        runStateTxt = "_RUN";
+    }
 
     QString fileName = VOICE_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + vmParams.getType() + ".ini";
     QSettings config(fileName, QSettings::IniFormat);
@@ -234,7 +243,7 @@ bool RigControlCwMessageKeyer::readVmButtonParams(int buttonNum, VoiceKeyerParam
 
 
 
-    QString newKey = "button" +  QString::number(buttonNum);
+    QString newKey = "button" +  QString::number(buttonNum) + runStateTxt;
 
     vmParams.setType(config.value(newKey + "/type", "").toString());
     vmParams.setVmName(config.value(newKey + "/name", "").toString());
@@ -255,6 +264,16 @@ void RigControlCwMessageKeyer::saveVmButtonParams(const VoiceKeyerParams &vmPara
 
     bool saveByRadioName = readSaveVoiceCWMemoryButtonByRadioNameFromIni(VoiceKeyerId::CW_RigControl);
 
+    QString runStateTxt;
+    if(vmParams.getSAndPState())
+    {
+        runStateTxt = "_SANDP";
+    }
+    else
+    {
+        runStateTxt = "_RUN";
+    }
+
     QString fileName = VOICE_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + vmParams.getType() + ".ini";
     QSettings config(fileName, QSettings::IniFormat);
 
@@ -267,7 +286,7 @@ void RigControlCwMessageKeyer::saveVmButtonParams(const VoiceKeyerParams &vmPara
        config.beginGroup(ALL_RADIOS_GROUP_NAME);
     }
 
-    QString newKey = "button" + QString::number(vmParams.getvmButtonNum());
+    QString newKey = "button" + QString::number(vmParams.getvmButtonNum()) + runStateTxt;
 
     config.setValue(newKey + "/type", vmParams.getType());
     config.setValue(newKey + "/name", vmParams.getVmName());
@@ -531,8 +550,6 @@ int RigControlCwMessageKeyer::editButton(VoiceKeyerParams *vmData, QString title
     return ret;
 
 }
-
-
 
 
 

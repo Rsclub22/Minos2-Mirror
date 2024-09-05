@@ -71,6 +71,8 @@ private slots:
 private:
 
 
+
+
 };
 
 #endif // EXTERNALMQTKEYER_H

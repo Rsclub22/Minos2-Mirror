@@ -71,8 +71,13 @@ public:
     void setRigModel(const QString rigModel_) {rigModel = rigModel_;}
     QString getRigModel() const {return rigModel;}
 
+    void setSAndPState(const bool sAndPState_) {sAndPState = sAndPState_;}
+    bool getSAndPState() const {return sAndPState;}
+
     QSharedPointer<VoiceKeyerBase> getVkBase() const {return vkBase;}
     void setVkBase(QSharedPointer<VoiceKeyerBase> value){vkBase = value;}
+
+
 
     void clear();
 
@@ -88,6 +93,7 @@ private:
     bool vmRepeatFlag = false;
     int vmRepeatPauseDur = -1;
     int vmButtonNum = -1;
+    bool sAndPState = true; // S&P = true, Run = false
 };
 
 class VoiceKeyerBase  : public QObject
@@ -125,6 +131,8 @@ public:
     virtual int setup(VoiceKeyerFactory *voiceKeyerFactory, int &maxNumButtons, int &numButtons, QString selectedRadioName) = 0;
     virtual void setRadioParams(int radioMaxNumButtons, QString selectedRadioName, serialCommonData::MINOS_PTT_TYPES pttType_, bool pttEnabled_) = 0;
     virtual int editButton(VoiceKeyerParams* vmData, QString title) = 0;
+
+
 
     virtual bool hasPip() const
     {

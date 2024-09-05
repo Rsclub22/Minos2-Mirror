@@ -46,6 +46,7 @@ public:
 
 
 
+
 private slots:
     void onDoPTT(bool onOff);
 
@@ -54,6 +55,7 @@ private:
     int selectedEomType = voiceKeyerCommon::VoiceCwKeyerEomTypes::Eom_None;
     serialCommonData::MINOS_PTT_TYPES pttType = serialCommonData::MINOS_PTT_TYPES::PTT_TYPE_NONE;
     bool pttEnabled = false;
+
 };
 
 #endif // INTERNALVOICEMEMORYKEYER_H

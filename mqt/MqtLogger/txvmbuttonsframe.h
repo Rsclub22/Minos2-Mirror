@@ -137,6 +137,7 @@ private:
     QString savedMode;
     bool radioConnected;
     bool pttState;
+    bool sAndPState = true;
 
 
 
@@ -204,6 +205,7 @@ private slots:
     void on_pipCb_stateChanged(int arg1);
     void onExtConnectTimer();
     void onInternalVoiceMemoryPlayState(bool playing);
+    void sandPChanged(bool s);
 };
 
 #endif // TXVMBUTTONSFRAME_H

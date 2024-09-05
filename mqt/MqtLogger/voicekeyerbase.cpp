@@ -22,6 +22,7 @@ void VoiceKeyerParams::clear()
     vmDuration = 0;
     vmRepeatPauseDur = 0;
     vmButtonNum = -1;   // None
+    sAndPState = true;
 }
 
 VoiceKeyerParams& VoiceKeyerParams::operator = (const VoiceKeyerParams& vkp)
@@ -38,6 +39,7 @@ VoiceKeyerParams& VoiceKeyerParams::operator = (const VoiceKeyerParams& vkp)
     vmCwMessage = vkp.vmCwMessage;
     vmRepeatPauseDur = vkp.vmRepeatPauseDur;
     vmButtonNum = vkp.vmButtonNum;
+    sAndPState = vkp.sAndPState;
     return *this;
 }
 
@@ -60,3 +62,7 @@ VoiceKeyerBase::~VoiceKeyerBase()
 {
 
 }
+
+
+
+

@@ -56,6 +56,8 @@ TxVmButtonsFrame::TxVmButtonsFrame(QWidget *parent) :
     connect(LogContainer->sendDM, &TSendDM::keyerReport, this, &TxVmButtonsFrame::onExtConnectTimer);
 
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::fKey, this, &TxVmButtonsFrame::fKey);
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::SandPChanged, this, &TxVmButtonsFrame::sandPChanged);
+    //connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::modeChange, this, &TxVmButtonsFrame::onModeChange);
 
     initTxVmButtonFrame();
 
@@ -293,6 +295,12 @@ void TxVmButtonsFrame::loadButtonData()
         {
             vmData.setSelRadioName(selectedRadio.getLocalName());
             vmData.setRigModel(getRigModel(selectedRadio));
+
+        }
+
+        if (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl])
+        {
+            vmData.setSAndPState(sAndPState);
         }
 
         if (vmData.getType().isEmpty())
@@ -521,6 +529,8 @@ void TxVmButtonsFrame::setFrameState(QString voiceKeyerName)
 
     VoiceKeyerCapabilities voiceCap = voiceKeyerFactory->supportedVoiceKeyers()->value(voiceKeyerName);
 
+    ui->sAndPLabel->clear();
+
     if (txVoiceKeyer == nullptr)
     {
        clearButtonLabels();
@@ -578,6 +588,7 @@ void TxVmButtonsFrame::setFrameState(QString voiceKeyerName)
         {
 
             txVoiceKeyer->setCwMemType(getCwMemType(selectedRadio));
+            ui->sAndPLabel->setText("| S&P");       // init S&P/Run Label
         }
 
         ui->vmStopPb->setVisible(true);
@@ -620,6 +631,8 @@ void TxVmButtonsFrame::setFrameState(QString voiceKeyerName)
                 {
                     ui->vmStopPb->setVisible(true);
                 }
+
+
             }
         }
         else if (voiceKeyerType == keyerTypes[VoiceKeyerId::InternalVoiceKeyer])
@@ -628,12 +641,14 @@ void TxVmButtonsFrame::setFrameState(QString voiceKeyerName)
             setPttTypeText(getPttType(selectedRadio));
             setPttEnabledIndicatorOnOff(getPttEnabled(selectedRadio));
             loadButtonData();
+
         }
         else
         {
             ui->buttonSelectionLbl->setVisible(false);
             ui->saveByRadioNameText->setVisible(false);
             setPttTypeLabelsVisible(false);
+
         }
     }
 }
@@ -700,6 +715,7 @@ void TxVmButtonsFrame::editActionSelected(int buttonNumber)
     vmData.setType(voiceKeyerType);
 
 
+
     if ((voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl] || voiceKeyerType == keyerTypes[VoiceKeyerId::RigControl])
         && !selectedRadio.getLocalName().isEmpty())
     {
@@ -709,6 +725,8 @@ void TxVmButtonsFrame::editActionSelected(int buttonNumber)
         {
             txVoiceKeyer->setCwMemType(getCwMemType(selectedRadio));    // ensure the cwType is updated
         }
+
+        vmData.setSAndPState(sAndPState);
     }
 
     if (txVoiceKeyer)
@@ -726,7 +744,17 @@ void TxVmButtonsFrame::editActionSelected(int buttonNumber)
         QString title1 = "";
         if (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl])
         {
-            title1 = tr("Rig CW Message");
+            QString t = tr("Rig CW Message - ");
+            QString runSandPTxt;
+            if (sAndPState)
+            {
+                runSandPTxt = "S&P";
+            }
+            else
+            {
+                runSandPTxt = "Run";
+            }
+            title1 = t + runSandPTxt;
         }
         else
         {
@@ -800,6 +828,7 @@ void TxVmButtonsFrame::startVMMsg(int buttonNumber)
     {
         vmData.setSelRadioName(selectedRadio.getLocalName());
         vmData.setRigModel(getRigModel(selectedRadio));
+        vmData.setSAndPState(sAndPState);
 
     }
 
@@ -928,7 +957,18 @@ void TxVmButtonsFrame::newActionSelected(int buttonNumber)
     QString title1 = "";
     if (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl])
     {
-        title1 = tr("Rig CW Message");
+        vmData.setSAndPState(sAndPState);
+        QString t = tr("Rig CW Message - ");
+        QString runSandPTxt;
+        if (sAndPState)
+        {
+            runSandPTxt = "S&P";
+        }
+        else
+        {
+            runSandPTxt = "Run";
+        }
+        title1 = t + runSandPTxt;
     }
     else
     {
@@ -1642,6 +1682,38 @@ void TxVmButtonsFrame::setEomLabelText(int selectedEomType)
     {
         ui->eomText->setText("None");
     }
+}
+
+
+void TxVmButtonsFrame::sandPChanged(bool s)
+{
+    if (txVoiceKeyer)
+    {
+
+        if (s != sAndPState)
+        {
+            sAndPState = s;
+            loadButtonData();
+        }
+
+
+       if (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl])
+       {
+           if (s)
+           {
+               ui->sAndPLabel->setText("| S&P");
+           }
+           else
+           {
+              ui->sAndPLabel->setText("| Run");
+           }
+       }
+       else
+       {
+          ui->sAndPLabel->setText("");
+       }
+    }
+
 }
 
 

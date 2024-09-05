@@ -56,6 +56,8 @@ public:
 
 
 
+
+
     void setUseCATPttForEom(bool usePttForEom_);
     void setSelectedEomType(int selectedEomType_);
 
@@ -66,6 +68,7 @@ private:
     serialCommonData::MINOS_PTT_TYPES pttType = serialCommonData::MINOS_PTT_TYPES::PTT_TYPE_NONE;
     bool pttEnabled = false;
     bool setCwModeAndRestoreCurrentMode = true;
+
 
     bool radioKeyerAvail = false;
     int radioMaxNumButtons = 0;

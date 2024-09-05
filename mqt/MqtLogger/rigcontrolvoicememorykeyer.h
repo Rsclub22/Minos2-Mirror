@@ -58,6 +58,7 @@ public:
 
     virtual int editButton(VoiceKeyerParams* vmData, QString title) override;
 
+
     void setSelectedEomType(int selectedEomType_);
 
 signals:
@@ -71,6 +72,8 @@ private:
     bool pttEnabled = false;
 
     bool radioKeyerAvail = false;
+
+
 
     int radioMaxNumButtons = 0;
     QString selectedRadioName;
