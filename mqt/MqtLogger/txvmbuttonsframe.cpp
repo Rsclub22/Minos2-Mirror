@@ -121,6 +121,8 @@ void TxVmButtonsFrame::initTxVmButtonFrame()
 }
 
 
+
+
 void TxVmButtonsFrame::setPttTypeLabelsVisible(bool visible)
 {
     ui->pttTypeLabel->setVisible(visible);
@@ -589,6 +591,7 @@ void TxVmButtonsFrame::setFrameState(QString voiceKeyerName)
 
             txVoiceKeyer->setCwMemType(getCwMemType(selectedRadio));
             ui->sAndPLabel->setText("| S&P");       // init S&P/Run Label
+            txVoiceKeyer->setContest(ct);
         }
 
         ui->vmStopPb->setVisible(true);
@@ -1751,6 +1754,10 @@ void TxVmButtonsFrame::setMode(const QString m)
 void TxVmButtonsFrame::setContest(BaseContestLog *c)
 {
     ct = c;
+    if (txVoiceKeyer && voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl])
+    {
+        txVoiceKeyer->setContest(ct);
+    }
 }
 
 void TxVmButtonsFrame::sendModeToRadio(const QString m)

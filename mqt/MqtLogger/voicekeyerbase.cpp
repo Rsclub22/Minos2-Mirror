@@ -8,6 +8,8 @@
 #include "MTrace.h"
 #include "voicekeyerbase.h"
 
+
+
 VoiceKeyerParams::VoiceKeyerParams()
 {
     clear();

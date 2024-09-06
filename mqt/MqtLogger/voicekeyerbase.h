@@ -20,10 +20,12 @@
 
 class VoiceKeyerBase;
 class VoiceKeyerFactory;
-
+class LoggerContestLog;
+class BaseContestLog;
 
 const int REPEAT_DUR_MIN = 0;
 const int REPEAT_DUR_MAX = 180; // secs
+
 
 class VoiceKeyerParams
 {
@@ -107,6 +109,8 @@ public:
 
     explicit VoiceKeyerBase(QObject *parent = nullptr);
     virtual ~VoiceKeyerBase();
+
+    virtual  void setContest(BaseContestLog *c) = 0;
 
     virtual void voiceKeyerInit(int &numButtons) = 0;
     virtual void sendMsgNum(int msgNum) = 0;

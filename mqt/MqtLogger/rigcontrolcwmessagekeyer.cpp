@@ -13,8 +13,11 @@
 
 #include <QSettings>
 #include <QString>
+
+
+
+#include "LoggerContest.h"
 #include "tlogcontainer.h"
-#include "tsinglelogframe.h"
 #include "voicekeyerfactory.h"
 #include "txvmrigsetupdialog.h"
 #include "txvmrigbuttondialog.h"
@@ -137,6 +140,10 @@ void RigControlCwMessageKeyer::sendCwMsg(VoiceKeyerParams &vmData)
         QStringList rmList;
         QString radioModel;
 
+
+        TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
+
+
         if (readSaveVoiceCWMemoryButtonByRadioNameFromIni(VoiceKeyerId::CW_RigControl))
         {
 
@@ -193,12 +200,163 @@ void RigControlCwMessageKeyer::sendCwMsg(VoiceKeyerParams &vmData)
         }
 
 
+
+        cwMessageToTx = parseMacrosInMessage(tslf, cwMessageToTx);
+
         trace(QString("Send Morse Message to radio : %1").arg(cwMessageToTx));
-        TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
+
         tslf->sendRigTxCwMessage(cwMessageToTx);
     }
 
 }
+
+
+QString RigControlCwMessageKeyer::parseMacrosInMessage(TSingleLogFrame *tslf, QString mess)
+{
+    // make sure screenContact is up to date
+
+    tslf->GJVQSOLogFrame->getScreenEntry();
+    ScreenContact *sc = &tslf->GJVQSOLogFrame->screenContact;
+
+    // data is taken now; an {ENTER} may log the call, and clear it
+    QString call = sc->cs.getFullCall();
+    QString serials = sc->serials;
+    QString reps = sc->reps;
+
+    QString txMess;
+
+    // and parse the message
+
+    for (int i = 0; i < mess.length(); i++)
+    {
+        QChar c = mess[i];
+
+        // not supporting these chars as they can conflict with some radios values for special characters
+        /*if (c == '*')
+        {
+            txMess += ct->mycall.getFullCall();
+        }
+        else if (c == '#')
+        {
+            txMess += serials;
+        }
+        else if (c == '!')
+        {
+            txMess += call;
+        }
+        else*/
+
+        if (c == '{')
+        {
+            int lb = mess.indexOf('}', i);
+            if (lb)
+            {
+                QString macro = mess.mid(i + 1, lb - i - 1).toUpper();
+                i = lb;
+                if (macro == "MYCALL")
+                {
+                    txMess += ct->mycall.getFullCall();
+                }
+                else if (macro == "CALL")
+                {
+                    txMess += call;
+                }
+                else if (macro == "SN")
+                {
+                    txMess += serials;
+                }
+                else if (macro == "EXCH")
+                {
+                    // This is whatever exchange is required
+                    // May have multiple elements!
+                    // in particular, includes serial number
+
+                    // we need an exchange definition somewhere
+                    // to be able to do this properly
+
+                    bool needSpace = false;
+                    if (ct->serialMandatoryField.getValue() || ct->asymmetricMult.getValue())
+                    {
+                        txMess += serials;
+                        needSpace = true;
+                    }
+                    if (!ct->asymmetricMult.getValue() && ct->exchangeRequired.getValue())
+                    {
+                        QString exch = ct->location.getValue();
+                        if (!exch.isEmpty() && exch != "-")
+                        {
+                            if (needSpace)
+                            {
+                                txMess += ' ';
+                            }
+                            txMess +=exch;
+                        }
+                    }
+
+                }
+                else if (macro == "GRID")
+                {
+                    txMess += ct->myloc.getLoc();
+                }
+                else if (macro == "SPACE")
+                {
+                    txMess += ' ';
+                }
+                else if (macro == "SENTRST")
+                {
+                    txMess += reps;
+                }
+                else if (macro == "TIME2")
+                {
+                    QString t2 = sc->sentExchange.getValue();
+                    if (t2.isEmpty())
+                    {
+                        t2 = QDateTime::currentDateTimeUtc().toString("HHmm");
+                    }
+                    txMess += t2;
+                    tslf->GJVQSOLogFrame->sentExchange = t2;
+                }
+                else if (macro == "LOG")
+                {
+                    // simulate "Enter" key
+                    // This may well log the contact, leaving nothing
+                    // useful in screenContact
+                    // which is why N1MM has various "last contact" macros
+
+                    tslf->GJVQSOLogFrame->doGJVOKButton_clicked();
+                }
+                else if (macro == "WIPE")
+                {
+                    // wipe QSO - like ESC key
+                    tslf->GJVQSOLogFrame->doGJVCancelButton_clicked();
+                }
+                else if (macro == "CALLFIELD")
+                {
+                    tslf->GJVQSOLogFrame->selectCallField();
+                }
+                else if (macro == "SERIALFIELD")
+                {
+                    tslf->GJVQSOLogFrame->selectSnRxField();
+                }
+                else if (macro == "EXCHANGEFIELD")
+                {
+                    tslf->GJVQSOLogFrame->selectExchField();
+                }
+                else
+                {
+                    trace(QString("Message <%1> contains unknown macro {%2}").arg(mess, macro));
+                }
+            }
+        }
+        else
+        {
+            txMess += c;
+        }
+    }
+    return txMess;
+
+}
+
 
 
 
@@ -442,6 +600,13 @@ void RigControlCwMessageKeyer::setCwMemType(int _cwMemType)
 }
 
 
+void RigControlCwMessageKeyer::setContest(BaseContestLog *c)
+{
+    ct = dynamic_cast<LoggerContestLog *>( c);
+
+}
+
+
 int RigControlCwMessageKeyer::editButton(VoiceKeyerParams *vmData, QString title)
 {
 
@@ -550,6 +715,9 @@ int RigControlCwMessageKeyer::editButton(VoiceKeyerParams *vmData, QString title
     return ret;
 
 }
+
+
+
 
 
 

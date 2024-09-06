@@ -46,6 +46,8 @@ public:
     virtual int editButton(VoiceKeyerParams* vmData, QString title) override;
 
 
+    virtual void setContest(BaseContestLog *c) override {Q_UNUSED(c)};
+
     //virtual bool hasPip() const override
     //{
     //    return true;

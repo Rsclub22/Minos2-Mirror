@@ -61,6 +61,8 @@ public:
 
     void setSelectedEomType(int selectedEomType_);
 
+    virtual void setContest(BaseContestLog *c) override {Q_UNUSED(c)};
+
 signals:
 
 

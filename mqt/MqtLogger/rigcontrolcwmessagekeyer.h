@@ -13,6 +13,7 @@
 #ifndef RIGCONTROLCWMESSAGEKEYER_H
 #define RIGCONTROLCWMESSAGEKEYER_H
 
+#include "tsinglelogframe.h"
 #include "serialCommonData.h"
 #include "voicekeyerbase.h"
 #include "voicekeyerfactory.h"
@@ -21,11 +22,18 @@
 #include <QObject>
 #include <QValidator>
 
+class LoggerContestLog;
+class BaseContestLog;
+
+
 class RigControlCwMessageKeyer : public VoiceKeyerBase
 {
     Q_OBJECT
 
 public:
+
+
+
     explicit RigControlCwMessageKeyer(QObject *parent = nullptr);
     virtual ~RigControlCwMessageKeyer() override;
 
@@ -55,13 +63,16 @@ public:
     virtual int editButton(VoiceKeyerParams* vmData, QString title) override;
 
 
-
+    virtual void setContest(BaseContestLog *c) override;
 
 
     void setUseCATPttForEom(bool usePttForEom_);
     void setSelectedEomType(int selectedEomType_);
 
+
 private:
+
+    LoggerContestLog *ct = nullptr;
 
     int cwMemType;
     int selectedEomType = voiceKeyerCommon::VoiceCwKeyerEomTypes::Eom_None;
@@ -77,6 +88,7 @@ private:
 
 
     void getRadioCommonData(int &selectedEomType, int &userNumberButtons, int radioMaxNumButtons);
+    QString parseMacrosInMessage(TSingleLogFrame *tslf, QString mess);
 };
 
 
