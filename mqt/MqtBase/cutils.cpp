@@ -1039,12 +1039,13 @@ void sleepFor(qint64 milliseconds)
 }
 QString formatTime( qlonglong s )
 {
-    int i = 0;
-    QString suff;
+    // How about 23D 00:01 or 23D 00H01
+
+    int days = 0;
     while ( s >= 24 * 60 )
     {
         s -= 24 * 60;
-        i++;
+        days++;
     }
     QTime qt(0, 0);
     qt = qt.addSecs( s * 60 );
@@ -1052,23 +1053,10 @@ QString formatTime( qlonglong s )
     QString ts = "hh:mm";
 
     QString pref;
-    if ( i > 0 )
+    if ( days > 0 )
     {
-        pref = QString::number( i ) + "/";
-        suff = " d/hh:mm";
+        pref = QString::number( days ) + "D ";
     }
-    else
-    {
-        if (s > 60)
-        {
-            suff = " hh:mm";
-        }
-        else
-        {
-            ts = "mm";
-            suff = " min";
-        }
-    }
-    QString t = pref + qt.toString ( ts ) + suff;
+    QString t = pref + qt.toString ( ts );
     return t;
 }
