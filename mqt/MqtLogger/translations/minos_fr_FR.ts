@@ -263,27 +263,27 @@
         <translation>Filtre %1</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1696"/>
+        <location filename="../bandmapclientframe.cpp" line="1697"/>
         <source>Mouse in frame, updates paused</source>
         <translation>Souris dans le cadre, mises à jour suspendues</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1427"/>
+        <location filename="../bandmapclientframe.cpp" line="1428"/>
         <source>Cluster Server Not Running</source>
         <translation>Le Serveur du Cluster ne fonctionne pas</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1460"/>
+        <location filename="../bandmapclientframe.cpp" line="1461"/>
         <source>Connected</source>
         <translation>Connecté</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1470"/>
+        <location filename="../bandmapclientframe.cpp" line="1471"/>
         <source>Disconnected</source>
         <translation>Déconnecté</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1582"/>
+        <location filename="../bandmapclientframe.cpp" line="1583"/>
         <source>Freq out of band</source>
         <translation>Fréquence hors bande</translation>
     </message>
