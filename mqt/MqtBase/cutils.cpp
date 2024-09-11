@@ -1055,7 +1055,7 @@ QString formatTime( qlonglong s )
     QString pref;
     if ( days > 0 )
     {
-        pref = QString::number( days ) + "D ";
+        pref = QString::number( days ) + QCoreApplication::translate("Day Abbreviation", "D") + " ";
     }
     QString t = pref + qt.toString ( ts );
     return t;
