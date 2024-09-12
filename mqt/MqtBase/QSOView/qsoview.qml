@@ -24,13 +24,26 @@ Frame {
     property string homeLat: "0.0"
     property string homeLon: "0.0"
 
+    // clues for getting rid of API Key watermark from
+    // Qt C++ Positioning Application Tutorial
+    // https://www.youtube.com/playlist?list=PLh0cogPqXcJOVXsLsEKEFi4CbbBou2neH
+    // Thank you Ketan!
+
+    Plugin {
+        id:osmMapView
+        name: "osm"
+        PluginParameter {
+            name:"osm.mapping.custom.host"
+            value:"https://tile.openstreetmap.org/"
+        }
+    }
+
     Map {
         id: mapOfEurope
         anchors.centerIn: parent;
         anchors.fill: parent
-        plugin: Plugin {
-            name: "osm"
-        }
+        plugin:osmMapView
+        activeMapType: mapOfEurope.supportedMapTypes[mapOfEurope.supportedMapTypes.length - 1]
 
         ToolTip.text: calcToolTip()
         ToolTip.visible: hovered && mapMouse.containsMouse
