@@ -50,8 +50,10 @@ QSOMapFrame::QSOMapFrame(QWidget *parent) :
 
     purgeTimer = new QTimer(this);
     connect (purgeTimer, &QTimer::timeout, this, &QSOMapFrame::purgeSpots);
-    connect (purgeTimer, &QTimer::timeout, this, &QSOMapFrame::saveParams);
     purgeTimer->start(PURGE_TIME);
+    paramSaveTimer = new QTimer(this);
+    connect (paramSaveTimer, &QTimer::timeout, this, &QSOMapFrame::saveParams);
+    paramSaveTimer->start(1000);
 }
 
 QSOMapFrame::~QSOMapFrame()
@@ -118,6 +120,7 @@ void QSOMapFrame::startMap()
 
         QWidget *container = QWidget::createWindowContainer(view);
         auto qmlObj = view->rootObject();
+
 
         qvb->addWidget(container);
 

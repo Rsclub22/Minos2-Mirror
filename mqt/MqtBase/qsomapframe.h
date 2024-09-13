@@ -55,6 +55,7 @@ private:
 
     qlonglong timeToLive = 0;
     QTimer *purgeTimer = nullptr;
+    QTimer *paramSaveTimer = nullptr;
 
     void startMap();
     void stopMap();
