@@ -85,6 +85,7 @@ private slots:
     void purgeSpots();
     void saveParams();
     void onContestBandChanged(BaseContestLog *c);
+    void onclab_linkActivated(const QString &link);
 public slots:
     void on_AfterLogContact(const BaseContestLog *c, const QSharedPointer<BaseContact> lct);
     void on_redrawQSOMap(bool grid, bool lines, bool spots, int sd, bool sl, QString tl, QString br, bool sn);

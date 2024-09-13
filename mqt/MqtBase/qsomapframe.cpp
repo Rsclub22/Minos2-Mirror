@@ -1,3 +1,4 @@
+#include "cutils.h"
 #ifdef INC_MAP
 #include <QQmlApplicationEngine>
 #include <QQuickView>
@@ -12,6 +13,10 @@ extern QSharedPointer<QQmlApplicationEngine> appQmlEngine;
 #include <QVBoxLayout>
 #include <QTimer>
 #include <cmath>
+
+#include <QLabel>
+#include <QDesktopServices>
+#include <QUrl>
 
 #include "MTrace.h"
 #include "calcs.h"
@@ -116,6 +121,20 @@ void QSOMapFrame::startMap()
 
         qvb->addWidget(container);
 
+        QLabel *clab = new QLabel(this);
+        clab->setAlignment(Qt::AlignCenter);
+        clab->setText(QString("<b>") + tr("Data and Map") + QString(" &copy;<a href=\"https://openstreetmap.org/\">openstreetmap.org</a>"));
+        qvb->addWidget(clab);
+        clab->setTextInteractionFlags(Qt::TextBrowserInteraction);
+        connect(clab, &QLabel::linkActivated, this, &QSOMapFrame::onclab_linkActivated);
+
+        QVBoxLayout *vbl = dynamic_cast<QVBoxLayout *>(qvb);
+        vbl->setStretch(0, 199);
+        vbl->setStretch(1, 1);
+        adjustMargins(vbl, 0, 0, 0, 0, 0);
+
+        //<a href=\"http://minos.sourceforge.net/\">http://minos.sourceforge.net</a>
+
         // connect the C++ callSig signal to the QML slot
 
         connect(this, SIGNAL(callSig(QVariant)), qmlObj, SLOT(newCall(QVariant)), Qt::UniqueConnection);
@@ -134,6 +153,10 @@ void QSOMapFrame::startMap()
         connect(qmlObj, SIGNAL(qmlSignal(QVariant)), this, SLOT(onQmlSignal(QVariant)), Qt::UniqueConnection);
     }
 #endif
+}
+void QSOMapFrame::onclab_linkActivated(const QString &link)
+{
+    QDesktopServices::openUrl(QUrl(link));
 }
 void QSOMapFrame::stopMap()
 {

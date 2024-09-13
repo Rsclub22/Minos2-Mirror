@@ -36,6 +36,18 @@ Frame {
             name:"osm.mapping.custom.host"
             value:"https://tile.openstreetmap.org/"
         }
+        // PluginParameter {
+        //     name:"osm.mapping.custom.mapcopyright"
+        //     value:"openstreetmap.org"
+        // }
+        // PluginParameter {
+        //     name:"osm.mapping.custom.datacopyright"
+        //     value:"openstreetmap.org"
+        // }
+        PluginParameter {
+            name:"osm.useragent"
+            value:"Minos Contest Logger"
+        }
     }
 
     Map {

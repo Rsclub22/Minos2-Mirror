@@ -1753,6 +1753,14 @@ Reverted Hamlib will be used after restart</source>
     </message>
 </context>
 <context>
+    <name>QSOMapFrame</name>
+    <message>
+        <location filename="../qsomapframe.cpp" line="126"/>
+        <source>Data and Map</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>QSOMatchGridModel</name>
     <message>
         <location filename="../MatchTreeFrame.cpp" line="17"/>
