@@ -18,9 +18,6 @@ public:
     int getRecordCount();
 
     void resetDB();
-
-private:
-    QSqlDatabase qdb;
 };
 
 #endif // QRZDB_H

@@ -136,8 +136,6 @@ void QSOMapFrame::startMap()
         vbl->setStretch(1, 1);
         adjustMargins(vbl, 0, 0, 0, 0, 0);
 
-        //<a href=\"http://minos.sourceforge.net/\">http://minos.sourceforge.net</a>
-
         // connect the C++ callSig signal to the QML slot
 
         connect(this, SIGNAL(callSig(QVariant)), qmlObj, SLOT(newCall(QVariant)), Qt::UniqueConnection);

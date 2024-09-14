@@ -304,6 +304,8 @@ TLogContainer::TLogContainer(QWidget *parent) :
 
     contestPageControls.append(ui->contestPageControl);
 
+    BandMapSpotDB::startDB();
+
 }
 TLogContainer::~TLogContainer()
 {

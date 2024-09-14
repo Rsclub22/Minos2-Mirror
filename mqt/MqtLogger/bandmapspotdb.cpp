@@ -7,9 +7,10 @@
 #include "dtg.h"
 #include "bandmapspotdb.h"
 
-BandMapSpotDB::BandMapSpotDB(QObject *parent): QObject(parent)
+const char *connectionName = "BandMapSpotDB";
+void BandMapSpotDB::startDB()
 {
-    qdb = QSqlDatabase::addDatabase("QSQLITE");
+    QSqlDatabase qdb = QSqlDatabase::addDatabase("QSQLITE", connectionName);
 
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
     QString dbName = getDirectoryLocation(dlDB) + "/lspotsdb6.db";
@@ -22,6 +23,14 @@ BandMapSpotDB::BandMapSpotDB(QObject *parent): QObject(parent)
     if (!qdb.open())
     {
         trace(QString("Error: connection with database %1 failed %2").arg(dbName, qdb.lastError().text()));
+    }
+}
+
+BandMapSpotDB::BandMapSpotDB(QObject *parent): QObject(parent)
+{
+    if (!QSqlDatabase::database(connectionName).isOpen())
+    {
+        trace("BandMapSpotDB: DB not open");
     }
     else
     {
@@ -45,15 +54,15 @@ BandMapSpotDB::BandMapSpotDB(QObject *parent): QObject(parent)
                               "mark BOOLEAN"
                               ") ";
 
-        QSqlQuery cquery;
+        QSqlQuery cquery(QSqlDatabase::database(connectionName));
         bool cres = cquery.prepare(createQuery);
         if(cres && cquery.exec())
         {
-            trace(QString("BandMapSpotDB %1 database created successfully").arg(dbName));
+            trace(QString("BandMapSpotDB %1 database created successfully").arg(QSqlDatabase::database("BandMapSpotDB").databaseName()));
 
             {
                 QString createIndexQuery = "CREATE INDEX IF NOT EXISTS lspot_idx ON LSPOTS (id)";
-                QSqlQuery query;
+                QSqlQuery query(QSqlDatabase::database(connectionName));
                 bool ipres = query.prepare(createIndexQuery);
                 if (ipres)
                 {
@@ -72,7 +81,7 @@ BandMapSpotDB::BandMapSpotDB(QObject *parent): QObject(parent)
         }
 
         {
-            QSqlQuery amQuery;
+            QSqlQuery amQuery(QSqlDatabase::database(connectionName));
             bool amres = amQuery.prepare("ALTER TABLE LSPOTS ADD mark BOOLEAN");
             if (amres)
             {
@@ -85,7 +94,7 @@ BandMapSpotDB::BandMapSpotDB(QObject *parent): QObject(parent)
             }
         }
         {
-            QSqlQuery amQuery;
+            QSqlQuery amQuery(QSqlDatabase::database(connectionName));
             bool amres = amQuery.prepare("ALTER TABLE LSPOTS ADD spottype TEXT");
             if (amres)
             {
@@ -98,7 +107,7 @@ BandMapSpotDB::BandMapSpotDB(QObject *parent): QObject(parent)
             }
         }
         {
-            QSqlQuery query;
+            QSqlQuery query(QSqlDatabase::database(connectionName));
             query.prepare("SELECT COUNT(*) FROM LSPOTS");
             if (query.exec())
             {
@@ -135,7 +144,7 @@ bool BandMapSpotDB::createRecord(ClusterSpotData *spot, QString id)
     {
         return true;
     }
-    QSqlQuery query;
+    QSqlQuery query(QSqlDatabase::database(connectionName));
     QString create =         "INSERT INTO LSPOTS "
                      "(id, type, spottype, callsign, band, mode, loc, dist, freq, dtg, rmOn, offRF, CQResp)"
                      " VALUES "
@@ -168,7 +177,7 @@ bool BandMapSpotDB::createRecord(ClusterSpotData *spot, QString id)
         if(query.exec())
         {
             //select seq from sqlite_sequence where name="table_name"
-            QSqlQuery query;
+            QSqlQuery query(QSqlDatabase::database(connectionName));
             bool prepres = query.prepare("SELECT SEQ FROM sqlite_sequence WHERE name = \"LSPOTS\" ");
             if (prepres)
             {
@@ -207,7 +216,7 @@ bool BandMapSpotDB::modifyRecord(QSharedPointer<ClusterSpotData> spot)
 }
 bool BandMapSpotDB::modifyRecord(ClusterSpotData *spot)
 {
-    QSqlQuery query;
+    QSqlQuery query(QSqlDatabase::database(connectionName));
     QString mod = "UPDATE LSPOTS SET "
                   "type=:type, spottype=:spottype, callsign=:callsign, band=:band, mode=:mode, loc=:loc, dist=:dist, freq=:freq,"
                   " dtg=:dtg, rmOn=:rmOn, offRF=:offRF, CQResp=:CQResp"
@@ -265,7 +274,7 @@ bool BandMapSpotDB::deleteRecord(QSharedPointer<ClusterSpotData> spot)
 }
 bool BandMapSpotDB::deleteRecord(ClusterSpotData *spot)
 {
-    QSqlQuery query;
+    QSqlQuery query(QSqlDatabase::database(connectionName));
     bool prepres = query.prepare("DELETE FROM LSPOTS WHERE recno=(:recid)");
     if (prepres)
     {
@@ -285,7 +294,7 @@ bool BandMapSpotDB::deleteRecord(ClusterSpotData *spot)
 
 bool BandMapSpotDB::deleteAllRecords(QString id)
 {
-    QSqlQuery query;
+    QSqlQuery query(QSqlDatabase::database(connectionName));
     bool prepres = query.prepare("DELETE FROM LSPOTS WHERE id=(:id)");
     if (prepres)
     {
@@ -305,7 +314,7 @@ QVector<QSharedPointer<ClusterSpotData> > BandMapSpotDB::getRecords(const QStrin
 {
     QVector<QSharedPointer<ClusterSpotData> > spots;
 
-    QSqlQuery query;
+    QSqlQuery query(QSqlDatabase::database(connectionName));
     bool prepres = query.prepare("SELECT * FROM LSPOTS WHERE id=(:id) ORDER BY recno ASC");
     if (prepres)
     {
@@ -359,7 +368,7 @@ QVector<QSharedPointer<ClusterSpotData> > BandMapSpotDB::getRecords(const QStrin
 
 int BandMapSpotDB::getRecordCount()
 {
-    QSqlQuery query;
+    QSqlQuery query(QSqlDatabase::database(connectionName));
     query.prepare("SELECT COUNT(*) FROM LSPOTS");
     if (query.exec() && query.next())
     {
@@ -372,7 +381,7 @@ int BandMapSpotDB::getRecordCount()
 QVector<ContestDbEntry > BandMapSpotDB::getContests()
 {
     QVector<ContestDbEntry > contests;
-    QSqlQuery query;
+    QSqlQuery query(QSqlDatabase::database(connectionName));
     query.prepare("SELECT distinct id FROM LSPOTS");
     if (query.exec())
     {
@@ -382,7 +391,7 @@ QVector<ContestDbEntry > BandMapSpotDB::getContests()
             ContestDbEntry cde;
             cde.name = name;
 
-            QSqlQuery cquery;
+            QSqlQuery cquery(QSqlDatabase::database(connectionName));
             cquery.prepare(QString("SELECT COUNT(*) FROM LSPOTS WHERE id='%1'").arg(name));
             if (cquery.exec() && cquery.next())
             {
@@ -402,7 +411,7 @@ QVector<ContestDbEntry > BandMapSpotDB::getContests()
 
 void BandMapSpotDB::deleteRecords(QStringList nameList)
 {
-    QSqlQuery query;
+    QSqlQuery query(QSqlDatabase::database(connectionName));
     bool prepres = query.prepare("DELETE FROM LSPOTS WHERE id=(:id)");
     if (prepres)
     {
@@ -429,7 +438,7 @@ void BandMapSpotDB::deleteRecords(QStringList nameList)
 
 void BandMapSpotDB::resetDB()
 {
-    QSqlQuery rquery;
+    QSqlQuery rquery(QSqlDatabase::database(connectionName));
     rquery.prepare("DROP TABLE LSPOTS");
     if (rquery.exec())
     {
