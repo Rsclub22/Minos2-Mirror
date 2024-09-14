@@ -1776,7 +1776,7 @@ Reverted Hamlib will be used after restart</source>
 <context>
     <name>QSOMapFrame</name>
     <message>
-        <location filename="../qsomapframe.cpp" line="126"/>
+        <location filename="../qsomapframe.cpp" line="129"/>
         <source>Data and Map</source>
         <translation type="unfinished"></translation>
     </message>

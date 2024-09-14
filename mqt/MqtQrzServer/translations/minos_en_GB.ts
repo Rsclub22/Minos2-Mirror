@@ -4,7 +4,7 @@
 <context>
     <name>QRZDB</name>
     <message>
-        <location filename="../qrzdb.cpp" line="34"/>
+        <location filename="../qrzdb.cpp" line="36"/>
         <source>Failed to rename
 %1
  as 
