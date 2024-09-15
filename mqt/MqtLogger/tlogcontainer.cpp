@@ -1277,17 +1277,20 @@ void TLogContainer::ContestDetailsActionExecute()
 
 void TLogContainer::FileCloseActionExecute()
 {
+    trace(QString("%1 entered").arg(__func__));
    int t = ui->contestPageControl->currentIndex();
    closeSlot(t, true);
 }
 void TLogContainer::onTabClosebutton(int t)
 {
+    trace(QString("%1 entered").arg(__func__));
     closeSlot(t, true);
 }
 //---------------------------------------------------------------------------
 
 void TLogContainer::CloseAllActionExecute()
 {
+    trace(QString("%1 entered").arg(__func__));
     QWidget *thisContest = ui->contestPageControl->currentWidget();
     while ( ui->contestPageControl->count() > 1)
     {
@@ -1317,6 +1320,7 @@ void TLogContainer::CloseAllActionExecute()
 
 void TLogContainer::CloseAllButActionExecute()
 {
+    trace(QString("%1 entered").arg(__func__));
    QWidget *thisContest = ui->contestPageControl->currentWidget();
    while ( ui->contestPageControl->count() > 1)
    {
