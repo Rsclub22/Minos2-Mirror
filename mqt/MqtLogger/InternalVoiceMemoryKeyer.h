@@ -43,6 +43,7 @@ public:
     virtual void setRadioParams(int radioMaxNumButtons, QString selectedRadioName, serialCommonData::MINOS_PTT_TYPES pttType_, bool pttEnabled_) override{Q_UNUSED(radioMaxNumButtons) Q_UNUSED(selectedRadioName) Q_UNUSED(pttType_) Q_UNUSED(pttEnabled_)};
     virtual int editButton(VoiceKeyerParams* vmData, QString title) override;
 
+    virtual void setContest(BaseContestLog *c) override {Q_UNUSED(c)};
 
 
 
@@ -54,6 +55,7 @@ private:
     int selectedEomType = voiceKeyerCommon::VoiceCwKeyerEomTypes::Eom_None;
     serialCommonData::MINOS_PTT_TYPES pttType = serialCommonData::MINOS_PTT_TYPES::PTT_TYPE_NONE;
     bool pttEnabled = false;
+
 };
 
 #endif // INTERNALVOICEMEMORYKEYER_H

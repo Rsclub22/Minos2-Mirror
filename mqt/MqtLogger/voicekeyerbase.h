@@ -20,10 +20,12 @@
 
 class VoiceKeyerBase;
 class VoiceKeyerFactory;
-
+class LoggerContestLog;
+class BaseContestLog;
 
 const int REPEAT_DUR_MIN = 0;
 const int REPEAT_DUR_MAX = 180; // secs
+
 
 class VoiceKeyerParams
 {
@@ -71,8 +73,13 @@ public:
     void setRigModel(const QString rigModel_) {rigModel = rigModel_;}
     QString getRigModel() const {return rigModel;}
 
+    void setSAndPState(const bool sAndPState_) {sAndPState = sAndPState_;}
+    bool getSAndPState() const {return sAndPState;}
+
     QSharedPointer<VoiceKeyerBase> getVkBase() const {return vkBase;}
     void setVkBase(QSharedPointer<VoiceKeyerBase> value){vkBase = value;}
+
+
 
     void clear();
 
@@ -88,6 +95,7 @@ private:
     bool vmRepeatFlag = false;
     int vmRepeatPauseDur = -1;
     int vmButtonNum = -1;
+    bool sAndPState = true; // S&P = true, Run = false
 };
 
 class VoiceKeyerBase  : public QObject
@@ -101,6 +109,8 @@ public:
 
     explicit VoiceKeyerBase(QObject *parent = nullptr);
     virtual ~VoiceKeyerBase();
+
+    virtual  void setContest(BaseContestLog *c) = 0;
 
     virtual void voiceKeyerInit(int &numButtons) = 0;
     virtual void sendMsgNum(int msgNum) = 0;
@@ -125,6 +135,8 @@ public:
     virtual int setup(VoiceKeyerFactory *voiceKeyerFactory, int &maxNumButtons, int &numButtons, QString selectedRadioName) = 0;
     virtual void setRadioParams(int radioMaxNumButtons, QString selectedRadioName, serialCommonData::MINOS_PTT_TYPES pttType_, bool pttEnabled_) = 0;
     virtual int editButton(VoiceKeyerParams* vmData, QString title) = 0;
+
+
 
     virtual bool hasPip() const
     {

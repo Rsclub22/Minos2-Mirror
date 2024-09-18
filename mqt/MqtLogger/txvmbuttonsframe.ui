@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>622</width>
-    <height>273</height>
+    <width>656</width>
+    <height>276</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -318,6 +318,13 @@
            </item>
            <item>
             <widget class="QLabel" name="saveByRadioNameText">
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="sAndPLabel">
              <property name="text">
               <string/>
              </property>
