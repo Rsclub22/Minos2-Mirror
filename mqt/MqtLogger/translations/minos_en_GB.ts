@@ -3266,7 +3266,7 @@ No          - Discard changes</source>
 <context>
     <name>RigControlCwMessageKeyer</name>
     <message>
-        <location filename="../rigcontrolcwmessagekeyer.cpp" line="301"/>
+        <location filename="../rigcontrolcwmessagekeyer.cpp" line="478"/>
         <source>Rig Control CW Memory Setup</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5352,7 +5352,7 @@ Please choose a new name.</source>
     </message>
     <message>
         <location filename="../tlogcontainer.cpp" line="1159"/>
-        <location filename="../tlogcontainer.cpp" line="1437"/>
+        <location filename="../tlogcontainer.cpp" line="1441"/>
         <source>Minos contest files (*.minos *.Minos);;All Files (*.*)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5372,90 +5372,90 @@ Please choose a new name.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1374"/>
+        <location filename="../tlogcontainer.cpp" line="1378"/>
         <source>This action will clear geometry entries for all of the apps within Minos.
 
 Please confirm this action by pressing &quot;Yes&quot;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1388"/>
+        <location filename="../tlogcontainer.cpp" line="1392"/>
         <source>Clear registry only works under Windows</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1441"/>
+        <location filename="../tlogcontainer.cpp" line="1445"/>
         <source>Open contest for Analysis</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1453"/>
+        <location filename="../tlogcontainer.cpp" line="1457"/>
         <source>Failed to open Contest Log file %1 : %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1461"/>
+        <location filename="../tlogcontainer.cpp" line="1465"/>
         <source>Analysis of %1 complete; look in the trace log for analysis.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="2368"/>
+        <location filename="../tlogcontainer.cpp" line="2372"/>
         <source>Minos Contest Logger Application</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1352"/>
+        <location filename="../tlogcontainer.cpp" line="1356"/>
         <source>You may need to close and reload Minos to have these settings applied</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1551"/>
+        <location filename="../tlogcontainer.cpp" line="1555"/>
         <source>Contest Sets</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1640"/>
+        <location filename="../tlogcontainer.cpp" line="1644"/>
         <source>Creating </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1640"/>
-        <location filename="../tlogcontainer.cpp" line="2170"/>
+        <location filename="../tlogcontainer.cpp" line="1644"/>
+        <location filename="../tlogcontainer.cpp" line="2174"/>
         <source>Loading </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1642"/>
+        <location filename="../tlogcontainer.cpp" line="1646"/>
         <source>Contest file </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1811"/>
+        <location filename="../tlogcontainer.cpp" line="1815"/>
         <source>Configure Screen Layouts...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1901"/>
+        <location filename="../tlogcontainer.cpp" line="1905"/>
         <source>&amp;Manage Contest Sets...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="2172"/>
+        <location filename="../tlogcontainer.cpp" line="2176"/>
         <source>List file </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="2182"/>
+        <location filename="../tlogcontainer.cpp" line="2186"/>
         <source>Open List %1?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="2206"/>
+        <location filename="../tlogcontainer.cpp" line="2210"/>
         <source>Contact list files (*.csl);;All Files (*.*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="2210"/>
+        <location filename="../tlogcontainer.cpp" line="2214"/>
         <source>Open Archive List</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5855,81 +5855,81 @@ Last %8 Mins: %9 QSO %10 pts %11 mults
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.ui" line="344"/>
+        <location filename="../txvmbuttonsframe.ui" line="351"/>
         <source>Error:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.ui" line="394"/>
         <location filename="../txvmbuttonsframe.ui" line="401"/>
         <location filename="../txvmbuttonsframe.ui" line="408"/>
         <location filename="../txvmbuttonsframe.ui" line="415"/>
-        <location filename="../txvmbuttonsframe.ui" line="452"/>
+        <location filename="../txvmbuttonsframe.ui" line="422"/>
         <location filename="../txvmbuttonsframe.ui" line="459"/>
         <location filename="../txvmbuttonsframe.ui" line="466"/>
         <location filename="../txvmbuttonsframe.ui" line="473"/>
+        <location filename="../txvmbuttonsframe.ui" line="480"/>
         <source>...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.ui" line="497"/>
+        <location filename="../txvmbuttonsframe.ui" line="504"/>
         <source>Stop</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="531"/>
+        <location filename="../txvmbuttonsframe.cpp" line="543"/>
         <source>To use the external keyer mqtKeyer must be running and connected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="729"/>
-        <location filename="../txvmbuttonsframe.cpp" line="931"/>
-        <source>Rig CW Message</source>
+        <location filename="../txvmbuttonsframe.cpp" line="750"/>
+        <location filename="../txvmbuttonsframe.cpp" line="964"/>
+        <source>Rig CW Message - </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="733"/>
-        <location filename="../txvmbuttonsframe.cpp" line="935"/>
+        <location filename="../txvmbuttonsframe.cpp" line="764"/>
+        <location filename="../txvmbuttonsframe.cpp" line="978"/>
         <source>Voice Memory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="735"/>
+        <location filename="../txvmbuttonsframe.cpp" line="766"/>
         <source>%1 %2 - Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="937"/>
+        <location filename="../txvmbuttonsframe.cpp" line="980"/>
         <source>%1 %2 - New</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1468"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1511"/>
         <source>Rig Voice Keyer Available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1472"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1515"/>
         <source>Rig CW Messages Available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1594"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1637"/>
         <source>TX On</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1600"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1643"/>
         <source>TX Off</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1610"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1653"/>
         <source>PTT Enabled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1616"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1659"/>
         <source>PTT Disabled</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6291,12 +6291,12 @@ Please edit or remove</source>
 <context>
     <name>TxVoiceMemButton</name>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1730"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1809"/>
         <source>&amp;New</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1731"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1810"/>
         <source>&amp;Edit</source>
         <translation type="unfinished"></translation>
     </message>
