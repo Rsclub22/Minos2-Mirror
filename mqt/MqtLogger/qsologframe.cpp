@@ -1143,8 +1143,6 @@ void QSOLogFrame::rxDMWord(QString rxWord, int markFreq)
 {
     // we now need to preserve this mark frequency so we can send it back on transmit
     // and also put rig + mark frequency into the QSO frequency
-    QLineEdit *ed = dynamic_cast<QLineEdit *>( current );
-    ed->setText(rxWord);
 
     if (markFreq != 0)
     {
@@ -1152,17 +1150,37 @@ void QSOLogFrame::rxDMWord(QString rxWord, int markFreq)
     }
 
     trace(QString("QSOLogFrame::rxDMWord %1 %2").arg(rxWord).arg(markFreq));
-    if ( !valid( cmCheckValid ) )   // make sure all single and cross field
+
+    QLineEdit *ed = dynamic_cast<QLineEdit *>( current );
+    if (ed != ui->QTHFrame->getTextEditEdit())
     {
-        QWidget *firstInvalid = nullptr;
-        QWidget *nextf = getNextInvalid(firstInvalid);
+        ed->setText(rxWord);
 
-        if (!nextf)
+        if ( !valid( cmCheckValid ) )   // make sure all single and cross field
         {
-            nextf = current;
-        }
+            QWidget *firstInvalid = nullptr;
+            QWidget *nextf = getNextInvalid(firstInvalid);
 
-        selectField(nextf);
+            if (!nextf)
+            {
+                nextf = current;
+            }
+
+            selectField(nextf);
+        }
+    }
+    else
+    {
+        QString exch = ed->text();
+        if (!exch.isEmpty())
+        {
+            exch += " ";
+        }
+        exch += rxWord;
+
+        ed->setText(exch);
+        valid( cmCheckValid );  // but we don't move focus!
+
     }
 }
 
