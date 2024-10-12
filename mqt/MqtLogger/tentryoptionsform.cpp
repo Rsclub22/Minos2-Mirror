@@ -154,10 +154,14 @@ TEntryOptionsForm::TEntryOptionsForm(QWidget* Owner, QSharedPointer<ContestDetai
     {
         if (ct->isHF())
         {
+            ui->enrb0->setEnabled(false);
+            ui->enrb6->setEnabled(true);
             ui->enrb6->setChecked(true);
         }
         else
         {
+            ui->enrb6->setEnabled(false);
+            ui->enrb0->setEnabled(true);
             ui->enrb0->setChecked( true );
         }
     }
