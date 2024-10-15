@@ -1118,7 +1118,7 @@
 <context>
     <name>Day Abbreviation</name>
     <message>
-        <location filename="../cutils.cpp" line="1058"/>
+        <location filename="../cutils.cpp" line="993"/>
         <source>D</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1867,7 +1867,7 @@ Reverted Hamlib will be used after restart</source>
 <context>
     <name>QWidget</name>
     <message>
-        <location filename="../cutils.cpp" line="858"/>
+        <location filename="../cutils.cpp" line="793"/>
         <source>Reset Columns</source>
         <comment>createColumnsMenu</comment>
         <translation type="unfinished"></translation>

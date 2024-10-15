@@ -302,22 +302,22 @@
 <context>
     <name>MMVARIFrame</name>
     <message>
-        <location filename="../MMVARIFrame.cpp" line="81"/>
+        <location filename="../MMVARIFrame.cpp" line="77"/>
         <source>RX/TX state</source>
         <translation>RX/TX État</translation>
     </message>
     <message>
-        <location filename="../MMVARIFrame.cpp" line="90"/>
+        <location filename="../MMVARIFrame.cpp" line="86"/>
         <source>Move the cursor to keep it centered on a signal if the frequency changes slightly</source>
         <translation>Déplacer le curseur pour le maintenir centré sur un signal si la fréquence change légèrement</translation>
     </message>
     <message>
-        <location filename="../MMVARIFrame.cpp" line="97"/>
+        <location filename="../MMVARIFrame.cpp" line="93"/>
         <source>When NET is on the TX frequency follows the RX frequency </source>
         <translation>Lorsque NET est sur la fréquence TX suit la fréquence RX </translation>
     </message>
     <message>
-        <location filename="../MMVARIFrame.cpp" line="103"/>
+        <location filename="../MMVARIFrame.cpp" line="99"/>
         <source>Align the transmit frequency to the receive frequency</source>
         <translation>Aligner la fréquence TX sur la fréquence RX</translation>
     </message>
