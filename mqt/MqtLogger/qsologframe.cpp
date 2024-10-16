@@ -2889,7 +2889,9 @@ void QSOLogFrame::modeSentFromRig(QString m)
             mode = newMode;
 
             // ensure flip mode is shown on mode button
-            if (ui->ModeComboBoxGJV->currentText() == hamlibData::CW || ui->ModeComboBoxGJV->currentText() == hamlibData::MGM)
+            if (ui->ModeComboBoxGJV->currentText() == hamlibData::CW || ui->ModeComboBoxGJV->currentText() == hamlibData::MGM
+                || ui->ModeComboBoxGJV->currentText() == hamlibData::RY || ui->ModeComboBoxGJV->currentText() == hamlibData::PSK
+                )
             {
                ui->ModeButton->setText(oldMode);
             }
