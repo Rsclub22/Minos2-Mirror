@@ -433,7 +433,7 @@ QVariant QSOMatchGridModel::data( const QModelIndex &index, int role ) const
                     {
                         QColor multhighlight = Qt::red;
                         bool setHighlight = false;
-                        switch ( QSOGridModel::QSOTreeColumns[ column ].fieldId )
+                        switch ( ThisMatchTreeColumns[ column ].fieldId )
                         {
                         case egTime:
                             if (!contest->checkTime(ct->timeOff))
