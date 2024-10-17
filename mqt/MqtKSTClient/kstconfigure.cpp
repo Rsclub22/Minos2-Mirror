@@ -1,4 +1,5 @@
 #include "kstconfigure.h"
+#include "MShowMessageDlg.h"
 #include "ui_kstconfigure.h"
 
 
@@ -61,6 +62,11 @@ void KSTConfigure::on_OKButton_clicked()
     autoConnect = ui->autoConnect->isChecked();
     locator = ui->locatorEdit->text().toUpper();
     firstName = ui->nameEdit->text();
+    if (firstName.length() >16)
+    {
+        mShowMessage(tr("Name %1 cannot be more than 16 characters").arg(firstName), this);
+        return;
+    }
 
     ASServerName = ui->ASServerName->text();
     ASMyName = ui->ASMyName->text();

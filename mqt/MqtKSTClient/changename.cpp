@@ -1,5 +1,6 @@
 #include <QSettings>
 
+#include "MShowMessageDlg.h"
 #include "MTrace.h"
 #include "delayedaction.h"
 
@@ -121,7 +122,7 @@ void ChangeName::messageRx(QString msg)
     {
         traceMsg.chop(1);
     }
-    trace(QString("messageRx: %1").arg(traceMsg));
+    trace(QString("ChangeName::messageRx: %1").arg(traceMsg));
 
     if (setupComplete)
     {
@@ -139,6 +140,12 @@ void ChangeName::messageRx(QString msg)
             if (msg.contains(newName))
             {
                 trace("logging out of telnet");
+                sendData("/Q\r\n");
+                tnclient->logout();
+            }
+            else if (msg.contains("Invalid"))
+            {
+                mShowMessage(tr("Change name failed: %1").arg(msg), this);
                 sendData("/Q\r\n");
                 tnclient->logout();
             }

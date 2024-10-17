@@ -88,6 +88,10 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     {
         QSettings isettings(iniName, QSettings::IniFormat);
         getSettings(isettings);
+        if (firstName.length() > 16)
+        {
+            doConfiguration(true);
+        }
     }
 
     QStringList selections = chatSelection.split(":");
@@ -546,7 +550,7 @@ void KSTMainWindow::onReadyRead()
     {
         traceMsg.chop(1);
     }
-    trace(QString("messageRx: %1").arg(traceMsg));
+    trace(QString("KSTMainWindow::messageRx: %1").arg(traceMsg));
 
     // break into lines...
     msgbuf.append(msg);
