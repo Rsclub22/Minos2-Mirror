@@ -205,11 +205,11 @@ QString getCwRadioManufacturer(int cwMemType)
     {
         type = "Icom";
     }
-    else if (cwMemType == hamlibData::CW_MEMORY_TYPES::YAESU_MEM_RECALL)
+    else if (cwMemType == hamlibData::CW_MEMORY_TYPES::YAESU)
     {
         type = "Yaesu";
     }
-    else if (cwMemType == hamlibData::CW_MEMORY_TYPES::KENWOOD_MEM_RECALL)
+    else if (cwMemType == hamlibData::CW_MEMORY_TYPES::KENWOOD)
     {
         type = "Kenwood";
     }

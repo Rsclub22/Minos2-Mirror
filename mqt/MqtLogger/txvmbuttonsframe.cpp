@@ -852,8 +852,8 @@ void TxVmButtonsFrame::startVMMsg(int buttonNumber)
     {
         if (getCwMemType(selectedRadio) == hamlibData::CW_MEMORY_TYPES::ICOM
             || getCwMemType(selectedRadio) == hamlibData::CW_MEMORY_TYPES::ELECRAFT
-            || getCwMemType(selectedRadio) == hamlibData::CW_MEMORY_TYPES::KENWOOD_MEM_RECALL
-            || getCwMemType(selectedRadio) == hamlibData::CW_MEMORY_TYPES::YAESU_MEM_RECALL)
+            || getCwMemType(selectedRadio) == hamlibData::CW_MEMORY_TYPES::KENWOOD
+            || getCwMemType(selectedRadio) == hamlibData::CW_MEMORY_TYPES::YAESU)
         {
             if (curMode != rigcommon::convertModeToQString(MODE::CW) && txVoiceKeyer->getSetCwModeAndRestoreFlag())
             {
@@ -1097,8 +1097,8 @@ void TxVmButtonsFrame::onMsgDurTimerTimeout()
     {
 
         if ((getCwMemType(selectedRadio) == hamlibData::CW_MEMORY_TYPES::ICOM
-            ||  getCwMemType(selectedRadio) == hamlibData::CW_MEMORY_TYPES::YAESU_MEM_RECALL
-            || getCwMemType(selectedRadio) == hamlibData::CW_MEMORY_TYPES::KENWOOD_MEM_RECALL
+            ||  getCwMemType(selectedRadio) == hamlibData::CW_MEMORY_TYPES::YAESU
+            || getCwMemType(selectedRadio) == hamlibData::CW_MEMORY_TYPES::KENWOOD
             || getCwMemType(selectedRadio) == hamlibData::CW_MEMORY_TYPES::ELECRAFT)
             && txVoiceKeyer->getSetCwModeAndRestoreFlag())
         {
@@ -1435,8 +1435,8 @@ bool TxVmButtonsFrame::isCwMemTypeAvail(PubSubName psn)
     if (allRadioDetails.contains(psn))
     {
         rd = allRadioDetails[psn];
-        if (rd.getCwMemType() == hamlibData::CW_MEMORY_TYPES::KENWOOD_MEM_RECALL
-            || rd.getCwMemType() == hamlibData::CW_MEMORY_TYPES::YAESU_MEM_RECALL
+        if (rd.getCwMemType() == hamlibData::CW_MEMORY_TYPES::KENWOOD
+            || rd.getCwMemType() == hamlibData::CW_MEMORY_TYPES::YAESU
             || rd.getCwMemType() == hamlibData::CW_MEMORY_TYPES::ICOM
             || rd.getCwMemType() == hamlibData::CW_MEMORY_TYPES::ELECRAFT)
         {

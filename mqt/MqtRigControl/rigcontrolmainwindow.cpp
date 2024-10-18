@@ -238,12 +238,6 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
 
     initialiseSupportedRadioDisplay();
 
-    //if (hamlibOk)
-    //{
-    //    setTestMode(testMode);
-   // }
-
-
     setPolltime(1000);
 
     ui->selectRadioBox->clearFocus();
@@ -974,19 +968,48 @@ bool RigControlMainWindow::checkSupportCwKeyerMemory()
             addRigModelToRigCache(currentRadio.rigModel);
             if (currentRadio.rigMfg_Name == "Yaesu")
             {
-                addCwKeyerTypeToRigCache(hamlibData::CW_MEMORY_TYPES::YAESU_MEM_RECALL);
+                trace("Send to logger Rig CW keyer type is Yaesu");
+                addCwKeyerTypeToRigCache(hamlibData::CW_MEMORY_TYPES::YAESU);
             }
             else if (currentRadio.rigMfg_Name == "Kenwood")
             {
-                addCwKeyerTypeToRigCache(hamlibData::CW_MEMORY_TYPES::KENWOOD_MEM_RECALL);
+                trace("Send to logger Rig CW keyer type is Kenwood");
+                addCwKeyerTypeToRigCache(hamlibData::CW_MEMORY_TYPES::KENWOOD);
             }
             else if (currentRadio.rigMfg_Name == "Icom")
             {
+                trace("Send to logger Rig CW keyer type is Icom");
                 addCwKeyerTypeToRigCache(hamlibData::CW_MEMORY_TYPES::ICOM);
             }
             else if (currentRadio.rigMfg_Name == "Elecraft")
             {
+                trace("Send to logger Rig CW keyer type is Elecraft");
                 addCwKeyerTypeToRigCache(hamlibData::CW_MEMORY_TYPES::ELECRAFT);
+            }
+            else if (currentRadio.rigMfg_Name == "Flex-radio")
+            {
+                trace("Send to logger Rig CW keyer type is Flex-Radio");
+                addCwKeyerTypeToRigCache(hamlibData::CW_MEMORY_TYPES::FLEX_RADIO);
+            }
+            else if (currentRadio.rigMfg_Name == "OpenHPSDR")
+            {
+                trace("Send to logger Rig CW keyer type is OpenHPSDR");
+                addCwKeyerTypeToRigCache(hamlibData::CW_MEMORY_TYPES::OPENHPSDR);
+            }
+            else if (currentRadio.rigMfg_Name == "Flex-radio/Apache")
+            {
+                trace("Send to logger Rig CW keyer type is Flex-radio/Apache");
+                addCwKeyerTypeToRigCache(hamlibData::CW_MEMORY_TYPES::FLEX_RADIO_APACHE);
+            }
+            else if (currentRadio.rigMfg_Name == "QRPLabs")
+            {
+                trace("Send to logger Rig CW keyer type is QRPLabs");
+                addCwKeyerTypeToRigCache(hamlibData::CW_MEMORY_TYPES::QRPLABS);
+            }
+            else if (currentRadio.rigMfg_Name == "Thetis")
+            {
+                trace("Send to logger Rig CW keyer type is Thetis");
+                addCwKeyerTypeToRigCache(hamlibData::CW_MEMORY_TYPES::THETIS);
             }
             else
             {
@@ -3599,6 +3622,8 @@ int RigControlMainWindow::getRitFreq(VFO vfo)
                ui->ritFreq->setText(convertRitFreqToStr(rigStateDetails->rRitFreq, rigStateDetails->ritKHzFlag));
                logMessage(QString("GetRitFreq from radio = %1").arg(rigStateDetails->rRitFreq.traceStr()));
                sendRitFreqLogger(rigStateDetails->rRitFreq);
+
+
             }
         }
     }

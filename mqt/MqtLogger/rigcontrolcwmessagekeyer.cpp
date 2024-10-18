@@ -700,8 +700,8 @@ int RigControlCwMessageKeyer::editButton(VoiceKeyerParams *vmData, QString title
     vmButtonDialog.setSerialMessageTextBoxVisible(false);
     vmButtonDialog.setCwCharInputValidator();
 
-    if (cwMemType == hamlibData::CW_MEMORY_TYPES::YAESU_MEM_RECALL
-        || cwMemType == hamlibData::CW_MEMORY_TYPES::KENWOOD_MEM_RECALL
+    if (cwMemType == hamlibData::CW_MEMORY_TYPES::YAESU
+        || cwMemType == hamlibData::CW_MEMORY_TYPES::KENWOOD
         || cwMemType == hamlibData::CW_MEMORY_TYPES::ELECRAFT
         || cwMemType == hamlibData::CW_MEMORY_TYPES::ICOM)
     {

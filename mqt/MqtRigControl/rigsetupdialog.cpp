@@ -457,32 +457,6 @@ void RigSetupDialog::addRadio()
 
 
 
-    /******* we should conisder moving this to actual radio selection ???? *****/
-
-    /*// initial settings
-    radioTab.value(radioName)->setDataSpeed("9600");
-    radioTab.value(radioName)->comSpeedSelected();
-
-    radioTab.value(radioName)->setDataBits("8");
-    radioTab.value(radioName)->comDataBitsSelected();
-
-    radioTab.value(radioName)->setStopBits("1");
-    radioTab.value(radioName)->comStopBitsSelected();
-
-    radioTab.value(radioName)->setParityBits(0);
-    radioTab.value(radioName)->comParitySelected(true);
-
-    //  force RTS - to enable USB adaptors
-    // but can conflict with serial PTT control
-    if (radioTab.value(radioName)->getCatComportType(radioModel) == RigCapConstants::PortType::serial)
-    {
-        radioTab.value(radioName)->setForceRTSComboBox(1);
-        radioTab.value(radioName)->on_forceRTSSelected();
-    }
-*/
-
-
-
 
 
     ui->radioTab->setCurrentIndex(tabNum);
