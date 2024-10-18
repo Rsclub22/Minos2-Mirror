@@ -118,6 +118,8 @@ inline const QString FILENAME_CURRENT_RADIO = "CurrentRadio.ini";
 inline const QString FILENAME_TRANSVERT_RADIOS = "TransVertRadio.ini";
 inline const QString FILENAME_RIGCONTROL_TEST_DATA = "rigcontrolTestData.ini";
 
+inline const QString FILENAME_MINOS_OMNIRIG = "minosOmnirig.ini";
+
 inline const QString FILENAME_FREQ_PRESETS = "FreqPresets.ini";
 
 inline const QString RIGCTL_WIN32_EXE_FILENAME = "rigctld.exe";

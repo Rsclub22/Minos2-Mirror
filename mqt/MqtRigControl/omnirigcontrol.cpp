@@ -16,6 +16,7 @@
 #include <QString>
 #include <QTimer>
 #include <QThread>
+#include <QMessageBox>
 #include "BandList.h"
 #include "MTrace.h"
 
@@ -618,6 +619,41 @@ int OmnirigControl::rigInit(scatParams &currentRadio, bool useRigCtld)
 
 
     rig_type = rig->RigType ();
+
+    if (rig_type.contains("IC-"))
+    {
+
+        trace(QString("Using icom radio %1, check the ini file for PMFREQ"));
+        bool foundRadio = false;
+        bool foundPMFreq = checkIniFileContainsPMFREQEntry(rig_type, foundRadio);
+        if (foundRadio)
+        {
+            if (!foundPMFreq)
+            {
+                trace(QString("Found Icom radio, PMFREQ missing from rig ini file"));
+                // we didn't find pmFreq in the rig ini file, alert the user to
+                // install the correct rig ini file
+                QMessageBox::critical(nullptr,
+                    tr("Minos - Check Omnirig Radio ini File for radio %1").arg(rig_type),
+                    tr("The ini file for %1 does not contain [pmFreq] for correct operation of Minos\nPlease obtain the correct ini file from the developers").arg(rig_type),
+                    QMessageBox::Ok);
+
+                return omnirigError(OMNIRIG_OK);
+
+            }
+            else
+            {
+                trace(QString("pmFreq exists in %1 ini file").arg(rig_type));
+            }
+
+            trace("Not the Icom model we are testing against pmFreq!");
+        }
+        else
+        {
+            trace(QString("Not the Icom %1 model we are interested in!").arg(rig_type));
+        }
+    }
+
     traceMsg(QString("Opening Rig %1").arg(rig_type));
     currentRadio.rigModelName = rig_type;
     readable_params = rig->ReadableParams ();
@@ -1204,6 +1240,38 @@ bool OmnirigControl::getRigConnected()
 {
     trace(QString("Omnirig: getRigConnected = %1").arg(rigConnected ? "true" : "false"));
     return rigConnected;
+}
+
+
+bool OmnirigControl::checkIniFileContainsPMFREQEntry(QString radioModel, bool &foundRadio)
+{
+    QString fileName = RADIO_PATH_LOGGER() + FILENAME_MINOS_OMNIRIG;
+    QSettings settings(fileName, QSettings::IniFormat);
+
+    QString omnirigIniPath = settings.value("omnirig_ini_path", "C:/Program Files (x86)/Afreet/OmniRig/Rigs").toString();
+    QString checkModels = settings.value("checkrigs", "IC-705,IC-905,IC-7100,IC-7300,IC-7610,IC-7850,IC-9700").toString();
+    QStringList checkModelsList = checkModels.split(",");
+
+
+
+    foreach (auto rm, checkModelsList)
+    {
+        if (radioModel == rm)
+        {
+            foundRadio = true;
+            QString iniFileName = omnirigIniPath + "/" + rm + ".ini";
+            QSettings omnirigSettings(iniFileName, QSettings::IniFormat);
+
+            QStringList groups = omnirigSettings.childGroups();
+
+            // Check if [pmFreq] exists
+            return groups.contains("pmFreq");
+        }
+    }
+
+    // if we got here it is not an Icom radio in our list that we are testing
+    return false;
+
 }
 
 

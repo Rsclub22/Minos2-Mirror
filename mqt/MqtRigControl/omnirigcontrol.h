@@ -155,6 +155,8 @@ private:
 
 
 
+
+    bool checkIniFileContainsPMFREQEntry(QString radioModel_, bool &foundRadio);
 };
 
 #endif // OMNIRIGCONTROL_H
