@@ -9,6 +9,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include <QMessageBox>
+#include <QSettings>
 #include "regsettings.h"
 #include "MTrace.h"
 
@@ -17,7 +18,7 @@
 
 int BandmapClientFilterDialog::mainTabIndex;
 
-BandmapClientFilterDialog::BandmapClientFilterDialog(BaseContestLog *c, BandmapClientFilterSettings &filterSettings_, QWidget *parent) :
+BandmapClientFilterDialog::BandmapClientFilterDialog(BandmapClientFilterSettings &filterSettings_, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::BandmapClientFilterDialog),
     distanceChanged(false),
@@ -37,7 +38,6 @@ BandmapClientFilterDialog::BandmapClientFilterDialog(BaseContestLog *c, BandmapC
     }
 
     filterSettings = filterSettings_;
-    ct = dynamic_cast<LoggerContestLog *>(c);
 
     initCheckFilterTab();
 }
@@ -165,8 +165,6 @@ void BandmapClientFilterDialog::filtersAccepted()
 
     if (modefilterChanged || distanceChanged || distanceChkBoxChanged || distanceEmptyChkBoxChanged)
     {
-
-        trace(QString("Bandmap Filters Changed - ContestUuid = %1").arg(contestUuid));
         if (modefilterChanged)
         {
             trace(QString("Mode Filters CW = %1, LSBMode = %2, USBMode = %3, FMMode = %4, RTTYMode = %5, PSK31Mode = %6, FT8Mode = %7, MSK144Mode = %8, JT65Mode = %9")
@@ -189,14 +187,10 @@ void BandmapClientFilterDialog::filtersAccepted()
         {
             trace(QString("Bandmap Filter Distance Checkbox Changed Ignore Empty Distance = %1, Ignore Empty Distance = %2").arg(filterSettings.getIgnoreEmptyDistanceFlag() ? "true" : "false"));
         }
-        trace(QString("Save to log"));
-        saveBandmapFilterToContest();
         settingsChanged = true;
     }
 
-    //emit filtersChanged(modefilterChanged);
     doCloseEvent();
-    //close();
 }
 
 void BandmapClientFilterDialog::filtersRejected()
@@ -283,13 +277,6 @@ void BandmapClientFilterDialog::loadIgnoreEmptyDistanceValuesChkBoxState()
         ui->ignoreEmptyDistanceValuesChkBox->setCheckState(Qt::Unchecked);
     }
 }
-
-
-void BandmapClientFilterDialog::saveBandmapFilterToContest()
-{
-    ct->saveBandmapFilter(filterSettings);
-}
-
 
 bool BandmapClientFilterDialog::modeFiltersChanged()
 {

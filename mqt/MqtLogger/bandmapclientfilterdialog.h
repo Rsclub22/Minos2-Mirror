@@ -13,7 +13,6 @@
 #define BANDMAPCLIENTFILTERDIALOG_H
 
 #include <QDialog>
-#include "LoggerContest.h"
 #include "clustercommon.h"
 
 
@@ -26,34 +25,22 @@ class BandmapClientFilterDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit BandmapClientFilterDialog(BaseContestLog *c, BandmapClientFilterSettings &filterSettings, QWidget *parent = nullptr);
+    explicit BandmapClientFilterDialog(BandmapClientFilterSettings &filterSettings, QWidget *parent = nullptr);
     ~BandmapClientFilterDialog();
 
     static int mainTabIndex;
 
-    bool checkBandMatch(int bandNum);
-    bool checkModeMatch(int bandNum);
-
     void copyModeFiltersToDialog();
-    void setContest(BaseContestLog *c);
-
-    void saveBandmapFilterToContest();
 
     bool getSettingsChangedFlag(){return settingsChanged;}
     BandmapClientFilterSettings getFilterSettings(){return filterSettings;}
 
-    void setModeFilter(bool state, int mode);
     void loadDistanceFilterEditBox();
     void loadIgnoreDistanceChkBoxState();
     void loadIgnoreEmptyDistanceValuesChkBoxState();
 
-signals:
-    //void filtersChanged(bool);
-
-
 private:
     Ui::BandmapClientFilterDialog *ui;
-    LoggerContestLog *ct = nullptr;
 
     QList<QCheckBox*> modeChkBoxList;
     QMap<QString, QCheckBox*> modeCheckBoxes;
@@ -63,9 +50,6 @@ private:
     bool distanceChkBoxChanged;
     bool distanceEmptyChkBoxChanged;
     bool settingsChanged;
-
-    QString contestUuid;
-    QString distanceIniName;
 
     BandmapClientFilterSettings filterSettings;
 
@@ -81,9 +65,6 @@ private:
     void copyModeFiltersToFilterSettings();
 
     void doCloseEvent();
-
-
-    void getCurrentBandDistanceIniName();
 
     void loadSettingsToDialogBox();
     bool areAnyModesSet();

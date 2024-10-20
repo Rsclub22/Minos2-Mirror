@@ -19,6 +19,7 @@
 #include "BandList.h"
 #include "delayedaction.h"
 #include "rigutils.h"
+#include "LoggerContest.h"
 #include "MTrace.h"
 
 #include "bandmapclientframe.h"
@@ -1621,17 +1622,23 @@ void BandmapClientFrame::setMode(QString mode)
 
 void BandmapClientFrame::filterButtonSelected()
 {
-    BandmapClientFilterDialog* filterSetup =  new BandmapClientFilterDialog(ct, filterSettings, this);
-    filterSetup->exec();
-
-    if (filterSetup->getSettingsChangedFlag())
+    BandmapClientFilterDialog* filterSetup =  new BandmapClientFilterDialog(filterSettings, this);
+    if (filterSetup->exec() == QDialog::Accepted)
     {
-        // reload filtersettings after change
-        filterSettings = filterSetup->getFilterSettings();
-        trace("BandmapView::bandmapUpdate() filterButtonSelected");
-        ShowFilter();
-        bandmapView->bandmapUpdate(true);
+        trace(QString("Save to log"));
 
+        LoggerContestLog *lct = dynamic_cast<LoggerContestLog *>(ct);
+        lct->saveBandmapFilter(filterSettings);
+
+       if (filterSetup->getSettingsChangedFlag())
+        {
+            // reload filtersettings after change
+            filterSettings = filterSetup->getFilterSettings();
+            trace("BandmapView::bandmapUpdate() filterButtonSelected");
+            ShowFilter();
+            bandmapView->bandmapUpdate(true);
+
+        }
     }
     filterSetup->close();
     delete filterSetup;
