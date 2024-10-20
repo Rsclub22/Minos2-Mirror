@@ -460,7 +460,7 @@ void MainWindow::on_rrConfigBrowse_clicked()
     if (!fname.isEmpty())
     {
         configFile = fname;
-        QSettings csettings(getDirectoryLocation(dlConfiguration) + "/DataModeSelect.ini", QSettings::IniFormat);
+        QSettings csettings(getDirectoryLocation(dlConfiguration) + "/RigRecorderSelect.ini", QSettings::IniFormat);
         csettings.setValue("ConfigurationFile", configFile);
         setConfigDisplay(configFile);
     }
