@@ -1249,7 +1249,7 @@ bool OmnirigControl::checkIniFileContainsPMFREQEntry(QString radioModel, bool &f
     QSettings settings(fileName, QSettings::IniFormat);
 
     QString omnirigIniPath = settings.value("omnirig_ini_path", "C:/Program Files (x86)/Afreet/OmniRig/Rigs").toString();
-    QString checkModels = settings.value("checkrigs", "IC-705,IC-905,IC-7100,IC-7300,IC-7610,IC-7850,IC-9700").toString();
+    QString checkModels = settings.value("checkrigs", "IC-705, IC-905,IC-7100,IC-7300,IC-7610,IC-7850,IC-9700").toString();
     QStringList checkModelsList = checkModels.split(",");
 
 
