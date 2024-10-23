@@ -63,6 +63,7 @@ cd installFiles
 mkdir Configuration
 mkdir Configuration\Cluster
 mkdir Configuration\FunctionKeyMessages
+mkdir Configuration\Omnirig_Minos_Ini
 mkdir Lists
 mkdir Logs
 mkdir Bin
@@ -87,6 +88,8 @@ xcopy /F /Y %MROOT%\mqt\ControlFiles\Configuration .\Configuration
 xcopy /F /Y %MROOT%\mqt\ControlFiles\Configuration\WindowsFiles .\Configuration
 xcopy /F /Y %MROOT%\mqt\ControlFiles\Configuration\Cluster .\Configuration\Cluster
 xcopy /F /Y %MROOT%\mqt\ControlFiles\Configuration\FunctionKeyMessages .\Configuration\FunctionKeyMessages
+
+xcopy /F /Y %MROOT%\mqt\ControlFiles\Omnirig_Minos_Ini .\Configuration\Omnirig_Minos_Ini
 
 cd Configuration
 
