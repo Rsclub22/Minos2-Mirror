@@ -2,6 +2,105 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="en_GB">
 <context>
+    <name>BandmapClientFilterDialog</name>
+    <message>
+        <location filename="../bandmapclientfilterdialog.ui" line="24"/>
+        <source>Mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../bandmapclientfilterdialog.ui" line="30"/>
+        <source>All Modes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../bandmapclientfilterdialog.ui" line="39"/>
+        <source>USB</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../bandmapclientfilterdialog.ui" line="46"/>
+        <source>RTTY</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../bandmapclientfilterdialog.ui" line="53"/>
+        <source>LSB</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../bandmapclientfilterdialog.ui" line="60"/>
+        <source>Mode None</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../bandmapclientfilterdialog.ui" line="67"/>
+        <source>CW</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../bandmapclientfilterdialog.ui" line="74"/>
+        <source>FM</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../bandmapclientfilterdialog.ui" line="81"/>
+        <source>FT4</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../bandmapclientfilterdialog.ui" line="88"/>
+        <source>FT8</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../bandmapclientfilterdialog.ui" line="95"/>
+        <source>MSK144</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../bandmapclientfilterdialog.ui" line="102"/>
+        <source>JT65</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../bandmapclientfilterdialog.ui" line="109"/>
+        <source>PSK31/63</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../bandmapclientfilterdialog.ui" line="119"/>
+        <location filename="../bandmapclientfilterdialog.ui" line="138"/>
+        <source>Distance</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../bandmapclientfilterdialog.ui" line="145"/>
+        <source>Ignore</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../bandmapclientfilterdialog.ui" line="154"/>
+        <source>Ignore Spots with no distance value</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../bandmapclientfilterdialog.cpp" line="101"/>
+        <source>Click to set/reset all modes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../bandmapclientfilterdialog.cpp" line="218"/>
+        <source>Distance Filter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../bandmapclientfilterdialog.cpp" line="219"/>
+        <source>Please enter a number between %1 and %2!</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>BaseContact</name>
     <message>
         <location filename="../contacts.cpp" line="434"/>
@@ -37,12 +136,12 @@
 <context>
     <name>BaseContestLog</name>
     <message>
-        <location filename="../contest.cpp" line="697"/>
+        <location filename="../contest.cpp" line="699"/>
         <source>DUPLICATE OF </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contest.cpp" line="713"/>
+        <location filename="../contest.cpp" line="715"/>
         <source>DUP OF</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1069,22 +1168,22 @@
 <context>
     <name>ContestScore</name>
     <message>
-        <location filename="../contest.cpp" line="2119"/>
+        <location filename="../contest.cpp" line="2165"/>
         <source>Score: %1 Qsos; %2 pts; (%3 countries); %4 locs; bonuses %5(%6) = %7</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contest.cpp" line="2127"/>
+        <location filename="../contest.cpp" line="2173"/>
         <source>Score: %1 Qsos; %2 pts; %3 countries; %4 districts; %5 locs; bonuses %6(%7) = %8</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contest.cpp" line="2135"/>
+        <location filename="../contest.cpp" line="2181"/>
         <source>Score: %1 Qsos; %2 pts; %3%4 countries%5; bonuses %6(%7) = %8</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contest.cpp" line="2143"/>
+        <location filename="../contest.cpp" line="2189"/>
         <source>Score: %1 Qsos; %2 pts;%3%4 countries%5;%6%7 districts%8; %9%10 locators %13 = %14</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1755,7 +1854,12 @@ Reverted Hamlib will be used after restart</source>
 <context>
     <name>QSOMapFrame</name>
     <message>
-        <location filename="../qsomapframe.cpp" line="129"/>
+        <location filename="../qsomapframe.cpp" line="179"/>
+        <source>Filter...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qsomapframe.cpp" line="190"/>
         <source>Data and Map</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2345,17 +2449,17 @@ Please enter another bearing</source>
 <context>
     <name>clusterState</name>
     <message>
-        <location filename="../clustercommon.cpp" line="11"/>
+        <location filename="../clustercommon.cpp" line="12"/>
         <source>Available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustercommon.cpp" line="12"/>
+        <location filename="../clustercommon.cpp" line="13"/>
         <source>Not Available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustercommon.cpp" line="13"/>
+        <location filename="../clustercommon.cpp" line="14"/>
         <source>No Contact</source>
         <translation type="unfinished"></translation>
     </message>

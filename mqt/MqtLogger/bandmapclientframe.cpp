@@ -723,7 +723,7 @@ void BandmapClientFrame::setContest(BaseContestLog *c)
     if (!contestBandStr.isEmpty())
     {
 
-        if (!contest->bandmapFilterSettingsExist)       // have settings been saved before?
+        if (!contest->getBandmapFilterSettingsExist())       // have settings been saved before?
         {
             // no, save current mode filter for this contest
             readDefaultDistanceFilterSettings(&filterSettings);
@@ -753,6 +753,7 @@ void BandmapClientFrame::setContest(BaseContestLog *c)
             }
 
             contest->saveBandmapFilter(filterSettings);
+            contest->setBandmapFilterSettingsExist(true);
         }
         else
         {
@@ -1622,27 +1623,23 @@ void BandmapClientFrame::setMode(QString mode)
 
 void BandmapClientFrame::filterButtonSelected()
 {
-    BandmapClientFilterDialog* filterSetup =  new BandmapClientFilterDialog(filterSettings, this);
-    if (filterSetup->exec() == QDialog::Accepted)
+    BandmapClientFilterDialog filterSetup(BandmapClientFilterDialog(filterSettings, this));
+    if (filterSetup.exec() == QDialog::Accepted)
     {
-        trace(QString("Save to log"));
 
-        LoggerContestLog *lct = dynamic_cast<LoggerContestLog *>(ct);
-        lct->saveBandmapFilter(filterSettings);
-
-       if (filterSetup->getSettingsChangedFlag())
+       if (filterSetup.getSettingsChangedFlag())
         {
+            trace(QString("Save to log"));
+
+           filterSettings = filterSetup.getFilterSettings();
+            ct->saveBandmapFilter(filterSettings);
             // reload filtersettings after change
-            filterSettings = filterSetup->getFilterSettings();
             trace("BandmapView::bandmapUpdate() filterButtonSelected");
             ShowFilter();
             bandmapView->bandmapUpdate(true);
 
         }
     }
-    filterSetup->close();
-    delete filterSetup;
-
 }
 
 bool BandmapClientFrame::event(QEvent *event)

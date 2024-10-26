@@ -34,9 +34,7 @@ LoggerContestLog::LoggerContestLog(bool hf) : BaseContestLog(hf),
       minosFile( false ),
       GJVFile( false ),
       logFile( false ), adifFile( false ), ediFile( false ),
-      needExport( false ),
-      clusterFilterSettingsExist( false),
-      bandmapFilterSettingsExist( false)
+      needExport( false )
 {
 
     // clusterClientFrame
@@ -433,10 +431,7 @@ bool LoggerContestLog::initialise( const QString &fn, bool newFile, int slotno )
              return false;
           }
 
-          if ( minosFile )
-          {
-             minosContestFile = contestFile;
-          }
+          minosContestFile = contestFile;
       }
       else
       {
@@ -755,12 +750,19 @@ void LoggerContestLog::saveInitialClusterFilter(const ClusterClientFilterSetting
 }
 ClusterClientFilterSettings LoggerContestLog::getClusterFilter()
 {
-
-        return clusterFilterSettings.getValue();
+    return clusterFilterSettings.getValue();
 }
 
 //==========================================================================
+bool LoggerContestLog::getBandmapFilterSettingsExist() const
+{
+    return bandmapFilterSettingsExist;
+}
 
+void LoggerContestLog::setBandmapFilterSettingsExist(bool newBandmapFilterSettingsExist)
+{
+    bandmapFilterSettingsExist = newBandmapFilterSettingsExist;
+}
 void LoggerContestLog::saveBandmapFilter(const BandmapClientFilterSettings &bcfs)
 {
     bandmapFilterSettings.setValue(bcfs);
@@ -773,10 +775,8 @@ void LoggerContestLog::saveInitialBandmapFilter(const BandmapClientFilterSetting
 }
 BandmapClientFilterSettings LoggerContestLog::getBandmapFilter()
 {
-
-        return bandmapFilterSettings.getValue();
+    return bandmapFilterSettings.getValue();
 }
-
 
 //==========================================================================
 bool LoggerContestLog::commonSave( bool newfile )
@@ -806,9 +806,12 @@ bool LoggerContestLog::minosSaveFile( bool newfile )
 }
 bool LoggerContestLog::minosSaveContestContact( const QSharedPointer<BaseContact> lct )
 {
-   MinosTestExport mt( this );
-   ct_stanzaCount = mt.exportQSO( minosContestFile, lct );
-   return true;
+    if (minosContestFile)
+    {
+        MinosTestExport mt( this );
+        ct_stanzaCount = mt.exportQSO( minosContestFile, lct );
+    }
+    return true;
 }
 //==========================================================================
 bool LoggerContestLog::GJVsave( GJVParams &gp )
@@ -1726,7 +1729,7 @@ void LoggerContestLog::processMinosStanza( const QString &methodName, MinosTestI
                                else if (methodName == "MinosBandmapFilter")
                                {
 
-                                       bandmapFilterSettingsExist = true;
+                                       setBandmapFilterSettingsExist(true);
                                        BandmapClientFilterSettings bcfs;
                                        bool filterFlag = false;
                                        bool filterFlag1 = false;
@@ -1861,5 +1864,7 @@ bool LoggerContestLog::getStanza( unsigned int stanza, QString &stanzaData )
    contestFile.close();
    return readOK;
 }
+
+
 //====================================================================
 

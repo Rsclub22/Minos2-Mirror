@@ -51,7 +51,10 @@ class MinosTestExport
       void exportAllClusterFilters(QSharedPointer<QFile> expfd );
       void writeFile(QSharedPointer<QFile> minosContestFile, QString s);
       void exportQSOMap(QSharedPointer<QFile> expfd);
-public:
+      void exportQSOMapFilter(QSharedPointer<QFile> expfd);
+
+      void exportDetails(QSharedPointer<QFile> expfd);
+  public:
       MinosTestExport( LoggerContestLog * const ct );
       MinosTestExport( );
       ~MinosTestExport();

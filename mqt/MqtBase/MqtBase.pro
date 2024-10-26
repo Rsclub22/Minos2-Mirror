@@ -36,6 +36,7 @@ SOURCES += \
     MonitoredLog.cpp \
     StartConfigManager.cpp \
     StatisticsDisplay.cpp \
+    bandmapclientfilterdialog.cpp \
     bandmapcommon.cpp \
     bandmapmarkerdetails.cpp \
     baseloglist.cpp \
@@ -134,6 +135,7 @@ HEADERS += \
     MonitoredLog.h \
     StartConfigManager.h \
     StatisticsDisplay.h \
+    bandmapclientfilterdialog.h \
     bandmapmarkerdetails.h \
     CacheSelection.h \
     baseloglist.h \
@@ -237,6 +239,7 @@ FORMS += \
     MatchTreeFrame.ui \
     StartConfigManager.ui \
     StatisticsDisplay.ui \
+    bandmapclientfilterdialog.ui \
     managehamlib.ui \
     minoskeyboard.ui \
     monitoredlogs.ui \

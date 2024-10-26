@@ -287,15 +287,13 @@ class ModeFilterSettings
 public:
     ModeFilterSettings();
 
-
-
     bool operator==(const ModeFilterSettings& mfs) const;
 
+    QString print();
 
     bool testModeFilter(QString mode);
     bool getModeFilter(QString mode);
     void setModeFilter(QString mode, bool setting);
-
 
     bool contains(const QString mode);
 private:
@@ -438,8 +436,10 @@ public:
     bool getIgnoreEmptyDistanceFlag();
     void setIgnoreEmptyDistanceFlag(bool state);
 
-    QString packFilterList(QStringList l);
-    QStringList unpackFilterList(QString &sl);
+    //QString packFilterList(QStringList l);
+    //QStringList unpackFilterList(QString &sl);
+
+    QString print(){return modeFilterFlag.print();}
 
 private:
 

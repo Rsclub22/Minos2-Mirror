@@ -21,7 +21,7 @@
 #include "contest.h"
 #include "bandmapview.h"
 #include "bandmapdatamodel.h"
-#include "bandmapclientfilterdialog.h"
+#include "../MqtBase/bandmapclientfilterdialog.h"
 #include "BandList.h"
 #include "checkmodeagainstfreq.h"
 #include "checkoperatingfreq.h"

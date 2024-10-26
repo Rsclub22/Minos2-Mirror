@@ -118,8 +118,6 @@ MonitorMain::MonitorMain(QWidget *parent) :
 
     mapShowSpots = isettings.value("mapShowSpots", true).toBool();
     ui->mapShowSpots->setChecked(mapShowSpots);
-    clusterDistanceLimit = isettings.value("clusterDistanceLimit", 0).toInt();
-    ui->clusterDistanceLimit->setValue(clusterDistanceLimit);
 
     showLoc = isettings.value("mapShowLoc", true).toBool();
     ui->showLocs->setChecked(showLoc);
@@ -479,7 +477,7 @@ void MonitorMain::on_showGridcb_stateChanged(int /*arg1*/)
     QSettings settings(iniName, QSettings::IniFormat);
     QSOGrid = ui->showGridcb->isChecked();
     settings.setValue("showQSOGrid", QSOGrid);
-    MinosLoggerEvents::SendRedrawQSOMap(QSOGrid, QSOLines, mapShowSpots, clusterDistanceLimit
+    MinosLoggerEvents::SendRedrawQSOMap(QSOGrid, QSOLines, mapShowSpots
                                         , showLoc, locTL, locBR, showNav);
 }
 
@@ -489,7 +487,7 @@ void MonitorMain::on_showLinescb_stateChanged(int /*arg1*/)
     QSettings settings(iniName, QSettings::IniFormat);
     QSOLines = ui->showLinescb->isChecked();
     settings.setValue("showQSOLines", QSOLines);
-    MinosLoggerEvents::SendRedrawQSOMap(QSOGrid, QSOLines, mapShowSpots, clusterDistanceLimit
+    MinosLoggerEvents::SendRedrawQSOMap(QSOGrid, QSOLines, mapShowSpots
                                         , showLoc, locTL, locBR, showNav);
 }
 
@@ -499,27 +497,16 @@ void MonitorMain::on_mapShowSpots_stateChanged(int /*arg1*/)
     QSettings settings(iniName, QSettings::IniFormat);
     mapShowSpots = ui->mapShowSpots->isChecked();
     settings.setValue("mapShowSpots", mapShowSpots);
-    MinosLoggerEvents::SendRedrawQSOMap(QSOGrid, QSOLines, mapShowSpots, clusterDistanceLimit
+    MinosLoggerEvents::SendRedrawQSOMap(QSOGrid, QSOLines, mapShowSpots
                                         , showLoc, locTL, locBR, showNav);
 }
-
-
-void MonitorMain::on_clusterDistanceLimit_valueChanged(int /*arg1*/)
-{
-    QSettings settings(iniName, QSettings::IniFormat);
-    clusterDistanceLimit = ui->clusterDistanceLimit->value();
-    settings.setValue("clusterDistanceLimit", clusterDistanceLimit);
-    MinosLoggerEvents::SendRedrawQSOMap(QSOGrid, QSOLines, mapShowSpots, clusterDistanceLimit
-                                        , showLoc, locTL, locBR, showNav);
-}
-
 
 void MonitorMain::on_showLocs_stateChanged(int /*arg1*/)
 {
     QSettings settings(iniName, QSettings::IniFormat);
     showLoc = ui->showLocs->isChecked();
     settings.setValue("mapShowLoc", showLoc);
-    MinosLoggerEvents::SendRedrawQSOMap(QSOGrid, QSOLines, mapShowSpots, clusterDistanceLimit
+    MinosLoggerEvents::SendRedrawQSOMap(QSOGrid, QSOLines, mapShowSpots
                                         , showLoc, locTL, locBR, showNav);
 }
 
@@ -529,7 +516,7 @@ void MonitorMain::on_showNav_stateChanged(int /*arg1*/)
     QSettings settings(iniName, QSettings::IniFormat);
     showNav = ui->showNav->isChecked();
     settings.setValue("mapShowNav", showNav);
-    MinosLoggerEvents::SendRedrawQSOMap(QSOGrid, QSOLines, mapShowSpots, clusterDistanceLimit
+    MinosLoggerEvents::SendRedrawQSOMap(QSOGrid, QSOLines, mapShowSpots
                                         , showLoc, locTL, locBR, showNav);
 }
 void MonitorMain::on_locTL_editingFinished()
@@ -537,7 +524,7 @@ void MonitorMain::on_locTL_editingFinished()
     QSettings settings(iniName, QSettings::IniFormat);
     locTL = ui->locTL->text();
     settings.setValue("mapShowLocTL", locTL);
-    MinosLoggerEvents::SendRedrawQSOMap(QSOGrid, QSOLines, mapShowSpots, clusterDistanceLimit
+    MinosLoggerEvents::SendRedrawQSOMap(QSOGrid, QSOLines, mapShowSpots
                                         , showLoc, locTL, locBR, showNav);
 }
 
@@ -547,7 +534,7 @@ void MonitorMain::on_locBR_editingFinished()
     QSettings settings(iniName, QSettings::IniFormat);
     locBR = ui->locBR->text();
     settings.setValue("mapShowLocBR", locBR);
-    MinosLoggerEvents::SendRedrawQSOMap(QSOGrid, QSOLines, mapShowSpots, clusterDistanceLimit
+    MinosLoggerEvents::SendRedrawQSOMap(QSOGrid, QSOLines, mapShowSpots
                                         , showLoc, locTL, locBR, showNav);
 }
 
