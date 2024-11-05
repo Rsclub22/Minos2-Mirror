@@ -711,24 +711,30 @@ void QSOMapFrame::drawSpot(QSharedPointer<ClusterSpotData> bsd)
 
         if (bsd->getBand() != currBand)
         {
+            trace(QString("QSOMapFrame::drawSpot not current band %1 %2").arg(bsd->getDxCallStr(), bsd->getMode()));
             return;
         }
 
-        if (!matchMode(bsd) || matchDistance(bsd))
+        if (matchMode(bsd) && matchDistance(bsd))
         {
-            return;
+            trace(QString("QSOMapFrame::drawSpot filtered OK %1").arg(bsd->getDxCallStr()));
+            bool drawLine = true;
+            QPair<double, double> pos = calcPosition(loc, drawLine);
+
+            QStringList callInfo; // [callsign, latitude, longitude]
+
+            callInfo << bsd->getDxCall().getFullCall();
+            callInfo << QString::number(pos.first);
+            callInfo << QString::number(pos.second);
+            callInfo << loc;
+            callInfo << (drawLine?"true":"false");
+            emit spotSig(callInfo);
         }
-        bool drawLine = true;
-        QPair<double, double> pos = calcPosition(loc, drawLine);
-
-        QStringList callInfo; // [callsign, latitude, longitude]
-
-        callInfo << bsd->getDxCall().getFullCall();
-        callInfo << QString::number(pos.first);
-        callInfo << QString::number(pos.second);
-        callInfo << loc;
-        callInfo << (drawLine?"true":"false");
-        emit spotSig(callInfo);
+        else
+        {
+            trace(QString("QSOMapFrame::drawSpot Not filtered OK %1 %2"
+                          "").arg(bsd->getDxCallStr(), bsd->getMode()));
+        }
     }
 }
 bool QSOMapFrame::checkSpotInTable(QSharedPointer<ClusterSpotData> spot)
@@ -757,7 +763,7 @@ bool QSOMapFrame::checkSpotInTable(QSharedPointer<ClusterSpotData> spot)
                 else if (spotType == bandmapSpotType::CLUSTER)
                 {
                     // yes, remove old spot
-                    trace(QString("CheckSpot In Table Remove - Cluster Spot %1").arg(rowCall.getFullCall()));
+                    trace(QString("QSOMapFrame::checkSpotInTable CheckSpot In Table Remove - Cluster Spot %1").arg(rowCall.getFullCall()));
                     bsd->setSpotType(bandmapSpotType::DELETED);
                     // and this spot will be used instead
                 }
@@ -776,7 +782,7 @@ void QSOMapFrame::dxSpots(QVector<ClusterMessage> spotMsg)
         for (int i = 0; i < spotMsg.count(); i++)
         {
             ClusterMessage msg = spotMsg[i];
-            trace(QString("retrieve cluster spot from queue - spot = %1 for loggeruuid = %2, this contest uuid = %3").arg(msg.getMessage(), msg.getLoggerUuid(), ct->uuid));
+            trace(QString("QSOMapFrame::dxSpots  retrieve cluster spot from queue - spot = %1 for loggeruuid = %2, this contest uuid = %3").arg(msg.getMessage(), msg.getLoggerUuid(), ct->uuid));
 
             // if loggerUuid is empty, message is for all frames
             if ((msg.getLoggerUuid().isEmpty() || msg.getLoggerUuid() == ct->uuid)
@@ -785,7 +791,7 @@ void QSOMapFrame::dxSpots(QVector<ClusterMessage> spotMsg)
             {
                 if (msg.getMessage().contains(DXSPOT) || msg.getMessage().contains(RESENTSPOT))
                 {
-                    trace(QString("Spot for this loggeruuid = %1, add to queue").arg(ct->uuid));
+                    trace(QString("QSOMapFrame::dxSpots Spot for this loggeruuid = %1, add to queue").arg(ct->uuid));
                     QSharedPointer<ClusterSpotData> sp = stringToDxSpot(msg.getMessage(), ct, timeToLive);
                     if (!sp || !checkSpotInTable(sp))
                     {
@@ -797,13 +803,13 @@ void QSOMapFrame::dxSpots(QVector<ClusterMessage> spotMsg)
                     bool locEmpty = sp->getDxLocator().isEmpty();
                     if (!fromNode && !wkd && !locEmpty)
                     {
-                        trace(QString("draw cluster spot spot = %1").arg(msg.getMessage()));
+                        trace(QString("QSOMapFrame::dxSpots draw cluster spot spot = %1").arg(msg.getMessage()));
                         spotQueue += sp;
                         drawSpot(sp);
                     }
                     else
                     {
-                        trace(QString("don't draw cluster spot spot = %1 FN %2 WKD %3 LE %4")
+                        trace(QString("QSOMapFrame::dxSpots don't draw cluster spot spot = %1 fromNode %2 WKD %3 locEmpty %4")
                               .arg(msg.getMessage())
                               .arg(fromNode)
                               .arg(wkd)
@@ -814,7 +820,7 @@ void QSOMapFrame::dxSpots(QVector<ClusterMessage> spotMsg)
             }
             else
             {
-                trace("Not for this contest");
+                trace("QSOMapFrame::dxSpots Not for this contest");
             }
         }
     }
