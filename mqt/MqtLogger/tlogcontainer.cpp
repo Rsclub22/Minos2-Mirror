@@ -1291,6 +1291,10 @@ void TLogContainer::onTabClosebutton(int t)
 void TLogContainer::CloseAllActionExecute()
 {
     trace(QString("%1 entered").arg(__func__));
+    if (!loggerClosing && !mShowYesNoMessage(this, tr("Do you want to close all contests?") ))
+    {
+        return;
+    }
     QWidget *thisContest = ui->contestPageControl->currentWidget();
     while ( ui->contestPageControl->count() > 1)
     {
@@ -1321,6 +1325,11 @@ void TLogContainer::CloseAllActionExecute()
 void TLogContainer::CloseAllButActionExecute()
 {
     trace(QString("%1 entered").arg(__func__));
+    if (!mShowYesNoMessage(this, tr("Do you want to close all but the current contest?") ))
+    {
+        return;
+    }
+
    QWidget *thisContest = ui->contestPageControl->currentWidget();
    while ( ui->contestPageControl->count() > 1)
    {
