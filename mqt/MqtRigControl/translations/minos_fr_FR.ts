@@ -281,9 +281,8 @@ Please obtain the correct ini file from the developers</source>
         <translation>Contrôle de l&apos;appareil</translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.ui" line="54"/>
         <source>Select RigControl path</source>
-        <translation>Sélectionner le programme Rigctld</translation>
+        <translation type="vanished">Sélectionner le programme Rigctld</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.ui" line="107"/>
@@ -324,6 +323,11 @@ Please obtain the correct ini file from the developers</source>
         <location filename="../rigcontrolmainwindow.ui" line="39"/>
         <source>Setup</source>
         <translation>Configuration</translation>
+    </message>
+    <message>
+        <location filename="../rigcontrolmainwindow.ui" line="54"/>
+        <source>Select RigControl Program</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.ui" line="61"/>

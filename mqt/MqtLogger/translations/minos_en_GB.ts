@@ -5258,7 +5258,7 @@ Please choose a new name.</source>
     </message>
     <message>
         <location filename="../tlogcontainer.cpp" line="1159"/>
-        <location filename="../tlogcontainer.cpp" line="1441"/>
+        <location filename="../tlogcontainer.cpp" line="1450"/>
         <source>Minos contest files (*.minos *.Minos);;All Files (*.*)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5278,90 +5278,100 @@ Please choose a new name.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1378"/>
+        <location filename="../tlogcontainer.cpp" line="1294"/>
+        <source>Do you want to close all contests?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../tlogcontainer.cpp" line="1328"/>
+        <source>Do you want to close all but the current contest?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../tlogcontainer.cpp" line="1387"/>
         <source>This action will clear geometry entries for all of the apps within Minos.
 
 Please confirm this action by pressing &quot;Yes&quot;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1392"/>
+        <location filename="../tlogcontainer.cpp" line="1401"/>
         <source>Clear registry only works under Windows</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1445"/>
+        <location filename="../tlogcontainer.cpp" line="1454"/>
         <source>Open contest for Analysis</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1457"/>
+        <location filename="../tlogcontainer.cpp" line="1466"/>
         <source>Failed to open Contest Log file %1 : %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1465"/>
+        <location filename="../tlogcontainer.cpp" line="1474"/>
         <source>Analysis of %1 complete; look in the trace log for analysis.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="2372"/>
+        <location filename="../tlogcontainer.cpp" line="2381"/>
         <source>Minos Contest Logger Application</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1356"/>
+        <location filename="../tlogcontainer.cpp" line="1365"/>
         <source>You may need to close and reload Minos to have these settings applied</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1555"/>
+        <location filename="../tlogcontainer.cpp" line="1564"/>
         <source>Contest Sets</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1644"/>
+        <location filename="../tlogcontainer.cpp" line="1653"/>
         <source>Creating </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1644"/>
-        <location filename="../tlogcontainer.cpp" line="2174"/>
+        <location filename="../tlogcontainer.cpp" line="1653"/>
+        <location filename="../tlogcontainer.cpp" line="2183"/>
         <source>Loading </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1646"/>
+        <location filename="../tlogcontainer.cpp" line="1655"/>
         <source>Contest file </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1815"/>
+        <location filename="../tlogcontainer.cpp" line="1824"/>
         <source>Configure Screen Layouts...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1905"/>
+        <location filename="../tlogcontainer.cpp" line="1914"/>
         <source>&amp;Manage Contest Sets...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="2176"/>
+        <location filename="../tlogcontainer.cpp" line="2185"/>
         <source>List file </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="2186"/>
+        <location filename="../tlogcontainer.cpp" line="2195"/>
         <source>Open List %1?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="2210"/>
+        <location filename="../tlogcontainer.cpp" line="2219"/>
         <source>Contact list files (*.csl);;All Files (*.*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="2214"/>
+        <location filename="../tlogcontainer.cpp" line="2223"/>
         <source>Open Archive List</source>
         <translation type="unfinished"></translation>
     </message>

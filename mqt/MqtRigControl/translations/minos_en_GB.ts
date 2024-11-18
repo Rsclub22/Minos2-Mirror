@@ -282,6 +282,11 @@ Please obtain the correct ini file from the developers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../rigcontrolmainwindow.ui" line="54"/>
+        <source>Select RigControl Program</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../rigcontrolmainwindow.ui" line="61"/>
         <source>Show Current Radio Config</source>
         <translation type="unfinished"></translation>
@@ -319,11 +324,6 @@ Please obtain the correct ini file from the developers</source>
     <message>
         <location filename="../rigcontrolmainwindow.ui" line="183"/>
         <source>Reconnect</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../rigcontrolmainwindow.ui" line="54"/>
-        <source>Select RigControl path</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
