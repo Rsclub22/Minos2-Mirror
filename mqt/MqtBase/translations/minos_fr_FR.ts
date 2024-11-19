@@ -6,98 +6,98 @@
     <message>
         <location filename="../bandmapclientfilterdialog.ui" line="24"/>
         <source>Mode</source>
-        <translation type="unfinished">Mode</translation>
+        <translation>Mode</translation>
     </message>
     <message>
         <location filename="../bandmapclientfilterdialog.ui" line="30"/>
         <source>All Modes</source>
-        <translation type="unfinished"></translation>
+        <translation>Tous les modes</translation>
     </message>
     <message>
         <location filename="../bandmapclientfilterdialog.ui" line="39"/>
         <source>USB</source>
-        <translation type="unfinished"></translation>
+        <translation>USB</translation>
     </message>
     <message>
         <location filename="../bandmapclientfilterdialog.ui" line="46"/>
         <source>RTTY</source>
-        <translation type="unfinished"></translation>
+        <translation>RTTY</translation>
     </message>
     <message>
         <location filename="../bandmapclientfilterdialog.ui" line="53"/>
         <source>LSB</source>
-        <translation type="unfinished"></translation>
+        <translation>LSB</translation>
     </message>
     <message>
         <location filename="../bandmapclientfilterdialog.ui" line="60"/>
         <source>Mode None</source>
-        <translation type="unfinished"></translation>
+        <translation>Mode: Aucun</translation>
     </message>
     <message>
         <location filename="../bandmapclientfilterdialog.ui" line="67"/>
         <source>CW</source>
-        <translation type="unfinished"></translation>
+        <translation>CW</translation>
     </message>
     <message>
         <location filename="../bandmapclientfilterdialog.ui" line="74"/>
         <source>FM</source>
-        <translation type="unfinished"></translation>
+        <translation>FM</translation>
     </message>
     <message>
         <location filename="../bandmapclientfilterdialog.ui" line="81"/>
         <source>FT4</source>
-        <translation type="unfinished"></translation>
+        <translation>FT4</translation>
     </message>
     <message>
         <location filename="../bandmapclientfilterdialog.ui" line="88"/>
         <source>FT8</source>
-        <translation type="unfinished"></translation>
+        <translation>FT8</translation>
     </message>
     <message>
         <location filename="../bandmapclientfilterdialog.ui" line="95"/>
         <source>MSK144</source>
-        <translation type="unfinished"></translation>
+        <translation>MSK144</translation>
     </message>
     <message>
         <location filename="../bandmapclientfilterdialog.ui" line="102"/>
         <source>JT65</source>
-        <translation type="unfinished"></translation>
+        <translation>JT65</translation>
     </message>
     <message>
         <location filename="../bandmapclientfilterdialog.ui" line="109"/>
         <source>PSK31/63</source>
-        <translation type="unfinished"></translation>
+        <translation>PSK31/63</translation>
     </message>
     <message>
         <location filename="../bandmapclientfilterdialog.ui" line="119"/>
         <location filename="../bandmapclientfilterdialog.ui" line="138"/>
         <source>Distance</source>
-        <translation type="unfinished"></translation>
+        <translation>Distance</translation>
     </message>
     <message>
         <location filename="../bandmapclientfilterdialog.ui" line="145"/>
         <source>Ignore</source>
-        <translation type="unfinished"></translation>
+        <translation>Ignorer</translation>
     </message>
     <message>
         <location filename="../bandmapclientfilterdialog.ui" line="154"/>
         <source>Ignore Spots with no distance value</source>
-        <translation type="unfinished"></translation>
+        <translation>Ignorer les spots sans valeur de distance</translation>
     </message>
     <message>
         <location filename="../bandmapclientfilterdialog.cpp" line="101"/>
         <source>Click to set/reset all modes</source>
-        <translation type="unfinished"></translation>
+        <translation>Cliquer pour définir/réinitialiser tous les modes</translation>
     </message>
     <message>
         <location filename="../bandmapclientfilterdialog.cpp" line="218"/>
         <source>Distance Filter</source>
-        <translation type="unfinished"></translation>
+        <translation>Filtre de distance</translation>
     </message>
     <message>
         <location filename="../bandmapclientfilterdialog.cpp" line="219"/>
         <source>Please enter a number between %1 and %2!</source>
-        <translation type="unfinished"></translation>
+        <translation>Entrer un nombre entre %1 et %2 SVP !</translation>
     </message>
 </context>
 <context>
@@ -1224,7 +1224,7 @@
     <message>
         <location filename="../cutils.cpp" line="993"/>
         <source>D</source>
-        <translation type="unfinished"></translation>
+        <translation>J</translation>
     </message>
 </context>
 <context>
@@ -1435,58 +1435,66 @@ Attention: &quot;.&quot; pas &quot;,&quot;
     <message>
         <location filename="../managehamlib.ui" line="14"/>
         <source>Manage Hamlib</source>
-        <translation type="unfinished"></translation>
+        <translation>Gérer Hamlib</translation>
     </message>
     <message>
         <location filename="../managehamlib.ui" line="20"/>
         <source>Hamlib Path</source>
-        <translation type="unfinished"></translation>
+        <translation>Chemin de Hamlib</translation>
     </message>
     <message>
         <location filename="../managehamlib.ui" line="50"/>
         <source>Revert Hamlib</source>
-        <translation type="unfinished"></translation>
+        <translation>Restaurer vieux Hamlib</translation>
     </message>
     <message>
         <location filename="../managehamlib.ui" line="70"/>
         <source>Update Hamlib</source>
-        <translation type="unfinished"></translation>
+        <translation>Mise à jour de Hamlib</translation>
     </message>
     <message>
         <location filename="../managehamlib.ui" line="94"/>
         <source>Cancel</source>
-        <translation type="unfinished">Annuler</translation>
+        <translation>Annuler</translation>
     </message>
     <message>
         <location filename="../managehamlib.cpp" line="90"/>
         <source>Failed to load libhamlib-4.dll %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Échec du charger libhamlib-4.dll %1</translation>
     </message>
     <message>
         <location filename="../managehamlib.cpp" line="301"/>
         <location filename="../managehamlib.cpp" line="308"/>
         <location filename="../managehamlib.cpp" line="344"/>
         <source>Failed to rename %1 to %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Échec du renommage de %1 en %2</translation>
     </message>
     <message>
         <location filename="../managehamlib.cpp" line="312"/>
-        <source>Hamlib Update successful 
-
-New Hamlib will be used after restart</source>
+        <source>Hamlib updated - will be used after restart</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../managehamlib.cpp" line="349"/>
+        <source>Old Hamlib restored - it will be used after restart</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hamlib Update successful 
+
+New Hamlib will be used after restart</source>
+        <translation type="vanished">Hamlib mis à jour - sera utilisé après le redémarrage</translation>
+    </message>
+    <message>
         <source>Hamlib successfully reverted 
 
 Reverted Hamlib will be used after restart</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Vieux Hamlib restauré - sera utilisé après le redémarrage</translation>
     </message>
     <message>
         <location filename="../managehamlib.cpp" line="361"/>
         <source>No Hamlib update found that could be reverted</source>
-        <translation type="unfinished"></translation>
+        <translation>Aucun vieux Hamlib à restaurer</translation>
     </message>
 </context>
 <context>
@@ -1877,12 +1885,12 @@ Reverted Hamlib will be used after restart</source>
     <message>
         <location filename="../qsomapframe.cpp" line="179"/>
         <source>Filter...</source>
-        <translation type="unfinished"></translation>
+        <translation>Filtrer...</translation>
     </message>
     <message>
         <location filename="../qsomapframe.cpp" line="190"/>
         <source>Data and Map</source>
-        <translation type="unfinished"></translation>
+        <translation>Données et Carte</translation>
     </message>
 </context>
 <context>
