@@ -924,9 +924,13 @@ void TxVmButtonsFrame::onVmStopClicked()
 
     msgDurTimer->stop();
     repeatPauseTimer->stop();
-    if (buttonNumSent != NO_VM_BUTTON_ON)
+    if (buttonNumSent != NO_VM_BUTTON_ON && buttonNumSent <= txVmButtonMap.count())
     {
-        txVmButtonMap[buttonNumSent]->showButtonOnOff(false);
+        TxVoiceMemButton *b = txVmButtonMap[buttonNumSent];
+        if (b)
+        {
+            b->showButtonOnOff(false);
+        }
     }
     setRepeatIndicatorOnOff(false);
     buttonNumSent = NO_VM_BUTTON_ON;
@@ -1040,7 +1044,11 @@ void TxVmButtonsFrame::onRemoteKeyerStarted(int key)
         logMessage(QString("- msgDurTimer->start(%1)").arg(msgDur));
         msgDurTimer->start(msgDur);
     }
-    txVmButtonMap[buttonNumSent]->showButtonOnOff(true);
+    TxVoiceMemButton *b = txVmButtonMap[buttonNumSent];
+    if (b)
+    {
+        b->showButtonOnOff(true);
+    }
 }
 void TxVmButtonsFrame::onRemoteKeyerStopped()
 {
@@ -1051,7 +1059,11 @@ void TxVmButtonsFrame::onRemoteKeyerStopped()
     //txVoiceKeyer->stopMsg();
     msgDurTimer->stop();
     repeatPauseTimer->stop();
-    txVmButtonMap[buttonNumSent]->showButtonOnOff(false);
+    TxVoiceMemButton *b = txVmButtonMap[buttonNumSent];
+    if (b)
+    {
+        b->showButtonOnOff(false);
+    }
     buttonNumSent = NO_VM_BUTTON_ON;
 
 }
@@ -1119,7 +1131,12 @@ void TxVmButtonsFrame::onMsgDurTimerTimeout()
 
 void TxVmButtonsFrame::turnOffVMButton()
 {
-    txVmButtonMap[buttonNumSent]->showButtonOnOff(false);
+    TxVoiceMemButton *b = txVmButtonMap[buttonNumSent];
+    if (b)
+    {
+        b->showButtonOnOff(false);
+    }
+
     setRepeatIndicatorOnOff(false);
     buttonNumSent = NO_VM_BUTTON_ON;
 }
@@ -1724,7 +1741,7 @@ void TxVmButtonsFrame::sandPChanged(bool s)
 void TxVmButtonsFrame::fKey(BaseContestLog *c, int key, int /*carrier*/)
 {
     // FKey event received by log frame (or ctrl/FKey)
-    if (ct == c)
+    if (c && ct == c)
     {
         int mem = key - Qt::Key_F1;
         if (mem > 10)
@@ -1861,13 +1878,16 @@ void TxVoiceMemButton::buttonSelected()
 
 void TxVoiceMemButton::showButtonOnOff(bool state)
 {
-    if (state)
+    if (vmButton)
     {
-        vmButton->setStyleSheet(VM_BUTTON_ON_STYLE);
-    }
-    else
-    {
-        vmButton->setStyleSheet(VM_BUTTON_OFF_STYLE);
+        if (state)
+        {
+            vmButton->setStyleSheet(VM_BUTTON_ON_STYLE);
+        }
+        else
+        {
+            vmButton->setStyleSheet(VM_BUTTON_OFF_STYLE);
+        }
     }
 }
 

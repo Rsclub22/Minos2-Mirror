@@ -124,7 +124,7 @@ void DMButtonFrame::setContest(BaseContestLog *c)
 }
 void DMButtonFrame::fKey(BaseContestLog *c, int key, int carr)
 {
-    if (c == ct)
+    if (c && c == ct)
     {
         if (key >= Qt::Key_F1 && key <= Qt::Key_F12 && fkeys["Digi"][currentName].size() == 24)
         {
