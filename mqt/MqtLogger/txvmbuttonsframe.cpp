@@ -8,12 +8,10 @@
 #include "MTrace.h"
 #include "contest.h"
 
-#include "txvmbuttonsframe.h"
-#include "ui_txvmbuttonsframe.h"
 #include "rigcommon.h"
 #include "serialCommonData.h"
-
-
+#include "txvmbuttonsframe.h"
+#include "ui_txvmbuttonsframe.h"
 
 const char * VM_BUTTON_ON_STYLE = "background-color: orange ; color:black ; border-style: outset; border-width: 1px; border-color: black;\n";
 const char * VM_BUTTON_OFF_STYLE = "background-color: Gainsboro ; color:black ; border-style: outset; border-width: 1px; border-color: black;\n";
@@ -60,7 +58,6 @@ TxVmButtonsFrame::TxVmButtonsFrame(QWidget *parent) :
     //connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::modeChange, this, &TxVmButtonsFrame::onModeChange);
 
     initTxVmButtonFrame();
-
 }
 
 TxVmButtonsFrame::~TxVmButtonsFrame()
@@ -72,9 +69,6 @@ TxVmButtonsFrame::~TxVmButtonsFrame()
         delete b;
     }
 }
-
-
-
 
 void TxVmButtonsFrame::initTxVmButtonFrame()
 {
@@ -111,17 +105,17 @@ void TxVmButtonsFrame::initTxVmButtonFrame()
 
     onVoiceKeyerSelect(ui->voiceKeyerSelect->currentIndex());
 
-
-
     config.endGroup();
-
-
-
-
 }
 
+bool  TxVmButtonsFrame::isVoiceMode()
+{
+    return  curMode == rigcommon::convertModeToQString(MODE::USB)
+    || curMode == rigcommon::convertModeToQString(MODE::LSB)
+        || curMode == rigcommon::convertModeToQString(MODE::FM)
+        || curMode == hamlibData::PH;
 
-
+}
 
 void TxVmButtonsFrame::setPttTypeLabelsVisible(bool visible)
 {
@@ -147,8 +141,6 @@ void TxVmButtonsFrame::setVoiceNumMemButtonsVisible(int num)
         voiceMemButtonList[i]->setVisible(true);
     }
 }
-
-
 
 void TxVmButtonsFrame::onVmSetupClicked()
 {
@@ -278,12 +270,8 @@ void TxVmButtonsFrame::createKeyer(QString voiceKeyerName)
 
         }
 
-
     }
 }
-
-
-
 
 void TxVmButtonsFrame::loadButtonData()
 {
@@ -686,10 +674,6 @@ void TxVmButtonsFrame::setSaveButtonByRadionameText(QString selectedRadioName)
         ui->buttonSelectionLbl->setVisible(false);
 
     }
-
-
-
-
 }
 
 void TxVmButtonsFrame::clearButtonLabels()
@@ -699,8 +683,6 @@ void TxVmButtonsFrame::clearButtonLabels()
         setRunButtonText(i, "");
     }
 }
-
-
 
 void TxVmButtonsFrame::editActionSelected(int buttonNumber)
 {
@@ -780,7 +762,6 @@ void TxVmButtonsFrame::editActionSelected(int buttonNumber)
     }
 
 }
-
 void TxVmButtonsFrame::readActionSelected(int buttonNumber)
 {
     if ((voiceKeyerType == keyerTypes[VoiceKeyerId::RigControl] && !isVoiceMemAvail(selectedRadio))
@@ -793,10 +774,7 @@ void TxVmButtonsFrame::readActionSelected(int buttonNumber)
 
     if (voiceKeyerType == keyerTypes[VoiceKeyerId::RigControl])
     {
-        if(curMode != rigcommon::convertModeToQString(MODE::USB)
-                && curMode != rigcommon::convertModeToQString(MODE::LSB)
-                && curMode != rigcommon::convertModeToQString(MODE::FM)
-                && curMode != hamlibData::PH)
+        if(!isVoiceMode())
         {
             logMessage(QString("Mode needs to be a phone type for rigcontrol Voice Message, current mode = %1").arg(curMode));
             return;
@@ -912,10 +890,7 @@ void TxVmButtonsFrame::onVmStopClicked()
             {
                 sendModeToRadio(savedMode);
             }
-
        // }
-
-
     }
     else
     {
@@ -936,10 +911,6 @@ void TxVmButtonsFrame::onVmStopClicked()
     buttonNumSent = NO_VM_BUTTON_ON;
 
 }
-
-
-
-
 
 void TxVmButtonsFrame::newActionSelected(int buttonNumber)
 {
@@ -1011,8 +982,6 @@ void TxVmButtonsFrame::onRemoteConfigChanged()
         ui->pipCb->setChecked(s);
     }
 
-
-
     for (int i = 0; i < voiceMemButtonList.count(); i++)
     {
         VoiceKeyerParams vmData;
@@ -1025,8 +994,6 @@ void TxVmButtonsFrame::onRemoteConfigChanged()
         vmKeyParamList[i] = vmData;
         setRunButtonText(i, vmData.getVmName());
     }
-
-
 }
 void TxVmButtonsFrame::onRemoteKeyerStarted(int key)
 {
@@ -1124,8 +1091,6 @@ void TxVmButtonsFrame::onMsgDurTimerTimeout()
 
     }
 
-
-
 }
 
 
@@ -1164,12 +1129,7 @@ void TxVmButtonsFrame::onRepeatPauseTimerTimeout()
            }
         }
     }
-
-
-
 }
-
-
 
 void TxVmButtonsFrame::setRadioIsConnected(bool connected)
 {
@@ -1183,11 +1143,7 @@ void TxVmButtonsFrame::setSelectedRadio(PubSubName selectedRadio_)
         selectedRadio = selectedRadio_;
 
         updateFrameState();
-
-
     }
-
-
 }
 
 void TxVmButtonsFrame::setPttEnabled(bool state, PubSubName psn)
@@ -1243,10 +1199,6 @@ void TxVmButtonsFrame::setPttType(int type, PubSubName psn)
 
     updateFrameState();
 }
-
-
-
-
 
 serialCommonData::MINOS_PTT_TYPES TxVmButtonsFrame::getPttType(PubSubName psn)
 {
@@ -1333,10 +1285,6 @@ int TxVmButtonsFrame::getNumVoiceMessages(PubSubName psn)
         return MAXIMUM_BUTTONS;
     }
 }
-
-
-
-
 
 void TxVmButtonsFrame::setRigVoiceKeyerSupportStopFlag(bool supportStopCmd, PubSubName psn)
 {
@@ -1741,7 +1689,8 @@ void TxVmButtonsFrame::sandPChanged(bool s)
 void TxVmButtonsFrame::fKey(BaseContestLog *c, int key, int /*carrier*/)
 {
     // FKey event received by log frame (or ctrl/FKey)
-    if (c && ct == c)
+
+    if (c && ct == c && isVoiceMode())
     {
         int mem = key - Qt::Key_F1;
         if (mem > 10)
@@ -1794,10 +1743,6 @@ void TxVmButtonsFrame::onInternalVoiceMemoryPlayState(bool playing)
        qDebug() << "internal has stopped";
         onMsgDurTimerTimeout();
     }
-    //if (!playing)
-   // {
-   //
-   // }
 }
 
 void TxVmButtonsFrame::logMessage(QString msg)
@@ -1843,8 +1788,6 @@ TxVoiceMemButton::~TxVoiceMemButton()
 {
 
 }
-
-
 
 void TxVoiceMemButton::memoryShortCutSelected()
 {

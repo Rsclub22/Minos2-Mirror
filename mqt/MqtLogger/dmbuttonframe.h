@@ -60,11 +60,13 @@ private:
     QMap<QString, QMap<QString, QVector<QPair<QString, QString> > > > fkeys;
 
     QString dataSender;
+    QString curMode;
 
     void showFButtons(bool s);
     QString getFKeysString() const;
     bool parseFKeyString(QString s, QString mode);
     bool parseFKeyArray(QJsonArray s, QString keyset, QString mode);
+    bool isDataMode();
 };
 
 #endif // DMBUTTONFRAME_H

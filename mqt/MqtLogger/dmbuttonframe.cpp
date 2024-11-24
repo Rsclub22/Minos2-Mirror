@@ -14,6 +14,7 @@
 #include "MShowMessageDlg.h"
 #include "MinosLoggerEvents.h"
 #include "MinosParameters.h"
+#include "rigcommon.h"
 
 #include "MinosRPC.h"
 #include "dmbuttonframe.h"
@@ -91,9 +92,17 @@ void DMButtonFrame::DMMess(AnalysePubSubNotify an)
         connect(qfsw, &QFileSystemWatcher::fileChanged, this, &DMButtonFrame::fkeyFileChanged);
     }
 }
+bool  DMButtonFrame::isDataMode()
+{
+    return  curMode == rigcommon::convertModeToQString(MODE::USB)
+        || curMode == rigcommon::convertModeToQString(MODE::LSB)
+        || curMode == rigcommon::convertModeToQString(MODE::FM)
+        || curMode == hamlibData::PH;
 
+}
 void DMButtonFrame::onModeChange(QString mode)
 {
+    curMode = mode;
     MinosRPC *rpc = MinosRPC::getMinosRPC();
     rpc->publish( rpcConstants::DMCat, rpcConstants::DMMode, mode, psPublished );
 }
@@ -124,7 +133,7 @@ void DMButtonFrame::setContest(BaseContestLog *c)
 }
 void DMButtonFrame::fKey(BaseContestLog *c, int key, int carr)
 {
-    if (c && c == ct)
+    if (c && c == ct && isDataMode())
     {
         if (key >= Qt::Key_F1 && key <= Qt::Key_F12 && fkeys["Digi"][currentName].size() == 24)
         {
