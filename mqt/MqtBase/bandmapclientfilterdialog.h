@@ -25,7 +25,7 @@ class BandmapClientFilterDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit BandmapClientFilterDialog(BandmapClientFilterSettings &filterSettings, QWidget *parent = nullptr);
+    explicit BandmapClientFilterDialog(BandmapClientFilterSettings &filterSettings, const QString &title, QWidget *parent);
     ~BandmapClientFilterDialog();
 
     static int mainTabIndex;
@@ -53,7 +53,7 @@ private:
 
     BandmapClientFilterSettings filterSettings;
 
-    void initCheckFilterTab();
+    void initCheckFilterTab(const QString &t);
 
     void clearModes();
     void setModes();

@@ -1623,7 +1623,8 @@ void BandmapClientFrame::setMode(QString mode)
 
 void BandmapClientFrame::filterButtonSelected()
 {
-    BandmapClientFilterDialog filterSetup(BandmapClientFilterDialog(filterSettings, this));
+    trace("BandmapClientFrame::filterButtonSelected()");
+    BandmapClientFilterDialog filterSetup(BandmapClientFilterDialog(filterSettings, tr("Bandmap Spot Filters"), this));
     if (filterSetup.exec() == QDialog::Accepted)
     {
 

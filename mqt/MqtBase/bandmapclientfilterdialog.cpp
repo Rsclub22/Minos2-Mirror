@@ -18,7 +18,7 @@
 
 int BandmapClientFilterDialog::mainTabIndex;
 
-BandmapClientFilterDialog::BandmapClientFilterDialog(BandmapClientFilterSettings &filterSettings_, QWidget *parent) :
+BandmapClientFilterDialog::BandmapClientFilterDialog(BandmapClientFilterSettings &filterSettings_, const QString &title, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::BandmapClientFilterDialog),
     distanceChanged(false),
@@ -39,7 +39,7 @@ BandmapClientFilterDialog::BandmapClientFilterDialog(BandmapClientFilterSettings
 
     filterSettings = filterSettings_;
 
-    initCheckFilterTab();
+    initCheckFilterTab(title);
 }
 
 BandmapClientFilterDialog::~BandmapClientFilterDialog()
@@ -77,9 +77,9 @@ void BandmapClientFilterDialog::doCloseEvent()
 }
 
 
-void BandmapClientFilterDialog::initCheckFilterTab()
+void BandmapClientFilterDialog::initCheckFilterTab(const QString &t)
 {
-    setWindowTitle("Bandmap Spot Filters");
+    setWindowTitle(t);
 
     ui->bandmapFilterTab->setCurrentIndex(0);
 

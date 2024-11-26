@@ -1892,6 +1892,11 @@ Reverted Hamlib will be used after restart</source>
         <source>Data and Map</source>
         <translation>Données et Carte</translation>
     </message>
+    <message>
+        <location filename="../qsomapframe.cpp" line="232"/>
+        <source>QSO Map Spot Filters</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QSOMatchGridModel</name>

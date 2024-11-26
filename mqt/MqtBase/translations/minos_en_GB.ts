@@ -1859,6 +1859,11 @@ The format required is (e.g.) 1296.3, 144.32 or 144.290123
         <source>Data and Map</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../qsomapframe.cpp" line="232"/>
+        <source>QSO Map Spot Filters</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QSOMatchGridModel</name>

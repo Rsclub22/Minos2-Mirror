@@ -243,6 +243,11 @@
         <translation>Filtre %1</translation>
     </message>
     <message>
+        <location filename="../bandmapclientframe.cpp" line="1626"/>
+        <source>Bandmap Spot Filters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../bandmapclientframe.cpp" line="1701"/>
         <source>Mouse in frame, updates paused</source>
         <translation>Souris dans le cadre, mises à jour suspendues</translation>
@@ -1543,28 +1548,28 @@ Déplacez-vous entre les composants d&amp;apos;un groupe à l&amp;apos;aide de l
         <translation>Supprimer</translation>
     </message>
     <message>
-        <location filename="../dmbuttonframe.cpp" line="69"/>
-        <location filename="../dmbuttonframe.cpp" line="468"/>
+        <location filename="../dmbuttonframe.cpp" line="70"/>
+        <location filename="../dmbuttonframe.cpp" line="477"/>
         <source>Data Modes Buttons from %1</source>
         <translation>Boutons de modes de données de %1 [???]</translation>
     </message>
     <message>
-        <location filename="../dmbuttonframe.cpp" line="183"/>
+        <location filename="../dmbuttonframe.cpp" line="192"/>
         <source>Not enough key definitions in %1</source>
         <translation>Pas assez de définitions dans %1 [key???]</translation>
     </message>
     <message>
-        <location filename="../dmbuttonframe.cpp" line="347"/>
+        <location filename="../dmbuttonframe.cpp" line="356"/>
         <source>Invalid or missing FKey definitions</source>
         <translation>Définitions FKey invalides ou manquantes</translation>
     </message>
     <message>
-        <location filename="../dmbuttonframe.cpp" line="454"/>
+        <location filename="../dmbuttonframe.cpp" line="463"/>
         <source>Contact list files (*.json);;All Files (*.*)</source>
         <translation>Fichiers de la liste de contacts (* .json) ;; Tous les fichiers (*. *) [Contacts = json??]</translation>
     </message>
     <message>
-        <location filename="../dmbuttonframe.cpp" line="458"/>
+        <location filename="../dmbuttonframe.cpp" line="467"/>
         <source>Open Function Key Definitions</source>
         <translation>Ouvrir les définitions des touches de fonction [???]</translation>
     </message>
@@ -5994,59 +5999,59 @@ Last %8 Mins: %9 QSO %10 pts %11 mults
         <translation type="vanished">Message CW d&apos;apparat</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="764"/>
-        <location filename="../txvmbuttonsframe.cpp" line="982"/>
+        <location filename="../txvmbuttonsframe.cpp" line="746"/>
+        <location filename="../txvmbuttonsframe.cpp" line="953"/>
         <source>Voice Memory</source>
         <translation>Mémoire de voix</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="766"/>
+        <location filename="../txvmbuttonsframe.cpp" line="748"/>
         <source>%1 %2 - Edit</source>
         <translation>%1 %2 - Modifier</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="543"/>
+        <location filename="../txvmbuttonsframe.cpp" line="531"/>
         <source>To use the external keyer mqtKeyer must be running and connected</source>
         <translation>Pour utiliser le keyer externe, mqtKeyer doit être en cours d&apos;exécution et connecté</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="750"/>
-        <location filename="../txvmbuttonsframe.cpp" line="968"/>
+        <location filename="../txvmbuttonsframe.cpp" line="732"/>
+        <location filename="../txvmbuttonsframe.cpp" line="939"/>
         <source>Rig CW Message - </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="984"/>
+        <location filename="../txvmbuttonsframe.cpp" line="955"/>
         <source>%1 %2 - New</source>
         <translation>%1 %2 - Nouveau</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1528"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1476"/>
         <source>Rig Voice Keyer Available</source>
         <translation>Mémoire de voix disponible</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1532"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1480"/>
         <source>Rig CW Messages Available</source>
         <translation>Message CW disponible</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1654"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1602"/>
         <source>TX On</source>
         <translation>TX Actif</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1660"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1608"/>
         <source>TX Off</source>
         <translation>TX Éteint</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1670"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1618"/>
         <source>PTT Enabled</source>
         <translation>PTT activé</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1676"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1624"/>
         <source>PTT Disabled</source>
         <translation>PTT Désactivé</translation>
     </message>
@@ -6412,12 +6417,12 @@ Veuillez modifier ou supprimer</translation>
 <context>
     <name>TxVoiceMemButton</name>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1826"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1771"/>
         <source>&amp;New</source>
         <translation>&amp;Nouveau</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1827"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1772"/>
         <source>&amp;Edit</source>
         <translation>&amp;Modifier</translation>
     </message>
