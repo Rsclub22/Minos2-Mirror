@@ -18,12 +18,13 @@
 
 int BandmapClientFilterDialog::mainTabIndex;
 
-BandmapClientFilterDialog::BandmapClientFilterDialog(BandmapClientFilterSettings &filterSettings_, const QString &title, QWidget *parent) :
+BandmapClientFilterDialog::BandmapClientFilterDialog(BandmapClientFilterSettings &filterSettings_, const QString &title, const QString &reg, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::BandmapClientFilterDialog),
     distanceChanged(false),
     distanceChkBoxChanged(false),
     distanceEmptyChkBoxChanged(false),
+    regPrefix(reg),
     settingsChanged(false)
 
 {
@@ -31,7 +32,7 @@ BandmapClientFilterDialog::BandmapClientFilterDialog(BandmapClientFilterSettings
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     RegSettings settings;
-    QByteArray geometry = settings.getSettings().value("BandmapClientFilter/geometry").toByteArray();
+    QByteArray geometry = settings.getSettings().value(regPrefix + "ClientFilter/geometry").toByteArray();
     if (geometry.size() > 0)
     {
         restoreGeometry(geometry);
@@ -73,7 +74,7 @@ void BandmapClientFilterDialog::closeEvent (QCloseEvent *event)
 void BandmapClientFilterDialog::doCloseEvent()
 {
     RegSettings settings;
-    settings.getSettings().setValue("BandmapClientFilter/geometry", saveGeometry());
+    settings.getSettings().setValue(regPrefix + "ClientFilter/geometry", saveGeometry());
 }
 
 

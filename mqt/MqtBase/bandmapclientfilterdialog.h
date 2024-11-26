@@ -25,7 +25,7 @@ class BandmapClientFilterDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit BandmapClientFilterDialog(BandmapClientFilterSettings &filterSettings, const QString &title, QWidget *parent);
+    explicit BandmapClientFilterDialog(BandmapClientFilterSettings &filterSettings, const QString &title, const QString &reg, QWidget *parent);
     ~BandmapClientFilterDialog();
 
     static int mainTabIndex;
@@ -41,6 +41,7 @@ public:
 
 private:
     Ui::BandmapClientFilterDialog *ui;
+    QString regPrefix;
 
     QList<QCheckBox*> modeChkBoxList;
     QMap<QString, QCheckBox*> modeCheckBoxes;

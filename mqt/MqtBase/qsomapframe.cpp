@@ -229,7 +229,7 @@ void QSOMapFrame::filterButtonClicked()
         trace("QSOMapFrame::filterButtonClicked()");
         BandmapClientFilterSettings filterSettings = ct->getQSOMapFilter();
         trace(filterSettings.print());
-        BandmapClientFilterDialog fd(filterSettings, tr("QSO Map Spot Filters"), this);
+        BandmapClientFilterDialog fd(filterSettings, tr("QSO Map Spot Filters"), "QSOMap", this);
 
         if (fd.exec() == QDialog::Accepted)
         {

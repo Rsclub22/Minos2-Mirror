@@ -85,17 +85,17 @@
         <translation>Ignorer les spots sans valeur de distance</translation>
     </message>
     <message>
-        <location filename="../bandmapclientfilterdialog.cpp" line="101"/>
+        <location filename="../bandmapclientfilterdialog.cpp" line="102"/>
         <source>Click to set/reset all modes</source>
         <translation>Cliquer pour définir/réinitialiser tous les modes</translation>
     </message>
     <message>
-        <location filename="../bandmapclientfilterdialog.cpp" line="218"/>
+        <location filename="../bandmapclientfilterdialog.cpp" line="219"/>
         <source>Distance Filter</source>
         <translation>Filtre de distance</translation>
     </message>
     <message>
-        <location filename="../bandmapclientfilterdialog.cpp" line="219"/>
+        <location filename="../bandmapclientfilterdialog.cpp" line="220"/>
         <source>Please enter a number between %1 and %2!</source>
         <translation>Entrer un nombre entre %1 et %2 SVP !</translation>
     </message>
