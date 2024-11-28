@@ -1032,9 +1032,13 @@ Le mode calculé est %2</translation>
         <translation>Double entrée</translation>
     </message>
     <message>
-        <location filename="../LoggerContacts.cpp" line="69"/>
         <source>BackPacker</source>
-        <translation>&apos;BackPacker&apos;</translation>
+        <translation type="vanished">&apos;BackPacker&apos;</translation>
+    </message>
+    <message>
+        <location filename="../LoggerContacts.cpp" line="69"/>
+        <source>Valid Dup</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../LoggerContacts.cpp" line="72"/>
@@ -5127,9 +5131,13 @@ n&apos;existe pas; télécharger les derniers calendriers&#xa0;?</translation>
         <translation>Non rempli - entrer plus tard</translation>
     </message>
     <message>
-        <location filename="../tforcelogdlg.ui" line="88"/>
         <source>Backpacker (i.e. Valid Duplicate)</source>
-        <translation>&apos;Backpacker&apos;: Duplicata valide</translation>
+        <translation type="vanished">&apos;Backpacker&apos;: Duplicata valide</translation>
+    </message>
+    <message>
+        <location filename="../tforcelogdlg.ui" line="88"/>
+        <source>Valid Duplicate e.g. Rover</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../tforcelogdlg.ui" line="95"/>

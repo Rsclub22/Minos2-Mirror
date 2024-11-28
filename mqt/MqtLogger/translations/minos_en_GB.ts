@@ -936,7 +936,7 @@ The mode is %2</source>
     </message>
     <message>
         <location filename="../LoggerContacts.cpp" line="69"/>
-        <source>BackPacker</source>
+        <source>Valid Dup</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -4943,7 +4943,7 @@ does not exist; do you wish to download the latest calendars?</source>
     </message>
     <message>
         <location filename="../tforcelogdlg.ui" line="88"/>
-        <source>Backpacker (i.e. Valid Duplicate)</source>
+        <source>Valid Duplicate e.g. Rover</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
