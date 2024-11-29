@@ -587,6 +587,8 @@ private:
 
     void setCwMemTestControlsVisible(bool visible);
     void setVoiceMemTestControlsVisible(bool visible);
+    void loadTestModeCombo();
+    void setTestModeControlsVisible(bool visible);
 private slots:
 
     void onCommandRead(QString);
@@ -662,6 +664,7 @@ private slots:
     void onVoiceMessageSpinBoxTextChanged();
     void onVoiceMessagePlayClicked();
     void onVoiceMessageStopClicked();
+    void onTestModeComboBoxTextChanged(const QString testMode);
 };
 
 extern RigControlMainWindow *mainWindow;
