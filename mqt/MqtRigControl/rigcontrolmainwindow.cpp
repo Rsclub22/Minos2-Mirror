@@ -1026,11 +1026,11 @@ bool RigControlMainWindow::checkSupportCwKeyerMemory()
                 return false;
             }
 
-            bool supportStopCmd = true;
-            if (currentRadio.rigMfg_Name == "Yaesu")
-            {
-                supportStopCmd = false;
-            }
+            //bool supportStopCmd = true;
+            //if (!selectedRadioSupportCap.getSupportCwMemoryStop())
+            //{
+            //    supportStopCmd = false;
+            //}
 
             if (testMode)
             {
@@ -1038,7 +1038,7 @@ bool RigControlMainWindow::checkSupportCwKeyerMemory()
             }
 
 
-            addCwKeyerSupportStopCmdToRigCache(supportStopCmd);
+            addCwKeyerSupportStopCmdToRigCache(!selectedRadioSupportCap.getSupportCwMemoryStop());
 
 
             return true;
@@ -5515,25 +5515,8 @@ void RigControlMainWindow::onSetCwTxMessage(QString cwMsg)
     {
         if (radio && !cwMsg.isEmpty())
         {
-            if (currentRadio.rigMfg_Name == "Kenwood"
-                || currentRadio.rigMfg_Name == "Yaesu"
-                || currentRadio.rigMfg_Name == "Icom")
-            {
-                trace(QString("Cw Tx Message Received from logger = %1 for radio %2").arg(cwMsg, currentRadio.rigMfg_Name));
-                radio->sendMorse(rigStateDetails->curVfo, cwMsg);
-            }
-
-            // probably should store cwMessageType locally in rigcontrol or get from cache
-            //if (currentRadio.rigModelNumber >= 1000 && currentRadio.rigModelNumber < 2000)
-            //{
-            //    handleYaesuCwMessage(cwMsg);
-            //}
-            //else if (currentRadio.rigModelNumber >= 3000 && currentRadio.rigModelNumber < 4000)
-            //{
-            //    handleIcomCwMessage(cwMsg);
-            //}
-
-
+           trace(QString("Cw Tx Message Received from logger = %1 for radio %2").arg(cwMsg, currentRadio.rigMfg_Name));
+           radio->sendMorse(rigStateDetails->curVfo, cwMsg);
         }
         else
         {
@@ -5703,7 +5686,19 @@ void RigControlMainWindow::setPttTestControlsVisible(bool visible)
 void RigControlMainWindow::setCwMemTestControlsVisible(bool visible)
 {
     ui->cwKeyerPb->setVisible(visible);
-    ui->cwKeyerStopPb->setVisible(visible);
+    if (visible)
+    {
+        if (!selectedRadioSupportCap.getSupportCwMemoryStop())
+        {
+            ui->cwKeyerStopPb->setVisible(visible);
+        }
+    }
+    else
+    {
+       ui->cwKeyerStopPb->setVisible(visible);
+    }
+
+
 
 }
 
@@ -5726,11 +5721,17 @@ void RigControlMainWindow::onCwKeyerPbClicked()
     {
         if (radioCommsOK)
         {
+            // we probably don't need to check the manfacturer as we have checked the cw memory capability
             QString rigManufacturer = currentRadio.rigMfg_Name;
             if (rigManufacturer == "Yaesu"
                 || rigManufacturer ==  "Kenwood"
                 || rigManufacturer == "Icom"
-                || rigManufacturer == "Elecraft")
+                || rigManufacturer == "Elecraft"
+                || rigManufacturer == "Flex-radio"
+                || rigManufacturer == "OpenHPSDR"
+                || rigManufacturer == "Flex-radio/Apache"
+                || rigManufacturer == "QRPLabs"
+                || rigManufacturer == "Thetis")
             {
                 // This is an optional ini to allow manufacturer specific messages
                 QString fileName = RADIO_PATH_LOGGER() + FILENAME_RIGCONTROL_TEST_DATA;

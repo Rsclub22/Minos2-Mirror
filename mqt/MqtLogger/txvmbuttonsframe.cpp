@@ -853,7 +853,12 @@ void TxVmButtonsFrame::startVMMsg(int buttonNumber)
         if (getCwMemType(selectedRadio) == hamlibData::CW_MEMORY_TYPES::ICOM
             || getCwMemType(selectedRadio) == hamlibData::CW_MEMORY_TYPES::ELECRAFT
             || getCwMemType(selectedRadio) == hamlibData::CW_MEMORY_TYPES::KENWOOD
-            || getCwMemType(selectedRadio) == hamlibData::CW_MEMORY_TYPES::YAESU)
+            || getCwMemType(selectedRadio) == hamlibData::CW_MEMORY_TYPES::YAESU
+            || getCwMemType(selectedRadio) == hamlibData::CW_MEMORY_TYPES::FLEX_RADIO
+            || getCwMemType(selectedRadio) == hamlibData::CW_MEMORY_TYPES::FLEX_RADIO_APACHE
+            || getCwMemType(selectedRadio) == hamlibData::CW_MEMORY_TYPES::OPENHPSDR
+            || getCwMemType(selectedRadio) == hamlibData::CW_MEMORY_TYPES::QRPLABS
+            || getCwMemType(selectedRadio) == hamlibData::CW_MEMORY_TYPES::THETIS)
         {
             if (curMode != rigcommon::convertModeToQString(MODE::CW) && txVoiceKeyer->getSetCwModeAndRestoreFlag())
             {
@@ -1099,7 +1104,12 @@ void TxVmButtonsFrame::onMsgDurTimerTimeout()
         if ((getCwMemType(selectedRadio) == hamlibData::CW_MEMORY_TYPES::ICOM
             ||  getCwMemType(selectedRadio) == hamlibData::CW_MEMORY_TYPES::YAESU
             || getCwMemType(selectedRadio) == hamlibData::CW_MEMORY_TYPES::KENWOOD
-            || getCwMemType(selectedRadio) == hamlibData::CW_MEMORY_TYPES::ELECRAFT)
+            || getCwMemType(selectedRadio) == hamlibData::CW_MEMORY_TYPES::ELECRAFT
+            || getCwMemType(selectedRadio) == hamlibData::CW_MEMORY_TYPES::FLEX_RADIO
+            || getCwMemType(selectedRadio) == hamlibData::CW_MEMORY_TYPES::FLEX_RADIO_APACHE
+            || getCwMemType(selectedRadio) == hamlibData::CW_MEMORY_TYPES::OPENHPSDR
+            || getCwMemType(selectedRadio) == hamlibData::CW_MEMORY_TYPES::QRPLABS
+            || getCwMemType(selectedRadio) == hamlibData::CW_MEMORY_TYPES::THETIS)
             && txVoiceKeyer->getSetCwModeAndRestoreFlag())
         {
 
@@ -1438,7 +1448,12 @@ bool TxVmButtonsFrame::isCwMemTypeAvail(PubSubName psn)
         if (rd.getCwMemType() == hamlibData::CW_MEMORY_TYPES::KENWOOD
             || rd.getCwMemType() == hamlibData::CW_MEMORY_TYPES::YAESU
             || rd.getCwMemType() == hamlibData::CW_MEMORY_TYPES::ICOM
-            || rd.getCwMemType() == hamlibData::CW_MEMORY_TYPES::ELECRAFT)
+            || rd.getCwMemType() == hamlibData::CW_MEMORY_TYPES::ELECRAFT
+            || rd.getCwMemType() == hamlibData::CW_MEMORY_TYPES::FLEX_RADIO
+            || rd.getCwMemType() == hamlibData::CW_MEMORY_TYPES::FLEX_RADIO_APACHE
+            || rd.getCwMemType() == hamlibData::CW_MEMORY_TYPES::OPENHPSDR
+            || rd.getCwMemType() == hamlibData::CW_MEMORY_TYPES::QRPLABS
+            || rd.getCwMemType() == hamlibData::CW_MEMORY_TYPES::THETIS)
         {
             return true;
         }

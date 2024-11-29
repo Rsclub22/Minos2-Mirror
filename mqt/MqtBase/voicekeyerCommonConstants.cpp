@@ -200,7 +200,7 @@ bool getRigCWKeyerSupportedSpecialCharacters(QMap<QString, QChar> &specialCharMa
 
 QString getCwRadioManufacturer(int cwMemType)
 {
-    QString type;
+    QString type = "None";
     if (cwMemType == hamlibData::CW_MEMORY_TYPES::ICOM)
     {
         type = "Icom";
@@ -216,6 +216,26 @@ QString getCwRadioManufacturer(int cwMemType)
     else if (cwMemType == hamlibData::CW_MEMORY_TYPES::ELECRAFT)
     {
         type = "Elecraft";
+    }
+    else if (cwMemType == hamlibData::CW_MEMORY_TYPES::FLEX_RADIO)
+    {
+        type = "Flex_Radio";
+    }
+    else if (cwMemType == hamlibData::CW_MEMORY_TYPES::FLEX_RADIO_APACHE)
+    {
+        type = "Flex_Radio_Apache";
+    }
+    else if (cwMemType == hamlibData::CW_MEMORY_TYPES::OPENHPSDR)
+    {
+        type = "OpenHPSDR";
+    }
+    else if (cwMemType == hamlibData::CW_MEMORY_TYPES::THETIS)
+    {
+        type = "Thetis";
+    }
+    else if (cwMemType == hamlibData::CW_MEMORY_TYPES::QRPLABS)
+    {
+        type = "QrpLabs";
     }
     else if (cwMemType == hamlibData::CW_MEMORY_TYPES::NONE)
     {
