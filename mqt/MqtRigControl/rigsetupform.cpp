@@ -442,6 +442,7 @@ void RigSetupForm::setRadioModel(QString m)
 
 RigCapConstants::PortType RigSetupForm::getCatComportType(QString radioModel)
 {
+    Q_UNUSED(radioModel)
     RigCapabilities rigCap = rigFactory->supported_rigs()->value(radioData->rigModel);
     return rigCap.getPortType();
 }
@@ -2326,6 +2327,9 @@ void RigSetupForm::onPttEnableSelected(bool /*checked*/)
         radioData->enablePTT = checked;
         //setSerialPttControlsVisible(checked);
         setPttGroupBoxVisible(checked);
+
+        initPttStateWhenPttEnabled();
+
         /*
         if (checked)
         {
@@ -2352,6 +2356,14 @@ void RigSetupForm::onPttEnableSelected(bool /*checked*/)
 
     }
 
+
+}
+
+void RigSetupForm::initPttStateWhenPttEnabled()
+{
+    onPttCatEnableClicked(true);
+    onPttDtrEnableClicked(true);
+    onPttRtsEnableClicked(true);
 
 }
 

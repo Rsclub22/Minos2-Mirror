@@ -238,12 +238,6 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
 
     initialiseSupportedRadioDisplay();
 
-    //if (hamlibOk)
-    //{
-    //    setTestMode(testMode);
-   // }
-
-
     setPolltime(1000);
 
     ui->selectRadioBox->clearFocus();
@@ -974,19 +968,48 @@ bool RigControlMainWindow::checkSupportCwKeyerMemory()
             addRigModelToRigCache(currentRadio.rigModel);
             if (currentRadio.rigMfg_Name == "Yaesu")
             {
-                addCwKeyerTypeToRigCache(hamlibData::CW_MEMORY_TYPES::YAESU_MEM_RECALL);
+                trace("Send to logger Rig CW keyer type is Yaesu");
+                addCwKeyerTypeToRigCache(hamlibData::CW_MEMORY_TYPES::YAESU);
             }
             else if (currentRadio.rigMfg_Name == "Kenwood")
             {
-                addCwKeyerTypeToRigCache(hamlibData::CW_MEMORY_TYPES::KENWOOD_MEM_RECALL);
+                trace("Send to logger Rig CW keyer type is Kenwood");
+                addCwKeyerTypeToRigCache(hamlibData::CW_MEMORY_TYPES::KENWOOD);
             }
             else if (currentRadio.rigMfg_Name == "Icom")
             {
+                trace("Send to logger Rig CW keyer type is Icom");
                 addCwKeyerTypeToRigCache(hamlibData::CW_MEMORY_TYPES::ICOM);
             }
             else if (currentRadio.rigMfg_Name == "Elecraft")
             {
+                trace("Send to logger Rig CW keyer type is Elecraft");
                 addCwKeyerTypeToRigCache(hamlibData::CW_MEMORY_TYPES::ELECRAFT);
+            }
+            else if (currentRadio.rigMfg_Name == "Flex-radio")
+            {
+                trace("Send to logger Rig CW keyer type is Flex-Radio");
+                addCwKeyerTypeToRigCache(hamlibData::CW_MEMORY_TYPES::FLEX_RADIO);
+            }
+            else if (currentRadio.rigMfg_Name == "OpenHPSDR")
+            {
+                trace("Send to logger Rig CW keyer type is OpenHPSDR");
+                addCwKeyerTypeToRigCache(hamlibData::CW_MEMORY_TYPES::OPENHPSDR);
+            }
+            else if (currentRadio.rigMfg_Name == "Flex-radio/Apache")
+            {
+                trace("Send to logger Rig CW keyer type is Flex-radio/Apache");
+                addCwKeyerTypeToRigCache(hamlibData::CW_MEMORY_TYPES::FLEX_RADIO_APACHE);
+            }
+            else if (currentRadio.rigMfg_Name == "QRPLabs")
+            {
+                trace("Send to logger Rig CW keyer type is QRPLabs");
+                addCwKeyerTypeToRigCache(hamlibData::CW_MEMORY_TYPES::QRPLABS);
+            }
+            else if (currentRadio.rigMfg_Name == "Thetis")
+            {
+                trace("Send to logger Rig CW keyer type is Thetis");
+                addCwKeyerTypeToRigCache(hamlibData::CW_MEMORY_TYPES::THETIS);
             }
             else
             {
@@ -1003,11 +1026,11 @@ bool RigControlMainWindow::checkSupportCwKeyerMemory()
                 return false;
             }
 
-            bool supportStopCmd = true;
-            if (currentRadio.rigMfg_Name == "Yaesu")
-            {
-                supportStopCmd = false;
-            }
+            //bool supportStopCmd = true;
+            //if (!selectedRadioSupportCap.getSupportCwMemoryStop())
+            //{
+            //    supportStopCmd = false;
+            //}
 
             if (testMode)
             {
@@ -1015,7 +1038,7 @@ bool RigControlMainWindow::checkSupportCwKeyerMemory()
             }
 
 
-            addCwKeyerSupportStopCmdToRigCache(supportStopCmd);
+            addCwKeyerSupportStopCmdToRigCache(!selectedRadioSupportCap.getSupportCwMemoryStop());
 
 
             return true;
@@ -3599,6 +3622,8 @@ int RigControlMainWindow::getRitFreq(VFO vfo)
                ui->ritFreq->setText(convertRitFreqToStr(rigStateDetails->rRitFreq, rigStateDetails->ritKHzFlag));
                logMessage(QString("GetRitFreq from radio = %1").arg(rigStateDetails->rRitFreq.traceStr()));
                sendRitFreqLogger(rigStateDetails->rRitFreq);
+
+
             }
         }
     }
@@ -5490,25 +5515,8 @@ void RigControlMainWindow::onSetCwTxMessage(QString cwMsg)
     {
         if (radio && !cwMsg.isEmpty())
         {
-            if (currentRadio.rigMfg_Name == "Kenwood"
-                || currentRadio.rigMfg_Name == "Yaesu"
-                || currentRadio.rigMfg_Name == "Icom")
-            {
-                trace(QString("Cw Tx Message Received from logger = %1 for radio %2").arg(cwMsg, currentRadio.rigMfg_Name));
-                radio->sendMorse(rigStateDetails->curVfo, cwMsg);
-            }
-
-            // probably should store cwMessageType locally in rigcontrol or get from cache
-            //if (currentRadio.rigModelNumber >= 1000 && currentRadio.rigModelNumber < 2000)
-            //{
-            //    handleYaesuCwMessage(cwMsg);
-            //}
-            //else if (currentRadio.rigModelNumber >= 3000 && currentRadio.rigModelNumber < 4000)
-            //{
-            //    handleIcomCwMessage(cwMsg);
-            //}
-
-
+           trace(QString("Cw Tx Message Received from logger = %1 for radio %2").arg(cwMsg, currentRadio.rigMfg_Name));
+           radio->sendMorse(rigStateDetails->curVfo, cwMsg);
         }
         else
         {
@@ -5678,7 +5686,19 @@ void RigControlMainWindow::setPttTestControlsVisible(bool visible)
 void RigControlMainWindow::setCwMemTestControlsVisible(bool visible)
 {
     ui->cwKeyerPb->setVisible(visible);
-    ui->cwKeyerStopPb->setVisible(visible);
+    if (visible)
+    {
+        if (!selectedRadioSupportCap.getSupportCwMemoryStop())
+        {
+            ui->cwKeyerStopPb->setVisible(visible);
+        }
+    }
+    else
+    {
+       ui->cwKeyerStopPb->setVisible(visible);
+    }
+
+
 
 }
 
@@ -5701,11 +5721,17 @@ void RigControlMainWindow::onCwKeyerPbClicked()
     {
         if (radioCommsOK)
         {
+            // we probably don't need to check the manfacturer as we have checked the cw memory capability
             QString rigManufacturer = currentRadio.rigMfg_Name;
             if (rigManufacturer == "Yaesu"
                 || rigManufacturer ==  "Kenwood"
                 || rigManufacturer == "Icom"
-                || rigManufacturer == "Elecraft")
+                || rigManufacturer == "Elecraft"
+                || rigManufacturer == "Flex-radio"
+                || rigManufacturer == "OpenHPSDR"
+                || rigManufacturer == "Flex-radio/Apache"
+                || rigManufacturer == "QRPLabs"
+                || rigManufacturer == "Thetis")
             {
                 // This is an optional ini to allow manufacturer specific messages
                 QString fileName = RADIO_PATH_LOGGER() + FILENAME_RIGCONTROL_TEST_DATA;
