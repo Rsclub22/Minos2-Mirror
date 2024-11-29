@@ -1328,7 +1328,7 @@ void WsjtxFrame::on_testButton_clicked()
 //19:30:14.690 WsjtxFrame::decode_added - 18:30:00 new message G0GJV G8KWX IO91 stage Grid points 50 snr -15
 //19:30:14.733 WsjtxFrame::decode_added - 18:30:00 new message G0GJV G3ZPB IO91 stage Grid points 50 snr -15
 
-#ifdef RUBBISH
+#ifdef TESTCODE
             QTime now = QTime::currentTime();
 
             decode_added(true, "test", now, -14, 0, 0, "FT8", "CQ M/ZL1DRI", false, true);

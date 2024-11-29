@@ -1,5 +1,6 @@
 #include <QFileDialog>
 
+#include "MMessageDialog.h"
 #include "regsettings.h"
 #include "LoggerContest.h"
 #include "ContestDetailsTransferObject.h"
@@ -154,10 +155,14 @@ TEntryOptionsForm::TEntryOptionsForm(QWidget* Owner, QSharedPointer<ContestDetai
     {
         if (ct->isHF())
         {
+            ui->enrb0->setEnabled(false);   //reg1test
+//            ui->enrb6->setEnabled(true);  //cabrillo
             ui->enrb6->setChecked(true);
         }
         else
         {
+//            ui->enrb6->setEnabled(false); //cabrillo
+            ui->enrb0->setEnabled(true);    // reg1test
             ui->enrb0->setChecked( true );
         }
     }
@@ -302,7 +307,22 @@ QString TEntryOptionsForm::doFileSave( )
     }
     if (ui->enrb6->isChecked())
     {
-        exptypes.push_back(ECABRILLO);
+        ExportType et = ECABRILLO;
+        if (!ct->isHF())
+        {
+            bool mret = mShowYesNoMessage(this,
+                                    tr("<center><b>All VHF and up contests in the UK and IARU Region 1<br>"
+                                    "require the Reg1Test format for entries.</b><br>"
+                                    "Is this what you really want?<br>"
+                                    "Press <b>Yes</b> for Reg1Test, or <b>No</b> to continue to export Cabrillo<br>"
+                                    "(e.g. for CQ or ARRL entries)"));
+            if (mret)
+            {
+                et = EREG1TEST;
+            }
+
+        }
+        exptypes.push_back(et);
     }
 
     for(auto const &expformat: exptypes)

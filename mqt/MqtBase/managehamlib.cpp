@@ -8,6 +8,7 @@
 #include "MTrace.h"
 #include "ServerEvent.h"
 #include "ConfigFile.h"
+#include "cutils.h"
 #include "fileutils.h"
 #include "managehamlib.h"
 #include "regsettings.h"
@@ -30,6 +31,7 @@ ManageHamlib::ManageHamlib(QWidget *parent)
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
+    ui->uweLabel->setText(HtmlFontColour(Qt::blue) + "Hamlib download courtesy of Uwe, DG2YCB");
     checkHamlib();
 }
 
@@ -276,14 +278,18 @@ void ManageHamlib::on_updateHamlibButton_clicked()
     ui->updateHamlibButton->setEnabled (false);
     ui->revertHamlibButton->setEnabled (false);
 
+    // I'd use the N0NB site, but that requires you to be logged in to Sourceforge
+    // Form will display "Hamllib download courtesy of Uwe, DG2YCB"
     QString url;
     if (isBuild64Bit())
     {
-        url = "https://n0nb.users.sourceforge.net/dll64/libhamlib-4.dll";
+        url = "http://dr-risse-consulting.de/hamlib/dll64/libhamlib-4.dll";
+//        url = "https://n0nb.users.sourceforge.net/dll64/libhamlib-4.dll";
     }
     else
     {
-        url = "https://n0nb.users.sourceforge.net/dll32/libhamlib-4.dll";
+        url = "http://dr-risse-consulting.de/hamlib/dll32/libhamlib-4.dll";
+//        url = "https://n0nb.users.sourceforge.net/dll32/libhamlib-4.dll";
     }
     bool routerRunning = checkRouterReady();
 

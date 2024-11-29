@@ -17,7 +17,9 @@ win32: {
 
     win32-g++* {
           LIBS += -L$$HAMLIBDIR/lib/gcc/ -llibhamlib
-    } else {
+    } else: win32-clang-g++: {
+        LIBS += -L$$HAMLIBDIR/lib/gcc/ -llibhamlib
+    } else{
           msvc: LIBS += -L$$HAMLIBDIR/lib/msvc/ -llibhamlib-4
           msvc: DEFINES += DLL_EXPORT
     }

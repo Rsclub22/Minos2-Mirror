@@ -114,7 +114,7 @@ DMMainWindow::DMMainWindow(QWidget *parent)
     }
     csettings.setValue("configured", true); // make sure the config file is created;
 
-    ui->dataConfigEdit->setText(configFile);
+    setConfigDisplay(configFile);
 
     RemoteLogs::setSettingsFile(configFile);
 
@@ -165,6 +165,16 @@ DMMainWindow::DMMainWindow(QWidget *parent)
 DMMainWindow::~DMMainWindow()
 {
     delete ui;
+}
+void DMMainWindow::setConfigDisplay(QString s)
+{
+    QString f = "./" + GetCleanPath(s);
+    ui->dataConfigEdit->setText(f);
+    QFontMetrics fm(ui->dataConfigEdit->font());
+    int pixelsWide = fm.boundingRect(f).width() + fm.maxWidth();
+
+    ui->dataConfigEdit->setFixedWidth(pixelsWide);
+    adjustSize();
 }
 
 void DMMainWindow::closeAllEngines()
@@ -429,10 +439,10 @@ void DMMainWindow::on_dataConfigBrowse_clicked()
 
     if (!fname.isEmpty())
     {
-        ui->dataConfigEdit->setText(fname);
         configFile = fname;
         QSettings csettings(getDirectoryLocation(dlConfiguration) + "/DataModeSelect.ini", QSettings::IniFormat);
         csettings.setValue("ConfigurationFile", configFile);
+        setConfigDisplay(configFile);
         if (doRestart)
         {
             on_startButton_clicked();

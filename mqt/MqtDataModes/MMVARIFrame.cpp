@@ -10,10 +10,6 @@
 #include "engineconfigure.h"
 #include "MMVARIFrame.h"
 
-// I think we are in charge of MMVARI multiple copies - we do all the INI file stuff
-
-// we already report on the TX/RX frequencies!
-// either pallette of sensitivity are rubbish - not seeoing signals
 MMVARIFrame::MMVARIFrame(QFrame *cwl, EngineWindow *p,
                          QLineEdit *sendEdit,
                          int inId, int outId, QString name) :

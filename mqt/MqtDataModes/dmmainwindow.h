@@ -60,6 +60,7 @@ private:
     void testAutoStart();
     void onNewStanzas();
 
+    void setConfigDisplay(QString s);
 private slots:
     void on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString from);
 

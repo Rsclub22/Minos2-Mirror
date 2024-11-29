@@ -40,33 +40,33 @@
     </message>
     <message>
         <location filename="../dmmainwindow.cpp" line="158"/>
-        <location filename="../dmmainwindow.cpp" line="178"/>
-        <location filename="../dmmainwindow.cpp" line="339"/>
+        <location filename="../dmmainwindow.cpp" line="188"/>
+        <location filename="../dmmainwindow.cpp" line="349"/>
         <source>Start All Engines</source>
         <translation>Démarrer tous modules de traitement</translation>
     </message>
     <message>
-        <location filename="../dmmainwindow.cpp" line="290"/>
+        <location filename="../dmmainwindow.cpp" line="300"/>
         <source>Any changes will only be actioned when you stop and restart the engines.</source>
         <translation>Arrêter et redémarrer les modules de traitement pour appliquer les modifications.</translation>
     </message>
     <message>
-        <location filename="../dmmainwindow.cpp" line="318"/>
+        <location filename="../dmmainwindow.cpp" line="328"/>
         <source>Stop All Engines</source>
         <translation>Arrêter tous modules de traitement</translation>
     </message>
     <message>
-        <location filename="../dmmainwindow.cpp" line="365"/>
+        <location filename="../dmmainwindow.cpp" line="375"/>
         <source>No DataMode sender configured</source>
         <translation>Aucun expéditeur DataMode configuré</translation>
     </message>
     <message>
-        <location filename="../dmmainwindow.cpp" line="421"/>
+        <location filename="../dmmainwindow.cpp" line="431"/>
         <source>INI (*.ini);;All Files (*.*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dmmainwindow.cpp" line="425"/>
+        <location filename="../dmmainwindow.cpp" line="435"/>
         <source>Datamodes Configuration file</source>
         <translation type="unfinished"></translation>
     </message>
@@ -302,22 +302,22 @@
 <context>
     <name>MMVARIFrame</name>
     <message>
-        <location filename="../MMVARIFrame.cpp" line="81"/>
+        <location filename="../MMVARIFrame.cpp" line="77"/>
         <source>RX/TX state</source>
         <translation>RX/TX État</translation>
     </message>
     <message>
-        <location filename="../MMVARIFrame.cpp" line="90"/>
+        <location filename="../MMVARIFrame.cpp" line="86"/>
         <source>Move the cursor to keep it centered on a signal if the frequency changes slightly</source>
         <translation>Déplacer le curseur pour le maintenir centré sur un signal si la fréquence change légèrement</translation>
     </message>
     <message>
-        <location filename="../MMVARIFrame.cpp" line="97"/>
+        <location filename="../MMVARIFrame.cpp" line="93"/>
         <source>When NET is on the TX frequency follows the RX frequency </source>
         <translation>Lorsque NET est sur la fréquence TX suit la fréquence RX </translation>
     </message>
     <message>
-        <location filename="../MMVARIFrame.cpp" line="103"/>
+        <location filename="../MMVARIFrame.cpp" line="99"/>
         <source>Align the transmit frequency to the receive frequency</source>
         <translation>Aligner la fréquence TX sur la fréquence RX</translation>
     </message>

@@ -26,6 +26,13 @@ win32-g++*{
 #message(g++ dumpcpp)
     TYPELIBS = $$system(dumpcpp OmniRig.tlb)
 }
+win32-clang-g++{
+DEFINES += WIN32
+QT += axcontainer
+
+#message(g++ dumpcpp)
+TYPELIBS = $$system(dumpcpp OmniRig.tlb)
+}
 win32-msvc{
         DEFINES += WIN32
         QT += axcontainer

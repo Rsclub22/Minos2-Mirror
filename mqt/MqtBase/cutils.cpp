@@ -495,71 +495,6 @@ void CSVToStringList( const QString &qs, QStringList &sl )
     csv.parseCsvLine(qs, sl);
 }
 
-#ifdef RUBBISH
-CsvReader::CsvReader(){}
-
-bool CsvReader::parseCsv(const QString &fileName, QList<QStringList> &csv)
-{
-    QFile file (fileName);
-     if (file.open(QIODevice::ReadOnly))
-     {
-         QString data = file.readAll();
-         data.remove( QRegularExpression("\r") ); //remove all ocurrences of CR (Carriage Return)
-         QString temp;
-         QChar character;
-         QTextStream textStream(&data);
-         while (!textStream.atEnd())
-         {
-             textStream >> character;
-             if (character == ',')
-             {
-                 checkString(temp, character, csv);
-             }
-             else if (character == '\n')
-             {
-                 checkString(temp, character, csv);
-             }
-             else if (textStream.atEnd())
-             {
-                 temp.append(character);
-                 checkString(temp, 0, csv);
-             }
-             else
-             {
-                 temp.append(character);
-             }
-         }
-         itemList.clear();
-         return true;
-     }
-     return false;
-}
-void CsvReader::checkString(QString &temp, QChar character, QList<QStringList> &csv)
-{
-    if(temp.count("\"")%2 == 0)
-    {
-        if (temp.startsWith( QChar('\"')) && temp.endsWith( QChar('\"') ) )
-        {
-             temp.remove( QRegularExpression("^\"") );
-             temp.remove( QRegularExpression("\"$") );
-        }
-        temp.replace("\"\"", "\"");
-        itemList.append(temp.trimmed());
-        if (character != QChar(','))
-        {
-            csv.append(itemList);
-            itemList.clear();
-        }
-        temp.clear();
-    }
-    else
-    {
-        temp.append(character);
-    }
-}
-
-
-#endif
 QString anchoredPattern(const QString &expression)
 {
     return QLatin1String("\\A(?:")
@@ -1039,12 +974,13 @@ void sleepFor(qint64 milliseconds)
 }
 QString formatTime( qlonglong s )
 {
-    int i = 0;
-    QString suff;
+    // How about 23D 00:01 or 23D 00H01
+
+    int days = 0;
     while ( s >= 24 * 60 )
     {
         s -= 24 * 60;
-        i++;
+        days++;
     }
     QTime qt(0, 0);
     qt = qt.addSecs( s * 60 );
@@ -1052,23 +988,10 @@ QString formatTime( qlonglong s )
     QString ts = "hh:mm";
 
     QString pref;
-    if ( i > 0 )
+    if ( days > 0 )
     {
-        pref = QString::number( i ) + "/";
-        suff = " d/hh:mm";
+        pref = QString::number( days ) + QCoreApplication::translate("Day Abbreviation", "D") + " ";
     }
-    else
-    {
-        if (s > 60)
-        {
-            suff = " hh:mm";
-        }
-        else
-        {
-            ts = "mm";
-            suff = " min";
-        }
-    }
-    QString t = pref + qt.toString ( ts ) + suff;
+    QString t = pref + qt.toString ( ts );
     return t;
 }

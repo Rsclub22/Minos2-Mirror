@@ -1292,13 +1292,14 @@ void BandmapClientFrame::addLogSpotToBandmapTable(QSharedPointer<ClusterSpotData
         // put the spot on the bandmap
         // find distance to station
         QString distance;
-
+        QString dxBrg;
         if (!newSpot->getDxLocator().isEmpty())
         {
             double dist = 0;
             int brg = 0;
             ct->calcDistanceBearing(newSpot->getDxLocator(), &dist, &brg);
             distance = QString::number(static_cast<int>(dist));
+            dxBrg = QString::number(brg);
         }
 
         QString rotBrg;
@@ -1321,7 +1322,7 @@ void BandmapClientFrame::addLogSpotToBandmapTable(QSharedPointer<ClusterSpotData
         newSpot->setSpotTime(logTimeStr);
 
         newSpot->setDxDist(distance);
-        newSpot->setDxBrg(newSpot->getDxBrg());
+        newSpot->setDxBrg(dxBrg);
         newSpot->setRotBrg(rotBrg);
         newSpot->setRotConnected(rotatorConnected);
         if (newSpot->getSpotType() == bandmapSpotType::LOGGED)

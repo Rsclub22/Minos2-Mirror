@@ -39,9 +39,7 @@ public:
     void deleteRecords(QStringList nameList);
 
     void resetDB();
-
-private:
-    QSqlDatabase qdb;
+    static void startDB();
 };
 
 #endif // BANDMAPSPOTDB_H

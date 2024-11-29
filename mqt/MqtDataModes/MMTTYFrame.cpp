@@ -20,7 +20,7 @@
 // 2Tone - no frequency agility
 // MMTTY you can click-tune to move the frequency
 // We can read/set the mark/space freqs - do we need to do both?
-#ifdef RUBBISH
+#ifdef DOCUMENTATION
 enum { // APP -> MMTTY
 RXM_HANDLE          // provide new window handle
 

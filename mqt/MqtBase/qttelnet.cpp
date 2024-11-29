@@ -663,16 +663,6 @@ int QtTelnetPrivate::parsePlaintext(const QByteArray &data)
 
     QString text = QString::fromLocal8Bit(data.constData(), length);
 
-    if (!nocheckp && nullauth) {
-#ifdef RUBBISH
-        // QRegularExpression doesn't include ::indexIn
-        if (!promptp.pattern().isEmpty() && promptp.indexIn(text) != -1) {
-            emit q->loggedIn();
-            nocheckp = true;
-        }
-#endif
-    }
-    //if (!nocheckp && nullauth) {
     if (!nocheckp && !nullauth) {
         bool f = text.contains("login:", Qt::CaseInsensitive);
         if (!loginp.pattern().isEmpty() && f) {

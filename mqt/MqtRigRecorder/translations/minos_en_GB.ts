@@ -60,27 +60,27 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rcmainwindow.cpp" line="54"/>
+        <location filename="../rcmainwindow.cpp" line="53"/>
         <source>No Sound Input devices available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rcmainwindow.cpp" line="261"/>
+        <location filename="../rcmainwindow.cpp" line="276"/>
         <source>Record Files (*.wav);;All Files (*.*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rcmainwindow.cpp" line="264"/>
+        <location filename="../rcmainwindow.cpp" line="279"/>
         <source>Recorded Files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rcmainwindow.cpp" line="436"/>
+        <location filename="../rcmainwindow.cpp" line="451"/>
         <source>INI (*.ini);;All Files (*.*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rcmainwindow.cpp" line="440"/>
+        <location filename="../rcmainwindow.cpp" line="455"/>
         <source>Rig Recorder Configuration file</source>
         <translation type="unfinished"></translation>
     </message>

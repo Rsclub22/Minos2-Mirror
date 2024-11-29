@@ -19,7 +19,7 @@ DEFINES += TIXML_USE_STL
 DEFINES += NOMINMAX
 
 macx {
-    QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.15
+    QMAKE_MACOSX_DEPLOYMENT_TARGET = 11.0
     QMAKE_TARGET_BUNDLE_PREFIX = uk.org.g0gjv.minos
     MY_ENTITLEMENTS.name = CODE_SIGN_ENTITLEMENTS
     MY_ENTITLEMENTS.value = ../ControlFiles/minos.entitlements
@@ -47,8 +47,9 @@ CONFIG(release, debug|release): QMAKE_CXXFLAGS_WARN_ON += -Wno-deprecated-declar
 CONFIG(debug, debug|release):QMAKE_CXXFLAGS_WARN_ON += -Wno-deprecated-declarations -Wno-reorder -Wold-style-cast  -Winvalid-pch
 
 } else {
-INC_MAP = 1
-DEFINES += INC_MAP
+# Map still not working on all Linux
+#INC_MAP = 1
+#DEFINES += INC_MAP
 *g++*:CONFIG(release, debug|release): QMAKE_CXXFLAGS_WARN_ON += -Wno-deprecated-declarations -Wno-reorder -Wold-style-cast -DNDEBUG  -Winvalid-pch
 else:*g++*:CONFIG(debug, debug|release):QMAKE_CXXFLAGS_WARN_ON += -Wno-deprecated-declarations -Wno-reorder -Wold-style-cast  -Winvalid-pch
 }

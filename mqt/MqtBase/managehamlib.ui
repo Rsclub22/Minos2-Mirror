@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>231</width>
-    <height>159</height>
+    <width>336</width>
+    <height>184</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -22,6 +22,13 @@
     </widget>
    </item>
    <item>
+    <widget class="QLabel" name="verLabel">
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QLabel" name="hamlibPathLabel">
      <property name="text">
       <string/>
@@ -29,7 +36,7 @@
     </widget>
    </item>
    <item>
-    <widget class="QLabel" name="verLabel">
+    <widget class="QLabel" name="uweLabel">
      <property name="text">
       <string/>
      </property>
@@ -47,7 +54,7 @@
      <item>
       <spacer name="horizontalSpacer_2">
        <property name="orientation">
-        <enum>Qt::Horizontal</enum>
+        <enum>Qt::Orientation::Horizontal</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>
@@ -71,7 +78,7 @@
      <item>
       <spacer name="horizontalSpacer">
        <property name="orientation">
-        <enum>Qt::Horizontal</enum>
+        <enum>Qt::Orientation::Horizontal</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>

@@ -1,8 +1,10 @@
 #include <QTabBar>
+#include "delayedaction.h"
 #include "tsinglelogframe.h"
 #include "LoggerContest.h"
 #include "ContestApp.h"
 #include "MTrace.h"
+#include "cutils.h"
 
 #include "StackedInfoFrame.h"
 #include "ui_StackedInfoFrame.h"
@@ -54,6 +56,8 @@ StackedInfoFrame::StackedInfoFrame(QWidget *parent, int instance, TSingleLogFram
 
     setFrameStyle(QStyleOptionFrame::None);
     setFrameShadow(QFrame::Plain);
+
+    adjustMargins(ui->auxDescFrame->layout(), 0, 6, 0, 6, 0);
 
     BandList &blist = BandList::getBandList();
 
@@ -115,7 +119,7 @@ void StackedInfoFrame::on_ShowAuxHeaders()
     TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpShowAuxHeaders, showAuxHeaders );
 
     int topSplit = showAuxHeaders?1:0;
-    ui->stackSplitter->setSizes({topSplit, 10});
+    ui->stackSplitter->setSizes({topSplit, 100});
 }
 void StackedInfoFrame::on_currentTabChangedSlot(int index)
 {
@@ -281,8 +285,11 @@ void StackedInfoFrame::onInfoComboCurrentIndexChanged(int /*arg1*/)
         contest->commonSave(false);
     }
     setTabVisibility();
-    on_ShowAuxHeaders();
     stackMargins();
+    delayedAction(this, [this]() {
+        on_ShowAuxHeaders();
+    }
+    );
 }
 
 void StackedInfoFrame::stackMargins()

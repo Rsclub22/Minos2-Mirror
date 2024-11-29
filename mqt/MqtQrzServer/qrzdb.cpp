@@ -9,10 +9,12 @@
 #include "qrzserverminosparameters.h"
 #include "qrzdb.h"
 
+const char *connectionName = "QRZDB";
+
 QRZDB::QRZDB(QObject *parent)
     : QObject{parent}
 {
-    qdb = QSqlDatabase::addDatabase("QSQLITE");
+    QSqlDatabase qdb = QSqlDatabase::addDatabase("QSQLITE", "QRZDB");
 
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
     QString dbName = getDirectoryLocation(dlDB) + "/qrzdb6";
@@ -66,13 +68,13 @@ QRZDB::QRZDB(QObject *parent)
        "message TEXT"
        ") ";
 
-       QSqlQuery cquery;
+       QSqlQuery cquery(QSqlDatabase::database(connectionName));
           cquery.prepare(createQuery);
           if(cquery.exec())
           {
               trace(QString("QRZ database %1 created successfully").arg(dbName));
               // Original table def didn't have "message" column, so add it now in case
-              QSqlQuery rquery;
+              QSqlQuery rquery(QSqlDatabase::database(connectionName));
               rquery.prepare("ALTER TABLE QRZ ADD message TEXT");
               if (rquery.exec())
               {
@@ -83,7 +85,7 @@ QRZDB::QRZDB(QObject *parent)
                   trace(QString("failed to add message to QRZ table error ; %1").arg(rquery.lastError().text()));
               }
 
-              QSqlQuery query;
+              QSqlQuery query(QSqlDatabase::database(connectionName));
               query.prepare("SELECT COUNT(*) FROM QRZ");
               if (query.exec())
               {
@@ -110,7 +112,7 @@ QRZDB::QRZDB(QObject *parent)
 
 bool QRZDB::createRecord(const QrzCallsignData &csData)
 {
-    QSqlQuery query;
+    QSqlQuery query(QSqlDatabase::database(connectionName));
     query.prepare(
       "INSERT INTO QRZ "
       "(dataSource, callsign, firstName, name, addr1, addr2, county, country, lat, lon, qra, cqZone, ituZone, moddate, dbdate, message)"
@@ -148,7 +150,7 @@ bool QRZDB::createRecord(const QrzCallsignData &csData)
 QrzCallsignData QRZDB::getRecord(const QString cs)
 {
     QrzCallsignData csData;
-    QSqlQuery query;
+    QSqlQuery query(QSqlDatabase::database(connectionName));
     query.prepare("SELECT * FROM QRZ WHERE callsign=(:callsign)");
     query.bindValue(":callsign", cs);
     if (query.exec())
@@ -206,7 +208,7 @@ QrzCallsignData QRZDB::getRecord(const QString cs)
 
 int QRZDB::getRecordCount()
 {
-    QSqlQuery query;
+    QSqlQuery query(QSqlDatabase::database(connectionName));
     query.prepare("SELECT COUNT(*) FROM QRZ");
     if (query.exec() && query.next())
     {
@@ -218,7 +220,7 @@ int QRZDB::getRecordCount()
 
 void QRZDB::resetDB()
 {
-    QSqlQuery rquery;
+    QSqlQuery rquery(QSqlDatabase::database(connectionName));
     rquery.prepare("DROP TABLE QRZ");
     if (rquery.exec())
     {

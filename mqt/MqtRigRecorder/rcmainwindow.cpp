@@ -37,7 +37,6 @@ void MainWindow::volcallback(int instance, unsigned int peakvol, unsigned int rm
         ui->levelMeter_2->levelChanged( peakvol / 32768.0, rmsvol / 32768.0, samples );
     }
 }
-
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -88,6 +87,8 @@ MainWindow::MainWindow(QWidget *parent)
 
 void MainWindow::doConfig()
 {
+    inConfig = true;
+
     QSettings csettings(getDirectoryLocation(dlConfiguration) + "/RigRecorderSelect.ini", QSettings::IniFormat);
     configFile = csettings.value("ConfigurationFile").toString();
     if (configFile.isEmpty())
@@ -96,7 +97,7 @@ void MainWindow::doConfig()
         csettings.setValue("ConfigurationFile", configFile);
     }
 
-    ui->rrConfigEdit->setText(configFile);
+    setConfigDisplay(configFile);
 
     QSettings settings(configFile, QSettings::IniFormat);
 
@@ -122,8 +123,11 @@ void MainWindow::doConfig()
     inVolChange = true;
 
     int recordLevel = settings.value("RecordLevel", 0).toInt();
-
     ui->recordSlider->setValue(recordLevel);
+
+    int recordLevel2 = settings.value("RecordLevel2", 0).toInt();
+
+    ui->recordSlider_2->setValue(recordLevel2);
 
     inVolChange = false;
 
@@ -135,6 +139,17 @@ void MainWindow::doConfig()
     ui->contestLinkCB->setChecked(link);
 
     settings.setValue("configured", true); // make sure the config file is created;
+    inConfig = false;
+}
+void MainWindow::setConfigDisplay(QString s)
+{
+    QString f = "./" + GetCleanPath(s);
+    ui->rrConfigEdit->setText(f);
+    QFontMetrics fm(ui->rrConfigEdit->font());
+    int pixelsWide = fm.boundingRect(f).width() + fm.maxWidth();
+
+    ui->rrConfigEdit->setFixedWidth(pixelsWide);
+    adjustSize();
 }
 MainWindow::~MainWindow()
 {
@@ -276,7 +291,7 @@ void MainWindow::on_baseFileBrowse_clicked()
 
 void MainWindow::inChannelCB_currentTextChanged(const QString &arg1)
 {
-    if (!closing)
+    if (!closing && !inConfig)
     {
         QSettings settings(configFile, QSettings::IniFormat);
         settings.setValue(indevKey, arg1);
@@ -289,7 +304,7 @@ void MainWindow::inChannelCB_currentTextChanged(const QString &arg1)
 }
 void MainWindow::inChannelCB_2_currentTextChanged(const QString &arg1)
 {
-    if (!closing)
+    if (!closing && !inConfig)
     {
         QSettings settings(configFile, QSettings::IniFormat);
         settings.setValue(indevKey2, arg1);
@@ -444,10 +459,10 @@ void MainWindow::on_rrConfigBrowse_clicked()
 
     if (!fname.isEmpty())
     {
-        ui->rrConfigEdit->setText(fname);
         configFile = fname;
         QSettings csettings(getDirectoryLocation(dlConfiguration) + "/DataModeSelect.ini", QSettings::IniFormat);
         csettings.setValue("ConfigurationFile", configFile);
+        setConfigDisplay(configFile);
     }
 
     started = false;
