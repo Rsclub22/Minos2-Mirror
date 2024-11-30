@@ -1946,7 +1946,7 @@ bool QSOLogFrame::validateControls( validTypes command )   // do control validat
                 }
                 setEditStyleSheet(vcp->wc, ss);
             }
-            else if (vcp == locIl && (screenContact.locMultCount > 0 || screenContact.newBonus))
+            else if (vcp == locIl && (screenContact.locMultCount > 0 || (screenContact.newBonus && screenContact.newLoc)))
             {
                 if (ss == ssLineEditFrRedBkWhite)
                 {

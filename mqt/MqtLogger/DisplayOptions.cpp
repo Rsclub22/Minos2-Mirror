@@ -220,7 +220,7 @@ void DisplayOptions::finalise()
         MinosLoggerEvents::SendRedrawQSOMap(ShowQSOMapGrid.value(),
                                             ShowQSOMapLines.value(),
                                             MapShowCluster.value(),
-                                            MapClusterDistance.iValue(),
+//                                            MapClusterDistance.iValue(),
                                             ShowQSOMapShowLoc.value(),
                                             ShowQSOMapTLLoc.sValue(),
                                             ShowQSOMapBRLoc.sValue(),

@@ -80,6 +80,11 @@
         <source>Changing first name...</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../changename.cpp" line="148"/>
+        <source>Change name failed: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>KSTConfigure</name>
@@ -186,6 +191,11 @@
     <message>
         <location filename="../kstconfigure.ui" line="347"/>
         <source>Ok</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../kstconfigure.cpp" line="67"/>
+        <source>Name %1 cannot be more than 16 characters</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -380,7 +390,7 @@ when user selected</source>
     </message>
     <message>
         <location filename="../kstmainwindow.ui" line="762"/>
-        <location filename="../kstmainwindow.cpp" line="504"/>
+        <location filename="../kstmainwindow.cpp" line="508"/>
         <source>Connect</source>
         <translation type="unfinished"></translation>
     </message>
@@ -390,33 +400,33 @@ when user selected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="144"/>
         <location filename="../kstmainwindow.cpp" line="148"/>
+        <location filename="../kstmainwindow.cpp" line="152"/>
         <source>Active</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="486"/>
+        <location filename="../kstmainwindow.cpp" line="490"/>
         <source>Including %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="493"/>
+        <location filename="../kstmainwindow.cpp" line="497"/>
         <source>Disconnect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="652"/>
+        <location filename="../kstmainwindow.cpp" line="656"/>
         <source>Set Back</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="656"/>
+        <location filename="../kstmainwindow.cpp" line="660"/>
         <source>Set Away</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="1594"/>
+        <location filename="../kstmainwindow.cpp" line="1598"/>
         <source>Message updates paused</source>
         <translation type="unfinished"></translation>
     </message>

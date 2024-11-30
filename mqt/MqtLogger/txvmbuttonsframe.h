@@ -9,7 +9,7 @@
 #include "radiodetails.h"
 #include "voicekeyerbase.h"
 #include "voicekeyerfactory.h"
-#include "radiosettingdialog.h"
+#include "rigcontrolcommonconstants.h"
 
 class QToolButton;
 class QMenu;
@@ -189,6 +189,7 @@ private:
 
     void logMessage(QString msg);
 
+    bool isVoiceMode();
 private slots:
 
     void onVoiceKeyerSelect(int idx);

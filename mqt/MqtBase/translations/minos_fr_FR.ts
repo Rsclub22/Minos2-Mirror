@@ -2,6 +2,105 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="fr_FR">
 <context>
+    <name>BandmapClientFilterDialog</name>
+    <message>
+        <location filename="../bandmapclientfilterdialog.ui" line="24"/>
+        <source>Mode</source>
+        <translation>Mode</translation>
+    </message>
+    <message>
+        <location filename="../bandmapclientfilterdialog.ui" line="30"/>
+        <source>All Modes</source>
+        <translation>Tous les modes</translation>
+    </message>
+    <message>
+        <location filename="../bandmapclientfilterdialog.ui" line="39"/>
+        <source>USB</source>
+        <translation>USB</translation>
+    </message>
+    <message>
+        <location filename="../bandmapclientfilterdialog.ui" line="46"/>
+        <source>RTTY</source>
+        <translation>RTTY</translation>
+    </message>
+    <message>
+        <location filename="../bandmapclientfilterdialog.ui" line="53"/>
+        <source>LSB</source>
+        <translation>LSB</translation>
+    </message>
+    <message>
+        <location filename="../bandmapclientfilterdialog.ui" line="60"/>
+        <source>Mode None</source>
+        <translation>Mode: Aucun</translation>
+    </message>
+    <message>
+        <location filename="../bandmapclientfilterdialog.ui" line="67"/>
+        <source>CW</source>
+        <translation>CW</translation>
+    </message>
+    <message>
+        <location filename="../bandmapclientfilterdialog.ui" line="74"/>
+        <source>FM</source>
+        <translation>FM</translation>
+    </message>
+    <message>
+        <location filename="../bandmapclientfilterdialog.ui" line="81"/>
+        <source>FT4</source>
+        <translation>FT4</translation>
+    </message>
+    <message>
+        <location filename="../bandmapclientfilterdialog.ui" line="88"/>
+        <source>FT8</source>
+        <translation>FT8</translation>
+    </message>
+    <message>
+        <location filename="../bandmapclientfilterdialog.ui" line="95"/>
+        <source>MSK144</source>
+        <translation>MSK144</translation>
+    </message>
+    <message>
+        <location filename="../bandmapclientfilterdialog.ui" line="102"/>
+        <source>JT65</source>
+        <translation>JT65</translation>
+    </message>
+    <message>
+        <location filename="../bandmapclientfilterdialog.ui" line="109"/>
+        <source>PSK31/63</source>
+        <translation>PSK31/63</translation>
+    </message>
+    <message>
+        <location filename="../bandmapclientfilterdialog.ui" line="119"/>
+        <location filename="../bandmapclientfilterdialog.ui" line="138"/>
+        <source>Distance</source>
+        <translation>Distance</translation>
+    </message>
+    <message>
+        <location filename="../bandmapclientfilterdialog.ui" line="145"/>
+        <source>Ignore</source>
+        <translation>Ignorer</translation>
+    </message>
+    <message>
+        <location filename="../bandmapclientfilterdialog.ui" line="154"/>
+        <source>Ignore Spots with no distance value</source>
+        <translation>Ignorer les spots sans valeur de distance</translation>
+    </message>
+    <message>
+        <location filename="../bandmapclientfilterdialog.cpp" line="102"/>
+        <source>Click to set/reset all modes</source>
+        <translation>Cliquer pour définir/réinitialiser tous les modes</translation>
+    </message>
+    <message>
+        <location filename="../bandmapclientfilterdialog.cpp" line="219"/>
+        <source>Distance Filter</source>
+        <translation>Filtre de distance</translation>
+    </message>
+    <message>
+        <location filename="../bandmapclientfilterdialog.cpp" line="220"/>
+        <source>Please enter a number between %1 and %2!</source>
+        <translation>Entrer un nombre entre %1 et %2 SVP !</translation>
+    </message>
+</context>
+<context>
     <name>BaseContact</name>
     <message>
         <location filename="../contacts.cpp" line="434"/>
@@ -37,12 +136,12 @@
 <context>
     <name>BaseContestLog</name>
     <message>
-        <location filename="../contest.cpp" line="697"/>
+        <location filename="../contest.cpp" line="699"/>
         <source>DUPLICATE OF </source>
         <translation>Duplicata de </translation>
     </message>
     <message>
-        <location filename="../contest.cpp" line="713"/>
+        <location filename="../contest.cpp" line="715"/>
         <source>DUP OF</source>
         <translation>Duplicata de</translation>
     </message>
@@ -1074,22 +1173,22 @@
 <context>
     <name>ContestScore</name>
     <message>
-        <location filename="../contest.cpp" line="2119"/>
+        <location filename="../contest.cpp" line="2165"/>
         <source>Score: %1 Qsos; %2 pts; (%3 countries); %4 locs; bonuses %5(%6) = %7</source>
         <translation>Score: %1 Qsos; %2 pts; (%3 pays); %4 locs; bonuses %5(%6) = %7</translation>
     </message>
     <message>
-        <location filename="../contest.cpp" line="2127"/>
+        <location filename="../contest.cpp" line="2173"/>
         <source>Score: %1 Qsos; %2 pts; %3 countries; %4 districts; %5 locs; bonuses %6(%7) = %8</source>
         <translation>Score: %1 Qsos; %2 pts; %3 pays; %4 quartiers; %5 locs; bonuses %6(%7) = %8</translation>
     </message>
     <message>
-        <location filename="../contest.cpp" line="2135"/>
+        <location filename="../contest.cpp" line="2181"/>
         <source>Score: %1 Qsos; %2 pts; %3%4 countries%5; bonuses %6(%7) = %8</source>
         <translation>Score: %1 Qsos; %2 pts; %3%4 pays%5; bonuses %6(%7) = %8</translation>
     </message>
     <message>
-        <location filename="../contest.cpp" line="2143"/>
+        <location filename="../contest.cpp" line="2189"/>
         <source>Score: %1 Qsos; %2 pts;%3%4 countries%5;%6%7 districts%8; %9%10 locators %13 = %14</source>
         <translation>Score: %1 Qsos; %2 pts;%3%4 pays%5;%6%7 quartiers%8; %9%10 locators %13 = %14</translation>
     </message>
@@ -1125,7 +1224,7 @@
     <message>
         <location filename="../cutils.cpp" line="993"/>
         <source>D</source>
-        <translation type="unfinished"></translation>
+        <translation>J</translation>
     </message>
 </context>
 <context>
@@ -1336,58 +1435,66 @@ Attention: &quot;.&quot; pas &quot;,&quot;
     <message>
         <location filename="../managehamlib.ui" line="14"/>
         <source>Manage Hamlib</source>
-        <translation type="unfinished"></translation>
+        <translation>Gérer Hamlib</translation>
     </message>
     <message>
         <location filename="../managehamlib.ui" line="20"/>
         <source>Hamlib Path</source>
-        <translation type="unfinished"></translation>
+        <translation>Chemin de Hamlib</translation>
     </message>
     <message>
         <location filename="../managehamlib.ui" line="50"/>
         <source>Revert Hamlib</source>
-        <translation type="unfinished"></translation>
+        <translation>Restaurer vieux Hamlib</translation>
     </message>
     <message>
         <location filename="../managehamlib.ui" line="70"/>
         <source>Update Hamlib</source>
-        <translation type="unfinished"></translation>
+        <translation>Mise à jour de Hamlib</translation>
     </message>
     <message>
         <location filename="../managehamlib.ui" line="94"/>
         <source>Cancel</source>
-        <translation type="unfinished">Annuler</translation>
+        <translation>Annuler</translation>
     </message>
     <message>
         <location filename="../managehamlib.cpp" line="90"/>
         <source>Failed to load libhamlib-4.dll %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Échec du charger libhamlib-4.dll %1</translation>
     </message>
     <message>
         <location filename="../managehamlib.cpp" line="301"/>
         <location filename="../managehamlib.cpp" line="308"/>
         <location filename="../managehamlib.cpp" line="344"/>
         <source>Failed to rename %1 to %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Échec du renommage de %1 en %2</translation>
     </message>
     <message>
         <location filename="../managehamlib.cpp" line="312"/>
-        <source>Hamlib Update successful 
-
-New Hamlib will be used after restart</source>
+        <source>Hamlib updated - will be used after restart</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../managehamlib.cpp" line="349"/>
+        <source>Old Hamlib restored - it will be used after restart</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hamlib Update successful 
+
+New Hamlib will be used after restart</source>
+        <translation type="vanished">Hamlib mis à jour - sera utilisé après le redémarrage</translation>
+    </message>
+    <message>
         <source>Hamlib successfully reverted 
 
 Reverted Hamlib will be used after restart</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Vieux Hamlib restauré - sera utilisé après le redémarrage</translation>
     </message>
     <message>
         <location filename="../managehamlib.cpp" line="361"/>
         <source>No Hamlib update found that could be reverted</source>
-        <translation type="unfinished"></translation>
+        <translation>Aucun vieux Hamlib à restaurer</translation>
     </message>
 </context>
 <context>
@@ -1776,8 +1883,18 @@ Reverted Hamlib will be used after restart</source>
 <context>
     <name>QSOMapFrame</name>
     <message>
-        <location filename="../qsomapframe.cpp" line="129"/>
+        <location filename="../qsomapframe.cpp" line="179"/>
+        <source>Filter...</source>
+        <translation>Filtrer...</translation>
+    </message>
+    <message>
+        <location filename="../qsomapframe.cpp" line="190"/>
         <source>Data and Map</source>
+        <translation>Données et Carte</translation>
+    </message>
+    <message>
+        <location filename="../qsomapframe.cpp" line="232"/>
+        <source>QSO Map Spot Filters</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2367,17 +2484,17 @@ Entrer une autre direction SVP</translation>
 <context>
     <name>clusterState</name>
     <message>
-        <location filename="../clustercommon.cpp" line="11"/>
+        <location filename="../clustercommon.cpp" line="12"/>
         <source>Available</source>
         <translation>Disponible</translation>
     </message>
     <message>
-        <location filename="../clustercommon.cpp" line="12"/>
+        <location filename="../clustercommon.cpp" line="13"/>
         <source>Not Available</source>
         <translation>Non disponible</translation>
     </message>
     <message>
-        <location filename="../clustercommon.cpp" line="13"/>
+        <location filename="../clustercommon.cpp" line="14"/>
         <source>No Contact</source>
         <translatorcomment>Dupe?</translatorcomment>
         <translation>Pas de contact</translation>

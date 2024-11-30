@@ -187,13 +187,12 @@ void MonitoringFrame::on_mapButton_clicked()
         bool grid = monitorMain->QSOGrid;
         bool lines = monitorMain->QSOLines;
         bool spots = monitorMain->mapShowSpots;
-        int sd = monitorMain->clusterDistanceLimit;
 
         bool showLoc = monitorMain->showLoc;
         QString tl = monitorMain->locTL;
         QString br = monitorMain->locBR;
         bool showNav = monitorMain->showNav;
-        qsoMapFrame->setContest(ct, true, grid, lines, spots, sd, showLoc, tl, br, showNav );
+        qsoMapFrame->setContest(ct, true, grid, lines, spots, showLoc, tl, br, showNav );
         qsoMapFrame->setVisible(true);
     }
     else

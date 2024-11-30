@@ -4,6 +4,7 @@
 #include <QQuickView>
 #include <QQuickItem>
 #include <QQmlContext>
+#include <QPushButton>
 
 extern QSharedPointer<QQmlApplicationEngine> appQmlEngine;
 
@@ -29,6 +30,7 @@ extern QSharedPointer<QQmlApplicationEngine> appQmlEngine;
 #include "spotbasedata.h"
 #include "qmlcpplink.h"
 #include "qsomapframe.h"
+#include "bandmapclientfilterdialog.h"
 #include "ui_qsomapframe.h"
 
 QSOMapFrame::QSOMapFrame(QWidget *parent) :
@@ -60,17 +62,64 @@ QSOMapFrame::~QSOMapFrame()
 {
     delete ui;
 }
-void QSOMapFrame::setContest(BaseContestLog *c, bool monitor, bool grid, bool lines, bool spots, int spotDistance, bool sl, QString tl, QString br, bool sn)
+void QSOMapFrame::setContest(BaseContestLog *c, bool monitor, bool grid, bool lines, bool spots, bool sl, QString tl, QString br, bool sn)
 {
     // NB maps that aren't displayed never get ct set
 
     ct = c;
     if (c)
     {
+
+        trace(QString("Set Contest: contest uuid =  ContestUuid = %1").arg(ct->uuid));
+
+        QString contestModeStr = ct->currentMode.getValue();
+
+
+        if (!ct->getQSOMapFilterSettingsExist())       // have settings been saved before?
+        {
+            BandmapClientFilterSettings filterSettings;
+            // no, save current mode filter for this contest
+            if (ct->isHF())
+            {
+                filterSettings.setIgnoreDistanceFlag(true);
+            }
+
+            //set current mode
+            if (contestModeStr == hamlibData::MGM)
+            {
+                for (auto &m: mgmModes)
+                {
+                    filterSettings.setModeFilter(m, true); // set all the mgm modes in filter
+
+                }
+            }
+            else if (contestModeStr == hamlibData::PH)
+            {
+                filterSettings.setModeFilter(USB_MODE, true);
+                filterSettings.setModeFilter(LSB_MODE, true);
+            }
+            else if (contestModeStr == hamlibData::RY || contestModeStr == hamlibData::PSK  )
+            {
+                filterSettings.setModeFilter(RTTY_MODE, true);
+                filterSettings.setModeFilter(PSK31_MODE, true);
+            }
+            else
+            {
+                filterSettings.setModeFilter(contestModeStr, true);
+            }
+
+            ct->setQSOMapFilterSettingsExist(true);
+            ct->saveQSOMapFilter(filterSettings);
+        }
+        else
+        {
+            //filterSettings = ct->getQSOMapFilter();
+        }
+
         bmonitor = monitor;
         startMap();
 
-        doRedraw(c, grid, lines, spots, spotDistance, sl, tl, br, sn);
+        doRedraw(c, grid, lines, spots, sl, tl, br, sn);
     }
     else
     {
@@ -84,7 +133,7 @@ void QSOMapFrame::onContestBandChanged(BaseContestLog *c)
         emit clearAll();
         locs.clear();
 
-        doRedraw(ct, bdrawGrid, bdrawLines, drawSpots, spotDistance,showLoc, locTL, locBR, showNav);
+        doRedraw(ct, bdrawGrid, bdrawLines, drawSpots, showLoc, locTL, locBR, showNav);
     }
 }
 void QSOMapFrame::startMap()
@@ -124,12 +173,26 @@ void QSOMapFrame::startMap()
 
         qvb->addWidget(container);
 
+        QHBoxLayout *qhb = new QHBoxLayout();
+
+        QPushButton *filterButton = new QPushButton(this);
+        filterButton->setText(tr("Filter..."));
+        qhb->addWidget(filterButton);
+        connect(filterButton, &QPushButton::clicked, this, &QSOMapFrame::filterButtonClicked);
+
+        QSpacerItem *horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Minimum);
+
+        qhb->addItem(horizontalSpacer);
+
+
         QLabel *clab = new QLabel(this);
         clab->setAlignment(Qt::AlignCenter);
         clab->setText(QString("<b>") + tr("Data and Map") + QString(" &copy;<a href=\"https://openstreetmap.org/\">openstreetmap.org</a>"));
-        qvb->addWidget(clab);
+        qhb->addWidget(clab);
         clab->setTextInteractionFlags(Qt::TextBrowserInteraction);
         connect(clab, &QLabel::linkActivated, this, &QSOMapFrame::onclab_linkActivated);
+
+        qvb->addItem(qhb);
 
         QVBoxLayout *vbl = dynamic_cast<QVBoxLayout *>(qvb);
         vbl->setStretch(0, 199);
@@ -158,6 +221,27 @@ void QSOMapFrame::startMap()
 void QSOMapFrame::onclab_linkActivated(const QString &link)
 {
     QDesktopServices::openUrl(QUrl(link));
+}
+void QSOMapFrame::filterButtonClicked()
+{
+    if (ct)
+    {
+        trace("QSOMapFrame::filterButtonClicked()");
+        BandmapClientFilterSettings filterSettings = ct->getQSOMapFilter();
+        trace(filterSettings.print());
+        BandmapClientFilterDialog fd(filterSettings, tr("QSO Map Spot Filters"), "QSOMap", this);
+
+        if (fd.exec() == QDialog::Accepted)
+        {
+            trace("QSOMapFrame::filterButtonClicked() Accepted");
+            if (fd.getSettingsChangedFlag())
+            {
+                filterSettings = fd.getFilterSettings();
+                ct->saveQSOMapFilter(filterSettings);
+                doRedraw(ct, bdrawGrid, bdrawLines, drawSpots, showLoc, locTL, locBR, showNav);
+            }
+        }
+    }
 }
 void QSOMapFrame::stopMap()
 {
@@ -221,10 +305,10 @@ void QSOMapFrame::saveParams()
         }
     }
 }
-void QSOMapFrame::doRedraw(const BaseContestLog *ctest, bool grid, bool lines, bool spots, int sd
+void QSOMapFrame::doRedraw(const BaseContestLog *ctest, bool grid, bool lines, bool spots
                            ,bool sl, QString tl, QString br, bool sn)
 {
-    trace(QString("QSOMapFrame doRedraw grid %1 lines %2 spots %3 sd %4").arg(grid).arg(lines).arg(spots).arg(sd));
+    trace(QString("QSOMapFrame doRedraw grid %1 lines %2 spots %3").arg(grid).arg(lines).arg(spots));
     if (ct == nullptr || ctest != ct)
     {
         return;
@@ -298,7 +382,6 @@ void QSOMapFrame::doRedraw(const BaseContestLog *ctest, bool grid, bool lines, b
     emit showLocsBR(latlong);
 
     drawSpots = spots;
-    spotDistance = sd;
 
     QStringList callInfo; // [callsign, latitude, longitude]
 
@@ -544,7 +627,7 @@ void QSOMapFrame::on_AfterLogContact(const BaseContestLog *c, const QSharedPoint
         {
             emit clearAll();
             locs.clear();
-            doRedraw(c, bdrawGrid, bdrawLines, drawSpots, spotDistance, showLoc, locTL, locBR, showNav);
+            doRedraw(c, bdrawGrid, bdrawLines, drawSpots, showLoc, locTL, locBR, showNav);
         }
         else
         {
@@ -553,7 +636,7 @@ void QSOMapFrame::on_AfterLogContact(const BaseContestLog *c, const QSharedPoint
     }
 }
 
-void QSOMapFrame::on_redrawQSOMap(bool grid, bool lines, bool spots, int sd,
+void QSOMapFrame::on_redrawQSOMap(bool grid, bool lines, bool spots,
                                     bool sl, QString tl, QString br, bool sn)
 {
     if (ct != nullptr)
@@ -563,11 +646,47 @@ void QSOMapFrame::on_redrawQSOMap(bool grid, bool lines, bool spots, int sd,
         emit clearAll();
         locs.clear();
 
-        doRedraw(ct, grid, lines, spots, sd, sl, tl, br, sn);
+        doRedraw(ct, grid, lines, spots, sl, tl, br, sn);
     }
 }
 
 //---------------------- Cluster Spots -------------------------------------
+bool QSOMapFrame::matchMode(QSharedPointer<ClusterSpotData> bsd)
+{
+    QString mode = bsd->getMode();
+
+    if (!mode.isEmpty())
+    {
+        return ct->getQSOMapFilter().getModeFilter(mode);
+    }
+    else
+    {
+        return false;
+    }
+}
+
+bool QSOMapFrame::matchDistance(QSharedPointer<ClusterSpotData> bsd)
+{
+    if (!ct->getQSOMapFilter().getIgnoreDistanceFlag())
+    {
+        bool ok = false;
+
+        bandmapSpotType::SPOT_TYPE savedSpot = bsd->getSpotType();
+        QString distanceStr =bsd->getDxDist();
+        if (distanceStr.isEmpty() && ct->getQSOMapFilter().getIgnoreEmptyDistanceFlag()
+            && savedSpot == bandmapSpotType::CLUSTER )
+        {
+            return false;
+        }
+
+        int distance = distanceStr.toInt(&ok);
+        if (ok)
+        {
+            return ct->getQSOMapFilter().testDistance(distance, false);
+        }
+    }
+    return true;
+}
 
 void QSOMapFrame::drawSpot(QSharedPointer<ClusterSpotData> bsd)
 {
@@ -592,28 +711,30 @@ void QSOMapFrame::drawSpot(QSharedPointer<ClusterSpotData> bsd)
 
         if (bsd->getBand() != currBand)
         {
+            trace(QString("QSOMapFrame::drawSpot not current band %1 %2").arg(bsd->getDxCallStr(), bsd->getMode()));
             return;
         }
 
-        int bearing = 0;
-        double distance = 0.0;
-        ct->calcDistanceBearing(loc, &distance, &bearing);
-
-        if (spotDistance > 0 && distance > spotDistance)
+        if (matchMode(bsd) && matchDistance(bsd))
         {
-            return;
+            trace(QString("QSOMapFrame::drawSpot filtered OK %1").arg(bsd->getDxCallStr()));
+            bool drawLine = true;
+            QPair<double, double> pos = calcPosition(loc, drawLine);
+
+            QStringList callInfo; // [callsign, latitude, longitude]
+
+            callInfo << bsd->getDxCall().getFullCall();
+            callInfo << QString::number(pos.first);
+            callInfo << QString::number(pos.second);
+            callInfo << loc;
+            callInfo << (drawLine?"true":"false");
+            emit spotSig(callInfo);
         }
-        bool drawLine = true;
-        QPair<double, double> pos = calcPosition(loc, drawLine);
-
-        QStringList callInfo; // [callsign, latitude, longitude]
-
-        callInfo << bsd->getDxCall().getFullCall();
-        callInfo << QString::number(pos.first);
-        callInfo << QString::number(pos.second);
-        callInfo << loc;
-        callInfo << (drawLine?"true":"false");
-        emit spotSig(callInfo);
+        else
+        {
+            trace(QString("QSOMapFrame::drawSpot Not filtered OK %1 %2"
+                          "").arg(bsd->getDxCallStr(), bsd->getMode()));
+        }
     }
 }
 bool QSOMapFrame::checkSpotInTable(QSharedPointer<ClusterSpotData> spot)
@@ -642,7 +763,7 @@ bool QSOMapFrame::checkSpotInTable(QSharedPointer<ClusterSpotData> spot)
                 else if (spotType == bandmapSpotType::CLUSTER)
                 {
                     // yes, remove old spot
-                    trace(QString("CheckSpot In Table Remove - Cluster Spot %1").arg(rowCall.getFullCall()));
+                    trace(QString("QSOMapFrame::checkSpotInTable CheckSpot In Table Remove - Cluster Spot %1").arg(rowCall.getFullCall()));
                     bsd->setSpotType(bandmapSpotType::DELETED);
                     // and this spot will be used instead
                 }
@@ -661,7 +782,7 @@ void QSOMapFrame::dxSpots(QVector<ClusterMessage> spotMsg)
         for (int i = 0; i < spotMsg.count(); i++)
         {
             ClusterMessage msg = spotMsg[i];
-            trace(QString("retrieve cluster spot from queue - spot = %1 for loggeruuid = %2, this contest uuid = %3").arg(msg.getMessage(), msg.getLoggerUuid(), ct->uuid));
+            trace(QString("QSOMapFrame::dxSpots  retrieve cluster spot from queue - spot = %1 for loggeruuid = %2, this contest uuid = %3").arg(msg.getMessage(), msg.getLoggerUuid(), ct->uuid));
 
             // if loggerUuid is empty, message is for all frames
             if ((msg.getLoggerUuid().isEmpty() || msg.getLoggerUuid() == ct->uuid)
@@ -670,7 +791,7 @@ void QSOMapFrame::dxSpots(QVector<ClusterMessage> spotMsg)
             {
                 if (msg.getMessage().contains(DXSPOT) || msg.getMessage().contains(RESENTSPOT))
                 {
-                    trace(QString("Spot for this loggeruuid = %1, add to queue").arg(ct->uuid));
+                    trace(QString("QSOMapFrame::dxSpots Spot for this loggeruuid = %1, add to queue").arg(ct->uuid));
                     QSharedPointer<ClusterSpotData> sp = stringToDxSpot(msg.getMessage(), ct, timeToLive);
                     if (!sp || !checkSpotInTable(sp))
                     {
@@ -682,13 +803,13 @@ void QSOMapFrame::dxSpots(QVector<ClusterMessage> spotMsg)
                     bool locEmpty = sp->getDxLocator().isEmpty();
                     if (!fromNode && !wkd && !locEmpty)
                     {
-                        trace(QString("draw cluster spot spot = %1").arg(msg.getMessage()));
+                        trace(QString("QSOMapFrame::dxSpots draw cluster spot spot = %1").arg(msg.getMessage()));
                         spotQueue += sp;
                         drawSpot(sp);
                     }
                     else
                     {
-                        trace(QString("don't draw cluster spot spot = %1 FN %2 WKD %3 LE %4")
+                        trace(QString("QSOMapFrame::dxSpots don't draw cluster spot spot = %1 fromNode %2 WKD %3 locEmpty %4")
                               .arg(msg.getMessage())
                               .arg(fromNode)
                               .arg(wkd)
@@ -699,7 +820,7 @@ void QSOMapFrame::dxSpots(QVector<ClusterMessage> spotMsg)
             }
             else
             {
-                trace("Not for this contest");
+                trace("QSOMapFrame::dxSpots Not for this contest");
             }
         }
     }
@@ -727,7 +848,7 @@ void QSOMapFrame::purgeSpots()
     {
         emit clearAll();
         locs.clear();
-        doRedraw(ct, bdrawGrid, bdrawLines, drawSpots, spotDistance, showLoc, locTL, locBR, showNav);
+        doRedraw(ct, bdrawGrid, bdrawLines, drawSpots, showLoc, locTL, locBR, showNav);
     }
 }
 

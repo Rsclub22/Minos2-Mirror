@@ -131,10 +131,10 @@ protected:
       QVector<MinosItem<memoryData::memData> > rigMemories;
 
       MinosItem<ClusterClientFilterSettings> clusterFilterSettings;
-      bool clusterFilterSettingsExist;
+      bool clusterFilterSettingsExist = false;
 
       MinosItem<BandmapClientFilterSettings> bandmapFilterSettings;
-      bool bandmapFilterSettingsExist;
+      bool bandmapFilterSettingsExist = false;
 
       QDateTime lastSpotTabTime;
       QDateTime lastCallsignTabTime;
@@ -172,9 +172,11 @@ protected:
       void saveInitialClusterFilter(const ClusterClientFilterSettings &ccfs);
       ClusterClientFilterSettings getClusterFilter();
 
-      void saveBandmapFilter(const BandmapClientFilterSettings &bcfs);
-      void saveInitialBandmapFilter(const BandmapClientFilterSettings &bcfs);
-      BandmapClientFilterSettings getBandmapFilter();
+      virtual bool getBandmapFilterSettingsExist() const override;
+      virtual void setBandmapFilterSettingsExist(bool newBandmapFilterSettingsExist) override;
+      virtual void saveBandmapFilter(const BandmapClientFilterSettings &bcfs) override;
+      virtual void saveInitialBandmapFilter(const BandmapClientFilterSettings &bcfs) override;
+      virtual BandmapClientFilterSettings getBandmapFilter() override;
 
       // dirty info is only relevant when it is being editted
       // but needs to stay with the data

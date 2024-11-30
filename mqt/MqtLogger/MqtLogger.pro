@@ -72,7 +72,6 @@ SOURCES += \
     TSessionManager.cpp \
     WsjtxConfigureCQ.cpp \
     adifmanager.cpp \
-    bandmapclientfilterdialog.cpp \
     bandmapdatamodel.cpp \
     bandmapgraphicspanel.cpp \
     bandmapspotdb.cpp \
@@ -178,7 +177,6 @@ HEADERS  += \
     TSessionManager.h \
     WsjtxConfigureCQ.h \
     adifmanager.h \
-    bandmapclientfilterdialog.h \
     bandmapdatamodel.h \
     bandmapgraphicspanel.h \
     bandmapspotdb.h \
@@ -259,7 +257,6 @@ FORMS    += \
     OptionsDialog.ui \
     ScreenConfigScreen.ui \
     WsjtxConfigureCQ.ui \
-    bandmapclientfilterdialog.ui \
     checkupdates.ui \
     contestdetails.ui \
     defdirsdlg.ui \

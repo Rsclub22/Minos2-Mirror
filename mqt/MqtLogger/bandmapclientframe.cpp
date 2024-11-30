@@ -19,6 +19,7 @@
 #include "BandList.h"
 #include "delayedaction.h"
 #include "rigutils.h"
+#include "LoggerContest.h"
 #include "MTrace.h"
 
 #include "bandmapclientframe.h"
@@ -722,7 +723,7 @@ void BandmapClientFrame::setContest(BaseContestLog *c)
     if (!contestBandStr.isEmpty())
     {
 
-        if (!contest->bandmapFilterSettingsExist)       // have settings been saved before?
+        if (!contest->getBandmapFilterSettingsExist())       // have settings been saved before?
         {
             // no, save current mode filter for this contest
             readDefaultDistanceFilterSettings(&filterSettings);
@@ -752,6 +753,7 @@ void BandmapClientFrame::setContest(BaseContestLog *c)
             }
 
             contest->saveBandmapFilter(filterSettings);
+            contest->setBandmapFilterSettingsExist(true);
         }
         else
         {
@@ -1621,21 +1623,24 @@ void BandmapClientFrame::setMode(QString mode)
 
 void BandmapClientFrame::filterButtonSelected()
 {
-    BandmapClientFilterDialog* filterSetup =  new BandmapClientFilterDialog(ct, filterSettings, this);
-    filterSetup->exec();
-
-    if (filterSetup->getSettingsChangedFlag())
+    trace("BandmapClientFrame::filterButtonSelected()");
+    BandmapClientFilterDialog filterSetup(BandmapClientFilterDialog(filterSettings, tr("Bandmap Spot Filters"), "Bandmap", this));
+    if (filterSetup.exec() == QDialog::Accepted)
     {
-        // reload filtersettings after change
-        filterSettings = filterSetup->getFilterSettings();
-        trace("BandmapView::bandmapUpdate() filterButtonSelected");
-        ShowFilter();
-        bandmapView->bandmapUpdate(true);
 
+       if (filterSetup.getSettingsChangedFlag())
+        {
+            trace(QString("Save to log"));
+
+           filterSettings = filterSetup.getFilterSettings();
+            ct->saveBandmapFilter(filterSettings);
+            // reload filtersettings after change
+            trace("BandmapView::bandmapUpdate() filterButtonSelected");
+            ShowFilter();
+            bandmapView->bandmapUpdate(true);
+
+        }
     }
-    filterSetup->close();
-    delete filterSetup;
-
 }
 
 bool BandmapClientFrame::event(QEvent *event)

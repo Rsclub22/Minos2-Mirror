@@ -360,6 +360,7 @@ void BaseContestLog::clearDirty()
    {
       i.wt->clearDirty();
    }
+   QSOMapFilterSettings.clearDirty();
 }
 void BaseContestLog::setDirty()
 {
@@ -409,6 +410,7 @@ void BaseContestLog::setDirty()
    {
       i.wt->setDirty();
    }
+   QSOMapFilterSettings.setDirty();
 }
 
 QSharedPointer<BaseContact> BaseContestLog::findContact(CheckableContact *cct) const
@@ -1691,6 +1693,50 @@ void BaseContestLog::processMinosStanza( const QString &methodName, MinosTestImp
                                  rct->processMinosStanza( methodName, mt );
 
                               }
+                              else
+                               if (methodName == "MinosQSOMapFilter")
+                               {
+
+                                   setQSOMapFilterSettingsExist(true);
+                                   BandmapClientFilterSettings bcfs;
+                                   bool filterFlag = false;
+                                   bool filterFlag1 = false;
+
+
+                                   mt->getStructArgMemberValue("modeFilterCW", filterFlag);
+                                   bcfs.setModeFilter("CW", filterFlag);
+                                   mt->getStructArgMemberValue("modeFilterLSBMODE", filterFlag);
+                                   bcfs.setModeFilter("LSB", filterFlag);
+                                   mt->getStructArgMemberValue("modeFilterUSBMODE", filterFlag);
+                                   bcfs.setModeFilter("USB", filterFlag);
+                                   mt->getStructArgMemberValue("modeFilterFMMODE", filterFlag);
+                                   bcfs.setModeFilter("FM", filterFlag);
+                                   mt->getStructArgMemberValue("modeFilterRTTYMODE", filterFlag);
+                                   bcfs.setModeFilter("RTTY", filterFlag);
+                                   mt->getStructArgMemberValue("modeFilterPSK31MODE", filterFlag);
+                                   bcfs.setModeFilter("PSK31", filterFlag);
+                                   mt->getStructArgMemberValue("modeFilterFT4MODE", filterFlag);
+                                   bcfs.setModeFilter("FT4", filterFlag);
+                                   mt->getStructArgMemberValue("modeFilterFT8MODE", filterFlag);
+                                   bcfs.setModeFilter("FT8", filterFlag);
+                                   mt->getStructArgMemberValue("modeFilterMSK144MODE", filterFlag);
+                                   bcfs.setModeFilter("MSK144", filterFlag);
+                                   mt->getStructArgMemberValue("modeFilterJT65MODE", filterFlag);
+                                   bcfs.setModeFilter("JT65", filterFlag);
+                                   mt->getStructArgMemberValue("modeFilterNONEMODE", filterFlag);
+                                   bcfs.setModeFilter("NONE", filterFlag);
+                                   int distance = 0;
+                                   mt->getStructArgMemberValue("distanceFilter", distance);
+                                   bcfs.setDistanceFilter(distance);
+                                   mt->getStructArgMemberValue("ignoreDistanceFlag", filterFlag);
+                                   bcfs.setIgnoreDistanceFlag(filterFlag);
+                                   mt->getStructArgMemberValue("ignoreEmptyDistanceFlag", filterFlag1);
+                                   bcfs.setIgnoreEmptyDistanceFlag(filterFlag1);
+
+
+                                   saveInitialQSOMapFilter(bcfs);
+
+                               }
 }
 
 //====================================================================
@@ -2146,5 +2192,40 @@ QString ContestScore::disp()
             .arg(totalScore );
     }
    return buff;
+}
+//==========================================================================
+
+bool BaseContestLog::getQSOMapFilterSettingsExist() const
+{
+    return QSOMapFilterSettingsExist;
+}
+
+void BaseContestLog::setQSOMapFilterSettingsExist(bool newQSOMapFilterSettingsExist)
+{
+    QSOMapFilterSettingsExist = newQSOMapFilterSettingsExist;
+}
+void BaseContestLog::saveQSOMapFilter(const BandmapClientFilterSettings &bcfs)
+{
+    QSOMapFilterSettings.setValue(bcfs);
+    setQSOMapFilterSettingsExist(true);
+
+    trace("BaseContestLog::saveQSOMapFilter: ");
+    trace(QSOMapFilterSettings.getValue().print());
+
+    commonSave(false);
+}
+void BaseContestLog::saveInitialQSOMapFilter(const BandmapClientFilterSettings &bcfs)
+{
+    QSOMapFilterSettings.setInitialValue(bcfs);
+    setQSOMapFilterSettingsExist(true);
+
+    trace("BaseContestLog::saveInitialQSOMapFilter: ");
+    trace(QSOMapFilterSettings.getValue().print());
+}
+BandmapClientFilterSettings BaseContestLog::getQSOMapFilter()
+{
+    trace("BaseContestLog::getQSOMapFilter: ");
+    trace(QSOMapFilterSettings.getValue().print());
+    return QSOMapFilterSettings.getValue();
 }
 //====================================================================

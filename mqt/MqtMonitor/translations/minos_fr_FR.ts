@@ -49,32 +49,31 @@
         <translation>Afficher les boutons de navigation</translation>
     </message>
     <message>
-        <location filename="../MonitorMain.ui" line="175"/>
+        <location filename="../MonitorMain.ui" line="176"/>
         <source>Show spots</source>
         <translation>Afficher les Spots</translation>
     </message>
     <message>
-        <location filename="../MonitorMain.ui" line="195"/>
         <source>Dist Limit</source>
-        <translation>Limite de distance</translation>
+        <translation type="vanished">Limite de distance</translation>
     </message>
     <message>
-        <location filename="../MonitorMain.ui" line="227"/>
+        <location filename="../MonitorMain.ui" line="183"/>
         <source>Show Locs</source>
         <translation>Afficher Locators</translation>
     </message>
     <message>
-        <location filename="../MonitorMain.ui" line="234"/>
+        <location filename="../MonitorMain.ui" line="206"/>
         <source>Top Left Labelled Locator</source>
         <translation>Locators etiquetés - en haut à gauche</translation>
     </message>
     <message>
-        <location filename="../MonitorMain.ui" line="261"/>
+        <location filename="../MonitorMain.ui" line="233"/>
         <source>Bottom Right Labelled Locator</source>
         <translation>Locators etiquetés - en bas à droite</translation>
     </message>
     <message>
-        <location filename="../MonitorMain.ui" line="288"/>
+        <location filename="../MonitorMain.ui" line="260"/>
         <source>NB Showing Labelled Locators can make the display very slow, so restrict the area as much as possible.</source>
         <translation>NB L&amp;apos;affichage des Locators peut être très lent, alors limiter la zone autant que possible.</translation>
     </message>
@@ -88,7 +87,7 @@
     <name>MonitoringFrame</name>
     <message>
         <location filename="../MonitoringFrame.ui" line="62"/>
-        <location filename="../MonitoringFrame.cpp" line="210"/>
+        <location filename="../MonitoringFrame.cpp" line="209"/>
         <source>Show Map</source>
         <translation>Afficher la Carte</translation>
     </message>
