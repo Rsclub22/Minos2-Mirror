@@ -47,6 +47,8 @@ namespace voiceKeyerCommon
     inline const QString VOICEKEYER_COMMON_PARAMS_FILENAME = "txVoiceKeyCommonParams.ini";
     inline const QString VOICEKEYER_COMMON_PARAMS_GROUPNAME = VOICEKEYER_COMMON_KEY;
     inline const QString CWKEYER_RADIO_COMMON_PARAMS_FILENAME = "cwRadioParams";
+    inline const QString DEFAULT_SUPPORTED_CW_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 /?{}";
+    inline const QString DEFAULT_LENGTH_CW_MESSAGE = "24";
     inline const QString CW_MESSAGE_BASE_FILE_NAME = "txCwMemory";
 
     inline const QString ALL_RADIOS_GROUP_NAME = "AllRadios";
