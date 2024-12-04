@@ -86,7 +86,7 @@ bool getRigCWKeyerMaxMessageLength(int &messageLength, QString radioMfg)
     if (config.childGroups().contains(radioMfg))
     {
         config.beginGroup(radioMfg);
-        messageLength = config.value("maxMsgLength", 0).toInt();
+        messageLength = config.value("maxMsgLength", DEFAULT_LENGTH_CW_MESSAGE).toInt();
         config.endGroup();
         return true;
     }
@@ -105,7 +105,7 @@ bool getRigCWKeyerSupportedCharacters(QString &supportedChars, QString radioMfg)
     if (config.childGroups().contains(radioMfg))
     {
         config.beginGroup(radioMfg);
-        supportedChars =  config.value("supportedCharacters", "").toString();
+        supportedChars =  config.value("supportedCharacters", DEFAULT_SUPPORTED_CW_CHARACTERS).toString();
         config.endGroup();
         if (supportedChars.isEmpty())
         {

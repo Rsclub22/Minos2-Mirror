@@ -197,6 +197,7 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
         ui->testRadioButton->setVisible(false);
         setTestControlsVisible(false);
         setTestMode(true);
+        loadTestModeCombo();
     }
     else
     {
@@ -386,6 +387,7 @@ void RigControlMainWindow::initActionsConnections()
     cwMessageTestTimer = new QTimer(this);
     connect(cwMessageTestTimer, &QTimer::timeout, this, &RigControlMainWindow::onCWMessageTimerTimeout);
     connect(ui->cwKeyerPb, &QPushButton::clicked, this, &RigControlMainWindow::onCwKeyerPbClicked);
+    connect(ui->testModeComboBox, &QComboBox::currentTextChanged, this, &RigControlMainWindow::onTestModeComboBoxTextChanged);
     connect(ui->cwKeyerStopPb, &QPushButton::clicked, this, &RigControlMainWindow::onCwKeyerStopPbClicked);
 
     connect(ui->selFreq, &QPushButton::clicked,  this, &RigControlMainWindow::selFreqClicked);
@@ -5645,7 +5647,19 @@ void RigControlMainWindow::on_testRadioButton_clicked()
 }
 
 
+void RigControlMainWindow::loadTestModeCombo()
+{
+    QString fileName = RADIO_PATH_LOGGER() + FILENAME_RIGCONTROL_TEST_DATA;
+    QSettings  config(fileName, QSettings::IniFormat);
+    config.beginGroup("MODES");
 
+    QString modes = config.value("modeComboList", "USB,LSB,CW,FM,MGM,RY,PS").toString();
+    config.endGroup();
+
+    QStringList modeList = modes.split(',');
+    ui->testModeComboBox->addItems(modeList);
+
+}
 
 
 void RigControlMainWindow::selFreqClicked()
@@ -5664,10 +5678,18 @@ void RigControlMainWindow::selFreqClicked()
 
 void RigControlMainWindow::setTestControlsVisible(bool visible)
 {
+
     setRitTestControlsVisible(visible);
     setPttTestControlsVisible(visible);
     setCwMemTestControlsVisible(visible);
     setVoiceMemTestControlsVisible(visible);
+}
+
+
+void RigControlMainWindow::setTestModeControlsVisible(bool visible)
+{
+    ui->testModeComboBox->setVisible(visible);
+    ui->modeTestLabel->setVisible(visible);
 }
 
 
@@ -5736,6 +5758,8 @@ void RigControlMainWindow::onCwKeyerPbClicked()
                 // This is an optional ini to allow manufacturer specific messages
                 QString fileName = RADIO_PATH_LOGGER() + FILENAME_RIGCONTROL_TEST_DATA;
                 QSettings  config(fileName, QSettings::IniFormat);
+
+                rigManufacturer.replace('/', '_');  // can't have / in group name
 
                 config.beginGroup(rigManufacturer);
 
@@ -5884,6 +5908,13 @@ void RigControlMainWindow::onSelectRadioFromLoggerClicked()
        closeRadio();
     }
 
+}
+
+void RigControlMainWindow::onTestModeComboBoxTextChanged(const QString testMode)
+{
+    trace(QString("**** test mode combo selected - %1 ****").arg(testMode));
+    trace(QString("Calling loggerSetMode"));
+    loggerSetMode(testMode);
 }
 
 void RigControlMainWindow::onSelectRadioFromRigControlClicked()

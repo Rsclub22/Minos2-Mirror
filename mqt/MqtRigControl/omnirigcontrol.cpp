@@ -635,7 +635,7 @@ int OmnirigControl::rigInit(scatParams &currentRadio, bool useRigCtld)
                 // install the correct rig ini file
                 QMessageBox::critical(nullptr,
                     tr("Minos - Check Omnirig Radio ini File for radio %1").arg(rig_type),
-                    tr("The ini file for %1 does not contain [pmFreq] for correct operation of Minos\nPlease obtain the correct ini file from the developers").arg(rig_type),
+                    tr("The ini file for %1 does not contain [pmFreq] for correct operation of Minos\nPlease obtain the correct ini file from the Minos folder:\nConfiguration\\Omnirig_Minos_Ini\nPlace it in \\Program Files (x86)\\Afreet\\OmniRig\\Rigs").arg(rig_type),
                     QMessageBox::Ok);
 
                 return omnirigError(OMNIRIG_OK);

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>947</width>
-    <height>702</height>
+    <width>851</width>
+    <height>621</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -274,6 +274,33 @@
                      <size>
                       <width>98</width>
                       <height>17</height>
+                     </size>
+                    </property>
+                   </spacer>
+                  </item>
+                 </layout>
+                </item>
+                <item>
+                 <layout class="QHBoxLayout" name="horizontalLayout_34">
+                  <item>
+                   <widget class="QLabel" name="modeTestLabel">
+                    <property name="text">
+                     <string>Mode</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QComboBox" name="testModeComboBox"/>
+                  </item>
+                  <item>
+                   <spacer name="horizontalSpacer_16">
+                    <property name="orientation">
+                     <enum>Qt::Horizontal</enum>
+                    </property>
+                    <property name="sizeHint" stdset="0">
+                     <size>
+                      <width>40</width>
+                      <height>20</height>
                      </size>
                     </property>
                    </spacer>
