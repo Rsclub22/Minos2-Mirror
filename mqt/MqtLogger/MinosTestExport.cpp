@@ -191,6 +191,7 @@ void MinosTestExport::exportQSOMap( QSharedPointer<QFile> expfd )
 
 }
 
+
 void MinosTestExport::exportEntry( QSharedPointer<QFile> expfd )
 {
    RPCParamStruct * st = new RPCParamStruct;
@@ -471,6 +472,33 @@ void MinosTestExport::exportBandmapFilter(QSharedPointer<QFile> expfd)
 }
 
 
+void MinosTestExport::exportQSOMapFilter(QSharedPointer<QFile> expfd)
+{
+    MinosItem<BandmapClientFilterSettings> qsomapFilter = ct->QSOMapFilterSettings;
+    if (qsomapFilter.isDirty())
+    {
+        RPCParamStruct * st = new RPCParamStruct;
+        makeHeader( st, 1 );
+
+        st->addMember(qsomapFilter.getValue().getModeFilter("NONE"), "modeFilterNONEMODE");
+        st->addMember(qsomapFilter.getValue().getModeFilter(hamlibData::CW), "modeFilterCW");
+        st->addMember(qsomapFilter.getValue().getModeFilter(hamlibData::LSB), "modeFilterLSBMODE");
+        st->addMember(qsomapFilter.getValue().getModeFilter(hamlibData::USB), "modeFilterUSBMODE");
+        st->addMember(qsomapFilter.getValue().getModeFilter(hamlibData::FM), "modeFilterFMMODE");
+        st->addMember(qsomapFilter.getValue().getModeFilter(hamlibData::RTTY), "modeFilterRTTYMODE");
+        st->addMember(qsomapFilter.getValue().getModeFilter("PSK31"), "modeFilterPSK31MODE");
+        st->addMember(qsomapFilter.getValue().getModeFilter("FT4"), "modeFilterFT4MODE");
+        st->addMember(qsomapFilter.getValue().getModeFilter("FT8"), "modeFilterFT8MODE");
+        st->addMember(qsomapFilter.getValue().getModeFilter("MSK144"), "modeFilterMSK144MODE");
+        st->addMember(qsomapFilter.getValue().getModeFilter("JT65"), "modeFilterJT65MODE");
+        st->addMember(qsomapFilter.getValue().getDistanceFilter(), "distanceFilter");
+        st->addMember(qsomapFilter.getValue().getIgnoreDistanceFlag(), "ignoreDistanceFlag");
+        st->addMember(qsomapFilter.getValue().getIgnoreEmptyDistanceFlag(), "ignoreEmptyDistanceFlag");
+        sendRequest(expfd, "MinosQSOMapFilter", st);
+
+    }
+
+}
 
 
 void MinosTestExport::exportRigMemory(QSharedPointer<QFile> expfd, int memno )
@@ -576,6 +604,24 @@ void MinosTestExport::writeFile(QSharedPointer<QFile> minosContestFile, QString 
     }
 
 }
+void MinosTestExport::exportDetails(QSharedPointer<QFile> expfd )
+{
+    exportMode( expfd );
+    exportContest( expfd );
+    exportQTH( expfd );
+    exportEntry( expfd );
+    exportStation( expfd );
+    exportCurrent( expfd );
+    exportOperators( expfd );
+    exportApps(expfd);
+    exportBundles( expfd );
+    exportAllMemories(expfd);
+    exportStackDisplay(expfd);
+    exportClusterFilter(expfd);
+    exportBandmapFilter(expfd);
+    exportQSOMap(expfd);
+    exportQSOMapFilter(expfd);
+}
 int MinosTestExport::exportAllDetails(QSharedPointer<QFile> minosContestFile, bool newfile )
 {
    if ( newfile )
@@ -587,24 +633,11 @@ int MinosTestExport::exportAllDetails(QSharedPointer<QFile> minosContestFile, bo
       writeFile(minosContestFile, lbuff);
 
    }
-   exportMode( minosContestFile );
-   exportContest( minosContestFile );
-   exportQTH( minosContestFile );
-   exportEntry( minosContestFile );
-   exportStation( minosContestFile );
-   exportCurrent( minosContestFile );
-   exportOperators( minosContestFile );
-   exportApps(minosContestFile);
-   exportBundles( minosContestFile );
-   exportAllMemories(minosContestFile);
-   exportStackDisplay(minosContestFile);
-   exportClusterFilter(minosContestFile);
-   exportBandmapFilter(minosContestFile);
-   exportQSOMap(minosContestFile);
 
+   exportDetails(minosContestFile);
    return exp_stanzaCount;
 }
-// AND we need an export operator change
+
 int MinosTestExport::exportTest( QSharedPointer<QFile> expfd, int mindump, int maxdump )
 {
    exp_stanzaCount = 0;
@@ -614,19 +647,7 @@ int MinosTestExport::exportTest( QSharedPointer<QFile> expfd, int mindump, int m
 
    // export a sequence of Minos stanzas
 
-   exportMode( expfd );
-   exportContest( expfd );
-   exportQTH( expfd );
-   exportEntry( expfd );
-   exportStation( expfd );
-   exportCurrent( expfd );
-   exportOperators( expfd );     // not right... we need to log op changes
-   exportApps(expfd);
-   exportBundles( expfd );
-   exportAllMemories(expfd);
-   exportClusterFilter(expfd);
-   exportQSOMap(expfd);
-
+   exportDetails(expfd);
 
    bool inDump = false;
    for(auto const &dct: QASCONST(ct->ctList))

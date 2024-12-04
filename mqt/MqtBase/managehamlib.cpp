@@ -309,7 +309,7 @@ void ManageHamlib::on_updateHamlibButton_clicked()
             }
             else
             {
-                mShowMessage(tr ("Hamlib Update successful \n\nNew Hamlib will be used after restart"), this);
+                mShowMessage(tr ("Hamlib updated - will be used after restart"), this);
                 if (routerRunning && checkHamlib())
                 {
                     MinosConfig::getMinosConfig() ->bounce();
@@ -346,7 +346,7 @@ void ManageHamlib::on_revertHamlibButton_clicked()
         else
         {
             QFile::copy(fs1, hPath);
-            mShowMessage( tr ("Hamlib successfully reverted \n\nReverted Hamlib will be used after restart"), this);
+            mShowMessage( tr ("Old Hamlib restored - it will be used after restart"), this);
             if (f1.exists()) f1.remove();
 
             if (routerRunning && checkHamlib())

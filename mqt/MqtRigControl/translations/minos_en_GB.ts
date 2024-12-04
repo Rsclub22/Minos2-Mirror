@@ -182,78 +182,89 @@ Please enter a name for the radio</source>
 <context>
     <name>OmnirigControl</name>
     <message>
-        <location filename="../omnirigcontrol.cpp" line="26"/>
+        <location filename="../omnirigcontrol.cpp" line="27"/>
         <source>No Error, operation completed sucessfully</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../omnirigcontrol.cpp" line="27"/>
+        <location filename="../omnirigcontrol.cpp" line="28"/>
         <source>Radio Function not supported</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../omnirigcontrol.cpp" line="28"/>
+        <location filename="../omnirigcontrol.cpp" line="29"/>
         <source>Omnirig Com Failed to start</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../omnirigcontrol.cpp" line="29"/>
+        <location filename="../omnirigcontrol.cpp" line="30"/>
         <source>Omnirig rig One failed to initialise</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../omnirigcontrol.cpp" line="30"/>
+        <location filename="../omnirigcontrol.cpp" line="31"/>
         <source>Omnirig rig Two failed to initialise</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../omnirigcontrol.cpp" line="31"/>
+        <location filename="../omnirigcontrol.cpp" line="32"/>
         <source>Omnirig rig is offline</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../omnirigcontrol.cpp" line="32"/>
+        <location filename="../omnirigcontrol.cpp" line="33"/>
         <source>Omnirig radio online</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../omnirigcontrol.cpp" line="33"/>
+        <location filename="../omnirigcontrol.cpp" line="34"/>
         <source>Omnirig get freq fail</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../omnirigcontrol.cpp" line="34"/>
+        <location filename="../omnirigcontrol.cpp" line="35"/>
         <source>Omnirig COM Exception
 Check Rigcontrol tracelog</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../omnirigcontrol.cpp" line="35"/>
+        <location filename="../omnirigcontrol.cpp" line="36"/>
         <source>Omnirig not configured</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../omnirigcontrol.cpp" line="36"/>
+        <location filename="../omnirigcontrol.cpp" line="37"/>
         <source>Omnirig disabled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../omnirigcontrol.cpp" line="37"/>
+        <location filename="../omnirigcontrol.cpp" line="38"/>
         <source>Omnirig port busy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../omnirigcontrol.cpp" line="38"/>
+        <location filename="../omnirigcontrol.cpp" line="39"/>
         <source>Omnirig not responding</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../omnirigcontrol.cpp" line="39"/>
+        <location filename="../omnirigcontrol.cpp" line="40"/>
         <source>Omnirig rig pointer null</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../omnirigcontrol.cpp" line="1014"/>
+        <location filename="../omnirigcontrol.cpp" line="637"/>
+        <source>Minos - Check Omnirig Radio ini File for radio %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../omnirigcontrol.cpp" line="638"/>
+        <source>The ini file for %1 does not contain [pmFreq] for correct operation of Minos
+Please obtain the correct ini file from the developers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../omnirigcontrol.cpp" line="1050"/>
         <source>Omnirig Errorcode too large!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -268,6 +279,11 @@ Check Rigcontrol tracelog</source>
     <message>
         <location filename="../rigcontrolmainwindow.ui" line="39"/>
         <source>Setup</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rigcontrolmainwindow.ui" line="54"/>
+        <source>Select RigControl Program</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -308,11 +324,6 @@ Check Rigcontrol tracelog</source>
     <message>
         <location filename="../rigcontrolmainwindow.ui" line="183"/>
         <source>Reconnect</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../rigcontrolmainwindow.ui" line="54"/>
-        <source>Select RigControl path</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

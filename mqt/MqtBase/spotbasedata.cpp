@@ -191,6 +191,8 @@ QSharedPointer<ClusterSpotData> stringToDxSpot(QString spot, BaseContestLog *ct,
             res->setDxLocator(spotlist[DXLOCATOR]);
             res->setDxLocatorIsFromNode(dxLocFromNodeFlag);
             res->setDxLocatorWorked(locWorked);
+            res->setDistrict(QString());
+            res->setDistrictWorked(false);
             res->setDxDist(distance);
             res->setDxBrg(bearing);
             res->setSpotterCall(spotlist[SPOTCALL]);

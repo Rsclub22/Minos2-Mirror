@@ -49,32 +49,27 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MonitorMain.ui" line="175"/>
+        <location filename="../MonitorMain.ui" line="176"/>
         <source>Show spots</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MonitorMain.ui" line="195"/>
-        <source>Dist Limit</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../MonitorMain.ui" line="227"/>
+        <location filename="../MonitorMain.ui" line="183"/>
         <source>Show Locs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MonitorMain.ui" line="234"/>
+        <location filename="../MonitorMain.ui" line="206"/>
         <source>Top Left Labelled Locator</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MonitorMain.ui" line="261"/>
+        <location filename="../MonitorMain.ui" line="233"/>
         <source>Bottom Right Labelled Locator</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MonitorMain.ui" line="288"/>
+        <location filename="../MonitorMain.ui" line="260"/>
         <source>NB Showing Labelled Locators can make the display very slow, so restrict the area as much as possible.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -88,7 +83,7 @@
     <name>MonitoringFrame</name>
     <message>
         <location filename="../MonitoringFrame.ui" line="62"/>
-        <location filename="../MonitoringFrame.cpp" line="210"/>
+        <location filename="../MonitoringFrame.cpp" line="209"/>
         <source>Show Map</source>
         <translation type="unfinished"></translation>
     </message>

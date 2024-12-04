@@ -20,6 +20,7 @@
 #include "MapWrapper.h"
 #include "ProfileEnums.h"
 #include "callsign.h"
+#include "clustercommon.h"
 #include "contacts.h"
 #include "dtg.h"
 #include "frequency.h"
@@ -207,6 +208,15 @@ class BaseContestLog: public BaseLogList
       MinosStringItem<QString> centreLat;
       MinosStringItem<QString> centreLon;
 
+      MinosItem<BandmapClientFilterSettings> QSOMapFilterSettings;
+      bool QSOMapFilterSettingsExist = false;
+
+      virtual bool getQSOMapFilterSettingsExist() const ;
+      virtual void setQSOMapFilterSettingsExist(bool newBandmapFilterSettingsExist) ;
+      virtual void saveQSOMapFilter(const BandmapClientFilterSettings &bcfs) ;
+      virtual void saveInitialQSOMapFilter(const BandmapClientFilterSettings &bcfs) ;
+      virtual BandmapClientFilterSettings getQSOMapFilter() ;
+
       // dirty info is only relevant when it is being editted
       // but needs to stay with the data
 
@@ -274,6 +284,13 @@ class BaseContestLog: public BaseLogList
       int lastInserted = -1;
 
       QSharedPointer<BaseContact> findContact(CheckableContact *) const;
+
+      virtual bool getBandmapFilterSettingsExist() const{return false;};
+      virtual void setBandmapFilterSettingsExist(bool /*newBandmapFilterSettingsExist*/){};
+
+      virtual void saveBandmapFilter(const BandmapClientFilterSettings &/*bcfs*/){};
+      virtual void saveInitialBandmapFilter(const BandmapClientFilterSettings &/*bcfs*/){}
+      virtual BandmapClientFilterSettings getBandmapFilter(){return BandmapClientFilterSettings();}
 
       // Ancilliary variables
 

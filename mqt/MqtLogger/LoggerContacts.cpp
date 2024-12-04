@@ -66,7 +66,7 @@ void ContestContact::getPrintFileText( QString &sdest, short maxlen )
          else
          {
             if ( contactFlags.getValue() & VALID_DUPLICATE )
-               exp_buff = tr("BackPacker") + " ";
+               exp_buff = tr("Valid Dup") + " ";
 
             if ( contactFlags.getValue() & VALID_DISTRICT )
                exp_buff += tr("No district code") + " ";

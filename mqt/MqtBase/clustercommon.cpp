@@ -4,6 +4,7 @@
 #include "checkmodeagainstfreq.h"
 #include "BandList.h"
 #include "MTrace.h"
+#include "cutils.h"
 #include "rigcontrolcommonconstants.h"
 
 const char * clusterStateList[] =
@@ -33,6 +34,16 @@ bool ModeFilterSettings::operator==(const ModeFilterSettings& mfs) const
 bool ModeFilterSettings::contains(const QString mode)
 {
     return modeFilterFlag.contains(mode);
+}
+
+QString ModeFilterSettings::print()
+{
+    QString res("ModeFilterSettings:");
+    for (auto it = modeFilterFlag.begin(); it != modeFilterFlag.end(); ++it)
+    {
+        res += " " + it.key() + " " + makeStr( it.value());
+    }
+    return res;
 }
 
 bool ModeFilterSettings::testModeFilter(QString mode)
@@ -508,6 +519,7 @@ bool BandmapClientFilterSettings::operator!=( const BandmapClientFilterSettings&
     return !(*this == ccfs);
 }
 
+#ifdef RUBBISH
 QString BandmapClientFilterSettings::packFilterList(QStringList l)
 {
     QString s;
@@ -541,7 +553,7 @@ QStringList BandmapClientFilterSettings::unpackFilterList(QString &sl)
     return fl;
 }
 
-
+#endif
 
 
 
