@@ -6008,7 +6008,7 @@ Last %8 Mins: %9 QSO %10 pts %11 mults
     </message>
     <message>
         <location filename="../txvmbuttonsframe.cpp" line="746"/>
-        <location filename="../txvmbuttonsframe.cpp" line="953"/>
+        <location filename="../txvmbuttonsframe.cpp" line="958"/>
         <source>Voice Memory</source>
         <translation>Mémoire de voix</translation>
     </message>
@@ -6024,42 +6024,42 @@ Last %8 Mins: %9 QSO %10 pts %11 mults
     </message>
     <message>
         <location filename="../txvmbuttonsframe.cpp" line="732"/>
-        <location filename="../txvmbuttonsframe.cpp" line="939"/>
+        <location filename="../txvmbuttonsframe.cpp" line="944"/>
         <source>Rig CW Message - </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="955"/>
+        <location filename="../txvmbuttonsframe.cpp" line="960"/>
         <source>%1 %2 - New</source>
         <translation>%1 %2 - Nouveau</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1476"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1491"/>
         <source>Rig Voice Keyer Available</source>
         <translation>Mémoire de voix disponible</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1480"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1495"/>
         <source>Rig CW Messages Available</source>
         <translation>Message CW disponible</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1602"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1617"/>
         <source>TX On</source>
         <translation>TX Actif</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1608"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1623"/>
         <source>TX Off</source>
         <translation>TX Éteint</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1618"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1633"/>
         <source>PTT Enabled</source>
         <translation>PTT activé</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1624"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1639"/>
         <source>PTT Disabled</source>
         <translation>PTT Désactivé</translation>
     </message>
@@ -6425,12 +6425,12 @@ Veuillez modifier ou supprimer</translation>
 <context>
     <name>TxVoiceMemButton</name>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1771"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1786"/>
         <source>&amp;New</source>
         <translation>&amp;Nouveau</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1772"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1787"/>
         <source>&amp;Edit</source>
         <translation>&amp;Modifier</translation>
     </message>
