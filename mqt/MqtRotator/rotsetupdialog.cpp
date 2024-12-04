@@ -497,7 +497,7 @@ void RotSetupDialog::getAvailAntenna(int antNum, QSettings& config)
     availAntData[antNum]->networkPort = config.value("netPort", "").toString();
     availAntData[antNum]->advancedCommsFlag = config.value("advancedComms", false).toBool();
     availAntData[antNum]->showCompassDialFlag = config.value("showCompassDial",true).toBool();
-    availAntData[antNum]->nearStopTolerance = config.value("nearStopTolerance", 0).toBool();
+    availAntData[antNum]->nearStopTolerance = config.value("nearStopTolerance", 0).toInt();
 
     config.endGroup();
 
