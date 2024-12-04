@@ -156,6 +156,14 @@ private:
     bool hamlibOk = false;
 
 
+    bool skyScanEnabled = false;
+    bool saveSkyScanOnClose = false;
+    int startSkyScanBrg = 0;
+    int endSkyScanBrg = 0;
+    int skyScanStepDegrees = 0;
+    int skyScanPauseSecs = 0;
+
+
 
     int openRotator();
     void closeRotator();
@@ -266,6 +274,15 @@ private slots:
 
     void on_rotTabs_currentChanged(int index);
 
+    void skyScanStopPbPressed();
+    void skyScanStartPbPressed();
+    void skyScanPauseTimeLineEdit();
+    void skyScanEndBrgLineEditReturnPressed();
+    void skyScanStartBrgLineEditReturnPressed();
+    void skyScanSettingsOnCloseChkBoxChanged();
+    void skyScanEnableChkBoxChanged();
+
+
 private:
     void rotateTo(int bearing);
     int northCalcTarget(int targetBearing);
@@ -299,6 +316,19 @@ private:
     void setCompassDialVisible(bool visible);
     void setTestMode(bool test);
 
+    void setSkyScanEnableChkBoxEnabled(bool enabled);
+    void setSaveSkyScanSettingsOnCloseChkBoxEnabled(bool enabled);
+    void setSkyScanStartBrgLineEditEnabled(bool enabled);
+    void setSkyScanEndBrgLineEditEnabled(bool enabled);
+    void setSkyScanPauseTimeLineEditEnabled(bool enabled);
+    void setSkyScanStartButtonEnabled(bool enabled);
+    void setSkyScanStopButtonEnabled(bool enabled);
+    void saveSkyScanSettings(QString currentAntennaName);
+    void readSkyScanSettings(QString currentAntennaName);
+    void setSkyScanComponentsEnabled(bool enabled);
+    void setStepDegreeLineEditEnabled(bool enabled);
+    void closeSkyScan(QString currentAntennaName);
+    void openSkyScan(QString currentAntennaName);
 };
 
 #endif // ROTATORMAINWINDOW_H

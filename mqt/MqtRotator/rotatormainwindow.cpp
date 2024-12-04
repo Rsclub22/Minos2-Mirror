@@ -203,7 +203,8 @@ RotatorMainWindow::RotatorMainWindow(QWidget *parent) :
         showStatusMessage(tr("Error: Installed Hamlib version %1 is incorrect, should be version %2 or greater").arg(hamlib_version).arg(MINIMUM_HAMLIB_VERSION));
     }
 
-
+    setSkyScanComponentsEnabled(false);
+    setSkyScanEnableChkBoxEnabled(false);
 
     setTestMode(appName.isEmpty());
 
@@ -596,6 +597,8 @@ void RotatorMainWindow::closeRotator()
 
         }
 
+        closeSkyScan(setupAntenna->currentAntenna.antennaName);
+
         if (rotator->getRotConnected())
         {
             rotator->closeRotator();
@@ -725,6 +728,8 @@ void RotatorMainWindow::initActionsConnections()
     connect(msg, &RotatorRpc::setRotation, this, &RotatorMainWindow::onLoggerSetRotation);
     connect(msg, &RotatorRpc::selectAntennaFromLog, this, &RotatorMainWindow::onLoggerSelectAntenna);
     connect(msg, &RotatorRpc::setRotPreset, this, &RotatorMainWindow::onLoggerSetPreset);
+
+
 }
 
 
@@ -1049,10 +1054,15 @@ void RotatorMainWindow::upDateAntenna()
             if (rotator->getRotConnected())
             {
                 sendStatusToLogConnected();
+                setSkyScanEnableChkBoxEnabled(true);
+                openSkyScan(setupAntenna->currentAntenna.antennaName);
+
             }
             else
             {
                 sendStatusToLogDisConnected();
+                setSkyScanEnableChkBoxEnabled(false);
+                closeSkyScan(setupAntenna->currentAntenna.antennaName);
             }
 
             rotatorBearing = 9999;      // force display update
@@ -1130,10 +1140,14 @@ void RotatorMainWindow::refreshAntenna()
         if (rotator->getRotConnected())
         {
             sendStatusToLogConnected();
+            setSkyScanEnableChkBoxEnabled(true);
+            openSkyScan(setupAntenna->currentAntenna.antennaName);
         }
         else
         {
             sendStatusToLogDisConnected();
+            setSkyScanEnableChkBoxEnabled(false);
+            closeSkyScan(setupAntenna->currentAntenna.antennaName);
         }
 
     }
@@ -2673,4 +2687,207 @@ void RotatorMainWindow::on_rotTabs_currentChanged(int index)
     settings.getSettings().setValue("rotTabs/curTab", index);
 
 }
+
+void RotatorMainWindow::setSkyScanComponentsEnabled(bool enabled)
+{
+    //setSkyScanEnableChkBoxEnabled(enabled);
+    setSaveSkyScanSettingsOnCloseChkBoxEnabled(enabled);
+    setSkyScanStartBrgLineEditEnabled(enabled);
+    setSkyScanEndBrgLineEditEnabled(enabled);
+    setSkyScanPauseTimeLineEditEnabled(enabled);
+    setStepDegreeLineEditEnabled(enabled);
+    setSkyScanStartButtonEnabled(enabled);
+    setSkyScanStopButtonEnabled(enabled);
+
+}
+void RotatorMainWindow::setSkyScanEnableChkBoxEnabled(bool enabled)
+{
+    ui->skyScanEnableChkBox->setEnabled(enabled);
+}
+
+void RotatorMainWindow::setSaveSkyScanSettingsOnCloseChkBoxEnabled(bool enabled)
+{
+    ui->saveSkyScanSettingsOnCloseChkBox->setEnabled(enabled);
+}
+void RotatorMainWindow::setSkyScanStartBrgLineEditEnabled(bool enabled)
+{
+    ui->skyScanStartBrgLabel->setEnabled(enabled);
+    ui->skyScanStartBrgLineEdit->setEnabled(enabled);
+}
+void RotatorMainWindow::setSkyScanEndBrgLineEditEnabled(bool enabled)
+{
+    ui->skyScanEndBrgLabel->setEnabled(enabled);
+    ui->skyScanEndBrgLineEdit->setEnabled(enabled);
+}
+void RotatorMainWindow::setStepDegreeLineEditEnabled(bool enabled)
+{
+    ui->skyScanStepDegreesLabel->setEnabled(enabled);
+    ui->skyScanStepDegreesLineEdit->setEnabled(enabled);
+}
+void RotatorMainWindow::setSkyScanPauseTimeLineEditEnabled(bool enabled)
+{
+    ui->skyScanPauseTimeLabel->setEnabled(enabled);
+    ui->skyScanPauseTimeLineEdit->setEnabled(enabled);
+}
+void RotatorMainWindow::setSkyScanStartButtonEnabled(bool enabled)
+{
+    ui->skyScanStartPb->setEnabled(enabled);
+}
+void RotatorMainWindow::setSkyScanStopButtonEnabled(bool enabled)
+{
+    ui->skyScanStopPb->setEnabled(enabled);
+}
+void RotatorMainWindow::skyScanEnableChkBoxChanged()
+{
+    if (rotator && rotator->getRotConnected())
+    {
+
+        if (ui->skyScanEnableChkBox->isChecked() != skyScanEnabled)
+        {
+            skyScanEnabled = ui->skyScanEnableChkBox->isChecked();
+
+            if (skyScanEnabled)
+            {
+                // enable skyScan components
+                setSkyScanComponentsEnabled(true);
+            }
+            else
+            {
+                // stop
+                skyScanStopPbPressed();
+                setSkyScanComponentsEnabled(false);
+            }
+        }
+
+
+    }
+
+
+}
+void RotatorMainWindow::skyScanSettingsOnCloseChkBoxChanged()
+{
+
+}
+void RotatorMainWindow::skyScanStartBrgLineEditReturnPressed()
+{
+
+}
+void RotatorMainWindow::skyScanEndBrgLineEditReturnPressed()
+{
+
+}
+void RotatorMainWindow::skyScanPauseTimeLineEdit()
+{
+
+}
+void RotatorMainWindow::skyScanStartPbPressed()
+{
+
+}
+void RotatorMainWindow::skyScanStopPbPressed()
+{
+
+}
+void RotatorMainWindow::saveSkyScanSettings(QString currentAntennaName)
+{
+    trace(QString("Save skyScan Settings for antenna %1").arg(currentAntennaName));
+
+    QString fileName = ANTENNA_PATH_LOGGER() + FILENAME_AVAIL_ANTENNAS;
+    QSettings config(fileName, QSettings::IniFormat);
+    config.beginGroup(currentAntennaName);
+
+    config.setValue("skyScanEnabled", skyScanEnabled);
+    config.setValue("saveSkyScanOnClose", saveSkyScanOnClose);
+    config.setValue("startSkyScanBearing", startSkyScanBrg);
+    config.setValue("endSkyScanBearing", endSkyScanBrg);
+    config.setValue("skyScanStepDegrees", skyScanStepDegrees);
+    config.setValue("skyScanPauseSecs", skyScanPauseSecs);
+
+    config.endGroup();
+
+}
+void RotatorMainWindow::readSkyScanSettings(QString currentAntennaName)
+{
+    trace(QString("Read skyScan Settings for antenna %1").arg(currentAntennaName));
+
+    QString fileName = ANTENNA_PATH_LOGGER() + FILENAME_AVAIL_ANTENNAS;
+    QSettings config(fileName, QSettings::IniFormat);
+    config.beginGroup(currentAntennaName);
+
+    skyScanEnabled = config.value("skyScanEnabled", false).toBool();
+    saveSkyScanOnClose = config.value("saveSkyScanOnClose", false).toBool();
+    startSkyScanBrg = config.value("startSkyScanBearing", 0).toInt();
+    endSkyScanBrg = config.value("endSkyScanBearing", 0).toInt();
+    skyScanStepDegrees = config.value("skyScanStepDegrees", 0).toInt();
+    skyScanPauseSecs = config.value("skyScanPauseSecs", 0).toInt();
+
+    config.endGroup();
+
+}
+void RotatorMainWindow::closeSkyScan(QString currentAntennaName)
+{
+    trace(QString("Close Skyscan"));
+
+    if (saveSkyScanOnClose)
+    {
+        saveSkyScanSettings(currentAntennaName);
+    }
+
+    skyScanEnabled = false;
+    ui->skyScanEnableChkBox->setChecked(skyScanEnabled);
+    saveSkyScanOnClose = false;
+    ui->saveSkyScanSettingsOnCloseChkBox->setChecked(saveSkyScanOnClose);
+    setSkyScanEnableChkBoxEnabled(false);
+    setSkyScanComponentsEnabled(false);
+    ui->skyScanStartBrgLineEdit->clear();
+    ui->skyScanEndBrgLineEdit->clear();
+    ui->skyScanStepDegreesLineEdit->clear();
+    ui->skyScanPauseTimeLineEdit->clear();
+
+
+    disconnect(ui->skyScanEnableChkBox, &QCheckBox::stateChanged, this, &RotatorMainWindow::skyScanEnableChkBoxChanged);
+    disconnect(ui->saveSkyScanSettingsOnCloseChkBox, &QCheckBox::stateChanged, this, &RotatorMainWindow::skyScanSettingsOnCloseChkBoxChanged);
+    disconnect(ui->skyScanStartBrgLineEdit, &BearingLineEdit::returnPressed, this, &RotatorMainWindow::skyScanStartBrgLineEditReturnPressed);
+    disconnect(ui->skyScanEndBrgLineEdit, &BearingLineEdit::returnPressed, this, &RotatorMainWindow::skyScanEndBrgLineEditReturnPressed);
+    disconnect(ui->skyScanPauseTimeLineEdit, &QLineEdit::returnPressed, this, &RotatorMainWindow::skyScanPauseTimeLineEdit);
+    disconnect(ui->skyScanStartPb, &QPushButton::pressed, this, &RotatorMainWindow::skyScanStartPbPressed);
+    disconnect(ui->skyScanStopPb, &QPushButton::pressed, this, &RotatorMainWindow::skyScanStopPbPressed);
+
+}
+void RotatorMainWindow::openSkyScan(QString currentAntennaName)
+{
+    trace(QString("Open SkyScan"));
+
+    readSkyScanSettings(currentAntennaName);
+    setSkyScanEnableChkBoxEnabled(true);
+    ui->skyScanEnableChkBox->setChecked(skyScanEnabled);
+    setSkyScanComponentsEnabled(skyScanEnabled);
+    //ui->saveSkyScanSettingsOnCloseChkBox->setChecked(saveSkyScanOnClose);
+    //ui->skyScanStartBrgLineEdit->setText(QString::number(startSkyScanBrg));
+    //ui->skyScanEndBrgLineEdit->setText(QString::number(endSkyScanBrg));
+    //ui->skyScanStepDegreesLineEdit->setText(QString::number(skyScanStepDegrees));
+    //ui->skyScanPauseTimeLineEdit->setText(QString::number(skyScanPauseSecs));
+
+    connect(ui->skyScanEnableChkBox, &QCheckBox::stateChanged, this, &RotatorMainWindow::skyScanEnableChkBoxChanged);
+    connect(ui->saveSkyScanSettingsOnCloseChkBox, &QCheckBox::stateChanged, this, &RotatorMainWindow::skyScanSettingsOnCloseChkBoxChanged);
+    connect(ui->skyScanStartBrgLineEdit, &BearingLineEdit::returnPressed, this, &RotatorMainWindow::skyScanStartBrgLineEditReturnPressed);
+    connect(ui->skyScanEndBrgLineEdit, &BearingLineEdit::returnPressed, this, &RotatorMainWindow::skyScanEndBrgLineEditReturnPressed);
+    connect(ui->skyScanPauseTimeLineEdit, &QLineEdit::returnPressed, this, &RotatorMainWindow::skyScanPauseTimeLineEdit);
+    connect(ui->skyScanStartPb, &QPushButton::pressed, this, &RotatorMainWindow::skyScanStartPbPressed);
+    connect(ui->skyScanStopPb, &QPushButton::pressed, this, &RotatorMainWindow::skyScanStopPbPressed);
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
