@@ -3,6 +3,12 @@
 set -x
 
 echo $OSTYPE
+
+if [[ "$OSTYPE" != "darwin"* ]] ; then 		#MacOS
+echo Please use buildInstall.sh instead
+exit 1
+fi
+
 SCRIPT=$(basename $0)
 DIR=$(echo `pwd`/../..)
 QTDIR=~/Qt/6.7.2/macos
