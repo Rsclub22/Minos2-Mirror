@@ -9,15 +9,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>722</width>
-    <height>447</height>
+    <width>728</width>
+    <height>470</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Minos Rotator</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout_25">
+   <layout class="QHBoxLayout" name="horizontalLayout_20">
     <item>
      <widget class="MinosSplitter" name="rotSplitter">
       <property name="orientation">
@@ -458,7 +458,7 @@
                   </widget>
                  </item>
                  <item>
-                  <widget class="BearingLineEdit" name="skyScanStartBrgLineEdit"/>
+                  <widget class="QLineEdit" name="skyScanStartBrgLineEdit"/>
                  </item>
                  <item>
                   <spacer name="horizontalSpacer_15">
@@ -485,7 +485,7 @@
                   </widget>
                  </item>
                  <item>
-                  <widget class="BearingLineEdit" name="skyScanEndBrgLineEdit"/>
+                  <widget class="QLineEdit" name="skyScanEndBrgLineEdit"/>
                  </item>
                  <item>
                   <spacer name="horizontalSpacer_16">
@@ -512,7 +512,7 @@
                   </widget>
                  </item>
                  <item>
-                  <widget class="BearingLineEdit" name="skyScanStepDegreesLineEdit"/>
+                  <widget class="QLineEdit" name="skyScanStepDegreesLineEdit"/>
                  </item>
                  <item>
                   <spacer name="horizontalSpacer_17">
@@ -576,6 +576,13 @@
                   </widget>
                  </item>
                  <item>
+                  <widget class="QPushButton" name="skyScanPausePb">
+                   <property name="text">
+                    <string>Pause</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
                   <widget class="QPushButton" name="skyScanStopPb">
                    <property name="text">
                     <string>Stop</string>
@@ -590,6 +597,24 @@
                   <enum>Qt::Horizontal</enum>
                  </property>
                 </widget>
+               </item>
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_19">
+                 <item>
+                  <widget class="QLabel" name="skyScanErrorLbl">
+                   <property name="text">
+                    <string>Error:</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="skyScanErrorMsg">
+                   <property name="text">
+                    <string/>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
                </item>
               </layout>
              </item>

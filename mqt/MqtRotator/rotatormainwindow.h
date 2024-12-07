@@ -24,6 +24,8 @@
 #include <QPushButton>
 #include <QShortcut>
 #include <QTimer>
+#include <QRegularExpression>
+#include <QRegularExpressionValidator>
 
 #include "CommandReader.h"
 #include "rotatorRpc.h"
@@ -31,6 +33,7 @@
 #include "rotatorfactory.h"
 #include "rotatorcommon.h"
 #include "presetbutton.h"
+#include "skyscancontrol.h"
 
 #define NUM_PRESETS 10
 #define OFF false
@@ -155,7 +158,7 @@ private:
 
     bool hamlibOk = false;
 
-
+    QSharedPointer<SkyScanControl> skyScanControl;
     bool skyScanEnabled = false;
     bool saveSkyScanOnClose = false;
     int startSkyScanBrg = 0;
@@ -163,7 +166,10 @@ private:
     int skyScanStepDegrees = 0;
     int skyScanPauseSecs = 0;
 
-
+    QRegularExpressionValidator *startScanBrgLineEditValidator;
+    QRegularExpressionValidator *endScanBrgLineEditValidator;
+    QRegularExpressionValidator *stepDegreeLineEditValidator;
+    QRegularExpressionValidator *pauseTimeLineEditValidator;
 
     int openRotator();
     void closeRotator();
@@ -283,6 +289,9 @@ private slots:
     void skyScanEnableChkBoxChanged();
 
 
+    void skyScanStartBrgLineEditTextChanged();
+    void skyScanPausePbPressed();
+    void upDateSkyScanCurrentBearing(int brg);
 private:
     void rotateTo(int bearing);
     int northCalcTarget(int targetBearing);
@@ -329,6 +338,14 @@ private:
     void setStepDegreeLineEditEnabled(bool enabled);
     void closeSkyScan(QString currentAntennaName);
     void openSkyScan(QString currentAntennaName);
+    void setSkyScanPauseButtonEnabled(bool enabled);
+    void setSkyScanErrorLabelEnabled(bool enabled);
+    void setSkyScanErrorMessageEnabled(bool enabled);
+    void setSkyScanStepDegreesLineEditValidator();
+    void setSkyPauseTimeLineEditValidator();
+    void setSkyScanEndBrgLineEditValidator();
+    void setSkyScanStartBrgLineEditValidator();
+    void setSkyScanLineEditValidators();
 };
 
 #endif // ROTATORMAINWINDOW_H

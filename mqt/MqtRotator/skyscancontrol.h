@@ -13,48 +13,58 @@
 
 #include <QObject>
 #include <QList>
+#include <QTimer>
+#include "rotatorcommon.h"
 
-class skyScanControl : public QObject
+
+class SkyScanControl : public QObject
 {
     Q_OBJECT
 public:
-    explicit skyScanControl(QObject *parent = nullptr);
 
-    enum StopPosition { North = 0, South = 180 };
 
-    void setStartScanBrg(int startScanBrg_){startScanBrg = startScanBrg_;}
-    int getStartScanBrg(){return startScanBrg;}
+    explicit SkyScanControl(QObject *parent);
 
-    void setEndtScanBrg(int endScanBrg_){endScanBrg = endScanBrg_;}
-    int getEndScanBrg(){return endScanBrg;}
+    ~SkyScanControl();
 
-    void setStepDegrees(int stepDegrees_){stepDegrees = stepDegrees_;}
-    int getStepDegrees(){return stepDegrees;}
-
-    void setScanPauseTime(int scanPauseTimeMs_){scanPauseTimeMs = scanPauseTimeMs_;}
-    int getScanPauseTime(){return scanPauseTimeMs;}
-
+    void initSkyScan(enum southStop southType_, int minRot, int maxRot, int start, int end, int step, int interval);
     void startSkyscan();
+    void stopSkyscan();
+    void pauseSkyscan();
+    void setCurrentBearing(int newBearing);
 
+
+signals:
+
+    void rotateTo(int bearing);
+
+private slots:
+    void skyScanIntervalTimerTimeOut();
 private:
 
-    int range;              // rotation range (e.g. 360, 450, 540)
-    int startScanBrg = 0;
-    int endScanBrg = 0;
+
+    int minRotation = 0;
+    int maxRotation = 0;
+    int startScanBearing = 0;
+    int endScanBearing = 0;
     int stepDegrees = 0;
-    int currentBrg = 0;
-    int wrapPoint = 0;      // Maximum bearing before wrap around
-    StopPosition stopPosition = StopPosition::North;
+    int currentBearing = 0;
+    southStop southType = southStop::S_STOPOFF;
+
     int scanPauseTimeMs = 0;
+    bool movingToStartPosition = false;
 
     QList<int> rotationPath;
+
+    QTimer *skyScanIntervalTimer = nullptr;
 
     void determinePath();
 
     void rotateToNextPosition();
     QString determineDirection(int current, int target);
-
-
+    int toStandardBearing(int bearing);
+    int toStopTypeBearing(int bearing);
+    void traceMessage(QString msg);
 };
 
 #endif // SKYSCANCONTROL_H

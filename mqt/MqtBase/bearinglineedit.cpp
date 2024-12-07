@@ -63,6 +63,8 @@ void BearingLineEdit::onTextChanged(const QString& brg)
 
         showBearingGoodBad(true);
     }
+
+
 }
 
 
