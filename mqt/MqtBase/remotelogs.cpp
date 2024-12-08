@@ -88,6 +88,21 @@ bool RemoteLogs::hasWorked(const Callsign &cs, QString band, QString mode)
                 bool worked = (*l)->getCallsigns().contains(dc);
                 if (worked)
                 {
+                    const DupContact &dcc = *((*l)->getCallsigns().find(dc));
+                    if ( dcc.dct->contactFlags.getValue() & DONT_PRINT )
+                    {
+                        //trace(QString("RemoteLogs::hasWorked %1 Deleted").arg(dcc.dct->cs.getFullCall()));
+                        return false;
+                    }
+                    else
+                        if ( dcc.dct->contactFlags.getValue() & NON_SCORING )
+                        {
+                            //trace(QString("RemoteLogs::hasWorked %1 Non Scoring").arg(dcc.dct->cs.getFullCall()));
+                            return false;
+                        }
+                    // This will return true even if the QSO is non-scoring
+                    //trace(QString("RemoteLogs::hasWorked %1 OK").arg(dcc.dct->cs.getFullCall()));
+
                     return true;
                 }
             }
