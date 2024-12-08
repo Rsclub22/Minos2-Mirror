@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>728</width>
-    <height>470</height>
+    <height>502</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -458,7 +458,7 @@
                   </widget>
                  </item>
                  <item>
-                  <widget class="QLineEdit" name="skyScanStartBrgLineEdit"/>
+                  <widget class="BearingLineEdit" name="skyScanStartBrgLineEdit"/>
                  </item>
                  <item>
                   <spacer name="horizontalSpacer_15">
@@ -485,7 +485,7 @@
                   </widget>
                  </item>
                  <item>
-                  <widget class="QLineEdit" name="skyScanEndBrgLineEdit"/>
+                  <widget class="BearingLineEdit" name="skyScanEndBrgLineEdit"/>
                  </item>
                  <item>
                   <spacer name="horizontalSpacer_16">

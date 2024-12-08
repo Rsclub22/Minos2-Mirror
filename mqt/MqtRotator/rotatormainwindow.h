@@ -69,6 +69,7 @@ public:
 
     const QString version = "2.20";
 
+
 signals:
 
     void escapePressed();
@@ -166,8 +167,8 @@ private:
     int skyScanStepDegrees = 0;
     int skyScanPauseSecs = 0;
 
-    QRegularExpressionValidator *startScanBrgLineEditValidator;
-    QRegularExpressionValidator *endScanBrgLineEditValidator;
+    //QRegularExpressionValidator *startScanBrgLineEditValidator;
+    //QRegularExpressionValidator *endScanBrgLineEditValidator;
     QRegularExpressionValidator *stepDegreeLineEditValidator;
     QRegularExpressionValidator *pauseTimeLineEditValidator;
 
@@ -197,6 +198,7 @@ private:
     void rotatorError(int errorCode, QString cmd);
 
     void rotatorActive();
+    void saveSkyScanEnableSetting(QString currentAntennaName);
 
 
 public slots:
@@ -346,6 +348,7 @@ private:
     void setSkyScanEndBrgLineEditValidator();
     void setSkyScanStartBrgLineEditValidator();
     void setSkyScanLineEditValidators();
+    bool readSkyScanEnableSetting(QString currentAntennaName);
 };
 
 #endif // ROTATORMAINWINDOW_H

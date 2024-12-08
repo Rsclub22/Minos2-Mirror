@@ -3,97 +3,95 @@
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //                      BearingLineEdit
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2019
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2024
 //
 //
 //
 //
 /////////////////////////////////////////////////////////////////////////////
 
-#include "rotatorcommon.h"
+
+
+
 #include "bearinglineedit.h"
 
-// we could remove the remove char code as it is now removed before display...
 
-BearingLineEdit::BearingLineEdit(QWidget * parent): QLineEdit (parent),
-    bearingValid(false)
+// change to QPalette to prevent interfering with disable widget setting
+
+BearingLineEdit::BearingLineEdit(QWidget *parent)
+    : QLineEdit(parent), bearingValid(false)
 {
-
-    setValidator(&ucValidator);
     connect(this, &QLineEdit::textChanged, this, &BearingLineEdit::onTextChanged);
-
-
 }
 
-
-void BearingLineEdit::onTextChanged(const QString& brg)
+void BearingLineEdit::onTextChanged(const QString &brg)
 {
+    if (!isEnabled())
+    {
+        // Skip validation and visual changes if the widget is disabled
+        return;
+    }
 
     bearingValid = false;
     QString bearingStr = brg;
-    bearingStr.remove(DEGREE_SYMBOL, Qt::CaseInsensitive).remove(BEARING_TRUE_CHAR).remove(SHORTLOC_DELIMITER_START).remove(SHORTLOC_DELIMITER_END);
+
 
     if (!bearingStr.isEmpty())
     {
-        QRegularExpression re = QRegularExpression(anchoredPattern("\\d*"));  // match ghz_mhz.khz_hz
+
+        QRegularExpression re(R"(^\d*$)"); // Match digits only
         QRegularExpressionMatch rem = re.match(bearingStr.trimmed());
         if (rem.hasMatch())
         {
-            // all digits
             int bearing = bearingStr.trimmed().toInt();
-            if (bearing >= COMPASS_MIN0 && bearing <= COMPASS_MAX360)
+            if (bearing >= minBearing && bearing <= maxBearing)
             {
                 bearingValid = true;
-                showBearingGoodBad(bearingValid);
-
             }
-
         }
-
-        if (!bearingValid)
-        {
-            bearingValid = false;
-            showBearingGoodBad(bearingValid);
-        }
-
-
-    }
-    else
-    {
-
-        showBearingGoodBad(true);
     }
 
-
+    // Update the visual state based on validity
+    showBearingGoodBad(bearingValid);
 }
-
-
-
 
 void BearingLineEdit::showBearingGoodBad(bool state)
 {
+    QPalette palette = this->palette(); // Get the current palette
+
     if (state)
     {
-        setStyleSheet(BearingLineEditFrBlackBkWhite);
-    }
-    else
+        // Good bearing: Black text on a white background
+        palette.setColor(QPalette::Base, Qt::white);    // Background color
+        palette.setColor(QPalette::Text, Qt::black);   // Text color
+    } else
     {
-        setStyleSheet(BearingLineEditFrRedBkWhite);
+        // Bad bearing: Red text on a white background
+        palette.setColor(QPalette::Base, Qt::white);    // Background color
+        palette.setColor(QPalette::Text, Qt::red);      // Text color
     }
+
+    // Apply the updated palette
+    setPalette(palette);
 }
 
-
-
-bool BearingLineEdit::isValid()
+bool BearingLineEdit::isValid() const
 {
     return bearingValid;
 }
 
-int BearingLineEdit::getBearing()
+void BearingLineEdit::setMaxMinBearing(int maxBrg, int minBrg)
 {
-
-    int bearing = text().trimmed().remove(DEGREE_SYMBOL, Qt::CaseInsensitive).remove(BEARING_TRUE_CHAR).remove(SHORTLOC_DELIMITER_START).remove(SHORTLOC_DELIMITER_END).toInt();
-
-    return bearing;
+    maxBearing = maxBrg;
+    minBearing = minBrg;
 }
+
+int BearingLineEdit::getBearing() const
+{
+    QString bearingStr = text().trimmed();
+    return bearingStr.toInt();
+}
+
+
+
 

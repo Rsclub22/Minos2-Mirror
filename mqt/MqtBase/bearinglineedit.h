@@ -3,7 +3,7 @@
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //                      BearingLineEdit
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2019
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2024
 //
 //
 //
@@ -15,39 +15,37 @@
 #define BEARINGLINEEDIT_H
 
 #include <QObject>
+#include "rotatorcommon.h"
+//#include "cutils.h"
+
+
 #include <QLineEdit>
-#include "cutils.h"
+#include <QRegularExpression>
+#include <QPalette>
 
-class BearingLineEdit : public QLineEdit
-{
-
-     Q_OBJECT
+class BearingLineEdit : public QLineEdit {
+    Q_OBJECT
 
 public:
-    BearingLineEdit(QWidget*);
-    int getBearing();
-    bool isValid();
+    explicit BearingLineEdit(QWidget *parent = nullptr);
 
+    bool isValid() const;           // Check if the current value is valid
+    int getBearing() const;         // Get the current bearing as an integer
 
-signals:
+    void setMaxMinBearing(int maxBrg, int minBrg);
+
+protected:
+    void showBearingGoodBad(bool state);  // Update visual appearance based on validity
 
 private slots:
-    void onTextChanged(const QString &);
-
+    void onTextChanged(const QString &text);  // Handle text changes for validation
 
 private:
-
-    int bearing;
-    bool bearingValid;
-
-    UpperCaseValidator ucValidator;
-
-    QString BearingLineEditFrRedBkWhite = "QLineEdit { background-color: white ; border-style: outset ; border-width: 1px ; border-color: red ; color : black}";
-    QString BearingLineEditFrBlackBkWhite = "QLineEdit { background-color: white ; border-style: outset ; border-width: 1px ; border-color: black ; color : black}";
-    void showBearingGoodBad(bool state);
-
-
-
+    bool bearingValid;              // Flag to indicate if the current value is valid
+    int maxBearing = COMPASS_MAX360;
+    int minBearing = COMPASS_MIN0;
 };
+
+
 
 #endif // BEARINGLINEEDIT_H

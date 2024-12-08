@@ -14,6 +14,7 @@
 
 #include "ContestApp.h"
 #include "LoggerContest.h"
+#include "cutils.h"
 #include "tlogcontainer.h"
 #include "SendRPCDM.h"
 #include "rotatorcommon.h"
