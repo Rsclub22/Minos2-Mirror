@@ -161,11 +161,18 @@ private:
 
     QSharedPointer<SkyScanControl> skyScanControl;
     bool skyScanEnabled = false;
+    bool skyScanActive = false;
     bool saveSkyScanOnClose = false;
     int startSkyScanBrg = 0;
     int endSkyScanBrg = 0;
     int skyScanStepDegrees = 0;
     int skyScanPauseSecs = 0;
+
+    int minSkyScanStepDegrees = 0;
+    int maxSkyScanStepDegrees = 30;
+
+    int minSkyScanPauseSecs = 0;
+    int maxSkyScanPauseSecs = 600;
 
     //QRegularExpressionValidator *startScanBrgLineEditValidator;
     //QRegularExpressionValidator *endScanBrgLineEditValidator;
@@ -284,16 +291,18 @@ private slots:
 
     void skyScanStopPbPressed();
     void skyScanStartPbPressed();
-    void skyScanPauseTimeLineEdit();
-    void skyScanEndBrgLineEditReturnPressed();
-    void skyScanStartBrgLineEditReturnPressed();
+    void skyScanPauseTimeLineEditEditingFinished();
+    void skyScanEndBrgLineEditEditingFinished();
+    void skyScanStartBrgLineEditEditingFinished();
     void skyScanSettingsOnCloseChkBoxChanged();
     void skyScanEnableChkBoxChanged();
 
 
-    void skyScanStartBrgLineEditTextChanged();
+
     void skyScanPausePbPressed();
     void upDateSkyScanCurrentBearing(int brg);
+    void skyScanRotateTo(int bearing);
+    void skyScanStepDegreesLineEditEditingFinished();
 private:
     void rotateTo(int bearing);
     int northCalcTarget(int targetBearing);
@@ -349,6 +358,8 @@ private:
     void setSkyScanStartBrgLineEditValidator();
     void setSkyScanLineEditValidators();
     bool readSkyScanEnableSetting(QString currentAntennaName);
+    void readSkyScanCommonSettings();
+    void dumpSkyScanSettingsToTraceLog();
 };
 
 #endif // ROTATORMAINWINDOW_H

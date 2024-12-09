@@ -49,10 +49,17 @@ private:
     int endScanBearing = 0;
     int stepDegrees = 0;
     int currentBearing = 0;
+    int targetBearing = 0;      // these are intermediate bearings calculated between starScan
+                                // bearing and end scan bearing
     southStop southType = southStop::S_STOPOFF;
 
     int scanPauseTimeMs = 0;
+
     bool movingToStartPosition = false;
+    bool movingToStepPosition = false;
+    bool skyScanPauseInterval = false;
+    bool reverseScan = false;
+
 
     QList<int> rotationPath;
 
@@ -65,6 +72,7 @@ private:
     int toStandardBearing(int bearing);
     int toStopTypeBearing(int bearing);
     void traceMessage(QString msg);
+    void reversePath(QList<int> &rotationPath);
 };
 
 #endif // SKYSCANCONTROL_H
