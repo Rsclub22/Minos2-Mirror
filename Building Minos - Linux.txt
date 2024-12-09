@@ -45,7 +45,7 @@ git clone git://git.code.sf.net/p/minos/minos Minos2
 Then, so that you get the latest release rather than the "bleeding edge" source code
 
 cd Minos2
-git checkout Mqt_Release_2.6.0.0
+git checkout Mqt_Release_2.7.x.x
 
 # tools.sh is a script that installs all the pre-requisites that may not already be installed.
 # it includes those required for Hamlib as well.
@@ -54,7 +54,7 @@ git checkout Mqt_Release_2.6.0.0
 sudo ./tools.sh
 
 ===================== Building Hamlib 4 ========================================
-The current Minos (2.6.0.0) uses hamlib 4.6
+The current Minos (2.7.0.0) uses hamlib 4.6
 
 Look at https://github.com/Hamlib/Hamlib for all the up to date hamlib information,
 including their build instructions, from which the following is derived.

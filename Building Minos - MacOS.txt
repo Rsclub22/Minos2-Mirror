@@ -34,7 +34,7 @@ This is based on Xcode on MacOS Sonoma
 	cd ~
 	git clone git://git.code.sf.net/p/minos/minos Minos2
 	cd Minos2
-    git checkout Mqt_Release_2.6.0.0
+    git checkout Mqt_Release_2.7.x.x
 
 6) Install other required components
 
