@@ -87,6 +87,8 @@ signals:
     void displayActualBearing(QString);
     void presetRotateTo();
 
+    void sendRotationStatusToSkyScan(int bearing, skyScanBearingStates brgState);
+
 
 
 private:
@@ -300,7 +302,7 @@ private slots:
 
 
     void skyScanPausePbPressed();
-    void upDateSkyScanCurrentBearing(int brg);
+
     void skyScanRotateTo(int bearing);
     void skyScanStepDegreesLineEditEditingFinished();
 private:
@@ -337,21 +339,21 @@ private:
     void setTestMode(bool test);
 
     void setSkyScanEnableChkBoxEnabled(bool enabled);
-    void setSaveSkyScanSettingsOnCloseChkBoxEnabled(bool enabled);
-    void setSkyScanStartBrgLineEditEnabled(bool enabled);
-    void setSkyScanEndBrgLineEditEnabled(bool enabled);
-    void setSkyScanPauseTimeLineEditEnabled(bool enabled);
-    void setSkyScanStartButtonEnabled(bool enabled);
-    void setSkyScanStopButtonEnabled(bool enabled);
+    //void setSaveSkyScanSettingsOnCloseChkBoxEnabled(bool enabled);
+    //void setSkyScanStartBrgLineEditEnabled(bool enabled);
+    //void setSkyScanEndBrgLineEditEnabled(bool enabled);
+    //void setSkyScanPauseTimeLineEditEnabled(bool enabled);
+    //void setSkyScanStartButtonEnabled(bool enabled);
+    //void setSkyScanStopButtonEnabled(bool enabled);
     void saveSkyScanSettings(QString currentAntennaName);
     void readSkyScanSettings(QString currentAntennaName);
     void setSkyScanComponentsEnabled(bool enabled);
-    void setStepDegreeLineEditEnabled(bool enabled);
+    //void setStepDegreeLineEditEnabled(bool enabled);
     void closeSkyScan(QString currentAntennaName);
     void openSkyScan(QString currentAntennaName);
-    void setSkyScanPauseButtonEnabled(bool enabled);
-    void setSkyScanErrorLabelEnabled(bool enabled);
-    void setSkyScanErrorMessageEnabled(bool enabled);
+    //void setSkyScanPauseButtonEnabled(bool enabled);
+    //void setSkyScanErrorLabelEnabled(bool enabled);
+    //void setSkyScanErrorMessageEnabled(bool enabled);
     void setSkyScanStepDegreesLineEditValidator();
     void setSkyPauseTimeLineEditValidator();
     void setSkyScanEndBrgLineEditValidator();
@@ -360,6 +362,8 @@ private:
     bool readSkyScanEnableSetting(QString currentAntennaName);
     void readSkyScanCommonSettings();
     void dumpSkyScanSettingsToTraceLog();
+    void setSkyScanGroupBoxEnabled(bool enabled);
+    bool isSkyScanEnabled();
 };
 
 #endif // ROTATORMAINWINDOW_H

@@ -56,3 +56,8 @@ QString CONFIGURATION_FILEPATH_LOGGER()
 {
     return getDirectoryLocation(dlConfiguration);
 }
+
+QString getBearingStateTxt(skyScanBearingStates state)
+{
+    return bearingStateTxt[state];
+}

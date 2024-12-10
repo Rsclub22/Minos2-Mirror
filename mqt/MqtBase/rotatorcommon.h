@@ -140,7 +140,7 @@ inline const QStringList endStopNames = (QStringList() << "ROT_NEG180_180" << "R
 // S_STOPINV when a rotator is mounted inverted normal N Stop is now S Stop. Feedback is South 0 Degrees through 360 at South
 //S_STOPCOMP when a rotator is mounted with a south stop, but the sensor is a compass. Rotator will rotate 180 degrees to 180, rotator type ROT_180_180
 enum southStop {S_STOPOFF, S_STOPINV, S_STOPCOMP};
-const QStringList southStopNames = (QStringList() << "S_StopOff" << "S_StopInv" << "S_StopComp");
+inline const QStringList southStopNames = (QStringList() << "S_StopOff" << "S_StopInv" << "S_StopComp");
 // Overlap Status
 
 enum overlapStat { NO_OVERLAP, NEG_OVERLAP, POS_OVERLAP};
@@ -151,6 +151,12 @@ inline const QString BUTTON_ON_STYLE = QString("background-color: Sandybrown ; b
 inline const QString BUTTON_OFF_STYLE = QString("background-color: Gainsboro ; border-style: outset; border-width: 1px; border-color: black; min-width: 5em; padding: 3px;\n");
 
 extern const QStringList presetButtonLabels;
+
+enum skyScanBearingStates {ROT_STOPPED, ROT_REACHED_TARGET, ROT_NEAR_TARGET, ROT_MOVING, ROT_STOPPED_MOVING};
+inline const QStringList bearingStateTxt = {"ROT_STOPPED", "ROT_REACHED_TARGET", "ROT_NEAR_TARGET", "ROT_MOVING", "ROT_STOPPED_MOVING"};
+
+QString getBearingStateTxt(skyScanBearingStates state);
+
 
 class srotParams
 {

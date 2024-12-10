@@ -14,16 +14,19 @@
 #include "skyscancontrol.h"
 #include <QTimer>
 #include "MTrace.h"
+#include "rotatormainwindow.h"
 
 
 
 
-SkyScanControl::SkyScanControl(QObject *parent)
-    : QObject(parent)
+SkyScanControl::SkyScanControl(RotatorMainWindow *rotatorMainWindow, QObject *parent)
+    : QObject(parent),
+    m_rotatorMainWindow(rotatorMainWindow)
 {
     movingToStartPosition = false;
     skyScanIntervalTimer = new QTimer(this);
     connect(skyScanIntervalTimer, &QTimer::timeout, this, &SkyScanControl::skyScanIntervalTimerTimeOut);
+    connect(m_rotatorMainWindow, &RotatorMainWindow::sendRotationStatusToSkyScan, this, &SkyScanControl::handleRotationBearings);
 }
 
 SkyScanControl::~SkyScanControl()
@@ -48,6 +51,8 @@ void SkyScanControl::initSkyScan(enum southStop southType_, int minRot, int maxR
 
 void SkyScanControl::startSkyscan()
 {
+
+    skyScanRunning = true;
 
     // If current bearing is not at the start position, move the rotator there first
     if (currentBearing != startScanBearing)
@@ -75,8 +80,11 @@ void SkyScanControl::startSkyscan()
 void SkyScanControl::stopSkyscan()
 {
     traceMessage("Stopping skyscan...");
-
+    skyScanRunning = false;
     movingToStartPosition = false;
+    skyScanPauseed = false;
+    movingToStepPosition = false;
+    skyScanPauseInterval = false;
     rotationPath.clear();
     skyScanIntervalTimer->stop(); // Stop any pending timer events
 }
@@ -94,27 +102,41 @@ void SkyScanControl::skyScanIntervalTimerTimeOut()
     rotateToNextPosition();
 }
 
-void SkyScanControl::setCurrentBearing(int newBearing)
+
+void SkyScanControl::handleRotationBearings(int bearing, skyScanBearingStates brgState)
 {
-    if (movingToStartPosition)
+
+    traceMessage(QString("new bearing from rotator = %1, bearing state = %2").arg(bearing).arg(getBearingStateTxt(brgState)));
+    if (currentBearing != bearing)
     {
 
-        if (newBearing == startScanBearing)
-        {
-            traceMessage(QString("Reached StartScan Position = %1").arg(newBearing));
-            movingToStartPosition = false;            startSkyscan();
-        }
+        currentBearing = bearing;
     }
-    else if (movingToStepPosition)
+
+
+
+    if (brgState == skyScanBearingStates::ROT_STOPPED)
     {
-        if (newBearing == targetBearing)
+
+        traceMessage(QString("Rotator stopped current bearing is %1 degrees.").arg(currentBearing));
+    }
+    else if (brgState == skyScanBearingStates::ROT_REACHED_TARGET || brgState == skyScanBearingStates::ROT_NEAR_TARGET)
+    {
+        if (movingToStartPosition)
         {
-            traceMessage(QString("Reached step Position = %1").arg(newBearing));
+            traceMessage(QString("Reached StartScan Position = %1").arg(currentBearing));
+            movingToStartPosition = false;
+            startSkyscan();
+        }
+        else if (movingToStepPosition)
+        {
+
+            traceMessage(QString("Reached step Position = %1").arg(currentBearing));
             movingToStepPosition = false;
 
-            if (newBearing == endScanBearing)
+            if (currentBearing == endScanBearing)
             {
-                traceMessage(QString("Reached end of Scan Position = %1").arg(newBearing));
+                traceMessage(QString("Reached end of Scan Position = %1").arg(currentBearing));
                 if (!reverseScan)
                 {
                     traceMessage("We are going to reverse scan");
@@ -135,13 +157,19 @@ void SkyScanControl::setCurrentBearing(int newBearing)
             traceMessage(QString("start interval timer %1 ms").arg(scanPauseTimeMs));
             skyScanPauseInterval = true;
             skyScanIntervalTimer->start(scanPauseTimeMs);
+
         }
+    }
+    else if (brgState == skyScanBearingStates::ROT_STOPPED_MOVING)
+    {
+        traceMessage(QString("Error Rotator has timedout and stopped moving"));
     }
 
 
 
-    traceMessage(QString("Updated current bearing to %1 degrees.").arg(currentBearing));
 }
+
+
 
 void SkyScanControl::determinePath()
 {

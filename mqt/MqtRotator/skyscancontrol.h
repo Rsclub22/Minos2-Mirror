@@ -17,13 +17,15 @@
 #include "rotatorcommon.h"
 
 
+class RotatorMainWindow;
+
 class SkyScanControl : public QObject
 {
     Q_OBJECT
 public:
 
 
-    explicit SkyScanControl(QObject *parent);
+    explicit SkyScanControl(RotatorMainWindow *rotatorMainWindow, QObject *parent);
 
     ~SkyScanControl();
 
@@ -31,7 +33,11 @@ public:
     void startSkyscan();
     void stopSkyscan();
     void pauseSkyscan();
-    void setCurrentBearing(int newBearing);
+
+
+    bool getMovingToStartPositionFlag(){return movingToStepPosition;}
+    bool getMovingToStepPositionFlag(){return movingToStepPosition;}
+    bool getSkyScanPauseIntervalFlag(){return skyScanPauseInterval;}
 
 
 signals:
@@ -40,8 +46,11 @@ signals:
 
 private slots:
     void skyScanIntervalTimerTimeOut();
+    void handleRotationBearings(int bearing, skyScanBearingStates brgState);
 private:
 
+
+    RotatorMainWindow *m_rotatorMainWindow;
 
     int minRotation = 0;
     int maxRotation = 0;
@@ -55,6 +64,8 @@ private:
 
     int scanPauseTimeMs = 0;
 
+    bool skyScanRunning = false;
+    bool skyScanPauseed = false;
     bool movingToStartPosition = false;
     bool movingToStepPosition = false;
     bool skyScanPauseInterval = false;
