@@ -16,6 +16,7 @@
 #include "MinosLink.h"
 
 extern bool closeApp;
+int MinosCommonConnection::mcsequence = 0;
 
 //==============================================================================
 
@@ -99,6 +100,8 @@ static void serverSendAction( XStanza *a )
 //==============================================================================
 MinosCommonConnection::MinosCommonConnection()
 {
+    mcsequence++;
+    mySeq = mcsequence;
     setSendAction(serverSendAction);
 
     lastRx = QDateTime::currentMSecsSinceEpoch() + 5000;

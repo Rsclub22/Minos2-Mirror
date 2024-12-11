@@ -49,6 +49,8 @@ class MinosCommonConnection: public QObject
       char rxbuff[ RXBUFFLEN + 1 ];
       TIXML_STRING packetbuff;
 
+      static int mcsequence;
+
     protected:
        bool connected = false;
        qint64 lastRx = 0;
@@ -66,6 +68,7 @@ class MinosCommonConnection: public QObject
       }
    public:
 
+      int mySeq = 0;
       QSharedPointer<QTcpSocket> sock;
 
       bool remove_socket = false;

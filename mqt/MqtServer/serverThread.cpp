@@ -156,7 +156,8 @@ void MinosRouterConnection::sendKeepAlive( )
         if (!checkLastRx())
         {
             // abort the connection
-            trace("MinosServerConnection - checkLastRx failed, removing socket");
+            trace(QString("MinosServerConnection::checkLastRx failed, removing socket %1 %2 %3")
+                      .arg(sock->peerAddress().toString(), connectHost.toString(), QString::number(mySeq)));
             remove_socket = true;
             return;
         }

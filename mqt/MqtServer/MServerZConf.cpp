@@ -365,8 +365,8 @@ Router *TZConf::zcPublishRouter( const QString &uuid, const QString &name,
         else
         {
             // we must have a server connection already
-            trace("Creating MinosServerConnection zcPublishServer for " + name);
             MinosRouterConnection *msc = new MinosRouterConnection(true);
+            trace(QString("Creating MinosServerConnection zcPublishServer for %1 Sequence %2").arg(name, QString::number(msc->mySeq)));
             msc->setClientRouter(sss->station);
             msc->mConnect(sss);
             msl->addListenerSlot(msc);
