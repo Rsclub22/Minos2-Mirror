@@ -43,6 +43,8 @@ public:
 signals:
 
     void rotateTo(int bearing);
+    void displaySkyScanPauseIntervalTime(int time);
+    void displaySkyScanNextStepBearing(int degrees);
 
 private slots:
     void skyScanIntervalTimerTimeOut();
@@ -62,7 +64,7 @@ private:
                                 // bearing and end scan bearing
     southStop southType = southStop::S_STOPOFF;
 
-    int scanPauseTimeMs = 0;
+
 
     bool skyScanRunning = false;
     bool skyScanPauseed = false;
@@ -73,7 +75,10 @@ private:
 
 
     QList<int> rotationPath;
+    QList<int> reverseRotationPath;
 
+    int scanPauseTimeInterval = 0;
+    int scanPauseTimeCount = 0;   // seconds
     QTimer *skyScanIntervalTimer = nullptr;
 
     void determinePath();
@@ -83,7 +88,7 @@ private:
     int toStandardBearing(int bearing);
     int toStopTypeBearing(int bearing);
     void traceMessage(QString msg);
-    void reversePath(QList<int> &rotationPath);
+
 };
 
 #endif // SKYSCANCONTROL_H

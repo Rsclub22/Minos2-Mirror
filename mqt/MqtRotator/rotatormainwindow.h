@@ -304,7 +304,10 @@ private slots:
     void skyScanPausePbPressed();
 
     void skyScanRotateTo(int bearing);
-    void skyScanStepDegreesLineEditEditingFinished();
+    void displaySkyScanNextStepBearing(int bearing);
+    void displaySkyScanPauseIntervalCount(int count);
+
+    void skyScanStepDegreesSpinBoxValueChanged(int value);
 private:
     void rotateTo(int bearing);
     int northCalcTarget(int targetBearing);
@@ -339,21 +342,11 @@ private:
     void setTestMode(bool test);
 
     void setSkyScanEnableChkBoxEnabled(bool enabled);
-    //void setSaveSkyScanSettingsOnCloseChkBoxEnabled(bool enabled);
-    //void setSkyScanStartBrgLineEditEnabled(bool enabled);
-    //void setSkyScanEndBrgLineEditEnabled(bool enabled);
-    //void setSkyScanPauseTimeLineEditEnabled(bool enabled);
-    //void setSkyScanStartButtonEnabled(bool enabled);
-    //void setSkyScanStopButtonEnabled(bool enabled);
     void saveSkyScanSettings(QString currentAntennaName);
     void readSkyScanSettings(QString currentAntennaName);
     void setSkyScanComponentsEnabled(bool enabled);
-    //void setStepDegreeLineEditEnabled(bool enabled);
     void closeSkyScan(QString currentAntennaName);
     void openSkyScan(QString currentAntennaName);
-    //void setSkyScanPauseButtonEnabled(bool enabled);
-    //void setSkyScanErrorLabelEnabled(bool enabled);
-    //void setSkyScanErrorMessageEnabled(bool enabled);
     void setSkyScanStepDegreesLineEditValidator();
     void setSkyPauseTimeLineEditValidator();
     void setSkyScanEndBrgLineEditValidator();
@@ -364,6 +357,13 @@ private:
     void dumpSkyScanSettingsToTraceLog();
     void setSkyScanGroupBoxEnabled(bool enabled);
     bool isSkyScanEnabled();
+    void setTargetTabEnabled(bool enabled);
+    void setPresetsGroupBoxEnabled(bool enabled);
+    void setSkyScanLineEditBoxesEnabled(bool enabled);
+    void stopSkyScan();
+    void setSkyScanStartButtonColour(QString style);
+    void setSkyScanStopButtonColour(QString style);
+
 };
 
 #endif // ROTATORMAINWINDOW_H

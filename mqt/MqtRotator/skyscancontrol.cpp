@@ -43,7 +43,7 @@ void SkyScanControl::initSkyScan(enum southStop southType_, int minRot, int maxR
     startScanBearing = start;
     endScanBearing = end;
     stepDegrees = step;
-    scanPauseTimeMs = interval * 1000;  // mSecs
+    scanPauseTimeInterval = interval;  // Secs
     //currentBearing = initialBearing;
     movingToStartPosition = false;
 }
@@ -86,6 +86,7 @@ void SkyScanControl::stopSkyscan()
     movingToStepPosition = false;
     skyScanPauseInterval = false;
     rotationPath.clear();
+    reverseRotationPath.clear();
     skyScanIntervalTimer->stop(); // Stop any pending timer events
 }
 
@@ -97,9 +98,22 @@ void SkyScanControl::pauseSkyscan()
 
 void SkyScanControl::skyScanIntervalTimerTimeOut()
 {
-    skyScanIntervalTimer->stop();
-    skyScanPauseInterval = false;
-    rotateToNextPosition();
+    if (skyScanPauseInterval)
+    {
+        scanPauseTimeCount--;
+        emit displaySkyScanPauseIntervalTime(scanPauseTimeCount);
+        traceMessage(QString("Pause Interval Count = %1").arg(scanPauseTimeCount));
+
+        if (scanPauseTimeCount <= 0)
+        {
+            traceMessage(QString("Pause Interval Finished, count = %1").arg(scanPauseTimeCount));
+            skyScanIntervalTimer->stop();
+            skyScanPauseInterval = false;
+            rotateToNextPosition();
+        }
+
+    }
+
 }
 
 
@@ -134,29 +148,42 @@ void SkyScanControl::handleRotationBearings(int bearing, skyScanBearingStates br
             traceMessage(QString("Reached step Position = %1").arg(currentBearing));
             movingToStepPosition = false;
 
-            if (currentBearing == endScanBearing)
+            // set the endScanBearing based upon direction of scan
+            int endBearing;
+
+            if (!reverseScan)
+            {
+                endBearing = endScanBearing;
+            }
+            else
+            {
+                endBearing = startScanBearing;
+            }
+
+
+            if (currentBearing == endBearing)
             {
                 traceMessage(QString("Reached end of Scan Position = %1").arg(currentBearing));
                 if (!reverseScan)
                 {
                     traceMessage("We are going to reverse scan");
-                    // we want to reverse direction
                     reverseScan = true;
-                    determinePath();
-                    reversePath(rotationPath);
                 }
                 else
                 {
                     traceMessage("We are going to forward scan");
                     reverseScan = false;
-                    determinePath();
                 }
+
+                determinePath();
             }
             // Schedule the next rotation
             traceMessage(QString("reverseScan flag = %1").arg(reverseScan ? "reverseScan" : "forwardScan"));
-            traceMessage(QString("start interval timer %1 ms").arg(scanPauseTimeMs));
             skyScanPauseInterval = true;
-            skyScanIntervalTimer->start(scanPauseTimeMs);
+            scanPauseTimeCount = scanPauseTimeInterval;
+            traceMessage(QString("start interval timer %1 secs").arg(scanPauseTimeCount));
+            emit displaySkyScanPauseIntervalTime(scanPauseTimeCount);
+            skyScanIntervalTimer->start(1000);
 
         }
     }
@@ -174,8 +201,8 @@ void SkyScanControl::handleRotationBearings(int bearing, skyScanBearingStates br
 void SkyScanControl::determinePath()
 {
     rotationPath.clear();
+    reverseRotationPath.clear(); // Ensure reverse path is also cleared
     int bearing = startScanBearing;
-
     // Convert to standard range if needed
     if (southType == S_STOPINV)
     {
@@ -183,44 +210,70 @@ void SkyScanControl::determinePath()
         endScanBearing = toStandardBearing(endScanBearing);
     }
 
-    // Generate the rotation path
+    // Generate the forward rotation path
+
+    bearing = bearing + stepDegrees; // first step
+
     while (true)
     {
+        rotationPath.append(bearing);
+
+        // Break if we reach the end angle
+        if (bearing == endScanBearing) break;
+
+        // Update the bearing
         bearing += stepDegrees;
 
         // Handle wrap-around logic
         if (bearing > maxRotation) bearing = minRotation + (bearing - maxRotation - 1);
         if (bearing < minRotation) bearing = maxRotation - (minRotation - bearing - 1);
 
-        rotationPath.append(bearing);
-
-        // Break if we reach the end angle
-        if (bearing == endScanBearing) break;
-
         // Prevent infinite loops
         if (bearing == startScanBearing) break;
     }
-}
 
-void SkyScanControl::reversePath(QList<int> &rotationPath)
-{
-    QList<int> reversedPath;
-    for (int i = rotationPath.size() - 1; i >= 0; --i)
+    // Generate the reverse rotation path
+    bearing = endScanBearing;
+    while (true)
     {
-        reversedPath.append(rotationPath[i]);
+        bearing -= stepDegrees; // Step backward
+        if (bearing < minRotation) bearing = maxRotation - (minRotation - bearing - 1);
+        if (bearing > maxRotation) bearing = minRotation + (bearing - maxRotation - 1);
+
+        reverseRotationPath.append(bearing);
+
+        // Break if we reach the start angle
+        if (bearing == startScanBearing) break;
+
+        // Prevent infinite loops
+        if (bearing == endScanBearing) break;
     }
-    rotationPath = reversedPath;
 }
 
 void SkyScanControl::rotateToNextPosition()
 {
-    if (rotationPath.isEmpty())
+    if (!reverseScan && rotationPath.isEmpty())
     {
-        traceMessage(QString("scan complete."));
+        traceMessage(QString("forward scan complete."));
         return;
     }
+    else if (reverseScan && reverseRotationPath.isEmpty())
+    {
+        traceMessage(QString("reverse scan complete"));
+    }
 
-    targetBearing = rotationPath.takeFirst();
+    if (!reverseScan)
+    {
+        targetBearing = rotationPath.takeFirst();
+        traceMessage(QString("forward scan, next target bearing = %1").arg(targetBearing));
+    }
+    else
+    {
+        targetBearing = reverseRotationPath.takeFirst();
+        traceMessage(QString("reverse scan, next target bearing = %1").arg(targetBearing));
+    }
+
+
 
     // Convert back to stop type range if needed
     if (southType == S_STOPINV)
@@ -233,6 +286,7 @@ void SkyScanControl::rotateToNextPosition()
     traceMessage(QString("Rotating %1 to %2 degrees.").arg(command).arg(targetBearing));
 
     movingToStepPosition = true;
+    displaySkyScanNextStepBearing(targetBearing);
     emit rotateTo(targetBearing);
 
 

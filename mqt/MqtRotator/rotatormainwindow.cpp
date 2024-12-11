@@ -906,8 +906,13 @@ void RotatorMainWindow::displayBearing(int bearing)
 
 void RotatorMainWindow::compassClicked(int brg)
 {
-    ui->bearingEdit->setText(QString::number(brg));
-    emit presetRotateTo();
+
+    if (!skyScanActive && !isSkyScanEnabled())
+    {
+        ui->bearingEdit->setText(QString::number(brg));
+        emit presetRotateTo();
+    }
+
 }
 
 
@@ -1294,19 +1299,21 @@ void RotatorMainWindow::checkMoving(int bearing)
 {
 
     static int oldBearing;
-    logMessage(QString("Check Moving, rotator bearing = %1").arg(bearing));
+    logMessage(QString("Check Moving, old bearing = %1, rotator bearing = %2").arg(oldBearing).arg(bearing));
+
     if (!moving)
     {
         if (isSkyScanEnabled())
         {
             emit sendRotationStatusToSkyScan(bearing, skyScanBearingStates::ROT_STOPPED);
         }
+
         return;
     }
 
     int tolerance = setupAntenna->currentAntenna.nearStopTolerance;
 
-    if (oldBearing == bearing)
+    if (bearing == targetBearing)
     {
         logMessage(QString("Rotator is on target"));
         stopButton();
@@ -1329,6 +1336,7 @@ void RotatorMainWindow::checkMoving(int bearing)
             }
 
         }
+
         oldBearing = bearing;
     }
     else if (oldBearing != bearing)
@@ -1340,6 +1348,8 @@ void RotatorMainWindow::checkMoving(int bearing)
             {
                 emit sendRotationStatusToSkyScan(bearing, skyScanBearingStates::ROT_MOVING);
             }
+
+            oldBearing = bearing;
 
             return;
     }
@@ -1355,6 +1365,8 @@ void RotatorMainWindow::checkMoving(int bearing)
                 emit sendRotationStatusToSkyScan(bearing, skyScanBearingStates::ROT_STOPPED_MOVING);
             }
         }
+
+        oldBearing = bearing;
 
     }
 
@@ -1655,10 +1667,19 @@ void RotatorMainWindow::stopButton()
 void RotatorMainWindow::stop_rotation()
 {
 
+    // this is for Esc and Compass Dial Stop
+
     logMessage(QString("stop_rotation"));
     if (rotator)
     {
-        stopRotation(rotator->getRotConnected());
+        if (skyScanActive && isSkyScanEnabled())
+        {
+            stopSkyScan();  // stop rotation is part of stopSkyScan()
+        }
+        else
+        {
+            stopRotation(rotator->getRotConnected());
+        }
     }
     else
     {
@@ -1713,6 +1734,10 @@ void RotatorMainWindow::stopRotation(bool sendStop)
         movingCCW = false;
         stopCmdflag = false;
         stop_button_off();
+        if (skyScanActive && isSkyScanEnabled())
+        {
+            setSkyScanStopButtonColour(BUTTON_OFF_STYLE);
+        }
         logMessage(QString("Stop Cmd Successful"));
     }
     else
@@ -2754,6 +2779,16 @@ void RotatorMainWindow::setSkyScanComponentsEnabled(bool enabled)
     setSkyScanGroupBoxEnabled(enabled);
 
 }
+
+
+void RotatorMainWindow::setSkyScanLineEditBoxesEnabled(bool enabled)
+{
+    ui->skyScanStartBrgLineEdit->setEnabled(enabled);
+    ui->skyScanEndBrgLineEdit->setEnabled(enabled);
+    ui->skyScanStepDegreeSpinBox->setEnabled(enabled);
+    ui->skyScanPauseTimeLineEdit->setEnabled(enabled);
+}
+
 void RotatorMainWindow::setSkyScanEnableChkBoxEnabled(bool enabled)
 {
     ui->skyScanEnableChkBox->setEnabled(enabled);
@@ -2767,6 +2802,20 @@ void RotatorMainWindow::setSkyScanEnableChkBoxEnabled(bool enabled)
         disconnect(ui->skyScanEnableChkBox, &QCheckBox::stateChanged, this, &RotatorMainWindow::skyScanEnableChkBoxChanged);
 
     }
+}
+
+
+
+
+
+void RotatorMainWindow::setTargetTabEnabled(bool enabled)
+{
+    ui->targetTab->setEnabled(enabled);
+}
+
+void RotatorMainWindow::setPresetsGroupBoxEnabled(bool enabled)
+{
+    ui->presetsGroupBox->setEnabled(enabled);
 }
 
 void RotatorMainWindow::setSkyScanGroupBoxEnabled(bool enabled)
@@ -2881,32 +2930,25 @@ void RotatorMainWindow::skyScanEndBrgLineEditEditingFinished()
 
     }
 }
-void RotatorMainWindow::skyScanStepDegreesLineEditEditingFinished()
+void RotatorMainWindow::skyScanStepDegreesSpinBoxValueChanged(int value)
 {
-    QString errMsg;
-    bool ok = false;
-    int stepDegrees = ui->skyScanStepDegreesLineEdit->text().toInt(&ok);
-    if (ok)
-    {
-        if (stepDegrees >= minSkyScanStepDegrees && stepDegrees <= maxSkyScanStepDegrees)     // replace with an ini file constant ?
-        {
-            skyScanStepDegrees = stepDegrees;
-            trace(QString("Skyscan step Degrees set to %1").arg(skyScanStepDegrees));
-            ui->skyScanErrorMsg->setText("");
-        }
-        else
-        {
-            errMsg = QString("Step Degress entered was %1, please enter between %2 and %3 degrees").arg(stepDegrees).arg(minSkyScanStepDegrees).arg(maxSkyScanStepDegrees);
-            ui->skyScanErrorMsg->setText(errMsg);
-            trace(errMsg);
-        }
-    }
-    else
-    {
-        errMsg = QString("Step Degress entered was %1, not a valid number.").arg(stepDegrees);
-        ui->skyScanErrorMsg->setText(errMsg);
-        trace(errMsg);
-    }
+
+    int stepDegrees = value;
+
+    //if (stepDegrees >= minSkyScanStepDegrees && stepDegrees <= maxSkyScanStepDegrees)     // replace with an ini file constant ?
+    //{
+        skyScanStepDegrees = stepDegrees;
+        trace(QString("Skyscan step Degrees set to %1").arg(skyScanStepDegrees));
+    //    ui->skyScanErrorMsg->setText("");
+    //}
+    //else
+    //{
+    //    errMsg = QString("Step Degress entered was %1, please enter between %2 and %3 degrees").arg(stepDegrees).arg(minSkyScanStepDegrees).arg(maxSkyScanStepDegrees);
+    //    ui->skyScanErrorMsg->setText(errMsg);
+    //    trace(errMsg);
+    //}
+
+
 
 
 }
@@ -2942,9 +2984,18 @@ void RotatorMainWindow::skyScanPauseTimeLineEditEditingFinished()
 }
 void RotatorMainWindow::skyScanStartPbPressed()
 {
+    trace(QString("Start SkyScan Button Pressed"));
+
     if (!movingCW && !movingCCW && !skyScanActive)
     {
+
+        trace(QString("Starting SkyScan"));
+
         skyScanActive = true;
+
+        setTargetTabEnabled(false);
+        setPresetsGroupBoxEnabled(false);
+        setSkyScanLineEditBoxesEnabled(false);
 
         skyScanControl->initSkyScan(setupAntenna->currentAntenna.southStopType,
                                 setupAntenna->currentAntenna.min_azimuth,
@@ -2955,25 +3006,68 @@ void RotatorMainWindow::skyScanStartPbPressed()
                                 skyScanPauseSecs);
 
         skyScanControl->startSkyscan();
+        setSkyScanStartButtonColour(BUTTON_ON_STYLE);
     }
+}
+
+void RotatorMainWindow::setSkyScanStartButtonColour(QString style)
+{
+    ui->skyScanStartPb->setStyleSheet(style);
+}
+
+void RotatorMainWindow::setSkyScanStopButtonColour(QString style)
+{
+    ui->skyScanStopPb->setStyleSheet(style);
 }
 void RotatorMainWindow::skyScanPausePbPressed()
 {
 
 }
+
+
 void RotatorMainWindow::skyScanStopPbPressed()
 {
+    trace(QString("SkyScan Stop Pressed"));
+
     if (skyScanActive)
     {
-        skyScanControl->stopSkyscan();
-        skyScanActive = false;
+        setSkyScanStopButtonColour(BUTTON_ON_STYLE);
+        stopSkyScan();
     }
 }
+
+
+void RotatorMainWindow::stopSkyScan()
+{
+    trace("Stopping SkyScan");
+    setSkyScanStartButtonColour(BUTTON_OFF_STYLE);
+    stopRotation(true);
+    skyScanControl->stopSkyscan();
+    skyScanActive = false;
+    setTargetTabEnabled(true);
+    setPresetsGroupBoxEnabled(true);
+    setSkyScanLineEditBoxesEnabled(true);
+}
+
+
 void RotatorMainWindow::skyScanRotateTo(int bearing)
 {
     trace(QString("SkyScan rotate to bearing = %1").arg(bearing));
     rotateTo(bearing);
 }
+
+void RotatorMainWindow::displaySkyScanNextStepBearing(int bearing)
+{
+    QString bearingStr = QString::number(bearing).rightJustified(3, '0');
+    ui->nextStepDegrees->setText(bearingStr);
+}
+
+void RotatorMainWindow::displaySkyScanPauseIntervalCount(int count)
+{
+    QString countStr = QString::number(count).rightJustified(3, '0');
+    ui->pauseCountDown->setText(countStr);
+}
+
 void RotatorMainWindow::saveSkyScanSettings(QString currentAntennaName)
 {
     trace(QString("Save skyScan Settings for antenna %1").arg(currentAntennaName));
@@ -2991,6 +3085,9 @@ void RotatorMainWindow::saveSkyScanSettings(QString currentAntennaName)
     config.endGroup();
 
 }
+
+
+
 void RotatorMainWindow::readSkyScanSettings(QString currentAntennaName)
 {
     trace(QString("Read skyScan Settings for antenna %1").arg(currentAntennaName));
@@ -3065,7 +3162,7 @@ void RotatorMainWindow::closeSkyScan(QString currentAntennaName)
 
     ui->skyScanEndBrgLineEdit->clear();
     ui->skyScanEndBrgLineEdit->setMaxMinBearing(COMPASS_MAX360, COMPASS_MIN0);
-    ui->skyScanStepDegreesLineEdit->clear();
+    //ui->skyScanStepDegreesLineEdit->clear();
     ui->skyScanPauseTimeLineEdit->clear();
 
 
@@ -3074,12 +3171,15 @@ void RotatorMainWindow::closeSkyScan(QString currentAntennaName)
     disconnect(ui->skyScanStartBrgLineEdit, &BearingLineEdit::editingFinished, this, &RotatorMainWindow::skyScanStartBrgLineEditEditingFinished);
     //disconnect(ui->skyScanStartBrgLineEdit, &BearingLineEdit::textChanged, this, &RotatorMainWindow::skyScanStartBrgLineEditTextChanged);
     disconnect(ui->skyScanEndBrgLineEdit, &BearingLineEdit::editingFinished, this, &RotatorMainWindow::skyScanEndBrgLineEditEditingFinished);
-    disconnect(ui->skyScanStepDegreesLineEdit, &QLineEdit::editingFinished, this, &RotatorMainWindow::skyScanStepDegreesLineEditEditingFinished);
+    //disconnect(ui->skyScanStepDegreesLineEdit, &QLineEdit::editingFinished, this, &RotatorMainWindow::skyScanStepDegreesLineEditEditingFinished);
+    disconnect(ui->skyScanStepDegreeSpinBox, QOverload<int>::of(&QSpinBox::valueChanged), this, &RotatorMainWindow::skyScanStepDegreesSpinBoxValueChanged);connect(ui->skyScanPauseTimeLineEdit, &QLineEdit::editingFinished, this, &RotatorMainWindow::skyScanPauseTimeLineEditEditingFinished);
     disconnect(ui->skyScanPauseTimeLineEdit, &QLineEdit::editingFinished, this, &RotatorMainWindow::skyScanPauseTimeLineEditEditingFinished);
     disconnect(ui->skyScanStartPb, &QPushButton::pressed, this, &RotatorMainWindow::skyScanStartPbPressed);
     disconnect(ui->skyScanPausePb, &QPushButton::pressed, this, &RotatorMainWindow::skyScanPausePbPressed);
     disconnect(ui->skyScanStopPb, &QPushButton::pressed, this, &RotatorMainWindow::skyScanStopPbPressed);
     disconnect(skyScanControl.data(), &SkyScanControl::rotateTo, this, &RotatorMainWindow::skyScanRotateTo);
+    disconnect(skyScanControl.data(), &SkyScanControl::displaySkyScanNextStepBearing, this, &RotatorMainWindow::displaySkyScanNextStepBearing);
+    disconnect(skyScanControl.data(), &SkyScanControl::displaySkyScanPauseIntervalTime, this, &RotatorMainWindow::displaySkyScanPauseIntervalCount);
 
 }
 void RotatorMainWindow::openSkyScan(QString currentAntennaName)
@@ -3099,7 +3199,7 @@ void RotatorMainWindow::openSkyScan(QString currentAntennaName)
     ui->skyScanEndBrgLineEdit->setText(QString::number(endSkyScanBrg));
     ui->skyScanEndBrgLineEdit->setMaxMinBearing(setupAntenna->currentAntenna.max_azimuth, setupAntenna->currentAntenna.min_azimuth);
 
-    ui->skyScanStepDegreesLineEdit->setText(QString::number(skyScanStepDegrees));
+    ui->skyScanStepDegreeSpinBox->setValue(skyScanStepDegrees);
     ui->skyScanPauseTimeLineEdit->setText(QString::number(skyScanPauseSecs));
 
     dumpSkyScanSettingsToTraceLog();
@@ -3110,14 +3210,14 @@ void RotatorMainWindow::openSkyScan(QString currentAntennaName)
     connect(ui->skyScanStartBrgLineEdit, &BearingLineEdit::editingFinished, this, &RotatorMainWindow::skyScanStartBrgLineEditEditingFinished);
     //connect(ui->skyScanStartBrgLineEdit, &BearingLineEdit::textChanged, this, &RotatorMainWindow::skyScanStartBrgLineEditTextChanged);
     connect(ui->skyScanEndBrgLineEdit, &BearingLineEdit::editingFinished, this, &RotatorMainWindow::skyScanEndBrgLineEditEditingFinished);
-    connect(ui->skyScanStepDegreesLineEdit, &QLineEdit::editingFinished, this, &RotatorMainWindow::skyScanStepDegreesLineEditEditingFinished);
-    connect(ui->skyScanPauseTimeLineEdit, &QLineEdit::editingFinished, this, &RotatorMainWindow::skyScanPauseTimeLineEditEditingFinished);
+    //connect(ui->skyScanStepDegreesLineEdit, &QLineEdit::editingFinished, this, &RotatorMainWindow::skyScanStepDegreesLineEditEditingFinished);
+    connect(ui->skyScanStepDegreeSpinBox, QOverload<int>::of(&QSpinBox::valueChanged), this, &RotatorMainWindow::skyScanStepDegreesSpinBoxValueChanged);connect(ui->skyScanPauseTimeLineEdit, &QLineEdit::editingFinished, this, &RotatorMainWindow::skyScanPauseTimeLineEditEditingFinished);
     connect(ui->skyScanStartPb, &QPushButton::pressed, this, &RotatorMainWindow::skyScanStartPbPressed);
     connect(ui->skyScanPausePb, &QPushButton::pressed, this, &RotatorMainWindow::skyScanPausePbPressed);
     connect(ui->skyScanStopPb, &QPushButton::pressed, this, &RotatorMainWindow::skyScanStopPbPressed);
     connect(skyScanControl.data(), &SkyScanControl::rotateTo, this, &RotatorMainWindow::skyScanRotateTo);
-
-
+    connect(skyScanControl.data(), &SkyScanControl::displaySkyScanNextStepBearing, this, &RotatorMainWindow::displaySkyScanNextStepBearing);
+    connect(skyScanControl.data(), &SkyScanControl::displaySkyScanPauseIntervalTime, this, &RotatorMainWindow::displaySkyScanPauseIntervalCount);
 }
 void RotatorMainWindow::dumpSkyScanSettingsToTraceLog()
 {

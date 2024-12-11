@@ -36,6 +36,7 @@ public:
 
 protected:
     void showBearingGoodBad(bool state);  // Update visual appearance based on validity
+    void changeEvent(QEvent *event) override;
 
 private slots:
     void onTextChanged(const QString &text);  // Handle text changes for validation
