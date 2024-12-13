@@ -101,7 +101,7 @@ static void serverSendAction( XStanza *a )
 void MinosCommonConnection::strace(const QString &mess)
 {
     trace(QString(mess + " MySequence %1 PeerAddress %2 connectAddress %3 ")
-              .arg(QString::number(mySeq), sock->peerAddress().toString(), connectHost.toString()));
+              .arg(QString::number(mySeq), sock?sock->peerAddress().toString():"No socket", connectHost.toString()));
 }
 MinosCommonConnection::MinosCommonConnection()
 {
