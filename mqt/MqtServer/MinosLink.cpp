@@ -320,6 +320,6 @@ void MinosCommonConnection::on_disconnected()
 {
     // All disconnects come through here
     // if server we need to see if is a true disconnect, or a "spare"
-    trace("MinosCommonConnection::on_disconnected() " + clientRouter + " " + clientUser + "; remove_socket = true");
+    strace("MinosCommonConnection::on_disconnected() " + clientRouter + " " + clientUser + "; remove_socket = true");
     remove_socket = true;
 }
