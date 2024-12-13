@@ -142,6 +142,10 @@ bool MinosCommonConnection::sendRaw ( const TIXML_STRING xmlstr )
       xmllen = strlen( xmlbuff );
 
       qint64 ret = sock->write ( xmlbuff, xmllen );
+      if (ret < 0)
+      {
+          trace(QString("Write failed, error %1").arg(sock->error()));
+      }
       onLog ( xmlbuff, false );
       delete [] xmlbuff;
 
