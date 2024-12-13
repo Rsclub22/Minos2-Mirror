@@ -98,6 +98,11 @@ static void serverSendAction( XStanza *a )
    // or no valid destination found
 }
 //==============================================================================
+void MinosCommonConnection::strace(const QString &mess)
+{
+    trace(QString(mess + " MySequence %1 PeerAddress %2 connectAddress %3 ")
+              .arg(QString::number(mySeq), sock->peerAddress().toString(), connectHost.toString()));
+}
 MinosCommonConnection::MinosCommonConnection()
 {
     mcsequence++;
@@ -160,7 +165,7 @@ void MinosCommonConnection::onLog (const char *data, bool is_incoming )
 
    logbuff += " : " + sock->peerAddress().toString();
 
-   trace( "MinosCommonConnection: " + logbuff );
+   strace( "MinosCommonConnection: " + logbuff );
 }
 //---------------------------------------------------------------------------
 bool MinosCommonConnection::tryForwardStanza( TiXmlElement *tix )

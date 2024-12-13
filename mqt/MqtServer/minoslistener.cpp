@@ -163,7 +163,7 @@ MinosCommonConnection *MinosRouterListener::makeConnection(QTcpSocket *s)
     c->connectHost = c->sock->peerAddress();
     c->myAddr = c->sock->localAddress();
 
-    trace (QString("Router Connection from %1 to %2 seq %3").arg(c->sock->peerAddress().toString(), c->sock->localAddress().toString(), QString::number(c->mySeq)));
+    c->strace (QString("Router Connection to peer %1 from local %2").arg(c->sock->peerAddress().toString(), c->sock->localAddress().toString()));
 
     return c;
 }
@@ -254,7 +254,7 @@ MinosCommonConnection *MinosClientListener::makeConnection(QTcpSocket *s)
     c->sock = QSharedPointer<QTcpSocket>(s);
     c->connectHost = c->sock->peerAddress();
 
-    trace (QString("Client Connection from %1 to %2").arg(c->sock->peerAddress().toString(), c->sock->localAddress().toString()));
+    c->strace (QString("Client Connection from %1 to %2").arg(c->sock->peerAddress().toString(), c->sock->localAddress().toString()));
 
     return c;
 }

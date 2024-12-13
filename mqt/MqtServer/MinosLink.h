@@ -117,7 +117,8 @@ class MinosCommonConnection: public QObject
       }
 
 
-public slots:
+      void strace(const QString &mess);
+  public slots:
       void on_readyRead();
       void on_disconnected();
 };
