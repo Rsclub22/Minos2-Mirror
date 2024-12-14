@@ -91,6 +91,7 @@ void MinosListener::on_newConnection()
 }
 void MinosListener::on_timeout()
 {
+#ifdef RUBBISH
     if (isRouter())
     {
         // This is intended to remove the second link each process
@@ -102,25 +103,29 @@ void MinosListener::on_timeout()
                 continue;
             for ( CommonIterator j = i + 1; j != i_array.end(); j++ )
             {
-                QString hj = (*j)->getClientRouter();
-                if (hi == hj)
+                if (j != i_array.end())
                 {
-                    quint32 remIP = (*j)->sock->peerAddress().toIPv4Address();
-                    quint32 locIP = (*j)->sock->localAddress().toIPv4Address();
-
-                    // make sure only one end does the removal
-                    if (remIP < locIP)
+                    QString hj = (*j)->getClientRouter();
+                    if (hi == hj)
                     {
-                        (*j)->remove_socket = true;
-                        (*j)->publish_disconnect = false;
-                        (*j)->sendCloseSocket();
-                        (*j)->strace("removing socket for " + (*j)->getClientRouter());
+                        quint32 remIP = (*j)->sock->peerAddress().toIPv4Address();
+                        quint32 locIP = (*j)->sock->localAddress().toIPv4Address();
+
+                        // make sure only one end does the removal
+                        if (remIP < locIP)
+                        {
+                            (*j)->remove_socket = true;
+                            (*j)->publish_disconnect = false;
+                            (*j)->sendCloseSocket();
+                            (*j)->strace("removing socket for " + (*j)->getClientRouter());
+                        }
                     }
                 }
             }
         }
 
     }
+#endif
     bool clearup = false;
     for ( auto &a: i_array )
     {

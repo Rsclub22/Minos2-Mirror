@@ -225,8 +225,6 @@ void TZConf::onReadyRead()
     trace("TZConf::onReadyRead()");
     while (readSocket.hasPendingDatagrams())
     {
-
-
         QNetworkDatagram dgram = readSocket.receiveDatagram();
         //quint16 port = dgram.senderPort();
         QHostAddress host = dgram.senderAddress();
