@@ -260,11 +260,11 @@ void MinosCommonConnection::on_readyRead()
            trace("Bad read in MinosCommonConnection::on_readyRead; remove_socket = true");
           remove_socket = true;
        }
-       if (rxlen >= 0)
-       {
-           // rxlen == 0 is valid
-           lastRx = QDateTime::currentMSecsSinceEpoch();
-       }
+       // if (rxlen >= 0)
+       // {
+       //     // rxlen == 0 is valid
+       //     lastRx = QDateTime::currentMSecsSinceEpoch();
+       // }
    }
 }
 //==============================================================================
@@ -285,6 +285,8 @@ bool MinosCommonConnection::analyseNode( TiXmlElement *tix )
         publish_disconnect = false;
         return true;
     }
+
+    lastRx = QDateTime::currentMSecsSinceEpoch();
 
     if ( !checkFrom( tix ) )
    {
