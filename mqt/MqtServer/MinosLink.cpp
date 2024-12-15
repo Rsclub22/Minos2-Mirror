@@ -16,7 +16,7 @@
 #include "MinosLink.h"
 
 extern bool closeApp;
-int MinosCommonConnection::mcsequence = 0;
+int MinosCommonConnection::serverSequence = 0;
 
 //==============================================================================
 
@@ -100,13 +100,11 @@ static void serverSendAction( XStanza *a )
 //==============================================================================
 void MinosCommonConnection::strace(const QString &mess)
 {
-    trace(QString(mess + " MySequence %1 PeerAddress %2 connectAddress %3 ")
+    trace(QString(mess + " ServerSequence %1 PeerAddress %2 connectAddress %3 ")
               .arg(QString::number(mySeq), sock?sock->peerAddress().toString():"No socket", connectHost.toString()));
 }
 MinosCommonConnection::MinosCommonConnection()
 {
-    mcsequence++;
-    mySeq = mcsequence;
     setSendAction(serverSendAction);
 
     lastRx = QDateTime::currentMSecsSinceEpoch() + 5000;
@@ -144,7 +142,7 @@ bool MinosCommonConnection::sendRaw ( const TIXML_STRING xmlstr )
       qint64 ret = sock->write ( xmlbuff, xmllen );
       if (ret < 0)
       {
-          trace(QString("Write failed, error %1").arg(sock->error()));
+          strace(QString("Write failed, error %1").arg(sock->error()));
       }
       onLog ( xmlbuff, false );
       delete [] xmlbuff;
@@ -167,8 +165,6 @@ void MinosCommonConnection::onLog (const char *data, bool is_incoming )
    logbuff += data;
    logbuff += "]";
 
-   logbuff += " : " + sock->peerAddress().toString();
-
    strace( "MinosCommonConnection: " + logbuff );
 }
 //---------------------------------------------------------------------------
@@ -184,8 +180,7 @@ void MinosCommonConnection::on_readyRead()
 {
    // select says we have data, so read it
    // and send the data through the parser
-   trace ( QString("MinosCommonConnection::on_readyRead called to receive data from %2")
-           .arg(connectHost.toString())  );
+    strace ( QString("MinosCommonConnection::on_readyRead called"));
 
    // documntation says this may occasionally fail on Windows
    while (sock->bytesAvailable() > 0)
@@ -229,7 +224,7 @@ void MinosCommonConnection::on_readyRead()
                        xdoc.Parse( packet.c_str(), nullptr );
                        if ( xdoc.Error())
                        {
-                           trace(QString("parse failed; ") + xdoc.ErrorDesc());
+                           strace(QString("parse failed; ") + xdoc.ErrorDesc());
                        }
                        else
                        {
@@ -239,7 +234,7 @@ void MinosCommonConnection::on_readyRead()
                    }
                    else
                    {
-                       trace("empty packet!");
+                       strace("empty packet!");
                    }
                 }
                 else
@@ -257,7 +252,7 @@ void MinosCommonConnection::on_readyRead()
        }
        else if (rxlen < 0)
        {
-           trace("Bad read in MinosCommonConnection::on_readyRead; remove_socket = true");
+           strace("Bad read in MinosCommonConnection::on_readyRead; remove_socket = true");
           remove_socket = true;
        }
        // if (rxlen >= 0)
@@ -293,7 +288,7 @@ bool MinosCommonConnection::analyseNode( TiXmlElement *tix )
       if ( isRouter() )
       {
          closeSocket();
-         trace("Bad checkFrom in MinosCommonConnection::analyseNode; remove_socket = true");
+         strace("Bad checkFrom in MinosCommonConnection::analyseNode; remove_socket = true");
          remove_socket = true;
       }
       return false;

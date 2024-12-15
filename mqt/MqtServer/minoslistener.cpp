@@ -52,7 +52,7 @@ bool MinosListener::initialise( QString type, quint16 port )
 
 void MinosListener::addListenerSlot( MinosCommonConnection *il )
 {
-    trace( QString("addListenerSlot: from %1 %2").arg(isRouter()?"Server":"Client", il->connectHost.toString() ));
+    il->strace( QString("addListenerSlot: from %1 %2").arg(isRouter()?"Server":"Client", il->connectHost.toString() ));
 
     i_array.push_back( il );
     il->initialise();
@@ -209,7 +209,7 @@ void MinosRouterListener::buildTable(QTableWidget *tab)
     tab->clear();
     tab->setRowCount(i_array.count());
     tab->setColumnCount(3);
-    QStringList h = {"name", "address", "uuid"};
+    QStringList h = {"name", "sequence", "address", "uuid"};
     tab->setHorizontalHeaderLabels(h);
     int row = 0;
     for ( auto const &a: QASCONST(i_array ))
@@ -218,6 +218,8 @@ void MinosRouterListener::buildTable(QTableWidget *tab)
         QString router = msc->getClientRouter();
         QTableWidgetItem *s = new QTableWidgetItem(router);
         tab->setItem(row, 0, s);
+        s = new QTableWidgetItem(QString::number(msc->mySeq));
+        tab->setItem(row, 1, s);
         s = new QTableWidgetItem(msc->router()->host.toString());
         tab->setItem(row, 1, s);
         s = new QTableWidgetItem(msc->router()->uuid);

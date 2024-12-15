@@ -49,10 +49,10 @@ class MinosCommonConnection: public QObject
       char rxbuff[ RXBUFFLEN + 1 ];
       TIXML_STRING packetbuff;
 
-      static int mcsequence;
-
     protected:
-       bool connected = false;
+      static int serverSequence;
+
+        bool connected = false;
        qint64 lastRx = 0;
 
       // who is connected?

@@ -20,6 +20,9 @@ MinosRouterConnection::MinosRouterConnection(bool fromDatagram) : fromDatagram(f
 {}
 void MinosRouterConnection::initialise()
 {
+    serverSequence++;
+    mySeq = serverSequence;
+
     QHostAddress h = sock->peerAddress();
     connectHost = h;
     connect(sock.data(), &QTcpSocket::readyRead, this, &MinosRouterConnection::on_readyRead, Qt::UniqueConnection);
@@ -34,7 +37,7 @@ MinosRouterConnection::~MinosRouterConnection()
 }
 void MinosRouterConnection::closeDown()
 {
-   trace( "Server Link: Closing" );
+   strace( "Server Link: Closing" );
 
    if (PubSubMain)
        PubSubMain->disconnectRouter(makeJid());
@@ -98,12 +101,12 @@ void MinosRouterConnection::setFromId( MinosId &id, RPCRequest *req )
    // and we need to check that the originator is who we think they ought to be
    if ( !id.router.size() )
    {
-      trace( "ServerSetFromId: No \"from\" from server " + srv->station );
+      strace( "ServerSetFromId: No \"from\" from server " + srv->station );
       return;
    }
    if ( srv && srv->station.compare( id.router, Qt::CaseInsensitive) != 0 )
    {
-      trace( "ServerSetFromId: Mismatch from server " + srv->station + " we received \"" + id.router + "\"" );
+      strace( "ServerSetFromId: Mismatch from server " + srv->station + " we received \"" + id.router + "\"" );
       return;
    }
 
@@ -117,11 +120,11 @@ void MinosRouterConnection::setFromId( MinosId &id, RPCRequest *req )
       }
       if ( srv )
       {
-         trace( "ServerSetFromId: server " + srv->station + " connected to us" );
+         strace( "ServerSetFromId: server " + srv->station + " connected to us" );
       }
       else
       {
-         trace( "ServerSetFromId: server " + QString( id.router ) + " tried to connect to us - not recognised" );
+         strace( "ServerSetFromId: server " + QString( id.router ) + " tried to connect to us - not recognised" );
          // SO we need to set up a server
 
          QString message;
@@ -135,7 +138,7 @@ void MinosRouterConnection::setFromId( MinosId &id, RPCRequest *req )
    }
    else
    {
-      trace( "ServerSetFromId: server " + id.router + " connected to us - srv already set up as " + srv->station );
+      strace( "ServerSetFromId: server " + id.router + " connected to us - srv already set up as " + srv->station );
    }
    clientRouter = id.router;
 }
@@ -156,8 +159,8 @@ void MinosRouterConnection::sendKeepAlive( )
         if (!checkLastRx())
         {
             // abort the connection
-            trace(QString("MinosRouterConnection::checkLastRx failed, removing socket %1 %2 %3")
-                      .arg(sock->peerAddress().toString(), connectHost.toString(), QString::number(mySeq)));
+            strace(QString("MinosRouterConnection::checkLastRx failed, removing socket"));
+            publish_disconnect = false;
             remove_socket = true;
             return;
         }

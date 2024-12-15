@@ -31,7 +31,7 @@ MinosClientConnection::~MinosClientConnection()
 //==============================================================================
 void MinosClientConnection::closeDown()
 {
-    trace( "Client Link: Closing" );
+    strace( "Client Link: Closing" );
     // here we need to revoke all of this clients published keys
     PubSubMain->revokeClient(makeJid());
 }
