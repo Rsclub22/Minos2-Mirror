@@ -16,13 +16,18 @@
 #include "MTrace.h"
 
 //==============================================================================
+void MinosRouterConnection::strace(const QString &mess)
+{
+    trace(QString(mess + " ServerSequence %1 PeerAddress %2 connectAddress %3")
+              .arg(QString::number(mySeq), sock?sock->peerAddress().toString():"No socket", connectHost.toString()));
+}
 MinosRouterConnection::MinosRouterConnection(bool fromDatagram) : fromDatagram(fromDatagram)
-{}
-void MinosRouterConnection::initialise()
 {
     serverSequence++;
     mySeq = serverSequence;
-
+}
+void MinosRouterConnection::initialise()
+{
     QHostAddress h = sock->peerAddress();
     connectHost = h;
     connect(sock.data(), &QTcpSocket::readyRead, this, &MinosRouterConnection::on_readyRead, Qt::UniqueConnection);
@@ -45,6 +50,12 @@ void MinosRouterConnection::closeDown()
    {
       TZConf::getZConf()->publishDisconnect(srv);
    }
+}
+
+void MinosRouterConnection::disconnected()
+{
+    // if server we need to see if is a true disconnect, or a "spare"
+    remove_socket = true;
 }
 
 bool MinosRouterConnection::checkFrom( TiXmlElement *tix )

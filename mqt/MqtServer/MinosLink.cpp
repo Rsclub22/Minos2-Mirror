@@ -98,11 +98,7 @@ static void serverSendAction( XStanza *a )
    // or no valid destination found
 }
 //==============================================================================
-void MinosCommonConnection::strace(const QString &mess)
-{
-    trace(QString(mess + " ServerSequence %1 PeerAddress %2 connectAddress %3 ")
-              .arg(QString::number(mySeq), sock?sock->peerAddress().toString():"No socket", connectHost.toString()));
-}
+
 MinosCommonConnection::MinosCommonConnection()
 {
     setSendAction(serverSendAction);
@@ -316,7 +312,7 @@ bool MinosCommonConnection::analyseNode( TiXmlElement *tix )
 void MinosCommonConnection::on_disconnected()
 {
     // All disconnects come through here
-    // if server we need to see if is a true disconnect, or a "spare"
     strace("MinosCommonConnection::on_disconnected() " + clientRouter + " " + clientUser + "; remove_socket = true");
-    remove_socket = true;
+
+    disconnected();
 }

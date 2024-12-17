@@ -91,7 +91,6 @@ void MinosListener::on_newConnection()
 }
 void MinosListener::on_timeout()
 {
-#ifdef RUBBISH
     if (isRouter())
     {
         // This is intended to remove the second link each process
@@ -105,19 +104,23 @@ void MinosListener::on_timeout()
             {
                 if (j != i_array.end())
                 {
-                    QString hj = (*j)->getClientRouter();
-                    if (hi == hj)
+                    if (!(*j)->checkLastRx())
                     {
-                        quint32 remIP = (*j)->sock->peerAddress().toIPv4Address();
-                        quint32 locIP = (*j)->sock->localAddress().toIPv4Address();
-
-                        // make sure only one end does the removal
-                        if (remIP < locIP)
+                        // don't remove a socket that is being used
+                        QString hj = (*j)->getClientRouter();
+                        if (hi == hj)
                         {
-                            (*j)->remove_socket = true;
-                            (*j)->publish_disconnect = false;
-                            (*j)->sendCloseSocket();
-                            (*j)->strace("removing socket for " + (*j)->getClientRouter());
+                            quint32 remIP = (*j)->sock->peerAddress().toIPv4Address();
+                            quint32 locIP = (*j)->sock->localAddress().toIPv4Address();
+
+                            // make sure only one end does the removal
+                            if (remIP < locIP)
+                            {
+                                (*j)->remove_socket = true;
+                                (*j)->publish_disconnect = false;
+                                (*j)->sendCloseSocket();
+                                (*j)->strace("removing socket for " + (*j)->getClientRouter());
+                            }
                         }
                     }
                 }
@@ -125,7 +128,7 @@ void MinosListener::on_timeout()
         }
 
     }
-#endif
+
     bool clearup = false;
     for ( auto &a: i_array )
     {
@@ -137,7 +140,8 @@ void MinosListener::on_timeout()
             {
                 mcc->closeDown();
             }
-            delete mcc;
+            mcc->sock->close();
+            mcc->deleteLater();
             a = nullptr;
             clearup = true;
         }

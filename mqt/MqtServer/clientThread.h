@@ -19,6 +19,8 @@ class MinosClientConnection: public MinosCommonConnection
    private:
    protected:
    public:
+       void strace(const QString &) override;
+
       MinosClientConnection();
       virtual void initialise() override;
       ~MinosClientConnection() override;
@@ -29,6 +31,8 @@ class MinosClientConnection: public MinosCommonConnection
          return false;
       }
       void closeDown() override;
+
+      virtual void disconnected() override;
 };
 //==============================================================================
 
