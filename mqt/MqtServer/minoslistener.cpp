@@ -135,13 +135,12 @@ void MinosListener::on_timeout()
         if ( a ->remove_socket )
         {
             // process says to finish off
-            MinosCommonConnection *mcc = a;
             if (a->publish_disconnect)
             {
-                mcc->closeDown();
+                a->closeDown();
             }
-            mcc->sock->close();
-            mcc->deleteLater();
+            a->sock->close();
+            a->deleteLater();
             a = nullptr;
             clearup = true;
         }
@@ -157,7 +156,9 @@ void MinosListener::clearSockets()
 {
       for ( auto  &a: i_array )
       {
-          delete a;
+        a->sock->close();
+        a->deleteLater();
+        a = nullptr;
       }
       i_array.clear();
 }
