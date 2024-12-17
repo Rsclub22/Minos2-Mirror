@@ -43,7 +43,7 @@ void SkyScanControl::initSkyScan(enum southStop southType_, int minRot, int maxR
     startScanBearing = start;
     endScanBearing = end;
     stepDegrees = step;
-    scanPauseTimeInterval = interval;  // Secs
+    scanPauseTimeInterval = interval;  // Mins
     //currentBearing = initialBearing;
     movingToStartPosition = false;
 }
@@ -180,7 +180,7 @@ void SkyScanControl::handleRotationBearings(int bearing, skyScanBearingStates br
             // Schedule the next rotation
             traceMessage(QString("reverseScan flag = %1").arg(reverseScan ? "reverseScan" : "forwardScan"));
             skyScanPauseInterval = true;
-            scanPauseTimeCount = scanPauseTimeInterval;
+            scanPauseTimeCount = scanPauseTimeInterval * 60;
             traceMessage(QString("start interval timer %1 secs").arg(scanPauseTimeCount));
             emit displaySkyScanPauseIntervalTime(scanPauseTimeCount);
             skyScanIntervalTimer->start(1000);
@@ -286,7 +286,7 @@ void SkyScanControl::rotateToNextPosition()
     traceMessage(QString("Rotating %1 to %2 degrees.").arg(command).arg(targetBearing));
 
     movingToStepPosition = true;
-    displaySkyScanNextStepBearing(targetBearing);
+    emit displaySkyScanNextStepBearing(targetBearing);
     emit rotateTo(targetBearing);
 
 

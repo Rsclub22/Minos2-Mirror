@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>857</width>
-    <height>657</height>
+    <width>856</width>
+    <height>642</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -468,7 +468,7 @@
                          </widget>
                         </item>
                         <item>
-                         <widget class="QSpinBox" name="skyScanStepDegreeSpinBox">
+                         <widget class="CustomSpinBox" name="skyScanStepDegreeSpinBox">
                           <property name="minimum">
                            <number>5</number>
                           </property>
@@ -559,7 +559,14 @@
                          </widget>
                         </item>
                         <item>
-                         <widget class="QLineEdit" name="skyScanPauseTimeLineEdit"/>
+                         <widget class="CustomSpinBox" name="pauseTimeSpinBox">
+                          <property name="maximum">
+                           <number>30</number>
+                          </property>
+                          <property name="value">
+                           <number>1</number>
+                          </property>
+                         </widget>
                         </item>
                         <item>
                          <spacer name="horizontalSpacer_18">
@@ -623,7 +630,7 @@
                        </layout>
                       </item>
                       <item>
-                       <layout class="QHBoxLayout" name="horizontalLayout_16">
+                       <layout class="QHBoxLayout" name="horizontalLayout_14">
                         <item>
                          <widget class="QLabel" name="pauseCountLbl">
                           <property name="font">
@@ -637,7 +644,7 @@
                          </widget>
                         </item>
                         <item>
-                         <widget class="QLabel" name="pauseCountDown">
+                         <widget class="QLabel" name="pauseTimeCountDownLbl">
                           <property name="font">
                            <font>
                             <pointsize>16</pointsize>
@@ -645,7 +652,7 @@
                            </font>
                           </property>
                           <property name="text">
-                           <string>000</string>
+                           <string>1:00</string>
                           </property>
                          </widget>
                         </item>
@@ -1128,6 +1135,11 @@
    <extends>QWidget</extends>
    <header>minoscustomtab.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>CustomSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header>rotatorMainWindow.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

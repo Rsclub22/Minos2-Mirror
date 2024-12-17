@@ -145,6 +145,15 @@ inline const QStringList southStopNames = (QStringList() << "S_StopOff" << "S_St
 
 enum overlapStat { NO_OVERLAP, NEG_OVERLAP, POS_OVERLAP};
 
+
+// SkyScan Default Values
+inline const int MIN_SKYSCAN_STEP_DEGREES = 5;
+inline const int MAX_SKYSCAN_STEP_DEGREES = 45;
+inline const int STEP_DEGREES_INCREMENT = 5;
+inline const int MIN_SKYSCAN_PAUSE_MINS = 1;
+inline const int MAX_SKYSCAN_PAUSE_MINS = 45;
+inline const int SKYSCAN_PAUSE_STEP_INCREMENT_MINS = 1;
+
 // Pushbutton Styles
 
 inline const QString BUTTON_ON_STYLE = QString("background-color: Sandybrown ; border-style: outset; border-width: 1px; border-color: black; min-width: 5em; padding: 3px;\n");

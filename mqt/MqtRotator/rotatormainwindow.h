@@ -28,6 +28,8 @@
 #include <QRegularExpressionValidator>
 
 #include "CommandReader.h"
+#include "qlineedit.h"
+#include "qspinbox.h"
 #include "rotatorRpc.h"
 #include "rotatorbase.h"
 #include "rotatorfactory.h"
@@ -55,6 +57,17 @@ class LogDialog;
 namespace Ui {
 class RotatorMainWindow;
 }
+
+
+class CustomSpinBox : public QSpinBox {
+public:
+    using QSpinBox::QSpinBox; // Inherit constructors
+
+    void setReadOnlyLineEdit(bool readOnly) {
+        lineEdit()->setReadOnly(readOnly);
+    }
+};
+
 
 class RotatorMainWindow : public QMainWindow
 {
@@ -168,18 +181,15 @@ private:
     int startSkyScanBrg = 0;
     int endSkyScanBrg = 0;
     int skyScanStepDegrees = 0;
-    int skyScanPauseSecs = 0;
+    int skyScanPauseMins = 0;
 
-    int minSkyScanStepDegrees = 0;
-    int maxSkyScanStepDegrees = 30;
+    int minSkyScanStepDegrees = MIN_SKYSCAN_STEP_DEGREES;
+    int maxSkyScanStepDegrees = MAX_SKYSCAN_STEP_DEGREES;
+    int stepDegreesIncrement = STEP_DEGREES_INCREMENT;
 
-    int minSkyScanPauseSecs = 0;
-    int maxSkyScanPauseSecs = 600;
-
-    //QRegularExpressionValidator *startScanBrgLineEditValidator;
-    //QRegularExpressionValidator *endScanBrgLineEditValidator;
-    QRegularExpressionValidator *stepDegreeLineEditValidator;
-    QRegularExpressionValidator *pauseTimeLineEditValidator;
+    int minSkyScanPauseMins = MIN_SKYSCAN_PAUSE_MINS;
+    int maxSkyScanPauseMins = MAX_SKYSCAN_PAUSE_MINS;
+    int skyScanPauseStepIncrement = SKYSCAN_PAUSE_STEP_INCREMENT_MINS;
 
     int openRotator();
     void closeRotator();
@@ -293,7 +303,7 @@ private slots:
 
     void skyScanStopPbPressed();
     void skyScanStartPbPressed();
-    void skyScanPauseTimeLineEditEditingFinished();
+
     void skyScanEndBrgLineEditEditingFinished();
     void skyScanStartBrgLineEditEditingFinished();
     void skyScanSettingsOnCloseChkBoxChanged();
@@ -308,6 +318,8 @@ private slots:
     void displaySkyScanPauseIntervalCount(int count);
 
     void skyScanStepDegreesSpinBoxValueChanged(int value);
+    void skyScanPauseTimeSpinBoxValueChanged(int value);
+
 private:
     void rotateTo(int bearing);
     int northCalcTarget(int targetBearing);
@@ -347,11 +359,8 @@ private:
     void setSkyScanComponentsEnabled(bool enabled);
     void closeSkyScan(QString currentAntennaName);
     void openSkyScan(QString currentAntennaName);
-    void setSkyScanStepDegreesLineEditValidator();
-    void setSkyPauseTimeLineEditValidator();
     void setSkyScanEndBrgLineEditValidator();
     void setSkyScanStartBrgLineEditValidator();
-    void setSkyScanLineEditValidators();
     bool readSkyScanEnableSetting(QString currentAntennaName);
     void readSkyScanCommonSettings();
     void dumpSkyScanSettingsToTraceLog();
@@ -364,6 +373,9 @@ private:
     void setSkyScanStartButtonColour(QString style);
     void setSkyScanStopButtonColour(QString style);
 
+
+
+    void initialiseSpinBox(CustomSpinBox *spinBox, int min, int max, int interval, int initialValue);
 };
 
 #endif // ROTATORMAINWINDOW_H
