@@ -225,8 +225,6 @@ void TZConf::onReadyRead()
     trace("TZConf::onReadyRead()");
     while (readSocket.hasPendingDatagrams())
     {
-
-
         QNetworkDatagram dgram = readSocket.receiveDatagram();
         //quint16 port = dgram.senderPort();
         QHostAddress host = dgram.senderAddress();
@@ -365,8 +363,8 @@ Router *TZConf::zcPublishRouter( const QString &uuid, const QString &name,
         else
         {
             // we must have a server connection already
-            trace("Creating MinosServerConnection zcPublishServer for " + name);
             MinosRouterConnection *msc = new MinosRouterConnection(true);
+            msc->strace(QString("Creating MinosRouterConnection zcPublishServer for %1 host %2 ").arg(name, host.toString()));
             msc->setClientRouter(sss->station);
             msc->mConnect(sss);
             msl->addListenerSlot(msc);
@@ -382,6 +380,7 @@ Router *TZConf::zcPublishRouter( const QString &uuid, const QString &name,
     trace("zcPublishServer finished");
     return *s;
 }
+
 void TZConf::publishDisconnect(Router *srv)
 {
    trace("publishDisconnect");

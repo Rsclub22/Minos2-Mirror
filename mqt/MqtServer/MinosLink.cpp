@@ -16,6 +16,7 @@
 #include "MinosLink.h"
 
 extern bool closeApp;
+int MinosCommonConnection::serverSequence = 0;
 
 //==============================================================================
 
@@ -97,6 +98,7 @@ static void serverSendAction( XStanza *a )
    // or no valid destination found
 }
 //==============================================================================
+
 MinosCommonConnection::MinosCommonConnection()
 {
     setSendAction(serverSendAction);
@@ -134,6 +136,10 @@ bool MinosCommonConnection::sendRaw ( const TIXML_STRING xmlstr )
       xmllen = strlen( xmlbuff );
 
       qint64 ret = sock->write ( xmlbuff, xmllen );
+      if (ret < 0)
+      {
+          strace(QString("Write failed, error %1").arg(sock->error()));
+      }
       onLog ( xmlbuff, false );
       delete [] xmlbuff;
 
@@ -155,9 +161,7 @@ void MinosCommonConnection::onLog (const char *data, bool is_incoming )
    logbuff += data;
    logbuff += "]";
 
-   logbuff += " : " + sock->peerAddress().toString();
-
-   trace( "MinosCommonConnection: " + logbuff );
+   strace( "MinosCommonConnection: " + logbuff );
 }
 //---------------------------------------------------------------------------
 bool MinosCommonConnection::tryForwardStanza( TiXmlElement *tix )
@@ -172,8 +176,7 @@ void MinosCommonConnection::on_readyRead()
 {
    // select says we have data, so read it
    // and send the data through the parser
-   trace ( QString("MinosCommonConnection::on_readyRead called to receive data from %2")
-           .arg(connectHost.toString())  );
+    strace ( QString("MinosCommonConnection::on_readyRead called"));
 
    // documntation says this may occasionally fail on Windows
    while (sock->bytesAvailable() > 0)
@@ -217,7 +220,7 @@ void MinosCommonConnection::on_readyRead()
                        xdoc.Parse( packet.c_str(), nullptr );
                        if ( xdoc.Error())
                        {
-                           trace(QString("parse failed; ") + xdoc.ErrorDesc());
+                           strace(QString("parse failed; ") + xdoc.ErrorDesc());
                        }
                        else
                        {
@@ -227,7 +230,7 @@ void MinosCommonConnection::on_readyRead()
                    }
                    else
                    {
-                       trace("empty packet!");
+                       strace("empty packet!");
                    }
                 }
                 else
@@ -245,14 +248,14 @@ void MinosCommonConnection::on_readyRead()
        }
        else if (rxlen < 0)
        {
-           trace("Bad read in MinosCommonConnection::on_readyRead; remove_socket = true");
+           strace("Bad read in MinosCommonConnection::on_readyRead; remove_socket = true");
           remove_socket = true;
        }
-       if (rxlen >= 0)
-       {
-           // rxlen == 0 is valid
-           lastRx = QDateTime::currentMSecsSinceEpoch();
-       }
+       // if (rxlen >= 0)
+       // {
+       //     // rxlen == 0 is valid
+       //     lastRx = QDateTime::currentMSecsSinceEpoch();
+       // }
    }
 }
 //==============================================================================
@@ -264,7 +267,9 @@ bool MinosCommonConnection::analyseNode( TiXmlElement *tix )
    // A server connection has to have a "from" (but it isn't necessarily correct, if its been proxied)
    // A client must either have a from address, or nothing - when checkFrom will insert it
 
-    if (  checkElementName( tix, "keepAlive" ) )
+   lastRx = QDateTime::currentMSecsSinceEpoch();
+
+   if (  checkElementName( tix, "keepAlive" ) )
     {
         return true;
     }
@@ -279,7 +284,7 @@ bool MinosCommonConnection::analyseNode( TiXmlElement *tix )
       if ( isRouter() )
       {
          closeSocket();
-         trace("Bad checkFrom in MinosCommonConnection::analyseNode; remove_socket = true");
+         strace("Bad checkFrom in MinosCommonConnection::analyseNode; remove_socket = true");
          remove_socket = true;
       }
       return false;
@@ -307,7 +312,7 @@ bool MinosCommonConnection::analyseNode( TiXmlElement *tix )
 void MinosCommonConnection::on_disconnected()
 {
     // All disconnects come through here
-    // if server we need to see if is a true disconnect, or a "spare"
-    trace("MinosCommonConnection::on_disconnected() " + clientRouter + " " + clientUser + "; remove_socket = true");
-    remove_socket = true;
+    strace("MinosCommonConnection::on_disconnected() " + clientRouter + " " + clientUser + "; remove_socket = true");
+
+    disconnected();
 }

@@ -16,8 +16,16 @@
 #include "MTrace.h"
 
 //==============================================================================
+void MinosRouterConnection::strace(const QString &mess)
+{
+    trace(QString(mess + " ServerSequence %1 PeerAddress %2 connectAddress %3")
+              .arg(QString::number(mySeq), sock?sock->peerAddress().toString():"No socket", connectHost.toString()));
+}
 MinosRouterConnection::MinosRouterConnection(bool fromDatagram) : fromDatagram(fromDatagram)
-{}
+{
+    serverSequence++;
+    mySeq = serverSequence;
+}
 void MinosRouterConnection::initialise()
 {
     QHostAddress h = sock->peerAddress();
@@ -34,7 +42,7 @@ MinosRouterConnection::~MinosRouterConnection()
 }
 void MinosRouterConnection::closeDown()
 {
-   trace( "Server Link: Closing" );
+   strace( "Server Link: Closing" );
 
    if (PubSubMain)
        PubSubMain->disconnectRouter(makeJid());
@@ -42,6 +50,12 @@ void MinosRouterConnection::closeDown()
    {
       TZConf::getZConf()->publishDisconnect(srv);
    }
+}
+
+void MinosRouterConnection::disconnected()
+{
+    // if server we need to see if is a true disconnect, or a "spare"
+    remove_socket = true;
 }
 
 bool MinosRouterConnection::checkFrom( TiXmlElement *tix )
@@ -61,7 +75,7 @@ void MinosRouterConnection::setRouter(Router *s)
 {
     srv = s;
     clientRouter = srv->station;
-    trace( QString( "Server: Connecting to " ) + srv->station + " host " + srv->host.toString() );
+    strace( QString( "MinosRouterConnection::setRouter: Connecting to " ) + srv->station + " host " + srv->host.toString() );
 }
 
 void MinosRouterConnection::mConnect( Router *psrv )
@@ -70,7 +84,7 @@ void MinosRouterConnection::mConnect( Router *psrv )
    clientRouter = srv->station;
    connectHost = srv->host;
 
-   trace( QString( "Server: Connecting to " ) + srv->station + " host " + srv->host.toString() );
+   strace( QString( "MinosRouterConnection::mConnect: Connecting to " ) + srv->station + " host " + srv->host.toString() );
 
    // connect to endpoint
    // We need to connect out to the end point - looks much like a client connection!
@@ -83,7 +97,7 @@ void MinosRouterConnection::mConnect( Router *psrv )
 }
 void MinosRouterConnection::on_connected()
 {
-    trace( QString( "Server: Connected OK to " ) + srv->station + " host " + srv->host.toString() );
+    strace( QString( "Server: Connected OK to %1 host %2" ).arg(srv->station, srv->host.toString() ) );
     RPCRequest *rpa = new RPCRequest( clientRouter, ThisMinosRouter::getThisMinosRouter() ->getRouterName(), "ServerSetFromId" );   // for our local server, this one MUST have a from
     rpa->addParam( ThisMinosRouter::getThisMinosRouter() ->getRouterName() );
     rpa->addParam( TZConf::getZConf()->getZConfString(false, connectHost.toString() ) );
@@ -98,12 +112,12 @@ void MinosRouterConnection::setFromId( MinosId &id, RPCRequest *req )
    // and we need to check that the originator is who we think they ought to be
    if ( !id.router.size() )
    {
-      trace( "ServerSetFromId: No \"from\" from server " + srv->station );
+      strace( "ServerSetFromId: No \"from\" from server " + srv->station );
       return;
    }
    if ( srv && srv->station.compare( id.router, Qt::CaseInsensitive) != 0 )
    {
-      trace( "ServerSetFromId: Mismatch from server " + srv->station + " we received \"" + id.router + "\"" );
+      strace( "ServerSetFromId: Mismatch from server " + srv->station + " we received \"" + id.router + "\"" );
       return;
    }
 
@@ -117,11 +131,11 @@ void MinosRouterConnection::setFromId( MinosId &id, RPCRequest *req )
       }
       if ( srv )
       {
-         trace( "ServerSetFromId: server " + srv->station + " connected to us" );
+         strace( "ServerSetFromId: server " + srv->station + " connected to us" );
       }
       else
       {
-         trace( "ServerSetFromId: server " + QString( id.router ) + " tried to connect to us - not recognised" );
+         strace( "ServerSetFromId: server " + QString( id.router ) + " tried to connect to us - not recognised" );
          // SO we need to set up a server
 
          QString message;
@@ -135,7 +149,7 @@ void MinosRouterConnection::setFromId( MinosId &id, RPCRequest *req )
    }
    else
    {
-      trace( "ServerSetFromId: server " + id.router + " connected to us - srv already set up as " + srv->station );
+      strace( "ServerSetFromId: server " + id.router + " connected to us - srv already set up as " + srv->station );
    }
    clientRouter = id.router;
 }
@@ -156,7 +170,8 @@ void MinosRouterConnection::sendKeepAlive( )
         if (!checkLastRx())
         {
             // abort the connection
-            trace("MinosServerConnection - checkLastRx failed, removing socket");
+            strace(QString("MinosRouterConnection::checkLastRx failed, removing socket"));
+            publish_disconnect = false;
             remove_socket = true;
             return;
         }
@@ -166,6 +181,7 @@ void MinosRouterConnection::sendKeepAlive( )
             if ( clientRouter.size() && clientRouter.compare( "localhost", Qt::CaseInsensitive ) != 0 &&
                  clientRouter.compare( ThisMinosRouter::getThisMinosRouter() ->getRouterName(), Qt::CaseInsensitive) != 0 )
             {
+                strace(QString("MinosRouterConnection::checkLastRx - resubscribtion needed"));
                 RPCRouterPubSub::routerReconnectRemotePubSub( srv->station );
                 resubscribed = true;
                 return ;
@@ -175,6 +191,7 @@ void MinosRouterConnection::sendKeepAlive( )
         qint64 now = QDateTime::currentMSecsSinceEpoch();
         if (now - lastKeepAlive > resubscribeTimer.interval() * 2 )
         {
+            strace(QString("MinosRouterConnection::checkLastRx - send keepAlive"));
             sendRaw(QString("<keepAlive seq='" + QString::number(seqno++) + "'/>").toStdString());
             lastKeepAlive = now;
         }

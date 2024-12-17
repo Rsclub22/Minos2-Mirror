@@ -50,7 +50,9 @@ class MinosCommonConnection: public QObject
       TIXML_STRING packetbuff;
 
     protected:
-       bool connected = false;
+      static int serverSequence;
+
+        bool connected = false;
        qint64 lastRx = 0;
 
       // who is connected?
@@ -60,12 +62,9 @@ class MinosCommonConnection: public QObject
 
       void onLog (const char *data, bool is_incoming );
       bool sendRaw (const TIXML_STRING xmlstr );
-      virtual bool checkLastRx()
-      {
-          return true;
-      }
    public:
 
+      int mySeq = 0;
       QSharedPointer<QTcpSocket> sock;
 
       bool remove_socket = false;
@@ -113,8 +112,14 @@ class MinosCommonConnection: public QObject
           return false;
       }
 
+      virtual bool checkLastRx()
+      {
+          return true;
+      }
+      virtual void disconnected() = 0;
 
-public slots:
+      virtual void strace(const QString &mess) = 0;
+  public slots:
       void on_readyRead();
       void on_disconnected();
 };

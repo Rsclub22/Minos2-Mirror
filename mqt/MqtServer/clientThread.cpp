@@ -13,7 +13,11 @@
 #include "clientThread.h"
 
 //==============================================================================
-
+void MinosClientConnection::strace(const QString &mess)
+{
+    trace(QString(mess + " PeerAddress %1 connectAddress %2")
+              .arg(sock?sock->peerAddress().toString():"No socket", connectHost.toString()));
+}
 MinosClientConnection::MinosClientConnection()
 {
 }
@@ -31,9 +35,14 @@ MinosClientConnection::~MinosClientConnection()
 //==============================================================================
 void MinosClientConnection::closeDown()
 {
-    trace( "Client Link: Closing" );
+    strace( "Client Link: Closing" );
     // here we need to revoke all of this clients published keys
     PubSubMain->revokeClient(makeJid());
+}
+
+void MinosClientConnection::disconnected()
+{
+    remove_socket = true;
 }
 //==============================================================================
 bool MinosClientConnection::checkFrom( TiXmlElement *tix )

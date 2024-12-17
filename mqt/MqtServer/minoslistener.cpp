@@ -52,7 +52,7 @@ bool MinosListener::initialise( QString type, quint16 port )
 
 void MinosListener::addListenerSlot( MinosCommonConnection *il )
 {
-    trace( QString("addListenerSlot: from %1 %2").arg(isRouter()?"Server":"Client", il->connectHost.toString() ));
+    il->strace( QString("addListenerSlot: from %1 %2").arg(isRouter()?"Server":"Client", il->connectHost.toString() ));
 
     i_array.push_back( il );
     il->initialise();
@@ -102,37 +102,45 @@ void MinosListener::on_timeout()
                 continue;
             for ( CommonIterator j = i + 1; j != i_array.end(); j++ )
             {
-                QString hj = (*j)->getClientRouter();
-                if (hi == hj)
+                if (j != i_array.end())
                 {
-                    quint32 remIP = (*j)->sock->peerAddress().toIPv4Address();
-                    quint32 locIP = (*j)->sock->localAddress().toIPv4Address();
-
-                    // make sure only one end does the removal
-                    if (remIP < locIP)
+                    if (!(*j)->checkLastRx())
                     {
-                        (*j)->remove_socket = true;
-                        (*j)->publish_disconnect = false;
-                        (*j)->sendCloseSocket();
-                        trace("removing socket for " + (*j)->getClientRouter());
+                        // don't remove a socket that is being used
+                        QString hj = (*j)->getClientRouter();
+                        if (hi == hj)
+                        {
+                            quint32 remIP = (*j)->sock->peerAddress().toIPv4Address();
+                            quint32 locIP = (*j)->sock->localAddress().toIPv4Address();
+
+                            // make sure only one end does the removal
+                            if (remIP < locIP)
+                            {
+                                (*j)->remove_socket = true;
+                                (*j)->publish_disconnect = false;
+                                (*j)->sendCloseSocket();
+                                (*j)->strace("removing socket for " + (*j)->getClientRouter());
+                            }
+                        }
                     }
                 }
             }
         }
 
     }
+
     bool clearup = false;
     for ( auto &a: i_array )
     {
         if ( a ->remove_socket )
         {
             // process says to finish off
-            MinosCommonConnection *mcc = a;
             if (a->publish_disconnect)
             {
-                mcc->closeDown();
+                a->closeDown();
             }
-            delete mcc;
+            a->sock->close();
+            a->deleteLater();
             a = nullptr;
             clearup = true;
         }
@@ -148,7 +156,9 @@ void MinosListener::clearSockets()
 {
       for ( auto  &a: i_array )
       {
-          delete a;
+        a->sock->close();
+        a->deleteLater();
+        a = nullptr;
       }
       i_array.clear();
 }
@@ -156,14 +166,14 @@ void MinosListener::clearSockets()
 
 MinosCommonConnection *MinosRouterListener::makeConnection(QTcpSocket *s)
 {
-    trace("Creating MinosRouterConnection makeConnection");
+    trace("Creating MinosRouterConnection in MinosRouterListener::makeConnection");
     MinosRouterConnection *c = new MinosRouterConnection(false);
 
     c->sock = QSharedPointer<QTcpSocket>(s);
     c->connectHost = c->sock->peerAddress();
     c->myAddr = c->sock->localAddress();
 
-    trace (QString("Router Connection from %1 to %2").arg(c->sock->peerAddress().toString(), c->sock->localAddress().toString()));
+    c->strace (QString("Router Connection to peer %1 from local %2").arg(c->sock->peerAddress().toString(), c->sock->localAddress().toString()));
 
     return c;
 }
@@ -204,7 +214,7 @@ void MinosRouterListener::buildTable(QTableWidget *tab)
     tab->clear();
     tab->setRowCount(i_array.count());
     tab->setColumnCount(3);
-    QStringList h = {"name", "address", "uuid"};
+    QStringList h = {"name", "sequence", "address", "uuid"};
     tab->setHorizontalHeaderLabels(h);
     int row = 0;
     for ( auto const &a: QASCONST(i_array ))
@@ -213,6 +223,8 @@ void MinosRouterListener::buildTable(QTableWidget *tab)
         QString router = msc->getClientRouter();
         QTableWidgetItem *s = new QTableWidgetItem(router);
         tab->setItem(row, 0, s);
+        s = new QTableWidgetItem(QString::number(msc->mySeq));
+        tab->setItem(row, 1, s);
         s = new QTableWidgetItem(msc->router()->host.toString());
         tab->setItem(row, 1, s);
         s = new QTableWidgetItem(msc->router()->uuid);
@@ -254,7 +266,7 @@ MinosCommonConnection *MinosClientListener::makeConnection(QTcpSocket *s)
     c->sock = QSharedPointer<QTcpSocket>(s);
     c->connectHost = c->sock->peerAddress();
 
-    trace (QString("Client Connection from %1 to %2").arg(c->sock->peerAddress().toString(), c->sock->localAddress().toString()));
+    c->strace (QString("Client Connection from %1 to %2").arg(c->sock->peerAddress().toString(), c->sock->localAddress().toString()));
 
     return c;
 }
