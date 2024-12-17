@@ -267,7 +267,9 @@ bool MinosCommonConnection::analyseNode( TiXmlElement *tix )
    // A server connection has to have a "from" (but it isn't necessarily correct, if its been proxied)
    // A client must either have a from address, or nothing - when checkFrom will insert it
 
-    if (  checkElementName( tix, "keepAlive" ) )
+   lastRx = QDateTime::currentMSecsSinceEpoch();
+
+   if (  checkElementName( tix, "keepAlive" ) )
     {
         return true;
     }
@@ -276,8 +278,6 @@ bool MinosCommonConnection::analyseNode( TiXmlElement *tix )
         publish_disconnect = false;
         return true;
     }
-
-    lastRx = QDateTime::currentMSecsSinceEpoch();
 
     if ( !checkFrom( tix ) )
    {

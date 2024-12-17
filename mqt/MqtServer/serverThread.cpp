@@ -75,7 +75,7 @@ void MinosRouterConnection::setRouter(Router *s)
 {
     srv = s;
     clientRouter = srv->station;
-    strace( QString( "Server: Connecting to " ) + srv->station + " host " + srv->host.toString() );
+    strace( QString( "MinosRouterConnection::setRouter: Connecting to " ) + srv->station + " host " + srv->host.toString() );
 }
 
 void MinosRouterConnection::mConnect( Router *psrv )
@@ -84,7 +84,7 @@ void MinosRouterConnection::mConnect( Router *psrv )
    clientRouter = srv->station;
    connectHost = srv->host;
 
-   strace( QString( "Server: Connecting to " ) + srv->station + " host " + srv->host.toString() );
+   strace( QString( "MinosRouterConnection::mConnect: Connecting to " ) + srv->station + " host " + srv->host.toString() );
 
    // connect to endpoint
    // We need to connect out to the end point - looks much like a client connection!

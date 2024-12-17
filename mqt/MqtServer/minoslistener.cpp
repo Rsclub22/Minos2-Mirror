@@ -165,7 +165,7 @@ void MinosListener::clearSockets()
 
 MinosCommonConnection *MinosRouterListener::makeConnection(QTcpSocket *s)
 {
-    trace("Creating MinosRouterConnection makeConnection");
+    trace("Creating MinosRouterConnection in MinosRouterListener::makeConnection");
     MinosRouterConnection *c = new MinosRouterConnection(false);
 
     c->sock = QSharedPointer<QTcpSocket>(s);
