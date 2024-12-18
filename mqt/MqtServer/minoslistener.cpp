@@ -213,7 +213,7 @@ void MinosRouterListener::buildTable(QTableWidget *tab)
 {
     tab->clear();
     tab->setRowCount(i_array.count());
-    tab->setColumnCount(3);
+    tab->setColumnCount(4);
     QStringList h = {"name", "sequence", "address", "uuid"};
     tab->setHorizontalHeaderLabels(h);
     int row = 0;
@@ -226,9 +226,9 @@ void MinosRouterListener::buildTable(QTableWidget *tab)
         s = new QTableWidgetItem(QString::number(msc->mySeq));
         tab->setItem(row, 1, s);
         s = new QTableWidgetItem(msc->router()->host.toString());
-        tab->setItem(row, 1, s);
-        s = new QTableWidgetItem(msc->router()->uuid);
         tab->setItem(row, 2, s);
+        s = new QTableWidgetItem(msc->router()->uuid);
+        tab->setItem(row, 3, s);
         row++;
     }
 }
