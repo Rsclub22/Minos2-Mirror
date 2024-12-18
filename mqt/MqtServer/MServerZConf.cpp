@@ -9,16 +9,17 @@
 //---------------------------------------------------------------------------
 #include <QUuid>
 #include "QtUtils.h"
+#include <QNetworkDatagram>
+#include <QRandomGenerator>
+
 #include "AppStartup.h"
 #include "MTrace.h"
-#include <QNetworkDatagram>
 #include "RPCCommandConstants.h"
 #include "SecondInstall.h"
 #include "regsettings.h"
 #include "tinyxml.h"
 #include "TinyUtils.h"
-
-#include "MinosLink.h"
+#include "delayedaction.h"
 #include "serverThread.h"
 
 #include "minoslistener.h"
@@ -174,6 +175,7 @@ void TZConf::startZConf(const QString &name)
 }
 void TZConf::onTimeout()
 {
+
     static bool firstTime = true;
     if (firstTime)
     {
@@ -214,7 +216,20 @@ bool TZConf::sendMessage( )
     for (auto const &t: QASCONST(TxSocks))
     {
         QString mess = getZConfString(reqBeacon, t->qua.ip().toString());
-        t->sendMessage(mess);
+
+        double x = QRandomGenerator::global()->generateDouble();
+        int ms = std::trunc(x * 5 * 1000);
+
+        // put in a random delay so that we don't all beacon at once
+        // then MAYBE we won't get multiple connections between servers
+
+        delayedAction(this, [=]()
+                      {
+                          // NB a lambda function
+                        t->sendMessage(mess);
+                      }
+                      , ms
+                      );
     }
    return true;
 }
