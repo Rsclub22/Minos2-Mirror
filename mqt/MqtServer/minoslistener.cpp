@@ -94,7 +94,9 @@ void MinosListener::on_timeout()
     if (isRouter())
     {
         // This is intended to remove the second link each process
-        // gets initially
+        // gets initially - but I can't get it to work consistently
+        // so we have to accept two connections between servers
+
         for ( CommonIterator i = i_array.begin(); i != i_array.end(); i++ )
         {
             QString hi = (*i)->getClientRouter();
