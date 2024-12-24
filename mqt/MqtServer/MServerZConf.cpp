@@ -230,6 +230,24 @@ void TZConf::onReadyRead()
         //quint16 port = dgram.senderPort();
         QHostAddress host = dgram.senderAddress();
         QHostAddress rxAddr = dgram.destinationAddress();
+        uint ind = dgram.interfaceIndex();
+        QList<QNetworkInterface> ifaces = QNetworkInterface::allInterfaces();
+
+        QNetworkInterface &cint = ifaces[ind];
+
+        // Now get all IP addresses for this interface
+        QList<QNetworkAddressEntry> addrs = cint.addressEntries();
+
+        // And for any IP address, if it is IPv4 and the interface is active, make a socket
+        for (auto  &j: addrs)
+        {
+            if ((j.ip().protocol() == QAbstractSocket::IPv4Protocol)
+                && !j.ip().toString().isEmpty())
+            {
+                rxAddr = j.ip();
+            }
+        }
+
 
         QByteArray buf = dgram.data();
         QString dgs = QString(buf);
