@@ -139,10 +139,6 @@ QString ClubListCalendarYear::getURL()
 {
     return getSite();
 }
-bool ClubListCalendarYear::downloadProvisionalFile ( bool /*showError*/ )
-{
-    return false;
-}
 //---------------------------------------------------------------------------
 QString UKSMGCalendarYear::getSite()
 {

@@ -66,7 +66,7 @@ class TZConf: public QObject
    private:  	// User declarations
 
       static Router *zcPublishRouter(const QString &uuid, const QString &name,
-                        const QHostAddress &host, quint16 PortAsNumber );
+                        const QHostAddress &host, const QHostAddress &rxAddr, quint16 PortAsNumber );
       QString localName;
 
       QVector<QSharedPointer<UDPSocket> > TxSocks;
@@ -103,7 +103,7 @@ public:  		// User declarations
       }
 
       QString getZConfString(bool beaconreq, const QString &h);
-      Router *processZConfString(const QString &message, QHostAddress &host, QDateTime &beaconResponse);
+      Router *processZConfString(const QString &message, QHostAddress &host, QHostAddress &rxAddr, QDateTime &beaconResponse);
       void publishDisconnect(Router *);
       void closeDown();
 private slots:

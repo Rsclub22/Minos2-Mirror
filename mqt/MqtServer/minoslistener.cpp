@@ -91,6 +91,7 @@ void MinosListener::on_newConnection()
 }
 void MinosListener::on_timeout()
 {
+#ifdef RUBBISH
     if (isRouter())
     {
         // This is intended to remove the second link each process
@@ -130,6 +131,7 @@ void MinosListener::on_timeout()
         }
 
     }
+#endif
 
     bool clearup = false;
     for ( auto &a: i_array )
