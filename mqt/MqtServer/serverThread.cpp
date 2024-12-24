@@ -143,7 +143,7 @@ void MinosRouterConnection::setFromId( MinosId &id, RPCRequest *req )
          {
              QDateTime sb;   // ignored response
              QHostAddress host = connectHost;
-             srv = TZConf::getZConf()->processZConfString(message, host, myAddr, sb);
+             srv = TZConf::getZConf()->processZConfString(message, host, sb);
          }
       }
    }

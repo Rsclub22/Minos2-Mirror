@@ -229,34 +229,14 @@ void TZConf::onReadyRead()
         QNetworkDatagram dgram = readSocket.receiveDatagram();
         //quint16 port = dgram.senderPort();
         QHostAddress host = dgram.senderAddress();
-        QHostAddress rxAddr = dgram.destinationAddress();
-        uint ind = dgram.interfaceIndex();
-        QList<QNetworkInterface> ifaces = QNetworkInterface::allInterfaces();
-
-        QNetworkInterface &cint = ifaces[ind];
-
-        // Now get all IP addresses for this interface
-        QList<QNetworkAddressEntry> addrs = cint.addressEntries();
-
-        // And for any IP address, if it is IPv4 and the interface is active, make a socket
-        for (auto  &j: addrs)
-        {
-            if ((j.ip().protocol() == QAbstractSocket::IPv4Protocol)
-                && !j.ip().toString().isEmpty())
-            {
-                rxAddr = j.ip();
-            }
-        }
-
 
         QByteArray buf = dgram.data();
         QString dgs = QString(buf);
 
-        // we don't seem to get our own receiver address here
-        trace(QString("Datagram received from %1 at %2: %3").arg(host.toString(), rxAddr.toString(), dgs));
+        trace(QString("Datagram received from %1 : %2").arg(host.toString(), dgs));
         if (dgs.size() > 0)
         {
-            processZConfString(dgs, host, rxAddr, sendBeaconResponse);
+            processZConfString(dgs, host, sendBeaconResponse);
         }
     }
 }
@@ -334,7 +314,7 @@ void TZConf::readRouterListFile()
 
       QHostAddress ha;
       ha.setAddress(host);
-      zcPublishRouter( uuid, station, ha, QHostAddress(), toQUint16(port, SecondInstall::getRouterPort() ) );
+      zcPublishRouter( uuid, station, ha, toQUint16(port, SecondInstall::getRouterPort() ) );
 
    }
    //trace("Finished reading Server List File");
@@ -351,7 +331,7 @@ void TZConf::readRouterListFile()
 // when they have subscribed to stations.
 
 Router *TZConf::zcPublishRouter(const QString &uuid, const QString &name,
-                                const QHostAddress &host, const QHostAddress &rxAddr, quint16 PortAsNumber )
+                                const QHostAddress &host, quint16 PortAsNumber )
 {
     trace( "zcPublishRouter Host " + host.toString() + " Station " + name +
            " Port " + QString::number( PortAsNumber ) + " uuid " + uuid  );
@@ -381,19 +361,11 @@ Router *TZConf::zcPublishRouter(const QString &uuid, const QString &name,
         }
         else
         {
-            quint32 remIP = host.toIPv4Address();
-            quint32 locIP = rxAddr.toIPv4Address();
-
-            if (rxAddr.isNull() || (remIP < locIP))
-            {
-                // rxAddr is null from reading a hosts file
-                // This tries to ensure that we only create one connection between routers
-                MinosRouterConnection *msc = new MinosRouterConnection(true);
-                msc->strace(QString("Creating MinosRouterConnection zcPublishServer for %1 host %2 ").arg(name, host.toString()));
-                msc->setClientRouter(sss->station);
-                msc->mConnect(sss);
-                msl->addListenerSlot(msc);
-            }
+            MinosRouterConnection *msc = new MinosRouterConnection(true);
+            msc->strace(QString("Creating MinosRouterConnection zcPublishServer for %1 host %2 ").arg(name, host.toString()));
+            msc->setClientRouter(sss->station);
+            msc->mConnect(sss);
+            msl->addListenerSlot(msc);
         }
         routerList.push_back( sss );
         s = findStation(name);
@@ -432,7 +404,7 @@ QString TZConf::getZConfString(bool beaconreq, const QString &h)
                + " />";
 }
 //==============================================================================
-Router *TZConf::processZConfString(const QString &message, QHostAddress &host, QHostAddress &rxAddr, QDateTime &sendBeaconResponse)
+Router *TZConf::processZConfString(const QString &message, QHostAddress &host, QDateTime &sendBeaconResponse)
 {
     sendBeaconResponse = QDateTime();
     Router *srv = nullptr;
@@ -461,7 +433,7 @@ Router *TZConf::processZConfString(const QString &message, QHostAddress &host, Q
         // publish what came in
 
         quint16 iPort = toQUint16(port, SecondInstall::getRouterPort());
-        srv = zcPublishRouter( UUID, station, host, rxAddr, iPort );
+        srv = zcPublishRouter( UUID, station, host, iPort );
         if ( request.size() && UUID != getRouterId())
         {
             sendBeaconResponse = QDateTime::currentDateTime();   // delay the response, give the other end a chance...
