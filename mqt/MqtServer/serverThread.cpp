@@ -129,6 +129,10 @@ void MinosRouterConnection::setFromId( MinosId &id, RPCRequest *req )
       {
           srv = *srvi;
       }
+      else
+      {
+         srv = *findIp( sock->peerAddress() );
+      }
       if ( srv )
       {
          strace( "ServerSetFromId: server " + srv->station + " connected to us" );
