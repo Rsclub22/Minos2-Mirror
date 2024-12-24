@@ -131,7 +131,11 @@ void MinosRouterConnection::setFromId( MinosId &id, RPCRequest *req )
       }
       else
       {
-         srv = *findIp( sock->peerAddress() );
+         srvi = findIp( sock->peerAddress() );
+          if (srvi != routerList.end())
+          {
+              srv = *srvi;
+          }
       }
       if ( srv )
       {
