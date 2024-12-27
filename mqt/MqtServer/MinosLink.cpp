@@ -251,11 +251,6 @@ void MinosCommonConnection::on_readyRead()
            strace("Bad read in MinosCommonConnection::on_readyRead; remove_socket = true");
           remove_socket = true;
        }
-       // if (rxlen >= 0)
-       // {
-       //     // rxlen == 0 is valid
-       //     lastRx = QDateTime::currentMSecsSinceEpoch();
-       // }
    }
 }
 //==============================================================================

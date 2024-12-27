@@ -128,6 +128,5 @@ class ClubListCalendarYear : public CalendarYear
         virtual QString getFileName();
         virtual QString getPath();
         virtual QString getURL();
-        virtual bool downloadProvisionalFile (bool);
 };
 #endif

@@ -71,7 +71,7 @@ class MinosCommonConnection: public QObject
       bool publish_disconnect = true;
       bool fromIdSet = false;
       QHostAddress connectHost;
-      QHostAddress myAddr;
+      QHostAddress myAddr;  // only populated after connection
 
       MinosCommonConnection();
       virtual void initialise( ) = 0;

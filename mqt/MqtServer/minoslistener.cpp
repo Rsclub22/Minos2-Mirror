@@ -91,10 +91,13 @@ void MinosListener::on_newConnection()
 }
 void MinosListener::on_timeout()
 {
+#ifdef RUBBISH
     if (isRouter())
     {
         // This is intended to remove the second link each process
-        // gets initially
+        // gets initially - but I can't get it to work consistently
+        // so we have to accept two connections between servers
+
         for ( CommonIterator i = i_array.begin(); i != i_array.end(); i++ )
         {
             QString hi = (*i)->getClientRouter();
@@ -128,6 +131,7 @@ void MinosListener::on_timeout()
         }
 
     }
+#endif
 
     bool clearup = false;
     for ( auto &a: i_array )
@@ -213,7 +217,7 @@ void MinosRouterListener::buildTable(QTableWidget *tab)
 {
     tab->clear();
     tab->setRowCount(i_array.count());
-    tab->setColumnCount(3);
+    tab->setColumnCount(4);
     QStringList h = {"name", "sequence", "address", "uuid"};
     tab->setHorizontalHeaderLabels(h);
     int row = 0;
@@ -226,9 +230,9 @@ void MinosRouterListener::buildTable(QTableWidget *tab)
         s = new QTableWidgetItem(QString::number(msc->mySeq));
         tab->setItem(row, 1, s);
         s = new QTableWidgetItem(msc->router()->host.toString());
-        tab->setItem(row, 1, s);
-        s = new QTableWidgetItem(msc->router()->uuid);
         tab->setItem(row, 2, s);
+        s = new QTableWidgetItem(msc->router()->uuid);
+        tab->setItem(row, 3, s);
         row++;
     }
 }
