@@ -95,7 +95,6 @@ public:
 
     Frequency getSendFreq();
     void logRadioSettingsChanged(QSharedPointer<RadioSettingsDialogChangeFlag> logRadioSettingsFlags);
-    void setVmButtonsFrame(TxVmButtonsFrame *txVmButtonsFrame);
     void setContestBand(QString band);
     void rigChangedFromDetails();
 signals:
@@ -231,7 +230,7 @@ private:
     QPalette *freqDisplayPalette;
     bool legalFreq = true;
 
-    TxVmButtonsFrame *txVmButtonsFrame;
+    //TxVmButtonsFrame *txVmButtonsFrame;
 
     const QString RIT_BUTTON_ON_STYLE = QString("background-color: Sandybrown ;\n");
     const QString RIT_BUTTON_OFF_STYLE = QString("background-color: Gainsboro ;\n");
@@ -302,7 +301,6 @@ private:
     bool readIgnorePresetFreqFlag();
     bool readIgnorePreviousFreqFlag();
     void setRitMaxKHzFreq(int maxRitFreq);
-    //int setBandSelComboIndex(QString band);
     void restoreRadioFreq();
     void displayFreqOnFreqEditDisplay(const Frequency &freq);
     void setRadioFreq(Frequency &sendFreq, bool &rigFrameStartFlag);

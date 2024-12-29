@@ -222,7 +222,6 @@ void TSingleLogFrame::createScreenComponents()
     FKHRigControlFrame->setObjectName(QStringLiteral("FKHRigControlFrame"));
     FKHRigControlFrame->setFrameShape(QFrame::StyledPanel);
     FKHRigControlFrame->setFrameShadow(QFrame::Raised);
-    FKHRigControlFrame->setVmButtonsFrame(txVmButtonsFrame);
 
     FKHRigControlFrame->setVisible(false);
 
