@@ -106,7 +106,7 @@ void MinosRouterConnection::mConnect( Router *psrv )
     sock = QSharedPointer<QTcpSocket>(new QTcpSocket);
 
     connect(sock.data(), &QTcpSocket::connected, this, &MinosRouterConnection::on_connected, Qt::UniqueConnection);
-    connect(sock.data(), &QTcpSocket::disconnected, this, &MinosRouterConnection::disconnected, Qt::UniqueConnection);
+    connect(sock.data(), &QTcpSocket::disconnected, this, &MinosRouterConnection::on_disconnected, Qt::UniqueConnection);
     connect(sock.data(), &QTcpSocket::readyRead, this, &MinosRouterConnection::on_readyRead, Qt::UniqueConnection);
     sock->connectToHost(srv->host, srv->port);
 }
