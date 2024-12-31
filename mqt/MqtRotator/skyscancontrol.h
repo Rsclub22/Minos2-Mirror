@@ -89,6 +89,7 @@ private:
     int toStopTypeBearing(int bearing);
     void traceMessage(QString msg);
 
+    int calcNumberOfStepsAvailable(int startBearing, int stepSize, int maxAzimuth);
 };
 
 #endif // SKYSCANCONTROL_H

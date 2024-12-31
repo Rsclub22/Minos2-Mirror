@@ -61,3 +61,20 @@ QString getBearingStateTxt(skyScanBearingStates state)
 {
     return bearingStateTxt[state];
 }
+
+// bearing >= 0
+QString convertBearingToString(int bearing)
+{
+    QString bearingStr = QString::number(bearing);
+
+    if (bearing < 10)
+    {
+        bearingStr = bearingStr.prepend("00");
+    }
+    else if (bearing < 100)
+    {
+        bearingStr = bearingStr.prepend("0");
+    }
+
+    return bearingStr;
+}

@@ -196,13 +196,19 @@ void SkyScanControl::handleRotationBearings(int bearing, skyScanBearingStates br
 
 }
 
-
+int SkyScanControl::calcNumberOfStepsAvailable(int startBearing, int stepSize, int maxAzimuth)
+{
+    int range = maxAzimuth - startBearing/stepSize;
+    return range;
+}
 
 void SkyScanControl::determinePath()
 {
     rotationPath.clear();
     reverseRotationPath.clear(); // Ensure reverse path is also cleared
+
     int bearing = startScanBearing;
+
     // Convert to standard range if needed
     if (southType == S_STOPINV)
     {
@@ -225,11 +231,24 @@ void SkyScanControl::determinePath()
         bearing += stepDegrees;
 
         // Handle wrap-around logic
-        if (bearing > maxRotation) bearing = minRotation + (bearing - maxRotation - 1);
-        if (bearing < minRotation) bearing = maxRotation - (minRotation - bearing - 1);
+        if (bearing > maxRotation)
+        {
+
+            bearing = minRotation + (bearing - maxRotation - 1);
+        }
+
+        if (bearing < minRotation)
+        {
+
+            bearing = maxRotation - (minRotation - bearing - 1);
+        }
 
         // Prevent infinite loops
-        if (bearing == startScanBearing) break;
+        if (bearing == startScanBearing)
+        {
+
+            break;
+        }
     }
 
     // Generate the reverse rotation path
@@ -237,16 +256,30 @@ void SkyScanControl::determinePath()
     while (true)
     {
         bearing -= stepDegrees; // Step backward
-        if (bearing < minRotation) bearing = maxRotation - (minRotation - bearing - 1);
-        if (bearing > maxRotation) bearing = minRotation + (bearing - maxRotation - 1);
+        if (bearing < minRotation)
+        {
 
+            bearing = maxRotation - (minRotation - bearing - 1);
+        }
+
+        if (bearing > maxRotation)
+        {
+
+            bearing = minRotation + (bearing - maxRotation - 1);
+        }
         reverseRotationPath.append(bearing);
 
         // Break if we reach the start angle
-        if (bearing == startScanBearing) break;
-
+        if (bearing == startScanBearing)
+        {
+            break;
+        }
         // Prevent infinite loops
-        if (bearing == endScanBearing) break;
+        if (bearing == endScanBearing)
+        {
+
+            break;
+        }
     }
 }
 

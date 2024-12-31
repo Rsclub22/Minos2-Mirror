@@ -109,6 +109,7 @@ SOURCES += \
     serialdata.cpp \
     serialtvswitch.cpp \
     spotbasedata.cpp \
+    toolbuttonupdown.cpp \
     validators.cpp \
     dxspotdatamodel.cpp \
     qttelnet.cpp \
@@ -212,6 +213,7 @@ HEADERS += \
     serialdata.h \
     serialtvswitch.h \
     spotbasedata.h \
+    toolbuttonupdown.h \
     validators.h \
     voicekeyerCommonConstants.h \
     waitcursor.h \

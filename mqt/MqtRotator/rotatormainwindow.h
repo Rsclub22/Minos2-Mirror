@@ -36,6 +36,7 @@
 #include "rotatorcommon.h"
 #include "presetbutton.h"
 #include "skyscancontrol.h"
+#include "toolbuttonupdown.h"
 
 #define NUM_PRESETS 10
 #define OFF false
@@ -81,6 +82,11 @@ public:
     void initActionsConnections();
 
     const QString version = "2.20";
+
+    int northCalcTarget(int targetBearing, int currentRotatorBearing);
+    int calcRotZero360(int targetBearing);
+    int calcRotNeg180_180(int targetBearing);
+    int calclRot_0_450_Neg180_540(int targetBearing, int currentRotatorBearing);
 
 
 signals:
@@ -181,11 +187,29 @@ private:
     int startSkyScanBrg = 0;
     int endSkyScanBrg = 0;
     int skyScanStepDegrees = 0;
+    int skyScanNumberOfSteps = 0;
     int skyScanPauseMins = 0;
+
+    int skyScanMinAzimuth = COMPASS_MIN0;
+    int skyScanMaxAzimuth = COMPASS_MAX360;
+
+
+    // skyScan Step Degrees Spinbox
 
     int minSkyScanStepDegrees = MIN_SKYSCAN_STEP_DEGREES;
     int maxSkyScanStepDegrees = MAX_SKYSCAN_STEP_DEGREES;
-    int stepDegreesIncrement = STEP_DEGREES_INCREMENT;
+    int stepDegreesIncrement = DEFAULT_SKYSCAN_STEP_DEGREES_INCREMENT;
+
+    // skyScan Start Bearing Spinbox
+
+    int minSkyScanStartBearing = DEFAULT_MIN_SKYSCAN_START_BEARING;
+    int maxSkyScanStartBearing = DEFAULT_MAX_SKYSCAN_START_BEARING;
+
+
+    // skyScan Number of Steps
+    int maxSkyScanNumberOfSteps = DEFAULT_SKYSCAN_NUMBER_OF_STEPS;
+
+    // skyScan Pause Mins Spinbox
 
     int minSkyScanPauseMins = MIN_SKYSCAN_PAUSE_MINS;
     int maxSkyScanPauseMins = MAX_SKYSCAN_PAUSE_MINS;
@@ -304,12 +328,9 @@ private slots:
     void skyScanStopPbPressed();
     void skyScanStartPbPressed();
 
-    void skyScanEndBrgLineEditEditingFinished();
-    void skyScanStartBrgLineEditEditingFinished();
+
     void skyScanSettingsOnCloseChkBoxChanged();
     void skyScanEnableChkBoxChanged();
-
-
 
     void skyScanPausePbPressed();
 
@@ -320,9 +341,14 @@ private slots:
     void skyScanStepDegreesSpinBoxValueChanged(int value);
     void skyScanPauseTimeSpinBoxValueChanged(int value);
 
+    void skyScanNumberOfStepsSpinBoxValueChanged(int value);
+
+
+    void skyScanStartBearingToolbuttonValueChanged(int value);
+    void skyScanEndBearingToolbuttonValueChanged(int value);
 private:
     void rotateTo(int bearing);
-    int northCalcTarget(int targetBearing);
+    //int northCalcTarget(int targetBearing);
 
 
 
@@ -338,9 +364,9 @@ private:
     void stop_button_on();
     void stop_button_off();
     void dispRawRotBearing(int);
-    int calcRotZero360(int targetBearing);
-    int calcRotNeg180_180(int targetBearing);
-    int calclRot_0_450_Neg180_540(int targetBearing);
+    //int calcRotZero360(int targetBearing);
+    //int calcRotNeg180_180(int targetBearing);
+    //int calclRot_0_450_Neg180_540(int targetBearing);
     void dumpRotatorToTraceLog();
     void writeWindowTitle(QString appName);
     void readTraceLogFlag();
@@ -375,7 +401,14 @@ private:
 
 
 
-    void initialiseSpinBox(CustomSpinBox *spinBox, int min, int max, int interval, int initialValue);
+    void initialiseSpinBox(CustomSpinBox *spinBox, int min, int max, int interval, int initialValue, bool readOnly);
+    void saveSkyScanCommonSettings();
+    void initialiseSkyScannerSpinners();
+    void setSkyScanNumberOfStepsSpinBox();
+    void initialiseToolButtonUpDown(ToolButtonUpDown *toolButtonUpDown, int min, int max, int interval, int initialValue);
+    void setSkyScanStartBearingToolButtonUpDown();
+    void setSkyScanEndBearingToolButtonUpDown();
+    void skyScanDisplayRotatorMinAzMaxAz(int minAz, int maxAz);
 };
 
 #endif // ROTATORMAINWINDOW_H

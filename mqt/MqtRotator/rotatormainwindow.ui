@@ -9,15 +9,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>856</width>
-    <height>642</height>
+    <width>819</width>
+    <height>648</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Minos Rotator</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout_29">
+   <layout class="QVBoxLayout" name="verticalLayout_31">
     <item>
      <widget class="MinosSplitter" name="rotSplitter">
       <property name="orientation">
@@ -455,225 +455,298 @@
                    </layout>
                   </item>
                   <item>
-                   <layout class="QHBoxLayout" name="horizontalLayout_22">
+                   <layout class="QHBoxLayout" name="horizontalLayout_15">
                     <item>
-                     <layout class="QVBoxLayout" name="verticalLayout_27">
-                      <item>
-                       <layout class="QHBoxLayout" name="horizontalLayout_23">
-                        <item>
-                         <widget class="QLabel" name="skyScanStepDegreesLabel">
-                          <property name="text">
-                           <string>Step Degrees</string>
-                          </property>
-                         </widget>
-                        </item>
-                        <item>
-                         <widget class="CustomSpinBox" name="skyScanStepDegreeSpinBox">
-                          <property name="minimum">
-                           <number>5</number>
-                          </property>
-                          <property name="maximum">
-                           <number>45</number>
-                          </property>
-                          <property name="singleStep">
-                           <number>5</number>
-                          </property>
-                         </widget>
-                        </item>
-                        <item>
-                         <spacer name="horizontalSpacer_17">
-                          <property name="orientation">
-                           <enum>Qt::Horizontal</enum>
-                          </property>
-                          <property name="sizeHint" stdset="0">
-                           <size>
-                            <width>60</width>
-                            <height>19</height>
-                           </size>
-                          </property>
-                         </spacer>
-                        </item>
-                       </layout>
-                      </item>
-                      <item>
-                       <layout class="QHBoxLayout" name="horizontalLayout_10">
-                        <item>
-                         <widget class="QLabel" name="skyScanStartBrgLabel">
-                          <property name="text">
-                           <string>Start Bearing</string>
-                          </property>
-                         </widget>
-                        </item>
-                        <item>
-                         <widget class="BearingLineEdit" name="skyScanStartBrgLineEdit"/>
-                        </item>
-                        <item>
-                         <spacer name="horizontalSpacer_15">
-                          <property name="orientation">
-                           <enum>Qt::Horizontal</enum>
-                          </property>
-                          <property name="sizeHint" stdset="0">
-                           <size>
-                            <width>40</width>
-                            <height>20</height>
-                           </size>
-                          </property>
-                         </spacer>
-                        </item>
-                       </layout>
-                      </item>
-                      <item>
-                       <layout class="QHBoxLayout" name="horizontalLayout_18">
-                        <item>
-                         <widget class="QLabel" name="skyScanEndBrgLabel">
-                          <property name="text">
-                           <string>End Bearing</string>
-                          </property>
-                         </widget>
-                        </item>
-                        <item>
-                         <widget class="BearingLineEdit" name="skyScanEndBrgLineEdit"/>
-                        </item>
-                        <item>
-                         <spacer name="horizontalSpacer_16">
-                          <property name="orientation">
-                           <enum>Qt::Horizontal</enum>
-                          </property>
-                          <property name="sizeHint" stdset="0">
-                           <size>
-                            <width>40</width>
-                            <height>20</height>
-                           </size>
-                          </property>
-                         </spacer>
-                        </item>
-                       </layout>
-                      </item>
-                      <item>
-                       <layout class="QHBoxLayout" name="horizontalLayout_15">
-                        <item>
-                         <widget class="QLabel" name="skyScanPauseTimeLabel">
-                          <property name="text">
-                           <string>Pause Time Secs</string>
-                          </property>
-                         </widget>
-                        </item>
-                        <item>
-                         <widget class="CustomSpinBox" name="pauseTimeSpinBox">
-                          <property name="maximum">
-                           <number>30</number>
-                          </property>
-                          <property name="value">
-                           <number>1</number>
-                          </property>
-                         </widget>
-                        </item>
-                        <item>
-                         <spacer name="horizontalSpacer_18">
-                          <property name="orientation">
-                           <enum>Qt::Horizontal</enum>
-                          </property>
-                          <property name="sizeHint" stdset="0">
-                           <size>
-                            <width>40</width>
-                            <height>20</height>
-                           </size>
-                          </property>
-                         </spacer>
-                        </item>
-                       </layout>
-                      </item>
-                     </layout>
+                     <widget class="QLabel" name="skyScanStepDegreesLabel">
+                      <property name="text">
+                       <string>Step Degrees</string>
+                      </property>
+                     </widget>
                     </item>
                     <item>
-                     <layout class="QVBoxLayout" name="verticalLayout_26">
-                      <item>
-                       <layout class="QHBoxLayout" name="horizontalLayout_21">
-                        <item>
-                         <widget class="QLabel" name="nextStepLbl">
-                          <property name="font">
-                           <font>
-                            <bold>true</bold>
-                           </font>
-                          </property>
-                          <property name="text">
-                           <string>Next Step:</string>
-                          </property>
-                         </widget>
-                        </item>
-                        <item>
-                         <widget class="QLabel" name="nextStepDegrees">
-                          <property name="font">
-                           <font>
-                            <pointsize>16</pointsize>
-                            <bold>true</bold>
-                           </font>
-                          </property>
-                          <property name="text">
-                           <string>000</string>
-                          </property>
-                         </widget>
-                        </item>
-                        <item>
-                         <spacer name="horizontalSpacer_20">
-                          <property name="orientation">
-                           <enum>Qt::Horizontal</enum>
-                          </property>
-                          <property name="sizeHint" stdset="0">
-                           <size>
-                            <width>78</width>
-                            <height>17</height>
-                           </size>
-                          </property>
-                         </spacer>
-                        </item>
-                       </layout>
-                      </item>
-                      <item>
-                       <layout class="QHBoxLayout" name="horizontalLayout_14">
-                        <item>
-                         <widget class="QLabel" name="pauseCountLbl">
-                          <property name="font">
-                           <font>
-                            <bold>true</bold>
-                           </font>
-                          </property>
-                          <property name="text">
-                           <string>Pause Count:</string>
-                          </property>
-                         </widget>
-                        </item>
-                        <item>
-                         <widget class="QLabel" name="pauseTimeCountDownLbl">
-                          <property name="font">
-                           <font>
-                            <pointsize>16</pointsize>
-                            <bold>true</bold>
-                           </font>
-                          </property>
-                          <property name="text">
-                           <string>1:00</string>
-                          </property>
-                         </widget>
-                        </item>
-                        <item>
-                         <spacer name="horizontalSpacer_21">
-                          <property name="orientation">
-                           <enum>Qt::Horizontal</enum>
-                          </property>
-                          <property name="sizeHint" stdset="0">
-                           <size>
-                            <width>40</width>
-                            <height>20</height>
-                           </size>
-                          </property>
-                         </spacer>
-                        </item>
-                       </layout>
-                      </item>
-                     </layout>
+                     <widget class="CustomSpinBox" name="skyScanStepDegreeSpinBox">
+                      <property name="minimum">
+                       <number>5</number>
+                      </property>
+                      <property name="maximum">
+                       <number>45</number>
+                      </property>
+                      <property name="singleStep">
+                       <number>5</number>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QLabel" name="skyScanPauseTimeLabel">
+                      <property name="text">
+                       <string>Pause Time Min</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="CustomSpinBox" name="skyScanPauseTimeSpinBox">
+                      <property name="maximum">
+                       <number>30</number>
+                      </property>
+                      <property name="value">
+                       <number>1</number>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <spacer name="horizontalSpacer_18">
+                      <property name="orientation">
+                       <enum>Qt::Horizontal</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>40</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                     </spacer>
                     </item>
                    </layout>
+                  </item>
+                  <item>
+                   <layout class="QVBoxLayout" name="verticalLayout_30">
+                    <item>
+                     <widget class="QGroupBox" name="skyScanRawBearingsGroupBox">
+                      <property name="title">
+                       <string>Raw Bearings</string>
+                      </property>
+                      <layout class="QVBoxLayout" name="verticalLayout_32">
+                       <item>
+                        <layout class="QHBoxLayout" name="horizontalLayout_24">
+                         <item>
+                          <layout class="QVBoxLayout" name="verticalLayout_26">
+                           <item>
+                            <layout class="QHBoxLayout" name="horizontalLayout_14">
+                             <item>
+                              <widget class="QLabel" name="skyScanRotatorMinAzLbl">
+                               <property name="text">
+                                <string>Rotator Min Az:</string>
+                               </property>
+                              </widget>
+                             </item>
+                             <item>
+                              <widget class="QLabel" name="skyScanRotatorDisplayMinAz">
+                               <property name="text">
+                                <string>000</string>
+                               </property>
+                              </widget>
+                             </item>
+                             <item>
+                              <spacer name="horizontalSpacer_16">
+                               <property name="orientation">
+                                <enum>Qt::Horizontal</enum>
+                               </property>
+                               <property name="sizeHint" stdset="0">
+                                <size>
+                                 <width>40</width>
+                                 <height>20</height>
+                                </size>
+                               </property>
+                              </spacer>
+                             </item>
+                            </layout>
+                           </item>
+                           <item>
+                            <layout class="QHBoxLayout" name="horizontalLayout_18">
+                             <item>
+                              <widget class="QLabel" name="skyScanStartBrgLabel">
+                               <property name="text">
+                                <string>Start Bearing:</string>
+                               </property>
+                              </widget>
+                             </item>
+                             <item>
+                              <widget class="ToolButtonUpDown" name="skyScanStartBearingUpDownButtons">
+                               <property name="text">
+                                <string>TextLabel</string>
+                               </property>
+                              </widget>
+                             </item>
+                             <item>
+                              <spacer name="horizontalSpacer_15">
+                               <property name="orientation">
+                                <enum>Qt::Horizontal</enum>
+                               </property>
+                               <property name="sizeHint" stdset="0">
+                                <size>
+                                 <width>40</width>
+                                 <height>20</height>
+                                </size>
+                               </property>
+                              </spacer>
+                             </item>
+                            </layout>
+                           </item>
+                          </layout>
+                         </item>
+                         <item>
+                          <widget class="Line" name="line_3">
+                           <property name="orientation">
+                            <enum>Qt::Vertical</enum>
+                           </property>
+                          </widget>
+                         </item>
+                         <item>
+                          <layout class="QVBoxLayout" name="verticalLayout_27">
+                           <item>
+                            <layout class="QHBoxLayout" name="horizontalLayout_23">
+                             <item>
+                              <widget class="QLabel" name="skyScanRotatorMaxAzLbl">
+                               <property name="text">
+                                <string>Rotator Max Az:</string>
+                               </property>
+                              </widget>
+                             </item>
+                             <item>
+                              <widget class="QLabel" name="skyScanRotatorDisplayMaxAz">
+                               <property name="text">
+                                <string>000</string>
+                               </property>
+                              </widget>
+                             </item>
+                             <item>
+                              <spacer name="horizontalSpacer_17">
+                               <property name="orientation">
+                                <enum>Qt::Horizontal</enum>
+                               </property>
+                               <property name="sizeHint" stdset="0">
+                                <size>
+                                 <width>40</width>
+                                 <height>20</height>
+                                </size>
+                               </property>
+                              </spacer>
+                             </item>
+                            </layout>
+                           </item>
+                           <item>
+                            <layout class="QHBoxLayout" name="horizontalLayout_21">
+                             <item>
+                              <widget class="QLabel" name="skyScanEndBrgLabel">
+                               <property name="text">
+                                <string>End Bearing:</string>
+                               </property>
+                              </widget>
+                             </item>
+                             <item>
+                              <widget class="ToolButtonUpDown" name="skyScanEndBearingUpDownButtons">
+                               <property name="text">
+                                <string>TextLabel</string>
+                               </property>
+                              </widget>
+                             </item>
+                             <item>
+                              <spacer name="horizontalSpacer_22">
+                               <property name="orientation">
+                                <enum>Qt::Horizontal</enum>
+                               </property>
+                               <property name="sizeHint" stdset="0">
+                                <size>
+                                 <width>40</width>
+                                 <height>20</height>
+                                </size>
+                               </property>
+                              </spacer>
+                             </item>
+                            </layout>
+                           </item>
+                          </layout>
+                         </item>
+                        </layout>
+                       </item>
+                      </layout>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QGroupBox" name="groupBox_2">
+                      <property name="title">
+                       <string>Compas Bearings</string>
+                      </property>
+                      <layout class="QVBoxLayout" name="verticalLayout_29">
+                       <item>
+                        <layout class="QHBoxLayout" name="horizontalLayout_16">
+                         <item>
+                          <widget class="QLabel" name="skyScanCompassStartBearingLabel">
+                           <property name="text">
+                            <string>Start Bearing:</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item>
+                          <widget class="QLabel" name="skyScanCompassStartBearingDisplay">
+                           <property name="text">
+                            <string>000</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item>
+                          <spacer name="horizontalSpacer_24">
+                           <property name="orientation">
+                            <enum>Qt::Horizontal</enum>
+                           </property>
+                           <property name="sizeHint" stdset="0">
+                            <size>
+                             <width>40</width>
+                             <height>20</height>
+                            </size>
+                           </property>
+                          </spacer>
+                         </item>
+                         <item>
+                          <widget class="Line" name="line_4">
+                           <property name="orientation">
+                            <enum>Qt::Vertical</enum>
+                           </property>
+                          </widget>
+                         </item>
+                         <item>
+                          <widget class="QLabel" name="skyScanCompassEndBearingLabel">
+                           <property name="text">
+                            <string>End Bearing:</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item>
+                          <widget class="QLabel" name="skyScanCompassEndBearingDisplay">
+                           <property name="text">
+                            <string>000</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item>
+                          <widget class="QLabel" name="skyScanOverlapDisplay">
+                           <property name="text">
+                            <string>TextLabel</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item>
+                          <spacer name="horizontalSpacer_23">
+                           <property name="orientation">
+                            <enum>Qt::Horizontal</enum>
+                           </property>
+                           <property name="sizeHint" stdset="0">
+                            <size>
+                             <width>40</width>
+                             <height>20</height>
+                            </size>
+                           </property>
+                          </spacer>
+                         </item>
+                        </layout>
+                       </item>
+                      </layout>
+                     </widget>
+                    </item>
+                   </layout>
+                  </item>
+                  <item>
+                   <layout class="QHBoxLayout" name="horizontalLayout_22"/>
                   </item>
                   <item>
                    <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -683,6 +756,86 @@
                        <enum>Qt::Horizontal</enum>
                       </property>
                      </widget>
+                    </item>
+                    <item>
+                     <layout class="QHBoxLayout" name="horizontalLayout_10">
+                      <item>
+                       <spacer name="horizontalSpacer_20">
+                        <property name="orientation">
+                         <enum>Qt::Horizontal</enum>
+                        </property>
+                        <property name="sizeHint" stdset="0">
+                         <size>
+                          <width>40</width>
+                          <height>20</height>
+                         </size>
+                        </property>
+                       </spacer>
+                      </item>
+                      <item>
+                       <widget class="QLabel" name="nextStepLbl">
+                        <property name="font">
+                         <font>
+                          <bold>true</bold>
+                         </font>
+                        </property>
+                        <property name="text">
+                         <string>Next Step:</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QLabel" name="nextStepDegrees">
+                        <property name="font">
+                         <font>
+                          <pointsize>16</pointsize>
+                          <bold>true</bold>
+                         </font>
+                        </property>
+                        <property name="text">
+                         <string>000</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QLabel" name="pauseCountLbl">
+                        <property name="font">
+                         <font>
+                          <bold>true</bold>
+                         </font>
+                        </property>
+                        <property name="text">
+                         <string>Pause Count:</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QLabel" name="pauseTimeCountDownLbl">
+                        <property name="font">
+                         <font>
+                          <pointsize>16</pointsize>
+                          <bold>true</bold>
+                         </font>
+                        </property>
+                        <property name="text">
+                         <string>1:00</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <spacer name="horizontalSpacer_21">
+                        <property name="orientation">
+                         <enum>Qt::Horizontal</enum>
+                        </property>
+                        <property name="sizeHint" stdset="0">
+                         <size>
+                          <width>40</width>
+                          <height>20</height>
+                         </size>
+                        </property>
+                       </spacer>
+                      </item>
+                     </layout>
                     </item>
                     <item>
                      <layout class="QHBoxLayout" name="horizontalLayout_17">
@@ -1140,6 +1293,11 @@
    <class>CustomSpinBox</class>
    <extends>QSpinBox</extends>
    <header>rotatorMainWindow.h</header>
+  </customwidget>
+  <customwidget>
+   <class>ToolButtonUpDown</class>
+   <extends>QLabel</extends>
+   <header>toolbuttonupdown.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
