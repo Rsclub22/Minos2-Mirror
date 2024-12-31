@@ -75,7 +75,7 @@ MinosAppConnection::MinosAppConnection( const QString &myid ) : myId(myid)
     connect(&waitConnectTimer, &QTimer::timeout, this, &MinosAppConnection::on_waitConnectTimeout);
     connect(sock.data(), &QTcpSocket::readyRead, this, &MinosAppConnection::on_readyRead);
     connect(sock.data(), &QTcpSocket::connected, this, &MinosAppConnection::on_connected);
-    connect(sock.data(), &QTcpSocket::disconnected, this, &MinosAppConnection::on_disconnected);
+    connect(sock.data(), &QTcpSocket::disconnected, this, &MinosAppConnection::on_appDisconnected);
 }
 MinosAppConnection::~MinosAppConnection()
 {
@@ -105,7 +105,7 @@ void MinosAppConnection::on_connected()
     RPCPubSub::reconnectPubSub();
 }
 
-void MinosAppConnection::on_disconnected()
+void MinosAppConnection::on_appDisconnected()
 {
     trace("MinosAppConnection::on_disconnected");
     closeDaemonThread();

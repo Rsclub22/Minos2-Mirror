@@ -59,6 +59,8 @@ private slots:
       void on_connected();
       virtual void sendKeepAlive( ) override;
       virtual void sendCloseSocket( ) override;
+      void connectionError(QAbstractSocket::SocketError);
+      void on_hostFound();
 };
 //==============================================================================
 #endif

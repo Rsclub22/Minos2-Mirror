@@ -32,11 +32,26 @@ void MinosRouterConnection::initialise()
     connectHost = h;
     connect(sock.data(), &QTcpSocket::readyRead, this, &MinosRouterConnection::on_readyRead, Qt::UniqueConnection);
     connect(sock.data(), &QTcpSocket::disconnected, this, &MinosRouterConnection::on_disconnected, Qt::UniqueConnection);
+    connect(sock.data(), &QTcpSocket::hostFound, this, &MinosRouterConnection::on_hostFound, Qt::UniqueConnection);
+    connect(sock.data(), &QTcpSocket::connected, this, &MinosRouterConnection::on_connected, Qt::UniqueConnection);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+    connect(sock.data(), &QTcpSocket::errorOccurred, this, &MinosRouterConnection::connectionError);
+#else
+    connect(sock.data(), SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(MinosRouterConnection(QAbstractSocket::SocketError)));
+#endif
+
 
     connect(&resubscribeTimer, &QTimer::timeout, this, &MinosRouterConnection::sendKeepAlive, Qt::UniqueConnection);
     resubscribeTimer.start(1000);
 }
-
+void MinosRouterConnection::connectionError(QAbstractSocket::SocketError /*error*/)
+{
+    strace("MinosRouterConnection::connectionError Socket error: " + sock->errorString());
+}
+void MinosRouterConnection::on_hostFound()
+{
+    strace("MinosRouterConnection::on_hostFound");
+}
 MinosRouterConnection::~MinosRouterConnection()
 {
 }
@@ -91,7 +106,7 @@ void MinosRouterConnection::mConnect( Router *psrv )
     sock = QSharedPointer<QTcpSocket>(new QTcpSocket);
 
     connect(sock.data(), &QTcpSocket::connected, this, &MinosRouterConnection::on_connected, Qt::UniqueConnection);
-    connect(sock.data(), &QTcpSocket::disconnected, this, &MinosRouterConnection::on_disconnected, Qt::UniqueConnection);
+    connect(sock.data(), &QTcpSocket::disconnected, this, &MinosRouterConnection::disconnected, Qt::UniqueConnection);
     connect(sock.data(), &QTcpSocket::readyRead, this, &MinosRouterConnection::on_readyRead, Qt::UniqueConnection);
     sock->connectToHost(srv->host, srv->port);
 }
