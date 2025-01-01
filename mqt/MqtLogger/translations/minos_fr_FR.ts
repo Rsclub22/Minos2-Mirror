@@ -3437,7 +3437,7 @@ Non - Ignorer les modifications</translation>
     </message>
     <message>
         <location filename="../rigcontrolframe.cpp" line="1381"/>
-        <location filename="../rigcontrolframe.cpp" line="2307"/>
+        <location filename="../rigcontrolframe.cpp" line="2299"/>
         <source>No %1 Band found for this radio!</source>
         <translation>Aucune Bande %1 trouvée pour cette radio!</translation>
     </message>
@@ -5835,27 +5835,27 @@ Veuillez confirmer cette action en appuyant sur &amp;quot;Oui&amp;quot;.</transl
 <context>
     <name>TSingleLogFrame</name>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="994"/>
+        <location filename="../tsinglelogframe.cpp" line="993"/>
         <source>Failed to open %1</source>
         <translation>L&apos;Ouverture échoué %1</translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1008"/>
+        <location filename="../tsinglelogframe.cpp" line="1007"/>
         <source>Save imported log as a .minos file</source>
         <translation>Enregistrer le Log importé en tant que fichier .minos</translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1534"/>
+        <location filename="../tsinglelogframe.cpp" line="1533"/>
         <source>No unfilled contacts</source>
         <translation>Pas de contacts  non remplis</translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1553"/>
+        <location filename="../tsinglelogframe.cpp" line="1552"/>
         <source>Please give serial wanted</source>
         <translation>Numéro de série requis</translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1575"/>
+        <location filename="../tsinglelogframe.cpp" line="1574"/>
         <source>Serial number %1 not found</source>
         <translation>Numéro de série %1 introuvable</translation>
     </message>

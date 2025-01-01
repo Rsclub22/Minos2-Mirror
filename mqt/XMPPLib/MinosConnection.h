@@ -55,7 +55,7 @@ class MinosAppConnection:public QObject, RPCDispatcher
       void on_waitConnectTimeout();
       void on_readyRead();
       void on_connected();
-      void on_disconnected();
+      void on_appDisconnected();
 
   signals:
       void routerClosed();

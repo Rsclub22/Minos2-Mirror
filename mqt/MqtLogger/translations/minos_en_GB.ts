@@ -3273,7 +3273,7 @@ No          - Discard changes</source>
     </message>
     <message>
         <location filename="../rigcontrolframe.cpp" line="1381"/>
-        <location filename="../rigcontrolframe.cpp" line="2307"/>
+        <location filename="../rigcontrolframe.cpp" line="2299"/>
         <source>No %1 Band found for this radio!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5633,27 +5633,27 @@ Please confirm this action by pressing &quot;Yes&quot;.</source>
 <context>
     <name>TSingleLogFrame</name>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="994"/>
+        <location filename="../tsinglelogframe.cpp" line="993"/>
         <source>Failed to open %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1008"/>
+        <location filename="../tsinglelogframe.cpp" line="1007"/>
         <source>Save imported log as a .minos file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1534"/>
+        <location filename="../tsinglelogframe.cpp" line="1533"/>
         <source>No unfilled contacts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1553"/>
+        <location filename="../tsinglelogframe.cpp" line="1552"/>
         <source>Please give serial wanted</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1575"/>
+        <location filename="../tsinglelogframe.cpp" line="1574"/>
         <source>Serial number %1 not found</source>
         <translation type="unfinished"></translation>
     </message>
