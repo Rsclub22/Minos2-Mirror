@@ -81,7 +81,7 @@ cd Hamlib
 
 # get the hamlib 4.6 release branch
 
-git checkout Hamlib-4.6.0
+git checkout Hamlib-4.6
 
 # and run the build
 

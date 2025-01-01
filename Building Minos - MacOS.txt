@@ -25,7 +25,7 @@ This is based on Xcode on MacOS Sonoma
     Download the QT installer - go to https://www.qt.io/download-qt-installer
     Run the installer. You will need to set up a Qt account.
     
-    Install at least Qt 6.6.0. Under "Additional libraries" you need at least 
+    Install at least Qt 6.8.1. Under "Additional libraries" you need at least 
         Qt Charts, Qt Location, Qt positioning and Qt Serial Port
  
 5) Download Minos Source Code
@@ -57,18 +57,9 @@ git clone https://github.com/Hamlib/Hamlib.git
 
 cd Hamlib
 
-If 4.6 has been released
-
 # get the hamlib 4.6.0 release branch
 
-git checkout Hamlib-4.6.0
-
-
-Otherwise, 
-
-# get the main development branch
-
-git checkout master
+git checkout Hamlib-4.6
 
 # and run the build
 
@@ -79,7 +70,7 @@ sudo make install
 
 8) You should now be able to go ahead with the build.
 
-	export PATH="~/qt/6.6.0/bin:$PATH"
+	export PATH="~/qt/6.8.1/bin:$PATH"
 	cd ~/mqt/Installer
 	./macInstall.sh
 
