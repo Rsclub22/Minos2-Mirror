@@ -8,7 +8,7 @@ Clone the repository
 Switch to the latest release branch (currently 4.6)
 
     cd Minos2
-    git checkout Mqt_Release_2.6.0.0
+    git checkout Mqt_Release_2.7.x.x
 
 And follow the instructions in the relevant "Building Minos - <OS>.txt"
 
