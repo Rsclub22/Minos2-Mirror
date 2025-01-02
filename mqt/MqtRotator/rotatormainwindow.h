@@ -187,7 +187,7 @@ private:
     int startSkyScanBrg = 0;
     int endSkyScanBrg = 0;
     int skyScanStepDegrees = 0;
-    int skyScanNumberOfSteps = 0;
+
     int skyScanPauseMins = 0;
 
     int skyScanMinAzimuth = COMPASS_MIN0;
@@ -198,22 +198,18 @@ private:
 
     int minSkyScanStepDegrees = MIN_SKYSCAN_STEP_DEGREES;
     int maxSkyScanStepDegrees = MAX_SKYSCAN_STEP_DEGREES;
-    int stepDegreesIncrement = DEFAULT_SKYSCAN_STEP_DEGREES_INCREMENT;
+    int stepDegreesIncrement = SKYSCAN_STEP_DEGREES;
 
     // skyScan Start Bearing Spinbox
 
-    int minSkyScanStartBearing = DEFAULT_MIN_SKYSCAN_START_BEARING;
-    int maxSkyScanStartBearing = DEFAULT_MAX_SKYSCAN_START_BEARING;
-
-
-    // skyScan Number of Steps
-    int maxSkyScanNumberOfSteps = DEFAULT_SKYSCAN_NUMBER_OF_STEPS;
+    int minSkyScanStartBearing = DEFAULT_VALUE_READ_INI;
+    int maxSkyScanStartBearing = DEFAULT_VALUE_READ_INI;
 
     // skyScan Pause Mins Spinbox
 
     int minSkyScanPauseMins = MIN_SKYSCAN_PAUSE_MINS;
     int maxSkyScanPauseMins = MAX_SKYSCAN_PAUSE_MINS;
-    int skyScanPauseStepIncrement = SKYSCAN_PAUSE_STEP_INCREMENT_MINS;
+    int skyScanPauseStepIncrement = DEFAULT_VALUE_READ_INI;
 
     int openRotator();
     void closeRotator();
@@ -341,7 +337,6 @@ private slots:
     void skyScanStepDegreesSpinBoxValueChanged(int value);
     void skyScanPauseTimeSpinBoxValueChanged(int value);
 
-    void skyScanNumberOfStepsSpinBoxValueChanged(int value);
 
 
     void skyScanStartBearingToolbuttonValueChanged(int value);
@@ -394,7 +389,8 @@ private:
     bool isSkyScanEnabled();
     void setTargetTabEnabled(bool enabled);
     void setPresetsGroupBoxEnabled(bool enabled);
-    void setSkyScanLineEditBoxesEnabled(bool enabled);
+    void setSkyScanSpinBoxesEnabled(bool enabled);
+    void setSkyScanToolButtonUpDownEnabled(bool enabled);
     void stopSkyScan();
     void setSkyScanStartButtonColour(QString style);
     void setSkyScanStopButtonColour(QString style);
@@ -404,7 +400,7 @@ private:
     void initialiseSpinBox(CustomSpinBox *spinBox, int min, int max, int interval, int initialValue, bool readOnly);
     void saveSkyScanCommonSettings();
     void initialiseSkyScannerSpinners();
-    void setSkyScanNumberOfStepsSpinBox();
+
     void initialiseToolButtonUpDown(ToolButtonUpDown *toolButtonUpDown, int min, int max, int interval, int initialValue);
     void setSkyScanStartBearingToolButtonUpDown();
     void setSkyScanEndBearingToolButtonUpDown();

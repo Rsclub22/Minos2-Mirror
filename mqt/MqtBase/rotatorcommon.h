@@ -149,15 +149,10 @@ enum overlapStat { NO_OVERLAP, NEG_OVERLAP, POS_OVERLAP};
 // SkyScan Default Values
 inline const int MIN_SKYSCAN_STEP_DEGREES = 5;
 inline const int MAX_SKYSCAN_STEP_DEGREES = 45;
-inline const int DEFAULT_SKYSCAN_STEP_DEGREES_INCREMENT = 10000;
+inline const int SKYSCAN_STEP_DEGREES = 5;
+inline const int DEFAULT_VALUE_READ_INI = 10000;    // no value stored in ini file
 inline const int MIN_SKYSCAN_PAUSE_MINS = 1;
 inline const int MAX_SKYSCAN_PAUSE_MINS = 45;
-inline const int SKYSCAN_PAUSE_STEP_INCREMENT_MINS = 10000;
-inline const int DEFAULT_MIN_SKYSCAN_START_BEARING = 10000;
-inline const int DEFAULT_MAX_SKYSCAN_START_BEARING = 10000;
-inline const int DEFAULT_SKYSCAN_START_BEARING = 10000;
-inline const int DEFAULT_SKYSCAN_NUMBER_OF_STEPS =  10000;
-inline const int DEFAULT_SKYSCAN_END_BEARING = 10000;
 
 // Pushbutton Styles
 

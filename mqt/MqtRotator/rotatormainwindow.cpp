@@ -2787,17 +2787,21 @@ void RotatorMainWindow::initialiseSkyScannerSpinners()
 
     initialiseSpinBox(ui->skyScanStepDegreeSpinBox, minSkyScanStepDegrees, maxSkyScanStepDegrees, stepDegreesIncrement, minSkyScanStepDegrees, true);
     initialiseSpinBox(ui->skyScanPauseTimeSpinBox, minSkyScanPauseMins, maxSkyScanPauseMins, skyScanPauseStepIncrement, minSkyScanPauseMins, true);
-    //initialiseSpinBox(ui->skyScanStartBearingSpinBox, 0, 360, minSkyScanStepDegrees, 0, true);      // !!!!!! get rid of magic numbers!!!!!!!
-    //initialiseSpinBox(ui->skyScanNumberOfStepsSpinBox, 0, 360/minSkyScanStepDegrees, 1, 0, true);
 
 }
 
 
-void RotatorMainWindow::setSkyScanLineEditBoxesEnabled(bool enabled)
+void RotatorMainWindow::setSkyScanSpinBoxesEnabled(bool enabled)
 {
-    //ui->skyScanStartBearingSpinBox->setEnabled(enabled);
     ui->skyScanStepDegreeSpinBox->setEnabled(enabled);
     ui->skyScanPauseTimeSpinBox->setEnabled(enabled);
+}
+
+
+void RotatorMainWindow::setSkyScanToolButtonUpDownEnabled(bool enabled)
+{
+    ui->skyScanStartBearingUpDownButtons->setEnabled(enabled);
+    ui->skyScanEndBearingUpDownButtons->setEnabled(enabled);
 }
 
 void RotatorMainWindow::setSkyScanEnableChkBoxEnabled(bool enabled)
@@ -2888,7 +2892,7 @@ void RotatorMainWindow::initialiseSpinBox(CustomSpinBox *spinBox, int min, int m
     // Make the QSpinBox non-editable but keep the arrows functional
     spinBox->setButtonSymbols(QAbstractSpinBox::UpDownArrows); // Ensure arrows are visible
     //spinBox->setKeyboardTracking(false); // Optional: Prevent value change by typing
-    spinBox->setReadOnlyLineEdit(readOnly);
+    //spinBox->setReadOnly(true);
     spinBox->setFocusPolicy(Qt::NoFocus); // Prevent text highlighting
 }
 
@@ -2905,31 +2909,14 @@ void RotatorMainWindow::skyScanStepDegreesSpinBoxValueChanged(int value)
     skyScanStepDegrees = value;
     trace(QString("Skyscan step Degrees set to %1").arg(skyScanStepDegrees));
 
-}
-
-
-void RotatorMainWindow::setSkyScanNumberOfStepsSpinBox()
-{
-
-    trace(QString("skyscan set number of steps spinbox"));
-
-    if (setupAntenna->currentAntenna.rotType == ROT_0_360)
-    {
-        int numberSteps = (setupAntenna->currentAntenna.max_azimuth - startSkyScanBrg)/ skyScanStepDegrees;
-        initialiseSpinBox(ui->skyScanStepDegreeSpinBox, 0, numberSteps, 1, 0, true);
-    }
-}
-
-
-void RotatorMainWindow::skyScanNumberOfStepsSpinBoxValueChanged(int value)
-{
-    int calcEndBearing = startSkyScanBrg + (value * skyScanStepDegrees);
-    if (calcEndBearing <= setupAntenna->currentAntenna.max_azimuth)
-    {
-        //ui->skyScanEndBearingDisplay->setText(QString::number(calcEndBearing));
-    }
+    ui->skyScanStartBearingUpDownButtons->setStep(value);
+    ui->skyScanEndBearingUpDownButtons->setStep(value);
 
 }
+
+
+
+
 
 void RotatorMainWindow::skyScanPauseTimeSpinBoxValueChanged(int value)
 {
@@ -2949,12 +2936,17 @@ void RotatorMainWindow::setSkyScanStartBearingToolButtonUpDown()
                                skyScanMinAzimuth,
                                skyScanMaxAzimuth,
                                skyScanStepDegrees,
-                               skyScanMinAzimuth);
+                               startSkyScanBrg);
+
+    skyScanStartBearingToolbuttonValueChanged(startSkyScanBrg);
 
 }
 
 void RotatorMainWindow::skyScanStartBearingToolbuttonValueChanged(int value)
 {
+
+    startSkyScanBrg = value;
+
     //********************* need to cope with different rotator values
 
     QString compassStartBearing = convertBearingToString(value);
@@ -2969,11 +2961,16 @@ void RotatorMainWindow::setSkyScanEndBearingToolButtonUpDown()
                                 skyScanMinAzimuth,
                                 skyScanMaxAzimuth,
                                 skyScanStepDegrees,
-                                skyScanMinAzimuth);
+                                endSkyScanBrg);
+
+    skyScanEndBearingToolbuttonValueChanged(endSkyScanBrg);
 }
 
 void RotatorMainWindow::skyScanEndBearingToolbuttonValueChanged(int value)
 {
+
+    endSkyScanBrg = value;
+
     //********************* need to cope with different rotator values
 
     QString compassEndBearing = convertBearingToString(value);
@@ -2995,7 +2992,8 @@ void RotatorMainWindow::skyScanStartPbPressed()
 
         setTargetTabEnabled(false);
         setPresetsGroupBoxEnabled(false);
-        setSkyScanLineEditBoxesEnabled(false);
+        setSkyScanSpinBoxesEnabled(false);
+        setSkyScanToolButtonUpDownEnabled(false);
 
         skyScanControl->initSkyScan(setupAntenna->currentAntenna.southStopType,
                                 setupAntenna->currentAntenna.min_azimuth,
@@ -3046,7 +3044,8 @@ void RotatorMainWindow::stopSkyScan()
     skyScanActive = false;
     setTargetTabEnabled(true);
     setPresetsGroupBoxEnabled(true);
-    setSkyScanLineEditBoxesEnabled(true);
+    setSkyScanSpinBoxesEnabled(true);
+    setSkyScanToolButtonUpDownEnabled(true);
 }
 
 
@@ -3094,10 +3093,8 @@ void RotatorMainWindow::saveSkyScanSettings(QString currentAntennaName)
     config.setValue("startSkyScanBearing", startSkyScanBrg);
     config.setValue("minSkyScanStartBearing", minSkyScanStartBearing);
     config.setValue("maxSkyScanStartBearing", maxSkyScanStartBearing);
-    config.setValue("maxSkyScanNumberOfSteps", maxSkyScanNumberOfSteps);
     config.setValue("endSkyScanBearing", endSkyScanBrg);
     config.setValue("skyScanStepDegrees", skyScanStepDegrees);
-    config.setValue("skyScanNumberOfSteps", skyScanNumberOfSteps);
     config.setValue("skyScanPauseMins", skyScanPauseMins);
 
     config.endGroup();
@@ -3115,13 +3112,11 @@ void RotatorMainWindow::readSkyScanSettings(QString currentAntennaName)
     config.beginGroup(currentAntennaName);
 
     saveSkyScanOnClose = config.value("saveSkyScanOnClose", true).toBool();
-    startSkyScanBrg = config.value("startSkyScanBearing", DEFAULT_SKYSCAN_START_BEARING).toInt();
-    minSkyScanStartBearing = config.value("minSkyScanStartBearing", DEFAULT_MIN_SKYSCAN_START_BEARING).toInt();
-    maxSkyScanStartBearing = config.value("maxSkyScanStartBearing", DEFAULT_MAX_SKYSCAN_START_BEARING).toInt();
-    maxSkyScanNumberOfSteps = config.value("maxSkyScanNumberOfSteps", DEFAULT_SKYSCAN_NUMBER_OF_STEPS).toInt();
-    endSkyScanBrg = config.value("endSkyScanBearing", DEFAULT_SKYSCAN_END_BEARING).toInt();
-    skyScanStepDegrees = config.value("skyScanStepDegrees", DEFAULT_SKYSCAN_STEP_DEGREES_INCREMENT).toInt();
-    skyScanNumberOfSteps = config.value("skyScanNumberOfSteps", DEFAULT_SKYSCAN_NUMBER_OF_STEPS).toInt();
+    startSkyScanBrg = config.value("startSkyScanBearing", DEFAULT_VALUE_READ_INI).toInt();
+    minSkyScanStartBearing = config.value("minSkyScanStartBearing", DEFAULT_VALUE_READ_INI).toInt();
+    maxSkyScanStartBearing = config.value("maxSkyScanStartBearing", DEFAULT_VALUE_READ_INI).toInt();
+    endSkyScanBrg = config.value("endSkyScanBearing", DEFAULT_VALUE_READ_INI).toInt();
+    skyScanStepDegrees = config.value("skyScanStepDegrees", DEFAULT_VALUE_READ_INI).toInt();
     skyScanPauseMins = config.value("skyScanPauseMins", MIN_SKYSCAN_PAUSE_MINS).toInt();
 
     config.endGroup();
@@ -3157,11 +3152,11 @@ void RotatorMainWindow::readSkyScanCommonSettings()
 
     minSkyScanStepDegrees = config.value("minSkyScanStepDegrees", MIN_SKYSCAN_STEP_DEGREES).toInt();
     maxSkyScanStepDegrees = config.value("maxSkyScanStepDegrees", MAX_SKYSCAN_STEP_DEGREES).toInt();
-    stepDegreesIncrement = config.value("skyScanStepIncrement", DEFAULT_SKYSCAN_STEP_DEGREES_INCREMENT).toInt();
+    stepDegreesIncrement = config.value("skyScanStepIncrement", DEFAULT_VALUE_READ_INI).toInt();
 
     minSkyScanPauseMins = config.value("minSkyScanPauseMins", MIN_SKYSCAN_PAUSE_MINS).toInt();
     maxSkyScanPauseMins = config.value("maxSkyScanPauseMins", MAX_SKYSCAN_PAUSE_MINS).toInt();
-    skyScanPauseStepIncrement = config.value("skyScanPauseStepMins", SKYSCAN_PAUSE_STEP_INCREMENT_MINS).toInt();
+    skyScanPauseStepIncrement = config.value("skyScanPauseStepMins", DEFAULT_VALUE_READ_INI).toInt();
     config.endGroup();
 }
 void RotatorMainWindow::saveSkyScanEnableSetting(QString currentAntennaName)
@@ -3236,12 +3231,24 @@ void RotatorMainWindow::openSkyScan(QString currentAntennaName)
 
 
     // setup pauseTimeSpinBox
-    //initialiseSpinBox(ui->skyScanPauseTimeSpinBox, minSkyScanPauseMins, maxSkyScanPauseMins, skyScanPauseStepIncrement, skyScanPauseMins, true);
+    if (skyScanPauseStepIncrement == DEFAULT_VALUE_READ_INI)
+    {
+        // nothing saved
+        skyScanPauseStepIncrement = MIN_SKYSCAN_PAUSE_MINS; // make this the pause time step 1 min
+    }
+    initialiseSpinBox(ui->skyScanPauseTimeSpinBox, minSkyScanPauseMins, maxSkyScanPauseMins, skyScanPauseStepIncrement, skyScanPauseMins, true);
 
     //setup Scan Step SpinBox
-    if (skyScanStepDegrees == DEFAULT_SKYSCAN_STEP_DEGREES_INCREMENT)
+    if (skyScanStepDegrees == DEFAULT_VALUE_READ_INI)
     {
+        // nothing saved
         skyScanStepDegrees = MIN_SKYSCAN_STEP_DEGREES;
+    }
+
+    if (stepDegreesIncrement == DEFAULT_VALUE_READ_INI)
+    {
+        // nothing saved
+        stepDegreesIncrement = MIN_SKYSCAN_STEP_DEGREES;
     }
 
     initialiseSpinBox(ui->skyScanStepDegreeSpinBox, minSkyScanStepDegrees, maxSkyScanStepDegrees,  stepDegreesIncrement, skyScanStepDegrees, true);
@@ -3260,41 +3267,19 @@ void RotatorMainWindow::openSkyScan(QString currentAntennaName)
     skyScanDisplayRotatorMinAzMaxAz(skyScanMinAzimuth, skyScanMaxAzimuth);
 
     // setup StartBearingSpinBox
-    if (startSkyScanBrg == DEFAULT_SKYSCAN_START_BEARING)
+    if (startSkyScanBrg == DEFAULT_VALUE_READ_INI)
     {
         // nothing has been saved for this rotator
         startSkyScanBrg = skyScanMinAzimuth;
     }
 
+    if (endSkyScanBrg == DEFAULT_VALUE_READ_INI)
+    {
+        endSkyScanBrg = skyScanMinAzimuth;
+    }
+
     setSkyScanStartBearingToolButtonUpDown();
     setSkyScanEndBearingToolButtonUpDown();
-/*
-    if (skyScanNumberOfSteps == DEFAULT_SKYSCAN_NUMBER_OF_STEPS)
-    {
-        skyScanNumberOfSteps = 0;
-    }
-
-    int calcNumberOfSteps;
-
-    if (setupAntenna->currentAntenna.endStopType == ROT_NEG180_180
-        || setupAntenna->currentAntenna.endStopType == ROT_0_360
-        || setupAntenna->currentAntenna.endStopType == ROT_180_180)
-    {
-        calcNumberOfSteps = 360/skyScanStepDegrees;
-    }
-    else if (setupAntenna->currentAntenna.endStopType == ROT_0_450)
-    {
-        calcNumberOfSteps = 450/skyScanStepDegrees;
-    }
-    else if (setupAntenna->currentAntenna.endStopType == ROT_NEG180_540)
-    {
-        calcNumberOfSteps = (180 + 540)/skyScanStepDegrees;
-    }
-
-*/
-    //initialiseSpinBox(ui->skyScanNumberOfStepsSpinBox, 0, calcNumberOfSteps, 1, 0, true);
-
-
     dumpSkyScanSettingsToTraceLog();
 
 
