@@ -46,6 +46,7 @@ private slots:
     void on_ageSpinner_valueChanged(int arg1);
     void on_ageCb_stateChanged(int arg1);
     void on_appSelectButton_clicked();
+    void on_fontButton_clicked();
 };
 
 #endif // TABOUTBOX_H
