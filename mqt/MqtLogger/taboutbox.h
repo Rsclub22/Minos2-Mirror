@@ -21,6 +21,7 @@ class TAboutBox : public QDialog
     int exec() override;
 
     void doCloseEvent();
+    void showAppConfig();
 
 public:
     static bool ShowAboutBox(QWidget *Owner, bool onStartup );

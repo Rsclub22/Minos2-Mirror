@@ -200,6 +200,8 @@ TAboutBox::TAboutBox(QWidget *parent, bool onStartup) :
         ui->ageSpinner->setEnabled(ui->ageCb->isChecked());
     }
 
+    showAppConfig();
+
     if (  onStartup && !checkRouterReady() )
     {
         doStartup = true; // click the start button on form close
@@ -227,6 +229,12 @@ void TAboutBox::accept()
 {
     doCloseEvent();
     QDialog::accept();
+}
+void TAboutBox::showAppConfig()
+{
+    MinosConfig *minosConfig = MinosConfig::getMinosConfig();
+    ui->appsLabel->setText( minosConfig->getCurrConfig().configName);
+
 }
 void TAboutBox::on_AboutMemo_linkActivated(const QString &link)
 {
@@ -263,11 +271,13 @@ void TAboutBox::on_AppsButton_clicked()
     MinosConfig *minosConfig = MinosConfig::getMinosConfig();
     StartConfig configBox( this, false, minosConfig->getCurrConfig().configName);
     configBox.exec();
+    showAppConfig();
 }
 void TAboutBox::on_appSelectButton_clicked()
 {
     StartConfigManager manageApps( this, true);   // when managing sets, include autostart
     manageApps.exec();
+    showAppConfig();
 }
 
 void TAboutBox::on_manageSets_clicked()
