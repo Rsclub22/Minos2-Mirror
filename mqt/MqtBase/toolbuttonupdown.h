@@ -2,6 +2,7 @@
 #define TOOLBUTTONUPDOWN_H
 
 #include <QWidget>
+#include <QElapsedTimer>
 
 class QToolButton;
 class QLabel;
@@ -36,6 +37,7 @@ private:
     QLabel *valueDisplay;
     QTimer *incrementTimer;
     QTimer *decrementTimer;
+    QElapsedTimer pressTimer;
 
 
     int currentValue = 0;

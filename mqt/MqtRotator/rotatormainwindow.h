@@ -3,7 +3,7 @@
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //                      Rotator Control
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2024
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2025
 //
 // Interprocess Control Logic
 // COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2008
@@ -89,6 +89,8 @@ public:
     int calclRot_0_450_Neg180_540(int targetBearing, int currentRotatorBearing);
 
 
+    void setSkyScanCCWIndicatorOnOff(bool state);
+    void setSkyScanCWIndicatorOnOff(bool state);
 signals:
 
     void escapePressed();
@@ -405,6 +407,7 @@ private:
     void setSkyScanStartBearingToolButtonUpDown();
     void setSkyScanEndBearingToolButtonUpDown();
     void skyScanDisplayRotatorMinAzMaxAz(int minAz, int maxAz);
+    void setSkyScanDirectionIndOnOff(QToolButton *indicator, bool state);
 };
 
 #endif // ROTATORMAINWINDOW_H

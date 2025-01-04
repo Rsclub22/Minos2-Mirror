@@ -3,7 +3,7 @@
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //                      Rotator Control
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2024
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2025
 //
 // Interprocess Control Logic
 // COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2008
@@ -2996,6 +2996,7 @@ void RotatorMainWindow::skyScanStartPbPressed()
         setSkyScanToolButtonUpDownEnabled(false);
 
         skyScanControl->initSkyScan(setupAntenna->currentAntenna.southStopType,
+                                setupAntenna->currentAntenna.endStopType,
                                 setupAntenna->currentAntenna.min_azimuth,
                                 setupAntenna->currentAntenna.max_azimuth,
                                 startSkyScanBrg,
@@ -3296,6 +3297,29 @@ void RotatorMainWindow::openSkyScan(QString currentAntennaName)
     connect(skyScanControl.data(), &SkyScanControl::displaySkyScanNextStepBearing, this, &RotatorMainWindow::displaySkyScanNextStepBearing);
     connect(skyScanControl.data(), &SkyScanControl::displaySkyScanPauseIntervalTime, this, &RotatorMainWindow::displaySkyScanPauseIntervalCount);
 }
+
+void RotatorMainWindow::setSkyScanCCWIndicatorOnOff(bool state)
+{
+    setSkyScanDirectionIndOnOff(ui->skyScanCcwIndicator, state);
+}
+
+void RotatorMainWindow::setSkyScanCWIndicatorOnOff(bool state)
+{
+    setSkyScanDirectionIndOnOff(ui->skyScanCwIndicator, state);
+}
+
+void RotatorMainWindow::setSkyScanDirectionIndOnOff(QToolButton *indicator, bool state)
+{
+    if (state)
+    {
+        indicator->setStyleSheet(SKYSCAN_DIRECTION_INDICATOR_ON);
+    }
+    else
+    {
+        indicator->setStyleSheet(SKYSCAN_DIRECTION_INDICATOR_OFF);
+    }
+}
+
 void RotatorMainWindow::dumpSkyScanSettingsToTraceLog()
 {
     trace(QString("*** SkyScan Settings ***"));

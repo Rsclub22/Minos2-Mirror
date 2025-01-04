@@ -159,6 +159,10 @@ inline const int MAX_SKYSCAN_PAUSE_MINS = 45;
 inline const QString BUTTON_ON_STYLE = QString("background-color: Sandybrown ; border-style: outset; border-width: 1px; border-color: black; min-width: 5em; padding: 3px;\n");
 inline const QString BUTTON_OFF_STYLE = QString("background-color: Gainsboro ; border-style: outset; border-width: 1px; border-color: black; min-width: 5em; padding: 3px;\n");
 
+// SkyScan Rotation Direction Indicators
+inline const QString SKYSCAN_DIRECTION_INDICATOR_ON = QString("background-color: orange ;\n");
+inline const QString SKYSCAN_DIRECTION_INDICATOR_OFF = QString("background-color: white ;\n");
+
 extern const QStringList presetButtonLabels;
 
 enum skyScanBearingStates {ROT_STOPPED, ROT_REACHED_TARGET, ROT_NEAR_TARGET, ROT_MOVING, ROT_STOPPED_MOVING};

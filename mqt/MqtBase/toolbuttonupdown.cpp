@@ -136,14 +136,39 @@ void ToolButtonUpDown::decrement()
 
 void ToolButtonUpDown::startIncrement()
 {
+    /*
     increment(); // Immediate action on press
     incrementTimer->start();
+    */
+    pressTimer.start(); // Start tracking press duration
+    increment(); // Immediate action on press
+    QTimer::singleShot(200, this, [this]()
+    {
+        // Start timer only if the button is still pressed after 200 ms
+        if (upButton->isDown())
+        {
+            incrementTimer->start();
+        }
+    });
+
 }
 
 void ToolButtonUpDown::startDecrement()
 {
-    decrement(); // Immediate action on press
+    /*
+     * decrement(); // Immediate action on press
     decrementTimer->start();
+    */
+    pressTimer.start(); // Start tracking press duration
+    decrement(); // Immediate action on press
+    QTimer::singleShot(200, this, [this]()
+    {
+        // Start timer only if the button is still pressed after 200 ms
+        if (downButton->isDown())
+        {
+            decrementTimer->start();
+        }
+    });
 }
 
 void ToolButtonUpDown::stopAction()

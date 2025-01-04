@@ -17,7 +17,47 @@
 #include "rotatorcommon.h"
 
 
+
 class RotatorMainWindow;
+
+
+
+class ScanPath
+{
+public:
+
+    explicit ScanPath(){}
+
+    void clearScanPath()
+    {
+        pathStart = 0;
+        pathEnd = 0;
+        rotationPath.clear();
+
+    }
+    void clearRotationPath(){rotationPath.clear();}
+    void appendToScanPath(int bearing){rotationPath.append(bearing);}
+    bool isEmpty(){return rotationPath.isEmpty();}
+    int numScanSteps(){return rotationPath.count();}
+    int takeFirst(){return rotationPath.takeFirst();}
+
+    void setPathStart(int start){pathStart = start;}
+    int getPathStart(){return pathStart;}
+
+    void setPathEnd(int end){pathEnd = end;}
+    int getPathEnd(){return pathEnd;}
+
+
+
+private:
+
+    int pathStart = 0;
+    int pathEnd = 0;
+    QList<int> rotationPath;
+
+};
+
+
 
 class SkyScanControl : public QObject
 {
@@ -29,7 +69,7 @@ public:
 
     ~SkyScanControl();
 
-    void initSkyScan(enum southStop southType_, int minRot, int maxRot, int start, int end, int step, int interval);
+    void initSkyScan(enum southStop southType_, enum endStop endStopType_, int minRot, int maxRot, int start, int end, int step, int interval);
     void startSkyscan();
     void stopSkyscan();
     void pauseSkyscan();
@@ -63,6 +103,7 @@ private:
     int targetBearing = 0;      // these are intermediate bearings calculated between starScan
                                 // bearing and end scan bearing
     southStop southType = southStop::S_STOPOFF;
+    endStop endStopType = ROT_0_360;
 
 
 
@@ -74,8 +115,11 @@ private:
     bool reverseScan = false;
 
 
+    ScanPath forwardRotationPath;
+    ScanPath reverseRotationPath;
+
     QList<int> rotationPath;
-    QList<int> reverseRotationPath;
+    //QList<int> reverseRotationPath;
 
     int scanPauseTimeInterval = 0;
     int scanPauseTimeCount = 0;   // seconds
@@ -89,7 +133,8 @@ private:
     int toStopTypeBearing(int bearing);
     void traceMessage(QString msg);
 
-    int calcNumberOfStepsAvailable(int startBearing, int stepSize, int maxAzimuth);
+    void calcForwardPath(int startBearing, int endBearing);
+    void calcReversePath(int startBearing, int endBearing);
 };
 
 #endif // SKYSCANCONTROL_H
