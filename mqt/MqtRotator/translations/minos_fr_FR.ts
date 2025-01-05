@@ -130,31 +130,29 @@ utiliser un autre nom SVP</translation>
     <message>
         <location filename="../hamlibRotcontrol.cpp" line="42"/>
         <source>Argument out of domain of func</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Context?</translatorcomment>
+        <translation>??</translation>
     </message>
     <message>
         <location filename="../hamlibRotcontrol.cpp" line="43"/>
         <source>Function deprecated</source>
-        <translation type="unfinished"></translation>
+        <translation>Fonction obsolète</translation>
     </message>
     <message>
         <location filename="../hamlibRotcontrol.cpp" line="44"/>
         <source>Security error password not provided or crypto failure</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Context</translatorcomment>
+        <translation>???</translation>
     </message>
     <message>
         <location filename="../hamlibRotcontrol.cpp" line="45"/>
         <source>Rig is not powered on</source>
-        <translation type="unfinished"></translation>
+        <translation>RIG???</translation>
     </message>
     <message>
         <location filename="../hamlibRotcontrol.cpp" line="46"/>
         <source>Limit exceeded </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>RIG_EDOM</source>
-        <translation type="vanished">RIG_EDOM WHAT????   APJ21</translation>
+        <translation>Limite dépassée </translation>
     </message>
     <message>
         <location filename="../hamlibRotcontrol.cpp" line="494"/>

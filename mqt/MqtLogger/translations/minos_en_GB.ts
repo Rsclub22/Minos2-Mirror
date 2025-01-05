@@ -2445,42 +2445,42 @@ and send the .EDI file produced.
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../OptionsDialog.cpp" line="82"/>
+        <location filename="../OptionsDialog.cpp" line="98"/>
         <source>Wanted Bands</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../OptionsDialog.cpp" line="83"/>
+        <location filename="../OptionsDialog.cpp" line="99"/>
         <source>Cluster/Bandmap</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../OptionsDialog.cpp" line="84"/>
+        <location filename="../OptionsDialog.cpp" line="100"/>
         <source>General Options</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../OptionsDialog.cpp" line="85"/>
+        <location filename="../OptionsDialog.cpp" line="101"/>
         <source>Display Options</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../OptionsDialog.cpp" line="86"/>
+        <location filename="../OptionsDialog.cpp" line="102"/>
         <source>Log Radio Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../OptionsDialog.cpp" line="87"/>
+        <location filename="../OptionsDialog.cpp" line="103"/>
         <source>UDP Broadcast</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../OptionsDialog.cpp" line="88"/>
+        <location filename="../OptionsDialog.cpp" line="104"/>
         <source>WSJT-X</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../OptionsDialog.cpp" line="143"/>
+        <location filename="../OptionsDialog.cpp" line="159"/>
         <source>We will save the band changes before continuing.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4196,114 +4196,124 @@ The row background will change colour when selected.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../taboutbox.ui" line="95"/>
-        <location filename="../taboutbox.cpp" line="137"/>
+        <location filename="../taboutbox.ui" line="114"/>
+        <location filename="../taboutbox.cpp" line="140"/>
         <source>Credits</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../taboutbox.ui" line="53"/>
+        <location filename="../taboutbox.ui" line="72"/>
         <source>Why Minos?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../taboutbox.ui" line="147"/>
+        <location filename="../taboutbox.ui" line="168"/>
         <source>Protect Contests by Age</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../taboutbox.ui" line="167"/>
+        <location filename="../taboutbox.ui" line="188"/>
         <source>Contest Age Protection after</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../taboutbox.ui" line="184"/>
+        <location filename="../taboutbox.ui" line="205"/>
         <source>days</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../taboutbox.ui" line="204"/>
+        <location filename="../taboutbox.ui" line="242"/>
         <source>Current Contest Set</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../taboutbox.ui" line="214"/>
+        <location filename="../taboutbox.ui" line="252"/>
         <source>Manage Contest Sets</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../taboutbox.ui" line="239"/>
+        <location filename="../taboutbox.ui" line="279"/>
         <source>Logger Only</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../taboutbox.ui" line="259"/>
+        <location filename="../taboutbox.ui" line="299"/>
+        <source>Set Font...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../taboutbox.ui" line="319"/>
         <source>Exit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../taboutbox.ui" line="283"/>
+        <location filename="../taboutbox.ui" line="343"/>
         <source>OK</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../taboutbox.ui" line="306"/>
+        <location filename="../taboutbox.ui" line="366"/>
         <source>Apps</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../taboutbox.ui" line="313"/>
+        <location filename="../taboutbox.ui" line="373"/>
         <source>...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../taboutbox.cpp" line="130"/>
+        <location filename="../taboutbox.cpp" line="133"/>
         <source>Welcome to Minos Version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../taboutbox.cpp" line="138"/>
+        <location filename="../taboutbox.cpp" line="141"/>
         <source>Main Developers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../taboutbox.cpp" line="139"/>
+        <location filename="../taboutbox.cpp" line="142"/>
         <source>Testing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../taboutbox.cpp" line="140"/>
+        <location filename="../taboutbox.cpp" line="143"/>
         <source>Documentation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../taboutbox.cpp" line="141"/>
+        <location filename="../taboutbox.cpp" line="144"/>
         <source>MAC port</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../taboutbox.cpp" line="142"/>
+        <location filename="../taboutbox.cpp" line="145"/>
         <source>Icons</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../taboutbox.cpp" line="143"/>
+        <location filename="../taboutbox.cpp" line="146"/>
         <source>Rig testing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../taboutbox.cpp" line="144"/>
+        <location filename="../taboutbox.cpp" line="147"/>
         <source>French Translation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../taboutbox.cpp" line="145"/>
+        <location filename="../taboutbox.cpp" line="148"/>
         <source>Web Site</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../taboutbox.cpp" line="146"/>
+        <location filename="../taboutbox.cpp" line="149"/>
         <source>And last (but not least) our long suffering wives</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../taboutbox.cpp" line="323"/>
+        <source>Font setting will not work while the QT_QPA_PLATFORMTHEME environment variable is set to qt5ct</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

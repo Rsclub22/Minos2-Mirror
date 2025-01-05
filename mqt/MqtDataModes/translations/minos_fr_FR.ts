@@ -21,12 +21,12 @@
     <message>
         <location filename="../dmmainwindow.ui" line="53"/>
         <source>Configuration File</source>
-        <translation type="unfinished"></translation>
+        <translation>Fichier de configuration</translation>
     </message>
     <message>
         <location filename="../dmmainwindow.ui" line="67"/>
         <source>...</source>
-        <translation type="unfinished">...</translation>
+        <translation>...</translation>
     </message>
     <message>
         <location filename="../dmmainwindow.ui" line="87"/>
@@ -63,12 +63,12 @@
     <message>
         <location filename="../dmmainwindow.cpp" line="431"/>
         <source>INI (*.ini);;All Files (*.*)</source>
-        <translation type="unfinished"></translation>
+        <translation>INI (*.ini);;Tous les fichiers (*.*)</translation>
     </message>
     <message>
         <location filename="../dmmainwindow.cpp" line="435"/>
         <source>Datamodes Configuration file</source>
-        <translation type="unfinished"></translation>
+        <translation>Fichier de configuration des modes de données</translation>
     </message>
 </context>
 <context>
@@ -260,12 +260,12 @@
     <message>
         <location filename="../enginewindow.ui" line="76"/>
         <source>Set Test</source>
-        <translation type="unfinished"></translation>
+        <translation>CONTEXT??</translation>
     </message>
     <message>
         <location filename="../enginewindow.ui" line="83"/>
         <source>Send Test</source>
-        <translation type="unfinished"></translation>
+        <translation>CONTEXT??</translation>
     </message>
     <message>
         <location filename="../enginewindow.ui" line="124"/>
@@ -289,14 +289,6 @@
         <location filename="../enginewindow.ui" line="254"/>
         <source>...</source>
         <translation>...</translation>
-    </message>
-    <message>
-        <source>Show Back Data</source>
-        <translation type="vanished">Afficher les données arrière [huh???]</translation>
-    </message>
-    <message>
-        <source>Hide Back Data</source>
-        <translation type="vanished">Masquer les données arrière [huh???]</translation>
     </message>
 </context>
 <context>

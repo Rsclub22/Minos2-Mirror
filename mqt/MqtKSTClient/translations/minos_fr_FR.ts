@@ -83,7 +83,7 @@
     <message>
         <location filename="../changename.cpp" line="148"/>
         <source>Change name failed: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Le changement de nom a échoué&#xa0;: %1</translation>
     </message>
 </context>
 <context>
@@ -196,7 +196,7 @@
     <message>
         <location filename="../kstconfigure.cpp" line="67"/>
         <source>Name %1 cannot be more than 16 characters</source>
-        <translation type="unfinished"></translation>
+        <translation>Nom %1 limité à 16 caractères</translation>
     </message>
 </context>
 <context>

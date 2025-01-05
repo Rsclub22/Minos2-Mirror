@@ -65,13 +65,9 @@ Veuillez choisir un nouveau nom.</translation>
 <context>
     <name>QrzServerMainWindow</name>
     <message>
-        <source>QrzServerMainWindow</source>
-        <translation type="vanished">Serveur QRZ</translation>
-    </message>
-    <message>
         <location filename="../qrzservermainwindow.ui" line="14"/>
         <source>QRZ Server</source>
-        <translation type="unfinished"></translation>
+        <translation>Serveur QRZ</translation>
     </message>
     <message>
         <location filename="../qrzservermainwindow.ui" line="26"/>

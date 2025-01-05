@@ -53,7 +53,7 @@
     <message>
         <location filename="../rcmainwindow.ui" line="324"/>
         <source>Configuration File</source>
-        <translation type="unfinished"></translation>
+        <translation>Fichier de configuration</translation>
     </message>
     <message>
         <location filename="../rcmainwindow.ui" line="354"/>
@@ -78,12 +78,12 @@
     <message>
         <location filename="../rcmainwindow.cpp" line="451"/>
         <source>INI (*.ini);;All Files (*.*)</source>
-        <translation type="unfinished"></translation>
+        <translation>INI (*.ini);;Tous les fichiers (*. *)</translation>
     </message>
     <message>
         <location filename="../rcmainwindow.cpp" line="455"/>
         <source>Rig Recorder Configuration file</source>
-        <translation type="unfinished"></translation>
+        <translation>Enregistreur d&apos;appareil - Fichier de configuration???</translation>
     </message>
 </context>
 </TS>

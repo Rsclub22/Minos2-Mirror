@@ -1472,24 +1472,12 @@ Attention: &quot;.&quot; pas &quot;,&quot;
     <message>
         <location filename="../managehamlib.cpp" line="312"/>
         <source>Hamlib updated - will be used after restart</source>
-        <translation type="unfinished"></translation>
+        <translation>Hamlib mis à jour - sera utilisé après le redémarrage</translation>
     </message>
     <message>
         <location filename="../managehamlib.cpp" line="349"/>
         <source>Old Hamlib restored - it will be used after restart</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Hamlib Update successful 
-
-New Hamlib will be used after restart</source>
-        <translation type="vanished">Hamlib mis à jour - sera utilisé après le redémarrage</translation>
-    </message>
-    <message>
-        <source>Hamlib successfully reverted 
-
-Reverted Hamlib will be used after restart</source>
-        <translation type="vanished">Vieux Hamlib restauré - sera utilisé après le redémarrage</translation>
+        <translation>Vieux Hamlib restauré - sera utilisé après le redémarrage</translation>
     </message>
     <message>
         <location filename="../managehamlib.cpp" line="361"/>
