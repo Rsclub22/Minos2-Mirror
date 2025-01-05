@@ -2947,7 +2947,14 @@ void RotatorMainWindow::skyScanStartBearingToolbuttonValueChanged(int value)
 
     startSkyScanBrg = value;
 
-    //********************* need to cope with different rotator values
+    if (value < 0)
+    {
+        value = value + COMPASS_MAX360;
+    }
+    else if (value > 360)
+    {
+        value = value - COMPASS_MAX360;
+    }
 
     QString compassStartBearing = convertBearingToString(value);
     ui->skyScanCompassStartBearingDisplay->setText(compassStartBearing);
@@ -2971,7 +2978,14 @@ void RotatorMainWindow::skyScanEndBearingToolbuttonValueChanged(int value)
 
     endSkyScanBrg = value;
 
-    //********************* need to cope with different rotator values
+    if (value < 0)
+    {
+        value = value + COMPASS_MAX360;
+    }
+    else if (value > 360)
+    {
+        value = value - COMPASS_MAX360;
+    }
 
     QString compassEndBearing = convertBearingToString(value);
     ui->skyScanCompassEndBearingDisplay->setText(compassEndBearing);

@@ -3,7 +3,7 @@
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //                      Rotator Control
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2024
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2025
 //
 //
 /////////////////////////////////////////////////////////////////////////////
