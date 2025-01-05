@@ -36,12 +36,12 @@
     <message>
         <location filename="../mqtktWaveShowDialog.cpp" line="148"/>
         <source>Attack (ms)</source>
-        <translation>[Context?] </translation>
+        <translation>[Context?Compressor Attack] </translation>
     </message>
     <message>
         <location filename="../mqtktWaveShowDialog.cpp" line="152"/>
         <source>Release (ms)</source>
-        <translation>[Context?] </translation>
+        <translation>[Context?] Compressor release</translation>
     </message>
     <message>
         <location filename="../mqtktWaveShowDialog.cpp" line="156"/>

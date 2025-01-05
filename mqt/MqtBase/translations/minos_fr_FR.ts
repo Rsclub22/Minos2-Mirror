@@ -519,9 +519,13 @@
         <translation>Afficher les en-têtes auxiliaires</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="120"/>
         <source>Show Crib Band</source>
-        <translation>[What does this mean???]</translation>
+        <translation type="vanished">[What does this mean???]</translation>
+    </message>
+    <message>
+        <location filename="../profiles.cpp" line="120"/>
+        <source>Show Next QSO Band</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="122"/>
@@ -918,9 +922,8 @@
         <translation>Hauteur au-dessus du sol de l&apos;antenne</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="247"/>
         <source>Antenna Bearing Offset</source>
-        <translation>Hauteur au-dessus du sol de l&apos;antenne</translation>
+        <translation type="vanished">Hauteur au-dessus du sol de l&apos;antenne</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="247"/>
@@ -1131,7 +1134,7 @@
     <message>
         <location filename="../ConfigElementFrame.ui" line="333"/>
         <source>Leave the app name and/or the server name empty to get information from any app on a server, any server, or any app on any server</source>
-        <translatorcomment>Can surely be simplififed?</translatorcomment>
+        <translatorcomment>Can surely be simplififed? Suggestions, please!</translatorcomment>
         <translation>Laissez le nom de l&apos;application et / ou le nom du serveur vide pour obtenir des informations à partir de n&apos;importe quelle application sur un serveur, n&apos;importe quel serveur ou n&apos;importe quelle application sur n&apos;importe quel serveur</translation>
     </message>
     <message>
@@ -1496,36 +1499,29 @@ Attention: &quot;.&quot; pas &quot;,&quot;
 <context>
     <name>MessageServer::impl</name>
     <message>
-        <location filename="../WsjtxMessageServer.cpp" line="71"/>
-        <location filename="../WsjtxMessageServer.cpp" line="219"/>
         <source>Error creating UDP message</source>
         <translatorcomment>Tracelog? (Hence in ENglish?)</translatorcomment>
-        <translation>Erreur lors de la création du message UDP</translation>
+        <translation type="vanished">Erreur lors de la création du message UDP</translation>
     </message>
     <message>
-        <location filename="../WsjtxMessageServer.cpp" line="397"/>
         <source>MessageServer warning: invalid UDP message received</source>
-        <translation>Avertissement de MessageServer : message UDP invalide reçu</translation>
+        <translation type="vanished">Avertissement de MessageServer : message UDP invalide reçu</translation>
     </message>
     <message>
-        <location filename="../WsjtxMessageServer.cpp" line="402"/>
         <source>MessageServer exception: %1</source>
-        <translation>Exception du serveur de messages&#xa0;: %1</translation>
+        <translation type="vanished">Exception du serveur de messages&#xa0;: %1</translation>
     </message>
     <message>
-        <location filename="../WsjtxMessageServer.cpp" line="406"/>
         <source>Unexpected exception in MessageServer</source>
-        <translation>Exception inattendue dans MessageServer</translation>
+        <translation type="vanished">Exception inattendue dans MessageServer</translation>
     </message>
     <message>
-        <location filename="../WsjtxMessageServer.cpp" line="440"/>
         <source>Message serialization error: read corrupt data</source>
-        <translation>Erreur de sérialisation du message&#xa0;: lire les données corrompues</translation>
+        <translation type="vanished">Erreur de sérialisation du message&#xa0;: lire les données corrompues</translation>
     </message>
     <message>
-        <location filename="../WsjtxMessageServer.cpp" line="444"/>
         <source>Message serialization error: write error</source>
-        <translation>Erreur de sérialisation du message&#xa0;: erreur d&apos;écriture</translation>
+        <translation type="vanished">Erreur de sérialisation du message&#xa0;: erreur d&apos;écriture</translation>
     </message>
 </context>
 <context>

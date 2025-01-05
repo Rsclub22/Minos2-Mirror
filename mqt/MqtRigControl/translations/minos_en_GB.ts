@@ -442,16 +442,6 @@ Active</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.ui" line="1039"/>
-        <source>TX</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../rigcontrolmainwindow.ui" line="1066"/>
-        <source>Support:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../rigcontrolmainwindow.ui" line="345"/>
         <source>TX PTT Test</source>
         <translation type="unfinished"></translation>

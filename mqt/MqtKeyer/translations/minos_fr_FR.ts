@@ -29,9 +29,8 @@
         <translation>Indicateur d&apos;enregistrement</translation>
     </message>
     <message>
-        <location filename="../KeyerMain.ui" line="129"/>
         <source>Show</source>
-        <translation>Afficher [Context?]</translation>
+        <translation type="vanished">Afficher [Context?]</translation>
     </message>
     <message>
         <location filename="../KeyerMain.ui" line="115"/>
@@ -93,6 +92,11 @@
         <location filename="../KeyerMain.ui" line="101"/>
         <source>Message Name</source>
         <translation>Nom du message</translation>
+    </message>
+    <message>
+        <location filename="../KeyerMain.ui" line="129"/>
+        <source>Show Waveform</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../KeyerMain.ui" line="266"/>
@@ -198,7 +202,7 @@ Rejouer</translation>
         <location filename="../KeyerMain.cpp" line="120"/>
         <source>Pass
 Through</source>
-        <translatorcomment>mode intermédiaire ??</translatorcomment>
+        <translatorcomment>mode intermédiaire ?? Pass sound from microphone through to output</translatorcomment>
         <translation>Passthrough</translation>
     </message>
     <message>
@@ -219,17 +223,21 @@ Through</source>
     <message>
         <location filename="../KeyerMain.cpp" line="138"/>
         <source>Attack (ms)</source>
-        <translation>[Context?] </translation>
+        <translation>[Context?Compression Attack in ms] </translation>
     </message>
     <message>
         <location filename="../KeyerMain.cpp" line="142"/>
         <source>Release (ms)</source>
-        <translation>[Context?]  </translation>
+        <translation>[Context?] Compression Release in ms </translation>
     </message>
     <message>
         <location filename="../KeyerMain.cpp" line="146"/>
         <source>Makeup Gain (db)</source>
-        <translation>[Context?] </translation>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Makeup Gain (db) extra gain to compensate for proccessing attenuation</source>
+        <translation type="vanished">[Context?] </translation>
     </message>
     <message>
         <location filename="../KeyerMain.cpp" line="193"/>
@@ -259,7 +267,7 @@ Through</source>
     <message>
         <location filename="../KeyerMain.cpp" line="826"/>
         <source>Restart to set sample rate to &quot;0&quot;</source>
-        <translatorcomment>Redémarrer could be taken as reboot?</translatorcomment>
+        <translatorcomment>Redémarrer could be taken as reboot? restart this app only needed</translatorcomment>
         <translation>Redémarrer pour régler la fréquence d&apos;échantillonnage sur &quot;0&quot;</translation>
     </message>
 </context>
@@ -343,7 +351,7 @@ Through</source>
     <message>
         <location filename="../keyers.cpp" line="42"/>
         <source>OS - Restart(1)/Close(2)</source>
-        <translatorcomment>SO or OS??</translatorcomment>
+        <translatorcomment>SO or OS?? Operating System</translatorcomment>
         <translation>? Redémarrer(1)/Fermer(2)</translation>
     </message>
 </context>
@@ -352,7 +360,7 @@ Through</source>
     <message>
         <location filename="../keyers.cpp" line="404"/>
         <source>No current actions</source>
-        <translation>Aucune action (en cours ?)</translation>
+        <translation>Aucune action (en cours ? Yes, more or less!)</translation>
     </message>
 </context>
 <context>

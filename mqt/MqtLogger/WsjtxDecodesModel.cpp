@@ -55,7 +55,6 @@ DecodeHeading const DecodesModel::headings[dcMaxVal] = {
     {QT_TR_NOOP ("Seq"),Qt::AlignLeft},
     {QT_TR_NOOP ("points"),Qt::AlignLeft},
     {QT_TR_NOOP ("brg"),Qt::AlignLeft},
-    {QT_TR_NOOP ("distance"),Qt::AlignLeft},
 
     {QT_TR_NOOP ("Call"), Qt::AlignLeft},
     {QT_TR_NOOP ("Grid"), Qt::AlignLeft},
@@ -368,14 +367,6 @@ QVariant DecodesModel::data (QModelIndex const& pindex, int role) const
                 return "";
             }
             return QString::number(msg.bearing);
-        case dcDistance:
-            if (msg.txrx == eTX)
-                return "";
-            if (msg.distance <= 0)
-            {
-                return "";
-            }
-            return QString::number(msg.distance);
 
         case dcFromCall:
             if (msg.txrx == eTX)

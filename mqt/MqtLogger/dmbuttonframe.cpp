@@ -460,11 +460,11 @@ void DMButtonFrame::on_chooseButton_clicked()
     QFileInfo qf(InitialDir);
 
     InitialDir = qf.canonicalFilePath();
-    QString Filter = tr("Contact list files (*.json);;"
+    QString Filter = tr("Function Key Definitions Files (*.json);;"
                      "All Files (*.*)") ;
 
     QString fName = QFileDialog::getOpenFileName( this,
-                       tr("Open Function Key Definitions"),
+                       tr("Open Function Key Definitions File"),
                        InitialDir,
                        Filter
                        );

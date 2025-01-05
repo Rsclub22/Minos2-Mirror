@@ -144,7 +144,7 @@ Please enter a name for the radio</source>
     <message>
         <location filename="../hamlibrigcontrol.cpp" line="40"/>
         <source>Argument out of domain of func</source>
-        <translation>Argument hors du domaine de la fonction [huh]???</translation>
+        <translation>Argument hors du domaine de la fonction [huh] Hamlib error???</translation>
     </message>
     <message>
         <location filename="../hamlibrigcontrol.cpp" line="41"/>
@@ -259,7 +259,7 @@ Vérifier le tracelog Rigcontrol</translation>
     <message>
         <location filename="../omnirigcontrol.cpp" line="637"/>
         <source>Minos - Check Omnirig Radio ini File for radio %1</source>
-        <translation>Minos - Vérifier le fichier INI de la radio Omnirig pour la radio %1 ??</translation>
+        <translation>Minos - Vérifier le fichier INI de la radio Omnirig pour la radio %1 ?? David&apos;s changed Omnirig files</translation>
     </message>
     <message>
         <location filename="../omnirigcontrol.cpp" line="638"/>
@@ -371,7 +371,7 @@ Obtenir le fichier ini correct auprès des développeurs SVP</translation>
     <message>
         <location filename="../rigcontrolmainwindow.ui" line="397"/>
         <source>Play</source>
-        <translation>???Where???</translation>
+        <translation>???Where???Test play of voice message - only when rig control run stand-alone</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.ui" line="534"/>
@@ -453,14 +453,12 @@ actif</translation>
         <translation>PTT</translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.ui" line="1039"/>
         <source>TX</source>
-        <translation>TX</translation>
+        <translation type="vanished">TX</translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.ui" line="1066"/>
         <source>Support:</source>
-        <translation>Soutiens: [Context?]</translation>
+        <translation type="vanished">Soutiens: [Context?Placeholder - don&apos;t translate]</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.ui" line="345"/>
@@ -602,7 +600,7 @@ Voulez-vous recharger les paramètres de cette radio?</translation>
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="571"/>
         <source>Radio type &quot;%1&quot; no longer exists in Hamlib, Please choose something different</source>
-        <translation>WHERE???</translation>
+        <translation>WHERE??? Hamlib has a bad habit of changing names - e.g. between FlexRadio and Flex Radio!</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="1413"/>
@@ -1232,7 +1230,7 @@ Vous ne pourrez pas sélectionner un radio tant que cela ne sera pas corrigé !<
         <source>Get and Set Antenna Switch = %1
 </source>
         <translatorcomment>Obtenir et définir</translatorcomment>
-        <translation>WHERE???????</translation>
+        <translation>WHERE??????? Under &quot;show current radio config&quot; button</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="4959"/>
@@ -1384,7 +1382,7 @@ la poignée de main et les réglages forcés.</translation>
 following:
 %1
 Please Correct before Continuing</source>
-        <translatorcomment>just for %1?</translatorcomment>
+        <translatorcomment>just for %1? Yes, I think so</translatorcomment>
         <translation>Paramètres du Transverter sont hors bande pour la suivant
 %1
 Corriger avant de continuer SVP</translation>
@@ -1580,7 +1578,7 @@ Corriger les entrées du convertisseur SVP.</translation>
     <message>
         <location filename="../rigsetupform.ui" line="107"/>
         <source>Serial</source>
-        <translation>Série [Context???]</translation>
+        <translation>Série [Context???Serial port (as against network)]</translation>
     </message>
     <message>
         <location filename="../rigsetupform.ui" line="114"/>

@@ -520,7 +520,7 @@
     </message>
     <message>
         <location filename="../profiles.cpp" line="120"/>
-        <source>Show Crib Band</source>
+        <source>Show Next QSO Band</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -913,11 +913,6 @@
     <message>
         <location filename="../profiles.cpp" line="246"/>
         <source>Antenna Height AGL (metres)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../profiles.cpp" line="247"/>
-        <source>Antenna Bearing Offset</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1470,40 +1465,6 @@ The format required is (e.g.) 1296.3, 144.32 or 144.290123
     <message>
         <location filename="../MatchThisFrame.cpp" line="72"/>
         <source>Press &quot;Yes&quot; to transfer details, or &quot;No&quot; to edit the QSO</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>MessageServer::impl</name>
-    <message>
-        <location filename="../WsjtxMessageServer.cpp" line="71"/>
-        <location filename="../WsjtxMessageServer.cpp" line="219"/>
-        <source>Error creating UDP message</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../WsjtxMessageServer.cpp" line="397"/>
-        <source>MessageServer warning: invalid UDP message received</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../WsjtxMessageServer.cpp" line="402"/>
-        <source>MessageServer exception: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../WsjtxMessageServer.cpp" line="406"/>
-        <source>Unexpected exception in MessageServer</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../WsjtxMessageServer.cpp" line="440"/>
-        <source>Message serialization error: read corrupt data</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../WsjtxMessageServer.cpp" line="444"/>
-        <source>Message serialization error: write error</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

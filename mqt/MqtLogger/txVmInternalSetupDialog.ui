@@ -22,7 +22,7 @@
      <item>
       <widget class="QLabel" name="nunButtonsLbl">
        <property name="text">
-        <string>Number Buttons</string>
+        <string>Number of  Buttons</string>
        </property>
       </widget>
      </item>

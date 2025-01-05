@@ -1247,7 +1247,7 @@ Comptabiliser entre Locators de 4 caractères</translation>
     <message>
         <location filename="../contestdetails.cpp" line="59"/>
         <source>Asymmetric (TX S/N, RX exchange), Multiplier</source>
-        <translation>Asymétrique (TX S/N, échange RX) multiplicateur [context???]</translation>
+        <translation>Asymétrique (TX S/N, échange RX) multiplicateur [context???Complicated HF contests]</translation>
     </message>
     <message>
         <location filename="../contestdetails.cpp" line="61"/>
@@ -1356,7 +1356,7 @@ Déplacez-vous entre les composants d&amp;apos;un groupe à l&amp;apos;aide de l
     <message>
         <location filename="../contestdetails.cpp" line="57"/>
         <source>Exchange Multiplier (may be &quot;-&quot;)</source>
-        <translation>Multiplicateur d&apos;échange (peut être &quot;-&quot;) [???]</translation>
+        <translation>Multiplicateur d&apos;échange (peut être &quot;-&quot;) [???e.g. UKSMG book number]</translation>
     </message>
     <message>
         <location filename="../contestdetails.cpp" line="63"/>
@@ -1454,7 +1454,7 @@ Déplacez-vous entre les composants d&amp;apos;un groupe à l&amp;apos;aide de l
     <message>
         <location filename="../dmbuttonframe.ui" line="188"/>
         <source>Log It</source>
-        <translation>Enregistre [-le???]</translation>
+        <translation>Enregistre [-le??? Log the QSO]</translation>
     </message>
     <message>
         <location filename="../dmbuttonframe.ui" line="208"/>
@@ -1465,12 +1465,12 @@ Déplacez-vous entre les composants d&amp;apos;un groupe à l&amp;apos;aide de l
         <location filename="../dmbuttonframe.cpp" line="70"/>
         <location filename="../dmbuttonframe.cpp" line="477"/>
         <source>Data Modes Buttons from %1</source>
-        <translation>Boutons de modes de données de %1 [???]</translation>
+        <translation>Boutons de modes de données de %1 [??? %1 is a file name]</translation>
     </message>
     <message>
         <location filename="../dmbuttonframe.cpp" line="192"/>
         <source>Not enough key definitions in %1</source>
-        <translation>Pas assez de définitions dans %1 [key???]</translation>
+        <translation>Pas assez de définitions dans %1 [key???%1 is a file name]</translation>
     </message>
     <message>
         <location filename="../dmbuttonframe.cpp" line="356"/>
@@ -1479,13 +1479,21 @@ Déplacez-vous entre les composants d&amp;apos;un groupe à l&amp;apos;aide de l
     </message>
     <message>
         <location filename="../dmbuttonframe.cpp" line="463"/>
-        <source>Contact list files (*.json);;All Files (*.*)</source>
-        <translation>Fichiers de la liste de contacts (* .json) ;; Tous les fichiers (*. *) [Contacts = json??]</translation>
+        <source>Function Key Definitions Files (*.json);;All Files (*.*)</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../dmbuttonframe.cpp" line="467"/>
+        <source>Open Function Key Definitions File</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Contact list files (*.json);;All Files (*.*)</source>
+        <translation type="vanished">Fichiers de la liste de contacts (* .json) ;; Tous les fichiers (*. *) [Contacts = json??]</translation>
+    </message>
+    <message>
         <source>Open Function Key Definitions</source>
-        <translation>Ouvrir les définitions des touches de fonction [???]</translation>
+        <translation type="vanished">Ouvrir les définitions des touches de fonction [???]</translation>
     </message>
 </context>
 <context>
@@ -1654,72 +1662,71 @@ Déplacez-vous entre les composants d&amp;apos;un groupe à l&amp;apos;aide de l
         <translation>Direction</translation>
     </message>
     <message>
-        <location filename="../WsjtxDecodesModel.cpp" line="58"/>
         <source>distance</source>
         <translatorcomment>NOT USED?</translatorcomment>
-        <translation>distance</translation>
+        <translation type="vanished">distance</translation>
     </message>
     <message>
-        <location filename="../WsjtxDecodesModel.cpp" line="60"/>
+        <location filename="../WsjtxDecodesModel.cpp" line="59"/>
         <source>Call</source>
         <translatorcomment>NOT USED?</translatorcomment>
         <translation>Indicatif d&apos;appel</translation>
     </message>
     <message>
-        <location filename="../WsjtxDecodesModel.cpp" line="61"/>
+        <location filename="../WsjtxDecodesModel.cpp" line="60"/>
         <source>Grid</source>
         <translation>Locator</translation>
     </message>
     <message>
-        <location filename="../WsjtxDecodesModel.cpp" line="62"/>
+        <location filename="../WsjtxDecodesModel.cpp" line="61"/>
         <source>To Call</source>
         <translation>Appel de destination</translation>
     </message>
     <message>
-        <location filename="../WsjtxDecodesModel.cpp" line="63"/>
+        <location filename="../WsjtxDecodesModel.cpp" line="62"/>
         <source>To Grid</source>
         <translation>Locator de destination</translation>
     </message>
     <message>
-        <location filename="../WsjtxDecodesModel.cpp" line="64"/>
-        <location filename="../WsjtxDecodesModel.cpp" line="411"/>
+        <location filename="../WsjtxDecodesModel.cpp" line="63"/>
+        <location filename="../WsjtxDecodesModel.cpp" line="402"/>
         <source>Best</source>
         <translation>Meilleur</translation>
     </message>
     <message>
-        <location filename="../WsjtxDecodesModel.cpp" line="66"/>
+        <location filename="../WsjtxDecodesModel.cpp" line="65"/>
         <source>Message</source>
         <translation>Message</translation>
     </message>
     <message>
-        <location filename="../WsjtxDecodesModel.cpp" line="71"/>
+        <location filename="../WsjtxDecodesModel.cpp" line="70"/>
         <source>low</source>
         <translatorcomment>NOT USED</translatorcomment>
         <translation>Bas</translation>
     </message>
     <message>
-        <location filename="../WsjtxDecodesModel.cpp" line="71"/>
+        <location filename="../WsjtxDecodesModel.cpp" line="70"/>
         <source>high</source>
         <translatorcomment>NOT USED</translatorcomment>
         <translation>Haute</translation>
     </message>
     <message>
-        <location filename="../WsjtxDecodesModel.cpp" line="76"/>
+        <location filename="../WsjtxDecodesModel.cpp" line="75"/>
         <source>no</source>
         <translation>Non</translation>
     </message>
     <message>
-        <location filename="../WsjtxDecodesModel.cpp" line="76"/>
+        <location filename="../WsjtxDecodesModel.cpp" line="75"/>
         <source>yes</source>
         <translation>Oui</translation>
     </message>
     <message>
-        <location filename="../WsjtxDecodesModel.cpp" line="403"/>
+        <location filename="../WsjtxDecodesModel.cpp" line="394"/>
         <source>(old)</source>
         <translation>(Vieux)</translation>
     </message>
     <message>
-        <location filename="../WsjtxDecodesModel.cpp" line="409"/>
+        <location filename="../WsjtxDecodesModel.cpp" line="400"/>
         <source>Auto</source>
         <translation>Automatique</translation>
     </message>
@@ -1886,6 +1893,11 @@ Déplacez-vous entre les composants d&amp;apos;un groupe à l&amp;apos;aide de l
         <translation>Afficher une seule bande dans le prochain contact [???length]</translation>
     </message>
     <message>
+        <location filename="../DisplayOptions.ui" line="212"/>
+        <source>Centering of Auxiliary locator map</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../DisplayOptions.ui" line="399"/>
         <source>Display of Operating Time</source>
         <translation>Affichage du temps de l&apos;opérateur</translation>
@@ -1911,9 +1923,8 @@ Déplacez-vous entre les composants d&amp;apos;un groupe à l&amp;apos;aide de l
         <translation>Icônes séparées sur la barre des tâches</translation>
     </message>
     <message>
-        <location filename="../DisplayOptions.ui" line="212"/>
         <source>Centre Auxiliary locator map</source>
-        <translation>[????]</translation>
+        <translation type="vanished">[????]</translation>
     </message>
     <message>
         <location filename="../DisplayOptions.ui" line="218"/>
@@ -1943,7 +1954,7 @@ Déplacez-vous entre les composants d&amp;apos;un groupe à l&amp;apos;aide de l
     <message>
         <location filename="../DisplayOptions.ui" line="282"/>
         <source>Show grid when contest has locators</source>
-        <translation>Afficher grille lorsque quand le Concour utiliser Locators [???]</translation>
+        <translation>Afficher grille lorsque quand le Concour utiliser Locators [???i.e. not in HF contests]</translation>
     </message>
     <message>
         <location filename="../DisplayOptions.ui" line="289"/>
@@ -2987,7 +2998,7 @@ Non - Ignorer les modifications</translation>
     <message>
         <location filename="../qrzdisplayframe.ui" line="366"/>
         <source>QRZ date:</source>
-        <translation>Date QRZ [???Context]:</translation>
+        <translation>Date QRZ [???Context] Date call registered on QRZ:</translation>
     </message>
     <message>
         <location filename="../qrzdisplayframe.ui" line="408"/>
@@ -3007,7 +3018,7 @@ Non - Ignorer les modifications</translation>
     <message>
         <location filename="../qrzdisplayframe.ui" line="524"/>
         <source>DB date:</source>
-        <translation>Date DB [???Context}:</translation>
+        <translation>Date DB [???Context] Date callsign stored in our DB}:</translation>
     </message>
     <message>
         <location filename="../qrzdisplayframe.ui" line="617"/>
@@ -4026,13 +4037,13 @@ Non - Ignorer les modifications</translation>
     <message>
         <location filename="../ScreenConfigElement.cpp" line="34"/>
         <source>HSplit</source>
-        <translatorcomment>How differ from HSE and how used???</translatorcomment>
+        <translatorcomment>How differ from HSE and how used??? This is the splitter rather than a button hint</translatorcomment>
         <translation>Division horizontale</translation>
     </message>
     <message>
         <location filename="../ScreenConfigElement.cpp" line="34"/>
         <source>Horizontally split element</source>
-        <translatorcomment>Has it been split, or will it be?</translatorcomment>
+        <translatorcomment>Has it been split, or will it be? This is the button hint</translatorcomment>
         <translation>Élément divisé horizontalement (done or to do)</translation>
     </message>
     <message>
@@ -4053,7 +4064,7 @@ Non - Ignorer les modifications</translation>
     <message>
         <location filename="../ScreenConfigElement.cpp" line="38"/>
         <source>Data Modes Buttons</source>
-        <translation>Boutons Data [???]</translation>
+        <translation>Boutons Data [???] The type of panel containing data mode F key buttons</translation>
     </message>
     <message>
         <location filename="../ScreenConfigElement.cpp" line="39"/>
@@ -4630,7 +4641,7 @@ n&apos;existe pas; télécharger les derniers calendriers&#xa0;?</translation>
     <message>
         <location filename="../tclockdlg.ui" line="32"/>
         <source>raw time</source>
-        <translatorcomment>Does this actually need to be translated?</translatorcomment>
+        <translatorcomment>Does this actually need to be translated? - yes</translatorcomment>
         <translation>Temps brut</translation>
     </message>
     <message>
@@ -4803,7 +4814,7 @@ n&apos;existe pas; télécharger les derniers calendriers&#xa0;?</translation>
     <message>
         <location filename="../tentryoptionsform.cpp" line="48"/>
         <source>Section</source>
-        <translatorcomment>Are these actually required to be in ENglish for submission?</translatorcomment>
+        <translatorcomment>Are these actually required to be in ENglish for submission? No - they are for the operator</translatorcomment>
         <translation>Section</translation>
     </message>
     <message>
@@ -4927,7 +4938,7 @@ n&apos;existe pas; télécharger les derniers calendriers&#xa0;?</translation>
     <message>
         <location filename="../tentryoptionsform.cpp" line="314"/>
         <source>&lt;center&gt;&lt;b&gt;All VHF and up contests in the UK and IARU Region 1&lt;br&gt;require the Reg1Test format for entries.&lt;/b&gt;&lt;br&gt;Is this what you really want?&lt;br&gt;Press &lt;b&gt;Yes&lt;/b&gt; for Reg1Test, or &lt;b&gt;No&lt;/b&gt; to continue to export Cabrillo&lt;br&gt;(e.g. for CQ or ARRL entries)</source>
-        <translation>CONTEXT??</translation>
+        <translation>CONTEXT?? You tried to produce Reg1Test for HF (never allowed), or Cabrillo for VHF (can be needed e.g. for ARRL)</translation>
     </message>
     <message>
         <location filename="../tentryoptionsform.cpp" line="345"/>
@@ -6045,7 +6056,7 @@ Replay</source>
         <location filename="../txVmExternalButtonDialog.cpp" line="37"/>
         <source>Pass
 Through</source>
-        <translatorcomment>??Mode intermédiaire</translatorcomment>
+        <translatorcomment>??Mode intermédiaire no - pass microphone through to output</translatorcomment>
         <translation>Passthrough</translation>
     </message>
     <message>
@@ -6066,17 +6077,17 @@ Through</source>
     <message>
         <location filename="../txVmExternalButtonDialog.cpp" line="53"/>
         <source>Attack (ms)</source>
-        <translation>[Context?] </translation>
+        <translation>[Context? Compressor attack] </translation>
     </message>
     <message>
         <location filename="../txVmExternalButtonDialog.cpp" line="57"/>
         <source>Release (ms)</source>
-        <translation>[Context?] </translation>
+        <translation>[Context? Compressor release] </translation>
     </message>
     <message>
         <location filename="../txVmExternalButtonDialog.cpp" line="61"/>
         <source>Makeup Gain (db)</source>
-        <translation>[Context?] </translation>
+        <translation>[Context? extra gain needed after processing] </translation>
     </message>
     <message>
         <location filename="../txVmExternalButtonDialog.cpp" line="96"/>
@@ -6539,7 +6550,7 @@ Inclure le &quot;CQ&quot; ainsi que le type</translation>
     <message>
         <location filename="../WsjtxFrame.ui" line="134"/>
         <source>NoQSOWaiting</source>
-        <translation>Pas de qso attend [???context???]</translation>
+        <translation>Pas de qso attend [???context??? Leave as is, internal state name]</translation>
     </message>
     <message>
         <location filename="../WsjtxFrame.ui" line="141"/>
@@ -6618,10 +6629,14 @@ Inclure le &quot;CQ&quot; ainsi que le type</translation>
         <translation>Configuration du Keyer interne</translation>
     </message>
     <message>
-        <location filename="../txVmInternalSetupDialog.ui" line="25"/>
         <source>Number Buttons</source>
         <translatorcomment>???What is this???</translatorcomment>
-        <translation>Boutons numériques</translation>
+        <translation type="vanished">Boutons numériques</translation>
+    </message>
+    <message>
+        <location filename="../txVmInternalSetupDialog.ui" line="25"/>
+        <source>Number of  Buttons</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../txVmInternalSetupDialog.ui" line="39"/>

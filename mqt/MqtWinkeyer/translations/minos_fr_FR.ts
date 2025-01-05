@@ -6,7 +6,7 @@
     <message>
         <location filename="../winkeyersetupdialog.ui" line="14"/>
         <source>Dialog</source>
-        <translation>???</translation>
+        <translation>???WinKeyer isn&apos;t anywhere finished!</translation>
     </message>
     <message>
         <location filename="../winkeyersetupdialog.ui" line="22"/>

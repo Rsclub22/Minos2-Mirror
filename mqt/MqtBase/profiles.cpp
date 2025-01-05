@@ -117,7 +117,7 @@ BundleFile::BundleFile( PROFILES p )
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpBandmapOldStyle, "OldStyleBandmap", false, QT_TR_NOOP("Old style of band map"), QT_TR_NOOP("Old style of band map"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpShowAuxHeaders, "ShowAuxHeaders", true, QT_TR_NOOP("Show Auxiliary Headers"), QT_TR_NOOP("Show Auxiliary Headers"), false ) ) );
 
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpShowCribBand, "ShowCribBand", true, QT_TR_NOOP("Show Crib Band"), QT_TR_NOOP("Show Crib Band"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpShowCribBand, "ShowCribBand", true, QT_TR_NOOP("Show Next QSO Band"), QT_TR_NOOP("Show Next QSO Band"), false ) ) );
 
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpShowQSOMapGrid, "ShowQSOMapGrid", true, QT_TR_NOOP("Show QSO Map Grid"), QT_TR_NOOP("Show QSO Map Grid"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpShowQSOMapLines, "ShowQSOMapLines", true, QT_TR_NOOP("Show QSO Map Lines"), QT_TR_NOOP("Show QSO Map Lines"), false ) ) );
@@ -244,7 +244,7 @@ BundleFile::BundleFile( PROFILES p )
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( espReceiver, "Receiver", "", QT_TR_NOOP("Receive Equipment"), QT_TR_NOOP("Receive Equipment"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( espAntenna, "Antenna", "", QT_TR_NOOP("Antenna details"), QT_TR_NOOP("Antenna details"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( espAGL, "AGL", 0, QT_TR_NOOP("Antenna Height AGL (metres)"), QT_TR_NOOP("Antenna Height AGL (metres)"), false ) ) );
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( espOffset, "Bearing Offset", 0, QT_TR_NOOP("Antenna Bearing Offset"), QT_TR_NOOP("Amount to offset antenna bearings"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( espOffset, "Bearing Offset", 0, QT_TR_NOOP("Amount to offset antenna bearings"), QT_TR_NOOP("Amount to offset antenna bearings"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( espRadioName, "Radio", "", QT_TR_NOOP("Radio in Rig Control"), QT_TR_NOOP("Radio in Rig Control"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( espRotatorName, "rotator", "", QT_TR_NOOP("Rotator in Rotator Control"), QT_TR_NOOP("Rotator in Rotator Control"), false ) ) );
         break;

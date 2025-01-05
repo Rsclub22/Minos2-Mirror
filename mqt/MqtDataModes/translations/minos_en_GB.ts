@@ -74,11 +74,6 @@
 <context>
     <name>EngineConfigure</name>
     <message>
-        <location filename="../engineconfigure.ui" line="14"/>
-        <source>Configure Engines</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../engineconfigure.ui" line="58"/>
         <location filename="../engineconfigure.ui" line="154"/>
         <source>Receive</source>
@@ -103,6 +98,11 @@
     <message>
         <location filename="../engineconfigure.ui" line="33"/>
         <source>MMVARI/1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../engineconfigure.ui" line="14"/>
+        <source>Configure Decode Engines</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -226,12 +226,12 @@
     </message>
     <message>
         <location filename="../engineconfigure.cpp" line="439"/>
-        <source>Engine Files (*.ocx *.exe);;All Files (*.*)</source>
+        <source>Decode Engine Files (*.ocx *.exe);;All Files (*.*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../engineconfigure.cpp" line="443"/>
-        <source>%1 Engine Executable</source>
+        <source>%1 Decode Engine Executable</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -259,12 +259,12 @@
     </message>
     <message>
         <location filename="../enginewindow.ui" line="76"/>
-        <source>Set Test</source>
+        <source>Set Test Transmission Text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../enginewindow.ui" line="83"/>
-        <source>Send Test</source>
+        <source>Send Test Transmission</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

@@ -96,9 +96,6 @@ public:
   Q_SIGNAL void decodes_cleared (QString const& id);
   Q_SIGNAL void logged_ADIF (QString const& id, QByteArray const& ADIF);
 
-  // this signal is emitted when a network error occurs
-  Q_SIGNAL void error (QString const&);
-
   void stop();
 private:
   class impl;

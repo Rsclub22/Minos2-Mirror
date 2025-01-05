@@ -74,9 +74,8 @@
 <context>
     <name>EngineConfigure</name>
     <message>
-        <location filename="../engineconfigure.ui" line="14"/>
         <source>Configure Engines</source>
-        <translation>Configurer [what does this mean?]</translation>
+        <translation type="vanished">Configurer [what does this mean?]</translation>
     </message>
     <message>
         <location filename="../engineconfigure.ui" line="58"/>
@@ -104,6 +103,11 @@
         <location filename="../engineconfigure.ui" line="33"/>
         <source>MMVARI/1</source>
         <translation>MMVARI/1</translation>
+    </message>
+    <message>
+        <location filename="../engineconfigure.ui" line="14"/>
+        <source>Configure Decode Engines</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../engineconfigure.ui" line="47"/>
@@ -225,14 +229,22 @@
         <translation>Annuler</translation>
     </message>
     <message>
-        <location filename="../engineconfigure.cpp" line="439"/>
         <source>Engine Files (*.ocx *.exe);;All Files (*.*)</source>
-        <translation>[What???] Fichiers (*.ocx *.exe);;Tous les fichiers (*.*)</translation>
+        <translation type="vanished">[What???] Fichiers (*.ocx *.exe);;Tous les fichiers (*.*)</translation>
+    </message>
+    <message>
+        <source>%1 Engine Executable</source>
+        <translation type="vanished">%1 [what????] Exécutable</translation>
+    </message>
+    <message>
+        <location filename="../engineconfigure.cpp" line="439"/>
+        <source>Decode Engine Files (*.ocx *.exe);;All Files (*.*)</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../engineconfigure.cpp" line="443"/>
-        <source>%1 Engine Executable</source>
-        <translation>%1 [what????] Exécutable</translation>
+        <source>%1 Decode Engine Executable</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -259,13 +271,21 @@
     </message>
     <message>
         <location filename="../enginewindow.ui" line="76"/>
-        <source>Set Test</source>
-        <translation>CONTEXT??</translation>
+        <source>Set Test Transmission Text</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../enginewindow.ui" line="83"/>
+        <source>Send Test Transmission</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set Test</source>
+        <translation type="vanished">CONTEXT??</translation>
+    </message>
+    <message>
         <source>Send Test</source>
-        <translation>CONTEXT??</translation>
+        <translation type="vanished">CONTEXT??</translation>
     </message>
     <message>
         <location filename="../enginewindow.ui" line="124"/>

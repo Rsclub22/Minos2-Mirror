@@ -209,7 +209,7 @@
    <item>
     <widget class="QGroupBox" name="groupBox_4">
      <property name="title">
-      <string>Centre Auxiliary locator map</string>
+      <string>Centering of Auxiliary locator map</string>
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout_13">
       <item>
@@ -677,7 +677,7 @@
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="otButtonGroup"/>
   <buttongroup name="locButtonGroup"/>
+  <buttongroup name="otButtonGroup"/>
  </buttongroups>
 </ui>

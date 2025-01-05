@@ -217,17 +217,14 @@
         <translation>Connecter</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.ui" line="80"/>
-        <location filename="../kstmainwindow.ui" line="87"/>
-        <location filename="../kstmainwindow.ui" line="94"/>
-        <location filename="../kstmainwindow.ui" line="101"/>
-        <location filename="../kstmainwindow.ui" line="576"/>
-        <location filename="../kstmainwindow.ui" line="586"/>
-        <location filename="../kstmainwindow.ui" line="596"/>
-        <location filename="../kstmainwindow.ui" line="606"/>
+        <location filename="../kstmainwindow.ui" line="469"/>
+        <source>Including my call</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../kstmainwindow.ui" line="755"/>
         <source>-</source>
-        <translatorcomment>Replaced by text?</translatorcomment>
+        <translatorcomment>Replaced by text? Placeholder only - leave as is</translatorcomment>
         <translation>-</translation>
     </message>
     <message>
@@ -324,10 +321,9 @@ l&apos;indicatif sélectionné</translation>
         <translation>Effacer les filtres des messages</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.ui" line="469"/>
         <source>Including me</source>
         <translatorcomment>Context??</translatorcomment>
-        <translation>y compris les miens</translation>
+        <translation type="vanished">y compris les miens</translation>
     </message>
     <message>
         <location filename="../kstmainwindow.ui" line="490"/>
@@ -425,7 +421,7 @@ l&apos;indicatif sélectionné</translation>
     <message>
         <location filename="../kstmainwindow.cpp" line="656"/>
         <source>Set Back</source>
-        <translatorcomment>ou Retour?</translatorcomment>
+        <translatorcomment>ou Retour? KST has states AWAY and BACK</translatorcomment>
         <translation>Définir statut à « Présent »</translation>
     </message>
     <message>
