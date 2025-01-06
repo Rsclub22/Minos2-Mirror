@@ -13,6 +13,7 @@ enum SCType
     sctRunButtons,
     sctBandSwitch,
     sctRotControl,
+    sctSkyScanControl,
     sctRotPresets,
     sctQSOEdit,
     sctNextQSODetails,

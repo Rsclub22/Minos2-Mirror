@@ -62,6 +62,29 @@ QString getBearingStateTxt(skyScanBearingStates state)
     return bearingStateTxt[state];
 }
 
+
+int adjustOverlapBearingToCompassBearing(int value)
+{
+    int bearing = value;
+
+    if (bearing < 0)
+    {
+        bearing = bearing + COMPASS_MAX360;
+    }
+    else if (bearing > 360)
+    {
+        bearing = bearing - COMPASS_MAX360;
+    }
+
+    return bearing;
+}
+
+
+
+
+
+
+
 // bearing >= 0
 QString convertBearingToString(int bearing)
 {

@@ -12,6 +12,7 @@
 #include "dmbuttonframe.h"
 #include "fileutils.h"
 #include "qheaderview.h"
+#include "rotatorskyscanframe.h"
 #include "tqsoeditdlg.h"
 #include "tentryoptionsform.h"
 
@@ -246,6 +247,13 @@ void TSingleLogFrame::createScreenComponents()
 
     FKHRotControlFrame->setVisible(false);
 
+    skyScanControlFrame = new RotatorSkyScanFrame(this);
+    skyScanControlFrame->setObjectName(QStringLiteral("FKHSkyScanControlFrame"));
+    skyScanControlFrame->setFrameShape(QFrame::StyledPanel);
+    skyScanControlFrame->setFrameShadow(QFrame::Raised);
+
+    skyScanControlFrame->setVisible(false);
+
     clusterControlFrame = new ClusterClientFrame(this);
     clusterControlFrame->setObjectName(QStringLiteral("ClusterControlFrame"));
     clusterControlFrame->setFrameShape(QFrame::StyledPanel);
@@ -388,6 +396,7 @@ void TSingleLogFrame::clearScreenLayout(bool clearAllTabs)
     bandSwitchFrame->setContest(nullptr);
     txVmButtonsFrame->setContest(nullptr);
     FKHRotControlFrame->setContest(nullptr);
+    skyScanControlFrame->setContest(nullptr);
     rotPresets->setContest(nullptr);
     // CribSheet
     // NextContactDetailsLabel
@@ -440,6 +449,9 @@ void TSingleLogFrame::clearScreenLayout(bool clearAllTabs)
 
         FKHRotControlFrame->setParent(this);
         FKHRotControlFrame->hide();
+
+        skyScanControlFrame->setParent(this);
+        skyScanControlFrame->setParent(this);
 
         rotPresets->setParent(this);
         rotPresets->hide();
@@ -650,6 +662,12 @@ void TSingleLogFrame::buildRow(ContestPage *cp, SCRow &scrow, int &auxInstance, 
                 case sctRotControl:
                 {
                     elementScrollArea->setWidget(FKHRotControlFrame);
+                    // don't set contest here
+                    break;
+                }
+                case sctSkyScanControl:
+                {
+                    elementScrollArea->setWidget(skyScanControlFrame);
                     // don't set contest here
                     break;
                 }
@@ -899,6 +917,7 @@ void TSingleLogFrame::buildScreenLayout(int slotNo)
     wsjtxFrame->setContest(ct);
     FKHRigControlFrame->setContest(ct);
     FKHRotControlFrame->setContest(ct);
+    skyScanControlFrame->setContest(ct);
     dmButtonFrame->setContest(ct);
     txVmButtonsFrame->setContest(ct);
     bandmapControlFrame->setContest(ct);
@@ -1116,6 +1135,7 @@ void TSingleLogFrame::on_ContestPageChanged ()
 
     FKHRigControlFrame->on_ContestPageChanged();
     FKHRotControlFrame->on_ContestPageChanged();
+    skyScanControlFrame->on_ContestPageChanged();
 
     updateQSODisplay();
 

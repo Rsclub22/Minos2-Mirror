@@ -14,6 +14,7 @@
 #include "qsologframe.h"
 #include "rigcontrolframe.h"
 #include "rotcontrolframe.h"
+#include "rotatorskyscanframe.h"
 #include "RotPresets.h"
 #include "runbuttonsframe.h"
 #include "BandSwitchFrame.h"
@@ -47,6 +48,7 @@ public:
     RunButtonsFrame *runButtonsFrame = nullptr;
     BandSwitchFrame *bandSwitchFrame = nullptr;
     RotControlFrame *FKHRotControlFrame = nullptr;
+    RotatorSkyScanFrame *skyScanControlFrame = nullptr;
     TxVmButtonsFrame *txVmButtonsFrame = nullptr;
     QrzDisplayFrame *qrzDisplayFrame = nullptr;
 

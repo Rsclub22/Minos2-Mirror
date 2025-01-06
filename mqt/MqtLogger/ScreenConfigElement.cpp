@@ -25,6 +25,7 @@ QVector <SCTypeOption> ScreenConfigElement::scoptions =
     {sctBandSwitch, QT_TR_NOOP("HF Band Switching"), QT_TR_NOOP("HF Band Switching")},
     {sctRunButtons, QT_TR_NOOP("Call Freq Buttons"), QT_TR_NOOP("Run Freq Buttons")},
     {sctRotControl, QT_TR_NOOP("Rotator Control"), QT_TR_NOOP("Rotator Control")},
+    {sctSkyScanControl, QT_TR_NOOP("SkyScan Control"), QT_TR_NOOP("SkyScan Control")},
     {sctRotPresets, QT_TR_NOOP("Rotator Presets"), QT_TR_NOOP("Rotator Presets")},
     {sctThisMatch, QT_TR_NOOP("This Contest Match"), QT_TR_NOOP("This Contest Matches")},
     {sctOtherMatch, QT_TR_NOOP("Other Contest Match"), QT_TR_NOOP("Other Contest Matches") },

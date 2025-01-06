@@ -46,6 +46,18 @@ public:
 
     void setPathEnd(int end){pathEnd = end;}
     int getPathEnd(){return pathEnd;}
+    QString getListOfSteps()
+    {
+        QStringList stepList;
+        for (int value : rotationPath)
+        {
+          stepList.append(QString::number(value));
+        }
+
+        QString result = stepList.join(',');
+
+        return result;
+    }
 
 
 
@@ -135,6 +147,7 @@ private:
 
     void calcForwardPath(int startBearing, int endBearing);
     void calcReversePath(int startBearing, int endBearing);
+    void dumpRotationPathToTraceLog(ScanPath &scanPath, const QString &pathname);
 };
 
 #endif // SKYSCANCONTROL_H

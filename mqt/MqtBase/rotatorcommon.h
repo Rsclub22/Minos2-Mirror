@@ -161,7 +161,7 @@ inline const QString BUTTON_OFF_STYLE = QString("background-color: Gainsboro ; b
 
 // SkyScan Rotation Direction Indicators
 inline const QString SKYSCAN_DIRECTION_INDICATOR_ON = QString("background-color: orange ;\n");
-inline const QString SKYSCAN_DIRECTION_INDICATOR_OFF = QString("background-color: white ;\n");
+inline const QString SKYSCAN_DIRECTION_INDICATOR_OFF = QString("");
 
 extern const QStringList presetButtonLabels;
 
@@ -171,6 +171,7 @@ inline const QStringList bearingStateTxt = {"ROT_STOPPED", "ROT_REACHED_TARGET",
 QString getBearingStateTxt(skyScanBearingStates state);
 
 QString convertBearingToString(int bearing);
+int adjustOverlapBearingToCompassBearing(int value);
 
 class srotParams
 {

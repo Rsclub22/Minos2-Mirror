@@ -253,7 +253,8 @@ void SkyScanControl::determinePath()
         calcReversePath(endScanBearing, startScanBearing);
     }
 
-
+    dumpRotationPathToTraceLog(forwardRotationPath, QString("forward rotation path"));
+    dumpRotationPathToTraceLog(reverseRotationPath, QString("reverse rotation path"));
 
     /*
     // Generate the forward rotation path
@@ -432,9 +433,7 @@ void SkyScanControl::calcReversePath(int startBearing, int endBearing)
 {
 
     reverseRotationPath.setPathStart(startBearing);
-    traceMessage(QString("reversePath Start Bearing = %1").arg(startBearing));
     reverseRotationPath.setPathEnd(endBearing);
-    traceMessage(QString("reversePath End Bearing = %1").arg(endBearing));
 
     // Generate the reverse rotation path
     int nextStepBearing = startBearing;
@@ -453,8 +452,8 @@ void SkyScanControl::calcReversePath(int startBearing, int endBearing)
 
             nextStepBearing = minRotation + (nextStepBearing - maxRotation - 1);
         }
+
         reverseRotationPath.appendToScanPath(nextStepBearing);
-        traceMessage(QString("reversePath append nextStep Bearing = %1").arg(nextStepBearing));
 
         // Break if we reach the start angle
         if (nextStepBearing == endBearing)
@@ -506,6 +505,20 @@ int SkyScanControl::toStopTypeBearing(int bearing)
         }
     }
     return bearing;
+}
+
+
+void SkyScanControl::dumpRotationPathToTraceLog(ScanPath &scanPath, const QString &pathname)
+{
+    QString msg;
+
+    msg.append(pathname);
+    msg.append(QString(" - Start Scan Bearing: %1").arg(scanPath.getPathStart()));
+    msg.append(QString(" - End Scan Bearing: %1").arg(scanPath.getPathEnd()));
+    msg.append(QString(" - Steps: "));
+    msg.append(scanPath.getListOfSteps());
+
+    traceMessage(msg);
 }
 
 void SkyScanControl::traceMessage(QString msg)

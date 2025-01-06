@@ -1499,7 +1499,6 @@ void RotatorMainWindow::rotateTo(int bearing)
 
 
 
-
 int RotatorMainWindow::northCalcTarget(int targetBearing, int currentRotatorBearing)
 {
 
@@ -2956,7 +2955,7 @@ void RotatorMainWindow::skyScanStartBearingToolbuttonValueChanged(int value)
         value = value - COMPASS_MAX360;
     }
 
-    QString compassStartBearing = convertBearingToString(value);
+    QString compassStartBearing = QString::number(value).rightJustified(3, '0'); //convertBearingToString(value);
     ui->skyScanCompassStartBearingDisplay->setText(compassStartBearing);
 }
 
@@ -2978,16 +2977,10 @@ void RotatorMainWindow::skyScanEndBearingToolbuttonValueChanged(int value)
 
     endSkyScanBrg = value;
 
-    if (value < 0)
-    {
-        value = value + COMPASS_MAX360;
-    }
-    else if (value > 360)
-    {
-        value = value - COMPASS_MAX360;
-    }
+    int bearing = adjustOverlapBearingToCompassBearing(value);  // convert if overlap bearing
 
-    QString compassEndBearing = convertBearingToString(value);
+    QString compassEndBearing = QString::number(bearing).rightJustified(3, '0');   //convertBearingToString(bearing); // with leading zeros
+
     ui->skyScanCompassEndBearingDisplay->setText(compassEndBearing);
 }
 
@@ -3064,15 +3057,65 @@ void RotatorMainWindow::stopSkyScan()
 }
 
 
-void RotatorMainWindow::skyScanRotateTo(int bearing)
+void RotatorMainWindow::skyScanRotateTo(int rotateToBearing)
 {
-    trace(QString("SkyScan rotate to bearing = %1").arg(bearing));
-    rotateTo(bearing);
+    trace(QString("SkyScan rotate to bearing = %1").arg(QString::number(rotateToBearing)));
+
+    int retCode = 0;
+
+    if (rotator)
+    {
+        // check if we are already at bearing
+        if (rotateToBearing == rotatorBearing)
+        {
+            return;
+        }
+
+        if (movingCW || movingCCW)
+        {
+
+            stopRotation(true);
+        }
+
+        if (rotator->getRotConnected())
+        {
+
+            if ((setupAntenna->currentAntenna.max_azimuth == COMPASS_MAX360 || setupAntenna->currentAntenna.max_azimuth == COMPASS_MAX359) && rotateToBearing == COMPASS_MAX360)
+            {
+                rotateToBearing = rotateToBearing - 1;        // some hamlib and PST Rotator do not like 360
+            }
+
+            targetBearing = rotateToBearing;
+            retCode = rotator->rotate_to_bearing(rotateToBearing);
+            if (retCode < 0)
+            {
+                rotatorError(retCode, tr("Rotate to Bearing"));
+            }
+            else
+            {
+                moving = true;
+                rotTimeCount = 0;           // clear timer count
+            }
+
+        }
+        else
+        {
+            logMessage(QString("skscan rotateTo - rotator = nullptr"));
+        }
+
+    }
+
 }
 
 void RotatorMainWindow::displaySkyScanNextStepBearing(int bearing)
 {
     QString bearingStr = QString::number(bearing).rightJustified(3, '0');
+
+    if (bearing < 0 || bearing > 360)
+    {
+        bearingStr.append(QString(" (%1)").arg(QString::number(adjustOverlapBearingToCompassBearing(bearing)).rightJustified(3, '0')));
+    }
+
     ui->nextStepDegrees->setText(bearingStr);
 }
 
@@ -3086,8 +3129,8 @@ void RotatorMainWindow::displaySkyScanPauseIntervalCount(int count)
 
 void RotatorMainWindow::skyScanDisplayRotatorMinAzMaxAz(int minAz, int maxAz)
 {
-    QString minAzStr = convertBearingToString(minAz);
-    QString maxAzStr = convertBearingToString(maxAz);
+    QString minAzStr = QString::number(minAz).rightJustified(3, '0'); //convertBearingToString(minAz);
+    QString maxAzStr = QString::number(maxAz).rightJustified(3, '0'); //convertBearingToString(maxAz);
 
     ui->skyScanRotatorDisplayMinAz->setText(minAzStr);
     ui->skyScanRotatorDisplayMaxAz->setText(maxAzStr);
