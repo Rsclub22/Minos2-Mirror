@@ -78,6 +78,13 @@ public:
 
     void rotatorPresetsClearDirty();
     void setSupportStopCommand(const PubSubName &name, bool state);
+    void setSkyScanEnabled(const PubSubName &name, const bool enabled);
+    void setSkyScanStartBearing(const PubSubName &name, const int startBearing);
+    void setSkyScanEndBearing(const PubSubName &name, const int endBearing);
+    void setSkyScanNextStep(const PubSubName &name, QString bearing);
+    void setSkyScanCountDown(const PubSubName &name, QString countDown);
+    void setSkyScanButtonState(const PubSubName &name, int state);
+    void setSkyScanReverseScan(const PubSubName &name, bool state);
 };
 
 #endif // ROTATORCACHE_H

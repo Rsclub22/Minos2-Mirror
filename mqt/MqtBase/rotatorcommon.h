@@ -3,7 +3,7 @@
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //                      Rotator Control
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2018
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2018 - 2025
 //
 //
 //
@@ -12,9 +12,13 @@
 #ifndef ROTATORCOMMON_H
 #define ROTATORCOMMON_H
 
+#include "qtoolbutton.h"
 #include "rigcontrolcommonconstants.h"
 #include <QCoreApplication>
+#include <QLabel>
 #include "serialCommonData.h"
+
+
 class RotPresetData
 {
     Q_DECLARE_TR_FUNCTIONS(RotPresetData)
@@ -172,6 +176,8 @@ QString getBearingStateTxt(skyScanBearingStates state);
 
 QString convertBearingToString(int bearing);
 int adjustOverlapBearingToCompassBearing(int value);
+void displayCompassBearingWithOverlap(const QString newBearing, int &rotatorBearing, int &currentBearing, QLabel* displayLabel);
+void setSkyScanDirectionIndOnOff(QToolButton *indicator, bool state);
 
 class srotParams
 {

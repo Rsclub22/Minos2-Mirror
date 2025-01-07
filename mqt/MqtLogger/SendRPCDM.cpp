@@ -829,6 +829,28 @@ void TSendDM::notifyRotChanges()
                         traceMsg(QString("Rotator set status = %1, uuid = %2").arg(selState.status().getValue(), selStateUuid));
                         tslf->on_RotatorStatus(selState.status().getValue());
                     }
+                    if (selState.skyScanNextStep().isDirty())
+                    {
+                        traceMsg(QString("Skyscan nextStep = %1, uuid = %2").arg(selState.skyScanNextStep().getValue(), selStateUuid));
+                        tslf->on_SkyScanNextStep(selState.skyScanNextStep().getValue());
+                    }
+                    if (selState.skyScanCountDown().isDirty())
+                    {
+                        traceMsg(QString("Skyscan countdown = %1, uuid = %2").arg(selState.skyScanCountDown().getValue(),selStateUuid));
+                        tslf->on_SkyScanCountDown(selState.skyScanCountDown().getValue());
+                    }
+                    if (selState.skyScanButtonState().isDirty())
+                    {
+                        traceMsg(QString("SkyScan button state = %1, uuid = %2").arg(QString::number(selState.skyScanButtonState().getValue()), selStateUuid));
+                        tslf->on_SkyScanButtonState(selState.skyScanButtonState().getValue());
+                    }
+                    if (selState.skyScanReverseScan().isDirty())
+                    {
+                        traceMsg(QString("SkyScan reversescan state = %1, uuid = %2").arg(selState.skyScanReverseScan().getValue() ? "True" : "False", selStateUuid));
+                        tslf->on_SkyScanReverseScan(selState.skyScanReverseScan().getValue());
+                    }
+
+
                     selState.clearDirty();
                 }
                 if (selDetailUuid == frameUuid)
@@ -853,6 +875,21 @@ void TSendDM::notifyRotChanges()
                     {
                         traceMsg(QString("Rotator set supportStopCommand = %1, uuid = %2").arg(selDetail.supportStopCommand().getValue() ? "True" :"False", selStateUuid));
                         tslf->on_SupportStopCommand(selDetail.supportStopCommand().getValue());
+                    }
+                    if (selDetail.skyScanEnabled().isDirty())
+                    {
+                        traceMsg(QString("SkyScan enabled = %1, uuid = %2").arg(selDetail.skyScanEnabled().getValue() ? "True" : "False", selStateUuid));
+                        tslf->on_skyScanEnabled(selDetail.skyScanEnabled().getValue());
+                    }
+                    if (selDetail.skyScanStartBearing().isDirty())
+                    {
+                        traceMsg(QString("SkyScan Start Bearing = %1, uuid = %2").arg(selDetail.skyScanStartBearing().getValue()).arg(selStateUuid));
+                        tslf->on_skyScanStartBearing(selDetail.skyScanStartBearing().getValue());
+                    }
+                    if (selDetail.skyScanEndBearing().isDirty())
+                    {
+                        traceMsg(QString("SkyScan End Bearing = %1, uuid = %2").arg(selDetail.skyScanEndBearing().getValue()).arg(selStateUuid));
+                        tslf->on_skyScanEndBearing(selDetail.skyScanEndBearing().getValue());
                     }
                     selDetail.clearDirty();
 

@@ -11,6 +11,9 @@ class AntennaDetail
     MinosItem<int> _maxAzimuth;
     MinosItem<bool> _cwCcwCmdEnable;
     MinosItem<bool> _supportStopCommand;
+    MinosItem<bool> _skyScanEnabled;
+    MinosItem<int> _skyScanStartBearing;
+    MinosItem<int> _skyScanEndBearing;
     CacheSelection _selected;
 public:
     AntennaDetail();
@@ -36,6 +39,14 @@ public:
     void setCwCcwCmdEnable(bool cwCcwCmdEnable);
 
     void setSelected(const QString &loggeruuid, const QString &selected);
+
+    MinosItem<bool> skyScanEnabled() const;
+    MinosItem<int> skyScanStartBearing() const;
+    MinosItem<int> skyScanEndBearing() const;
+
+    void setSkyScanEnabled(bool state);
+    void setSkyScanStartBearing(int startBearing);
+    void setSkyScanEndBearing(int endBearing);
 };
 
 #endif // ANTENNADETAIL_H

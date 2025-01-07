@@ -690,6 +690,60 @@ void RotatorMainWindow::sendPresetListLogger()
     msg->rotatorCache.setRotatorPresets(psname, presets.join(':'));
     msg->rotatorCache.publish();
 }
+
+
+
+void RotatorMainWindow::sendSkyScanEnabledToLogger(bool state)
+{
+    logMessage(QString("Send SkyScan Enabled = %1 to logger").arg(state ? "true" :"false"));
+    PubSubName psname(setupAntenna->currentAntennaName);
+    msg->rotatorCache.setSkyScanEnabled(psname, state);
+    msg->rotatorCache.publish();
+}
+
+void RotatorMainWindow::sendSkyScanStartBearingAndEndBearingToLogger(int startBearing, int endBearing)
+{
+    logMessage(QString("Send SkyScan Start Bearing = %1 and end bearing = %2 to logger").arg(QString::number(startBearing).arg(endBearing)));
+    PubSubName psname(setupAntenna->currentAntennaName);
+    msg->rotatorCache.setSkyScanStartBearing(psname, startBearing);
+    msg->rotatorCache.setSkyScanEndBearing(psname, endBearing);
+    msg->rotatorCache.publish();
+}
+
+void RotatorMainWindow::sendSkyScanNextStepToLogger(QString nextStepBearing)
+{
+    logMessage(QString("Send SkyScan next step bearing = %1 to logger").arg(nextStepBearing));
+    PubSubName psname(setupAntenna->currentAntennaName);
+    msg->rotatorCache.setSkyScanNextStep(psname, nextStepBearing);
+    msg->rotatorCache.publish();
+}
+
+void RotatorMainWindow::sendSkyScanCountDownToLogger(QString countDown)
+{
+    logMessage(QString("Send SkyScan count down time = %1 to logger").arg(countDown));
+    PubSubName psname(setupAntenna->currentAntennaName);
+    msg->rotatorCache.setSkyScanCountDown(psname, countDown);
+    msg->rotatorCache.publish();
+}
+
+void RotatorMainWindow::sendSkyScanButtonStateToLogger(int state)
+{
+    logMessage(QString("Send SkyScan button state = %1 to logger").arg(QString::number(state)));
+    PubSubName psname(setupAntenna->currentAntennaName);
+    msg->rotatorCache.setSkyScanButtonState(psname, state);
+    msg->rotatorCache.publish();
+}
+
+void RotatorMainWindow::sendSkyScanReverseScanToLogger(bool state)
+{
+    logMessage(QString("Send SkyScan reverse scan state = %1 to logger").arg(state ? "true" : "false"));
+    PubSubName psname(setupAntenna->currentAntennaName);
+    msg->rotatorCache.setSkyScanReverseScan(psname, state);
+    msg->rotatorCache.publish();
+}
+
+
+
 void RotatorMainWindow::initActionsConnections()
 {
 
@@ -3365,17 +3419,7 @@ void RotatorMainWindow::setSkyScanCWIndicatorOnOff(bool state)
     setSkyScanDirectionIndOnOff(ui->skyScanCwIndicator, state);
 }
 
-void RotatorMainWindow::setSkyScanDirectionIndOnOff(QToolButton *indicator, bool state)
-{
-    if (state)
-    {
-        indicator->setStyleSheet(SKYSCAN_DIRECTION_INDICATOR_ON);
-    }
-    else
-    {
-        indicator->setStyleSheet(SKYSCAN_DIRECTION_INDICATOR_OFF);
-    }
-}
+
 
 void RotatorMainWindow::dumpSkyScanSettingsToTraceLog()
 {

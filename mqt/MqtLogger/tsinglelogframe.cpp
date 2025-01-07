@@ -2291,6 +2291,7 @@ void TSingleLogFrame::on_RotatorBearing(QString s)
         FKHRotControlFrame->setRotatorBearing(s);
         bandmapControlFrame->setRotatorBearing(s);
         GJVQSOLogFrame->setRotatorBearing(s);
+        skyScanControlFrame->setRotatorBearing(s);
     }
 }
 
@@ -2331,6 +2332,7 @@ void TSingleLogFrame::on_cwCcwCmdEnable(bool s)
     }
 }
 
+
 void TSingleLogFrame::sendRotator(rpcConstants::RotateDirection direction, int angle )
 {
     if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
@@ -2348,6 +2350,67 @@ void TSingleLogFrame::presetTurn(QString b)
     if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
         FKHRotControlFrame->presetTurn(b);
 }
+
+
+void TSingleLogFrame::on_skyScanEnabled(bool state)
+{
+    if (this == LogContainer->getCurrentLogFrame())
+    {
+        skyScanControlFrame->setSkyScanEnabled(state);
+    }
+}
+
+void TSingleLogFrame::on_skyScanStartBearing(int startBearing)
+{
+    if (this == LogContainer->getCurrentLogFrame())
+    {
+        skyScanControlFrame->setSkyScanStartBearing(startBearing);
+    }
+}
+
+void TSingleLogFrame::on_skyScanEndBearing(int endBearing)
+{
+    if (this == LogContainer->getCurrentLogFrame())
+    {
+        skyScanControlFrame->setSkyScanEndBearing(endBearing);
+    }
+}
+
+
+void TSingleLogFrame::on_SkyScanNextStep(QString nextStep)
+{
+    if (this == LogContainer->getCurrentLogFrame())
+    {
+        skyScanControlFrame->setSkyScanNextStep(nextStep);
+    }
+}
+
+
+void TSingleLogFrame::on_SkyScanCountDown(QString countDown)
+{
+    if (this == LogContainer->getCurrentLogFrame())
+    {
+        skyScanControlFrame->setSkyScanCountDown(countDown);
+    }
+}
+
+void TSingleLogFrame::on_SkyScanButtonState(int state)
+{
+    if (this == LogContainer->getCurrentLogFrame())
+    {
+        skyScanControlFrame->setSkyScanButtonState(state);
+    }
+}
+
+void TSingleLogFrame::on_SkyScanReverseScan(bool state)
+{
+    if (this == LogContainer->getCurrentLogFrame())
+    {
+        skyScanControlFrame->setSkyScanReverseScan(state);
+    }
+}
+
+
 
 //---------------------------KST------------------------------------
 void TSingleLogFrame::xferFromKST(QString call, QString loc, QString freq)

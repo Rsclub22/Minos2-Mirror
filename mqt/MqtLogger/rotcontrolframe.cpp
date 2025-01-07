@@ -695,7 +695,12 @@ void RotControlFrame::on_ContestPageChanged()
 
 void RotControlFrame::setRotatorBearing(const QString &s)
 {
-    traceMsg("Bearings from rotator control");
+    traceMsg(QString("Bearings from rotator control = %1").arg(s));
+
+    displayCompassBearingWithOverlap(s, rotatorBearing, currentBearing, ui->RotBrg);
+
+ /*
+
     // extract displayBearing:rotatorBearing:overlapstatus
     QStringList sl = s.split(':');
     if (sl.size() < 3)
@@ -747,7 +752,7 @@ void RotControlFrame::setRotatorBearing(const QString &s)
         brg.prepend("<font color='Black'>");
         ui->RotBrg->setText(brg);
     }
-
+*/
 }
 
 void RotControlFrame::setRotatorMaxAzimuth(const int maxAz)

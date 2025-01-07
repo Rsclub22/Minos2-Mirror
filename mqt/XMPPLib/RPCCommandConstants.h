@@ -181,6 +181,18 @@ static const QString rotatorMaxAzimuth  ("MaxAzimuth");
 static const QString rotatorMinAzimuth  ("MinAzimuth");
 static const QString supportStopCommand ("SupportStopCommand");
 
+// SkyScan
+
+enum SkyScanButtonState : int {eSkyScanStop, eSkyScanStart, eSkyScanPause};
+
+static const QString skyScanEnabled ("SkyScanEnabled");
+static const QString skyScanStartBearing ("SkyScanStartBearing");
+static const QString skyScanEndBearing ("SkyScanEndBearing");
+static const QString skyScanNextStep ("SkyScanNextStep");
+static const QString skyScanCountDown ("SkyScanCountDown");
+static const QString skyScanButtonState ("SkyScanButtonState");
+static const QString skyScanReverseScan ("SkyScanReverseScan");
+
 // Rig Control
 static const QString rigControlApp         ("mqtRigControl");
 static const QString rigControlResult      ("RigControlResult");

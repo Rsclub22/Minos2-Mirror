@@ -18,6 +18,7 @@
 
 #include <QFrame>
 #include <QObject>
+#include <QToolButton>
 #include "RPCCommandConstants.h"
 #include "MinosLoggerEvents.h"
 
@@ -42,9 +43,40 @@ public:
 
     void setContest(BaseContestLog *c);
     void on_ContestPageChanged();
+    void setSkyScanNextStep(QString nextStep);
+    void setSkyScanCountDown(QString countDown);
+    void setSkyScanButtonState(int state);
+    void setSkyScanReverseScan(bool state);
+    void setRotatorBearing(QString bearing);
+    void setSkyScanEnabled(bool state);
+    void setSkyScanStartBearing(int startBearing);
+    void setSkyScanEndBearing(int endBearing);
+
 private:
 
     Ui::RotatorSkyScanFrame *ui;
+    void traceMsg(QString msg);
+
+    int rotatorBearing = 0;
+    int currentBearing = 0;
+
+    int startScanBearing = 0;
+    int endScanBearing = 0;
+
+    QString nextStepBearing;
+    QString countDownTime;
+
+    rpcConstants::SkyScanButtonState buttonState = rpcConstants::eSkyScanStop;
+
+    bool skyScanEnabled = false;
+    bool skyScanReverse = false;
+
+
+    void setSkyScanStartButtonColour(QString style);
+    void setSkyScanStopButtonColour(QString style);
+    void setSkyScanCWIndicatorOnOff(bool state);
+    void setSkyScanCCWIndicatorOnOff(bool state);
+
 };
 
 #endif // ROTATORSKYSCANFRAME_H

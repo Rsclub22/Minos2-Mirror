@@ -91,6 +91,13 @@ public:
 
     void setSkyScanCCWIndicatorOnOff(bool state);
     void setSkyScanCWIndicatorOnOff(bool state);
+    void sendSkyScanEnabledToLogger(bool state);
+    void sendSkyScanStartBearingAndEndBearingToLogger(int startBearing, int endBearing);
+    void sendSkyScanNextStepToLogger(QString nextStepBearing);
+    void sendSkyScanCountDownToLogger(QString countDown);
+    void sendSkyScanButtonStateToLogger(int state);
+    void sendSkyScanReverseScanToLogger(bool state);
+
 signals:
 
     void escapePressed();
@@ -407,7 +414,7 @@ private:
     void setSkyScanStartBearingToolButtonUpDown();
     void setSkyScanEndBearingToolButtonUpDown();
     void skyScanDisplayRotatorMinAzMaxAz(int minAz, int maxAz);
-    void setSkyScanDirectionIndOnOff(QToolButton *indicator, bool state);
+
 };
 
 #endif // ROTATORMAINWINDOW_H

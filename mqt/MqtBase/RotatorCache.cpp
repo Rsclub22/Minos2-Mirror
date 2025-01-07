@@ -346,6 +346,42 @@ QString RotatorCache::getRotatorPresets(const PubSubName &name)
     return rotPresets[n].getValue();
 }
 
+void RotatorCache::setSkyScanNextStep(const PubSubName &name, QString bearing)
+{
+    rotStates[name].setSkyScanNextStep(bearing);
+}
+
+void RotatorCache::setSkyScanCountDown(const PubSubName &name, QString countDown)
+{
+    rotStates[name].setSkyScanCountDown(countDown);
+}
+
+void RotatorCache::setSkyScanButtonState(const PubSubName &name, int state)
+{
+    rotStates[name].setSkyScanButtonState(state);
+}
+
+void RotatorCache::setSkyScanReverseScan(const PubSubName &name, bool state)
+{
+    rotStates[name].setSkyScanReverseScan(state);
+}
+
+
+void RotatorCache::setSkyScanEnabled(const PubSubName &name, const bool enabled)
+{
+    rotDetails[name].setSkyScanEnabled(enabled);
+}
+
+void RotatorCache::setSkyScanStartBearing(const PubSubName &name, const int startBearing)
+{
+    rotDetails[name].setSkyScanStartBearing(startBearing);
+}
+
+void RotatorCache::setSkyScanEndBearing(const PubSubName &name, const int endBearing)
+{
+    rotDetails[name].setSkyScanEndBearing(endBearing);
+}
+
 void RotatorCache::publishState()
 {
     MinosRPC *rpc = MinosRPC::getMinosRPC();

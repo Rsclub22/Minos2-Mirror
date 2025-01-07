@@ -12,6 +12,9 @@ AntennaDetail::AntennaDetail()
     _minAzimuth.setInitialValue(0);
     _cwCcwCmdEnable.setInitialValue(false);
     _supportStopCommand.setInitialValue(true);
+    _skyScanEnabled.setInitialValue(false);
+    _skyScanStartBearing.setInitialValue(0);
+    _skyScanEndBearing.setInitialValue(0);
 }
 AntennaDetail::AntennaDetail(QString s)
 {
@@ -20,11 +23,21 @@ AntennaDetail::AntennaDetail(QString s)
     _minAzimuth.setInitialValue(0);
     _cwCcwCmdEnable.setInitialValue(false);
     _supportStopCommand.setInitialValue(true);
+    _skyScanEnabled.setInitialValue(false);
+    _skyScanStartBearing.setInitialValue(0);
+    _skyScanEndBearing.setInitialValue(0);
     unpack(s);
 }
 bool AntennaDetail::isDirty() const
 {
-    return (_selected.isDirty() || _minAzimuth.isDirty() || _maxAzimuth.isDirty() || _cwCcwCmdEnable.isDirty() || _supportStopCommand.isDirty());
+    return (_selected.isDirty()
+            || _minAzimuth.isDirty()
+            || _maxAzimuth.isDirty()
+            || _cwCcwCmdEnable.isDirty()
+            || _supportStopCommand.isDirty()
+            || _skyScanEnabled.isDirty()
+            || _skyScanStartBearing.isDirty()
+            || _skyScanEndBearing.isDirty());
 }
 void AntennaDetail::clearDirty()
 {
@@ -33,6 +46,9 @@ void AntennaDetail::clearDirty()
     _cwCcwCmdEnable.clearDirty();
     _supportStopCommand.clearDirty();
     _selected.clearDirty();
+    _skyScanEnabled.clearDirty();
+    _skyScanStartBearing.clearDirty();
+    _skyScanEndBearing.clearDirty();
 }
 void AntennaDetail::setDirty()
 {
@@ -41,6 +57,9 @@ void AntennaDetail::setDirty()
     _cwCcwCmdEnable.setDirty();
     _supportStopCommand.setDirty();
     _selected.setDirty();
+    _skyScanEnabled.setDirty();
+    _skyScanStartBearing.setDirty();
+    _skyScanEndBearing.setDirty();
 }
 QString AntennaDetail::pack() const
 {
@@ -51,6 +70,9 @@ QString AntennaDetail::pack() const
     jv.insert(rpcConstants::rotatorMaxAzimuth, maxAzimuth().getValue());
     jv.insert(rpcConstants::rotCwCcwCmdEnable, cwCcwCmdEnable().getValue());
     jv.insert(rpcConstants::supportStopCommand, supportStopCommand().getValue());
+    jv.insert(rpcConstants::skyScanEnabled, skyScanEnabled().getValue());
+    jv.insert(rpcConstants::skyScanStartBearing, skyScanEndBearing().getValue());
+    jv.insert(rpcConstants::skyScanEndBearing, skyScanEndBearing().getValue());
 
     QJsonDocument json(jv);
 
@@ -70,6 +92,9 @@ void AntennaDetail::unpack(QString s)
         _maxAzimuth.setValue(json.object().value(rpcConstants::rotatorMaxAzimuth).toInt());
         _cwCcwCmdEnable.setValue(json.object().value(rpcConstants::rotCwCcwCmdEnable).toBool());
         _supportStopCommand.setValue(json.object().value(rpcConstants::supportStopCommand).toBool());
+        _skyScanEnabled.setValue(json.object().value(rpcConstants::skyScanEnabled).toBool());
+        _skyScanStartBearing.setValue(json.object().value(rpcConstants::skyScanStartBearing).toBool());
+        _skyScanEndBearing.setValue(json.object().value(rpcConstants::skyScanEndBearing).toBool());
     }
     else
     {
@@ -121,6 +146,33 @@ MinosItem<bool> AntennaDetail::supportStopCommand() const
 MinosStringItem<QString> AntennaDetail::getSelectedContest(QString loggerUuid) const
 {
     return _selected.getSelectedContest(loggerUuid);
+}
+
+
+MinosItem<bool> AntennaDetail::skyScanEnabled() const
+{
+    return _skyScanEnabled;
+}
+MinosItem<int> AntennaDetail::skyScanStartBearing() const
+{
+    return _skyScanStartBearing;
+}
+MinosItem<int> AntennaDetail::skyScanEndBearing() const
+{
+    return _skyScanEndBearing;
+}
+
+void AntennaDetail::setSkyScanEnabled(bool state)
+{
+    _skyScanEnabled.setValue(state);
+}
+void AntennaDetail::setSkyScanStartBearing(int startBearing)
+{
+    _skyScanStartBearing.setValue(startBearing);
+}
+void AntennaDetail::setSkyScanEndBearing(int endBearing)
+{
+    _skyScanEndBearing.setValue(endBearing);
 }
 
 
