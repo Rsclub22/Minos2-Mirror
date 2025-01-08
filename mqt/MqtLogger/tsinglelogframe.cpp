@@ -631,7 +631,8 @@ void TSingleLogFrame::buildRow(ContestPage *cp, SCRow &scrow, int &auxInstance, 
                 case sctRunButtons:
                 {
                     elementScrollArea->setWidget(runButtonsFrame);
-                    runButtonsFrame->setContest(ct);
+                    // don't set contest here
+//                    runButtonsFrame->setContest(ct);
                     break;
                 }
                 case sctBandSwitch:
@@ -901,6 +902,7 @@ void TSingleLogFrame::buildScreenLayout(int slotNo)
     dmButtonFrame->setContest(ct);
     txVmButtonsFrame->setContest(ct);
     bandmapControlFrame->setContest(ct);
+    runButtonsFrame->setContest(ct);
 
     LogContainer->raise();  // get it back in front
 
