@@ -466,7 +466,7 @@ when user selected</string>
               <item>
                <widget class="QCheckBox" name="includeMeCb">
                 <property name="text">
-                 <string>Including my call</string>
+                 <string notr="true">Including my call</string>
                 </property>
                </widget>
               </item>
@@ -799,7 +799,7 @@ when user selected</string>
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="activeChatGroup"/>
   <buttongroup name="callStringButtonGroup"/>
+  <buttongroup name="activeChatGroup"/>
  </buttongroups>
 </ui>
