@@ -144,7 +144,8 @@ Please enter a name for the radio</source>
     <message>
         <location filename="../hamlibrigcontrol.cpp" line="40"/>
         <source>Argument out of domain of func</source>
-        <translation>Argument hors du domaine de la fonction [huh] Hamlib error???</translation>
+        <translatorcomment>Argument hors du domaine de la fonction [huh]</translatorcomment>
+        <translation>Hamlib error</translation>
     </message>
     <message>
         <location filename="../hamlibrigcontrol.cpp" line="41"/>
@@ -267,13 +268,10 @@ Vérifier le tracelog Rigcontrol</translation>
 Please obtain the correct ini file from the Minos folder:
 Configuration\Omnirig_Minos_Ini
 Place it in \Program Files (x86)\Afreet\OmniRig\Rigs</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>The ini file for %1 does not contain [pmFreq] for correct operation of Minos
-Please obtain the correct ini file from the developers</source>
-        <translation type="vanished">Le fichier INI pour %1 ne contient pas [pmFreq] pour le bon fonctionnement de Minos
-Obtenir le fichier ini correct auprès des développeurs SVP</translation>
+        <translation>Le fichier ini pour %1 ne contient pas [pmFreq] pour un fonctionnement correct de Minos
+Obtenir le fichier ini correct à partir du dossier Minos&#xa0;:
+Configuration\Omnirig_Minos_Ini
+Placez-le dans \Program Files (x86)\Afreet\OmniRig\Rigs</translation>
     </message>
     <message>
         <location filename="../omnirigcontrol.cpp" line="1050"/>
@@ -361,7 +359,7 @@ Obtenir le fichier ini correct auprès des développeurs SVP</translation>
     <message>
         <location filename="../rigcontrolmainwindow.ui" line="288"/>
         <source>Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Mode</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.ui" line="387"/>
@@ -451,14 +449,6 @@ actif</translation>
         <location filename="../rigcontrolmainwindow.ui" line="1002"/>
         <source>PTT</source>
         <translation>PTT</translation>
-    </message>
-    <message>
-        <source>TX</source>
-        <translation type="vanished">TX</translation>
-    </message>
-    <message>
-        <source>Support:</source>
-        <translation type="vanished">Soutiens: [Context?Placeholder - don&apos;t translate]</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.ui" line="345"/>
@@ -600,7 +590,8 @@ Voulez-vous recharger les paramètres de cette radio?</translation>
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="571"/>
         <source>Radio type &quot;%1&quot; no longer exists in Hamlib, Please choose something different</source>
-        <translation>WHERE??? Hamlib has a bad habit of changing names - e.g. between FlexRadio and Flex Radio!</translation>
+        <translatorcomment>Hamlib has a bad habit of changing names - e.g. between FlexRadio and Flex Radio!</translatorcomment>
+        <translation>Le type de radio &quot;%1&quot; n&apos;existe plus dans Hamlib, choisir quelque chose de différent SVP</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="1413"/>
@@ -621,8 +612,8 @@ Some radios/interfaces may require Force DTR or Force RTS to be set High, to pow
 Minos a essayé de lire la fréquence radio,
 mais rien n&apos;a été reçu de la radio.
 
-Vérifier les connexions et/ou les paramètres.
-Certaines radios/interfaces peuvent nécessiter que Force DTR ou Force RTS soit réglé sur Haut pour alimenter l&apos;interface.!Force?</translation>
+Veuillez vérifier les connexions et/ou les paramètres.
+Certaines radios/interfaces peuvent nécessiter que Force-DTR ou Force-RTS soit réglé sur High, pour alimenter l&apos;interface.</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="1434"/>
@@ -1229,8 +1220,8 @@ Vous ne pourrez pas sélectionner un radio tant que cela ne sera pas corrigé !<
         <location filename="../rigcontrolmainwindow.cpp" line="4958"/>
         <source>Get and Set Antenna Switch = %1
 </source>
-        <translatorcomment>Obtenir et définir</translatorcomment>
-        <translation>WHERE??????? Under &quot;show current radio config&quot; button</translation>
+        <translatorcomment>WHY &quot;Get and Set ANTENNA Switch&quot; under &quot;show current RADIO config&quot; button</translatorcomment>
+        <translation>Obtenir et définir le commutateur d&apos;antenne = %1???</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="4959"/>

@@ -5638,27 +5638,27 @@ Please confirm this action by pressing &quot;Yes&quot;.</source>
 <context>
     <name>TSingleLogFrame</name>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="993"/>
+        <location filename="../tsinglelogframe.cpp" line="995"/>
         <source>Failed to open %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1007"/>
+        <location filename="../tsinglelogframe.cpp" line="1009"/>
         <source>Save imported log as a .minos file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1533"/>
+        <location filename="../tsinglelogframe.cpp" line="1535"/>
         <source>No unfilled contacts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1552"/>
+        <location filename="../tsinglelogframe.cpp" line="1554"/>
         <source>Please give serial wanted</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1574"/>
+        <location filename="../tsinglelogframe.cpp" line="1576"/>
         <source>Serial number %1 not found</source>
         <translation type="unfinished"></translation>
     </message>

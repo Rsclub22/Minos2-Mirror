@@ -166,7 +166,7 @@
     <message>
         <location filename="../bandmapclientframe.cpp" line="1627"/>
         <source>Bandmap Spot Filters</source>
-        <translation type="unfinished"></translation>
+        <translation>Bandmap filtres de spot</translation>
     </message>
     <message>
         <location filename="../bandmapclientframe.cpp" line="1702"/>
@@ -939,16 +939,12 @@ Le mode calculé est %2</translation>
     <message>
         <location filename="../LoggerContacts.cpp" line="64"/>
         <source>Duplicate</source>
-        <translation>Double entrée</translation>
-    </message>
-    <message>
-        <source>BackPacker</source>
-        <translation type="vanished">&apos;BackPacker&apos;</translation>
+        <translation>Duplicata</translation>
     </message>
     <message>
         <location filename="../LoggerContacts.cpp" line="69"/>
         <source>Valid Dup</source>
-        <translation type="unfinished"></translation>
+        <translation>Duplicata valide</translation>
     </message>
     <message>
         <location filename="../LoggerContacts.cpp" line="72"/>
@@ -1465,12 +1461,12 @@ Déplacez-vous entre les composants d&amp;apos;un groupe à l&amp;apos;aide de l
         <location filename="../dmbuttonframe.cpp" line="70"/>
         <location filename="../dmbuttonframe.cpp" line="477"/>
         <source>Data Modes Buttons from %1</source>
-        <translation>Boutons de modes de données de %1 [??? %1 is a file name]</translation>
+        <translation>Boutons de modes de données de %1</translation>
     </message>
     <message>
         <location filename="../dmbuttonframe.cpp" line="192"/>
         <source>Not enough key definitions in %1</source>
-        <translation>Pas assez de définitions dans %1 [key???%1 is a file name]</translation>
+        <translation>Pas assez de définitions dans %1</translation>
     </message>
     <message>
         <location filename="../dmbuttonframe.cpp" line="356"/>
@@ -1480,20 +1476,12 @@ Déplacez-vous entre les composants d&amp;apos;un groupe à l&amp;apos;aide de l
     <message>
         <location filename="../dmbuttonframe.cpp" line="463"/>
         <source>Function Key Definitions Files (*.json);;All Files (*.*)</source>
-        <translation type="unfinished"></translation>
+        <translation>Fichiers de définitions de touches de fonction (*.json);;Tous les fichiers (*.*)</translation>
     </message>
     <message>
         <location filename="../dmbuttonframe.cpp" line="467"/>
         <source>Open Function Key Definitions File</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Contact list files (*.json);;All Files (*.*)</source>
-        <translation type="vanished">Fichiers de la liste de contacts (* .json) ;; Tous les fichiers (*. *) [Contacts = json??]</translation>
-    </message>
-    <message>
-        <source>Open Function Key Definitions</source>
-        <translation type="vanished">Ouvrir les définitions des touches de fonction [???]</translation>
+        <translation>Ouvrir le fichier de définitions des touches de fonction</translation>
     </message>
 </context>
 <context>
@@ -1660,11 +1648,6 @@ Déplacez-vous entre les composants d&amp;apos;un groupe à l&amp;apos;aide de l
         <location filename="../WsjtxDecodesModel.cpp" line="57"/>
         <source>brg</source>
         <translation>Direction</translation>
-    </message>
-    <message>
-        <source>distance</source>
-        <translatorcomment>NOT USED?</translatorcomment>
-        <translation type="vanished">distance</translation>
     </message>
     <message>
         <location filename="../WsjtxDecodesModel.cpp" line="59"/>
@@ -1921,10 +1904,6 @@ Déplacez-vous entre les composants d&amp;apos;un groupe à l&amp;apos;aide de l
         <location filename="../DisplayOptions.ui" line="170"/>
         <source>Separate Logger Icons on Taskbar</source>
         <translation>Icônes séparées sur la barre des tâches</translation>
-    </message>
-    <message>
-        <source>Centre Auxiliary locator map</source>
-        <translation type="vanished">[????]</translation>
     </message>
     <message>
         <location filename="../DisplayOptions.ui" line="218"/>
@@ -2908,7 +2887,7 @@ Non - Ignorer les modifications</translation>
     <message>
         <location filename="../qsologframe.cpp" line="2947"/>
         <source>Change mode to PH?</source>
-        <translation>Changer de mode en PH? </translation>
+        <translation>Changer de mode en PH?</translation>
     </message>
     <message>
         <location filename="../qsologframe.cpp" line="2956"/>
@@ -2998,7 +2977,7 @@ Non - Ignorer les modifications</translation>
     <message>
         <location filename="../qrzdisplayframe.ui" line="366"/>
         <source>QRZ date:</source>
-        <translation>Date QRZ [???Context] Date call registered on QRZ:</translation>
+        <translation>Date d&apos;enregistrement de l&apos;appel sur QRZ :</translation>
     </message>
     <message>
         <location filename="../qrzdisplayframe.ui" line="408"/>
@@ -3018,7 +2997,7 @@ Non - Ignorer les modifications</translation>
     <message>
         <location filename="../qrzdisplayframe.ui" line="524"/>
         <source>DB date:</source>
-        <translation>Date DB [???Context] Date callsign stored in our DB}:</translation>
+        <translation>Date d&apos;entrée de l&apos;indicatif dans notre DB :</translation>
     </message>
     <message>
         <location filename="../qrzdisplayframe.ui" line="617"/>
@@ -4038,7 +4017,7 @@ Non - Ignorer les modifications</translation>
         <location filename="../ScreenConfigElement.cpp" line="34"/>
         <source>HSplit</source>
         <translatorcomment>How differ from HSE and how used??? This is the splitter rather than a button hint</translatorcomment>
-        <translation>Division horizontale</translation>
+        <translation type="unfinished">Division horizontale??</translation>
     </message>
     <message>
         <location filename="../ScreenConfigElement.cpp" line="34"/>
@@ -4064,7 +4043,7 @@ Non - Ignorer les modifications</translation>
     <message>
         <location filename="../ScreenConfigElement.cpp" line="38"/>
         <source>Data Modes Buttons</source>
-        <translation>Boutons Data [???] The type of panel containing data mode F key buttons</translation>
+        <translation type="unfinished">Boutons Data [???] The type of panel containing data mode F key buttons??</translation>
     </message>
     <message>
         <location filename="../ScreenConfigElement.cpp" line="39"/>
@@ -4331,7 +4310,7 @@ L&amp;apos;arrière-plan de la ligne change de couleur lorsqu&amp;apos;elle est 
     <message>
         <location filename="../taboutbox.ui" line="299"/>
         <source>Set Font...</source>
-        <translation type="unfinished"></translation>
+        <translation>Définir la police...</translation>
     </message>
     <message>
         <location filename="../taboutbox.ui" line="319"/>
@@ -4406,7 +4385,7 @@ L&amp;apos;arrière-plan de la ligne change de couleur lorsqu&amp;apos;elle est 
     <message>
         <location filename="../taboutbox.cpp" line="323"/>
         <source>Font setting will not work while the QT_QPA_PLATFORMTHEME environment variable is set to qt5ct</source>
-        <translation type="unfinished">Les paramètres de police ne fonctionneront pas si la variable d&apos;environnement QT_QPA_PLATFORMTHEME est définie sur qt5ct</translation>
+        <translation>Les paramètres de police ne fonctionneront pas si la variable d&apos;environnement QT_QPA_PLATFORMTHEME est définie sur qt5ct</translation>
     </message>
 </context>
 <context>
@@ -5054,13 +5033,9 @@ n&apos;existe pas; télécharger les derniers calendriers&#xa0;?</translation>
         <translation>Non rempli - entrer plus tard</translation>
     </message>
     <message>
-        <source>Backpacker (i.e. Valid Duplicate)</source>
-        <translation type="vanished">&apos;Backpacker&apos;: Duplicata valide</translation>
-    </message>
-    <message>
         <location filename="../tforcelogdlg.ui" line="88"/>
         <source>Valid Duplicate e.g. Rover</source>
-        <translation type="unfinished"></translation>
+        <translation>Duplicata valide, par exemple /P</translation>
     </message>
     <message>
         <location filename="../tforcelogdlg.ui" line="95"/>
@@ -5401,13 +5376,9 @@ Veuillez choisir un nouveau nom.</translation>
         <translation>Importer %1 Concours</translation>
     </message>
     <message>
-        <source>Do you want to close all contests?</source>
-        <translation type="vanished">Voulez-vous fermer tous les concours ?</translation>
-    </message>
-    <message>
         <location filename="../tlogcontainer.cpp" line="1325"/>
         <source>Do you want to close all but the current contest?</source>
-        <translation>Voulez-vous fermer tous les concours sauf le concours en cours ? </translation>
+        <translation>Voulez-vous fermer tous les concours sauf le concours en cours ?</translation>
     </message>
     <message>
         <location filename="../tlogcontainer.cpp" line="1384"/>
@@ -5762,27 +5733,27 @@ Veuillez confirmer cette action en appuyant sur &amp;quot;Oui&amp;quot;.</transl
 <context>
     <name>TSingleLogFrame</name>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="993"/>
+        <location filename="../tsinglelogframe.cpp" line="995"/>
         <source>Failed to open %1</source>
         <translation>L&apos;Ouverture échoué %1</translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1007"/>
+        <location filename="../tsinglelogframe.cpp" line="1009"/>
         <source>Save imported log as a .minos file</source>
         <translation>Enregistrer le Log importé en tant que fichier .minos</translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1533"/>
+        <location filename="../tsinglelogframe.cpp" line="1535"/>
         <source>No unfilled contacts</source>
         <translation>Pas de contacts  non remplis</translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1552"/>
+        <location filename="../tsinglelogframe.cpp" line="1554"/>
         <source>Please give serial wanted</source>
         <translation>Numéro de série requis</translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1574"/>
+        <location filename="../tsinglelogframe.cpp" line="1576"/>
         <source>Serial number %1 not found</source>
         <translation>Numéro de série %1 introuvable</translation>
     </message>
@@ -5949,7 +5920,7 @@ Last %8 Mins: %9 QSO %10 pts %11 mults
         <location filename="../txvmbuttonsframe.cpp" line="732"/>
         <location filename="../txvmbuttonsframe.cpp" line="944"/>
         <source>Rig CW Message - </source>
-        <translation>CONTEXT???</translation>
+        <translation>Message CW d&apos;appareil - </translation>
     </message>
     <message>
         <location filename="../txvmbuttonsframe.cpp" line="960"/>
@@ -6077,17 +6048,17 @@ Through</source>
     <message>
         <location filename="../txVmExternalButtonDialog.cpp" line="53"/>
         <source>Attack (ms)</source>
-        <translation>[Context? Compressor attack] </translation>
+        <translation>Compression temps de désensibilisation en mS</translation>
     </message>
     <message>
         <location filename="../txVmExternalButtonDialog.cpp" line="57"/>
         <source>Release (ms)</source>
-        <translation>[Context? Compressor release] </translation>
+        <translation>Relâchement de la compression en mS</translation>
     </message>
     <message>
         <location filename="../txVmExternalButtonDialog.cpp" line="61"/>
         <source>Makeup Gain (db)</source>
-        <translation>[Context? extra gain needed after processing] </translation>
+        <translation>Gain (dB)</translation>
     </message>
     <message>
         <location filename="../txVmExternalButtonDialog.cpp" line="96"/>
@@ -6629,14 +6600,9 @@ Inclure le &quot;CQ&quot; ainsi que le type</translation>
         <translation>Configuration du Keyer interne</translation>
     </message>
     <message>
-        <source>Number Buttons</source>
-        <translatorcomment>???What is this???</translatorcomment>
-        <translation type="vanished">Boutons numériques</translation>
-    </message>
-    <message>
         <location filename="../txVmInternalSetupDialog.ui" line="25"/>
         <source>Number of  Buttons</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../txVmInternalSetupDialog.ui" line="39"/>

@@ -217,11 +217,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.ui" line="469"/>
-        <source>Including my call</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../kstmainwindow.ui" line="755"/>
         <source>-</source>
         <translation type="unfinished"></translation>

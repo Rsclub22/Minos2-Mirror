@@ -74,10 +74,6 @@
 <context>
     <name>EngineConfigure</name>
     <message>
-        <source>Configure Engines</source>
-        <translation type="vanished">Configurer [what does this mean?]</translation>
-    </message>
-    <message>
         <location filename="../engineconfigure.ui" line="58"/>
         <location filename="../engineconfigure.ui" line="154"/>
         <source>Receive</source>
@@ -107,7 +103,7 @@
     <message>
         <location filename="../engineconfigure.ui" line="14"/>
         <source>Configure Decode Engines</source>
-        <translation type="unfinished"></translation>
+        <translation>Configurer les applications de décodage</translation>
     </message>
     <message>
         <location filename="../engineconfigure.ui" line="47"/>
@@ -229,22 +225,14 @@
         <translation>Annuler</translation>
     </message>
     <message>
-        <source>Engine Files (*.ocx *.exe);;All Files (*.*)</source>
-        <translation type="vanished">[What???] Fichiers (*.ocx *.exe);;Tous les fichiers (*.*)</translation>
-    </message>
-    <message>
-        <source>%1 Engine Executable</source>
-        <translation type="vanished">%1 [what????] Exécutable</translation>
-    </message>
-    <message>
         <location filename="../engineconfigure.cpp" line="439"/>
         <source>Decode Engine Files (*.ocx *.exe);;All Files (*.*)</source>
-        <translation type="unfinished"></translation>
+        <translation>Fichiers pour les applications de décodage (*.ocx *.exe);;Tous les fichiers (*.*)</translation>
     </message>
     <message>
         <location filename="../engineconfigure.cpp" line="443"/>
         <source>%1 Decode Engine Executable</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 Exécutable pour l&apos;application de décodage</translation>
     </message>
 </context>
 <context>
@@ -272,20 +260,12 @@
     <message>
         <location filename="../enginewindow.ui" line="76"/>
         <source>Set Test Transmission Text</source>
-        <translation type="unfinished"></translation>
+        <translation>Définir le texte de transmission du test</translation>
     </message>
     <message>
         <location filename="../enginewindow.ui" line="83"/>
         <source>Send Test Transmission</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Set Test</source>
-        <translation type="vanished">CONTEXT??</translation>
-    </message>
-    <message>
-        <source>Send Test</source>
-        <translation type="vanished">CONTEXT??</translation>
+        <translation>Démarrer la transmission du test</translation>
     </message>
     <message>
         <location filename="../enginewindow.ui" line="124"/>

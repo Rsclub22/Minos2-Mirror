@@ -83,7 +83,7 @@
     <message>
         <location filename="../rcmainwindow.cpp" line="455"/>
         <source>Rig Recorder Configuration file</source>
-        <translation>Enregistreur d&apos;appareil - Fichier de configuration??? rig recorder records the audio output from the rig</translation>
+        <translation type="unfinished">Enregistreur d&apos;appareil - Fichier de configuration??? rig recorder records the audio output from the rig??</translation>
     </message>
 </context>
 </TS>

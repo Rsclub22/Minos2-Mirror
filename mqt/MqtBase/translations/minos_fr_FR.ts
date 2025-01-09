@@ -519,13 +519,9 @@
         <translation>Afficher les en-têtes auxiliaires</translation>
     </message>
     <message>
-        <source>Show Crib Band</source>
-        <translation type="vanished">[What does this mean???]</translation>
-    </message>
-    <message>
         <location filename="../profiles.cpp" line="120"/>
         <source>Show Next QSO Band</source>
-        <translation type="unfinished"></translation>
+        <translation>Afficher la prochaine bande QSO</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="122"/>
@@ -920,10 +916,6 @@
         <location filename="../profiles.cpp" line="246"/>
         <source>Antenna Height AGL (metres)</source>
         <translation>Hauteur au-dessus du sol de l&apos;antenne</translation>
-    </message>
-    <message>
-        <source>Antenna Bearing Offset</source>
-        <translation type="vanished">Hauteur au-dessus du sol de l&apos;antenne</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="247"/>
@@ -1497,34 +1489,6 @@ Attention: &quot;.&quot; pas &quot;,&quot;
     </message>
 </context>
 <context>
-    <name>MessageServer::impl</name>
-    <message>
-        <source>Error creating UDP message</source>
-        <translatorcomment>Tracelog? (Hence in ENglish?)</translatorcomment>
-        <translation type="vanished">Erreur lors de la création du message UDP</translation>
-    </message>
-    <message>
-        <source>MessageServer warning: invalid UDP message received</source>
-        <translation type="vanished">Avertissement de MessageServer : message UDP invalide reçu</translation>
-    </message>
-    <message>
-        <source>MessageServer exception: %1</source>
-        <translation type="vanished">Exception du serveur de messages&#xa0;: %1</translation>
-    </message>
-    <message>
-        <source>Unexpected exception in MessageServer</source>
-        <translation type="vanished">Exception inattendue dans MessageServer</translation>
-    </message>
-    <message>
-        <source>Message serialization error: read corrupt data</source>
-        <translation type="vanished">Erreur de sérialisation du message&#xa0;: lire les données corrompues</translation>
-    </message>
-    <message>
-        <source>Message serialization error: write error</source>
-        <translation type="vanished">Erreur de sérialisation du message&#xa0;: erreur d&apos;écriture</translation>
-    </message>
-</context>
-<context>
     <name>MinosKeyboard</name>
     <message>
         <location filename="../minoskeyboard.ui" line="28"/>
@@ -1768,7 +1732,7 @@ Attention: &quot;.&quot; pas &quot;,&quot;
     <message>
         <location filename="../monitoredlogs.cpp" line="34"/>
         <source>Auto start current logs from stations</source>
-        <translation>[What does this mean???]</translation>
+        <translation type="unfinished">[What does this mean???]?</translation>
     </message>
 </context>
 <context>
@@ -1879,7 +1843,7 @@ Attention: &quot;.&quot; pas &quot;,&quot;
     <message>
         <location filename="../qsomapframe.cpp" line="232"/>
         <source>QSO Map Spot Filters</source>
-        <translation type="unfinished"></translation>
+        <translation>Filtres des spots de la carte QSO</translation>
     </message>
 </context>
 <context>

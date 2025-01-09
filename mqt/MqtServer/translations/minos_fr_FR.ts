@@ -11,7 +11,7 @@
     <message>
         <location filename="../servermain.ui" line="25"/>
         <source>Server Connections</source>
-        <translation type="unfinished"></translation>
+        <translation>Connexions au serveur</translation>
     </message>
     <message>
         <location filename="../servermain.ui" line="38"/>
@@ -85,7 +85,7 @@
     <message>
         <location filename="../ServerDetails.ui" line="34"/>
         <source>Server Connections</source>
-        <translation type="unfinished"></translation>
+        <translation>Connexions au serveur</translation>
     </message>
     <message>
         <location filename="../ServerDetails.ui" line="61"/>

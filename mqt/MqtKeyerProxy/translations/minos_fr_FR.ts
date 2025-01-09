@@ -4,13 +4,9 @@
 <context>
     <name>KPMainWindow</name>
     <message>
-        <source>KPMainWindow</source>
-        <translation type="vanished">KPMainWindow [???]</translation>
-    </message>
-    <message>
         <location filename="../kpmainwindow.ui" line="14"/>
         <source>Keyer Proxy</source>
-        <translation type="unfinished"></translation>
+        <translation>Proxy de Keyer</translation>
     </message>
     <message>
         <location filename="../kpmainwindow.ui" line="25"/>
@@ -40,17 +36,12 @@
     <message>
         <location filename="../kpmainwindow.ui" line="112"/>
         <source>Setup Script for alsactl</source>
-        <translation type="unfinished"></translation>
+        <translation>??Définir le script de configuration (ALSActl)</translation>
     </message>
     <message>
         <location filename="../kpmainwindow.ui" line="181"/>
         <source>sequence</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Setup Script (alsactl)</source>
-        <translatorcomment>Script de configuration (alsactl)</translatorcomment>
-        <translation type="vanished">Script d&apos;installation (alsactl) [???]</translation>
+        <translation>séquence</translation>
     </message>
     <message>
         <location filename="../kpmainwindow.ui" line="124"/>
@@ -60,16 +51,12 @@
     <message>
         <location filename="../kpmainwindow.ui" line="150"/>
         <source>Save Alsa Config</source>
-        <translation>Enregistrer la configuration Alsa [what is Alsa???? A Linux sound system]</translation>
+        <translation>Enregistrer la configuration ALSA</translation>
     </message>
     <message>
         <location filename="../kpmainwindow.ui" line="157"/>
         <source>Restore Alsa Config</source>
-        <translation>Restaurer la configuration Alsa [what is Alsa ???? A Linux Sound System]</translation>
-    </message>
-    <message>
-        <source>seq</source>
-        <translation type="vanished">séquence [??????]</translation>
+        <translation>Restaurer la configuration ALSA</translation>
     </message>
     <message>
         <location filename="../kpmainwindow.ui" line="188"/>
@@ -92,10 +79,6 @@
         <translation>PTT</translation>
     </message>
     <message>
-        <source>Metering</source>
-        <translation type="vanished">Mesure [????]</translation>
-    </message>
-    <message>
         <location filename="../kpmainwindow.ui" line="254"/>
         <source>Input</source>
         <translation>Entrée</translation>
@@ -108,7 +91,7 @@
     <message>
         <location filename="../kpmainwindow.cpp" line="228"/>
         <source>Alsa Control Files</source>
-        <translation>Fichiers de contrôle Alsa [???]</translation>
+        <translation>Fichiers de contrôle ALSA</translation>
     </message>
     <message>
         <location filename="../kpmainwindow.cpp" line="229"/>

@@ -119,19 +119,17 @@ utiliser un autre nom SVP</translation>
     <message>
         <location filename="../hamlibRotcontrol.cpp" line="40"/>
         <source>NULL RIG handle or any invalid pointer parameter in get arg</source>
-        <translatorcomment>Prise en main de l&apos;appareil nulle ou un paramètre de pointeur invalide dans l&apos;argument retourné</translatorcomment>
-        <translation>WHAT ???     (AND WHY?) Hamlib error  APJ19</translation>
+        <translation>Erreur Hamlib</translation>
     </message>
     <message>
         <location filename="../hamlibRotcontrol.cpp" line="41"/>
         <source>Invalid VFO</source>
-        <translation>VFO?????? invalide  Hamlib error APJ20</translation>
+        <translation>Erreur Hamlib</translation>
     </message>
     <message>
         <location filename="../hamlibRotcontrol.cpp" line="42"/>
         <source>Argument out of domain of func</source>
-        <translatorcomment>Context? Hamlib error</translatorcomment>
-        <translation>??</translation>
+        <translation>Erreur Hamlib</translation>
     </message>
     <message>
         <location filename="../hamlibRotcontrol.cpp" line="43"/>
@@ -142,12 +140,12 @@ utiliser un autre nom SVP</translation>
         <location filename="../hamlibRotcontrol.cpp" line="44"/>
         <source>Security error password not provided or crypto failure</source>
         <translatorcomment>Context</translatorcomment>
-        <translation>??? Hamlib error</translation>
+        <translation>Erreur Hamlib</translation>
     </message>
     <message>
         <location filename="../hamlibRotcontrol.cpp" line="45"/>
         <source>Rig is not powered on</source>
-        <translation>RIG??? Hamlib error</translation>
+        <translation>Erreur Hamlib</translation>
     </message>
     <message>
         <location filename="../hamlibRotcontrol.cpp" line="46"/>
@@ -659,7 +657,8 @@ Vous ne pourrez pas sélectionner un rotateur tant que cela ne sera pas corrigé
     <message>
         <location filename="../rotatormainwindow.cpp" line="246"/>
         <source>Test Antenna</source>
-        <translation>Antenne de test  [context??? You have chosen to select the antenna in rot control]</translation>
+        <translatorcomment>Test antenna selected in rot contro</translatorcomment>
+        <translation>Antenne en test</translation>
     </message>
     <message>
         <location filename="../rotatormainwindow.cpp" line="1148"/>
@@ -949,7 +948,7 @@ Voulez-vous recharger les paramètres de l&apos;antenne maintenant?</translation
         <source>No Antenna Selected
 </source>
         <translatorcomment>Antenna or Rotator??? David likes Antenna, I like Rotator; we aren&apos;t consistent</translatorcomment>
-        <translation>Pas de Rotateur selectionné
+        <translation>Pas de Antennes selectionné
 </translation>
     </message>
 </context>

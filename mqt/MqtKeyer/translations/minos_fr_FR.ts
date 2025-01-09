@@ -29,10 +29,6 @@
         <translation>Indicateur d&apos;enregistrement</translation>
     </message>
     <message>
-        <source>Show</source>
-        <translation type="vanished">Afficher [Context?]</translation>
-    </message>
-    <message>
         <location filename="../KeyerMain.ui" line="115"/>
         <source>Record</source>
         <translation>Enregistrer</translation>
@@ -96,7 +92,7 @@
     <message>
         <location filename="../KeyerMain.ui" line="129"/>
         <source>Show Waveform</source>
-        <translation type="unfinished"></translation>
+        <translation>Afficher la forme d&apos;onde</translation>
     </message>
     <message>
         <location filename="../KeyerMain.ui" line="266"/>
@@ -223,21 +219,17 @@ Through</source>
     <message>
         <location filename="../KeyerMain.cpp" line="138"/>
         <source>Attack (ms)</source>
-        <translation>[Context?Compression Attack in ms] </translation>
+        <translation>Compression temps de désensibilisation en mS [??</translation>
     </message>
     <message>
         <location filename="../KeyerMain.cpp" line="142"/>
         <source>Release (ms)</source>
-        <translation>[Context?] Compression Release in ms </translation>
+        <translation>Relâchement de la compression en mS</translation>
     </message>
     <message>
         <location filename="../KeyerMain.cpp" line="146"/>
         <source>Makeup Gain (db)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Makeup Gain (db) extra gain to compensate for proccessing attenuation</source>
-        <translation type="vanished">[Context?] </translation>
+        <translation>Gain ??</translation>
     </message>
     <message>
         <location filename="../KeyerMain.cpp" line="193"/>
@@ -268,7 +260,7 @@ Through</source>
         <location filename="../KeyerMain.cpp" line="826"/>
         <source>Restart to set sample rate to &quot;0&quot;</source>
         <translatorcomment>Redémarrer could be taken as reboot? restart this app only needed</translatorcomment>
-        <translation>Redémarrer pour régler la fréquence d&apos;échantillonnage sur &quot;0&quot;</translation>
+        <translation>Redémarrer l&apos;applicationpour régler la fréquence d&apos;échantillonnage sur &quot;0&quot;</translation>
     </message>
 </context>
 <context>
@@ -352,7 +344,7 @@ Through</source>
         <location filename="../keyers.cpp" line="42"/>
         <source>OS - Restart(1)/Close(2)</source>
         <translatorcomment>SO or OS?? Operating System</translatorcomment>
-        <translation>? Redémarrer(1)/Fermer(2)</translation>
+        <translation>Système - Redémarrer(1)/Fermer(2)</translation>
     </message>
 </context>
 <context>
@@ -360,7 +352,7 @@ Through</source>
     <message>
         <location filename="../keyers.cpp" line="404"/>
         <source>No current actions</source>
-        <translation>Aucune action (en cours ? Yes, more or less!)</translation>
+        <translation>Aucune action en cours</translation>
     </message>
 </context>
 <context>

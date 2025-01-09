@@ -217,15 +217,14 @@
         <translation>Connecter</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.ui" line="469"/>
         <source>Including my call</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Mon indicatif d&apos;appel compris</translation>
     </message>
     <message>
         <location filename="../kstmainwindow.ui" line="755"/>
         <source>-</source>
         <translatorcomment>Replaced by text? Placeholder only - leave as is</translatorcomment>
-        <translation>-</translation>
+        <translation>- Placeholder only - leave as is?</translation>
     </message>
     <message>
         <location filename="../kstmainwindow.ui" line="162"/>
@@ -319,11 +318,6 @@ l&apos;indicatif sélectionné</translation>
         <location filename="../kstmainwindow.ui" line="451"/>
         <source>Clear the message filters</source>
         <translation>Effacer les filtres des messages</translation>
-    </message>
-    <message>
-        <source>Including me</source>
-        <translatorcomment>Context??</translatorcomment>
-        <translation type="vanished">y compris les miens</translation>
     </message>
     <message>
         <location filename="../kstmainwindow.ui" line="490"/>
@@ -421,8 +415,8 @@ l&apos;indicatif sélectionné</translation>
     <message>
         <location filename="../kstmainwindow.cpp" line="656"/>
         <source>Set Back</source>
-        <translatorcomment>ou Retour? KST has states AWAY and BACK</translatorcomment>
-        <translation>Définir statut à « Présent »</translation>
+        <translatorcomment>Ou retour??</translatorcomment>
+        <translation>Définir statut à « Présent»</translation>
     </message>
     <message>
         <location filename="../kstmainwindow.cpp" line="660"/>

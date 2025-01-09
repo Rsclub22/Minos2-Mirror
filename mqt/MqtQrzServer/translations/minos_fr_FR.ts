@@ -147,7 +147,7 @@ Veuillez choisir un nouveau nom.</translation>
     <message>
         <location filename="../qrzservermainwindow.cpp" line="705"/>
         <source>Ask QRZ DB for callsign - %1</source>
-        <translation>Demander à QRZ DB l&apos;Indicatif - %1 [????] This is on-screen logging</translation>
+        <translation>Demander l&apos;indicatif %1 à QRZ DB</translation>
     </message>
     <message>
         <location filename="../qrzservermainwindow.cpp" line="711"/>
