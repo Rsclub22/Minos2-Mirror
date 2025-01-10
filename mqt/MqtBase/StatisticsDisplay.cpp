@@ -485,9 +485,9 @@ void StatisticsDisplay::doRecalc()
                         allBandsallModesSlot.QSOs += m.QSOs;
                         allModesSlot.QSOs += m.QSOs;
 
-                        allBandsModes.modes[m.mode].bonus += m.bonus;
-                        allBandsallModesSlot.bonus += m.bonus;
-                        allModesSlot.bonus += m.bonus;
+                        allBandsModes.modes[m.mode].points += m.points;
+                        allBandsallModesSlot.points += m.points;
+                        allModesSlot.points += m.points;
 
                         allBandsModes.modes[m.mode].newMults += m.newMults;
                         allBandsallModesSlot.newMults += m.newMults;
@@ -496,10 +496,6 @@ void StatisticsDisplay::doRecalc()
                         allBandsModes.modes[m.mode].bonus += m.bonus;
                         allBandsallModesSlot.bonus += m.bonus;
                         allModesSlot.bonus += m.bonus;
-
-                        allBandsModes.modes[m.mode].points += m.points;
-                        allBandsallModesSlot.points += m.points;
-                        allModesSlot.points += m.points;
 
                         //AND we need to merge operators
 
