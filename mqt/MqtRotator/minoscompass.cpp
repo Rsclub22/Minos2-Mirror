@@ -3,7 +3,7 @@
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //                      Rotator Control
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2025
 //
 //
 /////////////////////////////////////////////////////////////////////////////
@@ -11,6 +11,7 @@
 #include <QtWidgets>
 #include <QStringList>
 #include <QFont>
+#include <QtMath>
 
 #include "minoscompass.h"
 
@@ -106,6 +107,16 @@ void MinosCompass::paintEvent(QPaintEvent *)
 
     painter.drawPath(qpp);
 
+    // Draw the skyScan annulus segment
+    if (skyScanStartBearing != skyScanEndBearing)
+    {
+        QColor skyScanAnnulusColor("#8ecaff");
+        drawAnnulusSegment(painter, skyScanAnnulusColor,
+                           65.0, 70.0,      // annulus inner and outer radius
+                           skyScanStartBearing, skyScanEndBearing);
+
+    }
+
     QFont dialfont = dynamic_cast<QWidget *>(parent())->font();
     qreal dps = dialfont.pointSizeF();
     dialfont.setPointSizeF(dps * 250.0 / side );
@@ -168,12 +179,11 @@ void MinosCompass::paintEvent(QPaintEvent *)
 
     QRect trect = painter.fontMetrics().boundingRect("XXX");
     trect.adjust(-trect.width()/2, -75, -trect.width()/2, -75);
-//    QRect textRect1(-8, -90, 20,15);
+
 
     for (int j = 0; j < 12; j++)
     {
         painter.drawText(trect, Qt::AlignCenter,legendsList.value(j));
-//        painter.drawText(textRect1,legendsList.value(j));
         painter.rotate(degreeRotate[j]);
     }
 
@@ -182,14 +192,10 @@ void MinosCompass::paintEvent(QPaintEvent *)
 
     QRect tr2 = painter.fontMetrics().boundingRect("XXX");
     tr2.adjust(-trect.width()/2, -75, -trect.width()/2, -75);
-//    QRect textRect2(-3, -90, 15,15);
-//    QFont textFont();
-//    textFont.setWeight( QFont::Bold );
-//   painter.setfont(textFont);
+
     for (int j = 0; j < 4; j++)
     {
         painter.drawText(tr2, Qt::AlignCenter,dirLegendsList.value(j));
-//        painter.drawText(textRect2,dirLegendsList.value(j));
         painter.rotate(90);
     }
 
@@ -311,7 +317,190 @@ bool MinosCompass::eventFilter(QObject */*obj*/, QEvent *event)
 }
 
 
+void MinosCompass::drawAnnulusSegment(QPainter &painter, const QColor &annulusColor,
+                                      double innerRadius, double outerRadius,
+                                      int rotatorStartBearing, int rotatorEndBearing)
+{
+    QPainterPath mainPath;
+    QPainterPath overlapPath;
 
+    double mainInnerRadius = 65.0;
+    double mainOuterRadius = 70.0;
+    double overLapInnerRadius = 60.0;
+    double overLapOuterRadius = 65.0;
+
+    QColor mainColor("#8ecaff");
+    QColor overlapColor("#ffa4aa");
+    QColor negativeOverlapColor("#f0fff7");
+
+    // Adjust for Qt coords
+    double adjustedStartBearing = static_cast<double>(rotatorStartBearing) - 90.0;
+    double adjustedEndBearing = static_cast<double>(rotatorEndBearing) - 90.0;
+
+    double startAngle = 0.0;
+    double endAngle = 0.0;
+    double sweepLength = 0.0;
+
+    // Define the outer arc's bounding rectangle
+    QRectF mainOuterRect(-mainOuterRadius, -mainOuterRadius, mainOuterRadius * 2, mainOuterRadius * 2);
+
+    // Define the inner arc's bounding rectangle
+    QRectF mainInnerRect(-mainInnerRadius, -mainInnerRadius, mainInnerRadius * 2, mainInnerRadius * 2);
+
+    QRectF overlapOuterRect(-overLapOuterRadius, -overLapOuterRadius, overLapOuterRadius * 2, overLapOuterRadius * 2);
+
+    // Define the inner arc's bounding rectangle
+    QRectF overlapInnerRect(-overLapInnerRadius, -overLapInnerRadius, overLapInnerRadius * 2, overLapInnerRadius * 2);
+
+
+
+
+
+    if (endStopType == ROT_0_360)
+    {
+        if (rotatorStartBearing < rotatorEndBearing)
+        {
+            startAngle = adjustedStartBearing;
+            endAngle = adjustedEndBearing;
+            sweepLength = adjustedEndBearing - adjustedStartBearing;
+        }
+        else
+        {
+            // reverse start and end to draw correctly
+            startAngle = adjustedEndBearing;
+            endAngle = adjustedStartBearing;
+            sweepLength = adjustedStartBearing - adjustedEndBearing;
+        }
+
+        // Add the outer arc (clockwise from startAngle to endAngle)
+        mainPath.arcTo(mainOuterRect, -startAngle, -sweepLength); // Negative for CCW in Qt
+
+        // Add the inner arc (counterclockwise from endAngle to startAngle)
+        mainPath.arcTo(mainInnerRect, -endAngle, sweepLength); // Positive for CW
+
+        mainPath.closeSubpath();
+        painter.setBrush(mainColor);
+        painter.setPen(Qt::NoPen);
+        painter.drawPath(mainPath);
+    }
+    else if (endStopType == ROT_0_450)
+    {
+        if (rotatorStartBearing <= COMPASS_MAX360 && rotatorEndBearing <= COMPASS_MAX360)
+        {
+            if (rotatorStartBearing < rotatorEndBearing)
+            {
+                startAngle = adjustedStartBearing;
+                endAngle = adjustedEndBearing;
+                sweepLength = adjustedEndBearing - adjustedStartBearing;
+            }
+            else
+            {
+                // reverse start and end to draw correctly
+                startAngle = adjustedEndBearing;
+                endAngle = adjustedStartBearing;
+                sweepLength = adjustedStartBearing - adjustedEndBearing;
+            }
+
+            // this is the same as 0-360 only
+
+            // Add the outer arc (clockwise from startAngle to endAngle)
+            mainPath.arcTo(mainOuterRect, -startAngle, -sweepLength); // Negative for CCW in Qt
+
+            // Add the inner arc (counterclockwise from endAngle to startAngle)
+            mainPath.arcTo(mainInnerRect, -endAngle, sweepLength); // Positive for CW
+
+            mainPath.closeSubpath();
+            painter.setBrush(mainColor);
+            painter.setPen(Qt::NoPen);
+            painter.drawPath(mainPath);
+
+        }
+        else
+        {
+            if (rotatorStartBearing < rotatorEndBearing)
+            {
+
+
+
+                // this is the same as 0 -360 above
+                if (rotatorEndBearing <= COMPASS_MAX360)
+                {
+
+                    startAngle = adjustedStartBearing;
+                    endAngle = adjustedEndBearing;
+                    sweepLength = adjustedEndBearing - adjustedStartBearing;
+
+
+                    // Add the outer arc (clockwise from startAngle to endAngle)
+                    mainPath.arcTo(mainOuterRect, -startAngle, -sweepLength); // Negative for CCW in Qt
+
+                    // Add the inner arc (counterclockwise from endAngle to startAngle)
+                    mainPath.arcTo(mainInnerRect, -endAngle, sweepLength); // Positive for CW
+
+                    mainPath.closeSubpath();
+                    painter.setBrush(mainColor);
+                    painter.setPen(Qt::NoPen);
+                    painter.drawPath(mainPath);
+                }
+                else
+                {
+                    // end > 360, draw start to 360
+
+                    startAngle = adjustedStartBearing;
+                    endAngle = static_cast<double>(COMPASS_MAX360) - 90.0;
+                    sweepLength = static_cast<double>(COMPASS_MAX360) - static_cast<double>(rotatorStartBearing);
+
+                    mainPath.arcTo(mainOuterRect, -startAngle, -sweepLength);
+                    mainPath.arcTo(mainInnerRect, -endAngle, sweepLength); // Positive for CW
+
+                    mainPath.closeSubpath();
+                    painter.setBrush(mainColor);
+                    painter.setPen(Qt::NoPen);
+                    painter.drawPath(mainPath);
+
+                    startAngle = static_cast<double>(COMPASS_MIN0) - 90.0;
+                    endAngle = adjustedEndBearing - static_cast<double>(COMPASS_MAX360);
+                    sweepLength = static_cast<double>(rotatorEndBearing) - static_cast<double>(COMPASS_MAX360);
+
+                    // now draw from 360 to endAngle
+                    overlapPath.arcTo(overlapOuterRect, -startAngle, -sweepLength);
+                    overlapPath.arcTo(overlapInnerRect, -endAngle, sweepLength); // Positive for CW
+
+                    overlapPath.closeSubpath();
+                    painter.setBrush(overlapColor);
+                    painter.setPen(Qt::NoPen);
+                    painter.drawPath(overlapPath);
+
+                }
+
+
+            }
+        }
+    }
+
+}
+
+
+
+
+void MinosCompass::updateEndStopType(int endStopType_)
+{
+    endStopType = static_cast<endStop>(endStopType_);
+}
+
+void MinosCompass::updateSkyScanStartBearing(int bearing)
+{
+    skyScanStartBearing = bearing;
+    qDebug() << "skyScan compass start bearing = " << QString::number(skyScanStartBearing);
+    update();
+}
+
+void MinosCompass::updateSkyScanEndBearing(int bearing)
+{
+    skyScanEndBearing = bearing;
+    qDebug() << "skyScan compass end bearing = " << QString::number(skyScanEndBearing);
+    update();
+}
 
 void MinosCompass::compassDialUpdate(int bearing)
 {

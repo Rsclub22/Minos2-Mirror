@@ -116,6 +116,9 @@ signals:
     void presetRotateTo();
 
     void sendRotationStatusToSkyScan(int bearing, skyScanBearingStates brgState);
+    void sendSkyScanStartBearingToCompassDial(int bearing);
+    void sendSkyScanEndBearingToCompassDial(int bearing);
+    void sendRotatorEndStopTypeToCompassDial(int endStopType);
 
 
 

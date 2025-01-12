@@ -3,7 +3,7 @@
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //                      Rotator Control
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2025
 //
 //
 /////////////////////////////////////////////////////////////////////////////
@@ -15,6 +15,7 @@
 #define MINOSCOMPASS_H
 
 #include <QWidget>
+#include "rotatorcommon.h"
 
 class MinosCompass : public QWidget
 {
@@ -23,9 +24,13 @@ class MinosCompass : public QWidget
 public:
     MinosCompass(QWidget *parent = nullptr);
 
+
 public slots:
 
+    void updateSkyScanStartBearing(int bearing);
+    void updateSkyScanEndBearing(int bearing);
     void compassDialUpdate(int);
+    void updateEndStopType(int endStopType_);
 /*
 // for test
     void upDateDial();
@@ -35,6 +40,7 @@ signals:
 
 // for test
 */
+
 signals:
     void sendClickBearing(int brg);
     void sendStop();
@@ -48,10 +54,16 @@ private:
     int compassDialBearing;
     int mouseBearing = -1;
 
+    int skyScanStartBearing = 0;
+    int skyScanEndBearing = 0;
+
+    endStop endStopType = ROT_0_360;
+
     QSize minimumSizeHint() const Q_DECL_OVERRIDE;
     QSize sizeHint() const Q_DECL_OVERRIDE;
     int getMouseBearing(QPoint vec);
     bool inAnnulus(QPoint vec);
+    void drawAnnulusSegment(QPainter &painter, const QColor &annulusColor, double innerRadius, double outerRadius, int startAngle, int endAngle);
 };
 
 

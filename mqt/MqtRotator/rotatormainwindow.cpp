@@ -781,6 +781,11 @@ void RotatorMainWindow::initActionsConnections()
     connect(&RotateTimer, &QTimer::timeout, this, &RotatorMainWindow::rotatingTimer);
     connect(this, &RotatorMainWindow::checkingEndStop, this, &RotatorMainWindow::checkEndStop);
 
+    // display skyScan bearings on compass dial
+    connect(this, &RotatorMainWindow::sendSkyScanStartBearingToCompassDial, ui->compassDial, &MinosCompass::updateSkyScanStartBearing);
+    connect(this, &RotatorMainWindow::sendSkyScanEndBearingToCompassDial, ui->compassDial, &MinosCompass::updateSkyScanEndBearing);
+    connect(this, &RotatorMainWindow::sendRotatorEndStopTypeToCompassDial, ui->compassDial, &MinosCompass::updateEndStopType);
+
     // Test Bearing Box
     connect(ui->testBearing, &QLineEdit::returnPressed, this, &RotatorMainWindow::onTestBearingEnter);
 
@@ -3000,16 +3005,12 @@ void RotatorMainWindow::skyScanStartBearingToolbuttonValueChanged(int value)
 
     startSkyScanBrg = value;
 
-    if (value < 0)
-    {
-        value = value + COMPASS_MAX360;
-    }
-    else if (value > 360)
-    {
-        value = value - COMPASS_MAX360;
-    }
+    emit sendSkyScanStartBearingToCompassDial(startSkyScanBrg);
 
-    QString compassStartBearing = QString::number(value).rightJustified(3, '0'); //convertBearingToString(value);
+    int bearing = adjustOverlapBearingToCompassBearing(value);  // convert if overlap bearing
+
+
+    QString compassStartBearing = QString::number(bearing).rightJustified(3, '0');
     ui->skyScanCompassStartBearingDisplay->setText(compassStartBearing);
 }
 
@@ -3031,10 +3032,11 @@ void RotatorMainWindow::skyScanEndBearingToolbuttonValueChanged(int value)
 
     endSkyScanBrg = value;
 
+    emit sendSkyScanEndBearingToCompassDial(value);
+
     int bearing = adjustOverlapBearingToCompassBearing(value);  // convert if overlap bearing
 
-    QString compassEndBearing = QString::number(bearing).rightJustified(3, '0');   //convertBearingToString(bearing); // with leading zeros
-
+    QString compassEndBearing = QString::number(bearing).rightJustified(3, '0');
     ui->skyScanCompassEndBearingDisplay->setText(compassEndBearing);
 }
 
@@ -3394,9 +3396,12 @@ void RotatorMainWindow::openSkyScan(QString currentAntennaName)
     setSkyScanEndBearingToolButtonUpDown();
     dumpSkyScanSettingsToTraceLog();
 
+    emit sendRotatorEndStopTypeToCompassDial(setupAntenna->currentAntenna.endStopType);
+
 
 
     connect(ui->saveSkyScanSettingsOnCloseChkBox, &QCheckBox::stateChanged, this, &RotatorMainWindow::skyScanSettingsOnCloseChkBoxChanged);
+    connect(ui->skyScanStartBearingUpDownButtons, QOverload<int>::of(&ToolButtonUpDown::valueChanged), this, &RotatorMainWindow::skyScanStartBearingToolbuttonValueChanged);
     connect(ui->skyScanStartBearingUpDownButtons, QOverload<int>::of(&ToolButtonUpDown::valueChanged), this, &RotatorMainWindow::skyScanStartBearingToolbuttonValueChanged);
     connect(ui->skyScanStepDegreeSpinBox, QOverload<int>::of(&QSpinBox::valueChanged), this, &RotatorMainWindow::skyScanStepDegreesSpinBoxValueChanged);
     connect(ui->skyScanEndBearingUpDownButtons, QOverload<int>::of(&ToolButtonUpDown::valueChanged), this, &RotatorMainWindow::skyScanEndBearingToolbuttonValueChanged);

@@ -96,6 +96,7 @@ inline const QStringList presetMenuShortCutKeys = {
                                                         ROTATE_PRESET_MENU9, ROTATE_PRESET_MENU0
                                              };
 
+const int COMPASS_MAX450 = 450;
 const int COMPASS_MAX360 = 360;
 const int COMPASS_MAX359 = 359; // Green Heron Rotator
 const int COMPASS_HALF = 180;
