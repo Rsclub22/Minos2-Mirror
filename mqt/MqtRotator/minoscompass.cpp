@@ -110,11 +110,7 @@ void MinosCompass::paintEvent(QPaintEvent *)
     // Draw the skyScan annulus segment
     if (skyScanStartBearing != skyScanEndBearing)
     {
-        QColor skyScanAnnulusColor("#8ecaff");
-        drawAnnulusSegment(painter, skyScanAnnulusColor,
-                           65.0, 70.0,      // annulus inner and outer radius
-                           skyScanStartBearing, skyScanEndBearing);
-
+        drawSkyScanAnnulusSegment(&painter, skyScanStartBearing, skyScanEndBearing);
     }
 
     QFont dialfont = dynamic_cast<QWidget *>(parent())->font();
@@ -317,10 +313,10 @@ bool MinosCompass::eventFilter(QObject */*obj*/, QEvent *event)
 }
 
 
-void MinosCompass::drawAnnulusSegment(QPainter &painter, const QColor &annulusColor,
-                                      double innerRadius, double outerRadius,
-                                      int rotatorStartBearing, int rotatorEndBearing)
+void MinosCompass::drawSkyScanAnnulusSegment(QPainter *painter, int rotatorStartBearing, int rotatorEndBearing)
 {
+
+
     QPainterPath mainPath;
     QPainterPath overlapPath;
 
@@ -354,9 +350,8 @@ void MinosCompass::drawAnnulusSegment(QPainter &painter, const QColor &annulusCo
 
 
 
-
-
-    if (endStopType == ROT_0_360)
+    if (endStopType == ROT_0_360
+        || (endStopType == ROT_0_450 && rotatorStartBearing <= COMPASS_MAX360 && rotatorEndBearing <= COMPASS_MAX360))
     {
         if (rotatorStartBearing < rotatorEndBearing)
         {
@@ -372,116 +367,68 @@ void MinosCompass::drawAnnulusSegment(QPainter &painter, const QColor &annulusCo
             sweepLength = adjustedStartBearing - adjustedEndBearing;
         }
 
-        // Add the outer arc (clockwise from startAngle to endAngle)
-        mainPath.arcTo(mainOuterRect, -startAngle, -sweepLength); // Negative for CCW in Qt
+        drawAnnulusArc(painter, mainPath, mainInnerRect, mainOuterRect, startAngle, endAngle, sweepLength, mainColor);
 
-        // Add the inner arc (counterclockwise from endAngle to startAngle)
-        mainPath.arcTo(mainInnerRect, -endAngle, sweepLength); // Positive for CW
 
-        mainPath.closeSubpath();
-        painter.setBrush(mainColor);
-        painter.setPen(Qt::NoPen);
-        painter.drawPath(mainPath);
     }
-    else if (endStopType == ROT_0_450)
+    else if (endStopType == ROT_0_450 && (rotatorStartBearing > COMPASS_MAX360 || rotatorEndBearing > COMPASS_MAX360))
     {
-        if (rotatorStartBearing <= COMPASS_MAX360 && rotatorEndBearing <= COMPASS_MAX360)
+
+
+        if (rotatorStartBearing >= COMPASS_MAX360 && rotatorEndBearing >= COMPASS_MAX360)
         {
-            if (rotatorStartBearing < rotatorEndBearing)
-            {
-                startAngle = adjustedStartBearing;
-                endAngle = adjustedEndBearing;
-                sweepLength = adjustedEndBearing - adjustedStartBearing;
-            }
-            else
-            {
-                // reverse start and end to draw correctly
-                startAngle = adjustedEndBearing;
-                endAngle = adjustedStartBearing;
-                sweepLength = adjustedStartBearing - adjustedEndBearing;
-            }
+            startAngle = adjustedStartBearing - static_cast<double>(COMPASS_MAX360);
+            endAngle = adjustedEndBearing;
+            sweepLength =  adjustedEndBearing - adjustedStartBearing;
+            drawAnnulusArc(painter, overlapPath, overlapInnerRect, overlapOuterRect, startAngle, endAngle, sweepLength, overlapColor);
 
-            // this is the same as 0-360 only
+        }
 
-            // Add the outer arc (clockwise from startAngle to endAngle)
-            mainPath.arcTo(mainOuterRect, -startAngle, -sweepLength); // Negative for CCW in Qt
 
-            // Add the inner arc (counterclockwise from endAngle to startAngle)
-            mainPath.arcTo(mainInnerRect, -endAngle, sweepLength); // Positive for CW
+        else if (rotatorStartBearing < rotatorEndBearing)
+        {
 
-            mainPath.closeSubpath();
-            painter.setBrush(mainColor);
-            painter.setPen(Qt::NoPen);
-            painter.drawPath(mainPath);
+            // end > 360, draw start to 360
 
+            startAngle = adjustedStartBearing;
+            endAngle = static_cast<double>(COMPASS_MAX360) - 90.0;
+            sweepLength = static_cast<double>(COMPASS_MAX360) - static_cast<double>(rotatorStartBearing);
+            drawAnnulusArc(painter, mainPath, mainInnerRect, mainOuterRect, startAngle, endAngle, sweepLength, mainColor);
+
+            startAngle = static_cast<double>(COMPASS_MIN0) - 90.0;
+            endAngle = adjustedEndBearing - static_cast<double>(COMPASS_MAX360);
+            sweepLength = static_cast<double>(rotatorEndBearing) - static_cast<double>(COMPASS_MAX360);
+            drawAnnulusArc(painter, overlapPath, overlapInnerRect, overlapOuterRect, startAngle, endAngle, sweepLength, overlapColor);
         }
         else
         {
-            if (rotatorStartBearing < rotatorEndBearing)
-            {
+            startAngle = adjustedEndBearing;
+            endAngle = static_cast<double>(COMPASS_MAX360) - 90.0;
+            sweepLength = static_cast<double>(COMPASS_MAX360) - static_cast<double>(rotatorEndBearing);
+            drawAnnulusArc(painter, mainPath, mainInnerRect, mainOuterRect, startAngle, endAngle, sweepLength, mainColor);
 
+            startAngle = static_cast<double>(COMPASS_MAX360) - 90.0;
+            endAngle = adjustedStartBearing - static_cast<double>(COMPASS_MAX360);
+            sweepLength = rotatorStartBearing - static_cast<double>(COMPASS_MAX360);
+            drawAnnulusArc(painter, overlapPath, overlapInnerRect, overlapOuterRect, startAngle, endAngle, sweepLength, overlapColor);
 
-
-                // this is the same as 0 -360 above
-                if (rotatorEndBearing <= COMPASS_MAX360)
-                {
-
-                    startAngle = adjustedStartBearing;
-                    endAngle = adjustedEndBearing;
-                    sweepLength = adjustedEndBearing - adjustedStartBearing;
-
-
-                    // Add the outer arc (clockwise from startAngle to endAngle)
-                    mainPath.arcTo(mainOuterRect, -startAngle, -sweepLength); // Negative for CCW in Qt
-
-                    // Add the inner arc (counterclockwise from endAngle to startAngle)
-                    mainPath.arcTo(mainInnerRect, -endAngle, sweepLength); // Positive for CW
-
-                    mainPath.closeSubpath();
-                    painter.setBrush(mainColor);
-                    painter.setPen(Qt::NoPen);
-                    painter.drawPath(mainPath);
-                }
-                else
-                {
-                    // end > 360, draw start to 360
-
-                    startAngle = adjustedStartBearing;
-                    endAngle = static_cast<double>(COMPASS_MAX360) - 90.0;
-                    sweepLength = static_cast<double>(COMPASS_MAX360) - static_cast<double>(rotatorStartBearing);
-
-                    mainPath.arcTo(mainOuterRect, -startAngle, -sweepLength);
-                    mainPath.arcTo(mainInnerRect, -endAngle, sweepLength); // Positive for CW
-
-                    mainPath.closeSubpath();
-                    painter.setBrush(mainColor);
-                    painter.setPen(Qt::NoPen);
-                    painter.drawPath(mainPath);
-
-                    startAngle = static_cast<double>(COMPASS_MIN0) - 90.0;
-                    endAngle = adjustedEndBearing - static_cast<double>(COMPASS_MAX360);
-                    sweepLength = static_cast<double>(rotatorEndBearing) - static_cast<double>(COMPASS_MAX360);
-
-                    // now draw from 360 to endAngle
-                    overlapPath.arcTo(overlapOuterRect, -startAngle, -sweepLength);
-                    overlapPath.arcTo(overlapInnerRect, -endAngle, sweepLength); // Positive for CW
-
-                    overlapPath.closeSubpath();
-                    painter.setBrush(overlapColor);
-                    painter.setPen(Qt::NoPen);
-                    painter.drawPath(overlapPath);
-
-                }
-
-
-            }
         }
+
     }
 
 }
 
+void MinosCompass::drawAnnulusArc(QPainter *painter, QPainterPath &arcPath, QRectF &innerRect, QRectF &outerRect,
+                                  double startAngle, double endAngle, double sweepLength, QColor &pathColor)
+{
+    arcPath.arcTo(outerRect, -startAngle, -sweepLength);
+    arcPath.arcTo(innerRect, -endAngle, sweepLength); // Positive for CW
 
-
+    arcPath.closeSubpath();
+    painter->setBrush(pathColor);
+    painter->setPen(Qt::NoPen);
+    painter->drawPath(arcPath);
+}
 
 void MinosCompass::updateEndStopType(int endStopType_)
 {

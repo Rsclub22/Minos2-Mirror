@@ -63,7 +63,8 @@ private:
     QSize sizeHint() const Q_DECL_OVERRIDE;
     int getMouseBearing(QPoint vec);
     bool inAnnulus(QPoint vec);
-    void drawAnnulusSegment(QPainter &painter, const QColor &annulusColor, double innerRadius, double outerRadius, int startAngle, int endAngle);
+    void drawSkyScanAnnulusSegment(QPainter *painter, int rotatorStartBearing, int rotatorEndBearing);
+    void drawAnnulusArc(QPainter *painter, QPainterPath &arcPath, QRectF &innerRect, QRectF &outerRect, double startAngle, double endAngle, double sweepLength, QColor &pathColor);
 };
 
 
