@@ -287,6 +287,7 @@ void MMVARIFrame::sendCharacters(const QString &sendData, int mf)
     if (sendData.isEmpty())
     {
         mmvari->setBTX(false);  // stop immediately
+        mmvari->setWBufferCount(0);// and clear out the TX buffer
     }
     else
     {
