@@ -94,10 +94,8 @@ void DMButtonFrame::DMMess(AnalysePubSubNotify an)
 }
 bool  DMButtonFrame::isDataMode()
 {
-    return  curMode == rigcommon::convertModeToQString(MODE::USB)
-        || curMode == rigcommon::convertModeToQString(MODE::LSB)
-        || curMode == rigcommon::convertModeToQString(MODE::FM)
-        || curMode == hamlibData::PH;
+    return  curMode == "PS"
+           || curMode == "RY";
 
 }
 void DMButtonFrame::onModeChange(QString mode)
