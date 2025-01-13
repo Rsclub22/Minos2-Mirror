@@ -14,7 +14,7 @@
 #include "MShowMessageDlg.h"
 #include "MinosLoggerEvents.h"
 #include "MinosParameters.h"
-#include "rigcommon.h"
+//#include "rigcommon.h"
 
 #include "MinosRPC.h"
 #include "dmbuttonframe.h"
@@ -94,8 +94,8 @@ void DMButtonFrame::DMMess(AnalysePubSubNotify an)
 }
 bool  DMButtonFrame::isDataMode()
 {
-    return  curMode == "PS"
-           || curMode == "RY";
+    return  curMode == hamlibData::PSK
+           || curMode == hamlibData::RY;
 
 }
 void DMButtonFrame::onModeChange(QString mode)

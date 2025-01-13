@@ -1152,6 +1152,27 @@ void QSOLogFrame::rxDMWord(QString rxWord, int markFreq)
     trace(QString("QSOLogFrame::rxDMWord %1 %2").arg(rxWord).arg(markFreq));
 
     QLineEdit *ed = dynamic_cast<QLineEdit *>( current );
+    if (ed == ui->CallsignFrame->getTextEditEdit())
+    {
+        Callsign call;
+
+        int res = call.setFullCall(rxWord);
+        if (res != CS_OK)
+        {
+            trace(QString("%1 is not a valid callsign; ").arg(rxWord));
+            return;
+        }
+
+    }
+    if (ed == ui->SerRxFrame->getTextEditEdit())
+    {
+        if (!isPureNumeric(rxWord))
+        {
+            trace(QString("%1 is not a valid serial number; ").arg(rxWord));
+            return;
+        }
+
+    }
     if (ed != ui->QTHFrame->getTextEditEdit())
     {
         ed->setText(rxWord);
