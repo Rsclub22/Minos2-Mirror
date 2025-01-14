@@ -146,7 +146,7 @@ void FLDigiFrame::sendCharacters(const QString &s, int mfreq)
     // main.tx sets tx on
     // main.rx_tx "Sets normal Rx/Tx switching."
 
-    // main.abort kills the TX
+    // main.abort kills the TX, and hopefully clears the TX buffer
 
     // Then there are: )which all use params 0
 

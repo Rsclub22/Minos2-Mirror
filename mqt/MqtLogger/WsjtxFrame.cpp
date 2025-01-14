@@ -91,7 +91,7 @@ WsjtxFrame::WsjtxFrame(TSingleLogFrame *parent) :
     ui->decodes_table_view_->hideColumn (dcSeq);
 //    //ui->decodes_table_view_->hideColumn (dcPoints);
 //    //ui->decodes_table_view_->hideColumn (dcBearing);
-    ui->decodes_table_view_->hideColumn (dcDistance);
+//    ui->decodes_table_view_->hideColumn (dcDistance);
 //    //ui->decodes_table_view_->hideColumn (dcFromCall);
 //    //ui->decodes_table_view_->hideColumn (dcFromGrid);
 //    //ui->decodes_table_view_->hideColumn (dcToCall);

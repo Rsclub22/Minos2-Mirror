@@ -21,12 +21,12 @@
     <message>
         <location filename="../dmmainwindow.ui" line="53"/>
         <source>Configuration File</source>
-        <translation type="unfinished"></translation>
+        <translation>Fichier de configuration</translation>
     </message>
     <message>
         <location filename="../dmmainwindow.ui" line="67"/>
         <source>...</source>
-        <translation type="unfinished">...</translation>
+        <translation>...</translation>
     </message>
     <message>
         <location filename="../dmmainwindow.ui" line="87"/>
@@ -63,21 +63,16 @@
     <message>
         <location filename="../dmmainwindow.cpp" line="431"/>
         <source>INI (*.ini);;All Files (*.*)</source>
-        <translation type="unfinished"></translation>
+        <translation>INI (*.ini);;Tous les fichiers (*.*)</translation>
     </message>
     <message>
         <location filename="../dmmainwindow.cpp" line="435"/>
         <source>Datamodes Configuration file</source>
-        <translation type="unfinished"></translation>
+        <translation>Fichier de configuration des modes de données</translation>
     </message>
 </context>
 <context>
     <name>EngineConfigure</name>
-    <message>
-        <location filename="../engineconfigure.ui" line="14"/>
-        <source>Configure Engines</source>
-        <translation>Configurer [what does this mean?]</translation>
-    </message>
     <message>
         <location filename="../engineconfigure.ui" line="58"/>
         <location filename="../engineconfigure.ui" line="154"/>
@@ -104,6 +99,11 @@
         <location filename="../engineconfigure.ui" line="33"/>
         <source>MMVARI/1</source>
         <translation>MMVARI/1</translation>
+    </message>
+    <message>
+        <location filename="../engineconfigure.ui" line="14"/>
+        <source>Configure Decode Engines</source>
+        <translation>Configurer les applications de décodage</translation>
     </message>
     <message>
         <location filename="../engineconfigure.ui" line="47"/>
@@ -226,13 +226,13 @@
     </message>
     <message>
         <location filename="../engineconfigure.cpp" line="439"/>
-        <source>Engine Files (*.ocx *.exe);;All Files (*.*)</source>
-        <translation>[What???] Fichiers (*.ocx *.exe);;Tous les fichiers (*.*)</translation>
+        <source>Decode Engine Files (*.ocx *.exe);;All Files (*.*)</source>
+        <translation>Fichiers pour les applications de décodage (*.ocx *.exe);;Tous les fichiers (*.*)</translation>
     </message>
     <message>
         <location filename="../engineconfigure.cpp" line="443"/>
-        <source>%1 Engine Executable</source>
-        <translation>%1 [what????] Exécutable</translation>
+        <source>%1 Decode Engine Executable</source>
+        <translation>%1 Exécutable pour l&apos;application de décodage</translation>
     </message>
 </context>
 <context>
@@ -259,13 +259,13 @@
     </message>
     <message>
         <location filename="../enginewindow.ui" line="76"/>
-        <source>Set Test</source>
-        <translation type="unfinished"></translation>
+        <source>Set Test Transmission Text</source>
+        <translation>Définir le texte de transmission du test</translation>
     </message>
     <message>
         <location filename="../enginewindow.ui" line="83"/>
-        <source>Send Test</source>
-        <translation type="unfinished"></translation>
+        <source>Send Test Transmission</source>
+        <translation>Démarrer la transmission du test</translation>
     </message>
     <message>
         <location filename="../enginewindow.ui" line="124"/>
@@ -289,14 +289,6 @@
         <location filename="../enginewindow.ui" line="254"/>
         <source>...</source>
         <translation>...</translation>
-    </message>
-    <message>
-        <source>Show Back Data</source>
-        <translation type="vanished">Afficher les données arrière [huh???]</translation>
-    </message>
-    <message>
-        <source>Hide Back Data</source>
-        <translation type="vanished">Masquer les données arrière [huh???]</translation>
     </message>
 </context>
 <context>

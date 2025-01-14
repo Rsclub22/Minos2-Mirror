@@ -1,3 +1,6 @@
+#include <QScrollArea>
+#include <QStyleOption>
+
 #include "regsettings.h"
 #include "Clusterbandmapconfigure.h"
 #include "defdirsdlg.h"
@@ -50,6 +53,19 @@ void OptionsDialog::accept()
     QDialog::accept();
 }
 
+void OptionsDialog::addTab(QFrame *f, const QString &t)
+{
+    QScrollArea *elementScrollArea = new QScrollArea();
+    elementScrollArea->setWidgetResizable(true);
+    elementScrollArea->setFocusPolicy(Qt::NoFocus);
+    elementScrollArea->setFrameStyle(QStyleOptionFrame::None);
+    elementScrollArea->setFrameShadow(QFrame::Plain);
+
+    ui->optionTabs->addTab(elementScrollArea, t);
+
+    elementScrollArea->setWidget(f);
+
+}
 int OptionsDialog::exec()
 {
     RegSettings settings;
@@ -79,13 +95,13 @@ int OptionsDialog::exec()
     wc->initialise();
     wc->setAutoFillBackground(true);
 
-    ui->optionTabs->addTab(bs, tr("Wanted Bands"));
-    ui->optionTabs->addTab(cbc, tr("Cluster/Bandmap"));
-    ui->optionTabs->addTab(ddd, tr("General Options"));
-    ui->optionTabs->addTab(dod, tr("Display Options"));
-    ui->optionTabs->addTab(rdc, tr("Log Radio Settings"));
-    ui->optionTabs->addTab(nbc, tr("UDP Broadcast"));
-    ui->optionTabs->addTab(wc, tr("WSJT-X"));
+    addTab(bs, tr("Wanted Bands"));
+    addTab(cbc, tr("Cluster/Bandmap"));
+    addTab(ddd, tr("General Options"));
+    addTab(dod, tr("Display Options"));
+    addTab(rdc, tr("Log Radio Settings"));
+    addTab(nbc, tr("UDP Broadcast"));
+    addTab(wc, tr("WSJT-X"));
 
     ui->optionTabs->setCurrentIndex(curTabNo);
     current = ui->optionTabs->currentWidget();

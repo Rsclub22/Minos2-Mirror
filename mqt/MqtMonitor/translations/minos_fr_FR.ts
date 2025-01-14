@@ -54,10 +54,6 @@
         <translation>Afficher les Spots</translation>
     </message>
     <message>
-        <source>Dist Limit</source>
-        <translation type="vanished">Limite de distance</translation>
-    </message>
-    <message>
         <location filename="../MonitorMain.ui" line="183"/>
         <source>Show Locs</source>
         <translation>Afficher Locators</translation>

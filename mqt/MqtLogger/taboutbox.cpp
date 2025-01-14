@@ -1,5 +1,7 @@
 #include <QDesktopServices>
 #include <QUrl>
+#include <QFontDialog>
+#include <QFont>
 #include "MTrace.h"
 #include "regsettings.h"
 #include "MShowMessageDlg.h"
@@ -11,6 +13,7 @@
 #include "ConfigFile.h"
 #include "StartConfigManager.h"
 #include "ServerEvent.h"
+#include "MinosLoggerEvents.h"
 #include "taboutbox.h"
 #include "ui_taboutbox.h"
 
@@ -150,6 +153,7 @@ TAboutBox::TAboutBox(QWidget *parent, bool onStartup) :
 
     ui->ExitButton->setVisible(onStartup);
     ui->LoggerOnlyButton->setVisible(onStartup);
+    ui->fontButton->setVisible(onStartup);
     ui->SessionsFrame->setVisible(onStartup);
 
     if (onStartup)
@@ -200,6 +204,8 @@ TAboutBox::TAboutBox(QWidget *parent, bool onStartup) :
         ui->ageSpinner->setEnabled(ui->ageCb->isChecked());
     }
 
+    showAppConfig();
+
     if (  onStartup && !checkRouterReady() )
     {
         doStartup = true; // click the start button on form close
@@ -227,6 +233,12 @@ void TAboutBox::accept()
 {
     doCloseEvent();
     QDialog::accept();
+}
+void TAboutBox::showAppConfig()
+{
+    MinosConfig *minosConfig = MinosConfig::getMinosConfig();
+    ui->appsLabel->setText( minosConfig->getCurrConfig().configName);
+
 }
 void TAboutBox::on_AboutMemo_linkActivated(const QString &link)
 {
@@ -263,11 +275,13 @@ void TAboutBox::on_AppsButton_clicked()
     MinosConfig *minosConfig = MinosConfig::getMinosConfig();
     StartConfig configBox( this, false, minosConfig->getCurrConfig().configName);
     configBox.exec();
+    showAppConfig();
 }
 void TAboutBox::on_appSelectButton_clicked()
 {
     StartConfigManager manageApps( this, true);   // when managing sets, include autostart
     manageApps.exec();
+    showAppConfig();
 }
 
 void TAboutBox::on_manageSets_clicked()
@@ -298,5 +312,36 @@ void TAboutBox::on_ageCb_stateChanged(int /*arg1*/)
     ui->ageSpinner->setEnabled(ui->ageCb->isChecked());
     TContestApp::getContestApp() ->loggerBundle.setBoolProfile(elpAgeProtectContests, ui->ageCb->isChecked());
     TContestApp::getContestApp() ->loggerBundle.flushProfile();
+}
+
+
+void TAboutBox::on_fontButton_clicked()
+{
+    QString qpa = qgetenv("QT_QPA_PLATFORMTHEME");
+    if (qpa.compare("qt5ct", Qt::CaseInsensitive) == 0)
+    {
+        mShowMessage(tr("Font setting will not work while the QT_QPA_PLATFORMTHEME environment variable is set to qt5ct"), this);
+        RegSettings settings;
+        settings.getSettings().remove( "font");
+        return;
+    }
+    bool ok;
+    QFont f;
+    QFont nf = QFontDialog::getFont( &ok, f );
+    if (ok && nf != f)
+    {
+        QApplication::setFont( nf );
+
+        for ( auto &widget: QApplication::allWidgets() )
+        {
+            widget->setFont(nf);
+            widget->update();
+        }
+
+        RegSettings settings;
+        settings.getSettings().setValue( "font", font() );
+
+        MinosLoggerEvents::SendFontChanged();
+    }
 }
 

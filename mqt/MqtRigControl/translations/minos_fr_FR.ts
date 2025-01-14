@@ -144,7 +144,8 @@ Please enter a name for the radio</source>
     <message>
         <location filename="../hamlibrigcontrol.cpp" line="40"/>
         <source>Argument out of domain of func</source>
-        <translation>Argument hors du domaine de la fonction [huh]???</translation>
+        <translatorcomment>Argument hors du domaine de la fonction [huh]</translatorcomment>
+        <translation>Hamlib error</translation>
     </message>
     <message>
         <location filename="../hamlibrigcontrol.cpp" line="41"/>
@@ -174,7 +175,7 @@ Please enter a name for the radio</source>
     <message>
         <location filename="../hamlibrigcontrol.cpp" line="44"/>
         <source>Limit exceeded </source>
-        <translation type="unfinished"></translation>
+        <translation>Limite dépassée </translation>
     </message>
     <message>
         <location filename="../hamlibrigcontrol.cpp" line="1171"/>
@@ -259,7 +260,7 @@ Vérifier le tracelog Rigcontrol</translation>
     <message>
         <location filename="../omnirigcontrol.cpp" line="637"/>
         <source>Minos - Check Omnirig Radio ini File for radio %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Minos - Vérifier le fichier INI de la radio Omnirig pour la radio %1 ?? David&apos;s changed Omnirig files</translation>
     </message>
     <message>
         <location filename="../omnirigcontrol.cpp" line="638"/>
@@ -267,7 +268,10 @@ Vérifier le tracelog Rigcontrol</translation>
 Please obtain the correct ini file from the Minos folder:
 Configuration\Omnirig_Minos_Ini
 Place it in \Program Files (x86)\Afreet\OmniRig\Rigs</source>
-        <translation type="unfinished"></translation>
+        <translation>Le fichier ini pour %1 ne contient pas [pmFreq] pour un fonctionnement correct de Minos
+Obtenir le fichier ini correct à partir du dossier Minos&#xa0;:
+Configuration\Omnirig_Minos_Ini
+Placez-le dans \Program Files (x86)\Afreet\OmniRig\Rigs</translation>
     </message>
     <message>
         <location filename="../omnirigcontrol.cpp" line="1050"/>
@@ -281,10 +285,6 @@ Place it in \Program Files (x86)\Afreet\OmniRig\Rigs</source>
         <location filename="../rigcontrolmainwindow.ui" line="14"/>
         <source>Minos Rig Control</source>
         <translation>Contrôle de l&apos;appareil</translation>
-    </message>
-    <message>
-        <source>Select RigControl path</source>
-        <translation type="vanished">Sélectionner le programme Rigctld</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.ui" line="107"/>
@@ -329,7 +329,7 @@ Place it in \Program Files (x86)\Afreet\OmniRig\Rigs</source>
     <message>
         <location filename="../rigcontrolmainwindow.ui" line="54"/>
         <source>Select RigControl Program</source>
-        <translation type="unfinished"></translation>
+        <translation>Sélectionner le programme Rigcontrol</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.ui" line="61"/>
@@ -344,32 +344,32 @@ Place it in \Program Files (x86)\Afreet\OmniRig\Rigs</source>
     <message>
         <location filename="../rigcontrolmainwindow.ui" line="231"/>
         <source>Test Actions</source>
-        <translation type="unfinished"></translation>
+        <translation>Options de test</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.ui" line="239"/>
         <source>Select Radio From Logger </source>
-        <translation type="unfinished"></translation>
+        <translation>Sélectionner la radio à partir de l&apos;enregistreur </translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.ui" line="246"/>
         <source>Select Radio From Rigcontrol</source>
-        <translation type="unfinished"></translation>
+        <translation>Sélectionner la radio à partir de Rigcontrol</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.ui" line="288"/>
         <source>Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Mode</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.ui" line="387"/>
         <source>Voice Message</source>
-        <translation type="unfinished"></translation>
+        <translation>Message vocal</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.ui" line="397"/>
         <source>Play</source>
-        <translation type="unfinished"></translation>
+        <translation>???Where???Test play of voice message - only when rig control run stand-alone</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.ui" line="534"/>
@@ -449,16 +449,6 @@ actif</translation>
         <location filename="../rigcontrolmainwindow.ui" line="1002"/>
         <source>PTT</source>
         <translation>PTT</translation>
-    </message>
-    <message>
-        <location filename="../rigcontrolmainwindow.ui" line="1039"/>
-        <source>TX</source>
-        <translation>TX</translation>
-    </message>
-    <message>
-        <location filename="../rigcontrolmainwindow.ui" line="1066"/>
-        <source>Support:</source>
-        <translation>Soutiens: [Context?]</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.ui" line="345"/>
@@ -586,10 +576,6 @@ Voulez-vous recharger les paramètres de cette radio?</translation>
         <translation>Erreur de version RigControl Hamlib !</translation>
     </message>
     <message>
-        <source>Set Radio from Logger</source>
-        <translation type="vanished">Régler la radio à partir de Logger</translation>
-    </message>
-    <message>
         <location filename="../rigcontrolmainwindow.cpp" line="546"/>
         <location filename="../rigcontrolmainwindow.cpp" line="570"/>
         <source>RigControl Select Radio</source>
@@ -604,7 +590,8 @@ Voulez-vous recharger les paramètres de cette radio?</translation>
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="571"/>
         <source>Radio type &quot;%1&quot; no longer exists in Hamlib, Please choose something different</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Hamlib has a bad habit of changing names - e.g. between FlexRadio and Flex Radio!</translatorcomment>
+        <translation>Le type de radio &quot;%1&quot; n&apos;existe plus dans Hamlib, choisir quelque chose de différent SVP</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="1413"/>
@@ -625,8 +612,8 @@ Some radios/interfaces may require Force DTR or Force RTS to be set High, to pow
 Minos a essayé de lire la fréquence radio,
 mais rien n&apos;a été reçu de la radio.
 
-Vérifier les connexions et/ou les paramètres.
-Certaines radios/interfaces peuvent nécessiter que Force DTR ou Force RTS soit réglé sur Haut pour alimenter l&apos;interface.!Force?</translation>
+Veuillez vérifier les connexions et/ou les paramètres.
+Certaines radios/interfaces peuvent nécessiter que Force-DTR ou Force-RTS soit réglé sur High, pour alimenter l&apos;interface.</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="1434"/>
@@ -1233,7 +1220,8 @@ Vous ne pourrez pas sélectionner un radio tant que cela ne sera pas corrigé !<
         <location filename="../rigcontrolmainwindow.cpp" line="4958"/>
         <source>Get and Set Antenna Switch = %1
 </source>
-        <translation type="unfinished">Obtenir et définir ???????</translation>
+        <translatorcomment>WHY &quot;Get and Set ANTENNA Switch&quot; under &quot;show current RADIO config&quot; button</translatorcomment>
+        <translation>Obtenir et définir le commutateur d&apos;antenne = %1???</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="4959"/>
@@ -1385,7 +1373,7 @@ la poignée de main et les réglages forcés.</translation>
 following:
 %1
 Please Correct before Continuing</source>
-        <translatorcomment>just for %1?</translatorcomment>
+        <translatorcomment>just for %1? Yes, I think so</translatorcomment>
         <translation>Paramètres du Transverter sont hors bande pour la suivant
 %1
 Corriger avant de continuer SVP</translation>
@@ -1581,7 +1569,7 @@ Corriger les entrées du convertisseur SVP.</translation>
     <message>
         <location filename="../rigsetupform.ui" line="107"/>
         <source>Serial</source>
-        <translation>Série [Context???]</translation>
+        <translation>Série [Context???Serial port (as against network)]</translation>
     </message>
     <message>
         <location filename="../rigsetupform.ui" line="114"/>

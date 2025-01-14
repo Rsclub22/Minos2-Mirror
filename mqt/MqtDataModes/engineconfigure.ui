@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Configure Engines</string>
+   <string>Configure Decode Engines</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_9">
    <item>
@@ -600,7 +600,7 @@
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="MMVARIPTTL1"/>
   <buttongroup name="MMVARIPTTL2"/>
+  <buttongroup name="MMVARIPTTL1"/>
  </buttongroups>
 </ui>

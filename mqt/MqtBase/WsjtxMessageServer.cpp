@@ -46,7 +46,6 @@ public:
              {
                QString err = errorString();
                trace("WSJT-X error: " + err);
-               Q_EMIT self_->error (err);
              });
     connect (clock_, &QTimer::timeout, this, &impl::tick);
     clock_->start (NetworkMessage::pulse * 1000);
@@ -68,7 +67,7 @@ public:
         }
       else
         {
-          Q_EMIT self_->error (tr("Error creating UDP message"));
+          trace("Error creating UDP message");
         }
   }
 
@@ -216,7 +215,7 @@ void MessageServer::impl::parse_message (QHostAddress const& sender, port_type s
                         }
                       else
                         {
-                          Q_EMIT self_->error (tr("Error creating UDP message"));
+                          trace("Error creating UDP message");
                         }
                     }
                   // we don't care if this fails to read
@@ -394,16 +393,16 @@ void MessageServer::impl::parse_message (QHostAddress const& sender, port_type s
         }
       else
         {
-          Q_EMIT self_->error (tr("MessageServer warning: invalid UDP message received"));
+          trace("MessageServer warning: invalid UDP message received");
         }
     }
   catch (std::exception const& e)
     {
-      Q_EMIT self_->error ( tr("MessageServer exception: %1").arg (e.what ()));
+      trace(QString("MessageServer exception: %1").arg (e.what ()));
     }
   catch (...)
     {
-      Q_EMIT self_->error (tr("Unexpected exception in MessageServer"));
+      trace("Unexpected exception in MessageServer");
     }
 }
 
@@ -437,11 +436,11 @@ auto MessageServer::impl::check_status (QDataStream const& stream) const -> Stre
       break;
 
     case QDataStream::ReadCorruptData:
-      Q_EMIT self_->error (tr("Message serialization error: read corrupt data"));
+      trace("Message serialization error: read corrupt data");
       break;
 
     case QDataStream::WriteFailed:
-      Q_EMIT self_->error (tr("Message serialization error: write error"));
+      trace("Message serialization error: write error");
       break;
 
     default:

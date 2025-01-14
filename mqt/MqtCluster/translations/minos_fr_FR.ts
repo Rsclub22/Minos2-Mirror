@@ -183,7 +183,7 @@
     <message>
         <location filename="../clustermainwindow.cpp" line="213"/>
         <source>Always loads last saved settings</source>
-        <translation>Context? Charge toujours les derniers paramètres enregistrés</translation>
+        <translation type="unfinished">Context? Charge toujours les derniers paramètres enregistrés ??</translation>
     </message>
     <message>
         <location filename="../clustermainwindow.cpp" line="457"/>

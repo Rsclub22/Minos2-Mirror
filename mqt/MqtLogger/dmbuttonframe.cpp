@@ -14,7 +14,7 @@
 #include "MShowMessageDlg.h"
 #include "MinosLoggerEvents.h"
 #include "MinosParameters.h"
-#include "rigcommon.h"
+//#include "rigcommon.h"
 
 #include "MinosRPC.h"
 #include "dmbuttonframe.h"
@@ -94,10 +94,8 @@ void DMButtonFrame::DMMess(AnalysePubSubNotify an)
 }
 bool  DMButtonFrame::isDataMode()
 {
-    return  curMode == rigcommon::convertModeToQString(MODE::USB)
-        || curMode == rigcommon::convertModeToQString(MODE::LSB)
-        || curMode == rigcommon::convertModeToQString(MODE::FM)
-        || curMode == hamlibData::PH;
+    return  curMode == hamlibData::PSK
+           || curMode == hamlibData::RY;
 
 }
 void DMButtonFrame::onModeChange(QString mode)
@@ -460,11 +458,11 @@ void DMButtonFrame::on_chooseButton_clicked()
     QFileInfo qf(InitialDir);
 
     InitialDir = qf.canonicalFilePath();
-    QString Filter = tr("Contact list files (*.json);;"
+    QString Filter = tr("Function Key Definitions Files (*.json);;"
                      "All Files (*.*)") ;
 
     QString fName = QFileDialog::getOpenFileName( this,
-                       tr("Open Function Key Definitions"),
+                       tr("Open Function Key Definitions File"),
                        InitialDir,
                        Filter
                        );

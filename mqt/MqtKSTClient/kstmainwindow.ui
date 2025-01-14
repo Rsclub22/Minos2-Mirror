@@ -77,28 +77,28 @@
        <item>
         <widget class="QCheckBox" name="login1cb">
          <property name="text">
-          <string>-</string>
+          <string notr="true">-</string>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QCheckBox" name="login2cb">
          <property name="text">
-          <string>-</string>
+          <string notr="true">-</string>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QCheckBox" name="login3cb">
          <property name="text">
-          <string>-</string>
+          <string notr="true">-</string>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QCheckBox" name="login4cb">
          <property name="text">
-          <string>-</string>
+          <string notr="true">-</string>
          </property>
         </widget>
        </item>
@@ -466,7 +466,7 @@ when user selected</string>
               <item>
                <widget class="QCheckBox" name="includeMeCb">
                 <property name="text">
-                 <string>Including me</string>
+                 <string notr="true">Including my call</string>
                 </property>
                </widget>
               </item>
@@ -573,7 +573,7 @@ when user selected</string>
           <item>
            <widget class="QRadioButton" name="active1rb">
             <property name="text">
-             <string>-</string>
+             <string notr="true">-</string>
             </property>
             <attribute name="buttonGroup">
              <string notr="true">activeChatGroup</string>
@@ -583,7 +583,7 @@ when user selected</string>
           <item>
            <widget class="QRadioButton" name="active2rb">
             <property name="text">
-             <string>-</string>
+             <string notr="true">-</string>
             </property>
             <attribute name="buttonGroup">
              <string notr="true">activeChatGroup</string>
@@ -593,7 +593,7 @@ when user selected</string>
           <item>
            <widget class="QRadioButton" name="active3rb">
             <property name="text">
-             <string>-</string>
+             <string notr="true">-</string>
             </property>
             <attribute name="buttonGroup">
              <string notr="true">activeChatGroup</string>
@@ -603,7 +603,7 @@ when user selected</string>
           <item>
            <widget class="QRadioButton" name="active4rb">
             <property name="text">
-             <string>-</string>
+             <string notr="true">-</string>
             </property>
             <attribute name="buttonGroup">
              <string notr="true">activeChatGroup</string>
@@ -799,7 +799,7 @@ when user selected</string>
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="activeChatGroup"/>
   <buttongroup name="callStringButtonGroup"/>
+  <buttongroup name="activeChatGroup"/>
  </buttongroups>
 </ui>

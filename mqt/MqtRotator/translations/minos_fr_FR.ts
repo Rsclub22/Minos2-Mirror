@@ -104,7 +104,7 @@ utiliser un autre nom SVP</translation>
     <message>
         <location filename="../hamlibRotcontrol.cpp" line="37"/>
         <source>VFO not targetable</source>
-        <translation>VFO???? not targetable</translation>
+        <translation>VFO???? not targetable Hamlib error</translation>
     </message>
     <message>
         <location filename="../hamlibRotcontrol.cpp" line="38"/>
@@ -119,42 +119,38 @@ utiliser un autre nom SVP</translation>
     <message>
         <location filename="../hamlibRotcontrol.cpp" line="40"/>
         <source>NULL RIG handle or any invalid pointer parameter in get arg</source>
-        <translatorcomment>Prise en main de l&apos;appareil nulle ou un paramètre de pointeur invalide dans l&apos;argument retourné</translatorcomment>
-        <translation>WHAT ???     (AND WHY?)   APJ19</translation>
+        <translation>Erreur Hamlib</translation>
     </message>
     <message>
         <location filename="../hamlibRotcontrol.cpp" line="41"/>
         <source>Invalid VFO</source>
-        <translation>VFO?????? invalide   APJ20</translation>
+        <translation>Erreur Hamlib</translation>
     </message>
     <message>
         <location filename="../hamlibRotcontrol.cpp" line="42"/>
         <source>Argument out of domain of func</source>
-        <translation type="unfinished"></translation>
+        <translation>Erreur Hamlib</translation>
     </message>
     <message>
         <location filename="../hamlibRotcontrol.cpp" line="43"/>
         <source>Function deprecated</source>
-        <translation type="unfinished"></translation>
+        <translation>Fonction obsolète</translation>
     </message>
     <message>
         <location filename="../hamlibRotcontrol.cpp" line="44"/>
         <source>Security error password not provided or crypto failure</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Context</translatorcomment>
+        <translation>Erreur Hamlib</translation>
     </message>
     <message>
         <location filename="../hamlibRotcontrol.cpp" line="45"/>
         <source>Rig is not powered on</source>
-        <translation type="unfinished"></translation>
+        <translation>Erreur Hamlib</translation>
     </message>
     <message>
         <location filename="../hamlibRotcontrol.cpp" line="46"/>
         <source>Limit exceeded </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>RIG_EDOM</source>
-        <translation type="vanished">RIG_EDOM WHAT????   APJ21</translation>
+        <translation>Limite dépassée </translation>
     </message>
     <message>
         <location filename="../hamlibRotcontrol.cpp" line="494"/>
@@ -661,7 +657,8 @@ Vous ne pourrez pas sélectionner un rotateur tant que cela ne sera pas corrigé
     <message>
         <location filename="../rotatormainwindow.cpp" line="246"/>
         <source>Test Antenna</source>
-        <translation>Antenne de test  [context???]</translation>
+        <translatorcomment>Test antenna selected in rot contro</translatorcomment>
+        <translation>Antenne en test</translation>
     </message>
     <message>
         <location filename="../rotatormainwindow.cpp" line="1148"/>
@@ -950,8 +947,8 @@ Voulez-vous recharger les paramètres de l&apos;antenne maintenant?</translation
         <location filename="../rotatormainwindow.cpp" line="2536"/>
         <source>No Antenna Selected
 </source>
-        <translatorcomment>Antenna or Rotator???</translatorcomment>
-        <translation>Pas de Rotateur selectionné
+        <translatorcomment>Antenna or Rotator??? David likes Antenna, I like Rotator; we aren&apos;t consistent</translatorcomment>
+        <translation>Pas de Antennes selectionné
 </translation>
     </message>
 </context>

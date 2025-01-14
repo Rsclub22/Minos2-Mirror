@@ -18,7 +18,7 @@
     <item>
      <widget class="QTabWidget" name="KeyerTabs">
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="voiceTab">
        <attribute name="title">
@@ -126,7 +126,7 @@
              <item>
               <widget class="QPushButton" name="showButton">
                <property name="text">
-                <string>Show</string>
+                <string>Show Waveform</string>
                </property>
               </widget>
              </item>

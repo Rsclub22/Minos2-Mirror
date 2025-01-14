@@ -217,14 +217,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.ui" line="80"/>
-        <location filename="../kstmainwindow.ui" line="87"/>
-        <location filename="../kstmainwindow.ui" line="94"/>
-        <location filename="../kstmainwindow.ui" line="101"/>
-        <location filename="../kstmainwindow.ui" line="576"/>
-        <location filename="../kstmainwindow.ui" line="586"/>
-        <location filename="../kstmainwindow.ui" line="596"/>
-        <location filename="../kstmainwindow.ui" line="606"/>
         <location filename="../kstmainwindow.ui" line="755"/>
         <source>-</source>
         <translation type="unfinished"></translation>
@@ -315,11 +307,6 @@ when user selected</source>
         <location filename="../kstmainwindow.ui" line="399"/>
         <location filename="../kstmainwindow.ui" line="451"/>
         <source>Clear the message filters</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../kstmainwindow.ui" line="469"/>
-        <source>Including me</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

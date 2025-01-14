@@ -52,7 +52,7 @@
     <message>
         <location filename="../AsMainWindow.cpp" line="52"/>
         <source>Manage &amp;Hamlib...</source>
-        <translation type="unfinished"></translation>
+        <translation>Gérer &amp;Hamlib...</translation>
     </message>
     <message>
         <location filename="../AsMainWindow.cpp" line="53"/>

@@ -436,11 +436,11 @@ void EngineConfigure::doBrowse(QString key, QLineEdit *edit)
         InitialDir = ExtractFileDir(fname);
     }
 
-    QString Filter = tr("Engine Files (*.ocx *.exe);;All Files (*.*)") ;
+    QString Filter = tr("Decode Engine Files (*.ocx *.exe);;All Files (*.*)") ;
 
 
     QString fileName = QFileDialog::getOpenFileName( this,
-                       tr("%1 Engine Executable").arg(key),
+                       tr("%1 Decode Engine Executable").arg(key),
                        InitialDir,                   // opendir
                        Filter );
 

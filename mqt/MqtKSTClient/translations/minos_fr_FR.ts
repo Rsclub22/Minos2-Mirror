@@ -83,7 +83,7 @@
     <message>
         <location filename="../changename.cpp" line="148"/>
         <source>Change name failed: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Le changement de nom a échoué&#xa0;: %1</translation>
     </message>
 </context>
 <context>
@@ -196,7 +196,7 @@
     <message>
         <location filename="../kstconfigure.cpp" line="67"/>
         <source>Name %1 cannot be more than 16 characters</source>
-        <translation type="unfinished"></translation>
+        <translation>Nom %1 limité à 16 caractères</translation>
     </message>
 </context>
 <context>
@@ -217,18 +217,14 @@
         <translation>Connecter</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.ui" line="80"/>
-        <location filename="../kstmainwindow.ui" line="87"/>
-        <location filename="../kstmainwindow.ui" line="94"/>
-        <location filename="../kstmainwindow.ui" line="101"/>
-        <location filename="../kstmainwindow.ui" line="576"/>
-        <location filename="../kstmainwindow.ui" line="586"/>
-        <location filename="../kstmainwindow.ui" line="596"/>
-        <location filename="../kstmainwindow.ui" line="606"/>
+        <source>Including my call</source>
+        <translation type="vanished">Mon indicatif d&apos;appel compris</translation>
+    </message>
+    <message>
         <location filename="../kstmainwindow.ui" line="755"/>
         <source>-</source>
-        <translatorcomment>Replaced by text?</translatorcomment>
-        <translation>-</translation>
+        <translatorcomment>Replaced by text? Placeholder only - leave as is</translatorcomment>
+        <translation>- Placeholder only - leave as is?</translation>
     </message>
     <message>
         <location filename="../kstmainwindow.ui" line="162"/>
@@ -322,12 +318,6 @@ l&apos;indicatif sélectionné</translation>
         <location filename="../kstmainwindow.ui" line="451"/>
         <source>Clear the message filters</source>
         <translation>Effacer les filtres des messages</translation>
-    </message>
-    <message>
-        <location filename="../kstmainwindow.ui" line="469"/>
-        <source>Including me</source>
-        <translatorcomment>Context??</translatorcomment>
-        <translation>y compris les miens</translation>
     </message>
     <message>
         <location filename="../kstmainwindow.ui" line="490"/>
@@ -425,8 +415,8 @@ l&apos;indicatif sélectionné</translation>
     <message>
         <location filename="../kstmainwindow.cpp" line="656"/>
         <source>Set Back</source>
-        <translatorcomment>ou Retour?</translatorcomment>
-        <translation>Définir statut à « Présent »</translation>
+        <translatorcomment>Ou retour??</translatorcomment>
+        <translation>Définir statut à « Présent»</translation>
     </message>
     <message>
         <location filename="../kstmainwindow.cpp" line="660"/>

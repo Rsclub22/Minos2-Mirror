@@ -520,8 +520,8 @@
     </message>
     <message>
         <location filename="../profiles.cpp" line="120"/>
-        <source>Show Crib Band</source>
-        <translation>[What does this mean???]</translation>
+        <source>Show Next QSO Band</source>
+        <translation>Afficher la prochaine bande QSO</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="122"/>
@@ -919,11 +919,6 @@
     </message>
     <message>
         <location filename="../profiles.cpp" line="247"/>
-        <source>Antenna Bearing Offset</source>
-        <translation>Hauteur au-dessus du sol de l&apos;antenne</translation>
-    </message>
-    <message>
-        <location filename="../profiles.cpp" line="247"/>
         <source>Amount to offset antenna bearings</source>
         <translatorcomment>DUPE??</translatorcomment>
         <translation>Valeur du décalage d&apos;antenne</translation>
@@ -1131,7 +1126,7 @@
     <message>
         <location filename="../ConfigElementFrame.ui" line="333"/>
         <source>Leave the app name and/or the server name empty to get information from any app on a server, any server, or any app on any server</source>
-        <translatorcomment>Can surely be simplififed?</translatorcomment>
+        <translatorcomment>Can surely be simplififed? Suggestions, please!</translatorcomment>
         <translation>Laissez le nom de l&apos;application et / ou le nom du serveur vide pour obtenir des informations à partir de n&apos;importe quelle application sur un serveur, n&apos;importe quel serveur ou n&apos;importe quelle application sur n&apos;importe quel serveur</translation>
     </message>
     <message>
@@ -1472,24 +1467,12 @@ Attention: &quot;.&quot; pas &quot;,&quot;
     <message>
         <location filename="../managehamlib.cpp" line="312"/>
         <source>Hamlib updated - will be used after restart</source>
-        <translation type="unfinished"></translation>
+        <translation>Hamlib mis à jour - sera utilisé après le redémarrage</translation>
     </message>
     <message>
         <location filename="../managehamlib.cpp" line="349"/>
         <source>Old Hamlib restored - it will be used after restart</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Hamlib Update successful 
-
-New Hamlib will be used after restart</source>
-        <translation type="vanished">Hamlib mis à jour - sera utilisé après le redémarrage</translation>
-    </message>
-    <message>
-        <source>Hamlib successfully reverted 
-
-Reverted Hamlib will be used after restart</source>
-        <translation type="vanished">Vieux Hamlib restauré - sera utilisé après le redémarrage</translation>
+        <translation>Vieux Hamlib restauré - sera utilisé après le redémarrage</translation>
     </message>
     <message>
         <location filename="../managehamlib.cpp" line="361"/>
@@ -1503,41 +1486,6 @@ Reverted Hamlib will be used after restart</source>
         <location filename="../MatchThisFrame.cpp" line="72"/>
         <source>Press &quot;Yes&quot; to transfer details, or &quot;No&quot; to edit the QSO</source>
         <translation>Appuyez sur &quot;Oui&quot; pour transférer les détails ou sur &quot;Non&quot; pour modifier le QSO</translation>
-    </message>
-</context>
-<context>
-    <name>MessageServer::impl</name>
-    <message>
-        <location filename="../WsjtxMessageServer.cpp" line="71"/>
-        <location filename="../WsjtxMessageServer.cpp" line="219"/>
-        <source>Error creating UDP message</source>
-        <translatorcomment>Tracelog? (Hence in ENglish?)</translatorcomment>
-        <translation>Erreur lors de la création du message UDP</translation>
-    </message>
-    <message>
-        <location filename="../WsjtxMessageServer.cpp" line="397"/>
-        <source>MessageServer warning: invalid UDP message received</source>
-        <translation>Avertissement de MessageServer : message UDP invalide reçu</translation>
-    </message>
-    <message>
-        <location filename="../WsjtxMessageServer.cpp" line="402"/>
-        <source>MessageServer exception: %1</source>
-        <translation>Exception du serveur de messages&#xa0;: %1</translation>
-    </message>
-    <message>
-        <location filename="../WsjtxMessageServer.cpp" line="406"/>
-        <source>Unexpected exception in MessageServer</source>
-        <translation>Exception inattendue dans MessageServer</translation>
-    </message>
-    <message>
-        <location filename="../WsjtxMessageServer.cpp" line="440"/>
-        <source>Message serialization error: read corrupt data</source>
-        <translation>Erreur de sérialisation du message&#xa0;: lire les données corrompues</translation>
-    </message>
-    <message>
-        <location filename="../WsjtxMessageServer.cpp" line="444"/>
-        <source>Message serialization error: write error</source>
-        <translation>Erreur de sérialisation du message&#xa0;: erreur d&apos;écriture</translation>
     </message>
 </context>
 <context>
@@ -1784,7 +1732,7 @@ Reverted Hamlib will be used after restart</source>
     <message>
         <location filename="../monitoredlogs.cpp" line="34"/>
         <source>Auto start current logs from stations</source>
-        <translation>[What does this mean???]</translation>
+        <translation type="unfinished">[What does this mean???]?</translation>
     </message>
 </context>
 <context>
@@ -1895,7 +1843,7 @@ Reverted Hamlib will be used after restart</source>
     <message>
         <location filename="../qsomapframe.cpp" line="232"/>
         <source>QSO Map Spot Filters</source>
-        <translation type="unfinished"></translation>
+        <translation>Filtres des spots de la carte QSO</translation>
     </message>
 </context>
 <context>

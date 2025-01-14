@@ -5,7 +5,7 @@
     <name>KPMainWindow</name>
     <message>
         <location filename="../kpmainwindow.ui" line="14"/>
-        <source>KPMainWindow</source>
+        <source>Keyer Proxy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -35,7 +35,12 @@
     </message>
     <message>
         <location filename="../kpmainwindow.ui" line="112"/>
-        <source>Setup Script (alsactl)</source>
+        <source>Setup Script for alsactl</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../kpmainwindow.ui" line="181"/>
+        <source>sequence</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -51,11 +56,6 @@
     <message>
         <location filename="../kpmainwindow.ui" line="157"/>
         <source>Restore Alsa Config</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../kpmainwindow.ui" line="181"/>
-        <source>seq</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -80,11 +80,6 @@
     </message>
     <message>
         <location filename="../kpmainwindow.ui" line="254"/>
-        <source>Metering</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../kpmainwindow.ui" line="261"/>
         <source>Input</source>
         <translation type="unfinished"></translation>
     </message>
