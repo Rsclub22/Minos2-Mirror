@@ -93,14 +93,29 @@ QString convertBearingToString(int bearing)
 {
     QString bearingStr = QString::number(bearing);
 
-    if (bearing < 10)
+    if (bearing >= 0)
     {
-        bearingStr = bearingStr.prepend("00");
+        if (bearing < 10)
+        {
+            bearingStr = bearingStr.prepend("00");
+        }
+        else if (bearing < 100)
+        {
+            bearingStr = bearingStr.prepend("0");
+        }
     }
-    else if (bearing < 100)
+    else
     {
-        bearingStr = bearingStr.prepend("0");
+        if (bearing > -10)
+        {
+            bearingStr = bearingStr.insert(1, "00");
+        }
+        else if (bearing > -100)
+        {
+            bearingStr = bearingStr.insert(1, "0");
+        }
     }
+
 
     return bearingStr;
 }

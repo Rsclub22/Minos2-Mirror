@@ -320,18 +320,35 @@ void MinosCompass::drawSkyScanAnnulusSegment(QPainter *painter, int rotatorStart
     QPainterPath mainPath;
     QPainterPath overlapPath;
 
-    double mainInnerRadius = 65.0;
-    double mainOuterRadius = 70.0;
-    double overLapInnerRadius = 60.0;
-    double overLapOuterRadius = 65.0;
+    double mainInnerRadius = 65;
+    double mainOuterRadius = 70;
+    double overLapInnerRadius = 60;
+    double overLapOuterRadius = 65;
 
     QColor mainColor("#8ecaff");
     QColor overlapColor("#ffa4aa");
-    QColor negativeOverlapColor("#f0fff7");
+    //QColor negativeOverlapColor("#e0c31e");
 
     // Adjust for Qt coords
-    double adjustedStartBearing = static_cast<double>(rotatorStartBearing) - 90.0;
-    double adjustedEndBearing = static_cast<double>(rotatorEndBearing) - 90.0;
+    double adjustedStartBearing = 0;
+    double adjustedEndBearing = 0;
+
+    if (rotatorStartBearing >= COMPASS_MIN0)
+    {
+       adjustedStartBearing = rotatorStartBearing - 90;
+    }
+    else
+    {
+        adjustedStartBearing = rotatorStartBearing + COMPASS_MAX360 - 90;
+    }
+    if (rotatorEndBearing >= COMPASS_MIN0)
+    {
+        adjustedEndBearing = rotatorEndBearing - 90;
+    }
+    else
+    {
+        adjustedEndBearing = rotatorEndBearing + COMPASS_MAX360 - 90;
+    }
 
     double startAngle = 0.0;
     double endAngle = 0.0;
@@ -351,7 +368,8 @@ void MinosCompass::drawSkyScanAnnulusSegment(QPainter *painter, int rotatorStart
 
 
     if (endStopType == ROT_0_360
-        || (endStopType == ROT_0_450 && rotatorStartBearing <= COMPASS_MAX360 && rotatorEndBearing <= COMPASS_MAX360))
+        || (endStopType == ROT_0_450 && rotatorStartBearing <= COMPASS_MAX360 && rotatorEndBearing <= COMPASS_MAX360)
+        || (endStopType == ROT_NEG180_540 && rotatorStartBearing <= COMPASS_MAX360 && rotatorStartBearing >= COMPASS_MIN0 && rotatorEndBearing <= COMPASS_MAX360 && rotatorEndBearing >= COMPASS_MIN0))
     {
         if (rotatorStartBearing < rotatorEndBearing)
         {
@@ -391,29 +409,115 @@ void MinosCompass::drawSkyScanAnnulusSegment(QPainter *painter, int rotatorStart
             // end > 360, draw start to 360
 
             startAngle = adjustedStartBearing;
-            endAngle = static_cast<double>(COMPASS_MAX360) - 90.0;
-            sweepLength = static_cast<double>(COMPASS_MAX360) - static_cast<double>(rotatorStartBearing);
+            endAngle = COMPASS_MAX360 - 90.0;
+            sweepLength = COMPASS_MAX360 - rotatorStartBearing;
             drawAnnulusArc(painter, mainPath, mainInnerRect, mainOuterRect, startAngle, endAngle, sweepLength, mainColor);
 
-            startAngle = static_cast<double>(COMPASS_MIN0) - 90.0;
-            endAngle = adjustedEndBearing - static_cast<double>(COMPASS_MAX360);
-            sweepLength = static_cast<double>(rotatorEndBearing) - static_cast<double>(COMPASS_MAX360);
+            startAngle = COMPASS_MIN0 - 90.0;
+            endAngle = adjustedEndBearing - COMPASS_MAX360;
+            sweepLength = rotatorEndBearing - COMPASS_MAX360;
             drawAnnulusArc(painter, overlapPath, overlapInnerRect, overlapOuterRect, startAngle, endAngle, sweepLength, overlapColor);
         }
         else
         {
             startAngle = adjustedEndBearing;
-            endAngle = static_cast<double>(COMPASS_MAX360) - 90.0;
-            sweepLength = static_cast<double>(COMPASS_MAX360) - static_cast<double>(rotatorEndBearing);
+            endAngle = COMPASS_MAX360 - 90.0;
+            sweepLength = COMPASS_MAX360 - rotatorEndBearing;
             drawAnnulusArc(painter, mainPath, mainInnerRect, mainOuterRect, startAngle, endAngle, sweepLength, mainColor);
 
-            startAngle = static_cast<double>(COMPASS_MAX360) - 90.0;
-            endAngle = adjustedStartBearing - static_cast<double>(COMPASS_MAX360);
-            sweepLength = rotatorStartBearing - static_cast<double>(COMPASS_MAX360);
+            startAngle = COMPASS_MAX360 - 90.0;
+            endAngle = adjustedStartBearing - COMPASS_MAX360;
+            sweepLength = rotatorStartBearing - COMPASS_MAX360;
             drawAnnulusArc(painter, overlapPath, overlapInnerRect, overlapOuterRect, startAngle, endAngle, sweepLength, overlapColor);
 
         }
 
+    }
+    else if (endStopType == ROT_NEG180_540)
+    {
+        if (rotatorStartBearing >= COMPASS_MAX360 && rotatorEndBearing >= COMPASS_MAX360)
+        {
+            // start and end > 360
+            startAngle = adjustedStartBearing - COMPASS_MAX360;
+            endAngle = adjustedEndBearing;
+            sweepLength =  adjustedEndBearing - adjustedStartBearing;
+            drawAnnulusArc(painter, overlapPath, overlapInnerRect, overlapOuterRect, startAngle, endAngle, sweepLength, overlapColor);
+        }
+        else if (rotatorStartBearing < COMPASS_MIN0 && rotatorEndBearing < COMPASS_MIN0)
+        {
+            // start and end < 360
+            startAngle = adjustedStartBearing;
+            endAngle = adjustedEndBearing;
+            sweepLength = adjustedEndBearing - adjustedStartBearing;
+            drawAnnulusArc(painter, overlapPath, overlapInnerRect, overlapOuterRect, startAngle, endAngle, sweepLength, overlapColor);
+
+        }
+        else if (rotatorStartBearing < rotatorEndBearing)
+        {
+            if (rotatorStartBearing < COMPASS_MIN0 && rotatorEndBearing >= COMPASS_MIN0 && rotatorEndBearing <= COMPASS_MAX360)
+            {
+                startAngle = adjustedStartBearing;
+                endAngle = COMPASS_MIN0 - 90;
+                sweepLength = rotatorStartBearing * -1;
+                drawAnnulusArc(painter, overlapPath, overlapInnerRect, overlapOuterRect, startAngle, endAngle, sweepLength, overlapColor);
+
+                startAngle = COMPASS_MIN0 - 90;
+                endAngle = adjustedEndBearing;
+                sweepLength = rotatorEndBearing;
+                drawAnnulusArc(painter, mainPath, mainInnerRect, mainOuterRect, startAngle, endAngle, sweepLength, mainColor);
+            }
+            else if (rotatorStartBearing < COMPASS_MIN0  && rotatorEndBearing >= COMPASS_MAX360)
+            {
+                startAngle = adjustedStartBearing;
+                endAngle = COMPASS_MIN0 - 90;
+                sweepLength = COMPASS_MAX360 - (rotatorStartBearing * -1);
+                drawAnnulusArc(painter, overlapPath, overlapInnerRect, overlapOuterRect, startAngle, endAngle, sweepLength, overlapColor);
+
+                startAngle = COMPASS_MIN0 - 90;
+                endAngle = COMPASS_MAX360 - 90;
+                sweepLength = COMPASS_MAX360;
+                drawAnnulusArc(painter, mainPath, mainInnerRect, mainOuterRect, startAngle, endAngle, sweepLength, mainColor);
+
+                startAngle = COMPASS_MAX360 - 90;
+                endAngle = adjustedEndBearing;
+                sweepLength = rotatorEndBearing - COMPASS_MAX360;;
+                drawAnnulusArc(painter, overlapPath, overlapInnerRect, overlapOuterRect, startAngle, endAngle, sweepLength, overlapColor);
+
+
+            }
+        }
+        else
+        {
+            if (rotatorStartBearing >= COMPASS_MIN0 && rotatorStartBearing < COMPASS_MAX360 && rotatorEndBearing < COMPASS_MIN0)
+            {
+                startAngle = adjustedEndBearing;
+                endAngle = COMPASS_MIN0 - 90;
+                sweepLength = rotatorEndBearing * -1;
+                drawAnnulusArc(painter, overlapPath, overlapInnerRect, overlapOuterRect, startAngle, endAngle, sweepLength, overlapColor);
+
+                startAngle = COMPASS_MIN0 - 90;
+                endAngle = adjustedStartBearing;
+                sweepLength = rotatorStartBearing;
+                drawAnnulusArc(painter, mainPath, mainInnerRect, mainOuterRect, startAngle, endAngle, sweepLength, mainColor);
+            }
+            else if (rotatorStartBearing >= COMPASS_MAX360 && rotatorEndBearing < COMPASS_MIN0)
+            {
+                startAngle = adjustedEndBearing;
+                endAngle = COMPASS_MIN0 - 90;
+                sweepLength = rotatorEndBearing * -1;
+                drawAnnulusArc(painter, overlapPath, overlapInnerRect, overlapOuterRect, startAngle, endAngle, sweepLength, overlapColor);
+
+                startAngle = COMPASS_MIN0 - 90;
+                endAngle = COMPASS_MAX360 - 90;
+                sweepLength = COMPASS_MAX360;
+                drawAnnulusArc(painter, mainPath, mainInnerRect, mainOuterRect, startAngle, endAngle, sweepLength, mainColor);
+
+                startAngle = COMPASS_MAX360 - 90;
+                endAngle = adjustedStartBearing - COMPASS_MAX360;
+                sweepLength = rotatorStartBearing - COMPASS_MAX360;
+                drawAnnulusArc(painter, overlapPath, overlapInnerRect, overlapOuterRect, startAngle, endAngle, sweepLength, overlapColor);
+            }
+        }
     }
 
 }
