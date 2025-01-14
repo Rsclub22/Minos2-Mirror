@@ -1459,27 +1459,27 @@ Déplacez-vous entre les composants d&amp;apos;un groupe à l&amp;apos;aide de l
     </message>
     <message>
         <location filename="../dmbuttonframe.cpp" line="70"/>
-        <location filename="../dmbuttonframe.cpp" line="477"/>
+        <location filename="../dmbuttonframe.cpp" line="475"/>
         <source>Data Modes Buttons from %1</source>
         <translation>Boutons de modes de données de %1</translation>
     </message>
     <message>
-        <location filename="../dmbuttonframe.cpp" line="192"/>
+        <location filename="../dmbuttonframe.cpp" line="190"/>
         <source>Not enough key definitions in %1</source>
         <translation>Pas assez de définitions dans %1</translation>
     </message>
     <message>
-        <location filename="../dmbuttonframe.cpp" line="356"/>
+        <location filename="../dmbuttonframe.cpp" line="354"/>
         <source>Invalid or missing FKey definitions</source>
         <translation>Définitions FKey invalides ou manquantes</translation>
     </message>
     <message>
-        <location filename="../dmbuttonframe.cpp" line="463"/>
+        <location filename="../dmbuttonframe.cpp" line="461"/>
         <source>Function Key Definitions Files (*.json);;All Files (*.*)</source>
         <translation>Fichiers de définitions de touches de fonction (*.json);;Tous les fichiers (*.*)</translation>
     </message>
     <message>
-        <location filename="../dmbuttonframe.cpp" line="467"/>
+        <location filename="../dmbuttonframe.cpp" line="465"/>
         <source>Open Function Key Definitions File</source>
         <translation>Ouvrir le fichier de définitions des touches de fonction</translation>
     </message>
@@ -2842,7 +2842,7 @@ to</source>
         <translation>Terminer rattrapage</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2316"/>
+        <location filename="../qsologframe.cpp" line="2337"/>
         <source>This Contact has changed: Shall I log the changes?
 
 Yes         - Log as shown
@@ -2853,69 +2853,69 @@ Oui - Enregistrer  comme indiqué
 Non - Ignorer les modifications</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2552"/>
+        <location filename="../qsologframe.cpp" line="2573"/>
         <source>Read Only</source>
         <translation>Lecture seulement</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2556"/>
+        <location filename="../qsologframe.cpp" line="2577"/>
         <source>Protected</source>
         <translation>Protégé</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2560"/>
+        <location filename="../qsologframe.cpp" line="2581"/>
         <source>Protected by age of contest</source>
         <translation>Protégé par l&apos;âge du concours</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2570"/>
+        <location filename="../qsologframe.cpp" line="2591"/>
         <source>No QSO entry field focussed!</source>
         <translation>Aucun champ d&apos;entrée QSO focalisé&#xa0;!</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2936"/>
+        <location filename="../qsologframe.cpp" line="2957"/>
         <source>Change mode to CW?</source>
         <translation>Changer de mode en CW?</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2939"/>
-        <location filename="../qsologframe.cpp" line="2950"/>
-        <location filename="../qsologframe.cpp" line="2959"/>
+        <location filename="../qsologframe.cpp" line="2960"/>
+        <location filename="../qsologframe.cpp" line="2971"/>
+        <location filename="../qsologframe.cpp" line="2980"/>
         <source>Please check the signal reports, and log the contact</source>
         <translation>Vérifier les rapports de signal et enregistrer le contact SVP</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2947"/>
+        <location filename="../qsologframe.cpp" line="2968"/>
         <source>Change mode to PH?</source>
         <translation>Changer de mode en PH?</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2956"/>
+        <location filename="../qsologframe.cpp" line="2977"/>
         <source>Change mode to USB?</source>
         <translation>Changer de mode en USB?</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="3013"/>
+        <location filename="../qsologframe.cpp" line="3034"/>
         <source>Spot Last Logged (%1) </source>
         <translation>Spot dernière enregistrée (%1) </translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="3084"/>
+        <location filename="../qsologframe.cpp" line="3105"/>
         <source>&quot;Serial sent&quot; is too high - please confirm that this is correct?</source>
         <translation>&quot;Numéro Tx&quot; est trop élevé - est-ce correct?</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="3086"/>
+        <location filename="../qsologframe.cpp" line="3107"/>
         <source>Do you want to enter the missing contacts later?</source>
         <translation>Voulez-vous entrer les contacts manquants plus tard?</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="3495"/>
+        <location filename="../qsologframe.cpp" line="3516"/>
         <source>Start of QSOs</source>
         <translation>Début des QSO</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="3530"/>
+        <location filename="../qsologframe.cpp" line="3551"/>
         <source>End of QSOs</source>
         <translation>Fin des QSO</translation>
     </message>
