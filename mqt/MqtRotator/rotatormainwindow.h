@@ -119,6 +119,7 @@ signals:
     void sendSkyScanStartBearingToCompassDial(int bearing);
     void sendSkyScanEndBearingToCompassDial(int bearing);
     void sendRotatorEndStopTypeToCompassDial(int endStopType);
+    void sendRotatorSouthStopTypeToCompassDial(int southStopType);
 
 
 

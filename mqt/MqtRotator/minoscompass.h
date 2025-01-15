@@ -31,6 +31,7 @@ public slots:
     void updateSkyScanEndBearing(int bearing);
     void compassDialUpdate(int);
     void updateEndStopType(int endStopType_);
+    void updateSouthStopType(int southStopType_);
 /*
 // for test
     void upDateDial();
@@ -58,6 +59,7 @@ private:
     int skyScanEndBearing = 0;
 
     endStop endStopType = ROT_0_360;
+    southStop southStopType = southStop::S_STOPOFF;
 
     QSize minimumSizeHint() const Q_DECL_OVERRIDE;
     QSize sizeHint() const Q_DECL_OVERRIDE;

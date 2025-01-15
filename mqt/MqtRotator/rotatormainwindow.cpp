@@ -785,6 +785,9 @@ void RotatorMainWindow::initActionsConnections()
     connect(this, &RotatorMainWindow::sendSkyScanStartBearingToCompassDial, ui->compassDial, &MinosCompass::updateSkyScanStartBearing);
     connect(this, &RotatorMainWindow::sendSkyScanEndBearingToCompassDial, ui->compassDial, &MinosCompass::updateSkyScanEndBearing);
     connect(this, &RotatorMainWindow::sendRotatorEndStopTypeToCompassDial, ui->compassDial, &MinosCompass::updateEndStopType);
+    connect(this, &RotatorMainWindow::sendRotatorSouthStopTypeToCompassDial, ui->compassDial, &MinosCompass::updateSouthStopType);
+
+
 
     // Test Bearing Box
     connect(ui->testBearing, &QLineEdit::returnPressed, this, &RotatorMainWindow::onTestBearingEnter);
@@ -3316,6 +3319,13 @@ void RotatorMainWindow::closeSkyScan(QString currentAntennaName)
     ui->skyScanStepDegreeSpinBox->clear();
     ui->skyScanPauseTimeSpinBox->clear();
 
+    emit sendSkyScanStartBearingToCompassDial(COMPASS_MIN0);
+    emit sendSkyScanEndBearingToCompassDial(COMPASS_MIN0);
+
+    emit sendRotatorEndStopTypeToCompassDial(endStop::ROT_0_360);
+    emit sendRotatorSouthStopTypeToCompassDial(southStop::S_STOPOFF);
+
+
 
     disconnect(ui->saveSkyScanSettingsOnCloseChkBox, &QCheckBox::stateChanged, this, &RotatorMainWindow::skyScanSettingsOnCloseChkBoxChanged);
 
@@ -3397,6 +3407,7 @@ void RotatorMainWindow::openSkyScan(QString currentAntennaName)
     dumpSkyScanSettingsToTraceLog();
 
     emit sendRotatorEndStopTypeToCompassDial(setupAntenna->currentAntenna.endStopType);
+    emit sendRotatorSouthStopTypeToCompassDial(setupAntenna->currentAntenna.southStopType);
 
 
 
