@@ -907,10 +907,10 @@ void RotatorMainWindow::displayBearing(int bearing)
         msg->rotatorCache.setBearing(psname, s);
         msg->rotatorCache.publish();
     }
-    QString rotatorBearingmsg = QString("%1").arg(rotatorBearing, 3, 10, QChar('0'));
+    QString rotatorDisplayBearingmsg = QString("%1").arg(displayBearing, 3, 10, QChar('0'));
 
-    // send rotatorBearing to actual rotatorBearingDisplay
-    emit displayActualBearing(rotatorBearingmsg);
+    // send actual rotatorBearing to actual rotatorBearingDisplay
+    emit displayActualBearing(rotatorDisplayBearingmsg);
     // display raw rotator bearing on status line
     dispRawRotBearing(rotatorBearing);
 

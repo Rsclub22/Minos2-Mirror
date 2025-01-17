@@ -312,7 +312,7 @@ bool MinosCompass::eventFilter(QObject */*obj*/, QEvent *event)
     return QWidget::event(event);
 }
 
-
+/*
 void MinosCompass::drawSkyScanAnnulusSegment(QPainter *painter, int rotatorStartBearing, int rotatorEndBearing)
 {
 
@@ -566,6 +566,233 @@ void MinosCompass::drawSkyScanAnnulusSegment(QPainter *painter, int rotatorStart
 
     }
 }
+
+*/
+
+
+
+void MinosCompass::drawSkyScanAnnulusSegment(QPainter *painter, int rotatorStartBearing, int rotatorEndBearing)
+{
+
+
+    skyScanAnnulusParameters skyScanAnnulusParam;
+
+    skyScanAnnulusParam.painter = painter;
+
+    skyScanAnnulusParam.rotatorStartBearing = rotatorStartBearing;
+    skyScanAnnulusParam.rotatorEndBearing = rotatorEndBearing;
+
+    if (rotatorStartBearing >= COMPASS_MIN0)
+    {
+        skyScanAnnulusParam.adjustedStartBearing = rotatorStartBearing - 90;
+    }
+    else
+    {
+        skyScanAnnulusParam.adjustedStartBearing = rotatorStartBearing + COMPASS_MAX360 - 90;
+    }
+    if (rotatorEndBearing >= COMPASS_MIN0)
+    {
+        skyScanAnnulusParam.adjustedEndBearing = rotatorEndBearing - 90;
+    }
+    else
+    {
+        skyScanAnnulusParam.adjustedEndBearing = rotatorEndBearing + COMPASS_MAX360 - 90;
+    }
+
+
+
+    if (rotatorStartBearing < rotatorEndBearing)
+    {
+        skyScanDrawAnnulusAscending(skyScanAnnulusParam);
+    }
+    else
+    {
+        skyScanDrawAnnulusDescending(skyScanAnnulusParam);
+    }
+
+
+
+}
+
+
+void MinosCompass::skyScanDrawAnnulusAscending(skyScanAnnulusParameters &skyScanAnnulusParam)
+{
+
+    double startAngle = 0;
+    double endAngle = 0;
+    double sweepLength = 0;
+
+    if (skyScanAnnulusParam.rotatorStartBearing < 0)
+    {
+        if (skyScanAnnulusParam.rotatorEndBearing < 0)
+        {
+            startAngle = skyScanAnnulusParam.adjustedStartBearing;
+            endAngle = skyScanAnnulusParam.adjustedEndBearing;
+            sweepLength = skyScanAnnulusParam.adjustedEndBearing - skyScanAnnulusParam.adjustedStartBearing;
+            drawAnnulusArc(skyScanAnnulusParam.painter, skyScanAnnulusParam.overlapPath, skyScanAnnulusParam.overlapInnerRect, skyScanAnnulusParam.overlapOuterRect, startAngle, endAngle, sweepLength, skyScanAnnulusParam.overlapColor);
+        }
+        else if (skyScanAnnulusParam.rotatorEndBearing >= 0 && skyScanAnnulusParam.rotatorEndBearing <= COMPASS_MAX360)
+        {
+
+            startAngle = skyScanAnnulusParam.adjustedStartBearing;
+            endAngle = COMPASS_MAX360 - 90;
+            sweepLength = skyScanAnnulusParam.rotatorStartBearing * -1;
+            drawAnnulusArc(skyScanAnnulusParam.painter, skyScanAnnulusParam.overlapPath, skyScanAnnulusParam.overlapInnerRect, skyScanAnnulusParam.overlapOuterRect, startAngle, endAngle, sweepLength, skyScanAnnulusParam.overlapColor);
+
+
+            startAngle = COMPASS_MIN0 - 90;
+            endAngle = skyScanAnnulusParam.adjustedEndBearing;
+            sweepLength = skyScanAnnulusParam.rotatorEndBearing;
+            drawAnnulusArc(skyScanAnnulusParam.painter, skyScanAnnulusParam.mainPath, skyScanAnnulusParam.mainInnerRect, skyScanAnnulusParam.mainOuterRect, startAngle, endAngle, sweepLength, skyScanAnnulusParam.mainColor);
+
+
+        }
+        else if (skyScanAnnulusParam.rotatorEndBearing > COMPASS_MAX360)
+        {
+            startAngle = skyScanAnnulusParam.adjustedStartBearing;
+            endAngle = COMPASS_MAX360 - 90;
+            sweepLength = skyScanAnnulusParam.rotatorStartBearing * -1;
+            drawAnnulusArc(skyScanAnnulusParam.painter, skyScanAnnulusParam.overlapPath, skyScanAnnulusParam.overlapInnerRect, skyScanAnnulusParam.overlapOuterRect, startAngle, endAngle, sweepLength, skyScanAnnulusParam.overlapColor);
+
+
+            startAngle = COMPASS_MIN0 - 90;
+            endAngle = COMPASS_MAX360 - 90;
+            sweepLength = COMPASS_MAX360;
+            drawAnnulusArc(skyScanAnnulusParam.painter, skyScanAnnulusParam.mainPath, skyScanAnnulusParam.mainInnerRect, skyScanAnnulusParam.mainOuterRect, startAngle, endAngle, sweepLength, skyScanAnnulusParam.mainColor);
+
+            startAngle = COMPASS_MIN0 - 90;
+            endAngle = skyScanAnnulusParam.adjustedEndBearing;
+            sweepLength = skyScanAnnulusParam.rotatorEndBearing - COMPASS_MAX360;
+            drawAnnulusArc(skyScanAnnulusParam.painter, skyScanAnnulusParam.overlapPath, skyScanAnnulusParam.overlapInnerRect, skyScanAnnulusParam.overlapOuterRect, startAngle, endAngle, sweepLength, skyScanAnnulusParam.overlapColor);
+
+        }
+    }
+    else if (skyScanAnnulusParam.rotatorStartBearing >= 0 && skyScanAnnulusParam.rotatorStartBearing <= COMPASS_MAX360)
+    {
+        if (skyScanAnnulusParam.rotatorEndBearing >= 0 && skyScanAnnulusParam.rotatorEndBearing <= COMPASS_MAX360)
+        {
+            startAngle = skyScanAnnulusParam.adjustedStartBearing;
+            endAngle = skyScanAnnulusParam.adjustedEndBearing;
+            sweepLength = skyScanAnnulusParam.adjustedEndBearing - skyScanAnnulusParam.adjustedStartBearing;
+            drawAnnulusArc(skyScanAnnulusParam.painter, skyScanAnnulusParam.mainPath, skyScanAnnulusParam.mainInnerRect,skyScanAnnulusParam.mainOuterRect, startAngle, endAngle, sweepLength, skyScanAnnulusParam.mainColor);
+        }
+        else if (skyScanAnnulusParam.rotatorEndBearing > COMPASS_MAX360)
+        {
+            startAngle = skyScanAnnulusParam.adjustedStartBearing;
+            endAngle = COMPASS_MAX360 - 90;
+            sweepLength = COMPASS_MAX360 - skyScanAnnulusParam.rotatorStartBearing;
+            drawAnnulusArc(skyScanAnnulusParam.painter, skyScanAnnulusParam.mainPath, skyScanAnnulusParam.mainInnerRect, skyScanAnnulusParam.mainOuterRect, startAngle, endAngle, sweepLength, skyScanAnnulusParam.mainColor);
+
+            startAngle = COMPASS_MIN0 - 90;
+            endAngle = skyScanAnnulusParam.adjustedEndBearing;
+            sweepLength = skyScanAnnulusParam.rotatorEndBearing - COMPASS_MAX360;
+            drawAnnulusArc(skyScanAnnulusParam.painter, skyScanAnnulusParam.overlapPath, skyScanAnnulusParam.overlapInnerRect, skyScanAnnulusParam.overlapOuterRect, startAngle, endAngle, sweepLength, skyScanAnnulusParam.overlapColor);
+
+
+        }
+    }
+    else if (skyScanAnnulusParam.rotatorStartBearing > COMPASS_MAX360)
+    {
+        startAngle = skyScanAnnulusParam.adjustedStartBearing;
+        endAngle = skyScanAnnulusParam.adjustedEndBearing;
+        sweepLength = skyScanAnnulusParam.adjustedEndBearing - skyScanAnnulusParam.adjustedStartBearing;
+        drawAnnulusArc(skyScanAnnulusParam.painter, skyScanAnnulusParam.overlapPath, skyScanAnnulusParam.overlapInnerRect, skyScanAnnulusParam.overlapOuterRect, startAngle, endAngle, sweepLength, skyScanAnnulusParam.overlapColor);
+    }
+
+
+}
+
+
+void MinosCompass::skyScanDrawAnnulusDescending(skyScanAnnulusParameters &skyScanAnnulusParam)
+{
+    double startAngle = 0;
+    double endAngle = 0;
+    double sweepLength = 0;
+
+    if (skyScanAnnulusParam.rotatorEndBearing < 0)
+    {
+        if (skyScanAnnulusParam.rotatorStartBearing < 0)
+        {
+            startAngle = skyScanAnnulusParam.adjustedEndBearing;
+            endAngle = skyScanAnnulusParam.adjustedStartBearing;
+            sweepLength = skyScanAnnulusParam.adjustedStartBearing - skyScanAnnulusParam.adjustedEndBearing;
+            drawAnnulusArc(skyScanAnnulusParam.painter, skyScanAnnulusParam.overlapPath, skyScanAnnulusParam.overlapInnerRect, skyScanAnnulusParam.overlapOuterRect, startAngle, endAngle, sweepLength, skyScanAnnulusParam.overlapColor);
+
+        }
+        else if (skyScanAnnulusParam.rotatorStartBearing >= 0 && skyScanAnnulusParam.rotatorEndBearing <= COMPASS_MAX360)
+        {
+            startAngle = skyScanAnnulusParam.adjustedEndBearing;
+            endAngle = COMPASS_MAX360 - 90;
+            sweepLength = skyScanAnnulusParam.rotatorEndBearing * -1;
+            drawAnnulusArc(skyScanAnnulusParam.painter, skyScanAnnulusParam.overlapPath, skyScanAnnulusParam.overlapInnerRect, skyScanAnnulusParam.overlapOuterRect, startAngle, endAngle, sweepLength, skyScanAnnulusParam.overlapColor);
+
+
+            startAngle = COMPASS_MIN0 - 90;
+            endAngle = skyScanAnnulusParam.adjustedStartBearing;
+            sweepLength = skyScanAnnulusParam.rotatorStartBearing;
+            drawAnnulusArc(skyScanAnnulusParam.painter, skyScanAnnulusParam.mainPath, skyScanAnnulusParam.mainInnerRect, skyScanAnnulusParam.mainOuterRect, startAngle, endAngle, sweepLength, skyScanAnnulusParam.mainColor);
+
+
+        }
+        else if (skyScanAnnulusParam.rotatorStartBearing > COMPASS_MAX360)
+        {
+            startAngle = skyScanAnnulusParam.adjustedEndBearing;
+            endAngle = COMPASS_MAX360 - 90;
+            sweepLength = skyScanAnnulusParam.rotatorEndBearing * -1;
+            drawAnnulusArc(skyScanAnnulusParam.painter, skyScanAnnulusParam.overlapPath, skyScanAnnulusParam.overlapInnerRect, skyScanAnnulusParam.overlapOuterRect, startAngle, endAngle, sweepLength, skyScanAnnulusParam.overlapColor);
+
+
+            startAngle = COMPASS_MIN0 - 90;
+            endAngle = COMPASS_MAX360 - 90;
+            sweepLength = COMPASS_MAX360;
+            drawAnnulusArc(skyScanAnnulusParam.painter, skyScanAnnulusParam.mainPath, skyScanAnnulusParam.mainInnerRect, skyScanAnnulusParam.mainOuterRect, startAngle, endAngle, sweepLength, skyScanAnnulusParam.mainColor);
+
+            startAngle = COMPASS_MIN0 - 90;
+            endAngle = skyScanAnnulusParam.adjustedStartBearing;
+            sweepLength = skyScanAnnulusParam.rotatorStartBearing - COMPASS_MAX360;
+            drawAnnulusArc(skyScanAnnulusParam.painter, skyScanAnnulusParam.overlapPath, skyScanAnnulusParam.overlapInnerRect, skyScanAnnulusParam.overlapOuterRect, startAngle, endAngle, sweepLength, skyScanAnnulusParam.overlapColor);
+
+        }
+    }
+    else if (skyScanAnnulusParam.rotatorEndBearing >= 0 && skyScanAnnulusParam.rotatorEndBearing <= COMPASS_MAX360)
+    {
+        if (skyScanAnnulusParam.rotatorStartBearing >= 0 && skyScanAnnulusParam.rotatorStartBearing <= COMPASS_MAX360)
+        {
+            startAngle = skyScanAnnulusParam.adjustedEndBearing;
+            endAngle = skyScanAnnulusParam.adjustedStartBearing;
+            sweepLength = skyScanAnnulusParam.adjustedStartBearing - skyScanAnnulusParam.adjustedEndBearing;
+            drawAnnulusArc(skyScanAnnulusParam.painter, skyScanAnnulusParam.mainPath, skyScanAnnulusParam.mainInnerRect, skyScanAnnulusParam.mainOuterRect, startAngle, endAngle, sweepLength, skyScanAnnulusParam.mainColor);
+
+        }
+        else if (skyScanAnnulusParam.rotatorStartBearing > COMPASS_MAX360)
+        {
+            startAngle = skyScanAnnulusParam.adjustedEndBearing;
+            endAngle = COMPASS_MAX360 - 90;
+            sweepLength = COMPASS_MAX360 - skyScanAnnulusParam.rotatorEndBearing;
+            drawAnnulusArc(skyScanAnnulusParam.painter, skyScanAnnulusParam.mainPath, skyScanAnnulusParam.mainInnerRect, skyScanAnnulusParam.mainOuterRect, startAngle, endAngle, sweepLength, skyScanAnnulusParam.mainColor);
+
+            startAngle = COMPASS_MIN0 - 90;
+            endAngle = skyScanAnnulusParam.adjustedStartBearing;
+            sweepLength = skyScanAnnulusParam.rotatorStartBearing - COMPASS_MAX360;
+            drawAnnulusArc(skyScanAnnulusParam.painter, skyScanAnnulusParam.overlapPath, skyScanAnnulusParam.overlapInnerRect, skyScanAnnulusParam.overlapOuterRect, startAngle, endAngle, sweepLength, skyScanAnnulusParam.overlapColor);
+
+        }
+    }
+    else if (skyScanAnnulusParam.rotatorEndBearing > COMPASS_MAX360)
+    {
+        startAngle = skyScanAnnulusParam.adjustedEndBearing;
+        endAngle = skyScanAnnulusParam.adjustedStartBearing;
+        sweepLength = skyScanAnnulusParam.adjustedStartBearing - skyScanAnnulusParam.adjustedEndBearing;
+        drawAnnulusArc(skyScanAnnulusParam.painter, skyScanAnnulusParam.overlapPath, skyScanAnnulusParam.overlapInnerRect, skyScanAnnulusParam.overlapOuterRect, startAngle, endAngle, sweepLength, skyScanAnnulusParam.overlapColor);
+
+    }
+
+
+}
+
+
+
+
 
 
 void MinosCompass::drawAnnulusArc(QPainter *painter, QPainterPath &arcPath, QRectF &innerRect, QRectF &outerRect,
