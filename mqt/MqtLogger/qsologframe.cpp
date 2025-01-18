@@ -2805,6 +2805,8 @@ void QSOLogFrame::on_tabSandP()
         ui->SandPrb->setChecked(true);
     }
     setPlaceholders(QStringList());
+    trace(QString("QSOLogFrame::on_tabSandP state %1 runButtonOnFlag %2 radioOffRunFreq %3")
+              .arg(tabSandPstate).arg(runButtonOnFlag).arg(radioOffRunFreq));
 }
 //---------------------------------------------------------------------------
 void QSOLogFrame::doGJVEditChange( QObject *Sender )
