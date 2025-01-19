@@ -210,9 +210,13 @@ RotatorMainWindow::RotatorMainWindow(QWidget *parent) :
 
     setSkyScanComponentsEnabled(false);
     setSkyScanEnableChkBoxEnabled(false);
+    sendSkyScanEnabledToLogger(false);
+
     readSkyScanCommonSettings();
     initialiseSkyScannerSpinners();
     skyScanControl = QSharedPointer<SkyScanControl>::create(this, parent);
+    skyScanButtonState = QSharedPointer<SkyScanButtonState>::create();
+
 
 
     setTestMode(appName.isEmpty());
@@ -271,7 +275,7 @@ void RotatorMainWindow::on_testButton_clicked()
 
 void RotatorMainWindow::logMessage( QString s )
 {
-           trace( s );
+    trace( s );
 }
 
 void RotatorMainWindow::onCommandRead(QString cmd)
@@ -610,7 +614,6 @@ void RotatorMainWindow::closeRotator()
 
         }
 
-        setSkyScanEnableChkBoxEnabled(false);
         if (skyScanEnabled && saveSkyScanOnClose)
         {
             saveSkyScanSettings(setupAntenna->currentAntenna.antennaName);
@@ -701,14 +704,26 @@ void RotatorMainWindow::sendSkyScanEnabledToLogger(bool state)
     msg->rotatorCache.publish();
 }
 
-void RotatorMainWindow::sendSkyScanStartBearingAndEndBearingToLogger(int startBearing, int endBearing)
+// we send Compass Start Bearing to logger
+
+void RotatorMainWindow::sendSkyScanStartBearingToLogger(int bearing)
 {
-    logMessage(QString("Send SkyScan Start Bearing = %1 and end bearing = %2 to logger").arg(QString::number(startBearing).arg(endBearing)));
+    logMessage(QString("Send SkyScan Compass Start Bearing = %1 to logger").arg(QString::number(bearing)));
     PubSubName psname(setupAntenna->currentAntennaName);
-    msg->rotatorCache.setSkyScanStartBearing(psname, startBearing);
-    msg->rotatorCache.setSkyScanEndBearing(psname, endBearing);
+    msg->rotatorCache.setSkyScanStartBearing(psname, bearing);
     msg->rotatorCache.publish();
 }
+
+// we send Compass End Bearing to logger
+void RotatorMainWindow::sendSkyScanEndBearingToLogger(int bearing)
+{
+    logMessage(QString("Send SkyScan Compass End Bearing = %1 to logger").arg(QString::number(bearing)));
+    PubSubName psname(setupAntenna->currentAntennaName);
+    msg->rotatorCache.setSkyScanEndBearing(psname, bearing);
+    msg->rotatorCache.publish();
+}
+
+
 
 void RotatorMainWindow::sendSkyScanNextStepToLogger(QString nextStepBearing)
 {
@@ -728,12 +743,14 @@ void RotatorMainWindow::sendSkyScanCountDownToLogger(QString countDown)
 
 void RotatorMainWindow::sendSkyScanButtonStateToLogger(int state)
 {
-    logMessage(QString("Send SkyScan button state = %1 to logger").arg(QString::number(state)));
+    sendSkyScanButtonStateToTraceLog();
     PubSubName psname(setupAntenna->currentAntennaName);
     msg->rotatorCache.setSkyScanButtonState(psname, state);
     msg->rotatorCache.publish();
 }
 
+
+// remove this as sending start as part of button state!
 void RotatorMainWindow::sendSkyScanReverseScanToLogger(bool state)
 {
     logMessage(QString("Send SkyScan reverse scan state = %1 to logger").arg(state ? "true" : "false"));
@@ -742,7 +759,12 @@ void RotatorMainWindow::sendSkyScanReverseScanToLogger(bool state)
     msg->rotatorCache.publish();
 }
 
+void RotatorMainWindow::sendSkyScanButtonStateToTraceLog()
+{
 
+    logMessage(QString("skyScan button state sent to logger %1").arg(skyScanButtonState->getButtonStateToString()));
+
+}
 
 void RotatorMainWindow::initActionsConnections()
 {
@@ -2867,6 +2889,7 @@ void RotatorMainWindow::setSkyScanToolButtonUpDownEnabled(bool enabled)
 
 void RotatorMainWindow::setSkyScanEnableChkBoxEnabled(bool enabled)
 {
+    trace(QString("skyScan - set Enable checkBox = %1").arg(enabled ? "True" : "False"));
     ui->skyScanEnableChkBox->setEnabled(enabled);
     if (enabled)
     {
@@ -3015,6 +3038,8 @@ void RotatorMainWindow::skyScanStartBearingToolbuttonValueChanged(int value)
 
     QString compassStartBearing = QString::number(bearing).rightJustified(3, '0');
     ui->skyScanCompassStartBearingDisplay->setText(compassStartBearing);
+    sendSkyScanStartBearingToLogger(bearing);
+
 }
 
 void RotatorMainWindow::setSkyScanEndBearingToolButtonUpDown()
@@ -3041,6 +3066,7 @@ void RotatorMainWindow::skyScanEndBearingToolbuttonValueChanged(int value)
 
     QString compassEndBearing = QString::number(bearing).rightJustified(3, '0');
     ui->skyScanCompassEndBearingDisplay->setText(compassEndBearing);
+    sendSkyScanEndBearingToLogger(bearing);
 }
 
 
@@ -3071,7 +3097,11 @@ void RotatorMainWindow::skyScanStartPbPressed()
                                 skyScanPauseMins);
 
         skyScanControl->startSkyscan();
-        setSkyScanStartButtonColour(BUTTON_ON_STYLE);
+        setSkyScanStartButtonState(true);
+        setSkyScanStopButtonState(false);
+        setSkyScanPauseButtonState(false);
+        sendSkyScanButtonStateToLogger(skyScanButtonState->getState());
+
     }
 }
 
@@ -3083,6 +3113,11 @@ void RotatorMainWindow::setSkyScanStartButtonColour(QString style)
 void RotatorMainWindow::setSkyScanStopButtonColour(QString style)
 {
     ui->skyScanStopPb->setStyleSheet(style);
+}
+
+void RotatorMainWindow::setSkyScanPauseButtonColour(QString style)
+{
+    ui->skyScanPausePb->setStyleSheet(style);
 }
 void RotatorMainWindow::skyScanPausePbPressed()
 {
@@ -3096,11 +3131,69 @@ void RotatorMainWindow::skyScanStopPbPressed()
 
     if (skyScanActive)
     {
-        setSkyScanStopButtonColour(BUTTON_ON_STYLE);
+
+        setSkyScanStopButtonState(true);
+        setSkyScanPauseButtonState(false);
+        setSkyScanStartButtonState(false);
+        sendSkyScanButtonStateToLogger(skyScanButtonState->getState());
         stopSkyScan();
     }
 }
 
+void RotatorMainWindow::setSkyScanStartButtonState(bool state)
+{
+    if (state != skyScanButtonState->isStart())
+    {
+        skyScanButtonState->setStart(state);
+
+        QString buttonColor = "";
+        if (state)
+        {
+            buttonColor = BUTTON_ON_STYLE;
+        }
+
+        setSkyScanStartButtonColour(buttonColor);
+    }
+
+}
+
+void RotatorMainWindow::setSkyScanStopButtonState(bool state)
+{
+    if (state != skyScanButtonState->isStop())
+    {
+        skyScanButtonState->setStop(state);
+
+        QString buttonColor = "";
+        if (state)
+        {
+            buttonColor = BUTTON_ON_STYLE;
+        }
+
+        setSkyScanStopButtonColour(buttonColor);
+    }
+
+
+
+
+
+}
+
+void RotatorMainWindow::setSkyScanPauseButtonState(bool state)
+{
+    if (state != skyScanButtonState->isStop())
+    {
+        skyScanButtonState->setPause(state);
+
+        QString buttonColor = "";
+        if (state)
+        {
+            buttonColor = BUTTON_ON_STYLE;
+        }
+
+        setSkyScanPauseButtonColour(buttonColor);
+    }
+
+}
 
 void RotatorMainWindow::stopSkyScan()
 {
@@ -3176,6 +3269,7 @@ void RotatorMainWindow::displaySkyScanNextStepBearing(int bearing)
     }
 
     ui->nextStepDegrees->setText(bearingStr);
+    sendSkyScanNextStepToLogger(bearingStr);
 }
 
 void RotatorMainWindow::displaySkyScanPauseIntervalCount(int count)
@@ -3183,7 +3277,10 @@ void RotatorMainWindow::displaySkyScanPauseIntervalCount(int count)
 
     int minutes = count / 60;
     int seconds = count % 60;
-    ui->pauseTimeCountDownLbl->setText(QString("%1:%2").arg(minutes).arg(seconds, 2, 10, QChar('0')));
+    QString countDownTime = QString("%1:%2").arg(minutes).arg(seconds, 2, 10, QChar('0'));
+    ui->pauseTimeCountDownLbl->setText(countDownTime);
+    sendSkyScanCountDownToLogger(countDownTime);
+
 }
 
 void RotatorMainWindow::skyScanDisplayRotatorMinAzMaxAz(int minAz, int maxAz)
@@ -3311,8 +3408,9 @@ void RotatorMainWindow::closeSkyScan(QString currentAntennaName)
     ui->skyScanEnableChkBox->setChecked(skyScanEnabled);
     saveSkyScanOnClose = false;
     ui->saveSkyScanSettingsOnCloseChkBox->setChecked(saveSkyScanOnClose);
-    setSkyScanEnableChkBoxEnabled(false);
+
     setSkyScanComponentsEnabled(false);
+    sendSkyScanEnabledToLogger(false);
 
     //ui->skyScanStartBearingSpinBox->clear();
 
@@ -3404,6 +3502,7 @@ void RotatorMainWindow::openSkyScan(QString currentAntennaName)
 
     setSkyScanStartBearingToolButtonUpDown();
     setSkyScanEndBearingToolButtonUpDown();
+    sendSkyScanEnabledToLogger(true);
     dumpSkyScanSettingsToTraceLog();
 
     emit sendRotatorEndStopTypeToCompassDial(setupAntenna->currentAntenna.endStopType);
@@ -3423,16 +3522,38 @@ void RotatorMainWindow::openSkyScan(QString currentAntennaName)
     connect(skyScanControl.data(), &SkyScanControl::rotateTo, this, &RotatorMainWindow::skyScanRotateTo);
     connect(skyScanControl.data(), &SkyScanControl::displaySkyScanNextStepBearing, this, &RotatorMainWindow::displaySkyScanNextStepBearing);
     connect(skyScanControl.data(), &SkyScanControl::displaySkyScanPauseIntervalTime, this, &RotatorMainWindow::displaySkyScanPauseIntervalCount);
+
+
+}
+
+
+void RotatorMainWindow::setRotatorMainWindowTabVisible(int tabNum, bool state)
+{
+    ui->rotTabs->setTabVisible(tabNum, state);
 }
 
 void RotatorMainWindow::setSkyScanCCWIndicatorOnOff(bool state)
 {
-    setSkyScanDirectionIndOnOff(ui->skyScanCcwIndicator, state);
+    if (state != skyScanButtonState->isForward())
+    {
+        skyScanButtonState->setForward(state);
+        setSkyScanDirectionIndOnOff(ui->skyScanCcwIndicator, state);
+        skyScanButtonState->setForward(state);
+        sendSkyScanButtonStateToLogger(skyScanButtonState->getState());
+    }
+
 }
 
 void RotatorMainWindow::setSkyScanCWIndicatorOnOff(bool state)
 {
-    setSkyScanDirectionIndOnOff(ui->skyScanCwIndicator, state);
+    if (state != skyScanButtonState->isReverse())
+    {
+        skyScanButtonState->setReverse(state);
+        setSkyScanDirectionIndOnOff(ui->skyScanCwIndicator, state);
+        skyScanButtonState->setReverse(state);
+        sendSkyScanButtonStateToLogger(skyScanButtonState->getState());
+    }
+
 }
 
 

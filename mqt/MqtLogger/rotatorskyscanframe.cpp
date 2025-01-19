@@ -15,7 +15,6 @@
 
 #include "LoggerContest.h"
 #include "rotatorskyscanframe.h"
-#include "rotatorcommon.h"
 #include "MTrace.h"
 #include "ui_rotatorskyscanframe.h"
 
@@ -73,7 +72,7 @@ void RotatorSkyScanFrame::setSkyScanStartBearing(int startBearing)
         if (startScanBearing != startBearing)
         {
             startScanBearing = startBearing;
-            ui->startBearingDisplay->setText(QString::number(startScanBearing));
+            ui->startBearingDisplay->setText(QString("%1%2").arg(QString::number(startScanBearing).rightJustified(3, '0')).arg(QChar(DEGREE_SYMBOL)));
         }
     }
 }
@@ -81,12 +80,13 @@ void RotatorSkyScanFrame::setSkyScanStartBearing(int startBearing)
 void RotatorSkyScanFrame::setSkyScanEndBearing(int endBearing)
 {
     traceMsg(QString("end bearing = %1").arg(endBearing));
+
     if (skyScanEnabled)
     {
         if (endScanBearing != endBearing)
         {
             endScanBearing = endBearing;
-            ui->endBearingDisplay->setText(QString::number(endScanBearing));
+            ui->endBearingDisplay->setText(QString("%1%2").arg(QString::number(endScanBearing).rightJustified(3, '0')).arg(QChar(DEGREE_SYMBOL)));
         }
     }
 }
@@ -99,7 +99,7 @@ void RotatorSkyScanFrame::setSkyScanNextStep(QString nextStep)
         if (nextStepBearing != nextStep)
         {
             nextStepBearing = nextStep;
-            ui->nextStepDisplayLbl->setText(nextStepBearing);
+            ui->nextStepDisplayLbl->setText(QString("%1%2").arg(nextStepBearing).arg(QChar(DEGREE_SYMBOL)));
         }
     }
 }
@@ -120,14 +120,13 @@ void RotatorSkyScanFrame::setSkyScanCountDown(QString countDown)
 
 void RotatorSkyScanFrame::setSkyScanButtonState(int state)
 {
-    traceMsg(QString("button state = %1").arg(QString::number(state)));
-    rpcConstants::SkyScanButtonState bState = static_cast<rpcConstants::SkyScanButtonState>(state);
-
     if (skyScanEnabled)
     {
-        if (bState != buttonState)
+        if (state != buttonState.getState())
         {
-            buttonState = bState;
+            buttonState.setState(state);
+            traceMsg(QString("button state change from rotator %1").arg(buttonState.getButtonStateToString()));
+            handleSkyScanButtonStateFromRotator();
         }
     }
 }
@@ -146,9 +145,51 @@ void RotatorSkyScanFrame::setRotatorBearing(QString bearing)
 }
 
 
+void RotatorSkyScanFrame::handleSkyScanButtonStateFromRotator()
+{
+    if (buttonState.isStart())
+    {
+        setSkyScanStartButtonColour(BUTTON_ON_STYLE);
+        setSkyScanPauseButtonColour("");
+        setSkyScanStopButtonColour("");
+
+    }
+    else if (buttonState.isStop())
+    {
+        setSkyScanStartButtonColour("");
+        setSkyScanPauseButtonColour("");
+        setSkyScanStopButtonColour(BUTTON_ON_STYLE);
+
+        setSkyScanCWIndicatorOnOff(false);
+        setSkyScanCCWIndicatorOnOff(false);
+    }
+    else if (buttonState.isPause())
+    {
+        setSkyScanStartButtonColour("");
+        setSkyScanPauseButtonColour(BUTTON_ON_STYLE);
+        setSkyScanStopButtonColour("");
+    }
+    else if (buttonState.isForward())
+    {
+        setSkyScanCWIndicatorOnOff(true);
+        setSkyScanCCWIndicatorOnOff(false);
+    }
+    else if (buttonState.isReverse())
+    {
+        setSkyScanCWIndicatorOnOff(false);
+        setSkyScanCCWIndicatorOnOff(false);
+    }
+}
+
+
 void RotatorSkyScanFrame::setSkyScanStartButtonColour(QString style)
 {
     ui->skyScanStartPb->setStyleSheet(style);
+}
+
+void RotatorSkyScanFrame::setSkyScanPauseButtonColour(QString style)
+{
+    ui->skyScanPausePb->setStyleSheet(style);
 }
 
 void RotatorSkyScanFrame::setSkyScanStopButtonColour(QString style)

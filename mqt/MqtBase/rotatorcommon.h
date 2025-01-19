@@ -279,6 +279,47 @@ public:
 
 };
 
+class SkyScanButtonState
+{
+
+public:
+
+    SkyScanButtonState();
+
+
+    int getState();
+    void clear();
+    void setState(int state_);  // this is used when passing state to logger
+
+    void setStart(bool value);
+    void setPause(bool value);
+    void setStop(bool value);
+    void setForward(bool value);
+    void setReverse(bool value);
+
+    bool isStart() const;
+    bool isPause() const;
+    bool isStop() const;
+    bool isForward() const;
+    bool isReverse() const;
+
+    QString getButtonStateToString();
+private:
+
+    void setButtonState(int bit, bool value);
+    bool getButtonState(int bit) const;
+
+
+    static constexpr int START_BIT = 0;
+    static constexpr int PAUSE_BIT = 1;
+    static constexpr int STOP_BIT = 2;
+    static constexpr int FORWARD_BIT = 3;
+    static constexpr int REVERSE_BIT = 4;
+
+    int state = 0; // Holds all button states as bits
+
+};
+
 
 
 #endif // ROTATORCOMMON_H

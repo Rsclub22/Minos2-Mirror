@@ -91,12 +91,7 @@ public:
 
     void setSkyScanCCWIndicatorOnOff(bool state);
     void setSkyScanCWIndicatorOnOff(bool state);
-    void sendSkyScanEnabledToLogger(bool state);
-    void sendSkyScanStartBearingAndEndBearingToLogger(int startBearing, int endBearing);
-    void sendSkyScanNextStepToLogger(QString nextStepBearing);
-    void sendSkyScanCountDownToLogger(QString countDown);
-    void sendSkyScanButtonStateToLogger(int state);
-    void sendSkyScanReverseScanToLogger(bool state);
+
 
 signals:
 
@@ -194,6 +189,8 @@ private:
     bool hamlibOk = false;
 
     QSharedPointer<SkyScanControl> skyScanControl;
+    QSharedPointer<SkyScanButtonState> skyScanButtonState;
+
     bool skyScanEnabled = false;
     bool skyScanActive = false;
     bool saveSkyScanOnClose = false;
@@ -418,6 +415,21 @@ private:
     void setSkyScanStartBearingToolButtonUpDown();
     void setSkyScanEndBearingToolButtonUpDown();
     void skyScanDisplayRotatorMinAzMaxAz(int minAz, int maxAz);
+
+    void setRotatorMainWindowTabVisible(int tabNum, bool state);
+    void setSkyScanStartButtonState(bool state);
+    void setSkyScanStopButtonState(bool state);
+    void setSkyScanPauseButtonState(bool state);
+    void sendSkyScanButtonStateToTraceLog();
+    void sendSkyScanStartBearingToLogger(int bearing);
+    void sendSkyScanEndBearingToLogger(int bearing);
+
+    void sendSkyScanEnabledToLogger(bool state);
+    void sendSkyScanNextStepToLogger(QString nextStepBearing);
+    void sendSkyScanCountDownToLogger(QString countDown);
+    void sendSkyScanButtonStateToLogger(int state);
+    void sendSkyScanReverseScanToLogger(bool state);
+    void setSkyScanPauseButtonColour(QString style);
 
 };
 

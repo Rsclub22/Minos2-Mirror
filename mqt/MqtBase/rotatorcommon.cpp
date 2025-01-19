@@ -189,3 +189,105 @@ void setSkyScanDirectionIndOnOff(QToolButton *indicator, bool state)
         indicator->setStyleSheet(SKYSCAN_DIRECTION_INDICATOR_OFF);
     }
 }
+
+
+
+SkyScanButtonState::SkyScanButtonState() : state(0)
+{
+
+}
+
+void SkyScanButtonState::clear()
+{
+    state = 0;
+}
+
+int SkyScanButtonState::getState()
+{
+    return state;
+}
+
+
+void SkyScanButtonState::setState(int state_)
+{
+    state = state_;
+}
+
+
+QString SkyScanButtonState::getButtonStateToString()
+{
+    QString startBut = isStart() ? "On" : "Off";
+    QString pauseBut = isPause() ? "On" : "Off";
+    QString stopBut = isStop() ? "On" : "Off";
+    QString fwdBut = isForward()  ? "On" : "Off";
+    QString revBut = isReverse()  ? "On" : "Off";
+
+    return QString("Start = %1, Pause = %2, Stop = %3, Fwd = %4, Rev = %5").arg(startBut).arg(pauseBut).arg(stopBut).arg(fwdBut).arg(revBut);
+}
+
+void SkyScanButtonState::setButtonState(int bit, bool value)
+{
+    if (value)
+        state |= (1 << bit); // Set the bit
+    else
+        state &= ~(1 << bit); // Clear the bit
+}
+
+bool SkyScanButtonState::getButtonState(int bit) const
+{
+    return state & (1 << bit); // Check the bit
+}
+
+void SkyScanButtonState::setStart(bool value)
+{
+    setButtonState(START_BIT, value);
+}
+
+void SkyScanButtonState::setPause(bool value)
+{
+    setButtonState(PAUSE_BIT, value);
+}
+
+void SkyScanButtonState::setStop(bool value)
+{
+    setButtonState(STOP_BIT, value);
+}
+
+void SkyScanButtonState::setForward(bool value)
+{
+    setButtonState(FORWARD_BIT, value);
+}
+
+void SkyScanButtonState::setReverse(bool value)
+{
+    setButtonState(REVERSE_BIT, value);
+}
+
+bool SkyScanButtonState::isStart() const
+{
+    return getButtonState(START_BIT);
+}
+
+bool SkyScanButtonState::isPause() const
+{
+    return getButtonState(PAUSE_BIT);
+}
+
+bool SkyScanButtonState::isStop() const
+{
+    return getButtonState(STOP_BIT);
+}
+
+bool SkyScanButtonState::isForward() const
+{
+    return getButtonState(FORWARD_BIT);
+}
+
+bool SkyScanButtonState::isReverse() const
+{
+    return getButtonState(REVERSE_BIT);
+}
+
+
+
+

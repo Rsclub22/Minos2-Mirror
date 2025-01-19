@@ -183,7 +183,7 @@ static const QString supportStopCommand ("SupportStopCommand");
 
 // SkyScan
 
-enum SkyScanButtonState : int {eSkyScanStop, eSkyScanStart, eSkyScanPause};
+
 
 static const QString skyScanEnabled ("SkyScanEnabled");
 static const QString skyScanStartBearing ("SkyScanStartBearing");
