@@ -1534,7 +1534,7 @@ void QSOLogFrame::getScreenEntry()
    }
    else
    {
-       screenContact.cqResponse = runButtonOnFlag && !radioOffRunFreq;
+       screenContact.cqResponse = isRunMode();
    }
    screenContact.mode.setValue(ui->ModeComboBoxGJV->currentText().trimmed());
    screenContact.mgmSubmode = ui->MGMSubModeEdit->text().trimmed();
@@ -2785,6 +2785,10 @@ void QSOLogFrame::on_ShowOperators ( )
    bool so = LogContainer->isShowOperators();
    doShowOperators(so);
 }
+bool QSOLogFrame::isRunMode()
+{
+    return runButtonOnFlag && !radioOffRunFreq;
+}
 void QSOLogFrame::on_tabSandP()
 {
     bool tabSandPstate;
@@ -2796,7 +2800,7 @@ void QSOLogFrame::on_tabSandP()
     }
     ui->tabSandPframe->setVisible(tabSandPstate);
 
-    if (!tabSandPstate || (runButtonOnFlag && !radioOffRunFreq))
+    if (!tabSandPstate || isRunMode())
     {
         ui->callRb->setChecked(true);
     }
@@ -3655,7 +3659,7 @@ void QSOLogFrame::on_SpotLastLoggedPbClicked()
 }
 void QSOLogFrame::on_SpotPbClicked()
 {
-    if ((runButtonOnFlag && radioOffRunFreq) || !runButtonOnFlag)     // don't send a spot when running a freq
+    if (!isRunMode())     // don't send a spot when running a freq
     {
         memoryData::memData logData;
         int valRes = -1;
@@ -4105,27 +4109,18 @@ void QSOLogFrame::setRunOffFreqFlag(bool offRunFreq)
 
 void QSOLogFrame::setBandmapControlsState()
 {
-    if (runButtonOnFlag)
+    TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
+    if (tslf && tslf->isBandMapLoaded())
     {
-        if (radioOffRunFreq)
-        {
-            setBandMapControlsDisabled(false);
-        }
-        else
-        {
-            setBandMapControlsDisabled(true);
-        }
+        setBandMapControlsVisible(true);
+        setBandMapControlsDisabled(!isRunMode());
     }
     else
     {
-        TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
-        if (tslf && tslf->isBandMapLoaded())
-        {
-            setBandMapControlsVisible(true);
-            setBandMapControlsDisabled(false);
-        }
-
+        setBandMapControlsVisible(false);
+        setBandMapControlsDisabled(true);
     }
+
 }
 
 void QSOLogFrame::setClusterSendSpotControlsState()

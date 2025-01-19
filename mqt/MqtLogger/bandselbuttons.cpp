@@ -87,7 +87,7 @@ void BandSelButtons::onBandSelButtonPressed(QToolButton* button)
     QString band = button->text();
 
     ct->setCurrentBand(band);
-    ct->commonSave(false);
+    // ct->commonSave(false); // done in setCurrentBand
     setContestBand(band);
 
     MinosLoggerEvents::SendContestBandChanged(ct);

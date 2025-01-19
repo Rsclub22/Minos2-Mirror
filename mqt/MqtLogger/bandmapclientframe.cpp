@@ -1060,7 +1060,6 @@ void BandmapClientFrame::addLogSpotToBandmapTable(QSharedPointer<ClusterSpotData
     if (newSpot->getSpotType() == bandmapSpotType::CQ)
     {
         addRemoveCQSpot(newSpot);
-        trace("BandmapView::bandmapUpdate() addRemoveCQSpot");
         bandmapView->bandmapUpdate(true);
         MinosLoggerEvents::SendBroadcastSpot(newSpot);
         return;
@@ -1345,6 +1344,8 @@ void BandmapClientFrame::addRemoveCQSpot(QSharedPointer<ClusterSpotData>  spot)
     // CQ freqs are in the contest, they don't need to be in the DB as well
     if (!spot->getRunModeOn())
     {
+        trace("BandmapView::bandmapUpdate() addRemoveCQSpot - remove");
+
         // look for an existing CQ spot and remove
         for (int row = 0; row < bandmapDataModel->rowCount(); row++)
         {
@@ -1359,6 +1360,8 @@ void BandmapClientFrame::addRemoveCQSpot(QSharedPointer<ClusterSpotData>  spot)
     }
     else
     {
+        trace(QString("BandmapView::bandmapUpdate() addRemoveCQSpot - add at ").arg(spot->getFreq()));
+
         qint64 logTime = spot->getSpotDateTime().toMSecsSinceEpoch() / 1000;
         QString logTimeStr = spot->getSpotDateTime().time().toString("HH:mm");
 

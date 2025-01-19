@@ -122,10 +122,6 @@ void TSingleLogFrame::buildFrame(int slotNo)
     connect(FKHRigControlFrame, &RigControlFrame::sendModeToControl, this, &TSingleLogFrame::sendRadioMode);
     connect(GJVQSOLogFrame, &QSOLogFrame::sendModeControl, this , &TSingleLogFrame::sendRadioMode);
 
-    connect(runButtonsFrame, &RunButtonsFrame::sendRunOnFlag, this, &TSingleLogFrame::sendRunOnFlag);
-    connect(runButtonsFrame, &RunButtonsFrame::sendRunOffFreqFlag, this, &TSingleLogFrame::sendRunOffFreqFlag);
-
-
     // Rotator updates
     // From rotator controller
     connect(LogContainer->sendDM, &TSendDM::RotatorList, this, &TSingleLogFrame::on_RotatorList);

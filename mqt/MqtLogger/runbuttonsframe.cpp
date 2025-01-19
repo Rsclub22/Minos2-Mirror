@@ -199,7 +199,8 @@ void RunButtonsFrame::setRunFreq(int buttonNumber)
     chkRunFreqTimer->setInterval(CHECK_RUN_FREQ_POLLTIME);
     chkRunFreqTimer->start();
 
-    emit sendRunOnFlag(curRunFreq, curRunMode, true);
+    TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
+    tslf->sendRunOnFlag(curRunFreq, curRunMode, true);
 }
 
 void RunButtonsFrame::runModeOff(int buttonNumber)
@@ -250,7 +251,8 @@ void RunButtonsFrame::switchRunButton(int buttonNumber)
 
     chkRunFreqTimer->start(CHECK_RUN_FREQ_POLLTIME);
     runButtonOnNum = buttonNumber;
-    emit sendRunOnFlag(curRunFreq, curRunMode, true);
+    TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
+    tslf->sendRunOnFlag(curRunFreq, curRunMode, true);
 
     chkRunFreq();
 }
@@ -406,7 +408,8 @@ void RunButtonsFrame::runButOffActionSelected(int buttonNumber)
         runButtonOnNum = NO_RUN_BUTTON_ON;
         chkRunFreqTimer->stop();
 
-        emit sendRunOnFlag(curRunFreq, curRunMode, false);
+        TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
+        tslf->sendRunOnFlag(curRunFreq, curRunMode, false);
     }
 
 }
@@ -449,7 +452,8 @@ void RunButtonsFrame::runButtonUpdate(int buttonNumber)
             runButtonMap[buttonNumber]->showButtonOnOff(false);
             runButtonOnNum = NO_RUN_BUTTON_ON;
             chkRunFreqTimer->stop();
-            emit sendRunOnFlag(curRunFreq, curRunMode, false);
+            TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
+            tslf->sendRunOnFlag(curRunFreq, curRunMode, false);
         }
         else
         {
@@ -464,7 +468,8 @@ void RunButtonsFrame::runButtonUpdate(int buttonNumber)
             }
             curRunFreq = m.freq;
             curRunMode = m.mode;
-            emit sendRunOnFlag(curRunFreq, curRunMode, true);
+            TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
+            tslf->sendRunOnFlag(curRunFreq, curRunMode, true);
         }
     }
 
@@ -512,7 +517,9 @@ void RunButtonsFrame::chkRunFreq()
             if (oldRadioOffRunFreq != radioOffRunFreq)
             {
                 oldRadioOffRunFreq = radioOffRunFreq;
-                emit sendRunOffFreqFlag(curRunFreq, radioOffRunFreq);
+
+                TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
+                tslf->sendRunOffFreqFlag(curRunFreq, radioOffRunFreq);
             }
         }
     }
