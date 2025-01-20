@@ -587,7 +587,22 @@ void RunButtonsFrame::setCallFreq()
             buttonNumber = RUN_BUTTON_1_ON;
         }
 
-        runButWriteActSel(buttonNumber);
+        trace(QString("setCallFreq Selected = %1").arg(QString::number(buttonNumber + 1)));
+        memoryData::memData runData;
+        runData.callsign = tr("Run") + QString::number(buttonNumber + 1);
+        runData.freq = rigControl->getCurFreq();
+        runData.locator = "";
+        runData.mode = rigControl->curMode;
+        runData.bearing = COMPASS_ERROR;
+        runData.time = "00:00";
+        runData.memno = buttonNumber;
+
+        // load run data into run memory
+
+        setRunMemoryData(buttonNumber, runData);
+        runButtonUpdate(buttonNumber);
+        runButActivated(buttonNumber);  // simulate button press
+
     }
 }
 
