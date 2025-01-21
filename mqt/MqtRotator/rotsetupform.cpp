@@ -78,6 +78,7 @@ rotSetupForm::rotSetupForm(RotatorFactory* rotFactory_, srotParams* _antennaData
     connect(ui->antOffset, &QLineEdit::editingFinished, this, &rotSetupForm::antennaOffSetSelected);
     connect(ui->simCW_CCWcmd, &QCheckBox::clicked, this, &rotSetupForm::simCWCCWCmdSelected);
     connect(ui->showCompDialChkBox, &QCheckBox::clicked, this, &rotSetupForm::onCompasDialVisibleChecked);
+    connect(ui->showSkyScanChkBox, &QCheckBox::clicked, this, &rotSetupForm::onSkyScanTabVisibleChecked);
 }
 
 rotSetupForm::~rotSetupForm()
@@ -889,6 +890,31 @@ void rotSetupForm::checkCompassDialChkBox(bool checked)
     ui->showCompDialChkBox->setCheckState(checked ? Qt::Checked : Qt::Unchecked);
 }
 
+/*********************** SkyScan Tab Visible *************************/
+
+void rotSetupForm::onSkyScanTabVisibleChecked(bool selected)
+{
+    Q_UNUSED(selected)
+    bool checked = ui->showSkyScanChkBox->isChecked();
+    if (antennaData->showSkyScanFlag != checked)
+    {
+        antennaData->showSkyScanFlag = checked;
+        checkSkyScanChkBox(checked);
+        antennaValueChanged = true;
+
+    }
+}
+
+
+void rotSetupForm::setSkyScanTabChkBoxVisible(bool s)
+{
+    ui->showSkyScanChkBox->setVisible(s);
+}
+
+void rotSetupForm::checkSkyScanChkBox(bool checked)
+{
+    ui->showSkyScanChkBox->setCheckState(checked ? Qt::Checked : Qt::Unchecked);
+}
 
 
 /*************************** Serial Data Entry Visible ***************/

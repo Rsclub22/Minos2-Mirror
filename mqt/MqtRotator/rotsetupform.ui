@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>935</width>
-    <height>236</height>
+    <width>1088</width>
+    <height>238</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -341,6 +341,13 @@
           <widget class="QCheckBox" name="showCompDialChkBox">
            <property name="text">
             <string>Show Compass Dial</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="showSkyScanChkBox">
+           <property name="text">
+            <string>Show SkyScan</string>
            </property>
           </widget>
          </item>

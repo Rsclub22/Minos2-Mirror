@@ -21,6 +21,7 @@ void RotCapabilities::clear()
     enableSelectDisplayDial= RotCapConstants::disableSelectDisplayDial;
     pollData = RotCapConstants::pollDataOn;
     allowSouthStopConfig = true;
+    allowSkyScan = false;
 }
 
 
@@ -126,4 +127,11 @@ bool RotCapabilities::getAllowSouthStopConfig() const
 {
     return allowSouthStopConfig;
 }
-
+void RotCapabilities::setAllowSkyScan(bool allowSkyScan_)
+{
+    allowSkyScan = allowSkyScan_;
+}
+bool RotCapabilities::getAllowSkyScan() const
+{
+    return allowSkyScan;
+}

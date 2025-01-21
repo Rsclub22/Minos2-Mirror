@@ -212,6 +212,7 @@ public:
       dest.antennaOffset = srce->antennaOffset;
       dest.moving = srce->moving;
       dest.showCompassDialFlag = srce->showCompassDialFlag;
+      dest.showSkyScanFlag = srce->showSkyScanFlag;
       dest.portType = srce->portType;
       dest.advancedCommsFlag = srce->advancedCommsFlag;
       dest.networkAdd = srce->networkAdd;
@@ -259,6 +260,7 @@ public:
   int antennaOffset = 0;
   bool moving = false;
   bool showCompassDialFlag;
+  bool showSkyScanFlag;
   int portType = 0;
   bool advancedCommsFlag;
   QString networkAdd;

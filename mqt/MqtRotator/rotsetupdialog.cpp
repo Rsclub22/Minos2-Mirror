@@ -271,7 +271,11 @@ void RotSetupDialog::loadSettingsToTab(int tabNum)
             antennaTab[tabNum]->setCompassDialChkBoxVisible(false);
         }
 
-
+        if (rotCap.getAllowSkyScan())
+        {
+            antennaTab[tabNum]->setSkyScanTabChkBoxVisible(true);
+            antennaTab[tabNum]->checkSkyScanChkBox(availAntData[tabNum]->showSkyScanFlag);
+        }
 
     }
     else
@@ -287,6 +291,7 @@ void RotSetupDialog::loadSettingsToTab(int tabNum)
         antennaTab[tabNum]->serialDataEntryVisible(false);
         antennaTab[tabNum]->setSimCW_CCWcmdVisible(false);
         antennaTab[tabNum]->setCompassDialChkBoxVisible(false);
+        antennaTab[tabNum]->setSkyScanTabChkBoxVisible(false);
 
     }
 
@@ -442,6 +447,7 @@ void RotSetupDialog::saveSettings()
             config.setValue("netAddress", availAntData[i]->networkAdd);
             config.setValue("netPort", availAntData[i]->networkPort);
             config.setValue("showCompassDial", availAntData[i]->showCompassDialFlag);
+            config.setValue("showSkyScan", availAntData[i]->showSkyScanFlag);
             config.setValue("nearStopTolerance", availAntData[i]->nearStopTolerance);
             config.endGroup();
             antennaTab[i]->setAntennaValueChanged(false);
@@ -497,6 +503,7 @@ void RotSetupDialog::getAvailAntenna(int antNum, QSettings& config)
     availAntData[antNum]->networkPort = config.value("netPort", "").toString();
     availAntData[antNum]->advancedCommsFlag = config.value("advancedComms", false).toBool();
     availAntData[antNum]->showCompassDialFlag = config.value("showCompassDial",true).toBool();
+    availAntData[antNum]->showSkyScanFlag = config.value("showSkyScan", false).toBool();
     availAntData[antNum]->nearStopTolerance = config.value("nearStopTolerance", 0).toBool();
 
     config.endGroup();

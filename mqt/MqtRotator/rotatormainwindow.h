@@ -396,7 +396,7 @@ private:
     void readSkyScanCommonSettings();
     void dumpSkyScanSettingsToTraceLog();
     void setSkyScanGroupBoxEnabled(bool enabled);
-    bool isSkyScanEnabled();
+    bool isSkyScanEnabledAndVisible();
     void setTargetTabEnabled(bool enabled);
     void setPresetsGroupBoxEnabled(bool enabled);
     void setSkyScanSpinBoxesEnabled(bool enabled);
@@ -431,6 +431,8 @@ private:
     void sendSkyScanReverseScanToLogger(bool state);
     void setSkyScanPauseButtonColour(QString style);
 
+    void setSkyScanTabVisible(bool visible);
+    void clearSkyScanDisplayCompassDial();
 };
 
 #endif // ROTATORMAINWINDOW_H

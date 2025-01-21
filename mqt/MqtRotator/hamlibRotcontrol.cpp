@@ -291,6 +291,7 @@ void HamlibRotControl::register_rotators(RotatorFactory::Rotators* rotatorsList)
         rotCap.setEnableSelectDisplayDial(RotCapConstants::SelectDisplayCompass::disableSelectDisplayDial);
         rotCap.setPollData(RotCapConstants::PollData::pollDataOn);
         rotCap.setAllowSouthStopConfig(true);
+        rotCap.setAllowSkyScan(true);
 
 
         (*rotatorsList)[key] = rotCap;

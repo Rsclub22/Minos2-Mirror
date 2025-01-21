@@ -52,6 +52,9 @@ public:
     void setAllowSouthStopConfig(bool allowSouthStopConfig_);
     bool getAllowSouthStopConfig() const;
 
+    void setAllowSkyScan(bool allowSkyScan_);
+    bool getAllowSkyScan() const;
+
 
 private:
 
@@ -64,6 +67,7 @@ private:
     int minRot;
     int maxRot;
     bool enableSelectDisplayDial;
+    bool allowSkyScan;
     bool pollData;
     bool allowSouthStopConfig;
 

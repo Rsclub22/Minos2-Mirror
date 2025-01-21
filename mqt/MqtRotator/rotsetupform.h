@@ -131,6 +131,9 @@ public:
     void setCompassDialChkBoxVisible(bool s);
     void checkCompassDialChkBox(bool checked);
 
+    void setSkyScanTabChkBoxVisible(bool s);
+    void checkSkyScanChkBox(bool checked);
+
 
 public slots:
 
@@ -167,6 +170,7 @@ private slots:
 
     void onAdvancedCommsSelected(bool selected);
     void onCompasDialVisibleChecked(bool selected);
+    void onSkyScanTabVisibleChecked(bool selected);
 
 private:
     Ui::rotSetupForm *ui;
@@ -191,6 +195,7 @@ private:
     void fillParityBitsInfo();
     void fillHandShakeInfo();
     void fillForceLinesInfo();
+
 
 
 

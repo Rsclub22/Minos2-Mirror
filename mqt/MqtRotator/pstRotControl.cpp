@@ -58,6 +58,7 @@ void PstRotControl::register_rotators(RotatorFactory::Rotators *rotatorsList, in
     rotCap.setEnableSelectDisplayDial(RotCapConstants::SelectDisplayCompass::enableSelectDisplayDial);
     rotCap.setPollData(RotCapConstants::PollData::pollDataOn);
     rotCap.setAllowSouthStopConfig(false);
+    rotCap.setAllowSkyScan(false);  // don't all skyScan with PST for now
 
 
     (*rotatorsList)["PSTRotator"] = rotCap;
