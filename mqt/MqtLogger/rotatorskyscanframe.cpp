@@ -120,12 +120,14 @@ void RotatorSkyScanFrame::setSkyScanCountDown(QString countDown)
 
 void RotatorSkyScanFrame::setSkyScanButtonState(int state)
 {
+    traceMsg(QString("button state from rotator %1").arg(buttonState.getButtonStateToString()));
+
     if (skyScanEnabled)
     {
         if (state != buttonState.getState())
         {
             buttonState.setState(state);
-            traceMsg(QString("button state change from rotator %1").arg(buttonState.getButtonStateToString()));
+            traceMsg(QString("Update button state change from rotator %1").arg(buttonState.getButtonStateToString()));
             handleSkyScanButtonStateFromRotator();
         }
     }
@@ -154,7 +156,8 @@ void RotatorSkyScanFrame::handleSkyScanButtonStateFromRotator()
         setSkyScanStopButtonColour("");
 
     }
-    else if (buttonState.isStop())
+
+    if (buttonState.isStop())
     {
         setSkyScanStartButtonColour("");
         setSkyScanPauseButtonColour("");
@@ -163,21 +166,24 @@ void RotatorSkyScanFrame::handleSkyScanButtonStateFromRotator()
         setSkyScanCWIndicatorOnOff(false);
         setSkyScanCCWIndicatorOnOff(false);
     }
-    else if (buttonState.isPause())
+
+    if (buttonState.isPause())
     {
         setSkyScanStartButtonColour("");
         setSkyScanPauseButtonColour(BUTTON_ON_STYLE);
         setSkyScanStopButtonColour("");
     }
-    else if (buttonState.isForward())
+
+    if (buttonState.isForward())
     {
         setSkyScanCWIndicatorOnOff(true);
-        setSkyScanCCWIndicatorOnOff(false);
+
     }
-    else if (buttonState.isReverse())
+
+    if (buttonState.isReverse())
     {
-        setSkyScanCWIndicatorOnOff(false);
-        setSkyScanCCWIndicatorOnOff(false);
+
+        setSkyScanCCWIndicatorOnOff(true);
     }
 }
 

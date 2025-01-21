@@ -23,7 +23,6 @@ SkyScanControl::SkyScanControl(RotatorMainWindow *rotatorMainWindow, QObject *pa
     : QObject(parent),
     m_rotatorMainWindow(rotatorMainWindow)
 {
-    movingToStartPosition = false;
     skyScanIntervalTimer = new QTimer(this);
     connect(skyScanIntervalTimer, &QTimer::timeout, this, &SkyScanControl::skyScanIntervalTimerTimeOut);
     connect(m_rotatorMainWindow, &RotatorMainWindow::sendRotationStatusToSkyScan, this, &SkyScanControl::handleRotationBearings);
@@ -46,14 +45,14 @@ void SkyScanControl::initSkyScan(enum southStop southType_, enum endStop endStop
     stepDegrees = step;
     scanPauseTimeInterval = interval;  // Mins
     //currentBearing = initialBearing;
-    movingToStartPosition = false;
+
 }
 
 
 void SkyScanControl::startSkyscan()
 {
 
-    skyScanRunning = true;
+    skyScanStateFlags.setSkyScanRunning(true);
 
     // If current bearing is not at the start position, move the rotator there first
     if (currentBearing != startScanBearing)
@@ -61,8 +60,10 @@ void SkyScanControl::startSkyscan()
         traceMessage("Moving rotator to start position.");
 
         // Set flag to indicate movement to start position
-        movingToStartPosition = true;
+        skyScanStateFlags.setMovingToStartPosition(true);
         targetBearing = startScanBearing;
+
+        sendNextStepBearingToDisplay();
 
         // Emit signal to command the calling program to rotate
         emit rotateTo(targetBearing);
@@ -77,14 +78,14 @@ void SkyScanControl::startSkyscan()
         if (startScanBearing > endScanBearing)
         {
             traceMessage("startSkyScan - rotate revervsePath");
-            reverseScan = true;
+            skyScanStateFlags.setReverseScan(true);
             m_rotatorMainWindow->setSkyScanCCWIndicatorOnOff(true);
             m_rotatorMainWindow->setSkyScanCWIndicatorOnOff(false);
 
         }
         else
         {
-            reverseScan = false;
+            skyScanStateFlags.setReverseScan(false);
             m_rotatorMainWindow->setSkyScanCCWIndicatorOnOff(false);
             m_rotatorMainWindow->setSkyScanCWIndicatorOnOff(true);
             traceMessage("startSkyScan - rotate forwardPath");
@@ -99,11 +100,7 @@ void SkyScanControl::startSkyscan()
 void SkyScanControl::stopSkyscan()
 {
     traceMessage("Stopping skyscan...");
-    skyScanRunning = false;
-    movingToStartPosition = false;
-    skyScanPauseed = false;
-    movingToStepPosition = false;
-    skyScanPauseInterval = false;
+    skyScanStateFlags.clear();
     forwardRotationPath.clearScanPath();
     reverseRotationPath.clearScanPath();
     skyScanIntervalTimer->stop(); // Stop any pending timer events
@@ -119,7 +116,7 @@ void SkyScanControl::pauseSkyscan()
 
 void SkyScanControl::skyScanIntervalTimerTimeOut()
 {
-    if (skyScanPauseInterval)
+    if (skyScanStateFlags.getSkyScanPauseInterval())
     {
         scanPauseTimeCount--;
         emit displaySkyScanPauseIntervalTime(scanPauseTimeCount);
@@ -129,7 +126,7 @@ void SkyScanControl::skyScanIntervalTimerTimeOut()
         {
             traceMessage(QString("Pause Interval Finished, count = %1").arg(scanPauseTimeCount));
             skyScanIntervalTimer->stop();
-            skyScanPauseInterval = false;
+            skyScanStateFlags.setSkyScanPauseInterval(false);
             rotateToNextPosition();
         }
 
@@ -157,22 +154,26 @@ void SkyScanControl::handleRotationBearings(int bearing, skyScanBearingStates br
     }
     else if (brgState == skyScanBearingStates::ROT_REACHED_TARGET || brgState == skyScanBearingStates::ROT_NEAR_TARGET)
     {
-        if (movingToStartPosition)
+        if (skyScanStateFlags.getMovingToStartPosition())
         {
             traceMessage(QString("Reached StartScan Position = %1").arg(currentBearing));
-            movingToStartPosition = false;
+            skyScanStateFlags.setMovingToStartPosition(false);
             startSkyscan();
         }
-        else if (movingToStepPosition)
+        else if (skyScanStateFlags.getMovingToStartPosition())
         {
 
             traceMessage(QString("Reached step Position = %1").arg(currentBearing));
-            movingToStepPosition = false;
+            sendNextStepBearingToDisplay();
+
+            skyScanStateFlags.setMovingToStepPosition(false);
+
+
 
             // set the endScanBearing based upon direction of scan
             int endBearing;
 
-            if (!reverseScan)
+            if (!skyScanStateFlags.getReverseScan())
             {
                 endBearing = forwardRotationPath.getPathEnd();
             }
@@ -185,31 +186,34 @@ void SkyScanControl::handleRotationBearings(int bearing, skyScanBearingStates br
             if (currentBearing == endBearing)
             {
                 traceMessage(QString("Reached end of Scan Position = %1").arg(currentBearing));
-                if (!reverseScan)
+                if (!skyScanStateFlags.getReverseScan())
                 {
                     traceMessage("We are going to reverse scan");
-                    reverseScan = true;
+                    skyScanStateFlags.setReverseScan(true);
                     m_rotatorMainWindow->setSkyScanCCWIndicatorOnOff(true);
                     m_rotatorMainWindow->setSkyScanCWIndicatorOnOff(false);
+
 
                 }
                 else
                 {
                     traceMessage("We are going to forward scan");
-                    reverseScan = false;
+                    skyScanStateFlags.setReverseScan(false);
                     m_rotatorMainWindow->setSkyScanCCWIndicatorOnOff(false);
                     m_rotatorMainWindow->setSkyScanCWIndicatorOnOff(true);
+
 
                 }
 
                 determinePath();
             }
             // Schedule the next rotation
-            traceMessage(QString("reverseScan flag = %1").arg(reverseScan ? "reverseScan" : "forwardScan"));
-            skyScanPauseInterval = true;
+            traceMessage(QString("reverseScan flag = %1").arg(skyScanStateFlags.getReverseScan() ? "reverseScan" : "forwardScan"));
+            skyScanStateFlags.setSkyScanPauseInterval(true);
             scanPauseTimeCount = scanPauseTimeInterval * 60;
             traceMessage(QString("start interval timer %1 secs").arg(scanPauseTimeCount));
             emit displaySkyScanPauseIntervalTime(scanPauseTimeCount);
+
             skyScanIntervalTimer->start(1000);
 
         }
@@ -223,7 +227,45 @@ void SkyScanControl::handleRotationBearings(int bearing, skyScanBearingStates br
 
 }
 
+void SkyScanControl::sendNextStepBearingToDisplay()
+{
 
+    int nextStep = 0;
+
+    if (skyScanStateFlags.getMovingToStepPosition())
+    {
+
+        if (!skyScanStateFlags.getReverseScan())
+        {
+            nextStep = forwardRotationPath.getNextStep();
+            if (nextStep != -999)
+            {
+                emit displaySkyScanNextStepBearing(nextStep);
+            }
+
+
+
+        }
+        else
+        {
+            nextStep = reverseRotationPath.getNextStep();
+            if (nextStep != -999)
+            {
+
+                emit displaySkyScanNextStepBearing(reverseRotationPath.getNextStep());
+            }
+
+        }
+    }
+    else if (skyScanStateFlags.getMovingToStartPosition())
+    {
+
+
+        emit displaySkyScanNextStepBearing(targetBearing);
+
+    }
+
+}
 
 void SkyScanControl::determinePath()
 {
@@ -327,17 +369,17 @@ void SkyScanControl::determinePath()
 
 void SkyScanControl::rotateToNextPosition()
 {
-    if (!reverseScan && forwardRotationPath.isEmpty())
+    if (!skyScanStateFlags.getReverseScan() && forwardRotationPath.isEmpty())
     {
         traceMessage(QString("forward scan complete."));
         return;
     }
-    else if (reverseScan && reverseRotationPath.isEmpty())
+    else if (skyScanStateFlags.getReverseScan() && reverseRotationPath.isEmpty())
     {
         traceMessage(QString("reverse scan complete"));
     }
 
-    if (!reverseScan)
+    if (!skyScanStateFlags.getReverseScan())
     {
         targetBearing = forwardRotationPath.takeFirst();
         traceMessage(QString("forward scan, next target bearing = %1").arg(targetBearing));
@@ -360,8 +402,8 @@ void SkyScanControl::rotateToNextPosition()
 
     traceMessage(QString("Rotating %1 to %2 degrees.").arg(command).arg(targetBearing));
 
-    movingToStepPosition = true;
-    emit displaySkyScanNextStepBearing(targetBearing);
+    skyScanStateFlags.setMovingToStartPosition(true);
+
     emit rotateTo(targetBearing);
 
 

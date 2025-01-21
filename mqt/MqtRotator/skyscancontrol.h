@@ -22,6 +22,66 @@ class RotatorMainWindow;
 
 
 
+class ScanState
+{
+public:
+    explicit ScanState(){clear();}
+
+    void clear()
+    {
+        movingToStartPosition = false;
+        movingToStepPosition = false;
+        reachedStartPosition = false;
+        reacheadEndPosition = false;
+        skyScanPauseInterval = false;
+
+        skyScanRunning = false;
+        skyScanPaused = false;
+
+        reverseScan = false;
+    };
+
+
+    void setReachedStartPosition(bool reachedStartPosition_){reachedStartPosition = reachedStartPosition_;}
+    bool getReachedStartPosition(){return reachedStartPosition;}
+
+    void setReachedEndPosition(bool reacheadEndPosition_){reacheadEndPosition = reacheadEndPosition_;}
+    bool getReachedEndPosition(){return reacheadEndPosition;}
+
+    void setSkyScanRunning(bool skyScanRunning_){skyScanRunning = skyScanRunning_;}
+    bool getSkyScanRunning(){return skyScanRunning;}
+
+    void setSkyScanPaused(bool skyScanPaused_){skyScanPaused = skyScanPaused_;}
+    bool getSkyScanPaused(){return skyScanPaused;}
+
+    void setReverseScan(bool reverseScan_){reverseScan = reverseScan_;}
+    bool getReverseScan(){return reverseScan;}
+
+    void setMovingToStartPosition(bool movingToStartPosition_){movingToStartPosition = movingToStartPosition_;}
+    bool getMovingToStartPosition(){return movingToStepPosition;}
+
+    void setMovingToStepPosition(bool movingToStepPosition_){movingToStepPosition = movingToStepPosition_;}
+    bool getMovingToStepPosition(){return movingToStepPosition;}
+
+    void setSkyScanPauseInterval(bool skyScanPauseInterval_){skyScanPauseInterval = skyScanPauseInterval_;}
+    bool getSkyScanPauseInterval(){return skyScanPauseInterval;}
+
+private:
+
+
+    bool movingToStartPosition = false;
+    bool movingToStepPosition = false;
+    bool reachedStartPosition = false;
+    bool reacheadEndPosition = false;
+    bool skyScanPauseInterval = false;
+
+    bool skyScanRunning = false;
+    bool skyScanPaused = false;
+
+    bool reverseScan = false;
+
+};
+
 class ScanPath
 {
 public:
@@ -40,6 +100,16 @@ public:
     bool isEmpty(){return rotationPath.isEmpty();}
     int numScanSteps(){return rotationPath.count();}
     int takeFirst(){return rotationPath.takeFirst();}
+    int getNextStep()
+    {
+        if (isEmpty())
+        {
+          return -999;  // error!
+        }
+
+        return rotationPath.first();
+
+    }
 
     void setPathStart(int start){pathStart = start;}
     int getPathStart(){return pathStart;}
@@ -87,9 +157,6 @@ public:
     void pauseSkyscan();
 
 
-    bool getMovingToStartPositionFlag(){return movingToStepPosition;}
-    bool getMovingToStepPositionFlag(){return movingToStepPosition;}
-    bool getSkyScanPauseIntervalFlag(){return skyScanPauseInterval;}
 
 
 signals:
@@ -117,21 +184,11 @@ private:
     southStop southType = southStop::S_STOPOFF;
     endStop endStopType = ROT_0_360;
 
-
-
-    bool skyScanRunning = false;
-    bool skyScanPauseed = false;
-    bool movingToStartPosition = false;
-    bool movingToStepPosition = false;
-    bool skyScanPauseInterval = false;
-    bool reverseScan = false;
-
-
+    ScanState skyScanStateFlags;
     ScanPath forwardRotationPath;
     ScanPath reverseRotationPath;
 
-    QList<int> rotationPath;
-    //QList<int> reverseRotationPath;
+
 
     int scanPauseTimeInterval = 0;
     int scanPauseTimeCount = 0;   // seconds
@@ -148,6 +205,7 @@ private:
     void calcForwardPath(int startBearing, int endBearing);
     void calcReversePath(int startBearing, int endBearing);
     void dumpRotationPathToTraceLog(ScanPath &scanPath, const QString &pathname);
+    void sendNextStepBearingToDisplay();
 };
 
 #endif // SKYSCANCONTROL_H
