@@ -360,6 +360,23 @@ void TSendDM::sendRotatorSelection(const PubSubName &s, const QString &uuid)
     rpc.queueCall( s );
 }
 
+void TSendDM::sendSkyScanControlPanelButtonState(TSingleLogFrame *tslf, SkyScanButtonState buttonState)
+{
+    traceMsg(QString("Send SkyScan Control Button State - Start = %1, Stop = %2").arg(buttonState.isStop() ? "On" :"Off").arg(buttonState.isStop() ? "On" : "Off"));
+    RPCGeneralClient rpc(rpcConstants::rotatorMethod);
+    QSharedPointer<RPCParam>st(new RPCParamStruct);
+
+    st->addMember( loggerUuid, rpcConstants::loggerUuid );
+
+    st->addMember( tslf->getContest()->uuid, rpcConstants::selected );
+    st->addMember( buttonState.getState(), rpcConstants::skyScanButtonState );
+    rpc.getCallArgs() ->addParam( st );
+
+    PubSubName rotSelected = rotatorCache.getSelected(loggerUuid);
+    rpc.queueCall( rotSelected );
+
+}
+
 void TSendDM::changeRigSelectionTo(const PubSubName &name, const QString &band, const Frequency &freq, const QString &mode, const QString &uuid)
 {
     // we should de-select the cached uuid on all rig apps

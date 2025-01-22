@@ -35,6 +35,7 @@ signals:
     void setRotation(int direction, int angle);
     void selectAntennaFromLog(PubSubName);
     void setRotPreset(QString);
+    void setSkyScanButtonStateFromLogger(int);
 
 private slots:
     void on_notify(AnalysePubSubNotify an, const QString from );

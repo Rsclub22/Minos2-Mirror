@@ -69,6 +69,7 @@ void RotatorRpc::on_routerCall(bool err, QSharedPointer<MinosRPCObj>mro, const Q
         QSharedPointer<RPCParam> psSelect;
         QSharedPointer<RPCParam> psLoggerUuid;
         QSharedPointer<RPCParam> psRotPreset;
+        QSharedPointer<RPCParam> psSkyScanButtonState;
         RPCArgs *args = mro->getCallArgs();
 
         QString selContest;
@@ -97,6 +98,27 @@ void RotatorRpc::on_routerCall(bool err, QSharedPointer<MinosRPCObj>mro, const Q
                     // here you handle what the logger has sent to us
                     trace(QString("Rot RPC: Direction = %1, Angle = %2").arg(QString::number(direction), QString::number(angle)));
                     emit setRotation(direction, angle);
+                }
+            }
+            else
+            {
+                trace("rotate on wrong rotator " + selContest + " instead of " + cursel );
+            }
+        }
+        if ( args->getStructArgMember( 0, rpcConstants::skyScanButtonState, psSkyScanButtonState ))
+        {
+            int buttonState;
+
+
+            PubSubName psn("test"); // just uses router/appname
+            QString cursel = rotatorCache.getSelectedContest(psn, loggeruuid);
+            if ( cursel == selContest)
+            {
+                if ( psSkyScanButtonState->getInt( buttonState ) )
+                {
+                    // here you handle what the logger has sent to us
+                    trace(QString("Rot RPC: SkyScanButtonState = %1").arg(QString::number(buttonState)));
+                    emit setSkyScanButtonStateFromLogger(buttonState);
                 }
             }
             else

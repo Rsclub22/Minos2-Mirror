@@ -290,6 +290,7 @@ private slots:
     void onQrzCallsignRequest(QString callsign);
     void onQrzInfoToLog(QString callsign, QString qraLocator, QString name);
     void onShowCribBand();
+    void sendSkyScanFrameButtonStateToRotator(SkyScanButtonState buttonState);
 };
 
 #endif // TSINGLELOGFRAME_H

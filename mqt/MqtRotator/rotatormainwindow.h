@@ -190,6 +190,8 @@ private:
 
     QSharedPointer<SkyScanControl> skyScanControl;
     QSharedPointer<SkyScanButtonState> skyScanButtonState;
+    QSharedPointer<SkyScanButtonState> loggerSkyScanButtonState;
+
 
     bool skyScanEnabled = false;
     bool skyScanActive = false;
@@ -220,6 +222,8 @@ private:
     int minSkyScanPauseMins = MIN_SKYSCAN_PAUSE_MINS;
     int maxSkyScanPauseMins = MAX_SKYSCAN_PAUSE_MINS;
     int skyScanPauseStepIncrement = DEFAULT_VALUE_READ_INI;
+
+
 
     int openRotator();
     void closeRotator();
@@ -351,6 +355,7 @@ private slots:
 
     void skyScanStartBearingToolbuttonValueChanged(int value);
     void skyScanEndBearingToolbuttonValueChanged(int value);
+    void onSetSkyScanButtonStateFromLogger(int buttonState);
 private:
     void rotateTo(int bearing);
     //int northCalcTarget(int targetBearing);

@@ -220,7 +220,7 @@ RotatorMainWindow::RotatorMainWindow(QWidget *parent) :
     initialiseSkyScannerSpinners();
     skyScanControl = QSharedPointer<SkyScanControl>::create(this, parent);
     skyScanButtonState = QSharedPointer<SkyScanButtonState>::create();
-
+    loggerSkyScanButtonState = QSharedPointer<SkyScanButtonState>::create();
 
 
     setTestMode(appName.isEmpty());
@@ -456,7 +456,23 @@ void RotatorMainWindow::onLoggerSetPreset(QString presetMsg)
 
 }
 
+void RotatorMainWindow::onSetSkyScanButtonStateFromLogger(int buttonState)
+{
+    if (buttonState != loggerSkyScanButtonState->getState())
+    {
+        loggerSkyScanButtonState->setState(buttonState);
+        logMessage(QString("ButtonState from logger = %1").arg(loggerSkyScanButtonState->getButtonStateToString()));
+        if (loggerSkyScanButtonState->isStart())
+        {
+            skyScanStartPbPressed();
+        }
+        else if (loggerSkyScanButtonState->isStop())
+        {
+            skyScanStopPbPressed();
+        }
 
+    }
+}
 
 int RotatorMainWindow::openRotator()
 {
@@ -835,7 +851,7 @@ void RotatorMainWindow::initActionsConnections()
     connect(msg, &RotatorRpc::setRotation, this, &RotatorMainWindow::onLoggerSetRotation);
     connect(msg, &RotatorRpc::selectAntennaFromLog, this, &RotatorMainWindow::onLoggerSelectAntenna);
     connect(msg, &RotatorRpc::setRotPreset, this, &RotatorMainWindow::onLoggerSetPreset);
-
+    connect(msg, &RotatorRpc::setSkyScanButtonStateFromLogger, this, &RotatorMainWindow::onSetSkyScanButtonStateFromLogger);
 
 }
 
@@ -3478,7 +3494,7 @@ void RotatorMainWindow::closeSkyScan(QString currentAntennaName)
     emit sendRotatorEndStopTypeToCompassDial(endStop::ROT_0_360);
     emit sendRotatorSouthStopTypeToCompassDial(southStop::S_STOPOFF);
 
-    setSkyScanTabVisible(false);
+    //setSkyScanTabVisible(false);
 
 
 

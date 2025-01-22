@@ -53,8 +53,14 @@ public:
     void setSkyScanStartBearing(int startBearing);
     void setSkyScanEndBearing(int endBearing);
 
+signals:
+
+    void sendSkyScanButtonState(SkyScanButtonState state);
+
 private slots:
     void setSkyScanPauseButtonColour(QString style);
+    void onSkyScanStartButtonClicked();
+    void onSkyScanStopButtonClicked();
 private:
 
     Ui::RotatorSkyScanFrame *ui;
@@ -69,7 +75,8 @@ private:
     QString nextStepBearing;
     QString countDownTime;
 
-    SkyScanButtonState buttonState;
+    SkyScanButtonState buttonStateFromRotControl;
+    SkyScanButtonState buttonStateToRotControl;
 
     bool skyScanEnabled = false;
     bool skyScanReverse = false;

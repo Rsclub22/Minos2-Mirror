@@ -138,6 +138,7 @@ void TSingleLogFrame::buildFrame(int slotNo)
     connect(FKHRotControlFrame, &RotControlFrame::selectRotator, rotPresets, &RotPresets::selectRotator);
     connect(rotPresets, &RotPresets::presetTurn, this, &TSingleLogFrame::presetTurn);
     connect(FKHRotControlFrame, &RotControlFrame::rotatorConnected, this, &TSingleLogFrame::on_rotatorConnected);
+    connect(skyScanControlFrame, &RotatorSkyScanFrame::sendSkyScanButtonState, this, &TSingleLogFrame::sendSkyScanFrameButtonStateToRotator);
 
     // from cluster frame
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::DxSpotToLog, this, &TSingleLogFrame::dxSpotToLog);
@@ -2336,7 +2337,7 @@ void TSingleLogFrame::on_cwCcwCmdEnable(bool s)
 void TSingleLogFrame::sendRotator(rpcConstants::RotateDirection direction, int angle )
 {
     if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
-    {    if (!skyScanButtonState.isStart())
+    {    if (!skyScanButtonState.isStart())  // don't send if skyscan is started
         {
 
             LogContainer->sendDM->sendRotator(this, direction, angle);
@@ -2348,6 +2349,16 @@ void TSingleLogFrame::sendRotator(rpcConstants::RotateDirection direction, int a
     }
 
 }
+
+void TSingleLogFrame::sendSkyScanFrameButtonStateToRotator(SkyScanButtonState buttonState)
+{
+    if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
+    {
+       LogContainer->sendDM->sendSkyScanControlPanelButtonState(this, buttonState);
+    }
+}
+
+
 
 void TSingleLogFrame::sendRotatorPreset(QString s )
 {

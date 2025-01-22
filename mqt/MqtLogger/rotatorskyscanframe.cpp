@@ -30,6 +30,10 @@ RotatorSkyScanFrame::RotatorSkyScanFrame(QWidget *parent):
     skyScanEnabled = false;
     ui->skyScanGroupBox->setEnabled(skyScanEnabled);
 
+    connect(ui->skyScanStartPb, &QPushButton::clicked, this, &RotatorSkyScanFrame::onSkyScanStartButtonClicked);
+    connect(ui->skyScanStopPb, &QPushButton::clicked, this, &RotatorSkyScanFrame::onSkyScanStopButtonClicked);
+
+
 }
 
 
@@ -121,14 +125,14 @@ void RotatorSkyScanFrame::setSkyScanCountDown(QString countDown)
 
 void RotatorSkyScanFrame::setSkyScanButtonState(int state)
 {
-    traceMsg(QString("button state from rotator %1").arg(buttonState.getButtonStateToString()));
+    traceMsg(QString("button state from rotator %1").arg(buttonStateFromRotControl.getButtonStateToString()));
 
     if (skyScanEnabled)
     {
-        if (state != buttonState.getState())
+        if (state != buttonStateFromRotControl.getState())
         {
-            buttonState.setState(state);
-            traceMsg(QString("Update button state change from rotator %1").arg(buttonState.getButtonStateToString()));
+            buttonStateFromRotControl.setState(state);
+            traceMsg(QString("Update button state change from rotator %1").arg(buttonStateFromRotControl.getButtonStateToString()));
             handleSkyScanButtonStateFromRotator();
         }
     }
@@ -150,7 +154,7 @@ void RotatorSkyScanFrame::setRotatorBearing(QString bearing)
 
 void RotatorSkyScanFrame::handleSkyScanButtonStateFromRotator()
 {
-    if (buttonState.isStart())
+    if (buttonStateFromRotControl.isStart())
     {
         setSkyScanStartButtonColour(BUTTON_ON_STYLE);
         setSkyScanPauseButtonColour("");
@@ -158,7 +162,7 @@ void RotatorSkyScanFrame::handleSkyScanButtonStateFromRotator()
 
     }
 
-    if (buttonState.isStop())
+    if (buttonStateFromRotControl.isStop())
     {
         setSkyScanStartButtonColour("");
         setSkyScanPauseButtonColour("");
@@ -168,20 +172,20 @@ void RotatorSkyScanFrame::handleSkyScanButtonStateFromRotator()
         setSkyScanCCWIndicatorOnOff(false);
     }
 
-    //if (buttonState.isPause())
+    //if (buttonStateFromRotControl.isPause())
    // {
    //     setSkyScanStartButtonColour("");
    //     setSkyScanPauseButtonColour(BUTTON_ON_STYLE);
    //     setSkyScanStopButtonColour("");
    // }
 
-    if (buttonState.isForward())
+    if (buttonStateFromRotControl.isForward())
     {
         setSkyScanCWIndicatorOnOff(true);
 
     }
 
-    if (buttonState.isReverse())
+    if (buttonStateFromRotControl.isReverse())
     {
 
         setSkyScanCCWIndicatorOnOff(true);
@@ -214,7 +218,38 @@ void RotatorSkyScanFrame::setSkyScanCCWIndicatorOnOff(bool state)
     setSkyScanDirectionIndOnOff(ui->reverseScanTb, state);
 }
 
+void RotatorSkyScanFrame::onSkyScanStartButtonClicked()
+{
+    if (skyScanEnabled)
+    {
 
+        traceMsg(QString("start button clicked"));
+        if (!buttonStateFromRotControl.isStart())
+        {
+            buttonStateToRotControl.setStart(true);
+            buttonStateToRotControl.setStop(false);
+            traceMsg(QString("send start button state to rotator = %1").arg(buttonStateToRotControl.getButtonStateToString()));
+
+            emit sendSkyScanButtonState(buttonStateToRotControl);
+        }
+    }
+}
+
+void RotatorSkyScanFrame::onSkyScanStopButtonClicked()
+{
+    if (skyScanEnabled)
+    {
+        traceMsg(QString("stop button clicked"));
+        if (buttonStateFromRotControl.isStart())
+        {
+            buttonStateToRotControl.setStart(false);
+            buttonStateToRotControl.setStop(true);
+            traceMsg(QString("send stop button state to rotator = %1").arg(buttonStateToRotControl.getButtonStateToString()));
+
+            emit sendSkyScanButtonState(buttonStateToRotControl);
+        }
+    }
+}
 
 void RotatorSkyScanFrame::traceMsg(QString msg)
 {

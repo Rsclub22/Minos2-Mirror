@@ -13,6 +13,7 @@
 #include "RigCache.h"
 #include "RotatorCache.h"
 #include "clustercommon.h"
+#include "rotatorcommon.h"
 
 //---------------------------------------------------------------------------
 class MinosRPCObj;
@@ -135,7 +136,9 @@ class TSendDM : public QObject
           return clusterConnected;
       }
 
-private slots:
+
+      void sendSkyScanControlPanelButtonState(TSingleLogFrame *tslf, const SkyScanButtonState state);
+  private slots:
       void on_routerCall( bool err, QSharedPointer<MinosRPCObj>mro, const QString from );
       void on_notify(AnalysePubSubNotify an, const QString from );
 
