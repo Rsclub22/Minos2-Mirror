@@ -6,8 +6,10 @@
 #include "ui_RotPresets.h"
 
 
+
 RotPresets::RotPresets(QWidget *parent) :
-    QGroupBox(parent),
+    QFrame(parent),
+
     ui(new Ui::RotPresets)
 {
     ui->setupUi(this);
@@ -214,6 +216,9 @@ void RotPresets::saveRotPresetButton(RotPresetData& editData)
     emit sendRotatorPreset(msg);
 }
 
-
+void RotPresets::skyScanStartedSetFrameDisabled(bool disabled)
+{
+    ui->rotPresetsGroupBox->setDisabled(disabled);
+}
 
 

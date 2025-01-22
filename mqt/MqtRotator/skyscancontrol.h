@@ -58,7 +58,7 @@ public:
     bool getReverseScan(){return reverseScan;}
 
     void setMovingToStartPosition(bool movingToStartPosition_){movingToStartPosition = movingToStartPosition_;}
-    bool getMovingToStartPosition(){return movingToStepPosition;}
+    bool getMovingToStartPosition(){return movingToStartPosition;}
 
     void setMovingToStepPosition(bool movingToStepPosition_){movingToStepPosition = movingToStepPosition_;}
     bool getMovingToStepPosition(){return movingToStepPosition;}
@@ -151,10 +151,10 @@ public:
 
     ~SkyScanControl();
 
-    void initSkyScan(enum southStop southType_, enum endStop endStopType_, int minRot, int maxRot, int start, int end, int step, int interval);
+    void initSkyScan(int currentBearing_, enum southStop southType_, enum endStop endStopType_, int minRot, int maxRot, int start, int end, int step, int interval);
     void startSkyscan();
     void stopSkyscan();
-    void pauseSkyscan();
+    void pauseSkyscan(bool pauseState); // true starts pause, false cancels pause
 
 
 
@@ -206,6 +206,10 @@ private:
     void calcReversePath(int startBearing, int endBearing);
     void dumpRotationPathToTraceLog(ScanPath &scanPath, const QString &pathname);
     void sendNextStepBearingToDisplay();
+
+    int closestBearing(int currentBearing, int start, int end, int minRange, int maxRange);
+    int normaliseBearing(int bearing, int minRange, int maxRange);
+    int angularDistance(int from, int to, int minRange, int maxRange);
 };
 
 #endif // SKYSCANCONTROL_H

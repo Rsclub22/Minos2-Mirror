@@ -433,6 +433,11 @@ private:
 
     void setSkyScanTabVisible(bool visible);
     void clearSkyScanDisplayCompassDial();
+
+
+    void showTab(QTabWidget *tabWidget, QWidget *tabContent, const QString &tabLabel);
+    void hideTab(QTabWidget *tabWidget, QWidget *tabContent);
+    bool isTabVisible(QTabWidget *tabWidget, QWidget *tabContent);
 };
 
 #endif // ROTATORMAINWINDOW_H

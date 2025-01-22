@@ -2336,7 +2336,17 @@ void TSingleLogFrame::on_cwCcwCmdEnable(bool s)
 void TSingleLogFrame::sendRotator(rpcConstants::RotateDirection direction, int angle )
 {
     if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
-        LogContainer->sendDM->sendRotator(this, direction, angle);
+    {    if (!skyScanButtonState.isStart())
+        {
+
+            LogContainer->sendDM->sendRotator(this, direction, angle);
+        }
+        else
+        {
+            trace(QString("skyScan in operation - stop rotator bearing commands from logger"));
+        }
+    }
+
 }
 
 void TSingleLogFrame::sendRotatorPreset(QString s )
@@ -2399,6 +2409,19 @@ void TSingleLogFrame::on_SkyScanButtonState(int state)
     if (this == LogContainer->getCurrentLogFrame())
     {
         skyScanControlFrame->setSkyScanButtonState(state);
+        skyScanButtonState.setState(state);
+        if (skyScanButtonState.isStart())
+        {
+            // started disable rotPresets and rotator Frames
+            FKHRotControlFrame->skyScanStartedSetFrameDisabled(true);
+            rotPresets->skyScanStartedSetFrameDisabled(true);
+
+        }
+        else
+        {
+            FKHRotControlFrame->skyScanStartedSetFrameDisabled(false);
+            rotPresets->skyScanStartedSetFrameDisabled(false);
+        }
     }
 }
 

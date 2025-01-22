@@ -3,7 +3,7 @@
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //                      Rotator Control
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2017
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2017 - 2025
 //
 // Interprocess Control Logic
 // COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2017
@@ -129,24 +129,7 @@ QString RotControlFrame::convertBearingForDisplay(QString bearing)
     QString brgbuff = bearing;
     brgbuff.remove(DEGREE_SYMBOL).remove(BEARING_TRUE_CHAR).remove(SHORTLOC_DELIMITER_START).remove(SHORTLOC_DELIMITER_END).remove(SHORTLOCATOR_IDENTIFIER);
 
-/*
-    const QChar degreeChar(DEGREE_SYMBOL);
-    const QChar trueChar(BEARING_TRUE_CHAR);
-    const QChar shortLocDelimiterStart(SHORTLOC_DELIMITER_START);
-    const QChar shortLocDelimiterEnd(SHORTLOC_DELIMITER_END);
-    if (bearing.contains(SHORTLOCATOR_IDENTIFIER))
-    {
-        brgbuff = QString("%1%2%3%4%5").arg(shortLocDelimiterStart).arg( bearing.remove(SHORTLOCATOR_IDENTIFIER) ).arg(degreeChar).arg(trueChar).arg(shortLocDelimiterEnd);
-    }
-    else if (!bearing.contains(DEGREE_SYMBOL) && !bearing.contains(BEARING_TRUE_CHAR))
-    {
-        brgbuff = QString("%1%2%3").arg( bearing ).arg(degreeChar).arg(trueChar);
-    }
-    else
-    {
-        brgbuff = bearing;
-    }
-*/
+
     traceMsg(QString("Convert Bearing for Display = %1").arg(brgbuff));
     return brgbuff;
 }
@@ -792,6 +775,14 @@ void RotControlFrame::setCwCcW_Items_Visible(bool visible)
     ui->nudgeRight->setVisible(visible);
     ui->RotateLeft->setVisible(visible);
     ui->RotateRight->setVisible(visible);
+}
+
+void RotControlFrame::skyScanStartedSetFrameDisabled(bool disabled)
+{
+    traceMsg(QString("skyScan set frame disabable = %1").arg(disabled ? "True" : "False"));
+
+    ui->rotatorControlGroupBox->setDisabled(disabled);
+
 }
 
 void RotControlFrame::traceMsg(QString msg)

@@ -257,6 +257,7 @@ FORMS    += \
     ContestPageControl.ui \
     DisplayOptions.ui \
     OptionsDialog.ui \
+    RotPresets.ui \
     ScreenConfigScreen.ui \
     WsjtxConfigureCQ.ui \
     checkupdates.ui \
@@ -281,7 +282,6 @@ FORMS    += \
     RigMemoryFrame.ui \
     rotatorskyscanframe.ui \
     rotcontrolframe.ui \
-    RotPresets.ui \
     runbuttondialog.ui \
     ScreenConfig.ui \
     ScreenConfigElement.ui \

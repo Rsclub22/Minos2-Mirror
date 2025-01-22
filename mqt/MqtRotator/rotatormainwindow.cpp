@@ -210,7 +210,7 @@ RotatorMainWindow::RotatorMainWindow(QWidget *parent) :
     }
 
 
-
+    ui->skyScanPausePb->setVisible(false);      // not using pause at the moment
     setSkyScanTabVisible(false);
     setSkyScanComponentsEnabled(false);
     setSkyScanEnableChkBoxEnabled(false);
@@ -995,7 +995,7 @@ void RotatorMainWindow::displayBearing(int bearing)
 void RotatorMainWindow::compassClicked(int brg)
 {
 
-    if (!skyScanActive && !isSkyScanEnabledAndVisible())
+    if (!skyScanActive)
     {
         ui->bearingEdit->setText(QString::number(brg));
         emit presetRotateTo();
@@ -2943,7 +2943,7 @@ void RotatorMainWindow::setSkyScanGroupBoxEnabled(bool enabled)
 
 bool RotatorMainWindow::isSkyScanEnabledAndVisible()
 {
-    bool tabVisible = ui->skyScanTab->isHidden();
+    bool tabVisible = isTabVisible(ui->rotTabs, ui->skyScanTab);
 
     return tabVisible && skyScanEnabled;
 }
@@ -2951,8 +2951,17 @@ bool RotatorMainWindow::isSkyScanEnabledAndVisible()
 void RotatorMainWindow::setSkyScanTabVisible(bool visible)
 {
 
-    ui->rotTabs->setTabVisible(3, visible); // 3 = SkyScan tab
+    if (visible)
+    {
+        showTab(ui->rotTabs, ui->skyScanTab, "SkyScan");
+    }
+    else
+    {
+        hideTab(ui->rotTabs, ui->skyScanTab);
+    }
+
 }
+
 
 
 void RotatorMainWindow::skyScanEnableChkBoxChanged()
@@ -3112,7 +3121,8 @@ void RotatorMainWindow::skyScanStartPbPressed()
         setSkyScanSpinBoxesEnabled(false);
         setSkyScanToolButtonUpDownEnabled(false);
 
-        skyScanControl->initSkyScan(setupAntenna->currentAntenna.southStopType,
+        skyScanControl->initSkyScan(rotatorBearing,
+                                setupAntenna->currentAntenna.southStopType,
                                 setupAntenna->currentAntenna.endStopType,
                                 setupAntenna->currentAntenna.min_azimuth,
                                 setupAntenna->currentAntenna.max_azimuth,
@@ -3146,7 +3156,28 @@ void RotatorMainWindow::setSkyScanPauseButtonColour(QString style)
 }
 void RotatorMainWindow::skyScanPausePbPressed()
 {
+    trace(QString("SkyScan Pause Pressed"));
 
+    if (skyScanButtonState->isStart() && skyScanActive)
+    {
+        stopRotation(true);
+        skyScanControl->pauseSkyscan(true);
+
+        setSkyScanPauseButtonState(true);
+        setSkyScanStartButtonState(false);
+        setSkyScanStopButtonState(false);
+        sendSkyScanButtonStateToLogger(skyScanButtonState->getState());
+    }
+    else if (skyScanButtonState->isPause() && skyScanActive)
+    {
+        stopRotation(true);
+        skyScanControl->pauseSkyscan(false);
+
+        setSkyScanPauseButtonState(false);
+        setSkyScanStartButtonState(true);
+        setSkyScanStopButtonState(false);
+        sendSkyScanButtonStateToLogger(skyScanButtonState->getState());
+    }
 }
 
 
@@ -3460,7 +3491,7 @@ void RotatorMainWindow::closeSkyScan(QString currentAntennaName)
     disconnect(ui->skyScanStartBearingUpDownButtons, QOverload<int>::of(&ToolButtonUpDown::valueChanged), this, &RotatorMainWindow::skyScanStartBearingToolbuttonValueChanged);
     disconnect(ui->skyScanEndBearingUpDownButtons, QOverload<int>::of(&ToolButtonUpDown::valueChanged), this, &RotatorMainWindow::skyScanEndBearingToolbuttonValueChanged);
     disconnect(ui->skyScanStartPb, &QPushButton::pressed, this, &RotatorMainWindow::skyScanStartPbPressed);
-    disconnect(ui->skyScanPausePb, &QPushButton::pressed, this, &RotatorMainWindow::skyScanPausePbPressed);
+    //disconnect(ui->skyScanPausePb, &QPushButton::pressed, this, &RotatorMainWindow::skyScanPausePbPressed);
     disconnect(ui->skyScanStopPb, &QPushButton::pressed, this, &RotatorMainWindow::skyScanStopPbPressed);
     disconnect(skyScanControl.data(), &SkyScanControl::rotateTo, this, &RotatorMainWindow::skyScanRotateTo);
     disconnect(skyScanControl.data(), &SkyScanControl::displaySkyScanNextStepBearing, this, &RotatorMainWindow::displaySkyScanNextStepBearing);
@@ -3485,6 +3516,7 @@ void RotatorMainWindow::openSkyScan(QString currentAntennaName)
     setSkyScanComponentsEnabled(skyScanEnabled);
     ui->saveSkyScanSettingsOnCloseChkBox->setChecked(saveSkyScanOnClose);
 
+    sendSkyScanEnabledToLogger(true);
 
     // setup pauseTimeSpinBox
     if (skyScanPauseStepIncrement == DEFAULT_VALUE_READ_INI)
@@ -3536,7 +3568,7 @@ void RotatorMainWindow::openSkyScan(QString currentAntennaName)
 
     setSkyScanStartBearingToolButtonUpDown();
     setSkyScanEndBearingToolButtonUpDown();
-    sendSkyScanEnabledToLogger(true);
+
     dumpSkyScanSettingsToTraceLog();
 
     emit sendRotatorEndStopTypeToCompassDial(setupAntenna->currentAntenna.endStopType);
@@ -3551,7 +3583,7 @@ void RotatorMainWindow::openSkyScan(QString currentAntennaName)
     connect(ui->skyScanEndBearingUpDownButtons, QOverload<int>::of(&ToolButtonUpDown::valueChanged), this, &RotatorMainWindow::skyScanEndBearingToolbuttonValueChanged);
     connect(ui->skyScanPauseTimeSpinBox, QOverload<int>::of(&QSpinBox::valueChanged), this, &RotatorMainWindow::skyScanPauseTimeSpinBoxValueChanged);
     connect(ui->skyScanStartPb, &QPushButton::pressed, this, &RotatorMainWindow::skyScanStartPbPressed);
-    connect(ui->skyScanPausePb, &QPushButton::pressed, this, &RotatorMainWindow::skyScanPausePbPressed);
+    //connect(ui->skyScanPausePb, &QPushButton::pressed, this, &RotatorMainWindow::skyScanPausePbPressed);
     connect(ui->skyScanStopPb, &QPushButton::pressed, this, &RotatorMainWindow::skyScanStopPbPressed);
     connect(skyScanControl.data(), &SkyScanControl::rotateTo, this, &RotatorMainWindow::skyScanRotateTo);
     connect(skyScanControl.data(), &SkyScanControl::displaySkyScanNextStepBearing, this, &RotatorMainWindow::displaySkyScanNextStepBearing);
@@ -3566,30 +3598,60 @@ void RotatorMainWindow::setRotatorMainWindowTabVisible(int tabNum, bool state)
     ui->rotTabs->setTabVisible(tabNum, state);
 }
 
-void RotatorMainWindow::setSkyScanCCWIndicatorOnOff(bool state)
+
+void RotatorMainWindow::setSkyScanCWIndicatorOnOff(bool state)
 {
     if (state != skyScanButtonState->isForward())
     {
         skyScanButtonState->setForward(state);
-        setSkyScanDirectionIndOnOff(ui->skyScanCcwIndicator, state);
-        skyScanButtonState->setForward(state);
+        setSkyScanDirectionIndOnOff(ui->skyScanCwIndicator, state);
+        //skyScanButtonState->setReverse(!state);
         sendSkyScanButtonStateToLogger(skyScanButtonState->getState());
     }
 
 }
 
-void RotatorMainWindow::setSkyScanCWIndicatorOnOff(bool state)
+
+
+
+void RotatorMainWindow::setSkyScanCCWIndicatorOnOff(bool state)
 {
     if (state != skyScanButtonState->isReverse())
     {
         skyScanButtonState->setReverse(state);
-        setSkyScanDirectionIndOnOff(ui->skyScanCwIndicator, state);
-        skyScanButtonState->setReverse(state);
+        setSkyScanDirectionIndOnOff(ui->skyScanCcwIndicator, state);
+        //skyScanButtonState->setForward(!state);
         sendSkyScanButtonStateToLogger(skyScanButtonState->getState());
     }
 
 }
 
+
+
+
+// these would be better in MqtBase?
+void RotatorMainWindow::showTab(QTabWidget* tabWidget, QWidget* tabContent, const QString& tabLabel)
+{
+    int tabIndex = tabWidget->indexOf(tabContent);
+    if (tabIndex == -1)
+    {
+        tabWidget->addTab(tabContent, tabLabel);
+    }
+}
+
+void RotatorMainWindow::hideTab(QTabWidget* tabWidget, QWidget* tabContent)
+{
+    int tabIndex = tabWidget->indexOf(tabContent);
+    if (tabIndex != -1)
+    {
+        tabWidget->removeTab(tabIndex);
+    }
+}
+
+bool RotatorMainWindow::isTabVisible(QTabWidget* tabWidget, QWidget* tabContent)
+{
+    return tabWidget->indexOf(tabContent) != -1;
+}
 
 
 void RotatorMainWindow::dumpSkyScanSettingsToTraceLog()

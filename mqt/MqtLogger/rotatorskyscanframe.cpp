@@ -26,6 +26,7 @@ RotatorSkyScanFrame::RotatorSkyScanFrame(QWidget *parent):
 {
 
     ui->setupUi(this);
+    ui->skyScanPausePb->setVisible(false);      // not using pause at the moment
     skyScanEnabled = false;
     ui->skyScanGroupBox->setEnabled(skyScanEnabled);
 
@@ -167,12 +168,12 @@ void RotatorSkyScanFrame::handleSkyScanButtonStateFromRotator()
         setSkyScanCCWIndicatorOnOff(false);
     }
 
-    if (buttonState.isPause())
-    {
-        setSkyScanStartButtonColour("");
-        setSkyScanPauseButtonColour(BUTTON_ON_STYLE);
-        setSkyScanStopButtonColour("");
-    }
+    //if (buttonState.isPause())
+   // {
+   //     setSkyScanStartButtonColour("");
+   //     setSkyScanPauseButtonColour(BUTTON_ON_STYLE);
+   //     setSkyScanStopButtonColour("");
+   // }
 
     if (buttonState.isForward())
     {

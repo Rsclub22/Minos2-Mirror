@@ -204,6 +204,9 @@ private:
 
     MatchTreeItem *getXferItem();
 
+    SkyScanButtonState skyScanButtonState;     // use to prevent sending rotator commands
+                                               // when skyScan is active
+
     void createScreenComponents();
 
     void buildScreenLayout(int slotNo);
