@@ -210,6 +210,7 @@ private:
     int closestBearing(int currentBearing, int start, int end, int minRange, int maxRange);
     int normaliseBearing(int bearing, int minRange, int maxRange);
     int angularDistance(int from, int to, int minRange, int maxRange);
+
 };
 
 #endif // SKYSCANCONTROL_H

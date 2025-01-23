@@ -214,8 +214,8 @@ private:
 
     // skyScan Start Bearing Spinbox
 
-    int minSkyScanStartBearing = DEFAULT_VALUE_READ_INI;
-    int maxSkyScanStartBearing = DEFAULT_VALUE_READ_INI;
+    //int minSkyScanStartBearing = DEFAULT_VALUE_READ_INI;
+    //int maxSkyScanStartBearing = DEFAULT_VALUE_READ_INI;
 
     // skyScan Pause Mins Spinbox
 
@@ -443,6 +443,7 @@ private:
     void showTab(QTabWidget *tabWidget, QWidget *tabContent, const QString &tabLabel);
     void hideTab(QTabWidget *tabWidget, QWidget *tabContent);
     bool isTabVisible(QTabWidget *tabWidget, QWidget *tabContent);
+    void checkScanStartEndInRotatorRange();
 };
 
 #endif // ROTATORMAINWINDOW_H

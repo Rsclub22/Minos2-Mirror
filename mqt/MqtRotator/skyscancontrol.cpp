@@ -14,6 +14,7 @@
 #include "skyscancontrol.h"
 #include <QTimer>
 #include <QtMath>
+#include <QMessageBox>
 #include "MTrace.h"
 #include "rotatormainwindow.h"
 
@@ -48,9 +49,8 @@ void SkyScanControl::initSkyScan(int currentBearing_, enum southStop southType_,
     scanPauseTimeInterval = interval;  // Mins
     //currentBearing = initialBearing;
 
+
 }
-
-
 
 
 

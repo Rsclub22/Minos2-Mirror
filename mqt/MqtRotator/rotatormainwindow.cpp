@@ -3377,8 +3377,8 @@ void RotatorMainWindow::saveSkyScanSettings(QString currentAntennaName)
 
     config.setValue("saveSkyScanOnClose", saveSkyScanOnClose);
     config.setValue("startSkyScanBearing", startSkyScanBrg);
-    config.setValue("minSkyScanStartBearing", minSkyScanStartBearing);
-    config.setValue("maxSkyScanStartBearing", maxSkyScanStartBearing);
+    //config.setValue("minSkyScanStartBearing", minSkyScanStartBearing);
+    //config.setValue("maxSkyScanStartBearing", maxSkyScanStartBearing);
     config.setValue("endSkyScanBearing", endSkyScanBrg);
     config.setValue("skyScanStepDegrees", skyScanStepDegrees);
     config.setValue("skyScanPauseMins", skyScanPauseMins);
@@ -3399,8 +3399,8 @@ void RotatorMainWindow::readSkyScanSettings(QString currentAntennaName)
 
     saveSkyScanOnClose = config.value("saveSkyScanOnClose", true).toBool();
     startSkyScanBrg = config.value("startSkyScanBearing", DEFAULT_VALUE_READ_INI).toInt();
-    minSkyScanStartBearing = config.value("minSkyScanStartBearing", DEFAULT_VALUE_READ_INI).toInt();
-    maxSkyScanStartBearing = config.value("maxSkyScanStartBearing", DEFAULT_VALUE_READ_INI).toInt();
+    //minSkyScanStartBearing = config.value("minSkyScanStartBearing", DEFAULT_VALUE_READ_INI).toInt();
+    //maxSkyScanStartBearing = config.value("maxSkyScanStartBearing", DEFAULT_VALUE_READ_INI).toInt();
     endSkyScanBrg = config.value("endSkyScanBearing", DEFAULT_VALUE_READ_INI).toInt();
     skyScanStepDegrees = config.value("skyScanStepDegrees", DEFAULT_VALUE_READ_INI).toInt();
     skyScanPauseMins = config.value("skyScanPauseMins", MIN_SKYSCAN_PAUSE_MINS).toInt();
@@ -3464,6 +3464,69 @@ bool RotatorMainWindow::readSkyScanEnableSetting(QString currentAntennaName)
     trace(QString("read skyscan enable setting to antenna: %1, %2").arg(currentAntennaName).arg(skyScanEnabled ? "True" : "False"));
     return skyScanEnabled;
 }
+
+
+
+void RotatorMainWindow::checkScanStartEndInRotatorRange()
+{
+    bool outOfRange = false;
+
+    int requestedStart = startSkyScanBrg;
+    int requestedEnd = endSkyScanBrg;
+
+    if(startSkyScanBrg < endSkyScanBrg)
+    {
+        if (startSkyScanBrg < setupAntenna->currentAntenna.min_azimuth)
+        {
+            trace(QString("Error! startScanBearing out of range - startScanBearing = %1 less than minRotation = %2").arg(startSkyScanBrg).arg(setupAntenna->currentAntenna.min_azimuth));
+            startSkyScanBrg = setupAntenna->currentAntenna.min_azimuth;
+            trace(QString("startScanBearing brought in range start = %1").arg(startSkyScanBrg));
+            outOfRange = true;
+        }
+
+        if (endSkyScanBrg >  setupAntenna->currentAntenna.max_azimuth)
+        {
+            trace(QString("Error! endScanBearing out of range - endScanBearing = %1 greater than maxRotation = %2").arg(endSkyScanBrg).arg(setupAntenna->currentAntenna.max_azimuth));
+            endSkyScanBrg =  setupAntenna->currentAntenna.max_azimuth;
+            trace(QString("endScanBearing brought in range end = %1").arg(endSkyScanBrg));
+            outOfRange = true;
+
+        }
+    }
+    else
+    {
+        if (endSkyScanBrg < setupAntenna->currentAntenna.min_azimuth)
+        {
+            trace(QString("Error! endScanBearing out of range - endScanBearing = %1 less than minRotation = %2").arg(endSkyScanBrg).arg(setupAntenna->currentAntenna.min_azimuth));
+            endSkyScanBrg = setupAntenna->currentAntenna.min_azimuth;
+            trace(QString("endScanBearing brought in range end = %1").arg(endSkyScanBrg));
+            outOfRange = true;
+        }
+
+        if (startSkyScanBrg >  setupAntenna->currentAntenna.max_azimuth)
+        {
+            trace(QString("Error! startScanBearing out of range - startScanBearing = %1 greater than maxRotation = %2").arg(startSkyScanBrg).arg(skyScanMaxAzimuth));
+            startSkyScanBrg =  setupAntenna->currentAntenna.max_azimuth;
+            trace(QString("startScanBearing brought in range start = %1").arg(startSkyScanBrg));
+            outOfRange = true;
+
+        }
+
+    }
+
+    if (outOfRange)
+    {
+        QMessageBox::warning(nullptr, tr("SkyScan Start/End Bearing Check!"), tr("Start/End Bearings out of rotator range\n"
+                                                                                 "Requested Start = %1, Requested End = %2\n"
+                                                                                 "MinRotation = %3, MaxRotation = %4\n"
+                                                                                 "Start/End Bearing brought in range\n"
+                                                                                 "Start = %5, End = %6")
+                                                                                  .arg(requestedStart).arg(requestedEnd)
+                                                                                  .arg(setupAntenna->currentAntenna.min_azimuth).arg(setupAntenna->currentAntenna.max_azimuth)
+                                                                                  .arg(startSkyScanBrg).arg(endSkyScanBrg));
+    }
+}
+
 void RotatorMainWindow::closeSkyScan(QString currentAntennaName)
 {
     Q_UNUSED(currentAntennaName)
@@ -3528,6 +3591,7 @@ void RotatorMainWindow::openSkyScan(QString currentAntennaName)
 
     readSkyScanSettings(currentAntennaName);
 
+    checkScanStartEndInRotatorRange(currentAntennaName);      // if rotator changed overlap setting
 
     setSkyScanComponentsEnabled(skyScanEnabled);
     ui->saveSkyScanSettingsOnCloseChkBox->setChecked(saveSkyScanOnClose);
@@ -3584,6 +3648,7 @@ void RotatorMainWindow::openSkyScan(QString currentAntennaName)
 
     setSkyScanStartBearingToolButtonUpDown();
     setSkyScanEndBearingToolButtonUpDown();
+
 
     dumpSkyScanSettingsToTraceLog();
 
