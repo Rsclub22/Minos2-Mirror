@@ -48,7 +48,7 @@ void ScreenContact::initialise(BaseContestLog *ct , bool initReport)
     if ( clp )
     {
         mode = clp->currentMode;
-        if (mode.getValue() == hamlibData::MGM)
+        if (mode.getValue() == MGM)
         {
             // don't clear submode - keep the old one
         }
@@ -59,7 +59,7 @@ void ScreenContact::initialise(BaseContestLog *ct , bool initReport)
         ms = clp->maxSerial + 1;
     }
 
-    if (mode.getValue() != hamlibData::MGM)
+    if (mode.getValue() != MGM)
     {
         QString cb = clp->currentBand.getValue().trimmed();
         BandList &blist = BandList::getBandList();
@@ -80,7 +80,7 @@ void ScreenContact::initialise(BaseContestLog *ct , bool initReport)
         if (hf)
         {
             QString m = mode.getValue();
-             if (m == hamlibData::CW || m == hamlibData::RY || m == hamlibData::PSK)
+             if (m == hamlibData::CW || m == RY || m == PSK)
              {
                  repr = "599" ;
                  reps = "599" ;

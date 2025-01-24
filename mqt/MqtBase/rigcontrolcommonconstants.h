@@ -11,11 +11,6 @@
 #include "minositem.h"
 #include "frequency.h"
 
-// Offset frequencies
-
-const int RTTY_MARK_OFFSET = 2125;
-const int BPSK_OFFSET = 1750;
-
 // Status messages sent to minos logger
 extern const char * RIG_STATUS_CONNECTED;
 extern const char * RIG_STATUS_DISCONNECTED;
@@ -59,12 +54,6 @@ namespace hamlibData
     inline const QString SAH = "SAH";           // Synchronous AM upper (higher) sideband
     inline const QString DSB = "DSB";           // Double sideband suppressed carrier
     inline const QString FMN = "FMN";           // FM Narrow Kenwood ts990s
-
-    inline const QString MGM = "MGM";           // MGM generically
-
-    inline const QString RY = "RY";
-    inline const QString PSK = "PS";
-    inline const QString PH = "PH";
 
 
     inline const QStringList portTypeList = { "RIG_PORT_NONE", "RIG_PORT_SERIAL", "RIG_PORT_NETWORK", "RIG_PORT_DEVICE",

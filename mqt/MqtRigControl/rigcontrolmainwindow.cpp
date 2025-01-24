@@ -3163,18 +3163,18 @@ int RigControlMainWindow::getAndSendMode(VFO vfo)
 
             if (rigStateDetails->RTTYModeFlag)
             {
-                displayModeVfo(hamlibData::RY);
-                sendModeToLog(QString("%1:%2").arg(hamlibData::RY, currentRadio.rttyMode));
+                displayModeVfo(RY);
+                sendModeToLog(QString("%1:%2").arg(RY, currentRadio.rttyMode));
             }
             else if (rigStateDetails->PSKModeFlag)
             {
-                displayModeVfo(hamlibData::PSK);
-                sendModeToLog(QString("%1:%2").arg(hamlibData::PSK, currentRadio.pskMode));
+                displayModeVfo(PSK);
+                sendModeToLog(QString("%1:%2").arg(PSK, currentRadio.pskMode));
             }
             else if (rigStateDetails->mgmModeFlag)
             {
-                displayModeVfo(hamlibData::MGM);
-                sendModeToLog(QString("%1:%2").arg(hamlibData::MGM, currentRadio.mgmMode));
+                displayModeVfo(MGM);
+                sendModeToLog(QString("%1:%2").arg(MGM, currentRadio.mgmMode));
             }
             else
             {
@@ -3212,7 +3212,7 @@ void RigControlMainWindow::loggerSetMode(QString mode)
         //logMode = radio->convertQStrMode(mode);
 
 
-        if (loggerRequests->slogMode == hamlibData::MGM)
+        if (loggerRequests->slogMode == MGM)
         {
             logMessage(QString("Log SetMode:MGM mode Selected"));
             if (rigStateDetails->mgmModeFlag)
@@ -3235,7 +3235,7 @@ void RigControlMainWindow::loggerSetMode(QString mode)
                 logMessage((QString("Log SetMode: Set MgmMode Flag, Send to setmode MGM Mode = %1").arg(currentRadio.mgmMode)));
             }
         }
-        else if (loggerRequests->slogMode == hamlibData::RY)
+        else if (loggerRequests->slogMode == RY)
         {
             logMessage(QString("Log SetMode:RY mode Selected"));
             if (rigStateDetails->RTTYModeFlag)
@@ -3258,7 +3258,7 @@ void RigControlMainWindow::loggerSetMode(QString mode)
                 logMessage((QString("Log SetMode: Set rttyMode Flag, Send to setmode RTTY Mode = %1").arg(currentRadio.rttyMode)));
             }
         }
-        else if (loggerRequests->slogMode == hamlibData::PSK)
+        else if (loggerRequests->slogMode == PSK)
         {
             logMessage(QString("Log SetMode:PSK mode Selected"));
             if (rigStateDetails->PSKModeFlag)
@@ -3307,7 +3307,7 @@ void RigControlMainWindow::setMode(QString mode, VFO vfo)
         cmdLockOn();      // lock get radio info
         logMessage(QString("SetMode: Mode Requested = %1, vfo = %2").arg(mode, vfoToStr(vfo)));
         mode = mode.left(mode.indexOf(":"));
-        if (mode == hamlibData::PH)
+        if (mode == PH)
         {
             Frequency modeTestFreq;
             if (rigStateDetails->curTransVertFreq.isClear())

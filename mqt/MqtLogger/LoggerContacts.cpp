@@ -271,13 +271,13 @@ void ContestContact::getReg1TestText(QString &sdest , bool noSerials)
          if ( smode.compare( hamlibData::FM ) == 0 )
             sdest += "6";
          else
-            if ( smode.compare( hamlibData::MGM ) == 0 )
+            if ( smode.compare( MGM ) == 0 )
                sdest += "7";
              else
-                if ( smode.compare( hamlibData::RY ) == 0 )
+                if ( smode.compare( RY ) == 0 )
                    sdest += "7";
                  else
-                    if ( smode.compare( hamlibData::PSK ) == 0 )
+                    if ( smode.compare( PSK ) == 0 )
                        sdest += "7";
                      else
                         sdest += "0";
@@ -420,13 +420,13 @@ QSO:  3799 PH 1999-03-06 0712 HC8N           59 700    N5KO           59 CA     
     outstr += getCabrilloField(contest->getCabrilloFreqBand(getFrequency().getValue()), 5);
 
     QString smode = mode.getValue().toUpper();
-    if (smode == hamlibData::USB || smode == hamlibData::LSB || smode == hamlibData::FM || smode == hamlibData::PH)
+    if (smode == hamlibData::USB || smode == hamlibData::LSB || smode == hamlibData::FM || smode == PH)
         smode = "PH";
-    else if (smode == hamlibData::MGM)
+    else if (smode == MGM)
         smode = "DG";
-    else if (smode == hamlibData::RY)
+    else if (smode == RY)
         smode = "RY";
-    else if (smode == hamlibData::PSK)
+    else if (smode == PSK)
         smode = "PS";
     else
         smode = "CW";
@@ -536,7 +536,7 @@ QString ContestContact::getADIFLine()
             if ( smode.compare( hamlibData::FM ) == 0 )
                 outstr += makeADIFField( "MODE", "FM" );
             else
-                if ( smode.compare( hamlibData::MGM) == 0 && !smgmSubmode.trimmed().isEmpty())
+                if ( smode.compare( MGM) == 0 && !smgmSubmode.trimmed().isEmpty())
                 {
                     if (smgmSubmode == "FT4")
                     {

@@ -113,7 +113,7 @@ bool  TxVmButtonsFrame::isVoiceMode()
     return  curMode == rigcommon::convertModeToQString(MODE::USB)
     || curMode == rigcommon::convertModeToQString(MODE::LSB)
         || curMode == rigcommon::convertModeToQString(MODE::FM)
-        || curMode == hamlibData::PH;
+        || curMode == PH;
 
 }
 

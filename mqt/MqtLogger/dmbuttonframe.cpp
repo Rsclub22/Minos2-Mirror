@@ -94,8 +94,8 @@ void DMButtonFrame::DMMess(AnalysePubSubNotify an)
 }
 bool  DMButtonFrame::isDataMode()
 {
-    return  curMode == hamlibData::PSK
-           || curMode == hamlibData::RY;
+    return  curMode == PSK
+           || curMode == RY;
 
 }
 void DMButtonFrame::onModeChange(QString mode)

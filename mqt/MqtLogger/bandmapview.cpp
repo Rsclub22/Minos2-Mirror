@@ -1445,22 +1445,12 @@ void BandmapView::assembleSpotMsg(int row, QString& markerMsg)
     QString bLineStart = "";
     QString bLineEnd = "";
 
-    Frequency mfreq = cFreq;
-    if (dxMode.compare( hamlibData::RY, Qt::CaseInsensitive ) == 0)
-    {
-         mfreq = mfreq + Frequency(RTTY_MARK_OFFSET);
-    }
-    if (dxMode.compare( hamlibData::PSK, Qt::CaseInsensitive ) == 0)
-    {
-        mfreq = mfreq - Frequency(BPSK_OFFSET);
-    }
-
     int tol = 0;
-    if (curMode == hamlibData::PH || curMode == hamlibData::USB || curMode == hamlibData::LSB || curMode == hamlibData::FM)
+    if (curMode == PH || curMode == hamlibData::USB || curMode == hamlibData::LSB || curMode == hamlibData::FM)
     {
         tol = 1000;
     }
-    else if (curMode == hamlibData::PSK || curMode == hamlibData::RY || curMode == hamlibData::RTTY)
+    else if (curMode == PSK || curMode == RY || curMode == hamlibData::RTTY)
     {
         tol = 100;
     }

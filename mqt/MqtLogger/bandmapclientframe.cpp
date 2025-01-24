@@ -729,7 +729,7 @@ void BandmapClientFrame::setContest(BaseContestLog *c)
             readDefaultDistanceFilterSettings(&filterSettings);
 
             //set current mode
-            if (contestModeStr == hamlibData::MGM)
+            if (contestModeStr == MGM)
             {
                 for (auto &m: mgmModes)
                 {
@@ -737,12 +737,12 @@ void BandmapClientFrame::setContest(BaseContestLog *c)
 
                 }
             }
-            else if (contestModeStr == hamlibData::PH)
+            else if (contestModeStr == PH)
             {
                 filterSettings.setModeFilter(USB_MODE, true);
                 filterSettings.setModeFilter(LSB_MODE, true);
             }
-            else if (contestModeStr == hamlibData::RY || contestModeStr == hamlibData::PSK  )
+            else if (contestModeStr == RY || contestModeStr == PSK  )
             {
                 filterSettings.setModeFilter(RTTY_MODE, true);
                 filterSettings.setModeFilter(PSK31_MODE, true);
@@ -1603,9 +1603,9 @@ void BandmapClientFrame::setMode(QString mode)
     if (!mode.isEmpty())
     {
         if (mode.contains(':')
-                && (mode.contains(hamlibData::MGM)
-                    || mode.contains(hamlibData::PSK)
-                    || mode.contains(hamlibData::RY))
+                && (mode.contains(MGM)
+                    || mode.contains(PSK)
+                    || mode.contains(RY))
         )
         {
             QStringList ml = mode.split(':');
@@ -1811,7 +1811,7 @@ void BandmapClientFrame::on_AfterLogContact(BaseContestLog *c, QSharedPointer<Ba
 
         QString logModeStr = lct->mode.getValue();
 
-        if (logModeStr == hamlibData::MGM)
+        if (logModeStr == MGM)
         {
             logModeStr = lct->mgmSubmode.getValue();
         }

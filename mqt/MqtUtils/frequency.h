@@ -5,6 +5,17 @@
 #include <QDataStream>
 #include <QLocale>
 
+// Offset frequencies
+
+const int RTTY_MARK_OFFSET = 2125;
+const int BPSK_OFFSET = 1750;
+
+inline const QString MGM = "MGM";           // MGM generically
+
+inline const QString RY = "RY";
+inline const QString PSK = "PS";
+inline const QString PH = "PH";
+
 class Frequency
 {
 private:
@@ -54,6 +65,8 @@ public:
     QString convertFreqStrDispSingleNoTrailZero();
     QString removeTrailingZeroes(QString sfreq);
 
+    Frequency toMark(const QString &mode) const;
+    Frequency toCarrier(const QString &mode) const;
 };
 
 class ShortFreq

@@ -943,7 +943,7 @@ void ClusterClientFrame::setContest(BaseContestLog *c)
                 filterSettings.setBandFilter(contestBandStr, true);    // set cluster filter to current band - can be overidden
 
 
-                if (contestModeStr == hamlibData::MGM)
+                if (contestModeStr == MGM)
                 {
 
                     for (auto &m:mgmModes)
@@ -952,12 +952,12 @@ void ClusterClientFrame::setContest(BaseContestLog *c)
                     }
 
                 }
-                else if (contestModeStr == hamlibData::PH)
+                else if (contestModeStr == PH)
                 {
                     filterSettings.setModeFilter(USB_MODE, true);
                     filterSettings.setModeFilter(LSB_MODE, true);
                 }
-                else if (contestModeStr == hamlibData::RY || contestModeStr == hamlibData::PSK  )
+                else if (contestModeStr == RY || contestModeStr == PSK  )
                 {
                     filterSettings.setModeFilter(RTTY_MODE, true);
                     filterSettings.setModeFilter(PSK31_MODE, true);
