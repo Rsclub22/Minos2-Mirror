@@ -1458,7 +1458,8 @@ void BandmapView::assembleSpotMsg(int row, QString& markerMsg)
     {
         tol = 100;
     }
-    int offset = std::abs(freq - cFreq);
+    Frequency f = cFreq.toMark(curMode);
+    int offset = std::abs(freq - f);
     if (tol > 0 && offset < tol )
     {
         // highlight this line as current frequency
