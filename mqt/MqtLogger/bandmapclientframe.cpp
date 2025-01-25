@@ -417,7 +417,7 @@ void BandmapClientFrame::on_FreqDisplayClicked()
 
 void BandmapClientFrame::sendFreqToRig(Frequency freq)
 {
-    MinosLoggerEvents::SendFreqToRig(freq);
+    MinosLoggerEvents::SendFreqToRig(freq.toCarrier(radioMode));
 }
 
 void BandmapClientFrame::on_freqActionSelected()
