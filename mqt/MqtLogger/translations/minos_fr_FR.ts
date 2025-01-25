@@ -164,32 +164,32 @@
         <translation>Filtre %1</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1627"/>
+        <location filename="../bandmapclientframe.cpp" line="1630"/>
         <source>Bandmap Spot Filters</source>
         <translation>Bandmap filtres de spot</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1702"/>
+        <location filename="../bandmapclientframe.cpp" line="1705"/>
         <source>Mouse in frame, updates paused</source>
         <translation>Souris dans le cadre, mises à jour suspendues</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1430"/>
+        <location filename="../bandmapclientframe.cpp" line="1433"/>
         <source>Cluster Server Not Running</source>
         <translation>Le Serveur du Cluster ne fonctionne pas</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1463"/>
+        <location filename="../bandmapclientframe.cpp" line="1466"/>
         <source>Connected</source>
         <translation>Connecté</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1473"/>
+        <location filename="../bandmapclientframe.cpp" line="1476"/>
         <source>Disconnected</source>
         <translation>Déconnecté</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1585"/>
+        <location filename="../bandmapclientframe.cpp" line="1588"/>
         <source>Freq out of band</source>
         <translation>Fréquence hors bande</translation>
     </message>
@@ -197,34 +197,34 @@
 <context>
     <name>BandmapView</name>
     <message>
-        <location filename="../bandmapview.cpp" line="1356"/>
+        <location filename="../bandmapview.cpp" line="1351"/>
         <source>%1%2CQ Frequency @ .%3%4%5</source>
         <translation>%1%2CQ Frequency @ .%3%4%5</translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1388"/>
+        <location filename="../bandmapview.cpp" line="1383"/>
         <source>New</source>
         <translation>Nouveau</translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1522"/>
+        <location filename="../bandmapview.cpp" line="1508"/>
         <source>CQ Frequency = %1
 The mode is %2</source>
         <translation>La fréquence CQ = %1
 Le mode calculé est %2</translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1549"/>
+        <location filename="../bandmapview.cpp" line="1535"/>
         <source>The computed mode is</source>
         <translation>Mode calculé</translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1552"/>
+        <location filename="../bandmapview.cpp" line="1538"/>
         <source>The mode is</source>
         <translation>Mode</translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1559"/>
+        <location filename="../bandmapview.cpp" line="1545"/>
         <source>%1 - %2, %3, %4, %5 [%6 %7 @ %8] 
 %9 %10
 %11
@@ -1458,28 +1458,28 @@ Déplacez-vous entre les composants d&amp;apos;un groupe à l&amp;apos;aide de l
         <translation>Supprimer</translation>
     </message>
     <message>
-        <location filename="../dmbuttonframe.cpp" line="70"/>
-        <location filename="../dmbuttonframe.cpp" line="475"/>
+        <location filename="../dmbuttonframe.cpp" line="71"/>
+        <location filename="../dmbuttonframe.cpp" line="476"/>
         <source>Data Modes Buttons from %1</source>
         <translation>Boutons de modes de données de %1</translation>
     </message>
     <message>
-        <location filename="../dmbuttonframe.cpp" line="190"/>
+        <location filename="../dmbuttonframe.cpp" line="191"/>
         <source>Not enough key definitions in %1</source>
         <translation>Pas assez de définitions dans %1</translation>
     </message>
     <message>
-        <location filename="../dmbuttonframe.cpp" line="354"/>
+        <location filename="../dmbuttonframe.cpp" line="355"/>
         <source>Invalid or missing FKey definitions</source>
         <translation>Définitions FKey invalides ou manquantes</translation>
     </message>
     <message>
-        <location filename="../dmbuttonframe.cpp" line="461"/>
+        <location filename="../dmbuttonframe.cpp" line="462"/>
         <source>Function Key Definitions Files (*.json);;All Files (*.*)</source>
         <translation>Fichiers de définitions de touches de fonction (*.json);;Tous les fichiers (*.*)</translation>
     </message>
     <message>
-        <location filename="../dmbuttonframe.cpp" line="465"/>
+        <location filename="../dmbuttonframe.cpp" line="466"/>
         <source>Open Function Key Definitions File</source>
         <translation>Ouvrir le fichier de définitions des touches de fonction</translation>
     </message>
@@ -2873,49 +2873,49 @@ Non - Ignorer les modifications</translation>
         <translation>Aucun champ d&apos;entrée QSO focalisé&#xa0;!</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2957"/>
+        <location filename="../qsologframe.cpp" line="2963"/>
         <source>Change mode to CW?</source>
         <translation>Changer de mode en CW?</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2960"/>
-        <location filename="../qsologframe.cpp" line="2971"/>
-        <location filename="../qsologframe.cpp" line="2980"/>
+        <location filename="../qsologframe.cpp" line="2966"/>
+        <location filename="../qsologframe.cpp" line="2977"/>
+        <location filename="../qsologframe.cpp" line="2986"/>
         <source>Please check the signal reports, and log the contact</source>
         <translation>Vérifier les rapports de signal et enregistrer le contact SVP</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2968"/>
+        <location filename="../qsologframe.cpp" line="2974"/>
         <source>Change mode to PH?</source>
         <translation>Changer de mode en PH?</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2977"/>
+        <location filename="../qsologframe.cpp" line="2983"/>
         <source>Change mode to USB?</source>
         <translation>Changer de mode en USB?</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="3034"/>
+        <location filename="../qsologframe.cpp" line="3042"/>
         <source>Spot Last Logged (%1) </source>
         <translation>Spot dernière enregistrée (%1) </translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="3105"/>
+        <location filename="../qsologframe.cpp" line="3113"/>
         <source>&quot;Serial sent&quot; is too high - please confirm that this is correct?</source>
         <translation>&quot;Numéro Tx&quot; est trop élevé - est-ce correct?</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="3107"/>
+        <location filename="../qsologframe.cpp" line="3115"/>
         <source>Do you want to enter the missing contacts later?</source>
         <translation>Voulez-vous entrer les contacts manquants plus tard?</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="3516"/>
+        <location filename="../qsologframe.cpp" line="3524"/>
         <source>Start of QSOs</source>
         <translation>Début des QSO</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="3551"/>
+        <location filename="../qsologframe.cpp" line="3559"/>
         <source>End of QSOs</source>
         <translation>Fin des QSO</translation>
     </message>
@@ -3320,44 +3320,44 @@ Non - Ignorer les modifications</translation>
         <translation>Éteint</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1239"/>
+        <location filename="../rigcontrolframe.cpp" line="1229"/>
         <source>Selected radio details were not found, please add radio or restart rigcontrol!</source>
         <translation>Radio sélectionnée aucun détail trouvé, ajouter une bande ou transverter SVP!</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1275"/>
+        <location filename="../rigcontrolframe.cpp" line="1265"/>
         <source>Radio Bandlist is empty!</source>
         <translatorcomment>Liste des bandes est vide!</translatorcomment>
         <translation>La liste des bandes est vide!</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1284"/>
+        <location filename="../rigcontrolframe.cpp" line="1274"/>
         <source>Radio has no available bands</source>
         <translation>La radio n&apos;a pas de bandes disponibles</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1381"/>
-        <location filename="../rigcontrolframe.cpp" line="2299"/>
+        <location filename="../rigcontrolframe.cpp" line="1371"/>
+        <location filename="../rigcontrolframe.cpp" line="2289"/>
         <source>No %1 Band found for this radio!</source>
         <translation>Aucune Bande %1 trouvée pour cette radio!</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1493"/>
+        <location filename="../rigcontrolframe.cpp" line="1483"/>
         <source>Freq out of contest band</source>
         <translation>Fréquence hors bande du Concours</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1645"/>
+        <location filename="../rigcontrolframe.cpp" line="1635"/>
         <source>Error: %1</source>
         <translation>Erreur: %1</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1654"/>
+        <location filename="../rigcontrolframe.cpp" line="1644"/>
         <source>Connected</source>
         <translation>Connecté</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1675"/>
+        <location filename="../rigcontrolframe.cpp" line="1665"/>
         <source>Disconnected</source>
         <translation>Déconnecté</translation>
     </message>
@@ -3744,37 +3744,38 @@ Non - Ignorer les modifications</translation>
         <translation>Déconnecté</translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="350"/>
+        <location filename="../runbuttonsframe.cpp" line="352"/>
+        <location filename="../runbuttonsframe.cpp" line="592"/>
         <source>Run</source>
         <translation>Run</translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="379"/>
+        <location filename="../runbuttonsframe.cpp" line="381"/>
         <source>Run %1 - Edit</source>
         <translation>Run %1 - Modifier</translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="432"/>
+        <location filename="../runbuttonsframe.cpp" line="435"/>
         <source>Restore .%1    </source>
         <translation>Restaurer .%1    </translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="433"/>
+        <location filename="../runbuttonsframe.cpp" line="436"/>
         <source>Restore freq: </source>
         <translation>Restaurer la fréquence: </translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="427"/>
+        <location filename="../runbuttonsframe.cpp" line="430"/>
         <source>Freq: </source>
         <translation>Fréquence: </translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="361"/>
+        <location filename="../runbuttonsframe.cpp" line="363"/>
         <source>Run %1 - Set</source>
         <translation>Run %1 - Définir</translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="428"/>
+        <location filename="../runbuttonsframe.cpp" line="431"/>
         <source>Mode: </source>
         <translation>Mode: </translation>
     </message>
@@ -3782,17 +3783,17 @@ Non - Ignorer les modifications</translation>
 <context>
     <name>RunMemoryButton</name>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="637"/>
+        <location filename="../runbuttonsframe.cpp" line="659"/>
         <source>&amp;Off</source>
         <translation>&amp;Éteint</translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="646"/>
+        <location filename="../runbuttonsframe.cpp" line="668"/>
         <source>&amp;Set</source>
         <translation>&amp;Définir</translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="654"/>
+        <location filename="../runbuttonsframe.cpp" line="676"/>
         <source>&amp;Clear</source>
         <translation>&amp;Effacer</translation>
     </message>
@@ -5733,27 +5734,27 @@ Veuillez confirmer cette action en appuyant sur &amp;quot;Oui&amp;quot;.</transl
 <context>
     <name>TSingleLogFrame</name>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="995"/>
+        <location filename="../tsinglelogframe.cpp" line="991"/>
         <source>Failed to open %1</source>
         <translation>L&apos;Ouverture échoué %1</translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1009"/>
+        <location filename="../tsinglelogframe.cpp" line="1005"/>
         <source>Save imported log as a .minos file</source>
         <translation>Enregistrer le Log importé en tant que fichier .minos</translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1535"/>
+        <location filename="../tsinglelogframe.cpp" line="1531"/>
         <source>No unfilled contacts</source>
         <translation>Pas de contacts  non remplis</translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1554"/>
+        <location filename="../tsinglelogframe.cpp" line="1550"/>
         <source>Please give serial wanted</source>
         <translation>Numéro de série requis</translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1576"/>
+        <location filename="../tsinglelogframe.cpp" line="1572"/>
         <source>Serial number %1 not found</source>
         <translation>Numéro de série %1 introuvable</translation>
     </message>
