@@ -155,6 +155,10 @@ ScreenConfigElement *ScreenConfigRow::addRight(ScreenConfigElement *e)
             break;
         }
     }
+    if (e == nullptr && hbl->count() > 0)
+    {
+        offset = 1;
+    }
     ScreenConfigElement *baseElement = new ScreenConfigElement(this);
     hbl->insertWidget( pos + offset, baseElement);
 
