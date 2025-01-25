@@ -1542,7 +1542,7 @@ void BandmapClientFrame::setFreq(Frequency freq)
     if (lastfreq != freq)
     {
         QSharedPointer<BandInfo> bandChanged = ct->checkBandChange(freq, lastfreq);
-        curFreq = freq;
+        curFreq = freq.toMark(radioMode);
         if (bandChanged)
         {
             setContestBandMode(bandChanged->uk, contestModeStr);

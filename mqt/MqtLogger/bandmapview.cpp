@@ -505,7 +505,6 @@ void BandmapView::mouseDoubleClicked(QPoint p)
         memoryData::memData spotData;
         spotData.callsign = selectedSpot.getDxCallStr();
         spotData.time = selectedSpot.getSpotTime();
-        spotData.freq = selectedSpot.getFreq();
 
         bool showDerivedLocFlag;
         TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpShowDerivedLoc, showDerivedLocFlag );
@@ -518,6 +517,7 @@ void BandmapView::mouseDoubleClicked(QPoint p)
         spotData.fromBandmapOrMemory = true;
         spotData.exchange = selectedSpot.getDistrict();
         spotData.mode = selectedSpot.getMode();
+        spotData.freq = selectedSpot.getFreq().toCarrier(curMode);
 
         MinosLoggerEvents::SendSpotToLog(spotData);
     }
@@ -726,7 +726,7 @@ int BandmapView::dialCursorWithinViewport(Frequency freq)
 void BandmapView::bandmapSelectFreq(int y)
 {
     Frequency f = dial->getFreqFromYCoordOnDial(y);
-    MinosLoggerEvents::SendFreqToRig(f);
+    MinosLoggerEvents::SendFreqToRig(f.toCarrier(curMode));
 }
 
 void BandmapView::setBandFreqLimits(Frequency flow, Frequency fhigh)
@@ -742,11 +742,6 @@ void BandmapView::setBandmapHeight(Frequency flow, Frequency fhigh)
     dial->changeBoundingRect(fullBandHeight + horizontalScrollBar()->height() , dial->getCurWidth());
     bandmapScene->setSceneRect(0,0, bandmapGraphicsView->width(), fullBandHeight + horizontalScrollBar()->height() );
 
-}
-
-void BandmapView::sendFreqToRig(Frequency freq)
-{
-    MinosLoggerEvents::SendFreqToRig(freq);
 }
 
 int BandmapView::isClickInRegionOfSpot(QPoint p)
@@ -777,7 +772,7 @@ void BandmapView::bandmapSelectSpot(QPoint p)
             clearSelectedSpot();       // clear any spot previously selected
             setSelectedSpot(spotViewNum);        // mark new selected spot
 
-            MinosLoggerEvents::SendFreqToRig(selectedSpot.getFreq());
+            MinosLoggerEvents::SendFreqToRig(selectedSpot.getFreq().toCarrier(curMode));
         }
     }
     else
@@ -1458,7 +1453,7 @@ void BandmapView::assembleSpotMsg(int row, QString& markerMsg)
     {
         tol = 100;
     }
-    Frequency f = cFreq.toMark(curMode);
+    Frequency f = cFreq;
     int offset = std::abs(freq - f);
     if (tol > 0 && offset < tol )
     {

@@ -558,7 +558,7 @@ void ClusterClientFrame::handleClickedItems(DxSpotSortFilterProxyModel* spotProx
     if (index.column() == FREQ_COL_NUM)
     {
         Frequency freq = qvariant_cast<Frequency>(spotProxyModel->data(index, DataStoredRole));
-        sendFreqToRig(freq);
+        sendFreqToRig(freq.toCarrier(contestModeStr));
 
     }
     else if (index.column() == DXSPOT_CALL_COL_NUM )
