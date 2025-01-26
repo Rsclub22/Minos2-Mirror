@@ -294,22 +294,22 @@
 <context>
     <name>MMVARIFrame</name>
     <message>
-        <location filename="../MMVARIFrame.cpp" line="77"/>
+        <location filename="../MMVARIFrame.cpp" line="76"/>
         <source>RX/TX state</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MMVARIFrame.cpp" line="86"/>
+        <location filename="../MMVARIFrame.cpp" line="85"/>
         <source>Move the cursor to keep it centered on a signal if the frequency changes slightly</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MMVARIFrame.cpp" line="93"/>
+        <location filename="../MMVARIFrame.cpp" line="92"/>
         <source>When NET is on the TX frequency follows the RX frequency </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MMVARIFrame.cpp" line="99"/>
+        <location filename="../MMVARIFrame.cpp" line="98"/>
         <source>Align the transmit frequency to the receive frequency</source>
         <translation type="unfinished"></translation>
     </message>

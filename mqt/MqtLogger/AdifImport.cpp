@@ -169,7 +169,7 @@ void ADIFImport::ADIFImportFieldDecode(QString Fieldname, int FieldLength, QStri
           }
           else if (temp == "SSB")
           {
-              aqso->mode.setValue(hamlibData::PH);
+              aqso->mode.setValue(PH);
           }
           else if (temp == hamlibData::FM)
           {
@@ -177,15 +177,15 @@ void ADIFImport::ADIFImportFieldDecode(QString Fieldname, int FieldLength, QStri
           }
           else if (temp == "RTTY")
           {
-              aqso->mode.setValue(hamlibData::RY);
+              aqso->mode.setValue(RY);
           }
           else if (temp == "PSK")
           {
-              aqso->mode.setValue(hamlibData::PSK);
+              aqso->mode.setValue(PSK);
           }
           else
           {
-              aqso->mode.setValue(hamlibData::MGM);
+              aqso->mode.setValue(MGM);
               if (aqso->mgmSubmode.getValue().isEmpty())
               {
                 aqso->mgmSubmode.setValue(temp.trimmed());

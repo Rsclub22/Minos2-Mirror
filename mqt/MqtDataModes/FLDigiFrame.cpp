@@ -5,7 +5,6 @@
 #include "MTrace.h"
 #include "dmmainwindow.h"
 #include "fileutils.h"
-#include "rigcontrolcommonconstants.h"
 #include "rxbuffer.h"
 #include "engineconfigure.h"
 #include "enginewindow.h"
@@ -146,7 +145,7 @@ void FLDigiFrame::sendCharacters(const QString &s, int mfreq)
     // main.tx sets tx on
     // main.rx_tx "Sets normal Rx/Tx switching."
 
-    // main.abort kills the TX
+    // main.abort kills the TX, and hopefully clears the TX buffer
 
     // Then there are: )which all use params 0
 
@@ -160,7 +159,7 @@ void FLDigiFrame::sendCharacters(const QString &s, int mfreq)
 
     if (mfreq > 0)
     {
-        if (mode == hamlibData::RY)
+        if (mode == RY)
         {
             args << mfreq + 170/2;
         }
@@ -202,9 +201,9 @@ void FLDigiFrame::sendCharacters(const QString &s, int mfreq)
 
 void FLDigiFrame::sendMode(QString m)
 {
-    if (m == hamlibData::RY)
+    if (m == RY)
     {
-        mode = hamlibData::RY;
+        mode = RY;
         carrierOffsetFromMark = 170/2;
 
         QVariantList args;
@@ -224,9 +223,9 @@ void FLDigiFrame::sendMode(QString m)
         // How do we set RTTY speed?
 
     }
-    if (m == hamlibData::PSK)
+    if (m == PSK)
     {
-        mode = hamlibData::PSK;
+        mode = PSK;
         carrierOffsetFromMark = 0;
         QVariantList args;
 

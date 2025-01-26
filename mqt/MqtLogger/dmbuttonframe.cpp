@@ -14,7 +14,7 @@
 #include "MShowMessageDlg.h"
 #include "MinosLoggerEvents.h"
 #include "MinosParameters.h"
-#include "rigcommon.h"
+//#include "rigcommon.h"
 
 #include "MinosRPC.h"
 #include "dmbuttonframe.h"
@@ -54,6 +54,7 @@ DMButtonFrame::DMButtonFrame(QWidget *parent) :
         {
             QFile::copy(fkeyFileName, dstItemPath);
             fkeyFileName = dstItemPath;
+            TContestApp::getContestApp() ->loggerBundle.setStringProfile( elpDigiFunctionKeyFile, fkeyFileName );
         }
     }
     fButtons << ui->F1Button << ui->F2Button << ui->F3Button << ui->F4Button << ui->F5Button << ui->F6Button;
@@ -94,10 +95,8 @@ void DMButtonFrame::DMMess(AnalysePubSubNotify an)
 }
 bool  DMButtonFrame::isDataMode()
 {
-    return  curMode == rigcommon::convertModeToQString(MODE::USB)
-        || curMode == rigcommon::convertModeToQString(MODE::LSB)
-        || curMode == rigcommon::convertModeToQString(MODE::FM)
-        || curMode == hamlibData::PH;
+    return  curMode == PSK
+           || curMode == RY;
 
 }
 void DMButtonFrame::onModeChange(QString mode)

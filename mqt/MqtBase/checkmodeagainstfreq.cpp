@@ -1,7 +1,6 @@
 #include "QtUtils.h"
 #include "checkmodeagainstfreq.h"
 #include "clustercommon.h"
-#include "rigcontrolcommonconstants.h"
 
 checkModeAgainstFreq::checkModeAgainstFreq()
 {
@@ -23,7 +22,7 @@ QString checkModeAgainstFreq::getMode(const QString &band, Frequency freq)
                     continue;
                 if (freq >= freqLimits[0] && freq <= freqLimits[1])
                 {
-                    if (i.key() == hamlibData::MGM)
+                    if (i.key() == MGM)
                     {
                         continue;
                     }

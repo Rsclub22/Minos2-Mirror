@@ -116,9 +116,7 @@ private:
     void chkRunFreq();
     void setRunButtonsFrameTitle();
     bool getRadioReadOnlyFlag();
-signals:
-    void sendRunOnFlag(Frequency, QString mode, bool);
-    void sendRunOffFreqFlag(Frequency, bool);
+
 private slots:
     void runButActivated(int buttonNumber);
     void on_radioFreqCheckTimer();

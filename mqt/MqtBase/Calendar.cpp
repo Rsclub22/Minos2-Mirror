@@ -943,11 +943,11 @@ bool Calendar::parseContest ( TiXmlElement * tix )
                                                                                 }
                                                                                 if (mode == "RY")
                                                                                 {
-                                                                                   mode = hamlibData::RY;
+                                                                                   mode = RY;
                                                                                 }
                                                                                 if (mode == "PS")
                                                                                 {
-                                                                                   mode = hamlibData::PSK;
+                                                                                   mode = PSK;
                                                                                 }
 
                                                                                 if (mode == "[A-Z][A-Z]")
