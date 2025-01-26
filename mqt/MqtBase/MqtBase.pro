@@ -60,6 +60,7 @@ SOURCES += \
     gjvparams.cpp \
     htmldelegate.cpp \
     indicatorpushbutton.cpp \
+    jsoneditdlg.cpp \
     latlong.cpp \
     list.cpp \
     ListContact.cpp \
@@ -160,6 +161,7 @@ HEADERS += \
     gjvparams.h \
     htmldelegate.h \
     indicatorpushbutton.h \
+    jsoneditdlg.h \
     latlong.h \
     list.h \
     ListContact.h \
@@ -240,6 +242,7 @@ FORMS += \
     StartConfigManager.ui \
     StatisticsDisplay.ui \
     bandmapclientfilterdialog.ui \
+    jsoneditdlg.ui \
     managehamlib.ui \
     minoskeyboard.ui \
     monitoredlogs.ui \
