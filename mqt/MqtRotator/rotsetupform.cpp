@@ -272,7 +272,7 @@ bool rotSetupForm::setEndStopType(srotParams* antennaData, int minRot, int maxRo
 
             antennaData->rotType = ROT_0_360;
 
-            if (antennaData->southStopType ==  S_STOPCOMP)
+            if (antennaData->southStopType ==  S_STOP_COMPASS_SENSOR)
             {
                 antennaData->max_azimuth = COMPASS_HALF - 1;
                 antennaData->min_azimuth = COMPASS_HALF + 1;
@@ -302,7 +302,7 @@ bool rotSetupForm::setEndStopType(srotParams* antennaData, int minRot, int maxRo
             if (!antennaData->overRunFlag)
             {
 
-                if (antennaData->southStopType ==  S_STOPCOMP)
+                if (antennaData->southStopType ==  S_STOP_COMPASS_SENSOR)
                 {
                     antennaData->max_azimuth = COMPASS_HALF - 1;
                     antennaData->min_azimuth = COMPASS_HALF + 1;
@@ -657,7 +657,7 @@ void rotSetupForm::setSStopButtons(southStop stopType)
     {
         setRotInvertButChecked(true);
     }
-    else if (stopType == S_STOPCOMP)
+    else if (stopType == S_STOP_COMPASS_SENSOR)
     {
         setCompassButChecked(true);
     }
@@ -703,7 +703,7 @@ void rotSetupForm::setRotInvertButVisible(bool s)
 void rotSetupForm::compassButSelected()
 {
 
-    antennaData->southStopType = S_STOPCOMP;
+    antennaData->southStopType = S_STOP_COMPASS_SENSOR;
     antennaData->max_azimuth = COMPASS_HALF - 1;
     antennaData->min_azimuth = COMPASS_HALF + 1;
     antennaData->endStopType = ROT_180_180;

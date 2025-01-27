@@ -356,7 +356,6 @@ void MinosCompass::drawSkyScanAnnulusSegment(QPainter *painter, int rotatorStart
     }
 
 
-
 }
 
 
@@ -366,6 +365,30 @@ void MinosCompass::skyScanDrawAnnulusAscending(skyScanAnnulusParameters &skyScan
     double startAngle = 0;
     double endAngle = 0;
     double sweepLength = 0;
+
+
+    if (southStopType == S_STOP_COMPASS_SENSOR)
+    {
+
+        // we only need to handle start/end straddling 0 here as rotator can pass through 360/0
+        if (skyScanAnnulusParam.rotatorStartBearing >= COMPASS_MIN0 && skyScanAnnulusParam.rotatorStartBearing <= COMPASS_HALF
+             && skyScanAnnulusParam.rotatorEndBearing >= COMPASS_HALF && skyScanAnnulusParam.rotatorEndBearing <= COMPASS_MAX360)
+        {
+            // we are going in reverse here
+            startAngle = COMPASS_MIN0 - 90;
+            endAngle = skyScanAnnulusParam.adjustedStartBearing;
+            sweepLength = skyScanAnnulusParam.rotatorStartBearing;
+            drawAnnulusArc(skyScanAnnulusParam.painter, skyScanAnnulusParam.mainPath, skyScanAnnulusParam.mainInnerRect, skyScanAnnulusParam.mainOuterRect, startAngle, endAngle, sweepLength, skyScanAnnulusParam.mainColor);
+
+            startAngle = skyScanAnnulusParam.adjustedEndBearing;
+            endAngle = COMPASS_MAX360 - 90;
+            sweepLength = COMPASS_MAX360 - skyScanAnnulusParam.rotatorEndBearing;
+            drawAnnulusArc(skyScanAnnulusParam.painter, skyScanAnnulusParam.mainPath, skyScanAnnulusParam.mainInnerRect, skyScanAnnulusParam.mainOuterRect, startAngle, endAngle, sweepLength, skyScanAnnulusParam.mainColor);
+            return;
+        }
+    }
+
+
 
     if (skyScanAnnulusParam.rotatorStartBearing < 0)
     {
@@ -414,6 +437,7 @@ void MinosCompass::skyScanDrawAnnulusAscending(skyScanAnnulusParameters &skyScan
     }
     else if (skyScanAnnulusParam.rotatorStartBearing >= 0 && skyScanAnnulusParam.rotatorStartBearing <= COMPASS_MAX360)
     {
+
         if (skyScanAnnulusParam.rotatorEndBearing >= 0 && skyScanAnnulusParam.rotatorEndBearing <= COMPASS_MAX360)
         {
             startAngle = skyScanAnnulusParam.adjustedStartBearing;
@@ -432,9 +456,11 @@ void MinosCompass::skyScanDrawAnnulusAscending(skyScanAnnulusParameters &skyScan
             endAngle = skyScanAnnulusParam.adjustedEndBearing;
             sweepLength = skyScanAnnulusParam.rotatorEndBearing - COMPASS_MAX360;
             drawAnnulusArc(skyScanAnnulusParam.painter, skyScanAnnulusParam.overlapPath, skyScanAnnulusParam.overlapInnerRect, skyScanAnnulusParam.overlapOuterRect, startAngle, endAngle, sweepLength, skyScanAnnulusParam.overlapColor);
-
-
         }
+
+
+
+
     }
     else if (skyScanAnnulusParam.rotatorStartBearing > COMPASS_MAX360)
     {
@@ -454,6 +480,29 @@ void MinosCompass::skyScanDrawAnnulusDescending(skyScanAnnulusParameters &skySca
     double endAngle = 0;
     double sweepLength = 0;
 
+    if (southStopType == S_STOP_COMPASS_SENSOR)
+    {
+
+        if (skyScanAnnulusParam.rotatorEndBearing >= COMPASS_MIN0 && skyScanAnnulusParam.rotatorEndBearing <= COMPASS_HALF
+            && skyScanAnnulusParam.rotatorStartBearing >= COMPASS_HALF && skyScanAnnulusParam.rotatorStartBearing <= COMPASS_MAX360)
+        {
+            startAngle = skyScanAnnulusParam.adjustedStartBearing;
+            endAngle = COMPASS_MAX360 - 90;
+            sweepLength = COMPASS_MAX360 - skyScanAnnulusParam.rotatorStartBearing;
+            drawAnnulusArc(skyScanAnnulusParam.painter, skyScanAnnulusParam.mainPath, skyScanAnnulusParam.mainInnerRect, skyScanAnnulusParam.mainOuterRect, startAngle, endAngle, sweepLength, skyScanAnnulusParam.mainColor);
+
+            startAngle = COMPASS_MIN0 - 90;
+            endAngle = skyScanAnnulusParam.adjustedEndBearing;
+            sweepLength = skyScanAnnulusParam.rotatorEndBearing;
+            drawAnnulusArc(skyScanAnnulusParam.painter, skyScanAnnulusParam.mainPath, skyScanAnnulusParam.mainInnerRect, skyScanAnnulusParam.mainOuterRect, startAngle, endAngle, sweepLength, skyScanAnnulusParam.mainColor);
+
+            return;
+        }
+    }
+
+
+
+
     if (skyScanAnnulusParam.rotatorEndBearing < 0)
     {
         if (skyScanAnnulusParam.rotatorStartBearing < 0)
@@ -466,6 +515,8 @@ void MinosCompass::skyScanDrawAnnulusDescending(skyScanAnnulusParameters &skySca
         }
         else if (skyScanAnnulusParam.rotatorStartBearing >= 0 && skyScanAnnulusParam.rotatorEndBearing <= COMPASS_MAX360)
         {
+
+
             startAngle = skyScanAnnulusParam.adjustedEndBearing;
             endAngle = COMPASS_MAX360 - 90;
             sweepLength = skyScanAnnulusParam.rotatorEndBearing * -1;

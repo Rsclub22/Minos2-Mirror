@@ -416,10 +416,10 @@ private:
     void saveSkyScanCommonSettings();
     void initialiseSkyScannerSpinners();
 
-    void initialiseToolButtonUpDown(ToolButtonUpDown *toolButtonUpDown, int min, int max, int interval, int initialValue);
+    void initialiseToolButtonUpDown(ToolButtonUpDown *toolButtonUpDown, int min, int max, int interval, int initialValue, enum southStop southStopType );
     void setSkyScanStartBearingToolButtonUpDown();
     void setSkyScanEndBearingToolButtonUpDown();
-    void skyScanDisplayRotatorMinAzMaxAz(int minAz, int maxAz);
+    void skyScanDisplayRotatorMinAzMaxAz(int minAz, int maxAz, enum southStop, enum endStop endStopType);
 
     void setRotatorMainWindowTabVisible(int tabNum, bool state);
     void setSkyScanStartButtonState(bool state);

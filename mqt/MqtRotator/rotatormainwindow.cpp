@@ -1372,11 +1372,11 @@ void RotatorMainWindow::checkEndStop()
     if (movingCW)
     {
 
-        if (setupAntenna->currentAntenna.southStopType == S_STOPCOMP)
+        if (setupAntenna->currentAntenna.southStopType == S_STOP_COMPASS_SENSOR)
         {
             if (rotatorBearing >= setupAntenna->currentAntenna.max_azimuth && rotatorBearing <= setupAntenna->currentAntenna.min_azimuth)
             {
-                logMessage(QString("S_STOPCOMP - Max Endstop reached!"));
+                logMessage(QString("S_STOP_COMPASS_SENSOR - Max Endstop reached!"));
                 stopButton();
             }
         }
@@ -1388,11 +1388,11 @@ void RotatorMainWindow::checkEndStop()
         }
     else if (movingCCW)
     {
-        if (setupAntenna->currentAntenna.southStopType == S_STOPCOMP)
+        if (setupAntenna->currentAntenna.southStopType == S_STOP_COMPASS_SENSOR)
         {
             if (rotatorBearing <= setupAntenna->currentAntenna.min_azimuth && rotatorBearing >= setupAntenna->currentAntenna.max_azimuth)
             {
-                logMessage(QString("S_STOPCOMP - Min Endstop reached!"));
+                logMessage(QString("S_STOP_COMPASS_SENSOR - Min Endstop reached!"));
                 stopButton();
             }
         }
@@ -1895,11 +1895,11 @@ void RotatorMainWindow::rotateCW(bool /*clicked*/)
         {
 
             // check if at endstop
-            if (setupAntenna->currentAntenna.southStopType == S_STOPCOMP)
+            if (setupAntenna->currentAntenna.southStopType == S_STOP_COMPASS_SENSOR)
             {
                 if (rotatorBearing == setupAntenna->currentAntenna.max_azimuth)
                 {
-                    logMessage(QString("CCW - S_STOPCMP - Max Endstop"));
+                    logMessage(QString("CCW - S_STOP_COMPASS_SENSOR - Max Endstop"));
                     cwCcwCmdflag = false;
                     return;
                 }
@@ -2007,11 +2007,11 @@ void RotatorMainWindow::rotateCCW(bool /*toggle*/)
         else
         {
             // check if at endstop
-            if (setupAntenna->currentAntenna.southStopType == S_STOPCOMP)
+            if (setupAntenna->currentAntenna.southStopType == S_STOP_COMPASS_SENSOR)
             {
                 if (rotatorBearing == setupAntenna->currentAntenna.min_azimuth)
                 {
-                    logMessage(QString("CCW - S_STOPCMP - Min Endstop"));
+                    logMessage(QString("CCW - S_STOP_COMPASS_SENSOR - Min Endstop"));
                     cwCcwCmdflag = false;
                     return;
                 }
@@ -3019,6 +3019,8 @@ void RotatorMainWindow::skyScanSettingsOnCloseChkBoxChanged()
 
 void RotatorMainWindow::initialiseSpinBox(CustomSpinBox *spinBox, int min, int max, int interval, int initialValue, bool readOnly)
 {
+    Q_UNUSED(readOnly)
+
     spinBox->setRange(min, max);
     spinBox->setSingleStep(interval);
     spinBox->setValue(initialValue);
@@ -3030,11 +3032,12 @@ void RotatorMainWindow::initialiseSpinBox(CustomSpinBox *spinBox, int min, int m
     spinBox->setFocusPolicy(Qt::NoFocus); // Prevent text highlighting
 }
 
-void RotatorMainWindow::initialiseToolButtonUpDown(ToolButtonUpDown *toolButtonUpDown, int min, int max, int interval, int initialValue)
+void RotatorMainWindow::initialiseToolButtonUpDown(ToolButtonUpDown *toolButtonUpDown, int min, int max, int interval, int initialValue, enum southStop southStopType )
 {
     toolButtonUpDown->setRange(min, max);
     toolButtonUpDown->setStep(interval);
     toolButtonUpDown->setValue(initialValue);
+    toolButtonUpDown->setSouthStopType(southStopType); //set this after setting initialValue
 }
 
 void RotatorMainWindow::skyScanStepDegreesSpinBoxValueChanged(int value)
@@ -3070,7 +3073,8 @@ void RotatorMainWindow::setSkyScanStartBearingToolButtonUpDown()
                                skyScanMinAzimuth,
                                skyScanMaxAzimuth,
                                skyScanStepDegrees,
-                               startSkyScanBrg);
+                               startSkyScanBrg,
+                               setupAntenna->currentAntenna.southStopType);
 
     skyScanStartBearingToolbuttonValueChanged(startSkyScanBrg);
 
@@ -3081,9 +3085,19 @@ void RotatorMainWindow::skyScanStartBearingToolbuttonValueChanged(int value)
 
     startSkyScanBrg = value;
 
+    if (setupAntenna->currentAntenna.southStopType == S_STOP_COMPASS_SENSOR)
+    {
+        if (value < 0)
+        {
+           startSkyScanBrg = COMPASS_MAX360 + value;
+        }
+
+    }
+
+
     emit sendSkyScanStartBearingToCompassDial(startSkyScanBrg);
 
-    int bearing = adjustOverlapBearingToCompassBearing(value);  // convert if overlap bearing
+    int bearing = adjustOverlapBearingToCompassBearing(startSkyScanBrg);  // convert if overlap bearing
 
 
     QString compassStartBearing = QString::number(bearing).rightJustified(3, '0');
@@ -3100,7 +3114,8 @@ void RotatorMainWindow::setSkyScanEndBearingToolButtonUpDown()
                                 skyScanMinAzimuth,
                                 skyScanMaxAzimuth,
                                 skyScanStepDegrees,
-                                endSkyScanBrg);
+                                endSkyScanBrg,
+                                setupAntenna->currentAntenna.southStopType);
 
     skyScanEndBearingToolbuttonValueChanged(endSkyScanBrg);
 }
@@ -3110,9 +3125,19 @@ void RotatorMainWindow::skyScanEndBearingToolbuttonValueChanged(int value)
 
     endSkyScanBrg = value;
 
-    emit sendSkyScanEndBearingToCompassDial(value);
+    if (setupAntenna->currentAntenna.southStopType == S_STOP_COMPASS_SENSOR)
+    {
+        if (value < 0)
+        {
+            endSkyScanBrg = COMPASS_MAX360 + value;
+        }
 
-    int bearing = adjustOverlapBearingToCompassBearing(value);  // convert if overlap bearing
+
+    }
+
+    emit sendSkyScanEndBearingToCompassDial(endSkyScanBrg);
+
+    int bearing = adjustOverlapBearingToCompassBearing(endSkyScanBrg);  // convert if overlap bearing
 
     QString compassEndBearing = QString::number(bearing).rightJustified(3, '0');
     ui->skyScanCompassEndBearingDisplay->setText(compassEndBearing);
@@ -3355,13 +3380,35 @@ void RotatorMainWindow::displaySkyScanPauseIntervalCount(int count)
 
 }
 
-void RotatorMainWindow::skyScanDisplayRotatorMinAzMaxAz(int minAz, int maxAz)
+void RotatorMainWindow::skyScanDisplayRotatorMinAzMaxAz(int minAz, int maxAz, enum southStop southStopType, enum endStop endStopType)
 {
     QString minAzStr = QString::number(minAz).rightJustified(3, '0'); //convertBearingToString(minAz);
     QString maxAzStr = QString::number(maxAz).rightJustified(3, '0'); //convertBearingToString(maxAz);
 
     ui->skyScanRotatorDisplayMinAz->setText(minAzStr);
     ui->skyScanRotatorDisplayMaxAz->setText(maxAzStr);
+
+    QString sStopDisplay = "South Stop: ";
+
+    if (southStopType == S_STOPOFF)
+    {
+        ui->southStopDisplay->setVisible(false);
+
+    }
+    else if (southStopType == S_STOPINV)
+    {
+        sStopDisplay.append("180 - 180");
+        ui->southStopDisplay->setText(sStopDisplay);
+        ui->southStopDisplay->setVisible(true);
+
+    }
+    else if (southStopType == S_STOP_COMPASS_SENSOR)
+    {
+
+        sStopDisplay.append("181 - 179 Compass Sensor");
+        ui->southStopDisplay->setText(sStopDisplay);
+        ui->southStopDisplay->setVisible(true);
+    }
 
 }
 
@@ -3474,7 +3521,25 @@ void RotatorMainWindow::checkScanStartEndInRotatorRange()
     int requestedStart = startSkyScanBrg;
     int requestedEnd = endSkyScanBrg;
 
-    if(startSkyScanBrg < endSkyScanBrg)
+    if (setupAntenna->currentAntenna.southStopType == S_STOP_COMPASS_SENSOR)
+    {
+        if (requestedStart < COMPASS_MIN0 || requestedStart > COMPASS_MAX360 )
+        {
+            trace(QString("Error - S_STOP_COMPASS_SENSOR startScanBearing = %1 either too small or too large").arg(startSkyScanBrg));
+            startSkyScanBrg = COMPASS_MIN0;
+            trace(QString("startScanBearing brought in range start = %1").arg(startSkyScanBrg));
+            outOfRange = true;
+        }
+
+        if (requestedEnd < COMPASS_MIN0 || requestedStart > COMPASS_MAX360)
+        {
+            trace(QString("Error - S_STOP_COMPASS_SENSOR endScanBearing = %1 either too small or too large").arg(endSkyScanBrg));
+            endSkyScanBrg = COMPASS_MIN0;
+            trace(QString("endScanBearing brought in range start = %1").arg(startSkyScanBrg));
+            outOfRange = true;
+        }
+    }
+    else if(startSkyScanBrg < endSkyScanBrg)
     {
         if (startSkyScanBrg < setupAntenna->currentAntenna.min_azimuth)
         {
@@ -3591,7 +3656,7 @@ void RotatorMainWindow::openSkyScan(QString currentAntennaName)
 
     readSkyScanSettings(currentAntennaName);
 
-    checkScanStartEndInRotatorRange(currentAntennaName);      // if rotator changed overlap setting
+    checkScanStartEndInRotatorRange();      // if rotator changed overlap setting
 
     setSkyScanComponentsEnabled(skyScanEnabled);
     ui->saveSkyScanSettingsOnCloseChkBox->setChecked(saveSkyScanOnClose);
@@ -3632,18 +3697,34 @@ void RotatorMainWindow::openSkyScan(QString currentAntennaName)
         skyScanMaxAzimuth = setupAntenna->currentAntenna.max_azimuth;
     }
 
-    skyScanDisplayRotatorMinAzMaxAz(skyScanMinAzimuth, skyScanMaxAzimuth);
+    skyScanDisplayRotatorMinAzMaxAz(skyScanMinAzimuth, skyScanMaxAzimuth,
+                                    setupAntenna->currentAntenna.southStopType, setupAntenna->currentAntenna.endStopType);
 
     // setup StartBearingSpinBox
     if (startSkyScanBrg == DEFAULT_VALUE_READ_INI)
     {
         // nothing has been saved for this rotator
-        startSkyScanBrg = skyScanMinAzimuth;
+        if (setupAntenna->currentAntenna.southStopType != S_STOPOFF)
+        {
+            startSkyScanBrg = COMPASS_MIN0;
+        }
+        else
+        {
+            startSkyScanBrg = skyScanMinAzimuth;
+        }
+
     }
 
     if (endSkyScanBrg == DEFAULT_VALUE_READ_INI)
     {
-        endSkyScanBrg = skyScanMinAzimuth;
+        if (setupAntenna->currentAntenna.southStopType != S_STOPOFF)
+        {
+            endSkyScanBrg = COMPASS_MIN0;
+        }
+        else
+        {
+            endSkyScanBrg = skyScanMinAzimuth;
+        }
     }
 
     setSkyScanStartBearingToolButtonUpDown();

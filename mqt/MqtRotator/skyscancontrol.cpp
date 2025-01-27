@@ -63,12 +63,12 @@ void SkyScanControl::startSkyscan()
 
     skyScanStateFlags.setSkyScanRunning(true);
 
-    // move rotator to startScan or endScan which ever is closest
-
-    targetBearing = closestBearing(currentBearing, startScanBearing, endScanBearing, minRotation, maxRotation);
-
     if ( currentBearing != startScanBearing && currentBearing != endScanBearing)
     {
+        // move rotator to startScan or endScan which ever is closest
+
+        targetBearing = closestBearing(currentBearing, startScanBearing, endScanBearing, minRotation, maxRotation);
+
         traceMessage(QString("not at startScan or endScanBearing moving to bearing = %1").arg(targetBearing));
 
         // Set flag to indicate movement to start position
@@ -90,7 +90,7 @@ void SkyScanControl::startSkyscan()
         {
             QString("startSkyScan - startScanBearing < endScanBearing ");
 
-            if (targetBearing == startScanBearing)
+            if (currentBearing == startScanBearing)
             {
 
                 traceMessage("startSkyScan - targetBearing == startScanBearing, rotate forwardPath");
@@ -105,7 +105,7 @@ void SkyScanControl::startSkyscan()
         else
         {
             QString("startSkyScan - startScanBearing > endScanBearing ");
-            if (targetBearing == startScanBearing)
+            if (currentBearing == startScanBearing)
             {
                 traceMessage("startSkyScan - targetBearing == startScanBearing, rotate revervsePath");
                 skyScanStateFlags.setReverseScan(true);

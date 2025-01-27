@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QElapsedTimer>
+#include "rotatorcommon.h"
 
 class QToolButton;
 class QLabel;
@@ -20,6 +21,7 @@ public:
     void setStep(int step);
     void setText(const QString &text);
     void setBearingText(const int num);
+    void setSouthStopType(enum southStop southStopType_);
 
 signals:
     void valueChanged(int newValue);
@@ -44,6 +46,7 @@ private:
     int minimum;
     int maximum;
     int step;
+    enum southStop southStopType = southStop::S_STOPOFF;
 };
 
 

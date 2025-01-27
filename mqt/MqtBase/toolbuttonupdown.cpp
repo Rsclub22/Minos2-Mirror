@@ -7,6 +7,7 @@
 #include <QHBoxLayout>
 #include <QIntValidator>
 #include <QTimer>
+#include <QDebug>
 
 ToolButtonUpDown::ToolButtonUpDown(QWidget *parent)
     : QWidget(parent), currentValue(0), minimum(0), maximum(100), step(1)
@@ -56,6 +57,25 @@ ToolButtonUpDown::ToolButtonUpDown(QWidget *parent)
     connect(decrementTimer, &QTimer::timeout, this, &ToolButtonUpDown::decrement);
 }
 
+
+void ToolButtonUpDown::setSouthStopType(enum southStop southStopType_)
+{
+    southStopType = southStopType_;
+
+    if (southStopType == S_STOP_COMPASS_SENSOR)
+    {
+        int displayValue = currentValue;
+
+        if (currentValue < 0)
+        {
+            displayValue = COMPASS_MAX360 + currentValue;
+        }
+
+        valueDisplay->setText(convertBearingToString(displayValue));
+    }
+
+}
+
 int ToolButtonUpDown::value() const
 {
     return currentValue;
@@ -69,11 +89,33 @@ void ToolButtonUpDown::setText(const QString &text)
 
 void ToolButtonUpDown::setBearingText(const int num)
 {
-    valueDisplay->setText(convertBearingToString(num));
+    int displayValue = num;
+
+    if (southStopType == S_STOP_COMPASS_SENSOR)
+    {
+        if (num < 0)
+        {
+            displayValue = COMPASS_MAX360 + num;
+        }
+    }
+    valueDisplay->setText(convertBearingToString(displayValue));
 }
 
-void ToolButtonUpDown::setValue(int newValue)
+void ToolButtonUpDown::setValue(int newValue_)
 {
+
+    int newValue = newValue_;
+
+    if (southStopType == S_STOP_COMPASS_SENSOR)
+    {
+        if (newValue >= COMPASS_HALF && newValue <= COMPASS_MAX360)
+        {
+            // convert to negative
+            newValue = newValue - COMPASS_MAX360;
+
+        }
+    }
+
     if (newValue < minimum)
         newValue = minimum;
     if (newValue > maximum)
@@ -81,6 +123,7 @@ void ToolButtonUpDown::setValue(int newValue)
 
     if (currentValue != newValue)
     {
+
         currentValue = newValue;
         setBearingText(currentValue);
         emit valueChanged(currentValue);
@@ -89,9 +132,17 @@ void ToolButtonUpDown::setValue(int newValue)
 
 void ToolButtonUpDown::setRange(int min, int max)
 {
-    minimum = min;
+    if (southStopType == S_STOP_COMPASS_SENSOR)
+    {
+        minimum = -179; // 180 - 180 but to allow spinner to work set negative, but display positive
+    }
+    else
+    {
+       minimum = min;
+    }
+
     maximum = max;
-    setValue(currentValue); // Ensure currentValue is within new range
+
 }
 
 void ToolButtonUpDown::setStep(int stepValue)
