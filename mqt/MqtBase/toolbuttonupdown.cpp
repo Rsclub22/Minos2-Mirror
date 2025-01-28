@@ -114,12 +114,17 @@ void ToolButtonUpDown::setValue(int newValue_)
             newValue = newValue - COMPASS_MAX360;
 
         }
+
     }
 
     if (newValue < minimum)
+    {
         newValue = minimum;
+    }
     if (newValue > maximum)
+    {
         newValue = maximum;
+    }
 
     if (currentValue != newValue)
     {
@@ -162,10 +167,7 @@ void ToolButtonUpDown::decrement()
 
 void ToolButtonUpDown::startIncrement()
 {
-    /*
-    increment(); // Immediate action on press
-    incrementTimer->start();
-    */
+
     pressTimer.start(); // Start tracking press duration
     increment(); // Immediate action on press
     QTimer::singleShot(200, this, [this]()
@@ -181,10 +183,7 @@ void ToolButtonUpDown::startIncrement()
 
 void ToolButtonUpDown::startDecrement()
 {
-    /*
-     * decrement(); // Immediate action on press
-    decrementTimer->start();
-    */
+
     pressTimer.start(); // Start tracking press duration
     decrement(); // Immediate action on press
     QTimer::singleShot(200, this, [this]()

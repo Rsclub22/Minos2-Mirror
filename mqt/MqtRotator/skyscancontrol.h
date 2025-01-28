@@ -211,6 +211,9 @@ private:
     int normaliseBearing(int bearing, int minRange, int maxRange);
     int angularDistance(int from, int to, int minRange, int maxRange);
 
+    void determinePathCompassSensor();
+    void calcForwardPathCompassSensor(int startScanBearing, int endScanBearing);
+    void calcReversePathCompassSensor(int startScanBearing, int endScanBearing);
 };
 
 #endif // SKYSCANCONTROL_H
