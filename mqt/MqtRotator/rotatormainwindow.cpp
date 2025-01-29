@@ -3070,9 +3070,19 @@ void RotatorMainWindow::setSkyScanStartBearingToolButtonUpDown()
 {
     trace(QString("set SkyScan Start Bearing up down tool buttons - minAzimuth = %1, maxAzimuth = %2, step degree = %3, initial value = %4").arg(skyScanMinAzimuth).arg(skyScanMaxAzimuth).arg(skyScanStepDegrees).arg(skyScanMinAzimuth));
 
+    int skyScanMinAz = skyScanMinAzimuth;
+    int skyScanMaxAz = skyScanMaxAzimuth;
+
+    if (setupAntenna->currentAntenna.southStopType == S_STOP_COMPASS_SENSOR)
+    {
+        skyScanMinAz = 180; // adjust for spinners, will be turned negative in spinner. May consider making 180-0-180 a -180-0-180 type in rotator!!!
+        skyScanMaxAz = 180;
+    }
+
+
     initialiseToolButtonUpDown(ui->skyScanStartBearingUpDownButtons,
-                               skyScanMinAzimuth,
-                               skyScanMaxAzimuth,
+                               skyScanMinAz,
+                               skyScanMaxAz,
                                skyScanStepDegrees,
                                startSkyScanBrg,
                                setupAntenna->currentAntenna.southStopType);

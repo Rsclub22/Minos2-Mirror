@@ -119,7 +119,7 @@ public:
     QString getListOfSteps()
     {
         QStringList stepList;
-        for (int value : rotationPath)
+        for (auto value : rotationPath)
         {
           stepList.append(QString::number(value));
         }
@@ -127,6 +127,17 @@ public:
         QString result = stepList.join(',');
 
         return result;
+    }
+
+    void convertNegBearings()
+    {
+        for (auto& bearing : rotationPath)
+        {
+            if (bearing < 0)
+            {
+                bearing = COMPASS_MAX360 + bearing;
+            }
+        }
     }
 
 
@@ -212,8 +223,8 @@ private:
     int angularDistance(int from, int to, int minRange, int maxRange);
 
     void determinePathCompassSensor();
-    void calcForwardPathCompassSensor(int startScanBearing, int endScanBearing);
-    void calcReversePathCompassSensor(int startScanBearing, int endScanBearing);
+    void calcForwardPathCompassSensor(int startBearing_, int endBearing_);
+    void calcReversePathCompassSensor(int startBearing_, int endBearing_);
 };
 
 #endif // SKYSCANCONTROL_H

@@ -372,28 +372,30 @@ void SkyScanControl::determinePathCompassSensor()
     forwardRotationPath.clearRotationPath();
     reverseRotationPath.clearRotationPath();
 
-    if (startScanBearing >= COMPASS_MAX360 && startScanBearing < COMPASS_HALF && endScanBearing <= COMPASS_MAX360 && endScanBearing > COMPASS_HALF)
+    int adjustedStartBearing = 0;
+    int adjustedEndBearing = 0;
+
+    if (startScanBearing >= COMPASS_HALF && startScanBearing <= COMPASS_MAX360)
     {
-        if (startScanBearing < endScanBearing)
-        {
-            calcReversePathCompassSensor(startScanBearing, endScanBearing);
-        }
-        else
-        {
-            calcForwardPathCompassSensor(startScanBearing, endScanBearing);
-        }
+        adjustedStartBearing = -COMPASS_MAX360 + startScanBearing;         // convert to -180 range for this calculation
+    }
+
+    if (endScanBearing >= COMPASS_HALF && endScanBearing <= COMPASS_MAX360)
+    {
+        adjustedEndBearing = -COMPASS_MAX360 + endScanBearing;         // convert to -180 range for this calculation
+    }
+
+    if (adjustedStartBearing < adjustedEndBearing)
+    {
+       calcForwardPathCompassSensor(startScanBearing, endScanBearing);
+       calcReversePathCompassSensor(endScanBearing, startScanBearing);
     }
     else
     {
-        if (startScanBearing < endScanBearing)
-        {
-           calcForwardPathCompassSensor(startScanBearing, endScanBearing);
-        }
-        else
-        {
-            calcReversePathCompassSensor(startScanBearing, endScanBearing);
-        }
+        calcForwardPathCompassSensor(endScanBearing, startScanBearing);
+        calcReversePathCompassSensor(startScanBearing, endScanBearing);
     }
+
 
     dumpRotationPathToTraceLog(forwardRotationPath, QString("compass sensor forward rotation path"));
     dumpRotationPathToTraceLog(reverseRotationPath, QString("compass sensor reverse rotation path"));
@@ -543,56 +545,102 @@ void SkyScanControl::calcReversePath(int startBearing, int endBearing)
 
 }
 
-void SkyScanControl::calcForwardPathCompassSensor(int startBearing, int endBearing)
+void SkyScanControl::calcForwardPathCompassSensor(int startBearing_, int endBearing_)
 {
+    int startBearing = startBearing_;
+    int endBearing = endBearing_;
+
     forwardRotationPath.setPathStart(startBearing);
     traceMessage(QString("compass sensor forwardPath Start Bearing = %1").arg(startBearing));
     forwardRotationPath.setPathEnd(endBearing);
     traceMessage(QString("compass sensor forwardPath End Bearing = %1").arg(endBearing));
 
-    int nextStepBearing = startBearing + stepDegrees;
+    if (startBearing >= COMPASS_HALF && startBearing <= COMPASS_MAX360)
+    {
+        startBearing = -COMPASS_MAX360 + startBearing;         // convert to -180 range for this calculation
+    }
+
+    if (endBearing >= COMPASS_HALF && startBearing <= COMPASS_MAX360)
+    {
+        endBearing = -COMPASS_MAX360 + endBearing;         // convert to -180 range for this calculation
+    }
+
+    int nextStepBearing = startBearing;
 
     while (true)
     {
-        if (nextStepBearing > COMPASS_MAX360)
+        // Update the bearing
+        nextStepBearing += stepDegrees;
+
+        if (nextStepBearing > endBearing)
         {
-            nextStepBearing = nextStepBearing - COMPASS_MAX360;
-
-
+            nextStepBearing = endBearing;
         }
 
         forwardRotationPath.appendToScanPath(nextStepBearing);
         traceMessage(QString("compass sensor forwardPath append nextStep Bearing = %1").arg(nextStepBearing));
 
-
-        if (nextStepBearing > endBearing || nextStepBearing == endBearing)
+        if (nextStepBearing == endBearing)
         {
-            break;
-        }
-
-        // Update the bearing
-        nextStepBearing += stepDegrees;
-
-        if (nextStepBearing > COMPASS_MAX360)
-        {
-           nextStepBearing = nextStepBearing - COMPASS_MAX360;
-        }
-
-        // Prevent infinite loops
-        if (nextStepBearing == startBearing)
-        {
-
             break;
         }
 
     }
 
+    // convert negative values back to 180 - 360
+
+    forwardRotationPath.convertNegBearings();
+
+
 }
 
 
-void SkyScanControl::calcReversePathCompassSensor(int startScanBearing, int endScanBearing)
+void SkyScanControl::calcReversePathCompassSensor(int startBearing_, int endBearing_)
 {
+    int startBearing = startBearing_;
+    int endBearing = endBearing_;
 
+    reverseRotationPath.setPathStart(startBearing);
+    traceMessage(QString("compass sensor forwardPath Start Bearing = %1").arg(startBearing));
+    reverseRotationPath.setPathEnd(endBearing);
+    traceMessage(QString("compass sensor forwardPath End Bearing = %1").arg(endBearing));
+
+    if (startBearing >= COMPASS_HALF && startBearing <= COMPASS_MAX360)
+    {
+        startBearing = -COMPASS_MAX360 + startBearing;         // convert to -180 range for this calculation
+    }
+
+    if (endBearing >= COMPASS_HALF && startBearing <= COMPASS_MAX360)
+    {
+        endBearing = -COMPASS_MAX360 + endBearing;         // convert to -180 range for this calculation
+    }
+
+    int nextStepBearing = startBearing;
+
+    while (true)
+    {
+        // Update the bearing
+        nextStepBearing -= stepDegrees;
+
+        if (nextStepBearing < endBearing)
+        {
+            nextStepBearing = endBearing;
+        }
+
+        reverseRotationPath.appendToScanPath(nextStepBearing);
+        traceMessage(QString("compass sensor forwardPath append nextStep Bearing = %1").arg(nextStepBearing));
+
+        if (nextStepBearing == endBearing)
+        {
+            break;
+        }
+
+
+    }
+
+    // convert negative values back to 180 - 360
+
+    reverseRotationPath.convertNegBearings();
 }
 
 
@@ -644,25 +692,31 @@ int SkyScanControl::normaliseBearing(int bearing, int minRange, int maxRange) {
     return bearing;
 }
 
-int SkyScanControl::angularDistance(int from, int to, int minRange, int maxRange) {
-    //int range = maxRange - minRange;
-    int range = 360;
+int SkyScanControl::angularDistance(int from, int to, int minRange, int maxRange)
+{
+    int range = maxRange - minRange;  // Calculate range width
+
+    // Ensure the difference is within the range
     int distance = (to - from + range) % range;
 
-    // Ensure shortest path is chosen
+    // Normalize to the shortest path within half the range
     if (distance > range / 2)
     {
         distance -= range;
     }
+
     return distance;
 }
 
 
-int SkyScanControl::closestBearing(int currentBearing, int start, int end, int minRange, int maxRange) {
-    // Normalize bearings to the provided range
-    //currentBearing = normaliseBearing(currentBearing, minRange, maxRange);
-    //start = normaliseBearing(start, minRange, maxRange);
-    //end = normaliseBearing(end, minRange, maxRange);
+int SkyScanControl::closestBearing(int currentBearing, int start, int end, int minRange_, int maxRange) {
+
+    int minRange = minRange_;
+
+    if (southType == S_STOP_COMPASS_SENSOR)
+    {
+        minRange = -COMPASS_HALF;
+    }
 
     // Calculate absolute distances to start and end
     int distanceToStart = abs(angularDistance(currentBearing, start, minRange, maxRange));
