@@ -274,8 +274,10 @@ bool rotSetupForm::setEndStopType(srotParams* antennaData, int minRot, int maxRo
 
             if (antennaData->southStopType ==  S_STOP_COMPASS_SENSOR)
             {
-                antennaData->max_azimuth = COMPASS_HALF - 1;
-                antennaData->min_azimuth = COMPASS_HALF + 1;
+                //antennaData->max_azimuth = COMPASS_HALF - 1;
+                //antennaData->min_azimuth = COMPASS_HALF + 1;
+                antennaData->max_azimuth = -COMPASS_HALF;  // use a negative azimuth to help calculations
+                antennaData->min_azimuth = COMPASS_HALF;
                 antennaData->endStopType = ROT_180_180;
             }
             else if (antennaData->southStopType ==  S_STOPINV)

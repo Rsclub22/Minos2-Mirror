@@ -615,6 +615,14 @@ void MinosCompass::updateSouthStopType(int southStopType_)
 
 void MinosCompass::updateSkyScanStartBearing(int bearing)
 {
+    if (southStopType == S_STOP_COMPASS_SENSOR)
+    {
+        if (bearing < 0)
+        {
+            bearing = bearing + COMPASS_MAX360;
+        }
+    }
+
     skyScanStartBearing = bearing;
     qDebug() << "skyScan compass start bearing = " << QString::number(skyScanStartBearing);
     update();
@@ -622,6 +630,14 @@ void MinosCompass::updateSkyScanStartBearing(int bearing)
 
 void MinosCompass::updateSkyScanEndBearing(int bearing)
 {
+    if (southStopType == S_STOP_COMPASS_SENSOR)
+    {
+        if (bearing < 0)
+        {
+            bearing = bearing + COMPASS_MAX360;
+        }
+    }
+
     skyScanEndBearing = bearing;
     qDebug() << "skyScan compass end bearing = " << QString::number(skyScanEndBearing);
     update();

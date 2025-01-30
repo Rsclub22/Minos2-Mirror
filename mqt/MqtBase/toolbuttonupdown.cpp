@@ -62,7 +62,7 @@ void ToolButtonUpDown::setSouthStopType(enum southStop southStopType_)
 {
     southStopType = southStopType_;
 
-    if (southStopType == S_STOP_COMPASS_SENSOR)
+ /*   if (southStopType == S_STOP_COMPASS_SENSOR)
     {
         int displayValue = currentValue;
 
@@ -73,7 +73,7 @@ void ToolButtonUpDown::setSouthStopType(enum southStop southStopType_)
 
         valueDisplay->setText(convertBearingToString(displayValue));
     }
-
+*/
 }
 
 int ToolButtonUpDown::value() const
@@ -91,13 +91,15 @@ void ToolButtonUpDown::setBearingText(const int num)
 {
     int displayValue = num;
 
-    if (southStopType == S_STOP_COMPASS_SENSOR)
+/*    if (southStopType == S_STOP_COMPASS_SENSOR)
     {
         if (num < 0)
         {
             displayValue = COMPASS_MAX360 + num;
         }
     }
+*/
+
     valueDisplay->setText(convertBearingToString(displayValue));
 }
 
@@ -106,7 +108,7 @@ void ToolButtonUpDown::setValue(int newValue_)
 
     int newValue = newValue_;
 
-    if (southStopType == S_STOP_COMPASS_SENSOR)
+ /*   if (southStopType == S_STOP_COMPASS_SENSOR)
     {
         if (newValue >= COMPASS_HALF && newValue <= COMPASS_MAX360)
         {
@@ -116,7 +118,7 @@ void ToolButtonUpDown::setValue(int newValue_)
         }
 
     }
-
+*/
     if (newValue < minimum)
     {
         newValue = minimum;
@@ -137,15 +139,16 @@ void ToolButtonUpDown::setValue(int newValue_)
 
 void ToolButtonUpDown::setRange(int min, int max)
 {
-    if (southStopType == S_STOP_COMPASS_SENSOR)
+/*    if (southStopType == S_STOP_COMPASS_SENSOR)
     {
         minimum = -179; // 180 - 180 but to allow spinner to work set negative, but display positive
     }
     else
     {
-       minimum = min;
+      minimum = min;
     }
-
+*/
+    minimum = min;
     maximum = max;
 
 }

@@ -3070,19 +3070,9 @@ void RotatorMainWindow::setSkyScanStartBearingToolButtonUpDown()
 {
     trace(QString("set SkyScan Start Bearing up down tool buttons - minAzimuth = %1, maxAzimuth = %2, step degree = %3, initial value = %4").arg(skyScanMinAzimuth).arg(skyScanMaxAzimuth).arg(skyScanStepDegrees).arg(skyScanMinAzimuth));
 
-    int skyScanMinAz = skyScanMinAzimuth;
-    int skyScanMaxAz = skyScanMaxAzimuth;
-
-    if (setupAntenna->currentAntenna.southStopType == S_STOP_COMPASS_SENSOR)
-    {
-        skyScanMinAz = 180; // adjust for spinners, will be turned negative in spinner. May consider making 180-0-180 a -180-0-180 type in rotator!!!
-        skyScanMaxAz = 180;
-    }
-
-
     initialiseToolButtonUpDown(ui->skyScanStartBearingUpDownButtons,
-                               skyScanMinAz,
-                               skyScanMaxAz,
+                               skyScanMinAzimuth,
+                               skyScanMinAzimuth,
                                skyScanStepDegrees,
                                startSkyScanBrg,
                                setupAntenna->currentAntenna.southStopType);
@@ -3095,7 +3085,7 @@ void RotatorMainWindow::skyScanStartBearingToolbuttonValueChanged(int value)
 {
 
     startSkyScanBrg = value;
-
+/*
     if (setupAntenna->currentAntenna.southStopType == S_STOP_COMPASS_SENSOR)
     {
         if (value < 0)
@@ -3105,7 +3095,7 @@ void RotatorMainWindow::skyScanStartBearingToolbuttonValueChanged(int value)
 
     }
 
-
+*/
     emit sendSkyScanStartBearingToCompassDial(startSkyScanBrg);
 
     int bearing = adjustOverlapBearingToCompassBearing(startSkyScanBrg);  // convert if overlap bearing
@@ -3135,7 +3125,7 @@ void RotatorMainWindow::skyScanEndBearingToolbuttonValueChanged(int value)
 {
 
     endSkyScanBrg = value;
-
+/*
     if (setupAntenna->currentAntenna.southStopType == S_STOP_COMPASS_SENSOR)
     {
         if (value < 0)
@@ -3145,7 +3135,7 @@ void RotatorMainWindow::skyScanEndBearingToolbuttonValueChanged(int value)
 
 
     }
-
+*/
     emit sendSkyScanEndBearingToCompassDial(endSkyScanBrg);
 
     int bearing = adjustOverlapBearingToCompassBearing(endSkyScanBrg);  // convert if overlap bearing
@@ -3393,6 +3383,8 @@ void RotatorMainWindow::displaySkyScanPauseIntervalCount(int count)
 
 void RotatorMainWindow::skyScanDisplayRotatorMinAzMaxAz(int minAz, int maxAz, enum southStop southStopType, enum endStop endStopType)
 {
+    Q_UNUSED(endStopType)
+
     QString minAzStr = QString::number(minAz).rightJustified(3, '0'); //convertBearingToString(minAz);
     QString maxAzStr = QString::number(maxAz).rightJustified(3, '0'); //convertBearingToString(maxAz);
 
@@ -3416,7 +3408,7 @@ void RotatorMainWindow::skyScanDisplayRotatorMinAzMaxAz(int minAz, int maxAz, en
     else if (southStopType == S_STOP_COMPASS_SENSOR)
     {
 
-        sStopDisplay.append("181 - 179 Compass Sensor");
+        sStopDisplay.append("-180 - 180 Compass Sensor");
         ui->southStopDisplay->setText(sStopDisplay);
         ui->southStopDisplay->setVisible(true);
     }

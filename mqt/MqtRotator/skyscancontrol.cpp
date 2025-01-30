@@ -709,14 +709,7 @@ int SkyScanControl::angularDistance(int from, int to, int minRange, int maxRange
 }
 
 
-int SkyScanControl::closestBearing(int currentBearing, int start, int end, int minRange_, int maxRange) {
-
-    int minRange = minRange_;
-
-    if (southType == S_STOP_COMPASS_SENSOR)
-    {
-        minRange = -COMPASS_HALF;
-    }
+int SkyScanControl::closestBearing(int currentBearing, int start, int end, int minRange, int maxRange) {
 
     // Calculate absolute distances to start and end
     int distanceToStart = abs(angularDistance(currentBearing, start, minRange, maxRange));
