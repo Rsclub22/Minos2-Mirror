@@ -16,6 +16,7 @@
 #include <QDateTime>
 #include <qnamespace.h>
 #include <cstring>
+#include <QTimeZone>
 
 #include "QtUtils.h"
 #include "PubSubName.h"
@@ -994,4 +995,16 @@ QString formatTime( qlonglong s )
     }
     QString t = pref + qt.toString ( ts );
     return t;
+}
+QDateTime toUTC(const QDateTime &d)
+{
+    QDateTime d2 = d;
+#if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
+    d2.setTimeSpec(Qt::UTC);
+#elif QT_VERSION < QT_VERSION_CHECK(6, 8, 0)
+    d2.setTimeSpec(QTimeZone::UTC);
+#else
+    d2.setTimeZone(QTimeZone::UTC);
+#endif
+    return d2;
 }

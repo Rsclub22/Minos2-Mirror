@@ -1,4 +1,5 @@
 #include <QDateTime>
+#include <QTimeZone>
 #include "AppStartup.h"
 #include "clustercommon.h"
 #include "checkmodeagainstfreq.h"
@@ -635,7 +636,9 @@ QDateTime getSpotDateTime(const QString spotDate, const QString spotTime)
     {
         tmo = QTime::currentTime();
     }
-    dt = QDateTime(dto, tmo, Qt::UTC);
+
+    dt = QDateTime(dto, tmo);
+    dt = toUTC(dt);
     return dt;
 }
 
