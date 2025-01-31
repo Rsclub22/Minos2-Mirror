@@ -1002,7 +1002,7 @@ QDateTime toUTC(const QDateTime &d)
 #if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
     d2.setTimeSpec(Qt::UTC);
 #elif QT_VERSION < QT_VERSION_CHECK(6, 8, 0)
-    d2.setTimeSpec(QTimeZone::UTC);
+    d2.setTimeSpec(Qt::UTC);
 #else
     d2.setTimeZone(QTimeZone::UTC);
 #endif
