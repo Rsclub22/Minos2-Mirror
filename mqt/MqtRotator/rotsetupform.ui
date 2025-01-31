@@ -279,7 +279,7 @@
           <item>
            <widget class="QRadioButton" name="compassBut">
             <property name="text">
-             <string>S-Stop  180-180</string>
+             <string>S-Stop  -180-180</string>
             </property>
            </widget>
           </item>

@@ -289,5 +289,28 @@ bool SkyScanButtonState::isReverse() const
 }
 
 
+bool isEasternBearing(int bearing)
+{
+    if (bearing > COMPASS_MAX360)
+    {
+        return true;
+    }
+    if (bearing >= COMPASS_MIN0 && bearing <= COMPASS_HALF)
+    {
+        return true;
+    }
 
+    return false;
+}
+
+
+bool isWesternBearing(int bearing)
+{
+    if (bearing > COMPASS_HALF && bearing <= COMPASS_MAX360 )
+    {
+        return true;
+    }
+
+    return false;
+}
 

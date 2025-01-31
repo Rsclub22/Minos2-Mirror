@@ -247,25 +247,25 @@ void HamlibRotControl::register_rotators(RotatorFactory::Rotators* rotatorsList)
             {}
         }
 
-        int min_az = 0; // hamlib V4.0 sets min azimuth to -180 for Yaesu rotators, override to 0.
+    /*    //int min_az = 0; // hamlib V4.0 sets min azimuth to -180 for Yaesu rotators, override to 0.
         int max_az = 360;
 
         if (capsList[i]->max_az == 450)
-        {
-           if ( capsList[i]->min_az == -180)
+       {
+          if ( capsList[i]->min_az == -180)
            {
 
                 min_az = 0;
-           }
+          }
 
         }
         else
-        {
+       {
             min_az = capsList[i]->min_az;
-        }
-
-
-        max_az = capsList[i]->max_az;
+       }
+*/
+        int min_az = capsList[i]->min_az;
+        int max_az = capsList[i]->max_az;
 
 
         // uncomment to dump the rotator values to tracelog
@@ -508,11 +508,16 @@ QString HamlibRotControl::getLibraryName()
 QString HamlibRotControl::getRotLibVersion()
 {
     QString ver = hamlib_version;
+
     return ver;
 }
 
 
-
+QString HamlibRotControl::getRotLibDetailedVersion()
+{
+    QString ver = hamlib_version2;
+    return ver;
+}
 
 
 

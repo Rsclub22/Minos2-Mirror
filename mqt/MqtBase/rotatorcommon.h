@@ -136,15 +136,20 @@ QString ANTENNA_PATH_LOCAL();
 inline const QString FILENAME_AVAIL_ANTENNAS = "AvailAntenna.ini";
 inline const QString FILENAME_CURRENT_ANTENNA = "CurrentAntenna.ini";
 
+
 // Rotator Types
-// ROT_180_180 is ROT_0_360 set to southstop.
-enum endStop {ROT_NEG180_180, ROT_0_360, ROT_0_450, ROT_NEG180_540, ROT_180_180};
-inline const QStringList endStopNames = (QStringList() << "ROT_NEG180_180" << "ROT_0_360" << "ROT_0_450" << "ROT_NEG180_540" << "ROT_180_180");
+// ROT_180_180 is ROT_0_360 set to southstop.** Replaced by ROT_NEG180_180
+// Hamlib Yaesu protocol now supports ROT_NEG180_450, but will not be used with this full range here
+// it will be used to set max and min rotations as follows:-
+// ROT_NEG180_180 for a Compass Sensor set for south stop.
+// ROT_0_360 rotator with no overlap, north stop
+// ROT_0_450 rotator with overlap, north stop
+enum endStop {ROT_NEG180_180, ROT_0_360, ROT_0_450, ROT_NEG180_540, ROT_NEG180_450};
+inline const QStringList endStopNames = (QStringList() << "ROT_NEG180_180" << "ROT_0_360" << "ROT_0_450" << "ROT_NEG180_540" << "ROT_NEG180_450");
 
 // Defines the South Stop Types
 // S_STOPINV when a rotator is mounted inverted normal N Stop is now S Stop. Feedback is South 0 Degrees through 360 at South
-//S_STOPCOMP when a rotator is mounted with a south stop, but the sensor is a compass. Rotator will rotate 180 degrees to 180, rotator type ROT_180_180
-// but will set the min azimuth to -180 for internal calculations.
+//S_STOPCOMP when a rotator is mounted with a south stop, but the sensor is a compass.
 enum southStop {S_STOPOFF, S_STOPINV, S_STOP_COMPASS_SENSOR};
 inline const QStringList southStopNames = (QStringList() << "S_StopOff" << "S_StopInv" << "S_StopComp");
 // Overlap Status
@@ -180,6 +185,9 @@ QString convertBearingToString(int bearing);
 int adjustOverlapBearingToCompassBearing(int value);
 void displayCompassBearingWithOverlap(const QString newBearing, int &rotatorBearing, int &currentBearing, QLabel* displayLabel);
 void setSkyScanDirectionIndOnOff(QToolButton *indicator, bool state);
+
+bool isEasternBearing(int bearing);
+bool isWesternBearing(int bearing);
 
 class srotParams
 {

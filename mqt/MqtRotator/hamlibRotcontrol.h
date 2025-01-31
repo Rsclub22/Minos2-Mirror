@@ -137,6 +137,7 @@ private:
 
 
 
+    QString getRotLibDetailedVersion();
 };
 
 #endif // HAMLIBROTCONTROL_H

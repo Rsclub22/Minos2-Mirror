@@ -274,15 +274,12 @@ bool rotSetupForm::setEndStopType(srotParams* antennaData, int minRot, int maxRo
 
             if (antennaData->southStopType ==  S_STOP_COMPASS_SENSOR)
             {
-                //antennaData->max_azimuth = COMPASS_HALF - 1;
-                //antennaData->min_azimuth = COMPASS_HALF + 1;
-                antennaData->max_azimuth = -COMPASS_HALF;  // use a negative azimuth to help calculations
-                antennaData->min_azimuth = COMPASS_HALF;
-                antennaData->endStopType = ROT_180_180;
+                antennaData->max_azimuth = COMPASS_HALF;  // use a negative azimuth to help calculations
+                antennaData->min_azimuth = -COMPASS_HALF;
+                antennaData->endStopType = ROT_NEG180_180;
             }
             else if (antennaData->southStopType ==  S_STOPINV)
             {
-                //antennaData->max_azimuth = COMPASS_MAX360;
                 antennaData->max_azimuth = maxRot;      // for Green Heron which isn't 360
                 antennaData->min_azimuth = COMPASS_MIN0;
                 antennaData->endStopType = ROT_0_360;
@@ -306,9 +303,9 @@ bool rotSetupForm::setEndStopType(srotParams* antennaData, int minRot, int maxRo
 
                 if (antennaData->southStopType ==  S_STOP_COMPASS_SENSOR)
                 {
-                    antennaData->max_azimuth = COMPASS_HALF - 1;
-                    antennaData->min_azimuth = COMPASS_HALF + 1;
-                    antennaData->endStopType = ROT_180_180;
+                    antennaData->max_azimuth = COMPASS_HALF;
+                    antennaData->min_azimuth = -COMPASS_HALF;
+                    antennaData->endStopType = ROT_NEG180_180;
                 }
                 else if (antennaData->southStopType ==  S_STOPINV)
                 {
@@ -706,9 +703,9 @@ void rotSetupForm::compassButSelected()
 {
 
     antennaData->southStopType = S_STOP_COMPASS_SENSOR;
-    antennaData->max_azimuth = COMPASS_HALF - 1;
-    antennaData->min_azimuth = COMPASS_HALF + 1;
-    antennaData->endStopType = ROT_180_180;
+    antennaData->max_azimuth = COMPASS_HALF;
+    antennaData->min_azimuth = -COMPASS_HALF;
+    antennaData->endStopType = ROT_NEG180_180;
 
     antennaValueChanged = true;
 
@@ -751,7 +748,7 @@ void rotSetupForm::overlapSelected()
 void rotSetupForm::setOverlapEndStop(srotParams* antennaData, bool overrunState)
 {
 
-    if (overrunState && (antennaData->endStopType == ROT_0_360 || antennaData->endStopType == ROT_180_180))
+    if (overrunState && (antennaData->endStopType == ROT_0_360 || antennaData->endStopType == ROT_NEG180_180))
     {
 
         antennaData->max_azimuth = antennaData->rotatorCWEndStop;
