@@ -181,7 +181,7 @@ void RotSetupDialog::loadSettingsToTab(int tabNum)
         else if (availAntData[tabNum]->rotType == ROT_0_450)
         {
            antennaTab[tabNum]->setOverRunFlagVisible(true);
-           if ((availAntData[tabNum]->endStopType == ROT_0_360 || availAntData[tabNum]->endStopType == ROT_NEG180_180) && !availAntData[tabNum]->overRunFlag  )
+           if ((availAntData[tabNum]->endStopType == ROT_0_360 || availAntData[tabNum]->endStopType == ROT_NEG179_180) && !availAntData[tabNum]->overRunFlag  )
            {
 
                antennaTab[tabNum]->sStopButtonsVisible(true);

@@ -1627,7 +1627,7 @@ int RotatorMainWindow::northCalcTarget(int targetBearing, int currentRotatorBear
         target = calcRotZero360(targetBearing);
 
     }
-    else if (setupAntenna->currentAntenna.endStopType == ROT_NEG180_180)
+    else if (setupAntenna->currentAntenna.endStopType == ROT_NEG179_180)
     {
         target = calcRotNeg180_180(targetBearing);
 
