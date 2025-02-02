@@ -74,7 +74,7 @@ rotSetupForm::rotSetupForm(RotatorFactory* rotFactory_, srotParams* _antennaData
     connect(ui->sStopOffBut, &QRadioButton::clicked, this, &rotSetupForm::sStopOffButSelected);
     connect(ui->rotInvertBut, &QRadioButton::clicked, this, &rotSetupForm::rotInvertButSelected);
     connect(ui->compassBut, &QRadioButton::clicked, this, &rotSetupForm::compassButSelected);
-    connect(ui->chkOverrun, &QCheckBox::stateChanged, this, &rotSetupForm::overlapSelected);
+    connect(ui->chkOverLap, &QCheckBox::stateChanged, this, &rotSetupForm::overlapSelected);
     connect(ui->antOffset, &QLineEdit::editingFinished, this, &rotSetupForm::antennaOffSetSelected);
     connect(ui->simCW_CCWcmd, &QCheckBox::clicked, this, &rotSetupForm::simCWCCWCmdSelected);
     connect(ui->showCompDialChkBox, &QCheckBox::clicked, this, &rotSetupForm::onCompasDialVisibleChecked);
@@ -142,8 +142,8 @@ void rotSetupForm::setupRotatorModel(QString rotatorModel)
             if (antennaData->endStopType == ROT_0_360)
             {
 
-                ui->chkOverrun->setVisible(false);
-                ui->chkOverrun->setChecked(false);
+                ui->chkOverLap->setVisible(false);
+                ui->chkOverLap->setChecked(false);
                 if (rotCap.getAllowSouthStopConfig())
                 {
                     sStopButtonsVisible(true);
@@ -158,23 +158,23 @@ void rotSetupForm::setupRotatorModel(QString rotatorModel)
             else if (antennaData->endStopType == ROT_0_450)
             {
 
-                ui->chkOverrun->setVisible(true);
-                ui->chkOverrun->setChecked(true);
+                ui->chkOverLap->setVisible(true);
+                ui->chkOverLap->setChecked(true);
                 sStopButtonsVisible(false);
                 setSStopOffButChecked(true);
             }
             else if (antennaData->endStopType == ROT_NEG180_450)
             {
 
-                ui->chkOverrun->setVisible(true);
-                ui->chkOverrun->setChecked(true);
+                ui->chkOverLap->setVisible(true);
+                ui->chkOverLap->setChecked(true);
                 sStopButtonsVisible(false);
                 setSStopOffButChecked(true);
             }
             else if (antennaData->endStopType == ROT_NEG180_540)
             {
-                ui->chkOverrun->setVisible(true);
-                ui->chkOverrun->setChecked(true);
+                ui->chkOverLap->setVisible(true);
+                ui->chkOverLap->setChecked(true);
                 sStopButtonsVisible(false);
                 setSStopOffButChecked(true);
             }
@@ -268,7 +268,7 @@ bool rotSetupForm::setEndStopType(srotParams* antennaData, int minRot, int maxRo
             antennaData->min_azimuth = minRot;
             antennaData->rotType = ROT_NEG179_180;
             antennaData->endStopType = ROT_NEG179_180;
-            antennaData->overRunFlag = false;
+            antennaData->overLapFlag = false;
             antennaData->southStopType = S_STOPOFF;
         }
 
@@ -310,7 +310,7 @@ bool rotSetupForm::setEndStopType(srotParams* antennaData, int minRot, int maxRo
                antennaData->rotType = ROT_0_450;
             }
 
-            if (!antennaData->overRunFlag)
+            if (!antennaData->overLapFlag)
             {
 
                 if (antennaData->southStopType ==  S_STOP_COMPASS_SENSOR)
@@ -350,7 +350,7 @@ bool rotSetupForm::setEndStopType(srotParams* antennaData, int minRot, int maxRo
             antennaData->min_azimuth = minRot;
             antennaData->rotType = ROT_NEG180_540;
             antennaData->endStopType = ROT_NEG180_540;
-            antennaData->overRunFlag = true;
+            antennaData->overLapFlag = true;
             antennaData->southStopType = S_STOPOFF;
         }
         else
@@ -748,9 +748,9 @@ void rotSetupForm::setCompassButVisible(bool s)
 void rotSetupForm::overlapSelected()
 {
 
-        antennaData->overRunFlag = ui->chkOverrun->isChecked();
+        antennaData->overLapFlag = ui->chkOverLap->isChecked();
 
-        setOverlapEndStop(antennaData, antennaData->overRunFlag);
+        setOverlapEndStop(antennaData, antennaData->overLapFlag);
 
         antennaValueChanged = true;
 
@@ -758,11 +758,11 @@ void rotSetupForm::overlapSelected()
 }
 
 
-void rotSetupForm::setOverlapEndStop(srotParams* antennaData, bool overrunState)
+void rotSetupForm::setOverlapEndStop(srotParams* antennaData, bool overLapState)
 {
 
 
-    if (overrunState && (antennaData->endStopType == ROT_0_450 || antennaData->endStopType == ROT_NEG180_450))
+    if (overLapState && (antennaData->endStopType == ROT_0_450 || antennaData->endStopType == ROT_NEG180_450))
     {
         antennaData->max_azimuth = antennaData->rotatorCWEndStop;
         antennaData->min_azimuth = antennaData->rotatorCCWEndStop;
@@ -784,7 +784,7 @@ void rotSetupForm::setOverlapEndStop(srotParams* antennaData, bool overrunState)
 
 
     /*
-    if (overrunState && (antennaData->endStopType == ROT_0_360 || antennaData->endStopType == ROT_NEG179_180))
+    if (overLapState && (antennaData->endStopType == ROT_0_360 || antennaData->endStopType == ROT_NEG179_180))
     {
 
         antennaData->max_azimuth = antennaData->rotatorCWEndStop;
@@ -795,7 +795,7 @@ void rotSetupForm::setOverlapEndStop(srotParams* antennaData, bool overrunState)
         antennaData->southStopType = S_STOPOFF;
 
     }
-    else if (!overrunState && (antennaData->endStopType == ROT_0_450 || antennaData->endStopType == ROT_NEG180_450))
+    else if (!overLapState && (antennaData->endStopType == ROT_0_450 || antennaData->endStopType == ROT_NEG180_450))
     {
         antennaData->max_azimuth = COMPASS_MAX360;
         antennaData->min_azimuth = COMPASS_MIN0;
@@ -809,19 +809,19 @@ void rotSetupForm::setOverlapEndStop(srotParams* antennaData, bool overrunState)
 }
 
 
-bool rotSetupForm::getCheckOverrun()
+bool rotSetupForm::getCheckOverLap()
 {
-    return ui->chkOverrun->checkState();
+    return ui->chkOverLap->checkState();
 }
 
-void rotSetupForm::setCheckOverrun(bool s)
+void rotSetupForm::setCheckOverLap(bool s)
 {
-    ui->chkOverrun->setChecked(s);
+    ui->chkOverLap->setChecked(s);
 }
 
-void rotSetupForm::setOverRunFlagVisible(bool s)
+void rotSetupForm::setOverLapFlagVisible(bool s)
 {
-    ui->chkOverrun->setVisible(s);
+    ui->chkOverLap->setVisible(s);
 
 }
 

@@ -89,12 +89,12 @@ public:
     void sStopButtonsVisible(bool visible);
     void setSStopButtons(southStop stopType);
 
-    bool getCheckOverrun();
-    void setCheckOverrun(bool s);
+    bool getCheckOverLap();
+    void setCheckOverLap(bool s);
 
     QString getAntennaOffset();
     void setAntennaOffset(QString o);
-    void setOverRunFlagVisible(bool s);
+    void setOverLapFlagVisible(bool s);
 
     void serialDataEntryVisible(bool v);
     void networkDataEntryVisible(bool v);
@@ -116,7 +116,7 @@ public:
     void setupRotatorModel(QString rotatorModel);
 
     bool setEndStopType(srotParams *antennaData, int minRot, int maxRot);
-    void setOverlapEndStop(srotParams *antennaData, bool overrunState);
+    void setOverlapEndStop(srotParams *antennaData, bool overLapState);
 
     void setAdvancedCommsFlag(bool state);
     void advancedSerialDataEntryVisible(bool v);

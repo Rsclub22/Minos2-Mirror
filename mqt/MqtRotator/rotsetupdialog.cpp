@@ -101,10 +101,10 @@ void RotSetupDialog::initSetup()
             availAntData[i]->rotatorCWEndStop = rotCap.getMaxRot();
             availAntData[i]->rotatorCCWEndStop = rotCap.getMinRot();
 
-            bool overrunState = availAntData[i]->overRunFlag;   // save as it is changed in setEndStopType
+            bool overLapState = availAntData[i]->overLapFlag;   // save as it is changed in setEndStopType
             antennaTab[i]->setEndStopType(availAntData[i], availAntData[i]->rotatorCCWEndStop, availAntData[i]->rotatorCWEndStop);
-            availAntData[i]->overRunFlag = overrunState;  //restore
-            antennaTab[i]->setOverlapEndStop(availAntData[i], overrunState);
+            availAntData[i]->overLapFlag = overLapState;  //restore
+            antennaTab[i]->setOverlapEndStop(availAntData[i], overLapState);
 
             loadSettingsToTab(i);
         }
@@ -156,7 +156,7 @@ void RotSetupDialog::loadSettingsToTab(int tabNum)
         antennaTab[tabNum]->pollIntervalVisible(true);
         //antennaTab[tabNum]->setCheckStop(availAntData[tabNum]->southStopType);
 
-        antennaTab[tabNum]->setCheckOverrun(availAntData[tabNum]->overRunFlag);
+        antennaTab[tabNum]->setCheckOverLap(availAntData[tabNum]->overLapFlag);
         antennaTab[tabNum]->setSimCW_CCWcmdChecked(availAntData[tabNum]->simCwCcwCmd);
 
         // set southstop visible if rotator is 0 - 360
@@ -176,12 +176,12 @@ void RotSetupDialog::loadSettingsToTab(int tabNum)
                antennaTab[tabNum]->setSStopButtons(availAntData[tabNum]->southStopType);
            }
 
-           antennaTab[tabNum]->setOverRunFlagVisible(false);
+           antennaTab[tabNum]->setOverLapFlagVisible(false);
         }
         else if (availAntData[tabNum]->rotType == ROT_0_450)
         {
-           antennaTab[tabNum]->setOverRunFlagVisible(true);
-           if ((availAntData[tabNum]->endStopType == ROT_0_360 || availAntData[tabNum]->endStopType == ROT_NEG179_180) && !availAntData[tabNum]->overRunFlag  )
+           antennaTab[tabNum]->setOverLapFlagVisible(true);
+           if ((availAntData[tabNum]->endStopType == ROT_0_360 || availAntData[tabNum]->endStopType == ROT_NEG179_180) && !availAntData[tabNum]->overLapFlag  )
            {
 
                antennaTab[tabNum]->sStopButtonsVisible(true);
@@ -195,10 +195,10 @@ void RotSetupDialog::loadSettingsToTab(int tabNum)
         else
         {
            antennaTab[tabNum]->sStopButtonsVisible(false);
-           antennaTab[tabNum]->setOverRunFlagVisible(false);
+           antennaTab[tabNum]->setOverLapFlagVisible(false);
         }
 
-        antennaTab[tabNum]->setCheckOverrun(availAntData[tabNum]->overRunFlag);
+        antennaTab[tabNum]->setCheckOverLap(availAntData[tabNum]->overLapFlag);
         antennaTab[tabNum]->setAntennaOffset(QString::number(availAntData[tabNum]->antennaOffset));
         antennaTab[tabNum]->antennaOffSetVisible(true);
         //antennaTab[tabNum]->setComport(availAntData[tabNum]->comport);
@@ -283,7 +283,7 @@ void RotSetupDialog::loadSettingsToTab(int tabNum)
         // no rotator model selected, hide elements on tab
         antennaTab[tabNum]->setRotatorModel(availAntData[tabNum]->rotatorModel);
         antennaTab[tabNum]->networkDataEntryVisible(false);
-        antennaTab[tabNum]->setOverRunFlagVisible(false);
+        antennaTab[tabNum]->setOverLapFlagVisible(false);
         antennaTab[tabNum]->sStopButtonsVisible(false);
         antennaTab[tabNum]->setSStopButtons(S_STOPOFF);
         antennaTab[tabNum]->pollIntervalVisible(false);
@@ -431,7 +431,7 @@ void RotSetupDialog::saveSettings()
             config.setValue("supportCwCcwCmd", availAntData[i]->supportCwCcwCmd);
             config.setValue("rotatorPollInterval", availAntData[i]->pollInterval);
             config.setValue("simulateCwCCw", availAntData[i]->simCwCcwCmd);
-            config.setValue("overRun", availAntData[i]->overRunFlag);
+            config.setValue("overRun", availAntData[i]->overLapFlag);           // leave name as overrun in ini file
             config.setValue("southStopType", availAntData[i]->southStopType);
             config.setValue("antennaOffset", availAntData[i]->antennaOffset);
             config.setValue("portType", availAntData[i]->portType);
@@ -487,7 +487,7 @@ void RotSetupDialog::getAvailAntenna(int antNum, QSettings& config)
     availAntData[antNum]->pollInterval = config.value("rotatorPollInterval", ROT_DEFAULT_POLLINTERVAL).toString();
     availAntData[antNum]->supportCwCcwCmd = config.value("supportCwCcwCmd", false).toBool();
     availAntData[antNum]->simCwCcwCmd = config.value("simulateCwCCw", true).toBool();
-    availAntData[antNum]->overRunFlag = config.value("overRun", false).toBool();
+    availAntData[antNum]->overLapFlag = config.value("overRun", false).toBool();
     availAntData[antNum]->southStopType = static_cast<southStop> (config.value("southStopType", southStop::S_STOPOFF).toInt());
     availAntData[antNum]->antennaOffset = config.value("antennaOffset", "").toInt();
     availAntData[antNum]->portType = (config.value("portType", RotCapConstants::PortType::none).toInt());

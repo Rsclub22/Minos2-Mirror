@@ -1140,7 +1140,7 @@ void RotatorMainWindow::upDateAntenna()
             offSetDisplay->setText(QString::number(setupAntenna->currentAntenna.antennaOffset));
 
             // don't display overlap if rotator doesn't support or user turned off overlap
-            toggleOverLapDisplay(setupAntenna->currentAntenna.overRunFlag);
+            toggleOverLapDisplay(setupAntenna->currentAntenna.overLapFlag);
 
            // for test ******************************************************************************************
             //setupAntenna->currentAntenna.supportCwCcwCmd = false;
@@ -2735,7 +2735,7 @@ void RotatorMainWindow::aboutRotatorConfig()
         msg.append(tr("Current Max Azimuth = %1\n").arg(QString::number(setupAntenna->currentAntenna.max_azimuth)));
         msg.append(tr("Current Min Azimuth = %1\n").arg(QString::number(setupAntenna->currentAntenna.min_azimuth)));
         msg.append(tr("South Stop Type = %1\n").arg(southStopNames[setupAntenna->currentAntenna.southStopType]));
-        msg.append(tr("Overrun flag = %1\n").arg(overLapActiveflag ? "True" : "False"));
+        msg.append(tr("OverLap flag = %1\n").arg(overLapActiveflag ? "True" : "False"));
         msg.append(tr("Support CW and CCW Commands = %1\n").arg(setupAntenna->currentAntenna.supportCwCcwCmd ? "True" : "False"));
         msg.append(tr("Simulate CW and CCW Commands selected = %1\n").arg(setupAntenna->currentAntenna.simCwCcwCmd ? "True" : "False"));
         msg.append(tr("Rotator Polltime = %1\n").arg(setupAntenna->currentAntenna.pollInterval));
@@ -2810,7 +2810,7 @@ void RotatorMainWindow::dumpRotatorToTraceLog()
         trace(QString("Current Max Azimuth = %1").arg(QString::number(setupAntenna->currentAntenna.max_azimuth)));
         trace(QString("Current Min Azimuth = %1").arg(QString::number(setupAntenna->currentAntenna.min_azimuth)));
         trace(QString("South Stop Type = %1").arg(southStopNames[setupAntenna->currentAntenna.southStopType]));
-        trace(QString("Overrun flag = %1").arg(overLapActiveflag ? "True" : "False"));
+        trace(QString("OverLap flag = %1").arg(overLapActiveflag ? "True" : "False"));
         trace(QString("Support CW and CCW Commands = %1").arg(setupAntenna->currentAntenna.supportCwCcwCmd ? "True" : "False"));
         trace(QString("Simulate CW and CCW Commands selected = %1").arg(setupAntenna->currentAntenna.simCwCcwCmd ? "True" : "False"));
         trace(QString("Rotator Polltime = %1").arg(setupAntenna->currentAntenna.pollInterval));
@@ -3720,7 +3720,7 @@ void RotatorMainWindow::openSkyScan(QString currentAntennaName)
 
     initialiseSpinBox(ui->skyScanStepDegreeSpinBox, minSkyScanStepDegrees, maxSkyScanStepDegrees,  stepDegreesIncrement, skyScanStepDegrees, true);
 
-    //if (setupAntenna->currentAntenna.overRunFlag)      // has overlap been disabled
+    //if (setupAntenna->currentAntenna.overLapFlag)      // has overlap been disabled
     //{
     //    skyScanMinAzimuth = COMPASS_MIN0;
     //    skyScanMaxAzimuth = COMPASS_MAX360;
