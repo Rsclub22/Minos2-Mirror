@@ -101,10 +101,12 @@ void RotSetupDialog::initSetup()
             availAntData[i]->rotatorCWEndStop = rotCap.getMaxRot();
             availAntData[i]->rotatorCCWEndStop = rotCap.getMinRot();
 
-            bool overLapState = availAntData[i]->overLapFlag;   // save as it is changed in setEndStopType
+            //bool overLapState = availAntData[i]->overLapFlag;   // save as it is changed in setEndStopType
+            antennaTab[i]->getRotatorType(availAntData[i], availAntData[i]->rotatorCCWEndStop, availAntData[i]->rotatorCWEndStop);
+            availAntData[i]->overLapFlag = availAntData[i]->overLapFlag;
             antennaTab[i]->setEndStopType(availAntData[i], availAntData[i]->rotatorCCWEndStop, availAntData[i]->rotatorCWEndStop);
-            availAntData[i]->overLapFlag = overLapState;  //restore
-            antennaTab[i]->setOverlapEndStop(availAntData[i], overLapState);
+            //availAntData[i]->overLapFlag = availAntData[i]->overLapFlag;  //restore
+            //antennaTab[i]->setOverlapEndStop(availAntData[i], overLapState);
 
             loadSettingsToTab(i);
         }
@@ -178,10 +180,13 @@ void RotSetupDialog::loadSettingsToTab(int tabNum)
 
            antennaTab[tabNum]->setOverLapFlagVisible(false);
         }
-        else if (availAntData[tabNum]->rotType == ROT_0_450)
+        else if (availAntData[tabNum]->rotType == ROT_NEG180_450)
         {
            antennaTab[tabNum]->setOverLapFlagVisible(true);
-           if ((availAntData[tabNum]->endStopType == ROT_0_360 || availAntData[tabNum]->endStopType == ROT_NEG179_180) && !availAntData[tabNum]->overLapFlag  )
+           if ((availAntData[tabNum]->endStopType == ROT_0_360
+                || availAntData[tabNum]->endStopType == ROT_0_450
+                ||availAntData[tabNum]->endStopType == ROT_NEG179_180)
+               && !availAntData[tabNum]->overLapFlag  )
            {
 
                antennaTab[tabNum]->sStopButtonsVisible(true);
@@ -198,7 +203,7 @@ void RotSetupDialog::loadSettingsToTab(int tabNum)
            antennaTab[tabNum]->setOverLapFlagVisible(false);
         }
 
-        antennaTab[tabNum]->setCheckOverLap(availAntData[tabNum]->overLapFlag);
+        //antennaTab[tabNum]->setCheckOverLap(availAntData[tabNum]->overLapFlag);
         antennaTab[tabNum]->setAntennaOffset(QString::number(availAntData[tabNum]->antennaOffset));
         antennaTab[tabNum]->antennaOffSetVisible(true);
         //antennaTab[tabNum]->setComport(availAntData[tabNum]->comport);

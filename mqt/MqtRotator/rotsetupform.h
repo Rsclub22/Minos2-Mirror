@@ -114,7 +114,7 @@ public:
 
 
     void setupRotatorModel(QString rotatorModel);
-
+    bool getRotatorType(srotParams *antennaData, int minRot, int maxRot);
     bool setEndStopType(srotParams *antennaData, int minRot, int maxRot);
     void setOverlapEndStop(srotParams *antennaData, bool overLapState);
 
@@ -133,6 +133,10 @@ public:
 
     void setSkyScanTabChkBoxVisible(bool s);
     void checkSkyScanChkBox(bool checked);
+
+
+
+
 
 
 public slots:
