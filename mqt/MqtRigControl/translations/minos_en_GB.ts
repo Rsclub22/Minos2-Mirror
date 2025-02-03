@@ -174,7 +174,7 @@ Please enter a name for the radio</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../hamlibrigcontrol.cpp" line="1171"/>
+        <location filename="../hamlibrigcontrol.cpp" line="1172"/>
         <source>Hamlib Errorcode too large!</source>
         <translation type="unfinished"></translation>
     </message>

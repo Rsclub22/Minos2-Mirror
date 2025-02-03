@@ -14,49 +14,49 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="457"/>
+        <location filename="../ConfigFile.cpp" line="471"/>
         <source>Default App Config</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="922"/>
+        <location filename="../ConfigFile.cpp" line="936"/>
         <source>More than one server is defined and enabled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="931"/>
+        <location filename="../ConfigFile.cpp" line="945"/>
         <source>A local server is required.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="946"/>
+        <location filename="../ConfigFile.cpp" line="960"/>
         <source> contains bad characters [ and/or ]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="961"/>
+        <location filename="../ConfigFile.cpp" line="975"/>
         <source> appears more than once (names are not case sensitive)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="1000"/>
+        <location filename="../ConfigFile.cpp" line="1014"/>
         <source>%1 requires a local %2
 
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="1013"/>
+        <location filename="../ConfigFile.cpp" line="1027"/>
         <source> Inferred Executable path does not exist or is not executable:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="1021"/>
+        <location filename="../ConfigFile.cpp" line="1035"/>
         <source> Executable path does not exist or is not executable:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="1027"/>
+        <location filename="../ConfigFile.cpp" line="1041"/>
         <source> Working directory is not valid - no Configuration/MinosConfig.json
 
 </source>
@@ -66,7 +66,7 @@
 <context>
     <name>RunConfigElement</name>
     <message>
-        <location filename="../ConfigFile.cpp" line="246"/>
+        <location filename="../ConfigFile.cpp" line="258"/>
         <source>:program is not executable:</source>
         <translation type="unfinished"></translation>
     </message>
