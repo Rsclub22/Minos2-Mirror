@@ -74,6 +74,9 @@ public:
     void setLibraryVersion(QString libraryVersion_);
     QString getLibraryVersion();
 
+    void setDetailedLibraryVersion(QString detailedVersion_);
+    QString getDetailedLibraryVersion();
+
     void setSupportGetSupBands(bool supportGetSupBands_);
     bool getSupportGetSupBands()const;
 
@@ -171,6 +174,7 @@ private:
   int rigModelNumber;
   QString libraryName;
   QString libraryVersion;
+  QString detailedLibraryVersion;
   bool supportGetSupBands;
   bool supportGetVfo;
   bool supportSetVfo;
