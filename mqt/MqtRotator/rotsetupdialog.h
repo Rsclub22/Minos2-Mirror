@@ -3,7 +3,7 @@
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //                      Rotator Control
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016-2020
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016-2025
 //
 //
 /////////////////////////////////////////////////////////////////////////////
@@ -116,7 +116,7 @@ private:
 
     void addTab(int tabNum, QString tabName);
 
-    void loadSettingsToTab(int tabNum);
+    void loadSettingsToTab(RotCapabilities &rotCap, int tabNum);
     void getAvailAntenna(int antNum, QSettings &config);
     void initSetup();
     void closeEvent(QCloseEvent *event) override;
@@ -124,6 +124,7 @@ private:
     void loadAvailComportsToTab(int tabNum);
     void updateAvailAntennasToVersion2();
 
+    void updateAvailAntennasToVersion3();
 };
 
 #endif // SETUPDIALOG_H

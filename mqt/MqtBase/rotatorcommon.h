@@ -146,6 +146,15 @@ inline const QString FILENAME_CURRENT_ANTENNA = "CurrentAntenna.ini";
 // ROT_NEG179_180 for a Compass Sensor set for south stop.
 // ROT_0_360 rotator with no overlap, north stop
 // ROT_0_450 rotator with overlap, north stop
+// hamlib Gs232 ROT_NEG180_540 rotator
+// For south stop
+// send -181 to -1 hamlib converts to 181 to 359 to send to rotator
+// if rotator sends -181 to -1 hamlib returns the negative number
+// the rotator only works with -181 to 180 on the rotator - ie a 360 degree rotator
+// sending -180 is converted to 180 so dependent on controller will send the rotator all the way
+// round to 180.
+// sending receiving 0 - 450 works as normal.
+
 enum endStop {ROT_NEG179_180, ROT_0_360, ROT_0_450, ROT_NEG180_540, ROT_NEG180_450};
 inline const QStringList endStopNames = (QStringList() << "ROT_NEG179_180" << "ROT_0_360" << "ROT_0_450" << "ROT_NEG180_540" << "ROT_NEG180_450");
 
