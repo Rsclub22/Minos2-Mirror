@@ -228,10 +228,7 @@ void HamlibRotControl::register_rotators(RotatorFactory::Rotators* rotatorsList)
 
     for (int i = 0; i < capsList.count(); i++)
     {
-        if (!(capsList[i]->rot_model == 610
-             || capsList[i]->rot_model == 612
-             || capsList[i]->rot_model == 1702
-             || capsList[i]->rot_model == 1704 ))    // skip elevation models
+        if (capsList[i]->max_az != 0) // skip elevation models
         {
             key = QString("%1 %2").arg(capsList[i]->mfg_name, capsList[i]->model_name);
             auto port_type = RotCapConstants::PortType::none;

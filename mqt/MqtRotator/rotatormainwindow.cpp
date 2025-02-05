@@ -1375,7 +1375,7 @@ void RotatorMainWindow::checkEndStop()
 
         if (setupAntenna->currentAntenna.southStopType == S_STOP_COMPASS_SENSOR)
         {
-            if (rotatorBearing >= setupAntenna->currentAntenna.max_azimuth && rotatorBearing <= setupAntenna->currentAntenna.min_azimuth)
+            if (rotatorBearing >= setupAntenna->currentAntenna.max_azimuth || rotatorBearing <= setupAntenna->currentAntenna.min_azimuth)
             {
                 logMessage(QString("S_STOP_COMPASS_SENSOR - Max Endstop reached!"));
                 stopButton();
@@ -1385,13 +1385,13 @@ void RotatorMainWindow::checkEndStop()
         {
                 logMessage(QString("Max Endstop reached!"));
                 stopButton();
-            }
         }
+    }
     else if (movingCCW)
     {
         if (setupAntenna->currentAntenna.southStopType == S_STOP_COMPASS_SENSOR)
         {
-            if (rotatorBearing <= setupAntenna->currentAntenna.min_azimuth && rotatorBearing >= setupAntenna->currentAntenna.max_azimuth)
+            if (rotatorBearing <= setupAntenna->currentAntenna.min_azimuth || rotatorBearing >= setupAntenna->currentAntenna.max_azimuth)
             {
                 logMessage(QString("S_STOP_COMPASS_SENSOR - Min Endstop reached!"));
                 stopButton();
