@@ -1,4 +1,5 @@
 #include <QDateTime>
+#include <QTimeZone>
 #include "AppStartup.h"
 #include "clustercommon.h"
 #include "checkmodeagainstfreq.h"
@@ -407,15 +408,15 @@ void BandmapClientFilterSettings::setModeFilter(QString mode, bool setting)
 
 bool BandmapClientFilterSettings::getModeFilter(QString mode)
 {
-    if (mode == hamlibData::PSK)
+    if (mode == PSK)
     {
         mode = PSK31_MODE;
     }
-    else if (mode == hamlibData::RY)
+    else if (mode == RY)
     {
         mode = RTTY_MODE;
     }
-    if (mode == hamlibData::PH)
+    if (mode == PH)
     {
         if (modeFilterFlag.getModeFilter(USB_MODE))
         {
@@ -635,7 +636,9 @@ QDateTime getSpotDateTime(const QString spotDate, const QString spotTime)
     {
         tmo = QTime::currentTime();
     }
-    dt = QDateTime(dto, tmo, Qt::UTC);
+
+    dt = QDateTime(dto, tmo);
+    dt = toUTC(dt);
     return dt;
 }
 

@@ -180,6 +180,7 @@ private:
 
 
 
+    QString getRotLibDetailedVersion();
 };
 
 #endif // HAMLIBRIGCONTROL_H

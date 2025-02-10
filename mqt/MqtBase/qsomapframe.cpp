@@ -85,7 +85,7 @@ void QSOMapFrame::setContest(BaseContestLog *c, bool monitor, bool grid, bool li
             }
 
             //set current mode
-            if (contestModeStr == hamlibData::MGM)
+            if (contestModeStr == MGM)
             {
                 for (auto &m: mgmModes)
                 {
@@ -93,12 +93,12 @@ void QSOMapFrame::setContest(BaseContestLog *c, bool monitor, bool grid, bool li
 
                 }
             }
-            else if (contestModeStr == hamlibData::PH)
+            else if (contestModeStr == PH)
             {
                 filterSettings.setModeFilter(USB_MODE, true);
                 filterSettings.setModeFilter(LSB_MODE, true);
             }
-            else if (contestModeStr == hamlibData::RY || contestModeStr == hamlibData::PSK  )
+            else if (contestModeStr == RY || contestModeStr == PSK  )
             {
                 filterSettings.setModeFilter(RTTY_MODE, true);
                 filterSettings.setModeFilter(PSK31_MODE, true);

@@ -3,7 +3,6 @@
 #include <QSplitter>
 #include "QtUtils.h"
 #include "MTrace.h"
-#include "rigcontrolcommonconstants.h"
 #include "rxbuffer.h"
 #include "dmmainwindow.h"
 #include "enginewindow.h"
@@ -320,12 +319,12 @@ void MMVARIFrame::sendCharacters(const QString &sendData, int mf)
 
 void MMVARIFrame::sendMode(QString m)
 {
-    if (m == hamlibData::PSK)
+    if (m == PSK)
     {
         mmview->setBLSB(false);
         modeCombo->setCurrentText("bpsk");
     }
-    if (m == hamlibData::RY)
+    if (m == RY)
     {
         mmview->setBLSB(true);
         modeCombo->setCurrentText("rtty-L");

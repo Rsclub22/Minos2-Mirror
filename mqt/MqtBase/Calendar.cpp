@@ -1,3 +1,4 @@
+#include <QTimeZone>
 #include "QtUtils.h"
 #include "TinyUtils.h"
 #include "cutils.h"
@@ -89,8 +90,10 @@ int Calendar::getDate ( int month, int day, int week )
 
 #if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
     QDateTime startMonth ( QDate( curYear, month, 1 ) );
-#else
+#elif QT_VERSION < QT_VERSION_CHECK(6, 8, 0)
     QDateTime startMonth  = QDate( curYear, month, 1 ).startOfDay(Qt::UTC);
+#else
+    QDateTime startMonth  = QDate( curYear, month, 1 ).startOfDay(QTimeZone::UTC);
 #endif
     int dw = getDayOfWeek ( startMonth ) - 1;   // make it 0 based
 
@@ -408,8 +411,10 @@ bool Calendar::parseFile ( const QString &fname )
                             ic.mode = mode;
 #if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
                             ic.start = QDateTime ( QDate( curYear, sm, istartDate ) );
-#else
+#elif QT_VERSION < QT_VERSION_CHECK(6, 8, 0)
                             ic.start = QDate( curYear, sm, istartDate ).startOfDay(Qt::UTC);
+#else
+                            ic.start = QDate( curYear, sm, istartDate ).startOfDay(QTimeZone::UTC);
 #endif
                             int h = tl.startTime.left( 2 ).toInt();
                             int m = tl.startTime.mid( 2, 2 ).toInt();
@@ -943,11 +948,11 @@ bool Calendar::parseContest ( TiXmlElement * tix )
                                                                                 }
                                                                                 if (mode == "RY")
                                                                                 {
-                                                                                   mode = hamlibData::RY;
+                                                                                   mode = RY;
                                                                                 }
                                                                                 if (mode == "PS")
                                                                                 {
-                                                                                   mode = hamlibData::PSK;
+                                                                                   mode = PSK;
                                                                                 }
 
                                                                                 if (mode == "[A-Z][A-Z]")

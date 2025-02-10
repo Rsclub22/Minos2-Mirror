@@ -290,7 +290,7 @@ void PresetFreq::readSettings(const QVector<QSharedPointer<BandInfo> > &bands)
     {
         Frequency fl;
         QString band = bi->uk;
-        QSharedPointer<ModeInfo> mi = bi->findMode(hamlibData::MGM);
+        QSharedPointer<ModeInfo> mi = bi->findMode(MGM);
         fl = mi?mi->fcLow1:bi->fcLow;
         QString mf = config.value(band, fl.str()).toString();
         bool excludedFreq = false;
@@ -309,7 +309,7 @@ void PresetFreq::readSettings(const QVector<QSharedPointer<BandInfo> > &bands)
     {
         Frequency fl;
         QString band = bi->uk;
-        QSharedPointer<ModeInfo> mi = bi->findMode(hamlibData::RY);
+        QSharedPointer<ModeInfo> mi = bi->findMode(RY);
         fl = mi?mi->fcLow1:bi->fcLow;
         QString mf = config.value(band, fl.str()).toString();
         bool excludedFreq = false;
@@ -328,7 +328,7 @@ void PresetFreq::readSettings(const QVector<QSharedPointer<BandInfo> > &bands)
     {
         Frequency fl;
         QString band = bi->uk;
-        QSharedPointer<ModeInfo> mi = bi->findMode(hamlibData::PSK);
+        QSharedPointer<ModeInfo> mi = bi->findMode(PSK);
         fl = mi?mi->fcLow1:bi->fcLow;
         QString mf = config.value(band, fl.str()).toString();
         bool excludedFreq = false;

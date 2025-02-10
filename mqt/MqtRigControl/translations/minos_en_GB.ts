@@ -174,7 +174,7 @@ Please enter a name for the radio</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../hamlibrigcontrol.cpp" line="1171"/>
+        <location filename="../hamlibrigcontrol.cpp" line="1177"/>
         <source>Hamlib Errorcode too large!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -253,12 +253,12 @@ Check Rigcontrol tracelog</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../omnirigcontrol.cpp" line="637"/>
+        <location filename="../omnirigcontrol.cpp" line="638"/>
         <source>Minos - Check Omnirig Radio ini File for radio %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../omnirigcontrol.cpp" line="638"/>
+        <location filename="../omnirigcontrol.cpp" line="639"/>
         <source>The ini file for %1 does not contain [pmFreq] for correct operation of Minos
 Please obtain the correct ini file from the Minos folder:
 Configuration\Omnirig_Minos_Ini
@@ -266,7 +266,7 @@ Place it in \Program Files (x86)\Afreet\OmniRig\Rigs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../omnirigcontrol.cpp" line="1050"/>
+        <location filename="../omnirigcontrol.cpp" line="1051"/>
         <source>Omnirig Errorcode too large!</source>
         <translation type="unfinished"></translation>
     </message>

@@ -1004,11 +1004,11 @@ void ContestDetails::setDetails( const IndividualContest &ic )
    QString setMode = ic.mode;
    if (setMode == "FT8" || setMode == "FT4")
    {
-       setMode = hamlibData::MGM;
+       setMode = MGM;
    }
    if (isHF)
    {
-       if (setMode == hamlibData::MGM)
+       if (setMode == MGM)
        {
            contestTransferObject->locMult.setValue( false );
            contestTransferObject->countryMult.setValue( true );
@@ -1060,7 +1060,7 @@ void ContestDetails::setDetails( const IndividualContest &ic )
    if (mode.isEmpty())
    {
       if (contestTransferObject->MGMContestRules.getValue() || ic.specialRules.contains("S12"))
-          mode = hamlibData::MGM;
+          mode = MGM;
       else
           mode = hamlibData::USB;
    }
@@ -1100,11 +1100,11 @@ void ContestDetails::setModes()
     if (!contestTransferObject || contestTransferObject->modeList.getValue().isEmpty())
     {
         modeString = hamlibData::CW
-                     + "|" + (contestTransferObject->isHF()?hamlibData::PH:hamlibData::USB)
+                     + "|" + (contestTransferObject->isHF()?PH:hamlibData::USB)
                     + "|" + hamlibData::FM
-                    + "|" + hamlibData::MGM
-                    + "|" + hamlibData::RY
-                    + "|" + hamlibData::PSK
+                    + "|" + MGM
+                    + "|" + RY
+                    + "|" + PSK
                     ;
     }
     else

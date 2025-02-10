@@ -3,7 +3,7 @@
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //                      Rig Control
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2024
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2026
 //
 //
 //
@@ -12,9 +12,9 @@
 
 
 
-
-#include "rigcapabilities.h"
 #include <hamlib/rig.h>
+#include "rigcapabilities.h"
+
 
 RigCapabilities::RigCapabilities()
 {
@@ -45,6 +45,7 @@ RigCapabilities & RigCapabilities::operator= ( const RigCapabilities &rigcap)
     rigModelNumber = rigcap.rigModelNumber;
     libraryName = rigcap.libraryName;
     libraryVersion = rigcap.libraryVersion;
+    detailedLibraryVersion = rigcap.detailedLibraryVersion;
     supportGetSupBands = rigcap.supportGetSupBands;
     supportGetVfo = rigcap.supportGetVfo;
     supportSetVfo = rigcap.supportSetVfo;
@@ -87,6 +88,7 @@ void RigCapabilities::clear()
     rigModelNumber = 0;
     libraryName = "";
     libraryVersion = "";
+    detailedLibraryVersion = "";
     supportGetSupBands = false;
     supportGetVfo = false;
     supportSetVfo = false;
@@ -179,7 +181,14 @@ QString RigCapabilities::getLibraryVersion()
 {
     return libraryVersion;
 }
-
+void RigCapabilities::setDetailedLibraryVersion(QString detailedVersion_)
+{
+    detailedLibraryVersion = detailedVersion_;
+}
+QString RigCapabilities::getDetailedLibraryVersion()
+{
+    return detailedLibraryVersion;
+}
 void RigCapabilities::setSupportGetSupBands(bool supportGetSupBands_)
 {
     supportGetSupBands = supportGetSupBands_;

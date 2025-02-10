@@ -50,7 +50,7 @@ int CheckOperatingFreq::getFreqLimitsForDial(ModeFreqDetail<Frequency> &listOfFr
     QString mode(pmode);
     if (bandModeFreqList.contains(band))
     {
-        if (mode == hamlibData::PH)
+        if (mode == PH)
         {
             auto modeTestFreq = bandModeFreqList.value(band).begin()->freq.at(0).at(0);
             if (modeTestFreq > Frequency(10000000))

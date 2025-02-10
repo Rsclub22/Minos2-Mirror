@@ -1066,7 +1066,10 @@ bool LoggerContestLog::exportADIF(QSharedPointer<QFile> expfd )
 
    header += tr( "From file %1" ).arg(cfileName) + "\n\n";
 
-   header += "<EOH>\n";
+   header += makeADIFField("PROGRAMID", "Minos");
+   header += makeADIFField("PROGRAMVERSION", QString("%1 %2").arg(STRINGVERSION, PRERELEASETYPE));
+
+   header += "\n\n<EOH>\n\n";
 
    QByteArray bh = header.toUtf8();
 

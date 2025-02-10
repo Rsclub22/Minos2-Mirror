@@ -938,17 +938,17 @@
 <context>
     <name>Calendar</name>
     <message>
-        <location filename="../Calendar.cpp" line="21"/>
+        <location filename="../Calendar.cpp" line="22"/>
         <source>&lt;VHF from VHFContests.xml&gt;</source>
         <translation>&lt;VHF de VHFContests.xml&gt;</translation>
     </message>
     <message>
-        <location filename="../Calendar.cpp" line="22"/>
+        <location filename="../Calendar.cpp" line="23"/>
         <source>&lt;Microwave from MicrContemodestsxx.xml&gt;</source>
         <translation>&lt;Microonde de MicrContemodestsxx.xml&gt;</translation>
     </message>
     <message>
-        <location filename="../Calendar.cpp" line="42"/>
+        <location filename="../Calendar.cpp" line="43"/>
         <source>Undefined</source>
         <translation>Indéterminée</translation>
     </message>
@@ -1217,7 +1217,7 @@
 <context>
     <name>Day Abbreviation</name>
     <message>
-        <location filename="../cutils.cpp" line="993"/>
+        <location filename="../cutils.cpp" line="994"/>
         <source>D</source>
         <translation>J</translation>
     </message>
@@ -1953,7 +1953,7 @@ Attention: &quot;.&quot; pas &quot;,&quot;
 <context>
     <name>QWidget</name>
     <message>
-        <location filename="../cutils.cpp" line="793"/>
+        <location filename="../cutils.cpp" line="794"/>
         <source>Reset Columns</source>
         <comment>createColumnsMenu</comment>
         <translation>Réinitialiser les colonnes</translation>
@@ -2432,17 +2432,17 @@ Entrer une autre direction SVP</translation>
 <context>
     <name>clusterState</name>
     <message>
-        <location filename="../clustercommon.cpp" line="12"/>
+        <location filename="../clustercommon.cpp" line="13"/>
         <source>Available</source>
         <translation>Disponible</translation>
     </message>
     <message>
-        <location filename="../clustercommon.cpp" line="13"/>
+        <location filename="../clustercommon.cpp" line="14"/>
         <source>Not Available</source>
         <translation>Non disponible</translation>
     </message>
     <message>
-        <location filename="../clustercommon.cpp" line="14"/>
+        <location filename="../clustercommon.cpp" line="15"/>
         <source>No Contact</source>
         <translatorcomment>Dupe?</translatorcomment>
         <translation>Pas de contact</translation>

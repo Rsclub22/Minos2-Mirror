@@ -179,6 +179,9 @@ public:
     void xferFromKST(QString call, QString loc, QString freq);
 
     void setCallPlaceholder(QString call);
+    void sendRunOnFlag(Frequency, QString mode, bool);
+    void sendRunOffFreqFlag(Frequency, bool);
+
 private:
     QString curScreenLayout;
 
@@ -260,8 +263,6 @@ private slots:
     void on_BandmapMarkFreq(Frequency freq, QString mode);
     void on_BandmapSaveFreq(QString cs, Frequency freq, QString mode, QString loc, QString brg, QString exchange);
     void on_rotatorConnected(bool connected);
-    void sendRunOnFlag(Frequency, QString mode, bool);
-    void sendRunOffFreqFlag(Frequency, bool);
     void on_clusterServerState(QString state);
     void on_SendSpotToClusterServer(Frequency freq, QString callsign, QString loc);
     void on_setClusterTXSpotEnableState(QString state);
