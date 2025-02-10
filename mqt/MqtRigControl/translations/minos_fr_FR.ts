@@ -178,7 +178,7 @@ Please enter a name for the radio</source>
         <translation>Limite dépassée </translation>
     </message>
     <message>
-        <location filename="../hamlibrigcontrol.cpp" line="1172"/>
+        <location filename="../hamlibrigcontrol.cpp" line="1177"/>
         <source>Hamlib Errorcode too large!</source>
         <translation>Code d&apos;erreur de Hamlib trop grand!</translation>
     </message>
@@ -258,12 +258,12 @@ Vérifier le tracelog Rigcontrol</translation>
         <translation>Omnirig: pointeur nul</translation>
     </message>
     <message>
-        <location filename="../omnirigcontrol.cpp" line="637"/>
+        <location filename="../omnirigcontrol.cpp" line="638"/>
         <source>Minos - Check Omnirig Radio ini File for radio %1</source>
         <translation>Minos - Vérifier le fichier INI de la radio Omnirig pour la radio %1 ?? David&apos;s changed Omnirig files</translation>
     </message>
     <message>
-        <location filename="../omnirigcontrol.cpp" line="638"/>
+        <location filename="../omnirigcontrol.cpp" line="639"/>
         <source>The ini file for %1 does not contain [pmFreq] for correct operation of Minos
 Please obtain the correct ini file from the Minos folder:
 Configuration\Omnirig_Minos_Ini
@@ -274,7 +274,7 @@ Configuration\Omnirig_Minos_Ini
 Placez-le dans \Program Files (x86)\Afreet\OmniRig\Rigs</translation>
     </message>
     <message>
-        <location filename="../omnirigcontrol.cpp" line="1050"/>
+        <location filename="../omnirigcontrol.cpp" line="1051"/>
         <source>Omnirig Errorcode too large!</source>
         <translation>Code d&apos;erreur de Omnirig trop grand!</translation>
     </message>
