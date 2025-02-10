@@ -57,9 +57,9 @@ git clone https://github.com/Hamlib/Hamlib.git
 
 cd Hamlib
 
-# get the hamlib 4.6.0 release branch
+# get the hamlib 4.6.2 release branch
 
-git checkout Hamlib-4.6
+git checkout Hamlib-4.6.2
 
 # and run the build
 
