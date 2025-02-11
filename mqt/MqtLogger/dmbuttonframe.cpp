@@ -19,6 +19,7 @@
 #include "MinosRPC.h"
 #include "dmbuttonframe.h"
 #include "fileutils.h"
+#include "dmkeyseditdlg.h"
 #include "tlogcontainer.h"
 #include "tsinglelogframe.h"
 #include "MTrace.h"
@@ -384,6 +385,7 @@ bool DMButtonFrame::parseFKeyArray(QJsonArray s, QString keyset, QString mode)
     }
     return true;
 }
+
 bool DMButtonFrame::parseFKeyString(QString s, QString mode)
 {
     QJsonParseError err;
@@ -429,9 +431,11 @@ void DMButtonFrame::on_stopButton_clicked()
 
 void DMButtonFrame::on_editButton_clicked()
 {
+    DMKeysEditDlg jed(this, currentName, fkeys);
+    jed.exec();
     // bring up default file editor on "fkeyFileName"
 
-    QDesktopServices::openUrl(QUrl::fromLocalFile(fkeyFileName));
+ //   QDesktopServices::openUrl(QUrl::fromLocalFile(fkeyFileName));
 }
 
 void DMButtonFrame::on_logitButton_clicked()

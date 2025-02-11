@@ -54,13 +54,13 @@ SOURCES += \
     contest.cpp \
     cutils.cpp \
     DisplayContestContact.cpp \
+    dmkeyseditdlg.cpp \
     dtg.cpp \
     enqdlg.cpp \
     freqmodebandplan.cpp \
     gjvparams.cpp \
     htmldelegate.cpp \
     indicatorpushbutton.cpp \
-    jsoneditdlg.cpp \
     latlong.cpp \
     list.cpp \
     ListContact.cpp \
@@ -154,6 +154,7 @@ HEADERS += \
     contest.h \
     cutils.h \
     DisplayContestContact.h \
+    dmkeyseditdlg.h \
     dtg.h \
     enqdlg.h \
     focuswatcher.h \
@@ -161,7 +162,6 @@ HEADERS += \
     gjvparams.h \
     htmldelegate.h \
     indicatorpushbutton.h \
-    jsoneditdlg.h \
     latlong.h \
     list.h \
     ListContact.h \
@@ -242,7 +242,7 @@ FORMS += \
     StartConfigManager.ui \
     StatisticsDisplay.ui \
     bandmapclientfilterdialog.ui \
-    jsoneditdlg.ui \
+    dmkeyseditdlg.ui \
     managehamlib.ui \
     minoskeyboard.ui \
     monitoredlogs.ui \

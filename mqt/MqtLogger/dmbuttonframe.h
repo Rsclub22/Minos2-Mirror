@@ -57,7 +57,13 @@ private:
     QString currentName = "Default";
 
     QVector<QPushButton *> fButtons;
-    QMap<QString, QMap<QString, QVector<QPair<QString, QString> > > > fkeys;
+
+    // map(key contest type) of pairs (first map(key Fkey) of run message , second map(key fKey) of S&P message)
+    //typedef QMap<QString, QPair<QMap<QString, QString>, QMap<QString, QString> > > Keys;
+
+    // map(key "Digi" of (map(key current set name) of vector of pairs (fkey name, fkey mesage) ))
+    typedef QMap<QString, QMap<QString, QVector<QPair<QString, QString> > > > Keys;
+    Keys fkeys;
 
     QString dataSender;
     QString curMode;
