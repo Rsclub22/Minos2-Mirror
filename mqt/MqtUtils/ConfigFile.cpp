@@ -229,6 +229,18 @@ void RunConfigElement::createProcess()
         return;
     if (rEnabled && runType == RunLocal && !runner)
     {
+
+        if (lastStarted.isValid() && lastStarted.secsTo(QDateTime::currentDateTime()) < 10)
+        {
+            trace(QString("RunConfigElement::createProcess() %1 was started less than 10 secs ago").arg(name));
+            delayedAction(this, [=]()
+            {
+                trace(QString("RunConfigElement::createProcess() About to do delayed restart of %1").arg(name));
+                    createProcess();
+            }, 10000
+            );
+            return;
+        }
         runner = new QProcess(parent());
 
         QString program;
@@ -285,6 +297,8 @@ void RunConfigElement::createProcess()
         runner->start(runarg);
         trace(runarg);
 #endif
+        lastStarted = QDateTime::currentDateTime();
+
 
         delayedAction(this, [=]()
         {

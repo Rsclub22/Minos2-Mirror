@@ -10,7 +10,7 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-
+#include "cutils.h"
 #include "clustercommon.h"
 #include "contest.h"
 #include "MTrace.h"
@@ -169,7 +169,8 @@ QSharedPointer<ClusterSpotData> stringToDxSpot(QString spot, BaseContestLog *ct,
             bool dxLocFromNodeFlag = extractDxLocFromNodeFlag(spotlist[DXLOC_FROM_NODE_FLAG]);
 
             spotDateTime = QDateTime::fromString(spotlist[SPOTDATETIME], "yyyyMMMddHHmmss" );
-            spotDateTime.setTimeSpec(Qt::UTC);
+            spotDateTime = toUTC(spotDateTime);
+
             if (!spotDateTime.isValid())
             {
                 spotDateTime = QDateTime::currentDateTimeUtc();

@@ -1544,7 +1544,7 @@ int RigControlMainWindow::openRadio()
 
     if (rigStateDetails->rigCap.getRigManufacturer() != OMINRIG_MFR_NAME)
     {
-        logMessage(QString("Hamlib Library Version = %1").arg(rigStateDetails->rigCap.getLibraryVersion()));     // show library version in trace log before connection.
+        logMessage(QString("Hamlib Library Version = %1").arg(rigStateDetails->rigCap.getDetailedLibraryVersion()));     // show library version in trace log before connection.
     }
 
 
@@ -4809,7 +4809,7 @@ void RigControlMainWindow::aboutRigConfig()
     {
         if (radio != nullptr)
         {
-            msg.append(tr("Hamlib Version = %1\n").arg(rigStateDetails->rigCap.getLibraryVersion()));
+            msg.append(tr("Hamlib Version = %1\n").arg(rigStateDetails->rigCap.getDetailedLibraryVersion()));
         }
         else
         {
@@ -4999,7 +4999,7 @@ void RigControlMainWindow::dumpRadioToTraceLog()
         trace(QString("App Instance Name  = %1").arg(appName));
         if (radio != nullptr)
         {
-           trace(QString("Library Version = %1").arg(rigStateDetails->rigCap.getLibraryVersion()));
+           trace(QString("Library Version = %1").arg(rigStateDetails->rigCap.getDetailedLibraryVersion()));
         }
         else
         {

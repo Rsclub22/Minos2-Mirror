@@ -1932,7 +1932,7 @@ void RigControlFrame::freqPlusMinusButton(Frequency f)
         Frequency freq = calcNewFreq(f);
         if (!freq.isClear())
         {
-
+            trace(QString("RigControlFrame::freqPlusMinusButton cur %1 step %2").arg(curFreq.traceStr(), f.traceStr()));
             setFreqTextLegalColour(freq, curMode);
             ui->freqInput->setLineText(freq.str());
             emit setFreqDisplay(freq, legalFreq);

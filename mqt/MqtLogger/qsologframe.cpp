@@ -4115,7 +4115,7 @@ void QSOLogFrame::setBandmapControlsState()
     if (tslf && tslf->isBandMapLoaded())
     {
         setBandMapControlsVisible(true);
-        setBandMapControlsDisabled(!isRunMode());
+        setBandMapControlsDisabled(isRunMode());
     }
     else
     {

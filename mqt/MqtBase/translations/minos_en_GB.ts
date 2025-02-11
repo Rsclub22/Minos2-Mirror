@@ -934,17 +934,17 @@
 <context>
     <name>Calendar</name>
     <message>
-        <location filename="../Calendar.cpp" line="21"/>
+        <location filename="../Calendar.cpp" line="22"/>
         <source>&lt;VHF from VHFContests.xml&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Calendar.cpp" line="22"/>
+        <location filename="../Calendar.cpp" line="23"/>
         <source>&lt;Microwave from MicrContemodestsxx.xml&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Calendar.cpp" line="42"/>
+        <location filename="../Calendar.cpp" line="43"/>
         <source>Undefined</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1212,7 +1212,7 @@
 <context>
     <name>Day Abbreviation</name>
     <message>
-        <location filename="../cutils.cpp" line="993"/>
+        <location filename="../cutils.cpp" line="994"/>
         <source>D</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1933,7 +1933,7 @@ The format required is (e.g.) 1296.3, 144.32 or 144.290123
 <context>
     <name>QWidget</name>
     <message>
-        <location filename="../cutils.cpp" line="793"/>
+        <location filename="../cutils.cpp" line="794"/>
         <source>Reset Columns</source>
         <comment>createColumnsMenu</comment>
         <translation type="unfinished"></translation>
@@ -2411,17 +2411,17 @@ Please enter another bearing</source>
 <context>
     <name>clusterState</name>
     <message>
-        <location filename="../clustercommon.cpp" line="12"/>
+        <location filename="../clustercommon.cpp" line="13"/>
         <source>Available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustercommon.cpp" line="13"/>
+        <location filename="../clustercommon.cpp" line="14"/>
         <source>Not Available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustercommon.cpp" line="14"/>
+        <location filename="../clustercommon.cpp" line="15"/>
         <source>No Contact</source>
         <translation type="unfinished"></translation>
     </message>
