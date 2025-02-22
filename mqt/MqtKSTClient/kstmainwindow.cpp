@@ -1235,6 +1235,7 @@ void KSTMainWindow::onCSTableSelectionChanged(const QItemSelection &/*selected*/
         }
         // Planes
         showPlanes(user);
+        setDefaultButton(ui->loggerXferButton);
     }
     else
     {
@@ -1644,6 +1645,10 @@ bool KSTMainWindow::eventFilter(QObject *obj, QEvent *event)
                 {
                     ui->genmsgButton->click();
                 }
+                else if (ui->loggerXferButton->isDefault())
+                {
+                    ui->loggerXferButton->click();
+                }
             }
         }
     }
@@ -1655,18 +1660,37 @@ void KSTMainWindow::on_sortIndicatorChanged(int /*logicalIndex*/, Qt::SortOrder 
     on_sectionResized(0, 0, 0);
 }
 
-void KSTMainWindow::on_callEdit_textChanged(const QString &/*arg1*/)
+void KSTMainWindow::setDefaultButton(QPushButton *d)
 {
-    if (ui->callEdit->text().isEmpty())
+    if (d)
     {
+        ui->loggerXferButton->setDefault(false);
         ui->meepButton->setDefault(false);
-        ui->genmsgButton->setDefault(true);
+        ui->genmsgButton->setDefault(false);
+
+        d->setDefault(true);
     }
     else
-    {
-        ui->genmsgButton->setDefault(false);
-        ui->meepButton->setDefault(true);
-    }
+        if (ui->callEdit->text().isEmpty())
+        {
+            ui->loggerXferButton->setDefault(false);
+            ui->meepButton->setDefault(false);
+            ui->genmsgButton->setDefault(true);
+        }
+        else
+            {
+                ui->loggerXferButton->setDefault(false);
+                ui->genmsgButton->setDefault(false);
+                ui->meepButton->setDefault(true);
+            }
+}
+void KSTMainWindow::on_callEdit_textChanged(const QString & /*arg1*/)
+{
+    setDefaultButton(nullptr);
+}
+void KSTMainWindow::on_msgEdit_textChanged(const QString &/*arg1*/)
+{
+    setDefaultButton(nullptr);
 }
 
 void KSTMainWindow::on_clearMessageButton_clicked()
@@ -2050,3 +2074,4 @@ void KSTMainWindow::on_loggerXferButton_clicked()
         }
     }
 }
+

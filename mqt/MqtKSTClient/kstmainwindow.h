@@ -22,6 +22,7 @@ extern QStringList services;
 
 class RemoteLogs;
 class MonitoredLog;
+class QPushButton;
 
 class KSTMainWindow : public QMainWindow
 {
@@ -112,6 +113,7 @@ class KSTMainWindow : public QMainWindow
     void doLoginChanges();
     void setActive(int chat);
     bool doConfiguration(bool showForm);
+    void setDefaultButton(QPushButton *d);
 
 public:
     KSTMainWindow(QWidget *parent = nullptr);
@@ -192,6 +194,7 @@ private slots:
     void on_clearButton_clicked();
 
     void on_sortIndicatorChanged(int, Qt::SortOrder);
+
     void on_callEdit_textChanged(const QString &arg1);
 
     void on_clearMessageButton_clicked();
@@ -246,6 +249,8 @@ private slots:
     void onLogStarted(QSharedPointer<MonitoredLog>);
     void onLogClosed(QSharedPointer<MonitoredLog>);
     void on_loggerXferButton_clicked();
+
+    void on_msgEdit_textChanged(const QString &arg1);
 
 private:
     Ui::KSTMainWindow *ui;

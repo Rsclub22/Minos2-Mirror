@@ -2331,6 +2331,10 @@ void TSingleLogFrame::xferFromKST(QString call, QString loc, QString freq)
 {
     GJVQSOLogFrame->xferFromKST(call, loc);
     FKHRigControlFrame->xferFromKST(freq);
+
+#ifdef Q_OS_WIN
+    MinosConfigEvents::sendStealFocus();
+#endif
 }
 
 //--------------- QRZ Display ---------------------------------------
