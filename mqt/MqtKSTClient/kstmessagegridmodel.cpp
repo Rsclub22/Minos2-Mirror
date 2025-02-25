@@ -1,4 +1,6 @@
+#include <QApplication>
 #include "QtUtils.h"
+#include "MinosLoggerEvents.h"
 #include "kstmainwindow.h"
 #include "kstmessagegridmodel.h"
 //==========================================================================================
@@ -10,8 +12,19 @@ bool compMessages ( QSharedPointer<KstMessageLine> q1, const QSharedPointer<KstM
         return q1->dtg < q2->dtg;
 }
 
-KstMessageGridModel::KstMessageGridModel():cacheSize(10, 10)
+KstMessageGridModel::KstMessageGridModel()
 {
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::FontChanged, this, &KstMessageGridModel::on_FontChanged, Qt::QueuedConnection);
+}
+void KstMessageGridModel::on_FontChanged()
+{
+    beginResetModel();
+    QFont cf = QApplication::font();
+    QFontMetrics fm(cf);
+    int ls = fm.lineSpacing();
+
+    cacheSize = QSize(10, ls);
+    endResetModel();
 }
 void KstMessageGridModel::reset()
 {
@@ -70,12 +83,6 @@ void KstMessageGridModel::appendLastRow(QSharedPointer<KstMessageLine> msg)
     beginInsertRows(QModelIndex(), rawCount() , rawCount());
     messageVector->push_back(msg);
     endInsertRows();
-}
-
-void KstMessageGridModel::setCacheSize()
-{
-    QString s = "Memxx";
-    cacheSize = delegate->docSize(s);
 }
 
 QVariant KstMessageGridModel::data( const QModelIndex &index, int role ) const
@@ -194,9 +201,9 @@ QVariant KstMessageGridModel::headerData( int section, Qt::Orientation orientati
     }
     else if (orientation == Qt::Vertical && role == Qt::SizeHintRole)
     {
-        if (delegate)
+        if (!cacheSize.isEmpty())
         {
-            return cacheSize;
+            return cacheSize.height();
         }
     }
     return QVariant();

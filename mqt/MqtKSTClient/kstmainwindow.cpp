@@ -217,20 +217,17 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     ui->CSTable->setItemDelegate(CSDelegate.data());
     ui->planesView->setItemDelegate(PlanesDelegate.data());
 
-    QSize mps = meepDelegate->docSize("XX");
     QHeaderView *verticalHeader = ui->meepTable->verticalHeader();
     verticalHeader->setVisible(false);
-    verticalHeader->setMinimumSectionSize(1);
-    verticalHeader->setDefaultSectionSize(mps.height());
-    verticalHeader->setSectionResizeMode(QHeaderView::Fixed);
+    verticalHeader->setMinimumSectionSize(10);
+    verticalHeader->setDefaultSectionSize(10);
+    verticalHeader->setSectionResizeMode(QHeaderView::ResizeToContents);
 
-    QSize mss = messageDelegate->docSize("XX");
     verticalHeader = ui->messageTable->verticalHeader();
     verticalHeader->setVisible(false);
-
-    verticalHeader->setMinimumSectionSize(1);
-    verticalHeader->setDefaultSectionSize(mss.height());
-    verticalHeader->setSectionResizeMode(QHeaderView::Fixed);
+    verticalHeader->setMinimumSectionSize(10);
+    verticalHeader->setDefaultSectionSize(10);
+    verticalHeader->setSectionResizeMode(QHeaderView::ResizeToContents);
 
     verticalHeader = ui->CSTable->verticalHeader();
     verticalHeader->setVisible(false);
@@ -493,7 +490,6 @@ void KSTMainWindow::connected()
     kstMeepFilterModel.setMyCsFilterString(myCallsign.getFullCall());
     ui->toMeFilter->clear();
 
-    kstMessageModel.setCacheSize();
     ui->connectButton->setText(tr("Disconnect"));
 
     setMeepFilters();

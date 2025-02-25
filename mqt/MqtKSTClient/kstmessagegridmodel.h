@@ -35,7 +35,8 @@ bool compMessages ( QSharedPointer<KstMessageLine> q1, const QSharedPointer<KstM
 class KstMessageGridModel: public QAbstractItemModel
 {
     Q_OBJECT
-
+    private:
+        QSize cacheSize;
         QString filterString;
         int chatFilter = 0;
         bool isFiltered() const
@@ -47,7 +48,6 @@ class KstMessageGridModel: public QAbstractItemModel
         {
             return pauseIndex > 0;
         }
-        QSize cacheSize;
     public:
         KstMessageGridModel();
         virtual ~KstMessageGridModel() override
@@ -71,7 +71,6 @@ class KstMessageGridModel: public QAbstractItemModel
 
         void appendLastRow(QSharedPointer<KstMessageLine>);
 
-        void setCacheSize();
         void reset();
         void setFilterString(QString f);
         void setChatFilter(int value);
@@ -79,6 +78,8 @@ class KstMessageGridModel: public QAbstractItemModel
 
         virtual Qt::ItemFlags flags(const QModelIndex &index) const override;
         virtual bool setData(const QModelIndex &index, const QVariant &value, int role) override;
+    private slots:
+        void on_FontChanged();
 };
 
 class KstMessageGridSortFilterModel: public QSortFilterProxyModel
