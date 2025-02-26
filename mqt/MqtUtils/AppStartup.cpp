@@ -14,7 +14,9 @@
 #ifdef Q_OS_WIN
 #include <windows.h>
 #endif
-
+#ifdef Q_OS_UNIX
+#include <unistd.h>
+#endif
 #include "regsettings.h"
 #include "fileutils.h"
 #include "MTrace.h"
