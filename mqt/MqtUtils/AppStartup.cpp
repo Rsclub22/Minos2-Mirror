@@ -212,7 +212,7 @@ HANDLE GetCurrentProcessToken() {
     //DCHECK(process_token != NULL && process_token != INVALID_HANDLE_VALUE);
     return process_token;
 }
-
+#endif
 bool IsCurrentProcessElevated()
 {
 #ifdef Q_OS_WIN
@@ -236,7 +236,7 @@ bool IsCurrentProcessElevated()
     return me != myprivs;
 #endif
 }
-#endif
+
 void appStartup(const QString &pappName)
 {
     oldHandler = qInstallMessageHandler(myMessageOutput);
