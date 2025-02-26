@@ -11,6 +11,9 @@
 #include <QStandardPaths>
 #include <QDir>
 #include <QStyle>
+#ifdef Q_OS_WIN
+#include <windows.h>
+#endif
 
 #include "regsettings.h"
 #include "fileutils.h"
@@ -202,7 +205,38 @@ QString getCurrentLanguage()
 {
     return currentLanguage;
 }
+#ifdef Q_OS_WIN
+HANDLE GetCurrentProcessToken() {
+    HANDLE process_token;
+    OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, &process_token);
+    //DCHECK(process_token != NULL && process_token != INVALID_HANDLE_VALUE);
+    return process_token;
+}
 
+bool IsCurrentProcessElevated()
+{
+#ifdef Q_OS_WIN
+
+    HANDLE process_token(GetCurrentProcessToken());
+
+    // Unlike TOKEN_ELEVATION_TYPE which returns TokenElevationTypeDefault when
+    // UAC is turned off, TOKEN_ELEVATION returns whether the process is elevated.
+    DWORD size;
+    TOKEN_ELEVATION elevation;
+    if (!GetTokenInformation(process_token, TokenElevation, &elevation,
+                             sizeof(elevation), &size)) {
+        trace("GetTokenInformation() failed");
+        return false;
+    }
+    return !!elevation.TokenIsElevated;
+#else
+    auto me = getuid();
+    auto myprivs = geteuid();
+
+    return me != myprivs;
+#endif
+}
+#endif
 void appStartup(const QString &pappName)
 {
     oldHandler = qInstallMessageHandler(myMessageOutput);
@@ -457,6 +491,9 @@ void appStartup(const QString &pappName)
     trace(QString("Language Name %1").arg(languageName));
 
     register_frequency_types();
+
+    bool elevated = IsCurrentProcessElevated();
+    trace(QString("Current process is%1 elevated").arg(elevated?QString():QString(" not")));
 
     setAppLanguage(languageName);
 }
