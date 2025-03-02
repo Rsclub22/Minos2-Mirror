@@ -221,13 +221,15 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     verticalHeader->setVisible(false);
     verticalHeader->setMinimumSectionSize(10);
     verticalHeader->setDefaultSectionSize(10);
-    verticalHeader->setSectionResizeMode(QHeaderView::ResizeToContents);
+    //verticalHeader->setSectionResizeMode(QHeaderView::ResizeToContents);
+    verticalHeader->setSectionResizeMode(QHeaderView::Fixed);
 
     verticalHeader = ui->messageTable->verticalHeader();
     verticalHeader->setVisible(false);
     verticalHeader->setMinimumSectionSize(10);
     verticalHeader->setDefaultSectionSize(10);
-    verticalHeader->setSectionResizeMode(QHeaderView::ResizeToContents);
+//    verticalHeader->setSectionResizeMode(QHeaderView::ResizeToContents);
+    verticalHeader->setSectionResizeMode(QHeaderView::Fixed);
 
     verticalHeader = ui->CSTable->verticalHeader();
     verticalHeader->setVisible(false);
