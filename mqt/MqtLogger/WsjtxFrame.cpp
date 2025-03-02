@@ -57,7 +57,7 @@ WsjtxFrame::WsjtxFrame(TSingleLogFrame *parent) :
 
 
     QSize ms = delegate->docSize("XX");
-    ui->decodes_table_view_->verticalHeader()->setDefaultSectionSize(ms.height() *4/5);
+    ui->decodes_table_view_->verticalHeader()->setDefaultSectionSize(ms.height() *5/4);
     ui->decodes_table_view_->verticalHeader()->setMinimumSectionSize(10);
 
     ui->decodes_table_view_->verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);

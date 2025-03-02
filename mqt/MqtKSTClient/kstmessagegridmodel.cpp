@@ -1,6 +1,6 @@
 #include <QApplication>
 #include "QtUtils.h"
-#include "MinosLoggerEvents.h"
+//#include "MinosLoggerEvents.h"
 #include "kstmainwindow.h"
 #include "kstmessagegridmodel.h"
 //==========================================================================================
@@ -14,18 +14,8 @@ bool compMessages ( QSharedPointer<KstMessageLine> q1, const QSharedPointer<KstM
 
 KstMessageGridModel::KstMessageGridModel()
 {
-    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::FontChanged, this, &KstMessageGridModel::on_FontChanged, Qt::QueuedConnection);
 }
-void KstMessageGridModel::on_FontChanged()
-{
-    beginResetModel();
-    QFont cf = QApplication::font();
-    QFontMetrics fm(cf);
-    int ls = fm.lineSpacing();
 
-    cacheSize = QSize(10, ls);
-    endResetModel();
-}
 void KstMessageGridModel::reset()
 {
     beginResetModel();
@@ -198,13 +188,6 @@ QVariant KstMessageGridModel::headerData( int section, Qt::Orientation orientati
             break;
         }
         return cell;
-    }
-    else if (orientation == Qt::Vertical && role == Qt::SizeHintRole)
-    {
-        if (!cacheSize.isEmpty())
-        {
-            return cacheSize.height();
-        }
     }
     return QVariant();
 }

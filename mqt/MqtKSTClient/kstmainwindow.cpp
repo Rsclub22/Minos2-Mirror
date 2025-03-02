@@ -19,7 +19,7 @@
 #include "kstmonitoredlogs.h"
 #include "mults.h"
 #include "MinosRPC.h"
-
+#include "MinosLoggerEvents.h"
 #include "kstmainwindow.h"
 #include "ui_kstmainwindow.h"
 
@@ -278,6 +278,8 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     connect(ui->CSTable->selectionModel(),&QItemSelectionModel::selectionChanged,
             this, &KSTMainWindow::onCSTableSelectionChanged);
 
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::FontChanged, this, &KSTMainWindow::on_FontChanged, Qt::QueuedConnection);
+
 
     kstclient = new QTcpSocket(this);
 
@@ -358,12 +360,31 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     ui->planesFrame->setMinimumHeight(10);
     ui->msgFrame->setMinimumHeight(10);
     ui->tomeFrame->setMinimumHeight(10);
+
+    on_FontChanged();
 }
 
 KSTMainWindow::~KSTMainWindow()
 {
     asl.reset();
     delete ui;
+}
+void KSTMainWindow::on_FontChanged()
+{
+    int ls = 10;
+    if (messageDelegate)
+    {
+        QString s = "Memxx";
+        QSize r = messageDelegate->docSize(s);
+        ls = r.height() *5/4;
+    }
+
+    QHeaderView *verticalHeader = ui->meepTable->verticalHeader();
+    verticalHeader->setDefaultSectionSize(ls);
+
+    verticalHeader = ui->messageTable->verticalHeader();
+    verticalHeader->setDefaultSectionSize(ls);
+
 }
 void KSTMainWindow::resizeEvent(QResizeEvent * event)
 {
