@@ -1256,7 +1256,7 @@ void KSTMainWindow::onCSTableSelectionChanged(const QItemSelection &/*selected*/
         showPlanes(user);
         setDefaultButton(ui->loggerXferButton);
     }
-    else
+    else if (mil.count() == 0)
     {
         on_clearMessageFilter_clicked();
     }
