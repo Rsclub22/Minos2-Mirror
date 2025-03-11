@@ -5,7 +5,8 @@
 #include <QSortFilterProxyModel>
 #include "callsign.h"
 #include "htmldelegate.h"
-#include "remotelogs.h"
+#include "airscoutlink.h"
+
 
 
 enum CallColumns {ecscChat, ecscCall, ecscLoc, ecscDistance, ecscBearing, ecscAirscout, ecscName, ecscCountryPrefix, ecscCountryName, ecscMaxColumn};
@@ -25,6 +26,7 @@ public:
     bool recent = false;
     int distance = -1;
     int bearing = -1;
+    int messageCount = 0;
 
     QString lastCalcTime;
     QString fromCall;
@@ -33,6 +35,11 @@ public:
     QString toLoc;
     QVector<Aircraft> planes;
     bool planeResponseSeen = false;
+
+    KstUser()
+    {}
+    KstUser(const Callsign &c, int achat):call(c),chat(achat)
+    {}
 
     bool operator< ( const KstUser& rhs ) const;
 

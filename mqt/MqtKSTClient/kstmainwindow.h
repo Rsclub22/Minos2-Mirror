@@ -5,12 +5,14 @@
 #include <QTcpSocket>
 #include <QRadioButton>
 #include <QCheckBox>
+#include <QTimer>
 #include "CommandReader.h"
 #include "kstcallgridmodel.h"
 #include "kstmessagegridmodel.h"
-#include "airscoutlink.h"
 #include "kstplanesmodel.h"
 #include "cutils.h"
+#include "airscoutlink.h"
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class KSTMainWindow; }
@@ -23,6 +25,7 @@ extern QStringList services;
 class RemoteLogs;
 class MonitoredLog;
 class QPushButton;
+
 
 class KSTMainWindow : public QMainWindow
 {
@@ -152,7 +155,7 @@ public:
 
     void showPlanes(QSharedPointer<KstUser> user);
 
-    QSharedPointer<KstUser> getUser(const Callsign &call);
+    QSharedPointer<KstUser> getUser(const KstUser &test);
     int getASPort() const;
 
     int getASTimeout() const;
@@ -271,6 +274,8 @@ private:
     void scrollMeepToBotton();
     void scrollMesToBottom();
     void testAutoStart();
+    void addMessage(QSharedPointer<KstMessageLine> kst);
+    void checkUserMessages(QSharedPointer<KstUser> user);
 };
 
 extern KSTMainWindow *mainWindow;

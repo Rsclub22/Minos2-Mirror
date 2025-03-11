@@ -3,6 +3,7 @@
 //#include "MinosLoggerEvents.h"
 #include "kstmainwindow.h"
 #include "kstmessagegridmodel.h"
+#include "remotelogs.h"
 //==========================================================================================
 bool compMessages ( QSharedPointer<KstMessageLine> q1, const QSharedPointer<KstMessageLine> q2 )
 {

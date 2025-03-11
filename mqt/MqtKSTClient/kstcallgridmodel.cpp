@@ -3,6 +3,7 @@
 #include "contest.h"
 #include "kstmainwindow.h"
 #include "cutils.h"
+#include "remotelogs.h"
 
 // kst2me sort by
 // new before old
@@ -22,6 +23,7 @@ bool KstUserCompare (QSharedPointer<KstUser> i, QSharedPointer<KstUser> j)
 {
     return (*i<*j);
 }
+
 KstCallGridModel::KstCallGridModel()
 {
 }
@@ -144,11 +146,14 @@ QVariant KstCallGridModel::data( const QModelIndex &index, int role ) const
                 call = col + call + HtmlFontColour(Qt::black);
             }
 
+            if (crec->messageCount == 0)
+                call = "[" + call + "]";
             if (crec->away)
                 call = "(" + call + ")";
             if (crec->recent)
                 call = "*" + call + "*";
 
+            //return QString("%1 %2").arg(call).arg(crec->messageCount);
             return call;
         }
 

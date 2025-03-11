@@ -21,6 +21,7 @@
 #include "MinosRPC.h"
 #include "MinosLoggerEvents.h"
 #include "kstmainwindow.h"
+#include "remotelogs.h"
 #include "ui_kstmainwindow.h"
 
 QStringList services =
@@ -545,15 +546,9 @@ int KSTMainWindow::calcDistance(const Callsign &c)
 {
     if (!c.getFullCall().isEmpty())
     {
-        QSharedPointer<KstUser> test(new KstUser());
-        test->call = c;
-        test->chat = activeChat;
-        if (std::binary_search(callVector->begin(), callVector->end(), test, KstUserCompare))
+        QSharedPointer<KstUser> user = getUser(KstUser(c, activeChat));
+        if (user)
         {
-            int row = (std::lower_bound(callVector->begin(), callVector->end(), test, KstUserCompare ) - callVector->begin());
-
-            QSharedPointer<KstUser> user = callVector->at(row);
-
             return user->distance;
         }
     }
@@ -661,15 +656,9 @@ void KSTMainWindow::sendKST(QString msg)
 }
 void KSTMainWindow::checkAwayButton()
 {
-    QSharedPointer<KstUser> test(new KstUser());
-    test->call = myCallsign;
-    test->chat = activeChat;
-    if (std::binary_search(callVector->begin(), callVector->end(), test, KstUserCompare))
+    QSharedPointer<KstUser> user = getUser(KstUser(myCallsign, activeChat));
+    if (user)
     {
-        int row = (std::lower_bound(callVector->begin(), callVector->end(), test, KstUserCompare ) - callVector->begin());
-
-        QSharedPointer<KstUser> user = callVector->at(row);
-
         if (user->away)
         {
             ui->awayButton->setText(tr("Set Back"));
@@ -679,6 +668,38 @@ void KSTMainWindow::checkAwayButton()
             ui->awayButton->setText(tr("Set Away"));
         }
     }
+}
+
+void KSTMainWindow::addMessage(QSharedPointer<KstMessageLine> kst)
+{
+    // Add to the counts of messages per user
+    kstMessageModel.appendLastRow(kst);
+    Callsign userName = kst->call;
+    QSharedPointer<KstUser> user = getUser(KstUser(userName, kst->chat));
+    if (user)
+    {
+        user->messageCount++;
+    }
+}
+void KSTMainWindow::checkUserMessages(QSharedPointer<KstUser> user)
+{
+    // scan messages for to/from this user
+    int ucount = 0;
+    QString userName = user->call.getFullCall();
+    for (const auto &m: qAsConst(*messageVector))
+    {
+        int chat = user->chat;
+        if (chat == m->chat)
+        {
+            QString to = m->call.getFullCall();
+            //QString other = m->otherCall.getFullCall();
+            if (to == userName /*|| other == userName*/)
+            {
+                ucount++;
+            }
+        }
+    }
+    user->messageCount = ucount;
 }
 
 void KSTMainWindow::analyseKstMessage(QString atj)
@@ -787,7 +808,9 @@ void KSTMainWindow::analyseKstMessage(QString atj)
             }
         }
         if (!found)
-            kstMessageModel.appendLastRow(kst);
+        {
+            addMessage(kst);
+        }
 
     }
     else if (sl[0] == "CE")
@@ -828,7 +851,7 @@ void KSTMainWindow::analyseKstMessage(QString atj)
         }
         kst->otherDistance = calcDistance(kst->otherCall);
 
-        kstMessageModel.appendLastRow(kst);
+        addMessage(kst);
 
         scrollMesToBottom();
         scrollMeepToBotton();
@@ -922,6 +945,8 @@ void KSTMainWindow::analyseKstMessage(QString atj)
             int row = (std::lower_bound(callVector->begin(), callVector->end(), test, KstUserCompare ) - callVector->begin());
             callVector->insert(row, test);
             callVectorChanged = true;
+            QSharedPointer<KstUser> user = getUser(*test.data());
+            checkUserMessages(user);
         }
     }
 
@@ -1099,6 +1124,9 @@ void KSTMainWindow::analyseKstMessage(QString atj)
             int row = (std::lower_bound(callVector->begin(), callVector->end(), test, KstUserCompare ) - callVector->begin());
             kstCallModel.insertRow(row, test);
             callVectorChanged = true;
+
+            QSharedPointer<KstUser> user = getUser(*test.data());
+            checkUserMessages(user);
         }
 
     }
@@ -1413,14 +1441,10 @@ void KSTMainWindow::on_meepButton_clicked()
 
 void KSTMainWindow::setNameFromCall(const Callsign &call)
 {
-    QSharedPointer<KstUser> test(new KstUser());
-    test->call = call;
-    if (std::binary_search(callVector->begin(), callVector->end(), test, KstUserCompare))
+    QSharedPointer<KstUser> user = getUser(KstUser(call, activeChat));
+
+    if (user)
     {
-        int row = (std::lower_bound(callVector->begin(), callVector->end(), test, KstUserCompare ) - callVector->begin());
-
-        QSharedPointer<KstUser> user = callVector->at(row);
-
         QStringList name = user->name.split(' ');
 
         ui->msgEdit->setText("Hi " + name[0] + " ");
@@ -1721,15 +1745,9 @@ void KSTMainWindow::on_clearMessageButton_clicked()
 
 void KSTMainWindow::on_awayButton_clicked()
 {
-    QSharedPointer<KstUser> test(new KstUser());
-    test->call = myCallsign;
-    test->chat = activeChat;
-    if (std::binary_search(callVector->begin(), callVector->end(), test, KstUserCompare))
+    QSharedPointer<KstUser> user = getUser(KstUser(myCallsign, activeChat));
+    if (user)
     {
-        int row = (std::lower_bound(callVector->begin(), callVector->end(), test, KstUserCompare ) - callVector->begin());
-
-        QSharedPointer<KstUser> user = callVector->at(row);
-
         if (user->away)
         {
             QString msg = "MSG|" + QString::number(activeChat) + "|0|/BACK|0|";
@@ -1916,14 +1934,12 @@ void KSTMainWindow::on_showInAS_clicked()
 {
     asl->asSelected(planeActive);
 }
-QSharedPointer<KstUser> KSTMainWindow::getUser(const Callsign &call)
+QSharedPointer<KstUser> KSTMainWindow::getUser(const KstUser &test)
 {
-    QSharedPointer<KstUser> test(new KstUser());
-    test->call = call;
-    test->chat = activeChat;
-    if (std::binary_search(callVector->begin(), callVector->end(), test, KstUserCompare))
+    QSharedPointer<KstUser> test1(new KstUser(test));
+    if (std::binary_search(callVector->begin(), callVector->end(), test1, KstUserCompare))
     {
-        int row = (std::lower_bound(callVector->begin(), callVector->end(), test, KstUserCompare ) - callVector->begin());
+        int row = (std::lower_bound(callVector->begin(), callVector->end(), test1, KstUserCompare ) - callVector->begin());
 
         QSharedPointer<KstUser> user = callVector->at(row);
 
@@ -1940,8 +1956,8 @@ void KSTMainWindow::on_showMPath_clicked()
         return;
     QSharedPointer<KstMessageLine> line = messageVector->at(row);
 
-    QSharedPointer<KstUser> user = getUser(line->call);
-    QSharedPointer<KstUser> other = getUser(line->otherCall);
+    QSharedPointer<KstUser> user = getUser(KstUser(line->call, activeChat));
+    QSharedPointer<KstUser> other = getUser(KstUser(line->otherCall, activeChat));
 
     if (user && other)
     {

@@ -2,12 +2,11 @@
 #define KSTPLANESMODEL_H
 
 #include <QAbstractItemModel>
+#include <QSortFilterProxyModel>
 #include "airscoutlink.h"
-#include "remotelogs.h"
 
 enum PlaneColumns {eplcCall, eplcCategory, eplcDistance, eplcPotential, eplcMinutes, eplcMax};
 
-class Aircraft;
 class KstPlanesModel : public QAbstractItemModel
 {
     Q_OBJECT
