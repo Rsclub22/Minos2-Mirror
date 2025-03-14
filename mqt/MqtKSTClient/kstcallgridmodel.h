@@ -52,6 +52,8 @@ class KstCallGridModel: public QAbstractItemModel
 
     QString filterString;
     int chatFilter = 0;
+    bool awayFilter = false;
+    bool inactiveFilter = false;
 
     void checkDistBear(QSharedPointer<KstUser> crec) const;
     bool isFiltered() const
@@ -87,6 +89,8 @@ public:
 
         void setFilterString(QString f);
         void setChatFilter(int value);
+        void setAwayFilter(bool value);
+        void setInactiveFilter(bool value);
 
 };
 
@@ -95,6 +99,8 @@ class KstCallGridSortFilterModel: public QSortFilterProxyModel
     QStringList filterStrings;
     QStringList filterSyns;
     int chatFilter = 0;
+    bool awayFilter = false;
+    bool inactiveFilter = false;
     bool filterDxcc = false;
     bool isFiltered() const
     {
@@ -108,6 +114,8 @@ public:
 
     void setStringDXCC(bool dxcc);
 
+    void setAwayFilter(bool value);
+    void setInactiveFilter(bool value);
 protected:
     bool lessThan(const QModelIndex &left, const QModelIndex &right) const override;
 };

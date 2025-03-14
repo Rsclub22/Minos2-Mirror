@@ -101,6 +101,16 @@ void KstCallGridModel::setChatFilter(int value)
 {
     chatFilter = value;
 }
+
+void KstCallGridModel::setAwayFilter(bool value)
+{
+    awayFilter = value;
+}
+
+void KstCallGridModel::setInactiveFilter(bool value)
+{
+    inactiveFilter = value;
+}
 void KstCallGridModel::checkDistBear(QSharedPointer<KstUser> crec) const
 {
     if (crec->distance < 0)
@@ -385,6 +395,22 @@ void KstCallGridSortFilterModel::setChatFilter(int value)
     chatFilter = value;
     invalidateFilter();
 }
+void KstCallGridSortFilterModel::setAwayFilter(bool value)
+{
+    KstCallGridModel *cgm = dynamic_cast<KstCallGridModel *>(sourceModel());
+    if (cgm)
+        cgm->setAwayFilter(value);
+    awayFilter = value;
+    invalidateFilter();
+}
+void KstCallGridSortFilterModel::setInactiveFilter(bool value)
+{
+    KstCallGridModel *cgm = dynamic_cast<KstCallGridModel *>(sourceModel());
+    if (cgm)
+        cgm->setInactiveFilter(value);
+    inactiveFilter = value;
+    invalidateFilter();
+}
 
 void KstCallGridSortFilterModel::setStringDXCC(bool dxcc)
 {
@@ -403,6 +429,15 @@ bool KstCallGridSortFilterModel::filterAcceptsRow(int sourceRow, const QModelInd
         return isFiltered();
 
     QSharedPointer<KstUser> call = cgm->callVector->at(sourceRow);
+
+    if (awayFilter && call->away)
+    {
+        return false;
+    }
+    if (inactiveFilter && call->messageCount == 0)
+    {
+        return false;
+    }
 
     int chat = call->chat;
     if ((chatFilter > 0 && chatFilter == chat) || (chatFilter == 0))

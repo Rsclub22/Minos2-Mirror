@@ -256,6 +256,10 @@ private slots:
     void on_msgEdit_textChanged(const QString &arg1);
 
     void on_FontChanged();
+
+    void on_awayCallscb_stateChanged(int);
+
+    void on_inactiveCallscb_stateChanged(int);
 private:
     Ui::KSTMainWindow *ui;
     QSharedPointer<CommandReader> commandReader = QSharedPointer<CommandReader>(new CommandReader(this));

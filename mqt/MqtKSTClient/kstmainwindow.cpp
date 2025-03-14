@@ -2110,3 +2110,22 @@ void KSTMainWindow::on_loggerXferButton_clicked()
     }
 }
 
+
+void KSTMainWindow::on_awayCallscb_stateChanged(int)
+{
+    if (started)
+    {
+        kstCallFilterModel.setAwayFilter(ui->awayCallscb->isChecked());
+    }
+}
+
+
+void KSTMainWindow::on_inactiveCallscb_stateChanged(int)
+{
+    if (started)
+    {
+        kstCallFilterModel.setInactiveFilter(ui->inactiveCallscb->isChecked());
+    }
+}
+
+

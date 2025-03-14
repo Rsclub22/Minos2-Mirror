@@ -240,13 +240,43 @@
              </widget>
             </item>
             <item>
-             <widget class="QLabel" name="label_9">
-              <property name="text">
-               <string>Call is *new* (away) [inactive]</string>
+             <widget class="QFrame" name="frame">
+              <property name="frameShape">
+               <enum>QFrame::StyledPanel</enum>
               </property>
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
+              <property name="frameShadow">
+               <enum>QFrame::Raised</enum>
               </property>
+              <layout class="QHBoxLayout" name="horizontalLayout_14">
+               <item>
+                <widget class="QLabel" name="label_9">
+                 <property name="text">
+                  <string>User is *new*</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLabel" name="label_10">
+                 <property name="text">
+                  <string>Exclude Calls</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QCheckBox" name="awayCallscb">
+                 <property name="text">
+                  <string>(away)</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QCheckBox" name="inactiveCallscb">
+                 <property name="text">
+                  <string>[inactive]</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
              </widget>
             </item>
             <item>
@@ -809,7 +839,7 @@ when user selected</string>
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="activeChatGroup"/>
   <buttongroup name="callStringButtonGroup"/>
+  <buttongroup name="activeChatGroup"/>
  </buttongroups>
 </ui>
