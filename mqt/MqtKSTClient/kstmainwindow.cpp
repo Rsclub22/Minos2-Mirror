@@ -686,7 +686,7 @@ void KSTMainWindow::checkUserMessages(QSharedPointer<KstUser> user)
     // scan messages for to/from this user
     int ucount = 0;
     QString userName = user->call.getFullCall();
-    for (const auto &m: qAsConst(*messageVector))
+    for (const auto &m: QASCONST(*messageVector))
     {
         int chat = user->chat;
         if (chat == m->chat)
@@ -1628,6 +1628,11 @@ void KSTMainWindow::on_meepTable_clicked(const QModelIndex &index)
 void KSTMainWindow::on_clearButton_clicked()
 {
     kstMessageModel.reset();
+    for (auto const &l: QASCONST(*callVector))
+    {
+        l->messageCount = 0;
+    }
+    kstCallFilterModel.invalidate();
 }
 bool KSTMainWindow::eventFilter(QObject *obj, QEvent *event)
 {
