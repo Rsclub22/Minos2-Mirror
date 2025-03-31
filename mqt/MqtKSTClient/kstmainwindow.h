@@ -46,6 +46,8 @@ class KSTMainWindow : public QMainWindow
 
     QSharedPointer<QVector<QSharedPointer<KstUser> > > callVector;
     bool callVectorChanged = false;
+    
+    QMap<KstUser /*key*/, QSharedPointer<KstUser> > callMap;
 
     KstPlanesModel kstPlanesModel;
     KstPlanesGridSortFilterModel kstPlanesFilterModel;

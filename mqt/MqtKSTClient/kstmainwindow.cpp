@@ -929,8 +929,9 @@ void KSTMainWindow::analyseKstMessage(QString atj)
             test->away = true;
         if (istate & 2)
             test->recent = true;
-
-        if (!std::binary_search(callVector->begin(), callVector->end(), test, KstUserCompare))
+        
+        if (!callMap.contains(*test.data()))
+//        if (!std::binary_search(callVector->begin(), callVector->end(), test, KstUserCompare))
         {
             QSharedPointer<CountrySynonym> syn = MultLists::getMultLists()->searchCountrySynonym ( test->call.locCtryPrefix );
             if ( syn )
@@ -945,6 +946,7 @@ void KSTMainWindow::analyseKstMessage(QString atj)
             int row = (std::lower_bound(callVector->begin(), callVector->end(), test, KstUserCompare ) - callVector->begin());
             callVector->insert(row, test);
             callVectorChanged = true;
+            callMap[*test.data()] = test;
             QSharedPointer<KstUser> user = getUser(*test.data());
             checkUserMessages(user);
         }
@@ -977,6 +979,7 @@ void KSTMainWindow::analyseKstMessage(QString atj)
 
             kstCallModel.reset();
             callVector->clear();
+            callMap.clear();
             kstMessageModel.reset();
             messageVector->clear();
 
@@ -1112,7 +1115,7 @@ void KSTMainWindow::analyseKstMessage(QString atj)
         if (istate & 2)
             test->recent = true;
 
-        if (!std::binary_search(callVector->begin(), callVector->end(), test, KstUserCompare))
+        if (!callMap.contains(*test.data()))
         {
             QSharedPointer<CountrySynonym> syn = MultLists::getMultLists()->searchCountrySynonym ( test->call.locCtryPrefix );
             if ( syn )
@@ -1126,6 +1129,7 @@ void KSTMainWindow::analyseKstMessage(QString atj)
             callVectorChanged = true;
 
             QSharedPointer<KstUser> user = getUser(*test.data());
+            callMap[*test.data()] = user;
             checkUserMessages(user);
         }
 
@@ -1514,7 +1518,7 @@ void KSTMainWindow::doLoginChanges()
             kstLoggedIn.clear();
             kstCallModel.reset();
             callVector->clear();
-
+            callMap.clear();
         }
     }
     else
@@ -1548,6 +1552,11 @@ void KSTMainWindow::doLoginChanges()
         }
         kstCallModel.setCallVector(newCallVector);
         callVector = newCallVector;
+        callMap.clear();
+        for(auto const &i: QASCONST(*callVector))
+        {
+            callMap[*i.data()] = i;
+        }
     }
 
     checkActive();
@@ -1941,15 +1950,19 @@ void KSTMainWindow::on_showInAS_clicked()
 }
 QSharedPointer<KstUser> KSTMainWindow::getUser(const KstUser &test)
 {
-    QSharedPointer<KstUser> test1(new KstUser(test));
-    if (std::binary_search(callVector->begin(), callVector->end(), test1, KstUserCompare))
+    if (callMap.contains(test))
     {
-        int row = (std::lower_bound(callVector->begin(), callVector->end(), test1, KstUserCompare ) - callVector->begin());
-
-        QSharedPointer<KstUser> user = callVector->at(row);
-
-        return user;
+        return callMap[test];
     }
+    // QSharedPointer<KstUser> test1(new KstUser(test));
+    // if (std::binary_search(callVector->begin(), callVector->end(), test1, KstUserCompare))
+    // {
+    //     int row = (std::lower_bound(callVector->begin(), callVector->end(), test1, KstUserCompare ) - callVector->begin());
+
+    //     QSharedPointer<KstUser> user = callVector->at(row);
+
+    //     return user;
+    // }
     return QSharedPointer<KstUser>();
 }
 void KSTMainWindow::on_showMPath_clicked()

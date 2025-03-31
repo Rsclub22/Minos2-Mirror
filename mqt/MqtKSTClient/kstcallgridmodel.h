@@ -42,7 +42,9 @@ public:
     {}
 
     bool operator< ( const KstUser& rhs ) const;
+    bool operator== ( const KstUser& rhs ) const;
 
+    qHashRet qHash() const;
 };
 extern bool KstUserCompare (QSharedPointer<KstUser> i, QSharedPointer<KstUser> j);
 

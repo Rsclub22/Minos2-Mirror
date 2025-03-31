@@ -19,6 +19,20 @@ bool KstUser::operator< ( const KstUser& rhs ) const
     else
         return chat < rhs.chat;
 }
+
+bool KstUser::operator==(const KstUser &rhs) const
+{
+    return (chat == rhs.chat && call == rhs.call);
+}
+qHashRet KstUser::qHash() const
+{
+    // find in set works off hash values, NOT the equality operator
+    // and they aren't the same (KST has no band/mode, monitored contact has band/mode)
+
+    // BUT hash just gives a bucket to be scanned, and THEN equality should be used
+
+    return ::qHash(call.getFullCall().arg(chat));
+}
 bool KstUserCompare (QSharedPointer<KstUser> i, QSharedPointer<KstUser> j)
 {
     return (*i<*j);
