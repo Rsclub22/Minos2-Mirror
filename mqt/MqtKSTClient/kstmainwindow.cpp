@@ -1128,8 +1128,8 @@ void KSTMainWindow::analyseKstMessage(QString atj)
             kstCallModel.insertRow(row, test);
             callVectorChanged = true;
 
+            callMap[*test.data()] = test;
             QSharedPointer<KstUser> user = getUser(*test.data());
-            callMap[*test.data()] = user;
             checkUserMessages(user);
         }
 
