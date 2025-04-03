@@ -37,7 +37,7 @@ TSettingsEditDlg::TSettingsEditDlg(QWidget *parent, SettingsBundle *bundle) :
     ui->SectionsList->setMinimumWidth(10);
     ui->OptionsTable->setMinimumWidth(10);
 }
-void TSettingsEditDlg::on_splitter_splitterMoved(int /*pos*/, int /*index*/)
+void TSettingsEditDlg::on_settingsSplitter_splitterMoved(int /*pos*/, int /*index*/)
 {
     RegSettings settings;
     QByteArray state = ui->settingsSplitter->saveState();

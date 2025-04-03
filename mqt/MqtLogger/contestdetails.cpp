@@ -1871,6 +1871,7 @@ QString ContestDetails::getSelectedRadio()
 
 void ContestDetails::setSelectedRadio(QString s)
 {
+    // need a more complicated find, as it is a shortened PubSubName
    int c = ui->radioNameSel->findData(s);
    ui->radioNameSel->setCurrentIndex(c);
 }
