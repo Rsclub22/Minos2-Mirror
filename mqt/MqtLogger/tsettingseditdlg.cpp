@@ -24,7 +24,9 @@ TSettingsEditDlg::TSettingsEditDlg(QWidget *parent, SettingsBundle *bundle) :
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
-    QByteArray state = settings.getSettings().value("EntrySettings/SplitterState/" + bundle->getBundle()).toByteArray();
+    RegSettings spsettings;
+    QString key = "EntrySettings/SplitterState/" + bundle->getBundle();
+    QByteArray state = spsettings.getSettings().value(key).toByteArray();
     ui->settingsSplitter->restoreState(state);
 
     baseTitle = windowTitle();
@@ -41,7 +43,8 @@ void TSettingsEditDlg::on_settingsSplitter_splitterMoved(int /*pos*/, int /*inde
 {
     RegSettings settings;
     QByteArray state = ui->settingsSplitter->saveState();
-    settings.getSettings().setValue("EntrySettings/SplitterState/" + bundle->getBundle(), state);
+    QString key = "EntrySettings/SplitterState/" + bundle->getBundle();
+    settings.getSettings().setValue(key, state);
 }
 void TSettingsEditDlg::ShowCurrentSectionOnly()
 {
@@ -183,6 +186,11 @@ void TSettingsEditDlg::showDetails()
        ui->OptionsTable->setVerticalHeaderLabels(labels);
        bundle->endGroup();
    }
+   // something messes with the splitter settings, so reset them
+   RegSettings spsettings;
+   QString key = "EntrySettings/SplitterState/" + bundle->getBundle();
+   QByteArray state = spsettings.getSettings().value(key).toByteArray();
+   ui->settingsSplitter->restoreState(state);
 }
 void TSettingsEditDlg::getDetails()
 {
