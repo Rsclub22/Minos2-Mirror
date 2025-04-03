@@ -144,7 +144,10 @@ bool MinosCommonConnection::sendRaw ( const TIXML_STRING xmlstr )
       delete [] xmlbuff;
 
       if ( ret == -1 )  // QIOdevice::write returned an error.
+      {
+          remove_socket = true;
          return false;
+      }
    }
    return true;
 }
