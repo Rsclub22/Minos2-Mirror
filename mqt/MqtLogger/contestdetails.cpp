@@ -1851,8 +1851,8 @@ QString ContestDetails::getSelectedAntenna()
 
 void ContestDetails::setSelectedAntenna(QString s)
 {
-   int c = ui->antennaNameSel->findData(s);
-   ui->antennaNameSel->setCurrentIndex(c);
+    int c = findPubSubInCombo(s, ui->antennaNameSel);
+    ui->antennaNameSel->setCurrentIndex(c);
 }
 void ContestDetails::on_RotatorList()
 {
@@ -1868,12 +1868,30 @@ QString ContestDetails::getSelectedRadio()
 {
     return ui->radioNameSel->currentData().toString();
 }
+int ContestDetails::findPubSubInCombo(QString name, QComboBox *cb)
+{
+    int found = -1;
+    for(int r = 0; r < cb->count(); r++)
+    {
+        QString data = cb->itemData(r).toString();
+        if (data.contains(name, Qt::CaseInsensitive))
+        {
+            if (found != -1)
+            {
+                found = -1;
+                break;
+            }
+            found = r;
+        }
+    }
+
+    return found;
+}
 
 void ContestDetails::setSelectedRadio(QString s)
 {
-    // need a more complicated find, as it is a shortened PubSubName
-   int c = ui->radioNameSel->findData(s);
-   ui->radioNameSel->setCurrentIndex(c);
+    int c = findPubSubInCombo(s, ui->radioNameSel);
+    ui->radioNameSel->setCurrentIndex(c);
 }
 void ContestDetails::on_SetRadioList()
 {
