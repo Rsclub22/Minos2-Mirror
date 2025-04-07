@@ -45,7 +45,7 @@ private slots:
     void on_SectionsList_itemSelectionChanged();
     void on_renameButton_clicked();
 
-    void on_splitter_splitterMoved(int pos, int index);
+    void on_settingsSplitter_splitterMoved(int pos, int index);
 
 public Q_SLOTS:
     virtual void accept() override;

@@ -5,12 +5,14 @@
 #include <QTcpSocket>
 #include <QRadioButton>
 #include <QCheckBox>
+#include <QTimer>
 #include "CommandReader.h"
 #include "kstcallgridmodel.h"
 #include "kstmessagegridmodel.h"
-#include "airscoutlink.h"
 #include "kstplanesmodel.h"
 #include "cutils.h"
+#include "airscoutlink.h"
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class KSTMainWindow; }
@@ -22,6 +24,8 @@ extern QStringList services;
 
 class RemoteLogs;
 class MonitoredLog;
+class QPushButton;
+
 
 class KSTMainWindow : public QMainWindow
 {
@@ -42,6 +46,8 @@ class KSTMainWindow : public QMainWindow
 
     QSharedPointer<QVector<QSharedPointer<KstUser> > > callVector;
     bool callVectorChanged = false;
+    
+    QMap<KstUser /*key*/, QSharedPointer<KstUser> > callMap;
 
     KstPlanesModel kstPlanesModel;
     KstPlanesGridSortFilterModel kstPlanesFilterModel;
@@ -112,6 +118,7 @@ class KSTMainWindow : public QMainWindow
     void doLoginChanges();
     void setActive(int chat);
     bool doConfiguration(bool showForm);
+    void setDefaultButton(QPushButton *d);
 
 public:
     KSTMainWindow(QWidget *parent = nullptr);
@@ -150,7 +157,7 @@ public:
 
     void showPlanes(QSharedPointer<KstUser> user);
 
-    QSharedPointer<KstUser> getUser(const Callsign &call);
+    QSharedPointer<KstUser> getUser(const KstUser &test);
     int getASPort() const;
 
     int getASTimeout() const;
@@ -192,6 +199,7 @@ private slots:
     void on_clearButton_clicked();
 
     void on_sortIndicatorChanged(int, Qt::SortOrder);
+
     void on_callEdit_textChanged(const QString &arg1);
 
     void on_clearMessageButton_clicked();
@@ -247,6 +255,13 @@ private slots:
     void onLogClosed(QSharedPointer<MonitoredLog>);
     void on_loggerXferButton_clicked();
 
+    void on_msgEdit_textChanged(const QString &arg1);
+
+    void on_FontChanged();
+
+    void on_awayCallscb_stateChanged(int);
+
+    void on_inactiveCallscb_stateChanged(int);
 private:
     Ui::KSTMainWindow *ui;
     QSharedPointer<CommandReader> commandReader = QSharedPointer<CommandReader>(new CommandReader(this));
@@ -265,6 +280,8 @@ private:
     void scrollMeepToBotton();
     void scrollMesToBottom();
     void testAutoStart();
+    void addMessage(QSharedPointer<KstMessageLine> kst);
+    void checkUserMessages(QSharedPointer<KstUser> user);
 };
 
 extern KSTMainWindow *mainWindow;

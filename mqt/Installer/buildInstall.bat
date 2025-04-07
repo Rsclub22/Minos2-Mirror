@@ -34,6 +34,7 @@ cd %MROOT%
 
 git pull origin master
 
+rmdir /Q /S %builddir%
 if not exist %builddir% mkdir %builddir%
 cd %builddir%
 
