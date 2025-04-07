@@ -45,7 +45,7 @@ DMKeysEditDlg::DMKeysEditDlg(QWidget *parent, QString name, Keys &keys) :
     ui->SectionsList->setMinimumWidth(10);
     ui->OptionsTable->setMinimumWidth(10);
 }
-void DMKeysEditDlg::on_splitter_splitterMoved(int /*pos*/, int /*index*/)
+void DMKeysEditDlg::on_settingsSplitter_splitterMoved(int /*pos*/, int /*index*/)
 {
     RegSettings settings;
     QByteArray state = ui->settingsSplitter->saveState();
@@ -151,6 +151,9 @@ void DMKeysEditDlg::showDetails()
        ui->OptionsTable->setVerticalHeaderLabels(fkeys);
    }
 
+   RegSettings settings;
+   QByteArray state = settings.getSettings().value("DMKeysEdit/SplitterState/" + name).toByteArray();
+   ui->settingsSplitter->restoreState(state);
 }
 void DMKeysEditDlg::getDetails()
 {
