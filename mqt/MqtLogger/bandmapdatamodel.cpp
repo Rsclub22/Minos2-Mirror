@@ -126,31 +126,31 @@ QVariant BandmapDataModel::data(const QModelIndex &index, int role) const
                 d = QString::number(bandmapSpot->getRxTime());
             break;
             case SPOT_TYPE_COL_NUM:
-                d = QChar(bandmapSpot->getSpotType());
+                d = QChar(static_cast<int>(bandmapSpot->getSpotType()));
             break;
             case ROT_BEARING_COL_NUM:
                 d = bandmapSpot->getRotBrg() + QChar('R');
             break;
             case ROT_CONNECTED_COL_NUM:
-                d = QChar(bandmapSpot->getRotConnected());
+                d = QChar(static_cast<int>(bandmapSpot->getRotConnected()));
             break;
             case RUN_MODE_ON_COL_NUM:
-                d = QChar(bandmapSpot->getRunModeOn());
+                d = QChar(static_cast<int>(bandmapSpot->getRunModeOn()));
             break;
             case OFF_RUN_FREQ_COL_NUM:
-                d = QChar(bandmapSpot->getOffRunFreq());
+                d = QChar(static_cast<int>(bandmapSpot->getOffRunFreq()));
             break;
             case CQ_RESPONSE_COL:
-                d = QChar(bandmapSpot->getCqResponse());
+                d = QChar(static_cast<int>(bandmapSpot->getCqResponse()));
             break;
             case DXLOC_FROM_NODE_FLAG_COL_NUM:
-                d = QChar(bandmapSpot->getDxLocatorIsFromNode());
+                d = QChar(static_cast<int>(bandmapSpot->getDxLocatorIsFromNode()));
             break;
             case DX_DISTRICT_COL_NUM:
                 d = bandmapSpot->getDistrict();
             break;
             case DX_DISTRICT_WORKED_COL_NUM:
-                d = QChar(bandmapSpot->getDistrictWorked());
+                d = QChar(static_cast<int>(bandmapSpot->getDistrictWorked()));
             break;
             default:
                 d = "";

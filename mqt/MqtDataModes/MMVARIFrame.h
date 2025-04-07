@@ -20,7 +20,11 @@
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include "mmvarilib5.h"
 #else
+#if QT_VERSION < QT_VERSION_CHECK(6, 9, 0)
 #include "mmvarilib6.h"
+#else
+#include "mmvarilib69.h"
+#endif
 #endif
 #if !defined (_MSC_VER)
 #pragma GCC diagnostic pop

@@ -52,11 +52,14 @@ SOURCES += \
     MMVARIFrame.cpp \
     grittyframe.cpp
 
-
-lessThan(QT_MAJOR_VERSION, 6) {
-    SOURCES += mmvarilib5.cpp
+versionAtLeast(QT_VERSION, 6.9.0) {
+SOURCES += mmvarilib69.cpp
 } else {
-    SOURCES += mmvarilib6.cpp
+    lessThan(QT_MAJOR_VERSION, 6) {
+        SOURCES += mmvarilib5.cpp
+    } else {
+        SOURCES += mmvarilib6.cpp
+    }
 }
 HEADERS += \
     MMTTYFrame.h \
@@ -64,11 +67,14 @@ HEADERS += \
     MMVARIFrame.h \
     grittyframe.h
 
-
-lessThan(QT_MAJOR_VERSION, 6) {
-    HEADERS += mmvarilib5.h
+versionAtLeast(QT_VERSION, 6.9.0) {
+HEADERS += mmvarilib69.h
 } else {
-    HEADERS += mmvarilib6.h
+    lessThan(QT_MAJOR_VERSION, 6) {
+        HEADERS += mmvarilib5.h
+    } else {
+        HEADERS += mmvarilib6.h
+    }
 }
 
 FORMS += \
