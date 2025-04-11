@@ -154,6 +154,7 @@ HEADERS += \
     contest.h \
     cutils.h \
     DisplayContestContact.h \
+    dmFKeydef.h \
     dmkeyseditdlg.h \
     dtg.h \
     enqdlg.h \

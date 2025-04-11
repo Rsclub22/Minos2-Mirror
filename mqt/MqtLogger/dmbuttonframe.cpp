@@ -6,7 +6,6 @@
 #include <QTextStream>
 #include <QPushButton>
 #include <QFileDialog>
-#include <QDesktopServices>
 #include <QFileSystemWatcher>
 
 #include "ContestApp.h"
@@ -14,16 +13,15 @@
 #include "MShowMessageDlg.h"
 #include "MinosLoggerEvents.h"
 #include "MinosParameters.h"
-//#include "rigcommon.h"
 
 #include "MinosRPC.h"
-#include "dmbuttonframe.h"
 #include "fileutils.h"
-#include "dmkeyseditdlg.h"
 #include "tlogcontainer.h"
 #include "tsinglelogframe.h"
 #include "MTrace.h"
+#include "dmkeyseditdlg.h"
 
+#include "dmbuttonframe.h"
 #include "ui_dmbuttonframe.h"
 
 DMButtonFrame::DMButtonFrame(QWidget *parent) :
@@ -74,6 +72,8 @@ DMButtonFrame::DMButtonFrame(QWidget *parent) :
     ui->FButtonFrame->setEnabled(false);
 
     ui->fkeysetCombo->addItem(currentName);
+
+    fkeyFileChanged();
 }
 
 DMButtonFrame::~DMButtonFrame()
@@ -94,12 +94,7 @@ void DMButtonFrame::DMMess(AnalysePubSubNotify an)
         connect(qfsw, &QFileSystemWatcher::fileChanged, this, &DMButtonFrame::fkeyFileChanged);
     }
 }
-bool  DMButtonFrame::isDataMode()
-{
-    return  curMode == PSK
-           || curMode == RY;
 
-}
 void DMButtonFrame::onModeChange(QString mode)
 {
     curMode = mode;
@@ -108,11 +103,14 @@ void DMButtonFrame::onModeChange(QString mode)
 }
 void DMButtonFrame::fkeyFileChanged()
 {
-    parseFKeyFile(fkeyFileName, "Digi");
+    parseFKeyFile(fkeyFileName);
 
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
-    bool sandp = tslf->GJVQSOLogFrame->getSandP();
-    showFButtons(sandp);
+    if (tslf)
+    {
+        bool sandp = tslf->GJVQSOLogFrame->getSandP();
+        showFButtons(sandp);
+    }
 }
 void DMButtonFrame::fButtonClicked()
 {
@@ -131,17 +129,22 @@ void DMButtonFrame::setContest(BaseContestLog *c)
         onModeChange(mode);
     }
 }
-void DMButtonFrame::fKey(BaseContestLog *c, int key, int carr)
+bool  DMButtonFrame::isDataMode()
+{
+    return  curMode == PSK
+           || curMode == RY;
+
+}void DMButtonFrame::fKey(BaseContestLog *c, int key, int carr)
 {
     if (c && c == ct && isDataMode())
     {
-        if (key >= Qt::Key_F1 && key <= Qt::Key_F12 && fkeys["Digi"][currentName].size() == 24)
+        if (key >= Qt::Key_F1 && key <= Qt::Key_F12 && fkeys[currentName].size() == 24)
         {
             TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
             int spoffset = tslf->GJVQSOLogFrame->getSandP()?12:0;
-            QPair<QString, QString> mess = fkeys["Digi"][currentName][key - Qt::Key_F1 + spoffset];
+            KeyVal mess = fkeys[currentName][key - Qt::Key_F1 + spoffset];
 
-            QString toSend = parseFKeyMessage(mess.second);
+            QString toSend = parseFKeyMessage(mess.kval);
 
             // send transmission to sender app
 
@@ -165,11 +168,11 @@ void DMButtonFrame::showFButtons(bool s)
     ui->FButtonFrame->setEnabled(false);
     MinosRPC *rpc = MinosRPC::getMinosRPC();
 
-    if (fkeys["Digi"][currentName].size() == 24)
+    if (fkeys[currentName].size() == 24)
     {
         for (int i = 0; i < 12; i++)
         {
-            QString keytop = fkeys["Digi"][currentName][i + (s?12:0)].first;
+            QString keytop = QString("F%1: %2").arg(i + 1).arg(fkeys[currentName][i + (s?12:0)].ktop);
 
             fButtons[i]->setText(keytop);
         }
@@ -180,7 +183,7 @@ void DMButtonFrame::showFButtons(bool s)
         rpc->publish( rpcConstants::DMCat, rpcConstants::DMFKeys, fkeystring, psPublished );
 
     }
-    else if (fkeys["Digi"][currentName].size() == 0)
+    else if (fkeys[currentName].size() == 0)
     {
         for (int i = 0; i < 12; i++)
         {
@@ -333,9 +336,9 @@ QString DMButtonFrame::parseFKeyMessage(QString mess)
     }
     return txMess;
 }
-void DMButtonFrame::parseFKeyFile(QString fname, QString mode)
+void DMButtonFrame::parseFKeyFile(QString fname)
 {
-    fkeys[mode].clear();
+    fkeys.clear();
     ui->fkeysetCombo->clear();
     nameList.clear();
 
@@ -350,7 +353,7 @@ void DMButtonFrame::parseFKeyFile(QString fname, QString mode)
     bool retval = false;
 
     QString s = lf.readAll();
-    retval = parseFKeyString(s, mode);
+    retval = parseFKeyString(s);
     if (retval == false)
     {
         mShowMessage(tr("Invalid or missing FKey definitions"), this);
@@ -362,8 +365,9 @@ void DMButtonFrame::parseFKeyFile(QString fname, QString mode)
         ui->fkeysetCombo->setCurrentText(currentName);
     }
 }
-bool DMButtonFrame::parseFKeyArray(QJsonArray s, QString keyset, QString mode)
+bool DMButtonFrame::parseFKeyArray(QJsonArray s, QString keyset)
 {
+    KeySet &ks = fkeys[keyset];
     for (const auto &v:QASCONST(s))
     {
         if (v.isArray())
@@ -375,18 +379,18 @@ bool DMButtonFrame::parseFKeyArray(QJsonArray s, QString keyset, QString mode)
                 QString keytop = a[1].toString();
                 QString val = a[2].toString();
 
-                QString l = fk + " " + keytop;
-                l.replace("&&", "&");
-                l.replace("&", "&&");
-
-                fkeys[mode][keyset].append(QPair<QString, QString>(l, val));
+                KeyVal p;
+                p.fk = fk;
+                p.ktop = keytop;
+                p.kval = val;
+                ks.append(p);
             }
         }
     }
     return true;
 }
 
-bool DMButtonFrame::parseFKeyString(QString s, QString mode)
+bool DMButtonFrame::parseFKeyString(QString s)
 {
     QJsonParseError err;
     QJsonDocument json = QJsonDocument::fromJson(s.toUtf8(), &err);
@@ -407,13 +411,13 @@ bool DMButtonFrame::parseFKeyString(QString s, QString mode)
 
                 QJsonArray run = namestruct.value("Run").toArray();
 
-                if (!parseFKeyArray(run, name, mode) )
+                if (!parseFKeyArray(run, name) )
                 {
                     // always returns true
                 }
 
                 QJsonArray sandp = namestruct.value("SandP").toArray();
-                if (!parseFKeyArray(sandp, name, mode) )
+                if (!parseFKeyArray(sandp, name) )
                 {
                     // always returns true
                 }
@@ -421,6 +425,69 @@ bool DMButtonFrame::parseFKeyString(QString s, QString mode)
         }
     }
     return true;
+}
+void DMButtonFrame::rewriteFKeyFile()
+{
+    QJsonDocument json;
+
+    QJsonArray keys;
+    for (Keys::const_iterator i = fkeys.constBegin();
+         i != fkeys.constEnd(); i++)
+    {
+        QString setName = i.key();
+
+        const KeySet &eles = i.value();
+
+        QJsonArray korun;
+        QJsonArray kosp;
+        {
+            for (int i = 0; i < 12; i++)
+            {
+                const KeyVal &k = eles[i];
+
+                QJsonArray kor;
+                kor.append(QJsonValue(k.fk));
+                kor.append(QJsonValue(k.ktop));
+                kor.append(QJsonValue(k.kval));
+                korun.append(kor);
+            }
+        }
+        {
+            for (int i = 12; i < 24; i++)
+            {
+                const KeyVal &k = eles[i];
+
+                QJsonArray ksp;
+                ksp.append(QJsonValue(k.fk));
+                ksp.append(QJsonValue(k.ktop));
+                ksp.append(QJsonValue(k.kval));
+                kosp.append(ksp);
+            }
+        }
+
+        QJsonObject ks;
+        ks.insert("Name", setName);
+        ks.insert("Run", korun);
+        ks.insert("SandP", kosp);
+
+
+        keys.append(ks);
+
+     }
+    json.setArray(keys);
+
+     QByteArray s = json.toJson(QJsonDocument::Indented);
+
+    QFile jf(fkeyFileName);
+    if (!jf.open(QIODevice::WriteOnly | QIODevice::Truncate))
+    {
+        trace("Failed to open " +  fkeyFileName);
+        return;
+    }
+    jf.write(s);
+
+    jf.close();
+
 }
 void DMButtonFrame::on_stopButton_clicked()
 {
@@ -431,11 +498,20 @@ void DMButtonFrame::on_stopButton_clicked()
 
 void DMButtonFrame::on_editButton_clicked()
 {
-    DMKeysEditDlg jed(this, currentName, fkeys);
-    jed.exec();
     // bring up default file editor on "fkeyFileName"
 
- //   QDesktopServices::openUrl(QUrl::fromLocalFile(fkeyFileName));
+    //   QDesktopServices::openUrl(QUrl::fromLocalFile(fkeyFileName));
+
+    // Use built in fKey editor on "fkeyFileName"
+
+    Keys nfk = fkeys;
+    DMKeysEditDlg jed(this, fkeyFileName, currentName, nfk);
+    if (jed.exec() == QDialog::Accepted)
+    {
+        fkeys = nfk;
+        // and we have to regenerate the JSON file
+        rewriteFKeyFile();
+    }
 }
 
 void DMButtonFrame::on_logitButton_clicked()

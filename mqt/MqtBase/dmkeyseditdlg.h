@@ -2,17 +2,13 @@
 #define DMKEYSEDITDLG_H
 
 #include <QDialog>
+#include <QItemSelection>
+#include "dmFKeydef.h"
 
 namespace Ui {
 class DMKeysEditDlg;
 }
 
-// map(key contest type) of pairs (first map(key Fkey) of run message , second map(key fKey) of S&P message)
-//typedef QMap<QString, QPair<QMap<QString, QString>, QMap<QString, QString> > > Keys;
-
-// map(key "Digi" of (map(key current set name) of vector of pairs (fkey text, fkey message) ))
-// QVector is 24 entries, F1-F12, F1-F12
-typedef QMap<QString, QMap<QString, QVector<QPair<QString, QString> > > > Keys;
 
 class DMKeysEditDlg : public QDialog
 {
@@ -21,10 +17,7 @@ class DMKeysEditDlg : public QDialog
     Ui::DMKeysEditDlg *ui;
 
     Keys &keys;
-    QString initialSection;
-    int lastOffset = -1;
 
-    QString baseTitle;
     QString name;
     void showSections();
     void showSection();
@@ -32,7 +25,7 @@ class DMKeysEditDlg : public QDialog
     void getDetails();
     void doCloseEvent();
 public:
-    explicit DMKeysEditDlg(QWidget *parent , QString name, Keys &keys);
+    explicit DMKeysEditDlg(QWidget *parent , QString fKeyFileName, QString name, Keys &keys);
     ~DMKeysEditDlg() override;
 
     int exec() override;
@@ -53,6 +46,11 @@ private slots:
 
     void on_settingsSplitter_splitterMoved(int pos, int index);
 
+    void on_upButton_clicked();
+
+    void on_downButton_clicked();
+
+    void onOptionsTableSelectionChanged(const QItemSelection &selected, const QItemSelection &);
 public Q_SLOTS:
     virtual void accept() override;
     virtual void reject() override;

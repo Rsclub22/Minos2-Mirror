@@ -2,10 +2,11 @@
 #define DMBUTTONFRAME_H
 
 #include "AnalysePubSubNotify.h"
-#include "frequency.h"
 #include <QFrame>
 #include <QMap>
 #include <QVector>
+
+#include "dmFKeydef.h"
 
 class QPushButton;
 class QFileSystemWatcher;
@@ -27,7 +28,7 @@ public:
     void setContest(BaseContestLog *);
 
     QString parseFKeyMessage(QString mess);
-    void parseFKeyFile(QString sfname, QString mode);
+    void parseFKeyFile(QString sfname);
 private slots:
     void fKey(BaseContestLog *c, int key, int carr);
     void sandPChanged(bool);
@@ -58,11 +59,6 @@ private:
 
     QVector<QPushButton *> fButtons;
 
-    // map(key contest type) of pairs (first map(key Fkey) of run message , second map(key fKey) of S&P message)
-    //typedef QMap<QString, QPair<QMap<QString, QString>, QMap<QString, QString> > > Keys;
-
-    // map(key "Digi" of (map(key current set name) of vector of pairs (fkey name, fkey mesage) ))
-    typedef QMap<QString, QMap<QString, QVector<QPair<QString, QString> > > > Keys;
     Keys fkeys;
 
     QString dataSender;
@@ -70,8 +66,10 @@ private:
 
     void showFButtons(bool s);
     QString getFKeysString() const;
-    bool parseFKeyString(QString s, QString mode);
-    bool parseFKeyArray(QJsonArray s, QString keyset, QString mode);
+    bool parseFKeyString(QString s);
+    bool parseFKeyArray(QJsonArray s, QString keyset);
+    void rewriteFKeyFile();
+
     bool isDataMode();
 };
 
