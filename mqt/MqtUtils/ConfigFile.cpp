@@ -563,12 +563,6 @@ void MinosConfig::initialise()
 //---------------------------------------------------------------------------
 bool MinosConfig::saveAsJson(QString f)
 {
-    QFile jf(f);
-    if (!jf.open(QIODevice::WriteOnly | QIODevice::Truncate))
-    {
-        trace("Failed to open " + f );
-        return false;
-    }
 
     QJsonDocument json;
     QJsonObject sconf;
@@ -625,6 +619,13 @@ bool MinosConfig::saveAsJson(QString f)
      json.setObject(sconf);
 
      QByteArray s = json.toJson();
+
+     QFile jf(f);
+     if (!jf.open(QIODevice::WriteOnly | QIODevice::Truncate))
+     {
+         trace("Failed to open " + f );
+         return false;
+     }
      jf.write(s);
 
      jf.close();
