@@ -660,6 +660,12 @@
         <translation>Bandmap afficher la Locator dérivée</translation>
     </message>
     <message>
+        <location filename="../profiles.cpp" line="157"/>
+        <location filename="../profiles.cpp" line="158"/>
+        <source></source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../profiles.cpp" line="159"/>
         <source>Auto QRZ HF callsigns</source>
         <translation>Indicatifs d&apos;appel automatiques QRZ HF</translation>
@@ -1212,6 +1218,148 @@
         <location filename="../MultsImpl.cpp" line="715"/>
         <source>Country Synonym File</source>
         <translation>Fichier des synonymes de Pays</translation>
+    </message>
+</context>
+<context>
+    <name>DMKeysEditDlg</name>
+    <message>
+        <location filename="../dmkeyseditdlg.ui" line="20"/>
+        <source>Settings Editor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dmkeyseditdlg.ui" line="32"/>
+        <source>OK</source>
+        <translation type="unfinished">OK</translation>
+    </message>
+    <message>
+        <location filename="../dmkeyseditdlg.ui" line="42"/>
+        <source>Cancel</source>
+        <translation type="unfinished">Annuler</translation>
+    </message>
+    <message>
+        <location filename="../dmkeyseditdlg.ui" line="49"/>
+        <source>Rename Setting</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dmkeyseditdlg.ui" line="56"/>
+        <source>Delete Setting</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dmkeyseditdlg.ui" line="63"/>
+        <source>Copy Setting</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dmkeyseditdlg.ui" line="70"/>
+        <source>New Setting</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dmkeyseditdlg.ui" line="153"/>
+        <source>Move Up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dmkeyseditdlg.ui" line="160"/>
+        <source>Move Down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dmkeyseditdlg.cpp" line="33"/>
+        <source>New Digi FKey section</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dmkeyseditdlg.cpp" line="34"/>
+        <source>Copy Digi FKey section</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dmkeyseditdlg.cpp" line="35"/>
+        <source>Delete Digi FKey section</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dmkeyseditdlg.cpp" line="36"/>
+        <source>Rename Digi FKey section</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dmkeyseditdlg.cpp" line="50"/>
+        <source>* My callsign
+        # Serial to send
+        ! Their call
+        {macro}
+        {MYCALL}        my full call
+        {CALL}          their full call
+        {SN}            serial number to send
+        {EXCH}          full exchange to send - can be in multiple parts
+        {GRID}          my Maidenhead locator
+        {SPACE}         space character
+        {SENTRST}       RST to send
+        {TIME2}         time in HHmm format
+        {LOG}           log the QSO. clear it, and focus on CALL
+        {WIPE}          wipe all QSO fields
+        {CALLFIELD}     move focus to the call field
+        {SERIALFIELD}   move focus to the serial received field
+        {EXCHANGEFIELD} move focus to the exchange received field</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dmkeyseditdlg.cpp" line="154"/>
+        <source>Run</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dmkeyseditdlg.cpp" line="154"/>
+        <source>S&amp;P</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dmkeyseditdlg.cpp" line="167"/>
+        <source>Key Top</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dmkeyseditdlg.cpp" line="167"/>
+        <source>Value</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dmkeyseditdlg.cpp" line="204"/>
+        <location filename="../dmkeyseditdlg.cpp" line="298"/>
+        <source>Please give a new name for the %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dmkeyseditdlg.cpp" line="233"/>
+        <location filename="../dmkeyseditdlg.cpp" line="263"/>
+        <location filename="../dmkeyseditdlg.cpp" line="312"/>
+        <source>%1 already exists</source>
+        <translation type="unfinished">%1 existe déjà</translation>
+    </message>
+    <message>
+        <location filename="../dmkeyseditdlg.cpp" line="246"/>
+        <source>Please give a name for the new %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dmkeyseditdlg.cpp" line="278"/>
+        <source>You cannot delete the empty %1!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dmkeyseditdlg.cpp" line="280"/>
+        <source>Are you sure you want to delete the current %1?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dmkeyseditdlg.cpp" line="294"/>
+        <source>You cannot rename the empty %1!</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

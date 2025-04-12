@@ -19,27 +19,27 @@
         <translation>Configuration d&apos;application défaut</translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="936"/>
+        <location filename="../ConfigFile.cpp" line="937"/>
         <source>More than one server is defined and enabled</source>
         <translation>Plusieurs serveurs définis et active</translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="945"/>
+        <location filename="../ConfigFile.cpp" line="946"/>
         <source>A local server is required.</source>
         <translation>Un serveur local est requis.</translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="960"/>
+        <location filename="../ConfigFile.cpp" line="961"/>
         <source> contains bad characters [ and/or ]</source>
         <translation> contient de mauvais caractères [et / ou]</translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="975"/>
+        <location filename="../ConfigFile.cpp" line="976"/>
         <source> appears more than once (names are not case sensitive)</source>
         <translation> apparaît plusieurs fois (les noms ne sont pas sensibles à la casse)</translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="1014"/>
+        <location filename="../ConfigFile.cpp" line="1015"/>
         <source>%1 requires a local %2
 
 </source>
@@ -48,7 +48,7 @@
 </translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="1027"/>
+        <location filename="../ConfigFile.cpp" line="1028"/>
         <source> Inferred Executable path does not exist or is not executable:</source>
         <translation> Le chemin exécutable déduit n&apos;existe pas ou n&apos;est pas exécutable&#xa0;: [why inferred???]</translation>
     </message>
@@ -59,12 +59,12 @@
         <translation type="obsolete">[???? what???]</translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="1035"/>
+        <location filename="../ConfigFile.cpp" line="1036"/>
         <source> Executable path does not exist or is not executable:</source>
         <translation> Le chemin de l&apos;exécutable n&apos;existe pas ou n&apos;est pas exécutable&#xa0;:</translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="1041"/>
+        <location filename="../ConfigFile.cpp" line="1042"/>
         <source> Working directory is not valid - no Configuration/MinosConfig.json
 
 </source>

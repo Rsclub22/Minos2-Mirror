@@ -1458,28 +1458,28 @@ Déplacez-vous entre les composants d&amp;apos;un groupe à l&amp;apos;aide de l
         <translation>Supprimer</translation>
     </message>
     <message>
-        <location filename="../dmbuttonframe.cpp" line="71"/>
-        <location filename="../dmbuttonframe.cpp" line="476"/>
+        <location filename="../dmbuttonframe.cpp" line="70"/>
+        <location filename="../dmbuttonframe.cpp" line="556"/>
         <source>Data Modes Buttons from %1</source>
         <translation>Boutons de modes de données de %1</translation>
     </message>
     <message>
-        <location filename="../dmbuttonframe.cpp" line="191"/>
+        <location filename="../dmbuttonframe.cpp" line="195"/>
         <source>Not enough key definitions in %1</source>
         <translation>Pas assez de définitions dans %1</translation>
     </message>
     <message>
-        <location filename="../dmbuttonframe.cpp" line="355"/>
+        <location filename="../dmbuttonframe.cpp" line="359"/>
         <source>Invalid or missing FKey definitions</source>
         <translation>Définitions FKey invalides ou manquantes</translation>
     </message>
     <message>
-        <location filename="../dmbuttonframe.cpp" line="462"/>
+        <location filename="../dmbuttonframe.cpp" line="542"/>
         <source>Function Key Definitions Files (*.json);;All Files (*.*)</source>
         <translation>Fichiers de définitions de touches de fonction (*.json);;Tous les fichiers (*.*)</translation>
     </message>
     <message>
-        <location filename="../dmbuttonframe.cpp" line="466"/>
+        <location filename="../dmbuttonframe.cpp" line="546"/>
         <source>Open Function Key Definitions File</source>
         <translation>Ouvrir le fichier de définitions des touches de fonction</translation>
     </message>
@@ -5693,60 +5693,60 @@ Veuillez confirmer cette action en appuyant sur &amp;quot;Oui&amp;quot;.</transl
         <translation>Nouveau paramètre</translation>
     </message>
     <message>
-        <location filename="../tsettingseditdlg.cpp" line="32"/>
+        <location filename="../tsettingseditdlg.cpp" line="34"/>
         <source>New %1</source>
         <translation>Nouveau %1</translation>
     </message>
     <message>
-        <location filename="../tsettingseditdlg.cpp" line="33"/>
+        <location filename="../tsettingseditdlg.cpp" line="35"/>
         <source>Copy %1</source>
         <translation>Copier %1</translation>
     </message>
     <message>
-        <location filename="../tsettingseditdlg.cpp" line="34"/>
+        <location filename="../tsettingseditdlg.cpp" line="36"/>
         <source>Delete %1</source>
         <translation>Supprimer %1</translation>
     </message>
     <message>
-        <location filename="../tsettingseditdlg.cpp" line="35"/>
+        <location filename="../tsettingseditdlg.cpp" line="37"/>
         <source>Rename %1</source>
         <translation>Renommer %1</translation>
     </message>
     <message>
-        <location filename="../tsettingseditdlg.cpp" line="125"/>
+        <location filename="../tsettingseditdlg.cpp" line="128"/>
         <source> for &quot;</source>
         <translation> pour &quot;</translation>
     </message>
     <message>
-        <location filename="../tsettingseditdlg.cpp" line="262"/>
+        <location filename="../tsettingseditdlg.cpp" line="270"/>
         <source>Please give a name for the new %1</source>
         <translation>Donner un nom au nouveau %1 SVP</translation>
     </message>
     <message>
-        <location filename="../tsettingseditdlg.cpp" line="249"/>
-        <location filename="../tsettingseditdlg.cpp" line="274"/>
-        <location filename="../tsettingseditdlg.cpp" line="321"/>
+        <location filename="../tsettingseditdlg.cpp" line="257"/>
+        <location filename="../tsettingseditdlg.cpp" line="282"/>
+        <location filename="../tsettingseditdlg.cpp" line="329"/>
         <source>%1 already exists</source>
         <translation>%1 existe déjà</translation>
     </message>
     <message>
-        <location filename="../tsettingseditdlg.cpp" line="289"/>
+        <location filename="../tsettingseditdlg.cpp" line="297"/>
         <source>You cannot delete the empty %1!</source>
         <translation>%1 vide - impossible de supprimer!</translation>
     </message>
     <message>
-        <location filename="../tsettingseditdlg.cpp" line="291"/>
+        <location filename="../tsettingseditdlg.cpp" line="299"/>
         <source>Are you sure you want to delete the current %1?</source>
         <translation>Supprimer définitivement le%1 actuel?</translation>
     </message>
     <message>
-        <location filename="../tsettingseditdlg.cpp" line="305"/>
+        <location filename="../tsettingseditdlg.cpp" line="313"/>
         <source>You cannot rename the empty %1!</source>
         <translation>%1 vide - impossible de renommer!</translation>
     </message>
     <message>
-        <location filename="../tsettingseditdlg.cpp" line="239"/>
-        <location filename="../tsettingseditdlg.cpp" line="309"/>
+        <location filename="../tsettingseditdlg.cpp" line="247"/>
+        <location filename="../tsettingseditdlg.cpp" line="317"/>
         <source>Please give a new name for the %1</source>
         <translation>Donner un nouveau nom à %1 SVP</translation>
     </message>
@@ -5957,6 +5957,11 @@ Last %8 Mins: %9 QSO %10 pts %11 mults
         <location filename="../txvmbuttonsframe.cpp" line="1495"/>
         <source>Rig CW Messages Available</source>
         <translation>Message CW disponible</translation>
+    </message>
+    <message>
+        <location filename="../txvmbuttonsframe.cpp" line="1499"/>
+        <source></source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../txvmbuttonsframe.cpp" line="1617"/>
