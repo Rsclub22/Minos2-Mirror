@@ -208,12 +208,14 @@ QString getCurrentLanguage()
     return currentLanguage;
 }
 #ifdef Q_OS_WIN
+#if (QT_VERSION < QT_VERSION_CHECK(6, 9, 0))
 HANDLE GetCurrentProcessToken() {
     HANDLE process_token;
     OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, &process_token);
     //DCHECK(process_token != NULL && process_token != INVALID_HANDLE_VALUE);
     return process_token;
 }
+#endif
 #endif
 bool IsCurrentProcessElevated()
 {
