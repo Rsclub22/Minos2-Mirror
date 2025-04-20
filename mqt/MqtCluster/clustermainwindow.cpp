@@ -1349,7 +1349,8 @@ void ClusterMainWindow::resendAllSpotsToClients(ResendSpotCommand cmd)
     {
         for (int row = 0; row < dxSpotDataModel->rowCount(); row ++)
         {
-            QString bandMask = dxSpotDataModel->data(dxSpotDataModel->index(row, DXBANDSTR_COL_NUM), DataStoredRole).toString();
+            QSharedPointer<ClusterSpotData> pSpot = dxSpotDataModel->getSpotData(row);
+            QString bandMask = pSpot->getBand();
             QString bandType = getBandType(bandMask);
             if (bandType == NO_BANDTYPE)
             {
@@ -3014,8 +3015,9 @@ bool DxSpotSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelInd
 
     if (traceDebugFlag)
     {
+        QSharedPointer<ClusterSpotData> pSpot = dynamic_cast<DxSpotDataModel *>(sourceModel())->getSpotData(sourceRow);
         trace(QString("filterAcceptsRow: callsign = %1, matchBand = %2")
-            .arg(sourceModel()->data(sourceModel()->index(sourceRow, DXSPOT_CALL_COL_NUM), DataStoredRole).toString(),
+            .arg(pSpot->getDxCallStr(),
             match_band ? "True" : "False"));
    }
     return match_band;
@@ -3023,8 +3025,9 @@ bool DxSpotSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelInd
 
 bool DxSpotSortFilterProxyModel::matchBand(int sourceRow) const
 {
+    QSharedPointer<ClusterSpotData> pSpot = dynamic_cast<DxSpotDataModel *>(sourceModel())->getSpotData(sourceRow);
 
-    QString band = sourceModel()->data(sourceModel()->index(sourceRow, DXBANDSTR_COL_NUM), DataStoredRole).toString();
+    QString band = pSpot->getBand();
     if (traceDebugFlag)
     {
         trace(QString("matchBand: band = %1").arg(band));
@@ -3080,10 +3083,12 @@ void ClusterMainWindow::purgeSpots()
            int idx = dxSpotDataModel->rowCount() - 1;
            while (idx >= 0 && dxSpotDataModel->rowCount() > 0)
            {
-               if (spotTimedOut(dxSpotDataModel->data(dxSpotDataModel->index(idx, RXTIME_COL_NUM), DataStoredRole).toLongLong(), setupCluster->getTimeToLive().toLongLong() * 60))
+               QSharedPointer<ClusterSpotData> pSpot = dxSpotDataModel->getSpotData(idx);
+
+               if (spotTimedOut(pSpot->getRxTime(), setupCluster->getTimeToLive().toLongLong() * 60))
                {
                    dxSpotDataModel->removeRows(idx, 1, QModelIndex());
-                   trace(QString("purged spot = %1").arg(dxSpotDataModel->data(dxSpotDataModel->index(idx, DXSPOT_CALL_COL_NUM), DataStoredRole).toString()));
+                   trace(QString("purged spot = %1").arg(pSpot->getDxCallStr()));
                }
                idx--;
            }

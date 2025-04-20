@@ -25,6 +25,8 @@ const int NO_SELECTED_ROWNUM = -1;
 const int KEY_SCROLL_STEP_SIZE = 50;
 
 class BaseContestLog;
+class BandmapDataModel;
+class BandmapSortFilterProxyModel;
 class BandmapView : public QAbstractItemView
 {
     Q_OBJECT
@@ -32,6 +34,10 @@ class BandmapView : public QAbstractItemView
 public:
     explicit BandmapView(QWidget *parent = nullptr);
     ~BandmapView() override;
+
+    BandmapDataModel *bandmapDataModel = nullptr;
+    BandmapSortFilterProxyModel* bandmapSpotProxyModel = nullptr;
+
 
     QModelIndex indexAt(const QPoint &point_) const override;
     void scrollTo(const QModelIndex &index, QAbstractItemView::ScrollHint) override;

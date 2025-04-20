@@ -302,12 +302,16 @@ int BandmapView::findNextOccupiedMarkerUpList(int curSpotViewNum)
     {
         return curSpotViewNum;
     }
+
     for (int i = curSpotViewNum + 1; i < listOfMarkers.count(); i++)
     {
         if (listOfMarkers[i]->getSpotMarkerPtr() != nullptr)
         {
             int row = listOfMarkers[i]->getModelRowNum();
-            bandmapSpotType::SPOT_TYPE savedSpot = static_cast<bandmapSpotType::SPOT_TYPE>(model()->data(model()->index(row, SPOT_TYPE_COL_NUM), BMP_DataStoredRole).toInt());
+
+            ClusterSpotData *pSpot = bandmapDataModel->getBandmapDataRow(row).data();
+
+            bandmapSpotType::SPOT_TYPE savedSpot = pSpot->getSpotType();
             if ( savedSpot != bandmapSpotType::CQ)
             {
                 return i;
@@ -324,12 +328,14 @@ int BandmapView::findNextOccupiedMarkerDownList(int curSpotViewNum)
     {
         return curSpotViewNum;
     }
+
     for (int i = curSpotViewNum - 1; i >= 0; i--)
     {
         if (listOfMarkers[i]->getSpotMarkerPtr() != nullptr)
         {
             int row = listOfMarkers[i]->getModelRowNum();
-            bandmapSpotType::SPOT_TYPE savedSpot = static_cast<bandmapSpotType::SPOT_TYPE>(model()->data(model()->index(row, SPOT_TYPE_COL_NUM), BMP_DataStoredRole).toInt());
+            ClusterSpotData *pSpot = bandmapDataModel->getBandmapDataRow(row).data();
+            bandmapSpotType::SPOT_TYPE savedSpot = pSpot->getSpotType();
             if ( savedSpot != bandmapSpotType::CQ)
             {
                 return i;
@@ -352,8 +358,9 @@ int BandmapView::findNextNonWorkedLocatorUpList(int curSpotViewNum)
         if (listOfMarkers[i]->getSpotMarkerPtr() != nullptr)
         {
             int row = listOfMarkers[i]->getModelRowNum();
-            bool locWorked = model()->data(model()->index(row, DXLOC_WORKED_COL_NUM), BMP_DataStoredRole).toBool();
-            bandmapSpotType::SPOT_TYPE savedSpot = static_cast<bandmapSpotType::SPOT_TYPE>(model()->data(model()->index(row, SPOT_TYPE_COL_NUM), BMP_DataStoredRole).toInt());
+            ClusterSpotData *pSpot = bandmapDataModel->getBandmapDataRow(row).data();
+            bool locWorked = pSpot->getDxCallWorked();
+            bandmapSpotType::SPOT_TYPE savedSpot = pSpot->getSpotType();
             if (!locWorked && savedSpot != bandmapSpotType::CQ)
             {
                 return i;
@@ -375,8 +382,9 @@ int BandmapView::findNextNonWorkedLocatorDownList(int curSpotViewNum)
         if (listOfMarkers[i]->getSpotMarkerPtr() != nullptr)
         {
             int row = listOfMarkers[i]->getModelRowNum();
-            bool locWorked = model()->data(model()->index(row, DXLOC_WORKED_COL_NUM), BMP_DataStoredRole).toBool();
-            bandmapSpotType::SPOT_TYPE savedSpot = static_cast<bandmapSpotType::SPOT_TYPE>(model()->data(model()->index(row, SPOT_TYPE_COL_NUM), BMP_DataStoredRole).toInt());
+            ClusterSpotData *pSpot = bandmapDataModel->getBandmapDataRow(row).data();
+            bool locWorked = pSpot->getDxLocatorWorked();
+            bandmapSpotType::SPOT_TYPE savedSpot = pSpot->getSpotType();
             if (!locWorked && savedSpot != bandmapSpotType::CQ)
             {
                 return i;
@@ -784,11 +792,13 @@ void BandmapView::bandmapSelectSpot(QPoint p)
 
 void BandmapView::clearSelectedSpot()
 {
-    for (int i = 0; i < model()->rowCount(); i++)
+    for (int i = 0; i < bandmapDataModel->rowCount(); i++)
     {
-        if (model()->data(model()->index(i, SPOT_IS_SELECTED_COL_NUM), BMP_DataStoredRole).toBool())
+        ClusterSpotData *pSpot = bandmapDataModel->getBandmapDataRow(i).data();
+
+        if (pSpot->getIsSelected())
         {
-            model()->setData(model()->index(i, SPOT_IS_SELECTED_COL_NUM), false, BMP_DataStoredRole);
+            pSpot->setIsSelected(false);
 
             clearSpotData(selectedSpot );
 
@@ -824,8 +834,9 @@ void BandmapView::setSelectedSpot(int spotViewNum)
     selectedSpotViewRowNum = spotViewNum;
 
     getSpotData(selectedSpotDataRowNum, selectedSpotViewRowNum, selectedSpot);
+    ClusterSpotData *pSpot = bandmapDataModel->getBandmapDataRow(selectedSpotViewRowNum).data();
 
-    model()->setData(model()->index(selectedSpotDataRowNum , SPOT_IS_SELECTED_COL_NUM), true, BMP_DataStoredRole);
+    pSpot->setIsSelected(true);
     selectedSpot.setIsSelected(true);
     trace("BandmapView::bandmapUpdate() bandmapView::setSelectedSpot");
     bandmapUpdate(true);
@@ -846,45 +857,42 @@ void BandmapView::getSpotData(int &selectedSpotDataRowNum, int selectedSpotViewR
 
     if (selectedSpotDataRowNum >= 0 && selectedSpotDataRowNum < model()->rowCount())
     {
-        QAbstractItemModel *atm = model();
-        BandmapSortFilterProxyModel *bmm = dynamic_cast<BandmapSortFilterProxyModel *>(atm);
-
-
-        ClusterSpotData *pselectedSpot = bmm->getBandmapDataRow(selectedSpotDataRowNum).data();
-
+        ClusterSpotData *pselectedSpot = bandmapDataModel->getBandmapDataRow(selectedSpotDataRowNum).data();
 
         selectedSpot.setRecNo(pselectedSpot->getRecNo());
-        selectedSpot.setSpotTime(model()->data(model()->index(selectedSpotDataRowNum, TIME_COL_NUM), BMP_DataStoredRole).toString());
-        selectedSpot.setFreq(qvariant_cast<Frequency>(model()->data(model()->index(selectedSpotDataRowNum, FREQ_COL_NUM), BMP_DataStoredRole)));
-        selectedSpot.setDxCall(model()->data(model()->index(selectedSpotDataRowNum, DXSPOT_CALL_COL_NUM), BMP_DataStoredRole).toString());
+        selectedSpot.setSpotTime(pselectedSpot->getSpotTime());
+        selectedSpot.setFreq(pselectedSpot->getFreq());
+        selectedSpot.setDxCall(pselectedSpot->getDxCallStr());
         bool showDerivedLocFlag;
         TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpShowDerivedLoc, showDerivedLocFlag );
 
-        if (showDerivedLocFlag || !model()->data(model()->index(selectedSpotDataRowNum, DXLOC_FROM_NODE_FLAG_COL_NUM), BMP_DataStoredRole).toBool())
+        if (showDerivedLocFlag || !pselectedSpot->getDxLocatorIsFromNode())
         {
-            selectedSpot.setDxLocator(model()->data(model()->index(selectedSpotDataRowNum, DXLOC_COL_NUM), BMP_DataStoredRole).toString());
+            selectedSpot.setDxLocator(pselectedSpot->getDxLocator());
         }
-        selectedSpot.setDxDist(model()->data(model()->index(selectedSpotDataRowNum, DXDIST_COL_NUM), BMP_DataStoredRole).toString());
-        selectedSpot.setDxBrg(model()->data(model()->index(selectedSpotDataRowNum, DXBRG_COL_NUM), BMP_DataStoredRole).toString());
-        selectedSpot.setRotBrg(model()->data(model()->index(selectedSpotDataRowNum, ROT_BEARING_COL_NUM),BMP_DataStoredRole).toString());
-        selectedSpot.setDxCallWorked(model()->data(model()->index(selectedSpotDataRowNum, DXSPOT_CALL_WORKED_COL_NUM), BMP_DataStoredRole).toBool());
-        selectedSpot.setDxLocatorWorked(model()->data(model()->index(selectedSpotDataRowNum, DXLOC_WORKED_COL_NUM), BMP_DataStoredRole).toBool());
-        selectedSpot.setDistrict(model()->data(model()->index(selectedSpotDataRowNum, DX_DISTRICT_COL_NUM), BMP_DataStoredRole).toString());
-        selectedSpot.setDistrictWorked(model()->data(model()->index(selectedSpotDataRowNum, DX_DISTRICT_WORKED_COL_NUM), BMP_DataStoredRole).toBool());
-        selectedSpot.setSpotType(static_cast<bandmapSpotType::SPOT_TYPE>(model()->data(model()->index(selectedSpotDataRowNum, SPOT_TYPE_COL_NUM), BMP_DataStoredRole).toInt()));
+        selectedSpot.setDxDist(pselectedSpot->getDxDist());
+        selectedSpot.setDxBrg(pselectedSpot->getDxBrg());
+        selectedSpot.setRotBrg(pselectedSpot->getRotBrg());
+        selectedSpot.setDxCallWorked(pselectedSpot->getDxCallWorked());
+        selectedSpot.setDxLocatorWorked(pselectedSpot->getDxLocatorWorked());
+        selectedSpot.setDistrict(pselectedSpot->getDistrict());
+        selectedSpot.setDistrictWorked(pselectedSpot->getDistrictWorked());
+        selectedSpot.setSpotType(pselectedSpot->getSpotType());
     }
 }
 
 void BandmapView::drawBandmapSpot(int row, int &fontOffset, int markersAbove, int &lastOffset, bool &firstDrawn)
 {
-    bandmapSpotType::SPOT_TYPE savedSpotType = static_cast<bandmapSpotType::SPOT_TYPE>(model()->data(model()->index(row, SPOT_TYPE_COL_NUM ),  BMP_DataStoredRole).toInt());
+    ClusterSpotData *pSpot = bandmapDataModel->getBandmapDataRow(row).data();
+
+    bandmapSpotType::SPOT_TYPE savedSpotType = pSpot->getSpotType();
     if (savedSpotType == bandmapSpotType::DELETED)
     {
         return;
     }
     if (matchMode(row) && matchDistance(row))
     {
-        Frequency spotFreq = qvariant_cast<Frequency>(model()->data(model()->index(row, FREQ_COL_NUM), BMP_DataStoredRole));
+        Frequency spotFreq = pSpot->getFreq();
 
         if (spotFreq < contestBandFlow || spotFreq > contestBandFhigh)
         {
@@ -1046,10 +1054,12 @@ void BandmapView::drawBandMapSpots()
     if (traceDebugFlag)
     {
         traceMsg(QString("dump list of spots and freq"));
+
         for (int row = 0; row < numrows; row++)
         {
-            Frequency freq = qvariant_cast<Frequency>(model()->data(model()->index(row, FREQ_COL_NUM), BMP_DataStoredRole));
-            QString callsign = model()->data(model()->index(row, DXSPOT_CALL_COL_NUM), Qt::DisplayRole).toString();
+            ClusterSpotData *pSpot = bandmapDataModel->getBandmapDataRow(row).data();
+            Frequency freq = pSpot->getFreq();
+            QString callsign = pSpot->getDxCallStr();
             traceMsg(QString("DB# = %1, Callsign = %2, Freq = %3").arg(row).arg( callsign, freq.traceStr()));
         }
     }
@@ -1060,7 +1070,9 @@ void BandmapView::drawBandMapSpots()
         int centreSpot;
         for (centreSpot = 0; centreSpot < model()->rowCount(); ++centreSpot)
         {
-            Frequency freq = qvariant_cast<Frequency>(model()->data(model()->index(centreSpot, FREQ_COL_NUM), BMP_DataStoredRole));
+            ClusterSpotData *pSpot = bandmapDataModel->getBandmapDataRow(centreSpot).data();
+
+            Frequency freq = pSpot->getFreq();
 
             // If they are in the table, we have to account for them
             // we can filter when looking at the individuals later
@@ -1143,7 +1155,8 @@ void BandmapView::drawBandMapSpots()
 
         for (int row = 0; row < numrows; ++row)
         {
-            bandmapSpotType::SPOT_TYPE savedSpotType = static_cast<bandmapSpotType::SPOT_TYPE>(model()->data(model()->index(row, SPOT_TYPE_COL_NUM ),  BMP_DataStoredRole).toInt());
+            ClusterSpotData *pSpot = bandmapDataModel->getBandmapDataRow(row).data();
+            bandmapSpotType::SPOT_TYPE savedSpotType = pSpot->getSpotType();
             if (savedSpotType == bandmapSpotType::DELETED)
             {
                 continue;;
@@ -1152,7 +1165,7 @@ void BandmapView::drawBandMapSpots()
             if (matchMode(row) && matchDistance(row))
             {
 
-                Frequency f = qvariant_cast<Frequency>(model()->data(model()->index(row, FREQ_COL_NUM), BMP_DataStoredRole));
+                Frequency f = pSpot->getFreq();
 
                 if (f <= contestBandFhigh && f >= contestBandFlow)
                 {
@@ -1173,8 +1186,6 @@ void BandmapView::drawBandMapSpots()
                         {
                             if (listOfMarkers[markNum]->getSpotMarkerPtr() == nullptr)
                             {
-                                //QString callsign = model()->data(model()->index(row, DXSPOT_CALL_COL_NUM), Qt::DisplayRole).toString();
-
                                 QPoint spotCoord = QPoint(listOfMarkers[markNum]->getSpotMarkerCoord().x(), listOfMarkers[markNum]->getSpotMarkerCoord().y());
                                 BandmapSpotMarker* spot = new BandmapSpotMarker(spotCoord);
 
@@ -1268,7 +1279,9 @@ void BandmapView::deleteItemsFromMarkerList()
 
 bool BandmapView::matchMode(int sourceRow)
 {
-    QString mode = model()->data(model()->index(sourceRow, DXSPOT_MODE_COL_NUM), BMP_DataStoredRole).toString();
+    ClusterSpotData *pSpot = bandmapDataModel->getBandmapDataRow(sourceRow).data();
+
+    QString mode = pSpot->getMode();
 
     if (!mode.isEmpty())
     {
@@ -1286,8 +1299,10 @@ bool BandmapView::matchDistance(int sourceRow)
     {
         bool ok = false;
 
-        bandmapSpotType::SPOT_TYPE savedSpot = static_cast<bandmapSpotType::SPOT_TYPE>(model()->data(model()->index(sourceRow, SPOT_TYPE_COL_NUM), BMP_DataStoredRole).toInt());
-        QString distanceStr = model()->data(model()->index(sourceRow, DXDIST_COL_NUM), BMP_DataStoredRole).toString();
+        ClusterSpotData *pSpot = bandmapDataModel->getBandmapDataRow(sourceRow).data();
+
+        bandmapSpotType::SPOT_TYPE savedSpot = pSpot->getSpotType();
+        QString distanceStr = pSpot->getDxDist();
         if (distanceStr.isEmpty() && filterSettings->getIgnoreEmptyDistanceFlag()
             && savedSpot == bandmapSpotType::CLUSTER )
         {
@@ -1320,7 +1335,9 @@ QRectF BandmapView::calculateSpotRect(const QString text, const QPoint spotCoord
 
 void BandmapView::assembleCqMsg(int row, QString& markerMsg)
 {
-    bool offRunFreq = model()->data(model()->index(row, OFF_RUN_FREQ_COL_NUM), BMP_DataStoredRole).toBool();
+    ClusterSpotData *pSpot = bandmapDataModel->getBandmapDataRow(row).data();
+
+    bool offRunFreq = pSpot->getOffRunFreq();
     QString msgColourStart;
     if (offRunFreq)
     {
@@ -1334,7 +1351,7 @@ void BandmapView::assembleCqMsg(int row, QString& markerMsg)
     QString msgColourEnd = HtmlFontColour("black");
 
 
-    Frequency freq = qvariant_cast<Frequency>(model()->data(model()->index(row, FREQ_COL_NUM), BMP_DataStoredRole));
+    Frequency freq = pSpot->getFreq();
 
     Frequency cFreq = dial->getCurFreq();
 
@@ -1354,27 +1371,29 @@ void BandmapView::assembleCqMsg(int row, QString& markerMsg)
 
 void BandmapView::assembleSpotMsg(int row, QString& markerMsg)
 {
-    QString dxCallsign = model()->data(model()->index(row, DXSPOT_CALL_COL_NUM), BMP_DataStoredRole).toString();
-    bool callWkd = model()->data(model()->index(row,DXSPOT_CALL_WORKED_COL_NUM), BMP_DataStoredRole).toBool();
-    Frequency freq = qvariant_cast<Frequency>(model()->data(model()->index(row, FREQ_COL_NUM), BMP_DataStoredRole));
-    Frequency cFreq = dial->getCurFreq();
-    QString dxLoc = model()->data(model()->index(row, DXLOC_COL_NUM), BMP_DataStoredRole).toString();
-    QString dxMode = model()->data(model()->index(row, DXSPOT_MODE_COL_NUM), BMP_DataStoredRole).toString();
-    bool locWkd = model()->data(model()->index(row, DXLOC_WORKED_COL_NUM), BMP_DataStoredRole).toBool();
-    QString dxDist = model()->data(model()->index(row, DXDIST_COL_NUM), BMP_DataStoredRole).toString();
-    QString dxBrg = model()->data(model()->index(row, DXBRG_COL_NUM), BMP_DataStoredRole).toString();
-    QString rotBrg = model()->data(model()->index(row, ROT_BEARING_COL_NUM), BMP_DataStoredRole).toString();
-    bool rotConnected = model()->data(model()->index(row, ROT_CONNECTED_COL_NUM), BMP_DataStoredRole).toBool();
-    bool dxLocFromNodeFlag = model()->data(model()->index(row, DXLOC_FROM_NODE_FLAG_COL_NUM), BMP_DataStoredRole).toBool();
+    ClusterSpotData *pSpot = bandmapDataModel->getBandmapDataRow(row).data();
 
-    QString dxQth = model()->data(model()->index(row, DX_DISTRICT_COL_NUM), BMP_DataStoredRole).toString();
+    QString dxCallsign = pSpot->getDxCallStr();
+    bool callWkd = pSpot->getDxCallWorked();
+    Frequency freq = pSpot->getFreq();
+    Frequency cFreq = dial->getCurFreq();
+    QString dxLoc = pSpot->getDxLocator();
+    QString dxMode = pSpot->getMode();
+    bool locWkd = pSpot->getDxLocatorWorked();
+    QString dxDist = pSpot->getDxDist();
+    QString dxBrg = pSpot->getDxBrg();
+    QString rotBrg = pSpot->getRotBrg();
+    bool rotConnected = pSpot->getRotConnected();
+    bool dxLocFromNodeFlag = pSpot->getDxLocatorIsFromNode();
+
+    QString dxQth = pSpot->getDistrict();
 
     bool showDerivedLocFlag;
     TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpShowDerivedLoc, showDerivedLocFlag );
 
-    bandmapSpotType::SPOT_TYPE spotType = static_cast<bandmapSpotType::SPOT_TYPE>(model()->data(model()->index(row, SPOT_TYPE_COL_NUM), BMP_DataStoredRole).toInt());
+    bandmapSpotType::SPOT_TYPE spotType = pSpot->getSpotType();
 
-    qlonglong spotTime = model()->data(model()->index(row, RXTIME_COL_NUM), BMP_DataStoredRole).toLongLong();
+    qlonglong spotTime = pSpot->getRxTime();
     bool olderThan3Min = spotTimedOut(spotTime, NEW_SPOT_TIME);
 
     QString newSpotMsg = "";
@@ -1486,13 +1505,13 @@ void BandmapView::assembleSpotMsg(int row, QString& markerMsg)
         markSym = HtmlFontColour(CLUSTER_SPOT_COLOUR) + "*" + HtmlFontColour(MARKED_SPOT_COLOUR) + "#" + HtmlFontColour(NOT_WORKED_COLOUR);
     }
 
-    qlonglong st = model()->data(model()->index(row, RXTIME_COL_NUM), BMP_DataStoredRole).toLongLong();
+    qlonglong st = pSpot->getRxTime();
     qlonglong elapsedTime = spotElapsedTime(st) / 60;
     QString etc = formatTime(elapsedTime);
 
     QString msg = QString("%1%2 @ .%3 %4 %5 %6 %7 %8 %9%10").arg(bLineStart, callsign, freq.extractKhz(), locator, distance).arg(bearing, etc, markSym, newSpotMsg, bLineEnd);
 
-    if (model()->data(model()->index(row, SPOT_IS_SELECTED_COL_NUM), BMP_DataStoredRole).toBool())
+    if (pSpot->getIsSelected())
     {
         msg = QString("<div style='background:rgba(200, 200, 200, 75%);'>" + msg + QString("</div<"));           // show selected
 
@@ -1504,32 +1523,36 @@ void BandmapView::assembleSpotMsg(int row, QString& markerMsg)
 
 void BandmapView::assembleCqToolTip(int row, Frequency freq, QString& toolTipMsg)
 {
-    QString mode = model()->data(model()->index(row, DXSPOT_MODE_COL_NUM), BMP_DataStoredRole).toString();
+    ClusterSpotData *pSpot = bandmapDataModel->getBandmapDataRow(row).data();
+
+    QString mode = pSpot->getMode();
     QString msg = tr("CQ Frequency = %1\nThe mode is %2").arg(freq.convertFreqStrDisp(), mode);
     toolTipMsg = msg;
 }
 
 void BandmapView::assembleToolTip(int row, Frequency freq, QString& toolTipMsg)
 {
+    ClusterSpotData *pSpot = bandmapDataModel->getBandmapDataRow(row).data();
+
     QChar degSym = QChar(DEG_SYMBOL);
-    QString callsign = model()->data(model()->index(row, DXSPOT_CALL_COL_NUM), BMP_DataStoredRole).toString();
-    QString locator = model()->data(model()->index(row, DXLOC_COL_NUM), BMP_DataStoredRole).toString();
-    QString bearing = model()->data(model()->index(row, DXBRG_COL_NUM), BMP_DataStoredRole).toString();
+    QString callsign = pSpot->getDxCallStr();
+    QString locator = pSpot->getDxLocator();
+    QString bearing = pSpot->getDxBrg();
     if (!bearing.isEmpty())
     {
         bearing += degSym;
     }
-    QString distance = model()->data(model()->index(row, DXDIST_COL_NUM), BMP_DataStoredRole).toString();
+    QString distance = pSpot->getDxDist();
     if (!distance.isEmpty())
     {
         distance += " km";
     }
-    QString spotterCallsign =  model()->data(model()->index(row, SPOTTER_CALL_COL_NUM), BMP_DataStoredRole).toString();
-    QString spotterLocator = model()->data(model()->index(row, SPOTTER_LOC_COL_NUM), BMP_DataStoredRole).toString();
+    QString spotterCallsign = pSpot->getSpotterCallStr();
+    QString spotterLocator = pSpot->getSpotterLocator();
 
-    QString spotterComment = model()->data(model()->index(row, COMMENT_COL_NUM), BMP_DataStoredRole).toString().replace('<', " (").replace('>', ") ");
-    QString computedMode = model()->data(model()->index(row, DXSPOT_MODE_COL_NUM), BMP_DataStoredRole).toString();
-    bandmapSpotType::SPOT_TYPE spotType = static_cast<bandmapSpotType::SPOT_TYPE>(model()->data(model()->index(row, SPOT_TYPE_COL_NUM), BMP_DataStoredRole).toInt());
+    QString spotterComment = pSpot->getSpotComment();
+    QString computedMode = pSpot->getMode();
+    bandmapSpotType::SPOT_TYPE spotType = pSpot->getSpotType();
 
     QString spotName = ClusterSpotData::spotName(spotType);
     QString spotModeMsg = tr("The computed mode is");
@@ -1538,7 +1561,7 @@ void BandmapView::assembleToolTip(int row, Frequency freq, QString& toolTipMsg)
         spotModeMsg = tr("The mode is");
     }
 
-    qlonglong spotTime = model()->data(model()->index(row, RXTIME_COL_NUM), BMP_DataStoredRole).toLongLong();
+    qlonglong spotTime = pSpot->getRxTime();
     qlonglong elapsedTime = spotElapsedTime(spotTime) / 60;
     QString etc = formatTime(elapsedTime);
 

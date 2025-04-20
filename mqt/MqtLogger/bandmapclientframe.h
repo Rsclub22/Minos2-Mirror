@@ -132,14 +132,13 @@ private:
     BandmapView *bandmapView = nullptr;
     QItemSelectionModel *selectionModel = nullptr;
 
+    BandmapDataModel *bandmapDataModel = nullptr;
     BandmapSortFilterProxyModel* bandmapSpotProxyModel = nullptr;
     BandmapClientFilterDialog* filterSetup = nullptr;
 
     UpperCaseValidator ucValidator;
 
     Frequency curFreq;
-
-    BandmapDataModel *bandmapDataModel = nullptr;
 
     QMenu* spotsMenu = nullptr;
     QAction* markSpotAction = nullptr;

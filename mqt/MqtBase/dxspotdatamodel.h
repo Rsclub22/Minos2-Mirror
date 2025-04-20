@@ -18,9 +18,6 @@
 
 const int dxSpotColCount = 20;
 
-const int DataStoredRole = Qt::UserRole + 0;
-
-
 class HtmlDelegate;
 
 class DxSpotDataModel : public QAbstractTableModel
@@ -40,8 +37,6 @@ public:
 
     // get data
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
-    // set data
-    bool setData(const QModelIndex & index, const QVariant & value, int role = Qt::EditRole) override;
 
     // Add data:
     bool insertRows(int row, int count, const QModelIndex &index = QModelIndex()) override;

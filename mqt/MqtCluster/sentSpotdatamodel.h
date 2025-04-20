@@ -19,8 +19,6 @@
 
 const int sentSpotColCount = 8;
 
-const int SentDataStoredRole = Qt::UserRole + 0;
-
 const int SENT_SPOT_TIME_COL_NUM = 0;
 const int SENT_SPOT_FREQ_STR_COL_NUM = 1;
 const int SENT_SPOT_DXSPOT_CALL_COL_NUM = 2;
@@ -51,9 +49,6 @@ public:
 
     // get data
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
-    // set data
-    bool setData(const QModelIndex & index, const QVariant & value, int role = Qt::EditRole) override;
-
     // Add data:
     bool insertRows(int row, int count, const QModelIndex &index = QModelIndex()) override;
     bool insertColumns(int column, int count, const QModelIndex &parent = QModelIndex()) override;

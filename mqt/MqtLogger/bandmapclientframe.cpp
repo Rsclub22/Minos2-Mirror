@@ -51,6 +51,9 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
     bandmapSpotProxyModel->setSourceModel(bandmapDataModel);
     bandmapView->setModel(bandmapSpotProxyModel);
 
+    bandmapView->bandmapSpotProxyModel = bandmapSpotProxyModel;
+    bandmapView->bandmapDataModel = bandmapDataModel;
+
     ui->textFilterEdit->setValidator(&ucValidator);
 
     bandmapView->initBandmapView(ui->bandmapGraphicsView);
@@ -1349,7 +1352,7 @@ void BandmapClientFrame::addRemoveCQSpot(QSharedPointer<ClusterSpotData>  spot)
         // look for an existing CQ spot and remove
         for (int row = 0; row < bandmapDataModel->rowCount(); row++)
         {
-            bandmapSpotType::SPOT_TYPE savedSpotType = static_cast<bandmapSpotType::SPOT_TYPE>(bandmapDataModel->data(bandmapDataModel->index(row, SPOT_TYPE_COL_NUM ),  BMP_DataStoredRole).toInt());
+            bandmapSpotType::SPOT_TYPE savedSpotType = bandmapDataModel->getSpotData(row)->getSpotType();
             if (savedSpotType == bandmapSpotType::CQ)
             {
                 QSharedPointer<ClusterSpotData> spotInBandmap = bandmapDataModel->getBandmapDataRow(row);
@@ -1370,7 +1373,7 @@ void BandmapClientFrame::addRemoveCQSpot(QSharedPointer<ClusterSpotData>  spot)
         bandmapSpotType::SPOT_TYPE savedSpotType = bandmapSpotType::SPOT_TYPE::NONE;
         for(int row = 0; row < bandmapDataModel->rowCount(); row++)
         {
-            savedSpotType = static_cast<bandmapSpotType::SPOT_TYPE>(bandmapDataModel->data(bandmapDataModel->index(row, SPOT_TYPE_COL_NUM ),  BMP_DataStoredRole).toInt());
+            savedSpotType = bandmapDataModel->getSpotData(row)->getSpotType();
             if (savedSpotType == bandmapSpotType::CQ)
             {
                 rowNum = row;
@@ -1391,12 +1394,11 @@ void BandmapClientFrame::addRemoveCQSpot(QSharedPointer<ClusterSpotData>  spot)
         else
         {
             // update the spot
-            bandmapDataModel->setData(bandmapDataModel->index(rowNum, RUN_MODE_ON_COL_NUM ), spot->getRunModeOn() ,BMP_DataStoredRole);
-            bandmapDataModel->setData(bandmapDataModel->index(rowNum, OFF_RUN_FREQ_COL_NUM ), spot->getOffRunFreq() ,BMP_DataStoredRole);
-            QVariant f;
-            f.setValue(spot->getFreq());
-            bandmapDataModel->setData(bandmapDataModel->index(rowNum, FREQ_COL_NUM ), f ,BMP_DataStoredRole);
-            bandmapDataModel->setData(bandmapDataModel->index(rowNum, DXSPOT_MODE_COL_NUM ), spot->getMode() ,BMP_DataStoredRole);
+            QSharedPointer<ClusterSpotData> pSpot = bandmapDataModel->getSpotData(rowNum);
+            spot->setRunModeOn(pSpot->getRunModeOn());
+            spot->setOffRunFreq(pSpot->getOffRunFreq());
+            spot->setFreq(pSpot->getFreq());
+            spot->setMode(pSpot->getMode());
             bandmapDataModel->sortModel();
         }
     }

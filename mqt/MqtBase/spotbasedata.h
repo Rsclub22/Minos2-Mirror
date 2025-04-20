@@ -231,6 +231,7 @@ private:
     bool isSelected = false;
     bandmapSpotType::SPOT_TYPE spotType = bandmapSpotType::SPOT_TYPE::NONE;
 };
+Q_DECLARE_METATYPE(ClusterSpotData *)
 
 extern QSharedPointer<ClusterSpotData> stringToDxSpot(QString spot, BaseContestLog *ct, qlonglong &timeToLive);
 
