@@ -350,7 +350,7 @@ void DMKeysEditDlg::accept()
     QDialog::accept();
 }
 
-void DMKeysEditDlg::onOptionsTableSelectionChanged(const QItemSelection &selected, const QItemSelection &)
+void DMKeysEditDlg::onOptionsTableSelectionChanged(const QItemSelection &/*selected*/, const QItemSelection &)
 {
     ui->upButton->setEnabled(false);
     ui->downButton->setEnabled(false);
