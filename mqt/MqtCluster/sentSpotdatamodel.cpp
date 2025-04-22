@@ -50,6 +50,7 @@ QVariant SentSpotDataModel::headerData(int section, Qt::Orientation orientation,
                     return tr("Comment");
                 case SENT_SPOT_STATUS_COL_NUM:
                     return tr("Status");
+//const int SENT_SPOT_RXTIME_COL_NUM = 6;
                 case SENT_SPOT_REASON_COL_NUM:
                     return tr("Reason");
                 default:
@@ -152,6 +153,7 @@ QVariant SentSpotDataModel::data(const QModelIndex &index, int role) const
                 }
 
             break;
+//const int SENT_SPOT_RXTIME_COL_NUM = 6;
             case SENT_SPOT_REASON_COL_NUM:
                 d = sentSpot->reason;
             break;

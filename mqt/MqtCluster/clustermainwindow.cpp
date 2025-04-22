@@ -263,18 +263,10 @@ void ClusterMainWindow::doStartup()
     dxSpotView->setColumnHidden(COMMENT_COL_NUM, false);
 
     // hide these columns
+    dxSpotView->setColumnHidden(RXTIME_COL_NUM, true);  // used for sorting
     dxSpotView->setColumnHidden(DXBRG_COL_NUM, true);
-    dxSpotView->setColumnHidden(DXSPOT_TO_MEMORY_FLAG_COL_NUM, true);
-    dxSpotView->setColumnHidden(DXSPOT_CALL_WORKED_COL_NUM, true);
-    dxSpotView->setColumnHidden(DXLOC_WORKED_COL_NUM, true);
     dxSpotView->setColumnHidden(DXDIST_COL_NUM, true);
-    dxSpotView->setColumnHidden(RXTIME_COL_NUM, true);
-    dxSpotView->setColumnHidden(DXSPOT_PROP_MODE_COL_NUM, true);
-    dxSpotView->setColumnHidden(DXBANDSTR_COL_NUM, true);
-    dxSpotView->setColumnHidden(DATE_COL_NUM, true);
-    dxSpotView->setColumnHidden(DXLOC_FROM_NODE_FLAG_COL_NUM, true);
-    dxSpotView->setColumnHidden(DATE_TIME_COL_NUM, true);
-    dxSpotView->setColumnHidden(DXCLUSTER_SHOW_SPOT_TYPE, true);
+    dxSpotView->setColumnHidden(SPOTTER_LOC_COL_NUM, true);
 
 
 

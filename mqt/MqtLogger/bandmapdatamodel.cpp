@@ -11,8 +11,6 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include "bandmapdatamodel.h"
-#include "clustercommon.h"
-#include "cutils.h"
 #include "ContestApp.h"
 
 // Note this is being used by a custom view with no horizontal headers.
@@ -33,131 +31,14 @@ int BandmapDataModel::rowCount(const QModelIndex &parent) const
     return bandmapData.count();
 }
 
-int BandmapDataModel::columnCount(const QModelIndex &parent) const
+int BandmapDataModel::columnCount(const QModelIndex &/*parent*/) const
 {
-    if (parent.isValid())
-    {
-        return 0;
-    }
-    return bandmapColCount;
+    return 0;
 }
 
 
-QVariant BandmapDataModel::data(const QModelIndex &index, int role) const
+QVariant BandmapDataModel::data(const QModelIndex &/*index*/, int /*role*/) const
 {
-    if (!index.isValid())
-    {
-        return QVariant();
-    }
-
-    if (index.row() >= bandmapData.size() || index.row() < 0)
-    {
-             return QVariant();
-    }
-
-    int col = index.column();
-
-    if (role == Qt::DisplayRole)
-    {
-        int row = index.row();
-        if (row < 0 && row >= bandmapData.size())
-        {
-            return QVariant();
-        }
-
-        QSharedPointer<ClusterSpotData> bandmapSpot = bandmapData.at(row);
-
-        QString d;
-        switch (col)
-        {
-            case TIME_COL_NUM:
-                d = bandmapSpot->getSpotTime();
-                break;
-            case FREQ_COL_NUM:
-                d = bandmapSpot->getFreq().convertFreqStrDisp();
-                break;
-            case DXBANDSTR_COL_NUM:
-                d = bandmapSpot->getBand();
-            break;
-            case DXSPOT_CALL_COL_NUM:
-                if (bandmapSpot->getDxCallWorked() )
-                {
-                    d = HtmlFontColour(CALLSIGN_WORKED_COLOUR);
-                }
-                d = d + bandmapSpot->getDxCallStr();
-                if (bandmapSpot->getDxCallWorked() )
-                {
-                    d = d + HtmlFontColour(NOT_WORKED_COLOUR);
-                }
-            break;
-
-            case DXSPOT_MODE_COL_NUM:
-                d = bandmapSpot->getMode();
-            break;
-
-            case DXLOC_COL_NUM:
-                if (!bandmapSpot->getDxLocatorWorked() && bandmapSpot->getDxCallWorked())
-                {
-                    d = HtmlFontColour(NOT_WORKED_COLOUR);
-                }
-                else if (bandmapSpot->getDxLocatorWorked())
-                {
-                    d = HtmlFontColour(LOCATOR_WORKED_COLOUR);
-                }
-
-                d = d + bandmapSpot->getDxLocator() + HtmlFontColour(NOT_WORKED_COLOUR);
-            break;
-            case DXDIST_COL_NUM:
-                d = bandmapSpot->getDxDist();
-            break;
-            case DXBRG_COL_NUM:
-                d = bandmapSpot->getDxBrg();
-            break;
-            case SPOTTER_CALL_COL_NUM:
-                d = bandmapSpot->getSpotterCallStr();
-            break;
-            case SPOTTER_LOC_COL_NUM:
-                d = bandmapSpot->getSpotterLocator();
-            break;
-            case COMMENT_COL_NUM:
-                d = escapeXML(bandmapSpot->getSpotComment());
-            break;
-            case RXTIME_COL_NUM:
-                d = QString::number(bandmapSpot->getRxTime());
-            break;
-            case SPOT_TYPE_COL_NUM:
-                d = QChar(static_cast<int>(bandmapSpot->getSpotType()));
-            break;
-            case ROT_BEARING_COL_NUM:
-                d = bandmapSpot->getRotBrg() + QChar('R');
-            break;
-            case ROT_CONNECTED_COL_NUM:
-                d = QChar(static_cast<int>(bandmapSpot->getRotConnected()));
-            break;
-            case RUN_MODE_ON_COL_NUM:
-                d = QChar(static_cast<int>(bandmapSpot->getRunModeOn()));
-            break;
-            case OFF_RUN_FREQ_COL_NUM:
-                d = QChar(static_cast<int>(bandmapSpot->getOffRunFreq()));
-            break;
-            case CQ_RESPONSE_COL:
-                d = QChar(static_cast<int>(bandmapSpot->getCqResponse()));
-            break;
-            case DXLOC_FROM_NODE_FLAG_COL_NUM:
-                d = QChar(static_cast<int>(bandmapSpot->getDxLocatorIsFromNode()));
-            break;
-            case DX_DISTRICT_COL_NUM:
-                d = bandmapSpot->getDistrict();
-            break;
-            case DX_DISTRICT_WORKED_COL_NUM:
-                d = QChar(static_cast<int>(bandmapSpot->getDistrictWorked()));
-            break;
-            default:
-                d = "";
-        }
-        return d;
-    }
-
     return QVariant();
 }
 

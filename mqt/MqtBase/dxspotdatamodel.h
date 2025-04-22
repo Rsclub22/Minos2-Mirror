@@ -16,8 +16,6 @@
 #include <QAbstractTableModel>
 #include "spotbasedata.h"
 
-const int dxSpotColCount = 20;
-
 class HtmlDelegate;
 
 class DxSpotDataModel : public QAbstractTableModel

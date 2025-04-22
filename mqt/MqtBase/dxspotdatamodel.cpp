@@ -12,8 +12,8 @@
 
 #include "clustercommon.h"
 #include "cutils.h"
-#include "rigutils.h"
 #include "htmldelegate.h"
+#include "rigutils.h"
 #include "dxspotdatamodel.h"
 
 DxSpotDataModel::DxSpotDataModel(QObject *parent)
@@ -37,14 +37,10 @@ QVariant DxSpotDataModel::headerData(int section, Qt::Orientation orientation, i
             switch (section) {
                 case TIME_COL_NUM:
                     return tr("UTC");
-                case DATE_COL_NUM:
-                    return tr("Date");
                 case FREQ_COL_NUM:
                     return tr("Freq");
                 case DXSPOT_CALL_COL_NUM:
                     return tr("Dx");
-                case DXSPOT_CALL_WORKED_COL_NUM:
-                    return tr("Wkd");
                 case DXSPOT_MODE_COL_NUM:
                     return tr("Mode");
                 case DXLOC_COL_NUM:
@@ -53,18 +49,12 @@ QVariant DxSpotDataModel::headerData(int section, Qt::Orientation orientation, i
                     return tr("Dist");
                 case DXBRG_COL_NUM:
                     return tr("Brg");
-                case DXLOC_WORKED_COL_NUM:
-                    return tr("Wkd");
                 case SPOTTER_CALL_COL_NUM:
                     return tr("Spotter");
                 case SPOTTER_LOC_COL_NUM:
                     return tr("Loc");
                 case COMMENT_COL_NUM:
                     return tr("Comment");
-                case DXSPOT_TO_MEMORY_FLAG_COL_NUM:
-                    return tr("Spot to Mem Flag");
-                case DXSPOT_PROP_MODE_COL_NUM:
-                    return tr("Prop Mode");
                 default:
                 return QVariant();
             }
@@ -165,11 +155,11 @@ QVariant DxSpotDataModel::data(const QModelIndex &index, int role) const
         QString d;
         switch (col)
         {
+            case RXTIME_COL_NUM:
+                d = QString::number(dxSpot->getRxTime());
+                break;
             case TIME_COL_NUM:
                 d = dxSpot->getSpotTime();
-            break;
-            case DATE_COL_NUM:
-                d = dxSpot->getSpotDate();
             break;
             case FREQ_COL_NUM:
                 d = removeHundredHzAndHzDigits(dxSpot->getFreq().convertFreqStrDisp());
@@ -183,6 +173,9 @@ QVariant DxSpotDataModel::data(const QModelIndex &index, int role) const
 
                 d = d + dxSpot->getDxCallStr();
             break;
+            case DXSPOT_MODE_COL_NUM:
+                d = dxSpot->getMode();
+                break;
             case DXLOC_COL_NUM:
                 if (dxSpot->getDxLocatorWorked())
                 {
@@ -214,24 +207,6 @@ QVariant DxSpotDataModel::data(const QModelIndex &index, int role) const
             break;
             case COMMENT_COL_NUM:
                 d = escapeXML(dxSpot->getSpotComment());
-            break;
-            case RXTIME_COL_NUM:
-                d = QString::number(dxSpot->getRxTime());
-            break;
-            case DXSPOT_MODE_COL_NUM:
-                d = dxSpot->getMode();
-            break;
-            case DXSPOT_PROP_MODE_COL_NUM:
-                d = dxSpot->getDxPropMode();
-            break;
-            case DXBANDSTR_COL_NUM:
-                d = dxSpot->getBand();
-            break;
-            case DXLOC_FROM_NODE_FLAG_COL_NUM:
-                d = QChar(static_cast<int>(dxSpot->getDxLocatorIsFromNode()));
-            break;
-            case DXCLUSTER_SHOW_SPOT_TYPE:
-                d = dxSpot->isShowSpotType()?clusterSpotType::SHOW_DXSPOT_TYPE:clusterSpotType::DXSPOT_TYPE;
             break;
             default:
                 d = "";
