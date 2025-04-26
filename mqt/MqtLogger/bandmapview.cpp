@@ -525,7 +525,7 @@ void BandmapView::mouseDoubleClicked(QPoint p)
         spotData.fromBandmapOrMemory = true;
         spotData.exchange = selectedSpot.getDistrict();
         spotData.mode = selectedSpot.getMode();
-        spotData.freq = selectedSpot.getFreq().toCarrier(curMode);
+        spotData.freq = selectedSpot.getFreq();
 
         MinosLoggerEvents::SendSpotToLog(spotData);
     }
@@ -734,7 +734,7 @@ int BandmapView::dialCursorWithinViewport(Frequency freq)
 void BandmapView::bandmapSelectFreq(int y)
 {
     Frequency f = dial->getFreqFromYCoordOnDial(y);
-    MinosLoggerEvents::SendFreqToRig(f.toCarrier(curMode));
+    MinosLoggerEvents::SendFreqToRig(f);
 }
 
 void BandmapView::setBandFreqLimits(Frequency flow, Frequency fhigh)
@@ -780,7 +780,7 @@ void BandmapView::bandmapSelectSpot(QPoint p)
             clearSelectedSpot();       // clear any spot previously selected
             setSelectedSpot(spotViewNum);        // mark new selected spot
 
-            MinosLoggerEvents::SendFreqToRig(selectedSpot.getFreq().toCarrier(curMode));
+            MinosLoggerEvents::SendFreqToRig(selectedSpot.getFreq());
         }
     }
     else

@@ -420,7 +420,7 @@ void BandmapClientFrame::on_FreqDisplayClicked()
 
 void BandmapClientFrame::sendFreqToRig(Frequency freq)
 {
-    MinosLoggerEvents::SendFreqToRig(freq.toCarrier(radioMode));
+    MinosLoggerEvents::SendFreqToRig(freq);
 }
 
 void BandmapClientFrame::on_freqActionSelected()
@@ -1093,8 +1093,10 @@ void BandmapClientFrame::addLogSpotToBandmapTable(QSharedPointer<ClusterSpotData
                 {
                     // delete the old logged/saved entry, add the new one
                     traceMsg(QString("Deleting Spot as new spot is DELETED %1, %2, %3, %4")
-                                 .arg(spotInBandmap->getDxCall().getFullCall(), spotInBandmap->getFreq().traceStr(), spotInBandmap->getMode())
-                                 .arg(spotInBandmap->spotName())
+                                 .arg(spotInBandmap->getDxCall().getFullCall(),
+                                      spotInBandmap->getFreq().traceStr(),
+                                      spotInBandmap->getMode(),
+                                      spotInBandmap->spotName())
                              );
 
                     spotInBandmap->setSpotType(bandmapSpotType::DELETED);
@@ -1153,8 +1155,10 @@ void BandmapClientFrame::addLogSpotToBandmapTable(QSharedPointer<ClusterSpotData
                         // newSpot is LOGGED, so OK
                         // delete the old logged/saved entry, add the new LOGGED one
                         traceMsg(QString("Deleting Spot as new spot will replace it %1, %2, %3, %4")
-                                     .arg(spotInBandmap->getDxCall().getFullCall(), spotInBandmap->getFreq().traceStr(), spotInBandmap->getMode())
-                                     .arg(spotInBandmap->spotName())
+                                     .arg(spotInBandmap->getDxCall().getFullCall(),
+                                          spotInBandmap->getFreq().traceStr(),
+                                          spotInBandmap->getMode(),
+                                          spotInBandmap->spotName())
                                  );
 
                         spotInBandmap->setSpotType(bandmapSpotType::DELETED);
@@ -1240,7 +1244,8 @@ void BandmapClientFrame::addLogSpotToBandmapTable(QSharedPointer<ClusterSpotData
                             && newSpot->getSpotType() == bandmapSpotType::SAVED)
                     {
                         // we want to move the freq of the pre-existing spot if this is a SAVED spot
-                        traceMsg(QString("AddLogSpot Callsign moved freq - %1, %2").arg(savedCall.getFullCall(), savedFreq.traceStr()));
+                        traceMsg(QString("AddLogSpot Callsign moved freq - %1, %2")
+                                     .arg(savedCall.getFullCall(), savedFreq.traceStr()));
 
                         spotInBandmap->setFreq(newSpot->getFreq());
                         spotInBandmap->setDxCallWorked(newSpot->getDxCallWorked());
@@ -1319,7 +1324,11 @@ void BandmapClientFrame::addLogSpotToBandmapTable(QSharedPointer<ClusterSpotData
         qint64 logTime = newSpot->getSpotDateTime().toMSecsSinceEpoch() / 1000;
         QString logTimeStr = newSpot->getSpotDateTime().time().toString("HH:mm");
 
-        traceMsg(QString("Add Log Spot to Bandmap %1, %2, %3, %4").arg(newSpot->getDxCallStr(), newSpot->getFreq().traceStr(), newSpot->getMode(), newSpot->getDxLocator()));
+        traceMsg(QString("Add Log Spot to Bandmap %1, %2, %3, %4")
+                     .arg(newSpot->getDxCallStr(),
+                          newSpot->getFreq().traceStr(),
+                          newSpot->getMode(),
+                          newSpot->getDxLocator()));
 
 
         newSpot->setRxTime(logTime);
@@ -1544,7 +1553,7 @@ void BandmapClientFrame::setFreq(Frequency freq)
     if (lastfreq != freq)
     {
         QSharedPointer<BandInfo> bandChanged = ct->checkBandChange(freq, lastfreq);
-        curFreq = freq.toMark(radioMode);
+        curFreq = freq;
         if (bandChanged)
         {
             setContestBandMode(bandChanged->uk, contestModeStr);
@@ -1866,7 +1875,10 @@ void BandmapClientFrame::setCQFreq()
 {
     if (ct && !ct->isReadOnly())
     {
-        traceMsg(QString("set CQFreq - runFreq %1, runModeOn %2, offRunFreq %3").arg(runFreq.traceStr(), runModeOn ? "True" : "False", offRunFreq ? "True" : "False"));
+        traceMsg(QString("set CQFreq - runFreq %1, runModeOn %2, offRunFreq %3")
+                     .arg(runFreq.traceStr(),
+                          runModeOn ? "True" : "False",
+                          offRunFreq ? "True" : "False"));
         QDateTime time = QDateTime::currentDateTimeUtc();
 
 
@@ -1935,7 +1947,8 @@ void BandmapClientFrame::setBandmapSaveFreq(QString cs, Frequency _freq, QString
 {
     if (ct && !ct->isReadOnly())
     {
-        traceMsg(QString("save freq  add marker - callsign %1, freq %2, loc %3, brg %4, exch %5").arg(cs, _freq.traceStr(), loc, brg).arg(exchange));
+        traceMsg(QString("save freq  add marker - callsign %1, freq %2, loc %3, brg %4, exch %5")
+                     .arg(cs, _freq.traceStr(), loc, brg).arg(exchange));
         QDateTime time = QDateTime::currentDateTimeUtc();
 
         QString logBandStr;

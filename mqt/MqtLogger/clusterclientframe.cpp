@@ -514,7 +514,7 @@ void ClusterClientFrame::handleClickedItems(DxSpotSortFilterProxyModel* spotProx
     if (index.column() == FREQ_COL_NUM)
     {
         Frequency freq = pSpot->getFreq();
-        sendFreqToRig(freq.toCarrier(contestModeStr));
+        sendFreqToRig(freq);
 
     }
     else if (index.column() == DXSPOT_CALL_COL_NUM )
