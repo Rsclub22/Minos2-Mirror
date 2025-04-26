@@ -608,7 +608,7 @@ void EngineWindow::scanLine(int curLine) {
                     {
                         QStringList words2 = w.split('/');
                         int woffset = offset;
-                        for(const auto &w:words2)
+                        for(const auto &w:QASCONST(words2))
                         {
                             RXChar *r1 = rline->getCharRef(woffset);
                             if (isPureNumeric(w))
