@@ -113,7 +113,6 @@ int register_callback(rig_model_t rig_model, void *callback_data)
         {}
     }
 
-
     bool supportGetVfo = rig_get_function_ptr(rig_model, RIG_FUNCTION_GET_VFO) ? true:false;
     bool supportSetVfo = rig_get_function_ptr(rig_model, RIG_FUNCTION_SET_VFO) ? true:false;
 

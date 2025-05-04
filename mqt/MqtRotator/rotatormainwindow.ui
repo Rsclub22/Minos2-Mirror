@@ -595,6 +595,13 @@
                       </widget>
                      </item>
                      <item>
+                      <widget class="QLabel" name="label_5">
+                       <property name="text">
+                        <string>Changing Step Degrees will clear bearings</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
                       <layout class="QHBoxLayout" name="horizontalLayout_18">
                        <item>
                         <widget class="QLabel" name="skyScanStartBrgLabel">
@@ -697,7 +704,7 @@
                          <item>
                           <widget class="QLabel" name="skyScanOverlapDisplay">
                            <property name="text">
-                            <string>TextLabel</string>
+                            <string>Overlap</string>
                            </property>
                           </widget>
                          </item>
@@ -910,29 +917,7 @@
                      </layout>
                     </item>
                     <item>
-                     <widget class="Line" name="line">
-                      <property name="orientation">
-                       <enum>Qt::Horizontal</enum>
-                      </property>
-                     </widget>
-                    </item>
-                    <item>
-                     <layout class="QHBoxLayout" name="horizontalLayout_19">
-                      <item>
-                       <widget class="QLabel" name="skyScanErrorLbl">
-                        <property name="text">
-                         <string>Error:</string>
-                        </property>
-                       </widget>
-                      </item>
-                      <item>
-                       <widget class="QLabel" name="skyScanErrorMsg">
-                        <property name="text">
-                         <string/>
-                        </property>
-                       </widget>
-                      </item>
-                     </layout>
+                     <layout class="QHBoxLayout" name="horizontalLayout_19"/>
                     </item>
                    </layout>
                   </item>
