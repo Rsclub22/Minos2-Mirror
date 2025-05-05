@@ -279,10 +279,10 @@ public:
   bool simCwCcwCmd = false;
   int antennaOffset = 0;
   bool moving = false;
-  bool showCompassDialFlag;
-  bool showSkyScanFlag;
+  bool showCompassDialFlag = true;
+  bool showSkyScanFlag = false;
   int portType = 0;
-  bool advancedCommsFlag;
+  bool advancedCommsFlag = false ;
   QString networkAdd;
   QString networkPort;
   //int maxBaudRate = 0;

@@ -639,6 +639,7 @@ void RotatorMainWindow::closeRotator()
         }
 
         closeSkyScan(setupAntenna->currentAntenna.antennaName);
+        setSkyScanTabVisible(false);
 
 
         if (rotator->getRotConnected())
