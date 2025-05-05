@@ -44,8 +44,11 @@ rotSetupForm::rotSetupForm(RotatorFactory* rotFactory_, srotParams* _antennaData
     ui->netPortBox->setVisible(false);
     ui->portLbl->setVisible(false);
 
+
     rotFactory = rotFactory_;
-    antennaData = _antennaData;
+    antennaData = _antennaData;     // we don't use this here, it just has default settings
+
+
 
     fillRotatorModelInfo();
     //fillPortsInfo();
@@ -121,7 +124,6 @@ void rotSetupForm::setupRotatorModel(QString rotatorModel)
         minRot = rotCap.getMinRot();
         antennaData->rotatorCWEndStop = rotCap.getMaxRot();
         antennaData->rotatorCCWEndStop = rotCap.getMinRot();
-
         antennaData->supportCwCcwCmd = rotCap.getSupportCwCCwCmd();
         antennaData->portType = rotCap.getPortType();
 
@@ -136,7 +138,8 @@ void rotSetupForm::setupRotatorModel(QString rotatorModel)
 
             // set ui according to rotator
 
-            if (antennaData->endStopType == ROT_0_360)
+            //if (antennaData->endStopType == ROT_0_360)
+            if (antennaData->rotType == ROT_0_360)
             {
 
                 ui->chkOverLap->setVisible(false);
@@ -153,7 +156,7 @@ void rotSetupForm::setupRotatorModel(QString rotatorModel)
                     setSStopOffButChecked(true);
                 }
             }
-            else if (antennaData->endStopType == ROT_0_450)
+            else if (antennaData->rotType == ROT_0_450)
             {
 
                 ui->chkOverLap->setVisible(true);
@@ -161,7 +164,7 @@ void rotSetupForm::setupRotatorModel(QString rotatorModel)
                 sStopButtonsVisible(false);
                 setSStopOffButChecked(true);
             }
-            else if (antennaData->endStopType == ROT_NEG180_450)
+            else if (antennaData->rotType == ROT_NEG180_450)
             {
 
                 ui->chkOverLap->setVisible(true);
@@ -169,7 +172,7 @@ void rotSetupForm::setupRotatorModel(QString rotatorModel)
                 sStopButtonsVisible(false);
                 setSStopOffButChecked(true);
             }
-            else if (antennaData->endStopType == ROT_NEG180_540)
+            else if (antennaData->rotType == ROT_NEG180_540)
             {
                 ui->chkOverLap->setVisible(true);
                 ui->chkOverLap->setChecked(true);
