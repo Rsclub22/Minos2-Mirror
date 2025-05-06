@@ -435,7 +435,7 @@ when user selected</source>
     <message>
         <location filename="../kstmainwindow.cpp" line="1240"/>
         <source></source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../kstmainwindow.cpp" line="1656"/>

@@ -663,7 +663,7 @@
         <location filename="../profiles.cpp" line="157"/>
         <location filename="../profiles.cpp" line="158"/>
         <source></source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="159"/>
@@ -1397,32 +1397,32 @@
 <context>
     <name>DisplayContestContact</name>
     <message>
-        <location filename="../DisplayContestContact.cpp" line="424"/>
+        <location filename="../DisplayContestContact.cpp" line="426"/>
         <source>DELETED</source>
         <translation>SUPPRIMÉ</translation>
     </message>
     <message>
-        <location filename="../DisplayContestContact.cpp" line="484"/>
+        <location filename="../DisplayContestContact.cpp" line="486"/>
         <source>MAN</source>
         <translation>MANUEL</translation>
     </message>
     <message>
-        <location filename="../DisplayContestContact.cpp" line="554"/>
+        <location filename="../DisplayContestContact.cpp" line="556"/>
         <source>DEL</source>
         <translation>SUPPRIMÉ</translation>
     </message>
     <message>
-        <location filename="../DisplayContestContact.cpp" line="557"/>
+        <location filename="../DisplayContestContact.cpp" line="559"/>
         <source>N/S</source>
         <translation>NON SIGNIFICATIF</translation>
     </message>
     <message>
-        <location filename="../DisplayContestContact.cpp" line="564"/>
+        <location filename="../DisplayContestContact.cpp" line="566"/>
         <source>DUP</source>
         <translation>DUPLIQUER</translation>
     </message>
     <message>
-        <location filename="../DisplayContestContact.cpp" line="645"/>
+        <location filename="../DisplayContestContact.cpp" line="647"/>
         <source>UNFILLED CONTACT </source>
         <translation>CONTACT NON REMPLI </translation>
     </message>
@@ -1435,69 +1435,64 @@
         <translation>UTC</translation>
     </message>
     <message>
-        <location filename="../dxspotdatamodel.cpp" line="41"/>
         <source>Date</source>
-        <translation>Date</translation>
+        <translation type="vanished">Date</translation>
     </message>
     <message>
-        <location filename="../dxspotdatamodel.cpp" line="43"/>
+        <location filename="../dxspotdatamodel.cpp" line="41"/>
         <source>Freq</source>
         <translation>Fréquence</translation>
     </message>
     <message>
-        <location filename="../dxspotdatamodel.cpp" line="45"/>
+        <location filename="../dxspotdatamodel.cpp" line="43"/>
         <source>Dx</source>
         <translation>DX</translation>
     </message>
     <message>
-        <location filename="../dxspotdatamodel.cpp" line="47"/>
-        <location filename="../dxspotdatamodel.cpp" line="57"/>
         <source>Wkd</source>
-        <translation>Contacté</translation>
+        <translation type="vanished">Contacté</translation>
     </message>
     <message>
-        <location filename="../dxspotdatamodel.cpp" line="49"/>
+        <location filename="../dxspotdatamodel.cpp" line="45"/>
         <source>Mode</source>
         <translation>Mode</translation>
     </message>
     <message>
-        <location filename="../dxspotdatamodel.cpp" line="51"/>
-        <location filename="../dxspotdatamodel.cpp" line="61"/>
+        <location filename="../dxspotdatamodel.cpp" line="47"/>
+        <location filename="../dxspotdatamodel.cpp" line="55"/>
         <source>Loc</source>
         <translation>Loc</translation>
     </message>
     <message>
-        <location filename="../dxspotdatamodel.cpp" line="53"/>
+        <location filename="../dxspotdatamodel.cpp" line="49"/>
         <source>Dist</source>
         <translation>Distance</translation>
     </message>
     <message>
-        <location filename="../dxspotdatamodel.cpp" line="55"/>
+        <location filename="../dxspotdatamodel.cpp" line="51"/>
         <source>Brg</source>
         <translation>Direction</translation>
     </message>
     <message>
-        <location filename="../dxspotdatamodel.cpp" line="59"/>
+        <location filename="../dxspotdatamodel.cpp" line="53"/>
         <source>Spotter</source>
         <translation>Observateur</translation>
     </message>
     <message>
-        <location filename="../dxspotdatamodel.cpp" line="63"/>
+        <location filename="../dxspotdatamodel.cpp" line="57"/>
         <source>Comment</source>
         <translation>Commentaire</translation>
     </message>
     <message>
-        <location filename="../dxspotdatamodel.cpp" line="65"/>
         <source>Spot to Mem Flag</source>
-        <translation>Indicateur Spot Mémorisé</translation>
+        <translation type="vanished">Indicateur Spot Mémorisé</translation>
     </message>
     <message>
-        <location filename="../dxspotdatamodel.cpp" line="67"/>
         <source>Prop Mode</source>
-        <translation>Mode de propagation</translation>
+        <translation type="vanished">Mode de propagation</translation>
     </message>
     <message>
-        <location filename="../dxspotdatamodel.cpp" line="82"/>
+        <location filename="../dxspotdatamodel.cpp" line="72"/>
         <source>Mem</source>
         <translation>Memoire</translation>
     </message>
