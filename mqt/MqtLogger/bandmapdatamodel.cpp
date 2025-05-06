@@ -15,40 +15,23 @@
 
 // Note this is being used by a custom view with no horizontal headers.
 
-BandmapDataModel::BandmapDataModel(QObject *parent)
-    : QAbstractTableModel(parent)
+BandmapData::BandmapData()
 {
 
 }
 
-int BandmapDataModel::rowCount(const QModelIndex &parent) const
+int BandmapData::rowCount() const
 {
-    if (parent.isValid())
-    {
-        return 0;
-    }
-
-    return bandmapData.count();
-}
-
-int BandmapDataModel::columnCount(const QModelIndex &/*parent*/) const
-{
-    return 0;
-}
-
-
-QVariant BandmapDataModel::data(const QModelIndex &/*index*/, int /*role*/) const
-{
-    return QVariant();
+    return bandmapSpots.count();
 }
 
 // NOTE! This needs modification of the for loop and rowData to trully support multiple rows!!
-void BandmapDataModel::sortBandmapModel()
+void BandmapData::sortBandmapData()
 {
     bool invertBandmap = false;
     TContestApp::getContestApp()->loggerBundle.getBoolProfile(elpBandmapInvert, invertBandmap);
 
-    std::sort(bandmapData.begin(), bandmapData.end(),
+    std::sort(bandmapSpots.begin(), bandmapSpots.end(),
               [=](const QSharedPointer<ClusterSpotData> a, const QSharedPointer<ClusterSpotData> b)->bool
                 {
                     if (a->getFreq() == b->getFreq())
@@ -65,151 +48,42 @@ void BandmapDataModel::sortBandmapModel()
 
 }
 
-bool BandmapDataModel::insertRows(int row, int count, const QModelIndex &index)
+bool BandmapData::insertRows(int row, int count)
 {
-    Q_UNUSED(index)
-
         if (count > 0)
         {
-
-            beginInsertRows(QModelIndex(), row, row + count - 1);
             for (int i = 0; i < count; i++)
             {
-                bandmapData.insert(row, rowData[i]);
+                bandmapSpots.insert(row, rowData[i]);
             }
             rowData.clear();
 
-            sortBandmapModel();
-
-            endInsertRows();
+            sortBandmapData();
         }
     return true;
 }
-// not used......
-bool BandmapDataModel::insertColumns(int column, int count, const QModelIndex &parent)
+
+bool BandmapData::removeRows(int _row, int count)
 {
-    beginInsertColumns(parent, column, column + count - 1);
-    // FIXME: Implement me!
-    endInsertColumns();
-    return true;
-}
-
-
-bool BandmapDataModel::removeRows(int _row, int count, const QModelIndex &parent)
-{
-    beginRemoveRows(parent, _row, _row + count - 1);
-
     for (int row = _row + count - 1; row > (_row - 1); row--)
     {
-        QSharedPointer<ClusterSpotData> spotData = bandmapData[row];
-        bandmapData.removeAt(row);
+        QSharedPointer<ClusterSpotData> spotData = bandmapSpots[row];
+        bandmapSpots.removeAt(row);
     }
-    endRemoveRows();
     return true;
 }
 
-// not used.....
-bool BandmapDataModel::removeColumns(int column, int count, const QModelIndex &parent)
+QSharedPointer<ClusterSpotData> BandmapData::getBandmapDataRow(int row)
 {
-    beginRemoveColumns(parent, column, column + count - 1);
-    // FIXME: Implement me!
-    endRemoveColumns();
-    return true;
+    return bandmapSpots[row];
 }
 
-QSharedPointer<ClusterSpotData> BandmapDataModel::getBandmapDataRow(int row)
-{
-    return bandmapData[row];
-}
-
-void BandmapDataModel::sortModel()
-{
-    beginResetModel();
-
-    sortBandmapModel();
-
-    endResetModel();
-}
-
-BandmapSortFilterProxyModel::BandmapSortFilterProxyModel(QObject *parent):
-    QSortFilterProxyModel(parent)
-{}
-
-bool BandmapSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &/*sourceParent*/) const
-{
-    if (filterString.isEmpty())
-        return true;
-
-    BandmapDataModel *cgm = dynamic_cast<BandmapDataModel *>(sourceModel());
-
-    if (!cgm || sourceRow >= cgm->rowCount())
-        return false;
-
-    QSharedPointer<ClusterSpotData> spotData = cgm->getBandmapDataRow(sourceRow);
-
-
-    QString call = spotData->getDxCall().getFullCall();
-    QString loc = spotData->getDxLocator();
-
-    if (call.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
-        return true;
-    if (loc.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
-        return true;
-
-    return false;
-}
-
-void BandmapSortFilterProxyModel::setFilterString(QString f)
+void BandmapData::setFilterString(QString f)
 {
     filterString = f;
-    invalidateFilter();
 }
 
-QString BandmapSortFilterProxyModel::getFilterString()
+QString BandmapData::getFilterString()
 {
     return filterString;
-}
-
-bool BandmapSortFilterProxyModel::lessThan(const QModelIndex &left,
-                      const QModelIndex &right) const
-{
-    // we don't really need this - we don't use the proxy for sorting
-
-    //Model Indices are to the SOURCE model
-
-    BandmapDataModel *cgm = dynamic_cast<BandmapDataModel *>(sourceModel());
-
-    int lrow = left.row();
-    int rrow = right.row();
-
-    QSharedPointer<ClusterSpotData> spotData1 = cgm->getBandmapDataRow(lrow);
-    QSharedPointer<ClusterSpotData> spotData2 = cgm->getBandmapDataRow(rrow);
-
-    Frequency ws1 = spotData1->getFreq();
-    Frequency ws2 = spotData2->getFreq();
-
-    if (ws1 == ws2)
-    {
-        QString ss1 = spotData1->getDxCallStr();
-        QString ss2 = spotData2->getDxCallStr();
-        return ss1 < ss2;
-    }
-    else
-    {
-        bool invertBandmap = false;
-        TContestApp::getContestApp()->loggerBundle.getBoolProfile(elpBandmapInvert, invertBandmap);
-        if (invertBandmap)
-        {
-            return ws2 < ws1;
-        }
-        return ws1 < ws2;
-    }
-
-    return false;
-}
-
-QSharedPointer<ClusterSpotData> BandmapSortFilterProxyModel::getBandmapDataRow(int row)
-{
-    BandmapDataModel *bmm = dynamic_cast<BandmapDataModel *>(sourceModel());
-    return bmm->getBandmapDataRow(row);
 }

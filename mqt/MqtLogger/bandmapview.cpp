@@ -25,7 +25,7 @@ const int DIAL_CURSOR_ABOVE_VIEWSTART_FREQ = 1;
 const int DIAL_CURSOR_WITHIN_VIEWPORT = 2;
 
 BandmapView::BandmapView(QWidget *parent) :
-    QAbstractItemView(parent),
+    QScrollArea(parent),
     zoomLevel(0),
     contestBandFlow(0),
     contestBandFhigh(0),
@@ -80,10 +80,6 @@ void BandmapView::initBandmapView(BandmapGraphicsPanel* view )
     connect(bandmapGraphicsView, &BandmapGraphicsPanel::mouseDoubleClicked, this, &BandmapView::mouseDoubleClicked);
     connect(bandmapGraphicsView, &BandmapGraphicsPanel::nextSpot, this, &BandmapView::on_nextSpot);
     connect(bandmapGraphicsView, &BandmapGraphicsPanel::scrollMap, this, &BandmapView::on_scrollMap);
-
-    // functor connects don't work for these two... Or if they do, I haven't found the recipe
-    connect(model(), SIGNAL(rowsRemoved(const QModelIndex, int, int)), SLOT(onRowsRemoved(const QModelIndex, int, int)));
-    connect(model(), SIGNAL(rowsInserted(const QModelIndex, int, int)), SLOT(onRowsInserted(const QModelIndex, int, int)));
 
     connect(&updateTimer, &QTimer::timeout, this, &BandmapView::updateTimerTimeout);
 
@@ -394,54 +390,6 @@ int BandmapView::findNextNonWorkedLocatorDownList(int curSpotViewNum)
 
     return curSpotViewNum;
 }
-
-void BandmapView::dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight, const QVector<int> &roles)
-{
-
-    QAbstractItemView::dataChanged(topLeft, bottomRight, roles);
-    trace("BandmapView::bandmapUpdate() BandmapView::dataChanged");
-    bandmapUpdate(false);
-
-}
-
-
-
-void BandmapView::selectionChanged(const QItemSelection &/*selected*/, const QItemSelection &/*deselected*/)
-{
-    // do nothing
-}
-
-void BandmapView::rowsInserted(const QModelIndex &parent, int start, int end)
-{
-
-    QAbstractItemView::rowsInserted(parent, start, end);
-    trace("BandmapView::bandmapUpdate() bandmapView::rowsInserted");
-    bandmapUpdate(false);
-
-}
-
-
-void BandmapView::rowsAboutToBeRemoved(const QModelIndex &parent,
-                                         int start, int end)
-{
-
-    QAbstractItemView::rowsAboutToBeRemoved(parent, start, end);
-
-}
-
-void BandmapView::onRowsRemoved(const QModelIndex &/*parent*/, int /*first*/, int /*last*/)
-{
-    trace("BandmapView::bandmapUpdate() bandmapView::rowsRemoved");
-    bandmapUpdate(false);
-
-}
-
-// this is not used...
-void BandmapView::onRowsInserted(const QModelIndex &/*parent*/, int /*first*/, int /*last*/)
-{
-}
-
-
 void BandmapView::doBandmapUpdate()
 {
     if (!getSuppressUpdate())
@@ -449,13 +397,7 @@ void BandmapView::doBandmapUpdate()
         if (updateRequired)
         {
             dial->update();
-            BandmapSortFilterProxyModel *pm = dynamic_cast<BandmapSortFilterProxyModel *>(model());
-            QString pms = pm->getFilterString();
-            if (!pm->getFilterString().isEmpty())
-            {
-                // don't incur the overhead unless we ARE filtering
-                pm->setFilterString(pms);
-            }
+
             // delay the spots until any dial update has happened
             delayedAction(this, [=](){
                 drawBandMapSpots();
@@ -541,52 +483,14 @@ void BandmapView::on_bandmap_customContextMenuRequested( const QPoint& p)
     }
 }
 
-void BandmapView::updateGeometries()
-{
-
-}
-
 int BandmapView::horizontalOffset() const
 {
     return horizontalScrollBar()->value();
 }
 
-QModelIndex BandmapView::moveCursor(QAbstractItemView::CursorAction /*cursorAction*/, Qt::KeyboardModifiers)
-{
-    QModelIndex index = currentIndex();
-
-    return index;
-}
-
-void BandmapView::setSelection(const QRect &/*rect*/, QFlags<QItemSelectionModel::SelectionFlag> /*flags*/)
-{
-    // do nothing
-}
-
 int BandmapView::verticalOffset() const
 {
     return verticalScrollBar()->value();
-}
-
-QRegion BandmapView::visualRegionForSelection(const QItemSelection &/*selection*/) const
-{
-    // unused
-    return QRegion();
-}
-
-QModelIndex BandmapView::indexAt(const QPoint &point_) const
-{
-
-    // not used
-    QPoint point(point_);
-    point.rx() += horizontalScrollBar()->value();
-    point.ry() += verticalScrollBar()->value();
-
-    return QModelIndex();
-}
-
-void BandmapView::scrollTo(const QModelIndex &/*index*/, QAbstractItemView::ScrollHint)
-{
 }
 
 QRect BandmapView::visualRect(const QModelIndex &index) const
@@ -634,11 +538,6 @@ void BandmapView::bandmapResize(QSize s)
 
     trace("BandmapView::bandmapUpdate() bandmapView::bandmapResize");
     bandmapUpdate(false);
-}
-
-int BandmapView::rows(const QModelIndex &index) const
-{
-    return model()->rowCount(model()->parent(index));
 }
 
 int BandmapView::getBandmapFrameHeight()
@@ -825,7 +724,7 @@ void BandmapView::setSelectedSpot(int spotViewNum)
 {
     if (spotViewNum > listOfMarkers.count()
             || spotViewNum == NO_SELECTED_ROWNUM
-            || listOfMarkers[spotViewNum]->getModelRowNum() > model()->rowCount()
+            || listOfMarkers[spotViewNum]->getModelRowNum() > bandmapDataModel->rowCount()
             || listOfMarkers[spotViewNum]->getModelRowNum() < 0)
     {
         return;
@@ -855,7 +754,7 @@ void BandmapView::getSpotData(int &selectedSpotDataRowNum, int selectedSpotViewR
 {
     selectedSpotDataRowNum = listOfMarkers[selectedSpotViewRowNum]->getModelRowNum();
 
-    if (selectedSpotDataRowNum >= 0 && selectedSpotDataRowNum < model()->rowCount())
+    if (selectedSpotDataRowNum >= 0 && selectedSpotDataRowNum < bandmapDataModel->rowCount())
     {
         ClusterSpotData *pselectedSpot = bandmapDataModel->getBandmapDataRow(selectedSpotDataRowNum).data();
 
@@ -880,7 +779,29 @@ void BandmapView::getSpotData(int &selectedSpotDataRowNum, int selectedSpotViewR
         selectedSpot.setSpotType(pselectedSpot->getSpotType());
     }
 }
+bool BandmapView::filterAcceptsRow(int sourceRow) const
+{
+    QString filterString = bandmapDataModel->getFilterString();
+    if (filterString.isEmpty())
+        return true;
 
+    BandmapData *cgm = bandmapDataModel;
+
+    if (!cgm || sourceRow >= cgm->rowCount())
+        return false;
+
+    QSharedPointer<ClusterSpotData> spotData = cgm->getBandmapDataRow(sourceRow);
+
+    QString call = spotData->getDxCall().getFullCall();
+    QString loc = spotData->getDxLocator();
+
+    if (call.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
+        return true;
+    if (loc.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
+        return true;
+
+    return false;
+}
 void BandmapView::drawBandmapSpot(int row, int &fontOffset, int markersAbove, int &lastOffset, bool &firstDrawn)
 {
     ClusterSpotData *pSpot = bandmapDataModel->getBandmapDataRow(row).data();
@@ -890,7 +811,7 @@ void BandmapView::drawBandmapSpot(int row, int &fontOffset, int markersAbove, in
     {
         return;
     }
-    if (matchMode(row) && matchDistance(row))
+    if (matchMode(row) && matchDistance(row) && filterAcceptsRow(row))
     {
         Frequency spotFreq = pSpot->getFreq();
 
@@ -1023,10 +944,10 @@ void BandmapView::drawBandMapSpots()
     clearListOfMarkers();
 
     // don't draw spots when freq is zero, or no spots
-    int numrows = model()->rowCount();
+    int numrows = bandmapDataModel->rowCount();
     if ( numrows == 0)
     {
-        traceMsg(QString("CurFreq = %1, Number of Spots = %2 - Don't draw markers").arg(curFreq.traceStr()).arg(model()->rowCount()));
+        traceMsg(QString("CurFreq = %1, Number of Spots = %2 - Don't draw markers").arg(curFreq.traceStr()).arg(bandmapDataModel->rowCount()));
         return;
     }
     traceMsg(QString("drawBandMapSpots: Number of Rows to Check = %1").arg(numrows));
@@ -1068,7 +989,7 @@ void BandmapView::drawBandMapSpots()
     {
         int markersAbove = 0;
         int centreSpot;
-        for (centreSpot = 0; centreSpot < model()->rowCount(); ++centreSpot)
+        for (centreSpot = 0; centreSpot < bandmapDataModel->rowCount(); ++centreSpot)
         {
             ClusterSpotData *pSpot = bandmapDataModel->getBandmapDataRow(centreSpot).data();
 
@@ -1162,7 +1083,7 @@ void BandmapView::drawBandMapSpots()
                 continue;;
             }
            // check mode and distance against the filter settings
-            if (matchMode(row) && matchDistance(row))
+            if (matchMode(row) && matchDistance(row) && filterAcceptsRow(row))
             {
 
                 Frequency f = pSpot->getFreq();

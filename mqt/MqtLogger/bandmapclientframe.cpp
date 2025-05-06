@@ -7,6 +7,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include <QMessageBox>
+
 #include "ContestApp.h"
 #include "clusterClientServer.h"
 #include "cutils.h"
@@ -40,18 +41,13 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
 
     connect (ClusterClientServer::getClusterClientServer(), &ClusterClientServer::dxSpot, this, &BandmapClientFrame::dxSpots);
 
-    bandmapDataModel = new BandmapDataModel();
+    bandmapDataModel = new BandmapData();
 
     bandmapView = new BandmapView(this);
     bandmapView->move(-100, -100);
     bandmapView->resize(1, 1);
     bandmapView->setFilterSettings(&filterSettings);
 
-    bandmapSpotProxyModel = new BandmapSortFilterProxyModel(parent);
-    bandmapSpotProxyModel->setSourceModel(bandmapDataModel);
-    bandmapView->setModel(bandmapSpotProxyModel);
-
-    bandmapView->bandmapSpotProxyModel = bandmapSpotProxyModel;
     bandmapView->bandmapDataModel = bandmapDataModel;
 
     ui->textFilterEdit->setValidator(&ucValidator);
@@ -445,7 +441,7 @@ void BandmapClientFrame::context_moveFreqActionSelected()
 
     selSpot->setFreq(curFreq);
     bmsdb->modifyRecord(selSpot);
-    bandmapDataModel->sortModel();
+    bandmapDataModel->sortBandmapData();
     bandmapView->bandmapUpdate(true);
 }
 
@@ -590,7 +586,7 @@ void BandmapClientFrame::doClearSpotSelected(ClusterSpotData *sd, int selRow)
         bmsdb->deleteRecord( sd);
         sd->setSpotType(bandmapSpotType::DELETED);
 
-        bandmapSpotProxyModel->removeRows(selRow, 1);
+        bandmapDataModel->removeRows(selRow, 1);
         bandmapView->clearSelectedSpotData();
         purgeSpots();
         bandmapView->bandmapUpdate(true);
@@ -600,7 +596,7 @@ void BandmapClientFrame::doClearSpotSelected(ClusterSpotData *sd, int selRow)
 void BandmapClientFrame::on_clearAllSpotsActionSelected()
 {
     // only on Actions button
-    if (bandmapSpotProxyModel->rowCount() > 0)
+    if (bandmapDataModel->rowCount() > 0)
     {
         int ret = QMessageBox::warning(this, tr("Bandmap"),
                                        tr("Please confirm you want to delete all the spots in the bandmap?"),
@@ -608,7 +604,7 @@ void BandmapClientFrame::on_clearAllSpotsActionSelected()
         if (ret == QMessageBox::Yes)
         {
             traceMsg(QString("menu clear all bandmap spots selected"));
-            bandmapSpotProxyModel->removeRows(0, bandmapSpotProxyModel->rowCount(), QModelIndex());
+            bandmapDataModel->removeRows(0, bandmapDataModel->rowCount());
             bmsdb->deleteAllRecords( ct->cfileName);
 
             bandmapView->clearSelectedSpotData();
@@ -620,7 +616,7 @@ void BandmapClientFrame::on_clearAllSpotsActionSelected()
 void BandmapClientFrame::on_clearClusterSpotsActionSelected()
 {
     // only on Actions button
-    if (bandmapSpotProxyModel->rowCount() > 0)
+    if (bandmapDataModel->rowCount() > 0)
     {
         int ret = QMessageBox::warning(this, tr("Bandmap"),
                                        tr("Please confirm you want to delete all the cluster spots in the bandmap?"),
@@ -994,7 +990,7 @@ bool BandmapClientFrame::checkSpotInTable(QSharedPointer<ClusterSpotData> newSpo
                     {
                         spotInBandmap->setFreq(dxFreq);
                         bmsdb->modifyRecord(spotInBandmap);
-                        bandmapDataModel->sortModel();
+                        bandmapDataModel->sortBandmapData();
                     }
                     else
                     {
@@ -1273,7 +1269,7 @@ void BandmapClientFrame::addLogSpotToBandmapTable(QSharedPointer<ClusterSpotData
                             }
                             bmsdb->modifyRecord(spotInBandmap);
                         }
-                        bandmapDataModel->sortModel();
+                        bandmapDataModel->sortBandmapData();
                         bandmapView->bandmapUpdate(true);
 
                         // do we need to update the time as well????
@@ -1404,11 +1400,11 @@ void BandmapClientFrame::addRemoveCQSpot(QSharedPointer<ClusterSpotData>  spot)
         {
             // update the spot
             QSharedPointer<ClusterSpotData> pSpot = bandmapDataModel->getSpotData(rowNum);
-            spot->setRunModeOn(pSpot->getRunModeOn());
-            spot->setOffRunFreq(pSpot->getOffRunFreq());
-            spot->setFreq(pSpot->getFreq());
-            spot->setMode(pSpot->getMode());
-            bandmapDataModel->sortModel();
+            pSpot->setRunModeOn(spot->getRunModeOn());
+            pSpot->setOffRunFreq(spot->getOffRunFreq());
+            pSpot->setFreq(spot->getFreq());
+            pSpot->setMode(spot->getMode());
+            bandmapDataModel->sortBandmapData();
         }
     }
 }
@@ -1778,14 +1774,14 @@ void BandmapClientFrame::purgeSpots()
                    if (spotTimedOut(spotInBandmap->getRxTime(), timeToLive))
                    {
                        traceMsg(QString("Cluster Spot purged - %1").arg(spotInBandmap->getDxCall().getFullCall()));
-                       bandmapDataModel->removeRows(idx, 1, QModelIndex());
+                       bandmapDataModel->removeRows(idx, 1);
                        bmsdb->deleteRecord(spotInBandmap);
                    }
                }
                else if (spotType == bandmapSpotType::DELETED)
                {
                    traceMsg(QString("Deleted Spot purged - %1").arg(spotInBandmap->getDxCall().getFullCall()));
-                   bandmapDataModel->removeRows(idx, 1, QModelIndex());
+                   bandmapDataModel->removeRows(idx, 1);
                    // should already have gone from db
                }
 
@@ -2053,7 +2049,7 @@ void BandmapClientFrame::setZoomLevelLabelText(int level)
 
 void BandmapClientFrame::on_textFilterEdit_textChanged(const QString &filter)
 {
-    bandmapSpotProxyModel->setFilterString(filter);
+    bandmapDataModel->setFilterString(filter);
     trace("BandmapView::bandmapUpdate() on_textFilterEdit_textChanged");
 
     if (filter.isEmpty())

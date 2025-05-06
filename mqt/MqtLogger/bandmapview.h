@@ -2,17 +2,13 @@
 #define BANDMAPVIEW_H
 
 #include <QWidget>
-#include <QAbstractItemView>
 #include <QTimer>
 
-#include <QAbstractItemModel>
 #include <QGraphicsView>
-#include <QPainter>
-#include <QPaintEvent>
 #include <QScrollArea>
 #include <QScrollBar>
 #include <QGraphicsScene>
-#include <QSortFilterProxyModel>
+
 #include "bandmapfreqdial.h"
 #include "bandmapmarkerdetails.h"
 #include "clustercommon.h"
@@ -25,9 +21,9 @@ const int NO_SELECTED_ROWNUM = -1;
 const int KEY_SCROLL_STEP_SIZE = 50;
 
 class BaseContestLog;
-class BandmapDataModel;
+class BandmapData;
 class BandmapSortFilterProxyModel;
-class BandmapView : public QAbstractItemView
+class BandmapView : public QScrollArea
 {
     Q_OBJECT
 
@@ -35,13 +31,10 @@ public:
     explicit BandmapView(QWidget *parent = nullptr);
     ~BandmapView() override;
 
-    BandmapDataModel *bandmapDataModel = nullptr;
-    BandmapSortFilterProxyModel* bandmapSpotProxyModel = nullptr;
+    BandmapData *bandmapDataModel = nullptr;
 
 
-    QModelIndex indexAt(const QPoint &point_) const override;
-    void scrollTo(const QModelIndex &index, QAbstractItemView::ScrollHint) override;
-    QRect visualRect(const QModelIndex &index) const override;
+    QRect visualRect(const QModelIndex &index) const;
 
     void setContest(BaseContestLog *c);
 
@@ -53,8 +46,6 @@ public:
     void initBandmapView(BandmapGraphicsPanel *view);
 
     void bandmapUpdate(bool now);
-
-    int rows(const QModelIndex &index) const;
 
     int isClickInRegionOfSpot(QPoint p);
 
@@ -94,23 +85,9 @@ signals:
     void contextMenuSelected(const QPoint&, const QPoint&);
     void newZoomlevel(int);
 
-protected slots:
-    void dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight, const QVector<int> &roles) override;
-
-    void rowsInserted(const QModelIndex &parent, int start, int end) override;
-
-    void rowsAboutToBeRemoved(const QModelIndex &parent, int start, int end) override;
-    void selectionChanged(const QItemSelection &selected, const QItemSelection &deselected) override;
-    void updateGeometries() override;
-
 protected:
-    int horizontalOffset() const override;
-    int verticalOffset() const override;
-    bool isIndexHidden(const QModelIndex&) const override{ return false; }
-    QModelIndex moveCursor(QAbstractItemView::CursorAction cursorAction, Qt::KeyboardModifiers modifiers) override;
-    void setSelection(const QRect &rect, QFlags<QItemSelectionModel::SelectionFlag> flags) override;
-
-    QRegion visualRegionForSelection(const QItemSelection &selection) const override;
+    int horizontalOffset() const;
+    int verticalOffset() const ;
 
 private slots:
     void bandmapResize(QSize s);
@@ -124,8 +101,6 @@ private slots:
     int findNextNonWorkedLocatorUpList(int curSpotViewNum);
 
     void on_scrollMap(bool dir);
-    void onRowsRemoved(const QModelIndex &parent, int first, int last);
-    void onRowsInserted(const QModelIndex &parent, int first, int last);
     void zoomUpdated(bool dir);
     void updateTimerTimeout();
 private:
@@ -194,6 +169,7 @@ private:
     void drawBandmapSpot(int row, int &fontOffset, int markersAbove, int &lastOffset, bool &firstDrawn);
     bool readLessGreaterThanDistanceFlag();
     void doBandmapUpdate();
+    bool filterAcceptsRow(int sourceRow) const;
 };
 
 #endif // BANDMAPVIEW_H

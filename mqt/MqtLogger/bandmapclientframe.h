@@ -132,8 +132,8 @@ private:
     BandmapView *bandmapView = nullptr;
     QItemSelectionModel *selectionModel = nullptr;
 
-    BandmapDataModel *bandmapDataModel = nullptr;
-    BandmapSortFilterProxyModel* bandmapSpotProxyModel = nullptr;
+    BandmapData *bandmapDataModel = nullptr;
+    //BandmapSortFilterProxyModel* bandmapSpotProxyModel = nullptr;
     BandmapClientFilterDialog* filterSetup = nullptr;
 
     UpperCaseValidator ucValidator;
