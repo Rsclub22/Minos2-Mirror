@@ -865,8 +865,6 @@ int OmnirigControl::getFrequency(VFO vfo, Frequency &freq)
             }
         }
 
-
-
         return omnirigError(OMNIRIG_OK);
     }
 

@@ -1633,7 +1633,6 @@ int RigControlMainWindow::openRadio()
         //delay(1);
         retCode = radio->getFrequency(VFO::CURRENT_VFO, rigStateDetails->rfrequency);
 
-
         if (retCode < Rig_OK)
         {
             logMessage(QString("Open Radio: Test Communication - Get Freq error, code = %1").arg(QString::number(retCode)));
@@ -2248,7 +2247,11 @@ void RigControlMainWindow::setFreq(Frequency freq, VFO vfo)
 
         if (radio)
         {
-           retCode = radio->setFrequency(f, vfo);
+            rigStateDetails->rfrequency = rigStateDetails->rfrequency.toMark(
+                rigcommon::convertModeToQString(rigStateDetails->rmode));
+            Frequency mf = f.toCarrier(rigcommon::convertModeToQString(rigStateDetails->rmode));
+
+           retCode = radio->setFrequency(mf, vfo);
         }
         else
         {
@@ -2477,6 +2480,8 @@ int RigControlMainWindow::getRxFreq(VFO vfo)
     if (radio)
     {
         retCode = radio->getFrequency(vfo, rigStateDetails->rfrequency);
+        rigStateDetails->rfrequency = rigStateDetails->rfrequency.toMark(
+            rigcommon::convertModeToQString(rigStateDetails->rmode));
     }
     else
     {
@@ -2944,37 +2949,13 @@ void RigControlMainWindow::initCacheData(QStringList &availRadios)
 
             addBandListToRigCache(radioDataList[i]->radioName, supBandList);
 
-        }
+            msg->rigCache.setRttyOffset(radioDataList[i]->radioName, radioDataList[i]->rttyOffset);
+            msg->rigCache.setPskOffset(radioDataList[i]->radioName, radioDataList[i]->pskOffset);
 
-        msg->rigCache.invalidate();
-
-    }
-
- /*
-    if (setupRadio->availRadioData.count() > 0)
-    {
-
-        for (int i = 0; i < setupRadio->availRadioData.count(); i++)
-        {
-            QStringList supBandList;
-            int radioModelNumber = setupRadio->availRadioData[i]->rigModelNumber;
-            buildSupBandList(i, radioModelNumber, supBandList);
-
-            addBandListToRigCache(i, supBandList);
-
-
-            //bool f = radio->supportVolControl(radioModelNumber);
-
-
-            //msg->rigCache.publish();
-
-
+            msg->rigCache.invalidate();
 
         }
-        msg->rigCache.invalidate();
     }
-
-*/
 }
 
 // this is a bit brutal...updates all rigdetails even if data hasn't changed...
@@ -4544,6 +4525,8 @@ void RigControlMainWindow::getRadioConfigData(scatParams *radioData, QString rad
     radioData->mgmMode = config.value("mgmMode", hamlibData::USB).toString();
     radioData->rttyMode = config.value("rttyMode", hamlibData::LSB).toString();
     radioData->pskMode = config.value("pskMode", hamlibData::USB).toString();
+    radioData->rttyOffset = config.value("rttyOffset", RTTY_MARK_OFFSET).toInt();
+    radioData->pskOffset = config.value("pskOffset", PSK_OFFSET).toInt();
     radioData->enableDisableCatFeature.enableDisplay = config.value("enableShowCatFeatures", false).toBool();
     radioData->enableDisableCatFeature.ritEnable = config.value("ritEnable", false).toBool();
     radioData->enableDisableCatFeature.sMeterEnable = config.value("sMeterEnable", true).toBool();

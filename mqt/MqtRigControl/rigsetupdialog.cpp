@@ -319,13 +319,11 @@ void RigSetupDialog::loadSettingsToTab(int tabNum, QString tabName)
     radioTab.value(tabName)->setPTTEnableCheckBox(availRadioData.value(tabName)->enablePTT);
     radioTab.value(tabName)->setPttGroupBoxVisible(availRadioData.value(tabName)->enablePTT);
 
-
-
-
-
     radioTab.value(tabName)->setMgmMode(availRadioData.value(tabName)->mgmMode);
     radioTab.value(tabName)->setRttyMode(availRadioData.value(tabName)->rttyMode);
     radioTab.value(tabName)->setPskMode(availRadioData.value(tabName)->pskMode);
+    radioTab.value(tabName)->setRttyOffset(availRadioData.value(tabName)->rttyOffset);
+    radioTab.value(tabName)->setPskOffset(availRadioData.value(tabName)->pskOffset);
 
     for (const auto &b: QASCONST(bands))
     {
@@ -1086,6 +1084,8 @@ void RigSetupDialog::saveRadioData(QSharedPointer<scatParams> radioData, QSettin
     config.setValue("voiceMemEnable", radioData->enableDisableCatFeature.voiceMemEnable);
     config.setValue("cWMemEnable", radioData->enableDisableCatFeature.cWMemEnable);
     config.setValue("catPttEnable", radioData->enableDisableCatFeature.catPttEnable);
+    config.setValue("rttyOffset", radioData->rttyOffset);
+    config.setValue("pskOffset", radioData->pskOffset);
 
     for (const auto &b: QASCONST(bands))
     {
@@ -1153,8 +1153,17 @@ void RigSetupDialog::getRadioSetting(QSharedPointer<scatParams> radioData, QStri
     radioData->enableDisableCatFeature.voiceMemEnable = config.value("voiceMemEnable", true).toBool();
     radioData->enableDisableCatFeature.cWMemEnable = config.value("cWMemEnable", true).toBool();
     radioData->enableDisableCatFeature.catPttEnable = config.value("catPttEnable", true).toBool();
+    radioData->rttyOffset = config.value("rttyOffset").toInt();
+    radioData->pskOffset = config.value("pskOffset").toInt();
 
-
+    if (radioData->rttyOffset == 0)
+    {
+        radioData->rttyOffset = RTTY_MARK_OFFSET;
+    }
+    if (radioData->pskOffset == 0)
+    {
+        radioData->pskOffset = PSK_OFFSET;
+    }
     for (const auto &b: QASCONST(bands))
     {
         if (b->getType() == HF_BANDTYPE)

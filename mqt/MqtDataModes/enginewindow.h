@@ -18,6 +18,7 @@ QT_BEGIN_NAMESPACE
 namespace Ui { class EngineWindow; }
 QT_END_NAMESPACE
 
+#define RttyMSGap 170
 class QPushButton;
 
 class EngineWindow : public QDialog

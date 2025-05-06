@@ -377,6 +377,15 @@ void RigCache::setPttOnOff(const PubSubName &name, bool onOff)
 {
     rigStates[name].setPttOnOff(onOff);
 }
+void RigCache::setRttyOffset(const PubSubName &name, int f)
+{
+    rigDetails[name].setRttyOffset(f);
+}
+void RigCache::setPskOffset(const PubSubName &name, int f)
+{
+    rigDetails[name].setPskOffset(f);
+}
+
 void RigCache::setVoiceMemAvail(const PubSubName &name, bool voiceMemAvail)
 {
     rigDetails[name].setVoiceMemAvail(voiceMemAvail);

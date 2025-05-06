@@ -219,6 +219,8 @@ static const QString rigPttEnabled ("PttEnabled");
 static const QString rigPttType ("PttType");
 static const QString rigPttState  ("PttState");
 static const QString rigPttOnOff ("PttOnOff");
+static const QString rigRttyOffset ("RttyOffset");
+static const QString rigPSKOffset ("PSKOffset");
 static const QString rigVoiceMemAvail ("VoiceMemAvail");
 static const QString rigNumberVoiceMessages ("NumberOfVoiceMessages");
 static const QString rigCwMemType ("CwMemType");

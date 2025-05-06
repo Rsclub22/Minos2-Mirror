@@ -278,7 +278,20 @@ void EngineWindow::on_notify(AnalysePubSubNotify an, const QString /*from*/ )
         }
         else if ( an.getCategory() == rpcConstants::rigDetailsCategory)
         {
+            int rttyOffset = rigCache.getDetails(getSelectedRadio()).getRttyOffset().getValue();
+            int pskOffset = rigCache.getDetails(getSelectedRadio()).getPskOffset().getValue();
             rigCache.setDetailsString(an);
+            int rttyOffset1 = rigCache.getDetails(getSelectedRadio()).getRttyOffset().getValue();
+            int pskOffset1 = rigCache.getDetails(getSelectedRadio()).getPskOffset().getValue();
+
+            if (rttyOffset != rttyOffset1)
+            {
+
+            }
+            if (pskOffset != pskOffset1)
+            {
+
+            }
         }
         else if ( an.getCategory() == rpcConstants::rigControlCategory && an.getKey() == rpcConstants::rigControlRadioList )
         {

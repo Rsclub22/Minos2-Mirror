@@ -161,7 +161,7 @@ void FLDigiFrame::sendCharacters(const QString &s, int mfreq)
     {
         if (mode == RY)
         {
-            args << mfreq + 170/2;
+            args << mfreq + RttyMSGap/2;
         }
         else
         {
@@ -204,7 +204,7 @@ void FLDigiFrame::sendMode(QString m)
     if (m == RY)
     {
         mode = RY;
-        carrierOffsetFromMark = 170/2;
+        carrierOffsetFromMark = RttyMSGap/2;
 
         QVariantList args;
 

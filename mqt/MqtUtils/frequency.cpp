@@ -181,7 +181,7 @@ Frequency Frequency::toMark(const QString &mode) const
     }
     if (mode.compare( PSK, Qt::CaseInsensitive ) == 0)
     {
-        mfreq = mfreq + Frequency(BPSK_OFFSET);
+        mfreq = mfreq + Frequency(PSK_OFFSET);
     }
     return mfreq;
 }
@@ -197,7 +197,7 @@ Frequency Frequency::toCarrier(const QString &mode) const
     }
     if (mode.compare( PSK, Qt::CaseInsensitive ) == 0)
     {
-        mfreq = mfreq - Frequency(BPSK_OFFSET);
+        mfreq = mfreq - Frequency(PSK_OFFSET);
     }
     return mfreq;
 }
