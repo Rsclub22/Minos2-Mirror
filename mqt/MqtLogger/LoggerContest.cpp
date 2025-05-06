@@ -247,18 +247,19 @@ bool LoggerContestLog::initialise( const QString &fn, bool newFile, int slotno )
    statsPeriod1.setInitialValue(MinosParameters::getMinosParameters() ->getStatsPeriod1());
    statsPeriod2.setInitialValue(MinosParameters::getMinosParameters() ->getStatsPeriod2());
 
+   // It would be nice to make these HF dependent
    bool bTemp;
-   MinosParameters::getMinosParameters() ->getBoolDisplayProfile( edpShowContinentEU, bTemp );
+   MinosParameters::getMinosParameters() ->getBoolDisplayProfile( edpShowContinentEU, bTemp, true );
    showContinentEU.setInitialValue(bTemp);
-   MinosParameters::getMinosParameters() ->getBoolDisplayProfile( edpShowContinentAS, bTemp );
+   MinosParameters::getMinosParameters() ->getBoolDisplayProfile( edpShowContinentAS, bTemp, isHF() );
    showContinentAS.setInitialValue(bTemp);
-   MinosParameters::getMinosParameters() ->getBoolDisplayProfile( edpShowContinentAF, bTemp );
+   MinosParameters::getMinosParameters() ->getBoolDisplayProfile( edpShowContinentAF, bTemp, isHF() );
    showContinentAF.setInitialValue(bTemp);
-   MinosParameters::getMinosParameters() ->getBoolDisplayProfile( edpShowContinentOC, bTemp );
+   MinosParameters::getMinosParameters() ->getBoolDisplayProfile( edpShowContinentOC, bTemp, isHF() );
    showContinentOC.setInitialValue(bTemp);
-   MinosParameters::getMinosParameters() ->getBoolDisplayProfile( edpShowContinentSA, bTemp );
+   MinosParameters::getMinosParameters() ->getBoolDisplayProfile( edpShowContinentSA, bTemp, isHF() );
    showContinentSA.setInitialValue(bTemp);
-   MinosParameters::getMinosParameters() ->getBoolDisplayProfile( edpShowContinentNA, bTemp );
+   MinosParameters::getMinosParameters() ->getBoolDisplayProfile( edpShowContinentNA, bTemp, isHF() );
    showContinentNA.setInitialValue(bTemp);
 
    MinosParameters::getMinosParameters() ->getBoolDisplayProfile( edpShowWorkedCountries, bTemp );

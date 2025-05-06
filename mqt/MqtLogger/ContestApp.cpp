@@ -597,6 +597,10 @@ void TContestApp::setDisplayColumnWidth( const QString &key, int val )
         displayBundle.setIntProfile( key, val );
     }
 }
+void TContestApp::getBoolDisplayProfile( int enumkey, bool &value, bool def )
+{
+    displayBundle.getBoolProfile( displayBundle.bundleFile->GetKey( enumkey )->name, value, def );
+}
 void TContestApp::getBoolDisplayProfile( int enumkey, bool &value )
 {
    displayBundle.getBoolProfile( enumkey, value );
