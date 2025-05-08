@@ -10,7 +10,7 @@
 #include <QDebug>
 
 ToolButtonUpDown::ToolButtonUpDown(QWidget *parent)
-    : QWidget(parent), currentValue(0), minimum(0), maximum(100), step(1)
+    : QFrame(parent), currentValue(0), minimum(0), maximum(100), step(1)
 {
     // Initialize buttons
     upButton = new QToolButton(this);

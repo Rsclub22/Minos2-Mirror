@@ -721,48 +721,6 @@ int SkyScanControl::closestBearing(int currentBearing, int start, int end, int m
 
 
 
-// Function to normalize a bearing to the desired range
-/*
-int SkyScanControl::normaliseBearing(int bearing, int minRange, int maxRange)
-{
-    int range = maxRange - minRange;
-    while (bearing < minRange)
-    {
-        bearing += range;
-    }
-    while (bearing >= maxRange)
-    {
-        bearing -= range;
-    }
-    return bearing;
-}
-
-// Function to calculate the shortest angular distance between two bearings
-
-int SkyScanControl::angularDistance(int from, int to, int minRange, int maxRange)
-{
-    int range = maxRange - minRange;
-    int diff = (to - from + range) % range;
-    return qMin(diff, range - diff);
-}
-
-// Function to find the closest bearing
-
-int SkyScanControl::closestBearing(int currentBearing, int start, int end, int minRange, int maxRange)
-{
-    // Normalise bearings to the given range
-    currentBearing = normaliseBearing(currentBearing, minRange, maxRange);
-    start = normaliseBearing(start, minRange, maxRange);
-    end = normaliseBearing(end, minRange, maxRange);
-
-    // Calculate distances to start and end
-    int distanceToStart = angularDistance(currentBearing, start, minRange, maxRange);
-    int distanceToEnd = angularDistance(currentBearing, end, minRange, maxRange);
-
-    // Return the closer bearing
-    return (distanceToStart <= distanceToEnd) ? start : end;
-}
-*/
 
 void SkyScanControl::dumpRotationPathToTraceLog(ScanPath &scanPath, const QString &pathname)
 {

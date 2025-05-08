@@ -115,6 +115,7 @@ signals:
     void sendSkyScanEndBearingToCompassDial(int bearing);
     void sendRotatorEndStopTypeToCompassDial(int endStopType);
     void sendRotatorSouthStopTypeToCompassDial(int southStopType);
+    void sendAntennaOffsetToCompassDial(int antennaOffset);
 
 
 
@@ -419,7 +420,7 @@ private:
     void initialiseToolButtonUpDown(ToolButtonUpDown *toolButtonUpDown, int min, int max, int interval, int initialValue, enum southStop southStopType );
     void setSkyScanStartBearingToolButtonUpDown();
     void setSkyScanEndBearingToolButtonUpDown();
-    void skyScanDisplayRotatorMinAzMaxAz(int minAz, int maxAz, enum southStop, enum endStop endStopType);
+    void skyScanDisplayRotatorMinAzMaxAz(int minAz, int maxAz, int antennaOffset, enum southStop, enum endStop endStopType);
 
     void setRotatorMainWindowTabVisible(int tabNum, bool state);
     void setSkyScanStartButtonState(bool state);
@@ -444,6 +445,8 @@ private:
     void hideTab(QTabWidget *tabWidget, QWidget *tabContent);
     bool isTabVisible(QTabWidget *tabWidget, QWidget *tabContent);
     void checkScanStartEndInRotatorRange();
+
+    int calcAntennaBearing(int bearing);
 };
 
 #endif // ROTATORMAINWINDOW_H

@@ -9,7 +9,7 @@ class QToolButton;
 class QLabel;
 class QTimer;
 
-class ToolButtonUpDown : public QWidget
+class ToolButtonUpDown : public QFrame
 {
     Q_OBJECT
 

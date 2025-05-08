@@ -65,7 +65,7 @@ QString getBearingStateTxt(skyScanBearingStates state)
     return bearingStateTxt[state];
 }
 
-
+/*
 int adjustOverlapBearingToCompassBearing(int value)
 {
     int bearing = value;
@@ -82,7 +82,7 @@ int adjustOverlapBearingToCompassBearing(int value)
     return bearing;
 }
 
-
+*/
 
 
 
