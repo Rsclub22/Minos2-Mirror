@@ -217,7 +217,7 @@ RotatorMainWindow::RotatorMainWindow(QWidget *parent) :
     sendSkyScanEnabledToLogger(false);
 
     readSkyScanCommonSettings();
-    initialiseSkyScannerSpinners();
+    //initialiseSkyScannerSpinners();
     skyScanControl = QSharedPointer<SkyScanControl>::create(this, parent);
     skyScanButtonState = QSharedPointer<SkyScanButtonState>::create();
     loggerSkyScanButtonState = QSharedPointer<SkyScanButtonState>::create();
@@ -2914,6 +2914,7 @@ void RotatorMainWindow::initialiseSkyScannerSpinners()
     ui->skyScanRotatorStartBearingUpDownButton->setBearingText(0);
     ui->skyScanRotatorEndBearingUpDownButton->setBearingText(0);
 
+
     initialiseSpinBox(ui->skyScanStepDegreeSpinBox, minSkyScanStepDegrees, maxSkyScanStepDegrees, stepDegreesIncrement, minSkyScanStepDegrees, true);
     initialiseSpinBox(ui->skyScanPauseTimeSpinBox, minSkyScanPauseMins, maxSkyScanPauseMins, skyScanPauseStepIncrement, minSkyScanPauseMins, true);
 
@@ -3413,11 +3414,13 @@ void RotatorMainWindow::skyScanDisplayRotatorMinAzMaxAz(int minAz, int maxAz, in
     ui->skyScanRotatorDisplayMaxAz->setText(maxAzStr);
     ui->antennaOffsetDisplay->setText(QString::number(antennaOffset));
 
-    QString sStopDisplay = "South Stop: ";
+    QString sStopDisplay = "South ";
 
     if (southStopType == S_STOPOFF)
     {
+        ui->rotatorStopLabel->setVisible(false);
         ui->southStopDisplay->setVisible(false);
+
 
     }
     else if (southStopType == S_STOPINV)
@@ -3425,6 +3428,7 @@ void RotatorMainWindow::skyScanDisplayRotatorMinAzMaxAz(int minAz, int maxAz, in
         sStopDisplay.append("180 - 180");
         ui->southStopDisplay->setText(sStopDisplay);
         ui->southStopDisplay->setVisible(true);
+        ui->rotatorStopLabel->setVisible(true);
 
     }
     else if (southStopType == S_STOP_COMPASS_SENSOR)
@@ -3433,6 +3437,7 @@ void RotatorMainWindow::skyScanDisplayRotatorMinAzMaxAz(int minAz, int maxAz, in
         sStopDisplay.append("-180 - 180 Compass Sensor");
         ui->southStopDisplay->setText(sStopDisplay);
         ui->southStopDisplay->setVisible(true);
+        ui->rotatorStopLabel->setVisible(true);
     }
 
 }
@@ -3732,10 +3737,10 @@ void RotatorMainWindow::openSkyScan(QString currentAntennaName)
     sendSkyScanEnabledToLogger(skyScanEnabled);
 
     // setup pauseTimeSpinBox
-    if (skyScanPauseStepIncrement == DEFAULT_VALUE_READ_INI)
+    if (skyScanPauseMins == DEFAULT_VALUE_READ_INI)
     {
         // nothing saved
-        skyScanPauseStepIncrement = MIN_SKYSCAN_PAUSE_MINS; // make this the pause time step 1 min
+        skyScanPauseMins = MIN_SKYSCAN_PAUSE_MINS; // make this the pause time step 1 min
     }
     initialiseSpinBox(ui->skyScanPauseTimeSpinBox, minSkyScanPauseMins, maxSkyScanPauseMins, skyScanPauseStepIncrement, skyScanPauseMins, true);
 
@@ -3754,16 +3759,9 @@ void RotatorMainWindow::openSkyScan(QString currentAntennaName)
 
     initialiseSpinBox(ui->skyScanStepDegreeSpinBox, minSkyScanStepDegrees, maxSkyScanStepDegrees,  stepDegreesIncrement, skyScanStepDegrees, true);
 
-    //if (setupAntenna->currentAntenna.overLapFlag)      // has overlap been disabled
-    //{
-    //    skyScanMinAzimuth = COMPASS_MIN0;
-    //    skyScanMaxAzimuth = COMPASS_MAX360;
-    //}
-    //else
-   // {
-        skyScanMinAzimuth = setupAntenna->currentAntenna.min_azimuth;
-        skyScanMaxAzimuth = setupAntenna->currentAntenna.max_azimuth;
-   // }
+    skyScanMinAzimuth = setupAntenna->currentAntenna.min_azimuth;
+    skyScanMaxAzimuth = setupAntenna->currentAntenna.max_azimuth;
+
 
     skyScanDisplayRotatorMinAzMaxAz(skyScanMinAzimuth, skyScanMaxAzimuth, setupAntenna->currentAntenna.antennaOffset,
                                     setupAntenna->currentAntenna.southStopType, setupAntenna->currentAntenna.endStopType);

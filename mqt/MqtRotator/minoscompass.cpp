@@ -377,8 +377,7 @@ QList<SkyScanArcSegment> MinosCompass::splitBearingArc(int rotatorStart, int rot
 {
     QList<SkyScanArcSegment> segments;
 
-    //if (rotatorStart == rotatorEnd)
-    //    return segments;
+    bool ascending = false;
 
     auto addSegment = [&](int s, int e, const QColor &color, bool inner) {
         segments.append(SkyScanArcSegment{s, e, color, inner});
@@ -386,8 +385,20 @@ QList<SkyScanArcSegment> MinosCompass::splitBearingArc(int rotatorStart, int rot
 
     if (rotatorStart < rotatorEnd)
     {
-        if (type == ROT_0_450)
+        ascending = true;   // we have already set to false for descending
+    }
+
+
+
+
+
+
+    if (type == ROT_0_450)
+    {
+        if (ascending)
         {
+
+            // rotatorStart < rotatorEnd
             if (rotatorStart < 360 && rotatorEnd > 360)
             {
                 addSegment(rotatorStart, 360, mainColor, false);
@@ -402,40 +413,10 @@ QList<SkyScanArcSegment> MinosCompass::splitBearingArc(int rotatorStart, int rot
                 addSegment(rotatorStart, rotatorEnd, mainColor, false);
             }
         }
-        else if (type == ROT_NEG180_540)
+        else
         {
-            if (rotatorStart < 0 && rotatorEnd <= 0)
-            {
-                addSegment(rotatorStart + 360, rotatorEnd + 360, QColor("red"), true);
-            }
-            else if (rotatorStart < 0 && rotatorEnd > 0)
-            {
-                addSegment(rotatorStart + 360, 360, QColor("red"), true);
-                addSegment(0, rotatorEnd, QColor("blue"), false);
-            }
-            else if (rotatorStart < 360 && rotatorEnd > 360)
-            {
-                addSegment(rotatorStart, 360, QColor("blue"), false);
-                addSegment(360, rotatorEnd, QColor("cyan"), true);
-            }
-            else if (rotatorStart >= 360)
-            {
-                addSegment(rotatorStart, rotatorEnd, QColor("cyan"), true);
-            }
-            else
-            {
-                addSegment(rotatorStart, rotatorEnd, QColor("blue"), false);
-            }
-        }
-        else // ROT_0_360 or default
-        {
-            addSegment(rotatorStart, rotatorEnd, QColor("blue"), false);
-        }
-    }
-    else
-    {
-        if (type == ROT_0_450)
-        {
+            // rotatorStart > rotatorEnd
+
             if (rotatorEnd < 360 && rotatorStart > 360)
             {
                 addSegment(360, rotatorStart, overlapColor, true);
@@ -450,7 +431,65 @@ QList<SkyScanArcSegment> MinosCompass::splitBearingArc(int rotatorStart, int rot
                 addSegment(rotatorEnd, rotatorStart, mainColor, false);
             }
         }
+
     }
+    else if (type == ROT_NEG180_450)
+    {
+
+    }
+    else if (type == ROT_NEG180_540)
+    {
+
+        if (ascending)
+        {
+            // rotatorStart < rotatorEnd
+            if (rotatorStart < 0 && rotatorEnd <= 0)
+            {
+                //addSegment(rotatorStart + 360, rotatorEnd + 360, overlapColor, true);
+            }
+            else if (rotatorStart < 0 && rotatorEnd > 0)
+            {
+                //addSegment(rotatorStart + 360, 360, overlapColor, true);
+                //addSegment(0, rotatorEnd, mainColor, false);
+            }
+            else if (rotatorStart < 360 && rotatorEnd > 360)
+            {
+                //addSegment(rotatorStart, 360, mainColor, false);
+                //addSegment(360, rotatorEnd, negativeOverlapColor, true);
+            }
+            else if (rotatorStart >= 360)
+            {
+                //addSegment(rotatorStart, rotatorEnd, negativeOverlapColor, true);
+            }
+            else
+            {
+                //addSegment(rotatorStart, rotatorEnd, mainColor, false);
+            }
+        }
+        else
+        {
+
+        }
+    }
+    else if (type == ROT_NEG179_180)
+    {
+
+    }
+    else if (type == ROT_0_360)
+    {
+        if (ascending)
+        {
+            addSegment(rotatorStart, rotatorEnd, mainColor, false);
+        }
+        else
+        {
+            addSegment(rotatorEnd, rotatorStart, mainColor, false);
+        }
+    }
+
+
+
+
 
     return segments;
 }
