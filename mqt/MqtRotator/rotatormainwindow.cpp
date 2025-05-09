@@ -3027,6 +3027,20 @@ void RotatorMainWindow::skyScanEnableChkBoxChanged()
 void RotatorMainWindow::skyScanSettingsOnCloseChkBoxChanged()
 {
 
+    if (setupAntenna->currentAntenna.antennaName.isEmpty())
+    {
+        return;
+    }
+
+    QString fileName = ANTENNA_PATH_LOGGER() + FILENAME_AVAIL_ANTENNAS;
+    QSettings config(fileName, QSettings::IniFormat);
+    config.beginGroup(setupAntenna->currentAntenna.antennaName);
+
+    saveSkyScanOnClose = ui->saveSkyScanSettingsOnCloseChkBox->isChecked();
+    config.setValue("saveSkyScanOnClose", saveSkyScanOnClose);
+
+     config.endGroup();
+
 }
 
 
@@ -3173,12 +3187,21 @@ void RotatorMainWindow::skyScanStartPbPressed()
 {
     trace(QString("Start SkyScan Button Pressed"));
 
+    if (startSkyScanBrg == endSkyScanBrg)
+    {
+        trace("Start and End Scan Bearing are equal - can't start skyscan");
+        return;
+    }
+
+
     if (!movingCW && !movingCCW && !skyScanActive)
     {
 
         trace(QString("Starting SkyScan"));
 
         skyScanActive = true;
+
+        displaySkyScanPauseIntervalCount(0);
 
         setTargetTabEnabled(false);
         setPresetsGroupBoxEnabled(false);
@@ -3671,6 +3694,13 @@ void RotatorMainWindow::closeSkyScan(QString currentAntennaName)
 
     trace(QString("Close Skyscan"));
 
+    if (skyScanActive)
+    {
+        trace(QString("Close SkyScan: Skyscan running Stop!"));
+        skyScanStopPbPressed();
+    }
+
+
     if (saveSkyScanOnClose)
     {
         saveSkyScanSettings(currentAntennaName);
@@ -3779,7 +3809,7 @@ void RotatorMainWindow::openSkyScan(QString currentAntennaName)
 
 
 
-    connect(ui->saveSkyScanSettingsOnCloseChkBox, &QCheckBox::stateChanged, this, &RotatorMainWindow::skyScanSettingsOnCloseChkBoxChanged);
+    connect(ui->saveSkyScanSettingsOnCloseChkBox, &QCheckBox::clicked, this, &RotatorMainWindow::skyScanSettingsOnCloseChkBoxChanged);
     connect(ui->skyScanRotatorStartBearingUpDownButton, QOverload<int>::of(&ToolButtonUpDown::valueChanged), this, &RotatorMainWindow::skyScanStartBearingToolbuttonValueChanged);
     connect(ui->skyScanStepDegreeSpinBox, QOverload<int>::of(&QSpinBox::valueChanged), this, &RotatorMainWindow::skyScanStepDegreesSpinBoxValueChanged);
     connect(ui->skyScanRotatorEndBearingUpDownButton, QOverload<int>::of(&ToolButtonUpDown::valueChanged), this, &RotatorMainWindow::skyScanEndBearingToolbuttonValueChanged);

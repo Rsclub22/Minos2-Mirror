@@ -316,15 +316,16 @@ bool MinosCompass::eventFilter(QObject */*obj*/, QEvent *event)
 void MinosCompass::drawSkyScanAnnulusSegment(QPainter *painter, int rotatorStartBearing, int rotatorEndBearing)
 {
     if (rotatorStartBearing == rotatorEndBearing)
-        return; // Nothing to draw
+        return;
 
     QList<SkyScanArcSegment> segments = splitBearingArc(rotatorStartBearing, rotatorEndBearing, endStopType);
 
     for (const SkyScanArcSegment &seg : segments)
     {
-        int adjustedStart = mod360(seg.startAngle + antennaOffset -90);
-        int adjustedEnd = mod360(seg.endAngle + antennaOffset - 90);
-        drawAnnulusArc(painter, seg.isInnerArc, adjustedStart, adjustedEnd, true, seg.colour);
+        int adjustedStart = mod360(seg.startAngle + antennaOffset - 90);
+        int adjustedEnd   = mod360(seg.endAngle   + antennaOffset - 90);
+
+        drawAnnulusArc(painter, seg.isInnerArc, adjustedStart, adjustedEnd, seg.colour);
     }
 }
 
@@ -332,35 +333,20 @@ void MinosCompass::drawSkyScanAnnulusSegment(QPainter *painter, int rotatorStart
 
 
 void MinosCompass::drawAnnulusArc(QPainter *painter, bool innerArc,
-                                  int startAngle, int endAngle, bool clockwise, const QColor &pathColor)
+                                  int startAngle, int endAngle, const QColor &pathColor)
 {
+    QRectF innerRect = innerArc ? overlapInnerRect : mainInnerRect;
+    QRectF outerRect = innerArc ? overlapOuterRect : mainOuterRect;
 
-    QRectF innerRect;
-    QRectF outerRect;
-
-
-    if (innerArc)
-    {
-        innerRect = overlapInnerRect;
-        outerRect = overlapOuterRect;
-    }
-    else
-    {
-        innerRect = mainInnerRect;
-        outerRect = mainOuterRect;
-    }
-
-
-    double start = static_cast<double>(startAngle);
-    double end = static_cast<double>(endAngle);
+    // Normalize both angles to 0–360 for drawing (visual only)
+    double start = static_cast<double>(mod360(startAngle));
+    double end   = static_cast<double>(mod360(endAngle));
 
     double sweep = end - start;
     if (sweep <= 0)
         sweep += 360;
 
-    if (!clockwise)
-        sweep = -sweep;
-
+    // The QPainter arc drawing is counter-clockwise, so negate angles
     QPainterPath arcPath;
     arcPath.arcTo(outerRect, -start, -sweep);
     arcPath.arcTo(innerRect, -end, sweep);
@@ -371,133 +357,104 @@ void MinosCompass::drawAnnulusArc(QPainter *painter, bool innerArc,
     painter->drawPath(arcPath);
 }
 
-
-
-QList<SkyScanArcSegment> MinosCompass::splitBearingArc(int rotatorStart, int rotatorEnd, endStop type)
+QList<SkyScanArcSegment> MinosCompass::splitBearingArc(int start, int end, endStop model)
 {
     QList<SkyScanArcSegment> segments;
 
-    bool ascending = false;
+    if (start == end)
+        return segments; // Nothing to draw
 
-    auto addSegment = [&](int s, int e, const QColor &color, bool inner) {
-        segments.append(SkyScanArcSegment{s, e, color, inner});
+    // If start is greater than end, swap them to ensure clockwise drawing
+    if (start > end)
+    {
+        int temp = start;
+        start = end;
+        end = temp;
+    }
+
+    auto addSegment = [&](int s, int e, bool inner, QColor c) {
+        if (s != e) {
+            segments.append({ s, e, inner, c });
+        }
     };
 
-    if (rotatorStart < rotatorEnd)
+    // Handle ROT_0_360
+    if (model == ROT_0_360)
     {
-        ascending = true;   // we have already set to false for descending
+        addSegment(start, end, true, mainColor);
     }
-
-
-
-
-
-
-    if (type == ROT_0_450)
+    // Handle ROT_0_450
+    else if (model == ROT_0_450)
     {
-        if (ascending)
+        if (start < 360 && end <= 360)
         {
-
-            // rotatorStart < rotatorEnd
-            if (rotatorStart < 360 && rotatorEnd > 360)
-            {
-                addSegment(rotatorStart, 360, mainColor, false);
-                addSegment(360, rotatorEnd, overlapColor, true);
-            }
-            else if (rotatorStart >= 360)
-            {
-                addSegment(rotatorStart, rotatorEnd, overlapColor, true);
-            }
-            else
-            {
-                addSegment(rotatorStart, rotatorEnd, mainColor, false);
-            }
+          addSegment(start, end, false, mainColor);
         }
-        else
+        if (start < 360 && end > 360)
         {
-            // rotatorStart > rotatorEnd
-
-            if (rotatorEnd < 360 && rotatorStart > 360)
-            {
-                addSegment(360, rotatorStart, overlapColor, true);
-                addSegment(rotatorEnd, 360, mainColor, false);
-            }
-            else if (rotatorStart >= 360 && rotatorEnd >= 360)
-            {
-                addSegment(rotatorEnd, rotatorStart, overlapColor, true);
-            }
-            else
-            {
-                addSegment(rotatorEnd, rotatorStart, mainColor, false);
-            }
+            addSegment(0, 360, false, mainColor);
+            addSegment(360, end, true, overlapColor);
         }
-
-    }
-    else if (type == ROT_NEG180_450)
-    {
-
-    }
-    else if (type == ROT_NEG180_540)
-    {
-
-        if (ascending)
+        if (start > 360 && end > 360)
         {
-            // rotatorStart < rotatorEnd
-            if (rotatorStart < 0 && rotatorEnd <= 0)
-            {
-                //addSegment(rotatorStart + 360, rotatorEnd + 360, overlapColor, true);
-            }
-            else if (rotatorStart < 0 && rotatorEnd > 0)
-            {
-                //addSegment(rotatorStart + 360, 360, overlapColor, true);
-                //addSegment(0, rotatorEnd, mainColor, false);
-            }
-            else if (rotatorStart < 360 && rotatorEnd > 360)
-            {
-                //addSegment(rotatorStart, 360, mainColor, false);
-                //addSegment(360, rotatorEnd, negativeOverlapColor, true);
-            }
-            else if (rotatorStart >= 360)
-            {
-                //addSegment(rotatorStart, rotatorEnd, negativeOverlapColor, true);
-            }
-            else
-            {
-                //addSegment(rotatorStart, rotatorEnd, mainColor, false);
-            }
-        }
-        else
-        {
-
+            addSegment(start, end, true, overlapColor);
         }
     }
-    else if (type == ROT_NEG179_180)
+    // Handle ROT_NEG179_180
+    else if (model == ROT_NEG179_180)
     {
+        if (start < 0 && end <= 0)
+        {
+           addSegment(start, end, true, negativeOverlapColor);
+        }
+        else if (start < 0 && end <= 180)
+        {
+            addSegment(start, 0, true, negativeOverlapColor);
+            addSegment(0, end, false, mainColor);
+        }
+        else if (start >= 0 && end <= 180)
+        {
+            addSegment(start, end, false, mainColor);
+        }
+
 
     }
-    else if (type == ROT_0_360)
+    // Handle ROT_NEG180_540
+    else if (model == ROT_NEG180_540)
     {
-        if (ascending)
+        if (start < 0 && end <= 0)
         {
-            addSegment(rotatorStart, rotatorEnd, mainColor, false);
+            addSegment(start, end, true, negativeOverlapColor);
         }
-        else
+        else if (start < 0 && end <= 360)
         {
-            addSegment(rotatorEnd, rotatorStart, mainColor, false);
+            addSegment(start, 0, true, negativeOverlapColor);
+            addSegment(0, end, false, mainColor);
+        }
+        else if (start >= 0 && end > 360)
+        {
+            addSegment(start, 360, false, mainColor);
+            addSegment(360, end, true, overlapColor);
+        }
+        else if (start < 0 && end > 360)
+        {
+            addSegment(start, 0, true, negativeOverlapColor);
+            addSegment(0, 360, false, mainColor);
+            addSegment(360, end, true, overlapColor);
+        }
+        else if (start > 360 && end <= 540)
+        {
+            addSegment(start, end, true, overlapColor);
         }
     }
-
-
-
-
+    else
+    {
+        // Default case, treat the entire range as main arc
+        addSegment(start, end, true, mainColor);
+    }
 
     return segments;
 }
-
-
-
-
-
 
 
 int MinosCompass::mod360(int bearing)

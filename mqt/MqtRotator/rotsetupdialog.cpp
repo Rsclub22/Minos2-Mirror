@@ -411,6 +411,7 @@ void RotSetupDialog::saveSettings()
                 config.beginGroup(savedAntNames[i]);        // entry no longer exists
                 config.remove("");      // remove all keys for this group
                 config.endGroup();
+                antennaNameChg = true;
             }
         }
     }

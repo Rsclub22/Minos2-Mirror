@@ -17,12 +17,11 @@
 #include <QWidget>
 #include "rotatorcommon.h"
 
-struct SkyScanArcSegment
-{
-    int startAngle;
+struct SkyScanArcSegment {
+    int startAngle;    // in degrees, raw (can be < 0 or > 360)
     int endAngle;
+    bool isInnerArc;   // true = main annulus, false = outer annulus (red or green)
     QColor colour;
-    bool isInnerArc;
 };
 
 
@@ -102,8 +101,7 @@ private:
 
 
     QList<SkyScanArcSegment> splitBearingArc(int rotatorStart, int rotatorEnd, endStop type);
-    void drawAnnulusArc(QPainter *painter, bool innerArc,
-                        int startAngle, int endAngle, bool clockwise, const QColor &pathColor);
+    void drawAnnulusArc(QPainter *painter, bool innerArc, int startAngle, int endAngle, const QColor &pathColor);
     static int mod360(int bearing);
 
 
