@@ -39,6 +39,7 @@
 #include "LogEvents.h"
 #include "rotatormainwindow.h"
 #include "checkHamlibVersionIsValid.h"
+#include "skyscanpresetsdialog.h"
 #include "ui_rotatormainwindow.h"
 
 
@@ -852,6 +853,10 @@ void RotatorMainWindow::initActionsConnections()
     connect(msg, &RotatorRpc::selectAntennaFromLog, this, &RotatorMainWindow::onLoggerSelectAntenna);
     connect(msg, &RotatorRpc::setRotPreset, this, &RotatorMainWindow::onLoggerSetPreset);
     connect(msg, &RotatorRpc::setSkyScanButtonStateFromLogger, this, &RotatorMainWindow::onSetSkyScanButtonStateFromLogger);
+
+
+
+
 
 }
 
@@ -2608,7 +2613,7 @@ void RotatorMainWindow::readPresets()
         {
         rotPresets.append(new RotPresetData(i, config.value("preset" +  QString::number(i+1)).toString(),
                                         config.value("bearing" +  QString::number(i+1)).toString()));
-    }
+        }
     }
 
 
@@ -3759,6 +3764,9 @@ void RotatorMainWindow::openSkyScan(QString currentAntennaName)
 
     readSkyScanSettings(currentAntennaName);
 
+    initSkyScanPresetButtons();
+    loadSkyScanPresets(setupAntenna->currentAntenna.antennaName);
+
     checkScanStartEndInRotatorRange();      // if rotator changed overlap setting
 
     setSkyScanComponentsEnabled(skyScanEnabled);
@@ -3904,8 +3912,191 @@ void RotatorMainWindow::dumpSkyScanSettingsToTraceLog()
 }
 
 
+// ******************** SkyScan Presets ******************************//
 
 
+void RotatorMainWindow::initSkyScanPresetButtons()
+{
+
+    QList<QToolButton*> ui_skyScanPresetbuttons;
+    ui_skyScanPresetbuttons << ui->skyscanPreset0 << ui->skyscanPreset1 << ui->skyscanPreset2 << ui->skyscanPreset3 << ui->skyscanPreset4
+                     << ui->skyscanPreset5;
+
+    QStringList buttonLabels;
+    for (unsigned int i = 0; i < sizeof(RotPresetData::presetButtonLabels)/sizeof(const char *); i++)
+    {
+        buttonLabels.append(RotPresetData::tr(RotPresetData::presetButtonLabels[i]));
+    }
+
+    for (int i = 0; i < ui_skyScanPresetbuttons.count(); i++)
+    {
+
+        skyScanPresetButton.append(new PresetButton(ui_skyScanPresetbuttons[i], i, nullptr, nullptr, buttonLabels)); // using PresetButton here
+
+        //connect(skyScanPresetButton[i], &PresetButton::presetShortCutRecall, this, [this, i]() {presetRead(i);});
+        //connect(skyScanPresetButton.[i], &PresetButton::presetShiftShortCutRecall, this, [this, i]() {showPresetMenu(i);});
+        connect(skyScanPresetButton[i], &PresetButton::presetReadAction, this, [this, i]() {skyScanPresetRead(i);});
+        connect(skyScanPresetButton[i], &PresetButton::presetEditAction, this, [this, i]() {skyScanPresetEdit(i);});
+        connect(skyScanPresetButton[i], &PresetButton::presetWriteAction, this, [this, i]() {skyScanPresetWrite(i);});
+        connect(skyScanPresetButton[i], &PresetButton::presetClearAction, this, [this, i]() {skyScanPresetClear(i);});
+
+
+    }
+
+}
+
+void RotatorMainWindow::loadSkyScanPresets(QString currentAntennaName)
+{
+
+    QString fileName = ANTENNA_PATH_LOGGER() + FILENAME_AVAIL_ANTENNAS;
+    QSettings config(fileName, QSettings::IniFormat);
+
+
+    if (skyScanPresetButton.count() > 0)
+    {
+
+        for (int i = 0; i < skyScanPresetButton.count(); i++)
+        {
+            QString antennaPresetName = currentAntennaName + SKYSCAN_PRESET + QString::number(i);
+            config.beginGroup(antennaPresetName);
+            QString presetName =  config.value("skyScanPresetName", "").toString();
+            int skyScanStepDegreesValue =  config.value("skyScanStepDegreesValue", SKYSCAN_STEP_DEGREES).toInt();
+            int stepToolButtonMin = config.value("skyScanStepToolButtonMin", SKYSCAN_STEP_DEGREES).toInt();
+            int stepToolButtonMax = config.value("skyScanStepToolButtonMax", MAX_SKYSCAN_STEP_DEGREES).toInt();
+            int stepToolButtonStep = config.value("skyScanStepToolButtonStep", MAX_SKYSCAN_STEP_DEGREES).toInt();
+            int skyScanPauseTimeValue = config.value("skyScanPauseTimeValue", MIN_SKYSCAN_PAUSE_MINS).toInt();
+            int pauseToolButtonMin = config.value("skyScanPauseToolButtonMin", MIN_SKYSCAN_PAUSE_MINS).toInt();
+            int pauseToolButtonMax = config.value("skyScanPauseToolButtonMax", MAX_SKYSCAN_PAUSE_MINS).toInt();
+            int pauseToolButtonStep = config.value("skyScanPauseToolButtonStep", MIN_SKYSCAN_PAUSE_MINS).toInt();
+            int skyScanStartBearing = config.value("skyScanStartBearing", COMPASS_MIN0).toInt();
+            int skyScanEndBearing = config.value("skyScanEndBearing", COMPASS_MIN0).toInt();
+
+            config.endGroup();
+
+            SkyScanPresetData* skyScanPresetData = new SkyScanPresetData();
+            skyScanPresetData->setNumber(i);
+            skyScanPresetData->setAntennaName(currentAntennaName);
+            skyScanPresetData->setPresetName(presetName);
+            skyScanPresetData->setSkyScanStepDegreesValue(skyScanStepDegreesValue);
+            skyScanPresetData->setStepToolButtonMin(stepToolButtonMin);
+            skyScanPresetData->setStepToolButtonMax(stepToolButtonMax);
+            skyScanPresetData->setStepToolButtonStep(stepToolButtonStep);
+            skyScanPresetData->setSkyScanPauseTimeValue(skyScanPauseTimeValue);
+            skyScanPresetData->setPauseToolButtonMin(pauseToolButtonMin);
+            skyScanPresetData->setPauseToolButtonMax(pauseToolButtonMax);
+            skyScanPresetData->setPauseToolButtonStep(pauseToolButtonStep);
+            skyScanPresetData->setRotatorMinAzimuth(setupAntenna->currentAntenna.min_azimuth);
+            skyScanPresetData->setRotatorMaxAzimuth(setupAntenna->currentAntenna.max_azimuth);
+            skyScanPresetData->setAntennaOffset(setupAntenna->currentAntenna.antennaOffset);
+            skyScanPresetData->setEndStopType(setupAntenna->currentAntenna.endStopType);
+            skyScanPresetData->setSouthStopType(setupAntenna->currentAntenna.southStopType);
+            skyScanPresetData->setSkyScanStartBearing(skyScanStartBearing);
+            skyScanPresetData->setSkyScanEndBearing(skyScanEndBearing);
+
+
+            skyScanPresetsData.append(skyScanPresetData);
+
+
+
+        }
+    }
+}
+
+void RotatorMainWindow::showSkyScanPresetMenu(int buttonNumber)
+{
+    skyScanPresetButton[buttonNumber]->showButtonMenu();
+}
+
+
+void RotatorMainWindow::skyScanPresetRead(int buttonNumber)
+{
+/*
+    if (!rotPresets.isEmpty()  && buttonNumber < rotPresets.count())
+    {
+        if (!rotPresets[buttonNumber]->bearing.isEmpty())
+        {
+            rotateTo(rotPresets[buttonNumber]->bearing.toInt());
+            ui->bearingEdit->setText(rotPresets[buttonNumber]->bearing);
+            ui->bearingEdit->setFocus();
+        }
+    }
+*/
+}
+
+void RotatorMainWindow::skyScanPresetEdit(int buttonNumber)
+{
+
+
+    if (!skyScanPresetsData.isEmpty()  && buttonNumber < skyScanPresetsData.count())
+    {
+
+        SkyScanPresetData curData = skyScanPresetsData[buttonNumber]->copy();
+        curData.clearDirty();
+        curData.setEndStopType(setupAntenna->currentAntenna.endStopType);
+
+
+        logMessage(QString("SkyScan Preset Edit Selected = %1").arg(QString::number(buttonNumber + 1)));
+        SkyScanPresetsDialog skyScanPresetDialog(this, &curData, "Edit");
+        skyScanPresetDialog.initialiseStepDegreeToolButton(curData.getStepToolButtonMin(), curData.getStepToolButtonMax(),
+                                                          curData.getPauseToolButtonStep(), curData.getSkyScanStepDegreesValue());
+        skyScanPresetDialog.initialisePauseTimeToolButton(curData.getPauseToolButtonMin(), curData.getPauseToolButtonMax(),
+                                                          curData.getPauseToolButtonStep(), curData.getSkyScanPauseTimeValue());
+        skyScanPresetDialog.initialiseRotatorMinMaxAzimuth(setupAntenna->currentAntenna.min_azimuth, setupAntenna->currentAntenna.max_azimuth);
+        skyScanPresetDialog.setStartBearingToolButton(setupAntenna->currentAntenna.min_azimuth, setupAntenna->currentAntenna.max_azimuth, curData.getSkyScanStepDegreesValue(), curData.getSkyScanStartBearing());
+        skyScanPresetDialog.setEndBearingToolButton(setupAntenna->currentAntenna.min_azimuth, setupAntenna->currentAntenna.max_azimuth, curData.getSkyScanStepDegreesValue(), curData.getSkyScanEndBearing());
+
+        if (skyScanPresetDialog.exec() == QDialog::Accepted)
+        {
+            //if (editData.name != curData.name || editData.bearing != curData.bearing)
+           // {
+           //     setRotPresetButData(buttonNumber, editData);
+           //     rotPresetButtonUpdate(buttonNumber, editData);
+           // }
+
+        }
+    }
+
+
+}
+
+void RotatorMainWindow::skyScanPresetWrite(int buttonNumber)
+{
+/*    logMessage(QString("Preset Write Selected = %1").arg(QString::number(buttonNumber +1)));
+    if (!rotPresets.isEmpty()  && buttonNumber < rotPresets.count())
+    {
+        RotPresetData editData(buttonNumber, "", "0");
+        RotPresetData curData(buttonNumber, "", "0");
+
+        logMessage(QString("Preset Edit Selected = %1").arg(QString::number(buttonNumber + 1)));
+        RotPresetDialog presetDialog(this, buttonNumber, &editData, &curData, "New");
+
+
+        if (presetDialog.exec() == QDialog::Accepted)
+        {
+            if (editData.name != curData.name || editData.bearing != curData.bearing)
+            {
+                setRotPresetButData(buttonNumber, editData);
+                rotPresetButtonUpdate(buttonNumber, editData);
+            }
+
+        }
+    }*/
+}
+
+void RotatorMainWindow::skyScanPresetClear(int buttonNumber)
+{
+/*
+
+    logMessage(QString("Preset Clear Selected = %1").arg(QString::number(buttonNumber +1)));
+    if (!rotPresets.isEmpty() && buttonNumber < rotPresets.count())
+    {
+        // clear this preset
+        RotPresetData pData(0, "", "0");
+        rotPresetButtonUpdate(buttonNumber, pData);
+        rotPresetButtonUpdate(buttonNumber, pData);
+    }
+*/
+}
 
 
 

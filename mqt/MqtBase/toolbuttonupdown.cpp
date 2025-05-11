@@ -153,9 +153,24 @@ void ToolButtonUpDown::setRange(int min, int max)
 
 }
 
+int ToolButtonUpDown::getMin()
+{
+    return minimum;
+}
+
+int ToolButtonUpDown::getMax()
+{
+    return maximum;
+}
+
 void ToolButtonUpDown::setStep(int stepValue)
 {
     step = stepValue;
+}
+
+int ToolButtonUpDown::getStep()
+{
+    return step;
 }
 
 void ToolButtonUpDown::increment()

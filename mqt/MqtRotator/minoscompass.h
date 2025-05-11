@@ -35,6 +35,8 @@ public:
 
 
 
+    void setDoNotShowNeedle(bool doNotShowNeedle_);
+
 public slots:
 
     void updateSkyScanStartBearing(int bearing);
@@ -73,6 +75,8 @@ private:
 
     endStop endStopType = ROT_0_360;
     southStop southStopType = southStop::S_STOPOFF;
+
+    bool doNotShowNeedle = false;
 
 
 

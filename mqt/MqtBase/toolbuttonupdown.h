@@ -18,7 +18,10 @@ public:
     int value() const;
     void setValue(int newValue);
     void setRange(int min, int max);
+    int getMin();
+    int getMax();
     void setStep(int step);
+    int getStep();
     void setText(const QString &text);
     void setBearingText(const int num);
     void setSouthStopType(enum southStop southStopType_);

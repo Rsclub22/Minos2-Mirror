@@ -31,7 +31,8 @@ SOURCES += \
     rotsetupform.cpp \
     addantennadialog.cpp \
     rotsetupdialog.cpp \
-    skyscancontrol.cpp
+    skyscancontrol.cpp \
+    skyscanpresetsdialog.cpp
 
 HEADERS  += \
     hamlibRotcontrol.h \
@@ -47,7 +48,8 @@ HEADERS  += \
     rotsetupform.h \
     addantennadialog.h \
     rotsetupdialog.h \
-    skyscancontrol.h
+    skyscancontrol.h \
+    skyscanpresetsdialog.h
 
 FORMS    += \
     pstconfigdialog.ui \
@@ -55,7 +57,8 @@ FORMS    += \
     rotatormainwindow.ui \
     rotsetupform.ui \
     addantennadialog.ui \
-    rotsetupdialog.ui
+    rotsetupdialog.ui \
+    skyscanpresetsdialog.ui
 
 win32:{HEADERS +=     pstRotControl.h
 SOURCES += pstRotControl.cpp

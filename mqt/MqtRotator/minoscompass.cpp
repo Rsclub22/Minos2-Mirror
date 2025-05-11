@@ -142,19 +142,21 @@ void MinosCompass::paintEvent(QPaintEvent *)
 
     painter.setPen(Qt::NoPen);
 
+    if (!doNotShowNeedle)
+    {
+        painter.setBrush(needleFrontColor);
 
-    painter.setBrush(needleFrontColor);
+        painter.save();
 
-    painter.save();
+        painter.rotate(compassDialBearing);
+        painter.drawConvexPolygon(needleFront, 3);
 
-    painter.rotate(compassDialBearing);
-    painter.drawConvexPolygon(needleFront, 3);
+        painter.setBrush(needleBackColor);
+        painter.drawConvexPolygon(needleBack, 3);
 
-    painter.setBrush(needleBackColor);
-    painter.drawConvexPolygon(needleBack, 3);
+        painter.restore();
 
-    painter.restore();
-
+    }
 
     painter.setPen(twoDegreeMarkerColor);
 
@@ -274,6 +276,12 @@ void MinosCompass::mouseMoveEvent(QMouseEvent *event)
         }
     }
     QToolTip::hideText();
+}
+
+
+void MinosCompass::setDoNotShowNeedle(bool doNotShowNeedle_)
+{
+    doNotShowNeedle = doNotShowNeedle_;
 }
 
 bool MinosCompass::eventFilter(QObject */*obj*/, QEvent *event)

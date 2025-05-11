@@ -37,6 +37,9 @@ static const char * presetButtonLabels[4];
 
 
 
+
+inline const QString SKYSCAN_PRESET = "_SkyScanPreset";
+
 const QChar SHORTLOCATOR_IDENTIFIER = '#'; // add to bearing to identify that it has been calculated from short locator.
                                            // Used in bearing sent from memory and clusterframe.
 
@@ -342,6 +345,146 @@ private:
 
 };
 
+class SkyScanPresetData
+{
+
+public:
+
+    SkyScanPresetData(){}
+
+
+    int getNumber(){return number;}
+    void setNumber(int num){number = num;}
+
+    QString gePresetName(){return presetName;}
+    void setPresetName(QString name_){presetName = name_;}
+    void setPresetNameIsDirty(bool dirty){presetNameDirty = dirty;}
+    bool isPresetNameDirty(){return presetNameDirty;}
+
+    QString getAntennaName(){return antennaName;}
+    void setAntennaName(QString antennaName_){antennaName = antennaName_;}
+
+    endStop getEndStopType(){return endStopType;}
+    void setEndStopType(endStop endStopType_){endStopType = endStopType_;}
+
+    southStop getSouthStopType(){return southStopType;}
+    void setSouthStopType(southStop southStopType_){southStopType = southStopType_;}
+
+    int getSkyScanStepDegreesValue(){return skyScanStepDegreesValue;}
+    void setSkyScanStepDegreesValue(int skyScanStepDegreesValue_){skyScanStepDegreesValue = skyScanStepDegreesValue_;}
+    void setSkyScanStepDegreesValueIsDirty(bool dirty){skyScanStepDegreesValueIsDirty = dirty;}
+    bool isSkyScanStepDegreesValueDirty(){return skyScanStepDegreesValueIsDirty;}
+
+    int getStepToolButtonMin(){return stepToolButtonMin;}
+    void setStepToolButtonMin(int stepToolButtonMin_){stepToolButtonMin = stepToolButtonMin_;}
+
+    int getStepToolButtonMax(){return stepToolButtonMax;};
+    void setStepToolButtonMax(int stepToolButtonMax_){stepToolButtonMax = stepToolButtonMax_;}
+
+    int getStepToolButtonStep(){return stepToolButtonStep;};
+    void setStepToolButtonStep(int stepToolButtonStep_){stepToolButtonStep = stepToolButtonStep_;}
+
+    int getSkyScanPauseTimeValue(){return skyScanPauseTimeValue;};
+    void setSkyScanPauseTimeValue(int skyScanPauseTimeValue_){skyScanPauseTimeValue = skyScanPauseTimeValue_;}
+    void setSkyScanPauseTimeValueDirty(bool dirty){skyScanPauseTimeValueIsDirty = dirty;}
+    bool isSkyScanPauseTimeValueDirty(){return skyScanPauseTimeValueIsDirty;}
+
+    int getPauseToolButtonMin(){return pauseToolButtonMin;};
+    void setPauseToolButtonMin(int pauseToolButtonMin_){pauseToolButtonMin = pauseToolButtonMin_;}
+
+    int getPauseToolButtonMax(){return pauseToolButtonMax;};
+    void setPauseToolButtonMax(int pauseToolButtonMax_){pauseToolButtonMax = pauseToolButtonMax_;}
+
+    int getPauseToolButtonStep(){return pauseToolButtonStep;};
+    void setPauseToolButtonStep(int pauseToolButtonStep_){pauseToolButtonStep = pauseToolButtonStep_;}
+
+    int getRotatorMinAzimuth(){return rotatorMinAzimuth;};
+    void setRotatorMinAzimuth(int rotatorMinAzimuth_ ){rotatorMinAzimuth = rotatorMinAzimuth_;}
+
+    int getRotatorMaxAzimath(){return rotatorMaxAzimath;};
+    void setRotatorMaxAzimuth(int rotatorMaxAzimuth_ ){rotatorMaxAzimath = rotatorMaxAzimuth_;}
+
+    int getAntennaOffset(){return antennaOffset;};
+    void setAntennaOffset(int antennaOffset_){antennaOffset = antennaOffset_;}
+
+    int getSkyScanStartBearing(){return skyScanStartBearing;};
+    void setSkyScanStartBearing(int skyScanStartBearing_){skyScanStartBearing = skyScanStartBearing_;}
+    void setSkyScanStartBearingIsDirty(bool dirty){skyScanStartBearingIsDirty = dirty;}
+    bool isSkyScanStartBearingIsDirty(){return skyScanStartBearingIsDirty;}
+
+    int getSkyScanEndBearing(){return skyScanEndBearing;};
+    void setSkyScanEndBearing(int skyScanEndBearing_){skyScanEndBearing = skyScanEndBearing_;}
+    void setSkyScanEndBearingIsDirty(bool dirty){skyScanEndBearingIsDirty =dirty;}
+    bool isSkyScanEndBearingDirty(){return skyScanEndBearingIsDirty;}
+
+    bool areSettingsDirty(){return isPresetNameDirty() || isSkyScanStepDegreesValueDirty() || isSkyScanPauseTimeValueDirty()
+                                     || isSkyScanStartBearingIsDirty() || isSkyScanEndBearingDirty();}
+
+    void clearDirty()
+    {
+        presetNameDirty = false;
+        skyScanStepDegreesValueIsDirty = false;
+        skyScanStepDegreesValueIsDirty = false;
+        skyScanPauseTimeValueIsDirty = false;
+        skyScanEndBearingIsDirty = false;
+    }
+
+    SkyScanPresetData copy() const {
+        SkyScanPresetData c;
+        c.setNumber(number);
+        c.setPresetName(presetName);
+        c.setAntennaName(antennaName);
+        c.setEndStopType(endStopType);
+        c.setSkyScanStepDegreesValue(skyScanStepDegreesValue);
+        c.setSkyScanStepDegreesValueIsDirty(skyScanStepDegreesValueIsDirty);
+        c.setStepToolButtonMin(stepToolButtonMin);
+        c.setStepToolButtonMax(stepToolButtonMax);
+        c.setStepToolButtonStep(stepToolButtonStep);
+        c.setSkyScanPauseTimeValue(skyScanPauseTimeValue);
+        c.setSkyScanPauseTimeValueDirty(skyScanPauseTimeValueIsDirty);
+        c.setPauseToolButtonMin(pauseToolButtonMin);
+        c.setPauseToolButtonMax(pauseToolButtonMax);
+        c.setPauseToolButtonStep(pauseToolButtonStep);
+        c.setRotatorMinAzimuth(rotatorMinAzimuth);
+        c.setRotatorMaxAzimuth(rotatorMaxAzimath);
+        c.setAntennaOffset(antennaOffset);
+        c.setSkyScanStartBearing(skyScanStartBearing);
+        c.setSkyScanStartBearingIsDirty(skyScanStartBearingIsDirty);
+        c.setSkyScanEndBearing(skyScanEndBearing);
+        c.setSkyScanEndBearingIsDirty(skyScanEndBearingIsDirty);
+        return c;
+    }
+
+
+private:
+
+    int number = 0;
+    QString presetName;
+    bool presetNameDirty = false;
+    QString antennaName;
+    endStop endStopType;
+    southStop southStopType;
+    int skyScanStepDegreesValue;
+    int stepToolButtonMin;
+    int stepToolButtonMax;
+    int stepToolButtonStep;
+    bool skyScanStepDegreesValueIsDirty = false;
+    int skyScanPauseTimeValue;
+    int pauseToolButtonMin;
+    int pauseToolButtonMax;
+    int pauseToolButtonStep;
+    bool skyScanPauseTimeValueIsDirty = false;
+    int rotatorMinAzimuth;
+    int rotatorMaxAzimath;
+    int antennaOffset;
+    int skyScanStartBearing;
+    bool skyScanStartBearingIsDirty = false;
+    int skyScanEndBearing;
+    bool skyScanEndBearingIsDirty = false;
+
+
+
+};
 
 
 #endif // ROTATORCOMMON_H

@@ -224,6 +224,9 @@ private:
     int maxSkyScanPauseMins = MAX_SKYSCAN_PAUSE_MINS;
     int skyScanPauseStepIncrement = DEFAULT_VALUE_READ_INI;
 
+    QList<PresetButton *> skyScanPresetButton;
+    QVector<SkyScanPresetData*> skyScanPresetsData;
+
 
 
     int openRotator();
@@ -357,6 +360,11 @@ private slots:
     void skyScanStartBearingToolbuttonValueChanged(int value);
     void skyScanEndBearingToolbuttonValueChanged(int value);
     void onSetSkyScanButtonStateFromLogger(int buttonState);
+    void skyScanPresetRead(int buttonNumber);
+    void skyScanPresetEdit(int buttonNumber);
+    void skyScanPresetClear(int buttonNumber);
+    void showSkyScanPresetMenu(int buttonNumber);
+    void skyScanPresetWrite(int buttonNumber);
 private:
     void rotateTo(int bearing);
     //int northCalcTarget(int targetBearing);
@@ -447,6 +455,8 @@ private:
     void checkScanStartEndInRotatorRange();
 
     int calcAntennaBearing(int bearing);
+    void initSkyScanPresetButtons();
+    void loadSkyScanPresets(QString currentAntennaName);
 };
 
 #endif // ROTATORMAINWINDOW_H
