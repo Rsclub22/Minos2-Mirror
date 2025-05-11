@@ -680,6 +680,15 @@ void KSTMainWindow::addMessage(QSharedPointer<KstMessageLine> kst)
     {
         user->messageCount++;
     }
+    else
+    {
+        QString user = userName.getFullCall();
+        if (!user.isEmpty() && user != "SERVER")
+        {
+            // NB we can get messages before we see the UA5 announcing them
+            trace(QString("User %1 not found").arg(user));
+        }
+    }
 }
 void KSTMainWindow::checkUserMessages(QSharedPointer<KstUser> user)
 {
@@ -1028,13 +1037,13 @@ void KSTMainWindow::analyseKstMessage(QString atj)
         if (istate & 2)
             test->recent = true;
 
-        QVector<QSharedPointer<KstUser> >::const_iterator l = std::lower_bound(callVector->begin(), callVector->end(), test, KstUserCompare);
+        QVector<QSharedPointer<KstUser> >::const_iterator l = std::lower_bound(callVector->constBegin(), callVector->constEnd(), test, KstUserCompare);
         if (l != callVector->constEnd() && l->data()->call == test->call && l->data()->chat == test->chat)
         {
             // as it should be...
             l->data()->away = test->away;
             l->data()->recent = test->recent;
-            int row = l - callVector->begin();
+            int row = l - callVector->constBegin();
             emit kstCallModel.dataChanged(kstCallModel.index(row, 0), kstCallModel.index(row, kstCallModel.columnCount() - 1));
         }
     }
@@ -1057,7 +1066,7 @@ void KSTMainWindow::analyseKstMessage(QString atj)
         if (istate & 2)
             test->recent = true;
 
-        QVector<QSharedPointer<KstUser> >::const_iterator l = std::lower_bound(callVector->begin(), callVector->end(), test, KstUserCompare);
+        QVector<QSharedPointer<KstUser> >::const_iterator l = std::lower_bound(callVector->constBegin(), callVector->constEnd(), test, KstUserCompare);
         if (l != callVector->constEnd() && l->data()->call == test->call && l->data()->chat == test->chat)
         {
             // as it should be...
@@ -1066,7 +1075,7 @@ void KSTMainWindow::analyseKstMessage(QString atj)
             l->data()->away = test->away;
             l->data()->recent = test->recent;
             l->data()->distance = -1;   // force recalc
-            int row = l - callVector->begin();
+            int row = l - callVector->constBegin();
             emit kstCallModel.dataChanged(kstCallModel.index(row, 0), kstCallModel.index(row, kstCallModel.columnCount() - 1));
 
         }
@@ -1082,14 +1091,14 @@ void KSTMainWindow::analyseKstMessage(QString atj)
         test->chat = sl[1].toInt();
         test->call.setFullCall(sl[2]);
 
-        QVector<QSharedPointer<KstUser> >::const_iterator l = std::lower_bound(callVector->begin(), callVector->end(), test, KstUserCompare);
+        QVector<QSharedPointer<KstUser> >::const_iterator l = std::lower_bound(callVector->constBegin(), callVector->constEnd(), test, KstUserCompare);
         if (l != callVector->constEnd() && l->data()->call == test->call && l->data()->chat == test->chat)
         {
             // as it should be...
 
             // if we remove the last row then the call model
             // is one short as we have already removed it from the vector
-            int row = l - callVector->begin();
+            int row = l - callVector->constBegin();
 
             kstCallModel.removeRow(row);
             callVectorChanged = true;
@@ -1719,9 +1728,9 @@ void KSTMainWindow::on_sortIndicatorChanged(int /*logicalIndex*/, Qt::SortOrder 
 
 void KSTMainWindow::setDefaultButton(QPushButton *d)
 {
+    ui->loggerXferButton->setDefault(false);
     if (d)
     {
-        ui->loggerXferButton->setDefault(false);
         ui->meepButton->setDefault(false);
         ui->genmsgButton->setDefault(false);
 
@@ -1730,13 +1739,11 @@ void KSTMainWindow::setDefaultButton(QPushButton *d)
     else
         if (ui->callEdit->text().isEmpty())
         {
-            ui->loggerXferButton->setDefault(false);
             ui->meepButton->setDefault(false);
             ui->genmsgButton->setDefault(true);
         }
         else
             {
-                ui->loggerXferButton->setDefault(false);
                 ui->genmsgButton->setDefault(false);
                 ui->meepButton->setDefault(true);
             }

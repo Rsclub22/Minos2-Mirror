@@ -4,6 +4,7 @@
 #include "kstmainwindow.h"
 #include "cutils.h"
 #include "remotelogs.h"
+#include "MTrace.h"
 
 // kst2me sort by
 // new before old
@@ -102,6 +103,7 @@ void KstCallGridModel::insertRow( int row, QSharedPointer<KstUser> call)
 void KstCallGridModel::removeRow(int _row)
 {
     beginRemoveRows(QModelIndex(), _row, _row);
+    trace(QString("Removing from callVector %1").arg(callVector->at(_row)->call.getFullCall()));
     callVector->removeAt(_row);
     endRemoveRows();
 }

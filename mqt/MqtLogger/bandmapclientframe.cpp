@@ -535,24 +535,24 @@ void BandmapClientFrame::context_memoryActionSelected()
     doMemorySelected(&contextMenuSelectedSpotData);
     memoryData::memData spotData;
 }
-void BandmapClientFrame::doMemorySelected(ClusterSpotData *sd)
+void BandmapClientFrame::doMemorySelected(ClusterSpotData *d)
 {
     memoryData::memData spotData;
-    spotData.callsign = sd->getDxCallStr();
-    spotData.time = sd->getSpotTime();
-    spotData.freq = sd->getFreq();
+    spotData.callsign = d->getDxCallStr();
+    spotData.time = d->getSpotTime();
+    spotData.freq = d->getFreq();
 
     bool showDerivedLocFlag;
     TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpShowDerivedLoc, showDerivedLocFlag );
 
-    if (showDerivedLocFlag || !sd->getDxLocatorIsFromNode())
+    if (showDerivedLocFlag || !d->getDxLocatorIsFromNode())
     {
-        spotData.locator = sd->getDxLocator();
+        spotData.locator = d->getDxLocator();
     }
 
-    spotData.bearing = sd->getDxBrg().toInt();
-    spotData.dxLocFromNode = sd->getDxLocatorIsFromNode();
-    spotData.exchange = sd->getDistrict();
+    spotData.bearing = d->getDxBrg().toInt();
+    spotData.dxLocFromNode = d->getDxLocatorIsFromNode();
+    spotData.exchange = d->getDistrict();
 
     MinosLoggerEvents::SendSpotToMemory(ct,spotData);
 }
@@ -579,17 +579,26 @@ void BandmapClientFrame::doClearSpotSelected(ClusterSpotData *sd, int selRow)
                                    QMessageBox::Yes | QMessageBox::No);
     if (ret == QMessageBox::Yes)
     {
-        traceMsg(QString("clear spot selected for callsign %1 id %2")
-                     .arg(sd->getDxCallStr())
-                     .arg(sd->getRecNo()));
+        traceMsg(tr("clear spot selected for callsign %1")
+                     .arg(sd->getDxCallStr()));
 
-        bmsdb->deleteRecord( sd);
-        sd->setSpotType(bandmapSpotType::DELETED);
+        QSharedPointer<ClusterSpotData> selSpot = bandmapDataModel->getBandmapDataRow(selRow);
 
-        bandmapDataModel->removeRows(selRow, 1);
-        bandmapView->clearSelectedSpotData();
-        purgeSpots();
-        bandmapView->bandmapUpdate(true);
+        if (selSpot->getDxCallWorked() == sd->getDxCallWorked())
+        {
+            bmsdb->deleteRecord( sd);
+            sd->setSpotType(bandmapSpotType::DELETED);
+
+            bandmapDataModel->removeRows(selRow, 1);
+            bandmapView->clearSelectedSpotData();
+            purgeSpots();
+            bandmapView->bandmapUpdate(true);
+        }
+        else
+        {
+            traceMsg(tr("Spot for %1 has moved - try again")
+                         .arg(sd->getDxCallStr()));
+        }
     }
 }
 
@@ -1655,17 +1664,15 @@ void BandmapClientFrame::filterButtonSelected()
 
 bool BandmapClientFrame::event(QEvent *event)
 {
+    bool minBFlag;
+    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpBandMapMouseInFrameDelay, minBFlag );
    if (event->type() == QEvent::Enter)
    {
-       bool minBFlag;
-       TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpBandMapMouseInFrameDelay, minBFlag );
        if (minBFlag)
            setHoldUpdateFlag(true);
    }
    else if (event->type() == QEvent::Leave)
    {
-       bool minBFlag;
-       TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpBandMapMouseInFrameDelay, minBFlag );
        if (minBFlag)
        {
            mouseInFrameTimer->stop();

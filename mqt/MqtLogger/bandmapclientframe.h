@@ -209,9 +209,9 @@ private:
     void restoreSplitters();
     void doMarkSpot(int selRow);
     void doUnMarkSpot(int selRow);
-    void doBearingSelected(ClusterSpotData *sd);
+    void doBearingSelected(ClusterSpotData * );
     void doLogSelected(ClusterSpotData *sd);
-    void doMemorySelected(ClusterSpotData *sd);
+    void doMemorySelected(ClusterSpotData *d);
     void doClearSpotSelected(ClusterSpotData *sd, int selRow);
     void doClearClusterSpotsSelected();
 protected:
