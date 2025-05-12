@@ -1,5 +1,7 @@
 #include "skyscanpresetsdialog.h"
 #include "ui_skyscanpresetsdialog.h"
+#include "rotatorcommon.h"
+#include "regsettings.h"
 
 SkyScanPresetsDialog::SkyScanPresetsDialog(QWidget *parent, SkyScanPresetData* curData_, QString editButtonType)
     : QDialog(parent)
@@ -11,24 +13,47 @@ SkyScanPresetsDialog::SkyScanPresetsDialog(QWidget *parent, SkyScanPresetData* c
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
     setWindowTitle(tr("%1 Antenna - SkyScan Preset %2 - %3").arg(curData->getAntennaName()).arg(QString::number(curData->getNumber() + 1), editButtonType));
 
+    RegSettings settings;
+    QByteArray geometry = settings.getSettings().value("SkyScanPresetDialog/geometry").toByteArray();
+    if (geometry.size() > 0)
+        restoreGeometry(geometry);
+
+
+    connect(ui->presetNameLineEdit, &QLineEdit::editingFinished, this, &SkyScanPresetsDialog::presetNameEditingFinished);
     connect(ui->skyScanRotatorStartBearingUpDownButton, QOverload<int>::of(&ToolButtonUpDown::valueChanged), this, &SkyScanPresetsDialog::skyScanStartBearingToolbuttonValueChanged);
     connect(ui->skyScanRotatorEndBearingUpDownButton, QOverload<int>::of(&ToolButtonUpDown::valueChanged), this, &SkyScanPresetsDialog::skyScanEndBearingToolbuttonValueChanged);
     connect(ui->skyScanStepDegreeSpinBox, QOverload<int>::of(&QSpinBox::valueChanged), this, &SkyScanPresetsDialog::skyScanStepDegreesSpinBoxValueChanged);
     connect(ui->skyScanPauseTimeSpinBox, QOverload<int>::of(&QSpinBox::valueChanged), this, &SkyScanPresetsDialog::skyScanPauseTimeSpinBoxValueChanged);
 
-    connect(this, &SkyScanPresetsDialog::updateAntennaOffset, ui->compassDialwidget, &MinosCompass::updateSkyScanEndBearing);
+
     connect(this, &SkyScanPresetsDialog::updateEndStopType,  ui->compassDialwidget, &MinosCompass::updateEndStopType);
     connect(this, &SkyScanPresetsDialog::updateAntennaOffset,  ui->compassDialwidget, &MinosCompass::updateAntennaOffset);
     connect(this, &SkyScanPresetsDialog::updateStartBearing, ui->compassDialwidget, &MinosCompass::updateSkyScanStartBearing);
     connect(this, &SkyScanPresetsDialog::updateEndBearing, ui->compassDialwidget, &MinosCompass::updateSkyScanEndBearing);
 
-    connect(ui->buttonBox, &QDialogButtonBox::accepted, this, &SkyScanPresetsDialog::editAccepted);
-    connect(ui->buttonBox, &QDialogButtonBox::rejected, this, &SkyScanPresetsDialog::editRejected);
+    //connect(ui->buttonBox, &QDialogButtonBox::accepted, this, &SkyScanPresetsDialog::editAccepted);
+    //connect(ui->buttonBox, &QDialogButtonBox::rejected, this, &SkyScanPresetsDialog::editRejected);
 
     ui->compassDialwidget->setDoNotShowNeedle(true);
 
+
+
+    ui->presetNameLineEdit->setText(curData->getPresetName());
+    initialiseStepDegreeToolButton(curData->getStepToolButtonMin(), curData->getStepToolButtonMax(),
+                                                       curData->getStepToolButtonStep(), curData->getSkyScanStepDegreesValue());
+    initialisePauseTimeToolButton(curData->getPauseToolButtonMin(), curData->getPauseToolButtonMax(),
+                                                      curData->getPauseToolButtonStep(), curData->getSkyScanPauseTimeValue());
+    setStartBearingToolButton(curData->getRotatorMinAzimuth(), curData->getRotatorMaxAzimath(), curData->getSkyScanStepDegreesValue(), curData->getSkyScanStartBearing());
+    setEndBearingToolButton(curData->getRotatorMinAzimuth(), curData->getRotatorMaxAzimath(), curData->getSkyScanStepDegreesValue(), curData->getSkyScanEndBearing());
+
     sendEndStopTypeToCompassDial();
-    skyScanDisplayRotatorMinAzMaxAz(curData->getRotatorMinAzimuth(), curData->getRotatorMaxAzimath(), curData->getAntennaOffset(), curData->getSouthStopType(), curData->getEndStopType());
+    sendAntennaOffsetToCompassDial();
+
+    displaySkyScanRotatorMinMaxAzimuth(curData->getRotatorMinAzimuth(), curData->getRotatorMaxAzimath(), curData->getAntennaOffset(), curData->getSouthStopType(), curData->getEndStopType());
+
+    updateSkyScanStartBearingDisplay(curData->getSkyScanStartBearing());
+    updateSkyScanEndBearingDisplay(curData->getSkyScanEndBearing());
+
 
 }
 
@@ -43,9 +68,32 @@ void SkyScanPresetsDialog::editAccepted()
 
 }
 
-
 void SkyScanPresetsDialog::editRejected()
 {
+    doCloseEvent();
+}
+
+void SkyScanPresetsDialog::doCloseEvent()
+{
+    RegSettings settings;
+    settings.getSettings().setValue("RotControlSetup/geometry", saveGeometry());
+}
+
+
+void SkyScanPresetsDialog::closeEvent (QCloseEvent *event)
+{
+
+    doCloseEvent();
+    QWidget::closeEvent(event);
+}
+
+void SkyScanPresetsDialog::presetNameEditingFinished()
+{
+    if (curData->getPresetName() != ui->presetNameLineEdit->text().trimmed())
+    {
+        curData->setPresetName(ui->presetNameLineEdit->text().trimmed());
+        curData->setPresetNameIsDirty(true);
+    }
 
 }
 
@@ -56,9 +104,18 @@ void SkyScanPresetsDialog::skyScanStartBearingToolbuttonValueChanged()
     {
         curData->setSkyScanStartBearing(ui->skyScanRotatorStartBearingUpDownButton->value());
         curData->setSkyScanStartBearingIsDirty(true);
-        calculateAntennaDisplayBearing(curData->getSkyScanStartBearing(), ui->skyScanCompassStartBearingDisplay);
-        emit updateStartBearing(curData->getSkyScanStartBearing());
+        updateSkyScanStartBearingDisplay(curData->getSkyScanStartBearing());
+        //calculateAntennaDisplayBearing(curData->getSkyScanStartBearing(), ui->skyScanCompassStartBearingDisplay);
+        //emit updateStartBearing(curData->getSkyScanStartBearing());
     }
+}
+
+
+void SkyScanPresetsDialog::updateSkyScanStartBearingDisplay(int bearing)
+{
+    emit updateStartBearing(bearing); // send to compass display
+    calculateAntennaDisplayBearing(bearing, ui->skyScanCompassStartBearingDisplay);
+
 }
 
 
@@ -68,20 +125,51 @@ void SkyScanPresetsDialog::skyScanEndBearingToolbuttonValueChanged()
     {
         curData->setSkyScanEndBearing(ui->skyScanRotatorEndBearingUpDownButton->value());
         curData->setSkyScanEndBearingIsDirty(true);
-        calculateAntennaDisplayBearing(curData->getSkyScanEndBearing(), ui->skyScanCompassEndBearingDisplay);
-        emit updateEndBearing(curData->getSkyScanEndBearing());
+        updateSkyScanEndBearingDisplay(curData->getSkyScanEndBearing());
+        //calculateAntennaDisplayBearing(curData->getSkyScanEndBearing(), ui->skyScanCompassEndBearingDisplay);
+        //emit updateEndBearing(curData->getSkyScanEndBearing());
     }
+}
+
+void SkyScanPresetsDialog::updateSkyScanEndBearingDisplay(int bearing)
+{
+    emit updateEndBearing(bearing); // send to compass display
+    calculateAntennaDisplayBearing(bearing, ui->skyScanCompassEndBearingDisplay);
+
 }
 
 void SkyScanPresetsDialog::skyScanStepDegreesSpinBoxValueChanged()
 {
+    if (curData->getSkyScanStepDegreesValue() != ui->skyScanStepDegreeSpinBox->value())
+    {
+        curData->setSkyScanStepDegreesValue(ui->skyScanStepDegreeSpinBox->value());
+        curData->setSkyScanStepDegreesValueIsDirty(true);
+        clearSkyScanStartEndBearings();
+    }
+}
 
+
+void SkyScanPresetsDialog::clearSkyScanStartEndBearings()
+{
+    int brg = 0;
+    curData->setSkyScanStartBearing(brg);
+    ui->skyScanRotatorStartBearingUpDownButton->setValue(brg);
+    updateSkyScanStartBearingDisplay(curData->getSkyScanStartBearing());
+    curData->setSkyScanStartBearingIsDirty(true);
+    curData->setSkyScanEndBearing(brg);
+    ui->skyScanRotatorEndBearingUpDownButton->setValue(brg);
+    updateSkyScanEndBearingDisplay(curData->getSkyScanEndBearing());
+    curData->setSkyScanEndBearingIsDirty(true);
 }
 
 
 void SkyScanPresetsDialog::skyScanPauseTimeSpinBoxValueChanged()
 {
-
+    if (curData->getSkyScanPauseTimeValue() != ui->skyScanPauseTimeSpinBox->value())
+    {
+        curData->setSkyScanPauseTimeValue(ui->skyScanPauseTimeSpinBox->value());
+        curData->setSkyScanPauseTimeValueDirty(true);
+    }
 }
 
 void SkyScanPresetsDialog::sendEndStopTypeToCompassDial()
@@ -89,11 +177,17 @@ void SkyScanPresetsDialog::sendEndStopTypeToCompassDial()
     emit updateEndStopType(curData->getEndStopType());
 }
 
+void SkyScanPresetsDialog::sendAntennaOffsetToCompassDial()
+{
+    emit updateAntennaOffset(curData->getAntennaOffset());
+}
+
 void SkyScanPresetsDialog::initialiseStepDegreeToolButton(int minStep, int maxStep, int stepInterval, int initialValue)
 {
     ui->skyScanStepDegreeSpinBox->setRange(minStep, maxStep);
     ui->skyScanStepDegreeSpinBox->setSingleStep(stepInterval);
     ui->skyScanStepDegreeSpinBox->setValue(initialValue);
+
 
 }
 
@@ -109,6 +203,7 @@ void SkyScanPresetsDialog::setStartBearingToolButton(int minRotatorBearing, int 
     ui->skyScanRotatorStartBearingUpDownButton->setRange(minRotatorBearing, maxRotatorBearing);
     ui->skyScanRotatorStartBearingUpDownButton->setStep(stepInterval);
     ui->skyScanRotatorStartBearingUpDownButton->setValue(value);
+    emit updateStartBearing(curData->getSkyScanStartBearing());
 }
 
 void SkyScanPresetsDialog::setEndBearingToolButton(int minRotatorBearing, int maxRotatorBearing, int stepInterval, int value)
@@ -116,6 +211,7 @@ void SkyScanPresetsDialog::setEndBearingToolButton(int minRotatorBearing, int ma
     ui->skyScanRotatorEndBearingUpDownButton->setRange(minRotatorBearing, maxRotatorBearing);
     ui->skyScanRotatorEndBearingUpDownButton->setStep(stepInterval);
     ui->skyScanRotatorEndBearingUpDownButton->setValue(value);
+    emit updateStartBearing(curData->getSkyScanEndBearing());
 
 }
 
@@ -132,7 +228,7 @@ void SkyScanPresetsDialog::setEndAntennaBearingDisplay(int rotatorEndBearing)
 
 void SkyScanPresetsDialog::calculateAntennaDisplayBearing(int rotatorBearing, QLabel* displayAntennaBearingLabel)
 {
-    int curBearingWithOffset = rotatorBearing + antennaOffset;
+    int curBearingWithOffset = rotatorBearing + curData->getAntennaOffset();
 
 
     //int displayBearing = curBearingWithOffset;
@@ -151,57 +247,26 @@ void SkyScanPresetsDialog::calculateAntennaDisplayBearing(int rotatorBearing, QL
     displayAntennaBearingLabel->setText(compassStartBearing);
 }
 
-void SkyScanPresetsDialog::initialiseRotatorMinMaxAzimuth(int minAz, int maxAz)
+
+
+
+
+
+
+void SkyScanPresetsDialog::displaySkyScanRotatorMinMaxAzimuth(int minAz, int maxAz, int antennaOffset, enum southStop southStopType, enum endStop endStopType)
 {
-    rotatorMinAz = minAz;
-    rotatorMaxAz = maxAz;
+
+    skyScanRotatorDisplayLabels displayLabels;
+    displayLabels.minAzimuthLabel = ui->skyScanRotatorDisplayMinAz;
+    displayLabels.maxAzimuthLabel = ui->skyScanRotatorDisplayMaxAz;
+    displayLabels.antennaOffsetLabel = ui->antennaOffsetDisplay;
+    displayLabels.rotatorStopLabel = ui->rotatorStopLabel;
+    displayLabels.southStopDisplayLabel = ui->southStopDisplay;
+
+    skyScanDisplayRotatorMinAzMaxAz(minAz, maxAz, antennaOffset,  southStopType, endStopType, displayLabels);
 
 }
 
 
-void SkyScanPresetsDialog::initialiseAntennaOffset(int antennaOffset_)
-{
-    antennaOffset = antennaOffset_;
-}
-
-
-void SkyScanPresetsDialog::skyScanDisplayRotatorMinAzMaxAz(int minAz, int maxAz, int antennaOffset, enum southStop southStopType, enum endStop endStopType)
-{
-    Q_UNUSED(endStopType)
-
-    QString minAzStr = QString::number(minAz).rightJustified(3, '0'); //convertBearingToString(minAz);
-    QString maxAzStr = QString::number(maxAz).rightJustified(3, '0'); //convertBearingToString(maxAz);
-
-    ui->skyScanRotatorDisplayMinAz->setText(minAzStr);
-    ui->skyScanRotatorDisplayMaxAz->setText(maxAzStr);
-    ui->antennaOffsetDisplay->setText(QString::number(antennaOffset));
-
- /*   QString sStopDisplay = "South ";
-
-    if (southStopType == S_STOPOFF)
-    {
-        ui->rotatorStopLabel->setVisible(false);
-        ui->southStopDisplay->setVisible(false);
-
-
-    }
-    else if (southStopType == S_STOPINV)
-    {
-        sStopDisplay.append("180 - 180");
-        ui->southStopDisplay->setText(sStopDisplay);
-        ui->southStopDisplay->setVisible(true);
-        ui->rotatorStopLabel->setVisible(true);
-
-    }
-    else if (southStopType == S_STOP_COMPASS_SENSOR)
-    {
-
-        sStopDisplay.append("-180 - 180 Compass Sensor");
-        ui->southStopDisplay->setText(sStopDisplay);
-        ui->southStopDisplay->setVisible(true);
-        ui->rotatorStopLabel->setVisible(true);
-    }
-*/
-}
 
 

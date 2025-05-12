@@ -2,6 +2,7 @@
 #define SKYSCANPRESETSDIALOG_H
 
 #include <QDialog>
+#include <QSettings>
 #include "rotatorcommon.h"
 
 namespace Ui {
@@ -19,15 +20,6 @@ public:
 
 
 
-    void initialiseStepDegreeToolButton(int minStep, int maxStep, int stepInterval, int initialValue);
-    void initialisePauseTimeToolButton(int minTime, int maxTime, int timeInterval, int initialValue);
-
-
-
-    void initialiseRotatorMinMaxAzimuth(int minAz, int maxAz);
-    void initialiseAntennaOffset(int antennaOffset_);
-    void setStartBearingToolButton(int minRotatorBearing, int maxRotatorBearing, int stepInterval, int value);
-    void setEndBearingToolButton(int minRotatorBearing, int maxRotatorBearing, int stepInterval, int value);
 
 signals:
 
@@ -44,6 +36,8 @@ private slots:
     void skyScanStepDegreesSpinBoxValueChanged();
 
     void skyScanPauseTimeSpinBoxValueChanged();
+    void presetNameEditingFinished();
+
 private:
     Ui::SkyScanPresetsDialog *ui;
 
@@ -52,17 +46,24 @@ private:
     SkyScanPresetData* curData = nullptr;
 
 
-    int rotatorMinAz = 0;
-    int rotatorMaxAz = 360;
-    int antennaOffset = 0;
+    void initialiseStepDegreeToolButton(int minStep, int maxStep, int stepInterval, int initialValue);
+    void initialisePauseTimeToolButton(int minTime, int maxTime, int timeInterval, int initialValue);
 
 
+    void setStartBearingToolButton(int minRotatorBearing, int maxRotatorBearing, int stepInterval, int value);
+    void setEndBearingToolButton(int minRotatorBearing, int maxRotatorBearing, int stepInterval, int value);
 
     void setStartAntennaBearingDisplay(int rotatorStartBearing);
     void setEndAntennaBearingDisplay(int rotatorStartBearing);
     void calculateAntennaDisplayBearing(int rotatorBearing, QLabel *displayAntennaBearingLabel);
     void sendEndStopTypeToCompassDial();
-    void skyScanDisplayRotatorMinAzMaxAz(int minAz, int maxAz, int antennaOffset, southStop southStopType, endStop endStopType);
+    void updateSkyScanStartBearingDisplay(int bearing);
+    void updateSkyScanEndBearingDisplay(int bearing);
+    void sendAntennaOffsetToCompassDial();
+    void displaySkyScanRotatorMinMaxAzimuth(int minAz, int maxAz, int antennaOffset, southStop southStopType, endStop endStopType);
+    void closeEvent(QCloseEvent *event) override;
+    void doCloseEvent();
+    void clearSkyScanStartEndBearings();
 };
 
 #endif // SKYSCANPRESETSDIALOG_H

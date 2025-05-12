@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>600</width>
-    <height>420</height>
+    <width>765</width>
+    <height>510</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -163,6 +163,24 @@
               <string>0</string>
              </property>
             </widget>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_4">
+             <item>
+              <widget class="QLabel" name="rotatorStopLabel">
+               <property name="text">
+                <string>RotatorStop:</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="southStopDisplay">
+               <property name="text">
+                <string/>
+               </property>
+              </widget>
+             </item>
+            </layout>
            </item>
            <item>
             <spacer name="horizontalSpacer_2">

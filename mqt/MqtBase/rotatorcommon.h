@@ -140,6 +140,7 @@ QString ANTENNA_PATH_LOGGER();
 QString ANTENNA_PATH_LOCAL();
 inline const QString FILENAME_AVAIL_ANTENNAS = "AvailAntenna.ini";
 inline const QString FILENAME_CURRENT_ANTENNA = "CurrentAntenna.ini";
+inline const QString FILENAME_SKYSCAN_PRESETS = "SkyScanPresets.ini";
 
 
 // Rotator Types
@@ -188,6 +189,8 @@ inline const QString BUTTON_OFF_STYLE = QString("background-color: Gainsboro ; b
 inline const QString SKYSCAN_DIRECTION_INDICATOR_ON = QString("background-color: orange ;\n");
 inline const QString SKYSCAN_DIRECTION_INDICATOR_OFF = QString("");
 
+
+
 extern const QStringList presetButtonLabels;
 
 enum skyScanBearingStates {ROT_STOPPED, ROT_REACHED_TARGET, ROT_NEAR_TARGET, ROT_MOVING, ROT_STOPPED_MOVING};
@@ -202,6 +205,19 @@ void setSkyScanDirectionIndOnOff(QToolButton *indicator, bool state);
 
 bool isEasternBearing(int bearing);
 bool isWesternBearing(int bearing);
+
+
+struct skyScanRotatorDisplayLabels
+{
+    QLabel *minAzimuthLabel;
+    QLabel *maxAzimuthLabel;
+    QLabel *antennaOffsetLabel;
+    QLabel *rotatorStopLabel;
+    QLabel *southStopDisplayLabel;
+};
+
+
+void skyScanDisplayRotatorMinAzMaxAz(int minAz, int maxAz, int antennaOffset, enum southStop southStopType, enum endStop endStopType, skyScanRotatorDisplayLabels displayLabels);
 
 class srotParams
 {
@@ -356,7 +372,7 @@ public:
     int getNumber(){return number;}
     void setNumber(int num){number = num;}
 
-    QString gePresetName(){return presetName;}
+    QString getPresetName(){return presetName;}
     void setPresetName(QString name_){presetName = name_;}
     void setPresetNameIsDirty(bool dirty){presetNameDirty = dirty;}
     bool isPresetNameDirty(){return presetNameDirty;}

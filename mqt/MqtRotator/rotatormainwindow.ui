@@ -32,7 +32,7 @@
           </property>
           <widget class="QTabWidget" name="rotTabs">
            <property name="currentIndex">
-            <number>3</number>
+            <number>1</number>
            </property>
            <widget class="MinosCustomTab" name="setupTab">
             <attribute name="title">
@@ -1519,6 +1519,17 @@
    <header location="global">minoscompass.h</header>
   </customwidget>
   <customwidget>
+   <class>CustomSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header>rotatorMainWindow.h</header>
+  </customwidget>
+  <customwidget>
+   <class>ToolButtonUpDown</class>
+   <extends>QFrame</extends>
+   <header location="global">toolbuttonupdown.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
    <class>BearingLineEdit</class>
    <extends>QLineEdit</extends>
    <header location="global">bearinglineedit.h</header>
@@ -1533,17 +1544,6 @@
    <class>MinosCustomTab</class>
    <extends>QWidget</extends>
    <header>minoscustomtab.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>CustomSpinBox</class>
-   <extends>QSpinBox</extends>
-   <header>rotatorMainWindow.h</header>
-  </customwidget>
-  <customwidget>
-   <class>ToolButtonUpDown</class>
-   <extends>QFrame</extends>
-   <header location="global">toolbuttonupdown.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

@@ -224,8 +224,8 @@ private:
     int maxSkyScanPauseMins = MAX_SKYSCAN_PAUSE_MINS;
     int skyScanPauseStepIncrement = DEFAULT_VALUE_READ_INI;
 
-    QList<PresetButton *> skyScanPresetButton;
-    QVector<SkyScanPresetData*> skyScanPresetsData;
+    QList<QSharedPointer<PresetButton>> skyScanPresetButton;
+    QVector<QSharedPointer<SkyScanPresetData>> skyScanPresetDataList;
 
 
 
@@ -428,7 +428,6 @@ private:
     void initialiseToolButtonUpDown(ToolButtonUpDown *toolButtonUpDown, int min, int max, int interval, int initialValue, enum southStop southStopType );
     void setSkyScanStartBearingToolButtonUpDown();
     void setSkyScanEndBearingToolButtonUpDown();
-    void skyScanDisplayRotatorMinAzMaxAz(int minAz, int maxAz, int antennaOffset, enum southStop, enum endStop endStopType);
 
     void setRotatorMainWindowTabVisible(int tabNum, bool state);
     void setSkyScanStartButtonState(bool state);
@@ -457,6 +456,8 @@ private:
     int calcAntennaBearing(int bearing);
     void initSkyScanPresetButtons();
     void loadSkyScanPresets(QString currentAntennaName);
+    void saveSkyScanPreset(SkyScanPresetData *curData, int buttonNumber);
+    void displaySkyScanRotatorMinMaxAzimuth(int minAz, int maxAz, int antennaOffset, southStop southStopType, endStop endStopType);
 };
 
 #endif // ROTATORMAINWINDOW_H
