@@ -1664,15 +1664,17 @@ void BandmapClientFrame::filterButtonSelected()
 
 bool BandmapClientFrame::event(QEvent *event)
 {
-    bool minBFlag;
-    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpBandMapMouseInFrameDelay, minBFlag );
    if (event->type() == QEvent::Enter)
    {
+        bool minBFlag;
+        TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpBandMapMouseInFrameDelay, minBFlag );
        if (minBFlag)
            setHoldUpdateFlag(true);
    }
    else if (event->type() == QEvent::Leave)
    {
+       bool minBFlag;
+       TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpBandMapMouseInFrameDelay, minBFlag );
        if (minBFlag)
        {
            mouseInFrameTimer->stop();
