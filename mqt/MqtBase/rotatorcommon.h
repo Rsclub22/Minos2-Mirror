@@ -175,10 +175,12 @@ enum overlapStat { NO_OVERLAP, NEG_OVERLAP, POS_OVERLAP};
 // SkyScan Default Values
 inline const int MIN_SKYSCAN_STEP_DEGREES = 5;
 inline const int MAX_SKYSCAN_STEP_DEGREES = 45;
-inline const int SKYSCAN_STEP_DEGREES = 5;
-inline const int DEFAULT_VALUE_READ_INI = 10000;    // no value stored in ini file
+inline const int DEFAULT_SKYSCAN_STEP_INTERVAL_DEGREES = 5;
+inline const int DEFAULT_SKYSCAN_STEP_VALUE = 5;
 inline const int MIN_SKYSCAN_PAUSE_MINS = 1;
 inline const int MAX_SKYSCAN_PAUSE_MINS = 45;
+inline const int DEFAULT_SKYSCAN_PAUSE_TIME_INTERVAL = 1;
+inline const int DEFAULT_SKYSCAN_PAUSE_TIME_VALUE = 1;
 
 // Pushbutton Styles
 
@@ -361,12 +363,39 @@ private:
 
 };
 
-class SkyScanPresetData
+class SkyScanData
 {
 
 public:
 
-    SkyScanPresetData(){}
+    SkyScanData(){}
+
+    void skyScanDataClear()
+    {
+        number = 0;
+        presetName.clear();
+        presetNameDirty = false;
+        antennaName.clear();
+        endStopType = endStop::ROT_0_360;
+        southStopType= southStop::S_STOPOFF;
+        skyScanStepDegreesValue = DEFAULT_SKYSCAN_STEP_VALUE;
+        stepToolButtonMin= MIN_SKYSCAN_STEP_DEGREES;
+        stepToolButtonMax = MAX_SKYSCAN_STEP_DEGREES;
+        stepToolButtonStepInterval = DEFAULT_SKYSCAN_STEP_INTERVAL_DEGREES;
+        skyScanStepDegreesValueIsDirty = false;
+        skyScanPauseTimeValue = DEFAULT_SKYSCAN_PAUSE_TIME_VALUE;
+        pauseToolButtonMin = MIN_SKYSCAN_PAUSE_MINS;
+        pauseToolButtonMax = MAX_SKYSCAN_PAUSE_MINS;
+        pauseToolButtonStepInterval = DEFAULT_SKYSCAN_PAUSE_TIME_INTERVAL;
+        skyScanPauseTimeValueIsDirty = false;
+        rotatorMinAzimuth = COMPASS_MIN0;
+        rotatorMaxAzimath= COMPASS_MAX360;
+        antennaOffset = 0;
+        skyScanStartBearing = COMPASS_MIN0;
+        skyScanStartBearingIsDirty = false;
+        skyScanEndBearing = COMPASS_MIN0;
+        skyScanEndBearingIsDirty = false;
+    }
 
 
     int getNumber(){return number;}
@@ -397,8 +426,8 @@ public:
     int getStepToolButtonMax(){return stepToolButtonMax;};
     void setStepToolButtonMax(int stepToolButtonMax_){stepToolButtonMax = stepToolButtonMax_;}
 
-    int getStepToolButtonStep(){return stepToolButtonStep;};
-    void setStepToolButtonStep(int stepToolButtonStep_){stepToolButtonStep = stepToolButtonStep_;}
+    int getStepToolButtonStepInterval(){return stepToolButtonStepInterval;};
+    void setStepToolButtonStepInterval(int stepToolButtonStepInterval_){stepToolButtonStepInterval = stepToolButtonStepInterval_;}
 
     int getSkyScanPauseTimeValue(){return skyScanPauseTimeValue;};
     void setSkyScanPauseTimeValue(int skyScanPauseTimeValue_){skyScanPauseTimeValue = skyScanPauseTimeValue_;}
@@ -411,13 +440,13 @@ public:
     int getPauseToolButtonMax(){return pauseToolButtonMax;};
     void setPauseToolButtonMax(int pauseToolButtonMax_){pauseToolButtonMax = pauseToolButtonMax_;}
 
-    int getPauseToolButtonStep(){return pauseToolButtonStep;};
-    void setPauseToolButtonStep(int pauseToolButtonStep_){pauseToolButtonStep = pauseToolButtonStep_;}
+    int getPauseToolButtonStepInterval(){return pauseToolButtonStepInterval;};
+    void setPauseToolButtonStepInterval(int pauseToolButtonStepInterval_){pauseToolButtonStepInterval = pauseToolButtonStepInterval_;}
 
     int getRotatorMinAzimuth(){return rotatorMinAzimuth;};
     void setRotatorMinAzimuth(int rotatorMinAzimuth_ ){rotatorMinAzimuth = rotatorMinAzimuth_;}
 
-    int getRotatorMaxAzimath(){return rotatorMaxAzimath;};
+    int getRotatorMaxAzimuth(){return rotatorMaxAzimath;};
     void setRotatorMaxAzimuth(int rotatorMaxAzimuth_ ){rotatorMaxAzimath = rotatorMaxAzimuth_;}
 
     int getAntennaOffset(){return antennaOffset;};
@@ -445,8 +474,8 @@ public:
         skyScanEndBearingIsDirty = false;
     }
 
-    SkyScanPresetData copy() const {
-        SkyScanPresetData c;
+    SkyScanData copy() const {
+        SkyScanData c;
         c.setNumber(number);
         c.setPresetName(presetName);
         c.setAntennaName(antennaName);
@@ -455,12 +484,12 @@ public:
         c.setSkyScanStepDegreesValueIsDirty(skyScanStepDegreesValueIsDirty);
         c.setStepToolButtonMin(stepToolButtonMin);
         c.setStepToolButtonMax(stepToolButtonMax);
-        c.setStepToolButtonStep(stepToolButtonStep);
+        c.setStepToolButtonStepInterval(stepToolButtonStepInterval);
         c.setSkyScanPauseTimeValue(skyScanPauseTimeValue);
         c.setSkyScanPauseTimeValueDirty(skyScanPauseTimeValueIsDirty);
         c.setPauseToolButtonMin(pauseToolButtonMin);
         c.setPauseToolButtonMax(pauseToolButtonMax);
-        c.setPauseToolButtonStep(pauseToolButtonStep);
+        c.setPauseToolButtonStepInterval(pauseToolButtonStepInterval);
         c.setRotatorMinAzimuth(rotatorMinAzimuth);
         c.setRotatorMaxAzimuth(rotatorMaxAzimath);
         c.setAntennaOffset(antennaOffset);
@@ -478,24 +507,24 @@ private:
     QString presetName;
     bool presetNameDirty = false;
     QString antennaName;
-    endStop endStopType;
-    southStop southStopType;
-    int skyScanStepDegreesValue;
-    int stepToolButtonMin;
-    int stepToolButtonMax;
-    int stepToolButtonStep;
+    endStop endStopType = endStop::ROT_0_360;
+    southStop southStopType= southStop::S_STOPOFF;
+    int skyScanStepDegreesValue = DEFAULT_SKYSCAN_STEP_VALUE;
+    int stepToolButtonMin= MIN_SKYSCAN_STEP_DEGREES;
+    int stepToolButtonMax = MAX_SKYSCAN_STEP_DEGREES;
+    int stepToolButtonStepInterval = DEFAULT_SKYSCAN_STEP_INTERVAL_DEGREES;
     bool skyScanStepDegreesValueIsDirty = false;
-    int skyScanPauseTimeValue;
-    int pauseToolButtonMin;
-    int pauseToolButtonMax;
-    int pauseToolButtonStep;
+    int skyScanPauseTimeValue = DEFAULT_SKYSCAN_PAUSE_TIME_VALUE;
+    int pauseToolButtonMin = MIN_SKYSCAN_PAUSE_MINS;
+    int pauseToolButtonMax = MAX_SKYSCAN_PAUSE_MINS;
+    int pauseToolButtonStepInterval = DEFAULT_SKYSCAN_PAUSE_TIME_INTERVAL;
     bool skyScanPauseTimeValueIsDirty = false;
-    int rotatorMinAzimuth;
-    int rotatorMaxAzimath;
-    int antennaOffset;
-    int skyScanStartBearing;
+    int rotatorMinAzimuth = COMPASS_MIN0;
+    int rotatorMaxAzimath= COMPASS_MAX360;
+    int antennaOffset = 0;
+    int skyScanStartBearing = COMPASS_MIN0;
     bool skyScanStartBearingIsDirty = false;
-    int skyScanEndBearing;
+    int skyScanEndBearing = COMPASS_MIN0;
     bool skyScanEndBearingIsDirty = false;
 
 

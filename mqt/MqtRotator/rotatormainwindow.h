@@ -197,21 +197,23 @@ private:
     bool skyScanEnabled = false;
     bool skyScanActive = false;
     bool saveSkyScanOnClose = false;
-    int startSkyScanBrg = 0;
-    int endSkyScanBrg = 0;
-    int skyScanStepDegrees = 0;
 
-    int skyScanPauseMins = 0;
 
-    int skyScanMinAzimuth = COMPASS_MIN0;
-    int skyScanMaxAzimuth = COMPASS_MAX360;
+    //int startSkyScanBrg = 0;
+    //int endSkyScanBrg = 0;
+    //int skyScanStepDegrees = 0;
+
+    //int skyScanPauseMins = 0;
+
+    //int skyScanMinAzimuth = COMPASS_MIN0;
+    //int skyScanMaxAzimuth = COMPASS_MAX360;
 
 
     // skyScan Step Degrees Spinbox
 
-    int minSkyScanStepDegrees = MIN_SKYSCAN_STEP_DEGREES;
-    int maxSkyScanStepDegrees = MAX_SKYSCAN_STEP_DEGREES;
-    int stepDegreesIncrement = SKYSCAN_STEP_DEGREES;
+    //int minSkyScanStepDegrees = MIN_SKYSCAN_STEP_DEGREES;
+    //int maxSkyScanStepDegrees = MAX_SKYSCAN_STEP_DEGREES;
+    //int stepDegreesIncrement = SKYSCAN_STEP_DEGREES;
 
     // skyScan Start Bearing Spinbox
 
@@ -220,12 +222,14 @@ private:
 
     // skyScan Pause Mins Spinbox
 
-    int minSkyScanPauseMins = MIN_SKYSCAN_PAUSE_MINS;
-    int maxSkyScanPauseMins = MAX_SKYSCAN_PAUSE_MINS;
-    int skyScanPauseStepIncrement = DEFAULT_VALUE_READ_INI;
+    //int minSkyScanPauseMins = MIN_SKYSCAN_PAUSE_MINS;
+    //int maxSkyScanPauseMins = MAX_SKYSCAN_PAUSE_MINS;
+    //int skyScanPauseStepIncrement = DEFAULT_VALUE_READ_INI;
+
+    SkyScanData activeData;
 
     QList<QSharedPointer<PresetButton>> skyScanPresetButton;
-    QVector<QSharedPointer<SkyScanPresetData>> skyScanPresetDataList;
+    QVector<QSharedPointer<SkyScanData>> skyScanPresetDataList;
 
 
 
@@ -365,6 +369,9 @@ private slots:
     void skyScanPresetClear(int buttonNumber);
     void showSkyScanPresetMenu(int buttonNumber);
     void skyScanPresetWrite(int buttonNumber);
+
+    void onSkyScanStepDegreeSpinBoxChanged();
+    void onSkyScanPauseTimeSpinBoxChanged();
 private:
     void rotateTo(int bearing);
     //int northCalcTarget(int targetBearing);
@@ -399,16 +406,16 @@ private:
     void setTestMode(bool test);
 
     void setSkyScanEnableChkBoxEnabled(bool enabled);
-    void saveSkyScanSettings(QString currentAntennaName);
-    void readSkyScanSettings(QString currentAntennaName);
+    void saveSkyScanSettings(QString currentAntennaName, SkyScanData &activeData);
+    void readSkyScanSettings(QString currentAntennaName, SkyScanData &activeData);
     void setSkyScanComponentsEnabled(bool enabled);
     void closeSkyScan(QString currentAntennaName);
     void openSkyScan(QString currentAntennaName);
     void setSkyScanEndBrgLineEditValidator();
     void setSkyScanStartBrgLineEditValidator();
     bool readSkyScanEnableSetting(QString currentAntennaName);
-    void readSkyScanCommonSettings();
-    void dumpSkyScanSettingsToTraceLog();
+    void readSkyScanCommonSettings(SkyScanData &activeData);
+    void dumpSkyScanSettingsToTraceLog(SkyScanData &activeData);
     void setSkyScanGroupBoxEnabled(bool enabled);
     bool isSkyScanEnabledAndVisible();
     void setTargetTabEnabled(bool enabled);
@@ -422,8 +429,8 @@ private:
 
 
     void initialiseSpinBox(CustomSpinBox *spinBox, int min, int max, int interval, int initialValue, bool readOnly);
-    void saveSkyScanCommonSettings();
-    void initialiseSkyScannerSpinners();
+    void saveSkyScanCommonSettings(SkyScanData &activeData);
+    //void initialiseSkyScannerSpinners();
 
     void initialiseToolButtonUpDown(ToolButtonUpDown *toolButtonUpDown, int min, int max, int interval, int initialValue, enum southStop southStopType );
     void setSkyScanStartBearingToolButtonUpDown();
@@ -456,7 +463,7 @@ private:
     int calcAntennaBearing(int bearing);
     void initSkyScanPresetButtons();
     void loadSkyScanPresets(QString currentAntennaName);
-    void saveSkyScanPreset(SkyScanPresetData *curData, int buttonNumber);
+    void saveSkyScanPreset(SkyScanData &curData, int buttonNumber);
     void displaySkyScanRotatorMinMaxAzimuth(int minAz, int maxAz, int antennaOffset, southStop southStopType, endStop endStopType);
 };
 

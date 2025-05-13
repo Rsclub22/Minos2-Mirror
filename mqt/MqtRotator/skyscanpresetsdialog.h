@@ -14,7 +14,7 @@ class SkyScanPresetsDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit SkyScanPresetsDialog(QWidget *parent, SkyScanPresetData* _curData, QString editButtonType);
+    explicit SkyScanPresetsDialog(QWidget *parent, SkyScanData* _curData, QString editButtonType);
     ~SkyScanPresetsDialog();
 
 
@@ -38,12 +38,14 @@ private slots:
     void skyScanPauseTimeSpinBoxValueChanged();
     void presetNameEditingFinished();
 
+    void onSkyScanStepDegreeSpinBoxChanged();
+    void onSkyScanPauseTimeSpinBoxChanged();
 private:
     Ui::SkyScanPresetsDialog *ui;
 
 
 
-    SkyScanPresetData* curData = nullptr;
+    SkyScanData* curData = nullptr;
 
 
     void initialiseStepDegreeToolButton(int minStep, int maxStep, int stepInterval, int initialValue);

@@ -3,7 +3,7 @@
 #include "rotatorcommon.h"
 #include "regsettings.h"
 
-SkyScanPresetsDialog::SkyScanPresetsDialog(QWidget *parent, SkyScanPresetData* curData_, QString editButtonType)
+SkyScanPresetsDialog::SkyScanPresetsDialog(QWidget *parent, SkyScanData* curData_, QString editButtonType)
     : QDialog(parent)
     , ui(new Ui::SkyScanPresetsDialog)
     , curData(curData_)
@@ -31,6 +31,11 @@ SkyScanPresetsDialog::SkyScanPresetsDialog(QWidget *parent, SkyScanPresetData* c
     connect(this, &SkyScanPresetsDialog::updateStartBearing, ui->compassDialwidget, &MinosCompass::updateSkyScanStartBearing);
     connect(this, &SkyScanPresetsDialog::updateEndBearing, ui->compassDialwidget, &MinosCompass::updateSkyScanEndBearing);
 
+    //remove spin box highlighting
+    connect(ui->skyScanStepDegreeSpinBox, SIGNAL(valueChanged(int)), this, SLOT(onSkyScanStepDegreeSpinBoxChanged()), Qt::QueuedConnection);
+    connect(ui->skyScanPauseTimeSpinBox, SIGNAL(valueChanged(int)), this, SLOT(onSkyScanPauseTimeSpinBoxChanged()), Qt::QueuedConnection);
+
+
     //connect(ui->buttonBox, &QDialogButtonBox::accepted, this, &SkyScanPresetsDialog::editAccepted);
     //connect(ui->buttonBox, &QDialogButtonBox::rejected, this, &SkyScanPresetsDialog::editRejected);
 
@@ -40,16 +45,16 @@ SkyScanPresetsDialog::SkyScanPresetsDialog(QWidget *parent, SkyScanPresetData* c
 
     ui->presetNameLineEdit->setText(curData->getPresetName());
     initialiseStepDegreeToolButton(curData->getStepToolButtonMin(), curData->getStepToolButtonMax(),
-                                                       curData->getStepToolButtonStep(), curData->getSkyScanStepDegreesValue());
+                                                       curData->getStepToolButtonStepInterval(), curData->getSkyScanStepDegreesValue());
     initialisePauseTimeToolButton(curData->getPauseToolButtonMin(), curData->getPauseToolButtonMax(),
-                                                      curData->getPauseToolButtonStep(), curData->getSkyScanPauseTimeValue());
-    setStartBearingToolButton(curData->getRotatorMinAzimuth(), curData->getRotatorMaxAzimath(), curData->getSkyScanStepDegreesValue(), curData->getSkyScanStartBearing());
-    setEndBearingToolButton(curData->getRotatorMinAzimuth(), curData->getRotatorMaxAzimath(), curData->getSkyScanStepDegreesValue(), curData->getSkyScanEndBearing());
+                                                      curData->getPauseToolButtonStepInterval(), curData->getSkyScanPauseTimeValue());
+    setStartBearingToolButton(curData->getRotatorMinAzimuth(), curData->getRotatorMaxAzimuth(), curData->getSkyScanStepDegreesValue(), curData->getSkyScanStartBearing());
+    setEndBearingToolButton(curData->getRotatorMinAzimuth(), curData->getRotatorMaxAzimuth(), curData->getSkyScanStepDegreesValue(), curData->getSkyScanEndBearing());
 
     sendEndStopTypeToCompassDial();
     sendAntennaOffsetToCompassDial();
 
-    displaySkyScanRotatorMinMaxAzimuth(curData->getRotatorMinAzimuth(), curData->getRotatorMaxAzimath(), curData->getAntennaOffset(), curData->getSouthStopType(), curData->getEndStopType());
+    displaySkyScanRotatorMinMaxAzimuth(curData->getRotatorMinAzimuth(), curData->getRotatorMaxAzimuth(), curData->getAntennaOffset(), curData->getSouthStopType(), curData->getEndStopType());
 
     updateSkyScanStartBearingDisplay(curData->getSkyScanStartBearing());
     updateSkyScanEndBearingDisplay(curData->getSkyScanEndBearing());
@@ -196,6 +201,17 @@ void SkyScanPresetsDialog::initialisePauseTimeToolButton(int minTime, int maxTim
     ui->skyScanPauseTimeSpinBox->setRange(minTime, maxTime);
     ui->skyScanPauseTimeSpinBox->setSingleStep(timeInterval);
     ui->skyScanPauseTimeSpinBox->setValue(initialValue);
+}
+
+void SkyScanPresetsDialog::onSkyScanStepDegreeSpinBoxChanged() // slot
+{
+    ui->skyScanStepDegreeSpinBox->findChild<QLineEdit*>()->deselect();
+}
+
+
+void SkyScanPresetsDialog::onSkyScanPauseTimeSpinBoxChanged() // slot
+{
+    ui->skyScanPauseTimeSpinBox->findChild<QLineEdit*>()->deselect();
 }
 
 void SkyScanPresetsDialog::setStartBearingToolButton(int minRotatorBearing, int maxRotatorBearing, int stepInterval, int value)
