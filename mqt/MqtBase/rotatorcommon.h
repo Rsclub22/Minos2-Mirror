@@ -188,9 +188,10 @@ inline const QString BUTTON_ON_STYLE = QString("background-color: Sandybrown ; b
 inline const QString BUTTON_OFF_STYLE = QString("background-color: Gainsboro ; border-style: outset; border-width: 1px; border-color: black; min-width: 5em; padding: 3px;\n");
 
 // SkyScan Rotation Direction Indicators
-inline const QString SKYSCAN_DIRECTION_INDICATOR_ON = QString("background-color: orange ;\n");
-inline const QString SKYSCAN_DIRECTION_INDICATOR_OFF = QString("");
-
+//inline const QString SKYSCAN_DIRECTION_INDICATOR_ON = QString("background-color: orange ;\n");
+//inline const QString SKYSCAN_DIRECTION_INDICATOR_OFF = QString("");
+inline const QString SKYSCAN_DIRECTION_INDICATOR_ON = "QToolButton { background-color: orange; }";
+inline const QString SKYSCAN_DIRECTION_INDICATOR_OFF = "QToolButton { background-color: none; }";
 
 
 extern const QStringList presetButtonLabels;
@@ -370,7 +371,7 @@ public:
 
     SkyScanData(){}
 
-    void skyScanDataClear()
+    void clear()
     {
         number = 0;
         presetName.clear();
@@ -395,6 +396,7 @@ public:
         skyScanStartBearingIsDirty = false;
         skyScanEndBearing = COMPASS_MIN0;
         skyScanEndBearingIsDirty = false;
+        createdFromNew = false;
     }
 
 
@@ -462,6 +464,9 @@ public:
     void setSkyScanEndBearingIsDirty(bool dirty){skyScanEndBearingIsDirty =dirty;}
     bool isSkyScanEndBearingDirty(){return skyScanEndBearingIsDirty;}
 
+    bool hasBeenCreatedFromNew(){return createdFromNew;}
+    void setCreatedFromNew(bool createdFromNew_){createdFromNew = createdFromNew_;}
+
     bool areSettingsDirty(){return isPresetNameDirty() || isSkyScanStepDegreesValueDirty() || isSkyScanPauseTimeValueDirty()
                                      || isSkyScanStartBearingIsDirty() || isSkyScanEndBearingDirty();}
 
@@ -497,6 +502,7 @@ public:
         c.setSkyScanStartBearingIsDirty(skyScanStartBearingIsDirty);
         c.setSkyScanEndBearing(skyScanEndBearing);
         c.setSkyScanEndBearingIsDirty(skyScanEndBearingIsDirty);
+        c.setCreatedFromNew(createdFromNew);
         return c;
     }
 
@@ -526,6 +532,7 @@ private:
     bool skyScanStartBearingIsDirty = false;
     int skyScanEndBearing = COMPASS_MIN0;
     bool skyScanEndBearingIsDirty = false;
+    bool createdFromNew = false;
 
 
 

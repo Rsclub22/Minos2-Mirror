@@ -444,6 +444,10 @@ QList<SkyScanArcSegment> MinosCompass::splitBearingArc(int start, int end, endSt
             addSegment(start, 360, false, mainColor);
             addSegment(360, end, true, overlapColor);
         }
+        else if (start >= 0 && end <= 360)
+        {
+            addSegment(start, end, false, mainColor);
+        }
         else if (start < 0 && end > 360)
         {
             addSegment(start, 0, true, negativeOverlapColor);

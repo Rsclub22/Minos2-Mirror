@@ -1,7 +1,21 @@
+/////////////////////////////////////////////////////////////////////////////
+// $Id$
+//
+// PROJECT NAME 		Minos Amateur Radio Control and Logging System
+//                      Rotator Control
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2025
+//
+//
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+
 #include "skyscanpresetsdialog.h"
 #include "ui_skyscanpresetsdialog.h"
 #include "rotatorcommon.h"
 #include "regsettings.h"
+#include <QMessageBox>
 
 SkyScanPresetsDialog::SkyScanPresetsDialog(QWidget *parent, SkyScanData* curData_, QString editButtonType)
     : QDialog(parent)
@@ -281,6 +295,19 @@ void SkyScanPresetsDialog::displaySkyScanRotatorMinMaxAzimuth(int minAz, int max
 
     skyScanDisplayRotatorMinAzMaxAz(minAz, maxAz, antennaOffset,  southStopType, endStopType, displayLabels);
 
+}
+
+
+void SkyScanPresetsDialog::accept()
+{
+    if (ui->presetNameLineEdit->text().trimmed().isEmpty())
+    {
+        QMessageBox::warning(this, "SkyScan Preset Missing Name", "Please enter a preset name.");
+        return;
+    }
+
+
+    QDialog::accept();
 }
 
 

@@ -1,3 +1,14 @@
+/////////////////////////////////////////////////////////////////////////////
+// $Id$
+//
+// PROJECT NAME 		Minos Amateur Radio Control and Logging System
+//                      Rotator Control
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2025
+//
+//
+/////////////////////////////////////////////////////////////////////////////
+
+
 #ifndef SKYSCANPRESETSDIALOG_H
 #define SKYSCANPRESETSDIALOG_H
 
@@ -66,6 +77,7 @@ private:
     void closeEvent(QCloseEvent *event) override;
     void doCloseEvent();
     void clearSkyScanStartEndBearings();
+    void accept() override;
 };
 
 #endif // SKYSCANPRESETSDIALOG_H

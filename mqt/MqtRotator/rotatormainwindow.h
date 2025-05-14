@@ -199,33 +199,6 @@ private:
     bool saveSkyScanOnClose = false;
 
 
-    //int startSkyScanBrg = 0;
-    //int endSkyScanBrg = 0;
-    //int skyScanStepDegrees = 0;
-
-    //int skyScanPauseMins = 0;
-
-    //int skyScanMinAzimuth = COMPASS_MIN0;
-    //int skyScanMaxAzimuth = COMPASS_MAX360;
-
-
-    // skyScan Step Degrees Spinbox
-
-    //int minSkyScanStepDegrees = MIN_SKYSCAN_STEP_DEGREES;
-    //int maxSkyScanStepDegrees = MAX_SKYSCAN_STEP_DEGREES;
-    //int stepDegreesIncrement = SKYSCAN_STEP_DEGREES;
-
-    // skyScan Start Bearing Spinbox
-
-    //int minSkyScanStartBearing = DEFAULT_VALUE_READ_INI;
-    //int maxSkyScanStartBearing = DEFAULT_VALUE_READ_INI;
-
-    // skyScan Pause Mins Spinbox
-
-    //int minSkyScanPauseMins = MIN_SKYSCAN_PAUSE_MINS;
-    //int maxSkyScanPauseMins = MAX_SKYSCAN_PAUSE_MINS;
-    //int skyScanPauseStepIncrement = DEFAULT_VALUE_READ_INI;
-
     SkyScanData activeData;
 
     QList<QSharedPointer<PresetButton>> skyScanPresetButton;
@@ -370,8 +343,7 @@ private slots:
     void showSkyScanPresetMenu(int buttonNumber);
     void skyScanPresetWrite(int buttonNumber);
 
-    void onSkyScanStepDegreeSpinBoxChanged();
-    void onSkyScanPauseTimeSpinBoxChanged();
+
 private:
     void rotateTo(int bearing);
     //int northCalcTarget(int targetBearing);
@@ -433,8 +405,8 @@ private:
     //void initialiseSkyScannerSpinners();
 
     void initialiseToolButtonUpDown(ToolButtonUpDown *toolButtonUpDown, int min, int max, int interval, int initialValue, enum southStop southStopType );
-    void setSkyScanStartBearingToolButtonUpDown();
-    void setSkyScanEndBearingToolButtonUpDown();
+    void setSkyScanStartBearingToolButtonUpDown(SkyScanData &activeData);
+    void setSkyScanEndBearingToolButtonUpDown(SkyScanData &activeData);
 
     void setRotatorMainWindowTabVisible(int tabNum, bool state);
     void setSkyScanStartButtonState(bool state);
@@ -465,6 +437,11 @@ private:
     void loadSkyScanPresets(QString currentAntennaName);
     void saveSkyScanPreset(SkyScanData &curData, int buttonNumber);
     void displaySkyScanRotatorMinMaxAzimuth(int minAz, int maxAz, int antennaOffset, southStop southStopType, endStop endStopType);
+    void updateSkyScanDisplay(SkyScanData &activeData);
+    void setActivePresetDisplay(const QString presetName);
+    void clearActivePresetDisplay();
+    void setSkyScanPresetIndicationOnOff(int buttonNumber, bool state);
+    void clearAllSkyScanPresetButtonsIndicators(int count);
 };
 
 #endif // ROTATORMAINWINDOW_H

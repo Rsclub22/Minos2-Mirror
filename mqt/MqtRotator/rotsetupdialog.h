@@ -125,6 +125,8 @@ private:
     void updateAvailAntennasToVersion2();
 
     void updateAvailAntennasToVersion3();
+    void deleteSkyScanPreset(QSettings &config, const QString &antennaName, int n);
+    int countSkyScanPresets(QSettings &config, const QString &antennaName);
 };
 
 #endif // SETUPDIALOG_H

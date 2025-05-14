@@ -15,6 +15,7 @@
 #include <QCheckBox>
 #include <QMessageBox>
 #include <QInputDialog>
+#include <QFile>
 
 #include "regsettings.h"
 #include "MShowMessageDlg.h"
@@ -695,13 +696,63 @@ void RotSetupDialog::removeAntenna()
     antennaTab.removeAt(currentIndex);
     numAvailAntennas--;
 
+    // Delete Skyscan Presets
 
-    //emit antennaTabChanged();
+    QString fileName = ANTENNA_PATH_LOGGER() + FILENAME_SKYSCAN_PRESETS;
+
+    if (QFile::exists(fileName))
+    {
+        QSettings config(fileName, QSettings::IniFormat);
+        // get number of presets for this antenna
+        int presetCount = countSkyScanPresets(config, currentName);
+        for (int i = 0; i < presetCount; i++)
+        {
+            deleteSkyScanPreset(config, currentName, i);
+        }
+    }
 
 
 
 }
 
+
+void RotSetupDialog::deleteSkyScanPreset(QSettings &config, const QString& antennaName, int n)
+{
+
+
+    const QString prefix = QString("%1_%2%3").arg(antennaName).arg(SKYSCAN_PRESET).arg(n);
+
+    QStringList groups = config.childGroups();
+    for (const QString& group : groups)
+    {
+        if (group == prefix)
+        {
+           config.beginGroup(group);
+            config.remove("");  // Remove all keys in this group
+            config.endGroup();
+        }
+    }
+    config.sync();
+}
+
+
+int RotSetupDialog::countSkyScanPresets(QSettings &config, const QString& antennaName)
+{
+
+    // Matches e.g., Dummy_SkyScanPreset0, Dummy_SkyScanPreset1, etc.
+    QRegularExpression pattern("^" + QRegularExpression::escape(antennaName) + "SKYSCAN_PRESET" + "\\d+$");
+
+    int count = 0;
+    QStringList groups = config.childGroups();
+    for (const QString& group : groups)
+    {
+        if (pattern.match(group).hasMatch())
+        {
+            ++count;
+        }
+    }
+    return count;
+}
 
 void RotSetupDialog::editAntennaName()
 {
