@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>765</width>
-    <height>510</height>
+    <width>505</width>
+    <height>409</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -493,6 +493,13 @@
                  </layout>
                 </item>
                </layout>
+              </item>
+              <item>
+               <widget class="QPushButton" name="copyToPresetPushButton">
+                <property name="text">
+                 <string>Copy Current Settings To Preset</string>
+                </property>
+               </widget>
               </item>
              </layout>
             </item>

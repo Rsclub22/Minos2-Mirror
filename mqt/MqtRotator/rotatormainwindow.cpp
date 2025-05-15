@@ -4193,7 +4193,7 @@ void RotatorMainWindow::skyScanPresetWrite(int buttonNumber)
 
         logMessage(QString("SkyScan Preset write (new) Selected = %1").arg(QString::number(buttonNumber + 1)));
         SkyScanPresetsDialog skyScanPresetDialog(this, &curData, "New");
-
+        skyScanPresetDialog.setActiveData(&activeData); // to allow copying to preset
 
         if (skyScanPresetDialog.exec() == QDialog::Accepted)
         {

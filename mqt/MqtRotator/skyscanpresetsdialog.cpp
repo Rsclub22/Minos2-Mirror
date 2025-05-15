@@ -17,10 +17,11 @@
 #include "regsettings.h"
 #include <QMessageBox>
 
-SkyScanPresetsDialog::SkyScanPresetsDialog(QWidget *parent, SkyScanData* curData_, QString editButtonType)
+SkyScanPresetsDialog::SkyScanPresetsDialog(QWidget *parent, SkyScanData* curData_, QString editButtonType_)
     : QDialog(parent)
     , ui(new Ui::SkyScanPresetsDialog)
     , curData(curData_)
+    , editButtonType(editButtonType_)
 
 {
     ui->setupUi(this);
@@ -29,7 +30,7 @@ SkyScanPresetsDialog::SkyScanPresetsDialog(QWidget *parent, SkyScanData* curData
 
     RegSettings settings;
     QByteArray geometry = settings.getSettings().value("SkyScanPresetDialog/geometry").toByteArray();
-    if (geometry.size() > 0)
+    if (!geometry.isEmpty())
         restoreGeometry(geometry);
 
 
@@ -38,12 +39,15 @@ SkyScanPresetsDialog::SkyScanPresetsDialog(QWidget *parent, SkyScanData* curData
     connect(ui->skyScanRotatorEndBearingUpDownButton, QOverload<int>::of(&ToolButtonUpDown::valueChanged), this, &SkyScanPresetsDialog::skyScanEndBearingToolbuttonValueChanged);
     connect(ui->skyScanStepDegreeSpinBox, QOverload<int>::of(&QSpinBox::valueChanged), this, &SkyScanPresetsDialog::skyScanStepDegreesSpinBoxValueChanged);
     connect(ui->skyScanPauseTimeSpinBox, QOverload<int>::of(&QSpinBox::valueChanged), this, &SkyScanPresetsDialog::skyScanPauseTimeSpinBoxValueChanged);
-
+    connect(ui->copyToPresetPushButton, &QPushButton::clicked, this, &SkyScanPresetsDialog::copyToPresetClicked);
 
     connect(this, &SkyScanPresetsDialog::updateEndStopType,  ui->compassDialwidget, &MinosCompass::updateEndStopType);
     connect(this, &SkyScanPresetsDialog::updateAntennaOffset,  ui->compassDialwidget, &MinosCompass::updateAntennaOffset);
     connect(this, &SkyScanPresetsDialog::updateStartBearing, ui->compassDialwidget, &MinosCompass::updateSkyScanStartBearing);
     connect(this, &SkyScanPresetsDialog::updateEndBearing, ui->compassDialwidget, &MinosCompass::updateSkyScanEndBearing);
+
+
+
 
     //remove spin box highlighting
     connect(ui->skyScanStepDegreeSpinBox, SIGNAL(valueChanged(int)), this, SLOT(onSkyScanStepDegreeSpinBoxChanged()), Qt::QueuedConnection);
@@ -55,23 +59,20 @@ SkyScanPresetsDialog::SkyScanPresetsDialog(QWidget *parent, SkyScanData* curData
 
     ui->compassDialwidget->setDoNotShowNeedle(true);
 
+    if (editButtonType == "New")
+    {
+        ui->copyToPresetPushButton->setVisible(true);
+    }
+    else
+    {
+        ui->copyToPresetPushButton->setVisible(false);
+    }
+
 
 
     ui->presetNameLineEdit->setText(curData->getPresetName());
-    initialiseStepDegreeToolButton(curData->getStepToolButtonMin(), curData->getStepToolButtonMax(),
-                                                       curData->getStepToolButtonStepInterval(), curData->getSkyScanStepDegreesValue());
-    initialisePauseTimeToolButton(curData->getPauseToolButtonMin(), curData->getPauseToolButtonMax(),
-                                                      curData->getPauseToolButtonStepInterval(), curData->getSkyScanPauseTimeValue());
-    setStartBearingToolButton(curData->getRotatorMinAzimuth(), curData->getRotatorMaxAzimuth(), curData->getSkyScanStepDegreesValue(), curData->getSkyScanStartBearing());
-    setEndBearingToolButton(curData->getRotatorMinAzimuth(), curData->getRotatorMaxAzimuth(), curData->getSkyScanStepDegreesValue(), curData->getSkyScanEndBearing());
+    updateDialogDisplay(curData);
 
-    sendEndStopTypeToCompassDial();
-    sendAntennaOffsetToCompassDial();
-
-    displaySkyScanRotatorMinMaxAzimuth(curData->getRotatorMinAzimuth(), curData->getRotatorMaxAzimuth(), curData->getAntennaOffset(), curData->getSouthStopType(), curData->getEndStopType());
-
-    updateSkyScanStartBearingDisplay(curData->getSkyScanStartBearing());
-    updateSkyScanEndBearingDisplay(curData->getSkyScanEndBearing());
 
 
 }
@@ -89,21 +90,54 @@ void SkyScanPresetsDialog::editAccepted()
 
 void SkyScanPresetsDialog::editRejected()
 {
-    doCloseEvent();
+
 }
 
-void SkyScanPresetsDialog::doCloseEvent()
+
+void SkyScanPresetsDialog::copyToPresetClicked()
+{
+    if (editButtonType == "New")
+    {
+        if (activeData)
+        {
+            curData = activeData;
+            updateDialogDisplay(curData);
+            curData->setSkyScanEndBearingIsDirty(true);
+        }
+    }
+}
+
+
+void SkyScanPresetsDialog::updateDialogDisplay(SkyScanData *curData)
+{
+    if (curData)
+    {
+        initialiseStepDegreeToolButton(curData->getStepToolButtonMin(), curData->getStepToolButtonMax(),
+                                       curData->getStepToolButtonStepInterval(), curData->getSkyScanStepDegreesValue());
+        initialisePauseTimeToolButton(curData->getPauseToolButtonMin(), curData->getPauseToolButtonMax(),
+                                      curData->getPauseToolButtonStepInterval(), curData->getSkyScanPauseTimeValue());
+        setStartBearingToolButton(curData->getRotatorMinAzimuth(), curData->getRotatorMaxAzimuth(), curData->getSkyScanStepDegreesValue(), curData->getSkyScanStartBearing());
+        setEndBearingToolButton(curData->getRotatorMinAzimuth(), curData->getRotatorMaxAzimuth(), curData->getSkyScanStepDegreesValue(), curData->getSkyScanEndBearing());
+
+        sendEndStopTypeToCompassDial();
+        sendAntennaOffsetToCompassDial();
+
+        displaySkyScanRotatorMinMaxAzimuth(curData->getRotatorMinAzimuth(), curData->getRotatorMaxAzimuth(), curData->getAntennaOffset(), curData->getSouthStopType(), curData->getEndStopType());
+
+        updateSkyScanStartBearingDisplay(curData->getSkyScanStartBearing());
+        updateSkyScanEndBearingDisplay(curData->getSkyScanEndBearing());
+
+    }
+
+
+}
+
+void SkyScanPresetsDialog::done (int result)
 {
     RegSettings settings;
-    settings.getSettings().setValue("RotControlSetup/geometry", saveGeometry());
-}
+    settings.getSettings().setValue("SkyScanPresetDialog/geometry", saveGeometry());
 
-
-void SkyScanPresetsDialog::closeEvent (QCloseEvent *event)
-{
-
-    doCloseEvent();
-    QWidget::closeEvent(event);
+    QDialog::done(result);
 }
 
 void SkyScanPresetsDialog::presetNameEditingFinished()

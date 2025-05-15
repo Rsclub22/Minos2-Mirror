@@ -25,11 +25,14 @@ class SkyScanPresetsDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit SkyScanPresetsDialog(QWidget *parent, SkyScanData* _curData, QString editButtonType);
+    explicit SkyScanPresetsDialog(QWidget *parent, SkyScanData* _curData, QString editButtonType_);
     ~SkyScanPresetsDialog();
 
 
-
+    void setActiveData(SkyScanData *activeData_)
+    {
+        activeData = activeData_;
+    }
 
 
 signals:
@@ -51,12 +54,16 @@ private slots:
 
     void onSkyScanStepDegreeSpinBoxChanged();
     void onSkyScanPauseTimeSpinBoxChanged();
+    void copyToPresetClicked();
 private:
     Ui::SkyScanPresetsDialog *ui;
 
 
 
     SkyScanData* curData = nullptr;
+    SkyScanData* activeData = nullptr;
+
+    QString editButtonType = nullptr;
 
 
     void initialiseStepDegreeToolButton(int minStep, int maxStep, int stepInterval, int initialValue);
@@ -74,10 +81,11 @@ private:
     void updateSkyScanEndBearingDisplay(int bearing);
     void sendAntennaOffsetToCompassDial();
     void displaySkyScanRotatorMinMaxAzimuth(int minAz, int maxAz, int antennaOffset, southStop southStopType, endStop endStopType);
-    void closeEvent(QCloseEvent *event) override;
-    void doCloseEvent();
-    void clearSkyScanStartEndBearings();
+    void done(int result) override;
     void accept() override;
+    void clearSkyScanStartEndBearings();
+
+    void updateDialogDisplay(SkyScanData *curData);
 };
 
 #endif // SKYSCANPRESETSDIALOG_H
