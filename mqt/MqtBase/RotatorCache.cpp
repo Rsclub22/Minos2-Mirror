@@ -367,9 +367,9 @@ void RotatorCache::setSkyScanReverseScan(const PubSubName &name, bool state)
 }
 
 
-void RotatorCache::setSkyScanEnabled(const PubSubName &name, const bool enabled)
+void RotatorCache::setSkyScanVisible(const PubSubName &name, const bool visible)
 {
-    rotDetails[name].setSkyScanEnabled(enabled);
+    rotDetails[name].setSkyScanVisible(visible);
 }
 
 void RotatorCache::setSkyScanStartBearing(const PubSubName &name, const int startBearing)

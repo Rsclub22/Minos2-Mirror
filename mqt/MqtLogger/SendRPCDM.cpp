@@ -893,10 +893,10 @@ void TSendDM::notifyRotChanges()
                         traceMsg(QString("Rotator set supportStopCommand = %1, uuid = %2").arg(selDetail.supportStopCommand().getValue() ? "True" :"False", selStateUuid));
                         tslf->on_SupportStopCommand(selDetail.supportStopCommand().getValue());
                     }
-                    if (selDetail.skyScanEnabled().isDirty())
+                    if (selDetail.skyScanVisible().isDirty())
                     {
-                        traceMsg(QString("SkyScan enabled = %1, uuid = %2").arg(selDetail.skyScanEnabled().getValue() ? "True" : "False", selStateUuid));
-                        tslf->on_skyScanEnabled(selDetail.skyScanEnabled().getValue());
+                        traceMsg(QString("SkyScan tab visible = %1, uuid = %2").arg(selDetail.skyScanVisible().getValue() ? "True" : "False", selStateUuid));
+                        tslf->on_skyScanVisible(selDetail.skyScanVisible().getValue());
                     }
                     if (selDetail.skyScanStartBearing().isDirty())
                     {

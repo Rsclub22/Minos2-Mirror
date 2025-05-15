@@ -185,7 +185,7 @@ static const QString supportStopCommand ("SupportStopCommand");
 
 
 
-static const QString skyScanEnabled ("SkyScanEnabled");
+static const QString skyScanVisible ("SkyScanVisible");
 static const QString skyScanStartBearing ("SkyScanStartBearing");
 static const QString skyScanEndBearing ("SkyScanEndBearing");
 static const QString skyScanNextStep ("SkyScanNextStep");

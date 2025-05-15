@@ -27,8 +27,8 @@ RotatorSkyScanFrame::RotatorSkyScanFrame(QWidget *parent):
 
     ui->setupUi(this);
     ui->skyScanPausePb->setVisible(false);      // not using pause at the moment
-    skyScanEnabled = false;
-    ui->skyScanGroupBox->setEnabled(skyScanEnabled);
+    skyScanVisible = false;
+    ui->skyScanGroupBox->setEnabled(skyScanVisible);
 
     connect(ui->skyScanStartPb, &QPushButton::clicked, this, &RotatorSkyScanFrame::onSkyScanStartButtonClicked);
     connect(ui->skyScanStopPb, &QPushButton::clicked, this, &RotatorSkyScanFrame::onSkyScanStopButtonClicked);
@@ -59,20 +59,20 @@ void RotatorSkyScanFrame::on_ContestPageChanged()
 
 }
 
-void RotatorSkyScanFrame::setSkyScanEnabled(bool state)
+void RotatorSkyScanFrame::setSkyScanVisible(bool state)
 {
     traceMsg(QString("enable msg = %1").arg(state ? "True" : "False"));
-    if (skyScanEnabled != state)
+    if (skyScanVisible != state)
     {
-        skyScanEnabled = state;
-        ui->skyScanGroupBox->setEnabled(skyScanEnabled);
+        skyScanVisible = state;
+        ui->skyScanGroupBox->setEnabled(skyScanVisible);
     }
 }
 
 void RotatorSkyScanFrame::setSkyScanStartBearing(int startBearing)
 {
     traceMsg(QString("start bearing = %1").arg(startBearing));
-    if (skyScanEnabled)
+    if (skyScanVisible)
     {
         if (startScanBearing != startBearing)
         {
@@ -86,7 +86,7 @@ void RotatorSkyScanFrame::setSkyScanEndBearing(int endBearing)
 {
     traceMsg(QString("end bearing = %1").arg(endBearing));
 
-    if (skyScanEnabled)
+    if (skyScanVisible)
     {
         if (endScanBearing != endBearing)
         {
@@ -99,7 +99,7 @@ void RotatorSkyScanFrame::setSkyScanEndBearing(int endBearing)
 void RotatorSkyScanFrame::setSkyScanNextStep(QString nextStep)
 {
     traceMsg(QString("nextStep bearing = %1").arg(nextStep));
-    if (skyScanEnabled)
+    if (skyScanVisible)
     {
         if (nextStepBearing != nextStep)
         {
@@ -113,7 +113,7 @@ void RotatorSkyScanFrame::setSkyScanNextStep(QString nextStep)
 void RotatorSkyScanFrame::setSkyScanCountDown(QString countDown)
 {
     traceMsg(QString("count down = %1").arg(countDown));
-    if (skyScanEnabled)
+    if (skyScanVisible)
     {
         if (countDownTime != countDown)
         {
@@ -127,7 +127,7 @@ void RotatorSkyScanFrame::setSkyScanButtonState(int state)
 {
     traceMsg(QString("button state from rotator %1").arg(buttonStateFromRotControl.getButtonStateToString()));
 
-    if (skyScanEnabled)
+    if (skyScanVisible)
     {
         if (state != buttonStateFromRotControl.getState())
         {
@@ -220,7 +220,7 @@ void RotatorSkyScanFrame::setSkyScanCCWIndicatorOnOff(bool state)
 
 void RotatorSkyScanFrame::onSkyScanStartButtonClicked()
 {
-    if (skyScanEnabled)
+    if (skyScanVisible)
     {
 
         traceMsg(QString("start button clicked"));
@@ -237,7 +237,7 @@ void RotatorSkyScanFrame::onSkyScanStartButtonClicked()
 
 void RotatorSkyScanFrame::onSkyScanStopButtonClicked()
 {
-    if (skyScanEnabled)
+    if (skyScanVisible)
     {
         traceMsg(QString("stop button clicked"));
         if (buttonStateFromRotControl.isStart())

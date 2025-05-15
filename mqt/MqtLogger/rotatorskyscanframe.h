@@ -49,7 +49,7 @@ public:
     void setSkyScanButtonState(int state);
     void setSkyScanReverseScan(bool state);
     void setRotatorBearing(QString bearing);
-    void setSkyScanEnabled(bool state);
+    void setSkyScanVisible(bool state);
     void setSkyScanStartBearing(int startBearing);
     void setSkyScanEndBearing(int endBearing);
 
@@ -78,7 +78,7 @@ private:
     SkyScanButtonState buttonStateFromRotControl;
     SkyScanButtonState buttonStateToRotControl;
 
-    bool skyScanEnabled = false;
+    bool skyScanVisible = false;
     bool skyScanReverse = false;
 
 

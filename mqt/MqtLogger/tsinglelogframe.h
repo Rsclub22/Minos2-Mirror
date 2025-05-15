@@ -185,7 +185,7 @@ public:
     void on_SkyScanCountDown(QString countDown);
     void on_SkyScanButtonState(int state);
     void on_SkyScanReverseScan(bool state);
-    void on_skyScanEnabled(bool state);
+    void on_skyScanVisible(bool state);
     void on_skyScanStartBearing(int startBearing);
     void on_skyScanEndBearing(int endBearing);
 private:

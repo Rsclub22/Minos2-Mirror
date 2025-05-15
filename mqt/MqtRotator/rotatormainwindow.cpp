@@ -215,9 +215,9 @@ RotatorMainWindow::RotatorMainWindow(QWidget *parent) :
 
     ui->skyScanPausePb->setVisible(false);      // not using pause at the moment
     setSkyScanTabVisible(false);
-    setSkyScanComponentsEnabled(false);
-    setSkyScanEnableChkBoxEnabled(false);
-    sendSkyScanEnabledToLogger(false);
+    //setSkyScanComponentsEnabled(false);
+    //setSkyScanEnableChkBoxEnabled(false);
+    sendSkyScanTabVisibleToLogger(isSkyScanTabVisible());
 
 
     //initialiseSkyScannerSpinners();
@@ -636,7 +636,7 @@ void RotatorMainWindow::closeRotator()
 
         }
 
-        if (skyScanEnabled && saveSkyScanOnClose)
+        if (isSkyScanTabVisible() && saveSkyScanOnClose)
         {
             saveSkyScanSettings(setupAntenna->currentAntenna.antennaName, activeData);
         }
@@ -718,11 +718,11 @@ void RotatorMainWindow::sendPresetListLogger()
 
 
 
-void RotatorMainWindow::sendSkyScanEnabledToLogger(bool state)
+void RotatorMainWindow::sendSkyScanTabVisibleToLogger(bool state)
 {
-    logMessage(QString("Send SkyScan Enabled = %1 to logger").arg(state ? "true" :"false"));
+    logMessage(QString("Send SkyScan Tab Visible = %1 to logger").arg(state ? "true" :"false"));
     PubSubName psname(setupAntenna->currentAntennaName);
-    msg->rotatorCache.setSkyScanEnabled(psname, state);
+    msg->rotatorCache.setSkyScanVisible(psname, state);
     msg->rotatorCache.publish();
 }
 
@@ -1220,11 +1220,11 @@ void RotatorMainWindow::upDateAntenna()
                 sendStatusToLogConnected();
 
 
-                setSkyScanEnableChkBoxEnabled(true);
-                readSkyScanEnableSetting(setupAntenna->currentAntenna.antennaName);
-                ui->skyScanEnableChkBox->setChecked(skyScanEnabled);
+                //setSkyScanEnableChkBoxEnabled(true);
+                //readSkyScanEnableSetting(setupAntenna->currentAntenna.antennaName);
+                //ui->skyScanEnableChkBox->setChecked(skyScanEnabled);
 
-                if (isSkyScanEnabledAndVisible())
+                if (isSkyScanTabVisible())
                 {
                    openSkyScan(setupAntenna->currentAntenna.antennaName);
                 }
@@ -1234,7 +1234,7 @@ void RotatorMainWindow::upDateAntenna()
             else
             {
                 sendStatusToLogDisConnected();
-                setSkyScanEnableChkBoxEnabled(false);
+                //setSkyScanEnableChkBoxEnabled(false);
                 closeSkyScan(setupAntenna->currentAntenna.antennaName);
             }
 
@@ -1314,11 +1314,11 @@ void RotatorMainWindow::refreshAntenna()
         {
             sendStatusToLogConnected();
 
-            setSkyScanEnableChkBoxEnabled(true);
-            readSkyScanEnableSetting(setupAntenna->currentAntenna.antennaName);
-            ui->skyScanEnableChkBox->setChecked(skyScanEnabled);
+            //setSkyScanEnableChkBoxEnabled(true);
+            //readSkyScanEnableSetting(setupAntenna->currentAntenna.antennaName);
+            //ui->skyScanEnableChkBox->setChecked(skyScanEnabled);
 
-            if (isSkyScanEnabledAndVisible())
+            if (isSkyScanTabVisible())
             {
 
                 openSkyScan(setupAntenna->currentAntenna.antennaName);
@@ -1328,7 +1328,7 @@ void RotatorMainWindow::refreshAntenna()
         else
         {
             sendStatusToLogDisConnected();
-            setSkyScanEnableChkBoxEnabled(false);
+            //setSkyScanEnableChkBoxEnabled(false);
             closeSkyScan(setupAntenna->currentAntenna.antennaName);
         }
 
@@ -1446,7 +1446,7 @@ void RotatorMainWindow::checkMoving(int bearing)
 
     if (!moving)
     {
-        if (isSkyScanEnabledAndVisible())
+        if (isSkyScanTabVisible())
         {
             emit sendRotationStatusToSkyScan(bearing, skyScanBearingStates::ROT_STOPPED);
         }
@@ -1461,7 +1461,7 @@ void RotatorMainWindow::checkMoving(int bearing)
         logMessage(QString("Rotator is on target"));
         stopButton();
         sendStatusToLogStop();
-        if (skyScanActive && isSkyScanEnabledAndVisible())
+        if (skyScanActive && isSkyScanTabVisible())
         {
             emit sendRotationStatusToSkyScan(bearing, skyScanBearingStates::ROT_REACHED_TARGET);
         }
@@ -1473,7 +1473,7 @@ void RotatorMainWindow::checkMoving(int bearing)
             logMessage(QString("Rotator is near target for too long"));
             stopButton();
             sendStatusToLogStop();
-            if (skyScanActive && isSkyScanEnabledAndVisible())
+            if (skyScanActive && isSkyScanTabVisible())
             {
                emit sendRotationStatusToSkyScan(bearing, skyScanBearingStates::ROT_NEAR_TARGET);
             }
@@ -1487,7 +1487,7 @@ void RotatorMainWindow::checkMoving(int bearing)
             oldBearing = bearing;
             rotTimeCount = 0;
             logMessage(QString("Rotator is moving"));
-            if (skyScanActive && isSkyScanEnabledAndVisible())
+            if (skyScanActive && isSkyScanTabVisible())
             {
                 emit sendRotationStatusToSkyScan(bearing, skyScanBearingStates::ROT_MOVING);
             }
@@ -1503,7 +1503,7 @@ void RotatorMainWindow::checkMoving(int bearing)
             logMessage(QString("Rotator has stopped moving"));
             stopButton();
             sendStatusToLogStop();
-            if (skyScanActive && isSkyScanEnabledAndVisible())
+            if (skyScanActive && isSkyScanTabVisible())
             {
                 emit sendRotationStatusToSkyScan(bearing, skyScanBearingStates::ROT_STOPPED_MOVING);
             }
@@ -1814,7 +1814,7 @@ void RotatorMainWindow::stop_rotation()
     logMessage(QString("stop_rotation"));
     if (rotator)
     {
-        if (skyScanActive && isSkyScanEnabledAndVisible())
+        if (skyScanActive && isSkyScanTabVisible())
         {
             stopSkyScan();  // stop rotation is part of stopSkyScan()
         }
@@ -1876,7 +1876,7 @@ void RotatorMainWindow::stopRotation(bool sendStop)
         movingCCW = false;
         stopCmdflag = false;
         stop_button_off();
-        if (skyScanActive && isSkyScanEnabledAndVisible())
+        if (skyScanActive && isSkyScanTabVisible())
         {
             setSkyScanStopButtonColour(BUTTON_OFF_STYLE);
         }
@@ -2947,7 +2947,7 @@ void RotatorMainWindow::setSkyScanToolButtonUpDownEnabled(bool enabled)
     ui->skyScanRotatorStartBearingUpDownButton->setEnabled(enabled);
     ui->skyScanRotatorEndBearingUpDownButton->setEnabled(enabled);
 }
-
+/*
 void RotatorMainWindow::setSkyScanEnableChkBoxEnabled(bool enabled)
 {
     trace(QString("skyScan - set Enable checkBox = %1").arg(enabled ? "True" : "False"));
@@ -2964,7 +2964,7 @@ void RotatorMainWindow::setSkyScanEnableChkBoxEnabled(bool enabled)
     }
 }
 
-
+*/
 
 
 
@@ -2984,11 +2984,10 @@ void RotatorMainWindow::setSkyScanGroupBoxEnabled(bool enabled)
     ui->skyScanGroupBox->setEnabled(enabled);
 }
 
-bool RotatorMainWindow::isSkyScanEnabledAndVisible()
+bool RotatorMainWindow::isSkyScanTabVisible()
 {
-    bool tabVisible = isTabVisible(ui->rotTabs, ui->skyScanTab);
+    return isTabVisible(ui->rotTabs, ui->skyScanTab);
 
-    return tabVisible && skyScanEnabled;
 }
 
 void RotatorMainWindow::setSkyScanTabVisible(bool visible)
@@ -3007,37 +3006,7 @@ void RotatorMainWindow::setSkyScanTabVisible(bool visible)
 
 
 
-void RotatorMainWindow::skyScanEnableChkBoxChanged()
-{
-    if (rotator && rotator->getRotConnected())
-    {
 
-        if (ui->skyScanEnableChkBox->isChecked() != skyScanEnabled)
-        {
-            skyScanEnabled = ui->skyScanEnableChkBox->isChecked();
-            saveSkyScanEnableSetting(setupAntenna->currentAntenna.antennaName);
-
-            if (isSkyScanEnabledAndVisible())
-            {
-                // enable skyScan components
-                setSkyScanComponentsEnabled(true);
-                //openSkyScan(setupAntenna->currentAntenna.antennaName);
-
-            }
-            else
-            {
-                // stop
-                skyScanStopPbPressed();
-                setSkyScanComponentsEnabled(false);
-                //closeSkyScan(setupAntenna->currentAntenna.antennaName);
-            }
-        }
-
-
-    }
-
-
-}
 void RotatorMainWindow::skyScanSettingsOnCloseChkBoxChanged()
 {
 
@@ -3580,14 +3549,13 @@ void RotatorMainWindow::readSkyScanSettings(QString currentAntennaName, SkyScanD
 }
 
 
-
+/*
 void RotatorMainWindow::saveSkyScanEnableSetting(QString currentAntennaName)
 {
     trace(QString("save skyscan enable setting to antenna: %1, enabled: %2").arg(currentAntennaName).arg(skyScanEnabled ? "True" : "False"));
     QString fileName = ANTENNA_PATH_LOGGER() + FILENAME_AVAIL_ANTENNAS;
     QSettings config(fileName, QSettings::IniFormat);
     config.beginGroup(currentAntennaName);
-    config.setValue("skyScanEnabled", skyScanEnabled);
     config.endGroup();
 }
 bool RotatorMainWindow::readSkyScanEnableSetting(QString currentAntennaName)
@@ -3601,7 +3569,7 @@ bool RotatorMainWindow::readSkyScanEnableSetting(QString currentAntennaName)
     return skyScanEnabled;
 }
 
-
+*/
 
 void RotatorMainWindow::checkScanStartEndInRotatorRange()
 {
@@ -3700,14 +3668,14 @@ void RotatorMainWindow::closeSkyScan(QString currentAntennaName)
         saveSkyScanSettings(currentAntennaName, activeData);
     }
 
-    skyScanEnabled = false;
-    ui->skyScanEnableChkBox->setChecked(skyScanEnabled);
+    //skyScanEnabled = false;
+    //ui->skyScanEnableChkBox->setChecked(skyScanEnabled);
     saveSkyScanOnClose = false;
     ui->saveSkyScanSettingsOnCloseChkBox->setChecked(saveSkyScanOnClose);
 
     setSkyScanTabVisible(false);
     setSkyScanComponentsEnabled(false);
-    sendSkyScanEnabledToLogger(false);
+    sendSkyScanTabVisibleToLogger(isSkyScanTabVisible());
 
     //ui->skyScanStartBearingSpinBox->clear();
 
@@ -3763,10 +3731,10 @@ void RotatorMainWindow::openSkyScan(QString currentAntennaName)
 
     checkScanStartEndInRotatorRange();      // if rotator changed overlap setting
 
-    setSkyScanComponentsEnabled(skyScanEnabled);
+    setSkyScanComponentsEnabled(isSkyScanTabVisible());
     ui->saveSkyScanSettingsOnCloseChkBox->setChecked(saveSkyScanOnClose);
 
-    sendSkyScanEnabledToLogger(skyScanEnabled);
+    sendSkyScanTabVisibleToLogger(isSkyScanTabVisible());
 
     updateSkyScanDisplay(activeData);
 
@@ -3924,7 +3892,7 @@ bool RotatorMainWindow::isTabVisible(QTabWidget* tabWidget, QWidget* tabContent)
 void RotatorMainWindow::dumpSkyScanSettingsToTraceLog(SkyScanData &activeData)
 {
     trace(QString("*** SkyScan Settings ***"));
-    trace(QString("Skyscan Enabled State = %1").arg(skyScanEnabled ? "True" : "False"));
+    trace(QString("Skyscan Tab Visible State = %1").arg(isSkyScanTabVisible() ? "True" : "False"));
     trace(QString("Skyscan Active State = %1").arg(skyScanActive ? "True" : "False"));
     trace(QString("SaveSkyScanOnClose = %1").arg(saveSkyScanOnClose ? "True" : "False"));
     trace(QString("Start Scan Bearing = %1 degrees").arg(activeData.getSkyScanStartBearing()));

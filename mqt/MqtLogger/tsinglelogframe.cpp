@@ -2373,11 +2373,11 @@ void TSingleLogFrame::presetTurn(QString b)
 }
 
 
-void TSingleLogFrame::on_skyScanEnabled(bool state)
+void TSingleLogFrame::on_skyScanVisible(bool state)
 {
     if (this == LogContainer->getCurrentLogFrame())
     {
-        skyScanControlFrame->setSkyScanEnabled(state);
+        skyScanControlFrame->setSkyScanVisible(state);
     }
 }
 

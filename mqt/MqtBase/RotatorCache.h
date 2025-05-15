@@ -78,7 +78,7 @@ public:
 
     void rotatorPresetsClearDirty();
     void setSupportStopCommand(const PubSubName &name, bool state);
-    void setSkyScanEnabled(const PubSubName &name, const bool enabled);
+    void setSkyScanVisible(const PubSubName &name, const bool visible);
     void setSkyScanStartBearing(const PubSubName &name, const int startBearing);
     void setSkyScanEndBearing(const PubSubName &name, const int endBearing);
     void setSkyScanNextStep(const PubSubName &name, QString bearing);

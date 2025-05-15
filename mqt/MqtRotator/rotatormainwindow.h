@@ -194,7 +194,7 @@ private:
     QSharedPointer<SkyScanButtonState> loggerSkyScanButtonState;
 
 
-    bool skyScanEnabled = false;
+    //bool skyScanVisible = false;
     bool skyScanActive = false;
     bool saveSkyScanOnClose = false;
 
@@ -232,7 +232,7 @@ private:
     void rotatorError(int errorCode, QString cmd);
 
     void rotatorActive();
-    void saveSkyScanEnableSetting(QString currentAntennaName);
+    //void saveSkyScanEnableSetting(QString currentAntennaName);
 
 
 public slots:
@@ -321,7 +321,7 @@ private slots:
 
 
     void skyScanSettingsOnCloseChkBoxChanged();
-    void skyScanEnableChkBoxChanged();
+
 
     void skyScanPausePbPressed();
 
@@ -377,7 +377,7 @@ private:
     void setCompassDialVisible(bool visible);
     void setTestMode(bool test);
 
-    void setSkyScanEnableChkBoxEnabled(bool enabled);
+    //void setSkyScanEnableChkBoxEnabled(bool enabled);
     void saveSkyScanSettings(QString currentAntennaName, SkyScanData &activeData);
     void readSkyScanSettings(QString currentAntennaName, SkyScanData &activeData);
     void setSkyScanComponentsEnabled(bool enabled);
@@ -385,11 +385,11 @@ private:
     void openSkyScan(QString currentAntennaName);
     void setSkyScanEndBrgLineEditValidator();
     void setSkyScanStartBrgLineEditValidator();
-    bool readSkyScanEnableSetting(QString currentAntennaName);
+    //bool readSkyScanEnableSetting(QString currentAntennaName);
     void readSkyScanCommonSettings(SkyScanData &activeData);
     void dumpSkyScanSettingsToTraceLog(SkyScanData &activeData);
     void setSkyScanGroupBoxEnabled(bool enabled);
-    bool isSkyScanEnabledAndVisible();
+    bool isSkyScanTabVisible();
     void setTargetTabEnabled(bool enabled);
     void setPresetsGroupBoxEnabled(bool enabled);
     void setSkyScanSpinBoxesEnabled(bool enabled);
@@ -416,7 +416,7 @@ private:
     void sendSkyScanStartBearingToLogger(int bearing);
     void sendSkyScanEndBearingToLogger(int bearing);
 
-    void sendSkyScanEnabledToLogger(bool state);
+    void sendSkyScanTabVisibleToLogger(bool state);
     void sendSkyScanNextStepToLogger(QString nextStepBearing);
     void sendSkyScanCountDownToLogger(QString countDown);
     void sendSkyScanButtonStateToLogger(int state);

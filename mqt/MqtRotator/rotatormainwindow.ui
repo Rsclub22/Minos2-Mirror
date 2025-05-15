@@ -422,13 +422,6 @@
             </widget>
            </item>
            <item>
-            <widget class="QCheckBox" name="skyScanEnableChkBox">
-             <property name="text">
-              <string>Skyscan Enable</string>
-             </property>
-            </widget>
-           </item>
-           <item>
             <widget class="QGroupBox" name="skyScanGroupBox">
              <property name="title">
               <string/>
@@ -1061,7 +1054,7 @@
                      <item>
                       <widget class="QLabel" name="activePresetName">
                        <property name="text">
-                        <string> </string>
+                        <string/>
                        </property>
                       </widget>
                      </item>
