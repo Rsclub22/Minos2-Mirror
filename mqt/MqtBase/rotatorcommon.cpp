@@ -121,7 +121,7 @@ QString convertBearingToString(int bearing)
 }
 
 
-void displayCompassBearingWithOverlap(const QString newBearing, int &rotatorBearing, int &currentBearing, QLabel* displayLabel)
+void displayCompassBearingWithOverlap(const QString newBearing, RotFrameData &rotFrameData, QLabel* displayLabel)
 {
     // extract displayBearing:rotatorBearing:overlapstatus
     QStringList sl = newBearing.split(':');
@@ -134,7 +134,7 @@ void displayCompassBearingWithOverlap(const QString newBearing, int &rotatorBear
 
     // save rotatorBearing
     bool ok;
-    rotatorBearing = sl[1].toInt(&ok, 10);
+    rotFrameData.setRotatorBearing(sl[1].toInt(&ok, 10));
 
     if (!ok)
     {
@@ -143,7 +143,7 @@ void displayCompassBearingWithOverlap(const QString newBearing, int &rotatorBear
     }
 
     int iBearing = sl[0].toInt(&ok, 10);
-    currentBearing = iBearing;
+    rotFrameData.setAntennaBearing(iBearing);
 
     if (!ok)
     {
@@ -159,12 +159,12 @@ void displayCompassBearingWithOverlap(const QString newBearing, int &rotatorBear
 
     brg.append("</font>");
 
-    if (rotatorBearing > COMPASS_MAX360 && sl[2] == "1")
+    if (rotFrameData.getRotatorBearing() > COMPASS_MAX360 && sl[2] == "1")
     {
         brg.prepend("<font color='Red'>");
         displayLabel->setText(brg);
     }
-    else if (rotatorBearing < COMPASS_MIN0 && sl[2] == "1")
+    else if (rotFrameData.getRotatorBearing() < COMPASS_MIN0 && sl[2] == "1")
     {
         brg.prepend("<font color='Blue'>");
         displayLabel->setText(brg);

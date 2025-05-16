@@ -203,7 +203,10 @@ QString getBearingStateTxt(skyScanBearingStates state);
 
 QString convertBearingToString(int bearing);
 int adjustOverlapBearingToCompassBearing(int value);
-void displayCompassBearingWithOverlap(const QString newBearing, int &rotatorBearing, int &currentBearing, QLabel* displayLabel);
+
+class RotFrameData;
+void displayCompassBearingWithOverlap(const QString newBearing, RotFrameData &rotFrameData, QLabel* displayLabel);
+
 void setSkyScanDirectionIndOnOff(QToolButton *indicator, bool state);
 
 bool isEasternBearing(int bearing);
@@ -537,6 +540,135 @@ private:
 
 
 };
+
+
+class RotFrameData
+{
+
+
+public:
+
+    RotFrameData()
+    {
+        clearRotatorMovingFlags();
+    }
+
+    int getRotatorMinAzimuth(){return minAzimuth;}
+    void setRotatorMinAzimuth(int minAzimuth_){minAzimuth = minAzimuth_;}
+
+    int getRotatorMaxAzimuth(){return maxAzimuth;}
+    void setRotatorMaxAzimuth(int maxAzimuth_){maxAzimuth = maxAzimuth_;}
+
+
+
+    int getAntennaBearing(){return antennaBearing;}
+    void setAntennaBearing(int antennaBearing_){antennaBearing = antennaBearing_;}
+
+    int getRotatorBearing(){return rotatorBearing;}
+    void setRotatorBearing(int rotatorBearing_){rotatorBearing = rotatorBearing_;}
+
+    bool getMoving(){return moving;}
+    void setMoving(bool moving_){moving = moving_;}
+
+    bool getMovingCW(){return movingCW;}
+    void setMovingCW(bool movingCW_){movingCW = movingCW_;}
+
+    bool getMovingCCW(){return movingCCW;}
+    void setMovingCCW(bool movingCCW_){movingCCW = movingCCW_;}
+
+    bool getRotLeftButtonStatus(){return rot_left_button_status;}
+    void setRotLeftButtonStatus(bool rot_left_button_status_){rot_left_button_status = rot_left_button_status_;}
+
+    bool getRotRightButtonStatus(){return rot_right_button_status;}
+    void setRotRightButtonStatus(bool rot_right_button_status_){rot_right_button_status = rot_right_button_status_;}
+
+    bool getRotConnected(){return rotConnected;}
+    void setRotConnected(bool rotConnected_){rotConnected = rotConnected_;}
+
+    bool getSupportCwCcwCmd(){return supportCwCcwCmd;}
+    void SetSupportCwCcwCmd(bool supportCwCcwCmd_){supportCwCcwCmd = supportCwCcwCmd_;}
+
+    bool getSupportStopCommand(){return supportStopCommand;}
+    void setSupportStopCommand(bool supportStopCommand_){supportStopCommand = supportStopCommand_;}
+
+    bool getRotError(){return rotError;}
+    void setRotError(bool rotError_){rotError = rotError_;}
+
+    QString getLastConnectStat(){return lastConnectStat;}
+    void setLastConnectStat(QString lastConnectStat_){lastConnectStat = lastConnectStat_;}
+
+    QString getLastStatus(){return lastStatus;}
+    void setLastStatus(QString lastStatus_){lastStatus = lastStatus_;}
+
+    QString getAntennaName(){return antennaName;}
+    void setAntennaName(QString antennaName_){antennaName = antennaName_;}
+
+    QString getFrameName(){return frameName;}
+    void setFrameName(QString frameName_){frameName = frameName_;}
+
+    int getAntennaOffset(){return antennaOffset;}
+    void setAntennaOffset(int antennaOffset_){antennaOffset = antennaOffset_;}
+
+    int getSkyScanStartBearing(){return skyScanStartBearing;}
+    void setSkyScanStartBearing(int skyScanStartBearing_){skyScanStartBearing = skyScanStartBearing_;}
+
+    int getSkyScanEndBearing(){return skyScanEndBearing;}
+    void setSkyScanEndBearing(int skyScanEndBearing_){skyScanEndBearing = skyScanEndBearing_;}
+
+    endStop getEndStopType(){return  endStopType;}
+    void setEndStopType(endStop endStopType_){ endStopType =  endStopType_;}
+
+    southStop getSouthStopType(){return southStopType;}
+    void setSouthStopType(southStop southStopType_){southStopType = southStopType_;}
+
+    void clearRotatorMovingFlags()
+    {
+        moving = false;
+        movingCCW = false;
+        movingCW = false;
+        rot_left_button_status = false;
+        rot_right_button_status = false;
+        //rotConnected = false;
+        //rotError = false;
+    }
+
+private:
+
+
+    int maxAzimuth = 0;
+    int minAzimuth = 0;
+    int antennaBearing = 0;
+    int rotatorBearing = 0;
+    bool moving = false;
+    bool movingCW = false;
+    bool movingCCW = false;
+    bool rot_left_button_status;
+    bool rot_right_button_status;
+    bool rotConnected = false;
+    bool supportCwCcwCmd = true;
+    bool supportStopCommand = true;
+    bool rotError = false;
+
+    QString lastConnectStat;
+    QString lastStatus;
+
+
+
+    QString antennaName;
+    QString frameName;
+
+
+    int antennaOffset = 0;
+    int skyScanStartBearing = 0;
+    int skyScanEndBearing = 0;
+    endStop endStopType = ROT_0_360;
+    southStop southStopType = southStop::S_STOPOFF;
+
+
+
+};
+
+
 
 
 #endif // ROTATORCOMMON_H

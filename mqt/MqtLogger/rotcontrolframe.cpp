@@ -21,7 +21,6 @@
 
 RotControlFrame::RotControlFrame(QWidget *parent):
     RotControlFrameBase(parent)
-    , ct(nullptr)
     , ui(new Ui::RotControlFrame)
 {
     ui->setupUi(this);
@@ -55,7 +54,7 @@ RotControlFrame::RotControlFrame(QWidget *parent):
     rot_left_button_off();
     rot_right_button_off();
     showTurnButOff();
-    setCwCcW_Items_Visible(supportCwCcwCmd);   // init visible
+    setCwCcW_Items_Visible(rotFrameData.getSupportCwCcwCmd());   // init visible
     traceMsg("RotControlFrame Started");
 
 }

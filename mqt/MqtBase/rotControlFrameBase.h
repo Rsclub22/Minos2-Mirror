@@ -11,18 +11,29 @@
 #include "bearinglineedit.h"
 #include "ContestApp.h"
 
+
+
+
+
+
+
 class RotControlFrameBase : public QFrame
 {
     Q_OBJECT
 
-    LoggerContestLog *ct = nullptr;
+
 public:
     explicit RotControlFrameBase(QWidget *parent);
     ~RotControlFrameBase();
 
 
-
-
+    void setFrameName(QString frameName);
+    void setContest(BaseContestLog *c);
+    int getAngle(QString brgSt);
+    int getCurrentBearing();
+    void setRotatorBearing(const QString &s);
+    void setSupportStopCommandFlag(bool state);
+    void setCwCcwCmdEnable(bool s);
 
     void setRotatorMinAzimuth(const int minAz);
     void setRotatorMaxAzimuth(const int maxAz);
@@ -40,33 +51,29 @@ public:
 
 protected:
 
-    virtual QWidget* getCompassObject() = 0;
-    virtual QGroupBox* getRotatorControlGroupBoxObject() = 0;
-    virtual QComboBox* getAntennaSelectObject() = 0;
-    virtual QLabel* getRotConnectStateLabelObject() = 0;
-    virtual QLabel* getRotatorStatMsgLabelObject() = 0;
-    virtual BearingLineEdit* getBrgLineEditObject() = 0;
-    virtual QToolButton* getRotateButtonObject() = 0;
-    virtual QToolButton* getStopRotateObject() = 0;
-    virtual QToolButton* getRotateLeftObject() = 0;
-    virtual QToolButton* getRotateRightObject() = 0;
-    virtual QToolButton* getnudgeLeftObject() = 0;
-    virtual QToolButton* getnudgeRightObject() = 0;
-    virtual QLabel* getRotBrgDisplayObject() = 0;
-    virtual QShortcut* getNudgeRightShortCutObject() = 0;
-    virtual QShortcut* getNudgeLeftShortCutObject() = 0;
-    virtual QShortcut* getRotateLeftShortCutObject() = 0;
-    virtual QShortcut* getRotateRightShortCutObject() = 0;
-    virtual QShortcut* getTurnToBearingShortCutObject() = 0;
-    virtual QShortcut* getRotateStopShortCutObject() = 0;
+    virtual QWidget* getCompassObject() { return nullptr; }
+    virtual QGroupBox* getRotatorControlGroupBoxObject() { return nullptr; }
+    virtual QComboBox* getAntennaSelectObject() { return nullptr; }
+    virtual QLabel* getRotConnectStateLabelObject() { return nullptr; }
+    virtual QLabel* getRotatorStatMsgLabelObject() { return nullptr; }
+    virtual BearingLineEdit* getBrgLineEditObject() { return nullptr; }
+    virtual QToolButton* getRotateButtonObject() { return nullptr; }
+    virtual QToolButton* getStopRotateObject() { return nullptr; }
+    virtual QToolButton* getRotateLeftObject() { return nullptr; }
+    virtual QToolButton* getRotateRightObject() { return nullptr; }
+    virtual QToolButton* getnudgeLeftObject() { return nullptr; }
+    virtual QToolButton* getnudgeRightObject() { return nullptr; }
+    virtual QLabel* getRotBrgDisplayObject() { return nullptr; }
+    virtual QShortcut* getNudgeRightShortCutObject() { return nullptr; };
+    virtual QShortcut* getNudgeLeftShortCutObject() { return nullptr; }
+    virtual QShortcut* getRotateLeftShortCutObject() { return nullptr; }
+    virtual QShortcut* getRotateRightShortCutObject() { return nullptr; }
+    virtual QShortcut* getTurnToBearingShortCutObject() { return nullptr; }
+    virtual QShortcut* getRotateStopShortCutObject() { return nullptr; }
 
     virtual void keyPressEvent(QKeyEvent *event) override;
 
 
-
-    void setContest(BaseContestLog *c);
-    int getAngle(QString brgSt);
-    int getCurrentBearing();
     QString convertBearingForDisplay(QString bearing);
     void setTurnDisplayText(QString brg);
     void turnTo(int angle);
@@ -86,36 +93,26 @@ protected:
 
     void traceMsg(QString msg);
     void setCwCcW_Items_Visible(bool visible);
-    void setCwCcwCmdEnable(bool s);
 
-    void setSupportStopCommandFlag(bool state);
-    void setRotatorBearing(const QString &s);
+
+
+
     void initConnections();
     void clearBearingLineEdit();
+    void clearRotatorIndicators();
+
+    RotFrameData rotFrameData;
+
 private:
 
+    LoggerContestLog *ct = nullptr;
 
-    int maxAzimuth = 0;
-    int minAzimuth = 0;
-    int currentBearing = 0;
-    int rotatorBearing = 0;
-    bool moving = false;
-    bool movingCW = false;
-    bool movingCCW = false;
-    bool rot_left_button_status;
-    bool rot_right_button_status;
-    bool rotConnected = false;
-    bool supportCwCcwCmd = true;
-    bool supportStopCommand = true;
-    bool rotError = false;
 
-    QString lastConnectStat;
-    QString lastStatus;
 
     void clearRotatorFlags();
 
-    QString antennaName;
-    QString frameName;
+
+
 
 
 

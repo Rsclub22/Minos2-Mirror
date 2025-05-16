@@ -147,7 +147,16 @@ void RotatorSkyScanFrame::setSkyScanReverseScan(bool state)
 void RotatorSkyScanFrame::setRotatorBearing(QString bearing)
 {
     traceMsg(QString("Bearings from rotator control = %1").arg(bearing));
-    displayCompassBearingWithOverlap(bearing, rotatorBearing, currentBearing, ui->currentBearingDisplay);
+
+    RotFrameData rotFrameData;
+    rotFrameData.setRotatorBearing(rotatorBearing);
+    rotFrameData.setAntennaBearing(currentBearing);
+
+    displayCompassBearingWithOverlap(bearing, rotFrameData, ui->currentBearingDisplay);
+
+    rotatorBearing = rotFrameData.getRotatorBearing();
+    currentBearing = rotFrameData.getAntennaBearing();
+
 
 }
 

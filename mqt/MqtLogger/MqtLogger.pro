@@ -103,6 +103,7 @@ SOURCES += \
     rigcontrolvoicememorykeyer.cpp \
     rigmemdialog.cpp \
     ritlineedit.cpp \
+    rotatorcompassframe.cpp \
     rotatorskyscanframe.cpp \
     rotcontrolframe.cpp \
     runbuttondialog.cpp \
@@ -209,6 +210,7 @@ HEADERS  += \
     rigcontrolvoicememorykeyer.h \
     rigmemdialog.h \
     ritlineedit.h \
+    rotatorcompassframe.h \
     rotatorskyscanframe.h \
     rotcontrolframe.h \
     runbuttondialog.h \
@@ -280,6 +282,7 @@ FORMS    += \
     rigcontrolframe.ui \
     rigmemdialog.ui \
     RigMemoryFrame.ui \
+    rotatorcompassframe.ui \
     rotatorskyscanframe.ui \
     rotcontrolframe.ui \
     runbuttondialog.ui \

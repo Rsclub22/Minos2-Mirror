@@ -66,7 +66,7 @@ int RotControlFrameBase::getAngle(QString brgSt)
 
 int RotControlFrameBase::getCurrentBearing()
 {
-    return currentBearing;
+    return rotFrameData.getAntennaBearing();
 }
 
 
@@ -144,9 +144,7 @@ void RotControlFrameBase::setBrgFromSpot(QString brg)
 
 void RotControlFrameBase::setTurnDisplayText(QString brg)
 {
-    BearingLineEdit* brglne = getBrgLineEditObject();
-
-    if (brglne)
+    if (auto brglne = getBrgLineEditObject())
     {
        brglne->setText(brg);
     }
@@ -181,7 +179,7 @@ void RotControlFrameBase::turnTo(int angle)
     {
         //ui->BrgSt->setText(bearingForDisplay(angle));
 
-        if (rotConnected)
+        if (rotFrameData.getRotConnected())
         {
             traceMsg("Turn to - Contest match and connected");
 
@@ -189,8 +187,8 @@ void RotControlFrameBase::turnTo(int angle)
             {
                 traceMsg(QString("TurnTo: Bearing empty or invalid"));
                 QString msg = HtmlFontColour(Qt::red) + tr("Bearing empty or invalid");
-                QLabel* stateLabel = getRotConnectStateLabelObject();
-                if (stateLabel)
+
+                if (auto stateLabel = getRotConnectStateLabelObject())
                 {
                     stateLabel->setText(msg);
                 }
@@ -203,8 +201,8 @@ void RotControlFrameBase::turnTo(int angle)
             {
                 traceMsg(QString("TurnTo: Bearing too large"));
                 QString msg = HtmlFontColour(Qt::red) + tr("Bearing too large - %1").arg(angle);
-                QLabel* stateLabel = getRotConnectStateLabelObject();
-                if (stateLabel)
+
+                if (auto stateLabel = getRotConnectStateLabelObject())
                 {
                     stateLabel->setText(msg);
                 }
@@ -216,15 +214,15 @@ void RotControlFrameBase::turnTo(int angle)
             {
                 traceMsg(QString("TurnTo: Bearing too small"));
                 QString msg = HtmlFontColour(Qt::red) + tr("Bearing too small - %1").arg(angle);
-                QLabel* stateLabel = getRotConnectStateLabelObject();
-                if (stateLabel)
+
+                if (auto stateLabel = getRotConnectStateLabelObject())
                 {
                     stateLabel->setText(msg);
                 }
 
                 return;
             }
-            else if (angle == currentBearing)
+            else if (angle == rotFrameData.getAntennaBearing())
             {
                 traceMsg(QString("TurnTo: Bearing = CurrentBearing"));
                 return;
@@ -234,7 +232,7 @@ void RotControlFrameBase::turnTo(int angle)
                 traceMsg(QString("Send Bearing %1 to Rotator Control").arg(QString::number(angle)));
                 emit sendRotator(rpcConstants::eRotateDirect, angle);
                 showTurnButOn();
-                moving = true;
+                rotFrameData.setMoving(true);
             }
 
 
@@ -245,7 +243,7 @@ void RotControlFrameBase::turnTo(int angle)
 
 void RotControlFrameBase::on_Rotate_clicked()
 {
-    if (rotConnected && !rotError)
+    if (rotFrameData.getRotConnected() && !rotFrameData.getRotError())
     {
         traceMsg("Turn to button Clicked");
         BearingLineEdit* le = getBrgLineEditObject();
@@ -264,7 +262,7 @@ void RotControlFrameBase::on_Rotate_clicked()
     }
     else
     {
-        traceMsg(QString("On Rotate:Rotconnected = %1, RotError = %2").arg(rotConnected).arg(rotError));
+        traceMsg(QString("On Rotate:Rotconnected = %1, RotError = %2").arg(rotFrameData.getRotConnected() ? "True" : "False").arg(rotFrameData.getRotError() ? "True" : "False"));
     }
 
 
@@ -272,11 +270,11 @@ void RotControlFrameBase::on_Rotate_clicked()
 
 void RotControlFrameBase::on_nudgeLeft_clicked()
 {
-    if (rotConnected && !rotError)
+    if (rotFrameData.getRotConnected() && !rotFrameData.getRotError())
     {
         traceMsg("Nudge Left Clicked");
 
-        int newBearing = currentBearing - 3;
+        int newBearing = rotFrameData.getAntennaBearing() - 3;
         if (newBearing < 0)
             newBearing += 360;
         setTurnDisplayText(convertBearingForDisplay(QString::number(newBearing)));
@@ -284,17 +282,17 @@ void RotControlFrameBase::on_nudgeLeft_clicked()
     }
     else
     {
-        traceMsg(QString("NudgeLeft:Rotconnected = %1, RotError = %2").arg(rotConnected).arg(rotError));
+        traceMsg(QString("NudgeLeft:Rotconnected = %1, RotError = %2").arg(rotFrameData.getRotConnected() ? "True" : "False").arg(rotFrameData.getRotError() ? "True" : "False"));
     }
 }
 
 void RotControlFrameBase::on_nudgeRight_clicked()
 {
 
-    if (rotConnected && !rotError)
+    if (rotFrameData.getRotConnected() && !rotFrameData.getRotError())
     {
         traceMsg("Nudge Right Clicked");
-        int newBearing = currentBearing + 3;
+        int newBearing = rotFrameData.getAntennaBearing() + 3;
         if (newBearing >= 360)
             newBearing -= 360;
         setTurnDisplayText(convertBearingForDisplay(QString::number(newBearing)));
@@ -302,7 +300,7 @@ void RotControlFrameBase::on_nudgeRight_clicked()
     }
     else
     {
-        traceMsg(QString("NudgeRight:Rotconnected = %1, RotError = %2").arg(rotConnected).arg(rotError));
+        traceMsg(QString("NudgeRight:Rotconnected = %1, RotError = %2").arg(rotFrameData.getRotConnected() ? "True" : "False").arg(rotFrameData.getRotError() ? "True" : "False"));
     }
 
 }
@@ -310,14 +308,14 @@ void RotControlFrameBase::on_nudgeRight_clicked()
 void RotControlFrameBase::on_RotateLeft_clicked()
 {
 
-    if (!rotConnected || rotError)
+    if (!rotFrameData.getRotConnected() || rotFrameData.getRotError())
     {
-        traceMsg(QString("On Rotate Left:Rotconnected = %1, RotError = %2").arg(rotConnected).arg(rotError));
+        traceMsg(QString("On Rotate Left:Rotconnected = %1, RotError = %2").arg(rotFrameData.getRotConnected() ? "True" : "False").arg(rotFrameData.getRotError() ? "True" : "False"));
         return;
     }
 
     traceMsg("RotLeft Button Clicked");
-    if (rot_left_button_status)
+    if (rotFrameData.getRotLeftButtonStatus())
     {
         traceMsg("RotLeft Button On - Stop and Turn Off");
         on_StopRotate_clicked();
@@ -326,18 +324,18 @@ void RotControlFrameBase::on_RotateLeft_clicked()
     }
     else
     {
-        traceMsg("Current Bearing = " + QString::number(currentBearing));
-        traceMsg("Rotator Bearing = " + QString::number(rotatorBearing));
-        traceMsg("RotLeft Status = " + QString::number(rot_left_button_status));
+        traceMsg("Current Bearing = " + QString::number(rotFrameData.getAntennaBearing()));
+        traceMsg("Rotator Bearing = " + QString::number(rotFrameData.getRotatorBearing()));
+        traceMsg(QString("RotLeft Status = %1").arg(rotFrameData.getRotLeftButtonStatus() ? "On" : "Off"));
         int angle = 0;
 
-        if (rotatorBearing <= minAzimuth)
+        if (rotFrameData.getRotatorBearing() <= rotFrameData.getRotatorMinAzimuth())
         {
-            traceMsg(QString("Current Bearing = %1 <= minAzimuth %2").arg(QString::number(rotatorBearing), QString::number(minAzimuth)));
+            traceMsg(QString("Current Bearing = %1 <= minAzimuth %2").arg(QString::number(rotFrameData.getRotatorBearing()), QString::number(rotFrameData.getRotatorMinAzimuth())));
             return;
         }
 
-        if (moving || movingCW || movingCCW)
+        if (rotFrameData.getMoving() || rotFrameData.getMovingCW() || rotFrameData.getMovingCCW())
         {
             traceMsg("RotLeft Stopping");
             on_StopRotate_clicked();
@@ -346,15 +344,14 @@ void RotControlFrameBase::on_RotateLeft_clicked()
         rot_left_button_on();
         traceMsg("Send RotLeft to Rototor Control");
         emit sendRotator(rpcConstants::eRotateLeft, angle);
-        movingCW = true;
+        rotFrameData.setMovingCW(true);
     }
 
 }
 
 void RotControlFrameBase::clearBearingLineEdit()
 {
-    BearingLineEdit* le = getBrgLineEditObject();
-    if (le)
+    if (auto le = getBrgLineEditObject())
     {
         le->clear();
     }
@@ -364,16 +361,16 @@ void RotControlFrameBase::clearBearingLineEdit()
 void RotControlFrameBase::on_RotateRight_clicked()
 {
 
-    if (!rotConnected || rotError)
+    if (!rotFrameData.getRotConnected() || rotFrameData.getRotError())
     {
-        traceMsg(QString("On Rotate Right:Rotconnected = %1, RotError = %2").arg(rotConnected).arg(rotError));
+        traceMsg(QString("On Rotate Right:Rotconnected = %1, RotError = %2").arg(rotFrameData.getRotConnected() ? "True" : "False").arg(rotFrameData.getRotError() ? "True" : "False"));
         return;
     }
 
 
     traceMsg("RotRight Button Clicked");
 
-    if (rot_right_button_status)
+    if (rotFrameData.getRotRightButtonStatus())
     {
         traceMsg("RotRight Button On - Stop and Turn Off");
         on_StopRotate_clicked();
@@ -382,18 +379,18 @@ void RotControlFrameBase::on_RotateRight_clicked()
     }
     else
     {
-        traceMsg("Current Bearing = " + QString::number(currentBearing));
-        traceMsg("Rotator Bearing = " + QString::number(rotatorBearing));
-        traceMsg("RotRight Status = " + QString::number(rot_right_button_status));
+        traceMsg("Current Bearing = " + QString::number(rotFrameData.getAntennaBearing()));
+        traceMsg("Rotator Bearing = " + QString::number(rotFrameData.getRotatorBearing()));
+        traceMsg(QString("RotRight Status = %1").arg(rotFrameData.getRotRightButtonStatus()));
         int angle = 0;
 
-        if (rotatorBearing >= maxAzimuth)
+        if (rotFrameData.getRotatorBearing() >= rotFrameData.getRotatorMaxAzimuth())
         {
-            traceMsg(QString("Current Bearing = %1 >= maxAzimuth %2").arg(QString::number(currentBearing), QString::number(maxAzimuth)));
+            traceMsg(QString("Current Bearing = %1 >= maxAzimuth %2").arg(QString::number(rotFrameData.getAntennaBearing()), QString::number(rotFrameData.getRotatorMaxAzimuth())));
             return;
         }
 
-        if (moving || movingCW || movingCCW)
+        if (rotFrameData.getMoving() || rotFrameData.getMovingCW() || rotFrameData.getMovingCCW())
         {
             traceMsg("RotRight Stopping");
             on_StopRotate_clicked();
@@ -402,7 +399,7 @@ void RotControlFrameBase::on_RotateRight_clicked()
         rot_right_button_on();
         traceMsg("Send RotRight to Rotator Control");
         emit sendRotator(rpcConstants::eRotateRight, angle);
-        movingCCW = true;
+        rotFrameData.setMovingCCW(true);
     }
 
 }
@@ -411,25 +408,25 @@ void RotControlFrameBase::on_RotateRight_clicked()
 
 void RotControlFrameBase::rot_left_button_on()
 {
-    rot_left_button_status = true;
+    rotFrameData.setRotLeftButtonStatus(true);
     showRotLeftButOn();
 }
 
 void RotControlFrameBase::rot_left_button_off()
 {
-    rot_left_button_status = false;
+    rotFrameData.setRotLeftButtonStatus(false);
     showRotLeftButOff();
 }
 
 void RotControlFrameBase::rot_right_button_on()
 {
-    rot_right_button_status = true;
+    rotFrameData.setRotRightButtonStatus(true);
     showRotRightButOn();
 }
 
 void RotControlFrameBase::rot_right_button_off()
 {
-    rot_right_button_status = false;
+    rotFrameData.setRotRightButtonStatus(false);
     showRotRightButOff();
 }
 
@@ -437,8 +434,8 @@ void RotControlFrameBase::rot_right_button_off()
 void RotControlFrameBase::showTurnButOn()
 {
     //ui->Rotate->setPalette(*redText);
-    QToolButton* tb = getRotateButtonObject();
-    if (tb)
+
+    if (auto tb = getRotateButtonObject())
     {
         tb->setStyleSheet(BUTTON_ON_STYLE);
         tb->setText(tr("Turn"));
@@ -448,8 +445,8 @@ void RotControlFrameBase::showTurnButOn()
 
 void RotControlFrameBase::showTurnButOff()
 {
-    QToolButton* tb = getRotateButtonObject();
-    if (tb)
+
+    if (auto tb = getRotateButtonObject())
     {
         tb->setStyleSheet(BUTTON_OFF_STYLE);
         tb->setText(tr("Turn"));
@@ -461,8 +458,8 @@ void RotControlFrameBase::showTurnButOff()
 
 void RotControlFrameBase::showRotLeftButOn()
 {
-    QToolButton* tb = getRotateLeftObject();
-    if (tb)
+
+    if (auto tb = getRotateLeftObject())
     {
         tb->setStyleSheet(BUTTON_ON_STYLE);
         tb->setText(tr("(CCW) Left"));
@@ -472,8 +469,8 @@ void RotControlFrameBase::showRotLeftButOn()
 
 void RotControlFrameBase::showRotLeftButOff()
 {
-    QToolButton* tb = getRotateLeftObject();
-    if (tb)
+
+    if (auto tb = getRotateLeftObject())
     {
         tb->setStyleSheet(BUTTON_OFF_STYLE);
         tb->setText(tr("(CCW) Left"));
@@ -482,8 +479,8 @@ void RotControlFrameBase::showRotLeftButOff()
 
 void RotControlFrameBase::showRotRightButOn()
 {
-    QToolButton* tb = getRotateRightObject();
-    if (tb)
+
+    if (auto tb = getRotateRightObject())
     {
         tb->setStyleSheet(BUTTON_ON_STYLE);
         tb->setText(tr("(CW) Right"));
@@ -492,8 +489,8 @@ void RotControlFrameBase::showRotRightButOn()
 
 void RotControlFrameBase::showRotRightButOff()
 {
-    QToolButton* tb = getRotateRightObject();
-    if (tb)
+
+    if (auto tb = getRotateRightObject())
     {
         tb->setStyleSheet(BUTTON_OFF_STYLE);
         tb->setText(tr("(CW) Right"));
@@ -503,19 +500,19 @@ void RotControlFrameBase::showRotRightButOff()
 void RotControlFrameBase::on_StopRotate_clicked()
 {
     emit sendRotator(rpcConstants::eRotateStop, 0);
-    clearRotatorFlags();
+    rotFrameData.clearRotatorMovingFlags();
     showTurnButOff();
     showRotLeftButOff();
     showRotRightButOff();
 }
 
-void RotControlFrameBase::clearRotatorFlags()
+
+
+
+void RotControlFrameBase::clearRotatorIndicators()
 {
     rot_left_button_off();
     rot_right_button_off();
-    moving = false;
-    movingCCW = false;
-    movingCW = false;
     showTurnButOff();
     showRotLeftButOff();
     showRotRightButOff();
@@ -529,8 +526,7 @@ void RotControlFrameBase::setRotatorList()
 {
     QStringList rots = LogContainer->sendDM->rotators();
 
-    QComboBox* cb = getAntennaSelectObject();
-    if (cb)
+    if (auto cb = getAntennaSelectObject())
     {
        comboSetUniqueNames(rots, cb);
     }
@@ -552,140 +548,131 @@ void RotControlFrameBase::setRotatorState(const QString &s)
 
     if (sl.count() < 3)
     {
-        if (sl.count() > 0 && sl[0] != lastConnectStat)
+        if (sl.count() > 0 && sl[0] != rotFrameData.getLastConnectStat())
         {
-            lastConnectStat = sl[0];
-            if (lastConnectStat == ROT_STATUS_CONNECTED)
+            rotFrameData.setLastConnectStat(sl[0]);
+            if (rotFrameData.getLastConnectStat() == ROT_STATUS_CONNECTED)
             {
-                QLabel* lbl = getRotConnectStateLabelObject();
-                if (lbl)
+
+                if (auto lbl = getRotConnectStateLabelObject())
                 {
                    lbl->setText(tr("Connected"));
                 }
 
-                rotError = false;
-                rotConnected = true;
+                rotFrameData.setRotError(false);
+                rotFrameData.setRotConnected(true);
 
                 setRotatorAntennaName(ct->antennaName.getValue().toString()); // make sure the name appears
 
                 emit rotatorConnected(true);     // tell bandmap
             }
-            else if (lastConnectStat == ROT_STATUS_DISCONNECTED)
+            else if (rotFrameData.getLastConnectStat() == ROT_STATUS_DISCONNECTED)
             {
-                QLabel* lbl = getRotConnectStateLabelObject();
-                if (lbl)
+                if (auto lbl = getRotConnectStateLabelObject())
                 {
                     lbl->setText(tr("Disconnected"));
                 }
-                rotError = false;
-                rotConnected = false;
+                rotFrameData.setRotError(false);
+                rotFrameData.setRotConnected(false);
                 emit rotatorConnected(false);     // tell bandmap
 
 
             }
         }
-        if (sl.count() > 1 && sl[1] != lastStatus)
+        if (sl.count() > 1 && sl[1] != rotFrameData.getLastStatus())
         {
-            lastStatus = sl[1];
+            rotFrameData.setLastStatus(sl[1]);
 
-            if (lastStatus == ROT_STATUS_STOP)
+            if (rotFrameData.getLastStatus() == ROT_STATUS_STOP)
             {
-                QLabel* lbl = getRotConnectStateLabelObject();
-                if (lbl)
+                if (auto lbl = getRotConnectStateLabelObject())
                 {
                     lbl->setText(tr("Stop"));
                 }
 
-                rotError = false;
-                clearRotatorFlags();
+                rotFrameData.setRotError(false);
+                rotFrameData.clearRotatorMovingFlags();
                 showRotLeftButOff();
                 showRotRightButOff();
                 showTurnButOff();
             }
-            else if (lastStatus == ROT_STATUS_ROTATE_CCW)
+            else if (rotFrameData.getLastStatus() == ROT_STATUS_ROTATE_CCW)
             {
-                QLabel* lbl = getRotConnectStateLabelObject();
-                if (lbl)
+                if (auto lbl = getRotConnectStateLabelObject())
                 {
                    lbl->setText(HtmlFontColour("Green") + tr("Rotating CCW"));
                 }
 
-                rotError = false;
-                moving = false;
-                movingCW = false;
-                movingCCW = true;
+                rotFrameData.setRotError(false);
+                rotFrameData.setMoving(false);
+                rotFrameData.setMovingCW(false);
+                rotFrameData.setMovingCCW(true);
                 // clearRotatorFlags();
                 showRotLeftButOn();
             }
-            else if (lastStatus == ROT_STATUS_ROTATE_CW)
+            else if (rotFrameData.getLastStatus() == ROT_STATUS_ROTATE_CW)
             {
-                QLabel* lbl = getRotConnectStateLabelObject();
-                if (lbl)
+                if (auto lbl = getRotConnectStateLabelObject())
                 {
                     lbl->setText(HtmlFontColour("Green") + tr("Rotating CW"));
                 }
 
-                rotError = false;
-                moving = false;
-                movingCW = true;
-                movingCCW = false;
+                rotFrameData.setRotError(false);
+                rotFrameData.setMoving(false);
+                rotFrameData.setMovingCW(true);
+                rotFrameData.setMovingCCW(false);
                 //clearRotatorFlags();
                 showRotRightButOn();
             }
-            else if (lastStatus == ROT_STATUS_TURN_TO)
+            else if (rotFrameData.getLastStatus() == ROT_STATUS_TURN_TO)
             {
 
-                QLabel* lbl = getRotConnectStateLabelObject();
-                if (lbl)
-                {
-                    lbl->setText(HtmlFontColour("Green") + tr("Turning to bearing"));
-                }
+               if (auto lbl =  getRotConnectStateLabelObject())
+               {
+                   lbl->setText(HtmlFontColour("Green") + tr("Turning to bearing"));
+               }
 
-                rotError = false;
-                moving = true;
-                movingCW = false;
-                movingCCW = false;
+                rotFrameData.setRotError(false);
+                rotFrameData.setMoving(true);
+                rotFrameData.setMovingCW(false);
+                rotFrameData.setMovingCCW(false);
                 showTurnButOn();
                 //clearRotatorFlags();
             }
-            else if (lastStatus == ROT_STATUS_CONNECTED)
+            else if (rotFrameData.getLastStatus() == ROT_STATUS_CONNECTED)
             {
-                QLabel* lbl = getRotConnectStateLabelObject();
-                if (lbl)
+                if (auto lbl = getRotConnectStateLabelObject())
                 {
                     lbl->setText(tr("Connected"));
                 }
 
-                rotError = false;
-                rotConnected = true;
+               rotFrameData.setRotError(false);
+               rotFrameData.setRotConnected(true);
             }
-            else if (lastStatus == ROT_STATUS_DISCONNECTED)
+            else if (rotFrameData.getLastStatus() == ROT_STATUS_DISCONNECTED)
             {
-                QLabel* lbl = getRotConnectStateLabelObject();
-                if (lbl)
+                if (auto lbl = getRotConnectStateLabelObject())
                 {
                     lbl->setText(tr("Disconnected"));
                 }
 
-                rotError = false;
-                rotConnected = false;
+                rotFrameData.setRotError(false);
+                rotFrameData.setRotConnected(false);
             }
-            else if (lastStatus == ROT_STATUS_ERROR)
+            else if (rotFrameData.getLastStatus() == ROT_STATUS_ERROR)
             {
-                QLabel* lbl = getRotConnectStateLabelObject();
-                if (lbl)
+                if (auto lbl = getRotConnectStateLabelObject())
                 {
                     lbl->setText(HtmlFontColour("Red") + tr("Error"));
                 }
 
-                rotError = true;
+                rotFrameData.setRotError(true);
             }
             else
             {
-                QLabel* lbl = getRotConnectStateLabelObject();
-                if (lbl)
+                if (auto lbl = getRotConnectStateLabelObject())
                 {
-                    lbl->setText(lastStatus);
+                    lbl->setText(rotFrameData.getLastStatus());
                 }
             }
 
@@ -693,14 +680,13 @@ void RotControlFrameBase::setRotatorState(const QString &s)
     }
     if (sl.count() <= 1)     // will be a revoked state
     {
-        QLabel* lbl = getRotConnectStateLabelObject();
-        if (lbl)
+        if (auto lbl = getRotConnectStateLabelObject())
         {
             lbl->setText(tr("Disconnected"));
         }
 
-        rotError = false;
-        rotConnected = false;
+        rotFrameData.setRotError(false);
+        rotFrameData.setRotConnected(false);
     }
 
 
@@ -717,10 +703,10 @@ void RotControlFrameBase::setRotatorAntennaName(const QString &s)
     else
         trace(QString("Antenna %1 not found").arg(s));
 
-    antennaName = cb->currentData().toString();
+    rotFrameData.setAntennaName(cb->currentData().toString());
     if (ct && !ct->isReadOnly())
     {
-        emit selectRotator(antennaName);
+        emit selectRotator(rotFrameData.getAntennaName());
     }
 }
 void RotControlFrameBase::on_ContestPageChanged()
@@ -735,10 +721,9 @@ void RotControlFrameBase::setRotatorBearing(const QString &s)
 {
     traceMsg(QString("Bearings from rotator control = %1").arg(s));
 
-    QLabel* lbl = getRotBrgDisplayObject();
-    if (lbl)
+    if (auto lbl = getRotBrgDisplayObject())
     {
-        displayCompassBearingWithOverlap(s, rotatorBearing, currentBearing, lbl);
+        displayCompassBearingWithOverlap(s, rotFrameData, lbl);
     }
 
 
@@ -749,7 +734,7 @@ void RotControlFrameBase::setRotatorMaxAzimuth(const int maxAz)
 {
     traceMsg(QString("Set MaxAzimuth = %1").arg(QString::number(maxAz)));
 
-    maxAzimuth = maxAz;
+    rotFrameData.setRotatorMaxAzimuth(maxAz);
 
 }
 
@@ -758,16 +743,16 @@ void RotControlFrameBase::setRotatorMinAzimuth(const int minAz)
 {
     traceMsg(QString("Set MinAzimuth = %1").arg(QString::number(minAz)));
 
-    minAzimuth = minAz;
+    rotFrameData.setRotatorMinAzimuth(minAz);
 
 }
 
 void RotControlFrameBase::setSupportStopCommandFlag(bool state)
 {
     traceMsg((QString("Set Support Stop Command Flag = %1").arg(state ?  "True" : "False" )));
-    supportStopCommand = state;
-    QToolButton* tb = getStopRotateObject();
-    if (tb)
+    rotFrameData.setSupportStopCommand(state);
+
+    if (auto tb = getStopRotateObject())
     {
         tb->setVisible(state);
     }
@@ -777,13 +762,13 @@ void RotControlFrameBase::setSupportStopCommandFlag(bool state)
 
 void RotControlFrameBase::setCwCcwCmdEnable(bool s)
 {
-    supportCwCcwCmd = s;
+    rotFrameData.SetSupportCwCcwCmd(s);
     setCwCcW_Items_Visible(s);
 }
 
 void RotControlFrameBase::setCwCcW_Items_Visible(bool visible)
 {
-    QToolButton* tb = getnudgeLeftObject();
+    auto tb = getnudgeLeftObject();
     if (tb)
     {
        tb->setVisible(visible);
@@ -813,8 +798,7 @@ void RotControlFrameBase::skyScanStartedSetFrameDisabled(bool disabled)
 {
     traceMsg(QString("skyScan set frame disabable = %1").arg(disabled ? "True" : "False"));
 
-    QGroupBox* gb = getRotatorControlGroupBoxObject();
-    if (gb)
+    if (auto gb = getRotatorControlGroupBoxObject())
     {
         gb->setDisabled(disabled);
     }
@@ -824,7 +808,7 @@ void RotControlFrameBase::skyScanStartedSetFrameDisabled(bool disabled)
 
 void RotControlFrameBase::traceMsg(QString msg)
 {
-    trace(QString("[%1] %2 - %3").arg(frameName, antennaName, msg));
+    trace(QString("[%1] %2 - %3").arg(rotFrameData.getFrameName(), rotFrameData.getAntennaName(), msg));
 }
 
 void RotControlFrameBase::on_antennaNameSel_activated(int /*arg1*/)
@@ -832,16 +816,16 @@ void RotControlFrameBase::on_antennaNameSel_activated(int /*arg1*/)
     QComboBox* cb = getAntennaSelectObject();
     if (cb)
     {
-        antennaName = cb->currentData().toString();
+        rotFrameData.setAntennaName(cb->currentData().toString());
     }
 
 
-    emit selectRotator(antennaName);
+    emit selectRotator(rotFrameData.getAntennaName());
 
 }
 void RotControlFrameBase::getRotDetails(memoryData::memData &m)
 {
-    m.bearing = currentBearing;
+    m.bearing = rotFrameData.getAntennaBearing();;
 }
 
 void RotControlFrameBase::presetTurn(QString b)
@@ -851,8 +835,8 @@ void RotControlFrameBase::presetTurn(QString b)
         turnTo(b.toInt());
         //ui->BrgSt->setText(b);
         setTurnDisplayText(convertBearingForDisplay(b));
-        QLineEdit* le = getBrgLineEditObject();
-        if (le)
+
+        if (auto le = getBrgLineEditObject())
         {
            le->setFocus();
         }
@@ -872,9 +856,9 @@ void RotControlFrameBase::keyPressEvent(QKeyEvent *event)
     bool alt = mods & Qt::AltModifier;
 */
 
-    BearingLineEdit* le = getBrgLineEditObject();
+
     bool test = false;
-    if (le)
+    if (auto le = getBrgLineEditObject())
     {
         if (Key == Qt::Key_Return && le->hasFocus())
         {
@@ -904,12 +888,18 @@ void RotControlFrameBase::checkConnection()
     {
         // clear the rot selection
 
-        QComboBox* cb = getAntennaSelectObject();
-        if (cb)
+
+        if (auto cb = getAntennaSelectObject())
         {
            cb->setCurrentText("");
         }
 
         setRotatorState(ROT_STATUS_DISCONNECTED);
     }
+}
+
+
+void RotControlFrameBase::setFrameName(QString frameName)
+{
+    rotFrameData.setFrameName(frameName);
 }
