@@ -23,6 +23,8 @@ CONFIG += staticlib
 INCLUDEPATH += ../MqtUtils
 INCLUDEPATH += ../TinyXML
 INCLUDEPATH += ../XMPPLib
+INCLUDEPATH += ../MqtLogger
+
 
 SOURCES += \
     AntennaDetail.cpp \
@@ -103,6 +105,7 @@ SOURCES += \
     rigcontrolcommonconstants.cpp \
     rigutils.cpp \
     RotatorCache.cpp \
+    rotControlFrameBase.cpp \
     rotatorcommon.cpp \
     rotpresetdialog.cpp \
     ScreenContact.cpp \
@@ -207,6 +210,7 @@ HEADERS += \
     RigState.h \
     rigutils.h \
     RotatorCache.h \
+    rotControlFrameBase.h \
     rotatorcommon.h \
     rotpresetdialog.h \
     ScreenContact.h \

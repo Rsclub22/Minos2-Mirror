@@ -17,20 +17,22 @@
 
 #include <QFrame>
 #include <QShortcut>
+#include <QComboBox>
 #include "RPCCommandConstants.h"
 #include "rigmemcommondata.h"
 #include "MinosLoggerEvents.h"
+#include "rotControlFrameBase.h"
 
 
 namespace Ui {
 class RotControlFrame;
 }
-class RotControlFrame;
 
 
 
 
-class RotControlFrame : public QFrame
+
+class RotControlFrame : public RotControlFrameBase
 {
     Q_OBJECT
 
@@ -41,39 +43,44 @@ public:
 
     Ui::RotControlFrame *ui;
 
-    void setContest(BaseContestLog *);
 
-    void setRotatorList();
-    void setRotatorState(const QString &s);
-    void setRotatorBearing(const QString &s);
-    void setRotatorAntennaName(const QString &s);
-    void setRotatorMaxAzimuth(const int s);
-    void setRotatorMinAzimuth(const int s);
-    int getAngle(QString);
-    int getCurrentBearing();
-
-    QString getBrgTxtFrmFrame();
 
     void getRotDetails(memoryData::memData &m);
 
-    void on_ContestPageChanged();
-    void presetTurn(QString);
 
-    void setCwCcwCmdEnable(bool s);
 
-    void checkConnection();
-    void setSupportStopCommandFlag(bool state);
 
-    void skyScanStartedSetFrameDisabled(bool disabled);
+
+
+
+protected:
+
+    //QWidget* getCompassObject() override;
+    QGroupBox* getRotatorControlGroupBoxObject() override;
+    QComboBox* getAntennaSelectObject() override;
+    QLabel* getRotConnectStateLabelObject() override;
+    QLabel* getRotatorStatMsgLabelObject() override;
+    BearingLineEdit* getBrgLineEditObject() override;
+    QToolButton* getRotateButtonObject() override;
+    QToolButton* getStopRotateObject() override;
+    QToolButton* getRotateLeftObject() override;
+    QToolButton* getRotateRightObject() override;
+    QToolButton* getnudgeLeftObject() override;
+    QToolButton* getnudgeRightObject() override;
+    QLabel* getRotBrgDisplayObject() override;
+
+
+/*
+    QShortcut* getNudgeRightShortCutObject() override;
+    QShortcut* getNudgeLeftShortCutObject() override;
+    QShortcut* getRotateLeftShortCutObject() override;
+    QShortcut* getRotateRightShortCutObject() override;
+    QShortcut* getTurnToBearingShortCutObject() override;
+    QShortcut* getRotateStopShortCutObject() override;
+*/
 private:
 
-    QShortcut *nudgeRight1;
-    QShortcut *nudgeRight2;
-    QShortcut *nudgeLeft;
-    QShortcut *rotateLeft;
-    QShortcut *rotateRight;
-    QShortcut *turnToBearing;
-    QShortcut *rotateStop;
+
 
     int maxAzimuth = 0;
     int minAzimuth = 0;
@@ -113,17 +120,17 @@ private:
     void showTurnButOn();
     void showTurnButOff();
 
-    void keyPressEvent(QKeyEvent *event);
+
     void setCwCcW_Items_Visible(bool visible);
 
 
 
 
-    void setTurnDisplayText(QString brg);
+
     QString convertBearingForDisplay(QString bearing);
 
 
-    //bool validateBearingEntry(const QString brg);
+
 
 signals:
     void selectRotator(QString);
