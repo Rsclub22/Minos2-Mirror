@@ -23,7 +23,6 @@ SOURCES += \
     rotatorfactory.cpp \
     rotcapabilities.cpp \
     rotatormainwindow.cpp \
-    minoscompass.cpp \
     main.cpp \
     logdialog.cpp \
     rotatorlog.cpp \
@@ -41,7 +40,6 @@ HEADERS  += \
     rotatorfactory.h \
     rotcapabilities.h \
     rotatormainwindow.h \
-    minoscompass.h \
     logdialog.h \
     rotatorlog.h \
     rotatorRpc.h \

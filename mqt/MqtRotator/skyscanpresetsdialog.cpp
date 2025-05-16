@@ -58,6 +58,7 @@ SkyScanPresetsDialog::SkyScanPresetsDialog(QWidget *parent, SkyScanData* curData
     //connect(ui->buttonBox, &QDialogButtonBox::rejected, this, &SkyScanPresetsDialog::editRejected);
 
     ui->compassDialwidget->setDoNotShowNeedle(true);
+    ui->compassDialwidget->setMouseEventsEnabled(false);
 
     if (editButtonType == "New")
     {

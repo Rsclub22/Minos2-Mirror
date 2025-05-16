@@ -14,6 +14,7 @@ enum SCType
     sctBandSwitch,
     sctRotControl,
     sctSkyScanControl,
+    sctRotCompassDisplay,
     sctRotPresets,
     sctQSOEdit,
     sctNextQSODetails,

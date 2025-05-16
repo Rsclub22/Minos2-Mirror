@@ -26,6 +26,7 @@ QVector <SCTypeOption> ScreenConfigElement::scoptions =
     {sctRunButtons, QT_TR_NOOP("Call Freq Buttons"), QT_TR_NOOP("Run Freq Buttons")},
     {sctRotControl, QT_TR_NOOP("Rotator Control"), QT_TR_NOOP("Rotator Control")},
     {sctSkyScanControl, QT_TR_NOOP("SkyScan Control"), QT_TR_NOOP("SkyScan Control")},
+    {sctRotCompassDisplay, QT_TR_NOOP("Rotator Compass Display"), QT_TR_NOOP("Rotator Compass Display")},
     {sctRotPresets, QT_TR_NOOP("Rotator Presets"), QT_TR_NOOP("Rotator Presets")},
     {sctThisMatch, QT_TR_NOOP("This Contest Match"), QT_TR_NOOP("This Contest Matches")},
     {sctOtherMatch, QT_TR_NOOP("Other Contest Match"), QT_TR_NOOP("Other Contest Matches") },

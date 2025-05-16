@@ -219,16 +219,18 @@ void TSingleLogFrame::createScreenComponents()
     bandSwitchFrame = new BandSwitchFrame(this);
     bandSwitchFrame->setObjectName(QStringLiteral("bandSwitchFrame"));
     bandSwitchFrame->setVisible(false);
+    bandSwitchFrame->setRigControl(FKHRigControlFrame);
 
     FKHRigControlFrame = new RigControlFrame(this);
     FKHRigControlFrame->setObjectName(QStringLiteral("FKHRigControlFrame"));
     FKHRigControlFrame->setFrameShape(QFrame::StyledPanel);
     FKHRigControlFrame->setFrameShadow(QFrame::Raised);
     FKHRigControlFrame->setVmButtonsFrame(txVmButtonsFrame);
-
     FKHRigControlFrame->setVisible(false);
 
-    bandSwitchFrame->setRigControl(FKHRigControlFrame);
+    FKHRotCompassFrame = new RotatorCompassFrame(this);
+    FKHRotCompassFrame->setObjectName(QStringLiteral("FKHRotCompassFrame"));
+    FKHRotCompassFrame->setVisible(false);
 
     runButtonsFrame = new RunButtonsFrame(this);
     runButtonsFrame->setObjectName(QStringLiteral("runButtonsFrame"));
@@ -397,6 +399,7 @@ void TSingleLogFrame::clearScreenLayout(bool clearAllTabs)
     bandSwitchFrame->setContest(nullptr);
     txVmButtonsFrame->setContest(nullptr);
     FKHRotControlFrame->setContest(nullptr);
+    FKHRotCompassFrame->setContest(nullptr);
     skyScanControlFrame->setContest(nullptr);
     rotPresets->setContest(nullptr);
     // CribSheet
@@ -452,7 +455,10 @@ void TSingleLogFrame::clearScreenLayout(bool clearAllTabs)
         FKHRotControlFrame->hide();
 
         skyScanControlFrame->setParent(this);
-        skyScanControlFrame->setParent(this);
+        skyScanControlFrame->hide();
+
+        FKHRotCompassFrame->setParent(this);
+        FKHRotCompassFrame->hide();
 
         rotPresets->setParent(this);
         rotPresets->hide();
@@ -670,6 +676,11 @@ void TSingleLogFrame::buildRow(ContestPage *cp, SCRow &scrow, int &auxInstance, 
                 {
                     elementScrollArea->setWidget(skyScanControlFrame);
                     // don't set contest here
+                    break;
+                }
+                case sctRotCompassDisplay:
+                {
+                    elementScrollArea->setWidget(FKHRotCompassFrame);
                     break;
                 }
                 case sctQrzDisplay:

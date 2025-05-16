@@ -73,6 +73,7 @@ SOURCES += \
     locator.cpp \
     managehamlib.cpp \
     minosNetUtils.cpp \
+    minoscompass.cpp \
     minoscustomtab.cpp \
     minositem.cpp \
     minoskeyboard.cpp \
@@ -174,6 +175,7 @@ HEADERS += \
     locator.h \
     managehamlib.h \
     minosNetUtils.h \
+    minoscompass.h \
     minoscustomtab.h \
     minositem.h \
     minoskeyboard.h \

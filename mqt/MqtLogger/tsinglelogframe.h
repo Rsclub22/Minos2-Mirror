@@ -21,6 +21,7 @@
 #include "txvmbuttonsframe.h"
 #include "qrzdisplayframe.h"
 #include "qsomapframe.h"
+#include "rotatorcompassframe.h"
 
 namespace Ui {
 class TSingleLogFrame;
@@ -49,6 +50,7 @@ public:
     BandSwitchFrame *bandSwitchFrame = nullptr;
     RotControlFrame *FKHRotControlFrame = nullptr;
     RotatorSkyScanFrame *skyScanControlFrame = nullptr;
+    RotatorCompassFrame *FKHRotCompassFrame = nullptr;
     TxVmButtonsFrame *txVmButtonsFrame = nullptr;
     QrzDisplayFrame *qrzDisplayFrame = nullptr;
 
