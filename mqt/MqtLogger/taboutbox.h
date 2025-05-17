@@ -21,6 +21,7 @@ class TAboutBox : public QDialog
     int exec() override;
 
     void doCloseEvent();
+    void showAppConfig();
 
 public:
     static bool ShowAboutBox(QWidget *Owner, bool onStartup );
@@ -45,6 +46,7 @@ private slots:
     void on_ageSpinner_valueChanged(int arg1);
     void on_ageCb_stateChanged(int arg1);
     void on_appSelectButton_clicked();
+    void on_fontButton_clicked();
 };
 
 #endif // TABOUTBOX_H

@@ -57,7 +57,7 @@ WsjtxFrame::WsjtxFrame(TSingleLogFrame *parent) :
 
 
     QSize ms = delegate->docSize("XX");
-    ui->decodes_table_view_->verticalHeader()->setDefaultSectionSize(ms.height() *4/5);
+    ui->decodes_table_view_->verticalHeader()->setDefaultSectionSize(ms.height() *5/4);
     ui->decodes_table_view_->verticalHeader()->setMinimumSectionSize(10);
 
     ui->decodes_table_view_->verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
@@ -91,7 +91,7 @@ WsjtxFrame::WsjtxFrame(TSingleLogFrame *parent) :
     ui->decodes_table_view_->hideColumn (dcSeq);
 //    //ui->decodes_table_view_->hideColumn (dcPoints);
 //    //ui->decodes_table_view_->hideColumn (dcBearing);
-    ui->decodes_table_view_->hideColumn (dcDistance);
+//    ui->decodes_table_view_->hideColumn (dcDistance);
 //    //ui->decodes_table_view_->hideColumn (dcFromCall);
 //    //ui->decodes_table_view_->hideColumn (dcFromGrid);
 //    //ui->decodes_table_view_->hideColumn (dcToCall);

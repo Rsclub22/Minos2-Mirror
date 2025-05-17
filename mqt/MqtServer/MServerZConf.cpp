@@ -9,16 +9,15 @@
 //---------------------------------------------------------------------------
 #include <QUuid>
 #include "QtUtils.h"
+#include <QNetworkDatagram>
+
 #include "AppStartup.h"
 #include "MTrace.h"
-#include <QNetworkDatagram>
 #include "RPCCommandConstants.h"
 #include "SecondInstall.h"
 #include "regsettings.h"
 #include "tinyxml.h"
 #include "TinyUtils.h"
-
-#include "MinosLink.h"
 #include "serverThread.h"
 
 #include "minoslistener.h"
@@ -174,6 +173,7 @@ void TZConf::startZConf(const QString &name)
 }
 void TZConf::onTimeout()
 {
+
     static bool firstTime = true;
     if (firstTime)
     {
@@ -214,6 +214,7 @@ bool TZConf::sendMessage( )
     for (auto const &t: QASCONST(TxSocks))
     {
         QString mess = getZConfString(reqBeacon, t->qua.ip().toString());
+
         t->sendMessage(mess);
     }
    return true;
@@ -225,18 +226,14 @@ void TZConf::onReadyRead()
     trace("TZConf::onReadyRead()");
     while (readSocket.hasPendingDatagrams())
     {
-
-
         QNetworkDatagram dgram = readSocket.receiveDatagram();
         //quint16 port = dgram.senderPort();
         QHostAddress host = dgram.senderAddress();
-        QHostAddress rxAddr = dgram.destinationAddress();
 
         QByteArray buf = dgram.data();
         QString dgs = QString(buf);
 
-        // we don't seem to get our own receiver address here
-        trace(QString("Datagram received from %1 at %2: %3").arg(host.toString(), rxAddr.toString(), dgs));
+        trace(QString("Datagram received from %1 : %2").arg(host.toString(), dgs));
         if (dgs.size() > 0)
         {
             processZConfString(dgs, host, sendBeaconResponse);
@@ -333,8 +330,8 @@ void TZConf::readRouterListFile()
 // ONLY trouble is... clients will now address their servers by UUID!
 // when they have subscribed to stations.
 
-Router *TZConf::zcPublishRouter( const QString &uuid, const QString &name,
-                              const QHostAddress &host, quint16 PortAsNumber )
+Router *TZConf::zcPublishRouter(const QString &uuid, const QString &name,
+                                const QHostAddress &host, quint16 PortAsNumber )
 {
     trace( "zcPublishRouter Host " + host.toString() + " Station " + name +
            " Port " + QString::number( PortAsNumber ) + " uuid " + uuid  );
@@ -364,9 +361,8 @@ Router *TZConf::zcPublishRouter( const QString &uuid, const QString &name,
         }
         else
         {
-            // we must have a server connection already
-            trace("Creating MinosServerConnection zcPublishServer for " + name);
             MinosRouterConnection *msc = new MinosRouterConnection(true);
+            msc->strace(QString("Creating MinosRouterConnection zcPublishServer for %1 host %2 ").arg(name, host.toString()));
             msc->setClientRouter(sss->station);
             msc->mConnect(sss);
             msl->addListenerSlot(msc);
@@ -382,6 +378,7 @@ Router *TZConf::zcPublishRouter( const QString &uuid, const QString &name,
     trace("zcPublishServer finished");
     return *s;
 }
+
 void TZConf::publishDisconnect(Router *srv)
 {
    trace("publishDisconnect");

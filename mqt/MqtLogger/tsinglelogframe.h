@@ -183,6 +183,7 @@ public:
     void xferFromKST(QString call, QString loc, QString freq);
 
     void setCallPlaceholder(QString call);
+<<<<<<< HEAD
     void on_SkyScanNextStep(QString nextStep);
     void on_SkyScanCountDown(QString countDown);
     void on_SkyScanButtonState(int state);
@@ -190,6 +191,11 @@ public:
     void on_skyScanVisible(bool state);
     void on_skyScanStartBearing(int startBearing);
     void on_skyScanEndBearing(int endBearing);
+=======
+    void sendRunOnFlag(Frequency, QString mode, bool);
+    void sendRunOffFreqFlag(Frequency, bool);
+
+>>>>>>> 8fkh_newDev
 private:
     QString curScreenLayout;
 
@@ -274,8 +280,6 @@ private slots:
     void on_BandmapMarkFreq(Frequency freq, QString mode);
     void on_BandmapSaveFreq(QString cs, Frequency freq, QString mode, QString loc, QString brg, QString exchange);
     void on_rotatorConnected(bool connected);
-    void sendRunOnFlag(Frequency, QString mode, bool);
-    void sendRunOffFreqFlag(Frequency, bool);
     void on_clusterServerState(QString state);
     void on_SendSpotToClusterServer(Frequency freq, QString callsign, QString loc);
     void on_setClusterTXSpotEnableState(QString state);

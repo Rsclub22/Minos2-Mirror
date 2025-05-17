@@ -520,8 +520,8 @@
     </message>
     <message>
         <location filename="../profiles.cpp" line="120"/>
-        <source>Show Crib Band</source>
-        <translation>[What does this mean???]</translation>
+        <source>Show Next QSO Band</source>
+        <translation>Afficher la prochaine bande QSO</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="122"/>
@@ -658,6 +658,12 @@
         <location filename="../profiles.cpp" line="155"/>
         <source>Bandmap show derived loc</source>
         <translation>Bandmap afficher la Locator dérivée</translation>
+    </message>
+    <message>
+        <location filename="../profiles.cpp" line="157"/>
+        <location filename="../profiles.cpp" line="158"/>
+        <source></source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="159"/>
@@ -919,11 +925,6 @@
     </message>
     <message>
         <location filename="../profiles.cpp" line="247"/>
-        <source>Antenna Bearing Offset</source>
-        <translation>Hauteur au-dessus du sol de l&apos;antenne</translation>
-    </message>
-    <message>
-        <location filename="../profiles.cpp" line="247"/>
         <source>Amount to offset antenna bearings</source>
         <translatorcomment>DUPE??</translatorcomment>
         <translation>Valeur du décalage d&apos;antenne</translation>
@@ -943,17 +944,17 @@
 <context>
     <name>Calendar</name>
     <message>
-        <location filename="../Calendar.cpp" line="21"/>
+        <location filename="../Calendar.cpp" line="22"/>
         <source>&lt;VHF from VHFContests.xml&gt;</source>
         <translation>&lt;VHF de VHFContests.xml&gt;</translation>
     </message>
     <message>
-        <location filename="../Calendar.cpp" line="22"/>
+        <location filename="../Calendar.cpp" line="23"/>
         <source>&lt;Microwave from MicrContemodestsxx.xml&gt;</source>
         <translation>&lt;Microonde de MicrContemodestsxx.xml&gt;</translation>
     </message>
     <message>
-        <location filename="../Calendar.cpp" line="42"/>
+        <location filename="../Calendar.cpp" line="43"/>
         <source>Undefined</source>
         <translation>Indéterminée</translation>
     </message>
@@ -1131,7 +1132,7 @@
     <message>
         <location filename="../ConfigElementFrame.ui" line="333"/>
         <source>Leave the app name and/or the server name empty to get information from any app on a server, any server, or any app on any server</source>
-        <translatorcomment>Can surely be simplififed?</translatorcomment>
+        <translatorcomment>Can surely be simplififed? Suggestions, please!</translatorcomment>
         <translation>Laissez le nom de l&apos;application et / ou le nom du serveur vide pour obtenir des informations à partir de n&apos;importe quelle application sur un serveur, n&apos;importe quel serveur ou n&apos;importe quelle application sur n&apos;importe quel serveur</translation>
     </message>
     <message>
@@ -1220,9 +1221,151 @@
     </message>
 </context>
 <context>
+    <name>DMKeysEditDlg</name>
+    <message>
+        <location filename="../dmkeyseditdlg.ui" line="20"/>
+        <source>Settings Editor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dmkeyseditdlg.ui" line="32"/>
+        <source>OK</source>
+        <translation type="unfinished">OK</translation>
+    </message>
+    <message>
+        <location filename="../dmkeyseditdlg.ui" line="42"/>
+        <source>Cancel</source>
+        <translation type="unfinished">Annuler</translation>
+    </message>
+    <message>
+        <location filename="../dmkeyseditdlg.ui" line="49"/>
+        <source>Rename Setting</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dmkeyseditdlg.ui" line="56"/>
+        <source>Delete Setting</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dmkeyseditdlg.ui" line="63"/>
+        <source>Copy Setting</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dmkeyseditdlg.ui" line="70"/>
+        <source>New Setting</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dmkeyseditdlg.ui" line="153"/>
+        <source>Move Up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dmkeyseditdlg.ui" line="160"/>
+        <source>Move Down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dmkeyseditdlg.cpp" line="33"/>
+        <source>New Digi FKey section</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dmkeyseditdlg.cpp" line="34"/>
+        <source>Copy Digi FKey section</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dmkeyseditdlg.cpp" line="35"/>
+        <source>Delete Digi FKey section</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dmkeyseditdlg.cpp" line="36"/>
+        <source>Rename Digi FKey section</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dmkeyseditdlg.cpp" line="50"/>
+        <source>* My callsign
+        # Serial to send
+        ! Their call
+        {macro}
+        {MYCALL}        my full call
+        {CALL}          their full call
+        {SN}            serial number to send
+        {EXCH}          full exchange to send - can be in multiple parts
+        {GRID}          my Maidenhead locator
+        {SPACE}         space character
+        {SENTRST}       RST to send
+        {TIME2}         time in HHmm format
+        {LOG}           log the QSO. clear it, and focus on CALL
+        {WIPE}          wipe all QSO fields
+        {CALLFIELD}     move focus to the call field
+        {SERIALFIELD}   move focus to the serial received field
+        {EXCHANGEFIELD} move focus to the exchange received field</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dmkeyseditdlg.cpp" line="154"/>
+        <source>Run</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dmkeyseditdlg.cpp" line="154"/>
+        <source>S&amp;P</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dmkeyseditdlg.cpp" line="167"/>
+        <source>Key Top</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dmkeyseditdlg.cpp" line="167"/>
+        <source>Value</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dmkeyseditdlg.cpp" line="204"/>
+        <location filename="../dmkeyseditdlg.cpp" line="298"/>
+        <source>Please give a new name for the %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dmkeyseditdlg.cpp" line="233"/>
+        <location filename="../dmkeyseditdlg.cpp" line="263"/>
+        <location filename="../dmkeyseditdlg.cpp" line="312"/>
+        <source>%1 already exists</source>
+        <translation type="unfinished">%1 existe déjà</translation>
+    </message>
+    <message>
+        <location filename="../dmkeyseditdlg.cpp" line="246"/>
+        <source>Please give a name for the new %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dmkeyseditdlg.cpp" line="278"/>
+        <source>You cannot delete the empty %1!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dmkeyseditdlg.cpp" line="280"/>
+        <source>Are you sure you want to delete the current %1?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dmkeyseditdlg.cpp" line="294"/>
+        <source>You cannot rename the empty %1!</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Day Abbreviation</name>
     <message>
-        <location filename="../cutils.cpp" line="993"/>
+        <location filename="../cutils.cpp" line="994"/>
         <source>D</source>
         <translation>J</translation>
     </message>
@@ -1472,24 +1615,12 @@ Attention: &quot;.&quot; pas &quot;,&quot;
     <message>
         <location filename="../managehamlib.cpp" line="312"/>
         <source>Hamlib updated - will be used after restart</source>
-        <translation type="unfinished"></translation>
+        <translation>Hamlib mis à jour - sera utilisé après le redémarrage</translation>
     </message>
     <message>
         <location filename="../managehamlib.cpp" line="349"/>
         <source>Old Hamlib restored - it will be used after restart</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Hamlib Update successful 
-
-New Hamlib will be used after restart</source>
-        <translation type="vanished">Hamlib mis à jour - sera utilisé après le redémarrage</translation>
-    </message>
-    <message>
-        <source>Hamlib successfully reverted 
-
-Reverted Hamlib will be used after restart</source>
-        <translation type="vanished">Vieux Hamlib restauré - sera utilisé après le redémarrage</translation>
+        <translation>Vieux Hamlib restauré - sera utilisé après le redémarrage</translation>
     </message>
     <message>
         <location filename="../managehamlib.cpp" line="361"/>
@@ -1503,41 +1634,6 @@ Reverted Hamlib will be used after restart</source>
         <location filename="../MatchThisFrame.cpp" line="72"/>
         <source>Press &quot;Yes&quot; to transfer details, or &quot;No&quot; to edit the QSO</source>
         <translation>Appuyez sur &quot;Oui&quot; pour transférer les détails ou sur &quot;Non&quot; pour modifier le QSO</translation>
-    </message>
-</context>
-<context>
-    <name>MessageServer::impl</name>
-    <message>
-        <location filename="../WsjtxMessageServer.cpp" line="71"/>
-        <location filename="../WsjtxMessageServer.cpp" line="219"/>
-        <source>Error creating UDP message</source>
-        <translatorcomment>Tracelog? (Hence in ENglish?)</translatorcomment>
-        <translation>Erreur lors de la création du message UDP</translation>
-    </message>
-    <message>
-        <location filename="../WsjtxMessageServer.cpp" line="397"/>
-        <source>MessageServer warning: invalid UDP message received</source>
-        <translation>Avertissement de MessageServer : message UDP invalide reçu</translation>
-    </message>
-    <message>
-        <location filename="../WsjtxMessageServer.cpp" line="402"/>
-        <source>MessageServer exception: %1</source>
-        <translation>Exception du serveur de messages&#xa0;: %1</translation>
-    </message>
-    <message>
-        <location filename="../WsjtxMessageServer.cpp" line="406"/>
-        <source>Unexpected exception in MessageServer</source>
-        <translation>Exception inattendue dans MessageServer</translation>
-    </message>
-    <message>
-        <location filename="../WsjtxMessageServer.cpp" line="440"/>
-        <source>Message serialization error: read corrupt data</source>
-        <translation>Erreur de sérialisation du message&#xa0;: lire les données corrompues</translation>
-    </message>
-    <message>
-        <location filename="../WsjtxMessageServer.cpp" line="444"/>
-        <source>Message serialization error: write error</source>
-        <translation>Erreur de sérialisation du message&#xa0;: erreur d&apos;écriture</translation>
     </message>
 </context>
 <context>
@@ -1784,7 +1880,7 @@ Reverted Hamlib will be used after restart</source>
     <message>
         <location filename="../monitoredlogs.cpp" line="34"/>
         <source>Auto start current logs from stations</source>
-        <translation>[What does this mean???]</translation>
+        <translation type="unfinished">[What does this mean???]?</translation>
     </message>
 </context>
 <context>
@@ -1895,7 +1991,7 @@ Reverted Hamlib will be used after restart</source>
     <message>
         <location filename="../qsomapframe.cpp" line="232"/>
         <source>QSO Map Spot Filters</source>
-        <translation type="unfinished"></translation>
+        <translation>Filtres des spots de la carte QSO</translation>
     </message>
 </context>
 <context>
@@ -2005,7 +2101,7 @@ Reverted Hamlib will be used after restart</source>
 <context>
     <name>QWidget</name>
     <message>
-        <location filename="../cutils.cpp" line="793"/>
+        <location filename="../cutils.cpp" line="794"/>
         <source>Reset Columns</source>
         <comment>createColumnsMenu</comment>
         <translation>Réinitialiser les colonnes</translation>
@@ -2484,17 +2580,17 @@ Entrer une autre direction SVP</translation>
 <context>
     <name>clusterState</name>
     <message>
-        <location filename="../clustercommon.cpp" line="12"/>
+        <location filename="../clustercommon.cpp" line="13"/>
         <source>Available</source>
         <translation>Disponible</translation>
     </message>
     <message>
-        <location filename="../clustercommon.cpp" line="13"/>
+        <location filename="../clustercommon.cpp" line="14"/>
         <source>Not Available</source>
         <translation>Non disponible</translation>
     </message>
     <message>
-        <location filename="../clustercommon.cpp" line="14"/>
+        <location filename="../clustercommon.cpp" line="15"/>
         <source>No Contact</source>
         <translatorcomment>Dupe?</translatorcomment>
         <translation>Pas de contact</translation>

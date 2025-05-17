@@ -69,6 +69,7 @@ private:
    void setBandBoxes(QString bandStr, QString bandsList);
    void loadClubNames(QString groupName);
    void doCalendarButton(QString dtitle, CalType calt);
+   int findPubSubInCombo(QString name, QComboBox *cb);
    public Q_SLOTS:
    virtual void accept() override;
    virtual void reject() override;

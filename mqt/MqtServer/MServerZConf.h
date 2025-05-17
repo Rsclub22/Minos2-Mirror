@@ -44,7 +44,7 @@ class Router
 };
 extern QVector<Router *> routerList;
 extern QVector<Router *>::iterator findStation( const QString s );
-extern QVector<Router *>::iterator findIp( const QString s );
+extern QVector<Router *>::iterator findIp( const QHostAddress & );
 
 class UDPSocket: public QObject
 {

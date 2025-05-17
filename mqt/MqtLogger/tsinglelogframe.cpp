@@ -123,10 +123,6 @@ void TSingleLogFrame::buildFrame(int slotNo)
     connect(FKHRigControlFrame, &RigControlFrame::sendModeToControl, this, &TSingleLogFrame::sendRadioMode);
     connect(GJVQSOLogFrame, &QSOLogFrame::sendModeControl, this , &TSingleLogFrame::sendRadioMode);
 
-    connect(runButtonsFrame, &RunButtonsFrame::sendRunOnFlag, this, &TSingleLogFrame::sendRunOnFlag);
-    connect(runButtonsFrame, &RunButtonsFrame::sendRunOffFreqFlag, this, &TSingleLogFrame::sendRunOffFreqFlag);
-
-
     // Rotator updates
     // From rotator controller
     connect(LogContainer->sendDM, &TSendDM::RotatorList, this, &TSingleLogFrame::on_RotatorList);
@@ -234,7 +230,11 @@ void TSingleLogFrame::createScreenComponents()
     FKHRigControlFrame->setObjectName(QStringLiteral("FKHRigControlFrame"));
     FKHRigControlFrame->setFrameShape(QFrame::StyledPanel);
     FKHRigControlFrame->setFrameShadow(QFrame::Raised);
+<<<<<<< HEAD
     FKHRigControlFrame->setVmButtonsFrame(txVmButtonsFrame);
+=======
+
+>>>>>>> 8fkh_newDev
     FKHRigControlFrame->setVisible(false);
 
     FKHRotCompassFrame = new RotatorCompassFrame(this);
@@ -660,7 +660,8 @@ void TSingleLogFrame::buildRow(ContestPage *cp, SCRow &scrow, int &auxInstance, 
                 case sctRunButtons:
                 {
                     elementScrollArea->setWidget(runButtonsFrame);
-                    runButtonsFrame->setContest(ct);
+                    // don't set contest here
+//                    runButtonsFrame->setContest(ct);
                     break;
                 }
                 case sctBandSwitch:
@@ -943,6 +944,7 @@ void TSingleLogFrame::buildScreenLayout(int slotNo)
     dmButtonFrame->setContest(ct);
     txVmButtonsFrame->setContest(ct);
     bandmapControlFrame->setContest(ct);
+    runButtonsFrame->setContest(ct);
 
     LogContainer->raise();  // get it back in front
 
@@ -2485,6 +2487,10 @@ void TSingleLogFrame::xferFromKST(QString call, QString loc, QString freq)
 {
     GJVQSOLogFrame->xferFromKST(call, loc);
     FKHRigControlFrame->xferFromKST(freq);
+
+#ifdef Q_OS_WIN
+    MinosConfigEvents::sendStealFocus();
+#endif
 }
 
 //--------------- QRZ Display ---------------------------------------

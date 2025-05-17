@@ -1004,11 +1004,11 @@ void ContestDetails::setDetails( const IndividualContest &ic )
    QString setMode = ic.mode;
    if (setMode == "FT8" || setMode == "FT4")
    {
-       setMode = hamlibData::MGM;
+       setMode = MGM;
    }
    if (isHF)
    {
-       if (setMode == hamlibData::MGM)
+       if (setMode == MGM)
        {
            contestTransferObject->locMult.setValue( false );
            contestTransferObject->countryMult.setValue( true );
@@ -1060,7 +1060,7 @@ void ContestDetails::setDetails( const IndividualContest &ic )
    if (mode.isEmpty())
    {
       if (contestTransferObject->MGMContestRules.getValue() || ic.specialRules.contains("S12"))
-          mode = hamlibData::MGM;
+          mode = MGM;
       else
           mode = hamlibData::USB;
    }
@@ -1100,11 +1100,11 @@ void ContestDetails::setModes()
     if (!contestTransferObject || contestTransferObject->modeList.getValue().isEmpty())
     {
         modeString = hamlibData::CW
-                     + "|" + (contestTransferObject->isHF()?hamlibData::PH:hamlibData::USB)
+                     + "|" + (contestTransferObject->isHF()?PH:hamlibData::USB)
                     + "|" + hamlibData::FM
-                    + "|" + hamlibData::MGM
-                    + "|" + hamlibData::RY
-                    + "|" + hamlibData::PSK
+                    + "|" + MGM
+                    + "|" + RY
+                    + "|" + PSK
                     ;
     }
     else
@@ -1851,8 +1851,8 @@ QString ContestDetails::getSelectedAntenna()
 
 void ContestDetails::setSelectedAntenna(QString s)
 {
-   int c = ui->antennaNameSel->findData(s);
-   ui->antennaNameSel->setCurrentIndex(c);
+    int c = findPubSubInCombo(s, ui->antennaNameSel);
+    ui->antennaNameSel->setCurrentIndex(c);
 }
 void ContestDetails::on_RotatorList()
 {
@@ -1868,11 +1868,30 @@ QString ContestDetails::getSelectedRadio()
 {
     return ui->radioNameSel->currentData().toString();
 }
+int ContestDetails::findPubSubInCombo(QString name, QComboBox *cb)
+{
+    int found = -1;
+    for(int r = 0; r < cb->count(); r++)
+    {
+        QString data = cb->itemData(r).toString();
+        if (data.contains(name, Qt::CaseInsensitive))
+        {
+            if (found != -1)
+            {
+                found = -1;
+                break;
+            }
+            found = r;
+        }
+    }
+
+    return found;
+}
 
 void ContestDetails::setSelectedRadio(QString s)
 {
-   int c = ui->radioNameSel->findData(s);
-   ui->radioNameSel->setCurrentIndex(c);
+    int c = findPubSubInCombo(s, ui->radioNameSel);
+    ui->radioNameSel->setCurrentIndex(c);
 }
 void ContestDetails::on_SetRadioList()
 {

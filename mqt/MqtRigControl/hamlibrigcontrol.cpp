@@ -75,11 +75,16 @@ int register_callback(rig_model_t rig_model, void *callback_data)
 
 
     RIG *myRig = nullptr;
+<<<<<<< HEAD
     if (rig_model != 2057)      // temp fix because QRP Labs radio is still beta and causes crashes in hamlib 4.6.1 Jan 2025
     {
         myRig = rig_init(rig_model);
     }
 
+=======
+    if (rig_model != 2057)
+        myRig = rig_init(rig_model);
+>>>>>>> 8fkh_newDev
     bool myRigOk = (myRig) ? true : false;
 
 
@@ -214,6 +219,7 @@ int register_callback(rig_model_t rig_model, void *callback_data)
     rigCap.setRigModelNumber(rig_model);
     rigCap.setLibraryName("hamlib");
     rigCap.setLibraryVersion(hamlib_version);
+    rigCap.setDetailedLibraryVersion(hamlib_version2);
     rigCap.setSupportGetSupBands(true);
     rigCap.setSupportGetVfo(supportGetVfo);
     rigCap.setSupportSetVfo(supportSetVfo);
@@ -266,7 +272,11 @@ HamlibRigControl::~HamlibRigControl()
 }
 
 
-
+QString HamlibRigControl::getRotLibDetailedVersion()
+{
+    QString ver = hamlib_version2;
+    return ver;
+}
 
 
 

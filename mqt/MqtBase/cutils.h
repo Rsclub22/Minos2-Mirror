@@ -150,5 +150,6 @@ void removeFrameBoxes(QLayout *layout);
 void delay(int sec);
 void sleepFor(qint64 milliseconds);
 QString formatTime( qlonglong s );
+QDateTime toUTC(const QDateTime &d);
 
 #endif

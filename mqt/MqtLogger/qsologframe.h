@@ -303,6 +303,7 @@ private:
     void setEditStyleSheet(QLineEdit *qle, QString ss);
     void doBandmapSaveFreq(bool PbClicked);
 
+    bool isRunMode();
 signals:
     void QSOFrameCancelled();
     void sendBandMap( Frequency freq, QString call, QString utc, QString loc, QString qth );

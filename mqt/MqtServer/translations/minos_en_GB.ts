@@ -10,39 +10,39 @@
     </message>
     <message>
         <location filename="../servermain.ui" line="25"/>
-        <source>Servers</source>
+        <source>Server Connections</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../servermain.ui" line="35"/>
-        <location filename="../servermain.ui" line="68"/>
-        <location filename="../servermain.ui" line="149"/>
-        <location filename="../servermain.ui" line="182"/>
+        <location filename="../servermain.ui" line="38"/>
+        <location filename="../servermain.ui" line="71"/>
+        <location filename="../servermain.ui" line="152"/>
+        <location filename="../servermain.ui" line="185"/>
         <source>0</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../servermain.ui" line="58"/>
+        <location filename="../servermain.ui" line="61"/>
         <source>Published</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../servermain.ui" line="95"/>
+        <location filename="../servermain.ui" line="98"/>
         <source>Close</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../servermain.ui" line="115"/>
+        <location filename="../servermain.ui" line="118"/>
         <source>Show</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../servermain.ui" line="139"/>
+        <location filename="../servermain.ui" line="142"/>
         <source>Clients</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../servermain.ui" line="172"/>
+        <location filename="../servermain.ui" line="175"/>
         <source>Subscribed</source>
         <translation type="unfinished"></translation>
     </message>
@@ -84,31 +84,31 @@
     </message>
     <message>
         <location filename="../ServerDetails.ui" line="34"/>
-        <source>Servers</source>
+        <source>Server Connections</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ServerDetails.ui" line="58"/>
+        <location filename="../ServerDetails.ui" line="61"/>
         <source>Clients</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ServerDetails.ui" line="87"/>
+        <location filename="../ServerDetails.ui" line="90"/>
         <source>Published</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ServerDetails.ui" line="110"/>
+        <location filename="../ServerDetails.ui" line="113"/>
         <source>Subscribed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ServerDetails.ui" line="136"/>
+        <location filename="../ServerDetails.ui" line="139"/>
         <source>Refresh</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ServerDetails.ui" line="156"/>
+        <location filename="../ServerDetails.ui" line="159"/>
         <source>Close</source>
         <translation type="unfinished"></translation>
     </message>

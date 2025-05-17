@@ -21,12 +21,12 @@
     <message>
         <location filename="../dmmainwindow.ui" line="53"/>
         <source>Configuration File</source>
-        <translation type="unfinished"></translation>
+        <translation>Fichier de configuration</translation>
     </message>
     <message>
         <location filename="../dmmainwindow.ui" line="67"/>
         <source>...</source>
-        <translation type="unfinished">...</translation>
+        <translation>...</translation>
     </message>
     <message>
         <location filename="../dmmainwindow.ui" line="87"/>
@@ -63,21 +63,16 @@
     <message>
         <location filename="../dmmainwindow.cpp" line="431"/>
         <source>INI (*.ini);;All Files (*.*)</source>
-        <translation type="unfinished"></translation>
+        <translation>INI (*.ini);;Tous les fichiers (*.*)</translation>
     </message>
     <message>
         <location filename="../dmmainwindow.cpp" line="435"/>
         <source>Datamodes Configuration file</source>
-        <translation type="unfinished"></translation>
+        <translation>Fichier de configuration des modes de données</translation>
     </message>
 </context>
 <context>
     <name>EngineConfigure</name>
-    <message>
-        <location filename="../engineconfigure.ui" line="14"/>
-        <source>Configure Engines</source>
-        <translation>Configurer [what does this mean?]</translation>
-    </message>
     <message>
         <location filename="../engineconfigure.ui" line="58"/>
         <location filename="../engineconfigure.ui" line="154"/>
@@ -104,6 +99,11 @@
         <location filename="../engineconfigure.ui" line="33"/>
         <source>MMVARI/1</source>
         <translation>MMVARI/1</translation>
+    </message>
+    <message>
+        <location filename="../engineconfigure.ui" line="14"/>
+        <source>Configure Decode Engines</source>
+        <translation>Configurer les applications de décodage</translation>
     </message>
     <message>
         <location filename="../engineconfigure.ui" line="47"/>
@@ -226,13 +226,13 @@
     </message>
     <message>
         <location filename="../engineconfigure.cpp" line="439"/>
-        <source>Engine Files (*.ocx *.exe);;All Files (*.*)</source>
-        <translation>[What???] Fichiers (*.ocx *.exe);;Tous les fichiers (*.*)</translation>
+        <source>Decode Engine Files (*.ocx *.exe);;All Files (*.*)</source>
+        <translation>Fichiers pour les applications de décodage (*.ocx *.exe);;Tous les fichiers (*.*)</translation>
     </message>
     <message>
         <location filename="../engineconfigure.cpp" line="443"/>
-        <source>%1 Engine Executable</source>
-        <translation>%1 [what????] Exécutable</translation>
+        <source>%1 Decode Engine Executable</source>
+        <translation>%1 Exécutable pour l&apos;application de décodage</translation>
     </message>
 </context>
 <context>
@@ -259,13 +259,13 @@
     </message>
     <message>
         <location filename="../enginewindow.ui" line="76"/>
-        <source>Set Test</source>
-        <translation type="unfinished"></translation>
+        <source>Set Test Transmission Text</source>
+        <translation>Définir le texte de transmission du test</translation>
     </message>
     <message>
         <location filename="../enginewindow.ui" line="83"/>
-        <source>Send Test</source>
-        <translation type="unfinished"></translation>
+        <source>Send Test Transmission</source>
+        <translation>Démarrer la transmission du test</translation>
     </message>
     <message>
         <location filename="../enginewindow.ui" line="124"/>
@@ -290,34 +290,26 @@
         <source>...</source>
         <translation>...</translation>
     </message>
-    <message>
-        <source>Show Back Data</source>
-        <translation type="vanished">Afficher les données arrière [huh???]</translation>
-    </message>
-    <message>
-        <source>Hide Back Data</source>
-        <translation type="vanished">Masquer les données arrière [huh???]</translation>
-    </message>
 </context>
 <context>
     <name>MMVARIFrame</name>
     <message>
-        <location filename="../MMVARIFrame.cpp" line="77"/>
+        <location filename="../MMVARIFrame.cpp" line="76"/>
         <source>RX/TX state</source>
         <translation>RX/TX État</translation>
     </message>
     <message>
-        <location filename="../MMVARIFrame.cpp" line="86"/>
+        <location filename="../MMVARIFrame.cpp" line="85"/>
         <source>Move the cursor to keep it centered on a signal if the frequency changes slightly</source>
         <translation>Déplacer le curseur pour le maintenir centré sur un signal si la fréquence change légèrement</translation>
     </message>
     <message>
-        <location filename="../MMVARIFrame.cpp" line="93"/>
+        <location filename="../MMVARIFrame.cpp" line="92"/>
         <source>When NET is on the TX frequency follows the RX frequency </source>
         <translation>Lorsque NET est sur la fréquence TX suit la fréquence RX </translation>
     </message>
     <message>
-        <location filename="../MMVARIFrame.cpp" line="99"/>
+        <location filename="../MMVARIFrame.cpp" line="98"/>
         <source>Align the transmit frequency to the receive frequency</source>
         <translation>Aligner la fréquence TX sur la fréquence RX</translation>
     </message>

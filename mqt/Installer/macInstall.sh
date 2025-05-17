@@ -3,9 +3,15 @@
 set -x
 
 echo $OSTYPE
+
+if [[ "$OSTYPE" != "darwin"* ]] ; then 		#MacOS
+echo Please use buildInstall.sh instead
+exit 1
+fi
+
 SCRIPT=$(basename $0)
 DIR=$(echo `pwd`/../..)
-QTDIR=~/Qt/6.7.2/macos
+QTDIR=~/Qt/6.8.1/macos
 BUILDDIR="build/install"
 
 cd $DIR
@@ -129,17 +135,17 @@ cd Configuration
 wget https://www.country-files.com/cty/cty.dat -O cty.dat
 wget https://www.rsgbcc.org/cgi-bin/vhfenter.pl?afsdownload=y -O clublist.txt
 
-wget https://www.rsgbcc.org/vhf/vhfcontests23.xml -O vhfcontests23.xml
+wget https://www.rsgbcc.org/vhf/vhfcontests25.xml -O vhfcontests25.xml
 wget https://www.rsgbcc.org/vhf/vhfcontests24.xml -O vhfcontests24.xml
 
-wget https://www.rsgbcc.org/vhf/hfcontests23.xml -O hfcontests23.xml
+wget https://www.rsgbcc.org/vhf/hfcontests25.xml -O hfcontests25.xml
 wget https://www.rsgbcc.org/vhf/hfcontests24.xml -O hfcontests24.xml
 
-wget https://microwave.rsgbcc.org/microcontests23.xml -O microcontests23.xml
+wget https://microwave.rsgbcc.org/microcontests25.xml -O microcontests25.xml
 wget https://microwave.rsgbcc.org/microcontests24.xml -O microcontests24.xml
 
 
-wget https://microwave.rsgbcc.org/bartgcontests23.xml -O bartgcontests23.xml
+wget https://microwave.rsgbcc.org/bartgcontests25.xml -O bartgcontests25.xml
 wget https://microwave.rsgbcc.org/bartgcontests24.xml -O bartgcontests24.xml
 
 cd ..

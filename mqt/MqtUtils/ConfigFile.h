@@ -4,6 +4,7 @@
 #include <QProcess>
 #include <QMap>
 #include <QLocalSocket>
+#include <QDateTime>
 
 #include "INIFile.h"
 //---------------------------------------------------------------------------
@@ -59,6 +60,7 @@ class RunConfigElement: public QObject
 private:  	// User declarations
     QProcess *runner = nullptr;
     QLocalSocket *localSocket = nullptr;
+    QDateTime lastStarted;
 public:  		// User declarations
     bool newElement = false;
     bool deleted = false;

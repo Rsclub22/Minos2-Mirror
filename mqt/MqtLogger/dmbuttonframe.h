@@ -2,10 +2,11 @@
 #define DMBUTTONFRAME_H
 
 #include "AnalysePubSubNotify.h"
-#include "frequency.h"
 #include <QFrame>
 #include <QMap>
 #include <QVector>
+
+#include "dmFKeydef.h"
 
 class QPushButton;
 class QFileSystemWatcher;
@@ -27,7 +28,7 @@ public:
     void setContest(BaseContestLog *);
 
     QString parseFKeyMessage(QString mess);
-    void parseFKeyFile(QString sfname, QString mode);
+    void parseFKeyFile(QString sfname);
 private slots:
     void fKey(BaseContestLog *c, int key, int carr);
     void sandPChanged(bool);
@@ -57,15 +58,18 @@ private:
     QString currentName = "Default";
 
     QVector<QPushButton *> fButtons;
-    QMap<QString, QMap<QString, QVector<QPair<QString, QString> > > > fkeys;
+
+    Keys fkeys;
 
     QString dataSender;
     QString curMode;
 
     void showFButtons(bool s);
     QString getFKeysString() const;
-    bool parseFKeyString(QString s, QString mode);
-    bool parseFKeyArray(QJsonArray s, QString keyset, QString mode);
+    bool parseFKeyString(QString s);
+    bool parseFKeyArray(QJsonArray s, QString keyset);
+    void rewriteFKeyFile();
+
     bool isDataMode();
 };
 

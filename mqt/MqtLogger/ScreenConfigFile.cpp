@@ -322,7 +322,6 @@ void ScreenConfigFile::writeTypetoRow(SCElement &e, QJsonArray &scrow)
 }
 void ScreenConfigFile::getScreenConfig(const SCScreen &scb, QJsonObject &scr)
 {
-
     QJsonArray scrows;
     for (auto &j: scb.baseElement->rows)
     {
@@ -338,12 +337,6 @@ void ScreenConfigFile::getScreenConfig(const SCScreen &scb, QJsonObject &scr)
 
 bool ScreenConfigFile::writeFile(QString f)
 {
-    QFile jf(f);
-    if (!jf.open(QIODevice::WriteOnly | QIODevice::Truncate))
-    {
-        trace("Failed to open " + f );
-        return false;
-    }
      QJsonDocument json;
      QJsonArray scarray;
 
@@ -388,6 +381,14 @@ bool ScreenConfigFile::writeFile(QString f)
      json.setArray(scarray);
 
      QByteArray s = json.toJson();
+
+     QFile jf(f);
+     if (!jf.open(QIODevice::WriteOnly | QIODevice::Truncate))
+     {
+         trace("Failed to open " + f );
+         return false;
+     }
+
      jf.write(s);
 
      jf.close();

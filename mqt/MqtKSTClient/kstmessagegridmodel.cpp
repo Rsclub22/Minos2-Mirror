@@ -1,6 +1,9 @@
+#include <QApplication>
 #include "QtUtils.h"
+//#include "MinosLoggerEvents.h"
 #include "kstmainwindow.h"
 #include "kstmessagegridmodel.h"
+#include "remotelogs.h"
 //==========================================================================================
 bool compMessages ( QSharedPointer<KstMessageLine> q1, const QSharedPointer<KstMessageLine> q2 )
 {
@@ -10,9 +13,10 @@ bool compMessages ( QSharedPointer<KstMessageLine> q1, const QSharedPointer<KstM
         return q1->dtg < q2->dtg;
 }
 
-KstMessageGridModel::KstMessageGridModel():cacheSize(10, 10)
+KstMessageGridModel::KstMessageGridModel()
 {
 }
+
 void KstMessageGridModel::reset()
 {
     beginResetModel();
@@ -70,12 +74,6 @@ void KstMessageGridModel::appendLastRow(QSharedPointer<KstMessageLine> msg)
     beginInsertRows(QModelIndex(), rawCount() , rawCount());
     messageVector->push_back(msg);
     endInsertRows();
-}
-
-void KstMessageGridModel::setCacheSize()
-{
-    QString s = "Memxx";
-    cacheSize = delegate->docSize(s);
 }
 
 QVariant KstMessageGridModel::data( const QModelIndex &index, int role ) const
@@ -191,13 +189,6 @@ QVariant KstMessageGridModel::headerData( int section, Qt::Orientation orientati
             break;
         }
         return cell;
-    }
-    else if (orientation == Qt::Vertical && role == Qt::SizeHintRole)
-    {
-        if (delegate)
-        {
-            return cacheSize;
-        }
     }
     return QVariant();
 }

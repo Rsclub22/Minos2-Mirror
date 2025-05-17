@@ -5,8 +5,8 @@
     <name>KPMainWindow</name>
     <message>
         <location filename="../kpmainwindow.ui" line="14"/>
-        <source>KPMainWindow</source>
-        <translation>KPMainWindow [???]</translation>
+        <source>Keyer Proxy</source>
+        <translation>Proxy de Keyer</translation>
     </message>
     <message>
         <location filename="../kpmainwindow.ui" line="25"/>
@@ -35,9 +35,13 @@
     </message>
     <message>
         <location filename="../kpmainwindow.ui" line="112"/>
-        <source>Setup Script (alsactl)</source>
-        <translatorcomment>Script de configuration (alsactl)</translatorcomment>
-        <translation>Script d&apos;installation (alsactl) [???]</translation>
+        <source>Setup Script for alsactl</source>
+        <translation>??Définir le script de configuration (ALSActl)</translation>
+    </message>
+    <message>
+        <location filename="../kpmainwindow.ui" line="181"/>
+        <source>sequence</source>
+        <translation>séquence</translation>
     </message>
     <message>
         <location filename="../kpmainwindow.ui" line="124"/>
@@ -47,17 +51,12 @@
     <message>
         <location filename="../kpmainwindow.ui" line="150"/>
         <source>Save Alsa Config</source>
-        <translation>Enregistrer la configuration Alsa [what is Alsa????]</translation>
+        <translation>Enregistrer la configuration ALSA</translation>
     </message>
     <message>
         <location filename="../kpmainwindow.ui" line="157"/>
         <source>Restore Alsa Config</source>
-        <translation>Restaurer la configuration Alsa [what is Also ????]</translation>
-    </message>
-    <message>
-        <location filename="../kpmainwindow.ui" line="181"/>
-        <source>seq</source>
-        <translation>séquence [??????]</translation>
+        <translation>Restaurer la configuration ALSA</translation>
     </message>
     <message>
         <location filename="../kpmainwindow.ui" line="188"/>
@@ -81,11 +80,6 @@
     </message>
     <message>
         <location filename="../kpmainwindow.ui" line="254"/>
-        <source>Metering</source>
-        <translation>Mesure [????]</translation>
-    </message>
-    <message>
-        <location filename="../kpmainwindow.ui" line="261"/>
         <source>Input</source>
         <translation>Entrée</translation>
     </message>
@@ -97,7 +91,7 @@
     <message>
         <location filename="../kpmainwindow.cpp" line="228"/>
         <source>Alsa Control Files</source>
-        <translation>Fichiers de contrôle Alsa [???]</translation>
+        <translation>Fichiers de contrôle ALSA</translation>
     </message>
     <message>
         <location filename="../kpmainwindow.cpp" line="229"/>

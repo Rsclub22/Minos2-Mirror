@@ -6,8 +6,6 @@
 #include <QDateTime>
 #include "callsign.h"
 #include "htmldelegate.h"
-#include "remotelogs.h"
-
 
 enum ChatColumns {eccChat = 0, eccDTG, eccCall, eccName, eccOther, eccText, eccMaxColumn};
 
@@ -35,7 +33,7 @@ bool compMessages ( QSharedPointer<KstMessageLine> q1, const QSharedPointer<KstM
 class KstMessageGridModel: public QAbstractItemModel
 {
     Q_OBJECT
-
+    private:
         QString filterString;
         int chatFilter = 0;
         bool isFiltered() const
@@ -47,7 +45,6 @@ class KstMessageGridModel: public QAbstractItemModel
         {
             return pauseIndex > 0;
         }
-        QSize cacheSize;
     public:
         KstMessageGridModel();
         virtual ~KstMessageGridModel() override
@@ -71,7 +68,6 @@ class KstMessageGridModel: public QAbstractItemModel
 
         void appendLastRow(QSharedPointer<KstMessageLine>);
 
-        void setCacheSize();
         void reset();
         void setFilterString(QString f);
         void setChatFilter(int value);

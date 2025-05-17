@@ -550,6 +550,15 @@ QVariant QSOMatchGridModel::headerData( int section, Qt::Orientation orientation
     }
     if (role == Qt::TextAlignmentRole)
         return Qt::AlignLeft;
+
+    // if (orientation == Qt::Horizontal && role == Qt::SizeHintRole)
+    // {
+    //     QFont cf = QApplication::font();
+    //     QFontMetrics fm(cf);
+    //     int ls = fm.lineSpacing();
+    //     return QSize(10, ls *2);
+
+    // }
     return QVariant();
 }
 

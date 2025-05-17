@@ -1,4 +1,5 @@
 #include "MinosParameters.h"
+#include "cutils.h"
 #include "dtg.h"
 
 const double dtg::daySecs = 86400.0;	// 24 * 60 * 60
@@ -10,7 +11,7 @@ QDateTime CanonicalToTDT(QString cdtg )
    QDateTime d;
    QString format("yyyyMMddHHmm");
    d = QDateTime::fromString(cdtg, format );
-   d.setTimeSpec(Qt::UTC);
+   d = toUTC(d);
    return d;
 
 }
@@ -41,7 +42,7 @@ dtg::dtg( bool now ): baddtg(true)
         baddtg = false;
 
         qdatetime = tdt;
-        qdatetime.setTimeSpec(Qt::UTC);
+        qdatetime = toUTC(qdatetime);
     }
     else
     {
@@ -381,7 +382,8 @@ bool dtg::getDtg( QDateTime &cttime, bool &d ) const
 
    QDate dt = QDate::fromString(dateValue, "yyyyMMdd");
 
-   cttime = QDateTime(dt, tm, Qt::UTC);
+   cttime = QDateTime(dt, tm);
+   cttime = toUTC(cttime);
 
    return true;
 }
@@ -525,8 +527,7 @@ QDateTime dtg::getQDT()
         QString t = getTime(DTGFULL);
         qdatetime.setDate(QDate::fromString(dtgstr, "yyyyMMdd"));
         qdatetime.setTime(QTime::fromString(t, "HHmmss"));
-        qdatetime.setTimeSpec(Qt::UTC);
-
+        qdatetime = toUTC(qdatetime);
     }
     return qdatetime;
 }
@@ -536,7 +537,7 @@ void dtg::setDate(QDate tdt)
     sdate.setValue(d);
 
     qdatetime.setDate(tdt);
-    qdatetime.setTimeSpec(Qt::UTC);
+    qdatetime = toUTC(qdatetime);
 }
 void dtg::setTime(QTime tdt)
 {
@@ -544,7 +545,7 @@ void dtg::setTime(QTime tdt)
     stime.setValue(t);
 
     qdatetime.setTime(tdt);
-    qdatetime.setTimeSpec(Qt::UTC);
+    qdatetime = toUTC(qdatetime);
 }
 
 void dtg::setDateTime(QDateTime tdt)
@@ -556,7 +557,7 @@ void dtg::setDateTime(QDateTime tdt)
     stime.setValue(t);
 
     qdatetime = tdt;
-    qdatetime.setTimeSpec(Qt::UTC);
+    qdatetime = toUTC(qdatetime);
 }
 
 

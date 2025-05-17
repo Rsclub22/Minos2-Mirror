@@ -29,11 +29,6 @@
         <translation>Indicateur d&apos;enregistrement</translation>
     </message>
     <message>
-        <location filename="../KeyerMain.ui" line="129"/>
-        <source>Show</source>
-        <translation>Afficher [Context?]</translation>
-    </message>
-    <message>
         <location filename="../KeyerMain.ui" line="115"/>
         <source>Record</source>
         <translation>Enregistrer</translation>
@@ -93,6 +88,11 @@
         <location filename="../KeyerMain.ui" line="101"/>
         <source>Message Name</source>
         <translation>Nom du message</translation>
+    </message>
+    <message>
+        <location filename="../KeyerMain.ui" line="129"/>
+        <source>Show Waveform</source>
+        <translation>Afficher la forme d&apos;onde</translation>
     </message>
     <message>
         <location filename="../KeyerMain.ui" line="266"/>
@@ -198,7 +198,7 @@ Rejouer</translation>
         <location filename="../KeyerMain.cpp" line="120"/>
         <source>Pass
 Through</source>
-        <translatorcomment>mode intermédiaire ??</translatorcomment>
+        <translatorcomment>mode intermédiaire ?? Pass sound from microphone through to output</translatorcomment>
         <translation>Passthrough</translation>
     </message>
     <message>
@@ -219,17 +219,17 @@ Through</source>
     <message>
         <location filename="../KeyerMain.cpp" line="138"/>
         <source>Attack (ms)</source>
-        <translation>[Context?] </translation>
+        <translation>Compression temps de désensibilisation en mS [??</translation>
     </message>
     <message>
         <location filename="../KeyerMain.cpp" line="142"/>
         <source>Release (ms)</source>
-        <translation>[Context?]  </translation>
+        <translation>Relâchement de la compression en mS</translation>
     </message>
     <message>
         <location filename="../KeyerMain.cpp" line="146"/>
         <source>Makeup Gain (db)</source>
-        <translation>[Context?] </translation>
+        <translation>Gain ??</translation>
     </message>
     <message>
         <location filename="../KeyerMain.cpp" line="193"/>
@@ -259,8 +259,8 @@ Through</source>
     <message>
         <location filename="../KeyerMain.cpp" line="826"/>
         <source>Restart to set sample rate to &quot;0&quot;</source>
-        <translatorcomment>Redémarrer could be taken as reboot?</translatorcomment>
-        <translation>Redémarrer pour régler la fréquence d&apos;échantillonnage sur &quot;0&quot;</translation>
+        <translatorcomment>Redémarrer could be taken as reboot? restart this app only needed</translatorcomment>
+        <translation>Redémarrer l&apos;applicationpour régler la fréquence d&apos;échantillonnage sur &quot;0&quot;</translation>
     </message>
 </context>
 <context>
@@ -343,8 +343,8 @@ Through</source>
     <message>
         <location filename="../keyers.cpp" line="42"/>
         <source>OS - Restart(1)/Close(2)</source>
-        <translatorcomment>SO or OS??</translatorcomment>
-        <translation>? Redémarrer(1)/Fermer(2)</translation>
+        <translatorcomment>SO or OS?? Operating System</translatorcomment>
+        <translation>Système - Redémarrer(1)/Fermer(2)</translation>
     </message>
 </context>
 <context>
@@ -352,7 +352,7 @@ Through</source>
     <message>
         <location filename="../keyers.cpp" line="404"/>
         <source>No current actions</source>
-        <translation>Aucune action (en cours ?)</translation>
+        <translation>Aucune action en cours</translation>
     </message>
 </context>
 <context>

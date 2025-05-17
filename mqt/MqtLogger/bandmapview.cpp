@@ -505,7 +505,6 @@ void BandmapView::mouseDoubleClicked(QPoint p)
         memoryData::memData spotData;
         spotData.callsign = selectedSpot.getDxCallStr();
         spotData.time = selectedSpot.getSpotTime();
-        spotData.freq = selectedSpot.getFreq();
 
         bool showDerivedLocFlag;
         TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpShowDerivedLoc, showDerivedLocFlag );
@@ -518,6 +517,7 @@ void BandmapView::mouseDoubleClicked(QPoint p)
         spotData.fromBandmapOrMemory = true;
         spotData.exchange = selectedSpot.getDistrict();
         spotData.mode = selectedSpot.getMode();
+        spotData.freq = selectedSpot.getFreq().toCarrier(curMode);
 
         MinosLoggerEvents::SendSpotToLog(spotData);
     }
@@ -726,7 +726,7 @@ int BandmapView::dialCursorWithinViewport(Frequency freq)
 void BandmapView::bandmapSelectFreq(int y)
 {
     Frequency f = dial->getFreqFromYCoordOnDial(y);
-    MinosLoggerEvents::SendFreqToRig(f);
+    MinosLoggerEvents::SendFreqToRig(f.toCarrier(curMode));
 }
 
 void BandmapView::setBandFreqLimits(Frequency flow, Frequency fhigh)
@@ -742,11 +742,6 @@ void BandmapView::setBandmapHeight(Frequency flow, Frequency fhigh)
     dial->changeBoundingRect(fullBandHeight + horizontalScrollBar()->height() , dial->getCurWidth());
     bandmapScene->setSceneRect(0,0, bandmapGraphicsView->width(), fullBandHeight + horizontalScrollBar()->height() );
 
-}
-
-void BandmapView::sendFreqToRig(Frequency freq)
-{
-    MinosLoggerEvents::SendFreqToRig(freq);
 }
 
 int BandmapView::isClickInRegionOfSpot(QPoint p)
@@ -777,7 +772,7 @@ void BandmapView::bandmapSelectSpot(QPoint p)
             clearSelectedSpot();       // clear any spot previously selected
             setSelectedSpot(spotViewNum);        // mark new selected spot
 
-            MinosLoggerEvents::SendFreqToRig(selectedSpot.getFreq());
+            MinosLoggerEvents::SendFreqToRig(selectedSpot.getFreq().toCarrier(curMode));
         }
     }
     else
@@ -1445,22 +1440,12 @@ void BandmapView::assembleSpotMsg(int row, QString& markerMsg)
     QString bLineStart = "";
     QString bLineEnd = "";
 
-    Frequency mfreq = cFreq;
-    if (dxMode.compare( hamlibData::RY, Qt::CaseInsensitive ) == 0)
-    {
-         mfreq = mfreq + Frequency(RTTY_MARK_OFFSET);
-    }
-    if (dxMode.compare( hamlibData::PSK, Qt::CaseInsensitive ) == 0)
-    {
-        mfreq = mfreq - Frequency(BPSK_OFFSET);
-    }
-
     int tol = 0;
-    if (curMode == hamlibData::PH || curMode == hamlibData::USB || curMode == hamlibData::LSB || curMode == hamlibData::FM)
+    if (curMode == PH || curMode == hamlibData::USB || curMode == hamlibData::LSB || curMode == hamlibData::FM)
     {
         tol = 1000;
     }
-    else if (curMode == hamlibData::PSK || curMode == hamlibData::RY || curMode == hamlibData::RTTY)
+    else if (curMode == PSK || curMode == RY || curMode == hamlibData::RTTY)
     {
         tol = 100;
     }
@@ -1468,7 +1453,8 @@ void BandmapView::assembleSpotMsg(int row, QString& markerMsg)
     {
         tol = 100;
     }
-    int offset = std::abs(freq - cFreq);
+    Frequency f = cFreq;
+    int offset = std::abs(freq - f);
     if (tol > 0 && offset < tol )
     {
         // highlight this line as current frequency

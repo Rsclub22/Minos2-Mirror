@@ -874,16 +874,6 @@ void RigControlFrame::transferDetails(memoryData::memData &m)
              .arg(m.freq.traceStr(), curFreq.traceStr(), m.mode, curMode));
     if (isRadioLoaded())
     {
-        Frequency mfreq = m.freq;
-        if (m.mode.compare( hamlibData::RY, Qt::CaseInsensitive ) == 0)
-        {
-             mfreq = mfreq - Frequency(RTTY_MARK_OFFSET);
-        }
-        if (m.mode.compare( hamlibData::PSK, Qt::CaseInsensitive ) == 0)
-        {
-            mfreq = mfreq + Frequency(BPSK_OFFSET);
-        }
-
         if (radioConnected && !radioError)
         {
             ui->freqInput->clearFocus();
@@ -972,7 +962,7 @@ void RigControlFrame::noRadioSetMode(QString m)
         return;
     }
 
-    if (ml[0] == hamlibData::MGM)
+    if (ml[0] == MGM)
     {
         ml[1] = "N/A";
         mode = ml[0] + ml[1];
@@ -985,7 +975,7 @@ void RigControlFrame::noRadioSetMode(QString m)
 
 void RigControlFrame::setFreqStepCombo(QString mode)
 {
-    if (mode == hamlibData::PH)
+    if (mode == PH)
     {
         ui->freqStepCombo->clear();
         ui->freqStepCombo->addItems(PH_TUNING_STEPS);
@@ -1003,13 +993,13 @@ void RigControlFrame::setFreqStepCombo(QString mode)
         ui->freqStepCombo->addItems(FM_TUNING_STEPS);
         ui->freqStepCombo->setCurrentIndex(FM_DEFAULT_STEP);
     }
-    else if (mode == hamlibData::RY)
+    else if (mode == RY)
     {
         ui->freqStepCombo->clear();
         ui->freqStepCombo->addItems(RY_TUNING_STEPS);
         ui->freqStepCombo->setCurrentIndex(RY_DEFAULT_STEP);
     }
-    else if (mode == hamlibData::PSK)
+    else if (mode == PSK)
     {
         ui->freqStepCombo->clear();
         ui->freqStepCombo->addItems(PSK_TUNING_STEPS);
@@ -1021,7 +1011,7 @@ void RigControlFrame::setFreqStepCombo(QString mode)
         ui->freqStepCombo->addItems(CW_TUNING_STEPS);
         ui->freqStepCombo->setCurrentIndex(CW_DEFAULT_STEP);
     }
-    else if (mode == hamlibData::MGM)
+    else if (mode == MGM)
     {
         ui->freqStepCombo->clear();
         ui->freqStepCombo->addItems(MGM_TUNING_STEPS);
@@ -1052,7 +1042,7 @@ double RigControlFrame::getStepFreqFromComboText(const QString step)
     }
     else
     {
-        if (curMode == hamlibData::USB || curMode == hamlibData::LSB || curMode == hamlibData::FM || curMode == hamlibData::PH)
+        if (curMode == hamlibData::USB || curMode == hamlibData::LSB || curMode == hamlibData::FM || curMode == PH)
         {
             stepF = sl[0].toDouble() * 1000;
         }
@@ -1079,9 +1069,9 @@ void RigControlFrame::setMode(QString m)
                 ui->modelbl->setText(mode[0]);
                 curMode = mode[0];
                 tslf->bandSwitchFrame->setMode(curMode);
-                if (mode[0] == hamlibData::MGM
-                        || mode[0] == hamlibData::RY
-                        || mode[0] == hamlibData::PSK
+                if (mode[0] == MGM
+                        || mode[0] == RY
+                        || mode[0] == PSK
                         )
                 {
                     mgmLabelVisible(true);
@@ -1201,9 +1191,9 @@ void RigControlFrame::setRadioName(QString radNam, bool fromStartRigControl)
 
                         traceMsg(QString("setRadioName: SavedCurMode = %1").arg(curMode));
                         if (m.contains(':') &&
-                                (m.contains(hamlibData::MGM)
-                                || m.contains(hamlibData::RY)
-                                || m.contains(hamlibData::PSK))
+                                (m.contains(MGM)
+                                || m.contains(RY)
+                                || m.contains(PSK))
                                 )
                         {
                             QStringList ml = m.split(':');
@@ -1340,7 +1330,7 @@ void RigControlFrame::setRadioFreq( Frequency &freqToSend, bool &fromStartRigCon
            if (bandOK)
            {
                QString mode = ct->currentMode.getValue();
-               if (mode == hamlibData::PH)
+               if (mode == PH)
                {
                    Frequency modeTestFreq = bi->fLow;
                    if (modeTestFreq > Frequency(10000000)) // over 10MHz is USB
@@ -1942,7 +1932,7 @@ void RigControlFrame::freqPlusMinusButton(Frequency f)
         Frequency freq = calcNewFreq(f);
         if (!freq.isClear())
         {
-
+            trace(QString("RigControlFrame::freqPlusMinusButton cur %1 step %2").arg(curFreq.traceStr(), f.traceStr()));
             setFreqTextLegalColour(freq, curMode);
             ui->freqInput->setLineText(freq.str());
             emit setFreqDisplay(freq, legalFreq);
@@ -2162,19 +2152,11 @@ bool RigControlFrame::readIgnorePreviousFreqFlag()
     return state;
 }
 
-void RigControlFrame::setVmButtonsFrame(TxVmButtonsFrame *txVmButtonsFrame_)
-{
-    if (txVmButtonsFrame)
-    {
-        txVmButtonsFrame = txVmButtonsFrame_;
-    }
-}
-
 bool RigControlFrame::isVmButtonsFrameVisible()
 {
-    if (txVmButtonsFrame)
+    if (tslf->txVmButtonsFrame)
     {
-       return txVmButtonsFrame->isVisible();
+       return tslf->txVmButtonsFrame->isVisible();
     }
 
     return false;
@@ -2183,18 +2165,18 @@ bool RigControlFrame::isVmButtonsFrameVisible()
 void RigControlFrame::sendVmButtonFrameSelectedRadio(PubSubName selectedRadio)
 {
 
-    if (txVmButtonsFrame)
+    if (tslf->txVmButtonsFrame)
     {
-      txVmButtonsFrame->setSelectedRadio(selectedRadio);
+      tslf->txVmButtonsFrame->setSelectedRadio(selectedRadio);
     }
 
 }
 
 void RigControlFrame::sendVmButtonFrameRadioConnected(bool connected)
 {
-    if (txVmButtonsFrame)
+    if (tslf->txVmButtonsFrame)
     {
-       txVmButtonsFrame->setRadioIsConnected(connected);
+       tslf->txVmButtonsFrame->setRadioIsConnected(connected);
     }
 
 }
@@ -2268,7 +2250,7 @@ void RigControlFrame::on_resetBandFreqButton_clicked()
     if (bandOK)
     {
         QString mode = ct->currentMode.getValue();
-        if (mode == hamlibData::PH)
+        if (mode == PH)
         {
             Frequency modeTestFreq = bi->fLow;
             if (modeTestFreq > Frequency(10000000)) // over 10MHz is USB

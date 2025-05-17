@@ -56,6 +56,7 @@ SOURCES += \
     contest.cpp \
     cutils.cpp \
     DisplayContestContact.cpp \
+    dmkeyseditdlg.cpp \
     dtg.cpp \
     enqdlg.cpp \
     freqmodebandplan.cpp \
@@ -158,6 +159,8 @@ HEADERS += \
     contest.h \
     cutils.h \
     DisplayContestContact.h \
+    dmFKeydef.h \
+    dmkeyseditdlg.h \
     dtg.h \
     enqdlg.h \
     focuswatcher.h \
@@ -248,6 +251,7 @@ FORMS += \
     StartConfigManager.ui \
     StatisticsDisplay.ui \
     bandmapclientfilterdialog.ui \
+    dmkeyseditdlg.ui \
     managehamlib.ui \
     minoskeyboard.ui \
     monitoredlogs.ui \

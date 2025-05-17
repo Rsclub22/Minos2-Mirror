@@ -87,7 +87,7 @@ void BandSelButtons::onBandSelButtonPressed(QToolButton* button)
     QString band = button->text();
 
     ct->setCurrentBand(band);
-    ct->commonSave(false);
+    // ct->commonSave(false); // done in setCurrentBand
     setContestBand(band);
 
     MinosLoggerEvents::SendContestBandChanged(ct);
@@ -362,7 +362,7 @@ void BandSelButtons::setContestBand(QString contestBand_)
 
 QString BandSelButtons::convertModeForPresets(const QString mode)
 {
-    if (mode == hamlibData::USB || mode == hamlibData::LSB || mode == hamlibData::FM  || mode == hamlibData::PH)
+    if (mode == hamlibData::USB || mode == hamlibData::LSB || mode == hamlibData::FM  || mode == PH)
     {
         return "PHONE";
     }

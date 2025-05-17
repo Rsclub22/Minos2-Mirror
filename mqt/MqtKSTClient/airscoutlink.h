@@ -12,7 +12,7 @@
 
 #include <QSettings>
 #include <QNetworkInterface>
-#include "kstcallgridmodel.h"
+//#include "kstcallgridmodel.h"
 #include "MTrace.h"
 
 enum ASBand {
@@ -30,7 +30,7 @@ enum ASBand {
     asb74G,
     asbMaxBand
 };
-
+class KstUser;
 class Aircraft
 {
     Q_DECLARE_TR_FUNCTIONS(Aircraft)

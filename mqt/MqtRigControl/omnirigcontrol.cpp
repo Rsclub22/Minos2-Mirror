@@ -497,6 +497,7 @@ void OmnirigControl::register_rigs(RigFactory::Rigs* rigsList, int id1, int id2)
     rigCap.setRigModelNumber(id1);
     rigCap.setLibraryName("Omnirig");
     rigCap.setLibraryVersion(OmnirigControl::getRigLibVersion());
+    rigCap.setDetailedLibraryVersion(OmnirigControl::getRigLibVersion());
     rigCap.setSupportGetSupBands(false);
     rigCap.setSupportGetVfo(false);
     rigCap.setSupportSetVfo(false);

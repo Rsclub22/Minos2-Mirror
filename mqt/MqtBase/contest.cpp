@@ -42,7 +42,7 @@ BaseContestLog::BaseContestLog(bool hf)
     QString h = QHostInfo::localHostName();
    uuid = /*makeUuid()*/ h + "_" + QString::number(inst++);
    bearingOffset.setValue(0);
-   currentMode.setValue( isHF()?hamlibData::PH:hamlibData::USB );
+   currentMode.setValue( isHF()?PH:hamlibData::USB );
 
   protectedContest.setValue( false );
   allowLoc8.setValue( false );
@@ -1580,11 +1580,11 @@ void BaseContestLog::processMinosStanza( const QString &methodName, MinosTestImp
       if (modeList.getValue().isEmpty())
       {
           QString modeString = hamlibData::CW
-                       + "|" + (isHF()?hamlibData::PH:hamlibData::USB)
+                       + "|" + (isHF()?PH:hamlibData::USB)
                       + "|" + hamlibData::FM
-                      + "|" + hamlibData::MGM
-                      + "|" + hamlibData::RY
-                      + "|" + hamlibData::PSK
+                      + "|" + MGM
+                      + "|" + RY
+                      + "|" + PSK
                       ;
 
           modeList.setValue( modeString);

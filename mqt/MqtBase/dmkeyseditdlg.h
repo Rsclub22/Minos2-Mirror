@@ -1,33 +1,32 @@
-#ifndef TSETTINGSEDITDLG_H
-#define TSETTINGSEDITDLG_H
+#ifndef DMKEYSEDITDLG_H
+#define DMKEYSEDITDLG_H
 
 #include <QDialog>
+#include <QItemSelection>
+#include "dmFKeydef.h"
 
 namespace Ui {
-class TSettingsEditDlg;
+class DMKeysEditDlg;
 }
 
-class SettingsBundle;
-class TSettingsEditDlg : public QDialog
+
+class DMKeysEditDlg : public QDialog
 {
     Q_OBJECT
 
-    Ui::TSettingsEditDlg *ui;
+    Ui::DMKeysEditDlg *ui;
 
-    SettingsBundle *bundle;
-    bool currSectionOnly;
-    QString initialSection;
+    Keys &keys;
 
-    QString baseTitle;
-    void showSections(QString currSection);
+    QString name;
+    void showSections();
     void showSection();
     void showDetails();
     void getDetails();
     void doCloseEvent();
 public:
-    explicit TSettingsEditDlg(QWidget *parent , SettingsBundle *bundle);
-    void ShowCurrentSectionOnly();
-    ~TSettingsEditDlg() override;
+    explicit DMKeysEditDlg(QWidget *parent , QString fKeyFileName, QString name, Keys &keys);
+    ~DMKeysEditDlg() override;
 
     int exec() override;
 
@@ -47,9 +46,14 @@ private slots:
 
     void on_settingsSplitter_splitterMoved(int pos, int index);
 
+    void on_upButton_clicked();
+
+    void on_downButton_clicked();
+
+    void onOptionsTableSelectionChanged(const QItemSelection &selected, const QItemSelection &);
 public Q_SLOTS:
     virtual void accept() override;
     virtual void reject() override;
 
 };
-#endif // TSETTINGSEDITDLG_H
+#endif // DMKEYSEDITDLG_H

@@ -15,7 +15,7 @@ set QtTools=C:\Qt\Tools\mingw810_32\bin
 set QtKit=C:\Qt\5.15.2\mingw81_32\bin
 set QtOpenSSL="C:\Qt\Tools\OpenSSL\Win_x86\bin"
 set QtLicenses="C:\Qt\Licenses"
-set HamlibPath="C:\Projects\hamlib-w32-4.6"
+set HamlibPath="C:\Projects\hamlib-w32-4.6.2"
 set MMVARIPath="C:\Ham\MMVARI"
 
 if exist %QtKit% goto kitInstalled
@@ -34,6 +34,7 @@ cd %MROOT%
 
 git pull origin master
 
+rmdir /Q /S %builddir%
 if not exist %builddir% mkdir %builddir%
 cd %builddir%
 
@@ -64,6 +65,8 @@ mkdir Configuration
 mkdir Configuration\Cluster
 mkdir Configuration\FunctionKeyMessages
 mkdir Configuration\Omnirig_Minos_Ini
+mkdir Configuration\VoiceKeyer
+mkdir Configuration\VoiceKeyer\CommonParams
 mkdir Lists
 mkdir Logs
 mkdir Bin
@@ -88,6 +91,7 @@ xcopy /F /Y %MROOT%\mqt\ControlFiles\Configuration .\Configuration
 xcopy /F /Y %MROOT%\mqt\ControlFiles\Configuration\WindowsFiles .\Configuration
 xcopy /F /Y %MROOT%\mqt\ControlFiles\Configuration\Cluster .\Configuration\Cluster
 xcopy /F /Y %MROOT%\mqt\ControlFiles\Configuration\FunctionKeyMessages .\Configuration\FunctionKeyMessages
+xcopy /F /Y %MROOT%\mqt\ControlFiles\Configuration\VoiceKeyer\CommonParams .\Configuration\VoiceKeyer\CommonParams
 
 xcopy /F /Y %MROOT%\mqt\ControlFiles\Omnirig_Minos_Ini .\Configuration\Omnirig_Minos_Ini
 
@@ -95,17 +99,17 @@ cd Configuration
 
 call powershell.exe "& {Invoke-WebRequest https://www.country-files.com/cty/cty.dat -Outfile cty.dat}"
 call powershell.exe "& {Invoke-WebRequest https://www.rsgbcc.org/cgi-bin/vhfenter.pl?afsdownload=y -Outfile clublist.txt}"
-call powershell.exe "& {Invoke-WebRequest https://www.rsgbcc.org/vhf/vhfcontests23.xml -Outfile vhfcontests23.xml}"
 call powershell.exe "& {Invoke-WebRequest https://www.rsgbcc.org/vhf/vhfcontests24.xml -Outfile vhfcontests24.xml}"
+call powershell.exe "& {Invoke-WebRequest https://www.rsgbcc.org/vhf/vhfcontests25.xml -Outfile vhfcontests25.xml}"
 
-call powershell.exe "& {Invoke-WebRequest http://www.rsgbcc.org/vhf/hfcontests23.xml -Outfile hfcontests23.xml}"
 call powershell.exe "& {Invoke-WebRequest http://www.rsgbcc.org/vhf/hfcontests24.xml -Outfile hfcontests24.xml}"
+call powershell.exe "& {Invoke-WebRequest http://www.rsgbcc.org/vhf/hfcontests25.xml -Outfile hfcontests25.xml}"
 
-call powershell.exe "& {Invoke-WebRequest http://microwave.rsgbcc.org/microcontests23.xml -Outfile microcontests23.xml}"
 call powershell.exe "& {Invoke-WebRequest http://microwave.rsgbcc.org/microcontests24.xml -Outfile microcontests24.xml}"
+call powershell.exe "& {Invoke-WebRequest http://microwave.rsgbcc.org/microcontests25.xml -Outfile microcontests25.xml}"
 
-call powershell.exe "& {Invoke-WebRequest http://bartg.rsgbcc.org/bartgcontests23.xml -Outfile bartgcontests23.xml}"
 call powershell.exe "& {Invoke-WebRequest http://bartg.rsgbcc.org/bartgcontests24.xml -Outfile bartgcontests24.xml}"
+call powershell.exe "& {Invoke-WebRequest http://bartg.rsgbcc.org/bartgcontests25.xml -Outfile bartgcontests25.xml}"
 
 
 cd ../Bin

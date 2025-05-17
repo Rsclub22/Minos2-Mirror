@@ -6,134 +6,142 @@
     <message>
         <location filename="../winkeyersetupdialog.ui" line="14"/>
         <source>Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">???WinKeyer isn&apos;t anywhere finished!</translation>
     </message>
     <message>
         <location filename="../winkeyersetupdialog.ui" line="22"/>
         <source>Comport</source>
-        <translation type="unfinished"></translation>
+        <translation>Port COM</translation>
     </message>
     <message>
         <location filename="../winkeyersetupdialog.ui" line="49"/>
         <source>Keyer Mode</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Mode Keyer?</translatorcomment>
+        <translation>Mode de manipulateur ?</translation>
     </message>
     <message>
         <location filename="../winkeyersetupdialog.ui" line="76"/>
         <source>Swap</source>
-        <translation type="unfinished"></translation>
+        <translation>Échanger</translation>
     </message>
     <message>
         <location filename="../winkeyersetupdialog.ui" line="83"/>
         <source>AutoSpace</source>
-        <translation type="unfinished"></translation>
+        <translation>Espace auto</translation>
     </message>
     <message>
         <location filename="../winkeyersetupdialog.ui" line="90"/>
         <source>CT Spacing</source>
-        <translation type="unfinished"></translation>
+        <translation>Espacement CT</translation>
     </message>
     <message>
         <location filename="../winkeyersetupdialog.ui" line="97"/>
         <source>Enable PTT</source>
-        <translation type="unfinished"></translation>
+        <translation>Activer PTT</translation>
     </message>
     <message>
         <location filename="../winkeyersetupdialog.ui" line="104"/>
         <source>Serial Echo</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Écho série?</translatorcomment>
+        <translation>?</translation>
     </message>
     <message>
         <location filename="../winkeyersetupdialog.ui" line="111"/>
         <source>Paddle Echo</source>
-        <translation type="unfinished"></translation>
+        <translation>Écho du manipulateur</translation>
     </message>
     <message>
         <location filename="../winkeyersetupdialog.ui" line="118"/>
         <source>Paddle Mute</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Context?</translatorcomment>
+        <translation>Manipulateur muet?</translation>
     </message>
     <message>
         <location filename="../winkeyersetupdialog.ui" line="125"/>
         <source>PaddleWD</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Context</translatorcomment>
+        <translation>Manipulateur WD??</translation>
     </message>
     <message>
         <location filename="../winkeyersetupdialog.ui" line="136"/>
         <source>Sidetone Frequency</source>
-        <translation type="unfinished"></translation>
+        <translation>Fréquence de tonalité latérale</translation>
     </message>
     <message>
         <location filename="../winkeyersetupdialog.ui" line="163"/>
         <source>Speed Pot Control</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Context?</translatorcomment>
+        <translation>Contrôle du potentiomètre de vitesse??</translation>
     </message>
     <message>
         <location filename="../winkeyersetupdialog.ui" line="172"/>
         <source>maxWpm</source>
-        <translation type="unfinished"></translation>
+        <translation>WPMmax</translation>
     </message>
     <message>
         <location filename="../winkeyersetupdialog.ui" line="199"/>
         <source>minWpm</source>
-        <translation type="unfinished"></translation>
+        <translation>WPMmin</translation>
     </message>
     <message>
         <location filename="../winkeyersetupdialog.ui" line="224"/>
         <source>Speed Pot Lock</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Context?</translatorcomment>
+        <translation>Verrouillage du pot de vitesse?</translation>
     </message>
     <message>
         <location filename="../winkeyersetupdialog.ui" line="235"/>
         <source>Weight</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Context?</translatorcomment>
+        <translation>Égalité??</translation>
     </message>
     <message>
         <location filename="../winkeyersetupdialog.ui" line="245"/>
         <source>(10-90)</source>
-        <translation type="unfinished"></translation>
+        <translation>(10-90)</translation>
     </message>
     <message>
         <location filename="../winkeyersetupdialog.ui" line="269"/>
         <source>Lead Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Temps de délai</translation>
     </message>
     <message>
         <location filename="../winkeyersetupdialog.ui" line="279"/>
         <location filename="../winkeyersetupdialog.ui" line="313"/>
         <source>(0-250) x10</source>
-        <translation type="unfinished"></translation>
+        <translation>(0-250) x10</translation>
     </message>
     <message>
         <location filename="../winkeyersetupdialog.ui" line="303"/>
         <source>Tail Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Temps de fin</translation>
     </message>
     <message>
         <location filename="../winkeyersetupdialog.ui" line="337"/>
         <source>First Character Extension</source>
-        <translation type="unfinished"></translation>
+        <translation>Extension du premier lettre</translation>
     </message>
     <message>
         <location filename="../winkeyersetupdialog.ui" line="347"/>
         <location filename="../winkeyersetupdialog.ui" line="381"/>
         <source>(0-250) mSec</source>
-        <translation type="unfinished"></translation>
+        <translation>(0-250) m</translation>
     </message>
     <message>
         <location filename="../winkeyersetupdialog.ui" line="371"/>
         <source>Keying Compensation</source>
-        <translation type="unfinished"></translation>
+        <translation>Compensation de clé</translation>
     </message>
     <message>
         <location filename="../winkeyersetupdialog.ui" line="405"/>
         <source>Paddle Hang</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Context?</translatorcomment>
+        <translation>Manipulateur suspendu??</translation>
     </message>
     <message>
         <location filename="../winkeyersetupdialog.ui" line="430"/>
         <source>Set Defaults</source>
-        <translation type="unfinished"></translation>
+        <translation>Définir les valeurs par défaut??</translation>
     </message>
 </context>
 <context>
@@ -141,38 +149,40 @@
     <message>
         <location filename="../winkeyermainwindow.ui" line="14"/>
         <source>WinkeyerMainWindow</source>
-        <translation type="unfinished"></translation>
+        <translation>???</translation>
     </message>
     <message>
         <location filename="../winkeyermainwindow.ui" line="46"/>
         <source>Keyer</source>
-        <translation type="unfinished"></translation>
+        <translation>Manipulateur </translation>
     </message>
     <message>
         <location filename="../winkeyermainwindow.ui" line="54"/>
         <source>Echo CW</source>
-        <translation type="unfinished"></translation>
+        <translation>Context??</translation>
     </message>
     <message>
         <location filename="../winkeyermainwindow.ui" line="70"/>
         <source>Send CW</source>
-        <translation type="unfinished"></translation>
+        <translation>Envoyer CW</translation>
     </message>
     <message>
         <location filename="../winkeyermainwindow.ui" line="84"/>
         <source>Send</source>
-        <translation type="unfinished"></translation>
+        <translation>Envoyer</translation>
     </message>
     <message>
         <location filename="../winkeyermainwindow.ui" line="93"/>
         <source>Open</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Context?</translatorcomment>
+        <translation>Ouvert/Ouvrir??</translation>
     </message>
     <message>
         <location filename="../winkeyermainwindow.ui" line="28"/>
         <location filename="../winkeyermainwindow.ui" line="40"/>
         <source>Setup</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Context?</translatorcomment>
+        <translation>Configuration?</translation>
     </message>
 </context>
 <context>
@@ -180,17 +190,18 @@
     <message>
         <location filename="../winkeyerrpc.cpp" line="27"/>
         <source>Available</source>
-        <translation type="unfinished"></translation>
+        <translation>Disponible</translation>
     </message>
     <message>
         <location filename="../winkeyerrpc.cpp" line="28"/>
         <source>Not Available</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>ou indisponible??</translatorcomment>
+        <translation>Non disponible??</translation>
     </message>
     <message>
         <location filename="../winkeyerrpc.cpp" line="29"/>
         <source>No Contact</source>
-        <translation type="unfinished"></translation>
+        <translation>Aucun contact?</translation>
     </message>
 </context>
 </TS>

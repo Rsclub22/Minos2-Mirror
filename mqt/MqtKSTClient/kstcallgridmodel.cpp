@@ -3,6 +3,7 @@
 #include "contest.h"
 #include "kstmainwindow.h"
 #include "cutils.h"
+#include "remotelogs.h"
 
 // kst2me sort by
 // new before old
@@ -18,10 +19,25 @@ bool KstUser::operator< ( const KstUser& rhs ) const
     else
         return chat < rhs.chat;
 }
+
+bool KstUser::operator==(const KstUser &rhs) const
+{
+    return (chat == rhs.chat && call == rhs.call);
+}
+qHashRet KstUser::qHash() const
+{
+    // find in set works off hash values, NOT the equality operator
+    // and they aren't the same (KST has no band/mode, monitored contact has band/mode)
+
+    // BUT hash just gives a bucket to be scanned, and THEN equality should be used
+
+    return ::qHash(call.getFullCall().arg(chat));
+}
 bool KstUserCompare (QSharedPointer<KstUser> i, QSharedPointer<KstUser> j)
 {
     return (*i<*j);
 }
+
 KstCallGridModel::KstCallGridModel()
 {
 }
@@ -99,6 +115,16 @@ void KstCallGridModel::setChatFilter(int value)
 {
     chatFilter = value;
 }
+
+void KstCallGridModel::setAwayFilter(bool value)
+{
+    awayFilter = value;
+}
+
+void KstCallGridModel::setInactiveFilter(bool value)
+{
+    inactiveFilter = value;
+}
 void KstCallGridModel::checkDistBear(QSharedPointer<KstUser> crec) const
 {
     if (crec->distance < 0)
@@ -144,11 +170,14 @@ QVariant KstCallGridModel::data( const QModelIndex &index, int role ) const
                 call = col + call + HtmlFontColour(Qt::black);
             }
 
+            if (crec->messageCount == 0)
+                call = "[" + call + "]";
             if (crec->away)
                 call = "(" + call + ")";
             if (crec->recent)
                 call = "*" + call + "*";
 
+            //return QString("%1 %2").arg(call).arg(crec->messageCount);
             return call;
         }
 
@@ -380,6 +409,22 @@ void KstCallGridSortFilterModel::setChatFilter(int value)
     chatFilter = value;
     invalidateFilter();
 }
+void KstCallGridSortFilterModel::setAwayFilter(bool value)
+{
+    KstCallGridModel *cgm = dynamic_cast<KstCallGridModel *>(sourceModel());
+    if (cgm)
+        cgm->setAwayFilter(value);
+    awayFilter = value;
+    invalidateFilter();
+}
+void KstCallGridSortFilterModel::setInactiveFilter(bool value)
+{
+    KstCallGridModel *cgm = dynamic_cast<KstCallGridModel *>(sourceModel());
+    if (cgm)
+        cgm->setInactiveFilter(value);
+    inactiveFilter = value;
+    invalidateFilter();
+}
 
 void KstCallGridSortFilterModel::setStringDXCC(bool dxcc)
 {
@@ -398,6 +443,15 @@ bool KstCallGridSortFilterModel::filterAcceptsRow(int sourceRow, const QModelInd
         return isFiltered();
 
     QSharedPointer<KstUser> call = cgm->callVector->at(sourceRow);
+
+    if (awayFilter && call->away)
+    {
+        return false;
+    }
+    if (inactiveFilter && call->messageCount == 0)
+    {
+        return false;
+    }
 
     int chat = call->chat;
     if ((chatFilter > 0 && chatFilter == chat) || (chatFilter == 0))

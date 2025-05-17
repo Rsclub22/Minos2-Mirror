@@ -15,6 +15,7 @@ class RadioSettingDialog;
 class N1MMBroadcastConfig;
 class WsjtxConfigure;
 class BandsSelect;
+class QFrame;
 
 class OptionsDialog : public QDialog
 {
@@ -54,6 +55,7 @@ private:
 
     bool check();
 
+    void addTab(QFrame *f, const QString &t);
 };
 
 #endif // OPTIONSDIALOG_H

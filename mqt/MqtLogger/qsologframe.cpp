@@ -223,13 +223,13 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
         trace(QString("addToBandmapTuneTolerance Data read in = %1 Hz").arg(addToBandmapTuneTolerance["DATA"]));
     }
     addToBandmapTuneTolerance[hamlibData::RTTY] = addToBandmapTuneTolerance["DATA"];
-    addToBandmapTuneTolerance[hamlibData::RY] = addToBandmapTuneTolerance["DATA"];
-    addToBandmapTuneTolerance[hamlibData::PSK] = addToBandmapTuneTolerance["DATA"];
+    addToBandmapTuneTolerance[RY] = addToBandmapTuneTolerance["DATA"];
+    addToBandmapTuneTolerance[PSK] = addToBandmapTuneTolerance["DATA"];
 
     TContestApp::getContestApp()->loggerBundle.getBoolProfile(elpAddBandMapTuningEnableDATA, addToBandmapTuneEnabled["DATA"]);
     addToBandmapTuneEnabled[hamlibData::RTTY] = addToBandmapTuneEnabled["DATA"];
-    addToBandmapTuneEnabled[hamlibData::RY] = addToBandmapTuneEnabled["DATA"];
-    addToBandmapTuneEnabled[hamlibData::PSK] = addToBandmapTuneEnabled["DATA"];
+    addToBandmapTuneEnabled[RY] = addToBandmapTuneEnabled["DATA"];
+    addToBandmapTuneEnabled[PSK] = addToBandmapTuneEnabled["DATA"];
 
 
     TContestApp::getContestApp() ->loggerBundle.getIntProfile( elpAddBandMapTuningTolerancePHONE, addToBandmapTuneTolerance["PHONE"] );
@@ -248,13 +248,13 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
     }
     addToBandmapTuneTolerance[hamlibData::USB] = addToBandmapTuneTolerance["PHONE"];
     addToBandmapTuneTolerance[hamlibData::LSB] = addToBandmapTuneTolerance["PHONE"];
-    addToBandmapTuneTolerance[hamlibData::PH] = addToBandmapTuneTolerance["PHONE"];
+    addToBandmapTuneTolerance[PH] = addToBandmapTuneTolerance["PHONE"];
     addToBandmapTuneTolerance[hamlibData::FM] = addToBandmapTuneTolerance["PHONE"];
 
     TContestApp::getContestApp()->loggerBundle.getBoolProfile(elpAddBandMapTuningEnablePHONE, addToBandmapTuneEnabled["PHONE"]);
     addToBandmapTuneEnabled[hamlibData::USB] = addToBandmapTuneEnabled["PHONE"];
     addToBandmapTuneEnabled[hamlibData::LSB] = addToBandmapTuneEnabled["PHONE"];
-    addToBandmapTuneEnabled[hamlibData::PH] = addToBandmapTuneEnabled["PHONE"];
+    addToBandmapTuneEnabled[PH] = addToBandmapTuneEnabled["PHONE"];
     addToBandmapTuneEnabled[hamlibData::FM] = addToBandmapTuneEnabled["PHONE"];
 
     on_tabSandP();  // show (or not) the Call/S&P choice
@@ -1152,6 +1152,27 @@ void QSOLogFrame::rxDMWord(QString rxWord, int markFreq)
     trace(QString("QSOLogFrame::rxDMWord %1 %2").arg(rxWord).arg(markFreq));
 
     QLineEdit *ed = dynamic_cast<QLineEdit *>( current );
+    if (ed == ui->CallsignFrame->getTextEditEdit())
+    {
+        Callsign call;
+
+        int res = call.setFullCall(rxWord);
+        if (res != CS_OK)
+        {
+            trace(QString("%1 is not a valid callsign; ").arg(rxWord));
+            return;
+        }
+
+    }
+    if (ed == ui->SerRxFrame->getTextEditEdit())
+    {
+        if (!isPureNumeric(rxWord))
+        {
+            trace(QString("%1 is not a valid serial number; ").arg(rxWord));
+            return;
+        }
+
+    }
     if (ed != ui->QTHFrame->getTextEditEdit())
     {
         ed->setText(rxWord);
@@ -1513,7 +1534,7 @@ void QSOLogFrame::getScreenEntry()
    }
    else
    {
-       screenContact.cqResponse = runButtonOnFlag && !radioOffRunFreq;
+       screenContact.cqResponse = isRunMode();
    }
    screenContact.mode.setValue(ui->ModeComboBoxGJV->currentText().trimmed());
    screenContact.mgmSubmode = ui->MGMSubModeEdit->text().trimmed();
@@ -2362,7 +2383,7 @@ void QSOLogFrame::setModes()
     }
     ui->ModeComboBoxGJV->setCurrentText(cmode);
 
-    ui->MGMSubModeFrame->setVisible(cmode == hamlibData::MGM);
+    ui->MGMSubModeFrame->setVisible(cmode == MGM);
 
 
 }
@@ -2373,18 +2394,18 @@ void QSOLogFrame::setOtherMode()
 
     QString cmode = ui->ModeComboBoxGJV->currentText();
 
-    if (cmode == hamlibData::RY)
+    if (cmode == RY)
     {
-        if (mlist.contains(hamlibData::PSK))
+        if (mlist.contains(PSK))
         {
-            ui->ModeButton->setText(hamlibData::PSK);
+            ui->ModeButton->setText(PSK);
         }
     }
-    else if (cmode == hamlibData::PSK)
+    else if (cmode == PSK)
     {
-        if (mlist.contains(hamlibData::RY))
+        if (mlist.contains(RY))
         {
-            ui->ModeButton->setText(hamlibData::RY);
+            ui->ModeButton->setText(RY);
         }
     }
     else
@@ -2425,9 +2446,9 @@ void QSOLogFrame::setMode(QString m)
     // make sure the mode button shows the correct "flip" value
 
     if (ui->ModeComboBoxGJV->currentText() == hamlibData::CW
-            || ui->ModeComboBoxGJV->currentText() == hamlibData::MGM
-            || ui->ModeComboBoxGJV->currentText() == hamlibData::RY
-            || ui->ModeComboBoxGJV->currentText() == hamlibData::PSK
+            || ui->ModeComboBoxGJV->currentText() == MGM
+            || ui->ModeComboBoxGJV->currentText() == RY
+            || ui->ModeComboBoxGJV->currentText() == PSK
             )
     {
         ui->ModeButton->setText(oldMode);
@@ -2437,7 +2458,7 @@ void QSOLogFrame::setMode(QString m)
         ui->ModeButton->setText(hamlibData::CW);
     }
 
-    ui->MGMSubModeFrame->setVisible(ui->ModeComboBoxGJV->currentText() == hamlibData::MGM);
+    ui->MGMSubModeFrame->setVisible(ui->ModeComboBoxGJV->currentText() == MGM);
 }
 //---------------------------------------------------------------------------
 void QSOLogFrame::setFreq(Frequency f)
@@ -2663,7 +2684,7 @@ void QSOLogFrame::updateQSODisplay()
 
    if (mgm)
    {
-       ui->ModeComboBoxGJV->setCurrentText(hamlibData::MGM);
+       ui->ModeComboBoxGJV->setCurrentText(MGM);
        ui->MGMSubModeEdit->setText(contest->currentMode.getValue());
    }
    if (notProtected)
@@ -2764,6 +2785,10 @@ void QSOLogFrame::on_ShowOperators ( )
    bool so = LogContainer->isShowOperators();
    doShowOperators(so);
 }
+bool QSOLogFrame::isRunMode()
+{
+    return runButtonOnFlag && !radioOffRunFreq;
+}
 void QSOLogFrame::on_tabSandP()
 {
     bool tabSandPstate;
@@ -2775,7 +2800,7 @@ void QSOLogFrame::on_tabSandP()
     }
     ui->tabSandPframe->setVisible(tabSandPstate);
 
-    if (!tabSandPstate || (runButtonOnFlag && !radioOffRunFreq))
+    if (!tabSandPstate || isRunMode())
     {
         ui->callRb->setChecked(true);
     }
@@ -2784,6 +2809,8 @@ void QSOLogFrame::on_tabSandP()
         ui->SandPrb->setChecked(true);
     }
     setPlaceholders(QStringList());
+    trace(QString("QSOLogFrame::on_tabSandP state %1 runButtonOnFlag %2 radioOffRunFreq %3")
+              .arg(tabSandPstate).arg(runButtonOnFlag).arg(radioOffRunFreq));
 }
 //---------------------------------------------------------------------------
 void QSOLogFrame::doGJVEditChange( QObject *Sender )
@@ -2860,7 +2887,7 @@ void QSOLogFrame::onModeButtonClickeds(const QString & m)
 
     oldMode = myOldMode;
     ui->ModeButton->setText(oldMode);
-    ui->MGMSubModeFrame->setVisible(ui->ModeComboBoxGJV->currentText() == hamlibData::MGM);
+    ui->MGMSubModeFrame->setVisible(ui->ModeComboBoxGJV->currentText() == MGM);
     contest->currentMode.setValue(mode);
     EditControlExit(ui->ModeButton);
 }
@@ -2889,8 +2916,8 @@ void QSOLogFrame::modeSentFromRig(QString m)
             mode = newMode;
 
             // ensure flip mode is shown on mode button
-            if (ui->ModeComboBoxGJV->currentText() == hamlibData::CW || ui->ModeComboBoxGJV->currentText() == hamlibData::MGM
-                || ui->ModeComboBoxGJV->currentText() == hamlibData::RY || ui->ModeComboBoxGJV->currentText() == hamlibData::PSK
+            if (ui->ModeComboBoxGJV->currentText() == hamlibData::CW || ui->ModeComboBoxGJV->currentText() == MGM
+                || ui->ModeComboBoxGJV->currentText() == RY || ui->ModeComboBoxGJV->currentText() == PSK
                 )
             {
                ui->ModeButton->setText(oldMode);
@@ -2899,7 +2926,7 @@ void QSOLogFrame::modeSentFromRig(QString m)
             {
                ui->ModeButton->setText(hamlibData::CW);
             }
-            ui->MGMSubModeFrame->setVisible(ui->ModeComboBoxGJV->currentText() == hamlibData::MGM);
+            ui->MGMSubModeFrame->setVisible(ui->ModeComboBoxGJV->currentText() == MGM);
         }
     }
 }
@@ -2920,9 +2947,9 @@ void QSOLogFrame::logScreenEntry( )
       return ;
    }
 
-   if ( screenContact.mode.getValue().compare( hamlibData::MGM, Qt::CaseInsensitive ) != 0
-        && screenContact.mode.getValue().compare( hamlibData::RY, Qt::CaseInsensitive ) != 0
-        && screenContact.mode.getValue().compare( hamlibData::PSK, Qt::CaseInsensitive ) != 0
+   if ( screenContact.mode.getValue().compare( MGM, Qt::CaseInsensitive ) != 0
+        && screenContact.mode.getValue().compare( RY, Qt::CaseInsensitive ) != 0
+        && screenContact.mode.getValue().compare( PSK, Qt::CaseInsensitive ) != 0
                 )
    {
        bool contactmodeCW = ( screenContact.reps.size() == 3 && screenContact.repr.size() == 3 );
@@ -2946,7 +2973,7 @@ void QSOLogFrame::logScreenEntry( )
               {
                   if ( MinosParameters::getMinosParameters() ->yesNoMessage( this, tr("Change mode to PH?") ) )
                   {
-                      onModeButtonClickeds(hamlibData::PH);
+                      onModeButtonClickeds(PH);
                       MinosParameters::getMinosParameters() ->mshowMessage(tr("Please check the signal reports, and log the contact"), this);
                       return;
                   }
@@ -2976,12 +3003,14 @@ void QSOLogFrame::logScreenEntry( )
    screenContact.op2 = ct->currentOp2.getValue();
 
    lct->copyFromArg( screenContact );
-   if (screenContact.mode.getValue().compare( hamlibData::RY, Qt::CaseInsensitive ) == 0)
+
+   // Correct RTTY/PSK rig freq to the mark frequency
+   if (screenContact.mode.getValue().compare( RY, Qt::CaseInsensitive ) == 0)
    {
         Frequency corrected = screenContact.getFrequency().getValue() - screenContact.markOffset;
         lct->setFrequency(corrected, screenContact.band);
    }
-   if (screenContact.mode.getValue().compare( hamlibData::PSK, Qt::CaseInsensitive ) == 0)
+   if (screenContact.mode.getValue().compare( PSK, Qt::CaseInsensitive ) == 0)
    {
        Frequency corrected = screenContact.getFrequency().getValue() + screenContact.markOffset;
        lct->setFrequency(corrected, screenContact.band);
@@ -3579,7 +3608,7 @@ void QSOLogFrame::on_ModeComboBoxGJV_activated(int index)
         MinosLoggerEvents::SendModeChange(mode);    // this will e.g. set the RTTY/PSK engines correctly
     }
 
-    if (cmode == hamlibData::CW || cmode == hamlibData::MGM || cmode == hamlibData::RY || cmode == hamlibData::PSK)
+    if (cmode == hamlibData::CW || cmode == MGM || cmode == RY || cmode == PSK)
     {
        ui->ModeButton->setText(oldMode);
     }
@@ -3587,7 +3616,7 @@ void QSOLogFrame::on_ModeComboBoxGJV_activated(int index)
     {
        ui->ModeButton->setText(hamlibData::CW);
     }
-    if (cmode == hamlibData::MGM)
+    if (cmode == MGM)
     {
         if (ui->RSTTxFrame->getTextEditEdit()->text().trimmed() == "5")
         {
@@ -3598,7 +3627,7 @@ void QSOLogFrame::on_ModeComboBoxGJV_activated(int index)
             ui->RSTRxFrame->getTextEditEdit()->clear();
         }
     }
-    ui->MGMSubModeFrame->setVisible(cmode == hamlibData::MGM);
+    ui->MGMSubModeFrame->setVisible(cmode == MGM);
 }
 
 void QSOLogFrame::on_ValidateError (int mess_no )
@@ -3632,7 +3661,7 @@ void QSOLogFrame::on_SpotLastLoggedPbClicked()
 }
 void QSOLogFrame::on_SpotPbClicked()
 {
-    if ((runButtonOnFlag && radioOffRunFreq) || !runButtonOnFlag)     // don't send a spot when running a freq
+    if (!isRunMode())     // don't send a spot when running a freq
     {
         memoryData::memData logData;
         int valRes = -1;
@@ -4082,27 +4111,18 @@ void QSOLogFrame::setRunOffFreqFlag(bool offRunFreq)
 
 void QSOLogFrame::setBandmapControlsState()
 {
-    if (runButtonOnFlag)
+    TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
+    if (tslf && tslf->isBandMapLoaded())
     {
-        if (radioOffRunFreq)
-        {
-            setBandMapControlsDisabled(false);
-        }
-        else
-        {
-            setBandMapControlsDisabled(true);
-        }
+        setBandMapControlsVisible(true);
+        setBandMapControlsDisabled(isRunMode());
     }
     else
     {
-        TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
-        if (tslf && tslf->isBandMapLoaded())
-        {
-            setBandMapControlsVisible(true);
-            setBandMapControlsDisabled(false);
-        }
-
+        setBandMapControlsVisible(false);
+        setBandMapControlsDisabled(true);
     }
+
 }
 
 void QSOLogFrame::setClusterSendSpotControlsState()

@@ -520,7 +520,7 @@
     </message>
     <message>
         <location filename="../profiles.cpp" line="120"/>
-        <source>Show Crib Band</source>
+        <source>Show Next QSO Band</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -656,6 +656,12 @@
     <message>
         <location filename="../profiles.cpp" line="155"/>
         <source>Bandmap show derived loc</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../profiles.cpp" line="157"/>
+        <location filename="../profiles.cpp" line="158"/>
+        <source></source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -917,11 +923,6 @@
     </message>
     <message>
         <location filename="../profiles.cpp" line="247"/>
-        <source>Antenna Bearing Offset</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../profiles.cpp" line="247"/>
         <source>Amount to offset antenna bearings</source>
         <translation type="unfinished"></translation>
     </message>
@@ -939,17 +940,17 @@
 <context>
     <name>Calendar</name>
     <message>
-        <location filename="../Calendar.cpp" line="21"/>
+        <location filename="../Calendar.cpp" line="22"/>
         <source>&lt;VHF from VHFContests.xml&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Calendar.cpp" line="22"/>
+        <location filename="../Calendar.cpp" line="23"/>
         <source>&lt;Microwave from MicrContemodestsxx.xml&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Calendar.cpp" line="42"/>
+        <location filename="../Calendar.cpp" line="43"/>
         <source>Undefined</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1215,9 +1216,151 @@
     </message>
 </context>
 <context>
+    <name>DMKeysEditDlg</name>
+    <message>
+        <location filename="../dmkeyseditdlg.ui" line="20"/>
+        <source>Settings Editor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dmkeyseditdlg.ui" line="32"/>
+        <source>OK</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dmkeyseditdlg.ui" line="42"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dmkeyseditdlg.ui" line="49"/>
+        <source>Rename Setting</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dmkeyseditdlg.ui" line="56"/>
+        <source>Delete Setting</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dmkeyseditdlg.ui" line="63"/>
+        <source>Copy Setting</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dmkeyseditdlg.ui" line="70"/>
+        <source>New Setting</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dmkeyseditdlg.ui" line="153"/>
+        <source>Move Up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dmkeyseditdlg.ui" line="160"/>
+        <source>Move Down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dmkeyseditdlg.cpp" line="33"/>
+        <source>New Digi FKey section</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dmkeyseditdlg.cpp" line="34"/>
+        <source>Copy Digi FKey section</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dmkeyseditdlg.cpp" line="35"/>
+        <source>Delete Digi FKey section</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dmkeyseditdlg.cpp" line="36"/>
+        <source>Rename Digi FKey section</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dmkeyseditdlg.cpp" line="50"/>
+        <source>* My callsign
+        # Serial to send
+        ! Their call
+        {macro}
+        {MYCALL}        my full call
+        {CALL}          their full call
+        {SN}            serial number to send
+        {EXCH}          full exchange to send - can be in multiple parts
+        {GRID}          my Maidenhead locator
+        {SPACE}         space character
+        {SENTRST}       RST to send
+        {TIME2}         time in HHmm format
+        {LOG}           log the QSO. clear it, and focus on CALL
+        {WIPE}          wipe all QSO fields
+        {CALLFIELD}     move focus to the call field
+        {SERIALFIELD}   move focus to the serial received field
+        {EXCHANGEFIELD} move focus to the exchange received field</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dmkeyseditdlg.cpp" line="154"/>
+        <source>Run</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dmkeyseditdlg.cpp" line="154"/>
+        <source>S&amp;P</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dmkeyseditdlg.cpp" line="167"/>
+        <source>Key Top</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dmkeyseditdlg.cpp" line="167"/>
+        <source>Value</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dmkeyseditdlg.cpp" line="204"/>
+        <location filename="../dmkeyseditdlg.cpp" line="298"/>
+        <source>Please give a new name for the %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dmkeyseditdlg.cpp" line="233"/>
+        <location filename="../dmkeyseditdlg.cpp" line="263"/>
+        <location filename="../dmkeyseditdlg.cpp" line="312"/>
+        <source>%1 already exists</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dmkeyseditdlg.cpp" line="246"/>
+        <source>Please give a name for the new %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dmkeyseditdlg.cpp" line="278"/>
+        <source>You cannot delete the empty %1!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dmkeyseditdlg.cpp" line="280"/>
+        <source>Are you sure you want to delete the current %1?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dmkeyseditdlg.cpp" line="294"/>
+        <source>You cannot rename the empty %1!</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Day Abbreviation</name>
     <message>
-        <location filename="../cutils.cpp" line="993"/>
+        <location filename="../cutils.cpp" line="994"/>
         <source>D</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1470,40 +1613,6 @@ The format required is (e.g.) 1296.3, 144.32 or 144.290123
     <message>
         <location filename="../MatchThisFrame.cpp" line="72"/>
         <source>Press &quot;Yes&quot; to transfer details, or &quot;No&quot; to edit the QSO</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>MessageServer::impl</name>
-    <message>
-        <location filename="../WsjtxMessageServer.cpp" line="71"/>
-        <location filename="../WsjtxMessageServer.cpp" line="219"/>
-        <source>Error creating UDP message</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../WsjtxMessageServer.cpp" line="397"/>
-        <source>MessageServer warning: invalid UDP message received</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../WsjtxMessageServer.cpp" line="402"/>
-        <source>MessageServer exception: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../WsjtxMessageServer.cpp" line="406"/>
-        <source>Unexpected exception in MessageServer</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../WsjtxMessageServer.cpp" line="440"/>
-        <source>Message serialization error: read corrupt data</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../WsjtxMessageServer.cpp" line="444"/>
-        <source>Message serialization error: write error</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1972,7 +2081,7 @@ The format required is (e.g.) 1296.3, 144.32 or 144.290123
 <context>
     <name>QWidget</name>
     <message>
-        <location filename="../cutils.cpp" line="793"/>
+        <location filename="../cutils.cpp" line="794"/>
         <source>Reset Columns</source>
         <comment>createColumnsMenu</comment>
         <translation type="unfinished"></translation>
@@ -2450,17 +2559,17 @@ Please enter another bearing</source>
 <context>
     <name>clusterState</name>
     <message>
-        <location filename="../clustercommon.cpp" line="12"/>
+        <location filename="../clustercommon.cpp" line="13"/>
         <source>Available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustercommon.cpp" line="13"/>
+        <location filename="../clustercommon.cpp" line="14"/>
         <source>Not Available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustercommon.cpp" line="14"/>
+        <location filename="../clustercommon.cpp" line="15"/>
         <source>No Contact</source>
         <translation type="unfinished"></translation>
     </message>

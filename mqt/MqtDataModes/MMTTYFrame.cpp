@@ -203,6 +203,7 @@ void MMTTYFrame::sendCharacters(const QString &sendData, int markf)
     if (sendData.isEmpty())
     {
         ::PostMessage(mttyHWnd, uMSG_MMTTY, RXM_PTT, 0);    // PTT off immediate
+        ::PostMessage(mttyHWnd, uMSG_MMTTY, RXM_PTT, 4);    // Clear TX Buffer
     }
     else
     {

@@ -29,11 +29,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../KeyerMain.ui" line="129"/>
-        <source>Show</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../KeyerMain.ui" line="115"/>
         <source>Record</source>
         <translation type="unfinished"></translation>
@@ -92,6 +87,11 @@
     <message>
         <location filename="../KeyerMain.ui" line="101"/>
         <source>Message Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../KeyerMain.ui" line="129"/>
+        <source>Show Waveform</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

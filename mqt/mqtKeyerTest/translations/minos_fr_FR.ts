@@ -16,7 +16,7 @@
     <message>
         <location filename="../mqtktWaveShowDialog.ui" line="58"/>
         <source>Close</source>
-        <translation type="unfinished">Fermer?</translation>
+        <translation>Fermer</translation>
     </message>
     <message>
         <location filename="../mqtktWaveShowDialog.cpp" line="136"/>
@@ -36,17 +36,17 @@
     <message>
         <location filename="../mqtktWaveShowDialog.cpp" line="148"/>
         <source>Attack (ms)</source>
-        <translation>[Context?] </translation>
+        <translation>Compression temps de désensibilisation en mS [??</translation>
     </message>
     <message>
         <location filename="../mqtktWaveShowDialog.cpp" line="152"/>
         <source>Release (ms)</source>
-        <translation>[Context?] </translation>
+        <translation>Relâchement de la compression en mS</translation>
     </message>
     <message>
         <location filename="../mqtktWaveShowDialog.cpp" line="156"/>
         <source>Makeup Gain (db)</source>
-        <translation>[Context?] </translation>
+        <translation>Gain (dB)</translation>
     </message>
 </context>
 <context>

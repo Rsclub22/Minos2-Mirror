@@ -27,9 +27,9 @@ class MinosRouterConnection: public MinosCommonConnection
 
       QTimer resubscribeTimer;
    protected:
-      virtual bool checkLastRx() override;
       qint64 lastKeepAlive = 0;
    public:
+      void strace(const QString &) override;
       MinosRouterConnection(bool fromDatagram);
       virtual void initialise() override;
       ~MinosRouterConnection() override;
@@ -52,10 +52,15 @@ class MinosRouterConnection: public MinosCommonConnection
       virtual void mConnect( Router *srv );
       virtual void sendAction( XStanza *a );
       void closeDown() override;
+      virtual void disconnected() override;
+      virtual bool checkLastRx() override;
+
 private slots:
       void on_connected();
       virtual void sendKeepAlive( ) override;
       virtual void sendCloseSocket( ) override;
+      void connectionError(QAbstractSocket::SocketError);
+      void on_hostFound();
 };
 //==============================================================================
 #endif
