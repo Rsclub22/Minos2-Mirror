@@ -31,19 +31,33 @@ public:
     explicit RotatorCompassFrame(QWidget *parent = nullptr);
     ~RotatorCompassFrame();
 
+    void setRotatorCompassBearing(const QString &s);
 
+signals:
+    void sendCompassDial(int);
 
 protected:
-    QGroupBox *getRotatorControlGroupBoxObject();
-    QComboBox *getAntennaSelectObject();
-    QLabel *getRotConnectStateLabelObject();
-    QLabel *getRotatorStatMsgLabelObject();
-    QToolButton *getRotateLeftObject();
-    QToolButton *getRotateRightObject();
-    QToolButton *getnudgeLeftObject();
-    QToolButton *getnudgeRightObject();
+    QGroupBox *getRotatorControlGroupBoxObject() override;
+    QComboBox *getAntennaSelectObject() override;
+    QToolButton* getRotateButtonObject() override;
+    BearingLineEdit* getBrgLineEditObject() override;
+    QLabel *getRotConnectStateLabelObject() override;
+    QLabel *getRotatorStatMsgLabelObject() override;
+    QLabel* getRotBrgDisplayObject() override;
+    QToolButton *getRotateLeftObject() override;
+    QToolButton *getRotateRightObject() override;
+    QToolButton *getnudgeLeftObject() override;
+    QToolButton *getnudgeRightObject() override;
+
+
+
+
+private slots:
+    void  compassClicked(int);
+    void stop_rotation();
 private:
     Ui::RotatorCompassFrame *ui;
+
 
 
 

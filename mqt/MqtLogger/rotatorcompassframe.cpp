@@ -19,6 +19,14 @@ RotatorCompassFrame::RotatorCompassFrame(QWidget *parent)
 {
     ui->setupUi(this);
 
+    rotFrameData.setFrameName("rotCompassControl");
+
+    connect(this, &RotatorCompassFrame::sendCompassDial, ui->compassDialDisplay, &MinosCompass::compassDialUpdate);
+    // click on compass rose
+
+    connect(ui->compassDialDisplay, &MinosCompass::sendClickBearing, this, &RotatorCompassFrame::compassClicked);
+    connect(ui->compassDialDisplay, &MinosCompass::sendStop, this, &RotatorCompassFrame::stop_rotation);
+
 /*
     nudgeRight1 = new QShortcut(QKeySequence("Ctrl++"), parent);   // Ctrl +
     connect(nudgeRight1, &QShortcut::activated, ui->nudgeRight, &QToolButton::click);
@@ -70,6 +78,17 @@ QComboBox* RotatorCompassFrame::getAntennaSelectObject()
     return ui->antennaNameSel;
 }
 
+QToolButton* RotatorCompassFrame::getRotateButtonObject()
+{
+    return ui->Rotate;
+}
+
+BearingLineEdit* RotatorCompassFrame::getBrgLineEditObject()
+{
+    return ui->BrgLineEdit;
+}
+
+
 QLabel* RotatorCompassFrame::getRotConnectStateLabelObject()
 {
     return ui->rotConnectState;
@@ -78,10 +97,13 @@ QLabel* RotatorCompassFrame::getRotatorStatMsgLabelObject()
 {
     return ui->rotatorStatMsg;
 }
+QLabel* RotatorCompassFrame::getRotBrgDisplayObject()
+{
+    return ui->RotBrgDisplay;
+}
 
 
-
-QToolButton* RotatorCompassFrame::getRotateLeftObject()
+QToolButton* RotatorCompassFrame::RotatorCompassFrame::getRotateLeftObject()
 {
     return ui->RotateLeft;
 }
@@ -99,3 +121,47 @@ QToolButton* RotatorCompassFrame::getnudgeRightObject()
 }
 
 
+void  RotatorCompassFrame::setRotatorCompassBearing(const QString &s)
+{
+    traceMsg(QString("Bearings from rotator control = %1").arg(s));
+
+    // send to text display
+
+    int bearing = 0;
+    bool ok = true;
+
+    QStringList sl = s.split(":");
+    if (sl.count() == 3)
+    {
+        bearing = sl[0].toInt(&ok);
+        if (ok)
+        {
+           emit sendCompassDial(bearing);
+        }
+    }
+
+    ok = false;
+
+    if (!ok)
+    {
+        traceMsg("Bearing from rotator control error!");
+    }
+
+
+}
+
+void  RotatorCompassFrame::compassClicked(int bearing)
+{
+    traceMsg(QString("Compass Dial Click, Send Bearing %1 to Rotator Control").arg(QString::number(bearing)));
+    emit sendRotator(rpcConstants::eRotateDirect, bearing);
+
+    ui->BrgLineEdit->setText(QString::number(bearing));
+    ui->BrgLineEdit->selectAll();
+}
+
+
+void  RotatorCompassFrame::stop_rotation()
+{
+    traceMsg(QString("Compass Dial Clicked"));
+    emit sendRotator(rpcConstants::eRotateStop, 0);
+}

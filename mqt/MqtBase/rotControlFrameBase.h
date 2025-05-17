@@ -16,7 +16,6 @@
 
 
 
-
 class RotControlFrameBase : public QFrame
 {
     Q_OBJECT
@@ -31,7 +30,7 @@ public:
     void setContest(BaseContestLog *c);
     int getAngle(QString brgSt);
     int getCurrentBearing();
-    void setRotatorBearing(const QString &s);
+    virtual void setRotatorBearing(const QString &s);
     void setSupportStopCommandFlag(bool state);
     void setCwCcwCmdEnable(bool s);
 

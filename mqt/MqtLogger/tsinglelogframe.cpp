@@ -133,11 +133,20 @@ void TSingleLogFrame::buildFrame(int slotNo)
 
     // To rotator controller
     connect(FKHRotControlFrame, &RotControlFrame::sendRotator, this, &TSingleLogFrame::sendRotator);
-    connect(rotPresets, &RotPresets::sendRotatorPreset, this, &TSingleLogFrame::sendRotatorPreset);
     connect(FKHRotControlFrame, &RotControlFrame::selectRotator, this, &TSingleLogFrame::sendSelectRotator);
     connect(FKHRotControlFrame, &RotControlFrame::selectRotator, rotPresets, &RotPresets::selectRotator);
-    connect(rotPresets, &RotPresets::presetTurn, this, &TSingleLogFrame::presetTurn);
     connect(FKHRotControlFrame, &RotControlFrame::rotatorConnected, this, &TSingleLogFrame::on_rotatorConnected);
+
+    connect(FKHRotCompassFrame, &RotControlFrame::sendRotator, this, &TSingleLogFrame::sendRotator);
+    connect(FKHRotCompassFrame, &RotControlFrame::selectRotator, this, &TSingleLogFrame::sendSelectRotator);
+    connect(FKHRotCompassFrame, &RotControlFrame::selectRotator, rotPresets, &RotPresets::selectRotator);
+    connect(FKHRotCompassFrame, &RotControlFrame::rotatorConnected, this, &TSingleLogFrame::on_rotatorConnected);
+
+
+    connect(rotPresets, &RotPresets::presetTurn, this, &TSingleLogFrame::presetTurn);
+    connect(rotPresets, &RotPresets::sendRotatorPreset, this, &TSingleLogFrame::sendRotatorPreset);
+
+
     connect(skyScanControlFrame, &RotatorSkyScanFrame::sendSkyScanButtonState, this, &TSingleLogFrame::sendSkyScanFrameButtonStateToRotator);
 
     // from cluster frame
@@ -929,6 +938,7 @@ void TSingleLogFrame::buildScreenLayout(int slotNo)
     wsjtxFrame->setContest(ct);
     FKHRigControlFrame->setContest(ct);
     FKHRotControlFrame->setContest(ct);
+    FKHRotCompassFrame->setContest(ct);
     skyScanControlFrame->setContest(ct);
     dmButtonFrame->setContest(ct);
     txVmButtonsFrame->setContest(ct);
@@ -1147,6 +1157,7 @@ void TSingleLogFrame::on_ContestPageChanged ()
 
     FKHRigControlFrame->on_ContestPageChanged();
     FKHRotControlFrame->on_ContestPageChanged();
+    FKHRotCompassFrame->on_ContestPageChanged();
     skyScanControlFrame->on_ContestPageChanged();
 
     updateQSODisplay();
@@ -1799,6 +1810,8 @@ void TSingleLogFrame::checkConnections()
             FKHRigControlFrame->checkConnection();
         if (FKHRotControlFrame)
             FKHRotControlFrame->checkConnection();
+        if (FKHRotCompassFrame)
+            FKHRotCompassFrame->checkConnection();
     }
 }
 //---------------------------------------------------------------------------
@@ -2281,6 +2294,7 @@ bool TSingleLogFrame::getRadioReadOnlyFlag()
 void TSingleLogFrame::on_RotatorList()
 {
     FKHRotControlFrame->setRotatorList();
+    FKHRotCompassFrame->setRotatorList();
 }
 
 void TSingleLogFrame::on_RotatorPresetList(QString s)
@@ -2293,6 +2307,7 @@ void TSingleLogFrame::on_RotatorStatus(QString s)
     if ( this == LogContainer->getCurrentLogFrame() )
     {
         FKHRotControlFrame->setRotatorState(s);
+        FKHRotCompassFrame->setRotatorState(s);
     }
 }
 
@@ -2301,6 +2316,8 @@ void TSingleLogFrame::on_RotatorBearing(QString s)
     if ( this == LogContainer->getCurrentLogFrame() )
     {
         FKHRotControlFrame->setRotatorBearing(s);
+        FKHRotCompassFrame->setRotatorBearing(s);
+        FKHRotCompassFrame->setRotatorCompassBearing(s);
         bandmapControlFrame->setRotatorBearing(s);
         GJVQSOLogFrame->setRotatorBearing(s);
         skyScanControlFrame->setRotatorBearing(s);
@@ -2317,6 +2334,7 @@ void TSingleLogFrame::on_RotatorMaxAzimuth(int s)
     if ( this == LogContainer->getCurrentLogFrame() )
     {
         FKHRotControlFrame->setRotatorMaxAzimuth(s);
+        FKHRotCompassFrame->setRotatorMaxAzimuth(s);
     }
 }
 
@@ -2325,6 +2343,7 @@ void TSingleLogFrame::on_RotatorMinAzimuth(int s)
     if ( this == LogContainer->getCurrentLogFrame() )
     {
         FKHRotControlFrame->setRotatorMinAzimuth(s);
+        FKHRotCompassFrame->setRotatorMinAzimuth(s);
     }
 }
 
@@ -2333,6 +2352,7 @@ void TSingleLogFrame::on_SupportStopCommand(bool state)
     if (this == LogContainer->getCurrentLogFrame())
     {
         FKHRotControlFrame->setSupportStopCommandFlag(state);
+        FKHRotCompassFrame->setSupportStopCommandFlag(state);
     }
 }
 
@@ -2340,6 +2360,7 @@ void TSingleLogFrame::on_cwCcwCmdEnable(bool s)
 {
     if (this == LogContainer->getCurrentLogFrame())
     {
+       FKHRotControlFrame->setCwCcwCmdEnable(s);
        FKHRotControlFrame->setCwCcwCmdEnable(s);
     }
 }
@@ -2436,12 +2457,14 @@ void TSingleLogFrame::on_SkyScanButtonState(int state)
         {
             // started disable rotPresets and rotator Frames
             FKHRotControlFrame->skyScanStartedSetFrameDisabled(true);
+            FKHRotCompassFrame->skyScanStartedSetFrameDisabled(true);
             rotPresets->skyScanStartedSetFrameDisabled(true);
 
         }
         else
         {
             FKHRotControlFrame->skyScanStartedSetFrameDisabled(false);
+            FKHRotCompassFrame->skyScanStartedSetFrameDisabled(false);
             rotPresets->skyScanStartedSetFrameDisabled(false);
         }
     }

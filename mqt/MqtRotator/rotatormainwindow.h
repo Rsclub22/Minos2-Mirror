@@ -420,7 +420,6 @@ private:
     void sendSkyScanNextStepToLogger(QString nextStepBearing);
     void sendSkyScanCountDownToLogger(QString countDown);
     void sendSkyScanButtonStateToLogger(int state);
-    void sendSkyScanReverseScanToLogger(bool state);
     void setSkyScanPauseButtonColour(QString style);
 
     void setSkyScanTabVisible(bool visible);

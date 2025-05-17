@@ -772,14 +772,7 @@ void RotatorMainWindow::sendSkyScanButtonStateToLogger(int state)
 }
 
 
-// remove this as sending start as part of button state!
-void RotatorMainWindow::sendSkyScanReverseScanToLogger(bool state)
-{
-    logMessage(QString("Send SkyScan reverse scan state = %1 to logger").arg(state ? "true" : "false"));
-    PubSubName psname(setupAntenna->currentAntennaName);
-    msg->rotatorCache.setSkyScanReverseScan(psname, state);
-    msg->rotatorCache.publish();
-}
+
 
 void RotatorMainWindow::sendSkyScanButtonStateToTraceLog()
 {
@@ -1234,7 +1227,7 @@ void RotatorMainWindow::upDateAntenna()
             else
             {
                 sendStatusToLogDisConnected();
-                //setSkyScanEnableChkBoxEnabled(false);
+
                 closeSkyScan(setupAntenna->currentAntenna.antennaName);
             }
 
@@ -1314,22 +1307,10 @@ void RotatorMainWindow::refreshAntenna()
         {
             sendStatusToLogConnected();
 
-            //setSkyScanEnableChkBoxEnabled(true);
-            //readSkyScanEnableSetting(setupAntenna->currentAntenna.antennaName);
-            //ui->skyScanEnableChkBox->setChecked(skyScanEnabled);
-
-            if (isSkyScanTabVisible())
-            {
-
-                openSkyScan(setupAntenna->currentAntenna.antennaName);
-            }
-
         }
         else
         {
             sendStatusToLogDisConnected();
-            //setSkyScanEnableChkBoxEnabled(false);
-            closeSkyScan(setupAntenna->currentAntenna.antennaName);
         }
 
     }
@@ -3915,6 +3896,7 @@ void RotatorMainWindow::dumpSkyScanSettingsToTraceLog(SkyScanData &activeData)
 
 void RotatorMainWindow::initSkyScanPresetButtons()
 {
+    skyScanPresetButton.clear();
 
     QList<QToolButton*> ui_skyScanPresetbuttons;
     ui_skyScanPresetbuttons << ui->skyscanPreset0 << ui->skyscanPreset1 << ui->skyscanPreset2 << ui->skyscanPreset3 << ui->skyscanPreset4
