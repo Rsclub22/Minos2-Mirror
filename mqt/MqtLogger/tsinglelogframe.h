@@ -183,7 +183,7 @@ public:
     void xferFromKST(QString call, QString loc, QString freq);
 
     void setCallPlaceholder(QString call);
-<<<<<<< HEAD
+
     void on_SkyScanNextStep(QString nextStep);
     void on_SkyScanCountDown(QString countDown);
     void on_SkyScanButtonState(int state);
@@ -191,11 +191,11 @@ public:
     void on_skyScanVisible(bool state);
     void on_skyScanStartBearing(int startBearing);
     void on_skyScanEndBearing(int endBearing);
-=======
+
     void sendRunOnFlag(Frequency, QString mode, bool);
     void sendRunOffFreqFlag(Frequency, bool);
 
->>>>>>> 8fkh_newDev
+
 private:
     QString curScreenLayout;
 

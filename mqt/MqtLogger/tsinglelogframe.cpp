@@ -230,11 +230,9 @@ void TSingleLogFrame::createScreenComponents()
     FKHRigControlFrame->setObjectName(QStringLiteral("FKHRigControlFrame"));
     FKHRigControlFrame->setFrameShape(QFrame::StyledPanel);
     FKHRigControlFrame->setFrameShadow(QFrame::Raised);
-<<<<<<< HEAD
-    FKHRigControlFrame->setVmButtonsFrame(txVmButtonsFrame);
-=======
 
->>>>>>> 8fkh_newDev
+    //FKHRigControlFrame->setVmButtonsFrame(txVmButtonsFrame);
+
     FKHRigControlFrame->setVisible(false);
 
     FKHRotCompassFrame = new RotatorCompassFrame(this);

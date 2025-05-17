@@ -494,13 +494,9 @@ QString HamlibRotControl::getLibraryName()
 
 QString HamlibRotControl::getRotLibVersion()
 {
-<<<<<<< HEAD
-    QString ver = hamlib_version;
 
-=======
-    QString ver = hamlib_version2;
->>>>>>> 8fkh_newDev
-    return ver;
+   QString ver = hamlib_version2;
+   return ver;
 }
 
 
