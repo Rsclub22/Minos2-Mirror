@@ -180,7 +180,7 @@ static const QString rotatorSelectAntennaName ("SelectAntennaName");
 static const QString rotatorMaxAzimuth  ("MaxAzimuth");
 static const QString rotatorMinAzimuth  ("MinAzimuth");
 static const QString supportStopCommand ("SupportStopCommand");
-
+static const QString rotatorStopSouthStopOffsetData ("StopSouthStopOffsetData");
 // SkyScan
 
 
@@ -192,6 +192,8 @@ static const QString skyScanNextStep ("SkyScanNextStep");
 static const QString skyScanCountDown ("SkyScanCountDown");
 static const QString skyScanButtonState ("SkyScanButtonState");
 static const QString skyScanReverseScan ("SkyScanReverseScan");
+static const QString skyScanRotatorStartBearimg ("SkyScanRotatorStartBearing");
+static const QString skyScanRotatorEndBearimg ("SkyScanRotatorEndBearing");
 
 // Rig Control
 static const QString rigControlApp         ("mqtRigControl");

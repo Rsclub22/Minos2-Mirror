@@ -344,6 +344,8 @@ private slots:
     void skyScanPresetWrite(int buttonNumber);
 
 
+
+
 private:
     void rotateTo(int bearing);
     //int northCalcTarget(int targetBearing);
@@ -422,6 +424,8 @@ private:
     void sendSkyScanButtonStateToLogger(int state);
     void setSkyScanPauseButtonColour(QString style);
 
+    void sendRotator_EndStopType_OffSet_SouthStop_ToLogger(endStop endStopType, southStop southStop, int offset);
+
     void setSkyScanTabVisible(bool visible);
     void clearSkyScanDisplayCompassDial();
 
@@ -441,6 +445,9 @@ private:
     void clearActivePresetDisplay();
     void setSkyScanPresetIndicationOnOff(int buttonNumber, bool state);
     void clearAllSkyScanPresetButtonsIndicators(int count);
+
+    void sendSkyScanRotatorStartBearingToLogger(int rotatorStartBearing);
+    void sendSkyScanRotatorEndBearingToLogger(int rotatorEndBearing);
 };
 
 #endif // ROTATORMAINWINDOW_H

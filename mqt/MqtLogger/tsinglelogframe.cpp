@@ -2356,6 +2356,11 @@ void TSingleLogFrame::on_SupportStopCommand(bool state)
     }
 }
 
+void TSingleLogFrame::on_RotatorStopSouthStopOffset(QString data)
+{
+    FKHRotCompassFrame->setRotatorSouthStopOffset(data);
+}
+
 void TSingleLogFrame::on_cwCcwCmdEnable(bool s)
 {
     if (this == LogContainer->getCurrentLogFrame())
@@ -2410,6 +2415,7 @@ void TSingleLogFrame::on_skyScanVisible(bool state)
     if (this == LogContainer->getCurrentLogFrame())
     {
         skyScanControlFrame->setSkyScanVisible(state);
+        FKHRotCompassFrame->setSkyScanVisible(state);
     }
 }
 
@@ -2418,6 +2424,7 @@ void TSingleLogFrame::on_skyScanStartBearing(int startBearing)
     if (this == LogContainer->getCurrentLogFrame())
     {
         skyScanControlFrame->setSkyScanStartBearing(startBearing);
+
     }
 }
 
@@ -2426,6 +2433,24 @@ void TSingleLogFrame::on_skyScanEndBearing(int endBearing)
     if (this == LogContainer->getCurrentLogFrame())
     {
         skyScanControlFrame->setSkyScanEndBearing(endBearing);
+    }
+}
+
+void TSingleLogFrame::on_skyScanRotatorStartBearing(int rotatorStartBearing)
+{
+    if (this == LogContainer->getCurrentLogFrame())
+    {
+
+        FKHRotCompassFrame->setSkyScanRotatorStartBearing(rotatorStartBearing);
+    }
+}
+
+void TSingleLogFrame::on_skyScanRotatorEndBearing(int rotatorEndBearing)
+{
+    if (this == LogContainer->getCurrentLogFrame())
+    {
+
+        FKHRotCompassFrame->setSkyScanRotatorEndBearing(rotatorEndBearing);
     }
 }
 

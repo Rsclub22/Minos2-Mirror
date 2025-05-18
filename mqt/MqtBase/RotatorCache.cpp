@@ -333,6 +333,10 @@ void RotatorCache::setSupportStopCommand(const PubSubName &name, bool state)
 {
     rotDetails[name].setSupportStopCommand(state);
 }
+void RotatorCache::setEndStopSouthStopOffset(const PubSubName &name, QString data)
+{
+    rotDetails[name].setEndStopSouthStopOffset(data);
+}
 void RotatorCache::setRotatorPresets(const PubSubName &name, const QString &p)
 {
     PubSubName n(name);
@@ -380,6 +384,16 @@ void RotatorCache::setSkyScanStartBearing(const PubSubName &name, const int star
 void RotatorCache::setSkyScanEndBearing(const PubSubName &name, const int endBearing)
 {
     rotDetails[name].setSkyScanEndBearing(endBearing);
+}
+
+void RotatorCache::setSkyScanRotatorStartBearing(const PubSubName &name, const int rotatorStartBearing)
+{
+    rotDetails[name].setSkyScanRotatorStartBearing(rotatorStartBearing);
+}
+
+void RotatorCache::setSkyScanRotatorEndBearing(const PubSubName &name, const int rotatorEndBearing)
+{
+    rotDetails[name].setSkyScanRotatorEndBearing(rotatorEndBearing);
 }
 
 void RotatorCache::publishState()

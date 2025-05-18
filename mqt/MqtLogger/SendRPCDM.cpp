@@ -893,6 +893,11 @@ void TSendDM::notifyRotChanges()
                         traceMsg(QString("Rotator set supportStopCommand = %1, uuid = %2").arg(selDetail.supportStopCommand().getValue() ? "True" :"False", selStateUuid));
                         tslf->on_SupportStopCommand(selDetail.supportStopCommand().getValue());
                     }
+                    if (selDetail.rotatorStopSouthStopOffset().isDirty())
+                    {
+                        traceMsg(QString("Rotator rotatorStopSouthStopOffset = %1, uuid = %2").arg(selDetail.rotatorStopSouthStopOffset().getValue(), selStateUuid));
+                        tslf->on_RotatorStopSouthStopOffset(selDetail.rotatorStopSouthStopOffset().getValue());
+                    }
                     if (selDetail.skyScanVisible().isDirty())
                     {
                         traceMsg(QString("SkyScan tab visible = %1, uuid = %2").arg(selDetail.skyScanVisible().getValue() ? "True" : "False", selStateUuid));
@@ -908,6 +913,18 @@ void TSendDM::notifyRotChanges()
                         traceMsg(QString("SkyScan End Bearing = %1, uuid = %2").arg(selDetail.skyScanEndBearing().getValue()).arg(selStateUuid));
                         tslf->on_skyScanEndBearing(selDetail.skyScanEndBearing().getValue());
                     }
+                    if (selDetail.skyScanRotatorStartBearing().isDirty())
+                    {
+                        traceMsg(QString("SkyScan Rotator Start Bearing = %1, uuid = %2").arg(selDetail.skyScanRotatorStartBearing().getValue()).arg(selStateUuid));
+                        tslf->on_skyScanRotatorStartBearing(selDetail.skyScanRotatorStartBearing().getValue());
+                    }
+                    if (selDetail.skyScanRotatorEndBearing().isDirty())
+                    {
+                        traceMsg(QString("SkyScan Rotator End Bearing = %1, uuid = %2").arg(selDetail.skyScanRotatorEndBearing().getValue()).arg(selStateUuid));
+                        tslf->on_skyScanRotatorEndBearing(selDetail.skyScanRotatorEndBearing().getValue());
+                    }
+
+
                     selDetail.clearDirty();
 
                 }

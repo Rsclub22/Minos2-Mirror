@@ -78,6 +78,7 @@ public:
 
     void rotatorPresetsClearDirty();
     void setSupportStopCommand(const PubSubName &name, bool state);
+    void setEndStopSouthStopOffset(const PubSubName &name, QString data);
     void setSkyScanVisible(const PubSubName &name, const bool visible);
     void setSkyScanStartBearing(const PubSubName &name, const int startBearing);
     void setSkyScanEndBearing(const PubSubName &name, const int endBearing);
@@ -85,6 +86,9 @@ public:
     void setSkyScanCountDown(const PubSubName &name, QString countDown);
     void setSkyScanButtonState(const PubSubName &name, int state);
     void setSkyScanReverseScan(const PubSubName &name, bool state);
+    void setSkyScanRotatorStartBearing(const PubSubName &name, const int rotatorStartBearing);
+    void setSkyScanRotatorEndBearing(const PubSubName &name, const int rotatorEndBearing);
+
 };
 
 #endif // ROTATORCACHE_H

@@ -33,8 +33,19 @@ public:
 
     void setRotatorCompassBearing(const QString &s);
 
+
+    void setSkyScanVisible(bool state);
+
+    void setRotatorSouthStopOffset(QString data);
+    void setSkyScanRotatorStartBearing(int rotatorStartBearing);
+    void setSkyScanRotatorEndBearing(int rotatorEndBearing);
 signals:
     void sendCompassDial(int);
+    void updateSkyScanRotatorStartBearing(int);
+    void updateSkyScanRotatorEndBearing(int);
+    void updateEndStopType(int);
+    void updateSouthStopType(int);
+    void updateAntennaOffset(int);
 
 protected:
     QGroupBox *getRotatorControlGroupBoxObject() override;
@@ -57,6 +68,8 @@ private slots:
     void stop_rotation();
 private:
     Ui::RotatorCompassFrame *ui;
+
+    bool skyScanVisible = false;
 
 
 

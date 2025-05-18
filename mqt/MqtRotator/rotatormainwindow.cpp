@@ -728,7 +728,7 @@ void RotatorMainWindow::sendSkyScanTabVisibleToLogger(bool state)
 
 // we send Compass Start Bearing to logger
 
-void RotatorMainWindow::sendSkyScanStartBearingToLogger(int bearing)
+void RotatorMainWindow::sendSkyScanStartBearingToLogger(int bearing)   // antenna start bearing, with offset
 {
     logMessage(QString("Send SkyScan Compass Start Bearing = %1 to logger").arg(QString::number(bearing)));
     PubSubName psname(setupAntenna->currentAntennaName);
@@ -737,7 +737,7 @@ void RotatorMainWindow::sendSkyScanStartBearingToLogger(int bearing)
 }
 
 // we send Compass End Bearing to logger
-void RotatorMainWindow::sendSkyScanEndBearingToLogger(int bearing)
+void RotatorMainWindow::sendSkyScanEndBearingToLogger(int bearing) // antenna end bearing, with offset
 {
     logMessage(QString("Send SkyScan Compass End Bearing = %1 to logger").arg(QString::number(bearing)));
     PubSubName psname(setupAntenna->currentAntennaName);
@@ -745,6 +745,29 @@ void RotatorMainWindow::sendSkyScanEndBearingToLogger(int bearing)
     msg->rotatorCache.publish();
 }
 
+void RotatorMainWindow::sendSkyScanRotatorStartBearingToLogger(int rotatorStartBearing)
+{
+
+    logMessage(QString("Send Skyscan rotator start bearing = %1").arg(rotatorStartBearing));
+
+
+    PubSubName psname(setupAntenna->currentAntennaName);
+    msg->rotatorCache.setSkyScanRotatorStartBearing(psname, rotatorStartBearing);
+    msg->rotatorCache.publish();
+
+}
+
+void RotatorMainWindow::sendSkyScanRotatorEndBearingToLogger(int rotatorEndBearing)
+{
+
+    logMessage(QString("Send Skyscan rotator endsbearing = %1").arg(rotatorEndBearing));
+
+
+    PubSubName psname(setupAntenna->currentAntennaName);
+    msg->rotatorCache.setSkyScanRotatorEndBearing(psname, rotatorEndBearing);
+    msg->rotatorCache.publish();
+
+}
 
 
 void RotatorMainWindow::sendSkyScanNextStepToLogger(QString nextStepBearing)
@@ -772,7 +795,18 @@ void RotatorMainWindow::sendSkyScanButtonStateToLogger(int state)
 }
 
 
+void RotatorMainWindow::sendRotator_EndStopType_OffSet_SouthStop_ToLogger(endStop endStopType, southStop southStop, int offset)
+{
+    logMessage(QString("Send EndStopType = %1, SouthStop %2, Antenna Offset = %3 to logger").arg(endStopType).arg(southStop).arg(offset));
+    QString endStopTypeStr = QString::number(endStopType);
+    QString southStopStr = QString::number(southStop);
+    QString offsetStr = QString::number(offset);
 
+    QString data(QString("%1:%2:%3").arg(endStopTypeStr).arg(southStopStr) .arg(offsetStr));
+    PubSubName psname(setupAntenna->currentAntennaName);
+    msg->rotatorCache.setEndStopSouthStopOffset(psname, data);
+    msg->rotatorCache.publish();
+}
 
 void RotatorMainWindow::sendSkyScanButtonStateToTraceLog()
 {
@@ -3105,6 +3139,7 @@ void RotatorMainWindow::skyScanStartBearingToolbuttonValueChanged(int value)
 
 
     emit sendSkyScanStartBearingToCompassDial(activeData.getSkyScanStartBearing());
+    sendSkyScanRotatorStartBearingToLogger(activeData.getSkyScanStartBearing());
 
     //int bearing = adjustOverlapBearingToCompassBearing(startSkyScanBrg);  // convert if overlap bearing
     int displayAntennaStartBearing = calcAntennaBearing(activeData.getSkyScanStartBearing());
@@ -3152,6 +3187,7 @@ void RotatorMainWindow::skyScanEndBearingToolbuttonValueChanged(int value)
 */
 
     emit sendSkyScanEndBearingToCompassDial(activeData.getSkyScanEndBearing());
+    sendSkyScanRotatorEndBearingToLogger(activeData.getSkyScanEndBearing());
 
     //int bearing = adjustOverlapBearingToCompassBearing(endSkyScanBrg);  // convert if overlap bearing
     int displayAntennaEndBearing = calcAntennaBearing(activeData.getSkyScanEndBearing());
@@ -3672,6 +3708,7 @@ void RotatorMainWindow::closeSkyScan(QString currentAntennaName)
 
     emit sendRotatorEndStopTypeToCompassDial(endStop::ROT_0_360);
     emit sendRotatorSouthStopTypeToCompassDial(southStop::S_STOPOFF);
+    sendRotator_EndStopType_OffSet_SouthStop_ToLogger(endStop::ROT_0_360, southStop::S_STOPOFF, COMPASS_MIN0);
 
     //setSkyScanTabVisible(false);
 
@@ -3726,6 +3763,7 @@ void RotatorMainWindow::openSkyScan(QString currentAntennaName)
     emit sendRotatorSouthStopTypeToCompassDial(activeData.getSouthStopType());
     emit sendAntennaOffsetToCompassDial(activeData.getAntennaOffset());
 
+    sendRotator_EndStopType_OffSet_SouthStop_ToLogger(activeData.getEndStopType(), activeData.getSouthStopType(), activeData.getAntennaOffset());
 
 
     connect(ui->saveSkyScanSettingsOnCloseChkBox, &QCheckBox::clicked, this, &RotatorMainWindow::skyScanSettingsOnCloseChkBoxChanged);

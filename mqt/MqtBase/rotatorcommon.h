@@ -395,7 +395,7 @@ public:
         rotatorMinAzimuth = COMPASS_MIN0;
         rotatorMaxAzimath= COMPASS_MAX360;
         antennaOffset = 0;
-        skyScanStartBearing = COMPASS_MIN0;
+        skyScanStartBearing = COMPASS_MIN0;     // skyScan is rotator bearing, antenna bearing may apply offset
         skyScanStartBearingIsDirty = false;
         skyScanEndBearing = COMPASS_MIN0;
         skyScanEndBearingIsDirty = false;

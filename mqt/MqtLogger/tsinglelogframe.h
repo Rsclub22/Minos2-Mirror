@@ -141,6 +141,7 @@ public:
     void on_SetBandList(QString s, PubSubName psn);
 
     void on_SupportStopCommand(bool state);
+    void on_RotatorStopSouthStopOffset(QString data);
     void sendRigTxVoiceMessage(QString msgNum);
     void sendRigStopTxVoiceMessage(QString msg);
 
@@ -191,6 +192,9 @@ public:
     void on_skyScanVisible(bool state);
     void on_skyScanStartBearing(int startBearing);
     void on_skyScanEndBearing(int endBearing);
+    void on_skyScanRotatorStartBearing(int rotatorStartBearing);
+    void on_skyScanRotatorEndBearing(int rotatorEndBearing);
+
 
     void sendRunOnFlag(Frequency, QString mode, bool);
     void sendRunOffFreqFlag(Frequency, bool);

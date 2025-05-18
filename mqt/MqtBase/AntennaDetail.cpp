@@ -12,9 +12,12 @@ AntennaDetail::AntennaDetail()
     _minAzimuth.setInitialValue(0);
     _cwCcwCmdEnable.setInitialValue(false);
     _supportStopCommand.setInitialValue(true);
+    _rotatorStopSouthStopOffset.setInitialValue("");
     _skyScanVisible.setInitialValue(false);
     _skyScanStartBearing.setInitialValue(0);
     _skyScanEndBearing.setInitialValue(0);
+    _skyScanRotatorStartBearing.setInitialValue(0);
+    _skyScanRotatorEndBearing.setInitialValue(0);
 }
 AntennaDetail::AntennaDetail(QString s)
 {
@@ -23,9 +26,12 @@ AntennaDetail::AntennaDetail(QString s)
     _minAzimuth.setInitialValue(0);
     _cwCcwCmdEnable.setInitialValue(false);
     _supportStopCommand.setInitialValue(true);
+    _rotatorStopSouthStopOffset.setInitialValue("");
     _skyScanVisible.setInitialValue(false);
     _skyScanStartBearing.setInitialValue(0);
     _skyScanEndBearing.setInitialValue(0);
+    _skyScanRotatorStartBearing.setInitialValue(0);
+    _skyScanRotatorEndBearing.setInitialValue(0);
     unpack(s);
 }
 bool AntennaDetail::isDirty() const
@@ -35,9 +41,12 @@ bool AntennaDetail::isDirty() const
             || _maxAzimuth.isDirty()
             || _cwCcwCmdEnable.isDirty()
             || _supportStopCommand.isDirty()
+            || _rotatorStopSouthStopOffset.isDirty()
             || _skyScanVisible.isDirty()
             || _skyScanStartBearing.isDirty()
-            || _skyScanEndBearing.isDirty());
+            || _skyScanEndBearing.isDirty()
+            || _skyScanRotatorStartBearing.isDirty()
+            || _skyScanRotatorEndBearing.isDirty());
 }
 void AntennaDetail::clearDirty()
 {
@@ -45,10 +54,13 @@ void AntennaDetail::clearDirty()
     _maxAzimuth.clearDirty();
     _cwCcwCmdEnable.clearDirty();
     _supportStopCommand.clearDirty();
+    _rotatorStopSouthStopOffset.clearDirty();
     _selected.clearDirty();
     _skyScanVisible.clearDirty();
     _skyScanStartBearing.clearDirty();
     _skyScanEndBearing.clearDirty();
+    _skyScanRotatorStartBearing.clearDirty();
+    _skyScanRotatorEndBearing.clearDirty();
 }
 void AntennaDetail::setDirty()
 {
@@ -56,10 +68,13 @@ void AntennaDetail::setDirty()
     _maxAzimuth.setDirty();
     _cwCcwCmdEnable.setDirty();
     _supportStopCommand.setDirty();
+    _rotatorStopSouthStopOffset.setDirty();
     _selected.setDirty();
     _skyScanVisible.setDirty();
     _skyScanStartBearing.setDirty();
     _skyScanEndBearing.setDirty();
+    _skyScanRotatorStartBearing.setDirty();
+    _skyScanRotatorEndBearing.setDirty();
 }
 QString AntennaDetail::pack() const
 {
@@ -69,10 +84,13 @@ QString AntennaDetail::pack() const
     jv.insert(rpcConstants::rotatorMinAzimuth, minAzimuth().getValue());
     jv.insert(rpcConstants::rotatorMaxAzimuth, maxAzimuth().getValue());
     jv.insert(rpcConstants::rotCwCcwCmdEnable, cwCcwCmdEnable().getValue());
+    jv.insert(rpcConstants::rotatorStopSouthStopOffsetData, rotatorStopSouthStopOffset().getValue());
     jv.insert(rpcConstants::supportStopCommand, supportStopCommand().getValue());
     jv.insert(rpcConstants::skyScanVisible, skyScanVisible().getValue());
     jv.insert(rpcConstants::skyScanStartBearing, skyScanStartBearing().getValue());
     jv.insert(rpcConstants::skyScanEndBearing, skyScanEndBearing().getValue());
+    jv.insert(rpcConstants::skyScanRotatorStartBearimg, skyScanRotatorStartBearing().getValue());
+    jv.insert(rpcConstants::skyScanRotatorEndBearimg, skyScanRotatorEndBearing().getValue());
 
     QJsonDocument json(jv);
 
@@ -92,9 +110,12 @@ void AntennaDetail::unpack(QString s)
         _maxAzimuth.setValue(json.object().value(rpcConstants::rotatorMaxAzimuth).toInt());
         _cwCcwCmdEnable.setValue(json.object().value(rpcConstants::rotCwCcwCmdEnable).toBool());
         _supportStopCommand.setValue(json.object().value(rpcConstants::supportStopCommand).toBool());
+        _rotatorStopSouthStopOffset.setValue(json.object().value(rpcConstants::rotatorStopSouthStopOffsetData).toString());
         _skyScanVisible.setValue(json.object().value(rpcConstants::skyScanVisible).toBool());
         _skyScanStartBearing.setValue(json.object().value(rpcConstants::skyScanStartBearing).toInt());
         _skyScanEndBearing.setValue(json.object().value(rpcConstants::skyScanEndBearing).toInt());
+        _skyScanRotatorStartBearing.setValue(json.object().value(rpcConstants::skyScanRotatorStartBearimg).toInt());
+        _skyScanRotatorEndBearing.setValue(json.object().value(rpcConstants::skyScanRotatorEndBearimg).toInt());
     }
     else
     {
@@ -120,6 +141,10 @@ void AntennaDetail::setSupportStopCommand(bool state)
 {
     _supportStopCommand.setValue(state);
 }
+void AntennaDetail::setEndStopSouthStopOffset(QString data)
+{
+    _rotatorStopSouthStopOffset.setValue(data);
+}
 void AntennaDetail::setSelected(const QString &loggeruuid, const QString &selected)
 {
     _selected.setSelection(loggeruuid,selected);
@@ -143,6 +168,10 @@ MinosItem<bool> AntennaDetail::supportStopCommand() const
 {
     return _supportStopCommand;
 }
+MinosItem<QString> AntennaDetail::rotatorStopSouthStopOffset() const
+{
+    return _rotatorStopSouthStopOffset;
+}
 MinosStringItem<QString> AntennaDetail::getSelectedContest(QString loggerUuid) const
 {
     return _selected.getSelectedContest(loggerUuid);
@@ -161,7 +190,14 @@ MinosItem<int> AntennaDetail::skyScanEndBearing() const
 {
     return _skyScanEndBearing;
 }
-
+MinosItem<int> AntennaDetail::skyScanRotatorStartBearing() const
+{
+    return _skyScanRotatorStartBearing;
+}
+MinosItem<int> AntennaDetail::skyScanRotatorEndBearing() const
+{
+    return _skyScanRotatorEndBearing;
+}
 void AntennaDetail::setSkyScanVisible(bool state)
 {
     _skyScanVisible.setValue(state);
@@ -173,6 +209,14 @@ void AntennaDetail::setSkyScanStartBearing(int startBearing)
 void AntennaDetail::setSkyScanEndBearing(int endBearing)
 {
     _skyScanEndBearing.setValue(endBearing);
+}
+void AntennaDetail::setSkyScanRotatorStartBearing(int skyScanRotatorStartBearing)
+{
+    _skyScanRotatorStartBearing.setValue(skyScanRotatorStartBearing);
+}
+void AntennaDetail::setSkyScanRotatorEndBearing(int skyScanRotatorEndBearing)
+{
+    _skyScanRotatorEndBearing.setValue(skyScanRotatorEndBearing);
 }
 
 
