@@ -18,8 +18,6 @@
 const QChar DEG_SYMBOL(0260); // octal value
 const int NO_SELECTED_ROWNUM = -1;
 
-const int KEY_SCROLL_STEP_SIZE = 50;
-
 class BaseContestLog;
 class BandmapData;
 class BandmapSortFilterProxyModel;
@@ -50,15 +48,15 @@ public:
     int isClickInRegionOfSpot(QPoint p);
 
 
-    void getSpotData(int &selectedSpotDataRowNum, int displayedSpotNum, ClusterSpotData &selectedSpot);
+    QSharedPointer<ClusterSpotData> getSpotData(int displayedSpotNum);
+
+    int getSpotDataRow(QSharedPointer<ClusterSpotData>);
 
     void clearSelectedSpotData();
 
     int getSelectedSpotViewRowNum(){return selectedSpotViewRowNum;}
 
-    int getSelectedSpotDataRowNum(){return selectedSpotDataRowNum;}
-
-    ClusterSpotData* getSelectedSpotDataPtr(){return &selectedSpot;}
+    QSharedPointer<ClusterSpotData> getSelectedSpotDataPtr(){return selectedSpot;}
 
     void clearSelectedSpot();
 
@@ -97,10 +95,6 @@ private slots:
 
     void on_bandmap_customContextMenuRequested(const QPoint &p);
 
-    void on_nextSpot(bool nextFreqUpDown, bool nextMult);
-    int findNextNonWorkedLocatorUpList(int curSpotViewNum);
-
-    void on_scrollMap(bool dir);
     void zoomUpdated(bool dir);
     void updateTimerTimeout();
 private:
@@ -108,14 +102,13 @@ private:
     QGraphicsScene *bandmapScene;
     BandmapGraphicsPanel* bandmapGraphicsView;
 
-    BandmapFreqDial *dial;
+    BandmapFreqDial *dial = nullptr;
     Frequency curFreq;
     QString curMode;
 
     QTimer updateTimer;
     bool updateRequired = false;
     bool suppressUpdate = false;
-    int totalSize = 300; //for test
 
     int dialMinZoomLevel;
     int dialMaxZoomLevel;
@@ -132,8 +125,8 @@ private:
     void drawBandMapSpots();
     QVector<BandmapMarkerDetails*> listOfMarkers;
 
-    ClusterSpotData selectedSpot;
-    int selectedSpotDataRowNum;
+    QSharedPointer<ClusterSpotData> selectedSpot;
+
     int selectedSpotViewRowNum;
 
     BandmapClientFilterSettings* filterSettings;
@@ -153,13 +146,9 @@ private:
 
     void clearListOfMarkers();
     bool matchMode(int sourceRow);
-    int findNextOccupiedMarkerUpList(int curSpotViewNum);
-    int findNextOccupiedMarkerDownList(int curSpotViewNum);
-    int findNextNonWorkedLocatorDownList(int curSpotViewNum);
     int getViewPortStartYCoordOnScene();
     int getViewPortEndYCoordOnScene();
     void traceMsg(QString msg);
-    void clearSpotData(ClusterSpotData &selectedSpot);
     void deleteItemsFromMarkerList();
     void assembleCqToolTip(int row, Frequency freq, QString& toolTipMsg);
     void assembleCqMsg(int row, QString& markerMsg);

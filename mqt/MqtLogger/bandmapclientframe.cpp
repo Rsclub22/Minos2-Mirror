@@ -356,26 +356,23 @@ void BandmapClientFrame::on_resendClusterSpotSelected()
 
 void BandmapClientFrame::on_markSpotActionSelected()
 {
-    int selRow = bandmapView->getSelectedSpotDataRowNum();
-    doMarkSpot(selRow);
+    doMarkSpot(bandmapView->getSelectedSpotDataPtr());
 }
 void BandmapClientFrame::context_markSpotActionSelected()
 {
-    int selRow = contextMenuSelectedSpotDataRowNum;
-    doMarkSpot(selRow);
+    doMarkSpot(contextMenuSelectedSpotData);
 }
-void BandmapClientFrame::doMarkSpot(int selRow)
+void BandmapClientFrame::doMarkSpot(QSharedPointer<ClusterSpotData> sd)
 {
-    if (selRow > 0)
+    if (sd)
     {
-        QSharedPointer<ClusterSpotData> selSpot = bandmapDataModel->getBandmapDataRow(selRow);
-        traceMsg(QString("mark spot selected for callsign %1").arg(selSpot->getDxCallStr()));
+        traceMsg(QString("mark spot selected for callsign %1").arg(sd->getDxCallStr()));
 
-        bandmapSpotType::SPOT_TYPE spotType = selSpot->getSpotType();
+        bandmapSpotType::SPOT_TYPE spotType = sd->getSpotType();
         if (spotType == bandmapSpotType::CLUSTER)
         {
-            selSpot->setSpotType(bandmapSpotType::CLUSTER_MARKED);
-            bmsdb->modifyRecord(selSpot);
+            sd->setSpotType(bandmapSpotType::CLUSTER_MARKED);
+            bmsdb->modifyRecord(sd);
             bandmapView->bandmapUpdate(true);
         }
     }
@@ -383,27 +380,24 @@ void BandmapClientFrame::doMarkSpot(int selRow)
 
 void BandmapClientFrame::on_unMarkSpotActionSelected()
 {
-    int selRow = bandmapView->getSelectedSpotDataRowNum();
-    doUnMarkSpot(selRow);
+    doUnMarkSpot(bandmapView->getSelectedSpotDataPtr());
 }
 
 void BandmapClientFrame::context_unMarkSpotActionSelected()
 {
-    int selRow = contextMenuSelectedSpotDataRowNum;
-    doMarkSpot(selRow);
+    doUnMarkSpot(contextMenuSelectedSpotData);
 }
 
-void BandmapClientFrame::doUnMarkSpot(int selRow)
+void BandmapClientFrame::doUnMarkSpot(QSharedPointer<ClusterSpotData> sd)
 {
-    if (selRow > 0)
+    if (sd)
     {
-        QSharedPointer<ClusterSpotData> selSpot = bandmapDataModel->getBandmapDataRow(selRow);
-        traceMsg(QString("unmark spot selected for callsign %1").arg(bandmapView->getSelectedSpotDataPtr()->getDxCallStr()));
-        bandmapSpotType::SPOT_TYPE spotType = selSpot->getSpotType();
+        traceMsg(QString("unmark spot selected for callsign %1").arg(sd->getDxCallStr()));
+        bandmapSpotType::SPOT_TYPE spotType = sd->getSpotType();
         if (spotType == bandmapSpotType::CLUSTER_MARKED)
         {
-            selSpot->setSpotType(bandmapSpotType::CLUSTER);
-            bmsdb->modifyRecord(selSpot);
+            sd->setSpotType(bandmapSpotType::CLUSTER);
+            bmsdb->modifyRecord(sd);
             bandmapView->bandmapUpdate(true);
         }
     }
@@ -421,22 +415,24 @@ void BandmapClientFrame::sendFreqToRig(Frequency freq)
 
 void BandmapClientFrame::on_freqActionSelected()
 {
-    if (bandmapView->getSelectedSpotDataPtr()->getIsSelected())
+    QSharedPointer<ClusterSpotData> sel = bandmapView->getSelectedSpotDataPtr();
+
+    if (sel && sel->getIsSelected())
     {
-        traceMsg(QString("menu freq selected for callsign %1, freq %2").arg(bandmapView->getSelectedSpotDataPtr()->getDxCallStr(), bandmapView->getSelectedSpotDataPtr()->getFreq().traceStr()));
-         Frequency freq = bandmapView->getSelectedSpotDataPtr()->getFreq();
+        traceMsg(QString("menu freq selected for callsign %1, freq %2").arg(sel->getDxCallStr(), sel->getFreq().traceStr()));
+         Frequency freq = sel->getFreq();
          sendFreqToRig(freq);
     }
 }
 void BandmapClientFrame::context_freqActionSelected()
 {
-    traceMsg(QString("menu freq selected for callsign %1, freq %2").arg(contextMenuSelectedSpotData.getDxCallStr(), contextMenuSelectedSpotData.getFreq().traceStr()));
-    Frequency freq = contextMenuSelectedSpotData.getFreq();
+    traceMsg(QString("menu freq selected for callsign %1, freq %2").arg(contextMenuSelectedSpotData->getDxCallStr(), contextMenuSelectedSpotData->getFreq().traceStr()));
+    Frequency freq = contextMenuSelectedSpotData->getFreq();
     sendFreqToRig(freq);
 }
 void BandmapClientFrame::context_moveFreqActionSelected()
 {
-    QSharedPointer<ClusterSpotData> selSpot = bandmapDataModel->getBandmapDataRow(contextMenuSelectedSpotDataRowNum);
+    QSharedPointer<ClusterSpotData> selSpot = contextMenuSelectedSpotData;
     traceMsg(QString("menu move frequency of spot selected for callsign %1").arg(selSpot->getDxCallStr()));
 
     selSpot->setFreq(curFreq);
@@ -454,150 +450,152 @@ void BandmapClientFrame::sendBrgToRot(QString brg)
 }
 void BandmapClientFrame::on_bearingActionSelected()
 {
-    if (bandmapView->getSelectedSpotDataPtr()->getIsSelected())
+    QSharedPointer<ClusterSpotData> sel = bandmapView->getSelectedSpotDataPtr();
+
+    if (sel && sel->getIsSelected())
     {
-        doBearingSelected(bandmapView->getSelectedSpotDataPtr());
+        doBearingSelected(sel);
     }
 }
 void BandmapClientFrame::context_bearingActionSelected()
 {
-    doBearingSelected(&contextMenuSelectedSpotData);
+    doBearingSelected(contextMenuSelectedSpotData);
 }
-void BandmapClientFrame::doBearingSelected(ClusterSpotData *sd)
+void BandmapClientFrame::doBearingSelected(QSharedPointer<ClusterSpotData> sd)
 {
-    traceMsg(QString("menu bearing selected for callsign %1, bearing %2").arg(contextMenuSelectedSpotData.getDxCallStr(), contextMenuSelectedSpotData.getRotBrg()));
-    QString brg = sd->getDxBrg();
-    QString loc = sd->getDxLocator();
-    if (!brg.isEmpty())
+    if (sd)
     {
-        if (loc.size() < 6)
+        traceMsg(QString("menu bearing selected for callsign %1, bearing %2").arg(sd->getDxCallStr(), sd->getRotBrg()));
+        QString brg = sd->getDxBrg();
+        QString loc = sd->getDxLocator();
+        if (!brg.isEmpty())
         {
-            brg = brg.append(SHORTLOCATOR_IDENTIFIER);
+            if (loc.size() < 6)
+            {
+                brg = brg.append(SHORTLOCATOR_IDENTIFIER);
+            }
+            sendBrgToRot(brg);
+            traceMsg(QString("Bandmap Context Menu Send to Rotator, locator bearing = %1").arg(brg));
         }
-        sendBrgToRot(brg);
-        traceMsg(QString("Bandmap Context Menu Send to Rotator, locator bearing = %1").arg(brg));
-    }
-    else if (!sd->getRotBrg().isEmpty())
-    {
-        sendBrgToRot(sd->getRotBrg());
-        traceMsg(QString("Bandmap Menu Send to Rotator, rotator bearing = %1").arg(brg));
+        else if (!sd->getRotBrg().isEmpty())
+        {
+            sendBrgToRot(sd->getRotBrg());
+            traceMsg(QString("Bandmap Menu Send to Rotator, rotator bearing = %1").arg(brg));
+        }
     }
 }
 
 void BandmapClientFrame::on_logActionSelected()
 {
-    if (bandmapView->getSelectedSpotDataPtr()->getIsSelected())
+    QSharedPointer<ClusterSpotData> sel = bandmapView->getSelectedSpotDataPtr();
+    if (sel && sel->getIsSelected())
     {
-        traceMsg(QString("menu send to log selected for callsign %1").arg(bandmapView->getSelectedSpotDataPtr()->getDxCallStr()));
+        traceMsg(QString("menu send to log selected for callsign %1").arg(sel->getDxCallStr()));
 
-        doLogSelected(bandmapView->getSelectedSpotDataPtr());
+        doLogSelected(sel);
     }
 }
 void BandmapClientFrame::context_logActionSelected()
 {
-    traceMsg(QString("menu send to log selected for callsign %1").arg(contextMenuSelectedSpotData.getDxCallStr()));
-    doLogSelected(&contextMenuSelectedSpotData);
+    traceMsg(QString("menu send to log selected for callsign %1").arg(contextMenuSelectedSpotData->getDxCallStr()));
+    doLogSelected(contextMenuSelectedSpotData);
 }
-void BandmapClientFrame::doLogSelected(ClusterSpotData *sd)
+void BandmapClientFrame::doLogSelected(QSharedPointer<ClusterSpotData> sd)
 {
-    memoryData::memData spotData;
-    spotData.callsign = sd->getDxCallStr();
-    spotData.time = sd->getSpotTime();
-    spotData.freq = sd->getFreq();
-
-    bool showDerivedLocFlag;
-    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpShowDerivedLoc, showDerivedLocFlag );
-
-    if (showDerivedLocFlag || !sd->getDxLocatorIsFromNode())
+    if (sd)
     {
-        spotData.locator = sd->getDxLocator();
+        memoryData::memData spotData;
+        spotData.callsign = sd->getDxCallStr();
+        spotData.time = sd->getSpotTime();
+        spotData.freq = sd->getFreq();
+
+        bool showDerivedLocFlag;
+        TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpShowDerivedLoc, showDerivedLocFlag );
+
+        if (showDerivedLocFlag || !sd->getDxLocatorIsFromNode())
+        {
+            spotData.locator = sd->getDxLocator();
+        }
+
+        spotData.bearing = sd->getDxBrg().toInt();
+        spotData.exchange = sd->getDistrict();
+        spotData.fromBandmapOrMemory = true;
+
+        MinosLoggerEvents::SendSpotToLog(spotData);
     }
-
-    spotData.bearing = sd->getDxBrg().toInt();
-    spotData.exchange = sd->getDistrict();
-    spotData.fromBandmapOrMemory = true;
-
-    MinosLoggerEvents::SendSpotToLog(spotData);
 }
 
 
 void BandmapClientFrame::on_memoryActionSelected()
 {
-    if (bandmapView->getSelectedSpotDataPtr()->getIsSelected())
+    QSharedPointer<ClusterSpotData> sel = bandmapView->getSelectedSpotDataPtr();
+
+    if (sel && sel->getIsSelected())
     {
-        traceMsg(QString("menu send to memory selected for callsign %1").arg(bandmapView->getSelectedSpotDataPtr()->getDxCallStr()));
-        doMemorySelected(bandmapView->getSelectedSpotDataPtr());
+        traceMsg(QString("menu send to memory selected for callsign %1").arg(sel->getDxCallStr()));
+        doMemorySelected(sel);
     }
 }
 void BandmapClientFrame::context_memoryActionSelected()
 {
-    traceMsg(QString("menu send to memory selected for callsign %1").arg(contextMenuSelectedSpotData.getDxCallStr()));
-    doMemorySelected(&contextMenuSelectedSpotData);
-    memoryData::memData spotData;
+    traceMsg(QString("menu send to memory selected for callsign %1").arg(contextMenuSelectedSpotData->getDxCallStr()));
+    doMemorySelected(contextMenuSelectedSpotData);
 }
-void BandmapClientFrame::doMemorySelected(ClusterSpotData *d)
+void BandmapClientFrame::doMemorySelected(QSharedPointer<ClusterSpotData> sd)
 {
-    memoryData::memData spotData;
-    spotData.callsign = d->getDxCallStr();
-    spotData.time = d->getSpotTime();
-    spotData.freq = d->getFreq();
-
-    bool showDerivedLocFlag;
-    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpShowDerivedLoc, showDerivedLocFlag );
-
-    if (showDerivedLocFlag || !d->getDxLocatorIsFromNode())
+    if (sd)
     {
-        spotData.locator = d->getDxLocator();
+        memoryData::memData spotData;
+        spotData.callsign = sd->getDxCallStr();
+        spotData.time = sd->getSpotTime();
+        spotData.freq = sd->getFreq();
+
+        bool showDerivedLocFlag;
+        TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpShowDerivedLoc, showDerivedLocFlag );
+
+        if (showDerivedLocFlag || !sd->getDxLocatorIsFromNode())
+        {
+            spotData.locator = sd->getDxLocator();
+        }
+
+        spotData.bearing = sd->getDxBrg().toInt();
+        spotData.dxLocFromNode = sd->getDxLocatorIsFromNode();
+        spotData.exchange = sd->getDistrict();
+
+        MinosLoggerEvents::SendSpotToMemory(ct,spotData);
     }
-
-    spotData.bearing = d->getDxBrg().toInt();
-    spotData.dxLocFromNode = d->getDxLocatorIsFromNode();
-    spotData.exchange = d->getDistrict();
-
-    MinosLoggerEvents::SendSpotToMemory(ct,spotData);
 }
 
 void BandmapClientFrame::on_clearSpotActionSelected()
 {
-    int selRow = bandmapView->getSelectedSpotDataRowNum();
-    if (selRow > 0)
-    {
-        QSharedPointer<ClusterSpotData> selSpot = bandmapDataModel->getBandmapDataRow(selRow);
-        doClearSpotSelected(selSpot.data(), selRow);
-    }
+    QSharedPointer<ClusterSpotData> selSpot = bandmapView->getSelectedSpotDataPtr();
+    doClearSpotSelected(selSpot);
 }
 void BandmapClientFrame::context_clearSpotActionSelected()
 {
-    doClearSpotSelected(&contextMenuSelectedSpotData, contextMenuSelectedSpotDataRowNum);
+    doClearSpotSelected(contextMenuSelectedSpotData);
 }
-void BandmapClientFrame::doClearSpotSelected(ClusterSpotData *sd, int selRow)
+void BandmapClientFrame::doClearSpotSelected(QSharedPointer<ClusterSpotData> sd)
 {
-
-    int ret = QMessageBox::warning(this, tr("Bandmap"),
-                                   tr("Please confirm you want to delete this spot - %1?")
-                                       .arg(sd->getDxCallStr()),
-                                   QMessageBox::Yes | QMessageBox::No);
-    if (ret == QMessageBox::Yes)
+    if (sd)
     {
-        traceMsg(tr("clear spot selected for callsign %1")
-                     .arg(sd->getDxCallStr()));
-
-        QSharedPointer<ClusterSpotData> selSpot = bandmapDataModel->getBandmapDataRow(selRow);
-
-        if (selSpot->getDxCallWorked() == sd->getDxCallWorked())
+        int ret = QMessageBox::warning(this, tr("Bandmap"),
+                                       tr("Please confirm you want to delete this spot - %1?")
+                                           .arg(sd->getDxCallStr()),
+                                       QMessageBox::Yes | QMessageBox::No);
+        if (ret == QMessageBox::Yes)
         {
+            traceMsg(tr("clear spot selected for callsign %1")
+                         .arg(sd->getDxCallStr()));
+
             bmsdb->deleteRecord( sd);
             sd->setSpotType(bandmapSpotType::DELETED);
 
+            int selRow = bandmapDataModel->getSpotDataRow(sd);
             bandmapDataModel->removeRows(selRow, 1);
             bandmapView->clearSelectedSpotData();
             purgeSpots();
             bandmapView->bandmapUpdate(true);
-        }
-        else
-        {
-            traceMsg(tr("Spot for %1 has moved - try again")
-                         .arg(sd->getDxCallStr()));
         }
     }
 }
@@ -675,16 +673,22 @@ void BandmapClientFrame::on_readZoomLevelActionSelected()
 //============================================================================
 void BandmapClientFrame::on_contextMenuSelected(const QPoint& pos, const QPoint& mapP)
 {
-    int contextSelectedSpotViewRowNum = bandmapView->isClickInRegionOfSpot(mapP);
-    traceMsg(QString("Context Menu Selected - ViewRowNum %1").arg(contextSelectedSpotViewRowNum));
+    int viewRowNum = bandmapView->isClickInRegionOfSpot(mapP);
+    traceMsg(QString("Context Menu Selected - ViewRowNum %1").arg(viewRowNum));
 
-    if (contextSelectedSpotViewRowNum != NO_SELECTED_ROWNUM)
+    if (viewRowNum != NO_SELECTED_ROWNUM)
     {
-        bandmapView->getSpotData(contextMenuSelectedSpotDataRowNum, contextSelectedSpotViewRowNum, contextMenuSelectedSpotData);
-        if (contextMenuSelectedSpotData.getSpotType() == bandmapSpotType::CQ)
+        contextMenuSelectedSpotData = bandmapView->getSpotData(viewRowNum);
+        if (contextMenuSelectedSpotData->getSpotType() == bandmapSpotType::CQ)
         {
-            traceMsg(QString("Context Menu Selected - ViewRowNum %1 - Error Selected CQ Marker").arg(contextSelectedSpotViewRowNum));
+            traceMsg(QString("Context Menu Selected - ViewRowNum %1 - Error Selected CQ Marker").arg(viewRowNum));
             return;
+        }
+        else
+        {
+            QString call = contextMenuSelectedSpotData->getDxCallStr();
+            traceMsg(QString("Context Menu Selected - call %1").arg(call));
+
         }
         QPoint globalPos = ui->bandmapGraphicsView->viewport()->mapToGlobal( pos );
         contextSpotsMenu->popup(globalPos);

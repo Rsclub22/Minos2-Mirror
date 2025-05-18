@@ -30,10 +30,10 @@ BandmapView::BandmapView(QWidget *parent) :
     contestBandFlow(0),
     contestBandFhigh(0),
     fullBandHeight(4000),
-    fontHeight(0),
-    selectedSpot(bandmapSpotType::NONE),
-    selectedSpotDataRowNum(NO_SELECTED_ROWNUM),
-    selectedSpotViewRowNum(NO_SELECTED_ROWNUM)
+    fontHeight(0)
+    // selectedSpot(bandmapSpotType::NONE),
+    // selectedSpotDataRowNum(NO_SELECTED_ROWNUM),
+    // selectedSpotViewRowNum(NO_SELECTED_ROWNUM)
 {
 
     setFocusPolicy((Qt::ClickFocus));
@@ -78,8 +78,6 @@ void BandmapView::initBandmapView(BandmapGraphicsPanel* view )
     connect(bandmapGraphicsView, &BandmapGraphicsPanel::bandmapResize, this, &BandmapView::bandmapResize);
     connect(bandmapGraphicsView, &BandmapGraphicsPanel::leftMouseButtonPressed, this, &BandmapView::leftMouseButtonPressed);
     connect(bandmapGraphicsView, &BandmapGraphicsPanel::mouseDoubleClicked, this, &BandmapView::mouseDoubleClicked);
-    connect(bandmapGraphicsView, &BandmapGraphicsPanel::nextSpot, this, &BandmapView::on_nextSpot);
-    connect(bandmapGraphicsView, &BandmapGraphicsPanel::scrollMap, this, &BandmapView::on_scrollMap);
 
     connect(&updateTimer, &QTimer::timeout, this, &BandmapView::updateTimerTimeout);
 
@@ -164,30 +162,6 @@ void BandmapView::setSuppressUpdate(bool value)
     suppressUpdate = value;
 }
 
-void BandmapView::on_scrollMap(bool dir)
-{
-    int scrollValue = bandmapGraphicsView->verticalScrollBar()->value();
-
-    if (dir)
-    {
-        scrollValue -= KEY_SCROLL_STEP_SIZE;
-       if (scrollValue < bandmapGraphicsView->verticalScrollBar()->minimum())
-       {
-           scrollValue = bandmapGraphicsView->verticalScrollBar()->minimum();
-       }
-    }
-    else
-    {
-        scrollValue += KEY_SCROLL_STEP_SIZE;
-        if (scrollValue > bandmapGraphicsView->verticalScrollBar()->maximum())
-        {
-            scrollValue = bandmapGraphicsView->verticalScrollBar()->maximum();
-        }
-    }
-
-    bandmapGraphicsView->verticalScrollBar()->setValue(scrollValue);
-}
-
 void BandmapView::makeCursorVisibleInBandmap()
 {
 
@@ -217,178 +191,6 @@ int BandmapView::getViewPortEndYCoordOnScene()
     return bandmapGraphicsView->mapToScene( QPoint(
                                                 bandmapGraphicsView->viewport()->width(),
                                                 bandmapGraphicsView->viewport()->height() )).toPoint().y();
-}
-
-void BandmapView::on_nextSpot(bool nextFreqUpDown, bool nextMult)
-{
-
-    if (selectedSpotViewRowNum != NO_SELECTED_ROWNUM)
-    {
-        if (!nextMult)
-        {
-            if (nextFreqUpDown)
-            {
-                if (selectedSpotViewRowNum != (listOfMarkers.count() - 1))
-                {
-                    int newMarkNum = findNextOccupiedMarkerUpList(selectedSpotViewRowNum);
-                    if (newMarkNum == selectedSpotViewRowNum)
-                    {
-                        return; // nothing found
-                    }
-
-                    clearSelectedSpot();
-                    selectedSpotViewRowNum = newMarkNum;
-                    setSelectedSpot(selectedSpotViewRowNum);
-                }
-
-            }
-            else
-            {
-                if (selectedSpotViewRowNum != 0)
-                {
-                    int newMarkNum = findNextOccupiedMarkerDownList(selectedSpotViewRowNum);
-                    if (newMarkNum == selectedSpotViewRowNum)
-                    {
-                        return;     // nothing found
-                    }
-
-                    clearSelectedSpot();
-                    selectedSpotViewRowNum = newMarkNum;
-                    setSelectedSpot(selectedSpotViewRowNum);
-                }
-            }
-        }
-        else if (nextFreqUpDown)
-        {
-            if (selectedSpotViewRowNum != (listOfMarkers.count() - 1))
-            {
-                int newMarkNum = findNextNonWorkedLocatorDownList(selectedSpotViewRowNum);
-                if (newMarkNum == selectedSpotViewRowNum)
-                {
-                    return; // nothing found
-                }
-
-                clearSelectedSpot();
-                selectedSpotViewRowNum = newMarkNum;
-                setSelectedSpot(selectedSpotViewRowNum);
-            }
-        }
-        else
-        {
-            if (selectedSpotViewRowNum != 0)
-            {
-                int newMarkNum = findNextNonWorkedLocatorUpList(selectedSpotViewRowNum);
-                if (newMarkNum == selectedSpotViewRowNum)
-                {
-                    return;     // nothing found
-                }
-
-                clearSelectedSpot();
-                selectedSpotViewRowNum = newMarkNum;
-                setSelectedSpot(selectedSpotViewRowNum);
-            }
-        }
-    }
-}
-
-
-int BandmapView::findNextOccupiedMarkerUpList(int curSpotViewNum)
-{
-    if (curSpotViewNum + 1 >= listOfMarkers.count())
-    {
-        return curSpotViewNum;
-    }
-
-    for (int i = curSpotViewNum + 1; i < listOfMarkers.count(); i++)
-    {
-        if (listOfMarkers[i]->getSpotMarkerPtr() != nullptr)
-        {
-            int row = listOfMarkers[i]->getModelRowNum();
-
-            ClusterSpotData *pSpot = bandmapDataModel->getBandmapDataRow(row).data();
-
-            bandmapSpotType::SPOT_TYPE savedSpot = pSpot->getSpotType();
-            if ( savedSpot != bandmapSpotType::CQ)
-            {
-                return i;
-            }
-        }
-    }
-
-    return curSpotViewNum;
-}
-
-int BandmapView::findNextOccupiedMarkerDownList(int curSpotViewNum)
-{
-    if (curSpotViewNum - 1 < 0)
-    {
-        return curSpotViewNum;
-    }
-
-    for (int i = curSpotViewNum - 1; i >= 0; i--)
-    {
-        if (listOfMarkers[i]->getSpotMarkerPtr() != nullptr)
-        {
-            int row = listOfMarkers[i]->getModelRowNum();
-            ClusterSpotData *pSpot = bandmapDataModel->getBandmapDataRow(row).data();
-            bandmapSpotType::SPOT_TYPE savedSpot = pSpot->getSpotType();
-            if ( savedSpot != bandmapSpotType::CQ)
-            {
-                return i;
-            }
-        }
-    }
-
-    return curSpotViewNum;
-}
-
-
-int BandmapView::findNextNonWorkedLocatorUpList(int curSpotViewNum)
-{
-    if (curSpotViewNum + 1 >= listOfMarkers.count())
-    {
-        return curSpotViewNum;
-    }
-    for (int i = curSpotViewNum + 1; i < listOfMarkers.count(); i++)
-    {
-        if (listOfMarkers[i]->getSpotMarkerPtr() != nullptr)
-        {
-            int row = listOfMarkers[i]->getModelRowNum();
-            ClusterSpotData *pSpot = bandmapDataModel->getBandmapDataRow(row).data();
-            bool locWorked = pSpot->getDxCallWorked();
-            bandmapSpotType::SPOT_TYPE savedSpot = pSpot->getSpotType();
-            if (!locWorked && savedSpot != bandmapSpotType::CQ)
-            {
-                return i;
-            }
-        }
-    }
-
-    return curSpotViewNum;
-}
-
-int BandmapView::findNextNonWorkedLocatorDownList(int curSpotViewNum)
-{
-    if (curSpotViewNum - 1 < 0)
-    {
-        return curSpotViewNum;
-    }
-    for (int i = curSpotViewNum - 1; i >= 0; i--)
-    {
-        if (listOfMarkers[i]->getSpotMarkerPtr() != nullptr)
-        {
-            int row = listOfMarkers[i]->getModelRowNum();
-            ClusterSpotData *pSpot = bandmapDataModel->getBandmapDataRow(row).data();
-            bool locWorked = pSpot->getDxLocatorWorked();
-            bandmapSpotType::SPOT_TYPE savedSpot = pSpot->getSpotType();
-            if (!locWorked && savedSpot != bandmapSpotType::CQ)
-            {
-                return i;
-            }
-        }
-    }
-
-    return curSpotViewNum;
 }
 void BandmapView::doBandmapUpdate()
 {
@@ -453,21 +255,21 @@ void BandmapView::mouseDoubleClicked(QPoint p)
     {
 
         memoryData::memData spotData;
-        spotData.callsign = selectedSpot.getDxCallStr();
-        spotData.time = selectedSpot.getSpotTime();
+        spotData.callsign = selectedSpot->getDxCallStr();
+        spotData.time = selectedSpot->getSpotTime();
 
         bool showDerivedLocFlag;
         TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpShowDerivedLoc, showDerivedLocFlag );
 
-        if (showDerivedLocFlag || !selectedSpot.getDxLocatorIsFromNode())
+        if (showDerivedLocFlag || !selectedSpot->getDxLocatorIsFromNode())
         {
-            spotData.locator = selectedSpot.getDxLocator();
+            spotData.locator = selectedSpot->getDxLocator();
         }
-        spotData.bearing = selectedSpot.getDxBrg().toInt();
+        spotData.bearing = selectedSpot->getDxBrg().toInt();
         spotData.fromBandmapOrMemory = true;
-        spotData.exchange = selectedSpot.getDistrict();
-        spotData.mode = selectedSpot.getMode();
-        spotData.freq = selectedSpot.getFreq();
+        spotData.exchange = selectedSpot->getDistrict();
+        spotData.mode = selectedSpot->getMode();
+        spotData.freq = selectedSpot->getFreq();
 
         MinosLoggerEvents::SendSpotToLog(spotData);
     }
@@ -679,7 +481,7 @@ void BandmapView::bandmapSelectSpot(QPoint p)
             clearSelectedSpot();       // clear any spot previously selected
             setSelectedSpot(spotViewNum);        // mark new selected spot
 
-            MinosLoggerEvents::SendFreqToRig(selectedSpot.getFreq());
+            MinosLoggerEvents::SendFreqToRig(selectedSpot->getFreq());
         }
     }
     else
@@ -691,33 +493,24 @@ void BandmapView::bandmapSelectSpot(QPoint p)
 
 void BandmapView::clearSelectedSpot()
 {
-    for (int i = 0; i < bandmapDataModel->rowCount(); i++)
+    if (selectedSpot)
     {
-        ClusterSpotData *pSpot = bandmapDataModel->getBandmapDataRow(i).data();
-
-        if (pSpot->getIsSelected())
-        {
-            pSpot->setIsSelected(false);
-
-            clearSpotData(selectedSpot );
-
-            trace("BandmapView::bandmapUpdate() bandmapView::clearSelectedSpot");
-            bandmapUpdate(true);
-        }
+        selectedSpot->setIsSelected(false);
+        selectedSpot.clear();
+        trace("BandmapView::bandmapUpdate() bandmapView::clearSelectedSpot");
+        bandmapUpdate(true);
     }
 }
 
 
 void BandmapView::clearSelectedSpotData()
 {
-    clearSpotData(selectedSpot);
-}
-
-void BandmapView::clearSpotData(ClusterSpotData &selectedSpot)
-{
-    selectedSpotDataRowNum = NO_SELECTED_ROWNUM;
-    selectedSpotViewRowNum = NO_SELECTED_ROWNUM;
-    selectedSpot = ClusterSpotData();
+    if (selectedSpot)
+    {
+//        selectedSpotDataRowNum = NO_SELECTED_ROWNUM;
+        selectedSpotViewRowNum = NO_SELECTED_ROWNUM;
+        selectedSpot.clear();
+    }
 }
 
 void BandmapView::setSelectedSpot(int spotViewNum)
@@ -732,11 +525,9 @@ void BandmapView::setSelectedSpot(int spotViewNum)
 
     selectedSpotViewRowNum = spotViewNum;
 
-    getSpotData(selectedSpotDataRowNum, selectedSpotViewRowNum, selectedSpot);
-    ClusterSpotData *pSpot = bandmapDataModel->getBandmapDataRow(selectedSpotViewRowNum).data();
+    selectedSpot = getSpotData(spotViewNum);
 
-    pSpot->setIsSelected(true);
-    selectedSpot.setIsSelected(true);
+    selectedSpot->setIsSelected(true);
     trace("BandmapView::bandmapUpdate() bandmapView::setSelectedSpot");
     bandmapUpdate(true);
 }
@@ -750,34 +541,21 @@ void BandmapView::clearListOfMarkers()
     listOfMarkers.clear();
 }
 
-void BandmapView::getSpotData(int &selectedSpotDataRowNum, int selectedSpotViewRowNum, ClusterSpotData &selectedSpot)
+QSharedPointer<ClusterSpotData> BandmapView::getSpotData(int selectedSpotViewRowNum)
 {
-    selectedSpotDataRowNum = listOfMarkers[selectedSpotViewRowNum]->getModelRowNum();
+    QSharedPointer<ClusterSpotData> sd;
+    int selectedSpotDataRowNum = listOfMarkers[selectedSpotViewRowNum]->getModelRowNum();
 
     if (selectedSpotDataRowNum >= 0 && selectedSpotDataRowNum < bandmapDataModel->rowCount())
     {
-        ClusterSpotData *pselectedSpot = bandmapDataModel->getBandmapDataRow(selectedSpotDataRowNum).data();
-
-        selectedSpot.setRecNo(pselectedSpot->getRecNo());
-        selectedSpot.setSpotTime(pselectedSpot->getSpotTime());
-        selectedSpot.setFreq(pselectedSpot->getFreq());
-        selectedSpot.setDxCall(pselectedSpot->getDxCallStr());
-        bool showDerivedLocFlag;
-        TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpShowDerivedLoc, showDerivedLocFlag );
-
-        if (showDerivedLocFlag || !pselectedSpot->getDxLocatorIsFromNode())
-        {
-            selectedSpot.setDxLocator(pselectedSpot->getDxLocator());
-        }
-        selectedSpot.setDxDist(pselectedSpot->getDxDist());
-        selectedSpot.setDxBrg(pselectedSpot->getDxBrg());
-        selectedSpot.setRotBrg(pselectedSpot->getRotBrg());
-        selectedSpot.setDxCallWorked(pselectedSpot->getDxCallWorked());
-        selectedSpot.setDxLocatorWorked(pselectedSpot->getDxLocatorWorked());
-        selectedSpot.setDistrict(pselectedSpot->getDistrict());
-        selectedSpot.setDistrictWorked(pselectedSpot->getDistrictWorked());
-        selectedSpot.setSpotType(pselectedSpot->getSpotType());
+        sd = bandmapDataModel->getBandmapDataRow(selectedSpotDataRowNum);
     }
+    return sd;
+}
+
+int BandmapView::getSpotDataRow(QSharedPointer<ClusterSpotData> sd)
+{
+    return bandmapDataModel->getSpotDataRow(sd);
 }
 bool BandmapView::filterAcceptsRow(int sourceRow) const
 {

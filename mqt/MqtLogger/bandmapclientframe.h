@@ -133,7 +133,6 @@ private:
     QItemSelectionModel *selectionModel = nullptr;
 
     BandmapData *bandmapDataModel = nullptr;
-    //BandmapSortFilterProxyModel* bandmapSpotProxyModel = nullptr;
     BandmapClientFilterDialog* filterSetup = nullptr;
 
     UpperCaseValidator ucValidator;
@@ -167,9 +166,7 @@ private:
     QShortcut* zoomIn = nullptr;
     QShortcut* zoomOut = nullptr;
 
-
-    ClusterSpotData contextMenuSelectedSpotData = bandmapSpotType::NONE;
-    int contextMenuSelectedSpotDataRowNum = -1;
+    QSharedPointer<ClusterSpotData> contextMenuSelectedSpotData;
 
     bool purgeSpotFlag = false;
     bool holdUpdateFlag = false;
@@ -207,12 +204,12 @@ private:
     void ShowFilter();
 
     void restoreSplitters();
-    void doMarkSpot(int selRow);
-    void doUnMarkSpot(int selRow);
-    void doBearingSelected(ClusterSpotData * );
-    void doLogSelected(ClusterSpotData *sd);
-    void doMemorySelected(ClusterSpotData *d);
-    void doClearSpotSelected(ClusterSpotData *sd, int selRow);
+    void doMarkSpot(QSharedPointer<ClusterSpotData> sd);
+    void doUnMarkSpot(QSharedPointer<ClusterSpotData> sd);
+    void doBearingSelected(QSharedPointer<ClusterSpotData> sd);
+    void doLogSelected(QSharedPointer<ClusterSpotData> sd);
+    void doMemorySelected(QSharedPointer<ClusterSpotData> sd);
+    void doClearSpotSelected(QSharedPointer<ClusterSpotData> sd);
     void doClearClusterSpotsSelected();
 protected:
 
@@ -283,19 +280,24 @@ private slots:
 class BMP_MouseInObject : public QObject
 {
     Q_OBJECT
+
+    /* This is installed by
+
+    actionInObject = new BMP_MouseInObject(this, this);
+    spotsMenu->installEventFilter(actionInObject);
+
+    So only active while the menu is active.
+
+    BUT it takes no notice of configuration
+*/
 public:
     BMP_MouseInObject(QWidget */*parent*/, BandmapClientFrame* frame)
     {
         bandmapFrame = frame;
     }
 
-
-
-
-    bool eventFilter(QObject *obj, QEvent *event)
+    virtual bool eventFilter(QObject *obj, QEvent *event) override
     {
-
-
         if (event->type() == QEvent::Enter)
         {
             bandmapFrame->setHoldUpdateFlag(true);
@@ -316,14 +318,8 @@ public:
 
         return QObject::eventFilter(obj, event);
     }
-
-
-
 private:
-
-BandmapClientFrame* bandmapFrame;
-
-
+    BandmapClientFrame* bandmapFrame;
 };
 
 

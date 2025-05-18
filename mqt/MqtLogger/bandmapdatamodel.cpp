@@ -65,10 +65,13 @@ bool BandmapData::insertRows(int row, int count)
 
 bool BandmapData::removeRows(int _row, int count)
 {
-    for (int row = _row + count - 1; row > (_row - 1); row--)
+    if (_row >= 0)
     {
-        QSharedPointer<ClusterSpotData> spotData = bandmapSpots[row];
-        bandmapSpots.removeAt(row);
+        for (int row = _row + count - 1; row > (_row - 1); row--)
+        {
+            QSharedPointer<ClusterSpotData> spotData = bandmapSpots[row];
+            bandmapSpots.removeAt(row);
+        }
     }
     return true;
 }
@@ -76,6 +79,19 @@ bool BandmapData::removeRows(int _row, int count)
 QSharedPointer<ClusterSpotData> BandmapData::getBandmapDataRow(int row)
 {
     return bandmapSpots[row];
+}
+int BandmapData::getSpotDataRow(QSharedPointer<ClusterSpotData> sd)
+{
+    for (int i = 0; i < bandmapSpots.count(); i++)
+    {
+        // we don't actrually have an equality operator for spots
+        // Maybe we should look at DX callsigns
+        if (bandmapSpots[i] == sd)
+        {
+            return i;
+        }
+    }
+    return -1;
 }
 
 void BandmapData::setFilterString(QString f)

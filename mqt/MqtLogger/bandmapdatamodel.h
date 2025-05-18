@@ -32,6 +32,7 @@ public:
 
     QSharedPointer<ClusterSpotData> getBandmapDataRow(int row);
 
+    // list of spots to be inserted into bandmapSpots
     QVector< QSharedPointer<ClusterSpotData> > rowData;
 
     QSharedPointer<ClusterSpotData> getSpotData(int row){return bandmapSpots[row];};
@@ -41,8 +42,10 @@ public:
 
     void sortBandmapData();
 
+    int getSpotDataRow(QSharedPointer<ClusterSpotData> sd);
 private:
 
+    //list of spots in model
     QVector< QSharedPointer<ClusterSpotData>>  bandmapSpots;
 };
 #endif // BANDMAPDATAMODEL_H
