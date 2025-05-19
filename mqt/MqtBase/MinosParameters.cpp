@@ -141,3 +141,7 @@ ContactList *MinosParametersAdapter::getListSlot(int)
 {
     return nullptr;
 }
+bool MinosParametersAdapter::isLogger()
+{
+    return false;
+}

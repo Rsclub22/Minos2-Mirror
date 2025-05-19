@@ -65,6 +65,7 @@ class MinosParameters
       virtual int getListSlotCount() = 0;
       virtual ContactList *getListSlot(int) = 0;
 
+      virtual bool isLogger() = 0;
 };
 class MinosParametersAdapter : public MinosParameters
 {
@@ -102,5 +103,6 @@ class MinosParametersAdapter : public MinosParameters
       virtual BaseContestLog *getContestSlot(int) override;
       virtual int getListSlotCount() override;
       virtual ContactList *getListSlot(int) override;
+      virtual bool isLogger() override;
 };
 #endif
