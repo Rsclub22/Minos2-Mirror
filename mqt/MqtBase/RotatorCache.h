@@ -35,6 +35,7 @@ public:
         publishState();
         publishDetails();
         publishPresets();
+        publishSkyScanPresets();
     }
 
 

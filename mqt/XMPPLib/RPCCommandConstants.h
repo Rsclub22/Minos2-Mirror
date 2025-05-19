@@ -169,7 +169,7 @@ static const QString RotatorCategory    ("Rotator");
 static const QString rotatorDetailCategory    ("RotatorDetail");
 static const QString rotatorStateCategory    ("RotatorState");
 static const QString rotatorPresetsCategory ("RotatorPresets");
-static const QString rotatorSkyScanPresetsCategory ("RotatoSkyScanPresets");
+static const QString rotatorSkyScanPresetsCategory ("RotatorSkyScanPresets");
 static const QString rotatorStatus       ("RotStatus");
 static const QString rotatorBearing     ("Bearing");
 static const QString rotatorList        ("rotList");

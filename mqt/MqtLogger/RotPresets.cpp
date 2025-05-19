@@ -67,8 +67,12 @@ void RotPresets::setRotatorPresetList(QString s)
         for (int i = 0; i < presets.count(); i++)
         {
             QStringList p = presets[i].split(',');
-            rotPresetData.append(new RotPresetData(p[0].toInt(), p[1], p[2]));
-            rotPresetButtonUpdate(i, *rotPresetData[i]);
+            if (p.count() == 3)
+            {
+                rotPresetData.append(new RotPresetData(p[0].toInt(), p[1], p[2]));
+                rotPresetButtonUpdate(i, *rotPresetData[i]);
+            }
+
         }
 
     }

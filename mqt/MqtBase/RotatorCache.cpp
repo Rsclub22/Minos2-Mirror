@@ -226,7 +226,7 @@ void RotatorCache::setSkyScanPresetsString(const AnalysePubSubNotify & an)
     QJsonDocument json = QJsonDocument::fromJson(s.toUtf8(), &err);
     if (!err.error)
     {
-        rotPresets[n].setValue(json.object().value(rpcConstants::rotPresetList).toString());
+        rotSkyScanPresets[n].setValue(json.object().value(rpcConstants::rotSkyScanPresetList).toString());
     }
     else
     {
@@ -509,7 +509,7 @@ void RotatorCache::publishSkyScanPresets()
     {
         if (i.value().isDirty())
         {
-            QString packed = getPresetsString(i.key());
+            QString packed = getSkyScanPresetsString(i.key());
             rpc->publish(rpcConstants::rotatorSkyScanPresetsCategory, i.key().toString(), packed, psPublished);
             rotDetails[i.key()].clearDirty();
         }

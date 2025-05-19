@@ -841,6 +841,7 @@ void TSendDM::notifyRotChanges()
         QString selStateUuid = selState.getSelectedContest(loggerUuid).getValue();
         AntennaDetail &selDetail = rotatorCache.getDetails(rotSelected);
         QString selDetailUuid = selState.getSelectedContest(loggerUuid).getValue();
+
         if (!selStateUuid.isEmpty())
         {
             QVector<TSingleLogFrame *> frames = LogContainer->getLogFrames();
@@ -958,9 +959,12 @@ void TSendDM::notifyRotChanges()
                     traceMsg(QString("Rotator set skyscan presets = %1 - %2").arg(rotatorCache.getRotatorSkyScanPresets(rotSelected), selStateUuid));
                     tslf->on_RotatorSkyScanPresetList(rotatorCache.getRotatorSkyScanPresets(rotSelected));
                 }
+
+                rotatorCache.rotatorPresetsClearDirty();
+                rotatorCache.rotatorSkyScanPresetsClearDirty();
             }
-            rotatorCache.rotatorPresetsClearDirty();
-            rotatorCache.rotatorSkyScanPresetsClearDirty();
+
+
         }
     }
 }

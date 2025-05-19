@@ -112,9 +112,6 @@ private:
 
 
 
-
-
-
 signals:
     void selectRotator(QString);
     void sendRotator(rpcConstants::RotateDirection direction, int angle );
@@ -129,10 +126,11 @@ signals:
 
 private slots:
 
+    void on_StopRotate_clicked();
     void on_Rotate_clicked();
     void on_RotateLeft_clicked();
     void on_RotateRight_clicked();
-    void on_StopRotate_clicked();
+
 
     void on_nudgeLeft_clicked();
     void on_nudgeRight_clicked();
@@ -143,6 +141,8 @@ private slots:
     void setBrgFromSpot(QString brg);
     void setBrgFromFrmMemory(QString Brg);
     void setBrgFromMatchFrame(QString brg);
+
+
 };
 
 

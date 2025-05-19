@@ -85,8 +85,8 @@ void skyScanPresetsFrame::setPresetList(QString skyScanPresetList)
                 QStringList p = presets[i].split(',');
                 if (p.count() == 2)
                 {
-                    skyScanPresetButton[i]->setText(p[1]);
-                    int a = 1;
+                    skyScanPresetButton[i]->setText(QString("%1:%2").arg(i).arg(p[1]));
+
                 }
 
             }
