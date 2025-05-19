@@ -92,6 +92,7 @@ void TSendDM::getRouterAppCatMap()
             routerAppCatMap[rpcConstants::rotatorDetailCategory].push_back(i);
             routerAppCatMap[rpcConstants::rotatorStateCategory].push_back(i);
             routerAppCatMap[rpcConstants::rotatorPresetsCategory].push_back(i);
+            routerAppCatMap[rpcConstants::rotatorSkyScanPresetsCategory].push_back(i);
         }
         else if (i->appType == "Server")
         {
@@ -360,6 +361,9 @@ void TSendDM::sendRotatorSelection(const PubSubName &s, const QString &uuid)
     rpc.queueCall( s );
 }
 
+
+
+
 void TSendDM::sendSkyScanControlPanelButtonState(TSingleLogFrame *tslf, SkyScanButtonState buttonState)
 {
     traceMsg(QString("Send SkyScan Control Button State - Start = %1, Stop = %2").arg(buttonState.isStop() ? "On" :"Off").arg(buttonState.isStop() ? "On" : "Off"));
@@ -601,6 +605,22 @@ void TSendDM::sendRotatorPreset(QString s)
 
     PubSubName rotSelected = rotatorCache.getSelected(loggerUuid);
     rpc.queueCall( rotSelected );
+}
+
+void TSendDM::sendRotatorSkyScanPresetNumberToRotator(int buttonNumber)
+{
+    traceMsg(QString("Send SkyScan Preset Button Number = %1").arg(buttonNumber));
+    RPCGeneralClient rpc(rpcConstants::rotatorMethod);
+    QSharedPointer<RPCParam>st(new RPCParamStruct);
+
+    st->addMember( loggerUuid, rpcConstants::loggerUuid );
+    st->addMember( buttonNumber, rpcConstants::skyScanPresetNumber );
+    rpc.getCallArgs() ->addParam( st );
+
+    PubSubName rotSelected = rotatorCache.getSelected(loggerUuid);
+    rpc.queueCall( rotSelected );
+
+
 }
 
 
@@ -933,8 +953,14 @@ void TSendDM::notifyRotChanges()
                     traceMsg(QString("Rotator set presets = %1 - %2").arg(rotatorCache.getRotatorPresets(rotSelected), selStateUuid));
                     tslf->on_RotatorPresetList(rotatorCache.getRotatorPresets(rotSelected));
                 }
+                if (rotatorCache.rotatorSkyScanPresetsIsDirty(rotSelected))
+                {
+                    traceMsg(QString("Rotator set skyscan presets = %1 - %2").arg(rotatorCache.getRotatorSkyScanPresets(rotSelected), selStateUuid));
+                    tslf->on_RotatorSkyScanPresetList(rotatorCache.getRotatorSkyScanPresets(rotSelected));
+                }
             }
             rotatorCache.rotatorPresetsClearDirty();
+            rotatorCache.rotatorSkyScanPresetsClearDirty();
         }
     }
 }
@@ -968,6 +994,10 @@ void TSendDM::on_notify( AnalysePubSubNotify an, const QString /*from*/ )
             else if ( an.getCategory() == rpcConstants::rotatorPresetsCategory )
             {
                 rotatorCache.setPresetsString(an);
+            }
+            else if (an.getCategory() == rpcConstants::rotatorSkyScanPresetsCategory)
+            {
+                rotatorCache.setSkyScanPresetsString(an);
             }
             else if ( an.getCategory() == rpcConstants::rigControlCategory && an.getKey() == rpcConstants::rigControlRadioList )
             {

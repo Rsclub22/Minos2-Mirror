@@ -346,6 +346,7 @@ private slots:
 
 
 
+    void onSetSkyScanPresetButtonFromLogger(int buttonNumber);
 private:
     void rotateTo(int bearing);
     //int northCalcTarget(int targetBearing);
@@ -448,6 +449,7 @@ private:
 
     void sendSkyScanRotatorStartBearingToLogger(int rotatorStartBearing);
     void sendSkyScanRotatorEndBearingToLogger(int rotatorEndBearing);
+    void sendSkyScanPresetListLogger();
 };
 
 #endif // ROTATORMAINWINDOW_H

@@ -36,6 +36,7 @@ public:
     void setText(QString t);
 
     QString getText();
+    void disableMenu();
 signals:
 
     void presetShortCutRecall();

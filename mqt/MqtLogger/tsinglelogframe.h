@@ -22,6 +22,7 @@
 #include "qrzdisplayframe.h"
 #include "qsomapframe.h"
 #include "rotatorcompassframe.h"
+#include "skyscanpresetsframe.h"
 
 namespace Ui {
 class TSingleLogFrame;
@@ -51,6 +52,7 @@ public:
     RotControlFrame *FKHRotControlFrame = nullptr;
     RotatorSkyScanFrame *skyScanControlFrame = nullptr;
     RotatorCompassFrame *FKHRotCompassFrame = nullptr;
+    skyScanPresetsFrame *FKHRotSkyScanPresetsFrame = nullptr;
     TxVmButtonsFrame *txVmButtonsFrame = nullptr;
     QrzDisplayFrame *qrzDisplayFrame = nullptr;
 
@@ -180,6 +182,7 @@ public:
     void on_RotatorMinAzimuth(int);
     void on_cwCcwCmdEnable(bool);
     void presetTurn(QString);
+    void on_RotatorSkyScanPresetList(QString skyScanPresetList);
 
     void xferFromKST(QString call, QString loc, QString freq);
 
@@ -301,6 +304,7 @@ private slots:
     void onQrzInfoToLog(QString callsign, QString qraLocator, QString name);
     void onShowCribBand();
     void sendSkyScanFrameButtonStateToRotator(SkyScanButtonState buttonState);
+    void sendSkyScanPresetNumberToRotator(int buttonNumber);
 };
 
 #endif // TSINGLELOGFRAME_H

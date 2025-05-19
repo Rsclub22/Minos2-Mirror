@@ -199,6 +199,54 @@ void RotatorCache::rotatorPresetsClearDirty()
         i.clearDirty();
     }
 }
+QString RotatorCache::getSkyScanPresetsString(const PubSubName &name) const
+{
+    PubSubName n(name);
+    n.setKey("");
+    QString val = rotSkyScanPresets[n].getValue();
+
+    QJsonObject jv;
+
+    jv.insert(rpcConstants::rotSkyScanPresetList, val);
+
+    QJsonDocument json(jv);
+
+    QString message(json.toJson(QJsonDocument::Compact));
+
+    return message;
+
+}
+void RotatorCache::setSkyScanPresetsString(const AnalysePubSubNotify & an)
+{
+    PubSubName n(an);
+    n.setKey("");
+    QString s = an.getValue();
+
+    QJsonParseError err;
+    QJsonDocument json = QJsonDocument::fromJson(s.toUtf8(), &err);
+    if (!err.error)
+    {
+        rotPresets[n].setValue(json.object().value(rpcConstants::rotPresetList).toString());
+    }
+    else
+    {
+        trace("Err " + err.errorString() + " Bad Json document " + s);
+    }
+}
+bool RotatorCache::rotatorSkyScanPresetsIsDirty(const PubSubName &name)
+{
+    PubSubName n(name);
+    n.setKey("");
+    return rotSkyScanPresets[n].isDirty();
+
+}
+void RotatorCache::rotatorSkyScanPresetsClearDirty()
+{
+    for(auto &i: rotSkyScanPresets )
+    {
+        i.clearDirty();
+    }
+}
 
 void RotatorCache::setDetail(const PubSubName &name, const AntennaDetail &detail)
 {
@@ -349,6 +397,18 @@ QString RotatorCache::getRotatorPresets(const PubSubName &name)
     n.setKey("");
     return rotPresets[n].getValue();
 }
+void RotatorCache::setRotatorSkyScanPresets(const PubSubName &name, const QString &p)
+{
+    PubSubName n(name);
+    n.setKey("");
+    rotSkyScanPresets[n].setValue(p);
+}
+QString RotatorCache::getRotatorSkyScanPresets(const PubSubName &name)
+{
+    PubSubName n(name);
+    n.setKey("");
+    return rotSkyScanPresets[n].getValue();
+}
 
 void RotatorCache::setSkyScanNextStep(const PubSubName &name, QString bearing)
 {
@@ -442,3 +502,18 @@ void RotatorCache::publishPresets()
     }
 
 }
+void RotatorCache::publishSkyScanPresets()
+{
+    MinosRPC *rpc = MinosRPC::getMinosRPC();
+    for(QMap<PubSubName, MinosStringItem<QString> >::iterator i = rotSkyScanPresets.begin(); i != rotSkyScanPresets.end(); i++ )
+    {
+        if (i.value().isDirty())
+        {
+            QString packed = getPresetsString(i.key());
+            rpc->publish(rpcConstants::rotatorSkyScanPresetsCategory, i.key().toString(), packed, psPublished);
+            rotDetails[i.key()].clearDirty();
+        }
+    }
+
+}
+

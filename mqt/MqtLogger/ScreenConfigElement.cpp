@@ -28,6 +28,7 @@ QVector <SCTypeOption> ScreenConfigElement::scoptions =
     {sctSkyScanControl, QT_TR_NOOP("SkyScan Control"), QT_TR_NOOP("SkyScan Control")},
     {sctRotCompassDisplay, QT_TR_NOOP("Rotator Compass Display"), QT_TR_NOOP("Rotator Compass Display")},
     {sctRotPresets, QT_TR_NOOP("Rotator Presets"), QT_TR_NOOP("Rotator Presets")},
+    {sctRotSkyScanPresets, QT_TR_NOOP("SkyScan Presets"), QT_TR_NOOP("SkyScan Presets")},
     {sctThisMatch, QT_TR_NOOP("This Contest Match"), QT_TR_NOOP("This Contest Matches")},
     {sctOtherMatch, QT_TR_NOOP("Other Contest Match"), QT_TR_NOOP("Other Contest Matches") },
     {sctArchiveMatch, QT_TR_NOOP("Archive Match"), QT_TR_NOOP("Archive List Matches") },

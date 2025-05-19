@@ -40,6 +40,7 @@
 #include "ContestPageControl.h"
 #include "MTrace.h"
 
+
 #include "tsinglelogframe.h"
 #include "ui_tsinglelogframe.h"
 
@@ -133,10 +134,12 @@ void TSingleLogFrame::buildFrame(int slotNo)
     connect(FKHRotControlFrame, &RotControlFrame::selectRotator, rotPresets, &RotPresets::selectRotator);
     connect(FKHRotControlFrame, &RotControlFrame::rotatorConnected, this, &TSingleLogFrame::on_rotatorConnected);
 
-    connect(FKHRotCompassFrame, &RotControlFrame::sendRotator, this, &TSingleLogFrame::sendRotator);
-    connect(FKHRotCompassFrame, &RotControlFrame::selectRotator, this, &TSingleLogFrame::sendSelectRotator);
-    connect(FKHRotCompassFrame, &RotControlFrame::selectRotator, rotPresets, &RotPresets::selectRotator);
-    connect(FKHRotCompassFrame, &RotControlFrame::rotatorConnected, this, &TSingleLogFrame::on_rotatorConnected);
+    connect(FKHRotCompassFrame, &RotatorCompassFrame::sendRotator, this, &TSingleLogFrame::sendRotator);
+    connect(FKHRotCompassFrame, &RotatorCompassFrame::selectRotator, this, &TSingleLogFrame::sendSelectRotator);
+    connect(FKHRotCompassFrame, &RotatorCompassFrame::selectRotator, rotPresets, &RotPresets::selectRotator);
+    connect(FKHRotCompassFrame, &RotatorCompassFrame::rotatorConnected, this, &TSingleLogFrame::on_rotatorConnected);
+
+    connect(FKHRotSkyScanPresetsFrame, &skyScanPresetsFrame::recallSkyScanPreset, this, &TSingleLogFrame::sendSkyScanPresetNumberToRotator);
 
 
     connect(rotPresets, &RotPresets::presetTurn, this, &TSingleLogFrame::presetTurn);
@@ -231,7 +234,7 @@ void TSingleLogFrame::createScreenComponents()
     FKHRigControlFrame->setFrameShape(QFrame::StyledPanel);
     FKHRigControlFrame->setFrameShadow(QFrame::Raised);
 
-    //FKHRigControlFrame->setVmButtonsFrame(txVmButtonsFrame);
+
 
     FKHRigControlFrame->setVisible(false);
 
@@ -263,6 +266,10 @@ void TSingleLogFrame::createScreenComponents()
     skyScanControlFrame->setFrameShadow(QFrame::Raised);
 
     skyScanControlFrame->setVisible(false);
+
+    FKHRotSkyScanPresetsFrame = new skyScanPresetsFrame(this);
+    FKHRotSkyScanPresetsFrame->setObjectName(QStringLiteral("FKHRotSkyScanPresetsFrame"));
+    FKHRotSkyScanPresetsFrame->setVisible(false);
 
     clusterControlFrame = new ClusterClientFrame(this);
     clusterControlFrame->setObjectName(QStringLiteral("ClusterControlFrame"));
@@ -408,6 +415,7 @@ void TSingleLogFrame::clearScreenLayout(bool clearAllTabs)
     FKHRotControlFrame->setContest(nullptr);
     FKHRotCompassFrame->setContest(nullptr);
     skyScanControlFrame->setContest(nullptr);
+    FKHRotSkyScanPresetsFrame->setVisible(false);
     rotPresets->setContest(nullptr);
     // CribSheet
     // NextContactDetailsLabel
@@ -466,6 +474,9 @@ void TSingleLogFrame::clearScreenLayout(bool clearAllTabs)
 
         FKHRotCompassFrame->setParent(this);
         FKHRotCompassFrame->hide();
+
+        FKHRotSkyScanPresetsFrame->setParent(this);
+        FKHRotSkyScanPresetsFrame->hide();
 
         rotPresets->setParent(this);
         rotPresets->hide();
@@ -684,6 +695,11 @@ void TSingleLogFrame::buildRow(ContestPage *cp, SCRow &scrow, int &auxInstance, 
                 {
                     elementScrollArea->setWidget(skyScanControlFrame);
                     // don't set contest here
+                    break;
+                }
+                case sctRotSkyScanPresets:
+                {
+                    elementScrollArea->setWidget(FKHRotSkyScanPresetsFrame);
                     break;
                 }
                 case sctRotCompassDisplay:
@@ -2387,6 +2403,12 @@ void TSingleLogFrame::sendRotator(rpcConstants::RotateDirection direction, int a
 
 }
 
+void TSingleLogFrame::sendSkyScanPresetNumberToRotator(int buttonNumber)
+{
+    if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
+        LogContainer->sendDM->sendRotatorSkyScanPresetNumberToRotator( buttonNumber);
+}
+
 void TSingleLogFrame::sendSkyScanFrameButtonStateToRotator(SkyScanButtonState buttonState)
 {
     if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
@@ -2409,6 +2431,12 @@ void TSingleLogFrame::presetTurn(QString b)
         FKHRotControlFrame->presetTurn(b);
 }
 
+void TSingleLogFrame::on_RotatorSkyScanPresetList(QString skyScanPresetList)
+{
+    FKHRotSkyScanPresetsFrame->setPresetList(skyScanPresetList);
+}
+
+
 
 void TSingleLogFrame::on_skyScanVisible(bool state)
 {
@@ -2416,6 +2444,7 @@ void TSingleLogFrame::on_skyScanVisible(bool state)
     {
         skyScanControlFrame->setSkyScanVisible(state);
         FKHRotCompassFrame->setSkyScanVisible(state);
+        FKHRotSkyScanPresetsFrame->setSkyCanVisible(state);
     }
 }
 

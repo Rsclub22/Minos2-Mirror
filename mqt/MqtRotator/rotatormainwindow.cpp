@@ -459,6 +459,21 @@ void RotatorMainWindow::onLoggerSetPreset(QString presetMsg)
 
 }
 
+
+void RotatorMainWindow::onSetSkyScanPresetButtonFromLogger(int buttonNumber)
+{
+    logMessage(QString("SkyScan Preset Button %1 received from logger").arg(buttonNumber));
+
+    if (closeApp && skyScanActive)
+    {
+        logMessage(QString("Rotator App closing or skyScan is Active, Exit Preset Button from logger"));
+        return;
+    }
+    skyScanPresetRead(buttonNumber);
+
+
+}
+
 void RotatorMainWindow::onSetSkyScanButtonStateFromLogger(int buttonState)
 {
     if (buttonState != loggerSkyScanButtonState->getState())
@@ -717,6 +732,29 @@ void RotatorMainWindow::sendPresetListLogger()
 }
 
 
+void RotatorMainWindow::sendSkyScanPresetListLogger()
+{
+    QStringList skyScanPresets;
+    for (int i=0; i < skyScanPresetDataList.count(); i++)
+    {
+        if (!skyScanPresetDataList.isEmpty())
+        {
+            QStringList skyScanPreset;
+            skyScanPreset.append(QString::number(skyScanPresetDataList[i]->getNumber()));
+            skyScanPreset.append(skyScanPresetDataList[i]->getPresetName());
+
+            skyScanPresets.append(skyScanPreset.join(','));
+
+        }
+    }
+
+    PubSubName psname(setupAntenna->currentAntennaName);
+    msg->rotatorCache.setRotatorSkyScanPresets(psname, skyScanPresets.join(':'));
+    msg->rotatorCache.publish();
+}
+
+
+
 
 void RotatorMainWindow::sendSkyScanTabVisibleToLogger(bool state)
 {
@@ -881,7 +919,7 @@ void RotatorMainWindow::initActionsConnections()
     connect(msg, &RotatorRpc::setRotation, this, &RotatorMainWindow::onLoggerSetRotation);
     connect(msg, &RotatorRpc::selectAntennaFromLog, this, &RotatorMainWindow::onLoggerSelectAntenna);
     connect(msg, &RotatorRpc::setRotPreset, this, &RotatorMainWindow::onLoggerSetPreset);
-    connect(msg, &RotatorRpc::setSkyScanButtonStateFromLogger, this, &RotatorMainWindow::onSetSkyScanButtonStateFromLogger);
+    connect(msg, &RotatorRpc::setSkyScanPresetButtonFromLogger, this, &RotatorMainWindow::onSetSkyScanPresetButtonFromLogger);
 
 
 
@@ -3782,7 +3820,7 @@ void RotatorMainWindow::openSkyScan(QString currentAntennaName)
     connect(ui->skyScanStepDegreeSpinBox, SIGNAL(valueChanged(int)), this, SLOT(onSkyScanStepDegreeSpinBoxChanged()), Qt::QueuedConnection);
     connect(ui->skyScanPauseTimeSpinBox, SIGNAL(valueChanged(int)), this, SLOT(onSkyScanPauseTimeSpinBoxChanged()), Qt::QueuedConnection);
 
-
+    sendSkyScanPresetListLogger();
 }
 
 
@@ -4063,7 +4101,11 @@ void RotatorMainWindow::saveSkyScanPreset(SkyScanData &curData, int buttonNumber
         config.endGroup();
 
 
+
+
     }
+
+
 
 }
 
@@ -4139,6 +4181,10 @@ void RotatorMainWindow::skyScanPresetEdit(int buttonNumber)
                     saveSkyScanPreset(curData, buttonNumber);
                     skyScanPresetButton[buttonNumber]->presetButton->setText(QString("%1: %2").arg(QString::number(buttonNumber + 1), curData.getPresetName()) );
                     *skyScanPresetDataList[buttonNumber] = curData;    // copy back the new data
+                    if (curData.isPresetNameDirty())
+                    {
+                        sendSkyScanPresetListLogger();
+                    }
 
                 }
 
@@ -4193,6 +4239,10 @@ void RotatorMainWindow::skyScanPresetWrite(int buttonNumber)
                 *skyScanPresetDataList[buttonNumber] = curData;    // copy back the new data
                 saveSkyScanPreset(curData, buttonNumber);
 
+                sendSkyScanPresetListLogger();
+
+
+
             }
 
         }
@@ -4221,6 +4271,9 @@ void RotatorMainWindow::skyScanPresetClear(int buttonNumber)
             saveSkyScanPreset(curData, buttonNumber);
             skyScanPresetButton[buttonNumber]->presetButton->setText(QString("%1: %2").arg(QString::number(buttonNumber + 1), curData.getPresetName()) );
             *skyScanPresetDataList[buttonNumber] = curData;    // copy back the new data
+            sendSkyScanPresetListLogger();
+
+
         }
 
 

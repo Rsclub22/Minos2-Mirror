@@ -20,6 +20,7 @@ class RotatorCache
     QMap<PubSubName, AntennaDetail> rotDetails;
     QMap<PubSubName, AntennaState> rotStates;
     QMap<PubSubName, MinosStringItem<QString> > rotPresets;
+    QMap<PubSubName, MinosStringItem<QString> > rotSkyScanPresets;
     QVector<PubSubName> rotList;
     void publishState( );
     void publishDetails( );
@@ -89,6 +90,13 @@ public:
     void setSkyScanRotatorStartBearing(const PubSubName &name, const int rotatorStartBearing);
     void setSkyScanRotatorEndBearing(const PubSubName &name, const int rotatorEndBearing);
 
+    void setRotatorSkyScanPresets(const PubSubName &name, const QString &p);
+    void publishSkyScanPresets();
+    QString getRotatorSkyScanPresets(const PubSubName &name);
+    bool rotatorSkyScanPresetsIsDirty(const PubSubName &name);
+    void rotatorSkyScanPresetsClearDirty();
+    QString getSkyScanPresetsString(const PubSubName &name) const;
+    void setSkyScanPresetsString(const AnalysePubSubNotify &an);
 };
 
 #endif // ROTATORCACHE_H

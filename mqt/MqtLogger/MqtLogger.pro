@@ -108,6 +108,7 @@ SOURCES += \
     rotcontrolframe.cpp \
     runbuttondialog.cpp \
     runbuttonsframe.cpp \
+    skyscanpresetsframe.cpp \
     taboutbox.cpp \
     tbundleframe.cpp \
     tcalendardownload.cpp \
@@ -215,6 +216,7 @@ HEADERS  += \
     rotcontrolframe.h \
     runbuttondialog.h \
     runbuttonsframe.h \
+    skyscanpresetsframe.h \
     taboutbox.h \
     tbundleframe.h \
     tcalendardownload.h \
@@ -292,6 +294,7 @@ FORMS    += \
     ScreenConfigRow.ui \
     StackedInfoFrame.ui \
     runbuttonsframe.ui \
+    skyscanpresetsframe.ui \
     taboutbox.ui \
     tbundleframe.ui \
     tcalendardownload.ui \

@@ -16,6 +16,7 @@ enum SCType
     sctSkyScanControl,
     sctRotCompassDisplay,
     sctRotPresets,
+    sctRotSkyScanPresets,
     sctQSOEdit,
     sctNextQSODetails,
     sctThisMatch,

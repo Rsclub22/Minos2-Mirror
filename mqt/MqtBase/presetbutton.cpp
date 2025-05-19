@@ -113,3 +113,9 @@ QString PresetButton::getText()
 {
     return presetButton->text();
 }
+
+void PresetButton::disableMenu()
+{
+    presetButton->setMenu(nullptr);
+    presetButton->setPopupMode(QToolButton::DelayedPopup);
+}
