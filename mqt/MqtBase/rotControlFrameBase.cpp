@@ -1,3 +1,16 @@
+/////////////////////////////////////////////////////////////////////////////
+// $Id$
+//
+// PROJECT NAME 		Minos Amateur Radio Control and Logging System
+//                      Rotator Control Frame Base for Logger
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2017 - 2025
+//
+// Interprocess Control Logic
+// COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2017
+//
+//
+//
+/////////////////////////////////////////////////////////////////////////////
 
 
 
@@ -32,6 +45,9 @@ RotControlFrameBase::~RotControlFrameBase()
 
 
 }
+
+
+
 
 void RotControlFrameBase::setContest(BaseContestLog *c)
 {
@@ -153,23 +169,6 @@ void RotControlFrameBase::setTurnDisplayText(QString brg)
 
 
 
-void RotControlFrameBase::initConnections()
-{
-
-    connect(this, &RotControlFrameBase::bearingEditReturn, this, &RotControlFrameBase::on_Rotate_clicked);
-
-    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::BrgStrToRot, this, &RotControlFrameBase::setBrgFromQSOLog);
-
-    // from match frame
-    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::MatchBrgStrToRot, this, &RotControlFrameBase::setBrgFromMatchFrame);
-
-    // from cluster frame
-    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::SpotBrgStrToRot, this, &RotControlFrameBase::setBrgFromSpot);
-
-    // from memory frame
-    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::MemBrgStrToRot, this, &RotControlFrameBase::setBrgFromFrmMemory);
-
-}
 
 void RotControlFrameBase::turnTo(int angle)
 {
@@ -241,7 +240,7 @@ void RotControlFrameBase::turnTo(int angle)
     }
 }
 
-void RotControlFrameBase::on_Rotate_clicked()
+void RotControlFrameBase::onRotate_clicked()
 {
     if (rotFrameData.getRotConnected() && !rotFrameData.getRotError())
     {
@@ -268,7 +267,7 @@ void RotControlFrameBase::on_Rotate_clicked()
 
 }
 
-void RotControlFrameBase::on_nudgeLeft_clicked()
+void RotControlFrameBase::onNudgeLeft_clicked()
 {
     if (rotFrameData.getRotConnected() && !rotFrameData.getRotError())
     {
@@ -286,7 +285,7 @@ void RotControlFrameBase::on_nudgeLeft_clicked()
     }
 }
 
-void RotControlFrameBase::on_nudgeRight_clicked()
+void RotControlFrameBase::onNudgeRight_clicked()
 {
 
     if (rotFrameData.getRotConnected() && !rotFrameData.getRotError())
@@ -305,7 +304,7 @@ void RotControlFrameBase::on_nudgeRight_clicked()
 
 }
 
-void RotControlFrameBase::on_RotateLeft_clicked()
+void RotControlFrameBase::onRotateLeft_clicked()
 {
 
     if (!rotFrameData.getRotConnected() || rotFrameData.getRotError())
@@ -318,7 +317,7 @@ void RotControlFrameBase::on_RotateLeft_clicked()
     if (rotFrameData.getRotLeftButtonStatus())
     {
         traceMsg("RotLeft Button On - Stop and Turn Off");
-        on_StopRotate_clicked();
+        onStopRotate_clicked();
         rot_left_button_off();
 
     }
@@ -338,7 +337,7 @@ void RotControlFrameBase::on_RotateLeft_clicked()
         if (rotFrameData.getMoving() || rotFrameData.getMovingCW() || rotFrameData.getMovingCCW())
         {
             traceMsg("RotLeft Stopping");
-            on_StopRotate_clicked();
+            onStopRotate_clicked();
         }
 
         rot_left_button_on();
@@ -358,7 +357,7 @@ void RotControlFrameBase::clearBearingLineEdit()
 }
 
 
-void RotControlFrameBase::on_RotateRight_clicked()
+void RotControlFrameBase::onRotateRight_clicked()
 {
 
     if (!rotFrameData.getRotConnected() || rotFrameData.getRotError())
@@ -373,7 +372,7 @@ void RotControlFrameBase::on_RotateRight_clicked()
     if (rotFrameData.getRotRightButtonStatus())
     {
         traceMsg("RotRight Button On - Stop and Turn Off");
-        on_StopRotate_clicked();
+        onStopRotate_clicked();
         rot_right_button_off();
 
     }
@@ -393,7 +392,7 @@ void RotControlFrameBase::on_RotateRight_clicked()
         if (rotFrameData.getMoving() || rotFrameData.getMovingCW() || rotFrameData.getMovingCCW())
         {
             traceMsg("RotRight Stopping");
-            on_StopRotate_clicked();
+            onStopRotate_clicked();
         }
 
         rot_right_button_on();
@@ -497,7 +496,7 @@ void RotControlFrameBase::showRotRightButOff()
     }
 }
 
-void RotControlFrameBase::on_StopRotate_clicked()
+void RotControlFrameBase::onStopRotate_clicked()
 {
     emit sendRotator(rpcConstants::eRotateStop, 0);
     rotFrameData.clearRotatorMovingFlags();
@@ -661,7 +660,7 @@ void RotControlFrameBase::setRotatorState(const QString &s)
             }
             else if (rotFrameData.getLastStatus() == ROT_STATUS_ERROR)
             {
-                if (auto lbl = getRotConnectStateLabelObject())
+                if (auto lbl = getRotatorStatMsgLabelObject())
                 {
                     lbl->setText(HtmlFontColour("Red") + tr("Error"));
                 }
@@ -670,7 +669,7 @@ void RotControlFrameBase::setRotatorState(const QString &s)
             }
             else
             {
-                if (auto lbl = getRotConnectStateLabelObject())
+                if (auto lbl = getRotatorStatMsgLabelObject())
                 {
                     lbl->setText(rotFrameData.getLastStatus());
                 }
@@ -774,7 +773,7 @@ void RotControlFrameBase::setCwCcW_Items_Visible(bool visible)
        tb->setVisible(visible);
     }
 
-    tb =getnudgeRightObject();
+    tb = getnudgeRightObject();
     if (tb)
     {
         tb->setVisible(visible);
@@ -811,7 +810,7 @@ void RotControlFrameBase::traceMsg(QString msg)
     trace(QString("[%1] %2 - %3").arg(rotFrameData.getFrameName(), rotFrameData.getAntennaName(), msg));
 }
 
-void RotControlFrameBase::on_antennaNameSel_activated(int /*arg1*/)
+void RotControlFrameBase::onAntennaNameSel_activated(int /*arg1*/)
 {
     QComboBox* cb = getAntennaSelectObject();
     if (cb)
@@ -856,7 +855,7 @@ void RotControlFrameBase::keyPressEvent(QKeyEvent *event)
     bool alt = mods & Qt::AltModifier;
 */
 
-
+    // can not remember what this was for!
     bool test = false;
     if (auto le = getBrgLineEditObject())
     {
@@ -877,7 +876,162 @@ void RotControlFrameBase::keyPressEvent(QKeyEvent *event)
 
 }
 
+void RotControlFrameBase::showEvent(QShowEvent *event)
+{
+    QWidget::showEvent(event);
+    activate();
+}
 
+void RotControlFrameBase::hideEvent(QHideEvent *event)
+{
+    QWidget::hideEvent(event);
+    deactivate();
+}
+
+
+void RotControlFrameBase::activate()
+{
+    activateSignalConnections();
+}
+void RotControlFrameBase::deactivate()
+{
+    deactivateSignalConnections();
+}
+
+
+void RotControlFrameBase::activateSignalConnections()
+{
+    if (auto ui_element = getStopRotateObject())
+    {
+        connect(ui_element, &QToolButton::clicked, this, &RotControlFrameBase::onStopRotate_clicked);
+    }
+
+    if (auto ui_element = getRotateButtonObject())
+    {
+        connect(ui_element, &QToolButton::clicked, this, &RotControlFrameBase::onRotate_clicked);
+    }
+
+    if (auto ui_element = getRotateLeftObject())
+    {
+        connect(ui_element, &QToolButton::clicked, this, &RotControlFrameBase::onRotateLeft_clicked);
+    }
+
+    if (auto ui_element = getRotateRightObject())
+    {
+        connect(ui_element, &QToolButton::clicked, this, &RotControlFrameBase::onRotateRight_clicked);
+    }
+
+    if (auto ui_element = getnudgeLeftObject())
+    {
+        connect(ui_element, &QToolButton::clicked, this, &RotControlFrameBase::onNudgeLeft_clicked);
+    }
+
+    if (auto ui_element = getnudgeRightObject())
+    {
+        connect(ui_element, &QToolButton::clicked, this, &RotControlFrameBase::onNudgeRight_clicked);
+    }
+
+    if (auto ui_element = getBrgLineEditObject())
+    {
+        connect(ui_element, &BearingLineEdit::editingFinished, this, &RotControlFrameBase::onRotate_clicked);
+    }
+
+    if (auto ui_element = getAntennaSelectObject())
+    {
+        connect(ui_element, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &RotControlFrameBase::onAntennaNameSel_activated);
+    }
+
+    if (auto ui_element = getAntennaSelectObject())
+    {
+        connect(ui_element, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &RotControlFrameBase::onAntennaNameSel_activated);
+    }
+    if (auto ui_element = qobject_cast<BearingLineEdit*>(getBrgLineEditObject()))
+    {
+        connect(ui_element, &BearingLineEdit::editingFinished, this, &RotControlFrameBase::onRotate_clicked);
+    }
+
+
+
+    //connect(this, &RotControlFrameBase::bearingEditReturn, this, &RotControlFrameBase::onRotate_clicked);
+
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::BrgStrToRot, this, &RotControlFrameBase::setBrgFromQSOLog);
+
+    // from match frame
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::MatchBrgStrToRot, this, &RotControlFrameBase::setBrgFromMatchFrame);
+
+    // from cluster frame
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::SpotBrgStrToRot, this, &RotControlFrameBase::setBrgFromSpot);
+
+    // from memory frame
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::MemBrgStrToRot, this, &RotControlFrameBase::setBrgFromFrmMemory);
+}
+
+void RotControlFrameBase::deactivateSignalConnections()
+{
+    if (auto ui_element = getStopRotateObject())
+    {
+        disconnect(ui_element, &QToolButton::clicked, this, &RotControlFrameBase::onStopRotate_clicked);
+    }
+
+    if (auto ui_element = getRotateButtonObject())
+    {
+        disconnect(ui_element, &QToolButton::clicked, this, &RotControlFrameBase::onRotate_clicked);
+    }
+
+    if (auto ui_element = getRotateLeftObject())
+    {
+        disconnect(ui_element, &QToolButton::clicked, this, &RotControlFrameBase::onRotateLeft_clicked);
+    }
+
+    if (auto ui_element = getRotateRightObject())
+    {
+        disconnect(ui_element, &QToolButton::clicked, this, &RotControlFrameBase::onRotateRight_clicked);
+    }
+
+    if (auto ui_element = getnudgeLeftObject())
+    {
+        disconnect(ui_element, &QToolButton::clicked, this, &RotControlFrameBase::onNudgeLeft_clicked);
+    }
+
+    if (auto ui_element = getnudgeRightObject())
+    {
+        disconnect(ui_element, &QToolButton::clicked, this, &RotControlFrameBase::onNudgeRight_clicked);
+    }
+
+    if (auto ui_element = getBrgLineEditObject())
+    {
+        disconnect(ui_element, &BearingLineEdit::editingFinished, this, &RotControlFrameBase::onNudgeRight_clicked);
+    }
+
+    if (auto ui_element = getAntennaSelectObject())
+    {
+        disconnect(ui_element, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &RotControlFrameBase::onAntennaNameSel_activated);
+    }
+
+    if (auto ui_element = getAntennaSelectObject())
+    {
+        disconnect(ui_element, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &RotControlFrameBase::onAntennaNameSel_activated);
+    }
+    if (auto ui_element = qobject_cast<BearingLineEdit*>(getBrgLineEditObject()))
+    {
+        disconnect(ui_element, &BearingLineEdit::editingFinished, this, &RotControlFrameBase::onRotate_clicked);
+    }
+
+
+
+    //connect(this, &RotControlFrameBase::bearingEditReturn, this, &RotControlFrameBase::onRotate_clicked);
+
+    disconnect(&MinosLoggerEvents::mle, &MinosLoggerEvents::BrgStrToRot, this, &RotControlFrameBase::setBrgFromQSOLog);
+
+    // from match frame
+    disconnect(&MinosLoggerEvents::mle, &MinosLoggerEvents::MatchBrgStrToRot, this, &RotControlFrameBase::setBrgFromMatchFrame);
+
+    // from cluster frame
+    disconnect(&MinosLoggerEvents::mle, &MinosLoggerEvents::SpotBrgStrToRot, this, &RotControlFrameBase::setBrgFromSpot);
+
+    // from memory frame
+    disconnect(&MinosLoggerEvents::mle, &MinosLoggerEvents::MemBrgStrToRot, this, &RotControlFrameBase::setBrgFromFrmMemory);
+}
 
 void RotControlFrameBase::checkConnection()
 {

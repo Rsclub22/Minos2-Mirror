@@ -1,3 +1,18 @@
+/////////////////////////////////////////////////////////////////////////////
+// $Id$
+//
+// PROJECT NAME 		Minos Amateur Radio Control and Logging System
+//                      Rotator Control Frame Base for Logger
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2017 - 2025
+//
+// Interprocess Control Logic
+// COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2017
+//
+//
+//
+/////////////////////////////////////////////////////////////////////////////
+
+
 #ifndef ROTCONTROLFRAMEBASE_H
 #define ROTCONTROLFRAMEBASE_H
 
@@ -47,6 +62,9 @@ public:
 
     void getRotDetails(memoryData::memData &m);
 
+
+    virtual void activate();
+    virtual void deactivate();
 
 protected:
 
@@ -102,9 +120,15 @@ protected:
 
     RotFrameData rotFrameData;
 
+    void showEvent(QShowEvent *event) override;
+    void hideEvent(QHideEvent *event) override;
+
 private:
 
     LoggerContestLog *ct = nullptr;
+
+
+
 
 
 
@@ -112,6 +136,8 @@ private:
 
 
 
+    void activateSignalConnections();
+    void deactivateSignalConnections();
 signals:
     void selectRotator(QString);
     void sendRotator(rpcConstants::RotateDirection direction, int angle );
@@ -126,15 +152,15 @@ signals:
 
 private slots:
 
-    void on_StopRotate_clicked();
-    void on_Rotate_clicked();
-    void on_RotateLeft_clicked();
-    void on_RotateRight_clicked();
+    void onStopRotate_clicked();
+    void onRotate_clicked();
+    void onRotateLeft_clicked();
+    void onRotateRight_clicked();
 
 
-    void on_nudgeLeft_clicked();
-    void on_nudgeRight_clicked();
-    void on_antennaNameSel_activated(int arg1);
+    void onNudgeLeft_clicked();
+    void onNudgeRight_clicked();
+    void onAntennaNameSel_activated(int arg1);
 
 
     void setBrgFromQSOLog(QString);

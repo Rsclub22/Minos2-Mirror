@@ -10,6 +10,8 @@ skyScanPresetsFrame::skyScanPresetsFrame(QWidget *parent)
     ui->setupUi(this);
 
     initPresetButtons();
+
+    ui->skyScanPresetsGroupBox->setEnabled(false);
 }
 
 skyScanPresetsFrame::~skyScanPresetsFrame()
@@ -98,14 +100,10 @@ void skyScanPresetsFrame::setPresetList(QString skyScanPresetList)
 
 void skyScanPresetsFrame::setSkyCanVisible(bool visible)
 {
-    if (visible)
-    {
-        ui->skyScanPresetsGroupBox->setDisabled(true);
-    }
-    else
-    {
-       ui->skyScanPresetsGroupBox->setDisabled(false);
-    }
+    traceMessage(QString("Set SkyScanVisible = %1").arg(visible ? "True" : "False"));
+
+    ui->skyScanPresetsGroupBox->setEnabled(visible);
+
 }
 
 
