@@ -3049,10 +3049,12 @@ void RotatorMainWindow::setSkyScanTabVisible(bool visible)
     if (visible)
     {
         showTab(ui->rotTabs, ui->skyScanTab, "SkyScan");
+        showTab(ui->presetsTabWidget, ui->skyScanPresetsTab, "SkyScan Presets");
     }
     else
     {
         hideTab(ui->rotTabs, ui->skyScanTab);
+        hideTab(ui->presetsTabWidget, ui->skyScanPresetsTab);
     }
 
 }
