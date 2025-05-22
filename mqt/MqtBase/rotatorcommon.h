@@ -223,8 +223,6 @@ struct skyScanRotatorDisplayLabels
 };
 
 
-void skyScanDisplayRotatorMinAzMaxAz(int minAz, int maxAz, int antennaOffset, enum southStop southStopType, enum endStop endStopType, skyScanRotatorDisplayLabels displayLabels);
-
 class srotParams
 {
 public:

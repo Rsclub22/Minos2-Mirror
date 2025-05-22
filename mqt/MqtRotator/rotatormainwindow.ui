@@ -9,7 +9,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1758</width>
+    <width>1110</width>
     <height>1008</height>
    </rect>
   </property>
@@ -17,7 +17,7 @@
    <string>Minos Rotator</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout_37">
+   <layout class="QHBoxLayout" name="horizontalLayout_26">
     <item>
      <widget class="MinosSplitter" name="rotSplitter">
       <property name="orientation">
@@ -487,6 +487,30 @@
                      </widget>
                     </item>
                     <item>
+                     <layout class="QHBoxLayout" name="horizontalLayout_21">
+                      <item>
+                       <widget class="QLabel" name="antennaOffsetLabel">
+                        <property name="text">
+                         <string>Antenna Offset:</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QLabel" name="antennaOffsetDisplay">
+                        <property name="font">
+                         <font>
+                          <pointsize>9</pointsize>
+                          <bold>false</bold>
+                         </font>
+                        </property>
+                        <property name="text">
+                         <string>0</string>
+                        </property>
+                       </widget>
+                      </item>
+                     </layout>
+                    </item>
+                    <item>
                      <spacer name="horizontalSpacer_18">
                       <property name="orientation">
                        <enum>Qt::Horizontal</enum>
@@ -498,98 +522,6 @@
                        </size>
                       </property>
                      </spacer>
-                    </item>
-                   </layout>
-                  </item>
-                  <item>
-                   <layout class="QVBoxLayout" name="verticalLayout_36">
-                    <item>
-                     <layout class="QHBoxLayout" name="horizontalLayout_28">
-                      <item>
-                       <layout class="QHBoxLayout" name="horizontalLayout_26">
-                        <item>
-                         <widget class="QLabel" name="skyScanRotatorMinAzLbl">
-                          <property name="text">
-                           <string>Min Az:</string>
-                          </property>
-                         </widget>
-                        </item>
-                        <item>
-                         <widget class="QLabel" name="skyScanRotatorDisplayMinAz">
-                          <property name="font">
-                           <font>
-                            <pointsize>14</pointsize>
-                           </font>
-                          </property>
-                          <property name="text">
-                           <string>000</string>
-                          </property>
-                         </widget>
-                        </item>
-                        <item>
-                         <widget class="QLabel" name="skyScanRotatorMaxAzLbl">
-                          <property name="text">
-                           <string>Max Az:</string>
-                          </property>
-                         </widget>
-                        </item>
-                        <item>
-                         <widget class="QLabel" name="skyScanRotatorDisplayMaxAz">
-                          <property name="font">
-                           <font>
-                            <pointsize>14</pointsize>
-                           </font>
-                          </property>
-                          <property name="text">
-                           <string>000</string>
-                          </property>
-                         </widget>
-                        </item>
-                       </layout>
-                      </item>
-                      <item>
-                       <layout class="QHBoxLayout" name="horizontalLayout_27">
-                        <item>
-                         <widget class="QLabel" name="antennaOffsetLabel">
-                          <property name="text">
-                           <string>Antenna Offset:</string>
-                          </property>
-                         </widget>
-                        </item>
-                        <item>
-                         <widget class="QLabel" name="antennaOffsetDisplay">
-                          <property name="font">
-                           <font>
-                            <pointsize>14</pointsize>
-                            <bold>false</bold>
-                           </font>
-                          </property>
-                          <property name="text">
-                           <string>0</string>
-                          </property>
-                         </widget>
-                        </item>
-                       </layout>
-                      </item>
-                     </layout>
-                    </item>
-                    <item>
-                     <layout class="QHBoxLayout" name="horizontalLayout_29">
-                      <item>
-                       <widget class="QLabel" name="rotatorStopLabel">
-                        <property name="text">
-                         <string>RotatorStop:</string>
-                        </property>
-                       </widget>
-                      </item>
-                      <item>
-                       <widget class="QLabel" name="southStopDisplay">
-                        <property name="text">
-                         <string/>
-                        </property>
-                       </widget>
-                      </item>
-                     </layout>
                     </item>
                    </layout>
                   </item>
@@ -632,14 +564,17 @@
                            <item>
                             <layout class="QVBoxLayout" name="verticalLayout_27">
                              <item>
-                              <widget class="QLabel" name="label_6">
-                               <property name="text">
-                                <string>Rotator</string>
+                              <spacer name="verticalSpacer_12">
+                               <property name="orientation">
+                                <enum>Qt::Vertical</enum>
                                </property>
-                               <property name="alignment">
-                                <set>Qt::AlignCenter</set>
+                               <property name="sizeHint" stdset="0">
+                                <size>
+                                 <width>20</width>
+                                 <height>40</height>
+                                </size>
                                </property>
-                              </widget>
+                              </spacer>
                              </item>
                              <item>
                               <widget class="ToolButtonUpDown" name="skyScanRotatorStartBearingUpDownButton">
@@ -669,14 +604,17 @@
                            <item>
                             <layout class="QVBoxLayout" name="verticalLayout_29">
                              <item>
-                              <widget class="QLabel" name="skyScanCompassStartBearingLabel">
-                               <property name="text">
-                                <string>Antenna</string>
+                              <spacer name="verticalSpacer_9">
+                               <property name="orientation">
+                                <enum>Qt::Vertical</enum>
                                </property>
-                               <property name="alignment">
-                                <set>Qt::AlignCenter</set>
+                               <property name="sizeHint" stdset="0">
+                                <size>
+                                 <width>20</width>
+                                 <height>40</height>
+                                </size>
                                </property>
-                              </widget>
+                              </spacer>
                              </item>
                              <item>
                               <widget class="QLabel" name="skyScanCompassStartBearingDisplay">
@@ -737,14 +675,17 @@
                            <item>
                             <layout class="QVBoxLayout" name="verticalLayout_33">
                              <item>
-                              <widget class="QLabel" name="skyScanEndBrgLabel">
-                               <property name="text">
-                                <string>Rotator</string>
+                              <spacer name="verticalSpacer_11">
+                               <property name="orientation">
+                                <enum>Qt::Vertical</enum>
                                </property>
-                               <property name="alignment">
-                                <set>Qt::AlignCenter</set>
+                               <property name="sizeHint" stdset="0">
+                                <size>
+                                 <width>20</width>
+                                 <height>40</height>
+                                </size>
                                </property>
-                              </widget>
+                              </spacer>
                              </item>
                              <item>
                               <widget class="ToolButtonUpDown" name="skyScanRotatorEndBearingUpDownButton">
@@ -774,14 +715,17 @@
                            <item>
                             <layout class="QVBoxLayout" name="verticalLayout_31">
                              <item>
-                              <widget class="QLabel" name="skyScanCompassEndBearingLabel">
-                               <property name="text">
-                                <string>Antenna</string>
+                              <spacer name="verticalSpacer_10">
+                               <property name="orientation">
+                                <enum>Qt::Vertical</enum>
                                </property>
-                               <property name="alignment">
-                                <set>Qt::AlignCenter</set>
+                               <property name="sizeHint" stdset="0">
+                                <size>
+                                 <width>20</width>
+                                 <height>40</height>
+                                </size>
                                </property>
-                              </widget>
+                              </spacer>
                              </item>
                              <item>
                               <widget class="QLabel" name="skyScanCompassEndBearingDisplay">

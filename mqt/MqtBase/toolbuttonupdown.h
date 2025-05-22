@@ -26,6 +26,7 @@ public:
     void setBearingText(const int num);
     void setSouthStopType(enum southStop southStopType_);
 
+    void setValueDisplay(bool visible);
 signals:
     void valueChanged(int newValue);
 

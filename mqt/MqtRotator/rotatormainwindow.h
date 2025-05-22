@@ -440,7 +440,6 @@ private:
     void initSkyScanPresetButtons();
     void loadSkyScanPresets(QString currentAntennaName);
     void saveSkyScanPreset(SkyScanData &curData, int buttonNumber);
-    void displaySkyScanRotatorMinMaxAzimuth(int minAz, int maxAz, int antennaOffset, southStop southStopType, endStop endStopType);
     void updateSkyScanDisplay(SkyScanData &activeData);
     void setActivePresetDisplay(const QString presetName);
     void clearActivePresetDisplay();
@@ -450,6 +449,7 @@ private:
     void sendSkyScanRotatorStartBearingToLogger(int rotatorStartBearing);
     void sendSkyScanRotatorEndBearingToLogger(int rotatorEndBearing);
     void sendSkyScanPresetListLogger();
+    void updateOffsetDisplay(const int offset);
 };
 
 #endif // ROTATORMAINWINDOW_H

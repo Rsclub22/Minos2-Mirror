@@ -65,9 +65,12 @@ void skyScanPresetsFrame::presetRead(int buttonNumber)
     traceMessage(QString("preset button number %1 pressed").arg(buttonNumber));
 
 
-    if (buttonNumber < skyScanPresetButton.count())
+    if (buttonNumber >=0 && buttonNumber < skyScanPresetButton.count())
     {
-        emit recallSkyScanPreset(buttonNumber);
+        if (!skyScanPresetButton[buttonNumber]->getText().isEmpty())
+        {
+            emit recallSkyScanPreset(buttonNumber);
+        }
     }
 }
 

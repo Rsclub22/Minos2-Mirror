@@ -24,6 +24,7 @@ ToolButtonUpDown::ToolButtonUpDown(QWidget *parent)
     setBearingText(currentValue);
     valueDisplay->setAlignment(Qt::AlignCenter);
     valueDisplay->setFixedWidth(50);
+    valueDisplay->setVisible(false);
 
     // Initialize timers
     incrementTimer = new QTimer(this);
@@ -55,6 +56,12 @@ ToolButtonUpDown::ToolButtonUpDown(QWidget *parent)
 
     connect(incrementTimer, &QTimer::timeout, this, &ToolButtonUpDown::increment);
     connect(decrementTimer, &QTimer::timeout, this, &ToolButtonUpDown::decrement);
+}
+
+
+void ToolButtonUpDown::setValueDisplay(bool visible)
+{
+    valueDisplay->setVisible(visible);
 }
 
 

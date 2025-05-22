@@ -3460,19 +3460,14 @@ void RotatorMainWindow::skyScanRotateTo(int rotateToBearing)
 
 }
 
-void RotatorMainWindow::displaySkyScanRotatorMinMaxAzimuth(int minAz, int maxAz, int antennaOffset, enum southStop southStopType, enum endStop endStopType)
+
+void RotatorMainWindow::updateOffsetDisplay(const int offset)
 {
-
-    skyScanRotatorDisplayLabels skyscanDispLabels;
-    skyscanDispLabels.minAzimuthLabel = ui->skyScanRotatorDisplayMinAz;
-    skyscanDispLabels.maxAzimuthLabel =  ui->skyScanRotatorDisplayMaxAz;
-    skyscanDispLabels.antennaOffsetLabel = ui->antennaOffsetDisplay;
-    skyscanDispLabels.rotatorStopLabel = ui->rotatorStopLabel;
-    skyscanDispLabels.southStopDisplayLabel = ui->southStopDisplay;
-
-    skyScanDisplayRotatorMinAzMaxAz(minAz, maxAz, antennaOffset,  southStopType, endStopType, skyscanDispLabels);
-
+    ui->antennaOffsetDisplay->setText(QString::number(offset));
 }
+
+
+
 
 void RotatorMainWindow::displaySkyScanNextStepBearing(int bearing)
 {
@@ -3850,11 +3845,7 @@ void RotatorMainWindow::updateSkyScanDisplay(SkyScanData &activeData)
     activeData.setSouthStopType(setupAntenna->currentAntenna.southStopType);
     activeData.setEndStopType(setupAntenna->currentAntenna.endStopType);
 
-    displaySkyScanRotatorMinMaxAzimuth(activeData.getRotatorMinAzimuth(),
-                                       activeData.getRotatorMaxAzimuth(),
-                                       activeData.getAntennaOffset(),
-                                       activeData.getSouthStopType(),
-                                       activeData.getEndStopType());
+    updateOffsetDisplay(activeData.getAntennaOffset());
 
     setSkyScanStartBearingToolButtonUpDown(activeData);
     setSkyScanEndBearingToolButtonUpDown(activeData);
@@ -4168,7 +4159,15 @@ void RotatorMainWindow::skyScanPresetEdit(int buttonNumber)
 
             SkyScanData curData = skyScanPresetDataList[buttonNumber]->copy();
             curData.clearDirty();
-            curData.setEndStopType(setupAntenna->currentAntenna.endStopType);
+            // add common data
+            curData.setAntennaName(activeData.getAntennaName());
+            curData.setAntennaOffset(activeData.getAntennaOffset());
+            curData.setRotatorMinAzimuth(activeData.getRotatorMinAzimuth());
+            curData.setRotatorMaxAzimuth(activeData.getRotatorMaxAzimuth());
+            curData.setEndStopType(activeData.getEndStopType());
+            curData.setSouthStopType(activeData.getSouthStopType());
+            curData.setSkyScanStepDegreesValue(activeData.getSkyScanStepDegreesValue());
+            curData.setSkyScanPauseTimeValue(activeData.getSkyScanPauseTimeValue());
 
 
             logMessage(QString("SkyScan Preset Edit Selected = %1").arg(QString::number(buttonNumber + 1)));

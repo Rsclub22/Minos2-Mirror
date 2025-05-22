@@ -123,7 +123,8 @@ void SkyScanPresetsDialog::updateDialogDisplay(SkyScanData *curData)
         sendEndStopTypeToCompassDial();
         sendAntennaOffsetToCompassDial();
 
-        displaySkyScanRotatorMinMaxAzimuth(curData->getRotatorMinAzimuth(), curData->getRotatorMaxAzimuth(), curData->getAntennaOffset(), curData->getSouthStopType(), curData->getEndStopType());
+        //displaySkyScanRotatorMinMaxAzimuth(curData->getRotatorMinAzimuth(), curData->getRotatorMaxAzimuth(), curData->getAntennaOffset(), curData->getSouthStopType(), curData->getEndStopType());
+        updateAntennaOffsetDisplay(curData->getAntennaOffset());
 
         updateSkyScanStartBearingDisplay(curData->getSkyScanStartBearing());
         updateSkyScanEndBearingDisplay(curData->getSkyScanEndBearing());
@@ -315,23 +316,26 @@ void SkyScanPresetsDialog::calculateAntennaDisplayBearing(int rotatorBearing, QL
 
 
 
+void SkyScanPresetsDialog::updateAntennaOffsetDisplay(const int offset)
+{
+    ui->antennaOffsetDisplay->setText(QString::number(offset));
+}
 
-
-
+/*
 void SkyScanPresetsDialog::displaySkyScanRotatorMinMaxAzimuth(int minAz, int maxAz, int antennaOffset, enum southStop southStopType, enum endStop endStopType)
 {
 
     skyScanRotatorDisplayLabels displayLabels;
-    displayLabels.minAzimuthLabel = ui->skyScanRotatorDisplayMinAz;
-    displayLabels.maxAzimuthLabel = ui->skyScanRotatorDisplayMaxAz;
+    //displayLabels.minAzimuthLabel = ui->skyScanRotatorDisplayMinAz;
+    //displayLabels.maxAzimuthLabel = ui->skyScanRotatorDisplayMaxAz;
     displayLabels.antennaOffsetLabel = ui->antennaOffsetDisplay;
-    displayLabels.rotatorStopLabel = ui->rotatorStopLabel;
-    displayLabels.southStopDisplayLabel = ui->southStopDisplay;
+    //displayLabels.rotatorStopLabel = ui->rotatorStopLabel;
+    //displayLabels.southStopDisplayLabel = ui->southStopDisplay;
 
-    skyScanDisplayRotatorMinAzMaxAz(minAz, maxAz, antennaOffset,  southStopType, endStopType, displayLabels);
+    //skyScanDisplayRotatorMinAzMaxAz(minAz, maxAz, antennaOffset,  southStopType, endStopType, displayLabels);
 
 }
-
+*/
 
 void SkyScanPresetsDialog::accept()
 {

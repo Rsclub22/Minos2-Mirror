@@ -80,12 +80,13 @@ private:
     void updateSkyScanStartBearingDisplay(int bearing);
     void updateSkyScanEndBearingDisplay(int bearing);
     void sendAntennaOffsetToCompassDial();
-    void displaySkyScanRotatorMinMaxAzimuth(int minAz, int maxAz, int antennaOffset, southStop southStopType, endStop endStopType);
+    //void displaySkyScanRotatorMinMaxAzimuth(int minAz, int maxAz, int antennaOffset, southStop southStopType, endStop endStopType);
     void done(int result) override;
     void accept() override;
     void clearSkyScanStartEndBearings();
 
     void updateDialogDisplay(SkyScanData *curData);
+    void updateAntennaOffsetDisplay(const int offset);
 };
 
 #endif // SKYSCANPRESETSDIALOG_H

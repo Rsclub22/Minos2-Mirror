@@ -318,43 +318,5 @@ bool isWesternBearing(int bearing)
 
 
 
-void skyScanDisplayRotatorMinAzMaxAz(int minAz, int maxAz, int antennaOffset, enum southStop southStopType, enum endStop endStopType, skyScanRotatorDisplayLabels displayLabels)
-{
-    Q_UNUSED(endStopType)
-
-    QString minAzStr = QString::number(minAz).rightJustified(3, '0'); //convertBearingToString(minAz);
-    QString maxAzStr = QString::number(maxAz).rightJustified(3, '0'); //convertBearingToString(maxAz);
-
-    displayLabels.minAzimuthLabel->setText(minAzStr);
-    displayLabels.maxAzimuthLabel->setText(maxAzStr);
-    displayLabels.antennaOffsetLabel->setText(QString::number(antennaOffset));
-
-    QString sStopDisplay = "South ";
-
-    if (southStopType == S_STOPOFF)
-    {
-        displayLabels.southStopDisplayLabel->setVisible(false);
-        displayLabels.rotatorStopLabel->setVisible(false);
-
-
-    }
-    else if (southStopType == S_STOPINV)
-    {
-        sStopDisplay.append("180 - 180");
-        displayLabels.southStopDisplayLabel->setText(sStopDisplay);
-        displayLabels.southStopDisplayLabel->setVisible(true);
-        displayLabels.rotatorStopLabel->setVisible(true);
-
-    }
-    else if (southStopType == S_STOP_COMPASS_SENSOR)
-    {
-
-        sStopDisplay.append("-180 - 180 Compass Sensor");
-        displayLabels.southStopDisplayLabel->setText(sStopDisplay);
-        displayLabels.southStopDisplayLabel->setVisible(true);
-        displayLabels.rotatorStopLabel->setVisible(true);
-    }
-
-}
 
 
