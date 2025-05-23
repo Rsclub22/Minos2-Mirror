@@ -347,6 +347,8 @@ private slots:
 
 
     void onSetSkyScanPresetButtonFromLogger(int buttonNumber);
+    void onSkyScanStepDegreeSpinBoxChanged();
+    void onSkyScanPauseTimeSpinBoxChanged();
 private:
     void rotateTo(int bearing);
     //int northCalcTarget(int targetBearing);

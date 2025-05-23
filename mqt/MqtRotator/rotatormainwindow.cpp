@@ -3864,6 +3864,15 @@ void RotatorMainWindow::updateSkyScanDisplay(SkyScanData &activeData)
 
 }
 
+void RotatorMainWindow::onSkyScanStepDegreeSpinBoxChanged() // slot
+{
+    ui->skyScanStepDegreeSpinBox->findChild<QLineEdit*>()->deselect();
+}
+
+void RotatorMainWindow::onSkyScanPauseTimeSpinBoxChanged() // slot
+{
+    ui->skyScanPauseTimeSpinBox->findChild<QLineEdit*>()->deselect();
+}
 
 void RotatorMainWindow::setRotatorMainWindowTabVisible(int tabNum, bool state)
 {
