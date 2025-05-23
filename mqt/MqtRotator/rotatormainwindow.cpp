@@ -3031,6 +3031,11 @@ void RotatorMainWindow::setPresetsGroupBoxEnabled(bool enabled)
     ui->presetsGroupBox->setEnabled(enabled);
 }
 
+void RotatorMainWindow::setSkyScanPresetsGroupBoxEnabled(bool enabled)
+{
+    ui->skyScanPresetGroupBox->setEnabled(enabled);
+}
+
 void RotatorMainWindow::setSkyScanGroupBoxEnabled(bool enabled)
 {
     // this also sets child components enabled/disabled
@@ -3263,6 +3268,7 @@ void RotatorMainWindow::skyScanStartPbPressed()
 
         setTargetTabEnabled(false);
         setPresetsGroupBoxEnabled(false);
+        setSkyScanPresetsGroupBoxEnabled(false);
         setSkyScanSpinBoxesEnabled(false);
         setSkyScanToolButtonUpDownEnabled(false);
 
@@ -3405,6 +3411,7 @@ void RotatorMainWindow::stopSkyScan()
     skyScanActive = false;
     setTargetTabEnabled(true);
     setPresetsGroupBoxEnabled(true);
+    setSkyScanPresetsGroupBoxEnabled(true);
     setSkyScanSpinBoxesEnabled(true);
     setSkyScanToolButtonUpDownEnabled(true);
 }

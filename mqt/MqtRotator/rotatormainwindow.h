@@ -452,6 +452,7 @@ private:
     void sendSkyScanRotatorEndBearingToLogger(int rotatorEndBearing);
     void sendSkyScanPresetListLogger();
     void updateOffsetDisplay(const int offset);
+    void setSkyScanPresetsGroupBoxEnabled(bool enabled);
 };
 
 #endif // ROTATORMAINWINDOW_H
