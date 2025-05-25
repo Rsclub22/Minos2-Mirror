@@ -1412,6 +1412,8 @@ int RigControlMainWindow::openRigCtldRadio(bool localRigCtld)
         int retCode = Rig_OK;
         showStatusMessage(tr("Attempting to communicate with radio via rigctld - %1").arg(currentRadio.rigModel));
         retCode = radio->getFrequency(VFO::CURRENT_VFO, rigStateDetails->rfrequency);
+        rigStateDetails->rfrequency = rigStateDetails->rfrequency.toMark(
+            rigcommon::convertModeToQString(rigStateDetails->rmode));
 
 
         if (retCode < Rig_OK)
@@ -1632,6 +1634,8 @@ int RigControlMainWindow::openRadio()
         showStatusMessage(tr("Attempting to communicate with radio - %1").arg(currentRadio.radioName));
         //delay(1);
         retCode = radio->getFrequency(VFO::CURRENT_VFO, rigStateDetails->rfrequency);
+        rigStateDetails->rfrequency = rigStateDetails->rfrequency.toMark(
+            rigcommon::convertModeToQString(rigStateDetails->rmode));
 
         if (retCode < Rig_OK)
         {
@@ -2210,29 +2214,12 @@ void RigControlMainWindow::setFreq(Frequency freq, VFO vfo)
         }
     }
 
-
     Frequency f(freq);
-
 
     if ((cb != rigStateDetails->selTvBand) && currentRadio.transVertEnable && (currentRadio.transVertSettings.count() != 0))
     {
-
         logMessage(QString("SetFreq: Look for transverter for band %1").arg(cb));
         selectTransverter(cb, f);
-
-
-        /*
-        rigStateDetails->selTransverterNum = NO_TRANSVERTER_NUM;
-        if (findTransverter(rigStateDetails->selTransverterNum, rigStateDetails->selTvBand, cb))
-        {
-            getAndSendTransVertSwNum(rigStateDetails->selTransverterNum);
-            // now calculate the freq
-            f = f - setupRadio->currentRadio.transVertSettings[rigStateDetails->selTransverterNum]->transVertOffset;
-            logMessage(QString("SetFreq: Transvert Enabled Freq = %1").arg(f.traceStr()));
-
-        }
-        */
-
     }
     else if ((cb == rigStateDetails->selTvBand) && currentRadio.transVertEnable && (currentRadio.transVertSettings.count() != 0))
     {
@@ -2247,8 +2234,6 @@ void RigControlMainWindow::setFreq(Frequency freq, VFO vfo)
 
         if (radio)
         {
-            rigStateDetails->rfrequency = rigStateDetails->rfrequency.toMark(
-                rigcommon::convertModeToQString(rigStateDetails->rmode));
             Frequency mf = f.toCarrier(rigcommon::convertModeToQString(rigStateDetails->rmode));
 
            retCode = radio->setFrequency(mf, vfo);
