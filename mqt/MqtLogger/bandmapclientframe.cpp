@@ -33,7 +33,7 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
 
     ui->setupUi(this);
 
-    ui->mouseInFrameLabel->setVisible(false);
+    //ui->mouseInFrameLabel->setVisible(false);
     clusterStatusIndicatorToggle(false);
     radioStatusIndicatorToggle(false);
     ui->radioStatusMsg->clear();
@@ -1727,8 +1727,8 @@ void BandmapClientFrame::setHoldUpdateFlag(bool state)
     }
     else
     {
-        ui->mouseInFrameLabel->setVisible(false);
-        ui->mouseInFrameLabel->setText(clText);
+        //ui->mouseInFrameLabel->setVisible(false);
+        ui->mouseInFrameLabel->setText(".");
         ui->mouseInFrameLabel->setToolTip(clText);  // not really needed, as if we hover we must be in frame
     }
 }
@@ -2084,7 +2084,6 @@ void BandmapClientFrame::keyPressEvent(QKeyEvent *event)
     }
 
     QWidget::keyPressEvent(event);
-
 }
 
 void BandmapClientFrame::on_zoomSpinner_valueChanged(int z)
@@ -2095,3 +2094,18 @@ void BandmapClientFrame::on_zoomSpinner_valueChanged(int z)
     }
 }
 
+void BandmapClientFrame::on_searchUnworkedLF_clicked()
+{
+    trace(QString("BandmapClientFrame::on_searchUnworkedLF_clicked()"));
+    purgeSpots();
+    bool locs = ui->locatorscb->isChecked();
+    bandmapView-> onNextUnworkedSpot(false, locs);
+}
+
+void BandmapClientFrame::on_searchUnworkedHF_clicked()
+{
+    trace(QString("BandmapClientFrame::on_searchUnworkedHF_clicked()"));
+    purgeSpots();
+    bool locs = ui->locatorscb->isChecked();
+    bandmapView-> onNextUnworkedSpot(true, locs);
+}

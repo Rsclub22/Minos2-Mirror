@@ -25,7 +25,6 @@ int BandmapData::rowCount() const
     return bandmapSpots.count();
 }
 
-// NOTE! This needs modification of the for loop and rowData to trully support multiple rows!!
 void BandmapData::sortBandmapData()
 {
     bool invertBandmap = false;

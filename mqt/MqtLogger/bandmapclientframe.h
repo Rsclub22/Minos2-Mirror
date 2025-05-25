@@ -271,6 +271,10 @@ private slots:
      void on_bandmapLimitsChanged();
      void on_doSplitterChanges(BaseContestLog *b);
      void on_bmSplitter_splitterMoved(int, int);
+
+     void on_searchUnworkedHF_clicked();
+     void on_searchUnworkedLF_clicked();
+
  public slots:
      void on_AfterLogContact(BaseContestLog *c, QSharedPointer<BaseContact>);
 };

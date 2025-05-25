@@ -77,6 +77,7 @@ public:
     void setDialRadioMode(QString mode);
     bool getSuppressUpdate() const;
     void setSuppressUpdate(bool value);
+    void onNextUnworkedSpot(bool nextFreqUpDown, bool nextMult);
 
 signals:
 
@@ -127,7 +128,7 @@ private:
 
     QSharedPointer<ClusterSpotData> selectedSpot;
 
-    int selectedSpotViewRowNum;
+    int selectedSpotViewRowNum = NO_SELECTED_ROWNUM;
 
     BandmapClientFilterSettings* filterSettings;
 
@@ -159,6 +160,11 @@ private:
     bool readLessGreaterThanDistanceFlag();
     void doBandmapUpdate();
     bool filterAcceptsRow(int sourceRow) const;
+    int findNextUnworkedMarkerHF(int curSpotViewNum);
+    int findNextUnworkedMarkerLF(int curSpotViewNum);
+    int findNextNonWorkedLocatorHF(int curSpotViewNum);
+    int findNextNonWorkedLocatorLF(int curSpotViewNum);
+    void traceTables();
 };
 
 #endif // BANDMAPVIEW_H
