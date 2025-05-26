@@ -433,12 +433,12 @@ when user selected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="1240"/>
+        <location filename="../kstmainwindow.cpp" line="1249"/>
         <source></source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="1656"/>
+        <location filename="../kstmainwindow.cpp" line="1665"/>
         <source>Message updates paused</source>
         <translation type="unfinished"></translation>
     </message>
@@ -459,47 +459,47 @@ when user selected</source>
 <context>
     <name>KstCallGridModel</name>
     <message>
-        <location filename="../kstcallgridmodel.cpp" line="361"/>
+        <location filename="../kstcallgridmodel.cpp" line="363"/>
         <source>Chat</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstcallgridmodel.cpp" line="364"/>
+        <location filename="../kstcallgridmodel.cpp" line="366"/>
         <source>Callsign</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstcallgridmodel.cpp" line="367"/>
+        <location filename="../kstcallgridmodel.cpp" line="369"/>
         <source>Loc</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstcallgridmodel.cpp" line="370"/>
+        <location filename="../kstcallgridmodel.cpp" line="372"/>
         <source>Dist</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstcallgridmodel.cpp" line="373"/>
+        <location filename="../kstcallgridmodel.cpp" line="375"/>
         <source>Brg</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstcallgridmodel.cpp" line="376"/>
+        <location filename="../kstcallgridmodel.cpp" line="378"/>
         <source>AS</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstcallgridmodel.cpp" line="379"/>
+        <location filename="../kstcallgridmodel.cpp" line="381"/>
         <source>Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstcallgridmodel.cpp" line="382"/>
+        <location filename="../kstcallgridmodel.cpp" line="384"/>
         <source>Prefix</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstcallgridmodel.cpp" line="385"/>
+        <location filename="../kstcallgridmodel.cpp" line="387"/>
         <source>Country</source>
         <translation type="unfinished"></translation>
     </message>

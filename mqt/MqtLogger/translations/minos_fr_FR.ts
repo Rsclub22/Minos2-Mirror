@@ -13,9 +13,9 @@
     <name>BandmapClientFrame</name>
     <message>
         <location filename="../bandmapclientframe.ui" line="32"/>
-        <location filename="../bandmapclientframe.cpp" line="576"/>
-        <location filename="../bandmapclientframe.cpp" line="601"/>
-        <location filename="../bandmapclientframe.cpp" line="621"/>
+        <location filename="../bandmapclientframe.cpp" line="582"/>
+        <location filename="../bandmapclientframe.cpp" line="608"/>
+        <location filename="../bandmapclientframe.cpp" line="628"/>
         <source>Bandmap</source>
         <translatorcomment>Bandmap???</translatorcomment>
         <translation>Carte des bandes</translation>
@@ -39,6 +39,21 @@
         <location filename="../bandmapclientframe.ui" line="202"/>
         <source>Mode:</source>
         <translation>Mode:</translation>
+    </message>
+    <message>
+        <location filename="../bandmapclientframe.ui" line="343"/>
+        <source>Search Unworked HF</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../bandmapclientframe.ui" line="353"/>
+        <source>Search Unworked LF</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../bandmapclientframe.ui" line="362"/>
+        <source>Search Locators</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../bandmapclientframe.ui" line="170"/>
@@ -144,52 +159,57 @@
         <translation>Déplacer le spot sur la fréquence actuelle</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="577"/>
+        <location filename="../bandmapclientframe.cpp" line="583"/>
         <source>Please confirm you want to delete this spot - %1?</source>
         <translation>Veuillez confirmer que vous souhaitez supprimer ce Spot - %1?</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="602"/>
+        <location filename="../bandmapclientframe.cpp" line="588"/>
+        <source>clear spot selected for callsign %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../bandmapclientframe.cpp" line="609"/>
         <source>Please confirm you want to delete all the spots in the bandmap?</source>
         <translation>Voulez-vous vraiment supprimer tous les Spots de Bandmap?</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="622"/>
+        <location filename="../bandmapclientframe.cpp" line="629"/>
         <source>Please confirm you want to delete all the cluster spots in the bandmap?</source>
         <translation>Voulez-vous vraiment supprimer tous les Spots de cluster dans le Bandmap?</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="692"/>
+        <location filename="../bandmapclientframe.cpp" line="705"/>
         <source>Filter %1</source>
         <translation>Filtre %1</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1637"/>
+        <location filename="../bandmapclientframe.cpp" line="1650"/>
         <source>Bandmap Spot Filters</source>
         <translation>Bandmap filtres de spot</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1712"/>
+        <location filename="../bandmapclientframe.cpp" line="1725"/>
         <source>Mouse in frame, updates paused</source>
         <translation>Souris dans le cadre, mises à jour suspendues</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1440"/>
+        <location filename="../bandmapclientframe.cpp" line="1453"/>
         <source>Cluster Server Not Running</source>
         <translation>Le Serveur du Cluster ne fonctionne pas</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1473"/>
+        <location filename="../bandmapclientframe.cpp" line="1486"/>
         <source>Connected</source>
         <translation>Connecté</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1483"/>
+        <location filename="../bandmapclientframe.cpp" line="1496"/>
         <source>Disconnected</source>
         <translation>Déconnecté</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1595"/>
+        <location filename="../bandmapclientframe.cpp" line="1608"/>
         <source>Freq out of band</source>
         <translation>Fréquence hors bande</translation>
     </message>
@@ -197,34 +217,34 @@
 <context>
     <name>BandmapView</name>
     <message>
-        <location filename="../bandmapview.cpp" line="1289"/>
+        <location filename="../bandmapview.cpp" line="1035"/>
         <source>%1%2CQ Frequency @ .%3%4%5</source>
         <translation>%1%2CQ Frequency @ .%3%4%5</translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1323"/>
+        <location filename="../bandmapview.cpp" line="1069"/>
         <source>New</source>
         <translation>Nouveau</translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1450"/>
+        <location filename="../bandmapview.cpp" line="1196"/>
         <source>CQ Frequency = %1
 The mode is %2</source>
         <translation>La fréquence CQ = %1
 Le mode calculé est %2</translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1479"/>
+        <location filename="../bandmapview.cpp" line="1225"/>
         <source>The computed mode is</source>
         <translation>Mode calculé</translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1482"/>
+        <location filename="../bandmapview.cpp" line="1228"/>
         <source>The mode is</source>
         <translation>Mode</translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1489"/>
+        <location filename="../bandmapview.cpp" line="1235"/>
         <source>%1 - %2, %3, %4, %5 [%6 %7 @ %8] 
 %9 %10
 %11
