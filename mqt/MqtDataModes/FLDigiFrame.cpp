@@ -114,6 +114,7 @@ void FLDigiFrame::onRigModeFreq(QString m, Frequency f)
     QVariantList args;
     if (!f.isClear())
     {
+        f = f.toCarrier(m);
         args << f.str();
 
         rpcClient->call("rig.set_frequency", args,

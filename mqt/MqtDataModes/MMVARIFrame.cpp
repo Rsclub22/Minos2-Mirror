@@ -268,6 +268,8 @@ void MMVARIFrame::onSendCharacters(QString data, int markfreq)
 
 void MMVARIFrame::onRigModeFreq(QString mode, Frequency f)
 {
+    f = f.toCarrier(mode);
+
     mmview->setDwFreqHz(f.toInt64());  // tranciever frequency
     sendMode(mode);
 
