@@ -44,6 +44,9 @@ public:
 
     static const QStringList enginesList;
 
+    int getRttyOffset();
+    int getPSKOffset();
+
     void selectEngine(QString name);
 
     void selectMMVARI(QString name);

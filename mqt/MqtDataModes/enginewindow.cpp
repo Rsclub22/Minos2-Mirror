@@ -121,6 +121,18 @@ EngineWindow::~EngineWindow()
 {
     delete ui;
 }
+
+int EngineWindow::getRttyOffset()
+{
+    int rttyOffset = rigCache.getDetails(getSelectedRadio()).getRttyOffset().getValue();
+    return rttyOffset;
+}
+
+int EngineWindow::getPSKOffset()
+{
+    int pskOffset = rigCache.getDetails(getSelectedRadio()).getPskOffset().getValue();
+    return pskOffset;
+}
 void EngineWindow::startEngine()
 {
     if (engineName.contains(mmvari))
@@ -286,11 +298,12 @@ void EngineWindow::on_notify(AnalysePubSubNotify an, const QString /*from*/ )
 
             if (rttyOffset != rttyOffset1)
             {
+                emit rigModeFreq(rigMode, rigFreq);
 
             }
-            if (pskOffset != pskOffset1)
+            else if (pskOffset != pskOffset1)
             {
-
+                emit rigModeFreq(rigMode, rigFreq);
             }
         }
         else if ( an.getCategory() == rpcConstants::rigControlCategory && an.getKey() == rpcConstants::rigControlRadioList )

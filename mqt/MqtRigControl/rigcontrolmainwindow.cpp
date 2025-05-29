@@ -1415,16 +1415,12 @@ int RigControlMainWindow::openRigCtldRadio(bool localRigCtld)
 
         if (rigStateDetails->RTTYModeFlag)
         {
-            rigStateDetails->rfrequency = rigStateDetails->rfrequency.toMark(
-                RY);
+            rigStateDetails->rfrequency = rigStateDetails->rfrequency - Frequency(currentRadio.rttyOffset);
         }
         else if (rigStateDetails->PSKModeFlag)
         {
-            rigStateDetails->rfrequency = rigStateDetails->rfrequency.toMark(
-                PSK);
+            rigStateDetails->rfrequency = rigStateDetails->rfrequency + Frequency(currentRadio.pskOffset);
         }
-
-
         if (retCode < Rig_OK)
         {
             logMessage(QString("openRigctldRadio: Test Communication - Get Freq error, code = %1").arg(QString::number(retCode)));
@@ -1646,13 +1642,11 @@ int RigControlMainWindow::openRadio()
 
         if (rigStateDetails->RTTYModeFlag)
         {
-            rigStateDetails->rfrequency = rigStateDetails->rfrequency.toMark(
-                RY);
+            rigStateDetails->rfrequency = rigStateDetails->rfrequency - Frequency(currentRadio.rttyOffset);
         }
         else if (rigStateDetails->PSKModeFlag)
         {
-            rigStateDetails->rfrequency = rigStateDetails->rfrequency.toMark(
-                PSK);
+            rigStateDetails->rfrequency = rigStateDetails->rfrequency + Frequency(currentRadio.pskOffset);
         }
         if (retCode < Rig_OK)
         {
@@ -2254,11 +2248,11 @@ void RigControlMainWindow::setFreq(Frequency freq, VFO vfo)
             Frequency mf = f;
             if (rigStateDetails->RTTYModeFlag)
             {
-                mf = f.toCarrier(RY);
+                mf = f + Frequency(currentRadio.rttyOffset);
             }
             else if (rigStateDetails->PSKModeFlag)
             {
-                mf = f.toCarrier(PSK);
+                mf = f - Frequency(currentRadio.pskOffset);
             }
 
            retCode = radio->setFrequency(mf, vfo);
@@ -2493,13 +2487,11 @@ int RigControlMainWindow::getRxFreq(VFO vfo)
 
         if (rigStateDetails->RTTYModeFlag)
         {
-            rigStateDetails->rfrequency = rigStateDetails->rfrequency.toMark(
-               RY);
+            rigStateDetails->rfrequency = rigStateDetails->rfrequency - Frequency(currentRadio.rttyOffset);
         }
         else if (rigStateDetails->PSKModeFlag)
         {
-            rigStateDetails->rfrequency = rigStateDetails->rfrequency.toMark(
-                PSK);
+            rigStateDetails->rfrequency = rigStateDetails->rfrequency + Frequency(currentRadio.pskOffset);
         }
 
         logMessage(QString("getRxFreq - freq = %1 mode = %2").arg(rigStateDetails->rfrequency.convertFreqStrDisp(), rigcommon::convertModeToQString(rigStateDetails->rmode)));

@@ -64,9 +64,6 @@ public:
     QString convertFreqStrDispSingle();
     QString convertFreqStrDispSingleNoTrailZero();
     QString removeTrailingZeroes(QString sfreq);
-
-    Frequency toMark(const QString &mode) const;
-    Frequency toCarrier(const QString &mode) const;
 };
 
 class ShortFreq

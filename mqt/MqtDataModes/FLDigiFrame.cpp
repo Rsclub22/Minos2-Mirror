@@ -114,7 +114,17 @@ void FLDigiFrame::onRigModeFreq(QString m, Frequency f)
     QVariantList args;
     if (!f.isClear())
     {
-        f = f.toCarrier(m);
+        if (m == RY)
+        {
+            Frequency rttyOffset = engineWindow->getRttyOffset();
+            f = f + Frequency(rttyOffset);
+        }
+        else if (m == PSK)
+        {
+            Frequency pskOffset = engineWindow->getPSKOffset();
+            f = f + Frequency(pskOffset);
+        }
+
         args << f.str();
 
         rpcClient->call("rig.set_frequency", args,
