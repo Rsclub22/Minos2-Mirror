@@ -296,14 +296,10 @@ void EngineWindow::on_notify(AnalysePubSubNotify an, const QString /*from*/ )
             int rttyOffset1 = rigCache.getDetails(getSelectedRadio()).getRttyOffset().getValue();
             int pskOffset1 = rigCache.getDetails(getSelectedRadio()).getPskOffset().getValue();
 
-            if (rttyOffset != rttyOffset1)
+            if (rttyOffset != rttyOffset1 ||  pskOffset != pskOffset1)
             {
                 emit rigModeFreq(rigMode, rigFreq);
 
-            }
-            else if (pskOffset != pskOffset1)
-            {
-                emit rigModeFreq(rigMode, rigFreq);
             }
         }
         else if ( an.getCategory() == rpcConstants::rigControlCategory && an.getKey() == rpcConstants::rigControlRadioList )
@@ -314,10 +310,6 @@ void EngineWindow::on_notify(AnalysePubSubNotify an, const QString /*from*/ )
 
             QStringList cb = populateRig();
             comboSetUniqueNames(cb, ui->mainRigComboBox);
-
-//            ui->mainRigComboBox->clear();
-//            ui->mainRigComboBox->addItems(cb);
-//            ui->mainRigComboBox->setCurrentText(mainRig.toString());
         }
 
         RigState &selState = rigCache.getState(mainRig);

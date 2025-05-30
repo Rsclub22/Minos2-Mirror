@@ -271,14 +271,17 @@ void MMVARIFrame::onRigModeFreq(QString mode, Frequency f)
     if (mode == RY)
     {
         Frequency rttyOffset = engineWindow->getRttyOffset();
-        f = f + Frequency(rttyOffset);
+        f = f + Frequency(rttyOffset);  // back to Rig frequency
     }
     else if (mode == PSK)
     {
         Frequency pskOffset = engineWindow->getPSKOffset();
-        f = f + Frequency(pskOffset);
+        f = f - Frequency(pskOffset);
     }
     mmview->setDwFreqHz(f.toInt64());  // tranciever frequency
+    mmvari->setWTxCarrier(f + Frequency(RttyMSGap/2));
+    mmvari->setWRxCarrier(0, f + Frequency(RttyMSGap/2));
+
     sendMode(mode);
 
 }

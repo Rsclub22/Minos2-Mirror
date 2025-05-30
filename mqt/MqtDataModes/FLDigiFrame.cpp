@@ -116,12 +116,12 @@ void FLDigiFrame::onRigModeFreq(QString m, Frequency f)
     {
         if (m == RY)
         {
-            Frequency rttyOffset = engineWindow->getRttyOffset();
-            f = f + Frequency(rttyOffset);
+            int rttyOffset = engineWindow->getRttyOffset();
+            f = f - Frequency(rttyOffset);
         }
         else if (m == PSK)
         {
-            Frequency pskOffset = engineWindow->getPSKOffset();
+            int pskOffset = engineWindow->getPSKOffset();
             f = f + Frequency(pskOffset);
         }
 
