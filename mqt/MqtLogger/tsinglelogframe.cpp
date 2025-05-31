@@ -121,6 +121,7 @@ void TSingleLogFrame::buildFrame(int slotNo)
     connect(FKHRigControlFrame, &RigControlFrame::ritStatus, this, &TSingleLogFrame::sendRadioRitStatus);
     connect(FKHRigControlFrame, &RigControlFrame::sendModeToControl, this, &TSingleLogFrame::sendRadioMode);
     connect(GJVQSOLogFrame, &QSOLogFrame::sendModeControl, this , &TSingleLogFrame::sendRadioMode);
+    connect(dmButtonFrame, &DMButtonFrame::sendFreqControl, this, &TSingleLogFrame::sendRadioFreq);
 
     // Rotator updates
     // From rotator controller
@@ -1833,6 +1834,7 @@ void TSingleLogFrame::updateFreq(Frequency f)
     runButtonsFrame->setFreq(f);
     GJVQSOLogFrame->setFreq(f);
     bandmapControlFrame->setFreq(f);
+    dmButtonFrame->setFreq(f);
 
     MinosLoggerEvents::SendRigFreqChanged(f, contest);
 }

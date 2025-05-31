@@ -15,6 +15,7 @@
 #include "MinosParameters.h"
 
 #include "MinosRPC.h"
+#include "SendRPCDM.h"
 #include "fileutils.h"
 #include "tlogcontainer.h"
 #include "tsinglelogframe.h"
@@ -80,6 +81,10 @@ DMButtonFrame::~DMButtonFrame()
 {
     delete ui;
 }
+void DMButtonFrame::setFreq(Frequency freq)
+{
+    curFreq = freq;
+}
 void DMButtonFrame::DMMess(AnalysePubSubNotify an)
 {
     if (an.getKey() == rpcConstants::DMSender)
@@ -97,9 +102,27 @@ void DMButtonFrame::DMMess(AnalysePubSubNotify an)
 
 void DMButtonFrame::onModeChange(QString mode)
 {
-    curMode = mode;
-    MinosRPC *rpc = MinosRPC::getMinosRPC();
-    rpc->publish( rpcConstants::DMCat, rpcConstants::DMMode, mode, psPublished );
+    TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
+    if (tslf)
+    {
+        curMode = mode;
+        MinosRPC *rpc = MinosRPC::getMinosRPC();
+        rpc->publish( rpcConstants::DMCat, rpcConstants::DMMode, mode, psPublished );
+
+        int rttyOffset = LogContainer->sendDM->getRigDetails(tslf->GJVQSOLogFrame->getRadioName()).getRttyOffset().getValue();
+        int pskOffset = LogContainer->sendDM->getRigDetails(tslf->GJVQSOLogFrame->getRadioName()).getPskOffset().getValue();
+        Frequency f = curFreq;
+        if (curMode == RY && mode == PSK)
+        {
+            f = curFreq - Frequency(rttyOffset) - Frequency(pskOffset);
+        }
+        if (curMode == PSK && mode == RY)
+        {
+            f = curFreq + Frequency(rttyOffset) + Frequency(pskOffset);
+        }
+        emit sendFreqControl(f);
+
+    }
 }
 void DMButtonFrame::fkeyFileChanged()
 {
