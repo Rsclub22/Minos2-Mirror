@@ -231,8 +231,8 @@ QString RigControlCwMessageKeyer::parseMacrosInMessage(TSingleLogFrame *tslf, QS
     {
         QChar c = mess[i];
 
-        // not supporting these chars as they can conflict with some radios values for special characters
-        /*if (c == '*')
+
+        if (c == '*')
         {
             txMess += ct->mycall.getFullCall();
         }
@@ -244,14 +244,12 @@ QString RigControlCwMessageKeyer::parseMacrosInMessage(TSingleLogFrame *tslf, QS
         {
             txMess += call;
         }
-        else*/
-
-        if (c == '{')
+        else if (c == '{')
         {
             int lb = mess.indexOf('}', i);
             if (lb)
             {
-                QString macro = mess.mid(i + 1, lb - i - 1).toUpper();
+                QString macro = mess.mid(i + 1, lb - i - 1).toUpper().trimmed();
                 i = lb;
                 if (macro == "MYCALL")
                 {
