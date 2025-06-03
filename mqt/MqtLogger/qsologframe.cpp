@@ -2459,6 +2459,16 @@ void QSOLogFrame::setMode(QString m)
     }
 
     ui->MGMSubModeFrame->setVisible(ui->ModeComboBoxGJV->currentText() == MGM);
+
+    // the markOffset we had remembered will be wrong...
+    if (mode ==RY)
+    {
+        markOffset = LogContainer->sendDM->getRigDetails(getRadioName()).getRttyOffset().getValue();
+    }
+    else if (mode == PSK)
+    {
+        markOffset = LogContainer->sendDM->getRigDetails(getRadioName()).getPskOffset().getValue();
+    }
 }
 //---------------------------------------------------------------------------
 void QSOLogFrame::setFreq(Frequency f)
@@ -2881,7 +2891,15 @@ void QSOLogFrame::onModeButtonClickeds(const QString & m)
 
     }
     MinosLoggerEvents::SendModeChange(mode);
-
+    // the markOffset we had remembered will be wrong...
+    if (mode ==RY)
+    {
+        markOffset = LogContainer->sendDM->getRigDetails(getRadioName()).getRttyOffset().getValue();
+    }
+    else if (mode == PSK)
+    {
+        markOffset = LogContainer->sendDM->getRigDetails(getRadioName()).getPskOffset().getValue();
+    }
     QString myOldMode = ui->ModeComboBoxGJV->currentText();
     ui->ModeComboBoxGJV->setCurrentText(ui->ModeButton->text());
 
@@ -3003,7 +3021,7 @@ void QSOLogFrame::logScreenEntry( )
    screenContact.op2 = ct->currentOp2.getValue();
 
    lct->copyFromArg( screenContact );
-
+//xxxxxxxxxxxxx we want to record the mark frequency
    // Correct RTTY/PSK rig freq to the mark frequency
    if (screenContact.mode.getValue().compare( RY, Qt::CaseInsensitive ) == 0)
    {
@@ -3606,6 +3624,15 @@ void QSOLogFrame::on_ModeComboBoxGJV_activated(int index)
             emit sendModeControl(mode);
         }
         MinosLoggerEvents::SendModeChange(mode);    // this will e.g. set the RTTY/PSK engines correctly
+        // the markOffset we had remembered will be wrong...
+        if (mode ==RY)
+        {
+            markOffset = LogContainer->sendDM->getRigDetails(getRadioName()).getRttyOffset().getValue();
+        }
+        else if (mode == PSK)
+        {
+            markOffset = LogContainer->sendDM->getRigDetails(getRadioName()).getPskOffset().getValue();
+        }
     }
 
     if (cmode == hamlibData::CW || cmode == MGM || cmode == RY || cmode == PSK)

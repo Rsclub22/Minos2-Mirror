@@ -109,19 +109,7 @@ void DMButtonFrame::onModeChange(QString mode)
         MinosRPC *rpc = MinosRPC::getMinosRPC();
         rpc->publish( rpcConstants::DMCat, rpcConstants::DMMode, mode, psPublished );
 
-        int rttyOffset = LogContainer->sendDM->getRigDetails(tslf->GJVQSOLogFrame->getRadioName()).getRttyOffset().getValue();
-        int pskOffset = LogContainer->sendDM->getRigDetails(tslf->GJVQSOLogFrame->getRadioName()).getPskOffset().getValue();
-        Frequency f = curFreq;
-        if (curMode == RY && mode == PSK)
-        {
-            f = curFreq - Frequency(rttyOffset) - Frequency(pskOffset);
-        }
-        if (curMode == PSK && mode == RY)
-        {
-            f = curFreq + Frequency(rttyOffset) + Frequency(pskOffset);
-        }
-        emit sendFreqControl(f);
-
+        emit sendFreqControl(curFreq);
     }
 }
 void DMButtonFrame::fkeyFileChanged()

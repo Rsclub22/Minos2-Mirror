@@ -277,6 +277,7 @@ void MMVARIFrame::onRigModeFreq(QString mode, Frequency f)
 
     if (!f.isClear())
     {
+        // MMVARI wants the genuine rig frequency
         if (mode == RY)
         {
             int rttyOffset = engineWindow->getRttyOffset();

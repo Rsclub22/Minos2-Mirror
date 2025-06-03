@@ -1248,41 +1248,48 @@ void RigControlMainWindow::refreshRadio()
 
 }
 
-
-
-int RigControlMainWindow::openRigCtldRadio(bool localRigCtld)
+void RigControlMainWindow::getFreqFromRadio(int &retCode)
 {
+    retCode = radio->getFrequency(VFO::CURRENT_VFO, rigStateDetails->rfrequency);
+    if (rigStateDetails->RTTYModeFlag)
+    {
+        rigStateDetails->rfrequency =
+            rigStateDetails->rfrequency - Frequency(currentRadio.rttyOffset);
+    }
+    else if (rigStateDetails->PSKModeFlag)
+    {
+        rigStateDetails->rfrequency =
+            rigStateDetails->rfrequency + Frequency(currentRadio.pskOffset);
+    }
+}
+int RigControlMainWindow::openRigCtldRadio(bool localRigCtld) {
     int retCode = 0;
     radioCommsOK = false;
 
-    if (localRigCtld)
-    {
+    if (localRigCtld) {
 
         trace(QString("Starting Local rigctld"));
         // check rigctld file exists
         QString filename = getRigCtldExePath() + getRigCtldExeName();
 
-        if (!FileExecutable(filename))
-        {
+        if (!FileExecutable(filename)) {
             trace(QString("openRigCtld: rigctld %1 is not executable").arg(filename));
             return RIGCTLD_EXE_MISSING;
         }
 
         trace(QString("openRigCtld: found rigctld = %1").arg(filename));
 
-        if (rigCtldProcess->state() == QProcess::Running)
-        {
+        if (rigCtldProcess->state() == QProcess::Running) {
             trace(QString("openRigCtldRadio: rigctld running - killing"));
-            if (!rigCtldKill())
-            {
+            if (!rigCtldKill()) {
                 trace(QString("openRigCtldRadio: rigctld did not stop"));
                 return RIGCTLD_FAILED_TO_STOP;
             }
         }
 
-        rigCtldTrace::rigCtldTraceCodes traceCode = rigCtldTrace::rigCtldTraceCodes::rctNONE;
-        if (ui->traceDataComms->isChecked())
-        {
+        rigCtldTrace::rigCtldTraceCodes traceCode =
+            rigCtldTrace::rigCtldTraceCodes::rctNONE;
+        if (ui->traceDataComms->isChecked()) {
             traceCode = rigCtldTrace::rigCtldTraceCodes::rctVERBOSE;
         }
 
@@ -1290,22 +1297,21 @@ int RigControlMainWindow::openRigCtldRadio(bool localRigCtld)
         QString handshake;
         QString rtsState;
 
-        parity = serialData::rigctldParityStr[static_cast<int>(currentRadio.parity)];
+        parity =
+            serialData::rigctldParityStr[static_cast<int>(currentRadio.parity)];
 
-        handshake = serialData::rigctldHandshakeStr[static_cast<int>(currentRadio.handshake)];
+        handshake = serialData::rigctldHandshakeStr[static_cast<int>(
+            currentRadio.handshake)];
 
-
-        if (handshake == serialData::rigctldHandshakeStr[RIG_HANDSHAKE_HARDWARE])
-        {
+        if (handshake == serialData::rigctldHandshakeStr[RIG_HANDSHAKE_HARDWARE]) {
             rtsState = serialData::rigctldForceLinesStr[serialData::FORCE_LINE_NONE];
-        }
-        else
-        {
-            rtsState = serialData::rigctldForceLinesStr[static_cast<int>(currentRadio.forceRts)];
+        } else {
+            rtsState = serialData::rigctldForceLinesStr[static_cast<int>(
+                currentRadio.forceRts)];
         }
 
-        QString dtrState = serialData::rigctldForceLinesStr[static_cast<int>(currentRadio.forceDtr)];
-
+        QString dtrState = serialData::rigctldForceLinesStr[static_cast<int>(
+            currentRadio.forceDtr)];
 
         RigCtldParameters rigCtldPar;
 
@@ -1329,56 +1335,55 @@ int RigControlMainWindow::openRigCtldRadio(bool localRigCtld)
 
         // start rigctld
         trace(QString("openRigCtldRadio: starting rigctld"));
-        trace(QString("rigctld parameters - %1, %2, %3, %4, %5, %6, %7, %8, %9, %10, %11, %12, %13, %14, %15, %16, %17")
-                                                .arg(rigCtldPar.getManufacturer())
-                                                .arg(rigCtldPar.getModelNumber())
-                                                .arg(rigCtldPar.getComport())
-                                                .arg(rigCtldPar.getBaudRate())
-                                                .arg(rigCtldPar.getBaudRate())
-                                                .arg(rigCtldPar.getCiv())
-                                                .arg(rigCtldPar.getNetworkAddress())
-                                                .arg(rigCtldPar.getPortNum())
-                                                .arg(rigCtldPar.getStopBits())
-                                                .arg(rigCtldPar.getParity())
-                                                .arg(rigCtldPar.getHandshake())
-                                                .arg(rigCtldPar.getRtsState())
-                                                .arg(rigCtldPar.getDtrState())
-                                                .arg(rigCtldPar.getTraceCode())
-                                                .arg(rigCtldPar.getPttEnabled() ? "PTT Enabled" : "PTT Disabled")
-                                                .arg(rigCtldPar.getPttComport())
-                                                .arg(serialCommonData::pttTypeStr[static_cast<int>(rigCtldPar.getPttType())]));
-
+        trace(QString("rigctld parameters - %1, %2, %3, %4, %5, %6, %7, %8, %9, "
+                      "%10, %11, %12, %13, %14, %15, %16, %17")
+                  .arg(rigCtldPar.getManufacturer())
+                  .arg(rigCtldPar.getModelNumber())
+                  .arg(rigCtldPar.getComport())
+                  .arg(rigCtldPar.getBaudRate())
+                  .arg(rigCtldPar.getBaudRate())
+                  .arg(rigCtldPar.getCiv())
+                  .arg(rigCtldPar.getNetworkAddress())
+                  .arg(rigCtldPar.getPortNum())
+                  .arg(rigCtldPar.getStopBits())
+                  .arg(rigCtldPar.getParity())
+                  .arg(rigCtldPar.getHandshake())
+                  .arg(rigCtldPar.getRtsState())
+                  .arg(rigCtldPar.getDtrState())
+                  .arg(rigCtldPar.getTraceCode())
+                  .arg(rigCtldPar.getPttEnabled() ? "PTT Enabled" : "PTT Disabled")
+                  .arg(rigCtldPar.getPttComport())
+                  .arg(serialCommonData::pttTypeStr[static_cast<int>(
+                      rigCtldPar.getPttType())]));
 
         runRigCtlDaemon(rigCtldPar);
 
         // wait for rigctld to start
         int waitStartDur = 500;
-        while (rigCtldProcess->state() != QProcess::Running && waitStartDur > 0)
-        {
+        while (rigCtldProcess->state() != QProcess::Running && waitStartDur > 0) {
             sleepFor(100);
             waitStartDur--;
         }
 
-        if (waitStartDur > 0)
-        {
-            trace(QString("openRigCtldRadio: rigctld running for radio %1").arg(currentRadio.rigModel));
-        }
-        else
-        {
-            trace(QString("openRigCtldRadio: rigctld failed for radio %1").arg(currentRadio.rigModel));
+        if (waitStartDur > 0) {
+            trace(QString("openRigCtldRadio: rigctld running for radio %1")
+                      .arg(currentRadio.rigModel));
+        } else {
+            trace(QString("openRigCtldRadio: rigctld failed for radio %1")
+                      .arg(currentRadio.rigModel));
             return RIGCTLD_FAILED;
         }
 
-
-        if (rigCtldDetails->rigCtldConnectDelay != 0)
-        {
-            trace(QString("openRigCtldRadio: Delay = %1 secs before connecting to rigCtld").arg(rigCtldDetails->rigCtldConnectDelay));
+        if (rigCtldDetails->rigCtldConnectDelay != 0) {
+            trace(
+                QString(
+                    "openRigCtldRadio: Delay = %1 secs before connecting to rigCtld")
+                    .arg(rigCtldDetails->rigCtldConnectDelay));
             delay(rigCtldDetails->rigCtldConnectDelay);
         }
     }
 
-    if (!localRigCtld)
-    {
+    if (!localRigCtld) {
         trace(QString("using external rigctld - now try to connect"));
     }
 
@@ -1386,77 +1391,87 @@ int RigControlMainWindow::openRigCtldRadio(bool localRigCtld)
 
     radio = rigFactory->createRigs(HamlibRigCtld);
 
-    if (radio == nullptr)
-    {
+    if (radio == nullptr) {
         logMessage(QString("Error Creating a rig in the factory - rigctld"));
-        QMessageBox::critical(this, tr("RigControl Open Radio Error"), tr("Failed to create a radio"));
+        QMessageBox::critical(this, tr("RigControl Open Radio Error"),
+                              tr("Failed to create a radio"));
         return OPEN_FAILED;
     }
 
-
-    trace(QString("openRigCtldRadio: Open radio = %1, via Rigctld").arg(currentRadio.rigModel));
+    trace(QString("openRigCtldRadio: Open radio = %1, via Rigctld")
+              .arg(currentRadio.rigModel));
     retCode = radio->rigInit(currentRadio, RIGCTLD_ON);
-    if (retCode < 0)
-    {
+    if (retCode < 0) {
         radio->closeRig();
-        logMessage(QString("openRigCtldRadio: Error Opening Radio %1, Error Code = %2").arg(currentRadio.rigModel, QString::number(retCode)));
+        logMessage(
+            QString("openRigCtldRadio: Error Opening Radio %1, Error Code = %2")
+                .arg(currentRadio.rigModel, QString::number(retCode)));
         radioError(retCode, tr("RigCtld Open Radio"));
         return OPEN_FAILED;
     }
 
-    logMessage(QString("Open Radio is connected = %1").arg(radio->getRigConnected() ? "yes" : "no"));
+    logMessage(QString("Open Radio is connected = %1")
+                   .arg(radio->getRigConnected() ? "yes" : "no"));
     // let's see if we can get freq from radio and confirm comms
-    if (radio->getRigConnected())
-    {
+    if (radio->getRigConnected()) {
 
         int retCode = Rig_OK;
-        showStatusMessage(tr("Attempting to communicate with radio via rigctld - %1").arg(currentRadio.rigModel));
-        retCode = radio->getFrequency(VFO::CURRENT_VFO, rigStateDetails->rfrequency);
-
-        if (rigStateDetails->RTTYModeFlag)
-        {
-            rigStateDetails->rfrequency = rigStateDetails->rfrequency - Frequency(currentRadio.rttyOffset);
-        }
-        else if (rigStateDetails->PSKModeFlag)
-        {
-            rigStateDetails->rfrequency = rigStateDetails->rfrequency + Frequency(currentRadio.pskOffset);
-        }
-        if (retCode < Rig_OK)
-        {
-            logMessage(QString("openRigctldRadio: Test Communication - Get Freq error, code = %1").arg(QString::number(retCode)));
-            radioError(retCode, tr("Test Radio Connection via rigctld\n\nMinos tried to read the radio frequency,\nbut nothing was received from the radio.\n\nPlease check connections and/or settings.\nSome radios/interfaces may require Force DTR or Force RTS to be set High, to power the interface."));
-            //sendStatusToLogDisConnected();
+        showStatusMessage(
+            tr("Attempting to communicate with radio via rigctld - %1")
+                .arg(currentRadio.rigModel));
+        getFreqFromRadio(retCode);
+        if (retCode < Rig_OK) {
+            logMessage(QString("openRigctldRadio: Test Communication - Get Freq "
+                               "error, code = %1")
+                           .arg(QString::number(retCode)));
+            radioError(retCode,
+                       tr("Test Radio Connection via rigctld\n\nMinos tried to read "
+                          "the radio frequency,\nbut nothing was received from the "
+                          "radio.\n\nPlease check connections and/or settings.\nSome "
+                          "radios/interfaces may require Force DTR or Force RTS to "
+                          "be set High, to power the interface."));
+            // sendStatusToLogDisConnected();
             return OPEN_FAILED;
-        }
-        else
-        {
+        } else {
             radioCommsOK = true;
         }
-
     }
 
-    if (radioCommsOK)
-    {
-        logMessage(QString("openRigctldRadio: Radio Opened %1").arg(currentRadio.rigModel));
-        showStatusMessage(tr("Radio Opened rigctld: %1").arg(currentRadio.rigModel));
+    if (radioCommsOK) {
+        logMessage(QString("openRigctldRadio: Radio Opened %1")
+                       .arg(currentRadio.rigModel));
+        showStatusMessage(
+            tr("Radio Opened rigctld: %1").arg(currentRadio.rigModel));
 
-        if (currentRadio.catPortType == RigCapConstants::PortType::serial)
-        {
+        if (currentRadio.catPortType == RigCapConstants::PortType::serial) {
 
-            showStatusMessage(QString("Connected via RigCtld: %1 - %2, %3, %4, %5, %6, %7, Handshake %8, ForceDTR %9, ForceRTS %10")
-                              .arg(currentRadio.rigMfg_Name).arg(currentRadio.rigModelName).trimmed().arg(currentRadio.comport).arg(currentRadio.baudrate).arg(currentRadio.databits)
-                                  .arg(currentRadio.stopbits).arg(serialCommonData::parityStr[static_cast<int>(currentRadio.parity)]).arg(serialCommonData::handshakeStr[static_cast<int>(currentRadio.handshake)]).arg(serialCommonData::forceLinesStr[static_cast<int>(currentRadio.forceDtr)]).arg(serialCommonData::forceLinesStr[static_cast<int>(currentRadio.forceRts)]));
+            showStatusMessage(
+                QString("Connected via RigCtld: %1 - %2, %3, %4, %5, %6, %7, "
+                        "Handshake %8, ForceDTR %9, ForceRTS %10")
+                    .arg(currentRadio.rigMfg_Name)
+                    .arg(currentRadio.rigModelName)
+                    .trimmed()
+                    .arg(currentRadio.comport)
+                    .arg(currentRadio.baudrate)
+                    .arg(currentRadio.databits)
+                    .arg(currentRadio.stopbits)
+                    .arg(serialCommonData::parityStr[static_cast<int>(
+                        currentRadio.parity)])
+                    .arg(serialCommonData::handshakeStr[static_cast<int>(
+                        currentRadio.handshake)])
+                    .arg(serialCommonData::forceLinesStr[static_cast<int>(
+                        currentRadio.forceDtr)])
+                    .arg(serialCommonData::forceLinesStr[static_cast<int>(
+                        currentRadio.forceRts)]));
         }
 
-
-        else if (currentRadio.catPortType == RigCapConstants::PortType::none)
-        {
-            showStatusMessage(tr("Connected via rigctld: %1 - %2").arg(currentRadio.rigMfg_Name, currentRadio.rigModelName));
+        else if (currentRadio.catPortType == RigCapConstants::PortType::none) {
+            showStatusMessage(
+                tr("Connected via rigctld: %1 - %2")
+                    .arg(currentRadio.rigMfg_Name, currentRadio.rigModelName));
         }
 
-    }
-    else
-    {
+    } else {
 
         logMessage(QString("Radio Open Error"));
         showStatusMessage(tr("Radio Open error"));
@@ -1467,17 +1482,7 @@ int RigControlMainWindow::openRigCtldRadio(bool localRigCtld)
 
     msg->rigCache.publish();
     return OPEN_OK;
-
-
-
 }
-
-
-
-
-
-
-
 
 int RigControlMainWindow::openRadio()
 {
@@ -1638,16 +1643,8 @@ int RigControlMainWindow::openRadio()
         int retCode = Rig_OK;
         showStatusMessage(tr("Attempting to communicate with radio - %1").arg(currentRadio.radioName));
         //delay(1);
-        retCode = radio->getFrequency(VFO::CURRENT_VFO, rigStateDetails->rfrequency);
+        getFreqFromRadio(retCode);
 
-        if (rigStateDetails->RTTYModeFlag)
-        {
-            rigStateDetails->rfrequency = rigStateDetails->rfrequency - Frequency(currentRadio.rttyOffset);
-        }
-        else if (rigStateDetails->PSKModeFlag)
-        {
-            rigStateDetails->rfrequency = rigStateDetails->rfrequency + Frequency(currentRadio.pskOffset);
-        }
         if (retCode < Rig_OK)
         {
             logMessage(QString("Open Radio: Test Communication - Get Freq error, code = %1").arg(QString::number(retCode)));
@@ -2245,6 +2242,7 @@ void RigControlMainWindow::setFreq(Frequency freq, VFO vfo)
 
         if (radio)
         {
+            //xxxxxxxxxxxCorrect rigstate frequency to rig
             Frequency mf = f;
             if (rigStateDetails->RTTYModeFlag)
             {
@@ -2255,6 +2253,7 @@ void RigControlMainWindow::setFreq(Frequency freq, VFO vfo)
                 mf = f - Frequency(currentRadio.pskOffset);
             }
 
+           // rigStateDetails->rfrequency will be set when we poll the rig later
            retCode = radio->setFrequency(mf, vfo);
         }
         else
@@ -2478,21 +2477,12 @@ int RigControlMainWindow::getAndSendFrequency(VFO vfo)
 
 
 
-int RigControlMainWindow::getRxFreq(VFO vfo)
+int RigControlMainWindow::getRxFreq(VFO /*vfo*/)
 {
     int retCode = 0;
     if (radio)
     {
-        retCode = radio->getFrequency(vfo, rigStateDetails->rfrequency);
-
-        if (rigStateDetails->RTTYModeFlag)
-        {
-            rigStateDetails->rfrequency = rigStateDetails->rfrequency - Frequency(currentRadio.rttyOffset);
-        }
-        else if (rigStateDetails->PSKModeFlag)
-        {
-            rigStateDetails->rfrequency = rigStateDetails->rfrequency + Frequency(currentRadio.pskOffset);
-        }
+        getFreqFromRadio(retCode);
 
         logMessage(QString("getRxFreq - freq = %1 mode = %2").arg(rigStateDetails->rfrequency.convertFreqStrDisp(), rigcommon::convertModeToQString(rigStateDetails->rmode)));
     }

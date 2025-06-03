@@ -476,7 +476,7 @@ private:
 
     void runRigCtlDaemon(RigCtldParameters &rigCtldPar);
 
-
+    void getFreqFromRadio(int &retCode);
     int openRigCtldRadio(bool localRigCtld);
     void setRigCltdIndicatorVisible(bool visible);
     void setRigCtldIndicator(RIGCTLD_INDICATOR_ID idNum);

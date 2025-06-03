@@ -114,6 +114,7 @@ void FLDigiFrame::onRigModeFreq(QString m, Frequency f)
     QVariantList args;
     if (!f.isClear())
     {
+        // FLDigi works on the genuine rig frequency
         if (m == RY)
         {
             int rttyOffset = engineWindow->getRttyOffset();

@@ -298,6 +298,7 @@ void EngineWindow::on_notify(AnalysePubSubNotify an, const QString /*from*/ )
 
             if (rttyOffset != rttyOffset1 ||  pskOffset != pskOffset1)
             {
+                // offsets have changed, so we need to tell the engines
                 emit rigModeFreq(rigMode, rigFreq);
 
             }
