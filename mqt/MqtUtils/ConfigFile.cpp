@@ -710,14 +710,15 @@ void MinosConfig::saveAll()
 }
 void MinosConfig::start()
 {
-   terminated = false;
+    terminated = false;
+    trace(QString("MinosConfig::Start App Config %1").arg(thisConfigName));
 
-   NamedConfig &nc = configs[thisConfigName];
+    NamedConfig &nc = configs[thisConfigName];
 
-   for ( auto const &i: QASCONST(nc.elelist ))
-   {
+    for ( auto const &i: QASCONST(nc.elelist ))
+    {
        i->createProcess();
-   }
+    }
 }
 
 void MinosConfig::askStop()
