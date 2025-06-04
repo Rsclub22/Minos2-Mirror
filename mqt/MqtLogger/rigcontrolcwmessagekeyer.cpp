@@ -3,7 +3,7 @@
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //                      CW Message Keyer
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2024
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2025
 //
 //
 //
@@ -243,6 +243,14 @@ QString RigControlCwMessageKeyer::parseMacrosInMessage(TSingleLogFrame *tslf, QS
         else if (c == '!')
         {
             txMess += call;
+        }
+        else if (c == '%')
+        {
+            txMess += ct->myloc.getLoc();
+        }
+        else if (c == '$')
+        {
+            txMess += reps;
         }
         else if (c == '{')
         {
@@ -641,10 +649,36 @@ int RigControlCwMessageKeyer::editButton(VoiceKeyerParams *vmData, QString title
     vmButtonDialog.setVmTypeAndRadioModelLabel(vmData->getRigModel());
     vmButtonDialog.setCwInfoPanelVisible(true);
 
+    QString cwMacroCharList;
+    bool cwMacroCharOk;
+    if (getRigCWKeyerMacroCharacter(cwMacroCharList, radioManufacturer))
+    {
+        cwMacroCharOk = true;
+        trace(QString("Retrieved CW Macro Chars %1 for manufacturer %2").arg(cwMacroCharList).arg(radioManufacturer));
+    }
+    else
+    {
+       cwMacroCharOk = false;
+        trace(QString("Error retrieving CW Macro Chars for manufacturer %1").arg(radioManufacturer));
+    }
+
+
+
     QString validCharCwList;
     if (getRigCWKeyerSupportedCharacters(validCharCwList, radioManufacturer))
     {
-        vmButtonDialog.setCwValidatorCwCharList(validCharCwList);
+        if (cwMacroCharOk)
+        {
+            QString vc = validCharCwList.append(cwMacroCharList);
+            vmButtonDialog.setCwValidatorCwCharList(vc);
+            trace(QString("Supported CW Chars and Macro chars %1 for manufacturer %2").arg(vc).arg(radioManufacturer));
+        }
+        else
+        {
+           vmButtonDialog.setCwValidatorCwCharList(validCharCwList);
+           trace(QString("Supported CW Chars with no Macro chars %1 for manufacturer %2").arg(validCharCwList).arg(radioManufacturer));
+        }
+
     }
     else
     {

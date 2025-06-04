@@ -118,7 +118,26 @@ bool getRigCWKeyerSupportedCharacters(QString &supportedChars, QString radioMfg)
     return false;    // error
 }
 
+bool getRigCWKeyerMacroCharacter(QString &macroChars, QString radioMfg)
+{
+    QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + CWKEYER_RADIO_COMMON_PARAMS_FILENAME + ".ini";
+    QSettings config(fileName, QSettings::IniFormat);
 
+    if (config.childGroups().contains(radioMfg))
+    {
+        config.beginGroup(radioMfg);
+        macroChars =  config.value("macroCharacters", DEFAULT_SUPPORTED_CW_CHARACTERS).toString();
+        config.endGroup();
+        if (macroChars.isEmpty())
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    return false;    // error
+}
 
 bool getRigCWKeyerListOfRadiosSupportSpecialCharacters(QStringList &listOfRadioModels, QString radioMfg)
 {
