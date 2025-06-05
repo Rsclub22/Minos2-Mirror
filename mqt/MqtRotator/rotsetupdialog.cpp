@@ -723,7 +723,7 @@ void RotSetupDialog::deleteSkyScanPreset(QSettings &config, const QString& anten
 
     const QString prefix = QString("%1_%2%3").arg(antennaName).arg(SKYSCAN_PRESET).arg(n);
 
-    QStringList groups = config.childGroups();
+    const QStringList groups = config.childGroups();
     for (const QString& group : groups)
     {
         if (group == prefix)
@@ -744,7 +744,7 @@ int RotSetupDialog::countSkyScanPresets(QSettings &config, const QString& antenn
     QRegularExpression pattern("^" + QRegularExpression::escape(antennaName) + "SKYSCAN_PRESET" + "\\d+$");
 
     int count = 0;
-    QStringList groups = config.childGroups();
+    const QStringList groups = config.childGroups();
     for (const QString& group : groups)
     {
         if (pattern.match(group).hasMatch())

@@ -24,7 +24,10 @@ private:
 
 
     PcCwKeyer *cwKeyer = nullptr;
-    QString pendingBuffer;
+    //QString pendingBuffer;
+
+    QList<QString> cwMsgQueue;
+
 
     QString comport;
     int wpm = 15;
@@ -53,13 +56,14 @@ private:
     void closeEvent(QCloseEvent *event);
 private slots:
     //void onTextEdited(const QString &text);
-    void checkCWBuffer();
+    //void checkCWBuffer();
     void onComportSelected();
     void onDtrSelected();
     void onSidetoneChkBoxSelected();
     void onRtsSelected();
     void onWpmValueChanged(int value);
     void onTextInputFinished(const QString &text);
+    void handleNextCwString();
 };
 #endif // PCCWKEYERMAINWINDOW_H
 

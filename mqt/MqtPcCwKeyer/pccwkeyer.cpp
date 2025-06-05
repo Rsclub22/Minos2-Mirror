@@ -57,7 +57,7 @@ void PcCwKeyer::setWPM(int charWpm, int wordWpm) {
 
 void PcCwKeyer::sendText(const QString &text) {
     QString upper = text.toUpper();
-    for (QChar ch : upper) {
+    for (const QChar ch : upper) {
         if (!morseTable.contains(ch)) continue;
         QString code = morseTable[ch];
 
@@ -96,6 +96,7 @@ void PcCwKeyer::enqueueAction(std::function<void()> func, int delayMs) {
 void PcCwKeyer::processQueue() {
     if (timedActions.isEmpty()) {
         key(false);
+        emit nextStringRequested();
         return;
     }
 
@@ -106,6 +107,7 @@ void PcCwKeyer::processQueue() {
         timer.start(next.delayMs);
     } else {
         timer.stop();
+        emit nextStringRequested();
     }
 }
 

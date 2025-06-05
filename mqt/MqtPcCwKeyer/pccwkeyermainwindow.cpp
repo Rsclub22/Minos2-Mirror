@@ -33,10 +33,7 @@ pcCwKeyerMainWindow::pcCwKeyerMainWindow(QWidget *parent)
     setConnections();
 
 
-    // Timer to feed CW keyer every 100ms
-    auto *bufferTimer = new QTimer(this);
-    connect(bufferTimer, &QTimer::timeout, this, &pcCwKeyerMainWindow::checkCWBuffer);
-    bufferTimer->start(100);
+
 }
 
 pcCwKeyerMainWindow::~pcCwKeyerMainWindow()
@@ -48,7 +45,6 @@ pcCwKeyerMainWindow::~pcCwKeyerMainWindow()
 void pcCwKeyerMainWindow::setConnections()
 {
 
-    //connect(ui->cwTextInputLineEdit, &QLineEdit::textEdited, this, &pcCwKeyerMainWindow::onTextEdited);
     connect(ui->comportSel, QOverload<int>::of(&QComboBox::activated), this, &pcCwKeyerMainWindow::onComportSelected);
     connect(ui->dtrRb, &QRadioButton::clicked,this, &pcCwKeyerMainWindow::onDtrSelected);
     connect(ui->rtsRb, &QRadioButton::clicked,this, &pcCwKeyerMainWindow::onRtsSelected);
@@ -62,6 +58,15 @@ void pcCwKeyerMainWindow::setConnections()
     });
 
 
+}
+
+void pcCwKeyerMainWindow::handleNextCwString()
+{
+    if (!cwMsgQueue.isEmpty())
+    {
+        QString next = cwMsgQueue.takeFirst().append(" "); // add space between messages
+        cwKeyer->sendText(next);
+    }
 }
 
 
@@ -123,6 +128,7 @@ void pcCwKeyerMainWindow::openCwKeyer()
 {
     if (cwKeyer)
     {
+        disconnect(cwKeyer, &PcCwKeyer::nextStringRequested, this, &pcCwKeyerMainWindow::handleNextCwString);
         delete cwKeyer;
     }
 
@@ -132,6 +138,8 @@ void pcCwKeyerMainWindow::openCwKeyer()
     }
 
     cwKeyer = new PcCwKeyer(comport, wpm, farnsworth, sideToneOn, dtrRtsSelected, this);
+    connect(cwKeyer, &PcCwKeyer::nextStringRequested, this, &pcCwKeyerMainWindow::handleNextCwString);
+
 
 
 }
@@ -141,40 +149,78 @@ void pcCwKeyerMainWindow::closeCwKeyer()
     delete cwKeyer;
 }
 
-/*
-void pcCwKeyerMainWindow::onTextEdited(const QString &text) {
-    static int lastLen = 0;
-    if (text.length() > lastLen) {
-        QString added = text.mid(lastLen);
-        pendingBuffer += added;
-    } else if (text.length() < lastLen) {
-        // Handle backspace or clear (optional logic)
-    }
-    lastLen = text.length();
-}
-*/
+
 
 void pcCwKeyerMainWindow::onTextInputFinished(const QString &text)
 {
-    pendingBuffer += text;
+    if (!text.trimmed().isEmpty())
+        cwMsgQueue.append(text.trimmed());
 
-}
-
-void pcCwKeyerMainWindow::checkCWBuffer() {
-
-    if (cwKeyer)
+    // If keyer is not currently busy, kick it off
+    if (!cwKeyer->isBusy())
     {
-        if (!pendingBuffer.isEmpty() && !cwKeyer->isBusy()) {
-            QChar next = pendingBuffer[0];
-            pendingBuffer.remove(0, 1);
-            cwKeyer->sendText(QString(next));
-        }
+        handleNextCwString();
     }
 
 }
 
+
+
 // should replace this with the common version in rigcommon, same in rotControl!
 
+void pcCwKeyerMainWindow::fillPortsInfo()
+{
+    ui->comportSel->clear();
+    ui->comportSel->addItem("");  // Add blank entry
+
+    QString description;
+    QString manufacturer;
+    QString serialNumber;
+
+
+    QList<QPair<QString, QStringList>> portEntries;
+
+    // Collect all port info into a list
+    for (const QSerialPortInfo &info : QSerialPortInfo::availablePorts())
+    {
+        QStringList list;
+        description = info.description();
+        manufacturer = info.manufacturer();
+#if QT_VERSION > QT_VERSION_CHECK(5, 3, 0)
+        serialNumber = info.serialNumber();
+#endif
+        list << info.portName()
+             << (!description.isEmpty() ? description : blankString)
+             << (!manufacturer.isEmpty() ? manufacturer : blankString)
+             << (!serialNumber.isEmpty() ? serialNumber : blankString)
+             << info.systemLocation()
+             << (info.vendorIdentifier() ? QString::number(info.vendorIdentifier(), 16) : blankString)
+             << (info.productIdentifier() ? QString::number(info.productIdentifier(), 16) : blankString);
+
+        portEntries.append({info.portName(), list});
+    }
+
+    // Sort using numeric part of COM port name
+    std::sort(portEntries.begin(), portEntries.end(), [](const QPair<QString, QStringList> &a, const QPair<QString, QStringList> &b) {
+        QRegularExpression re("COM(\\d+)");
+        QRegularExpressionMatch ma = re.match(a.first);
+        QRegularExpressionMatch mb = re.match(b.first);
+
+        int na = ma.hasMatch() ? ma.captured(1).toInt() : 0;
+        int nb = mb.hasMatch() ? mb.captured(1).toInt() : 0;
+
+        return na < nb;
+    });
+
+    // Add sorted items to the combobox
+    for (const auto &pair : portEntries) {
+        ui->comportSel->addItem(pair.first, pair.second);
+    }
+}
+
+
+
+/*
 void pcCwKeyerMainWindow::fillPortsInfo()
 {
     ui->comportSel->clear();
@@ -206,6 +252,7 @@ void pcCwKeyerMainWindow::fillPortsInfo()
        ui->comportSel->addItem(list.first(), list);
     }
 }
+*/
 
 void pcCwKeyerMainWindow::setWpmSpinnerRange(int minValue, int maxValue)
 {
@@ -238,7 +285,7 @@ void pcCwKeyerMainWindow::keyPressEvent(QKeyEvent *event)
         event->accept(); // mark it as handled
         if (cwKeyer)
         {
-            pendingBuffer.clear();
+            cwMsgQueue.clear();
             cwKeyer->abortTransmission();
         }
 
@@ -251,7 +298,9 @@ void pcCwKeyerMainWindow::keyPressEvent(QKeyEvent *event)
 
 void pcCwKeyerMainWindow::closeEvent(QCloseEvent *event)
 {
-    if (cwKeyer) {
+    if (cwKeyer)
+    {
+        cwMsgQueue.clear();
         cwKeyer->abortTransmission();  // stop any CW sending
         cwKeyer->close();       // close the serial port
     }

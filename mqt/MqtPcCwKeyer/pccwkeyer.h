@@ -24,6 +24,10 @@ public:
     void setUseSideTone(bool useSideTone_);
     void abortTransmission();
     void close();
+
+signals:
+    void nextStringRequested();
+
 private slots:
     void processQueue();
 
