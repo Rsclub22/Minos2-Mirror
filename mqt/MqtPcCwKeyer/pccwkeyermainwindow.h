@@ -64,6 +64,8 @@ private slots:
     void onWpmValueChanged(int value);
     void onTextInputFinished(const QString &text);
     void handleNextCwString();
+    void handleSerialPortOpen(bool state);
+    void handleSerialPortError(QString errorMsg);
 };
 #endif // PCCWKEYERMAINWINDOW_H
 

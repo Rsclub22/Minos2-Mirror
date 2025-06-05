@@ -6,76 +6,85 @@
 
 
 
-PcCwKeyer::PcCwKeyer(const QString &portName, int wpm, int farnsworthWpm, bool sidetone, bool dtrRts, QObject *parent)
-    : QObject(parent), useSidetone(sidetone), useDtrRts(dtrRts) {
-    serial.setPortName(portName);
-    serial.setBaudRate(QSerialPort::Baud9600);
-    if (!serial.open(QIODevice::ReadWrite)) {
-        qFatal("Failed to open port %s", qPrintable(portName));
-
-    }
+PcCwKeyer::PcCwKeyer(int wpm, int farnsworthWpm, bool sidetone, bool dtrRts, QObject *parent)
+    : QObject(parent), useSidetone(sidetone), useDtrRts(dtrRts)
+{
 
     key(false);
     setWPM(wpm, farnsworthWpm);
 
     connect(&timer, &QTimer::timeout, this, &PcCwKeyer::processQueue);
     timer.setSingleShot(true);
-
-    if (useSidetone) {
-        QAudioFormat format;
-        format.setSampleRate(44100);
-        format.setChannelCount(1);
-
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-        format.setSampleFormat(QAudioFormat::Int16);
-#else
-        format.setSampleSize(16);
-        format.setSampleType(QAudioFormat::SignedInt);
-        format.setByteOrder(QAudioFormat::LittleEndian);
-        format.setCodec("audio/pcm");
-#endif
-
-        audioOut = new QAudioOutput(format, this);
-    }
 }
 
-PcCwKeyer::~PcCwKeyer() {
+PcCwKeyer::~PcCwKeyer()
+{
     key(false);
     serial.close();
 }
 
-void PcCwKeyer::setWPM(int charWpm, int wordWpm) {
+
+void PcCwKeyer::openComPort(const QString portName)
+{
+    serial.setPortName(portName);
+    serial.setBaudRate(QSerialPort::Baud9600);
+    if (!serial.open(QIODevice::ReadWrite))
+    {
+        qFatal("Failed to open port %s", qPrintable(portName));
+        emit serialPortOpen(false);
+
+    }
+    else
+    {
+        emit serialPortOpen(true);
+        connect(&serial, &QSerialPort::errorOccurred, this, &PcCwKeyer::handleSerialPortError);
+    }
+}
+
+
+void PcCwKeyer::setWPM(int charWpm, int wordWpm)
+{
     charDot = 1200 / charWpm;
-    if (wordWpm > 0 && wordWpm < charWpm) {
+    if (wordWpm > 0 && wordWpm < charWpm)
+    {
         spaceDot = 1200 / wordWpm;
         useFarnsworth = true;
-    } else {
+    } else
+    {
         spaceDot = charDot;
         useFarnsworth = false;
     }
 }
 
-void PcCwKeyer::sendText(const QString &text) {
-    QString upper = text.toUpper();
-    for (const QChar ch : upper) {
+void PcCwKeyer::sendText(const QString &text)
+{
+    const QString upper = text.toUpper();
+    for (const QChar ch : upper)
+    {
         if (!morseTable.contains(ch)) continue;
         QString code = morseTable[ch];
 
-        if (code == " ") {
+        if (code == " ")
+        {
             enqueueAction([] {}, spaceDot * 7);  // word space
-        } else {
+        }
+        else
+        {
             enqueueSymbolSequence(code);
             enqueueAction([] {}, spaceDot * 3);  // inter-char space
         }
     }
 
-    if (!timer.isActive()) {
+    if (!timer.isActive())
+    {
         timer.start(1);
     }
 }
 
-void PcCwKeyer::enqueueSymbolSequence(const QString &morse) {
-    for (int i = 0; i < morse.length(); ++i) {
+void PcCwKeyer::enqueueSymbolSequence(const QString &morse)
+{
+    for (int i = 0; i < morse.length(); ++i)
+    {
         int toneLen = (morse[i] == '.') ? charDot : charDot * 3;
 
         enqueueAction([this, toneLen] {
@@ -89,12 +98,15 @@ void PcCwKeyer::enqueueSymbolSequence(const QString &morse) {
     }
 }
 
-void PcCwKeyer::enqueueAction(std::function<void()> func, int delayMs) {
+void PcCwKeyer::enqueueAction(std::function<void()> func, int delayMs)
+{
     timedActions.enqueue({func, delayMs});
 }
 
-void PcCwKeyer::processQueue() {
-    if (timedActions.isEmpty()) {
+void PcCwKeyer::processQueue()
+{
+    if (timedActions.isEmpty())
+    {
         key(false);
         emit nextStringRequested();
         return;
@@ -103,15 +115,18 @@ void PcCwKeyer::processQueue() {
     auto next = timedActions.dequeue();
     next.func();
 
-    if (!timedActions.isEmpty()) {
+    if (!timedActions.isEmpty())
+    {
         timer.start(next.delayMs);
-    } else {
+    } else
+    {
         timer.stop();
         emit nextStringRequested();
     }
 }
 
-void PcCwKeyer::key(bool on) {
+void PcCwKeyer::key(bool on)
+{
 
     if (useDtrRts)
     {
@@ -124,7 +139,8 @@ void PcCwKeyer::key(bool on) {
 
 }
 
-void PcCwKeyer::playToneFor(int durationMs) {
+void PcCwKeyer::playToneFor(int durationMs)
+{
     if (!audioOut) return;
 
     QByteArray data = generateTone(600, durationMs);
@@ -140,13 +156,15 @@ void PcCwKeyer::playToneFor(int durationMs) {
     audioOut->start(buffer);
 }
 
-QByteArray PcCwKeyer::generateTone(int frequency, int durationMs, int sampleRate) {
+QByteArray PcCwKeyer::generateTone(int frequency, int durationMs, int sampleRate)
+{
     const int samples = sampleRate * durationMs / 1000;
     QByteArray data;
     data.resize(samples * sizeof(qint16));
     qint16 *buf = reinterpret_cast<qint16*>(data.data());
 
-    for (int i = 0; i < samples; ++i) {
+    for (int i = 0; i < samples; ++i)
+    {
         double t = static_cast<double>(i) / sampleRate;
         buf[i] = static_cast<qint16>(32767 * qSin(2 * M_PI * frequency * t));
     }
@@ -154,12 +172,20 @@ QByteArray PcCwKeyer::generateTone(int frequency, int durationMs, int sampleRate
     return data;
 }
 
-bool PcCwKeyer::isBusy() const {
+bool PcCwKeyer::isBusy() const
+{
     return !timedActions.isEmpty();
 }
 
 
-
+void PcCwKeyer::handleSerialPortError(QSerialPort::SerialPortError error)
+{
+    if (error == QSerialPort::ResourceError)
+    {
+        qDebug() << "Serial port disconnected";
+        emit serialPortError(serial.errorString());
+    }
+}
 
 void PcCwKeyer::setUseSideTone(bool useSideTone_)
 {

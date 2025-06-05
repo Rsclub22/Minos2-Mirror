@@ -14,9 +14,10 @@ class PcCwKeyer : public QObject
 {
     Q_OBJECT
 public:
-    explicit PcCwKeyer(const QString &portName, int wpm, int farnsworthWpm = 0, bool sidetone = false, bool dtrRts = false, QObject *parent = nullptr);
+    explicit PcCwKeyer(int wpm, int farnsworthWpm = 0, bool sidetone = false, bool dtrRts = false, QObject *parent = nullptr);
     ~PcCwKeyer();
 
+    void openComPort(const QString portName);
     void setWPM(int charWpm, int wordWpm = 0);
     void sendText(const QString &text);
     bool isBusy() const;
@@ -27,9 +28,12 @@ public:
 
 signals:
     void nextStringRequested();
+    void serialPortOpen(bool);
+    void serialPortError(QString);
 
 private slots:
     void processQueue();
+    void handleSerialPortError(QSerialPort::SerialPortError error);
 
 private:
     struct TimedAction {

@@ -58,6 +58,8 @@ void pcCwKeyerMainWindow::setConnections()
     });
 
 
+
+
 }
 
 void pcCwKeyerMainWindow::handleNextCwString()
@@ -137,8 +139,17 @@ void pcCwKeyerMainWindow::openCwKeyer()
         qDebug() << "Comport is empty";
     }
 
-    cwKeyer = new PcCwKeyer(comport, wpm, farnsworth, sideToneOn, dtrRtsSelected, this);
-    connect(cwKeyer, &PcCwKeyer::nextStringRequested, this, &pcCwKeyerMainWindow::handleNextCwString);
+    cwKeyer = new PcCwKeyer(wpm, farnsworth, sideToneOn, dtrRtsSelected, this);
+
+    if (cwKeyer)
+    {
+        connect(cwKeyer, &PcCwKeyer::nextStringRequested, this, &pcCwKeyerMainWindow::handleNextCwString);
+        connect(cwKeyer, &PcCwKeyer::serialPortOpen, this, &pcCwKeyerMainWindow::handleSerialPortOpen);
+        connect(cwKeyer, &PcCwKeyer::serialPortError, this, &pcCwKeyerMainWindow::handleSerialPortError);
+
+        cwKeyer->openComPort(comport);
+    }
+
 
 
 
@@ -164,6 +175,20 @@ void pcCwKeyerMainWindow::onTextInputFinished(const QString &text)
 
 }
 
+void pcCwKeyerMainWindow::handleSerialPortOpen(bool state)
+{
+    ui->statusbar->clearMessage();
+    ui->statusbar->showMessage(QString("%1 %2").arg(ui->comportSel->currentText(), state ? "Open" : "Closed"));
+
+}
+
+void pcCwKeyerMainWindow::handleSerialPortError(QString errorMsg)
+{
+    ui->statusbar->clearMessage();
+    ui->statusbar->showMessage(QString("%1 %2").arg(ui->comportSel->currentText(), errorMsg));
+}
+
+
 
 
 // should replace this with the common version in rigcommon, same in rotControl!
@@ -181,7 +206,8 @@ void pcCwKeyerMainWindow::fillPortsInfo()
     QList<QPair<QString, QStringList>> portEntries;
 
     // Collect all port info into a list
-    for (const QSerialPortInfo &info : QSerialPortInfo::availablePorts())
+    const auto portInfo = QSerialPortInfo::availablePorts();
+    for (const QSerialPortInfo &info : portInfo)
     {
         QStringList list;
         description = info.description();
@@ -202,7 +228,7 @@ void pcCwKeyerMainWindow::fillPortsInfo()
 
     // Sort using numeric part of COM port name
     std::sort(portEntries.begin(), portEntries.end(), [](const QPair<QString, QStringList> &a, const QPair<QString, QStringList> &b) {
-        QRegularExpression re("COM(\\d+)");
+        static QRegularExpression re("COM(\\d+)");
         QRegularExpressionMatch ma = re.match(a.first);
         QRegularExpressionMatch mb = re.match(b.first);
 
@@ -213,46 +239,14 @@ void pcCwKeyerMainWindow::fillPortsInfo()
     });
 
     // Add sorted items to the combobox
-    for (const auto &pair : portEntries) {
+    for (const auto &pair : portEntries)
+    {
         ui->comportSel->addItem(pair.first, pair.second);
     }
 }
 
 
 
-/*
-void pcCwKeyerMainWindow::fillPortsInfo()
-{
-    ui->comportSel->clear();
-
-
-    QString description;
-    QString manufacturer;
-    QString serialNumber;
-
-    ui->comportSel->addItem("");
-
-    for(auto &info: QSerialPortInfo::availablePorts())
-    {
-        QStringList list;
-        description = info.description();
-        manufacturer = info.manufacturer();
-#if QT_VERSION > QT_VERSION_CHECK(5, 3, 0)
-        serialNumber = info.serialNumber();
-#endif
-        list << info.portName()
-             << (!description.isEmpty() ? description : blankString)
-             << (!manufacturer.isEmpty() ? manufacturer : blankString)
-             << (!serialNumber.isEmpty() ? serialNumber : blankString)
-             << info.systemLocation()
-             << (info.vendorIdentifier() ? QString::number(info.vendorIdentifier(), 16) : blankString)
-             << (info.productIdentifier() ? QString::number(info.productIdentifier(), 16) : blankString);
-
-
-       ui->comportSel->addItem(list.first(), list);
-    }
-}
-*/
 
 void pcCwKeyerMainWindow::setWpmSpinnerRange(int minValue, int maxValue)
 {
