@@ -3,67 +3,70 @@
 
 #include <QObject>
 #include <QSerialPort>
-#include <QAudioOutput>
-#include <QIODevice>
 #include <QTimer>
 #include <QQueue>
-#include <QMap>
-#include <QByteArray>
+#include <QAudioOutput>
 #include <QBuffer>
+#include <QMap>
+#include <functional>
 
-class PcCwKeyer : public QObject {
+class PcCwKeyer : public QObject
+{
     Q_OBJECT
-
 public:
-    PcCwKeyer(const QString &portName, int wpm = 20, int farnsworthWpm = -1, bool sidetone = false, QObject *parent = nullptr);
+    explicit PcCwKeyer(const QString &portName, int wpm, int farnsworthWpm = 0, bool sidetone = false, bool dtrRts = false, QObject *parent = nullptr);
     ~PcCwKeyer();
 
+    void setWPM(int charWpm, int wordWpm = 0);
     void sendText(const QString &text);
-    void setWPM(int charWpm, int wordWpm = -1);  // wordWpm = -1 disables Farnsworth
     bool isBusy() const;
 
+    void setUseSideTone(bool useSideTone_);
+    void abortTransmission();
+    void close();
 private slots:
     void processQueue();
 
 private:
-    void enqueueSymbolSequence(const QString &morse);
-    void enqueueDelay(int ms);
-    void key(bool on);
-    void playTone(bool on);
-    QByteArray generateTone(int frequency, int durationMs, int sampleRate = 44100);
+    struct TimedAction {
+        std::function<void()> func;
+        int delayMs;
+    };
 
     QSerialPort serial;
     QTimer timer;
-    QQueue<std::function<void()>> actions;
+    QQueue<TimedAction> timedActions;
 
-    int charDot;  // ms per dot at character speed
-    int spaceDot; // ms per dot at word spacing speed (Farnsworth)
-    bool useFarnsworth;
+    int charDot = 60;
+    int spaceDot = 60;
+    bool useFarnsworth = false;
+    bool useSidetone = false;
+    bool useDtrRts = false;
 
-
-
-
-    // Sidetone
     QAudioOutput *audioOut = nullptr;
-    QBuffer toneBuffer;
-    QByteArray toneData;
 
-    const QMap<QChar, QString> morseTable = {
-        {'A', ".-"},    {'B', "-..."},  {'C', "-.-."},  {'D', "-.."},
-        {'E', "."},     {'F', "..-."},  {'G', "--."},   {'H', "...."},
-        {'I', ".."},    {'J', ".---"},  {'K', "-.-"},   {'L', ".-.."},
-        {'M', "--"},    {'N', "-."},    {'O', "---"},   {'P', ".--."},
-        {'Q', "--.-"},  {'R', ".-."},   {'S', "..."},   {'T', "-"},
-        {'U', "..-"},   {'V', "...-"},  {'W', ".--"},   {'X', "-..-"},
-        {'Y', "-.--"},  {'Z', "--.."},  {'1', ".----"}, {'2', "..---"},
-        {'3', "...--"}, {'4', "....-"}, {'5', "....."}, {'6', "-...."},
-        {'7', "--..."}, {'8', "---.."}, {'9', "----."}, {'0', "-----"},
-        {' ', " "}
-    };
+    void key(bool on);
+    void playToneFor(int durationMs);
+    void enqueueAction(std::function<void()> func, int delayMs);
+    void enqueueSymbolSequence(const QString &morse);
+    QByteArray generateTone(int frequency, int durationMs, int sampleRate = 44100);
+
+
+
+    static inline const QMap<QChar, QString> morseTable = {
+        { 'A', ".-" }, { 'B', "-..." }, { 'C', "-.-." }, { 'D', "-.." },
+        { 'E', "." }, { 'F', "..-." }, { 'G', "--." }, { 'H', "...." },
+        { 'I', ".." }, { 'J', ".---" }, { 'K', "-.-" }, { 'L', ".-.." },
+        { 'M', "--" }, { 'N', "-." }, { 'O', "---" }, { 'P', ".--." },
+        { 'Q', "--.-" }, { 'R', ".-." }, { 'S', "..." }, { 'T', "-" },
+        { 'U', "..-" }, { 'V', "...-" }, { 'W', ".--" }, { 'X', "-..-" },
+        { 'Y', "-.--" }, { 'Z', "--.." },
+        { '0', "-----" }, { '1', ".----" }, { '2', "..---" }, { '3', "...--" },
+        { '4', "....-" }, { '5', "....." }, { '6', "-...." },
+         { '7', "--..." }, { '8', "---.." }, { '9', "----." },
+          { ' ', " " }
+          };
+
 };
 
 #endif // PCCWKEYER_H
-
-
-
-

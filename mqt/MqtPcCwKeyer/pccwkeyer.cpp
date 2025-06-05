@@ -6,25 +6,22 @@
 
 
 
-PcCwKeyer::PcCwKeyer(const QString &portName, int wpm, int farnsworthWpm, bool sidetone, QObject *parent)
-    : QObject(parent)
-{
+PcCwKeyer::PcCwKeyer(const QString &portName, int wpm, int farnsworthWpm, bool sidetone, bool dtrRts, QObject *parent)
+    : QObject(parent), useSidetone(sidetone), useDtrRts(dtrRts) {
     serial.setPortName(portName);
     serial.setBaudRate(QSerialPort::Baud9600);
     if (!serial.open(QIODevice::ReadWrite)) {
         qFatal("Failed to open port %s", qPrintable(portName));
+
     }
 
     key(false);
     setWPM(wpm, farnsworthWpm);
 
     connect(&timer, &QTimer::timeout, this, &PcCwKeyer::processQueue);
-/*
-    if (sidetone) {
-        toneData = generateTone(600, 100);  // 600 Hz, 100ms segment
-        toneBuffer.setData(toneData);
-        toneBuffer.open(QIODevice::ReadOnly);
+    timer.setSingleShot(true);
 
+    if (useSidetone) {
         QAudioFormat format;
         format.setSampleRate(44100);
         format.setChannelCount(1);
@@ -40,12 +37,10 @@ PcCwKeyer::PcCwKeyer(const QString &portName, int wpm, int farnsworthWpm, bool s
 
         audioOut = new QAudioOutput(format, this);
     }
-*/
 }
 
 PcCwKeyer::~PcCwKeyer() {
     key(false);
-    playTone(false);
     serial.close();
 }
 
@@ -67,55 +62,80 @@ void PcCwKeyer::sendText(const QString &text) {
         QString code = morseTable[ch];
 
         if (code == " ") {
-            enqueueDelay(spaceDot * 7);  // word space
+            enqueueAction([] {}, spaceDot * 7);  // word space
         } else {
             enqueueSymbolSequence(code);
-            enqueueDelay(spaceDot * 3);  // inter-char space
+            enqueueAction([] {}, spaceDot * 3);  // inter-char space
         }
     }
 
-    if (!timer.isActive())
-        timer.start(1);  // <-- fine resolution timer
+    if (!timer.isActive()) {
+        timer.start(1);
+    }
 }
 
 void PcCwKeyer::enqueueSymbolSequence(const QString &morse) {
     for (int i = 0; i < morse.length(); ++i) {
         int toneLen = (morse[i] == '.') ? charDot : charDot * 3;
 
-        qDebug() << "Symbol:" << morse[i] << "duration:" << toneLen;
+        enqueueAction([this, toneLen] {
+            key(true);
+            if (useSidetone) playToneFor(toneLen);
+        }, toneLen);
 
-        actions.enqueue([this] { key(true); playTone(true); });
-        enqueueDelay(toneLen);
-        actions.enqueue([this] { key(false); playTone(false); });
-
-        if (i != morse.length() - 1)
-            enqueueDelay(spaceDot);  // Inter-element space
+        enqueueAction([this] {
+            key(false);
+        }, spaceDot);
     }
 }
 
-void PcCwKeyer::enqueueDelay(int ms) {
-    for (int i = 0; i < ms; ++i)
-        actions.enqueue([] {});
+void PcCwKeyer::enqueueAction(std::function<void()> func, int delayMs) {
+    timedActions.enqueue({func, delayMs});
 }
 
+void PcCwKeyer::processQueue() {
+    if (timedActions.isEmpty()) {
+        key(false);
+        return;
+    }
+
+    auto next = timedActions.dequeue();
+    next.func();
+
+    if (!timedActions.isEmpty()) {
+        timer.start(next.delayMs);
+    } else {
+        timer.stop();
+    }
+}
 
 void PcCwKeyer::key(bool on) {
-    qDebug() << "DTR" << (on ? "ON" : "OFF") << "at" << QTime::currentTime().toString("hh:mm:ss.zzz");
 
-    serial.setDataTerminalReady(on);
+    if (useDtrRts)
+    {
+       serial.setDataTerminalReady(on);
+    }
+    else
+    {
+        serial.setReadBufferSize(on);
+    }
+
 }
 
-void PcCwKeyer::playTone(bool on) {
-
-    return;
-
+void PcCwKeyer::playToneFor(int durationMs) {
     if (!audioOut) return;
-    if (on) {
-        toneBuffer.seek(0);
-        audioOut->start(&toneBuffer);
-    } else {
-        audioOut->stop();
-    }
+
+    QByteArray data = generateTone(600, durationMs);
+    QBuffer* buffer = new QBuffer(this);
+    buffer->setData(data);
+    buffer->open(QIODevice::ReadOnly);
+
+    connect(audioOut, &QAudioOutput::stateChanged, buffer, [buffer](QAudio::State state) {
+        if (state == QAudio::IdleState || state == QAudio::StoppedState)
+            buffer->deleteLater();
+    });
+
+    audioOut->start(buffer);
 }
 
 QByteArray PcCwKeyer::generateTone(int frequency, int durationMs, int sampleRate) {
@@ -132,19 +152,77 @@ QByteArray PcCwKeyer::generateTone(int frequency, int durationMs, int sampleRate
     return data;
 }
 
-void PcCwKeyer::processQueue() {
-    if (!actions.isEmpty()) {
-        auto act = actions.dequeue();
-        act();
-    } else {
-        timer.stop();
-        key(false);
-        playTone(false);
+bool PcCwKeyer::isBusy() const {
+    return !timedActions.isEmpty();
+}
+
+
+
+
+void PcCwKeyer::setUseSideTone(bool useSideTone_)
+{
+
+    if (useSidetone == useSideTone_)
+        return;  // no change
+
+    useSidetone = useSideTone_;
+
+    if (useSidetone)
+    {
+        // Create new audioOut if not already created
+        if (!audioOut)
+        {
+            QAudioFormat format;
+            format.setSampleRate(44100);
+            format.setChannelCount(1);
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+            format.setSampleFormat(QAudioFormat::Int16);
+#else
+            format.setSampleSize(16);
+            format.setSampleType(QAudioFormat::SignedInt);
+            format.setByteOrder(QAudioFormat::LittleEndian);
+            format.setCodec("audio/pcm");
+#endif
+
+            audioOut = new QAudioOutput(format, this);
+        }
+    }
+    else
+    {
+        if (audioOut)
+        {
+            audioOut->stop();
+            delete audioOut;
+            audioOut = nullptr;
+        }
     }
 }
 
-bool PcCwKeyer::isBusy() const {
-    return !actions.isEmpty();
+
+
+
+void PcCwKeyer::abortTransmission()
+{
+    // Stop any pending CW actions
+    timer.stop();
+    timedActions.clear();
+
+    // Unkey the transmitter
+    key(false);
+
+    // Stop sidetone if active
+    if (useSidetone && audioOut) {
+        audioOut->stop();
+    }
+
+    qDebug() << "CW transmission aborted.";
 }
 
 
+void PcCwKeyer::close()
+{
+    if (serial.isOpen())
+    {
+        serial.close();
+    }
+}
