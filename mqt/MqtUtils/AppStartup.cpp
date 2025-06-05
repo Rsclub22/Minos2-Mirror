@@ -273,7 +273,8 @@ void appStartup(const QString &pappName)
         QApplication::setStyle("windowsvista");
     }
 #endif
-    qa->setStyleSheet(QString("[readOnly=\"true\"] { background-color: %0 }").arg(qa->palette().color(QPalette::Window).name(QColor::HexRgb)));
+    qa->setStyleSheet(QString("[readOnly=\"true\"] { background-color: %0 }")
+                          .arg(qa->palette().color(QPalette::Window).name(QColor::HexRgb)));
 
 // For Mac Users, set the default directory to be Documents/Minos2
 

@@ -666,7 +666,7 @@ void QSOLogFrame::setAsEdit(bool s, QString b)
         edit = true;
         ui->GJVCancelButton->setText(tr("Return to Log"));
         on_tabSandP();
-        ui->SerTxFrame->getTextEditEdit()->setReadOnly(false);
+        setTxReadOnly(false);
         ui->SerTxFrame->getTextEditEdit()->setFocusPolicy(Qt::StrongFocus);
     }
 }
@@ -940,6 +940,22 @@ QWidget *QSOLogFrame::getNextInvalid(QWidget * &firstInvalid)
     QWidget *nextf = ( nextInvalid ) ? nextInvalid : firstInvalid;
     return nextf;
 }
+void QSOLogFrame::setTxReadOnly(bool isNotEdit)
+{
+    ui->SerTxFrame->getTextEditEdit()->setReadOnly(isNotEdit);
+    if (isNotEdit)
+    {
+        ui->SerTxFrame->getTextEditEdit()->setStyleSheet
+            (QString("background-color: darkGrey"));
+    }
+    else
+    {
+        ui->SerTxFrame->getTextEditEdit()->setStyleSheet(QString());
+    }
+    ui->SerTxFrame->getTextEditEdit()->setFocusPolicy(!isNotEdit?Qt::StrongFocus:Qt::ClickFocus);
+    ui->SerTxFrame->setFocusPolicy(!isNotEdit?Qt::StrongFocus:Qt::ClickFocus);
+}
+
 void QSOLogFrame::doGJVOKButton_clicked()
 {
     if ( contest->isReadOnly() )
@@ -947,8 +963,7 @@ void QSOLogFrame::doGJVOKButton_clicked()
        return;
     }
     trace("QSOLogFrame::doGJVOKButton_clicked()");
-    ui->SerTxFrame->getTextEditEdit()->setReadOnly(!edit);
-    ui->SerTxFrame->getTextEditEdit()->setFocusPolicy(edit?Qt::StrongFocus:Qt::ClickFocus);
+    setTxReadOnly(!edit);
 
     getScreenEntry(); // make sure it is saved
     bool was_unfilled = screenContact.contactFlags.getValue() & TO_BE_ENTERED;
@@ -1255,7 +1270,7 @@ void QSOLogFrame::on_GJVForceButton_clicked()
     {
        return;
     }
-    ui->SerTxFrame->getTextEditEdit()->setReadOnly(!edit);
+    setTxReadOnly(!edit);
 
     trace("on_GJVForceButton_clicked(), about to go to dlgForced");
 
@@ -1328,6 +1343,12 @@ void QSOLogFrame::startNextEntry( )
 void QSOLogFrame::doGJVCancelButton_clicked()
 {
     trace("QSOLogFrame::doGJVCancelButton_clicked()");
+    if (!edit && current == ui->SerTxFrame->getTextEditEdit())
+    {
+        setTxReadOnly(!edit);
+        return;
+    }
+
     if (edit)
     {
         checkAndLogEntry();
@@ -1337,7 +1358,7 @@ void QSOLogFrame::doGJVCancelButton_clicked()
     }
     else
     {
-        ui->SerTxFrame->getTextEditEdit()->setReadOnly(!edit);
+        setTxReadOnly(!edit);
 
         ScreenContact *temp = nullptr;
         if ( !partialContact )
@@ -1431,7 +1452,7 @@ void QSOLogFrame::do_mouseDoubleClickEvent(QObject *w)
 
     if (w == ui->SerTxFrame->getTextEditEdit())
     {
-        ui->SerTxFrame->getTextEditEdit()->setReadOnly(false);
+        setTxReadOnly(false);
     }
     if (edit && (w == ui->timeEdit || w == ui->dateEdit))
     {
@@ -1567,7 +1588,7 @@ void QSOLogFrame::showScreenEntry( )
    if ( contest )
    {
       // we only validate this contact up to the validation point
-       ui->SerTxFrame->getTextEditEdit()->setReadOnly(!edit);
+      setTxReadOnly(!edit);
 
       contest->validationPoint = selectedContact?selectedContact->getLogSequence():0;
       ScreenContact temp;
@@ -1660,7 +1681,7 @@ void QSOLogFrame::EditControlExit( QObject * /*Sender*/ )
    {
       return;
    }
-   ui->SerTxFrame->getTextEditEdit()->setReadOnly(!edit);
+   setTxReadOnly(!edit);
 
    if ( current == ui->LocFrame->getTextEditEdit() )
    {
@@ -3478,7 +3499,7 @@ void QSOLogFrame::selectEntryForEdit( QSharedPointer<BaseContact> slct )
    ui->MainOpComboBox->setCurrentText(slct->op1.getValue());
    ui->SecondOpComboBox->setCurrentText(slct->op2.getValue());
    sortUnfilledCatchupTime();
-   ui->SerTxFrame->getTextEditEdit()->setReadOnly(!edit);
+   setTxReadOnly(!edit);
 
    int tne = screenContact.timeOff.notEntered(); // partial dtg will give +fe
    // full dtg gives -ve, none gives 0
