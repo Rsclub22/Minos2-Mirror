@@ -1,16 +1,14 @@
-QT       += core gui
+include($$PWD/../mqt.pri)
+# Temporary don't look for translation files
+TRANSLATIONS =
+include($$PWD/../mqtapplibs.pri)
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+QT       += core gui widgets network serialport multimedia
 
-QT       += core gui
-QT       += widgets
-QT       += network
-QT  += serialport
-QT += multimedia
+TARGET = MqtPcCwKeyer
+TEMPLATE = app
 
 CONFIG += c++17
-
-
 
 # You can make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
@@ -28,7 +26,3 @@ HEADERS += \
 FORMS += \
     pccwkeyermainwindow.ui
 
-# Default rules for deployment.
-qnx: target.path = /tmp/$${TARGET}/bin
-else: unix:!android: target.path = /opt/$${TARGET}/bin
-!isEmpty(target.path): INSTALLS += target

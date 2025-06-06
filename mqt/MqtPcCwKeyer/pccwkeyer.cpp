@@ -1,3 +1,19 @@
+/////////////////////////////////////////////////////////////////////////////
+// $Id$
+//
+// PROJECT NAME 		Minos Amateur Radio Control and Logging System
+//                      Pc Serial Port DTR CW Keyer
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2025
+//
+// Interprocess Control Logic
+// COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2017
+//
+//
+//
+/////////////////////////////////////////////////////////////////////////////
+
+
+
 #include "pccwkeyer.h"
 #include <QtMath>
 #include <QDebug>

@@ -1,9 +1,30 @@
+/////////////////////////////////////////////////////////////////////////////
+// $Id$
+//
+// PROJECT NAME 		Minos Amateur Radio Control and Logging System
+//                      Pc Serial Port DTR CW Keyer
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2025
+//
+// Interprocess Control Logic
+// COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2017
+//
+//
+//
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+
 #ifndef PCCWKEYERMAINWINDOW_H
 #define PCCWKEYERMAINWINDOW_H
 
 #include <QMainWindow>
 #include <QLineEdit>
+#include <QXmlStreamReader>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
 #include "pccwkeyer.h"
+#include "CommandReader.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -22,6 +43,9 @@ public:
 private:
     Ui::pcCwKeyerMainWindow *ui;
 
+    QSharedPointer<CommandReader> commandReader = QSharedPointer<CommandReader>(new CommandReader(this));
+
+    QTimer LogTimer;
 
     PcCwKeyer *cwKeyer = nullptr;
     //QString pendingBuffer;
@@ -66,6 +90,8 @@ private slots:
     void handleNextCwString();
     void handleSerialPortOpen(bool state);
     void handleSerialPortError(QString errorMsg);
+    void onCommandRead(QString cmd);
+    void LogTimerTimer();
 };
 #endif // PCCWKEYERMAINWINDOW_H
 

@@ -1,12 +1,37 @@
+/////////////////////////////////////////////////////////////////////////////
+// $Id$
+//
+// PROJECT NAME 		Minos Amateur Radio Control and Logging System
+//                      Pc Serial Port DTR CW Keyer
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2025
+//
+// Interprocess Control Logic
+// COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2017
+//
+//
+//
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#include <QTimer>
+#include <QtSerialPort/QSerialPort>
+#include <QtSerialPort/QSerialPortInfo>
+#include <QSettings>
+#include <QProcessEnvironment>
+#include <QDebug>
+
+#include "regsettings.h"
+#include "AppStartup.h"
+#include "MinosRPC.h"
+#include "RPCCommandConstants.h"
+#include "LogEvents.h"
+#include "MTrace.h"
+
 #include "pccwkeyermainwindow.h"
 #include "qevent.h"
 #include "ui_pccwkeyermainwindow.h"
 
-#include <QVBoxLayout>
-#include <QTimer>
-#include <QtSerialPort/QSerialPort>
-#include <QtSerialPort/QSerialPortInfo>
-#include <QDebug>
 
 
 
@@ -18,6 +43,29 @@ pcCwKeyerMainWindow::pcCwKeyerMainWindow(QWidget *parent)
     , ui(new Ui::pcCwKeyerMainWindow)
 {
     ui->setupUi(this);
+
+    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
+    trace("Connect to commandRead");  // This connect doesn't appear to work for some time!
+    connect(commandReader.data(), &CommandReader::commandLine, this, &pcCwKeyerMainWindow::onCommandRead);
+
+    RegSettings settings;
+    QByteArray geometry = settings.getSettings().value("geometry").toByteArray();
+    if (geometry.size() > 0)
+        restoreGeometry(geometry);
+
+    QString fileName = getDirectoryLocation(dlConfiguration) + "/PcCwKeyer.ini";
+    QSettings config(fileName, QSettings::IniFormat);
+
+
+    createCloseEvent();
+
+    connect(&LogTimer, &QTimer::timeout, this, &pcCwKeyerMainWindow::LogTimerTimer);
+    LogTimer.start(100);
+
+    QString appName = getAppStartupName();
+    trace(QString("AppName = %1").arg(appName));
+    MinosRPC *rpc = MinosRPC::getMinosRPC(appName);
+    Q_UNUSED(rpc)
 
     fillPortsInfo();
 
@@ -292,6 +340,11 @@ void pcCwKeyerMainWindow::keyPressEvent(QKeyEvent *event)
 
 void pcCwKeyerMainWindow::closeEvent(QCloseEvent *event)
 {
+    trace("pcCwKeyerMainWindow::closeEvent");
+
+    RegSettings settings;
+    settings.getSettings().setValue("geometry", saveGeometry());
+
     if (cwKeyer)
     {
         cwMsgQueue.clear();
@@ -301,5 +354,29 @@ void pcCwKeyerMainWindow::closeEvent(QCloseEvent *event)
 
     event->accept();  // allow the window to close
 }
+
+void pcCwKeyerMainWindow::onCommandRead(QString cmd)
+{
+    trace(QString("onCommandRead %1").arg(cmd));
+    if (cmd.indexOf("Shutdown", 0, Qt::CaseInsensitive) >= 0)
+    {
+        close();
+    }
+}
+
+void pcCwKeyerMainWindow::LogTimerTimer()
+{
+    static bool closed = false;
+    if ( !closed )
+    {
+        if ( checkCloseEvent() )
+        {
+            trace("close event seen");
+            closed = true;
+            close();
+        }
+    }
+}
+
 
 
