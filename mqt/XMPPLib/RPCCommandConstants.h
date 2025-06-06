@@ -58,6 +58,7 @@ static const QString clusterBandmask ("ClusterBandmask");
 static const QString clusterFrameId ("ClusterFrameId");
 static const QString clusterReconnect ("ClusterReconnect");
 
+
 // QRZ Server
 static const QString qrzServerApp  ("qrzServerApp");
 static const QString qrzDisplayApp ("qrzDisplayApp");
@@ -137,6 +138,20 @@ static const QString winkeyerApp           ("mqtWinKeyer");
 static const QString winkeyerDisplayApp    ("winkeyerDisplayApp");
 
 
+// PcCwKeyer
+static const QString pcCwKeyerApp       ("mqtPcCwKeyer");
+static const QString pcCwKeyerMethod     ("Minos:PcCwKeyer");
+static const QString pcCwKeyerState     ("pcCwKeyerState");
+static const QString pcCwKeyerDisconnected ("pcCwKeyerDisconnected");
+static const QString pcCwKeyerConnected ("pcCwKeyerConnected");
+static const QString pcCwKeyerConnectionState ("pcCwKeyerConnectionState");
+static const QString pcCwKeyerStateMessage     ("pcCwKeyerStateMessage");
+static const QString pcCwKeyerCwMessage ("pcCwKeyerCwMessage");
+static const QString pcCwKeyerCwParamMessage ("pcCwKeyerCwParamMessage");
+static const QString pcCwKeyerStopCw ("pcCwKeyerStopCw");
+static const QString pcCwKeyerStopCwParam ("pcCwKeyerStopCwParam");
+static const QString pcCwKeyerCategory    ("PcCwKeyerCategory");
+static const QString pcCwKeyerReport      ("PcCwKeyerReport");
 
 // Control
 static const QString controlApp         ("mqtControl");

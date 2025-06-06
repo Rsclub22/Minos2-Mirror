@@ -17,11 +17,18 @@ CONFIG += c++17
 SOURCES += \
     main.cpp \
     pccwkeyer.cpp \
-    pccwkeyermainwindow.cpp
+    pccwkeyermainwindow.cpp \
+    pccwkeyerrpc.cpp
+
+
 
 HEADERS += \
     pccwkeyer.h \
-    pccwkeyermainwindow.h
+    pccwkeyermainwindow.h \
+    pccwkeyerrpc.h
+
+
+
 
 FORMS += \
     pccwkeyermainwindow.ui
