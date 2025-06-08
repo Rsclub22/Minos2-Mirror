@@ -16,9 +16,7 @@
 #ifndef PCCWKEYERRPC_H
 #define PCCWKEYERRPC_H
 
-#include <QObject>
-
-#include "XMPPRPCObj.h"
+#include "MinosRPC.h"
 #include "AnalysePubSubNotify.h"
 
 class PcCwKeyerServer
@@ -51,6 +49,7 @@ public:
 
     void publishState( const QString &raw, const QString &state );
 
+    int getServerListCount();
 signals:
 
     void cwMessageFromLoggerToKeyer(QString);
@@ -70,6 +69,7 @@ private slots:
 
 
 
+    void on_provider(Provider p, QString);
 };
 
 

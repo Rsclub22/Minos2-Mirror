@@ -13,13 +13,12 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include "MinosRPC.h"
-#include "ConfigFile.h"
 #include "RPCCommandConstants.h"
 #include "RPCPubSub.h"
 #include "MTrace.h"
 #include "pccwkeyerrpc.h"
 
-static bool syncstat = false;
+
 
 
 
@@ -49,13 +48,14 @@ PcCwKeyerRpc::PcCwKeyerRpc()
     MinosRPC *rpc = MinosRPC::getMinosRPC();
 
 
-    QStringList sv{
-        rpcConstants::clusterApp, rpcConstants::qrzDisplayApp
-    };
-    rpc->initialiseRouters(sv);
+    QStringList sv;
+
+    rpc->findProviders(rpcConstants::pcCwKeyerCategory, sv);
+
 
     connect(rpc, &MinosRPC::routerCall, this, &PcCwKeyerRpc::on_routerCall);
     connect(rpc, &MinosRPC::notify, this, &PcCwKeyerRpc::on_notify);
+    connect(rpc, &MinosRPC::provider, this, &PcCwKeyerRpc::on_provider);
 
 
     QString a = rpc->getAppName();
@@ -66,6 +66,12 @@ PcCwKeyerRpc::PcCwKeyerRpc()
 
 PcCwKeyerRpc::~PcCwKeyerRpc()
 {
+}
+
+int PcCwKeyerRpc::getServerListCount()
+{
+    MinosRPC *rpc = MinosRPC::getMinosRPC();
+    return rpc->getProviders().count();
 }
 
 
@@ -97,7 +103,7 @@ void PcCwKeyerRpc::on_routerCall( bool err, QSharedPointer<MinosRPCObj>mro, cons
                     QString cwText;
 
 
-                    if (args->getStructArgMember(0, rpcConstants::txSpotParamFreq, cwMsg))
+                    if (args->getStructArgMember(0, rpcConstants::pcCwKeyerCwMessage, cwMsg))
                     {
                         cwMsg->getString(cwText);
 
@@ -140,7 +146,10 @@ void PcCwKeyerRpc::on_routerCall( bool err, QSharedPointer<MinosRPCObj>mro, cons
     }
 }
 
-
+void PcCwKeyerRpc::on_provider(Provider p, QString /*cat*/  )
+{
+    trace(QString("clusterServer: on_provider - routerName = %1, app = %2").arg(p.routerName, p.app));
+}
 
 
 void PcCwKeyerRpc::on_notify(AnalysePubSubNotify /*an*/, const QString /*from*/ )

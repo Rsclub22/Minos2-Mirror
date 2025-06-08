@@ -203,6 +203,8 @@ public:
     void sendRunOffFreqFlag(Frequency, bool);
 
 
+    void sendPcKeyerTxCwMessage(QString msg);
+    void sendPcKeyerTxCwStop(QString msg);
 private:
     QString curScreenLayout;
 

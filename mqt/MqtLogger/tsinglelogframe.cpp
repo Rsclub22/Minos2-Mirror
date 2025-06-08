@@ -2128,6 +2128,22 @@ void TSingleLogFrame::sendRigTxCwMessage(QString msg)
     }
 }
 
+void TSingleLogFrame::sendPcKeyerTxCwMessage(QString msg)
+{
+    if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
+    {
+        LogContainer->sendDM->sendPcKeyerTxCwMessage(this, msg);
+    }
+}
+
+void TSingleLogFrame::sendPcKeyerTxCwStop(QString msg)
+{
+    if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
+    {
+        LogContainer->sendDM->sendPcKeyerTxCwStop(this, msg);
+    }
+}
+
 void TSingleLogFrame::sendRadioFreq(Frequency freq)
 {
     if (contest && contest == TContestApp::getContestApp() ->getCurrentContest()

@@ -33,9 +33,12 @@ class TSendDM : public QObject
       bool clusterServerLoaded = false;
       bool clusterConnected = false;
 
+      bool pcCwKeyerLoaded = false;
+      bool pcCwKeyerConnected = false;
 
       PubSubName keyerApp;
       PubSubName clusterApp;
+      PubSubName pcCwKeyerApp;
 
       QString loggerUuid;
 
@@ -91,6 +94,10 @@ class TSendDM : public QObject
       void sendRigStopTxVoiceMessage(TSingleLogFrame *tslf, const QString &msg);
       void sendRigTxCwMessage(TSingleLogFrame *tslf, const QString &msg);
 
+      void sendPcKeyerTxCwMessage(TSingleLogFrame *tslf, const QString &msg);
+      void sendPcKeyerTxCwStop(TSingleLogFrame *tslf, const QString &msg);
+
+
       void sendRigControlMode(TSingleLogFrame *tslf, const QString &mode);
       void sendRigControlVolumeLevel(TSingleLogFrame *tslf, int level);
       void sendRigControlPassBandState(TSingleLogFrame *tslf,const int state);
@@ -134,6 +141,14 @@ class TSendDM : public QObject
       bool isClusterConnected()
       {
           return clusterConnected;
+      }
+      bool isPcCWkeyerLoaded()
+      {
+          return pcCwKeyerLoaded;
+      }
+      bool isPcCwKeyerConnected()
+      {
+          return pcCwKeyerConnected;
       }
 
 

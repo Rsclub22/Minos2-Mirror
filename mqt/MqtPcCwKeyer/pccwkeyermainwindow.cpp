@@ -24,7 +24,6 @@
 #include "regsettings.h"
 #include "AppStartup.h"
 #include "MinosRPC.h"
-#include "RPCCommandConstants.h"
 #include "LogEvents.h"
 #include "MTrace.h"
 
@@ -33,7 +32,7 @@
 #include "ui_pccwkeyermainwindow.h"
 
 
-
+const int STATUS_TIMER_DUR = 1000;
 
 static const char blankString[] = QT_TRANSLATE_NOOP("SettingsDialog", "N/A");
 
@@ -45,8 +44,20 @@ pcCwKeyerMainWindow::pcCwKeyerMainWindow(QWidget *parent)
     ui->setupUi(this);
 
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
+
+
+
+
     trace("Connect to commandRead");  // This connect doesn't appear to work for some time!
     connect(commandReader.data(), &CommandReader::commandLine, this, &pcCwKeyerMainWindow::onCommandRead);
+
+    QString appName = getAppStartupName();
+    trace(QString("AppName = %1").arg(appName));
+
+    MinosRPC *rpc = MinosRPC::getMinosRPC(getAppStartupName());
+    Q_UNUSED(rpc)
+
+    createCloseEvent();
 
     RegSettings settings;
     QByteArray geometry = settings.getSettings().value("geometry").toByteArray();
@@ -56,16 +67,16 @@ pcCwKeyerMainWindow::pcCwKeyerMainWindow(QWidget *parent)
     QString fileName = getDirectoryLocation(dlConfiguration) + "/PcCwKeyer.ini";
     QSettings config(fileName, QSettings::IniFormat);
 
-
-    createCloseEvent();
-
     connect(&LogTimer, &QTimer::timeout, this, &pcCwKeyerMainWindow::LogTimerTimer);
     LogTimer.start(100);
 
-    QString appName = getAppStartupName();
-    trace(QString("AppName = %1").arg(appName));
-    MinosRPC *rpc = MinosRPC::getMinosRPC(appName);
-    Q_UNUSED(rpc)
+
+    pcCwKeyerRpc = new PcCwKeyerRpc();
+
+
+
+
+
 
     fillPortsInfo();
 
@@ -79,6 +90,10 @@ pcCwKeyerMainWindow::pcCwKeyerMainWindow(QWidget *parent)
     setWpmValue(wpm);
 
     setConnections();
+
+    statusTimer = new QTimer(this);
+    connect(statusTimer, &QTimer::timeout, this, &pcCwKeyerMainWindow::handleStatusTimer);
+    statusTimer->start(STATUS_TIMER_DUR);
 
 
 
@@ -117,6 +132,36 @@ void pcCwKeyerMainWindow::handleNextCwString()
         QString next = cwMsgQueue.takeFirst().append(" "); // add space between messages
         cwKeyer->sendText(next);
     }
+}
+
+void pcCwKeyerMainWindow::handleStatusTimer()
+{
+    static QString oldStatusMsg;
+    static int oldServerListCount = 0;
+    qDebug() << "keyer server count = " << pcCwKeyerRpc->getServerListCount();
+    if (oldServerListCount != pcCwKeyerRpc->getServerListCount())
+    {
+        oldServerListCount = pcCwKeyerRpc->getServerListCount();
+        // send status to clients
+        //trace(QString("handleStatusTimer: Cluster Client Count Changed old = %1, new = %2 - Send Status to Cluster Clients - %3").arg(oldServerListCount).arg(pcCwKeyerRpc->getServerListCount()).arg(status->text()));
+        pcCwKeyerRpc->publishState(ui->statusbar->currentMessage(), ui->statusbar->currentMessage());
+
+    }
+
+   // send status message if it has changed
+    else if (!ui->statusbar->currentMessage().isEmpty())
+    {
+        if (oldStatusMsg != ui->statusbar->currentMessage())
+        {
+            oldStatusMsg = ui->statusbar->currentMessage();
+
+            // send status to clients
+            trace(QString("handleStatusTimer: Send Status to Cluster Clients - %1").arg(ui->statusbar->currentMessage()));
+            //sendSpotsQueue.append(createStatusToSend(rawStatus));
+            pcCwKeyerRpc->publishState(ui->statusbar->currentMessage(), ui->statusbar->currentMessage());
+        }
+    }
+
 }
 
 

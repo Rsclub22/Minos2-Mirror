@@ -25,6 +25,7 @@
 #include <QNetworkReply>
 #include "pccwkeyer.h"
 #include "CommandReader.h"
+#include "pccwkeyerrpc.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -62,7 +63,9 @@ private:
 
     bool dtrRtsSelected = true; // true = dtr, false = rts
 
+    QTimer* statusTimer;
 
+    PcCwKeyerRpc* pcCwKeyerRpc;
 
 
     void fillPortsInfo();
@@ -92,6 +95,7 @@ private slots:
     void handleSerialPortError(QString errorMsg);
     void onCommandRead(QString cmd);
     void LogTimerTimer();
+    void handleStatusTimer();
 };
 #endif // PCCWKEYERMAINWINDOW_H
 

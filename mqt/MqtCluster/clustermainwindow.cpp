@@ -2943,7 +2943,7 @@ void ClusterMainWindow::handleStatusTimer()
 {
     static QString oldStatusMsg;
     static int oldServerListCount = 0;
-
+    qDebug() << "cluster server count = " << clusterRpc->getServerListCount();
 
     if (oldServerListCount != clusterRpc->getServerListCount())
     {

@@ -111,6 +111,13 @@ void TSendDM::getRouterAppCatMap()
         {
             routerAppCatMap[rpcConstants::DMCat].push_back(i);
         }
+        else if (i->appType == "PcDtrCwKeyer")
+        {
+            routerAppCatMap[rpcConstants::pcCwKeyerApp].push_back(i);
+            routerAppCatMap[rpcConstants::pcCwKeyerCategory].push_back(i);
+
+        }
+
     }
     rpc->setRouterAppCatMap(routerAppCatMap);
 }
@@ -505,6 +512,36 @@ void TSendDM::sendRigTxCwMessage(TSingleLogFrame *tslf, const QString &msg)
 
     rpc.queueCall( rigSelected );
 }
+
+void TSendDM::sendPcKeyerTxCwMessage(TSingleLogFrame *tslf, const QString &msg)
+{
+    if (!pcCwKeyerApp.isEmpty())
+    {
+        RPCGeneralClient rpc(rpcConstants::pcCwKeyerMethod);
+        QSharedPointer<RPCParam>st(new RPCParamStruct);
+        st->addMember( loggerUuid, rpcConstants::loggerUuid );
+        st->addMember( tslf->getContest()->uuid, rpcConstants::selected );
+        st->addMember(msg, rpcConstants::pcCwKeyerCwMessage);
+        rpc.getCallArgs() ->addParam( st );
+        rpc.queueCall( keyerApp );
+    }
+}
+
+
+void TSendDM::sendPcKeyerTxCwStop(TSingleLogFrame *tslf, const QString &msg)
+{
+    if (!pcCwKeyerApp.isEmpty())
+    {
+        RPCGeneralClient rpc(rpcConstants::pcCwKeyerMethod);
+        QSharedPointer<RPCParam>st(new RPCParamStruct);
+        st->addMember( loggerUuid, rpcConstants::loggerUuid );
+        st->addMember( tslf->getContest()->uuid, rpcConstants::selected );
+        st->addMember(msg, rpcConstants::pcCwKeyerStopCw);
+        rpc.getCallArgs() ->addParam( st );
+        rpc.queueCall( keyerApp );
+    }
+}
+
 
 
 void TSendDM::sendRigControlMode(TSingleLogFrame *tslf,const QString &mode)
@@ -1119,6 +1156,15 @@ void TSendDM::on_notify( AnalysePubSubNotify an, const QString /*from*/ )
         else if ( an.getCategory() == rpcConstants::clusterCategory  && an.getKey() == rpcConstants::clusterTXSpotEnableState )
         {
             emit setClusterTXSpotEnableState(an.getValue());
+        }
+        if (an.getCategory() == rpcConstants::pcCwKeyerCategory && an.getKey() == rpcConstants::pcCwKeyerReport)
+        {
+            if (pcCwKeyerApp.isEmpty())
+            {
+                pcCwKeyerApp = PubSubName(an);
+            }
+
+            pcCwKeyerLoaded = true;
         }
 
     }

@@ -93,6 +93,7 @@ SOURCES += \
     managebandmapspotsdb.cpp \
     n1mmbroadcast.cpp \
     n1mmbroadcastconfig.cpp \
+    pccwmessagekeyer.cpp \
     qrzdisplayframe.cpp \
     qsologframe.cpp \
     qsotableframe.cpp \
@@ -200,6 +201,7 @@ HEADERS  += \
     managebandmapspotsdb.h \
     n1mmbroadcast.h \
     n1mmbroadcastconfig.h \
+    pccwmessagekeyer.h \
     printfile.h \
     qrzdisplayframe.h \
     qsologframe.h \

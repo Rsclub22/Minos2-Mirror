@@ -16,6 +16,7 @@ namespace voiceKeyerCommon
     // Rigcontrol with hamlib will provide max number of voice memories the
     // radio will support.
 
+    const int PC_CW_KEYER_MAXIMUM_BUTTONS = 10;
     const int MAXIMUM_BUTTONS = 8;
     const int MININUM_BUTTONS = 2;
 
@@ -25,6 +26,7 @@ namespace voiceKeyerCommon
         RigControl,
         CW_RigControl,    // Rig sends message by CW
         SerialControl,    // Sends user serial message to control external voice keyer
+        PcCwKeyer,        // Serial DTR keying of radio
         InternalVoiceKeyer,
         ExternalVoiceKeyer
     };
@@ -37,7 +39,7 @@ namespace voiceKeyerCommon
         InternalSoundCardVoiceKeyer
     };
 
-    inline const QStringList keyerTypes = {"", "Voice RigControl", "CW RigControl", "SerialControl", "Internal", "mqtKeyer"};
+    inline const QStringList keyerTypes = {"", "Voice RigControl", "CW RigControl", "SerialControl", "PcCwKeyer", "Internal", "mqtKeyer"};
 
     inline const QString VOICEKEYER_COMMON_KEY = "commonParams";
 
@@ -47,6 +49,7 @@ namespace voiceKeyerCommon
     inline const QString VOICEKEYER_COMMON_PARAMS_FILENAME = "txVoiceKeyCommonParams.ini";
     inline const QString VOICEKEYER_COMMON_PARAMS_GROUPNAME = VOICEKEYER_COMMON_KEY;
     inline const QString CWKEYER_RADIO_COMMON_PARAMS_FILENAME = "cwRadioParams";
+    inline const QString PC_CW_KEYER_COMMON_PARAMS_FILENAME = "pcCwKeyerParams";
     inline const QString DEFAULT_SUPPORTED_CW_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 /?{}";
     inline const QString DEFAULT_MACRO_CW_CHARACTERS = "{}*#!%$";
     inline const QString DEFAULT_LENGTH_CW_MESSAGE = "24";
@@ -70,12 +73,12 @@ bool readSaveVoiceCWMemoryButtonByRadioNameFromIni(voiceKeyerCommon::VoiceKeyerI
 void writeSaveVoiceCWMemoryButtonByRadioNameToIni(bool data, voiceKeyerCommon::VoiceKeyerId id);
 void getListOfRadioNamesForMemoryButtons(QStringList &radioNames, voiceKeyerCommon::VoiceKeyerId id);
 
-bool getRigCWKeyerSupportedSpecialCharacters(QMap<QString, QChar> &specialCharMap, QString radioMfg);
-bool getRigCWKeyerMacroCharacter(QString &macroChars, QString radioMfg);
-bool getRigCWKeyerListOfRadiosSupportSpecialCharacters(QStringList &listOfRadioModels, QString radioMfg);
-bool getRigCWKeyerSupportedCharacters(QString &supportedChars, QString radioMfg);
-bool getRigCWMessageStoredInRadioFlag(bool &storedInRadio, QString radioMfg);
-bool getRigCWKeyerMaxMessageLength(int &messageLength, QString radioMfg);
+bool getRigCWKeyerSupportedSpecialCharacters(QMap<QString, QChar> &specialCharMap, QString radioMfg, const QString filename);
+bool getRigCWKeyerMacroCharacter(QString &macroChars, QString radioMfg, const QString filename);
+bool getRigCWKeyerListOfRadiosSupportSpecialCharacters(QStringList &listOfRadioModels, QString radioMfg, const QString filename);
+bool getRigCWKeyerSupportedCharacters(QString &supportedChars, QString radioMfg, const QString filename);
+bool getRigCWMessageStoredInRadioFlag(bool &storedInRadio, QString radioMfg, const QString filename);
+bool getRigCWKeyerMaxMessageLength(int &messageLength, QString radioMfg, const QString filename);
 
 QString getCwRadioManufacturer(int cwMemType);
 

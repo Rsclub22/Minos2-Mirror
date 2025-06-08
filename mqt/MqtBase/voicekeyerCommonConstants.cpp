@@ -61,9 +61,9 @@ void getListOfRadioNamesForMemoryButtons(QStringList &radioNames, VoiceKeyerId i
 
 
 
-bool getRigCWMessageStoredInRadioFlag(bool &storedInRadio, QString radioMfg)
+bool getRigCWMessageStoredInRadioFlag(bool &storedInRadio, QString radioMfg, const QString filename)
 {
-    QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + CWKEYER_RADIO_COMMON_PARAMS_FILENAME + ".ini";
+    QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + filename + ".ini";
     QSettings config(fileName, QSettings::IniFormat);
 
     if (config.childGroups().contains(radioMfg))
@@ -77,10 +77,10 @@ bool getRigCWMessageStoredInRadioFlag(bool &storedInRadio, QString radioMfg)
     return false;    // error
 }
 
-bool getRigCWKeyerMaxMessageLength(int &messageLength, QString radioMfg)
+bool getRigCWKeyerMaxMessageLength(int &messageLength, QString radioMfg, const QString filename)
 {
 
-    QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + CWKEYER_RADIO_COMMON_PARAMS_FILENAME + ".ini";
+    QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + filename + ".ini";
     QSettings config(fileName, QSettings::IniFormat);
 
     if (config.childGroups().contains(radioMfg))
@@ -97,9 +97,9 @@ bool getRigCWKeyerMaxMessageLength(int &messageLength, QString radioMfg)
 }
 
 
-bool getRigCWKeyerSupportedCharacters(QString &supportedChars, QString radioMfg)
+bool getRigCWKeyerSupportedCharacters(QString &supportedChars, QString radioMfg, const QString filename)
 {
-    QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + CWKEYER_RADIO_COMMON_PARAMS_FILENAME + ".ini";
+    QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + filename + ".ini";
     QSettings config(fileName, QSettings::IniFormat);
 
     if (config.childGroups().contains(radioMfg))
@@ -118,9 +118,9 @@ bool getRigCWKeyerSupportedCharacters(QString &supportedChars, QString radioMfg)
     return false;    // error
 }
 
-bool getRigCWKeyerMacroCharacter(QString &macroChars, QString radioMfg)
+bool getRigCWKeyerMacroCharacter(QString &macroChars, QString radioMfg, const QString filename)
 {
-    QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + CWKEYER_RADIO_COMMON_PARAMS_FILENAME + ".ini";
+    QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + filename + ".ini";
     QSettings config(fileName, QSettings::IniFormat);
 
     if (config.childGroups().contains(radioMfg))
@@ -139,9 +139,9 @@ bool getRigCWKeyerMacroCharacter(QString &macroChars, QString radioMfg)
     return false;    // error
 }
 
-bool getRigCWKeyerListOfRadiosSupportSpecialCharacters(QStringList &listOfRadioModels, QString radioMfg)
+bool getRigCWKeyerListOfRadiosSupportSpecialCharacters(QStringList &listOfRadioModels, QString radioMfg, const QString filename)
 {
-    QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + CWKEYER_RADIO_COMMON_PARAMS_FILENAME + ".ini";
+    QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + filename + ".ini";
     QSettings config(fileName, QSettings::IniFormat);
 
     QString radios;
@@ -171,9 +171,9 @@ bool getRigCWKeyerListOfRadiosSupportSpecialCharacters(QStringList &listOfRadioM
 }
 
 
-bool getRigCWKeyerSupportedSpecialCharacters(QMap<QString, QChar> &specialCharMap, QString radioMfg)
+bool getRigCWKeyerSupportedSpecialCharacters(QMap<QString, QChar> &specialCharMap, QString radioMfg, const QString filename)
 {
-    QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + CWKEYER_RADIO_COMMON_PARAMS_FILENAME + ".ini";
+    QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + filename + ".ini";
     QSettings config(fileName, QSettings::IniFormat);
 
     QString specialChars;
