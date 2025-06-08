@@ -119,6 +119,7 @@ class TContestApp : public MinosParameters
       virtual BaseContestLog *getContestSlot(int) override;
       virtual int getListSlotCount() override;
       virtual ContactList *getListSlot(int) override;
+      virtual bool isLogger() override;
 
 
       TContestApp();

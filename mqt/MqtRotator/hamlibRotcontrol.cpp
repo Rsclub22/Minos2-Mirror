@@ -228,73 +228,61 @@ void HamlibRotControl::register_rotators(RotatorFactory::Rotators* rotatorsList)
 
     for (int i = 0; i < capsList.count(); i++)
     {
-        key = QString("%1 %2").arg(capsList[i]->mfg_name, capsList[i]->model_name);
-        auto port_type = RotCapConstants::PortType::none;
-        switch(capsList[i]->port_type)
+        if (capsList[i]->max_az != 0) // skip elevation models
         {
-            case RIG_PORT_SERIAL:
-                port_type = RotCapConstants::PortType::serial;
-            break;
+            key = QString("%1 %2").arg(capsList[i]->mfg_name, capsList[i]->model_name);
+            auto port_type = RotCapConstants::PortType::none;
+            switch(capsList[i]->port_type)
+            {
+                case RIG_PORT_SERIAL:
+                    port_type = RotCapConstants::PortType::serial;
+                break;
 
-            case RIG_PORT_NETWORK:
-                port_type = RotCapConstants::PortType::network;
-            break;
+                case RIG_PORT_NETWORK:
+                    port_type = RotCapConstants::PortType::network;
+                break;
 
-            case RIG_PORT_USB:
-                port_type = RotCapConstants::PortType::usb;
-            break;
-            default:
-            {}
+                case RIG_PORT_USB:
+                    port_type = RotCapConstants::PortType::usb;
+                break;
+                default:
+                {}
+            }
+
+
+            int min_az = capsList[i]->min_az;
+            int max_az = capsList[i]->max_az;
+
+
+            // uncomment to dump the rotator values to tracelog
+            trace(QString("Manufacturer = %1, Model Name = %2, RotModel = %3, move = %4, stop = %5, minAz = %6, maxAz = %7")
+                  .arg(capsList[i]->mfg_name)
+                  .arg(capsList[i]->model_name)
+                  .arg(capsList[i]->rot_model)
+                  .arg(capsList[i]->move ? "True" : "False")
+                  .arg(capsList[i]->stop  ? "True" : "False")
+                  .arg(capsList[i]->min_az)
+                  .arg(capsList[i]->max_az));
+
+            RotCapabilities rotCap;
+
+            rotCap.setModelNumber(capsList[i]->rot_model);
+            rotCap.setPortType(port_type);
+            rotCap.setRotatorManufacturer(capsList[i]->mfg_name);
+            rotCap.setRotatorModelName(capsList[i]->model_name);
+            rotCap.setSupportCwCCwCmd(capsList[i]->move != nullptr ? true : false);
+            rotCap.setSupportStopCommand(capsList[i]->stop != nullptr ? true : false);
+            rotCap.setMinRot(min_az);
+            rotCap.setMaxRot(max_az);
+            rotCap.setEnableSelectDisplayDial(RotCapConstants::SelectDisplayCompass::disableSelectDisplayDial);
+            rotCap.setPollData(RotCapConstants::PollData::pollDataOn);
+            rotCap.setAllowSouthStopConfig(true);
+            rotCap.setAllowSkyScan(true);
+
+
+            (*rotatorsList)[key] = rotCap;
+
         }
-
-        int min_az = 0; // hamlib V4.0 sets min azimuth to -180 for Yaesu rotators, override to 0.
-        int max_az = 360;
-
-        if (capsList[i]->max_az == 450)
-        {
-           if ( capsList[i]->min_az == -180)
-           {
-
-                min_az = 0;
-           }
-
-        }
-        else
-        {
-            min_az = capsList[i]->min_az;
-        }
-
-
-        max_az = capsList[i]->max_az;
-
-
-        // uncomment to dump the rotator values to tracelog
-        trace(QString("Manufacturer = %1, Model Name = %2, RotModel = %3, move = %4, stop = %5, minAz = %6, maxAz = %7")
-              .arg(capsList[i]->mfg_name)
-              .arg(capsList[i]->model_name)
-              .arg(capsList[i]->rot_model)
-              .arg(capsList[i]->move ? "True" : "False")
-              .arg(capsList[i]->stop  ? "True" : "False")
-              .arg(capsList[i]->min_az)
-              .arg(capsList[i]->max_az));
-
-        RotCapabilities rotCap;
-
-        rotCap.setModelNumber(capsList[i]->rot_model);
-        rotCap.setPortType(port_type);
-        rotCap.setRotatorManufacturer(capsList[i]->mfg_name);
-        rotCap.setRotatorModelName(capsList[i]->model_name);
-        rotCap.setSupportCwCCwCmd(capsList[i]->move != nullptr ? true : false);
-        rotCap.setSupportStopCommand(capsList[i]->stop != nullptr ? true : false);
-        rotCap.setMinRot(min_az);
-        rotCap.setMaxRot(max_az);
-        rotCap.setEnableSelectDisplayDial(RotCapConstants::SelectDisplayCompass::disableSelectDisplayDial);
-        rotCap.setPollData(RotCapConstants::PollData::pollDataOn);
-        rotCap.setAllowSouthStopConfig(true);
-
-
-        (*rotatorsList)[key] = rotCap;
-
 
     }
 
@@ -506,12 +494,17 @@ QString HamlibRotControl::getLibraryName()
 
 QString HamlibRotControl::getRotLibVersion()
 {
-    QString ver = hamlib_version2;
-    return ver;
+
+   QString ver = hamlib_version2;
+   return ver;
 }
 
 
-
+QString HamlibRotControl::getRotLibDetailedVersion()
+{
+    QString ver = hamlib_version2;
+    return ver;
+}
 
 
 

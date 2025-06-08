@@ -12,7 +12,8 @@ namespace Ui {
 class RotPresets;
 }
 
-class RotPresets : public QGroupBox
+
+class RotPresets : public QFrame
 {
     Q_OBJECT
 
@@ -23,6 +24,7 @@ public:
     void setRotatorPresetList(QString s);
     void setContest(BaseContestLog *);
 
+    void skyScanStartedSetFrameDisabled(bool disabled);
 private:
     Ui::RotPresets *ui;
     QString antennaName;

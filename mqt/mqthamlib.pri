@@ -1,7 +1,9 @@
 # Make sure the Windows Path statement contains the path to the Hamlib Bin Dir
 # For example C:\Qt_Projects\hamlib-w32-4.6\bin
 
+
 HAMLIBVERSION=4.6.2
+
 DEFINES += HAMLIBVERSION=\\\"$$HAMLIBVERSION\\\"
 # message(Using hamlib V$$HAMLIBVERSION)
 

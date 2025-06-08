@@ -7,6 +7,10 @@ class AntennaState
 {
     MinosStringItem<QString> _bearing;
     MinosStringItem<QString> _status;
+    MinosStringItem<QString> _skyScanNextStep;
+    MinosStringItem<QString> _skyScanCountDown;
+    MinosItem<int> _skyScanButtonState;
+    MinosItem<bool> _skyScanReverseScan;
     CacheSelection _selected;
 public:
     AntennaState();
@@ -27,6 +31,17 @@ public:
     void setStatus(const QString &status);
     void setSelected(const QString &loggeruuid, const QString &selected);
     QStringList getSelectedLoggers();
+
+    MinosStringItem<QString> skyScanNextStep() const;
+    MinosStringItem<QString> skyScanCountDown() const;
+    MinosItem<int> skyScanButtonState() const;
+    MinosItem<bool> skyScanReverseScan() const;
+
+    void setSkyScanNextStep(const QString &skyScanNextStep);
+    void setSkyScanCountDown(const QString &skyScanCountDown);
+    void setSkyScanButtonState(int state);
+    void setSkyScanReverseScan(bool reverseScan);
+
 };
 
 #endif // ANTENNASTATE_H

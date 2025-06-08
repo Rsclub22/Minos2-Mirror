@@ -14,12 +14,15 @@
 #include "qsologframe.h"
 #include "rigcontrolframe.h"
 #include "rotcontrolframe.h"
+#include "rotatorskyscanframe.h"
 #include "RotPresets.h"
 #include "runbuttonsframe.h"
 #include "BandSwitchFrame.h"
 #include "txvmbuttonsframe.h"
 #include "qrzdisplayframe.h"
 #include "qsomapframe.h"
+#include "rotatorcompassframe.h"
+#include "skyscanpresetsframe.h"
 
 namespace Ui {
 class TSingleLogFrame;
@@ -47,6 +50,9 @@ public:
     RunButtonsFrame *runButtonsFrame = nullptr;
     BandSwitchFrame *bandSwitchFrame = nullptr;
     RotControlFrame *FKHRotControlFrame = nullptr;
+    RotatorSkyScanFrame *skyScanControlFrame = nullptr;
+    RotatorCompassFrame *FKHRotCompassFrame = nullptr;
+    skyScanPresetsFrame *FKHRotSkyScanPresetsFrame = nullptr;
     TxVmButtonsFrame *txVmButtonsFrame = nullptr;
     QrzDisplayFrame *qrzDisplayFrame = nullptr;
 
@@ -137,6 +143,7 @@ public:
     void on_SetBandList(QString s, PubSubName psn);
 
     void on_SupportStopCommand(bool state);
+    void on_RotatorStopSouthStopOffset(QString data);
     void sendRigTxVoiceMessage(QString msgNum);
     void sendRigStopTxVoiceMessage(QString msg);
 
@@ -175,12 +182,26 @@ public:
     void on_RotatorMinAzimuth(int);
     void on_cwCcwCmdEnable(bool);
     void presetTurn(QString);
+    void on_RotatorSkyScanPresetList(QString skyScanPresetList);
 
     void xferFromKST(QString call, QString loc, QString freq);
 
     void setCallPlaceholder(QString call);
+
+    void on_SkyScanNextStep(QString nextStep);
+    void on_SkyScanCountDown(QString countDown);
+    void on_SkyScanButtonState(int state);
+    void on_SkyScanReverseScan(bool state);
+    void on_skyScanVisible(bool state);
+    void on_skyScanStartBearing(int startBearing);
+    void on_skyScanEndBearing(int endBearing);
+    void on_skyScanRotatorStartBearing(int rotatorStartBearing);
+    void on_skyScanRotatorEndBearing(int rotatorEndBearing);
+
+
     void sendRunOnFlag(Frequency, QString mode, bool);
     void sendRunOffFreqFlag(Frequency, bool);
+
 
 private:
     QString curScreenLayout;
@@ -197,6 +218,9 @@ private:
     void transferDetails( MatchTreeItem *MatchTreeIndex );
 
     MatchTreeItem *getXferItem();
+
+    SkyScanButtonState skyScanButtonState;     // use to prevent sending rotator commands
+                                               // when skyScan is active
 
     void createScreenComponents();
 
@@ -279,6 +303,8 @@ private slots:
     void onQrzCallsignRequest(QString callsign);
     void onQrzInfoToLog(QString callsign, QString qraLocator, QString name);
     void onShowCribBand();
+    void sendSkyScanFrameButtonStateToRotator(SkyScanButtonState buttonState);
+    void sendSkyScanPresetNumberToRotator(int buttonNumber);
 };
 
 #endif // TSINGLELOGFRAME_H

@@ -1,3 +1,14 @@
+/////////////////////////////////////////////////////////////////////////////
+// $Id$
+//
+// PROJECT NAME 		Minos Amateur Radio Control and Logging System
+//                      Rotator Control
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2020 - 2025
+//
+//
+//
+/////////////////////////////////////////////////////////////////////////////
+
 #ifndef ROTCAPABILITIES_H
 #define ROTCAPABILITIES_H
 
@@ -52,6 +63,9 @@ public:
     void setAllowSouthStopConfig(bool allowSouthStopConfig_);
     bool getAllowSouthStopConfig() const;
 
+    void setAllowSkyScan(bool allowSkyScan_);
+    bool getAllowSkyScan() const;
+
 
 private:
 
@@ -64,6 +78,7 @@ private:
     int minRot;
     int maxRot;
     bool enableSelectDisplayDial;
+    bool allowSkyScan;
     bool pollData;
     bool allowSouthStopConfig;
 

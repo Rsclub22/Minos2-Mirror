@@ -103,9 +103,12 @@ SOURCES += \
     rigcontrolvoicememorykeyer.cpp \
     rigmemdialog.cpp \
     ritlineedit.cpp \
+    rotatorcompassframe.cpp \
+    rotatorskyscanframe.cpp \
     rotcontrolframe.cpp \
     runbuttondialog.cpp \
     runbuttonsframe.cpp \
+    skyscanpresetsframe.cpp \
     taboutbox.cpp \
     tbundleframe.cpp \
     tcalendardownload.cpp \
@@ -208,9 +211,12 @@ HEADERS  += \
     rigcontrolvoicememorykeyer.h \
     rigmemdialog.h \
     ritlineedit.h \
+    rotatorcompassframe.h \
+    rotatorskyscanframe.h \
     rotcontrolframe.h \
     runbuttondialog.h \
     runbuttonsframe.h \
+    skyscanpresetsframe.h \
     taboutbox.h \
     tbundleframe.h \
     tcalendardownload.h \
@@ -255,6 +261,7 @@ FORMS    += \
     ContestPageControl.ui \
     DisplayOptions.ui \
     OptionsDialog.ui \
+    RotPresets.ui \
     ScreenConfigScreen.ui \
     WsjtxConfigureCQ.ui \
     checkupdates.ui \
@@ -277,8 +284,9 @@ FORMS    += \
     rigcontrolframe.ui \
     rigmemdialog.ui \
     RigMemoryFrame.ui \
+    rotatorcompassframe.ui \
+    rotatorskyscanframe.ui \
     rotcontrolframe.ui \
-    RotPresets.ui \
     runbuttondialog.ui \
     ScreenConfig.ui \
     ScreenConfigElement.ui \
@@ -286,6 +294,7 @@ FORMS    += \
     ScreenConfigRow.ui \
     StackedInfoFrame.ui \
     runbuttonsframe.ui \
+    skyscanpresetsframe.ui \
     taboutbox.ui \
     tbundleframe.ui \
     tcalendardownload.ui \

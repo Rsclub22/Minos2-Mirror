@@ -3,7 +3,7 @@
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //                      Rig Control
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2018
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2018 - 2025
 //
 //
 //
@@ -44,8 +44,11 @@ rotSetupForm::rotSetupForm(RotatorFactory* rotFactory_, srotParams* _antennaData
     ui->netPortBox->setVisible(false);
     ui->portLbl->setVisible(false);
 
+
     rotFactory = rotFactory_;
-    antennaData = _antennaData;
+    antennaData = _antennaData;     // we don't use this here, it just has default settings
+
+
 
     fillRotatorModelInfo();
     //fillPortsInfo();
@@ -74,10 +77,11 @@ rotSetupForm::rotSetupForm(RotatorFactory* rotFactory_, srotParams* _antennaData
     connect(ui->sStopOffBut, &QRadioButton::clicked, this, &rotSetupForm::sStopOffButSelected);
     connect(ui->rotInvertBut, &QRadioButton::clicked, this, &rotSetupForm::rotInvertButSelected);
     connect(ui->compassBut, &QRadioButton::clicked, this, &rotSetupForm::compassButSelected);
-    connect(ui->chkOverrun, &QCheckBox::stateChanged, this, &rotSetupForm::overlapSelected);
+    connect(ui->chkOverLap, &QCheckBox::stateChanged, this, &rotSetupForm::overlapSelected);
     connect(ui->antOffset, &QLineEdit::editingFinished, this, &rotSetupForm::antennaOffSetSelected);
     connect(ui->simCW_CCWcmd, &QCheckBox::clicked, this, &rotSetupForm::simCWCCWCmdSelected);
     connect(ui->showCompDialChkBox, &QCheckBox::clicked, this, &rotSetupForm::onCompasDialVisibleChecked);
+    connect(ui->showSkyScanChkBox, &QCheckBox::clicked, this, &rotSetupForm::onSkyScanTabVisibleChecked);
 }
 
 rotSetupForm::~rotSetupForm()
@@ -107,8 +111,6 @@ void rotSetupForm::setupRotatorModel(QString rotatorModel)
 
 
 
-
-    // need to do something is selection is empty!!!!!!!!!!!!!!!!!!!!!!!!
     if (!rotatorModel.isEmpty())
     {
         antennaData->rotatorModel = rotatorModel;
@@ -122,32 +124,30 @@ void rotSetupForm::setupRotatorModel(QString rotatorModel)
         minRot = rotCap.getMinRot();
         antennaData->rotatorCWEndStop = rotCap.getMaxRot();
         antennaData->rotatorCCWEndStop = rotCap.getMinRot();
-
         antennaData->supportCwCcwCmd = rotCap.getSupportCwCCwCmd();
         antennaData->portType = rotCap.getPortType();
 
-
-        //antennaData->rotatorModel = ui->rotatorModelBox->currentText();
-
         pollIntervalVisible(true);
-
 
         antennaOffSetVisible(true);
 
+        getRotatorType(antennaData, minRot, maxRot);
 
         if (setEndStopType(antennaData, minRot, maxRot))
         {
 
             // set ui according to rotator
 
-            if (antennaData->endStopType == ROT_0_360)
+            //if (antennaData->endStopType == ROT_0_360)
+            if (antennaData->rotType == ROT_0_360)
             {
 
-                ui->chkOverrun->setVisible(false);
-                ui->chkOverrun->setChecked(false);
+                ui->chkOverLap->setVisible(false);
+                ui->chkOverLap->setChecked(false);
                 if (rotCap.getAllowSouthStopConfig())
                 {
                     sStopButtonsVisible(true);
+                    setCompassButVisible(false);    // can't support -180_180
                     setSStopOffButChecked(true);
                 }
                 else
@@ -156,18 +156,26 @@ void rotSetupForm::setupRotatorModel(QString rotatorModel)
                     setSStopOffButChecked(true);
                 }
             }
-            else if (antennaData->endStopType == ROT_0_450)
+            else if (antennaData->rotType == ROT_0_450)
             {
 
-                ui->chkOverrun->setVisible(true);
-                ui->chkOverrun->setChecked(true);
+                ui->chkOverLap->setVisible(true);
+                ui->chkOverLap->setChecked(true);
                 sStopButtonsVisible(false);
                 setSStopOffButChecked(true);
             }
-            else if (antennaData->endStopType == ROT_NEG180_540)
+            else if (antennaData->rotType == ROT_NEG180_450)
             {
-                ui->chkOverrun->setVisible(true);
-                ui->chkOverrun->setChecked(true);
+
+                ui->chkOverLap->setVisible(true);
+                ui->chkOverLap->setChecked(true);
+                sStopButtonsVisible(false);
+                setSStopOffButChecked(true);
+            }
+            else if (antennaData->rotType == ROT_NEG180_540)
+            {
+                ui->chkOverLap->setVisible(true);
+                ui->chkOverLap->setChecked(true);
                 sStopButtonsVisible(false);
                 setSStopOffButChecked(true);
             }
@@ -242,115 +250,110 @@ void rotSetupForm::setupRotatorModel(QString rotatorModel)
 
 }
 
+// This gets the installed type of rotator based on max/min Rotatotion provided by the model in the library
+
+bool rotSetupForm::getRotatorType(srotParams* antennaData, int minRot, int maxRot)
+{
+    if ((maxRot == COMPASS_MAX360 || maxRot == COMPASS_MAX359) && minRot == COMPASS_MIN0)
+    {
+        antennaData->rotType = ROT_0_360;
+    }
+    else if (maxRot == COMPASS_MAX450 && minRot <= COMPASS_MIN0)
+    {
+        antennaData->rotType = ROT_NEG180_450;
+    }
+    else if (maxRot == COMPASS_HALF && minRot == COMPASS_NEG_HALF)
+    {
+        antennaData->rotType = ROT_NEG179_180;
+    }
+    else if (maxRot == COMPASS_MAX540 && minRot < COMPASS_MIN0)
+    {
+        antennaData->rotType = ROT_NEG180_540;
+    }
+    else
+    {
+        return false;
+    }
+
+    return true;
+}
 
 
-
-
-
+// dependent upon settings this sets the rotator endStop type and max/min azimuth
 
 bool rotSetupForm::setEndStopType(srotParams* antennaData, int minRot, int maxRot)
 {
+    if (antennaData->rotType == ROT_0_360)
+    {
 
+        setCompassButVisible(false);        // ROT_0_360 can't support -180_0_180
 
-
-        // define type of rotator
-
-        if (maxRot == 180 && minRot == -180)
+        //if (antennaData->southStopType ==  S_STOP_COMPASS_SENSOR)
+        //{
+        //    antennaData->max_azimuth = COMPASS_HALF;  // use a negative azimuth to help calculations
+        //    antennaData->min_azimuth = -COMPASS_HALF;
+        //    antennaData->endStopType = ROT_NEG179_180;
+       // }
+        if (antennaData->southStopType ==  S_STOPINV)
+        {
+            antennaData->max_azimuth = maxRot;      // for Green Heron which isn't 360
+            antennaData->min_azimuth = COMPASS_MIN0;
+            antennaData->endStopType = ROT_0_360;
+        }
+        else if (antennaData->southStopType == S_STOPOFF)
         {
             antennaData->max_azimuth = maxRot;
             antennaData->min_azimuth = minRot;
-            antennaData->rotType = ROT_NEG180_180;
-            antennaData->endStopType = ROT_NEG180_180;
-            antennaData->overRunFlag = false;
-            antennaData->southStopType = S_STOPOFF;
+            antennaData->endStopType = ROT_0_360;
         }
-
-        // COMPASS_MAX359 is for Green Heron which is max 359
-        else if ((maxRot == COMPASS_MAX360 || maxRot == COMPASS_MAX359) && minRot == COMPASS_MIN0)
+    }
+    else if (antennaData->rotType == ROT_NEG180_450)
+    {
+        if (antennaData->overLapFlag)
         {
-
-            antennaData->rotType = ROT_0_360;
-
-            if (antennaData->southStopType ==  S_STOPCOMP)
-            {
-                antennaData->max_azimuth = COMPASS_HALF - 1;
-                antennaData->min_azimuth = COMPASS_HALF + 1;
-                antennaData->endStopType = ROT_180_180;
-            }
-            else if (antennaData->southStopType ==  S_STOPINV)
-            {
-                //antennaData->max_azimuth = COMPASS_MAX360;
-                antennaData->max_azimuth = maxRot;      // for Green Heron which isn't 360
-                antennaData->min_azimuth = COMPASS_MIN0;
-                antennaData->endStopType = ROT_0_360;
-            }
-            else if (antennaData->southStopType == S_STOPOFF)
-            {
-                antennaData->max_azimuth = maxRot;
-                antennaData->min_azimuth = minRot;
-                antennaData->endStopType = ROT_0_360;
-            }
-
-
-        }
-        else if (maxRot > COMPASS_MAX360 && minRot == COMPASS_MIN0)
-        {                                                                                                               // ROT_0_450, mainly GS232B rotator
-
-            antennaData->rotType = ROT_0_450;
-
-            if (!antennaData->overRunFlag)
-            {
-
-                if (antennaData->southStopType ==  S_STOPCOMP)
-                {
-                    antennaData->max_azimuth = COMPASS_HALF - 1;
-                    antennaData->min_azimuth = COMPASS_HALF + 1;
-                    antennaData->endStopType = ROT_180_180;
-                }
-                else if (antennaData->southStopType ==  S_STOPINV)
-                {
-                    antennaData->max_azimuth = COMPASS_MAX360;
-                    antennaData->min_azimuth = COMPASS_MIN0;
-                    antennaData->endStopType = ROT_0_360;
-                }
-                else if (antennaData->southStopType == S_STOPOFF)
-                {
-                    antennaData->max_azimuth = maxRot;
-                    antennaData->min_azimuth = minRot;
-                    antennaData->endStopType = ROT_0_360;
-                }
-            }
-            else
-            {
-                antennaData->max_azimuth = maxRot;
-                antennaData->min_azimuth = minRot;
-                antennaData->southStopType = S_STOPOFF;
-                antennaData->endStopType = ROT_0_450;
-            }
-
-
-         }
-         else if (maxRot > COMPASS_MAX360 && minRot < COMPASS_MIN0 )
-         {
-
             antennaData->max_azimuth = maxRot;
-            antennaData->min_azimuth = minRot;
-            antennaData->rotType = ROT_NEG180_540;
-            antennaData->endStopType = ROT_NEG180_540;
-            antennaData->overRunFlag = true;
+            antennaData->min_azimuth = COMPASS_MIN0;    // this overrides the -180 in Yaesu
             antennaData->southStopType = S_STOPOFF;
+            antennaData->endStopType = ROT_0_450;
         }
         else
         {
-            return false;
+            if (antennaData->southStopType ==  S_STOP_COMPASS_SENSOR)
+            {
+                antennaData->max_azimuth = COMPASS_HALF;
+                antennaData->min_azimuth = COMPASS_NEG_179;
+                antennaData->endStopType = ROT_NEG179_180;
+            }
+            else if (antennaData->southStopType ==  S_STOPINV)
+            {
+                antennaData->max_azimuth = COMPASS_MAX360;
+                antennaData->min_azimuth = COMPASS_MIN0;
+                antennaData->endStopType = ROT_0_360;
+            }
+            else if (antennaData->southStopType ==  S_STOPOFF)
+            {
+                antennaData->max_azimuth = COMPASS_MAX360;
+                antennaData->min_azimuth = COMPASS_MIN0;
+                antennaData->endStopType = ROT_0_360;
+            }
         }
+    }
+    else if (antennaData->rotType == ROT_NEG180_450 )
+    {
 
+        antennaData->max_azimuth = maxRot;
+        antennaData->min_azimuth = minRot;
+        antennaData->rotType = ROT_NEG180_540;
+        antennaData->endStopType = ROT_NEG180_540;
+        antennaData->overLapFlag = true;
+        antennaData->southStopType = S_STOPOFF;
+    }
+    else
+    {
+        return false;
+    }
 
-        return true;
-
-
-
-
+    return true;
 
 }
 
@@ -656,7 +659,7 @@ void rotSetupForm::setSStopButtons(southStop stopType)
     {
         setRotInvertButChecked(true);
     }
-    else if (stopType == S_STOPCOMP)
+    else if (stopType == S_STOP_COMPASS_SENSOR)
     {
         setCompassButChecked(true);
     }
@@ -702,10 +705,10 @@ void rotSetupForm::setRotInvertButVisible(bool s)
 void rotSetupForm::compassButSelected()
 {
 
-    antennaData->southStopType = S_STOPCOMP;
-    antennaData->max_azimuth = COMPASS_HALF - 1;
-    antennaData->min_azimuth = COMPASS_HALF + 1;
-    antennaData->endStopType = ROT_180_180;
+    antennaData->southStopType = S_STOP_COMPASS_SENSOR;
+    antennaData->max_azimuth = COMPASS_HALF;
+    antennaData->min_azimuth = COMPASS_NEG_179;
+    antennaData->endStopType = ROT_NEG179_180;
 
     antennaValueChanged = true;
 
@@ -735,9 +738,9 @@ void rotSetupForm::setCompassButVisible(bool s)
 void rotSetupForm::overlapSelected()
 {
 
-        antennaData->overRunFlag = ui->chkOverrun->isChecked();
+        antennaData->overLapFlag = ui->chkOverLap->isChecked();
 
-        setOverlapEndStop(antennaData, antennaData->overRunFlag);
+        setOverlapEndStop(antennaData, antennaData->overLapFlag);
 
         antennaValueChanged = true;
 
@@ -745,47 +748,93 @@ void rotSetupForm::overlapSelected()
 }
 
 
-void rotSetupForm::setOverlapEndStop(srotParams* antennaData, bool overrunState)
+void rotSetupForm::setOverlapEndStop(srotParams* antennaData, bool overLapState)
 {
 
-    if (overrunState && (antennaData->endStopType == ROT_0_360 || antennaData->endStopType == ROT_180_180))
-    {
 
-        antennaData->max_azimuth = antennaData->rotatorCWEndStop;
-        antennaData->min_azimuth = antennaData->rotatorCCWEndStop;
-        antennaData->endStopType = antennaData->rotType;
-        sStopButtonsVisible(false);
-        setSStopOffButChecked(true);
-        antennaData->southStopType = S_STOPOFF;
+    if (overLapState)
+    {
+        if (antennaData->rotType == ROT_NEG180_450)
+        {
+            antennaData->max_azimuth = antennaData->rotatorCWEndStop;
+            antennaData->min_azimuth = COMPASS_MIN0;
+            antennaData->endStopType = ROT_0_450;
+            sStopButtonsVisible(false);
+            setSStopOffButChecked(true);
+            antennaData->southStopType = S_STOPOFF;
+        }
+        else if (antennaData->rotType == ROT_NEG180_540)
+        {
+            antennaData->max_azimuth = antennaData->rotatorCWEndStop;
+            antennaData->min_azimuth =antennaData->rotatorCCWEndStop;
+            antennaData->endStopType = ROT_NEG180_540;
+            sStopButtonsVisible(false);
+            setSStopOffButChecked(true);
+            antennaData->southStopType = S_STOPOFF;
+
+        }
+        else
+        {
+            antennaData->max_azimuth = COMPASS_MAX360;
+            antennaData->min_azimuth = COMPASS_MIN0;
+            antennaData->endStopType = ROT_0_360;
+            sStopButtonsVisible(false);
+            setSStopOffButChecked(true);
+            antennaData->southStopType = S_STOPOFF;
+        }
+    }
+    else
+    {
+        if (antennaData->rotType == ROT_NEG180_450
+            || antennaData->rotType == ROT_0_360
+            || antennaData->rotType == ROT_NEG180_540)
+        {
+            antennaData->max_azimuth = COMPASS_MAX360;
+            antennaData->min_azimuth = COMPASS_MIN0;
+            antennaData->endStopType = ROT_0_360;
+
+            if (antennaData->rotType == ROT_NEG180_540)
+            {
+               sStopButtonsVisible(false);
+            }
+            else
+            {
+                sStopButtonsVisible(true);
+            }
+
+            setSStopOffButChecked(true);
+            antennaData->southStopType = S_STOPOFF;
+        }
+        else if (antennaData->rotType == ROT_NEG179_180)
+        {
+            antennaData->max_azimuth = COMPASS_HALF;
+            antennaData->min_azimuth = COMPASS_NEG_HALF;
+            antennaData->endStopType = ROT_NEG179_180;
+            sStopButtonsVisible(true);
+            setSStopOffButChecked(true);
+            antennaData->southStopType = S_STOPOFF;
+        }
+
 
     }
-    else if (!overrunState && antennaData->endStopType == ROT_0_450)
-    {
-        antennaData->max_azimuth = COMPASS_MAX360;
-        antennaData->min_azimuth = COMPASS_MIN0;
-        antennaData->endStopType = ROT_0_360;
-        sStopButtonsVisible(true);
-        setSStopOffButChecked(true);
-        antennaData->southStopType = S_STOPOFF;
-
-    }
-
 }
 
 
-bool rotSetupForm::getCheckOverrun()
+
+
+bool rotSetupForm::getCheckOverLap()
 {
-    return ui->chkOverrun->checkState();
+    return ui->chkOverLap->checkState();
 }
 
-void rotSetupForm::setCheckOverrun(bool s)
+void rotSetupForm::setCheckOverLap(bool s)
 {
-    ui->chkOverrun->setChecked(s);
+    ui->chkOverLap->setChecked(s);
 }
 
-void rotSetupForm::setOverRunFlagVisible(bool s)
+void rotSetupForm::setOverLapFlagVisible(bool s)
 {
-    ui->chkOverrun->setVisible(s);
+    ui->chkOverLap->setVisible(s);
 
 }
 
@@ -889,6 +938,31 @@ void rotSetupForm::checkCompassDialChkBox(bool checked)
     ui->showCompDialChkBox->setCheckState(checked ? Qt::Checked : Qt::Unchecked);
 }
 
+/*********************** SkyScan Tab Visible *************************/
+
+void rotSetupForm::onSkyScanTabVisibleChecked(bool selected)
+{
+    Q_UNUSED(selected)
+    bool checked = ui->showSkyScanChkBox->isChecked();
+    if (antennaData->showSkyScanFlag != checked)
+    {
+        antennaData->showSkyScanFlag = checked;
+        checkSkyScanChkBox(checked);
+        antennaValueChanged = true;
+
+    }
+}
+
+
+void rotSetupForm::setSkyScanTabChkBoxVisible(bool s)
+{
+    ui->showSkyScanChkBox->setVisible(s);
+}
+
+void rotSetupForm::checkSkyScanChkBox(bool checked)
+{
+    ui->showSkyScanChkBox->setCheckState(checked ? Qt::Checked : Qt::Unchecked);
+}
 
 
 /*************************** Serial Data Entry Visible ***************/

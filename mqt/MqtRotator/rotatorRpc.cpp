@@ -69,6 +69,8 @@ void RotatorRpc::on_routerCall(bool err, QSharedPointer<MinosRPCObj>mro, const Q
         QSharedPointer<RPCParam> psSelect;
         QSharedPointer<RPCParam> psLoggerUuid;
         QSharedPointer<RPCParam> psRotPreset;
+        QSharedPointer<RPCParam> psSkyScanButtonState;
+        QSharedPointer<RPCParam> psSkyScanPresetNumber;
         RPCArgs *args = mro->getCallArgs();
 
         QString selContest;
@@ -103,6 +105,49 @@ void RotatorRpc::on_routerCall(bool err, QSharedPointer<MinosRPCObj>mro, const Q
             {
                 trace("rotate on wrong rotator " + selContest + " instead of " + cursel );
             }
+        }
+        if ( args->getStructArgMember( 0, rpcConstants::skyScanButtonState, psSkyScanButtonState ))
+        {
+            int buttonState;
+
+
+            PubSubName psn("test"); // just uses router/appname
+            QString cursel = rotatorCache.getSelectedContest(psn, loggeruuid);
+            if ( cursel == selContest)
+            {
+                if ( psSkyScanButtonState->getInt( buttonState ) )
+                {
+                    // here you handle what the logger has sent to us
+                    trace(QString("Rot RPC: SkyScanButtonState = %1").arg(QString::number(buttonState)));
+                    emit setSkyScanButtonStateFromLogger(buttonState);
+                }
+            }
+            else
+            {
+                trace("rotate on wrong rotator " + selContest + " instead of " + cursel );
+            }
+        }
+        if ( args->getStructArgMember(0, rpcConstants::skyScanPresetNumber, psSkyScanPresetNumber))
+        {
+            int buttonNumber;
+
+            PubSubName psn("test"); // just uses router/appname
+            QString cursel = rotatorCache.getSelectedContest(psn, loggeruuid);
+            if ( cursel == selContest)
+            {
+                if ( psSkyScanPresetNumber->getInt( buttonNumber ) )
+                {
+                    // here you handle what the logger has sent to us
+                    trace(QString("Rot RPC: SkyScan Preset Button number = %1").arg(QString::number(buttonNumber)));
+                    emit setSkyScanPresetButtonFromLogger(buttonNumber);
+                }
+            }
+            else
+            {
+                trace("rotate on wrong rotator " + selContest + " instead of " + cursel );
+            }
+
+
         }
         else if (args->getStructArgMember(0, rpcConstants::rotatorSelectAntennaName, psAntName))
         {

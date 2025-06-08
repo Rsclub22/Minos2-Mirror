@@ -702,3 +702,8 @@ ContactList *TContestApp::getListSlot(int s)
     }
     return listSlotList[s]->slot;
 }
+
+bool TContestApp::isLogger()
+{
+    return true;
+}

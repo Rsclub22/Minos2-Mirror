@@ -1262,6 +1262,7 @@ void TLogContainer::ContestDetailsActionExecute()
                 MinosLoggerEvents::SendContestBandChanged(ct);  // in case it has...
                 f->FKHRigControlFrame->rigChangedFromDetails();
                 f->FKHRotControlFrame->on_ContestPageChanged();
+                f->FKHRotCompassFrame->on_ContestPageChanged();
                 // and we need to do some re-init on the display
                 f->updateQSODisplay();
                 ct->scanContest();      // if contest details have changed, required

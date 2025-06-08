@@ -169,17 +169,34 @@ static const QString RotatorCategory    ("Rotator");
 static const QString rotatorDetailCategory    ("RotatorDetail");
 static const QString rotatorStateCategory    ("RotatorState");
 static const QString rotatorPresetsCategory ("RotatorPresets");
+static const QString rotatorSkyScanPresetsCategory ("RotatorSkyScanPresets");
 static const QString rotatorStatus       ("RotStatus");
 static const QString rotatorBearing     ("Bearing");
 static const QString rotatorList        ("rotList");
 static const QString rotPreset  ("RotPreset");
 static const QString rotPresetList  ("RotPresetList");
+static const QString rotSkyScanPresetList ("RotSkyScanPreset");
 static const QString rotCwCcwCmdEnable ("RotCwCcwCmdEnable");
 
 static const QString rotatorSelectAntennaName ("SelectAntennaName");
 static const QString rotatorMaxAzimuth  ("MaxAzimuth");
 static const QString rotatorMinAzimuth  ("MinAzimuth");
 static const QString supportStopCommand ("SupportStopCommand");
+static const QString rotatorStopSouthStopOffsetData ("StopSouthStopOffsetData");
+// SkyScan
+
+
+
+static const QString skyScanVisible ("SkyScanVisible");
+static const QString skyScanStartBearing ("SkyScanStartBearing");
+static const QString skyScanEndBearing ("SkyScanEndBearing");
+static const QString skyScanNextStep ("SkyScanNextStep");
+static const QString skyScanCountDown ("SkyScanCountDown");
+static const QString skyScanButtonState ("SkyScanButtonState");
+static const QString skyScanPresetNumber ("SkyScanPresetNumbe");
+static const QString skyScanReverseScan ("SkyScanReverseScan");
+static const QString skyScanRotatorStartBearimg ("SkyScanRotatorStartBearing");
+static const QString skyScanRotatorEndBearimg ("SkyScanRotatorEndBearing");
 
 // Rig Control
 static const QString rigControlApp         ("mqtRigControl");
