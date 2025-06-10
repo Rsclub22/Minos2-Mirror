@@ -1522,7 +1522,7 @@
   <customwidget>
    <class>CustomSpinBox</class>
    <extends>QSpinBox</extends>
-   <header>rotatorMainWindow.h</header>
+   <header>rotatormainwindow.h</header>
   </customwidget>
   <customwidget>
    <class>ToolButtonUpDown</class>
