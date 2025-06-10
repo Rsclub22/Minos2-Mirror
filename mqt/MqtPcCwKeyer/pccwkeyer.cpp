@@ -14,23 +14,28 @@
 
 
 
+
+
+
+
 #include "pccwkeyer.h"
 #include <QtMath>
+#include <cmath>
 #include <QDebug>
 #include <QTime>
 
 
 
 
-PcCwKeyer::PcCwKeyer(int wpm, int farnsworthWpm, bool sidetone, bool dtrRts, QObject *parent)
-    : QObject(parent), useSidetone(sidetone), useDtrRts(dtrRts)
+PcCwKeyer::PcCwKeyer(int wpm, bool dtrRts, QObject *parent)
+    : QObject(parent), useDtrRts(dtrRts)
 {
 
     key(false);
-    setWPM(wpm, farnsworthWpm);
+    setWPM(wpm);
 
     connect(&timer, &QTimer::timeout, this, &PcCwKeyer::processQueue);
-    timer.setSingleShot(true);
+    timer.setTimerType(timerType);
 }
 
 PcCwKeyer::~PcCwKeyer()
@@ -58,18 +63,17 @@ void PcCwKeyer::openComPort(const QString portName)
 }
 
 
-void PcCwKeyer::setWPM(int charWpm, int wordWpm)
+void PcCwKeyer::setWPM(int charWpm)
 {
-    charDot = 1200 / charWpm;
-    if (wordWpm > 0 && wordWpm < charWpm)
-    {
-        spaceDot = 1200 / wordWpm;
-        useFarnsworth = true;
-    } else
-    {
-        spaceDot = charDot;
-        useFarnsworth = false;
-    }
+    charDot = 1200.0 / static_cast<qreal>(charWpm);
+
+    qDebug() << "WPM:" << charWpm
+             << "Dot:" << charDot << "ms"
+             << "Dash:" << (charDot * 3.0) << "ms";
+
+    //spaceDot = charDot;
+
+
 }
 
 void PcCwKeyer::sendText(const QString &text)
@@ -82,10 +86,15 @@ void PcCwKeyer::sendText(const QString &text)
 
         if (code == " ")
         {
+            qDebug() << QTime::currentTime().toString("hh:mm:ss.zzz")
+            << "Enqueue word space" << spaceDot * 7 << "ms";
             enqueueAction([] {}, spaceDot * 7);  // word space
         }
+
         else
         {
+            qDebug() << QTime::currentTime().toString("hh:mm:ss.zzz")
+            << "Enqueue inter-character space" << spaceDot * 3 << "ms";
             enqueueSymbolSequence(code);
             enqueueAction([] {}, spaceDot * 3);  // inter-char space
         }
@@ -101,18 +110,32 @@ void PcCwKeyer::enqueueSymbolSequence(const QString &morse)
 {
     for (int i = 0; i < morse.length(); ++i)
     {
-        int toneLen = (morse[i] == '.') ? charDot : charDot * 3;
+        qreal symbolLength = (morse[i] == '.') ? charDot : charDot * 3;
+        QString symbolType = (morse[i] == '.') ? "DOT" : "DASH";
 
-        enqueueAction([this, toneLen] {
+        qDebug() << QTime::currentTime().toString("hh:mm:ss.zzz")
+                 << "Enqueue" << symbolType
+                 << "duration:" << symbolLength << "ms";
+
+        enqueueAction([this, symbolType] {
+            qDebug() << QTime::currentTime().toString("hh:mm:ss.zzz")
+            << "KEY ON for" << symbolType;
             key(true);
-            if (useSidetone) playToneFor(toneLen);
-        }, toneLen);
+        }, symbolLength);
+
+        // Debug the inter-symbol (intra-character) space
+        qDebug() << QTime::currentTime().toString("hh:mm:ss.zzz")
+                 << "Enqueue inter-symbol space"
+                 << "duration:" << spaceDot << "ms";
 
         enqueueAction([this] {
+            qDebug() << QTime::currentTime().toString("hh:mm:ss.zzz")
+            << "KEY OFF";
             key(false);
         }, spaceDot);
     }
 }
+
 
 void PcCwKeyer::enqueueAction(std::function<void()> func, int delayMs)
 {
@@ -133,7 +156,8 @@ void PcCwKeyer::processQueue()
 
     if (!timedActions.isEmpty())
     {
-        timer.start(next.delayMs);
+        timer.start(static_cast<int>(std::round(next.delayMs)));
+
     } else
     {
         timer.stop();
@@ -154,7 +178,7 @@ void PcCwKeyer::key(bool on)
     }
 
 }
-
+/*
 void PcCwKeyer::playToneFor(int durationMs)
 {
     if (!audioOut) return;
@@ -172,6 +196,7 @@ void PcCwKeyer::playToneFor(int durationMs)
     audioOut->start(buffer);
 }
 
+
 QByteArray PcCwKeyer::generateTone(int frequency, int durationMs, int sampleRate)
 {
     const int samples = sampleRate * durationMs / 1000;
@@ -187,7 +212,7 @@ QByteArray PcCwKeyer::generateTone(int frequency, int durationMs, int sampleRate
 
     return data;
 }
-
+*/
 bool PcCwKeyer::isBusy() const
 {
     return !timedActions.isEmpty();
@@ -203,6 +228,7 @@ void PcCwKeyer::handleSerialPortError(QSerialPort::SerialPortError error)
     }
 }
 
+/*
 void PcCwKeyer::setUseSideTone(bool useSideTone_)
 {
 
@@ -242,7 +268,7 @@ void PcCwKeyer::setUseSideTone(bool useSideTone_)
     }
 }
 
-
+*/
 
 
 void PcCwKeyer::abortTransmission()
@@ -253,12 +279,12 @@ void PcCwKeyer::abortTransmission()
 
     // Unkey the transmitter
     key(false);
-
+/*
     // Stop sidetone if active
     if (useSidetone && audioOut) {
         audioOut->stop();
     }
-
+*/
     qDebug() << "CW transmission aborted.";
 }
 

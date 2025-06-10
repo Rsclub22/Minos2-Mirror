@@ -49,7 +49,7 @@ private:
     QTimer LogTimer;
 
     PcCwKeyer *cwKeyer = nullptr;
-    //QString pendingBuffer;
+
 
     QList<QString> cwMsgQueue;
 
@@ -57,9 +57,8 @@ private:
     QString comport;
     int wpm = 15;
 
-    int farnsworth = -1;        // disable farnsworth
 
-    bool sideToneOn = false;
+
 
     bool dtrRtsSelected = true; // true = dtr, false = rts
 
@@ -86,7 +85,7 @@ private slots:
     //void checkCWBuffer();
     void onComportSelected();
     void onDtrSelected();
-    void onSidetoneChkBoxSelected();
+    //void onSidetoneChkBoxSelected();
     void onRtsSelected();
     void onWpmValueChanged(int value);
     void onTextInputFinished(const QString &text);

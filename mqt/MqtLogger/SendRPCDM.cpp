@@ -1180,6 +1180,8 @@ void TSendDM::routerClosed()
     clusterConnected = false;
     emit setClusterState((tr("Disconnected")) + "<>Disconnected");
 
+    pcCwKeyerLoaded = false;
+
     radioLoaded = false;
     rigCache.setStateDisconnected();
 

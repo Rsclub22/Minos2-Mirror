@@ -88,6 +88,8 @@ void PcCWMessageKeyer::voiceKeyerInit(int &numButtons)
     int userNumberButtons = 0;
     getRadioCommonData(selectedEomType, userNumberButtons, radioMaxNumButtons);
     numButtons = userNumberButtons;
+
+
 }
 
 void PcCWMessageKeyer::getRadioCommonData(int &selectedEomType, int &userNumberButtons, int radioMaxNumButtons)
@@ -202,6 +204,17 @@ void PcCWMessageKeyer::sendCwMsg(VoiceKeyerParams &vmData)
         tslf->sendPcKeyerTxCwMessage(cwMessageToTx);
     }
 
+}
+
+void  PcCWMessageKeyer::sendCwFreeTextMsg(QString message)
+{
+    TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
+
+    QString cwMessageToTx = parseMacrosInMessage(tslf, message);
+
+    trace(QString("Send Free Text Morse Message to PcCwKeyer : %1").arg(cwMessageToTx));
+
+    tslf->sendPcKeyerTxCwMessage(cwMessageToTx);
 }
 
 

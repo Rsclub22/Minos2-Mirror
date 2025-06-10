@@ -190,6 +190,10 @@ private:
     void logMessage(QString msg);
 
     bool isVoiceMode();
+    void setAvailIndicatorOnOffForPcCwKeyer();
+    bool isPcCwKeyerLoaded();
+    bool isPcCwKeyerConnected();
+    void initCwTextEntryBox();
 private slots:
 
     void onVoiceKeyerSelect(int idx);
@@ -207,6 +211,8 @@ private slots:
     void onExtConnectTimer();
     void onInternalVoiceMemoryPlayState(bool playing);
     void sandPChanged(bool s);
+
+    void onCwEntryReturnPressed();
 };
 
 #endif // TXVMBUTTONSFRAME_H

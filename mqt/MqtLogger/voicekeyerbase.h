@@ -120,6 +120,7 @@ public:
 
     virtual void sendCwMsg(VoiceKeyerParams &vmParams) = 0;
     virtual void stopCwMsg() = 0;
+    virtual void sendCwFreeTextMsg(QString message) = 0;
     virtual void setCwMemType(int cwMemType) = 0;
     virtual bool getSetCwModeAndRestoreFlag() = 0;
 

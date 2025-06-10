@@ -46,6 +46,7 @@ public:
 
     virtual void sendCwMsg(VoiceKeyerParams &vmParams) override;
     virtual void stopCwMsg() override;
+    virtual void sendCwFreeTextMsg(QString message) override;
     virtual void setCwMemType(int cwMemType) override;
     bool getSetCwModeAndRestoreFlag() override;
 

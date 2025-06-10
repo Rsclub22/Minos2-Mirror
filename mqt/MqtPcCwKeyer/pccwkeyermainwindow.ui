@@ -71,13 +71,6 @@
          <widget class="QSpinBox" name="wpmSpinBox"/>
         </item>
         <item>
-         <widget class="QCheckBox" name="sidetoneChkBox">
-          <property name="text">
-           <string>Sidetone</string>
-          </property>
-         </widget>
-        </item>
-        <item>
          <spacer name="horizontalSpacer_2">
           <property name="orientation">
            <enum>Qt::Horizontal</enum>

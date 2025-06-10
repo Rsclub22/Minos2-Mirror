@@ -2,7 +2,7 @@
 # For example C:\Qt_Projects\hamlib-w32-4.6\bin
 
 
-HAMLIBVERSION=4.6.2
+HAMLIBVERSION=4.6.3
 
 DEFINES += HAMLIBVERSION=\\\"$$HAMLIBVERSION\\\"
 # message(Using hamlib V$$HAMLIBVERSION)

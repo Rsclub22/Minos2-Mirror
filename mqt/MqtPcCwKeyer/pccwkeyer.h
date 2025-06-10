@@ -19,8 +19,6 @@
 #include <QSerialPort>
 #include <QTimer>
 #include <QQueue>
-#include <QAudioOutput>
-#include <QBuffer>
 #include <QMap>
 #include <functional>
 
@@ -28,15 +26,15 @@ class PcCwKeyer : public QObject
 {
     Q_OBJECT
 public:
-    explicit PcCwKeyer(int wpm, int farnsworthWpm = 0, bool sidetone = false, bool dtrRts = false, QObject *parent = nullptr);
+    explicit PcCwKeyer(int wpm, bool dtrRts = false, QObject *parent = nullptr);
     ~PcCwKeyer();
 
     void openComPort(const QString portName);
-    void setWPM(int charWpm, int wordWpm = 0);
+    void setWPM(int charWpm);
     void sendText(const QString &text);
     bool isBusy() const;
 
-    void setUseSideTone(bool useSideTone_);
+
     void abortTransmission();
     void close();
 
@@ -56,22 +54,20 @@ private:
     };
 
     QSerialPort serial;
-    QTimer timer;
+    Qt::TimerType timerType = Qt::PreciseTimer;
+    QTimer timer;   // CW timer
+
     QQueue<TimedAction> timedActions;
 
-    int charDot = 60;
+    qreal charDot = 60;
     int spaceDot = 60;
-    bool useFarnsworth = false;
-    bool useSidetone = false;
+
     bool useDtrRts = false;
 
-    QAudioOutput *audioOut = nullptr;
-
     void key(bool on);
-    void playToneFor(int durationMs);
+
     void enqueueAction(std::function<void()> func, int delayMs);
     void enqueueSymbolSequence(const QString &morse);
-    QByteArray generateTone(int frequency, int durationMs, int sampleRate = 44100);
 
 
 

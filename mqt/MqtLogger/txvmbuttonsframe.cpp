@@ -579,8 +579,16 @@ void TxVmButtonsFrame::setFrameState(QString voiceKeyerName)
 
         if (voiceCap.getHasAvailStatus())
         {
-            setAvailIndicatorVisible(voiceCap.getHasAvailStatus());
-            setAvailIndicatorForRadioOnOff(selectedRadio);
+            if (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl] || voiceKeyerType == keyerTypes[VoiceKeyerId::RigControl])
+            {
+                setAvailIndicatorVisible(voiceCap.getHasAvailStatus());
+                setAvailIndicatorForRadioOnOff(selectedRadio);
+            }
+            else if (voiceKeyerType == keyerTypes[VoiceKeyerId::PcCwKeyer])
+            {
+                setAvailIndicatorOnOffForPcCwKeyer();
+            }
+
 
         }
         else
@@ -641,6 +649,8 @@ void TxVmButtonsFrame::setFrameState(QString voiceKeyerName)
                     ui->vmStopPb->setVisible(true);
                 }
 
+                initCwTextEntryBox();
+
             }
             else if (voiceKeyerType == keyerTypes[VoiceKeyerId::RigControl])
             {
@@ -674,6 +684,27 @@ void TxVmButtonsFrame::setFrameState(QString voiceKeyerName)
     }
 }
 
+
+void TxVmButtonsFrame::initCwTextEntryBox()
+{
+    ui->cwEntry->setVisible(true);
+    connect( ui->cwEntry, &QLineEdit::returnPressed, this, &TxVmButtonsFrame::onCwEntryReturnPressed);
+}
+
+
+void TxVmButtonsFrame::onCwEntryReturnPressed()
+{
+    if (txVoiceKeyer)
+    {
+        if (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl] || voiceKeyerType == keyerTypes[VoiceKeyerId::PcCwKeyer])
+        {
+            QString message = ui->cwEntry->text();
+            txVoiceKeyer->sendCwFreeTextMsg(message);
+        }
+
+    }
+
+}
 
 void TxVmButtonsFrame::setSaveButtonByRadionameText(QString selectedRadioName)
 {
@@ -1513,6 +1544,29 @@ void TxVmButtonsFrame::setAvailIndicatorVisible(bool visible)
     ui->availIndicator->setVisible(visible);
     ui->vmAvailIndicatorLine->setVisible(visible);
 
+}
+
+void TxVmButtonsFrame:: setAvailIndicatorOnOffForPcCwKeyer()
+{
+    if (isPcCwKeyerLoaded() && isPcCwKeyerConnected())
+    {
+        setAvailIndicatorOnOff(true);
+    }
+    else
+    {
+       setAvailIndicatorOnOff(false);
+    }
+}
+
+
+bool TxVmButtonsFrame::isPcCwKeyerLoaded()
+{
+    return LogContainer->sendDM->isPcCWkeyerLoaded();
+}
+
+bool TxVmButtonsFrame::isPcCwKeyerConnected()
+{
+    return LogContainer->sendDM->isPcCwKeyerConnected();
 }
 
 void TxVmButtonsFrame::setAvailIndicatorOnOff(bool on)

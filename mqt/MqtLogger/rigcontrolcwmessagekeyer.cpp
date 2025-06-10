@@ -210,6 +210,11 @@ void RigControlCwMessageKeyer::sendCwMsg(VoiceKeyerParams &vmData)
 
 }
 
+void  RigControlCwMessageKeyer::sendCwFreeTextMsg(QString message)
+{
+
+}
+
 
 QString RigControlCwMessageKeyer::parseMacrosInMessage(TSingleLogFrame *tslf, QString mess)
 {

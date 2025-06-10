@@ -82,7 +82,7 @@ pcCwKeyerMainWindow::pcCwKeyerMainWindow(QWidget *parent)
 
     ui->dtrRb->setChecked(true);
     ui->rtsRb->setChecked(false);
-    ui->sidetoneChkBox->setChecked(false);
+
 
 
     setWpmSpinnerRange(5, 40);
@@ -111,7 +111,6 @@ void pcCwKeyerMainWindow::setConnections()
     connect(ui->comportSel, QOverload<int>::of(&QComboBox::activated), this, &pcCwKeyerMainWindow::onComportSelected);
     connect(ui->dtrRb, &QRadioButton::clicked,this, &pcCwKeyerMainWindow::onDtrSelected);
     connect(ui->rtsRb, &QRadioButton::clicked,this, &pcCwKeyerMainWindow::onRtsSelected);
-    connect(ui->sidetoneChkBox, &QCheckBox::clicked,this, &pcCwKeyerMainWindow::onSidetoneChkBoxSelected);
     connect(ui->wpmSpinBox, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &pcCwKeyerMainWindow::onWpmValueChanged);
 
     connect(ui->cwTextInputLineEdit, &QLineEdit::returnPressed, this, [this]() {
@@ -138,7 +137,7 @@ void pcCwKeyerMainWindow::handleStatusTimer()
 {
     static QString oldStatusMsg;
     static int oldServerListCount = 0;
-    qDebug() << "keyer server count = " << pcCwKeyerRpc->getServerListCount();
+
     if (oldServerListCount != pcCwKeyerRpc->getServerListCount())
     {
         oldServerListCount = pcCwKeyerRpc->getServerListCount();
@@ -195,20 +194,6 @@ void pcCwKeyerMainWindow::onRtsSelected()
 }
 
 
-
-void pcCwKeyerMainWindow::onSidetoneChkBoxSelected()
-{
-    if (ui->sidetoneChkBox->isChecked() != sideToneOn)
-    {
-        sideToneOn = !sideToneOn;
-        if (cwKeyer)
-        {
-            cwKeyer->setUseSideTone(sideToneOn);
-        }
-    }
-
-}
-
 void pcCwKeyerMainWindow::onWpmValueChanged(int value)
 {
     if (value != wpm)
@@ -232,7 +217,7 @@ void pcCwKeyerMainWindow::openCwKeyer()
         qDebug() << "Comport is empty";
     }
 
-    cwKeyer = new PcCwKeyer(wpm, farnsworth, sideToneOn, dtrRtsSelected, this);
+    cwKeyer = new PcCwKeyer(wpm, dtrRtsSelected, this);
 
     if (cwKeyer)
     {
