@@ -1509,7 +1509,11 @@ void RotatorMainWindow::checkMoving(int bearing)
 
     int tolerance = setupAntenna->currentAntenna.nearStopTolerance;
 
-    if (bearing == targetBearing)
+    //With e.g. Spid first bearing returned is target, so we must ignore that
+    // first time round, oldBearing will be 0
+
+    // This can cause problems if the target bearing is 0 as well
+    if (oldBearing == bearing && bearing == targetBearing)
     {
         logMessage(QString("Rotator is on target"));
         stopButton();
