@@ -3,7 +3,7 @@ include($$PWD/../mqt.pri)
 TRANSLATIONS =
 include($$PWD/../mqtapplibs.pri)
 
-QT       += core gui widgets network serialport multimedia
+QT       += core gui widgets network serialport multimedia concurrent
 
 TARGET = MqtPcCwKeyer
 TEMPLATE = app
@@ -15,6 +15,7 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    cwworker.cpp \
     main.cpp \
     pccwkeyer.cpp \
     pccwkeyermainwindow.cpp \
@@ -23,6 +24,7 @@ SOURCES += \
 
 
 HEADERS += \
+    cwworker.h \
     pccwkeyer.h \
     pccwkeyermainwindow.h \
     pccwkeyerrpc.h

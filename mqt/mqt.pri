@@ -79,4 +79,8 @@ TRANSLATIONS *= translations/minos_en_GB.ts \
 #                translations/minos_no.ts \
 #                translations/minos_sv.ts \
 
+HEADERS +=
+
+SOURCES +=
+
 

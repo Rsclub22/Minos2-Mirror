@@ -23,6 +23,7 @@
 #include <QXmlStreamReader>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
+#include <QLabel>
 #include "pccwkeyer.h"
 #include "CommandReader.h"
 #include "pccwkeyerrpc.h"
@@ -33,6 +34,8 @@ class pcCwKeyerMainWindow;
 }
 QT_END_NAMESPACE
 
+QString PC_CW_KEYER_SETTINGS_FILE();
+
 class pcCwKeyerMainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -40,6 +43,10 @@ class pcCwKeyerMainWindow : public QMainWindow
 public:
     pcCwKeyerMainWindow(QWidget *parent = nullptr);
     ~pcCwKeyerMainWindow();
+
+signals:
+
+    void requestPtt(bool);
 
 private:
     Ui::pcCwKeyerMainWindow *ui;
@@ -57,14 +64,22 @@ private:
     QString comport;
     int wpm = 15;
 
+    int preTxDelayMs = 0;
+    int postTxDelayMs = 0;
 
-
-
-    bool dtrRtsSelected = true; // true = dtr, false = rts
+    bool pttEnabled = false;
 
     QTimer* statusTimer;
 
     PcCwKeyerRpc* pcCwKeyerRpc;
+
+    QMetaObject::Connection cwKeyerFinishedConnection;
+
+    QLabel *comportName;
+    QLabel *comportStatus;
+
+    QLabel *errorMsg;
+
 
 
     void fillPortsInfo();
@@ -80,13 +95,23 @@ private:
     void closeCwKeyer();
     void keyPressEvent(QKeyEvent *event);
     void closeEvent(QCloseEvent *event);
+    void readSettings();
+    void enableTXDelayObjects(bool enable);
+    void saveAllSettings();
+    void saveWpmSetting();
+    void savePreTxDelay();
+    void savePostTxDelay();
+    void savePttEnabled();
+    void saveComport();
+    void loadSettingsToMainWindow();
+
+
+
 private slots:
-    //void onTextEdited(const QString &text);
-    //void checkCWBuffer();
+
     void onComportSelected();
-    void onDtrSelected();
-    //void onSidetoneChkBoxSelected();
-    void onRtsSelected();
+
+
     void onWpmValueChanged(int value);
     void onTextInputFinished(const QString &text);
     void handleNextCwString();
@@ -95,6 +120,9 @@ private slots:
     void onCommandRead(QString cmd);
     void LogTimerTimer();
     void handleStatusTimer();
+    void onPreTxDelayEditingFinished(QString text);
+    void onPostTxDelayEditingFinished(QString text);
+    void onEnablePTT(bool checked);
 };
 #endif // PCCWKEYERMAINWINDOW_H
 

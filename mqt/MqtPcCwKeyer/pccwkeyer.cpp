@@ -16,283 +16,179 @@
 
 
 
-
-
-#include "pccwkeyer.h"
+#include "PcCwKeyer.h"
 #include <QtMath>
-#include <cmath>
+#include <QTimer>
 #include <QDebug>
-#include <QTime>
 
 
-
-
-PcCwKeyer::PcCwKeyer(int wpm, bool dtrRts, QObject *parent)
-    : QObject(parent), useDtrRts(dtrRts)
+PcCwKeyer::PcCwKeyer(int wpm, QObject *parent)
+    : QObject(parent)
 {
-
-    key(false);
     setWPM(wpm);
+    key(false);
 
-    connect(&timer, &QTimer::timeout, this, &PcCwKeyer::processQueue);
-    timer.setTimerType(timerType);
+    worker = new CwWorker(this);
+    connect(worker, &CwWorker::finished, this, &PcCwKeyer::onWorkerFinished);
+
+    connect(this, &PcCwKeyer::requestKey, this, &PcCwKeyer::key);
+
+
 }
 
 PcCwKeyer::~PcCwKeyer()
 {
-    key(false);
-    serial.close();
+    abortTransmission();
+    delete worker;
+    close();
 }
 
+void PcCwKeyer::setWPM(int wpm)
+{
+    charDot = 1200.0 / wpm;
+    qDebug() << "WPM set to" << wpm << ", dot duration:" << charDot;
+}
 
 void PcCwKeyer::openComPort(const QString portName)
 {
     serial.setPortName(portName);
     serial.setBaudRate(QSerialPort::Baud9600);
-    if (!serial.open(QIODevice::ReadWrite))
-    {
+    if (!serial.open(QIODevice::ReadWrite)) {
         qFatal("Failed to open port %s", qPrintable(portName));
         emit serialPortOpen(false);
-
-    }
-    else
-    {
-        emit serialPortOpen(true);
+    } else {
         connect(&serial, &QSerialPort::errorOccurred, this, &PcCwKeyer::handleSerialPortError);
+        emit serialPortOpen(true);
     }
-}
-
-
-void PcCwKeyer::setWPM(int charWpm)
-{
-    charDot = 1200.0 / static_cast<qreal>(charWpm);
-
-    qDebug() << "WPM:" << charWpm
-             << "Dot:" << charDot << "ms"
-             << "Dash:" << (charDot * 3.0) << "ms";
-
-    //spaceDot = charDot;
-
-
 }
 
 void PcCwKeyer::sendText(const QString &text)
 {
-    const QString upper = text.toUpper();
-    for (const QChar ch : upper)
-    {
-        if (!morseTable.contains(ch)) continue;
-        QString code = morseTable[ch];
+    enqueueMorseText(text);
+}
 
-        if (code == " ")
-        {
-            qDebug() << QTime::currentTime().toString("hh:mm:ss.zzz")
-            << "Enqueue word space" << spaceDot * 7 << "ms";
-            enqueueAction([] {}, spaceDot * 7);  // word space
+void PcCwKeyer::enqueueMorseText(const QString &text)
+{
+    QString upperText = text.toUpper();
+
+    for (int i = 0; i < upperText.length(); ++i) {
+        QChar c = upperText[i];
+
+        if (c == ' ') {
+            // Word gap = 7 dot units, minus the 1 unit already added after last symbol
+            qint32 gapDuration = static_cast<int>(charDot * 6);
+            qDebug() << "Word gap: OFF for" << gapDuration << "ms";
+            worker->enqueueAction([] {}, gapDuration);
+            continue;
         }
 
-        else
-        {
-            qDebug() << QTime::currentTime().toString("hh:mm:ss.zzz")
-            << "Enqueue inter-character space" << spaceDot * 3 << "ms";
-            enqueueSymbolSequence(code);
-            enqueueAction([] {}, spaceDot * 3);  // inter-char space
+        QString morse = convertCharToMorse(c);
+        if (morse.isEmpty())
+            continue;  // Skip unknown characters
+
+        for (int j = 0; j < morse.length(); ++j) {
+            QChar symbol = morse[j];
+            qreal onMs = (symbol == '.') ? charDot : charDot * 3;
+
+            // Key down
+            worker->enqueueAction([this, symbol, onMs] {
+                qDebug().nospace() << "Emit key ON: symbol '" << symbol << "' duration " << onMs << " ms";
+                emit requestKey(true);
+            }, static_cast<int>(onMs));
+
+            // Key up and symbol gap (always 1 unit)
+            worker->enqueueAction([this] {
+                qDebug() << "Emit key OFF: symbol gap duration" << charDot << "ms";
+                emit requestKey(false);
+            }, static_cast<int>(charDot));
+        }
+
+        // Inter-character gap = 3 dot units total (1 already added), so add 2 more
+        if (i + 1 < upperText.length() && upperText[i + 1] != ' ') {
+            qint32 gapDuration = static_cast<int>(charDot * 2);
+            qDebug() << "Inter-character gap: OFF for" << gapDuration << "ms";
+            worker->enqueueAction([] {}, gapDuration);
         }
     }
 
-    if (!timer.isActive())
-    {
-        timer.start(1);
-    }
-}
-
-void PcCwKeyer::enqueueSymbolSequence(const QString &morse)
-{
-    for (int i = 0; i < morse.length(); ++i)
-    {
-        qreal symbolLength = (morse[i] == '.') ? charDot : charDot * 3;
-        QString symbolType = (morse[i] == '.') ? "DOT" : "DASH";
-
-        qDebug() << QTime::currentTime().toString("hh:mm:ss.zzz")
-                 << "Enqueue" << symbolType
-                 << "duration:" << symbolLength << "ms";
-
-        enqueueAction([this, symbolType] {
-            qDebug() << QTime::currentTime().toString("hh:mm:ss.zzz")
-            << "KEY ON for" << symbolType;
-            key(true);
-        }, symbolLength);
-
-        // Debug the inter-symbol (intra-character) space
-        qDebug() << QTime::currentTime().toString("hh:mm:ss.zzz")
-                 << "Enqueue inter-symbol space"
-                 << "duration:" << spaceDot << "ms";
-
-        enqueueAction([this] {
-            qDebug() << QTime::currentTime().toString("hh:mm:ss.zzz")
-            << "KEY OFF";
-            key(false);
-        }, spaceDot);
-    }
+    worker->start();
 }
 
 
-void PcCwKeyer::enqueueAction(std::function<void()> func, int delayMs)
+QString PcCwKeyer::convertCharToMorse(QChar c)
 {
-    timedActions.enqueue({func, delayMs});
+    static const QMap<QChar, QString> morseMap {
+        { 'A', ".-" },    { 'B', "-..." },  { 'C', "-.-." }, { 'D', "-.." },
+        { 'E', "." },     { 'F', "..-." },  { 'G', "--." },  { 'H', "...." },
+        { 'I', ".." },    { 'J', ".---" },  { 'K', "-.-" },  { 'L', ".-.." },
+        { 'M', "--" },    { 'N', "-." },    { 'O', "---" },  { 'P', ".--." },
+        { 'Q', "--.-" },  { 'R', ".-." },   { 'S', "..." },  { 'T', "-" },
+        { 'U', "..-" },   { 'V', "...-" },  { 'W', ".--" },  { 'X', "-..-" },
+        { 'Y', "-.--" },  { 'Z', "--.." },
+
+        { '0', "-----" }, { '1', ".----" }, { '2', "..---" }, { '3', "...--" },
+        { '4', "....-" }, { '5', "....." }, { '6', "-...." }, { '7', "--..." },
+        { '8', "---.." }, { '9', "----." },
+
+        { '"', ".-..-."}, {'\'', "...-..-"}, {'(', "-.--.-"}, {')', "-.--.-"},
+        {'[', "-.--."}, {']', "-.--.-"}, {'+', ".-.-."}, {',', "--..--"},
+        {'-', "-....-"}, {'.', ".-.-.-"}, {'/', "-..-."}, {':', "---..."},
+        {';', "-.-.-."}, {'=', "-...-"}, {'?', "..--."}, {'@', ".--.-."},
+        {'_', "..--.-"}, {'!', "---."}
+    };
+
+    return morseMap.value(c, QString());
 }
 
-void PcCwKeyer::processQueue()
+void PcCwKeyer::abortTransmission()
 {
-    if (timedActions.isEmpty())
-    {
-        key(false);
-        emit nextStringRequested();
-        return;
-    }
+    worker->clear();
+    emit requestKey(false);
+    qDebug() << "CW transmission aborted.";
+}
 
-    auto next = timedActions.dequeue();
-    next.func();
-
-    if (!timedActions.isEmpty())
-    {
-        timer.start(static_cast<int>(std::round(next.delayMs)));
-
-    } else
-    {
-        timer.stop();
-        emit nextStringRequested();
+void PcCwKeyer::close()
+{
+    if (serial.isOpen()) {
+        serial.close();
     }
 }
 
 void PcCwKeyer::key(bool on)
 {
-
-    if (useDtrRts)
-    {
-       serial.setDataTerminalReady(on);
-    }
-    else
-    {
-        serial.setReadBufferSize(on);
-    }
+    serial.setDataTerminalReady(on);
 
 }
-/*
-void PcCwKeyer::playToneFor(int durationMs)
+
+void PcCwKeyer::pttOn(bool on)
 {
-    if (!audioOut) return;
-
-    QByteArray data = generateTone(600, durationMs);
-    QBuffer* buffer = new QBuffer(this);
-    buffer->setData(data);
-    buffer->open(QIODevice::ReadOnly);
-
-    connect(audioOut, &QAudioOutput::stateChanged, buffer, [buffer](QAudio::State state) {
-        if (state == QAudio::IdleState || state == QAudio::StoppedState)
-            buffer->deleteLater();
-    });
-
-    audioOut->start(buffer);
+    qDebug() << "PTT " << (on ? "On" : "Off");
+    serial.setRequestToSend(on);
 }
-
-
-QByteArray PcCwKeyer::generateTone(int frequency, int durationMs, int sampleRate)
-{
-    const int samples = sampleRate * durationMs / 1000;
-    QByteArray data;
-    data.resize(samples * sizeof(qint16));
-    qint16 *buf = reinterpret_cast<qint16*>(data.data());
-
-    for (int i = 0; i < samples; ++i)
-    {
-        double t = static_cast<double>(i) / sampleRate;
-        buf[i] = static_cast<qint16>(32767 * qSin(2 * M_PI * frequency * t));
-    }
-
-    return data;
-}
-*/
-bool PcCwKeyer::isBusy() const
-{
-    return !timedActions.isEmpty();
-}
-
 
 void PcCwKeyer::handleSerialPortError(QSerialPort::SerialPortError error)
 {
-    if (error == QSerialPort::ResourceError)
-    {
+    if (error == QSerialPort::ResourceError) {
         qDebug() << "Serial port disconnected";
         emit serialPortError(serial.errorString());
     }
 }
 
-/*
-void PcCwKeyer::setUseSideTone(bool useSideTone_)
+void PcCwKeyer::onWorkerFinished()
 {
-
-    if (useSidetone == useSideTone_)
-        return;  // no change
-
-    useSidetone = useSideTone_;
-
-    if (useSidetone)
+    if (getPttPendingFlag())
     {
-        // Create new audioOut if not already created
-        if (!audioOut)
-        {
-            QAudioFormat format;
-            format.setSampleRate(44100);
-            format.setChannelCount(1);
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-            format.setSampleFormat(QAudioFormat::Int16);
-#else
-            format.setSampleSize(16);
-            format.setSampleType(QAudioFormat::SignedInt);
-            format.setByteOrder(QAudioFormat::LittleEndian);
-            format.setCodec("audio/pcm");
-#endif
-
-            audioOut = new QAudioOutput(format, this);
-        }
+        QTimer::singleShot(postTxDelayMs, this, [this]() {
+            pttOn(false);  // Turn off transmitter
+            emit nextStringRequested();
+        });
+        setPttPendingFlag(false);
     }
     else
     {
-        if (audioOut)
-        {
-            audioOut->stop();
-            delete audioOut;
-            audioOut = nullptr;
-        }
+        emit nextStringRequested();
     }
+
+
 }
 
-*/
-
-
-void PcCwKeyer::abortTransmission()
-{
-    // Stop any pending CW actions
-    timer.stop();
-    timedActions.clear();
-
-    // Unkey the transmitter
-    key(false);
-/*
-    // Stop sidetone if active
-    if (useSidetone && audioOut) {
-        audioOut->stop();
-    }
-*/
-    qDebug() << "CW transmission aborted.";
-}
-
-
-void PcCwKeyer::close()
-{
-    if (serial.isOpen())
-    {
-        serial.close();
-    }
-}

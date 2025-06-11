@@ -34,6 +34,11 @@
 
 const int STATUS_TIMER_DUR = 1000;
 
+const int MIN_PRE_TX_DELAY = 10;
+const int MAX_PRE_TX_DELAY = 100;
+const int MIN_POST_TX_DELAY = 50;
+const int MAX_POST_TX_DELAY = 750;
+
 static const char blankString[] = QT_TRANSLATE_NOOP("SettingsDialog", "N/A");
 
 
@@ -43,10 +48,9 @@ pcCwKeyerMainWindow::pcCwKeyerMainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
+    this->setWindowTitle("Serial DTR CW Keyer");
+
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
-
-
-
 
     trace("Connect to commandRead");  // This connect doesn't appear to work for some time!
     connect(commandReader.data(), &CommandReader::commandLine, this, &pcCwKeyerMainWindow::onCommandRead);
@@ -73,23 +77,29 @@ pcCwKeyerMainWindow::pcCwKeyerMainWindow(QWidget *parent)
 
     pcCwKeyerRpc = new PcCwKeyerRpc();
 
-
-
-
-
-
     fillPortsInfo();
 
-    ui->dtrRb->setChecked(true);
-    ui->rtsRb->setChecked(false);
-
-
+    readSettings();
+    loadSettingsToMainWindow();
 
     setWpmSpinnerRange(5, 40);
     setWpmSpinnnerStep(1);
     setWpmValue(wpm);
 
+    ui->preTxDelayLineEdit->setValidator(new QIntValidator(MIN_PRE_TX_DELAY, MAX_PRE_TX_DELAY, this));
+    ui->postTxDelayLineEdit->setValidator(new QIntValidator(MIN_POST_TX_DELAY, MAX_POST_TX_DELAY, this));
+
+
     setConnections();
+
+    comportName = new QLabel();
+    comportStatus = new QLabel();
+    errorMsg = new QLabel();
+
+    ui->statusbar->addWidget(comportName);
+    ui->statusbar->addWidget(comportStatus);
+    ui->statusbar->addPermanentWidget(errorMsg);
+
 
     statusTimer = new QTimer(this);
     connect(statusTimer, &QTimer::timeout, this, &pcCwKeyerMainWindow::handleStatusTimer);
@@ -104,32 +114,151 @@ pcCwKeyerMainWindow::~pcCwKeyerMainWindow()
     delete ui;
 }
 
+void pcCwKeyerMainWindow::readSettings()
+{
+    QSettings config(PC_CW_KEYER_SETTINGS_FILE(), QSettings::IniFormat);
+
+    wpm = config.value("currentWpm", 15).toInt();
+    comport = config.value("comport", "").toString();
+    preTxDelayMs = config.value("preTxDelayMs", MIN_PRE_TX_DELAY).toInt();
+    postTxDelayMs = config.value("postTxDelayMs", MIN_POST_TX_DELAY).toInt();
+    pttEnabled = config.value("pttEnabled", false).toBool();
+
+}
+
+void pcCwKeyerMainWindow::loadSettingsToMainWindow()
+{
+    ui->wpmSpinBox->setValue(wpm);
+
+    int index = ui->comportSel->findText(comport);
+    if (index != -1)
+    {
+       ui->comportSel->setCurrentIndex(index);
+    }
+    else
+    {
+        qDebug() << "Comport" << comport << " is no longer available";
+    }
+
+
+    ui->preTxDelayValueDisplayLabel->setText(QString::number(preTxDelayMs));
+    ui->postTxDelayValueLabel->setText(QString::number(postTxDelayMs));
+    ui->enablePTTCheckbox->setChecked(pttEnabled);
+
+    enableTXDelayObjects(pttEnabled);
+
+
+}
+
+void pcCwKeyerMainWindow::saveWpmSetting()
+{
+    QSettings config(PC_CW_KEYER_SETTINGS_FILE(), QSettings::IniFormat);
+
+    config.setValue("currentWpm", wpm);
+}
+
+void pcCwKeyerMainWindow::saveComport()
+{
+    QSettings config(PC_CW_KEYER_SETTINGS_FILE(), QSettings::IniFormat);
+
+    config.setValue("comport", comport);
+
+}
+
+void pcCwKeyerMainWindow::savePreTxDelay()
+{
+    QSettings config(PC_CW_KEYER_SETTINGS_FILE(), QSettings::IniFormat);
+
+    config.setValue("preTxDelayMs", preTxDelayMs);
+}
+
+void pcCwKeyerMainWindow::savePostTxDelay()
+{
+    QSettings config(PC_CW_KEYER_SETTINGS_FILE(), QSettings::IniFormat);
+
+    config.setValue("postTxDelayMs", postTxDelayMs);
+}
+
+void pcCwKeyerMainWindow::savePttEnabled()
+{
+    QSettings config(PC_CW_KEYER_SETTINGS_FILE(), QSettings::IniFormat);
+
+    config.setValue("pttEnabled", pttEnabled);
+}
+
+void pcCwKeyerMainWindow::saveAllSettings()
+{
+    saveWpmSetting();
+    saveComport();
+    savePreTxDelay();
+    savePostTxDelay();
+    savePttEnabled();
+}
+
+void pcCwKeyerMainWindow::enableTXDelayObjects(bool enable)
+{
+    ui->preTxDelayLineEdit->setEnabled(enable);
+    ui->preTxDelayTitleLabel->setEnabled(enable);
+    ui->preTxDelayValueDisplayLabel->setEnabled(enable);
+
+    ui->postTxDelayLineEdit->setEnabled(enable);
+    ui->postTxDelayTitleLabel->setEnabled(enable);
+    ui->postTxDelayValueLabel->setEnabled(enable);
+}
+
 
 void pcCwKeyerMainWindow::setConnections()
 {
 
     connect(ui->comportSel, QOverload<int>::of(&QComboBox::activated), this, &pcCwKeyerMainWindow::onComportSelected);
-    connect(ui->dtrRb, &QRadioButton::clicked,this, &pcCwKeyerMainWindow::onDtrSelected);
-    connect(ui->rtsRb, &QRadioButton::clicked,this, &pcCwKeyerMainWindow::onRtsSelected);
     connect(ui->wpmSpinBox, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &pcCwKeyerMainWindow::onWpmValueChanged);
+
+    connect(ui->enablePTTCheckbox, &QCheckBox::clicked, this, &pcCwKeyerMainWindow::onEnablePTT);
+
+
+    connect(ui->preTxDelayLineEdit, &QLineEdit::returnPressed, this, [this]() {
+        QString text = ui->preTxDelayLineEdit->text();
+        onPreTxDelayEditingFinished(text);
+    });
+
+    connect(ui->postTxDelayLineEdit, &QLineEdit::returnPressed, this, [this]() {
+        QString text = ui->postTxDelayLineEdit->text();  // <- fixed lineEdit reference
+        onPostTxDelayEditingFinished(text);
+    });
 
     connect(ui->cwTextInputLineEdit, &QLineEdit::returnPressed, this, [this]() {
         QString text = ui->cwTextInputLineEdit->text();
         onTextInputFinished(text);
-        ui->cwTextInputLineEdit->clear();  // clear after sending
     });
 
 
 
-
 }
+
+
+
 
 void pcCwKeyerMainWindow::handleNextCwString()
 {
     if (!cwMsgQueue.isEmpty())
     {
         QString next = cwMsgQueue.takeFirst().append(" "); // add space between messages
-        cwKeyer->sendText(next);
+
+        if (pttEnabled)
+        {
+            cwKeyer->setPttPendingFlag(pttEnabled);
+            cwKeyer->pttOn(true);  // Turn on PTT
+
+            QTimer::singleShot(preTxDelayMs, this, [this, next]() {
+
+                cwKeyer->sendText(next);
+            });
+        }
+        else
+        {
+           cwKeyer->sendText(next);
+        }
+
     }
 }
 
@@ -170,28 +299,11 @@ void pcCwKeyerMainWindow::onComportSelected()
     {
         comport = ui->comportSel->currentText();
         openCwKeyer();
+        saveComport();
     }
 }
 
-void pcCwKeyerMainWindow::onDtrSelected()
-{
-    if (!dtrRtsSelected)
-    {
-        dtrRtsSelected = !dtrRtsSelected;
-        ui->dtrRb->setChecked(true);
-        ui->rtsRb->setChecked(false);
-    }
-}
 
-void pcCwKeyerMainWindow::onRtsSelected()
-{
-    if (dtrRtsSelected)
-    {
-        dtrRtsSelected = !dtrRtsSelected;
-        ui->dtrRb->setChecked(false);
-        ui->rtsRb->setChecked(true);
-    }
-}
 
 
 void pcCwKeyerMainWindow::onWpmValueChanged(int value)
@@ -200,6 +312,19 @@ void pcCwKeyerMainWindow::onWpmValueChanged(int value)
     {
         wpm = getWpmValue();
         openCwKeyer();
+        saveWpmSetting();
+    }
+}
+
+
+void pcCwKeyerMainWindow::onEnablePTT(bool checked)
+{
+    if (checked != pttEnabled)
+    {
+        pttEnabled = checked;
+        savePttEnabled();
+        enableTXDelayObjects(checked);
+
     }
 }
 
@@ -217,7 +342,7 @@ void pcCwKeyerMainWindow::openCwKeyer()
         qDebug() << "Comport is empty";
     }
 
-    cwKeyer = new PcCwKeyer(wpm, dtrRtsSelected, this);
+    cwKeyer = new PcCwKeyer(wpm, this);
 
     if (cwKeyer)
     {
@@ -226,6 +351,7 @@ void pcCwKeyerMainWindow::openCwKeyer()
         connect(cwKeyer, &PcCwKeyer::serialPortError, this, &pcCwKeyerMainWindow::handleSerialPortError);
 
         cwKeyer->openComPort(comport);
+        cwKeyer->setPostTxDelayMs(postTxDelayMs);
     }
 
 
@@ -242,15 +368,49 @@ void pcCwKeyerMainWindow::closeCwKeyer()
 
 void pcCwKeyerMainWindow::onTextInputFinished(const QString &text)
 {
-    if (!text.trimmed().isEmpty())
-        cwMsgQueue.append(text.trimmed());
-
-    // If keyer is not currently busy, kick it off
-    if (!cwKeyer->isBusy())
+    QString trimmed = text.trimmed();
+    if (!trimmed.isEmpty())
     {
-        handleNextCwString();
+        bool wasEmpty = cwMsgQueue.isEmpty();
+        ui->cwTextInputLineEdit->clear();
+        cwMsgQueue.append(trimmed);
+        if (wasEmpty && cwKeyer)
+        {
+            handleNextCwString();  // start sending right away
+        }
     }
 
+
+}
+
+void pcCwKeyerMainWindow::onPreTxDelayEditingFinished(QString text)
+{
+    bool ok = false;
+    int delay = text.toInt(&ok);
+    if (ok)
+    {
+        preTxDelayMs = delay;
+        savePreTxDelay();
+        ui->preTxDelayValueDisplayLabel->setText(text);
+        ui->preTxDelayLineEdit->clear();
+    }
+}
+
+void pcCwKeyerMainWindow::onPostTxDelayEditingFinished(QString text)
+{
+    bool ok = false;
+    int delay = text.toInt(&ok);
+    if (ok)
+    {
+        postTxDelayMs = delay;
+        savePostTxDelay();
+        ui->postTxDelayValueLabel->setText(text);
+        ui->postTxDelayLineEdit->clear();
+        if (cwKeyer)
+        {
+            cwKeyer->setPostTxDelayMs(postTxDelayMs);
+        }
+    }
 }
 
 void pcCwKeyerMainWindow::handleSerialPortOpen(bool state)
@@ -408,5 +568,8 @@ void pcCwKeyerMainWindow::LogTimerTimer()
     }
 }
 
-
+QString PC_CW_KEYER_SETTINGS_FILE()
+{
+    return getDirectoryLocation(dlConfiguration) + "/PcCwKeyer/PcCwKeyerSettings.ini";
+}
 

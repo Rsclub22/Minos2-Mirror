@@ -17,74 +17,58 @@
 
 #include <QObject>
 #include <QSerialPort>
-#include <QTimer>
-#include <QQueue>
-#include <QMap>
-#include <functional>
+#include <QHash>
+#include <QChar>
+#include "CwWorker.h"
 
 class PcCwKeyer : public QObject
 {
     Q_OBJECT
+
 public:
-    explicit PcCwKeyer(int wpm, bool dtrRts = false, QObject *parent = nullptr);
+    explicit PcCwKeyer(int wpm, QObject *parent = nullptr);
     ~PcCwKeyer();
 
     void openComPort(const QString portName);
-    void setWPM(int charWpm);
+    void setWPM(int wpm);
     void sendText(const QString &text);
-    bool isBusy() const;
-
 
     void abortTransmission();
     void close();
 
+    void pttOn(bool on);
+    void setPttPendingFlag(bool state){pttPendingOff = state;}
+    bool getPttPendingFlag(){return pttPendingOff;}
+
+    void setPostTxDelayMs(int delay){postTxDelayMs = delay;}
+
 signals:
+    void requestKey(bool on);
     void nextStringRequested();
-    void serialPortOpen(bool);
-    void serialPortError(QString);
+    void serialPortOpen(bool success);
+    void serialPortError(const QString &error);
+
+    void finished();  // Emitted when current CW transmission ends
+
 
 private slots:
-    void processQueue();
+    void key(bool on);
     void handleSerialPortError(QSerialPort::SerialPortError error);
+    void onWorkerFinished();
 
 private:
-    struct TimedAction {
-        std::function<void()> func;
-        int delayMs;
-    };
-
     QSerialPort serial;
-    Qt::TimerType timerType = Qt::PreciseTimer;
-    QTimer timer;   // CW timer
+    qreal charDot = 60.0; // default
+    CwWorker *worker = nullptr;
 
-    QQueue<TimedAction> timedActions;
+    bool pttPendingOff = false;
 
-    qreal charDot = 60;
-    int spaceDot = 60;
-
-    bool useDtrRts = false;
-
-    void key(bool on);
-
-    void enqueueAction(std::function<void()> func, int delayMs);
-    void enqueueSymbolSequence(const QString &morse);
+    int postTxDelayMs = 0;
 
 
 
-    static inline const QMap<QChar, QString> morseTable = {
-        { 'A', ".-" }, { 'B', "-..." }, { 'C', "-.-." }, { 'D', "-.." },
-        { 'E', "." }, { 'F', "..-." }, { 'G', "--." }, { 'H', "...." },
-        { 'I', ".." }, { 'J', ".---" }, { 'K', "-.-" }, { 'L', ".-.." },
-        { 'M', "--" }, { 'N', "-." }, { 'O', "---" }, { 'P', ".--." },
-        { 'Q', "--.-" }, { 'R', ".-." }, { 'S', "..." }, { 'T', "-" },
-        { 'U', "..-" }, { 'V', "...-" }, { 'W', ".--" }, { 'X', "-..-" },
-        { 'Y', "-.--" }, { 'Z', "--.." },
-        { '0', "-----" }, { '1', ".----" }, { '2', "..---" }, { '3', "...--" },
-        { '4', "....-" }, { '5', "....." }, { '6', "-...." },
-         { '7', "--..." }, { '8', "---.." }, { '9', "----." },
-          { ' ', " " }
-          };
-
+    void enqueueMorseText(const QString &text);
+    QString convertCharToMorse(QChar c);
 };
 
 #endif // PCCWKEYER_H
