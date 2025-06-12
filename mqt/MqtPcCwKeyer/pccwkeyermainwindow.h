@@ -77,8 +77,9 @@ private:
 
     QLabel *comportName;
     QLabel *comportStatus;
-
     QLabel *errorMsg;
+
+
 
 
 
@@ -104,6 +105,8 @@ private:
     void savePttEnabled();
     void saveComport();
     void loadSettingsToMainWindow();
+
+
 
 
 

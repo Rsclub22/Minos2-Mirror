@@ -68,19 +68,14 @@ pcCwKeyerMainWindow::pcCwKeyerMainWindow(QWidget *parent)
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
-    QString fileName = getDirectoryLocation(dlConfiguration) + "/PcCwKeyer.ini";
-    QSettings config(fileName, QSettings::IniFormat);
+    //QString fileName = getDirectoryLocation(dlConfiguration) + "/PcCwKeyer.ini";
+    //QSettings config(fileName, QSettings::IniFormat);
 
     connect(&LogTimer, &QTimer::timeout, this, &pcCwKeyerMainWindow::LogTimerTimer);
     LogTimer.start(100);
 
 
-    pcCwKeyerRpc = new PcCwKeyerRpc();
-
     fillPortsInfo();
-
-    readSettings();
-    loadSettingsToMainWindow();
 
     setWpmSpinnerRange(5, 40);
     setWpmSpinnnerStep(1);
@@ -88,7 +83,8 @@ pcCwKeyerMainWindow::pcCwKeyerMainWindow(QWidget *parent)
 
     ui->preTxDelayLineEdit->setValidator(new QIntValidator(MIN_PRE_TX_DELAY, MAX_PRE_TX_DELAY, this));
     ui->postTxDelayLineEdit->setValidator(new QIntValidator(MIN_POST_TX_DELAY, MAX_POST_TX_DELAY, this));
-
+    ui->preTxDelayLineEdit->setToolTip(QString("Min Delay %1, Max Delay %2").arg(QString::number(MIN_PRE_TX_DELAY), QString::number(MAX_PRE_TX_DELAY)));
+    ui->postTxDelayLineEdit->setToolTip(QString("Min Delay %1, Max Delay %2").arg(QString::number(MIN_POST_TX_DELAY), QString::number(MAX_POST_TX_DELAY)));
 
     setConnections();
 
@@ -96,14 +92,44 @@ pcCwKeyerMainWindow::pcCwKeyerMainWindow(QWidget *parent)
     comportStatus = new QLabel();
     errorMsg = new QLabel();
 
+
     ui->statusbar->addWidget(comportName);
     ui->statusbar->addWidget(comportStatus);
     ui->statusbar->addPermanentWidget(errorMsg);
 
 
+
     statusTimer = new QTimer(this);
     connect(statusTimer, &QTimer::timeout, this, &pcCwKeyerMainWindow::handleStatusTimer);
     statusTimer->start(STATUS_TIMER_DUR);
+
+    readSettings();
+    loadSettingsToMainWindow();
+
+
+
+    pcCwKeyerRpc = new PcCwKeyerRpc();
+
+    openCwKeyer();
+
+    if (comport.isEmpty())
+    {
+        trace(QString("Open CWKeyer - Comport is empty"));
+        errorMsg->setText("Comport is empty");
+        comportName->clear();
+        comportStatus->clear();
+
+    }
+    else
+    {
+
+       if (cwKeyer)
+       {
+         cwKeyer->openComPort(comport);
+       }
+    }
+
+
 
 
 
@@ -113,6 +139,7 @@ pcCwKeyerMainWindow::~pcCwKeyerMainWindow()
 {
     delete ui;
 }
+
 
 void pcCwKeyerMainWindow::readSettings()
 {
@@ -240,6 +267,9 @@ void pcCwKeyerMainWindow::setConnections()
 
 void pcCwKeyerMainWindow::handleNextCwString()
 {
+
+
+
     if (!cwMsgQueue.isEmpty())
     {
         QString next = cwMsgQueue.takeFirst().append(" "); // add space between messages
@@ -262,31 +292,34 @@ void pcCwKeyerMainWindow::handleNextCwString()
     }
 }
 
+
+
 void pcCwKeyerMainWindow::handleStatusTimer()
 {
     static QString oldStatusMsg;
     static int oldServerListCount = 0;
 
+
     if (oldServerListCount != pcCwKeyerRpc->getServerListCount())
     {
         oldServerListCount = pcCwKeyerRpc->getServerListCount();
         // send status to clients
-        //trace(QString("handleStatusTimer: Cluster Client Count Changed old = %1, new = %2 - Send Status to Cluster Clients - %3").arg(oldServerListCount).arg(pcCwKeyerRpc->getServerListCount()).arg(status->text()));
+        //trace(QString("handleStatusTimer: PcCwKeyer Client Count Changed old = %1, new = %2 - Send Status to Cluster Clients - %3").arg(oldServerListCount).arg(pcCwKeyerRpc->getServerListCount()).arg(status->text()));
         pcCwKeyerRpc->publishState(ui->statusbar->currentMessage(), ui->statusbar->currentMessage());
 
     }
 
    // send status message if it has changed
-    else if (!ui->statusbar->currentMessage().isEmpty())
+    else if (!comportStatus->text().isEmpty())
     {
-        if (oldStatusMsg != ui->statusbar->currentMessage())
+        if (oldStatusMsg != comportStatus->text())
         {
-            oldStatusMsg = ui->statusbar->currentMessage();
+            oldStatusMsg = comportStatus->text();
 
             // send status to clients
             trace(QString("handleStatusTimer: Send Status to Cluster Clients - %1").arg(ui->statusbar->currentMessage()));
             //sendSpotsQueue.append(createStatusToSend(rawStatus));
-            pcCwKeyerRpc->publishState(ui->statusbar->currentMessage(), ui->statusbar->currentMessage());
+            pcCwKeyerRpc->publishState(comportName->text(), comportStatus->text());
         }
     }
 
@@ -298,8 +331,28 @@ void pcCwKeyerMainWindow::onComportSelected()
     if (ui->comportSel->currentText() != comport)
     {
         comport = ui->comportSel->currentText();
-        openCwKeyer();
         saveComport();
+        if (cwKeyer)
+        {
+            if (comport.isEmpty())
+            {
+                if (cwKeyer->isSerialOpen())
+                {
+                   cwKeyer->closeComport(comport);
+                }
+
+                trace(QString("OnComport Sel  - Comport is empty"));
+                errorMsg->setText("Comport is empty");
+                comportName->clear();
+                comportStatus->clear();
+
+            }
+            else
+            {
+               cwKeyer->openComPort(comport);
+            }
+
+        }
     }
 }
 
@@ -311,7 +364,10 @@ void pcCwKeyerMainWindow::onWpmValueChanged(int value)
     if (value != wpm)
     {
         wpm = getWpmValue();
-        openCwKeyer();
+        if (cwKeyer)
+        {
+            cwKeyer->setWPM(wpm);
+        }
         saveWpmSetting();
     }
 }
@@ -331,26 +387,14 @@ void pcCwKeyerMainWindow::onEnablePTT(bool checked)
 
 void pcCwKeyerMainWindow::openCwKeyer()
 {
-    if (cwKeyer)
-    {
-        disconnect(cwKeyer, &PcCwKeyer::nextStringRequested, this, &pcCwKeyerMainWindow::handleNextCwString);
-        delete cwKeyer;
-    }
 
-    if (comport.isEmpty())
-    {
-        qDebug() << "Comport is empty";
-    }
-
-    cwKeyer = new PcCwKeyer(wpm, this);
+    cwKeyer = new PcCwKeyer(this);
 
     if (cwKeyer)
     {
         connect(cwKeyer, &PcCwKeyer::nextStringRequested, this, &pcCwKeyerMainWindow::handleNextCwString);
         connect(cwKeyer, &PcCwKeyer::serialPortOpen, this, &pcCwKeyerMainWindow::handleSerialPortOpen);
         connect(cwKeyer, &PcCwKeyer::serialPortError, this, &pcCwKeyerMainWindow::handleSerialPortError);
-
-        cwKeyer->openComPort(comport);
         cwKeyer->setPostTxDelayMs(postTxDelayMs);
     }
 
@@ -374,6 +418,7 @@ void pcCwKeyerMainWindow::onTextInputFinished(const QString &text)
         bool wasEmpty = cwMsgQueue.isEmpty();
         ui->cwTextInputLineEdit->clear();
         cwMsgQueue.append(trimmed);
+
         if (wasEmpty && cwKeyer)
         {
             handleNextCwString();  // start sending right away
@@ -415,15 +460,19 @@ void pcCwKeyerMainWindow::onPostTxDelayEditingFinished(QString text)
 
 void pcCwKeyerMainWindow::handleSerialPortOpen(bool state)
 {
-    ui->statusbar->clearMessage();
-    ui->statusbar->showMessage(QString("%1 %2").arg(ui->comportSel->currentText(), state ? "Open" : "Closed"));
+    comportName->clear();
+    comportStatus->clear();
+    errorMsg->clear();
+    comportName->setText(QString("%1: ").arg(ui->comportSel->currentText()));
+    comportStatus->setText(QString("%1").arg(state ? "Open" : "Closed"));
+
 
 }
 
-void pcCwKeyerMainWindow::handleSerialPortError(QString errorMsg)
+void pcCwKeyerMainWindow::handleSerialPortError(QString msg)
 {
-    ui->statusbar->clearMessage();
-    ui->statusbar->showMessage(QString("%1 %2").arg(ui->comportSel->currentText(), errorMsg));
+    errorMsg->clear();
+    errorMsg->setText(QString("%1").arg(msg));
 }
 
 

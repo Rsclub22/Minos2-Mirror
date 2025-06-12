@@ -19,6 +19,7 @@
 #include <QSerialPort>
 #include <QHash>
 #include <QChar>
+
 #include "CwWorker.h"
 
 class PcCwKeyer : public QObject
@@ -26,10 +27,11 @@ class PcCwKeyer : public QObject
     Q_OBJECT
 
 public:
-    explicit PcCwKeyer(int wpm, QObject *parent = nullptr);
+    explicit PcCwKeyer(QObject *parent = nullptr);
     ~PcCwKeyer();
 
     void openComPort(const QString portName);
+    void closeComport(const QString portName);
     void setWPM(int wpm);
     void sendText(const QString &text);
 
@@ -42,6 +44,10 @@ public:
 
     void setPostTxDelayMs(int delay){postTxDelayMs = delay;}
 
+    static QString convertCharToMorse(QChar c);
+
+
+    bool isSerialOpen();
 signals:
     void requestKey(bool on);
     void nextStringRequested();
@@ -68,7 +74,8 @@ private:
 
 
     void enqueueMorseText(const QString &text);
-    QString convertCharToMorse(QChar c);
+
+
 };
 
 #endif // PCCWKEYER_H

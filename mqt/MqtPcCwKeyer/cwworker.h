@@ -1,3 +1,19 @@
+/////////////////////////////////////////////////////////////////////////////
+// $Id$
+//
+// PROJECT NAME 		Minos Amateur Radio Control and Logging System
+//                      Pc Serial Port DTR CW Keyer Worker
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2025
+//
+//
+//
+//
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
 #ifndef CWWORKER_H
 #define CWWORKER_H
 
