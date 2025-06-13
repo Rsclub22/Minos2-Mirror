@@ -1157,6 +1157,8 @@ void TSendDM::on_notify( AnalysePubSubNotify an, const QString /*from*/ )
         {
             emit setClusterTXSpotEnableState(an.getValue());
         }
+
+
         if (an.getCategory() == rpcConstants::pcCwKeyerCategory && an.getKey() == rpcConstants::pcCwKeyerReport)
         {
             if (pcCwKeyerApp.isEmpty())

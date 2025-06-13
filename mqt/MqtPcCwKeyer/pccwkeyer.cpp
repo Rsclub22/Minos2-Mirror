@@ -153,10 +153,10 @@ QString PcCwKeyer::convertCharToMorse(QChar c)
         { '4', "....-" }, { '5', "....." }, { '6', "-...." }, { '7', "--..." },
         { '8', "---.." }, { '9', "----." },
 
-        { '"', ".-..-."}, {'\'', "...-..-"}, {'(', "-.--.-"}, {')', "-.--.-"},
+        { '"', ".-..-."}, {'\'', "...-..-"}, {'(', "-.--."}, {')', "-.--.-"},
         {'[', "-.--."}, {']', "-.--.-"}, {'+', ".-.-."}, {',', "--..--"},
         {'-', "-....-"}, {'.', ".-.-.-"}, {'/', "-..-."}, {':', "---..."},
-        {';', "-.-.-."}, {'=', "-...-"}, {'?', "..--."}, {'@', ".--.-."},
+        {';', "-.-.-."}, {'=', "-...-"}, {'?', "..--.."}, {'@', ".--.-."},
         {'_', "..--.-"}, {'!', "---."}
     };
 
@@ -193,7 +193,7 @@ void PcCwKeyer::pttOn(bool on)
 void PcCwKeyer::handleSerialPortError(QSerialPort::SerialPortError error)
 {
     if (error == QSerialPort::ResourceError) {
-        trace(QString("Serial port disconnected"));
+        trace(QString("Serial port disconnected: %1").arg(serial.errorString()));
         emit serialPortError(serial.errorString());
     }
 }
