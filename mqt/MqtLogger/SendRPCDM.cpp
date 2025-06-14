@@ -1167,6 +1167,23 @@ void TSendDM::on_notify( AnalysePubSubNotify an, const QString /*from*/ )
             }
 
             pcCwKeyerLoaded = true;
+
+            QStringList stateMsgList = an.getValue().split("<>", Qt::KeepEmptyParts);
+            if (stateMsgList.count() == 3)
+            {
+                emit pcCwKeyerComport(stateMsgList[0]);
+                if (stateMsgList[1] == "Open")
+                {
+                    pcCwKeyerConnected = true;
+                }
+                else
+                {
+                    pcCwKeyerConnected = false;
+
+                }
+                emit pcCwKeyerConnectionState(stateMsgList[1]);
+                emit pcCwKeyerErrorMsg(stateMsgList[2]);
+            }
         }
 
     }

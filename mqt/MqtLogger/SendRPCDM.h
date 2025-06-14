@@ -173,5 +173,9 @@ class TSendDM : public QObject
       void keyerConfig(QString, QString);
       void keyerReport(QString);
 
+      void pcCwKeyerComport(QString);
+      void pcCwKeyerConnectionState(QString);
+      void pcCwKeyerErrorMsg(QString);
+
 };
 #endif

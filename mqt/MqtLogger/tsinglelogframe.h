@@ -307,6 +307,9 @@ private slots:
     void onShowCribBand();
     void sendSkyScanFrameButtonStateToRotator(SkyScanButtonState buttonState);
     void sendSkyScanPresetNumberToRotator(int buttonNumber);
+    void onPcCwKeyerComport(QString comport);
+    void onPcCwKeyerConnectionState(QString stateStr);
+    void onPcCwKeyerErrorMsg(QString errorMsg);
 };
 
 #endif // TSINGLELOGFRAME_H

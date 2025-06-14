@@ -305,7 +305,7 @@ void pcCwKeyerMainWindow::handleStatusTimer()
         oldServerListCount = pcCwKeyerRpc->getServerListCount();
         // send status to clients
         //trace(QString("handleStatusTimer: PcCwKeyer Client Count Changed old = %1, new = %2 - Send Status to Cluster Clients - %3").arg(oldServerListCount).arg(pcCwKeyerRpc->getServerListCount()).arg(status->text()));
-        pcCwKeyerRpc->publishState(ui->statusbar->currentMessage(), ui->statusbar->currentMessage());
+        pcCwKeyerRpc->publishState(comportName->text(), comportStatus->text(), errorMsg->text());
 
     }
 
@@ -319,7 +319,7 @@ void pcCwKeyerMainWindow::handleStatusTimer()
             // send status to clients
             trace(QString("handleStatusTimer: Send Status to Cluster Clients - %1").arg(ui->statusbar->currentMessage()));
             //sendSpotsQueue.append(createStatusToSend(rawStatus));
-            pcCwKeyerRpc->publishState(comportName->text(), comportStatus->text());
+            pcCwKeyerRpc->publishState(comportName->text(), comportStatus->text(), errorMsg->text());
         }
     }
 

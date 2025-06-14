@@ -195,10 +195,10 @@ void PcCwKeyerRpc::on_notify(AnalysePubSubNotify /*an*/, const QString /*from*/ 
 }
 
 
-void PcCwKeyerRpc::publishState( const QString &raw, const QString &state )
+void PcCwKeyerRpc::publishState( const QString &comport, const QString &state, const QString &errorMsg )
 {
 
-    RPCPubSub::publish( rpcConstants::pcCwKeyerCategory, rpcConstants::pcCwKeyerReport, raw + "<>" + state, psPublished );
+    RPCPubSub::publish( rpcConstants::pcCwKeyerCategory, rpcConstants::pcCwKeyerReport, comport + "<>" + state  + "<>" + errorMsg, psPublished );
 
 }
 

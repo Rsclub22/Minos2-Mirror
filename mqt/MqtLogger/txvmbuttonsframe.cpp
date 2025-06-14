@@ -1855,6 +1855,31 @@ void TxVmButtonsFrame::onInternalVoiceMemoryPlayState(bool playing)
     }
 }
 
+
+void TxVmButtonsFrame::setPcCwKeyerComport(QString comportStr)
+{
+    if (txVoiceKeyer && voiceKeyerType == keyerTypes[VoiceKeyerId::PcCwKeyer])
+    {
+
+    }
+}
+
+void TxVmButtonsFrame::setPcCwKeyerConnectionState(QString stateStr)
+{
+    if (txVoiceKeyer && voiceKeyerType == keyerTypes[VoiceKeyerId::PcCwKeyer])
+    {
+
+    }
+}
+
+void TxVmButtonsFrame::setPcCwKeyerErrorMsg(QString errorMsg)
+{
+    if (txVoiceKeyer && voiceKeyerType == keyerTypes[VoiceKeyerId::PcCwKeyer])
+    {
+
+    }
+}
+
 void TxVmButtonsFrame::logMessage(QString msg)
 {
     trace(QString("[TxVmButtonsFrame] %1").arg(msg));

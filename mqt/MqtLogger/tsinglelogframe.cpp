@@ -160,6 +160,10 @@ void TSingleLogFrame::buildFrame(int slotNo)
     connect(LogContainer->sendDM, &TSendDM::setClusterState, this, &TSingleLogFrame::on_clusterServerState);
     connect(LogContainer->sendDM, &TSendDM::setClusterTXSpotEnableState, this, &TSingleLogFrame::on_setClusterTXSpotEnableState);
 
+    // from PcCwKeyer
+    connect(LogContainer->sendDM, &TSendDM::pcCwKeyerComport, this, &TSingleLogFrame::onPcCwKeyerComport);
+    connect(LogContainer->sendDM, &TSendDM::pcCwKeyerConnectionState, this, &TSingleLogFrame::onPcCwKeyerConnectionState);
+    connect(LogContainer->sendDM, &TSendDM::pcCwKeyerErrorMsg, this, &TSingleLogFrame::onPcCwKeyerErrorMsg);
 
     // to bandmap
     connect(GJVQSOLogFrame, &QSOLogFrame::bandmapMarkFreq, this, &TSingleLogFrame::on_BandmapMarkFreq);
@@ -2577,7 +2581,23 @@ void TSingleLogFrame::setQrzDisplayFrameLoaded(bool loaded)
    GJVQSOLogFrame->setqrzDisplayFrameLoaded(loaded);
 }
 
-//---------------------------------------------------------------------------
+//---------------------- PcCwKeyer ------------------------------------------
+
+
+void TSingleLogFrame::onPcCwKeyerComport(QString comportStr)
+{
+    txVmButtonsFrame->setPcCwKeyerComport(comportStr);
+}
+
+void TSingleLogFrame::onPcCwKeyerConnectionState(QString stateStr)
+{
+    txVmButtonsFrame->setPcCwKeyerConnectionState(stateStr);
+}
+
+void TSingleLogFrame::onPcCwKeyerErrorMsg(QString errorMsg)
+{
+    txVmButtonsFrame->setPcCwKeyerErrorMsg(errorMsg);
+}
 
 void TSingleLogFrame::traceMsg(QString msg)
 {

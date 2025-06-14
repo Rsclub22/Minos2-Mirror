@@ -100,6 +100,9 @@ public:
     void setMode(const QString m);
     void setContest(BaseContestLog *);
     void logRadioSettingsChanged(QSharedPointer<RadioSettingsDialogChangeFlag> logRadioSettingsFlags);
+    void setPcCwKeyerComport(QString comportStr);
+    void setPcCwKeyerConnectionState(QString stateStr);
+    void setPcCwKeyerErrorMsg(QString errorMsg);
 signals:
 
     void pttStatus(bool);

@@ -47,7 +47,7 @@ public:
     static PcCwKeyerRpc *getPcCwKeyerRpc();
 
 
-    void publishState( const QString &raw, const QString &state );
+    void publishState( const QString &comport, const QString &state, const QString &errorMsg );
 
     int getServerListCount();
 signals:
