@@ -49,6 +49,13 @@ class KSTMainWindow : public QMainWindow
     
     QMap<KstUser /*key*/, QSharedPointer<KstUser> > callMap;
 
+    QTimer KSTTestTimer;
+    QSharedPointer<QFile> KSTexpFile;
+    QFile KSTImportFile;
+    QTextStream KSTImportStream;
+//    bool replayEnabled = false;
+
+
     KstPlanesModel kstPlanesModel;
     KstPlanesGridSortFilterModel kstPlanesFilterModel;
 
@@ -262,6 +269,9 @@ private slots:
     void on_awayCallscb_stateChanged(int);
 
     void on_inactiveCallscb_stateChanged(int);
+    void on_KSTTestButton_clicked();
+
+    void testTimeout();
 private:
     Ui::KSTMainWindow *ui;
     QSharedPointer<CommandReader> commandReader = QSharedPointer<CommandReader>(new CommandReader(this));

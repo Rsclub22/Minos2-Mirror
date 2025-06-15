@@ -1,6 +1,7 @@
 #include <QHostInfo>
 #include <QSettings>
 #include <QKeyEvent>
+#include <QFileDialog>
 
 #include "QtUtils.h"
 #include "RPCCommandConstants.h"
@@ -22,6 +23,7 @@
 #include "MinosLoggerEvents.h"
 #include "kstmainwindow.h"
 #include "remotelogs.h"
+#include "MinosParameters.h"
 #include "ui_kstmainwindow.h"
 
 QStringList services =
@@ -334,6 +336,7 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     }
     started = true;
 
+
     if (autoConnect)
         doLoginChanges();
 
@@ -565,6 +568,32 @@ void KSTMainWindow::onReadyRead()
         traceMsg.chop(1);
     }
     trace(QString("KSTMainWindow::messageRx: %1").arg(traceMsg));
+
+    if (ui->KSTTestButton->isVisible() && !KSTexpFile)
+    {
+        QDateTime dt = QDateTime::currentDateTimeUtc();
+        QString s(GetCurrentDir() + "/KSTData" );
+        CreateDir(s);
+        s += "/KSTData";
+
+        s += dt.toString( "_yyyyMMdd_HHmmss" ) + ".txt";
+        QIODevice::OpenMode om = QIODevice::WriteOnly | QIODevice::Truncate | QIODevice::Unbuffered;
+        KSTexpFile = QSharedPointer<QFile> (new QFile(s));
+
+        if (!KSTexpFile->open(om))
+        {
+            QString lerr = KSTexpFile->errorString();
+            QString emess = tr("Failed to open KST export file%1 : %2 ").arg(s, lerr);
+            MinosParameters::getMinosParameters() ->mshowMessage( emess, this );
+        }
+        connect(&KSTTestTimer, &QTimer::timeout, this, &KSTMainWindow::testTimeout);
+    }
+    if (KSTexpFile && KSTexpFile->isOpen())
+    {
+        QTextStream ts( KSTexpFile.data() );
+        ts << msg;
+    }
+
 
     // break into lines...
     msgbuf.append(msg);
@@ -2154,3 +2183,84 @@ void KSTMainWindow::on_inactiveCallscb_stateChanged(int)
 }
 
 
+
+void KSTMainWindow::on_KSTTestButton_clicked()
+{
+    if (KSTexpFile)
+    {
+        KSTexpFile->close();
+    }
+
+    if (!KSTImportFile.isOpen())
+    {
+        QString dpath = "KSTData_*";
+
+        QString InitialDir = GetCurrentDir() + "/KSTData/" + dpath;
+
+        QString Filter = tr("KST Test data Files") + " (*.txt);;" +
+                         tr("All Files") + " (*.*)" ;
+
+        QString baseFileName = QFileDialog::getOpenFileName( this,
+                                                            tr("WSJT-X recording Files"),
+                                                            InitialDir,                   // opendir
+                                                            Filter );
+
+        if ( !baseFileName.isEmpty() )
+        {
+            KSTImportFile.setFileName(baseFileName);
+            if (!KSTImportFile.open(QIODevice::ReadOnly))
+                return;
+
+            if (KSTImportFile.isOpen())
+            {
+                KSTImportStream.setDevice(&KSTImportFile);
+
+                msgbuf.clear();
+
+                KSTTestTimer.start(10);
+            }
+        }
+    }
+
+}
+
+void KSTMainWindow::testTimeout()
+{
+    if ( KSTImportFile.isOpen())
+    {
+        if (KSTImportStream.atEnd())
+        {
+            KSTImportFile.close();
+            return;
+        }
+        else
+        {
+            QString kline;
+
+            kline = KSTImportStream.readLine();
+
+            if (kline.isEmpty())
+            {
+                KSTImportFile.close();
+                return;
+            }
+            kline += "\n";
+
+            // break into lines...
+            msgbuf.append(kline);
+
+            int p = msgbuf.indexOf("\n");
+            while (p >= 0)
+            {
+                QString m = msgbuf.left(p + 1);
+                msgbuf = msgbuf.mid(p + 1);
+                p = msgbuf.indexOf("\n");
+
+                if (!m.contains(" login "))
+                {
+                    analyseKstMessage(m);
+                }
+            }
+        }
+    }
+}
