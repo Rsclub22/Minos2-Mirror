@@ -24,7 +24,6 @@ using namespace voiceKeyerCommon;
 class TxVmButtonsFrame;
 
 
-
 class TxVoiceMemButton: public QObject
 {
 
@@ -103,6 +102,8 @@ public:
     void setPcCwKeyerComport(QString comportStr);
     void setPcCwKeyerConnectionState(QString stateStr);
     void setPcCwKeyerErrorMsg(QString errorMsg);
+    void setPcCwKeyerPttEnabled(QString enabled);
+    void setPcCwKeyerTxOnState(QString state);
 signals:
 
     void pttStatus(bool);
@@ -197,6 +198,9 @@ private:
     bool isPcCwKeyerLoaded();
     bool isPcCwKeyerConnected();
     void initCwTextEntryBox();
+
+    bool eventFilter(QObject *obj, QEvent *event);
+
 private slots:
 
     void onVoiceKeyerSelect(int idx);
@@ -217,5 +221,7 @@ private slots:
 
     void onCwEntryReturnPressed();
 };
+
+
 
 #endif // TXVMBUTTONSFRAME_H

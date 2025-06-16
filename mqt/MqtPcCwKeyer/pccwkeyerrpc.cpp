@@ -21,27 +21,6 @@
 
 
 
-
-const char * PcCwKeyerRpc::pcCwKeyerServerStateIndicator[] =
-{
-        QT_TR_NOOP("Available"),
-        QT_TR_NOOP("Not Available"),
-        QT_TR_NOOP("No Contact")
-};
-
-PcCwKeyerRpc* PcCwKeyerRpc::pcCwKeyerRpc = nullptr;
-
-PcCwKeyerRpc *PcCwKeyerRpc::getPcCwKeyerRpc()
-{
-    if (!pcCwKeyerRpc)
-    {
-        pcCwKeyerRpc = new PcCwKeyerRpc();
-    }
-    return pcCwKeyerRpc;
-}
-
-
-
 PcCwKeyerRpc::PcCwKeyerRpc()
 {
 
@@ -94,7 +73,7 @@ void PcCwKeyerRpc::on_routerCall( bool err, QSharedPointer<MinosRPCObj>mro, cons
                 QString paraName;
                 psName->getString(paraName);
 
-                if (paraName == rpcConstants::pcCwKeyerCwMessage)
+                if (paraName == rpcConstants::cwMessageToPcCwKeyer)
                 {
                     trace(QString("PcCwKeyerRpc RPC: callback from %1 paraName = %2").arg(mName, paraName));
 
@@ -116,15 +95,15 @@ void PcCwKeyerRpc::on_routerCall( bool err, QSharedPointer<MinosRPCObj>mro, cons
 
 
                 }
-                else if (paraName == rpcConstants::pcCwKeyerStopCw)
+                else if (paraName == rpcConstants::cwStopToPcCwKeyer)
                 {
-                    trace(QString("Cluster RPC: callback from %1 paraName = %2").arg(mName, paraName));
+                    trace(QString("PcCwKeyer RPC: callback from %1 paraName = %2").arg(mName, paraName));
 
 
                     QSharedPointer<RPCParam> stopCwCmd;
                     QString stopCwStr;
 
-                    if (args->getStructArgMember(0, rpcConstants::pcCwKeyerStopCwParam, stopCwCmd))
+                    if (args->getStructArgMember(0, rpcConstants::pcCwKeyerStopMsg, stopCwCmd))
                     {
                         stopCwCmd->getString(stopCwStr);
 
@@ -135,6 +114,7 @@ void PcCwKeyerRpc::on_routerCall( bool err, QSharedPointer<MinosRPCObj>mro, cons
 
 
                 }
+
             }
         }
 
@@ -148,7 +128,7 @@ void PcCwKeyerRpc::on_routerCall( bool err, QSharedPointer<MinosRPCObj>mro, cons
 
 void PcCwKeyerRpc::on_provider(Provider p, QString /*cat*/  )
 {
-    trace(QString("clusterServer: on_provider - routerName = %1, app = %2").arg(p.routerName, p.app));
+    trace(QString("PcCwKeyer: on_provider - routerName = %1, app = %2").arg(p.routerName, p.app));
 }
 
 
@@ -200,5 +180,26 @@ void PcCwKeyerRpc::publishState( const QString &comport, const QString &state, c
 
     RPCPubSub::publish( rpcConstants::pcCwKeyerCategory, rpcConstants::pcCwKeyerReport, comport + "<>" + state  + "<>" + errorMsg, psPublished );
 
+}
+
+void PcCwKeyerRpc::publishPttEnable(bool state)
+{
+    QString stateStr;
+    if (state)
+    {
+        stateStr = "On";
+
+    }
+    else
+    {
+        stateStr = "Off";
+    }
+
+    RPCPubSub::publish( rpcConstants::pcCwKeyerCategory, rpcConstants::pcCwKeyerPttEnabled, stateStr, psPublished );
+}
+
+void PcCwKeyerRpc::publishTxOn(const QString txOn)
+{
+    RPCPubSub::publish( rpcConstants::pcCwKeyerCategory, rpcConstants::pcCwKeyerTxOn, txOn, psPublished );
 }
 

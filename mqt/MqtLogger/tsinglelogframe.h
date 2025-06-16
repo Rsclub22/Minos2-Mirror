@@ -205,6 +205,7 @@ public:
 
     void sendPcKeyerTxCwMessage(QString msg);
     void sendPcKeyerTxCwStop(QString msg);
+
 private:
     QString curScreenLayout;
 
@@ -310,6 +311,8 @@ private slots:
     void onPcCwKeyerComport(QString comport);
     void onPcCwKeyerConnectionState(QString stateStr);
     void onPcCwKeyerErrorMsg(QString errorMsg);
+    void onPcCwKeyerPttEnabled(QString enabled);
+    void onPcCwKeyerTxOn(QString state);
 };
 
 #endif // TSINGLELOGFRAME_H

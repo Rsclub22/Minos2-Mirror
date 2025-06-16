@@ -42,9 +42,9 @@ const int MAX_POST_TX_DELAY = 750;
 static const char blankString[] = QT_TRANSLATE_NOOP("SettingsDialog", "N/A");
 
 
-pcCwKeyerMainWindow::pcCwKeyerMainWindow(QWidget *parent)
+PcCwKeyerMainWindow::PcCwKeyerMainWindow(QWidget *parent)
     : QMainWindow(parent)
-    , ui(new Ui::pcCwKeyerMainWindow)
+    , ui(new Ui::PcCwKeyerMainWindow)
 {
     ui->setupUi(this);
 
@@ -53,7 +53,7 @@ pcCwKeyerMainWindow::pcCwKeyerMainWindow(QWidget *parent)
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     trace("Connect to commandRead");  // This connect doesn't appear to work for some time!
-    connect(commandReader.data(), &CommandReader::commandLine, this, &pcCwKeyerMainWindow::onCommandRead);
+    connect(commandReader.data(), &CommandReader::commandLine, this, &PcCwKeyerMainWindow::onCommandRead);
 
     QString appName = getAppStartupName();
     trace(QString("AppName = %1").arg(appName));
@@ -71,7 +71,7 @@ pcCwKeyerMainWindow::pcCwKeyerMainWindow(QWidget *parent)
     //QString fileName = getDirectoryLocation(dlConfiguration) + "/PcCwKeyer.ini";
     //QSettings config(fileName, QSettings::IniFormat);
 
-    connect(&LogTimer, &QTimer::timeout, this, &pcCwKeyerMainWindow::LogTimerTimer);
+    connect(&LogTimer, &QTimer::timeout, this, &PcCwKeyerMainWindow::LogTimerTimer);
     LogTimer.start(100);
 
 
@@ -100,7 +100,7 @@ pcCwKeyerMainWindow::pcCwKeyerMainWindow(QWidget *parent)
 
 
     statusTimer = new QTimer(this);
-    connect(statusTimer, &QTimer::timeout, this, &pcCwKeyerMainWindow::handleStatusTimer);
+    connect(statusTimer, &QTimer::timeout, this, &PcCwKeyerMainWindow::handleStatusTimer);
     statusTimer->start(STATUS_TIMER_DUR);
 
     readSettings();
@@ -109,6 +109,9 @@ pcCwKeyerMainWindow::pcCwKeyerMainWindow(QWidget *parent)
 
 
     pcCwKeyerRpc = new PcCwKeyerRpc();
+    connect(pcCwKeyerRpc, &PcCwKeyerRpc::cwMessageFromLoggerToKeyer, this, &PcCwKeyerMainWindow::cwMessageFromLoggerToCwKeyer);
+    connect(pcCwKeyerRpc, &PcCwKeyerRpc::cwStopCommandFromLogger, this, &PcCwKeyerMainWindow::cwStopCommandFromLogger);
+
 
     openCwKeyer();
 
@@ -129,19 +132,24 @@ pcCwKeyerMainWindow::pcCwKeyerMainWindow(QWidget *parent)
        }
     }
 
+    // give time for logger to come up
+    QTimer::singleShot(30000, this, [this]() {
+        sendPttStateToLogger();
+    });
+
 
 
 
 
 }
 
-pcCwKeyerMainWindow::~pcCwKeyerMainWindow()
+PcCwKeyerMainWindow::~PcCwKeyerMainWindow()
 {
     delete ui;
 }
 
 
-void pcCwKeyerMainWindow::readSettings()
+void PcCwKeyerMainWindow::readSettings()
 {
     QSettings config(PC_CW_KEYER_SETTINGS_FILE(), QSettings::IniFormat);
 
@@ -153,7 +161,7 @@ void pcCwKeyerMainWindow::readSettings()
 
 }
 
-void pcCwKeyerMainWindow::loadSettingsToMainWindow()
+void PcCwKeyerMainWindow::loadSettingsToMainWindow()
 {
     ui->wpmSpinBox->setValue(wpm);
 
@@ -177,14 +185,14 @@ void pcCwKeyerMainWindow::loadSettingsToMainWindow()
 
 }
 
-void pcCwKeyerMainWindow::saveWpmSetting()
+void PcCwKeyerMainWindow::saveWpmSetting()
 {
     QSettings config(PC_CW_KEYER_SETTINGS_FILE(), QSettings::IniFormat);
 
     config.setValue("currentWpm", wpm);
 }
 
-void pcCwKeyerMainWindow::saveComport()
+void PcCwKeyerMainWindow::saveComport()
 {
     QSettings config(PC_CW_KEYER_SETTINGS_FILE(), QSettings::IniFormat);
 
@@ -192,28 +200,28 @@ void pcCwKeyerMainWindow::saveComport()
 
 }
 
-void pcCwKeyerMainWindow::savePreTxDelay()
+void PcCwKeyerMainWindow::savePreTxDelay()
 {
     QSettings config(PC_CW_KEYER_SETTINGS_FILE(), QSettings::IniFormat);
 
     config.setValue("preTxDelayMs", preTxDelayMs);
 }
 
-void pcCwKeyerMainWindow::savePostTxDelay()
+void PcCwKeyerMainWindow::savePostTxDelay()
 {
     QSettings config(PC_CW_KEYER_SETTINGS_FILE(), QSettings::IniFormat);
 
     config.setValue("postTxDelayMs", postTxDelayMs);
 }
 
-void pcCwKeyerMainWindow::savePttEnabled()
+void PcCwKeyerMainWindow::savePttEnabled()
 {
     QSettings config(PC_CW_KEYER_SETTINGS_FILE(), QSettings::IniFormat);
 
     config.setValue("pttEnabled", pttEnabled);
 }
 
-void pcCwKeyerMainWindow::saveAllSettings()
+void PcCwKeyerMainWindow::saveAllSettings()
 {
     saveWpmSetting();
     saveComport();
@@ -222,7 +230,7 @@ void pcCwKeyerMainWindow::saveAllSettings()
     savePttEnabled();
 }
 
-void pcCwKeyerMainWindow::enableTXDelayObjects(bool enable)
+void PcCwKeyerMainWindow::enableTXDelayObjects(bool enable)
 {
     ui->preTxDelayLineEdit->setEnabled(enable);
     ui->preTxDelayTitleLabel->setEnabled(enable);
@@ -234,13 +242,13 @@ void pcCwKeyerMainWindow::enableTXDelayObjects(bool enable)
 }
 
 
-void pcCwKeyerMainWindow::setConnections()
+void PcCwKeyerMainWindow::setConnections()
 {
 
-    connect(ui->comportSel, QOverload<int>::of(&QComboBox::activated), this, &pcCwKeyerMainWindow::onComportSelected);
-    connect(ui->wpmSpinBox, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &pcCwKeyerMainWindow::onWpmValueChanged);
+    connect(ui->comportSel, QOverload<int>::of(&QComboBox::activated), this, &PcCwKeyerMainWindow::onComportSelected);
+    connect(ui->wpmSpinBox, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &PcCwKeyerMainWindow::onWpmValueChanged);
 
-    connect(ui->enablePTTCheckbox, &QCheckBox::clicked, this, &pcCwKeyerMainWindow::onEnablePTT);
+    connect(ui->enablePTTCheckbox, &QCheckBox::clicked, this, &PcCwKeyerMainWindow::onEnablePTT);
 
 
     connect(ui->preTxDelayLineEdit, &QLineEdit::returnPressed, this, [this]() {
@@ -249,7 +257,7 @@ void pcCwKeyerMainWindow::setConnections()
     });
 
     connect(ui->postTxDelayLineEdit, &QLineEdit::returnPressed, this, [this]() {
-        QString text = ui->postTxDelayLineEdit->text();  // <- fixed lineEdit reference
+        QString text = ui->postTxDelayLineEdit->text();
         onPostTxDelayEditingFinished(text);
     });
 
@@ -265,7 +273,7 @@ void pcCwKeyerMainWindow::setConnections()
 
 
 
-void pcCwKeyerMainWindow::handleNextCwString()
+void PcCwKeyerMainWindow::handleNextCwString()
 {
 
 
@@ -273,7 +281,7 @@ void pcCwKeyerMainWindow::handleNextCwString()
     if (!cwMsgQueue.isEmpty())
     {
         QString next = cwMsgQueue.takeFirst().append(" "); // add space between messages
-
+        trace(QString("handle next Cw string: %1").arg(next));
         if (pttEnabled)
         {
             cwKeyer->setPttPendingFlag(pttEnabled);
@@ -290,11 +298,16 @@ void pcCwKeyerMainWindow::handleNextCwString()
         }
 
     }
+    else
+    {
+        // no more messages
+        pcCwKeyerRpc->publishTxOn("Off");
+    }
 }
 
 
 
-void pcCwKeyerMainWindow::handleStatusTimer()
+void PcCwKeyerMainWindow::handleStatusTimer()
 {
     static QString oldStatusMsg;
     static int oldServerListCount = 0;
@@ -317,20 +330,23 @@ void pcCwKeyerMainWindow::handleStatusTimer()
             oldStatusMsg = comportStatus->text();
 
             // send status to clients
-            trace(QString("handleStatusTimer: Send Status to Cluster Clients - %1").arg(ui->statusbar->currentMessage()));
-            //sendSpotsQueue.append(createStatusToSend(rawStatus));
+            trace(QString("handleStatusTimer: Send Status to PcCwKeyer Clients - %1").arg(ui->statusbar->currentMessage()));
+
             pcCwKeyerRpc->publishState(comportName->text(), comportStatus->text(), errorMsg->text());
         }
     }
 
+
+
 }
 
 
-void pcCwKeyerMainWindow::onComportSelected()
+void PcCwKeyerMainWindow::onComportSelected()
 {
     if (ui->comportSel->currentText() != comport)
     {
         comport = ui->comportSel->currentText();
+        trace(QString("comport changed = %1").arg(comport));
         saveComport();
         if (cwKeyer)
         {
@@ -359,7 +375,7 @@ void pcCwKeyerMainWindow::onComportSelected()
 
 
 
-void pcCwKeyerMainWindow::onWpmValueChanged(int value)
+void PcCwKeyerMainWindow::onWpmValueChanged(int value)
 {
     if (value != wpm)
     {
@@ -368,33 +384,40 @@ void pcCwKeyerMainWindow::onWpmValueChanged(int value)
         {
             cwKeyer->setWPM(wpm);
         }
+        trace(QString("wpm changed = %1").arg(QString::number(wpm)));
         saveWpmSetting();
     }
 }
 
 
-void pcCwKeyerMainWindow::onEnablePTT(bool checked)
+void PcCwKeyerMainWindow::onEnablePTT(bool checked)
 {
     if (checked != pttEnabled)
     {
         pttEnabled = checked;
         savePttEnabled();
         enableTXDelayObjects(checked);
+        pcCwKeyerRpc->publishPttEnable(checked);
 
     }
 }
 
 
-void pcCwKeyerMainWindow::openCwKeyer()
+void PcCwKeyerMainWindow::openCwKeyer()
 {
-
+    trace(QString("Opening Cw Keyer"));
     cwKeyer = new PcCwKeyer(this);
 
     if (cwKeyer)
     {
-        connect(cwKeyer, &PcCwKeyer::nextStringRequested, this, &pcCwKeyerMainWindow::handleNextCwString);
-        connect(cwKeyer, &PcCwKeyer::serialPortOpen, this, &pcCwKeyerMainWindow::handleSerialPortOpen);
-        connect(cwKeyer, &PcCwKeyer::serialPortError, this, &pcCwKeyerMainWindow::handleSerialPortError);
+        connect(cwKeyer, &PcCwKeyer::startTxMessage, this, [this]() {
+            sendTxStatusToLogger(true);
+        });
+
+        connect(cwKeyer, &PcCwKeyer::nextStringRequested, this, &PcCwKeyerMainWindow::handleNextCwString);
+        connect(cwKeyer, &PcCwKeyer::serialPortOpen, this, &PcCwKeyerMainWindow::handleSerialPortOpen);
+        connect(cwKeyer, &PcCwKeyer::serialPortError, this, &PcCwKeyerMainWindow::handleSerialPortError);
+
         cwKeyer->setPostTxDelayMs(postTxDelayMs);
     }
 
@@ -403,20 +426,69 @@ void pcCwKeyerMainWindow::openCwKeyer()
 
 }
 
-void pcCwKeyerMainWindow::closeCwKeyer()
+
+void PcCwKeyerMainWindow::sendTxStatusToLogger(bool on)
 {
-    delete cwKeyer;
+    if (pcCwKeyerRpc)
+    {
+        QString txState;
+        if (on)
+        {
+            txState = "On";
+        }
+        else
+        {
+            txState = "Off";
+        }
+
+        pcCwKeyerRpc->publishTxOn(txState);
+    }
+}
+
+void PcCwKeyerMainWindow::sendPttStateToLogger()
+{
+    if (pcCwKeyerRpc)
+    {
+
+        QString("Send pcCwKeyer PTT state");
+        pcCwKeyerRpc->publishPttEnable(pttEnabled);
+    }
 }
 
 
+void PcCwKeyerMainWindow::closeCwKeyer()
+{
+    trace(QString("Closing Cw Keyer"));
+    delete cwKeyer;
+}
 
-void pcCwKeyerMainWindow::onTextInputFinished(const QString &text)
+void PcCwKeyerMainWindow::cwStopCommandFromLogger()
+{
+    trace(QString("stop cw message from logger"));
+    if (cwKeyer)
+    {
+        cwKeyer->abortTransmission();
+    }
+
+}
+
+void PcCwKeyerMainWindow::cwMessageFromLoggerToCwKeyer(QString message)
+{
+    trace(QString("cw message from logger = %1").arg(message));
+    onTextInputFinished(message);
+}
+
+void PcCwKeyerMainWindow::onTextInputFinished(const QString &text)
 {
     QString trimmed = text.trimmed();
     if (!trimmed.isEmpty())
     {
         bool wasEmpty = cwMsgQueue.isEmpty();
-        ui->cwTextInputLineEdit->clear();
+        if (!ui->cwTextInputLineEdit->text().isEmpty())
+        {
+          ui->cwTextInputLineEdit->selectAll();     // if text came from this app
+        }
+
         cwMsgQueue.append(trimmed);
 
         if (wasEmpty && cwKeyer)
@@ -428,7 +500,7 @@ void pcCwKeyerMainWindow::onTextInputFinished(const QString &text)
 
 }
 
-void pcCwKeyerMainWindow::onPreTxDelayEditingFinished(QString text)
+void PcCwKeyerMainWindow::onPreTxDelayEditingFinished(QString text)
 {
     bool ok = false;
     int delay = text.toInt(&ok);
@@ -441,7 +513,7 @@ void pcCwKeyerMainWindow::onPreTxDelayEditingFinished(QString text)
     }
 }
 
-void pcCwKeyerMainWindow::onPostTxDelayEditingFinished(QString text)
+void PcCwKeyerMainWindow::onPostTxDelayEditingFinished(QString text)
 {
     bool ok = false;
     int delay = text.toInt(&ok);
@@ -458,7 +530,7 @@ void pcCwKeyerMainWindow::onPostTxDelayEditingFinished(QString text)
     }
 }
 
-void pcCwKeyerMainWindow::handleSerialPortOpen(bool state)
+void PcCwKeyerMainWindow::handleSerialPortOpen(bool state)
 {
     comportName->clear();
     comportStatus->clear();
@@ -469,7 +541,7 @@ void pcCwKeyerMainWindow::handleSerialPortOpen(bool state)
 
 }
 
-void pcCwKeyerMainWindow::handleSerialPortError(QString msg)
+void PcCwKeyerMainWindow::handleSerialPortError(QString msg)
 {
     errorMsg->clear();
     errorMsg->setText(QString("%1").arg(msg));
@@ -480,7 +552,7 @@ void pcCwKeyerMainWindow::handleSerialPortError(QString msg)
 
 // should replace this with the common version in rigcommon, same in rotControl!
 
-void pcCwKeyerMainWindow::fillPortsInfo()
+void PcCwKeyerMainWindow::fillPortsInfo()
 {
     ui->comportSel->clear();
     ui->comportSel->addItem("");  // Add blank entry
@@ -535,30 +607,30 @@ void pcCwKeyerMainWindow::fillPortsInfo()
 
 
 
-void pcCwKeyerMainWindow::setWpmSpinnerRange(int minValue, int maxValue)
+void PcCwKeyerMainWindow::setWpmSpinnerRange(int minValue, int maxValue)
 {
     ui->wpmSpinBox->setRange(minValue, maxValue);
 }
 
 
 
-void pcCwKeyerMainWindow::setWpmSpinnnerStep(int step)
+void PcCwKeyerMainWindow::setWpmSpinnnerStep(int step)
 {
     ui->wpmSpinBox->setSingleStep(step);
 }
 
-void pcCwKeyerMainWindow::setWpmValue(int value)
+void PcCwKeyerMainWindow::setWpmValue(int value)
 {
     ui->wpmSpinBox->setValue(value);
 }
 
-int pcCwKeyerMainWindow::getWpmValue() const
+int PcCwKeyerMainWindow::getWpmValue() const
 {
     return ui->wpmSpinBox->value();
 }
 
 
-void pcCwKeyerMainWindow::keyPressEvent(QKeyEvent *event)
+void PcCwKeyerMainWindow::keyPressEvent(QKeyEvent *event)
 {
     if (event->key() == Qt::Key_Escape)
     {
@@ -577,7 +649,7 @@ void pcCwKeyerMainWindow::keyPressEvent(QKeyEvent *event)
     }
 }
 
-void pcCwKeyerMainWindow::closeEvent(QCloseEvent *event)
+void PcCwKeyerMainWindow::closeEvent(QCloseEvent *event)
 {
     trace("pcCwKeyerMainWindow::closeEvent");
 
@@ -594,7 +666,7 @@ void pcCwKeyerMainWindow::closeEvent(QCloseEvent *event)
     event->accept();  // allow the window to close
 }
 
-void pcCwKeyerMainWindow::onCommandRead(QString cmd)
+void PcCwKeyerMainWindow::onCommandRead(QString cmd)
 {
     trace(QString("onCommandRead %1").arg(cmd));
     if (cmd.indexOf("Shutdown", 0, Qt::CaseInsensitive) >= 0)
@@ -603,7 +675,7 @@ void pcCwKeyerMainWindow::onCommandRead(QString cmd)
     }
 }
 
-void pcCwKeyerMainWindow::LogTimerTimer()
+void PcCwKeyerMainWindow::LogTimerTimer()
 {
     static bool closed = false;
     if ( !closed )

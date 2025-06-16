@@ -164,6 +164,8 @@ void TSingleLogFrame::buildFrame(int slotNo)
     connect(LogContainer->sendDM, &TSendDM::pcCwKeyerComport, this, &TSingleLogFrame::onPcCwKeyerComport);
     connect(LogContainer->sendDM, &TSendDM::pcCwKeyerConnectionState, this, &TSingleLogFrame::onPcCwKeyerConnectionState);
     connect(LogContainer->sendDM, &TSendDM::pcCwKeyerErrorMsg, this, &TSingleLogFrame::onPcCwKeyerErrorMsg);
+    connect(LogContainer->sendDM, &TSendDM::pcCwKeyerPttEnabled, this, &TSingleLogFrame::onPcCwKeyerPttEnabled);
+    connect(LogContainer->sendDM, &TSendDM::pcCwKeyerTxOn, this, &TSingleLogFrame::onPcCwKeyerTxOn);
 
     // to bandmap
     connect(GJVQSOLogFrame, &QSOLogFrame::bandmapMarkFreq, this, &TSingleLogFrame::on_BandmapMarkFreq);
@@ -2136,7 +2138,7 @@ void TSingleLogFrame::sendPcKeyerTxCwMessage(QString msg)
 {
     if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
     {
-        LogContainer->sendDM->sendPcKeyerTxCwMessage(this, msg);
+        LogContainer->sendDM->sendPcKeyerTxCwMessage(msg);
     }
 }
 
@@ -2144,9 +2146,11 @@ void TSingleLogFrame::sendPcKeyerTxCwStop(QString msg)
 {
     if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
     {
-        LogContainer->sendDM->sendPcKeyerTxCwStop(this, msg);
+        LogContainer->sendDM->sendPcKeyerTxCwStop(msg);
     }
 }
+
+
 
 void TSingleLogFrame::sendRadioFreq(Frequency freq)
 {
@@ -2597,6 +2601,16 @@ void TSingleLogFrame::onPcCwKeyerConnectionState(QString stateStr)
 void TSingleLogFrame::onPcCwKeyerErrorMsg(QString errorMsg)
 {
     txVmButtonsFrame->setPcCwKeyerErrorMsg(errorMsg);
+}
+
+void TSingleLogFrame::onPcCwKeyerPttEnabled(QString enabled)
+{
+    txVmButtonsFrame->setPcCwKeyerPttEnabled(enabled);
+}
+
+void TSingleLogFrame::onPcCwKeyerTxOn(QString state)
+{
+    txVmButtonsFrame->setPcCwKeyerTxOnState(state);
 }
 
 void TSingleLogFrame::traceMsg(QString msg)

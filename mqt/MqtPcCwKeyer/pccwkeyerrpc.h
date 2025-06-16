@@ -19,6 +19,7 @@
 #include "MinosRPC.h"
 #include "AnalysePubSubNotify.h"
 
+/*
 class PcCwKeyerServer
 {
 public:
@@ -28,7 +29,7 @@ public:
     PublishState state;
 
 };
-
+*/
 
 
 
@@ -38,38 +39,35 @@ class PcCwKeyerRpc : public QObject
 
 public:
 
-    static const char *pcCwKeyerServerStateIndicator[];
-    static const char * stateList[];
+
 
     explicit PcCwKeyerRpc();
     virtual ~PcCwKeyerRpc();
-
-    static PcCwKeyerRpc *getPcCwKeyerRpc();
 
 
     void publishState( const QString &comport, const QString &state, const QString &errorMsg );
 
     int getServerListCount();
+    void publishPttEnable(const bool state);
+    void publishTxOn(const QString txOn);
+
 signals:
 
     void cwMessageFromLoggerToKeyer(QString);
     void cwStopCommandFromLogger(QString);
 
 
-private:
 
-    static PcCwKeyerRpc *pcCwKeyerRpc;
-
-    QVector<PcCwKeyerServer> serverList;
 
 private slots:
 
     void on_notify(AnalysePubSubNotify an, const QString);
     void on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString from);
+    void on_provider(Provider provider, QString cat);
 
 
 
-    void on_provider(Provider p, QString);
+
 };
 
 

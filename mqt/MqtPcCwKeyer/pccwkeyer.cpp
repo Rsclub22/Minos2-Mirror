@@ -91,6 +91,8 @@ void PcCwKeyer::sendText(const QString &text)
 
 void PcCwKeyer::enqueueMorseText(const QString &text)
 {
+    emit startTxMessage();
+
     QString upperText = text.toUpper();
 
     for (int i = 0; i < upperText.length(); ++i) {

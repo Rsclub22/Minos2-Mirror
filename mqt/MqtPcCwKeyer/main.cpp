@@ -11,7 +11,7 @@ int main(int argc, char *argv[])
 
     QApplication a(argc, argv);
     appStartup(rpcConstants::pcCwKeyerApp);
-    pcCwKeyerMainWindow w;
+    PcCwKeyerMainWindow w;
     w.show();
     return a.exec();
 }

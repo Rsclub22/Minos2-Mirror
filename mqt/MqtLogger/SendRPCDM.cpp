@@ -513,34 +513,33 @@ void TSendDM::sendRigTxCwMessage(TSingleLogFrame *tslf, const QString &msg)
     rpc.queueCall( rigSelected );
 }
 
-void TSendDM::sendPcKeyerTxCwMessage(TSingleLogFrame *tslf, const QString &msg)
+void TSendDM::sendPcKeyerTxCwMessage(const QString &msg)
 {
     if (!pcCwKeyerApp.isEmpty())
     {
         RPCGeneralClient rpc(rpcConstants::pcCwKeyerMethod);
         QSharedPointer<RPCParam>st(new RPCParamStruct);
-        st->addMember( loggerUuid, rpcConstants::loggerUuid );
-        st->addMember( tslf->getContest()->uuid, rpcConstants::selected );
+        st->addMember( rpcConstants::cwMessageToPcCwKeyer, rpcConstants::paramName );
         st->addMember(msg, rpcConstants::pcCwKeyerCwMessage);
         rpc.getCallArgs() ->addParam( st );
-        rpc.queueCall( keyerApp );
+        rpc.queueCall( pcCwKeyerApp );
     }
 }
 
 
-void TSendDM::sendPcKeyerTxCwStop(TSingleLogFrame *tslf, const QString &msg)
+void TSendDM::sendPcKeyerTxCwStop(const QString &msg)
 {
     if (!pcCwKeyerApp.isEmpty())
     {
         RPCGeneralClient rpc(rpcConstants::pcCwKeyerMethod);
         QSharedPointer<RPCParam>st(new RPCParamStruct);
-        st->addMember( loggerUuid, rpcConstants::loggerUuid );
-        st->addMember( tslf->getContest()->uuid, rpcConstants::selected );
-        st->addMember(msg, rpcConstants::pcCwKeyerStopCw);
+        st->addMember( rpcConstants::cwStopToPcCwKeyer, rpcConstants::paramName );
+        st->addMember(msg, rpcConstants::pcCwKeyerStopMsg);
         rpc.getCallArgs() ->addParam( st );
-        rpc.queueCall( keyerApp );
+        rpc.queueCall( pcCwKeyerApp );
     }
 }
+
 
 
 
@@ -1159,34 +1158,52 @@ void TSendDM::on_notify( AnalysePubSubNotify an, const QString /*from*/ )
         }
 
 
-        if (an.getCategory() == rpcConstants::pcCwKeyerCategory && an.getKey() == rpcConstants::pcCwKeyerReport)
+        if (an.getCategory() == rpcConstants::pcCwKeyerCategory)
         {
-            if (pcCwKeyerApp.isEmpty())
+            if (an.getKey() == rpcConstants::pcCwKeyerReport)
             {
-                pcCwKeyerApp = PubSubName(an);
+                if (pcCwKeyerApp.isEmpty())
+                {
+                    pcCwKeyerApp = PubSubName(an);
+                }
+
+                pcCwKeyerLoaded = true;
+
+                QStringList stateMsgList = an.getValue().split("<>", Qt::KeepEmptyParts);
+                trace(QString("PcCwKeyer Report = %1").arg(an.getValue()));
+                if (stateMsgList.count() == 3)
+                {
+                    emit pcCwKeyerComport(stateMsgList[0]);
+                    if (stateMsgList[1] == "Open")
+                    {
+                        pcCwKeyerConnected = true;
+                    }
+                    else
+                    {
+                        pcCwKeyerConnected = false;
+
+                    }
+                    emit pcCwKeyerConnectionState(stateMsgList[1]);
+                    emit pcCwKeyerErrorMsg(stateMsgList[2]);
+                }
             }
-
-            pcCwKeyerLoaded = true;
-
-            QStringList stateMsgList = an.getValue().split("<>", Qt::KeepEmptyParts);
-            if (stateMsgList.count() == 3)
+            else if (an.getKey() == rpcConstants::pcCwKeyerPttEnabled)
             {
-                emit pcCwKeyerComport(stateMsgList[0]);
-                if (stateMsgList[1] == "Open")
-                {
-                    pcCwKeyerConnected = true;
-                }
-                else
-                {
-                    pcCwKeyerConnected = false;
 
-                }
-                emit pcCwKeyerConnectionState(stateMsgList[1]);
-                emit pcCwKeyerErrorMsg(stateMsgList[2]);
+                QString pttEnabled = an.getValue();
+                trace(QString("PcCwKeyer ptt enabled: %1").arg(an.getValue()));
+                emit pcCwKeyerPttEnabled(pttEnabled);
+            }
+            else if (an.getKey() == rpcConstants::pcCwKeyerTxOn)
+            {
+                QString txOn;
+                txOn = an.getValue();
+                trace(QString("PcCwKeyer Tx state: %1").arg(an.getValue()));
+                emit pcCwKeyerTxOn(txOn);
             }
         }
-
     }
+
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
     if (tslf)
         tslf->checkConnections();

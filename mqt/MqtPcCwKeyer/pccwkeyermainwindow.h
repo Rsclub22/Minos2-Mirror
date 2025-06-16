@@ -30,26 +30,26 @@
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
-class pcCwKeyerMainWindow;
+class PcCwKeyerMainWindow;
 }
 QT_END_NAMESPACE
 
 QString PC_CW_KEYER_SETTINGS_FILE();
 
-class pcCwKeyerMainWindow : public QMainWindow
+class PcCwKeyerMainWindow : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    pcCwKeyerMainWindow(QWidget *parent = nullptr);
-    ~pcCwKeyerMainWindow();
+    PcCwKeyerMainWindow(QWidget *parent = nullptr);
+    ~PcCwKeyerMainWindow();
 
 signals:
 
     void requestPtt(bool);
 
 private:
-    Ui::pcCwKeyerMainWindow *ui;
+    Ui::PcCwKeyerMainWindow *ui;
 
     QSharedPointer<CommandReader> commandReader = QSharedPointer<CommandReader>(new CommandReader(this));
 
@@ -110,6 +110,8 @@ private:
 
 
 
+    void sendTxStatusToLogger(bool on);
+    void sendPttStateToLogger();
 private slots:
 
     void onComportSelected();
@@ -126,6 +128,9 @@ private slots:
     void onPreTxDelayEditingFinished(QString text);
     void onPostTxDelayEditingFinished(QString text);
     void onEnablePTT(bool checked);
+    void cwMessageFromLoggerToCwKeyer(QString message);
+    void cwStopCommandFromLogger();
+
 };
 #endif // PCCWKEYERMAINWINDOW_H
 

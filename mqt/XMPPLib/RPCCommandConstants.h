@@ -141,17 +141,14 @@ static const QString winkeyerDisplayApp    ("winkeyerDisplayApp");
 // PcCwKeyer
 static const QString pcCwKeyerApp       ("mqtPcCwKeyer");
 static const QString pcCwKeyerMethod     ("Minos:PcCwKeyer");
-static const QString pcCwKeyerState     ("pcCwKeyerState");
-static const QString pcCwKeyerDisconnected ("pcCwKeyerDisconnected");
-static const QString pcCwKeyerConnected ("pcCwKeyerConnected");
-static const QString pcCwKeyerConnectionState ("pcCwKeyerConnectionState");
-static const QString pcCwKeyerStateMessage     ("pcCwKeyerStateMessage");
+static const QString cwMessageToPcCwKeyer ("cwMessageToPcCwKeyer");
+static const QString cwStopToPcCwKeyer ("cwStopToPcCwKeyer");
 static const QString pcCwKeyerCwMessage ("pcCwKeyerCwMessage");
-static const QString pcCwKeyerCwParamMessage ("pcCwKeyerCwParamMessage");
-static const QString pcCwKeyerStopCw ("pcCwKeyerStopCw");
-static const QString pcCwKeyerStopCwParam ("pcCwKeyerStopCwParam");
+static const QString pcCwKeyerStopMsg ("pcCwKeyerStopMsg");
 static const QString pcCwKeyerCategory    ("PcCwKeyerCategory");
 static const QString pcCwKeyerReport      ("PcCwKeyerReport");
+static const QString pcCwKeyerPttEnabled ("pcCwKeyerPttEnabled");
+static const QString pcCwKeyerTxOn ("pcCwKeyerTxOn");
 
 // Control
 static const QString controlApp         ("mqtControl");

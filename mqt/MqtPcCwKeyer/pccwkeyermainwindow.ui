@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>pcCwKeyerMainWindow</class>
- <widget class="QMainWindow" name="pcCwKeyerMainWindow">
+ <class>PcCwKeyerMainWindow</class>
+ <widget class="QMainWindow" name="PcCwKeyerMainWindow">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
     <width>320</width>
-    <height>203</height>
+    <height>207</height>
    </rect>
   </property>
   <property name="windowTitle">

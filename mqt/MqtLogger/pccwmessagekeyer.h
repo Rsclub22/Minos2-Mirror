@@ -64,6 +64,8 @@ public:
     void setUseCATPttForEom(bool usePttForEom_);
     void setSelectedEomType(int selectedEomType_);
 
+
+
 private:
 
     LoggerContestLog *ct = nullptr;
@@ -85,6 +87,7 @@ private:
 
     void getRadioCommonData(int &selectedEomType, int &userNumberButtons, int radioMaxNumButtons);
     QString parseMacrosInMessage(TSingleLogFrame *tslf, QString mess);
+
 
 };
 

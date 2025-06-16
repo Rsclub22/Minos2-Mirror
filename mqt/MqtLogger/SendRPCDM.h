@@ -94,8 +94,8 @@ class TSendDM : public QObject
       void sendRigStopTxVoiceMessage(TSingleLogFrame *tslf, const QString &msg);
       void sendRigTxCwMessage(TSingleLogFrame *tslf, const QString &msg);
 
-      void sendPcKeyerTxCwMessage(TSingleLogFrame *tslf, const QString &msg);
-      void sendPcKeyerTxCwStop(TSingleLogFrame *tslf, const QString &msg);
+      void sendPcKeyerTxCwMessage(const QString &msg);
+      void sendPcKeyerTxCwStop(const QString &msg);
 
 
       void sendRigControlMode(TSingleLogFrame *tslf, const QString &mode);
@@ -154,6 +154,7 @@ class TSendDM : public QObject
 
       void sendSkyScanControlPanelButtonState(TSingleLogFrame *tslf, const SkyScanButtonState state);
       void sendRotatorSkyScanPresetNumberToRotator(int buttonNumber);
+
   private slots:
       void on_routerCall( bool err, QSharedPointer<MinosRPCObj>mro, const QString from );
       void on_notify(AnalysePubSubNotify an, const QString from );
@@ -176,6 +177,8 @@ class TSendDM : public QObject
       void pcCwKeyerComport(QString);
       void pcCwKeyerConnectionState(QString);
       void pcCwKeyerErrorMsg(QString);
+      void pcCwKeyerPttEnabled(QString);
+      void pcCwKeyerTxOn(QString);
 
 };
 #endif

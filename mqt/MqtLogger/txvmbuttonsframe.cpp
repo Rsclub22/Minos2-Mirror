@@ -231,6 +231,8 @@ void TxVmButtonsFrame::createKeyer(QString voiceKeyerName)
 {
     if (!voiceKeyerName.isEmpty())
     {
+
+
         VoiceKeyerCapabilities voiceCap = voiceKeyerFactory->supportedVoiceKeyers()->value(voiceKeyerName);
         voiceKeyerType = voiceCap.getKeyerType();
 
@@ -282,7 +284,8 @@ void TxVmButtonsFrame::createKeyer(QString voiceKeyerName)
 
                 setVoiceNumMemButtonsVisible(txVoiceKeyer->numButtons);
 
-          }
+
+            }
 
         }
 
@@ -579,13 +582,16 @@ void TxVmButtonsFrame::setFrameState(QString voiceKeyerName)
 
         if (voiceCap.getHasAvailStatus())
         {
+            setAvailIndicatorVisible(voiceCap.getHasAvailStatus());
+
             if (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl] || voiceKeyerType == keyerTypes[VoiceKeyerId::RigControl])
             {
-                setAvailIndicatorVisible(voiceCap.getHasAvailStatus());
+
                 setAvailIndicatorForRadioOnOff(selectedRadio);
             }
             else if (voiceKeyerType == keyerTypes[VoiceKeyerId::PcCwKeyer])
             {
+
                 setAvailIndicatorOnOffForPcCwKeyer();
             }
 
@@ -688,23 +694,34 @@ void TxVmButtonsFrame::setFrameState(QString voiceKeyerName)
 void TxVmButtonsFrame::initCwTextEntryBox()
 {
     ui->cwEntry->setVisible(true);
-    connect( ui->cwEntry, &QLineEdit::returnPressed, this, &TxVmButtonsFrame::onCwEntryReturnPressed);
+    ui->cwEntry->installEventFilter(this);
+
 }
 
 
 void TxVmButtonsFrame::onCwEntryReturnPressed()
 {
-    if (txVoiceKeyer)
+
+
+    if  (txVoiceKeyer)
     {
         if (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl] || voiceKeyerType == keyerTypes[VoiceKeyerId::PcCwKeyer])
         {
-            QString message = ui->cwEntry->text();
-            txVoiceKeyer->sendCwFreeTextMsg(message);
+            QString message = ui->cwEntry->text().trimmed();
+
+            if (!message.isEmpty())
+            {
+                ui->cwEntry->selectAll();
+                txVoiceKeyer->sendCwFreeTextMsg(message);
+            }
+
         }
 
     }
 
 }
+
+
 
 void TxVmButtonsFrame::setSaveButtonByRadionameText(QString selectedRadioName)
 {
@@ -785,13 +802,37 @@ void TxVmButtonsFrame::editActionSelected(int buttonNumber)
         }
         vmData.setVkBase(txVoiceKeyer);
 
+        if (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl])
+        {
+            vmData.setCwKeyerType(CW_KEYER_TYPE::RIG);
+        }
+        else if (voiceKeyerType == keyerTypes[VoiceKeyerId::PcCwKeyer])
+        {
+            vmData.setCwKeyerType(CW_KEYER_TYPE::PC_CwKeyer);
+        }
+        else
+        {
+            vmData.setCwKeyerType(CW_KEYER_TYPE::KEYER_NONE);
+        }
+
 
         logMessage(QString("- edit selected button no = %1").arg(buttonNumber));
 
         QString title1 = "";
         if (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl] || voiceKeyerType == keyerTypes[VoiceKeyerId::PcCwKeyer])
         {
-            QString t = tr("Rig CW Message - ");
+            QString t;
+
+            if (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl])
+            {
+               t = tr("Rig CW Message - ");
+            }
+            else
+            {
+               t = tr("PC CW Keyer Message - ");
+            }
+
+
             QString runSandPTxt;
             if (sAndPState)
             {
@@ -1034,6 +1075,21 @@ void TxVmButtonsFrame::newActionSelected(int buttonNumber)
     vmData.setType(voiceKeyerType);
     vmData.setVkBase(txVoiceKeyer);
     vmData.setRigModel(getRigModel(selectedRadio));
+
+
+
+    if (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl])
+    {
+        vmData.setCwKeyerType(CW_KEYER_TYPE::RIG);
+    }
+    else if (voiceKeyerType == keyerTypes[VoiceKeyerId::PcCwKeyer])
+    {
+        vmData.setCwKeyerType(CW_KEYER_TYPE::PC_CwKeyer);
+    }
+    else
+    {
+        vmData.setCwKeyerType(CW_KEYER_TYPE::KEYER_NONE);
+    }
 
     int ret = txVoiceKeyer->editButton(&vmData, title);
     if (ret == QDialog::Accepted)
@@ -1863,7 +1919,7 @@ void TxVmButtonsFrame::setPcCwKeyerComport(QString comportStr)
 
     }
 }
-
+// don't need this???
 void TxVmButtonsFrame::setPcCwKeyerConnectionState(QString stateStr)
 {
     if (txVoiceKeyer && voiceKeyerType == keyerTypes[VoiceKeyerId::PcCwKeyer])
@@ -1880,9 +1936,59 @@ void TxVmButtonsFrame::setPcCwKeyerErrorMsg(QString errorMsg)
     }
 }
 
+void TxVmButtonsFrame::setPcCwKeyerPttEnabled(QString enabled)
+{
+    if (txVoiceKeyer && voiceKeyerType == keyerTypes[VoiceKeyerId::PcCwKeyer])
+    {
+        if (enabled == "On")
+        {
+            setPttEnabledIndicatorOnOff(true);
+        }
+        else
+        {
+            setPttEnabledIndicatorOnOff(false);
+        }
+    }
+}
+
+
+void TxVmButtonsFrame::setPcCwKeyerTxOnState(QString state)
+{
+    if (txVoiceKeyer && voiceKeyerType == keyerTypes[VoiceKeyerId::PcCwKeyer])
+    {
+        if (state == "On")
+        {
+            setPttStatusIndicatorOnOff(true);
+        }
+        else
+        {
+            setPttStatusIndicatorOnOff(false);
+        }
+    }
+}
+
 void TxVmButtonsFrame::logMessage(QString msg)
 {
     trace(QString("[TxVmButtonsFrame] %1").arg(msg));
+}
+
+// this to prevent multiple return event signals with connect statement
+
+bool TxVmButtonsFrame::eventFilter(QObject *obj, QEvent *event)
+{
+    if (obj == ui->cwEntry && event->type() == QEvent::KeyPress)
+    {
+        QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
+        if (keyEvent->key() == Qt::Key_Return || keyEvent->key() == Qt::Key_Enter)
+        {
+            if (keyEvent->isAutoRepeat())
+                return true;  // block repeated Return
+
+            onCwEntryReturnPressed();
+            return true;
+        }
+    }
+    return QWidget::eventFilter(obj, event);
 }
 
 
@@ -1968,6 +2074,9 @@ void TxVoiceMemButton::showButtonOnOff(bool state)
         }
     }
 }
+
+
+
 
 
 

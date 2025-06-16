@@ -54,6 +54,7 @@ signals:
     void serialPortOpen(bool success);
     void serialPortError(const QString &error);
 
+    void startTxMessage();
     void finished();  // Emitted when current CW transmission ends
 
 

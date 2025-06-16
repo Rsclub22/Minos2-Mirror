@@ -218,6 +218,8 @@ void  PcCWMessageKeyer::sendCwFreeTextMsg(QString message)
 }
 
 
+
+
 QString PcCWMessageKeyer::parseMacrosInMessage(TSingleLogFrame *tslf, QString mess)
 {
     // make sure screenContact is up to date
@@ -658,7 +660,16 @@ int PcCWMessageKeyer::editButton(VoiceKeyerParams *vmData, QString title)
 
     QString cwMacroCharList;
     bool cwMacroCharOk;
-    if (getRigCWKeyerMacroCharacter(cwMacroCharList, radioManufacturer, PC_CW_KEYER_COMMON_PARAMS_FILENAME))
+
+    QString rm = "AllRadios";
+
+    // we still support saving message under radioname, but retrieve common data from common file
+    if (radioManufacturer != "AllRadios")
+    {
+       rm = "PC_CWKEYER";
+    }
+
+    if (getRigCWKeyerMacroCharacter(cwMacroCharList, rm, PC_CW_KEYER_COMMON_PARAMS_FILENAME))
     {
         cwMacroCharOk = true;
         trace(QString("Retrieved CW Macro Chars %1 for pcCwKeyer").arg(cwMacroCharList));
@@ -672,7 +683,7 @@ int PcCWMessageKeyer::editButton(VoiceKeyerParams *vmData, QString title)
 
 
     QString validCharCwList;
-    if (getRigCWKeyerSupportedCharacters(validCharCwList, radioManufacturer, PC_CW_KEYER_COMMON_PARAMS_FILENAME))
+    if (getRigCWKeyerSupportedCharacters(validCharCwList, rm, PC_CW_KEYER_COMMON_PARAMS_FILENAME))
     {
         if (cwMacroCharOk)
         {
@@ -694,7 +705,7 @@ int PcCWMessageKeyer::editButton(VoiceKeyerParams *vmData, QString title)
 
 
     int maxNumChars = 0;
-    if (getRigCWKeyerMaxMessageLength(maxNumChars, radioManufacturer, PC_CW_KEYER_COMMON_PARAMS_FILENAME))
+    if (getRigCWKeyerMaxMessageLength(maxNumChars, rm, PC_CW_KEYER_COMMON_PARAMS_FILENAME))
     {
         vmButtonDialog.setCwValidatorMaxCwMessageLength(maxNumChars);
         vmButtonDialog.setMaxNumberCwCharactersText(maxNumChars);
@@ -705,7 +716,7 @@ int PcCWMessageKeyer::editButton(VoiceKeyerParams *vmData, QString title)
         vmButtonDialog.setMaxNumberCwCharactersText(0);
     }
 
-    QStringList listOfRadioModels;
+    /*QStringList listOfRadioModels;
     getRigCWKeyerListOfRadiosSupportSpecialCharacters(listOfRadioModels, radioManufacturer, PC_CW_KEYER_COMMON_PARAMS_FILENAME);
 
     bool radioSupportSpecialChar = false;
@@ -717,13 +728,16 @@ int PcCWMessageKeyer::editButton(VoiceKeyerParams *vmData, QString title)
             radioSupportSpecialChar = true;
         }
     }
+    */
+
+    bool radioSupportSpecialChar = false;
 
     vmButtonDialog.setCwSupportSpecialChar(radioSupportSpecialChar);
 
     QMap<QString, QChar> specialCharMap;
     if (radioSupportSpecialChar)
     {
-        if (getRigCWKeyerSupportedSpecialCharacters(specialCharMap, radioManufacturer, PC_CW_KEYER_COMMON_PARAMS_FILENAME))
+        if (getRigCWKeyerSupportedSpecialCharacters(specialCharMap, rm, PC_CW_KEYER_COMMON_PARAMS_FILENAME))
         {
             vmButtonDialog.setSpecialCwCharLists(specialCharMap);
             vmButtonDialog.setCwSupportSpecialCharsGroupBoxVisible(true);
