@@ -112,6 +112,8 @@ private:
 
     void sendTxStatusToLogger(bool on);
     void sendPttStateToLogger();
+    void setTXStatusVisible(bool visible);
+    void setPttStatusIndicatorOnOff(bool on);
 private slots:
 
     void onComportSelected();

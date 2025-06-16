@@ -25,6 +25,7 @@
 #include "AppStartup.h"
 #include "MinosRPC.h"
 #include "LogEvents.h"
+#include "clustercommon.h"
 #include "MTrace.h"
 
 #include "pccwkeyermainwindow.h"
@@ -301,7 +302,10 @@ void PcCwKeyerMainWindow::handleNextCwString()
     else
     {
         // no more messages
-        pcCwKeyerRpc->publishTxOn("Off");
+        sendTxStatusToLogger(false);
+        setPttStatusIndicatorOnOff(false);
+
+
     }
 }
 
@@ -412,6 +416,7 @@ void PcCwKeyerMainWindow::openCwKeyer()
     {
         connect(cwKeyer, &PcCwKeyer::startTxMessage, this, [this]() {
             sendTxStatusToLogger(true);
+            setPttStatusIndicatorOnOff(true);
         });
 
         connect(cwKeyer, &PcCwKeyer::nextStringRequested, this, &PcCwKeyerMainWindow::handleNextCwString);
@@ -687,6 +692,28 @@ void PcCwKeyerMainWindow::LogTimerTimer()
             close();
         }
     }
+}
+
+void PcCwKeyerMainWindow::setTXStatusVisible(bool visible)
+{
+    ui->txStatusIndicator->setVisible(visible);
+    ui->txStatusIndicatorLabel->setVisible(visible);
+}
+
+void PcCwKeyerMainWindow::setPttStatusIndicatorOnOff(bool on)
+{
+    if (on)
+    {
+        ui->txStatusIndicator->setStyleSheet(STATUS_INDICATOR_CONNECT_STYLE);
+        ui->txStatusIndicator->setToolTip(tr("TX On"));
+
+    }
+    else
+    {
+        ui->txStatusIndicator->setStyleSheet(STATUS_INDICATOR_DISCONNECT_STYLE);
+        ui->txStatusIndicator->setToolTip(tr("TX Off"));
+    }
+
 }
 
 QString PC_CW_KEYER_SETTINGS_FILE()
