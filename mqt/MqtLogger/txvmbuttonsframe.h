@@ -197,10 +197,11 @@ private:
     void setAvailIndicatorOnOffForPcCwKeyer();
     bool isPcCwKeyerLoaded();
     bool isPcCwKeyerConnected();
-    void initCwTextEntryBox();
+
 
     bool eventFilter(QObject *obj, QEvent *event);
 
+    void initCwTextEntryBox(QString radioManufacturer, QString fileName);
 private slots:
 
     void onVoiceKeyerSelect(int idx);

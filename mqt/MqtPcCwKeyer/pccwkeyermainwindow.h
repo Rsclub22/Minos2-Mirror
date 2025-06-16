@@ -54,6 +54,7 @@ private:
     QSharedPointer<CommandReader> commandReader = QSharedPointer<CommandReader>(new CommandReader(this));
 
     QTimer LogTimer;
+    QTimer *keyerStatusTimer;
 
     PcCwKeyer *cwKeyer = nullptr;
 
@@ -133,6 +134,7 @@ private slots:
     void cwMessageFromLoggerToCwKeyer(QString message);
     void cwStopCommandFromLogger();
 
+    void onKeyerStatusTimerTriggered();
 };
 #endif // PCCWKEYERMAINWINDOW_H
 

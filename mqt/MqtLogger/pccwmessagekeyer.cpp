@@ -24,6 +24,9 @@
 #include "MTrace.h"
 #include "pccwmessagekeyer.h"
 
+// Note we have forced to use "AllRadios" as this is radio agnostic...
+
+
 PcCWMessageKeyer::PcCWMessageKeyer(QObject *parent) : VoiceKeyerBase(parent)
 {
 
@@ -100,14 +103,14 @@ void PcCWMessageKeyer::getRadioCommonData(int &selectedEomType, int &userNumberB
     QSettings readCommonConfig(fileName, QSettings::IniFormat);
 
     QString groupName;
-    if (readCommonConfig.value("Common/SaveButtonByRadioName", false).toBool())
-    {
-        groupName = selectedRadioName.replace('/', '_');
-    }
-    else
-    {
+    //if (readCommonConfig.value("Common/SaveButtonByRadioName", false).toBool())
+    //{
+   //     groupName = selectedRadioName.replace('/', '_');
+   // }
+   // else
+   // {
         groupName = ALL_RADIOS_GROUP_NAME;
-    }
+  //  }
 
     fileName = VOICE_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[VoiceKeyerId::CW_RigControl] + ".ini";
     QSettings config(fileName, QSettings::IniFormat);
@@ -389,7 +392,7 @@ bool PcCWMessageKeyer::readVmButtonParams(int buttonNum, VoiceKeyerParams &vmPar
 
 
 
-    bool saveByRadioName = readSaveVoiceCWMemoryButtonByRadioNameFromIni(VoiceKeyerId::CW_RigControl);
+    //bool saveByRadioName = readSaveVoiceCWMemoryButtonByRadioNameFromIni(VoiceKeyerId::CW_RigControl);
 
     QString runStateTxt;
     if(vmParams.getSAndPState())
@@ -405,14 +408,14 @@ bool PcCWMessageKeyer::readVmButtonParams(int buttonNum, VoiceKeyerParams &vmPar
     QSettings config(fileName, QSettings::IniFormat);
 
 
-    if (saveByRadioName && !vmParams.getSelRadioName().isEmpty())
-    {
-        config.beginGroup(vmParams.getSelRadioName().replace('/', '_'));
-    }
-    else
-    {
+    //if (saveByRadioName && !vmParams.getSelRadioName().isEmpty())
+   // {
+    //    config.beginGroup(vmParams.getSelRadioName().replace('/', '_'));
+    //}
+   // else
+   // {
         config.beginGroup(ALL_RADIOS_GROUP_NAME);
-    }
+   // }
 
 
 
@@ -496,14 +499,14 @@ int PcCWMessageKeyer::setup(VoiceKeyerFactory *voiceKeyerFactory, int &maxNumBut
 
 
     QString allRadiosGrpName = ALL_RADIOS_GROUP_NAME;
-    if (readSaveVoiceCWMemoryButtonByRadioNameFromIni(VoiceKeyerId::PcCwKeyer))
-    {
-        txVmSetupDialog.setSetupRadioGroupBoxTitle(selectedRadioName);
-    }
-    else
-    {
+    //if (readSaveVoiceCWMemoryButtonByRadioNameFromIni(VoiceKeyerId::PcCwKeyer))
+   // {
+   //     txVmSetupDialog.setSetupRadioGroupBoxTitle(selectedRadioName);
+  //  }
+  //  else
+  //  {
         txVmSetupDialog.setSetupRadioGroupBoxTitle(allRadiosGrpName);
-    }
+  //  }
 
     if (voiceCap.getUseCatPTTForEom())
     {
@@ -630,9 +633,9 @@ int PcCWMessageKeyer::editButton(VoiceKeyerParams *vmData, QString title)
 
     QString radioManufacturer;   // used as group name
     QStringList rmList;
-    QString radioModel;
+    //QString radioModel;
 
-    if (readSaveVoiceCWMemoryButtonByRadioNameFromIni(VoiceKeyerId::PcCwKeyer))
+    /*if (readSaveVoiceCWMemoryButtonByRadioNameFromIni(VoiceKeyerId::PcCwKeyer))
     {
         vmButtonDialog.setRadioNameLbl(vmData->getSelRadioName());
         radioManufacturer = getCwRadioManufacturer(cwMemType);
@@ -644,11 +647,11 @@ int PcCWMessageKeyer::editButton(VoiceKeyerParams *vmData, QString title)
 
     }
     else
-    {
+    {*/
         vmButtonDialog.setRadioNameLbl("All Radios");
         radioManufacturer = "AllRadios";
 
-    }
+    //}
 
 
 
@@ -664,10 +667,10 @@ int PcCWMessageKeyer::editButton(VoiceKeyerParams *vmData, QString title)
     QString rm = "AllRadios";
 
     // we still support saving message under radioname, but retrieve common data from common file
-    if (radioManufacturer != "AllRadios")
-    {
-       rm = "PC_CWKEYER";
-    }
+    //if (radioManufacturer != "AllRadios")
+    //{
+    //   rm = "PC_CWKEYER";
+    //}
 
     if (getRigCWKeyerMacroCharacter(cwMacroCharList, rm, PC_CW_KEYER_COMMON_PARAMS_FILENAME))
     {

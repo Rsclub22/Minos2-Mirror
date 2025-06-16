@@ -655,7 +655,17 @@ void TxVmButtonsFrame::setFrameState(QString voiceKeyerName)
                     ui->vmStopPb->setVisible(true);
                 }
 
-                initCwTextEntryBox();
+                if (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl])
+                {
+                   initCwTextEntryBox(getCwRadioManufacturer(getCwMemType(selectedRadio)), CWKEYER_RADIO_COMMON_PARAMS_FILENAME);
+                }
+                else if (voiceKeyerType == keyerTypes[VoiceKeyerId::PcCwKeyer])
+                {
+                    initCwTextEntryBox("AllRadios", PC_CW_KEYER_COMMON_PARAMS_FILENAME);
+                }
+
+
+
 
             }
             else if (voiceKeyerType == keyerTypes[VoiceKeyerId::RigControl])
@@ -691,10 +701,68 @@ void TxVmButtonsFrame::setFrameState(QString voiceKeyerName)
 }
 
 
-void TxVmButtonsFrame::initCwTextEntryBox()
+void TxVmButtonsFrame::initCwTextEntryBox(QString radioManufacturer, QString fileName)
 {
     ui->cwEntry->setVisible(true);
     ui->cwEntry->installEventFilter(this);
+
+    //
+
+    QString cwMacroCharList;
+    bool cwMacroCharOk;
+    if (getRigCWKeyerMacroCharacter(cwMacroCharList, radioManufacturer, CWKEYER_RADIO_COMMON_PARAMS_FILENAME))
+    {
+        cwMacroCharOk = true;
+        trace(QString("[TxVmButtonsFrame] Retrieved CW Macro Chars %1 for manufacturer %2").arg(cwMacroCharList).arg(radioManufacturer));
+    }
+    else
+    {
+        cwMacroCharOk = false;
+        trace(QString("[TxVmButtonsFrame] Error retrieving CW Macro Chars for manufacturer %1").arg(radioManufacturer));
+    }
+
+
+
+    QString validCharCwList;
+    if (getRigCWKeyerSupportedCharacters(validCharCwList, radioManufacturer, CWKEYER_RADIO_COMMON_PARAMS_FILENAME))
+    {
+        if (cwMacroCharOk)
+        {
+            validCharCwList = validCharCwList.append(cwMacroCharList);
+            trace(QString("[TxButtons Frame] Supported CW Chars and Macro chars %1 for manufacturer %2").arg(validCharCwList).arg(radioManufacturer));
+        }
+        else
+        {
+
+            trace(QString("[TxVmButtonsFrame] Supported CW Chars with no Macro chars %1 for manufacturer %2").arg(validCharCwList).arg(radioManufacturer));
+        }
+
+        QString pattern = QString("^[%1]*$").arg(QRegularExpression::escape(validCharCwList));
+
+        auto *validator = new QRegularExpressionValidator(QRegularExpression(pattern), this);
+        ui->cwEntry->setValidator(validator);
+
+    }
+    else
+    {
+        trace(QString("[TxVmButtonsFrame] Error retrieving supported CW Chars for manufacturer %1, no validator set").arg(radioManufacturer));
+    }
+
+
+    int maxNumChars = 0;
+    if (getRigCWKeyerMaxMessageLength(maxNumChars, radioManufacturer, fileName))
+    {
+        ui->cwEntry->setMaxLength(maxNumChars);
+        trace(QString("[TxVmButtonsFrame] set max number of CW Chars = %1 for manufacturer %2").arg(maxNumChars).arg(radioManufacturer));
+    }
+    else
+    {
+        trace(QString("[TxVmButtonsFrame] Error retrieving max CW Message Length for manufacturer %1").arg(radioManufacturer));
+
+    }
+
+
+
 
 }
 
@@ -924,13 +992,7 @@ void TxVmButtonsFrame::startVMMsg(int buttonNumber)
     txVoiceKeyer->readVmButtonParams(buttonNumber, vmData);
     setRepeatIndicatorOnOff(vmData.getVmRepeatFlag());
 
-    // Even if name is empty, operator expects pressing it to work!
 
-    // if (vmData.getVmName().isEmpty())
-    // {
-    //     logMessage(QString("- startVMMsg - Button name empty, do not run message"));
-    //     return;
-    // }
 
     if (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl]
         || voiceKeyerType == keyerTypes[VoiceKeyerId::PcCwKeyer])

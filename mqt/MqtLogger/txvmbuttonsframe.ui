@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>656</width>
+    <width>645</width>
     <height>276</height>
    </rect>
   </property>
@@ -438,6 +438,20 @@
         </widget>
        </item>
        <item>
+        <widget class="QToolButton" name="vmToolButton5">
+         <property name="text">
+          <string>...</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="vmToolButton6">
+         <property name="text">
+          <string>...</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <spacer name="horizontalSpacer_5">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
@@ -468,20 +482,6 @@
         </spacer>
        </item>
        <item>
-        <widget class="QToolButton" name="vmToolButton5">
-         <property name="text">
-          <string>...</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QToolButton" name="vmToolButton6">
-         <property name="text">
-          <string>...</string>
-         </property>
-        </widget>
-       </item>
-       <item>
         <widget class="QToolButton" name="vmToolButton7">
          <property name="text">
           <string>...</string>
@@ -490,6 +490,34 @@
        </item>
        <item>
         <widget class="QToolButton" name="vmToolButton8">
+         <property name="text">
+          <string>...</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="vmToolButton9">
+         <property name="text">
+          <string>...</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="vmToolButton10">
+         <property name="text">
+          <string>...</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="vmToolButton11">
+         <property name="text">
+          <string>...</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="vmToolButton12">
          <property name="text">
           <string>...</string>
          </property>

@@ -133,10 +133,10 @@ PcCwKeyerMainWindow::PcCwKeyerMainWindow(QWidget *parent)
        }
     }
 
-    // give time for logger to come up
-    QTimer::singleShot(30000, this, [this]() {
-        sendPttStateToLogger();
-    });
+
+    keyerStatusTimer = new QTimer();
+    connect(keyerStatusTimer, &QTimer::timeout, this, &PcCwKeyerMainWindow::onKeyerStatusTimerTriggered);
+    keyerStatusTimer->start(15000);
 
 
 
@@ -431,6 +431,10 @@ void PcCwKeyerMainWindow::openCwKeyer()
 
 }
 
+void PcCwKeyerMainWindow::onKeyerStatusTimerTriggered()
+{
+    sendPttStateToLogger();
+}
 
 void PcCwKeyerMainWindow::sendTxStatusToLogger(bool on)
 {
