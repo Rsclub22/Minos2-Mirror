@@ -12,6 +12,7 @@
 #include "serialCommonData.h"
 #include "txvmbuttonsframe.h"
 #include "ui_txvmbuttonsframe.h"
+#include "cwrigkeyervalidator.h"
 
 const char * VM_BUTTON_ON_STYLE = "background-color: orange ; color:black ; border-style: outset; border-width: 1px; border-color: black;\n";
 const char * VM_BUTTON_OFF_STYLE = "background-color: Gainsboro ; color:black ; border-style: outset; border-width: 1px; border-color: black;\n";
@@ -76,6 +77,9 @@ TxVmButtonsFrame::TxVmButtonsFrame(QWidget *parent) :
 
     config.endGroup();
 
+    connect(ui->vmSetupPb, &QPushButton::clicked, this, &TxVmButtonsFrame::onVmSetupClicked);
+    connect(ui->vmStopPb, &QPushButton::clicked, this, &TxVmButtonsFrame::onVmStopClicked);
+
     voiceKeyerFactory->populateComboKeyerList(ui->voiceKeyerSelect, voiceKeyerName);
     connect(ui->voiceKeyerSelect, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &TxVmButtonsFrame::onVoiceKeyerSelect);
 
@@ -99,7 +103,7 @@ TxVmButtonsFrame::~TxVmButtonsFrame()
 }
 
 
-
+// create the tool buttons
 void TxVmButtonsFrame::createButtonsForKeyer(int numButtons, int columns)
 {
     clearButtons(); // Ensure old buttons are gone
@@ -120,8 +124,7 @@ void TxVmButtonsFrame::createButtonsForKeyer(int numButtons, int columns)
        // });
     }
 
-    connect(ui->vmSetupPb, &QPushButton::clicked, this, &TxVmButtonsFrame::onVmSetupClicked);
-    connect(ui->vmStopPb, &QPushButton::clicked, this, &TxVmButtonsFrame::onVmStopClicked);
+
 }
 
 
@@ -162,20 +165,8 @@ void TxVmButtonsFrame::setPttTypeText(serialCommonData::MINOS_PTT_TYPES pttType)
     ui->pttTypeText->setText(serialCommonData::pttTypeStr[static_cast<int>(pttType)]);
 }
 
-/*
-void TxVmButtonsFrame::setVoiceNumMemButtonsVisible(int num)
-{
-    for (int i = 0; i < voiceMemButtonList.count(); i++)
-    {
-        voiceMemButtonList[i]->setVisible(false);
-    }
 
-    for (int i = 0; i < num; i++)
-    {
-        voiceMemButtonList[i]->setVisible(true);
-    }
-}
-*/
+
 
 void TxVmButtonsFrame::onVmSetupClicked()
 {
@@ -612,6 +603,10 @@ void TxVmButtonsFrame::setFrameState(QString voiceKeyerName)
        }
        voiceKeyerType = keyerTypes[VoiceKeyerId::None];
 
+       clearButtons();
+       setCwEntryBoxVisible(false);
+
+
        setAvailIndicatorVisible(false);
        setRepeatIndicatorVisible(false);
 
@@ -639,6 +634,7 @@ void TxVmButtonsFrame::setFrameState(QString voiceKeyerName)
 
         setKeyerIndicatorGroupBoxVisible(true);
         setPttIndicatorGroupBoxVisible(true);
+
 
         if (voiceCap.getHasAvailStatus())
         {
@@ -706,6 +702,8 @@ void TxVmButtonsFrame::setFrameState(QString voiceKeyerName)
 
             if (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl] || voiceKeyerType == keyerTypes[VoiceKeyerId::PcCwKeyer])
             {
+                setCwEntryBoxVisible(true);
+
                 if (!getRigCwKeyerSupportStopFlag(selectedRadio.getLocalName()))
                 {
                     ui->vmStopPb->setVisible(false);
@@ -797,11 +795,6 @@ void TxVmButtonsFrame::initCwTextEntryBox(QString radioManufacturer, QString fil
             trace(QString("[TxVmButtonsFrame] Supported CW Chars with no Macro chars %1 for manufacturer %2").arg(validCharCwList).arg(radioManufacturer));
         }
 
-        QString pattern = QString("^[%1]*$").arg(QRegularExpression::escape(validCharCwList));
-
-        auto *validator = new QRegularExpressionValidator(QRegularExpression(pattern), this);
-        ui->cwEntry->setValidator(validator);
-
     }
     else
     {
@@ -812,7 +805,8 @@ void TxVmButtonsFrame::initCwTextEntryBox(QString radioManufacturer, QString fil
     int maxNumChars = 0;
     if (getRigCWKeyerMaxMessageLength(maxNumChars, radioManufacturer, fileName))
     {
-        ui->cwEntry->setMaxLength(maxNumChars);
+
+
         trace(QString("[TxVmButtonsFrame] set max number of CW Chars = %1 for manufacturer %2").arg(maxNumChars).arg(radioManufacturer));
     }
     else
@@ -820,8 +814,11 @@ void TxVmButtonsFrame::initCwTextEntryBox(QString radioManufacturer, QString fil
         trace(QString("[TxVmButtonsFrame] Error retrieving max CW Message Length for manufacturer %1").arg(radioManufacturer));
 
     }
-
-
+    // we need better error handling here!
+    auto *validator = new CWRigKeyerValidator(this);
+    validator->setValidCwCharStr(validCharCwList);
+    validator->setMaxNumCwChars(maxNumChars);
+    ui->cwEntry->setValidator(validator);
 
 
 }
@@ -1713,6 +1710,13 @@ int TxVmButtonsFrame::getCwMemType(PubSubName psn)
     }
 
     return hamlibData::CW_MEMORY_TYPES::NONE;
+}
+
+
+void TxVmButtonsFrame::setCwEntryBoxVisible(bool visible)
+{
+    ui->cwEntry->setVisible(visible);
+    ui->cwEntryLabel->setVisible(visible);
 }
 
 void TxVmButtonsFrame::setAvailIndicatorVisible(bool visible)

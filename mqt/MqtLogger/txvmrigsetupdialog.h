@@ -35,6 +35,7 @@ public:
     int getSelectedEomType();
 
 
+    void setButtonWidgetsVisible(bool visible);
 private slots:
 
     void onNumButtonsValueChanged(int num);

@@ -56,6 +56,7 @@ SOURCES += \
     contest.cpp \
     cutils.cpp \
     DisplayContestContact.cpp \
+    cwrigkeyervalidator.cpp \
     dmkeyseditdlg.cpp \
     dtg.cpp \
     enqdlg.cpp \
@@ -159,6 +160,7 @@ HEADERS += \
     contest.h \
     cutils.h \
     DisplayContestContact.h \
+    cwrigkeyervalidator.h \
     dmFKeydef.h \
     dmkeyseditdlg.h \
     dtg.h \

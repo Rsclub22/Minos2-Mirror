@@ -383,7 +383,7 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_3">
        <item>
-        <widget class="QLabel" name="label">
+        <widget class="QLabel" name="cwEntryLabel">
          <property name="text">
           <string>CW</string>
          </property>

@@ -208,6 +208,7 @@ private:
     void createButtonsForKeyer(int numButtons);
     void clearButtons();
     void createButtonsForKeyer(int numButtons, int columns);
+    void setCwEntryBoxVisible(bool visible);
 private slots:
 
     void onVoiceKeyerSelect(int idx);

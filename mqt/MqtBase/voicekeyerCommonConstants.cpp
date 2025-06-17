@@ -267,3 +267,6 @@ QString getCwRadioManufacturer(int cwMemType)
 
 
 
+
+
+

@@ -493,7 +493,7 @@ int PcCWMessageKeyer::setup(VoiceKeyerFactory *voiceKeyerFactory, int &maxNumBut
 
 
 
-    txVmSetupDialog.setWindowTitle(tr("Rig Control CW Memory Setup"));
+    txVmSetupDialog.setWindowTitle(tr("PC CW Keyer Setup"));
 
     txVmSetupDialog.setMaxNumOfButtonsLabel(maxNumButtons);
 
@@ -508,7 +508,8 @@ int PcCWMessageKeyer::setup(VoiceKeyerFactory *voiceKeyerFactory, int &maxNumBut
         txVmSetupDialog.setSetupRadioGroupBoxTitle(allRadiosGrpName);
   //  }
 
-    if (voiceCap.getUseCatPTTForEom())
+  /*
+        if (voiceCap.getUseCatPTTForEom())
     {
         txVmSetupDialog.setPttEomGroupBoxVisible(true);
 
@@ -533,8 +534,10 @@ int PcCWMessageKeyer::setup(VoiceKeyerFactory *voiceKeyerFactory, int &maxNumBut
         txVmSetupDialog.setPttEomGroupBoxVisible(false);
     }
 
+*/
 
-
+    // we don't allow change number of buttons
+    txVmSetupDialog.setButtonWidgetsVisible(false);
 
     if (voiceCap.getEnableCwMode())
     {

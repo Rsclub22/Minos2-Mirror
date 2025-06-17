@@ -5,6 +5,7 @@
 
 #include <QString>
 #include <QStringList>
+#include <QValidator>
 
 
 
@@ -81,6 +82,8 @@ bool getRigCWMessageStoredInRadioFlag(bool &storedInRadio, QString radioMfg, con
 bool getRigCWKeyerMaxMessageLength(int &messageLength, QString radioMfg, const QString filename);
 
 QString getCwRadioManufacturer(int cwMemType);
+
+
 
 
 #endif // VOICEKEYERCOMMONCONSTANTS_H
