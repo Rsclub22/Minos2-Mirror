@@ -4,6 +4,7 @@
 #include <QShortcut>
 #include <QGroupBox>
 #include <QKeyEvent>
+#include <QGridLayout>
 
 #include "PubSubName.h"
 #include "radiodetails.h"
@@ -123,9 +124,11 @@ private:
     QShortcut *stopButtonShortcut;
     QString voiceKeyerType;
 
+    QGridLayout *gridLayout = nullptr;
 
-    QTimer* msgDurTimer;
-    QTimer* repeatPauseTimer;
+
+    QTimer* msgDurTimer = nullptr;
+    QTimer* repeatPauseTimer = nullptr;
     int buttonNumSent ;
 
     int selectedEomType = voiceKeyerCommon::VoiceCwKeyerEomTypes::Eom_None;
@@ -146,12 +149,12 @@ private:
 
 
     bool notifyComboChange = true;
-    void initTxVmButtonFrame();
+
 
 
 
     void setRunButtonText(const int buttonNumber, const QString name);
-    void setVoiceNumMemButtonsVisible(int);
+    //void setVoiceNumMemButtonsVisible(int);
     void clearButtonLabels();
     void startVMMsg(int buttonNumber);
     void createKeyer(QString voiceKeyerName);
@@ -202,6 +205,9 @@ private:
     bool eventFilter(QObject *obj, QEvent *event);
 
     void initCwTextEntryBox(QString radioManufacturer, QString fileName);
+    void createButtonsForKeyer(int numButtons);
+    void clearButtons();
+    void createButtonsForKeyer(int numButtons, int columns);
 private slots:
 
     void onVoiceKeyerSelect(int idx);
@@ -221,6 +227,7 @@ private slots:
     void sandPChanged(bool s);
 
     void onCwEntryReturnPressed();
+    void setRadioParams();
 };
 
 
