@@ -17,7 +17,7 @@ namespace voiceKeyerCommon
     // Rigcontrol with hamlib will provide max number of voice memories the
     // radio will support.
 
-    const int PC_CW_KEYER_MAXIMUM_BUTTONS = 10;
+    const int PC_CW_KEYER_MAXIMUM_BUTTONS = 12;
     const int MAXIMUM_BUTTONS = 8;
     const int MININUM_BUTTONS = 2;
 
@@ -37,7 +37,8 @@ namespace voiceKeyerCommon
         Eom_None = 0,
         CAT,
         Timer,
-        InternalSoundCardVoiceKeyer
+        InternalSoundCardVoiceKeyer,
+        DTRKeyerTXStatus
     };
 
     inline const QStringList keyerTypes = {"", "Voice RigControl", "CW RigControl", "SerialControl", "PcCwKeyer", "Internal", "mqtKeyer"};

@@ -52,6 +52,7 @@ public:
     //int getKeyerState(int &state) override;
     void setPttOnOff(bool onOff) override;
     int getSelectedEomType() override;
+    virtual void setSelectedEomType(int eomType)override{Q_UNUSED(eomType)};
 
     bool readVmButtonParams(int buttonNum, VoiceKeyerParams &vmParams) override;
     void saveVmButtonParams(const VoiceKeyerParams &vmParams) override;
@@ -61,7 +62,7 @@ public:
     virtual int editButton(VoiceKeyerParams* vmData, QString title) override;
 
 
-    void setSelectedEomType(int selectedEomType_);
+
 
     virtual void setContest(BaseContestLog *c) override {Q_UNUSED(c)};
 

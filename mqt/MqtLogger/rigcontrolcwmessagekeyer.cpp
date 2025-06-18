@@ -67,10 +67,7 @@ void RigControlCwMessageKeyer::registerVoiceKeyer(VoiceKeyerFactory::VmKeyers* v
 
 }
 
-void RigControlCwMessageKeyer::setSelectedEomType(int selectedEomType_)
-{
-    selectedEomType = selectedEomType_;
-}
+
 
 void RigControlCwMessageKeyer::setPttOnOff(bool onOff)
 {

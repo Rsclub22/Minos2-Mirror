@@ -138,6 +138,7 @@ public:
 
     virtual void setPttOnOff(bool onOff) = 0;
     virtual int getSelectedEomType() = 0;
+    virtual void setSelectedEomType(int eomType) = 0;
 
     virtual int setup(VoiceKeyerFactory *voiceKeyerFactory, int &maxNumButtons, int &numButtons, QString selectedRadioName) = 0;
     virtual void setRadioParams(int radioMaxNumButtons, QString selectedRadioName, serialCommonData::MINOS_PTT_TYPES pttType_, bool pttEnabled_) = 0;

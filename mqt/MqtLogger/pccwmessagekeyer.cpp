@@ -47,7 +47,7 @@ void PcCWMessageKeyer::registerVoiceKeyer(VoiceKeyerFactory::VmKeyers* vmKeyersL
     voiceMemCap.setVmIdNum(VoiceKeyerId::PcCwKeyer);
     voiceMemCap.setKeyerType(keyerTypes[VoiceKeyerId::PcCwKeyer]);
     voiceMemCap.setKeyerName(keyerName);
-    voiceMemCap.setNumVoiceKeys(10);
+    voiceMemCap.setNumVoiceKeys(12);
     voiceMemCap.setsupportSerial(false);
     voiceMemCap.setUseCatPTTForEom(false);
     voiceMemCap.setEnableCwMode(true);
@@ -127,6 +127,25 @@ void PcCWMessageKeyer::getRadioCommonData(int &selectedEomType, int &userNumberB
     }
 
     userNumberButtons =  numButtons;
+}
+
+// we don't change these parameters through Setup
+void PcCWMessageKeyer::saveFixedRadioCommonData()
+{
+    QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[VoiceKeyerId::PcCwKeyer] + ".ini";
+    QSettings readCommonConfig(fileName, QSettings::IniFormat);
+
+    QString groupName = ALL_RADIOS_GROUP_NAME;
+
+    fileName = VOICE_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[VoiceKeyerId::CW_RigControl] + ".ini";
+    QSettings config(fileName, QSettings::IniFormat);
+
+    config.beginGroup(groupName);
+    config.setValue("NumButtons", PC_CW_KEYER_MAXIMUM_BUTTONS);
+    config.setValue("endOfMessageType", voiceKeyerCommon::VoiceCwKeyerEomTypes::DTRKeyerTXStatus);
+    config.endGroup();
+
+
 }
 
 
@@ -438,7 +457,7 @@ void PcCWMessageKeyer::saveVmButtonParams(const VoiceKeyerParams &vmParams_ )
 {
     VoiceKeyerParams vmParams = vmParams_;
 
-    bool saveByRadioName = readSaveVoiceCWMemoryButtonByRadioNameFromIni(VoiceKeyerId::CW_RigControl);
+    //bool saveByRadioName = readSaveVoiceCWMemoryButtonByRadioNameFromIni(VoiceKeyerId::CW_RigControl);
 
     QString runStateTxt;
     if(vmParams.getSAndPState())
@@ -453,14 +472,14 @@ void PcCWMessageKeyer::saveVmButtonParams(const VoiceKeyerParams &vmParams_ )
     QString fileName = VOICE_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + vmParams.getType() + ".ini";
     QSettings config(fileName, QSettings::IniFormat);
 
-    if (saveByRadioName  && !vmParams.getSelRadioName().isEmpty())
-    {
-        config.beginGroup(vmParams.getSelRadioName().replace('/', '_'));
-    }
-    else
-    {
+    //if (saveByRadioName  && !vmParams.getSelRadioName().isEmpty())
+   // {
+   //     config.beginGroup(vmParams.getSelRadioName().replace('/', '_'));
+   // }
+   // else
+   // {
         config.beginGroup(ALL_RADIOS_GROUP_NAME);
-    }
+   // }
 
     QString newKey = "button" + QString::number(vmParams.getvmButtonNum()) + runStateTxt;
 
@@ -479,6 +498,7 @@ void PcCWMessageKeyer::saveVmButtonParams(const VoiceKeyerParams &vmParams_ )
 int PcCWMessageKeyer::setup(VoiceKeyerFactory *voiceKeyerFactory, int &maxNumButtons, int &numButtons, QString selectedRadioName)
 {
 
+    Q_UNUSED(selectedRadioName)
 
     VoiceKeyerCapabilities voiceCap = voiceKeyerFactory->supportedVoiceKeyers()->value("pcCwKeyer");
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
@@ -495,7 +515,7 @@ int PcCWMessageKeyer::setup(VoiceKeyerFactory *voiceKeyerFactory, int &maxNumBut
 
     txVmSetupDialog.setWindowTitle(tr("PC CW Keyer Setup"));
 
-    txVmSetupDialog.setMaxNumOfButtonsLabel(maxNumButtons);
+    //txVmSetupDialog.setMaxNumOfButtonsLabel(maxNumButtons);
 
 
     QString allRadiosGrpName = ALL_RADIOS_GROUP_NAME;
@@ -543,18 +563,18 @@ int PcCWMessageKeyer::setup(VoiceKeyerFactory *voiceKeyerFactory, int &maxNumBut
     {
         txVmSetupDialog.setSwitchToCwVisible(true);
 
-        if (readSaveVoiceCWMemoryButtonByRadioNameFromIni(VoiceKeyerId::PcCwKeyer))
-        {
-            buttonConfig.beginGroup(selectedRadioName.replace('/', '_'));
-            txVmSetupDialog.setSwitchToCwChecked(buttonConfig.value("SwitchToCwMode", true).toBool());
-            buttonConfig.endGroup();
-        }
-        else
-        {
+        //if (readSaveVoiceCWMemoryButtonByRadioNameFromIni(VoiceKeyerId::PcCwKeyer))
+        //{
+        //    buttonConfig.beginGroup(selectedRadioName.replace('/', '_'));
+        //    txVmSetupDialog.setSwitchToCwChecked(buttonConfig.value("SwitchToCwMode", true).toBool());
+        //    buttonConfig.endGroup();
+        //}
+       // else
+       // {
             config.beginGroup(allRadiosGrpName);
             txVmSetupDialog.setSwitchToCwChecked(buttonConfig.value("SwitchToCwMode", true).toBool());
             buttonConfig.endGroup();
-        }
+       // }
 
     }
     else
@@ -574,27 +594,27 @@ int PcCWMessageKeyer::setup(VoiceKeyerFactory *voiceKeyerFactory, int &maxNumBut
 
     if (ret == QDialog::Accepted)
     {
-        numButtons = txVmSetupDialog.getNumButtons();
+        //numButtons = txVmSetupDialog.getNumButtons();
 
         // save these values by radio name in the buttons ini file
 
 
-        if (readSaveVoiceCWMemoryButtonByRadioNameFromIni(VoiceKeyerId::PcCwKeyer))
-        {
-            buttonConfig.beginGroup(selectedRadioName.replace('/', '_'));
-        }
-        else
-        {
+        //if (readSaveVoiceCWMemoryButtonByRadioNameFromIni(VoiceKeyerId::PcCwKeyer))
+        //{
+        //    buttonConfig.beginGroup(selectedRadioName.replace('/', '_'));
+        //}
+        //else
+        //{
             buttonConfig.beginGroup("AllRadios");
-        }
+       // }
 
 
-        buttonConfig.setValue("NumButtons", numButtons);
-        buttonConfig.setValue("endOfMessageType", txVmSetupDialog.getSelectedEomType());
+        //buttonConfig.setValue("NumButtons", numButtons);
+        //buttonConfig.setValue("endOfMessageType", txVmSetupDialog.getSelectedEomType());
         buttonConfig.setValue("SwitchToCwMode", txVmSetupDialog.getSetCwModeAndRestoreState());
         buttonConfig.endGroup();
 
-        selectedEomType = txVmSetupDialog.getSelectedEomType();
+        //selectedEomType = txVmSetupDialog.getSelectedEomType();
         setCwModeAndRestoreCurrentMode = txVmSetupDialog.getSetCwModeAndRestoreState();
 
 

@@ -54,6 +54,7 @@ public:
 
     virtual void setPttOnOff(bool onOff) override;
     virtual int getSelectedEomType() override;
+     virtual void setSelectedEomType(int eomType)override{Q_UNUSED(eomType)};
 
     virtual bool readVmButtonParams(int buttonNum, VoiceKeyerParams &vmParams) override;
     virtual void saveVmButtonParams(const VoiceKeyerParams &vmParams) override;
@@ -68,7 +69,7 @@ public:
 
 
     void setUseCATPttForEom(bool usePttForEom_);
-    void setSelectedEomType(int selectedEomType_);
+
 
 
 private:
