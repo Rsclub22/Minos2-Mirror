@@ -562,38 +562,14 @@ void KSTMainWindow::onReadyRead()
     QByteArray b = kstclient->readAll();
     QString msg = QString(b);
 
+    QChar addTraceChar = '!';
     QString traceMsg = msg.remove("\r");
     if (traceMsg.endsWith("\n"))
     {
         traceMsg.chop(1);
+        addTraceChar = '*';
     }
-    trace(QString("KSTMainWindow::messageRx: %1").arg(traceMsg));
-
-    if (ui->KSTTestButton->isVisible() && !KSTexpFile)
-    {
-        QDateTime dt = QDateTime::currentDateTimeUtc();
-        QString s(GetCurrentDir() + "/KSTData" );
-        CreateDir(s);
-        s += "/KSTData";
-
-        s += dt.toString( "_yyyyMMdd_HHmmss" ) + ".txt";
-        QIODevice::OpenMode om = QIODevice::WriteOnly | QIODevice::Truncate | QIODevice::Unbuffered;
-        KSTexpFile = QSharedPointer<QFile> (new QFile(s));
-
-        if (!KSTexpFile->open(om))
-        {
-            QString lerr = KSTexpFile->errorString();
-            QString emess = tr("Failed to open KST export file%1 : %2 ").arg(s, lerr);
-            MinosParameters::getMinosParameters() ->mshowMessage( emess, this );
-        }
-        connect(&KSTTestTimer, &QTimer::timeout, this, &KSTMainWindow::testTimeout);
-    }
-    if (KSTexpFile && KSTexpFile->isOpen())
-    {
-        QTextStream ts( KSTexpFile.data() );
-        ts << msg;
-    }
-
+    trace(QString("KSTMainWindow::messageRx: %1").arg("*****" + traceMsg) + "***" + addTraceChar);
 
     // break into lines...
     msgbuf.append(msg);
@@ -680,8 +656,11 @@ int KSTMainWindow::getASTimeout() const
 
 void KSTMainWindow::sendKST(QString msg)
 {
-    kstclient->write((msg + "\r\n").toLocal8Bit());
-    trace("Send to KST: " + msg);
+    if (!KSTImportFile.isOpen())
+    {
+        kstclient->write((msg + "\r\n").toLocal8Bit());
+        trace("Send to KST: " + msg);
+    }
 }
 void KSTMainWindow::checkAwayButton()
 {
@@ -715,7 +694,7 @@ void KSTMainWindow::addMessage(QSharedPointer<KstMessageLine> kst)
         if (!user.isEmpty() && user != "SERVER")
         {
             // NB we can get messages before we see the UA5 announcing them
-            trace(QString("User %1 not found").arg(user));
+            trace(QString("User %1 not found in chat %2").arg(user).arg(kst->chat));
         }
     }
 }
@@ -969,7 +948,6 @@ void KSTMainWindow::analyseKstMessage(QString atj)
             test->recent = true;
         
         if (!callMap.contains(*test.data()))
-//        if (!std::binary_search(callVector->begin(), callVector->end(), test, KstUserCompare))
         {
             QSharedPointer<CountrySynonym> syn = MultLists::getMultLists()->searchCountrySynonym ( test->call.locCtryPrefix );
             if ( syn )
@@ -1131,6 +1109,7 @@ void KSTMainWindow::analyseKstMessage(QString atj)
 
             kstCallModel.removeRow(row);
             callVectorChanged = true;
+            callMap.remove(*test.data());
         }
     }
 
@@ -1166,7 +1145,8 @@ void KSTMainWindow::analyseKstMessage(QString atj)
             kstCallModel.insertRow(row, test);
             callVectorChanged = true;
 
-            callMap[*test.data()] = test;
+            // NB callMap and callVector are different!
+            callMap[*test.data()] = test; // should already have happened
             QSharedPointer<KstUser> user = getUser(*test.data());
             checkUserMessages(user);
         }
@@ -1990,15 +1970,6 @@ QSharedPointer<KstUser> KSTMainWindow::getUser(const KstUser &test)
     {
         return callMap[test];
     }
-    // QSharedPointer<KstUser> test1(new KstUser(test));
-    // if (std::binary_search(callVector->begin(), callVector->end(), test1, KstUserCompare))
-    // {
-    //     int row = (std::lower_bound(callVector->begin(), callVector->end(), test1, KstUserCompare ) - callVector->begin());
-
-    //     QSharedPointer<KstUser> user = callVector->at(row);
-
-    //     return user;
-    // }
     return QSharedPointer<KstUser>();
 }
 void KSTMainWindow::on_showMPath_clicked()
@@ -2193,15 +2164,15 @@ void KSTMainWindow::on_KSTTestButton_clicked()
 
     if (!KSTImportFile.isOpen())
     {
-        QString dpath = "KSTData_*";
+        QString dpath = "mqtKSTClient_*";
 
-        QString InitialDir = GetCurrentDir() + "/KSTData/" + dpath;
+        QString InitialDir = GetCurrentDir() + "/TraceLog/" + dpath;
 
         QString Filter = tr("KST Test data Files") + " (*.txt);;" +
                          tr("All Files") + " (*.*)" ;
 
         QString baseFileName = QFileDialog::getOpenFileName( this,
-                                                            tr("WSJT-X recording Files"),
+                                                            tr("KST Client log files Files"),
                                                             InitialDir,                   // opendir
                                                             Filter );
 
@@ -2215,7 +2186,10 @@ void KSTMainWindow::on_KSTTestButton_clicked()
             {
                 KSTImportStream.setDevice(&KSTImportFile);
 
+                connect(&KSTTestTimer, &QTimer::timeout, this, &KSTMainWindow::testTimeout, Qt::UniqueConnection);
+
                 msgbuf.clear();
+                inTestMsg = false;
 
                 KSTTestTimer.start(10);
             }
@@ -2241,13 +2215,41 @@ void KSTMainWindow::testTimeout()
 
             if (kline.isEmpty())
             {
-                KSTImportFile.close();
                 return;
             }
-            kline += "\n";
+
+            //look for ***** in message, this message start
+            // Then look for **** or ***!
+            // If **** then add \n
+
+            int sline = kline.indexOf("*****");
+            if (sline >= 0)
+            {
+                kline = kline.mid(sline + 5);
+                inTestMsg = true;
+            }
+
+            int eline = kline.indexOf("****");
+            int eline2 = kline.indexOf("***!");
+            if (eline >= 0)
+            {
+                kline = kline.left(eline) + "\n";
+                msgbuf.append(kline);
+                inTestMsg = false;
+            }
+            else if (eline2 >= 0)
+            {
+                kline = kline.left(eline2);
+                msgbuf.append(kline);
+                inTestMsg = false;
+            }
+            if (inTestMsg)
+            {
+                msgbuf.append(kline + "\n");
+            }
+
 
             // break into lines...
-            msgbuf.append(kline);
 
             int p = msgbuf.indexOf("\n");
             while (p >= 0)
@@ -2256,10 +2258,8 @@ void KSTMainWindow::testTimeout()
                 msgbuf = msgbuf.mid(p + 1);
                 p = msgbuf.indexOf("\n");
 
-                if (!m.contains(" login "))
-                {
-                    analyseKstMessage(m);
-                }
+                trace(m);
+                analyseKstMessage(m);
             }
         }
     }

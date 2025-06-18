@@ -49,6 +49,8 @@ class KSTMainWindow : public QMainWindow
     
     QMap<KstUser /*key*/, QSharedPointer<KstUser> > callMap;
 
+    bool inTestMsg = false;
+
     QTimer KSTTestTimer;
     QSharedPointer<QFile> KSTexpFile;
     QFile KSTImportFile;
