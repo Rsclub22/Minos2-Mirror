@@ -664,8 +664,11 @@ int QtTelnetPrivate::parsePlaintext(const QByteArray &data)
     QString text = QString::fromLocal8Bit(data.constData(), length);
 
     if (!nocheckp && !nullauth) {
-        bool f = text.contains("login:", Qt::CaseInsensitive);
-        if (!loginp.pattern().isEmpty() && f) {
+        // check login to DXCluster or AR-Cluster
+
+        bool dxC = text.contains("login:", Qt::CaseInsensitive);
+        bool arC = text.contains("call:", Qt::CaseInsensitive);
+        if (!loginp.pattern().isEmpty() && (dxC || arC)) {
             if (triedlogin || firsttry) {
                 emit q->message(text);    // Display the login prompt
                 text.clear();
@@ -680,7 +683,8 @@ int QtTelnetPrivate::parsePlaintext(const QByteArray &data)
         }
         // QRegularExpression doesn't include ::indexIn
         // QRegExp not part of Qt6!
-        f = text.contains("assword:", Qt::CaseInsensitive);
+        // does Ar-Cluster prompt for a password?
+        bool f = text.contains("assword:", Qt::CaseInsensitive);
         if (!passp.pattern().isEmpty() && f/*passp.indexIn(text) != -1*/) {
             if (triedpass || firsttry) {
                 emit q->message(text);    // Display the password prompt

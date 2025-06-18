@@ -587,7 +587,7 @@ void ClusterMainWindow::connectToNode(const QString &nodeName)
 void ClusterMainWindow::connectToHost(QString hostName)
 {
 
-    //currentNodeName = nodeName;
+    //currentNoBName = nodeName;
 
     if (setupCluster->doesClusterNameExist(hostName))
     {
@@ -2943,7 +2943,7 @@ void ClusterMainWindow::handleStatusTimer()
 {
     static QString oldStatusMsg;
     static int oldServerListCount = 0;
-    qDebug() << "cluster server count = " << clusterRpc->getServerListCount();
+    //qDebug() << "cluster server count = " << clusterRpc->getServerListCount();
 
     if (oldServerListCount != clusterRpc->getServerListCount())
     {
