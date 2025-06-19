@@ -62,14 +62,7 @@ protected:
     QLabel* getRotBrgDisplayObject() override;
 
 
-/*
-    QShortcut* getNudgeRightShortCutObject() override;
-    QShortcut* getNudgeLeftShortCutObject() override;
-    QShortcut* getRotateLeftShortCutObject() override;
-    QShortcut* getRotateRightShortCutObject() override;
-    QShortcut* getTurnToBearingShortCutObject() override;
-    QShortcut* getRotateStopShortCutObject() override;
-*/
+
 private:
 
 

@@ -62,6 +62,8 @@ public:
 
     void getRotDetails(memoryData::memData &m);
 
+    void setupShortcuts(QWidget *shortcutParent);
+
 
     virtual void activate();
     virtual void deactivate();
@@ -126,6 +128,14 @@ protected:
 private:
 
     LoggerContestLog *ct = nullptr;
+
+    QShortcut *nudgeRight1 = nullptr;
+    QShortcut *nudgeRight2 = nullptr;
+    QShortcut *nudgeLeft = nullptr;
+    QShortcut *rotateLeft = nullptr;
+    QShortcut *rotateRight = nullptr;
+    QShortcut *turnToBearing = nullptr;
+    QShortcut *rotateStop = nullptr;
 
 
 

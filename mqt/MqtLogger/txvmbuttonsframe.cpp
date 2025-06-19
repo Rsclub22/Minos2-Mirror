@@ -1870,18 +1870,22 @@ void TxVmButtonsFrame::setAvailIndicatorOnOff(bool on)
 
 void TxVmButtonsFrame::setAvailIndicatorForRadioOnOff(PubSubName radName)
 {
-    if (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl])
+    if (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl] || voiceKeyerType == keyerTypes[VoiceKeyerId::RigControl])
     {
-        setAvailIndicatorOnOff(isCwMemTypeAvail(radName));
+        if (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl])
+        {
+            setAvailIndicatorOnOff(isCwMemTypeAvail(radName));
+        }
+        else if (voiceKeyerType == keyerTypes[VoiceKeyerId::RigControl])
+        {
+            setAvailIndicatorOnOff(isVoiceMemAvail(radName));
+        }
+        else
+        {
+            setAvailIndicatorOnOff(false);
+        }
     }
-    else if (voiceKeyerType == keyerTypes[VoiceKeyerId::RigControl])
-    {
-        setAvailIndicatorOnOff(isVoiceMemAvail(radName));
-    }
-    else
-    {
-        setAvailIndicatorOnOff(false);
-    }
+
 }
 
 void TxVmButtonsFrame::setRepeatIndicatorVisible(bool visible)
@@ -2160,17 +2164,27 @@ void TxVmButtonsFrame::setPcCwKeyerComport(QString comportStr)
 
     }
 }
-// don't need this???
+
 void TxVmButtonsFrame::setPcCwKeyerConnectionState(QString stateStr)
 {
+
+    logMessage(QString("PcCwKeyerConnection state = %1").arg(stateStr));
     if (txVoiceKeyer && voiceKeyerType == keyerTypes[VoiceKeyerId::PcCwKeyer])
     {
-
+        if (stateStr == "Open")
+        {
+            setAvailIndicatorOnOff(true);
+        }
+        else
+        {
+            setAvailIndicatorOnOff(false);
+        }
     }
 }
 
 void TxVmButtonsFrame::setPcCwKeyerErrorMsg(QString errorMsg)
 {
+    logMessage(QString("PcCwKeyerConnection error message = %1").arg(errorMsg));
     if (txVoiceKeyer && voiceKeyerType == keyerTypes[VoiceKeyerId::PcCwKeyer])
     {
 

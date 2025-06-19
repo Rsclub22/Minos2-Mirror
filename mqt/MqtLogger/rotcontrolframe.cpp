@@ -27,34 +27,13 @@ RotControlFrame::RotControlFrame(QWidget *parent):
 
     clearBearingLineEdit();
 
-/*
-    nudgeRight1 = new QShortcut(QKeySequence("Ctrl++"), parent);   // Ctrl +
-    connect(nudgeRight1, &QShortcut::activated, ui->nudgeRight, &QToolButton::click);
-
-    nudgeRight2 = new QShortcut(QKeySequence("Ctrl+="), parent);   // Ctrl +
-    connect(nudgeRight2, &QShortcut::activated, ui->nudgeRight, &QToolButton::click);
-
-    nudgeLeft = new QShortcut(QKeySequence::ZoomOut, parent);   // Ctrl -
-    connect(nudgeLeft, &QShortcut::activated, ui->nudgeLeft, &QToolButton::click);
-
-    rotateLeft = new QShortcut(QKeySequence(ROTATE_CCW_KEY), parent);
-    connect(rotateLeft, &QShortcut::activated, this, &RotControlFrame::on_RotateLeft_clicked);
-
-
-    rotateRight = new QShortcut(QKeySequence(ROTATE_CW_KEY), parent);
-    connect(rotateRight, &QShortcut::activated, this, &RotControlFrame::on_RotateRight_clicked);
-
-    turnToBearing = new QShortcut(QKeySequence(ROTATE_TURN_KEY), parent);
-    connect(turnToBearing, &QShortcut::activated, this, &RotControlFrame::on_Rotate_clicked);
-
-    rotateStop = new QShortcut(QKeySequence(ROTATE_STOP_KEY), parent);
-    connect(rotateStop, &QShortcut::activated, this, &RotControlFrame::on_StopRotate_clicked);
-
-*/
     rot_left_button_off();
     rot_right_button_off();
     showTurnButOff();
     setCwCcW_Items_Visible(rotFrameData.getSupportCwCcwCmd());   // init visible
+    setupShortcuts(this);
+
+
     traceMsg("RotControlFrame Started");
 
 }
@@ -117,33 +96,7 @@ QLabel* RotControlFrame::getRotBrgDisplayObject()
 {
     return ui->RotBrgDisplay;
 }
-/*
-QShortcut* RotControlFrame::getNudgeRightShortCutObject()
-{
-    return ui.
-}
-QShortcut* RotControlFrame::getNudgeLeftShortCutObject()
-{
 
-}
-QShortcut* RotControlFrame::getRotateLeftShortCutObject()
-{
-
-}
-QShortcut* RotControlFrame::getRotateRightShortCutObject()
-{
-
-}
-QShortcut* RotControlFrame::getTurnToBearingShortCutObject()
-{
-
-}
-QShortcut* RotControlFrame::getRotateStopShortCutObject()
-{
-
-}
-
-*/
 
 
 

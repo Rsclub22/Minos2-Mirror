@@ -158,6 +158,67 @@ void RotControlFrameBase::setBrgFromSpot(QString brg)
 }
 
 
+void RotControlFrameBase::setupShortcuts(QWidget *shortcutParent)
+{
+    if (!shortcutParent)
+        return;
+
+    // Nudge Right - Ctrl++
+    nudgeRight1 = new QShortcut(QKeySequence("Ctrl++"), shortcutParent);
+    if (auto btn = getnudgeRightObject())
+    {
+        connect(nudgeRight1, &QShortcut::activated, btn, &QToolButton::click);
+    }
+
+
+    // Nudge Right - Ctrl+= (also "+")
+    nudgeRight2 = new QShortcut(QKeySequence("Ctrl+="), shortcutParent);
+    if (auto btn = getnudgeRightObject())
+    {
+        connect(nudgeRight2, &QShortcut::activated, btn, &QToolButton::click);
+    }
+
+
+    // Nudge Left - Ctrl+-
+    nudgeLeft = new QShortcut(QKeySequence::ZoomOut, shortcutParent);
+    if (auto btn = getnudgeLeftObject())
+    connect(nudgeLeft, &QShortcut::activated, btn, &QToolButton::click);
+
+    // Rotate Left - e.g., custom defined macro ROTATE_CCW_KEY
+    rotateLeft = new QShortcut(QKeySequence(ROTATE_CCW_KEY), shortcutParent);
+    if (auto btn = getRotateLeftObject())
+    {
+        connect(rotateLeft, &QShortcut::activated, btn, &QToolButton::click);
+    }
+
+
+    // Rotate Right
+    rotateRight = new QShortcut(QKeySequence(ROTATE_CW_KEY), shortcutParent);
+    if (auto btn = getRotateRightObject())
+    {
+        connect(rotateRight, &QShortcut::activated,  btn, &QToolButton::click);
+    }
+
+
+    // Turn to bearing
+    turnToBearing = new QShortcut(QKeySequence(ROTATE_TURN_KEY), shortcutParent);
+    if (auto btn = getRotateButtonObject())
+    {
+       connect(turnToBearing, &QShortcut::activated,  btn, &QToolButton::click);
+    }
+
+
+    // Stop
+    rotateStop = new QShortcut(QKeySequence(ROTATE_STOP_KEY), shortcutParent);
+    if (auto btn = getStopRotateObject())
+    {
+        connect(rotateStop, &QShortcut::activated,  btn, &QToolButton::click);
+    }
+
+}
+
+
+
 void RotControlFrameBase::setTurnDisplayText(QString brg)
 {
     if (auto brglne = getBrgLineEditObject())

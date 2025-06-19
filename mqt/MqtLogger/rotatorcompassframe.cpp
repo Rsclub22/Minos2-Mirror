@@ -34,41 +34,11 @@ RotatorCompassFrame::RotatorCompassFrame(QWidget *parent)
     connect(ui->compassDialDisplay, &MinosCompass::sendClickBearing, this, &RotatorCompassFrame::compassClicked);
     connect(ui->compassDialDisplay, &MinosCompass::sendStop, this, &RotatorCompassFrame::stop_rotation);
 
+    setupShortcuts(this);
+
+    traceMsg("RotCompassFrame Started");
 
 
-
-/*
-    nudgeRight1 = new QShortcut(QKeySequence("Ctrl++"), parent);   // Ctrl +
-    connect(nudgeRight1, &QShortcut::activated, ui->nudgeRight, &QToolButton::click);
-
-    nudgeRight2 = new QShortcut(QKeySequence("Ctrl+="), parent);   // Ctrl +
-    connect(nudgeRight2, &QShortcut::activated, ui->nudgeRight, &QToolButton::click);
-
-    nudgeLeft = new QShortcut(QKeySequence::ZoomOut, parent);   // Ctrl -
-    connect(nudgeLeft, &QShortcut::activated, ui->nudgeLeft, &QToolButton::click);
-
-    rotateLeft = new QShortcut(QKeySequence(ROTATE_CCW_KEY), parent);
-    connect(rotateLeft, &QShortcut::activated, this, &RotatorCompassFrame::on_RotateLeft_clicked);
-
-
-    rotateRight = new QShortcut(QKeySequence(ROTATE_CW_KEY), parent);
-    connect(rotateRight, &QShortcut::activated, this, &RotatorCompassFrame::on_RotateRight_clicked);
-
-    rotateStop = new QShortcut(QKeySequence(ROTATE_STOP_KEY), parent);
-    connect(rotateStop, &QShortcut::activated, this, &RotatorCompassFrame::on_StopRotate_clicked);
-
-
-    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::BrgStrToRot, this, &RotatorCompassFrame::setBrgFromQSOLog);
-
-    // from match frame
-    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::MatchBrgStrToRot, this, &RotatorCompassFrame::setBrgFromMatchFrame);
-
-    // from cluster frame
-    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::SpotBrgStrToRot, this, &RotatorCompassFrame::setBrgFromSpot);
-
-    // from memory frame
-    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::MemBrgStrToRot, this, &RotatorCompassFrame::setBrgFromFrmMemory);
-*/
 }
 
 RotatorCompassFrame::~RotatorCompassFrame()

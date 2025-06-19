@@ -2333,8 +2333,12 @@ bool TSingleLogFrame::getRadioReadOnlyFlag()
 
 void TSingleLogFrame::on_RotatorList()
 {
+
     FKHRotControlFrame->setRotatorList();
     FKHRotCompassFrame->setRotatorList();
+
+
+
 }
 
 void TSingleLogFrame::on_RotatorPresetList(QString s)
@@ -2430,7 +2434,7 @@ void TSingleLogFrame::sendRotator(rpcConstants::RotateDirection direction, int a
 void TSingleLogFrame::sendSkyScanPresetNumberToRotator(int buttonNumber)
 {
     if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
-        LogContainer->sendDM->sendRotatorSkyScanPresetNumberToRotator( buttonNumber);
+        LogContainer->sendDM->sendRotatorSkyScanPresetNumberToRotator(this, buttonNumber);
 }
 
 void TSingleLogFrame::sendSkyScanFrameButtonStateToRotator(SkyScanButtonState buttonState)

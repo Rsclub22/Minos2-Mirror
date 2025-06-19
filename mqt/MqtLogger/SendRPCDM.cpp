@@ -388,6 +388,39 @@ void TSendDM::sendSkyScanControlPanelButtonState(TSingleLogFrame *tslf, SkyScanB
 
 }
 
+void TSendDM::sendRotatorSkyScanPresetNumberToRotator(TSingleLogFrame *tslf, int buttonNumber)
+{
+    traceMsg(QString("Send SkyScan Preset Button Number = %1").arg(buttonNumber));
+    RPCGeneralClient rpc(rpcConstants::rotatorMethod);
+    QSharedPointer<RPCParam>st(new RPCParamStruct);
+
+    st->addMember( loggerUuid, rpcConstants::loggerUuid );
+
+    st->addMember( tslf->getContest()->uuid, rpcConstants::selected );
+    st->addMember( buttonNumber, rpcConstants::skyScanPresetNumber );
+    rpc.getCallArgs() ->addParam( st );
+
+    PubSubName rotSelected = rotatorCache.getSelected(loggerUuid);
+    rpc.queueCall( rotSelected );
+
+
+}
+
+
+
+void TSendDM::sendRotatorPreset(QString s)
+{
+    RPCGeneralClient rpc(rpcConstants::rotatorMethod);
+    QSharedPointer<RPCParam>st(new RPCParamStruct);
+
+    st->addMember( loggerUuid, rpcConstants::loggerUuid );
+    st->addMember( s, rpcConstants::rotPreset );
+    rpc.getCallArgs() ->addParam( st );
+
+    PubSubName rotSelected = rotatorCache.getSelected(loggerUuid);
+    rpc.queueCall( rotSelected );
+}
+
 void TSendDM::changeRigSelectionTo(const PubSubName &name, const QString &band, const Frequency &freq, const QString &mode, const QString &uuid)
 {
     // we should de-select the cached uuid on all rig apps
@@ -630,34 +663,6 @@ void TSendDM::sendRigControlPttOnOff(TSingleLogFrame *tslf, const bool &onOff)
 
 
 
-void TSendDM::sendRotatorPreset(QString s)
-{
-    RPCGeneralClient rpc(rpcConstants::rotatorMethod);
-    QSharedPointer<RPCParam>st(new RPCParamStruct);
-
-    st->addMember( loggerUuid, rpcConstants::loggerUuid );
-    st->addMember( s, rpcConstants::rotPreset );
-    rpc.getCallArgs() ->addParam( st );
-
-    PubSubName rotSelected = rotatorCache.getSelected(loggerUuid);
-    rpc.queueCall( rotSelected );
-}
-
-void TSendDM::sendRotatorSkyScanPresetNumberToRotator(int buttonNumber)
-{
-    traceMsg(QString("Send SkyScan Preset Button Number = %1").arg(buttonNumber));
-    RPCGeneralClient rpc(rpcConstants::rotatorMethod);
-    QSharedPointer<RPCParam>st(new RPCParamStruct);
-
-    st->addMember( loggerUuid, rpcConstants::loggerUuid );
-    st->addMember( buttonNumber, rpcConstants::skyScanPresetNumber );
-    rpc.getCallArgs() ->addParam( st );
-
-    PubSubName rotSelected = rotatorCache.getSelected(loggerUuid);
-    rpc.queueCall( rotSelected );
-
-
-}
 
 
 //---------------------------------------------------------------------------
