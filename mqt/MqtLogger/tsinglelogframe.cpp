@@ -2029,7 +2029,7 @@ void TSingleLogFrame::on_SetPttState(bool state)
 {
     if ( this == LogContainer->getCurrentLogFrame() )
     {
-        txVmButtonsFrame->setPttState(state);
+        txVmButtonsFrame->setRadioPttState(state);
     }
 }
 void TSingleLogFrame::setCallPlaceholder(QString call)

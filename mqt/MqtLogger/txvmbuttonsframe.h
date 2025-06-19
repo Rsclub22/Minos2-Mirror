@@ -90,7 +90,7 @@ public:
     bool getRigVoiceKeyerSupportStopFlag(PubSubName psn);
     void setRigCwKeyerSupportStopFlag(bool supportStopCmd, PubSubName psn);
     bool getRigCwKeyerSupportStopFlag(PubSubName psn);
-    void setPttState(bool state);
+    void setRadioPttState(bool state);
     void setRigModel(QString rigModel, PubSubName psn);
 
     void setSelectedRadio(PubSubName selectedRadio);
@@ -130,6 +130,8 @@ private:
     QTimer* msgDurTimer = nullptr;
     QTimer* repeatPauseTimer = nullptr;
     int buttonNumSent ;
+
+    bool messagePlaying = false;
 
     int selectedEomType = voiceKeyerCommon::VoiceCwKeyerEomTypes::Eom_None;
 
@@ -209,6 +211,8 @@ private:
     void clearButtons();
     void createButtonsForKeyer(int numButtons, int columns);
     void setCwEntryBoxVisible(bool visible);
+    void setMessagePlayingFlag(bool playing);
+    bool isMessagePlaying();
 private slots:
 
     void onVoiceKeyerSelect(int idx);

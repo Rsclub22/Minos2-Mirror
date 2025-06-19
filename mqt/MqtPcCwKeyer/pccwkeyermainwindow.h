@@ -54,7 +54,7 @@ private:
     QSharedPointer<CommandReader> commandReader = QSharedPointer<CommandReader>(new CommandReader(this));
 
     QTimer LogTimer;
-    QTimer *keyerStatusTimer;
+    //QTimer *keyerStatusTimer;
 
     PcCwKeyer *cwKeyer = nullptr;
 
@@ -115,6 +115,7 @@ private:
     void sendPttStateToLogger();
     void setTXStatusVisible(bool visible);
     void setPttStatusIndicatorOnOff(bool on);
+    void sendInitialPttStatusToLogger();
 private slots:
 
     void onComportSelected();
@@ -134,7 +135,7 @@ private slots:
     void cwMessageFromLoggerToCwKeyer(QString message);
     void cwStopCommandFromLogger();
 
-    void onKeyerStatusTimerTriggered();
+
 };
 #endif // PCCWKEYERMAINWINDOW_H
 

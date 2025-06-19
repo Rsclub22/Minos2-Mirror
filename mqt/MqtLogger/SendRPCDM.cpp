@@ -1160,6 +1160,7 @@ void TSendDM::on_notify( AnalysePubSubNotify an, const QString /*from*/ )
 
         if (an.getCategory() == rpcConstants::pcCwKeyerCategory)
         {
+            trace(QString("message from pcCwKeyer - %1, %2, %3").arg(an.getKey()).arg(an.getKey()).arg(an.getValue()));
             if (an.getKey() == rpcConstants::pcCwKeyerReport)
             {
                 if (pcCwKeyerApp.isEmpty())

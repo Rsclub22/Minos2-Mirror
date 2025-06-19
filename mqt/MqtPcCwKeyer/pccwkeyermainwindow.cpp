@@ -134,9 +134,10 @@ PcCwKeyerMainWindow::PcCwKeyerMainWindow(QWidget *parent)
     }
 
 
-    keyerStatusTimer = new QTimer();
-    connect(keyerStatusTimer, &QTimer::timeout, this, &PcCwKeyerMainWindow::onKeyerStatusTimerTriggered);
-    keyerStatusTimer->start(15000);
+    QTimer::singleShot(30000, this, [this]() {
+        sendInitialPttStatusToLogger();
+    });
+
 
 
 
@@ -431,10 +432,7 @@ void PcCwKeyerMainWindow::openCwKeyer()
 
 }
 
-void PcCwKeyerMainWindow::onKeyerStatusTimerTriggered()
-{
-    sendPttStateToLogger();
-}
+
 
 void PcCwKeyerMainWindow::sendTxStatusToLogger(bool on)
 {
@@ -454,13 +452,33 @@ void PcCwKeyerMainWindow::sendTxStatusToLogger(bool on)
     }
 }
 
+
+void PcCwKeyerMainWindow::sendInitialPttStatusToLogger()
+{
+    if (pcCwKeyerRpc)
+    {
+       bool state = !ui->enablePTTCheckbox->isChecked();
+       pcCwKeyerRpc->publishPttEnable(state);
+       pcCwKeyerRpc->publishPttEnable(ui->enablePTTCheckbox->isChecked());
+       QTimer::singleShot(1000, this, [this]() {
+            pcCwKeyerRpc->publishPttEnable(ui->enablePTTCheckbox->isChecked());
+       });
+    }
+
+}
+
+
+
+
+
+
 void PcCwKeyerMainWindow::sendPttStateToLogger()
 {
     if (pcCwKeyerRpc)
     {
 
-        QString("Send pcCwKeyer PTT state");
-        pcCwKeyerRpc->publishPttEnable(pttEnabled);
+        trace(QString("Send pcCwKeyer PTT state - %1").arg(ui->enablePTTCheckbox->isChecked() ? "On" : "Off"));
+        pcCwKeyerRpc->publishPttEnable(ui->enablePTTCheckbox->isChecked());
     }
 }
 

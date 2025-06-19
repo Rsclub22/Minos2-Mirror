@@ -15,8 +15,13 @@
 #include "pccwmessagekeyer.h"
 #include "cwrigkeyervalidator.h"
 
-const char * VM_BUTTON_ON_STYLE = "background-color: orange ; color:black ; border-style: outset; border-width: 1px; border-color: black;\n";
-const char * VM_BUTTON_OFF_STYLE = "background-color: Gainsboro ; color:black ; border-style: outset; border-width: 1px; border-color: black;\n";
+const char * VM_BUTTON_ON_STYLE =
+    "background-color: orange;"
+    "padding: 4px;";
+
+const char * VM_BUTTON_OFF_STYLE =
+    "background-color: Gainsboro;"
+    "padding: 4px;";
 
 const int NO_VM_BUTTON_ON = -1;
 
@@ -29,7 +34,7 @@ const QStringList vmButtonShortCutKeys = {
                                     "Shift+F11", "Shift+F12",
                                 };
 
-const char * vmStopButtonShortCutKey = "Shift+F10";
+//const char * vmStopButtonShortCutKey = "Shift+F10";
 
 
 TxVmButtonsFrame::TxVmButtonsFrame(QWidget *parent) :
@@ -62,6 +67,9 @@ TxVmButtonsFrame::TxVmButtonsFrame(QWidget *parent) :
     //connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::modeChange, this, &TxVmButtonsFrame::onModeChange);
 
 
+    ui->buttonGridContainer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+
+
     gridLayout = qobject_cast<QGridLayout *>(ui->buttonGridContainer->layout());
     if (!gridLayout)
     {
@@ -87,6 +95,8 @@ TxVmButtonsFrame::TxVmButtonsFrame(QWidget *parent) :
     trace(QString("start keyer name = %1").arg(ui->voiceKeyerSelect->currentText()));
 
     onVoiceKeyerSelect(ui->voiceKeyerSelect->currentIndex());
+
+    qApp->installEventFilter(this); // look for esc key to stop playing
 
 
 
@@ -120,9 +130,7 @@ void TxVmButtonsFrame::createButtonsForKeyer(int numButtons, int columns)
         gridLayout->addWidget(toolButton, i / columns, i % columns);
         voiceMemButtonList.append(toolButton);
         txVmButtonMap[i] = new TxVoiceMemButton(voiceMemButtonList[i], this, i);
-        //connect(toolButton, &QToolButton::clicked, this, [this, i]() {
-       //     onVoiceMemButtonClicked(i);
-       // });
+
     }
 
 
@@ -1050,6 +1058,13 @@ void TxVmButtonsFrame::startVMMsg(int buttonNumber)
     if (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl]
         || voiceKeyerType == keyerTypes[VoiceKeyerId::PcCwKeyer])
     {
+        if (vmData.getVmCwMessage().isEmpty())
+        {
+            logMessage(QString("Cw Message is empty, ignore"));
+            return;
+        }
+
+
         if (getCwMemType(selectedRadio) == hamlibData::CW_MEMORY_TYPES::ICOM
             || getCwMemType(selectedRadio) == hamlibData::CW_MEMORY_TYPES::ELECRAFT
             || getCwMemType(selectedRadio) == hamlibData::CW_MEMORY_TYPES::KENWOOD
@@ -1072,6 +1087,7 @@ void TxVmButtonsFrame::startVMMsg(int buttonNumber)
             }
 
             txVoiceKeyer->sendCwMsg(vmData);
+            setMessagePlayingFlag(true);
         }
 
     }
@@ -1079,6 +1095,7 @@ void TxVmButtonsFrame::startVMMsg(int buttonNumber)
     {
 
         txVoiceKeyer->sendMsgNum(buttonNumSent);
+        setMessagePlayingFlag(true);
     }
 
     selectedEomType = txVoiceKeyer->getSelectedEomType();
@@ -1138,6 +1155,7 @@ void TxVmButtonsFrame::onVmStopClicked()
     }
     setRepeatIndicatorOnOff(false);
     buttonNumSent = NO_VM_BUTTON_ON;
+    setMessagePlayingFlag(false);
 
 }
 
@@ -1402,6 +1420,12 @@ void TxVmButtonsFrame::setRadioIsConnected(bool connected)
 
 void TxVmButtonsFrame::setSelectedRadio(PubSubName selectedRadio_)
 {
+    if (voiceKeyerType.isEmpty() || voiceKeyerType == keyerTypes[VoiceKeyerId::PcCwKeyer])
+    {
+        // ignore as we don't want to update framestate
+        return;
+    }
+
     if (selectedRadio != selectedRadio_)
     {
         selectedRadio = selectedRadio_;
@@ -1412,6 +1436,13 @@ void TxVmButtonsFrame::setSelectedRadio(PubSubName selectedRadio_)
 
 void TxVmButtonsFrame::setPttEnabled(bool state, PubSubName psn)
 {
+    if (voiceKeyerType.isEmpty() || voiceKeyerType == keyerTypes[VoiceKeyerId::PcCwKeyer])
+    {
+        // ignore as we don't want to update framestate
+        return;
+    }
+
+
     logMessage(QString("setPttEnabled = %1, radio = %2").arg(state ? "Enabled" : "Disabled").arg(psn.getLocalName()));
 
     RadioDetails rd;
@@ -1432,6 +1463,7 @@ void TxVmButtonsFrame::setPttEnabled(bool state, PubSubName psn)
 
 bool TxVmButtonsFrame::getPttEnabled(PubSubName psn)
 {
+
     RadioDetails rd;
     if (allRadioDetails.contains(psn))
     {
@@ -1445,6 +1477,12 @@ bool TxVmButtonsFrame::getPttEnabled(PubSubName psn)
 
 void TxVmButtonsFrame::setPttType(int type, PubSubName psn)
 {
+
+    if (voiceKeyerType.isEmpty() || voiceKeyerType == keyerTypes[VoiceKeyerId::PcCwKeyer])
+    {
+        // ignore as we don't want to update framestate
+        return;
+    }
 
     logMessage(QString("setPttType = %1, selectedRadio = %2").arg(type).arg(psn.getLocalName()));
 
@@ -1483,7 +1521,11 @@ serialCommonData::MINOS_PTT_TYPES TxVmButtonsFrame::getPttType(PubSubName psn)
 
 void TxVmButtonsFrame::setVoiceMemAvail(bool avail, PubSubName psn)
 {
-
+    if (voiceKeyerType.isEmpty() || voiceKeyerType == keyerTypes[VoiceKeyerId::PcCwKeyer])
+    {
+        // ignore as we don't want to update framestate
+        return;
+    }
     logMessage(QString("setVoiceMemAvail = %1, radio = %2").arg(avail ? "Yes" : "No", psn.getLocalName()));
 
     RadioDetails rd;
@@ -1516,6 +1558,13 @@ bool TxVmButtonsFrame::isVoiceMemAvail(PubSubName psn)
 
 void TxVmButtonsFrame::setNumVoiceMessages(int numMsgs, PubSubName psn)
 {
+
+    if (voiceKeyerType.isEmpty() || voiceKeyerType == keyerTypes[VoiceKeyerId::PcCwKeyer])
+    {
+        // ignore as we don't want to update framestate
+        return;
+    }
+
     logMessage(QString("setNumVoiceMessages = %1, radio = %2").arg(QString::number(numMsgs), psn.getLocalName()));
 
     RadioDetails rd;
@@ -1553,6 +1602,12 @@ int TxVmButtonsFrame::getNumVoiceMessages(PubSubName psn)
 void TxVmButtonsFrame::setRigVoiceKeyerSupportStopFlag(bool supportStopCmd, PubSubName psn)
 {
 
+    if (voiceKeyerType.isEmpty() || voiceKeyerType == keyerTypes[VoiceKeyerId::PcCwKeyer])
+    {
+        // ignore as we don't want to update framestate
+        return;
+    }
+
     logMessage(QString("setRigVoiceKeyerSupportStopFlag = %1, radio = %2").arg(supportStopCmd ? "Yes" : "No").arg(psn.getLocalName()));
 
     RadioDetails rd;
@@ -1588,6 +1643,13 @@ bool TxVmButtonsFrame::getRigVoiceKeyerSupportStopFlag(PubSubName psn)
 
 void TxVmButtonsFrame::setRigCwKeyerSupportStopFlag(bool supportStopCmd, PubSubName psn)
 {
+    if (voiceKeyerType == keyerTypes[VoiceKeyerId::PcCwKeyer])
+    {
+        // ignore as we don't want to update framestate
+        return;
+    }
+
+
     logMessage(QString("setRigCwKeyerSupportStopFlag = %1, radio = %2").arg(supportStopCmd ? "Yes" : "No").arg(psn.getLocalName()));
 
 
@@ -1623,6 +1685,12 @@ bool TxVmButtonsFrame::getRigCwKeyerSupportStopFlag(PubSubName psn)
 
 void TxVmButtonsFrame::setRigModel(QString rigModel, PubSubName psn)
 {
+
+    if (voiceKeyerType.isEmpty() ||voiceKeyerType == keyerTypes[VoiceKeyerId::PcCwKeyer])
+    {
+        // ignore as we don't want to update framestate
+        return;
+    }
 
     logMessage(QString("setRigModel = %1, radio = %2").arg(rigModel).arg(psn.getLocalName()));
 
@@ -1688,6 +1756,12 @@ bool TxVmButtonsFrame::isCwMemTypeAvail(PubSubName psn)
 
 void TxVmButtonsFrame::setCwMemType(int cwMemType, PubSubName psn)
 {
+    if (voiceKeyerType.isEmpty() || voiceKeyerType == keyerTypes[VoiceKeyerId::PcCwKeyer])
+    {
+        // ignore as we don't want to update framestate
+        return;
+    }
+
     logMessage(QString("setCwMemType = %1, radio = %2").arg(cwMemType).arg(psn.getLocalName()));
 
 
@@ -1737,6 +1811,7 @@ void TxVmButtonsFrame::setAvailIndicatorVisible(bool visible)
 
 void TxVmButtonsFrame:: setAvailIndicatorOnOffForPcCwKeyer()
 {
+
     if (isPcCwKeyerLoaded() && isPcCwKeyerConnected())
     {
         setAvailIndicatorOnOff(true);
@@ -1747,6 +1822,15 @@ void TxVmButtonsFrame:: setAvailIndicatorOnOffForPcCwKeyer()
     }
 }
 
+void TxVmButtonsFrame::setMessagePlayingFlag(bool playing)
+{
+    messagePlaying = playing;
+}
+
+bool TxVmButtonsFrame::isMessagePlaying()
+{
+    return messagePlaying;
+}
 
 bool TxVmButtonsFrame::isPcCwKeyerLoaded()
 {
@@ -1855,8 +1939,14 @@ void TxVmButtonsFrame::setErrorMessageVisible(bool visible)
     ui->errorMeassageLabel->setVisible(visible);
 }
 
-void TxVmButtonsFrame::setPttState(bool state)
+void TxVmButtonsFrame::setRadioPttState(bool state)
 {
+    if (voiceKeyerType == keyerTypes[VoiceKeyerId::PcCwKeyer])
+    {
+        // ignore as we don't want to update framestate
+        return;
+    }
+
     if (pttState != state)
     {
         pttState = state;
@@ -2006,6 +2096,23 @@ void TxVmButtonsFrame::fKey(BaseContestLog *c, int key, int /*carrier*/)
             readActionSelected(mem);
         }
     }
+    else if (c && ct == c && voiceKeyerType == keyerTypes[VoiceKeyerId::PcCwKeyer])
+    {
+        // for test...
+        int mem = key - Qt::Key_F1;
+        if (mem > 10)
+        {
+
+        }
+        else if (mem == 10)
+        {
+            onVmStopClicked();
+        }
+        else
+        {
+            readActionSelected(mem);
+        }
+    }
 }
 
 void TxVmButtonsFrame::setMode(const QString m)
@@ -2072,6 +2179,8 @@ void TxVmButtonsFrame::setPcCwKeyerErrorMsg(QString errorMsg)
 
 void TxVmButtonsFrame::setPcCwKeyerPttEnabled(QString enabled)
 {
+    logMessage(QString("PcCwKeyer Ptt enabled = %1").arg(enabled));
+
     if (txVoiceKeyer && voiceKeyerType == keyerTypes[VoiceKeyerId::PcCwKeyer])
     {
         if (enabled == "On")
@@ -2110,6 +2219,7 @@ void TxVmButtonsFrame::logMessage(QString msg)
     trace(QString("[TxVmButtonsFrame] %1").arg(msg));
 }
 
+/*
 // this to prevent multiple return event signals with connect statement
 
 bool TxVmButtonsFrame::eventFilter(QObject *obj, QEvent *event)
@@ -2128,6 +2238,40 @@ bool TxVmButtonsFrame::eventFilter(QObject *obj, QEvent *event)
     }
     return QWidget::eventFilter(obj, event);
 }
+*/
+
+
+bool TxVmButtonsFrame::eventFilter(QObject *obj, QEvent *event)
+{
+    if (event->type() == QEvent::KeyPress)
+    {
+        QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
+
+        // -- Only handle Return if it's from cwEntry --
+        if (obj == ui->cwEntry &&
+            (keyEvent->key() == Qt::Key_Return || keyEvent->key() == Qt::Key_Enter))
+        {
+            if (!keyEvent->isAutoRepeat())
+                onCwEntryReturnPressed();
+
+            return true; // consume
+        }
+
+        // -- Handle Escape globally --
+        if (keyEvent->key() == Qt::Key_Escape)
+        {
+            if (isMessagePlaying())
+            {
+                onVmStopClicked();
+                return true;                // consume Esc
+            }
+            // else let Esc propagate
+        }
+    }
+
+    return QWidget::eventFilter(obj, event); // default
+}
+
 
 
 //*******************TX Voice Memory Button *************************//
