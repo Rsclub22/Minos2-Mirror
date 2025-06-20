@@ -2,7 +2,9 @@
 // $Id$
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
+//
 //                      Rotator Control Frame Base for Logger
+//
 // Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2017 - 2025
 //
 // Interprocess Control Logic
