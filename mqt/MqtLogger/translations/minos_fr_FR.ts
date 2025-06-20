@@ -2549,6 +2549,14 @@ et envoyer le fichier .EDI produit.
     </message>
 </context>
 <context>
+    <name>PcCWMessageKeyer</name>
+    <message>
+        <location filename="../pccwmessagekeyer.cpp" line="516"/>
+        <source>PC CW Keyer Setup</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>PrintFile</name>
     <message>
         <location filename="../PrintFile.cpp" line="19"/>
@@ -3257,7 +3265,7 @@ Non - Ignorer les modifications</translation>
 <context>
     <name>RigControlCwMessageKeyer</name>
     <message>
-        <location filename="../rigcontrolcwmessagekeyer.cpp" line="478"/>
+        <location filename="../rigcontrolcwmessagekeyer.cpp" line="486"/>
         <source>Rig Control CW Memory Setup</source>
         <translation>Configuration de la mémoire de CW</translation>
     </message>
@@ -3387,7 +3395,7 @@ Non - Ignorer les modifications</translation>
 <context>
     <name>RigControlVoiceMemoryKeyer</name>
     <message>
-        <location filename="../rigcontrolvoicememorykeyer.cpp" line="168"/>
+        <location filename="../rigcontrolvoicememorykeyer.cpp" line="164"/>
         <source>Rig Control Voice Memory Setup</source>
         <translation>Configuration de la mémoire de voix</translation>
     </message>
@@ -5709,8 +5717,8 @@ Veuillez confirmer cette action en appuyant sur &amp;quot;Oui&amp;quot;.</transl
 <context>
     <name>TSendDM</name>
     <message>
-        <location filename="../SendRPCDM.cpp" line="1086"/>
-        <location filename="../SendRPCDM.cpp" line="1135"/>
+        <location filename="../SendRPCDM.cpp" line="1127"/>
+        <location filename="../SendRPCDM.cpp" line="1223"/>
         <source>Disconnected</source>
         <translation>Déconnecté</translation>
     </message>
@@ -5912,27 +5920,27 @@ Veuillez confirmer cette action en appuyant sur &amp;quot;Oui&amp;quot;.</transl
 <context>
     <name>TSingleLogFrame</name>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1049"/>
+        <location filename="../tsinglelogframe.cpp" line="1055"/>
         <source>Failed to open %1</source>
         <translation>L&apos;Ouverture échoué %1</translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1063"/>
+        <location filename="../tsinglelogframe.cpp" line="1069"/>
         <source>Save imported log as a .minos file</source>
         <translation>Enregistrer le Log importé en tant que fichier .minos</translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1591"/>
+        <location filename="../tsinglelogframe.cpp" line="1597"/>
         <source>No unfilled contacts</source>
         <translation>Pas de contacts  non remplis</translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1610"/>
+        <location filename="../tsinglelogframe.cpp" line="1616"/>
         <source>Please give serial wanted</source>
         <translation>Numéro de série requis</translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1632"/>
+        <location filename="../tsinglelogframe.cpp" line="1638"/>
         <source>Serial number %1 not found</source>
         <translation>Numéro de série %1 introuvable</translation>
     </message>
@@ -6037,6 +6045,11 @@ Last %8 Mins: %9 QSO %10 pts %11 mults
         <translation>État de TX</translation>
     </message>
     <message>
+        <location filename="../txvmbuttonsframe.ui" line="388"/>
+        <source>CW</source>
+        <translation type="unfinished">CW</translation>
+    </message>
+    <message>
         <location filename="../txvmbuttonsframe.ui" line="32"/>
         <source>Setup</source>
         <translation>Configurer</translation>
@@ -6063,56 +6076,54 @@ Last %8 Mins: %9 QSO %10 pts %11 mults
         <translation>Erreur:</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.ui" line="401"/>
-        <location filename="../txvmbuttonsframe.ui" line="408"/>
-        <location filename="../txvmbuttonsframe.ui" line="415"/>
-        <location filename="../txvmbuttonsframe.ui" line="422"/>
-        <location filename="../txvmbuttonsframe.ui" line="459"/>
-        <location filename="../txvmbuttonsframe.ui" line="466"/>
-        <location filename="../txvmbuttonsframe.ui" line="473"/>
-        <location filename="../txvmbuttonsframe.ui" line="480"/>
         <source>...</source>
-        <translation>...</translation>
+        <translation type="vanished">...</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.ui" line="504"/>
+        <location filename="../txvmbuttonsframe.ui" line="451"/>
         <source>Stop</source>
         <translation>Arrêter</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="746"/>
-        <location filename="../txvmbuttonsframe.cpp" line="958"/>
+        <location filename="../txvmbuttonsframe.cpp" line="978"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1212"/>
         <source>Voice Memory</source>
         <translation>Mémoire de voix</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="748"/>
+        <location filename="../txvmbuttonsframe.cpp" line="980"/>
         <source>%1 %2 - Edit</source>
         <translation>%1 %2 - Modifier</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="531"/>
+        <location filename="../txvmbuttonsframe.cpp" line="610"/>
         <source>To use the external keyer mqtKeyer must be running and connected</source>
         <translation>Pour utiliser le keyer externe, mqtKeyer doit être en cours d&apos;exécution et connecté</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="732"/>
-        <location filename="../txvmbuttonsframe.cpp" line="944"/>
+        <location filename="../txvmbuttonsframe.cpp" line="957"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1192"/>
         <source>Rig CW Message - </source>
         <translation>Message CW d&apos;appareil - </translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="960"/>
+        <location filename="../txvmbuttonsframe.cpp" line="961"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1196"/>
+        <source>PC CW Keyer Message - </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../txvmbuttonsframe.cpp" line="1214"/>
         <source>%1 %2 - New</source>
         <translation>%1 %2 - Nouveau</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1491"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1859"/>
         <source>Rig Voice Keyer Available</source>
         <translation>Mémoire de voix disponible</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1495"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1863"/>
         <source>Rig CW Messages Available</source>
         <translation>Message CW disponible</translation>
     </message>
@@ -6122,22 +6133,22 @@ Last %8 Mins: %9 QSO %10 pts %11 mults
         <translation></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1617"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1996"/>
         <source>TX On</source>
         <translation>TX Actif</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1623"/>
+        <location filename="../txvmbuttonsframe.cpp" line="2002"/>
         <source>TX Off</source>
         <translation>TX Éteint</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1633"/>
+        <location filename="../txvmbuttonsframe.cpp" line="2012"/>
         <source>PTT Enabled</source>
         <translation>PTT activé</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1639"/>
+        <location filename="../txvmbuttonsframe.cpp" line="2018"/>
         <source>PTT Disabled</source>
         <translation>PTT Désactivé</translation>
     </message>
@@ -6403,11 +6414,41 @@ Through</source>
     </message>
     <message>
         <location filename="../txvmrigbuttondialog.ui" line="315"/>
+        <source>Single Character Macros</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../txvmrigbuttondialog.ui" line="323"/>
+        <source>! = Call</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../txvmrigbuttondialog.ui" line="330"/>
+        <source>$ = Report</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../txvmrigbuttondialog.ui" line="337"/>
+        <source># = Serial Number</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../txvmrigbuttondialog.ui" line="344"/>
+        <source>% = Locator</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../txvmrigbuttondialog.ui" line="351"/>
+        <source>* = MyCall</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../txvmrigbuttondialog.ui" line="363"/>
         <source>Supported Special  CW Chars</source>
         <translation>Caractères CW spéciaux supporté</translation>
     </message>
     <message>
-        <location filename="../txvmrigbuttondialog.ui" line="330"/>
+        <location filename="../txvmrigbuttondialog.ui" line="378"/>
         <source>Precede with ^ Char Eg: ^SN</source>
         <translation>Précéder du caractère ^
 Par exemple&#xa0;: ^SN</translation>
@@ -6503,12 +6544,12 @@ Veuillez modifier ou supprimer</translation>
 <context>
     <name>TxVoiceMemButton</name>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1786"/>
+        <location filename="../txvmbuttonsframe.cpp" line="2308"/>
         <source>&amp;New</source>
         <translation>&amp;Nouveau</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1787"/>
+        <location filename="../txvmbuttonsframe.cpp" line="2309"/>
         <source>&amp;Edit</source>
         <translation>&amp;Modifier</translation>
     </message>

@@ -681,7 +681,7 @@ Please enter %1 - %2</source>
     </message>
     <message>
         <location filename="../rotatormainwindow.cpp" line="1673"/>
-        <location filename="../rotatormainwindow.cpp" line="3455"/>
+        <location filename="../rotatormainwindow.cpp" line="3462"/>
         <source>Rotate to Bearing</source>
         <translation type="unfinished"></translation>
     </message>
@@ -959,12 +959,12 @@ Do you want to reload the settings for the antenna now?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.cpp" line="3701"/>
+        <location filename="../rotatormainwindow.cpp" line="3708"/>
         <source>SkyScan Start/End Bearing Check!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.cpp" line="3701"/>
+        <location filename="../rotatormainwindow.cpp" line="3708"/>
         <source>Start/End Bearings out of rotator range
 Requested Start = %1, Requested End = %2
 MinRotation = %3, MaxRotation = %4
