@@ -1002,13 +1002,9 @@ void RotControlFrameBase::activateSignalConnections()
 
     if (auto ui_element = getAntennaSelectObject())
     {
-        connect(ui_element, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &RotControlFrameBase::onAntennaNameSel_activated);
+        connect(ui_element, QOverload<int>::of(&QComboBox::activated), this, &RotControlFrameBase::onAntennaNameSel_activated);
     }
 
-    if (auto ui_element = getAntennaSelectObject())
-    {
-        connect(ui_element, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &RotControlFrameBase::onAntennaNameSel_activated);
-    }
     if (auto ui_element = qobject_cast<BearingLineEdit*>(getBrgLineEditObject()))
     {
         connect(ui_element, &BearingLineEdit::editingFinished, this, &RotControlFrameBase::onRotate_clicked);
@@ -1072,10 +1068,6 @@ void RotControlFrameBase::deactivateSignalConnections()
         disconnect(ui_element, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &RotControlFrameBase::onAntennaNameSel_activated);
     }
 
-    if (auto ui_element = getAntennaSelectObject())
-    {
-        disconnect(ui_element, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &RotControlFrameBase::onAntennaNameSel_activated);
-    }
     if (auto ui_element = qobject_cast<BearingLineEdit*>(getBrgLineEditObject()))
     {
         disconnect(ui_element, &BearingLineEdit::editingFinished, this, &RotControlFrameBase::onRotate_clicked);
