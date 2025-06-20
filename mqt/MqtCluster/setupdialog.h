@@ -56,6 +56,10 @@ public:
     bool getRunStartFileFlag();
     bool getRunEndFileFlag();
 
+    bool getRemoveRepeatSpotFilterFlag(){return removeRepeatSpotFilterFlag;}
+    int getRemoveRepeatSpotsFreqDelta(){return removeRepeatSpotsFreqDelta;}
+    int getRemoveRepeatSpotsWithinTime(){return removeRepeatSpotsWithinTime;}
+
     void createDefaultGeneralSettingsFile();
     void readPersonal();
     void loadGeneralToSetupTab();
@@ -105,6 +109,9 @@ private slots:
     void sendSpotsToDXClusterChkBoxChanged(int state);
     //void onSaveBandFilterChkBoxClicked(int state);
     void onQrzCheckBoxChkBoxClicked(int state);
+    void repeatSpotsCheckboxChanged();
+    void repeatSpotFreqDeltaEditingFinished();
+    void repeatSpotWithinTimeEditingFinished();
 private:
     Ui::SetupDialog *ui;
     UpperCaseValidator ucValidator;
@@ -134,6 +141,15 @@ private:
     bool sendSpotsToDXClusterChanged;
 
     bool personalDataChanged;
+
+    bool removeRepeatSpotFilterFlag = false;
+    bool removeRepeatSpotFilterFlagChanged = false;
+
+    int removeRepeatSpotsFreqDelta = 200; // Hz
+    bool removeRepeatSpotsFreqDeltaChanged = false;
+
+    int removeRepeatSpotsWithinTime = 10; // mins
+    bool removeRepeatSpotsWithinTimeChanged = false;
 
     //bool bandFilterOnSaveFlag;
     //bool bandFilterOnSaveChanged;
@@ -165,6 +181,7 @@ private:
     void closeEvent(QCloseEvent *event);
     void doCloseEvent();
 
+    void setRemoveSpotItemsDisabled(bool disabled);
 };
 
 #endif // SETUPDIALOG_H

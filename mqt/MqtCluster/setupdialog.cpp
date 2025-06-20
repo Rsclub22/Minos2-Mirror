@@ -17,6 +17,7 @@
 #include "cutils.h"
 #include "clustercommon.h"
 #include "CallsignLineEdit.h"
+#include "MTrace.h"
 
 #include "setupdialog.h"
 #include "ui_setupdialog.h"
@@ -61,10 +62,18 @@ SetupDialog::SetupDialog(QWidget *parent) :
     connect(ui->locatorEdit, &LocatorLineEdit::locatorFinished, this, &SetupDialog::locatorFinished);
     connect(ui->qthEdit, &QLineEdit::editingFinished, this, &SetupDialog::qthEditFinished);
 
+    connect(ui->removeRepeatSpotsCheckBox, &QCheckBox::stateChanged, this, &SetupDialog::repeatSpotsCheckboxChanged);
+    connect(ui->repeatSpotFreqDeltaLineEdit, &QLineEdit::editingFinished, this, &SetupDialog::repeatSpotFreqDeltaEditingFinished);
+    connect(ui->repeatSpotWithinTimeLineEdit, &QLineEdit::editingFinished, this, &SetupDialog::repeatSpotWithinTimeEditingFinished);
 
     //readPersonal();
     //loadPersonalToSetupTab();
 
+    QIntValidator *repeatSpotFreqValidator = new QIntValidator(100, 750, this);
+    ui->repeatSpotFreqDeltaLineEdit->setValidator(repeatSpotFreqValidator);
+
+    QIntValidator *repeatSpotTimeValidator = new QIntValidator(0, 30, this);
+    ui->repeatSpotWithinTimeLineEdit->setValidator(repeatSpotTimeValidator);
 
 
     // Cluster Node List Tab
@@ -179,35 +188,54 @@ void SetupDialog::timeToliveEditFinished()
 
 void SetupDialog::saveGeneralSettings()
 {
-    if (timeToLiveChanged || sendSpotsToDXClusterChanged
-        || useQrzForQraChanged)
+
+    timeToLive = ui->timeToLive->text().trimmed();
+    QSettings config(CLUSTER_SETTINGS_FILE(), QSettings::IniFormat);
+
+    if (timeToLiveChanged)
     {
-        timeToLive = ui->timeToLive->text().trimmed();
-        QSettings config(CLUSTER_SETTINGS_FILE(), QSettings::IniFormat);
-
-        if (timeToLive != config.value("timeToLive", "").toString())
-        {
-            config.beginGroup("TimeToLive");
-            config.setValue("timeToLive", timeToLive);
-            config.endGroup();
-        }
-
-        if (sendSpotToDXCluster != config.value("enableSendToDXCluster", false).toBool())
-        {
-            config.beginGroup("EnableSendSpotsToDXCluster");
-            config.setValue("enableSendToDXCluster", sendSpotToDXCluster);
-            config.endGroup();
-            emit sendSpotToTxEnabled(sendSpotToDXCluster);
-        }
-
-        if (useQrzForQraFlag != config.value("enableGetQraFromQrz", false).toBool())
-        {
-            config.beginGroup("UseQRZServer");
-            config.setValue("enableGetQraFromQrz", useQrzForQraFlag);
-            config.endGroup();
-
-        }
+        config.beginGroup("TimeToLive");
+        config.setValue("timeToLive", timeToLive);
+        config.endGroup();
     }
+
+    if (sendSpotsToDXClusterChanged)
+    {
+        config.beginGroup("EnableSendSpotsToDXCluster");
+        config.setValue("enableSendToDXCluster", sendSpotToDXCluster);
+        config.endGroup();
+        emit sendSpotToTxEnabled(sendSpotToDXCluster);
+    }
+
+    if (useQrzForQraChanged)
+    {
+        config.beginGroup("UseQRZServer");
+        config.setValue("enableGetQraFromQrz", useQrzForQraFlag);
+        config.endGroup();
+
+    }
+
+    if (removeRepeatSpotFilterFlagChanged)
+    {
+        config.beginGroup("RemoveRepeatSpots");
+        config.setValue("removeRepeatSpotFilterFlag", removeRepeatSpotFilterFlag);
+        config.endGroup();
+    }
+
+    if (removeRepeatSpotsFreqDeltaChanged)
+    {
+       config.beginGroup("RemoveRepeatSpots");
+       config.setValue("removeRepeatSpotsFreqDelta", removeRepeatSpotsFreqDelta);
+       config.endGroup();
+    }
+
+    if (removeRepeatSpotsWithinTimeChanged)
+    {
+       config.beginGroup("RemoveRepeatSpots");
+       config.setValue("removeRepeatSpotsWithinTime", removeRepeatSpotsWithinTime);
+       config.endGroup();
+    }
+
 }
 
 
@@ -252,6 +280,11 @@ void SetupDialog::readGeneralSettings()
     config.beginGroup("UseQRZServer");
     useQrzForQraFlag =  config.value("enableGetQraFromQrz", false).toBool();
     config.endGroup();
+    config.beginGroup("RemoveRepeatSpots");
+    removeRepeatSpotFilterFlag = config.value("removeRepeatSpotFilterFlag", false).toBool();
+    removeRepeatSpotsFreqDelta = config.value("removeRepeatSpotsFreqDelta", 200).toInt();
+    removeRepeatSpotsWithinTime = config.value("removeRepeatSpotsWithinTime", 10).toInt();
+    config.endGroup();
 
 }
 
@@ -263,12 +296,54 @@ void SetupDialog::loadGeneralToSetupTab()
 {
 
     ui->timeToLive->setText(timeToLive);
+
     ui->sendSpotsToDXClusterChkBox->setChecked(sendSpotToDXCluster);
     ui->useQrzCheckBox->setChecked(useQrzForQraFlag);
-
+    ui->removeRepeatSpotsCheckBox->setChecked(removeRepeatSpotFilterFlag);
+    ui->repeatSpotFreqDeltaLineEdit->setText(QString::number(removeRepeatSpotsFreqDelta));
+    ui->repeatSpotWithinTimeLineEdit->setText(QString::number(removeRepeatSpotsWithinTime));
+    setRemoveSpotItemsDisabled(!removeRepeatSpotFilterFlag);
 }
 
 
+void SetupDialog::repeatSpotsCheckboxChanged()
+{
+    if (ui->removeRepeatSpotsCheckBox->isChecked() != removeRepeatSpotFilterFlag)
+    {
+        removeRepeatSpotFilterFlag = ui->removeRepeatSpotsCheckBox->isChecked();
+        setRemoveSpotItemsDisabled(!removeRepeatSpotFilterFlag);
+        removeRepeatSpotFilterFlagChanged = true;
+    }
+}
+
+
+void SetupDialog::repeatSpotFreqDeltaEditingFinished()
+{
+    if (ui->repeatSpotFreqDeltaLineEdit->text() != QString::number(removeRepeatSpotsFreqDelta))
+    {
+        removeRepeatSpotsFreqDelta = ui->repeatSpotFreqDeltaLineEdit->text().toInt();
+        removeRepeatSpotsFreqDeltaChanged = true;
+    }
+}
+
+void SetupDialog::repeatSpotWithinTimeEditingFinished()
+{
+    if (ui->repeatSpotWithinTimeLineEdit->text() != QString::number(removeRepeatSpotsWithinTime))
+    {
+        removeRepeatSpotsWithinTime = ui->repeatSpotWithinTimeLineEdit->text().toInt();
+        removeRepeatSpotsWithinTime = true;
+    }
+}
+
+void SetupDialog::setRemoveSpotItemsDisabled(bool disabled)
+{
+    ui->repeatSpotFreqDeltaLabel->setDisabled(disabled);
+    ui->repeatSpotFreqDeltaLineEdit->setDisabled(disabled);
+    ui->repeatSpotRangeLabel->setDisabled(disabled);
+    ui->repeatSpotTimeLabel->setDisabled(disabled);
+    ui->repeatSpotWithinTimeLineEdit->setDisabled(disabled);
+    ui->repeatSpotFreqDeltaRangeLabel->setDisabled(disabled);
+}
 
 
 QString SetupDialog::getTimeToLive()

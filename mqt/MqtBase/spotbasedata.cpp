@@ -3,7 +3,7 @@
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2020
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2020 - 2025
 //
 //
 //
@@ -46,6 +46,55 @@ bool ClusterSpotData::sameSpotAs(QSharedPointer<ClusterSpotData> cpd)
 }
 
 //---------------------------------------------------------------------------
+
+
+
+bool ClusterSpotData::spotMatchesDxCallsignFreqAndTime(const QSharedPointer<ClusterSpotData> &other, int freqTolerance, int timeToleranceMins) const
+{
+    if (!other)
+    {
+       return false;
+    }
+
+
+    trace(QString("[repeat check] List call = %1, Spot Call = %2").arg(getDxCallStr().trimmed().toUpper()).arg(other->getDxCallStr().trimmed().toUpper()));
+    if (getDxCallStr().trimmed().toUpper() != other->getDxCallStr().trimmed().toUpper())
+    {
+        trace(QString("[repeat check] No Callsign Match"));
+        return false;
+    }
+
+    if (getBand().trimmed().toUpper() != other->getBand().trimmed().toUpper())
+    {
+       trace(QString("[repeat check] No Band Match"));
+       return false;
+    }
+
+
+    qint64 deltaHz = qAbs(qint64(getFreq() - other->getFreq()));
+    if (deltaHz > freqTolerance)
+    {
+        trace(QString("[repeat check] No Freq Match"));
+        return false;
+    }
+
+    if (timeToleranceMins)      // if 0 mins ignore time
+    {
+        qint64 timeDiff = qAbs(spotDateTime.secsTo(other->spotDateTime));
+        if (timeDiff > timeToleranceMins * 60)
+        {
+            trace(QString("[repeat check] Out of time"));
+            return false;
+        }
+
+    }
+
+    trace(QString("[repeat check] Spot is a repeat (callsign, band, freq, time match)"));
+    return true;
+}
+
+
+
 
 QString ClusterSpotData::spotName()
 {

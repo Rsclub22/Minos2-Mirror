@@ -191,6 +191,7 @@ public:
 
     int getRecNo() const {return recno;}
     void setRecNo(int value) {recno = value;}
+    bool spotMatchesDxCallsignFreqAndTime(const QSharedPointer<ClusterSpotData> &other, int freqTolerance = 200, int timeToleranceMins = 10) const;
 private:
 
     int recno = -1;  // for spots DB

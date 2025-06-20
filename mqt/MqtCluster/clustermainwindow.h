@@ -476,6 +476,7 @@ private:
     void saveBandFilterOnSaveFlag();
     void readStartEndScriptSettings();
     void saveStartEndScriptSettings();
+    bool checkForRepeatSpot(const QVector<QSharedPointer<ClusterSpotData> > &spots, const QSharedPointer<ClusterSpotData> &newSpot);
 private slots:
     void personalDataChanged(QString callsign, QString name, QString locator, QString qth);
 

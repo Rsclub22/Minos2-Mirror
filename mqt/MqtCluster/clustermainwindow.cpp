@@ -367,6 +367,8 @@ void ClusterMainWindow::doStartup()
     purgeTimer = new QTimer(this);
     connect (purgeTimer, &QTimer::timeout, this, &ClusterMainWindow::purgeSpots);
     purgeTimer->start(PURGE_TIME);
+
+
 }
 
 void ClusterMainWindow::clusterListChanged()
@@ -1017,6 +1019,19 @@ void ClusterMainWindow::processNewSpot(QSharedPointer<ClusterSpotData> newSpot)
                                                                  setupCluster->getTimeToLive());
     trace(msg);
 
+    // is this a repeat spot
+    if (setupCluster->getRemoveRepeatSpotFilterFlag())
+    {
+        trace(QString("ProcessNewSpot: check if %1 is a repeat spot").arg(newSpot->getDxCallStr()));
+        if (checkForRepeatSpot(spotsList, newSpot))
+        {
+            trace(QString("ProcessNewSpot: %1 is a repeat spot, discard").arg(newSpot->getDxCallStr()));
+            return;
+        }
+
+        trace(QString("ProcessNewSpot: %1 is not a repeat spot, keep").arg(newSpot->getDxCallStr()));
+    }
+
 
     // is spot older than time to live time
     int timeToLive = setupCluster->getTimeToLive().toInt() * 60;
@@ -1292,6 +1307,22 @@ bool ClusterMainWindow::checkShowDxMsg(const QString txt, QSharedPointer<Cluster
     return false;
 
 }
+
+bool ClusterMainWindow::checkForRepeatSpot(const QVector<QSharedPointer<ClusterSpotData>> &spots,
+                       const QSharedPointer<ClusterSpotData> &newSpot)
+{
+    for (const auto &spot : spots)
+    {
+        if (spot->spotMatchesDxCallsignFreqAndTime(newSpot, setupCluster->getRemoveRepeatSpotsFreqDelta(), setupCluster->getRemoveRepeatSpotsWithinTime()))
+        {
+            return true;
+        }
+
+
+    }
+    return false;
+}
+
 
 
 
