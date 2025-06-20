@@ -8,7 +8,7 @@
 // Offset frequencies
 
 const int RTTY_MARK_OFFSET = 2125;
-const int BPSK_OFFSET = 1750;
+const int PSK_OFFSET = 1750;
 
 inline const QString MGM = "MGM";           // MGM generically
 
@@ -64,9 +64,6 @@ public:
     QString convertFreqStrDispSingle();
     QString convertFreqStrDispSingleNoTrailZero();
     QString removeTrailingZeroes(QString sfreq);
-
-    Frequency toMark(const QString &mode) const;
-    Frequency toCarrier(const QString &mode) const;
 };
 
 class ShortFreq

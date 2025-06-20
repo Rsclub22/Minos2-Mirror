@@ -662,7 +662,7 @@
         <location filename="../profiles.cpp" line="157"/>
         <location filename="../profiles.cpp" line="158"/>
         <source></source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="159"/>
@@ -1360,7 +1360,7 @@
 <context>
     <name>Day Abbreviation</name>
     <message>
-        <location filename="../cutils.cpp" line="994"/>
+        <location filename="../cutils.cpp" line="1008"/>
         <source>D</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1392,32 +1392,32 @@
 <context>
     <name>DisplayContestContact</name>
     <message>
-        <location filename="../DisplayContestContact.cpp" line="424"/>
+        <location filename="../DisplayContestContact.cpp" line="426"/>
         <source>DELETED</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../DisplayContestContact.cpp" line="484"/>
+        <location filename="../DisplayContestContact.cpp" line="486"/>
         <source>MAN</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../DisplayContestContact.cpp" line="554"/>
+        <location filename="../DisplayContestContact.cpp" line="556"/>
         <source>DEL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../DisplayContestContact.cpp" line="557"/>
+        <location filename="../DisplayContestContact.cpp" line="559"/>
         <source>N/S</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../DisplayContestContact.cpp" line="564"/>
+        <location filename="../DisplayContestContact.cpp" line="566"/>
         <source>DUP</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../DisplayContestContact.cpp" line="645"/>
+        <location filename="../DisplayContestContact.cpp" line="647"/>
         <source>UNFILLED CONTACT </source>
         <translation type="unfinished"></translation>
     </message>
@@ -1431,68 +1431,47 @@
     </message>
     <message>
         <location filename="../dxspotdatamodel.cpp" line="41"/>
-        <source>Date</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../dxspotdatamodel.cpp" line="43"/>
         <source>Freq</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dxspotdatamodel.cpp" line="45"/>
+        <location filename="../dxspotdatamodel.cpp" line="43"/>
         <source>Dx</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dxspotdatamodel.cpp" line="47"/>
-        <location filename="../dxspotdatamodel.cpp" line="57"/>
-        <source>Wkd</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../dxspotdatamodel.cpp" line="49"/>
+        <location filename="../dxspotdatamodel.cpp" line="45"/>
         <source>Mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dxspotdatamodel.cpp" line="51"/>
-        <location filename="../dxspotdatamodel.cpp" line="61"/>
+        <location filename="../dxspotdatamodel.cpp" line="47"/>
+        <location filename="../dxspotdatamodel.cpp" line="55"/>
         <source>Loc</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dxspotdatamodel.cpp" line="53"/>
+        <location filename="../dxspotdatamodel.cpp" line="49"/>
         <source>Dist</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dxspotdatamodel.cpp" line="55"/>
+        <location filename="../dxspotdatamodel.cpp" line="51"/>
         <source>Brg</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dxspotdatamodel.cpp" line="59"/>
+        <location filename="../dxspotdatamodel.cpp" line="53"/>
         <source>Spotter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dxspotdatamodel.cpp" line="63"/>
+        <location filename="../dxspotdatamodel.cpp" line="57"/>
         <source>Comment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dxspotdatamodel.cpp" line="65"/>
-        <source>Spot to Mem Flag</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../dxspotdatamodel.cpp" line="67"/>
-        <source>Prop Mode</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../dxspotdatamodel.cpp" line="82"/>
+        <location filename="../dxspotdatamodel.cpp" line="72"/>
         <source>Mem</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1613,6 +1592,19 @@ The format required is (e.g.) 1296.3, 144.32 or 144.290123
     <message>
         <location filename="../MatchThisFrame.cpp" line="72"/>
         <source>Press &quot;Yes&quot; to transfer details, or &quot;No&quot; to edit the QSO</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>MinosCompass</name>
+    <message>
+        <location filename="../minoscompass.cpp" line="189"/>
+        <source>N,E,S,W</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../minoscompass.cpp" line="345"/>
+        <source>Stop</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2088,24 +2080,98 @@ The format required is (e.g.) 1296.3, 144.32 or 144.290123
     </message>
 </context>
 <context>
+    <name>RotControlFrameBase</name>
+    <message>
+        <location filename="../rotControlFrameBase.cpp" line="191"/>
+        <source>Bearing empty or invalid</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rotControlFrameBase.cpp" line="205"/>
+        <source>Bearing too large - %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rotControlFrameBase.cpp" line="218"/>
+        <source>Bearing too small - %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rotControlFrameBase.cpp" line="443"/>
+        <location filename="../rotControlFrameBase.cpp" line="454"/>
+        <source>Turn</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rotControlFrameBase.cpp" line="467"/>
+        <location filename="../rotControlFrameBase.cpp" line="478"/>
+        <source>(CCW) Left</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rotControlFrameBase.cpp" line="488"/>
+        <location filename="../rotControlFrameBase.cpp" line="498"/>
+        <source>(CW) Right</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rotControlFrameBase.cpp" line="561"/>
+        <location filename="../rotControlFrameBase.cpp" line="648"/>
+        <source>Connected</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rotControlFrameBase.cpp" line="575"/>
+        <location filename="../rotControlFrameBase.cpp" line="658"/>
+        <location filename="../rotControlFrameBase.cpp" line="687"/>
+        <source>Disconnected</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rotControlFrameBase.cpp" line="592"/>
+        <source>Stop</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rotControlFrameBase.cpp" line="605"/>
+        <source>Rotating CCW</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rotControlFrameBase.cpp" line="619"/>
+        <source>Rotating CW</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rotControlFrameBase.cpp" line="634"/>
+        <source>Turning to bearing</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rotControlFrameBase.cpp" line="668"/>
+        <source>Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>RotPresetData</name>
     <message>
-        <location filename="../rotatorcommon.cpp" line="15"/>
+        <location filename="../rotatorcommon.cpp" line="18"/>
         <source>&amp;Read</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotatorcommon.cpp" line="16"/>
+        <location filename="../rotatorcommon.cpp" line="19"/>
         <source>&amp;New</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotatorcommon.cpp" line="17"/>
+        <location filename="../rotatorcommon.cpp" line="20"/>
         <source>&amp;Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotatorcommon.cpp" line="18"/>
+        <location filename="../rotatorcommon.cpp" line="21"/>
         <source>&amp;Clear</source>
         <translation type="unfinished"></translation>
     </message>

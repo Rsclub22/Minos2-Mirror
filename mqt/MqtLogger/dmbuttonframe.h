@@ -7,11 +7,13 @@
 #include <QVector>
 
 #include "dmFKeydef.h"
+#include "frequency.h"
 
 class QPushButton;
 class QFileSystemWatcher;
 class LoggerContestLog;
 class BaseContestLog;
+class RigControlFrame;
 
 namespace Ui {
 class DMButtonFrame;
@@ -29,6 +31,9 @@ public:
 
     QString parseFKeyMessage(QString mess);
     void parseFKeyFile(QString sfname);
+    void setFreq(Frequency f);
+signals:
+    void sendFreqControl(Frequency f);
 private slots:
     void fKey(BaseContestLog *c, int key, int carr);
     void sandPChanged(bool);
@@ -51,7 +56,7 @@ private slots:
 private:
     Ui::DMButtonFrame *ui;
     LoggerContestLog *ct = nullptr;
-
+    Frequency curFreq;
     QString fkeyFileName;
     QFileSystemWatcher *qfsw = nullptr;
     QStringList nameList;

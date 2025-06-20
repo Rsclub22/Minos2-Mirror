@@ -114,6 +114,18 @@ void FLDigiFrame::onRigModeFreq(QString m, Frequency f)
     QVariantList args;
     if (!f.isClear())
     {
+        // FLDigi works on the genuine rig frequency
+        if (m == RY)
+        {
+            int rttyOffset = engineWindow->getRttyOffset();
+            f = f - Frequency(rttyOffset);
+        }
+        else if (m == PSK)
+        {
+            int pskOffset = engineWindow->getPSKOffset();
+            f = f + Frequency(pskOffset);
+        }
+
         args << f.str();
 
         rpcClient->call("rig.set_frequency", args,
@@ -161,7 +173,7 @@ void FLDigiFrame::sendCharacters(const QString &s, int mfreq)
     {
         if (mode == RY)
         {
-            args << mfreq + 170/2;
+            args << mfreq + RttyMSGap/2;
         }
         else
         {
@@ -204,7 +216,7 @@ void FLDigiFrame::sendMode(QString m)
     if (m == RY)
     {
         mode = RY;
-        carrierOffsetFromMark = 170/2;
+        carrierOffsetFromMark = RttyMSGap/2;
 
         QVariantList args;
 

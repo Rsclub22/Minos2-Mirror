@@ -121,6 +121,18 @@ EngineWindow::~EngineWindow()
 {
     delete ui;
 }
+
+int EngineWindow::getRttyOffset()
+{
+    int rttyOffset = rigCache.getDetails(getSelectedRadio()).getRttyOffset().getValue();
+    return rttyOffset;
+}
+
+int EngineWindow::getPSKOffset()
+{
+    int pskOffset = rigCache.getDetails(getSelectedRadio()).getPskOffset().getValue();
+    return pskOffset;
+}
 void EngineWindow::startEngine()
 {
     if (engineName.contains(mmvari))
@@ -278,7 +290,18 @@ void EngineWindow::on_notify(AnalysePubSubNotify an, const QString /*from*/ )
         }
         else if ( an.getCategory() == rpcConstants::rigDetailsCategory)
         {
+            int rttyOffset = rigCache.getDetails(getSelectedRadio()).getRttyOffset().getValue();
+            int pskOffset = rigCache.getDetails(getSelectedRadio()).getPskOffset().getValue();
             rigCache.setDetailsString(an);
+            int rttyOffset1 = rigCache.getDetails(getSelectedRadio()).getRttyOffset().getValue();
+            int pskOffset1 = rigCache.getDetails(getSelectedRadio()).getPskOffset().getValue();
+
+            if (rttyOffset != rttyOffset1 ||  pskOffset != pskOffset1)
+            {
+                // offsets have changed, so we need to tell the engines
+                emit rigModeFreq(rigMode, rigFreq);
+
+            }
         }
         else if ( an.getCategory() == rpcConstants::rigControlCategory && an.getKey() == rpcConstants::rigControlRadioList )
         {
@@ -288,10 +311,6 @@ void EngineWindow::on_notify(AnalysePubSubNotify an, const QString /*from*/ )
 
             QStringList cb = populateRig();
             comboSetUniqueNames(cb, ui->mainRigComboBox);
-
-//            ui->mainRigComboBox->clear();
-//            ui->mainRigComboBox->addItems(cb);
-//            ui->mainRigComboBox->setCurrentText(mainRig.toString());
         }
 
         RigState &selState = rigCache.getState(mainRig);
@@ -608,7 +627,7 @@ void EngineWindow::scanLine(int curLine) {
                     {
                         QStringList words2 = w.split('/');
                         int woffset = offset;
-                        for(const auto &w:words2)
+                        for(const auto &w:QASCONST(words2))
                         {
                             RXChar *r1 = rline->getCharRef(woffset);
                             if (isPureNumeric(w))

@@ -304,6 +304,8 @@ private:
     void doBandmapSaveFreq(bool PbClicked);
 
     bool isRunMode();
+    void setTxReadOnly(bool isNotEdit);
+    
 signals:
     void QSOFrameCancelled();
     void sendBandMap( Frequency freq, QString call, QString utc, QString loc, QString qth );

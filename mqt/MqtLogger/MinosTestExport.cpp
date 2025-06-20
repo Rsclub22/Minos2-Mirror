@@ -238,7 +238,8 @@ void MinosTestExport::exportStation(QSharedPointer<QFile> expfd )
    }
    if (ct->antennaName.isDirty())
    {
-        st->addMember( ct->antennaName.getValue().toString(), "rotatorName");
+        QString antName = ct->antennaName.getValue().toString();
+        st->addMember( antName, "rotatorName");
         dirty = true;
    }
 

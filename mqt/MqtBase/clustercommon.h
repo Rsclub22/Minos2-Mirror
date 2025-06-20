@@ -72,46 +72,29 @@ const int DXPROPMODE = 12;
 const int TTLVALUE = 13;
 
 
-// Cluster Data and View Columns
+// Cluster View Columns
 
-const int TIME_COL_NUM = 0;
-const int FREQ_COL_NUM = 1;
-const int DXSPOT_CALL_COL_NUM = 2;
-const int DXSPOT_CALL_WORKED_COL_NUM = 3;
+const int RXTIME_COL_NUM = 0;
+
+const int TIME_COL_NUM = 1;
+const int FREQ_COL_NUM = 2;
+const int DXSPOT_CALL_COL_NUM = 3;
 const int DXSPOT_MODE_COL_NUM = 4;
 const int DXLOC_COL_NUM = 5;
-const int DXLOC_FROM_NODE_FLAG_COL_NUM = 6;
-const int DXDIST_COL_NUM = 7;
-const int DXBRG_COL_NUM = 8;
-const int DXLOC_WORKED_COL_NUM = 9;
-const int SPOTTER_CALL_COL_NUM = 10;
-const int SPOTTER_LOC_COL_NUM = 11;
-const int COMMENT_COL_NUM = 12;
-const int DXBANDSTR_COL_NUM = 13;
-const int DXSPOT_TO_MEMORY_FLAG_COL_NUM = 14;
-const int DXSPOT_PROP_MODE_COL_NUM = 15;
-const int RXTIME_COL_NUM = 16;
-const int DATE_COL_NUM = 17;
-const int DATE_TIME_COL_NUM = 18;
-const int DXCLUSTER_SHOW_SPOT_TYPE = 19;
+const int DXDIST_COL_NUM = 6;
+const int DXBRG_COL_NUM = 7;
+const int SPOTTER_CALL_COL_NUM = 8;
+const int SPOTTER_LOC_COL_NUM = 9;
+const int COMMENT_COL_NUM = 10;
 
-const int bandmapColCount = 28;
-
-const int SPOT_TYPE_COL_NUM = 20;       // used in bandmap
-const int SPOT_IS_SELECTED_COL_NUM = 21;    // used in bandmap
-const int ROT_BEARING_COL_NUM = 22;     // used in bandmap
-const int ROT_CONNECTED_COL_NUM = 23;   // used in bandmap
-const int RUN_MODE_ON_COL_NUM = 24;     // used in bandmap
-const int OFF_RUN_FREQ_COL_NUM = 25;    // used in bandmap
-const int CQ_RESPONSE_COL = 26;    // used in bandmap
-const int DX_DISTRICT_COL_NUM = 27;   // used in bandmap
-const int DX_DISTRICT_WORKED_COL_NUM = 28; // used in bandmap
+const int dxSpotColCount = 11;
 
 inline const QString SPOT_TX_ON = "TxSpotOn";
 inline const QString SPOT_TX_OFF = "TxSpotOff";
 
 const QChar SPOT_DATA_SEPERATOR = ':';
-// Only locators in Europe
+// Only locators in Europe - why???
+// And not all of these are used
 // use [I-Li-l][P-Lp-l] here??
 inline const QRegularExpression FULL_LOC_EXP = QRegularExpression("[I,i,J,j,K,k,L,l][P,p,O,o,N,n,M,m,L,l]\\d\\d[A-Za-z][A-Za-z]");
 inline const QRegularExpression PART_LOC_EXP = QRegularExpression("[I,i,J,j,K,k,L,l][P,p,O,o,N,n,M,m,L,l]\\d\\d\\W");

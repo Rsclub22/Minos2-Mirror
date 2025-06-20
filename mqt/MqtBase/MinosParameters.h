@@ -39,6 +39,8 @@ class MinosParameters
       virtual int getMagneticVariation() = 0;
       virtual void getDisplayColumnWidth( const QString &key, int &val, int def ) = 0;
       virtual void setDisplayColumnWidth( const QString &key, int val ) = 0;
+      virtual void getBoolDisplayProfile(int enumkey, bool &value, bool def) = 0;
+
       virtual void getBoolDisplayProfile( int enumkey, bool &value ) = 0;
       virtual void setBoolDisplayProfile( int enumkey, bool value ) = 0;
       virtual void getIntDisplayProfile(int enumkey, int &value) = 0;
@@ -78,6 +80,7 @@ class MinosParametersAdapter : public MinosParameters
       virtual int getMagneticVariation() override;
       virtual void getDisplayColumnWidth( const QString &key, int &val, int def ) override;
       virtual void setDisplayColumnWidth( const QString &key, int val ) override;
+      virtual void getBoolDisplayProfile( int enumkey, bool &value, bool def ) override;
       virtual void getBoolDisplayProfile( int enumkey, bool &value ) override;
       virtual void setBoolDisplayProfile( int enumkey, bool value ) override;
       virtual void getIntDisplayProfile(int enumkey, int &value) override;

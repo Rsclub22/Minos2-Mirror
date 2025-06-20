@@ -190,7 +190,6 @@ QString RigState::pack() const
     jv.insert(rpcConstants::rigPttState, pttState().getValue());
     jv.insert(rpcConstants::rigPttOnOff, getPttOnOff().getValue());
 
-
     QJsonDocument json(jv);
 
     QString message(json.toJson(QJsonDocument::Compact));
@@ -222,7 +221,6 @@ void RigState::unpack(QString s)
         _ritRadioStatus.setValue(json.object().value(rpcConstants::rigRitRadioStatus).toBool());
         _pttState.setValue(json.object().value(rpcConstants::rigPttState).toBool());
         _setPttOnOff.setValue(json.object().value(rpcConstants::rigPttOnOff).toBool());
-
     }
     else
     {

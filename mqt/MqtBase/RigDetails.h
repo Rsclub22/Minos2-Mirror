@@ -35,6 +35,8 @@ class RigDetails
     MinosItem<bool> _rigVoiceKeyerMessageSupportStop;
     MinosItem<bool> _rigCwKeyerMessageSupportStop;
     MinosItem<QString> _rigModel;
+    MinosItem<int> _rttyOffset;
+    MinosItem<int> _pskOffset;
 
 
 public:
@@ -67,6 +69,8 @@ public:
     MinosItem<bool> rigVoiceKeyerMessageSupportStop() const;
     MinosItem<bool> rigCwKeyerMessageSupportStop() const;
     MinosItem<QString> rigModel() const;
+    MinosItem<int> getRttyOffset() const;
+    MinosItem<int> getPskOffset() const;
 
 
     void setSelected(const QString &loggeruuid, const QString &selected);
@@ -87,9 +91,8 @@ public:
     void setRigCwKeyerMessageSupportStop(bool supportStop);
     void setRigModel(QString);
 
-
-
-
+    void setRttyOffset(int f);
+    void setPskOffset(int f);
 };
 
 

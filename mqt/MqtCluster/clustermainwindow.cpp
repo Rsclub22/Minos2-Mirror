@@ -263,18 +263,10 @@ void ClusterMainWindow::doStartup()
     dxSpotView->setColumnHidden(COMMENT_COL_NUM, false);
 
     // hide these columns
+    dxSpotView->setColumnHidden(RXTIME_COL_NUM, true);  // used for sorting
     dxSpotView->setColumnHidden(DXBRG_COL_NUM, true);
-    dxSpotView->setColumnHidden(DXSPOT_TO_MEMORY_FLAG_COL_NUM, true);
-    dxSpotView->setColumnHidden(DXSPOT_CALL_WORKED_COL_NUM, true);
-    dxSpotView->setColumnHidden(DXLOC_WORKED_COL_NUM, true);
     dxSpotView->setColumnHidden(DXDIST_COL_NUM, true);
-    dxSpotView->setColumnHidden(RXTIME_COL_NUM, true);
-    dxSpotView->setColumnHidden(DXSPOT_PROP_MODE_COL_NUM, true);
-    dxSpotView->setColumnHidden(DXBANDSTR_COL_NUM, true);
-    dxSpotView->setColumnHidden(DATE_COL_NUM, true);
-    dxSpotView->setColumnHidden(DXLOC_FROM_NODE_FLAG_COL_NUM, true);
-    dxSpotView->setColumnHidden(DATE_TIME_COL_NUM, true);
-    dxSpotView->setColumnHidden(DXCLUSTER_SHOW_SPOT_TYPE, true);
+    dxSpotView->setColumnHidden(SPOTTER_LOC_COL_NUM, true);
 
 
 
@@ -1349,7 +1341,8 @@ void ClusterMainWindow::resendAllSpotsToClients(ResendSpotCommand cmd)
     {
         for (int row = 0; row < dxSpotDataModel->rowCount(); row ++)
         {
-            QString bandMask = dxSpotDataModel->data(dxSpotDataModel->index(row, DXBANDSTR_COL_NUM), DataStoredRole).toString();
+            QSharedPointer<ClusterSpotData> pSpot = dxSpotDataModel->getSpotData(row);
+            QString bandMask = pSpot->getBand();
             QString bandType = getBandType(bandMask);
             if (bandType == NO_BANDTYPE)
             {
@@ -3014,8 +3007,9 @@ bool DxSpotSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelInd
 
     if (traceDebugFlag)
     {
+        QSharedPointer<ClusterSpotData> pSpot = dynamic_cast<DxSpotDataModel *>(sourceModel())->getSpotData(sourceRow);
         trace(QString("filterAcceptsRow: callsign = %1, matchBand = %2")
-            .arg(sourceModel()->data(sourceModel()->index(sourceRow, DXSPOT_CALL_COL_NUM), DataStoredRole).toString(),
+            .arg(pSpot->getDxCallStr(),
             match_band ? "True" : "False"));
    }
     return match_band;
@@ -3023,8 +3017,9 @@ bool DxSpotSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelInd
 
 bool DxSpotSortFilterProxyModel::matchBand(int sourceRow) const
 {
+    QSharedPointer<ClusterSpotData> pSpot = dynamic_cast<DxSpotDataModel *>(sourceModel())->getSpotData(sourceRow);
 
-    QString band = sourceModel()->data(sourceModel()->index(sourceRow, DXBANDSTR_COL_NUM), DataStoredRole).toString();
+    QString band = pSpot->getBand();
     if (traceDebugFlag)
     {
         trace(QString("matchBand: band = %1").arg(band));
@@ -3080,10 +3075,12 @@ void ClusterMainWindow::purgeSpots()
            int idx = dxSpotDataModel->rowCount() - 1;
            while (idx >= 0 && dxSpotDataModel->rowCount() > 0)
            {
-               if (spotTimedOut(dxSpotDataModel->data(dxSpotDataModel->index(idx, RXTIME_COL_NUM), DataStoredRole).toLongLong(), setupCluster->getTimeToLive().toLongLong() * 60))
+               QSharedPointer<ClusterSpotData> pSpot = dxSpotDataModel->getSpotData(idx);
+
+               if (spotTimedOut(pSpot->getRxTime(), setupCluster->getTimeToLive().toLongLong() * 60))
                {
                    dxSpotDataModel->removeRows(idx, 1, QModelIndex());
-                   trace(QString("purged spot = %1").arg(dxSpotDataModel->data(dxSpotDataModel->index(idx, DXSPOT_CALL_COL_NUM), DataStoredRole).toString()));
+                   trace(QString("purged spot = %1").arg(pSpot->getDxCallStr()));
                }
                idx--;
            }

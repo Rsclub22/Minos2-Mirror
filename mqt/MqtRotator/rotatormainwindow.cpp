@@ -1493,8 +1493,6 @@ void RotatorMainWindow::rotatingTimer()
 
 void RotatorMainWindow::checkMoving(int bearing)
 {
-
-    static int oldBearing;
     logMessage(QString("Check Moving, old bearing = %1, rotator bearing = %2").arg(oldBearing).arg(bearing));
 
     if (!moving)
@@ -1509,7 +1507,11 @@ void RotatorMainWindow::checkMoving(int bearing)
 
     int tolerance = setupAntenna->currentAntenna.nearStopTolerance;
 
-    if (bearing == targetBearing)
+    //With e.g. Spid first bearing returned is target, so we must ignore that
+    // first time round, oldBearing will be 0
+
+    // This can cause problems if the target bearing is 0 as well
+    if (oldBearing == bearing && bearing == targetBearing)
     {
         logMessage(QString("Rotator is on target"));
         stopButton();
@@ -1664,6 +1666,7 @@ void RotatorMainWindow::rotateTo(int bearing)
             }
 
             targetBearing = rotateTo;
+            oldBearing = COMPASS_ERROR;
             retCode = rotator->rotate_to_bearing(rotateTo);
             if (retCode < 0)
             {
@@ -2004,6 +2007,7 @@ void RotatorMainWindow::rotateCW(bool /*clicked*/)
                 if (setupAntenna->currentAntenna.supportCwCcwCmd)
                 {
                     logMessage(QString("Send CW rotator command, rotator speed = %1").arg(QString::number(rotator->get_rotatorSpeed())));
+                    oldBearing = COMPASS_ERROR;
                     retCode = rotator->rotateClockwise(rotator->get_rotatorSpeed());
                 }
                 else
@@ -2015,6 +2019,7 @@ void RotatorMainWindow::rotateCW(bool /*clicked*/)
                         bearing -=  1;  // some rotators change 360 to 0, but we want max here
                     }
 
+                    oldBearing = COMPASS_ERROR;
                     retCode = rotator->rotate_to_bearing(bearing);
                     logMessage(QString("Send rotate to maxAzimuth, instead of CW rotator command, maxAzimuth = %1").arg(QString::number(bearing)));
 
@@ -2115,11 +2120,13 @@ void RotatorMainWindow::rotateCCW(bool /*toggle*/)
                 if (setupAntenna->currentAntenna.supportCwCcwCmd)
                 {
                     logMessage(QString("Send CCW rotator command, rotator speed = " + QString::number(rotator->get_rotatorSpeed())));
+                    oldBearing = COMPASS_ERROR;
                     retCode = rotator->rotateCClockwise(rotator->get_rotatorSpeed());
                 }
                 else
                 {
 
+                    oldBearing = COMPASS_ERROR;
                     logMessage(QString("Send rotate to minAzimuth, instead of CCW rotator command, minAzimuth = %1").arg(QString::number(setupAntenna->currentAntenna.min_azimuth)));
                     retCode = rotator->rotate_to_bearing(setupAntenna->currentAntenna.min_azimuth + 1); // +1 for Spid Rotator
                 }
@@ -3448,6 +3455,7 @@ void RotatorMainWindow::skyScanRotateTo(int rotateToBearing)
             }
 
             targetBearing = rotateToBearing;
+            oldBearing = COMPASS_ERROR;
             retCode = rotator->rotate_to_bearing(rotateToBearing);
             if (retCode < 0)
             {

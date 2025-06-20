@@ -49,7 +49,10 @@ bool RigDetails::isDirty() const
             _cwMemType.isDirty() ||
            _rigVoiceKeyerMessageSupportStop.isDirty() ||
            _rigCwKeyerMessageSupportStop.isDirty() ||
-           _rigModel.isDirty();
+           _rigModel.isDirty() ||
+            _rttyOffset.isDirty() ||
+            _pskOffset.isDirty()
+        ;
 
 
 }
@@ -71,8 +74,8 @@ void RigDetails::clearDirty()
     _rigVoiceKeyerMessageSupportStop.clearDirty();
     _rigCwKeyerMessageSupportStop.clearDirty();
     _rigModel.clearDirty();
-
-
+    _rttyOffset.clearDirty();
+    _pskOffset.clearDirty();
 }
 void RigDetails::setDirty()
 {
@@ -92,9 +95,8 @@ void RigDetails::setDirty()
     _rigVoiceKeyerMessageSupportStop.setDirty();
     _rigCwKeyerMessageSupportStop.setDirty();
     _rigModel.setDirty();
-
-
-
+    _rttyOffset.setDirty();
+    _pskOffset.setDirty();
 }
 
 void RigDetails::setSelected(const QString &loggeruuid, const QString &selected)
@@ -175,6 +177,14 @@ void RigDetails::setRigModel(QString rigModel)
     _rigModel.setValue(rigModel);
 }
 
+void RigDetails::setRttyOffset(int f)
+{
+    _rttyOffset.setValue(f);
+}
+void RigDetails::setPskOffset(int f)
+{
+    _pskOffset.setValue(f);
+}
 
 
 QString RigDetails::pack() const
@@ -198,6 +208,8 @@ QString RigDetails::pack() const
     jv.insert(rpcConstants::rigVoiceKeyerMessageSupportStop, rigVoiceKeyerMessageSupportStop().getValue());
     jv.insert(rpcConstants::rigCwKeyerMessageSupportStop, rigCwKeyerMessageSupportStop().getValue());
     jv.insert(rpcConstants::rigRigModel, rigModel().getValue());
+    jv.insert(rpcConstants::rigRttyOffset, getRttyOffset().getValue());
+    jv.insert(rpcConstants::rigPSKOffset, getPskOffset().getValue());
 
     QJsonDocument json(jv);
 
@@ -229,6 +241,8 @@ void RigDetails::unpack(QString s)
         _rigVoiceKeyerMessageSupportStop.setValue(json.object().value(rpcConstants::rigVoiceKeyerMessageSupportStop).toBool());
         _rigCwKeyerMessageSupportStop.setValue(json.object().value(rpcConstants::rigCwKeyerMessageSupportStop).toBool());
         _rigModel.setValue(json.object().value(rpcConstants::rigRigModel).toString());
+        _rttyOffset.setValue(json.object().value(rpcConstants::rigRttyOffset).toInt());
+        _pskOffset.setValue(json.object().value(rpcConstants::rigPSKOffset).toInt());
     }
     else
     {
@@ -310,3 +324,11 @@ MinosItem<QString> RigDetails::rigModel() const
     return _rigModel;
 }
 
+MinosItem<int> RigDetails::getRttyOffset() const
+{
+    return _rttyOffset;
+}
+MinosItem<int> RigDetails::getPskOffset() const
+{
+    return _pskOffset;
+}

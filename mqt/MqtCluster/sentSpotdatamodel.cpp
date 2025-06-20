@@ -50,6 +50,7 @@ QVariant SentSpotDataModel::headerData(int section, Qt::Orientation orientation,
                     return tr("Comment");
                 case SENT_SPOT_STATUS_COL_NUM:
                     return tr("Status");
+//const int SENT_SPOT_RXTIME_COL_NUM = 6;
                 case SENT_SPOT_REASON_COL_NUM:
                     return tr("Reason");
                 default:
@@ -152,6 +153,7 @@ QVariant SentSpotDataModel::data(const QModelIndex &index, int role) const
                 }
 
             break;
+//const int SENT_SPOT_RXTIME_COL_NUM = 6;
             case SENT_SPOT_REASON_COL_NUM:
                 d = sentSpot->reason;
             break;
@@ -162,103 +164,8 @@ QVariant SentSpotDataModel::data(const QModelIndex &index, int role) const
         return d;
     }
 
-    if (role == SentDataStoredRole)
-    {
-
-        SentSpotData* sentSpot = sentSpotData.at(index.row());
-
-        QVariant d;
-        switch (col)
-        {
-            case SENT_SPOT_TIME_COL_NUM:
-                d = sentSpot->spotTime;
-            break;
-            case SENT_SPOT_FREQ_STR_COL_NUM:
-                d.setValue(sentSpot->dxFreq);
-            break;
-            case SENT_SPOT_DXSPOT_CALL_COL_NUM:
-                d = sentSpot->dxCall;
-            break;
-            case SENT_SPOT_DXLOC_COL_NUM:
-                d = sentSpot->dxLocator;
-            break;
-            case SENT_SPOT_COMMENT_COL_NUM:
-                d = sentSpot->spotComment;
-            break;
-            case SENT_SPOT_STATUS_COL_NUM:
-                d = sentSpot->sentOk ;
-            break;
-            case SENT_SPOT_RXTIME_COL_NUM:
-                d = sentSpot->rxTime;
-            break;
-            case SENT_SPOT_REASON_COL_NUM:
-                d = sentSpot->reason;
-            break;
-
-
-        }
-
-        return d;
-    }
-
     return QVariant();
 }
-
-
-bool SentSpotDataModel::setData(const QModelIndex & index, const QVariant & value, int role)
-{
-
-    int row = index.row();
-    int col = index.column();
-
-    if (index.isValid() && role == SentDataStoredRole)
-    {
-
-        SentSpotData* sentSpot = sentSpotData.value(row);
-
-        switch (col)
-        {
-            case SENT_SPOT_TIME_COL_NUM :
-                sentSpot->spotTime = value.toString();
-            break;
-            case SENT_SPOT_FREQ_STR_COL_NUM:
-                sentSpot->dxFreq = qvariant_cast<Frequency>(value);
-            break;
-            case SENT_SPOT_DXSPOT_CALL_COL_NUM:
-                sentSpot->dxCall = value.toString();
-            break;
-            case SENT_SPOT_DXLOC_COL_NUM:
-                sentSpot->dxLocator = value.toString();
-            break;
-            case SENT_SPOT_COMMENT_COL_NUM:
-                sentSpot->spotComment = value.toString();
-                break;
-            case SENT_SPOT_STATUS_COL_NUM:
-                sentSpot->sentOk = value.toBool();
-            break;
-            case SENT_SPOT_REASON_COL_NUM:
-                sentSpot->reason = value.toString();
-            break;
-
-
-            default:
-                return false;
-
-        }
-
-
-        // sentSpotData.replace(row, sentSpot); // not needed
-        emit dataChanged(index, index);
-
-
-            return true;
-    }
-
-
-        return false;
-}
-
-
 
 // NOTE! This needs modification of the for loop and rowData to trully support multiple rows!!
 bool SentSpotDataModel::insertRows(int row, int count, const QModelIndex &index)

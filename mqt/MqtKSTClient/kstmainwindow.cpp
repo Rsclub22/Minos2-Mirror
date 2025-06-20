@@ -1,6 +1,7 @@
 #include <QHostInfo>
 #include <QSettings>
 #include <QKeyEvent>
+#include <QFileDialog>
 
 #include "QtUtils.h"
 #include "RPCCommandConstants.h"
@@ -22,6 +23,7 @@
 #include "MinosLoggerEvents.h"
 #include "kstmainwindow.h"
 #include "remotelogs.h"
+#include "MinosParameters.h"
 #include "ui_kstmainwindow.h"
 
 QStringList services =
@@ -334,6 +336,7 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     }
     started = true;
 
+
     if (autoConnect)
         doLoginChanges();
 
@@ -559,12 +562,14 @@ void KSTMainWindow::onReadyRead()
     QByteArray b = kstclient->readAll();
     QString msg = QString(b);
 
+    QChar addTraceChar = '!';
     QString traceMsg = msg.remove("\r");
     if (traceMsg.endsWith("\n"))
     {
         traceMsg.chop(1);
+        addTraceChar = '*';
     }
-    trace(QString("KSTMainWindow::messageRx: %1").arg(traceMsg));
+    trace(QString("KSTMainWindow::messageRx: %1").arg("*****" + traceMsg) + "***" + addTraceChar);
 
     // break into lines...
     msgbuf.append(msg);
@@ -651,8 +656,11 @@ int KSTMainWindow::getASTimeout() const
 
 void KSTMainWindow::sendKST(QString msg)
 {
-    kstclient->write((msg + "\r\n").toLocal8Bit());
-    trace("Send to KST: " + msg);
+    if (!KSTImportFile.isOpen())
+    {
+        kstclient->write((msg + "\r\n").toLocal8Bit());
+        trace("Send to KST: " + msg);
+    }
 }
 void KSTMainWindow::checkAwayButton()
 {
@@ -679,6 +687,15 @@ void KSTMainWindow::addMessage(QSharedPointer<KstMessageLine> kst)
     if (user)
     {
         user->messageCount++;
+    }
+    else
+    {
+        QString user = userName.getFullCall();
+        if (!user.isEmpty() && user != "SERVER")
+        {
+            // NB we can get messages before we see the UA5 announcing them
+            trace(QString("User %1 not found in chat %2").arg(user).arg(kst->chat));
+        }
     }
 }
 void KSTMainWindow::checkUserMessages(QSharedPointer<KstUser> user)
@@ -931,7 +948,6 @@ void KSTMainWindow::analyseKstMessage(QString atj)
             test->recent = true;
         
         if (!callMap.contains(*test.data()))
-//        if (!std::binary_search(callVector->begin(), callVector->end(), test, KstUserCompare))
         {
             QSharedPointer<CountrySynonym> syn = MultLists::getMultLists()->searchCountrySynonym ( test->call.locCtryPrefix );
             if ( syn )
@@ -1028,13 +1044,13 @@ void KSTMainWindow::analyseKstMessage(QString atj)
         if (istate & 2)
             test->recent = true;
 
-        QVector<QSharedPointer<KstUser> >::const_iterator l = std::lower_bound(callVector->begin(), callVector->end(), test, KstUserCompare);
+        QVector<QSharedPointer<KstUser> >::const_iterator l = std::lower_bound(callVector->constBegin(), callVector->constEnd(), test, KstUserCompare);
         if (l != callVector->constEnd() && l->data()->call == test->call && l->data()->chat == test->chat)
         {
             // as it should be...
             l->data()->away = test->away;
             l->data()->recent = test->recent;
-            int row = l - callVector->begin();
+            int row = l - callVector->constBegin();
             emit kstCallModel.dataChanged(kstCallModel.index(row, 0), kstCallModel.index(row, kstCallModel.columnCount() - 1));
         }
     }
@@ -1057,7 +1073,7 @@ void KSTMainWindow::analyseKstMessage(QString atj)
         if (istate & 2)
             test->recent = true;
 
-        QVector<QSharedPointer<KstUser> >::const_iterator l = std::lower_bound(callVector->begin(), callVector->end(), test, KstUserCompare);
+        QVector<QSharedPointer<KstUser> >::const_iterator l = std::lower_bound(callVector->constBegin(), callVector->constEnd(), test, KstUserCompare);
         if (l != callVector->constEnd() && l->data()->call == test->call && l->data()->chat == test->chat)
         {
             // as it should be...
@@ -1066,7 +1082,7 @@ void KSTMainWindow::analyseKstMessage(QString atj)
             l->data()->away = test->away;
             l->data()->recent = test->recent;
             l->data()->distance = -1;   // force recalc
-            int row = l - callVector->begin();
+            int row = l - callVector->constBegin();
             emit kstCallModel.dataChanged(kstCallModel.index(row, 0), kstCallModel.index(row, kstCallModel.columnCount() - 1));
 
         }
@@ -1082,17 +1098,18 @@ void KSTMainWindow::analyseKstMessage(QString atj)
         test->chat = sl[1].toInt();
         test->call.setFullCall(sl[2]);
 
-        QVector<QSharedPointer<KstUser> >::const_iterator l = std::lower_bound(callVector->begin(), callVector->end(), test, KstUserCompare);
+        QVector<QSharedPointer<KstUser> >::const_iterator l = std::lower_bound(callVector->constBegin(), callVector->constEnd(), test, KstUserCompare);
         if (l != callVector->constEnd() && l->data()->call == test->call && l->data()->chat == test->chat)
         {
             // as it should be...
 
             // if we remove the last row then the call model
             // is one short as we have already removed it from the vector
-            int row = l - callVector->begin();
+            int row = l - callVector->constBegin();
 
             kstCallModel.removeRow(row);
             callVectorChanged = true;
+            callMap.remove(*test.data());
         }
     }
 
@@ -1128,7 +1145,8 @@ void KSTMainWindow::analyseKstMessage(QString atj)
             kstCallModel.insertRow(row, test);
             callVectorChanged = true;
 
-            callMap[*test.data()] = test;
+            // NB callMap and callVector are different!
+            callMap[*test.data()] = test; // should already have happened
             QSharedPointer<KstUser> user = getUser(*test.data());
             checkUserMessages(user);
         }
@@ -1719,9 +1737,9 @@ void KSTMainWindow::on_sortIndicatorChanged(int /*logicalIndex*/, Qt::SortOrder 
 
 void KSTMainWindow::setDefaultButton(QPushButton *d)
 {
+    ui->loggerXferButton->setDefault(false);
     if (d)
     {
-        ui->loggerXferButton->setDefault(false);
         ui->meepButton->setDefault(false);
         ui->genmsgButton->setDefault(false);
 
@@ -1730,13 +1748,11 @@ void KSTMainWindow::setDefaultButton(QPushButton *d)
     else
         if (ui->callEdit->text().isEmpty())
         {
-            ui->loggerXferButton->setDefault(false);
             ui->meepButton->setDefault(false);
             ui->genmsgButton->setDefault(true);
         }
         else
             {
-                ui->loggerXferButton->setDefault(false);
                 ui->genmsgButton->setDefault(false);
                 ui->meepButton->setDefault(true);
             }
@@ -1954,15 +1970,6 @@ QSharedPointer<KstUser> KSTMainWindow::getUser(const KstUser &test)
     {
         return callMap[test];
     }
-    // QSharedPointer<KstUser> test1(new KstUser(test));
-    // if (std::binary_search(callVector->begin(), callVector->end(), test1, KstUserCompare))
-    // {
-    //     int row = (std::lower_bound(callVector->begin(), callVector->end(), test1, KstUserCompare ) - callVector->begin());
-
-    //     QSharedPointer<KstUser> user = callVector->at(row);
-
-    //     return user;
-    // }
     return QSharedPointer<KstUser>();
 }
 void KSTMainWindow::on_showMPath_clicked()
@@ -2147,3 +2154,113 @@ void KSTMainWindow::on_inactiveCallscb_stateChanged(int)
 }
 
 
+
+void KSTMainWindow::on_KSTTestButton_clicked()
+{
+    if (KSTexpFile)
+    {
+        KSTexpFile->close();
+    }
+
+    if (!KSTImportFile.isOpen())
+    {
+        QString dpath = "mqtKSTClient_*";
+
+        QString InitialDir = GetCurrentDir() + "/TraceLog/" + dpath;
+
+        QString Filter = tr("KST Test data Files") + " (*.txt);;" +
+                         tr("All Files") + " (*.*)" ;
+
+        QString baseFileName = QFileDialog::getOpenFileName( this,
+                                                            tr("KST Client log files Files"),
+                                                            InitialDir,                   // opendir
+                                                            Filter );
+
+        if ( !baseFileName.isEmpty() )
+        {
+            KSTImportFile.setFileName(baseFileName);
+            if (!KSTImportFile.open(QIODevice::ReadOnly))
+                return;
+
+            if (KSTImportFile.isOpen())
+            {
+                KSTImportStream.setDevice(&KSTImportFile);
+
+                connect(&KSTTestTimer, &QTimer::timeout, this, &KSTMainWindow::testTimeout, Qt::UniqueConnection);
+
+                msgbuf.clear();
+                inTestMsg = false;
+
+                KSTTestTimer.start(10);
+            }
+        }
+    }
+
+}
+
+void KSTMainWindow::testTimeout()
+{
+    if ( KSTImportFile.isOpen())
+    {
+        if (KSTImportStream.atEnd())
+        {
+            KSTImportFile.close();
+            return;
+        }
+        else
+        {
+            QString kline;
+
+            kline = KSTImportStream.readLine();
+
+            if (kline.isEmpty())
+            {
+                return;
+            }
+
+            //look for ***** in message, this message start
+            // Then look for **** or ***!
+            // If **** then add \n
+
+            int sline = kline.indexOf("*****");
+            if (sline >= 0)
+            {
+                kline = kline.mid(sline + 5);
+                inTestMsg = true;
+            }
+
+            int eline = kline.indexOf("****");
+            int eline2 = kline.indexOf("***!");
+            if (eline >= 0)
+            {
+                kline = kline.left(eline) + "\n";
+                msgbuf.append(kline);
+                inTestMsg = false;
+            }
+            else if (eline2 >= 0)
+            {
+                kline = kline.left(eline2);
+                msgbuf.append(kline);
+                inTestMsg = false;
+            }
+            if (inTestMsg)
+            {
+                msgbuf.append(kline + "\n");
+            }
+
+
+            // break into lines...
+
+            int p = msgbuf.indexOf("\n");
+            while (p >= 0)
+            {
+                QString m = msgbuf.left(p + 1);
+                msgbuf = msgbuf.mid(p + 1);
+                p = msgbuf.indexOf("\n");
+
+                trace(m);
+                analyseKstMessage(m);
+            }
+        }
+    }
+}

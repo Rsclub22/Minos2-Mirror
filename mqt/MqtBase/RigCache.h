@@ -100,6 +100,8 @@ public:
     void setRigCwKeyerSupportStopFlag(const PubSubName &name, bool supportStopCmd);
 
     void setCwTxMessage(const PubSubName &name, const QString &msg);
+    void setRttyOffset(const PubSubName &name, int f);
+    void setPskOffset(const PubSubName &name, int f);
 };
 
 #endif // RIGCACHE_H

@@ -123,6 +123,7 @@ void TSingleLogFrame::buildFrame(int slotNo)
     connect(FKHRigControlFrame, &RigControlFrame::ritStatus, this, &TSingleLogFrame::sendRadioRitStatus);
     connect(FKHRigControlFrame, &RigControlFrame::sendModeToControl, this, &TSingleLogFrame::sendRadioMode);
     connect(GJVQSOLogFrame, &QSOLogFrame::sendModeControl, this , &TSingleLogFrame::sendRadioMode);
+    connect(dmButtonFrame, &DMButtonFrame::sendFreqControl, this, &TSingleLogFrame::sendRadioFreq);
 
     // Rotator updates
     // From rotator controller
@@ -230,28 +231,25 @@ void TSingleLogFrame::createScreenComponents()
     txVmButtonsFrame->setObjectName(QStringLiteral("txVmButtonsFrame"));
     txVmButtonsFrame->setVisible(false);
 
+    FKHRigControlFrame = new RigControlFrame(this);
+    FKHRigControlFrame->setObjectName(QStringLiteral("FKHRigControlFrame"));
+    FKHRigControlFrame->setFrameShape(QFrame::StyledPanel);
+    FKHRigControlFrame->setFrameShadow(QFrame::Raised);
+    FKHRigControlFrame->setVisible(false);
+
     bandSwitchFrame = new BandSwitchFrame(this);
     bandSwitchFrame->setObjectName(QStringLiteral("bandSwitchFrame"));
     bandSwitchFrame->setVisible(false);
     bandSwitchFrame->setRigControl(FKHRigControlFrame);
 
-    FKHRigControlFrame = new RigControlFrame(this);
-    FKHRigControlFrame->setObjectName(QStringLiteral("FKHRigControlFrame"));
-    FKHRigControlFrame->setFrameShape(QFrame::StyledPanel);
-    FKHRigControlFrame->setFrameShadow(QFrame::Raised);
-
-
-
-    FKHRigControlFrame->setVisible(false);
-
-    FKHRotCompassFrame = new RotatorCompassFrame(this);
-    FKHRotCompassFrame->setObjectName(QStringLiteral("FKHRotCompassFrame"));
-    FKHRotCompassFrame->setVisible(false);
-
     runButtonsFrame = new RunButtonsFrame(this);
     runButtonsFrame->setObjectName(QStringLiteral("runButtonsFrame"));
     runButtonsFrame->setVisible(false);
     runButtonsFrame->setRigControl(FKHRigControlFrame);
+
+    FKHRotCompassFrame = new RotatorCompassFrame(this);
+    FKHRotCompassFrame->setObjectName(QStringLiteral("FKHRotCompassFrame"));
+    FKHRotCompassFrame->setVisible(false);
 
     qrzDisplayFrame = new QrzDisplayFrame(this);
     qrzDisplayFrame->setObjectName(QStringLiteral("qrzDisplayFrame"));
@@ -1903,6 +1901,7 @@ void TSingleLogFrame::updateFreq(Frequency f)
     runButtonsFrame->setFreq(f);
     GJVQSOLogFrame->setFreq(f);
     bandmapControlFrame->setFreq(f);
+    dmButtonFrame->setFreq(f);
 
     MinosLoggerEvents::SendRigFreqChanged(f, contest);
 }
