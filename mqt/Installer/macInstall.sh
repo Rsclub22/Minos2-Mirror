@@ -43,7 +43,7 @@ fi
 
 echo Current Dir: `pwd`
 
-  for j in TinyXML XMPPLib KeyerBase MqtBase MqtUtils MqtAppStarter MqtChat MqtCluster MqtControl MqtKeyer MqtKSTClient MqtLogger MqtMonitor MqtQrzServer MqtRigControl MqtRigSync MqtRigRecorder MqtRotator MqtServer
+  for j in TinyXML XMPPLib KeyerBase MqtBase MqtUtils MqtAppStarter MqtChat MqtCluster MqtControl MqtKeyer MqtKSTClient MqtLogger MqtMonitor MqtPcCwKeyer MqtQrzServer MqtRigControl MqtRigSync MqtRigRecorder MqtRotator MqtServer MqtWinkeyer
   do
     lrelease -verbose ../../mqt/${j}/${j}.pro
     if [ ! -d ${j}/translations ]; then
@@ -74,7 +74,7 @@ mkdir Docs
 
 for i in en_GB fr_FR
 do
-  for j in MqtAppStarter MqtChat MqtCluster MqtControl MqtKeyer MqtKSTClient MqtLogger MqtMonitor MqtQrzServer MqtRigControl MqtRigRecorder MqtRigSync MqtRotator MqtServer
+  for j in MqtAppStarter MqtChat MqtCluster MqtControl MqtKeyer MqtKSTClient MqtLogger MqtMonitor MqtPcCwKeyer MqtQrzServer MqtRigControl MqtRigRecorder MqtRigSync MqtRotator MqtServer MqtWinkeyer
   do
     lconvert -verbose -o Bin/translations/${j}_${i}.qm \
     $DIR/$BUILDDIR/${j}/translations/minos_${i}.qm \
@@ -88,7 +88,7 @@ done
 
 cp $QTDIR/translations/qt*.qm Bin/translations
 
-for j in MqtAppStarter MqtChat MqtCluster MqtControl MqtKeyer MqtKSTClient MqtMonitor MqtQrzServer MqtRigControl MqtRigRecorder MqtRigSync MqtRotator MqtServer
+for j in MqtAppStarter MqtChat MqtCluster MqtControl MqtKeyer MqtKSTClient MqtMonitor MqtPcCwKeyer MqtQrzServer MqtRigControl MqtRigRecorder MqtRigSync MqtRotator MqtServer MqtWinkeyer
 do
   cp -r $DIR/$BUILDDIR/${j}/${j}.app Bin
 done
@@ -101,7 +101,7 @@ cd MqtLogger.app/Contents
 
 sudo cp /usr/local/lib/libhamlib.4.dylib Frameworks
 
-for j in MqtAppStarter MqtChat MqtCluster MqtControl MqtKeyer MqtKSTClient MqtMonitor MqtQrzServer MqtRigControl MqtRigRecorder MqtRigSync MqtRotator MqtServer
+for j in MqtAppStarter MqtChat MqtCluster MqtControl MqtKeyer MqtKSTClient MqtMonitor MqtPcCwKeyer MqtQrzServer MqtRigControl MqtRigRecorder MqtRigSync MqtRotator MqtServer MqtWinkeyer
 do
   ln -s ../../../../Frameworks   Resources/Bin/${j}.app/Contents/Frameworks
   ln -s ../../../../Plugins      Resources/Bin/${j}.app/Contents/Plugins
@@ -109,7 +109,7 @@ done
 
 cd ../..
 
-for j in MqtAppStarter MqtChat MqtCluster MqtControl MqtKeyer MqtKSTClient MqtMonitor MqtQrzServer MqtRigControl MqtRigRecorder MqtRigSync MqtRotator MqtServer
+for j in MqtAppStarter MqtChat MqtCluster MqtControl MqtKeyer MqtKSTClient MqtMonitor MqtPcCwKeyer MqtQrzServer MqtRigControl MqtRigRecorder MqtRigSync MqtRotator MqtServer MqtWinkeyer
 do
     install_name_tool -change /usr/local/lib/libhamlib.4.dylib @executable_path/../Frameworks/libhamlib.4.dylib MqtLogger.app/Contents/Resources/Bin/${j}.app/Contents/MacOS/${j}
     install_name_tool -change $QTDIR/lib/QtWidgets.framework/Versions/A/QtWidgets @executable_path/../Frameworks/QtWidgets.framework/Versions/A/QtWidgets MqtLogger.app/Contents/Resources/Bin/${j}.app/Contents/MacOS/${j}

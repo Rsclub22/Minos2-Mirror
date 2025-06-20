@@ -43,7 +43,7 @@ if [ $retVal -ne 0 ]; then
     exit $retVal
 fi
 
-  for j in TinyXML XMPPLib KeyerBase MqtBase MqtUtils MqtAppStarter MqtChat MqtCluster MqtControl MqtDataModes MqtKeyer MqtKeyerProxy MqtKSTClient MqtLogger MqtMonitor MqtQrzServer MqtRigControl MqtRigSync MqtRigRecorder MqtRotator MqtServer
+  for j in TinyXML XMPPLib KeyerBase MqtBase MqtUtils MqtAppStarter MqtChat MqtCluster MqtControl MqtDataModes MqtKeyer MqtKeyerProxy MqtKSTClient MqtLogger MqtMonitor MqtPcCwKeyer MqtQrzServer MqtRigControl MqtRigSync MqtRigRecorder MqtRotator MqtServer MqtWinkeyer
   do
     lrelease -verbose ../../mqt/${j}/${j}.pro
     if [ ! -d ${j}/translations ]; then
@@ -71,7 +71,7 @@ mkdir Docs
 
 for i in en_GB fr_FR
 do
-  for j in MqtAppStarter MqtChat MqtCluster MqtControl MqtDataModes MqtKeyer MqtKeyerProxy MqtKSTClient MqtLogger MqtMonitor MqtQrzServer MqtRigControl MqtRigSync MqtRigRecorder MqtRotator MqtServer
+  for j in MqtAppStarter MqtChat MqtCluster MqtControl MqtDataModes MqtKeyer MqtKeyerProxy MqtKSTClient MqtLogger MqtMonitor MqtPcCwKeyer MqtQrzServer MqtRigControl MqtRigSync MqtRigRecorder MqtRotator MqtServer MqtWinkeyer
   do
     lconvert -verbose -o Bin/translations/${j}_${i}.qm \
     $DIR/$BUILDDIR/MqtUtils/translations/minos_${i}.qm \
@@ -84,7 +84,7 @@ do
 done
 cp /usr/share/qt5/translations/qt*.qm Bin/translations
 
-  for j in MqtAppStarter MqtChat MqtCluster MqtControl MqtDataModes MqtKeyer MqtKeyerProxy MqtKSTClient MqtLogger MqtMonitor MqtQrzServer MqtRigControl MqtRigSync MqtRigRecorder MqtRotator MqtServer
+  for j in MqtAppStarter MqtChat MqtCluster MqtControl MqtDataModes MqtKeyer MqtKeyerProxy MqtKSTClient MqtLogger MqtMonitor MqtPcCwKeyer MqtQrzServer MqtRigControl MqtRigSync MqtRigRecorder MqtRotator MqtServer MqtWinkeyer
   do
     cp $DIR/$BUILDDIR/${j}/${j} Bin
   done
