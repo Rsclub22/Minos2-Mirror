@@ -52,7 +52,10 @@ RotControlFrameBase::~RotControlFrameBase()
 void RotControlFrameBase::setContest(BaseContestLog *c)
 {
     ct = dynamic_cast<LoggerContestLog *>( c);
-    setRotatorList();
+    if (ct)
+    {
+        setRotatorList();
+    }
 }
 
 int RotControlFrameBase::getAngle(QString brgSt)

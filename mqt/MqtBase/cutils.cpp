@@ -832,6 +832,9 @@ void createColumnsMenu(QMenu &menu, QHeaderView *hdr, QWidget *p, std::function<
 }
 void comboSetUniqueNames(QStringList nameList, QComboBox *cb)
 {
+    int cbOldCount = cb->count();
+    QString current = cb->currentText();
+
     QVector<PubSubName> names;
 
     for(const auto &s: QASCONST(nameList))
@@ -887,13 +890,24 @@ void comboSetUniqueNames(QStringList nameList, QComboBox *cb)
         uniqueNames.append(uniqueName);
     }
 
-    cb->clear();
-    cb->addItem("", "");
+    if (cbOldCount > 1) // unless it is empty, we should always have the blank entry
+    {
+        cb->clear();
+    }
+    int cbCount = cb->count();
+    if (cbCount == 0)
+    {
+        cb->addItem("", "");
+    }
     for(int i = 0; i < names.count(); i++)
     {
         cb->addItem( uniqueNames[i], names[i].toString());
         cb->setItemData( i + 1, names[i].toString(), Qt::ToolTipRole );
 
+    }
+    if (cbOldCount > 0)
+    {
+        cb->setCurrentText(current);
     }
 }
 void clearLayout(QLayout *layout)
