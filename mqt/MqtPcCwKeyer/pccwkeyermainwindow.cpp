@@ -690,7 +690,7 @@ void PcCwKeyerMainWindow::closeEvent(QCloseEvent *event)
         cwKeyer->close();       // close the serial port
     }
 
-    event->accept();  // allow the window to close
+    QWidget::closeEvent(event);  // allow the window to close
 }
 
 void PcCwKeyerMainWindow::onCommandRead(QString cmd)
