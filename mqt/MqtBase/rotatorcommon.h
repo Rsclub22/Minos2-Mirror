@@ -188,10 +188,37 @@ inline const QString BUTTON_ON_STYLE = QString("background-color: Sandybrown ; b
 inline const QString BUTTON_OFF_STYLE = QString("background-color: Gainsboro ; border-style: outset; border-width: 1px; border-color: black; min-width: 5em; padding: 3px;\n");
 
 // SkyScan Rotation Direction Indicators
-//inline const QString SKYSCAN_DIRECTION_INDICATOR_ON = QString("background-color: orange ;\n");
-//inline const QString SKYSCAN_DIRECTION_INDICATOR_OFF = QString("");
-inline const QString SKYSCAN_DIRECTION_INDICATOR_ON = "QToolButton { background-color: orange; }";
-inline const QString SKYSCAN_DIRECTION_INDICATOR_OFF = "QToolButton { background-color: none; }";
+
+inline const QString SKYSCAN_DIRECTION_INDICATOR_ON = R"(
+    QToolButton {
+        background-color: orange;
+        border: 1px solid black;
+        border-radius: 4px;
+        padding: 4px;
+        color: black;
+    }
+    QToolButton:hover,
+    QToolButton:pressed,
+    QToolButton:checked {
+        background-color: orange;
+    }
+)";
+
+inline const QString SKYSCAN_DIRECTION_INDICATOR_OFF = R"(
+    QToolButton {
+        background-color: none;
+        border: 1px solid black;
+        border-radius: 4px;
+        padding: 4px;
+        color: black;
+    }
+    QToolButton:hover,
+    QToolButton:pressed,
+    QToolButton:checked {
+        background-color: none;
+    }
+)";
+
 
 
 extern const QStringList presetButtonLabels;

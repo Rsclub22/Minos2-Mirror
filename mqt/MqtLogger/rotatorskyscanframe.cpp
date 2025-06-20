@@ -30,6 +30,15 @@ RotatorSkyScanFrame::RotatorSkyScanFrame(QWidget *parent):
     skyScanVisible = false;
     ui->skyScanGroupBox->setEnabled(skyScanVisible);
 
+    ui->forwardScanTb->setFocusPolicy(Qt::NoFocus);                       // Prevent focus rect
+    ui->forwardScanTb->setAttribute(Qt::WA_TransparentForMouseEvents);    // Prevent interaction if it's just an indicator
+    ui->forwardScanTb->setStyleSheet(SKYSCAN_DIRECTION_INDICATOR_OFF);    // Initial OFF state
+
+    ui->reverseScanTb->setFocusPolicy(Qt::NoFocus);                       // Prevent focus rect
+    ui->reverseScanTb->setAttribute(Qt::WA_TransparentForMouseEvents);    // Prevent interaction if it's just an indicator
+    ui->reverseScanTb->setStyleSheet(SKYSCAN_DIRECTION_INDICATOR_OFF);    // Initial OFF state
+
+
     connect(ui->skyScanStartPb, &QPushButton::clicked, this, &RotatorSkyScanFrame::onSkyScanStartButtonClicked);
     connect(ui->skyScanStopPb, &QPushButton::clicked, this, &RotatorSkyScanFrame::onSkyScanStopButtonClicked);
 

@@ -219,6 +219,15 @@ RotatorMainWindow::RotatorMainWindow(QWidget *parent) :
     //setSkyScanEnableChkBoxEnabled(false);
     sendSkyScanTabVisibleToLogger(isSkyScanTabVisible());
 
+    ui->skyScanCwIndicator->setFocusPolicy(Qt::NoFocus);                       // Prevent focus rect
+    ui->skyScanCwIndicator->setAttribute(Qt::WA_TransparentForMouseEvents);    // Prevent interaction if it's just an indicator
+    ui->skyScanCwIndicator->setStyleSheet(SKYSCAN_DIRECTION_INDICATOR_OFF);
+
+    ui->skyScanCcwIndicator->setFocusPolicy(Qt::NoFocus);
+    ui->skyScanCcwIndicator->setAttribute(Qt::WA_TransparentForMouseEvents);
+    ui->skyScanCcwIndicator->setStyleSheet(SKYSCAN_DIRECTION_INDICATOR_OFF);
+
+
 
     //initialiseSkyScannerSpinners();
     skyScanControl = QSharedPointer<SkyScanControl>::create(this, parent);
