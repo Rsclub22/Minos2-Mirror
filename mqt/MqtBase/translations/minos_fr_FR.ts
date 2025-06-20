@@ -1365,7 +1365,7 @@
 <context>
     <name>Day Abbreviation</name>
     <message>
-        <location filename="../cutils.cpp" line="994"/>
+        <location filename="../cutils.cpp" line="1008"/>
         <source>D</source>
         <translation>J</translation>
     </message>
@@ -1629,6 +1629,19 @@ Attention: &quot;.&quot; pas &quot;,&quot;
         <location filename="../MatchThisFrame.cpp" line="72"/>
         <source>Press &quot;Yes&quot; to transfer details, or &quot;No&quot; to edit the QSO</source>
         <translation>Appuyez sur &quot;Oui&quot; pour transférer les détails ou sur &quot;Non&quot; pour modifier le QSO</translation>
+    </message>
+</context>
+<context>
+    <name>MinosCompass</name>
+    <message>
+        <location filename="../minoscompass.cpp" line="189"/>
+        <source>N,E,S,W</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../minoscompass.cpp" line="345"/>
+        <source>Stop</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2103,24 +2116,98 @@ Attention: &quot;.&quot; pas &quot;,&quot;
     </message>
 </context>
 <context>
+    <name>RotControlFrameBase</name>
+    <message>
+        <location filename="../rotControlFrameBase.cpp" line="191"/>
+        <source>Bearing empty or invalid</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rotControlFrameBase.cpp" line="205"/>
+        <source>Bearing too large - %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rotControlFrameBase.cpp" line="218"/>
+        <source>Bearing too small - %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rotControlFrameBase.cpp" line="443"/>
+        <location filename="../rotControlFrameBase.cpp" line="454"/>
+        <source>Turn</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rotControlFrameBase.cpp" line="467"/>
+        <location filename="../rotControlFrameBase.cpp" line="478"/>
+        <source>(CCW) Left</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rotControlFrameBase.cpp" line="488"/>
+        <location filename="../rotControlFrameBase.cpp" line="498"/>
+        <source>(CW) Right</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rotControlFrameBase.cpp" line="561"/>
+        <location filename="../rotControlFrameBase.cpp" line="648"/>
+        <source>Connected</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rotControlFrameBase.cpp" line="575"/>
+        <location filename="../rotControlFrameBase.cpp" line="658"/>
+        <location filename="../rotControlFrameBase.cpp" line="687"/>
+        <source>Disconnected</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rotControlFrameBase.cpp" line="592"/>
+        <source>Stop</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rotControlFrameBase.cpp" line="605"/>
+        <source>Rotating CCW</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rotControlFrameBase.cpp" line="619"/>
+        <source>Rotating CW</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rotControlFrameBase.cpp" line="634"/>
+        <source>Turning to bearing</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rotControlFrameBase.cpp" line="668"/>
+        <source>Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>RotPresetData</name>
     <message>
-        <location filename="../rotatorcommon.cpp" line="15"/>
+        <location filename="../rotatorcommon.cpp" line="18"/>
         <source>&amp;Read</source>
         <translation>&amp;Lire</translation>
     </message>
     <message>
-        <location filename="../rotatorcommon.cpp" line="16"/>
+        <location filename="../rotatorcommon.cpp" line="19"/>
         <source>&amp;New</source>
         <translation>&amp;Nouveau</translation>
     </message>
     <message>
-        <location filename="../rotatorcommon.cpp" line="17"/>
+        <location filename="../rotatorcommon.cpp" line="20"/>
         <source>&amp;Edit</source>
         <translation>&amp;Modifier</translation>
     </message>
     <message>
-        <location filename="../rotatorcommon.cpp" line="18"/>
+        <location filename="../rotatorcommon.cpp" line="21"/>
         <source>&amp;Clear</source>
         <translation>&amp;Supprimer</translation>
     </message>
