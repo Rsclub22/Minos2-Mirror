@@ -14,10 +14,9 @@
 #include <QMessageBox>
 #include "AppStartup.h"
 #include "regsettings.h"
-#include "cutils.h"
 #include "clustercommon.h"
 #include "CallsignLineEdit.h"
-#include "MTrace.h"
+
 
 #include "setupdialog.h"
 #include "ui_setupdialog.h"
@@ -29,15 +28,11 @@ QString CLUSTER_NODE_LIST_FILE()
 
 SetupDialog::SetupDialog(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::SetupDialog),
-    listDataChanged(false),
-    timeToLiveChanged(false),
-    sendSpotToDXCluster(false),
-    sendSpotsToDXClusterChanged(false),
-    personalDataChanged(false),
-    useQrzForQraFlag(false),
-    useQrzForQraChanged(false)
+    ui(new Ui::SetupDialog)
 {
+
+    clearChangedFlags();
+
     ui->setupUi(this);
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
@@ -126,6 +121,7 @@ void SetupDialog::saveButtonPushed()
     clusterListSave();
     savePersonal();
     saveGeneralSettings();
+    clearChangedFlags();
     doCloseEvent();
 
 }
@@ -149,6 +145,7 @@ void SetupDialog::cancelButtonPushed()
     clusterListModel->setHeaderData(PasswdColNum, Qt::Horizontal, QObject::tr("Password"));
     loadSettingsToModel(availNodeNames, settings);
 
+    clearChangedFlags();
     readPersonal();
     loadPersonalToSetupTab();
 
@@ -157,6 +154,22 @@ void SetupDialog::cancelButtonPushed()
     doCloseEvent();
 
 
+
+}
+
+void SetupDialog::clearChangedFlags()
+{
+
+    listDataChanged = false;
+    timeToLiveChanged = false;
+    sendSpotToDXCluster = false;
+    sendSpotsToDXClusterChanged = false;
+    personalDataChanged = false;
+    useQrzForQraFlag = false;
+    useQrzForQraChanged = false;
+    removeRepeatSpotFilterFlagChanged = false;
+    removeRepeatSpotsFreqDeltaChanged = false;
+    removeRepeatSpotsWithinTimeChanged = false;
 
 }
 

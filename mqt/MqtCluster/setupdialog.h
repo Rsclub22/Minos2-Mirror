@@ -182,6 +182,7 @@ private:
     void doCloseEvent();
 
     void setRemoveSpotItemsDisabled(bool disabled);
+    void clearChangedFlags();
 };
 
 #endif // SETUPDIALOG_H
