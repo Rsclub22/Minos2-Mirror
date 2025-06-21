@@ -294,6 +294,7 @@ private:
     void testAutoStart();
     void addMessage(QSharedPointer<KstMessageLine> kst);
     void checkUserMessages(QSharedPointer<KstUser> user);
+    QStringList routerList();
 };
 
 extern KSTMainWindow *mainWindow;

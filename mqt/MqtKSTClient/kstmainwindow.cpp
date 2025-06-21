@@ -35,6 +35,11 @@ QStringList services =
 };
 
 KSTMainWindow *mainWindow = nullptr;
+
+const char *traceStart = "*-*_*";
+const char *traceEnd= "_**_";
+const char traceEndnlChar= '*';
+const char traceEndChar= '!';
 //==========================================================================================
 void KSTMainWindow::getSettings(QSettings &settings)
 {
@@ -562,14 +567,14 @@ void KSTMainWindow::onReadyRead()
     QByteArray b = kstclient->readAll();
     QString msg = QString(b);
 
-    QChar addTraceChar = '!';
+    QChar addTraceChar = traceEndChar;
     QString traceMsg = msg.remove("\r");
     if (traceMsg.endsWith("\n"))
     {
         traceMsg.chop(1);
-        addTraceChar = '*';
+        addTraceChar = traceEndnlChar;
     }
-    trace(QString("KSTMainWindow::messageRx: %1").arg("*****" + traceMsg) + "***" + addTraceChar);
+    trace(QString("KSTMainWindow::messageRx: %1").arg(traceStart + traceMsg + traceEnd + addTraceChar));
 
     // break into lines...
     msgbuf.append(msg);
@@ -876,6 +881,17 @@ void KSTMainWindow::analyseKstMessage(QString atj)
         if (kst->otherCall == myCallsign)
         {
             QApplication::alert(this, 10000);   // 10 sec alert
+            QStringList rList = routerList();
+            for(const auto &router: QASCONST(rList))
+            {
+
+                RPCGeneralClient rpc(rpcConstants::KSTTransferMeep);
+                QSharedPointer<RPCParam>st(new RPCParamStruct);
+                st->addMember( kst->otherCall.getFullCall(), rpcConstants::KSTTransferCall );
+                st->addMember( kst->message, rpcConstants::KSTTransferMeep );
+                rpc.getCallArgs() ->addParam( st );
+                rpc.queueCall( router );
+            }
         }
 
     }
@@ -2092,22 +2108,28 @@ void KSTMainWindow::on_logsButton_clicked()
 }
 
 
+QStringList KSTMainWindow::routerList()
+{
+    QStringList routerList;
+
+    for ( auto s = RemoteLogs::getRemoteLogs()->stationList.begin();
+         s != RemoteLogs::getRemoteLogs()->stationList.end();
+         s++ )
+    {
+        routerList.append((*s)->name);
+    }
+    routerList.sort();
+    routerList.removeDuplicates();
+
+    return routerList;
+}
+
 void KSTMainWindow::on_loggerXferButton_clicked()
 {
     QModelIndexList mil = ui->CSTable->selectionModel()->selectedRows();
 
     if (mil.size() == 1)
     {
-        QStringList routerList;
-
-        for ( auto s = RemoteLogs::getRemoteLogs()->stationList.begin();
-             s != RemoteLogs::getRemoteLogs()->stationList.end();
-             s++ )
-        {
-            routerList.append((*s)->name);
-        }
-        routerList.sort();
-        routerList.removeDuplicates();
 
         auto &mi = mil[0];
         QModelIndex m = kstCallFilterModel.mapToSource(mi);
@@ -2122,7 +2144,8 @@ void KSTMainWindow::on_loggerXferButton_clicked()
             call = call.left(hyphen);
         }
 
-        for(const auto &router: routerList)
+        QStringList rList = routerList();
+        for(const auto &router: QASCONST(rList))
         {
 
             RPCGeneralClient rpc(rpcConstants::KSTTransfer);
@@ -2222,15 +2245,15 @@ void KSTMainWindow::testTimeout()
             // Then look for **** or ***!
             // If **** then add \n
 
-            int sline = kline.indexOf("*****");
+            int sline = kline.indexOf(traceStart);
             if (sline >= 0)
             {
                 kline = kline.mid(sline + 5);
                 inTestMsg = true;
             }
 
-            int eline = kline.indexOf("****");
-            int eline2 = kline.indexOf("***!");
+            int eline = kline.indexOf(traceEnd + traceEndnlChar);
+            int eline2 = kline.indexOf(traceEnd + traceEndChar);
             if (eline >= 0)
             {
                 kline = kline.left(eline) + "\n";
