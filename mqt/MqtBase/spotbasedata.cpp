@@ -57,16 +57,16 @@ bool ClusterSpotData::spotMatchesDxCallsignFreqAndTime(const QSharedPointer<Clus
     }
 
 
-    trace(QString("[repeat check] List call = %1, Spot Call = %2").arg(getDxCallStr().trimmed().toUpper()).arg(other->getDxCallStr().trimmed().toUpper()));
+    //trace(QString("[repeat check] List call = %1, Spot Call = %2").arg(getDxCallStr().trimmed().toUpper()).arg(other->getDxCallStr().trimmed().toUpper()));
     if (getDxCallStr().trimmed().toUpper() != other->getDxCallStr().trimmed().toUpper())
     {
-        trace(QString("[repeat check] No Callsign Match"));
+        //trace(QString("[repeat check] No Callsign Match"));
         return false;
     }
 
     if (getBand().trimmed().toUpper() != other->getBand().trimmed().toUpper())
     {
-       trace(QString("[repeat check] No Band Match"));
+       //trace(QString("[repeat check] No Band Match"));
        return false;
     }
 
@@ -74,7 +74,7 @@ bool ClusterSpotData::spotMatchesDxCallsignFreqAndTime(const QSharedPointer<Clus
     qint64 deltaHz = qAbs(qint64(getFreq() - other->getFreq()));
     if (deltaHz > freqTolerance)
     {
-        trace(QString("[repeat check] No Freq Match"));
+        //trace(QString("[repeat check] No Freq Match"));
         return false;
     }
 
@@ -83,7 +83,7 @@ bool ClusterSpotData::spotMatchesDxCallsignFreqAndTime(const QSharedPointer<Clus
         qint64 timeDiff = qAbs(spotDateTime.secsTo(other->spotDateTime));
         if (timeDiff > timeToleranceMins * 60)
         {
-            trace(QString("[repeat check] Out of time"));
+            //trace(QString("[repeat check] Out of time"));
             return false;
         }
 

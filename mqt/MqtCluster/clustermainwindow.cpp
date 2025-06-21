@@ -1014,14 +1014,23 @@ void ClusterMainWindow::processNewSpot(QSharedPointer<ClusterSpotData> newSpot)
     // is this a repeat spot
     if (setupCluster->getRemoveRepeatSpotFilterFlag())
     {
+        trace(QString("ProcessNewSpot: Repeat Spot Check On. Checking if this is repeat spot"));
+
+        purgeOldRepeatSpots(repeatCheckSpotsList, setupCluster->getRemoveRepeatSpotsWithinTime());
+
         trace(QString("ProcessNewSpot: check if %1 is a repeat spot").arg(newSpot->getDxCallStr()));
-        if (checkForRepeatSpot(spotsList, newSpot))
+        if (checkForRepeatSpot(repeatCheckSpotsList, newSpot))
         {
             trace(QString("ProcessNewSpot: %1 is a repeat spot, discard").arg(newSpot->getDxCallStr()));
             return;
         }
+        else
+        {
+            trace(QString("ProcessNewSpot: %1 is not a repeat spot, keep").arg(newSpot->getDxCallStr()));
+            repeatCheckSpotsList.append(newSpot);  // save spot for further checks
+        }
 
-        trace(QString("ProcessNewSpot: %1 is not a repeat spot, keep").arg(newSpot->getDxCallStr()));
+
     }
 
 
@@ -1540,6 +1549,32 @@ void ClusterMainWindow::onHandleSpotsInQueues()
 
 
 }
+
+void ClusterMainWindow::purgeOldRepeatSpots(QVector<QSharedPointer<ClusterSpotData>> &spotsList, int timeToleranceMins)
+{
+    trace(QString("Purge spots from repeatSpot list older than %1 min").arg(QString::number(timeToleranceMins)));
+
+    int listInitalSize = spotsList.size();
+
+    QDateTime now = QDateTime::currentDateTimeUtc();
+    int thresholdSecs = timeToleranceMins * 60;
+
+    for (int i = spotsList.size() - 1; i >= 0; --i)
+    {
+        QDateTime spotTime = spotsList[i]->getSpotDateTime().toUTC();  // ensure UTC for correct comparison
+        if (spotTime.secsTo(now) > thresholdSecs)
+        {
+            spotsList.removeAt(i);
+        }
+    }
+
+    int listSizeAfterRemoval = spotsList.size();
+    int numberPurged = listInitalSize - listSizeAfterRemoval;
+    trace(QString("Repeat Spot list start size = %1, list size after purge = %2, number of spots purged = %3").arg(QString::number(listInitalSize)).arg(QString::number(listSizeAfterRemoval).arg(QString::number(numberPurged))));
+}
+
+
+
 
 
 

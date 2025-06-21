@@ -308,6 +308,8 @@ private:
     SetupDialog *setupCluster;
 
     QVector<QSharedPointer<ClusterSpotData> > spotsList;
+    QVector<QSharedPointer<ClusterSpotData> > repeatCheckSpotsList;
+
     //QTimer* getSpotsTimer;
 
     QTimer* handleSpotsInQueues;
@@ -477,6 +479,8 @@ private:
     void readStartEndScriptSettings();
     void saveStartEndScriptSettings();
     bool checkForRepeatSpot(const QVector<QSharedPointer<ClusterSpotData> > &spots, const QSharedPointer<ClusterSpotData> &newSpot);
+    void purgeOldRepeatSpots(QVector<QSharedPointer<ClusterSpotData> > &spotsList, int timeToleranceMins);
+
 private slots:
     void personalDataChanged(QString callsign, QString name, QString locator, QString qth);
 
