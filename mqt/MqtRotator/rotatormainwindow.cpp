@@ -483,6 +483,8 @@ void RotatorMainWindow::onSetSkyScanPresetButtonFromLogger(int buttonNumber)
 
 }
 
+
+
 void RotatorMainWindow::onSetSkyScanButtonStateFromLogger(int buttonState)
 {
     if (buttonState != loggerSkyScanButtonState->getState())
@@ -567,6 +569,7 @@ int RotatorMainWindow::openRotator()
     {
         connect(rotator, &RotatorBase::sentCommandError, this, &RotatorMainWindow::onSentCommandError, Qt::QueuedConnection);
     }
+
 
     rotator->setTraceComms(traceCommsFlag);
 
@@ -929,7 +932,7 @@ void RotatorMainWindow::initActionsConnections()
     connect(msg, &RotatorRpc::selectAntennaFromLog, this, &RotatorMainWindow::onLoggerSelectAntenna);
     connect(msg, &RotatorRpc::setRotPreset, this, &RotatorMainWindow::onLoggerSetPreset);
     connect(msg, &RotatorRpc::setSkyScanPresetButtonFromLogger, this, &RotatorMainWindow::onSetSkyScanPresetButtonFromLogger);
-
+    connect(msg, &RotatorRpc::setSkyScanButtonStateFromLogger, this, &RotatorMainWindow::onSetSkyScanButtonStateFromLogger);
 
 
 
