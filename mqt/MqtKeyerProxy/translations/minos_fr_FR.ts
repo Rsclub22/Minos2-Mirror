@@ -89,32 +89,32 @@
         <translation>Client IP distant</translation>
     </message>
     <message>
-        <location filename="../kpmainwindow.cpp" line="228"/>
+        <location filename="../kpmainwindow.cpp" line="229"/>
         <source>Alsa Control Files</source>
         <translation>Fichiers de contrôle ALSA</translation>
     </message>
     <message>
-        <location filename="../kpmainwindow.cpp" line="229"/>
+        <location filename="../kpmainwindow.cpp" line="230"/>
         <source>All Files</source>
         <translation>Tous les fichiers</translation>
     </message>
     <message>
-        <location filename="../kpmainwindow.cpp" line="232"/>
+        <location filename="../kpmainwindow.cpp" line="233"/>
         <source>File for mixer setup</source>
         <translation>Fichier pour la configuration du mixeur</translation>
     </message>
     <message>
-        <location filename="../kpmainwindow.cpp" line="280"/>
+        <location filename="../kpmainwindow.cpp" line="281"/>
         <source>Restart to set output to %1</source>
         <translation>Redémarrez pour définir la sortie sur %1</translation>
     </message>
     <message>
-        <location filename="../kpmainwindow.cpp" line="295"/>
+        <location filename="../kpmainwindow.cpp" line="296"/>
         <source>Restarting as host/port/rate has changed</source>
         <translation>Redémarrage&#xa0;: hôte/port/débit a changé [read as reboot???]</translation>
     </message>
     <message>
-        <location filename="../kpmainwindow.cpp" line="356"/>
+        <location filename="../kpmainwindow.cpp" line="357"/>
         <source>Open COM port %1 failed: %2</source>
         <translation>Ouverture du port COM %1&#xa0;Échec : %2</translation>
     </message>

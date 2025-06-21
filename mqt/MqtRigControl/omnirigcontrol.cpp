@@ -179,7 +179,7 @@ void OmnirigControl::onHandleStatusChange(int rigNumber)
         if (!rig || rig->isNull ())
             return;
 
-        status = rig->Status();
+        status = static_cast<OmniRig::RigStatusX>(rig->Status());
         traceMsg(QString("Rig %1 Status Change: new status = %2").arg(rigNumber).arg(rig->StatusStr()));
         if (status != OmniRig::ST_ONLINE)
         {
@@ -865,8 +865,6 @@ int OmnirigControl::getFrequency(VFO vfo, Frequency &freq)
             }
         }
 
-
-
         return omnirigError(OMNIRIG_OK);
     }
 
@@ -926,7 +924,7 @@ int OmnirigControl::getMode(VFO vfo, MODE &mode)
 
     }
 
-    mode = map_mode(rig->Mode());
+    mode = map_mode(static_cast<OmniRig::RigParamX>(rig->Mode()));
     traceMsg(QString("GetMode = %1").arg(rigcommon::convertModeToQString(mode)));
 
     return omnirigError(OMNIRIG_OK);
@@ -1091,7 +1089,7 @@ int OmnirigControl::setRitState(VFO vfo, bool state)
 int OmnirigControl::getRitState(VFO vfo, bool& state)
 {
     Q_UNUSED(vfo)
-    OmniRig::RigParamX s = rig->Rit();
+    OmniRig::RigParamX s = static_cast<OmniRig::RigParamX>(rig->Rit());
     if (s == OmniRig::PM_RITON)
     {
         state = true;

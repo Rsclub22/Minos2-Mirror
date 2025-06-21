@@ -77,8 +77,8 @@ public:
         logRitOn = false;
     }
 
-    Frequency logger_freq;
-    Frequency selRadioFreq;
+    Frequency logger_freq;  // just for logging "old" freq for logger
+    Frequency selRadioFreq; // frequency requested in selRadio
     QString selBand;
     QString slogMode;
     QString selRadioMode;   // onSelectRadio mode from logger at startup
@@ -203,7 +203,6 @@ public:
      pollTime = 1000;
      rfrequency = Frequency(0);
      curVfoFreq = Frequency(0);
-     curOtherFreq = Frequency(0);
      selTransverterNum = NO_TRANSVERTER_NUM;
      mgmModeFlag = false;
      RTTYModeFlag = false;
@@ -223,12 +222,11 @@ public:
   RigCapabilities rigCap;
   int radioIndex;
   int pollTime;
-  Frequency rfrequency;
+  Frequency rfrequency;     // radio frequency, corrected to "mark"
   MODE rmode;
   VFO curVfo;
-  Frequency curVfoFreq;
-  Frequency curTransVertFreq;
-  Frequency curOtherFreq;
+  Frequency curVfoFreq;     // ?? same as rfrequency
+  Frequency curTransVertFreq;   // rfrequency corrected to transverter on air frequency
   QString curBand;
   QString curTransvertBand;
   int selTransverterNum = 0;
@@ -478,7 +476,7 @@ private:
 
     void runRigCtlDaemon(RigCtldParameters &rigCtldPar);
 
-
+    void getFreqFromRadio(int &retCode);
     int openRigCtldRadio(bool localRigCtld);
     void setRigCltdIndicatorVisible(bool visible);
     void setRigCtldIndicator(RIGCTLD_INDICATOR_ID idNum);

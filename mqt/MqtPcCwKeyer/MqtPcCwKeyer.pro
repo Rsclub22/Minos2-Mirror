@@ -1,6 +1,4 @@
 include($$PWD/../mqt.pri)
-# Temporary don't look for translation files
-TRANSLATIONS =
 include($$PWD/../mqtapplibs.pri)
 
 QT       += core gui widgets network serialport multimedia concurrent

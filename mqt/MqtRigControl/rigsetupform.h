@@ -103,6 +103,12 @@ public:
     QString getMgmMode() const;
     void setMgmMode(QString p);
 
+    void setRttyOffset(int c);
+    int getRttyOffset() const;
+
+    void setPskOffset(int c);
+    int getPskOffset() const;
+
     QString getPollInterval() const;
     void setPollInterval(QString i);
     void pollIntervalVisible(bool s);
@@ -307,6 +313,8 @@ private slots:
     void onEnableVoiceTxMemCatFeatureClicked();
     void onEnableCwTxMemCatFeatureClicked();
     void onEnableCatFeaturesClicked();
+    void rttyOffsetSelected();
+    void pskOffsetSelected();
 private:
 
 

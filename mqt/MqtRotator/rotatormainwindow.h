@@ -132,6 +132,7 @@ private:
 
     bool testMode = false;
     QString liveAntenna;
+    int oldBearing = COMPASS_ERROR;
 
     QTimer LogTimer;
     QTimer RotateTimer;

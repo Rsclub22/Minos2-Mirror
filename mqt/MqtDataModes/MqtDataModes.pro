@@ -8,6 +8,9 @@ QT += widgets
 TARGET = MqtDataModes
 TEMPLATE = app
 
+win32:RC_ICONS += ../MinosDataModes.ico
+macx:ICON=../MinosDataModes.icns
+
 SOURCES += \
     DMMinosParameters.cpp \
     FLDigiFrame.cpp \
@@ -39,8 +42,6 @@ FORMS += \
 win32{
 CONFIG -= embed_manifest_exe
 CONFIG -= embed_manifest_dll
-
-RC_ICONS += ../minos.ico
 
 DEFINES += WIN32
 QT += axcontainer
@@ -81,7 +82,7 @@ FORMS += \
     MMTTYFrame.ui \
     grittyframe.ui
 
-LIBS += -lwinmm
+LIBS += -lwinmm -lshlwapi
 }
 
 win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../maia/release/ -lmaia

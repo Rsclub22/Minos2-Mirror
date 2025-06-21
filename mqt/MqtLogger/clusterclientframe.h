@@ -273,11 +273,6 @@ private:
 
     void setUnWorkedCallsignsCheckBoxVisible(bool state);
     void setUnworkedCheckboxesVisible(bool state);
-    bool checkDbRowForMatch(QString incomingVal, int row, const int colNum);
-    bool checkDbRowForMatch(qint64 incomingVal, int row, const int colNum);
-    bool checkDbRowForMatch(bool incomingVal, int row, const int colNum);
-    bool checkDbRowForMatch(Frequency incomingVal, int row, const int colNum);
-
 
     bool checkspotExists(QSharedPointer<ClusterSpotData> spotData);
 

@@ -2,17 +2,13 @@
 #define BANDMAPVIEW_H
 
 #include <QWidget>
-#include <QAbstractItemView>
 #include <QTimer>
 
-#include <QAbstractItemModel>
 #include <QGraphicsView>
-#include <QPainter>
-#include <QPaintEvent>
 #include <QScrollArea>
 #include <QScrollBar>
 #include <QGraphicsScene>
-#include <QSortFilterProxyModel>
+
 #include "bandmapfreqdial.h"
 #include "bandmapmarkerdetails.h"
 #include "clustercommon.h"
@@ -22,10 +18,10 @@
 const QChar DEG_SYMBOL(0260); // octal value
 const int NO_SELECTED_ROWNUM = -1;
 
-const int KEY_SCROLL_STEP_SIZE = 50;
-
 class BaseContestLog;
-class BandmapView : public QAbstractItemView
+class BandmapData;
+class BandmapSortFilterProxyModel;
+class BandmapView : public QScrollArea
 {
     Q_OBJECT
 
@@ -33,9 +29,10 @@ public:
     explicit BandmapView(QWidget *parent = nullptr);
     ~BandmapView() override;
 
-    QModelIndex indexAt(const QPoint &point_) const override;
-    void scrollTo(const QModelIndex &index, QAbstractItemView::ScrollHint) override;
-    QRect visualRect(const QModelIndex &index) const override;
+    BandmapData *bandmapDataModel = nullptr;
+
+
+    QRect visualRect(const QModelIndex &index) const;
 
     void setContest(BaseContestLog *c);
 
@@ -48,20 +45,18 @@ public:
 
     void bandmapUpdate(bool now);
 
-    int rows(const QModelIndex &index) const;
-
     int isClickInRegionOfSpot(QPoint p);
 
 
-    void getSpotData(int &selectedSpotDataRowNum, int displayedSpotNum, ClusterSpotData &selectedSpot);
+    QSharedPointer<ClusterSpotData> getSpotData(int displayedSpotNum);
+
+    int getSpotDataRow(QSharedPointer<ClusterSpotData>);
 
     void clearSelectedSpotData();
 
     int getSelectedSpotViewRowNum(){return selectedSpotViewRowNum;}
 
-    int getSelectedSpotDataRowNum(){return selectedSpotDataRowNum;}
-
-    ClusterSpotData* getSelectedSpotDataPtr(){return &selectedSpot;}
+    QSharedPointer<ClusterSpotData> getSelectedSpotDataPtr(){return selectedSpot;}
 
     void clearSelectedSpot();
 
@@ -82,29 +77,16 @@ public:
     void setDialRadioMode(QString mode);
     bool getSuppressUpdate() const;
     void setSuppressUpdate(bool value);
+    void onNextUnworkedSpot(bool nextFreqUpDown, bool nextMult);
 
 signals:
 
     void contextMenuSelected(const QPoint&, const QPoint&);
     void newZoomlevel(int);
 
-protected slots:
-    void dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight, const QVector<int> &roles) override;
-
-    void rowsInserted(const QModelIndex &parent, int start, int end) override;
-
-    void rowsAboutToBeRemoved(const QModelIndex &parent, int start, int end) override;
-    void selectionChanged(const QItemSelection &selected, const QItemSelection &deselected) override;
-    void updateGeometries() override;
-
 protected:
-    int horizontalOffset() const override;
-    int verticalOffset() const override;
-    bool isIndexHidden(const QModelIndex&) const override{ return false; }
-    QModelIndex moveCursor(QAbstractItemView::CursorAction cursorAction, Qt::KeyboardModifiers modifiers) override;
-    void setSelection(const QRect &rect, QFlags<QItemSelectionModel::SelectionFlag> flags) override;
-
-    QRegion visualRegionForSelection(const QItemSelection &selection) const override;
+    int horizontalOffset() const;
+    int verticalOffset() const ;
 
 private slots:
     void bandmapResize(QSize s);
@@ -114,12 +96,6 @@ private slots:
 
     void on_bandmap_customContextMenuRequested(const QPoint &p);
 
-    void on_nextSpot(bool nextFreqUpDown, bool nextMult);
-    int findNextNonWorkedLocatorUpList(int curSpotViewNum);
-
-    void on_scrollMap(bool dir);
-    void onRowsRemoved(const QModelIndex &parent, int first, int last);
-    void onRowsInserted(const QModelIndex &parent, int first, int last);
     void zoomUpdated(bool dir);
     void updateTimerTimeout();
 private:
@@ -127,14 +103,13 @@ private:
     QGraphicsScene *bandmapScene;
     BandmapGraphicsPanel* bandmapGraphicsView;
 
-    BandmapFreqDial *dial;
+    BandmapFreqDial *dial = nullptr;
     Frequency curFreq;
     QString curMode;
 
     QTimer updateTimer;
     bool updateRequired = false;
     bool suppressUpdate = false;
-    int totalSize = 300; //for test
 
     int dialMinZoomLevel;
     int dialMaxZoomLevel;
@@ -151,9 +126,9 @@ private:
     void drawBandMapSpots();
     QVector<BandmapMarkerDetails*> listOfMarkers;
 
-    ClusterSpotData selectedSpot;
-    int selectedSpotDataRowNum;
-    int selectedSpotViewRowNum;
+    QSharedPointer<ClusterSpotData> selectedSpot;
+
+    int selectedSpotViewRowNum = NO_SELECTED_ROWNUM;
 
     BandmapClientFilterSettings* filterSettings;
 
@@ -172,13 +147,9 @@ private:
 
     void clearListOfMarkers();
     bool matchMode(int sourceRow);
-    int findNextOccupiedMarkerUpList(int curSpotViewNum);
-    int findNextOccupiedMarkerDownList(int curSpotViewNum);
-    int findNextNonWorkedLocatorDownList(int curSpotViewNum);
     int getViewPortStartYCoordOnScene();
     int getViewPortEndYCoordOnScene();
     void traceMsg(QString msg);
-    void clearSpotData(ClusterSpotData &selectedSpot);
     void deleteItemsFromMarkerList();
     void assembleCqToolTip(int row, Frequency freq, QString& toolTipMsg);
     void assembleCqMsg(int row, QString& markerMsg);
@@ -188,6 +159,12 @@ private:
     void drawBandmapSpot(int row, int &fontOffset, int markersAbove, int &lastOffset, bool &firstDrawn);
     bool readLessGreaterThanDistanceFlag();
     void doBandmapUpdate();
+    bool filterAcceptsRow(int sourceRow) const;
+    int findNextUnworkedMarkerHF(int curSpotViewNum);
+    int findNextUnworkedMarkerLF(int curSpotViewNum);
+    int findNextNonWorkedLocatorHF(int curSpotViewNum);
+    int findNextNonWorkedLocatorLF(int curSpotViewNum);
+    void traceTables();
 };
 
 #endif // BANDMAPVIEW_H
