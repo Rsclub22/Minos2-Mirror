@@ -16,7 +16,7 @@
 
 
 
-#include "CwWorker.h"
+#include "cwworker.h"
 #include <QThread>
 #include <QMetaObject>
 #include <QtConcurrentRun>

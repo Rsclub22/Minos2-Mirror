@@ -16,7 +16,7 @@
 #include "LoggerContest.h"
 #include "rotatorskyscanframe.h"
 #include "MTrace.h"
-#include "ui_RotatorSkyScanFrame.h"
+#include "ui_rotatorskyscanframe.h"
 
 
 RotatorSkyScanFrame::RotatorSkyScanFrame(QWidget *parent):

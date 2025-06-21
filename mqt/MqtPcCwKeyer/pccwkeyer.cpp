@@ -16,7 +16,7 @@
 
 
 
-#include "PcCwKeyer.h"
+#include "pccwkeyer.h"
 #include <QtMath>
 #include <QTimer>
 #include <QMap>

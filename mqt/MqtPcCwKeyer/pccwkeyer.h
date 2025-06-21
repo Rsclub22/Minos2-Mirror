@@ -20,7 +20,7 @@
 #include <QHash>
 #include <QChar>
 
-#include "CwWorker.h"
+#include "cwworker.h"
 
 class PcCwKeyer : public QObject
 {
