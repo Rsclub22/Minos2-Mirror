@@ -487,20 +487,19 @@ void RotatorMainWindow::onSetSkyScanPresetButtonFromLogger(int buttonNumber)
 
 void RotatorMainWindow::onSetSkyScanButtonStateFromLogger(int buttonState)
 {
-    if (buttonState != loggerSkyScanButtonState->getState())
-    {
-        loggerSkyScanButtonState->setState(buttonState);
-        logMessage(QString("ButtonState from logger = %1").arg(loggerSkyScanButtonState->getButtonStateToString()));
-        if (loggerSkyScanButtonState->isStart())
-        {
-            skyScanStartPbPressed();
-        }
-        else if (loggerSkyScanButtonState->isStop())
-        {
-            skyScanStopPbPressed();
-        }
 
+    loggerSkyScanButtonState->setState(buttonState);
+    logMessage(QString("ButtonState from logger = %1").arg(loggerSkyScanButtonState->getButtonStateToString()));
+    if (loggerSkyScanButtonState->isStart())
+    {
+        skyScanStartPbPressed();
     }
+    else if (loggerSkyScanButtonState->isStop())
+    {
+        skyScanStopPbPressed();
+    }
+
+
 }
 
 int RotatorMainWindow::openRotator()
@@ -3853,7 +3852,7 @@ void RotatorMainWindow::updateSkyScanDisplay(SkyScanData &activeData)
     initialiseSpinBox(ui->skyScanPauseTimeSpinBox,
                       activeData.getPauseToolButtonMin(),
                       activeData.getPauseToolButtonMax(),
-                      activeData.getSkyScanStepDegreesValue(),
+                      activeData.getPauseToolButtonStepInterval(),
                       activeData.getSkyScanPauseTimeValue(),
                       true);
 

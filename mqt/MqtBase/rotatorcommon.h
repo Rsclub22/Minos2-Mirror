@@ -407,16 +407,19 @@ public:
         antennaName.clear();
         endStopType = endStop::ROT_0_360;
         southStopType= southStop::S_STOPOFF;
+
         skyScanStepDegreesValue = DEFAULT_SKYSCAN_STEP_VALUE;
         stepToolButtonMin= MIN_SKYSCAN_STEP_DEGREES;
         stepToolButtonMax = MAX_SKYSCAN_STEP_DEGREES;
         stepToolButtonStepInterval = DEFAULT_SKYSCAN_STEP_INTERVAL_DEGREES;
         skyScanStepDegreesValueIsDirty = false;
+
         skyScanPauseTimeValue = DEFAULT_SKYSCAN_PAUSE_TIME_VALUE;
         pauseToolButtonMin = MIN_SKYSCAN_PAUSE_MINS;
         pauseToolButtonMax = MAX_SKYSCAN_PAUSE_MINS;
         pauseToolButtonStepInterval = DEFAULT_SKYSCAN_PAUSE_TIME_INTERVAL;
         skyScanPauseTimeValueIsDirty = false;
+
         rotatorMinAzimuth = COMPASS_MIN0;
         rotatorMaxAzimath= COMPASS_MAX360;
         antennaOffset = 0;
