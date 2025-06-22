@@ -181,6 +181,7 @@ class TSendDM : public QObject
       void pcCwKeyerErrorMsg(QString);
       void pcCwKeyerPttEnabled(QString);
       void pcCwKeyerTxOn(QString);
+      void pcCwKeyerCurrentWpm(QString);
 
 };
 #endif

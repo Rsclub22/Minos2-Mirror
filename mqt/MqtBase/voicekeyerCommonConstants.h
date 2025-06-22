@@ -15,11 +15,14 @@ namespace voiceKeyerCommon
 {
     // These are Minos max and min keyer buttons
     // Rigcontrol with hamlib will provide max number of voice memories the
-    // radio will support.
+        // radio will support.
 
     const int PC_CW_KEYER_MAXIMUM_BUTTONS = 12;
+    const int PC_CW_KEYER_MIN_WPM = 5;
+    const int PC_CW_KEYER_MAX_WPM = 40;
     const int MAXIMUM_BUTTONS = 8;
     const int MININUM_BUTTONS = 2;
+
 
     enum VoiceKeyerId
     {

@@ -27,7 +27,16 @@ void CwSpeedControl::setSpeedRange(int min, int max)
 
 void CwSpeedControl::setValue(int speed)
 {
-    slider->setValue(20);
+    if (slider->value() == speed)
+    {
+        return;
+    }
+
+    slider->blockSignals(true);
+    slider->setValue(speed);
+    speedLabel->setText(QString("CW Speed: %1 WPM").arg(speed));
+    slider->blockSignals(false);
+
 }
 
 int CwSpeedControl::getValue()

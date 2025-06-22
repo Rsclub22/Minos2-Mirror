@@ -115,7 +115,7 @@ private:
     void sendPttStateToLogger();
     void setTXStatusVisible(bool visible);
     void setPttStatusIndicatorOnOff(bool on);
-    void sendInitialPttStatusToLogger();
+    void sendInitialStatusToLogger();
 private slots:
 
     void onComportSelected();
@@ -136,6 +136,7 @@ private slots:
     void cwStopCommandFromLogger();
 
 
+    void cwWpmFromLogger(int newWpm);
 };
 #endif // PCCWKEYERMAINWINDOW_H
 

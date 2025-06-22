@@ -1221,6 +1221,13 @@ void TSendDM::on_notify( AnalysePubSubNotify an, const QString /*from*/ )
                 trace(QString("PcCwKeyer Tx state: %1").arg(an.getValue()));
                 emit pcCwKeyerTxOn(txOn);
             }
+            else if (an.getKey() == rpcConstants::pcCwWpmToLog)
+            {
+                QString wpmFromPcCwKeyer;
+                wpmFromPcCwKeyer = an.getValue();
+                trace(QString("PcCwKeyer Wpm from keyer = %1").arg(wpmFromPcCwKeyer));
+                emit pcCwKeyerCurrentWpm(wpmFromPcCwKeyer);
+            }
         }
     }
 

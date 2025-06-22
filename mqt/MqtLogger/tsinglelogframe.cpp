@@ -167,6 +167,8 @@ void TSingleLogFrame::buildFrame(int slotNo)
     connect(LogContainer->sendDM, &TSendDM::pcCwKeyerErrorMsg, this, &TSingleLogFrame::onPcCwKeyerErrorMsg);
     connect(LogContainer->sendDM, &TSendDM::pcCwKeyerPttEnabled, this, &TSingleLogFrame::onPcCwKeyerPttEnabled);
     connect(LogContainer->sendDM, &TSendDM::pcCwKeyerTxOn, this, &TSingleLogFrame::onPcCwKeyerTxOn);
+    connect(LogContainer->sendDM, &TSendDM::pcCwKeyerCurrentWpm, this, &TSingleLogFrame::onPcCwKeyerCurrentWpm);
+
 
     // to bandmap
     connect(GJVQSOLogFrame, &QSOLogFrame::bandmapMarkFreq, this, &TSingleLogFrame::on_BandmapMarkFreq);
@@ -2624,6 +2626,11 @@ void TSingleLogFrame::onPcCwKeyerPttEnabled(QString enabled)
 void TSingleLogFrame::onPcCwKeyerTxOn(QString state)
 {
     txVmButtonsFrame->setPcCwKeyerTxOnState(state);
+}
+
+void TSingleLogFrame::onPcCwKeyerCurrentWpm(QString wpm)
+{
+    txVmButtonsFrame->setPcCwKeyerCurrentWpm(wpm);
 }
 
 void TSingleLogFrame::traceMsg(QString msg)

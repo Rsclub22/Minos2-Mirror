@@ -315,6 +315,7 @@ private slots:
     void onPcCwKeyerPttEnabled(QString enabled);
     void onPcCwKeyerTxOn(QString state);
     void sendPcKeyerCwWpm(int wpm);
+    void onPcCwKeyerCurrentWpm(QString wpm);
 };
 
 #endif // TSINGLELOGFRAME_H

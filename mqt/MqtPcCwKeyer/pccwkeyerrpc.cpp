@@ -114,6 +114,24 @@ void PcCwKeyerRpc::on_routerCall( bool err, QSharedPointer<MinosRPCObj>mro, cons
 
 
                 }
+                else if (paraName == rpcConstants::cwWpmToPcCwKeyer)
+                {
+                    trace(QString("PcCwKeyer RPC: callback from %1 paraName = %2").arg(mName, paraName));
+
+                    QSharedPointer<RPCParam> wpmFromLogger;
+                    int wpmFromLoggerValue;
+
+                    if (args->getStructArgMember(0, rpcConstants::pcCwKeyerWpm, wpmFromLogger))
+                    {
+                        wpmFromLogger->getInt(wpmFromLoggerValue);
+                        trace(QString("PcCwKeyer RPC: new wpm from logger = %1").arg(QString::number(wpmFromLoggerValue)));
+                        emit wpmFromLog(wpmFromLoggerValue);
+
+                    }
+
+
+
+                }
 
             }
         }
@@ -177,7 +195,7 @@ void PcCwKeyerRpc::on_notify(AnalysePubSubNotify /*an*/, const QString /*from*/ 
 
 void PcCwKeyerRpc::publishState( const QString &comport, const QString &state, const QString &errorMsg )
 {
-
+    trace(QString("PCCwKeyerRPc: publishState comport = %1, state = %2, errorMsg = %3").arg(comport).arg(state).arg(errorMsg));
     RPCPubSub::publish( rpcConstants::pcCwKeyerCategory, rpcConstants::pcCwKeyerReport, comport + "<>" + state  + "<>" + errorMsg, psPublished );
 
 }
@@ -194,12 +212,20 @@ void PcCwKeyerRpc::publishPttEnable(bool state)
     {
         stateStr = "Off";
     }
-
+    trace(QString("PCCwKeyerRPc: publishPttEnable = %1").arg(stateStr));
     RPCPubSub::publish( rpcConstants::pcCwKeyerCategory, rpcConstants::pcCwKeyerPttEnabled, stateStr, psPublished );
 }
 
 void PcCwKeyerRpc::publishTxOn(const QString txOn)
 {
+    trace(QString("PCCwKeyerRPc: publishTxOn = %1").arg(txOn));
     RPCPubSub::publish( rpcConstants::pcCwKeyerCategory, rpcConstants::pcCwKeyerTxOn, txOn, psPublished );
+}
+
+
+void PcCwKeyerRpc::publishWpm(const int wpm)
+{
+    trace(QString("PCCwKeyerRPc: publishWpm = %1").arg(QString::number(wpm)));
+    RPCPubSub::publish( rpcConstants::pcCwKeyerCategory, rpcConstants::pcCwWpmToLog, QString::number(wpm), psPublished );
 }
 

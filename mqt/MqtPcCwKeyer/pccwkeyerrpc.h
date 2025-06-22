@@ -51,10 +51,12 @@ public:
     void publishPttEnable(const bool state);
     void publishTxOn(const QString txOn);
 
+    void publishWpm(const int wpm);
 signals:
 
     void cwMessageFromLoggerToKeyer(QString);
     void cwStopCommandFromLogger(QString);
+    void wpmFromLog(int);
 
 
 

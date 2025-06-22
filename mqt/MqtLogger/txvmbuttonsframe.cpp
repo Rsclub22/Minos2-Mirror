@@ -736,8 +736,7 @@ void TxVmButtonsFrame::setFrameState(QString voiceKeyerName)
 
                 cwSpeedSlider = new CwSpeedControl(ui->cwSpeedSliderFrame);
                 ui->cwSpeedSliderHorizontalLayout->addWidget(cwSpeedSlider);
-
-
+                cwSpeedSlider->setSpeedRange(voiceKeyerCommon::PC_CW_KEYER_MIN_WPM, voiceKeyerCommon::PC_CW_KEYER_MAX_WPM);
 
                 connect(cwSpeedSlider, &CwSpeedControl::cwSpeedChanged, this, [this](int wpm){
                     emit sendWpmToPcCwkeyer(wpm);
@@ -2256,6 +2255,23 @@ void TxVmButtonsFrame::setPcCwKeyerTxOnState(QString state)
             clearCwMessageDisplay();
             onMsgDurTimerTimeout();
         }
+    }
+}
+
+
+void TxVmButtonsFrame::setPcCwKeyerCurrentWpm(QString wpm)
+{
+    logMessage(QString("Current WPM from PcCwKeyer = %1").arg(wpm));
+    if (wpm.isEmpty())
+    {
+        return;
+    }
+
+    if (txVoiceKeyer && voiceKeyerType == keyerTypes[VoiceKeyerId::PcCwKeyer])
+    {
+
+        cwSpeedSlider->setValue(wpm.toInt()); // this will not emit and send back to keyer
+
     }
 }
 

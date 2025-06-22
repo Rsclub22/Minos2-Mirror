@@ -27,6 +27,7 @@
 #include "LogEvents.h"
 #include "clustercommon.h"
 #include "MTrace.h"
+#include "voicekeyerCommonConstants.h"
 
 #include "pccwkeyermainwindow.h"
 #include "qevent.h"
@@ -78,7 +79,7 @@ PcCwKeyerMainWindow::PcCwKeyerMainWindow(QWidget *parent)
 
     fillPortsInfo();
 
-    setWpmSpinnerRange(5, 40);
+    setWpmSpinnerRange(voiceKeyerCommon::PC_CW_KEYER_MIN_WPM, voiceKeyerCommon::PC_CW_KEYER_MAX_WPM);
     setWpmSpinnnerStep(1);
     setWpmValue(wpm);
 
@@ -112,6 +113,7 @@ PcCwKeyerMainWindow::PcCwKeyerMainWindow(QWidget *parent)
     pcCwKeyerRpc = new PcCwKeyerRpc();
     connect(pcCwKeyerRpc, &PcCwKeyerRpc::cwMessageFromLoggerToKeyer, this, &PcCwKeyerMainWindow::cwMessageFromLoggerToCwKeyer);
     connect(pcCwKeyerRpc, &PcCwKeyerRpc::cwStopCommandFromLogger, this, &PcCwKeyerMainWindow::cwStopCommandFromLogger);
+    connect(pcCwKeyerRpc, &PcCwKeyerRpc::wpmFromLog, this, &PcCwKeyerMainWindow::cwWpmFromLogger);
 
 
     openCwKeyer();
@@ -135,7 +137,7 @@ PcCwKeyerMainWindow::PcCwKeyerMainWindow(QWidget *parent)
 
 
     QTimer::singleShot(30000, this, [this]() {
-        sendInitialPttStatusToLogger();
+        sendInitialStatusToLogger();
     });
 
 
@@ -156,10 +158,15 @@ void PcCwKeyerMainWindow::readSettings()
     QSettings config(PC_CW_KEYER_SETTINGS_FILE(), QSettings::IniFormat);
 
     wpm = config.value("currentWpm", 15).toInt();
+    trace(QString("readSettings wpm = %1").arg(QString::number(wpm)));
     comport = config.value("comport", "").toString();
+    trace(QString("readSettings comport = %1").arg(comport));
     preTxDelayMs = config.value("preTxDelayMs", MIN_PRE_TX_DELAY).toInt();
+    trace(QString("readSettings preTxDelayMs = %1").arg(QString::number(preTxDelayMs)));
     postTxDelayMs = config.value("postTxDelayMs", MIN_POST_TX_DELAY).toInt();
+    trace(QString("readSettings postTxDelayMs = %1").arg(QString::number(postTxDelayMs)));
     pttEnabled = config.value("pttEnabled", false).toBool();
+    trace(QString("readSettings pttEnabled = %1").arg(pttEnabled ? "True" : "False"));
 
 }
 
@@ -174,7 +181,7 @@ void PcCwKeyerMainWindow::loadSettingsToMainWindow()
     }
     else
     {
-        qDebug() << "Comport" << comport << " is no longer available";
+        trace(QString("Comport %1 is no longer available").arg(comport));
     }
 
 
@@ -288,6 +295,7 @@ void PcCwKeyerMainWindow::handleNextCwString()
         {
             cwKeyer->setPttPendingFlag(pttEnabled);
             cwKeyer->pttOn(true);  // Turn on PTT
+            trace("Ptt Turned On");
 
             QTimer::singleShot(preTxDelayMs, this, [this, next]() {
 
@@ -322,7 +330,6 @@ void PcCwKeyerMainWindow::handleStatusTimer()
     {
         oldServerListCount = pcCwKeyerRpc->getServerListCount();
         // send status to clients
-        //trace(QString("handleStatusTimer: PcCwKeyer Client Count Changed old = %1, new = %2 - Send Status to Cluster Clients - %3").arg(oldServerListCount).arg(pcCwKeyerRpc->getServerListCount()).arg(status->text()));
         pcCwKeyerRpc->publishState(comportName->text(), comportStatus->text(), errorMsg->text());
 
     }
@@ -391,8 +398,12 @@ void PcCwKeyerMainWindow::onWpmValueChanged(int value)
         }
         trace(QString("wpm changed = %1").arg(QString::number(wpm)));
         saveWpmSetting();
+        pcCwKeyerRpc->publishWpm(wpm);
+
     }
 }
+
+
 
 
 void PcCwKeyerMainWindow::onEnablePTT(bool checked)
@@ -453,16 +464,13 @@ void PcCwKeyerMainWindow::sendTxStatusToLogger(bool on)
 }
 
 
-void PcCwKeyerMainWindow::sendInitialPttStatusToLogger()
+void PcCwKeyerMainWindow::sendInitialStatusToLogger()
 {
     if (pcCwKeyerRpc)
     {
-       bool state = !ui->enablePTTCheckbox->isChecked();
-       pcCwKeyerRpc->publishPttEnable(state);
        pcCwKeyerRpc->publishPttEnable(ui->enablePTTCheckbox->isChecked());
-       QTimer::singleShot(1000, this, [this]() {
-            pcCwKeyerRpc->publishPttEnable(ui->enablePTTCheckbox->isChecked());
-       });
+       pcCwKeyerRpc->publishWpm(wpm);
+
     }
 
 }
@@ -491,11 +499,33 @@ void PcCwKeyerMainWindow::closeCwKeyer()
 
 void PcCwKeyerMainWindow::cwStopCommandFromLogger()
 {
-    trace(QString("stop cw message from logger"));
+    trace(QString("Stop cw message from logger"));
     if (cwKeyer)
     {
         cwKeyer->abortTransmission();
     }
+
+}
+
+void PcCwKeyerMainWindow::cwWpmFromLogger(int newWpm)
+{
+    if (newWpm != wpm)
+    {
+        trace(QString("Cw WPM from logger = %1").arg(QString::number(newWpm)));
+        ui->wpmSpinBox->blockSignals(true); // prevent update being sent back to logger
+        ui->wpmSpinBox->setValue(newWpm);
+        ui->wpmSpinBox->blockSignals(false);
+
+        if (cwKeyer)
+        {
+            cwKeyer->setWPM(newWpm);
+        }
+
+        saveWpmSetting();
+    }
+
+
+
 
 }
 
@@ -515,7 +545,7 @@ void PcCwKeyerMainWindow::onTextInputFinished(const QString &text)
         {
           ui->cwTextInputLineEdit->selectAll();     // if text came from this app
         }
-
+        trace(QString("Cw message from local CW Entry = %1").arg(trimmed));
         cwMsgQueue.append(trimmed);
 
         if (wasEmpty && cwKeyer)
@@ -563,8 +593,9 @@ void PcCwKeyerMainWindow::handleSerialPortOpen(bool state)
     comportStatus->clear();
     errorMsg->clear();
     comportName->setText(QString("%1: ").arg(ui->comportSel->currentText()));
-    comportStatus->setText(QString("%1").arg(state ? "Open" : "Closed"));
-
+    QString stateStr = state ? "Open" : "Closed";
+    comportStatus->setText(QString("%1").arg(stateStr));
+    trace(QString("Comport State = %1").arg(stateStr));
 
 }
 
@@ -572,6 +603,7 @@ void PcCwKeyerMainWindow::handleSerialPortError(QString msg)
 {
     errorMsg->clear();
     errorMsg->setText(QString("%1").arg(msg));
+    trace(QString("Serial Port Error = %1").arg(msg));
 }
 
 

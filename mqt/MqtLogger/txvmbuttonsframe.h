@@ -106,6 +106,7 @@ public:
     void setPcCwKeyerErrorMsg(QString errorMsg);
     void setPcCwKeyerPttEnabled(QString enabled);
     void setPcCwKeyerTxOnState(QString state);
+    void setPcCwKeyerCurrentWpm(QString wpm);
 signals:
 
     void pttStatus(bool);

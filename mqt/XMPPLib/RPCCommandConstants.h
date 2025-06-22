@@ -151,7 +151,7 @@ static const QString pcCwKeyerPttEnabled ("pcCwKeyerPttEnabled");
 static const QString pcCwKeyerTxOn ("pcCwKeyerTxOn");
 static const QString cwWpmToPcCwKeyer ("cwWpmToPcCwKeyer");
 static const QString pcCwKeyerWpm   ("pcCwKeyerWpm");
-
+static const QString pcCwWpmToLog  ("pcCwWpmToLog");
 
 // Control
 static const QString controlApp         ("mqtControl");
