@@ -180,6 +180,7 @@ void TSingleLogFrame::buildFrame(int slotNo)
 
     // from tx Voice Memory Panel
     connect(txVmButtonsFrame, &TxVmButtonsFrame::sendRadioMode, this, &TSingleLogFrame::sendRadioMode);
+    connect(txVmButtonsFrame, &TxVmButtonsFrame::sendWpmToPcCwkeyer, this, &TSingleLogFrame::sendPcKeyerCwWpm);
 
     connect(FKHRigControlFrame, &RigControlFrame::radioIsConnected, this, &TSingleLogFrame::sendBandmapRadioIsConnected);
     connect(FKHRigControlFrame, &RigControlFrame::radioHasError, this, &TSingleLogFrame::sendBandmapRadioHasError);
@@ -2146,6 +2147,15 @@ void TSingleLogFrame::sendPcKeyerTxCwStop(QString msg)
     if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
     {
         LogContainer->sendDM->sendPcKeyerTxCwStop(msg);
+    }
+}
+
+
+void TSingleLogFrame::sendPcKeyerCwWpm(int wpm)
+{
+    if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
+    {
+        LogContainer->sendDM->sendPcKeyerCwWpm(wpm);
     }
 }
 

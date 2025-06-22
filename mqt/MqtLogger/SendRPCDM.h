@@ -155,6 +155,8 @@ class TSendDM : public QObject
       void sendSkyScanControlPanelButtonState(TSingleLogFrame *tslf, const SkyScanButtonState state);
       void sendRotatorSkyScanPresetNumberToRotator(TSingleLogFrame *tslf, int buttonNumber);
 
+      void sendPcKeyerCwWpm(const int &wpm);
+
   private slots:
       void on_routerCall( bool err, QSharedPointer<MinosRPCObj>mro, const QString from );
       void on_notify(AnalysePubSubNotify an, const QString from );

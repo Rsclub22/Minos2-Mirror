@@ -574,6 +574,20 @@ void TSendDM::sendPcKeyerTxCwStop(const QString &msg)
 }
 
 
+void TSendDM::sendPcKeyerCwWpm(const int &wpm)
+{
+    if (!pcCwKeyerApp.isEmpty())
+    {
+        RPCGeneralClient rpc(rpcConstants::pcCwKeyerMethod);
+        QSharedPointer<RPCParam>st(new RPCParamStruct);
+        st->addMember( rpcConstants::cwWpmToPcCwKeyer, rpcConstants::paramName );
+        st->addMember(wpm, rpcConstants::pcCwKeyerWpm);
+        rpc.getCallArgs() ->addParam( st );
+        rpc.queueCall( pcCwKeyerApp );
+    }
+}
+
+
 
 
 void TSendDM::sendRigControlMode(TSingleLogFrame *tslf,const QString &mode)

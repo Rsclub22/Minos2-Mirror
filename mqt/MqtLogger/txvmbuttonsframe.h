@@ -11,6 +11,7 @@
 #include "voicekeyerbase.h"
 #include "voicekeyerfactory.h"
 #include "rigcontrolcommonconstants.h"
+#include "cwspeedcontrol.h"
 
 class QToolButton;
 class QMenu;
@@ -109,6 +110,7 @@ signals:
 
     void pttStatus(bool);
     void sendRadioMode(QString m);
+    void sendWpmToPcCwkeyer(int wpm);
 
 private:
     Ui::TxVmButtonsFrame *ui;
@@ -148,7 +150,7 @@ private:
     bool pttState;
     bool sAndPState = true;
 
-
+    CwSpeedControl *cwSpeedSlider = nullptr;
 
     bool notifyComboChange = true;
 
@@ -213,6 +215,9 @@ private:
     void setCwEntryBoxVisible(bool visible);
     void setMessagePlayingFlag(bool playing);
     bool isMessagePlaying();
+    void setCwMessagePlayingVisible(bool visible);
+    void clearCwMessageDisplay();
+    void displayCwMessagePlaying(const QString msg);
 private slots:
 
     void onVoiceKeyerSelect(int idx);

@@ -1,5 +1,6 @@
 #include <QMessageBox>
 
+#include "cwspeedcontrol.h"
 #include "tlogcontainer.h"
 #include "delayedaction.h"
 #include "SendRPCDM.h"
@@ -629,6 +630,7 @@ void TxVmButtonsFrame::setFrameState(QString voiceKeyerName)
        setKeyerIndicatorGroupBoxVisible(false);
        setPttIndicatorGroupBoxVisible(false);
        setErrorMessageVisible(false);
+       setCwMessagePlayingVisible(false);
 
     }
     else
@@ -710,6 +712,7 @@ void TxVmButtonsFrame::setFrameState(QString voiceKeyerName)
             if (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl])
             {
                 setCwEntryBoxVisible(true);
+                setCwMessagePlayingVisible(true);
 
                 if (!getRigCwKeyerSupportStopFlag(selectedRadio.getLocalName()))
                 {
@@ -725,10 +728,21 @@ void TxVmButtonsFrame::setFrameState(QString voiceKeyerName)
             else if (voiceKeyerType == keyerTypes[VoiceKeyerId::PcCwKeyer])
             {
                 setCwEntryBoxVisible(true);
+                setCwMessagePlayingVisible(true);
                 setPttTypeLabelsVisible(false);
                 setPttEnabledIndicatorOnOff(false);
                 setEomTypeLabelsVisible(false);
                 initCwTextEntryBox("AllRadios", PC_CW_KEYER_COMMON_PARAMS_FILENAME);
+
+                cwSpeedSlider = new CwSpeedControl(ui->cwSpeedSliderFrame);
+                ui->cwSpeedSliderHorizontalLayout->addWidget(cwSpeedSlider);
+
+
+
+                connect(cwSpeedSlider, &CwSpeedControl::cwSpeedChanged, this, [this](int wpm){
+                    emit sendWpmToPcCwkeyer(wpm);
+                });
+
             }
             else if (voiceKeyerType == keyerTypes[VoiceKeyerId::RigControl])
             {
@@ -1061,6 +1075,7 @@ void TxVmButtonsFrame::startVMMsg(int buttonNumber)
         if (vmData.getVmCwMessage().isEmpty())
         {
             logMessage(QString("Cw Message is empty, ignore"));
+            displayCwMessagePlaying(QString("CW Message Empty!"));
             return;
         }
 
@@ -1088,6 +1103,7 @@ void TxVmButtonsFrame::startVMMsg(int buttonNumber)
 
             txVoiceKeyer->sendCwMsg(vmData);
             setMessagePlayingFlag(true);
+            displayCwMessagePlaying(vmData.getVmCwMessage());
         }
 
     }
@@ -1128,15 +1144,13 @@ void TxVmButtonsFrame::onVmStopClicked()
         || voiceKeyerType == keyerTypes[VoiceKeyerId::PcCwKeyer])
     {
 
-        //if (getCwMemType(selectedRadio) == hamlibData::CW_MEMORY_TYPES::ICOM)
-       // {
-            txVoiceKeyer->stopCwMsg();
+        txVoiceKeyer->stopCwMsg();
 
-            if (curMode != savedMode && txVoiceKeyer->getSetCwModeAndRestoreFlag())       // restore mode?
-            {
-                sendModeToRadio(savedMode);
-            }
-       // }
+        if (curMode != savedMode && txVoiceKeyer->getSetCwModeAndRestoreFlag())       // restore mode?
+        {
+            sendModeToRadio(savedMode);
+        }
+
     }
     else
     {
@@ -1943,6 +1957,22 @@ void TxVmButtonsFrame::setErrorMessageVisible(bool visible)
     ui->errorMeassageLabel->setVisible(visible);
 }
 
+void TxVmButtonsFrame::setCwMessagePlayingVisible(bool visible)
+{
+    ui->cwMesssagePlayingLabel->setVisible(visible);
+    ui->cwMessagePlayingDisplay->setVisible(visible);
+}
+
+void TxVmButtonsFrame::displayCwMessagePlaying(const QString msg)
+{
+    ui->cwMessagePlayingDisplay->setText(msg);
+}
+
+void TxVmButtonsFrame::clearCwMessageDisplay()
+{
+    ui->cwMessagePlayingDisplay->clear();
+}
+
 void TxVmButtonsFrame::setRadioPttState(bool state)
 {
     if (voiceKeyerType == keyerTypes[VoiceKeyerId::PcCwKeyer])
@@ -2223,6 +2253,7 @@ void TxVmButtonsFrame::setPcCwKeyerTxOnState(QString state)
         else
         {
             setPttStatusIndicatorOnOff(false);
+            clearCwMessageDisplay();
             onMsgDurTimerTimeout();
         }
     }
