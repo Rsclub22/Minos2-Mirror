@@ -8,6 +8,8 @@ TEMPLATE = app
 
 CONFIG += c++17
 
+win32: LIBS += -lwinmm
+
 win32:RC_ICONS += ../MinosDTRKeyer.ico
 macx:ICON=../MinosDTRKeyer.icns
 

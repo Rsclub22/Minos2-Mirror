@@ -5,8 +5,6 @@
 //                      Pc Serial Port DTR CW Keyer
 // Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2025
 //
-// Interprocess Control Logic
-// COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2017
 //
 //
 //
@@ -15,26 +13,16 @@
 
 
 
-
 #include "PcCwKeyer.h"
-#include <QtMath>
-#include <QTimer>
-#include <QMap>
-#include <QString>
 #include "MTrace.h"
-
-
+#include <QTimer>
+#include <QDebug>
 
 PcCwKeyer::PcCwKeyer(QObject *parent)
     : QObject(parent)
 {
-
     worker = new CwWorker(this);
     connect(worker, &CwWorker::finished, this, &PcCwKeyer::onWorkerFinished);
-
-    connect(this, &PcCwKeyer::requestKey, this, &PcCwKeyer::key);
-
-
 }
 
 PcCwKeyer::~PcCwKeyer()
@@ -44,9 +32,10 @@ PcCwKeyer::~PcCwKeyer()
     close();
 }
 
-void PcCwKeyer::setWPM(int wpm){
+void PcCwKeyer::setWPM(int wpm)
+{
     charDot = 1200.0 / wpm;
-    trace(QString("WPM set to %1, dot duration: %2").arg(QString::number(wpm), QString::number(charDot)));
+    qDebug() << "WPM set to" << wpm << ", dot duration:" << charDot << "ms";
 }
 
 void PcCwKeyer::openComPort(const QString portName)
@@ -55,28 +44,31 @@ void PcCwKeyer::openComPort(const QString portName)
     serial.setBaudRate(QSerialPort::Baud9600);
     if (!serial.open(QIODevice::ReadWrite))
     {
-        trace(QString("Comport Failed to open port %1").arg(qPrintable(portName)));
-        key(false);
-        pttOn(false);
 
+        pttOn(false);
         emit serialPortOpen(false);
+        return;
     }
-    else
-    {
-        connect(&serial, &QSerialPort::errorOccurred, this, &PcCwKeyer::handleSerialPortError);
-        emit serialPortOpen(true);
-    }
+
+    connect(&serial, &QSerialPort::errorOccurred, this, &PcCwKeyer::handleSerialPortError);
+
+    worker->setSerialPort(&serial);
+
+    emit serialPortOpen(true);
 }
 
 void PcCwKeyer::closeComport(const QString portName)
 {
-    if (serial.isOpen())
-    {
-        trace(QString("Closing Comport %1").arg(portName));
+    if (serial.isOpen()) {
+        qDebug() << "Closing port" << portName;
         serial.close();
     }
+}
 
-
+void PcCwKeyer::close()
+{
+    if (serial.isOpen())
+        serial.close();
 }
 
 bool PcCwKeyer::isSerialOpen()
@@ -95,43 +87,34 @@ void PcCwKeyer::enqueueMorseText(const QString &text)
 
     QString upperText = text.toUpper();
 
-    for (int i = 0; i < upperText.length(); ++i) {
+    for (int i = 0; i < upperText.length(); ++i)
+    {
         QChar c = upperText[i];
 
-        if (c == ' ') {
-            // Word gap = 7 dot units, minus the 1 unit already added after last symbol
-            qint32 gapDuration = static_cast<int>(charDot * 6);
-            //qDebug() << "Word gap: OFF for" << gapDuration << "ms";
+        if (c == ' ')
+        {
+            int gapDuration = static_cast<int>(charDot * 6); // Word gap
             worker->enqueueAction([] {}, gapDuration);
             continue;
         }
 
         QString morse = convertCharToMorse(c);
         if (morse.isEmpty())
-            continue;  // Skip unknown characters
+            continue;
 
-        for (int j = 0; j < morse.length(); ++j) {
-            QChar symbol = morse[j];
-            qreal onMs = (symbol == '.') ? charDot : charDot * 3;
+        for (int j = 0; j < morse.length(); ++j)
+        {
+            const bool isDot = morse[j] == '.';
+            int onMs = static_cast<int>(charDot * (isDot ? 1 : 3));
 
-            // Key down
-            //worker->enqueueAction([this, symbol, onMs] {
-            worker->enqueueAction([this] {
-                //qDebug().nospace() << "Emit key ON: symbol '" << symbol << "' duration " << onMs << " ms";
-                emit requestKey(true);
-            }, static_cast<int>(onMs));
-
-            // Key up and symbol gap (always 1 unit)
-            worker->enqueueAction([this] {
-                //qDebug() << "Emit key OFF: symbol gap duration" << charDot << "ms";
-                emit requestKey(false);
-            }, static_cast<int>(charDot));
+            enqueueOnOff(true, onMs);  // Key down
+            enqueueOnOff(false, static_cast<int>(charDot));  // Symbol gap
         }
 
-        // Inter-character gap = 3 dot units total (1 already added), so add 2 more
-        if (i + 1 < upperText.length() && upperText[i + 1] != ' ') {
-            qint32 gapDuration = static_cast<int>(charDot * 2);
-            //qDebug() << "Inter-character gap: OFF for" << gapDuration << "ms";
+        // Inter-character gap
+        if (i + 1 < upperText.length() && upperText[i + 1] != ' ')
+        {
+            int gapDuration = static_cast<int>(charDot * 2);
             worker->enqueueAction([] {}, gapDuration);
         }
     }
@@ -139,6 +122,10 @@ void PcCwKeyer::enqueueMorseText(const QString &text)
     worker->start();
 }
 
+void PcCwKeyer::enqueueOnOff(bool on, int delayMs)
+{
+    worker->enqueueKey(on, delayMs);
+}
 
 QString PcCwKeyer::convertCharToMorse(QChar c)
 {
@@ -168,44 +155,29 @@ QString PcCwKeyer::convertCharToMorse(QChar c)
 void PcCwKeyer::abortTransmission()
 {
     worker->clear();
-    emit requestKey(false);
     pttOn(false);
-    trace(QString("CW transmission aborted."));
-}
-
-void PcCwKeyer::close()
-{
-    if (serial.isOpen()) {
-        serial.close();
-    }
-}
-
-void PcCwKeyer::key(bool on)
-{
-    serial.setDataTerminalReady(on);
-
+    trace("CW transmission aborted.");
 }
 
 void PcCwKeyer::pttOn(bool on)
 {
-    //qDebug() << "PTT " << (on ? "On" : "Off");
     serial.setRequestToSend(on);
 }
 
 void PcCwKeyer::handleSerialPortError(QSerialPort::SerialPortError error)
 {
-    if (error == QSerialPort::ResourceError) {
-        trace(QString("Serial port disconnected: %1").arg(serial.errorString()));
+    if (error == QSerialPort::ResourceError)
+    {
+        qDebug() << "Serial port error:" << serial.errorString();
         emit serialPortError(serial.errorString());
     }
 }
 
 void PcCwKeyer::onWorkerFinished()
 {
-    if (getPttPendingFlag())
-    {
+    if (getPttPendingFlag()) {
         QTimer::singleShot(postTxDelayMs, this, [this]() {
-            pttOn(false);  // Turn off transmitter
+            pttOn(false);
             emit nextStringRequested();
         });
         setPttPendingFlag(false);
@@ -214,7 +186,4 @@ void PcCwKeyer::onWorkerFinished()
     {
         emit nextStringRequested();
     }
-
-
 }
-
