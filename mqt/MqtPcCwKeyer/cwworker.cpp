@@ -13,27 +13,51 @@
 
 
 
-
-
-
 #include "CwWorker.h"
+#include <QtConcurrent/QtConcurrentRun>
 #include <QThread>
-#include <QMetaObject>
-#include <QtConcurrentRun>
+#include <QElapsedTimer>
+
+#ifdef Q_OS_WIN
+#include <windows.h>
+#include <mmsystem.h>
+#endif
+#ifdef _MSC_VER
+#pragma comment(lib, "winmm.lib")
+#endif
 
 CwWorker::CwWorker(QObject *parent) : QObject(parent)
 {
+#ifdef Q_OS_WIN
+    timeBeginPeriod(1); // Request 1ms timer resolution
+#endif
 }
 
 CwWorker::~CwWorker()
 {
     clear();
+#ifdef Q_OS_WIN
+    timeEndPeriod(1);
+#endif
+}
+
+void CwWorker::setSerialPort(QSerialPort *port)
+{
+    serial = port;
 }
 
 void CwWorker::enqueueAction(std::function<void()> func, int delayMs)
 {
     QMutexLocker locker(&mutex);
     actions.enqueue({func, delayMs});
+}
+
+void CwWorker::enqueueKey(bool on, int delayMs)
+{
+    enqueueAction([this, on]() {
+        if (serial && serial->isOpen())
+            serial->setDataTerminalReady(on);
+    }, delayMs);
 }
 
 void CwWorker::clear()
@@ -52,6 +76,9 @@ void CwWorker::start()
     }
 
     QtConcurrent::run([this]() {
+#ifdef Q_OS_WIN
+        SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_HIGHEST);
+#endif
         while (true)
         {
             QPair<std::function<void()>, int> action;
@@ -61,18 +88,18 @@ void CwWorker::start()
                 if (actions.isEmpty())
                 {
                     running = false;
-                    // Emit finished signal safely in object's thread:
                     QMetaObject::invokeMethod(this, "finished", Qt::QueuedConnection);
                     return;
                 }
                 action = actions.dequeue();
             }
 
-            // Execute the function in the object's thread:
-            QMetaObject::invokeMethod(this, [func = action.first]() { func(); }, Qt::QueuedConnection);
+            action.first();
 
-            // Sleep for the delay in the worker thread (this thread):
-            QThread::msleep(action.second);
+            QElapsedTimer timer;
+            timer.start();
+            while (timer.elapsed() < action.second)
+                QThread::msleep(1);
         }
     });
 }
