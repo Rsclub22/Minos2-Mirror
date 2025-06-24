@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>604</width>
-    <height>327</height>
+    <height>333</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -38,7 +38,7 @@
           <item>
            <layout class="QVBoxLayout" name="verticalLayout_5">
             <item>
-             <widget class="QComboBox" name="voiceKeyerSelect"/>
+             <widget class="QComboBox" name="txKeyerSelect"/>
             </item>
             <item>
              <widget class="QPushButton" name="vmSetupPb">

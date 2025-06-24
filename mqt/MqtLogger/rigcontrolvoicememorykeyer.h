@@ -20,23 +20,23 @@
 #include "txKeyerfactory.h"
 #include "serialCommonData.h"
 
-class RigControlVoiceMemoryKeyer : public VoiceKeyerBase
+class RigControlVoiceMemoryKeyer : public TxKeyerBase
 {
     Q_OBJECT
 public:
     explicit RigControlVoiceMemoryKeyer(QObject *parent = nullptr);
     virtual ~RigControlVoiceMemoryKeyer() override;
 
-    static void registerVoiceKeyer(VoiceKeyerFactory::VmKeyers*);
+    static void registerVoiceKeyer(TxKeyerFactory::TxKeyers*);
 
     void voiceKeyerInit(int &numButtons) override;
     void sendMsgNum(int buttonNum) override;
-    void stopMsg(VoiceKeyerParams * vkParam) override;
+    void stopMsg(TxKeyerParams * vkParam) override;
 
     virtual void setRadioParams(int radioMaxNumButtons, QString selectedRadioName, serialCommonData::MINOS_PTT_TYPES pttType_, bool pttEnabled_) override;
 
 
-    void sendCwMsg(VoiceKeyerParams &vmParams) override {Q_UNUSED(vmParams)};
+    void sendCwMsg(TxKeyerParams &vmParams) override {Q_UNUSED(vmParams)};
     void stopCwMsg() override {};
 
     void setCwMemType(int cwMemType) override {Q_UNUSED(cwMemType)};
@@ -54,12 +54,12 @@ public:
     int getSelectedEomType() override;
     virtual void setSelectedEomType(int eomType)override{Q_UNUSED(eomType)};
 
-    bool readVmButtonParams(int buttonNum, VoiceKeyerParams &vmParams) override;
-    void saveVmButtonParams(const VoiceKeyerParams &vmParams) override;
+    bool readVmButtonParams(int buttonNum, TxKeyerParams &vmParams) override;
+    void saveVmButtonParams(const TxKeyerParams &vmParams) override;
 
-    virtual int setup(VoiceKeyerFactory *voiceKeyerFactory, int &maxNumButtons, int &numButtons, QString selectedRadioName) override;
+    virtual int setup(TxKeyerFactory *voiceKeyerFactory, int &maxNumButtons, int &numButtons, QString selectedRadioName) override;
 
-    virtual int editButton(VoiceKeyerParams* vmData, QString title) override;
+    virtual int editButton(TxKeyerParams* vmData, QString title) override;
 
 
 
@@ -72,7 +72,7 @@ signals:
 
 private:
 
-    int selectedEomType = voiceKeyerCommon::VoiceCwKeyerEomTypes::Eom_None;
+    int selectedEomType = TxKeyerCommon::KeyerEomTypes::Eom_None;
     serialCommonData::MINOS_PTT_TYPES pttType = serialCommonData::MINOS_PTT_TYPES::PTT_TYPE_NONE;
     bool pttEnabled = false;
 
