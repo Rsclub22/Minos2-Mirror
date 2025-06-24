@@ -130,7 +130,6 @@ SOURCES += \
     txKeyerfactory.cpp \
     txVmExternalButtonDialog.cpp \
     txVmInternalSetupDialog.cpp \
-    txvmbuttonsframe.cpp \
     txvminternalbuttondialog.cpp \
     txvmrigbuttondialog.cpp \
     txvmrigsetupdialog.cpp \
@@ -239,7 +238,6 @@ HEADERS  += \
     txKeyerfactory.h \
     txVmExternalButtonDialog.h \
     txVmInternalSetupDialog.h \
-    txvmbuttonsframe.h \
     txvminternalbuttondialog.h \
     txvmrigbuttondialog.h \
     txvmrigsetupdialog.h \
@@ -321,7 +319,6 @@ FORMS    += \
     Clusterbandmapconfigure.ui \
     txVmExternalButtonDialog.ui \
     txVmInternalSetupDialog.ui \
-    txvmbuttonsframe.ui \
     txvminternalbuttondialog.ui \
     txvmrigbuttondialog.ui \
     txvmrigsetupdialog.ui

@@ -18,7 +18,7 @@
 #include "RotPresets.h"
 #include "runbuttonsframe.h"
 #include "BandSwitchFrame.h"
-#include "txvmbuttonsframe.h"
+//#include "txvmbuttonsframe.h"
 #include "qrzdisplayframe.h"
 #include "qsomapframe.h"
 #include "rotatorcompassframe.h"
@@ -53,7 +53,7 @@ public:
     RotatorSkyScanFrame *skyScanControlFrame = nullptr;
     RotatorCompassFrame *FKHRotCompassFrame = nullptr;
     skyScanPresetsFrame *FKHRotSkyScanPresetsFrame = nullptr;
-    TxVmButtonsFrame *txVmButtonsFrame = nullptr;
+    //TxVmButtonsFrame *txVmButtonsFrame = nullptr;
     QrzDisplayFrame *qrzDisplayFrame = nullptr;
 
     RotPresets *rotPresets = nullptr;

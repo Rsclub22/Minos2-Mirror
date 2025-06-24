@@ -79,7 +79,7 @@ PcCwKeyerMainWindow::PcCwKeyerMainWindow(QWidget *parent)
 
     fillPortsInfo();
 
-    setWpmSpinnerRange(voiceKeyerCommon::PC_CW_KEYER_MIN_WPM, voiceKeyerCommon::PC_CW_KEYER_MAX_WPM);
+    setWpmSpinnerRange(TxKeyerCommon::PC_CW_KEYER_MIN_WPM, TxKeyerCommon::PC_CW_KEYER_MAX_WPM);
     setWpmSpinnnerStep(1);
     setWpmValue(wpm);
 

@@ -155,12 +155,12 @@ private:
 
     bool messagePlaying = false;
 
-    int selectedEomType = voiceKeyerCommon::VoiceCwKeyerEomTypes::Eom_None;
+    int selectedEomType = TxKeyerCommon::KeyerEomTypes::Eom_None;
 
     QMap<PubSubName, RadioDetails> allRadioDetails;
 
     PubSubName selectedRadio;
-    QString curMode;
+
     QString savedMode;
     bool radioConnected;
     bool pttState;

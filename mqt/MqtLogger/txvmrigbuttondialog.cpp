@@ -163,7 +163,7 @@ void TxVmRigButtonDialog::setVmTypeAndRadioModelLabel(QString radioModel)
 }
 
 
-void TxVmRigButtonDialog::setVmData(VoiceKeyerParams* vmData_)
+void TxVmRigButtonDialog::setVmData(TxKeyerParams* vmData_)
 {
     vmData = vmData_;
     ui->txVmNameEdit->setText(vmData->getVmName());
@@ -194,7 +194,7 @@ void TxVmRigButtonDialog::on_txSerialMessageEditingFinshed()
 
 void TxVmRigButtonDialog::setDialogForEomType(int eomType)
 {
-    if (eomType == voiceKeyerCommon::VoiceCwKeyerEomTypes::Timer)
+    if (eomType == TxKeyerCommon::KeyerEomTypes::Timer)
     {
         ui->messageDurLbl->setVisible(true);
         ui->txVmMessageDur->setVisible(true);
@@ -275,7 +275,7 @@ void TxVmRigButtonDialog::on_okButtonClicked()
     bool allSpecialCharOK = false;
     QStringList specialCharErrorList;
 
-    int currentIndex = input.indexOf(voiceKeyerCommon::specialCwCharEscapeChar);
+    int currentIndex = input.indexOf(TxKeyerCommon::specialCwCharEscapeChar);
     while (currentIndex != -1)
     {
         specialCharPresent = true;
@@ -288,11 +288,11 @@ void TxVmRigButtonDialog::on_okButtonClicked()
         else
         {
             allSpecialCharOK = false;
-            spChar = voiceKeyerCommon::specialCwCharEscapeChar + spChar;
+            spChar = TxKeyerCommon::specialCwCharEscapeChar + spChar;
             specialCharErrorList.append(spChar);
         }
 
-        currentIndex = input.indexOf(voiceKeyerCommon::specialCwCharEscapeChar, currentIndex + 1);
+        currentIndex = input.indexOf(TxKeyerCommon::specialCwCharEscapeChar, currentIndex + 1);
 
     }
 
@@ -336,7 +336,7 @@ void TxVmRigButtonDialog::on_cancelbuttonClicked()
 
 void TxVmRigButtonDialog::setCwCharInputValidator()
 {
-    cwCharValidator.setValidCwCharStr(validCwCharacterList + voiceKeyerCommon::specialCwCharEscapeChar);
+    cwCharValidator.setValidCwCharStr(validCwCharacterList + TxKeyerCommon::specialCwCharEscapeChar);
     cwCharValidator.setMaxNumCwChars(maximumNumCwChars);
     //cwCharValidator.setSupportedSpecialChars(supportedCwSpecialCharsList);
     ui->txCwMessageLineEdit->setValidator(&cwCharValidator);

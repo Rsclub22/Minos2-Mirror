@@ -24,7 +24,7 @@
 #include "tlogcontainer.h"
 #include "SendRPCDM.h"
 
-using namespace txKeyerCommon;
+using namespace TxKeyerCommon;
 
 TxKeyerFactory::TxKeyerFactory(QObject *parent) : QObject(parent)
 {

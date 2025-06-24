@@ -100,7 +100,7 @@
                   </widget>
                  </item>
                  <item>
-                  <widget class="QLabel" name="txStatusLabel_2">
+                  <widget class="QLabel" name="txStatusLabel">
                    <property name="text">
                     <string>TX Status</string>
                    </property>
@@ -207,7 +207,7 @@
                <item>
                 <layout class="QHBoxLayout" name="horizontalLayout_24">
                  <item>
-                  <widget class="QLabel" name="repeatLabel_2">
+                  <widget class="QLabel" name="repeatLabel">
                    <property name="text">
                     <string>Repeat</string>
                    </property>

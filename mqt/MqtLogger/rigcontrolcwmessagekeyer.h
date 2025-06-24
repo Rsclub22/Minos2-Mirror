@@ -16,7 +16,7 @@
 #include "tsinglelogframe.h"
 #include "serialCommonData.h"
 #include "txKeyerbase.h"
-#include "txKeyerfactory.h"
+#include "txkeyerfactory.h"
 
 
 #include <QObject>

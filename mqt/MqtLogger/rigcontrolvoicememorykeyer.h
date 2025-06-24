@@ -3,7 +3,7 @@
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //                      Rig Voice Memory Keyer
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2020
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2025
 //
 //
 //
@@ -29,7 +29,7 @@ public:
 
     static void registerVoiceKeyer(TxKeyerFactory::TxKeyers*);
 
-    void voiceKeyerInit(int &numButtons) override;
+    void txKeyerInit(int &numButtons) override;
     void sendMsgNum(int buttonNum) override;
     void stopMsg(TxKeyerParams * vkParam) override;
 
