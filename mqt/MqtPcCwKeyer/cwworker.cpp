@@ -63,6 +63,7 @@ void CwWorker::enqueueKey(bool on, int delayMs)
 void CwWorker::clear()
 {
     QMutexLocker locker(&mutex);
+    serial->setDataTerminalReady(false);
     actions.clear();
 }
 

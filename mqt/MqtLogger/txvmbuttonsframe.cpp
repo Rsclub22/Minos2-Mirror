@@ -631,6 +631,7 @@ void TxVmButtonsFrame::setFrameState(QString voiceKeyerName)
        setPttIndicatorGroupBoxVisible(false);
        setErrorMessageVisible(false);
        setCwMessagePlayingVisible(false);
+       setMessagePlayingFlag(false);
 
     }
     else
@@ -645,6 +646,7 @@ void TxVmButtonsFrame::setFrameState(QString voiceKeyerName)
 
         setKeyerIndicatorGroupBoxVisible(true);
         setPttIndicatorGroupBoxVisible(true);
+        setMessagePlayingFlag(false);
 
 
         if (voiceCap.getHasAvailStatus())
@@ -1101,7 +1103,7 @@ void TxVmButtonsFrame::startVMMsg(int buttonNumber)
             }
 
             txVoiceKeyer->sendCwMsg(vmData);
-            setMessagePlayingFlag(true);
+            //setMessagePlayingFlag(true);
             displayCwMessagePlaying(vmData.getVmCwMessage());
         }
 
@@ -1110,7 +1112,7 @@ void TxVmButtonsFrame::startVMMsg(int buttonNumber)
     {
 
         txVoiceKeyer->sendMsgNum(buttonNumSent);
-        setMessagePlayingFlag(true);
+        //setMessagePlayingFlag(true);
     }
 
     selectedEomType = txVoiceKeyer->getSelectedEomType();
@@ -1168,7 +1170,7 @@ void TxVmButtonsFrame::onVmStopClicked()
     }
     setRepeatIndicatorOnOff(false);
     buttonNumSent = NO_VM_BUTTON_ON;
-    setMessagePlayingFlag(false);
+    //setMessagePlayingFlag(false);
 
 }
 
@@ -1837,6 +1839,7 @@ void TxVmButtonsFrame:: setAvailIndicatorOnOffForPcCwKeyer()
 
 void TxVmButtonsFrame::setMessagePlayingFlag(bool playing)
 {
+    qDebug() << "set messagePlaying " << (playing ? "True" : "False");
     messagePlaying = playing;
 }
 
@@ -2023,12 +2026,14 @@ void TxVmButtonsFrame::setPttStatusIndicatorOnOff(bool on)
     {
         ui->txStatusIndicator->setStyleSheet(STATUS_INDICATOR_CONNECT_STYLE);
         ui->txStatusIndicator->setToolTip(tr("TX On"));
+        setMessagePlayingFlag(true);
 
     }
     else
     {
        ui->txStatusIndicator->setStyleSheet(STATUS_INDICATOR_DISCONNECT_STYLE);
        ui->txStatusIndicator->setToolTip(tr("TX Off"));
+       setMessagePlayingFlag(false);
     }
 
 }
