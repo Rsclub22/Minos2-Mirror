@@ -76,7 +76,7 @@ DMButtonFrame::DMButtonFrame(QWidget *parent) :
 
     fkeyFileChanged();
 
-    ui->dmButtonFrameSelecton->addItem("PcCwKeyer");
+
 }
 
 DMButtonFrame::~DMButtonFrame()
