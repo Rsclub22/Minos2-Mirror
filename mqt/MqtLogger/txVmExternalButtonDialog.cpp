@@ -132,7 +132,7 @@ void TxVmExternalButtonDialog::on_buttonBox_rejected()
 }
 
 
-void TxVmExternalButtonDialog::setVmData(VoiceKeyerParams *vmData_)
+void TxVmExternalButtonDialog::setVmData(TxKeyerParams *vmData_)
 {
     txvmbd = this;
     vmData = vmData_;

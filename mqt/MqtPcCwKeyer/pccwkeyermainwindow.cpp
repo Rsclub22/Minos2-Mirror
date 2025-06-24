@@ -27,7 +27,7 @@
 #include "LogEvents.h"
 #include "clustercommon.h"
 #include "MTrace.h"
-#include "voicekeyerCommonConstants.h"
+#include "txkeyerCommonConstants.h"
 
 #include "pccwkeyermainwindow.h"
 #include "qevent.h"

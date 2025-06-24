@@ -3,8 +3,8 @@
 
 
 #include <QDialog>
-#include "voicekeyerfactory.h"
-#include "voicekeyerCommonConstants.h"
+#include "txKeyerfactory.h"
+#include "txkeyerCommonConstants.h"
 
 extern const char * indevKey;
 extern const char * outdevKey;

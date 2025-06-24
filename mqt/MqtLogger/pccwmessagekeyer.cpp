@@ -17,10 +17,10 @@
 
 #include "LoggerContest.h"
 #include "tlogcontainer.h"
-#include "voicekeyerfactory.h"
+#include "txKeyerfactory.h"
 #include "txvmrigsetupdialog.h"
 #include "txvmrigbuttondialog.h"
-#include "voicekeyerCommonConstants.h"
+#include "txkeyerCommonConstants.h"
 #include "MTrace.h"
 #include "pccwmessagekeyer.h"
 

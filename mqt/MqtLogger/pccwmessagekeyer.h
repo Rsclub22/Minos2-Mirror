@@ -16,8 +16,8 @@
 
 #include "tsinglelogframe.h"
 #include "serialCommonData.h"
-#include "voicekeyerbase.h"
-#include "voicekeyerfactory.h"
+#include "txKeyerbase.h"
+#include "txKeyerfactory.h"
 
 class LoggerContestLog;
 class BaseContestLog;

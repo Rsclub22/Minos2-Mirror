@@ -3,7 +3,7 @@
 
 #include <QDialog>
 #include <QValidator>
-#include "voicekeyerbase.h"
+#include "txKeyerbase.h"
 #include "cwrigkeyervalidator.h"
 
 

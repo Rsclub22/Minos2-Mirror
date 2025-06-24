@@ -2,8 +2,8 @@
 #define TXVMINTERNALBUTTONDIALOG_H
 
 #include <QDialog>
-#include "voicekeyerbase.h"
-#include "voicekeyerCommonConstants.h"
+#include "txKeyerbase.h"
+#include "txkeyerCommonConstants.h"
 #include "vudata.h"
 
 namespace Ui {

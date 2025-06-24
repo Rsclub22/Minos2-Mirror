@@ -4,7 +4,7 @@
 #include "regsettings.h"
 #include "txvmrigbuttondialog.h"
 #include "ui_txvmrigbuttondialog.h"
-#include "voicekeyerCommonConstants.h"
+#include "txkeyerCommonConstants.h"
 
 #include <QDebug>
 

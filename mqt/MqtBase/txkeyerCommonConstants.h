@@ -1,5 +1,5 @@
-#ifndef VOICEKEYERCOMMONCONSTANTS_H
-#define VOICEKEYERCOMMONCONSTANTS_H
+#ifndef TXKEYERCOMMONCONSTANTS_H
+#define TXEKEYERCOMMONCONSTANTS_H
 
 
 
@@ -11,7 +11,7 @@
 
 
 
-namespace voiceKeyerCommon
+namespace TxKeyerCommon
 {
     // These are Minos max and min keyer buttons
     // Rigcontrol with hamlib will provide max number of voice memories the
@@ -24,7 +24,7 @@ namespace voiceKeyerCommon
     const int MININUM_BUTTONS = 2;
 
 
-    enum VoiceKeyerId
+    enum TxKeyerId
     {
         None = 0,
         RigControl,
@@ -35,7 +35,7 @@ namespace voiceKeyerCommon
         ExternalVoiceKeyer
     };
 
-    enum VoiceCwKeyerEomTypes
+    enum KeyerEomTypes
     {
         Eom_None = 0,
         CAT,
@@ -74,9 +74,9 @@ namespace voiceKeyerCommon
 
 QString VOICE_KEYER_PATH();
 QString VOICEKEYER_COMMON_PARAMS_PATH();
-bool readSaveVoiceCWMemoryButtonByRadioNameFromIni(voiceKeyerCommon::VoiceKeyerId id);
-void writeSaveVoiceCWMemoryButtonByRadioNameToIni(bool data, voiceKeyerCommon::VoiceKeyerId id);
-void getListOfRadioNamesForMemoryButtons(QStringList &radioNames, voiceKeyerCommon::VoiceKeyerId id);
+bool readSaveVoiceCWMemoryButtonByRadioNameFromIni(TxKeyerCommon::TxKeyerId id);
+void writeSaveVoiceCWMemoryButtonByRadioNameToIni(bool data, TxKeyerCommon::TxKeyerId id);
+void getListOfRadioNamesForMemoryButtons(QStringList &radioNames, TxKeyerCommon::TxKeyerId id);
 
 bool getRigCWKeyerSupportedSpecialCharacters(QMap<QString, QChar> &specialCharMap, QString radioMfg, const QString filename);
 bool getRigCWKeyerMacroCharacter(QString &macroChars, QString radioMfg, const QString filename);
@@ -90,4 +90,4 @@ QString getCwRadioManufacturer(int cwMemType);
 
 
 
-#endif // VOICEKEYERCOMMONCONSTANTS_H
+#endif // TXKEYERCOMMONCONSTANTS_H

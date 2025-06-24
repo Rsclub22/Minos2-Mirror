@@ -3,7 +3,7 @@
 #include "SendRPCDM.h"
 #include "txvminternalbuttondialog.h"
 #include "txVmInternalSetupDialog.h"
-#include "voicekeyerCommonConstants.h"
+#include "txkeyerCommonConstants.h"
 
 #include "sbdriver.h"
 #include "keyerlog.h"
@@ -11,7 +11,7 @@
 
 #include "InternalVoiceMemoryKeyer.h"
 
-using namespace voiceKeyerCommon;
+using namespace TxKeyerCommon;
 
 InternalVoiceMemoryKeyer::InternalVoiceMemoryKeyer(QObject *parent) : VoiceKeyerBase(parent)
 {
@@ -22,14 +22,14 @@ InternalVoiceMemoryKeyer::~InternalVoiceMemoryKeyer()
 {
     SoundSystemDriver::sbdvp_unload();
 }
-void InternalVoiceMemoryKeyer::registerVoiceKeyer(VoiceKeyerFactory::VmKeyers* vmKeyersList)
+void InternalVoiceMemoryKeyer::registerVoiceKeyer(TxKeyerFactory::VmKeyers* vmKeyersList)
 {
     QString keyerName = "Internal";
 
-    VoiceKeyerCapabilities voiceMemCap;
+    TxCapabilities voiceMemCap;
 
-    voiceMemCap.setVmIdNum(VoiceKeyerId::InternalVoiceKeyer);
-    voiceMemCap.setKeyerType(keyerTypes[VoiceKeyerId::InternalVoiceKeyer]);
+    voiceMemCap.setVmIdNum(TxKeyerId::InternalVoiceKeyer);
+    voiceMemCap.setKeyerType(keyerTypes[TxKeyerId::InternalVoiceKeyer]);
     voiceMemCap.setKeyerName(keyerName);
     voiceMemCap.setsupportSerial(false);
     voiceMemCap.setUseCatPTTForEom(false);
@@ -69,7 +69,7 @@ void InternalVoiceMemoryKeyer::voiceKeyerInit(int &numButtons)
     {
         int msgLen = SoundSystemDriver::getSbDriver() ->getMessageLen(i);
 
-       QString inifileName = VOICE_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[VoiceKeyerId::InternalVoiceKeyer] + ".ini";
+       QString inifileName = VOICE_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[TxKeyerId::InternalVoiceKeyer] + ".ini";
         QSettings config(inifileName, QSettings::IniFormat);
         config.beginGroup("button" + QString::number(i));
 
@@ -93,7 +93,7 @@ void InternalVoiceMemoryKeyer::sendMsgNum(int msgNum)
 
 }
 
-void InternalVoiceMemoryKeyer::stopMsg(VoiceKeyerParams * vkParam)
+void InternalVoiceMemoryKeyer::stopMsg(TxKeyerParams * vkParam)
 {
     // stop recording/playing message
     SoundSystemDriver::getSbDriver() ->stoprec();
@@ -114,7 +114,7 @@ void InternalVoiceMemoryKeyer::stopMsg(VoiceKeyerParams * vkParam)
 }
 
 
-void InternalVoiceMemoryKeyer::doRecording(VoiceKeyerParams * vkParam)
+void InternalVoiceMemoryKeyer::doRecording(TxKeyerParams * vkParam)
 {
     // execute recording from params dialog
     // button number and filename are in vkParam
@@ -127,7 +127,7 @@ void InternalVoiceMemoryKeyer::doRecording(VoiceKeyerParams * vkParam)
 
 
 
-bool InternalVoiceMemoryKeyer::readVmButtonParams(int buttonNum, VoiceKeyerParams &vmParams)
+bool InternalVoiceMemoryKeyer::readVmButtonParams(int buttonNum, TxKeyerParams &vmParams)
 {
     QString fileName = VOICE_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + vmParams.getType() + ".ini";
     QSettings config(fileName, QSettings::IniFormat);
@@ -144,9 +144,9 @@ bool InternalVoiceMemoryKeyer::readVmButtonParams(int buttonNum, VoiceKeyerParam
     return true;
 }
 
-void InternalVoiceMemoryKeyer::saveVmButtonParams(const VoiceKeyerParams &vmParams_)
+void InternalVoiceMemoryKeyer::saveVmButtonParams(const TxKeyerParams &vmParams_)
 {
-    VoiceKeyerParams vmParams = vmParams_;
+    TxKeyerParams vmParams = vmParams_;
 
     QString fileName = VOICE_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + vmParams.getType() + ".ini";
     QSettings config(fileName, QSettings::IniFormat);

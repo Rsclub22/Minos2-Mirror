@@ -8,8 +8,8 @@
 
 #include "PubSubName.h"
 #include "radiodetails.h"
-#include "voicekeyerbase.h"
-#include "voicekeyerfactory.h"
+#include "txKeyerbase.h"
+#include "txkeyerfactory.h"
 #include "rigcontrolcommonconstants.h"
 #include "cwspeedcontrol.h"
 

@@ -14,7 +14,7 @@
 #include <QLineEdit>
 #include "BandList.h"
 #include "rigcontrolcommonconstants.h"
-#include "voicekeyerCommonConstants.h"
+#include "txkeyerCommonConstants.h"
 #include "ConfigurationOption.h"
 
 namespace Ui {

@@ -2,8 +2,8 @@
 #define EXTERNALMQTKEYER_H
 
 #include "KeyerJson.h"
-#include "voicekeyerbase.h"
-#include "voicekeyerfactory.h"
+#include "txKeyerbase.h"
+#include "txKeyerfactory.h"
 
 class ExternalMqtKeyer:public VoiceKeyerBase
 {

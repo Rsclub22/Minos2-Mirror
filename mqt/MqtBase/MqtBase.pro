@@ -117,6 +117,7 @@ SOURCES += \
     serialtvswitch.cpp \
     spotbasedata.cpp \
     toolbuttonupdown.cpp \
+    txkeyerCommonConstants.cpp \
     validators.cpp \
     dxspotdatamodel.cpp \
     qttelnet.cpp \
@@ -129,8 +130,7 @@ SOURCES += \
     locatorinputdialog.cpp \
     WsjtxNetworkMessage.cpp \
     WsjtxMessageServer.cpp \
-    Wsjtx_qt_helpers.cpp \
-    voicekeyerCommonConstants.cpp
+    Wsjtx_qt_helpers.cpp
 
 HEADERS += \
     AntennaDetail.h \
@@ -227,8 +227,8 @@ HEADERS += \
     serialtvswitch.h \
     spotbasedata.h \
     toolbuttonupdown.h \
+    txkeyerCommonConstants.h \
     validators.h \
-    voicekeyerCommonConstants.h \
     waitcursor.h \
     dxspotdatamodel.h \
     qttelnet.h \

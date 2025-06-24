@@ -69,6 +69,38 @@ private:
     QString dataSender;
     QString curMode;
 
+    QSharedPointer<VoiceKeyerBase> txKeyer;
+    VoiceKeyerFactory* voiceKeyerFactory;
+
+
+
+    QTimer *extKeyerConnectTimer = nullptr;
+    //QList<QShortcut *> shortCutKeyList;
+
+
+    QString voiceKeyerType;
+
+    QTimer* msgDurTimer = nullptr;
+    QTimer* repeatPauseTimer = nullptr;
+
+    bool messagePlaying = false;
+
+    int selectedEomType = voiceKeyerCommon::VoiceCwKeyerEomTypes::Eom_None;
+
+    QMap<PubSubName, RadioDetails> allRadioDetails;
+
+    PubSubName selectedRadio;
+    QString curMode;
+    QString savedMode;
+    bool radioConnected;
+    bool pttState;
+    bool sAndPState = true;
+
+    CwSpeedControl *cwSpeedSlider = nullptr;
+
+    bool notifyComboChange = true;
+
+
     void showFButtons(bool s);
     QString getFKeysString() const;
     bool parseFKeyString(QString s);

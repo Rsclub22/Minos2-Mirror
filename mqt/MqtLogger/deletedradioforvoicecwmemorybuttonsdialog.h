@@ -3,7 +3,7 @@
 
 #include <QDialog>
 #include <QListWidgetItem>
-#include "voicekeyerCommonConstants.h"
+#include "txkeyerCommonConstants.h"
 
 namespace Ui {
 class DeletedRadioForVoiceCwMemoryButtonsDialog;

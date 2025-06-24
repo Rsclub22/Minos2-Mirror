@@ -3,7 +3,7 @@
 
 #include <QDialog>
 #include "SliderSpinner.h"
-#include "voicekeyerbase.h"
+#include "txKeyerbase.h"
 #include "CompressorParams.h"
 
 namespace Ui {
@@ -18,7 +18,7 @@ public:
     explicit TxVmExternalButtonDialog(QWidget *parent = nullptr);
     ~TxVmExternalButtonDialog();
 
-    void setVmData(VoiceKeyerParams* vmData);
+    void setVmData(TxKeyerParams* vmData);
 
 private slots:
     void on_replayButton_clicked();
@@ -60,7 +60,7 @@ private:
     SliderSpinner *makeUpGainFrame = nullptr;
 
 
-    VoiceKeyerParams* vmData;
+    TxKeyerParams* vmData;
     int inVolChangeCount = 0;
 
     void doCloseEvent();

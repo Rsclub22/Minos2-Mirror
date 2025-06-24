@@ -16,8 +16,8 @@
 #define RIGCONTROLVOICEMEMORYKEYER_H
 
 #include <QObject>
-#include "voicekeyerbase.h"
-#include "voicekeyerfactory.h"
+#include "txKeyerbase.h"
+#include "txKeyerfactory.h"
 #include "serialCommonData.h"
 
 class RigControlVoiceMemoryKeyer : public VoiceKeyerBase

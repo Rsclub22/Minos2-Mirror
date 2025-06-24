@@ -1,10 +1,10 @@
 #include <QSettings>
 #include "QtUtils.h"
-#include "voicekeyerCommonConstants.h"
+#include "txkeyerCommonConstants.h"
 #include "AppStartup.h"
 #include "rigcontrolcommonconstants.h"
 
-using namespace voiceKeyerCommon;
+using namespace TxKeyerCommon;
 
 QString VOICE_KEYER_PATH()
 {
@@ -17,7 +17,7 @@ QString VOICEKEYER_COMMON_PARAMS_PATH()
 }
 
 
-bool readSaveVoiceCWMemoryButtonByRadioNameFromIni(VoiceKeyerId id)
+bool readSaveVoiceCWMemoryButtonByRadioNameFromIni(TxKeyerId id)
 {
     QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[id] + ".ini";
     QSettings readConfig(fileName, QSettings::IniFormat);
@@ -26,7 +26,7 @@ bool readSaveVoiceCWMemoryButtonByRadioNameFromIni(VoiceKeyerId id)
 
 }
 
-void writeSaveVoiceCWMemoryButtonByRadioNameToIni(bool data, VoiceKeyerId id)
+void writeSaveVoiceCWMemoryButtonByRadioNameToIni(bool data, TxKeyerId id)
 {
     QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[id] + ".ini";
     QSettings config(fileName, QSettings::IniFormat);
@@ -36,7 +36,7 @@ void writeSaveVoiceCWMemoryButtonByRadioNameToIni(bool data, VoiceKeyerId id)
 }
 
 
-void getListOfRadioNamesForMemoryButtons(QStringList &radioNames, VoiceKeyerId id)
+void getListOfRadioNamesForMemoryButtons(QStringList &radioNames, TxKeyerId id)
 {
 
     QString fileName = VOICE_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[id] + ".ini";

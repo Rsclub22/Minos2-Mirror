@@ -126,14 +126,14 @@ SOURCES += \
     tstatsdispframe.cpp \
     clusterclientfilterdialog.cpp \
     clusterclientframe.cpp \
+    txKeyerbase.cpp \
+    txKeyerfactory.cpp \
     txVmExternalButtonDialog.cpp \
     txVmInternalSetupDialog.cpp \
     txvmbuttonsframe.cpp \
     txvminternalbuttondialog.cpp \
     txvmrigbuttondialog.cpp \
     txvmrigsetupdialog.cpp \
-    voicekeyerbase.cpp \
-    voicekeyerfactory.cpp \
     volumeslider.cpp \
     radiodetails.cpp \
     WsjtxFrame.cpp \
@@ -235,14 +235,14 @@ HEADERS  += \
     tstatsdispframe.h \
     clusterclientfilterdialog.h \
     clusterclientframe.h \
+    txKeyerbase.h \
+    txKeyerfactory.h \
     txVmExternalButtonDialog.h \
     txVmInternalSetupDialog.h \
     txvmbuttonsframe.h \
     txvminternalbuttondialog.h \
     txvmrigbuttondialog.h \
     txvmrigsetupdialog.h \
-    voicekeyerbase.h \
-    voicekeyerfactory.h \
     volumeslider.h \
     radiodetails.h \
     WsjtxFrame.h \

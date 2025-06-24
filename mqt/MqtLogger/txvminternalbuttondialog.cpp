@@ -3,7 +3,7 @@
 #include "regsettings.h"
 #include "sbdriver.h"
 #include "WaveShowDialog.h"
-#include "voicekeyerfactory.h"
+#include "txKeyerfactory.h"
 
 #include "txvminternalbuttondialog.h"
 #include "ui_txvminternalbuttondialog.h"

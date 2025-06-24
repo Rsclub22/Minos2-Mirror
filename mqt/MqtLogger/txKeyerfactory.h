@@ -2,33 +2,33 @@
 // $Id$
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
-//                      Voice Keyer
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2024
+//                      TX Keyer
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2025
 //
 //
 //
 //
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef VOICEKEYERFACTORY_H
-#define VOICEKEYERFACTORY_H
+#ifndef TXKEYERFACTORY_H
+#define TXKEYERFACTORY_H
 
 #include <QObject>
 #include <QString>
 #include <QMap>
 #include <QModelIndex>
-#include "voicekeyerbase.h"
-#include "voicekeyerCommonConstants.h"
+#include "txkeyerbase.h"
+#include "txkeyerCommonConstants.h"
 
 
 class QComboBox;
 
 
-class VoiceKeyerCapabilities
+class TxKeyerCapabilities
 {
 public:
 
-    VoiceKeyerCapabilities(){};
+    TxKeyerCapabilities(){};
 
     QString getKeyerName(){return keyerName;}
     void setKeyerName(const QString keyerName_){keyerName = keyerName_;}
@@ -91,31 +91,31 @@ private:
 };
 
 
-class VoiceKeyerFactory : public QObject
+class TxKeyerFactory : public QObject
 {
     Q_OBJECT
 public:
 
-    typedef QMap<QString, VoiceKeyerCapabilities> VmKeyers;
+    typedef QMap<QString, TxKeyerCapabilities> TxKeyers;
 
 
-    explicit VoiceKeyerFactory(QObject *parent = nullptr);
-    ~VoiceKeyerFactory();
+    explicit TxKeyerFactory(QObject *parent = nullptr);
+    ~TxKeyerFactory();
 
-    VoiceKeyerBase* createVoiceKeyer(int vmKeyerId);
+    TxKeyerBase* createTxKeyer(int vmKeyerId);
 
 
-    void populateComboKeyerList(QComboBox *comBox, QString voiceKeyerName);
+    void populateComboKeyerList(QComboBox *comBox, QString txKeyerName);
 
-    VoiceKeyerFactory::VmKeyers *supportedVoiceKeyers();
+    TxKeyerFactory::TxKeyers *supportedTxKeyers();
 
 signals:
 
 private:
-    VmKeyers vmKeyersList;
+    TxKeyers txKeyersList;
 
     QModelIndex extInd;
 
 };
 
-#endif // VOICEKEYERFACTORY_H
+#endif // TXKEYERFACTORY_H

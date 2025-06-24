@@ -1,21 +1,21 @@
 /////////////////////////////////////////////////////////////////////////////
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
-//                      Rig Control
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2020
+//                      Tx Keyer Base
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2025
 //
 /////////////////////////////////////////////////////////////////////////////
 #include "MTrace.h"
-#include "voicekeyerbase.h"
+#include "txKeyerbase.h"
 
 
 
-VoiceKeyerParams::VoiceKeyerParams()
+TxKeyerParams::TxKeyerParams()
 {
     clear();
 }
 
-void VoiceKeyerParams::clear()
+void TxKeyerParams::clear()
 {
     type.clear();
     vmName.clear();
@@ -28,7 +28,7 @@ void VoiceKeyerParams::clear()
     cwKeyerType = CW_KEYER_TYPE::KEYER_NONE;
 }
 
-VoiceKeyerParams& VoiceKeyerParams::operator = (const VoiceKeyerParams& vkp)
+TxKeyerParams& TxKeyerParams::operator = (const TxKeyerParams& vkp)
 {
     type = vkp.type;
     selRadioName = vkp.selRadioName;
@@ -47,7 +47,7 @@ VoiceKeyerParams& VoiceKeyerParams::operator = (const VoiceKeyerParams& vkp)
     return *this;
 }
 
-void VoiceKeyerParams::setVmDuration(const int vmDuration_)
+void TxKeyerParams::setVmDuration(const int vmDuration_)
 {
     if (vmDuration_ > 0)
     {
@@ -57,12 +57,12 @@ void VoiceKeyerParams::setVmDuration(const int vmDuration_)
 }
 
 
-VoiceKeyerBase::VoiceKeyerBase(QObject *parent) : QObject(parent)
+TxKeyerBase::TxKeyerBase(QObject *parent) : QObject(parent)
 {
 
 }
 
-VoiceKeyerBase::~VoiceKeyerBase()
+TxKeyerBase::~TxKeyerBase()
 {
 
 }

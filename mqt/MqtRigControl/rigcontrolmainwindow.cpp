@@ -37,7 +37,7 @@
 
 #include "rigcontrolmainwindow.h"
 #include "ui_rigcontrolmainwindow.h"
-#include "voicekeyerCommonConstants.h"
+#include "txkeyerCommonConstants.h"
 
 RigControlMainWindow *mainWindow = nullptr;
 
