@@ -90,7 +90,7 @@ DMButtonFrame::DMButtonFrame(QWidget *parent) :
 
     connect(ui->txKeyerSelect, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &DMButtonFrame::onVoiceKeyerSelect);
 
-    trace(QString("start keyer name = %1").arg(ui->txKeyerSelect->currentText()));
+    logMessage(QString("start keyer name = %1").arg(ui->txKeyerSelect->currentText()));
 
     onVoiceKeyerSelect(ui->txKeyerSelect->currentIndex());
 
@@ -635,12 +635,12 @@ void DMButtonFrame::initCwTextEntryBox(QString radioManufacturer, QString fileNa
     if (getRigCWKeyerMacroCharacter(cwMacroCharList, radioManufacturer, CWKEYER_RADIO_COMMON_PARAMS_FILENAME))
     {
         cwMacroCharOk = true;
-        trace(QString("[TxVmButtonsFrame] Retrieved CW Macro Chars %1 for manufacturer %2").arg(cwMacroCharList).arg(radioManufacturer));
+        logMessage(QString("Retrieved CW Macro Chars %1 for manufacturer %2").arg(cwMacroCharList).arg(radioManufacturer));
     }
     else
     {
         cwMacroCharOk = false;
-        trace(QString("[TxVmButtonsFrame] Error retrieving CW Macro Chars for manufacturer %1").arg(radioManufacturer));
+        logMessage(QString("Error retrieving CW Macro Chars for manufacturer %1").arg(radioManufacturer));
     }
 
 
@@ -651,18 +651,18 @@ void DMButtonFrame::initCwTextEntryBox(QString radioManufacturer, QString fileNa
         if (cwMacroCharOk)
         {
             validCharCwList = validCharCwList.append(cwMacroCharList);
-            trace(QString("[TxButtons Frame] Supported CW Chars and Macro chars %1 for manufacturer %2").arg(validCharCwList).arg(radioManufacturer));
+            logMessage(QString("Supported CW Chars and Macro chars %1 for manufacturer %2").arg(validCharCwList).arg(radioManufacturer));
         }
         else
         {
 
-            trace(QString("[TxVmButtonsFrame] Supported CW Chars with no Macro chars %1 for manufacturer %2").arg(validCharCwList).arg(radioManufacturer));
+            logMessage(QString("Supported CW Chars with no Macro chars %1 for manufacturer %2").arg(validCharCwList).arg(radioManufacturer));
         }
 
     }
     else
     {
-        trace(QString("[TxVmButtonsFrame] Error retrieving supported CW Chars for manufacturer %1, no validator set").arg(radioManufacturer));
+        logMessage(QString("Error retrieving supported CW Chars for manufacturer %1, no validator set").arg(radioManufacturer));
     }
 
 
@@ -671,11 +671,11 @@ void DMButtonFrame::initCwTextEntryBox(QString radioManufacturer, QString fileNa
     {
 
 
-        trace(QString("[TxVmButtonsFrame] set max number of CW Chars = %1 for manufacturer %2").arg(maxNumChars).arg(radioManufacturer));
+        logMessage(QString("set max number of CW Chars = %1 for manufacturer %2").arg(maxNumChars).arg(radioManufacturer));
     }
     else
     {
-        trace(QString("[TxVmButtonsFrame] Error retrieving max CW Message Length for manufacturer %1").arg(radioManufacturer));
+        logMessage(QString("Error retrieving max CW Message Length for manufacturer %1").arg(radioManufacturer));
 
     }
     // we need better error handling here!
@@ -1719,7 +1719,7 @@ void DMButtonFrame::DMMess(AnalysePubSubNotify an)
     {
         dataSender = an.getPublisherProgram() + "@" + an.getPublisherRouter();
 
-        trace(QString("Datasender set to %1").arg(dataSender));
+        logMessage(QString("Datasender set to %1").arg(dataSender));
 
         fkeyFileChanged();
         qfsw = new QFileSystemWatcher(this);
@@ -1996,7 +1996,7 @@ QString DMButtonFrame::parseFKeyMessage(QString mess)
                 }
                 else
                 {
-                    trace(QString("Message <%1> contains unknown macro {%2}").arg(mess, macro));
+                    logMessage(QString("Message <%1> contains unknown macro {%2}").arg(mess, macro));
                 }
             }
         }
@@ -2044,16 +2044,20 @@ bool DMButtonFrame::parseFKeyArray(QJsonArray s, QString keyset)
         if (v.isArray())
         {
             QJsonArray a = v.toArray();
-            if (a.size() == 3)
+            if (a.size() == 5)
             {
                 QString fk = a[0].toString();
                 QString keytop = a[1].toString();
                 QString val = a[2].toString();
+                bool rptenbl = a[3].toBool();
+                int rptd = a[4].toInt();
 
                 KeyVal p;
                 p.fk = fk;
                 p.ktop = keytop;
                 p.kval = val;
+                p.rptEnable = rptenbl;
+                p.rptDur = rptd;
                 ks.append(p);
             }
         }
@@ -2120,6 +2124,8 @@ void DMButtonFrame::rewriteFKeyFile()
                 kor.append(QJsonValue(k.fk));
                 kor.append(QJsonValue(k.ktop));
                 kor.append(QJsonValue(k.kval));
+                kor.append(QJsonValue(k.rptEnable));
+                kor.append(QJsonValue(k.rptDur));
                 korun.append(kor);
             }
         }
@@ -2132,6 +2138,8 @@ void DMButtonFrame::rewriteFKeyFile()
                 ksp.append(QJsonValue(k.fk));
                 ksp.append(QJsonValue(k.ktop));
                 ksp.append(QJsonValue(k.kval));
+                ksp.append(QJsonValue(k.rptEnable));
+                ksp.append(QJsonValue(k.rptDur));
                 kosp.append(ksp);
             }
         }
@@ -2152,7 +2160,7 @@ void DMButtonFrame::rewriteFKeyFile()
     QFile jf(fkeyFileName);
     if (!jf.open(QIODevice::WriteOnly | QIODevice::Truncate))
     {
-        trace("Failed to open " +  fkeyFileName);
+        logMessage("Failed to open " +  fkeyFileName);
         return;
     }
     jf.write(s);

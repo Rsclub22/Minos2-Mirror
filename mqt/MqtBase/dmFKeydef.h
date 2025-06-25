@@ -3,8 +3,9 @@
 #include <QString>
 
 // vector of (map(key current set name) of vector of pairs (fkey name, fkey message) )
+// added message repeat enable and repeat interval duration
 // QVector is 24 entries, F1-F12, F1-F12
-struct KeyVal {QString fk; QString ktop; QString kval;};
+struct KeyVal {QString fk; QString ktop; QString kval; bool rptEnable; int rptDur;};
 typedef QVector<KeyVal >KeySet;
 typedef QMap<QString, KeySet > Keys;
 

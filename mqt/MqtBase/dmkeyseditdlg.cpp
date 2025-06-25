@@ -2,6 +2,9 @@
 #include <QString>
 #include <QPushButton>
 
+#include <QCheckBox>
+#include <QLineEdit>
+
 #include "regsettings.h"
 #include "enqdlg.h"
 #include "MShowMessageDlg.h"
@@ -29,11 +32,16 @@ DMKeysEditDlg::DMKeysEditDlg(QWidget *parent, QString fKeyFileName, QString name
 
     QString baseTitle = windowTitle();
     setWindowTitle(baseTitle + " - " + fKeyFileName) ;
-
+/*
     ui->NewSectionButton->setText(tr("New Digi FKey section"));
     ui->CopyButton->setText(tr("Copy Digi FKey section"));
     ui->DeleteButton->setText(tr("Delete Digi FKey section"));
     ui->renameButton->setText(tr("Rename Digi FKey section"));
+*/
+    ui->NewSectionButton->setText(tr("New Macro FKey section"));
+    ui->CopyButton->setText(tr("Copy Macro FKey section"));
+    ui->DeleteButton->setText(tr("Delete Macro FKey section"));
+    ui->renameButton->setText(tr("Rename Macro FKey section"));
 
     ui->SectionsList->setMinimumWidth(10);
     ui->OptionsTable->setMinimumWidth(10);
@@ -138,6 +146,7 @@ void DMKeysEditDlg::showSection()
     ui->renameButton->setEnabled(offset > 0 );
 
 }
+/*
 void DMKeysEditDlg::showDetails()
 {
     ui->OptionsTable->clear();
@@ -171,6 +180,73 @@ void DMKeysEditDlg::showDetails()
     QByteArray state = settings.getSettings().value("DMKeysEdit/SplitterState/" + name).toByteArray();
     ui->settingsSplitter->restoreState(state);
 }
+*/
+void DMKeysEditDlg::showDetails()
+{
+    ui->OptionsTable->clear();
+    int offset = ui->SectionsList->currentRow();
+
+    if (offset >= 0)
+    {
+        const int totalColumns = 4;          // 0-1 existing, 2-3 new
+        ui->OptionsTable->setColumnCount(totalColumns);
+        ui->OptionsTable->setRowCount(keys[name].size());
+
+        QStringList vHeaders;
+
+        for (int i = 0; i < keys[name].size(); ++i)
+        {
+            vHeaders << QString("%1 F%2")
+            .arg(i < 12 ? tr("Run") : tr("S&P"))
+                .arg(i < 12 ? i + 1   : (i - 12) + 1);
+
+
+            ui->OptionsTable->setItem(i, 0, new QTableWidgetItem(keys[name][i].ktop));
+            ui->OptionsTable->setItem(i, 1, new QTableWidgetItem(keys[name][i].kval));
+
+            // Checkbox (col-2)
+            auto *cb  = new QCheckBox;
+            cb->setChecked(keys[name][i].rptEnable);
+            auto *wcb = new QWidget;
+            auto *lcb = new QHBoxLayout(wcb);
+            lcb->addWidget(cb);
+            lcb->setAlignment(Qt::AlignCenter);
+            lcb->setContentsMargins(0,0,0,0);
+            ui->OptionsTable->setCellWidget(i, 2, wcb);
+
+            // Line-edit (col-3)
+            auto *le  = new QLineEdit;
+            le->setValidator(new QIntValidator(0, 60, le));
+            le->setMaxLength(2);
+            le->setFixedWidth(40);
+            le->setText(QString::number(keys[name][i].rptDur));
+            ui->OptionsTable->setCellWidget(i, 3, le);
+        }
+
+        ui->OptionsTable->setVerticalHeaderLabels(vHeaders);
+        ui->OptionsTable->setHorizontalHeaderLabels(
+            { tr("Key Top"), tr("Value"), tr("Repeat"), tr("Dur.") });
+
+
+        auto *hh = ui->OptionsTable->horizontalHeader();
+        hh->setStretchLastSection(false);                      // don’t stretch col-3
+
+        hh->setSectionResizeMode(0, QHeaderView::Stretch);     // Key Top
+        hh->setSectionResizeMode(1, QHeaderView::Stretch);     // Value
+        hh->setSectionResizeMode(2, QHeaderView::Fixed);       // Checkbox
+        hh->setSectionResizeMode(3, QHeaderView::Fixed);       // Line-edit
+
+        ui->OptionsTable->setColumnWidth(2, 40);   // checkbox column
+        ui->OptionsTable->setColumnWidth(3, 60);   // line-edit column
+    }
+
+    /* restore splitter state, etc. */
+    RegSettings settings;
+    ui->settingsSplitter->restoreState(
+        settings.getSettings().value("DMKeysEdit/SplitterState/" + name).toByteArray());
+}
+
+
 void DMKeysEditDlg::getDetails()
 {
     if (ui->OptionsTable->rowCount())
@@ -190,6 +266,24 @@ void DMKeysEditDlg::getDetails()
                 QString val = qtwi->text();
                 keys[name][r].kval = val ;
             }
+            bool val = false;
+            if (QWidget *wrap = ui->OptionsTable->cellWidget(r, 2))
+            {
+                if (QCheckBox *cb = wrap->findChild<QCheckBox*>())
+                {
+                    val = cb->isChecked();
+                    keys[name][r].rptEnable = val ;
+                }
+            }
+
+            int dur = 0;    // default
+            if (auto *le = qobject_cast<QLineEdit*>(ui->OptionsTable->cellWidget(r, 3)))
+            {
+                dur = le->text().toInt();
+            }
+
+            keys[name][r].rptDur = dur;
+
         }
     }
 }
