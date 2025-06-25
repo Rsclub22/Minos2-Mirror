@@ -414,7 +414,6 @@ void TSingleLogFrame::clearScreenLayout(bool clearAllTabs)
     FKHRigControlFrame->setContest(nullptr);
     runButtonsFrame->setContest(nullptr);
     bandSwitchFrame->setContest(nullptr);
-    txVmButtonsFrame->setContest(nullptr);
     FKHRotControlFrame->setContest(nullptr);
     FKHRotCompassFrame->setContest(nullptr);
     skyScanControlFrame->setContest(nullptr);

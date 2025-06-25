@@ -13,7 +13,7 @@
 
 using namespace TxKeyerCommon;
 
-InternalVoiceMemoryKeyer::InternalVoiceMemoryKeyer(QObject *parent) : VoiceKeyerBase(parent)
+InternalVoiceMemoryKeyer::InternalVoiceMemoryKeyer(QObject *parent) : TxKeyerBase(parent)
 {
 
 }
@@ -22,11 +22,11 @@ InternalVoiceMemoryKeyer::~InternalVoiceMemoryKeyer()
 {
     SoundSystemDriver::sbdvp_unload();
 }
-void InternalVoiceMemoryKeyer::registerVoiceKeyer(TxKeyerFactory::VmKeyers* vmKeyersList)
+void InternalVoiceMemoryKeyer::registerVoiceKeyer(TxKeyerFactory::TxKeyers* vmKeyersList)
 {
     QString keyerName = "Internal";
 
-    TxCapabilities voiceMemCap;
+    TxKeyerCapabilities voiceMemCap;
 
     voiceMemCap.setVmIdNum(TxKeyerId::InternalVoiceKeyer);
     voiceMemCap.setKeyerType(keyerTypes[TxKeyerId::InternalVoiceKeyer]);
@@ -47,7 +47,7 @@ void InternalVoiceMemoryKeyer::registerVoiceKeyer(TxKeyerFactory::VmKeyers* vmKe
     (*vmKeyersList)[keyerName] = voiceMemCap;
 
 }
-void InternalVoiceMemoryKeyer::voiceKeyerInit(int &numButtons)
+void InternalVoiceMemoryKeyer::txKeyerInit(int &numButtons)
 {
     sblog = true;
 
@@ -181,15 +181,15 @@ void InternalVoiceMemoryKeyer::onDoPTT(bool onOff)
 
 
 
-int InternalVoiceMemoryKeyer::setup(VoiceKeyerFactory *voiceKeyerFactory, int &maxNumButtons, int &numButtons, QString selectedRadio)
+int InternalVoiceMemoryKeyer::setup(TxKeyerFactory *txKeyerFactory, int &maxNumButtons, int &numButtons, QString selectedRadio)
 {
     Q_UNUSED(selectedRadio)
     Q_UNUSED(maxNumButtons)
 
-    VoiceKeyerCapabilities voiceCap = voiceKeyerFactory->supportedVoiceKeyers()->value("internal");
+    TxKeyerCapabilities voiceCap = txKeyerFactory->supportedTxKeyers()->value("internal");
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
 
-    txVmInternalSetupDialog txvmSetup(voiceCap, maxNumButtons, numButtons, tslf->txVmButtonsFrame);
+    txVmInternalSetupDialog txvmSetup(voiceCap, maxNumButtons, numButtons, tslf->dmButtonFrame);
     txvmSetup.setWindowTitle(tr("Internal Voice Memory Setup"));
 
     int ret = txvmSetup.exec();
@@ -197,17 +197,17 @@ int InternalVoiceMemoryKeyer::setup(VoiceKeyerFactory *voiceKeyerFactory, int &m
     if (ret == QDialog::Accepted)
     {
         numButtons = txvmSetup.getNumButtons();
-        QString fileName = VOICE_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[VoiceKeyerId::RigControl] + ".ini";
+        QString fileName = VOICE_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[TxKeyerId::RigControl] + ".ini";
         QSettings config(fileName, QSettings::IniFormat);
         config.setValue("Common/NumButtons", numButtons);
     }
     return ret;
 }
 
-int InternalVoiceMemoryKeyer::editButton(VoiceKeyerParams *vmData, QString title)
+int InternalVoiceMemoryKeyer::editButton(TxKeyerParams *vmData, QString title)
 {
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
-    TxVmInternalButtonDialog vmButtonDialog(tslf->txVmButtonsFrame);
+    TxVmInternalButtonDialog vmButtonDialog(tslf->dmButtonFrame);
 
     vmButtonDialog.setWindowTitle(title);
     vmButtonDialog.setVmData(vmData);

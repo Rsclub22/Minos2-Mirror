@@ -130,7 +130,7 @@ int ExternalMqtKeyer::setup(TxKeyerFactory *txKeyerFactory, int &maxNumButtons, 
 int ExternalMqtKeyer::editButton(TxKeyerParams* vmData, QString title)
 {
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
-    TxVmExternalButtonDialog vmButtonDialog(tslf->txVmButtonsFrame);
+    TxVmExternalButtonDialog vmButtonDialog(tslf->dmButtonFrame);
 
     vmButtonDialog.setWindowTitle(title);
     vmButtonDialog.setVmData(vmData);

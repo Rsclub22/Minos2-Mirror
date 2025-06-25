@@ -17,6 +17,7 @@
 
 #include "MinosRPC.h"
 #include "SendRPCDM.h"
+#include "delayedaction.h"
 #include "fileutils.h"
 #include "tlogcontainer.h"
 #include "tsinglelogframe.h"
@@ -33,6 +34,8 @@
 
 #include "dmbuttonframe.h"
 #include "ui_dmbuttonframe.h"
+
+using namespace TxKeyerCommon;
 
 DMButtonFrame::DMButtonFrame(QWidget *parent) :
     QFrame(parent),
@@ -53,14 +56,14 @@ DMButtonFrame::DMButtonFrame(QWidget *parent) :
     txKeyerFactory = new TxKeyerFactory(this);
 
     msgDurTimer = new QTimer(this);
-    connect(msgDurTimer, &QTimer::timeout, this, &TxVmButtonsFrame::onMsgDurTimerTimeout);
+    connect(msgDurTimer, &QTimer::timeout, this, &DMButtonFrame::onMsgDurTimerTimeout);
 
     repeatPauseTimer = new QTimer(this);
-    connect(repeatPauseTimer, &QTimer::timeout, this, &TxVmButtonsFrame::onRepeatPauseTimerTimeout);
+    connect(repeatPauseTimer, &QTimer::timeout, this, &DMButtonFrame::onRepeatPauseTimerTimeout);
 
     extKeyerConnectTimer = new QTimer(this);
-    connect(extKeyerConnectTimer, &QTimer::timeout, this, &TxVmButtonsFrame::onExtConnectTimer);
-    connect(LogContainer->sendDM, &TSendDM::keyerReport, this, &TxVmButtonsFrame::onExtConnectTimer);
+    connect(extKeyerConnectTimer, &QTimer::timeout, this, &DMButtonFrame::onExtConnectTimer);
+    connect(LogContainer->sendDM, &TSendDM::keyerReport, this, &DMButtonFrame::onExtConnectTimer);
 
     QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + VOICEKEYER_COMMON_PARAMS_FILENAME;
     QSettings config(fileName, QSettings::IniFormat);
@@ -69,11 +72,11 @@ DMButtonFrame::DMButtonFrame(QWidget *parent) :
     QString txKeyerName = config.value("KeyerName").toString();
 
     txKeyerFactory->populateComboKeyerList(ui->txKeyerSelect, txKeyerName);
-    connect(ui->txKeyerSelect, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &TxVmButtonsFrame::onVoiceKeyerSelect);
+    connect(ui->txKeyerSelect, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &DMButtonFrame::onVoiceKeyerSelect);
 
     trace(QString("start keyer name = %1").arg(ui->txKeyerSelect->currentText()));
 
-    onVoiceKeyerSelect(ui->voiceKeyerSelect->currentIndex());
+    onVoiceKeyerSelect(ui->txKeyerSelect->currentIndex());
 
     // If we haven't already done so, copy issue fkey file to a local copy
     // so that an installation can overwrite the original without losing
@@ -191,7 +194,10 @@ void DMButtonFrame::logRadioSettingsChanged(QSharedPointer<RadioSettingsDialogCh
 {
     Q_UNUSED(logRadioSettingsFlags)
 
-    if (voiceKeyerType == keyerTypes[TxKeyerId::CW_RigControl] || voiceKeyerType == keyerTypes[TxKeyerId::PcCwKeyer] || voiceKeyerType == keyerTypes[TxKeyerId::RigControl] || voiceKeyerType == keyerTypes[TxKeyerId::InternalVoiceKeyer])
+    if (voiceKeyerType == keyerTypes[TxKeyerId::CW_RigControl]
+                        || voiceKeyerType == keyerTypes[TxKeyerId::PcCwKeyer]
+                        || voiceKeyerType == keyerTypes[TxKeyerId::RigControl]
+                        || voiceKeyerType == keyerTypes[TxKeyerId::InternalVoiceKeyer])
     {
         setSaveButtonByRadionameText(selectedRadio.getLocalName());
         setRadioParams();
@@ -213,7 +219,7 @@ void DMButtonFrame::logRadioSettingsChanged(QSharedPointer<RadioSettingsDialogCh
 
 
 
-        txKeyer->voiceKeyerInit(txKeyer->numButtons);
+        txKeyer->txKeyerInit(txKeyer->numButtons);
 
         loadButtonData();
     }
@@ -237,29 +243,30 @@ void DMButtonFrame::setRadioParams()
     }
 }
 
+
 void DMButtonFrame::createKeyer(QString voiceKeyerName)
 {
     if (!voiceKeyerName.isEmpty())
     {
 
 
-        VoiceKeyerCapabilities voiceCap = voiceKeyerFactory->supportedVoiceKeyers()->value(voiceKeyerName);
+        TxKeyerCapabilities voiceCap = txKeyerFactory->supportedTxKeyers()->value(voiceKeyerName);
         voiceKeyerType = voiceCap.getKeyerType();
 
         if (voiceKeyerType != keyerTypes[TxKeyerId::None])
         {
-            txKeyer = QSharedPointer<VoiceKeyerBase>(voiceKeyerFactory->createVoiceKeyer(voiceCap.getVmIdNum()));
+            txKeyer = QSharedPointer<TxKeyerBase>(txKeyerFactory->createTxKeyer(voiceCap.getVmIdNum()));
             if (txKeyer)
             {
                 logMessage(QString("Voice Keyer type selected = %1").arg(voiceCap.getKeyerName()));
 
-                connect(txKeyer.data(), &VoiceKeyerBase::remoteConfigChanged, this, &TxVmButtonsFrame::onRemoteConfigChanged, Qt::UniqueConnection);
-                connect(txKeyer.data(), &VoiceKeyerBase::remoteKeyerStopped, this, &TxVmButtonsFrame::onRemoteKeyerStopped, Qt::UniqueConnection);
-                connect(txKeyer.data(), &VoiceKeyerBase::remoteKeyerStarted, this, &TxVmButtonsFrame::onRemoteKeyerStarted, Qt::UniqueConnection);
-                connect(txKeyer.data(), &VoiceKeyerBase::internalVoiceMemoryKeyerPlayState, this, &TxVmButtonsFrame::onInternalVoiceMemoryPlayState);
+                connect(txKeyer.data(), &TxKeyerBase::remoteConfigChanged, this, &DMButtonFrame::onRemoteConfigChanged, Qt::UniqueConnection);
+                connect(txKeyer.data(), &TxKeyerBase::remoteKeyerStopped, this, &DMButtonFrame::onRemoteKeyerStopped, Qt::UniqueConnection);
+                connect(txKeyer.data(), &TxKeyerBase::remoteKeyerStarted, this, &DMButtonFrame::onRemoteKeyerStarted, Qt::UniqueConnection);
+                connect(txKeyer.data(), &TxKeyerBase::internalVoiceMemoryKeyerPlayState, this, &DMButtonFrame::onInternalVoiceMemoryPlayState);
 
                 setRadioParams();
-                txKeyer->voiceKeyerInit(txKeyer->numButtons);
+                txKeyer->txKeyerInit(txKeyer->numButtons);
 
                 // create the buttons
                 if (voiceKeyerType == keyerTypes[TxKeyerId::CW_RigControl]
@@ -277,7 +284,7 @@ void DMButtonFrame::createKeyer(QString voiceKeyerName)
                     createButtonsForKeyer(numButtons, columns);
                 }
 
-                vmKeyParamList.clear();
+                txKeyParamList.clear();
                 buttonNumSent = NO_VM_BUTTON_ON;
 
 
@@ -291,11 +298,11 @@ void DMButtonFrame::createKeyer(QString voiceKeyerName)
                 else
                 {
 
-                    txKeyer->voiceKeyerInit(txKeyer->numButtons);
+                    txKeyer->txKeyerInit(txKeyer->numButtons);
 
                     for (int i = 0; i < voiceMemButtonList.count(); i++)
                     {
-                        VoiceKeyerParams vmData;
+                        TxKeyerParams vmData;
                         if (vmData.getType().isEmpty())
                         {
                             vmData.setType(voiceKeyerType);
@@ -323,15 +330,15 @@ void DMButtonFrame::createKeyer(QString voiceKeyerName)
 
 void DMButtonFrame::onExtConnectTimer()
 {
-    QString voiceKeyerName = ui->voiceKeyerSelect->currentText();
+    QString voiceKeyerName = ui->txKeyerSelect->currentText();
 
-    VoiceKeyerCapabilities voiceCap = voiceKeyerFactory->supportedVoiceKeyers()->value(voiceKeyerName);
+    TxKeyerCapabilities voiceCap = txKeyerFactory->supportedTxKeyers()->value(voiceKeyerName);
     voiceKeyerType = voiceCap.getKeyerType();
 
     if (LogContainer->sendDM->isKeyerLoaded())
     {
         notifyComboChange = false;
-        voiceKeyerFactory->populateComboKeyerList(ui->voiceKeyerSelect, voiceKeyerName);
+        txKeyerFactory->populateComboKeyerList(ui->txKeyerSelect, voiceKeyerName);
         notifyComboChange = true;
     }
 
@@ -363,7 +370,7 @@ void DMButtonFrame::onVoiceKeyerSelect(int idx)
     if (!notifyComboChange)
         return;
 
-    QString voiceKeyerName = ui->voiceKeyerSelect->currentText();
+    QString voiceKeyerName = ui->txKeyerSelect->currentText();
     logMessage(QString("onVoiceKeyerSelect - keyer select name = %1").arg( ui->voiceKeyerSelect->currentText()));
 
     QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + VOICEKEYER_COMMON_PARAMS_FILENAME;
@@ -384,30 +391,30 @@ void DMButtonFrame::onVoiceKeyerSelect(int idx)
 
     extKeyerConnectTimer->start(1000);
 
-    ui->voiceKeyerSelect->repaint();   // or the combo doesn't update
+    ui->txKeyerSelect->repaint();   // or the combo doesn't update
 
 }
 
 
-void DMButtonFrame::setFrameState(QString voiceKeyerName)
+void DMButtonFrame::setFrameState(QString txKeyerName)
 {
 
 
-    VoiceKeyerCapabilities voiceCap = voiceKeyerFactory->supportedVoiceKeyers()->value(voiceKeyerName);
+    TxKeyerCapabilities voiceCap = txKeyerFactory->supportedTxKeyers()->value(txKeyerName);
 
     ui->sAndPLabel->clear();
 
-    if (txVoiceKeyer == nullptr)
+    if (txKeyer == nullptr)
     {
         clearButtonLabels();
         vmKeyParamList.clear();
         //setVoiceNumMemButtonsVisible(0);
-        if (voiceKeyerType == keyerTypes[VoiceKeyerId::ExternalVoiceKeyer])
+        if (voiceKeyerType == keyerTypes[TxKeyerId::ExternalVoiceKeyer])
         {
             ui->noExtKeyerLabel->setText(HtmlFontColour(Qt::red) +  tr("To use the external keyer mqtKeyer must be running and connected"));
 
         }
-        voiceKeyerType = keyerTypes[VoiceKeyerId::None];
+        voiceKeyerType = keyerTypes[TxKeyerId::None];
 
         clearButtons();
         setCwEntryBoxVisible(false);
@@ -418,7 +425,7 @@ void DMButtonFrame::setFrameState(QString voiceKeyerName)
 
         ui->vmSetupPb->setVisible(false);
         ui->pipCb->setVisible(false);
-        ui->vmStopPb->setVisible(false);
+        ui->stopButton->setVisible(false);
         setTXStatusVisible(false);
         ui->buttonSelectionLbl->setVisible(false);
         ui->saveByRadioNameText->setVisible(false);
@@ -434,7 +441,7 @@ void DMButtonFrame::setFrameState(QString voiceKeyerName)
     {
         ui->noExtKeyerLabel->clear();
 
-        VoiceKeyerCapabilities voiceCap = voiceKeyerFactory->supportedVoiceKeyers()->value(voiceKeyerName);
+        TxKeyerCapabilities voiceCap = txKeyerFactory->supportedTxKeyers()->value(txKeyerName);
 
         ui->vmSetupPb->setVisible(voiceCap.getSetupButton());
         ui->pipCb->setVisible(voiceCap.getHasPip());
@@ -449,12 +456,12 @@ void DMButtonFrame::setFrameState(QString voiceKeyerName)
         {
             setAvailIndicatorVisible(voiceCap.getHasAvailStatus());
 
-            if (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl] || voiceKeyerType == keyerTypes[VoiceKeyerId::RigControl])
+            if (voiceKeyerType == keyerTypes[TxKeyerId::CW_RigControl] || voiceKeyerType == keyerTypes[TxKeyerId::RigControl])
             {
 
                 setAvailIndicatorForRadioOnOff(selectedRadio);
             }
-            else if (voiceKeyerType == keyerTypes[VoiceKeyerId::PcCwKeyer])
+            else if (voiceKeyerType == keyerTypes[TxKeyerId::PcCwKeyer])
             {
 
                 setAvailIndicatorOnOffForPcCwKeyer();
@@ -469,61 +476,61 @@ void DMButtonFrame::setFrameState(QString voiceKeyerName)
 
         setRepeatIndicatorVisible(voiceCap.getHasMessageRepeat());
 
-        if (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl])
+        if (voiceKeyerType == keyerTypes[TxKeyerId::CW_RigControl])
         {
 
-            txVoiceKeyer->setCwMemType(getCwMemType(selectedRadio));
+            txKeyer->setCwMemType(getCwMemType(selectedRadio));
             ui->sAndPLabel->setText("| S&P");       // init S&P/Run Label
-            txVoiceKeyer->setContest(ct);
+            txKeyer->setContest(ct);
         }
 
-        if (voiceKeyerType == keyerTypes[VoiceKeyerId::PcCwKeyer])
+        if (voiceKeyerType == keyerTypes[TxKeyerId::PcCwKeyer])
         {
             ui->sAndPLabel->setText("| S&P");       // init S&P/Run Label
-            txVoiceKeyer->setContest(ct);
+            txKeyer->setContest(ct);
             // don't really need to save every time, but ensures the data is correct
             // we don't allow change of number of buttons or EOM type.
-            if (auto keyed = qobject_cast<PcCWMessageKeyer*>(txVoiceKeyer.data()))
+            if (auto keyed = qobject_cast<PcCWMessageKeyer*>(txKeyer.data()))
             {
                 keyed->saveFixedRadioCommonData();
             }
         }
 
-        ui->vmStopPb->setVisible(true);
+        ui->stopButton->setVisible(true);
 
-        if (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl]
-            || voiceKeyerType == keyerTypes[VoiceKeyerId::RigControl]
-            || voiceKeyerType == keyerTypes[VoiceKeyerId::InternalVoiceKeyer]
-            || voiceKeyerType == keyerTypes[VoiceKeyerId::PcCwKeyer])
+        if (voiceKeyerType == keyerTypes[TxKeyerId::CW_RigControl]
+            || voiceKeyerType == keyerTypes[TxKeyerId::RigControl]
+            || voiceKeyerType == keyerTypes[TxKeyerId::InternalVoiceKeyer]
+            || voiceKeyerType == keyerTypes[TxKeyerId::PcCwKeyer])
         {
             setSaveButtonByRadionameText(selectedRadio.getLocalName());
 
-            txVoiceKeyer->setRadioParams(getNumVoiceMessages(selectedRadio), selectedRadio.getLocalName(), getPttType(selectedRadio), getPttEnabled(selectedRadio));
-            txVoiceKeyer->voiceKeyerInit(txVoiceKeyer->numButtons);
+            txKeyer->setRadioParams(getNumVoiceMessages(selectedRadio), selectedRadio.getLocalName(), getPttType(selectedRadio), getPttEnabled(selectedRadio));
+            txKeyer->txKeyerInit(txKeyer->numButtons);
             setPttTypeLabelsVisible(true);
             setPttTypeText(getPttType(selectedRadio));
             setPttEnabledIndicatorOnOff(getPttEnabled(selectedRadio));
             setEomTypeLabelsVisible(true);
-            setEomLabelText(txVoiceKeyer->getSelectedEomType());
+            setEomLabelText(txKeyer->getSelectedEomType());
             loadButtonData();
 
-            if (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl])
+            if (voiceKeyerType == keyerTypes[TxKeyerId::CW_RigControl])
             {
                 setCwEntryBoxVisible(true);
                 setCwMessagePlayingVisible(true);
 
                 if (!getRigCwKeyerSupportStopFlag(selectedRadio.getLocalName()))
                 {
-                    ui->vmStopPb->setVisible(false);
+                    ui->stopButton->setVisible(false);
                 }
                 else
                 {
-                    ui->vmStopPb->setVisible(true);
+                    ui->stopButton->setVisible(true);
                 }
 
                 initCwTextEntryBox(getCwRadioManufacturer(getCwMemType(selectedRadio)), CWKEYER_RADIO_COMMON_PARAMS_FILENAME);
             }
-            else if (voiceKeyerType == keyerTypes[VoiceKeyerId::PcCwKeyer])
+            else if (voiceKeyerType == keyerTypes[TxKeyerId::PcCwKeyer])
             {
                 setCwEntryBoxVisible(true);
                 setCwMessagePlayingVisible(true);
@@ -534,28 +541,28 @@ void DMButtonFrame::setFrameState(QString voiceKeyerName)
 
                 cwSpeedSlider = new CwSpeedControl(ui->cwSpeedSliderFrame);
                 ui->cwSpeedSliderHorizontalLayout->addWidget(cwSpeedSlider);
-                cwSpeedSlider->setSpeedRange(voiceKeyerCommon::PC_CW_KEYER_MIN_WPM, voiceKeyerCommon::PC_CW_KEYER_MAX_WPM);
+                cwSpeedSlider->setSpeedRange(PC_CW_KEYER_MIN_WPM, PC_CW_KEYER_MAX_WPM);
 
                 connect(cwSpeedSlider, &CwSpeedControl::cwSpeedChanged, this, [this](int wpm){
                     emit sendWpmToPcCwkeyer(wpm);
                 });
 
             }
-            else if (voiceKeyerType == keyerTypes[VoiceKeyerId::RigControl])
+            else if (voiceKeyerType == keyerTypes[TxKeyerId::RigControl])
             {
                 if (!getRigVoiceKeyerSupportStopFlag(selectedRadio.getLocalName()))
                 {
-                    ui->vmStopPb->setVisible(false);
+                    ui->stopButton->setVisible(false);
                 }
                 else
                 {
-                    ui->vmStopPb->setVisible(true);
+                    ui->stopButton->setVisible(true);
                 }
 
 
             }
         }
-        else if (voiceKeyerType == keyerTypes[VoiceKeyerId::InternalVoiceKeyer])
+        else if (voiceKeyerType == keyerTypes[TxKeyerId::InternalVoiceKeyer])
         {
             setPttTypeLabelsVisible(true);
             setPttTypeText(getPttType(selectedRadio));
@@ -708,7 +715,7 @@ void DMButtonFrame::startVMMsg(int buttonNumber)
     //    return;
    // }
 
-    selectedEomType = TxKeyerCommon::KeyerEomTypes::Eom_None;
+    selectedEomType = KeyerEomTypes::Eom_None;
 
     TxKeyerParams vmData;
 
@@ -768,13 +775,13 @@ void DMButtonFrame::startVMMsg(int buttonNumber)
     }
     else
     {
-
-        txKeyer->sendMsgNum(buttonNumSent);
+//**************************************************************************************
+//        txKeyer->sendMsgNum(buttonNumSent);
 
     }
 
     selectedEomType = txKeyer->getSelectedEomType();
-
+/**************************************************************************************
     if (selectedEomType == TxKeyerCommon::KeyerEomTypes::Timer)
     {
         int msgDur = vmKeyParamList[buttonNumber].getVmDuration() * 1000;
@@ -785,8 +792,8 @@ void DMButtonFrame::startVMMsg(int buttonNumber)
         }
     }
 
-    txVmButtonMap[buttonNumber]->showButtonOnOff(true);
-
+   txVmButtonMap[buttonNumber]->showButtonOnOff(true);
+********************************************/
 }
 
 
@@ -820,6 +827,7 @@ void DMButtonFrame::onVmStopClicked()
 
     msgDurTimer->stop();
     repeatPauseTimer->stop();
+/*****************************************************************************************
     if (buttonNumSent != NO_VM_BUTTON_ON && buttonNumSent <= txVmButtonMap.count())
     {
         TxVoiceMemButton *b = txVmButtonMap[buttonNumSent];
@@ -830,7 +838,7 @@ void DMButtonFrame::onVmStopClicked()
     }
     setRepeatIndicatorOnOff(false);
     buttonNumSent = NO_VM_BUTTON_ON;
-
+*/
 
 }
 
@@ -842,7 +850,7 @@ void DMButtonFrame::onRemoteConfigChanged()
     {
         ui->pipCb->setChecked(s);
     }
-
+/*******************************************************************************
     for (int i = 0; i < voiceMemButtonList.count(); i++)
     {
         VoiceKeyerParams vmData;
@@ -855,11 +863,12 @@ void DMButtonFrame::onRemoteConfigChanged()
         vmKeyParamList[i] = vmData;
         setRunButtonText(i, vmData.getVmName());
     }
+*/
 }
 void DMButtonFrame::onRemoteKeyerStarted(int key)
 {
     onRemoteKeyerStopped();
-
+/*********************************************************************************************
     buttonNumSent = key;
     if (voiceKeyerType == keyerTypes[TxKeyerId::None] || buttonNumSent == NO_VM_BUTTON_ON)
     {
@@ -877,9 +886,12 @@ void DMButtonFrame::onRemoteKeyerStarted(int key)
     {
         b->showButtonOnOff(true);
     }
+*/
 }
 void DMButtonFrame::onRemoteKeyerStopped()
 {
+/*************************************************************************************
+
     if (voiceKeyerType == keyerTypes[TxKeyerId::None] || buttonNumSent == NO_VM_BUTTON_ON)
     {
         return;
@@ -887,23 +899,27 @@ void DMButtonFrame::onRemoteKeyerStopped()
     //txKeyer->stopMsg();
     msgDurTimer->stop();
     repeatPauseTimer->stop();
+
+
     TxVoiceMemButton *b = txVmButtonMap[buttonNumSent];
     if (b)
     {
         b->showButtonOnOff(false);
     }
     buttonNumSent = NO_VM_BUTTON_ON;
-
+*/
 }
 
 void DMButtonFrame::onMsgDurTimerTimeout()
 {
+/**************************************************************************
+
     if (buttonNumSent >= 0)
     {
         if (vmKeyParamList[buttonNumSent].getVmDuration() > 0
-            || selectedEomType == TxKeyerCommon::KeyerEomTypes::CAT
-            || txKeyer->getSelectedEomType() == TxKeyerCommon::KeyerEomTypes::InternalSoundCardVoiceKeyer
-            || selectedEomType == TxKeyerCommon::KeyerEomTypes::DTRKeyerTXStatus)
+            || selectedEomType == KeyerEomTypes::CAT
+            || txKeyer->getSelectedEomType() == KeyerEomTypes::InternalSoundCardVoiceKeyer
+            || selectedEomType == KeyerEomTypes::DTRKeyerTXStatus)
         {
             if (voiceKeyerType == keyerTypes[TxKeyerId::InternalVoiceKeyer])
             {
@@ -953,21 +969,11 @@ void DMButtonFrame::onMsgDurTimerTimeout()
         }
 
     }
+*/
 
 }
 
 
-void DMButtonFrame::turnOffVMButton()
-{
-    TxVoiceMemButton *b = txVmButtonMap[buttonNumSent];
-    if (b)
-    {
-        b->showButtonOnOff(false);
-    }
-
-    setRepeatIndicatorOnOff(false);
-    buttonNumSent = NO_VM_BUTTON_ON;
-}
 
 
 
@@ -975,7 +981,7 @@ void DMButtonFrame::onRepeatPauseTimerTimeout()
 {
 
     repeatPauseTimer->stop();
-
+/***********************************************************************************
     if (txKeyer->doRepeatFromLogger())
     {
         if (buttonNumSent >= 0)
@@ -992,6 +998,7 @@ void DMButtonFrame::onRepeatPauseTimerTimeout()
             }
         }
     }
+*/
 }
 
 void DMButtonFrame::setRadioIsConnected(bool connected)

@@ -6,12 +6,12 @@
 #include "txVmInternalSetupDialog.h"
 #include "ui_txVmInternalSetupDialog.h"
 
-using namespace voiceKeyerCommon;
+using namespace TxKeyerCommon;
 
 const char * indevKey("InDevice");
 const char * outdevKey("OutDevice");
 
-txVmInternalSetupDialog::txVmInternalSetupDialog(VoiceKeyerCapabilities voiceCap_, int maxNumButtons_,int nb, QWidget *parent) :
+txVmInternalSetupDialog::txVmInternalSetupDialog(TxKeyerCapabilities voiceCap_, int maxNumButtons_,int nb, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::txVmInternalSetupDialog),
     voiceCap(voiceCap_),

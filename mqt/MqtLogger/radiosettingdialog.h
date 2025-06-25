@@ -32,7 +32,7 @@ public:
 
 };
 
-using namespace voiceKeyerCommon;
+using namespace TxKeyerCommon;
 
 struct SAVED_SETTINGS { // to silence clang
 
@@ -143,8 +143,8 @@ private:
 
     void saveVoiceMemoryButtonByRadioNameCheckBox();
     void saveCwMemoryButtonByRadioNameCheckBox();
-    void setDeleteMemoryButtonRadiosPushButtonVisible(bool visible, VoiceKeyerId id);
-    void deleteMemoryButtonRadios(VoiceKeyerId id);
+    void setDeleteMemoryButtonRadiosPushButtonVisible(bool visible, TxKeyerId id);
+    void deleteMemoryButtonRadios(TxKeyerId id);
     bool readIgnorePresetFreqFlagSavedSettingFlag();
     bool readContestChangeIgnorePreviousFreqFlagSavedSettingFlag();
     bool readContestChangeRestoreContestModeSavedSettingFlag();

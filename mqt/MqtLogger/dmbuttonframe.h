@@ -142,11 +142,11 @@ private:
     QSharedPointer<TxKeyerBase> txKeyer;
     TxKeyerFactory* txKeyerFactory;
 
-
+    QList<TxKeyerParams> txKeyParamList;
 
     QTimer *extKeyerConnectTimer = nullptr;
     //QList<QShortcut *> shortCutKeyList;
-
+    int buttonNumSent = NO_TXKEYER_BUTTON_SELECTED;
 
     QString voiceKeyerType;
 

@@ -14,14 +14,14 @@ namespace Ui {
 class txVmInternalSetupDialog;
 }
 
-using namespace voiceKeyerCommon;
+using namespace TxKeyerCommon;
 
 class txVmInternalSetupDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit txVmInternalSetupDialog(VoiceKeyerCapabilities voiceCap_, int maxNumButtons_, int nb, QWidget *parent = nullptr);
+    explicit txVmInternalSetupDialog(TxKeyerCapabilities voiceCap_, int maxNumButtons_, int nb, QWidget *parent = nullptr);
     ~txVmInternalSetupDialog();
 
     int getNumButtons(){return numButtons;}
@@ -42,7 +42,7 @@ private:
 
     Ui::txVmInternalSetupDialog *ui;
 
-    VoiceKeyerCapabilities voiceCap;
+    TxKeyerCapabilities voiceCap;
 
     int numButtons = MININUM_BUTTONS;
     int maxNumButtons = MAXIMUM_BUTTONS;

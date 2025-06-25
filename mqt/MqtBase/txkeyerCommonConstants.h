@@ -31,8 +31,10 @@ namespace TxKeyerCommon
         CW_RigControl,    // Rig sends message by CW
         SerialControl,    // Sends user serial message to control external voice keyer
         PcCwKeyer,        // Serial DTR keying of radio
+        DigitalModes,
         InternalVoiceKeyer,
         ExternalVoiceKeyer
+
     };
 
     enum KeyerEomTypes
@@ -44,7 +46,7 @@ namespace TxKeyerCommon
         DTRKeyerTXStatus
     };
 
-    inline const QStringList keyerTypes = {"", "Voice RigControl", "CW RigControl", "SerialControl", "PcCwKeyer", "Internal", "mqtKeyer"};
+    inline const QStringList keyerTypes = {"", "Voice RigControl", "CW RigControl", "SerialControl", "PcCwKeyer", "Digital Modes", "Internal", "mqtKeyer"};
 
     inline const QString VOICEKEYER_COMMON_KEY = "commonParams";
 

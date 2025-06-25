@@ -263,17 +263,17 @@ void RadioSettingDialog::initialise()
 
 
     // handle Voice and CW Save Memory Buttons by Name Checkboxes
-    ui->saveVoiceMemoryButtonByRadioName->setChecked(readSaveVoiceCWMemoryButtonByRadioNameFromIni(VoiceKeyerId::RigControl));
+    ui->saveVoiceMemoryButtonByRadioName->setChecked(readSaveVoiceCWMemoryButtonByRadioNameFromIni(TxKeyerId::RigControl));
     connect(ui->saveVoiceMemoryButtonByRadioName, &QCheckBox::stateChanged, this, [=]() {onSaveVoiceMemoryButtonByRadioNameChkBoxClicked();});
 
-    ui->saveCWMemoryButtonByRadioName->setChecked(readSaveVoiceCWMemoryButtonByRadioNameFromIni(VoiceKeyerId::CW_RigControl));
+    ui->saveCWMemoryButtonByRadioName->setChecked(readSaveVoiceCWMemoryButtonByRadioNameFromIni(TxKeyerId::CW_RigControl));
     connect(ui->saveCWMemoryButtonByRadioName, &QCheckBox::stateChanged, this, [=]() {onSaveCwMemoryButtonByRadioNameChkBoxClicked();});
 
 
-    ui->deleteVoiceMemoryButtonRadiosPushButton->setVisible(readSaveVoiceCWMemoryButtonByRadioNameFromIni(VoiceKeyerId::RigControl));
+    ui->deleteVoiceMemoryButtonRadiosPushButton->setVisible(readSaveVoiceCWMemoryButtonByRadioNameFromIni(TxKeyerId::RigControl));
     connect(ui->deleteVoiceMemoryButtonRadiosPushButton, &QPushButton::clicked, this, [=]() {onDeleteVoiceMemoryButtonRadiosPushButtonClicked();});
 
-    ui->deleteCWMemoryButtonRadiosPushButton->setVisible(readSaveVoiceCWMemoryButtonByRadioNameFromIni(VoiceKeyerId::CW_RigControl));
+    ui->deleteCWMemoryButtonRadiosPushButton->setVisible(readSaveVoiceCWMemoryButtonByRadioNameFromIni(TxKeyerId::CW_RigControl));
     connect(ui->deleteCWMemoryButtonRadiosPushButton, &QPushButton::clicked, this, [=]() {onDeleteCwMemoryButtonRadiosPushButtonClicked();});
 
     enableBandSwLineEdits(ui->enableBandSwChkBox->isChecked());
@@ -627,27 +627,27 @@ void RadioSettingDialog::onRadioReadOnlyCheckBoxClicked()
 
 void RadioSettingDialog::onSaveVoiceMemoryButtonByRadioNameChkBoxClicked()
 {
-    setDeleteMemoryButtonRadiosPushButtonVisible(ui->saveVoiceMemoryButtonByRadioName->isChecked(), VoiceKeyerId::RigControl);
+    setDeleteMemoryButtonRadiosPushButtonVisible(ui->saveVoiceMemoryButtonByRadioName->isChecked(), TxKeyerId::RigControl);
 }
 
 void RadioSettingDialog::onSaveCwMemoryButtonByRadioNameChkBoxClicked()
 {
-    setDeleteMemoryButtonRadiosPushButtonVisible(ui->saveCWMemoryButtonByRadioName->isChecked(), VoiceKeyerId::CW_RigControl);
+    setDeleteMemoryButtonRadiosPushButtonVisible(ui->saveCWMemoryButtonByRadioName->isChecked(), TxKeyerId::CW_RigControl);
 }
 
 
 void RadioSettingDialog::onDeleteVoiceMemoryButtonRadiosPushButtonClicked()
 {
-    deleteMemoryButtonRadios(VoiceKeyerId::RigControl);
+    deleteMemoryButtonRadios(TxKeyerId::RigControl);
 }
 
 void RadioSettingDialog::onDeleteCwMemoryButtonRadiosPushButtonClicked()
 {
-    deleteMemoryButtonRadios(VoiceKeyerId::CW_RigControl);
+    deleteMemoryButtonRadios(TxKeyerId::CW_RigControl);
 }
 
 
-void RadioSettingDialog::deleteMemoryButtonRadios(VoiceKeyerId id)
+void RadioSettingDialog::deleteMemoryButtonRadios(TxKeyerId id)
 {
 
     QStringList listOfRadios;
@@ -701,13 +701,13 @@ void RadioSettingDialog::deleteMemoryButtonRadios(VoiceKeyerId id)
     }
 }
 
-void RadioSettingDialog::setDeleteMemoryButtonRadiosPushButtonVisible(bool visible, VoiceKeyerId id)
+void RadioSettingDialog::setDeleteMemoryButtonRadiosPushButtonVisible(bool visible, TxKeyerId id)
 {
-    if (id == VoiceKeyerId::RigControl)
+    if (id == TxKeyerId::RigControl)
     {
         ui->deleteVoiceMemoryButtonRadiosPushButton->setVisible(visible);
     }
-    else if (id == VoiceKeyerId::CW_RigControl)
+    else if (id == TxKeyerId::CW_RigControl)
     {
         ui->deleteCWMemoryButtonRadiosPushButton->setVisible(visible);
     }
@@ -789,18 +789,18 @@ void RadioSettingDialog::saveBandSwCheckBoxes()
 
 void RadioSettingDialog::saveVoiceMemoryButtonByRadioNameCheckBox()
 {
-    if (readSaveVoiceCWMemoryButtonByRadioNameFromIni(VoiceKeyerId::RigControl) != ui->saveVoiceMemoryButtonByRadioName->isChecked())
+    if (readSaveVoiceCWMemoryButtonByRadioNameFromIni(TxKeyerId::RigControl) != ui->saveVoiceMemoryButtonByRadioName->isChecked())
     {
-        writeSaveVoiceCWMemoryButtonByRadioNameToIni(ui->saveVoiceMemoryButtonByRadioName->isChecked(), VoiceKeyerId::RigControl);
+        writeSaveVoiceCWMemoryButtonByRadioNameToIni(ui->saveVoiceMemoryButtonByRadioName->isChecked(), TxKeyerId::RigControl);
 
     }
 }
 
 void RadioSettingDialog::saveCwMemoryButtonByRadioNameCheckBox()
 {
-    if (readSaveVoiceCWMemoryButtonByRadioNameFromIni(VoiceKeyerId::CW_RigControl) != ui->saveCWMemoryButtonByRadioName->isChecked())
+    if (readSaveVoiceCWMemoryButtonByRadioNameFromIni(TxKeyerId::CW_RigControl) != ui->saveCWMemoryButtonByRadioName->isChecked())
     {
-        writeSaveVoiceCWMemoryButtonByRadioNameToIni(ui->saveCWMemoryButtonByRadioName->isChecked(), VoiceKeyerId::CW_RigControl);
+        writeSaveVoiceCWMemoryButtonByRadioNameToIni(ui->saveCWMemoryButtonByRadioName->isChecked(), TxKeyerId::CW_RigControl);
 
     }
 }

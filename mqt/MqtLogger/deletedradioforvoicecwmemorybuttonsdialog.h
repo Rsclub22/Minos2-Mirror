@@ -9,17 +9,17 @@ namespace Ui {
 class DeletedRadioForVoiceCwMemoryButtonsDialog;
 }
 
-using namespace voiceKeyerCommon;
+using namespace TxKeyerCommon;
 
 class DeletedRadioForVoiceCwMemoryButtonsDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit DeletedRadioForVoiceCwMemoryButtonsDialog(QStringList listOfRadioNames, VoiceKeyerId id, QWidget *parent = nullptr);
+    explicit DeletedRadioForVoiceCwMemoryButtonsDialog(QStringList listOfRadioNames, TxKeyerId id, QWidget *parent = nullptr);
     ~DeletedRadioForVoiceCwMemoryButtonsDialog();
 
-    QList<QListWidgetItem *> getSelectedItems(VoiceKeyerId id);
+    QList<QListWidgetItem *> getSelectedItems(TxKeyerId id);
 
 
 private slots:
@@ -30,7 +30,7 @@ private:
     Ui::DeletedRadioForVoiceCwMemoryButtonsDialog *ui;
 
 
-    VoiceKeyerId id = VoiceKeyerId::None;
+    TxKeyerId id = TxKeyerId::None;
     QList<QListWidgetItem*> selectedItems;
 
 

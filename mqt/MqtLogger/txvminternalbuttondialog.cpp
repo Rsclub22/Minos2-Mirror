@@ -9,7 +9,7 @@
 #include "ui_txvminternalbuttondialog.h"
 
 
-using namespace voiceKeyerCommon;
+using namespace TxKeyerCommon;
 
 
 static bool txvmIntInhibitCallbacks = false;
@@ -68,7 +68,7 @@ void TxVmInternalButtonDialog::accept()
 }
 
 
-void TxVmInternalButtonDialog::setVmData(VoiceKeyerParams* vmData_)
+void TxVmInternalButtonDialog::setVmData(TxKeyerParams* vmData_)
 {
     txvmbd = this;
     vmData = vmData_;

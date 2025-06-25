@@ -153,7 +153,7 @@ int RigControlVoiceMemoryKeyer::setup(TxKeyerFactory *voiceKeyerFactory, int &ma
     TxKeyerCapabilities voiceCap = voiceKeyerFactory->supportedTxKeyers()->value("rigControl");
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
 
-    TxVmRigSetupDialog txVmSetupDialog(voiceCap, maxNumButtons, numButtons, tslf->txVmButtonsFrame);
+    TxVmRigSetupDialog txVmSetupDialog(voiceCap, maxNumButtons, numButtons, tslf->dmButtonFrame);
 
     QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[TxKeyerId::RigControl] + ".ini";
     QSettings config(fileName, QSettings::IniFormat);
@@ -290,7 +290,7 @@ void RigControlVoiceMemoryKeyer::getRadioCommonData(int &selectedEomType, int &u
 int RigControlVoiceMemoryKeyer::editButton(TxKeyerParams *vmData, QString title)
 {
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
-    TxVmRigButtonDialog vmButtonDialog(tslf->txVmButtonsFrame);
+    TxVmRigButtonDialog vmButtonDialog(tslf->dmButtonFrame);
 
     if (readSaveVoiceCWMemoryButtonByRadioNameFromIni(TxKeyerId::RigControl))
     {
