@@ -246,6 +246,7 @@ private:
 
 
 
+    void actionDigitalModeKeyPress(int key, int carr);
 };
 
 #endif // DMBUTTONFRAME_H

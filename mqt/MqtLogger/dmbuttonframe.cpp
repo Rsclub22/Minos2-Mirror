@@ -47,6 +47,8 @@ const QStringList vmButtonShortCutKeys = {
     "Shift+F11", "Shift+F12",
 };
 
+const QString DIGIMODE = "DigiMode";
+
 DMButtonFrame::DMButtonFrame(QWidget *parent) :
     QFrame(parent),
     ui(new Ui::DMButtonFrame)
@@ -82,6 +84,10 @@ DMButtonFrame::DMButtonFrame(QWidget *parent) :
     QString txKeyerName = config.value("KeyerName").toString();
 
     txKeyerFactory->populateComboKeyerList(ui->txKeyerSelect, txKeyerName);
+
+    // we add digi modes to list, though it will not act as keyer
+    ui->txKeyerSelect->addItem(DIGIMODE);
+
     connect(ui->txKeyerSelect, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &DMButtonFrame::onVoiceKeyerSelect);
 
     trace(QString("start keyer name = %1").arg(ui->txKeyerSelect->currentText()));
@@ -380,22 +386,32 @@ void DMButtonFrame::onVoiceKeyerSelect(int idx)
     if (!notifyComboChange)
         return;
 
-    QString voiceKeyerName = ui->txKeyerSelect->currentText();
+    QString txKeyerName = ui->txKeyerSelect->currentText();
     logMessage(QString("onVoiceKeyerSelect - keyer select name = %1").arg( ui->txKeyerSelect->currentText()));
 
     QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + VOICEKEYER_COMMON_PARAMS_FILENAME;
     QSettings config(fileName, QSettings::IniFormat);
     config.beginGroup(VOICEKEYER_COMMON_PARAMS_GROUPNAME);
 
-    config.setValue("KeyerName", voiceKeyerName);
+    config.setValue("KeyerName", txKeyerName);
 
     config.endGroup();
 
     txKeyer.clear();
 
+    if (txKeyerName == DIGIMODE)
+    {
+        // flag we are in Digital Mode
+        voiceKeyerType = keyerTypes[TxKeyerId::DigitalModes];
+
+    }
+
     delayedAction(this, [=]{
-        createKeyer(voiceKeyerName);
-        setFrameState(voiceKeyerName);
+        if (txKeyerName != DIGIMODE)
+        {
+            createKeyer(txKeyerName);   // don't create a keyer when in Digimode
+        }
+        setFrameState(txKeyerName);
     });
 
 
@@ -409,10 +425,13 @@ void DMButtonFrame::onVoiceKeyerSelect(int idx)
 void DMButtonFrame::setFrameState(QString txKeyerName)
 {
 
+    if (txKeyerName != DIGIMODE)
+    {
+        TxKeyerCapabilities voiceCap = txKeyerFactory->supportedTxKeyers()->value(txKeyerName);
 
-    TxKeyerCapabilities voiceCap = txKeyerFactory->supportedTxKeyers()->value(txKeyerName);
+        ui->sAndPLabel->clear();
+    }
 
-    ui->sAndPLabel->clear();
 
     if (txKeyer == nullptr)
     {
@@ -424,7 +443,12 @@ void DMButtonFrame::setFrameState(QString txKeyerName)
             ui->noExtKeyerLabel->setText(HtmlFontColour(Qt::red) +  tr("To use the external keyer mqtKeyer must be running and connected"));
 
         }
-        voiceKeyerType = keyerTypes[TxKeyerId::None];
+
+        if (voiceKeyerType != keyerTypes[TxKeyerId::DigitalModes])
+        {
+            voiceKeyerType = keyerTypes[TxKeyerId::None];
+        }
+
 
         clearButtons();
         setCwEntryBoxVisible(false);
@@ -1751,28 +1775,41 @@ bool  DMButtonFrame::isDataMode()
 
 }void DMButtonFrame::fKey(BaseContestLog *c, int key, int carr)
 {
-    if (c && c == ct && isDataMode())
+    if (c && c == ct)
     {
-        if (key >= Qt::Key_F1 && key <= Qt::Key_F12 && fkeys[currentName].size() == 24)
+        if (isDataMode() && voiceKeyerType == keyerTypes[TxKeyerId::DigitalModes])
         {
-            TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
-            int spoffset = tslf->GJVQSOLogFrame->getSandP()?12:0;
-            KeyVal mess = fkeys[currentName][key - Qt::Key_F1 + spoffset];
-
-            QString toSend = parseFKeyMessage(mess.kval);
-
-            // send transmission to sender app
-
-            RPCGeneralClient rpc(rpcConstants::DMTransmit);
-            QSharedPointer<RPCParam>st(new RPCParamStruct);
-            st->addMember( toSend, rpcConstants::DMTransmit );
-            st->addMember(carr, rpcConstants::DMMarkFreq);
-            rpc.getCallArgs() ->addParam( st );
-            rpc.queueCall( dataSender );
-
+            // digital mode isn't a keyer..
+            actionDigitalModeKeyPress(key, carr);
         }
     }
 }
+
+
+
+void DMButtonFrame::actionDigitalModeKeyPress(int key, int carr)
+{
+    if (key >= Qt::Key_F1 && key <= Qt::Key_F12 && fkeys[currentName].size() == 24)
+    {
+        TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
+        int spoffset = tslf->GJVQSOLogFrame->getSandP()?12:0;
+        KeyVal mess = fkeys[currentName][key - Qt::Key_F1 + spoffset];
+
+        QString toSend = parseFKeyMessage(mess.kval);
+
+        // send transmission to sender app
+
+        RPCGeneralClient rpc(rpcConstants::DMTransmit);
+        QSharedPointer<RPCParam>st(new RPCParamStruct);
+        st->addMember( toSend, rpcConstants::DMTransmit );
+        st->addMember(carr, rpcConstants::DMMarkFreq);
+        rpc.getCallArgs() ->addParam( st );
+        rpc.queueCall( dataSender );
+
+    }
+}
+
+
 
 void DMButtonFrame::sandPChanged(bool s)
 {
