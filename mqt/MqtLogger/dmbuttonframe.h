@@ -15,6 +15,7 @@
 #include "txkeyerfactory.h"
 #include "rigcontrolcommonconstants.h"
 #include "cwspeedcontrol.h"
+#include "txkeyerCommonConstants.h"
 
 class QPushButton;
 class QFileSystemWatcher;
@@ -146,7 +147,7 @@ private:
 
     QTimer *extKeyerConnectTimer = nullptr;
     //QList<QShortcut *> shortCutKeyList;
-    int buttonNumSent = NO_TXKEYER_BUTTON_SELECTED;
+    int buttonNumSent = TxKeyerCommon::NO_TXKEYER_BUTTON_SELECTED;
 
     QString voiceKeyerType;
 
@@ -242,6 +243,7 @@ private:
     void setCwMessagePlayingVisible(bool visible);
     void clearCwMessageDisplay();
     void displayCwMessagePlaying(const QString msg);
+
 
 
 };

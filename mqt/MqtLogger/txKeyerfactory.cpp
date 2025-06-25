@@ -28,11 +28,11 @@ using namespace TxKeyerCommon;
 
 TxKeyerFactory::TxKeyerFactory(QObject *parent) : QObject(parent)
 {
-    RigControlVoiceMemoryKeyer::registerVoiceKeyer(&txKeyersList);
-    RigControlCwMessageKeyer::registerVoiceKeyer(&txKeyersList);
-    PcCWMessageKeyer::registerVoiceKeyer(&txKeyersList);
-    InternalVoiceMemoryKeyer::registerVoiceKeyer(&txKeyersList);
-    ExternalMqtKeyer::registerVoiceKeyer(&txKeyersList);
+    RigControlVoiceMemoryKeyer::registerTxKeyer(&txKeyersList);
+    RigControlCwMessageKeyer::registerTxKeyer(&txKeyersList);
+    PcCWMessageKeyer::registerTxKeyer(&txKeyersList);
+    InternalVoiceMemoryKeyer::registerTxKeyer(&txKeyersList);
+    ExternalMqtKeyer::registerTxKeyer(&txKeyersList);
 }
 
 
@@ -47,7 +47,7 @@ TxKeyerFactory::TxKeyers* TxKeyerFactory::supportedTxKeyers()
 }
 
 
-TxKeyerFactory* TxKeyerFactory::createTxKeyer(int txKeyerId)
+TxKeyerBase* TxKeyerFactory::createTxKeyer(int txKeyerId)
 {
     if (txKeyerId == TxKeyerId::RigControl)
     {        
@@ -59,7 +59,12 @@ TxKeyerFactory* TxKeyerFactory::createTxKeyer(int txKeyerId)
     }
     else if (txKeyerId == TxKeyerId::PcCwKeyer)
     {
-        return new PcCWMessageKeyer(this);
+        if (LogContainer->sendDM->isPcCWkeyerLoaded())
+        {
+           return new PcCWMessageKeyer(this);
+        }
+
+
     }
     else if (txKeyerId == TxKeyerId::InternalVoiceKeyer)
     {

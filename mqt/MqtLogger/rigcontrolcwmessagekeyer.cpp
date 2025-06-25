@@ -41,7 +41,7 @@ RigControlCwMessageKeyer::~RigControlCwMessageKeyer()
 }
 
 
-void RigControlCwMessageKeyer::registerVoiceKeyer(TxKeyerFactory::TxKeyers* vmKeyersList)
+void RigControlCwMessageKeyer::registerTxKeyer(TxKeyerFactory::TxKeyers* vmKeyersList)
 {
     QString keyerName = "cwRigControl";
 

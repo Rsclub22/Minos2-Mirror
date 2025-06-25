@@ -181,8 +181,8 @@ void TSingleLogFrame::buildFrame(int slotNo)
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::QRZInfoToLog, this, &TSingleLogFrame::onQrzInfoToLog );
 
     // from tx Voice Memory Panel
-    connect(dmButtonFrame, &DMButtonsFrame::sendRadioMode, this, &TSingleLogFrame::sendRadioMode);
-    connect(dmButtonFrame, &DMButtonsFrame::sendWpmToPcCwkeyer, this, &TSingleLogFrame::sendPcKeyerCwWpm);
+    connect(dmButtonFrame, &DMButtonFrame::sendRadioMode, this, &TSingleLogFrame::sendRadioMode);
+    connect(dmButtonFrame, &DMButtonFrame::sendWpmToPcCwkeyer, this, &TSingleLogFrame::sendPcKeyerCwWpm);
 
     connect(FKHRigControlFrame, &RigControlFrame::radioIsConnected, this, &TSingleLogFrame::sendBandmapRadioIsConnected);
     connect(FKHRigControlFrame, &RigControlFrame::radioHasError, this, &TSingleLogFrame::sendBandmapRadioHasError);
@@ -465,9 +465,6 @@ void TSingleLogFrame::clearScreenLayout(bool clearAllTabs)
         bandSwitchFrame->setParent(this);
         bandSwitchFrame->hide();
 
-        txVmButtonsFrame->setParent(this);
-        txVmButtonsFrame->hide();
-
         FKHRotControlFrame->setParent(this);
         FKHRotControlFrame->hide();
 
@@ -503,9 +500,6 @@ void TSingleLogFrame::clearScreenLayout(bool clearAllTabs)
 
         wsjtxFrame->setParent(this);
         wsjtxFrame->hide();
-
-        txVmButtonsFrame->setParent(this);
-        txVmButtonsFrame->hide();
 
         qrzDisplayFrame->setParent(this);
         qrzDisplayFrame->hide();

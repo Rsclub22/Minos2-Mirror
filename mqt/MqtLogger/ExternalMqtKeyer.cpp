@@ -21,7 +21,7 @@ ExternalMqtKeyer::~ExternalMqtKeyer()
 {
 }
 
-void ExternalMqtKeyer::registerVoiceKeyer(TxKeyerFactory::TxKeyers* vmKeyersList)
+void ExternalMqtKeyer::registerTxKeyer(TxKeyerFactory::TxKeyers* vmKeyersList)
 {
    // QString keyerName = "ExternalMqtKeyer";
 

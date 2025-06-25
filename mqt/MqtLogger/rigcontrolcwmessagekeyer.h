@@ -37,7 +37,7 @@ public:
     explicit RigControlCwMessageKeyer(QObject *parent = nullptr);
     virtual ~RigControlCwMessageKeyer() override;
 
-    static void registerVoiceKeyer(TxKeyerFactory::TxKeyers*);
+    static void registerTxKeyer(TxKeyerFactory::TxKeyers*);
 
     virtual void txKeyerInit(int &numButtons) override;
     virtual void sendMsgNum(int buttonNum) override {Q_UNUSED(buttonNum)};

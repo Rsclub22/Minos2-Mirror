@@ -20,7 +20,7 @@ RigControlVoiceMemoryKeyer::~RigControlVoiceMemoryKeyer()
 }
 
 
-void RigControlVoiceMemoryKeyer::registerVoiceKeyer(TxKeyerFactory::TxKeyers* vmKeyersList)
+void RigControlVoiceMemoryKeyer::registerTxKeyer(TxKeyerFactory::TxKeyers* vmKeyersList)
 {
     QString keyerName = "rigControl";
 
@@ -59,7 +59,7 @@ int RigControlVoiceMemoryKeyer::getSelectedEomType()
 }
 
 
-void RigControlVoiceMemoryKeyer::voiceKeyerInit(int &numButtons)
+void RigControlVoiceMemoryKeyer::txKeyerInit(int &numButtons)
 {
     int userNumberButtons = 0;
     getRadioCommonData(selectedEomType, userNumberButtons, radioMaxNumButtons);

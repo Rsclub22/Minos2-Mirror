@@ -12,7 +12,7 @@ public:
     explicit InternalVoiceMemoryKeyer(QObject *parent =nullptr);
     virtual ~InternalVoiceMemoryKeyer() override;
 
-    static void registerVoiceKeyer(TxKeyerFactory::TxKeyers*);
+    static void registerTxKeyer(TxKeyerFactory::TxKeyers*);
 
     // VoiceKeyerBase interface
     virtual void txKeyerInit(int &numButtons) override;

@@ -22,6 +22,16 @@ namespace TxKeyerCommon
     const int PC_CW_KEYER_MAX_WPM = 40;
     const int MAXIMUM_BUTTONS = 8;
     const int MININUM_BUTTONS = 2;
+/*
+    const char * TXKEYER_BUTTON_ON_STYLE =
+        "background-color: orange;"
+        "padding: 4px;";
+
+    const char * TXKEYER_BUTTON_OFF_STYLE =
+        "background-color: Gainsboro;"
+        "padding: 4px;";
+*/
+    const int NO_TXKEYER_BUTTON_SELECTED = -1;
 
 
     enum TxKeyerId

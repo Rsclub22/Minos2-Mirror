@@ -30,12 +30,22 @@
 #include "pccwmessagekeyer.h"
 #include "cwrigkeyervalidator.h"
 
-#include "txkeyerCommonConstants.h"
+
 
 #include "dmbuttonframe.h"
 #include "ui_dmbuttonframe.h"
 
 using namespace TxKeyerCommon;
+
+
+const QStringList vmButtonShortCutKeys = {
+    "Shift+F1", "Shift+F2",
+    "Shift+F3", "Shift+F4",
+    "Shift+F5", "Shift+F6",
+    "Shift+F7", "Shift+F8",
+    "Shift+F9", "Shift+F10",
+    "Shift+F11", "Shift+F12",
+};
 
 DMButtonFrame::DMButtonFrame(QWidget *parent) :
     QFrame(parent),
@@ -172,7 +182,7 @@ void DMButtonFrame::onVmSetupClicked()
 
 
 
-        if (txKeyer->setup(TxKeyerFactory, maxNumOfVoiceMessages, txKeyer->numButtons, selectedRadio.getLocalName()) == QDialog::Accepted)
+        if (txKeyer->setup(txKeyerFactory, maxNumOfVoiceMessages, txKeyer->numButtons, selectedRadio.getLocalName()) == QDialog::Accepted)
         {
             if (txKeyer->numButtons != oldnb)
             {
@@ -285,7 +295,7 @@ void DMButtonFrame::createKeyer(QString voiceKeyerName)
                 }
 
                 txKeyParamList.clear();
-                buttonNumSent = NO_VM_BUTTON_ON;
+                buttonNumSent = NO_TXKEYER_BUTTON_SELECTED;
 
 
 
@@ -299,7 +309,7 @@ void DMButtonFrame::createKeyer(QString voiceKeyerName)
                 {
 
                     txKeyer->txKeyerInit(txKeyer->numButtons);
-
+/**************************************************
                     for (int i = 0; i < voiceMemButtonList.count(); i++)
                     {
                         TxKeyerParams vmData;
@@ -310,11 +320,11 @@ void DMButtonFrame::createKeyer(QString voiceKeyerName)
 
                         //vmData.setRigModel(getRigModel(selectedRadio));
                         txKeyer->readVmButtonParams(i, vmData);
-                        vmKeyParamList.append(vmData);
+                        txKeyParamList.append(vmData);
                         setRunButtonText(i, vmData.getVmName());
 
                     }
-
+*/
 
                 }
 
@@ -371,7 +381,7 @@ void DMButtonFrame::onVoiceKeyerSelect(int idx)
         return;
 
     QString voiceKeyerName = ui->txKeyerSelect->currentText();
-    logMessage(QString("onVoiceKeyerSelect - keyer select name = %1").arg( ui->voiceKeyerSelect->currentText()));
+    logMessage(QString("onVoiceKeyerSelect - keyer select name = %1").arg( ui->txKeyerSelect->currentText()));
 
     QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + VOICEKEYER_COMMON_PARAMS_FILENAME;
     QSettings config(fileName, QSettings::IniFormat);
@@ -407,7 +417,7 @@ void DMButtonFrame::setFrameState(QString txKeyerName)
     if (txKeyer == nullptr)
     {
         clearButtonLabels();
-        vmKeyParamList.clear();
+        txKeyParamList.clear();
         //setVoiceNumMemButtonsVisible(0);
         if (voiceKeyerType == keyerTypes[TxKeyerId::ExternalVoiceKeyer])
         {
@@ -2218,5 +2228,101 @@ void DMButtonFrame::on_fkeysetCombo_textActivated(const QString &arg1)
     currentName = arg1;
     ct->currentFKeySet.setValue(currentName);
     ct->commonSave(false);
+}
+
+void DMButtonFrame::setCwMessagePlayingVisible(bool visible)
+{
+    ui->cwMessagePlayingDisplay->setVisible(visible);
+}
+void DMButtonFrame::clearCwMessageDisplay()
+{
+    ui->cwMessagePlayingDisplay->clear();
+}
+
+
+
+void DMButtonFrame::logMessage(QString msg)
+{
+    trace(QString("[DMButtonFrame] %1").arg(msg));
+}
+
+// these many not be needed
+
+void DMButtonFrame::createButtonsForKeyer(int numButtons, int columns)
+{
+
+}
+
+void DMButtonFrame::setSaveButtonByRadionameText(QString selectedRadioName)
+{
+
+}
+
+
+void DMButtonFrame::loadButtonData()
+{
+
+}
+
+void DMButtonFrame::onInternalVoiceMemoryPlayState(bool playing)
+{
+
+}
+
+void DMButtonFrame::checkButtonIniFileVersion(QString voiceKeyerType)
+{
+
+}
+
+void DMButtonFrame::checkCommonIniFileVersion(QString voiceKeyerType)
+{
+
+}
+
+void DMButtonFrame::clearButtonLabels()
+{
+
+}
+
+void DMButtonFrame::clearButtons()
+{
+
+}
+
+void DMButtonFrame::sendModeToRadio(const QString m)
+{
+
+}
+
+
+void DMButtonFrame::setMode(const QString m)
+{
+
+}
+
+
+void DMButtonFrame::setPcCwKeyerComport(QString comportStr)
+{
+
+}
+void DMButtonFrame::setPcCwKeyerConnectionState(QString stateStr)
+{
+
+}
+void DMButtonFrame::setPcCwKeyerErrorMsg(QString errorMsg)
+{
+
+}
+void DMButtonFrame::setPcCwKeyerPttEnabled(QString enabled)
+{
+
+}
+void DMButtonFrame::setPcCwKeyerTxOnState(QString state)
+{
+
+}
+void DMButtonFrame::setPcCwKeyerCurrentWpm(QString wpm)
+{
+
 }
 

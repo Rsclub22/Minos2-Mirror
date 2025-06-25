@@ -22,7 +22,7 @@ InternalVoiceMemoryKeyer::~InternalVoiceMemoryKeyer()
 {
     SoundSystemDriver::sbdvp_unload();
 }
-void InternalVoiceMemoryKeyer::registerVoiceKeyer(TxKeyerFactory::TxKeyers* vmKeyersList)
+void InternalVoiceMemoryKeyer::registerTxKeyer(TxKeyerFactory::TxKeyers* vmKeyersList)
 {
     QString keyerName = "Internal";
 

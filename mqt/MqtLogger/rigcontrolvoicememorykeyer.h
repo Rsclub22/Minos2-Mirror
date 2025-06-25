@@ -27,7 +27,7 @@ public:
     explicit RigControlVoiceMemoryKeyer(QObject *parent = nullptr);
     virtual ~RigControlVoiceMemoryKeyer() override;
 
-    static void registerVoiceKeyer(TxKeyerFactory::TxKeyers*);
+    static void registerTxKeyer(TxKeyerFactory::TxKeyers*);
 
     void txKeyerInit(int &numButtons) override;
     void sendMsgNum(int buttonNum) override;
