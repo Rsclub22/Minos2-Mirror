@@ -5,9 +5,12 @@
 #include <QItemSelection>
 #include "dmFKeydef.h"
 
+
 namespace Ui {
 class DMKeysEditDlg;
 }
+
+
 
 
 class DMKeysEditDlg : public QDialog
@@ -19,13 +22,16 @@ class DMKeysEditDlg : public QDialog
     Keys &keys;
 
     QString name;
+    QString txKeyerType;
+
     void showSections();
     void showSection();
     void showDetails();
     void getDetails();
     void doCloseEvent();
+
 public:
-    explicit DMKeysEditDlg(QWidget *parent , QString fKeyFileName, QString name, Keys &keys);
+    explicit DMKeysEditDlg(QWidget *parent , QString fKeyFileName, QString name, Keys &keys, QString txKeyerType);
     ~DMKeysEditDlg() override;
 
     int exec() override;

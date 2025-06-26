@@ -105,7 +105,7 @@ private slots:
 
     // txVmButtonFrame
 
-    void onVoiceKeyerSelect(int idx);
+    void onTxKeyerSelect(int idx);
     void onVmSetupClicked();
     void onRepeatPauseTimerTimeout();
     void onVmStopClicked();
@@ -149,7 +149,7 @@ private:
     //QList<QShortcut *> shortCutKeyList;
     int buttonNumSent = TxKeyerCommon::NO_TXKEYER_BUTTON_SELECTED;
 
-    QString voiceKeyerType;
+    QString txKeyerType;
 
     QTimer* msgDurTimer = nullptr;
     QTimer* repeatPauseTimer = nullptr;

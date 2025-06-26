@@ -1,6 +1,7 @@
 #include <QSettings>
 #include <QString>
 #include <QPushButton>
+#include <QToolButton>
 
 #include <QCheckBox>
 #include <QLineEdit>
@@ -11,13 +12,15 @@
 #include "MMessageDialog.h"
 #include "dmkeyseditdlg.h"
 #include "ui_dmkeyseditdlg.h"
+#include "txkeyerCommonConstants.h"
 
 
-DMKeysEditDlg::DMKeysEditDlg(QWidget *parent, QString fKeyFileName, QString name, Keys &keys) :
+DMKeysEditDlg::DMKeysEditDlg(QWidget *parent, QString fKeyFileName, QString name, Keys &keys, QString txKeyerType) :
     QDialog(parent),
     ui(new Ui::DMKeysEditDlg),
     keys(keys),
-    name(name)
+    name(name),
+    txKeyerType(txKeyerType)
 {
     ui->setupUi(this);
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
@@ -188,7 +191,7 @@ void DMKeysEditDlg::showDetails()
 
     if (offset >= 0)
     {
-        const int totalColumns = 4;          // 0-1 existing, 2-3 new
+        const int totalColumns = 5;
         ui->OptionsTable->setColumnCount(totalColumns);
         ui->OptionsTable->setRowCount(keys[name].size());
 
@@ -221,24 +224,61 @@ void DMKeysEditDlg::showDetails()
             le->setFixedWidth(40);
             le->setText(QString::number(keys[name][i].rptDur));
             ui->OptionsTable->setCellWidget(i, 3, le);
+
+            // record button (col-4)
+            QToolButton *recBtn = new QToolButton();
+            recBtn->setText("🎙");
+            recBtn->setToolTip(tr("Record/Play audio for this message"));
+            recBtn->setFixedSize(24, 24);
+            QWidget *wrap = new QWidget();
+            QHBoxLayout *layout = new QHBoxLayout(wrap);
+            layout->addWidget(recBtn);
+            layout->setAlignment(Qt::AlignCenter);
+            layout->setContentsMargins(0, 0, 0, 0);
+            wrap->setLayout(layout);
+            ui->OptionsTable->setCellWidget(i, 4, wrap);
+
+
+
         }
 
         ui->OptionsTable->setVerticalHeaderLabels(vHeaders);
         ui->OptionsTable->setHorizontalHeaderLabels(
-            { tr("Key Top"), tr("Value"), tr("Repeat"), tr("Dur.") });
+            { tr("Key Top"), tr("Value"), tr("Repeat"), tr("Dur."), tr("Rec.") });
 
 
         auto *hh = ui->OptionsTable->horizontalHeader();
-        hh->setStretchLastSection(false);                      // don’t stretch col-3
+        hh->setStretchLastSection(false);                      // don’t stretch col-4
 
-        hh->setSectionResizeMode(0, QHeaderView::Stretch);     // Key Top
-        hh->setSectionResizeMode(1, QHeaderView::Stretch);     // Value
+        hh->setSectionResizeMode(0, QHeaderView::Interactive);     // Key Top
+        hh->setSectionResizeMode(1, QHeaderView::Interactive);     // Value
         hh->setSectionResizeMode(2, QHeaderView::Fixed);       // Checkbox
         hh->setSectionResizeMode(3, QHeaderView::Fixed);       // Line-edit
+        hh->setSectionResizeMode(4, QHeaderView::Fixed);       // rec toolbutton
 
-        ui->OptionsTable->setColumnWidth(2, 40);   // checkbox column
-        ui->OptionsTable->setColumnWidth(3, 60);   // line-edit column
+        ui->OptionsTable->setColumnWidth(0, 140);
+        ui->OptionsTable->setColumnWidth(1, 220);
+        ui->OptionsTable->setColumnWidth(2, 50);
+        ui->OptionsTable->setColumnWidth(3, 60);
+        ui->OptionsTable->setColumnWidth(4, 30);
+
+
     }
+/*
+    // hide unwanted colums
+    if (txKeyerType == TxKeyerCommon::keyerTypes[TxKeyerCommon::TxKeyerId::DigitalModes])
+    {
+        ui->OptionsTable->setColumnHidden(2, true);
+        ui->OptionsTable->setColumnHidden(3, true);
+    }
+    else if (txKeyerType == TxKeyerCommon::keyerTypes[TxKeyerCommon::TxKeyerId::RigControl])
+    {
+        ui->OptionsTable->setColumnHidden(1, true);
+    }
+*/
+
+
+
 
     /* restore splitter state, etc. */
     RegSettings settings;
