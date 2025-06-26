@@ -815,7 +815,7 @@ void DMButtonFrame::startKeyerMsg(int key)
     }
     else
     {
-        txKeyer->sendMsgNum(buttonNumSent);
+        txKeyer->sendMsgNum(messageNumber);
 
     }
 

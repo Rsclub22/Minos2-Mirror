@@ -153,77 +153,17 @@ void PcCWMessageKeyer::sendCwMsg(TxKeyerParams &vmData)
 {
     if (!vmData.getKeyerCwMessage().isEmpty())
     {
-        QString cwMessageToTx;
-        QString radioManufacturer;
-        QStringList rmList;
-        QString radioModel;
-
-
         TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
 
+        QString cwMessageToTx = vmData.getKeyerCwMessage();
 
-        if (readSaveVoiceCWMemoryButtonByRadioNameFromIni(TxKeyerId::CW_RigControl))
-        {
-
-            radioManufacturer = getCwRadioManufacturer(cwMemType);
-            rmList = vmData.getRigModel().split(' ');
-            if (rmList.length() == 2)
-            {
-                radioModel = rmList[1].remove('-');
-            }
-
-
-        }
-        else
-        {
-            radioManufacturer = "AllRadios";
-
-        }
-
-        QStringList listOfRadioModels;
-        getRigCWKeyerListOfRadiosSupportSpecialCharacters(listOfRadioModels, radioManufacturer, PC_CW_KEYER_COMMON_PARAMS_FILENAME);
-
-        if (!listOfRadioModels.isEmpty()
-            && listOfRadioModels.contains(radioModel)
-            && vmData.getKeyerCwMessage().contains(TxKeyerCommon::specialCwCharEscapeChar)
-            && cwMemType != hamlibData::CW_MEMORY_TYPES::ICOM)          // we don't need to convert for Icom radios
-        {
-            // this radio supports special chars
-            QMap<QString, QChar> specialCharMap;
-            getRigCWKeyerSupportedSpecialCharacters(specialCharMap, radioManufacturer, PC_CW_KEYER_COMMON_PARAMS_FILENAME);
-            int currentIndex = 0;
-            while (currentIndex < vmData.getKeyerCwMessage().length())
-            {
-                QString c = vmData.getKeyerCwMessage().mid(currentIndex, 1);
-                if (c != TxKeyerCommon::specialCwCharEscapeChar)
-                {
-                    cwMessageToTx.append(c);
-                    currentIndex = currentIndex + 1;
-                }
-                else
-                {
-                    QString sp = vmData.getKeyerCwMessage().mid(currentIndex + 1, 2);
-                    if (specialCharMap.contains(sp))
-                    {
-                        cwMessageToTx.append(specialCharMap[sp]);
-                    }
-
-                    currentIndex = currentIndex + 3;
-                }
-            }
-        }
-        else
-        {
-            cwMessageToTx = vmData.getKeyerCwMessage();
-        }
-
-
-
-        cwMessageToTx = parseMacrosInMessage(tslf, cwMessageToTx);
-
-        trace(QString("Send Morse Message to radio : %1").arg(cwMessageToTx));
+        trace(QString("PcCwMessageKeyer Send Morse Message to radio : %1").arg(cwMessageToTx));
 
         tslf->sendPcKeyerTxCwMessage(cwMessageToTx);
+    }
+    else
+    {
+        trace(QString("PcCwMessageKeyer Send Morse Message to radio, message is empty"));
     }
 
 }
@@ -408,7 +348,7 @@ void PcCWMessageKeyer::stopCwMsg()
 
 bool PcCWMessageKeyer::readVmButtonParams(int buttonNum, TxKeyerParams &vmParams)
 {
-
+/*
 
 
     //bool saveByRadioName = readSaveVoiceCWMemoryButtonByRadioNameFromIni(VoiceKeyerId::CW_RigControl);
@@ -450,12 +390,13 @@ bool PcCWMessageKeyer::readVmButtonParams(int buttonNum, TxKeyerParams &vmParams
     config.endGroup();
 
     return true;
+*/ return true;
 }
 
 
 void PcCWMessageKeyer::saveVmButtonParams(const TxKeyerParams &vmParams_ )
 {
-    TxKeyerParams vmParams = vmParams_;
+/*    TxKeyerParams vmParams = vmParams_;
 
     //bool saveByRadioName = readSaveVoiceCWMemoryButtonByRadioNameFromIni(VoiceKeyerId::CW_RigControl);
 
@@ -491,7 +432,7 @@ void PcCWMessageKeyer::saveVmButtonParams(const TxKeyerParams &vmParams_ )
     config.setValue(newKey + "/repeatPauseDuration", vmParams.getKeyerRepeatPauseDur());
     config.setValue(newKey + "/buttonNum", vmParams.getKeyerButtonNum());
     config.endGroup();
-
+*/
 }
 
 
@@ -650,7 +591,7 @@ void PcCWMessageKeyer::setContest(BaseContestLog *c)
 
 int PcCWMessageKeyer::editButton(TxKeyerParams *vmData, QString title)
 {
-
+/*
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
     TxVmRigButtonDialog vmButtonDialog(tslf->dmButtonFrame);
 
@@ -658,7 +599,7 @@ int PcCWMessageKeyer::editButton(TxKeyerParams *vmData, QString title)
     QStringList rmList;
     //QString radioModel;
 
-    /*if (readSaveVoiceCWMemoryButtonByRadioNameFromIni(VoiceKeyerId::PcCwKeyer))
+   if (readSaveVoiceCWMemoryButtonByRadioNameFromIni(VoiceKeyerId::PcCwKeyer))
     {
         vmButtonDialog.setRadioNameLbl(vmData->getSelRadioName());
         radioManufacturer = getCwRadioManufacturer(cwMemType);
@@ -670,11 +611,11 @@ int PcCWMessageKeyer::editButton(TxKeyerParams *vmData, QString title)
 
     }
     else
-    {*/
+
         vmButtonDialog.setRadioNameLbl("All Radios");
         radioManufacturer = "AllRadios";
 
-    //}
+    }
 
 
 
@@ -742,7 +683,7 @@ int PcCWMessageKeyer::editButton(TxKeyerParams *vmData, QString title)
         vmButtonDialog.setMaxNumberCwCharactersText(0);
     }
 
-    /*QStringList listOfRadioModels;
+    QStringList listOfRadioModels;
     getRigCWKeyerListOfRadiosSupportSpecialCharacters(listOfRadioModels, radioManufacturer, PC_CW_KEYER_COMMON_PARAMS_FILENAME);
 
     bool radioSupportSpecialChar = false;
@@ -754,7 +695,7 @@ int PcCWMessageKeyer::editButton(TxKeyerParams *vmData, QString title)
             radioSupportSpecialChar = true;
         }
     }
-    */
+
 
     bool radioSupportSpecialChar = false;
 
@@ -792,5 +733,5 @@ int PcCWMessageKeyer::editButton(TxKeyerParams *vmData, QString title)
 
     int ret = vmButtonDialog.exec();
     return ret;
-
+*/ return 0;
 }
