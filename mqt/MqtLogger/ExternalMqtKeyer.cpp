@@ -70,7 +70,7 @@ void ExternalMqtKeyer::stopMsg(TxKeyerParams */*vkParam*/)
 }
 void ExternalMqtKeyer::doRecording(TxKeyerParams *vkParam)
 {
-    emit LogContainer->sendKeyerRecord( vkParam->getvmButtonNum() );
+    emit LogContainer->sendKeyerRecord( vkParam->getKeyerButtonNum() );
 }
 
 
@@ -78,11 +78,11 @@ void ExternalMqtKeyer::doRecording(TxKeyerParams *vkParam)
 bool ExternalMqtKeyer::readVmButtonParams(int buttonNum, TxKeyerParams &vmParams)
 {
     // This info should have come from the external keyer
-    vmParams.setVmRepeatFlag(remoteConfig.kjj[buttonNum].autoRepeat);
-    vmParams.setVmRepeatPauseDur(remoteConfig.kjj[buttonNum].autoRepeatDelay);
-    vmParams.setVmName(remoteConfig.kjj[buttonNum].CQName);
-    vmParams.setVmDuration(remoteConfig.kjj[buttonNum].CQLength);
-    vmParams.setvmButtonNum(buttonNum);
+    vmParams.setKeyerRepeatFlag(remoteConfig.kjj[buttonNum].autoRepeat);
+    vmParams.setKeyerRepeatPauseDur(remoteConfig.kjj[buttonNum].autoRepeatDelay);
+    vmParams.setKeyerName(remoteConfig.kjj[buttonNum].CQName);
+    vmParams.setKeyerDuration(remoteConfig.kjj[buttonNum].CQLength);
+    vmParams.setKeyerButtonNum(buttonNum);
 
     return true;
 }
@@ -91,14 +91,14 @@ void ExternalMqtKeyer::saveVmButtonParams(const TxKeyerParams &vmParams_ )
     // We should send this config to the external keyer
 
     trace("ExternalMqtKeyer::saveVmButtonParams");
-    int buttonNum = vmParams_.getvmButtonNum();
+    int buttonNum = vmParams_.getKeyerButtonNum();
     KeyerKeyJson &kkj = remoteConfig.kjj[buttonNum];
 
     kkj.keyno = buttonNum;
-    kkj.CQLength = vmParams_.getVmDuration();
-    kkj.CQName = vmParams_.getVmName();
-    kkj.autoRepeat = vmParams_.getVmRepeatFlag();
-    kkj.autoRepeatDelay = vmParams_.getVmRepeatPauseDur();
+    kkj.CQLength = vmParams_.getKeyerDuration();
+    kkj.CQName = vmParams_.getKeyerName();
+    kkj.autoRepeat = vmParams_.getKeyerRepeatFlag();
+    kkj.autoRepeatDelay = vmParams_.getKeyerRepeatPauseDur();
 
     QString config = remoteConfig.makeConfig(QJsonDocument::Compact, false, false);
     LogContainer->sendDM->publishKeyerConfig(config);

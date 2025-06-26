@@ -106,11 +106,11 @@ bool RigControlVoiceMemoryKeyer::readVmButtonParams(int buttonNum, TxKeyerParams
 
 
     vmParams.setType(config.value(newKey + "/type", "").toString());
-    vmParams.setVmName(config.value(newKey + "/name", "").toString());
-    vmParams.setVmRepeatFlag(config.value(newKey + "/repeatFlag", false).toBool());
-    vmParams.setVmDuration(config.value(newKey + "/messageDuration", 0).toInt());
-    vmParams.setVmRepeatPauseDur(config.value(newKey + "/repeatPauseDuration", 0).toInt());
-    vmParams.setvmButtonNum(config.value(newKey + "/buttonNum", buttonNum).toInt());
+    vmParams.setKeyerName(config.value(newKey + "/name", "").toString());
+    vmParams.setKeyerRepeatFlag(config.value(newKey + "/repeatFlag", false).toBool());
+    vmParams.setKeyerDuration(config.value(newKey + "/messageDuration", 0).toInt());
+    vmParams.setKeyerRepeatPauseDur(config.value(newKey + "/repeatPauseDuration", 0).toInt());
+    vmParams.setKeyerButtonNum(config.value(newKey + "/buttonNum", buttonNum).toInt());
     config.endGroup();
 
     return true;
@@ -135,13 +135,13 @@ void RigControlVoiceMemoryKeyer::saveVmButtonParams(const TxKeyerParams &vmParam
        config.beginGroup(ALL_RADIOS_GROUP_NAME);
     }
 
-    QString newKey = "button" + QString::number(vmParams.getvmButtonNum());
+    QString newKey = "button" + QString::number(vmParams.getKeyerButtonNum());
     config.setValue(newKey + "/type", vmParams.getType());
-    config.setValue(newKey + "/name", vmParams.getVmName());
-    config.setValue(newKey + "/repeatFlag", vmParams.getVmRepeatFlag());
-    config.setValue(newKey + "/messageDuration", vmParams.getVmDuration());
-    config.setValue(newKey + "/repeatPauseDuration", vmParams.getVmRepeatPauseDur());
-    config.setValue(newKey + "/buttonNum", vmParams.getvmButtonNum());
+    config.setValue(newKey + "/name", vmParams.getKeyerName());
+    config.setValue(newKey + "/repeatFlag", vmParams.getKeyerRepeatFlag());
+    config.setValue(newKey + "/messageDuration", vmParams.getKeyerDuration());
+    config.setValue(newKey + "/repeatPauseDuration", vmParams.getKeyerRepeatPauseDur());
+    config.setValue(newKey + "/buttonNum", vmParams.getKeyerButtonNum());
     config.endGroup();
 
 

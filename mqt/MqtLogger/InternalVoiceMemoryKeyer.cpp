@@ -101,13 +101,13 @@ void InternalVoiceMemoryKeyer::stopMsg(TxKeyerParams * vkParam)
 
     if (vkParam)
     {
-        int msgLen = SoundSystemDriver::getSbDriver() ->getMessageLen(vkParam->getvmButtonNum());
-        vkParam->setVmDuration(msgLen);
+        int msgLen = SoundSystemDriver::getSbDriver() ->getMessageLen(vkParam->getKeyerButtonNum());
+        vkParam->setKeyerDuration(msgLen);
         QString inifileName = VOICE_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + vkParam->getType() + ".ini";
         QSettings config(inifileName, QSettings::IniFormat);
-        config.beginGroup("button" + QString::number(vkParam->getvmButtonNum()));
+        config.beginGroup("button" + QString::number(vkParam->getKeyerButtonNum()));
 
-        config.setValue("messageDuration", vkParam->getVmDuration());
+        config.setValue("messageDuration", vkParam->getKeyerDuration());
 
         config.endGroup();
     }
@@ -120,7 +120,7 @@ void InternalVoiceMemoryKeyer::doRecording(TxKeyerParams * vkParam)
     // button number and filename are in vkParam
 
     // Can we work it to use space bar as PTT for recording?
-    QString fileName = QString("CQF%1.WAV").arg(vkParam->getvmButtonNum() + 1);
+    QString fileName = QString("CQF%1.WAV").arg(vkParam->getKeyerButtonNum() + 1);
     SoundSystemDriver::getSbDriver() ->record_file( fileName );
 
 }
@@ -134,11 +134,11 @@ bool InternalVoiceMemoryKeyer::readVmButtonParams(int buttonNum, TxKeyerParams &
     config.beginGroup("button" + QString::number(buttonNum));
 
     vmParams.setType(config.value("type", "").toString());
-    vmParams.setVmName(config.value("name", "").toString());
-    vmParams.setVmRepeatFlag(config.value("repeatFlag", false).toBool());
-    vmParams.setVmDuration(config.value("messageDuration", 0).toInt());
-    vmParams.setVmRepeatPauseDur(config.value("repeatPauseDuration", 0).toInt());
-    vmParams.setvmButtonNum(config.value("buttonNum", buttonNum).toInt());
+    vmParams.setKeyerName(config.value("name", "").toString());
+    vmParams.setKeyerRepeatFlag(config.value("repeatFlag", false).toBool());
+    vmParams.setKeyerDuration(config.value("messageDuration", 0).toInt());
+    vmParams.setKeyerRepeatPauseDur(config.value("repeatPauseDuration", 0).toInt());
+    vmParams.setKeyerButtonNum(config.value("buttonNum", buttonNum).toInt());
     config.endGroup();
 
     return true;
@@ -150,14 +150,14 @@ void InternalVoiceMemoryKeyer::saveVmButtonParams(const TxKeyerParams &vmParams_
 
     QString fileName = VOICE_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + vmParams.getType() + ".ini";
     QSettings config(fileName, QSettings::IniFormat);
-    config.beginGroup("button" + QString::number(vmParams.getvmButtonNum()));
+    config.beginGroup("button" + QString::number(vmParams.getKeyerButtonNum()));
 
     config.setValue("type", vmParams.getType());
-    config.setValue("name", vmParams.getVmName());
-    config.setValue("repeatFlag", vmParams.getVmRepeatFlag());
-    config.setValue("messageDuration", vmParams.getVmDuration());
-    config.setValue("repeatPauseDuration", vmParams.getVmRepeatPauseDur());
-    config.setValue("buttonNum", vmParams.getvmButtonNum());
+    config.setValue("name", vmParams.getKeyerName());
+    config.setValue("repeatFlag", vmParams.getKeyerRepeatFlag());
+    config.setValue("messageDuration", vmParams.getKeyerDuration());
+    config.setValue("repeatPauseDuration", vmParams.getKeyerRepeatPauseDur());
+    config.setValue("buttonNum", vmParams.getKeyerButtonNum());
     config.endGroup();
 }
 

@@ -18,12 +18,12 @@ TxKeyerParams::TxKeyerParams()
 void TxKeyerParams::clear()
 {
     type.clear();
-    vmName.clear();
-    vmCwMessage.clear();
-    vmRepeatFlag = false;
-    vmDuration = 0;
-    vmRepeatPauseDur = 0;
-    vmButtonNum = -1;   // None
+    keyerName.clear();
+    keyerCwMessage.clear();
+    keyerRepeatFlag = false;
+    keyerDuration = 0;
+    keyerRepeatPauseDur = 0;
+    keyerButtonNum = -1;   // None
     sAndPState = true;
     cwKeyerType = CW_KEYER_TYPE::KEYER_NONE;
 }
@@ -32,28 +32,28 @@ TxKeyerParams& TxKeyerParams::operator = (const TxKeyerParams& vkp)
 {
     type = vkp.type;
     selRadioName = vkp.selRadioName;
-    vmName = vkp.vmName;
+    keyerName = vkp.keyerName;
 
     vkBase = vkp.vkBase;
     
 
-    vmRepeatFlag = vkp.vmRepeatFlag;
-    vmDuration = vkp.vmDuration;
-    vmCwMessage = vkp.vmCwMessage;
-    vmRepeatPauseDur = vkp.vmRepeatPauseDur;
-    vmButtonNum = vkp.vmButtonNum;
+    keyerRepeatFlag = vkp.keyerRepeatFlag;
+    keyerDuration = vkp.keyerDuration;
+    keyerCwMessage = vkp.keyerCwMessage;
+    keyerRepeatPauseDur = vkp.keyerRepeatPauseDur;
+    keyerButtonNum = vkp.keyerButtonNum;
     sAndPState = vkp.sAndPState;
     cwKeyerType = vkp.cwKeyerType;
     return *this;
 }
 
-void TxKeyerParams::setVmDuration(const int vmDuration_)
+void TxKeyerParams::setKeyerDuration(const int keyerDuration_)
 {
-    if (vmDuration_ > 0)
+    if (keyerDuration_ > 0)
     {
-        trace(QString("setVmDuration(%1)").arg(vmDuration_));
+        trace(QString("setVmDuration(%1)").arg(keyerDuration_));
     }
-    vmDuration = vmDuration_;
+    keyerDuration = keyerDuration_;
 }
 
 

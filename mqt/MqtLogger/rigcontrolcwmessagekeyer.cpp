@@ -130,7 +130,7 @@ void RigControlCwMessageKeyer::getRadioCommonData(int &selectedEomType, int &use
 
 void RigControlCwMessageKeyer::sendCwMsg(TxKeyerParams &vmData)
 {
-    if (!vmData.getVmCwMessage().isEmpty())
+    if (!vmData.getKeyerCwMessage().isEmpty())
     {
         QString cwMessageToTx;
         QString radioManufacturer;
@@ -164,16 +164,16 @@ void RigControlCwMessageKeyer::sendCwMsg(TxKeyerParams &vmData)
 
         if (!listOfRadioModels.isEmpty()
             && listOfRadioModels.contains(radioModel)
-            && vmData.getVmCwMessage().contains(specialCwCharEscapeChar)
+            && vmData.getKeyerCwMessage().contains(specialCwCharEscapeChar)
             && cwMemType != hamlibData::CW_MEMORY_TYPES::ICOM)          // we don't need to convert for Icom radios
         {
             // this radio supports special chars
             QMap<QString, QChar> specialCharMap;
             getRigCWKeyerSupportedSpecialCharacters(specialCharMap, radioManufacturer, CWKEYER_RADIO_COMMON_PARAMS_FILENAME);
             int currentIndex = 0;
-            while (currentIndex < vmData.getVmCwMessage().length())
+            while (currentIndex < vmData.getKeyerCwMessage().length())
             {
-                QString c = vmData.getVmCwMessage().mid(currentIndex, 1);
+                QString c = vmData.getKeyerCwMessage().mid(currentIndex, 1);
                 if (c != specialCwCharEscapeChar)
                 {
                     cwMessageToTx.append(c);
@@ -181,7 +181,7 @@ void RigControlCwMessageKeyer::sendCwMsg(TxKeyerParams &vmData)
                 }
                 else
                 {
-                    QString sp = vmData.getVmCwMessage().mid(currentIndex + 1, 2);
+                    QString sp = vmData.getKeyerCwMessage().mid(currentIndex + 1, 2);
                     if (specialCharMap.contains(sp))
                     {
                         cwMessageToTx.append(specialCharMap[sp]);
@@ -193,7 +193,7 @@ void RigControlCwMessageKeyer::sendCwMsg(TxKeyerParams &vmData)
         }
         else
         {
-            cwMessageToTx = vmData.getVmCwMessage();
+            cwMessageToTx = vmData.getKeyerCwMessage();
         }
 
 
@@ -412,12 +412,12 @@ bool RigControlCwMessageKeyer::readVmButtonParams(int buttonNum, TxKeyerParams &
     QString newKey = "button" +  QString::number(buttonNum) + runStateTxt;
 
     vmParams.setType(config.value(newKey + "/type", "").toString());
-    vmParams.setVmName(config.value(newKey + "/name", "").toString());
-    vmParams.setVmCwMessage(config.value(newKey + "/cwMessageText", "").toString());
-    vmParams.setVmRepeatFlag(config.value(newKey + "/repeatFlag", false).toBool());
-    vmParams.setVmDuration(config.value(newKey + "/messageDuration", 0).toInt());
-    vmParams.setVmRepeatPauseDur(config.value(newKey + "/repeatPauseDuration", 0).toInt());
-    vmParams.setvmButtonNum(config.value(newKey + "/buttonNum", buttonNum).toInt());
+    vmParams.setKeyerName(config.value(newKey + "/name", "").toString());
+    vmParams.setKeyerCwMessage(config.value(newKey + "/cwMessageText", "").toString());
+    vmParams.setKeyerRepeatFlag(config.value(newKey + "/repeatFlag", false).toBool());
+    vmParams.setKeyerDuration(config.value(newKey + "/messageDuration", 0).toInt());
+    vmParams.setKeyerRepeatPauseDur(config.value(newKey + "/repeatPauseDuration", 0).toInt());
+    vmParams.setKeyerButtonNum(config.value(newKey + "/buttonNum", buttonNum).toInt());
     config.endGroup();
 
     return true;
@@ -452,15 +452,15 @@ void RigControlCwMessageKeyer::saveVmButtonParams(const TxKeyerParams &vmParams_
        config.beginGroup(ALL_RADIOS_GROUP_NAME);
     }
 
-    QString newKey = "button" + QString::number(vmParams.getvmButtonNum()) + runStateTxt;
+    QString newKey = "button" + QString::number(vmParams.getKeyerButtonNum()) + runStateTxt;
 
     config.setValue(newKey + "/type", vmParams.getType());
-    config.setValue(newKey + "/name", vmParams.getVmName());
-    config.setValue(newKey + "/cwMessageText", vmParams.getVmCwMessage());
-    config.setValue(newKey + "/repeatFlag", vmParams.getVmRepeatFlag());
-    config.setValue(newKey + "/messageDuration", vmParams.getVmDuration());
-    config.setValue(newKey + "/repeatPauseDuration", vmParams.getVmRepeatPauseDur());
-    config.setValue(newKey + "/buttonNum", vmParams.getvmButtonNum());
+    config.setValue(newKey + "/name", vmParams.getKeyerName());
+    config.setValue(newKey + "/cwMessageText", vmParams.getKeyerCwMessage());
+    config.setValue(newKey + "/repeatFlag", vmParams.getKeyerRepeatFlag());
+    config.setValue(newKey + "/messageDuration", vmParams.getKeyerDuration());
+    config.setValue(newKey + "/repeatPauseDuration", vmParams.getKeyerRepeatPauseDur());
+    config.setValue(newKey + "/buttonNum", vmParams.getKeyerButtonNum());
     config.endGroup();
 
 }

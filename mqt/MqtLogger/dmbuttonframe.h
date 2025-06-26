@@ -185,7 +185,7 @@ private:
     void setRunButtonText(const int buttonNumber, const QString name);
     //void setVoiceNumMemButtonsVisible(int);
     void clearButtonLabels();
-    void startVMMsg(int buttonNumber);
+    void startKeyerMsg(int buttonNumber);
     void createKeyer(QString voiceKeyerName);
     void setPttStatusIndicatorOnOff(bool on);
     bool isVoiceMemAvail(PubSubName psn);

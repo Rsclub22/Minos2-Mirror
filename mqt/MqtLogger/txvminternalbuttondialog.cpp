@@ -73,10 +73,10 @@ void TxVmInternalButtonDialog::setVmData(TxKeyerParams* vmData_)
     txvmbd = this;
     vmData = vmData_;
     ui->txVmTypeLbl->setText(vmData->getType());
-    ui->txVmNameEdit->setText(vmData->getVmName());
-    ui->txVmRepeatChkBox->setChecked(vmData->getVmRepeatFlag());
-    ui->txVmRepeatPauseDur->setText(QString::number(vmData->getVmRepeatPauseDur()));
-    ui->txVmMessageDur->setText(QString::number(vmData->getVmDuration()));
+    ui->txVmNameEdit->setText(vmData->getKeyerName());
+    ui->txVmRepeatChkBox->setChecked(vmData->getKeyerRepeatFlag());
+    ui->txVmRepeatPauseDur->setText(QString::number(vmData->getKeyerRepeatPauseDur()));
+    ui->txVmMessageDur->setText(QString::number(vmData->getKeyerDuration()));
 
     connect(SoundSystemDriver::getSbDriver(), &SoundSystemDriver::setVU, this, &TxVmInternalButtonDialog::doSetVU);
 
@@ -133,10 +133,10 @@ void TxVmInternalButtonDialog::on_okButtonCicked()
     }
 
     QString name = ui->txVmNameEdit->text();
-    vmData->setVmName(name);
-    vmData->setVmRepeatPauseDur(repeatPauseDur_);
-    vmData->setVmDuration(messageDur_);
-    vmData->setVmRepeatFlag(ui->txVmRepeatChkBox->isChecked());
+    vmData->setKeyerName(name);
+    vmData->setKeyerRepeatPauseDur(repeatPauseDur_);
+    vmData->setKeyerDuration(messageDur_);
+    vmData->setKeyerRepeatFlag(ui->txVmRepeatChkBox->isChecked());
     accept();
 
 }
@@ -152,7 +152,7 @@ void TxVmInternalButtonDialog::on_cancelbuttonClicked()
 void TxVmInternalButtonDialog::on_replayButton_clicked()
 {
     // This is a test replay - we shouldn't be PTTing if we can avoid it
-    vmData->getVkBase()->sendMsgNum(vmData->getvmButtonNum());
+    vmData->getVkBase()->sendMsgNum(vmData->getKeyerButtonNum());
 }
 
 void TxVmInternalButtonDialog::on_recordButton_clicked()
@@ -168,7 +168,7 @@ void TxVmInternalButtonDialog::on_stopButton_clicked()
 {
     // stop record/replay
     vmData->getVkBase()->stopMsg(vmData);
-    ui->txVmMessageDur->setText(QString::number(vmData->getVmDuration()));
+    ui->txVmMessageDur->setText(QString::number(vmData->getKeyerDuration()));
     ui->recordButton->setEnabled(true);
 }
 void TxVmInternalButtonDialog::setVolumeMults()
@@ -206,7 +206,7 @@ void TxVmInternalButtonDialog::on_recordSlider_valueChanged(int position)
 
 void TxVmInternalButtonDialog::on_showButton_clicked()
 {
-    int fno = vmData->getvmButtonNum();
+    int fno = vmData->getKeyerButtonNum();
     WaveShowDialog wsd(this, fno);
     wsd.exec();
 }

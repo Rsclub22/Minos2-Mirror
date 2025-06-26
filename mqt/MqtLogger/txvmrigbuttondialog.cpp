@@ -166,11 +166,11 @@ void TxVmRigButtonDialog::setVmTypeAndRadioModelLabel(QString radioModel)
 void TxVmRigButtonDialog::setVmData(TxKeyerParams* vmData_)
 {
     vmData = vmData_;
-    ui->txVmNameEdit->setText(vmData->getVmName());
-    ui->txCwMessageLineEdit->setText(vmData->getVmCwMessage());
-    ui->txVmRepeatChkBox->setChecked(vmData->getVmRepeatFlag());
-    ui->txVmRepeatPauseDur->setText(QString::number(vmData->getVmRepeatPauseDur()));
-    ui->txVmMessageDur->setText(QString::number(vmData->getVmDuration()));
+    ui->txVmNameEdit->setText(vmData->getKeyerName());
+    ui->txCwMessageLineEdit->setText(vmData->getKeyerCwMessage());
+    ui->txVmRepeatChkBox->setChecked(vmData->getKeyerRepeatFlag());
+    ui->txVmRepeatPauseDur->setText(QString::number(vmData->getKeyerRepeatPauseDur()));
+    ui->txVmMessageDur->setText(QString::number(vmData->getKeyerDuration()));
 }
 
 
@@ -319,11 +319,11 @@ void TxVmRigButtonDialog::on_okButtonClicked()
 
 
     QString name = ui->txVmNameEdit->text();
-    vmData->setVmName(name);
-    vmData->setVmCwMessage(ui->txCwMessageLineEdit->text());
-    vmData->setVmRepeatPauseDur(repeatPauseDur_);
-    vmData->setVmDuration(messageDur_);
-    vmData->setVmRepeatFlag(ui->txVmRepeatChkBox->isChecked());
+    vmData->setKeyerName(name);
+    vmData->setKeyerCwMessage(ui->txCwMessageLineEdit->text());
+    vmData->setKeyerRepeatPauseDur(repeatPauseDur_);
+    vmData->setKeyerDuration(messageDur_);
+    vmData->setKeyerRepeatFlag(ui->txVmRepeatChkBox->isChecked());
     accept();
 
 }

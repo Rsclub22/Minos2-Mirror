@@ -51,25 +51,25 @@ public:
     void setSelRadioName(const QString selRadioName_){selRadioName = selRadioName_;}
 
 
-    QString getVmName() const {return vmName;}
-    void setVmName(const QString vmName_){vmName = vmName_.trimmed();}
+    QString getKeyerName() const {return keyerName;}
+    void setKeyerName(const QString keyerName_){keyerName = keyerName_.trimmed();}
 
-    QString getVmCwMessage() const {return vmCwMessage;}
-    void setVmCwMessage(const QString msg){vmCwMessage = msg;}
+    QString getKeyerCwMessage() const {return keyerCwMessage;}
+    void setKeyerCwMessage(const QString msg){keyerCwMessage = msg;}
 
 
 
-    bool getVmRepeatFlag() const {return vmRepeatFlag;}
-    void setVmRepeatFlag(const bool vmRepeatFlag_){vmRepeatFlag = vmRepeatFlag_;}
+    bool getKeyerRepeatFlag() const {return keyerRepeatFlag;}
+    void setKeyerRepeatFlag(const bool keyerRepeatFlag_){keyerRepeatFlag = keyerRepeatFlag_;}
 
-    int getVmRepeatPauseDur() const {return vmRepeatPauseDur;}
-    void setVmRepeatPauseDur(const int vmRepeatPauseDur_){vmRepeatPauseDur = vmRepeatPauseDur_;}
+    int getKeyerRepeatPauseDur() const {return keyerRepeatPauseDur;}
+    void setKeyerRepeatPauseDur(const int keyerRepeatPauseDur_){keyerRepeatPauseDur = keyerRepeatPauseDur_;}
 
-    int getVmDuration() const {return vmDuration;}
-    void setVmDuration(const int vmDuration_);
+    int getKeyerDuration() const {return keyerDuration;}
+    void setKeyerDuration(const int keyerDuration_);
 
-    int getvmButtonNum() const {return vmButtonNum;}
-    void setvmButtonNum(const int vmButtonNum_){vmButtonNum = vmButtonNum_;}
+    int getKeyerButtonNum() const {return keyerButtonNum;}
+    void setKeyerButtonNum(const int keyerButtonNum_){keyerButtonNum = keyerButtonNum_;}
 
     void setRigModel(const QString rigModel_) {rigModel = rigModel_;}
     QString getRigModel() const {return rigModel;}
@@ -93,12 +93,12 @@ private:
     QSharedPointer<TxKeyerBase> vkBase;
     QString selRadioName;
     QString rigModel;
-    QString vmName;
-    QString vmCwMessage;
-    int vmDuration = 0;
-    bool vmRepeatFlag = false;
-    int vmRepeatPauseDur = -1;
-    int vmButtonNum = -1;
+    QString keyerName;
+    QString keyerCwMessage;
+    int keyerDuration = 0;
+    bool keyerRepeatFlag = false;
+    int keyerRepeatPauseDur = -1;
+    int keyerButtonNum = -1;
     CW_KEYER_TYPE cwKeyerType = CW_KEYER_TYPE::KEYER_NONE;
 
     bool sAndPState = true; // S&P = true, Run = false

@@ -740,14 +740,11 @@ void DMButtonFrame::readActionSelected(int buttonNumber)
 }
 
 */
-void DMButtonFrame::startVMMsg(int buttonNumber)
+void DMButtonFrame::startKeyerMsg(int key)
 {
-    logMessage(QString("- startVMMsg button Number = %1").arg(buttonNumber));
-    //buttonNumSent = buttonNumber;
-    //if (buttonNumber >= voiceMemButtonList.count())
-    //{
-    //    return;
-   // }
+    logMessage(QString("- start keyerMsg button Number = %1").arg(key));
+
+    int messageNumber = key - Qt::Key_F1;
 
     selectedEomType = KeyerEomTypes::Eom_None;
 
@@ -758,6 +755,10 @@ void DMButtonFrame::startVMMsg(int buttonNumber)
          || voiceKeyerType == keyerTypes[TxKeyerId::PcCwKeyer])
         && !selectedRadio.getLocalName().isEmpty())
     {
+        vmData.setKeyerCwMessage(fkeys[currentName][messageNumber].kval);
+        vmData.setKeyerButtonNum(messageNumber);
+        vmData.setKeyerRepeatPauseDur(fkeys[currentName][messageNumber].rptDur);
+        vmData.setKeyerRepeatFlag(fkeys[currentName][messageNumber].rptEnable);
         vmData.setSelRadioName(selectedRadio.getLocalName());
         vmData.setRigModel(getRigModel(selectedRadio));
         vmData.setSAndPState(sAndPState);
@@ -766,15 +767,15 @@ void DMButtonFrame::startVMMsg(int buttonNumber)
 
 
     vmData.setType(voiceKeyerType);
-    txKeyer->readVmButtonParams(buttonNumber, vmData);
-    setRepeatIndicatorOnOff(vmData.getVmRepeatFlag());
+
+    setRepeatIndicatorOnOff(vmData.getKeyerRepeatFlag());
 
 
 
     if (voiceKeyerType == keyerTypes[TxKeyerId::CW_RigControl]
         || voiceKeyerType == keyerTypes[TxKeyerId::PcCwKeyer])
     {
-        if (vmData.getVmCwMessage().isEmpty())
+        if (vmData.getKeyerCwMessage().isEmpty())
         {
             logMessage(QString("Cw Message is empty, ignore"));
             return;
@@ -809,8 +810,7 @@ void DMButtonFrame::startVMMsg(int buttonNumber)
     }
     else
     {
-//**************************************************************************************
-//        txKeyer->sendMsgNum(buttonNumSent);
+        txKeyer->sendMsgNum(buttonNumSent);
 
     }
 
@@ -1781,6 +1781,11 @@ bool  DMButtonFrame::isDataMode()
         {
             // digital mode isn't a keyer..
             actionDigitalModeKeyPress(key, carr);
+        }
+        else if (txKeyer)
+        {
+            startKeyerMsg(key);
+
         }
     }
 }
