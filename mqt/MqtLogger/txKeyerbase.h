@@ -57,7 +57,8 @@ public:
     QString getKeyerCwMessage() const {return keyerCwMessage;}
     void setKeyerCwMessage(const QString msg){keyerCwMessage = msg;}
 
-
+    int getRigVoiceMemNum() const {return rigVoiceMemNum;}
+    void setRigVoiceMemNum(const int rigVoiceMemNum_){rigVoiceMemNum = rigVoiceMemNum_;}
 
     bool getKeyerRepeatFlag() const {return keyerRepeatFlag;}
     void setKeyerRepeatFlag(const bool keyerRepeatFlag_){keyerRepeatFlag = keyerRepeatFlag_;}
@@ -95,6 +96,7 @@ private:
     QString rigModel;
     QString keyerName;
     QString keyerCwMessage;
+    int rigVoiceMemNum = 0;
     int keyerDuration = 0;
     bool keyerRepeatFlag = false;
     int keyerRepeatPauseDur = -1;
@@ -119,8 +121,8 @@ public:
     virtual  void setContest(BaseContestLog *c) = 0;
 
     virtual void txKeyerInit(int &numButtons) = 0;
-    virtual void sendMsgNum(int msgNum) = 0;
-    virtual void stopMsg(TxKeyerParams * vkParam) = 0;
+    virtual void sendMsgNum(TxKeyerParams &vkParam) = 0;
+    virtual void stopMsg(TxKeyerParams &vkParam) = 0;
 
     virtual bool doRepeatFromLogger(){return true;}
 

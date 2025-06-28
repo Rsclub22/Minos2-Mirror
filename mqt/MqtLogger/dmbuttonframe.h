@@ -76,6 +76,7 @@ public:
     void setPcCwKeyerCurrentWpm(QString wpm);
 
 
+
 signals:
     void sendFreqControl(Frequency f);
 
@@ -108,7 +109,6 @@ private slots:
     void onTxKeyerSelect(int idx);
     void onVmSetupClicked();
     void onRepeatPauseTimerTimeout();
-    void onVmStopClicked();
     void onMsgDurTimerTimeout();
     //void fKey(BaseContestLog *c, int e, int);
 
@@ -247,6 +247,16 @@ private:
 
 
     void actionDigitalModeKeyPress(int key, int carr);
+    void set_DigiMode_FrameState(QString txKeyerName);
+    void set_None_FrameState(QString txKeyerName);
+    void set_rigControl_FrameState(QString txKeyerName);
+    void set_cwRigControl_FrameState(QString txKeyerName);
+    void set_pcCwKeyer_FrameState(QString txKeyerName);
+    void set_Internal_FrameState(QString txKeyerName);
+    void set_External_FrameState(QString txKeyerName);
+
+    void setWipeButtonVisible(bool visible);
+    void setLogItButtonVisible(bool visible);
 };
 
 #endif // DMBUTTONFRAME_H

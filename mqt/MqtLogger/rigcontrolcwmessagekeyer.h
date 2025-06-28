@@ -40,9 +40,9 @@ public:
     static void registerTxKeyer(TxKeyerFactory::TxKeyers*);
 
     virtual void txKeyerInit(int &numButtons) override;
-    virtual void sendMsgNum(int buttonNum) override {Q_UNUSED(buttonNum)};
+    virtual void sendMsgNum(TxKeyerParams &vkParam) override {Q_UNUSED(vkParam)};
 
-    virtual void stopMsg(TxKeyerParams *vkParams) override {Q_UNUSED(vkParams)};
+    virtual void stopMsg(TxKeyerParams &vkParams) override {Q_UNUSED(vkParams)};
 
     virtual void sendCwMsg(TxKeyerParams &vmParams) override;
     virtual void stopCwMsg() override;

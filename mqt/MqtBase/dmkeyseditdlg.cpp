@@ -14,6 +14,8 @@
 #include "ui_dmkeyseditdlg.h"
 #include "txkeyerCommonConstants.h"
 
+using namespace TxKeyerCommon;
+
 
 DMKeysEditDlg::DMKeysEditDlg(QWidget *parent, QString fKeyFileName, QString name, Keys &keys, QString txKeyerType) :
     QDialog(parent),
@@ -149,49 +151,16 @@ void DMKeysEditDlg::showSection()
     ui->renameButton->setEnabled(offset > 0 );
 
 }
-/*
+
 void DMKeysEditDlg::showDetails()
 {
     ui->OptionsTable->clear();
     int offset = ui->SectionsList->currentRow();
-    if ( offset >= 0 )
-    {
-        QStringList fkeys;
 
-        ui->OptionsTable->setColumnCount(2);
-        ui->OptionsTable->setRowCount(keys[name].size());
-
-        for ( int i= 0; i < keys[name].size(); i++ )
-        {
-            fkeys.append(QString("%1 F%2").arg((i<12)?tr("Run"):tr("S&P")).arg((i < 12)?i + 1:(i - 12) + 1));
-
-            QString top = keys[name][i].ktop ;
-
-            QTableWidgetItem *it = new QTableWidgetItem(top);
-            ui->OptionsTable->setItem(i, 0, it);
-
-            QString val =  keys[name][i].kval ;
-
-            it = new QTableWidgetItem(val);
-            ui->OptionsTable->setItem(i, 1, it);
-        }
-        ui->OptionsTable->setVerticalHeaderLabels(fkeys);
-        ui->OptionsTable->setHorizontalHeaderLabels({tr("Key Top"), tr("Value")});
-    }
-
-    RegSettings settings;
-    QByteArray state = settings.getSettings().value("DMKeysEdit/SplitterState/" + name).toByteArray();
-    ui->settingsSplitter->restoreState(state);
-}
-*/
-void DMKeysEditDlg::showDetails()
-{
-    ui->OptionsTable->clear();
-    int offset = ui->SectionsList->currentRow();
 
     if (offset >= 0)
     {
-        const int totalColumns = 5;
+        const int totalColumns = 6;
         ui->OptionsTable->setColumnCount(totalColumns);
         ui->OptionsTable->setRowCount(keys[name].size());
 
@@ -204,10 +173,13 @@ void DMKeysEditDlg::showDetails()
                 .arg(i < 12 ? i + 1   : (i - 12) + 1);
 
 
-            ui->OptionsTable->setItem(i, 0, new QTableWidgetItem(keys[name][i].ktop));
-            ui->OptionsTable->setItem(i, 1, new QTableWidgetItem(keys[name][i].kval));
+            ui->OptionsTable->setItem(i, EDIT_DLG_COL0, new QTableWidgetItem(keys[name][i].ktop));
+            ui->OptionsTable->setItem(i, EDIT_DLG_COL1, new QTableWidgetItem(keys[name][i].kval));
 
-            // Checkbox (col-2)
+            // (col-2) - map radio voice mem
+            ui->OptionsTable->setItem(i, EDIT_DLG_COL2, new QTableWidgetItem(QString::number(keys[name][i].rigVoiceMemNum)));
+
+            // Checkbox (col-3) - repeat enable
             auto *cb  = new QCheckBox;
             cb->setChecked(keys[name][i].rptEnable);
             auto *wcb = new QWidget;
@@ -215,28 +187,28 @@ void DMKeysEditDlg::showDetails()
             lcb->addWidget(cb);
             lcb->setAlignment(Qt::AlignCenter);
             lcb->setContentsMargins(0,0,0,0);
-            ui->OptionsTable->setCellWidget(i, 2, wcb);
+            ui->OptionsTable->setCellWidget(i, EDIT_DLG_COL3, wcb);
 
-            // Line-edit (col-3)
-            auto *le  = new QLineEdit;
-            le->setValidator(new QIntValidator(0, 60, le));
-            le->setMaxLength(2);
-            le->setFixedWidth(40);
-            le->setText(QString::number(keys[name][i].rptDur));
-            ui->OptionsTable->setCellWidget(i, 3, le);
+            //  (col-4) - repeat pause duration
+            ui->OptionsTable->setItem(i, EDIT_DLG_COL4, new QTableWidgetItem(QString::number(keys[name][i].rptDur)));
 
-            // record button (col-4)
+            // record button (col-5)
             QToolButton *recBtn = new QToolButton();
             recBtn->setText("🎙");
             recBtn->setToolTip(tr("Record/Play audio for this message"));
             recBtn->setFixedSize(24, 24);
+            recBtn->setProperty("row", i);
             QWidget *wrap = new QWidget();
             QHBoxLayout *layout = new QHBoxLayout(wrap);
             layout->addWidget(recBtn);
             layout->setAlignment(Qt::AlignCenter);
             layout->setContentsMargins(0, 0, 0, 0);
             wrap->setLayout(layout);
-            ui->OptionsTable->setCellWidget(i, 4, wrap);
+            ui->OptionsTable->setCellWidget(i, EDIT_DLG_COL5, wrap);
+            connect(recBtn, &QToolButton::clicked, this, [this, recBtn](){
+                int row = recBtn->property("row").toInt();
+
+            });
 
 
 
@@ -244,23 +216,25 @@ void DMKeysEditDlg::showDetails()
 
         ui->OptionsTable->setVerticalHeaderLabels(vHeaders);
         ui->OptionsTable->setHorizontalHeaderLabels(
-            { tr("Key Top"), tr("Value"), tr("Repeat"), tr("Dur."), tr("Rec.") });
+            { tr("Key Top"), tr("Value"), tr("Rig\nMem"), tr("Repeat"), tr("Repeat\nDur"), tr("Rec.") });
 
 
         auto *hh = ui->OptionsTable->horizontalHeader();
-        hh->setStretchLastSection(false);                      // don’t stretch col-4
+        hh->setStretchLastSection(false);                      // don’t stretch col-5
 
-        hh->setSectionResizeMode(0, QHeaderView::Interactive);     // Key Top
-        hh->setSectionResizeMode(1, QHeaderView::Interactive);     // Value
-        hh->setSectionResizeMode(2, QHeaderView::Fixed);       // Checkbox
-        hh->setSectionResizeMode(3, QHeaderView::Fixed);       // Line-edit
-        hh->setSectionResizeMode(4, QHeaderView::Fixed);       // rec toolbutton
+        hh->setSectionResizeMode(EDIT_DLG_COL0, QHeaderView::Interactive);     // Key Top
+        hh->setSectionResizeMode(EDIT_DLG_COL1, QHeaderView::Interactive);     // Value
+        hh->setSectionResizeMode(EDIT_DLG_COL2, QHeaderView::Fixed);        // map rig voice mem num
+        hh->setSectionResizeMode(EDIT_DLG_COL3, QHeaderView::Fixed);       // repeat enable
+        hh->setSectionResizeMode(EDIT_DLG_COL4, QHeaderView::Fixed);       // repeat pause duration
+        hh->setSectionResizeMode(EDIT_DLG_COL5, QHeaderView::Fixed);       // rec toolbutton
 
-        ui->OptionsTable->setColumnWidth(0, 140);
-        ui->OptionsTable->setColumnWidth(1, 220);
-        ui->OptionsTable->setColumnWidth(2, 50);
-        ui->OptionsTable->setColumnWidth(3, 60);
-        ui->OptionsTable->setColumnWidth(4, 30);
+        ui->OptionsTable->setColumnWidth(EDIT_DLG_COL0, 140);
+        ui->OptionsTable->setColumnWidth(EDIT_DLG_COL1, 220);
+        ui->OptionsTable->setColumnWidth(EDIT_DLG_COL2, 50);
+        ui->OptionsTable->setColumnWidth(EDIT_DLG_COL3, 50);
+        ui->OptionsTable->setColumnWidth(EDIT_DLG_COL4, 60);
+        ui->OptionsTable->setColumnWidth(EDIT_DLG_COL5, 30);
 
 
     }
@@ -293,21 +267,47 @@ void DMKeysEditDlg::getDetails()
     {
         for ( int r = 0; r < keys[name].size(); r++ )
         {
-            QTableWidgetItem *qtwi = ui->OptionsTable->item(r, 0);
+            QTableWidgetItem *qtwi = ui->OptionsTable->item(r, EDIT_DLG_COL0);
 
             if (qtwi)
             {
                 QString val = qtwi->text();
                 keys[name][r].ktop = val ;
             }
-            qtwi = ui->OptionsTable->item(r, 1);
+            qtwi = ui->OptionsTable->item(r, EDIT_DLG_COL1);
             if (qtwi)
             {
                 QString val = qtwi->text();
                 keys[name][r].kval = val ;
             }
+
+            qtwi = ui->OptionsTable->item(r, EDIT_DLG_COL2);
+            if (qtwi)
+            {
+                bool ok;
+                int rigVoiceMem =  qtwi->text().toInt(&ok);
+
+                if(ok)
+                {
+                    keys[name][r].rigVoiceMemNum = rigVoiceMem;
+                }
+            }
+
+            //int rigVoiceMem = 0;    // default
+            //if (auto *le1 = qobject_cast<QLineEdit*>(ui->OptionsTable->cellWidget(r, EDIT_DLG_COL2)))
+            //{
+            //    bool ok;
+            //    rigVoiceMem = le1->text().toInt(&ok);
+            //    if (ok)
+            //    {
+
+            //    }
+
+            //}
+
+
             bool val = false;
-            if (QWidget *wrap = ui->OptionsTable->cellWidget(r, 2))
+            if (QWidget *wrap = ui->OptionsTable->cellWidget(r, EDIT_DLG_COL3))
             {
                 if (QCheckBox *cb = wrap->findChild<QCheckBox*>())
                 {
@@ -316,13 +316,32 @@ void DMKeysEditDlg::getDetails()
                 }
             }
 
-            int dur = 0;    // default
-            if (auto *le = qobject_cast<QLineEdit*>(ui->OptionsTable->cellWidget(r, 3)))
+            qtwi = ui->OptionsTable->item(r, EDIT_DLG_COL4);
+            if (qtwi)
             {
-                dur = le->text().toInt();
+                bool ok;
+                int dur =  qtwi->text().toInt(&ok);
+
+                if(ok)
+                {
+                    keys[name][r].rptDur = dur;
+                }
             }
 
-            keys[name][r].rptDur = dur;
+
+            //int dur = 0;    // default
+            //if (auto *le2 = qobject_cast<QLineEdit*>(ui->OptionsTable->cellWidget(r, EDIT_DLG_COL4)))
+            //{
+            //    bool ok;
+            //    dur = le2->text().toInt(&ok);
+            //    if (ok)
+            //    {
+           //        keys[name][r].rptDur = dur;
+           //     }
+
+           // }
+
+
 
         }
     }
@@ -350,11 +369,19 @@ void DMKeysEditDlg::on_NewSectionButton_clicked()
                     QString fk = QString("F%1").arg(i);
                     QString keytop;
                     QString val;
+                    int rigVoiceMemNum = 0;
+                    bool rptEnable = false;
+                    int rptDur = 0;
+
 
                     KeyVal kv;
                     kv.fk = fk;
                     kv.ktop = keytop;
                     kv.kval = val;
+                    kv.rigVoiceMemNum = rigVoiceMemNum;
+                    kv.rptEnable = rptEnable;
+                    kv.rptDur = rptDur;
+
 
                     keys[Value].append(kv);
                 }
@@ -519,6 +546,10 @@ void DMKeysEditDlg::on_upButton_clicked()
         std::swap(keys[name][selRow].ktop, keys[name][selRow - 1].ktop);
         std::swap(keys[name][selRow].kval, keys[name][selRow - 1].kval);
 
+        std::swap(keys[name][selRow].rigVoiceMemNum, keys[name][selRow - 1].rigVoiceMemNum);
+        std::swap(keys[name][selRow].rptEnable, keys[name][selRow - 1].rptEnable);
+        std::swap(keys[name][selRow].rptDur, keys[name][selRow - 1].rptDur);
+
         showDetails();
 
         ui->OptionsTable->selectRow(selRow - 1);
@@ -536,6 +567,10 @@ void DMKeysEditDlg::on_downButton_clicked()
 
         std::swap(keys[name][selRow].ktop, keys[name][selRow + 1].ktop);
         std::swap(keys[name][selRow].kval, keys[name][selRow + 1].kval);
+
+        std::swap(keys[name][selRow].rigVoiceMemNum, keys[name][selRow + 1].rigVoiceMemNum);
+        std::swap(keys[name][selRow].rptEnable, keys[name][selRow + 1].rptEnable);
+        std::swap(keys[name][selRow].rptDur, keys[name][selRow + 1].rptDur);
 
         showDetails();
         ui->OptionsTable->selectRow(selRow + 1);

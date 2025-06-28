@@ -33,6 +33,14 @@ namespace TxKeyerCommon
 */
     const int NO_TXKEYER_BUTTON_SELECTED = -1;
 
+    // used in DMButtonFrame edit table
+    const int EDIT_DLG_COL0 = 0;
+    const int EDIT_DLG_COL1 = 1;
+    const int EDIT_DLG_COL2 = 2;
+    const int EDIT_DLG_COL3 = 3;
+    const int EDIT_DLG_COL4 = 4;
+    const int EDIT_DLG_COL5 = 5;
+
 
     enum TxKeyerId
     {

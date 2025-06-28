@@ -20,8 +20,8 @@ public:
 
     // VoiceKeyerBase interface
     virtual void txKeyerInit(int &numButtons) override;
-    virtual void sendMsgNum(int msgNum) override;
-    virtual void stopMsg(TxKeyerParams * vkParam) override;
+    virtual void sendMsgNum(TxKeyerParams &vkParam) override;
+    virtual void stopMsg(TxKeyerParams &vkParam) override;
 
     virtual bool doRepeatFromLogger() override
     {

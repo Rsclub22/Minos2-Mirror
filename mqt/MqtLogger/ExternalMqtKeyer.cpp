@@ -58,13 +58,14 @@ void ExternalMqtKeyer::txKeyerInit(int &numButtons)
     LogContainer->sendDM->publishKeyerConfig(rpcConstants::keyerConfig);
 
 }
-void ExternalMqtKeyer::sendMsgNum(int msgNum)
+void ExternalMqtKeyer::sendMsgNum(TxKeyerParams &vkParam)
 {
     trace("ExternalMqtKeyer::sendMsgNum");
-    emit LogContainer->sendKeyerPlay( msgNum );
+    //*******************************************************emit LogContainer->sendKeyerPlay( msgNum );
 }
-void ExternalMqtKeyer::stopMsg(TxKeyerParams */*vkParam*/)
+void ExternalMqtKeyer::stopMsg(TxKeyerParams &vkParam)
 {
+    Q_UNUSED(vkParam)
     trace("ExternalMqtKeyer::stopMsg");
     emit LogContainer->sendKeyerStop();
 }

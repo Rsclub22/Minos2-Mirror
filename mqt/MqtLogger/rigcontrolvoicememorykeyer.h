@@ -30,8 +30,8 @@ public:
     static void registerTxKeyer(TxKeyerFactory::TxKeyers*);
 
     void txKeyerInit(int &numButtons) override;
-    void sendMsgNum(int buttonNum) override;
-    void stopMsg(TxKeyerParams * vkParam) override;
+    void sendMsgNum(TxKeyerParams &vkParam) override;
+    void stopMsg(TxKeyerParams &vkParam) override;
 
     virtual void setRadioParams(int radioMaxNumButtons, QString selectedRadioName, serialCommonData::MINOS_PTT_TYPES pttType_, bool pttEnabled_) override;
 

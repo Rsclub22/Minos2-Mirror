@@ -67,15 +67,15 @@ void RigControlVoiceMemoryKeyer::txKeyerInit(int &numButtons)
 
 }
 
-void RigControlVoiceMemoryKeyer::sendMsgNum(int buttonNum)
+void RigControlVoiceMemoryKeyer::sendMsgNum(TxKeyerParams &vkParams)
 {
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
 
-    tslf->sendRigTxVoiceMessage(QString::number(buttonNum +1));  // add for message Number, 0 is normally stop
+    tslf->sendRigTxVoiceMessage(QString::number(vkParams.getRigVoiceMemNum()));
 
 }
 
-void RigControlVoiceMemoryKeyer::stopMsg(TxKeyerParams *vkParams)
+void RigControlVoiceMemoryKeyer::stopMsg(TxKeyerParams &vkParams)
 {
     Q_UNUSED(vkParams)
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();

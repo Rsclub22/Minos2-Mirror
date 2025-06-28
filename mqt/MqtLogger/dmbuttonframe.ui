@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>612</width>
-    <height>342</height>
+    <width>601</width>
+    <height>353</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -313,44 +313,6 @@
           </item>
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_15">
-            <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_17">
-              <item>
-               <widget class="QLabel" name="buttonSelectionLbl">
-                <property name="text">
-                 <string>Button Selection for Radio:</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLabel" name="saveByRadioNameText">
-                <property name="text">
-                 <string/>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLabel" name="sAndPLabel">
-                <property name="text">
-                 <string/>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <spacer name="horizontalSpacer_5">
-                <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>40</width>
-                  <height>20</height>
-                 </size>
-                </property>
-               </spacer>
-              </item>
-             </layout>
-            </item>
             <item>
              <widget class="QLabel" name="errorTitleLabel">
               <property name="text">

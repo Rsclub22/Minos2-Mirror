@@ -16,8 +16,8 @@ public:
 
     // VoiceKeyerBase interface
     virtual void txKeyerInit(int &numButtons) override;
-    virtual void sendMsgNum(int msgNum) override;
-    virtual void stopMsg(TxKeyerParams *vkParam) override;
+    virtual void sendMsgNum(TxKeyerParams &vkParam) override;
+    virtual void stopMsg(TxKeyerParams &vkParam) override;
 
     void sendCwMsg(TxKeyerParams &vmParams) override {Q_UNUSED(vmParams)};
     void sendCwFreeTextMsg(QString message) override {Q_UNUSED(message)};

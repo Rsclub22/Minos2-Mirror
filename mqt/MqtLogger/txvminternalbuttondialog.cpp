@@ -152,7 +152,7 @@ void TxVmInternalButtonDialog::on_cancelbuttonClicked()
 void TxVmInternalButtonDialog::on_replayButton_clicked()
 {
     // This is a test replay - we shouldn't be PTTing if we can avoid it
-    vmData->getVkBase()->sendMsgNum(vmData->getKeyerButtonNum());
+    // *********************************vmData->getVkBase()->sendMsgNum(vmData->getKeyerButtonNum());
 }
 
 void TxVmInternalButtonDialog::on_recordButton_clicked()
@@ -166,9 +166,11 @@ void TxVmInternalButtonDialog::on_recordButton_clicked()
 
 void TxVmInternalButtonDialog::on_stopButton_clicked()
 {
+
+
     // stop record/replay
-    vmData->getVkBase()->stopMsg(vmData);
-    ui->txVmMessageDur->setText(QString::number(vmData->getKeyerDuration()));
+    //************************************vmData->getVkBase()->stopMsg(vmData);
+    //******************************ui->txVmMessageDur->setText(QString::number(vmData->getKeyerDuration()));
     ui->recordButton->setEnabled(true);
 }
 void TxVmInternalButtonDialog::setVolumeMults()

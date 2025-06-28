@@ -80,37 +80,35 @@ void InternalVoiceMemoryKeyer::txKeyerInit(int &numButtons)
     connect(SoundSystemDriver::getSbDriver(), &SoundSystemDriver::ptt, this, &InternalVoiceMemoryKeyer::onDoPTT);
 }
 
-void InternalVoiceMemoryKeyer::sendMsgNum(int msgNum)
+void InternalVoiceMemoryKeyer::sendMsgNum(TxKeyerParams &vkParam)
 {
     // play message - we need a PTT/NoPtt switch
     QString fileName;
-    fileName = QString("CQF%1.WAV").arg(msgNum + 1);
+//******************************************    fileName = QString("CQF%1.WAV").arg(msgNum + 1);
 
-    if ( !SoundSystemDriver::getSbDriver() ->play_file( fileName, true/*xmit*/, 0/*clipRecord*/ ))
-    {
+ //   if ( !SoundSystemDriver::getSbDriver() ->play_file( fileName, true/*xmit*/, 0/*clipRecord*/ ))
+ //   {
 
-    }
+ //   }
 
 }
 
-void InternalVoiceMemoryKeyer::stopMsg(TxKeyerParams * vkParam)
+void InternalVoiceMemoryKeyer::stopMsg(TxKeyerParams &vkParam)
 {
     // stop recording/playing message
     SoundSystemDriver::getSbDriver() ->stoprec();
     SoundSystemDriver::getSbDriver() ->stopDMA();
 
-    if (vkParam)
-    {
-        int msgLen = SoundSystemDriver::getSbDriver() ->getMessageLen(vkParam->getKeyerButtonNum());
-        vkParam->setKeyerDuration(msgLen);
-        QString inifileName = VOICE_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + vkParam->getType() + ".ini";
-        QSettings config(inifileName, QSettings::IniFormat);
-        config.beginGroup("button" + QString::number(vkParam->getKeyerButtonNum()));
+    int msgLen = SoundSystemDriver::getSbDriver() ->getMessageLen(vkParam.getKeyerButtonNum());
+    vkParam.setKeyerDuration(msgLen);
+    QString inifileName = VOICE_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + vkParam.getType() + ".ini";
+    QSettings config(inifileName, QSettings::IniFormat);
+    config.beginGroup("button" + QString::number(vkParam.getKeyerButtonNum()));
 
-        config.setValue("messageDuration", vkParam->getKeyerDuration());
+    config.setValue("messageDuration", vkParam.getKeyerDuration());
 
-        config.endGroup();
-    }
+    config.endGroup();
+
 }
 
 
