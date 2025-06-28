@@ -24,6 +24,7 @@ INCLUDEPATH += ../MqtUtils
 INCLUDEPATH += ../TinyXML
 INCLUDEPATH += ../XMPPLib
 INCLUDEPATH += ../MqtLogger
+INCLUDEPATH += ../KeyerBase
 
 
 SOURCES += \

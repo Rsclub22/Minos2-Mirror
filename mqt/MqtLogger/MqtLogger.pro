@@ -40,6 +40,8 @@ INCLUDEPATH += $$PWD/../MqtRotator
 INCLUDEPATH += $$PWD/../MqtRigControl
 INCLUDEPATH += $$PWD/../MqtBandMap
 
+
+
 SOURCES += \
     AdifImport.cpp \
     BandsSelect.cpp \

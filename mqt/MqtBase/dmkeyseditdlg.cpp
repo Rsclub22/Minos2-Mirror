@@ -13,6 +13,9 @@
 #include "dmkeyseditdlg.h"
 #include "ui_dmkeyseditdlg.h"
 #include "txkeyerCommonConstants.h"
+//#include "txVmExternalButtonDialog.h"
+#include "txvminternalbuttondialog.h"
+#include <QDebug>
 
 using namespace TxKeyerCommon;
 
@@ -207,6 +210,16 @@ void DMKeysEditDlg::showDetails()
             ui->OptionsTable->setCellWidget(i, EDIT_DLG_COL5, wrap);
             connect(recBtn, &QToolButton::clicked, this, [this, recBtn](){
                 int row = recBtn->property("row").toInt();
+                qDebug() << "row = " << QString::number(row);
+                if (txKeyerType == keyerTypes[TxKeyerId::InternalVoiceKeyer])
+                {
+                    TxVmInternalButtonDialog internalVKDlg;
+                    internalVKDlg.exec();
+                }
+                else if (txKeyerType == keyerTypes[TxKeyerId::ExternalVoiceKeyer])
+                {
+
+                }
 
             });
 

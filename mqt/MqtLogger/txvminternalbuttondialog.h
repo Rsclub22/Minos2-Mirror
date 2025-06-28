@@ -3,8 +3,8 @@
 
 #include <QDialog>
 #include "txKeyerbase.h"
-#include "txkeyerCommonConstants.h"
 #include "vudata.h"
+
 
 namespace Ui {
 class TxVmInternalButtonDialog;

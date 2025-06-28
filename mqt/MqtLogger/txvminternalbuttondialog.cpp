@@ -3,11 +3,10 @@
 #include "regsettings.h"
 #include "sbdriver.h"
 #include "WaveShowDialog.h"
-#include "txKeyerfactory.h"
 
 #include "txvminternalbuttondialog.h"
 #include "ui_txvminternalbuttondialog.h"
-
+#include "txkeyerCommonConstants.h"
 
 using namespace TxKeyerCommon;
 
