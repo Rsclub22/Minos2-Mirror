@@ -2594,38 +2594,52 @@ void QSOLogFrame::checkQsoFrameColour()
         // only worry about the current visible contest
         return;
     }
+    bool suppressUpdate = false;
+    if (kstMeepTime.isValid() && kstMeepTime.secsTo(QDateTime::currentDateTime()) < 30)
+    {
+        suppressUpdate = true;
+    }
     QString ssQsoFrame = ssQsoFrameBlue;
     if (contest->isReadOnly())
     {
         ui->RHSFrame->setVisible(false);
         ssQsoFrame = ssQsoFrameRed;
-        if (contest->isUnwriteable())
+        if (!suppressUpdate)
         {
-            ui->protectionLabel->setText(HtmlFontColour(Qt::red) + "<h3><b>  " + tr("Read Only"));
-        }
-        else if (contest->getProtectedState().getValue() && !contest->isProtectedSuppressed())
-        {
-            ui->protectionLabel->setText(HtmlFontColour(Qt::red) + "<h3><b>  " + tr("Protected"));
-        }
-        else if (contest->isAgeProtected())
-        {
-            ui->protectionLabel->setText(HtmlFontColour(Qt::red) + "<h3><b>  " + tr("Protected by age of contest"));
+            if (contest->isUnwriteable())
+            {
+                ui->protectionLabel->setText(HtmlFontColour(Qt::red) + "<h3><b>  " + tr("Read Only"));
+            }
+            else if (contest->getProtectedState().getValue() && !contest->isProtectedSuppressed())
+            {
+                ui->protectionLabel->setText(HtmlFontColour(Qt::red) + "<h3><b>  " + tr("Protected"));
+            }
+            else if (contest->isAgeProtected())
+            {
+                ui->protectionLabel->setText(HtmlFontColour(Qt::red) + "<h3><b>  " + tr("Protected by age of contest"));
+            }
         }
     }
     else
     {
         if (!edit && !frameHasFocus())
         {
-            ui->flagsFrame->setVisible(false);
             ssQsoFrame = ssQsoFrameRed;
 
-            ui->protectionLabel->setText(HtmlFontColour(Qt::red) + "<b>  " + tr("No QSO entry field focussed!"));
+            ui->flagsFrame->setVisible(suppressUpdate);
+            if (!suppressUpdate)
+            {
+                ui->protectionLabel->setText(HtmlFontColour(Qt::red) + "<b>  " + tr("No QSO entry field focussed!"));
+            }
 
         }
         else
         {
-            ui->protectionLabel->setText("");
-            ui->flagsFrame->setVisible(true);
+            if (!suppressUpdate)
+            {
+                ui->protectionLabel->setText("");
+                ui->flagsFrame->setVisible(true);
+            }
         }
     }
 
@@ -3377,6 +3391,15 @@ void QSOLogFrame::xferFromKST(QString call, QString loc)
     {
         ui->LocFrame->getTextEditEdit()->setText(loc);
         doGJVEditChange(ui->LocFrame->getTextEditEdit());
+    }
+}
+
+void QSOLogFrame::xferMeepFromKST(QString call)
+{
+    if (!call.isEmpty())
+    {
+        ui->protectionLabel->setText(HtmlFontColour(Qt::darkGreen) + "<b>  " + tr("Meep from %1").arg(call));
+        kstMeepTime = QDateTime::currentDateTime();
     }
 }
 void QSOLogFrame::transferFromWSJTX(QString call)
