@@ -306,17 +306,6 @@ void DMKeysEditDlg::getDetails()
                 }
             }
 
-            //int rigVoiceMem = 0;    // default
-            //if (auto *le1 = qobject_cast<QLineEdit*>(ui->OptionsTable->cellWidget(r, EDIT_DLG_COL2)))
-            //{
-            //    bool ok;
-            //    rigVoiceMem = le1->text().toInt(&ok);
-            //    if (ok)
-            //    {
-
-            //    }
-
-            //}
 
 
             bool val = false;
@@ -340,22 +329,6 @@ void DMKeysEditDlg::getDetails()
                     keys[name][r].rptDur = dur;
                 }
             }
-
-
-            //int dur = 0;    // default
-            //if (auto *le2 = qobject_cast<QLineEdit*>(ui->OptionsTable->cellWidget(r, EDIT_DLG_COL4)))
-            //{
-            //    bool ok;
-            //    dur = le2->text().toInt(&ok);
-            //    if (ok)
-            //    {
-           //        keys[name][r].rptDur = dur;
-           //     }
-
-           // }
-
-
-
         }
     }
 }

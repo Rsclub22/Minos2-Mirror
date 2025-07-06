@@ -83,6 +83,8 @@ DMButtonFrame::DMButtonFrame(QWidget *parent) :
 
     QString txKeyerName = config.value("KeyerName").toString();
 
+    connect(ui->txKeyerSetupPb, &QPushButton::clicked, this, &DMButtonFrame::onTxKeyerSetupClicked);
+
     txKeyerFactory->populateComboKeyerList(ui->txKeyerSelect, txKeyerName);
 
     // we add digi modes to list, though it will not act as keyer
@@ -163,7 +165,7 @@ void DMButtonFrame::setPttTypeText(serialCommonData::MINOS_PTT_TYPES pttType)
 }
 
 
-void DMButtonFrame::onVmSetupClicked()
+void DMButtonFrame::onTxKeyerSetupClicked()
 {
 
     if ((txKeyerType == keyerTypes[TxKeyerId::RigControl] && !isVoiceMemAvail(selectedRadio))
@@ -485,7 +487,7 @@ void DMButtonFrame::set_DigiMode_FrameState(QString txKeyerName)
     setAvailIndicatorVisible(false);
     setRepeatIndicatorVisible(false);
 
-    ui->vmSetupPb->setVisible(false);
+    ui->txKeyerSetupPb->setVisible(false);
     ui->pipCb->setVisible(false);
     ui->stopButton->setVisible(true);
     setTXStatusVisible(false);
@@ -522,7 +524,7 @@ void DMButtonFrame::set_None_FrameState(QString txKeyerName)
     setAvailIndicatorVisible(false);
     setRepeatIndicatorVisible(false);
 
-    ui->vmSetupPb->setVisible(false);
+    ui->txKeyerSetupPb->setVisible(false);
     ui->pipCb->setVisible(false);
     ui->stopButton->setVisible(false);
     setTXStatusVisible(false);
@@ -541,7 +543,7 @@ void DMButtonFrame::set_rigControl_FrameState(QString txKeyerName)
 
     TxKeyerCapabilities txKeyerCap = txKeyerFactory->supportedTxKeyers()->value(txKeyerName);
 
-    ui->vmSetupPb->setVisible(txKeyerCap.getSetupButton());
+    ui->txKeyerSetupPb->setVisible(txKeyerCap.getSetupButton());
     ui->pipCb->setVisible(txKeyerCap.getHasPip());
     setTXStatusVisible(txKeyerCap.getHasTxStatus());
 
@@ -595,7 +597,7 @@ void DMButtonFrame::set_cwRigControl_FrameState(QString txKeyerName)
 
     TxKeyerCapabilities txKeyerCap = txKeyerFactory->supportedTxKeyers()->value(txKeyerName);
 
-    ui->vmSetupPb->setVisible(txKeyerCap.getSetupButton());
+    ui->txKeyerSetupPb->setVisible(txKeyerCap.getSetupButton());
     ui->pipCb->setVisible(txKeyerCap.getHasPip());
     setTXStatusVisible(txKeyerCap.getHasTxStatus());
 
@@ -657,7 +659,7 @@ void DMButtonFrame::set_pcCwKeyer_FrameState(QString txKeyerName)
 
     TxKeyerCapabilities txKeyerCap = txKeyerFactory->supportedTxKeyers()->value(txKeyerName);
 
-    ui->vmSetupPb->setVisible(txKeyerCap.getSetupButton());
+    ui->txKeyerSetupPb->setVisible(txKeyerCap.getSetupButton());
     ui->pipCb->setVisible(txKeyerCap.getHasPip());
     setTXStatusVisible(txKeyerCap.getHasTxStatus());
 
@@ -704,7 +706,7 @@ void DMButtonFrame::set_Internal_FrameState(QString txKeyerName)
 
     TxKeyerCapabilities txKeyerCap = txKeyerFactory->supportedTxKeyers()->value(txKeyerName);
 
-    ui->vmSetupPb->setVisible(txKeyerCap.getSetupButton());
+    ui->txKeyerSetupPb->setVisible(txKeyerCap.getSetupButton());
     ui->pipCb->setVisible(txKeyerCap.getHasPip());
     setTXStatusVisible(txKeyerCap.getHasTxStatus());
 
