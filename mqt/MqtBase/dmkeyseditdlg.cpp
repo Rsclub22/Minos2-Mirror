@@ -230,52 +230,48 @@ void DMKeysEditDlg::showDetails()
 {
     ui->OptionsTable->clear();
 
-    /* 0 = "Run", 1 = "S&P" (assumed two‑row SectionsList) */
-    const int sel = ui->SectionsList->currentRow();
-    if (sel < 0)          return;                // nothing selected
+    // ---------- 1. locate the ContestSection ----------
+    const auto keyerIt = allKeyConfigs.constFind(txKeyerType);
+    if (keyerIt == allKeyConfigs.cend()) return;
 
-    /* ---------- 1. locate the ContestSection ---------- */
-    const auto keyerIt   = allKeyConfigs.constFind(txKeyerType);
-    if (keyerIt == allKeyConfigs.cend())         return;
-
-    const auto  contestIt = keyerIt->constFind(name);
-    if (contestIt == keyerIt->cend())            return;
+    const auto contestIt = keyerIt->constFind(name);
+    if (contestIt == keyerIt->cend()) return;
 
     const auto &rigMap = contestIt.value();
 
     QString rigKey;
-    if      (rigMap.contains(rigName)) rigKey = rigName;
-    else if (rigMap.contains("noRadio")) rigKey = QStringLiteral("noRadio");
+    if (rigMap.contains(rigName))        rigKey = rigName;
+    else if (rigMap.contains("noRadio")) rigKey = "noRadio";
     else if (!rigMap.isEmpty())          rigKey = rigMap.firstKey();
-    else                                 return;                 // nothing to show
+    else                                 return;
 
     const ContestSection &sect = rigMap[rigKey];
+    const KeySet &run = sect.run;
+    const KeySet &sp  = sect.sp;
 
-    /* pick the KeySet we actually want to display */
-    const KeySet &visibleKeys  = (sel == 0 ? sect.run : sect.sp);
+    if (run.size() != 12 || sp.size() != 12)
+        return; // ensure correct data size
 
-    /* ---------- 2. build the table ---------- */
+    // ---------- 2. build the table ----------
     constexpr int totalColumns = 6;
     ui->OptionsTable->setColumnCount(totalColumns);
-    ui->OptionsTable->setRowCount(visibleKeys.size());
+    ui->OptionsTable->setRowCount(24);
 
     QStringList vHeaders;
 
-    for (int row = 0; row < visibleKeys.size(); ++row)
+    for (int row = 0; row < 24; ++row)
     {
-        const KeyVal &k = visibleKeys[row];
+        const KeyVal &k = (row < 12 ? run[row] : sp[row - 12]);
 
-        /* vertical header: "Run F1", "Run F2", ... OR "S&P F1", ... */
         vHeaders << QString("%1 F%2")
-                        .arg(sel == 0 ? tr("Run") : tr("S&P"))
-                        .arg(row + 1);
+                        .arg(row < 12 ? tr("Run") : tr("S&P"))
+                        .arg(row < 12 ? row + 1 : row - 11);
 
         ui->OptionsTable->setItem(row, EDIT_DLG_COL0, new QTableWidgetItem(k.ktop));
         ui->OptionsTable->setItem(row, EDIT_DLG_COL1, new QTableWidgetItem(k.kval));
         ui->OptionsTable->setItem(row, EDIT_DLG_COL2, new QTableWidgetItem(QString::number(k.rigVoiceMemNum)));
 
-        /* repeat‑enable checkbox */
-        auto *cb  = new QCheckBox;
+        auto *cb = new QCheckBox;
         cb->setChecked(k.rptEnable);
         auto *wrapCB = new QWidget;
         auto *layCB  = new QHBoxLayout(wrapCB);
@@ -286,13 +282,12 @@ void DMKeysEditDlg::showDetails()
 
         ui->OptionsTable->setItem(row, EDIT_DLG_COL4, new QTableWidgetItem(QString::number(k.rptDur)));
 
-        /* record / play button */
         auto *recBtn = new QToolButton;
         recBtn->setText("🎙");
         recBtn->setToolTip(tr("Record/Play audio for this message"));
         recBtn->setFixedSize(24, 24);
-        recBtn->setProperty("row",   row);
-        recBtn->setProperty("scope", sel);   // 0=Run, 1=S&P  (handy later)
+        recBtn->setProperty("row", row);
+        recBtn->setProperty("scope", row < 12 ? 0 : 1); // 0 = Run, 1 = S&P
 
         auto *wrapBtn = new QWidget;
         auto *layBtn  = new QHBoxLayout(wrapBtn);
@@ -301,21 +296,20 @@ void DMKeysEditDlg::showDetails()
         layBtn->setContentsMargins(0,0,0,0);
         ui->OptionsTable->setCellWidget(row, EDIT_DLG_COL5, wrapBtn);
 
-        connect(recBtn, &QToolButton::clicked, this,
-                [this, recBtn]()
-                {
-                    const int row = recBtn->property("row").toInt();
-                    // Use recBtn->property("scope") to know if it’s Run or S&P
-                    if (txKeyerType == keyerTypes[TxKeyerId::InternalVoiceKeyer])
-                    {
-                        TxVmInternalButtonDialog dlg(this);
-                        dlg.exec();
-                    }
-                    else if (txKeyerType == keyerTypes[TxKeyerId::ExternalVoiceKeyer])
-                    {
-                        // …
-                    }
-                });
+        connect(recBtn, &QToolButton::clicked, this, [this, recBtn]() {
+            int row = recBtn->property("row").toInt();
+            int scope = recBtn->property("scope").toInt(); // 0 = Run, 1 = S&P
+
+            if (txKeyerType == keyerTypes[TxKeyerId::InternalVoiceKeyer])
+            {
+                TxVmInternalButtonDialog dlg(this);
+                dlg.exec();
+            }
+            else if (txKeyerType == keyerTypes[TxKeyerId::ExternalVoiceKeyer])
+            {
+                // handle external keyer
+            }
+        });
     }
 
     ui->OptionsTable->setVerticalHeaderLabels(vHeaders);
@@ -323,7 +317,7 @@ void DMKeysEditDlg::showDetails()
         { tr("Key Top"), tr("Value"), tr("Rig\nMem"),
          tr("Repeat"), tr("Repeat\nDur"), tr("Rec.") });
 
-    /* sizing rules exactly as before */
+    // ---------- Column sizing ----------
     auto *hh = ui->OptionsTable->horizontalHeader();
     hh->setStretchLastSection(false);
     hh->setSectionResizeMode(EDIT_DLG_COL0, QHeaderView::Interactive);
@@ -340,14 +334,12 @@ void DMKeysEditDlg::showDetails()
     ui->OptionsTable->setColumnWidth(EDIT_DLG_COL4, 60);
     ui->OptionsTable->setColumnWidth(EDIT_DLG_COL5, 30);
 
-
-    /* restore splitter state, etc. */
-       RegSettings settings;
+    // ---------- Restore splitter position ----------
+    RegSettings settings;
     ui->settingsSplitter->restoreState(
         settings.getSettings().value("DMKeysEdit/SplitterState/" + name).toByteArray());
-
-
 }
+
 
 
 /*
