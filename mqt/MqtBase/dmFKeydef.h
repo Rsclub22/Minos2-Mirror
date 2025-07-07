@@ -1,6 +1,7 @@
 #ifndef DMFKEYDEF_H
 #define DMFKEYDEF_H
 #include <QString>
+#include <QVector>
 
 // vector of (map(key current set name) of vector of pairs (fkey name, fkey message) )
 // added message repeat enable and repeat interval duration
@@ -13,7 +14,18 @@ struct KeyVal {
             bool rptEnable = false;
             int rptDur = 0;
 };
-typedef QVector<KeyVal >KeySet;
-typedef QMap<QString, KeySet > Keys;
+typedef QVector<KeyVal>KeySet;
+
+struct ContestSection {
+    KeySet run;
+    KeySet sp;
+};
+
+typedef QMap<QString, ContestSection> RigMap;         // rigModel or "default"
+typedef QMap<QString, RigMap> ContestMap;             // contest name
+typedef QMap<QString, ContestMap> KeyerMap;           // keyer type
+
+
+//typedef QMap<QString, KeySet > Keys;
 
 #endif // DMFKEYDEF_H

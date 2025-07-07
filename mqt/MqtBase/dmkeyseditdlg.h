@@ -19,9 +19,11 @@ class DMKeysEditDlg : public QDialog
 
     Ui::DMKeysEditDlg *ui;
 
-    Keys &keys;
+    //Keys &keys;
+    KeyerMap &allKeyConfigs;
 
     QString name;
+    QString rigName;
     QString txKeyerType;
 
     void showSections();
@@ -31,7 +33,7 @@ class DMKeysEditDlg : public QDialog
     void doCloseEvent();
 
 public:
-    explicit DMKeysEditDlg(QWidget *parent , QString fKeyFileName, QString name, Keys &keys, QString txKeyerType);
+    explicit DMKeysEditDlg(QWidget *parent , QString fKeyFileName, QString name, KeyerMap &allKeyConfigs, QString txKeyerType, QString rigName);
     ~DMKeysEditDlg() override;
 
     int exec() override;

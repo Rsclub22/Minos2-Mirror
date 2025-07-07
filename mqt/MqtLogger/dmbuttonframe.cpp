@@ -128,7 +128,8 @@ DMButtonFrame::DMButtonFrame(QWidget *parent) :
 
     ui->nameLabel->setText(tr("Data Modes Buttons from %1").arg(fkeyFileName));
 
-    ui->FButtonFrame->setEnabled(false);
+    //ui->FButtonFrame->setEnabled(false);
+
 
     ui->fkeysetCombo->addItem(currentName);
 
@@ -848,8 +849,56 @@ void DMButtonFrame::startKeyerMsg(int key)
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
     int msgOffset = tslf->GJVQSOLogFrame->getSandP()?12:0;
 
+    int messageNumber = key - Qt::Key_F1 + msgOffset; // e.g. F1=0, F12=11 (Run keys), then S&P keys 12..23
 
-    int messageNumber = key - Qt::Key_F1 + msgOffset; // add 12 if in S&P mode
+    selectedEomType = KeyerEomTypes::Eom_None;
+
+    TxKeyerParams vmData;
+
+    if ((txKeyerType == keyerTypes[TxKeyerId::CW_RigControl]
+         || txKeyerType == keyerTypes[TxKeyerId::RigControl]
+         || txKeyerType == keyerTypes[TxKeyerId::PcCwKeyer])
+        && !selectedRadio.getLocalName().isEmpty())
+    {
+        QString rigKey = getRigModel(selectedRadio);
+        if (rigKey.isEmpty())
+            rigKey = "noRadio";  // fallback if needed
+
+        auto &contestMap = allKeyConfigs[txKeyerType];
+        if (contestMap.contains(currentName) && contestMap[currentName].contains(rigKey))
+        {
+            const ContestSection &section = contestMap[currentName][rigKey];
+
+            const int runCount = section.run.size();
+            const int spCount = section.sp.size();
+
+            const KeyVal *kv = nullptr;
+
+            if (messageNumber < runCount)
+            {
+                kv = &section.run[messageNumber];
+            }
+            else if (messageNumber < runCount + spCount)
+            {
+                kv = &section.sp[messageNumber - runCount];
+            }
+
+            if (kv)
+            {
+                vmData.setKeyerCwMessage(kv->kval);
+                vmData.setKeyerButtonNum(messageNumber);
+                vmData.setRigVoiceMemNum(kv->rigVoiceMemNum);
+                vmData.setKeyerRepeatPauseDur(kv->rptDur);
+                vmData.setKeyerRepeatFlag(kv->rptEnable);
+                vmData.setSelRadioName(selectedRadio.getLocalName());
+                vmData.setRigModel(rigKey);
+                vmData.setSAndPState(sAndPState);
+            }
+        }
+    }
+
+
+/*    int messageNumber = key - Qt::Key_F1 + msgOffset; // add 12 if in S&P mode
 
     selectedEomType = KeyerEomTypes::Eom_None;
 
@@ -871,7 +920,7 @@ void DMButtonFrame::startKeyerMsg(int key)
 
     }
 
-
+*/
     vmData.setType(txKeyerType);
 
     setRepeatIndicatorOnOff(vmData.getKeyerRepeatFlag());
@@ -1867,7 +1916,7 @@ bool  DMButtonFrame::isDataMode()
 
 void DMButtonFrame::actionDigitalModeKeyPress(int key, int carr)
 {
-    if (key >= Qt::Key_F1 && key <= Qt::Key_F12 && fkeys[currentName].size() == 24)
+ /*   if (key >= Qt::Key_F1 && key <= Qt::Key_F12 && fkeys[currentName].size() == 24)
     {
         TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
         int spoffset = tslf->GJVQSOLogFrame->getSandP()?12:0;
@@ -1875,16 +1924,45 @@ void DMButtonFrame::actionDigitalModeKeyPress(int key, int carr)
 
         QString toSend = parseFKeyMessage(mess.kval);
 
-        // send transmission to sender app
+ */
+        if (key >= Qt::Key_F1 && key <= Qt::Key_F12)
+        {
+            TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
+            bool sandp = tslf->GJVQSOLogFrame->getSandP();
+            //int spoffset = sandp ? 12 : 0;
 
-        RPCGeneralClient rpc(rpcConstants::DMTransmit);
-        QSharedPointer<RPCParam>st(new RPCParamStruct);
-        st->addMember( toSend, rpcConstants::DMTransmit );
-        st->addMember(carr, rpcConstants::DMMarkFreq);
-        rpc.getCallArgs() ->addParam( st );
-        rpc.queueCall( dataSender );
+            QString rigKey = "noRadio";
 
-    }
+            auto &contestMap = allKeyConfigs[txKeyerType];
+            if (contestMap.contains(currentName) && contestMap[currentName].contains(rigKey))
+            {
+                const ContestSection &section = contestMap[currentName][rigKey];
+
+                int index = key - Qt::Key_F1;
+                KeyVal mess;
+
+                if (!sandp)
+                {
+                    if (index < section.run.size())
+                        mess = section.run[index];
+                }
+                else
+                {
+                    if (index < section.sp.size())
+                        mess = section.sp[index];
+                }
+
+                QString toSend = parseFKeyMessage(mess.kval);
+                // send transmission to sender app
+
+                RPCGeneralClient rpc(rpcConstants::DMTransmit);
+                QSharedPointer<RPCParam>st(new RPCParamStruct);
+                st->addMember( toSend, rpcConstants::DMTransmit );
+                st->addMember(carr, rpcConstants::DMMarkFreq);
+                rpc.getCallArgs() ->addParam( st );
+                rpc.queueCall( dataSender );
+            }
+        }
 }
 
 
@@ -1895,6 +1973,54 @@ void DMButtonFrame::sandPChanged(bool s)
 
 
 }
+
+
+void DMButtonFrame::showFButtons(bool s)
+{
+    //ui->FButtonFrame->setEnabled(false);
+
+
+    MinosRPC *rpc = MinosRPC::getMinosRPC();
+
+    QString rigKey = selectedRadio.getLocalName() == "/" ? "noRadio" : selectedRadio.getLocalName();
+
+    auto &contestMap = allKeyConfigs[txKeyerType];
+    if (contestMap.contains(currentName) && contestMap[currentName].contains(rigKey))
+    {
+        const ContestSection &section = contestMap[currentName][rigKey];
+
+        const KeySet &keysToShow = s ? section.sp : section.run;
+
+        if (keysToShow.size() >= 12)
+        {
+            for (int i = 0; i < 12; i++)
+            {
+                QString keytop = QString("F%1: %2").arg(i + 1).arg(keysToShow[i].ktop);
+                fButtons[i]->setText(keytop);
+            }
+            ui->FButtonFrame->setEnabled(true);
+
+            QString fkeystring = getFKeysString();
+
+            rpc->publish(rpcConstants::DMCat, rpcConstants::DMFKeys, fkeystring, psPublished);
+            return;
+        }
+        else if (keysToShow.size() == 0)
+        {
+            for (int i = 0; i < 12; i++)
+            {
+                fButtons[i]->setText(QString("F%1").arg(i + 1));
+            }
+            rpc->publish(rpcConstants::DMCat, rpcConstants::DMFKeys, "", psRevoked);
+            return;
+        }
+    }
+
+    mShowMessage(tr("Not enough key definitions in %1").arg(fkeyFileName), this);
+    rpc->publish(rpcConstants::DMCat, rpcConstants::DMFKeys, "", psRevoked);
+}
+
+/*
 void DMButtonFrame::showFButtons(bool s)
 {
     ui->FButtonFrame->setEnabled(false);
@@ -1928,6 +2054,7 @@ void DMButtonFrame::showFButtons(bool s)
         rpc->publish( rpcConstants::DMCat, rpcConstants::DMFKeys, "", psRevoked );
     }
 }
+*/
 QString DMButtonFrame::parseFKeyMessage(QString mess)
 {
     // make sure screenContact is up to date
@@ -2070,7 +2197,7 @@ QString DMButtonFrame::parseFKeyMessage(QString mess)
 }
 void DMButtonFrame::parseFKeyFile(QString fname)
 {
-    fkeys.clear();
+    allKeyConfigs.clear();
     ui->fkeysetCombo->clear();
     nameList.clear();
 
@@ -2097,6 +2224,34 @@ void DMButtonFrame::parseFKeyFile(QString fname)
         ui->fkeysetCombo->setCurrentText(currentName);
     }
 }
+
+bool DMButtonFrame::parseFKeyArray(const QJsonArray &array, KeySet &dest)
+{
+    dest.clear();  // Clear existing data before parsing
+
+    for (const QJsonValue &val : array) {
+        if (!val.isObject()) {
+            // Skip if not an object
+            continue;
+        }
+
+        QJsonObject obj = val.toObject();
+
+        KeyVal p;
+        p.fk = obj.value("key").toString();
+        p.ktop = obj.value("label").toString();
+        p.kval = obj.value("message").toString();
+        p.rigVoiceMemNum = obj.value("rigVoiceMemNum").toInt();
+        p.rptEnable = obj.value("repeatEnable").toBool();
+        p.rptDur = obj.value("repeatDuration").toInt();
+
+        dest.append(p);
+    }
+
+    return true;
+}
+
+/*
 bool DMButtonFrame::parseFKeyArray(QJsonArray s, QString keyset)
 {
     KeySet &ks = fkeys[keyset];
@@ -2127,7 +2282,8 @@ bool DMButtonFrame::parseFKeyArray(QJsonArray s, QString keyset)
     }
     return true;
 }
-
+*/
+/*
 bool DMButtonFrame::parseFKeyString(QString s)
 {
     QJsonParseError err;
@@ -2164,6 +2320,130 @@ bool DMButtonFrame::parseFKeyString(QString s)
     }
     return true;
 }
+*/
+
+bool DMButtonFrame::parseFKeyString(QString &s)
+{
+    QJsonParseError err;
+    QJsonDocument doc = QJsonDocument::fromJson(s.toUtf8(), &err);
+    if (err.error != QJsonParseError::NoError) {
+        qWarning() << "JSON parse error:" << err.errorString();
+        return false;
+    }
+
+    if (!doc.isObject()) {
+        qWarning() << "Expected top-level JSON object";
+        return false;
+    }
+
+    QJsonObject rootObj = doc.object();
+    QJsonObject keyerConfig = rootObj["KeyerConfig"].toObject();
+
+    for (const QString &keyerType : keyerConfig.keys()) {
+        QJsonObject contestMap = keyerConfig[keyerType].toObject();
+
+        for (const QString &contest : contestMap.keys()) {
+            QJsonObject rigMap = contestMap[contest].toObject();
+
+            for (const QString &rigModel : rigMap.keys()) {
+                QJsonObject section = rigMap[rigModel].toObject();
+
+                ContestSection &cs = allKeyConfigs[keyerType][contest][rigModel];
+
+                parseFKeyArray(section["Run"].toArray(), cs.run);
+                parseFKeyArray(section["SandP"].toArray(), cs.sp);
+
+                // Optional: keep a list of contest names (if needed elsewhere)
+                if (!nameList.contains(contest))
+                    nameList.append(contest);
+            }
+        }
+    }
+
+    return true;
+}
+
+void DMButtonFrame::rewriteFKeyFile()
+{
+    QJsonDocument json;
+    QJsonObject keyerConfigObj;  // Top-level "KeyerConfig" object
+
+    for (auto keyerIt = allKeyConfigs.constBegin(); keyerIt != allKeyConfigs.constEnd(); ++keyerIt)
+    {
+        const QString &keyerType = keyerIt.key();
+        const auto &contestMap = keyerIt.value();
+
+        QJsonObject contestObj;
+        for (auto contestIt = contestMap.constBegin(); contestIt != contestMap.constEnd(); ++contestIt)
+        {
+            const QString &contestName = contestIt.key();
+            const auto &rigMap = contestIt.value();
+
+            QJsonObject rigModelObj;
+            for (auto rigIt = rigMap.constBegin(); rigIt != rigMap.constEnd(); ++rigIt)
+            {
+                const QString &rigModel = rigIt.key();
+                const ContestSection &section = rigIt.value();
+
+                QJsonArray runArray;
+                for (const KeyVal &k : section.run)
+                {
+                    QJsonObject obj;
+                    obj["key"] = k.fk;
+                    obj["label"] = k.ktop;
+                    obj["message"] = k.kval;
+                    obj["rigVoiceMemNum"] = k.rigVoiceMemNum;
+                    obj["repeatEnable"] = k.rptEnable;
+                    obj["repeatDuration"] = k.rptDur;
+                    runArray.append(obj);
+                }
+
+                QJsonArray spArray;
+                for (const KeyVal &k : section.sp)
+                {
+                    QJsonObject obj;
+                    obj["key"] = k.fk;
+                    obj["label"] = k.ktop;
+                    obj["message"] = k.kval;
+                    obj["rigVoiceMemNum"] = k.rigVoiceMemNum;
+                    obj["repeatEnable"] = k.rptEnable;
+                    obj["repeatDuration"] = k.rptDur;
+                    spArray.append(obj);
+                }
+
+                QJsonObject sectionObj;
+                sectionObj["Run"] = runArray;
+                sectionObj["SandP"] = spArray;
+
+                rigModelObj[rigModel] = sectionObj;
+            }
+
+            contestObj[contestName] = rigModelObj;
+        }
+
+        keyerConfigObj[keyerType] = contestObj;
+    }
+
+    QJsonObject rootObj;
+    rootObj["KeyerConfig"] = keyerConfigObj;
+
+    json.setObject(rootObj);
+
+    QByteArray s = json.toJson(QJsonDocument::Indented);
+
+    QFile jf(fkeyFileName);
+    if (!jf.open(QIODevice::WriteOnly | QIODevice::Truncate))
+    {
+        logMessage("Failed to open " + fkeyFileName);
+        return;
+    }
+    jf.write(s);
+    jf.close();
+}
+
+
+
+/*
 void DMButtonFrame::rewriteFKeyFile()
 {
     QJsonDocument json;
@@ -2233,6 +2513,7 @@ void DMButtonFrame::rewriteFKeyFile()
     jf.close();
 
 }
+*/
 void DMButtonFrame::on_stopButton_clicked()
 {
     if (txKeyerType == keyerTypes[TxKeyerId::None])
@@ -2288,11 +2569,25 @@ void DMButtonFrame::on_editButton_clicked()
 
     // Use built in fKey editor on "fkeyFileName"
 
-    Keys nfk = fkeys;
-    DMKeysEditDlg jed(this, fkeyFileName, currentName, nfk, txKeyerType);
+    KeyerMap nfk = allKeyConfigs;
+
+    QString radioName = "noRadio";
+    if (txKeyerType == keyerTypes[TxKeyerId::RigControl])
+    {
+        if (selectedRadio.getLocalName() == "/")
+        {
+            radioName.clear(); // no radio selected
+        }
+        else
+        {
+            radioName = selectedRadio.getLocalName();
+        }
+    }
+
+    DMKeysEditDlg jed(this, fkeyFileName, currentName, nfk, txKeyerType, radioName);
     if (jed.exec() == QDialog::Accepted)
     {
-        fkeys = nfk;
+        allKeyConfigs = nfk;
         // and we have to regenerate the JSON file
         rewriteFKeyFile();
     }

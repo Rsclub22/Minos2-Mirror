@@ -135,7 +135,8 @@ private:
 
     QVector<QPushButton *> fButtons;
 
-    Keys fkeys;
+    //Keys fkeys;
+    KeyerMap allKeyConfigs;
 
     QString dataSender;
     QString curMode;
@@ -174,8 +175,9 @@ private:
 
     void showFButtons(bool s);
     QString getFKeysString() const;
-    bool parseFKeyString(QString s);
-    bool parseFKeyArray(QJsonArray s, QString keyset);
+    bool parseFKeyString(QString &s);
+    //bool parseFKeyArray(QJsonArray s, QString keyset);
+    bool parseFKeyArray(const QJsonArray &array, KeySet &dest);
     void rewriteFKeyFile();
 
     bool isDataMode();
