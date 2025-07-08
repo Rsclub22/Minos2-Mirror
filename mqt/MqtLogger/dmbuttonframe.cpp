@@ -131,9 +131,9 @@ DMButtonFrame::DMButtonFrame(QWidget *parent) :
     //ui->FButtonFrame->setEnabled(false);
 
 
-    ui->fkeysetCombo->addItem(currentName);
+    //ui->fkeysetCombo->addItem(currentName);
 
-    fkeyFileChanged();
+    //fkeyFileChanged();
 }
 
 DMButtonFrame::~DMButtonFrame()
@@ -433,6 +433,7 @@ void DMButtonFrame::onTxKeyerSelect(int idx)
 void DMButtonFrame::setFrameState(QString txKeyerName)
 {
 
+
     if (txKeyerName == DIGIMODE)
     {
 
@@ -501,6 +502,9 @@ void DMButtonFrame::set_DigiMode_FrameState(QString txKeyerName)
 
     setLogItButtonVisible(true);
     setLogItButtonVisible(true);
+
+    populateFksetCombo(txKeyerName, currentName);
+    fkeyFileChanged();
 }
 
 
@@ -1982,7 +1986,11 @@ void DMButtonFrame::showFButtons(bool s)
 
     MinosRPC *rpc = MinosRPC::getMinosRPC();
 
-    QString rigKey = selectedRadio.getLocalName() == "/" ? "noRadio" : selectedRadio.getLocalName();
+    QString rigKey = "noRadio";
+    if (txKeyerType == keyerTypes[TxKeyerId::RigControl])
+    {
+        selectedRadio.getLocalName() == "/" ? "noRadio" : selectedRadio.getLocalName();
+    }
 
     auto &contestMap = allKeyConfigs[txKeyerType];
     if (contestMap.contains(currentName) && contestMap[currentName].contains(rigKey))
@@ -2014,10 +2022,14 @@ void DMButtonFrame::showFButtons(bool s)
             rpc->publish(rpcConstants::DMCat, rpcConstants::DMFKeys, "", psRevoked);
             return;
         }
+        else
+        {
+            mShowMessage(tr("Not enough key definitions in %1").arg(fkeyFileName), this);
+            rpc->publish(rpcConstants::DMCat, rpcConstants::DMFKeys, "", psRevoked);
+        }
     }
 
-    mShowMessage(tr("Not enough key definitions in %1").arg(fkeyFileName), this);
-    rpc->publish(rpcConstants::DMCat, rpcConstants::DMFKeys, "", psRevoked);
+
 }
 
 /*
@@ -2055,6 +2067,33 @@ void DMButtonFrame::showFButtons(bool s)
     }
 }
 */
+
+
+void DMButtonFrame::populateFksetCombo(QString txKeyerName, QString currentName)
+{
+    nameList.clear();
+    ui->fkeysetCombo->clear();
+
+    nameList = getContestNamesForKeyerType(txKeyerName);
+    ui->fkeysetCombo->addItems(nameList);
+    ui->fkeysetCombo->setCurrentText(currentName);
+}
+
+
+QStringList DMButtonFrame::getContestNamesForKeyerType(const QString &keyerType)
+{
+    QStringList contestNames;
+
+    auto keyerIt = allKeyConfigs.constFind(keyerType);
+    if (keyerIt != allKeyConfigs.constEnd())
+    {
+        const ContestMap &contestMap = keyerIt.value();
+        contestNames = contestMap.keys();
+    }
+
+    return contestNames;
+}
+
 QString DMButtonFrame::parseFKeyMessage(QString mess)
 {
     // make sure screenContact is up to date
@@ -2198,8 +2237,8 @@ QString DMButtonFrame::parseFKeyMessage(QString mess)
 void DMButtonFrame::parseFKeyFile(QString fname)
 {
     allKeyConfigs.clear();
-    ui->fkeysetCombo->clear();
-    nameList.clear();
+    //ui->fkeysetCombo->clear();
+    //nameList.clear();
 
     QFile lf(fname);
 
@@ -2219,9 +2258,7 @@ void DMButtonFrame::parseFKeyFile(QString fname)
     }
     else
     {
-        ui->fkeysetCombo->clear();
-        ui->fkeysetCombo->addItems(nameList);
-        ui->fkeysetCombo->setCurrentText(currentName);
+        populateFksetCombo(txKeyerType, currentName);
     }
 }
 
@@ -2337,7 +2374,12 @@ bool DMButtonFrame::parseFKeyString(QString &s)
     }
 
     QJsonObject rootObj = doc.object();
+    if (!rootObj.contains("KeyerConfig")) {
+        qWarning() << "Missing KeyerConfig in JSON";
+        return false;
+    }
     QJsonObject keyerConfig = rootObj["KeyerConfig"].toObject();
+
 
     for (const QString &keyerType : keyerConfig.keys()) {
         QJsonObject contestMap = keyerConfig[keyerType].toObject();
@@ -2349,11 +2391,17 @@ bool DMButtonFrame::parseFKeyString(QString &s)
                 QJsonObject section = rigMap[rigModel].toObject();
 
                 ContestSection &cs = allKeyConfigs[keyerType][contest][rigModel];
+                if (section.contains("Run"))
+                {
+                    parseFKeyArray(section["Run"].toArray(), cs.run);
+                }
 
-                parseFKeyArray(section["Run"].toArray(), cs.run);
-                parseFKeyArray(section["SandP"].toArray(), cs.sp);
+                if (section.contains("SandP"))
+                {
+                    parseFKeyArray(section["SandP"].toArray(), cs.sp);
+                }
 
-                // Optional: keep a list of contest names (if needed elsewhere)
+
                 if (!nameList.contains(contest))
                     nameList.append(contest);
             }

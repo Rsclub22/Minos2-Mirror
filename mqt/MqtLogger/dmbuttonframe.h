@@ -259,6 +259,8 @@ private:
 
     void setWipeButtonVisible(bool visible);
     void setLogItButtonVisible(bool visible);
+    QStringList getContestNamesForKeyerType(const QString &keyerType);
+    void populateFksetCombo(QString txKeyerName, QString currentName);
 };
 
 #endif // DMBUTTONFRAME_H
