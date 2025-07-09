@@ -239,11 +239,18 @@ void DMKeysEditDlg::showDetails()
 
     const auto &rigMap = contestIt.value();
 
-    QString rigKey;
-    if (rigMap.contains(rigName))        rigKey = rigName;
-    else if (rigMap.contains("noRadio")) rigKey = "noRadio";
-    else if (!rigMap.isEmpty())          rigKey = rigMap.firstKey();
-    else                                 return;
+    QString rigKey = "noRadio";
+    if (txKeyerType == keyerTypes[TxKeyerId::RigControl])
+    {
+        if (rigName != "/") // no radio avail
+        {
+            rigKey = rigName;
+        }
+    }
+    //if (rigMap.contains(rigName))        rigKey = rigName;
+    //else if (rigMap.contains("noRadio")) rigKey = "noRadio";
+    //else if (!rigMap.isEmpty())          rigKey = rigMap.firstKey();
+    //else                                 return;
 
     const ContestSection &sect = rigMap[rigKey];
     const KeySet &run = sect.run;
@@ -468,11 +475,19 @@ void DMKeysEditDlg::getDetails()
     auto &contestMap = allKeyConfigs[txKeyerType][name];
 
     // Locate rig key (use rigName, fallback if needed)
-    QString rigKey;
-    if      (contestMap.contains(rigName))   rigKey = rigName;
-    else if (contestMap.contains("noRadio")) rigKey = QStringLiteral("noRadio");
-    else if (!contestMap.isEmpty())          rigKey = contestMap.firstKey();
-    else                                     return;
+    QString rigKey = "noRadio";
+    if (txKeyerType == keyerTypes[TxKeyerId::RigControl])
+    {
+        if (rigName != "/")
+        {
+            rigKey = rigName;
+        }
+    }
+
+    //if      (contestMap.contains(rigName))   rigKey = rigName;
+    //else if (contestMap.contains("noRadio")) rigKey = QStringLiteral("noRadio");
+    //else if (!contestMap.isEmpty())          rigKey = contestMap.firstKey();
+    //else                                     return;
 
     ContestSection &section = contestMap[rigKey];
 
@@ -630,7 +645,11 @@ void DMKeysEditDlg::on_NewSectionButton_clicked()
             }
 
             // Store under the current rigName (or "noRadio" fallback)
-            QString rigKey = rigName.isEmpty() ? "noRadio" : rigName;
+            QString rigKey = "noradio";
+            if (txKeyerType == txKeyerType[TxKeyerId::RigControl] && rigName != "/")
+            {
+                rigKey = rigName;
+            }
             contestMap[newName][rigKey] = section;
 
             // Update current selection and UI

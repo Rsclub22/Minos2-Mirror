@@ -208,7 +208,8 @@ QString getCurrentLanguage()
     return currentLanguage;
 }
 #ifdef Q_OS_WIN
-#if (QT_VERSION < QT_VERSION_CHECK(6, 9, 0))
+//#if (QT_VERSION < QT_VERSION_CHECK(6, 9, 0))
+#if !defined(NTDDI_WIN8) || (NTDDI_VERSION < NTDDI_WIN8)
 HANDLE GetCurrentProcessToken() {
     HANDLE process_token;
     OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, &process_token);
