@@ -84,6 +84,8 @@ namespace TxKeyerCommon
 
     inline const QString ALL_RADIOS_GROUP_NAME = "AllRadios";
 
+    inline const QString KEYER_NO_RADIO = "noRadio";
+
     inline const int VOICEKEYER_MAX_NUMBUTTONS = 8;
 
     inline const QString specialCwCharEscapeChar = "^";

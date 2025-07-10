@@ -866,7 +866,7 @@ void DMButtonFrame::startKeyerMsg(int key)
     {
         QString rigKey = getRigModel(selectedRadio);
         if (rigKey.isEmpty())
-            rigKey = "noRadio";  // fallback if needed
+            rigKey = KEYER_NO_RADIO;  // fallback if needed
 
         auto &contestMap = allKeyConfigs[txKeyerType];
         if (contestMap.contains(currentName) && contestMap[currentName].contains(rigKey))
@@ -1935,7 +1935,7 @@ void DMButtonFrame::actionDigitalModeKeyPress(int key, int carr)
             bool sandp = tslf->GJVQSOLogFrame->getSandP();
             //int spoffset = sandp ? 12 : 0;
 
-            QString rigKey = "noRadio";
+            QString rigKey = KEYER_NO_RADIO;
 
             auto &contestMap = allKeyConfigs[txKeyerType];
             if (contestMap.contains(currentName) && contestMap[currentName].contains(rigKey))
@@ -1986,10 +1986,10 @@ void DMButtonFrame::showFButtons(bool s)
 
     MinosRPC *rpc = MinosRPC::getMinosRPC();
 
-    QString rigKey = "noRadio";
+    QString rigKey = KEYER_NO_RADIO;
     if (txKeyerType == keyerTypes[TxKeyerId::RigControl])
     {
-        selectedRadio.getLocalName() == "/" ? "noRadio" : selectedRadio.getLocalName();
+        selectedRadio.getLocalName() == "/" ? KEYER_NO_RADIO : selectedRadio.getLocalName();
     }
 
     auto &contestMap = allKeyConfigs[txKeyerType];
@@ -2619,7 +2619,7 @@ void DMButtonFrame::on_editButton_clicked()
 
     KeyerMap nfk = allKeyConfigs;
 
-    QString radioName = "noRadio";
+    QString radioName = KEYER_NO_RADIO;
     if (txKeyerType == keyerTypes[TxKeyerId::RigControl])
     {
         if (selectedRadio.getLocalName() == "/")
