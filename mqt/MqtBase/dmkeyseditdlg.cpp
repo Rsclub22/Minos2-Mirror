@@ -288,6 +288,26 @@ void DMKeysEditDlg::showDetails()
     ui->OptionsTable->setColumnWidth(EDIT_DLG_COL4, 60);
     ui->OptionsTable->setColumnWidth(EDIT_DLG_COL5, 30);
 
+    if (txKeyerType == keyerTypes[TxKeyerId::DigitalModes])
+    {
+        ui->OptionsTable->setColumnHidden(EDIT_DLG_COL2, true);
+        ui->OptionsTable->setColumnHidden(EDIT_DLG_COL3, true);
+        ui->OptionsTable->setColumnHidden(EDIT_DLG_COL4, true);
+        ui->OptionsTable->setColumnHidden(EDIT_DLG_COL5, true);
+    }
+
+    if (txKeyerType == keyerTypes[TxKeyerId::RigControl])
+    {
+        ui->OptionsTable->setColumnHidden(EDIT_DLG_COL1, true);
+        ui->OptionsTable->setColumnHidden(EDIT_DLG_COL5, true);
+    }
+
+    if (txKeyerType == keyerTypes[TxKeyerId::CW_RigControl] || txKeyerType == keyerTypes[TxKeyerId::PcCwKeyer])
+    {
+        ui->OptionsTable->setColumnHidden(EDIT_DLG_COL2, true);
+        ui->OptionsTable->setColumnHidden(EDIT_DLG_COL5, true);
+    }
+
     // ---------- Restore splitter position ----------
     RegSettings settings;
     ui->settingsSplitter->restoreState(
