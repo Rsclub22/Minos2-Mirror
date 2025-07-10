@@ -889,11 +889,11 @@ void DMButtonFrame::startKeyerMsg(int key)
 
             if (kv)
             {
-                vmData.setKeyerCwMessage(kv->kval);
+                vmData.setKeyerCwMessage(kv->kval());
                 vmData.setKeyerButtonNum(messageNumber);
-                vmData.setRigVoiceMemNum(kv->rigVoiceMemNum);
-                vmData.setKeyerRepeatPauseDur(kv->rptDur);
-                vmData.setKeyerRepeatFlag(kv->rptEnable);
+                vmData.setRigVoiceMemNum(kv->rigVoiceMemNum());
+                vmData.setKeyerRepeatPauseDur(kv->rptDur());
+                vmData.setKeyerRepeatFlag(kv->rptEnable());
                 vmData.setSelRadioName(selectedRadio.getLocalName());
                 vmData.setRigModel(rigKey);
                 vmData.setSAndPState(sAndPState);
@@ -1956,7 +1956,7 @@ void DMButtonFrame::actionDigitalModeKeyPress(int key, int carr)
                         mess = section.sp[index];
                 }
 
-                QString toSend = parseFKeyMessage(mess.kval);
+                QString toSend = parseFKeyMessage(mess.kval());
                 // send transmission to sender app
 
                 RPCGeneralClient rpc(rpcConstants::DMTransmit);
@@ -2003,7 +2003,7 @@ void DMButtonFrame::showFButtons(bool s)
         {
             for (int i = 0; i < 12; i++)
             {
-                QString keytop = QString("F%1: %2").arg(i + 1).arg(keysToShow[i].ktop);
+                QString keytop = QString("F%1: %2").arg(i + 1).arg(keysToShow[i].ktop());
                 fButtons[i]->setText(keytop);
             }
             ui->FButtonFrame->setEnabled(true);
@@ -2275,12 +2275,12 @@ bool DMButtonFrame::parseFKeyArray(const QJsonArray &array, KeySet &dest)
         QJsonObject obj = val.toObject();
 
         KeyVal p;
-        p.fk = obj.value("key").toString();
-        p.ktop = obj.value("label").toString();
-        p.kval = obj.value("message").toString();
-        p.rigVoiceMemNum = obj.value("rigVoiceMemNum").toInt();
-        p.rptEnable = obj.value("repeatEnable").toBool();
-        p.rptDur = obj.value("repeatDuration").toInt();
+        p.setFk(obj.value("key").toString());
+        p.setKtop(obj.value("label").toString());
+        p.setKval(obj.value("message").toString());
+        p.setRigVoiceMemNum(obj.value("rigVoiceMemNum").toInt());
+        p.setRptEnable(obj.value("repeatEnable").toBool());
+        p.setRptDur(obj.value("repeatDuration").toInt());
 
         dest.append(p);
     }
@@ -2437,12 +2437,12 @@ void DMButtonFrame::rewriteFKeyFile()
                 for (const KeyVal &k : section.run)
                 {
                     QJsonObject obj;
-                    obj["key"] = k.fk;
-                    obj["label"] = k.ktop;
-                    obj["message"] = k.kval;
-                    obj["rigVoiceMemNum"] = k.rigVoiceMemNum;
-                    obj["repeatEnable"] = k.rptEnable;
-                    obj["repeatDuration"] = k.rptDur;
+                    obj["key"] = k.fk();
+                    obj["label"] = k.ktop();
+                    obj["message"] = k.kval();
+                    obj["rigVoiceMemNum"] = k.rigVoiceMemNum();
+                    obj["repeatEnable"] = k.rptEnable();
+                    obj["repeatDuration"] = k.rptDur();
                     runArray.append(obj);
                 }
 
@@ -2450,12 +2450,12 @@ void DMButtonFrame::rewriteFKeyFile()
                 for (const KeyVal &k : section.sp)
                 {
                     QJsonObject obj;
-                    obj["key"] = k.fk;
-                    obj["label"] = k.ktop;
-                    obj["message"] = k.kval;
-                    obj["rigVoiceMemNum"] = k.rigVoiceMemNum;
-                    obj["repeatEnable"] = k.rptEnable;
-                    obj["repeatDuration"] = k.rptDur;
+                    obj["key"] = k.fk();
+                    obj["label"] = k.ktop();
+                    obj["message"] = k.kval();
+                    obj["rigVoiceMemNum"] = k.rigVoiceMemNum();
+                    obj["repeatEnable"] = k.rptEnable();
+                    obj["repeatDuration"] = k.rptDur();
                     spArray.append(obj);
                 }
 

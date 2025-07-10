@@ -19,7 +19,6 @@
 
 using namespace TxKeyerCommon;
 
-
 DMKeysEditDlg::DMKeysEditDlg(QWidget *parent, QString fKeyFileName, QString name, KeyerMap &allKeyConfigs, QString txKeyerType, QString rigName) :
     QDialog(parent),
     ui(new Ui::DMKeysEditDlg),
@@ -169,10 +168,17 @@ void DMKeysEditDlg::showSection()
         ui->OptionsTable->setVisible(false);
     }
 
-    ui->NewSectionButton->setEnabled(true);
-    ui->DeleteButton->setEnabled(offset > 0);
-    ui->CopyButton->setEnabled(offset > 0);
-    ui->renameButton->setEnabled(offset > 0);
+    //ui->NewSectionButton->setEnabled(true);
+    //ui->DeleteButton->setEnabled(offset > 0);
+    //ui->CopyButton->setEnabled(offset > 0);
+    //ui->renameButton->setEnabled(offset > 0);
+
+    bool isProtected = (name == "<None>" || name == "Default");
+
+    ui->DeleteButton->setEnabled(!isProtected);
+    ui->CopyButton->setEnabled(!isProtected);
+    ui->renameButton->setEnabled(!isProtected);
+
 }
 
 
@@ -191,15 +197,7 @@ void DMKeysEditDlg::showDetails()
 
     const auto &rigMap = contestIt.value();
 
-    QString rigKey = KEYER_NO_RADIO;
-    if (txKeyerType == keyerTypes[TxKeyerId::RigControl])
-    {
-        if (rigName != "/") // no radio avail
-        {
-            rigKey = rigName;
-        }
-    }
-
+    QString rigKey = getRigKey();
 
     const ContestSection &sect = rigMap[rigKey];
     const KeySet &run = sect.run;
@@ -223,12 +221,12 @@ void DMKeysEditDlg::showDetails()
                         .arg(row < 12 ? tr("Run") : tr("S&P"))
                         .arg(row < 12 ? row + 1 : row - 11);
 
-        ui->OptionsTable->setItem(row, EDIT_DLG_COL0, new QTableWidgetItem(k.ktop));
-        ui->OptionsTable->setItem(row, EDIT_DLG_COL1, new QTableWidgetItem(k.kval));
-        ui->OptionsTable->setItem(row, EDIT_DLG_COL2, new QTableWidgetItem(QString::number(k.rigVoiceMemNum)));
+        ui->OptionsTable->setItem(row, EDIT_DLG_COL0, new QTableWidgetItem(k.ktop()));
+        ui->OptionsTable->setItem(row, EDIT_DLG_COL1, new QTableWidgetItem(k.kval()));
+        ui->OptionsTable->setItem(row, EDIT_DLG_COL2, new QTableWidgetItem(QString::number(k.rigVoiceMemNum())));
 
         auto *cb = new QCheckBox;
-        cb->setChecked(k.rptEnable);
+        cb->setChecked(k.rptEnable());
         auto *wrapCB = new QWidget;
         auto *layCB  = new QHBoxLayout(wrapCB);
         layCB->addWidget(cb);
@@ -236,7 +234,7 @@ void DMKeysEditDlg::showDetails()
         layCB->setContentsMargins(0,0,0,0);
         ui->OptionsTable->setCellWidget(row, EDIT_DLG_COL3, wrapCB);
 
-        ui->OptionsTable->setItem(row, EDIT_DLG_COL4, new QTableWidgetItem(QString::number(k.rptDur)));
+        ui->OptionsTable->setItem(row, EDIT_DLG_COL4, new QTableWidgetItem(QString::number(k.rptDur())));
 
         auto *recBtn = new QToolButton;
         recBtn->setText("🎙");
@@ -306,14 +304,7 @@ void DMKeysEditDlg::getDetails()
     auto &contestMap = allKeyConfigs[txKeyerType][name];
     qDebug() << "getDetails name = " << name;
     // Locate rig key (use rigName, fallback if needed)
-    QString rigKey = KEYER_NO_RADIO;
-    if (txKeyerType == keyerTypes[TxKeyerId::RigControl])
-    {
-        if (rigName != "/")
-        {
-            rigKey = rigName;
-        }
-    }
+    QString rigKey = getRigKey();
 
 
     ContestSection &section = contestMap[rigKey];
@@ -336,11 +327,11 @@ void DMKeysEditDlg::getDetails()
 
         // Column 0: Key Top
         if (QTableWidgetItem *qtwi = ui->OptionsTable->item(r, EDIT_DLG_COL0))
-            entry->ktop = qtwi->text();
+            entry->setKtop(qtwi->text());
 
         // Column 1: Value
         if (QTableWidgetItem *qtwi = ui->OptionsTable->item(r, EDIT_DLG_COL1))
-            entry->kval = qtwi->text();
+            entry->setKval(qtwi->text());
 
         // Column 2: Rig Voice Mem Num
         if (QTableWidgetItem *qtwi = ui->OptionsTable->item(r, EDIT_DLG_COL2))
@@ -348,14 +339,14 @@ void DMKeysEditDlg::getDetails()
             bool ok;
             int mem = qtwi->text().toInt(&ok);
             if (ok)
-                entry->rigVoiceMemNum = mem;
+                entry->setRigVoiceMemNum(mem);
         }
 
         // Column 3: Repeat Enable (checkbox)
         if (QWidget *wrap = ui->OptionsTable->cellWidget(r, EDIT_DLG_COL3))
         {
             if (QCheckBox *cb = wrap->findChild<QCheckBox*>())
-                entry->rptEnable = cb->isChecked();
+                entry->setRptEnable(cb->isChecked());
         }
 
         // Column 4: Repeat Duration
@@ -364,17 +355,60 @@ void DMKeysEditDlg::getDetails()
             bool ok;
             int dur = qtwi->text().toInt(&ok);
             if (ok)
-                entry->rptDur = dur;
+                entry->setRptDur(dur);
         }
     }
 }
+
+
+void DMKeysEditDlg::saveCurrentSection()
+{
+    if (!isCurrentSectionDirty())
+        return;
+
+    getDetails();  // Store current UI into model
+    clearDirtyFlag();  // Reset dirty status after save
+}
+
+bool DMKeysEditDlg::isCurrentSectionDirty() const
+{
+    const auto keyerIt = allKeyConfigs.constFind(txKeyerType);
+    if (keyerIt == allKeyConfigs.cend()) return false;
+
+    const auto contestIt = keyerIt->constFind(name);
+    if (contestIt == keyerIt->cend()) return false;
+
+    QString rigKey = getRigKey();
+
+    const auto &section = contestIt->value(rigKey);
+
+    for (const auto &k : section.run)
+        if (k.isDirty()) return true;
+    for (const auto &k : section.sp)
+        if (k.isDirty()) return true;
+
+    return false;
+}
+
+void DMKeysEditDlg::clearDirtyFlag()
+{
+    auto &section = allKeyConfigs[txKeyerType][name][rigName.isEmpty() ? KEYER_NO_RADIO : rigName];
+    for (auto &k : section.run)
+        k.clearDirty();
+    for (auto &k : section.sp)
+        k.clearDirty();
+}
+
+
+
 
 
 //---------------------------------------------------------------------------
 
 void DMKeysEditDlg::on_NewSectionButton_clicked()
 {
-    getDetails();  // Save current table to model
+    //getDetails();  // Save current table to model
+    saveCurrentSection();
 
     QString newName = "new digi key section";
 
@@ -391,12 +425,12 @@ void DMKeysEditDlg::on_NewSectionButton_clicked()
             {
                 QString fk = QString("F%1").arg(i);
                 KeyVal kv;
-                kv.fk = fk;
-                kv.ktop = "";
-                kv.kval = "";
-                kv.rigVoiceMemNum = 0;
-                kv.rptEnable = false;
-                kv.rptDur = 0;
+                kv.setFk(fk);
+                kv.setKtop("");
+                kv.setKval("");
+                kv.setRigVoiceMemNum(0);
+                kv.setRptEnable(false);
+                kv.setRptDur(0);
 
                 section.run.append(kv);
             }
@@ -404,28 +438,29 @@ void DMKeysEditDlg::on_NewSectionButton_clicked()
             {
                 QString fk = QString("F%1").arg(i);
                 KeyVal kv;
-                kv.fk = fk;
-                kv.ktop = "";
-                kv.kval = "";
-                kv.rigVoiceMemNum = 0;
-                kv.rptEnable = false;
-                kv.rptDur = 0;
+                kv.setFk(fk);
+                kv.setKtop("");
+                kv.setKval("");
+                kv.setRigVoiceMemNum(0);
+                kv.setRptEnable(false);
+                kv.setRptDur(0);
 
                 section.sp.append(kv);
             }
 
             // Store under the current rigName (or "noRadio" fallback)
-            QString rigKey = KEYER_NO_RADIO;
-            if (txKeyerType == txKeyerType[TxKeyerId::RigControl] && rigName != "/")
-            {
-                rigKey = rigName;
-            }
+            QString rigKey = getRigKey();
+
             contestMap[newName][rigKey] = section;
 
+
             // Update current selection and UI
+            ignoreSectionChange = true;
             name = newName;
             showSections();
             showDetails();
+            ignoreSectionChange = false;
+
         }
         else
         {
@@ -434,14 +469,27 @@ void DMKeysEditDlg::on_NewSectionButton_clicked()
     }
 }
 
+QString DMKeysEditDlg::getRigKey() const
+{
+    if (txKeyerType == keyerTypes[TxKeyerId::RigControl] && rigName != "/")
+    {
+        return rigName;
+    }
+
+    return KEYER_NO_RADIO;
+}
+
 
 void DMKeysEditDlg::on_CopyButton_clicked()
 {
-    getDetails();  // Save current edits
+    //getDetails();  // Save current edits
+    saveCurrentSection();
 
-    int offset = ui->SectionsList->currentRow();
-    if (offset <= 0)
-        return;
+    //int offset = ui->SectionsList->currentRow();
+    //if (offset <= 0)
+    //    return;
+
+
 
     QString newName = "new digi key section";
     if (!enquireDialog(this, tr("Please give a name for the new %1").arg(name), newName))
@@ -455,7 +503,7 @@ void DMKeysEditDlg::on_CopyButton_clicked()
         return;
     }
 
-    QString rigKey = rigName != "/" ? KEYER_NO_RADIO : rigName;
+    QString rigKey = getRigKey();
 
     // Check source exists
     if (!contestMap.contains(name) || !contestMap[name].contains(rigKey))
@@ -469,23 +517,31 @@ void DMKeysEditDlg::on_CopyButton_clicked()
 
     // Update UI
     name = newName;
+    ignoreSectionChange = true;
     showSections();
     showDetails();
+    ignoreSectionChange = false;
 }
 
 
 void DMKeysEditDlg::on_DeleteButton_clicked()
 {
-    int offset = ui->SectionsList->currentRow();
-    if (offset <= 0) {
-        mShowMessage(tr("You cannot delete the empty %1!").arg(name), this);
+    //int offset = ui->SectionsList->currentRow();
+    //if (offset <= 0) {
+    //    mShowMessage(tr("You cannot delete the empty %1!").arg(name), this);
+    //    return;
+    //}
+
+    if (name == "<None>"  || name == "Default")
+    {
+        mShowMessage(tr("You cannot rename the empty %1!").arg(name), this);
         return;
     }
 
     if (!mShowYesNoMessage(this, tr("Are you sure you want to delete the current %1?").arg(name)))
         return;
 
-    QString rigKey = rigName != "/" ? KEYER_NO_RADIO : rigName;
+    QString rigKey = getRigKey();
 
     auto keyerIt = allKeyConfigs.find(txKeyerType);
     if (keyerIt == allKeyConfigs.end())
@@ -509,18 +565,27 @@ void DMKeysEditDlg::on_DeleteButton_clicked()
     else
         name = QStringLiteral("<None>");
 
+    ignoreSectionChange = true;
     showSections();
     showDetails();
+    ignoreSectionChange = false;
 }
 
 
 
 void DMKeysEditDlg::on_renameButton_clicked()
 {
-    getDetails();  // Save current edits
+    //getDetails();  // Save current edits
+    saveCurrentSection();
 
-    int offset = ui->SectionsList->currentRow();
-    if (offset == 0)
+    //int offset = ui->SectionsList->currentRow();
+    //if (offset == 0)
+    //{
+    //    mShowMessage(tr("You cannot rename the empty %1!").arg(name), this);
+    //    return;
+    //}
+
+    if (name == "<None>"  || name == "Default")
     {
         mShowMessage(tr("You cannot rename the empty %1!").arg(name), this);
         return;
@@ -538,8 +603,11 @@ void DMKeysEditDlg::on_renameButton_clicked()
             contestMap.remove(name);
 
             name = newName;
+
+            ignoreSectionChange = true;
             showSections();
             showDetails();
+            ignoreSectionChange = false;
         }
         else
         {
@@ -549,6 +617,8 @@ void DMKeysEditDlg::on_renameButton_clicked()
 }
 
 
+
+
 void DMKeysEditDlg::on_CancelButton_clicked()
 {
     reject();
@@ -556,13 +626,19 @@ void DMKeysEditDlg::on_CancelButton_clicked()
 
 void DMKeysEditDlg::on_OKButton_clicked()
 {
-    getDetails();
+    //getDetails();
+    saveCurrentSection();
     accept();
 }
 
 void DMKeysEditDlg::on_SectionsList_itemSelectionChanged()
 {
-    getDetails();  // Save current edits
+    if (ignoreSectionChange)
+        return;
+
+
+    //getDetails();  // Save current edits
+    saveCurrentSection();
 
     const auto keyerIt = allKeyConfigs.constFind(txKeyerType);
     if (keyerIt == allKeyConfigs.cend() || ui->SectionsList->currentRow() < 0)
@@ -645,31 +721,29 @@ void DMKeysEditDlg::on_upButton_clicked()
         return;
 
     // Helper to swap two KeyVal references
-    auto swapKeyVals = [](KeyVal &a, KeyVal &b) {
-        std::swap(a.fk, b.fk);
-        std::swap(a.ktop, b.ktop);
-        std::swap(a.kval, b.kval);
-        std::swap(a.rigVoiceMemNum, b.rigVoiceMemNum);
-        std::swap(a.rptEnable, b.rptEnable);
-        std::swap(a.rptDur, b.rptDur);
-    };
+    //auto swapKeyVals = [](KeyVal &a, KeyVal &b) {
+    //    a.swapWith(b);
+    //};
 
     if (selRow < runCount && selRow - 1 < runCount)
     {
         // Both in run section
-        swapKeyVals(section.run[selRow], section.run[selRow - 1]);
+        //swapKeyVals(section.run[selRow], section.run[selRow - 1]);
+        section.run[selRow].swapWith(section.run[selRow - 1]);
     }
     else if (selRow >= runCount && selRow - 1 >= runCount)
     {
         // Both in sp section
         int spRow = selRow - runCount;
         int spRowPrev = selRow - 1 - runCount;
-        swapKeyVals(section.sp[spRow], section.sp[spRowPrev]);
+        //swapKeyVals(section.sp[spRow], section.sp[spRowPrev]);
+        section.sp[spRow].swapWith(section.sp[spRowPrev]);
     }
     else if (selRow == runCount)
     {
         // Moving first sp row up to last run row — swap across boundary
-        swapKeyVals(section.sp[0], section.run[runCount - 1]);
+        //swapKeyVals(section.sp[0], section.run[runCount - 1]);
+        section.sp[0].swapWith(section.run[runCount - 1]);
     }
     else
     {
@@ -709,31 +783,34 @@ void DMKeysEditDlg::on_downButton_clicked()
     if (selRow >= totalCount - 1)
         return;
 
-    auto swapKeyVals = [](KeyVal &a, KeyVal &b) {
-        std::swap(a.fk, b.fk);
-        std::swap(a.ktop, b.ktop);
-        std::swap(a.kval, b.kval);
-        std::swap(a.rigVoiceMemNum, b.rigVoiceMemNum);
-        std::swap(a.rptEnable, b.rptEnable);
-        std::swap(a.rptDur, b.rptDur);
-    };
+    //auto swapKeyVals = [](KeyVal &a, KeyVal &b) {
+    //    std::swap(a.fk(), b.fk());
+    //    std::swap(a.ktop(), b.ktop());
+    //    std::swap(a.kval(), b.kval());
+    //    std::swap(a.rigVoiceMemNum(), b.rigVoiceMemNum());
+    //    std::swap(a.rptEnable(), b.rptEnable());
+    //    std::swap(a.rptDur(), b.rptDur());
+    //};
 
     if (selRow < runCount - 1)
     {
         // Both in run section
-        swapKeyVals(section.run[selRow], section.run[selRow + 1]);
+        //swapKeyVals(section.run[selRow], section.run[selRow + 1]);
+        section.run[selRow].swapWith(section.run[selRow + 1]);
     }
     else if (selRow >= runCount && selRow + 1 >= runCount)
     {
         // Both in sp section
         int spRow = selRow - runCount;
         int spRowNext = selRow + 1 - runCount;
-        swapKeyVals(section.sp[spRow], section.sp[spRowNext]);
+        //swapKeyVals(section.sp[spRow], section.sp[spRowNext]);
+        section.sp[spRow].swapWith(section.sp[spRowNext]);
     }
     else if (selRow == runCount - 1)
     {
         // Moving last run row down to first sp row - swap across boundary
-        swapKeyVals(section.run[selRow], section.sp[0]);
+        //swapKeyVals(section.run[selRow], section.sp[0]);
+        section.run[selRow].swapWith(section.sp[0]);
     }
     else
     {

@@ -63,5 +63,12 @@ public Q_SLOTS:
     virtual void accept() override;
     virtual void reject() override;
 
+private:
+    void saveCurrentSection();
+    bool isCurrentSectionDirty() const;
+    void clearDirtyFlag();
+    QString getRigKey() const;
+
+    bool ignoreSectionChange = false;
 };
 #endif // DMKEYSEDITDLG_H
