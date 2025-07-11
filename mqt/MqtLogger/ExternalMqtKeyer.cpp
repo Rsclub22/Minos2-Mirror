@@ -8,12 +8,12 @@
 
 #include "ExternalMqtKeyer.h"
 
-using namespace voiceKeyerCommon;
+using namespace TxKeyerCommon;
 
 /*static*/ QString ExternalMqtKeyer::keyerName = "ExternalMqtKeyer";
 
 
-ExternalMqtKeyer::ExternalMqtKeyer(QObject *parent) : VoiceKeyerBase(parent)
+ExternalMqtKeyer::ExternalMqtKeyer(QObject *parent) : TxKeyerBase(parent)
 {
 }
 
@@ -21,14 +21,14 @@ ExternalMqtKeyer::~ExternalMqtKeyer()
 {
 }
 
-void ExternalMqtKeyer::registerVoiceKeyer(VoiceKeyerFactory::VmKeyers* vmKeyersList)
+void ExternalMqtKeyer::registerTxKeyer(TxKeyerFactory::TxKeyers* vmKeyersList)
 {
    // QString keyerName = "ExternalMqtKeyer";
 
-    VoiceKeyerCapabilities voiceMemCap;
+    TxKeyerCapabilities voiceMemCap;
 
-    voiceMemCap.setVmIdNum(VoiceKeyerId::ExternalVoiceKeyer);
-    voiceMemCap.setKeyerType(keyerTypes[VoiceKeyerId::ExternalVoiceKeyer]);
+    voiceMemCap.setVmIdNum(TxKeyerId::ExternalVoiceKeyer);
+    voiceMemCap.setKeyerType(keyerTypes[TxKeyerId::ExternalVoiceKeyer]);
     voiceMemCap.setKeyerName(keyerName);
     voiceMemCap.setNumVoiceKeys(KEYERKEYS);
     voiceMemCap.setsupportSerial(false);
@@ -46,7 +46,7 @@ void ExternalMqtKeyer::registerVoiceKeyer(VoiceKeyerFactory::VmKeyers* vmKeyersL
 
 }
 
-void ExternalMqtKeyer::voiceKeyerInit(int &numButtons)
+void ExternalMqtKeyer::txKeyerInit(int &numButtons)
 {
 
 
@@ -58,47 +58,48 @@ void ExternalMqtKeyer::voiceKeyerInit(int &numButtons)
     LogContainer->sendDM->publishKeyerConfig(rpcConstants::keyerConfig);
 
 }
-void ExternalMqtKeyer::sendMsgNum(int msgNum)
+void ExternalMqtKeyer::sendMsgNum(TxKeyerParams &vkParam)
 {
     trace("ExternalMqtKeyer::sendMsgNum");
-    emit LogContainer->sendKeyerPlay( msgNum );
+    //*******************************************************emit LogContainer->sendKeyerPlay( msgNum );
 }
-void ExternalMqtKeyer::stopMsg(VoiceKeyerParams */*vkParam*/)
+void ExternalMqtKeyer::stopMsg(TxKeyerParams &vkParam)
 {
+    Q_UNUSED(vkParam)
     trace("ExternalMqtKeyer::stopMsg");
     emit LogContainer->sendKeyerStop();
 }
-void ExternalMqtKeyer::doRecording(VoiceKeyerParams *vkParam)
+void ExternalMqtKeyer::doRecording(TxKeyerParams *vkParam)
 {
-    emit LogContainer->sendKeyerRecord( vkParam->getvmButtonNum() );
+    emit LogContainer->sendKeyerRecord( vkParam->getKeyerButtonNum() );
 }
 
 
 
-bool ExternalMqtKeyer::readVmButtonParams(int buttonNum, VoiceKeyerParams &vmParams)
+bool ExternalMqtKeyer::readVmButtonParams(int buttonNum, TxKeyerParams &vmParams)
 {
     // This info should have come from the external keyer
-    vmParams.setVmRepeatFlag(remoteConfig.kjj[buttonNum].autoRepeat);
-    vmParams.setVmRepeatPauseDur(remoteConfig.kjj[buttonNum].autoRepeatDelay);
-    vmParams.setVmName(remoteConfig.kjj[buttonNum].CQName);
-    vmParams.setVmDuration(remoteConfig.kjj[buttonNum].CQLength);
-    vmParams.setvmButtonNum(buttonNum);
+    vmParams.setKeyerRepeatFlag(remoteConfig.kjj[buttonNum].autoRepeat);
+    vmParams.setKeyerRepeatPauseDur(remoteConfig.kjj[buttonNum].autoRepeatDelay);
+    vmParams.setKeyerName(remoteConfig.kjj[buttonNum].CQName);
+    vmParams.setKeyerDuration(remoteConfig.kjj[buttonNum].CQLength);
+    vmParams.setKeyerButtonNum(buttonNum);
 
     return true;
 }
-void ExternalMqtKeyer::saveVmButtonParams(const VoiceKeyerParams &vmParams_ )
+void ExternalMqtKeyer::saveVmButtonParams(const TxKeyerParams &vmParams_ )
 {
     // We should send this config to the external keyer
 
     trace("ExternalMqtKeyer::saveVmButtonParams");
-    int buttonNum = vmParams_.getvmButtonNum();
+    int buttonNum = vmParams_.getKeyerButtonNum();
     KeyerKeyJson &kkj = remoteConfig.kjj[buttonNum];
 
     kkj.keyno = buttonNum;
-    kkj.CQLength = vmParams_.getVmDuration();
-    kkj.CQName = vmParams_.getVmName();
-    kkj.autoRepeat = vmParams_.getVmRepeatFlag();
-    kkj.autoRepeatDelay = vmParams_.getVmRepeatPauseDur();
+    kkj.CQLength = vmParams_.getKeyerDuration();
+    kkj.CQName = vmParams_.getKeyerName();
+    kkj.autoRepeat = vmParams_.getKeyerRepeatFlag();
+    kkj.autoRepeatDelay = vmParams_.getKeyerRepeatPauseDur();
 
     QString config = remoteConfig.makeConfig(QJsonDocument::Compact, false, false);
     LogContainer->sendDM->publishKeyerConfig(config);
@@ -112,12 +113,12 @@ void ExternalMqtKeyer::setPttOnOff(bool onOff)
 
 
 
-int ExternalMqtKeyer::setup(VoiceKeyerFactory *voiceKeyerFactory, int &maxNumButtons, int &numButtons, QString selectedRadioName)
+int ExternalMqtKeyer::setup(TxKeyerFactory *txKeyerFactory, int &maxNumButtons, int &numButtons, QString selectedRadioName)
 {
     // setup button shouldn't be visible, so shouldn't be called
 
 
-    Q_UNUSED(voiceKeyerFactory)
+    Q_UNUSED(txKeyerFactory)
     Q_UNUSED(maxNumButtons)
     Q_UNUSED(numButtons)
     Q_UNUSED(selectedRadioName)
@@ -127,10 +128,10 @@ int ExternalMqtKeyer::setup(VoiceKeyerFactory *voiceKeyerFactory, int &maxNumBut
 
     return QDialog::Rejected;
 }
-int ExternalMqtKeyer::editButton(VoiceKeyerParams* vmData, QString title)
+int ExternalMqtKeyer::editButton(TxKeyerParams* vmData, QString title)
 {
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
-    TxVmExternalButtonDialog vmButtonDialog(tslf->txVmButtonsFrame);
+    TxVmExternalButtonDialog vmButtonDialog(tslf->dmButtonFrame);
 
     vmButtonDialog.setWindowTitle(title);
     vmButtonDialog.setVmData(vmData);

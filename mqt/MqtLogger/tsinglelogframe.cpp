@@ -181,8 +181,8 @@ void TSingleLogFrame::buildFrame(int slotNo)
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::QRZInfoToLog, this, &TSingleLogFrame::onQrzInfoToLog );
 
     // from tx Voice Memory Panel
-    connect(txVmButtonsFrame, &TxVmButtonsFrame::sendRadioMode, this, &TSingleLogFrame::sendRadioMode);
-    connect(txVmButtonsFrame, &TxVmButtonsFrame::sendWpmToPcCwkeyer, this, &TSingleLogFrame::sendPcKeyerCwWpm);
+    connect(dmButtonFrame, &DMButtonFrame::sendRadioMode, this, &TSingleLogFrame::sendRadioMode);
+    connect(dmButtonFrame, &DMButtonFrame::sendWpmToPcCwkeyer, this, &TSingleLogFrame::sendPcKeyerCwWpm);
 
     connect(FKHRigControlFrame, &RigControlFrame::radioIsConnected, this, &TSingleLogFrame::sendBandmapRadioIsConnected);
     connect(FKHRigControlFrame, &RigControlFrame::radioHasError, this, &TSingleLogFrame::sendBandmapRadioHasError);
@@ -229,10 +229,6 @@ void TSingleLogFrame::createScreenComponents()
     GJVQSOLogFrame->setVisible(false);
     GJVQSOLogFrame->setAsEdit(false, "Logger");
     GJVQSOLogFrame->initialise( );
-
-    txVmButtonsFrame = new TxVmButtonsFrame(this);
-    txVmButtonsFrame->setObjectName(QStringLiteral("txVmButtonsFrame"));
-    txVmButtonsFrame->setVisible(false);
 
     FKHRigControlFrame = new RigControlFrame(this);
     FKHRigControlFrame->setObjectName(QStringLiteral("FKHRigControlFrame"));
@@ -418,7 +414,6 @@ void TSingleLogFrame::clearScreenLayout(bool clearAllTabs)
     FKHRigControlFrame->setContest(nullptr);
     runButtonsFrame->setContest(nullptr);
     bandSwitchFrame->setContest(nullptr);
-    txVmButtonsFrame->setContest(nullptr);
     FKHRotControlFrame->setContest(nullptr);
     FKHRotCompassFrame->setContest(nullptr);
     skyScanControlFrame->setContest(nullptr);
@@ -470,9 +465,6 @@ void TSingleLogFrame::clearScreenLayout(bool clearAllTabs)
         bandSwitchFrame->setParent(this);
         bandSwitchFrame->hide();
 
-        txVmButtonsFrame->setParent(this);
-        txVmButtonsFrame->hide();
-
         FKHRotControlFrame->setParent(this);
         FKHRotControlFrame->hide();
 
@@ -508,9 +500,6 @@ void TSingleLogFrame::clearScreenLayout(bool clearAllTabs)
 
         wsjtxFrame->setParent(this);
         wsjtxFrame->hide();
-
-        txVmButtonsFrame->setParent(this);
-        txVmButtonsFrame->hide();
 
         qrzDisplayFrame->setParent(this);
         qrzDisplayFrame->hide();
@@ -684,12 +673,6 @@ void TSingleLogFrame::buildRow(ContestPage *cp, SCRow &scrow, int &auxInstance, 
                 {
                     elementScrollArea->setWidget(bandSwitchFrame);
                     bandSwitchFrame->setContest(ct);
-                    break;
-                }
-                case sctTxVmButtons:
-                {
-                    elementScrollArea->setWidget(txVmButtonsFrame);
-                    // don't set contest here
                     break;
                 }
                 case sctRotControl:
@@ -963,7 +946,6 @@ void TSingleLogFrame::buildScreenLayout(int slotNo)
     FKHRotCompassFrame->setContest(ct);
     skyScanControlFrame->setContest(ct);
     dmButtonFrame->setContest(ct);
-    txVmButtonsFrame->setContest(ct);
     bandmapControlFrame->setContest(ct);
     runButtonsFrame->setContest(ct);
 
@@ -1855,7 +1837,7 @@ void TSingleLogFrame::on_SetMode(QString m)
         sCurMode = m;
         FKHRigControlFrame->setMode(m);
         GJVQSOLogFrame->modeSentFromRig(m);
-        txVmButtonsFrame->setMode(m);
+        dmButtonFrame->setMode(m);
         bandmapControlFrame->setMode(m);
         bandmapControlFrame->checkLegalFrequencies(sCurFreq);
     }
@@ -1960,9 +1942,9 @@ void TSingleLogFrame::onLogRadioSettingsChanged(QSharedPointer<RadioSettingsDial
         FKHRigControlFrame->logRadioSettingsChanged(logRadioSettingsFlags);
     }
 
-    if (txVmButtonsFrame)
+    if (dmButtonFrame)
     {
-        txVmButtonsFrame->logRadioSettingsChanged(logRadioSettingsFlags);
+        dmButtonFrame->logRadioSettingsChanged(logRadioSettingsFlags);
     }
 
     if (runButtonsFrame)
@@ -2019,19 +2001,19 @@ void TSingleLogFrame::on_SetBandList(QString s,PubSubName psn)
 
 void TSingleLogFrame::onSetPttEnabled(bool state, PubSubName psn)
 {
-    txVmButtonsFrame->setPttEnabled(state, psn);
+    dmButtonFrame->setPttEnabled(state, psn);
 }
 
 void TSingleLogFrame::onSetPttType(int type, PubSubName psn)
 {
-    txVmButtonsFrame->setPttType(type, psn);
+    dmButtonFrame->setPttType(type, psn);
 }
 
 void TSingleLogFrame::on_SetPttState(bool state)
 {
     if ( this == LogContainer->getCurrentLogFrame() )
     {
-        txVmButtonsFrame->setRadioPttState(state);
+        dmButtonFrame->setRadioPttState(state);
     }
 }
 void TSingleLogFrame::setCallPlaceholder(QString call)
@@ -2048,14 +2030,14 @@ void TSingleLogFrame::onSetVoiceMemAvail(bool avail, PubSubName psn)
 {
     if ( this == LogContainer->getCurrentLogFrame() )
     {
-        txVmButtonsFrame->setVoiceMemAvail(avail, psn);
+        dmButtonFrame->setVoiceMemAvail(avail, psn);
     }
 }
 void TSingleLogFrame::onSetRigModel(QString rigModel, PubSubName psn)
 {
     if ( this == LogContainer->getCurrentLogFrame() )
     {
-        txVmButtonsFrame->setRigModel(rigModel, psn);
+        dmButtonFrame->setRigModel(rigModel, psn);
     }
 }
 
@@ -2063,7 +2045,7 @@ void TSingleLogFrame::onSetNumVoiceMessages(int numMsgs, PubSubName psn)
 {
     if ( this == LogContainer->getCurrentLogFrame() )
     {
-        txVmButtonsFrame->setNumVoiceMessages(numMsgs, psn);
+        dmButtonFrame->setNumVoiceMessages(numMsgs, psn);
     }
 }
 
@@ -2071,7 +2053,7 @@ void TSingleLogFrame::onSetCwMemType(int cwMemType, PubSubName psn)
 {
     if ( this == LogContainer->getCurrentLogFrame() )
     {
-        txVmButtonsFrame->setCwMemType(cwMemType, psn);
+        dmButtonFrame->setCwMemType(cwMemType, psn);
     }
 }
 
@@ -2081,7 +2063,7 @@ void TSingleLogFrame::onRigVoiceKeyerMessageSupportStop(bool supportStopCmd, Pub
     {
         if ( this == LogContainer->getCurrentLogFrame() )
         {
-            txVmButtonsFrame->setRigVoiceKeyerSupportStopFlag(supportStopCmd, psn);
+            dmButtonFrame->setRigVoiceKeyerSupportStopFlag(supportStopCmd, psn);
         }
     }
 }
@@ -2092,7 +2074,7 @@ void TSingleLogFrame::onRigCwKeyerMessageSupportStop(bool supportStopCmd, PubSub
     {
         if ( this == LogContainer->getCurrentLogFrame() )
         {
-            txVmButtonsFrame->setRigCwKeyerSupportStopFlag(supportStopCmd, psn);
+            dmButtonFrame->setRigCwKeyerSupportStopFlag(supportStopCmd, psn);
         }
     }
 }
@@ -2605,32 +2587,32 @@ void TSingleLogFrame::setQrzDisplayFrameLoaded(bool loaded)
 
 void TSingleLogFrame::onPcCwKeyerComport(QString comportStr)
 {
-    txVmButtonsFrame->setPcCwKeyerComport(comportStr);
+    dmButtonFrame->setPcCwKeyerComport(comportStr);
 }
 
 void TSingleLogFrame::onPcCwKeyerConnectionState(QString stateStr)
 {
-    txVmButtonsFrame->setPcCwKeyerConnectionState(stateStr);
+    dmButtonFrame->setPcCwKeyerConnectionState(stateStr);
 }
 
 void TSingleLogFrame::onPcCwKeyerErrorMsg(QString errorMsg)
 {
-    txVmButtonsFrame->setPcCwKeyerErrorMsg(errorMsg);
+    dmButtonFrame->setPcCwKeyerErrorMsg(errorMsg);
 }
 
 void TSingleLogFrame::onPcCwKeyerPttEnabled(QString enabled)
 {
-    txVmButtonsFrame->setPcCwKeyerPttEnabled(enabled);
+    dmButtonFrame->setPcCwKeyerPttEnabled(enabled);
 }
 
 void TSingleLogFrame::onPcCwKeyerTxOn(QString state)
 {
-    txVmButtonsFrame->setPcCwKeyerTxOnState(state);
+    dmButtonFrame->setPcCwKeyerTxOnState(state);
 }
 
 void TSingleLogFrame::onPcCwKeyerCurrentWpm(QString wpm)
 {
-    txVmButtonsFrame->setPcCwKeyerCurrentWpm(wpm);
+    dmButtonFrame->setPcCwKeyerCurrentWpm(wpm);
 }
 
 void TSingleLogFrame::traceMsg(QString msg)

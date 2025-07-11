@@ -2,8 +2,8 @@
 // $Id$
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
-//                      Voice Keyer
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2021
+//                      Tx Keyer Factory
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2025
 //
 //
 //
@@ -15,7 +15,7 @@
 #include <QStandardItemModel>
 #include <QListView>
 #include "AppStartup.h"
-#include "voicekeyerfactory.h"
+#include "txKeyerfactory.h"
 #include "rigcontrolvoicememorykeyer.h"
 #include "rigcontrolcwmessagekeyer.h"
 #include "pccwmessagekeyer.h"
@@ -24,48 +24,53 @@
 #include "tlogcontainer.h"
 #include "SendRPCDM.h"
 
-using namespace voiceKeyerCommon;
+using namespace TxKeyerCommon;
 
-VoiceKeyerFactory::VoiceKeyerFactory(QObject *parent) : QObject(parent)
+TxKeyerFactory::TxKeyerFactory(QObject *parent) : QObject(parent)
 {
-    RigControlVoiceMemoryKeyer::registerVoiceKeyer(&vmKeyersList);
-    RigControlCwMessageKeyer::registerVoiceKeyer(&vmKeyersList);
-    PcCWMessageKeyer::registerVoiceKeyer(&vmKeyersList);
-    InternalVoiceMemoryKeyer::registerVoiceKeyer(&vmKeyersList);
-    ExternalMqtKeyer::registerVoiceKeyer(&vmKeyersList);
+    RigControlVoiceMemoryKeyer::registerTxKeyer(&txKeyersList);
+    RigControlCwMessageKeyer::registerTxKeyer(&txKeyersList);
+    PcCWMessageKeyer::registerTxKeyer(&txKeyersList);
+    InternalVoiceMemoryKeyer::registerTxKeyer(&txKeyersList);
+    ExternalMqtKeyer::registerTxKeyer(&txKeyersList);
 }
 
 
-VoiceKeyerFactory::~VoiceKeyerFactory()
+TxKeyerFactory::~TxKeyerFactory()
 {
 
 }
 
-VoiceKeyerFactory::VmKeyers* VoiceKeyerFactory::supportedVoiceKeyers()
+TxKeyerFactory::TxKeyers* TxKeyerFactory::supportedTxKeyers()
 {
-    return &vmKeyersList;
+    return &txKeyersList;
 }
 
 
-VoiceKeyerBase* VoiceKeyerFactory::createVoiceKeyer(int vmKeyerId)
+TxKeyerBase* TxKeyerFactory::createTxKeyer(int txKeyerId)
 {
-    if (vmKeyerId == VoiceKeyerId::RigControl)
+    if (txKeyerId == TxKeyerId::RigControl)
     {        
         return new RigControlVoiceMemoryKeyer(this);
     }
-    else if (vmKeyerId == VoiceKeyerId::CW_RigControl)
+    else if (txKeyerId == TxKeyerId::CW_RigControl)
     {
         return new RigControlCwMessageKeyer(this);
     }
-    else if (vmKeyerId == VoiceKeyerId::PcCwKeyer)
+    else if (txKeyerId == TxKeyerId::PcCwKeyer)
     {
-        return new PcCWMessageKeyer(this);
+        if (LogContainer->sendDM->isPcCWkeyerLoaded())
+        {
+           return new PcCWMessageKeyer(this);
+        }
+
+
     }
-    else if (vmKeyerId == VoiceKeyerId::InternalVoiceKeyer)
+    else if (txKeyerId == TxKeyerId::InternalVoiceKeyer)
     {
         return new InternalVoiceMemoryKeyer(this);
     }
-    else if (vmKeyerId == VoiceKeyerId::ExternalVoiceKeyer)
+    else if (txKeyerId == TxKeyerId::ExternalVoiceKeyer)
     {
         if (LogContainer->sendDM->isKeyerLoaded())
         {
@@ -76,13 +81,13 @@ VoiceKeyerBase* VoiceKeyerFactory::createVoiceKeyer(int vmKeyerId)
     return nullptr;
 }
 
-void VoiceKeyerFactory::populateComboKeyerList(QComboBox* comBox, QString voiceKeyerName)
+void TxKeyerFactory::populateComboKeyerList(QComboBox* comBox, QString txKeyerName)
 {
     if (comBox->count())
     {
         int row = -1;
         int i = 1;
-        for (auto r = supportedVoiceKeyers()->cbegin(); r != supportedVoiceKeyers()->cend(); ++r)
+        for (auto r = supportedTxKeyers()->cbegin(); r != supportedTxKeyers()->cend(); ++r)
         {
             if (r.key() == ExternalMqtKeyer::keyerName)
             {
@@ -99,7 +104,7 @@ void VoiceKeyerFactory::populateComboKeyerList(QComboBox* comBox, QString voiceK
         comBox->addItem("");
         int row = -1;
         int i = 1;
-        for (auto r = supportedVoiceKeyers()->cbegin(); r != supportedVoiceKeyers()->cend(); ++r)
+        for (auto r = supportedTxKeyers()->cbegin(); r != supportedTxKeyers()->cend(); ++r)
         {
             if (r.key() == ExternalMqtKeyer::keyerName)
             {
@@ -110,10 +115,10 @@ void VoiceKeyerFactory::populateComboKeyerList(QComboBox* comBox, QString voiceK
             i++;
         }
         extInd = comBox->model()->index(row, 0);
-        bool enableExt = !(LogContainer->sendDM->isKeyerLoaded() || voiceKeyerName == ExternalMqtKeyer::keyerName);
+        bool enableExt = !(LogContainer->sendDM->isKeyerLoaded() || txKeyerName == ExternalMqtKeyer::keyerName);
         qobject_cast<QListView *>(comBox->view())->setRowHidden(extInd.row(), enableExt);
 
-        comBox->setCurrentText(voiceKeyerName);
+        comBox->setCurrentText(txKeyerName);
     }
 }
 

@@ -6,6 +6,8 @@
 #include <deque>
 #include <iterator>
 
+
+
 extern QMap <int, QString> MORSECODE;    // . is 0x40, - is 0x80
 class MORSEMSG
 {

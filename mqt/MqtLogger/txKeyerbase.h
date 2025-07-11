@@ -2,8 +2,8 @@
 // $Id$
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
-//                      Rig Control
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2024
+//                      Tx Keyer Base
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2025
 //
 //
 //
@@ -11,15 +11,15 @@
 /////////////////////////////////////////////////////////////////////////////
 
 
-#ifndef VOICEKEYERBASE_H
-#define VOICEKEYERBASE_H
+#ifndef TXKEYERBASE_H
+#define TXKEYERBASE_H
 
 #include <QObject>
 #include <QSharedPointer>
 #include "serialCommonData.h"
 
-class VoiceKeyerBase;
-class VoiceKeyerFactory;
+class TxKeyerBase;
+class TxKeyerFactory;
 class LoggerContestLog;
 class BaseContestLog;
 
@@ -28,18 +28,18 @@ const int REPEAT_DUR_MAX = 180; // secs
 
 enum CW_KEYER_TYPE {KEYER_NONE, RIG, PC_CwKeyer, WINKEYER};
 
-class VoiceKeyerParams
+class TxKeyerParams
 {
 
 public:
 
-    explicit VoiceKeyerParams();
+    explicit TxKeyerParams();
 
-    ~VoiceKeyerParams(){}
+    ~TxKeyerParams(){}
 
-    VoiceKeyerParams& operator = (const VoiceKeyerParams& vkp);
+    TxKeyerParams& operator = (const TxKeyerParams& vkp);
 
-    VoiceKeyerParams(const VoiceKeyerParams& vkp)
+    TxKeyerParams(const TxKeyerParams& vkp)
     {
         *this = vkp;
     }
@@ -51,25 +51,26 @@ public:
     void setSelRadioName(const QString selRadioName_){selRadioName = selRadioName_;}
 
 
-    QString getVmName() const {return vmName;}
-    void setVmName(const QString vmName_){vmName = vmName_.trimmed();}
+    QString getKeyerName() const {return keyerName;}
+    void setKeyerName(const QString keyerName_){keyerName = keyerName_.trimmed();}
 
-    QString getVmCwMessage() const {return vmCwMessage;}
-    void setVmCwMessage(const QString msg){vmCwMessage = msg;}
+    QString getKeyerCwMessage() const {return keyerCwMessage;}
+    void setKeyerCwMessage(const QString msg){keyerCwMessage = msg;}
 
+    int getRigVoiceMemNum() const {return rigVoiceMemNum;}
+    void setRigVoiceMemNum(const int rigVoiceMemNum_){rigVoiceMemNum = rigVoiceMemNum_;}
 
+    bool getKeyerRepeatFlag() const {return keyerRepeatFlag;}
+    void setKeyerRepeatFlag(const bool keyerRepeatFlag_){keyerRepeatFlag = keyerRepeatFlag_;}
 
-    bool getVmRepeatFlag() const {return vmRepeatFlag;}
-    void setVmRepeatFlag(const bool vmRepeatFlag_){vmRepeatFlag = vmRepeatFlag_;}
+    int getKeyerRepeatPauseDur() const {return keyerRepeatPauseDur;}
+    void setKeyerRepeatPauseDur(const int keyerRepeatPauseDur_){keyerRepeatPauseDur = keyerRepeatPauseDur_;}
 
-    int getVmRepeatPauseDur() const {return vmRepeatPauseDur;}
-    void setVmRepeatPauseDur(const int vmRepeatPauseDur_){vmRepeatPauseDur = vmRepeatPauseDur_;}
+    int getKeyerDuration() const {return keyerDuration;}
+    void setKeyerDuration(const int keyerDuration_);
 
-    int getVmDuration() const {return vmDuration;}
-    void setVmDuration(const int vmDuration_);
-
-    int getvmButtonNum() const {return vmButtonNum;}
-    void setvmButtonNum(const int vmButtonNum_){vmButtonNum = vmButtonNum_;}
+    int getKeyerButtonNum() const {return keyerButtonNum;}
+    void setKeyerButtonNum(const int keyerButtonNum_){keyerButtonNum = keyerButtonNum_;}
 
     void setRigModel(const QString rigModel_) {rigModel = rigModel_;}
     QString getRigModel() const {return rigModel;}
@@ -80,8 +81,8 @@ public:
     void setCwKeyerType(CW_KEYER_TYPE type){cwKeyerType = type;}
     CW_KEYER_TYPE getCwKeyerType(){return cwKeyerType;}
 
-    QSharedPointer<VoiceKeyerBase> getVkBase() const {return vkBase;}
-    void setVkBase(QSharedPointer<VoiceKeyerBase> value){vkBase = value;}
+    QSharedPointer<TxKeyerBase> getVkBase() const {return vkBase;}
+    void setVkBase(QSharedPointer<TxKeyerBase> value){vkBase = value;}
 
 
 
@@ -90,21 +91,22 @@ public:
 private:
 
     QString type;
-    QSharedPointer<VoiceKeyerBase> vkBase;
+    QSharedPointer<TxKeyerBase> vkBase;
     QString selRadioName;
     QString rigModel;
-    QString vmName;
-    QString vmCwMessage;
-    int vmDuration = 0;
-    bool vmRepeatFlag = false;
-    int vmRepeatPauseDur = -1;
-    int vmButtonNum = -1;
+    QString keyerName;
+    QString keyerCwMessage;
+    int rigVoiceMemNum = 0;
+    int keyerDuration = 0;
+    bool keyerRepeatFlag = false;
+    int keyerRepeatPauseDur = -1;
+    int keyerButtonNum = -1;
     CW_KEYER_TYPE cwKeyerType = CW_KEYER_TYPE::KEYER_NONE;
 
     bool sAndPState = true; // S&P = true, Run = false
 };
 
-class VoiceKeyerBase  : public QObject
+class TxKeyerBase  : public QObject
 {
     Q_OBJECT
 
@@ -113,36 +115,36 @@ public:
     int maxNumberButtons = 8;       // set with max buttons from radio or 8
 
 
-    explicit VoiceKeyerBase(QObject *parent = nullptr);
-    virtual ~VoiceKeyerBase();
+    explicit TxKeyerBase(QObject *parent = nullptr);
+    virtual ~TxKeyerBase();
 
     virtual  void setContest(BaseContestLog *c) = 0;
 
-    virtual void voiceKeyerInit(int &numButtons) = 0;
-    virtual void sendMsgNum(int msgNum) = 0;
-    virtual void stopMsg(VoiceKeyerParams * vkParam) = 0;
+    virtual void txKeyerInit(int &numButtons) = 0;
+    virtual void sendMsgNum(TxKeyerParams &vkParam) = 0;
+    virtual void stopMsg(TxKeyerParams &vkParam) = 0;
 
     virtual bool doRepeatFromLogger(){return true;}
 
-    virtual void sendCwMsg(VoiceKeyerParams &vmParams) = 0;
+    virtual void sendCwMsg(TxKeyerParams &vmParams) = 0;
     virtual void stopCwMsg() = 0;
     virtual void sendCwFreeTextMsg(QString message) = 0;
     virtual void setCwMemType(int cwMemType) = 0;
     virtual bool getSetCwModeAndRestoreFlag() = 0;
 
     virtual bool hasRecord() = 0;
-    virtual void doRecording(VoiceKeyerParams *){}
+    virtual void doRecording(TxKeyerParams *){}
 
-    virtual bool readVmButtonParams(int buttonNum, VoiceKeyerParams &vmParams) = 0;
-    virtual void saveVmButtonParams(const VoiceKeyerParams &vmParams ) = 0;
+    virtual bool readVmButtonParams(int buttonNum, TxKeyerParams &vmParams) = 0;
+    virtual void saveVmButtonParams(const TxKeyerParams &vmParams ) = 0;
 
     virtual void setPttOnOff(bool onOff) = 0;
     virtual int getSelectedEomType() = 0;
     virtual void setSelectedEomType(int eomType) = 0;
 
-    virtual int setup(VoiceKeyerFactory *voiceKeyerFactory, int &maxNumButtons, int &numButtons, QString selectedRadioName) = 0;
+    virtual int setup(TxKeyerFactory *txKeyerFactory, int &maxNumButtons, int &numButtons, QString selectedRadioName) = 0;
     virtual void setRadioParams(int radioMaxNumButtons, QString selectedRadioName, serialCommonData::MINOS_PTT_TYPES pttType_, bool pttEnabled_) = 0;
-    virtual int editButton(VoiceKeyerParams* vmData, QString title) = 0;
+    virtual int editButton(TxKeyerParams* vmData, QString title) = 0;
 
 
 

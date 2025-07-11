@@ -2,22 +2,22 @@
 #define TXVMRIGSETUPDIALOG_H
 
 #include <QDialog>
-#include "voicekeyerfactory.h"
-#include "voicekeyerCommonConstants.h"
+#include "txKeyerfactory.h"
+#include "txkeyerCommonConstants.h"
 
 
 namespace Ui {
 class TxVmRigSetupDialog;
 }
 
-using namespace voiceKeyerCommon;
+using namespace TxKeyerCommon;
 
 class TxVmRigSetupDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit TxVmRigSetupDialog(VoiceKeyerCapabilities voiceCap_, int maxNumButtons_, int nb, QWidget *parent = nullptr);
+    explicit TxVmRigSetupDialog(TxKeyerCapabilities voiceCap_, int maxNumButtons_, int nb, QWidget *parent = nullptr);
     ~TxVmRigSetupDialog();
 
     int getNumButtons(){return numButtons;}
@@ -50,7 +50,7 @@ private:
 
     Ui::TxVmRigSetupDialog *ui;
 
-    VoiceKeyerCapabilities voiceCap;
+    TxKeyerCapabilities voiceCap;
 
     int numButtons = MININUM_BUTTONS;
     int maxNumButtons = MAXIMUM_BUTTONS;

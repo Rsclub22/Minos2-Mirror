@@ -27,7 +27,6 @@ enum SCType
     sctWsjtx,
     sctBandmap,
 	sctSplit,
-    sctTxVmButtons,
     sctQrzDisplay,
     sctQsoMap,
     sctDMButtons,

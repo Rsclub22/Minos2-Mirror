@@ -5,9 +5,12 @@
 #include <QItemSelection>
 #include "dmFKeydef.h"
 
+
 namespace Ui {
 class DMKeysEditDlg;
 }
+
+
 
 
 class DMKeysEditDlg : public QDialog
@@ -16,16 +19,21 @@ class DMKeysEditDlg : public QDialog
 
     Ui::DMKeysEditDlg *ui;
 
-    Keys &keys;
+    //Keys &keys;
+    KeyerMap &allKeyConfigs;
 
     QString name;
+    QString rigName;
+    QString txKeyerType;
+
     void showSections();
     void showSection();
     void showDetails();
     void getDetails();
     void doCloseEvent();
+
 public:
-    explicit DMKeysEditDlg(QWidget *parent , QString fKeyFileName, QString name, Keys &keys);
+    explicit DMKeysEditDlg(QWidget *parent , QString fKeyFileName, QString name, KeyerMap &allKeyConfigs, QString txKeyerType, QString rigName);
     ~DMKeysEditDlg() override;
 
     int exec() override;
@@ -55,5 +63,12 @@ public Q_SLOTS:
     virtual void accept() override;
     virtual void reject() override;
 
+private:
+    void saveCurrentSection();
+    bool isCurrentSectionDirty() const;
+    void clearDirtyFlag();
+    QString getRigKey() const;
+
+    bool ignoreSectionChange = false;
 };
 #endif // DMKEYSEDITDLG_H

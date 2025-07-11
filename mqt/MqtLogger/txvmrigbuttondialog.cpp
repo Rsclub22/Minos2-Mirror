@@ -4,7 +4,7 @@
 #include "regsettings.h"
 #include "txvmrigbuttondialog.h"
 #include "ui_txvmrigbuttondialog.h"
-#include "voicekeyerCommonConstants.h"
+#include "txkeyerCommonConstants.h"
 
 #include <QDebug>
 
@@ -163,14 +163,14 @@ void TxVmRigButtonDialog::setVmTypeAndRadioModelLabel(QString radioModel)
 }
 
 
-void TxVmRigButtonDialog::setVmData(VoiceKeyerParams* vmData_)
+void TxVmRigButtonDialog::setVmData(TxKeyerParams* vmData_)
 {
     vmData = vmData_;
-    ui->txVmNameEdit->setText(vmData->getVmName());
-    ui->txCwMessageLineEdit->setText(vmData->getVmCwMessage());
-    ui->txVmRepeatChkBox->setChecked(vmData->getVmRepeatFlag());
-    ui->txVmRepeatPauseDur->setText(QString::number(vmData->getVmRepeatPauseDur()));
-    ui->txVmMessageDur->setText(QString::number(vmData->getVmDuration()));
+    ui->txVmNameEdit->setText(vmData->getKeyerName());
+    ui->txCwMessageLineEdit->setText(vmData->getKeyerCwMessage());
+    ui->txVmRepeatChkBox->setChecked(vmData->getKeyerRepeatFlag());
+    ui->txVmRepeatPauseDur->setText(QString::number(vmData->getKeyerRepeatPauseDur()));
+    ui->txVmMessageDur->setText(QString::number(vmData->getKeyerDuration()));
 }
 
 
@@ -194,7 +194,7 @@ void TxVmRigButtonDialog::on_txSerialMessageEditingFinshed()
 
 void TxVmRigButtonDialog::setDialogForEomType(int eomType)
 {
-    if (eomType == voiceKeyerCommon::VoiceCwKeyerEomTypes::Timer)
+    if (eomType == TxKeyerCommon::KeyerEomTypes::Timer)
     {
         ui->messageDurLbl->setVisible(true);
         ui->txVmMessageDur->setVisible(true);
@@ -275,7 +275,7 @@ void TxVmRigButtonDialog::on_okButtonClicked()
     bool allSpecialCharOK = false;
     QStringList specialCharErrorList;
 
-    int currentIndex = input.indexOf(voiceKeyerCommon::specialCwCharEscapeChar);
+    int currentIndex = input.indexOf(TxKeyerCommon::specialCwCharEscapeChar);
     while (currentIndex != -1)
     {
         specialCharPresent = true;
@@ -288,11 +288,11 @@ void TxVmRigButtonDialog::on_okButtonClicked()
         else
         {
             allSpecialCharOK = false;
-            spChar = voiceKeyerCommon::specialCwCharEscapeChar + spChar;
+            spChar = TxKeyerCommon::specialCwCharEscapeChar + spChar;
             specialCharErrorList.append(spChar);
         }
 
-        currentIndex = input.indexOf(voiceKeyerCommon::specialCwCharEscapeChar, currentIndex + 1);
+        currentIndex = input.indexOf(TxKeyerCommon::specialCwCharEscapeChar, currentIndex + 1);
 
     }
 
@@ -319,11 +319,11 @@ void TxVmRigButtonDialog::on_okButtonClicked()
 
 
     QString name = ui->txVmNameEdit->text();
-    vmData->setVmName(name);
-    vmData->setVmCwMessage(ui->txCwMessageLineEdit->text());
-    vmData->setVmRepeatPauseDur(repeatPauseDur_);
-    vmData->setVmDuration(messageDur_);
-    vmData->setVmRepeatFlag(ui->txVmRepeatChkBox->isChecked());
+    vmData->setKeyerName(name);
+    vmData->setKeyerCwMessage(ui->txCwMessageLineEdit->text());
+    vmData->setKeyerRepeatPauseDur(repeatPauseDur_);
+    vmData->setKeyerDuration(messageDur_);
+    vmData->setKeyerRepeatFlag(ui->txVmRepeatChkBox->isChecked());
     accept();
 
 }
@@ -336,7 +336,7 @@ void TxVmRigButtonDialog::on_cancelbuttonClicked()
 
 void TxVmRigButtonDialog::setCwCharInputValidator()
 {
-    cwCharValidator.setValidCwCharStr(validCwCharacterList + voiceKeyerCommon::specialCwCharEscapeChar);
+    cwCharValidator.setValidCwCharStr(validCwCharacterList + TxKeyerCommon::specialCwCharEscapeChar);
     cwCharValidator.setMaxNumCwChars(maximumNumCwChars);
     //cwCharValidator.setSupportedSpecialChars(supportedCwSpecialCharsList);
     ui->txCwMessageLineEdit->setValidator(&cwCharValidator);

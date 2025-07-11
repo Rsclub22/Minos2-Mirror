@@ -37,7 +37,7 @@
 
 #include "rigcontrolmainwindow.h"
 #include "ui_rigcontrolmainwindow.h"
-#include "voicekeyerCommonConstants.h"
+#include "txkeyerCommonConstants.h"
 
 RigControlMainWindow *mainWindow = nullptr;
 
@@ -5453,7 +5453,7 @@ void RigControlMainWindow::onSetStopVoiceMessage(QString msg)
     if (radio)
     {
 
-        if (msg == voiceKeyerCommon::STOP_VOICE_MESSAGE)
+        if (msg == TxKeyerCommon::STOP_VOICE_MESSAGE)
         {
             if (selectedRadioSupportCap.getSupportStopVoiceMemory())
             {
@@ -5478,7 +5478,7 @@ void RigControlMainWindow::onSetStopVoiceMessage(QString msg)
                 radio->sendVoiceMessage(rigStateDetails->curVfo, 0);
             }
         }
-        else if (msg == voiceKeyerCommon::STOP_CW_MESSAGE)
+        else if (msg == TxKeyerCommon::STOP_CW_MESSAGE)
         {
             if (selectedRadioSupportCap.getSupportStopVoiceMemory())
             {

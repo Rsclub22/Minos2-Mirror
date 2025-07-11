@@ -6,7 +6,7 @@
 #include "serialCommonData.h"
 
 
-TxVmRigSetupDialog::TxVmRigSetupDialog(VoiceKeyerCapabilities voiceCap_, int maxNumButtons_, int nb, QWidget *parent) :
+TxVmRigSetupDialog::TxVmRigSetupDialog(TxKeyerCapabilities voiceCap_, int maxNumButtons_, int nb, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::TxVmRigSetupDialog),
     voiceCap(voiceCap_),
@@ -88,12 +88,12 @@ void TxVmRigSetupDialog::setPttEomGroupBoxVisible(bool visible)
 
 void TxVmRigSetupDialog::setEomRadioButtons(int eomType)
 {
-    if (eomType == voiceKeyerCommon::VoiceCwKeyerEomTypes::CAT)
+    if (eomType == TxKeyerCommon::KeyerEomTypes::CAT)
     {
         ui->catEomRb->setChecked(true);
         ui->timerEomRb->setChecked(false);
     }
-    else if (eomType == voiceKeyerCommon::VoiceCwKeyerEomTypes::Timer)
+    else if (eomType == TxKeyerCommon::KeyerEomTypes::Timer)
     {
         ui->catEomRb->setChecked(false);
         ui->timerEomRb->setChecked(true);
@@ -108,14 +108,14 @@ void TxVmRigSetupDialog::setEomRadioButtons(int eomType)
 
 int TxVmRigSetupDialog::getSelectedEomType()
 {
-    int selectedType = voiceKeyerCommon::VoiceCwKeyerEomTypes::Eom_None;
+    int selectedType = TxKeyerCommon::KeyerEomTypes::Eom_None;
     if (ui->catEomRb->isChecked())
     {
-        selectedType = voiceKeyerCommon::VoiceCwKeyerEomTypes::CAT;
+        selectedType = TxKeyerCommon::KeyerEomTypes::CAT;
     }
     else if (ui->timerEomRb->isChecked())
     {
-        selectedType = voiceKeyerCommon::VoiceCwKeyerEomTypes::Timer;
+        selectedType = TxKeyerCommon::KeyerEomTypes::Timer;
     }
 
     return selectedType;

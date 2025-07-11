@@ -3,7 +3,7 @@
 
 #include <QDialog>
 #include <QValidator>
-#include "voicekeyerbase.h"
+#include "txKeyerbase.h"
 #include "cwrigkeyervalidator.h"
 
 
@@ -24,7 +24,7 @@ public:
     explicit TxVmRigButtonDialog(QWidget *parent = nullptr);
     ~TxVmRigButtonDialog();
 
-    void setVmData(VoiceKeyerParams* vmData);
+    void setVmData(TxKeyerParams* vmData);
     void setCwMessageTextBoxVisible(bool state);
     void setCwMessageLineEditVisible(bool visible);
     void setSerialMessageTextBoxVisible(bool visible);
@@ -59,7 +59,7 @@ public Q_SLOTS:
 private:
 
     Ui::TxVmRigButtonDialog *ui;
-    VoiceKeyerParams* vmData;
+    TxKeyerParams* vmData;
 
     CWRigKeyerValidator cwCharValidator;
 

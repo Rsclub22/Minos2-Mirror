@@ -2,9 +2,9 @@
 #define TXVMINTERNALBUTTONDIALOG_H
 
 #include <QDialog>
-#include "voicekeyerbase.h"
-#include "voicekeyerCommonConstants.h"
+#include "txKeyerbase.h"
 #include "vudata.h"
+
 
 namespace Ui {
 class TxVmInternalButtonDialog;
@@ -19,7 +19,7 @@ public:
     ~TxVmInternalButtonDialog();
 
     void doSetVU(vudata v);
-    void setVmData(VoiceKeyerParams* vmData);
+    void setVmData(TxKeyerParams* vmData);
 private slots:
     void on_okButtonCicked();
     void on_cancelbuttonClicked();
@@ -43,7 +43,7 @@ public Q_SLOTS:
 
 private:
     Ui::TxVmInternalButtonDialog *ui;
-    VoiceKeyerParams* vmData;
+    TxKeyerParams* vmData;
     bool inVolChange = false;
 
     void doCloseEvent();

@@ -1,5 +1,5 @@
-#ifndef VOICEKEYERCOMMONCONSTANTS_H
-#define VOICEKEYERCOMMONCONSTANTS_H
+#ifndef TXKEYERCOMMONCONSTANTS_H
+#define TXKEYERCOMMONCONSTANTS_H
 
 
 
@@ -11,7 +11,9 @@
 
 
 
-namespace voiceKeyerCommon
+
+
+namespace TxKeyerCommon
 {
     // These are Minos max and min keyer buttons
     // Rigcontrol with hamlib will provide max number of voice memories the
@@ -22,20 +24,40 @@ namespace voiceKeyerCommon
     const int PC_CW_KEYER_MAX_WPM = 40;
     const int MAXIMUM_BUTTONS = 8;
     const int MININUM_BUTTONS = 2;
+/*
+    const char * TXKEYER_BUTTON_ON_STYLE =
+        "background-color: orange;"
+        "padding: 4px;";
+
+    const char * TXKEYER_BUTTON_OFF_STYLE =
+        "background-color: Gainsboro;"
+        "padding: 4px;";
+*/
+    const int NO_TXKEYER_BUTTON_SELECTED = -1;
+
+    // used in DMButtonFrame edit table
+    const int EDIT_DLG_COL0 = 0;
+    const int EDIT_DLG_COL1 = 1;
+    const int EDIT_DLG_COL2 = 2;
+    const int EDIT_DLG_COL3 = 3;
+    const int EDIT_DLG_COL4 = 4;
+    const int EDIT_DLG_COL5 = 5;
 
 
-    enum VoiceKeyerId
+    enum TxKeyerId
     {
         None = 0,
         RigControl,
         CW_RigControl,    // Rig sends message by CW
         SerialControl,    // Sends user serial message to control external voice keyer
         PcCwKeyer,        // Serial DTR keying of radio
+        DigitalModes,
         InternalVoiceKeyer,
         ExternalVoiceKeyer
+
     };
 
-    enum VoiceCwKeyerEomTypes
+    enum KeyerEomTypes
     {
         Eom_None = 0,
         CAT,
@@ -44,7 +66,7 @@ namespace voiceKeyerCommon
         DTRKeyerTXStatus
     };
 
-    inline const QStringList keyerTypes = {"", "Voice RigControl", "CW RigControl", "SerialControl", "PcCwKeyer", "Internal", "mqtKeyer"};
+    inline const QStringList keyerTypes = {"", "Voice RigControl", "CW RigControl", "SerialControl", "PcCwKeyer", "Digital Modes", "Internal", "mqtKeyer"};
 
     inline const QString VOICEKEYER_COMMON_KEY = "commonParams";
 
@@ -62,6 +84,8 @@ namespace voiceKeyerCommon
 
     inline const QString ALL_RADIOS_GROUP_NAME = "AllRadios";
 
+    inline const QString KEYER_NO_RADIO = "noRadio";
+
     inline const int VOICEKEYER_MAX_NUMBUTTONS = 8;
 
     inline const QString specialCwCharEscapeChar = "^";
@@ -74,9 +98,9 @@ namespace voiceKeyerCommon
 
 QString VOICE_KEYER_PATH();
 QString VOICEKEYER_COMMON_PARAMS_PATH();
-bool readSaveVoiceCWMemoryButtonByRadioNameFromIni(voiceKeyerCommon::VoiceKeyerId id);
-void writeSaveVoiceCWMemoryButtonByRadioNameToIni(bool data, voiceKeyerCommon::VoiceKeyerId id);
-void getListOfRadioNamesForMemoryButtons(QStringList &radioNames, voiceKeyerCommon::VoiceKeyerId id);
+bool readSaveVoiceCWMemoryButtonByRadioNameFromIni(TxKeyerCommon::TxKeyerId id);
+void writeSaveVoiceCWMemoryButtonByRadioNameToIni(bool data, TxKeyerCommon::TxKeyerId id);
+void getListOfRadioNamesForMemoryButtons(QStringList &radioNames, TxKeyerCommon::TxKeyerId id);
 
 bool getRigCWKeyerSupportedSpecialCharacters(QMap<QString, QChar> &specialCharMap, QString radioMfg, const QString filename);
 bool getRigCWKeyerMacroCharacter(QString &macroChars, QString radioMfg, const QString filename);
@@ -90,4 +114,4 @@ QString getCwRadioManufacturer(int cwMemType);
 
 
 
-#endif // VOICEKEYERCOMMONCONSTANTS_H
+#endif // TXKEYERCOMMONCONSTANTS_H

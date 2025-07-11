@@ -1,14 +1,14 @@
 #include "tlogcontainer.h"
 #include "tsinglelogframe.h"
-#include "voicekeyerfactory.h"
-#include "voicekeyerCommonConstants.h"
+#include "txKeyerfactory.h"
+#include "txkeyerCommonConstants.h"
 #include "txvmrigsetupdialog.h"
 #include "txvmrigbuttondialog.h"
 #include "rigcontrolvoicememorykeyer.h"
 
-using namespace voiceKeyerCommon;
+using namespace TxKeyerCommon;
 
-RigControlVoiceMemoryKeyer::RigControlVoiceMemoryKeyer(QObject *parent) : VoiceKeyerBase(parent)
+RigControlVoiceMemoryKeyer::RigControlVoiceMemoryKeyer(QObject *parent) : TxKeyerBase(parent)
 {
 
 }
@@ -20,11 +20,11 @@ RigControlVoiceMemoryKeyer::~RigControlVoiceMemoryKeyer()
 }
 
 
-void RigControlVoiceMemoryKeyer::registerVoiceKeyer(VoiceKeyerFactory::VmKeyers* vmKeyersList)
+void RigControlVoiceMemoryKeyer::registerTxKeyer(TxKeyerFactory::TxKeyers* vmKeyersList)
 {
     QString keyerName = "rigControl";
 
-    VoiceKeyerCapabilities voiceMemCap;
+    TxKeyerCapabilities voiceMemCap;
 
     voiceMemCap.setVmIdNum(RigControl);
     voiceMemCap.setKeyerType(keyerTypes[RigControl]);
@@ -59,7 +59,7 @@ int RigControlVoiceMemoryKeyer::getSelectedEomType()
 }
 
 
-void RigControlVoiceMemoryKeyer::voiceKeyerInit(int &numButtons)
+void RigControlVoiceMemoryKeyer::txKeyerInit(int &numButtons)
 {
     int userNumberButtons = 0;
     getRadioCommonData(selectedEomType, userNumberButtons, radioMaxNumButtons);
@@ -67,15 +67,15 @@ void RigControlVoiceMemoryKeyer::voiceKeyerInit(int &numButtons)
 
 }
 
-void RigControlVoiceMemoryKeyer::sendMsgNum(int buttonNum)
+void RigControlVoiceMemoryKeyer::sendMsgNum(TxKeyerParams &vkParams)
 {
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
 
-    tslf->sendRigTxVoiceMessage(QString::number(buttonNum +1));  // add for message Number, 0 is normally stop
+    tslf->sendRigTxVoiceMessage(QString::number(vkParams.getRigVoiceMemNum()));
 
 }
 
-void RigControlVoiceMemoryKeyer::stopMsg(VoiceKeyerParams *vkParams)
+void RigControlVoiceMemoryKeyer::stopMsg(TxKeyerParams &vkParams)
 {
     Q_UNUSED(vkParams)
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
@@ -84,10 +84,10 @@ void RigControlVoiceMemoryKeyer::stopMsg(VoiceKeyerParams *vkParams)
 
 
 
-bool RigControlVoiceMemoryKeyer::readVmButtonParams(int buttonNum, VoiceKeyerParams &vmParams)
+bool RigControlVoiceMemoryKeyer::readVmButtonParams(int buttonNum, TxKeyerParams &vmParams)
 {
 
-    bool saveByRadioName = readSaveVoiceCWMemoryButtonByRadioNameFromIni(VoiceKeyerId::RigControl);
+    bool saveByRadioName = readSaveVoiceCWMemoryButtonByRadioNameFromIni(TxKeyerId::RigControl);
 
 
     QString fileName = VOICE_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + vmParams.getType() + ".ini";
@@ -106,21 +106,22 @@ bool RigControlVoiceMemoryKeyer::readVmButtonParams(int buttonNum, VoiceKeyerPar
 
 
     vmParams.setType(config.value(newKey + "/type", "").toString());
-    vmParams.setVmName(config.value(newKey + "/name", "").toString());
-    vmParams.setVmRepeatFlag(config.value(newKey + "/repeatFlag", false).toBool());
-    vmParams.setVmDuration(config.value(newKey + "/messageDuration", 0).toInt());
-    vmParams.setVmRepeatPauseDur(config.value(newKey + "/repeatPauseDuration", 0).toInt());
-    vmParams.setvmButtonNum(config.value(newKey + "/buttonNum", buttonNum).toInt());
+    vmParams.setKeyerName(config.value(newKey + "/name", "").toString());
+    vmParams.setKeyerRepeatFlag(config.value(newKey + "/repeatFlag", false).toBool());
+    vmParams.setKeyerDuration(config.value(newKey + "/messageDuration", 0).toInt());
+    vmParams.setKeyerRepeatPauseDur(config.value(newKey + "/repeatPauseDuration", 0).toInt());
+    vmParams.setKeyerButtonNum(config.value(newKey + "/buttonNum", buttonNum).toInt());
     config.endGroup();
 
     return true;
 }
 
-void RigControlVoiceMemoryKeyer::saveVmButtonParams(const VoiceKeyerParams &vmParams_ )
-{
-    VoiceKeyerParams vmParams = vmParams_;
 
-    bool saveByRadioName = readSaveVoiceCWMemoryButtonByRadioNameFromIni(VoiceKeyerId::RigControl);
+void RigControlVoiceMemoryKeyer::saveVmButtonParams(const TxKeyerParams &vmParams_ )
+{
+    TxKeyerParams vmParams = vmParams_;
+
+    bool saveByRadioName = readSaveVoiceCWMemoryButtonByRadioNameFromIni(TxKeyerId::RigControl);
 
     QString fileName = VOICE_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + vmParams.getType() + ".ini";
     QSettings config(fileName, QSettings::IniFormat);
@@ -134,30 +135,30 @@ void RigControlVoiceMemoryKeyer::saveVmButtonParams(const VoiceKeyerParams &vmPa
        config.beginGroup(ALL_RADIOS_GROUP_NAME);
     }
 
-    QString newKey = "button" + QString::number(vmParams.getvmButtonNum());
+    QString newKey = "button" + QString::number(vmParams.getKeyerButtonNum());
     config.setValue(newKey + "/type", vmParams.getType());
-    config.setValue(newKey + "/name", vmParams.getVmName());
-    config.setValue(newKey + "/repeatFlag", vmParams.getVmRepeatFlag());
-    config.setValue(newKey + "/messageDuration", vmParams.getVmDuration());
-    config.setValue(newKey + "/repeatPauseDuration", vmParams.getVmRepeatPauseDur());
-    config.setValue(newKey + "/buttonNum", vmParams.getvmButtonNum());
+    config.setValue(newKey + "/name", vmParams.getKeyerName());
+    config.setValue(newKey + "/repeatFlag", vmParams.getKeyerRepeatFlag());
+    config.setValue(newKey + "/messageDuration", vmParams.getKeyerDuration());
+    config.setValue(newKey + "/repeatPauseDuration", vmParams.getKeyerRepeatPauseDur());
+    config.setValue(newKey + "/buttonNum", vmParams.getKeyerButtonNum());
     config.endGroup();
 
 
 
 }
 
-int RigControlVoiceMemoryKeyer::setup(VoiceKeyerFactory *voiceKeyerFactory, int &maxNumButtons, int &numButtons, QString selectedRadioName)
+int RigControlVoiceMemoryKeyer::setup(TxKeyerFactory *voiceKeyerFactory, int &maxNumButtons, int &numButtons, QString selectedRadioName)
 {
-    VoiceKeyerCapabilities voiceCap = voiceKeyerFactory->supportedVoiceKeyers()->value("rigControl");
+    TxKeyerCapabilities voiceCap = voiceKeyerFactory->supportedTxKeyers()->value("rigControl");
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
 
-    TxVmRigSetupDialog txVmSetupDialog(voiceCap, maxNumButtons, numButtons, tslf->txVmButtonsFrame);
+    TxVmRigSetupDialog txVmSetupDialog(voiceCap, maxNumButtons, numButtons, tslf->dmButtonFrame);
 
-    QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[VoiceKeyerId::RigControl] + ".ini";
+    QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[TxKeyerId::RigControl] + ".ini";
     QSettings config(fileName, QSettings::IniFormat);
 
-    fileName = VOICE_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[VoiceKeyerId::RigControl] + ".ini";
+    fileName = VOICE_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[TxKeyerId::RigControl] + ".ini";
     QSettings buttonConfig(fileName, QSettings::IniFormat);
 
 
@@ -168,7 +169,7 @@ int RigControlVoiceMemoryKeyer::setup(VoiceKeyerFactory *voiceKeyerFactory, int 
 
     QString allRadiosGrpName = ALL_RADIOS_GROUP_NAME;
 
-    if (readSaveVoiceCWMemoryButtonByRadioNameFromIni(VoiceKeyerId::RigControl))
+    if (readSaveVoiceCWMemoryButtonByRadioNameFromIni(TxKeyerId::RigControl))
     {
         txVmSetupDialog.setSetupRadioGroupBoxTitle(selectedRadioName);
     }
@@ -186,17 +187,17 @@ int RigControlVoiceMemoryKeyer::setup(VoiceKeyerFactory *voiceKeyerFactory, int 
         if (pttType == serialCommonData::MINOS_PTT_TYPES::PTT_TYPE_CAT)
         {
 
-            if (readSaveVoiceCWMemoryButtonByRadioNameFromIni(VoiceKeyerId::RigControl))
+            if (readSaveVoiceCWMemoryButtonByRadioNameFromIni(TxKeyerId::RigControl))
             {
                 buttonConfig.beginGroup(selectedRadioName.replace('/', '_'));
-                txVmSetupDialog.setEomRadioButtons(buttonConfig.value("endOfMessageType", voiceKeyerCommon::VoiceCwKeyerEomTypes::Eom_None).toInt());
+                txVmSetupDialog.setEomRadioButtons(buttonConfig.value("endOfMessageType", TxKeyerCommon::KeyerEomTypes::Eom_None).toInt());
 
                 buttonConfig.endGroup();
             }
             else
             {
                 config.beginGroup(allRadiosGrpName);
-                txVmSetupDialog.setEomRadioButtons(buttonConfig.value("endOfMessageType", voiceKeyerCommon::VoiceCwKeyerEomTypes::Eom_None).toInt());
+                txVmSetupDialog.setEomRadioButtons(buttonConfig.value("endOfMessageType", TxKeyerCommon::KeyerEomTypes::Eom_None).toInt());
                 buttonConfig.endGroup();
             }
         }
@@ -219,7 +220,7 @@ int RigControlVoiceMemoryKeyer::setup(VoiceKeyerFactory *voiceKeyerFactory, int 
         // save these values by radio name in the buttons ini file
 
 
-        if (readSaveVoiceCWMemoryButtonByRadioNameFromIni(VoiceKeyerId::RigControl))
+        if (readSaveVoiceCWMemoryButtonByRadioNameFromIni(TxKeyerId::RigControl))
         {
             buttonConfig.beginGroup(selectedRadioName.replace('/', '_'));
         }
@@ -253,7 +254,7 @@ void RigControlVoiceMemoryKeyer::getRadioCommonData(int &selectedEomType, int &u
 {
     int numButtons = 0;
 
-    QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[VoiceKeyerId::RigControl] + ".ini";
+    QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[TxKeyerId::RigControl] + ".ini";
     QSettings readCommonConfig(fileName, QSettings::IniFormat);
 
     QString groupName;
@@ -266,12 +267,12 @@ void RigControlVoiceMemoryKeyer::getRadioCommonData(int &selectedEomType, int &u
         groupName = ALL_RADIOS_GROUP_NAME;
     }
 
-    fileName = VOICE_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[VoiceKeyerId::RigControl] + ".ini";
+    fileName = VOICE_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[TxKeyerId::RigControl] + ".ini";
     QSettings config(fileName, QSettings::IniFormat);
 
     config.beginGroup(groupName);
     numButtons = config.value("NumButtons", -1).toInt();
-    selectedEomType = config.value("endOfMessageType", voiceKeyerCommon::VoiceCwKeyerEomTypes::Eom_None).toInt();
+    selectedEomType = config.value("endOfMessageType", TxKeyerCommon::KeyerEomTypes::Eom_None).toInt();
     config.endGroup();
 
     if (numButtons == -1)   // no user button number saved
@@ -286,12 +287,12 @@ void RigControlVoiceMemoryKeyer::getRadioCommonData(int &selectedEomType, int &u
 
 
 
-int RigControlVoiceMemoryKeyer::editButton(VoiceKeyerParams *vmData, QString title)
+int RigControlVoiceMemoryKeyer::editButton(TxKeyerParams *vmData, QString title)
 {
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
-    TxVmRigButtonDialog vmButtonDialog(tslf->txVmButtonsFrame);
+    TxVmRigButtonDialog vmButtonDialog(tslf->dmButtonFrame);
 
-    if (readSaveVoiceCWMemoryButtonByRadioNameFromIni(VoiceKeyerId::RigControl))
+    if (readSaveVoiceCWMemoryButtonByRadioNameFromIni(TxKeyerId::RigControl))
     {
         vmButtonDialog.setRadioNameLbl(vmData->getSelRadioName());
     }

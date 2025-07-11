@@ -118,10 +118,10 @@ void TxVmExternalButtonDialog::on_buttonBox_accepted()
     }
 
     QString name = ui->txVmNameEdit->text();
-    vmData->setVmName(name);
-    vmData->setVmRepeatPauseDur(repeatPauseDur_);
+    vmData->setKeyerName(name);
+    vmData->setKeyerRepeatPauseDur(repeatPauseDur_);
 //    vmData->setVmDuration(messageDur_);
-    vmData->setVmRepeatFlag(ui->repeatChkBox->isChecked());
+    vmData->setKeyerRepeatFlag(ui->repeatChkBox->isChecked());
     accept();
 }
 
@@ -132,25 +132,25 @@ void TxVmExternalButtonDialog::on_buttonBox_rejected()
 }
 
 
-void TxVmExternalButtonDialog::setVmData(VoiceKeyerParams *vmData_)
+void TxVmExternalButtonDialog::setVmData(TxKeyerParams *vmData_)
 {
     txvmbd = this;
     vmData = vmData_;
     ui->txVmTypeLbl->setText(vmData->getType());
-    ui->txVmNameEdit->setText(vmData->getVmName());
-    ui->repeatChkBox->setChecked(vmData->getVmRepeatFlag());
-    ui->repeatPauseDur->setText(QString::number(vmData->getVmRepeatPauseDur()));
+    ui->txVmNameEdit->setText(vmData->getKeyerName());
+    ui->repeatChkBox->setChecked(vmData->getKeyerRepeatFlag());
+    ui->repeatPauseDur->setText(QString::number(vmData->getKeyerRepeatPauseDur()));
 }
 
 void TxVmExternalButtonDialog::on_replayButton_clicked()
 {
     trace("TxVmExternalButtonDialog::on_replayButton_clicked()");
-    emit LogContainer->sendKeyerPlay( vmData->getvmButtonNum() );
+    emit LogContainer->sendKeyerPlay( vmData->getKeyerButtonNum() );
 }
 
 void TxVmExternalButtonDialog::on_recordButton_clicked()
 {
-    emit LogContainer->sendKeyerRecord( vmData->getvmButtonNum() );
+    emit LogContainer->sendKeyerRecord( vmData->getKeyerButtonNum() );
 }
 
 void TxVmExternalButtonDialog::on_stopButton_clicked()
@@ -189,7 +189,7 @@ void TxVmExternalButtonDialog::onKeyerConfig(QString key, QString val)
         kj.parseConfig(val, false);
         // and now use it!
 
-        int buttonNumber = vmData->getvmButtonNum();
+        int buttonNumber = vmData->getKeyerButtonNum();
         KeyerKeyJson &kkj = kj.kjj[buttonNumber];
         ui->repeatChkBox->setChecked(kkj.autoRepeat);
         ui->txVmNameEdit->setText(kkj.CQName);

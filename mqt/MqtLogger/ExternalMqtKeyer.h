@@ -2,10 +2,10 @@
 #define EXTERNALMQTKEYER_H
 
 #include "KeyerJson.h"
-#include "voicekeyerbase.h"
-#include "voicekeyerfactory.h"
+#include "txKeyerbase.h"
+#include "txKeyerfactory.h"
 
-class ExternalMqtKeyer:public VoiceKeyerBase
+class ExternalMqtKeyer:public TxKeyerBase
 {
     Q_OBJECT
     KeyerJson remoteConfig;
@@ -16,37 +16,37 @@ public:
     static QString keyerName;
 
 
-    static void registerVoiceKeyer(VoiceKeyerFactory::VmKeyers*);
+    static void registerTxKeyer(TxKeyerFactory::TxKeyers*);
 
     // VoiceKeyerBase interface
-    virtual void voiceKeyerInit(int &numButtons) override;
-    virtual void sendMsgNum(int msgNum) override;
-    virtual void stopMsg(VoiceKeyerParams * vkParam) override;
+    virtual void txKeyerInit(int &numButtons) override;
+    virtual void sendMsgNum(TxKeyerParams &vkParam) override;
+    virtual void stopMsg(TxKeyerParams &vkParam) override;
 
     virtual bool doRepeatFromLogger() override
     {
         return false;
     }
 
-    void sendCwMsg(VoiceKeyerParams &vmParams) override {Q_UNUSED(vmParams)};
+    void sendCwMsg(TxKeyerParams &vmParams) override {Q_UNUSED(vmParams)};
     virtual void stopCwMsg() override {};
      void sendCwFreeTextMsg(QString message) override {Q_UNUSED(message)};
     virtual void setCwMemType(int cwMemType) override {Q_UNUSED(cwMemType)};
     virtual bool getSetCwModeAndRestoreFlag() override {return false;};
 
     virtual bool hasRecord() override{return true;}
-    virtual void doRecording(VoiceKeyerParams *vkParam) override;
+    virtual void doRecording(TxKeyerParams *vkParam) override;
 
-    virtual bool readVmButtonParams(int buttonNum, VoiceKeyerParams &vmParams) override;
-    virtual void saveVmButtonParams(const VoiceKeyerParams &vmParams) override;
+    virtual bool readVmButtonParams(int buttonNum, TxKeyerParams &vmParams) override;
+    virtual void saveVmButtonParams(const TxKeyerParams &vmParams) override;
     virtual void setPttOnOff(bool onOff) override;
 
-    virtual int getSelectedEomType() override {return voiceKeyerCommon::VoiceCwKeyerEomTypes::Eom_None;};
+    virtual int getSelectedEomType() override {return TxKeyerCommon::KeyerEomTypes::Eom_None;};
     virtual void setSelectedEomType(int eomType)override{Q_UNUSED(eomType)};
 
-    virtual int setup(VoiceKeyerFactory *voiceKeyerFactory, int &maxNumButtons, int &numButtons, QString selectedRadio) override;
+    virtual int setup(TxKeyerFactory *voiceKeyerFactory, int &maxNumButtons, int &numButtons, QString selectedRadio) override;
     virtual void setRadioParams(int radioMaxNumButtons, QString selectedRadioName, serialCommonData::MINOS_PTT_TYPES pttType_, bool pttEnabled_) override{Q_UNUSED(radioMaxNumButtons) Q_UNUSED(selectedRadioName) Q_UNUSED(pttType_) Q_UNUSED(pttEnabled_)};
-    virtual int editButton(VoiceKeyerParams* vmData, QString title) override;
+    virtual int editButton(TxKeyerParams* vmData, QString title) override;
 
 
     virtual void setContest(BaseContestLog *c) override {Q_UNUSED(c)};

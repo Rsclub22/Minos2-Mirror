@@ -12,7 +12,7 @@
 #include "deletedradioforvoicecwmemorybuttonsdialog.h"
 #include "ui_deletedradioforvoicecwmemorybuttonsdialog.h"
 
-DeletedRadioForVoiceCwMemoryButtonsDialog::DeletedRadioForVoiceCwMemoryButtonsDialog(QStringList listOfRadioNames,  VoiceKeyerId id_, QWidget *parent) :
+DeletedRadioForVoiceCwMemoryButtonsDialog::DeletedRadioForVoiceCwMemoryButtonsDialog(QStringList listOfRadioNames,  TxKeyerId id_, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::DeletedRadioForVoiceCwMemoryButtonsDialog)
 {
@@ -22,7 +22,7 @@ DeletedRadioForVoiceCwMemoryButtonsDialog::DeletedRadioForVoiceCwMemoryButtonsDi
 
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-    if (id == VoiceKeyerId::RigControl)
+    if (id == TxKeyerId::RigControl)
     {
         setWindowTitle(tr("Delete RigControl Radios - Voice Keyer Memories"));
         ui->cwMemoryRadioListWidget->setVisible(false);
@@ -30,7 +30,7 @@ DeletedRadioForVoiceCwMemoryButtonsDialog::DeletedRadioForVoiceCwMemoryButtonsDi
         ui->voiceMemoryRadioListWidget->addItems(listOfRadioNames);
         ui->voiceMemoryRadioListWidget->setSelectionMode(QAbstractItemView::ExtendedSelection);
     }
-    else if (id == VoiceKeyerId::CW_RigControl)
+    else if (id == TxKeyerId::CW_RigControl)
     {
         setWindowTitle(tr("Delete RigControl Radios - CW Keyer Memories"));
         ui->cwMemoryRadioListWidget->setVisible(true);
@@ -53,16 +53,16 @@ DeletedRadioForVoiceCwMemoryButtonsDialog::~DeletedRadioForVoiceCwMemoryButtonsD
 }
 
 
-QList<QListWidgetItem *> DeletedRadioForVoiceCwMemoryButtonsDialog::getSelectedItems(VoiceKeyerId id)
+QList<QListWidgetItem *> DeletedRadioForVoiceCwMemoryButtonsDialog::getSelectedItems(TxKeyerId id)
 {
 
     QList<QListWidgetItem *> none;
 
-    if (id == VoiceKeyerId::RigControl)
+    if (id == TxKeyerId::RigControl)
     {
         return ui->voiceMemoryRadioListWidget->selectedItems();
     }
-    else if (id == VoiceKeyerId::CW_RigControl)
+    else if (id == TxKeyerId::CW_RigControl)
     {
         return ui->cwMemoryRadioListWidget->selectedItems();
     }
@@ -83,11 +83,11 @@ void DeletedRadioForVoiceCwMemoryButtonsDialog::accepted()
    if (!selectedItems.isEmpty())
    {
 
-       if (id ==VoiceKeyerId::RigControl)
+       if (id ==TxKeyerId::RigControl)
        {
            msgText.append("Voice Memory Radios:-\n");
        }
-       else if (id ==VoiceKeyerId::CW_RigControl)
+       else if (id ==TxKeyerId::CW_RigControl)
        {
            msgText.append("CW Memory Radios:-\n");
        }

@@ -35,7 +35,6 @@ QVector <SCTypeOption> ScreenConfigElement::scoptions =
     {sctWsjtx, QT_TR_NOOP("WSJT-X Connector"), QT_TR_NOOP("WSJT-X Connector") },
     {sctBandmap, QT_TR_NOOP("Bandmap Display"), QT_TR_NOOP("Bandmap Display")},
     {sctSplit, QT_TR_NOOP("HSplit"), QT_TR_NOOP("Horizontally split element")},
-    {sctTxVmButtons, QT_TR_NOOP("Keyer"), QT_TR_NOOP("Keyer")},
     {sctQrzDisplay, QT_TR_NOOP("QRZ Display"), QT_TR_NOOP("QRZ Display")},
     {sctQsoMap, QT_TR_NOOP("QSO Map"), QT_TR_NOOP("QSO Map")},
     {sctDMButtons, QT_TR_NOOP("Data Modes Buttons"), QT_TR_NOOP("Data Modes Buttons")},
