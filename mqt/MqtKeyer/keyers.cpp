@@ -417,8 +417,8 @@ bool commonKeyer::getStatus( QString &buff )
    buff += ( L2State ? "2 " : "" );
    for ( auto const &isba: KeyerAction::currentAction )
    {
-      buff += isba->statusLetter();
-   }
+        buff += isba->statusLetter();
+    }
    buff += "]";
 
    return ( KeyerAction::getCurrentAction() ) ? true : false;
