@@ -222,6 +222,7 @@ void TxVmButtonsFrame::onVmSetupClicked()
 
 void TxVmButtonsFrame::logRadioSettingsChanged(QSharedPointer<RadioSettingsDialogChangeFlag> logRadioSettingsFlags)
 {
+    trace("TxVmButtonsFrame::logRadioSettingsChanged");
     Q_UNUSED(logRadioSettingsFlags)
 
     if (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl] || voiceKeyerType == keyerTypes[VoiceKeyerId::PcCwKeyer] || voiceKeyerType == keyerTypes[VoiceKeyerId::RigControl] || voiceKeyerType == keyerTypes[VoiceKeyerId::InternalVoiceKeyer])
@@ -600,7 +601,7 @@ void TxVmButtonsFrame::updateFrameState()
 
 void TxVmButtonsFrame::setFrameState(QString voiceKeyerName)
 {
-
+    trace("TxVmButtonsFrame::setFrameState");
 
     VoiceKeyerCapabilities voiceCap = voiceKeyerFactory->supportedVoiceKeyers()->value(voiceKeyerName);
 
