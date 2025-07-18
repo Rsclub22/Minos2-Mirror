@@ -121,45 +121,43 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
     ui->BrgSt->setFixedSize(ui->BrgSt->size());
     ui->DistSt->setFixedSize(ui->DistSt->size());
 
-    bool horizontal = false ;
-
-    ui->CallsignFrame->setup("Call", this, true, horizontal);
+    ui->CallsignFrame->setup("Call", this, true);
     CallsignFW = new FocusWatcher(ui->CallsignFrame->getTextEditEdit());
     ui->CallsignFrame->getTextEditlabel()->setText("<b>" + CallsignLabelString);
     connect(ui->CallsignFrame->getTextEditEdit(), &QLineEdit::textChanged, this, &QSOLogFrame::onCallsignEdit_textChanged);
 
-    ui->RSTTxFrame->setup("RstTx", this, true, horizontal);
+    ui->RSTTxFrame->setup("RstTx", this, true);
     RSTTXFW = new FocusWatcher(ui->RSTTxFrame->getTextEditEdit());
     ui->RSTTxFrame->getTextEditlabel()->setText("<b>" + RSTTXLabelString);
     connect(ui->RSTTxFrame->getTextEditEdit(), &QLineEdit::textChanged, this, &QSOLogFrame::onRSTTXEdit_textChanged);
 
-    ui->SerTxFrame->setup("serTx", this, true, horizontal);
+    ui->SerTxFrame->setup("serTx", this, true);
     SerTXFW = new FocusWatcher(ui->SerTxFrame->getTextEditEdit());
     ui->SerTxFrame->getTextEditlabel()->setText("<b>" + SerTXLabelString);
     ui->SerTxFrame->getTextEditEdit()->setFocusPolicy(Qt::ClickFocus);
     connect(ui->SerTxFrame->getTextEditEdit(), &QLineEdit::textChanged, this, &QSOLogFrame::onSerTXEdit_textChanged);
 
-    ui->RSTRxFrame->setup("RstRx", this, true, horizontal);
+    ui->RSTRxFrame->setup("RstRx", this, true);
     RSTRXFW = new FocusWatcher(ui->RSTRxFrame->getTextEditEdit());
     ui->RSTRxFrame->getTextEditlabel()->setText("<b>" + RSTRXLabelString);
     connect(ui->RSTRxFrame->getTextEditEdit(), &QLineEdit::textChanged, this, &QSOLogFrame::onRSTRXEdit_textChanged);
 
-    ui->SerRxFrame->setup("SerRx", this, true, horizontal);
+    ui->SerRxFrame->setup("SerRx", this, true);
     SerRXFW = new FocusWatcher(ui->SerRxFrame->getTextEditEdit());
     ui->SerRxFrame->getTextEditlabel()->setText("<b>" + SerRXLabelString);
     connect(ui->SerRxFrame->getTextEditEdit(), &QLineEdit::textChanged, this, &QSOLogFrame::onSerRXEdit_textChanged);
 
-    ui->LocFrame->setup("Loc", this, true, horizontal);
+    ui->LocFrame->setup("Loc", this, true);
     LocFW = new FocusWatcher(ui->LocFrame->getTextEditEdit());
     ui->LocFrame->getTextEditlabel()->setText("<b>" + LocLabelString);
     connect(ui->LocFrame->getTextEditEdit(), &QLineEdit::textChanged, this, &QSOLogFrame::onLocEdit_textChanged);
 
-    ui->QTHFrame->setup("QTH", this, true, horizontal);
+    ui->QTHFrame->setup("QTH", this, true);
     QTHFW = new FocusWatcher(ui->QTHFrame->getTextEditEdit());
     ui->QTHFrame->getTextEditlabel()->setText("<b>" + QTHLabelString);
     connect(ui->QTHFrame->getTextEditEdit(), &QLineEdit::textChanged, this, &QSOLogFrame::onQTHEdit_textChanged);
 
-    ui->commentsFrame->setup("Comments", this, false, horizontal);
+    ui->commentsFrame->setup("Comments", this, false);
     CommentsFW = new FocusWatcher(ui->commentsFrame->getTextEditEdit());
     ui->commentsFrame->getTextEditlabel()->setText("<b>" + CommentsLabelString);
 
@@ -946,7 +944,7 @@ void QSOLogFrame::setTxReadOnly(bool isNotEdit)
     if (isNotEdit)
     {
         ui->SerTxFrame->getTextEditEdit()->setStyleSheet
-            (QString("background-color: darkGrey"));
+            (QString("background-color: darkGrey;border-width: 1px ; border-color: black ; "));
     }
     else
     {
