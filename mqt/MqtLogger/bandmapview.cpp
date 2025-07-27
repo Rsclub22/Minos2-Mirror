@@ -238,7 +238,7 @@ void BandmapView::mouseDoubleClicked(QPoint p)
 
     int spotNum = isClickInRegionOfSpot(mapP);
 
-    if (spotNum >= 0)
+    if (spotNum >= 0 && selectedSpot)
     {
         memoryData::memData spotData;
         spotData.callsign = selectedSpot->getDxCallStr();
