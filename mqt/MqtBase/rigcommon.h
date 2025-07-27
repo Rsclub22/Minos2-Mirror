@@ -259,9 +259,9 @@ public:
   QString rigCtldNetworkPort;
   QString mgmMode = hamlibData::USB;
   QString rttyMode = hamlibData::LSB;
-  int rttyOffset = 2125;
+  int rttyOffset = RTTY_MARK_OFFSET;
   QString pskMode = hamlibData::USB;
-  int pskOffset = 1750;
+  int pskOffset = PSK_OFFSET;
   bool antSwitchAvail = false;
   bool ritSupported = false;
 

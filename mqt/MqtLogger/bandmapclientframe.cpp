@@ -1537,8 +1537,6 @@ void BandmapClientFrame::checkLegalFrequencies(Frequency freq)
 
             legalFreq = false;
         }
-
-        ui->freqDisplay->setText(sf);
     }
     else
     {
@@ -1549,8 +1547,8 @@ void BandmapClientFrame::checkLegalFrequencies(Frequency freq)
         }
 
         legalFreq = false;
-        ui->freqDisplay->setText(sf);
     }
+    ui->freqDisplay->setText(sf);
     bandmapView->setFreq(curFreq, legalFreq);
 }
 
