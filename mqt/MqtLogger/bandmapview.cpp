@@ -1050,6 +1050,7 @@ void BandmapView::assembleSpotMsg(int row, QString& markerMsg)
     bool dxLocFromNodeFlag = pSpot->getDxLocatorIsFromNode();
 
     QString dxQth = pSpot->getDistrict();
+    bool qthWorked = pSpot->getDistrictWorked();
 
     bool showDerivedLocFlag;
     TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpShowDerivedLoc, showDerivedLocFlag );
@@ -1073,6 +1074,15 @@ void BandmapView::assembleSpotMsg(int row, QString& markerMsg)
     else
     {
         callsign = dxCallsign;
+    }
+    QString district;
+    if (qthWorked)
+    {
+        district = QString("%1%2%3").arg(HtmlFontColour(QTH_WORKED_COLOUR), dxQth, HtmlFontColour(NOT_WORKED_COLOUR));
+    }
+    else
+    {
+        district = dxQth;
     }
 
     QString locator;
@@ -1172,7 +1182,9 @@ void BandmapView::assembleSpotMsg(int row, QString& markerMsg)
     qlonglong elapsedTime = spotElapsedTime(st) / 60;
     QString etc = formatTime(elapsedTime);
 
-    QString msg = QString("%1%2 @ .%3 %4 %5 %6 %7 %8 %9%10").arg(bLineStart, callsign, freq.extractKhz(), locator, distance).arg(bearing, etc, markSym, newSpotMsg, bLineEnd);
+    QString msg = QString("%1%2 %3 @ .%4 %5 %6 %7 %8 %9 %10%11")
+                      .arg(bLineStart, callsign, district, freq.extractKhz(), locator, distance)
+                      .arg(bearing, etc, markSym, newSpotMsg, bLineEnd);
 
     if (pSpot->getIsSelected())
     {
