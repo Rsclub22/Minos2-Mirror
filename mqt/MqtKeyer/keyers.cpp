@@ -1445,6 +1445,18 @@ PlayAction::~PlayAction()
       trace( "PlayAction deleted" );
    }
 }
+
+QString PlayAction::statusLetter()
+{
+    QString st = "F" + QString::number(mno + 1);
+    if (getEnableAutoRepeat(mno))
+    {
+        int rdel = getAutoRepeatDelay(mno);
+        QString rep = QString("(R%1)").arg(rdel);
+        st += rep;
+    }
+    return st;
+}
 void PlayAction::getActionState( QString &s )
 {
     QString name = keyName.isEmpty()?("Play " + fileName):keyName;
