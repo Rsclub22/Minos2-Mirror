@@ -66,7 +66,3 @@ VoiceKeyerBase::~VoiceKeyerBase()
 {
 
 }
-
-
-
-

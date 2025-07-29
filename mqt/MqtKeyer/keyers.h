@@ -287,7 +287,14 @@ class PlayAction: public VoiceAction
       virtual ~PlayAction() override;
       QString statusLetter() override
       {
-         return "F" + QString::number(mno + 1);
+          QString st = "F" + QString::number(mno + 1);
+          int rdel = getAutoRepeatDelay(mno);
+          if (rdel > 0)
+          {
+              QString rep = QString("(R%1)").arg(rdel);
+              st += rep;
+          }
+          return st;
       }
       virtual bool playingFile( const QString & ) override;
 };

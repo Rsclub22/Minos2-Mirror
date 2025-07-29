@@ -217,33 +217,33 @@ Unworked</source>
 <context>
     <name>BandmapView</name>
     <message>
-        <location filename="../bandmapview.cpp" line="1035"/>
+        <location filename="../bandmapview.cpp" line="1031"/>
         <source>%1%2CQ Frequency @ .%3%4%5</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1069"/>
+        <location filename="../bandmapview.cpp" line="1065"/>
         <source>New</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1196"/>
+        <location filename="../bandmapview.cpp" line="1192"/>
         <source>CQ Frequency = %1
 The mode is %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1225"/>
+        <location filename="../bandmapview.cpp" line="1221"/>
         <source>The computed mode is</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1228"/>
+        <location filename="../bandmapview.cpp" line="1224"/>
         <source>The mode is</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1235"/>
+        <location filename="../bandmapview.cpp" line="1231"/>
         <source>%1 - %2, %3, %4, %5 [%6 %7 @ %8] 
 %9 %10
 %11
@@ -824,7 +824,7 @@ The mode is %2</source>
         <location filename="../clusterclientframe.cpp" line="42"/>
         <location filename="../clusterclientframe.cpp" line="1115"/>
         <location filename="../clusterclientframe.cpp" line="1142"/>
-        <location filename="../clusterclientframe.cpp" line="1598"/>
+        <location filename="../clusterclientframe.cpp" line="1594"/>
         <source>Cluster</source>
         <translation type="unfinished"></translation>
     </message>
@@ -939,7 +939,7 @@ The mode is %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientframe.cpp" line="1602"/>
+        <location filename="../clusterclientframe.cpp" line="1598"/>
         <source> - Mouse in frame, updates paused</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2063,7 +2063,7 @@ Move between components of a group using the mouse or up/down arrow keys.
 <context>
     <name>InternalVoiceMemoryKeyer</name>
     <message>
-        <location filename="../InternalVoiceMemoryKeyer.cpp" line="193"/>
+        <location filename="../InternalVoiceMemoryKeyer.cpp" line="192"/>
         <source>Internal Voice Memory Setup</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2557,7 +2557,7 @@ to</source>
     </message>
     <message>
         <location filename="../qsologframe.ui" line="171"/>
-        <location filename="../qsologframe.cpp" line="842"/>
+        <location filename="../qsologframe.cpp" line="840"/>
         <source>Catch-up (Post Entry)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2683,7 +2683,7 @@ to</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2622"/>
+        <location filename="../qsologframe.cpp" line="2630"/>
         <source>No QSO entry field focussed!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2810,17 +2810,17 @@ to</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="667"/>
+        <location filename="../qsologframe.cpp" line="665"/>
         <source>Return to Log</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="851"/>
+        <location filename="../qsologframe.cpp" line="849"/>
         <source>End Catch-up</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2358"/>
+        <location filename="../qsologframe.cpp" line="2356"/>
         <source>This Contact has changed: Shall I log the changes?
 
 Yes         - Log as shown
@@ -2828,64 +2828,69 @@ No          - Discard changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2604"/>
+        <location filename="../qsologframe.cpp" line="2609"/>
         <source>Read Only</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2608"/>
+        <location filename="../qsologframe.cpp" line="2613"/>
         <source>Protected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2612"/>
+        <location filename="../qsologframe.cpp" line="2617"/>
         <source>Protected by age of contest</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="3002"/>
+        <location filename="../qsologframe.cpp" line="3014"/>
         <source>Change mode to CW?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="3005"/>
-        <location filename="../qsologframe.cpp" line="3016"/>
-        <location filename="../qsologframe.cpp" line="3025"/>
+        <location filename="../qsologframe.cpp" line="3017"/>
+        <location filename="../qsologframe.cpp" line="3028"/>
+        <location filename="../qsologframe.cpp" line="3037"/>
         <source>Please check the signal reports, and log the contact</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="3013"/>
+        <location filename="../qsologframe.cpp" line="3025"/>
         <source>Change mode to PH?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="3022"/>
+        <location filename="../qsologframe.cpp" line="3034"/>
         <source>Change mode to USB?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="3081"/>
+        <location filename="../qsologframe.cpp" line="3093"/>
         <source>Spot Last Logged (%1) </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="3152"/>
+        <location filename="../qsologframe.cpp" line="3164"/>
         <source>&quot;Serial sent&quot; is too high - please confirm that this is correct?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="3154"/>
+        <location filename="../qsologframe.cpp" line="3166"/>
         <source>Do you want to enter the missing contacts later?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="3563"/>
+        <location filename="../qsologframe.cpp" line="3399"/>
+        <source>Meep from %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qsologframe.cpp" line="3584"/>
         <source>Start of QSOs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="3598"/>
+        <location filename="../qsologframe.cpp" line="3619"/>
         <source>End of QSOs</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3561,11 +3566,6 @@ No          - Discard changes</source>
 <context>
     <name>RotPresets</name>
     <message>
-        <location filename="../RotPresets.ui" line="14"/>
-        <source>Frame</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../RotPresets.ui" line="20"/>
         <source>Rotator Presets</source>
         <translation type="unfinished"></translation>
@@ -3602,11 +3602,6 @@ No          - Discard changes</source>
 </context>
 <context>
     <name>RotatorCompassFrame</name>
-    <message>
-        <location filename="../rotatorcompassframe.ui" line="14"/>
-        <source>Frame</source>
-        <translation type="unfinished"></translation>
-    </message>
     <message>
         <location filename="../rotatorcompassframe.ui" line="20"/>
         <source>Rotator Compass</source>
@@ -3651,11 +3646,6 @@ No          - Discard changes</source>
 </context>
 <context>
     <name>RotatorSkyScanFrame</name>
-    <message>
-        <location filename="../rotatorskyscanframe.ui" line="14"/>
-        <source>Frame</source>
-        <translation type="unfinished"></translation>
-    </message>
     <message>
         <location filename="../rotatorskyscanframe.ui" line="20"/>
         <source>Rotator SkyScan</source>
@@ -5934,70 +5924,70 @@ Last %8 Mins: %9 QSO %10 pts %11 mults
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="610"/>
+        <location filename="../txvmbuttonsframe.cpp" line="617"/>
         <source>To use the external keyer mqtKeyer must be running and connected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="957"/>
-        <location filename="../txvmbuttonsframe.cpp" line="1192"/>
+        <location filename="../txvmbuttonsframe.cpp" line="964"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1199"/>
         <source>Rig CW Message - </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="961"/>
-        <location filename="../txvmbuttonsframe.cpp" line="1196"/>
+        <location filename="../txvmbuttonsframe.cpp" line="968"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1203"/>
         <source>PC CW Keyer Message - </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="978"/>
-        <location filename="../txvmbuttonsframe.cpp" line="1212"/>
+        <location filename="../txvmbuttonsframe.cpp" line="985"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1219"/>
         <source>Voice Memory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="980"/>
+        <location filename="../txvmbuttonsframe.cpp" line="987"/>
         <source>%1 %2 - Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1214"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1221"/>
         <source>%1 %2 - New</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1859"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1866"/>
         <source>Rig Voice Keyer Available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1863"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1870"/>
         <source>Rig CW Messages Available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1499"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1874"/>
         <source></source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1996"/>
+        <location filename="../txvmbuttonsframe.cpp" line="2003"/>
         <source>TX On</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="2002"/>
+        <location filename="../txvmbuttonsframe.cpp" line="2009"/>
         <source>TX Off</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="2012"/>
+        <location filename="../txvmbuttonsframe.cpp" line="2019"/>
         <source>PTT Enabled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="2018"/>
+        <location filename="../txvmbuttonsframe.cpp" line="2025"/>
         <source>PTT Disabled</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6389,12 +6379,12 @@ Please edit or remove</source>
 <context>
     <name>TxVoiceMemButton</name>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="2308"/>
+        <location filename="../txvmbuttonsframe.cpp" line="2315"/>
         <source>&amp;New</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="2309"/>
+        <location filename="../txvmbuttonsframe.cpp" line="2316"/>
         <source>&amp;Edit</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6663,11 +6653,6 @@ Include the CQ as well as the type</source>
 </context>
 <context>
     <name>skyScanPresetsFrame</name>
-    <message>
-        <location filename="../skyscanpresetsframe.ui" line="14"/>
-        <source>Frame</source>
-        <translation type="unfinished"></translation>
-    </message>
     <message>
         <location filename="../skyscanpresetsframe.ui" line="20"/>
         <source>Rotator Skyscan Presets</source>

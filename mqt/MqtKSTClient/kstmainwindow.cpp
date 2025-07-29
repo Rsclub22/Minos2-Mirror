@@ -2147,13 +2147,20 @@ void KSTMainWindow::on_loggerXferButton_clicked()
         QStringList rList = routerList();
         for(const auto &router: QASCONST(rList))
         {
-
             RPCGeneralClient rpc(rpcConstants::KSTTransfer);
             QSharedPointer<RPCParam>st(new RPCParamStruct);
             st->addMember( call, rpcConstants::KSTTransferCall );
             st->addMember( loc, rpcConstants::KSTTransferLocator );
             rpc.getCallArgs() ->addParam( st );
             rpc.queueCall( router );
+#ifdef RUBBISH
+            RPCGeneralClient rpc(rpcConstants::KSTTransferMeep);
+            QSharedPointer<RPCParam>st(new RPCParamStruct);
+            st->addMember( QString("G4DDN"), rpcConstants::KSTTransferCall );
+            st->addMember( QString("RIP"), rpcConstants::KSTTransferMeep );
+            rpc.getCallArgs() ->addParam( st );
+            rpc.queueCall( router );
+#endif
         }
     }
 }

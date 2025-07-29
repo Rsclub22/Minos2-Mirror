@@ -1674,12 +1674,12 @@ Corriger les entrées du convertisseur SVP.</translation>
     <message>
         <location filename="../rigsetupform.ui" line="810"/>
         <source>RTTY Mark Frequency</source>
-        <translation type="unfinished"></translation>
+        <translation>Fréquence de marque RTTY</translation>
     </message>
     <message>
         <location filename="../rigsetupform.ui" line="820"/>
         <source>PSK Frequency</source>
-        <translation type="unfinished"></translation>
+        <translation>Fréquence PSK</translation>
     </message>
     <message>
         <location filename="../rigsetupform.ui" line="869"/>

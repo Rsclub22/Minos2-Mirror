@@ -24,7 +24,7 @@ class QSOTextEditFrame : public QFrame
 public:
     QSOTextEditFrame(QWidget *parent);
     virtual ~QSOTextEditFrame() override;
-    void setup(QString name, QWidget *filterWidget, bool uc = true, bool horizontal = false);
+    void setup(QString name, QWidget *filterWidget, bool uc = true);
     QLineEdit *getTextEditEdit() const;
     QLabel *getTextEditlabel() const;
     void setWidth(QString);
