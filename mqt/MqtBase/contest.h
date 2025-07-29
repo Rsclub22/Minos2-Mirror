@@ -453,7 +453,7 @@ class BaseContestLog: public BaseLogList
       QString  scanContact(QSharedPointer<BaseContact> nct, QDateTime contestStart, QDateTime contestEnd);
       
       void addToContestList(QSharedPointer<BaseContact> rct);
-      void checkSpotWorked(const Callsign &mcs, const QString &locator, const Frequency &freq, bool *callWorked, bool *locatorWorked);
+      void checkSpotWorked(const Callsign &mcs, const QString &locator, const QString &exch, const Frequency &freq, bool *callWorked, bool *locatorWorked, bool *exchWorked);
       void calcDistanceBearing(const QString &_locator, double *distance, int *bearing);
       QString getLocForCall(const Callsign &mcs);
   protected:

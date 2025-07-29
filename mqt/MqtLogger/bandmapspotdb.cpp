@@ -51,7 +51,8 @@ BandMapSpotDB::BandMapSpotDB(QObject *parent): QObject(parent)
                               "rmOn TEXT,"
                               "offRF TEXT,"
                               "CQResp TEXT,"
-                              "mark BOOLEAN"
+                              "mark BOOLEAN,"
+                              "exch TEXT"
                               ") ";
 
         QSqlQuery cquery(QSqlDatabase::database(connectionName));
@@ -107,6 +108,19 @@ BandMapSpotDB::BandMapSpotDB(QObject *parent): QObject(parent)
             }
         }
         {
+            QSqlQuery amQuery(QSqlDatabase::database(connectionName));
+            bool amres = amQuery.prepare("ALTER TABLE LSPOTS ADD exch TEXT");
+            if (amres)
+            {
+                bool qres = amQuery.exec();
+                if (!qres)
+                {
+                    QString mess = QString("BandMapSpotDB add field error: %1").arg(amQuery.lastError().text());
+                    trace(mess);
+                }
+            }
+        }
+        {
             QSqlQuery query(QSqlDatabase::database(connectionName));
             query.prepare("SELECT COUNT(*) FROM LSPOTS");
             if (query.exec())
@@ -144,11 +158,12 @@ bool BandMapSpotDB::createRecord(ClusterSpotData *spot, QString id)
     {
         return true;
     }
+
     QSqlQuery query(QSqlDatabase::database(connectionName));
     QString create =         "INSERT INTO LSPOTS "
-                     "(id, type, spottype, callsign, band, mode, loc, dist, freq, dtg, rmOn, offRF, CQResp)"
+                     "(id, type, spottype, callsign, band, mode, loc, dist, freq, dtg, rmOn, offRF, CQResp, exch)"
                      " VALUES "
-                     "(:id, :type, :spottype, :callsign, :band, :mode, :loc, :dist, :freq, :dtg, :rmOn, :offRF, :CQResp)";
+                     "(:id, :type, :spottype, :callsign, :band, :mode, :loc, :dist, :freq, :dtg, :rmOn, :offRF, :CQResp, :exch)";
     bool prepres = query.prepare(create);
 
     if (prepres)
@@ -168,6 +183,7 @@ bool BandMapSpotDB::createRecord(ClusterSpotData *spot, QString id)
         query.bindValue(":rmOn", spot->getRunModeOn());
         query.bindValue(":offRF", spot->getOffRunFreq());
         query.bindValue(":CQResp", spot->getCqResponse());
+        query.bindValue(":exch", spot->getDistrict());
 
     // // derived
     // spot->getDxBrg();
@@ -219,7 +235,7 @@ bool BandMapSpotDB::modifyRecord(ClusterSpotData *spot)
     QSqlQuery query(QSqlDatabase::database(connectionName));
     QString mod = "UPDATE LSPOTS SET "
                   "type=:type, spottype=:spottype, callsign=:callsign, band=:band, mode=:mode, loc=:loc, dist=:dist, freq=:freq,"
-                  " dtg=:dtg, rmOn=:rmOn, offRF=:offRF, CQResp=:CQResp"
+                  " dtg=:dtg, rmOn=:rmOn, offRF=:offRF, CQResp=:CQResp, exch=:exch"
                   " WHERE "
                   " recno=:recId";
     bool prepres = query.prepare(mod);
@@ -241,6 +257,7 @@ bool BandMapSpotDB::modifyRecord(ClusterSpotData *spot)
         query.bindValue(":rmOn", spot->getRunModeOn());
         query.bindValue(":offRF", spot->getOffRunFreq());
         query.bindValue(":CQResp", spot->getCqResponse());
+        query.bindValue(":exch", spot->getDistrict());
 
         // // derived
         // spot->getDxBrg();
@@ -333,6 +350,7 @@ QVector<QSharedPointer<ClusterSpotData> > BandMapSpotDB::getRecords(const QStrin
             int idRmOn = query.record().indexOf("rmOn");
             int idOffRF = query.record().indexOf("offRF");
             int idCQResp = query.record().indexOf("CQResp");
+            int idExch = query.record().indexOf("exch");
 
             while (query.next())
             {
@@ -353,6 +371,7 @@ QVector<QSharedPointer<ClusterSpotData> > BandMapSpotDB::getRecords(const QStrin
                 spot->setRunModeOn(query.value(idRmOn).toBool());
                 spot->setOffRunFreq(query.value(idOffRF).toBool());
                 spot->setCqResponse(query.value(idCQResp).toBool());
+                spot->setDistrict(query.value(idExch).toString());
 
                 spots.append(spot);
             }

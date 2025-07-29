@@ -2075,10 +2075,11 @@ QSharedPointer<BandInfo> BaseContestLog::checkBandChange(Frequency targetFreq, F
     }
     return nb;
 }
-void BaseContestLog::checkSpotWorked(const Callsign &mcs, const QString &locator, const Frequency &freq, bool* callWorked, bool* locatorWorked)
+void BaseContestLog::checkSpotWorked(const Callsign &mcs, const QString &locator, const QString &exch, const Frequency &freq, bool* callWorked, bool* locatorWorked, bool *exchWorked)
 {
     bool callfound = false;
     bool locfound = false;
+    bool exchFound = false;
     if (!isReadOnly())
     {
         for ( LogIterator i = ctList.begin(); i != ctList.end(); i++ )
@@ -2115,10 +2116,18 @@ void BaseContestLog::checkSpotWorked(const Callsign &mcs, const QString &locator
                     locfound = true;
                 }
             }
-
-            if (callfound && locfound)
+            if (!exchFound && !exch.isEmpty())
             {
-                return;
+                if ((*i).wt->extraText == exch)
+                {
+                    *exchWorked = true;
+                    exchFound = true;
+                }
+            }
+
+            if (callfound && locfound && exchFound)
+            {
+                break;
             }
         }
     }

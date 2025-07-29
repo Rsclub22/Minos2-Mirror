@@ -38,11 +38,12 @@ bool ClusterSpotData::sameSpotAs(QSharedPointer<ClusterSpotData> cpd)
             dxCall == cpd->dxCall &&
             freq == cpd->freq &&
             dxLocator == cpd->dxLocator &&
+            district == cpd->district &&
             spotterCall == cpd->spotterCall &&
             dxPropMode == cpd->dxPropMode &&
             spotComment == cpd->spotComment &&
             dxCallWorked == cpd->dxCallWorked &&
-            dxLocatorWorked == cpd->sentToMemory;
+            dxLocatorWorked == cpd->dxLocatorWorked;
 }
 
 //---------------------------------------------------------------------------
@@ -199,10 +200,11 @@ QSharedPointer<ClusterSpotData> stringToDxSpot(QString spot, BaseContestLog *ct,
             // check to see if call or locator worked
             bool callWorked = false;
             bool locWorked = false;
+            bool exchWorked = false;
 
             Callsign cs;
             cs.setFullCall(spotlist[DXCALL]);
-            ct->checkSpotWorked(cs, spotlist[DXLOCATOR], spotlist[DXFREQ], &callWorked, &locWorked);
+            ct->checkSpotWorked(cs, spotlist[DXLOCATOR], spotlist[DXFREQ], QString(), &callWorked, &locWorked, &exchWorked);
 
             QString distance;
             QString bearing;
