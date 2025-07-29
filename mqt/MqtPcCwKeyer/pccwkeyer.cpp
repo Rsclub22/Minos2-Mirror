@@ -13,7 +13,16 @@
 
 
 
+<<<<<<< HEAD
 #include "PcCwKeyer.h"
+=======
+
+#include "pccwkeyer.h"
+#include <QtMath>
+#include <QTimer>
+#include <QMap>
+#include <QString>
+>>>>>>> d4df068ed7a6e79f2b0ac9977883e522f29a49c0
 #include "MTrace.h"
 #include <QTimer>
 #include <QDebug>

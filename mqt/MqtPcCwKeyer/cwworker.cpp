@@ -13,8 +13,15 @@
 
 
 
+<<<<<<< HEAD
 #include "CwWorker.h"
 #include <QtConcurrent/QtConcurrentRun>
+=======
+
+
+
+#include "cwworker.h"
+>>>>>>> d4df068ed7a6e79f2b0ac9977883e522f29a49c0
 #include <QThread>
 #include <QElapsedTimer>
 

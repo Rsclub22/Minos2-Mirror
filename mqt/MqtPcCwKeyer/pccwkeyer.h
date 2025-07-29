@@ -15,7 +15,14 @@
 
 #include <QObject>
 #include <QSerialPort>
+<<<<<<< HEAD
 #include "CwWorker.h"
+=======
+#include <QHash>
+#include <QChar>
+
+#include "cwworker.h"
+>>>>>>> d4df068ed7a6e79f2b0ac9977883e522f29a49c0
 
 class PcCwKeyer : public QObject
 {

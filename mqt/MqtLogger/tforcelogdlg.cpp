@@ -89,12 +89,12 @@ int TForceLogDlg::doexec(BaseContestLog *contest,  ScreenContact &screenContact,
 
     while ( tryagain && (( res = QDialog::exec() ) == QDialog::Accepted) )
     {
-        if ( contest->countryMult.getValue() )
+        //if ( contest->countryMult.getValue() )
         {
             temp = ui->CtryMultIl->text();
         }
-        else
-            break;
+//        else
+//            break;
 
         if ( !ui->CheckBox6->isChecked() )
         {

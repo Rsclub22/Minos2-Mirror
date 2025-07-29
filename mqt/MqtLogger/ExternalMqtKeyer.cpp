@@ -50,7 +50,7 @@ void ExternalMqtKeyer::voiceKeyerInit(int &numButtons)
 {
 
 
-    trace("ExternalMqtKeyer::voiceKyerInit");
+    trace("ExternalMqtKeyer::voiceKeyerInit");
 
     numButtons = VOICEKEYER_MAX_NUMBUTTONS;
     connect(LogContainer->sendDM, &TSendDM::keyerConfig, this, &ExternalMqtKeyer::onKeyerConfig, Qt::UniqueConnection);

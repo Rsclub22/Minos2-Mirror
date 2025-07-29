@@ -309,6 +309,12 @@ void TxVmButtonsFrame::createKeyer(QString voiceKeyerName)
                     int columns = 6;
                     createButtonsForKeyer(numButtons, columns);
                 }
+                else if (voiceKeyerType == keyerTypes[VoiceKeyerId::ExternalVoiceKeyer])
+                {
+                    int numButtons = 8;    // fixed at 12!
+                    int columns = 4;
+                    createButtonsForKeyer(numButtons, columns);
+                }
 
                 vmKeyParamList.clear();
                 buttonNumSent = NO_VM_BUTTON_ON;
