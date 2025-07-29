@@ -28,11 +28,26 @@ SkyScanControl::SkyScanControl(RotatorMainWindow *rotatorMainWindow, QObject *pa
     skyScanIntervalTimer = new QTimer(this);
     connect(skyScanIntervalTimer, &QTimer::timeout, this, &SkyScanControl::skyScanIntervalTimerTimeOut);
     connect(m_rotatorMainWindow, &RotatorMainWindow::sendRotationStatusToSkyScan, this, &SkyScanControl::handleRotationBearings);
+
+    getTestMode();      // get flag to alter pause timer duration
+
 }
 
 SkyScanControl::~SkyScanControl()
 {
 
+}
+
+// This will set the timer to multiples of 10 seconds for test only
+void SkyScanControl::getTestMode()
+{
+    QString fileName = ANTENNA_PATH_LOGGER() + FILENAME_AVAIL_ANTENNAS;
+    QSettings config(fileName, QSettings::IniFormat);
+
+    config.beginGroup("testSkyScan");
+    testPauseTimerActive = config.value("testSkyScanPauseTimer", false).toBool();
+    config.endGroup();
+    traceMessage(QString("TestSkyScanPauseTimer = %1").arg(testPauseTimerActive ? "True" : "False"));
 }
 
 
@@ -278,7 +293,16 @@ void SkyScanControl::handleRotationBearings(int bearing, skyScanBearingStates br
             // Schedule the next rotation
             traceMessage(QString("reverseScan flag = %1").arg(skyScanStateFlags.getReverseScan() ? "reverseScan" : "forwardScan"));
             skyScanStateFlags.setSkyScanPauseInterval(true);
-            scanPauseTimeCount = scanPauseTimeInterval * 60;
+
+            if (testPauseTimerActive)
+            {
+                scanPauseTimeCount = scanPauseTimeInterval * 10;
+            }
+            else
+            {
+                scanPauseTimeCount = scanPauseTimeInterval * 60;
+            }
+
             traceMessage(QString("start interval timer %1 secs").arg(scanPauseTimeCount));
             emit displaySkyScanPauseIntervalTime(scanPauseTimeCount);
 

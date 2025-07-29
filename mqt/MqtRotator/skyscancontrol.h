@@ -205,6 +205,8 @@ private:
     int scanPauseTimeCount = 0;   // seconds
     QTimer *skyScanIntervalTimer = nullptr;
 
+    bool testPauseTimerActive = false;
+
     void determinePath();
 
     void rotateToNextPosition();
@@ -225,6 +227,7 @@ private:
     void determinePathCompassSensor();
     void calcForwardPathCompassSensor(int startBearing_, int endBearing_);
     void calcReversePathCompassSensor(int startBearing_, int endBearing_);
+    void getTestMode();
 };
 
 #endif // SKYSCANCONTROL_H
