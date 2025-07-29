@@ -1002,42 +1002,42 @@
 <context>
     <name>ClusterSpotData</name>
     <message>
-        <location filename="../spotbasedata.cpp" line="110"/>
+        <location filename="../spotbasedata.cpp" line="111"/>
         <source>NONE</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../spotbasedata.cpp" line="113"/>
+        <location filename="../spotbasedata.cpp" line="114"/>
         <source>CLUSTER</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../spotbasedata.cpp" line="116"/>
+        <location filename="../spotbasedata.cpp" line="117"/>
         <source>CLUSTER MARKED</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../spotbasedata.cpp" line="119"/>
+        <location filename="../spotbasedata.cpp" line="120"/>
         <source>LOGGED</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../spotbasedata.cpp" line="122"/>
+        <location filename="../spotbasedata.cpp" line="123"/>
         <source>MARKED</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../spotbasedata.cpp" line="125"/>
+        <location filename="../spotbasedata.cpp" line="126"/>
         <source>SAVED</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../spotbasedata.cpp" line="128"/>
+        <location filename="../spotbasedata.cpp" line="129"/>
         <source>CQ</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../spotbasedata.cpp" line="131"/>
+        <location filename="../spotbasedata.cpp" line="132"/>
         <source>DELETED</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1169,22 +1169,22 @@
 <context>
     <name>ContestScore</name>
     <message>
-        <location filename="../contest.cpp" line="2165"/>
+        <location filename="../contest.cpp" line="2174"/>
         <source>Score: %1 Qsos; %2 pts; (%3 countries); %4 locs; bonuses %5(%6) = %7</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contest.cpp" line="2173"/>
+        <location filename="../contest.cpp" line="2182"/>
         <source>Score: %1 Qsos; %2 pts; %3 countries; %4 districts; %5 locs; bonuses %6(%7) = %8</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contest.cpp" line="2181"/>
+        <location filename="../contest.cpp" line="2190"/>
         <source>Score: %1 Qsos; %2 pts; %3%4 countries%5; bonuses %6(%7) = %8</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contest.cpp" line="2189"/>
+        <location filename="../contest.cpp" line="2198"/>
         <source>Score: %1 Qsos; %2 pts;%3%4 countries%5;%6%7 districts%8; %9%10 locators %13 = %14</source>
         <translation type="unfinished"></translation>
     </message>

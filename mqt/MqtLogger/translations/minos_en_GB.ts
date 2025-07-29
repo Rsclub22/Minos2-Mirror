@@ -184,32 +184,32 @@ Unworked</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1650"/>
+        <location filename="../bandmapclientframe.cpp" line="1666"/>
         <source>Bandmap Spot Filters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1725"/>
+        <location filename="../bandmapclientframe.cpp" line="1741"/>
         <source>Mouse in frame, updates paused</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1453"/>
+        <location filename="../bandmapclientframe.cpp" line="1471"/>
         <source>Cluster Server Not Running</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1486"/>
+        <location filename="../bandmapclientframe.cpp" line="1504"/>
         <source>Connected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1496"/>
+        <location filename="../bandmapclientframe.cpp" line="1514"/>
         <source>Disconnected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1608"/>
+        <location filename="../bandmapclientframe.cpp" line="1624"/>
         <source>Freq out of band</source>
         <translation type="unfinished"></translation>
     </message>
@@ -222,28 +222,28 @@ Unworked</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1065"/>
+        <location filename="../bandmapview.cpp" line="1066"/>
         <source>New</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1192"/>
+        <location filename="../bandmapview.cpp" line="1204"/>
         <source>CQ Frequency = %1
 The mode is %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1221"/>
+        <location filename="../bandmapview.cpp" line="1233"/>
         <source>The computed mode is</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1224"/>
+        <location filename="../bandmapview.cpp" line="1236"/>
         <source>The mode is</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1231"/>
+        <location filename="../bandmapview.cpp" line="1243"/>
         <source>%1 - %2, %3, %4, %5 [%6 %7 @ %8] 
 %9 %10
 %11
@@ -1452,27 +1452,27 @@ Move between components of a group using the mouse or up/down arrow keys.
     </message>
     <message>
         <location filename="../dmbuttonframe.cpp" line="71"/>
-        <location filename="../dmbuttonframe.cpp" line="567"/>
+        <location filename="../dmbuttonframe.cpp" line="569"/>
         <source>Data Modes Buttons from %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dmbuttonframe.cpp" line="206"/>
+        <location filename="../dmbuttonframe.cpp" line="208"/>
         <source>Not enough key definitions in %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dmbuttonframe.cpp" line="370"/>
+        <location filename="../dmbuttonframe.cpp" line="372"/>
         <source>Invalid or missing FKey definitions</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dmbuttonframe.cpp" line="553"/>
+        <location filename="../dmbuttonframe.cpp" line="555"/>
         <source>Function Key Definitions Files (*.json);;All Files (*.*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dmbuttonframe.cpp" line="557"/>
+        <location filename="../dmbuttonframe.cpp" line="559"/>
         <source>Open Function Key Definitions File</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5400,116 +5400,116 @@ Please choose a new name.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1159"/>
-        <location filename="../tlogcontainer.cpp" line="1448"/>
+        <location filename="../tlogcontainer.cpp" line="1162"/>
+        <location filename="../tlogcontainer.cpp" line="1454"/>
         <source>Minos contest files (*.minos *.Minos);;All Files (*.*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1163"/>
+        <location filename="../tlogcontainer.cpp" line="1166"/>
         <source>Open contests</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1201"/>
+        <location filename="../tlogcontainer.cpp" line="1206"/>
         <source>Use this combo for file types (*.*);;Reg1Test Files (*.edi);;GJV contest files (*.gjv);;RSGB Log Files (*.log);;ADIF Files (*.adi);;All Files (*.*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1209"/>
+        <location filename="../tlogcontainer.cpp" line="1214"/>
         <source>Import %1 contests</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1326"/>
+        <location filename="../tlogcontainer.cpp" line="1332"/>
         <source>Do you want to close all but the current contest?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1385"/>
+        <location filename="../tlogcontainer.cpp" line="1391"/>
         <source>This action will clear geometry entries for all of the apps within Minos.
 
 Please confirm this action by pressing &quot;Yes&quot;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1399"/>
+        <location filename="../tlogcontainer.cpp" line="1405"/>
         <source>Clear registry only works under Windows</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1452"/>
+        <location filename="../tlogcontainer.cpp" line="1458"/>
         <source>Open contest for Analysis</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1464"/>
+        <location filename="../tlogcontainer.cpp" line="1470"/>
         <source>Failed to open Contest Log file %1 : %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1472"/>
+        <location filename="../tlogcontainer.cpp" line="1478"/>
         <source>Analysis of %1 complete; look in the trace log for analysis.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="2379"/>
+        <location filename="../tlogcontainer.cpp" line="2385"/>
         <source>Minos Contest Logger Application</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1363"/>
+        <location filename="../tlogcontainer.cpp" line="1369"/>
         <source>You may need to close and reload Minos to have these settings applied</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1562"/>
+        <location filename="../tlogcontainer.cpp" line="1568"/>
         <source>Contest Sets</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1651"/>
+        <location filename="../tlogcontainer.cpp" line="1657"/>
         <source>Creating </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1651"/>
-        <location filename="../tlogcontainer.cpp" line="2181"/>
+        <location filename="../tlogcontainer.cpp" line="1657"/>
+        <location filename="../tlogcontainer.cpp" line="2187"/>
         <source>Loading </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1653"/>
+        <location filename="../tlogcontainer.cpp" line="1659"/>
         <source>Contest file </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1822"/>
+        <location filename="../tlogcontainer.cpp" line="1828"/>
         <source>Configure Screen Layouts...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1912"/>
+        <location filename="../tlogcontainer.cpp" line="1918"/>
         <source>&amp;Manage Contest Sets...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="2183"/>
+        <location filename="../tlogcontainer.cpp" line="2189"/>
         <source>List file </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="2193"/>
+        <location filename="../tlogcontainer.cpp" line="2199"/>
         <source>Open List %1?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="2217"/>
+        <location filename="../tlogcontainer.cpp" line="2223"/>
         <source>Contact list files (*.csl);;All Files (*.*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="2221"/>
+        <location filename="../tlogcontainer.cpp" line="2227"/>
         <source>Open Archive List</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5568,8 +5568,8 @@ Please confirm this action by pressing &quot;Yes&quot;.</source>
 <context>
     <name>TSendDM</name>
     <message>
-        <location filename="../SendRPCDM.cpp" line="1127"/>
-        <location filename="../SendRPCDM.cpp" line="1223"/>
+        <location filename="../SendRPCDM.cpp" line="1141"/>
+        <location filename="../SendRPCDM.cpp" line="1244"/>
         <source>Disconnected</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5771,27 +5771,27 @@ Please confirm this action by pressing &quot;Yes&quot;.</source>
 <context>
     <name>TSingleLogFrame</name>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1055"/>
+        <location filename="../tsinglelogframe.cpp" line="1058"/>
         <source>Failed to open %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1069"/>
+        <location filename="../tsinglelogframe.cpp" line="1072"/>
         <source>Save imported log as a .minos file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1597"/>
+        <location filename="../tsinglelogframe.cpp" line="1600"/>
         <source>No unfilled contacts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1616"/>
+        <location filename="../tsinglelogframe.cpp" line="1619"/>
         <source>Please give serial wanted</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1638"/>
+        <location filename="../tsinglelogframe.cpp" line="1641"/>
         <source>Serial number %1 not found</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5889,7 +5889,12 @@ Last %8 Mins: %9 QSO %10 pts %11 mults
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.ui" line="388"/>
+        <location filename="../txvmbuttonsframe.ui" line="404"/>
+        <source>Stored Msg Playing:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../txvmbuttonsframe.ui" line="437"/>
         <source>CW</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5919,50 +5924,50 @@ Last %8 Mins: %9 QSO %10 pts %11 mults
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.ui" line="451"/>
+        <location filename="../txvmbuttonsframe.ui" line="500"/>
         <source>Stop</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="617"/>
+        <location filename="../txvmbuttonsframe.cpp" line="618"/>
         <source>To use the external keyer mqtKeyer must be running and connected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="964"/>
-        <location filename="../txvmbuttonsframe.cpp" line="1199"/>
+        <location filename="../txvmbuttonsframe.cpp" line="979"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1214"/>
         <source>Rig CW Message - </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="968"/>
-        <location filename="../txvmbuttonsframe.cpp" line="1203"/>
+        <location filename="../txvmbuttonsframe.cpp" line="983"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1218"/>
         <source>PC CW Keyer Message - </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="985"/>
-        <location filename="../txvmbuttonsframe.cpp" line="1219"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1000"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1234"/>
         <source>Voice Memory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="987"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1002"/>
         <source>%1 %2 - Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1221"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1236"/>
         <source>%1 %2 - New</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1866"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1882"/>
         <source>Rig Voice Keyer Available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1870"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1886"/>
         <source>Rig CW Messages Available</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5972,22 +5977,22 @@ Last %8 Mins: %9 QSO %10 pts %11 mults
         <translation></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="2003"/>
+        <location filename="../txvmbuttonsframe.cpp" line="2035"/>
         <source>TX On</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="2009"/>
+        <location filename="../txvmbuttonsframe.cpp" line="2042"/>
         <source>TX Off</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="2019"/>
+        <location filename="../txvmbuttonsframe.cpp" line="2053"/>
         <source>PTT Enabled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="2025"/>
+        <location filename="../txvmbuttonsframe.cpp" line="2059"/>
         <source>PTT Disabled</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6379,12 +6384,12 @@ Please edit or remove</source>
 <context>
     <name>TxVoiceMemButton</name>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="2315"/>
+        <location filename="../txvmbuttonsframe.cpp" line="2367"/>
         <source>&amp;New</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="2316"/>
+        <location filename="../txvmbuttonsframe.cpp" line="2368"/>
         <source>&amp;Edit</source>
         <translation type="unfinished"></translation>
     </message>

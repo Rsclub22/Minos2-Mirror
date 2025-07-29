@@ -50,12 +50,12 @@
         <translation>CW (DTR)</translation>
     </message>
     <message>
-        <location filename="../pccwkeyermainwindow.cpp" line="730"/>
+        <location filename="../pccwkeyermainwindow.cpp" line="762"/>
         <source>TX On</source>
         <translation>TX Actif</translation>
     </message>
     <message>
-        <location filename="../pccwkeyermainwindow.cpp" line="736"/>
+        <location filename="../pccwkeyermainwindow.cpp" line="768"/>
         <source>TX Off</source>
         <translation>TX Éteint</translation>
     </message>
@@ -63,7 +63,7 @@
 <context>
     <name>SettingsDialog</name>
     <message>
-        <location filename="../pccwkeyermainwindow.cpp" line="43"/>
+        <location filename="../pccwkeyermainwindow.cpp" line="44"/>
         <source>N/A</source>
         <translation>N/A</translation>
     </message>

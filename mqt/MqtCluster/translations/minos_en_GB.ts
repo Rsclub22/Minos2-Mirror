@@ -176,7 +176,7 @@
     </message>
     <message>
         <location filename="../clustermainwindow.cpp" line="126"/>
-        <location filename="../clustermainwindow.cpp" line="3011"/>
+        <location filename="../clustermainwindow.cpp" line="3046"/>
         <source>Minos Cluster Server</source>
         <translation type="unfinished"></translation>
     </message>
@@ -287,38 +287,38 @@ Do you want to enter\change your details?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="1851"/>
+        <location filename="../clustermainwindow.cpp" line="1886"/>
         <source>No spots will be sent to the log - please check one of the boxes!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="1882"/>
+        <location filename="../clustermainwindow.cpp" line="1917"/>
         <source>Sending command - Not logged in  - %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="2338"/>
+        <location filename="../clustermainwindow.cpp" line="2373"/>
         <source>Cluster %1 User Command Clear</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="2339"/>
+        <location filename="../clustermainwindow.cpp" line="2374"/>
         <source>Do you really want to clear cluster %1 user command number:%2?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="3011"/>
+        <location filename="../clustermainwindow.cpp" line="3046"/>
         <source>Minos Cluster
 Copyright D Balharrie G8FKH/M0DGB 2016 - 2020</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="3017"/>
+        <location filename="../clustermainwindow.cpp" line="3052"/>
         <source>Cluster Node User Command Shortcut Keys</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="3018"/>
+        <location filename="../clustermainwindow.cpp" line="3053"/>
         <source>VHF/UHF User Commands
 
 Send Cmd
@@ -340,26 +340,26 @@ C - Clear cmd
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../setupdialog.cpp" line="146"/>
-        <location filename="../setupdialog.cpp" line="573"/>
+        <location filename="../setupdialog.cpp" line="142"/>
+        <location filename="../setupdialog.cpp" line="586"/>
         <source>Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../setupdialog.cpp" line="147"/>
-        <location filename="../setupdialog.cpp" line="574"/>
+        <location filename="../setupdialog.cpp" line="143"/>
+        <location filename="../setupdialog.cpp" line="587"/>
         <source>Address</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../setupdialog.cpp" line="148"/>
-        <location filename="../setupdialog.cpp" line="575"/>
+        <location filename="../setupdialog.cpp" line="144"/>
+        <location filename="../setupdialog.cpp" line="588"/>
         <source>Port</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../setupdialog.cpp" line="149"/>
-        <location filename="../setupdialog.cpp" line="576"/>
+        <location filename="../setupdialog.cpp" line="145"/>
+        <location filename="../setupdialog.cpp" line="589"/>
         <source>Password</source>
         <translation type="unfinished"></translation>
     </message>
@@ -520,18 +520,18 @@ C - Clear cmd
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../setupdialog.cpp" line="176"/>
+        <location filename="../setupdialog.cpp" line="189"/>
         <source>%1 minutes has been entered
 The time to live must be between %2 minutes and %3 minutes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../setupdialog.cpp" line="638"/>
+        <location filename="../setupdialog.cpp" line="651"/>
         <source>Delete Cluster Node</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../setupdialog.cpp" line="638"/>
+        <location filename="../setupdialog.cpp" line="651"/>
         <source>Are you sure you want to delete a cluster node?</source>
         <translation type="unfinished"></translation>
     </message>
