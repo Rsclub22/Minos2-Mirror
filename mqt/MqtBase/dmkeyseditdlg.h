@@ -2,6 +2,7 @@
 #define DMKEYSEDITDLG_H
 
 #include <QDialog>
+#include <QListWidget>
 #include <QItemSelection>
 #include "dmFKeydef.h"
 
@@ -50,6 +51,9 @@ private slots:
     void on_OKButton_clicked();
 
     void on_SectionsList_itemSelectionChanged();
+
+    void on_RadioList_itemSelectionChanged();
+
     void on_renameButton_clicked();
 
     void on_settingsSplitter_splitterMoved(int pos, int index);
@@ -70,5 +74,7 @@ private:
     QString getRigKey() const;
 
     bool ignoreSectionChange = false;
+    QListWidget* RadioList = nullptr;
+
 };
 #endif // DMKEYSEDITDLG_H

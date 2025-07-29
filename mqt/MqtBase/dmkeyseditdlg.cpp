@@ -15,6 +15,7 @@
 #include "txkeyerCommonConstants.h"
 //#include "txVmExternalButtonDialog.h"
 #include "txvminternalbuttondialog.h"
+#include "txkeyerCommonConstants.h"
 #include <QDebug>
 
 using namespace TxKeyerCommon;
@@ -50,6 +51,14 @@ DMKeysEditDlg::DMKeysEditDlg(QWidget *parent, QString fKeyFileName, QString name
     ui->CopyButton->setText(tr("Copy Macro FKey section"));
     ui->DeleteButton->setText(tr("Delete Macro FKey section"));
     ui->renameButton->setText(tr("Rename Macro FKey section"));
+
+    if (txKeyerType == keyerTypes[TxKeyerId::RigControl])
+    {
+        RadioList = new QListWidget(this);
+        ui->settingsSplitter->insertWidget(1, RadioList);
+        RadioList->setMinimumWidth(10);
+    }
+
 
     ui->SectionsList->setMinimumWidth(10);
     ui->OptionsTable->setMinimumWidth(10);
@@ -672,6 +681,13 @@ void DMKeysEditDlg::on_SectionsList_itemSelectionChanged()
         name = sections[offset];
         showSection();
     }
+}
+
+
+
+void DMKeysEditDlg::on_RadioList_itemSelectionChanged()
+{
+
 }
 
 void DMKeysEditDlg::doCloseEvent()
