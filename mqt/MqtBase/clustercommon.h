@@ -141,6 +141,7 @@ const int LOCATORUP = 1 << 2;
 // Colour of text for worked callsign and locators in cluster views
 inline const QColor CALLSIGN_WORKED_COLOUR = Qt::red;
 inline const QColor LOCATOR_WORKED_COLOUR = Qt::red;
+inline const QColor QTH_WORKED_COLOUR = Qt::red;
 inline const QColor SPOT_TO_MEMORY = Qt::blue;
 inline const QColor NO_SPOT_TO_MEMORY = Qt::black;
 inline const QColor NOT_WORKED_COLOUR = Qt::black;

@@ -1140,6 +1140,7 @@ void BandmapClientFrame::addLogSpotToBandmapTable(QSharedPointer<ClusterSpotData
             Callsign loggedCall = newSpot->getDxCall();
             QString band = newSpot->getBand();
             QString loc = newSpot->getDxLocator();
+            QString exch = newSpot->getDistrict();
 
             for (int row = 0; row < bandmapDataModel->rowCount(); row++)
             {
@@ -1193,6 +1194,17 @@ void BandmapClientFrame::addLogSpotToBandmapTable(QSharedPointer<ClusterSpotData
                         }
                     }
                 }
+                if (!exch.isEmpty())
+                {
+                    QString storedExch = spotInBandmap->getDistrict();
+                    if (!storedExch.isEmpty())
+                    {
+                        if (exch == storedExch)
+                        {
+                            spotInBandmap->setDistrictWorked(true);
+                        }
+                    }
+                }
             }
         }   // newspot is LOGGED
         // If it is a SAVED spot we need to test this spot for worked
@@ -1200,6 +1212,7 @@ void BandmapClientFrame::addLogSpotToBandmapTable(QSharedPointer<ClusterSpotData
         {
             QString loc = newSpot->getDxLocator();
             Callsign call = newSpot->getDxCall();
+            QString exch = newSpot->getDistrict();
             if (loc.isEmpty())
             {
                 // If we have worked them, fill in locator
@@ -1207,12 +1220,13 @@ void BandmapClientFrame::addLogSpotToBandmapTable(QSharedPointer<ClusterSpotData
                 loc = ct->getLocForCall(call);
                 newSpot->setDxLocator(loc);
             }
-            if (!loc.isEmpty() || call.getValRes() == CS_OK)
+            if (!loc.isEmpty() || call.getValRes() == CS_OK || !exch.isEmpty())
             {
                 // check to see if call or locator worked
                 bool callWorked = false;
                 bool locWorked = false;
-                ct->checkSpotWorked(call, loc, newSpot->getFreq(), &callWorked, &locWorked);
+                bool exchWorked = false;
+                ct->checkSpotWorked(call, loc, exch, newSpot->getFreq(), &callWorked, &locWorked, &exchWorked);
                 if (locWorked)
                 {
                     newSpot->setDxLocatorWorked(true);
@@ -1223,6 +1237,10 @@ void BandmapClientFrame::addLogSpotToBandmapTable(QSharedPointer<ClusterSpotData
 
                     // If we worked the call, we better have also worked their locator...
                     newSpot->setDxLocatorWorked(true);
+                }
+                if (exchWorked)
+                {
+                    newSpot->setDistrictWorked(true);
                 }
             }
         }
@@ -1537,8 +1555,6 @@ void BandmapClientFrame::checkLegalFrequencies(Frequency freq)
 
             legalFreq = false;
         }
-
-        ui->freqDisplay->setText(sf);
     }
     else
     {
@@ -1549,8 +1565,8 @@ void BandmapClientFrame::checkLegalFrequencies(Frequency freq)
         }
 
         legalFreq = false;
-        ui->freqDisplay->setText(sf);
     }
+    ui->freqDisplay->setText(sf);
     bandmapView->setFreq(curFreq, legalFreq);
 }
 
