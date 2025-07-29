@@ -1141,6 +1141,15 @@ void BandmapClientFrame::addLogSpotToBandmapTable(QSharedPointer<ClusterSpotData
             QString band = newSpot->getBand();
             QString loc = newSpot->getDxLocator();
             QString exch = newSpot->getDistrict();
+            newSpot->setDxCallWorked(true);
+            if (!loc.isEmpty())
+            {
+                newSpot->setDxLocatorWorked(true);
+            }
+            if (!exch.isEmpty())
+            {
+                newSpot->setDistrictWorked(true);
+            }
 
             for (int row = 0; row < bandmapDataModel->rowCount(); row++)
             {
