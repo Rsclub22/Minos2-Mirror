@@ -76,5 +76,6 @@ private:
     bool ignoreSectionChange = false;
     QListWidget* RadioList = nullptr;
 
+    void showRadiosForSection();
 };
 #endif // DMKEYSEDITDLG_H

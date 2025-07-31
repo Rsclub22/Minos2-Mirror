@@ -144,8 +144,50 @@ void DMKeysEditDlg::showSections()
     }
 
     ui->SectionsList->setCurrentRow(offset);
+
+    if (RadioList)  // we have created a radio section
+    {
+        showRadiosForSection();
+    }
+
     showSection();  // Or showDetails(), if that’s what you want immediately
 }
+
+void DMKeysEditDlg::showRadiosForSection()
+{
+    if (RadioList)
+    {
+        RadioList->clear();  // Assuming you have a QListWidget* called RadiosList
+
+        const auto keyerIt = allKeyConfigs.constFind(txKeyerType);
+        if (keyerIt == allKeyConfigs.cend())
+            return;
+
+        const auto contestIt = keyerIt->constFind(name);  // name = selected section/contest
+        if (contestIt == keyerIt->cend())
+            return;
+
+        // Extract rig names for this contest
+        QStringList radioNames = contestIt->keys();
+
+        std::sort(radioNames.begin(), radioNames.end(),
+                  [](const QString &a, const QString &b) {
+                      return a.compare(b, Qt::CaseInsensitive) < 0;
+                  });
+
+        for (const QString &radio : radioNames)
+        {
+            RadioList->addItem(radio);
+        }
+
+        // Optional: auto-select first item or previously used radio
+        if (!radioNames.isEmpty())
+            RadioList->setCurrentRow(0);
+    }
+
+
+}
+
 
 //---------------------------------------------------------------------------
 void DMKeysEditDlg::showSection()
@@ -662,7 +704,7 @@ void DMKeysEditDlg::on_OKButton_clicked()
 
 void DMKeysEditDlg::on_SectionsList_itemSelectionChanged()
 {
-    if (ignoreSectionChange)
+    if (ignoreSectionChange)        // when making program changes
         return;
 
 
@@ -679,14 +721,82 @@ void DMKeysEditDlg::on_SectionsList_itemSelectionChanged()
     if (offset >= 0 && offset < sections.size())
     {
         name = sections[offset];
-        showSection();
+        //rigName = KEYER_NO_RADIO;       // set default radio
+        //showSection();
     }
+
+    if (RadioList)
+    {
+        RadioList->clear();
+
+        const auto contestIt = keyerIt->constFind(name);  // name = selected section/contest
+        if (contestIt == keyerIt->cend())
+            return;
+
+        // Extract rig names for this contest
+        QStringList radioNames = contestIt->keys();
+
+        std::sort(radioNames.begin(), radioNames.end(),
+                  [](const QString &a, const QString &b) {
+                      return a.compare(b, Qt::CaseInsensitive) < 0;
+                  });
+
+        for (const QString &radio : radioNames)
+        {
+            RadioList->addItem(radio);
+        }
+
+        for (int i = 0; i < RadioList->count(); i++)
+        {
+            QListWidgetItem *item = RadioList->item(i);
+            if (item->text() == KEYER_NO_RADIO)
+            {
+                RadioList->setCurrentItem(item);
+                item->setSelected(true);
+            }
+        }
+    }
+
+    rigName = KEYER_NO_RADIO;       // set default radio
+    showSection();
 }
 
 
 
 void DMKeysEditDlg::on_RadioList_itemSelectionChanged()
 {
+    if (ignoreSectionChange)        // when making program changes
+        return;
+
+    if (RadioList)
+    {
+
+
+        saveCurrentSection();
+
+        const auto keyerIt = allKeyConfigs.constFind(txKeyerType);
+        if (keyerIt == allKeyConfigs.cend())
+            return;
+
+        const auto contestIt = keyerIt->constFind(name);  // name = selected section/contest
+        if (contestIt == keyerIt->cend())
+            return;
+
+        // Extract rig names for this contest
+        QStringList radioNames = contestIt->keys();
+
+        int offset = RadioList->currentRow();
+        if (offset >= 0 && offset < radioNames.size())
+        {
+            rigName =radioNames[offset];
+            showSection();
+        }
+
+
+
+    }
+
+
 
 }
 

@@ -594,6 +594,9 @@ void DMButtonFrame::set_rigControl_FrameState(QString txKeyerName)
     {
         ui->stopButton->setVisible(true);
     }
+
+    populateFksetCombo(txKeyerName, currentName);
+    fkeyFileChanged();
 }
 
 void DMButtonFrame::set_cwRigControl_FrameState(QString txKeyerName)
@@ -655,6 +658,10 @@ void DMButtonFrame::set_cwRigControl_FrameState(QString txKeyerName)
     }
 
     initCwTextEntryBox(getCwRadioManufacturer(getCwMemType(selectedRadio)), CWKEYER_RADIO_COMMON_PARAMS_FILENAME);
+
+    populateFksetCombo(txKeyerName, currentName);
+    fkeyFileChanged();
+
 }
 
 
@@ -700,6 +707,8 @@ void DMButtonFrame::set_pcCwKeyer_FrameState(QString txKeyerName)
 
     initCwTextEntryBox(getCwRadioManufacturer(getCwMemType(selectedRadio)), CWKEYER_RADIO_COMMON_PARAMS_FILENAME);
 
+    populateFksetCombo(txKeyerName, currentName);
+    fkeyFileChanged();
 }
 
 
