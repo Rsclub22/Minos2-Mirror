@@ -47,6 +47,10 @@ void HtmlDelegate::paint( QPainter *painter, const QStyleOptionViewItem &poption
     //return QStyledItemDelegate::paint(painter, poption, index);
     QStyleOptionViewItem option = poption; // kill const
 
+    if (!index.isValid())
+    {
+        return;
+    }
     initStyleOption( &option, index );
 
     QStyle *style = option.widget ? option.widget->style() : QApplication::style();
