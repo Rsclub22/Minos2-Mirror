@@ -48,7 +48,7 @@ signals:
     void updateAntennaOffset(int);
 
 protected:
-    QGroupBox *getRotatorControlGroupBoxObject() override;
+    QWidget *getRotatorControlGroupBoxObject() override;
     QComboBox *getAntennaSelectObject() override;
     QToolButton* getRotateButtonObject() override;
     BearingLineEdit* getBrgLineEditObject() override;

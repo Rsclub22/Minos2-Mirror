@@ -10,6 +10,7 @@
 
 
 #include "rotatorcompassframe.h"
+#include "cutils.h"
 #include "ui_rotatorcompassframe.h"
 
 
@@ -35,7 +36,7 @@ RotatorCompassFrame::RotatorCompassFrame(QWidget *parent)
     connect(ui->compassDialDisplay, &MinosCompass::sendStop, this, &RotatorCompassFrame::stop_rotation);
 
     setupShortcuts(this);
-
+    adjustMargins(layout(), 0, 0, 0, 0, 0);
     traceMsg("RotCompassFrame Started");
 
 
@@ -48,9 +49,9 @@ RotatorCompassFrame::~RotatorCompassFrame()
 
 
 
-QGroupBox* RotatorCompassFrame::getRotatorControlGroupBoxObject()
+QWidget* RotatorCompassFrame::getRotatorControlGroupBoxObject()
 {
-    return ui->rotatoCompassFrameGroupBox;
+    return this;
 }
 
 QComboBox* RotatorCompassFrame::getAntennaSelectObject()

@@ -14,12 +14,6 @@
    <string notr="true"/>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_5">
-   <item>
-    <widget class="QGroupBox" name="rotatoCompassFrameGroupBox">
-     <property name="title">
-      <string>Rotator Compass</string>
-     </property>
-     <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
        <layout class="QVBoxLayout" name="verticalLayout">
         <item>
@@ -71,6 +65,13 @@
             </property>
            </spacer>
           </item>
+          <item>
+           <widget class="QLabel" name="label_2">
+            <property name="text">
+             <string>Rotator Compass</string>
+            </property>
+           </widget>
+          </item>
          </layout>
         </item>
         <item>
@@ -87,7 +88,7 @@
               </property>
               <property name="sizeHint" stdset="0">
                <size>
-                <width>20</width>
+                <width>0</width>
                 <height>40</height>
                </size>
               </property>
@@ -95,25 +96,12 @@
             </item>
            </layout>
           </item>
-          <item>
-           <spacer name="horizontalSpacer_3">
-            <property name="orientation">
-             <enum>Qt::Orientation::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
          </layout>
         </item>
        </layout>
       </item>
       <item>
-       <widget class="QFrame" name="frame">
+       <widget class="QFrame" name="turnFrame">
         <property name="frameShape">
          <enum>QFrame::Shape::Box</enum>
         </property>
@@ -292,9 +280,6 @@
         </layout>
        </widget>
       </item>
-     </layout>
-    </widget>
-   </item>
   </layout>
  </widget>
  <customwidgets>

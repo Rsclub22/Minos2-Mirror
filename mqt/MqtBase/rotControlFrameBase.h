@@ -71,7 +71,7 @@ public:
 protected:
 
     virtual QWidget* getCompassObject() { return nullptr; }
-    virtual QGroupBox* getRotatorControlGroupBoxObject() { return nullptr; }
+    virtual QWidget* getRotatorControlGroupBoxObject() { return nullptr; }
     virtual QComboBox* getAntennaSelectObject() { return nullptr; }
     virtual QLabel* getRotConnectStateLabelObject() { return nullptr; }
     virtual QLabel* getRotatorStatMsgLabelObject() { return nullptr; }
