@@ -65,11 +65,14 @@ void HtmlDelegate::paint( QPainter *painter, const QStyleOptionViewItem &poption
     style->drawControl( QStyle::CE_ItemViewItem, &option, painter, option.widget );
 
     QAbstractTextDocumentLayout::PaintContext ctx;
-    if (option.state & QStyle::State_Selected)
-    {
-        QColor c(0xFF, 0xFF, 0xFF);
-        ctx.palette.setColor(QPalette::Text, c);
-    }
+//     if (option.state & QStyle::State_Selected)
+//     {
+//         QColor c(0xFF, 0xFF, 0xFF);
+//         QColor c2(0, 0, 0);
+
+// //        ctx.palette.setColor(QPalette::Active, QPalette::Text, c);
+// //        ctx.palette.setColor(QPalette::Inactive, QPalette::Text, c2);
+//     }
     QRect textRect = style->subElementRect( QStyle::SE_ItemViewItemText, &option );
 
     QRect oldRect = textRect;
