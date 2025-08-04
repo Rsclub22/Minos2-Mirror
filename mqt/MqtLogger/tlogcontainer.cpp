@@ -22,6 +22,7 @@
 #include "checkupdates.h"
 #include "fileutils.h"
 #include "list.h"
+#include "tcalendardownload.h"
 #include "tsinglelogframe.h"
 #include "taboutbox.h"
 #include "contestdetails.h"
@@ -711,6 +712,7 @@ void TLogContainer::setupMenus()
     ManageHamlibAction = newAction(QT_TR_NOOP("Manage Hamlib..."), ui->menuTools, &TLogContainer::ManageHamlibActionExecute);
 #endif
     manageSpotDatabaseAction = newAction(QT_TR_NOOP("Manage Bandmap Spots Database..."), ui->menuTools, &TLogContainer::on_manageSpotsDatabaseActionSelected);
+    DownloadFilesAction = newAction(QT_TR_NOOP("Download Latest Calendar"), ui->menuTools, &TLogContainer::on_downloadFilesActionSelected);
 
     ui->menuTools->addSeparator();
 
@@ -1493,6 +1495,11 @@ void TLogContainer::on_manageSpotsDatabaseActionSelected()
 {
     ManageBandmapSpotsDb mbsd(this);
     mbsd.exec();
+}
+void TLogContainer::on_downloadFilesActionSelected()
+{
+    TCalendarDownload dl(this);
+    dl.exec();
 }
 void TLogContainer::GoToSerialActionExecute()
 {

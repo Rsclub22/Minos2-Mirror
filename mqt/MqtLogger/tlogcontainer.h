@@ -166,6 +166,7 @@ private:
     QAction *AnalyseMinosLogAction = nullptr;
     QAction *CorrectDateTimeAction = nullptr;
     QAction *ManageHamlibAction = nullptr;
+    QAction *DownloadFilesAction = nullptr;
     QAction* manageSpotDatabaseAction = nullptr;
     QAction *ScreenConfigAction = nullptr;
     QAction *AdvancedOptionsAction = nullptr;
@@ -249,6 +250,7 @@ private slots:
     void StatsActionExecute();
     void ManageHamlibActionExecute();
     void on_manageSpotsDatabaseActionSelected();
+    void on_downloadFilesActionSelected();
 public slots:
     void onArgsReceived(QString conarg);
     void ListOpenActionExecute();
