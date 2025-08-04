@@ -2148,6 +2148,22 @@ QString BaseContestLog::getLocForCall(const Callsign &mcs)
     }
     return QString();
 }
+QString BaseContestLog::getExchForCall(const Callsign &mcs)
+{
+    for ( LogIterator i = ctList.begin(); i != ctList.end(); i++ )
+    {
+        if ((*i).wt->notValidContact() )
+        {
+            continue;
+        }
+
+        if ((*i).wt->cs == mcs)
+        {
+            return (*i).wt->extraText.getValue();
+        }
+    }
+    return QString();
+}
 //====================================================================
 ContestScore::ContestScore(BaseContestLog *ct)
 {

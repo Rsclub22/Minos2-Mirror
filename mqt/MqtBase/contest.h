@@ -456,6 +456,7 @@ class BaseContestLog: public BaseLogList
       void checkSpotWorked(const Callsign &mcs, const QString &locator, const QString &exch, const Frequency &freq, bool *callWorked, bool *locatorWorked, bool *exchWorked);
       void calcDistanceBearing(const QString &_locator, double *distance, int *bearing);
       QString getLocForCall(const Callsign &mcs);
+      QString getExchForCall(const Callsign &mcs);
   protected:
       unsigned long nextBlock = 1;
    int ct_stanzaCount = 0;
