@@ -544,7 +544,7 @@ void MinosCompass::updateSkyScanStartBearing(int bearing)
     }
 
     skyScanStartBearing = bearing;
-    qDebug() << "skyScan compass start bearing = " << QString::number(skyScanStartBearing);
+    //qDebug() << "skyScan compass start bearing = " << QString::number(skyScanStartBearing);
     update();
 }
 
@@ -559,7 +559,7 @@ void MinosCompass::updateSkyScanEndBearing(int bearing)
     }
 
     skyScanEndBearing = bearing;
-    qDebug() << "skyScan compass end bearing = " << QString::number(skyScanEndBearing);
+    //qDebug() << "skyScan compass end bearing = " << QString::number(skyScanEndBearing);
     update();
 }
 

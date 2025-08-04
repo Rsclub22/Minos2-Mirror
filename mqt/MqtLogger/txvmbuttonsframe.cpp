@@ -1846,7 +1846,7 @@ void TxVmButtonsFrame:: setAvailIndicatorOnOffForPcCwKeyer()
 
 void TxVmButtonsFrame::setMessagePlayingFlag(bool playing)
 {
-    qDebug() << "set messagePlaying " << (playing ? "True" : "False");
+    //qDebug() << "set messagePlaying " << (playing ? "True" : "False");
     messagePlaying = playing;
 }
 
@@ -2188,11 +2188,11 @@ void TxVmButtonsFrame::onInternalVoiceMemoryPlayState(bool playing)
 {
     if (playing)
     {
-        qDebug() << "internal is playing";
+        //qDebug() << "internal is playing";
     }
     else
     {
-       qDebug() << "internal has stopped";
+       //qDebug() << "internal has stopped";
         onMsgDurTimerTimeout();
     }
 }
