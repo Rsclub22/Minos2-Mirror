@@ -2167,6 +2167,7 @@ void TLogContainer::preloadLists( )
         // get each value
         QString ent;
         TContestApp::getContestApp() ->listsPreloadBundle.getStringProfile( slotlst[i], ent, "" );
+        ent = GetCleanPath(ent);
         pathlst.append( ent );
     }
 
@@ -2238,7 +2239,8 @@ void TLogContainer::doListOpenActionExecute(QWidget *p)
 
     for (auto const &fname: QASCONST(fnames))
     {
-         addListSlot( p, fname, -1, false );
+        QString fn = GetCleanPath(fname);
+         addListSlot( p, fn, -1, false );
     }
 }
 void TLogContainer::ManageListsActionExecute(  )
