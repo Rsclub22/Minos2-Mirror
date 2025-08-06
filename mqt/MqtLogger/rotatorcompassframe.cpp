@@ -39,7 +39,8 @@ RotatorCompassFrame::RotatorCompassFrame(QWidget *parent)
     adjustMargins(layout(), 0, 0, 0, 0, 0);
     traceMsg("RotCompassFrame Started");
 
-
+    dynamic_cast<QVBoxLayout *>(layout())->setStretch(100, 1);
+    dynamic_cast<QVBoxLayout *>(ui->compassFrame->layout())->setStretch(1, 100);
 }
 
 RotatorCompassFrame::~RotatorCompassFrame()
