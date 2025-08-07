@@ -11,6 +11,7 @@
 #include "MShowMessageDlg.h"
 #include "MMessageDialog.h"
 #include "dmkeyseditdlg.h"
+#include "dmbuttoneditaddradiodialog.h"
 #include "ui_dmkeyseditdlg.h"
 #include "txkeyerCommonConstants.h"
 //#include "txVmExternalButtonDialog.h"
@@ -20,13 +21,14 @@
 
 using namespace TxKeyerCommon;
 
-DMKeysEditDlg::DMKeysEditDlg(QWidget *parent, QString fKeyFileName, QString name, KeyerMap &allKeyConfigs, QString txKeyerType, QString rigName) :
+DMKeysEditDlg::DMKeysEditDlg(QWidget *parent, QString fKeyFileName, QString name, KeyerMap &allKeyConfigs, QString txKeyerType, QString rigName, const QStringList& listOfRadios_) :
     QDialog(parent),
     ui(new Ui::DMKeysEditDlg),
     allKeyConfigs(allKeyConfigs),
     name(name),
     rigName(rigName),
-    txKeyerType(txKeyerType)
+    txKeyerType(txKeyerType),
+    listOfRadios(listOfRadios_)
 {
     ui->setupUi(this);
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
@@ -52,11 +54,15 @@ DMKeysEditDlg::DMKeysEditDlg(QWidget *parent, QString fKeyFileName, QString name
     ui->DeleteButton->setText(tr("Delete Macro FKey section"));
     ui->renameButton->setText(tr("Rename Macro FKey section"));
 
+    showRadioListButtons(false);
+
     if (txKeyerType == keyerTypes[TxKeyerId::RigControl])
     {
         RadioList = new QListWidget(this);
         ui->settingsSplitter->insertWidget(1, RadioList);
         RadioList->setMinimumWidth(10);
+        showRadioListButtons(true);
+        connect(RadioList, &QListWidget::currentItemChanged, this, &DMKeysEditDlg::on_RadioList_itemSelectionChanged);
     }
 
 
@@ -687,7 +693,81 @@ void DMKeysEditDlg::on_renameButton_clicked()
     }
 }
 
+void DMKeysEditDlg::on_addRadioButton_clicked()
+{
+    if (name == "<None>"  || name == "Default")
+    {
+        mShowMessage(tr("You cannot radio to Default!"), this);
+        return;
+    }
 
+
+    DmButtonEditAddRadioDialog* addRadioDialog = new DmButtonEditAddRadioDialog(listOfRadios);
+
+    int result = addRadioDialog->exec();
+
+    if (result == QDialog::Accepted)
+    {
+        bool radioExists = false;
+        if (checkRadioExists(addRadioDialog->getRadioName(), radioExists))
+        {
+            if (radioExists)
+            {
+               mShowMessage(tr("Radio already exists, please select another radio"), this);
+
+            }
+            else
+            {
+                // add radio to this contest set
+                // Create empty Run and S&P sets
+
+                auto &contestMap = allKeyConfigs[txKeyerType];
+
+                ContestSection section;
+
+                for (int i = 1; i <= 12; ++i)
+                {
+                    QString fk = QString("F%1").arg(i);
+                    KeyVal kv;
+                    kv.setFk(fk);
+                    kv.setKtop("");
+                    kv.setKval("");
+                    kv.setRigVoiceMemNum(0);
+                    kv.setRptEnable(false);
+                    kv.setRptDur(0);
+
+                    section.run.append(kv);
+                }
+                for (int i = 1; i <= 12; ++i)
+                {
+                    QString fk = QString("F%1").arg(i);
+                    KeyVal kv;
+                    kv.setFk(fk);
+                    kv.setKtop("");
+                    kv.setKval("");
+                    kv.setRigVoiceMemNum(0);
+                    kv.setRptEnable(false);
+                    kv.setRptDur(0);
+
+                    section.sp.append(kv);
+                }
+
+                contestMap[name][addRadioDialog->getRadioName()] = section;
+
+                // Update current selection and UI
+                ignoreSectionChange = true;
+                showSections();
+                showDetails();
+                ignoreSectionChange = false;
+
+            }
+        }
+    }
+    else
+    {
+        return;
+    }
+}
 
 
 void DMKeysEditDlg::on_CancelButton_clicked()
@@ -967,4 +1047,42 @@ void DMKeysEditDlg::on_downButton_clicked()
     showDetails();
     ui->OptionsTable->selectRow(selRow + 1);
 }
+
+
+
+void DMKeysEditDlg::showRadioListButtons(bool show)
+{
+    ui->addRadioButton->setVisible(show);
+    ui->deleteRadioButton->setVisible(show);
+}
+
+bool DMKeysEditDlg::checkRadioExists(QString radioName, bool &radioExists)
+{
+
+    bool ok = false;
+
+    if (allKeyConfigs.contains(txKeyerType))
+    {
+        const ContestMap &contestMap = allKeyConfigs.value(txKeyerType);
+
+        ok = true;
+
+        if (contestMap.contains(name))
+        {
+            const RigMap &rigMap = contestMap.value(name);
+
+            if (rigMap.contains(radioName))
+            {
+                radioExists = true;
+            }
+            else
+            {
+                radioExists = false;
+            }
+        }
+    }
+
+    return ok;
+}
+
 

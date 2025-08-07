@@ -59,6 +59,7 @@ SOURCES += \
     DisplayContestContact.cpp \
     cwrigkeyervalidator.cpp \
     cwspeedcontrol.cpp \
+    dmbuttoneditaddradiodialog.cpp \
     dmkeyseditdlg.cpp \
     dtg.cpp \
     enqdlg.cpp \
@@ -165,6 +166,7 @@ HEADERS += \
     cwrigkeyervalidator.h \
     cwspeedcontrol.h \
     dmFKeydef.h \
+    dmbuttoneditaddradiodialog.h \
     dmkeyseditdlg.h \
     dtg.h \
     enqdlg.h \
@@ -256,6 +258,7 @@ FORMS += \
     StartConfigManager.ui \
     StatisticsDisplay.ui \
     bandmapclientfilterdialog.ui \
+    dmbuttoneditaddradiodialog.ui \
     dmkeyseditdlg.ui \
     managehamlib.ui \
     minoskeyboard.ui \

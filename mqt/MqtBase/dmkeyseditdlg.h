@@ -34,10 +34,11 @@ class DMKeysEditDlg : public QDialog
     void doCloseEvent();
 
 public:
-    explicit DMKeysEditDlg(QWidget *parent , QString fKeyFileName, QString name, KeyerMap &allKeyConfigs, QString txKeyerType, QString rigName);
+    explicit DMKeysEditDlg(QWidget *parent , QString fKeyFileName, QString name, KeyerMap &allKeyConfigs, QString txKeyerType, QString rigName, const QStringList& listOfRadios_);
     ~DMKeysEditDlg() override;
 
     int exec() override;
+
 
 private slots:
     void on_NewSectionButton_clicked();
@@ -63,6 +64,7 @@ private slots:
     void on_downButton_clicked();
 
     void onOptionsTableSelectionChanged(const QItemSelection &selected, const QItemSelection &);
+    void on_addRadioButton_clicked();
 public Q_SLOTS:
     virtual void accept() override;
     virtual void reject() override;
@@ -75,7 +77,11 @@ private:
 
     bool ignoreSectionChange = false;
     QListWidget* RadioList = nullptr;
+    QStringList listOfRadios;
 
     void showRadiosForSection();
+    void showRadioListButtons(bool show);
+
+    bool checkRadioExists(QString radioName, bool &radioExists);
 };
 #endif // DMKEYSEDITDLG_H

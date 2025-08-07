@@ -1957,6 +1957,7 @@ void TSingleLogFrame::onLogRadioSettingsChanged(QSharedPointer<RadioSettingsDial
 void TSingleLogFrame::on_SetRadioList()
 {
     FKHRigControlFrame->setRadioListFromTslf();
+    dmButtonFrame->setRadioListFromTslf();
 }
 
 void TSingleLogFrame::on_SetTransVertOffset(double offset, PubSubName psn)

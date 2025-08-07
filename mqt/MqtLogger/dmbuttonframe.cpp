@@ -2644,7 +2644,8 @@ void DMButtonFrame::on_editButton_clicked()
         }
     }
 
-    DMKeysEditDlg jed(this, fkeyFileName, currentName, nfk, txKeyerType, radioName);
+    DMKeysEditDlg jed(this, fkeyFileName, currentName, nfk, txKeyerType, radioName, listOfRadios);
+
     if (jed.exec() == QDialog::Accepted)
     {
         allKeyConfigs = nfk;
@@ -2830,5 +2831,20 @@ void DMButtonFrame::setPcCwKeyerTxOnState(QString state)
 void DMButtonFrame::setPcCwKeyerCurrentWpm(QString wpm)
 {
 
+}
+
+void DMButtonFrame::setRadioListFromTslf()
+{
+    if (ct)
+    {
+        if (LogContainer->sendDM->rigs().count() > 0)
+        {
+            logMessage(QString("setRadioListUpdate: %1").arg(LogContainer->sendDM->rigs().join(", ")));
+            listOfRadios.clear();
+            listOfRadios = LogContainer->sendDM->rigs();
+            int a = 0;
+        }
+
+    }
 }
 
