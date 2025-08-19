@@ -205,7 +205,7 @@ void MinosRouterConnection::sendKeepAlive( )
             if ( clientRouter.size() && clientRouter.compare( "localhost", Qt::CaseInsensitive ) != 0 &&
                  clientRouter.compare( ThisMinosRouter::getThisMinosRouter() ->getRouterName(), Qt::CaseInsensitive) != 0 )
             {
-                strace(QString("MinosRouterConnection::checkLastRx - resubscribtion needed"));
+                strace(QString("MinosRouterConnection::checkLastRx - resubscription needed"));
                 RPCRouterPubSub::routerReconnectRemotePubSub( srv->station );
                 resubscribed = true;
                 return ;
