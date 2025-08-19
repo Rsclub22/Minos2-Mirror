@@ -70,6 +70,7 @@ void MinosRouterConnection::closeDown()
 void MinosRouterConnection::disconnected()
 {
     // if server we need to see if is a true disconnect, or a "spare"
+    strace("MinosRouterConnection::disconnected; remove_socket = true");
     remove_socket = true;
 }
 
@@ -193,7 +194,7 @@ void MinosRouterConnection::sendKeepAlive( )
         if (!checkLastRx())
         {
             // abort the connection
-            strace(QString("MinosRouterConnection::checkLastRx failed, removing socket"));
+            strace(QString("MinosRouterConnection::checkLastRx failed, remove socket = true"));
             publish_disconnect = false;
             remove_socket = true;
             return;

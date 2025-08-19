@@ -138,6 +138,7 @@ void MinosListener::on_timeout()
     {
         if ( a ->remove_socket )
         {
+            trace("MinosListener::on_timeout() close_socket = true, removing socket");
             // process says to finish off
             if (a->publish_disconnect)
             {

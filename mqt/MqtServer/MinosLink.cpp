@@ -8,6 +8,7 @@
 /////////////////////////////////////////////////////////////////////////////
 //---------------------------------------------------------------------------
 #include <QDateTime>
+#include <QMessageBox>
 #include "MTrace.h"
 #include "XMPPRPCObj.h"
 #include "minoslistener.h"
@@ -138,7 +139,14 @@ bool MinosCommonConnection::sendRaw ( const TIXML_STRING xmlstr )
       qint64 ret = sock->write ( xmlbuff, xmllen );
       if (ret < 0)
       {
+          QString mess = QString("Write failed, error %1").arg(sock->error());
           strace(QString("Write failed, error %1").arg(sock->error()));
+
+          QMessageBox msgBox;
+          msgBox.setText(mess);
+          msgBox.setIcon(QMessageBox::Critical);
+          msgBox.addButton("Close", QMessageBox::RejectRole);
+          msgBox.exec();
       }
       onLog ( xmlbuff, false );
       delete [] xmlbuff;
