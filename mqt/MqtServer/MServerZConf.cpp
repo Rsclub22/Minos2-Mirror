@@ -330,6 +330,24 @@ void TZConf::readRouterListFile()
 // ONLY trouble is... clients will now address their servers by UUID!
 // when they have subscribed to stations.
 
+void TZConf::addToRouterList(MinosRouterListener *msl, const QString &name, const QHostAddress &host, const QString &uuid, quint16 PortAsNumber)
+{
+    Router *sss = new Router( uuid, host, name, PortAsNumber );
+    if ( name == getZConf()->getName() )
+    {
+        sss->local = true;
+    }
+    else
+    {
+        MinosRouterConnection *msc = new MinosRouterConnection(true);
+        msc->strace(QString("Creating MinosRouterConnection zcPublishServer for %1 host %2 ").arg(name, host.toString()));
+        msc->setClientRouter(sss->station);
+        msc->mConnect(sss);
+        msl->addListenerSlot(msc);
+    }
+    routerList.push_back( sss );
+}
+
 Router *TZConf::zcPublishRouter(const QString &uuid, const QString &name,
                                 const QHostAddress &host, quint16 PortAsNumber )
 {
@@ -354,20 +372,7 @@ Router *TZConf::zcPublishRouter(const QString &uuid, const QString &name,
     if (s == routerList.end())
     {
         trace("Station " + name + " not found");
-        Router *sss = new Router( uuid, host, name, PortAsNumber );
-        if ( name == getZConf()->getName() )
-        {
-            sss->local = true;
-        }
-        else
-        {
-            MinosRouterConnection *msc = new MinosRouterConnection(true);
-            msc->strace(QString("Creating MinosRouterConnection zcPublishServer for %1 host %2 ").arg(name, host.toString()));
-            msc->setClientRouter(sss->station);
-            msc->mConnect(sss);
-            msl->addListenerSlot(msc);
-        }
-        routerList.push_back( sss );
+        addToRouterList(msl, name, host, uuid, PortAsNumber);
         s = findStation(name);
     }
     if ( (*s)->local )
