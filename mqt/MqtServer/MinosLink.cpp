@@ -141,6 +141,7 @@ bool MinosCommonConnection::sendRaw ( const TIXML_STRING xmlstr )
       {
           QString mess = QString("Write failed, error %1").arg(sock->error());
           strace(QString("Write failed, error %1").arg(sock->error()));
+          onLog ( xmlbuff, false );
 
           QMessageBox msgBox;
           msgBox.setText(mess);
@@ -148,7 +149,6 @@ bool MinosCommonConnection::sendRaw ( const TIXML_STRING xmlstr )
           msgBox.addButton("Close", QMessageBox::RejectRole);
           msgBox.exec();
       }
-      onLog ( xmlbuff, false );
       delete [] xmlbuff;
 
       if ( ret == -1 )  // QIOdevice::write returned an error.
