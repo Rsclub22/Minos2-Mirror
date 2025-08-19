@@ -15,6 +15,7 @@
 #include "MTrace.h"
 #include "RPCCommandConstants.h"
 #include "SecondInstall.h"
+#include "delayedaction.h"
 #include "regsettings.h"
 #include "tinyxml.h"
 #include "TinyUtils.h"
@@ -339,11 +340,15 @@ void TZConf::addToRouterList(MinosRouterListener *msl, const QString &name, cons
     }
     else
     {
-        MinosRouterConnection *msc = new MinosRouterConnection(true);
-        msc->strace(QString("Creating MinosRouterConnection zcPublishServer for %1 host %2 ").arg(name, host.toString()));
-        msc->setClientRouter(sss->station);
-        msc->mConnect(sss);
-        msl->addListenerSlot(msc);
+        getZConf()->sendMessage(); // make sure they get zconf before serversetfromid
+
+        delayedAction(getZConf(), [=](){
+            MinosRouterConnection *msc = new MinosRouterConnection(true);
+            msc->strace(QString("Creating MinosRouterConnection zcPublishServer for %1 host %2 ").arg(name, host.toString()));
+            msc->setClientRouter(sss->station);
+            msc->mConnect(sss);
+            msl->addListenerSlot(msc);
+        }, 100);
     }
     routerList.push_back( sss );
 }

@@ -85,60 +85,12 @@ void MinosListener::on_newConnection()
     if (s)
     {
         MinosCommonConnection *cc = makeConnection(s);
-        MinosRouterListener *msl = dynamic_cast<MinosRouterListener *>(cc);
-        if (msl)
-        {
-            quint16 p = s->localPort();
-            TZConf::addToRouterList(msl, QString(), s->peerAddress(), QString(), p);
-        }
 
         addListenerSlot(cc);
     }
 }
 void MinosListener::on_timeout()
 {
-#ifdef RUBBISH
-    if (isRouter())
-    {
-        // This is intended to remove the second link each process
-        // gets initially - but I can't get it to work consistently
-        // so we have to accept two connections between servers
-
-        for ( CommonIterator i = i_array.begin(); i != i_array.end(); i++ )
-        {
-            QString hi = (*i)->getClientRouter();
-            if ((*i)->remove_socket)
-                continue;
-            for ( CommonIterator j = i + 1; j != i_array.end(); j++ )
-            {
-                if (j != i_array.end())
-                {
-                    if (!(*j)->checkLastRx())
-                    {
-                        // don't remove a socket that is being used
-                        QString hj = (*j)->getClientRouter();
-                        if (hi == hj)
-                        {
-                            quint32 remIP = (*j)->sock->peerAddress().toIPv4Address();
-                            quint32 locIP = (*j)->sock->localAddress().toIPv4Address();
-
-                            // make sure only one end does the removal
-                            if (remIP < locIP)
-                            {
-                                (*j)->remove_socket = true;
-                                (*j)->publish_disconnect = false;
-                                (*j)->sendCloseSocket();
-                                (*j)->strace("removing socket for " + (*j)->getClientRouter());
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-    }
-#endif
-
     bool clearup = false;
     for ( auto &a: i_array )
     {

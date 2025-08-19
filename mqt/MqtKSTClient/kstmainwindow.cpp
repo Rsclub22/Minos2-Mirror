@@ -2153,14 +2153,6 @@ void KSTMainWindow::on_loggerXferButton_clicked()
             st->addMember( loc, rpcConstants::KSTTransferLocator );
             rpc.getCallArgs() ->addParam( st );
             rpc.queueCall( router );
-#ifdef RUBBISH
-            RPCGeneralClient rpc(rpcConstants::KSTTransferMeep);
-            QSharedPointer<RPCParam>st(new RPCParamStruct);
-            st->addMember( QString("G4DDN"), rpcConstants::KSTTransferCall );
-            st->addMember( QString("RIP"), rpcConstants::KSTTransferMeep );
-            rpc.getCallArgs() ->addParam( st );
-            rpc.queueCall( router );
-#endif
         }
     }
 }
