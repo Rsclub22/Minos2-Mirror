@@ -342,13 +342,13 @@ void TZConf::addToRouterList(MinosRouterListener *msl, const QString &name, cons
     {
         getZConf()->sendMessage(); // make sure they get zconf before serversetfromid
 
-        delayedAction(getZConf(), [=](){
-            MinosRouterConnection *msc = new MinosRouterConnection(true);
-            msc->strace(QString("Creating MinosRouterConnection zcPublishServer for %1 host %2 ").arg(name, host.toString()));
-            msc->setClientRouter(sss->station);
-            msc->mConnect(sss);
-            msl->addListenerSlot(msc);
-        }, 100);
+        // delayedAction(getZConf(), [=](){
+        //     MinosRouterConnection *msc = new MinosRouterConnection(true);
+        //     msc->strace(QString("Creating MinosRouterConnection zcPublishServer for %1 host %2 ").arg(name, host.toString()));
+        //     msc->setClientRouter(sss->station);
+        //     msc->mConnect(sss);
+        //     msl->addListenerSlot(msc);
+        // }, 100);
     }
     routerList.push_back( sss );
 }
