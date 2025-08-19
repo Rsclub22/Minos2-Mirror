@@ -261,7 +261,7 @@ QVector<Router *>::iterator findIp( const QHostAddress &h )
    for ( QVector<Router *>::iterator i = routerList.begin(); i != routerList.end(); i++ )
    {
        quint32 a = (*i)->host.toIPv4Address();
-       trace(QString("findIP comparing %1 with %2").arg(ha).arg(a));
+       trace(QString("findIP comparing %1(%2) with %3(%4)").arg(ha).arg(h.toString()).arg(a).arg((*i)->host.toString()));
       if (ha == a)
       {
          return i;
