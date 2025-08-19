@@ -85,12 +85,6 @@ void MinosListener::on_newConnection()
     if (s)
     {
         MinosCommonConnection *cc = makeConnection(s);
-        MinosRouterListener *msl = dynamic_cast<MinosRouterListener *>(cc);
-        if (msl)
-        {
-            quint16 p = s->localPort();
-            TZConf::addToRouterList(msl, QString(), s->peerAddress(), QString(), p);
-        }
 
         addListenerSlot(cc);
     }

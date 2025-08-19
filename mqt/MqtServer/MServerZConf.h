@@ -75,7 +75,6 @@ class TZConf: public QObject
 
       QTimer beaconTimer;
 
-      bool sendMessage();
       void readRouterListFile();
 
       static TZConf *ZConf;
@@ -97,6 +96,7 @@ public:  		// User declarations
        }
 
       void startZConf(const QString &name);
+       bool sendMessage();
 
       QString getName()
       {
