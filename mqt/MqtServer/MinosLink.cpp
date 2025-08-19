@@ -143,7 +143,7 @@ bool MinosCommonConnection::sendRaw ( const TIXML_STRING xmlstr )
           strace(QString("Write failed, error %1").arg(sock->error()));
           onLog ( xmlbuff, false );
 
-#ifndef RUBBISH
+#ifdef RUBBISH
           QMessageBox msgBox;
           msgBox.setText(mess);
           msgBox.setIcon(QMessageBox::Critical);
