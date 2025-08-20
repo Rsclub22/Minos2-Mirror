@@ -140,7 +140,7 @@ bool MinosCommonConnection::sendRaw ( const TIXML_STRING xmlstr )
       if (ret < 0)
       {
           QString mess = QString("Write failed, error %1").arg(sock->error());
-          strace(QString("Write failed, error %1").arg(sock->error()));
+          strace(mess);
           onLog ( xmlbuff, false );
 
 #ifdef RUBBISH
