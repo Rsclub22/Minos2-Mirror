@@ -135,6 +135,8 @@ bool isAlphaNumeric( const QString &s );
 
 extern bool suppressSaveHeaders;
 
+
+
 void saveHeaderColumns(QString fn, QString tname, QString lname, QHeaderView *h);
 void setHeaderColumns(QString hLine, QHeaderView *hdr);
 void restoreHeaderColumns(QString fn, QString tname, QString lname, QHeaderView *h);
@@ -143,6 +145,10 @@ void popupColumnsMenu(QMenu &menu, const QPoint &globalPos, QHeaderView *hdr);
 void createColumnsMenu(QMenu &menu, QAbstractItemModel *hdrModel,  QWidget *p, std::function<void()> pred);
 void createColumnsMenu(QMenu &menu, QHeaderView *h, QWidget *p, std::function<void()> pred);
 void comboSetUniqueNames(QStringList nameList, QComboBox *cb);
+
+class PubSubName;
+void getRadioUniqueNames(QVector<PubSubName> &names, const QStringList &nameList, QStringList &uniqueNames);
+void mapUniqueNames(QStringList nameList, QMap<QString,QString> &radioMap);
 
 void clearLayout(QLayout *layout);
 void removeFrameBoxes(QLayout *layout);

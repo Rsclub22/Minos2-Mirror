@@ -126,7 +126,7 @@ DMButtonFrame::DMButtonFrame(QWidget *parent) :
         connect(b, &QPushButton::clicked, this, &DMButtonFrame::fButtonClicked);
     }
 
-    ui->nameLabel->setText(tr("Data Modes Buttons from %1").arg(fkeyFileName));
+    ui->nameLabel->setText(tr("Data Modes & Keyer Buttons from %1").arg(fkeyFileName));
 
     //ui->FButtonFrame->setEnabled(false);
 
@@ -555,6 +555,7 @@ void DMButtonFrame::set_rigControl_FrameState(QString txKeyerName)
     setKeyerIndicatorGroupBoxVisible(true);
     setPttIndicatorGroupBoxVisible(true);
     setMessagePlayingFlag(false);
+    setCwMessagePlayingVisible(false);
 
     setLogItButtonVisible(false);
     setLogItButtonVisible(false);
@@ -577,6 +578,8 @@ void DMButtonFrame::set_rigControl_FrameState(QString txKeyerName)
 
         //setSaveButtonByRadionameText(selectedRadio.getLocalName());
 
+
+
     txKeyer->setRadioParams(getNumVoiceMessages(selectedRadio), selectedRadio.getLocalName(), getPttType(selectedRadio), getPttEnabled(selectedRadio));
     txKeyer->txKeyerInit(txKeyer->numButtons);
     setPttTypeLabelsVisible(true);
@@ -584,6 +587,7 @@ void DMButtonFrame::set_rigControl_FrameState(QString txKeyerName)
     setPttEnabledIndicatorOnOff(getPttEnabled(selectedRadio));
     setEomTypeLabelsVisible(true);
     setEomLabelText(txKeyer->getSelectedEomType());
+    setCwEntryBoxVisible(false);
     //loadButtonData();
 
     if (!getRigVoiceKeyerSupportStopFlag(selectedRadio.getLocalName()))
@@ -612,6 +616,7 @@ void DMButtonFrame::set_cwRigControl_FrameState(QString txKeyerName)
     setKeyerIndicatorGroupBoxVisible(true);
     setPttIndicatorGroupBoxVisible(true);
     setMessagePlayingFlag(false);
+    setCwMessagePlayingVisible(false);
 
 
     if (txKeyerCap.getHasAvailStatus())
@@ -678,6 +683,7 @@ void DMButtonFrame::set_pcCwKeyer_FrameState(QString txKeyerName)
     setKeyerIndicatorGroupBoxVisible(true);
     setPttIndicatorGroupBoxVisible(true);
     setMessagePlayingFlag(false);
+    setCwMessagePlayingVisible(false);
 
 
     setAvailIndicatorVisible(txKeyerCap.getHasAvailStatus());
@@ -727,6 +733,8 @@ void DMButtonFrame::set_Internal_FrameState(QString txKeyerName)
     setKeyerIndicatorGroupBoxVisible(true);
     setPttIndicatorGroupBoxVisible(true);
     setMessagePlayingFlag(false);
+    setCwEntryBoxVisible(false);
+    setCwMessagePlayingVisible(false);
 
     setAvailIndicatorVisible(txKeyerCap.getHasAvailStatus());
 
@@ -758,6 +766,8 @@ void DMButtonFrame::set_Internal_FrameState(QString txKeyerName)
 void DMButtonFrame::set_External_FrameState(QString txKeyerName)
 {
     // not sure what this should be....
+    setCwEntryBoxVisible(false);
+    setCwMessagePlayingVisible(false);
 }
 
 
@@ -1299,6 +1309,19 @@ void DMButtonFrame::setVoiceMemAvail(bool avail, PubSubName psn)
     }
 
     updateFrameState();
+}
+
+// This will not work as expected as all radiodetails are not sent to logger!
+void DMButtonFrame::getVoiceMemSupportedRadios(const QStringList &listOfRadios, QStringList& listOfRadioSupportVoiceMem)
+{
+    for (auto &radio: listOfRadios)
+    {
+        PubSubName radName(radio);
+        if(isVoiceMemAvail(radName))
+        {
+            listOfRadioSupportVoiceMem.append(radio);
+        }
+    }
 }
 
 bool DMButtonFrame::isVoiceMemAvail(PubSubName psn)
@@ -2632,6 +2655,9 @@ void DMButtonFrame::on_editButton_clicked()
     KeyerMap nfk = allKeyConfigs;
 
     QString radioName = KEYER_NO_RADIO;
+    //QStringList listOfRadioSupportVoiceMem;
+
+
     if (txKeyerType == keyerTypes[TxKeyerId::RigControl])
     {
         if (selectedRadio.getLocalName() == "/")
@@ -2642,6 +2668,9 @@ void DMButtonFrame::on_editButton_clicked()
         {
             radioName = selectedRadio.getLocalName();
         }
+
+        //getVoiceMemSupportedRadios(listOfRadios, listOfRadioSupportVoiceMem);     // we don't send all radio details only the selected!
+
     }
 
     DMKeysEditDlg jed(this, fkeyFileName, currentName, nfk, txKeyerType, radioName, listOfRadios);
@@ -2842,7 +2871,8 @@ void DMButtonFrame::setRadioListFromTslf()
             logMessage(QString("setRadioListUpdate: %1").arg(LogContainer->sendDM->rigs().join(", ")));
             listOfRadios.clear();
             listOfRadios = LogContainer->sendDM->rigs();
-            int a = 0;
+            mapUniqueNames(listOfRadios, radioMap);
+
         }
 
     }

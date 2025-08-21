@@ -21,14 +21,14 @@
 
 using namespace TxKeyerCommon;
 
-DMKeysEditDlg::DMKeysEditDlg(QWidget *parent, QString fKeyFileName, QString name, KeyerMap &allKeyConfigs, QString txKeyerType, QString rigName, const QStringList& listOfRadios_) :
+DMKeysEditDlg::DMKeysEditDlg(QWidget *parent, QString fKeyFileName, QString name, KeyerMap &allKeyConfigs, QString txKeyerType, QString rigName, const QStringList listOfRadios) :
     QDialog(parent),
     ui(new Ui::DMKeysEditDlg),
     allKeyConfigs(allKeyConfigs),
     name(name),
     rigName(rigName),
     txKeyerType(txKeyerType),
-    listOfRadios(listOfRadios_)
+    listOfRadios(listOfRadios)
 {
     ui->setupUi(this);
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
@@ -62,7 +62,7 @@ DMKeysEditDlg::DMKeysEditDlg(QWidget *parent, QString fKeyFileName, QString name
         ui->settingsSplitter->insertWidget(1, RadioList);
         RadioList->setMinimumWidth(10);
         showRadioListButtons(true);
-        connect(RadioList, &QListWidget::currentItemChanged, this, &DMKeysEditDlg::on_RadioList_itemSelectionChanged);
+        connect(RadioList, &QListWidget::currentItemChanged, this, &DMKeysEditDlg::onRadioListItemSelectionChanged);
     }
 
 
@@ -697,12 +697,13 @@ void DMKeysEditDlg::on_addRadioButton_clicked()
 {
     if (name == "<None>"  || name == "Default")
     {
-        mShowMessage(tr("You cannot radio to Default!"), this);
+        mShowMessage(tr("You cannot add radio to Default!"), this);
         return;
     }
 
 
     DmButtonEditAddRadioDialog* addRadioDialog = new DmButtonEditAddRadioDialog(listOfRadios);
+    addRadioDialog->setWindowTitle(tr("Add Radio"));
 
     int result = addRadioDialog->exec();
 
@@ -766,6 +767,54 @@ void DMKeysEditDlg::on_addRadioButton_clicked()
     else
     {
         return;
+    }
+}
+
+void DMKeysEditDlg::on_deleteRadioButton_clicked()
+{
+    if (rigName == "noRadio")
+    {
+        mShowMessage(tr("You cannot delete noRadio!"), this);
+        return;
+    }
+
+
+    if (!mShowYesNoMessage(this, tr("Are you sure you want to delete the radio %1?").arg(rigName)))
+    {
+
+        return;
+
+
+    }
+    else
+    {
+        auto keyerIt = allKeyConfigs.find(txKeyerType);
+        if (keyerIt != allKeyConfigs.end())
+        {
+            ContestMap &contestMap = keyerIt.value();
+            auto contestIt = contestMap.find(name);
+            if (contestIt != contestMap.end())
+            {
+                RigMap &rigMap = contestIt.value();
+                if (rigMap.contains(rigName))
+                {
+                    rigMap.remove(rigName);
+                    qDebug() << "Deleted radio:" << rigName;
+
+                    if (!rigMap.isEmpty())
+                        rigName = rigMap.firstKey();
+                    else
+                        rigName = QStringLiteral("<NoRadio>");
+                }
+            }
+        }
+
+
+
+        ignoreSectionChange = true;
+        showSections();
+        showDetails();
+        ignoreSectionChange = false;
     }
 }
 
@@ -843,7 +892,7 @@ void DMKeysEditDlg::on_SectionsList_itemSelectionChanged()
 
 
 
-void DMKeysEditDlg::on_RadioList_itemSelectionChanged()
+void DMKeysEditDlg::onRadioListItemSelectionChanged()
 {
     if (ignoreSectionChange)        // when making program changes
         return;
@@ -1084,5 +1133,7 @@ bool DMKeysEditDlg::checkRadioExists(QString radioName, bool &radioExists)
 
     return ok;
 }
+
+
 
 

@@ -169,7 +169,8 @@ private:
     bool radioConnected;
     bool pttState;
     bool sAndPState = true;
-    QStringList listOfRadios;
+    QMap<QString, QString> radioMap; // map radio name to path
+    QStringList listOfRadios;       // full path and radio name
 
     CwSpeedControl *cwSpeedSlider = nullptr;
 
@@ -264,6 +265,7 @@ private:
     void setLogItButtonVisible(bool visible);
     QStringList getContestNamesForKeyerType(const QString &keyerType);
     void populateFksetCombo(QString txKeyerName, QString currentName);
+    void getVoiceMemSupportedRadios(const QStringList &listOfRadios, QStringList &listOfRadioSupportVoiceMem);
 };
 
 #endif // DMBUTTONFRAME_H

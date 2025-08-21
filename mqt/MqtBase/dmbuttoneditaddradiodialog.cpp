@@ -11,7 +11,7 @@ DmButtonEditAddRadioDialog::DmButtonEditAddRadioDialog(const QStringList listOfR
     ui->setupUi(this);
 
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
-    setWindowTitle(tr("Add Radio"));
+
 
     comboSetUniqueNames(listOfRadios, ui->radioListCBox);
 

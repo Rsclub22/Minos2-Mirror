@@ -835,6 +835,12 @@ void comboSetUniqueNames(QStringList nameList, QComboBox *cb)
     int cbOldCount = cb->count();
     QString current = cb->currentText();
 
+    QStringList uniqueNames;
+    QVector<PubSubName> names;
+
+    getRadioUniqueNames(names, nameList, uniqueNames);
+
+/*
     QVector<PubSubName> names;
 
     for(const auto &s: QASCONST(nameList))
@@ -889,7 +895,7 @@ void comboSetUniqueNames(QStringList nameList, QComboBox *cb)
 
         uniqueNames.append(uniqueName);
     }
-
+*/
     if (cbOldCount > 1) // unless it is empty, we should always have the blank entry
     {
         cb->clear();
@@ -910,6 +916,88 @@ void comboSetUniqueNames(QStringList nameList, QComboBox *cb)
         cb->setCurrentText(current);
     }
 }
+
+
+
+void mapUniqueNames(QStringList nameList, QMap<QString,QString> &radioMap)
+{
+
+    //QString current = cb->currentText();
+
+    QStringList uniqueNames;
+    QVector<PubSubName> names;
+
+    getRadioUniqueNames(names, nameList, uniqueNames);
+
+    radioMap.clear();
+
+    for(int i = 0; i < names.count(); i++)
+    {
+        radioMap.insert(uniqueNames[i], names[i].toString());
+
+
+    }
+
+}
+
+void getRadioUniqueNames(QVector<PubSubName> &names, const QStringList &nameList, QStringList &uniqueNames)
+{
+
+
+    for(const auto &s: QASCONST(nameList))
+    {
+        // get unique names
+        names.push_back(PubSubName(s));
+    }
+
+
+    for(const auto &p:names)
+    {
+        QString r = p.key();
+
+        int sameNames = 0;
+        QString uniqueName;
+        for(const auto &p2:names)
+        {
+            if (p2.key() == r)
+            {
+                sameNames++;
+            }
+        }
+        if (sameNames > 1)
+        {
+            // NB that app + key on a single machine will always be unique
+            // sowe need to test for the same across machines
+
+            // we could also look for router + key?
+
+            sameNames = 0;
+            r = p.getLocalName();
+            for(const auto &p2:names)
+            {
+                if (p2.getLocalName() == r)
+                {
+                    sameNames++;
+                }
+                if (sameNames > 1)
+                {
+                    uniqueName = p.toString();
+                }
+                else
+                {
+                    uniqueName = r;
+                }
+            }
+        }
+        else
+        {
+            uniqueName = r;
+        }
+
+        uniqueNames.append(uniqueName);
+    }
+}
+
 void clearLayout(QLayout *layout)
 {
 //    trace("Enter clearLayout");
