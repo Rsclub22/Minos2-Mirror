@@ -1,4 +1,6 @@
+#include <QFileDialog>
 #include "kstconfigure.h"
+#include "AppStartup.h"
 #include "MShowMessageDlg.h"
 #include "ui_kstconfigure.h"
 
@@ -28,6 +30,10 @@ int KSTConfigure::exec()
     ui->locatorEdit->setText(locator);
     ui->nameEdit->setText(firstName);
     ui->autoConnect->setChecked(autoConnect);
+
+    ui->meepSound->setText(meepSoundFile);
+    ui->meepNotifyLogger->setChecked(meepNotifyLogger);
+    ui->meepPlaySound->setChecked(meepPlaySound);
 
     ui->ASServerName->setText(ASServerName);
     ui->ASMyName->setText(ASMyName);
@@ -68,6 +74,10 @@ void KSTConfigure::on_OKButton_clicked()
         return;
     }
 
+    meepSoundFile = ui->meepSound->text().trimmed();
+    meepPlaySound = ui->meepPlaySound->isChecked();
+    meepNotifyLogger = ui->meepNotifyLogger->isChecked();
+
     ASServerName = ui->ASServerName->text();
     ASMyName = ui->ASMyName->text();
 
@@ -84,3 +94,33 @@ void KSTConfigure::on_OKButton_clicked()
 
     accept();
 }
+
+void KSTConfigure::on_meepBrowse_clicked()
+{
+    QString InitialDir = meepSoundFile;
+
+    if (meepSoundFile.isEmpty())
+    {
+        InitialDir = getDirectoryLocation(dlConfiguration);
+
+        QFileInfo qf(InitialDir);
+
+        InitialDir = qf.canonicalFilePath();
+    }
+    QString Filter = tr("WAV (*.wav);;"
+                        "All Files (*.*)") ;
+
+    QString fname = QFileDialog::getOpenFileName( this,
+                                                 tr("Meep Notification Sound"),
+                                                 InitialDir,  // dir
+                                                 Filter
+                                                 );
+
+    if (!fname.isEmpty())
+    {
+        meepSoundFile = fname;
+        ui->meepSound->setText(fname);
+    }
+
+}
+

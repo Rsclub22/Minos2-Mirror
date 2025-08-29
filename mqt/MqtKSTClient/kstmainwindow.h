@@ -83,6 +83,11 @@ class KSTMainWindow : public QMainWindow
     QString recLoc;
     bool autoConnect = false;
 
+    bool meepNotifyLogger = false;
+    bool meepPlaySound = false;
+    QString meepSoundFile;
+
+
     int maxDistance = 99999;
 
     bool ASActive = false;
@@ -119,6 +124,7 @@ class KSTMainWindow : public QMainWindow
     void closeEvent(QCloseEvent *event) override;
 
     void sendKST(QString msg);
+    void playMeepSound();
     void analyseKstMessage(QString atj);
     void reconnect();
     void connectToHost();

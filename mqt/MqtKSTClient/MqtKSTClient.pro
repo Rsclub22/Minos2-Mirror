@@ -1,7 +1,7 @@
 include($$PWD/../mqt.pri)
 include($$PWD/../mqtapplibs.pri)
 
-QT       += core gui network
+QT       += core gui network multimedia
 QT += widgets
 
 TARGET = MqtKSTClient
