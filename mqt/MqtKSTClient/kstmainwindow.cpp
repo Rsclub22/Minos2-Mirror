@@ -733,7 +733,7 @@ void KSTMainWindow::playMeepSound()
 {
     if (meepPlaySound && FileExists(meepSoundFile))
     {
-        QMediaPlayer *player = new QMediaPlayer;
+        QMediaPlayer *player = new QMediaPlayer(this);
         player->setMedia(QUrl::fromLocalFile(meepSoundFile));
         player->setVolume(50);
         connect(player, &QMediaPlayer::stateChanged, this,
@@ -2179,8 +2179,6 @@ void KSTMainWindow::on_inactiveCallscb_stateChanged(int)
 
 void KSTMainWindow::on_KSTTestButton_clicked()
 {
-    playMeepSound();
-    return;
     if (KSTexpFile)
     {
         KSTexpFile->close();

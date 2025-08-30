@@ -58,6 +58,8 @@ private slots:
 
     void on_meepBrowse_clicked();
 
+    void on_testButton_clicked();
+
 private:
     Ui::KSTConfigure *ui;
 };

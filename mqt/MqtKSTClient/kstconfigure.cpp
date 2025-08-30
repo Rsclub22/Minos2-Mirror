@@ -1,7 +1,10 @@
 #include <QFileDialog>
+#include <QMediaPlayer>
+
 #include "kstconfigure.h"
 #include "AppStartup.h"
 #include "MShowMessageDlg.h"
+#include "fileutils.h"
 #include "ui_kstconfigure.h"
 
 
@@ -123,4 +126,24 @@ void KSTConfigure::on_meepBrowse_clicked()
     }
 
 }
+
+
+void KSTConfigure::on_testButton_clicked()
+{
+    QString fname = ui->meepSound->text();
+    if (meepPlaySound && FileExists(fname))
+    {
+        QMediaPlayer *player = new QMediaPlayer(this);
+        player->setMedia(QUrl::fromLocalFile(fname));
+        player->setVolume(50);
+        connect(player, &QMediaPlayer::stateChanged, this,
+                [=](QMediaPlayer::State state)
+                {
+                    if (state == QMediaPlayer::StoppedState)
+                    {
+                        player->deleteLater();
+                    }
+                });
+        player->play();
+    }}
 
