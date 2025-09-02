@@ -11,7 +11,7 @@ fi
 
 SCRIPT=$(basename $0)
 DIR=$(echo `pwd`/../..)
-QTDIR=~/Qt/6.9.0/macos
+QTDIR=~/Qt/6.9.2/macos
 BUILDDIR="build/install"
 
 cd $DIR
