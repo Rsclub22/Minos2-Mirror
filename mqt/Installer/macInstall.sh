@@ -11,7 +11,7 @@ fi
 
 SCRIPT=$(basename $0)
 DIR=$(echo `pwd`/../..)
-QTDIR=~/Qt/6.9.0/macos
+QTDIR=~/Qt/6.9.2/macos
 BUILDDIR="build/install"
 
 cd $DIR
@@ -117,6 +117,8 @@ do
     install_name_tool -change $QTDIR/lib/QtSerialPort.framework/Versions/A/QtSerialPort @executable_path/../Frameworks/QtSerialPort.framework/Versions/A/QtSerialPort MqtLogger.app/Contents/Resources/Bin/${j}.app/Contents/MacOS/${j}
     install_name_tool -change $QTDIR/lib/QtNetwork.framework/Versions/A/QtNetwork @executable_path/../Frameworks/QtNetwork.framework/Versions/A/QtNetwork MqtLogger.app/Contents/Resources/Bin/${j}.app/Contents/MacOS/${j}
     install_name_tool -change $QTDIR/lib/QtCore.framework/Versions/A/QtCore @executable_path/../Frameworks/QtCore.framework/Versions/A/QtCore MqtLogger.app/Contents/Resources/Bin/${j}.app/Contents/MacOS/${j}
+	install_name_tool -change $QTDIR/lib/QtMultimedia.framework/Versions/A/QtMultimedia @executable_path/../Frameworks/QtMultimedia.framework/Versions/A/QtMultimedia MqtLogger.app/Contents/Resources/Bin/${j}.app/Contents/MacOS/${j}
+
 done
 cd MqtLogger.app/Contents/Resources
 
