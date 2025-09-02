@@ -133,6 +133,7 @@ void KSTConfigure::on_meepBrowse_clicked()
 void KSTConfigure::on_testButton_clicked()
 {
     QString fname = ui->meepSound->text();
+    trace(QString("Test meep using %1").arg(fname));
     if (meepPlaySound && FileExists(fname))
     {
         QMediaPlayer *player = new QMediaPlayer;
@@ -149,8 +150,6 @@ void KSTConfigure::on_testButton_clicked()
                         player->deleteLater();
                     }
                 });
-        player->play();
-
 #else
 
         player->setMedia(QUrl::fromLocalFile(fname));
@@ -164,6 +163,14 @@ void KSTConfigure::on_testButton_clicked()
                     }
                 });
 #endif
+        //mShowMessage("meep", this);
         player->play();
-    }}
+    }
+    else
+    {
+        trace(QString("%1 doesn't exist").arg(fname));
+
+    }
+
+}
 
