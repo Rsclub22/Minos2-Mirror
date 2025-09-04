@@ -1,15 +1,28 @@
-Post 2.6.0.0
+Post 2.7.1.0
 
-getDirectoryLocation - allows for Mac differences
+Bug fixes
+Hamlib 4.7
+Build with Qt up to 6.9.2
+KST changes
+    focus changes
+    processor usage
+    show messages with multiselect
+    show inactive users
+    filter away and inactive users
+    Meep sent to logger, warning there
+    meep sound
+Changes to improve layout with large fonts
+Datamodes
+    F Key editor
+    (Bad) Icons
+    Frequency display, RTTY/PSK switch freq (not complete)
+Rotator
+    Skyscan
+    Compass panel in logger
+Serial DTR CW Keyer
+WinKeyer (not complete)
+Bandmap - search unworked HF and LF
+QRZ
+    Layout
+    Record aging
 
-Full Hamlib 4.6 (when released)
-Hamlib update (Windows only)
-Rig memory work
-Future proofing of hamlib interface
-Mac changes
-Datamode fixes
-"Manage ADIF" - monitoring of QSOs from an ADIF export
-BARTG and UKSMG calendars
-Calendar files download progress dialog
-Re-work Rotator and RigControl GUI using tabs to reduce real estate
-Spots DB
