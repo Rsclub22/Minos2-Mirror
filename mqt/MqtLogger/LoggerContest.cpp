@@ -247,29 +247,17 @@ bool LoggerContestLog::initialise( const QString &fn, bool newFile, int slotno )
    statsPeriod1.setInitialValue(MinosParameters::getMinosParameters() ->getStatsPeriod1());
    statsPeriod2.setInitialValue(MinosParameters::getMinosParameters() ->getStatsPeriod2());
 
-   // It would be nice to make these HF dependent
-   bool bTemp;
-   MinosParameters::getMinosParameters() ->getBoolDisplayProfile( edpShowContinentEU, bTemp, true );
-   showContinentEU.setInitialValue(bTemp);
-   MinosParameters::getMinosParameters() ->getBoolDisplayProfile( edpShowContinentAS, bTemp, isHF() );
-   showContinentAS.setInitialValue(bTemp);
-   MinosParameters::getMinosParameters() ->getBoolDisplayProfile( edpShowContinentAF, bTemp, isHF() );
-   showContinentAF.setInitialValue(bTemp);
-   MinosParameters::getMinosParameters() ->getBoolDisplayProfile( edpShowContinentOC, bTemp, isHF() );
-   showContinentOC.setInitialValue(bTemp);
-   MinosParameters::getMinosParameters() ->getBoolDisplayProfile( edpShowContinentSA, bTemp, isHF() );
-   showContinentSA.setInitialValue(bTemp);
-   MinosParameters::getMinosParameters() ->getBoolDisplayProfile( edpShowContinentNA, bTemp, isHF() );
-   showContinentNA.setInitialValue(bTemp);
+   showContinentEU.setInitialValue(true);
+   showContinentAS.setInitialValue(isHF());
+   showContinentAF.setInitialValue(isHF());
+   showContinentOC.setInitialValue(isHF());
+   showContinentSA.setInitialValue(isHF());
+   showContinentNA.setInitialValue(isHF());
 
-   MinosParameters::getMinosParameters() ->getBoolDisplayProfile( edpShowWorkedCountries, bTemp );
-   showWorkedCountries.setInitialValue(bTemp);
-   MinosParameters::getMinosParameters() ->getBoolDisplayProfile( edpShowUnworkedCountries, bTemp );
-   showUnworkedCountries.setInitialValue(bTemp);
-   MinosParameters::getMinosParameters() ->getBoolDisplayProfile( edpShowWorkedDistricts, bTemp );
-   showWorkedDistricts.setInitialValue(bTemp);
-   MinosParameters::getMinosParameters() ->getBoolDisplayProfile( edpShowUnworkedDistricts, bTemp );
-   showUnworkedDistricts.setInitialValue(bTemp);
+   showWorkedCountries.setInitialValue(true);
+   showUnworkedCountries.setInitialValue(false);
+   showWorkedDistricts.setInitialValue(true);
+   showUnworkedDistricts.setInitialValue(false);
 
    QString temp;
    MinosParameters::getMinosParameters() -> getStringDisplayProfile( edpDefaultLayout, temp );

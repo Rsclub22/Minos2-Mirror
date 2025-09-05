@@ -113,12 +113,7 @@ enum LOGGERPROFILE {
 };
 enum PRELOADPROFILE {eppSession, eppCurrent, eppDefSession};
 
-enum DISPLAYPROFILE {edpShowContinentEU, edpShowContinentAS,
-                     edpShowContinentAF, edpShowContinentOC,
-                     edpShowContinentSA, edpShowContinentNA,
-                     edpShowWorkedCountries, edpShowUnworkedCountries,
-                     edpShowWorkedDistricts, edpShowUnworkedDistricts,
-                     edpShowOperators,
+enum DISPLAYPROFILE {edpShowOperators,
                      edpStatisticsPeriod1, edpStatisticsPeriod2,
                      edpDefaultLayout,
                      edpProtectedLayout,

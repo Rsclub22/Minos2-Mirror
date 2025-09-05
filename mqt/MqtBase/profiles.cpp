@@ -176,16 +176,6 @@ BundleFile::BundleFile( PROFILES p )
         break;
 
     case epDISPLAYPROFILE:
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpShowContinentEU, "ShowContinentEU", true, "", "hint", false ) ) );
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpShowContinentAS, "ShowContinentAS", false, "", "hint", false ) ) );
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpShowContinentAF, "ShowContinentAF", false, "", "hint", false ) ) );
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpShowContinentOC, "ShowContinentOC", false, "", "hint", false ) ) );
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpShowContinentSA, "ShowContinentSA", false, "", "hint", false ) ) );
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpShowContinentNA, "ShowContinentNA", false, "", "hint", false ) ) );
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpShowWorkedCountries, "ShowWorkedCountries", true, "", "hint", false ) ) );
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpShowUnworkedCountries, "ShowUnworkedCountries", false, "", "hint", false ) ) );
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpShowWorkedDistricts, "ShowWorkedDistricts", true, "", "hint", false ) ) );
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpShowUnworkedDistricts, "ShowUnworkedDistricts", false, "", "hint", false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpShowOperators, "ShowOperators", true, "", "hint", false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpStatisticsPeriod1, "Statistics Period 1", 10, "", QT_TR_NOOP("Statistics Period 1"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpStatisticsPeriod2, "Statistics Period 2", 60, "", QT_TR_NOOP("Statistics Period 2"), false ) ) );
