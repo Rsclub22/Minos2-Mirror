@@ -238,6 +238,7 @@ void TZConf::onReadyRead()
         if (dgs.size() > 0)
         {
             processZConfString(dgs, host, sendBeaconResponse);
+
         }
     }
 }
@@ -505,6 +506,13 @@ bool UDPSocket::sendMessage(const QString &mess )
         err = qus->errorString();
     trace("send datagram on " + ifaceName + " result " + err
           + " : " + mess);
+    if (res < 0)
+    {
+        // if we can't send messages, at least see our own
+        QDateTime now =  QDateTime::currentDateTime();
+        QHostAddress local =  QHostAddress::LocalHost;
+        TZConf::getZConf()->processZConfString(mess,local ,now);
+    }
 
     return true;
 }
