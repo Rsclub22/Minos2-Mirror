@@ -913,7 +913,7 @@ void KSTMainWindow::analyseKstMessage(QString atj) {
 
                     RPCGeneralClient rpc(rpcConstants::KSTTransferMeep);
                     QSharedPointer<RPCParam> st(new RPCParamStruct);
-                    st->addMember(kst->otherCall.getFullCall(),
+                    st->addMember(kst->call.getFullCall(),
                                   rpcConstants::KSTTransferCall);
                     st->addMember(kst->message, rpcConstants::KSTTransferMeep);
                     rpc.getCallArgs()->addParam(st);

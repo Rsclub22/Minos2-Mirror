@@ -1418,10 +1418,10 @@ void TSendDM::on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, const QSt
         {
             QSharedPointer<RPCParam> kstCall;
             bool callOK = args->getStructArgMember( 0, rpcConstants::KSTTransferCall, kstCall );
-            QString call;
 
             if (callOK)
             {
+                QString call;
                 kstCall->getString(call);
 
                 TSingleLogFrame * lf = LogContainer->getCurrentLogFrame();
