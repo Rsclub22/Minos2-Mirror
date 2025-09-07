@@ -3396,7 +3396,7 @@ void QSOLogFrame::xferMeepFromKST(QString call)
 {
     if (!call.isEmpty())
     {
-        ui->protectionLabel->setText(HtmlFontColour(Qt::darkGreen) + "<b>  " + tr("Meep from %1").arg(call));
+        ui->protectionLabel->setText(HtmlFontColour(Qt::red) + "<b>  " + tr("Meep from %1").arg(call));
         kstMeepTime = QDateTime::currentDateTime();
     }
 }
