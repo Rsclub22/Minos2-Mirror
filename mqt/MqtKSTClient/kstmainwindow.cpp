@@ -2309,3 +2309,21 @@ void KSTMainWindow::testTimeout()
         }
     }
 }
+
+void KSTMainWindow::on_meepTable_doubleClicked(const QModelIndex &index)
+{
+    if (index.isValid())
+    {
+        QModelIndex sourceIndex = kstMeepFilterModel.mapToSource(index);
+        int row = sourceIndex.row();
+        QSharedPointer<KstMessageLine> line = messageVector->at(row);
+        Callsign call = line->call;
+        if (call == myCallsign)
+        {
+            call = line->otherCall;
+        }
+        ui->CSFilter->setText(call.getFullCall());
+        ui->CSTable->selectRow(0);
+    }
+}
+

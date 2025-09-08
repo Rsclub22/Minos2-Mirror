@@ -280,6 +280,8 @@ private slots:
     void on_KSTTestButton_clicked();
 
     void testTimeout();
+    void on_meepTable_doubleClicked(const QModelIndex &index);
+
 private:
     Ui::KSTMainWindow *ui;
     QSharedPointer<CommandReader> commandReader = QSharedPointer<CommandReader>(new CommandReader(this));
