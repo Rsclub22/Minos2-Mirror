@@ -22,7 +22,7 @@ class KSTMonitoredLogs;
 
 extern QStringList services;
 
-class RemoteLogs;
+//class RemoteLogs;
 class MonitoredLog;
 class QPushButton;
 
@@ -118,7 +118,7 @@ class KSTMainWindow : public QMainWindow
 
     bool mouseInMessages = false;
 
-    RemoteLogs *remoteLogs = nullptr;
+//    RemoteLogs *remoteLogs = nullptr;
 
 
     void closeEvent(QCloseEvent *event) override;
