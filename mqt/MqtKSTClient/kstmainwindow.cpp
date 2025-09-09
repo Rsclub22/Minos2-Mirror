@@ -2,10 +2,6 @@
 #include <QSettings>
 #include <QKeyEvent>
 #include <QFileDialog>
-#include <QMediaPlayer>
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-#include <QAudioOutput>
-#endif
 
 #include "QtUtils.h"
 #include "RPCCommandConstants.h"
@@ -737,6 +733,7 @@ void KSTMainWindow::playMeepSound()
 {
     if (meepPlaySound && FileExists(meepSoundFile))
     {
+#ifdef RUBBISH
         QMediaPlayer *player = new QMediaPlayer(this);
 
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
@@ -767,6 +764,7 @@ void KSTMainWindow::playMeepSound()
                 });
 #endif
         player->play();
+#endif
     }
 }
 void KSTMainWindow::analyseKstMessage(QString atj) {
