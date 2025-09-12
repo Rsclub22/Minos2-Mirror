@@ -28,6 +28,7 @@
 #include "kstmainwindow.h"
 #include "remotelogs.h"
 //#include "MinosParameters.h"
+#include "soundplayer.h"
 #include "ui_kstmainwindow.h"
 
 QStringList services =

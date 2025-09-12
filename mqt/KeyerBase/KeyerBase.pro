@@ -1,6 +1,6 @@
 include($$PWD/../mqt.pri)
 
-QT       += core gui network widgets charts
+QT       += core gui network widgets charts multimedia
 
 TEMPLATE = lib
 CONFIG += staticlib
