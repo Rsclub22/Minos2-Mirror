@@ -1,9 +1,13 @@
 #include <QFileDialog>
+#include <QMediaPlayer>
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+#include <QAudioOutput>
+#endif
+
 #include "kstconfigure.h"
 #include "AppStartup.h"
 #include "MShowMessageDlg.h"
 #include "fileutils.h"
-#include "soundplayer.h"
 #include "ui_kstconfigure.h"
 
 
@@ -133,8 +137,7 @@ void KSTConfigure::on_testButton_clicked()
     trace(QString("Test meep using %1").arg(fname));
     if (meepPlaySound && FileExists(fname))
     {
-        SoundPlayer::playSound(fname);
-#ifdef RUBBISH
+//        SoundPlayer::playSound(fname);
         QMediaPlayer *player = new QMediaPlayer;
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
         QAudioOutput *audioOutput = new QAudioOutput;
@@ -164,7 +167,6 @@ void KSTConfigure::on_testButton_clicked()
 #endif
         //mShowMessage("meep", this);
         player->play();
-#endif
     }
     else
     {
