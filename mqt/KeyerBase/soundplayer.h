@@ -9,7 +9,9 @@
 #ifndef SoundPlayerH
 #define SoundPlayerH
 
+#include <QObject>
 #include <QDateTime>
+#include <QMap>
 #include "riff.h"
 
 class SoundPlayer;
