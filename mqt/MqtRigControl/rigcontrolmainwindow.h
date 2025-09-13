@@ -3,7 +3,7 @@
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //                      Rig Control
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2017 - 2024
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2017 - 2025
 //
 // Interprocess Control Logic
 // COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2017
@@ -587,6 +587,8 @@ private:
     void setVoiceMemTestControlsVisible(bool visible);
     void loadTestModeCombo();
     void setTestModeControlsVisible(bool visible);
+    bool getSupportCwMemoryKeyerForCache(const QString radioName);
+    bool getCwMemoryType(hamlibData::CW_MEMORY_TYPES &cwMemoryType, const QString rigMfg_Name);
 private slots:
 
     void onCommandRead(QString);
@@ -659,7 +661,6 @@ private slots:
     void onCWMessageTimerTimeout();
     void onSelectRadioFromLoggerClicked();
     void onSelectRadioFromRigControlClicked();
-    void onVoiceMessageSpinBoxTextChanged();
     void onVoiceMessagePlayClicked();
     void onVoiceMessageStopClicked();
     void onTestModeComboBoxTextChanged(const QString testMode);

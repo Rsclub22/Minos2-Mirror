@@ -722,12 +722,20 @@ void RigSetupDialog::closeEvent (QCloseEvent *event)
 
 void RigSetupDialog::done(int r)
 {
+    bool radioModelSelectedOk = false;
     bool supportedBandsOK = false;
     bool transvertFreqInBand = false;
 
 
     if(QDialog::Accepted == r)  // ok was pressed
     {
+        // check radio definition has a radio model selected first
+        radioModelSelectedOk = checkRadioModelSelected();
+        if (!radioModelSelectedOk)
+        {
+            return;
+        }
+
         supportedBandsOK = checkOmniRigSupportedBands();
         transvertFreqInBand = checkTransvertFreqInBand();
 
@@ -743,6 +751,37 @@ void RigSetupDialog::done(int r)
    }
    doCloseEvent();
    QDialog::done(r);
+}
+
+bool RigSetupDialog::checkRadioModelSelected()
+{
+    QStringList radList = availRadioData.keys();
+    QString missingRadioList;
+
+    for(const auto &r: QASCONST(radList))
+    {
+        if (availRadioData.value(r)->rigModelName.isEmpty())
+        {
+           missingRadioList.append(radioTab.value(r)->getRadioData()->radioName + '\n');
+        }
+
+    }
+
+    if (missingRadioList.isEmpty())
+    {
+        // radio model selected ok
+        return true;
+    }
+    else
+    {
+        QMessageBox::critical(this, tr("Radio Model Missing"),
+                              tr("A radio model is missing from the following radio definitions:\n"
+                                 "Please select a model"
+                                 "%1").arg(missingRadioList),
+                              QMessageBox::Ok);
+
+        return false;
+    }
 }
 
 bool RigSetupDialog::checkTransvertFreqInBand()

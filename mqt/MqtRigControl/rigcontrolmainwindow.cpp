@@ -3,7 +3,7 @@
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //                      Rig Control
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2024
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2025
 //
 // Interprocess Control Logic
 // COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2017
@@ -394,7 +394,6 @@ void RigControlMainWindow::initActionsConnections()
     connect(ui->freqInputBox, &QLineEdit::editingFinished,  this, &RigControlMainWindow::selFreqClicked);
     connect(ui->selectRadioFromLoggerRb, &QRadioButton::clicked, this, &RigControlMainWindow::onSelectRadioFromLoggerClicked);
     connect(ui->selectRadioFromRigControlRb, &QRadioButton::clicked, this, &RigControlMainWindow::onSelectRadioFromRigControlClicked);
-    connect(ui->voiceMessageSpinBox, &QSpinBox::textChanged, this, &RigControlMainWindow::onVoiceMessageSpinBoxTextChanged);
     connect(ui->voiceMessagePlayPB, &QPushButton::clicked, this, &RigControlMainWindow::onVoiceMessagePlayClicked);
     connect(ui->voiceMessageStopPB, &QPushButton::clicked, this, &RigControlMainWindow::onVoiceMessageStopClicked);
 
@@ -895,6 +894,36 @@ void RigControlMainWindow::checkSupportRit()
 
 }
 
+
+
+
+bool RigControlMainWindow::getSupportCwMemoryKeyerForCache(const QString radioName)
+{
+
+
+    if (!radioName.isEmpty())
+    {
+
+        // get rigmodel
+        QString fileName = RADIO_PATH_LOGGER() + FILENAME_AVAIL_RADIOS;
+        QSettings  config(fileName, QSettings::IniFormat);
+        config.beginGroup(radioName);
+        QString radioModel = config.value("radioModel", "").toString();
+        RigCapabilities rigCap = rigFactory->supported_rigs()->value(radioModel);
+
+        return rigCap.getSupportCwMemory();
+
+
+    }
+
+    return false;
+}
+
+
+
+
+
+
 bool RigControlMainWindow::checkSupportVoiceMemory()
 {
 
@@ -930,7 +959,8 @@ bool RigControlMainWindow::checkSupportVoiceMemory()
                 if (testMode)
                 {
                     setVoiceMemTestControlsVisible(true);
-                    ui->voiceMessageSpinBox->setMaximum(voiceMemNum);
+                    //ui->voiceMessageSpinBox->setMaximum(voiceMemNum);
+                    ui->voiceMessageSpinBox->setRange(1, voiceMemNum);
                 }
 
                 return true;
@@ -968,50 +998,13 @@ bool RigControlMainWindow::checkSupportCwKeyerMemory()
             setCwMemIndVisible(true);
             setCwMemIndOnOff(true);
             addRigModelToRigCache(currentRadio.rigModel);
-            if (currentRadio.rigMfg_Name == "Yaesu")
+
+            hamlibData::CW_MEMORY_TYPES cwMemoryType = hamlibData::CW_MEMORY_TYPES::NONE;
+
+            if (getCwMemoryType(cwMemoryType, currentRadio.rigMfg_Name))
             {
-                trace("Send to logger Rig CW keyer type is Yaesu");
-                addCwKeyerTypeToRigCache(hamlibData::CW_MEMORY_TYPES::YAESU);
-            }
-            else if (currentRadio.rigMfg_Name == "Kenwood")
-            {
-                trace("Send to logger Rig CW keyer type is Kenwood");
-                addCwKeyerTypeToRigCache(hamlibData::CW_MEMORY_TYPES::KENWOOD);
-            }
-            else if (currentRadio.rigMfg_Name == "Icom")
-            {
-                trace("Send to logger Rig CW keyer type is Icom");
-                addCwKeyerTypeToRigCache(hamlibData::CW_MEMORY_TYPES::ICOM);
-            }
-            else if (currentRadio.rigMfg_Name == "Elecraft")
-            {
-                trace("Send to logger Rig CW keyer type is Elecraft");
-                addCwKeyerTypeToRigCache(hamlibData::CW_MEMORY_TYPES::ELECRAFT);
-            }
-            else if (currentRadio.rigMfg_Name == "Flex-radio")
-            {
-                trace("Send to logger Rig CW keyer type is Flex-Radio");
-                addCwKeyerTypeToRigCache(hamlibData::CW_MEMORY_TYPES::FLEX_RADIO);
-            }
-            else if (currentRadio.rigMfg_Name == "OpenHPSDR")
-            {
-                trace("Send to logger Rig CW keyer type is OpenHPSDR");
-                addCwKeyerTypeToRigCache(hamlibData::CW_MEMORY_TYPES::OPENHPSDR);
-            }
-            else if (currentRadio.rigMfg_Name == "Flex-radio/Apache")
-            {
-                trace("Send to logger Rig CW keyer type is Flex-radio/Apache");
-                addCwKeyerTypeToRigCache(hamlibData::CW_MEMORY_TYPES::FLEX_RADIO_APACHE);
-            }
-            else if (currentRadio.rigMfg_Name == "QRPLabs")
-            {
-                trace("Send to logger Rig CW keyer type is QRPLabs");
-                addCwKeyerTypeToRigCache(hamlibData::CW_MEMORY_TYPES::QRPLABS);
-            }
-            else if (currentRadio.rigMfg_Name == "Thetis")
-            {
-                trace("Send to logger Rig CW keyer type is Thetis");
-                addCwKeyerTypeToRigCache(hamlibData::CW_MEMORY_TYPES::THETIS);
+                trace("Send to logger Rig CW keyer type");
+                addCwKeyerTypeToRigCache(cwMemoryType);
             }
             else
             {
@@ -1056,6 +1049,82 @@ bool RigControlMainWindow::checkSupportCwKeyerMemory()
     addCwKeyerTypeToRigCache(hamlibData::CW_MEMORY_TYPES::NONE);
     return false;
 
+}
+
+
+bool RigControlMainWindow::getCwMemoryType(hamlibData::CW_MEMORY_TYPES &cwMemoryType, const QString rigMfg_Name)
+{
+
+    cwMemoryType = hamlibData::CW_MEMORY_TYPES::NONE;
+
+    if (rigMfg_Name == "Yaesu")
+    {
+        trace("Rig CW keyer type is Yaesu");
+        cwMemoryType = hamlibData::CW_MEMORY_TYPES::YAESU;
+        return true;
+        //addCwKeyerTypeToRigCache(hamlibData::CW_MEMORY_TYPES::YAESU);
+    }
+    else if (rigMfg_Name == "Kenwood")
+    {
+        trace("Rig CW keyer type is Kenwood");
+        cwMemoryType = hamlibData::CW_MEMORY_TYPES::KENWOOD;
+        return true;
+        //addCwKeyerTypeToRigCache(hamlibData::CW_MEMORY_TYPES::KENWOOD);
+    }
+    else if (rigMfg_Name == "Icom")
+    {
+        trace("Rig CW keyer type is Icom");
+        cwMemoryType = hamlibData::CW_MEMORY_TYPES::ICOM;
+        return true;
+        //addCwKeyerTypeToRigCache(hamlibData::CW_MEMORY_TYPES::ICOM);
+    }
+    else if (rigMfg_Name == "Elecraft")
+    {
+        trace("Rig CW keyer type is Elecraft");
+        cwMemoryType = hamlibData::CW_MEMORY_TYPES::ELECRAFT;
+        return true;
+        //addCwKeyerTypeToRigCache(hamlibData::CW_MEMORY_TYPES::ELECRAFT);
+    }
+    else if (rigMfg_Name == "Flex-radio")
+    {
+        trace("Rig CW keyer type is Flex-Radio");
+        cwMemoryType = hamlibData::CW_MEMORY_TYPES::FLEX_RADIO;
+        return true;
+
+        //addCwKeyerTypeToRigCache(hamlibData::CW_MEMORY_TYPES::FLEX_RADIO);
+    }
+    else if (rigMfg_Name == "OpenHPSDR")
+    {
+        trace("Rig CW keyer type is OpenHPSDR");
+        cwMemoryType = hamlibData::CW_MEMORY_TYPES::OPENHPSDR;
+        return true;
+        //addCwKeyerTypeToRigCache(hamlibData::CW_MEMORY_TYPES::OPENHPSDR);
+    }
+    else if (rigMfg_Name == "Flex-radio/Apache")
+    {
+        trace("Rig CW keyer type is Flex-radio/Apache");
+        cwMemoryType = hamlibData::CW_MEMORY_TYPES::FLEX_RADIO_APACHE;
+        return true;
+        //addCwKeyerTypeToRigCache(hamlibData::CW_MEMORY_TYPES::FLEX_RADIO_APACHE);
+    }
+    else if (rigMfg_Name == "QRPLabs")
+    {
+        trace("Rig CW keyer type is QRPLabs");
+        cwMemoryType = hamlibData::CW_MEMORY_TYPES::QRPLABS;
+        return true;
+
+        //addCwKeyerTypeToRigCache(hamlibData::CW_MEMORY_TYPES::QRPLABS);
+    }
+    else if (rigMfg_Name == "Thetis")
+    {
+        trace("Rig CW keyer type is Thetis");
+        cwMemoryType = hamlibData::CW_MEMORY_TYPES::THETIS;
+        return true;
+
+        //addCwKeyerTypeToRigCache(hamlibData::CW_MEMORY_TYPES::THETIS);
+    }
+
+    return false;
 }
 
 
@@ -2955,6 +3024,24 @@ void RigControlMainWindow::initCacheData(QStringList &availRadios)
             msg->rigCache.setRttyOffset(radioDataList[i]->radioName, radioDataList[i]->rttyOffset);
             msg->rigCache.setPskOffset(radioDataList[i]->radioName, radioDataList[i]->pskOffset);
 
+            QString fileName = RADIO_PATH_LOGGER() + FILENAME_AVAIL_RADIOS;
+            QSettings  config(fileName, QSettings::IniFormat);
+            config.beginGroup(radioDataList[i]->radioName);
+            QString radioModel = config.value("radioModel", "").toString();
+            if (!radioModel.isEmpty())
+            {
+                RigCapabilities rigCap = rigFactory->supported_rigs()->value(radioModel);
+
+                msg->rigCache.setVoiceMemAvail(radioDataList[i]->radioName, rigCap.getSupportVoiceMemory());
+                msg->rigCache.setNumVoiceMessages(radioDataList[i]->radioName, rigCap.getEndVoiceMemoryNumber());
+
+                hamlibData::CW_MEMORY_TYPES cwMemoryType = hamlibData::CW_MEMORY_TYPES::NONE;
+                getCwMemoryType(cwMemoryType, radioDataList[i]->rigMfg_Name);
+                msg->rigCache.setCwMemType(radioDataList[i]->radioName, cwMemoryType);
+
+            }
+
+
             msg->rigCache.invalidate();
 
         }
@@ -2969,6 +3056,7 @@ void RigControlMainWindow::updateRigDetailsCache()
     QStringList availRadios;
     getAvailRadiosList(availRadios);
     sendRadioListLogger(availRadios);
+
     // now rigdetails available before radio is opened
 
     initCacheData(availRadios);
@@ -5485,6 +5573,8 @@ void RigControlMainWindow::onSetStopVoiceMessage(QString msg)
                 trace(QString("This radio supports hamlib stop_morse function"));
                 radio->stopMorse(rigStateDetails->curVfo);
             }
+
+            // add stop ptt for radios that don't support stop cw message??
         }
 
 
@@ -5913,20 +6003,21 @@ void RigControlMainWindow::onSelectRadioFromRigControlClicked()
 
 }
 
-void RigControlMainWindow::onVoiceMessageSpinBoxTextChanged()
-{
 
-}
 
 void RigControlMainWindow::onVoiceMessagePlayClicked()
 {
+    int msgNum = ui->voiceMessageSpinBox->value();
+    trace(QString("Send Test Voice Message Number = %1").arg(msgNum));
+    radio->sendVoiceMessage(rigStateDetails->curVfo, msgNum);
 
 }
 
 
 void RigControlMainWindow::onVoiceMessageStopClicked()
 {
-
+    trace("Send Test Stop Voice Message");
+    onSetStopVoiceMessage(TxKeyerCommon::STOP_VOICE_MESSAGE);
 }
 
 void RigControlMainWindow::on_reconnectButton_clicked()

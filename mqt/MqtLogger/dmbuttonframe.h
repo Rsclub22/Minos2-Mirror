@@ -78,7 +78,7 @@ public:
 
 
 
-    void setRadioListFromTslf();
+//    void setRadioListFromTslf();
 signals:
     void sendFreqControl(Frequency f);
 
@@ -169,8 +169,10 @@ private:
     bool radioConnected;
     bool pttState;
     bool sAndPState = true;
+
     QMap<QString, QString> radioMap; // map radio name to path
     QStringList listOfRadios;       // full path and radio name
+    QStringList listOfRadioSupportKeyer;
 
     CwSpeedControl *cwSpeedSlider = nullptr;
 

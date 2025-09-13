@@ -1225,7 +1225,12 @@ void DMButtonFrame::setPttEnabled(bool state, PubSubName psn)
         allRadioDetails[psn] = rd;
     }
 
-    updateFrameState();
+    //if (txKeyerType.isEmpty() || txKeyerType == keyerTypes[TxKeyerId::PcCwKeyer])
+    //{
+        updateFrameState();
+    //}
+
+
 }
 
 bool DMButtonFrame::getPttEnabled(PubSubName psn)
@@ -1308,12 +1313,19 @@ void DMButtonFrame::setVoiceMemAvail(bool avail, PubSubName psn)
         allRadioDetails[psn] = rd;
     }
 
-    updateFrameState();
+    if (txKeyerType == keyerTypes[TxKeyerId::RigControl])
+    {
+         updateFrameState();
+    }
+
+
 }
 
-// This will not work as expected as all radiodetails are not sent to logger!
+
 void DMButtonFrame::getVoiceMemSupportedRadios(const QStringList &listOfRadios, QStringList& listOfRadioSupportVoiceMem)
 {
+    listOfRadioSupportVoiceMem.clear();
+
     for (auto &radio: listOfRadios)
     {
         PubSubName radName(radio);
@@ -1339,12 +1351,6 @@ bool DMButtonFrame::isVoiceMemAvail(PubSubName psn)
 void DMButtonFrame::setNumVoiceMessages(int numMsgs, PubSubName psn)
 {
 
-    if (txKeyerType.isEmpty() || txKeyerType == keyerTypes[TxKeyerId::PcCwKeyer])
-    {
-        // ignore as we don't want to update framestate
-        return;
-    }
-
     logMessage(QString("setNumVoiceMessages = %1, radio = %2").arg(QString::number(numMsgs), psn.getLocalName()));
 
     RadioDetails rd;
@@ -1360,7 +1366,11 @@ void DMButtonFrame::setNumVoiceMessages(int numMsgs, PubSubName psn)
         allRadioDetails[psn] = rd;
     }
 
-    updateFrameState();
+    if (txKeyerType == keyerTypes[TxKeyerId::RigControl])
+    {
+        updateFrameState(  );
+    }
+
 }
 
 // This is max number of voice messages available on a radio
@@ -1403,7 +1413,13 @@ void DMButtonFrame::setRigVoiceKeyerSupportStopFlag(bool supportStopCmd, PubSubN
         allRadioDetails[psn] = rd;
     }
 
-    updateFrameState();
+    if (txKeyerType == keyerTypes[TxKeyerId::RigControl])
+    {
+        updateFrameState();
+    }
+
+
+
 }
 
 
@@ -1446,7 +1462,12 @@ void DMButtonFrame::setRigCwKeyerSupportStopFlag(bool supportStopCmd, PubSubName
         allRadioDetails[psn] = rd;
     }
 
-    updateFrameState();
+    if (txKeyerType == keyerTypes[TxKeyerId::CW_RigControl])
+    {
+        updateFrameState();
+    }
+
+
 }
 
 
@@ -1488,7 +1509,13 @@ void DMButtonFrame::setRigModel(QString rigModel, PubSubName psn)
         allRadioDetails[psn] = rd;
     }
 
-    updateFrameState();
+    //if (txKeyerType.isEmpty() ||txKeyerType == keyerTypes[TxKeyerId::PcCwKeyer])
+    //{
+        updateFrameState();
+    //}
+
+
+
 }
 
 QString DMButtonFrame::getRigModel(PubSubName psn)
@@ -1536,11 +1563,7 @@ bool DMButtonFrame::isCwMemTypeAvail(PubSubName psn)
 
 void DMButtonFrame::setCwMemType(int cwMemType, PubSubName psn)
 {
-    if (txKeyerType.isEmpty() || txKeyerType == keyerTypes[TxKeyerId::PcCwKeyer])
-    {
-        // ignore as we don't want to update framestate
-        return;
-    }
+
 
     logMessage(QString("setCwMemType = %1, radio = %2").arg(cwMemType).arg(psn.getLocalName()));
 
@@ -1558,7 +1581,11 @@ void DMButtonFrame::setCwMemType(int cwMemType, PubSubName psn)
         allRadioDetails[psn] = rd;
     }
 
-    updateFrameState();
+    if (txKeyerType.isEmpty() || txKeyerType == keyerTypes[TxKeyerId::CW_RigControl])
+    {
+        updateFrameState();
+    }
+
 }
 
 
@@ -2669,11 +2696,13 @@ void DMButtonFrame::on_editButton_clicked()
             radioName = selectedRadio.getLocalName();
         }
 
-        //getVoiceMemSupportedRadios(listOfRadios, listOfRadioSupportVoiceMem);     // we don't send all radio details only the selected!
 
+        listOfRadios = LogContainer->sendDM->rigs();
+        getVoiceMemSupportedRadios(listOfRadios, listOfRadioSupportKeyer);     // we don't send all radio details only the selected!
+        mapUniqueNames(listOfRadioSupportKeyer, radioMap);
     }
 
-    DMKeysEditDlg jed(this, fkeyFileName, currentName, nfk, txKeyerType, radioName, listOfRadios);
+    DMKeysEditDlg jed(this, fkeyFileName, currentName, nfk, txKeyerType, radioName, listOfRadioSupportKeyer);
 
     if (jed.exec() == QDialog::Accepted)
     {
@@ -2861,7 +2890,7 @@ void DMButtonFrame::setPcCwKeyerCurrentWpm(QString wpm)
 {
 
 }
-
+/*
 void DMButtonFrame::setRadioListFromTslf()
 {
     if (ct)
@@ -2877,4 +2906,4 @@ void DMButtonFrame::setRadioListFromTslf()
 
     }
 }
-
+*/

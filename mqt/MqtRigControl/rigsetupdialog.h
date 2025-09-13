@@ -145,6 +145,7 @@ private:
     bool transVerterInBand(const QSharedPointer<TransVertParams> tvp, QString &transVertBand);
     bool checkTransvertFreqInBand();
     void setToolTips(QString tabName);
+    bool checkRadioModelSelected();
 };
 
 #endif // SETUPDIALOG_H

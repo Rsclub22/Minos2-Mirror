@@ -204,7 +204,7 @@ int register_callback(rig_model_t rig_model, void *callback_data)
 
 
     // below to get a parameter dump for development... edit required parameters...
-    //trace(QString("%1\t%2\tCW Keyer Mem = %3\tVoiceMem = %4\tportType = %5\tpttPortType = %6\tsupport getPtt = %7\tSupport SetPtt = %8").arg(manufacturerName + " " + modelName).arg(rig_model).arg(supportCwMem ? "True" : "False").arg(supportVoiceMem ? "True" : "False").arg(port_type).arg(supportPttPortType).arg(supportGetPtt ? "Yes" : "No").arg(supportSetPtt ? "Yes" : "No"));
+    trace(QString("%1\t%2\tCW Keyer Mem = %3\tVoiceMem = %4\tportType = %5\tpttPortType = %6\tsupport getPtt = %7\tSupport SetPtt = %8").arg(manufacturerName + " " + modelName).arg(rig_model).arg(supportCwMem ? "True" : "False").arg(supportVoiceMem ? "True" : "False").arg(port_type).arg(supportPttPortType).arg(supportGetPtt ? "Yes" : "No").arg(supportSetPtt ? "Yes" : "No"));
 
 
     RigCapabilities rigCap;
