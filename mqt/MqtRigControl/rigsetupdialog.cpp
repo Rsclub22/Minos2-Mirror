@@ -776,10 +776,11 @@ bool RigSetupDialog::checkRadioModelSelected()
     {
         QMessageBox::critical(this, tr("Radio Model Missing"),
                               tr("A radio model is missing from the following radio definitions:\n"
-                                 "Please select a model"
+                                 "Please select a model\n"
                                  "%1").arg(missingRadioList),
                               QMessageBox::Ok);
 
+        trace(QString("Radio Models are missing from the following radio definitions - %1").arg(missingRadioList));
         return false;
     }
 }
@@ -839,7 +840,7 @@ bool RigSetupDialog::checkTransvertFreqInBand()
                                           "following:\n"
                                           "%1\nPlease Correct before Continuing").arg(outofBandTransvertMsg),
                                        QMessageBox::Ok);
-
+        trace(QString("Transvert Settings out of Band - %1").arg(outofBandTransvertMsg));
         return false;
     }
 }
@@ -921,7 +922,7 @@ bool RigSetupDialog::checkOmniRigSupportedBands()
                                       "these radio definitions:\n"
                                       "%1").arg(supRadNames),
                                    QMessageBox::Ok);
-
+    trace(QString("Radio Support Bands Missing from these radio definitions - %1").arg(supRadNames));
     return false;
 
 }

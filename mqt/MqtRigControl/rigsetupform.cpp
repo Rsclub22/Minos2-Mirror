@@ -158,6 +158,16 @@ void RigSetupForm::setCurrentRadioName(QString name)
 
 void RigSetupForm::radioModelSelected()
 {
+    if (ui->radioModelBox->currentText().isEmpty())
+    {
+        QMessageBox::critical(this, tr("Radio Model Missing"),
+                              tr("A radio model is missing from this radio definition\n"
+                                 "Please select a model\n"),
+                              QMessageBox::Ok);
+
+        return;
+    }
+
     setupRadioModel(ui->radioModelBox->currentText());
 }
 
