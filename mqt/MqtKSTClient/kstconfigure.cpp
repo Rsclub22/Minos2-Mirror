@@ -1,8 +1,4 @@
 #include <QFileDialog>
-#include <QMediaPlayer>
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-#include <QAudioOutput>
-#endif
 
 #include "kstconfigure.h"
 #include "AppStartup.h"
@@ -140,37 +136,7 @@ void KSTConfigure::on_testButton_clicked()
     if (meepPlaySound && FileExists(fname))
     {
         SoundPlayer::playSound(fname);
-#ifdef RUBBISH
-        QMediaPlayer *player = new QMediaPlayer;
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-        QAudioOutput *audioOutput = new QAudioOutput;
-        player->setAudioOutput(audioOutput);
-        player->setSource(QUrl::fromLocalFile(fname));
-        audioOutput->setVolume(50);
-        connect(player, &QMediaPlayer::playbackStateChanged, this,
-                [=](QMediaPlayer::PlaybackState state)
-                {
-                    if (state == QMediaPlayer::StoppedState)
-                    {
-                        player->deleteLater();
-                    }
-                });
-#else
 
-        player->setMedia(QUrl::fromLocalFile(fname));
-        player->setVolume(50);
-        connect(player, &QMediaPlayer::stateChanged, this,
-                [=](QMediaPlayer::State state)
-                {
-                    if (state == QMediaPlayer::StoppedState)
-                    {
-                        player->deleteLater();
-                    }
-                });
-#endif
-        //mShowMessage("meep", this);
-        player->play();
-#endif
     }
     else
     {

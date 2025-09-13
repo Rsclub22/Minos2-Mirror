@@ -85,6 +85,10 @@ private:
     qint64 p_pos = 0;
     QByteArray m_buffer;
     void doPlaySound(QString fname);
+signals:
+    void draining();
+private slots:
+    void onDraining();
 };
 
 #endif

@@ -2,10 +2,6 @@
 #include <QSettings>
 #include <QKeyEvent>
 #include <QFileDialog>
-#include <QMediaPlayer>
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-#include <QAudioOutput>
-#endif
 
 #include "QtUtils.h"
 #include "RPCCommandConstants.h"
@@ -738,36 +734,13 @@ void KSTMainWindow::playMeepSound()
 {
     if (meepPlaySound && FileExists(meepSoundFile))
     {
-        QMediaPlayer *player = new QMediaPlayer(this);
+        SoundPlayer::playSound(meepSoundFile);
 
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-        QAudioOutput *audioOutput = new QAudioOutput;
-        player->setAudioOutput(audioOutput);
-        player->setSource(QUrl::fromLocalFile(meepSoundFile));
-        audioOutput->setVolume(50);
-        connect(player, &QMediaPlayer::playbackStateChanged, this,
-                [=](QMediaPlayer::PlaybackState state)
-                {
-                    if (state == QMediaPlayer::StoppedState)
-                    {
-                        player->deleteLater();
-                    }
-                });
-        player->play();
+    }
+    else
+    {
+        trace(QString("%1 doesn't exist").arg(meepSoundFile));
 
-#else
-        player->setMedia(QUrl::fromLocalFile(meepSoundFile));
-        player->setVolume(50);
-        connect(player, &QMediaPlayer::stateChanged, this,
-                [=](QMediaPlayer::State state)
-                {
-                    if (state == QMediaPlayer::StoppedState)
-                    {
-                        player->deleteLater();
-                    }
-                });
-#endif
-        player->play();
     }
 }
 void KSTMainWindow::analyseKstMessage(QString atj) {

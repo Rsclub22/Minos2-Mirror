@@ -4,7 +4,7 @@
 
 A set of C++ classes that provide a common API for realtime audio input/output across Linux (native ALSA, JACK, PulseAudio and OSS), Macintosh OS X (CoreAudio and JACK), and Windows (DirectSound, ASIO and WASAPI) operating systems.
 
-By Gary P. Scavone, 2001-2022 (and many other developers!)
+By Gary P. Scavone, 2001-2023 (and many other developers!)
 
 This distribution of RtAudio contains the following:
 
@@ -53,7 +53,7 @@ RtAudio doesn't automatically turn 1-channel output into stereo output with copi
 
 ## Further Reading
 
-For complete documentation on RtAudio, see the doc directory of the distribution or surf to http://www.music.mcgill.ca/~gary/rtaudio/.
+For complete documentation on RtAudio, see the doc directory of the distribution or surf to https://caml.music.mcgill.ca/~gary/rtaudio/index.html.
 
 
 ## Legal and ethical:

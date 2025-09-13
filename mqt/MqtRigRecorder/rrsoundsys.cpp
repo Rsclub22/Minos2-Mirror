@@ -13,7 +13,6 @@
 #endif
 #include <QtEndian>
 #include <QtMath>
-#include <numeric>
 #include <QWaitCondition>
 #include <QMutex>
 
@@ -111,58 +110,52 @@ int audioCallback2( void */*outputBuffer*/, void *inputBuffer,
     RRRtAudioSoundSystem *qss = static_cast<RRRtAudioSoundSystem *>(userData);
     return qss->audioCallback(inputBuffer, nFrames, streamTime, status, 2);
 }
+void errorCallback( RtAudioErrorType /*type*/, const std::string &errorText)
+{
+    trace(QString("RTAudio error callback: ") + errorText.c_str());
+}
 //==============================================================================
 RRRtAudioSoundSystem::RRRtAudioSoundSystem()
 {
-    try
-    {
-       audio = new RtAudio();
+   audio = new RtAudio(RtAudio::UNSPECIFIED, &errorCallback);
 
-       wThread = new RRRiffWriter(this);
-       wThread->start();
+   wThread = new RRRiffWriter(this);
+   wThread->start();
 
-       unsigned int defInput = audio->getDefaultInputDevice();
-       unsigned int devices = audio->getDeviceCount();
-       RtAudio::DeviceInfo info;
-       for ( unsigned int i=0; i<devices; i++ )
-       {
-         info = audio->getDeviceInfo( i );
-         if ( info.probed == true )
-         {
-           trace( "device = "  + QString::number(i) +  " " + info.name.c_str());
-           trace( "Maximum output channels = " + QString::number(info.outputChannels) + " Maximum input channels = " + QString::number(info.inputChannels));
+   std::vector<unsigned int> devices = audio->getDeviceIds();
+   //trace(QString("Found %1 device(s)").arg(devices.size()));
 
-           QString buff("Sample rates: ");
-           for (auto r:info.sampleRates)
-           {
-               QString pref;
-               if (r == info.preferredSampleRate)
-               {
-                   pref = "**";
-               }
-               buff += pref + QString::number(r) + pref + " ";
-           }
-           trace(buff);
-         }
-         if (i == defInput)
-         {
-             trace("(Default input)");
-         }
-         if (info.inputChannels)
-         {
-             inputDevices.append(info.name.c_str());
-         }
-         deviceIds[QString(info.name.c_str())] = i;
-         inChannels[info.name.c_str()] = info.inputChannels;
-         trace( QString(info.name.c_str()) + " input channels = " + QString::number(inChannels[info.name.c_str()]));
-       }
-    }
-    catch (RtAudioError &error)
-    {
-       // Handle the exception here
-       trace(error.getMessage().c_str());
-       audio = nullptr;
-    }
+   //unsigned int defInput = audio->getDefaultInputDevice();
+
+   for (unsigned int i=0; i<devices.size(); i++)
+   {
+       RtAudio::DeviceInfo info = audio->getDeviceInfo( devices[i] );       trace( "device = "  + QString::number(i) +  " " + info.name.c_str());
+       // trace( "Maximum output channels = " + QString::number(info.outputChannels) + " Maximum input channels = " + QString::number(info.inputChannels));
+
+       // QString buff("Sample rates: ");
+       // for (auto r:info.sampleRates)
+       // {
+       //     QString pref;
+       //     if (r == info.preferredSampleRate)
+       //     {
+       //         pref = "**";
+       //     }
+       //     buff += pref + QString::number(r) + pref + " ";
+       // }
+       // trace(buff);
+
+     // if (i == defInput)
+     // {
+     //     trace("(Default input)");
+     // }
+     if (info.inputChannels)
+     {
+         inputDevices.append(info.name.c_str());
+     }
+     deviceIds[QString(info.name.c_str())] = devices[i];
+     inChannels[info.name.c_str()] = info.inputChannels;
+     // trace( QString(info.name.c_str()) + " input channels = " + QString::number(inChannels[info.name.c_str()]));
+   }
 }
 void RRRtAudioSoundSystem::stop()
 {
@@ -210,15 +203,12 @@ void RRRtAudioSoundSystem::setVUCallBack( VUCallBack cb )
 {
    WinVUCallback = cb;
 }
-void errorCallback( RtAudioError::Type /*type*/, const std::string &errorText)
-{
-   trace(QString("RTAudio error callback: ") + errorText.c_str());
-}
+
 bool RRRtAudioSoundSystem::initialise( QString ind, QString ind2)
 {
     if (!audio)
     {
-        audio = new RtAudio();
+        audio = new RtAudio(RtAudio::UNSPECIFIED, &errorCallback);
     }
     curInDev1 = ind;
     curInDev2 = ind2;
@@ -237,14 +227,18 @@ bool RRRtAudioSoundSystem::initialise( QString ind, QString ind2)
     soptions.priority = 0;
     soptions.streamName = "";
 
-    audio->openStream(nullptr,
+    RtAudioErrorType err = audio->openStream(nullptr,
                       &inParams,
                       RTAUDIO_SINT16, sampleRate,
                       &bufferFrames, ::audioCallback,
                       static_cast<void *>(this),
-                      &soptions,
-                      &errorCallback
+                      &soptions
                       );
+    if(err != RTAUDIO_NO_ERROR)
+    {
+        trace(QString(audio->getErrorText().c_str()));
+        return false;
+    }
     audio->startStream();
     trace(QString("Audio stream %1 %2 opened OK").arg(deviceIds[ind]).arg(ind));
 
@@ -252,7 +246,7 @@ bool RRRtAudioSoundSystem::initialise( QString ind, QString ind2)
     {
         if (!audio2)
         {
-            audio2 = new RtAudio();
+            audio2 = new RtAudio(RtAudio::UNSPECIFIED, &errorCallback);
         }
         RtAudio::StreamParameters inParams;
         RtAudio::StreamOptions soptions;
@@ -268,15 +262,18 @@ bool RRRtAudioSoundSystem::initialise( QString ind, QString ind2)
         soptions.priority = 0;
         soptions.streamName = "";
 
-        audio2->openStream(nullptr,
+        RtAudioErrorType err = audio2->openStream(nullptr,
                           &inParams,
                           RTAUDIO_SINT16, sampleRate,
                           &bufferFrames, ::audioCallback2,
                           static_cast<void *>(this),
-                          &soptions,
-                          &errorCallback
+                          &soptions
                           );
-
+        if(err != RTAUDIO_NO_ERROR)
+        {
+            trace(QString(audio->getErrorText().c_str()));
+            return false;
+        }
         audio2->startStream();
         trace(QString("Audio stream %1 %2 opened OK").arg(deviceIds[ind2]).arg(ind2));
     }
