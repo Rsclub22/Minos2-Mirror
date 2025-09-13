@@ -16,21 +16,14 @@
 
 class SoundPlayer;
 class RtAudio;
-class dvkFile;
+class spFile;
 
 class SoundPlayer: public QObject
 {
     Q_OBJECT
 
-signals:
-    void interruptOK();
-    void ssOutputFinished();
-    void actionQueueFinished();
-    void soundAvailable();
-
-
 protected:
-    void readFromFile(void *outputBuffer, unsigned int nFrames);
+    bool readFromFile(void *outputBuffer, unsigned int nFrames);
 
 public:
     SoundPlayer();
@@ -42,10 +35,8 @@ public:
 
     static void playSound(QString fname);
 
-    QStringList inputDevices;
     QStringList outputDevices;
 
-    QString defaultInput;
     QString defaultOutput;
 
     unsigned int setRate(unsigned int rate);
@@ -62,13 +53,10 @@ public:
 
     void setData(int16_t *data, unsigned int len);
 
-    dvkFile *dvkf = nullptr;
+    spFile *spf = nullptr;
     int16_t *dataptr = nullptr;
     int numChannels = 0;
     uint32_t samples = 0;   /* fsample for current file  */
-
-    WaveFile *outWave = nullptr;
-    void writeDataToFile(void *inp, unsigned int nFrames);
 
     int audioCallback( void *outputBuffer, void *inputBuffer,
                                     unsigned int nFrames,
@@ -80,10 +68,8 @@ private:
     static SoundPlayer *soundPlayer;
 
     QMap<QString, int> deviceIds;
-    QMap<QString, unsigned int> inChannels;
     QMap<QString, unsigned int> outChannels;
 
-    QString curInDev;
     QString curOutDev;
 
     // internal values

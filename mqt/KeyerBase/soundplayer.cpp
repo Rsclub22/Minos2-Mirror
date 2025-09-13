@@ -27,12 +27,11 @@
 #define FRAMES 16
 #define FRAMESAMPLES 256
 
-class dvkFile
+class spFile
 {
 public:
     QString fileName;
     bool loaded = false;
-    bool frec = false;          // flag set to true if audio has been recorded
     unsigned int sampleRate = 0;       // system required sample rate
     unsigned long fsample = 0;        // number of bytes for each sound files
     int16_t *fptr = nullptr;          // data area for each sound file
@@ -47,7 +46,6 @@ public:
         loaded = false;
         delete[] fptr;
         fptr = nullptr;
-        // should be initiated by keyer, which should call the sound engine
         WaveFile inWave;
         int ret = inWave.OpenForRead( fileName );
         if ( ret != DDC_SUCCESS )
@@ -61,7 +59,6 @@ public:
             rate = inWave.SamplingRate();
             BitsPerSample = inWave.BitsPerSample();
             NumChannels = inWave.NumChannels();
-            frec = false;
             fsample = inWave.NumSamples();
 
             if ( /*rate == static_cast<unsigned int>(sampleRate) &&*/ BitsPerSample == 16  )
@@ -92,6 +89,11 @@ public:
                         loaded = false;
                     }
                 }
+                if (loaded)
+                {
+                    trace(QString("%1 opened rate %2 channels %3 bitspersample %4 numsamples %5")
+                              .arg(fileName).arg(sampleRate).arg(NumChannels).arg(BitsPerSample).arg(fsample));
+                }
             }
             else
             {
@@ -102,9 +104,9 @@ public:
         }
         return loaded;
     }
-    dvkFile()
+    spFile()
     {}
-    ~dvkFile()
+    ~spFile()
     {
         delete[] fptr;
         fptr = nullptr;
@@ -140,21 +142,21 @@ void SoundPlayer::playSound(QString fname)
 }
 void SoundPlayer::doPlaySound(QString fname)
 {
-    delete dvkf;
-    dvkf = new dvkFile();
-    dvkf->fileName = fname;
+    delete spf;
+    spf = new spFile();
+    spf->fileName = fname;
     QString err;
-    if (!dvkf->LoadFile(err))
+    if (!spf->LoadFile(err))
     {
         trace(err);
-        delete dvkf;
-        dvkf = nullptr;
+        delete spf;
+        spf = nullptr;
         return;
     }
-    samples = static_cast<uint32_t>(dvkf ->fsample * dvkf->NumChannels);
-    dataptr = dvkf ->fptr;
-    numChannels = dvkf->NumChannels;
-    setRate(dvkf->rate);
+    samples = static_cast<uint32_t>(spf ->fsample * spf->NumChannels);
+    dataptr = spf ->fptr;
+    numChannels = spf->NumChannels;
+    setRate(spf->rate);
     setVolumeMults(0.5);
 
     initialise();
@@ -288,8 +290,7 @@ void SoundPlayer::closedown()
         delete audio;
         audio = nullptr;
 
-        delete outWave;
-        outWave = nullptr;
+        delete spf;
     }
 }
 
@@ -332,7 +333,10 @@ int SoundPlayer::audioCallback(void *outputBuffer, void */*inputBuffer*/,
     }
     if (outputBuffer != nullptr && nFrames != 0 && outputEnabled )
     {
-        readFromFile(outputBuffer, nFrames);
+        if (!readFromFile(outputBuffer, nFrames))
+        {
+            return 1;   // stop the stream, drain buffer
+        }
 
     }
 
@@ -357,7 +361,6 @@ void SoundPlayer::stopOutput()
 {
     trace("stopOutput");
     outputEnabled = false;
-    emit ssOutputFinished();
 }
 
 void SoundPlayer::setData(int16_t *data, unsigned int len)
@@ -374,7 +377,7 @@ void SoundPlayer::setData(int16_t *data, unsigned int len)
     }
     m_pos = 0;
 }
-void SoundPlayer::readFromFile(void *outputBuffer, unsigned int nFrames)
+bool SoundPlayer::readFromFile(void *outputBuffer, unsigned int nFrames)
 {
     if (outputBuffer && nFrames)
     {
@@ -389,12 +392,12 @@ void SoundPlayer::readFromFile(void *outputBuffer, unsigned int nFrames)
         {
             len = nFrames * 2 * 2;
         }
-        // we have to add in the pip here as well...
+
         qint64 total = 0;
         if (m_pos >= m_buffer.size())
         {
             stopOutput();
-            return;
+            return false;
         }
         else
         {
@@ -435,6 +438,7 @@ void SoundPlayer::readFromFile(void *outputBuffer, unsigned int nFrames)
                     *q++ = static_cast<qint16>(val2);
                 }
                 m_pos += total;
+                return true;
             }
             else
             {
@@ -442,8 +446,8 @@ void SoundPlayer::readFromFile(void *outputBuffer, unsigned int nFrames)
                 trace("m_buffer empty");
             }
         }
-        emit interruptOK();
     }
+    return false;
 }
 
 //==============================================================================
