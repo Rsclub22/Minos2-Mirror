@@ -499,7 +499,7 @@ bool UDPSocket::sendMessage(const QString &mess )
 {
     QByteArray packet = mess.toUtf8();
 
-    qint64 res = qus->writeDatagram(packet.data(), packet.length(), qua.broadcast(), UPNP_PORT);
+    qint64 res = qus->writeDatagram(packet.data(), packet.length(), QHostAddress::Broadcast/*qua.broadcast()*/, UPNP_PORT);
 
     QString err = "No error";
     if (res < 0)
