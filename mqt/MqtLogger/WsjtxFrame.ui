@@ -16,7 +16,7 @@
   <property name="autoFillBackground">
    <bool>true</bool>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_3" stretch="1,0">
+  <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QLabel" name="label">
      <property name="sizePolicy">
@@ -31,7 +31,7 @@
     </widget>
    </item>
    <item>
-    <widget class="MinosSplitter" name="splitter">
+    <widget class="QSplitter" name="splitter">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
@@ -82,8 +82,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>997</width>
-         <height>422</height>
+         <width>949</width>
+         <height>423</height>
         </rect>
        </property>
        <property name="sizePolicy">
@@ -93,63 +93,6 @@
         </sizepolicy>
        </property>
        <layout class="QHBoxLayout" name="horizontalLayout_8">
-        <item>
-         <widget class="QFrame" name="blFrame">
-          <property name="frameShape">
-           <enum>QFrame::Box</enum>
-          </property>
-          <layout class="QHBoxLayout" name="horizontalLayout_5">
-           <item>
-            <layout class="QVBoxLayout" name="verticalLayout">
-             <item>
-              <widget class="QPushButton" name="addBlackListButton">
-               <property name="text">
-                <string>Add Blacklist</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QPushButton" name="removeBlackListButton">
-               <property name="text">
-                <string>Remove Blacklist</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <spacer name="verticalSpacer">
-               <property name="orientation">
-                <enum>Qt::Vertical</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>20</width>
-                 <height>40</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-             <item>
-              <widget class="QLabel" name="qsoStateLabel">
-               <property name="text">
-                <string>NoQSOWaiting</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QPushButton" name="resetButton">
-               <property name="text">
-                <string>Reset state to idle</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </item>
-           <item>
-            <widget class="QListView" name="blackListView"/>
-           </item>
-          </layout>
-         </widget>
-        </item>
         <item>
          <widget class="QFrame" name="wframe">
           <property name="frameShape">
@@ -311,137 +254,6 @@
             <widget class="QFrame" name="cframe">
              <layout class="QHBoxLayout" name="horizontalLayout_7">
               <item>
-               <widget class="QFrame" name="autoSelectReplyFrame">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="frameShape">
-                 <enum>QFrame::Box</enum>
-                </property>
-                <property name="frameShadow">
-                 <enum>QFrame::Plain</enum>
-                </property>
-                <layout class="QVBoxLayout" name="verticalLayout_5">
-                 <item>
-                  <widget class="QFrame" name="autoSelectFrame">
-                   <layout class="QHBoxLayout" name="horizontalLayout_3">
-                    <item>
-                     <widget class="QFrame" name="asframe">
-                      <property name="frameShape">
-                       <enum>QFrame::Box</enum>
-                      </property>
-                      <layout class="QVBoxLayout" name="verticalLayout_8">
-                       <item>
-                        <widget class="QCheckBox" name="semiAutocb">
-                         <property name="text">
-                          <string>Semi-auto</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item>
-                        <widget class="QCheckBox" name="RR73select">
-                         <property name="text">
-                          <string>Allow select 73/RR73</string>
-                         </property>
-                        </widget>
-                       </item>
-                      </layout>
-                     </widget>
-                    </item>
-                    <item>
-                     <widget class="QFrame" name="selFrame">
-                      <property name="frameShape">
-                       <enum>QFrame::Box</enum>
-                      </property>
-                      <layout class="QVBoxLayout" name="verticalLayout_9">
-                       <item>
-                        <widget class="QPushButton" name="semiAutoButton">
-                         <property name="text">
-                          <string>Select Best Response</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item>
-                        <widget class="QPushButton" name="configCQButton">
-                         <property name="focusPolicy">
-                          <enum>Qt::NoFocus</enum>
-                         </property>
-                         <property name="text">
-                          <string>Config CQ</string>
-                         </property>
-                        </widget>
-                       </item>
-                      </layout>
-                     </widget>
-                    </item>
-                   </layout>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QFrame" name="ignoreFrame">
-                   <property name="frameShape">
-                    <enum>QFrame::Box</enum>
-                   </property>
-                   <layout class="QHBoxLayout" name="horizontalLayout">
-                    <item>
-                     <widget class="QCheckBox" name="minPointsCheckBox">
-                      <property name="focusPolicy">
-                       <enum>Qt::NoFocus</enum>
-                      </property>
-                      <property name="text">
-                       <string>Ignore &lt; (points)</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item>
-                     <widget class="QSpinBox" name="minPointsSpinner">
-                      <property name="focusPolicy">
-                       <enum>Qt::ClickFocus</enum>
-                      </property>
-                      <property name="maximum">
-                       <number>10000</number>
-                      </property>
-                      <property name="singleStep">
-                       <number>10</number>
-                      </property>
-                     </widget>
-                    </item>
-                    <item>
-                     <widget class="QCheckBox" name="snrCheckBox">
-                      <property name="focusPolicy">
-                       <enum>Qt::NoFocus</enum>
-                      </property>
-                      <property name="text">
-                       <string>Ignore &lt; (SNR)</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item>
-                     <widget class="QSpinBox" name="snrSpinner">
-                      <property name="focusPolicy">
-                       <enum>Qt::NoFocus</enum>
-                      </property>
-                      <property name="minimum">
-                       <number>-30</number>
-                      </property>
-                      <property name="maximum">
-                       <number>30</number>
-                      </property>
-                      <property name="value">
-                       <number>-20</number>
-                      </property>
-                     </widget>
-                    </item>
-                   </layout>
-                  </widget>
-                 </item>
-                </layout>
-               </widget>
-              </item>
-              <item>
                <widget class="QFrame" name="txframe">
                 <property name="frameShape">
                  <enum>QFrame::Box</enum>
@@ -526,12 +338,6 @@
   </layout>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>MinosSplitter</class>
-   <extends>QSplitter</extends>
-   <header>minossplitter.h</header>
-   <container>1</container>
-  </customwidget>
   <customwidget>
    <class>MinosTableView</class>
    <extends>QTableView</extends>

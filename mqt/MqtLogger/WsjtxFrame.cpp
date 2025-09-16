@@ -18,7 +18,7 @@
 
 #include "WsjtxDecodesModel.hpp"
 #include "WsjtxServer.h"
-#include "WsjtxConfigureCQ.h"
+//#include "WsjtxConfigureCQ.h"
 
 #include "WsjtxFrame.h"
 #include "ui_WsjtxFrame.h"
@@ -47,8 +47,6 @@ WsjtxFrame::WsjtxFrame(TSingleLogFrame *parent) :
     ui->replayButton->setVisible(showTest);
 
     TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpWSJTX1AutoEnabled, autoEnabled );
-    ui->autoSelectReplyFrame->setVisible(autoEnabled);
-    ui->blFrame->setVisible(autoEnabled);
 
     int lcf;
     TContestApp::getContestApp() ->getIntDisplayProfile(edpListCompression, lcf);
@@ -98,10 +96,10 @@ WsjtxFrame::WsjtxFrame(TSingleLogFrame *parent) :
 //    ui->decodes_table_view_->hideColumn (dcToGrid);
 
 
-    if (autoEnabled)
-        ui->decodes_table_view_->showColumn (dcBest);
-    else
-        ui->decodes_table_view_->hideColumn (dcBest);
+    // if (autoEnabled)
+    //     ui->decodes_table_view_->showColumn (dcBest);
+    // else
+    //     ui->decodes_table_view_->hideColumn (dcBest);
 
 
     connect (WsjtxServer::getWsjtxServer(), &WsjtxServer::do_log_ADIF, this, &WsjtxFrame::log_ADIF);
@@ -129,7 +127,7 @@ WsjtxFrame::WsjtxFrame(TSingleLogFrame *parent) :
 
     restoreSplitters();
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::doSplitterChanges, this, &WsjtxFrame::on_doSplitterChanges);
-
+#ifdef RUBBISH
     getCQStrings();
 
     blackList =    QSharedPointer<QVector <QSharedPointer<BlCall> > >( new QVector<QSharedPointer<BlCall> > );
@@ -140,7 +138,7 @@ WsjtxFrame::WsjtxFrame(TSingleLogFrame *parent) :
 
     blFilterModel.setSourceModel(&blModel);
     ui->blackListView->setModel(&blFilterModel);
-
+#endif
     int ls = 2;
     int cml = 2;
     int cmt = 0;
@@ -153,9 +151,7 @@ WsjtxFrame::WsjtxFrame(TSingleLogFrame *parent) :
 //    TContestApp::getContestApp() ->getIntDisplayProfile(edpcmr, cmr);
 //    TContestApp::getContestApp() ->getIntDisplayProfile(edpcmb, cmb);
 
-    adjustMargins(ui->blFrame->layout(), ls, cml, cmt, cmr, cmb);
     adjustMargins(ui->wframe->layout(), ls, cml, cmt, cmr, cmb);
-    removeFrameBoxes(ui->blFrame->layout());
     removeFrameBoxes(ui->wframe->layout());
 }
 WsjtxFrame::~WsjtxFrame()
@@ -163,6 +159,7 @@ WsjtxFrame::~WsjtxFrame()
     delete ui;
     delete decodes_model_;
 }
+#ifdef RUBBISH
 void WsjtxFrame::getCQStrings()
 {
     QString testCQ;
@@ -175,6 +172,7 @@ void WsjtxFrame::getCQStrings()
     CSVToStringList(testCQ, testCQCalls);
     CSVToStringList(nontestCQ, nonTestCQCalls);
 }
+#endif
 void WsjtxFrame::on_halt_tx_button__clicked()
 {
     wtrace("WsjtxFrame::on_halt_tx_button__clicked do_halt_tx");
@@ -303,6 +301,7 @@ void WsjtxFrame::remove_client (QString const& /*id*/)
     ui->replyto_label->clear();
     id_.clear();
 }
+#ifdef RUBBISH
 bool WsjtxFrame::goodCQCall(decodeMessage &dc)
 {
     bool inTest = false;
@@ -790,15 +789,15 @@ void WsjtxFrame::process_InQSO(bool freeStanding)
         }
     }
 }
-
-void WsjtxFrame::process_decodes(bool freeStanding)
+#endif
+void WsjtxFrame::process_decodes(bool /*freeStanding*/)
 {
     if (!bandOK)
     {
         wtrace(QString("WsjtxFrame::process_decodes band not OK"));
         return;
     }
-
+#ifdef RUBBISH
     bestOffset = -1;
     bestPoints.clear();
     bestCQOffset = -1;
@@ -841,7 +840,7 @@ void WsjtxFrame::process_decodes(bool freeStanding)
             emit decodes_model_->dataChanged(decodes_model_->index(decodeStartSize, dcBest), decodes_model_->index(decodeEndSize, dcBest));
         }
     }
-
+#endif
     ui->decodes_table_view_->scrollToBottom ();
 }
 decodeMessage *WsjtxFrame::parse_tx_message(QString atline, bool fromScrape)
@@ -923,7 +922,7 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
     // protected contests aren't interesting
     if (!ct || ct->isReadOnly())
     {
-        ui->qsoStateLabel->clear();
+        //ui->qsoStateLabel->clear();
         return;
     }
 
@@ -982,7 +981,7 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
     {
         wtrace(QString("WsjtxFrame::update_status: band not OK, freq is %1").arg(Frequency(df).traceStr()));
         // don't continue
-        ui->qsoStateLabel->setText(tr("Wrong band"));
+        //ui->qsoStateLabel->setText(tr("Wrong band"));
         return;
     }
 
@@ -1054,7 +1053,7 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
             // CQ DX K1ABC FN42
             // CQ TEST G4ABC/P IO91
 
-            qsoState = NoQSOCallingCQ;
+            //qsoState = NoQSOCallingCQ;
             wtrace("WsjtxFrame::update_status Transition to NoQSOCallingCQ");
             break;
         case ems73:
@@ -1062,7 +1061,7 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
             // repliable to "from"
             // K1ABC G0XYZ 73
             // G4ABC/P PA9XYZ 73
-            qsoState = NoQSOWaiting;
+            //qsoState = NoQSOWaiting;
             wtrace("WsjtxFrame::update_status ems73 Transition to NoQSOWaiting");
             break;
         case emsFree:
@@ -1074,7 +1073,7 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
             // K1ABC G0XYZ IO91
             // G4ABC/P PA9XYZ JO22
             callingCall = dx_call;
-            qsoState = NoQSOCallingThem;
+            //qsoState = NoQSOCallingThem;
             wtrace("WsjtxFrame::update_status Transition to NoQSOCallingThem");
             break;
 
@@ -1083,7 +1082,7 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
             // on HF we alwasy miss out grid
             //G0XYZ K1ABC –19
             //PA9XYZ 590003 IO91NP
-            qsoState = NoQSOCallingThem;
+            //qsoState = NoQSOCallingThem;
             wtrace("WsjtxFrame::update_status Transition to NoQSOCallingThem");
             workingCall = dx_call;
             break;
@@ -1102,7 +1101,7 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
             // G0XYZ K1ABC RR73
             // PA9XYZ G4ABC/P RR73
             workingCall = dx_call;
-            qsoState = NoQSOWaiting;
+            //qsoState = NoQSOWaiting;
             wtrace("WsjtxFrame::update_status emsRRR Transition to NoQSOWaiting");
             break;
         }
@@ -1183,7 +1182,7 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
 
     // Diagnostic display of current qso state
 
-    ui->qsoStateLabel->setText(getStateText(qsoState));
+    //ui->qsoStateLabel->setText(getStateText(qsoState));
 }
 
 void WsjtxFrame::decode_added (bool is_new, QString const& id, QTime time
@@ -1270,6 +1269,7 @@ void WsjtxFrame::decodes_cleared (QString const& client_id)
     id_ = client_id;
     decodes_model_->clear();
 }
+#ifdef RUBBISH
 void WsjtxFrame::startCQ()
 {
     // temporary solution
@@ -1279,6 +1279,7 @@ void WsjtxFrame::startCQ()
 
     // And we need to send F1 to WSJT-X
 }
+#endif
 void WsjtxFrame::reply(decodeMessage &dc)
 {
     WsjtxServer::getWsjtxServer()->reply(dc.id, dc.time, dc.snr, dc.delta_time, dc.delta_frequency, dc.mode, dc.message, dc.low_confidence,  QApplication::keyboardModifiers () >> 24);
@@ -1298,7 +1299,6 @@ void WsjtxFrame::do_reply (QModelIndex index)
 
 
 }
-
 void WsjtxFrame::on_testButton_clicked()
 {
 // A collection of messages that we have at som time wanted to test
@@ -1431,6 +1431,7 @@ void WsjtxFrame::on_doSplitterChanges(BaseContestLog *b)
         restoreSplitters();
     }
 }
+#ifdef RUBBISH
 void WsjtxFrame::on_configCQButton_clicked()
 {
     WsjtxConfigureCQ wccq(this);
@@ -1439,7 +1440,7 @@ void WsjtxFrame::on_configCQButton_clicked()
 
     getCQStrings();
 }
-
+#endif
 void WsjtxFrame::on_decodes_table_view__clicked(const QModelIndex &index)
 {
     // How do we say "use from call"?
@@ -1625,7 +1626,7 @@ void WsjtxFrame::on_doColumnChanges(BaseContestLog * b)
         restoreWSJTXTableColumns();
     }
 }
-
+#ifdef RUBBISH
 void WsjtxFrame::on_addBlackListButton_clicked()
 {
     // add current call being "worked" to blacklist
@@ -1795,7 +1796,6 @@ void BlGridSortFilterModel::setFilterString(QString f)
     filterString = f;
     invalidateFilter();
 }
-
 void WsjtxFrame::on_resetButton_clicked()
 {
     on_halt_tx_button__clicked();          // kill the automatic sequencing
@@ -1843,4 +1843,5 @@ void WsjtxFrame::on_semiAutocb_toggled(bool c)
     {
         wtrace("WsjtxFrame semi-auto on");
     }}
+#endif
 

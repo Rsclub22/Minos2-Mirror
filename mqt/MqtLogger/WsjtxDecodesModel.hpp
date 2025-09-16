@@ -13,7 +13,7 @@ enum DecodeColumns
     dcTime, dcSnr, dcDT, dcDF, dcMd, dcConfidence, dcLive,
     dcSeq, dcPoints, dcBearing,
     dcFromCall, dcFromGrid, dcToCall, dcToGrid,
-    dcBest,
+    //dcBest,
     dcMessage, dcMaxVal
 };
 namespace

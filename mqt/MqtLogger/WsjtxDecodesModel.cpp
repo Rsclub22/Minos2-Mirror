@@ -60,7 +60,7 @@ DecodeHeading const DecodesModel::headings[dcMaxVal] = {
     {QT_TR_NOOP ("Grid"), Qt::AlignLeft},
     {QT_TR_NOOP ("To Call"), Qt::AlignLeft},
     {QT_TR_NOOP ("To Grid"), Qt::AlignLeft},
-    {QT_TR_NOOP ("Best"), Qt::AlignLeft},
+    //{QT_TR_NOOP ("Best"), Qt::AlignLeft},
 
     {QT_TR_NOOP ("Message"), Qt::AlignLeft}
 };
@@ -210,7 +210,7 @@ QVariant DecodesModel::data (QModelIndex const& pindex, int role) const
         case dcFromGrid:
         case dcToCall:
         case dcToGrid:
-        case dcBest:
+        //case dcBest:
         case dcDT:
         case dcDF:
         case dcSnr:
@@ -385,24 +385,24 @@ QVariant DecodesModel::data (QModelIndex const& pindex, int role) const
                 return "";
             return msg.toGrid.getLoc();
 
-        case dcBest:
-        {
-            if (msg.txrx == eTX)
-                return "";
-            if (msg.oldmsg)
-            {
-                return tr("(old)");
-            }
-            if (msg.best)
-            {
-                if (msg.autoresp)
-                {
-                    return tr("Auto");
-                }
-                return tr("Best");
-            }
-            return "";
-        }
+        // case dcBest:
+        // {
+        //     if (msg.txrx == eTX)
+        //         return "";
+        //     if (msg.oldmsg)
+        //     {
+        //         return tr("(old)");
+        //     }
+        //     if (msg.best)
+        //     {
+        //         if (msg.autoresp)
+        //         {
+        //             return tr("Auto");
+        //         }
+        //         return tr("Best");
+        //     }
+        //     return "";
+        // }
         case dcMessage:
             return escapeXML( msg.message );
 

@@ -65,7 +65,7 @@ public:
         return false;
     }
 };
-
+#ifdef RUBBISH
 class BlCall
 {
 public:
@@ -128,6 +128,7 @@ public:
     void setFilterString(QString f);
 
 };
+#endif
 
 class WsjtxFrame : public QFrame
 {
@@ -144,9 +145,9 @@ public:
     int decodeStartSize = 0;
 
 private:
-    enum QSOStates {NoQSOWaiting, NoQSOCallingCQ, NoQSOCallingThem, InQSO};
+//    enum QSOStates {NoQSOWaiting, NoQSOCallingCQ, NoQSOCallingThem, InQSO};
 
-    QSOStates qsoState = NoQSOWaiting;
+//    QSOStates qsoState = NoQSOWaiting;
     Ui::WsjtxFrame *ui;
     TSingleLogFrame *tslf = nullptr;
     BaseContestLog *ct = nullptr;
@@ -155,7 +156,7 @@ private:
     QString id_;
     QSharedPointer<HtmlDelegate> delegate;
     bool autoEnabled = false;
-    bool reArmValue = false;
+//    bool reArmValue = false;
     bool showTest = false;
     bool inDecode = false;
     int lastcol = 0;
@@ -174,8 +175,8 @@ private:
 
     WsjtxDecode decoder;
 
-    QStringList testCQCalls;
-    QStringList nonTestCQCalls;
+//    QStringList testCQCalls;
+//    QStringList nonTestCQCalls;
     qint8 special_op_mode;
 
     QFile alltxt;
@@ -191,51 +192,51 @@ private:
     bool firstRestoreDone = false;
     QMenu columnsMenu;
     bool inRestoreColumns = false;
-
+#ifdef RUBBISH
     QSharedPointer<HtmlDelegate> BLDelegate;
     QSharedPointer<QVector<QSharedPointer<BlCall> > > blackList;
     BlModel blModel;
     BlGridSortFilterModel blFilterModel;
-
+#endif
 
     void restoreWSJTXTableColumns();
     void saveWSJTXTableColumns();
 
     void restoreSplitters();
     
-    void getCQStrings();
+//    void getCQStrings();
     decodeMessage *parse_tx_message(QString atline, bool fromScrape);
 
-    void showBlackList();
-    bool blackListContains(const BlCall &bl);
+    // void showBlackList();
+    // bool blackListContains(const BlCall &bl);
 
-    int decodeEndSize = 0;
-    int minpoints = 0;
-    int minsnr = 0;
-    int bestOffset = -1;
-    int bestCQOffset = -1;
-    int bestToMeOffset = -1;
+    //int decodeEndSize = 0;
+    // int minpoints = 0;
+    // int minsnr = 0;
+    // int bestOffset = -1;
+    // int bestCQOffset = -1;
+    // int bestToMeOffset = -1;
 
-    PointBonusMultSnr bestPoints;
+//    PointBonusMultSnr bestPoints;
 
-    void doResponse(QSOStates nstate, bool cq, int offset);
-    void startCQ();
+    // void doResponse(QSOStates nstate, bool cq, int offset);
+    // void startCQ();
     void reply(decodeMessage &dc);
 
-    bool goodCQCall(decodeMessage &dc);
-    void getBestCQ73CallingMe();
-    bool areAnyToMe();
-    bool checkTheirCall();
-    void markBest();
+    //bool goodCQCall(decodeMessage &dc);
+    // void getBestCQ73CallingMe();
+    // bool areAnyToMe();
+    // bool checkTheirCall();
+    // void markBest();
 
-    void process_decodes(bool freeStanding);
-    void process_NoQSOWaiting(bool freeStanding);
-    void process_NoQSOCallingCQ(bool freeStanding);
-    void process_NoQSOCallingThem(bool freeStanding);
-    void process_InQSO(bool freeStanding);
+    void process_decodes(bool);
+    // void process_NoQSOWaiting(bool freeStanding);
+    // void process_NoQSOCallingCQ(bool freeStanding);
+    // void process_NoQSOCallingThem(bool freeStanding);
+    // void process_InQSO(bool freeStanding);
 
-    bool checkThemPresent();
-    QString getStateText(QSOStates s);
+    //bool checkThemPresent();
+    //QString getStateText(QSOStates s);
 public slots:
     void add_client (QString const& id, QString const& version, QString const& revision);
 
@@ -259,7 +260,7 @@ public slots:
                        const QString &mode, const QString &message, bool low_confidence, bool off_air);
     void decodes_cleared (QString const& client_id);
 
-    void do_reply (QModelIndex source);
+   void do_reply (QModelIndex source);
 
 
 signals:
@@ -276,7 +277,7 @@ private slots:
     void on_halt_tx_button__clicked();
     void on_auto_off_button__clicked();
     void on_doSplitterChanges(BaseContestLog *b);
-    void on_configCQButton_clicked();
+    //void on_configCQButton_clicked();
     void on_decodes_table_view__clicked(const QModelIndex &index);
     void on_replayButton_clicked();
     void doReplayTimer();
@@ -288,11 +289,11 @@ private slots:
     void viewColumn();
 
     void on_doColumnChanges(BaseContestLog *b);
-    void on_addBlackListButton_clicked();
-    void on_removeBlackListButton_clicked();
-    void on_resetButton_clicked();
-    void on_semiAutoButton_clicked();
-    void on_semiAutocb_toggled(bool checked);
+    // void on_addBlackListButton_clicked();
+    // void on_removeBlackListButton_clicked();
+    // void on_resetButton_clicked();
+    // void on_semiAutoButton_clicked();
+    // void on_semiAutocb_toggled(bool checked);
 };
 
 #endif // WSJTXFRAME_H
