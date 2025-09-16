@@ -1534,7 +1534,7 @@ void BaseContestLog::processMinosStanza( const QString &methodName, MinosTestImp
       mt->getStructArgMemberValue( "hf", hfContest);
       if (isHF() != isHfContest)
       {
-          locatorMandatoryField.setValue(!isHF());
+          initOnSetHF();
       }
 
       if (currentBand.getValue() == allHF)

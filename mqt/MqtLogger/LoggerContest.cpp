@@ -239,6 +239,7 @@ bool LoggerContestLog::initialise( const QString &fn, bool newFile, int slotno )
       return false;
    }
 
+   initOnSetHF();
    // open the settings bundle files
    initialiseINI();
 
@@ -246,13 +247,6 @@ bool LoggerContestLog::initialise( const QString &fn, bool newFile, int slotno )
 
    statsPeriod1.setInitialValue(MinosParameters::getMinosParameters() ->getStatsPeriod1());
    statsPeriod2.setInitialValue(MinosParameters::getMinosParameters() ->getStatsPeriod2());
-
-   showContinentEU.setInitialValue(true);
-   showContinentAS.setInitialValue(isHF());
-   showContinentAF.setInitialValue(isHF());
-   showContinentOC.setInitialValue(isHF());
-   showContinentSA.setInitialValue(isHF());
-   showContinentNA.setInitialValue(isHF());
 
    showWorkedCountries.setInitialValue(true);
    showUnworkedCountries.setInitialValue(false);
@@ -433,6 +427,17 @@ bool LoggerContestLog::initialise( const QString &fn, bool newFile, int slotno )
    checkAgeProtection();
 
    return true;
+}
+void LoggerContestLog::initOnSetHF()
+{
+    BaseContestLog::initOnSetHF();
+
+    showContinentEU.setInitialValue(true);
+    showContinentAS.setInitialValue(isHF());
+    showContinentAF.setInitialValue(isHF());
+    showContinentOC.setInitialValue(isHF());
+    showContinentSA.setInitialValue(isHF());
+    showContinentNA.setInitialValue(isHF());
 }
 void LoggerContestLog::checkAgeProtection()
 {

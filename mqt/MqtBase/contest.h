@@ -469,6 +469,10 @@ class BaseContestLog: public BaseLogList
    {
       return false;
    }
+   virtual void initOnSetHF()
+   {
+       locatorMandatoryField.setValue(!isHF());
+   }
    short sdummy = 0;        // improve padding on Windows
    int idummy = 0;          // improve padding on Windows
 
