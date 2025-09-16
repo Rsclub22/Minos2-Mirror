@@ -156,6 +156,10 @@ void TxVmButtonsFrame::clearButtons()
 
 bool  TxVmButtonsFrame::isVoiceMode()
 {
+    if (curMode.isEmpty())
+    {
+        curMode = ct->currentMode.getValue();
+    }
     return  curMode == rigcommon::convertModeToQString(MODE::USB)
     || curMode == rigcommon::convertModeToQString(MODE::LSB)
         || curMode == rigcommon::convertModeToQString(MODE::FM)

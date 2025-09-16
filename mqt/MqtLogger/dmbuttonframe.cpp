@@ -144,6 +144,10 @@ void DMButtonFrame::setContest(BaseContestLog *c)
 }
 bool  DMButtonFrame::isDataMode()
 {
+    if (curMode.isEmpty())
+    {
+        curMode = ct->currentMode.getValue();
+    }
     return  curMode == PSK
            || curMode == RY;
 
