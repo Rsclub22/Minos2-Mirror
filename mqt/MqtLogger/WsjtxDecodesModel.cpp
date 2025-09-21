@@ -60,7 +60,6 @@ DecodeHeading const DecodesModel::headings[dcMaxVal] = {
     {QT_TR_NOOP ("Grid"), Qt::AlignLeft},
     {QT_TR_NOOP ("To Call"), Qt::AlignLeft},
     {QT_TR_NOOP ("To Grid"), Qt::AlignLeft},
-    //{QT_TR_NOOP ("Best"), Qt::AlignLeft},
 
     {QT_TR_NOOP ("Message"), Qt::AlignLeft}
 };
@@ -201,7 +200,6 @@ QVariant DecodesModel::data (QModelIndex const& pindex, int role) const
 //            dcTime, dcSnr, dcDT, dcDF, dcMd, dcConfidence, dcLive,
 //            dcSeq, dcPoints, dcBearing, dcDistance,
 //            dcFromCall, dcFromGrid, dcToCall, dcToGrid,
-//            dcBest,
 //            dcMessage, dcMaxVal
 //        };
         case dcPoints:
@@ -210,7 +208,6 @@ QVariant DecodesModel::data (QModelIndex const& pindex, int role) const
         case dcFromGrid:
         case dcToCall:
         case dcToGrid:
-        //case dcBest:
         case dcDT:
         case dcDF:
         case dcSnr:
@@ -250,14 +247,6 @@ QVariant DecodesModel::data (QModelIndex const& pindex, int role) const
             }
         }
         break;
-
-//        case dcDF:                 // DF
-//            if (qAbs (data (pindex).toInt () - rx_df_) <= 10)
-//            {
-//                // near my freq  - colour red(ish)
-//                c = QColor (0xff, 0x66, 0x66);
-//            }
-//            break;
 
         case dcTime:
             {
@@ -385,24 +374,6 @@ QVariant DecodesModel::data (QModelIndex const& pindex, int role) const
                 return "";
             return msg.toGrid.getLoc();
 
-        // case dcBest:
-        // {
-        //     if (msg.txrx == eTX)
-        //         return "";
-        //     if (msg.oldmsg)
-        //     {
-        //         return tr("(old)");
-        //     }
-        //     if (msg.best)
-        //     {
-        //         if (msg.autoresp)
-        //         {
-        //             return tr("Auto");
-        //         }
-        //         return tr("Best");
-        //     }
-        //     return "";
-        // }
         case dcMessage:
             return escapeXML( msg.message );
 
