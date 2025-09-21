@@ -39,7 +39,7 @@ WsjtxFrame::WsjtxFrame(TSingleLogFrame *parent) :
     ui->decodes_table_view_->horizontalHeader()->setSectionsMovable(true);
     connect( ui->decodes_table_view_->horizontalHeader(), &QHeaderView::customContextMenuRequested, this, &WsjtxFrame::ondecodes_table_view__customContextMenuRequested );
 
-    ui->splitter->setStretchFactor(0, 2);
+    ui->splitter->setStretchFactor(0, 10);
     ui->splitter->setStretchFactor(1, 1);
     remove_client(QString());    // kill off the ratshit
     TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpWSJTX1TestEnabled, showTest );
@@ -176,14 +176,14 @@ void WsjtxFrame::getCQStrings()
 void WsjtxFrame::on_halt_tx_button__clicked()
 {
     wtrace("WsjtxFrame::on_halt_tx_button__clicked do_halt_tx");
-    ui->replyto_label->setText("");
+    //ui->replyto_label->setText("");
     WsjtxServer::getWsjtxServer()->do_halt_tx(id_, false);
 }
 
 void WsjtxFrame::on_auto_off_button__clicked()
 {
     wtrace("WsjtxFrame::on_auto_off_button__clicked disable tx clicked");
-    ui->replyto_label->setText("");
+    //ui->replyto_label->setText("");
     WsjtxServer::getWsjtxServer()->do_halt_tx(id_, true);
 }
 void WsjtxFrame::on_clearDecodesButton_clicked()
@@ -242,7 +242,7 @@ void WsjtxFrame::log_ADIF(QString const& id, QByteArray const& ADIF)
 
     wtrace("WsjtxFrame::log_ADIF " + QString(ADIF));
 
-    ui->replyto_label->setText("");
+    //ui->replyto_label->setText("");
     int spoint = ct->ctList.count();
 
     // we will try to log the ADIF to ALL open contests; it will fail if the date/time or requency are wrong
@@ -298,7 +298,7 @@ void WsjtxFrame::remove_client (QString const& /*id*/)
     ui->specialOpMode->clear();
     ui->mode_label_->clear();
     ui->bandErrorLabel->clear();
-    ui->replyto_label->clear();
+    //ui->replyto_label->clear();
     id_.clear();
 }
 #ifdef RUBBISH
@@ -1283,7 +1283,7 @@ void WsjtxFrame::startCQ()
 void WsjtxFrame::reply(decodeMessage &dc)
 {
     WsjtxServer::getWsjtxServer()->reply(dc.id, dc.time, dc.snr, dc.delta_time, dc.delta_frequency, dc.mode, dc.message, dc.low_confidence,  QApplication::keyboardModifiers () >> 24);
-    ui->replyto_label->setText("WsjtxFrame::reply Replying to: " + dc.message);
+    //ui->replyto_label->setText("WsjtxFrame::reply Replying to: " + dc.message);
 }
 void WsjtxFrame::do_reply (QModelIndex index)
 {
