@@ -280,14 +280,6 @@ The mode is %2</source>
     </message>
 </context>
 <context>
-    <name>BlModel</name>
-    <message>
-        <location filename="../WsjtxFrame.cpp" line="1707"/>
-        <source>Call</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>CheckUpdates</name>
     <message>
         <location filename="../checkupdates.ui" line="14"/>
@@ -1452,27 +1444,27 @@ Move between components of a group using the mouse or up/down arrow keys.
     </message>
     <message>
         <location filename="../dmbuttonframe.cpp" line="71"/>
-        <location filename="../dmbuttonframe.cpp" line="569"/>
+        <location filename="../dmbuttonframe.cpp" line="573"/>
         <source>Data Modes Buttons from %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dmbuttonframe.cpp" line="208"/>
+        <location filename="../dmbuttonframe.cpp" line="212"/>
         <source>Not enough key definitions in %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dmbuttonframe.cpp" line="372"/>
+        <location filename="../dmbuttonframe.cpp" line="376"/>
         <source>Invalid or missing FKey definitions</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dmbuttonframe.cpp" line="555"/>
+        <location filename="../dmbuttonframe.cpp" line="559"/>
         <source>Function Key Definitions Files (*.json);;All Files (*.*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dmbuttonframe.cpp" line="559"/>
+        <location filename="../dmbuttonframe.cpp" line="563"/>
         <source>Open Function Key Definitions File</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1661,44 +1653,28 @@ Move between components of a group using the mouse or up/down arrow keys.
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxDecodesModel.cpp" line="63"/>
-        <location filename="../WsjtxDecodesModel.cpp" line="402"/>
-        <source>Best</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../WsjtxDecodesModel.cpp" line="65"/>
+        <location filename="../WsjtxDecodesModel.cpp" line="64"/>
         <source>Message</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxDecodesModel.cpp" line="70"/>
+        <location filename="../WsjtxDecodesModel.cpp" line="69"/>
         <source>low</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxDecodesModel.cpp" line="70"/>
+        <location filename="../WsjtxDecodesModel.cpp" line="69"/>
         <source>high</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxDecodesModel.cpp" line="75"/>
+        <location filename="../WsjtxDecodesModel.cpp" line="74"/>
         <source>no</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxDecodesModel.cpp" line="75"/>
+        <location filename="../WsjtxDecodesModel.cpp" line="74"/>
         <source>yes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../WsjtxDecodesModel.cpp" line="394"/>
-        <source>(old)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../WsjtxDecodesModel.cpp" line="400"/>
-        <source>Auto</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2167,104 +2143,104 @@ Double click on an edge square to extend the area of the map.</source>
 <context>
     <name>LoggerContestLog</name>
     <message>
-        <location filename="../LoggerContest.cpp" line="323"/>
+        <location filename="../LoggerContest.cpp" line="305"/>
         <source>Not a known file type! (%1)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="338"/>
+        <location filename="../LoggerContest.cpp" line="320"/>
         <source>Failed to open Contest file %1 : %2 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="371"/>
+        <location filename="../LoggerContest.cpp" line="353"/>
         <source>File %1 is empty, so cannot be opened</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="430"/>
+        <location filename="../LoggerContest.cpp" line="412"/>
         <source>Failed to create Contest file %1 : %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="488"/>
+        <location filename="../LoggerContest.cpp" line="481"/>
         <source>(read) seek failed!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="495"/>
+        <location filename="../LoggerContest.cpp" line="488"/>
         <source>Short read</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="508"/>
+        <location filename="../LoggerContest.cpp" line="501"/>
         <source>Invalid block number for write!!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="513"/>
-        <location filename="../LoggerContest.cpp" line="1851"/>
+        <location filename="../LoggerContest.cpp" line="506"/>
+        <location filename="../LoggerContest.cpp" line="1844"/>
         <source>(write) seek failed!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="518"/>
-        <location filename="../LoggerContest.cpp" line="1080"/>
-        <location filename="../LoggerContest.cpp" line="1093"/>
-        <location filename="../LoggerContest.cpp" line="1099"/>
+        <location filename="../LoggerContest.cpp" line="511"/>
+        <location filename="../LoggerContest.cpp" line="1073"/>
+        <location filename="../LoggerContest.cpp" line="1086"/>
+        <location filename="../LoggerContest.cpp" line="1092"/>
         <source>bad reply from write!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="610"/>
+        <location filename="../LoggerContest.cpp" line="603"/>
         <source>Attempt to insert after last contact - not allowed. Please report a bug!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="789"/>
+        <location filename="../LoggerContest.cpp" line="782"/>
         <source>.GJV should have been opened read only!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="886"/>
+        <location filename="../LoggerContest.cpp" line="879"/>
         <source>Invalid block 0 in .GJV Contest file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="893"/>
+        <location filename="../LoggerContest.cpp" line="886"/>
         <source>Invalid Contest file format (%1, %2 expected)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="1015"/>
-        <location filename="../LoggerContest.cpp" line="1170"/>
+        <location filename="../LoggerContest.cpp" line="1008"/>
+        <location filename="../LoggerContest.cpp" line="1163"/>
         <source>Please give first serial to be written</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="1017"/>
-        <location filename="../LoggerContest.cpp" line="1172"/>
+        <location filename="../LoggerContest.cpp" line="1010"/>
+        <location filename="../LoggerContest.cpp" line="1165"/>
         <source>Please give last serial to be written</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="1023"/>
-        <location filename="../LoggerContest.cpp" line="1178"/>
+        <location filename="../LoggerContest.cpp" line="1016"/>
+        <location filename="../LoggerContest.cpp" line="1171"/>
         <source>Writing all contacts between serials %1 and %2 inclusive</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="1066"/>
+        <location filename="../LoggerContest.cpp" line="1059"/>
         <source>Exported by Minos VHF logging system Version %1 %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="1068"/>
+        <location filename="../LoggerContest.cpp" line="1061"/>
         <source>From file %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="1844"/>
+        <location filename="../LoggerContest.cpp" line="1837"/>
         <source>Failed to open Contest file for monitoring %1 : %2</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5934,45 +5910,45 @@ Last %8 Mins: %9 QSO %10 pts %11 mults
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="618"/>
+        <location filename="../txvmbuttonsframe.cpp" line="622"/>
         <source>To use the external keyer mqtKeyer must be running and connected</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../txvmbuttonsframe.cpp" line="979"/>
-        <location filename="../txvmbuttonsframe.cpp" line="1214"/>
-        <source>Rig CW Message - </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../txvmbuttonsframe.cpp" line="983"/>
         <location filename="../txvmbuttonsframe.cpp" line="1218"/>
+        <source>Rig CW Message - </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../txvmbuttonsframe.cpp" line="987"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1222"/>
         <source>PC CW Keyer Message - </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1000"/>
-        <location filename="../txvmbuttonsframe.cpp" line="1234"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1004"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1238"/>
         <source>Voice Memory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1002"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1006"/>
         <source>%1 %2 - Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1236"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1240"/>
         <source>%1 %2 - New</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1882"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1886"/>
         <source>Rig Voice Keyer Available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1886"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1890"/>
         <source>Rig CW Messages Available</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5982,22 +5958,22 @@ Last %8 Mins: %9 QSO %10 pts %11 mults
         <translation></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="2035"/>
+        <location filename="../txvmbuttonsframe.cpp" line="2039"/>
         <source>TX On</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="2042"/>
+        <location filename="../txvmbuttonsframe.cpp" line="2046"/>
         <source>TX Off</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="2053"/>
+        <location filename="../txvmbuttonsframe.cpp" line="2057"/>
         <source>PTT Enabled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="2059"/>
+        <location filename="../txvmbuttonsframe.cpp" line="2063"/>
         <source>PTT Disabled</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6389,12 +6365,12 @@ Please edit or remove</source>
 <context>
     <name>TxVoiceMemButton</name>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="2367"/>
+        <location filename="../txvmbuttonsframe.cpp" line="2371"/>
         <source>&amp;New</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="2368"/>
+        <location filename="../txvmbuttonsframe.cpp" line="2372"/>
         <source>&amp;Edit</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6468,40 +6444,6 @@ Please edit or remove</source>
     </message>
 </context>
 <context>
-    <name>WsjtxConfigureCQ</name>
-    <message>
-        <location filename="../WsjtxConfigureCQ.ui" line="14"/>
-        <source>Specify Permitted CQ Calls</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../WsjtxConfigureCQ.ui" line="20"/>
-        <source>CQ xxx Callsign Locator - xxx is allowed in...
-Include the CQ as well as the type</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../WsjtxConfigureCQ.ui" line="35"/>
-        <source>In Special mode &quot;test&quot;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../WsjtxConfigureCQ.ui" line="53"/>
-        <source>In other modes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../WsjtxConfigureCQ.ui" line="69"/>
-        <source>OK</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../WsjtxConfigureCQ.ui" line="89"/>
-        <source>Cancel</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>WsjtxFrame</name>
     <message>
         <location filename="../WsjtxFrame.ui" line="29"/>
@@ -6509,118 +6451,62 @@ Include the CQ as well as the type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxFrame.ui" line="107"/>
-        <source>Add Blacklist</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../WsjtxFrame.ui" line="114"/>
-        <source>Remove Blacklist</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../WsjtxFrame.ui" line="176"/>
-        <location filename="../WsjtxFrame.ui" line="183"/>
-        <location filename="../WsjtxFrame.ui" line="190"/>
-        <location filename="../WsjtxFrame.ui" line="214"/>
-        <location filename="../WsjtxFrame.ui" line="221"/>
-        <location filename="../WsjtxFrame.ui" line="228"/>
-        <location filename="../WsjtxFrame.ui" line="235"/>
-        <location filename="../WsjtxFrame.ui" line="242"/>
-        <location filename="../WsjtxFrame.ui" line="249"/>
-        <location filename="../WsjtxFrame.ui" line="256"/>
+        <location filename="../WsjtxFrame.ui" line="119"/>
+        <location filename="../WsjtxFrame.ui" line="126"/>
+        <location filename="../WsjtxFrame.ui" line="150"/>
+        <location filename="../WsjtxFrame.ui" line="157"/>
+        <location filename="../WsjtxFrame.ui" line="164"/>
+        <location filename="../WsjtxFrame.ui" line="171"/>
+        <location filename="../WsjtxFrame.ui" line="178"/>
+        <location filename="../WsjtxFrame.ui" line="185"/>
+        <location filename="../WsjtxFrame.ui" line="192"/>
         <source>.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxFrame.ui" line="340"/>
-        <source>Semi-auto</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../WsjtxFrame.ui" line="347"/>
-        <source>Allow select 73/RR73</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../WsjtxFrame.ui" line="363"/>
-        <source>Select Best Response</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../WsjtxFrame.ui" line="373"/>
-        <source>Config CQ</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../WsjtxFrame.ui" line="395"/>
-        <source>Ignore &lt; (points)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../WsjtxFrame.ui" line="418"/>
-        <source>Ignore &lt; (SNR)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../WsjtxFrame.ui" line="456"/>
+        <location filename="../WsjtxFrame.ui" line="232"/>
         <source>Halt TX</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxFrame.ui" line="466"/>
+        <location filename="../WsjtxFrame.ui" line="242"/>
         <source>Disable Tx</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxFrame.ui" line="485"/>
+        <location filename="../WsjtxFrame.ui" line="261"/>
         <source>Clear Local Decodes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxFrame.ui" line="495"/>
+        <location filename="../WsjtxFrame.ui" line="271"/>
         <source>Clear All Decodes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxFrame.ui" line="300"/>
+        <location filename="../WsjtxFrame.ui" line="290"/>
         <source>Replay</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxFrame.ui" line="134"/>
-        <source>NoQSOWaiting</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../WsjtxFrame.ui" line="141"/>
-        <source>Reset state to idle</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../WsjtxFrame.ui" line="290"/>
+        <location filename="../WsjtxFrame.ui" line="300"/>
         <source>test</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxFrame.cpp" line="949"/>
-        <location filename="../WsjtxFrame.cpp" line="964"/>
+        <location filename="../WsjtxFrame.cpp" line="361"/>
+        <location filename="../WsjtxFrame.cpp" line="376"/>
         <source>&lt;h1&gt;&lt;b&gt;Contest band %1 not the same as %2 band %3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxFrame.cpp" line="985"/>
-        <source>Wrong band</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../WsjtxFrame.cpp" line="1531"/>
-        <location filename="../WsjtxFrame.cpp" line="1535"/>
+        <location filename="../WsjtxFrame.cpp" line="914"/>
+        <location filename="../WsjtxFrame.cpp" line="918"/>
         <source>WSJT-X recording Files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxFrame.cpp" line="1532"/>
+        <location filename="../WsjtxFrame.cpp" line="915"/>
         <source>All Files</source>
         <translation type="unfinished"></translation>
     </message>

@@ -70,7 +70,6 @@ SOURCES += \
     StackedInfoFrame.cpp \
     TClockFrame.cpp \
     TSessionManager.cpp \
-    WsjtxConfigureCQ.cpp \
     adifmanager.cpp \
     bandmapdatamodel.cpp \
     bandmapgraphicspanel.cpp \
@@ -179,7 +178,6 @@ HEADERS  += \
     StackedInfoFrame.h \
     TClockFrame.h \
     TSessionManager.h \
-    WsjtxConfigureCQ.h \
     adifmanager.h \
     bandmapdatamodel.h \
     bandmapgraphicspanel.h \
@@ -265,7 +263,6 @@ FORMS    += \
     OptionsDialog.ui \
     RotPresets.ui \
     ScreenConfigScreen.ui \
-    WsjtxConfigureCQ.ui \
     checkupdates.ui \
     contestdetails.ui \
     defdirsdlg.ui \
