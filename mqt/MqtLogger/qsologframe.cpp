@@ -3054,18 +3054,6 @@ void QSOLogFrame::logScreenEntry( )
    screenContact.op2 = ct->currentOp2.getValue();
 
    lct->copyFromArg( screenContact );
-//xxxxxxxxxxxxx we want to record the mark frequency
-   // Correct RTTY/PSK rig freq to the mark frequency
-   if (screenContact.mode.getValue().compare( RY, Qt::CaseInsensitive ) == 0)
-   {
-        Frequency corrected = screenContact.getFrequency().getValue() - screenContact.markOffset;
-        lct->setFrequency(corrected, screenContact.band);
-   }
-   if (screenContact.mode.getValue().compare( PSK, Qt::CaseInsensitive ) == 0)
-   {
-       Frequency corrected = screenContact.getFrequency().getValue() + screenContact.markOffset;
-       lct->setFrequency(corrected, screenContact.band);
-   }
 
    lct->timeOn.setDirty();
    lct->timeOff.setDirty(); // As we may have created the contact with the same time as the screen contact

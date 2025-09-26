@@ -2242,7 +2242,7 @@ void RigControlMainWindow::setFreq(Frequency freq, VFO vfo)
 
         if (radio)
         {
-            //xxxxxxxxxxxCorrect rigstate frequency to rig
+            //Correct rigstate frequency to rig
             Frequency mf = f;
             if (rigStateDetails->RTTYModeFlag)
             {
