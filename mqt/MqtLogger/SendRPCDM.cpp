@@ -373,7 +373,7 @@ void TSendDM::sendRotatorSelection(const PubSubName &s, const QString &uuid)
 
 void TSendDM::sendSkyScanControlPanelButtonState(TSingleLogFrame *tslf, SkyScanButtonState buttonState)
 {
-    traceMsg(QString("Send SkyScan Control Button State - Start = %1, Stop = %2").arg(buttonState.isStop() ? "On" :"Off").arg(buttonState.isStop() ? "On" : "Off"));
+    traceMsg(QString("Send SkyScan Control Button State - Start = %1, Stop = %2").arg(buttonState.isStop() ? "On" :"Off", buttonState.isStop() ? "On" : "Off"));
     RPCGeneralClient rpc(rpcConstants::rotatorMethod);
     QSharedPointer<RPCParam>st(new RPCParamStruct);
 
@@ -1179,7 +1179,7 @@ void TSendDM::on_notify( AnalysePubSubNotify an, const QString /*from*/ )
 
         if (an.getCategory() == rpcConstants::pcCwKeyerCategory)
         {
-            trace(QString("message from pcCwKeyer - %1, %2, %3").arg(an.getKey()).arg(an.getKey()).arg(an.getValue()));
+            trace(QString("message from pcCwKeyer - %1, %2, %3").arg(an.getKey(), an.getKey(), an.getValue()));
             if (an.getKey() == rpcConstants::pcCwKeyerReport)
             {
                 if (pcCwKeyerApp.isEmpty())

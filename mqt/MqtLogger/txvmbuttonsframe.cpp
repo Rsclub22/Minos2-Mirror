@@ -420,7 +420,7 @@ void TxVmButtonsFrame::checkButtonIniFileVersion(QString voiceKeyerType)
         if (config.value("version", 0).toInt() != 2)
         {
             // no convert file to version 2
-            for (const QString& key : keys)
+            for (const QString& key : QASCONST(keys))
             {
                 QString buttonNumStr = key.mid( 6, 1);
                 // read settings for this key

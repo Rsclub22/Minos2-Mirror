@@ -773,7 +773,7 @@ void resetHeaderColumns(QString fileName, QString tableName, QString layoutName,
     Qt::SortOrder so = Qt::AscendingOrder;
     hLine += QString(";%1,%2").arg(sort).arg(so);
 
-    trace(QString("setHeaderColumns (in reset) %1 table %2").arg(layoutName).arg(tableName));
+    trace(QString("setHeaderColumns (in reset) %1 table %2").arg(layoutName, tableName));
     setHeaderColumns(hLine, hdr);
 }
 void popupColumnsMenu(QMenu &menu, const QPoint &globalPos, QHeaderView *hdr)

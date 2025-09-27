@@ -14,6 +14,7 @@
 #include <QObject>
 #include <QList>
 #include <QTimer>
+#include "QtUtils.h"
 #include "rotatorcommon.h"
 
 
@@ -119,7 +120,7 @@ public:
     QString getListOfSteps()
     {
         QStringList stepList;
-        for (auto value : rotationPath)
+        for (auto value : QASCONST(rotationPath))
         {
           stepList.append(QString::number(value));
         }

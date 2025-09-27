@@ -14,6 +14,7 @@
 #include <QtMath>
 
 #include "minoscompass.h"
+#include "QtUtils.h"
 
 /*
 // for test
@@ -369,7 +370,7 @@ void MinosCompass::drawSkyScanAnnulusSegment(QPainter *painter, int rotatorStart
 
     QList<SkyScanArcSegment> segments = splitBearingArc(rotatorStartBearing, rotatorEndBearing, endStopType);
 
-    for (const SkyScanArcSegment &seg : segments)
+    for (const SkyScanArcSegment &seg : QASCONST(segments))
     {
         int adjustedStart = mod360(seg.startAngle + antennaOffset - 90);
         int adjustedEnd   = mod360(seg.endAngle   + antennaOffset - 90);
