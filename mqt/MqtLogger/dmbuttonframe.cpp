@@ -1322,16 +1322,27 @@ void DMButtonFrame::setVoiceMemAvail(bool avail, PubSubName psn)
 }
 
 
-void DMButtonFrame::getVoiceMemSupportedRadios(const QStringList &listOfRadios, QStringList& listOfRadioSupportVoiceMem)
+void DMButtonFrame::getVoiceCwMemSupportedRadios(const QStringList &listOfRadios, QStringList& listOfRadioSupportKeyer, QString txkeyerType)
 {
-    listOfRadioSupportVoiceMem.clear();
+    listOfRadioSupportKeyer.clear();
 
     for (auto &radio: listOfRadios)
     {
         PubSubName radName(radio);
-        if(isVoiceMemAvail(radName))
+
+        if (txKeyerType == keyerTypes[TxKeyerId::RigControl])
         {
-            listOfRadioSupportVoiceMem.append(radio);
+            if(isVoiceMemAvail(radName))
+            {
+                listOfRadioSupportKeyer.append(radio);
+            }
+        }
+        else if (txKeyerType == keyerTypes[TxKeyerId::RigControl])
+        {
+            if(isCwMemTypeAvail(radName))
+            {
+                listOfRadioSupportKeyer.append(radio);
+            }
         }
     }
 }
@@ -2685,7 +2696,7 @@ void DMButtonFrame::on_editButton_clicked()
     //QStringList listOfRadioSupportVoiceMem;
 
 
-    if (txKeyerType == keyerTypes[TxKeyerId::RigControl])
+    if (txKeyerType == keyerTypes[TxKeyerId::RigControl] || txKeyerType == keyerTypes[TxKeyerId::CW_RigControl])
     {
         if (selectedRadio.getLocalName() == "/")
         {
@@ -2698,7 +2709,9 @@ void DMButtonFrame::on_editButton_clicked()
 
 
         listOfRadios = LogContainer->sendDM->rigs();
-        getVoiceMemSupportedRadios(listOfRadios, listOfRadioSupportKeyer);     // we don't send all radio details only the selected!
+
+
+        getVoiceCwMemSupportedRadios(listOfRadios, listOfRadioSupportKeyer, txKeyerType);
         mapUniqueNames(listOfRadioSupportKeyer, radioMap);
     }
 

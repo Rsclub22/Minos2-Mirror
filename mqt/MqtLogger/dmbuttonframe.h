@@ -267,7 +267,7 @@ private:
     void setLogItButtonVisible(bool visible);
     QStringList getContestNamesForKeyerType(const QString &keyerType);
     void populateFksetCombo(QString txKeyerName, QString currentName);
-    void getVoiceMemSupportedRadios(const QStringList &listOfRadios, QStringList &listOfRadioSupportVoiceMem);
+    void getVoiceCwMemSupportedRadios(const QStringList &listOfRadios, QStringList& listOfRadioSupportKeyer, QString txkeyerType);
 };
 
 #endif // DMBUTTONFRAME_H

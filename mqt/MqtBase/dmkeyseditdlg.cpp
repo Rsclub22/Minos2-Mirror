@@ -56,7 +56,7 @@ DMKeysEditDlg::DMKeysEditDlg(QWidget *parent, QString fKeyFileName, QString name
 
     showRadioListButtons(false);
 
-    if (txKeyerType == keyerTypes[TxKeyerId::RigControl])
+    if (txKeyerType == keyerTypes[TxKeyerId::RigControl] || txKeyerType == keyerTypes[TxKeyerId::CW_RigControl])
     {
         RadioList = new QListWidget(this);
         ui->settingsSplitter->insertWidget(1, RadioList);
