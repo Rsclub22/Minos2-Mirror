@@ -12,7 +12,6 @@
 #include <QObject>
 #include <QDateTime>
 #include <QMap>
-#include "riff.h"
 
 class SoundPlayer;
 class RtAudio;

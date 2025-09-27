@@ -10,6 +10,9 @@
 #include <QDateTime>
 #include <QtEndian>
 #include <QtMath>
+
+#include "riff.h"
+
 #include "delayedaction.h"
 
 #if !defined (_MSC_VER)

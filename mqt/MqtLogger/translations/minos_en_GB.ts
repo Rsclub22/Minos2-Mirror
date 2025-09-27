@@ -2841,32 +2841,32 @@ No          - Discard changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="3093"/>
+        <location filename="../qsologframe.cpp" line="3081"/>
         <source>Spot Last Logged (%1) </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="3164"/>
+        <location filename="../qsologframe.cpp" line="3152"/>
         <source>&quot;Serial sent&quot; is too high - please confirm that this is correct?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="3166"/>
+        <location filename="../qsologframe.cpp" line="3154"/>
         <source>Do you want to enter the missing contacts later?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="3399"/>
+        <location filename="../qsologframe.cpp" line="3387"/>
         <source>Meep from %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="3584"/>
+        <location filename="../qsologframe.cpp" line="3572"/>
         <source>Start of QSOs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="3619"/>
+        <location filename="../qsologframe.cpp" line="3607"/>
         <source>End of QSOs</source>
         <translation type="unfinished"></translation>
     </message>
