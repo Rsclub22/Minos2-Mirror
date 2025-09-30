@@ -283,13 +283,15 @@ void ManageHamlib::on_updateHamlibButton_clicked()
     QString url;
     if (isBuild64Bit())
     {
-        url = "http://dr-risse-consulting.de/hamlib/dll64/libhamlib-4.dll";
-//        url = "https://n0nb.users.sourceforge.net/dll64/libhamlib-4.dll";
+        //url = "http://dr-risse-consulting.de/hamlib/dll64/libhamlib-4.dll";
+        //url = "https://n0nb.users.sourceforge.net/dll64/libhamlib-4.dll";
+        url = "https://hamlib.sourceforge.net/snapshots/dll64/libhamlib-4.dll";
     }
     else
     {
-        url = "http://dr-risse-consulting.de/hamlib/dll32/libhamlib-4.dll";
-//        url = "https://n0nb.users.sourceforge.net/dll32/libhamlib-4.dll";
+//      url = "http://dr-risse-consulting.de/hamlib/dll32/libhamlib-4.dll";
+//      url = "https://n0nb.users.sourceforge.net/dll32/libhamlib-4.dll";
+        url = "https://hamlib.sourceforge.net/snapshots/dll32/libhamlib-4.dll";
     }
     bool routerRunning = checkRouterReady();
 
