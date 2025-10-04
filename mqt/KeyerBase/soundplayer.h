@@ -32,7 +32,7 @@ public:
     void stop();
     void closedown();
 
-    static void playSound(QString fname);
+    static void playSound(QString fname, int volume);
 
     QStringList outputDevices;
 
@@ -83,7 +83,7 @@ private:
     qint64 m_pos = 0;
     qint64 p_pos = 0;
     QByteArray m_buffer;
-    void doPlaySound(QString fname);
+    void doPlaySound(QString fname, int volume);
 signals:
     void draining();
 private slots:

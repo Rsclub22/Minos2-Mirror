@@ -140,7 +140,7 @@ void errorCallback( RtAudioErrorType /*type*/, const std::string &errorText)
     trace(QString("RTAudio error callback: ") + errorText.c_str());
 }
 //==============================================================================
-void SoundPlayer::playSound(QString fname)
+void SoundPlayer::playSound(QString fname, int volume)
 {
     if (soundPlayer)
     {
@@ -149,10 +149,10 @@ void SoundPlayer::playSound(QString fname)
     else
     {
         soundPlayer = createSoundPlayer();
-        soundPlayer->doPlaySound(fname);
+        soundPlayer->doPlaySound(fname, volume);
     }
 }
-void SoundPlayer::doPlaySound(QString fname)
+void SoundPlayer::doPlaySound(QString fname, int volume)
 {
     delete spf;
     spf = new spFile();
@@ -169,7 +169,7 @@ void SoundPlayer::doPlaySound(QString fname)
     dataptr = spf ->fptr;
     numChannels = spf->NumChannels;
     setRate(spf->rate);
-    setVolumeMults(0.5);
+    setVolumeMults(volume/100.0);
 
     initialise();
     startDMA();

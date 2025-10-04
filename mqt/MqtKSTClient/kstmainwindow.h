@@ -86,6 +86,7 @@ class KSTMainWindow : public QMainWindow
     bool meepNotifyLogger = false;
     bool meepPlaySound = false;
     QString meepSoundFile;
+    int meepVolume = 50;
 
 
     int maxDistance = 99999;

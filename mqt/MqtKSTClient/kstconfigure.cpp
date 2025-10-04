@@ -38,6 +38,7 @@ int KSTConfigure::exec()
     ui->meepSound->setText(meepSoundFile);
     ui->meepNotifyLogger->setChecked(meepNotifyLogger);
     ui->meepPlaySound->setChecked(meepPlaySound);
+    ui->volumeSpinBox->setValue(meepVolume);
 
     ui->ASServerName->setText(ASServerName);
     ui->ASMyName->setText(ASMyName);
@@ -135,7 +136,7 @@ void KSTConfigure::on_testButton_clicked()
     trace(QString("Test meep using %1").arg(fname));
     if (meepPlaySound && FileExists(fname))
     {
-        SoundPlayer::playSound(fname);
+        SoundPlayer::playSound(fname, meepVolume);
 
     }
     else
@@ -144,5 +145,11 @@ void KSTConfigure::on_testButton_clicked()
 
     }
 
+}
+
+
+void KSTConfigure::on_volumeSpinBox_valueChanged(int arg1)
+{
+    meepVolume = arg1;
 }
 

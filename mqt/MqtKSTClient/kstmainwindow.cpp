@@ -56,6 +56,7 @@ void KSTMainWindow::getSettings(QSettings &settings)
     meepNotifyLogger = settings.value("meepNotifyLogger", false).toBool();
     meepPlaySound = settings.value("meepPlaySound", false).toBool();
     meepSoundFile = settings.value("meepSoundFile", "").toString();
+    meepVolume = settings.value("meepVolume", 50).toInt();
 
 
     ASActive = settings.value("ASActive", false).toBool();
@@ -734,7 +735,7 @@ void KSTMainWindow::playMeepSound()
 {
     if (meepPlaySound && FileExists(meepSoundFile))
     {
-        SoundPlayer::playSound(meepSoundFile);
+        SoundPlayer::playSound(meepSoundFile, meepVolume);
 
     }
     else
@@ -1327,6 +1328,7 @@ bool KSTMainWindow::doConfiguration(bool showForm)
     conf.meepNotifyLogger = meepNotifyLogger;
     conf.meepPlaySound = meepPlaySound;
     conf.meepSoundFile = meepSoundFile;
+    conf.meepVolume = meepVolume;
 
     conf.ASActive = ASActive;
     conf.ASActiveBand = ASActiveBand;
@@ -1358,6 +1360,7 @@ bool KSTMainWindow::doConfiguration(bool showForm)
         meepNotifyLogger = conf.meepNotifyLogger;
         meepPlaySound = conf.meepPlaySound;
         meepSoundFile = conf.meepSoundFile;
+        meepVolume = conf.meepVolume;
 
         myLoc = conf.locator.trimmed();
         maxDistance = conf.maxDistance;
@@ -1387,6 +1390,7 @@ bool KSTMainWindow::doConfiguration(bool showForm)
         settings.setValue("meepNotifyLogger", meepNotifyLogger);
         settings.setValue("meepPlaySound", meepPlaySound);
         settings.setValue("meepSoundFile", meepSoundFile);
+        settings.setValue("meepVolume", meepVolume);
 
         settings.setValue("ASActive", ASActive);
         settings.setValue("ASServerName", ASServerName);

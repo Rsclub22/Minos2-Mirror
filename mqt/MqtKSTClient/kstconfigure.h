@@ -34,6 +34,7 @@ public:
     bool meepNotifyLogger;
     bool meepPlaySound;
     QString meepSoundFile;
+    int meepVolume = 50;
 
     int maxDistance;
 
@@ -59,6 +60,8 @@ private slots:
     void on_meepBrowse_clicked();
 
     void on_testButton_clicked();
+
+    void on_volumeSpinBox_valueChanged(int arg1);
 
 private:
     Ui::KSTConfigure *ui;
