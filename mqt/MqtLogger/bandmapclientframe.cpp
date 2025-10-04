@@ -1056,6 +1056,10 @@ void BandmapClientFrame::addDxSpotToBandmapTable(QSharedPointer<ClusterSpotData>
         ct->calcDistanceBearing(newSpot->getDxLocator(), &dist, &brg);
         distance = QString::number(static_cast<int>(dist));
         dxBrg = QString::number(brg);
+
+        newSpot->setDxDist(distance);
+        newSpot->setDxBrg(dxBrg);
+
     }
 
     qint64 logTime = newSpot->getSpotDateTime().toMSecsSinceEpoch() / 1000;
