@@ -1919,6 +1919,7 @@ void KSTMainWindow::on_clearUserFilter_clicked()
     ui->CSTable->clearSelection();
     on_clearMessageFilter_clicked();
     ui->CSFilter->setFocus();
+    on_clearMessageButton_clicked();
 }
 
 void KSTMainWindow::on_asBandCombo_currentIndexChanged(int band)
