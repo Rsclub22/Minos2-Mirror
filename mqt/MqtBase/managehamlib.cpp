@@ -232,9 +232,16 @@ bool ManageHamlib::downloadFile ( QString url, QString path, bool showError, QWi
         if (raw == 200 && ds > 0)
         {
             QFile file( path );
-            file.open( QIODevice::WriteOnly );
-            file.write( data );
-            trace ( "HTTP Get of " + url + " OK size " + QString::number(ds) );
+            if (file.open( QIODevice::WriteOnly ))
+            {
+                file.write( data );
+                trace ( "HTTP Get of " + url + " OK size " + QString::number(ds) );
+            }
+            else
+            {
+                trace(QString("Failed to open %1 response %2").arg(path, file.errorString()));
+            }
+
         }
         else
         {
