@@ -1322,7 +1322,7 @@ void DMButtonFrame::setVoiceMemAvail(bool avail, PubSubName psn)
 }
 
 
-void DMButtonFrame::getVoiceCwMemSupportedRadios(const QStringList &listOfRadios, QStringList& listOfRadioSupportKeyer, QString txkeyerType)
+void DMButtonFrame::getVoiceCwMemSupportedRadios(const QStringList &listOfRadios, QStringList& listOfRadioSupportKeyer)
 {
     listOfRadioSupportKeyer.clear();
 
@@ -1337,7 +1337,7 @@ void DMButtonFrame::getVoiceCwMemSupportedRadios(const QStringList &listOfRadios
                 listOfRadioSupportKeyer.append(radio);
             }
         }
-        else if (txKeyerType == keyerTypes[TxKeyerId::RigControl])
+        else if (txKeyerType == keyerTypes[TxKeyerId::CW_RigControl])
         {
             if(isCwMemTypeAvail(radName))
             {
@@ -2711,7 +2711,7 @@ void DMButtonFrame::on_editButton_clicked()
         listOfRadios = LogContainer->sendDM->rigs();
 
 
-        getVoiceCwMemSupportedRadios(listOfRadios, listOfRadioSupportKeyer, txKeyerType);
+        getVoiceCwMemSupportedRadios(listOfRadios, listOfRadioSupportKeyer);
         mapUniqueNames(listOfRadioSupportKeyer, radioMap);
     }
 

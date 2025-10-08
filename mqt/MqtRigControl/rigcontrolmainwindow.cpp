@@ -1055,7 +1055,7 @@ bool RigControlMainWindow::checkSupportCwKeyerMemory()
 bool RigControlMainWindow::getCwMemoryType(hamlibData::CW_MEMORY_TYPES &cwMemoryType, const QString rigMfg_Name)
 {
 
-    cwMemoryType = hamlibData::CW_MEMORY_TYPES::NONE;
+    //cwMemoryType = hamlibData::CW_MEMORY_TYPES::NONE;
 
     if (rigMfg_Name == "Yaesu")
     {
@@ -1115,7 +1115,7 @@ bool RigControlMainWindow::getCwMemoryType(hamlibData::CW_MEMORY_TYPES &cwMemory
 
         //addCwKeyerTypeToRigCache(hamlibData::CW_MEMORY_TYPES::QRPLABS);
     }
-    else if (rigMfg_Name == "Thetis")
+    else if (rigMfg_Name == "TAPR")
     {
         trace("Rig CW keyer type is Thetis");
         cwMemoryType = hamlibData::CW_MEMORY_TYPES::THETIS;
@@ -3035,8 +3035,14 @@ void RigControlMainWindow::initCacheData(QStringList &availRadios)
                 msg->rigCache.setVoiceMemAvail(radioDataList[i]->radioName, rigCap.getSupportVoiceMemory());
                 msg->rigCache.setNumVoiceMessages(radioDataList[i]->radioName, rigCap.getEndVoiceMemoryNumber());
 
+
                 hamlibData::CW_MEMORY_TYPES cwMemoryType = hamlibData::CW_MEMORY_TYPES::NONE;
-                getCwMemoryType(cwMemoryType, radioDataList[i]->rigMfg_Name);
+
+                if (rigCap.getSupportCwMemory())
+                {
+                   getCwMemoryType(cwMemoryType, rigCap.getRigManufacturer());
+                }
+
                 msg->rigCache.setCwMemType(radioDataList[i]->radioName, cwMemoryType);
 
             }
@@ -4334,8 +4340,7 @@ void RigControlMainWindow::addVoiceKeyerSupportStopCmdToRigCache(bool supportSto
 }
 
 
-// as we are now sending rigmodel to logger and it includes manufacturer and model number
-// we could despense with cwMemType and derive it from rigModel??
+
 void RigControlMainWindow::addCwKeyerTypeToRigCache(int cwMemType)
 {
     logMessage(QString("Add CW Keyer Type to rigcache = %1").arg(getCwRadioManufacturer(cwMemType)));

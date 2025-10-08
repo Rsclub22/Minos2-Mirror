@@ -12,6 +12,8 @@ DmButtonEditAddRadioDialog::DmButtonEditAddRadioDialog(const QStringList listOfR
 
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
+    ui->selectMsgTxt->setText( tr("Select Dropdown to see list of radios"));
+
 
     comboSetUniqueNames(listOfRadios, ui->radioListCBox);
 

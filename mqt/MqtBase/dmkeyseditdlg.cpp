@@ -106,8 +106,11 @@ void DMKeysEditDlg::on_settingsSplitter_splitterMoved(int /*pos*/, int /*index*/
 
 int DMKeysEditDlg::exec()
 {
+
+    ignoreSectionChange = true;
     showSections();
     showDetails();
+    ignoreSectionChange = false;
 
     return QDialog::exec();
 }
@@ -163,7 +166,7 @@ void DMKeysEditDlg::showRadiosForSection()
 {
     if (RadioList)
     {
-        RadioList->clear();  // Assuming you have a QListWidget* called RadiosList
+        RadioList->clear();
 
         const auto keyerIt = allKeyConfigs.constFind(txKeyerType);
         if (keyerIt == allKeyConfigs.cend())
@@ -469,7 +472,27 @@ bool DMKeysEditDlg::isCurrentSectionDirty() const
 
 void DMKeysEditDlg::clearDirtyFlag()
 {
-    auto &section = allKeyConfigs[txKeyerType][name][rigName.isEmpty() ? KEYER_NO_RADIO : rigName];
+    //auto &section = allKeyConfigs[txKeyerType][name][rigName.isEmpty() ? KEYER_NO_RADIO : rigName];
+    //for (auto &k : section.run)
+   //     k.clearDirty();
+   // for (auto &k : section.sp)
+   //     k.clearDirty();
+
+    QString rigKey = rigName.isEmpty() ? KEYER_NO_RADIO : rigName;
+
+    // Check if the path exists before accessing
+    if (!allKeyConfigs.contains(txKeyerType))
+        return;
+
+    auto &contestMap = allKeyConfigs[txKeyerType];
+    if (!contestMap.contains(name))
+        return;
+
+    auto &rigMap = contestMap[name];
+    if (!rigMap.contains(rigKey))
+        return;
+
+    auto &section = rigMap[rigKey];
     for (auto &k : section.run)
         k.clearDirty();
     for (auto &k : section.sp)
@@ -548,7 +571,7 @@ void DMKeysEditDlg::on_NewSectionButton_clicked()
 
 QString DMKeysEditDlg::getRigKey() const
 {
-    if (txKeyerType == keyerTypes[TxKeyerId::RigControl] && rigName != "/")
+    if (txKeyerType == keyerTypes[TxKeyerId::RigControl] && txKeyerType == keyerTypes[TxKeyerId::CW_RigControl] && rigName != "/")
     {
         return rigName;
     }
@@ -703,7 +726,19 @@ void DMKeysEditDlg::on_addRadioButton_clicked()
 
 
     DmButtonEditAddRadioDialog* addRadioDialog = new DmButtonEditAddRadioDialog(listOfRadios);
-    addRadioDialog->setWindowTitle(tr("Add Radio"));
+
+    QString titleText;
+    if (txKeyerType == keyerTypes[TxKeyerId::RigControl])
+    {
+        titleText = tr(" supporting Voice Keyer");
+    }
+    else if (txKeyerType == keyerTypes[TxKeyerId::CW_RigControl])
+    {
+       titleText = tr(" supporting CW Keyer");
+    }
+    addRadioDialog->setWindowTitle(tr("Add Radio %1").arg(titleText));
+
+
 
     int result = addRadioDialog->exec();
 
