@@ -268,6 +268,7 @@ private:
     QStringList getContestNamesForKeyerType(const QString &keyerType);
     void populateFksetCombo(QString txKeyerName, QString currentName);
     void getVoiceCwMemSupportedRadios(const QStringList &listOfRadios, QStringList& listOfRadioSupportKeyer);
+    void clearAllDirtyFlags();
 };
 
 #endif // DMBUTTONFRAME_H

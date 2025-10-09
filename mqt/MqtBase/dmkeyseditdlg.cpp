@@ -626,38 +626,25 @@ void DMKeysEditDlg::on_CopyButton_clicked()
 
 void DMKeysEditDlg::on_DeleteButton_clicked()
 {
-    //int offset = ui->SectionsList->currentRow();
-    //if (offset <= 0) {
-    //    mShowMessage(tr("You cannot delete the empty %1!").arg(name), this);
-    //    return;
-    //}
-
     if (name == "<None>"  || name == "Default")
     {
-        mShowMessage(tr("You cannot rename the empty %1!").arg(name), this);
+        mShowMessage(tr("You cannot delete the empty %1!").arg(name), this);
         return;
     }
-
     if (!mShowYesNoMessage(this, tr("Are you sure you want to delete the current %1?").arg(name)))
         return;
-
-    QString rigKey = getRigKey();
 
     auto keyerIt = allKeyConfigs.find(txKeyerType);
     if (keyerIt == allKeyConfigs.end())
         return;
 
     auto &contestMap = keyerIt.value();
-    auto contestIt = contestMap.find(name);
-    if (contestIt == contestMap.end())
-        return;
 
-    contestIt->remove(rigKey);  // remove this rig's section
-    if (contestIt->isEmpty())
-        contestMap.remove(name);  // if no rigs left, remove contest
+    // Simply remove the entire contest
+    contestMap.remove(name);
 
     if (contestMap.isEmpty())
-        allKeyConfigs.remove(txKeyerType);  // optional cleanup
+        allKeyConfigs.remove(txKeyerType);  // Optional cleanup
 
     // Reset selection to <None> or first available
     if (!contestMap.isEmpty())

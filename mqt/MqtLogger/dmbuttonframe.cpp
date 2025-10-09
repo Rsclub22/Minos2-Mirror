@@ -2333,6 +2333,8 @@ void DMButtonFrame::parseFKeyFile(QString fname)
     {
         populateFksetCombo(txKeyerType, currentName);
     }
+
+
 }
 
 bool DMButtonFrame::parseFKeyArray(const QJsonArray &array, KeySet &dest)
@@ -2453,7 +2455,7 @@ bool DMButtonFrame::parseFKeyString(QString &s)
     }
     QJsonObject keyerConfig = rootObj["KeyerConfig"].toObject();
 
-
+/*
     for (const QString &keyerType : keyerConfig.keys()) {
         QJsonObject contestMap = keyerConfig[keyerType].toObject();
 
@@ -2480,6 +2482,42 @@ bool DMButtonFrame::parseFKeyString(QString &s)
             }
         }
     }
+ */
+
+    // get rid of clang detach warnings..
+
+    QStringList keyerTypes = keyerConfig.keys();
+    for (const QString &keyerType : std::as_const(keyerTypes))
+    {
+        QJsonObject contestMap = keyerConfig[keyerType].toObject();
+        QStringList contests = contestMap.keys();
+
+        for (const QString &contest : std::as_const(contests))
+        {
+            QJsonObject rigMap = contestMap[contest].toObject();
+            QStringList rigModels = rigMap.keys();
+
+            for (const QString &rigModel : std::as_const(rigModels))
+            {
+                QJsonObject section = rigMap[rigModel].toObject();
+
+                ContestSection &cs = allKeyConfigs[keyerType][contest][rigModel];
+                if (section.contains("Run"))
+                {
+                    parseFKeyArray(section["Run"].toArray(), cs.run);
+                }
+                if (section.contains("SandP"))
+                {
+                    parseFKeyArray(section["SandP"].toArray(), cs.sp);
+                }
+                if (!nameList.contains(contest))
+                    nameList.append(contest);
+            }
+        }
+    }
+
+    clearAllDirtyFlags();  // Clear all dirty flags after loading
+                           // as they have not been changed yet.
 
     return true;
 }
@@ -2902,6 +2940,23 @@ void DMButtonFrame::setPcCwKeyerTxOnState(QString state)
 void DMButtonFrame::setPcCwKeyerCurrentWpm(QString wpm)
 {
 
+}
+
+void DMButtonFrame::clearAllDirtyFlags()
+{
+    for (auto &contestMap : allKeyConfigs)
+    {
+        for (auto &rigMap : contestMap)
+        {
+            for (auto &section : rigMap)
+            {
+                for (auto &k : section.run)
+                    k.clearDirty();
+                for (auto &k : section.sp)
+                    k.clearDirty();
+            }
+        }
+    }
 }
 /*
 void DMButtonFrame::setRadioListFromTslf()
