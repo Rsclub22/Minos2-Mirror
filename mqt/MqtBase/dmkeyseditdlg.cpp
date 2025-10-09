@@ -383,7 +383,7 @@ void DMKeysEditDlg::getDetails()
         return;
 
     auto &contestMap = allKeyConfigs[txKeyerType][name];
-    qDebug() << "getDetails name = " << name;
+
     // Locate rig key (use rigName, fallback if needed)
     QString rigKey = getRigKey();
 
