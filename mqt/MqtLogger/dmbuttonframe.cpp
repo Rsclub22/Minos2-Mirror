@@ -2730,30 +2730,17 @@ void DMButtonFrame::on_editButton_clicked()
 
     KeyerMap nfk = allKeyConfigs;
 
-    QString radioName = KEYER_NO_RADIO;
-    //QStringList listOfRadioSupportVoiceMem;
-
 
     if (txKeyerType == keyerTypes[TxKeyerId::RigControl] || txKeyerType == keyerTypes[TxKeyerId::CW_RigControl])
     {
-        if (selectedRadio.getLocalName() == "/")
-        {
-            radioName.clear(); // no radio selected
-        }
-        else
-        {
-            radioName = selectedRadio.getLocalName();
-        }
-
 
         listOfRadios = LogContainer->sendDM->rigs();
-
 
         getVoiceCwMemSupportedRadios(listOfRadios, listOfRadioSupportKeyer);
         mapUniqueNames(listOfRadioSupportKeyer, radioMap);
     }
 
-    DMKeysEditDlg jed(this, fkeyFileName, currentName, nfk, txKeyerType, radioName, listOfRadioSupportKeyer);
+    DMKeysEditDlg jed(this, fkeyFileName, currentName, nfk, txKeyerType, listOfRadioSupportKeyer);
 
     if (jed.exec() == QDialog::Accepted)
     {

@@ -24,7 +24,7 @@ class DMKeysEditDlg : public QDialog
     KeyerMap &allKeyConfigs;
 
     QString name;
-    QString rigName;
+    QString selectedRigName;
     QString txKeyerType;
 
     void showSections();
@@ -34,7 +34,7 @@ class DMKeysEditDlg : public QDialog
     void doCloseEvent();
 
 public:
-    explicit DMKeysEditDlg(QWidget *parent , QString fKeyFileName, QString name, KeyerMap &allKeyConfigs, QString txKeyerType, QString rigName, const  QStringList lisdtOfRadios);
+    explicit DMKeysEditDlg(QWidget *parent , QString fKeyFileName, QString name, KeyerMap &allKeyConfigs, QString txKeyerType, const  QStringList lisdtOfRadios);
     ~DMKeysEditDlg() override;
 
     int exec() override;

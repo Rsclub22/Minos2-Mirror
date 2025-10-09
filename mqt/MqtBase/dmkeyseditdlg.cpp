@@ -21,12 +21,11 @@
 
 using namespace TxKeyerCommon;
 
-DMKeysEditDlg::DMKeysEditDlg(QWidget *parent, QString fKeyFileName, QString name, KeyerMap &allKeyConfigs, QString txKeyerType, QString rigName, const QStringList listOfRadios) :
+DMKeysEditDlg::DMKeysEditDlg(QWidget *parent, QString fKeyFileName, QString name, KeyerMap &allKeyConfigs, QString txKeyerType, const QStringList listOfRadios) :
     QDialog(parent),
     ui(new Ui::DMKeysEditDlg),
     allKeyConfigs(allKeyConfigs),
     name(name),
-    rigName(rigName),
     txKeyerType(txKeyerType),
     listOfRadios(listOfRadios)
 {
@@ -55,6 +54,8 @@ DMKeysEditDlg::DMKeysEditDlg(QWidget *parent, QString fKeyFileName, QString name
     ui->renameButton->setText(tr("Rename Macro FKey section"));
 
     showRadioListButtons(false);
+
+    selectedRigName = KEYER_NO_RADIO;       // default selection
 
     if (txKeyerType == keyerTypes[TxKeyerId::RigControl] || txKeyerType == keyerTypes[TxKeyerId::CW_RigControl])
     {
@@ -399,10 +400,17 @@ void DMKeysEditDlg::getDetails()
     {
         KeyVal *entry = nullptr;
         if (r < runCount)
+        {
             entry = &section.run[r];
-        else if (r - runCount < section.sp.size())
-            entry = &section.sp[r - runCount];
+        }
         else
+        {
+            int spIndex = r - runCount;
+            if (spIndex < section.sp.size())
+                entry = &section.sp[spIndex];
+        }
+
+        if (!entry)
             continue;
 
         // Column 0: Key Top
@@ -443,11 +451,11 @@ void DMKeysEditDlg::getDetails()
 
 void DMKeysEditDlg::saveCurrentSection()
 {
-    if (!isCurrentSectionDirty())
-        return;
+    //if (!isCurrentSectionDirty())
+    //    return;
 
     getDetails();  // Store current UI into model
-    clearDirtyFlag();  // Reset dirty status after save
+
 }
 
 bool DMKeysEditDlg::isCurrentSectionDirty() const
@@ -478,7 +486,7 @@ void DMKeysEditDlg::clearDirtyFlag()
    // for (auto &k : section.sp)
    //     k.clearDirty();
 
-    QString rigKey = rigName.isEmpty() ? KEYER_NO_RADIO : rigName;
+    QString rigKey = selectedRigName;
 
     // Check if the path exists before accessing
     if (!allKeyConfigs.contains(txKeyerType))
@@ -571,9 +579,9 @@ void DMKeysEditDlg::on_NewSectionButton_clicked()
 
 QString DMKeysEditDlg::getRigKey() const
 {
-    if (txKeyerType == keyerTypes[TxKeyerId::RigControl] && txKeyerType == keyerTypes[TxKeyerId::CW_RigControl] && rigName != "/")
+    if (txKeyerType == keyerTypes[TxKeyerId::RigControl] || txKeyerType == keyerTypes[TxKeyerId::CW_RigControl])
     {
-        return rigName;
+        return selectedRigName;
     }
 
     return KEYER_NO_RADIO;
@@ -794,14 +802,14 @@ void DMKeysEditDlg::on_addRadioButton_clicked()
 
 void DMKeysEditDlg::on_deleteRadioButton_clicked()
 {
-    if (rigName == "noRadio")
+    if (selectedRigName == KEYER_NO_RADIO)
     {
         mShowMessage(tr("You cannot delete noRadio!"), this);
         return;
     }
 
 
-    if (!mShowYesNoMessage(this, tr("Are you sure you want to delete the radio %1?").arg(rigName)))
+    if (!mShowYesNoMessage(this, tr("Are you sure you want to delete the radio %1?").arg(selectedRigName)))
     {
 
         return;
@@ -818,15 +826,15 @@ void DMKeysEditDlg::on_deleteRadioButton_clicked()
             if (contestIt != contestMap.end())
             {
                 RigMap &rigMap = contestIt.value();
-                if (rigMap.contains(rigName))
+                if (rigMap.contains(selectedRigName))
                 {
-                    rigMap.remove(rigName);
-                    qDebug() << "Deleted radio:" << rigName;
+                    rigMap.remove(selectedRigName);
+                    qDebug() << "Deleted radio:" << selectedRigName;
 
                     if (!rigMap.isEmpty())
-                        rigName = rigMap.firstKey();
+                        selectedRigName = rigMap.firstKey();
                     else
-                        rigName = QStringLiteral("<NoRadio>");
+                        selectedRigName = QStringLiteral("<NoRadio>");
                 }
             }
         }
@@ -908,7 +916,7 @@ void DMKeysEditDlg::on_SectionsList_itemSelectionChanged()
         }
     }
 
-    rigName = KEYER_NO_RADIO;       // set default radio
+    selectedRigName = KEYER_NO_RADIO;       // set default radio
     showSection();
 }
 
@@ -939,7 +947,7 @@ void DMKeysEditDlg::onRadioListItemSelectionChanged()
         int offset = RadioList->currentRow();
         if (offset >= 0 && offset < radioNames.size())
         {
-            rigName =radioNames[offset];
+            selectedRigName =radioNames[offset];
             showSection();
         }
 
@@ -1006,7 +1014,7 @@ void DMKeysEditDlg::on_upButton_clicked()
     if (!contestMap.contains(name))
         return;
 
-    QString rigKey = rigName.isEmpty() ? KEYER_NO_RADIO : rigName;
+    QString rigKey = selectedRigName;
     if (!contestMap[name].contains(rigKey))
         return;
 
@@ -1069,7 +1077,7 @@ void DMKeysEditDlg::on_downButton_clicked()
     if (!contestMap.contains(name))
         return;
 
-    QString rigKey = rigName.isEmpty() ? KEYER_NO_RADIO : rigName;
+    QString rigKey = selectedRigName;
     if (!contestMap[name].contains(rigKey))
         return;
 
