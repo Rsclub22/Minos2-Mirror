@@ -141,10 +141,23 @@ protected:
       QDateTime lastLocatorTabTime;
 
       MinosStringItem<QString> screenLayout;
-      MinosStringItem<QString> currentFKeySet;
+      //MinosStringItem<QString> currentFKeySet;
       MinosStringItem<QString> watchedADIFFile;
       MinosItem<qint64> watchedADIFLastOffset;
       QSharedPointer<AdifManager> adifManager;
+
+      // Keyers
+      MinosStringItem<QString> rigControlCurrentFKeySetContest;
+      MinosStringItem<QString> cwRigControlCurrentFKeySetContest;
+      MinosStringItem<QString> serialControlCurrentFKeySetContest;
+      MinosStringItem<QString> pcCwKeyerCurrentFKeySetContest;
+      MinosStringItem<QString> digitalModesCurrentFKeySetContest;
+      MinosStringItem<QString> internalVoiceKeyerCurrentFKeySetContest;
+      MinosStringItem<QString> externalVoiceKeyerCurrentFKeySetContest;
+
+      MinosStringItem<QString> rigControlCurrentFKeySetRadio;
+      MinosStringItem<QString> cwRigControlCurrentFKeySetRadio; // other keyers not dependent upon a radio
+
 
       MinosItem<int> statsPeriod1;
       MinosItem<int> statsPeriod2;

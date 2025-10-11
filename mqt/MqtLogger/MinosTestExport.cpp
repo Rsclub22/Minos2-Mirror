@@ -134,9 +134,23 @@ void MinosTestExport::exportContest( QSharedPointer<QFile> expfd )
 
    ct->screenLayout.addIfDirty(st, "ScreenLayout", dirty);
 
-   ct->currentFKeySet.addIfDirty(st, "currentFKeySet", dirty);
+   //ct->currentFKeySet.addIfDirty(st, "currentFKeySet", dirty);
    ct->watchedADIFFile.addIfDirty(st, "WatchADIFFile", dirty);
    ct->watchedADIFLastOffset.addIfDirty(st, "WatchADIFLO", dirty);
+
+   // Keyers
+   ct->rigControlCurrentFKeySetContest.addIfDirty(st, "RigControlCurrentFKeySetContest", dirty);
+   ct->cwRigControlCurrentFKeySetContest.addIfDirty(st, "CWRigControlCurrentFKeySetContest", dirty);
+   ct->serialControlCurrentFKeySetContest.addIfDirty(st, "SerialControlCurrentFKeySetContest", dirty);
+   ct->pcCwKeyerCurrentFKeySetContest.addIfDirty(st, "PcCwKeyerCurrentFKeySetContest", dirty);
+   ct->digitalModesCurrentFKeySetContest.addIfDirty(st, "DigitalModesCurrentFKeySetContest", dirty);
+   ct->internalVoiceKeyerCurrentFKeySetContest.addIfDirty(st, "InternalVoiceKeyeyCurrentFKeySetContest", dirty);
+   ct->externalVoiceKeyerCurrentFKeySetContest.addIfDirty(st, "ExternalVoiceKeyerCurrentFKeySetContest", dirty);
+
+   ct->rigControlCurrentFKeySetRadio.addIfDirty(st, "RigControlCurrentFKeySetRadio", dirty);
+   ct->cwRigControlCurrentFKeySetRadio.addIfDirty(st, "CWRigControlCurrentFKeySetRadio", dirty);
+
+
 
    if ( dirty )
    {

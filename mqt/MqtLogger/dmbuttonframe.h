@@ -27,6 +27,21 @@ namespace Ui {
 class DMButtonFrame;
 }
 
+struct ValidationResult {
+    bool isValid = true;
+    QStringList errors;
+    QStringList warnings;
+
+    void addError(const QString &msg) {
+        errors << msg;
+        isValid = false;
+    }
+
+    void addWarning(const QString &msg) {
+        warnings << msg;
+    }
+};
+
 class DMButtonFrame : public QFrame
 {
     Q_OBJECT
@@ -87,6 +102,8 @@ signals:
     void sendRadioMode(QString m);
     void sendWpmToPcCwkeyer(int wpm);
 
+
+
 private slots:
     void fKey(BaseContestLog *c, int key, int carr);
     void sandPChanged(bool);
@@ -105,6 +122,7 @@ private slots:
     void DMMess(AnalysePubSubNotify an);
     void onModeChange(QString mode);
     void on_fkeysetCombo_textActivated(const QString &arg1);
+    void onFkeysetComboSelected();
 
     // txVmButtonFrame
 
@@ -136,6 +154,8 @@ private:
     QString currentName = "Default";
 
     QVector<QPushButton *> fButtons;
+
+
 
     //Keys fkeys;
     KeyerMap allKeyConfigs;
@@ -269,6 +289,13 @@ private:
     void populateFksetCombo(QString txKeyerName, QString currentName);
     void getVoiceCwMemSupportedRadios(const QStringList &listOfRadios, QStringList& listOfRadioSupportKeyer);
     void clearAllDirtyFlags();
+    QStringList getRadioNamesForSelectedContestName(const QString &keyerType);
+    void populateRadioNameCombo(const QString &contestName);
+
+    ValidationResult validateKeyConfigs(const KeyerMap &configs);
+    void getCurrentContestAndPopulateRadioCombo();
+    void connectFkeySetComboToPopulateRadioNameCombo();
+    void disConnectFkeySetComboToPopulateRadioNameCombo();
 };
 
 #endif // DMBUTTONFRAME_H

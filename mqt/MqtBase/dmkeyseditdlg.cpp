@@ -328,9 +328,7 @@ void DMKeysEditDlg::showDetails()
     }
 
     ui->OptionsTable->setVerticalHeaderLabels(vHeaders);
-    ui->OptionsTable->setHorizontalHeaderLabels(
-        { tr("Key Top"), tr("Value"), tr("Rig\nMem"),
-         tr("Repeat"), tr("Repeat\nDur"), tr("Rec.") });
+
 
     // ---------- Column sizing ----------
     auto *hh = ui->OptionsTable->horizontalHeader();
@@ -368,6 +366,10 @@ void DMKeysEditDlg::showDetails()
         ui->OptionsTable->setColumnHidden(EDIT_DLG_COL2, true);
         ui->OptionsTable->setColumnHidden(EDIT_DLG_COL5, true);
     }
+
+    ui->OptionsTable->setHorizontalHeaderLabels(
+        { tr("Key Top"), tr("Value"), tr("Rig\nMem"),
+         tr("Repeat"), tr("Repeat\nDur"), tr("Rec.") });
 
     // ---------- Restore splitter position ----------
     RegSettings settings;
@@ -931,7 +933,7 @@ void DMKeysEditDlg::onRadioListItemSelectionChanged()
     {
 
 
-        saveCurrentSection();
+        //saveCurrentSection();
 
         const auto keyerIt = allKeyConfigs.constFind(txKeyerType);
         if (keyerIt == allKeyConfigs.cend())

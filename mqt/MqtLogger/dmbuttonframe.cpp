@@ -128,6 +128,8 @@ DMButtonFrame::DMButtonFrame(QWidget *parent) :
 
     ui->nameLabel->setText(tr("Data Modes & Keyer Buttons from %1").arg(fkeyFileName));
 
+    ui->radioSelectCombo->setVisible(false);
+
     //ui->FButtonFrame->setEnabled(false);
 
 
@@ -279,6 +281,8 @@ void DMButtonFrame::createKeyer(QString voiceKeyerName)
             {
                 logMessage(QString("Voice Keyer type selected = %1").arg(voiceCap.getKeyerName()));
 
+                ui->radioSelectCombo->clear();
+
                 connect(txKeyer.data(), &TxKeyerBase::remoteConfigChanged, this, &DMButtonFrame::onRemoteConfigChanged, Qt::UniqueConnection);
                 connect(txKeyer.data(), &TxKeyerBase::remoteKeyerStopped, this, &DMButtonFrame::onRemoteKeyerStopped, Qt::UniqueConnection);
                 connect(txKeyer.data(), &TxKeyerBase::remoteKeyerStarted, this, &DMButtonFrame::onRemoteKeyerStarted, Qt::UniqueConnection);
@@ -318,6 +322,9 @@ void DMButtonFrame::createKeyer(QString voiceKeyerName)
                 {
 
                     txKeyer->txKeyerInit(txKeyer->numButtons);
+
+
+
 /**************************************************
                     for (int i = 0; i < voiceMemButtonList.count(); i++)
                     {
@@ -473,6 +480,9 @@ void DMButtonFrame::setFrameState(QString txKeyerName)
            set_External_FrameState(txKeyerName);
         }
 
+        // do this after data has been loaded from json
+        getCurrentContestAndPopulateRadioCombo();
+
 
     }
 }
@@ -492,6 +502,7 @@ void DMButtonFrame::set_DigiMode_FrameState(QString txKeyerName)
     ui->txKeyerSetupPb->setVisible(false);
     ui->pipCb->setVisible(false);
     ui->stopButton->setVisible(true);
+    ui->radioSelectCombo->setVisible(false);
     setTXStatusVisible(false);
     setEomTypeLabelsVisible(false);
     setKeyerIndicatorGroupBoxVisible(false);
@@ -532,6 +543,7 @@ void DMButtonFrame::set_None_FrameState(QString txKeyerName)
     ui->txKeyerSetupPb->setVisible(false);
     ui->pipCb->setVisible(false);
     ui->stopButton->setVisible(false);
+     ui->radioSelectCombo->setVisible(false);
     setTXStatusVisible(false);
     setEomTypeLabelsVisible(false);
     setKeyerIndicatorGroupBoxVisible(false);
@@ -551,6 +563,8 @@ void DMButtonFrame::set_rigControl_FrameState(QString txKeyerName)
     ui->txKeyerSetupPb->setVisible(txKeyerCap.getSetupButton());
     ui->pipCb->setVisible(txKeyerCap.getHasPip());
     setTXStatusVisible(txKeyerCap.getHasTxStatus());
+
+     ui->radioSelectCombo->setVisible(true);
 
     setKeyerIndicatorGroupBoxVisible(true);
     setPttIndicatorGroupBoxVisible(true);
@@ -601,6 +615,8 @@ void DMButtonFrame::set_rigControl_FrameState(QString txKeyerName)
 
     populateFksetCombo(txKeyerName, currentName);
     fkeyFileChanged();
+
+
 }
 
 void DMButtonFrame::set_cwRigControl_FrameState(QString txKeyerName)
@@ -612,6 +628,8 @@ void DMButtonFrame::set_cwRigControl_FrameState(QString txKeyerName)
     ui->txKeyerSetupPb->setVisible(txKeyerCap.getSetupButton());
     ui->pipCb->setVisible(txKeyerCap.getHasPip());
     setTXStatusVisible(txKeyerCap.getHasTxStatus());
+
+     ui->radioSelectCombo->setVisible(true);
 
     setKeyerIndicatorGroupBoxVisible(true);
     setPttIndicatorGroupBoxVisible(true);
@@ -667,6 +685,7 @@ void DMButtonFrame::set_cwRigControl_FrameState(QString txKeyerName)
     populateFksetCombo(txKeyerName, currentName);
     fkeyFileChanged();
 
+
 }
 
 
@@ -679,6 +698,8 @@ void DMButtonFrame::set_pcCwKeyer_FrameState(QString txKeyerName)
     ui->txKeyerSetupPb->setVisible(txKeyerCap.getSetupButton());
     ui->pipCb->setVisible(txKeyerCap.getHasPip());
     setTXStatusVisible(txKeyerCap.getHasTxStatus());
+
+     ui->radioSelectCombo->setVisible(false);
 
     setKeyerIndicatorGroupBoxVisible(true);
     setPttIndicatorGroupBoxVisible(true);
@@ -715,6 +736,8 @@ void DMButtonFrame::set_pcCwKeyer_FrameState(QString txKeyerName)
 
     populateFksetCombo(txKeyerName, currentName);
     fkeyFileChanged();
+
+
 }
 
 
@@ -729,6 +752,8 @@ void DMButtonFrame::set_Internal_FrameState(QString txKeyerName)
     ui->txKeyerSetupPb->setVisible(txKeyerCap.getSetupButton());
     ui->pipCb->setVisible(txKeyerCap.getHasPip());
     setTXStatusVisible(txKeyerCap.getHasTxStatus());
+
+     ui->radioSelectCombo->setVisible(false);
 
     setKeyerIndicatorGroupBoxVisible(true);
     setPttIndicatorGroupBoxVisible(true);
@@ -768,6 +793,8 @@ void DMButtonFrame::set_External_FrameState(QString txKeyerName)
     // not sure what this should be....
     setCwEntryBoxVisible(false);
     setCwMessagePlayingVisible(false);
+     ui->radioSelectCombo->setVisible(false);
+
 }
 
 
@@ -1939,6 +1966,52 @@ void DMButtonFrame::onModeChange(QString mode)
         emit sendFreqControl(curFreq);
     }
 }
+void DMButtonFrame::getCurrentContestAndPopulateRadioCombo()
+{
+    if (ct)
+    {
+        if (txKeyerType == keyerTypes[TxKeyerId::RigControl])
+        {
+           currentName = ct->rigControlCurrentFKeySetContest.getValue();
+        }
+        else  if (txKeyerType == keyerTypes[TxKeyerId::CW_RigControl])
+        {
+            currentName = ct->cwRigControlCurrentFKeySetContest.getValue();
+            populateRadioNameCombo(currentName);
+        }
+        else  if (txKeyerType == keyerTypes[TxKeyerId::SerialControl])
+        {
+            currentName = ct->serialControlCurrentFKeySetContest.getValue();
+            populateRadioNameCombo(currentName);
+        }
+        else  if (txKeyerType == keyerTypes[TxKeyerId::PcCwKeyer])
+        {
+            currentName = ct->pcCwKeyerCurrentFKeySetContest.getValue();
+        }
+        else  if (txKeyerType == keyerTypes[TxKeyerId::DigitalModes])
+        {
+            currentName = ct->digitalModesCurrentFKeySetContest.getValue();
+        }
+        else  if (txKeyerType == keyerTypes[TxKeyerId::InternalVoiceKeyer])
+        {
+            currentName = ct->internalVoiceKeyerCurrentFKeySetContest.getValue();
+        }
+        else  if (txKeyerType == keyerTypes[TxKeyerId::ExternalVoiceKeyer])
+        {
+            currentName = ct->externalVoiceKeyerCurrentFKeySetContest.getValue();
+        }
+        else
+        {
+            currentName = "Default";
+        }
+
+        ui->fkeysetCombo->setCurrentText(currentName);
+    }
+
+
+}
+
+
 void DMButtonFrame::fkeyFileChanged()
 {
     parseFKeyFile(fkeyFileName);
@@ -1961,8 +2034,8 @@ void DMButtonFrame::setContest(BaseContestLog *c)
     ct = dynamic_cast<LoggerContestLog *>( c);
     if (ct)
     {
-        currentName = ct->currentFKeySet.getValue();
-        ui->fkeysetCombo->setCurrentText(currentName);
+        //currentName = ct->currentFKeySet.getValue();
+        //ui->fkeysetCombo->setCurrentText(currentName);
         QString mode = ct->currentMode.getValue();
         onModeChange(mode);
     }
@@ -2167,6 +2240,61 @@ QStringList DMButtonFrame::getContestNamesForKeyerType(const QString &keyerType)
     return contestNames;
 }
 
+
+
+void DMButtonFrame::populateRadioNameCombo(const QString &contestName)
+{
+
+    ui->radioSelectCombo->clear();
+
+    QStringList radioList = getRadioNamesForSelectedContestName(contestName);
+    ui->radioSelectCombo->addItems(radioList);
+    ui->radioSelectCombo->setCurrentText(selectedRadio.getLocalName());
+
+}
+
+void DMButtonFrame::connectFkeySetComboToPopulateRadioNameCombo()
+{
+    disconnect(ui->fkeysetCombo, &QComboBox::currentTextChanged, this, &DMButtonFrame::onFkeysetComboSelected);
+}
+
+
+void DMButtonFrame::disConnectFkeySetComboToPopulateRadioNameCombo()
+{
+    connect(ui->fkeysetCombo, &QComboBox::currentTextChanged, this, &DMButtonFrame::onFkeysetComboSelected);
+}
+
+void DMButtonFrame::onFkeysetComboSelected()
+{
+    populateRadioNameCombo(currentName);
+}
+
+
+
+
+QStringList DMButtonFrame::getRadioNamesForSelectedContestName(const QString &contestName)
+{
+
+    QStringList radioList;
+
+    // Check if the contest exists for this keyer type
+    if (!allKeyConfigs.contains(txKeyerType))
+        return radioList;
+
+    auto &contestMap = allKeyConfigs[txKeyerType];
+
+    if (!contestMap.contains(contestName))
+        return radioList;
+
+    // Get all rig keys for this contest
+    auto &rigMap = contestMap[contestName];
+    radioList = rigMap.keys();
+
+    return radioList;
+
+
+}
+
 QString DMButtonFrame::parseFKeyMessage(QString mess)
 {
     // make sure screenContact is up to date
@@ -2307,6 +2435,60 @@ QString DMButtonFrame::parseFKeyMessage(QString mess)
     }
     return txMess;
 }
+
+void DMButtonFrame::parseFKeyFile(QString fname)
+{
+    allKeyConfigs.clear();
+
+    QFile lf(fname);
+
+    if (!lf.open(QIODevice::ReadOnly|QIODevice::Text))
+    {
+        QString ebuff = QString("Failed to open Function Key file %1").arg(fname);
+        MinosParameters::getMinosParameters()->mshowMessage(ebuff);
+        return;
+    }
+
+    QString s = lf.readAll();
+    bool retval = parseFKeyString(s);
+
+    if (retval == false)
+    {
+        mShowMessage(tr("Invalid or missing FKey definitions"), this);
+    }
+    else
+    {
+        // Validate the loaded configuration
+        ValidationResult validation = validateKeyConfigs(allKeyConfigs);
+
+        if (!validation.isValid)
+        {
+            QString errorMsg = tr("Configuration file has errors:\n\n");
+            errorMsg += validation.errors.join("\n");
+
+            if (!validation.warnings.isEmpty())
+            {
+                errorMsg += tr("\n\nWarnings:\n");
+                errorMsg += validation.warnings.join("\n");
+            }
+
+            mShowMessage(errorMsg, this);
+            // Optionally: clear allKeyConfigs or attempt repair
+        }
+        else if (!validation.warnings.isEmpty())
+        {
+            // Log warnings but continue
+            qWarning() << "Configuration loaded with warnings:";
+            for (const QString &warn : validation.warnings)
+            {
+                qWarning() << "  " << warn;
+            }
+        }
+
+        populateFksetCombo(txKeyerType, currentName);
+    }
+}
+/*
 void DMButtonFrame::parseFKeyFile(QString fname)
 {
     allKeyConfigs.clear();
@@ -2336,7 +2518,7 @@ void DMButtonFrame::parseFKeyFile(QString fname)
 
 
 }
-
+*/
 bool DMButtonFrame::parseFKeyArray(const QJsonArray &array, KeySet &dest)
 {
     dest.clear();  // Clear existing data before parsing
@@ -2363,76 +2545,8 @@ bool DMButtonFrame::parseFKeyArray(const QJsonArray &array, KeySet &dest)
     return true;
 }
 
-/*
-bool DMButtonFrame::parseFKeyArray(QJsonArray s, QString keyset)
-{
-    KeySet &ks = fkeys[keyset];
-    for (const auto &v:QASCONST(s))
-    {
-        if (v.isArray())
-        {
-            QJsonArray a = v.toArray();
-            if (a.size() == 6)
-            {
-                QString fk = a[0].toString();
-                QString keytop = a[1].toString();
-                QString val = a[2].toString();
-                int rigVoiceMemNun = a[3].toInt();
-                bool rptenbl = a[4].toBool();
-                int rptd = a[5].toInt();
 
-                KeyVal p;
-                p.fk = fk;
-                p.ktop = keytop;
-                p.kval = val;
-                p.rigVoiceMemNum = rigVoiceMemNun;
-                p.rptEnable = rptenbl;
-                p.rptDur = rptd;
-                ks.append(p);
-            }
-        }
-    }
-    return true;
-}
-*/
-/*
-bool DMButtonFrame::parseFKeyString(QString s)
-{
-    QJsonParseError err;
-    QJsonDocument json = QJsonDocument::fromJson(s.toUtf8(), &err);
-    if (err.error)
-    {
-        return false;
-    }
-    else
-    {
-        if( json.isArray())
-        {
-            QJsonArray namearray = json.array();
-            for (auto const &n: QASCONST(namearray))
-            {
-                QJsonObject namestruct = n.toObject();
-                QString name = namestruct.value("Name").toString();
-                nameList.push_back(name);
 
-                QJsonArray run = namestruct.value("Run").toArray();
-
-                if (!parseFKeyArray(run, name) )
-                {
-                    // always returns true
-                }
-
-                QJsonArray sandp = namestruct.value("SandP").toArray();
-                if (!parseFKeyArray(sandp, name) )
-                {
-                    // always returns true
-                }
-            }
-        }
-    }
-    return true;
-}
-*/
 
 bool DMButtonFrame::parseFKeyString(QString &s)
 {
@@ -2455,36 +2569,7 @@ bool DMButtonFrame::parseFKeyString(QString &s)
     }
     QJsonObject keyerConfig = rootObj["KeyerConfig"].toObject();
 
-/*
-    for (const QString &keyerType : keyerConfig.keys()) {
-        QJsonObject contestMap = keyerConfig[keyerType].toObject();
 
-        for (const QString &contest : contestMap.keys()) {
-            QJsonObject rigMap = contestMap[contest].toObject();
-
-            for (const QString &rigModel : rigMap.keys()) {
-                QJsonObject section = rigMap[rigModel].toObject();
-
-                ContestSection &cs = allKeyConfigs[keyerType][contest][rigModel];
-                if (section.contains("Run"))
-                {
-                    parseFKeyArray(section["Run"].toArray(), cs.run);
-                }
-
-                if (section.contains("SandP"))
-                {
-                    parseFKeyArray(section["SandP"].toArray(), cs.sp);
-                }
-
-
-                if (!nameList.contains(contest))
-                    nameList.append(contest);
-            }
-        }
-    }
- */
-
-    // get rid of clang detach warnings..
 
     QStringList keyerTypes = keyerConfig.keys();
     for (const QString &keyerType : std::as_const(keyerTypes))
@@ -2600,6 +2685,104 @@ void DMButtonFrame::rewriteFKeyFile()
     jf.close();
 }
 
+
+
+
+
+ValidationResult DMButtonFrame::validateKeyConfigs(const KeyerMap &configs)
+{
+    ValidationResult result;
+
+    for (auto keyerIt = configs.constBegin(); keyerIt != configs.constEnd(); ++keyerIt)
+    {
+        const QString &keyerType = keyerIt.key();
+        const auto &contestMap = keyerIt.value();
+
+        if (keyerType.isEmpty())
+        {
+            result.addError("Found empty keyer type");
+            continue;
+        }
+
+        for (auto contestIt = contestMap.constBegin(); contestIt != contestMap.constEnd(); ++contestIt)
+        {
+            const QString &contestName = contestIt.key();
+            const auto &rigMap = contestIt.value();
+
+            if (contestName.isEmpty())
+            {
+                result.addWarning(QString("Empty contest name in keyer '%1'").arg(keyerType));
+            }
+
+            if (rigMap.isEmpty())
+            {
+                result.addWarning(QString("Contest '%1' (keyer '%2') has no rigs")
+                                      .arg(contestName, keyerType));
+            }
+
+            for (auto rigIt = rigMap.constBegin(); rigIt != rigMap.constEnd(); ++rigIt)
+            {
+                const QString &rigName = rigIt.key();
+                const ContestSection &section = rigIt.value();
+
+                if (rigName.isEmpty())
+                {
+                    result.addWarning(QString("Empty rig name in contest '%1', keyer '%2'")
+                                          .arg(contestName, keyerType));
+                }
+
+                // Validate Run KeySet
+                if (section.run.isEmpty())
+                {
+                    result.addError(QString("Missing Run section for rig '%1' in contest '%2', keyer '%3'")
+                                        .arg(rigName, contestName, keyerType));
+                }
+                else if (section.run.size() != 12)
+                {
+                    result.addError(QString("Invalid Run size (%1, expected 12) for rig '%2' in contest '%3', keyer '%4'")
+                                        .arg(section.run.size()).arg(rigName, contestName, keyerType));
+                }
+
+                // Validate S&P KeySet
+                if (section.sp.isEmpty())
+                {
+                    result.addError(QString("Missing S&P section for rig '%1' in contest '%2', keyer '%3'")
+                                        .arg(rigName, contestName, keyerType));
+                }
+                else if (section.sp.size() != 12)
+                {
+                    result.addError(QString("Invalid S&P size (%1, expected 12) for rig '%2' in contest '%3', keyer '%4'")
+                                        .arg(section.sp.size()).arg(rigName, contestName, keyerType));
+                }
+
+                // Validate KeyVal data integrity
+                for (int i = 0; i < section.run.size(); ++i)
+                {
+                    const KeyVal &k = section.run[i];
+                    if (k.fk().isEmpty())
+                    {
+                        result.addWarning(QString("Run[%1]: Empty key for rig '%2', contest '%3'")
+                                              .arg(i).arg(rigName, contestName));
+                    }
+                }
+
+                for (int i = 0; i < section.sp.size(); ++i)
+                {
+                    const KeyVal &k = section.sp[i];
+                    if (k.fk().isEmpty())
+                    {
+                        result.addWarning(QString("S&P[%1]: Empty key for rig '%2', contest '%3'")
+                                              .arg(i).arg(rigName, contestName));
+                    }
+                }
+            }
+        }
+    }
+
+    return result;
+}
+
+// Modify parseFKeyFile to validate after loading
 
 
 /*
@@ -2828,7 +3011,40 @@ QString DMButtonFrame::getFKeysString() const
 void DMButtonFrame::on_fkeysetCombo_textActivated(const QString &arg1)
 {
     currentName = arg1;
-    ct->currentFKeySet.setValue(currentName);
+
+    if (txKeyerType == keyerTypes[TxKeyerId::RigControl])
+    {
+        ct->rigControlCurrentFKeySetContest.setValue(currentName);
+        populateRadioNameCombo(currentName);
+    }
+    else  if (txKeyerType == keyerTypes[TxKeyerId::CW_RigControl])
+    {
+        ct->cwRigControlCurrentFKeySetContest.setValue(currentName);
+        populateRadioNameCombo(currentName);
+    }
+    else  if (txKeyerType == keyerTypes[TxKeyerId::SerialControl])
+    {
+        ct->serialControlCurrentFKeySetContest.setValue(currentName);
+    }
+    else  if (txKeyerType == keyerTypes[TxKeyerId::PcCwKeyer])
+    {
+        ct->pcCwKeyerCurrentFKeySetContest.setValue(currentName);
+    }
+    else  if (txKeyerType == keyerTypes[TxKeyerId::DigitalModes])
+    {
+        ct->digitalModesCurrentFKeySetContest.setValue(currentName);
+    }
+    else  if (txKeyerType == keyerTypes[TxKeyerId::InternalVoiceKeyer])
+    {
+        ct->internalVoiceKeyerCurrentFKeySetContest.setValue(currentName);
+    }
+    else  if (txKeyerType == keyerTypes[TxKeyerId::ExternalVoiceKeyer])
+    {
+        ct->externalVoiceKeyerCurrentFKeySetContest.setValue(currentName);
+    }
+
+
+    //ct->currentFKeySet.setValue(currentName);
     ct->commonSave(false);
 }
 

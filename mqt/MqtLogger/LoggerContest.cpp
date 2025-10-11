@@ -118,8 +118,20 @@ void LoggerContestLog::clearDirty()
    clusterFilterSettings.clearDirty();
    bandmapFilterSettings.clearDirty();
 
+   //keyers
+   rigControlCurrentFKeySetContest.clearDirty();
+   cwRigControlCurrentFKeySetContest.clearDirty();
+   serialControlCurrentFKeySetContest.clearDirty();
+   pcCwKeyerCurrentFKeySetContest.clearDirty();
+   digitalModesCurrentFKeySetContest.clearDirty();
+   internalVoiceKeyerCurrentFKeySetContest.clearDirty();
+   externalVoiceKeyerCurrentFKeySetContest.clearDirty();
+
+   rigControlCurrentFKeySetRadio.clearDirty();
+   cwRigControlCurrentFKeySetRadio.clearDirty();
+
    screenLayout.clearDirty();
-   currentFKeySet.clearDirty();
+   //currentFKeySet.clearDirty();
    statsPeriod1.clearDirty();
    statsPeriod2.clearDirty();
    showContinentEU.clearDirty();
@@ -197,8 +209,20 @@ void LoggerContestLog::setDirty()
    clusterFilterSettings.setDirty();
    bandmapFilterSettings.setDirty();
 
+   //keyers
+   rigControlCurrentFKeySetContest.setDirty();
+   cwRigControlCurrentFKeySetContest.setDirty();
+   serialControlCurrentFKeySetContest.setDirty();
+   pcCwKeyerCurrentFKeySetContest.setDirty();
+   digitalModesCurrentFKeySetContest.setDirty();
+   internalVoiceKeyerCurrentFKeySetContest.setDirty();
+   externalVoiceKeyerCurrentFKeySetContest.setDirty();
+
+   rigControlCurrentFKeySetRadio.clearDirty();
+   cwRigControlCurrentFKeySetRadio.clearDirty();
+
    screenLayout.setDirty();
-   currentFKeySet.setDirty();
+   //currentFKeySet.setDirty();
    statsPeriod1.setDirty();
    statsPeriod2.setDirty();
    showContinentEU.setDirty();
@@ -277,7 +301,18 @@ bool LoggerContestLog::initialise( const QString &fn, bool newFile, int slotno )
 
    temp.clear(); // Initial value now comes from the screen config
 
-   currentFKeySet.setInitialValue("Default");
+   //currentFKeySet.setInitialValue("Default");
+
+   rigControlCurrentFKeySetContest.setInitialValue("Default");
+   cwRigControlCurrentFKeySetContest.setInitialValue("Default");
+   serialControlCurrentFKeySetContest.setInitialValue("Default");
+   pcCwKeyerCurrentFKeySetContest.setInitialValue("Default");
+   digitalModesCurrentFKeySetContest.setInitialValue("Default");
+   internalVoiceKeyerCurrentFKeySetContest.setInitialValue("Default");
+   externalVoiceKeyerCurrentFKeySetContest.setInitialValue("Default");
+
+   rigControlCurrentFKeySetRadio.setInitialValue("noRadio");
+   cwRigControlCurrentFKeySetRadio.setInitialValue("noRadio");
 
    for (int i = 0; i < STACKITEMS; i++)
    {
@@ -1553,7 +1588,16 @@ void LoggerContestLog::processMinosStanza( const QString &methodName, MinosTestI
       mt->getStructArgMemberValue( "section", entSect );
       mt->getStructArgMemberValue( "sectionList", sectionList );
       mt->getStructArgMemberValue( "ScreenLayout", screenLayout);
-      mt->getStructArgMemberValue( "currentFKeySet", currentFKeySet);
+      //mt->getStructArgMemberValue( "currentFKeySet", currentFKeySet);
+      mt->getStructArgMemberValue( "RigControlCurrentFKeySetContest", rigControlCurrentFKeySetContest);
+      mt->getStructArgMemberValue( "CWRigControlCurrentFKeySetContest", cwRigControlCurrentFKeySetContest);
+      mt->getStructArgMemberValue( "SerialControlCurrentFKeySetContest", serialControlCurrentFKeySetContest);
+      mt->getStructArgMemberValue( "PcCwKeyerCurrentFKeySetContest", pcCwKeyerCurrentFKeySetContest);
+      mt->getStructArgMemberValue( "DigitalModesCurrentFKeySetContest", digitalModesCurrentFKeySetContest);
+      mt->getStructArgMemberValue( "InternalVoiceKeyeyCurrentFKeySetContest", internalVoiceKeyerCurrentFKeySetContest);
+      mt->getStructArgMemberValue( "ExternalVoiceKeyerCurrentFKeySetContest", externalVoiceKeyerCurrentFKeySetContest);
+      mt->getStructArgMemberValue( "RigControlCurrentFKeySetRadio", rigControlCurrentFKeySetRadio);
+      mt->getStructArgMemberValue( "CWRigControlCurrentFKeySetRadio", cwRigControlCurrentFKeySetRadio);
       mt->getStructArgMemberValue( "WatchADIFFile", watchedADIFFile);
       mt->getStructArgMemberValue( "WatchADIFLo", watchedADIFLastOffset);
    }
