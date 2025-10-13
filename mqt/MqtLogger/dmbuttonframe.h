@@ -122,7 +122,7 @@ private slots:
     void DMMess(AnalysePubSubNotify an);
     void onModeChange(QString mode);
     void on_fkeysetCombo_textActivated(const QString &arg1);
-    void onFkeysetComboSelected();
+    //void onFkeysetComboSelected();
 
     // txVmButtonFrame
 
@@ -290,12 +290,14 @@ private:
     void getVoiceCwMemSupportedRadios(const QStringList &listOfRadios, QStringList& listOfRadioSupportKeyer);
     void clearAllDirtyFlags();
     QStringList getRadioNamesForSelectedContestName(const QString &keyerType);
-    void populateRadioNameCombo(const QString &contestName);
+//    void populateRadioNameCombo(const QString &contestName);
 
     ValidationResult validateKeyConfigs(const KeyerMap &configs);
-    void getCurrentContestAndPopulateRadioCombo();
-    void connectFkeySetComboToPopulateRadioNameCombo();
-    void disConnectFkeySetComboToPopulateRadioNameCombo();
+//    void connectFkeySetComboToPopulateRadioNameCombo();
+//    void disConnectFkeySetComboToPopulateRadioNameCombo();
+    void displayErrorMessage(QString msg);
+    void clearErrorMessage();
+    bool checkRadioExists(QString radioName, bool &radioExists);
 };
 
 #endif // DMBUTTONFRAME_H

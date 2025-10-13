@@ -548,7 +548,11 @@
       </widget>
      </item>
      <item>
-      <widget class="QComboBox" name="radioSelectCombo"/>
+      <widget class="QLabel" name="selectedRadioLabel">
+       <property name="text">
+        <string>AllRadios</string>
+       </property>
+      </widget>
      </item>
      <item>
       <spacer name="horizontalSpacer_2">

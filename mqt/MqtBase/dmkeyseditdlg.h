@@ -3,8 +3,9 @@
 
 #include <QDialog>
 #include <QListWidget>
-#include <QItemSelection>
+#include <QListWidgetItem>
 #include "dmFKeydef.h"
+#include "PubSubName.h"
 
 
 namespace Ui {
@@ -23,8 +24,10 @@ class DMKeysEditDlg : public QDialog
     //Keys &keys;
     KeyerMap &allKeyConfigs;
 
-    QString name;
-    QString selectedRigName;
+    QString contestName;
+    PubSubName minosSelectedRadio;
+    QString minosSelectedRadioLocalName;
+    QString radioListSelectedName;
     QString txKeyerType;
 
     void showSections();
@@ -34,7 +37,7 @@ class DMKeysEditDlg : public QDialog
     void doCloseEvent();
 
 public:
-    explicit DMKeysEditDlg(QWidget *parent , QString fKeyFileName, QString name, KeyerMap &allKeyConfigs, QString txKeyerType, const  QStringList lisdtOfRadios);
+    explicit DMKeysEditDlg(QWidget *parent , QString fKeyFileName, QString name, KeyerMap &allKeyConfigs, QString txKeyerType, PubSubName minoSelectedRadio, const  QStringList listOfRadios);
     ~DMKeysEditDlg() override;
 
     int exec() override;
@@ -74,7 +77,7 @@ private:
     void saveCurrentSection();
     bool isCurrentSectionDirty() const;
     void clearDirtyFlag();
-    QString getRigKey() const;
+    //QString getRigKey() const;
 
     bool ignoreSectionChange = false;
     QListWidget* RadioList = nullptr;
@@ -84,7 +87,7 @@ private:
     void showRadiosForSection();
     void showRadioListButtons(bool show);
 
-    bool checkRadioExists(QString radioName, bool &radioExists);
+    bool checkRadioExists(QString contestName, QString radioName, bool &radioExists);
 
 };
 #endif // DMKEYSEDITDLG_H
