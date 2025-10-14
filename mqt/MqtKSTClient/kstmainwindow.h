@@ -283,6 +283,8 @@ private slots:
     void testTimeout();
     void on_meepTable_doubleClicked(const QModelIndex &index);
 
+    void on_messageTable_doubleClicked(const QModelIndex &index);
+
 private:
     Ui::KSTMainWindow *ui;
     QSharedPointer<CommandReader> commandReader = QSharedPointer<CommandReader>(new CommandReader(this));
@@ -304,6 +306,7 @@ private:
     void addMessage(QSharedPointer<KstMessageLine> kst);
     void checkUserMessages(QSharedPointer<KstUser> user);
     QStringList routerList();
+    void doMessageDoubleClick(const QModelIndex &index);
 };
 
 extern KSTMainWindow *mainWindow;

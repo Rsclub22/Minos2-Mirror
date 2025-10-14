@@ -2289,7 +2289,7 @@ void KSTMainWindow::testTimeout()
     }
 }
 
-void KSTMainWindow::on_meepTable_doubleClicked(const QModelIndex &index)
+void KSTMainWindow::doMessageDoubleClick(const QModelIndex &index)
 {
     if (index.isValid())
     {
@@ -2303,6 +2303,15 @@ void KSTMainWindow::on_meepTable_doubleClicked(const QModelIndex &index)
         }
         ui->CSFilter->setText(call.getFullCall());
         ui->CSTable->selectRow(0);
-    }
+    }}
+void KSTMainWindow::on_meepTable_doubleClicked(const QModelIndex &index)
+{
+    doMessageDoubleClick(index);
+}
+
+
+void KSTMainWindow::on_messageTable_doubleClicked(const QModelIndex &index)
+{
+    doMessageDoubleClick(index);
 }
 
