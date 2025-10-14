@@ -824,6 +824,14 @@ void DMButtonFrame::set_pcCwKeyer_FrameState(QString txKeyerName)
 
     ui->stopButton->setVisible(true);
 
+    cwSpeedSlider = new CwSpeedControl(ui->cwSpeedSliderFrame);
+    ui->cwSpeedSliderHorizontalLayout->addWidget(cwSpeedSlider);
+    cwSpeedSlider->setSpeedRange(TxKeyerCommon::PC_CW_KEYER_MIN_WPM, TxKeyerCommon::PC_CW_KEYER_MAX_WPM);
+
+    connect(cwSpeedSlider, &CwSpeedControl::cwSpeedChanged, this, [this](int wpm){
+        emit sendWpmToPcCwkeyer(wpm);
+    });
+
     initCwTextEntryBox(getCwRadioManufacturer(getCwMemType(selectedRadio)), CWKEYER_RADIO_COMMON_PARAMS_FILENAME);
     currentName = ct->pcCwKeyerCurrentFKeySetContest.getValue();
     populateFksetCombo(txKeyerName, currentName);
@@ -3246,27 +3254,82 @@ void DMButtonFrame::setMode(const QString m)
 
 void DMButtonFrame::setPcCwKeyerComport(QString comportStr)
 {
+    if (txKeyer && txKeyerType == keyerTypes[TxKeyerId::PcCwKeyer])
+    {
 
+    }
 }
 void DMButtonFrame::setPcCwKeyerConnectionState(QString stateStr)
 {
-
+    logMessage(QString("PcCwKeyerConnection state = %1").arg(stateStr));
+    if (txKeyer && txKeyerType == keyerTypes[TxKeyerId::PcCwKeyer])
+    {
+        if (stateStr == "Open")
+        {
+            setAvailIndicatorOnOff(true);
+        }
+        else
+        {
+            setAvailIndicatorOnOff(false);
+        }
+    }
 }
 void DMButtonFrame::setPcCwKeyerErrorMsg(QString errorMsg)
 {
+    logMessage(QString("PcCwKeyerConnection error message = %1").arg(errorMsg));
+    if (txKeyer && txKeyerType == keyerTypes[TxKeyerId::PcCwKeyer])
+    {
 
+    }
 }
 void DMButtonFrame::setPcCwKeyerPttEnabled(QString enabled)
 {
+    logMessage(QString("PcCwKeyer Ptt enabled = %1").arg(enabled));
 
+    if (txKeyer && txKeyerType == keyerTypes[TxKeyerId::PcCwKeyer])
+    {
+        if (enabled == "On")
+        {
+            setPttEnabledIndicatorOnOff(true);
+        }
+        else
+        {
+            setPttEnabledIndicatorOnOff(false);
+        }
+    }
 }
 void DMButtonFrame::setPcCwKeyerTxOnState(QString state)
 {
+    logMessage(QString("TX State received = %1").arg(state));
 
+    if (txKeyer && txKeyerType == keyerTypes[TxKeyerId::PcCwKeyer])
+    {
+        if (state == "On")
+        {
+            setPttStatusIndicatorOnOff(true);
+        }
+        else
+        {
+            setPttStatusIndicatorOnOff(false);
+            clearCwMessageDisplay();
+            onMsgDurTimerTimeout();
+        }
+    }
 }
 void DMButtonFrame::setPcCwKeyerCurrentWpm(QString wpm)
 {
+    logMessage(QString("Current WPM from PcCwKeyer = %1").arg(wpm));
+    if (wpm.isEmpty())
+    {
+        return;
+    }
 
+    if (txKeyer && txKeyerType == keyerTypes[TxKeyerId::PcCwKeyer])
+    {
+
+        cwSpeedSlider->setValue(wpm.toInt()); // this will not emit and send back to keyer
+
+    }
 }
 
 void DMButtonFrame::clearAllDirtyFlags()
