@@ -24,7 +24,8 @@ class DMKeysEditDlg : public QDialog
     //Keys &keys;
     KeyerMap &allKeyConfigs;
 
-    QString contestName;
+    QString minosSelectedContestName;
+    QString selectedContestName;
     PubSubName minosSelectedRadio;
     QString minosSelectedRadioLocalName;
     QString radioListSelectedName;
@@ -42,6 +43,8 @@ public:
 
     int exec() override;
 
+protected:
+    void closeEvent(QCloseEvent *event) override;
 
 private slots:
     void on_NewSectionButton_clicked();
@@ -88,6 +91,10 @@ private:
     void showRadioListButtons(bool show);
 
     bool checkRadioExists(QString contestName, QString radioName, bool &radioExists);
+
+    void setupTableRow(int row, KeyVal &k);
+    void setupTableColumns();
+
 
 };
 #endif // DMKEYSEDITDLG_H

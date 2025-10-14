@@ -220,7 +220,7 @@ void DMButtonFrame::logRadioSettingsChanged(QSharedPointer<RadioSettingsDialogCh
                         || txKeyerType == keyerTypes[TxKeyerId::RigControl]
                         || txKeyerType == keyerTypes[TxKeyerId::InternalVoiceKeyer])
     {
-        setSaveButtonByRadionameText(selectedRadio.getLocalName());
+
         setRadioParams();
 
         if (txKeyerType == keyerTypes[TxKeyerId::PcCwKeyer])
@@ -438,7 +438,6 @@ void DMButtonFrame::onTxKeyerSelect(int idx)
 void DMButtonFrame::setFrameState(QString txKeyerName)
 {
 
-
     if (txKeyerName == DIGIMODE)
     {
 
@@ -446,7 +445,9 @@ void DMButtonFrame::setFrameState(QString txKeyerName)
         return;
     }
 
-    TxKeyerCapabilities voiceCap = txKeyerFactory->supportedTxKeyers()->value(txKeyerName);
+
+
+    //TxKeyerCapabilities voiceCap = txKeyerFactory->supportedTxKeyers()->value(txKeyerName);
 
     if (txKeyer == nullptr)
     {
@@ -487,7 +488,7 @@ void DMButtonFrame::set_DigiMode_FrameState(QString txKeyerName)
     txKeyParamList.clear();
     txKeyerType = keyerTypes[TxKeyerId::DigitalModes];
 
-    clearButtons();
+    clearButtonLabels();
     setCwEntryBoxVisible(false);
 
     setAvailIndicatorVisible(false);
@@ -516,6 +517,9 @@ void DMButtonFrame::set_DigiMode_FrameState(QString txKeyerName)
 
 void DMButtonFrame::set_None_FrameState(QString txKeyerName)
 {
+
+    Q_UNUSED(txKeyerName)
+
     clearButtonLabels();
     txKeyParamList.clear();
 
@@ -528,7 +532,12 @@ void DMButtonFrame::set_None_FrameState(QString txKeyerName)
     txKeyerType = keyerTypes[TxKeyerId::None];
 
 
-    clearButtons();
+    clearAll_Ui_Elements();
+}
+
+void DMButtonFrame::clearAll_Ui_Elements()
+{
+    clearButtonLabels();
     setCwEntryBoxVisible(false);
 
 
@@ -551,31 +560,64 @@ void DMButtonFrame::set_None_FrameState(QString txKeyerName)
 void DMButtonFrame::set_rigControl_FrameState(QString txKeyerName)
 {
 
+    clearAll_Ui_Elements(); // we do this to try and make it clear that the radio definition
+                            // is missing for the contest
+
     ui->noExtKeyerLabel->clear();
 
+    currentName = ct->rigControlCurrentFKeySetContest.getValue();
+    parseFKeyFile(fkeyFileName);    // also populates FkSetCombo
+
+
+    //populateFksetCombo(txKeyerName, currentName);
+
+    logMessage(QString("Set RigControl Frame State for Contest Name %1, Radio %2").arg(currentName, selectedRadio.key()));
+
+    bool radioExists = false;
+    if (checkRadioExists(selectedRadio.key(), radioExists))    // check radio exists in keyerConfigs
+    {
+        if (!radioExists)
+        {
+            displayErrorMessage(
+                tr("Radio %1 has not been defined in contest %2, please add the radio")
+                    .arg(selectedRadio.key())
+                    .arg(currentName)
+            );
+            logMessage(QString("Radio %1 has not been defined in %2, please add the radio").arg(selectedRadio.key().arg(currentName)));
+        }
+        else
+        {
+            logMessage(QString("Radio %1 Exists for Contest Name %2").arg(selectedRadio.key(), currentName));
+            clearErrorMessage();
+            setupRigControl_Ui_Elements(txKeyerName);
+
+
+
+            //    populateRadioNameCombo(currentName);
+            displayButtons();
+        }
+
+    }
+    else
+    {
+        qDebug() << "check radio exists failed";
+        logMessage(QString("checkRadio exists failed for contest name %1, radio %2").arg(currentName, selectedRadio.key()));
+    }
+}
+
+
+void DMButtonFrame::setupRigControl_Ui_Elements(QString txKeyerName)
+{
+
     TxKeyerCapabilities txKeyerCap = txKeyerFactory->supportedTxKeyers()->value(txKeyerName);
+
 
     ui->txKeyerSetupPb->setVisible(txKeyerCap.getSetupButton());
     ui->pipCb->setVisible(txKeyerCap.getHasPip());
     setTXStatusVisible(txKeyerCap.getHasTxStatus());
 
-     ui->selectedRadioLabel->setVisible(true);
-     ui->selectedRadioLabel->setText(selectedRadio.key());
-
-     bool radioExists = false;
-     if (checkRadioExists(selectedRadio.key(), radioExists))    // check radio exists in keyerConfigs
-     {
-        if (!radioExists)
-        {
-             displayErrorMessage(tr("Radio %1 has not been defined in %2, please add the radio").arg(selectedRadio.key().arg(currentName)));
-            logMessage(QString("Radio %1 has not been defined in %2, please add the radio").arg(selectedRadio.key().arg(currentName)));
-        }
-        else
-        {
-            clearErrorMessage();
-        }
-     }
-
+    ui->selectedRadioLabel->setVisible(true);
+    ui->selectedRadioLabel->setText(selectedRadio.key());
 
     setKeyerIndicatorGroupBoxVisible(true);
     setPttIndicatorGroupBoxVisible(true);
@@ -601,7 +643,7 @@ void DMButtonFrame::set_rigControl_FrameState(QString txKeyerName)
     ui->stopButton->setVisible(true);
 
 
-        //setSaveButtonByRadionameText(selectedRadio.getLocalName());
+    //setSaveButtonByRadionameText(selectedRadio.getLocalName());
 
 
 
@@ -624,19 +666,58 @@ void DMButtonFrame::set_rigControl_FrameState(QString txKeyerName)
         ui->stopButton->setVisible(true);
     }
 
-    currentName = ct->rigControlCurrentFKeySetContest.getValue();
-    populateFksetCombo(txKeyerName, currentName);
-
-//    populateRadioNameCombo(currentName);
-    fkeyFileChanged();
-
-
 }
 
 void DMButtonFrame::set_cwRigControl_FrameState(QString txKeyerName)
 {
+    clearAll_Ui_Elements(); // we do this to try and make it clear that the radio definition
+                            // is missing for the contest
+
     ui->noExtKeyerLabel->clear();
 
+    currentName = ct->cwRigControlCurrentFKeySetContest.getValue();
+    parseFKeyFile(fkeyFileName);    // also populates FkSetCombo
+
+    logMessage(QString("Set Cw RigControl Frame State for Contest Name %1, Radio %2").arg(currentName, selectedRadio.key()));
+
+
+
+    bool radioExists = false;
+    if (checkRadioExists(selectedRadio.key(), radioExists))    // check radio exists in keyerConfigs
+    {
+        if (!radioExists)
+        {
+            displayErrorMessage(
+                tr("Radio %1 has not been defined in contest %2, please add the radio")
+                    .arg(selectedRadio.key())
+                    .arg(currentName)
+            );
+            logMessage(QString("Radio %1 has not been defined in %2, please add the radio").arg(selectedRadio.key().arg(currentName)));
+        }
+        else
+        {
+            logMessage(QString("Radio %1 Exists for Contest Name %2").arg(selectedRadio.key(), currentName));
+
+            clearErrorMessage();
+            setupCw_RigControl_Ui_Elements(txKeyerName);
+            displayButtons();
+        }
+
+    }
+    else
+    {
+        qDebug() << "check radio exists failed";
+        logMessage(QString("checkRadio exists failed for contest name %1, radio %2").arg(currentName, selectedRadio.key()));
+    }
+
+
+
+
+}
+
+
+void DMButtonFrame::setupCw_RigControl_Ui_Elements(QString txKeyerName)
+{
     TxKeyerCapabilities txKeyerCap = txKeyerFactory->supportedTxKeyers()->value(txKeyerName);
 
     ui->txKeyerSetupPb->setVisible(txKeyerCap.getSetupButton());
@@ -645,20 +726,6 @@ void DMButtonFrame::set_cwRigControl_FrameState(QString txKeyerName)
 
     ui->selectedRadioLabel->setVisible(true);
     ui->selectedRadioLabel->setText(selectedRadio.key());
-
-    bool radioExists = false;
-    if (checkRadioExists(selectedRadio.key(), radioExists))    // check radio exists in keyerConfigs
-    {
-        if (!radioExists)
-        {
-            displayErrorMessage(tr("Radio %1 has not been defined in %2, please add the radio").arg(selectedRadio.key().arg(currentName)));
-            logMessage(QString("Radio %1 has not been defined in %2, please add the radio").arg(selectedRadio.key().arg(currentName)));
-        }
-        else
-        {
-            clearErrorMessage();
-        }
-    }
 
     setKeyerIndicatorGroupBoxVisible(true);
     setPttIndicatorGroupBoxVisible(true);
@@ -683,7 +750,7 @@ void DMButtonFrame::set_cwRigControl_FrameState(QString txKeyerName)
     ui->stopButton->setVisible(true);
 
 
-    setSaveButtonByRadionameText(selectedRadio.getLocalName());
+
 
     txKeyer->setRadioParams(getNumVoiceMessages(selectedRadio), selectedRadio.getLocalName(), getPttType(selectedRadio), getPttEnabled(selectedRadio));
     txKeyer->txKeyerInit(txKeyer->numButtons);
@@ -710,12 +777,6 @@ void DMButtonFrame::set_cwRigControl_FrameState(QString txKeyerName)
     }
 
     initCwTextEntryBox(getCwRadioManufacturer(getCwMemType(selectedRadio)), CWKEYER_RADIO_COMMON_PARAMS_FILENAME);
-
-    currentName = ct->cwRigControlCurrentFKeySetContest.getValue();
-    populateFksetCombo(txKeyerName, currentName);
-//    populateRadioNameCombo(currentName);
-    fkeyFileChanged();
-
 
 }
 
@@ -836,7 +897,12 @@ void DMButtonFrame::set_External_FrameState(QString txKeyerName)
 
 void DMButtonFrame::DMButtonFrame::updateFrameState()
 {
-    setFrameState(ui->txKeyerSelect->currentText());
+    if (!ui->txKeyerSelect->currentText().isEmpty())
+    {
+       setFrameState(ui->txKeyerSelect->currentText());
+    }
+
+
 }
 
 
@@ -2020,6 +2086,12 @@ void DMButtonFrame::fkeyFileChanged()
 {
     parseFKeyFile(fkeyFileName);
 
+    displayButtons();
+}
+
+
+void DMButtonFrame::displayButtons()
+{
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
     if (tslf)
     {
@@ -2027,6 +2099,9 @@ void DMButtonFrame::fkeyFileChanged()
         showFButtons(sandp);
     }
 }
+
+
+
 void DMButtonFrame::fButtonClicked()
 {
     QPushButton *b = dynamic_cast<QPushButton *>(sender());
@@ -2139,7 +2214,7 @@ void DMButtonFrame::showFButtons(bool s)
     QString rigKey = KEYER_NO_RADIO;
     if (txKeyerType == keyerTypes[TxKeyerId::RigControl] || txKeyerType == keyerTypes[TxKeyerId::CW_RigControl])
     {
-        rigKey = selectedRadio.getLocalName();
+        rigKey = selectedRadio.key();
     }
 
     auto &contestMap = allKeyConfigs[txKeyerType];
@@ -2221,12 +2296,16 @@ void DMButtonFrame::showFButtons(bool s)
 
 void DMButtonFrame::populateFksetCombo(QString txKeyerName, QString currentName)
 {
+    ignoreFkComboSignal = true;
+
     nameList.clear();
     ui->fkeysetCombo->clear();
 
     nameList = getContestNamesForKeyerType(txKeyerName);
     ui->fkeysetCombo->addItems(nameList);
     ui->fkeysetCombo->setCurrentText(currentName);
+
+    ignoreFkComboSignal = false;
 }
 
 
@@ -2791,6 +2870,13 @@ bool DMButtonFrame::checkRadioExists(QString radioName, bool &radioExists)
 {
 
     bool ok = false;
+    qDebug() << "Check Radio Exists" << radioName;
+    if (radioName.isEmpty())
+    {
+        qDebug() << "Radioname is empty" << radioName;
+        radioExists = false;
+        return false;
+    }
 
     if (allKeyConfigs.contains(txKeyerType))
     {
@@ -2804,10 +2890,12 @@ bool DMButtonFrame::checkRadioExists(QString radioName, bool &radioExists)
 
             if (rigMap.contains(radioName))
             {
+                qDebug() << "Radio Exists ";
                 radioExists = true;
             }
             else
             {
+                qDebug() << "Radio Does not exist";
                 radioExists = false;
             }
         }
@@ -2965,6 +3053,7 @@ void DMButtonFrame::on_editButton_clicked()
         allKeyConfigs = nfk;
         // and we have to regenerate the JSON file
         rewriteFKeyFile();
+        updateFrameState();
     }
 }
 
@@ -3045,6 +3134,9 @@ QString DMButtonFrame::getFKeysString() const
 
 void DMButtonFrame::on_fkeysetCombo_textActivated(const QString &arg1)
 {
+    if (ignoreFkComboSignal)
+        return;
+
     currentName = arg1;
 
     if (txKeyerType == keyerTypes[TxKeyerId::RigControl])
@@ -3107,10 +3199,7 @@ void DMButtonFrame::createButtonsForKeyer(int numButtons, int columns)
 
 }
 
-void DMButtonFrame::setSaveButtonByRadionameText(QString selectedRadioName)
-{
 
-}
 
 
 void DMButtonFrame::loadButtonData()
@@ -3135,13 +3224,13 @@ void DMButtonFrame::checkCommonIniFileVersion(QString txKeyerType)
 
 void DMButtonFrame::clearButtonLabels()
 {
-
+    for(auto &b: fButtons)
+    {
+        b->setText("");
+    }
 }
 
-void DMButtonFrame::clearButtons()
-{
 
-}
 
 void DMButtonFrame::sendModeToRadio(const QString m)
 {
@@ -3196,20 +3285,4 @@ void DMButtonFrame::clearAllDirtyFlags()
         }
     }
 }
-/*
-void DMButtonFrame::setRadioListFromTslf()
-{
-    if (ct)
-    {
-        if (LogContainer->sendDM->rigs().count() > 0)
-        {
-            logMessage(QString("setRadioListUpdate: %1").arg(LogContainer->sendDM->rigs().join(", ")));
-            listOfRadios.clear();
-            listOfRadios = LogContainer->sendDM->rigs();
-            mapUniqueNames(listOfRadios, radioMap);
 
-        }
-
-    }
-}
-*/

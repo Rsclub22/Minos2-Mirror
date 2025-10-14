@@ -197,6 +197,7 @@ private:
     CwSpeedControl *cwSpeedSlider = nullptr;
 
     bool notifyComboChange = true;
+    bool ignoreFkComboSignal = false;
 
 
     void showFButtons(bool s);
@@ -232,7 +233,6 @@ private:
     void updateFrameState();
     void setTXStatusVisible(bool visible);
     void sendModeToRadio(const QString m);
-    void setSaveButtonByRadionameText(QString selectedRadioName);
     void checkButtonIniFileVersion(QString voiceKeyerType);
     void loadButtonData();
     void checkCommonIniFileVersion(QString voiceKeyerType);
@@ -298,6 +298,10 @@ private:
     void displayErrorMessage(QString msg);
     void clearErrorMessage();
     bool checkRadioExists(QString radioName, bool &radioExists);
+    void clearAll_Ui_Elements();
+    void setupRigControl_Ui_Elements(QString txKeyerName);
+    void displayButtons();
+    void setupCw_RigControl_Ui_Elements(QString txKeyerName);
 };
 
 #endif // DMBUTTONFRAME_H
