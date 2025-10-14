@@ -64,10 +64,6 @@ int main(int argc, char *argv[])
         }
 #endif
 
-#ifdef Q_OS_MACOS
-        a.setStyle("fusion");
-#endif
-
         TLogContainer *w = new TLogContainer();
         w->connect(&a, &SingleApplication::argsReceived, w, &TLogContainer::onArgsReceived);
 
