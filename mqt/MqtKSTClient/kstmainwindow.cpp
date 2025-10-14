@@ -2289,7 +2289,7 @@ void KSTMainWindow::testTimeout()
     }
 }
 
-void KSTMainWindow::doMessageDoubleClick(const QModelIndex &index)
+void KSTMainWindow::on_meepTable_doubleClicked(const QModelIndex &index)
 {
     if (index.isValid())
     {
@@ -2303,15 +2303,24 @@ void KSTMainWindow::doMessageDoubleClick(const QModelIndex &index)
         }
         ui->CSFilter->setText(call.getFullCall());
         ui->CSTable->selectRow(0);
-    }}
-void KSTMainWindow::on_meepTable_doubleClicked(const QModelIndex &index)
-{
-    doMessageDoubleClick(index);
+    }
 }
 
 
 void KSTMainWindow::on_messageTable_doubleClicked(const QModelIndex &index)
 {
-    doMessageDoubleClick(index);
+    if (index.isValid())
+    {
+        QModelIndex sourceIndex = kstMessageFilterModel.mapToSource(index);
+        int row = sourceIndex.row();
+        QSharedPointer<KstMessageLine> line = messageVector->at(row);
+        Callsign call = line->call;
+        if (call == myCallsign)
+        {
+            call = line->otherCall;
+        }
+        ui->CSFilter->setText(call.getFullCall());
+        ui->CSTable->selectRow(0);
+    }
 }
 

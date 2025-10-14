@@ -306,7 +306,6 @@ private:
     void addMessage(QSharedPointer<KstMessageLine> kst);
     void checkUserMessages(QSharedPointer<KstUser> user);
     QStringList routerList();
-    void doMessageDoubleClick(const QModelIndex &index);
 };
 
 extern KSTMainWindow *mainWindow;
