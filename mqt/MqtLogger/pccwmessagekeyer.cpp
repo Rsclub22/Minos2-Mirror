@@ -157,7 +157,7 @@ void PcCWMessageKeyer::sendCwMsg(TxKeyerParams &vmData)
 
         QString cwMessageToTx = vmData.getKeyerCwMessage();
 
-        trace(QString("PcCwMessageKeyer Send Morse Message to radio : %1").arg(cwMessageToTx));
+        trace(QString("PcCwMessageKeyer Send Morse Message to Pc DTR Keyer : %1").arg(cwMessageToTx));
 
         tslf->sendPcKeyerTxCwMessage(cwMessageToTx);
     }

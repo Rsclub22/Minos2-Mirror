@@ -59,12 +59,10 @@ TxKeyerBase* TxKeyerFactory::createTxKeyer(int txKeyerId)
     }
     else if (txKeyerId == TxKeyerId::PcCwKeyer)
     {
-        if (LogContainer->sendDM->isPcCWkeyerLoaded())
-        {
-           return new PcCWMessageKeyer(this);
-        }
-
-
+        //if (LogContainer->sendDM->isPcCWkeyerLoaded())
+       // {
+       return new PcCWMessageKeyer(this);
+       // }
     }
     else if (txKeyerId == TxKeyerId::InternalVoiceKeyer)
     {
