@@ -278,7 +278,7 @@ void DMKeysEditDlg::showSection()
     bool isProtected = (selectedContestName == "<None>" || selectedContestName == "Default" || selectedContestName == minosSelectedContestName);
 
     ui->DeleteButton->setEnabled(!isProtected);
-    ui->CopyButton->setEnabled(!isProtected);
+    //ui->CopyButton->setEnabled(!isProtected);
     ui->renameButton->setEnabled(!isProtected);
 
 }
@@ -296,28 +296,47 @@ void DMKeysEditDlg::setupTableRow(int row, KeyVal &k)
                          .arg(localRow + 1);
     ui->OptionsTable->setVerticalHeaderItem(row, new QTableWidgetItem(header));
 
-    // Columns 0,1,2,4
+    // Columns 0,1,2
     ui->OptionsTable->setItem(row, EDIT_DLG_COL0, new QTableWidgetItem(k.ktop()));
     ui->OptionsTable->setItem(row, EDIT_DLG_COL1, new QTableWidgetItem(k.kval()));
     ui->OptionsTable->setItem(row, EDIT_DLG_COL2, new QTableWidgetItem(QString::number(k.rigVoiceMemNum())));
-    ui->OptionsTable->setItem(row, EDIT_DLG_COL4, new QTableWidgetItem(QString::number(k.rptDur())));
 
-    // Column 3: Repeat checkbox
-    auto *cb = new QCheckBox;
-    cb->setChecked(k.rptEnable());
-    auto *wrapCB = new QWidget;
-    auto *layCB = new QHBoxLayout(wrapCB);
-    layCB->addWidget(cb);
-    layCB->setAlignment(Qt::AlignCenter);
-    layCB->setContentsMargins(0,0,0,0);
-    ui->OptionsTable->setCellWidget(row, EDIT_DLG_COL3, wrapCB);
+    // Column 3: Duration Enable checkbox
+    auto *durEnableCb = new QCheckBox;
+    durEnableCb->setChecked(k.rptEnable());
+    auto *wrapDurEnableCb = new QWidget;
+    auto *layDurEnableCb = new QHBoxLayout(wrapDurEnableCb);
+    layDurEnableCb->addWidget(durEnableCb);
+    layDurEnableCb->setAlignment(Qt::AlignCenter);
+    layDurEnableCb->setContentsMargins(0,0,0,0);
+    ui->OptionsTable->setCellWidget(row, EDIT_DLG_COL3, wrapDurEnableCb);
 
-    KeyVal *kPtrCB = &k; // non-const pointer for mutating
-    connect(cb, &QCheckBox::toggled, this, [kPtrCB](bool checked){
-        kPtrCB->setRptEnable(checked);
+    KeyVal *kPtrdurEnableCb = &k;
+    connect(durEnableCb, &QCheckBox::toggled, this, [kPtrdurEnableCb](bool checked){
+        kPtrdurEnableCb->setRptEnable(checked);
     });
 
-    // Column 5: Record/play button
+
+    ui->OptionsTable->setItem(row, EDIT_DLG_COL4, new QTableWidgetItem(QString::number(k.msgDur())));
+
+    // Column 5: Repeat checkbox
+    auto *rptEnableCb = new QCheckBox;
+    rptEnableCb->setChecked(k.rptEnable());
+    auto *wrapRptEnableCb = new QWidget;
+    auto *layRptEnableCb = new QHBoxLayout(wrapRptEnableCb);
+    layRptEnableCb->addWidget(rptEnableCb);
+    layRptEnableCb->setAlignment(Qt::AlignCenter);
+    layRptEnableCb->setContentsMargins(0,0,0,0);
+    ui->OptionsTable->setCellWidget(row, EDIT_DLG_COL5, wrapRptEnableCb);
+
+    KeyVal *kPtrRptEnableCB = &k;
+    connect(rptEnableCb, &QCheckBox::toggled, this, [kPtrRptEnableCB](bool checked){
+        kPtrRptEnableCB->setRptEnable(checked);
+    });
+
+    ui->OptionsTable->setItem(row, EDIT_DLG_COL6, new QTableWidgetItem(QString::number(k.rptDur())));
+
+    // Column 7: Record/play button
     auto *recBtn = new QToolButton;
     recBtn->setText("🎙");
     recBtn->setToolTip(tr("Record/Play audio for this message"));
@@ -328,9 +347,9 @@ void DMKeysEditDlg::setupTableRow(int row, KeyVal &k)
     layBtn->addWidget(recBtn);
     layBtn->setAlignment(Qt::AlignCenter);
     layBtn->setContentsMargins(0,0,0,0);
-    ui->OptionsTable->setCellWidget(row, EDIT_DLG_COL5, wrapBtn);
+    ui->OptionsTable->setCellWidget(row, EDIT_DLG_COL7, wrapBtn);
 
-    KeyVal *kPtrBtn = &k; // non-const pointer
+    KeyVal *kPtrBtn = &k;
     connect(recBtn, &QToolButton::clicked, this, [this, kPtrBtn]() {
         if (txKeyerType == keyerTypes[TxKeyerId::InternalVoiceKeyer])
         {
@@ -367,6 +386,9 @@ void DMKeysEditDlg::setupTableColumns()
     hh->setSectionResizeMode(EDIT_DLG_COL3, QHeaderView::Fixed);
     hh->setSectionResizeMode(EDIT_DLG_COL4, QHeaderView::Fixed);
     hh->setSectionResizeMode(EDIT_DLG_COL5, QHeaderView::Fixed);
+    hh->setSectionResizeMode(EDIT_DLG_COL6, QHeaderView::Fixed);
+    hh->setSectionResizeMode(EDIT_DLG_COL7, QHeaderView::Fixed);
+
 
     ui->OptionsTable->setColumnWidth(EDIT_DLG_COL0, 140);
     ui->OptionsTable->setColumnWidth(EDIT_DLG_COL1, 220);
@@ -374,6 +396,8 @@ void DMKeysEditDlg::setupTableColumns()
     ui->OptionsTable->setColumnWidth(EDIT_DLG_COL3, 50);
     ui->OptionsTable->setColumnWidth(EDIT_DLG_COL4, 60);
     ui->OptionsTable->setColumnWidth(EDIT_DLG_COL5, 30);
+    ui->OptionsTable->setColumnWidth(EDIT_DLG_COL6, 30);
+    ui->OptionsTable->setColumnWidth(EDIT_DLG_COL7, 30);
 
     if (txKeyerType == keyerTypes[TxKeyerId::DigitalModes])
     {
@@ -381,6 +405,8 @@ void DMKeysEditDlg::setupTableColumns()
         ui->OptionsTable->setColumnHidden(EDIT_DLG_COL3, true);
         ui->OptionsTable->setColumnHidden(EDIT_DLG_COL4, true);
         ui->OptionsTable->setColumnHidden(EDIT_DLG_COL5, true);
+        ui->OptionsTable->setColumnHidden(EDIT_DLG_COL6, true);
+        ui->OptionsTable->setColumnHidden(EDIT_DLG_COL7, true);
     }
 
     // Hide Unwanted colums for keyer Type
@@ -388,13 +414,13 @@ void DMKeysEditDlg::setupTableColumns()
     if (txKeyerType == keyerTypes[TxKeyerId::RigControl])
     {
         ui->OptionsTable->setColumnHidden(EDIT_DLG_COL1, true);
-        ui->OptionsTable->setColumnHidden(EDIT_DLG_COL5, true);
+        ui->OptionsTable->setColumnHidden(EDIT_DLG_COL7, true);
     }
 
     if (txKeyerType == keyerTypes[TxKeyerId::CW_RigControl] || txKeyerType == keyerTypes[TxKeyerId::PcCwKeyer])
     {
         ui->OptionsTable->setColumnHidden(EDIT_DLG_COL2, true);
-        ui->OptionsTable->setColumnHidden(EDIT_DLG_COL5, true);
+        ui->OptionsTable->setColumnHidden(EDIT_DLG_COL7, true);
     }
 
 }
@@ -649,15 +675,33 @@ void DMKeysEditDlg::getDetails()
                 entry->setRigVoiceMemNum(mem);
         }
 
-        // Column 3: Repeat Enable (checkbox)
+        // Column 3: Duration Enable (checkbox)
         if (QWidget *wrap = ui->OptionsTable->cellWidget(r, EDIT_DLG_COL3))
+        {
+            if (QCheckBox *cb = wrap->findChild<QCheckBox*>())
+                entry->setMsgDurEnable(cb->isChecked());
+        }
+
+        // Column 4: Repeat Duration
+        if (QTableWidgetItem *qtwi = ui->OptionsTable->item(r, EDIT_DLG_COL4))
+        {
+            bool ok;
+            int dur = qtwi->text().toInt(&ok);
+            if (ok)
+                entry->setMsgDur(dur);
+        }
+
+
+
+        // Column 5: Repeat Enable (checkbox)
+        if (QWidget *wrap = ui->OptionsTable->cellWidget(r, EDIT_DLG_COL5))
         {
             if (QCheckBox *cb = wrap->findChild<QCheckBox*>())
                 entry->setRptEnable(cb->isChecked());
         }
 
-        // Column 4: Repeat Duration
-        if (QTableWidgetItem *qtwi = ui->OptionsTable->item(r, EDIT_DLG_COL4))
+        // Column 6: Repeat Duration
+        if (QTableWidgetItem *qtwi = ui->OptionsTable->item(r, EDIT_DLG_COL6))
         {
             bool ok;
             int dur = qtwi->text().toInt(&ok);
@@ -986,8 +1030,10 @@ void DMKeysEditDlg::on_addRadioButton_clicked()
                     KeyVal kv;
                     kv.setFk(fk);
                     kv.setKtop("");
-                    kv.setKval("");
+                    kv.setKval("");                    
                     kv.setRigVoiceMemNum(0);
+                    kv.setMsgDurEnable(false);
+                    kv.setMsgDur(0);
                     kv.setRptEnable(false);
                     kv.setRptDur(0);
 
@@ -1001,6 +1047,8 @@ void DMKeysEditDlg::on_addRadioButton_clicked()
                     kv.setKtop("");
                     kv.setKval("");
                     kv.setRigVoiceMemNum(0);
+                    kv.setMsgDurEnable(false);
+                    kv.setMsgDur(0);
                     kv.setRptEnable(false);
                     kv.setRptDur(0);
 

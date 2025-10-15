@@ -26,6 +26,8 @@ public:
     int rigVoiceMemNum() const {return m_rigVoiceMemNum;}
     bool rptEnable() const {return m_rptEnable;}
     int rptDur() const {return m_rptDur;}
+    bool msgDurEnable() const {return m_msgDurEnable;}
+    int msgDur() const {return m_msgDur;}
 
 
     void setFk(const QString &val) { if (m_fk != val) { m_fk = val; m_dirty = true; } }
@@ -34,6 +36,8 @@ public:
     void setRigVoiceMemNum(int val) { if (m_rigVoiceMemNum != val) { m_rigVoiceMemNum = val; m_dirty = true; } }
     void setRptEnable(bool val) { if (m_rptEnable != val) { m_rptEnable = val; m_dirty = true; } }
     void setRptDur(int val) { if (m_rptDur != val) { m_rptDur = val; m_dirty = true; } }
+    void setMsgDurEnable(bool val) { if (m_msgDurEnable != val) { m_msgDurEnable = val; m_dirty = true; } }
+    void setMsgDur(int val) { if (m_msgDur != val) { m_msgDur = val; m_dirty = true; } }
 
     void clearDirty() { m_dirty = false; }
     bool isDirty() const { return m_dirty; }
@@ -45,7 +49,10 @@ public:
                m_kval == other.m_kval &&
                m_rigVoiceMemNum == other.m_rigVoiceMemNum &&
                m_rptEnable == other.m_rptEnable &&
-               m_rptDur == other.m_rptDur;
+               m_rptDur == other.m_rptDur &&
+               m_msgDur == other.m_msgDur &&
+               m_msgDurEnable == other.m_msgDurEnable;
+
     }
 
     void swapWith(KeyVal &other)
@@ -84,6 +91,16 @@ public:
             swap(m_rptDur, other.m_rptDur);
             changed = true;
         }
+        if (m_msgDurEnable != other.m_msgDurEnable)
+        {
+            swap(m_msgDurEnable, other.m_msgDurEnable);
+            changed = true;
+        }
+        if (m_msgDur != other.m_msgDur)
+        {
+            swap(m_msgDur, other.m_msgDur);
+            changed = true;
+        }
 
         if (changed)
         {
@@ -98,6 +115,8 @@ private:
     QString m_ktop;
     QString m_kval;
     int m_rigVoiceMemNum = 0;
+    bool m_msgDurEnable = false;
+    int m_msgDur = 0;
     bool m_rptEnable = false;
     int m_rptDur = 0;
     bool m_dirty = false;

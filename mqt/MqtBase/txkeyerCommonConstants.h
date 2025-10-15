@@ -42,6 +42,8 @@ namespace TxKeyerCommon
     const int EDIT_DLG_COL3 = 3;
     const int EDIT_DLG_COL4 = 4;
     const int EDIT_DLG_COL5 = 5;
+    const int EDIT_DLG_COL6 = 6;
+    const int EDIT_DLG_COL7 = 7;
 
 
     enum TxKeyerId

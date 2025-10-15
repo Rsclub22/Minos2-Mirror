@@ -2656,6 +2656,8 @@ bool DMButtonFrame::parseFKeyArray(const QJsonArray &array, KeySet &dest)
         p.setFk(obj.value("key").toString());
         p.setKtop(obj.value("label").toString());
         p.setKval(obj.value("message").toString());
+        p.setMsgDur(obj.value("messageDuration").toInt());
+        p.setMsgDurEnable(obj.value("messageDurEnable").toBool());
         p.setRigVoiceMemNum(obj.value("rigVoiceMemNum").toInt());
         p.setRptEnable(obj.value("repeatEnable").toBool());
         p.setRptDur(obj.value("repeatDuration").toInt());
@@ -2757,6 +2759,8 @@ void DMButtonFrame::rewriteFKeyFile()
                     obj["key"] = k.fk();
                     obj["label"] = k.ktop();
                     obj["message"] = k.kval();
+                    obj["messageDuration"] = k.msgDur();
+                    obj["messageDurEnable"] = k.msgDurEnable();
                     obj["rigVoiceMemNum"] = k.rigVoiceMemNum();
                     obj["repeatEnable"] = k.rptEnable();
                     obj["repeatDuration"] = k.rptDur();
@@ -2770,6 +2774,8 @@ void DMButtonFrame::rewriteFKeyFile()
                     obj["key"] = k.fk();
                     obj["label"] = k.ktop();
                     obj["message"] = k.kval();
+                    obj["messageDuration"] = k.msgDur();
+                    obj["messageDurEnable"] = k.msgDurEnable();
                     obj["rigVoiceMemNum"] = k.rigVoiceMemNum();
                     obj["repeatEnable"] = k.rptEnable();
                     obj["repeatDuration"] = k.rptDur();
