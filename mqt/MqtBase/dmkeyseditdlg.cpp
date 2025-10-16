@@ -475,152 +475,6 @@ void DMKeysEditDlg::showDetails()
 }
 
 
-/*
-
-void DMKeysEditDlg::showDetails()
-{
-    ui->OptionsTable->clear();
-
-    // ---------- 1. locate the ContestSection ----------
-    const auto keyerIt = allKeyConfigs.constFind(txKeyerType);
-    if (keyerIt == allKeyConfigs.cend()) return;
-
-    const auto contestIt = keyerIt->constFind(selectedContestName);
-    if (contestIt == keyerIt->cend()) return;
-
-    const auto &rigMap = contestIt.value();
-
-    //QString rigKey = getRigKey();
-    bool radioExists = false;
-
-
-    if (checkRadioExists(selectedContestName, radioListSelectedName, radioExists))
-    {
-        if (!radioExists)
-        {
-            radioListSelectedName = KEYER_NO_RADIO;;
-        }
-    }
-
-    QString rigKey = radioListSelectedName;
-
-    const ContestSection &sect = rigMap[rigKey];
-    const KeySet &run = sect.run;
-    const KeySet &sp  = sect.sp;
-
-    if (run.size() != 12 || sp.size() != 12)
-        return; // ensure correct data size
-
-    // ---------- 2. build the table ----------
-    constexpr int totalColumns = 6;
-    ui->OptionsTable->setColumnCount(totalColumns);
-    ui->OptionsTable->setRowCount(24);
-
-    QStringList vHeaders;
-
-    for (int row = 0; row < 24; ++row)
-    {
-        const KeyVal &k = (row < 12 ? run[row] : sp[row - 12]);
-
-        vHeaders << QString("%1 F%2")
-                        .arg(row < 12 ? tr("Run") : tr("S&P"))
-                        .arg(row < 12 ? row + 1 : row - 11);
-
-        ui->OptionsTable->setItem(row, EDIT_DLG_COL0, new QTableWidgetItem(k.ktop()));
-        ui->OptionsTable->setItem(row, EDIT_DLG_COL1, new QTableWidgetItem(k.kval()));
-        ui->OptionsTable->setItem(row, EDIT_DLG_COL2, new QTableWidgetItem(QString::number(k.rigVoiceMemNum())));
-
-        auto *cb = new QCheckBox;
-        cb->setChecked(k.rptEnable());
-        auto *wrapCB = new QWidget;
-        auto *layCB  = new QHBoxLayout(wrapCB);
-        layCB->addWidget(cb);
-        layCB->setAlignment(Qt::AlignCenter);
-        layCB->setContentsMargins(0,0,0,0);
-        ui->OptionsTable->setCellWidget(row, EDIT_DLG_COL3, wrapCB);
-
-        ui->OptionsTable->setItem(row, EDIT_DLG_COL4, new QTableWidgetItem(QString::number(k.rptDur())));
-
-        auto *recBtn = new QToolButton;
-        recBtn->setText("🎙");
-        recBtn->setToolTip(tr("Record/Play audio for this message"));
-        recBtn->setFixedSize(24, 24);
-        recBtn->setProperty("row", row);
-        recBtn->setProperty("scope", row < 12 ? 0 : 1); // 0 = Run, 1 = S&P
-
-        auto *wrapBtn = new QWidget;
-        auto *layBtn  = new QHBoxLayout(wrapBtn);
-        layBtn->addWidget(recBtn);
-        layBtn->setAlignment(Qt::AlignCenter);
-        layBtn->setContentsMargins(0,0,0,0);
-        ui->OptionsTable->setCellWidget(row, EDIT_DLG_COL5, wrapBtn);
-
-        connect(recBtn, &QToolButton::clicked, this, [this, recBtn]() {
-            int row   = recBtn->property("row").toInt();
-            int scope = recBtn->property("scope").toInt();
-
-            // Use row and scope to access the right KeyVal
-            const KeyVal &k = (scope == 0 ? run[row] : sp[row]);
-
-            if (txKeyerType == keyerTypes[TxKeyerId::InternalVoiceKeyer])
-            {
-                TxVmInternalButtonDialog dlg(this);
-                dlg.exec();
-            }
-        });
-    }
-
-    ui->OptionsTable->setVerticalHeaderLabels(vHeaders);
-
-
-    // ---------- Column sizing ----------
-    auto *hh = ui->OptionsTable->horizontalHeader();
-    hh->setStretchLastSection(false);
-    hh->setSectionResizeMode(EDIT_DLG_COL0, QHeaderView::Interactive);
-    hh->setSectionResizeMode(EDIT_DLG_COL1, QHeaderView::Interactive);
-    hh->setSectionResizeMode(EDIT_DLG_COL2, QHeaderView::Fixed);
-    hh->setSectionResizeMode(EDIT_DLG_COL3, QHeaderView::Fixed);
-    hh->setSectionResizeMode(EDIT_DLG_COL4, QHeaderView::Fixed);
-    hh->setSectionResizeMode(EDIT_DLG_COL5, QHeaderView::Fixed);
-
-    ui->OptionsTable->setColumnWidth(EDIT_DLG_COL0, 140);
-    ui->OptionsTable->setColumnWidth(EDIT_DLG_COL1, 220);
-    ui->OptionsTable->setColumnWidth(EDIT_DLG_COL2, 50);
-    ui->OptionsTable->setColumnWidth(EDIT_DLG_COL3, 50);
-    ui->OptionsTable->setColumnWidth(EDIT_DLG_COL4, 60);
-    ui->OptionsTable->setColumnWidth(EDIT_DLG_COL5, 30);
-
-    if (txKeyerType == keyerTypes[TxKeyerId::DigitalModes])
-    {
-        ui->OptionsTable->setColumnHidden(EDIT_DLG_COL2, true);
-        ui->OptionsTable->setColumnHidden(EDIT_DLG_COL3, true);
-        ui->OptionsTable->setColumnHidden(EDIT_DLG_COL4, true);
-        ui->OptionsTable->setColumnHidden(EDIT_DLG_COL5, true);
-    }
-
-    if (txKeyerType == keyerTypes[TxKeyerId::RigControl])
-    {
-        ui->OptionsTable->setColumnHidden(EDIT_DLG_COL1, true);
-        ui->OptionsTable->setColumnHidden(EDIT_DLG_COL5, true);
-    }
-
-    if (txKeyerType == keyerTypes[TxKeyerId::CW_RigControl] || txKeyerType == keyerTypes[TxKeyerId::PcCwKeyer])
-    {
-        ui->OptionsTable->setColumnHidden(EDIT_DLG_COL2, true);
-        ui->OptionsTable->setColumnHidden(EDIT_DLG_COL5, true);
-    }
-
-    ui->OptionsTable->setHorizontalHeaderLabels(
-        { tr("Key Top"), tr("Value"), tr("Rig\nMem"),
-         tr("Repeat"), tr("Repeat\nDur"), tr("Rec.") });
-
-    // ---------- Restore splitter position ----------
-    RegSettings settings;
-    ui->settingsSplitter->restoreState(
-        settings.getSettings().value("DMKeysEdit/SplitterState/" + selectedContestName).toByteArray());
-}
-
-*/
 
 void DMKeysEditDlg::getDetails()
 {
@@ -714,9 +568,6 @@ void DMKeysEditDlg::getDetails()
 
 void DMKeysEditDlg::saveCurrentSection()
 {
-    //if (!isCurrentSectionDirty())
-    //    return;
-
     getDetails();  // Store current UI into model
 
 }
@@ -743,11 +594,6 @@ bool DMKeysEditDlg::isCurrentSectionDirty() const
 
 void DMKeysEditDlg::clearDirtyFlag()
 {
-    //auto &section = allKeyConfigs[txKeyerType][name][rigName.isEmpty() ? KEYER_NO_RADIO : rigName];
-    //for (auto &k : section.run)
-   //     k.clearDirty();
-   // for (auto &k : section.sp)
-   //     k.clearDirty();
 
     QString rigKey = radioListSelectedName;
 
@@ -778,7 +624,7 @@ void DMKeysEditDlg::clearDirtyFlag()
 
 void DMKeysEditDlg::on_NewSectionButton_clicked()
 {
-    //getDetails();  // Save current table to model
+
     saveCurrentSection();
 
     QString newContestName = "new digi key section";
@@ -839,17 +685,7 @@ void DMKeysEditDlg::on_NewSectionButton_clicked()
         }
     }
 }
-/*
-QString DMKeysEditDlg::getRigKey() const
-{
-    if (txKeyerType == keyerTypes[TxKeyerId::RigControl] || txKeyerType == keyerTypes[TxKeyerId::CW_RigControl])
-    {
-        return minosSelectedRadioLocalName;
-    }
 
-    return KEYER_NO_RADIO;
-}
-*/
 
 
 void DMKeysEditDlg::on_CopyButton_clicked()
@@ -938,15 +774,8 @@ void DMKeysEditDlg::on_DeleteButton_clicked()
 
 void DMKeysEditDlg::on_renameButton_clicked()
 {
-    //getDetails();  // Save current edits
-    saveCurrentSection();
 
-    //int offset = ui->SectionsList->currentRow();
-    //if (offset == 0)
-    //{
-    //    mShowMessage(tr("You cannot rename the empty %1!").arg(name), this);
-    //    return;
-    //}
+    saveCurrentSection();
 
     if (selectedContestName == "<None>"  || selectedContestName == "Default")
     {
@@ -1128,7 +957,7 @@ void DMKeysEditDlg::on_CancelButton_clicked()
 
 void DMKeysEditDlg::on_OKButton_clicked()
 {
-    //getDetails();
+
     saveCurrentSection();
     accept();
 }
@@ -1138,8 +967,6 @@ void DMKeysEditDlg::on_SectionsList_itemSelectionChanged()
     if (ignoreSectionChange)        // when making program changes
         return;
 
-
-    //getDetails();  // Save current edits
     saveCurrentSection();
 
     const auto keyerIt = allKeyConfigs.constFind(txKeyerType);
@@ -1152,8 +979,6 @@ void DMKeysEditDlg::on_SectionsList_itemSelectionChanged()
     if (offset >= 0 && offset < sections.size())
     {
         selectedContestName = sections[offset];
-        //rigName = KEYER_NO_RADIO;       // set default radio
-        //showSection();
     }
 
     if (RadioList)
@@ -1230,16 +1055,7 @@ void DMKeysEditDlg::onRadioListItemSelectionChanged()
                 ui->deleteRadioButton->setEnabled(true);
             }
         }
-
-
-
-
-
-
     }
-
-
-
 }
 
 void DMKeysEditDlg::closeEvent(QCloseEvent *event)
@@ -1316,15 +1132,10 @@ void DMKeysEditDlg::on_upButton_clicked()
     if (selRow >= totalCount)
         return;
 
-    // Helper to swap two KeyVal references
-    //auto swapKeyVals = [](KeyVal &a, KeyVal &b) {
-    //    a.swapWith(b);
-    //};
 
     if (selRow < runCount && selRow - 1 < runCount)
     {
         // Both in run section
-        //swapKeyVals(section.run[selRow], section.run[selRow - 1]);
         section.run[selRow].swapWith(section.run[selRow - 1]);
     }
     else if (selRow >= runCount && selRow - 1 >= runCount)
@@ -1332,13 +1143,12 @@ void DMKeysEditDlg::on_upButton_clicked()
         // Both in sp section
         int spRow = selRow - runCount;
         int spRowPrev = selRow - 1 - runCount;
-        //swapKeyVals(section.sp[spRow], section.sp[spRowPrev]);
+
         section.sp[spRow].swapWith(section.sp[spRowPrev]);
     }
     else if (selRow == runCount)
     {
-        // Moving first sp row up to last run row — swap across boundary
-        //swapKeyVals(section.sp[0], section.run[runCount - 1]);
+
         section.sp[0].swapWith(section.run[runCount - 1]);
     }
     else
@@ -1377,21 +1187,13 @@ void DMKeysEditDlg::on_downButton_clicked()
     int runCount = section.run.size();
     int totalCount = runCount + section.sp.size();
     if (selRow >= totalCount - 1)
+    {
         return;
-
-    //auto swapKeyVals = [](KeyVal &a, KeyVal &b) {
-    //    std::swap(a.fk(), b.fk());
-    //    std::swap(a.ktop(), b.ktop());
-    //    std::swap(a.kval(), b.kval());
-    //    std::swap(a.rigVoiceMemNum(), b.rigVoiceMemNum());
-    //    std::swap(a.rptEnable(), b.rptEnable());
-    //    std::swap(a.rptDur(), b.rptDur());
-    //};
+    }
 
     if (selRow < runCount - 1)
     {
         // Both in run section
-        //swapKeyVals(section.run[selRow], section.run[selRow + 1]);
         section.run[selRow].swapWith(section.run[selRow + 1]);
     }
     else if (selRow >= runCount && selRow + 1 >= runCount)
@@ -1399,13 +1201,11 @@ void DMKeysEditDlg::on_downButton_clicked()
         // Both in sp section
         int spRow = selRow - runCount;
         int spRowNext = selRow + 1 - runCount;
-        //swapKeyVals(section.sp[spRow], section.sp[spRowNext]);
         section.sp[spRow].swapWith(section.sp[spRowNext]);
     }
     else if (selRow == runCount - 1)
     {
         // Moving last run row down to first sp row - swap across boundary
-        //swapKeyVals(section.run[selRow], section.sp[0]);
         section.run[selRow].swapWith(section.sp[0]);
     }
     else

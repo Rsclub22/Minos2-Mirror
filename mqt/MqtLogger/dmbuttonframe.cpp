@@ -130,12 +130,7 @@ DMButtonFrame::DMButtonFrame(QWidget *parent) :
 
     ui->selectedRadioLabel->setVisible(false);
 
-    //ui->FButtonFrame->setEnabled(false);
 
-
-    //ui->fkeysetCombo->addItem(currentName);
-
-    //fkeyFileChanged();
 }
 
 DMButtonFrame::~DMButtonFrame()
@@ -2609,37 +2604,7 @@ void DMButtonFrame::parseFKeyFile(QString fname)
         populateFksetCombo(txKeyerType, currentName);
     }
 }
-/*
-void DMButtonFrame::parseFKeyFile(QString fname)
-{
-    allKeyConfigs.clear();
-    //ui->fkeysetCombo->clear();
-    //nameList.clear();
 
-    QFile lf(fname);
-
-    if (!lf.open(QIODevice::ReadOnly|QIODevice::Text))
-    {
-        QString ebuff = QString( "Failed to open Function Key file %1" ).arg(fname );
-        MinosParameters::getMinosParameters() ->mshowMessage( ebuff );
-        return;
-    }
-    bool retval = false;
-
-    QString s = lf.readAll();
-    retval = parseFKeyString(s);
-    if (retval == false)
-    {
-        mShowMessage(tr("Invalid or missing FKey definitions"), this);
-    }
-    else
-    {
-        populateFksetCombo(txKeyerType, currentName);
-    }
-
-
-}
-*/
 bool DMButtonFrame::parseFKeyArray(const QJsonArray &array, KeySet &dest)
 {
     dest.clear();  // Clear existing data before parsing
@@ -2914,10 +2879,10 @@ bool DMButtonFrame::checkRadioExists(QString radioName, bool &radioExists)
 {
 
     bool ok = false;
-    qDebug() << "Check Radio Exists" << radioName;
+
     if (radioName.isEmpty())
     {
-        qDebug() << "Radioname is empty" << radioName;
+
         radioExists = false;
         return false;
     }
@@ -2934,12 +2899,12 @@ bool DMButtonFrame::checkRadioExists(QString radioName, bool &radioExists)
 
             if (rigMap.contains(radioName))
             {
-                qDebug() << "Radio Exists ";
+
                 radioExists = true;
             }
             else
             {
-                qDebug() << "Radio Does not exist";
+
                 radioExists = false;
             }
         }
@@ -2949,80 +2914,7 @@ bool DMButtonFrame::checkRadioExists(QString radioName, bool &radioExists)
 }
 
 
-// Modify parseFKeyFile to validate after loading
 
-
-/*
-void DMButtonFrame::rewriteFKeyFile()
-{
-    QJsonDocument json;
-
-    QJsonArray keys;
-    for (Keys::const_iterator i = fkeys.constBegin();
-         i != fkeys.constEnd(); i++)
-    {
-        QString setName = i.key();
-
-        const KeySet &eles = i.value();
-
-        QJsonArray korun;
-        QJsonArray kosp;
-        {
-            for (int i = 0; i < 12; i++)
-            {
-                const KeyVal &k = eles[i];
-
-                QJsonArray kor;
-                kor.append(QJsonValue(k.fk));
-                kor.append(QJsonValue(k.ktop));
-                kor.append(QJsonValue(k.kval));
-                kor.append(QJsonValue(k.rigVoiceMemNum));
-                kor.append(QJsonValue(k.rptEnable));
-                kor.append(QJsonValue(k.rptDur));
-                korun.append(kor);
-            }
-        }
-        {
-            for (int i = 12; i < 24; i++)
-            {
-                const KeyVal &k = eles[i];
-
-                QJsonArray ksp;
-                ksp.append(QJsonValue(k.fk));
-                ksp.append(QJsonValue(k.ktop));
-                ksp.append(QJsonValue(k.kval));
-                ksp.append(QJsonValue(k.rigVoiceMemNum));
-                ksp.append(QJsonValue(k.rptEnable));
-                ksp.append(QJsonValue(k.rptDur));
-                kosp.append(ksp);
-            }
-        }
-
-        QJsonObject ks;
-        ks.insert("Name", setName);
-        ks.insert("Run", korun);
-        ks.insert("SandP", kosp);
-
-
-        keys.append(ks);
-
-     }
-    json.setArray(keys);
-
-     QByteArray s = json.toJson(QJsonDocument::Indented);
-
-    QFile jf(fkeyFileName);
-    if (!jf.open(QIODevice::WriteOnly | QIODevice::Truncate))
-    {
-        logMessage("Failed to open " +  fkeyFileName);
-        return;
-    }
-    jf.write(s);
-
-    jf.close();
-
-}
-*/
 void DMButtonFrame::on_stopButton_clicked()
 {
     if (txKeyerType == keyerTypes[TxKeyerId::None])
@@ -3186,12 +3078,12 @@ void DMButtonFrame::on_fkeysetCombo_textActivated(const QString &arg1)
     if (txKeyerType == keyerTypes[TxKeyerId::RigControl])
     {
         ct->rigControlCurrentFKeySetContest.setValue(currentName);
-        //populateRadioNameCombo(currentName);
+
     }
     else  if (txKeyerType == keyerTypes[TxKeyerId::CW_RigControl])
     {
         ct->cwRigControlCurrentFKeySetContest.setValue(currentName);
-        //populateRadioNameCombo(currentName);
+
     }
     else  if (txKeyerType == keyerTypes[TxKeyerId::SerialControl])
     {
@@ -3215,7 +3107,7 @@ void DMButtonFrame::on_fkeysetCombo_textActivated(const QString &arg1)
     }
 
 
-    //ct->currentFKeySet.setValue(currentName);
+
     ct->commonSave(false);
 }
 
