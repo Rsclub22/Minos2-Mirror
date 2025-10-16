@@ -84,15 +84,38 @@ void DPGraphicsTextItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 //        anchor() and the position() is the selection.
 //        If anchor() == position() there is no selection.
 
+        // we have a problem when we have single numerics
+        // works if we click before it, but not afterwards
+        // Should we try backwards if sel char is a space?
+
         // walk back looking for a separator
         RXChar basec = engineWindow->rxBuff.getCharAt(row, cp);
         RXChar selc = basec;
 
         if (selc.getCh() == ' ')
         {
-            c.setPosition(cp, QTextCursor::MoveAnchor);
-            setTextCursor(c);
-            return;
+            if (cp > 0)
+            {
+                RXChar backc = engineWindow->rxBuff.getCharAt(row, cp -1);
+                if (backc.getCh() != ' ')
+                {
+                    cp -= 1;
+                    basec = engineWindow->rxBuff.getCharAt(row, cp);
+                    selc = basec;
+                }
+                else
+                {
+                    c.setPosition(cp, QTextCursor::MoveAnchor);
+                    setTextCursor(c);
+                    return;
+                }
+            }
+            else
+            {
+                c.setPosition(cp, QTextCursor::MoveAnchor);
+                setTextCursor(c);
+                return;
+            }
         }
         while (cp > 0 && selc.isType(basec))
         {

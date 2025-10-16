@@ -14,7 +14,7 @@
 
 // run multi copies by setting separate config dir and title
 
-// look in C:\projects\fldigi-fldigi\src\network\xmlrpc.cxx
+// look in C:\projects\RTTY\fldigi-fldigi\src\network\xmlrpc.cxx
 // for the RPC commands
 // Big list at the end - look for
 
