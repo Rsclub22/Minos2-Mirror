@@ -1492,6 +1492,20 @@ bool dupsheet::isCurDup(CheckableContact *nct ) const
    }
    return cd;
 }
+
+CheckableContact *dupsheet::haveWorked(CheckableContact *nct) const
+{
+    if ( nct->cs.getValRes() == CS_OK )
+    {
+        QSharedPointer<DupContact> test( new DupContact(nct) );
+        ConstDupIterator c = dupList.find(test);
+        if ( c!= dupList.end() )
+        {
+            return c->wt->dct;
+        }
+    }
+    return nullptr;
+}
 void dupsheet::clearCurDup()
 {
    curdup.reset();
@@ -2075,7 +2089,9 @@ QSharedPointer<BandInfo> BaseContestLog::checkBandChange(Frequency targetFreq, F
     }
     return nb;
 }
-void BaseContestLog::checkSpotWorked(const Callsign &mcs, const QString &locator, const QString &exch, const Frequency &freq, bool* callWorked, bool* locatorWorked, bool *exchWorked)
+void BaseContestLog::checkSpotWorked(const Callsign &mcs, const QString &locator, const QString &exch,
+                                     const QString &mode, const Frequency &freq, bool* callWorked, bool* locatorWorked,
+                                     bool *exchWorked)
 {
     bool callfound = false;
     bool locfound = false;
@@ -2088,17 +2104,17 @@ void BaseContestLog::checkSpotWorked(const Callsign &mcs, const QString &locator
             {
                 continue;
             }
-
-            if (isHF())
+            QSharedPointer<BandInfo> bandChanged = checkBandChange(freq, (*i).wt->getFrequency().getValue().str());
+            if (bandChanged)
             {
-                QSharedPointer<BandInfo> bandChanged = checkBandChange(freq, (*i).wt->getFrequency().getValue().str());
-                if (bandChanged)
-                {
-                    // i.e. freq isn't same band as the searched QSO
-                    continue;
-                }
+                // i.e. freq isn't same band as the searched QSO
+                continue;
             }
-            if (!callfound)
+
+            CheckableContact *test = new CheckableContact(this, mcs, (*i).wt->band, mode);
+            CheckableContact *cc = DupSheet.haveWorked(test);
+            delete test;
+            if (cc)
             {
                 if ((*i).wt->cs == mcs)
                 {

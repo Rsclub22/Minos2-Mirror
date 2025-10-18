@@ -1156,7 +1156,8 @@ void BandmapClientFrame::addLogSpotToBandmapTable(QSharedPointer<ClusterSpotData
             QString band = newSpot->getBand();
             QString loc = newSpot->getDxLocator();
             QString exch = newSpot->getDistrict();
-            newSpot->setDxCallWorked(true);
+            QString mode = newSpot->getMode();
+            newSpot->setDxCallWorked(true); // new logged spot, so must have worked it
             newSpot->setDxLocatorWorked(true);
             newSpot->setDistrictWorked(true);
 
@@ -1164,15 +1165,10 @@ void BandmapClientFrame::addLogSpotToBandmapTable(QSharedPointer<ClusterSpotData
             {
                 QSharedPointer<ClusterSpotData> spotInBandmap = bandmapDataModel->getBandmapDataRow(row);
 
-                const Callsign &savedCs = spotInBandmap->getDxCall();
-                QString savedBand = spotInBandmap->getBand();
-
-                if (ct->isHF() && savedBand != band )
-                {
-                    continue;
-                }
-
-                if (savedCs == loggedCall )
+                CheckableContact *test = new CheckableContact(ct, loggedCall, band, mode);
+                CheckableContact *cc = ct->DupSheet.haveWorked(test);
+                delete test;
+                if (cc)
                 {
                     bandmapSpotType::SPOT_TYPE savedSpotType = spotInBandmap->getSpotType();
                     if (!cqResponse && (savedSpotType == bandmapSpotType::LOGGED || savedSpotType == bandmapSpotType::SAVED))
@@ -1231,6 +1227,7 @@ void BandmapClientFrame::addLogSpotToBandmapTable(QSharedPointer<ClusterSpotData
             QString loc = newSpot->getDxLocator();
             Callsign call = newSpot->getDxCall();
             QString exch = newSpot->getDistrict();
+            QString mode = newSpot->getMode();
             if (loc.isEmpty())
             {
                 // If we have worked them, fill in locator
@@ -1251,7 +1248,7 @@ void BandmapClientFrame::addLogSpotToBandmapTable(QSharedPointer<ClusterSpotData
                 bool callWorked = false;
                 bool locWorked = false;
                 bool exchWorked = false;
-                ct->checkSpotWorked(call, loc, exch, newSpot->getFreq(), &callWorked, &locWorked, &exchWorked);
+                ct->checkSpotWorked(call, loc, exch, mode, newSpot->getFreq(), &callWorked, &locWorked, &exchWorked);
                 if (locWorked)
                 {
                     newSpot->setDxLocatorWorked(true);
