@@ -1280,33 +1280,40 @@ void KSTMainWindow::onCSTableSelectionChanged(const QItemSelection &/*selected*/
     {
         QModelIndex m = kstCallFilterModel.mapToSource(mi);
         int r = m.row();
-        QSharedPointer<KstUser> user = callVector->at(r);
-        if (!mselstring.isEmpty())
+        if (r >= 0 && r < callVector->size())
         {
-            mselstring += " ";
+            QSharedPointer<KstUser> user = callVector->at(r);
+            if (!mselstring.isEmpty())
+            {
+                mselstring += " ";
+            }
+            mselstring += user->call.getFullCall();
         }
-        mselstring += user->call.getFullCall();
     }
     ui->messageFilter->setText(mselstring);
     if (mil.count() == 1)
     {
         QModelIndex m = kstCallFilterModel.mapToSource(mil[0]);
-        QSharedPointer<KstUser> user = callVector->at(m.row());
-
-        if (!ui->noSetCallcb->isChecked())
+        int r = m.row();
+        if (r >= 0 && r < callVector->size())
         {
-            // messages
+            QSharedPointer<KstUser> user = callVector->at(r);
 
-            setNameFromCall(user->call);
+            if (!ui->noSetCallcb->isChecked())
+            {
+                // messages
 
-            ui->callEdit->setText(user->call.getFullCall());
-            ui->msgEdit->setFocus();
-            setActive(user->chat);
-            ui->messageChatFilter->setCurrentIndex(user->chat);
+                setNameFromCall(user->call);
+
+                ui->callEdit->setText(user->call.getFullCall());
+                ui->msgEdit->setFocus();
+                setActive(user->chat);
+                ui->messageChatFilter->setCurrentIndex(user->chat);
+            }
+            // Planes
+            showPlanes(user);
+            setDefaultButton(ui->loggerXferButton);
         }
-        // Planes
-        showPlanes(user);
-        setDefaultButton(ui->loggerXferButton);
     }
     else if (mil.count() == 0)
     {
