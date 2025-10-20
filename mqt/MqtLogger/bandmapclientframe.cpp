@@ -1153,10 +1153,10 @@ void BandmapClientFrame::addLogSpotToBandmapTable(QSharedPointer<ClusterSpotData
         if (newSpot->getSpotType() == bandmapSpotType::LOGGED)
         {
             Callsign loggedCall = newSpot->getDxCall();
-            QString band = newSpot->getBand();
+            //QString band = newSpot->getBand();
             QString loc = newSpot->getDxLocator();
             QString exch = newSpot->getDistrict();
-            QString mode = newSpot->getMode();
+            //QString mode = newSpot->getMode();
             newSpot->setDxCallWorked(true); // new logged spot, so must have worked it
             newSpot->setDxLocatorWorked(true);
             newSpot->setDistrictWorked(true);
@@ -1165,34 +1165,45 @@ void BandmapClientFrame::addLogSpotToBandmapTable(QSharedPointer<ClusterSpotData
             {
                 QSharedPointer<ClusterSpotData> spotInBandmap = bandmapDataModel->getBandmapDataRow(row);
 
-                CheckableContact *test = new CheckableContact(ct, loggedCall, band, mode);
-                CheckableContact *cc = ct->DupSheet.haveWorked(test);
-                delete test;
-                if (cc)
+                const Callsign &savedCs = spotInBandmap->getDxCall();
+                QString savedBand = spotInBandmap->getBand();
+                QString savedMode = spotInBandmap->getMode();
+
+                if (savedCs == loggedCall )
                 {
-                    bandmapSpotType::SPOT_TYPE savedSpotType = spotInBandmap->getSpotType();
-                    if (!cqResponse && (savedSpotType == bandmapSpotType::LOGGED || savedSpotType == bandmapSpotType::SAVED))
+                    CheckableContact *test = new CheckableContact(ct, savedCs, savedBand, savedMode);
+                    test->contest = ct;
+                    CheckableContact *cc = ct->DupSheet.haveWorked(test);
+                    if (cc)
                     {
-                        // If we logged from CQ, then don't replace!
-                        // We don't want to replace LOGGED with something else
-                        // we CAN replace LOGGED with LOGGED (e.g. a dup)
-                        // newSpot is LOGGED, so OK
-                        // delete the old logged/saved entry, add the new LOGGED one
-                        traceMsg(QString("Deleting Spot as new spot will replace it %1, %2, %3, %4")
-                                     .arg(spotInBandmap->getDxCall().getFullCall(),
-                                          spotInBandmap->getFreq().traceStr(),
-                                          spotInBandmap->getMode(),
-                                          spotInBandmap->spotName())
-                                 );
+                        // traceMsg(QString("row %1").arg(row));
+                        // traceMsg(QString("test callsign %1").arg(test->cs.getFullCall()));
+                        // traceMsg(QString("cc callsign %1").arg(cc->cs.getFullCall()));
 
-                        spotInBandmap->setSpotType(bandmapSpotType::DELETED);
-                        bmsdb->deleteRecord( spotInBandmap);
-                        MinosLoggerEvents::SendBroadcastSpot(spotInBandmap);
-                        continue;
+                        bandmapSpotType::SPOT_TYPE savedSpotType = spotInBandmap->getSpotType();
+                        if (!cqResponse && (savedSpotType == bandmapSpotType::LOGGED || savedSpotType == bandmapSpotType::SAVED))
+                        {
+                            // If we logged from CQ, then don't replace!
+                            // We don't want to replace LOGGED with something else
+                            // we CAN replace LOGGED with LOGGED (e.g. a dup)
+                            // newSpot is LOGGED, so OK
+                            // delete the old logged/saved entry, add the new LOGGED one
+                            traceMsg(QString("Deleting Spot as new spot will replace it %1, %2, %3, %4")
+                                         .arg(spotInBandmap->getDxCall().getFullCall(),
+                                              spotInBandmap->getFreq().traceStr(),
+                                              spotInBandmap->getMode(),
+                                              spotInBandmap->spotName())
+                                     );
+
+                            spotInBandmap->setSpotType(bandmapSpotType::DELETED);
+                            bmsdb->deleteRecord( spotInBandmap);
+                            MinosLoggerEvents::SendBroadcastSpot(spotInBandmap);
+                            continue;
+                        }
+                        spotInBandmap->setDxCallWorked(true);
                     }
-                    spotInBandmap->setDxCallWorked(true);
+                    delete test;    // delete late so we have diagnostics
                 }
-
                 // update worked locators
                 if (!loc.isEmpty())
                 {

@@ -1037,7 +1037,6 @@ void BandmapView::assembleSpotMsg(int row, QString& markerMsg)
     ClusterSpotData *pSpot = bandmapDataModel->getBandmapDataRow(row).data();
 
     QString dxCallsign = pSpot->getDxCallStr();
-    bool callWkd = pSpot->getDxCallWorked();
     Frequency freq = pSpot->getFreq();
     Frequency cFreq = dial->getCurFreq();
     QString dxLoc = pSpot->getDxLocator();
@@ -1065,6 +1064,26 @@ void BandmapView::assembleSpotMsg(int row, QString& markerMsg)
     {
         newSpotMsg = HtmlFontColour(BANDMAP_NEW_COLOUR) + tr("New") +  HtmlFontColour(NOT_WORKED_COLOUR);
     }
+    Callsign cs;
+    cs.setFullCall(dxCallsign);
+
+    CheckableContact *test = new CheckableContact(contest, cs, contest->currentBand.getValue(), contest->currentMode.getValue());
+    test->contest = contest;
+    CheckableContact *cc = contest->DupSheet.haveWorked(test);
+    bool callWkd = cc != nullptr;
+//    traceMsg(QString("test callsign %1 mode %2").arg(test->cs.getFullCall(), test->mode.getValue()));
+    if (cc!= nullptr)
+    {
+        pSpot->setDxCallWorked(true);
+//        traceMsg(QString("cc callsign %1 mode %2").arg(cc->cs.getFullCall(), cc->mode.getValue()));
+    }
+    else
+    {
+        pSpot->setDxCallWorked(false);
+//        traceMsg("No dup contact found");
+    }
+
+    delete test;
 
     QString callsign;
     if (callWkd)

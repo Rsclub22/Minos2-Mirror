@@ -2112,6 +2112,7 @@ void BaseContestLog::checkSpotWorked(const Callsign &mcs, const QString &locator
             }
 
             CheckableContact *test = new CheckableContact(this, mcs, (*i).wt->band, mode);
+            test->contest = this;
             CheckableContact *cc = DupSheet.haveWorked(test);
             delete test;
             if (cc)
