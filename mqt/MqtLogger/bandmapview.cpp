@@ -1067,9 +1067,8 @@ void BandmapView::assembleSpotMsg(int row, QString& markerMsg)
     Callsign cs;
     cs.setFullCall(dxCallsign);
 
-    CheckableContact *test = new CheckableContact(contest, cs, contest->currentBand.getValue(), contest->currentMode.getValue());
-    test->contest = contest;
-    CheckableContact *cc = contest->DupSheet.haveWorked(test);
+    CheckableContact test(contest, cs, contest->currentBand.getValue(), contest->currentMode.getValue());
+    CheckableContact *cc = contest->haveWorked(&test);
     bool callWkd = cc != nullptr;
 //    traceMsg(QString("test callsign %1 mode %2").arg(test->cs.getFullCall(), test->mode.getValue()));
     if (cc!= nullptr)
@@ -1082,8 +1081,6 @@ void BandmapView::assembleSpotMsg(int row, QString& markerMsg)
         pSpot->setDxCallWorked(false);
 //        traceMsg("No dup contact found");
     }
-
-    delete test;
 
     QString callsign;
     if (callWkd)

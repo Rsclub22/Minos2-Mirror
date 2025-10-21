@@ -128,6 +128,7 @@ class BaseContestLog: public BaseLogList
       BaseContestLog();
       BaseContestLog(bool hf);
       virtual ~BaseContestLog();
+      CheckableContact *haveWorked(CheckableContact *nct );
 
       int getCtStanzaCount()
       {

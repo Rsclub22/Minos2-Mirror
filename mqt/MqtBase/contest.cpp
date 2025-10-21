@@ -68,6 +68,12 @@ BaseContestLog::BaseContestLog(bool hf)
 BaseContestLog::~BaseContestLog()
 {
 }
+
+CheckableContact *BaseContestLog::haveWorked(CheckableContact *nct)
+{
+    CheckableContact *cc = DupSheet.haveWorked(nct);
+    return cc;
+}
 void BaseContestLog::setVersion(QString v)
 {
     appVersion.setValue(v);
@@ -1497,7 +1503,8 @@ CheckableContact *dupsheet::haveWorked(CheckableContact *nct) const
 {
     if ( nct->cs.getValRes() == CS_OK )
     {
-        QSharedPointer<DupContact> test( new DupContact(nct) );
+        QSharedPointer<DupContact> test(new DupContact(nct) );
+
         ConstDupIterator c = dupList.find(test);
         if ( c!= dupList.end() )
         {
@@ -2111,10 +2118,8 @@ void BaseContestLog::checkSpotWorked(const Callsign &mcs, const QString &locator
                 continue;
             }
 
-            CheckableContact *test = new CheckableContact(this, mcs, (*i).wt->band, mode);
-            test->contest = this;
-            CheckableContact *cc = DupSheet.haveWorked(test);
-            delete test;
+            CheckableContact test(this, mcs, (*i).wt->band, mode);
+            CheckableContact *cc = haveWorked(&test);
             if (cc)
             {
                 if ((*i).wt->cs == mcs)

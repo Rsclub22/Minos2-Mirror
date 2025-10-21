@@ -1171,9 +1171,8 @@ void BandmapClientFrame::addLogSpotToBandmapTable(QSharedPointer<ClusterSpotData
 
                 if (savedCs == loggedCall )
                 {
-                    CheckableContact *test = new CheckableContact(ct, savedCs, savedBand, savedMode);
-                    test->contest = ct;
-                    CheckableContact *cc = ct->DupSheet.haveWorked(test);
+                    CheckableContact test(ct, savedCs, savedBand, savedMode);
+                    CheckableContact *cc = ct->haveWorked(&test);
                     if (cc)
                     {
                         // traceMsg(QString("row %1").arg(row));
@@ -1202,7 +1201,6 @@ void BandmapClientFrame::addLogSpotToBandmapTable(QSharedPointer<ClusterSpotData
                         }
                         spotInBandmap->setDxCallWorked(true);
                     }
-                    delete test;    // delete late so we have diagnostics
                 }
                 // update worked locators
                 if (!loc.isEmpty())
