@@ -52,7 +52,7 @@ SOURCES += \
     ContestPageControl.cpp \
     DisplayOptions.cpp \
     ExternalMqtKeyer.cpp \
-    InternalVoiceMemoryKeyer.cpp \
+    InternalVoiceTxKeyer.cpp \
     LocCalcFrame.cpp \
     LoggerContacts.cpp \
     LoggerContest.cpp \
@@ -101,9 +101,9 @@ SOURCES += \
     qsotableframe.cpp \
     radiosettingdialog.cpp \
     reg1test.cpp \
-    rigcontrolcwmessagekeyer.cpp \
+    rigcontrolcwtxkeyer.cpp \
     rigcontrolframe.cpp \
-    rigcontrolvoicememorykeyer.cpp \
+    rigcontrolvoicetxkeyer.cpp \
     rigmemdialog.cpp \
     ritlineedit.cpp \
     rotatorcompassframe.cpp \
@@ -128,8 +128,8 @@ SOURCES += \
     tstatsdispframe.cpp \
     clusterclientfilterdialog.cpp \
     clusterclientframe.cpp \
+    txKeyerFactory.cpp \
     txKeyerbase.cpp \
-    txKeyerfactory.cpp \
     txVmExternalButtonDialog.cpp \
     txVmInternalSetupDialog.cpp \
     txvminternalbuttondialog.cpp \
@@ -161,7 +161,7 @@ HEADERS  += \
     ContestPageControl.h \
     DisplayOptions.h \
     ExternalMqtKeyer.h \
-    InternalVoiceMemoryKeyer.h \
+    InternalVoiceTxKeyer.h \
     LocCalcFrame.h \
     LoggerContacts.h \
     LoggerContest.h \
@@ -209,9 +209,9 @@ HEADERS  += \
     qsotableframe.h \
     radiosettingdialog.h \
     reg1test.h \
-    rigcontrolcwmessagekeyer.h \
+    rigcontrolcwtxkeyer.h \
     rigcontrolframe.h \
-    rigcontrolvoicememorykeyer.h \
+    rigcontrolvoicetxkeyer.h \
     rigmemdialog.h \
     ritlineedit.h \
     rotatorcompassframe.h \
@@ -236,8 +236,8 @@ HEADERS  += \
     tstatsdispframe.h \
     clusterclientfilterdialog.h \
     clusterclientframe.h \
+    txKeyerFactory.h \
     txKeyerbase.h \
-    txKeyerfactory.h \
     txVmExternalButtonDialog.h \
     txVmInternalSetupDialog.h \
     txvminternalbuttondialog.h \

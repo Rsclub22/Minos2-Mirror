@@ -17,8 +17,8 @@
 #include <QString>
 #include <QMap>
 #include <QModelIndex>
-#include "txkeyerbase.h"
-#include "txkeyerCommonConstants.h"
+#include "txKeyerbase.h"
+
 
 
 class QComboBox;

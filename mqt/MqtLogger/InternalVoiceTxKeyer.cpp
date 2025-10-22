@@ -9,20 +9,20 @@
 #include "keyerlog.h"
 #include "MTrace.h"
 
-#include "InternalVoiceMemoryKeyer.h"
+#include "InternalVoiceTxKeyer.h"
 
 using namespace TxKeyerCommon;
 
-InternalVoiceMemoryKeyer::InternalVoiceMemoryKeyer(QObject *parent) : TxKeyerBase(parent)
+InternalVoiceTxKeyer::InternalVoiceTxKeyer(QObject *parent) : TxKeyerBase(parent)
 {
 
 }
 
-InternalVoiceMemoryKeyer::~InternalVoiceMemoryKeyer()
+InternalVoiceTxKeyer::~InternalVoiceTxKeyer()
 {
     SoundSystemDriver::sbdvp_unload();
 }
-void InternalVoiceMemoryKeyer::registerTxKeyer(TxKeyerFactory::TxKeyers* vmKeyersList)
+void InternalVoiceTxKeyer::registerTxKeyer(TxKeyerFactory::TxKeyers* vmKeyersList)
 {
     QString keyerName = "Internal";
 
@@ -47,11 +47,11 @@ void InternalVoiceMemoryKeyer::registerTxKeyer(TxKeyerFactory::TxKeyers* vmKeyer
     (*vmKeyersList)[keyerName] = voiceMemCap;
 
 }
-void InternalVoiceMemoryKeyer::txKeyerInit(int &numButtons)
+void InternalVoiceTxKeyer::txKeyerInit(int &numButtons)
 {
     sblog = true;
 
-    QString fileName = VOICE_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + "Internal" + ".ini";
+    QString fileName = TX_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + "Internal" + ".ini";
     QSettings settings(fileName, QSettings::IniFormat);
 
     QString indev = settings.value(indevKey, "").toString();
@@ -69,7 +69,7 @@ void InternalVoiceMemoryKeyer::txKeyerInit(int &numButtons)
     {
         int msgLen = SoundSystemDriver::getSbDriver() ->getMessageLen(i);
 
-       QString inifileName = VOICE_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[TxKeyerId::InternalVoiceKeyer] + ".ini";
+       QString inifileName = TX_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[TxKeyerId::InternalVoiceKeyer] + ".ini";
         QSettings config(inifileName, QSettings::IniFormat);
         config.beginGroup("button" + QString::number(i));
 
@@ -77,23 +77,24 @@ void InternalVoiceMemoryKeyer::txKeyerInit(int &numButtons)
 
         config.endGroup();
     }
-    connect(SoundSystemDriver::getSbDriver(), &SoundSystemDriver::ptt, this, &InternalVoiceMemoryKeyer::onDoPTT);
+    connect(SoundSystemDriver::getSbDriver(), &SoundSystemDriver::ptt, this, &InternalVoiceTxKeyer::onDoPTT);
 }
 
-void InternalVoiceMemoryKeyer::sendMsgNum(TxKeyerParams &vkParam)
+void InternalVoiceTxKeyer::sendMsgNum(TxKeyerParams &vkParam)
 {
     // play message - we need a PTT/NoPtt switch
     QString fileName;
-//******************************************    fileName = QString("CQF%1.WAV").arg(msgNum + 1);
+ /*
+    fileName = QString("CQF%1.WAV").arg(msgNum + 1);
+*/
+    if ( !SoundSystemDriver::getSbDriver() ->play_file( fileName, true/*xmit*/, 0/*clipRecord*/ ))
+    {
 
- //   if ( !SoundSystemDriver::getSbDriver() ->play_file( fileName, true/*xmit*/, 0/*clipRecord*/ ))
- //   {
-
- //   }
+    }
 
 }
 
-void InternalVoiceMemoryKeyer::stopMsg(TxKeyerParams &vkParam)
+void InternalVoiceTxKeyer::stopMsg(TxKeyerParams &vkParam)
 {
     // stop recording/playing message
     SoundSystemDriver::getSbDriver() ->stoprec();
@@ -101,7 +102,7 @@ void InternalVoiceMemoryKeyer::stopMsg(TxKeyerParams &vkParam)
 
     int msgLen = SoundSystemDriver::getSbDriver() ->getMessageLen(vkParam.getKeyerButtonNum());
     vkParam.setKeyerDuration(msgLen);
-    QString inifileName = VOICE_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + vkParam.getType() + ".ini";
+    QString inifileName = TX_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + vkParam.getType() + ".ini";
     QSettings config(inifileName, QSettings::IniFormat);
     config.beginGroup("button" + QString::number(vkParam.getKeyerButtonNum()));
 
@@ -112,7 +113,7 @@ void InternalVoiceMemoryKeyer::stopMsg(TxKeyerParams &vkParam)
 }
 
 
-void InternalVoiceMemoryKeyer::doRecording(TxKeyerParams * vkParam)
+void InternalVoiceTxKeyer::doRecording(TxKeyerParams * vkParam)
 {
     // execute recording from params dialog
     // button number and filename are in vkParam
@@ -124,10 +125,10 @@ void InternalVoiceMemoryKeyer::doRecording(TxKeyerParams * vkParam)
 }
 
 
-
-bool InternalVoiceMemoryKeyer::readVmButtonParams(int buttonNum, TxKeyerParams &vmParams)
+/*
+bool InternalVoiceTxKeyer::readVmButtonParams(int buttonNum, TxKeyerParams &vmParams)
 {
-    QString fileName = VOICE_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + vmParams.getType() + ".ini";
+    QString fileName = TX_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + vmParams.getType() + ".ini";
     QSettings config(fileName, QSettings::IniFormat);
     config.beginGroup("button" + QString::number(buttonNum));
 
@@ -142,11 +143,11 @@ bool InternalVoiceMemoryKeyer::readVmButtonParams(int buttonNum, TxKeyerParams &
     return true;
 }
 
-void InternalVoiceMemoryKeyer::saveVmButtonParams(const TxKeyerParams &vmParams_)
+void InternalVoiceTxKeyer::saveVmButtonParams(const TxKeyerParams &vmParams_)
 {
     TxKeyerParams vmParams = vmParams_;
 
-    QString fileName = VOICE_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + vmParams.getType() + ".ini";
+    QString fileName = TX_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + vmParams.getType() + ".ini";
     QSettings config(fileName, QSettings::IniFormat);
     config.beginGroup("button" + QString::number(vmParams.getKeyerButtonNum()));
 
@@ -158,8 +159,9 @@ void InternalVoiceMemoryKeyer::saveVmButtonParams(const TxKeyerParams &vmParams_
     config.setValue("buttonNum", vmParams.getKeyerButtonNum());
     config.endGroup();
 }
+*/
 
-void InternalVoiceMemoryKeyer::setPttOnOff(bool onOff)
+void InternalVoiceTxKeyer::setPttOnOff(bool onOff)
 {
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
     if (tslf)
@@ -168,7 +170,7 @@ void InternalVoiceMemoryKeyer::setPttOnOff(bool onOff)
         LogContainer->sendDM->sendRigControlPttOnOff(tslf, onOff);
     }
 }
-void InternalVoiceMemoryKeyer::onDoPTT(bool onOff)
+void InternalVoiceTxKeyer::onDoPTT(bool onOff)
 {
 
     setPttOnOff(onOff);
@@ -179,7 +181,7 @@ void InternalVoiceMemoryKeyer::onDoPTT(bool onOff)
 
 
 
-int InternalVoiceMemoryKeyer::setup(TxKeyerFactory *txKeyerFactory, int &maxNumButtons, int &numButtons, QString selectedRadio)
+int InternalVoiceTxKeyer::setup(TxKeyerFactory *txKeyerFactory, int &maxNumButtons, int &numButtons, QString selectedRadio)
 {
     Q_UNUSED(selectedRadio)
     Q_UNUSED(maxNumButtons)
@@ -195,14 +197,14 @@ int InternalVoiceMemoryKeyer::setup(TxKeyerFactory *txKeyerFactory, int &maxNumB
     if (ret == QDialog::Accepted)
     {
         numButtons = txvmSetup.getNumButtons();
-        QString fileName = VOICE_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[TxKeyerId::RigControl] + ".ini";
+        QString fileName = TX_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[TxKeyerId::RigControl] + ".ini";
         QSettings config(fileName, QSettings::IniFormat);
         config.setValue("Common/NumButtons", numButtons);
     }
     return ret;
 }
-
-int InternalVoiceMemoryKeyer::editButton(TxKeyerParams *vmData, QString title)
+/*
+int InternalVoiceTxKeyer::editButton(TxKeyerParams *vmData, QString title)
 {
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
     TxVmInternalButtonDialog vmButtonDialog(tslf->dmButtonFrame);
@@ -213,7 +215,7 @@ int InternalVoiceMemoryKeyer::editButton(TxKeyerParams *vmData, QString title)
     return ret;
 
 }
-
+*/
 
 
 

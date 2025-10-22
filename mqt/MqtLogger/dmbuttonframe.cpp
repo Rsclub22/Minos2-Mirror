@@ -83,7 +83,7 @@ DMButtonFrame::DMButtonFrame(QWidget *parent) :
 
     QString txKeyerName = config.value("KeyerName").toString();
 
-    connect(ui->txKeyerSetupPb, &QPushButton::clicked, this, &DMButtonFrame::onTxKeyerSetupClicked);
+    //connect(ui->txKeyerSetupPb, &QPushButton::clicked, this, &DMButtonFrame::onTxKeyerSetupClicked);
 
     txKeyerFactory->populateComboKeyerList(ui->txKeyerSelect, txKeyerName);
 
@@ -162,7 +162,7 @@ void DMButtonFrame::setPttTypeText(serialCommonData::MINOS_PTT_TYPES pttType)
     ui->pttTypeText->setText(serialCommonData::pttTypeStr[static_cast<int>(pttType)]);
 }
 
-
+/*
 void DMButtonFrame::onTxKeyerSetupClicked()
 {
 
@@ -204,7 +204,7 @@ void DMButtonFrame::onTxKeyerSetupClicked()
 
 
 }
-
+*/
 
 void DMButtonFrame::logRadioSettingsChanged(QSharedPointer<RadioSettingsDialogChangeFlag> logRadioSettingsFlags)
 {
@@ -493,7 +493,7 @@ void DMButtonFrame::set_DigiMode_FrameState(QString txKeyerName)
     setAvailIndicatorVisible(false);
     setRepeatIndicatorVisible(false);
 
-    ui->txKeyerSetupPb->setVisible(false);
+    //ui->txKeyerSetupPb->setVisible(false);
     ui->pipCb->setVisible(false);
     ui->stopButton->setVisible(true);
     ui->selectedRadioLabel->setVisible(false);
@@ -543,7 +543,7 @@ void DMButtonFrame::clearAll_Ui_Elements()
     setAvailIndicatorVisible(false);
     setRepeatIndicatorVisible(false);
 
-    ui->txKeyerSetupPb->setVisible(false);
+    //ui->txKeyerSetupPb->setVisible(false);
     ui->pipCb->setVisible(false);
     ui->stopButton->setVisible(false);
     ui->selectedRadioLabel->setVisible(false);
@@ -617,7 +617,7 @@ void DMButtonFrame::setupRigControl_Ui_Elements(QString txKeyerName)
     TxKeyerCapabilities txKeyerCap = txKeyerFactory->supportedTxKeyers()->value(txKeyerName);
 
 
-    ui->txKeyerSetupPb->setVisible(txKeyerCap.getSetupButton());
+    //ui->txKeyerSetupPb->setVisible(txKeyerCap.getSetupButton());
     ui->pipCb->setVisible(txKeyerCap.getHasPip());
     setTXStatusVisible(txKeyerCap.getHasTxStatus());
 
@@ -725,7 +725,7 @@ void DMButtonFrame::setupCw_RigControl_Ui_Elements(QString txKeyerName)
 {
     TxKeyerCapabilities txKeyerCap = txKeyerFactory->supportedTxKeyers()->value(txKeyerName);
 
-    ui->txKeyerSetupPb->setVisible(txKeyerCap.getSetupButton());
+    //ui->txKeyerSetupPb->setVisible(txKeyerCap.getSetupButton());
     ui->pipCb->setVisible(txKeyerCap.getHasPip());
     setTXStatusVisible(txKeyerCap.getHasTxStatus());
 
@@ -798,7 +798,7 @@ void DMButtonFrame::set_pcCwKeyer_FrameState(QString txKeyerName)
 
     TxKeyerCapabilities txKeyerCap = txKeyerFactory->supportedTxKeyers()->value(txKeyerName);
 
-    ui->txKeyerSetupPb->setVisible(txKeyerCap.getSetupButton());
+    //ui->txKeyerSetupPb->setVisible(txKeyerCap.getSetupButton());
     ui->pipCb->setVisible(txKeyerCap.getHasPip());
     setTXStatusVisible(txKeyerCap.getHasTxStatus());
 
@@ -879,7 +879,7 @@ void DMButtonFrame::set_Internal_FrameState(QString txKeyerName)
     }
 
 
-    ui->txKeyerSetupPb->setVisible(txKeyerCap.getSetupButton());
+    //ui->txKeyerSetupPb->setVisible(txKeyerCap.getSetupButton());
     ui->pipCb->setVisible(txKeyerCap.getHasPip());
     setTXStatusVisible(txKeyerCap.getHasTxStatus());
 
@@ -2962,7 +2962,7 @@ void DMButtonFrame::on_stopButton_clicked()
 
 }
 
-void DMButtonFrame::on_editButton_clicked()
+void DMButtonFrame::on_configEditButton_clicked()
 {
     // bring up default file editor on "fkeyFileName"
 
@@ -2982,7 +2982,11 @@ void DMButtonFrame::on_editButton_clicked()
         mapUniqueNames(listOfRadioSupportKeyer, radioMap);
     }
 
-    DMKeysEditDlg jed(this, fkeyFileName, currentName, nfk, txKeyerType, selectedRadio, listOfRadioSupportKeyer);
+    DMKeysEditDlg jed(this, fkeyFileName,
+                      currentName, nfk,
+                      txKeyerFactory, txKeyer,
+                      txKeyerType, selectedRadio,
+                      radioMap, listOfRadioSupportKeyer);
 
     if (jed.exec() == QDialog::Accepted)
     {

@@ -50,13 +50,13 @@ public:
     virtual int getSelectedEomType() override;
     virtual void setSelectedEomType(int eomType) override;
 
-    virtual bool readVmButtonParams(int buttonNum, TxKeyerParams &vmParams) override;
-    virtual void saveVmButtonParams(const TxKeyerParams &vmParams) override;
+    //virtual bool readVmButtonParams(int buttonNum, TxKeyerParams &vmParams) override;
+    //virtual void saveVmButtonParams(const TxKeyerParams &vmParams) override;
 
     virtual int setup(TxKeyerFactory *voiceKeyerFactory, int &maxNumButtons, int &numButtons, QString selectedRadioName) override;
     virtual void setRadioParams(int radioMaxNumButtons, QString selectedRadioName, serialCommonData::MINOS_PTT_TYPES pttType_, bool pttEnabled_) override;
 
-    virtual int editButton(TxKeyerParams* vmData, QString title) override;
+    //virtual int editButton(TxKeyerParams* vmData, QString title) override;
 
 
     virtual void setContest(BaseContestLog *c) override;

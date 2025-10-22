@@ -6,6 +6,9 @@
 #include <QListWidgetItem>
 #include "dmFKeydef.h"
 #include "PubSubName.h"
+#include "txKeyerFactory.h"
+#include "txKeyerbase.h"
+
 
 
 namespace Ui {
@@ -38,7 +41,8 @@ class DMKeysEditDlg : public QDialog
     void doCloseEvent();
 
 public:
-    explicit DMKeysEditDlg(QWidget *parent , QString fKeyFileName, QString name, KeyerMap &allKeyConfigs, QString txKeyerType, PubSubName minoSelectedRadio, const  QStringList listOfRadios);
+    explicit DMKeysEditDlg(QWidget *parent, QString fKeyFileName, QString minosSelectedContestName_, KeyerMap &allKeyConfigs, TxKeyerFactory *txKeyerFactory_,
+                           QSharedPointer<TxKeyerBase> txKeyer_, QString txKeyerType, PubSubName minosSelectedRadio_, const QMap<QString, QString> &radioMap_, const QStringList &listOfRadios_);
     ~DMKeysEditDlg() override;
 
     int exec() override;
@@ -72,6 +76,9 @@ private slots:
     void onOptionsTableSelectionChanged(const QItemSelection &selected, const QItemSelection &);
     void on_addRadioButton_clicked();
     void on_deleteRadioButton_clicked();
+    void onTxKeyerCommonConfigPbClicked();
+
+
 public Q_SLOTS:
     virtual void accept() override;
     virtual void reject() override;
@@ -82,9 +89,13 @@ private:
     void clearDirtyFlag();
     //QString getRigKey() const;
 
+    TxKeyerFactory *txKeyerFactory = nullptr;
+    QSharedPointer<TxKeyerBase> txKeyer;
+
     bool ignoreSectionChange = false;
     QListWidget* RadioList = nullptr;
-    QStringList listOfRadios;
+    const QMap<QString, QString> &radioMap;
+    const QStringList &listOfRadios;
 
 
     void showRadiosForSection();

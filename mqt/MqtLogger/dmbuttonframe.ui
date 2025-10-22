@@ -40,13 +40,6 @@
             <item>
              <widget class="QComboBox" name="txKeyerSelect"/>
             </item>
-            <item>
-             <widget class="QPushButton" name="txKeyerSetupPb">
-              <property name="text">
-               <string>Setup</string>
-              </property>
-             </widget>
-            </item>
            </layout>
           </item>
           <item>
@@ -534,9 +527,9 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="editButton">
+      <widget class="QPushButton" name="configEditButton">
        <property name="text">
-        <string>Edit</string>
+        <string>Config/Edit</string>
        </property>
       </widget>
      </item>

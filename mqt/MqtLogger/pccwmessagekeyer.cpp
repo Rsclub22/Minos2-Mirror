@@ -17,7 +17,7 @@
 
 #include "LoggerContest.h"
 #include "tlogcontainer.h"
-#include "txKeyerfactory.h"
+#include "txKeyerFactory.h"
 #include "txvmrigsetupdialog.h"
 #include "txvmrigbuttondialog.h"
 #include "txkeyerCommonConstants.h"
@@ -102,17 +102,9 @@ void PcCWMessageKeyer::getRadioCommonData(int &selectedEomType, int &userNumberB
     QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[TxKeyerId::PcCwKeyer] + ".ini";
     QSettings readCommonConfig(fileName, QSettings::IniFormat);
 
-    QString groupName;
-    //if (readCommonConfig.value("Common/SaveButtonByRadioName", false).toBool())
-    //{
-   //     groupName = selectedRadioName.replace('/', '_');
-   // }
-   // else
-   // {
-        groupName = ALL_RADIOS_GROUP_NAME;
-  //  }
+    QString groupName = ALL_RADIOS_GROUP_NAME;
 
-    fileName = VOICE_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[TxKeyerId::CW_RigControl] + ".ini";
+    fileName = TX_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[TxKeyerId::CW_RigControl] + ".ini";
     QSettings config(fileName, QSettings::IniFormat);
 
     config.beginGroup(groupName);
@@ -137,7 +129,7 @@ void PcCWMessageKeyer::saveFixedRadioCommonData()
 
     QString groupName = ALL_RADIOS_GROUP_NAME;
 
-    fileName = VOICE_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[TxKeyerId::CW_RigControl] + ".ini";
+    fileName = TX_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[TxKeyerId::CW_RigControl] + ".ini";
     QSettings config(fileName, QSettings::IniFormat);
 
     config.beginGroup(groupName);
@@ -346,96 +338,6 @@ void PcCWMessageKeyer::stopCwMsg()
 
 
 
-bool PcCWMessageKeyer::readVmButtonParams(int buttonNum, TxKeyerParams &vmParams)
-{
-/*
-
-
-    //bool saveByRadioName = readSaveVoiceCWMemoryButtonByRadioNameFromIni(VoiceKeyerId::CW_RigControl);
-
-    QString runStateTxt;
-    if(vmParams.getSAndPState())
-    {
-        runStateTxt = "_SANDP";
-    }
-    else
-    {
-        runStateTxt = "_RUN";
-    }
-
-    QString fileName = VOICE_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + vmParams.getType() + ".ini";
-    QSettings config(fileName, QSettings::IniFormat);
-
-
-    //if (saveByRadioName && !vmParams.getSelRadioName().isEmpty())
-   // {
-    //    config.beginGroup(vmParams.getSelRadioName().replace('/', '_'));
-    //}
-   // else
-   // {
-        config.beginGroup(ALL_RADIOS_GROUP_NAME);
-   // }
-
-
-
-    QString newKey = "button" +  QString::number(buttonNum) + runStateTxt;
-
-    vmParams.setType(config.value(newKey + "/type", "").toString());
-    vmParams.setKeyerName(config.value(newKey + "/name", "").toString());
-    vmParams.setKeyerCwMessage(config.value(newKey + "/cwMessageText", "").toString());
-    vmParams.setKeyerRepeatFlag(config.value(newKey + "/repeatFlag", false).toBool());
-    vmParams.setKeyerDuration(config.value(newKey + "/messageDuration", 0).toInt());
-    vmParams.setKeyerRepeatPauseDur(config.value(newKey + "/repeatPauseDuration", 0).toInt());
-    vmParams.setKeyerButtonNum(config.value(newKey + "/buttonNum", buttonNum).toInt());
-    config.endGroup();
-
-    return true;
-*/ return true;
-}
-
-
-void PcCWMessageKeyer::saveVmButtonParams(const TxKeyerParams &vmParams_ )
-{
-/*    TxKeyerParams vmParams = vmParams_;
-
-    //bool saveByRadioName = readSaveVoiceCWMemoryButtonByRadioNameFromIni(VoiceKeyerId::CW_RigControl);
-
-    QString runStateTxt;
-    if(vmParams.getSAndPState())
-    {
-        runStateTxt = "_SANDP";
-    }
-    else
-    {
-        runStateTxt = "_RUN";
-    }
-
-    QString fileName = VOICE_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + vmParams.getType() + ".ini";
-    QSettings config(fileName, QSettings::IniFormat);
-
-    //if (saveByRadioName  && !vmParams.getSelRadioName().isEmpty())
-   // {
-   //     config.beginGroup(vmParams.getSelRadioName().replace('/', '_'));
-   // }
-   // else
-   // {
-        config.beginGroup(ALL_RADIOS_GROUP_NAME);
-   // }
-
-    QString newKey = "button" + QString::number(vmParams.getKeyerButtonNum()) + runStateTxt;
-
-    config.setValue(newKey + "/type", vmParams.getType());
-    config.setValue(newKey + "/name", vmParams.getKeyerName());
-    config.setValue(newKey + "/cwMessageText", vmParams.getKeyerCwMessage());
-    config.setValue(newKey + "/repeatFlag", vmParams.getKeyerRepeatFlag());
-    config.setValue(newKey + "/messageDuration", vmParams.getKeyerDuration());
-    config.setValue(newKey + "/repeatPauseDuration", vmParams.getKeyerRepeatPauseDur());
-    config.setValue(newKey + "/buttonNum", vmParams.getKeyerButtonNum());
-    config.endGroup();
-*/
-}
-
-
 int PcCWMessageKeyer::setup(TxKeyerFactory *txKeyerFactory, int &maxNumButtons, int &numButtons, QString selectedRadioName)
 {
 
@@ -449,7 +351,7 @@ int PcCWMessageKeyer::setup(TxKeyerFactory *txKeyerFactory, int &maxNumButtons, 
     QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[TxKeyerId::PcCwKeyer] + ".ini";
     QSettings config(fileName, QSettings::IniFormat);
 
-    fileName = VOICE_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[TxKeyerId::PcCwKeyer] + ".ini";
+    fileName = TX_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[TxKeyerId::PcCwKeyer] + ".ini";
     QSettings buttonConfig(fileName, QSettings::IniFormat);
 
 
@@ -588,150 +490,3 @@ void PcCWMessageKeyer::setContest(BaseContestLog *c)
 
 }
 
-
-int PcCWMessageKeyer::editButton(TxKeyerParams *vmData, QString title)
-{
-/*
-    TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
-    TxVmRigButtonDialog vmButtonDialog(tslf->dmButtonFrame);
-
-    QString radioManufacturer;   // used as group name
-    QStringList rmList;
-    //QString radioModel;
-
-   if (readSaveVoiceCWMemoryButtonByRadioNameFromIni(VoiceKeyerId::PcCwKeyer))
-    {
-        vmButtonDialog.setRadioNameLbl(vmData->getSelRadioName());
-        radioManufacturer = getCwRadioManufacturer(cwMemType);
-        rmList = vmData->getRigModel().split(' ');
-        if (rmList.length() == 2)
-        {
-            radioModel = rmList[1].remove('-');
-        }
-
-    }
-    else
-
-        vmButtonDialog.setRadioNameLbl("All Radios");
-        radioManufacturer = "AllRadios";
-
-    }
-
-
-
-
-    vmButtonDialog.setWindowTitle(title);
-    vmButtonDialog.setVmData(vmData);
-    vmButtonDialog.setVmTypeAndRadioModelLabel(vmData->getRigModel());
-    vmButtonDialog.setCwInfoPanelVisible(true);
-
-    QString cwMacroCharList;
-    bool cwMacroCharOk;
-
-    QString rm = "AllRadios";
-
-    // we still support saving message under radioname, but retrieve common data from common file
-    //if (radioManufacturer != "AllRadios")
-    //{
-    //   rm = "PC_CWKEYER";
-    //}
-
-    if (getRigCWKeyerMacroCharacter(cwMacroCharList, rm, PC_CW_KEYER_COMMON_PARAMS_FILENAME))
-    {
-        cwMacroCharOk = true;
-        trace(QString("Retrieved CW Macro Chars %1 for pcCwKeyer").arg(cwMacroCharList));
-    }
-    else
-    {
-        cwMacroCharOk = false;
-        trace(QString("Error retrieving CW Macro Chars for pcCwKeyer"));
-    }
-
-
-
-    QString validCharCwList;
-    if (getRigCWKeyerSupportedCharacters(validCharCwList, rm, PC_CW_KEYER_COMMON_PARAMS_FILENAME))
-    {
-        if (cwMacroCharOk)
-        {
-            QString vc = validCharCwList.append(cwMacroCharList);
-            vmButtonDialog.setCwValidatorCwCharList(vc);
-            trace(QString("Supported CW Chars and Macro chars %1 for pcCwKeyer").arg(vc));
-        }
-        else
-        {
-            vmButtonDialog.setCwValidatorCwCharList(validCharCwList);
-            trace(QString("Supported CW Chars with no Macro chars %1 for ").arg(validCharCwList));
-        }
-
-    }
-    else
-    {
-        trace(QString("Error retrieving supported CW Chars for pcCwKeyer"));
-    }
-
-
-    int maxNumChars = 0;
-    if (getRigCWKeyerMaxMessageLength(maxNumChars, rm, PC_CW_KEYER_COMMON_PARAMS_FILENAME))
-    {
-        vmButtonDialog.setCwValidatorMaxCwMessageLength(maxNumChars);
-        vmButtonDialog.setMaxNumberCwCharactersText(maxNumChars);
-    }
-    else
-    {
-        trace(QString("Error retrieving max CW Message Length for pcCwKeyer"));
-        vmButtonDialog.setMaxNumberCwCharactersText(0);
-    }
-
-    QStringList listOfRadioModels;
-    getRigCWKeyerListOfRadiosSupportSpecialCharacters(listOfRadioModels, radioManufacturer, PC_CW_KEYER_COMMON_PARAMS_FILENAME);
-
-    bool radioSupportSpecialChar = false;
-
-    if (!listOfRadioModels.isEmpty())
-    {
-        if (listOfRadioModels.contains(radioModel))
-        {
-            radioSupportSpecialChar = true;
-        }
-    }
-
-
-    bool radioSupportSpecialChar = false;
-
-    vmButtonDialog.setCwSupportSpecialChar(radioSupportSpecialChar);
-
-    QMap<QString, QChar> specialCharMap;
-    if (radioSupportSpecialChar)
-    {
-        if (getRigCWKeyerSupportedSpecialCharacters(specialCharMap, rm, PC_CW_KEYER_COMMON_PARAMS_FILENAME))
-        {
-            vmButtonDialog.setSpecialCwCharLists(specialCharMap);
-            vmButtonDialog.setCwSupportSpecialCharsGroupBoxVisible(true);
-        }
-
-
-    }
-    else
-    {
-        vmButtonDialog.setCwSupportSpecialCharsGroupBoxVisible(false);
-    }
-
-    vmButtonDialog.setSerialMessageTextBoxVisible(false);
-    vmButtonDialog.setCwCharInputValidator();
-
-    //if (cwMemType == hamlibData::CW_MEMORY_TYPES::YAESU
-    //    || cwMemType == hamlibData::CW_MEMORY_TYPES::KENWOOD
-    //    || cwMemType == hamlibData::CW_MEMORY_TYPES::ELECRAFT
-    //    || cwMemType == hamlibData::CW_MEMORY_TYPES::ICOM)
-   // {
-        vmButtonDialog.setCwMessageTextBoxVisible(true);
-   // }
-
-
-    vmButtonDialog.setDialogForEomType(selectedEomType);
-
-    int ret = vmButtonDialog.exec();
-    return ret;
-*/ return 0;
-}

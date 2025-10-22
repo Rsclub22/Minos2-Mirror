@@ -2,7 +2,7 @@
 #define TXVMRIGSETUPDIALOG_H
 
 #include <QDialog>
-#include "txKeyerfactory.h"
+#include "txKeyerFactory.h"
 #include "txkeyerCommonConstants.h"
 
 

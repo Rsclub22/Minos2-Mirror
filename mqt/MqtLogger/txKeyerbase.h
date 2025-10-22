@@ -135,8 +135,8 @@ public:
     virtual bool hasRecord() = 0;
     virtual void doRecording(TxKeyerParams *){}
 
-    virtual bool readVmButtonParams(int buttonNum, TxKeyerParams &vmParams) = 0;
-    virtual void saveVmButtonParams(const TxKeyerParams &vmParams ) = 0;
+    //virtual bool readVmButtonParams(int buttonNum, TxKeyerParams &vmParams) = 0;
+    //virtual void saveVmButtonParams(const TxKeyerParams &vmParams ) = 0;
 
     virtual void setPttOnOff(bool onOff) = 0;
     virtual int getSelectedEomType() = 0;
@@ -144,7 +144,7 @@ public:
 
     virtual int setup(TxKeyerFactory *txKeyerFactory, int &maxNumButtons, int &numButtons, QString selectedRadioName) = 0;
     virtual void setRadioParams(int radioMaxNumButtons, QString selectedRadioName, serialCommonData::MINOS_PTT_TYPES pttType_, bool pttEnabled_) = 0;
-    virtual int editButton(TxKeyerParams* vmData, QString title) = 0;
+    //virtual int editButton(TxKeyerParams* vmData, QString title) = 0;
 
 
 

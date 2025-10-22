@@ -3,7 +3,7 @@
 
 
 #include <QDialog>
-#include "txKeyerfactory.h"
+#include "txKeyerFactory.h"
 #include "txkeyerCommonConstants.h"
 
 extern const char * indevKey;
