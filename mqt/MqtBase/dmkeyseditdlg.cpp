@@ -12,23 +12,32 @@
 #include "MMessageDialog.h"
 #include "dmkeyseditdlg.h"
 #include "dmbuttoneditaddradiodialog.h"
-#include "ui_dmkeyseditdlg.h"
+
 #include "txkeyerCommonConstants.h"
 //#include "txVmExternalButtonDialog.h"
 #include "txvminternalbuttondialog.h"
 #include "txkeyerCommonConstants.h"
 #include <QDebug>
 
+#include "ui_dmkeyseditdlg.h"
+
 using namespace TxKeyerCommon;
 
-DMKeysEditDlg::DMKeysEditDlg(QWidget *parent, QString fKeyFileName, QString minosSelectedContestName_, KeyerMap &allKeyConfigs, QString txKeyerType, PubSubName minosSelectedRadio_, const QStringList listOfRadios) :
+DMKeysEditDlg::DMKeysEditDlg(QWidget *parent, QString fKeyFileName,
+                             QString minosSelectedContestName_, KeyerMap &allKeyConfigs,
+                             TxKeyerFactory *txKeyerFactory_, QSharedPointer<TxKeyerBase> txKeyer_,
+                             QString txKeyerType, PubSubName minosSelectedRadio_,
+                             const QMap<QString, QString> &radioMap_, const QStringList &listOfRadios_) :
     QDialog(parent),
     ui(new Ui::DMKeysEditDlg),
     allKeyConfigs(allKeyConfigs),
     minosSelectedContestName(minosSelectedContestName_),
+    txKeyerFactory(txKeyerFactory_),
+    txKeyer(txKeyer_),
     txKeyerType(txKeyerType),
     minosSelectedRadio(minosSelectedRadio_),
-    listOfRadios(listOfRadios)
+    radioMap(radioMap_),
+    listOfRadios(listOfRadios_)
 {
     ui->setupUi(this);
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
@@ -48,6 +57,9 @@ DMKeysEditDlg::DMKeysEditDlg(QWidget *parent, QString fKeyFileName, QString mino
     ui->CopyButton->setText(tr("Copy Macro FKey section"));
     ui->DeleteButton->setText(tr("Delete Macro FKey section"));
     ui->renameButton->setText(tr("Rename Macro FKey section"));
+
+    // need to show config button dependent upon keyer type ***********************
+    //ui->txKeyerSetupPb->setVisible(txKeyerCap.getSetupButton());
 
     showRadioListButtons(false);
 
@@ -106,6 +118,8 @@ DMKeysEditDlg::DMKeysEditDlg(QWidget *parent, QString fKeyFileName, QString mino
         {SERIALFIELD}   move focus to the serial received field\n\
         {EXCHANGEFIELD} move focus to the exchange received field");
     ui->keySubs->setText(keySubs);
+
+    connect(ui->txKeyerCommonConfigPb, &QPushButton::clicked, this, &DMKeysEditDlg::onTxKeyerCommonConfigPbClicked);
 }
 void DMKeysEditDlg::on_settingsSplitter_splitterMoved(int /*pos*/, int /*index*/)
 {
@@ -1253,6 +1267,44 @@ bool DMKeysEditDlg::checkRadioExists(QString contestName, QString radioName, boo
     }
 
     return ok;
+}
+
+
+void DMKeysEditDlg::onTxKeyerCommonConfigPbClicked()
+{
+
+
+
+    if (txKeyerType != keyerTypes[TxKeyerId::None])
+    {
+        int oldnb = txKeyer->numButtons;
+
+
+        int maxNumOfVoiceMessages = MAXIMUM_BUTTONS;
+
+        if (txKeyerType == keyerTypes[TxKeyerId::RigControl])
+        {
+            //maxNumOfVoiceMessages = getNumVoiceMessages(selectedRadio);
+            maxNumOfVoiceMessages = 8;   /// temp for test ***********************************************
+        }
+
+
+
+        if (txKeyer->setup(txKeyerFactory, maxNumOfVoiceMessages, txKeyer->numButtons, minosSelectedRadio.getLocalName()) == QDialog::Accepted)
+        {
+            if (txKeyer->numButtons != oldnb)
+            {
+                int columns = 4;
+                //createButtonsForKeyer(txKeyer->numButtons, columns);
+
+            }
+
+            //setEomLabelText(txKeyer->getSelectedEomType());
+
+        }
+    }
+
+
 }
 
 

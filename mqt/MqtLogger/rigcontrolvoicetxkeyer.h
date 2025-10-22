@@ -12,20 +12,23 @@
 
 
 
-#ifndef RIGCONTROLVOICEMEMORYKEYER_H
-#define RIGCONTROLVOICEMEMORYKEYER_H
+#ifndef RIGCONTROLVOICETXKEYER_H
+#define RIGCONTROLVOICETXKEYER_H
 
 #include <QObject>
 #include "txKeyerbase.h"
-#include "txKeyerfactory.h"
+#include "txKeyerFactory.h"
 #include "serialCommonData.h"
+#include "txkeyerCommonConstants.h"
 
-class RigControlVoiceMemoryKeyer : public TxKeyerBase
+using namespace TxKeyerCommon;
+
+class RigControlVoiceTxKeyer : public TxKeyerBase
 {
     Q_OBJECT
 public:
-    explicit RigControlVoiceMemoryKeyer(QObject *parent = nullptr);
-    virtual ~RigControlVoiceMemoryKeyer() override;
+    explicit RigControlVoiceTxKeyer(QObject *parent = nullptr);
+    virtual ~RigControlVoiceTxKeyer() override;
 
     static void registerTxKeyer(TxKeyerFactory::TxKeyers*);
 
@@ -54,12 +57,12 @@ public:
     int getSelectedEomType() override;
     virtual void setSelectedEomType(int eomType)override{Q_UNUSED(eomType)};
 
-    bool readVmButtonParams(int buttonNum, TxKeyerParams &vmParams) override;
-    void saveVmButtonParams(const TxKeyerParams &vmParams) override;
+    //bool readVmButtonParams(int buttonNum, TxKeyerParams &vmParams) override;
+    //void saveVmButtonParams(const TxKeyerParams &vmParams) override;
 
     virtual int setup(TxKeyerFactory *voiceKeyerFactory, int &maxNumButtons, int &numButtons, QString selectedRadioName) override;
 
-    virtual int editButton(TxKeyerParams* vmData, QString title) override;
+    //virtual int editButton(TxKeyerParams* vmData, QString title) override;
 
 
 
@@ -87,4 +90,4 @@ private:
     void getRadioCommonData(int &usePttForEom, int &userNumberButtons, int radioMaxNumButtons);
 };
 
-#endif // RIGCONTROLVOICEMEMORYKEYER_H
+#endif // RIGCONTROLVOICETXKEYER_H

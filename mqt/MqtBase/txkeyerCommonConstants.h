@@ -100,6 +100,10 @@ namespace TxKeyerCommon
 
 QString VOICE_KEYER_PATH();
 QString VOICEKEYER_COMMON_PARAMS_PATH();
+
+QString TX_KEYER_PATH();
+QString TXKEYER_COMMON_PARAMS_PATH();
+
 bool readSaveVoiceCWMemoryButtonByRadioNameFromIni(TxKeyerCommon::TxKeyerId id);
 void writeSaveVoiceCWMemoryButtonByRadioNameToIni(bool data, TxKeyerCommon::TxKeyerId id);
 void getListOfRadioNamesForMemoryButtons(QStringList &radioNames, TxKeyerCommon::TxKeyerId id);

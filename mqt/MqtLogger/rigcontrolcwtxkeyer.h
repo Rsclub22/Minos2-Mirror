@@ -10,8 +10,8 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef RIGCONTROLCWMESSAGEKEYER_H
-#define RIGCONTROLCWMESSAGEKEYER_H
+#ifndef RIGCONTROLCWTXKEYER_H
+#define RIGCONTROLCWTXKEYER_H
 
 #include "tsinglelogframe.h"
 #include "serialCommonData.h"
@@ -26,7 +26,7 @@ class LoggerContestLog;
 class BaseContestLog;
 
 
-class RigControlCwMessageKeyer : public TxKeyerBase
+class RigControlCwTxKeyer : public TxKeyerBase
 {
     Q_OBJECT
 
@@ -34,8 +34,8 @@ public:
 
 
 
-    explicit RigControlCwMessageKeyer(QObject *parent = nullptr);
-    virtual ~RigControlCwMessageKeyer() override;
+    explicit RigControlCwTxKeyer(QObject *parent = nullptr);
+    virtual ~RigControlCwTxKeyer() override;
 
     static void registerTxKeyer(TxKeyerFactory::TxKeyers*);
 
@@ -56,13 +56,13 @@ public:
     virtual int getSelectedEomType() override;
      virtual void setSelectedEomType(int eomType)override{Q_UNUSED(eomType)};
 
-    virtual bool readVmButtonParams(int buttonNum, TxKeyerParams &vmParams) override;
-    virtual void saveVmButtonParams(const TxKeyerParams &vmParams) override;
+    //virtual bool readVmButtonParams(int buttonNum, TxKeyerParams &vmParams) override;
+   // virtual void saveVmButtonParams(const TxKeyerParams &vmParams) override;
 
     virtual int setup(TxKeyerFactory *voiceKeyerFactory, int &maxNumButtons, int &numButtons, QString selectedRadioName) override;
     virtual void setRadioParams(int radioMaxNumButtons, QString selectedRadioName, serialCommonData::MINOS_PTT_TYPES pttType_, bool pttEnabled_) override;
 
-    virtual int editButton(TxKeyerParams* vmData, QString title) override;
+    //virtual int editButton(TxKeyerParams* vmData, QString title) override;
 
 
     virtual void setContest(BaseContestLog *c) override;
@@ -95,4 +95,4 @@ private:
 
 
 
-#endif // RIGCONTROLCWMESSAGEKEYER_H
+#endif // RIGCONTROLCWTXKEYER_H

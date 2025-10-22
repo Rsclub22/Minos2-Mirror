@@ -15,11 +15,12 @@
 #include <QStandardItemModel>
 #include <QListView>
 #include "AppStartup.h"
-#include "txKeyerfactory.h"
-#include "rigcontrolvoicememorykeyer.h"
-#include "rigcontrolcwmessagekeyer.h"
+#include "txKeyerFactory.h"
+#include "txkeyerCommonConstants.h"
+#include "rigcontrolvoicetxkeyer.h"
+#include "rigcontrolcwtxkeyer.h"
 #include "pccwmessagekeyer.h"
-#include "InternalVoiceMemoryKeyer.h"
+#include "InternalVoiceTxKeyer.h"
 #include "ExternalMqtKeyer.h"
 #include "tlogcontainer.h"
 #include "SendRPCDM.h"
@@ -28,10 +29,10 @@ using namespace TxKeyerCommon;
 
 TxKeyerFactory::TxKeyerFactory(QObject *parent) : QObject(parent)
 {
-    RigControlVoiceMemoryKeyer::registerTxKeyer(&txKeyersList);
-    RigControlCwMessageKeyer::registerTxKeyer(&txKeyersList);
+    RigControlVoiceTxKeyer::registerTxKeyer(&txKeyersList);
+    RigControlCwTxKeyer::registerTxKeyer(&txKeyersList);
     PcCWMessageKeyer::registerTxKeyer(&txKeyersList);
-    InternalVoiceMemoryKeyer::registerTxKeyer(&txKeyersList);
+    InternalVoiceTxKeyer::registerTxKeyer(&txKeyersList);
     ExternalMqtKeyer::registerTxKeyer(&txKeyersList);
 }
 
@@ -51,11 +52,11 @@ TxKeyerBase* TxKeyerFactory::createTxKeyer(int txKeyerId)
 {
     if (txKeyerId == TxKeyerId::RigControl)
     {        
-        return new RigControlVoiceMemoryKeyer(this);
+        return new RigControlVoiceTxKeyer(this);
     }
     else if (txKeyerId == TxKeyerId::CW_RigControl)
     {
-        return new RigControlCwMessageKeyer(this);
+        return new RigControlCwTxKeyer(this);
     }
     else if (txKeyerId == TxKeyerId::PcCwKeyer)
     {
@@ -66,7 +67,7 @@ TxKeyerBase* TxKeyerFactory::createTxKeyer(int txKeyerId)
     }
     else if (txKeyerId == TxKeyerId::InternalVoiceKeyer)
     {
-        return new InternalVoiceMemoryKeyer(this);
+        return new InternalVoiceTxKeyer(this);
     }
     else if (txKeyerId == TxKeyerId::ExternalVoiceKeyer)
     {

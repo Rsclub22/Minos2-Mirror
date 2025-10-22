@@ -75,7 +75,7 @@ void ExternalMqtKeyer::doRecording(TxKeyerParams *vkParam)
 }
 
 
-
+/*
 bool ExternalMqtKeyer::readVmButtonParams(int buttonNum, TxKeyerParams &vmParams)
 {
     // This info should have come from the external keyer
@@ -105,7 +105,7 @@ void ExternalMqtKeyer::saveVmButtonParams(const TxKeyerParams &vmParams_ )
     LogContainer->sendDM->publishKeyerConfig(config);
 
 }
-
+*/
 void ExternalMqtKeyer::setPttOnOff(bool onOff)
 {
     Q_UNUSED(onOff)
@@ -128,6 +128,7 @@ int ExternalMqtKeyer::setup(TxKeyerFactory *txKeyerFactory, int &maxNumButtons, 
 
     return QDialog::Rejected;
 }
+/*
 int ExternalMqtKeyer::editButton(TxKeyerParams* vmData, QString title)
 {
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
@@ -139,7 +140,7 @@ int ExternalMqtKeyer::editButton(TxKeyerParams* vmData, QString title)
     return ret;
 
 }
-
+*/
 void ExternalMqtKeyer::setPip(bool p)
 {
     trace("ExternalMqtKeyer::setPip");

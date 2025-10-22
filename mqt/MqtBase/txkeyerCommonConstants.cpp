@@ -16,6 +16,17 @@ QString VOICEKEYER_COMMON_PARAMS_PATH()
     return VOICE_KEYER_PATH() + "CommonParams/";
 }
 
+QString TX_KEYER_PATH()
+{
+    return getDirectoryLocation(dlConfiguration) + "/TxKeyer/";
+}
+
+QString TXKEYER_COMMON_PARAMS_PATH()
+{
+    return VOICE_KEYER_PATH() + "CommonParams/";
+}
+
+
 
 bool readSaveVoiceCWMemoryButtonByRadioNameFromIni(TxKeyerId id)
 {

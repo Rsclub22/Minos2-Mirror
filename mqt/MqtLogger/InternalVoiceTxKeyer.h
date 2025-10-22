@@ -1,16 +1,19 @@
-#ifndef INTERNALVOICEMEMORYKEYER_H
-#define INTERNALVOICEMEMORYKEYER_H
+#ifndef INTERNALVOICETXKEYER_H
+#define INTERNALVOICETXKEYER_H
 
 #include "txKeyerbase.h"
-#include "txKeyerfactory.h"
+#include "txKeyerFactory.h"
 #include "serialCommonData.h"
+#include "txkeyerCommonConstants.h"
 
-class InternalVoiceMemoryKeyer : public TxKeyerBase
+using namespace TxKeyerCommon;
+
+class InternalVoiceTxKeyer : public TxKeyerBase
 {
     Q_OBJECT
 public:
-    explicit InternalVoiceMemoryKeyer(QObject *parent =nullptr);
-    virtual ~InternalVoiceMemoryKeyer() override;
+    explicit InternalVoiceTxKeyer(QObject *parent =nullptr);
+    virtual ~InternalVoiceTxKeyer() override;
 
     static void registerTxKeyer(TxKeyerFactory::TxKeyers*);
 
@@ -34,15 +37,15 @@ public:
     //    return false;
     //}
 
-    virtual bool readVmButtonParams(int buttonNum, TxKeyerParams &vmParams) override;
-    virtual void saveVmButtonParams(const TxKeyerParams &vmParams) override;
+    //virtual bool readVmButtonParams(int buttonNum, TxKeyerParams &vmParams) override;
+    //virtual void saveVmButtonParams(const TxKeyerParams &vmParams) override;
     virtual void setPttOnOff(bool onOff) override;
     virtual int getSelectedEomType() override {return TxKeyerCommon::KeyerEomTypes::InternalSoundCardVoiceKeyer;};
     virtual void setSelectedEomType(int eomType)override{Q_UNUSED(eomType)};
 
     virtual int setup(TxKeyerFactory *voiceKeyerFactory, int &maxNumButtons, int &numButtons, QString selectedRadioName) override;
     virtual void setRadioParams(int radioMaxNumButtons, QString selectedRadioName, serialCommonData::MINOS_PTT_TYPES pttType_, bool pttEnabled_) override{Q_UNUSED(radioMaxNumButtons) Q_UNUSED(selectedRadioName) Q_UNUSED(pttType_) Q_UNUSED(pttEnabled_)};
-    virtual int editButton(TxKeyerParams* vmData, QString title) override;
+    //virtual int editButton(TxKeyerParams* vmData, QString title) override;
 
     virtual void setContest(BaseContestLog *c) override {Q_UNUSED(c)};
 
@@ -59,4 +62,4 @@ private:
 
 };
 
-#endif // INTERNALVOICEMEMORYKEYER_H
+#endif // INTERNALVOICETXKEYER_H

@@ -1,26 +1,26 @@
 #include "tlogcontainer.h"
 #include "tsinglelogframe.h"
-#include "txKeyerfactory.h"
+#include "txKeyerFactory.h"
 #include "txkeyerCommonConstants.h"
 #include "txvmrigsetupdialog.h"
 #include "txvmrigbuttondialog.h"
-#include "rigcontrolvoicememorykeyer.h"
+#include "rigcontrolvoicetxkeyer.h"
 
 using namespace TxKeyerCommon;
 
-RigControlVoiceMemoryKeyer::RigControlVoiceMemoryKeyer(QObject *parent) : TxKeyerBase(parent)
+RigControlVoiceTxKeyer::RigControlVoiceTxKeyer(QObject *parent) : TxKeyerBase(parent)
 {
 
 }
 
 
-RigControlVoiceMemoryKeyer::~RigControlVoiceMemoryKeyer()
+RigControlVoiceTxKeyer::~RigControlVoiceTxKeyer()
 {
 
 }
 
 
-void RigControlVoiceMemoryKeyer::registerTxKeyer(TxKeyerFactory::TxKeyers* vmKeyersList)
+void RigControlVoiceTxKeyer::registerTxKeyer(TxKeyerFactory::TxKeyers* vmKeyersList)
 {
     QString keyerName = "rigControl";
 
@@ -46,20 +46,20 @@ void RigControlVoiceMemoryKeyer::registerTxKeyer(TxKeyerFactory::TxKeyers* vmKey
 }
 
 
-void RigControlVoiceMemoryKeyer::setPttOnOff(bool onOff)
+void RigControlVoiceTxKeyer::setPttOnOff(bool onOff)
 {
     Q_UNUSED(onOff)
 }
 
 
 
-int RigControlVoiceMemoryKeyer::getSelectedEomType()
+int RigControlVoiceTxKeyer::getSelectedEomType()
 {
     return selectedEomType;
 }
 
 
-void RigControlVoiceMemoryKeyer::txKeyerInit(int &numButtons)
+void RigControlVoiceTxKeyer::txKeyerInit(int &numButtons)
 {
     int userNumberButtons = 0;
     getRadioCommonData(selectedEomType, userNumberButtons, radioMaxNumButtons);
@@ -67,7 +67,7 @@ void RigControlVoiceMemoryKeyer::txKeyerInit(int &numButtons)
 
 }
 
-void RigControlVoiceMemoryKeyer::sendMsgNum(TxKeyerParams &vkParams)
+void RigControlVoiceTxKeyer::sendMsgNum(TxKeyerParams &vkParams)
 {
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
 
@@ -75,7 +75,7 @@ void RigControlVoiceMemoryKeyer::sendMsgNum(TxKeyerParams &vkParams)
 
 }
 
-void RigControlVoiceMemoryKeyer::stopMsg(TxKeyerParams &vkParams)
+void RigControlVoiceTxKeyer::stopMsg(TxKeyerParams &vkParams)
 {
     Q_UNUSED(vkParams)
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
@@ -83,14 +83,14 @@ void RigControlVoiceMemoryKeyer::stopMsg(TxKeyerParams &vkParams)
 }
 
 
-
-bool RigControlVoiceMemoryKeyer::readVmButtonParams(int buttonNum, TxKeyerParams &vmParams)
+/*
+bool RigControlVoiceTxKeyer::readVmButtonParams(int buttonNum, TxKeyerParams &vmParams)
 {
 
     bool saveByRadioName = readSaveVoiceCWMemoryButtonByRadioNameFromIni(TxKeyerId::RigControl);
 
 
-    QString fileName = VOICE_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + vmParams.getType() + ".ini";
+    QString fileName = TX_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + vmParams.getType() + ".ini";
     QSettings config(fileName, QSettings::IniFormat);
 
     if (saveByRadioName && !vmParams.getSelRadioName().isEmpty())
@@ -117,13 +117,13 @@ bool RigControlVoiceMemoryKeyer::readVmButtonParams(int buttonNum, TxKeyerParams
 }
 
 
-void RigControlVoiceMemoryKeyer::saveVmButtonParams(const TxKeyerParams &vmParams_ )
+void RigControlVoiceTxKeyer::saveVmButtonParams(const TxKeyerParams &vmParams_ )
 {
     TxKeyerParams vmParams = vmParams_;
 
     bool saveByRadioName = readSaveVoiceCWMemoryButtonByRadioNameFromIni(TxKeyerId::RigControl);
 
-    QString fileName = VOICE_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + vmParams.getType() + ".ini";
+    QString fileName = TX_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + vmParams.getType() + ".ini";
     QSettings config(fileName, QSettings::IniFormat);
 
     if (saveByRadioName  && !vmParams.getSelRadioName().isEmpty())
@@ -147,8 +147,9 @@ void RigControlVoiceMemoryKeyer::saveVmButtonParams(const TxKeyerParams &vmParam
 
 
 }
+*/
 
-int RigControlVoiceMemoryKeyer::setup(TxKeyerFactory *voiceKeyerFactory, int &maxNumButtons, int &numButtons, QString selectedRadioName)
+int RigControlVoiceTxKeyer::setup(TxKeyerFactory *voiceKeyerFactory, int &maxNumButtons, int &numButtons, QString selectedRadioName)
 {
     TxKeyerCapabilities voiceCap = voiceKeyerFactory->supportedTxKeyers()->value("rigControl");
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
@@ -158,7 +159,7 @@ int RigControlVoiceMemoryKeyer::setup(TxKeyerFactory *voiceKeyerFactory, int &ma
     QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[TxKeyerId::RigControl] + ".ini";
     QSettings config(fileName, QSettings::IniFormat);
 
-    fileName = VOICE_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[TxKeyerId::RigControl] + ".ini";
+    fileName = TX_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[TxKeyerId::RigControl] + ".ini";
     QSettings buttonConfig(fileName, QSettings::IniFormat);
 
 
@@ -240,7 +241,7 @@ int RigControlVoiceMemoryKeyer::setup(TxKeyerFactory *voiceKeyerFactory, int &ma
 }
 
 
-void RigControlVoiceMemoryKeyer::setRadioParams(int radioMaxNumButtons_, QString selectedRadioName_, serialCommonData::MINOS_PTT_TYPES pttType_, bool pttEnabled_)
+void RigControlVoiceTxKeyer::setRadioParams(int radioMaxNumButtons_, QString selectedRadioName_, serialCommonData::MINOS_PTT_TYPES pttType_, bool pttEnabled_)
 {
 
     selectedRadioName = selectedRadioName_;
@@ -250,7 +251,7 @@ void RigControlVoiceMemoryKeyer::setRadioParams(int radioMaxNumButtons_, QString
 }
 
 
-void RigControlVoiceMemoryKeyer::getRadioCommonData(int &selectedEomType, int &userNumberButtons, int radioMaxNumButtons)
+void RigControlVoiceTxKeyer::getRadioCommonData(int &selectedEomType, int &userNumberButtons, int radioMaxNumButtons)
 {
     int numButtons = 0;
 
@@ -267,7 +268,7 @@ void RigControlVoiceMemoryKeyer::getRadioCommonData(int &selectedEomType, int &u
         groupName = ALL_RADIOS_GROUP_NAME;
     }
 
-    fileName = VOICE_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[TxKeyerId::RigControl] + ".ini";
+    fileName = TX_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[TxKeyerId::RigControl] + ".ini";
     QSettings config(fileName, QSettings::IniFormat);
 
     config.beginGroup(groupName);
@@ -286,8 +287,8 @@ void RigControlVoiceMemoryKeyer::getRadioCommonData(int &selectedEomType, int &u
 
 
 
-
-int RigControlVoiceMemoryKeyer::editButton(TxKeyerParams *vmData, QString title)
+/*
+int RigControlVoiceTxKeyer::editButton(TxKeyerParams *vmData, QString title)
 {
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
     TxVmRigButtonDialog vmButtonDialog(tslf->dmButtonFrame);
@@ -313,6 +314,6 @@ int RigControlVoiceMemoryKeyer::editButton(TxKeyerParams *vmData, QString title)
     return ret;
 
 }
-
+*/
 
 

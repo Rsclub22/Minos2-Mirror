@@ -110,7 +110,7 @@ private slots:
     void fButtonClicked();
     void on_stopButton_clicked();
 
-    void on_editButton_clicked();
+    void on_configEditButton_clicked();
 
     void on_logitButton_clicked();
 
@@ -127,7 +127,7 @@ private slots:
     // txVmButtonFrame
 
     void onTxKeyerSelect(int idx);
-    void onTxKeyerSetupClicked();
+    //void onTxKeyerSetupClicked();
     void onRepeatPauseTimerTimeout();
     void onMsgDurTimerTimeout();
     //void fKey(BaseContestLog *c, int e, int);

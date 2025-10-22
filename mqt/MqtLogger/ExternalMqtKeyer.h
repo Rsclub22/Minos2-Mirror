@@ -3,7 +3,10 @@
 
 #include "KeyerJson.h"
 #include "txKeyerbase.h"
-#include "txKeyerfactory.h"
+#include "txKeyerFactory.h"
+#include "txkeyerCommonConstants.h"
+
+using namespace TxKeyerCommon;
 
 class ExternalMqtKeyer:public TxKeyerBase
 {
@@ -37,8 +40,8 @@ public:
     virtual bool hasRecord() override{return true;}
     virtual void doRecording(TxKeyerParams *vkParam) override;
 
-    virtual bool readVmButtonParams(int buttonNum, TxKeyerParams &vmParams) override;
-    virtual void saveVmButtonParams(const TxKeyerParams &vmParams) override;
+    //virtual bool readVmButtonParams(int buttonNum, TxKeyerParams &vmParams) override;
+    //virtual void saveVmButtonParams(const TxKeyerParams &vmParams) override;
     virtual void setPttOnOff(bool onOff) override;
 
     virtual int getSelectedEomType() override {return TxKeyerCommon::KeyerEomTypes::Eom_None;};
@@ -46,7 +49,7 @@ public:
 
     virtual int setup(TxKeyerFactory *voiceKeyerFactory, int &maxNumButtons, int &numButtons, QString selectedRadio) override;
     virtual void setRadioParams(int radioMaxNumButtons, QString selectedRadioName, serialCommonData::MINOS_PTT_TYPES pttType_, bool pttEnabled_) override{Q_UNUSED(radioMaxNumButtons) Q_UNUSED(selectedRadioName) Q_UNUSED(pttType_) Q_UNUSED(pttEnabled_)};
-    virtual int editButton(TxKeyerParams* vmData, QString title) override;
+    //virtual int editButton(TxKeyerParams* vmData, QString title) override;
 
 
     virtual void setContest(BaseContestLog *c) override {Q_UNUSED(c)};

@@ -18,10 +18,10 @@
 
 #include "LoggerContest.h"
 #include "tlogcontainer.h"
-#include "txKeyerfactory.h"
+#include "txKeyerFactory.h"
 #include "txvmrigsetupdialog.h"
 #include "txvmrigbuttondialog.h"
-#include "rigcontrolcwmessagekeyer.h"
+#include "rigcontrolcwtxkeyer.h"
 #include "txkeyerCommonConstants.h"
 #include "MTrace.h"
 
@@ -29,19 +29,19 @@
 
 using namespace TxKeyerCommon;
 
-RigControlCwMessageKeyer::RigControlCwMessageKeyer(QObject *parent) : TxKeyerBase(parent)
+RigControlCwTxKeyer::RigControlCwTxKeyer(QObject *parent) : TxKeyerBase(parent)
 {
 
 }
 
 
-RigControlCwMessageKeyer::~RigControlCwMessageKeyer()
+RigControlCwTxKeyer::~RigControlCwTxKeyer()
 {
 
 }
 
 
-void RigControlCwMessageKeyer::registerTxKeyer(TxKeyerFactory::TxKeyers* vmKeyersList)
+void RigControlCwTxKeyer::registerTxKeyer(TxKeyerFactory::TxKeyers* vmKeyersList)
 {
     QString keyerName = "cwRigControl";
 
@@ -69,22 +69,22 @@ void RigControlCwMessageKeyer::registerTxKeyer(TxKeyerFactory::TxKeyers* vmKeyer
 
 
 
-void RigControlCwMessageKeyer::setPttOnOff(bool onOff)
+void RigControlCwTxKeyer::setPttOnOff(bool onOff)
 {
     Q_UNUSED(onOff)
 }
 
-int RigControlCwMessageKeyer::getSelectedEomType()
+int RigControlCwTxKeyer::getSelectedEomType()
 {
     return selectedEomType;
 }
 
-bool RigControlCwMessageKeyer::getSetCwModeAndRestoreFlag()
+bool RigControlCwTxKeyer::getSetCwModeAndRestoreFlag()
 {
     return setCwModeAndRestoreCurrentMode;
 }
 
-void RigControlCwMessageKeyer::txKeyerInit(int &numButtons)
+void RigControlCwTxKeyer::txKeyerInit(int &numButtons)
 {
     int userNumberButtons = 0;
     getRadioCommonData(selectedEomType, userNumberButtons, radioMaxNumButtons);
@@ -92,7 +92,7 @@ void RigControlCwMessageKeyer::txKeyerInit(int &numButtons)
 }
 
 
-void RigControlCwMessageKeyer::getRadioCommonData(int &selectedEomType, int &userNumberButtons, int radioMaxNumButtons)
+void RigControlCwTxKeyer::getRadioCommonData(int &selectedEomType, int &userNumberButtons, int radioMaxNumButtons)
 {
     int numButtons = 0;
 
@@ -109,7 +109,7 @@ void RigControlCwMessageKeyer::getRadioCommonData(int &selectedEomType, int &use
         groupName = ALL_RADIOS_GROUP_NAME;
     }
 
-    fileName = VOICE_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[TxKeyerId::CW_RigControl] + ".ini";
+    fileName = TX_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[TxKeyerId::CW_RigControl] + ".ini";
     QSettings config(fileName, QSettings::IniFormat);
 
     config.beginGroup(groupName);
@@ -128,7 +128,7 @@ void RigControlCwMessageKeyer::getRadioCommonData(int &selectedEomType, int &use
 
 
 
-void RigControlCwMessageKeyer::sendCwMsg(TxKeyerParams &vmData)
+void RigControlCwTxKeyer::sendCwMsg(TxKeyerParams &vmData)
 {
     if (!vmData.getKeyerCwMessage().isEmpty())
     {
@@ -207,13 +207,13 @@ void RigControlCwMessageKeyer::sendCwMsg(TxKeyerParams &vmData)
 
 }
 
-void  RigControlCwMessageKeyer::sendCwFreeTextMsg(QString message)
+void  RigControlCwTxKeyer::sendCwFreeTextMsg(QString message)
 {
 
 }
 
 
-QString RigControlCwMessageKeyer::parseMacrosInMessage(TSingleLogFrame *tslf, QString mess)
+QString RigControlCwTxKeyer::parseMacrosInMessage(TSingleLogFrame *tslf, QString mess)
 {
     // make sure screenContact is up to date
 
@@ -368,7 +368,7 @@ QString RigControlCwMessageKeyer::parseMacrosInMessage(TSingleLogFrame *tslf, QS
 
 
 
-void RigControlCwMessageKeyer::stopCwMsg()
+void RigControlCwTxKeyer::stopCwMsg()
 {
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
 
@@ -376,8 +376,8 @@ void RigControlCwMessageKeyer::stopCwMsg()
 }
 
 
-
-bool RigControlCwMessageKeyer::readVmButtonParams(int buttonNum, TxKeyerParams &vmParams)
+/*
+bool RigControlCwTxKeyer::readVmButtonParams(int buttonNum, TxKeyerParams &vmParams)
 {
 
 
@@ -394,7 +394,7 @@ bool RigControlCwMessageKeyer::readVmButtonParams(int buttonNum, TxKeyerParams &
         runStateTxt = "_RUN";
     }
 
-    QString fileName = VOICE_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + vmParams.getType() + ".ini";
+    QString fileName = TX_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + vmParams.getType() + ".ini";
     QSettings config(fileName, QSettings::IniFormat);
 
 
@@ -424,7 +424,7 @@ bool RigControlCwMessageKeyer::readVmButtonParams(int buttonNum, TxKeyerParams &
 }
 
 
-void RigControlCwMessageKeyer::saveVmButtonParams(const TxKeyerParams &vmParams_ )
+void RigControlCwTxKeyer::saveVmButtonParams(const TxKeyerParams &vmParams_ )
 {
     TxKeyerParams vmParams = vmParams_;
 
@@ -440,7 +440,7 @@ void RigControlCwMessageKeyer::saveVmButtonParams(const TxKeyerParams &vmParams_
         runStateTxt = "_RUN";
     }
 
-    QString fileName = VOICE_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + vmParams.getType() + ".ini";
+    QString fileName = TX_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + vmParams.getType() + ".ini";
     QSettings config(fileName, QSettings::IniFormat);
 
     if (saveByRadioName  && !vmParams.getSelRadioName().isEmpty())
@@ -464,9 +464,9 @@ void RigControlCwMessageKeyer::saveVmButtonParams(const TxKeyerParams &vmParams_
     config.endGroup();
 
 }
+*/
 
-
-int RigControlCwMessageKeyer::setup(TxKeyerFactory *txKeyerFactory, int &maxNumButtons, int &numButtons, QString selectedRadioName)
+int RigControlCwTxKeyer::setup(TxKeyerFactory *txKeyerFactory, int &maxNumButtons, int &numButtons, QString selectedRadioName)
 {
 
 
@@ -478,7 +478,7 @@ int RigControlCwMessageKeyer::setup(TxKeyerFactory *txKeyerFactory, int &maxNumB
     QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[TxKeyerId::CW_RigControl] + ".ini";
     QSettings config(fileName, QSettings::IniFormat);
 
-    fileName = VOICE_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[TxKeyerId::CW_RigControl] + ".ini";
+    fileName = TX_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[TxKeyerId::CW_RigControl] + ".ini";
     QSettings buttonConfig(fileName, QSettings::IniFormat);
 
 
@@ -593,7 +593,7 @@ int RigControlCwMessageKeyer::setup(TxKeyerFactory *txKeyerFactory, int &maxNumB
 }
 
 
-void RigControlCwMessageKeyer::setRadioParams(int radioMaxNumButtons_, QString selectedRadioName_, serialCommonData::MINOS_PTT_TYPES pttType_, bool pttEnabled_)
+void RigControlCwTxKeyer::setRadioParams(int radioMaxNumButtons_, QString selectedRadioName_, serialCommonData::MINOS_PTT_TYPES pttType_, bool pttEnabled_)
 {
     selectedRadioName = selectedRadioName_;
     radioMaxNumButtons = radioMaxNumButtons_;
@@ -602,20 +602,20 @@ void RigControlCwMessageKeyer::setRadioParams(int radioMaxNumButtons_, QString s
 }
 
 
-void RigControlCwMessageKeyer::setCwMemType(int _cwMemType)
+void RigControlCwTxKeyer::setCwMemType(int _cwMemType)
 {
     cwMemType = _cwMemType;
 }
 
 
-void RigControlCwMessageKeyer::setContest(BaseContestLog *c)
+void RigControlCwTxKeyer::setContest(BaseContestLog *c)
 {
     ct = dynamic_cast<LoggerContestLog *>( c);
 
 }
 
-
-int RigControlCwMessageKeyer::editButton(TxKeyerParams *vmData, QString title)
+/*
+int RigControlCwTxKeyer::editButton(TxKeyerParams *vmData, QString title)
 {
 
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
@@ -749,7 +749,7 @@ int RigControlCwMessageKeyer::editButton(TxKeyerParams *vmData, QString title)
     return ret;
 
 }
-
+*/
 
 
 
