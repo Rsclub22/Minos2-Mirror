@@ -98,25 +98,38 @@ DMKeysEditDlg::DMKeysEditDlg(QWidget *parent, const DMKeysEditDlgConfig &config_
     ui->upButton->setEnabled(false);
     ui->downButton->setEnabled(false);
 
-    QString keySubs =
-        tr("* My callsign\n\
-        # Serial to send\n\
-        ! Their call\n\
-        {macro}\n\
-        {MYCALL}        my full call\n\
-        {CALL}          their full call\n\
-        {SN}            serial number to send\n\
-        {EXCH}          full exchange to send - can be in multiple parts\n\
-        {GRID}          my Maidenhead locator\n\
-        {SPACE}         space character\n\
-        {SENTRST}       RST to send\n\
-        {TIME2}         time in HHmm format\n\
-        {LOG}           log the QSO. clear it, and focus on CALL\n\
-        {WIPE}          wipe all QSO fields\n\
-        {CALLFIELD}     move focus to the call field\n\
-        {SERIALFIELD}   move focus to the serial received field\n\
-        {EXCHANGEFIELD} move focus to the exchange received field");
-    ui->keySubs->setText(keySubs);
+    if (config.txKeyerType == keyerTypes[TxKeyerId::PcCwKeyer]
+        || config.txKeyerType == keyerTypes[TxKeyerId::CW_RigControl]
+        || config.txKeyerType == keyerTypes[TxKeyerId::DigitalModes])
+    {
+        QString keySubs =
+            tr("* My callsign\n\
+            # Serial to send\n\
+            ! Their call\n\
+            {macro}\n\
+            {MYCALL}        my full call\n\
+            {CALL}          their full call\n\
+            {SN}            serial number to send\n\
+            {EXCH}          full exchange to send - can be in multiple parts\n\
+            {GRID}          my Maidenhead locator\n\
+            {SPACE}         space character\n\
+            {SENTRST}       RST to send\n\
+            {TIME2}         time in HHmm format\n\
+            {LOG}           log the QSO. clear it, and focus on CALL\n\
+            {WIPE}          wipe all QSO fields\n\
+            {CALLFIELD}     move focus to the call field\n\
+            {SERIALFIELD}   move focus to the serial received field\n\
+            {EXCHANGEFIELD} move focus to the exchange received field");
+
+        ui->keySubs->setText(keySubs);
+
+
+    }
+    else
+    {
+        ui->scrollArea->setVisible(false);
+        ui->keySubs->setVisible(false);
+    }
 
     connect(ui->txKeyerCommonConfigPb, &QPushButton::clicked, this, &DMKeysEditDlg::onTxKeyerCommonConfigPbClicked);
 }
