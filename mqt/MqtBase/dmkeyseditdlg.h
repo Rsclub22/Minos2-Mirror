@@ -15,7 +15,33 @@ namespace Ui {
 class DMKeysEditDlg;
 }
 
+struct DMKeysEditDlgConfig
+{
 
+    KeyerMap &allKeyConfigs;
+    TxKeyerCapabilities &txKeyerCap;
+    const QMap<QString, QString> &radioMap;
+    const QStringList &listOfRadios;
+
+
+    QString fKeyFileName;
+    QString minosSelectedContestName;
+    TxKeyerFactory *txKeyerFactory = nullptr;
+    QSharedPointer<TxKeyerBase> txKeyer;
+    QString txKeyerType;
+    PubSubName minosSelectedRadio;
+
+
+    DMKeysEditDlgConfig(KeyerMap &configs,
+                        TxKeyerCapabilities &cap,
+                        const QMap<QString, QString> &rMap,
+                        const QStringList &rList)
+        : allKeyConfigs(configs)
+        , txKeyerCap(cap)
+        , radioMap(rMap)
+        , listOfRadios(rList)
+    {}
+};
 
 
 class DMKeysEditDlg : public QDialog
@@ -25,14 +51,14 @@ class DMKeysEditDlg : public QDialog
     Ui::DMKeysEditDlg *ui;
 
     //Keys &keys;
-    KeyerMap &allKeyConfigs;
+    //KeyerMap &allKeyConfigs;
 
-    QString minosSelectedContestName;
-    QString selectedContestName;
-    PubSubName minosSelectedRadio;
-    QString minosSelectedRadioLocalName;
-    QString radioListSelectedName;
-    QString txKeyerType;
+    //QString minosSelectedContestName;
+
+    //PubSubName minosSelectedRadio;
+    //QString minosSelectedRadioLocalName;
+
+    //QString txKeyerType;
 
     void showSections();
     void showSection();
@@ -41,8 +67,7 @@ class DMKeysEditDlg : public QDialog
     void doCloseEvent();
 
 public:
-    explicit DMKeysEditDlg(QWidget *parent, QString fKeyFileName, QString minosSelectedContestName_, KeyerMap &allKeyConfigs, TxKeyerFactory *txKeyerFactory_,
-                           QSharedPointer<TxKeyerBase> txKeyer_, QString txKeyerType, PubSubName minosSelectedRadio_, const QMap<QString, QString> &radioMap_, const QStringList &listOfRadios_);
+    explicit DMKeysEditDlg(QWidget *parent, const DMKeysEditDlgConfig &config);
     ~DMKeysEditDlg() override;
 
     int exec() override;
@@ -89,13 +114,21 @@ private:
     void clearDirtyFlag();
     //QString getRigKey() const;
 
-    TxKeyerFactory *txKeyerFactory = nullptr;
-    QSharedPointer<TxKeyerBase> txKeyer;
+    const DMKeysEditDlgConfig &config;
+
+    //TxKeyerFactory *txKeyerFactory = nullptr;
+    //QSharedPointer<TxKeyerBase> txKeyer;
+    //TxKeyerCapabilities &txKeyerCap;
 
     bool ignoreSectionChange = false;
+    QString selectedContestName;
+    QString radioListSelectedName;
+    PubSubName minosSelectedRadioName;
+    QString minosSelectedRadioLocalName;
+
     QListWidget* RadioList = nullptr;
-    const QMap<QString, QString> &radioMap;
-    const QStringList &listOfRadios;
+    //const QMap<QString, QString> &radioMap;
+    //const QStringList &listOfRadios;
 
 
     void showRadiosForSection();

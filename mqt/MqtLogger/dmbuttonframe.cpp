@@ -694,8 +694,7 @@ void DMButtonFrame::set_cwRigControl_FrameState(QString txKeyerName)
         {
             displayErrorMessage(
                 tr("Radio %1 has not been defined in contest %2, please add the radio")
-                    .arg(selectedRadio.key())
-                    .arg(currentName)
+                    .arg(selectedRadio.key(), currentName)
             );
             logMessage(QString("Radio %1 has not been defined in %2, please add the radio").arg(selectedRadio.key().arg(currentName)));
         }
@@ -2982,11 +2981,25 @@ void DMButtonFrame::on_configEditButton_clicked()
         mapUniqueNames(listOfRadioSupportKeyer, radioMap);
     }
 
-    DMKeysEditDlg jed(this, fkeyFileName,
-                      currentName, nfk,
-                      txKeyerFactory, txKeyer,
-                      txKeyerType, selectedRadio,
-                      radioMap, listOfRadioSupportKeyer);
+    QString txKeyerName = ui->txKeyerSelect->currentText();
+
+    if (txKeyerName.isEmpty())
+    {
+        return;
+    }
+
+    TxKeyerCapabilities txKeyerCap = txKeyerFactory->supportedTxKeyers()->value(txKeyerName);
+
+    DMKeysEditDlgConfig editDlgConfig(allKeyConfigs, txKeyerCap, radioMap, listOfRadioSupportKeyer);
+
+    editDlgConfig.fKeyFileName = fkeyFileName;
+    editDlgConfig.minosSelectedContestName = currentName;
+    editDlgConfig.txKeyerFactory = txKeyerFactory;
+    editDlgConfig.txKeyer = txKeyer;
+    editDlgConfig.txKeyerType = txKeyerType;
+    editDlgConfig.minosSelectedRadio = selectedRadio;
+
+    DMKeysEditDlg jed(this, editDlgConfig);
 
     if (jed.exec() == QDialog::Accepted)
     {

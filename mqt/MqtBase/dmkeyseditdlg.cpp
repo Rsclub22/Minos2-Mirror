@@ -23,62 +23,61 @@
 
 using namespace TxKeyerCommon;
 
-DMKeysEditDlg::DMKeysEditDlg(QWidget *parent, QString fKeyFileName,
-                             QString minosSelectedContestName_, KeyerMap &allKeyConfigs,
-                             TxKeyerFactory *txKeyerFactory_, QSharedPointer<TxKeyerBase> txKeyer_,
-                             QString txKeyerType, PubSubName minosSelectedRadio_,
-                             const QMap<QString, QString> &radioMap_, const QStringList &listOfRadios_) :
-    QDialog(parent),
+DMKeysEditDlg::DMKeysEditDlg(QWidget *parent, const DMKeysEditDlgConfig &config_)
+    : QDialog(parent),
     ui(new Ui::DMKeysEditDlg),
-    allKeyConfigs(allKeyConfigs),
-    minosSelectedContestName(minosSelectedContestName_),
-    txKeyerFactory(txKeyerFactory_),
-    txKeyer(txKeyer_),
-    txKeyerType(txKeyerType),
-    minosSelectedRadio(minosSelectedRadio_),
-    radioMap(radioMap_),
-    listOfRadios(listOfRadios_)
+    config(config_)
 {
     ui->setupUi(this);
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     RegSettings settings;
-    QByteArray geometry = settings.getSettings().value("DMKeysEdit/geometry/" + txKeyerType).toByteArray();
+    QByteArray geometry = settings.getSettings().value("DMKeysEdit/geometry/" + config.txKeyerType).toByteArray();
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
-    QByteArray state = settings.getSettings().value("DMKeysEdit/SplitterState/" + txKeyerType).toByteArray();
+    QByteArray state = settings.getSettings().value("DMKeysEdit/SplitterState/" + config.txKeyerType).toByteArray();
     ui->settingsSplitter->restoreState(state);
 
     QString baseTitle = windowTitle();
-    setWindowTitle(baseTitle + " - " + fKeyFileName) ;
+    setWindowTitle(baseTitle + " - " + config.fKeyFileName) ;
 
     ui->NewSectionButton->setText(tr("New Macro FKey section"));
     ui->CopyButton->setText(tr("Copy Macro FKey section"));
     ui->DeleteButton->setText(tr("Delete Macro FKey section"));
     ui->renameButton->setText(tr("Rename Macro FKey section"));
 
-    // need to show config button dependent upon keyer type ***********************
-    //ui->txKeyerSetupPb->setVisible(txKeyerCap.getSetupButton());
+    minosSelectedRadioName = config.minosSelectedRadio;
+
+    if (config.txKeyerType == keyerTypes[TxKeyerId::DigitalModes])
+    {
+        ui->txKeyerCommonConfigPb->setVisible(false);
+
+    }
+    else
+    {
+        ui->txKeyerCommonConfigPb->setVisible(config.txKeyerCap.getSetupButton());
+    }
+
 
     showRadioListButtons(false);
 
-    selectedContestName = minosSelectedContestName;
+    selectedContestName = config.minosSelectedContestName;
 
-    if (minosSelectedRadio.isEmpty())
+    if (config.minosSelectedRadio.isEmpty())
     {
       minosSelectedRadioLocalName = KEYER_NO_RADIO;
     }
     else
     {
-        minosSelectedRadioLocalName = minosSelectedRadio.key();
+        minosSelectedRadioLocalName = config.minosSelectedRadio.key();
 
     }
 
     radioListSelectedName = minosSelectedRadioLocalName;
 
 
-    if (txKeyerType == keyerTypes[TxKeyerId::RigControl] || txKeyerType == keyerTypes[TxKeyerId::CW_RigControl])
+    if (config.txKeyerType == keyerTypes[TxKeyerId::RigControl] || config.txKeyerType == keyerTypes[TxKeyerId::CW_RigControl])
     {
         RadioList = new QListWidget(this);
         ui->settingsSplitter->insertWidget(1, RadioList);
@@ -156,8 +155,8 @@ void DMKeysEditDlg::showSections()
     // Extract all contest names for the current keyer type
     QStringList sections;
 
-    const auto keyerIt = allKeyConfigs.constFind(txKeyerType);
-    if (keyerIt == allKeyConfigs.cend())
+    const auto keyerIt = config.allKeyConfigs.constFind(config.txKeyerType);
+    if (keyerIt == config.allKeyConfigs.cend())
         return;  // No contests for this keyerType
 
     sections = keyerIt->keys();  // contest names for this keyerType
@@ -192,8 +191,8 @@ void DMKeysEditDlg::showRadiosForSection()
     {
         RadioList->clear();
 
-        const auto keyerIt = allKeyConfigs.constFind(txKeyerType);
-        if (keyerIt == allKeyConfigs.cend())
+        const auto keyerIt = config.allKeyConfigs.constFind(config.txKeyerType);
+        if (keyerIt == config.allKeyConfigs.cend())
             return;
 
         const auto contestIt = keyerIt->constFind(selectedContestName);  // name = selected section/contest
@@ -262,8 +261,8 @@ void DMKeysEditDlg::showSection()
 {
     const int offset = ui->SectionsList->currentRow();
 
-    const auto keyerIt = allKeyConfigs.constFind(txKeyerType);
-    if (keyerIt == allKeyConfigs.cend()) {
+    const auto keyerIt = config.allKeyConfigs.constFind(config.txKeyerType);
+    if (keyerIt == config.allKeyConfigs.cend()) {
         ui->OptionsTable->setVisible(false);
         return;
     }
@@ -289,7 +288,7 @@ void DMKeysEditDlg::showSection()
 
     ui->NewSectionButton->setEnabled(true);
 
-    bool isProtected = (selectedContestName == "<None>" || selectedContestName == "Default" || selectedContestName == minosSelectedContestName);
+    bool isProtected = (selectedContestName == "<None>" || selectedContestName == "Default" || selectedContestName == config.minosSelectedContestName);
 
     ui->DeleteButton->setEnabled(!isProtected);
     //ui->CopyButton->setEnabled(!isProtected);
@@ -313,7 +312,10 @@ void DMKeysEditDlg::setupTableRow(int row, KeyVal &k)
     // Columns 0,1,2
     ui->OptionsTable->setItem(row, EDIT_DLG_COL0, new QTableWidgetItem(k.ktop()));
     ui->OptionsTable->setItem(row, EDIT_DLG_COL1, new QTableWidgetItem(k.kval()));
-    ui->OptionsTable->setItem(row, EDIT_DLG_COL2, new QTableWidgetItem(QString::number(k.rigVoiceMemNum())));
+    auto *item2 = new QTableWidgetItem(QString::number(k.rigVoiceMemNum()));
+    item2->setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
+    ui->OptionsTable->setItem(row, EDIT_DLG_COL2, item2);
+
 
     // Column 3: Duration Enable checkbox
     auto *durEnableCb = new QCheckBox;
@@ -330,8 +332,10 @@ void DMKeysEditDlg::setupTableRow(int row, KeyVal &k)
         kPtrdurEnableCb->setRptEnable(checked);
     });
 
-
-    ui->OptionsTable->setItem(row, EDIT_DLG_COL4, new QTableWidgetItem(QString::number(k.msgDur())));
+    // Column 4: Message Dur
+    auto *item4 = new QTableWidgetItem(QString::number(k.msgDur()));
+    item4->setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
+    ui->OptionsTable->setItem(row, EDIT_DLG_COL4, item4);
 
     // Column 5: Repeat checkbox
     auto *rptEnableCb = new QCheckBox;
@@ -343,12 +347,16 @@ void DMKeysEditDlg::setupTableRow(int row, KeyVal &k)
     layRptEnableCb->setContentsMargins(0,0,0,0);
     ui->OptionsTable->setCellWidget(row, EDIT_DLG_COL5, wrapRptEnableCb);
 
+
     KeyVal *kPtrRptEnableCB = &k;
     connect(rptEnableCb, &QCheckBox::toggled, this, [kPtrRptEnableCB](bool checked){
         kPtrRptEnableCB->setRptEnable(checked);
     });
 
-    ui->OptionsTable->setItem(row, EDIT_DLG_COL6, new QTableWidgetItem(QString::number(k.rptDur())));
+    // Column 6: Repeat Dur
+    auto *item6 = new QTableWidgetItem(QString::number(k.rptDur()));
+    item6->setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
+    ui->OptionsTable->setItem(row, EDIT_DLG_COL6, item6);
 
     // Column 7: Record/play button
     auto *recBtn = new QToolButton;
@@ -365,12 +373,12 @@ void DMKeysEditDlg::setupTableRow(int row, KeyVal &k)
 
     KeyVal *kPtrBtn = &k;
     connect(recBtn, &QToolButton::clicked, this, [this, kPtrBtn]() {
-        if (txKeyerType == keyerTypes[TxKeyerId::InternalVoiceKeyer])
+        if (config.txKeyerType == keyerTypes[TxKeyerId::InternalVoiceKeyer])
         {
             TxVmInternalButtonDialog dlg(this);
             dlg.exec();
         }
-        else if (txKeyerType == keyerTypes[TxKeyerId::ExternalVoiceKeyer])
+        else if (config.txKeyerType == keyerTypes[TxKeyerId::ExternalVoiceKeyer])
         {
             // handle external keyer
         }
@@ -384,12 +392,12 @@ void DMKeysEditDlg::setupTableRow(int row, KeyVal &k)
 
 void DMKeysEditDlg::setupTableColumns()
 {
-    constexpr int totalColumns = 6;
+    constexpr int totalColumns = 8;
     ui->OptionsTable->setColumnCount(totalColumns);
 
     ui->OptionsTable->setHorizontalHeaderLabels(
         { tr("Key Top"), tr("Value"), tr("Rig\nMem"),
-         tr("Repeat"), tr("Repeat\nDur"), tr("Rec.") });
+         tr("Msg\nDur\nEnable"), tr("Msg\nDur"),tr("Repeat\nEnable"), tr("Repeat\nPause\nDur"), tr("Rec.") });
 
     auto *hh = ui->OptionsTable->horizontalHeader();
 
@@ -406,14 +414,14 @@ void DMKeysEditDlg::setupTableColumns()
 
     ui->OptionsTable->setColumnWidth(EDIT_DLG_COL0, 140);
     ui->OptionsTable->setColumnWidth(EDIT_DLG_COL1, 220);
-    ui->OptionsTable->setColumnWidth(EDIT_DLG_COL2, 50);
+    ui->OptionsTable->setColumnWidth(EDIT_DLG_COL2, 40);
     ui->OptionsTable->setColumnWidth(EDIT_DLG_COL3, 50);
-    ui->OptionsTable->setColumnWidth(EDIT_DLG_COL4, 60);
-    ui->OptionsTable->setColumnWidth(EDIT_DLG_COL5, 30);
-    ui->OptionsTable->setColumnWidth(EDIT_DLG_COL6, 30);
-    ui->OptionsTable->setColumnWidth(EDIT_DLG_COL7, 30);
+    ui->OptionsTable->setColumnWidth(EDIT_DLG_COL4, 40);
+    ui->OptionsTable->setColumnWidth(EDIT_DLG_COL5, 50);
+    ui->OptionsTable->setColumnWidth(EDIT_DLG_COL6, 50);
+    ui->OptionsTable->setColumnWidth(EDIT_DLG_COL7, 50);
 
-    if (txKeyerType == keyerTypes[TxKeyerId::DigitalModes])
+    if (config.txKeyerType == keyerTypes[TxKeyerId::DigitalModes])
     {
         ui->OptionsTable->setColumnHidden(EDIT_DLG_COL2, true);
         ui->OptionsTable->setColumnHidden(EDIT_DLG_COL3, true);
@@ -425,16 +433,28 @@ void DMKeysEditDlg::setupTableColumns()
 
     // Hide Unwanted colums for keyer Type
 
-    if (txKeyerType == keyerTypes[TxKeyerId::RigControl])
+    if (config.txKeyerType == keyerTypes[TxKeyerId::RigControl])
     {
         ui->OptionsTable->setColumnHidden(EDIT_DLG_COL1, true);
         ui->OptionsTable->setColumnHidden(EDIT_DLG_COL7, true);
     }
 
-    if (txKeyerType == keyerTypes[TxKeyerId::CW_RigControl] || txKeyerType == keyerTypes[TxKeyerId::PcCwKeyer])
+    if (config.txKeyerType == keyerTypes[TxKeyerId::CW_RigControl] || config.txKeyerType == keyerTypes[TxKeyerId::PcCwKeyer])
     {
         ui->OptionsTable->setColumnHidden(EDIT_DLG_COL2, true);
         ui->OptionsTable->setColumnHidden(EDIT_DLG_COL7, true);
+    }
+
+    if (config.txKeyerType == keyerTypes[TxKeyerId::InternalVoiceKeyer])
+    {
+        ui->OptionsTable->setColumnHidden(EDIT_DLG_COL1, true);
+        ui->OptionsTable->setColumnHidden(EDIT_DLG_COL2, true);
+    }
+
+    if (config.txKeyerType == keyerTypes[TxKeyerId::ExternalVoiceKeyer])
+    {
+        ui->OptionsTable->setColumnHidden(EDIT_DLG_COL1, true);
+        ui->OptionsTable->setColumnHidden(EDIT_DLG_COL2, true);
     }
 
 }
@@ -443,8 +463,8 @@ void DMKeysEditDlg::showDetails()
 {
     ui->OptionsTable->clear();
 
-    const auto keyerIt = allKeyConfigs.constFind(txKeyerType);
-    if (keyerIt == allKeyConfigs.cend()) return;
+    const auto keyerIt = config.allKeyConfigs.constFind(config.txKeyerType);
+    if (keyerIt == config.allKeyConfigs.cend()) return;
 
     const auto contestIt = keyerIt->constFind(selectedContestName);
     if (contestIt == keyerIt->cend()) return;
@@ -495,7 +515,7 @@ void DMKeysEditDlg::getDetails()
     if (!ui->OptionsTable->rowCount())
         return;
 
-    auto &contestMap = allKeyConfigs[txKeyerType][selectedContestName];
+    auto &contestMap = config.allKeyConfigs[config.txKeyerType][selectedContestName];
 
     // Locate rig key (use rigName, fallback if needed)
     QString rigKey = radioListSelectedName;
@@ -588,8 +608,8 @@ void DMKeysEditDlg::saveCurrentSection()
 
 bool DMKeysEditDlg::isCurrentSectionDirty() const
 {
-    const auto keyerIt = allKeyConfigs.constFind(txKeyerType);
-    if (keyerIt == allKeyConfigs.cend()) return false;
+    const auto keyerIt = config.allKeyConfigs.constFind(config.txKeyerType);
+    if (keyerIt == config.allKeyConfigs.cend()) return false;
 
     const auto contestIt = keyerIt->constFind(selectedContestName);
     if (contestIt == keyerIt->cend()) return false;
@@ -612,10 +632,10 @@ void DMKeysEditDlg::clearDirtyFlag()
     QString rigKey = radioListSelectedName;
 
     // Check if the path exists before accessing
-    if (!allKeyConfigs.contains(txKeyerType))
+    if (!config.allKeyConfigs.contains(config.txKeyerType))
         return;
 
-    auto &contestMap = allKeyConfigs[txKeyerType];
+    auto &contestMap = config.allKeyConfigs[config.txKeyerType];
     if (!contestMap.contains(selectedContestName))
         return;
 
@@ -645,7 +665,7 @@ void DMKeysEditDlg::on_NewSectionButton_clicked()
 
     if (enquireDialog(this, tr("Please give a new name for the %1").arg(selectedContestName), newContestName))
     {
-        auto &contestMap = allKeyConfigs[txKeyerType];
+        auto &contestMap = config.allKeyConfigs[config.txKeyerType];
 
         if (!contestMap.contains(newContestName))
         {
@@ -717,7 +737,7 @@ void DMKeysEditDlg::on_CopyButton_clicked()
     if (!enquireDialog(this, tr("Please give a name for the new %1").arg(selectedContestName), newContestName))
         return;
 
-    auto &contestMap = allKeyConfigs[txKeyerType];
+    auto &contestMap = config.allKeyConfigs[config.txKeyerType];
 
     if (contestMap.contains(newContestName))
     {
@@ -756,8 +776,8 @@ void DMKeysEditDlg::on_DeleteButton_clicked()
     if (!mShowYesNoMessage(this, tr("Are you sure you want to delete the current %1?").arg(selectedContestName)))
         return;
 
-    auto keyerIt = allKeyConfigs.find(txKeyerType);
-    if (keyerIt == allKeyConfigs.end())
+    auto keyerIt = config.allKeyConfigs.find(config.txKeyerType);
+    if (keyerIt == config.allKeyConfigs.end())
         return;
 
     auto &contestMap = keyerIt.value();
@@ -766,7 +786,7 @@ void DMKeysEditDlg::on_DeleteButton_clicked()
     contestMap.remove(selectedContestName);
 
     if (contestMap.isEmpty())
-        allKeyConfigs.remove(txKeyerType);  // Optional cleanup
+        config.allKeyConfigs.remove(config.txKeyerType);  // Optional cleanup
 
     // Reset selection to <None> or first available
     if (!contestMap.isEmpty())
@@ -800,7 +820,7 @@ void DMKeysEditDlg::on_renameButton_clicked()
     QString newContestName = selectedContestName;
     if (enquireDialog(this, tr("Please give a new name for the %1").arg(selectedContestName), newContestName))
     {
-        auto &contestMap = allKeyConfigs[txKeyerType];
+        auto &contestMap = config.allKeyConfigs[config.txKeyerType];
 
         if (!contestMap.contains(newContestName))
         {
@@ -831,14 +851,14 @@ void DMKeysEditDlg::on_addRadioButton_clicked()
     }
 
 
-    DmButtonEditAddRadioDialog* addRadioDialog = new DmButtonEditAddRadioDialog(listOfRadios);
+    DmButtonEditAddRadioDialog* addRadioDialog = new DmButtonEditAddRadioDialog(config.listOfRadios);
 
     QString titleText;
-    if (txKeyerType == keyerTypes[TxKeyerId::RigControl])
+    if (config.txKeyerType == keyerTypes[TxKeyerId::RigControl])
     {
         titleText = tr(" supporting Voice Keyer");
     }
-    else if (txKeyerType == keyerTypes[TxKeyerId::CW_RigControl])
+    else if (config.txKeyerType == keyerTypes[TxKeyerId::CW_RigControl])
     {
        titleText = tr(" supporting CW Keyer");
     }
@@ -863,7 +883,7 @@ void DMKeysEditDlg::on_addRadioButton_clicked()
                 // add radio to this contest set
                 // Create empty Run and S&P sets
 
-                auto &contestMap = allKeyConfigs[txKeyerType];
+                auto &contestMap = config.allKeyConfigs[config.txKeyerType];
 
                 ContestSection section;
 
@@ -933,8 +953,8 @@ void DMKeysEditDlg::on_deleteRadioButton_clicked()
     }
     else
     {
-        auto keyerIt = allKeyConfigs.find(txKeyerType);
-        if (keyerIt != allKeyConfigs.end())
+        auto keyerIt = config.allKeyConfigs.find(config.txKeyerType);
+        if (keyerIt != config.allKeyConfigs.end())
         {
             ContestMap &contestMap = keyerIt.value();
             auto contestIt = contestMap.find(selectedContestName);
@@ -983,8 +1003,8 @@ void DMKeysEditDlg::on_SectionsList_itemSelectionChanged()
 
     saveCurrentSection();
 
-    const auto keyerIt = allKeyConfigs.constFind(txKeyerType);
-    if (keyerIt == allKeyConfigs.cend() || ui->SectionsList->currentRow() < 0)
+    const auto keyerIt = config.allKeyConfigs.constFind(config.txKeyerType);
+    if (keyerIt == config.allKeyConfigs.cend() || ui->SectionsList->currentRow() < 0)
         return;
 
     QStringList sections = keyerIt->keys();
@@ -1043,8 +1063,8 @@ void DMKeysEditDlg::onRadioListItemSelectionChanged()
     if (RadioList)
     {
 
-        const auto keyerIt = allKeyConfigs.constFind(txKeyerType);
-        if (keyerIt == allKeyConfigs.cend())
+        const auto keyerIt = config.allKeyConfigs.constFind(config.txKeyerType);
+        if (keyerIt == config.allKeyConfigs.cend())
             return;
 
         const auto contestIt = keyerIt->constFind(selectedContestName);  // name = selected section/contest
@@ -1082,8 +1102,8 @@ void DMKeysEditDlg::closeEvent(QCloseEvent *event)
 void DMKeysEditDlg::doCloseEvent()
 {
     RegSettings settings;
-    settings.getSettings().setValue("DMKeysEdit/geometry/" + txKeyerType, saveGeometry());
-    settings.getSettings().setValue("DMKeysEdit/SplitterState/" + txKeyerType, ui->settingsSplitter->saveState());
+    settings.getSettings().setValue("DMKeysEdit/geometry/" + config.txKeyerType, saveGeometry());
+    settings.getSettings().setValue("DMKeysEdit/SplitterState/" + config.txKeyerType, ui->settingsSplitter->saveState());
 }
 void DMKeysEditDlg::reject()
 {
@@ -1131,7 +1151,7 @@ void DMKeysEditDlg::on_upButton_clicked()
     if (selRow == 0)
         return;
 
-    auto &contestMap = allKeyConfigs[txKeyerType];
+    auto &contestMap = config.allKeyConfigs[config.txKeyerType];
     if (!contestMap.contains(selectedContestName))
         return;
 
@@ -1188,7 +1208,7 @@ void DMKeysEditDlg::on_downButton_clicked()
     if (selRow >= rowCount - 1)
         return;
 
-    auto &contestMap = allKeyConfigs[txKeyerType];
+    auto &contestMap = config.allKeyConfigs[config.txKeyerType];
     if (!contestMap.contains(selectedContestName))
         return;
 
@@ -1245,9 +1265,9 @@ bool DMKeysEditDlg::checkRadioExists(QString contestName, QString radioName, boo
 
     bool ok = false;
 
-    if (allKeyConfigs.contains(txKeyerType))
+    if (config.allKeyConfigs.contains(config.txKeyerType))
     {
-        const ContestMap &contestMap = allKeyConfigs.value(txKeyerType);
+        const ContestMap &contestMap = config.allKeyConfigs.value(config.txKeyerType);
 
         ok = true;
 
@@ -1275,14 +1295,14 @@ void DMKeysEditDlg::onTxKeyerCommonConfigPbClicked()
 
 
 
-    if (txKeyerType != keyerTypes[TxKeyerId::None])
+    if (config.txKeyerType != keyerTypes[TxKeyerId::None])
     {
-        int oldnb = txKeyer->numButtons;
+        int oldnb = config.txKeyer->numButtons;
 
 
         int maxNumOfVoiceMessages = MAXIMUM_BUTTONS;
 
-        if (txKeyerType == keyerTypes[TxKeyerId::RigControl])
+        if (config.txKeyerType == keyerTypes[TxKeyerId::RigControl])
         {
             //maxNumOfVoiceMessages = getNumVoiceMessages(selectedRadio);
             maxNumOfVoiceMessages = 8;   /// temp for test ***********************************************
@@ -1290,9 +1310,9 @@ void DMKeysEditDlg::onTxKeyerCommonConfigPbClicked()
 
 
 
-        if (txKeyer->setup(txKeyerFactory, maxNumOfVoiceMessages, txKeyer->numButtons, minosSelectedRadio.getLocalName()) == QDialog::Accepted)
+        if (config.txKeyer->setup(config.txKeyerFactory, maxNumOfVoiceMessages, config.txKeyer->numButtons, config.minosSelectedRadio.key()) == QDialog::Accepted)
         {
-            if (txKeyer->numButtons != oldnb)
+            if (config.txKeyer->numButtons != oldnb)
             {
                 int columns = 4;
                 //createButtonsForKeyer(txKeyer->numButtons, columns);
