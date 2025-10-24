@@ -99,16 +99,16 @@ cd Configuration
 
 call powershell.exe "& {Invoke-WebRequest https://www.country-files.com/cty/cty.dat -Outfile cty.dat}"
 call powershell.exe "& {Invoke-WebRequest https://www.rsgbcc.org/cgi-bin/vhfenter.pl?afsdownload=y -Outfile clublist.txt}"
-call powershell.exe "& {Invoke-WebRequest https://www.rsgbcc.org/vhf/vhfcontests24.xml -Outfile vhfcontests24.xml}"
+call powershell.exe "& {Invoke-WebRequest https://www.rsgbcc.org/vhf/vhfcontests26.xml -Outfile vhfcontests26.xml}"
 call powershell.exe "& {Invoke-WebRequest https://www.rsgbcc.org/vhf/vhfcontests25.xml -Outfile vhfcontests25.xml}"
 
-call powershell.exe "& {Invoke-WebRequest http://www.rsgbcc.org/vhf/hfcontests24.xml -Outfile hfcontests24.xml}"
+call powershell.exe "& {Invoke-WebRequest http://www.rsgbcc.org/vhf/hfcontests26.xml -Outfile hfcontests26.xml}"
 call powershell.exe "& {Invoke-WebRequest http://www.rsgbcc.org/vhf/hfcontests25.xml -Outfile hfcontests25.xml}"
 
-call powershell.exe "& {Invoke-WebRequest http://microwave.rsgbcc.org/microcontests24.xml -Outfile microcontests24.xml}"
+call powershell.exe "& {Invoke-WebRequest http://microwave.rsgbcc.org/microcontests26.xml -Outfile microcontests26.xml}"
 call powershell.exe "& {Invoke-WebRequest http://microwave.rsgbcc.org/microcontests25.xml -Outfile microcontests25.xml}"
 
-call powershell.exe "& {Invoke-WebRequest http://bartg.rsgbcc.org/bartgcontests24.xml -Outfile bartgcontests24.xml}"
+call powershell.exe "& {Invoke-WebRequest http://bartg.rsgbcc.org/bartgcontests26.xml -Outfile bartgcontests26.xml}"
 call powershell.exe "& {Invoke-WebRequest http://bartg.rsgbcc.org/bartgcontests25.xml -Outfile bartgcontests25.xml}"
 
 
