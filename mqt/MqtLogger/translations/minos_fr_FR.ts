@@ -188,32 +188,32 @@ Non contacté</translation>
         <translation>Filtre %1</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1680"/>
+        <location filename="../bandmapclientframe.cpp" line="1701"/>
         <source>Bandmap Spot Filters</source>
         <translation>Bandmap filtres de spot</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1755"/>
+        <location filename="../bandmapclientframe.cpp" line="1776"/>
         <source>Mouse in frame, updates paused</source>
         <translation>Souris dans le cadre, mises à jour suspendues</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1485"/>
+        <location filename="../bandmapclientframe.cpp" line="1506"/>
         <source>Cluster Server Not Running</source>
         <translation>Le Serveur du Cluster ne fonctionne pas</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1518"/>
+        <location filename="../bandmapclientframe.cpp" line="1539"/>
         <source>Connected</source>
         <translation>Connecté</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1528"/>
+        <location filename="../bandmapclientframe.cpp" line="1549"/>
         <source>Disconnected</source>
         <translation>Déconnecté</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1638"/>
+        <location filename="../bandmapclientframe.cpp" line="1659"/>
         <source>Freq out of band</source>
         <translation>Fréquence hors bande</translation>
     </message>
@@ -221,7 +221,7 @@ Non contacté</translation>
 <context>
     <name>BandmapView</name>
     <message>
-        <location filename="../bandmapview.cpp" line="1031"/>
+        <location filename="../bandmapview.cpp" line="1032"/>
         <source>%1%2CQ Frequency @ .%3%4%5</source>
         <translation>%1%2CQ Frequency @ .%3%4%5</translation>
     </message>
@@ -231,24 +231,24 @@ Non contacté</translation>
         <translation>Nouveau</translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1204"/>
+        <location filename="../bandmapview.cpp" line="1221"/>
         <source>CQ Frequency = %1
 The mode is %2</source>
         <translation>La fréquence CQ = %1
 Le mode calculé est %2</translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1233"/>
+        <location filename="../bandmapview.cpp" line="1250"/>
         <source>The computed mode is</source>
         <translation>Mode calculé</translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1236"/>
+        <location filename="../bandmapview.cpp" line="1253"/>
         <source>The mode is</source>
         <translation>Mode</translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1243"/>
+        <location filename="../bandmapview.cpp" line="1260"/>
         <source>%1 - %2, %3, %4, %5 [%6 %7 @ %8] 
 %9 %10
 %11
@@ -6089,7 +6089,7 @@ Last %8 Mins: %9 QSO %10 pts %11 mults
         <translation>Message CW disponible</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1874"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1894"/>
         <source></source>
         <translation></translation>
     </message>

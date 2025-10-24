@@ -103,32 +103,32 @@
 <context>
     <name>BaseContact</name>
     <message>
-        <location filename="../contacts.cpp" line="434"/>
+        <location filename="../contacts.cpp" line="442"/>
         <source>DELETED</source>
         <translation>SUPPRIMÉ</translation>
     </message>
     <message>
-        <location filename="../contacts.cpp" line="449"/>
+        <location filename="../contacts.cpp" line="457"/>
         <source>MAN</source>
         <translation>MANUELLE</translation>
     </message>
     <message>
-        <location filename="../contacts.cpp" line="452"/>
+        <location filename="../contacts.cpp" line="460"/>
         <source>DEL</source>
         <translation>SUPPRIMER</translation>
     </message>
     <message>
-        <location filename="../contacts.cpp" line="455"/>
+        <location filename="../contacts.cpp" line="463"/>
         <source>N/S</source>
         <translation>NON SIGNIFICATIF</translation>
     </message>
     <message>
-        <location filename="../contacts.cpp" line="460"/>
+        <location filename="../contacts.cpp" line="468"/>
         <source>DUP</source>
         <translation>DUPLIQUER</translation>
     </message>
     <message>
-        <location filename="../contacts.cpp" line="506"/>
+        <location filename="../contacts.cpp" line="514"/>
         <source>MHz</source>
         <translation>MHz</translation>
     </message>
@@ -136,12 +136,12 @@
 <context>
     <name>BaseContestLog</name>
     <message>
-        <location filename="../contest.cpp" line="699"/>
+        <location filename="../contest.cpp" line="705"/>
         <source>DUPLICATE OF </source>
         <translation>Duplicata de </translation>
     </message>
     <message>
-        <location filename="../contest.cpp" line="715"/>
+        <location filename="../contest.cpp" line="721"/>
         <source>DUP OF</source>
         <translation>Duplicata de</translation>
     </message>
@@ -659,8 +659,8 @@
         <translation>Bandmap afficher la Locator dérivée</translation>
     </message>
     <message>
+        <location filename="../profiles.cpp" line="156"/>
         <location filename="../profiles.cpp" line="157"/>
-        <location filename="../profiles.cpp" line="158"/>
         <source></source>
         <translation></translation>
     </message>
@@ -1173,22 +1173,22 @@
 <context>
     <name>ContestScore</name>
     <message>
-        <location filename="../contest.cpp" line="2190"/>
+        <location filename="../contest.cpp" line="2212"/>
         <source>Score: %1 Qsos; %2 pts; (%3 countries); %4 locs; bonuses %5(%6) = %7</source>
         <translation>Score: %1 Qsos; %2 pts; (%3 pays); %4 locs; bonuses %5(%6) = %7</translation>
     </message>
     <message>
-        <location filename="../contest.cpp" line="2198"/>
+        <location filename="../contest.cpp" line="2220"/>
         <source>Score: %1 Qsos; %2 pts; %3 countries; %4 districts; %5 locs; bonuses %6(%7) = %8</source>
         <translation>Score: %1 Qsos; %2 pts; %3 pays; %4 quartiers; %5 locs; bonuses %6(%7) = %8</translation>
     </message>
     <message>
-        <location filename="../contest.cpp" line="2206"/>
+        <location filename="../contest.cpp" line="2228"/>
         <source>Score: %1 Qsos; %2 pts; %3%4 countries%5; bonuses %6(%7) = %8</source>
         <translation>Score: %1 Qsos; %2 pts; %3%4 pays%5; bonuses %6(%7) = %8</translation>
     </message>
     <message>
-        <location filename="../contest.cpp" line="2214"/>
+        <location filename="../contest.cpp" line="2236"/>
         <source>Score: %1 Qsos; %2 pts;%3%4 countries%5;%6%7 districts%8; %9%10 locators %13 = %14</source>
         <translation>Score: %1 Qsos; %2 pts;%3%4 pays%5;%6%7 quartiers%8; %9%10 locators %13 = %14</translation>
     </message>
@@ -1601,24 +1601,24 @@ Attention: &quot;.&quot; pas &quot;,&quot;
         <translation>Échec du charger libhamlib-4.dll %1</translation>
     </message>
     <message>
-        <location filename="../managehamlib.cpp" line="301"/>
-        <location filename="../managehamlib.cpp" line="308"/>
-        <location filename="../managehamlib.cpp" line="344"/>
+        <location filename="../managehamlib.cpp" line="310"/>
+        <location filename="../managehamlib.cpp" line="317"/>
+        <location filename="../managehamlib.cpp" line="353"/>
         <source>Failed to rename %1 to %2</source>
         <translation>Échec du renommage de %1 en %2</translation>
     </message>
     <message>
-        <location filename="../managehamlib.cpp" line="312"/>
+        <location filename="../managehamlib.cpp" line="321"/>
         <source>Hamlib updated - will be used after restart</source>
         <translation>Hamlib mis à jour - sera utilisé après le redémarrage</translation>
     </message>
     <message>
-        <location filename="../managehamlib.cpp" line="349"/>
+        <location filename="../managehamlib.cpp" line="358"/>
         <source>Old Hamlib restored - it will be used after restart</source>
         <translation>Vieux Hamlib restauré - sera utilisé après le redémarrage</translation>
     </message>
     <message>
-        <location filename="../managehamlib.cpp" line="361"/>
+        <location filename="../managehamlib.cpp" line="370"/>
         <source>No Hamlib update found that could be reverted</source>
         <translation>Aucun vieux Hamlib à restaurer</translation>
     </message>
@@ -1634,12 +1634,12 @@ Attention: &quot;.&quot; pas &quot;,&quot;
 <context>
     <name>MinosCompass</name>
     <message>
-        <location filename="../minoscompass.cpp" line="189"/>
+        <location filename="../minoscompass.cpp" line="190"/>
         <source>N,E,S,W</source>
         <translation>N,E,S,O</translation>
     </message>
     <message>
-        <location filename="../minoscompass.cpp" line="345"/>
+        <location filename="../minoscompass.cpp" line="346"/>
         <source>Stop</source>
         <translation>Arrêter</translation>
     </message>

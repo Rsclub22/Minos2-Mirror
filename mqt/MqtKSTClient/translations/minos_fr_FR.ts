@@ -160,71 +160,76 @@
     </message>
     <message>
         <location filename="../kstconfigure.ui" line="239"/>
+        <source>Volume</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../kstconfigure.ui" line="272"/>
         <source>Test</source>
         <translation type="unfinished">Tester</translation>
     </message>
     <message>
-        <location filename="../kstconfigure.ui" line="257"/>
+        <location filename="../kstconfigure.ui" line="290"/>
         <source>...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstconfigure.ui" line="269"/>
+        <location filename="../kstconfigure.ui" line="302"/>
         <source>AirScout</source>
         <translation>AirScout</translation>
     </message>
     <message>
-        <location filename="../kstconfigure.ui" line="279"/>
+        <location filename="../kstconfigure.ui" line="312"/>
         <source>Server Name</source>
         <translation>Nom du Serveur</translation>
     </message>
     <message>
-        <location filename="../kstconfigure.ui" line="297"/>
+        <location filename="../kstconfigure.ui" line="330"/>
         <source>My Name</source>
         <translation>Nom</translation>
     </message>
     <message>
-        <location filename="../kstconfigure.ui" line="319"/>
+        <location filename="../kstconfigure.ui" line="352"/>
         <source>Server UDP Port</source>
         <translation>Port du serveur UDP</translation>
     </message>
     <message>
-        <location filename="../kstconfigure.ui" line="337"/>
+        <location filename="../kstconfigure.ui" line="370"/>
         <source>Server timeout</source>
         <translation>Timeout du serveur</translation>
     </message>
     <message>
-        <location filename="../kstconfigure.ui" line="359"/>
+        <location filename="../kstconfigure.ui" line="392"/>
         <source>Minimum distance</source>
         <translation>Distance minimale</translation>
     </message>
     <message>
-        <location filename="../kstconfigure.ui" line="377"/>
+        <location filename="../kstconfigure.ui" line="410"/>
         <source>Maximum distance</source>
         <translation>Distance maximale</translation>
     </message>
     <message>
-        <location filename="../kstconfigure.ui" line="400"/>
+        <location filename="../kstconfigure.ui" line="433"/>
         <source>Cancel</source>
         <translation>Annuler</translation>
     </message>
     <message>
-        <location filename="../kstconfigure.ui" line="420"/>
+        <location filename="../kstconfigure.ui" line="453"/>
         <source>Ok</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../kstconfigure.cpp" line="77"/>
+        <location filename="../kstconfigure.cpp" line="78"/>
         <source>Name %1 cannot be more than 16 characters</source>
         <translation>Nom %1 limité à 16 caractères</translation>
     </message>
     <message>
-        <location filename="../kstconfigure.cpp" line="114"/>
+        <location filename="../kstconfigure.cpp" line="115"/>
         <source>WAV (*.wav);;All Files (*.*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstconfigure.cpp" line="118"/>
+        <location filename="../kstconfigure.cpp" line="119"/>
         <source>Meep Notification Sound</source>
         <translation type="unfinished"></translation>
     </message>
@@ -438,7 +443,7 @@ l&apos;indicatif sélectionné</translation>
     </message>
     <message>
         <location filename="../kstmainwindow.ui" line="809"/>
-        <location filename="../kstmainwindow.cpp" line="542"/>
+        <location filename="../kstmainwindow.cpp" line="543"/>
         <source>Connect</source>
         <translation>Connecter</translation>
     </message>
@@ -448,54 +453,54 @@ l&apos;indicatif sélectionné</translation>
         <translation>Fermer</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="531"/>
+        <location filename="../kstmainwindow.cpp" line="532"/>
         <source>Disconnect</source>
         <translation>Déconnecter</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="525"/>
+        <location filename="../kstmainwindow.cpp" line="526"/>
         <source>Including %1</source>
         <translation>%1 Compris</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="162"/>
-        <location filename="../kstmainwindow.cpp" line="166"/>
+        <location filename="../kstmainwindow.cpp" line="163"/>
+        <location filename="../kstmainwindow.cpp" line="167"/>
         <source>Active</source>
         <translation>Actif</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="683"/>
+        <location filename="../kstmainwindow.cpp" line="684"/>
         <source>Set Back</source>
         <translatorcomment>Ou retour??</translatorcomment>
         <translation>Définir statut à « Présent»</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="687"/>
+        <location filename="../kstmainwindow.cpp" line="688"/>
         <source>Set Away</source>
         <translation>Définir statut à « Absent »</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="2190"/>
+        <location filename="../kstmainwindow.cpp" line="2202"/>
         <source>KST Test data Files</source>
         <translation>Fichiers de données de test KST</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="2191"/>
+        <location filename="../kstmainwindow.cpp" line="2203"/>
         <source>All Files</source>
         <translation>Tous fichiers</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="2194"/>
+        <location filename="../kstmainwindow.cpp" line="2206"/>
         <source>KST Client log files Files</source>
         <translation>Fichiers journaux du Minos KSTclient</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="1274"/>
+        <location filename="../kstmainwindow.cpp" line="1260"/>
         <source></source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="1686"/>
+        <location filename="../kstmainwindow.cpp" line="1697"/>
         <source>Message updates paused</source>
         <translation>Mises à jour des messages suspendues</translation>
     </message>
