@@ -916,6 +916,7 @@ void BandmapView::drawBandMapSpots()
             tslf->setPlaceholders(nearMatches);
         }
     }
+    traceMsg(QString("drawBandMapSpots: finished"));
 }
 
 
