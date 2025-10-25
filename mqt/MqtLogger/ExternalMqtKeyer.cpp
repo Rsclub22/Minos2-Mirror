@@ -10,7 +10,7 @@
 
 using namespace TxKeyerCommon;
 
-/*static*/ QString ExternalMqtKeyer::keyerName = "ExternalMqtKeyer";
+/*static*/ QString ExternalMqtKeyer::keyerName = txKeyerNames[TxKeyerId::ExternalMqtKeyer];
 
 
 ExternalMqtKeyer::ExternalMqtKeyer(QObject *parent) : TxKeyerBase(parent)
@@ -27,8 +27,8 @@ void ExternalMqtKeyer::registerTxKeyer(TxKeyerFactory::TxKeyers* vmKeyersList)
 
     TxKeyerCapabilities voiceMemCap;
 
-    voiceMemCap.setVmIdNum(TxKeyerId::ExternalVoiceKeyer);
-    voiceMemCap.setKeyerType(keyerTypes[TxKeyerId::ExternalVoiceKeyer]);
+    voiceMemCap.setVmIdNum(TxKeyerId::ExternalMqtKeyer);
+    voiceMemCap.setKeyerType(txKeyerTypes[TxKeyerId::ExternalMqtKeyer]);
     voiceMemCap.setKeyerName(keyerName);
     voiceMemCap.setNumVoiceKeys(KEYERKEYS);
     voiceMemCap.setsupportSerial(false);

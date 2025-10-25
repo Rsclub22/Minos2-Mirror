@@ -69,12 +69,12 @@ TxKeyerBase* TxKeyerFactory::createTxKeyer(int txKeyerId)
     {
         return new InternalVoiceTxKeyer(this);
     }
-    else if (txKeyerId == TxKeyerId::ExternalVoiceKeyer)
+    else if (txKeyerId == TxKeyerId::ExternalMqtKeyer)
     {
-        if (LogContainer->sendDM->isKeyerLoaded())
+        /*if (LogContainer->sendDM->isKeyerLoaded())
         {
             return new ExternalMqtKeyer(this);
-        }
+        }*/
     }
 
     return nullptr;

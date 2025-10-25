@@ -55,9 +55,18 @@ namespace TxKeyerCommon
         PcCwKeyer,        // Serial DTR keying of radio
         DigitalModes,
         InternalVoiceKeyer,
-        ExternalVoiceKeyer
+        ExternalMqtKeyer
 
     };
+
+    // these two lists should match the TXKeyerId order
+
+    inline const QStringList txKeyerNames = {"", "Voice RigControl", "CW RigControl", "SerialControl", "PcCwKeyer", "Digital Modes", "Internal", "mqtKeyer"};
+
+
+    inline const QStringList txKeyerTypes = { "None", "rigControl", "cwRigControl",
+                                           "SerialControl", "pcCwKeyer", "DigitalModes",
+                                           "Internal", "ExternalMqtKeyer" };
 
     enum KeyerEomTypes
     {
@@ -67,8 +76,6 @@ namespace TxKeyerCommon
         InternalSoundCardVoiceKeyer,
         DTRKeyerTXStatus
     };
-
-    inline const QStringList keyerTypes = {"", "Voice RigControl", "CW RigControl", "SerialControl", "PcCwKeyer", "Digital Modes", "Internal", "mqtKeyer"};
 
     inline const QString VOICEKEYER_COMMON_KEY = "commonParams";
 

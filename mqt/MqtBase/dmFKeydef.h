@@ -2,18 +2,19 @@
 #define DMFKEYDEF_H
 #include <QString>
 #include <QVector>
+#include <QMap>
+#include <QSet>
+#include <QJsonObject>
 
-// vector of (map(key current set name) of vector of pairs (fkey name, fkey message) )
-// added message repeat enable and repeat interval duration
-// QVector is 24 entries, F1-F12, F1-F12
-/*struct KeyVal {
-            QString fk;
-            QString ktop;
-            QString kval;
-            int rigVoiceMemNum = 0;
-            bool rptEnable = false;
-            int rptDur = 0;
-};*/
+#include "txkeyerCommonConstants.h"
+
+using namespace TxKeyerCommon;
+
+inline const QMap<TxKeyerId, QSet<QString>> keyerFieldMap = {
+    { CW_RigControl,    { "fk", "ktop", "kval", "rptEnable", "rptDur", "msgDurEnable", "msgDur", "numButtons", "endOfMessageType", "switchToCwMode" } },
+    { RigControl, { "fk", "ktop", "rigVoiceMemNum", "numButtons", "endOfMessageType", "useCatForEom" } },
+    { DigitalModes,   { "fk", "ktop", "kval" } }  // add any other keyer types here
+};
 
 class KeyVal {
 public:
@@ -29,7 +30,6 @@ public:
     bool msgDurEnable() const {return m_msgDurEnable;}
     int msgDur() const {return m_msgDur;}
 
-
     void setFk(const QString &val) { if (m_fk != val) { m_fk = val; m_dirty = true; } }
     void setKtop(const QString &val) { if (m_ktop != val) { m_ktop = val; m_dirty = true; } }
     void setKval(const QString &val) { if (m_kval != val) { m_kval = val; m_dirty = true; } }
@@ -38,6 +38,7 @@ public:
     void setRptDur(int val) { if (m_rptDur != val) { m_rptDur = val; m_dirty = true; } }
     void setMsgDurEnable(bool val) { if (m_msgDurEnable != val) { m_msgDurEnable = val; m_dirty = true; } }
     void setMsgDur(int val) { if (m_msgDur != val) { m_msgDur = val; m_dirty = true; } }
+
 
     void clearDirty() { m_dirty = false; }
     bool isDirty() const { return m_dirty; }
@@ -102,6 +103,8 @@ public:
             changed = true;
         }
 
+
+
         if (changed)
         {
             m_dirty = true;
@@ -109,6 +112,39 @@ public:
         }
     }
 
+    QJsonObject toJson(const TxKeyerId &keyerId) const
+    {
+        QJsonObject obj;
+        const auto fields = keyerFieldMap.value(keyerId);
+
+        if (fields.contains("fk")) obj["fk"] = m_fk;
+        if (fields.contains("ktop")) obj["ktop"] = m_ktop;
+        if (fields.contains("kval")) obj["kval"] = m_kval;
+        if (fields.contains("rigVoiceMemNum")) obj["rigVoiceMemNum"] = m_rigVoiceMemNum;
+        if (fields.contains("rptEnable")) obj["rptEnable"] = m_rptEnable;
+        if (fields.contains("rptDur")) obj["rptDur"] = m_rptDur;
+        if (fields.contains("msgDurEnable")) obj["msgDurEnable"] = m_msgDurEnable;
+        if (fields.contains("msgDur")) obj["msgDur"] = m_msgDur;
+
+
+        return obj;
+    }
+
+    void fromJson(const QJsonObject &obj)
+    {
+        m_fk = obj.value("key").toString();
+        m_ktop = obj.value("label").toString();
+        m_kval = obj.value("message").toString();
+
+        // Use default values if fields are missing
+        m_msgDur = obj.value("messageDuration").toInt(0);
+        m_msgDurEnable = obj.value("messageDurEnable").toBool(false);
+        m_rptDur = obj.value("repeatDuration").toInt(0);
+        m_rptEnable = obj.value("repeatEnable").toBool(false);
+        m_rigVoiceMemNum = obj.value("rigVoiceMemNum").toInt(0);
+
+        m_dirty = false;
+    }
 
 private:
     QString m_fk;
@@ -122,11 +158,111 @@ private:
     bool m_dirty = false;
 };
 
+
+class CommonVal {
+
+public:
+
+    CommonVal() = default;
+
+    int numButtons() const {return m_numButtons;}
+    int endOfMessageType() const {return  m_endOfMessageType;}
+    bool useCatForEom() const {return m_useCatForEom;}
+    bool switchToCwMode() const {return  m_switchToCwMode;}
+
+    void setNumButtons(int numButtons) { if (m_numButtons != numButtons){m_numButtons = numButtons; m_dirty = true;}}
+    void setEndOfMessageType(int eomType) { if (m_endOfMessageType != eomType){m_endOfMessageType = eomType; m_dirty = true;}}
+    void setUseCatForEom(bool useCatForEom) { if (m_useCatForEom != useCatForEom){m_useCatForEom = useCatForEom; m_dirty = true;}}
+    void setSwitchToCwMode(bool switchToCwMode) {if (m_switchToCwMode != switchToCwMode){m_switchToCwMode = switchToCwMode; m_dirty = true;} }
+
+    void clearDirty() { m_dirty = false; }
+    bool isDirty() const { return m_dirty; }
+
+    bool operator==(const CommonVal &other) const
+    {
+        return m_numButtons == other.m_numButtons &&
+               m_endOfMessageType == other.m_endOfMessageType &&
+               m_useCatForEom == other.m_useCatForEom &&
+               m_switchToCwMode == other.m_switchToCwMode;
+
+    }
+
+    void swapWith(CommonVal &other)
+    {
+        using std::swap;
+
+        bool changed = false;
+
+
+
+        if (m_numButtons != other.m_numButtons)
+        {
+            swap(m_numButtons, other.m_numButtons);
+            changed = true;
+        }
+
+        if (m_endOfMessageType != other.m_endOfMessageType)
+        {
+            swap(m_endOfMessageType, other.m_endOfMessageType);
+            changed = true;
+        }
+
+        if (m_useCatForEom != other.m_useCatForEom)
+        {
+            swap(m_useCatForEom, other.m_useCatForEom);
+            changed = true;
+        }
+
+        if (m_switchToCwMode != other.m_switchToCwMode)
+        {
+            swap(m_switchToCwMode, other.m_switchToCwMode);
+            changed = true;
+        }
+
+        if (changed)
+        {
+            m_dirty = true;
+            other.m_dirty = true;
+        }
+    }
+
+    QJsonObject toJson() const
+    {
+        QJsonObject obj;
+        obj["numButtons"] = m_numButtons;
+        obj["endOfMessageType"] = m_endOfMessageType;
+        obj["useCatForEom"] = m_useCatForEom;
+        obj["switchToCwMode"] = m_switchToCwMode;
+        return obj;
+    }
+
+    void fromJson(const QJsonObject &obj)
+    {
+        m_numButtons = obj.value("numButtons").toInt(12);
+        m_endOfMessageType = obj.value("endOfMessageType").toInt(0);
+        m_useCatForEom = obj.value("useCatForEom").toBool(false);
+        m_switchToCwMode = obj.value("switchToCwMode").toBool(true);
+
+        m_dirty = false;
+    }
+
+private:
+
+    int m_numButtons = 12;
+    int m_endOfMessageType = 0;
+    bool m_useCatForEom = false;
+    bool m_switchToCwMode = true;
+    bool m_dirty = false;
+};
+
+
+
 typedef QVector<KeyVal>KeySet;
 
 struct ContestSection {
     KeySet run;
     KeySet sp;
+    CommonVal common;
 };
 
 typedef QMap<QString, ContestSection> RigMap;         // rigModel or "default"

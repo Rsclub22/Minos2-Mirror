@@ -43,12 +43,12 @@ RigControlCwTxKeyer::~RigControlCwTxKeyer()
 
 void RigControlCwTxKeyer::registerTxKeyer(TxKeyerFactory::TxKeyers* vmKeyersList)
 {
-    QString keyerName = "cwRigControl";
+    QString keyerName = txKeyerNames[TxKeyerId::CW_RigControl];
 
     TxKeyerCapabilities voiceMemCap;
 
     voiceMemCap.setVmIdNum(TxKeyerId::CW_RigControl);
-    voiceMemCap.setKeyerType(keyerTypes[TxKeyerId::CW_RigControl]);
+    voiceMemCap.setKeyerType(txKeyerTypes[TxKeyerId::CW_RigControl]);
     voiceMemCap.setKeyerName(keyerName);
     voiceMemCap.setNumVoiceKeys(8);
     voiceMemCap.setsupportSerial(false);
@@ -96,7 +96,7 @@ void RigControlCwTxKeyer::getRadioCommonData(int &selectedEomType, int &userNumb
 {
     int numButtons = 0;
 
-    QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[TxKeyerId::CW_RigControl] + ".ini";
+    QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + VOICE_KEYER_BASE_FILE_NAME + txKeyerTypes[TxKeyerId::CW_RigControl] + ".ini";
     QSettings readCommonConfig(fileName, QSettings::IniFormat);
 
     QString groupName;
@@ -109,7 +109,7 @@ void RigControlCwTxKeyer::getRadioCommonData(int &selectedEomType, int &userNumb
         groupName = ALL_RADIOS_GROUP_NAME;
     }
 
-    fileName = TX_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[TxKeyerId::CW_RigControl] + ".ini";
+    fileName = TX_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + txKeyerTypes[TxKeyerId::CW_RigControl] + ".ini";
     QSettings config(fileName, QSettings::IniFormat);
 
     config.beginGroup(groupName);
@@ -475,10 +475,10 @@ int RigControlCwTxKeyer::setup(TxKeyerFactory *txKeyerFactory, int &maxNumButton
 
     TxVmRigSetupDialog txVmSetupDialog(voiceCap, maxNumButtons, numButtons, tslf->dmButtonFrame);
 
-    QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[TxKeyerId::CW_RigControl] + ".ini";
+    QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + VOICE_KEYER_BASE_FILE_NAME + txKeyerTypes[TxKeyerId::CW_RigControl] + ".ini";
     QSettings config(fileName, QSettings::IniFormat);
 
-    fileName = TX_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[TxKeyerId::CW_RigControl] + ".ini";
+    fileName = TX_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + txKeyerTypes[TxKeyerId::CW_RigControl] + ".ini";
     QSettings buttonConfig(fileName, QSettings::IniFormat);
 
 

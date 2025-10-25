@@ -27,6 +27,13 @@ namespace Ui {
 class DMButtonFrame;
 }
 
+inline const QString rigControlKeyerConfigFilename = "/rigControl/rigControl.json";
+inline const QString cwRigControlKeyerConfigFilename = "/cwRigControl/cwRigControl.json";
+inline const QString pcCwKeyerKeyerConfigFilename = "pcCwKeyer/pcCwKeyer.json";
+inline const QString digitalModesConfigFilename = "DigitalModes/DigitalModes.json";
+inline const QString InternalKeyerConfigFilename = "Internal/internal.json";
+inline const QString ExternalKeyerConfigFilename = "Enternal/external.json";
+
 struct ValidationResult {
     bool isValid = true;
     QStringList errors;
@@ -52,8 +59,8 @@ public:
 
     void setContest(BaseContestLog *);
 
-    QString parseFKeyMessage(QString mess);
-    void parseFKeyFile(QString sfname);
+    //QString parseFKeyMessage(QString mess);
+    //void parseFKeyFile(QString sfname);
     void setFreq(Frequency f);
 
     // tvVmButtonFrame
@@ -155,7 +162,7 @@ private:
 
     QVector<QPushButton *> fButtons;
 
-
+    TxKeyerCapabilities selectedKeyerCap;
 
     //Keys fkeys;
     KeyerMap allKeyConfigs;
@@ -172,7 +179,7 @@ private:
     //QList<QShortcut *> shortCutKeyList;
     int buttonNumSent = TxKeyerCommon::NO_TXKEYER_BUTTON_SELECTED;
 
-    QString txKeyerType;
+    //QString txKeyerType;
 
     QTimer* msgDurTimer = nullptr;
     QTimer* repeatPauseTimer = nullptr;
@@ -204,8 +211,8 @@ private:
     QString getFKeysString() const;
     bool parseFKeyString(QString &s);
     //bool parseFKeyArray(QJsonArray s, QString keyset);
-    bool parseFKeyArray(const QJsonArray &array, KeySet &dest);
-    void rewriteFKeyFile();
+    //bool parseFKeyArray(const QJsonArray &array, KeySet &dest);
+    //void rewriteFKeyFile();
 
     bool isDataMode();
 
@@ -275,18 +282,18 @@ private:
 
 
     void actionDigitalModeKeyPress(int key, int carr);
-    void set_DigiMode_FrameState(QString txKeyerName);
-    void set_None_FrameState(QString txKeyerName);
-    void set_rigControl_FrameState(QString txKeyerName);
-    void set_cwRigControl_FrameState(QString txKeyerName);
-    void set_pcCwKeyer_FrameState(QString txKeyerName);
-    void set_Internal_FrameState(QString txKeyerName);
-    void set_External_FrameState(QString txKeyerName);
+    void set_DigiMode_FrameState();
+    void set_None_FrameState();
+    void set_rigControl_FrameState();
+    void set_cwRigControl_FrameState();
+    void set_pcCwKeyer_FrameState();
+    void set_Internal_FrameState();
+    void set_External_FrameState();
 
     void setWipeButtonVisible(bool visible);
     void setLogItButtonVisible(bool visible);
     QStringList getContestNamesForKeyerType(const QString &keyerType);
-    void populateFksetCombo(QString txKeyerName, QString currentName);
+    void populateFksetCombo(QString txKeyerType, QString currentName);
     void getVoiceCwMemSupportedRadios(const QStringList &listOfRadios, QStringList& listOfRadioSupportKeyer);
     void clearAllDirtyFlags();
     QStringList getRadioNamesForSelectedContestName(const QString &keyerType);
@@ -299,9 +306,13 @@ private:
     void clearErrorMessage();
     bool checkRadioExists(QString radioName, bool &radioExists);
     void clearAll_Ui_Elements();
-    void setupRigControl_Ui_Elements(QString txKeyerName);
+    void setupRigControl_Ui_Elements();
     void displayButtons();
-    void setupCw_RigControl_Ui_Elements(QString txKeyerName);
+    void setupCw_RigControl_Ui_Elements();
+    bool writeSingleKeyerFile(const QString &filePath, const QString &keyerType, const KeyerMap &allKeyConfigs, TxKeyerId keyerId);
+    bool readSingleKeyerFile(const QString &filePath, const QString &keyerType, KeyerMap &allKeyConfigs);
+    QString parseFKeyMessage(QString mess);
+    TxKeyerId txKeyerNameToId(const QString &name);
 };
 
 #endif // DMBUTTONFRAME_H

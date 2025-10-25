@@ -28,7 +28,7 @@ class TxKeyerCapabilities
 {
 public:
 
-    TxKeyerCapabilities(){};
+    TxKeyerCapabilities(){clear();};
 
     QString getKeyerName(){return keyerName;}
     void setKeyerName(const QString keyerName_){keyerName = keyerName_;}
@@ -70,6 +70,24 @@ public:
 
     bool getHasMessageRepeat(){return hasMessageRepeat;}
     void setHasMessageRepeat(const bool hasMessageRepeat_){hasMessageRepeat = hasMessageRepeat_;}
+
+    void clear()
+    {
+        vmIdNum = 0;
+        keyerName.clear();
+        keyerType.clear();
+        numVoiceKeys = 0;
+        supportRepeatMsg = false;
+        supportSerial = false;
+        useCatPTTForEom = false;
+        enableCwMode = false;
+        setupButton = false;
+        hasPip = false;
+        hasTxStatus = false;
+        hasAvailStatus = false;
+        hasMessageRepeat = false;
+
+    }
 
 
 private:

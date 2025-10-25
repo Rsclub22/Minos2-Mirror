@@ -678,7 +678,7 @@ void RadioSettingDialog::deleteMemoryButtonRadios(TxKeyerId id)
             }
 
 
-            QString fileName = TX_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[id] + ".ini";
+            QString fileName = TX_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + txKeyerTypes[id] + ".ini";
             QSettings config(fileName, QSettings::IniFormat);
 
             if (!listOfRadiosToDelete.isEmpty())
