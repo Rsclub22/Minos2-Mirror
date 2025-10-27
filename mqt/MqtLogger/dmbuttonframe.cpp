@@ -47,7 +47,7 @@ const QStringList vmButtonShortCutKeys = {
     "Shift+F11", "Shift+F12",
 };
 
-const QString DIGIMODE = "DigiMode";
+const QString DIGIMODE = "DigitalMode";
 
 DMButtonFrame::DMButtonFrame(QWidget *parent) :
     QFrame(parent),
@@ -88,7 +88,7 @@ DMButtonFrame::DMButtonFrame(QWidget *parent) :
     txKeyerFactory->populateComboKeyerList(ui->txKeyerSelect, txKeyerName);
 
     // we add digi modes to list, though it will not act as keyer
-    ui->txKeyerSelect->addItem(DIGIMODE);
+    ui->txKeyerSelect->addItem(txKeyerNames[DigitalModes]);
 
     connect(ui->txKeyerSelect, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &DMButtonFrame::onTxKeyerSelect);
 
@@ -521,7 +521,14 @@ void DMButtonFrame::set_DigiMode_FrameState()
     setLogItButtonVisible(true);
 
     currentName = ct->digitalModesCurrentFKeySetContest.getValue();
-    populateFksetCombo(selectedKeyerCap.getKeyerType(), currentName);
+    bool currentNameOk = false;
+    populateFksetCombo(selectedKeyerCap.getKeyerType(), currentName, currentNameOk);
+
+    if (!currentNameOk)
+    {
+        currentName = DEFAULT_CONTEST_NAME;  // current contest name is not in the list
+    }
+
     fkeyFileChanged();
 }
 
@@ -583,9 +590,11 @@ void DMButtonFrame::set_rigControl_FrameState()
 
     currentName = ct->rigControlCurrentFKeySetContest.getValue();
 
+    logMessage(QString("set_rigControl_framestate - current contest = %1").arg(currentName));
+
     fkeyFileName = TX_KEYER_PATH().append(rigControlKeyerConfigFilename);
 
-    readSingleKeyerFile(fkeyFileName, selectedKeyerCap.getKeyerType(), allKeyConfigs);  // also populates FkSetCombo
+    readSingleKeyerFile(fkeyFileName, selectedKeyerCap.getKeyerType());  // also populates FkSetCombo
 
     //parseFKeyFile(fkeyFileName);
 
@@ -696,7 +705,7 @@ void DMButtonFrame::set_cwRigControl_FrameState()
     currentName = ct->cwRigControlCurrentFKeySetContest.getValue();
 
     fkeyFileName = TX_KEYER_PATH().append(cwRigControlKeyerConfigFilename);
-    readSingleKeyerFile(fkeyFileName, selectedKeyerCap.getKeyerType(), allKeyConfigs);  // also populates FkSetCombo
+    readSingleKeyerFile(fkeyFileName, selectedKeyerCap.getKeyerType());  // also populates FkSetCombo
 
     //parseFKeyFile(fkeyFileName);    // also populates FkSetCombo
 
@@ -810,7 +819,7 @@ void DMButtonFrame::set_pcCwKeyer_FrameState()
 
     fkeyFileName = TX_KEYER_PATH().append(pcCwKeyerKeyerConfigFilename);
 
-    readSingleKeyerFile(fkeyFileName, selectedKeyerCap.getKeyerType(), allKeyConfigs);  // also populates FkSetCombo
+    readSingleKeyerFile(fkeyFileName, selectedKeyerCap.getKeyerType());  // also populates FkSetCombo
 
     //parseFKeyFile(fkeyFileName);    // also populates FkSetCombo
 
@@ -897,7 +906,7 @@ void DMButtonFrame::set_Internal_FrameState()
 
     fkeyFileName = TX_KEYER_PATH().append(InternalKeyerConfigFilename);
 
-    readSingleKeyerFile(fkeyFileName, selectedKeyerCap.getKeyerType(), allKeyConfigs);  // also populates FkSetCombo
+    readSingleKeyerFile(fkeyFileName, selectedKeyerCap.getKeyerType());  // also populates FkSetCombo
 
 
     //ui->txKeyerSetupPb->setVisible(txKeyerCap.getSetupButton());
@@ -955,7 +964,17 @@ void DMButtonFrame::set_External_FrameState()
      ui->selectedRadioLabel->setVisible(false);
 
      currentName = ct->externalVoiceKeyerCurrentFKeySetContest.getValue();
-     populateFksetCombo(selectedKeyerCap.getKeyerType(), currentName);
+
+     bool currentNameOk = false;
+     populateFksetCombo(selectedKeyerCap.getKeyerType(), currentName, currentNameOk);
+
+     if (!currentNameOk)
+     {
+         currentName = DEFAULT_CONTEST_NAME; // current contest name is not in the list
+     }
+
+
+
      fkeyFileChanged();
 }
 
@@ -1687,7 +1706,7 @@ void DMButtonFrame::setRigModel(QString rigModel, PubSubName psn)
         return;
     }
 
-    logMessage(QString("setRigModel = %1, radio = %2").arg(rigModel).arg(psn.getLocalName()));
+    logMessage(QString("setRigModel = %1, radio = %2").arg(rigModel, psn.getLocalName()));
 
 
     RadioDetails rd;
@@ -2138,7 +2157,7 @@ void DMButtonFrame::onModeChange(QString mode)
 
 void DMButtonFrame::fkeyFileChanged()
 {
-    readSingleKeyerFile(fkeyFileName, selectedKeyerCap.getKeyerType(), allKeyConfigs);
+    readSingleKeyerFile(fkeyFileName, selectedKeyerCap.getKeyerType());
     //parseFKeyFile(fkeyFileName);
 
     displayButtons();
@@ -2349,16 +2368,23 @@ void DMButtonFrame::showFButtons(bool s)
 */
 
 
-void DMButtonFrame::populateFksetCombo(QString txKeyerType, QString currentName)
+void DMButtonFrame::populateFksetCombo(QString txKeyerType, QString currentName, bool &contestNameOk)
 {
     ignoreFkComboSignal = true;
+    contestNameOk = false;
 
     nameList.clear();
     ui->fkeysetCombo->clear();
 
     nameList = getContestNamesForKeyerType(txKeyerType);
     ui->fkeysetCombo->addItems(nameList);
-    ui->fkeysetCombo->setCurrentText(currentName);
+
+    if (nameList.contains(currentName))
+    {
+       ui->fkeysetCombo->setCurrentText(currentName);
+        contestNameOk = true;
+    }
+
 
     ignoreFkComboSignal = false;
 }
@@ -2575,224 +2601,113 @@ QString DMButtonFrame::parseFKeyMessage(QString mess)
 }
 
 
-bool DMButtonFrame::readSingleKeyerFile(const QString &filePath, const QString &keyerType, KeyerMap &allKeyConfigs)
+bool DMButtonFrame::readSingleKeyerFile(const QString &filePath, const QString &keyerType)
 {
-    allKeyConfigs.clear();
+
+    KeyerMap tempKeyConfigs;
 
     QFile file(filePath);
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
         qWarning() << "Cannot open" << filePath;
         return false;
     }
-
     QJsonParseError err;
     QJsonDocument doc = QJsonDocument::fromJson(file.readAll(), &err);
-    if (err.error != QJsonParseError::NoError) {
+    if (err.error != QJsonParseError::NoError)
+    {
         qWarning() << "JSON parse error in" << filePath << ":" << err.errorString();
         return false;
     }
-
     QJsonObject root = doc.object();
-    if (!root.contains("KeyerConfig")) {
+    if (!root.contains("KeyerConfig"))
+    {
         qWarning() << "Missing KeyerConfig in" << filePath;
         return false;
     }
-
     QJsonObject keyerConfig = root["KeyerConfig"].toObject();
-    if (!keyerConfig.contains(keyerType)) {
+    if (!keyerConfig.contains(keyerType))
+    {
         qWarning() << "Keyer type" << keyerType << "not found in" << filePath;
         return false;
     }
+    QJsonObject contestMapJson = keyerConfig[keyerType].toObject();
 
-    QJsonObject contestMap = keyerConfig[keyerType].toObject();
-    for (const QString &contestName : contestMap.keys()) {
-        QJsonObject rigMap = contestMap[contestName].toObject();
-        for (const QString &rigModel : rigMap.keys()) {
-            QJsonObject section = rigMap[rigModel].toObject();
-            ContestSection &cs = allKeyConfigs[keyerType][contestName][rigModel];
+    // Build into tempKeyConfigs instead
+    ContestMap &contestMapRef = tempKeyConfigs[keyerType];
 
-            // Parse Run
-            if (section.contains("Run")) {
+    const QStringList contestNames = contestMapJson.keys();
+    for (const QString &contestName : contestNames)
+    {
+        QJsonObject rigMapJson = contestMapJson[contestName].toObject();
+        RigMap &rigMapRef = contestMapRef[contestName];
+
+
+        const QStringList rigModels = rigMapJson.keys();
+        for (const QString &rigModel : rigModels)
+        {
+            QJsonObject section = rigMapJson[rigModel].toObject();
+            ContestSection cs;
+
+            if (section.contains("Run"))
+            {
                 QJsonArray runArr = section["Run"].toArray();
                 cs.run.clear();
-                for (const QJsonValue &val : runArr) {
+
+                for (const QJsonValue &val : std::as_const(runArr))
+                {
                     if (!val.isObject()) continue;
                     KeyVal kv;
                     kv.fromJson(val.toObject());
                     cs.run.append(kv);
                 }
             }
-
-            // Parse S&P
-            if (section.contains("SandP")) {
+            if (section.contains("SandP"))
+            {
                 QJsonArray spArr = section["SandP"].toArray();
                 cs.sp.clear();
-                for (const QJsonValue &val : spArr) {
+                for (const QJsonValue &val :std::as_const(spArr))
+                {
                     if (!val.isObject()) continue;
                     KeyVal kv;
                     kv.fromJson(val.toObject());
                     cs.sp.append(kv);
                 }
             }
-
-            // Parse Common (optional)
             if (section.contains("Common"))
+            {
                 cs.common.fromJson(section["Common"].toObject());
+            }
             else
-                cs.common = CommonVal();  // defaults
+            {
+                cs.common = CommonVal();
+            }
+
+            rigMapRef[rigModel] = cs;
         }
     }
 
-    populateFksetCombo(selectedKeyerCap.getKeyerName(), currentName);
+    // Only at the very end, after everything is built, assign to the output parameter
+    allKeyConfigs = tempKeyConfigs;
 
-    clearAllDirtyFlags();  // Clear all dirty flags after loading
-                            // as they were changed by loading.
-
-
+    bool currentNameOk = false;
+    populateFksetCombo(selectedKeyerCap.getKeyerType(), currentName, currentNameOk);
+    if (!currentNameOk)
+    {
+        currentName = DEFAULT_CONTEST_NAME;
+    }
+    clearAllDirtyFlags();
     return true;
 }
 
 
 
-/*
-void DMButtonFrame::parseFKeyFile(QString fname)
+bool DMButtonFrame::writeSingleKeyerFile(const QString &filePath, const QString &keyerType, TxKeyerId keyerId)
 {
-    allKeyConfigs.clear();
-
-    QFile lf(fname);
-
-    if (!lf.open(QIODevice::ReadOnly|QIODevice::Text))
+    if (!allKeyConfigs.contains(keyerType))
     {
-        QString ebuff = QString("Failed to open Function Key file %1").arg(fname);
-        MinosParameters::getMinosParameters()->mshowMessage(ebuff);
-        return;
-    }
 
-    QString s = lf.readAll();
-    bool retval = parseFKeyString(s);
-
-    if (retval == false)
-    {
-        mShowMessage(tr("Invalid or missing FKey definitions"), this);
-    }
-    else
-    {
-        // Validate the loaded configuration
-        ValidationResult validation = validateKeyConfigs(allKeyConfigs);
-
-        if (!validation.isValid)
-        {
-            QString errorMsg = tr("Configuration file has errors:\n\n");
-            errorMsg += validation.errors.join("\n");
-
-            if (!validation.warnings.isEmpty())
-            {
-                errorMsg += tr("\n\nWarnings:\n");
-                errorMsg += validation.warnings.join("\n");
-            }
-
-            mShowMessage(errorMsg, this);
-            // Optionally: clear allKeyConfigs or attempt repair
-        }
-        else if (!validation.warnings.isEmpty())
-        {
-            // Log warnings but continue
-            qWarning() << "Configuration loaded with warnings:";
-            for (const QString &warn : validation.warnings)
-            {
-                qWarning() << "  " << warn;
-            }
-        }
-
-        populateFksetCombo(txKeyerType, currentName);
-    }
-}
-
-
-bool DMButtonFrame::parseFKeyArray(const QJsonArray &array, KeySet &dest)
-{
-    dest.clear();
-
-    for (const QJsonValue &val : array)
-    {
-        if (!val.isObject()) continue;
-
-        QJsonObject obj = val.toObject();
-        KeyVal key;
-        key.fromJson(obj);  // Uses the helper with defaults
-        dest.append(key);
-    }
-
-    return true;
-}
-
-
-
-bool DMButtonFrame::parseFKeyString(QString &s)
-{
-    QJsonParseError err;
-    QJsonDocument doc = QJsonDocument::fromJson(s.toUtf8(), &err);
-    if (err.error != QJsonParseError::NoError) {
-        qWarning() << "JSON parse error:" << err.errorString();
-        return false;
-    }
-
-    if (!doc.isObject()) {
-        qWarning() << "Expected top-level JSON object";
-        return false;
-    }
-
-    QJsonObject rootObj = doc.object();
-    if (!rootObj.contains("KeyerConfig")) {
-        qWarning() << "Missing KeyerConfig in JSON";
-        return false;
-    }
-    QJsonObject keyerConfig = rootObj["KeyerConfig"].toObject();
-
-
-
-    QStringList keyerTypes = keyerConfig.keys();
-    for (const QString &keyerType : std::as_const(keyerTypes))
-    {
-        QJsonObject contestMap = keyerConfig[keyerType].toObject();
-        QStringList contests = contestMap.keys();
-
-        for (const QString &contest : std::as_const(contests))
-        {
-            QJsonObject rigMap = contestMap[contest].toObject();
-            QStringList rigModels = rigMap.keys();
-
-            for (const QString &rigModel : std::as_const(rigModels))
-            {
-                QJsonObject section = rigMap[rigModel].toObject();
-
-                ContestSection &cs = allKeyConfigs[keyerType][contest][rigModel];
-                if (section.contains("Run"))
-                {
-                    parseFKeyArray(section["Run"].toArray(), cs.run);
-                }
-                if (section.contains("SandP"))
-                {
-                    parseFKeyArray(section["SandP"].toArray(), cs.sp);
-                }
-                if (!nameList.contains(contest))
-                    nameList.append(contest);
-            }
-        }
-    }
-
-    clearAllDirtyFlags();  // Clear all dirty flags after loading
-                           // as they were changed by loading.
-
-    return true;
-}
-
-*/
-
-bool DMButtonFrame::writeSingleKeyerFile(const QString &filePath, const QString &keyerType, const KeyerMap &allKeyConfigs, TxKeyerId keyerId)
-{
-    if (!allKeyConfigs.contains(keyerType)) {
-        qWarning() << "No data for keyer type:" << keyerType;
+        logMessage(QString("writeKeyerFile - No data for keyer type: %1").arg(keyerType));
         return false;
     }
 
@@ -2851,186 +2766,7 @@ TxKeyerId DMButtonFrame::txKeyerNameToId(const QString &name)
     return TxKeyerId::None; // fallback
 }
 
-/*
-void DMButtonFrame::rewriteFKeyFile()
-{
-    QJsonDocument json;
-    QJsonObject keyerConfigObj;  // Top-level "KeyerConfig" object
 
-    for (auto keyerIt = allKeyConfigs.constBegin(); keyerIt != allKeyConfigs.constEnd(); ++keyerIt)
-    {
-        const QString &keyerType = keyerIt.key();
-        const auto &contestMap = keyerIt.value();
-
-        QJsonObject contestObj;
-        for (auto contestIt = contestMap.constBegin(); contestIt != contestMap.constEnd(); ++contestIt)
-        {
-            const QString &contestName = contestIt.key();
-            const auto &rigMap = contestIt.value();
-
-            QJsonObject rigModelObj;
-            for (auto rigIt = rigMap.constBegin(); rigIt != rigMap.constEnd(); ++rigIt)
-            {
-                const QString &rigModel = rigIt.key();
-                const ContestSection &section = rigIt.value();
-
-                QJsonArray runArray;
-                for (const KeyVal &k : section.run)
-                {
-                    QJsonObject obj;
-                    obj["key"] = k.fk();
-                    obj["label"] = k.ktop();
-                    obj["message"] = k.kval();
-                    obj["messageDuration"] = k.msgDur();
-                    obj["messageDurEnable"] = k.msgDurEnable();
-                    obj["rigVoiceMemNum"] = k.rigVoiceMemNum();
-                    obj["repeatEnable"] = k.rptEnable();
-                    obj["repeatDuration"] = k.rptDur();
-                    runArray.append(obj);
-                }
-
-                QJsonArray spArray;
-                for (const KeyVal &k : section.sp)
-                {
-                    QJsonObject obj;
-                    obj["key"] = k.fk();
-                    obj["label"] = k.ktop();
-                    obj["message"] = k.kval();
-                    obj["messageDuration"] = k.msgDur();
-                    obj["messageDurEnable"] = k.msgDurEnable();
-                    obj["rigVoiceMemNum"] = k.rigVoiceMemNum();
-                    obj["repeatEnable"] = k.rptEnable();
-                    obj["repeatDuration"] = k.rptDur();
-                    spArray.append(obj);
-                }
-
-                QJsonObject sectionObj;
-                sectionObj["Run"] = runArray;
-                sectionObj["SandP"] = spArray;
-
-                rigModelObj[rigModel] = sectionObj;
-            }
-
-            contestObj[contestName] = rigModelObj;
-        }
-
-        keyerConfigObj[keyerType] = contestObj;
-    }
-
-    QJsonObject rootObj;
-    rootObj["KeyerConfig"] = keyerConfigObj;
-
-    json.setObject(rootObj);
-
-    QByteArray s = json.toJson(QJsonDocument::Indented);
-
-    QFile jf(fkeyFileName);
-    if (!jf.open(QIODevice::WriteOnly | QIODevice::Truncate))
-    {
-        logMessage("Failed to open " + fkeyFileName);
-        return;
-    }
-    jf.write(s);
-    jf.close();
-}
-
-*/
-
-
-/*
-ValidationResult DMButtonFrame::validateKeyConfigs(const KeyerMap &configs)
-{
-    ValidationResult result;
-
-    for (auto keyerIt = configs.constBegin(); keyerIt != configs.constEnd(); ++keyerIt)
-    {
-        const QString &keyerType = keyerIt.key();
-        const auto &contestMap = keyerIt.value();
-
-        if (keyerType.isEmpty())
-        {
-            result.addError("Found empty keyer type");
-            continue;
-        }
-
-        for (auto contestIt = contestMap.constBegin(); contestIt != contestMap.constEnd(); ++contestIt)
-        {
-            const QString &contestName = contestIt.key();
-            const auto &rigMap = contestIt.value();
-
-            if (contestName.isEmpty())
-            {
-                result.addWarning(QString("Empty contest name in keyer '%1'").arg(keyerType));
-            }
-
-            if (rigMap.isEmpty())
-            {
-                result.addWarning(QString("Contest '%1' (keyer '%2') has no rigs")
-                                      .arg(contestName, keyerType));
-            }
-
-            for (auto rigIt = rigMap.constBegin(); rigIt != rigMap.constEnd(); ++rigIt)
-            {
-                const QString &rigName = rigIt.key();
-                const ContestSection &section = rigIt.value();
-
-                if (rigName.isEmpty())
-                {
-                    result.addWarning(QString("Empty rig name in contest '%1', keyer '%2'")
-                                          .arg(contestName, keyerType));
-                }
-
-                // Validate Run KeySet
-                if (section.run.isEmpty())
-                {
-                    result.addError(QString("Missing Run section for rig '%1' in contest '%2', keyer '%3'")
-                                        .arg(rigName, contestName, keyerType));
-                }
-                else if (section.run.size() != 12)
-                {
-                    result.addError(QString("Invalid Run size (%1, expected 12) for rig '%2' in contest '%3', keyer '%4'")
-                                        .arg(section.run.size()).arg(rigName, contestName, keyerType));
-                }
-
-                // Validate S&P KeySet
-                if (section.sp.isEmpty())
-                {
-                    result.addError(QString("Missing S&P section for rig '%1' in contest '%2', keyer '%3'")
-                                        .arg(rigName, contestName, keyerType));
-                }
-                else if (section.sp.size() != 12)
-                {
-                    result.addError(QString("Invalid S&P size (%1, expected 12) for rig '%2' in contest '%3', keyer '%4'")
-                                        .arg(section.sp.size()).arg(rigName, contestName, keyerType));
-                }
-
-                // Validate KeyVal data integrity
-                for (int i = 0; i < section.run.size(); ++i)
-                {
-                    const KeyVal &k = section.run[i];
-                    if (k.fk().isEmpty())
-                    {
-                        result.addWarning(QString("Run[%1]: Empty key for rig '%2', contest '%3'")
-                                              .arg(i).arg(rigName, contestName));
-                    }
-                }
-
-                for (int i = 0; i < section.sp.size(); ++i)
-                {
-                    const KeyVal &k = section.sp[i];
-                    if (k.fk().isEmpty())
-                    {
-                        result.addWarning(QString("S&P[%1]: Empty key for rig '%2', contest '%3'")
-                                              .arg(i).arg(rigName, contestName));
-                    }
-                }
-            }
-        }
-    }
-
-    return result;
-}
-*/
 
 ValidationResult DMButtonFrame::validateKeyConfigs(const KeyerMap &configs)
 {
@@ -3239,7 +2975,7 @@ void DMButtonFrame::on_configEditButton_clicked()
         return;
     }
 
-    DMKeysEditDlgConfig editDlgConfig(allKeyConfigs, selectedKeyerCap, radioMap, listOfRadioSupportKeyer);
+    DMKeysEditDlgConfig editDlgConfig(nfk, selectedKeyerCap, radioMap, listOfRadioSupportKeyer);
 
     editDlgConfig.fKeyFileName = fkeyFileName;
     editDlgConfig.minosSelectedContestName = currentName;
@@ -3254,7 +2990,7 @@ void DMButtonFrame::on_configEditButton_clicked()
     {
         allKeyConfigs = nfk;
         // and we have to regenerate the JSON file
-        writeSingleKeyerFile(fkeyFileName, selectedKeyerCap.getKeyerType(), allKeyConfigs, txKeyerNameToId(selectedKeyerCap.getKeyerName()));
+        writeSingleKeyerFile(fkeyFileName, selectedKeyerCap.getKeyerType(), txKeyerNameToId(selectedKeyerCap.getKeyerName()));
         updateFrameState();
     }
 }

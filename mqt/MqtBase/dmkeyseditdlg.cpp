@@ -17,11 +17,14 @@
 //#include "txVmExternalButtonDialog.h"
 #include "txvminternalbuttondialog.h"
 #include "txkeyerCommonConstants.h"
+#include "MTrace.h"
 #include <QDebug>
 
 #include "ui_dmkeyseditdlg.h"
 
 using namespace TxKeyerCommon;
+
+// data to be edited passed in config.allKeysConfig
 
 DMKeysEditDlg::DMKeysEditDlg(QWidget *parent, const DMKeysEditDlgConfig &config_)
     : QDialog(parent),
@@ -30,6 +33,7 @@ DMKeysEditDlg::DMKeysEditDlg(QWidget *parent, const DMKeysEditDlgConfig &config_
 {
     ui->setupUi(this);
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
+
 
     RegSettings settings;
     QByteArray geometry = settings.getSettings().value("DMKeysEdit/geometry/" + config.txKeyerType).toByteArray();
@@ -170,7 +174,11 @@ void DMKeysEditDlg::showSections()
 
     const auto keyerIt = config.allKeyConfigs.constFind(config.txKeyerType);
     if (keyerIt == config.allKeyConfigs.cend())
+    {
+        logMessage(QString("showsections - No contests for this keyerType"));
         return;  // No contests for this keyerType
+
+    }
 
     sections = keyerIt->keys();  // contest names for this keyerType
 
@@ -206,12 +214,16 @@ void DMKeysEditDlg::showRadiosForSection()
 
         const auto keyerIt = config.allKeyConfigs.constFind(config.txKeyerType);
         if (keyerIt == config.allKeyConfigs.cend())
+        {
+            logMessage(QString("showRadiosForSection - txKeyerType %1 not found").arg(config.txKeyerType));
             return;
-
+        }
         const auto contestIt = keyerIt->constFind(selectedContestName);  // name = selected section/contest
         if (contestIt == keyerIt->cend())
+        {
+            logMessage(QString("showRadiosForSection - selectedContestName %1 not found").arg(selectedContestName));
             return;
-
+        }
         // Extract rig names for this contest
         QStringList radioNames = contestIt->keys();
 
@@ -280,7 +292,7 @@ void DMKeysEditDlg::showSection()
         return;
     }
 
-    QStringList contestList = keyerIt->keys();  // <-- FIXED
+    QStringList contestList = keyerIt->keys();
     std::sort(contestList.begin(), contestList.end(),
               [](const QString &first, const QString &second) {
                   return sectionLessThan(first, second);
@@ -310,8 +322,12 @@ void DMKeysEditDlg::showSection()
 }
 
 
-void DMKeysEditDlg::setupTableRow(int row, KeyVal &k)
+void DMKeysEditDlg::setupTableRow(int row, KeyVal &kData)
 {
+
+    auto kPtr = std::make_shared<KeyVal>(kData);
+    m_tableKeyVals.push_back(kPtr);
+
     // Determine scope and local row index
     int scope = (row < 12 ? 0 : 1);
     int localRow = (row < 12 ? row : row - 12);
@@ -323,16 +339,15 @@ void DMKeysEditDlg::setupTableRow(int row, KeyVal &k)
     ui->OptionsTable->setVerticalHeaderItem(row, new QTableWidgetItem(header));
 
     // Columns 0,1,2
-    ui->OptionsTable->setItem(row, EDIT_DLG_COL0, new QTableWidgetItem(k.ktop()));
-    ui->OptionsTable->setItem(row, EDIT_DLG_COL1, new QTableWidgetItem(k.kval()));
-    auto *item2 = new QTableWidgetItem(QString::number(k.rigVoiceMemNum()));
+    ui->OptionsTable->setItem(row, EDIT_DLG_COL0, new QTableWidgetItem(kPtr->ktop()));
+    ui->OptionsTable->setItem(row, EDIT_DLG_COL1, new QTableWidgetItem(kPtr->kval()));
+    auto *item2 = new QTableWidgetItem(QString::number(kPtr->rigVoiceMemNum()));
     item2->setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
     ui->OptionsTable->setItem(row, EDIT_DLG_COL2, item2);
 
-
     // Column 3: Duration Enable checkbox
     auto *durEnableCb = new QCheckBox;
-    durEnableCb->setChecked(k.rptEnable());
+    durEnableCb->setChecked(kPtr->msgDurEnable());
     auto *wrapDurEnableCb = new QWidget;
     auto *layDurEnableCb = new QHBoxLayout(wrapDurEnableCb);
     layDurEnableCb->addWidget(durEnableCb);
@@ -340,19 +355,19 @@ void DMKeysEditDlg::setupTableRow(int row, KeyVal &k)
     layDurEnableCb->setContentsMargins(0,0,0,0);
     ui->OptionsTable->setCellWidget(row, EDIT_DLG_COL3, wrapDurEnableCb);
 
-    KeyVal *kPtrdurEnableCb = &k;
-    connect(durEnableCb, &QCheckBox::toggled, this, [kPtrdurEnableCb](bool checked){
-        kPtrdurEnableCb->setRptEnable(checked);
+    connect(durEnableCb, &QCheckBox::toggled, this, [kPtr](bool checked){
+        kPtr->setMsgDurEnable(checked);
     });
 
+
     // Column 4: Message Dur
-    auto *item4 = new QTableWidgetItem(QString::number(k.msgDur()));
+    auto *item4 = new QTableWidgetItem(QString::number(kPtr->msgDur()));
     item4->setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
     ui->OptionsTable->setItem(row, EDIT_DLG_COL4, item4);
 
     // Column 5: Repeat checkbox
     auto *rptEnableCb = new QCheckBox;
-    rptEnableCb->setChecked(k.rptEnable());
+    rptEnableCb->setChecked(kPtr->rptEnable());
     auto *wrapRptEnableCb = new QWidget;
     auto *layRptEnableCb = new QHBoxLayout(wrapRptEnableCb);
     layRptEnableCb->addWidget(rptEnableCb);
@@ -360,14 +375,12 @@ void DMKeysEditDlg::setupTableRow(int row, KeyVal &k)
     layRptEnableCb->setContentsMargins(0,0,0,0);
     ui->OptionsTable->setCellWidget(row, EDIT_DLG_COL5, wrapRptEnableCb);
 
-
-    KeyVal *kPtrRptEnableCB = &k;
-    connect(rptEnableCb, &QCheckBox::toggled, this, [kPtrRptEnableCB](bool checked){
-        kPtrRptEnableCB->setRptEnable(checked);
+    connect(rptEnableCb, &QCheckBox::toggled, this, [kPtr](bool checked){
+        kPtr->setRptEnable(checked);
     });
 
     // Column 6: Repeat Dur
-    auto *item6 = new QTableWidgetItem(QString::number(k.rptDur()));
+    auto *item6 = new QTableWidgetItem(QString::number(kPtr->rptDur()));
     item6->setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
     ui->OptionsTable->setItem(row, EDIT_DLG_COL6, item6);
 
@@ -384,8 +397,7 @@ void DMKeysEditDlg::setupTableRow(int row, KeyVal &k)
     layBtn->setContentsMargins(0,0,0,0);
     ui->OptionsTable->setCellWidget(row, EDIT_DLG_COL7, wrapBtn);
 
-    KeyVal *kPtrBtn = &k;
-    connect(recBtn, &QToolButton::clicked, this, [this, kPtrBtn]() {
+    connect(recBtn, &QToolButton::clicked, this, [this, kPtr]() {
         if (config.txKeyerType == txKeyerTypes[TxKeyerId::InternalVoiceKeyer])
         {
             TxVmInternalButtonDialog dlg(this);
@@ -396,11 +408,12 @@ void DMKeysEditDlg::setupTableRow(int row, KeyVal &k)
             // handle external keyer
         }
 
-        // Example: access KeyVal if needed
-        QString top = kPtrBtn->ktop();
-        QString val = kPtrBtn->kval();
+        // Access KeyVal safely
+        QString top = kPtr->ktop();
+        QString val = kPtr->kval();
     });
 }
+
 
 
 void DMKeysEditDlg::setupTableColumns()
@@ -477,10 +490,18 @@ void DMKeysEditDlg::showDetails()
     ui->OptionsTable->clear();
 
     const auto keyerIt = config.allKeyConfigs.constFind(config.txKeyerType);
-    if (keyerIt == config.allKeyConfigs.cend()) return;
+    if (keyerIt == config.allKeyConfigs.cend())
+    {
+        logMessage(QString("Show Details - Keyer Type %1 Missing from json file").arg(config.txKeyerType));
+        return;
+    }
 
     const auto contestIt = keyerIt->constFind(selectedContestName);
-    if (contestIt == keyerIt->cend()) return;
+    if (contestIt == keyerIt->cend())
+    {
+        logMessage(QString("Show Details - Contestname %1 Missing from json file").arg(selectedContestName));
+        return;
+    }
 
     const auto &rigMap = contestIt.value();
 
@@ -492,18 +513,20 @@ void DMKeysEditDlg::showDetails()
             radioListSelectedName = KEYER_NO_RADIO;
             ui->deleteRadioButton->setEnabled(false);
         }
-
     }
 
     QString rigKey = radioListSelectedName;
     const ContestSection &sect = rigMap[rigKey];
 
-    // Mutable copies of KeySets
     KeySet &run = const_cast<KeySet&>(sect.run);
     KeySet &sp  = const_cast<KeySet&>(sect.sp);
 
     if (run.size() != 12 || sp.size() != 12)
+    {
+        logMessage(QString("Show Details Keys missing from Run or SP in json file - Run = %1, S&P = %2")
+                       .arg(run.size()).arg(sp.size()));
         return;
+    }
 
     // ---------- Table setup ----------
     ui->OptionsTable->setRowCount(24);
@@ -512,7 +535,7 @@ void DMKeysEditDlg::showDetails()
     for (int row = 0; row < 24; ++row)
     {
         KeyVal &k = (row < 12 ? run[row] : sp[row - 12]);
-        setupTableRow(row, k);
+        setupTableRow(row, k); // pass by reference to the dialog copy
     }
 
     // ---------- Restore splitter position ----------
@@ -523,6 +546,7 @@ void DMKeysEditDlg::showDetails()
 
 
 
+
 void DMKeysEditDlg::getDetails()
 {
     if (!ui->OptionsTable->rowCount())
@@ -530,9 +554,7 @@ void DMKeysEditDlg::getDetails()
 
     auto &contestMap = config.allKeyConfigs[config.txKeyerType][selectedContestName];
 
-    // Locate rig key (use rigName, fallback if needed)
     QString rigKey = radioListSelectedName;
-
 
     ContestSection &section = contestMap[rigKey];
 
@@ -1339,6 +1361,12 @@ void DMKeysEditDlg::onTxKeyerCommonConfigPbClicked()
 
 
 }
+
+void DMKeysEditDlg::logMessage(QString msg)
+{
+    trace(QString("[DMKeysEditDlg] %1").arg(msg));
+}
+
 
 
 

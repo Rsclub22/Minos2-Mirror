@@ -23,12 +23,11 @@ QString TX_KEYER_PATH()
 
 
 
-/*
+
 QString TXKEYER_COMMON_PARAMS_PATH()
 {
     return VOICE_KEYER_PATH() + "CommonParams/";
 }
-*/
 
 
 bool readSaveVoiceCWMemoryButtonByRadioNameFromIni(TxKeyerId id)

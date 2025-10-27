@@ -34,6 +34,8 @@ inline const QString digitalModesConfigFilename = "DigitalModes/DigitalModes.jso
 inline const QString InternalKeyerConfigFilename = "Internal/internal.json";
 inline const QString ExternalKeyerConfigFilename = "Enternal/external.json";
 
+inline const QString DEFAULT_CONTEST_NAME = "default";
+
 struct ValidationResult {
     bool isValid = true;
     QStringList errors;
@@ -293,7 +295,6 @@ private:
     void setWipeButtonVisible(bool visible);
     void setLogItButtonVisible(bool visible);
     QStringList getContestNamesForKeyerType(const QString &keyerType);
-    void populateFksetCombo(QString txKeyerType, QString currentName);
     void getVoiceCwMemSupportedRadios(const QStringList &listOfRadios, QStringList& listOfRadioSupportKeyer);
     void clearAllDirtyFlags();
     QStringList getRadioNamesForSelectedContestName(const QString &keyerType);
@@ -309,10 +310,11 @@ private:
     void setupRigControl_Ui_Elements();
     void displayButtons();
     void setupCw_RigControl_Ui_Elements();
-    bool writeSingleKeyerFile(const QString &filePath, const QString &keyerType, const KeyerMap &allKeyConfigs, TxKeyerId keyerId);
-    bool readSingleKeyerFile(const QString &filePath, const QString &keyerType, KeyerMap &allKeyConfigs);
+    bool writeSingleKeyerFile(const QString &filePath, const QString &keyerType, TxKeyerId keyerId);
+    bool readSingleKeyerFile(const QString &filePath, const QString &keyerType);
     QString parseFKeyMessage(QString mess);
     TxKeyerId txKeyerNameToId(const QString &name);
+    void populateFksetCombo(QString txKeyerType, QString currentName, bool &contestNameOk);
 };
 
 #endif // DMBUTTONFRAME_H

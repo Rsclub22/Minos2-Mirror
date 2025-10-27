@@ -2,8 +2,10 @@
 #define DMKEYSEDITDLG_H
 
 #include <QDialog>
+#include <QWidget>
 #include <QListWidget>
 #include <QListWidgetItem>
+#include <memory>
 #include "dmFKeydef.h"
 #include "PubSubName.h"
 #include "txKeyerFactory.h"
@@ -18,10 +20,23 @@ class DMKeysEditDlg;
 struct DMKeysEditDlgConfig
 {
 
+    DMKeysEditDlgConfig(KeyerMap &configs,
+                        TxKeyerCapabilities &cap,
+                        const QMap<QString, QString> &rMap,
+                        const QStringList &rList)
+        : allKeyConfigs(configs)
+        , txKeyerCap(cap)
+        , radioMap(rMap)
+        , listOfRadios(rList)
+    {}
+
     KeyerMap &allKeyConfigs;
     TxKeyerCapabilities &txKeyerCap;
     const QMap<QString, QString> &radioMap;
     const QStringList &listOfRadios;
+
+
+
 
 
     QString fKeyFileName;
@@ -32,15 +47,7 @@ struct DMKeysEditDlgConfig
     PubSubName minosSelectedRadio;
 
 
-    DMKeysEditDlgConfig(KeyerMap &configs,
-                        TxKeyerCapabilities &cap,
-                        const QMap<QString, QString> &rMap,
-                        const QStringList &rList)
-        : allKeyConfigs(configs)
-        , txKeyerCap(cap)
-        , radioMap(rMap)
-        , listOfRadios(rList)
-    {}
+
 };
 
 
@@ -116,6 +123,10 @@ private:
 
     const DMKeysEditDlgConfig &config;
 
+    std::vector<std::shared_ptr<KeyVal>> m_tableKeyVals; // store pointers to
+    // checkboxes and rec button
+
+
     //TxKeyerFactory *txKeyerFactory = nullptr;
     //QSharedPointer<TxKeyerBase> txKeyer;
     //TxKeyerCapabilities &txKeyerCap;
@@ -140,5 +151,6 @@ private:
     void setupTableColumns();
 
 
+    void logMessage(QString msg);
 };
 #endif // DMKEYSEDITDLG_H

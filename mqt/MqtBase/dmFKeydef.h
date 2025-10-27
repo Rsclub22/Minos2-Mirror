@@ -10,10 +10,12 @@
 
 using namespace TxKeyerCommon;
 
+// defines fields saved to KeyVal json file
 inline const QMap<TxKeyerId, QSet<QString>> keyerFieldMap = {
-    { CW_RigControl,    { "fk", "ktop", "kval", "rptEnable", "rptDur", "msgDurEnable", "msgDur", "numButtons", "endOfMessageType", "switchToCwMode" } },
-    { RigControl, { "fk", "ktop", "rigVoiceMemNum", "numButtons", "endOfMessageType", "useCatForEom" } },
-    { DigitalModes,   { "fk", "ktop", "kval" } }  // add any other keyer types here
+    { CW_RigControl, { "key", "label", "message", "messageDuration", "messageDurationEnable", "repeatDuration", "repeatEnable"}},
+    { RigControl, { "key", "label", "messageDuration", "messageDurationEnable", "repeatDuration", "repeatEnable", "rigVoiceMemNum"}},
+    { PcCwKeyer, { "key", "label", "message", "messageDuration", "messageDurationEnable", "repeatDuration", "repeatEnable"}},
+    { DigitalModes, { "key", "label", "message"}}
 };
 
 class KeyVal {
@@ -117,15 +119,14 @@ public:
         QJsonObject obj;
         const auto fields = keyerFieldMap.value(keyerId);
 
-        if (fields.contains("fk")) obj["fk"] = m_fk;
-        if (fields.contains("ktop")) obj["ktop"] = m_ktop;
-        if (fields.contains("kval")) obj["kval"] = m_kval;
+        if (fields.contains("key")) obj["key"] = m_fk;
+        if (fields.contains("label")) obj["label"] = m_ktop;
+        if (fields.contains("message")) obj["message"] = m_kval;
+        if (fields.contains("messageDuration")) obj["messageDuration"] = m_msgDur;
+        if (fields.contains("messageDurationEnable")) obj["messageDurationEnable"] = m_msgDurEnable;
+        if (fields.contains("repeatDuration")) obj["repeatDuration"] =  m_rptDur;
+        if (fields.contains("repeatEnable")) obj["repeatEnable"] = m_rptEnable;
         if (fields.contains("rigVoiceMemNum")) obj["rigVoiceMemNum"] = m_rigVoiceMemNum;
-        if (fields.contains("rptEnable")) obj["rptEnable"] = m_rptEnable;
-        if (fields.contains("rptDur")) obj["rptDur"] = m_rptDur;
-        if (fields.contains("msgDurEnable")) obj["msgDurEnable"] = m_msgDurEnable;
-        if (fields.contains("msgDur")) obj["msgDur"] = m_msgDur;
-
 
         return obj;
     }
@@ -138,7 +139,7 @@ public:
 
         // Use default values if fields are missing
         m_msgDur = obj.value("messageDuration").toInt(0);
-        m_msgDurEnable = obj.value("messageDurEnable").toBool(false);
+        m_msgDurEnable = obj.value("messageDurationEnable").toBool(false);
         m_rptDur = obj.value("repeatDuration").toInt(0);
         m_rptEnable = obj.value("repeatEnable").toBool(false);
         m_rigVoiceMemNum = obj.value("rigVoiceMemNum").toInt(0);

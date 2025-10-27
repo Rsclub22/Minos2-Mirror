@@ -40,8 +40,8 @@ public:
     void setNumVoiceKeys(const int numVoiceKeys_){numVoiceKeys = numVoiceKeys_;}
 
 
-    int getVmIdNum(){return vmIdNum;}
-    void setVmIdNum(const int vmIdNum_){vmIdNum = vmIdNum_;}
+    int getVmIdNum(){return txKeyerIdNum;}
+    void setVmIdNum(const int txKeyerIdNum_){txKeyerIdNum = txKeyerIdNum_;}
 
     bool getSupportRepeatMsg(){return supportRepeatMsg;}
     void setSupportRepeatMsg(const bool supportRepeatMsg_){supportRepeatMsg = supportRepeatMsg_;}
@@ -73,7 +73,7 @@ public:
 
     void clear()
     {
-        vmIdNum = 0;
+        txKeyerIdNum = 0;
         keyerName.clear();
         keyerType.clear();
         numVoiceKeys = 0;
@@ -92,7 +92,7 @@ public:
 
 private:
 
-   int vmIdNum;
+   int txKeyerIdNum;
    QString keyerName;
    QString keyerType;
    int numVoiceKeys;

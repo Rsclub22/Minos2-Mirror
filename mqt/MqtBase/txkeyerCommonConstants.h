@@ -65,7 +65,7 @@ namespace TxKeyerCommon
 
 
     inline const QStringList txKeyerTypes = { "None", "rigControl", "cwRigControl",
-                                           "SerialControl", "pcCwKeyer", "DigitalModes",
+                                           "SerialControl", "pcCwKeyer", "DigitalMode",
                                            "Internal", "ExternalMqtKeyer" };
 
     enum KeyerEomTypes
