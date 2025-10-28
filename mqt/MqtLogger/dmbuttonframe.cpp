@@ -603,36 +603,35 @@ void DMButtonFrame::set_rigControl_FrameState()
 
     logMessage(QString("Set RigControl Frame State for Contest Name %1, Radio %2").arg(currentName, selectedRadio.key()));
 
-    bool radioExists = false;
-    if (checkRadioExists(selectedRadio.key(), radioExists))    // check radio exists in keyerConfigs
+    int checkContestRadioErrorCode = CHECK_RAD_CONT_CONTEST_OK;
+    if (!checkContestAndRadioAvailable(checkContestRadioErrorCode))    // check keyer, contest and radio if applicable have been retrieved from json file
     {
-        if (!radioExists)
+        // error
+        if (checkContestRadioErrorCode == CHECK_RAD_CONT_CONTEST_MISSING)
         {
-            displayErrorMessage(
-                tr("Radio %1 has not been defined in contest %2, please add the radio")
-                    .arg(selectedRadio.key())
-                    .arg(currentName)
-            );
-            logMessage(QString("Radio %1 has not been defined in %2, please add the radio").arg(selectedRadio.key().arg(currentName)));
+            logMessage(QString("Contest %1 is missing set default").arg(currentName));
+            currentName = DEFAULT_CONTEST_NAME;
         }
-        else
+        else if (checkContestRadioErrorCode == CHECK_RAD_CONT_RADIO_MISSING)
         {
-            logMessage(QString("Radio %1 Exists for Contest Name %2").arg(selectedRadio.key(), currentName));
-            clearErrorMessage();
-            setupRigControl_Ui_Elements();
+            logMessage(QString("Radio %1 is missing set default radio ").arg(selectedRadio.key()));
+            return;     // may be we need to set the radio to noRadio???
 
-
-
-            //    populateRadioNameCombo(currentName);
-            displayButtons();
         }
+        else if (checkContestRadioErrorCode == CHECK_RAD_CONT_KEYER_MISING)
+        {
+            logMessage(QString("set rigControl frame state - keyerType missing %1").arg(selectedKeyerCap.getKeyerType()));
+            return;
+        }
+    }
 
-    }
-    else
-    {
-        qDebug() << "check radio exists failed";
-        logMessage(QString("checkRadio exists failed for contest name %1, radio %2").arg(currentName, selectedRadio.key()));
-    }
+    logMessage(QString("Contest %1 Exists").arg(currentName));
+    clearErrorMessage();
+    setupRigControl_Ui_Elements();
+    //    populateRadioNameCombo(currentName);
+    displayButtons();
+
+
 }
 
 
@@ -711,37 +710,32 @@ void DMButtonFrame::set_cwRigControl_FrameState()
 
     logMessage(QString("Set Cw RigControl Frame State for Contest Name %1, Radio %2").arg(currentName, selectedRadio.key()));
 
-
-
-    bool radioExists = false;
-    if (checkRadioExists(selectedRadio.key(), radioExists))    // check radio exists in keyerConfigs
+    int checkContestRadioErrorCode = CHECK_RAD_CONT_CONTEST_OK;
+    if (!checkContestAndRadioAvailable(checkContestRadioErrorCode))    // check keyer, contest and radio if applicable have been retrieved from json file
     {
-        if (!radioExists)
+        // error
+        if (checkContestRadioErrorCode == CHECK_RAD_CONT_CONTEST_MISSING)
         {
-            displayErrorMessage(
-                tr("Radio %1 has not been defined in contest %2, please add the radio")
-                    .arg(selectedRadio.key(), currentName)
-            );
-            logMessage(QString("Radio %1 has not been defined in %2, please add the radio").arg(selectedRadio.key().arg(currentName)));
+            logMessage(QString("Contest %1 is missing set default").arg(currentName));
+            currentName = DEFAULT_CONTEST_NAME;
         }
-        else
+        else if (checkContestRadioErrorCode == CHECK_RAD_CONT_RADIO_MISSING)
         {
-            logMessage(QString("Radio %1 Exists for Contest Name %2").arg(selectedRadio.key(), currentName));
+            logMessage(QString("Radio %1 is missing set default radio ").arg(selectedRadio.key()));
+            return;     // may be we need to set the radio to noRadio???
 
-            clearErrorMessage();
-            setupCw_RigControl_Ui_Elements();
-            displayButtons();
         }
-
-    }
-    else
-    {
-        qDebug() << "check radio exists failed";
-        logMessage(QString("checkRadio exists failed for contest name %1, radio %2").arg(currentName, selectedRadio.key()));
+        else if (checkContestRadioErrorCode == CHECK_RAD_CONT_KEYER_MISING)
+        {
+            logMessage(QString("set cw_rigControl frame state - keyerType missing %1").arg(selectedKeyerCap.getKeyerType()));
+            return;
+        }
     }
 
 
-
+    clearErrorMessage();
+    setupCw_RigControl_Ui_Elements();
+    displayButtons();
 
 }
 
@@ -2695,6 +2689,9 @@ bool DMButtonFrame::readSingleKeyerFile(const QString &filePath, const QString &
     if (!currentNameOk)
     {
         currentName = DEFAULT_CONTEST_NAME;
+        ct->rigControlCurrentFKeySetContest.setValue(currentName);  // save back the contest name
+        ct->commonSave(false);
+
     }
     clearAllDirtyFlags();
     return true;
@@ -2858,26 +2855,161 @@ ValidationResult DMButtonFrame::validateKeyConfigs(const KeyerMap &configs)
 
 
 
+bool DMButtonFrame::checkContestAndRadioAvailable(int &errorCode)
+{
+    int contestErrorCode = CHECK_RAD_CONT_CONTEST_OK;
+    int radioErrorCode = CHECK_RAD_CONT_CONTEST_OK;
+    QString errorMsg;
+
+    clearErrorMessage();
+
+    checkSavedContestExists(contestErrorCode);
+
+    if (contestErrorCode == CHECK_RAD_CONT_CONTEST_OK)
+    {
+        if ( selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::RigControl]  || selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::CW_RigControl])
+        {
+            checkRadioExists(selectedRadio.key(), radioErrorCode);
+            if (radioErrorCode == CHECK_RAD_CONT_CONTEST_OK)
+            {
+                errorCode = CHECK_RAD_CONT_CONTEST_OK;
+                return true;
+            }
+            else
+            {
+                errorCode = radioErrorCode;
+                // display radio error codes
+                switch (radioErrorCode) {
+                case  CHECK_RAD_CONT_CONTEST_MISSING:
+                    errorMsg = QObject::tr(checkContestRadioErrorCodeStr[CHECK_RAD_CONT_CONTEST_MISSING].toUtf8().constData())
+                                   .arg(currentName, selectedKeyerCap.getKeyerType());
+                    break;
+
+                case CHECK_RAD_CONT_RADIO_MISSING:
+                    errorMsg = QObject::tr(checkContestRadioErrorCodeStr[CHECK_RAD_CONT_RADIO_MISSING].toUtf8().constData())
+                                   .arg(selectedRadio.key(), currentName);
+                    break;
+
+                case CHECK_RAD_CONT_KEYER_MISING:
+                    errorMsg = QObject::tr(checkContestRadioErrorCodeStr[CHECK_RAD_CONT_KEYER_MISING].toUtf8().constData())
+                                   .arg(selectedKeyerCap.getKeyerType());
+                    break;
 
 
+                case CHECK_RAD_CONT_RADIO_NAME_EMPTY:
+                    errorMsg = QObject::tr(checkContestRadioErrorCodeStr[CHECK_RAD_CONT_RADIO_NAME_EMPTY].toUtf8().constData());
+                    break;
 
-bool DMButtonFrame::checkRadioExists(QString radioName, bool &radioExists)
+                default:
+                    errorMsg = tr("Check Radio Unknown error");
+                    break;
+
+                }
+
+                displayErrorMessage(errorMsg);
+
+                return false;
+
+            }
+        }
+        else
+        {
+            // no radio in this keyer
+            errorCode = CHECK_RAD_CONT_CONTEST_OK;
+            return true;
+        }
+
+    }
+    else
+    {
+        errorCode = contestErrorCode;
+        // display contest error codes
+        switch (contestErrorCode) {
+
+        case  CHECK_RAD_CONT_CONTEST_MISSING:
+            errorMsg = QObject::tr(checkContestRadioErrorCodeStr[CHECK_RAD_CONT_CONTEST_MISSING].toUtf8().constData())
+                           .arg(currentName, selectedKeyerCap.getKeyerType());
+            break;
+
+        case  CHECK_RAD_CONT_KEYER_MISING:
+            errorMsg = QObject::tr(checkContestRadioErrorCodeStr[CHECK_RAD_CONT_KEYER_MISING].toUtf8().constData())
+                           .arg(selectedKeyerCap.getKeyerType());
+            break;
+
+        case  CHECK_RAD_CONT_CONTEST_NAME_EMPTY:
+            errorMsg = QObject::tr(checkContestRadioErrorCodeStr[CHECK_RAD_CONT_CONTEST_NAME_EMPTY].toUtf8().constData())
+                           .arg(currentName, selectedKeyerCap.getKeyerType());
+            break;
+
+        default:
+            errorMsg = tr("Check Contest Unknown error");
+            break;
+
+        }
+
+        displayErrorMessage(errorMsg);
+    }
+
+    return false;
+
+
+}
+
+
+void DMButtonFrame::checkSavedContestExists(int &errorCode)
 {
 
-    bool ok = false;
-
-    if (radioName.isEmpty())
+    if (currentName.isEmpty())
     {
-
-        radioExists = false;
-        return false;
+        logMessage("checkSaveContestExists - contest name is empty");
+        errorCode = CHECK_RAD_CONT_CONTEST_NAME_EMPTY;
+        return;
     }
 
     if (allKeyConfigs.contains(selectedKeyerCap.getKeyerType()))
     {
         const ContestMap &contestMap = allKeyConfigs.value(selectedKeyerCap.getKeyerType());
 
-        ok = true;
+        QStringList contests = contestMap.keys();
+        if (contests.contains(currentName))
+        {
+            logMessage(QString("checkSaveContestExists - contest name %1 exists in json file for this keyerType %2").arg(currentName, selectedKeyerCap.getKeyerType()));
+            errorCode = CHECK_RAD_CONT_CONTEST_OK;
+            return;
+        }
+        else
+        {
+
+            errorCode = CHECK_RAD_CONT_CONTEST_MISSING;
+            logMessage(QString("checkSaveContestExists - contest name %1 does not exist in json file for this keyerType %2").arg(currentName, selectedKeyerCap.getKeyerType()));
+            return;
+
+        }
+
+
+    }
+    else
+    {
+        logMessage(QString("checkSaveContestExists - keyerType %1 does not exist in json file").arg(currentName, selectedKeyerCap.getKeyerType()));
+        errorCode  = CHECK_RAD_CONT_KEYER_MISING;
+        return;
+    }
+}
+
+// keyername and contest should have been checked when checking contest existed..
+void DMButtonFrame::checkRadioExists(QString radioName, int &errorCode)
+{
+
+    if (radioName.isEmpty())
+    {
+         logMessage("checkRadioExists - radio name is empty");
+        errorCode = CHECK_RAD_CONT_RADIO_NAME_EMPTY;
+         return;
+    }
+
+    if (allKeyConfigs.contains(selectedKeyerCap.getKeyerType()))
+    {
+        const ContestMap &contestMap = allKeyConfigs.value(selectedKeyerCap.getKeyerType());
 
         if (contestMap.contains(currentName))
         {
@@ -2885,18 +3017,35 @@ bool DMButtonFrame::checkRadioExists(QString radioName, bool &radioExists)
 
             if (rigMap.contains(radioName))
             {
-
-                radioExists = true;
+                logMessage(QString("checkRadioExists - radio name %1 exists in json file for this  for this contest name %2 and keyerType %3").arg(radioName, selectedKeyerCap.getKeyerType()));
+                errorCode = CHECK_RAD_CONT_CONTEST_OK;
+                return;
             }
             else
             {
-
-                radioExists = false;
+                logMessage(QString("checkRadioExists - radio name %1 does not exist in json file for this contest name %2 and keyerType %3").arg(radioName, currentName, selectedKeyerCap.getKeyerType()));
+                errorCode = CHECK_RAD_CONT_RADIO_MISSING;
+                return;
             }
+
+
+        }
+        else
+        {
+            logMessage(QString("checkRadioExists - contest name %2 does not exist for this keyerType %2").arg(currentName, selectedKeyerCap.getKeyerType()));
+            errorCode =  CHECK_RAD_CONT_CONTEST_MISSING;
+            return;
         }
     }
+    else
+    {
+        logMessage(QString("checkRadioExists - contest name %2 does not exist for this keyerType does not exist in json file %1").arg(selectedKeyerCap.getKeyerType()));
+        errorCode = CHECK_RAD_CONT_KEYER_MISING;
 
-    return ok;
+
+    }
+
+    return;
 }
 
 
@@ -3107,8 +3256,6 @@ void DMButtonFrame::on_fkeysetCombo_textActivated(const QString &arg1)
     {
         ct->externalVoiceKeyerCurrentFKeySetContest.setValue(currentName);
     }
-
-
 
     ct->commonSave(false);
 }

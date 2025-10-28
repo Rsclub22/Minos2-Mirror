@@ -36,6 +36,27 @@ inline const QString ExternalKeyerConfigFilename = "Enternal/external.json";
 
 inline const QString DEFAULT_CONTEST_NAME = "default";
 
+const int CHECK_RAD_CONT_CONTEST_OK = 0;
+const int CHECK_RAD_CONT_CONTEST_MISSING = 1;
+const int CHECK_RAD_CONT_RADIO_MISSING = 2;
+const int CHECK_RAD_CONT_KEYER_MISING = 3;
+const int CHECK_RAD_CONT_RADIO_NAME_EMPTY = 4;
+const int CHECK_RAD_CONT_CONTEST_NAME_EMPTY = 5;
+
+inline const QList<int> checkContestRadioErrorCodes = {CHECK_RAD_CONT_CONTEST_OK,
+                                          CHECK_RAD_CONT_CONTEST_MISSING,
+                                          CHECK_RAD_CONT_RADIO_MISSING,
+                                          CHECK_RAD_CONT_KEYER_MISING,
+                                          CHECK_RAD_CONT_RADIO_NAME_EMPTY,
+                                          CHECK_RAD_CONT_CONTEST_NAME_EMPTY};
+
+inline const QStringList checkContestRadioErrorCodeStr = {"OK",
+                                             "Contest %1 has not been defined, please add the contest, selecting Default contest",
+                                            "Radio name %1 has not been defined, for this contest %2, please add the radio",
+                                            "KeyerType %1 does not exist in json file",
+                                            "Radio name is empty",
+                                            "ContestName is empty"};
+
 struct ValidationResult {
     bool isValid = true;
     QStringList errors;
@@ -305,7 +326,7 @@ private:
 //    void disConnectFkeySetComboToPopulateRadioNameCombo();
     void displayErrorMessage(QString msg);
     void clearErrorMessage();
-    bool checkRadioExists(QString radioName, bool &radioExists);
+    void checkRadioExists(QString radioName, int &errorCode);
     void clearAll_Ui_Elements();
     void setupRigControl_Ui_Elements();
     void displayButtons();
@@ -315,6 +336,8 @@ private:
     QString parseFKeyMessage(QString mess);
     TxKeyerId txKeyerNameToId(const QString &name);
     void populateFksetCombo(QString txKeyerType, QString currentName, bool &contestNameOk);
+    void checkSavedContestExists(int &errorCode);
+    bool checkContestAndRadioAvailable(int &errorCode);
 };
 
 #endif // DMBUTTONFRAME_H

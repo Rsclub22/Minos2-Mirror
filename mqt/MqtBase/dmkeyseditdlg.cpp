@@ -734,7 +734,7 @@ void DMKeysEditDlg::on_NewSectionButton_clicked()
                 section.sp.append(kv);
             }
 
-            // Store under the current rigName (or "noRadio" fallback)
+            // Store under the current rigName (or KEYER_NO_RADIO fallback)
             QString rigKey = radioListSelectedName;
 
             contestMap[newContestName][rigKey] = section;
@@ -1042,13 +1042,11 @@ void DMKeysEditDlg::on_SectionsList_itemSelectionChanged()
     if (keyerIt == config.allKeyConfigs.cend() || ui->SectionsList->currentRow() < 0)
         return;
 
-    QStringList sections = keyerIt->keys();
+    QListWidgetItem *currentItem = ui->SectionsList->currentItem();
+    if (!currentItem)
+        return;
 
-    int offset = ui->SectionsList->currentRow();
-    if (offset >= 0 && offset < sections.size())
-    {
-        selectedContestName = sections[offset];
-    }
+    selectedContestName = currentItem->text();
 
     if (RadioList)
     {

@@ -27,6 +27,7 @@
 #include "calcs.h"
 #include "MinosParameters.h"
 #include "MTrace.h"
+#include "txkeyerCommonConstants.h"
 
 #include "LoggerContest.h"
 
@@ -311,8 +312,8 @@ bool LoggerContestLog::initialise( const QString &fn, bool newFile, int slotno )
    internalVoiceKeyerCurrentFKeySetContest.setInitialValue("Default");
    externalVoiceKeyerCurrentFKeySetContest.setInitialValue("Default");
 
-   rigControlCurrentFKeySetRadio.setInitialValue("noRadio");
-   cwRigControlCurrentFKeySetRadio.setInitialValue("noRadio");
+   rigControlCurrentFKeySetRadio.setInitialValue(TxKeyerCommon::KEYER_NO_RADIO);
+   cwRigControlCurrentFKeySetRadio.setInitialValue(TxKeyerCommon::KEYER_NO_RADIO);
 
    for (int i = 0; i < STACKITEMS; i++)
    {
