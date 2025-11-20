@@ -210,18 +210,23 @@ void DMKeysEditDlg::showRadiosForSection()
 {
     if (RadioList)
     {
+
+        ignoreRadioChange = true;
+
         RadioList->clear();
 
         const auto keyerIt = config.allKeyConfigs.constFind(config.txKeyerType);
         if (keyerIt == config.allKeyConfigs.cend())
         {
             logMessage(QString("showRadiosForSection - txKeyerType %1 not found").arg(config.txKeyerType));
+            ignoreRadioChange = false;
             return;
         }
         const auto contestIt = keyerIt->constFind(selectedContestName);  // name = selected section/contest
         if (contestIt == keyerIt->cend())
         {
             logMessage(QString("showRadiosForSection - selectedContestName %1 not found").arg(selectedContestName));
+            ignoreRadioChange = false;
             return;
         }
         // Extract rig names for this contest
@@ -232,7 +237,7 @@ void DMKeysEditDlg::showRadiosForSection()
                       return a.compare(b, Qt::CaseInsensitive) < 0;
                   });
 
-        for (const QString &radio : radioNames)
+        for (const QString &radio : std::as_const(radioNames))
         {
             RadioList->addItem(radio);
         }
@@ -275,9 +280,10 @@ void DMKeysEditDlg::showRadiosForSection()
 
 
 
+
     }
 
-
+    ignoreRadioChange = false;
 }
 
 
@@ -547,19 +553,20 @@ void DMKeysEditDlg::showDetails()
 
 
 
-void DMKeysEditDlg::getDetails()
+void DMKeysEditDlg::getDetails(const QString selectedContestName, const QString selectedRadioListName, QString wherefrom)
 {
+    qDebug() << "enter get details selectedContestName %1, selectedRadioName %2" << selectedContestName << selectedRadioListName;
+
     if (!ui->OptionsTable->rowCount())
+    {
         return;
+    }
 
     auto &contestMap = config.allKeyConfigs[config.txKeyerType][selectedContestName];
 
-    QString rigKey = radioListSelectedName;
+    //QString rigKey = radioListSelectedName;
 
-    ContestSection &section = contestMap[rigKey];
-
-    if (section.run.isEmpty() && section.sp.isEmpty())
-        return;
+    ContestSection &section = contestMap[selectedRadioListName];
 
     int runCount = section.run.size();
     int totalRows = ui->OptionsTable->rowCount();
@@ -575,7 +582,9 @@ void DMKeysEditDlg::getDetails()
         {
             int spIndex = r - runCount;
             if (spIndex < section.sp.size())
+            {
                 entry = &section.sp[spIndex];
+            }
         }
 
         if (!entry)
@@ -583,11 +592,17 @@ void DMKeysEditDlg::getDetails()
 
         // Column 0: Key Top
         if (QTableWidgetItem *qtwi = ui->OptionsTable->item(r, EDIT_DLG_COL0))
+        {
             entry->setKtop(qtwi->text());
+            qDebug() << "copy key top  %1" << qtwi->text();
+        }
+
 
         // Column 1: Value
         if (QTableWidgetItem *qtwi = ui->OptionsTable->item(r, EDIT_DLG_COL1))
+        {
             entry->setKval(qtwi->text());
+        }
 
         // Column 2: Rig Voice Mem Num
         if (QTableWidgetItem *qtwi = ui->OptionsTable->item(r, EDIT_DLG_COL2))
@@ -595,14 +610,18 @@ void DMKeysEditDlg::getDetails()
             bool ok;
             int mem = qtwi->text().toInt(&ok);
             if (ok)
+            {
                 entry->setRigVoiceMemNum(mem);
+            }
         }
 
         // Column 3: Duration Enable (checkbox)
         if (QWidget *wrap = ui->OptionsTable->cellWidget(r, EDIT_DLG_COL3))
         {
             if (QCheckBox *cb = wrap->findChild<QCheckBox*>())
+            {
                 entry->setMsgDurEnable(cb->isChecked());
+            }
         }
 
         // Column 4: Repeat Duration
@@ -611,7 +630,9 @@ void DMKeysEditDlg::getDetails()
             bool ok;
             int dur = qtwi->text().toInt(&ok);
             if (ok)
+            {
                 entry->setMsgDur(dur);
+            }
         }
 
 
@@ -620,7 +641,9 @@ void DMKeysEditDlg::getDetails()
         if (QWidget *wrap = ui->OptionsTable->cellWidget(r, EDIT_DLG_COL5))
         {
             if (QCheckBox *cb = wrap->findChild<QCheckBox*>())
+            {
                 entry->setRptEnable(cb->isChecked());
+            }
         }
 
         // Column 6: Repeat Duration
@@ -629,42 +652,64 @@ void DMKeysEditDlg::getDetails()
             bool ok;
             int dur = qtwi->text().toInt(&ok);
             if (ok)
+            {
                 entry->setRptDur(dur);
+            }
         }
     }
 }
 
 
-void DMKeysEditDlg::saveCurrentSection()
+void DMKeysEditDlg::saveCurrentSection(const QString selectedContestName, const QString selectedRadioListName, QString wherefrom)
 {
-    getDetails();  // Store current UI into model
+    getDetails(selectedContestName, selectedRadioListName, wherefrom);  // Store current UI into model
 
 }
 
-bool DMKeysEditDlg::isCurrentSectionDirty() const
+bool DMKeysEditDlg::isCurrentSectionDirty(const QString selectedContestName, const QString selectedRadioListName) const
 {
     const auto keyerIt = config.allKeyConfigs.constFind(config.txKeyerType);
-    if (keyerIt == config.allKeyConfigs.cend()) return false;
+
+    if (keyerIt == config.allKeyConfigs.cend())
+    {
+        return false;
+    }
 
     const auto contestIt = keyerIt->constFind(selectedContestName);
-    if (contestIt == keyerIt->cend()) return false;
-
-    QString rigKey = radioListSelectedName;
-
-    const auto &section = contestIt->value(rigKey);
+    if (contestIt == keyerIt->cend())
+    {
+        return false;
+    }
+    const auto &section = contestIt->value(selectedRadioListName);
 
     for (const auto &k : section.run)
-        if (k.isDirty()) return true;
+    {
+        if (k.isDirty())
+        {
+            return true;
+        }
+    }
     for (const auto &k : section.sp)
-        if (k.isDirty()) return true;
+    {
+        if (k.isDirty())
+        {
+            return true;
+        }
+    }
+
+    if (section.common.isDirty())
+    {
+            return true;
+    }
+
 
     return false;
 }
 
-void DMKeysEditDlg::clearDirtyFlag()
+void DMKeysEditDlg::clearDirtyFlag(const QString selectedContestName, const QString selectedRadioListName)
 {
 
-    QString rigKey = radioListSelectedName;
+
 
     // Check if the path exists before accessing
     if (!config.allKeyConfigs.contains(config.txKeyerType))
@@ -675,10 +720,10 @@ void DMKeysEditDlg::clearDirtyFlag()
         return;
 
     auto &rigMap = contestMap[selectedContestName];
-    if (!rigMap.contains(rigKey))
+    if (!rigMap.contains(selectedRadioListName))
         return;
 
-    auto &section = rigMap[rigKey];
+    auto &section = rigMap[selectedRadioListName];
     for (auto &k : section.run)
         k.clearDirty();
     for (auto &k : section.sp)
@@ -691,12 +736,49 @@ void DMKeysEditDlg::clearDirtyFlag()
 
 //---------------------------------------------------------------------------
 
+QString DMKeysEditDlg::getCurrentSelectedItem(QListWidget *list, const QString &defaultValue = QString())
+{
+    if (QListWidgetItem *item = list->currentItem())
+        return item->text();
+    return defaultValue;
+}
+
+QString DMKeysEditDlg::getCurrentSelectedContest()
+{
+    QString selectedContest = getCurrentSelectedItem(ui->SectionsList, KEYER_DEFAULT_CONTEST);
+    qDebug() << "Selected contest section:" << selectedContest;
+    return selectedContest;
+}
+
+QString DMKeysEditDlg::getCurrentSelectedRadio()
+{
+    QString selectedRadio = getCurrentSelectedItem(RadioList, KEYER_NO_RADIO);
+    qDebug() << "Selected radio:" << selectedRadio;
+    return selectedRadio;
+}
+
+void DMKeysEditDlg::selectListItem(QListWidget *list, const QString &name)
+{
+    QList<QListWidgetItem *> items = list->findItems(name, Qt::MatchExactly);
+    if (!items.isEmpty())
+    {
+        list->setCurrentItem(items.first());
+    }
+}
+
+
+
+
+
 void DMKeysEditDlg::on_NewSectionButton_clicked()
 {
 
-    saveCurrentSection();
+    qDebug() << "on_NewSectionButton_clicked";
 
-    QString newContestName = "new digi key section";
+    // save with selections before this new selection
+    saveCurrentSection(selectedContestName, radioListSelectedName, "onNewSectionClicked");
+
+    QString newContestName = "new contest key section";
 
     if (enquireDialog(this, tr("Please give a new name for the %1").arg(selectedContestName), newContestName))
     {
@@ -734,17 +816,24 @@ void DMKeysEditDlg::on_NewSectionButton_clicked()
                 section.sp.append(kv);
             }
 
-            // Store under the current rigName (or KEYER_NO_RADIO fallback)
-            QString rigKey = radioListSelectedName;
-
-            contestMap[newContestName][rigKey] = section;
+            // Always store under the default radio
+            const QString defaultRadio = KEYER_NO_RADIO;
+            contestMap[newContestName][defaultRadio] = section;
 
 
             // Update current selection and UI
             ignoreSectionChange = true;
+
             selectedContestName = newContestName;
+            radioListSelectedName = defaultRadio;
+
+            // move to new selection
+            selectListItem(ui->SectionsList, newContestName);
+            selectListItem(RadioList, defaultRadio);
+
             showSections();
             showDetails();
+
             ignoreSectionChange = false;
 
         }
@@ -759,8 +848,14 @@ void DMKeysEditDlg::on_NewSectionButton_clicked()
 
 void DMKeysEditDlg::on_CopyButton_clicked()
 {
-    //getDetails();  // Save current edits
-    saveCurrentSection();
+
+    qDebug() << "on_CopyButton_clicked";
+
+
+
+    // save with selections before this new selection
+    saveCurrentSection(selectedContestName, radioListSelectedName, "on_CopyButton_clicked");
+
 
     //int offset = ui->SectionsList->currentRow();
     //if (offset <= 0)
@@ -792,17 +887,30 @@ void DMKeysEditDlg::on_CopyButton_clicked()
     // Deep copy section
     contestMap[newContestName][rigKey] = contestMap[selectedContestName][rigKey];
 
-    // Update UI
+    // Update selected contest, radioName is unchanged in the copy and UI
     selectedContestName = newContestName;
+    // radioListSelectedName unchanged in new contest
+
+
     ignoreSectionChange = true;
+
+    // move to new selection
+    selectListItem(ui->SectionsList, newContestName);
+    selectListItem(RadioList, rigKey);
+
     showSections();
     showDetails();
+
     ignoreSectionChange = false;
 }
 
 
 void DMKeysEditDlg::on_DeleteButton_clicked()
 {
+    qDebug() << "on_DeleteButton_clicked";
+
+    saveCurrentSection(selectedContestName, radioListSelectedName, "on_DeleteButton_clicked");
+
     if (selectedContestName == "<None>"  || selectedContestName == "Default")
     {
         mShowMessage(tr("You cannot delete the empty %1!").arg(selectedContestName), this);
@@ -834,8 +942,14 @@ void DMKeysEditDlg::on_DeleteButton_clicked()
     }
 
     ignoreSectionChange = true;
+
+    // move to new selection
+    selectListItem(ui->SectionsList, selectedContestName);
+    selectListItem(RadioList, KEYER_NO_RADIO);
+
     showSections();
     showDetails();
+
     ignoreSectionChange = false;
 }
 
@@ -844,9 +958,11 @@ void DMKeysEditDlg::on_DeleteButton_clicked()
 void DMKeysEditDlg::on_renameButton_clicked()
 {
 
-    saveCurrentSection();
+    qDebug() << "on_renameButton_clicked";
 
-    if (selectedContestName == "<None>"  || selectedContestName == "Default")
+    saveCurrentSection(selectedContestName, radioListSelectedName, "on_renameButton_clicked");
+
+    if (selectedContestName == "<None>"  || selectedContestName == KEYER_DEFAULT_CONTEST)
     {
         mShowMessage(tr("You cannot rename the empty %1!").arg(selectedContestName), this);
         return;
@@ -866,6 +982,11 @@ void DMKeysEditDlg::on_renameButton_clicked()
             selectedContestName = newContestName;
 
             ignoreSectionChange = true;
+
+            // move to new selection
+            selectListItem(ui->SectionsList, selectedContestName);
+            selectListItem(RadioList, radioListSelectedName);
+
             showSections();
             showDetails();
             ignoreSectionChange = false;
@@ -879,7 +1000,12 @@ void DMKeysEditDlg::on_renameButton_clicked()
 
 void DMKeysEditDlg::on_addRadioButton_clicked()
 {
-    if (selectedContestName == "<None>"  || selectedContestName == "Default")
+
+    qDebug() << "on_addRadioButton_clicked";
+
+    saveCurrentSection(selectedContestName, radioListSelectedName, "on_renameButton_clicked");
+
+    if (selectedContestName == "<None>"  || selectedContestName == KEYER_DEFAULT_CONTEST)
     {
         mShowMessage(tr("You cannot add radio to Default!"), this);
         return;
@@ -953,12 +1079,21 @@ void DMKeysEditDlg::on_addRadioButton_clicked()
                     section.sp.append(kv);
                 }
 
-                contestMap[selectedContestName][addRadioDialog->getRadioName()] = section;
+                radioListSelectedName = addRadioDialog->getRadioName();
+                contestMap[selectedContestName][radioListSelectedName] = section;
+
 
                 // Update current selection and UI
                 ignoreSectionChange = true;
+
+                // move to new selection
+                selectListItem(ui->SectionsList, selectedContestName);
+                selectListItem(RadioList, radioListSelectedName);
+
+
                 showSections();
                 showDetails();
+
                 ignoreSectionChange = false;
 
             }
@@ -972,6 +1107,12 @@ void DMKeysEditDlg::on_addRadioButton_clicked()
 
 void DMKeysEditDlg::on_deleteRadioButton_clicked()
 {
+
+    qDebug() << "on_deleteRadioButton_clicked";
+
+    saveCurrentSection(selectedContestName, radioListSelectedName, "on_deleteRadioButton_clicked");
+
+
     if (radioListSelectedName == KEYER_NO_RADIO)
     {
         mShowMessage(tr("You cannot delete noRadio!"), this);
@@ -1004,7 +1145,7 @@ void DMKeysEditDlg::on_deleteRadioButton_clicked()
                     if (!rigMap.isEmpty())
                         radioListSelectedName = rigMap.firstKey();
                     else
-                        radioListSelectedName = QStringLiteral("<NoRadio>");
+                        radioListSelectedName = KEYER_NO_RADIO;
                 }
             }
         }
@@ -1012,8 +1153,15 @@ void DMKeysEditDlg::on_deleteRadioButton_clicked()
 
 
         ignoreSectionChange = true;
+
+        // move to new selection
+        selectListItem(ui->SectionsList, selectedContestName);
+        selectListItem(RadioList, radioListSelectedName);
+
+
         showSections();
         showDetails();
+
         ignoreSectionChange = false;
     }
 }
@@ -1027,71 +1175,91 @@ void DMKeysEditDlg::on_CancelButton_clicked()
 void DMKeysEditDlg::on_OKButton_clicked()
 {
 
-    saveCurrentSection();
+    qDebug() << "on_OKButton_clicked";
+
+    saveCurrentSection(selectedContestName, radioListSelectedName, "on_deleteRadioButton_clicked");
+
     accept();
 }
 
 void DMKeysEditDlg::on_SectionsList_itemSelectionChanged()
 {
-    if (ignoreSectionChange)        // when making program changes
+    if (ignoreSectionChange)
         return;
 
-    saveCurrentSection();
+    qDebug() << "on_SectionsList_itemSelectionChanged";
 
-    const auto keyerIt = config.allKeyConfigs.constFind(config.txKeyerType);
-    if (keyerIt == config.allKeyConfigs.cend() || ui->SectionsList->currentRow() < 0)
-        return;
+    // Save the previous section before switching
+    saveCurrentSection(selectedContestName, radioListSelectedName, "on_SectionsList_itemSelectionChanged");
 
     QListWidgetItem *currentItem = ui->SectionsList->currentItem();
     if (!currentItem)
+    {
         return;
+    }
 
     selectedContestName = currentItem->text();
+    radioListSelectedName = KEYER_NO_RADIO;  // always start with default radio
 
+    const auto keyerIt = config.allKeyConfigs.constFind(config.txKeyerType);
+    if (keyerIt == config.allKeyConfigs.cend())
+    {
+        return;
+    }
+    const auto contestIt = keyerIt->constFind(selectedContestName);
+    if (contestIt == keyerIt->cend())
+    {
+        return;
+    }
+
+    // --- Populate Radio List ---
     if (RadioList)
     {
+        ignoreRadioChange = true;
+
         RadioList->clear();
 
-        const auto contestIt = keyerIt->constFind(selectedContestName);  // name = selected section/contest
-        if (contestIt == keyerIt->cend())
-            return;
-
-        // Extract rig names for this contest
         QStringList radioNames = contestIt->keys();
+        radioNames.sort(Qt::CaseInsensitive);   // in-place, case-insensitive
 
-        std::sort(radioNames.begin(), radioNames.end(),
-                  [](const QString &a, const QString &b) {
-                      return a.compare(b, Qt::CaseInsensitive) < 0;
-                  });
 
-        for (const QString &radio : radioNames)
+        for (const QString &radio : std::as_const(radioNames))
         {
             RadioList->addItem(radio);
         }
 
-        for (int i = 0; i < RadioList->count(); i++)
+        // Select default radio (noRadio) if present, otherwise first entry
+        QList<QListWidgetItem *> matches = RadioList->findItems(KEYER_NO_RADIO, Qt::MatchExactly);
+        if (!matches.isEmpty())
         {
-            QListWidgetItem *item = RadioList->item(i);
-            if (item->text() == KEYER_NO_RADIO)
-            {
-                RadioList->setCurrentItem(item);
-                item->setSelected(true);
-            }
+            RadioList->setCurrentItem(matches.first());
         }
+        else if (RadioList->count() > 0)
+        {
+            RadioList->setCurrentRow(0);
+        }
+
+        ignoreRadioChange = false;
     }
 
-    radioListSelectedName = KEYER_NO_RADIO;       // set default radio
+    // --- Update UI for the new contest ---
     showSection();
+
+
 }
+
 
 
 
 void DMKeysEditDlg::onRadioListItemSelectionChanged()
 {
-    if (ignoreSectionChange)        // when making program changes
+    if (ignoreRadioChange)
         return;
 
-    saveCurrentSection();
+    qDebug() << "onRadioListItemSelectionChanged";
+
+    saveCurrentSection(selectedContestName, radioListSelectedName, "onRadioListItemSelectionChanged");
+
 
     if (RadioList)
     {
@@ -1122,7 +1290,13 @@ void DMKeysEditDlg::onRadioListItemSelectionChanged()
                 ui->deleteRadioButton->setEnabled(true);
             }
         }
+
+        // --- Update UI for the new contest ---
+        showSection();
     }
+
+
+
 }
 
 void DMKeysEditDlg::closeEvent(QCloseEvent *event)

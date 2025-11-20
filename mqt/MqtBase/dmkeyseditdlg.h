@@ -70,7 +70,7 @@ class DMKeysEditDlg : public QDialog
     void showSections();
     void showSection();
     void showDetails();
-    void getDetails();
+    void getDetails(const QString selectedContestName, const QString selectedRadioListName, QString wherefrom);
     void doCloseEvent();
 
 public:
@@ -116,9 +116,9 @@ public Q_SLOTS:
     virtual void reject() override;
 
 private:
-    void saveCurrentSection();
-    bool isCurrentSectionDirty() const;
-    void clearDirtyFlag();
+    void saveCurrentSection(const QString contestName, const QString radioName, QString wherefrom);
+    bool isCurrentSectionDirty(const QString selectedContestName, const QString selectedRadioListName) const;
+    void clearDirtyFlag(const QString selectedContestName, const QString selectedRadioListName);
     //QString getRigKey() const;
 
     const DMKeysEditDlgConfig &config;
@@ -132,6 +132,8 @@ private:
     //TxKeyerCapabilities &txKeyerCap;
 
     bool ignoreSectionChange = false;
+    bool ignoreRadioChange = false;
+
     QString selectedContestName;
     QString radioListSelectedName;
     PubSubName minosSelectedRadioName;
@@ -152,5 +154,9 @@ private:
 
 
     void logMessage(QString msg);
+    QString getCurrentSelectedContest();
+    QString getCurrentSelectedRadio();
+    QString getCurrentSelectedItem(QListWidget *list, const QString &defaultValue);
+    void selectListItem(QListWidget *list, const QString &name);
 };
 #endif // DMKEYSEDITDLG_H

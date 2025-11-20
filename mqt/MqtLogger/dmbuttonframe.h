@@ -34,7 +34,7 @@ inline const QString digitalModesConfigFilename = "DigitalModes/DigitalModes.jso
 inline const QString InternalKeyerConfigFilename = "Internal/internal.json";
 inline const QString ExternalKeyerConfigFilename = "Enternal/external.json";
 
-inline const QString DEFAULT_CONTEST_NAME = "default";
+
 
 const int CHECK_RAD_CONT_CONTEST_OK = 0;
 const int CHECK_RAD_CONT_CONTEST_MISSING = 1;

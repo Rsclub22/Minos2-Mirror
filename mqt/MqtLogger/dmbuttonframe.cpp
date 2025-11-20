@@ -38,7 +38,7 @@
 using namespace TxKeyerCommon;
 
 
-const QStringList vmButtonShortCutKeys = {
+inline const QStringList vmButtonShortCutKeys = {
     "Shift+F1", "Shift+F2",
     "Shift+F3", "Shift+F4",
     "Shift+F5", "Shift+F6",
@@ -47,7 +47,7 @@ const QStringList vmButtonShortCutKeys = {
     "Shift+F11", "Shift+F12",
 };
 
-const QString DIGIMODE = "DigitalMode";
+inline const QString DIGIMODE = "DigitalMode";
 
 DMButtonFrame::DMButtonFrame(QWidget *parent) :
     QFrame(parent),
@@ -526,7 +526,7 @@ void DMButtonFrame::set_DigiMode_FrameState()
 
     if (!currentNameOk)
     {
-        currentName = DEFAULT_CONTEST_NAME;  // current contest name is not in the list
+        currentName = KEYER_DEFAULT_CONTEST;  // current contest name is not in the list
     }
 
     fkeyFileChanged();
@@ -610,7 +610,7 @@ void DMButtonFrame::set_rigControl_FrameState()
         if (checkContestRadioErrorCode == CHECK_RAD_CONT_CONTEST_MISSING)
         {
             logMessage(QString("Contest %1 is missing set default").arg(currentName));
-            currentName = DEFAULT_CONTEST_NAME;
+            currentName = KEYER_DEFAULT_CONTEST;
         }
         else if (checkContestRadioErrorCode == CHECK_RAD_CONT_RADIO_MISSING)
         {
@@ -717,7 +717,7 @@ void DMButtonFrame::set_cwRigControl_FrameState()
         if (checkContestRadioErrorCode == CHECK_RAD_CONT_CONTEST_MISSING)
         {
             logMessage(QString("Contest %1 is missing set default").arg(currentName));
-            currentName = DEFAULT_CONTEST_NAME;
+            currentName = KEYER_DEFAULT_CONTEST;
         }
         else if (checkContestRadioErrorCode == CHECK_RAD_CONT_RADIO_MISSING)
         {
@@ -964,7 +964,7 @@ void DMButtonFrame::set_External_FrameState()
 
      if (!currentNameOk)
      {
-         currentName = DEFAULT_CONTEST_NAME; // current contest name is not in the list
+         currentName = KEYER_DEFAULT_CONTEST; // current contest name is not in the list
      }
 
 
@@ -994,7 +994,7 @@ void DMButtonFrame::initCwTextEntryBox(QString radioManufacturer, QString fileNa
 
     QString cwMacroCharList;
     bool cwMacroCharOk;
-    if (getRigCWKeyerMacroCharacter(cwMacroCharList, radioManufacturer, CWKEYER_RADIO_COMMON_PARAMS_FILENAME))
+    if (getRigCWKeyerMacroCharacter(TXKEYER_COMMON_PARAMS_PATH(), cwMacroCharList, radioManufacturer, CWKEYER_RADIO_COMMON_PARAMS_FILENAME))
     {
         cwMacroCharOk = true;
         logMessage(QString("Retrieved CW Macro Chars %1 for manufacturer %2").arg(cwMacroCharList).arg(radioManufacturer));
@@ -1008,7 +1008,7 @@ void DMButtonFrame::initCwTextEntryBox(QString radioManufacturer, QString fileNa
 
 
     QString validCharCwList;
-    if (getRigCWKeyerSupportedCharacters(validCharCwList, radioManufacturer, CWKEYER_RADIO_COMMON_PARAMS_FILENAME))
+    if (getRigCWKeyerSupportedCharacters(TXKEYER_COMMON_PARAMS_PATH(), validCharCwList, radioManufacturer, CWKEYER_RADIO_COMMON_PARAMS_FILENAME))
     {
         if (cwMacroCharOk)
         {
@@ -1029,7 +1029,7 @@ void DMButtonFrame::initCwTextEntryBox(QString radioManufacturer, QString fileNa
 
 
     int maxNumChars = 0;
-    if (getRigCWKeyerMaxMessageLength(maxNumChars, radioManufacturer, fileName))
+    if (getRigCWKeyerMaxMessageLength(TXKEYER_COMMON_PARAMS_PATH(), maxNumChars, radioManufacturer, fileName))
     {
 
 
@@ -2688,7 +2688,7 @@ bool DMButtonFrame::readSingleKeyerFile(const QString &filePath, const QString &
     populateFksetCombo(selectedKeyerCap.getKeyerType(), currentName, currentNameOk);
     if (!currentNameOk)
     {
-        currentName = DEFAULT_CONTEST_NAME;
+        currentName = KEYER_DEFAULT_CONTEST;
         ct->rigControlCurrentFKeySetContest.setValue(currentName);  // save back the contest name
         ct->commonSave(false);
 
@@ -3258,6 +3258,8 @@ void DMButtonFrame::on_fkeysetCombo_textActivated(const QString &arg1)
     }
 
     ct->commonSave(false);
+
+    displayButtons();
 }
 
 void DMButtonFrame::setCwMessagePlayingVisible(bool visible)

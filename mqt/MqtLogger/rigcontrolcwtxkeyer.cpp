@@ -160,7 +160,7 @@ void RigControlCwTxKeyer::sendCwMsg(TxKeyerParams &vmData)
         }
 
         QStringList listOfRadioModels;
-        getRigCWKeyerListOfRadiosSupportSpecialCharacters(listOfRadioModels, radioManufacturer, CWKEYER_RADIO_COMMON_PARAMS_FILENAME);
+        getRigCWKeyerListOfRadiosSupportSpecialCharacters(TXKEYER_COMMON_PARAMS_PATH(), listOfRadioModels, radioManufacturer, CWKEYER_RADIO_COMMON_PARAMS_FILENAME);
 
         if (!listOfRadioModels.isEmpty()
             && listOfRadioModels.contains(radioModel)
@@ -169,7 +169,7 @@ void RigControlCwTxKeyer::sendCwMsg(TxKeyerParams &vmData)
         {
             // this radio supports special chars
             QMap<QString, QChar> specialCharMap;
-            getRigCWKeyerSupportedSpecialCharacters(specialCharMap, radioManufacturer, CWKEYER_RADIO_COMMON_PARAMS_FILENAME);
+            getRigCWKeyerSupportedSpecialCharacters(TXKEYER_COMMON_PARAMS_PATH(), specialCharMap, radioManufacturer, CWKEYER_RADIO_COMMON_PARAMS_FILENAME);
             int currentIndex = 0;
             while (currentIndex < vmData.getKeyerCwMessage().length())
             {

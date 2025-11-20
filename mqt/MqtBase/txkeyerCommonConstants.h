@@ -94,6 +94,7 @@ namespace TxKeyerCommon
     inline const QString ALL_RADIOS_GROUP_NAME = "AllRadios";
 
     inline const QString KEYER_NO_RADIO = "noRadio";
+    inline const QString KEYER_DEFAULT_CONTEST = "default";
 
     inline const int VOICEKEYER_MAX_NUMBUTTONS = 8;
 
@@ -115,12 +116,12 @@ bool readSaveVoiceCWMemoryButtonByRadioNameFromIni(TxKeyerCommon::TxKeyerId id);
 void writeSaveVoiceCWMemoryButtonByRadioNameToIni(bool data, TxKeyerCommon::TxKeyerId id);
 void getListOfRadioNamesForMemoryButtons(QStringList &radioNames, TxKeyerCommon::TxKeyerId id);
 
-bool getRigCWKeyerSupportedSpecialCharacters(QMap<QString, QChar> &specialCharMap, QString radioMfg, const QString filename);
-bool getRigCWKeyerMacroCharacter(QString &macroChars, QString radioMfg, const QString filename);
-bool getRigCWKeyerListOfRadiosSupportSpecialCharacters(QStringList &listOfRadioModels, QString radioMfg, const QString filename);
-bool getRigCWKeyerSupportedCharacters(QString &supportedChars, QString radioMfg, const QString filename);
+bool getRigCWKeyerSupportedSpecialCharacters(QString filePath, QMap<QString, QChar> &specialCharMap, QString radioMfg, const QString filename);
+bool getRigCWKeyerMacroCharacter(QString filePath, QString &macroChars, QString radioMfg, const QString filename);
+bool getRigCWKeyerListOfRadiosSupportSpecialCharacters(QString filePath, QStringList &listOfRadioModels, QString radioMfg, const QString filename);
+bool getRigCWKeyerSupportedCharacters(QString filePath, QString &supportedChars, QString radioMfg, const QString filename);
 bool getRigCWMessageStoredInRadioFlag(bool &storedInRadio, QString radioMfg, const QString filename);
-bool getRigCWKeyerMaxMessageLength(int &messageLength, QString radioMfg, const QString filename);
+bool getRigCWKeyerMaxMessageLength(QString filePath, int &messageLength, QString radioMfg, const QString filename);
 
 QString getCwRadioManufacturer(int cwMemType);
 
