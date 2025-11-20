@@ -25,6 +25,8 @@ const char * VM_BUTTON_OFF_STYLE =
     "padding: 4px;";
 
 const int NO_VM_BUTTON_ON = -1;
+const int CW_FREE_TEXT_BUTTON_NUMBER = 13;
+
 
 const QStringList vmButtonShortCutKeys = {
                                     "Shift+F1", "Shift+F2",
@@ -729,8 +731,7 @@ void TxVmButtonsFrame::setFrameState(QString voiceKeyerName)
 
             if (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl])
             {
-                setCwEntryBoxVisible(true);
-                setCwMessagePlayingVisible(true);
+
 
                 if (!getRigCwKeyerSupportStopFlag(selectedRadio.getLocalName()))
                 {
@@ -741,7 +742,7 @@ void TxVmButtonsFrame::setFrameState(QString voiceKeyerName)
                     ui->vmStopPb->setVisible(true);
                 }
 
-                initCwTextEntryBox(getCwRadioManufacturer(getCwMemType(selectedRadio)), CWKEYER_RADIO_COMMON_PARAMS_FILENAME);
+                //initCwTextEntryBox(getCwRadioManufacturer(getCwMemType(selectedRadio)), CWKEYER_RADIO_COMMON_PARAMS_FILENAME);
             }
             else if (voiceKeyerType == keyerTypes[VoiceKeyerId::PcCwKeyer])
             {
@@ -865,13 +866,14 @@ void TxVmButtonsFrame::onCwEntryReturnPressed()
 
     if  (txVoiceKeyer)
     {
-        if (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl] || voiceKeyerType == keyerTypes[VoiceKeyerId::PcCwKeyer])
+        if (voiceKeyerType == keyerTypes[VoiceKeyerId::PcCwKeyer])
         {
             QString message = ui->cwEntry->text().trimmed();
 
             if (!message.isEmpty())
             {
                 ui->cwEntry->selectAll();
+
                 txVoiceKeyer->sendCwFreeTextMsg(message);
             }
 
@@ -1081,6 +1083,7 @@ void TxVmButtonsFrame::startVMMsg(int buttonNumber)
 
 
     vmData.setType(voiceKeyerType);
+
     txVoiceKeyer->readVmButtonParams(buttonNumber, vmData);
     setRepeatIndicatorOnOff(vmData.getVmRepeatFlag());
 

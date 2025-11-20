@@ -5480,10 +5480,14 @@ void RigControlMainWindow::onSetStopVoiceMessage(QString msg)
         }
         else if (msg == voiceKeyerCommon::STOP_CW_MESSAGE)
         {
-            if (selectedRadioSupportCap.getSupportStopVoiceMemory())
+            if (selectedRadioSupportCap.getSupportCwMemoryStop())
             {
                 trace(QString("This radio supports hamlib stop_morse function"));
                 radio->stopMorse(rigStateDetails->curVfo);
+            }
+            else
+            {
+                trace(QString("This radio does not support hamlib stop_morse function"));
             }
         }
 

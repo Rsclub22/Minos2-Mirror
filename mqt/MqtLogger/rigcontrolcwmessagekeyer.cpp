@@ -114,7 +114,7 @@ void RigControlCwMessageKeyer::getRadioCommonData(int &selectedEomType, int &use
 
     config.beginGroup(groupName);
     numButtons = config.value("NumButtons", -1).toInt();
-    selectedEomType = config.value("endOfMessageType", voiceKeyerCommon::VoiceCwKeyerEomTypes::Eom_None).toInt();
+    selectedEomType = config.value("endOfMessageType", voiceKeyerCommon::VoiceCwKeyerEomTypes::CAT).toInt();
     setCwModeAndRestoreCurrentMode = config.value("SwitchToCwMode", true).toBool();
     config.endGroup();
 
@@ -209,7 +209,13 @@ void RigControlCwMessageKeyer::sendCwMsg(VoiceKeyerParams &vmData)
 
 void  RigControlCwMessageKeyer::sendCwFreeTextMsg(QString message)
 {
+    TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
 
+    QString cwMessageToTx = parseMacrosInMessage(tslf, message);
+
+    trace(QString("Send Free Text Morse Message to Radio CW Keyer : %1").arg(cwMessageToTx));
+
+    tslf->sendRigTxCwMessage(cwMessageToTx);
 }
 
 
