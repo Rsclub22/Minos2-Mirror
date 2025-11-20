@@ -607,6 +607,16 @@ void TxVmButtonsFrame::setFrameState(QString voiceKeyerName)
 
     ui->sAndPLabel->clear();
 
+    if (cwSpeedSlider)
+    {
+        ui->cwSpeedSliderHorizontalLayout->removeWidget(cwSpeedSlider);
+        cwSpeedSlider->deleteLater();
+        cwSpeedSlider = nullptr;
+    }
+
+    setCwEntryBoxVisible(false);
+    setCwMessagePlayingVisible(false);
+
     if (txVoiceKeyer == nullptr)
     {
        clearButtonLabels();
