@@ -662,7 +662,7 @@ int RigControlCwMessageKeyer::editButton(VoiceKeyerParams *vmData, QString title
     if (getRigCWKeyerMacroCharacter(cwMacroCharList, radioManufacturer, CWKEYER_RADIO_COMMON_PARAMS_FILENAME))
     {
         cwMacroCharOk = true;
-        trace(QString("Retrieved CW Macro Chars %1 for manufacturer %2").arg(cwMacroCharList).arg(radioManufacturer));
+        trace(QString("Retrieved CW Macro Chars %1 for manufacturer %2").arg(cwMacroCharList, radioManufacturer));
     }
     else
     {
@@ -677,14 +677,15 @@ int RigControlCwMessageKeyer::editButton(VoiceKeyerParams *vmData, QString title
     {
         if (cwMacroCharOk)
         {
-            QString vc = validCharCwList.append(cwMacroCharList);
+            QString vc;
+            addCWKeyerMacroCharsToValidCwKeyerChars(vc, validCharCwList, cwMacroCharList);
             vmButtonDialog.setCwValidatorCwCharList(vc);
-            trace(QString("Supported CW Chars and Macro chars %1 for manufacturer %2").arg(vc).arg(radioManufacturer));
+            trace(QString("Supported CW Chars and Macro chars %1 for manufacturer %2").arg(vc, radioManufacturer));
         }
         else
         {
            vmButtonDialog.setCwValidatorCwCharList(validCharCwList);
-           trace(QString("Supported CW Chars with no Macro chars %1 for manufacturer %2").arg(validCharCwList).arg(radioManufacturer));
+           trace(QString("Supported CW Chars with no Macro chars %1 for manufacturer %2").arg(validCharCwList, radioManufacturer));
         }
 
     }
