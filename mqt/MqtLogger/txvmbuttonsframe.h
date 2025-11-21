@@ -219,6 +219,7 @@ private:
     void setCwMessagePlayingVisible(bool visible);
     void clearCwMessageDisplay();
     void displayCwMessagePlaying(const QString msg);
+    void restoreRadioMode();
 private slots:
 
     void onVoiceKeyerSelect(int idx);

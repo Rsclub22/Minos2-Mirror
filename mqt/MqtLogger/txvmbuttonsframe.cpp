@@ -618,6 +618,7 @@ void TxVmButtonsFrame::setFrameState(QString voiceKeyerName)
 
     setCwEntryBoxVisible(false);
     setCwMessagePlayingVisible(false);
+    ui->cwEntry->clear();
 
     if (txVoiceKeyer == nullptr)
     {
@@ -632,7 +633,7 @@ void TxVmButtonsFrame::setFrameState(QString voiceKeyerName)
        voiceKeyerType = keyerTypes[VoiceKeyerId::None];
 
        clearButtons();
-       setCwEntryBoxVisible(false);
+
 
 
        setAvailIndicatorVisible(false);
@@ -741,8 +742,9 @@ void TxVmButtonsFrame::setFrameState(QString voiceKeyerName)
                 {
                     ui->vmStopPb->setVisible(true);
                 }
-
-                //initCwTextEntryBox(getCwRadioManufacturer(getCwMemType(selectedRadio)), CWKEYER_RADIO_COMMON_PARAMS_FILENAME);
+                setCwEntryBoxVisible(true);
+                setCwMessagePlayingVisible(true);
+                initCwTextEntryBox(getCwRadioManufacturer(getCwMemType(selectedRadio)), CWKEYER_RADIO_COMMON_PARAMS_FILENAME);
             }
             else if (voiceKeyerType == keyerTypes[VoiceKeyerId::PcCwKeyer])
             {
@@ -866,7 +868,7 @@ void TxVmButtonsFrame::onCwEntryReturnPressed()
 
     if  (txVoiceKeyer)
     {
-        if (voiceKeyerType == keyerTypes[VoiceKeyerId::PcCwKeyer])
+        if (voiceKeyerType == keyerTypes[VoiceKeyerId::PcCwKeyer] || voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl])
         {
             QString message = ui->cwEntry->text().trimmed();
 
@@ -874,11 +876,28 @@ void TxVmButtonsFrame::onCwEntryReturnPressed()
             {
                 ui->cwEntry->selectAll();
 
+
+                if (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl])
+                {
+
+                    buttonNumSent = CW_FREE_TEXT_BUTTON_NUMBER;
+
+                    if (curMode != rigcommon::convertModeToQString(MODE::CW) && txVoiceKeyer->getSetCwModeAndRestoreFlag())
+                    {
+                        savedMode = curMode;
+                        sendModeToRadio(rigcommon::convertModeToQString(MODE::CW));
+                    }
+                    else
+                    {
+                        savedMode = curMode;        // keep current mode if CW
+                    }
+
+                }
+
+
                 txVoiceKeyer->sendCwFreeTextMsg(message);
             }
-
         }
-
     }
 
 }
@@ -1363,6 +1382,7 @@ void TxVmButtonsFrame::onMsgDurTimerTimeout()
                 txVoiceKeyer->stopMsg(nullptr); // ensure the sbdriver is stopped
             }
 
+
             // message duration of zero means that there shouldn't be a message timer running
             if (vmKeyParamList[buttonNumSent].getVmRepeatFlag())
             {
@@ -1381,23 +1401,30 @@ void TxVmButtonsFrame::onMsgDurTimerTimeout()
     msgDurTimer->stop();
 
 
+    restoreRadioMode();
+
+}
+
+
+void TxVmButtonsFrame::restoreRadioMode()
+{
     if (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl]
         || voiceKeyerType == keyerTypes[VoiceKeyerId::PcCwKeyer])
     {
 
         if ((getCwMemType(selectedRadio) == hamlibData::CW_MEMORY_TYPES::ICOM
-            ||  getCwMemType(selectedRadio) == hamlibData::CW_MEMORY_TYPES::YAESU
-            || getCwMemType(selectedRadio) == hamlibData::CW_MEMORY_TYPES::KENWOOD
-            || getCwMemType(selectedRadio) == hamlibData::CW_MEMORY_TYPES::ELECRAFT
-            || getCwMemType(selectedRadio) == hamlibData::CW_MEMORY_TYPES::FLEX_RADIO
-            || getCwMemType(selectedRadio) == hamlibData::CW_MEMORY_TYPES::FLEX_RADIO_APACHE
-            || getCwMemType(selectedRadio) == hamlibData::CW_MEMORY_TYPES::OPENHPSDR
-            || getCwMemType(selectedRadio) == hamlibData::CW_MEMORY_TYPES::QRPLABS
-            || getCwMemType(selectedRadio) == hamlibData::CW_MEMORY_TYPES::THETIS
-            || voiceKeyerType == keyerTypes[VoiceKeyerId::PcCwKeyer])
+             ||  getCwMemType(selectedRadio) == hamlibData::CW_MEMORY_TYPES::YAESU
+             || getCwMemType(selectedRadio) == hamlibData::CW_MEMORY_TYPES::KENWOOD
+             || getCwMemType(selectedRadio) == hamlibData::CW_MEMORY_TYPES::ELECRAFT
+             || getCwMemType(selectedRadio) == hamlibData::CW_MEMORY_TYPES::FLEX_RADIO
+             || getCwMemType(selectedRadio) == hamlibData::CW_MEMORY_TYPES::FLEX_RADIO_APACHE
+             || getCwMemType(selectedRadio) == hamlibData::CW_MEMORY_TYPES::OPENHPSDR
+             || getCwMemType(selectedRadio) == hamlibData::CW_MEMORY_TYPES::QRPLABS
+             || getCwMemType(selectedRadio) == hamlibData::CW_MEMORY_TYPES::THETIS
+             || voiceKeyerType == keyerTypes[VoiceKeyerId::PcCwKeyer])
             && txVoiceKeyer->getSetCwModeAndRestoreFlag())
         {
-
+            logMessage(QString("Restore Radio Mode, current mode = %1, savedMode = %2").arg(curMode, savedMode));
             if (curMode != savedMode)       // restore mode?
             {
                 sendModeToRadio(savedMode);
@@ -1406,7 +1433,6 @@ void TxVmButtonsFrame::onMsgDurTimerTimeout()
         }
 
     }
-
 }
 
 
@@ -2016,6 +2042,16 @@ void TxVmButtonsFrame::setRadioPttState(bool state)
 void TxVmButtonsFrame::pttStopMessage(bool state)
 {
    logMessage(QString("pttStopMessage state = %1").arg(state ? "true" : "false"));
+
+    if (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl])
+    {
+        if (buttonNumSent == CW_FREE_TEXT_BUTTON_NUMBER)
+        {
+            logMessage(QString("CW Freetext sent - stop tx and restore mode."));
+            restoreRadioMode();
+            return;
+        }
+    }
 
    if (selectedEomType == voiceKeyerCommon::VoiceCwKeyerEomTypes::CAT
        || selectedEomType == voiceKeyerCommon::VoiceCwKeyerEomTypes::DTRKeyerTXStatus)
