@@ -27,6 +27,7 @@ const char * VM_BUTTON_OFF_STYLE =
 const int NO_VM_BUTTON_ON = -1;
 const int CW_FREE_TEXT_BUTTON_NUMBER = 13;
 
+const int ERROR_MSG_TIMEOUT_DURATION = 20000;
 
 const QStringList vmButtonShortCutKeys = {
                                     "Shift+F1", "Shift+F2",
@@ -632,6 +633,8 @@ void TxVmButtonsFrame::setFrameState(QString voiceKeyerName)
     setCwEntryBoxVisible(false);
     setCwMessagePlayingVisible(false);
     setCwFreeTextIndicatorVisible(false);
+    setErrorMessageVisible(false);
+
     ui->cwEntry->clear();
 
     if (txVoiceKeyer == nullptr)
@@ -662,7 +665,6 @@ void TxVmButtonsFrame::setFrameState(QString voiceKeyerName)
        setEomTypeLabelsVisible(false);
        setKeyerIndicatorGroupBoxVisible(false);
        setPttIndicatorGroupBoxVisible(false);
-       setErrorMessageVisible(false);
        setCwMessagePlayingVisible(false);
        setMessagePlayingFlag(false);
 
@@ -881,10 +883,15 @@ void TxVmButtonsFrame::initCwTextEntryBox(QString radioManufacturer, QString fil
 
 void TxVmButtonsFrame::onCwEntryReturnPressed()
 {
-
-
     if  (txVoiceKeyer)
     {
+
+        if (!checkRadioAndKeyerState())
+        {
+            return;         // error radio keyer state missing
+        }
+
+
         if (voiceKeyerType == keyerTypes[VoiceKeyerId::PcCwKeyer] || voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl])
         {
             QString message = ui->cwEntry->text().trimmed();
@@ -1065,22 +1072,11 @@ void TxVmButtonsFrame::editActionSelected(int buttonNumber)
 }
 void TxVmButtonsFrame::readActionSelected(int buttonNumber)
 {
-    if ((voiceKeyerType == keyerTypes[VoiceKeyerId::RigControl] && !isVoiceMemAvail(selectedRadio))
-        || (voiceKeyerType == keyerTypes[VoiceKeyerId::PcCwKeyer] && !isPcCwKeyerLoaded())
-        || (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl] && !isCwMemTypeAvail(selectedRadio)))
-    {
-        logMessage(QString("- readActionSelected rigControl Voice CW Keyer Selected, but not available for this radio or no keyer selected"));
-        return;
-    }
     logMessage(QString("- readActionSelected"));
 
-    if (voiceKeyerType == keyerTypes[VoiceKeyerId::RigControl])
+    if (!checkRadioAndKeyerState())
     {
-        if(!isVoiceMode())
-        {
-            logMessage(QString("Mode needs to be a phone type for rigcontrol Voice Message, current mode = %1").arg(curMode));
-            return;
-        }
+        return;         // error radio keyer state missing
     }
 
     if (buttonNumSent != NO_VM_BUTTON_ON)
@@ -1090,6 +1086,55 @@ void TxVmButtonsFrame::readActionSelected(int buttonNumber)
     }
 
     startVMMsg(buttonNumber);
+}
+
+
+bool TxVmButtonsFrame::checkRadioAndKeyerState()
+{
+    if (voiceKeyerType == keyerTypes[VoiceKeyerId::RigControl] && !isVoiceMemAvail(selectedRadio))
+    {
+        QString msg = tr("rigControl Voice Selected, but not available for this radio");
+        logMessage(QString(msg));
+        showTemporaryErrorMessage(msg, ERROR_MSG_TIMEOUT_DURATION);
+        return false;
+    }
+    else if (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl] && !isCwMemTypeAvail(selectedRadio))
+    {
+        QString msg = tr("rigControl Voice Selected, but not available for this radio");
+        logMessage(QString(msg));
+        showTemporaryErrorMessage(msg, ERROR_MSG_TIMEOUT_DURATION);
+        return false;
+    }
+    else if (voiceKeyerType == keyerTypes[VoiceKeyerId::PcCwKeyer] && !isPcCwKeyerLoaded())
+    {
+        QString msg = tr("rigControl Voice Selected, but not available for this radio");
+        logMessage(QString(msg));
+        showTemporaryErrorMessage(msg, ERROR_MSG_TIMEOUT_DURATION);
+        return false;
+    }
+
+
+    if (getPttEnabled(selectedRadio))
+    {
+        QString msg = tr("radio ptt is not enabled, please enable");
+        logMessage(QString(msg));
+        showTemporaryErrorMessage(msg, ERROR_MSG_TIMEOUT_DURATION);
+        return false;
+    }
+
+
+    if (voiceKeyerType == keyerTypes[VoiceKeyerId::RigControl])
+    {
+        if(!isVoiceMode())
+        {
+            QString msg = tr("Mode needs to be a phone type for rigcontrol Voice Message, current mode = %1").arg(curMode);
+            logMessage(QString(msg));
+            showTemporaryErrorMessage(msg, ERROR_MSG_TIMEOUT_DURATION);
+            return false;
+        }
+    }
+
+    return true;
 }
 
 
@@ -1903,7 +1948,7 @@ void TxVmButtonsFrame:: setAvailIndicatorOnOffForPcCwKeyer()
 
 void TxVmButtonsFrame::setMessagePlayingFlag(bool playing)
 {
-    qDebug() << "set messagePlaying " << (playing ? "True" : "False");
+    //qDebug() << "set messagePlaying " << (playing ? "True" : "False");
     messagePlaying = playing;
 }
 
@@ -2020,7 +2065,27 @@ void TxVmButtonsFrame::setPttIndicatorGroupBoxVisible(bool visible)
 void TxVmButtonsFrame::setErrorMessageVisible(bool visible)
 {
     ui->errorTitleLabel->setVisible(visible);
-    ui->errorMeassageLabel->setVisible(visible);
+    ui->errorMeassageDisplay->setVisible(visible);
+}
+
+
+void TxVmButtonsFrame::showTemporaryErrorMessage(const QString &msg, int timeoutMs, const QColor &colour)
+{
+    setErrorMessageVisible(true);
+    // Save the current stylesheet
+    QString oldStyle = ui->errorMeassageDisplay->styleSheet();
+
+    // Set error color and text
+    ui->errorMeassageDisplay->setStyleSheet(QString("color: %1;").arg(colour.name()));
+
+    ui->errorMeassageDisplay->setText(msg);
+
+    // Clear after timeoutMs milliseconds
+    QTimer::singleShot(timeoutMs, this, [this, oldStyle]() {
+        ui->errorMeassageDisplay->clear();
+        ui->errorMeassageDisplay->setStyleSheet(oldStyle);
+        setErrorMessageVisible(false);
+    });
 }
 
 void TxVmButtonsFrame::setCwMessagePlayingVisible(bool visible)

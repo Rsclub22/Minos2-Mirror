@@ -223,6 +223,9 @@ private:
     void setCwFreeTextIndicatorOnOff(bool on);
     void setCwFreeTextIndicatorVisible(bool visible);
 
+    bool checkRadioAndKeyerState();
+    void showTemporaryErrorMessage(const QString &msg, int timeoutMs, const QColor &colour = QColorConstants::Svg::red);
+
 private slots:
 
     void onVoiceKeyerSelect(int idx);
