@@ -238,7 +238,7 @@ void BandmapView::mouseDoubleClicked(QPoint p)
 
     int spotNum = isClickInRegionOfSpot(mapP);
 
-    if (spotNum >= 0)
+    if (spotNum >= 0 && selectedSpot)
     {
         memoryData::memData spotData;
         spotData.callsign = selectedSpot->getDxCallStr();
@@ -335,11 +335,11 @@ int BandmapView::getBandmapFrameWidth()
     return bandmapGraphicsView->viewport()->width();
 }
 
-void BandmapView::setFreq(Frequency f, bool legalFreq)
+void BandmapView::setFreq(Frequency cf, bool legalFreq)
 {
-    curFreq = f;
+    curFreq = cf;
 
-    int dfwv = dialCursorWithinViewport(f);
+    int dfwv = dialCursorWithinViewport(curFreq);
     Frequency freqWidth = dial->getScaleEndFreq() - dial->getScaleStartFreq();
 
     Frequency edgeAmount = freqWidth/5;
@@ -347,15 +347,15 @@ void BandmapView::setFreq(Frequency f, bool legalFreq)
     if (dfwv == DIAL_CURSOR_BELOW_VIEWSTART_FREQ)
     {
         // tuning up, move viewport
-        bandmapGraphicsView->verticalScrollBar()->setValue(dial->getYCoordOnDial(f - edgeAmount));
+        bandmapGraphicsView->verticalScrollBar()->setValue(dial->getYCoordOnDial(curFreq - edgeAmount));
     }
     else if (dfwv == DIAL_CURSOR_ABOVE_VIEWSTART_FREQ)
     {
         // tuning down, move viewport
-        bandmapGraphicsView->verticalScrollBar()->setValue(dial->getYCoordOnDial(f - freqWidth + edgeAmount));
+        bandmapGraphicsView->verticalScrollBar()->setValue(dial->getYCoordOnDial(curFreq - freqWidth + edgeAmount));
     }
 
-    dial->setCurFreq(f);
+    dial->setCurFreq(curFreq);
     if (legalFreq)
     {
         dial->setCursorColour(Qt::black);
@@ -365,9 +365,9 @@ void BandmapView::setFreq(Frequency f, bool legalFreq)
         dial->setCursorColour(Qt::red);
     }
 
-    if (!f.isClear())
+    if (!curFreq.isClear())
     {
-        trace(QString("BandmapView::bandmapUpdate() bandmapView::setFreq %1").arg(f.traceStr()));
+        trace(QString("BandmapView::bandmapUpdate() bandmapView::setFreq %1").arg(curFreq.traceStr()));
         bandmapUpdate(true);
     }
     if (selectedSpot && selectedSpot->getFreq() != curFreq)
@@ -991,11 +991,7 @@ QRectF BandmapView::calculateSpotRect(const QString text, const QPoint spotCoord
     QFontMetrics fm(font());
     const int rowHeight = fm.height();
 
-#if QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
-    int textWidth = fm.horizontalAdvance(text);
-#else
-    int textWidth = fm.width(text);
-#endif
+    int textWidth = fm.boundingRect(text).width();
     
     return QRectF(spotCoord.x(),spotCoord.y(), textWidth, rowHeight);
 }
@@ -1054,6 +1050,7 @@ void BandmapView::assembleSpotMsg(int row, QString& markerMsg)
     bool dxLocFromNodeFlag = pSpot->getDxLocatorIsFromNode();
 
     QString dxQth = pSpot->getDistrict();
+    bool qthWorked = pSpot->getDistrictWorked();
 
     bool showDerivedLocFlag;
     TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpShowDerivedLoc, showDerivedLocFlag );
@@ -1077,6 +1074,15 @@ void BandmapView::assembleSpotMsg(int row, QString& markerMsg)
     else
     {
         callsign = dxCallsign;
+    }
+    QString district;
+    if (qthWorked)
+    {
+        district = QString("%1%2%3").arg(HtmlFontColour(QTH_WORKED_COLOUR), dxQth, HtmlFontColour(NOT_WORKED_COLOUR));
+    }
+    else
+    {
+        district = dxQth;
     }
 
     QString locator;
@@ -1176,7 +1182,9 @@ void BandmapView::assembleSpotMsg(int row, QString& markerMsg)
     qlonglong elapsedTime = spotElapsedTime(st) / 60;
     QString etc = formatTime(elapsedTime);
 
-    QString msg = QString("%1%2 @ .%3 %4 %5 %6 %7 %8 %9%10").arg(bLineStart, callsign, freq.extractKhz(), locator, distance).arg(bearing, etc, markSym, newSpotMsg, bLineEnd);
+    QString msg = QString("%1%2 %3 @ .%4 %5 %6 %7 %8 %9 %10%11")
+                      .arg(bLineStart, callsign, district, freq.extractKhz(), locator, distance)
+                      .arg(bearing, etc, markSym, newSpotMsg, bLineEnd);
 
     if (pSpot->getIsSelected())
     {

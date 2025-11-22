@@ -1139,15 +1139,18 @@ void TLogContainer::FileNewActionExecute(bool hf)
 }
 void TLogContainer::VHFFileNewActionExecute()
 {
+    trace(QString("%1 entered").arg(__func__));
     FileNewActionExecute(false);
 }
 void TLogContainer::HFFileNewActionExecute()
 {
+    trace(QString("%1 entered").arg(__func__));
     FileNewActionExecute(true);
 }
 
 void TLogContainer::FileOpenActionExecute()
 {
+    trace(QString("%1 entered").arg(__func__));
     // first choose file
 //"Images (*.png *.xpm *.jpg);;Text files (*.txt);;XML files (*.xml)"
     QString InitialDir = getDirectoryLocation(dlLogs);
@@ -1181,10 +1184,12 @@ void TLogContainer::FileOpenActionExecute()
 }
 void TLogContainer::FileImportVHFActionExecute()
 {
+    trace(QString("%1 entered").arg(__func__));
     FileImportActionExecute(false);
 }
 void TLogContainer::FileImportHFActionExecute()
 {
+    trace(QString("%1 entered").arg(__func__));
     FileImportActionExecute(true);
 }
 
@@ -1231,6 +1236,7 @@ void TLogContainer::FileImportActionExecute(bool hf)
 
 void TLogContainer::ContestDetailsActionExecute()
 {
+    trace(QString("%1 entered").arg(__func__));
     QWidget *tw = ui->contestPageControl->currentWidget();
     TSingleLogFrame *f = dynamic_cast<TSingleLogFrame *>( tw );
 

@@ -402,7 +402,7 @@ when user selected</source>
     </message>
     <message>
         <location filename="../kstmainwindow.ui" line="809"/>
-        <location filename="../kstmainwindow.cpp" line="531"/>
+        <location filename="../kstmainwindow.cpp" line="536"/>
         <source>Connect</source>
         <translation type="unfinished"></translation>
     </message>
@@ -412,53 +412,53 @@ when user selected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="151"/>
-        <location filename="../kstmainwindow.cpp" line="155"/>
+        <location filename="../kstmainwindow.cpp" line="156"/>
+        <location filename="../kstmainwindow.cpp" line="160"/>
         <source>Active</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="514"/>
+        <location filename="../kstmainwindow.cpp" line="519"/>
         <source>Including %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="520"/>
+        <location filename="../kstmainwindow.cpp" line="525"/>
         <source>Disconnect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="672"/>
+        <location filename="../kstmainwindow.cpp" line="677"/>
         <source>Set Back</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="676"/>
+        <location filename="../kstmainwindow.cpp" line="681"/>
         <source>Set Away</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="2171"/>
+        <location filename="../kstmainwindow.cpp" line="2201"/>
         <source>KST Test data Files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="2172"/>
+        <location filename="../kstmainwindow.cpp" line="2202"/>
         <source>All Files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="2175"/>
+        <location filename="../kstmainwindow.cpp" line="2205"/>
         <source>KST Client log files Files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="1249"/>
+        <location filename="../kstmainwindow.cpp" line="1274"/>
         <source></source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="1674"/>
+        <location filename="../kstmainwindow.cpp" line="1690"/>
         <source>Message updates paused</source>
         <translation type="unfinished"></translation>
     </message>

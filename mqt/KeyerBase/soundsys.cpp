@@ -141,6 +141,8 @@ bool RtAudioSoundSystem::initialise( QString ind, QString outd, QString host, QS
     curInDev = ind;
     curOutDev = outd;
 
+    trace(QString("RtAudioSoundSystem::initialise ind %1 outd %2").arg(ind, outd));
+
     bool oip = false;
     RtAudio::StreamParameters outParams;
     RtAudio::StreamParameters inParams;

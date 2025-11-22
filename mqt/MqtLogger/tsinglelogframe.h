@@ -185,6 +185,7 @@ public:
     void on_RotatorSkyScanPresetList(QString skyScanPresetList);
 
     void xferFromKST(QString call, QString loc, QString freq);
+    void xferMeepFromKST(QString call);
 
     void setCallPlaceholder(QString call);
 

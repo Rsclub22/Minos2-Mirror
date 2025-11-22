@@ -11,19 +11,18 @@ QSOTextEditFrame::~QSOTextEditFrame()
 {
 
 }
-void QSOTextEditFrame::setup(QString name, QWidget *filterWidget, bool uc, bool horizontal)
+void QSOTextEditFrame::setup(QString name, QWidget *filterWidget, bool uc)
 {
     setFrameShape(QFrame::NoFrame);
     QVBoxLayout *TextEditLayout = nullptr;
     QHBoxLayout *hb = nullptr;
+    QHBoxLayout *thb = nullptr;
 
-    if (!horizontal)
-    {
-        TextEditLayout = new QVBoxLayout();
-        TextEditLayout->setSpacing(0);
-        TextEditLayout->setContentsMargins(2, 2, 2, 2);
-        TextEditLayout->setObjectName(name + "Layout");
-    }
+    TextEditLayout = new QVBoxLayout();
+    TextEditLayout->setSpacing(0);
+    TextEditLayout->setContentsMargins(2, 2, 2, 2);
+    TextEditLayout->setObjectName(name + "Layout");
+
     hb = new QHBoxLayout();
     hb->setSpacing(0);
     hb->setContentsMargins(0, 0, 0, 0);
@@ -32,30 +31,21 @@ void QSOTextEditFrame::setup(QString name, QWidget *filterWidget, bool uc, bool 
     TextEditlabel->setObjectName(name + "label");
     hb->addWidget(TextEditlabel);
 
+    thb = new QHBoxLayout();
+    thb->setSpacing(0);
+    thb->setContentsMargins(0, 0, 0, 0);
+
     TextEditEdit = new QLineEdit(this);
     TextEditEdit->setObjectName(name + "Edit");
     TextEditEdit->setClearButtonEnabled(true);
+    thb->addWidget(TextEditEdit);
 
-    if (horizontal)
-    {
-        hb->addWidget(TextEditEdit);
-    }
-    if (!horizontal)
-    {
-        QSpacerItem *horizontalSpacer = new QSpacerItem(4, 2, QSizePolicy::Expanding, QSizePolicy::Minimum);
-        hb->addItem(horizontalSpacer);
-    }
+    QSpacerItem *horizontalSpacer = new QSpacerItem(4, 2, QSizePolicy::Expanding, QSizePolicy::Minimum);
+    hb->addItem(horizontalSpacer);
 
-    if (!horizontal)
-    {
-        TextEditLayout->addLayout(hb);
-        TextEditLayout->addWidget(TextEditEdit);
-        setLayout(TextEditLayout);
-    }
-    else
-    {
-        setLayout(hb);
-    }
+    TextEditLayout->addLayout(hb);
+    TextEditLayout->addLayout(thb);
+    setLayout(TextEditLayout);
 
     if (uc)
     {
@@ -94,30 +84,15 @@ void QSOTextEditFrame::setWidth(QString s)
     {
         l = l.right(l.length() - (b + 3));
     }
-
-#if QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
-    int tell = lfm.horizontalAdvance(l + "W");
-#else
-    int tell = lfm.width(l + "W");
-#endif
+    int tell = lfm.boundingRect(l + "W").width() * 8/7; // allowance for bold
 
     TextEditlabel->setMaximumWidth(tell);
     TextEditlabel->setMinimumWidth(tell);
 
     QFont ef = TextEditEdit->font();
     QFontMetrics efm(ef);
-    int editHeight = efm.height();
 
-
-#if QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
-    int teel = efm.horizontalAdvance(s);
-#else
-    int teel = efm.width(s);
-#endif
-
-    teel += editHeight; // allow for clear button
-
-    teel = std::max(teel, tell);
+    int teel = efm.boundingRect(s + "WWW").width();    //allow for close box
 
     TextEditEdit->setMaximumWidth(teel);
     TextEditEdit->setMinimumWidth(teel);

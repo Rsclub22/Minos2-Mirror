@@ -2584,6 +2584,12 @@ void TSingleLogFrame::xferFromKST(QString call, QString loc, QString freq)
 #endif
 }
 
+void TSingleLogFrame::xferMeepFromKST(QString call)
+{
+    GJVQSOLogFrame->xferMeepFromKST(call);
+
+}
+
 //--------------- QRZ Display ---------------------------------------
 
 void TSingleLogFrame::onQrzCallsignRequest(QString callsign)

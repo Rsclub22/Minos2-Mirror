@@ -285,10 +285,7 @@ class PlayAction: public VoiceAction
       virtual void timeOut() override;
       PlayAction(int mno, const QString &keyName, const QString &fileName, bool noPTT, long delayStart, long repeatDelay, bool firstTime, bool CW );
       virtual ~PlayAction() override;
-      QString statusLetter() override
-      {
-         return "F" + QString::number(mno + 1);
-      }
+      QString statusLetter() override;
       virtual bool playingFile( const QString & ) override;
 };
 //=============================================================================

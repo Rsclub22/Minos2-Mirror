@@ -1002,42 +1002,42 @@
 <context>
     <name>ClusterSpotData</name>
     <message>
-        <location filename="../spotbasedata.cpp" line="61"/>
+        <location filename="../spotbasedata.cpp" line="111"/>
         <source>NONE</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../spotbasedata.cpp" line="64"/>
+        <location filename="../spotbasedata.cpp" line="114"/>
         <source>CLUSTER</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../spotbasedata.cpp" line="67"/>
+        <location filename="../spotbasedata.cpp" line="117"/>
         <source>CLUSTER MARKED</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../spotbasedata.cpp" line="70"/>
+        <location filename="../spotbasedata.cpp" line="120"/>
         <source>LOGGED</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../spotbasedata.cpp" line="73"/>
+        <location filename="../spotbasedata.cpp" line="123"/>
         <source>MARKED</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../spotbasedata.cpp" line="76"/>
+        <location filename="../spotbasedata.cpp" line="126"/>
         <source>SAVED</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../spotbasedata.cpp" line="79"/>
+        <location filename="../spotbasedata.cpp" line="129"/>
         <source>CQ</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../spotbasedata.cpp" line="82"/>
+        <location filename="../spotbasedata.cpp" line="132"/>
         <source>DELETED</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1169,22 +1169,22 @@
 <context>
     <name>ContestScore</name>
     <message>
-        <location filename="../contest.cpp" line="2165"/>
+        <location filename="../contest.cpp" line="2174"/>
         <source>Score: %1 Qsos; %2 pts; (%3 countries); %4 locs; bonuses %5(%6) = %7</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contest.cpp" line="2173"/>
+        <location filename="../contest.cpp" line="2182"/>
         <source>Score: %1 Qsos; %2 pts; %3 countries; %4 districts; %5 locs; bonuses %6(%7) = %8</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contest.cpp" line="2181"/>
+        <location filename="../contest.cpp" line="2190"/>
         <source>Score: %1 Qsos; %2 pts; %3%4 countries%5; bonuses %6(%7) = %8</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contest.cpp" line="2189"/>
+        <location filename="../contest.cpp" line="2198"/>
         <source>Score: %1 Qsos; %2 pts;%3%4 countries%5;%6%7 districts%8; %9%10 locators %13 = %14</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2082,73 +2082,73 @@ The format required is (e.g.) 1296.3, 144.32 or 144.290123
 <context>
     <name>RotControlFrameBase</name>
     <message>
-        <location filename="../rotControlFrameBase.cpp" line="252"/>
+        <location filename="../rotControlFrameBase.cpp" line="254"/>
         <source>Bearing empty or invalid</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotControlFrameBase.cpp" line="266"/>
+        <location filename="../rotControlFrameBase.cpp" line="268"/>
         <source>Bearing too large - %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotControlFrameBase.cpp" line="279"/>
+        <location filename="../rotControlFrameBase.cpp" line="281"/>
         <source>Bearing too small - %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotControlFrameBase.cpp" line="504"/>
-        <location filename="../rotControlFrameBase.cpp" line="515"/>
+        <location filename="../rotControlFrameBase.cpp" line="506"/>
+        <location filename="../rotControlFrameBase.cpp" line="517"/>
         <source>Turn</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotControlFrameBase.cpp" line="528"/>
-        <location filename="../rotControlFrameBase.cpp" line="539"/>
+        <location filename="../rotControlFrameBase.cpp" line="530"/>
+        <location filename="../rotControlFrameBase.cpp" line="541"/>
         <source>(CCW) Left</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotControlFrameBase.cpp" line="549"/>
-        <location filename="../rotControlFrameBase.cpp" line="559"/>
+        <location filename="../rotControlFrameBase.cpp" line="551"/>
+        <location filename="../rotControlFrameBase.cpp" line="561"/>
         <source>(CW) Right</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotControlFrameBase.cpp" line="622"/>
-        <location filename="../rotControlFrameBase.cpp" line="709"/>
+        <location filename="../rotControlFrameBase.cpp" line="624"/>
+        <location filename="../rotControlFrameBase.cpp" line="711"/>
         <source>Connected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotControlFrameBase.cpp" line="636"/>
-        <location filename="../rotControlFrameBase.cpp" line="719"/>
-        <location filename="../rotControlFrameBase.cpp" line="748"/>
+        <location filename="../rotControlFrameBase.cpp" line="638"/>
+        <location filename="../rotControlFrameBase.cpp" line="721"/>
+        <location filename="../rotControlFrameBase.cpp" line="750"/>
         <source>Disconnected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotControlFrameBase.cpp" line="653"/>
+        <location filename="../rotControlFrameBase.cpp" line="655"/>
         <source>Stop</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotControlFrameBase.cpp" line="666"/>
+        <location filename="../rotControlFrameBase.cpp" line="668"/>
         <source>Rotating CCW</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotControlFrameBase.cpp" line="680"/>
+        <location filename="../rotControlFrameBase.cpp" line="682"/>
         <source>Rotating CW</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotControlFrameBase.cpp" line="695"/>
+        <location filename="../rotControlFrameBase.cpp" line="697"/>
         <source>Turning to bearing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotControlFrameBase.cpp" line="729"/>
+        <location filename="../rotControlFrameBase.cpp" line="731"/>
         <source>Error</source>
         <translation type="unfinished"></translation>
     </message>

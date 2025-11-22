@@ -217,10 +217,6 @@
         <translation>Connecter</translation>
     </message>
     <message>
-        <source>Including my call</source>
-        <translation type="vanished">Mon indicatif d&apos;appel compris</translation>
-    </message>
-    <message>
         <location filename="../kstmainwindow.ui" line="802"/>
         <source>-</source>
         <translatorcomment>Replaced by text? Placeholder only - leave as is</translatorcomment>
@@ -290,7 +286,7 @@ l&apos;indicatif sélectionné</translation>
     <message>
         <location filename="../kstmainwindow.ui" line="121"/>
         <source>Test</source>
-        <translation type="unfinished"></translation>
+        <translation>Tester</translation>
     </message>
     <message>
         <location filename="../kstmainwindow.ui" line="162"/>
@@ -310,22 +306,22 @@ l&apos;indicatif sélectionné</translation>
     <message>
         <location filename="../kstmainwindow.ui" line="261"/>
         <source>User is *new*</source>
-        <translation type="unfinished"></translation>
+        <translation>L&apos;utilisateur est *nouveau*</translation>
     </message>
     <message>
         <location filename="../kstmainwindow.ui" line="268"/>
         <source>Exclude Calls</source>
-        <translation type="unfinished"></translation>
+        <translation>Exclure les Indicatif d&apos;appel</translation>
     </message>
     <message>
         <location filename="../kstmainwindow.ui" line="275"/>
         <source>(away)</source>
-        <translation type="unfinished"></translation>
+        <translation>(Absent)</translation>
     </message>
     <message>
         <location filename="../kstmainwindow.ui" line="282"/>
         <source>[inactive]</source>
-        <translation type="unfinished"></translation>
+        <translation>[inactif]</translation>
     </message>
     <message>
         <location filename="../kstmainwindow.ui" line="321"/>
@@ -412,7 +408,7 @@ l&apos;indicatif sélectionné</translation>
     </message>
     <message>
         <location filename="../kstmainwindow.ui" line="809"/>
-        <location filename="../kstmainwindow.cpp" line="531"/>
+        <location filename="../kstmainwindow.cpp" line="536"/>
         <source>Connect</source>
         <translation>Connecter</translation>
     </message>
@@ -422,54 +418,54 @@ l&apos;indicatif sélectionné</translation>
         <translation>Fermer</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="520"/>
+        <location filename="../kstmainwindow.cpp" line="525"/>
         <source>Disconnect</source>
         <translation>Déconnecter</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="514"/>
+        <location filename="../kstmainwindow.cpp" line="519"/>
         <source>Including %1</source>
         <translation>%1 Compris</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="151"/>
-        <location filename="../kstmainwindow.cpp" line="155"/>
+        <location filename="../kstmainwindow.cpp" line="156"/>
+        <location filename="../kstmainwindow.cpp" line="160"/>
         <source>Active</source>
         <translation>Actif</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="672"/>
+        <location filename="../kstmainwindow.cpp" line="677"/>
         <source>Set Back</source>
         <translatorcomment>Ou retour??</translatorcomment>
         <translation>Définir statut à « Présent»</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="676"/>
+        <location filename="../kstmainwindow.cpp" line="681"/>
         <source>Set Away</source>
         <translation>Définir statut à « Absent »</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="2171"/>
+        <location filename="../kstmainwindow.cpp" line="2201"/>
         <source>KST Test data Files</source>
-        <translation type="unfinished"></translation>
+        <translation>Fichiers de données de test KST</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="2172"/>
+        <location filename="../kstmainwindow.cpp" line="2202"/>
         <source>All Files</source>
-        <translation type="unfinished"></translation>
+        <translation>Tous fichiers</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="2175"/>
+        <location filename="../kstmainwindow.cpp" line="2205"/>
         <source>KST Client log files Files</source>
-        <translation type="unfinished"></translation>
+        <translation>Fichiers journaux du Minos KSTclient</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="1249"/>
+        <location filename="../kstmainwindow.cpp" line="1274"/>
         <source></source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="1674"/>
+        <location filename="../kstmainwindow.cpp" line="1690"/>
         <source>Message updates paused</source>
         <translation>Mises à jour des messages suspendues</translation>
     </message>

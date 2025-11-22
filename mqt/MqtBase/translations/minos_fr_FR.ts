@@ -1006,42 +1006,42 @@
 <context>
     <name>ClusterSpotData</name>
     <message>
-        <location filename="../spotbasedata.cpp" line="61"/>
+        <location filename="../spotbasedata.cpp" line="111"/>
         <source>NONE</source>
         <translation>AUCUN</translation>
     </message>
     <message>
-        <location filename="../spotbasedata.cpp" line="64"/>
+        <location filename="../spotbasedata.cpp" line="114"/>
         <source>CLUSTER</source>
         <translation>CLUSTER</translation>
     </message>
     <message>
-        <location filename="../spotbasedata.cpp" line="67"/>
+        <location filename="../spotbasedata.cpp" line="117"/>
         <source>CLUSTER MARKED</source>
         <translation>CLUSTER MARQUÉ</translation>
     </message>
     <message>
-        <location filename="../spotbasedata.cpp" line="70"/>
+        <location filename="../spotbasedata.cpp" line="120"/>
         <source>LOGGED</source>
         <translation>ENREGISTRÉ</translation>
     </message>
     <message>
-        <location filename="../spotbasedata.cpp" line="73"/>
+        <location filename="../spotbasedata.cpp" line="123"/>
         <source>MARKED</source>
         <translation>MARQUÉ</translation>
     </message>
     <message>
-        <location filename="../spotbasedata.cpp" line="76"/>
+        <location filename="../spotbasedata.cpp" line="126"/>
         <source>SAVED</source>
         <translation>SAUVÉ</translation>
     </message>
     <message>
-        <location filename="../spotbasedata.cpp" line="79"/>
+        <location filename="../spotbasedata.cpp" line="129"/>
         <source>CQ</source>
         <translation>CQ</translation>
     </message>
     <message>
-        <location filename="../spotbasedata.cpp" line="82"/>
+        <location filename="../spotbasedata.cpp" line="132"/>
         <source>DELETED</source>
         <translation>SUPPRIMÉ</translation>
     </message>
@@ -1174,22 +1174,22 @@
 <context>
     <name>ContestScore</name>
     <message>
-        <location filename="../contest.cpp" line="2165"/>
+        <location filename="../contest.cpp" line="2174"/>
         <source>Score: %1 Qsos; %2 pts; (%3 countries); %4 locs; bonuses %5(%6) = %7</source>
         <translation>Score: %1 Qsos; %2 pts; (%3 pays); %4 locs; bonuses %5(%6) = %7</translation>
     </message>
     <message>
-        <location filename="../contest.cpp" line="2173"/>
+        <location filename="../contest.cpp" line="2182"/>
         <source>Score: %1 Qsos; %2 pts; %3 countries; %4 districts; %5 locs; bonuses %6(%7) = %8</source>
         <translation>Score: %1 Qsos; %2 pts; %3 pays; %4 quartiers; %5 locs; bonuses %6(%7) = %8</translation>
     </message>
     <message>
-        <location filename="../contest.cpp" line="2181"/>
+        <location filename="../contest.cpp" line="2190"/>
         <source>Score: %1 Qsos; %2 pts; %3%4 countries%5; bonuses %6(%7) = %8</source>
         <translation>Score: %1 Qsos; %2 pts; %3%4 pays%5; bonuses %6(%7) = %8</translation>
     </message>
     <message>
-        <location filename="../contest.cpp" line="2189"/>
+        <location filename="../contest.cpp" line="2198"/>
         <source>Score: %1 Qsos; %2 pts;%3%4 countries%5;%6%7 districts%8; %9%10 locators %13 = %14</source>
         <translation>Score: %1 Qsos; %2 pts;%3%4 pays%5;%6%7 quartiers%8; %9%10 locators %13 = %14</translation>
     </message>
@@ -1225,67 +1225,67 @@
     <message>
         <location filename="../dmkeyseditdlg.ui" line="20"/>
         <source>Settings Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Editeur des paramètres </translation>
     </message>
     <message>
         <location filename="../dmkeyseditdlg.ui" line="32"/>
         <source>OK</source>
-        <translation type="unfinished">OK</translation>
+        <translation>OK</translation>
     </message>
     <message>
         <location filename="../dmkeyseditdlg.ui" line="42"/>
         <source>Cancel</source>
-        <translation type="unfinished">Annuler</translation>
+        <translation>Annuler</translation>
     </message>
     <message>
         <location filename="../dmkeyseditdlg.ui" line="49"/>
         <source>Rename Setting</source>
-        <translation type="unfinished"></translation>
+        <translation>Renommer le paramètre</translation>
     </message>
     <message>
         <location filename="../dmkeyseditdlg.ui" line="56"/>
         <source>Delete Setting</source>
-        <translation type="unfinished"></translation>
+        <translation>Supprimer le paramètre</translation>
     </message>
     <message>
         <location filename="../dmkeyseditdlg.ui" line="63"/>
         <source>Copy Setting</source>
-        <translation type="unfinished"></translation>
+        <translation>Copier paramètre.</translation>
     </message>
     <message>
         <location filename="../dmkeyseditdlg.ui" line="70"/>
         <source>New Setting</source>
-        <translation type="unfinished"></translation>
+        <translation>Paramètre nouveau</translation>
     </message>
     <message>
         <location filename="../dmkeyseditdlg.ui" line="153"/>
         <source>Move Up</source>
-        <translation type="unfinished"></translation>
+        <translation>Monter</translation>
     </message>
     <message>
         <location filename="../dmkeyseditdlg.ui" line="160"/>
         <source>Move Down</source>
-        <translation type="unfinished"></translation>
+        <translation>Descendre</translation>
     </message>
     <message>
         <location filename="../dmkeyseditdlg.cpp" line="33"/>
         <source>New Digi FKey section</source>
-        <translation type="unfinished"></translation>
+        <translation>Nouvelle section Digi FKey.</translation>
     </message>
     <message>
         <location filename="../dmkeyseditdlg.cpp" line="34"/>
         <source>Copy Digi FKey section</source>
-        <translation type="unfinished"></translation>
+        <translation>Copier la section Digi FKey.</translation>
     </message>
     <message>
         <location filename="../dmkeyseditdlg.cpp" line="35"/>
         <source>Delete Digi FKey section</source>
-        <translation type="unfinished"></translation>
+        <translation>Supprimer la section Digi FKey.</translation>
     </message>
     <message>
         <location filename="../dmkeyseditdlg.cpp" line="36"/>
         <source>Rename Digi FKey section</source>
-        <translation type="unfinished"></translation>
+        <translation>Renommer la section Digi FKey.</translation>
     </message>
     <message>
         <location filename="../dmkeyseditdlg.cpp" line="50"/>
@@ -1306,60 +1306,77 @@
         {CALLFIELD}     move focus to the call field
         {SERIALFIELD}   move focus to the serial received field
         {EXCHANGEFIELD} move focus to the exchange received field</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Are keywords still in English or not?</translatorcomment>
+        <translation>Leur appel
+{macro}
+{MYCALL} Mon appel complet
+{CALL} Leur appel complet
+{SN} Numéro de série à envoyer
+{EXCH} Numéro d&apos;échange complet à envoyer (peut être en plusieurs parties)
+{GRID} Mon localisateur Maidenhead
+{SPACE} Espace
+{SENTRST} Numéro de série à envoyer
+{TIME2} Heure au format HHmm
+{LOG} Enregistrer le QSO, l&apos;effacer et se concentrer sur CALL
+{WIPE} Effacer tous les champs QSO
+{CALLFIELD} Déplacer le focus vers le champ d&apos;appel
+{SERIALFIELD} Déplacer le focus vers le champ de série reçu
+{EXCHANGEFIELD} Déplacer le focus vers le champ d&apos;échange reçu
+</translation>
     </message>
     <message>
         <location filename="../dmkeyseditdlg.cpp" line="154"/>
         <source>Run</source>
-        <translation type="unfinished"></translation>
+        <translation>Exécuter</translation>
     </message>
     <message>
         <location filename="../dmkeyseditdlg.cpp" line="154"/>
         <source>S&amp;P</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Is there French equivalent?</translatorcomment>
+        <translation>S&amp;P?</translation>
     </message>
     <message>
         <location filename="../dmkeyseditdlg.cpp" line="167"/>
         <source>Key Top</source>
-        <translation type="unfinished"></translation>
+        <translation>?????</translation>
     </message>
     <message>
         <location filename="../dmkeyseditdlg.cpp" line="167"/>
         <source>Value</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../dmkeyseditdlg.cpp" line="204"/>
         <location filename="../dmkeyseditdlg.cpp" line="298"/>
         <source>Please give a new name for the %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Donner un nouveau nom pour le %1 SVP</translation>
     </message>
     <message>
         <location filename="../dmkeyseditdlg.cpp" line="233"/>
         <location filename="../dmkeyseditdlg.cpp" line="263"/>
         <location filename="../dmkeyseditdlg.cpp" line="312"/>
         <source>%1 already exists</source>
-        <translation type="unfinished">%1 existe déjà</translation>
+        <translation>%1 existe déjà</translation>
     </message>
     <message>
         <location filename="../dmkeyseditdlg.cpp" line="246"/>
         <source>Please give a name for the new %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Donner un nom au nouveau %1 SVP</translation>
     </message>
     <message>
         <location filename="../dmkeyseditdlg.cpp" line="278"/>
         <source>You cannot delete the empty %1!</source>
-        <translation type="unfinished"></translation>
+        <translation>Vous ne pouvez pas supprimer le %1&#xa0;! vide.</translation>
     </message>
     <message>
         <location filename="../dmkeyseditdlg.cpp" line="280"/>
         <source>Are you sure you want to delete the current %1?</source>
-        <translation type="unfinished"></translation>
+        <translation>Sûr de vouloir supprimer le %1 actuel&#xa0;?.</translation>
     </message>
     <message>
         <location filename="../dmkeyseditdlg.cpp" line="294"/>
         <source>You cannot rename the empty %1!</source>
-        <translation type="unfinished"></translation>
+        <translation>Vous ne pouvez pas renommer le %1&#xa0;! vide.</translation>
     </message>
 </context>
 <context>
@@ -1435,10 +1452,6 @@
         <translation>UTC</translation>
     </message>
     <message>
-        <source>Date</source>
-        <translation type="vanished">Date</translation>
-    </message>
-    <message>
         <location filename="../dxspotdatamodel.cpp" line="41"/>
         <source>Freq</source>
         <translation>Fréquence</translation>
@@ -1447,10 +1460,6 @@
         <location filename="../dxspotdatamodel.cpp" line="43"/>
         <source>Dx</source>
         <translation>DX</translation>
-    </message>
-    <message>
-        <source>Wkd</source>
-        <translation type="vanished">Contacté</translation>
     </message>
     <message>
         <location filename="../dxspotdatamodel.cpp" line="45"/>
@@ -1482,14 +1491,6 @@
         <location filename="../dxspotdatamodel.cpp" line="57"/>
         <source>Comment</source>
         <translation>Commentaire</translation>
-    </message>
-    <message>
-        <source>Spot to Mem Flag</source>
-        <translation type="vanished">Indicateur Spot Mémorisé</translation>
-    </message>
-    <message>
-        <source>Prop Mode</source>
-        <translation type="vanished">Mode de propagation</translation>
     </message>
     <message>
         <location filename="../dxspotdatamodel.cpp" line="72"/>
@@ -1636,12 +1637,12 @@ Attention: &quot;.&quot; pas &quot;,&quot;
     <message>
         <location filename="../minoscompass.cpp" line="189"/>
         <source>N,E,S,W</source>
-        <translation type="unfinished"></translation>
+        <translation>N,E,S,O</translation>
     </message>
     <message>
         <location filename="../minoscompass.cpp" line="345"/>
         <source>Stop</source>
-        <translation type="unfinished"></translation>
+        <translation>Arrêter</translation>
     </message>
 </context>
 <context>
@@ -2118,75 +2119,75 @@ Attention: &quot;.&quot; pas &quot;,&quot;
 <context>
     <name>RotControlFrameBase</name>
     <message>
-        <location filename="../rotControlFrameBase.cpp" line="252"/>
+        <location filename="../rotControlFrameBase.cpp" line="254"/>
         <source>Bearing empty or invalid</source>
-        <translation type="unfinished"></translation>
+        <translation>Direction vide ou invalide</translation>
     </message>
     <message>
-        <location filename="../rotControlFrameBase.cpp" line="266"/>
+        <location filename="../rotControlFrameBase.cpp" line="268"/>
         <source>Bearing too large - %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Direction trop grande - %1</translation>
     </message>
     <message>
-        <location filename="../rotControlFrameBase.cpp" line="279"/>
+        <location filename="../rotControlFrameBase.cpp" line="281"/>
         <source>Bearing too small - %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Direction trop petitel - %1</translation>
     </message>
     <message>
-        <location filename="../rotControlFrameBase.cpp" line="504"/>
-        <location filename="../rotControlFrameBase.cpp" line="515"/>
+        <location filename="../rotControlFrameBase.cpp" line="506"/>
+        <location filename="../rotControlFrameBase.cpp" line="517"/>
         <source>Turn</source>
-        <translation type="unfinished"></translation>
+        <translation>Tourner</translation>
     </message>
     <message>
-        <location filename="../rotControlFrameBase.cpp" line="528"/>
-        <location filename="../rotControlFrameBase.cpp" line="539"/>
+        <location filename="../rotControlFrameBase.cpp" line="530"/>
+        <location filename="../rotControlFrameBase.cpp" line="541"/>
         <source>(CCW) Left</source>
-        <translation type="unfinished"></translation>
+        <translation>CCW (gauche)</translation>
     </message>
     <message>
-        <location filename="../rotControlFrameBase.cpp" line="549"/>
-        <location filename="../rotControlFrameBase.cpp" line="559"/>
+        <location filename="../rotControlFrameBase.cpp" line="551"/>
+        <location filename="../rotControlFrameBase.cpp" line="561"/>
         <source>(CW) Right</source>
-        <translation type="unfinished"></translation>
+        <translation>CW (droit)</translation>
     </message>
     <message>
-        <location filename="../rotControlFrameBase.cpp" line="622"/>
-        <location filename="../rotControlFrameBase.cpp" line="709"/>
+        <location filename="../rotControlFrameBase.cpp" line="624"/>
+        <location filename="../rotControlFrameBase.cpp" line="711"/>
         <source>Connected</source>
-        <translation type="unfinished"></translation>
+        <translation>Connecté</translation>
     </message>
     <message>
-        <location filename="../rotControlFrameBase.cpp" line="636"/>
-        <location filename="../rotControlFrameBase.cpp" line="719"/>
-        <location filename="../rotControlFrameBase.cpp" line="748"/>
+        <location filename="../rotControlFrameBase.cpp" line="638"/>
+        <location filename="../rotControlFrameBase.cpp" line="721"/>
+        <location filename="../rotControlFrameBase.cpp" line="750"/>
         <source>Disconnected</source>
-        <translation type="unfinished"></translation>
+        <translation>Déconnecté</translation>
     </message>
     <message>
-        <location filename="../rotControlFrameBase.cpp" line="653"/>
+        <location filename="../rotControlFrameBase.cpp" line="655"/>
         <source>Stop</source>
-        <translation type="unfinished"></translation>
+        <translation>Arrêter</translation>
     </message>
     <message>
-        <location filename="../rotControlFrameBase.cpp" line="666"/>
+        <location filename="../rotControlFrameBase.cpp" line="668"/>
         <source>Rotating CCW</source>
-        <translation type="unfinished"></translation>
+        <translation>Rotation CCW</translation>
     </message>
     <message>
-        <location filename="../rotControlFrameBase.cpp" line="680"/>
+        <location filename="../rotControlFrameBase.cpp" line="682"/>
         <source>Rotating CW</source>
-        <translation type="unfinished"></translation>
+        <translation>Rotation CW</translation>
     </message>
     <message>
-        <location filename="../rotControlFrameBase.cpp" line="695"/>
+        <location filename="../rotControlFrameBase.cpp" line="697"/>
         <source>Turning to bearing</source>
-        <translation type="unfinished"></translation>
+        <translation>Tournant vers la direction.</translation>
     </message>
     <message>
-        <location filename="../rotControlFrameBase.cpp" line="729"/>
+        <location filename="../rotControlFrameBase.cpp" line="731"/>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Erreur</translation>
     </message>
 </context>
 <context>

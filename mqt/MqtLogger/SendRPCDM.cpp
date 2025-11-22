@@ -1414,6 +1414,23 @@ void TSendDM::on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, const QSt
                 lf->xferFromKST(call, loc, freq);
             }
         }
+        else if (call == rpcConstants::KSTTransferMeep)
+        {
+            QSharedPointer<RPCParam> kstCall;
+            bool callOK = args->getStructArgMember( 0, rpcConstants::KSTTransferCall, kstCall );
+            QString call;
+
+            if (callOK)
+            {
+                kstCall->getString(call);
+
+                TSingleLogFrame * lf = LogContainer->getCurrentLogFrame();
+                if ( lf )
+                {
+                    lf->xferMeepFromKST(call);
+                }
+            }
+        }
     }
 }
 QStringList TSendDM::rotators()

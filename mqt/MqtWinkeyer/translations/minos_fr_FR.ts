@@ -154,7 +154,7 @@
     <message>
         <location filename="../winkeyermainwindow.ui" line="46"/>
         <source>Keyer</source>
-        <translation>Manipulateur </translation>
+        <translation>Manipulateur</translation>
     </message>
     <message>
         <location filename="../winkeyermainwindow.ui" line="54"/>
@@ -175,14 +175,14 @@
         <location filename="../winkeyermainwindow.ui" line="93"/>
         <source>Open</source>
         <translatorcomment>Context?</translatorcomment>
-        <translation>Ouvert/Ouvrir??</translation>
+        <translation>Ouvrir</translation>
     </message>
     <message>
         <location filename="../winkeyermainwindow.ui" line="28"/>
         <location filename="../winkeyermainwindow.ui" line="40"/>
         <source>Setup</source>
         <translatorcomment>Context?</translatorcomment>
-        <translation>Configuration?</translation>
+        <translation>Configuration</translation>
     </message>
 </context>
 <context>
@@ -196,12 +196,12 @@
         <location filename="../winkeyerrpc.cpp" line="28"/>
         <source>Not Available</source>
         <translatorcomment>ou indisponible??</translatorcomment>
-        <translation>Non disponible??</translation>
+        <translation>Non disponible</translation>
     </message>
     <message>
         <location filename="../winkeyerrpc.cpp" line="29"/>
         <source>No Contact</source>
-        <translation>Aucun contact?</translation>
+        <translation>Aucun contact</translation>
     </message>
 </context>
 </TS>

@@ -1579,11 +1579,7 @@ bool ClusterClientFrame::event(QEvent *event)
 static void setTextToLabel(QLabel *label, QString text1, QString col, QString text2)
 {
     QFontMetrics metrix(label->font());
-#if QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
-    int width1 = metrix.horizontalAdvance(text1);
-#else
-    int width1 = metrix.width(text1);
-#endif
+    int width1 = metrix.boundingRect(text1).width();
 
     int width = label->width() - width1 - 2;
     QString clippedText;
