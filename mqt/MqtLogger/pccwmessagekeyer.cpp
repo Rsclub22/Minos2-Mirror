@@ -223,6 +223,8 @@ void PcCWMessageKeyer::sendCwMsg(VoiceKeyerParams &vmData)
 
         trace(QString("Send Morse Message to radio : %1").arg(cwMessageToTx));
 
+        emit cwMacroExpandedText(cwMessageToTx);    // send to display
+
         tslf->sendPcKeyerTxCwMessage(cwMessageToTx);
     }
 
@@ -235,6 +237,8 @@ void  PcCWMessageKeyer::sendCwFreeTextMsg(QString message)
     QString cwMessageToTx = parseMacrosInMessage(tslf, message);
 
     trace(QString("Send Free Text Morse Message to PcCwKeyer : %1").arg(cwMessageToTx));
+
+    emit cwMacroExpandedText(cwMessageToTx);    // send to display
 
     tslf->sendPcKeyerTxCwMessage(cwMessageToTx);
 }

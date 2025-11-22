@@ -202,6 +202,8 @@ void RigControlCwMessageKeyer::sendCwMsg(VoiceKeyerParams &vmData)
 
         trace(QString("Send Morse Message to radio : %1").arg(cwMessageToTx));
 
+        emit cwMacroExpandedText(cwMessageToTx);    // send to display
+
         tslf->sendRigTxCwMessage(cwMessageToTx);
     }
 
@@ -214,6 +216,8 @@ void  RigControlCwMessageKeyer::sendCwFreeTextMsg(QString message)
     QString cwMessageToTx = parseMacrosInMessage(tslf, message);
 
     trace(QString("Send Free Text Morse Message to Radio CW Keyer : %1").arg(cwMessageToTx));
+
+    emit cwMacroExpandedText(cwMessageToTx);    // send to display
 
     tslf->sendRigTxCwMessage(cwMessageToTx);
 }
