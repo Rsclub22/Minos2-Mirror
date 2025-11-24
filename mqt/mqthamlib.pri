@@ -38,9 +38,9 @@ win32: {
   HAMLIB_DLL = $$HAMLIBDIR/bin/libhamlib-4.dll
   HAMLIB_LIBUSB = $$HAMLIBDIR/bin/libusb-1.0.dll
 
-  message("*******  hamlib dll = $$HAMLIB_DLL")
-  message("*******  hamlib libusb dll = $$HAMLIB_LIBUSB")
-  message("******* dest dir = $$DESTDIR_DLL")
+  #message("*******  hamlib dll = $$HAMLIB_DLL")
+  #message("*******  hamlib libusb dll = $$HAMLIB_LIBUSB")
+  #message("******* dest dir = $$DESTDIR_DLL")
 
   QMAKE_POST_LINK += $$quote($$QMAKE_COPY $$shell_path($$HAMLIB_DLL) $$shell_path($$DESTDIR_DLL)$$escape_expand(\\n\\t))
   QMAKE_POST_LINK += $$quote($$QMAKE_COPY $$shell_path($$HAMLIB_LIBUSB) $$shell_path($$DESTDIR_DLL)$$escape_expand(\\n\\t))
