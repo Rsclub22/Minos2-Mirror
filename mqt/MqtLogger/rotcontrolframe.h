@@ -48,7 +48,7 @@ public:
 protected:
 
     //QWidget* getCompassObject() override;
-    QGroupBox* getRotatorControlGroupBoxObject() override;
+    QWidget* getRotatorControlGroupBoxObject() override;
     QComboBox* getAntennaSelectObject() override;
     QLabel* getRotConnectStateLabelObject() override;
     QLabel* getRotatorStatMsgLabelObject() override;

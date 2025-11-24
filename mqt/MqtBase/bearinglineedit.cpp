@@ -124,7 +124,7 @@ void BearingLineEdit::onTextChanged(const QString &brg)
 
     if (!bearingStr.isEmpty())
     {
-        QRegularExpression re(R"(^\d*$)"); // Match digits only
+        static QRegularExpression re(R"(^\d*$)"); // Match digits only
         QRegularExpressionMatch rem = re.match(bearingStr.trimmed());
         if (rem.hasMatch())
         {

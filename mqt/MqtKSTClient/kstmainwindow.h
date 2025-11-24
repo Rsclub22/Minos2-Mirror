@@ -22,7 +22,7 @@ class KSTMonitoredLogs;
 
 extern QStringList services;
 
-class RemoteLogs;
+//class RemoteLogs;
 class MonitoredLog;
 class QPushButton;
 
@@ -83,6 +83,12 @@ class KSTMainWindow : public QMainWindow
     QString recLoc;
     bool autoConnect = false;
 
+    bool meepNotifyLogger = false;
+    bool meepPlaySound = false;
+    QString meepSoundFile;
+    int meepVolume = 50;
+
+
     int maxDistance = 99999;
 
     bool ASActive = false;
@@ -113,12 +119,13 @@ class KSTMainWindow : public QMainWindow
 
     bool mouseInMessages = false;
 
-    RemoteLogs *remoteLogs = nullptr;
+//    RemoteLogs *remoteLogs = nullptr;
 
 
     void closeEvent(QCloseEvent *event) override;
 
     void sendKST(QString msg);
+    void playMeepSound();
     void analyseKstMessage(QString atj);
     void reconnect();
     void connectToHost();
@@ -274,6 +281,10 @@ private slots:
     void on_KSTTestButton_clicked();
 
     void testTimeout();
+    void on_meepTable_doubleClicked(const QModelIndex &index);
+
+    void on_messageTable_doubleClicked(const QModelIndex &index);
+
 private:
     Ui::KSTMainWindow *ui;
     QSharedPointer<CommandReader> commandReader = QSharedPointer<CommandReader>(new CommandReader(this));

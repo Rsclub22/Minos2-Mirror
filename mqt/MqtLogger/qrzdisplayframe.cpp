@@ -43,6 +43,8 @@ QrzDisplayFrame::QrzDisplayFrame(QWidget *parent) :
 
     setQrzMessageText(tr("Note! Qrz XML subscription required to get QRA"));
 
+    adjustMargins(layout(), 2, 5, 0, 5, 2);
+
     serverPingTimer = new QTimer(this);
     connect (serverPingTimer, &QTimer::timeout, this, [=](){onServerPingTimerTimeout();});
     serverPingTimer->start(PINGTIMER_DURATION);

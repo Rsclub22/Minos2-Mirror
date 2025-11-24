@@ -695,8 +695,8 @@ void RigControlMainWindow::upDateRadio(QString radioName)
         else
         {
             logMessage(QString("Update Radio - Logger Set Freq = %1, Set Mode = %2").arg(loggerRequests->selRadioFreq.traceStr(), loggerRequests->selRadioMode));
-            loggerSetFreq(loggerRequests->selRadioFreq);
             loggerSetMode(loggerRequests->selRadioMode);
+            loggerSetFreq(loggerRequests->selRadioFreq);
         }
 
         logMessage(QString("Update Radio - Get Initial Radio Info"));
@@ -1213,38 +1213,38 @@ void RigControlMainWindow::updateCurrentRadioFromAvailRadios(QString radioName)
 void RigControlMainWindow::refreshRadio()
 {
     if (radioCommsOK)
+    {
+        logMessage(QString("Refresh Radio: Logger Set Mode to %1").arg(loggerRequests->selRadioMode));
+        loggerSetMode(loggerRequests->selRadioMode);
+        if (loggerRequests->selRadioFreq.isClear())
         {
-            if (loggerRequests->selRadioFreq.isClear())
+            if (loggerRequests->selBand != rigStateDetails->selTvBand && currentRadio.transVertEnable && currentRadio.transVertSettings.count() != 0)
             {
-                if (loggerRequests->selBand != rigStateDetails->selTvBand && currentRadio.transVertEnable && currentRadio.transVertSettings.count() != 0)
+                rigStateDetails->selTransverterNum = NO_TRANSVERTER_NUM;
+                if (findTransverter(rigStateDetails->selTvBand, loggerRequests->selBand))
                 {
-                    rigStateDetails->selTransverterNum = NO_TRANSVERTER_NUM;
-                    if (findTransverter(rigStateDetails->selTvBand, loggerRequests->selBand))
-                    {
-                        getAndSendTransVertSwNum(rigStateDetails->selTvBand);
-                        logMessage(QString("Refresh radio: Transvert Enabled select Transverter for %1").arg(loggerRequests->selBand));
+                    getAndSendTransVertSwNum(rigStateDetails->selTvBand);
+                    logMessage(QString("Refresh radio: Transvert Enabled select Transverter for %1").arg(loggerRequests->selBand));
 
-                    }
                 }
             }
-            else
-            {
-                loggerSetFreq(loggerRequests->selRadioFreq);
-            }
-            logMessage(QString("Refresh Radio: Logger Set Mode to %1").arg(loggerRequests->selRadioMode));
-            loggerSetMode(loggerRequests->selRadioMode);
-
-            //writeWindowTitle(appName);
-            sendStatusToLogConnected();
-            dumpRadioToTraceLog();
-            msg->rigCache.publish();
-            sendRadioSwitchCompleteToLogger();
-            msg->rigCache.publish();
         }
         else
         {
-            upDateRadio(currentRadioName);
+            loggerSetFreq(loggerRequests->selRadioFreq);
         }
+
+        //writeWindowTitle(appName);
+        sendStatusToLogConnected();
+        dumpRadioToTraceLog();
+        msg->rigCache.publish();
+        sendRadioSwitchCompleteToLogger();
+        msg->rigCache.publish();
+    }
+    else
+    {
+        upDateRadio(currentRadioName);
+    }
 
 }
 
@@ -2242,7 +2242,7 @@ void RigControlMainWindow::setFreq(Frequency freq, VFO vfo)
 
         if (radio)
         {
-            //xxxxxxxxxxxCorrect rigstate frequency to rig
+            //Correct rigstate frequency to rig
             Frequency mf = f;
             if (rigStateDetails->RTTYModeFlag)
             {

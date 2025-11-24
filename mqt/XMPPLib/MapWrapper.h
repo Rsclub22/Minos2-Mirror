@@ -15,6 +15,7 @@ public:
     {
         wt = m.wt;
     }
+    ~MapWrapper(){}
     MapWrapper &operator= (const MapWrapper &m)
     {
         wt = m.wt;

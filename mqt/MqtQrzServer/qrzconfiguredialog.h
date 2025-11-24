@@ -34,6 +34,7 @@ public:
 
     QString logCallsign;
     QString logPassword;
+    int cacheAge = 0;
 
     bool resetDB = false;
 

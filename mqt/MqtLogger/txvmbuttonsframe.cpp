@@ -159,6 +159,10 @@ void TxVmButtonsFrame::clearButtons()
 
 bool  TxVmButtonsFrame::isVoiceMode()
 {
+    if (curMode.isEmpty())
+    {
+        curMode = ct->currentMode.getValue();
+    }
     return  curMode == rigcommon::convertModeToQString(MODE::USB)
     || curMode == rigcommon::convertModeToQString(MODE::LSB)
         || curMode == rigcommon::convertModeToQString(MODE::FM)
@@ -420,7 +424,7 @@ void TxVmButtonsFrame::checkButtonIniFileVersion(QString voiceKeyerType)
         if (config.value("version", 0).toInt() != 2)
         {
             // no convert file to version 2
-            for (const QString& key : keys)
+            for (const QString& key : QASCONST(keys))
             {
                 QString buttonNumStr = key.mid( 6, 1);
                 // read settings for this key
@@ -2350,11 +2354,11 @@ void TxVmButtonsFrame::onInternalVoiceMemoryPlayState(bool playing)
 {
     if (playing)
     {
-        qDebug() << "internal is playing";
+        //qDebug() << "internal is playing";
     }
     else
     {
-       qDebug() << "internal has stopped";
+       //qDebug() << "internal has stopped";
         onMsgDurTimerTimeout();
     }
 }

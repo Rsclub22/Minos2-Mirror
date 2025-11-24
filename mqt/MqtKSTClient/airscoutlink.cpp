@@ -53,8 +53,8 @@ void AirScoutLink::onTimeout()
 {
     if (mainWindow && mainWindow->getASActive())
     {
-        QDateTime now = QDateTime::currentDateTime();
-        QDateTime timeoutTime = lastASSEnd.addSecs(mainWindow->getASTimeout());
+        //QDateTime now = QDateTime::currentDateTime();
+        //QDateTime timeoutTime = lastASSEnd.addSecs(mainWindow->getASTimeout());
         {
             // send again...
             assetPathInProgress = false;

@@ -232,9 +232,16 @@ bool ManageHamlib::downloadFile ( QString url, QString path, bool showError, QWi
         if (raw == 200 && ds > 0)
         {
             QFile file( path );
-            file.open( QIODevice::WriteOnly );
-            file.write( data );
-            trace ( "HTTP Get of " + url + " OK size " + QString::number(ds) );
+            if (file.open( QIODevice::WriteOnly ))
+            {
+                file.write( data );
+                trace ( "HTTP Get of " + url + " OK size " + QString::number(ds) );
+            }
+            else
+            {
+                trace(QString("Failed to open %1 response %2").arg(path, file.errorString()));
+            }
+
         }
         else
         {
@@ -283,13 +290,15 @@ void ManageHamlib::on_updateHamlibButton_clicked()
     QString url;
     if (isBuild64Bit())
     {
-        url = "http://dr-risse-consulting.de/hamlib/dll64/libhamlib-4.dll";
-//        url = "https://n0nb.users.sourceforge.net/dll64/libhamlib-4.dll";
+        //url = "http://dr-risse-consulting.de/hamlib/dll64/libhamlib-4.dll";
+        //url = "https://n0nb.users.sourceforge.net/dll64/libhamlib-4.dll";
+        url = "https://hamlib.sourceforge.net/snapshots/dll64/libhamlib-4.dll";
     }
     else
     {
-        url = "http://dr-risse-consulting.de/hamlib/dll32/libhamlib-4.dll";
-//        url = "https://n0nb.users.sourceforge.net/dll32/libhamlib-4.dll";
+//      url = "http://dr-risse-consulting.de/hamlib/dll32/libhamlib-4.dll";
+//      url = "https://n0nb.users.sourceforge.net/dll32/libhamlib-4.dll";
+        url = "https://hamlib.sourceforge.net/snapshots/dll32/libhamlib-4.dll";
     }
     bool routerRunning = checkRouterReady();
 

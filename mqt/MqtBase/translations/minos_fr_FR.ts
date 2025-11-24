@@ -103,32 +103,32 @@
 <context>
     <name>BaseContact</name>
     <message>
-        <location filename="../contacts.cpp" line="434"/>
+        <location filename="../contacts.cpp" line="442"/>
         <source>DELETED</source>
         <translation>SUPPRIMÉ</translation>
     </message>
     <message>
-        <location filename="../contacts.cpp" line="449"/>
+        <location filename="../contacts.cpp" line="457"/>
         <source>MAN</source>
         <translation>MANUELLE</translation>
     </message>
     <message>
-        <location filename="../contacts.cpp" line="452"/>
+        <location filename="../contacts.cpp" line="460"/>
         <source>DEL</source>
         <translation>SUPPRIMER</translation>
     </message>
     <message>
-        <location filename="../contacts.cpp" line="455"/>
+        <location filename="../contacts.cpp" line="463"/>
         <source>N/S</source>
         <translation>NON SIGNIFICATIF</translation>
     </message>
     <message>
-        <location filename="../contacts.cpp" line="460"/>
+        <location filename="../contacts.cpp" line="468"/>
         <source>DUP</source>
         <translation>DUPLIQUER</translation>
     </message>
     <message>
-        <location filename="../contacts.cpp" line="506"/>
+        <location filename="../contacts.cpp" line="514"/>
         <source>MHz</source>
         <translation>MHz</translation>
     </message>
@@ -136,12 +136,12 @@
 <context>
     <name>BaseContestLog</name>
     <message>
-        <location filename="../contest.cpp" line="699"/>
+        <location filename="../contest.cpp" line="705"/>
         <source>DUPLICATE OF </source>
         <translation>Duplicata de </translation>
     </message>
     <message>
-        <location filename="../contest.cpp" line="715"/>
+        <location filename="../contest.cpp" line="721"/>
         <source>DUP OF</source>
         <translation>Duplicata de</translation>
     </message>
@@ -284,37 +284,37 @@
         <translation>WSJTX Chemin pour enregistrer UDP entrants</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="85"/>
+        <location filename="../profiles.cpp" line="84"/>
         <source>UDP Contacts Enabled</source>
         <translation>UDP: Contacts activés</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="101"/>
+        <location filename="../profiles.cpp" line="100"/>
         <source>WSJTX re-broadcast Enabled</source>
         <translation>WSJTX: Rediffusion activée</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="97"/>
+        <location filename="../profiles.cpp" line="96"/>
         <source>UDP ADIF Enabled</source>
         <translation>UDP ADIF activé</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="86"/>
+        <location filename="../profiles.cpp" line="85"/>
         <source>UDP Contacts Address</source>
         <translation>UDP: Adresse pour les Contacts</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="87"/>
+        <location filename="../profiles.cpp" line="86"/>
         <source>UDP Contacts Port</source>
         <translation>UDP: Port pour les Contacts</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="98"/>
+        <location filename="../profiles.cpp" line="97"/>
         <source>UDP ADIF Address</source>
         <translation>UDP: Adresse pour ADIF</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="99"/>
+        <location filename="../profiles.cpp" line="98"/>
         <source>UDP ADIF Port</source>
         <translation>UDP ADIF numéro de port</translation>
     </message>
@@ -359,584 +359,583 @@
         <translation>WSJTX: Adresse du groupe 1</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="67"/>
         <source>WSJTX 1 Auto Enabled</source>
-        <translation>WSJTX 1 activé automatiquement</translation>
+        <translation type="vanished">WSJTX 1 activé automatiquement</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="68"/>
+        <location filename="../profiles.cpp" line="67"/>
         <source>WSJTX 1 Test Enabled</source>
         <translation>WSJTX 1 Test activé</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="70"/>
+        <location filename="../profiles.cpp" line="69"/>
         <source>CQ types in test mode</source>
         <translation>Types de CQ en mode test</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="71"/>
+        <location filename="../profiles.cpp" line="70"/>
         <source>CQ types in ordinary mode</source>
         <translation>Types de CQ en mode ordinaire</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="73"/>
+        <location filename="../profiles.cpp" line="72"/>
         <source>WSJTX 2 Enabled</source>
         <translation>WSJTX 2 activé</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="74"/>
+        <location filename="../profiles.cpp" line="73"/>
         <source>WSJTX 2 Port</source>
         <translation>WSJTX: Port 2</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="75"/>
+        <location filename="../profiles.cpp" line="74"/>
         <source>WSJTX 2 Group Address</source>
         <translation>WSJTX: Adresse du groupe 2</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="77"/>
+        <location filename="../profiles.cpp" line="76"/>
         <source>WSJTX 3 Enabled</source>
         <translation>WSJTX 3 activé</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="78"/>
+        <location filename="../profiles.cpp" line="77"/>
         <source>WSJTX 3 Port</source>
         <translation>WSJTX: Port 3</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="79"/>
+        <location filename="../profiles.cpp" line="78"/>
         <source>WSJTX 3 Group Address</source>
         <translation>WSJTX: Adresse du groupe 3</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="81"/>
+        <location filename="../profiles.cpp" line="80"/>
         <source>WSJTX 4 Enabled</source>
         <translation>WSJTX 4 activé</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="82"/>
+        <location filename="../profiles.cpp" line="81"/>
         <source>WSJTX 4 Port</source>
         <translation>WSJTX: Port 4</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="83"/>
+        <location filename="../profiles.cpp" line="82"/>
         <source>WSJTX 4 Group Address</source>
         <translation>WSJTX: Adresse du groupe 4</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="89"/>
+        <location filename="../profiles.cpp" line="88"/>
         <source>UDP External QSO Info Enabled</source>
         <translation>UDP&#xa0;:Iinformations sur les QSO externes activées</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="90"/>
+        <location filename="../profiles.cpp" line="89"/>
         <source>UDP External QSO Info Address</source>
         <translation>UDP&#xa0;: Adresse d&apos;informations QSO externe</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="91"/>
+        <location filename="../profiles.cpp" line="90"/>
         <source>UDP External QSO Info Port</source>
         <translation>UDP&#xa0;: Port d&apos;informations QSO externe</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="93"/>
+        <location filename="../profiles.cpp" line="92"/>
         <source>UDP External Spots Enabled</source>
         <translation>UDP: Spots externes activés</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="94"/>
+        <location filename="../profiles.cpp" line="93"/>
         <source>UDP External Spots Address</source>
         <translation>UDP&#xa0;: Adresse des spots externes</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="95"/>
+        <location filename="../profiles.cpp" line="94"/>
         <source>UDP External Spots Port</source>
         <translation>UDP&#xa0;: Port pour Spots externes</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="102"/>
+        <location filename="../profiles.cpp" line="101"/>
         <source>WSJTX re-broadcast Address</source>
         <translation>WSJTX: Adresse de rediffusion</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="103"/>
+        <location filename="../profiles.cpp" line="102"/>
         <source>WSJTX re-broadcast Port</source>
         <translation>WSJTX: Port de rediffusion</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="106"/>
+        <location filename="../profiles.cpp" line="105"/>
         <source>PDF documentation file</source>
         <translation>Fichier de documentation PDF (En anglais)</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="108"/>
+        <location filename="../profiles.cpp" line="107"/>
         <source>Auto set Readability to 5</source>
         <translation>Régler le rapport de signal sur 5 automatiquement</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="109"/>
+        <location filename="../profiles.cpp" line="108"/>
         <source>Auto Fill signal report</source>
         <translation>Rapport de signal remplissage automatique</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="109"/>
+        <location filename="../profiles.cpp" line="108"/>
         <source>Auto Fill signal report on return</source>
         <translation>Rapport de signal remplissage automatique sur action ENTREE</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="110"/>
+        <location filename="../profiles.cpp" line="109"/>
         <source>Show Operating Time</source>
         <translation>Afficher le temps de fonctionnement</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="112"/>
+        <location filename="../profiles.cpp" line="111"/>
         <source>Locator Map Centering</source>
         <translation>Centrage de la carte de Locator</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="114"/>
+        <location filename="../profiles.cpp" line="113"/>
         <source>Change Tab order for S&amp;P</source>
         <translation>Modifier l&apos;ordre des tabulations pour S&amp;P</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="115"/>
+        <location filename="../profiles.cpp" line="114"/>
         <source>Protect contests by age</source>
         <translation>Protéger les concours par l&apos;âge</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="116"/>
+        <location filename="../profiles.cpp" line="115"/>
         <source>Days after which contests are protected</source>
         <translation>Définir le nombre de jours après lequel protéger les concours (-1 pour toujours)</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="117"/>
+        <location filename="../profiles.cpp" line="116"/>
         <source>Old style of band map</source>
         <translation>Ancienne mise en page Bandmap</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="118"/>
+        <location filename="../profiles.cpp" line="117"/>
         <source>Show Auxiliary Headers</source>
         <translation>Afficher les en-têtes auxiliaires</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="120"/>
+        <location filename="../profiles.cpp" line="119"/>
         <source>Show Next QSO Band</source>
         <translation>Afficher la prochaine bande QSO</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="122"/>
+        <location filename="../profiles.cpp" line="121"/>
         <source>Show QSO Map Grid</source>
         <translation>Afficher la grille de la carte QSO</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="123"/>
+        <location filename="../profiles.cpp" line="122"/>
         <source>Show QSO Map Lines</source>
         <translation>Afficher les lignes de la carte QSO</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="125"/>
+        <location filename="../profiles.cpp" line="124"/>
         <source>Show QSO Map Locators</source>
         <translation>Afficher Locators de QSO Map</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="126"/>
+        <location filename="../profiles.cpp" line="125"/>
         <source>Show QSO Map Locators Top Left</source>
         <translation>Locators en haut à gauche de QSO Map</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="127"/>
+        <location filename="../profiles.cpp" line="126"/>
         <source>Show QSO Map Locators Bottom Right</source>
         <translation>Locators en bas a droite de QSO Map</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="128"/>
+        <location filename="../profiles.cpp" line="127"/>
         <source>Show QSO Map Navigation Buttons</source>
         <translation>Afficher boutons de navigation de QSO Map</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="130"/>
+        <location filename="../profiles.cpp" line="129"/>
         <source>Show Cluster spots on map</source>
         <translation>Afficher les spots du cluster sur la carte</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="131"/>
+        <location filename="../profiles.cpp" line="130"/>
         <source>Limit Cluster spot distance on map</source>
         <translatorcomment>Limiter la distance du Spot sur la carte Cluster </translatorcomment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="133"/>
+        <location filename="../profiles.cpp" line="132"/>
         <source>Add to Bandmap tuning CW enabled</source>
         <translation>Ajouter au Bandmap CW réglage activé</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="134"/>
+        <location filename="../profiles.cpp" line="133"/>
         <source>Add to Bandmap tuning Data enabled</source>
         <translation>Ajouter au Bandmap Données réglage activé</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="135"/>
+        <location filename="../profiles.cpp" line="134"/>
         <source>Add to Bandmap tuning Phone enabled</source>
         <translation>Ajouter au Bandmap Voix réglage activé</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="136"/>
+        <location filename="../profiles.cpp" line="135"/>
         <source>Add to Bandmap tuning tolerance CW</source>
         <translation>Tolérance de réglage pour CW Ajouter à la Bandmap</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="137"/>
+        <location filename="../profiles.cpp" line="136"/>
         <source>Add to Bandmap tuning tolerance Phone</source>
         <translation>Tolérance de réglage pour Voix Ajouter à la Bandmap</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="138"/>
+        <location filename="../profiles.cpp" line="137"/>
         <source>Add to Bandmap tuning tolerance Data</source>
         <translation>Tolérance de réglage pour Donnees Ajouter à la Bandmap</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="140"/>
+        <location filename="../profiles.cpp" line="139"/>
         <source>Disable Bandmap when not shown</source>
         <translation>Désactiver Bandmap lorsqu&apos;elle n&apos;est pas affichée</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="141"/>
+        <location filename="../profiles.cpp" line="140"/>
         <source>Disable adding logged Calls to bandmap</source>
         <translation>Désactiver l&apos;addition d&apos;appels enregistrés à Bandmap</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="142"/>
+        <location filename="../profiles.cpp" line="141"/>
         <source>Disable setting placeholders from current frequency on bandmap</source>
         <translation>Désactiver la configuration des espaces réservés Bandmap à partir de la fréquence actuelle</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="143"/>
+        <location filename="../profiles.cpp" line="142"/>
         <source>Bandmap High Frequency At Top</source>
         <translation>Bandmap haute fréquence en haut</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="145"/>
+        <location filename="../profiles.cpp" line="144"/>
         <source>RIT on CQ</source>
         <translation>CQ avec RIT</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="147"/>
+        <location filename="../profiles.cpp" line="146"/>
         <source>Radio Dial - Turn Off Operating Colour</source>
         <translation>Cadran radio - Désactiver la couleur de fonctionnement</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="149"/>
+        <location filename="../profiles.cpp" line="148"/>
         <source>Contest - Radio Read Only</source>
         <translation>[**********************************]</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="150"/>
+        <location filename="../profiles.cpp" line="149"/>
         <source>Contest Start - Ignore Preset Frequency</source>
         <translation>Début du concours - Ignorer la fréquence prédéfinie</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="151"/>
+        <location filename="../profiles.cpp" line="150"/>
         <source>Contest Change - Ignore Previous Frequency</source>
         <translation>Changement de concours - Ignorer la fréquence précédente</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="152"/>
+        <location filename="../profiles.cpp" line="151"/>
         <source>Contest Change - Restore Contest Mode</source>
         <translation>Changement de concours - Restaurer la mode de concours</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="153"/>
+        <location filename="../profiles.cpp" line="152"/>
         <source>Bandmap Turn Off Operating Freq Colour Strip</source>
         <translation>Désactiver la bande de couleur de fréquence</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="154"/>
+        <location filename="../profiles.cpp" line="153"/>
         <source>Bandmap Delay when mouse in frame</source>
         <translation>Retard de Bandmap lorsque le curseur est dans le cadre</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="155"/>
+        <location filename="../profiles.cpp" line="154"/>
         <source>Bandmap show derived loc</source>
         <translation>Bandmap afficher la Locator dérivée</translation>
     </message>
     <message>
+        <location filename="../profiles.cpp" line="156"/>
         <location filename="../profiles.cpp" line="157"/>
-        <location filename="../profiles.cpp" line="158"/>
         <source></source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="159"/>
+        <location filename="../profiles.cpp" line="158"/>
         <source>Auto QRZ HF callsigns</source>
         <translation>Indicatifs d&apos;appel automatiques QRZ HF</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="160"/>
+        <location filename="../profiles.cpp" line="159"/>
         <source>Auto QRZ VHF callsigns</source>
         <translation>Indicatifs d&apos;appel automatiques QRZ VHF</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="161"/>
+        <location filename="../profiles.cpp" line="160"/>
         <source>Auto QRZ HF WSJT-X callsigns</source>
         <translation>Indicatifs d&apos;appel automatiques QRZ WSJT-X HF</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="162"/>
+        <location filename="../profiles.cpp" line="161"/>
         <source>Auto QRZ VHF WSJT-X callsigns</source>
         <translation>Indicatifs d&apos;appel automatiques QRZ WSJT-X VHF</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="166"/>
+        <location filename="../profiles.cpp" line="165"/>
+        <location filename="../profiles.cpp" line="169"/>
         <location filename="../profiles.cpp" line="170"/>
-        <location filename="../profiles.cpp" line="171"/>
         <source>hint</source>
         <translatorcomment>référence, indice</translatorcomment>
         <translation>indication</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="190"/>
+        <location filename="../profiles.cpp" line="179"/>
         <source>Statistics Period 1</source>
         <translation>Période statistique 1</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="191"/>
+        <location filename="../profiles.cpp" line="180"/>
         <source>Statistics Period 2</source>
         <translation>Période statistique 2</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="216"/>
+        <location filename="../profiles.cpp" line="205"/>
         <source>Call Used</source>
         <translation>Indicatif d&apos;appel utilisé</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="216"/>
+        <location filename="../profiles.cpp" line="205"/>
         <source>Call sign used</source>
         <translation>Indicatif d&apos;appel utilisé</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="217"/>
+        <location filename="../profiles.cpp" line="206"/>
         <source>Main Op</source>
         <translation>Opérateur principal</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="217"/>
+        <location filename="../profiles.cpp" line="206"/>
         <source>Main Operator</source>
         <translation>Opérateur principal</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="218"/>
+        <location filename="../profiles.cpp" line="207"/>
         <source>Second Op</source>
         <translation>Second opérateur</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="218"/>
+        <location filename="../profiles.cpp" line="207"/>
         <source>Second  Operator</source>
         <translation>Second opérateur</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="219"/>
+        <location filename="../profiles.cpp" line="208"/>
         <source>On Behalf Of (Club)</source>
         <translation>Au nom de (club)</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="219"/>
+        <location filename="../profiles.cpp" line="208"/>
         <source>Name of club/group</source>
         <translation>Nom du club / groupe</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="220"/>
+        <location filename="../profiles.cpp" line="209"/>
         <source>My Name</source>
         <translation>Mon Nom</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="220"/>
+        <location filename="../profiles.cpp" line="209"/>
         <source>Name of responsible operator</source>
         <translation>Nom de l&apos;opérateur responsable</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="221"/>
+        <location filename="../profiles.cpp" line="210"/>
         <source>My Call</source>
         <translation>Mon Indicatif d&apos;appel</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="221"/>
+        <location filename="../profiles.cpp" line="210"/>
         <source>Callsign of responsible operator</source>
         <translation>Indicatif de l&apos;opérateur responsable</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="223"/>
+        <location filename="../profiles.cpp" line="212"/>
         <source>My Address Line 1</source>
         <translation>Ligne 1 de mon adresse</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="223"/>
+        <location filename="../profiles.cpp" line="212"/>
         <source>Address line 1 of responsible operator</source>
         <translation>Ligne 1 de l&apos;adresse de l&apos;opérateur responsable</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="224"/>
+        <location filename="../profiles.cpp" line="213"/>
         <source>My Address Line 2</source>
         <translation>Ligne 2 de mon adresse</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="224"/>
+        <location filename="../profiles.cpp" line="213"/>
         <source>Address line 2 of responsible operator</source>
         <translation>Ligne 2 de l&apos;adresse de l&apos;opérateur responsable</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="225"/>
+        <location filename="../profiles.cpp" line="214"/>
         <source>My City</source>
         <translation>Ma ville</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="225"/>
+        <location filename="../profiles.cpp" line="214"/>
         <source>City of responsible operator</source>
         <translation>Ville de l&apos;opérateur responsable</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="226"/>
+        <location filename="../profiles.cpp" line="215"/>
         <source>My Country</source>
         <translation>Mon pays</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="226"/>
+        <location filename="../profiles.cpp" line="215"/>
         <source>Country of responsible operator</source>
         <translation>Pays de l&apos;opérateur responsable</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="227"/>
+        <location filename="../profiles.cpp" line="216"/>
         <source>My Postcode</source>
         <translation>Mon code postal</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="227"/>
+        <location filename="../profiles.cpp" line="216"/>
         <source>Post Code of responsible operator</source>
         <translation>Code postal de l&apos;opérateur responsable</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="228"/>
+        <location filename="../profiles.cpp" line="217"/>
         <source>My Phone</source>
         <translation>Mon téléphone</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="228"/>
+        <location filename="../profiles.cpp" line="217"/>
         <source>Phone no. of responsible operator</source>
         <translation>No de Téléphone de l&apos;opérateur responsable</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="229"/>
+        <location filename="../profiles.cpp" line="218"/>
         <source>My Email</source>
         <translation>Mon email</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="229"/>
+        <location filename="../profiles.cpp" line="218"/>
         <source>eMail address of responsible operator</source>
         <translation>Adresse Email de l&apos;opérateur responsable</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="232"/>
+        <location filename="../profiles.cpp" line="221"/>
         <source>Locator</source>
         <translation>Locator</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="233"/>
+        <location filename="../profiles.cpp" line="222"/>
         <source>District Exchange</source>
         <translation>Échange de district</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="234"/>
+        <location filename="../profiles.cpp" line="223"/>
         <source>Location Exchange</source>
         <translation>Échange d&apos;emplacement</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="234"/>
+        <location filename="../profiles.cpp" line="223"/>
         <source>Descriptive Location Exchange</source>
         <translation>Échange d&apos;emplacement descriptif</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="235"/>
+        <location filename="../profiles.cpp" line="224"/>
         <source>Station QTH Line 1</source>
         <translation>Ligne 1 du QTH de la station</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="235"/>
+        <location filename="../profiles.cpp" line="224"/>
         <source>Address line 1/2 of station</source>
         <translation>Ligne 1 de l&apos;adresse de la station</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="236"/>
+        <location filename="../profiles.cpp" line="225"/>
         <source>Station QTH Line 2</source>
         <translation>Ligne 2 du QTH de la station</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="236"/>
+        <location filename="../profiles.cpp" line="225"/>
         <source>Address line 2/2 of station</source>
         <translation>Ligne 2 de l&apos;adresse de la station</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="237"/>
+        <location filename="../profiles.cpp" line="226"/>
         <source>QTH Height ASL (metres)</source>
         <translation>Altitude du QTH (metres)</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="237"/>
+        <location filename="../profiles.cpp" line="226"/>
         <source>QTH height ASL (metres)</source>
         <translation>Altitude du QTH (metres)</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="238"/>
+        <location filename="../profiles.cpp" line="227"/>
         <source>ITU Zone</source>
         <translation>Zone ITU</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="239"/>
+        <location filename="../profiles.cpp" line="228"/>
         <source>CQ Zone</source>
         <translation>Zone CQ</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="242"/>
+        <location filename="../profiles.cpp" line="231"/>
         <source>Transmitter Power</source>
         <translation>Puissance de l&apos;émetteur</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="242"/>
+        <location filename="../profiles.cpp" line="231"/>
         <source>Transmit Power (Watts)</source>
         <translation>Puissance transmise (Watts)</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="243"/>
+        <location filename="../profiles.cpp" line="232"/>
         <source>Transmit Equipment</source>
         <translation>Détails de l&apos;émetteur</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="244"/>
+        <location filename="../profiles.cpp" line="233"/>
         <source>Receive Equipment</source>
         <translation>Détails du récepteur</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="245"/>
+        <location filename="../profiles.cpp" line="234"/>
         <source>Antenna details</source>
         <translation>Détails de l&apos;antenne</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="246"/>
+        <location filename="../profiles.cpp" line="235"/>
         <source>Antenna Height AGL (metres)</source>
         <translation>Hauteur au-dessus du sol de l&apos;antenne</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="247"/>
+        <location filename="../profiles.cpp" line="236"/>
         <source>Amount to offset antenna bearings</source>
         <translatorcomment>DUPE??</translatorcomment>
         <translation>Valeur du décalage d&apos;antenne</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="248"/>
+        <location filename="../profiles.cpp" line="237"/>
         <source>Radio in Rig Control</source>
         <translatorcomment>In settings editor for station details</translatorcomment>
         <translation>Radio dans RigControl</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="249"/>
+        <location filename="../profiles.cpp" line="238"/>
         <source>Rotator in Rotator Control</source>
         <translation>Rotateur dans Rotator Control</translation>
     </message>
@@ -1174,22 +1173,22 @@
 <context>
     <name>ContestScore</name>
     <message>
-        <location filename="../contest.cpp" line="2174"/>
+        <location filename="../contest.cpp" line="2212"/>
         <source>Score: %1 Qsos; %2 pts; (%3 countries); %4 locs; bonuses %5(%6) = %7</source>
         <translation>Score: %1 Qsos; %2 pts; (%3 pays); %4 locs; bonuses %5(%6) = %7</translation>
     </message>
     <message>
-        <location filename="../contest.cpp" line="2182"/>
+        <location filename="../contest.cpp" line="2220"/>
         <source>Score: %1 Qsos; %2 pts; %3 countries; %4 districts; %5 locs; bonuses %6(%7) = %8</source>
         <translation>Score: %1 Qsos; %2 pts; %3 pays; %4 quartiers; %5 locs; bonuses %6(%7) = %8</translation>
     </message>
     <message>
-        <location filename="../contest.cpp" line="2190"/>
+        <location filename="../contest.cpp" line="2228"/>
         <source>Score: %1 Qsos; %2 pts; %3%4 countries%5; bonuses %6(%7) = %8</source>
         <translation>Score: %1 Qsos; %2 pts; %3%4 pays%5; bonuses %6(%7) = %8</translation>
     </message>
     <message>
-        <location filename="../contest.cpp" line="2198"/>
+        <location filename="../contest.cpp" line="2236"/>
         <source>Score: %1 Qsos; %2 pts;%3%4 countries%5;%6%7 districts%8; %9%10 locators %13 = %14</source>
         <translation>Score: %1 Qsos; %2 pts;%3%4 pays%5;%6%7 quartiers%8; %9%10 locators %13 = %14</translation>
     </message>
@@ -1602,24 +1601,24 @@ Attention: &quot;.&quot; pas &quot;,&quot;
         <translation>Échec du charger libhamlib-4.dll %1</translation>
     </message>
     <message>
-        <location filename="../managehamlib.cpp" line="301"/>
-        <location filename="../managehamlib.cpp" line="308"/>
-        <location filename="../managehamlib.cpp" line="344"/>
+        <location filename="../managehamlib.cpp" line="310"/>
+        <location filename="../managehamlib.cpp" line="317"/>
+        <location filename="../managehamlib.cpp" line="353"/>
         <source>Failed to rename %1 to %2</source>
         <translation>Échec du renommage de %1 en %2</translation>
     </message>
     <message>
-        <location filename="../managehamlib.cpp" line="312"/>
+        <location filename="../managehamlib.cpp" line="321"/>
         <source>Hamlib updated - will be used after restart</source>
         <translation>Hamlib mis à jour - sera utilisé après le redémarrage</translation>
     </message>
     <message>
-        <location filename="../managehamlib.cpp" line="349"/>
+        <location filename="../managehamlib.cpp" line="358"/>
         <source>Old Hamlib restored - it will be used after restart</source>
         <translation>Vieux Hamlib restauré - sera utilisé après le redémarrage</translation>
     </message>
     <message>
-        <location filename="../managehamlib.cpp" line="361"/>
+        <location filename="../managehamlib.cpp" line="370"/>
         <source>No Hamlib update found that could be reverted</source>
         <translation>Aucun vieux Hamlib à restaurer</translation>
     </message>
@@ -1635,12 +1634,12 @@ Attention: &quot;.&quot; pas &quot;,&quot;
 <context>
     <name>MinosCompass</name>
     <message>
-        <location filename="../minoscompass.cpp" line="189"/>
+        <location filename="../minoscompass.cpp" line="190"/>
         <source>N,E,S,W</source>
         <translation>N,E,S,O</translation>
     </message>
     <message>
-        <location filename="../minoscompass.cpp" line="345"/>
+        <location filename="../minoscompass.cpp" line="346"/>
         <source>Stop</source>
         <translation>Arrêter</translation>
     </message>
@@ -2319,7 +2318,7 @@ Entrer une autre direction SVP</translation>
 <context>
     <name>SettingsBundle</name>
     <message>
-        <location filename="../profiles.cpp" line="290"/>
+        <location filename="../profiles.cpp" line="279"/>
         <source>&lt;None&gt;</source>
         <translation>Aucun</translation>
     </message>

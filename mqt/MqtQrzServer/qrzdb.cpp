@@ -24,10 +24,12 @@ QRZDB::QRZDB(QObject *parent)
 
     if (!FileExists(dbName))
     {
-        trace(QString("%1 doesn't exist").arg(dbName));
+        trace(QString("Old style DB name %1 doesn't exist").arg(dbName));
     }
     else
     {
+        // rename the old DB name to the new
+
         if (!FileExists(dbName + ".db"))
         {
             QDir r(getDirectoryLocation(dlDB));
@@ -114,7 +116,7 @@ bool QRZDB::createRecord(const QrzCallsignData &csData)
 {
     QSqlQuery query(QSqlDatabase::database(connectionName));
     query.prepare(
-      "INSERT INTO QRZ "
+      "REPLACE INTO QRZ "
       "(dataSource, callsign, firstName, name, addr1, addr2, county, country, lat, lon, qra, cqZone, ituZone, moddate, dbdate, message)"
       " VALUES "
       "(:dataSource, :callsign, :firstName, :name, :addr1, :addr2, :county, :country, :lat, :lon, :qra, :cqZone, :ituZone, :moddate, :dbdate, :message)"

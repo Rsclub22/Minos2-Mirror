@@ -64,7 +64,6 @@ BundleFile::BundleFile( PROFILES p )
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpWSJTX1Enabled, "WSJTXEnabled", true, QT_TR_NOOP("WSJTX 1 Enabled"), QT_TR_NOOP("WSJTX 1 Enabled"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpWSJTX1Port, "WSJTXPort", 2237, QT_TR_NOOP("WSJTX 1 Port"), QT_TR_NOOP("WSJTX 1 Port"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpWSJTX1GroupAddress, "WSJTXGroupAddress", "", QT_TR_NOOP("WSJTX 1 Group Address"), QT_TR_NOOP("WSJTX 1 Group Address"), false ) ) );
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpWSJTX1AutoEnabled, "WSJTXAutoEnabled", false, QT_TR_NOOP("WSJTX 1 Auto Enabled"), QT_TR_NOOP("WSJTX 1 Auto Enabled"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpWSJTX1TestEnabled, "WSJTXTestEnabled", false, QT_TR_NOOP("WSJTX 1 Test Enabled"), QT_TR_NOOP("WSJTX 1 Test Enabled"), false ) ) );
 
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpWSJTX1TestCQ, "WSJTXTestCQ", "", QT_TR_NOOP("CQ types in test mode"), QT_TR_NOOP("CQ types in test mode"), "" ) ) );
@@ -176,16 +175,6 @@ BundleFile::BundleFile( PROFILES p )
         break;
 
     case epDISPLAYPROFILE:
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpShowContinentEU, "ShowContinentEU", true, "", "hint", false ) ) );
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpShowContinentAS, "ShowContinentAS", false, "", "hint", false ) ) );
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpShowContinentAF, "ShowContinentAF", false, "", "hint", false ) ) );
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpShowContinentOC, "ShowContinentOC", false, "", "hint", false ) ) );
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpShowContinentSA, "ShowContinentSA", false, "", "hint", false ) ) );
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpShowContinentNA, "ShowContinentNA", false, "", "hint", false ) ) );
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpShowWorkedCountries, "ShowWorkedCountries", true, "", "hint", false ) ) );
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpShowUnworkedCountries, "ShowUnworkedCountries", false, "", "hint", false ) ) );
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpShowWorkedDistricts, "ShowWorkedDistricts", true, "", "hint", false ) ) );
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpShowUnworkedDistricts, "ShowUnworkedDistricts", false, "", "hint", false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpShowOperators, "ShowOperators", true, "", "hint", false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpStatisticsPeriod1, "Statistics Period 1", 10, "", QT_TR_NOOP("Statistics Period 1"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpStatisticsPeriod2, "Statistics Period 2", 60, "", QT_TR_NOOP("Statistics Period 2"), false ) ) );

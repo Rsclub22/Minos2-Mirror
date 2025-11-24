@@ -272,6 +272,9 @@ void appStartup(const QString &pappName)
         // NB this only affects Qt 6.7 and above
         QApplication::setStyle("windowsvista");
     }
+#ifdef Q_OS_MACOS
+    QApplication::setStyle("fusion");
+#endif
 #endif
     qa->setStyleSheet(QString("[readOnly=\"true\"] { background-color: %0 }")
                           .arg(qa->palette().color(QPalette::Window).name(QColor::HexRgb)));

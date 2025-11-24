@@ -204,7 +204,8 @@ QSharedPointer<ClusterSpotData> stringToDxSpot(QString spot, BaseContestLog *ct,
 
             Callsign cs;
             cs.setFullCall(spotlist[DXCALL]);
-            ct->checkSpotWorked(cs, spotlist[DXLOCATOR], spotlist[DXFREQ], QString(), &callWorked, &locWorked, &exchWorked);
+
+            ct->checkSpotWorked(cs, spotlist[DXLOCATOR], QString(), spotlist[DXMODESTR], spotlist[DXFREQ], &callWorked, &locWorked, &exchWorked);
 
             QString distance;
             QString bearing;

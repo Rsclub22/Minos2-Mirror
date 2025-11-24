@@ -46,7 +46,7 @@ RotControlFrame::~RotControlFrame()
 }
 
 
-QGroupBox* RotControlFrame::getRotatorControlGroupBoxObject()
+QWidget* RotControlFrame::getRotatorControlGroupBoxObject()
 {
     return ui->rotatorControlGroupBox;
 }

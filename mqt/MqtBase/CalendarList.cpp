@@ -206,9 +206,15 @@ bool CalendarYear::downloadFile ( bool showError, QWidget *parent )
         if (raw == 200 && data.size() > 0)
         {
             QFile file( getPath() );
-            file.open( QIODevice::WriteOnly );
+            if (file.open( QIODevice::WriteOnly ))
+            {
             file.write( data );
             trace ( "HTTP Get of " + calendarURL + " OK size " + QString::number(data.size()) );
+            }
+            else
+            {
+                trace(QString("Failed to open %1 response %2").arg(getPath(), file.errorString()));
+            }
         }
         else
         {

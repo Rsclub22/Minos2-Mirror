@@ -11,7 +11,7 @@ fi
 
 SCRIPT=$(basename $0)
 DIR=$(echo `pwd`/../..)
-QTDIR=~/Qt/6.9.0/macos
+QTDIR=~/Qt/6.9.2/macos
 BUILDDIR="build/install"
 
 cd $DIR
@@ -117,6 +117,8 @@ do
     install_name_tool -change $QTDIR/lib/QtSerialPort.framework/Versions/A/QtSerialPort @executable_path/../Frameworks/QtSerialPort.framework/Versions/A/QtSerialPort MqtLogger.app/Contents/Resources/Bin/${j}.app/Contents/MacOS/${j}
     install_name_tool -change $QTDIR/lib/QtNetwork.framework/Versions/A/QtNetwork @executable_path/../Frameworks/QtNetwork.framework/Versions/A/QtNetwork MqtLogger.app/Contents/Resources/Bin/${j}.app/Contents/MacOS/${j}
     install_name_tool -change $QTDIR/lib/QtCore.framework/Versions/A/QtCore @executable_path/../Frameworks/QtCore.framework/Versions/A/QtCore MqtLogger.app/Contents/Resources/Bin/${j}.app/Contents/MacOS/${j}
+	install_name_tool -change $QTDIR/lib/QtMultimedia.framework/Versions/A/QtMultimedia @executable_path/../Frameworks/QtMultimedia.framework/Versions/A/QtMultimedia MqtLogger.app/Contents/Resources/Bin/${j}.app/Contents/MacOS/${j}
+
 done
 cd MqtLogger.app/Contents/Resources
 
@@ -136,17 +138,17 @@ wget https://www.country-files.com/cty/cty.dat -O cty.dat
 wget https://www.rsgbcc.org/cgi-bin/vhfenter.pl?afsdownload=y -O clublist.txt
 
 wget https://www.rsgbcc.org/vhf/vhfcontests25.xml -O vhfcontests25.xml
-wget https://www.rsgbcc.org/vhf/vhfcontests24.xml -O vhfcontests24.xml
+wget https://www.rsgbcc.org/vhf/vhfcontests26.xml -O vhfcontests26.xml
 
 wget https://www.rsgbcc.org/vhf/hfcontests25.xml -O hfcontests25.xml
-wget https://www.rsgbcc.org/vhf/hfcontests24.xml -O hfcontests24.xml
+wget https://www.rsgbcc.org/vhf/hfcontests26.xml -O hfcontests26.xml
 
 wget https://microwave.rsgbcc.org/microcontests25.xml -O microcontests25.xml
-wget https://microwave.rsgbcc.org/microcontests24.xml -O microcontests24.xml
+wget https://microwave.rsgbcc.org/microcontests26.xml -O microcontests26.xml
 
 
 wget https://microwave.rsgbcc.org/bartgcontests25.xml -O bartgcontests25.xml
-wget https://microwave.rsgbcc.org/bartgcontests24.xml -O bartgcontests24.xml
+wget https://microwave.rsgbcc.org/bartgcontests26.xml -O bartgcontests26.xml
 
 cd ..
 

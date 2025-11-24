@@ -42,6 +42,7 @@ void MinosClientConnection::closeDown()
 
 void MinosClientConnection::disconnected()
 {
+    strace("MinosClientConnection::disconnected; remove_socket = true");
     remove_socket = true;
 }
 //==============================================================================

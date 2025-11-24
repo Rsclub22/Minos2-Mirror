@@ -1,4 +1,4 @@
-#include "CwSpeedControl.h"
+#include "cwspeedcontrol.h"
 #include <QSlider>
 #include <QLabel>
 #include <QVBoxLayout>

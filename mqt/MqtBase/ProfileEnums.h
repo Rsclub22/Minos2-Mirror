@@ -26,7 +26,6 @@ enum LOGGERPROFILE {
     elpWSJTX1Enabled,
     elpWSJTX1Port,
     elpWSJTX1GroupAddress,
-    elpWSJTX1AutoEnabled,
     elpWSJTX1TestEnabled,
     elpWSJTX1TestCQ,
     elpWSJTX1NonTestCQ,
@@ -113,12 +112,7 @@ enum LOGGERPROFILE {
 };
 enum PRELOADPROFILE {eppSession, eppCurrent, eppDefSession};
 
-enum DISPLAYPROFILE {edpShowContinentEU, edpShowContinentAS,
-                     edpShowContinentAF, edpShowContinentOC,
-                     edpShowContinentSA, edpShowContinentNA,
-                     edpShowWorkedCountries, edpShowUnworkedCountries,
-                     edpShowWorkedDistricts, edpShowUnworkedDistricts,
-                     edpShowOperators,
+enum DISPLAYPROFILE {edpShowOperators,
                      edpStatisticsPeriod1, edpStatisticsPeriod2,
                      edpDefaultLayout,
                      edpProtectedLayout,

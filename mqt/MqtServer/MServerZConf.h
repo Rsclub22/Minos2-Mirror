@@ -27,7 +27,7 @@
 #include <QDateTime>
 
 #define UPNP_PORT 9999
-
+class MinosRouterListener;
 //---------------------------------------------------------------------------
 class Router
 {
@@ -67,6 +67,7 @@ class TZConf: public QObject
 
       static Router *zcPublishRouter(const QString &uuid, const QString &name,
                         const QHostAddress &host, quint16 PortAsNumber );
+
       QString localName;
 
       QVector<QSharedPointer<UDPSocket> > TxSocks;
@@ -74,7 +75,6 @@ class TZConf: public QObject
 
       QTimer beaconTimer;
 
-      bool sendMessage();
       void readRouterListFile();
 
       static TZConf *ZConf;
@@ -96,17 +96,20 @@ public:  		// User declarations
        }
 
       void startZConf(const QString &name);
+       bool sendMessage();
 
       QString getName()
       {
          return localName;
       }
+      static void addToRouterList(MinosRouterListener *msl, const QString &name, const QHostAddress &host, const QString &uuid, quint16 PortAsNumber);
 
       QString getZConfString(bool beaconreq, const QString &h);
       Router *processZConfString(const QString &message, QHostAddress &host, QDateTime &beaconResponse);
       void publishDisconnect(Router *);
       void closeDown();
-private slots:
+      
+  private slots:
       void onReadyRead();
       void onTimeout();
 };
