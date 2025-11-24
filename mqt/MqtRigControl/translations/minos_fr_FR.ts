@@ -1273,7 +1273,7 @@ Vous ne pourrez pas sélectionner un radio tant que cela ne sera pas corrigé !<
 </translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="5657"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="5661"/>
         <source>Invalid freq!</source>
         <translation>Fréquence invalide!</translation>
     </message>

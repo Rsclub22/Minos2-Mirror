@@ -1174,7 +1174,7 @@ Please delete them and set up the radios again</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="5657"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="5661"/>
         <source>Invalid freq!</source>
         <translation type="unfinished"></translation>
     </message>

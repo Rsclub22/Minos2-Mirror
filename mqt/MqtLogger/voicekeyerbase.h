@@ -168,6 +168,8 @@ signals:
     void vmVoiceKeyPressed(int msgNum);
     void vmVoiceKeyStopPressed();
 
+    void cwMacroExpandedText(const QString &text);
+
     void internalVoiceMemoryKeyerPlayState(bool onOff);
 
     void remoteConfigChanged();

@@ -114,7 +114,7 @@ void RigControlCwMessageKeyer::getRadioCommonData(int &selectedEomType, int &use
 
     config.beginGroup(groupName);
     numButtons = config.value("NumButtons", -1).toInt();
-    selectedEomType = config.value("endOfMessageType", voiceKeyerCommon::VoiceCwKeyerEomTypes::Eom_None).toInt();
+    selectedEomType = config.value("endOfMessageType", voiceKeyerCommon::VoiceCwKeyerEomTypes::CAT).toInt();
     setCwModeAndRestoreCurrentMode = config.value("SwitchToCwMode", true).toBool();
     config.endGroup();
 
@@ -202,6 +202,8 @@ void RigControlCwMessageKeyer::sendCwMsg(VoiceKeyerParams &vmData)
 
         trace(QString("Send Morse Message to radio : %1").arg(cwMessageToTx));
 
+        emit cwMacroExpandedText(cwMessageToTx);    // send to display
+
         tslf->sendRigTxCwMessage(cwMessageToTx);
     }
 
@@ -209,7 +211,15 @@ void RigControlCwMessageKeyer::sendCwMsg(VoiceKeyerParams &vmData)
 
 void  RigControlCwMessageKeyer::sendCwFreeTextMsg(QString message)
 {
+    TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
 
+    QString cwMessageToTx = parseMacrosInMessage(tslf, message);
+
+    trace(QString("Send Free Text Morse Message to Radio CW Keyer : %1").arg(cwMessageToTx));
+
+    emit cwMacroExpandedText(cwMessageToTx);    // send to display
+
+    tslf->sendRigTxCwMessage(cwMessageToTx);
 }
 
 
@@ -656,7 +666,7 @@ int RigControlCwMessageKeyer::editButton(VoiceKeyerParams *vmData, QString title
     if (getRigCWKeyerMacroCharacter(cwMacroCharList, radioManufacturer, CWKEYER_RADIO_COMMON_PARAMS_FILENAME))
     {
         cwMacroCharOk = true;
-        trace(QString("Retrieved CW Macro Chars %1 for manufacturer %2").arg(cwMacroCharList).arg(radioManufacturer));
+        trace(QString("Retrieved CW Macro Chars %1 for manufacturer %2").arg(cwMacroCharList, radioManufacturer));
     }
     else
     {
@@ -671,14 +681,15 @@ int RigControlCwMessageKeyer::editButton(VoiceKeyerParams *vmData, QString title
     {
         if (cwMacroCharOk)
         {
-            QString vc = validCharCwList.append(cwMacroCharList);
+            QString vc;
+            addCWKeyerMacroCharsToValidCwKeyerChars(vc, validCharCwList, cwMacroCharList);
             vmButtonDialog.setCwValidatorCwCharList(vc);
-            trace(QString("Supported CW Chars and Macro chars %1 for manufacturer %2").arg(vc).arg(radioManufacturer));
+            trace(QString("Supported CW Chars and Macro chars %1 for manufacturer %2").arg(vc, radioManufacturer));
         }
         else
         {
            vmButtonDialog.setCwValidatorCwCharList(validCharCwList);
-           trace(QString("Supported CW Chars with no Macro chars %1 for manufacturer %2").arg(validCharCwList).arg(radioManufacturer));
+           trace(QString("Supported CW Chars with no Macro chars %1 for manufacturer %2").arg(validCharCwList, radioManufacturer));
         }
 
     }

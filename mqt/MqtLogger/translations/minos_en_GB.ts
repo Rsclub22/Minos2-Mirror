@@ -2481,7 +2481,7 @@ and send the .EDI file produced.
 <context>
     <name>PcCWMessageKeyer</name>
     <message>
-        <location filename="../pccwmessagekeyer.cpp" line="516"/>
+        <location filename="../pccwmessagekeyer.cpp" line="520"/>
         <source>PC CW Keyer Setup</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3178,7 +3178,7 @@ No          - Discard changes</source>
 <context>
     <name>RigControlCwMessageKeyer</name>
     <message>
-        <location filename="../rigcontrolcwmessagekeyer.cpp" line="486"/>
+        <location filename="../rigcontrolcwmessagekeyer.cpp" line="496"/>
         <source>Rig Control CW Memory Setup</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5905,51 +5905,78 @@ Last %8 Mins: %9 QSO %10 pts %11 mults
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.ui" line="500"/>
+        <location filename="../txvmbuttonsframe.ui" line="522"/>
         <source>Stop</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="622"/>
+        <location filename="../txvmbuttonsframe.cpp" line="652"/>
         <source>To use the external keyer mqtKeyer must be running and connected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="983"/>
-        <location filename="../txvmbuttonsframe.cpp" line="1218"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1038"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1314"/>
         <source>Rig CW Message - </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="987"/>
-        <location filename="../txvmbuttonsframe.cpp" line="1222"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1042"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1318"/>
         <source>PC CW Keyer Message - </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1004"/>
-        <location filename="../txvmbuttonsframe.cpp" line="1238"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1059"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1334"/>
         <source>Voice Memory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1006"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1061"/>
         <source>%1 %2 - Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1240"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1101"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1108"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1115"/>
+        <source>rigControl Voice Selected, but not available for this radio</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../txvmbuttonsframe.cpp" line="1124"/>
+        <source>radio ptt is not enabled, please enable</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../txvmbuttonsframe.cpp" line="1135"/>
+        <source>Mode needs to be a phone type for rigcontrol Voice Message, current mode = %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../txvmbuttonsframe.cpp" line="1336"/>
         <source>%1 %2 - New</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1886"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1989"/>
         <source>Rig Voice Keyer Available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1890"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1993"/>
         <source>Rig CW Messages Available</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../txvmbuttonsframe.cpp" line="2216"/>
+        <source>CW FreeText Playing</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../txvmbuttonsframe.cpp" line="2221"/>
+        <source>No CW FreeText Playing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -5958,22 +5985,22 @@ Last %8 Mins: %9 QSO %10 pts %11 mults
         <translation></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="2039"/>
+        <location filename="../txvmbuttonsframe.cpp" line="2182"/>
         <source>TX On</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="2046"/>
+        <location filename="../txvmbuttonsframe.cpp" line="2189"/>
         <source>TX Off</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="2057"/>
+        <location filename="../txvmbuttonsframe.cpp" line="2200"/>
         <source>PTT Enabled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="2063"/>
+        <location filename="../txvmbuttonsframe.cpp" line="2206"/>
         <source>PTT Disabled</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6365,12 +6392,12 @@ Please edit or remove</source>
 <context>
     <name>TxVoiceMemButton</name>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="2371"/>
+        <location filename="../txvmbuttonsframe.cpp" line="2534"/>
         <source>&amp;New</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="2372"/>
+        <location filename="../txvmbuttonsframe.cpp" line="2535"/>
         <source>&amp;Edit</source>
         <translation type="unfinished"></translation>
     </message>

@@ -693,7 +693,7 @@ void PcCwKeyerMainWindow::keyPressEvent(QKeyEvent *event)
 {
     if (event->key() == Qt::Key_Escape)
     {
-        qDebug() << "Esc key pressed";
+        trace("Esc key pressed");
         event->accept(); // mark it as handled
         if (cwKeyer)
         {

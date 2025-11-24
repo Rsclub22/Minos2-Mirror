@@ -126,7 +126,7 @@ bool getRigCWKeyerMacroCharacter(QString &macroChars, QString radioMfg, const QS
     if (config.childGroups().contains(radioMfg))
     {
         config.beginGroup(radioMfg);
-        macroChars =  config.value("macroCharacters", DEFAULT_SUPPORTED_CW_CHARACTERS).toString();
+        macroChars =  config.value("macroCharacters", DEFAULT_MACRO_CW_CHARACTERS).toString();
         config.endGroup();
         if (macroChars.isEmpty())
         {
@@ -137,6 +137,22 @@ bool getRigCWKeyerMacroCharacter(QString &macroChars, QString radioMfg, const QS
     }
 
     return false;    // error
+}
+
+void addCWKeyerMacroCharsToValidCwKeyerChars(QString &mergedValidChar, const QString supportedCwChars, const QString macroCwChars)
+{
+    mergedValidChar = supportedCwChars;
+
+    if (!macroCwChars.isEmpty())
+    {
+        for (const QChar mChar : macroCwChars)
+        {
+            if (!mergedValidChar.contains(mChar))
+            {
+                mergedValidChar.append(mChar);
+            }
+        }
+    }
 }
 
 bool getRigCWKeyerListOfRadiosSupportSpecialCharacters(QStringList &listOfRadioModels, QString radioMfg, const QString filename)

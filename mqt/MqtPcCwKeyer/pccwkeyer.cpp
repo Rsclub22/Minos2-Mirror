@@ -38,7 +38,8 @@ PcCwKeyer::~PcCwKeyer()
 void PcCwKeyer::setWPM(int wpm)
 {
     charDot = 1200.0 / wpm;
-    qDebug() << "WPM set to" << wpm << ", dot duration:" << charDot << "ms";
+    trace(QString("WPM set to %1, dot duration: %2ms").arg(wpm, charDot));
+
 }
 
 void PcCwKeyer::openComPort(const QString portName)
@@ -63,7 +64,7 @@ void PcCwKeyer::openComPort(const QString portName)
 void PcCwKeyer::closeComport(const QString portName)
 {
     if (serial.isOpen()) {
-        qDebug() << "Closing port" << portName;
+        trace(QString("Closing port: %1").arg(portName));
         serial.close();
     }
 }
@@ -171,7 +172,7 @@ void PcCwKeyer::handleSerialPortError(QSerialPort::SerialPortError error)
 {
     if (error == QSerialPort::ResourceError)
     {
-        qDebug() << "Serial port error:" << serial.errorString();
+        trace(QString("Serial port error: %1").arg(serial.errorString()));
         emit serialPortError(serial.errorString());
     }
 }

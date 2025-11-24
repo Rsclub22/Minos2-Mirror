@@ -80,6 +80,7 @@ void getListOfRadioNamesForMemoryButtons(QStringList &radioNames, voiceKeyerComm
 
 bool getRigCWKeyerSupportedSpecialCharacters(QMap<QString, QChar> &specialCharMap, QString radioMfg, const QString filename);
 bool getRigCWKeyerMacroCharacter(QString &macroChars, QString radioMfg, const QString filename);
+void addCWKeyerMacroCharsToValidCwKeyerChars(QString &mergedValidChar, const QString supportedCwChars, const QString macroCwChars);
 bool getRigCWKeyerListOfRadiosSupportSpecialCharacters(QStringList &listOfRadioModels, QString radioMfg, const QString filename);
 bool getRigCWKeyerSupportedCharacters(QString &supportedChars, QString radioMfg, const QString filename);
 bool getRigCWMessageStoredInRadioFlag(bool &storedInRadio, QString radioMfg, const QString filename);
