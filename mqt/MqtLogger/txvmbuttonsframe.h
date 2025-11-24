@@ -217,8 +217,15 @@ private:
     void setMessagePlayingFlag(bool playing);
     bool isMessagePlaying();
     void setCwMessagePlayingVisible(bool visible);
-    void clearCwMessageDisplay();
+    void clearCwMessagePlayingDisplay();
     void displayCwMessagePlaying(const QString msg);
+    void restoreRadioMode();
+    void setCwFreeTextIndicatorOnOff(bool on);
+    void setCwFreeTextIndicatorVisible(bool visible);
+
+    bool checkRadioAndKeyerState();
+    void showTemporaryErrorMessage(const QString &msg, int timeoutMs, const QColor &colour = QColorConstants::Svg::red);
+
 private slots:
 
     void onVoiceKeyerSelect(int idx);
@@ -239,6 +246,7 @@ private slots:
 
     void onCwEntryReturnPressed();
     void setRadioParams();
+    void onCwMacroTextProcessed(const QString &cwTextSent);
 };
 
 
