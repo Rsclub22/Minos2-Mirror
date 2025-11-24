@@ -914,6 +914,9 @@ void BandmapView::drawBandMapSpots()
         {
             nearMatches.sort();
             tslf->setPlaceholders(nearMatches);
+
+            //xxxxxxxx here post nearMatches so that DataModes see them
+            // Do we publish, or send to interested parties?
         }
     }
     traceMsg(QString("drawBandMapSpots: finished"));
