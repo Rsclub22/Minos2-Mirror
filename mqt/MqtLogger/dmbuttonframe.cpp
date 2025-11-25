@@ -49,6 +49,10 @@ inline const QStringList vmButtonShortCutKeys = {
 
 inline const QString DIGIMODE = "DigitalMode";
 
+const int CW_FREE_TEXT_BUTTON_NUMBER = 13;
+
+const int ERROR_MSG_TIMEOUT_DURATION = 20000;
+
 DMButtonFrame::DMButtonFrame(QWidget *parent) :
     QFrame(parent),
     ui(new Ui::DMButtonFrame)
@@ -1072,6 +1076,57 @@ void DMButtonFrame::onCwEntryReturnPressed()
 
 }
 
+
+
+bool DMButtonFrame::checkRadioAndKeyerState()
+{
+
+    if (selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::RigControl] && !isVoiceMemAvail(selectedRadio))
+    {
+        QString msg = tr("rigControl Voice Selected, but not available for this radio");
+        logMessage(QString(msg));
+        showTemporaryErrorMessage(msg, ERROR_MSG_TIMEOUT_DURATION);
+        return false;
+    }
+    else if (selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::CW_RigControl] && !isCwMemTypeAvail(selectedRadio))
+    {
+        QString msg = tr("rigControl CW Keyer selected, but not available for this radio");
+        logMessage(QString(msg));
+        showTemporaryErrorMessage(msg, ERROR_MSG_TIMEOUT_DURATION);
+        return false;
+    }
+    else if (selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::PcCwKeyer] && !isPcCwKeyerLoaded())
+    {
+        QString msg = tr("PC CW DTR Server is not available.");
+        logMessage(QString(msg));
+        showTemporaryErrorMessage(msg, ERROR_MSG_TIMEOUT_DURATION);
+        return false;
+    }
+
+
+    if (!getPttEnabled(selectedRadio))
+    {
+        QString msg = tr("radio ptt is not enabled, please enable");
+        logMessage(QString(msg));
+        showTemporaryErrorMessage(msg, ERROR_MSG_TIMEOUT_DURATION);
+        return false;
+    }
+
+
+    if (selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::RigControl])
+    {
+        if(!isVoiceMode())
+        {
+            QString msg = tr("Mode needs to be a phone type for rigcontrol Voice Message, current mode = %1").arg(curMode);
+            logMessage(QString(msg));
+            showTemporaryErrorMessage(msg, ERROR_MSG_TIMEOUT_DURATION);
+            return false;
+        }
+    }
+
+    return true;
+}
+
 void DMButtonFrame::startKeyerMsg(int key)
 {
     logMessage(QString("- start keyerMsg button Number = %1").arg(key));
@@ -1817,6 +1872,26 @@ void DMButtonFrame::setCwEntryBoxVisible(bool visible)
     ui->cwEntryLabel->setVisible(visible);
 }
 
+
+void DMButtonFrame::setCwFreeTextIndicatorOnOff(bool on)
+{
+    if (on)
+    {
+        ui->cwFreeTextPlayingIndicator->setStyleSheet(STATUS_INDICATOR_CONNECT_STYLE);
+        ui->cwFreeTextPlayingIndicator->setToolTip(tr("CW FreeText Playing"));
+    }
+    else
+    {
+        ui->cwFreeTextPlayingIndicator->setStyleSheet(STATUS_INDICATOR_DISCONNECT_STYLE);
+        ui->cwFreeTextPlayingIndicator->setToolTip(tr("No CW FreeText Playing"));
+    }
+}
+
+void DMButtonFrame::setCwFreeTextIndicatorVisible(bool visible)
+{
+    ui->cwFreeTextPlayingIndicator->setVisible(visible);
+}
+
 void DMButtonFrame::setAvailIndicatorVisible(bool visible)
 {
 
@@ -1957,18 +2032,40 @@ void DMButtonFrame::setPttIndicatorGroupBoxVisible(bool visible)
 void DMButtonFrame::setErrorMessageVisible(bool visible)
 {
     ui->errorTitleLabel->setVisible(visible);
-    ui->errorMeassageLabel->setVisible(visible);
+    ui->errorMeassageDisplay->setVisible(visible);
 }
+
+
+void DMButtonFrame::showTemporaryErrorMessage(const QString &msg, int timeoutMs, const QColor &colour)
+{
+    setErrorMessageVisible(true);
+    // Save the current stylesheet
+    QString oldStyle = ui->errorMeassageDisplay->styleSheet();
+
+    // Set error color and text
+    ui->errorMeassageDisplay->setStyleSheet(QString("color: %1;").arg(colour.name()));
+
+    ui->errorMeassageDisplay->setText(msg);
+
+    // Clear after timeoutMs milliseconds
+    QTimer::singleShot(timeoutMs, this, [this, oldStyle]() {
+        ui->errorMeassageDisplay->clear();
+        ui->errorMeassageDisplay->setStyleSheet(oldStyle);
+        setErrorMessageVisible(false);
+    });
+}
+
+
 
 void DMButtonFrame::displayErrorMessage(QString msg)
 {
     setErrorMessageVisible(true);
-    ui->errorMeassageLabel->setText(msg);
+    ui->errorMeassageDisplay->setText(msg);
 }
 
 void DMButtonFrame::clearErrorMessage()
 {
-    ui->errorMeassageLabel->clear();
+    ui->errorMeassageDisplay->clear();
     setErrorMessageVisible(false);
 }
 

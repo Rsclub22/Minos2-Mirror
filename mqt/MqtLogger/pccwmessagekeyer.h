@@ -92,6 +92,7 @@ private:
 
 
 
+    void logMessage(QString msg);
 };
 
 #endif // PCCWMESSAGEKEYER_H

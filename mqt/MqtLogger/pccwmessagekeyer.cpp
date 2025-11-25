@@ -149,13 +149,13 @@ void PcCWMessageKeyer::sendCwMsg(TxKeyerParams &vmData)
 
         QString cwMessageToTx = vmData.getKeyerCwMessage();
 
-        trace(QString("PcCwMessageKeyer Send Morse Message to Pc DTR Keyer : %1").arg(cwMessageToTx));
+        logMessage(QString("PcCwMessageKeyer Send Morse Message to Pc DTR Keyer : %1").arg(cwMessageToTx));
 
         tslf->sendPcKeyerTxCwMessage(cwMessageToTx);
     }
     else
     {
-        trace(QString("PcCwMessageKeyer Send Morse Message to radio, message is empty"));
+        logMessage(QString("PcCwMessageKeyer Send Morse Message to radio, message is empty"));
     }
 
 }
@@ -166,7 +166,7 @@ void  PcCWMessageKeyer::sendCwFreeTextMsg(QString message)
 
     QString cwMessageToTx = parseMacrosInMessage(tslf, message);
 
-    trace(QString("Send Free Text Morse Message to PcCwKeyer : %1").arg(cwMessageToTx));
+    logMessage(QString("Send Free Text Morse Message to PcCwKeyer : %1").arg(cwMessageToTx));
 
     tslf->sendPcKeyerTxCwMessage(cwMessageToTx);
 }
@@ -198,27 +198,32 @@ QString PcCWMessageKeyer::parseMacrosInMessage(TSingleLogFrame *tslf, QString me
         if (c == '*')
         {
             txMess += ct->mycall.getFullCall();
+            continue;
         }
         else if (c == '#')
         {
             txMess += serials;
+            continue;
         }
         else if (c == '!')
         {
             txMess += call;
+            continue;
         }
         else if (c == '%')
         {
             txMess += ct->myloc.getLoc();
+            continue;
         }
         else if (c == '$')
         {
             txMess += reps;
+            continue;
         }
         else if (c == '{')
         {
             int lb = mess.indexOf('}', i);
-            if (lb)
+            if (lb != -1)
             {
                 QString macro = mess.mid(i + 1, lb - i - 1).toUpper().trimmed();
                 i = lb;
@@ -313,9 +318,11 @@ QString PcCWMessageKeyer::parseMacrosInMessage(TSingleLogFrame *tslf, QString me
                 }
                 else
                 {
-                    trace(QString("Message <%1> contains unknown macro {%2}").arg(mess, macro));
+                    logMessage(QString("Message <%1> contains unknown macro {%2}").arg(mess, macro));
                 }
             }
+
+            continue;
         }
         else
         {
@@ -489,4 +496,10 @@ void PcCWMessageKeyer::setContest(BaseContestLog *c)
     ct = dynamic_cast<LoggerContestLog *>( c);
 
 }
+
+void PcCWMessageKeyer::logMessage(QString msg)
+{
+    trace(QString("[TxVmButtonsFrame - PcCWMessageKeyer] %1").arg(msg));
+}
+
 

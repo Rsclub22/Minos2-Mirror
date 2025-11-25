@@ -338,6 +338,9 @@ private:
     void populateFksetCombo(QString txKeyerType, QString currentName, bool &contestNameOk);
     void checkSavedContestExists(int &errorCode);
     bool checkContestAndRadioAvailable(int &errorCode);
+    void setCwFreeTextIndicatorOnOff(bool on);
+    void setCwFreeTextIndicatorVisible(bool visible);
+    void showTemporaryErrorMessage(const QString &msg, int timeoutMs, const QColor &colour);
 };
 
 #endif // DMBUTTONFRAME_H
