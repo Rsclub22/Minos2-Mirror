@@ -200,7 +200,7 @@ void RigControlCwMessageKeyer::sendCwMsg(VoiceKeyerParams &vmData)
 
         cwMessageToTx = parseMacrosInMessage(tslf, cwMessageToTx);
 
-        trace(QString("Send Morse Message to radio : %1").arg(cwMessageToTx));
+        logMessage(QString("Send Morse Message to radio : %1").arg(cwMessageToTx));
 
         emit cwMacroExpandedText(cwMessageToTx);    // send to display
 
@@ -215,13 +215,12 @@ void  RigControlCwMessageKeyer::sendCwFreeTextMsg(QString message)
 
     QString cwMessageToTx = parseMacrosInMessage(tslf, message);
 
-    trace(QString("Send Free Text Morse Message to Radio CW Keyer : %1").arg(cwMessageToTx));
+    logMessage(QString("Send Free Text Morse Message to Radio CW Keyer : %1").arg(cwMessageToTx));
 
     emit cwMacroExpandedText(cwMessageToTx);    // send to display
 
     tslf->sendRigTxCwMessage(cwMessageToTx);
 }
-
 
 QString RigControlCwMessageKeyer::parseMacrosInMessage(TSingleLogFrame *tslf, QString mess)
 {
@@ -247,27 +246,32 @@ QString RigControlCwMessageKeyer::parseMacrosInMessage(TSingleLogFrame *tslf, QS
         if (c == '*')
         {
             txMess += ct->mycall.getFullCall();
+            continue;
         }
         else if (c == '#')
         {
             txMess += serials;
+            continue;
         }
         else if (c == '!')
         {
             txMess += call;
+            continue;
         }
         else if (c == '%')
         {
             txMess += ct->myloc.getLoc();
+            continue;
         }
         else if (c == '$')
         {
             txMess += reps;
+            continue;
         }
         else if (c == '{')
         {
             int lb = mess.indexOf('}', i);
-            if (lb)
+            if (lb != -1)
             {
                 QString macro = mess.mid(i + 1, lb - i - 1).toUpper().trimmed();
                 i = lb;
@@ -362,9 +366,11 @@ QString RigControlCwMessageKeyer::parseMacrosInMessage(TSingleLogFrame *tslf, QS
                 }
                 else
                 {
-                    trace(QString("Message <%1> contains unknown macro {%2}").arg(mess, macro));
+                    logMessage(QString("Message <%1> contains unknown macro {%2}").arg(mess, macro));
                 }
             }
+
+            continue;
         }
         else
         {
@@ -374,7 +380,6 @@ QString RigControlCwMessageKeyer::parseMacrosInMessage(TSingleLogFrame *tslf, QS
     return txMess;
 
 }
-
 
 
 
@@ -666,12 +671,12 @@ int RigControlCwMessageKeyer::editButton(VoiceKeyerParams *vmData, QString title
     if (getRigCWKeyerMacroCharacter(cwMacroCharList, radioManufacturer, CWKEYER_RADIO_COMMON_PARAMS_FILENAME))
     {
         cwMacroCharOk = true;
-        trace(QString("Retrieved CW Macro Chars %1 for manufacturer %2").arg(cwMacroCharList, radioManufacturer));
+        logMessage(QString("Retrieved CW Macro Chars %1 for manufacturer %2").arg(cwMacroCharList, radioManufacturer));
     }
     else
     {
        cwMacroCharOk = false;
-        trace(QString("Error retrieving CW Macro Chars for manufacturer %1").arg(radioManufacturer));
+        logMessage(QString("Error retrieving CW Macro Chars for manufacturer %1").arg(radioManufacturer));
     }
 
 
@@ -684,18 +689,18 @@ int RigControlCwMessageKeyer::editButton(VoiceKeyerParams *vmData, QString title
             QString vc;
             addCWKeyerMacroCharsToValidCwKeyerChars(vc, validCharCwList, cwMacroCharList);
             vmButtonDialog.setCwValidatorCwCharList(vc);
-            trace(QString("Supported CW Chars and Macro chars %1 for manufacturer %2").arg(vc, radioManufacturer));
+            logMessage(QString("Supported CW Chars and Macro chars %1 for manufacturer %2").arg(vc, radioManufacturer));
         }
         else
         {
            vmButtonDialog.setCwValidatorCwCharList(validCharCwList);
-           trace(QString("Supported CW Chars with no Macro chars %1 for manufacturer %2").arg(validCharCwList, radioManufacturer));
+           logMessage(QString("Supported CW Chars with no Macro chars %1 for manufacturer %2").arg(validCharCwList, radioManufacturer));
         }
 
     }
     else
     {
-        trace(QString("Error retrieving supported CW Chars for manufacturer %1").arg(radioManufacturer));
+        logMessage(QString("Error retrieving supported CW Chars for manufacturer %1").arg(radioManufacturer));
     }
 
 
@@ -707,7 +712,7 @@ int RigControlCwMessageKeyer::editButton(VoiceKeyerParams *vmData, QString title
     }
     else
     {
-        trace(QString("Error retrieving max CW Message Length for manufacturer %1").arg(radioManufacturer));
+        logMessage(QString("Error retrieving max CW Message Length for manufacturer %1").arg(radioManufacturer));
         vmButtonDialog.setMaxNumberCwCharactersText(0);
     }
 
@@ -760,6 +765,13 @@ int RigControlCwMessageKeyer::editButton(VoiceKeyerParams *vmData, QString title
     return ret;
 
 }
+
+
+void RigControlCwMessageKeyer::logMessage(QString msg)
+{
+    trace(QString("[TxVmButtonsFrame - RigControlCwMessageKeyer] %1").arg(msg));
+}
+
 
 
 
