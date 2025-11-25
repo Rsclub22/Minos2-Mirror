@@ -168,9 +168,8 @@ Non contacté</translation>
         <translation>Veuillez confirmer que vous souhaitez supprimer ce Spot - %1?</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="588"/>
         <source>clear spot selected for callsign %1</source>
-        <translation>Effacer Spot sélectionné pour l&apos;indicatif %1</translation>
+        <translation type="vanished">Effacer Spot sélectionné pour l&apos;indicatif %1</translation>
     </message>
     <message>
         <location filename="../bandmapclientframe.cpp" line="609"/>
@@ -183,37 +182,37 @@ Non contacté</translation>
         <translation>Voulez-vous vraiment supprimer tous les Spots de cluster dans le Bandmap?</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="705"/>
+        <location filename="../bandmapclientframe.cpp" line="707"/>
         <source>Filter %1</source>
         <translation>Filtre %1</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1701"/>
+        <location filename="../bandmapclientframe.cpp" line="1708"/>
         <source>Bandmap Spot Filters</source>
         <translation>Bandmap filtres de spot</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1776"/>
+        <location filename="../bandmapclientframe.cpp" line="1783"/>
         <source>Mouse in frame, updates paused</source>
         <translation>Souris dans le cadre, mises à jour suspendues</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1506"/>
+        <location filename="../bandmapclientframe.cpp" line="1513"/>
         <source>Cluster Server Not Running</source>
         <translation>Le Serveur du Cluster ne fonctionne pas</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1539"/>
+        <location filename="../bandmapclientframe.cpp" line="1546"/>
         <source>Connected</source>
         <translation>Connecté</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1549"/>
+        <location filename="../bandmapclientframe.cpp" line="1556"/>
         <source>Disconnected</source>
         <translation>Déconnecté</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1659"/>
+        <location filename="../bandmapclientframe.cpp" line="1666"/>
         <source>Freq out of band</source>
         <translation>Fréquence hors bande</translation>
     </message>
@@ -221,34 +220,34 @@ Non contacté</translation>
 <context>
     <name>BandmapView</name>
     <message>
-        <location filename="../bandmapview.cpp" line="1032"/>
+        <location filename="../bandmapview.cpp" line="1035"/>
         <source>%1%2CQ Frequency @ .%3%4%5</source>
         <translation>%1%2CQ Frequency @ .%3%4%5</translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1066"/>
+        <location filename="../bandmapview.cpp" line="1069"/>
         <source>New</source>
         <translation>Nouveau</translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1221"/>
+        <location filename="../bandmapview.cpp" line="1224"/>
         <source>CQ Frequency = %1
 The mode is %2</source>
         <translation>La fréquence CQ = %1
 Le mode calculé est %2</translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1250"/>
+        <location filename="../bandmapview.cpp" line="1253"/>
         <source>The computed mode is</source>
         <translation>Mode calculé</translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1253"/>
+        <location filename="../bandmapview.cpp" line="1256"/>
         <source>The mode is</source>
         <translation>Mode</translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1260"/>
+        <location filename="../bandmapview.cpp" line="1263"/>
         <source>%1 - %2, %3, %4, %5 [%6 %7 @ %8] 
 %9 %10
 %11
@@ -975,27 +974,27 @@ Le mode calculé est %2</translation>
         <translation>Pas de code de district</translation>
     </message>
     <message>
-        <location filename="../LoggerContacts.cpp" line="635"/>
+        <location filename="../LoggerContacts.cpp" line="639"/>
         <source>Unknown Radio</source>
         <translation>Radio inconnue</translation>
     </message>
     <message>
-        <location filename="../LoggerContacts.cpp" line="642"/>
+        <location filename="../LoggerContacts.cpp" line="646"/>
         <source>Unknown Antenna</source>
         <translation>Antenne inconnue</translation>
     </message>
     <message>
-        <location filename="../LoggerContacts.cpp" line="649"/>
+        <location filename="../LoggerContacts.cpp" line="653"/>
         <source>Unknown Contest</source>
         <translation>Concours inconnue</translation>
     </message>
     <message>
-        <location filename="../LoggerContacts.cpp" line="714"/>
+        <location filename="../LoggerContacts.cpp" line="718"/>
         <source>GJV file should have been opened read only!</source>
         <translation>Le fichier .GJV aurait dû être ouvert en lecture seule!</translation>
     </message>
     <message>
-        <location filename="../LoggerContacts.cpp" line="812"/>
+        <location filename="../LoggerContacts.cpp" line="816"/>
         <source>Invalid block number in contact block</source>
         <translation>Numéro de bloc non valide dans le bloc de contacts</translation>
     </message>
@@ -2548,7 +2547,7 @@ et envoyer le fichier .EDI produit.
 <context>
     <name>PcCWMessageKeyer</name>
     <message>
-        <location filename="../pccwmessagekeyer.cpp" line="520"/>
+        <location filename="../pccwmessagekeyer.cpp" line="526"/>
         <source>PC CW Keyer Setup</source>
         <translation>Configuration du PC CW Keyer</translation>
     </message>
@@ -2610,7 +2609,7 @@ to</source>
     </message>
     <message>
         <location filename="../qsologframe.ui" line="171"/>
-        <location filename="../qsologframe.cpp" line="840"/>
+        <location filename="../qsologframe.cpp" line="841"/>
         <source>Catch-up (Post Entry)</source>
         <translation>Rattrapage (post-entrée)</translation>
     </message>
@@ -2859,17 +2858,22 @@ to</source>
         <translation>Échange%1</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="665"/>
+        <location filename="../qsologframe.cpp" line="120"/>
+        <source>Match Xfer %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qsologframe.cpp" line="666"/>
         <source>Return to Log</source>
         <translation>Retourner au Log</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="849"/>
+        <location filename="../qsologframe.cpp" line="850"/>
         <source>End Catch-up</source>
         <translation>Terminer rattrapage</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2356"/>
+        <location filename="../qsologframe.cpp" line="2357"/>
         <source>This Contact has changed: Shall I log the changes?
 
 Yes         - Log as shown
@@ -2880,74 +2884,74 @@ Oui - Enregistrer  comme indiqué
 Non - Ignorer les modifications</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2609"/>
+        <location filename="../qsologframe.cpp" line="2610"/>
         <source>Read Only</source>
         <translation>Lecture seulement</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2613"/>
+        <location filename="../qsologframe.cpp" line="2614"/>
         <source>Protected</source>
         <translation>Protégé</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2617"/>
+        <location filename="../qsologframe.cpp" line="2618"/>
         <source>Protected by age of contest</source>
         <translation>Protégé par l&apos;âge du concours</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2630"/>
+        <location filename="../qsologframe.cpp" line="2631"/>
         <source>No QSO entry field focussed!</source>
         <translation>Aucun champ d&apos;entrée QSO focalisé&#xa0;!</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="3014"/>
+        <location filename="../qsologframe.cpp" line="3015"/>
         <source>Change mode to CW?</source>
         <translation>Changer de mode en CW?</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="3017"/>
-        <location filename="../qsologframe.cpp" line="3028"/>
-        <location filename="../qsologframe.cpp" line="3037"/>
+        <location filename="../qsologframe.cpp" line="3018"/>
+        <location filename="../qsologframe.cpp" line="3029"/>
+        <location filename="../qsologframe.cpp" line="3038"/>
         <source>Please check the signal reports, and log the contact</source>
         <translation>Vérifier les rapports de signal et enregistrer le contact SVP</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="3025"/>
+        <location filename="../qsologframe.cpp" line="3026"/>
         <source>Change mode to PH?</source>
         <translation>Changer de mode en PH?</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="3034"/>
+        <location filename="../qsologframe.cpp" line="3035"/>
         <source>Change mode to USB?</source>
         <translation>Changer de mode en USB?</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="3081"/>
+        <location filename="../qsologframe.cpp" line="3082"/>
         <source>Spot Last Logged (%1) </source>
         <translation>Spot dernière enregistrée (%1) </translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="3152"/>
+        <location filename="../qsologframe.cpp" line="3153"/>
         <source>&quot;Serial sent&quot; is too high - please confirm that this is correct?</source>
         <translation>&quot;Numéro Tx&quot; est trop élevé - est-ce correct?</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="3154"/>
+        <location filename="../qsologframe.cpp" line="3155"/>
         <source>Do you want to enter the missing contacts later?</source>
         <translation>Voulez-vous entrer les contacts manquants plus tard?</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="3387"/>
+        <location filename="../qsologframe.cpp" line="3388"/>
         <source>Meep from %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="3572"/>
+        <location filename="../qsologframe.cpp" line="3573"/>
         <source>Start of QSOs</source>
         <translation>Début des QSO</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="3607"/>
+        <location filename="../qsologframe.cpp" line="3608"/>
         <source>End of QSOs</source>
         <translation>Fin des QSO</translation>
     </message>
@@ -3267,7 +3271,7 @@ Non - Ignorer les modifications</translation>
 <context>
     <name>RigControlCwMessageKeyer</name>
     <message>
-        <location filename="../rigcontrolcwmessagekeyer.cpp" line="496"/>
+        <location filename="../rigcontrolcwmessagekeyer.cpp" line="501"/>
         <source>Rig Control CW Memory Setup</source>
         <translation>Configuration de la mémoire de CW</translation>
     </message>
@@ -6075,9 +6079,17 @@ Last %8 Mins: %9 QSO %10 pts %11 mults
     </message>
     <message>
         <location filename="../txvmbuttonsframe.cpp" line="1101"/>
-        <location filename="../txvmbuttonsframe.cpp" line="1108"/>
-        <location filename="../txvmbuttonsframe.cpp" line="1115"/>
         <source>rigControl Voice Selected, but not available for this radio</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../txvmbuttonsframe.cpp" line="1108"/>
+        <source>rigControl CW Keyer selected, but not available for this radio</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../txvmbuttonsframe.cpp" line="1115"/>
+        <source>PC CW DTR Server is not available.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
