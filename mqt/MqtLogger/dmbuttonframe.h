@@ -174,6 +174,7 @@ private slots:
     void onCwEntryReturnPressed();
     void setRadioParams();
 
+    void onCwMacroTextProcessed(const QString &cwTextSent);
 private:
     Ui::DMButtonFrame *ui;
     LoggerContestLog *ct = nullptr;
@@ -299,7 +300,7 @@ private:
     void setMessagePlayingFlag(bool playing);
     bool isMessagePlaying();
     void setCwMessagePlayingVisible(bool visible);
-    void clearCwMessageDisplay();
+    void clearCwMessagePlayingDisplay();
     void displayCwMessagePlaying(const QString msg);
 
 
@@ -340,7 +341,8 @@ private:
     bool checkContestAndRadioAvailable(int &errorCode);
     void setCwFreeTextIndicatorOnOff(bool on);
     void setCwFreeTextIndicatorVisible(bool visible);
-    void showTemporaryErrorMessage(const QString &msg, int timeoutMs, const QColor &colour);
+    void showTemporaryErrorMessage(const QString &msg, int timeoutMs, const QColor &colour = QColorConstants::Svg::red);
+    bool checkRadioAndKeyerState();
 };
 
 #endif // DMBUTTONFRAME_H

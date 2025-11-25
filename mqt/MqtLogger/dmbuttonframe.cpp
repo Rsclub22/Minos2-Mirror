@@ -286,7 +286,7 @@ void DMButtonFrame::createKeyer(QString voiceKeyerName)
                 connect(txKeyer.data(), &TxKeyerBase::remoteKeyerStopped, this, &DMButtonFrame::onRemoteKeyerStopped, Qt::UniqueConnection);
                 connect(txKeyer.data(), &TxKeyerBase::remoteKeyerStarted, this, &DMButtonFrame::onRemoteKeyerStarted, Qt::UniqueConnection);
                 connect(txKeyer.data(), &TxKeyerBase::internalVoiceMemoryKeyerPlayState, this, &DMButtonFrame::onInternalVoiceMemoryPlayState);
-
+                connect(txKeyer.data(), &TxKeyerBase::cwMacroExpandedText, this, &DMButtonFrame::onCwMacroTextProcessed);
                 setRadioParams();
 
 /*
@@ -446,6 +446,18 @@ void DMButtonFrame::onTxKeyerSelect(int idx)
     extKeyerConnectTimer->start(1000);
 
     ui->txKeyerSelect->repaint();   // or the combo doesn't update
+
+}
+
+void  DMButtonFrame::onCwMacroTextProcessed(const QString &cwTextSent)
+{
+    clearCwMessagePlayingDisplay();
+    displayCwMessagePlaying(cwTextSent);
+
+    if (buttonNumSent == CW_FREE_TEXT_BUTTON_NUMBER)
+    {
+        setCwFreeTextIndicatorOnOff(true);
+    }
 
 }
 
@@ -1060,6 +1072,13 @@ void DMButtonFrame::onCwEntryReturnPressed()
 
     if  (txKeyer)
     {
+
+        if (!checkRadioAndKeyerState())
+        {
+            return;         // error radio keyer state missing
+        }
+
+
         if ( selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::CW_RigControl] ||  selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::PcCwKeyer])
         {
             QString message = ui->cwEntry->text().trimmed();
@@ -1067,6 +1086,24 @@ void DMButtonFrame::onCwEntryReturnPressed()
             if (!message.isEmpty())
             {
                 ui->cwEntry->selectAll();
+
+                if (selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::CW_RigControl])
+                {
+
+                    buttonNumSent = CW_FREE_TEXT_BUTTON_NUMBER;
+
+                    if (curMode != rigcommon::convertModeToQString(MODE::CW) && txKeyer->getSetCwModeAndRestoreFlag())
+                    {
+                        savedMode = curMode;
+                        sendModeToRadio(rigcommon::convertModeToQString(MODE::CW));
+                    }
+                    else
+                    {
+                        savedMode = curMode;        // keep current mode if CW
+                    }
+
+                }
+
                 txKeyer->sendCwFreeTextMsg(message);
             }
 
@@ -1130,6 +1167,12 @@ bool DMButtonFrame::checkRadioAndKeyerState()
 void DMButtonFrame::startKeyerMsg(int key)
 {
     logMessage(QString("- start keyerMsg button Number = %1").arg(key));
+
+    if (!checkRadioAndKeyerState())
+    {
+        return;         // error radio keyer state missing
+    }
+
 
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
     int msgOffset = tslf->GJVQSOLogFrame->getSandP()?12:0;
@@ -1913,6 +1956,7 @@ void DMButtonFrame:: setAvailIndicatorOnOffForPcCwKeyer()
         setAvailIndicatorOnOff(false);
     }
 }
+
 
 void DMButtonFrame::setMessagePlayingFlag(bool playing)
 {
@@ -3369,6 +3413,10 @@ void DMButtonFrame::clearCwMessageDisplay()
     ui->cwMessagePlayingDisplay->clear();
 }
 
+void DMButtonFrame::clearCwMessagePlayingDisplay()
+{
+    ui->cwMessagePlayingDisplay->clear();
+}
 
 
 void DMButtonFrame::logMessage(QString msg)
@@ -3488,6 +3536,7 @@ void DMButtonFrame::setPcCwKeyerTxOnState(QString state)
         {
             setPttStatusIndicatorOnOff(false);
             clearCwMessageDisplay();
+            setCwFreeTextIndicatorOnOff(false);
             onMsgDurTimerTimeout();
         }
     }
