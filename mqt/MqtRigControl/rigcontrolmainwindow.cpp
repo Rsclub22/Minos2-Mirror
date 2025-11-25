@@ -1033,7 +1033,7 @@ bool RigControlMainWindow::checkSupportCwKeyerMemory()
             }
 
 
-            addCwKeyerSupportStopCmdToRigCache(!selectedRadioSupportCap.getSupportCwMemoryStop());
+            addCwKeyerSupportStopCmdToRigCache(selectedRadioSupportCap.getSupportCwMemoryStop());
 
 
             return true;
