@@ -221,7 +221,7 @@ void PcCWMessageKeyer::sendCwMsg(VoiceKeyerParams &vmData)
 
         cwMessageToTx = parseMacrosInMessage(tslf, cwMessageToTx);
 
-        trace(QString("Send Morse Message to radio : %1").arg(cwMessageToTx));
+        logMessage(QString("Send Morse Message to radio : %1").arg(cwMessageToTx));
 
         emit cwMacroExpandedText(cwMessageToTx);    // send to display
 
@@ -236,7 +236,7 @@ void  PcCWMessageKeyer::sendCwFreeTextMsg(QString message)
 
     QString cwMessageToTx = parseMacrosInMessage(tslf, message);
 
-    trace(QString("Send Free Text Morse Message to PcCwKeyer : %1").arg(cwMessageToTx));
+    logMessage(QString("Send Free Text Morse Message to PcCwKeyer : %1").arg(cwMessageToTx));
 
     emit cwMacroExpandedText(cwMessageToTx);    // send to display
 
@@ -270,27 +270,32 @@ QString PcCWMessageKeyer::parseMacrosInMessage(TSingleLogFrame *tslf, QString me
         if (c == '*')
         {
             txMess += ct->mycall.getFullCall();
+            continue;
         }
         else if (c == '#')
         {
             txMess += serials;
+            continue;
         }
         else if (c == '!')
         {
             txMess += call;
+            continue;
         }
         else if (c == '%')
         {
             txMess += ct->myloc.getLoc();
+            continue;
         }
         else if (c == '$')
         {
             txMess += reps;
+            continue;
         }
         else if (c == '{')
         {
             int lb = mess.indexOf('}', i);
-            if (lb)
+            if (lb != -1)
             {
                 QString macro = mess.mid(i + 1, lb - i - 1).toUpper().trimmed();
                 i = lb;
@@ -385,9 +390,11 @@ QString PcCWMessageKeyer::parseMacrosInMessage(TSingleLogFrame *tslf, QString me
                 }
                 else
                 {
-                    trace(QString("Message <%1> contains unknown macro {%2}").arg(mess, macro));
+                    logMessage(QString("Message <%1> contains unknown macro {%2}").arg(mess, macro));
                 }
             }
+
+            continue;
         }
         else
         {
@@ -397,7 +404,6 @@ QString PcCWMessageKeyer::parseMacrosInMessage(TSingleLogFrame *tslf, QString me
     return txMess;
 
 }
-
 
 
 
@@ -702,12 +708,12 @@ int PcCWMessageKeyer::editButton(VoiceKeyerParams *vmData, QString title)
     if (getRigCWKeyerMacroCharacter(cwMacroCharList, rm, PC_CW_KEYER_COMMON_PARAMS_FILENAME))
     {
         cwMacroCharOk = true;
-        trace(QString("Retrieved CW Macro Chars %1 for pcCwKeyer").arg(cwMacroCharList));
+        logMessage(QString("Retrieved CW Macro Chars %1 for pcCwKeyer").arg(cwMacroCharList));
     }
     else
     {
         cwMacroCharOk = false;
-        trace(QString("Error retrieving CW Macro Chars for pcCwKeyer"));
+        logMessage(QString("Error retrieving CW Macro Chars for pcCwKeyer"));
     }
 
 
@@ -719,18 +725,18 @@ int PcCWMessageKeyer::editButton(VoiceKeyerParams *vmData, QString title)
         {
             QString vc = validCharCwList.append(cwMacroCharList);
             vmButtonDialog.setCwValidatorCwCharList(vc);
-            trace(QString("Supported CW Chars and Macro chars %1 for pcCwKeyer").arg(vc));
+            logMessage(QString("Supported CW Chars and Macro chars %1 for pcCwKeyer").arg(vc));
         }
         else
         {
             vmButtonDialog.setCwValidatorCwCharList(validCharCwList);
-            trace(QString("Supported CW Chars with no Macro chars %1 for ").arg(validCharCwList));
+            logMessage(QString("Supported CW Chars with no Macro chars %1 for ").arg(validCharCwList));
         }
 
     }
     else
     {
-        trace(QString("Error retrieving supported CW Chars for pcCwKeyer"));
+        logMessage(QString("Error retrieving supported CW Chars for pcCwKeyer"));
     }
 
 
@@ -742,7 +748,7 @@ int PcCWMessageKeyer::editButton(VoiceKeyerParams *vmData, QString title)
     }
     else
     {
-        trace(QString("Error retrieving max CW Message Length for pcCwKeyer"));
+        logMessage(QString("Error retrieving max CW Message Length for pcCwKeyer"));
         vmButtonDialog.setMaxNumberCwCharactersText(0);
     }
 
@@ -798,3 +804,11 @@ int PcCWMessageKeyer::editButton(VoiceKeyerParams *vmData, QString title)
     return ret;
 
 }
+
+
+void PcCWMessageKeyer::logMessage(QString msg)
+{
+    trace(QString("[TxVmButtonsFrame - RigControlCwMessageKeyer] %1").arg(msg));
+}
+
+

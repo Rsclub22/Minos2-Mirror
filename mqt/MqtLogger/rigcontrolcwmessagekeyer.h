@@ -91,6 +91,7 @@ private:
 
     void getRadioCommonData(int &selectedEomType, int &userNumberButtons, int radioMaxNumButtons);
     QString parseMacrosInMessage(TSingleLogFrame *tslf, QString mess);
+    void logMessage(QString msg);
 };
 
 
