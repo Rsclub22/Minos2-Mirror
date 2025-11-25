@@ -343,6 +343,7 @@ private:
     void setCwFreeTextIndicatorVisible(bool visible);
     void showTemporaryErrorMessage(const QString &msg, int timeoutMs, const QColor &colour = QColorConstants::Svg::red);
     bool checkRadioAndKeyerState();
+
 };
 
 #endif // DMBUTTONFRAME_H

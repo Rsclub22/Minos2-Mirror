@@ -3408,14 +3408,16 @@ void DMButtonFrame::setCwMessagePlayingVisible(bool visible)
     ui->cwMesssagePlayingLabel->setVisible(visible);
     ui->cwMessagePlayingDisplay->setVisible(visible);
 }
-void DMButtonFrame::clearCwMessageDisplay()
-{
-    ui->cwMessagePlayingDisplay->clear();
-}
+
 
 void DMButtonFrame::clearCwMessagePlayingDisplay()
 {
     ui->cwMessagePlayingDisplay->clear();
+}
+
+void DMButtonFrame::displayCwMessagePlaying(const QString msg)
+{
+    ui->cwMessagePlayingDisplay->setText(msg);
 }
 
 
@@ -3535,7 +3537,7 @@ void DMButtonFrame::setPcCwKeyerTxOnState(QString state)
         else
         {
             setPttStatusIndicatorOnOff(false);
-            clearCwMessageDisplay();
+            clearCwMessagePlayingDisplay();
             setCwFreeTextIndicatorOnOff(false);
             onMsgDurTimerTimeout();
         }
