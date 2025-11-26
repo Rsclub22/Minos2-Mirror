@@ -117,7 +117,7 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
         theirSentLabelString = tr("Sent by Them");
         ui->theirSentLabel->setText("<b>" + theirSentLabelString);
     }
-    ui->MatchXferButton->setText(tr("Match Xfer %1").arg(getFKeyLabel(12)));
+    ui->MatchXferButton->setText(tr("Match Xfer%1").arg(getFKeyLabel(12)));
 
     ui->BrgSt->setFixedSize(ui->BrgSt->size());
     ui->DistSt->setFixedSize(ui->DistSt->size());
