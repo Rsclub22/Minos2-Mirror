@@ -628,6 +628,9 @@ void TxVmButtonsFrame::setFrameState(QString voiceKeyerName)
 
     ui->sAndPLabel->clear();
 
+    // set buttons to centre
+    setButtonsJustification(false);
+
     if (cwSpeedSlider)
     {
         ui->cwSpeedSliderHorizontalLayout->removeWidget(cwSpeedSlider);
@@ -719,6 +722,13 @@ void TxVmButtonsFrame::setFrameState(QString voiceKeyerName)
             txVoiceKeyer->setCwMemType(getCwMemType(selectedRadio));
             ui->sAndPLabel->setText("| S&P");       // init S&P/Run Label
             txVoiceKeyer->setContest(ct);
+
+            // do we need to left justify the buttons
+            if (getVmButtonsLeftJustifyFlag(VOICEKEYER_COMMON_PARAMS_FILENAME))
+            {
+                setButtonsJustification(true);
+
+            }
         }
 
         if (voiceKeyerType == keyerTypes[VoiceKeyerId::PcCwKeyer])
@@ -818,6 +828,25 @@ void TxVmButtonsFrame::setFrameState(QString voiceKeyerName)
 
         }
     }
+}
+
+void TxVmButtonsFrame::setButtonsJustification(bool leftJustify)
+{
+    if (leftJustify)
+    {
+        // Left justify - collapse left spacers
+        ui->vmButtonsLeftSpacer->changeSize(0, 0, QSizePolicy::Fixed, QSizePolicy::Fixed);
+        ui->stopButtonLeftSpacer->changeSize(0, 0, QSizePolicy::Fixed, QSizePolicy::Fixed);
+    }
+    else
+    {
+        // Center - restore left spacers
+        ui->vmButtonsLeftSpacer->changeSize(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+        ui->stopButtonLeftSpacer->changeSize(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+    }
+
+    ui->vmButtonsHorizLayout->invalidate();
+    ui->stopButtonHorizLayout->invalidate();
 }
 
 

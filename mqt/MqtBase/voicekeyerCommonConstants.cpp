@@ -97,6 +97,21 @@ bool getRigCWKeyerMaxMessageLength(int &messageLength, QString radioMfg, const Q
 }
 
 
+bool getVmButtonsLeftJustifyFlag(const QString filename)
+{
+    QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + filename;
+    QSettings config(fileName, QSettings::IniFormat);
+
+    config.beginGroup("commonParams");
+
+    bool flag = config.value("leftJustifyButtons", false).toBool();
+
+    config.endGroup();
+
+    return flag;
+}
+
+
 bool getRigCWKeyerSupportedCharacters(QString &supportedChars, QString radioMfg, const QString filename)
 {
     QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + filename + ".ini";

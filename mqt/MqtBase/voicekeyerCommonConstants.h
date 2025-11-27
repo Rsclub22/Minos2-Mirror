@@ -88,6 +88,8 @@ bool getRigCWKeyerMaxMessageLength(int &messageLength, QString radioMfg, const Q
 
 QString getCwRadioManufacturer(int cwMemType);
 
+bool getVmButtonsLeftJustifyFlag(const QString filename);
+
 
 
 

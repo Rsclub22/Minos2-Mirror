@@ -226,6 +226,7 @@ private:
     bool checkRadioAndKeyerState();
     void showTemporaryErrorMessage(const QString &msg, int timeoutMs, const QColor &colour = QColorConstants::Svg::red);
 
+    void setButtonsJustification(bool leftJustify);
 private slots:
 
     void onVoiceKeyerSelect(int idx);
