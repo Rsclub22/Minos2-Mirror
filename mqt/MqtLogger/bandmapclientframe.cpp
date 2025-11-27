@@ -585,8 +585,8 @@ void BandmapClientFrame::doClearSpotSelected(QSharedPointer<ClusterSpotData> sd)
                                        QMessageBox::Yes | QMessageBox::No);
         if (ret == QMessageBox::Yes)
         {
-            traceMsg(tr("clear spot selected for callsign %1")
-                         .arg(sd->getDxCallStr()));
+            traceMsg(QString("clear spot selected for callsign %1 %2")
+                         .arg(sd->getDxCallStr()).arg(sd->getRecNo()));
 
             bmsdb->deleteRecord( sd);
             sd->setSpotType(bandmapSpotType::DELETED);
@@ -640,6 +640,8 @@ void BandmapClientFrame::on_clearClusterSpotsActionSelected()
                 if (savedSpotType == bandmapSpotType::CLUSTER )
                 {
                     // delete the old logged/saved entry, add the new one
+                    traceMsg(QString("clear cluster spots selected for callsign %1 %2")
+                                 .arg(spotInBandmap->getDxCallStr()).arg(spotInBandmap->getRecNo()));
                     spotInBandmap->setSpotType(bandmapSpotType::DELETED);
                     bmsdb->deleteRecord( spotInBandmap);
                 }
@@ -1015,7 +1017,8 @@ bool BandmapClientFrame::checkSpotInTable(QSharedPointer<ClusterSpotData> newSpo
                 else if (spotType == bandmapSpotType::CLUSTER)
                 {
                     // yes, remove old spot
-                    traceMsg(QString("CheckSpot In Table Remove - Cluster Spot %1").arg(rowCall.getFullCall()));
+                    traceMsg(QString("CheckSpot In Table Remove - Cluster Spot %1 %2")
+                                 .arg(rowCall.getFullCall()).arg(spotInBandmap->getRecNo()));
                     spotInBandmap->setSpotType(bandmapSpotType::DELETED);
                     bmsdb->deleteRecord(spotInBandmap);
                     // and this spot will be used instead
@@ -1116,11 +1119,12 @@ void BandmapClientFrame::addLogSpotToBandmapTable(QSharedPointer<ClusterSpotData
                 if (savedSpotType == bandmapSpotType::LOGGED || savedSpotType == bandmapSpotType::SAVED)
                 {
                     // delete the old logged/saved entry, add the new one
-                    traceMsg(QString("Deleting Spot as new spot is DELETED %1, %2, %3, %4")
+                    traceMsg(QString("Deleting Spot as new spot is DELETED %1, %2, %3, %4 %5")
                                  .arg(spotInBandmap->getDxCall().getFullCall(),
                                       spotInBandmap->getFreq().traceStr(),
                                       spotInBandmap->getMode(),
                                       spotInBandmap->spotName())
+                                      .arg(spotInBandmap->getRecNo())
                              );
 
                     spotInBandmap->setSpotType(bandmapSpotType::DELETED);
@@ -1187,11 +1191,12 @@ void BandmapClientFrame::addLogSpotToBandmapTable(QSharedPointer<ClusterSpotData
                             // we CAN replace LOGGED with LOGGED (e.g. a dup)
                             // newSpot is LOGGED, so OK
                             // delete the old logged/saved entry, add the new LOGGED one
-                            traceMsg(QString("Deleting Spot as new spot will replace it %1, %2, %3, %4")
+                            traceMsg(QString("Deleting Spot as new spot will replace it %1, %2, %3, %4 %5")
                                          .arg(spotInBandmap->getDxCall().getFullCall(),
                                               spotInBandmap->getFreq().traceStr(),
                                               spotInBandmap->getMode(),
                                               spotInBandmap->spotName())
+                                         .arg(spotInBandmap->getRecNo())
                                      );
 
                             spotInBandmap->setSpotType(bandmapSpotType::DELETED);
@@ -1346,7 +1351,9 @@ void BandmapClientFrame::addLogSpotToBandmapTable(QSharedPointer<ClusterSpotData
                     {
                         // overwrite saved or cluster spots from logged or saved spots;
                         // delete existing and later it will be re-added
-                        traceMsg(QString("AddLogSpot Callsign removed - %1").arg(savedCall.getFullCall()));
+                        traceMsg(QString("AddLogSpot Callsign removed - %1 %2")
+                                     .arg(savedCall.getFullCall())
+                                     .arg(spotInBandmap->getRecNo()));
                         spotInBandmap->setSpotType(bandmapSpotType::DELETED);
                         bmsdb->deleteRecord( spotInBandmap);
                     }
@@ -1434,7 +1441,7 @@ void BandmapClientFrame::addRemoveCQSpot(QSharedPointer<ClusterSpotData>  spot)
     }
     else
     {
-        trace(QString("BandmapView::bandmapUpdate() addRemoveCQSpot - add at ").arg(spot->getFreq()));
+        trace(QString("BandmapView::bandmapUpdate() addRemoveCQSpot - add at ").arg(spot->getFreq().traceStr()));
 
         qint64 logTime = spot->getSpotDateTime().toMSecsSinceEpoch() / 1000;
         QString logTimeStr = spot->getSpotDateTime().time().toString("HH:mm");

@@ -99,7 +99,7 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
         ui->hl2->setVisible(false);
         ui->callBox->layout()->removeItem(ui->hsp1);
         delete ui->hsp1;
-        ui->hsp1 = nullptr;
+        ui->hsp1 = nullptr;       
     }
     else
     {
@@ -117,6 +117,7 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
         theirSentLabelString = tr("Sent by Them");
         ui->theirSentLabel->setText("<b>" + theirSentLabelString);
     }
+    ui->MatchXferButton->setText(tr("Match Xfer %1").arg(getFKeyLabel(12)));
 
     ui->BrgSt->setFixedSize(ui->BrgSt->size());
     ui->DistSt->setFixedSize(ui->DistSt->size());
@@ -4248,12 +4249,19 @@ void QSOLogFrame::on_callRb_clicked()
     frameHasFocusForced = true;
     if (ui->callRb->isChecked())
     {
-        TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
-        if (tslf && tslf->runButtonsFrame)
-        {
-            tslf->runButtonsFrame->setCallFreq();
-        }
+        //If it was clicked, then it should always by lit!
+        trace("SOLogFrame::on_callRb_clicked ui->callRb->isChecked() true");
     }
+    else
+    {
+        trace("SOLogFrame::on_callRb_clicked ui->callRb->isChecked() false");
+    }
+    TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
+    if (tslf && tslf->runButtonsFrame)
+    {
+        tslf->runButtonsFrame->setCallFreq();
+    }
+
     MinosLoggerEvents::SendSandPChanged(getSandP());
     frameHasFocusForced = false;
 }
