@@ -16,13 +16,13 @@
 #include "pccwmessagekeyer.h"
 #include "cwrigkeyervalidator.h"
 
-const char * VM_BUTTON_ON_STYLE =
-    "background-color: orange;"
-    "padding: 4px;";
 
-const char * VM_BUTTON_OFF_STYLE =
-    "background-color: Gainsboro;"
-    "padding: 4px;";
+const char * VM_BUTTON_ON_STYLE = "QToolButton { background-color: orange; }"
+                                     "QToolButton::menu-indicator { image: none; }";
+
+
+const char * VM_BUTTON_OFF_STYLE = "QToolButton { background-color: white; }"
+                                     "QToolButton::menu-indicator { image: none; }";
 
 const int NO_VM_BUTTON_ON = -1;
 const int CW_FREE_TEXT_BUTTON_NUMBER = 13;
@@ -1087,6 +1087,7 @@ void TxVmButtonsFrame::readActionSelected(int buttonNumber)
     if (buttonNumSent != NO_VM_BUTTON_ON)
     {
         onVmStopClicked();
+        return;
 
     }
 
@@ -2528,6 +2529,7 @@ TxVoiceMemButton::TxVoiceMemButton(QToolButton *b, TxVmButtonsFrame *tvmbf, int 
     vmButton->setToolButtonStyle(Qt::ToolButtonTextOnly);
     vmButton->setPopupMode(QToolButton::MenuButtonPopup);
     vmButton->setFocusPolicy(Qt::NoFocus);
+    vmButton->setFixedHeight(vmButton->sizeHint().height());
 
     shortKey = new QShortcut(QKeySequence(vmButtonShortCutKeys[memNo]), vmButton);
 
