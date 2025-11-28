@@ -934,24 +934,17 @@ void TxVmButtonsFrame::onCwEntryReturnPressed()
             {
                 ui->cwEntry->selectAll();
 
+                buttonNumSent = CW_FREE_TEXT_BUTTON_NUMBER;
 
-                if (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl])
+                if (curMode != rigcommon::convertModeToQString(MODE::CW) && txVoiceKeyer->getSetCwModeAndRestoreFlag())
                 {
-
-                    buttonNumSent = CW_FREE_TEXT_BUTTON_NUMBER;
-
-                    if (curMode != rigcommon::convertModeToQString(MODE::CW) && txVoiceKeyer->getSetCwModeAndRestoreFlag())
-                    {
-                        savedMode = curMode;
-                        sendModeToRadio(rigcommon::convertModeToQString(MODE::CW));
-                    }
-                    else
-                    {
-                        savedMode = curMode;        // keep current mode if CW
-                    }
-
+                    savedMode = curMode;
+                    sendModeToRadio(rigcommon::convertModeToQString(MODE::CW));
                 }
-
+                else
+                {
+                    savedMode = curMode;        // keep current mode if CW
+                }
 
                 txVoiceKeyer->sendCwFreeTextMsg(message);
             }
@@ -1149,13 +1142,17 @@ bool TxVmButtonsFrame::checkRadioAndKeyerState()
     }
 
 
-    if (!getPttEnabled(selectedRadio))
+    if (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl] && voiceKeyerType == keyerTypes[VoiceKeyerId::RigControl])
     {
-        QString msg = tr("radio ptt is not enabled, please enable");
-        logMessage(QString(msg));
-        showTemporaryErrorMessage(msg, ERROR_MSG_TIMEOUT_DURATION);
-        return false;
+        if (!getPttEnabled(selectedRadio) )
+        {
+            QString msg = tr("radio ptt is not enabled, please enable");
+            logMessage(QString(msg));
+            showTemporaryErrorMessage(msg, ERROR_MSG_TIMEOUT_DURATION);
+            return false;
+        }
     }
+
 
 
     if (voiceKeyerType == keyerTypes[VoiceKeyerId::RigControl])
