@@ -2076,7 +2076,7 @@ void DMButtonFrame::setPttIndicatorGroupBoxVisible(bool visible)
 void DMButtonFrame::setErrorMessageVisible(bool visible)
 {
     ui->errorTitleLabel->setVisible(visible);
-    ui->errorMeassageDisplay->setVisible(visible);
+    ui->errorMessageDisplay->setVisible(visible);
 }
 
 
@@ -2084,17 +2084,17 @@ void DMButtonFrame::showTemporaryErrorMessage(const QString &msg, int timeoutMs,
 {
     setErrorMessageVisible(true);
     // Save the current stylesheet
-    QString oldStyle = ui->errorMeassageDisplay->styleSheet();
+    QString oldStyle = ui->errorMessageDisplay->styleSheet();
 
     // Set error color and text
-    ui->errorMeassageDisplay->setStyleSheet(QString("color: %1;").arg(colour.name()));
+    ui->errorMessageDisplay->setStyleSheet(QString("color: %1;").arg(colour.name()));
 
-    ui->errorMeassageDisplay->setText(msg);
+    ui->errorMessageDisplay->setText(msg);
 
     // Clear after timeoutMs milliseconds
     QTimer::singleShot(timeoutMs, this, [this, oldStyle]() {
-        ui->errorMeassageDisplay->clear();
-        ui->errorMeassageDisplay->setStyleSheet(oldStyle);
+        ui->errorMessageDisplay->clear();
+        ui->errorMessageDisplay->setStyleSheet(oldStyle);
         setErrorMessageVisible(false);
     });
 }
@@ -2104,12 +2104,12 @@ void DMButtonFrame::showTemporaryErrorMessage(const QString &msg, int timeoutMs,
 void DMButtonFrame::displayErrorMessage(QString msg)
 {
     setErrorMessageVisible(true);
-    ui->errorMeassageDisplay->setText(msg);
+    ui->errorMessageDisplay->setText(msg);
 }
 
 void DMButtonFrame::clearErrorMessage()
 {
-    ui->errorMeassageDisplay->clear();
+    ui->errorMessageDisplay->clear();
     setErrorMessageVisible(false);
 }
 
