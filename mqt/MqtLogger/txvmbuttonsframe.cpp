@@ -16,13 +16,13 @@
 #include "pccwmessagekeyer.h"
 #include "cwrigkeyervalidator.h"
 
-const char * VM_BUTTON_ON_STYLE =
-    "background-color: orange;"
-    "padding: 4px;";
 
-const char * VM_BUTTON_OFF_STYLE =
-    "background-color: Gainsboro;"
-    "padding: 4px;";
+const char * VM_BUTTON_ON_STYLE = "QToolButton { background-color: orange; }"
+                                     "QToolButton::menu-indicator { image: none; }";
+
+
+const char * VM_BUTTON_OFF_STYLE = "QToolButton { background-color: white; }"
+                                     "QToolButton::menu-indicator { image: none; }";
 
 const int NO_VM_BUTTON_ON = -1;
 const int CW_FREE_TEXT_BUTTON_NUMBER = 13;
@@ -628,6 +628,9 @@ void TxVmButtonsFrame::setFrameState(QString voiceKeyerName)
 
     ui->sAndPLabel->clear();
 
+    // set buttons to centre
+    setButtonsJustification(false);
+
     if (cwSpeedSlider)
     {
         ui->cwSpeedSliderHorizontalLayout->removeWidget(cwSpeedSlider);
@@ -719,6 +722,13 @@ void TxVmButtonsFrame::setFrameState(QString voiceKeyerName)
             txVoiceKeyer->setCwMemType(getCwMemType(selectedRadio));
             ui->sAndPLabel->setText("| S&P");       // init S&P/Run Label
             txVoiceKeyer->setContest(ct);
+
+            // do we need to left justify the buttons
+            if (getVmButtonsLeftJustifyFlag(VOICEKEYER_COMMON_PARAMS_FILENAME))
+            {
+                setButtonsJustification(true);
+
+            }
         }
 
         if (voiceKeyerType == keyerTypes[VoiceKeyerId::PcCwKeyer])
@@ -820,6 +830,25 @@ void TxVmButtonsFrame::setFrameState(QString voiceKeyerName)
     }
 }
 
+void TxVmButtonsFrame::setButtonsJustification(bool leftJustify)
+{
+    if (leftJustify)
+    {
+        // Left justify - collapse left spacers
+        ui->vmButtonsLeftSpacer->changeSize(0, 0, QSizePolicy::Fixed, QSizePolicy::Fixed);
+        ui->stopButtonLeftSpacer->changeSize(0, 0, QSizePolicy::Fixed, QSizePolicy::Fixed);
+    }
+    else
+    {
+        // Center - restore left spacers
+        ui->vmButtonsLeftSpacer->changeSize(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+        ui->stopButtonLeftSpacer->changeSize(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+    }
+
+    ui->vmButtonsHorizLayout->invalidate();
+    ui->stopButtonHorizLayout->invalidate();
+}
+
 
 void TxVmButtonsFrame::initCwTextEntryBox(QString radioManufacturer, QString fileName)
 {
@@ -905,24 +934,17 @@ void TxVmButtonsFrame::onCwEntryReturnPressed()
             {
                 ui->cwEntry->selectAll();
 
+                buttonNumSent = CW_FREE_TEXT_BUTTON_NUMBER;
 
-                if (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl])
+                if (curMode != rigcommon::convertModeToQString(MODE::CW) && txVoiceKeyer->getSetCwModeAndRestoreFlag())
                 {
-
-                    buttonNumSent = CW_FREE_TEXT_BUTTON_NUMBER;
-
-                    if (curMode != rigcommon::convertModeToQString(MODE::CW) && txVoiceKeyer->getSetCwModeAndRestoreFlag())
-                    {
-                        savedMode = curMode;
-                        sendModeToRadio(rigcommon::convertModeToQString(MODE::CW));
-                    }
-                    else
-                    {
-                        savedMode = curMode;        // keep current mode if CW
-                    }
-
+                    savedMode = curMode;
+                    sendModeToRadio(rigcommon::convertModeToQString(MODE::CW));
                 }
-
+                else
+                {
+                    savedMode = curMode;        // keep current mode if CW
+                }
 
                 txVoiceKeyer->sendCwFreeTextMsg(message);
             }
@@ -1087,6 +1109,7 @@ void TxVmButtonsFrame::readActionSelected(int buttonNumber)
     if (buttonNumSent != NO_VM_BUTTON_ON)
     {
         onVmStopClicked();
+        return;
 
     }
 
@@ -1119,13 +1142,17 @@ bool TxVmButtonsFrame::checkRadioAndKeyerState()
     }
 
 
-    if (!getPttEnabled(selectedRadio))
+    if (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl] && voiceKeyerType == keyerTypes[VoiceKeyerId::RigControl])
     {
-        QString msg = tr("radio ptt is not enabled, please enable");
-        logMessage(QString(msg));
-        showTemporaryErrorMessage(msg, ERROR_MSG_TIMEOUT_DURATION);
-        return false;
+        if (!getPttEnabled(selectedRadio) )
+        {
+            QString msg = tr("radio ptt is not enabled, please enable");
+            logMessage(QString(msg));
+            showTemporaryErrorMessage(msg, ERROR_MSG_TIMEOUT_DURATION);
+            return false;
+        }
     }
+
 
 
     if (voiceKeyerType == keyerTypes[VoiceKeyerId::RigControl])
@@ -2528,6 +2555,7 @@ TxVoiceMemButton::TxVoiceMemButton(QToolButton *b, TxVmButtonsFrame *tvmbf, int 
     vmButton->setToolButtonStyle(Qt::ToolButtonTextOnly);
     vmButton->setPopupMode(QToolButton::MenuButtonPopup);
     vmButton->setFocusPolicy(Qt::NoFocus);
+    vmButton->setFixedHeight(vmButton->sizeHint().height());
 
     shortKey = new QShortcut(QKeySequence(vmButtonShortCutKeys[memNo]), vmButton);
 
