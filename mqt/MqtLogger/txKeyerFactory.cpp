@@ -22,6 +22,7 @@
 #include "pccwmessagekeyer.h"
 #include "InternalVoiceTxKeyer.h"
 #include "ExternalMqtKeyer.h"
+#include "winkeyertxkeyer.h"
 #include "tlogcontainer.h"
 #include "SendRPCDM.h"
 
@@ -34,6 +35,7 @@ TxKeyerFactory::TxKeyerFactory(QObject *parent) : QObject(parent)
     PcCWMessageKeyer::registerTxKeyer(&txKeyersList);
     InternalVoiceTxKeyer::registerTxKeyer(&txKeyersList);
     ExternalMqtKeyer::registerTxKeyer(&txKeyersList);
+    WinKeyerTxKeyer::registerTxKeyer(&txKeyersList);
 }
 
 
@@ -75,6 +77,10 @@ TxKeyerBase* TxKeyerFactory::createTxKeyer(int txKeyerId)
         {
             return new ExternalMqtKeyer(this);
         }*/
+    }
+    else if (txKeyerId == TxKeyerId::WinKeyer)
+    {
+        return new WinKeyerTxKeyer(this);
     }
 
     return nullptr;

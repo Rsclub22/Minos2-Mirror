@@ -146,7 +146,8 @@ SOURCES += \
     bandmapcallsignmarker.cpp \
     bandmapfreqdial.cpp	\
     bandmapview.cpp \
-    Clusterbandmapconfigure.cpp
+    Clusterbandmapconfigure.cpp \
+    winkeyertxkeyer.cpp
 
 
 
@@ -254,7 +255,8 @@ HEADERS  += \
     bandmapcallsignmarker.h \
     bandmapfreqdial.h	\
     bandmapview.h \
-    Clusterbandmapconfigure.h
+    Clusterbandmapconfigure.h \
+    winkeyertxkeyer.h
 
 FORMS    += \
     BandsSelect.ui \

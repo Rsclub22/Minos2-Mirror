@@ -89,8 +89,8 @@ QString AntennaDetail::pack() const
     jv.insert(rpcConstants::skyScanVisible, skyScanVisible().getValue());
     jv.insert(rpcConstants::skyScanStartBearing, skyScanStartBearing().getValue());
     jv.insert(rpcConstants::skyScanEndBearing, skyScanEndBearing().getValue());
-    jv.insert(rpcConstants::skyScanRotatorStartBearimg, skyScanRotatorStartBearing().getValue());
-    jv.insert(rpcConstants::skyScanRotatorEndBearimg, skyScanRotatorEndBearing().getValue());
+    jv.insert(rpcConstants::skyScanRotatorStartBearing, skyScanRotatorStartBearing().getValue());
+    jv.insert(rpcConstants::skyScanRotatorEndBearing, skyScanRotatorEndBearing().getValue());
 
     QJsonDocument json(jv);
 
@@ -114,8 +114,8 @@ void AntennaDetail::unpack(QString s)
         _skyScanVisible.setValue(json.object().value(rpcConstants::skyScanVisible).toBool());
         _skyScanStartBearing.setValue(json.object().value(rpcConstants::skyScanStartBearing).toInt());
         _skyScanEndBearing.setValue(json.object().value(rpcConstants::skyScanEndBearing).toInt());
-        _skyScanRotatorStartBearing.setValue(json.object().value(rpcConstants::skyScanRotatorStartBearimg).toInt());
-        _skyScanRotatorEndBearing.setValue(json.object().value(rpcConstants::skyScanRotatorEndBearimg).toInt());
+        _skyScanRotatorStartBearing.setValue(json.object().value(rpcConstants::skyScanRotatorStartBearing).toInt());
+        _skyScanRotatorEndBearing.setValue(json.object().value(rpcConstants::skyScanRotatorEndBearing).toInt());
     }
     else
     {

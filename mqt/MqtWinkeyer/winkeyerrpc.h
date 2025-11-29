@@ -21,43 +21,46 @@
 
 
 
-#include <QObject>
-#include <QObject>
-#include "XMPPRPCObj.h"
+#include "MinosRPC.h"
 #include "AnalysePubSubNotify.h"
+
 #include "winKeyerCommon.h"
 
 
-static bool syncstat = false;
+
 
 class WinkeyerRpc : public QObject
 {
     Q_OBJECT
 public:
 
-    static const char * winkeyerServerStateIndicator[];
-    static const char * stateList[];
 
     explicit WinkeyerRpc();
     virtual ~WinkeyerRpc();
 
-    static WinkeyerRpc *getWinkeyerRpc();
+
+    void publishState( const QString &comport, const QString &state, const QString &errorMsg );
+
+    int getServerListCount();
+    void publishPttEnable(const bool state);
+    void publishTxOn(const QString txOn);
+
+    void publishWpm(const int wpm);
 
 signals:
 
-    //void winkeyerMsg(QrzServerMessage);
-    //void loggerWinkeyerMsg(QrzServerMessage);
+    void cwMessageFromLoggerToKeyer(QString);
+    void cwStopCommandFromLogger(QString);
+    void wpmFromLog(int);
 
-private:
 
-    static WinkeyerRpc *winkeyerServerRpc;
-    QVector<WinkeyerServer> serverList;
 
 private slots:
 
+    void on_notify(AnalysePubSubNotify an, const QString);
     void on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString from);
+    void on_provider(Provider provider, QString cat);
 
-    void on_notify(AnalysePubSubNotify an, const QString );
 
 
 };
