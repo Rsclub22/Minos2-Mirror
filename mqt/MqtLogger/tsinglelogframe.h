@@ -23,6 +23,7 @@
 #include "qsomapframe.h"
 #include "rotatorcompassframe.h"
 #include "skyscanpresetsframe.h"
+#include "dmkeyercontainer.h"
 
 namespace Ui {
 class TSingleLogFrame;
@@ -78,7 +79,8 @@ public:
 
     QSOMapFrame *qsoMapFrame = nullptr;
 
-    DMButtonFrame *dmButtonFrame = nullptr;
+    //DMButtonFrame *dmButtonFrame = nullptr;
+    DMKeyerContainer *dmKeyerContainer;
 
     void buildRow(ContestPage *cp, SCRow &scrow, int &auxInstance, MinosSplitter *splitterParent);
 

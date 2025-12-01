@@ -189,7 +189,7 @@ int InternalVoiceTxKeyer::setup(TxKeyerFactory *txKeyerFactory, int &maxNumButto
     TxKeyerCapabilities voiceCap = txKeyerFactory->supportedTxKeyers()->value("internal");
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
 
-    txVmInternalSetupDialog txvmSetup(voiceCap, maxNumButtons, numButtons, tslf->dmButtonFrame);
+    txVmInternalSetupDialog txvmSetup(voiceCap, maxNumButtons, numButtons, tslf->dmKeyerContainer);
     txvmSetup.setWindowTitle(tr("Internal Voice Memory Setup"));
 
     int ret = txvmSetup.exec();

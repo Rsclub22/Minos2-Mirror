@@ -123,7 +123,7 @@ void TSingleLogFrame::buildFrame(int slotNo)
     connect(FKHRigControlFrame, &RigControlFrame::ritStatus, this, &TSingleLogFrame::sendRadioRitStatus);
     connect(FKHRigControlFrame, &RigControlFrame::sendModeToControl, this, &TSingleLogFrame::sendRadioMode);
     connect(GJVQSOLogFrame, &QSOLogFrame::sendModeControl, this , &TSingleLogFrame::sendRadioMode);
-    connect(dmButtonFrame, &DMButtonFrame::sendFreqControl, this, &TSingleLogFrame::sendRadioFreq);
+    connect(dmKeyerContainer, &DMKeyerContainer::sendFreqControl, this, &TSingleLogFrame::sendRadioFreq);
 
     // Rotator updates
     // From rotator controller
@@ -181,8 +181,8 @@ void TSingleLogFrame::buildFrame(int slotNo)
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::QRZInfoToLog, this, &TSingleLogFrame::onQrzInfoToLog );
 
     // from tx Voice Memory Panel
-    connect(dmButtonFrame, &DMButtonFrame::sendRadioMode, this, &TSingleLogFrame::sendRadioMode);
-    connect(dmButtonFrame, &DMButtonFrame::sendWpmToPcCwkeyer, this, &TSingleLogFrame::sendPcKeyerCwWpm);
+    connect(dmKeyerContainer, &DMKeyerContainer::sendModeToRadio, this, &TSingleLogFrame::sendRadioMode);
+    connect(dmKeyerContainer, &DMKeyerContainer::sendWpmToPcCwkeyer, this, &TSingleLogFrame::sendPcKeyerCwWpm);
 
     connect(FKHRigControlFrame, &RigControlFrame::radioIsConnected, this, &TSingleLogFrame::sendBandmapRadioIsConnected);
     connect(FKHRigControlFrame, &RigControlFrame::radioHasError, this, &TSingleLogFrame::sendBandmapRadioHasError);
@@ -383,13 +383,21 @@ void TSingleLogFrame::createScreenComponents()
     qsoMapFrame->setFrameShadow(QFrame::Raised);
 
     qsoMapFrame->setVisible(false);
-
+/*
     dmButtonFrame = new DMButtonFrame(this);
     dmButtonFrame->setObjectName(QStringLiteral("DMButtonFrame"));
     dmButtonFrame->setFrameShape(QFrame::StyledPanel);
     dmButtonFrame->setFrameShadow(QFrame::Raised);
 
     dmButtonFrame->setVisible(false);
+
+*/
+    // This Cw/Voice/Data Keyer panel
+    dmKeyerContainer = new DMKeyerContainer(this);
+    dmKeyerContainer->setObjectName(QStringLiteral("DMKeyerContainer"));
+    dmKeyerContainer->setVisible(false);
+
+
 }
 void TSingleLogFrame::clearScreenLayout(bool clearAllTabs)
 {
@@ -431,7 +439,7 @@ void TSingleLogFrame::clearScreenLayout(bool clearAllTabs)
     clusterControlFrame->setContest(nullptr);
     bandmapControlFrame->setContest(nullptr);
     qsoMapFrame->setContest(nullptr, false, false, false, false, false, QString(), QString(), false);
-    dmButtonFrame->setContest(nullptr);
+    dmKeyerContainer->setContest(nullptr);
 
     setBandmapLoaded(false);
     setQrzDisplayFrameLoaded(false);
@@ -507,8 +515,8 @@ void TSingleLogFrame::clearScreenLayout(bool clearAllTabs)
         qsoMapFrame->setParent(this);
         qsoMapFrame->hide();
 
-        dmButtonFrame->setParent(this);
-        dmButtonFrame->hide();
+        dmKeyerContainer->setParent(this);
+        dmKeyerContainer->hide();
 
         if (clearAllTabs)
         {
@@ -807,8 +815,8 @@ void TSingleLogFrame::buildRow(ContestPage *cp, SCRow &scrow, int &auxInstance, 
                 }
                 case sctDMButtons:
                 {
-                    elementScrollArea->setWidget(dmButtonFrame);
-                    dmButtonFrame->setVisible(true);
+                    elementScrollArea->setWidget(dmKeyerContainer);
+                    dmKeyerContainer->setVisible(true);
                     // don't set contest here
                     break;
                 }
@@ -945,7 +953,7 @@ void TSingleLogFrame::buildScreenLayout(int slotNo)
     FKHRotControlFrame->setContest(ct);
     FKHRotCompassFrame->setContest(ct);
     skyScanControlFrame->setContest(ct);
-    dmButtonFrame->setContest(ct);
+    dmKeyerContainer->setContest(ct);
     bandmapControlFrame->setContest(ct);
     runButtonsFrame->setContest(ct);
 
@@ -1837,7 +1845,7 @@ void TSingleLogFrame::on_SetMode(QString m)
         sCurMode = m;
         FKHRigControlFrame->setMode(m);
         GJVQSOLogFrame->modeSentFromRig(m);
-        dmButtonFrame->setMode(m);
+        dmKeyerContainer->setMode(m);
         bandmapControlFrame->setMode(m);
         bandmapControlFrame->checkLegalFrequencies(sCurFreq);
     }
@@ -1886,7 +1894,7 @@ void TSingleLogFrame::updateFreq(Frequency f)
     runButtonsFrame->setFreq(f);
     GJVQSOLogFrame->setFreq(f);
     bandmapControlFrame->setFreq(f);
-    dmButtonFrame->setFreq(f);
+    dmKeyerContainer->setFreq(f);
 
     MinosLoggerEvents::SendRigFreqChanged(f, contest);
 }
@@ -1942,9 +1950,9 @@ void TSingleLogFrame::onLogRadioSettingsChanged(QSharedPointer<RadioSettingsDial
         FKHRigControlFrame->logRadioSettingsChanged(logRadioSettingsFlags);
     }
 
-    if (dmButtonFrame)
+    if (dmKeyerContainer)
     {
-        dmButtonFrame->logRadioSettingsChanged(logRadioSettingsFlags);
+        dmKeyerContainer->logRadioSettingsChanged(logRadioSettingsFlags);
     }
 
     if (runButtonsFrame)
@@ -2002,19 +2010,19 @@ void TSingleLogFrame::on_SetBandList(QString s,PubSubName psn)
 
 void TSingleLogFrame::onSetPttEnabled(bool state, PubSubName psn)
 {
-    dmButtonFrame->setPttEnabled(state, psn);
+    dmKeyerContainer->setPttEnabled(state, psn);
 }
 
 void TSingleLogFrame::onSetPttType(int type, PubSubName psn)
 {
-    dmButtonFrame->setPttType(type, psn);
+    dmKeyerContainer->setPttType(type, psn);
 }
 
 void TSingleLogFrame::on_SetPttState(bool state)
 {
     if ( this == LogContainer->getCurrentLogFrame() )
     {
-        dmButtonFrame->setRadioPttState(state);
+        dmKeyerContainer->setRadioPttState(state);
     }
 }
 void TSingleLogFrame::setCallPlaceholder(QString call)
@@ -2031,14 +2039,14 @@ void TSingleLogFrame::onSetVoiceMemAvail(bool avail, PubSubName psn)
 {
     if ( this == LogContainer->getCurrentLogFrame() )
     {
-        dmButtonFrame->setVoiceMemAvail(avail, psn);
+        dmKeyerContainer->setVoiceMemAvail(avail, psn);
     }
 }
 void TSingleLogFrame::onSetRigModel(QString rigModel, PubSubName psn)
 {
     if ( this == LogContainer->getCurrentLogFrame() )
     {
-        dmButtonFrame->setRigModel(rigModel, psn);
+        dmKeyerContainer->setRigModel(rigModel, psn);
     }
 }
 
@@ -2046,7 +2054,7 @@ void TSingleLogFrame::onSetNumVoiceMessages(int numMsgs, PubSubName psn)
 {
     if ( this == LogContainer->getCurrentLogFrame() )
     {
-        dmButtonFrame->setNumVoiceMessages(numMsgs, psn);
+        dmKeyerContainer->setNumVoiceMessages(numMsgs, psn);
     }
 }
 
@@ -2054,7 +2062,7 @@ void TSingleLogFrame::onSetCwMemType(int cwMemType, PubSubName psn)
 {
     if ( this == LogContainer->getCurrentLogFrame() )
     {
-        dmButtonFrame->setCwMemType(cwMemType, psn);
+        dmKeyerContainer->setCwMemType(cwMemType, psn);
     }
 }
 
@@ -2064,7 +2072,7 @@ void TSingleLogFrame::onRigVoiceKeyerMessageSupportStop(bool supportStopCmd, Pub
     {
         if ( this == LogContainer->getCurrentLogFrame() )
         {
-            dmButtonFrame->setRigVoiceKeyerSupportStopFlag(supportStopCmd, psn);
+            dmKeyerContainer->setRigVoiceKeyerSupportStopFlag(supportStopCmd, psn);
         }
     }
 }
@@ -2075,7 +2083,7 @@ void TSingleLogFrame::onRigCwKeyerMessageSupportStop(bool supportStopCmd, PubSub
     {
         if ( this == LogContainer->getCurrentLogFrame() )
         {
-            dmButtonFrame->setRigCwKeyerSupportStopFlag(supportStopCmd, psn);
+            dmKeyerContainer->setRigCwKeyerSupportStopFlag(supportStopCmd, psn);
         }
     }
 }
@@ -2588,32 +2596,32 @@ void TSingleLogFrame::setQrzDisplayFrameLoaded(bool loaded)
 
 void TSingleLogFrame::onPcCwKeyerComport(QString comportStr)
 {
-    dmButtonFrame->setPcCwKeyerComport(comportStr);
+    dmKeyerContainer->setPcCwKeyerComport(comportStr);
 }
 
 void TSingleLogFrame::onPcCwKeyerConnectionState(QString stateStr)
 {
-    dmButtonFrame->setPcCwKeyerConnectionState(stateStr);
+    dmKeyerContainer->setPcCwKeyerConnectionState(stateStr);
 }
 
 void TSingleLogFrame::onPcCwKeyerErrorMsg(QString errorMsg)
 {
-    dmButtonFrame->setPcCwKeyerErrorMsg(errorMsg);
+    dmKeyerContainer->setPcCwKeyerErrorMsg(errorMsg);
 }
 
 void TSingleLogFrame::onPcCwKeyerPttEnabled(QString enabled)
 {
-    dmButtonFrame->setPcCwKeyerPttEnabled(enabled);
+    dmKeyerContainer->setPcCwKeyerPttEnabled(enabled);
 }
 
 void TSingleLogFrame::onPcCwKeyerTxOn(QString state)
 {
-    dmButtonFrame->setPcCwKeyerTxOnState(state);
+    dmKeyerContainer->setPcCwKeyerTxOnState(state);
 }
 
 void TSingleLogFrame::onPcCwKeyerCurrentWpm(QString wpm)
 {
-    dmButtonFrame->setPcCwKeyerCurrentWpm(wpm);
+    dmKeyerContainer->setPcCwKeyerCurrentWpm(wpm);
 }
 
 void TSingleLogFrame::traceMsg(QString msg)

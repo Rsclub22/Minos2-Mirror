@@ -1,0 +1,743 @@
+// DMKeyerContainer.cpp
+#include "DMKeyerContainer.h"
+#include "LoggerContest.h"
+#include "ContestApp.h"
+#include "MShowMessageDlg.h"
+#include <QInputDialog>
+#include <QMessageBox>
+#include <QSettings>
+
+//=============================================================================
+// KeyerTab Implementation
+//=============================================================================
+
+KeyerTab::KeyerTab(const QString &keyerType_,
+                   TxKeyerFactory *factory,
+                   QWidget *parent)
+    : QWidget(parent)
+    , keyerType(keyerType_)
+    , active(false)
+    , buttonFrame(nullptr)
+{
+    layout = new QVBoxLayout(this);
+    layout->setContentsMargins(0, 0, 0, 0);
+
+    // Create a DMButtonFrame in "tab mode" - without combo box
+    buttonFrame = new DMButtonFrame(this);
+
+    // Set the keyer type for this frame (it won't show combo box)
+    buttonFrame->setFixedKeyerType(keyerType);
+
+    layout->addWidget(buttonFrame);
+}
+
+KeyerTab::~KeyerTab()
+{
+    // buttonFrame deleted by Qt parent-child relationship
+}
+
+void KeyerTab::setActive(bool active_)
+{
+    active = active_;
+}
+
+void KeyerTab::setContest(BaseContestLog *contest)
+{
+    if (buttonFrame) {
+        buttonFrame->setContest(contest);
+    }
+}
+
+void KeyerTab::setSelectedRadio(PubSubName radio)
+{
+    if (buttonFrame) {
+        buttonFrame->setSelectedRadio(radio);
+    }
+}
+
+void KeyerTab::setRadioIsConnected(bool connected)
+{
+    if (buttonFrame) {
+        buttonFrame->setRadioIsConnected(connected);
+    }
+}
+
+//=============================================================================
+// DMKeyerContainer Implementation
+//=============================================================================
+
+DMKeyerContainer::DMKeyerContainer(QWidget *parent, ContainerMode mode)
+    : QWidget(parent)
+    , standaloneFrame(nullptr)
+    , tabbedWidget(nullptr)
+    , tabWidget(nullptr)
+    , activeTab(nullptr)
+    , currentMode(StandaloneMode)
+    , currentContest(nullptr)
+    , keyerSettings(new KeyerSettings)
+{
+    mainLayout = new QVBoxLayout(this);
+
+    // Create factory
+    txKeyerFactory = new TxKeyerFactory(this);
+
+    // Create toolbar
+    toolbarLayout = new QHBoxLayout();
+
+    modeToggleButton = new QPushButton(this);
+    modeToggleButton->setToolTip(tr("Switch between single keyer and tabbed view"));
+    toolbarLayout->addWidget(modeToggleButton);
+
+    addKeyerButton = new QPushButton(tr("Add Keyer"), this);
+    addKeyerButton->setToolTip(tr("Add a new keyer tab"));
+    toolbarLayout->addWidget(addKeyerButton);
+
+    toolbarLayout->addStretch();
+
+    mainLayout->addLayout(toolbarLayout);
+
+    // Create stacked widget to hold both modes
+    stackedWidget = new QStackedWidget(this);
+    mainLayout->addWidget(stackedWidget);
+
+    // Create standalone mode widget
+    standaloneFrame = new DMButtonFrame(keyerSettings, this);
+    setupFrameConnections(standaloneFrame);
+    stackedWidget->addWidget(standaloneFrame);
+
+    // Create tabbed mode widget
+    tabbedWidget = new QWidget(this);
+    tabbedLayout = new QVBoxLayout(tabbedWidget);
+    tabbedLayout->setContentsMargins(0, 0, 0, 0);
+
+    tabWidget = new QTabWidget(tabbedWidget);
+    tabWidget->setTabsClosable(true);
+    tabWidget->setMovable(true);
+    tabbedLayout->addWidget(tabWidget);
+
+    stackedWidget->addWidget(tabbedWidget);
+
+    // Connections
+    connect(modeToggleButton, &QPushButton::clicked,
+            this, &DMKeyerContainer::onModeToggleClicked);
+    connect(addKeyerButton, &QPushButton::clicked,
+            this, &DMKeyerContainer::onAddKeyerClicked);
+    connect(tabWidget, &QTabWidget::currentChanged,
+            this, &DMKeyerContainer::onTabChanged);
+    connect(tabWidget, &QTabWidget::tabCloseRequested,
+            this, &DMKeyerContainer::onTabCloseRequested);
+
+    // Set initial mode
+    setMode(mode);
+}
+
+DMKeyerContainer::~DMKeyerContainer()
+{
+}
+
+void DMKeyerContainer::setMode(ContainerMode mode)
+{
+    if (mode == currentMode) {
+        return;
+    }
+
+    currentMode = mode;
+
+    if (mode == StandaloneMode) {
+        switchToStandaloneMode();
+    } else {
+        switchToTabbedMode();
+    }
+
+    updateModeButton();
+    emit modeChanged(mode);
+}
+
+void DMKeyerContainer::switchToStandaloneMode()
+{
+    stackedWidget->setCurrentWidget(standaloneFrame);
+    addKeyerButton->setVisible(false);
+
+    // Transfer state from active tab if exists
+    if (activeTab && activeTab->getFrame()) {
+        // Could optionally transfer settings here
+    }
+}
+
+void DMKeyerContainer::switchToTabbedMode()
+{
+    stackedWidget->setCurrentWidget(tabbedWidget);
+    addKeyerButton->setVisible(true);
+
+    // If no tabs exist, create one with the current keyer from standalone
+    if (tabWidget->count() == 0) {
+        QString currentKeyer = standaloneFrame->getCurrentKeyerType();
+        if (!currentKeyer.isEmpty()) {
+            addKeyerTab(currentKeyer);
+        }
+    }
+}
+
+void DMKeyerContainer::updateModeButton()
+{
+    if (currentMode == StandaloneMode) {
+        modeToggleButton->setText(tr("Switch to Tabs"));
+        modeToggleButton->setIcon(QIcon(":/icons/tabs.png")); // Optional
+    } else {
+        modeToggleButton->setText(tr("Switch to Single"));
+        modeToggleButton->setIcon(QIcon(":/icons/single.png")); // Optional
+    }
+}
+
+void DMKeyerContainer::onModeToggleClicked()
+{
+    if (currentMode == StandaloneMode) {
+        setMode(TabbedMode);
+    } else {
+        setMode(StandaloneMode);
+    }
+
+    // Save preference
+    QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() +
+                       VOICEKEYER_COMMON_PARAMS_FILENAME;
+    QSettings config(fileName, QSettings::IniFormat);
+    config.beginGroup(VOICEKEYER_COMMON_PARAMS_GROUPNAME);
+    config.setValue("ContainerMode", currentMode == TabbedMode ? "Tabbed" : "Standalone");
+    config.endGroup();
+}
+
+DMButtonFrame* DMKeyerContainer::getActiveFrame() const
+{
+    if (currentMode == StandaloneMode) {
+        return standaloneFrame;
+    } else {
+        if (activeTab) {
+            return activeTab->getFrame();
+        }
+        return nullptr;
+    }
+}
+
+void DMKeyerContainer::addKeyerTab(const QString &keyerType)
+{
+    if (currentMode != TabbedMode) {
+        return;
+    }
+
+    if (keyerType.isEmpty()) {
+        return;
+    }
+
+    // Check if already in use
+    if (isKeyerTypeInUse(keyerType)) {
+        QMessageBox::information(this, tr("Keyer Already Open"),
+                                 tr("This keyer type is already open in another tab."));
+        return;
+    }
+
+    // Create new keyer tab
+    KeyerTab *newTab = createKeyerTab(keyerType);
+    if (!newTab) {
+        return;
+    }
+
+    // Generate tab name
+    QString tabName = getUniqueTabName(keyerType);
+
+    // Add tab
+    int index = tabWidget->addTab(newTab, tabName);
+    tabWidget->setCurrentIndex(index);
+
+    // Track this keyer type
+    keyerTypesInUse[keyerType] = newTab;
+
+    // If this is the first tab, make it active
+    if (tabWidget->count() == 1) {
+        updateActiveTab(newTab);
+    }
+
+    // Forward current settings
+    if (currentContest) {
+        newTab->setContest(currentContest);
+    }
+}
+
+void DMKeyerContainer::onAddKeyerClicked()
+{
+    if (currentMode != TabbedMode) {
+        return;
+    }
+
+    // Get available keyer types
+    QStringList availableTypes = getAvailableKeyerTypes();
+
+    if (availableTypes.isEmpty()) {
+        QMessageBox::information(this, tr("No Keyers Available"),
+                                 tr("All available keyer types are already in use."));
+        return;
+    }
+
+    // Show selection dialog
+    bool ok;
+    QString selectedType = QInputDialog::getItem(
+        this,
+        tr("Add Keyer"),
+        tr("Select keyer type:"),
+        availableTypes,
+        0,
+        false,
+        &ok
+        );
+
+    if (!ok || selectedType.isEmpty()) {
+        return;
+    }
+
+    addKeyerTab(selectedType);
+}
+
+void DMKeyerContainer::onTabChanged(int index)
+{
+    if (currentMode != TabbedMode) {
+        return;
+    }
+
+    if (index < 0 || index >= tabWidget->count()) {
+        updateActiveTab(nullptr);
+        return;
+    }
+
+    KeyerTab *tab = qobject_cast<KeyerTab*>(tabWidget->widget(index));
+    updateActiveTab(tab);
+}
+
+void DMKeyerContainer::onTabCloseRequested(int index)
+{
+    if (currentMode != TabbedMode) {
+        return;
+    }
+
+    if (index < 0 || index >= tabWidget->count()) {
+        return;
+    }
+
+    KeyerTab *tab = qobject_cast<KeyerTab*>(tabWidget->widget(index));
+    if (!tab) {
+        return;
+    }
+
+    // Don't allow closing the last tab
+    if (tabWidget->count() == 1) {
+        QMessageBox::information(this, tr("Cannot Close"),
+                                 tr("Cannot close the last keyer tab. Switch to single mode instead."));
+        return;
+    }
+
+    // Confirm closure
+    QMessageBox::StandardButton reply = QMessageBox::question(
+        this,
+        tr("Close Keyer Tab"),
+        tr("Close keyer tab '%1'?").arg(tab->getKeyerType()),
+        QMessageBox::Yes | QMessageBox::No
+        );
+
+    if (reply != QMessageBox::Yes) {
+        return;
+    }
+
+    // Remove from tracking
+    keyerTypesInUse.remove(tab->getKeyerType());
+
+    // If this was active, clear it
+    if (tab == activeTab) {
+        activeTab = nullptr;
+    }
+
+    // Remove tab
+    tabWidget->removeTab(index);
+    tab->deleteLater();
+
+    // Update active to current tab
+    int currentIndex = tabWidget->currentIndex();
+    if (currentIndex >= 0) {
+        KeyerTab *newActiveTab = qobject_cast<KeyerTab*>(
+            tabWidget->widget(currentIndex));
+        updateActiveTab(newActiveTab);
+    }
+}
+
+void DMKeyerContainer::removeCurrentTab()
+{
+    if (currentMode != TabbedMode) {
+        return;
+    }
+
+    int currentIndex = tabWidget->currentIndex();
+    if (currentIndex >= 0) {
+        onTabCloseRequested(currentIndex);
+    }
+}
+
+int DMKeyerContainer::getTabCount() const
+{
+    if (currentMode == TabbedMode) {
+        return tabWidget->count();
+    }
+    return 0;
+}
+
+KeyerTab* DMKeyerContainer::createKeyerTab(const QString &keyerType)
+{
+    KeyerTab *tab = new KeyerTab(keyerType, txKeyerFactory, this);
+
+    if (tab->getFrame()) {
+        setupFrameConnections(tab->getFrame());
+    }
+
+    return tab;
+}
+
+void DMKeyerContainer::updateActiveTab(KeyerTab *newActiveTab)
+{
+    if (activeTab) {
+        activeTab->setActive(false);
+    }
+
+    activeTab = newActiveTab;
+
+    if (activeTab) {
+        activeTab->setActive(true);
+    }
+}
+
+bool DMKeyerContainer::isKeyerTypeInUse(const QString &keyerType) const
+{
+    return keyerTypesInUse.contains(keyerType);
+}
+
+QString DMKeyerContainer::getUniqueTabName(const QString &keyerType) const
+{
+    return keyerType;
+}
+
+QStringList DMKeyerContainer::getAvailableKeyerTypes() const
+{
+    QStringList available;
+
+    const TxKeyerFactory::TxKeyers *keyers = txKeyerFactory->supportedTxKeyers();
+
+    for (auto it = keyers->constBegin(); it != keyers->constEnd(); ++it) {
+        const QString &keyerName = it.key();
+
+        if (keyerName.isEmpty()) {
+            continue;
+        }
+
+        // Skip if already in use
+        if (isKeyerTypeInUse(keyerName)) {
+            continue;
+        }
+
+        available.append(keyerName);
+    }
+
+    return available;
+}
+
+void DMKeyerContainer::setupFrameConnections(DMButtonFrame *frame)
+{
+    if (!frame)
+    {
+        return;
+    }
+
+    connect(frame, &DMButtonFrame::pttStatus, this, &DMKeyerContainer::pttStatus);
+    connect(frame, &DMButtonFrame::sendFreqControl, this, &DMKeyerContainer::sendFreqControl);
+    connect(frame, &DMButtonFrame::sendWpmToPcCwkeyer, this, &DMKeyerContainer::sendWpmToPcCwkeyer);
+    connect(frame, &DMButtonFrame::sendModeToRadio, this, &DMKeyerContainer::sendModeToRadio);
+}
+
+//=============================================================================
+// Forwarding Methods
+//=============================================================================
+
+void DMKeyerContainer::setContest(BaseContestLog *contest)
+{
+    currentContest = dynamic_cast<LoggerContestLog*>(contest);
+
+    keyerSettings->setContest(contest); // save in this frame
+
+    if (currentMode == StandaloneMode)
+    {
+        standaloneFrame->setContest(contest);
+    }
+    else
+    {
+        // Forward to all tabs
+        for (int i = 0; i < tabWidget->count(); ++i)
+        {
+            KeyerTab *tab = qobject_cast<KeyerTab*>(tabWidget->widget(i));
+            if (tab)
+            {
+                tab->setContest(contest);
+            }
+        }
+    }
+}
+
+void DMKeyerContainer::setSelectedRadio(PubSubName radio)
+{
+    if (radio != keyerSettings->getSelectedRadio())
+    {
+        keyerSettings->setSelectedRadio(radio);
+        emit selectedRadioChanged(radio);
+    }
+
+/*
+    if (currentMode == StandaloneMode)
+    {
+        standaloneFrame->setSelectedRadio(radio);
+    }
+    else
+    {
+        for (int i = 0; i < tabWidget->count(); ++i)
+        {
+            KeyerTab *tab = qobject_cast<KeyerTab*>(tabWidget->widget(i));
+            if (tab)
+            {
+                tab->setSelectedRadio(radio);
+            }
+        }
+    }
+*/
+}
+
+void DMKeyerContainer::setRadioIsConnected(bool connected)
+{
+
+    if (connected != keyerSettings->getIsRadioConnected())
+    {
+       keyerSettings->setIsRadioConnected(connected);
+        emit isRadioConnectedChanged(connected);
+    }
+
+ /*
+
+    if (currentMode == StandaloneMode)
+    {
+        standaloneFrame->setRadioIsConnected(connected);
+    }
+    else
+    {
+        for (int i = 0; i < tabWidget->count(); ++i)
+        {
+            KeyerTab *tab = qobject_cast<KeyerTab*>(tabWidget->widget(i));
+            if (tab)
+            {
+                tab->setRadioIsConnected(connected);
+            }
+        }
+    }
+*/
+}
+
+void DMKeyerContainer::setFreq(Frequency freq)
+{
+    if (freq != keyerSettings->getFreq())
+    {
+        keyerSettings->setFreq(freq);
+        emit radioFreqChanged(freq);
+    }
+
+ /*
+    if (currentMode == StandaloneMode)
+    {
+        standaloneFrame->setFreq(freq);
+    }
+    else
+    {
+        for (int i = 0; i < tabWidget->count(); ++i)
+        {
+            KeyerTab *tab = qobject_cast<KeyerTab*>(tabWidget->widget(i));
+            if (tab && tab->getFrame())
+            {
+                tab->getFrame()->setFreq(freq);
+            }
+        }
+    }
+*/
+}
+
+void DMKeyerContainer::setMode(const QString &mode)
+{
+    if (mode != keyerSettings->getRadioMode())
+    {
+        keyerSettings->setRadioMode(mode);
+        emit radioModeChanged(mode);
+    }
+
+ /*
+    if (currentMode == StandaloneMode)
+    {
+        standaloneFrame->onModeChange(mode);
+    }
+    else
+    {
+        for (int i = 0; i < tabWidget->count(); ++i)
+        {
+            KeyerTab *tab = qobject_cast<KeyerTab*>(tabWidget->widget(i));
+            if (tab && tab->getFrame())
+            {
+                tab->getFrame()->onModeChange(mode);
+            }
+        }
+    }
+*/
+}
+/*
+// Macro to forward to all frames
+#define FORWARD_TO_ALL_FRAMES(methodCall) \
+if (currentMode == StandaloneMode) { \
+        standaloneFrame->methodCall; \
+} else { \
+        for (int i = 0; i < tabWidget->count(); ++i) { \
+            KeyerTab *tab = qobject_cast<KeyerTab*>(tabWidget->widget(i)); \
+            if (tab && tab->getFrame()) { \
+                tab->getFrame()->methodCall; \
+        } \
+    } \
+}
+*/
+void DMKeyerContainer::setPttEnabled(bool state, PubSubName psn)
+{
+    if (state != keyerSettings->getPttEnabled(psn))
+    {
+        keyerSettings->setPttEnabled(state, psn);
+        emit pttEnabledChanged(state, psn);
+    }
+
+
+    //FORWARD_TO_ALL_FRAMES(setPttEnabled(state, psn));
+}
+
+void DMKeyerContainer::setPttType(int type, PubSubName psn)
+{
+
+    if (type != static_cast<int>(keyerSettings->getPttType(psn)))
+    {
+        keyerSettings->setPttType(type, psn);
+        emit pttTypeChanged(type, psn);
+    }
+
+    //FORWARD_TO_ALL_FRAMES(setPttType(type, psn));
+}
+
+void DMKeyerContainer::setVoiceMemAvail(bool avail, PubSubName psn)
+{
+    if (avail != keyerSettings->isVoiceMemAvail(psn))
+    {
+        keyerSettings->setVoiceMemAvail(avail, psn);
+        emit voiceMemAvailChanged(avail, psn);
+    }
+
+
+    //FORWARD_TO_ALL_FRAMES(setVoiceMemAvail(avail, psn));
+}
+
+void DMKeyerContainer::setRadioPttState(bool state)
+{
+    if (state != keyerSettings->getPttState())
+    {
+        keyerSettings->setPttState(state);
+        emit pttStateChanged(state);
+    }
+
+
+    //FORWARD_TO_ALL_FRAMES(setRadioPttState(state));
+}
+
+void DMKeyerContainer::setNumVoiceMessages(int numMsgs, PubSubName psn)
+{
+    if (numMsgs != keyerSettings->getNumVoiceMessages(psn))
+    {
+        keyerSettings->setNumVoiceMessages(numMsgs, psn);
+        emit numVoiceMessagesChanged(numMsgs, psn);
+    }
+
+    //FORWARD_TO_ALL_FRAMES(setNumVoiceMessages(numMsgs, psn));
+}
+
+void DMKeyerContainer::setRigModel(QString rigModel, PubSubName psn)
+{
+    if (rigModel != keyerSettings->getRigModel(psn))
+    {
+        keyerSettings->setRigModel(rigModel, psn);
+        emit rigModelChanged(rigModel, psn);
+    }
+
+    //FORWARD_TO_ALL_FRAMES(setRigModel(rigModel, psn));
+}
+
+void DMKeyerContainer::setCwMemType(int cwMemType, PubSubName psn)
+{
+    if (cwMemType != keyerSettings->getCwMemType(psn))
+    {
+       keyerSettings->setCwMemType(cwMemType, psn);
+        emit cwMemTypeChanged(cwMemType, psn);
+    }
+
+    //FORWARD_TO_ALL_FRAMES(setCwMemType(cwMemType, psn));
+}
+
+void DMKeyerContainer::setRigVoiceKeyerSupportStopFlag(bool supportStopCmd, PubSubName psn)
+{
+    if ( supportStopCmd != keyerSettings->getRigVoiceKeyerSupportStopFlag(psn))
+    {
+        keyerSettings->setRigVoiceKeyerSupportStopFlag(supportStopCmd, psn);
+        emit rigVoiceKeyerSupportStopFlagChanged(supportStopCmd, psn);
+
+    }
+
+
+    //FORWARD_TO_ALL_FRAMES(setRigVoiceKeyerSupportStopFlag(supportStopCmd, psn));
+}
+
+void DMKeyerContainer::setRigCwKeyerSupportStopFlag(bool supportStopCmd, PubSubName psn)
+{
+    FORWARD_TO_ALL_FRAMES(setRigCwKeyerSupportStopFlag(supportStopCmd, psn));
+}
+
+void DMKeyerContainer::setPcCwKeyerComport(QString comportStr)
+{
+    FORWARD_TO_ALL_FRAMES(setPcCwKeyerComport(comportStr));
+}
+
+void DMKeyerContainer::setPcCwKeyerConnectionState(QString stateStr)
+{
+    FORWARD_TO_ALL_FRAMES(setPcCwKeyerConnectionState(stateStr));
+}
+
+void DMKeyerContainer::setPcCwKeyerErrorMsg(QString errorMsg)
+{
+    FORWARD_TO_ALL_FRAMES(setPcCwKeyerErrorMsg(errorMsg));
+}
+
+void DMKeyerContainer::setPcCwKeyerPttEnabled(QString enabled)
+{
+    FORWARD_TO_ALL_FRAMES(setPcCwKeyerPttEnabled(enabled));
+}
+
+void DMKeyerContainer::setPcCwKeyerTxOnState(QString state)
+{
+    FORWARD_TO_ALL_FRAMES(setPcCwKeyerTxOnState(state));
+}
+
+void DMKeyerContainer::setPcCwKeyerCurrentWpm(QString wpm)
+{
+    FORWARD_TO_ALL_FRAMES(setPcCwKeyerCurrentWpm(wpm));
+}
+
+void DMKeyerContainer::logRadioSettingsChanged(QSharedPointer<RadioSettingsDialogChangeFlag> flags)
+{
+    FORWARD_TO_ALL_FRAMES(logRadioSettingsChanged(flags));
+}

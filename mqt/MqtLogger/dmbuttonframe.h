@@ -22,6 +22,7 @@ class QFileSystemWatcher;
 class LoggerContestLog;
 class BaseContestLog;
 class RigControlFrame;
+class KeyerSettings;
 
 namespace Ui {
 class DMButtonFrame;
@@ -77,7 +78,7 @@ class DMButtonFrame : public QFrame
     Q_OBJECT
 
 public:
-    explicit DMButtonFrame(QWidget *parent = nullptr);
+    explicit DMButtonFrame(QSharedPointer<KeyerSettings> keyerSettings_, QWidget *parent = nullptr);
     ~DMButtonFrame();
 
     void setContest(BaseContestLog *);
@@ -85,6 +86,9 @@ public:
     //QString parseFKeyMessage(QString mess);
     //void parseFKeyFile(QString sfname);
     void setFreq(Frequency f);
+
+    void setFixedKeyerType(const QString &keyerType);
+    QString getCurrentKeyerType() const;
 
     // tvVmButtonFrame
 
@@ -120,7 +124,9 @@ public:
     void setPcCwKeyerTxOnState(QString state);
     void setPcCwKeyerCurrentWpm(QString wpm);
 
+public slots:
 
+     void onModeChange(QString mode);
 
 
 //    void setRadioListFromTslf();
@@ -129,7 +135,7 @@ signals:
 
     // txVmButtonFrame
     void pttStatus(bool);
-    void sendRadioMode(QString m);
+    void sendModeToRadio(const QString m);
     void sendWpmToPcCwkeyer(int wpm);
 
 
@@ -150,7 +156,7 @@ private slots:
 
     void fkeyFileChanged();
     void DMMess(AnalysePubSubNotify an);
-    void onModeChange(QString mode);
+
     void on_fkeysetCombo_textActivated(const QString &arg1);
     //void onFkeysetComboSelected();
 
@@ -191,8 +197,13 @@ private:
     //Keys fkeys;
     KeyerMap allKeyConfigs;
 
+    bool fixedMode =false;
+    QString fixedKeyerType;
+
     QString dataSender;
     QString curMode;
+
+    QSharedPointer<KeyerSettings> keyerSettings;
 
     QSharedPointer<TxKeyerBase> txKeyer;
     TxKeyerFactory* txKeyerFactory;
@@ -263,7 +274,7 @@ private:
 
     void updateFrameState();
     void setTXStatusVisible(bool visible);
-    void sendModeToRadio(const QString m);
+    //void sendModeToRadio(const QString m);
     void checkButtonIniFileVersion(QString voiceKeyerType);
     void loadButtonData();
     void checkCommonIniFileVersion(QString voiceKeyerType);
@@ -344,6 +355,8 @@ private:
     void showTemporaryErrorMessage(const QString &msg, int timeoutMs, const QColor &colour = QColorConstants::Svg::red);
     bool checkRadioAndKeyerState();
 
+
+    void initKeyerSettings();
 };
 
 #endif // DMBUTTONFRAME_H

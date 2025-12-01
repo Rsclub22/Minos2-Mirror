@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>612</width>
-    <height>357</height>
+    <width>619</width>
+    <height>365</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -36,11 +36,24 @@
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_26">
           <item>
-           <layout class="QVBoxLayout" name="verticalLayout_5">
-            <item>
-             <widget class="QComboBox" name="txKeyerSelect"/>
-            </item>
-           </layout>
+           <widget class="QWidget" name="keyerSelectWidget" native="true">
+            <layout class="QHBoxLayout" name="horizontalLayout_5">
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_4">
+               <item>
+                <widget class="QLabel" name="keyerSelectLabel">
+                 <property name="text">
+                  <string>Keyer Type:</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QComboBox" name="txKeyerSelect"/>
+               </item>
+              </layout>
+             </item>
+            </layout>
+           </widget>
           </item>
           <item>
            <widget class="QGroupBox" name="keyerIndicatorGroupBox">

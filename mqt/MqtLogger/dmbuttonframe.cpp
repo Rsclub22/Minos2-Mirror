@@ -53,11 +53,15 @@ const int CW_FREE_TEXT_BUTTON_NUMBER = 13;
 
 const int ERROR_MSG_TIMEOUT_DURATION = 20000;
 
-DMButtonFrame::DMButtonFrame(QWidget *parent) :
+DMButtonFrame::DMButtonFrame(QSharedPointer<KeyerSettings> keyerSettings_, QWidget *parent) :
     QFrame(parent),
-    ui(new Ui::DMButtonFrame)
+    ui(new Ui::DMButtonFrame),
+    fixedMode(false),
+    keyerSettings(keyerSettings_)
 {
     ui->setupUi(this);
+
+    initKeyerSettings();   // get settings from container frame
 
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::fKey, this, &DMButtonFrame::fKey);
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::SandPChanged, this, &DMButtonFrame::sandPChanged);
@@ -401,8 +405,12 @@ void DMButtonFrame::onTxKeyerSelect(int idx)
 {
     Q_UNUSED(idx)
 
+    if (fixedMode) return;
+
+
     if (!notifyComboChange)
         return;
+
 
     QString txKeyerName = ui->txKeyerSelect->currentText();
     logMessage(QString("onVoiceKeyerSelect - keyer select name = %1").arg( ui->txKeyerSelect->currentText()));
@@ -1000,6 +1008,29 @@ void DMButtonFrame::DMButtonFrame::updateFrameState()
 }
 
 
+void DMButtonFrame::setFixedKeyerType(const QString &keyerType)
+{
+    fixedMode = true;
+    fixedKeyerType = keyerType;
+
+    ui->txKeyerSelect->setVisible(false);
+
+    notifyComboChange = false;
+    createKeyer(keyerType);
+    setFrameState(keyerType);
+    notifyComboChange = true;
+}
+
+QString DMButtonFrame::getCurrentKeyerType() const
+{
+    if (fixedMode) {
+        return fixedKeyerType;
+    }
+    return ui->txKeyerSelect->currentText();
+}
+
+
+
 
 void DMButtonFrame::initCwTextEntryBox(QString radioManufacturer, QString fileName)
 {
@@ -1095,7 +1126,7 @@ void DMButtonFrame::onCwEntryReturnPressed()
                     if (curMode != rigcommon::convertModeToQString(MODE::CW) && txKeyer->getSetCwModeAndRestoreFlag())
                     {
                         savedMode = curMode;
-                        sendModeToRadio(rigcommon::convertModeToQString(MODE::CW));
+                        emit sendModeToRadio(rigcommon::convertModeToQString(MODE::CW));
                     }
                     else
                     {
@@ -1268,7 +1299,7 @@ void DMButtonFrame::startKeyerMsg(int key)
             if (curMode != rigcommon::convertModeToQString(MODE::CW) && txKeyer->getSetCwModeAndRestoreFlag())
             {
                 savedMode = curMode;
-                sendModeToRadio(rigcommon::convertModeToQString(MODE::CW));
+                emit sendModeToRadio(rigcommon::convertModeToQString(MODE::CW));
             }
             else
             {
@@ -1473,6 +1504,7 @@ void DMButtonFrame::setLogItButtonVisible(bool visible)
 {
     ui->logitButton->setVisible(visible);
 }
+
 
 void DMButtonFrame::setRadioIsConnected(bool connected)
 {
@@ -2317,6 +2349,23 @@ void DMButtonFrame::fButtonClicked()
     int kno = b->property("KeyNo").toInt();
     fKey(ct, kno, 0);
 }
+
+
+
+void DMButtonFrame::initKeyerSettings()
+{
+
+    ct = dynamic_cast<LoggerContestLog *>(keyerSettings->getContest());
+    if (ct)
+    {
+        QString mode = ct->currentMode.getValue();
+        onModeChange(mode);
+    }
+}
+
+
+
+
 void DMButtonFrame::setContest(BaseContestLog *c)
 {
     ct = dynamic_cast<LoggerContestLog *>( c);
@@ -2335,6 +2384,12 @@ bool  DMButtonFrame::isDataMode()
 
 }void DMButtonFrame::fKey(BaseContestLog *c, int key, int carr)
 {
+
+    if (fixedMode && !isVisible()) {
+        return;
+    }
+
+
     if (c && c == ct)
     {
         if (isDataMode() &&  selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::DigitalModes])
@@ -3211,7 +3266,7 @@ void DMButtonFrame::on_stopButton_clicked()
 
         if (curMode != savedMode && txKeyer->getSetCwModeAndRestoreFlag())       // restore mode?
         {
-            sendModeToRadio(savedMode);
+            emit sendModeToRadio(savedMode);
         }
 
     }
@@ -3465,12 +3520,12 @@ void DMButtonFrame::clearButtonLabels()
 }
 
 
-
+/*
 void DMButtonFrame::sendModeToRadio(const QString m)
 {
 
 }
-
+*/
 
 void DMButtonFrame::setMode(const QString m)
 {

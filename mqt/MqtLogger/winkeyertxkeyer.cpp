@@ -347,7 +347,7 @@ int WinKeyerTxKeyer::setup(TxKeyerFactory *txKeyerFactory, int &maxNumButtons, i
     TxKeyerCapabilities voiceCap = txKeyerFactory->supportedTxKeyers()->value("pcCwKeyer");
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
 
-    TxVmRigSetupDialog txVmSetupDialog(voiceCap, maxNumButtons, numButtons, tslf->dmButtonFrame);
+    TxVmRigSetupDialog txVmSetupDialog(voiceCap, maxNumButtons, numButtons, tslf->dmKeyerContainer);
 
     QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + VOICE_KEYER_BASE_FILE_NAME + txKeyerTypes[TxKeyerId::PcCwKeyer] + ".ini";
     QSettings config(fileName, QSettings::IniFormat);

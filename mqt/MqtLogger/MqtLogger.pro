@@ -86,6 +86,7 @@ SOURCES += \
     deletedradioforvoicecwmemorybuttonsdialog.cpp \
     districtframe.cpp \
     dmbuttonframe.cpp \
+    dmkeyercontainer.cpp \
     dxccframe.cpp \
     freqlineedit.cpp \
     locTreeFrame.cpp \
@@ -195,6 +196,7 @@ HEADERS  += \
     deletedradioforvoicecwmemorybuttonsdialog.h \
     districtframe.h \
     dmbuttonframe.h \
+    dmkeyercontainer.h \
     dxccframe.h \
     freqlineedit.h \
     locTreeFrame.h \
