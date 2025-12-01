@@ -17,12 +17,14 @@
 #include "cwspeedcontrol.h"
 #include "txkeyerCommonConstants.h"
 
+
 class QPushButton;
 class QFileSystemWatcher;
 class LoggerContestLog;
 class BaseContestLog;
 class RigControlFrame;
 class KeyerSettings;
+class DMKeyerContainer;
 
 namespace Ui {
 class DMButtonFrame;
@@ -78,7 +80,7 @@ class DMButtonFrame : public QFrame
     Q_OBJECT
 
 public:
-    explicit DMButtonFrame(QSharedPointer<KeyerSettings> keyerSettings_, QWidget *parent = nullptr);
+    explicit DMButtonFrame(DMKeyerContainer* keyerContainer_, QWidget *parent = nullptr);
     ~DMButtonFrame();
 
     void setContest(BaseContestLog *);
@@ -97,32 +99,28 @@ public:
     void editActionSelected(int buttonNumber);
     void newActionSelected(int buttonNumber);
 
-    void setPttEnabled(bool state, PubSubName psn);
 
-    void setPttType(int type, PubSubName psn);
-    void setVoiceMemAvail(bool avail, PubSubName psn);
-    void setNumVoiceMessages(int numMsgs, PubSubName psn);
+
+
+
+
     void setCwMemType(int cwMemType, PubSubName psn);
     void setRigVoiceKeyerSupportStopFlag(bool supportStopCmd, PubSubName psn);
-    bool getRigVoiceKeyerSupportStopFlag(PubSubName psn);
-    void setRigCwKeyerSupportStopFlag(bool supportStopCmd, PubSubName psn);
-    bool getRigCwKeyerSupportStopFlag(PubSubName psn);
-    void setRadioPttState(bool state);
-    void setRigModel(QString rigModel, PubSubName psn);
 
-    void setSelectedRadio(PubSubName selectedRadio);
-    void setRadioIsConnected(bool connected);
+
+
+
+
+
+
+
     void setRadioName(const QString radName);
-    int getCwMemType(PubSubName psn);
+
     void setMode(const QString m);
 
-    void logRadioSettingsChanged(QSharedPointer<RadioSettingsDialogChangeFlag> logRadioSettingsFlags);
-    void setPcCwKeyerComport(QString comportStr);
-    void setPcCwKeyerConnectionState(QString stateStr);
-    void setPcCwKeyerErrorMsg(QString errorMsg);
-    void setPcCwKeyerPttEnabled(QString enabled);
-    void setPcCwKeyerTxOnState(QString state);
-    void setPcCwKeyerCurrentWpm(QString wpm);
+
+
+
 
 public slots:
 
@@ -181,6 +179,27 @@ private slots:
     void setRadioParams();
 
     void onCwMacroTextProcessed(const QString &cwTextSent);
+
+    void onSelectedRadioChanged(PubSubName selectedRadio);
+    void onPttEnabledChanged(bool state, PubSubName psn);
+    void onPttTypeChanged(int type, PubSubName psn);
+    void onPttStateChanged(bool state);
+    void onVoiceMemAvailChanged(bool avail, PubSubName psn);
+    void onNumVoiceMessagesChanged(int numMsgs, PubSubName psn);
+    void onRigVoiceKeyerSupportStopFlagChanged(bool supportStopCmd, PubSubName psn);
+    void onRigCwKeyerSupportStopFlagChanged(bool supportStopCmd, PubSubName psn);
+    void onRigModelChanged(QString rigModel, PubSubName psn);
+    void onCwMemTypeChanged(int cwMemType, PubSubName psn);
+    void onLoggerRadioSettingsChanged(QSharedPointer<RadioSettingsDialogChangeFlag> logRadioSettingsFlags);
+    void onIsRadioConnectedChanged(bool connected);
+    void onPcCwKeyerComportChanged(QString comportStr);
+    void onPcCwKeyerConnectionStateChanged(QString stateStr);
+    void onPcCwKeyerErrorMsgChanged(QString errorMsg);
+    void onPcCwKeyerPttEnabledChanged(QString enabled);
+    void onPcCwKeyerTxOnStateChanged(QString state);
+    void onPcCwKeyerCurrentWpmChanged(QString wpm);
+
+
 private:
     Ui::DMButtonFrame *ui;
     LoggerContestLog *ct = nullptr;
@@ -189,6 +208,7 @@ private:
     QFileSystemWatcher *qfsw = nullptr;
     QStringList nameList;
     QString currentName = "Default";
+
 
     QVector<QPushButton *> fButtons;
 
@@ -203,7 +223,7 @@ private:
     QString dataSender;
     QString curMode;
 
-    QSharedPointer<KeyerSettings> keyerSettings;
+    DMKeyerContainer* keyerContainer;
 
     QSharedPointer<TxKeyerBase> txKeyer;
     TxKeyerFactory* txKeyerFactory;
@@ -259,8 +279,8 @@ private:
     void startKeyerMsg(int buttonNumber);
     void createKeyer(QString voiceKeyerName);
     void setPttStatusIndicatorOnOff(bool on);
-    bool isVoiceMemAvail(PubSubName psn);
-    bool isCwMemTypeAvail(PubSubName psn);
+
+    //bool isCwMemTypeAvail(PubSubName psn);
     void setAvailIndicatorVisible(bool visible);
     void setAvailIndicatorOnOff(bool on);
     void setAvailIndicatorForRadioOnOff(PubSubName radName);
@@ -279,13 +299,13 @@ private:
     void loadButtonData();
     void checkCommonIniFileVersion(QString voiceKeyerType);
     int getNumCwMessages(PubSubName psn);
-    int getNumVoiceMessages(PubSubName psn);
-    QString getRigModel(PubSubName psn);
 
-    serialCommonData::MINOS_PTT_TYPES getPttType(PubSubName psn);
+
+
+
     void setPttTypeLabelsVisible(bool visible);
     void setPttTypeText(serialCommonData::MINOS_PTT_TYPES pttType);
-    bool getPttEnabled(PubSubName psn);
+
     void setPttEnabledIndicatorOnOff(bool on);
     void setEomTypeLabelsVisible(bool visible);
     void setEomLabelText(int selectedEomType);

@@ -2,17 +2,17 @@
 #include "DMKeyerContainer.h"
 #include "LoggerContest.h"
 #include "ContestApp.h"
-#include "MShowMessageDlg.h"
 #include <QInputDialog>
 #include <QMessageBox>
 #include <QSettings>
+#include "MTrace.h"
 
 //=============================================================================
 // KeyerTab Implementation
 //=============================================================================
 
 KeyerTab::KeyerTab(const QString &keyerType_,
-                   TxKeyerFactory *factory,
+                   DMKeyerContainer* keyerContainer,
                    QWidget *parent)
     : QWidget(parent)
     , keyerType(keyerType_)
@@ -23,7 +23,7 @@ KeyerTab::KeyerTab(const QString &keyerType_,
     layout->setContentsMargins(0, 0, 0, 0);
 
     // Create a DMButtonFrame in "tab mode" - without combo box
-    buttonFrame = new DMButtonFrame(this);
+    buttonFrame = new DMButtonFrame(keyerContainer, this);
 
     // Set the keyer type for this frame (it won't show combo box)
     buttonFrame->setFixedKeyerType(keyerType);
@@ -41,26 +41,7 @@ void KeyerTab::setActive(bool active_)
     active = active_;
 }
 
-void KeyerTab::setContest(BaseContestLog *contest)
-{
-    if (buttonFrame) {
-        buttonFrame->setContest(contest);
-    }
-}
 
-void KeyerTab::setSelectedRadio(PubSubName radio)
-{
-    if (buttonFrame) {
-        buttonFrame->setSelectedRadio(radio);
-    }
-}
-
-void KeyerTab::setRadioIsConnected(bool connected)
-{
-    if (buttonFrame) {
-        buttonFrame->setRadioIsConnected(connected);
-    }
-}
 
 //=============================================================================
 // DMKeyerContainer Implementation
@@ -101,7 +82,7 @@ DMKeyerContainer::DMKeyerContainer(QWidget *parent, ContainerMode mode)
     mainLayout->addWidget(stackedWidget);
 
     // Create standalone mode widget
-    standaloneFrame = new DMButtonFrame(keyerSettings, this);
+    standaloneFrame = new DMButtonFrame(this, this);
     setupFrameConnections(standaloneFrame);
     stackedWidget->addWidget(standaloneFrame);
 
@@ -256,10 +237,7 @@ void DMKeyerContainer::addKeyerTab(const QString &keyerType)
         updateActiveTab(newTab);
     }
 
-    // Forward current settings
-    if (currentContest) {
-        newTab->setContest(currentContest);
-    }
+
 }
 
 void DMKeyerContainer::onAddKeyerClicked()
@@ -388,7 +366,7 @@ int DMKeyerContainer::getTabCount() const
 
 KeyerTab* DMKeyerContainer::createKeyerTab(const QString &keyerType)
 {
-    KeyerTab *tab = new KeyerTab(keyerType, txKeyerFactory, this);
+    KeyerTab *tab = new KeyerTab(keyerType, this);
 
     if (tab->getFrame()) {
         setupFrameConnections(tab->getFrame());
@@ -446,15 +424,17 @@ QStringList DMKeyerContainer::getAvailableKeyerTypes() const
 
 void DMKeyerContainer::setupFrameConnections(DMButtonFrame *frame)
 {
+    //***************** I dont think we need this as these signals connect to tslf
+
     if (!frame)
     {
         return;
     }
 
-    connect(frame, &DMButtonFrame::pttStatus, this, &DMKeyerContainer::pttStatus);
-    connect(frame, &DMButtonFrame::sendFreqControl, this, &DMKeyerContainer::sendFreqControl);
-    connect(frame, &DMButtonFrame::sendWpmToPcCwkeyer, this, &DMKeyerContainer::sendWpmToPcCwkeyer);
-    connect(frame, &DMButtonFrame::sendModeToRadio, this, &DMKeyerContainer::sendModeToRadio);
+    //connect(frame, &DMButtonFrame::pttStatus, this, &DMKeyerContainer::pttStatus);
+    //connect(frame, &DMButtonFrame::sendFreqControl, this, &DMKeyerContainer::sendFreqControl);
+    //connect(frame, &DMButtonFrame::sendWpmToPcCwkeyer, this, &DMKeyerContainer::sendWpmToPcCwkeyer);
+    //connect(frame, &DMButtonFrame::sendModeToRadio, this, &DMKeyerContainer::sendModeToRadio);
 }
 
 //=============================================================================
@@ -467,6 +447,10 @@ void DMKeyerContainer::setContest(BaseContestLog *contest)
 
     keyerSettings->setContest(contest); // save in this frame
 
+    emit contestChanged(contest);
+
+    // ****************** replace this with signal ?????
+/*
     if (currentMode == StandaloneMode)
     {
         standaloneFrame->setContest(contest);
@@ -483,6 +467,7 @@ void DMKeyerContainer::setContest(BaseContestLog *contest)
             }
         }
     }
+*/
 }
 
 void DMKeyerContainer::setSelectedRadio(PubSubName radio)
@@ -521,8 +506,8 @@ void DMKeyerContainer::setRadioIsConnected(bool connected)
         emit isRadioConnectedChanged(connected);
     }
 
- /*
 
+/*
     if (currentMode == StandaloneMode)
     {
         standaloneFrame->setRadioIsConnected(connected);
@@ -704,40 +689,97 @@ void DMKeyerContainer::setRigVoiceKeyerSupportStopFlag(bool supportStopCmd, PubS
 
 void DMKeyerContainer::setRigCwKeyerSupportStopFlag(bool supportStopCmd, PubSubName psn)
 {
-    FORWARD_TO_ALL_FRAMES(setRigCwKeyerSupportStopFlag(supportStopCmd, psn));
+    if ( supportStopCmd != keyerSettings->getRigCwKeyerSupportStopFlag(psn))
+    {
+        keyerSettings->setRigCwKeyerSupportStopFlag(supportStopCmd, psn);
+        emit rigCwKeyerSupportStopCmdChanged(supportStopCmd, psn);
+    }
+   // ORWARD_TO_ALL_FRAMES(setRigCwKeyerSupportStopFlag(supportStopCmd, psn));
 }
 
 void DMKeyerContainer::setPcCwKeyerComport(QString comportStr)
 {
-    FORWARD_TO_ALL_FRAMES(setPcCwKeyerComport(comportStr));
+    if ( comportStr != keyerSettings->getPcCwKeyerComport())
+    {
+        keyerSettings->setPcCwKeyerComport(comportStr);
+        emit  pcCwKeyerComportChanged(comportStr);
+    }
+
+    //FORWARD_TO_ALL_FRAMES(setPcCwKeyerComport(comportStr));
 }
 
 void DMKeyerContainer::setPcCwKeyerConnectionState(QString stateStr)
 {
-    FORWARD_TO_ALL_FRAMES(setPcCwKeyerConnectionState(stateStr));
+    if ( stateStr != keyerSettings->getPcCwKeyerConnectionState())
+    {
+        keyerSettings->setPcCwKeyerConnectionState(stateStr);
+        emit pcCwKeyerConnectionStateChanged(stateStr);
+    }
+
+    //FORWARD_TO_ALL_FRAMES(setPcCwKeyerConnectionState(stateStr));
 }
 
 void DMKeyerContainer::setPcCwKeyerErrorMsg(QString errorMsg)
 {
-    FORWARD_TO_ALL_FRAMES(setPcCwKeyerErrorMsg(errorMsg));
+    if ( errorMsg != keyerSettings->getPcCwKeyerErrorMessage())
+    {
+        keyerSettings->setPcCwKeyerErrorMessage(errorMsg);
+        emit pcCwKeyerErrorMessageChanged(errorMsg);
+    }
+
+    //FORWARD_TO_ALL_FRAMES(setPcCwKeyerErrorMsg(errorMsg));
 }
 
 void DMKeyerContainer::setPcCwKeyerPttEnabled(QString enabled)
 {
-    FORWARD_TO_ALL_FRAMES(setPcCwKeyerPttEnabled(enabled));
+    if ( enabled != keyerSettings->getPcCwKeyerPttEnabled())
+    {
+        keyerSettings->setPcCwKeyerPttEnabled(enabled);
+        emit pcCwKeyerPttEnabledChanged(enabled);
+    }
+
+    //FORWARD_TO_ALL_FRAMES(setPcCwKeyerPttEnabled(enabled));
 }
 
 void DMKeyerContainer::setPcCwKeyerTxOnState(QString state)
 {
-    FORWARD_TO_ALL_FRAMES(setPcCwKeyerTxOnState(state));
+    if ( state != keyerSettings->getPcCwKeyerTxOnState())
+    {
+        keyerSettings->setPcCwKeyerTxOnState(state);
+        emit pcCwKeyerTxOnStateChanged(state);
+    }
+
+    //FORWARD_TO_ALL_FRAMES(setPcCwKeyerTxOnState(state));
 }
 
 void DMKeyerContainer::setPcCwKeyerCurrentWpm(QString wpm)
 {
-    FORWARD_TO_ALL_FRAMES(setPcCwKeyerCurrentWpm(wpm));
+    if ( wpm != keyerSettings->getPcCwKeyerCurrentWpm())
+    {
+        keyerSettings->setPcCwKeyerCurrentWpm(wpm);
+        emit pcCwKeyerCurrentWpmChanged(wpm);
+    }
+
+
+    //FORWARD_TO_ALL_FRAMES(setPcCwKeyerCurrentWpm(wpm));
 }
 
 void DMKeyerContainer::logRadioSettingsChanged(QSharedPointer<RadioSettingsDialogChangeFlag> flags)
 {
-    FORWARD_TO_ALL_FRAMES(logRadioSettingsChanged(flags));
+    logMessage(QString("Log Radio Settings Changed "));
+
+    if ( flags != keyerSettings->getLogRadioSettings())
+    {
+        keyerSettings->setLogRadioSettings(flags);
+        emit loggerRadioSettingsChanged(flags);
+    }
+
+
+    //FORWARD_TO_ALL_FRAMES(logRadioSettingsChanged(flags));
+}
+
+
+void DMKeyerContainer::logMessage(QString msg)
+{
+    trace(QString("[DMKeyerContainer] -  %1").arg(msg));
 }

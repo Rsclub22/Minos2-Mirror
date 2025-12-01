@@ -62,8 +62,9 @@ public:
     // Radio parameter updates
     void setPttEnabled(bool state, PubSubName psn);
     void setPttType(int type, PubSubName psn);
-    void setRadioPttState(bool state);
+
     void setVoiceMemAvail(bool avail, PubSubName psn);
+    void setRadioPttState(bool state);
     void setNumVoiceMessages(int numMsgs, PubSubName psn);
     void setRigModel(QString rigModel, PubSubName psn);
     void setCwMemType(int cwMemType, PubSubName psn);
@@ -87,6 +88,8 @@ public:
     int getTabCount() const;
 
 signals:
+
+    // **************** review this group of signals.. they go from buttonframe to tslf direct
     void pttStatus(bool state);
     void sendFreqControl(Frequency freq);
     void sendWpmToPcCwkeyer(int wpm);
@@ -95,8 +98,12 @@ signals:
 
     void selectedRadioChanged(PubSubName radio);
     void isRadioConnectedChanged(bool connected);
+
     void radioFreqChanged(Frequency freq);
     void radioModeChanged(QString mode);
+
+
+    void contestChanged(BaseContestLog * contest);
     void pttEnabledChanged(bool state, PubSubName psn);
     void pttTypeChanged(int type, PubSubName psn);
     void voiceMemAvailChanged(bool avail, PubSubName psn);
@@ -113,6 +120,8 @@ signals:
     void pcCwKeyerTxOnStateChanged(QString state);
     void pcCwKeyerCurrentWpmChanged(QString wpm);
     void loggerRadioSettingsChanged(QSharedPointer<RadioSettingsDialogChangeFlag> flags);
+    void onPttStateChanged(bool state);
+
 
 private slots:
     void onAddKeyerClicked();
@@ -163,6 +172,7 @@ private:
 
     // Contest reference
     LoggerContestLog *currentContest;
+    void logMessage(QString msg);
 };
 
 
@@ -175,8 +185,7 @@ class KeyerTab : public QWidget
     Q_OBJECT
 
 public:
-    explicit KeyerTab(const QString &keyerType,
-                      TxKeyerFactory *factory,
+    explicit KeyerTab(const QString &keyerType, DMKeyerContainer* keyerContainer,
                       QWidget *parent = nullptr);
     ~KeyerTab();
 
@@ -188,10 +197,7 @@ public:
     // Set this tab as active/inactive
     void setActive(bool active);
 
-    // Forward contest/radio settings
-    void setContest(BaseContestLog *contest);
-    void setSelectedRadio(PubSubName radio);
-    void setRadioIsConnected(bool connected);
+
 
 private:
     QString keyerType;
@@ -554,6 +560,8 @@ public:
     void setPcCwKeyerTxOnState(QString state){ pcCwKeyerTxOnState = state; }
     QString getPcCwKeyerTxOnState(){ return pcCwKeyerTxOnState; }
 
+    void setLogRadioSettings(QSharedPointer<RadioSettingsDialogChangeFlag> flags_){ flags = flags_;}
+    QSharedPointer<RadioSettingsDialogChangeFlag> getLogRadioSettings(){ return flags; }
 
 private:
 
@@ -577,7 +585,7 @@ private:
     QString pcCwKeyerCurrentWpm;
     QString pcCwKeyerTxOnState;
 
-
+    QSharedPointer<RadioSettingsDialogChangeFlag> flags;
 
 
 };
