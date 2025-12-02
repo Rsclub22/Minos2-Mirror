@@ -443,58 +443,36 @@ void DMKeyerContainer::setupFrameConnections(DMButtonFrame *frame)
 
 void DMKeyerContainer::setContest(BaseContestLog *contest)
 {
-    currentContest = dynamic_cast<LoggerContestLog*>(contest);
+    QSharedPointer<LoggerContestLog> ct;
 
-    keyerSettings->setContest(contest); // save in this frame
-
-    emit contestChanged(contest);
-
-    // ****************** replace this with signal ?????
-/*
-    if (currentMode == StandaloneMode)
+    if (contest)
     {
-        standaloneFrame->setContest(contest);
-    }
-    else
-    {
-        // Forward to all tabs
-        for (int i = 0; i < tabWidget->count(); ++i)
+        // Only wrap if contest is a LoggerContestLog
+        ct = QSharedPointer<LoggerContestLog>(dynamic_cast<LoggerContestLog*>(contest));
+        if (!ct)
         {
-            KeyerTab *tab = qobject_cast<KeyerTab*>(tabWidget->widget(i));
-            if (tab)
-            {
-                tab->setContest(contest);
-            }
+            qWarning() << "setContest: contest is not a LoggerContestLog";
         }
     }
-*/
+
+    qDebug() << "Container set contest = %1" << ct;
+
+    keyerSettings->setContest(ct);
+
+    emit contestChanged();
 }
+
+
 
 void DMKeyerContainer::setSelectedRadio(PubSubName radio)
 {
     if (radio != keyerSettings->getSelectedRadio())
     {
         keyerSettings->setSelectedRadio(radio);
-        emit selectedRadioChanged(radio);
+        emit selectedRadioChanged();
     }
 
-/*
-    if (currentMode == StandaloneMode)
-    {
-        standaloneFrame->setSelectedRadio(radio);
-    }
-    else
-    {
-        for (int i = 0; i < tabWidget->count(); ++i)
-        {
-            KeyerTab *tab = qobject_cast<KeyerTab*>(tabWidget->widget(i));
-            if (tab)
-            {
-                tab->setSelectedRadio(radio);
-            }
-        }
-    }
-*/
+
 }
 
 void DMKeyerContainer::setRadioIsConnected(bool connected)
@@ -579,30 +557,16 @@ void DMKeyerContainer::setMode(const QString &mode)
     }
 */
 }
-/*
-// Macro to forward to all frames
-#define FORWARD_TO_ALL_FRAMES(methodCall) \
-if (currentMode == StandaloneMode) { \
-        standaloneFrame->methodCall; \
-} else { \
-        for (int i = 0; i < tabWidget->count(); ++i) { \
-            KeyerTab *tab = qobject_cast<KeyerTab*>(tabWidget->widget(i)); \
-            if (tab && tab->getFrame()) { \
-                tab->getFrame()->methodCall; \
-        } \
-    } \
-}
-*/
+
+
 void DMKeyerContainer::setPttEnabled(bool state, PubSubName psn)
 {
     if (state != keyerSettings->getPttEnabled(psn))
     {
         keyerSettings->setPttEnabled(state, psn);
-        emit pttEnabledChanged(state, psn);
+        emit pttEnabledChanged();
     }
 
-
-    //FORWARD_TO_ALL_FRAMES(setPttEnabled(state, psn));
 }
 
 void DMKeyerContainer::setPttType(int type, PubSubName psn)
@@ -611,10 +575,10 @@ void DMKeyerContainer::setPttType(int type, PubSubName psn)
     if (type != static_cast<int>(keyerSettings->getPttType(psn)))
     {
         keyerSettings->setPttType(type, psn);
-        emit pttTypeChanged(type, psn);
+        emit pttTypeChanged();
     }
 
-    //FORWARD_TO_ALL_FRAMES(setPttType(type, psn));
+
 }
 
 void DMKeyerContainer::setVoiceMemAvail(bool avail, PubSubName psn)
@@ -622,11 +586,11 @@ void DMKeyerContainer::setVoiceMemAvail(bool avail, PubSubName psn)
     if (avail != keyerSettings->isVoiceMemAvail(psn))
     {
         keyerSettings->setVoiceMemAvail(avail, psn);
-        emit voiceMemAvailChanged(avail, psn);
+        emit voiceMemAvailChanged();
     }
 
 
-    //FORWARD_TO_ALL_FRAMES(setVoiceMemAvail(avail, psn));
+
 }
 
 void DMKeyerContainer::setRadioPttState(bool state)
@@ -634,11 +598,10 @@ void DMKeyerContainer::setRadioPttState(bool state)
     if (state != keyerSettings->getPttState())
     {
         keyerSettings->setPttState(state);
-        emit pttStateChanged(state);
+        emit pttStateChanged();
     }
 
 
-    //FORWARD_TO_ALL_FRAMES(setRadioPttState(state));
 }
 
 void DMKeyerContainer::setNumVoiceMessages(int numMsgs, PubSubName psn)
@@ -646,10 +609,10 @@ void DMKeyerContainer::setNumVoiceMessages(int numMsgs, PubSubName psn)
     if (numMsgs != keyerSettings->getNumVoiceMessages(psn))
     {
         keyerSettings->setNumVoiceMessages(numMsgs, psn);
-        emit numVoiceMessagesChanged(numMsgs, psn);
+        emit numVoiceMessagesChanged();
     }
 
-    //FORWARD_TO_ALL_FRAMES(setNumVoiceMessages(numMsgs, psn));
+
 }
 
 void DMKeyerContainer::setRigModel(QString rigModel, PubSubName psn)
@@ -657,10 +620,10 @@ void DMKeyerContainer::setRigModel(QString rigModel, PubSubName psn)
     if (rigModel != keyerSettings->getRigModel(psn))
     {
         keyerSettings->setRigModel(rigModel, psn);
-        emit rigModelChanged(rigModel, psn);
+        emit rigModelChanged();
     }
 
-    //FORWARD_TO_ALL_FRAMES(setRigModel(rigModel, psn));
+
 }
 
 void DMKeyerContainer::setCwMemType(int cwMemType, PubSubName psn)
@@ -668,10 +631,9 @@ void DMKeyerContainer::setCwMemType(int cwMemType, PubSubName psn)
     if (cwMemType != keyerSettings->getCwMemType(psn))
     {
        keyerSettings->setCwMemType(cwMemType, psn);
-        emit cwMemTypeChanged(cwMemType, psn);
+        emit cwMemTypeChanged();
     }
 
-    //FORWARD_TO_ALL_FRAMES(setCwMemType(cwMemType, psn));
 }
 
 void DMKeyerContainer::setRigVoiceKeyerSupportStopFlag(bool supportStopCmd, PubSubName psn)
@@ -679,12 +641,11 @@ void DMKeyerContainer::setRigVoiceKeyerSupportStopFlag(bool supportStopCmd, PubS
     if ( supportStopCmd != keyerSettings->getRigVoiceKeyerSupportStopFlag(psn))
     {
         keyerSettings->setRigVoiceKeyerSupportStopFlag(supportStopCmd, psn);
-        emit rigVoiceKeyerSupportStopFlagChanged(supportStopCmd, psn);
+        emit rigVoiceKeyerSupportStopFlagChanged();
 
     }
 
 
-    //FORWARD_TO_ALL_FRAMES(setRigVoiceKeyerSupportStopFlag(supportStopCmd, psn));
 }
 
 void DMKeyerContainer::setRigCwKeyerSupportStopFlag(bool supportStopCmd, PubSubName psn)
@@ -692,9 +653,8 @@ void DMKeyerContainer::setRigCwKeyerSupportStopFlag(bool supportStopCmd, PubSubN
     if ( supportStopCmd != keyerSettings->getRigCwKeyerSupportStopFlag(psn))
     {
         keyerSettings->setRigCwKeyerSupportStopFlag(supportStopCmd, psn);
-        emit rigCwKeyerSupportStopCmdChanged(supportStopCmd, psn);
+        emit rigCwKeyerSupportStopCmdChanged();
     }
-   // ORWARD_TO_ALL_FRAMES(setRigCwKeyerSupportStopFlag(supportStopCmd, psn));
 }
 
 void DMKeyerContainer::setPcCwKeyerComport(QString comportStr)
@@ -702,10 +662,9 @@ void DMKeyerContainer::setPcCwKeyerComport(QString comportStr)
     if ( comportStr != keyerSettings->getPcCwKeyerComport())
     {
         keyerSettings->setPcCwKeyerComport(comportStr);
-        emit  pcCwKeyerComportChanged(comportStr);
+        emit  pcCwKeyerComportChanged();
     }
 
-    //FORWARD_TO_ALL_FRAMES(setPcCwKeyerComport(comportStr));
 }
 
 void DMKeyerContainer::setPcCwKeyerConnectionState(QString stateStr)
@@ -713,10 +672,9 @@ void DMKeyerContainer::setPcCwKeyerConnectionState(QString stateStr)
     if ( stateStr != keyerSettings->getPcCwKeyerConnectionState())
     {
         keyerSettings->setPcCwKeyerConnectionState(stateStr);
-        emit pcCwKeyerConnectionStateChanged(stateStr);
+        emit pcCwKeyerConnectionStateChanged();
     }
 
-    //FORWARD_TO_ALL_FRAMES(setPcCwKeyerConnectionState(stateStr));
 }
 
 void DMKeyerContainer::setPcCwKeyerErrorMsg(QString errorMsg)
@@ -724,10 +682,9 @@ void DMKeyerContainer::setPcCwKeyerErrorMsg(QString errorMsg)
     if ( errorMsg != keyerSettings->getPcCwKeyerErrorMessage())
     {
         keyerSettings->setPcCwKeyerErrorMessage(errorMsg);
-        emit pcCwKeyerErrorMessageChanged(errorMsg);
+        emit pcCwKeyerErrorMessageChanged();
     }
 
-    //FORWARD_TO_ALL_FRAMES(setPcCwKeyerErrorMsg(errorMsg));
 }
 
 void DMKeyerContainer::setPcCwKeyerPttEnabled(QString enabled)
@@ -735,10 +692,9 @@ void DMKeyerContainer::setPcCwKeyerPttEnabled(QString enabled)
     if ( enabled != keyerSettings->getPcCwKeyerPttEnabled())
     {
         keyerSettings->setPcCwKeyerPttEnabled(enabled);
-        emit pcCwKeyerPttEnabledChanged(enabled);
+        emit pcCwKeyerPttEnabledChanged();
     }
 
-    //FORWARD_TO_ALL_FRAMES(setPcCwKeyerPttEnabled(enabled));
 }
 
 void DMKeyerContainer::setPcCwKeyerTxOnState(QString state)
@@ -746,10 +702,9 @@ void DMKeyerContainer::setPcCwKeyerTxOnState(QString state)
     if ( state != keyerSettings->getPcCwKeyerTxOnState())
     {
         keyerSettings->setPcCwKeyerTxOnState(state);
-        emit pcCwKeyerTxOnStateChanged(state);
+        emit pcCwKeyerTxOnStateChanged();
     }
 
-    //FORWARD_TO_ALL_FRAMES(setPcCwKeyerTxOnState(state));
 }
 
 void DMKeyerContainer::setPcCwKeyerCurrentWpm(QString wpm)
@@ -757,11 +712,10 @@ void DMKeyerContainer::setPcCwKeyerCurrentWpm(QString wpm)
     if ( wpm != keyerSettings->getPcCwKeyerCurrentWpm())
     {
         keyerSettings->setPcCwKeyerCurrentWpm(wpm);
-        emit pcCwKeyerCurrentWpmChanged(wpm);
+        emit pcCwKeyerCurrentWpmChanged();
     }
 
 
-    //FORWARD_TO_ALL_FRAMES(setPcCwKeyerCurrentWpm(wpm));
 }
 
 void DMKeyerContainer::logRadioSettingsChanged(QSharedPointer<RadioSettingsDialogChangeFlag> flags)
@@ -771,11 +725,10 @@ void DMKeyerContainer::logRadioSettingsChanged(QSharedPointer<RadioSettingsDialo
     if ( flags != keyerSettings->getLogRadioSettings())
     {
         keyerSettings->setLogRadioSettings(flags);
-        emit loggerRadioSettingsChanged(flags);
+        emit loggerRadioSettingsChanged();
     }
 
 
-    //FORWARD_TO_ALL_FRAMES(logRadioSettingsChanged(flags));
 }
 
 

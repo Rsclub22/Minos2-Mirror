@@ -180,24 +180,26 @@ private slots:
 
     void onCwMacroTextProcessed(const QString &cwTextSent);
 
-    void onSelectedRadioChanged(PubSubName selectedRadio);
-    void onPttEnabledChanged(bool state, PubSubName psn);
-    void onPttTypeChanged(int type, PubSubName psn);
-    void onPttStateChanged(bool state);
-    void onVoiceMemAvailChanged(bool avail, PubSubName psn);
-    void onNumVoiceMessagesChanged(int numMsgs, PubSubName psn);
-    void onRigVoiceKeyerSupportStopFlagChanged(bool supportStopCmd, PubSubName psn);
-    void onRigCwKeyerSupportStopFlagChanged(bool supportStopCmd, PubSubName psn);
-    void onRigModelChanged(QString rigModel, PubSubName psn);
-    void onCwMemTypeChanged(int cwMemType, PubSubName psn);
-    void onLoggerRadioSettingsChanged(QSharedPointer<RadioSettingsDialogChangeFlag> logRadioSettingsFlags);
+    void onContestChanged();
+    void onSelectedRadioChanged();
+    void onPttEnabledChanged();
+    void onPttTypeChanged();
+    void onPttStateChanged();
+    void onVoiceMemAvailChanged();
+    void onNumVoiceMessagesChanged();
+    void onRigVoiceKeyerSupportStopFlagChanged();
+    void onRigCwKeyerSupportStopFlagChanged();
+    void onRigModelChanged();
+    void onCwMemTypeChanged();
+    void onLoggerRadioSettingsChanged();
     void onIsRadioConnectedChanged(bool connected);
-    void onPcCwKeyerComportChanged(QString comportStr);
-    void onPcCwKeyerConnectionStateChanged(QString stateStr);
-    void onPcCwKeyerErrorMsgChanged(QString errorMsg);
-    void onPcCwKeyerPttEnabledChanged(QString enabled);
-    void onPcCwKeyerTxOnStateChanged(QString state);
-    void onPcCwKeyerCurrentWpmChanged(QString wpm);
+    void onPcCwKeyerComportChanged();
+    void onPcCwKeyerConnectionStateChanged();
+    void onPcCwKeyerErrorMsgChanged();
+    void onPcCwKeyerPttEnabledChanged();
+    void onPcCwKeyerTxOnStateChanged();
+    void onPcCwKeyerCurrentWpmChanged();
+
 
 
 private:
@@ -213,6 +215,7 @@ private:
     QVector<QPushButton *> fButtons;
 
     TxKeyerCapabilities selectedKeyerCap;
+    QSharedPointer<KeyerSettings> keyerSettings;
 
     //Keys fkeys;
     KeyerMap allKeyConfigs;
@@ -245,7 +248,7 @@ private:
 
     QMap<PubSubName, RadioDetails> allRadioDetails;
 
-    PubSubName selectedRadio;
+    //PubSubName selectedRadio;
 
     QString savedMode;
     bool radioConnected;

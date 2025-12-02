@@ -96,31 +96,31 @@ signals:
     void sendModeToRadio(const QString &mode);
     void modeChanged(ContainerMode newMode);
 
-    void selectedRadioChanged(PubSubName radio);
+    void selectedRadioChanged();
     void isRadioConnectedChanged(bool connected);
 
     void radioFreqChanged(Frequency freq);
     void radioModeChanged(QString mode);
 
 
-    void contestChanged(BaseContestLog * contest);
-    void pttEnabledChanged(bool state, PubSubName psn);
-    void pttTypeChanged(int type, PubSubName psn);
-    void voiceMemAvailChanged(bool avail, PubSubName psn);
-    void pttStateChanged(bool state);
-    void numVoiceMessagesChanged(int numMsgs, PubSubName psn);
-    void rigModelChanged(QString rigModel, PubSubName psn);
-    void cwMemTypeChanged(int cwMemType, PubSubName psn);
-    void rigVoiceKeyerSupportStopFlagChanged(bool supportStopCmd, PubSubName psn);
-    void rigCwKeyerSupportStopCmdChanged(bool supportStopCmd, PubSubName psn);
-    void pcCwKeyerComportChanged(QString comportStr);
-    void pcCwKeyerConnectionStateChanged(QString stateStr);
-    void pcCwKeyerErrorMessageChanged(QString errorMsg);
-    void pcCwKeyerPttEnabledChanged(QString enabled);
-    void pcCwKeyerTxOnStateChanged(QString state);
-    void pcCwKeyerCurrentWpmChanged(QString wpm);
-    void loggerRadioSettingsChanged(QSharedPointer<RadioSettingsDialogChangeFlag> flags);
-    void onPttStateChanged(bool state);
+    void contestChanged();
+    void pttEnabledChanged();
+    void pttTypeChanged();
+    void voiceMemAvailChanged();
+    void pttStateChanged();
+    void numVoiceMessagesChanged();
+    void rigModelChanged();
+    void cwMemTypeChanged();
+    void rigVoiceKeyerSupportStopFlagChanged();
+    void rigCwKeyerSupportStopCmdChanged();
+    void pcCwKeyerComportChanged();
+    void pcCwKeyerConnectionStateChanged();
+    void pcCwKeyerErrorMessageChanged();
+    void pcCwKeyerPttEnabledChanged();
+    void pcCwKeyerTxOnStateChanged();
+    void pcCwKeyerCurrentWpmChanged();
+    void loggerRadioSettingsChanged();
+    void onPttStateChanged();
 
 
 private slots:
@@ -219,8 +219,14 @@ public:
 
 
 
-    void setContest(BaseContestLog *contest){ currentContest = dynamic_cast<LoggerContestLog*>(contest); }
-    BaseContestLog* getContest() { return currentContest; }
+    void setContest(const QSharedPointer<BaseContestLog>& contest)
+    {
+        currentContest = contest;
+    }
+    QSharedPointer<BaseContestLog> getContest() const
+    {
+        return currentContest;
+    }
 
     void setSelectedRadio(PubSubName selRadio){ selectedRadio = selRadio; }
     PubSubName getSelectedRadio(){ return selectedRadio; }
@@ -565,7 +571,7 @@ public:
 
 private:
 
-    LoggerContestLog *currentContest;
+     QSharedPointer<BaseContestLog> currentContest;
 
     // radio settings
 
