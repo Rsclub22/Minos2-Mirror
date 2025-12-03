@@ -2859,7 +2859,7 @@ to</source>
     </message>
     <message>
         <location filename="../qsologframe.cpp" line="120"/>
-        <source>Match Xfer %1</source>
+        <source>Match Xfer%1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -6045,110 +6045,110 @@ Last %8 Mins: %9 QSO %10 pts %11 mults
         <translation>Erreur:</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.ui" line="522"/>
+        <location filename="../txvmbuttonsframe.ui" line="550"/>
         <source>Stop</source>
         <translation>Arrêter</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1059"/>
-        <location filename="../txvmbuttonsframe.cpp" line="1334"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1081"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1361"/>
         <source>Voice Memory</source>
         <translation>Mémoire de voix</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1061"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1083"/>
         <source>%1 %2 - Edit</source>
         <translation>%1 %2 - Modifier</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="652"/>
+        <location filename="../txvmbuttonsframe.cpp" line="655"/>
         <source>To use the external keyer mqtKeyer must be running and connected</source>
         <translation>Pour utiliser le keyer externe, mqtKeyer doit être en cours d&apos;exécution et connecté</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1038"/>
-        <location filename="../txvmbuttonsframe.cpp" line="1314"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1060"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1341"/>
         <source>Rig CW Message - </source>
         <translation>Message CW d&apos;appareil - </translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1042"/>
-        <location filename="../txvmbuttonsframe.cpp" line="1318"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1064"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1345"/>
         <source>PC CW Keyer Message - </source>
         <translation>Message PC CW Keyer - </translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1101"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1124"/>
         <source>rigControl Voice Selected, but not available for this radio</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1108"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1131"/>
         <source>rigControl CW Keyer selected, but not available for this radio</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1115"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1138"/>
         <source>PC CW DTR Server is not available.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1124"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1149"/>
         <source>radio ptt is not enabled, please enable</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1135"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1162"/>
         <source>Mode needs to be a phone type for rigcontrol Voice Message, current mode = %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1336"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1363"/>
         <source>%1 %2 - New</source>
         <translation>%1 %2 - Nouveau</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1989"/>
+        <location filename="../txvmbuttonsframe.cpp" line="2016"/>
         <source>Rig Voice Keyer Available</source>
         <translation>Mémoire de voix disponible</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1993"/>
+        <location filename="../txvmbuttonsframe.cpp" line="2020"/>
         <source>Rig CW Messages Available</source>
         <translation>Message CW disponible</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="2216"/>
+        <location filename="../txvmbuttonsframe.cpp" line="2243"/>
         <source>CW FreeText Playing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="2221"/>
+        <location filename="../txvmbuttonsframe.cpp" line="2248"/>
         <source>No CW FreeText Playing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1894"/>
+        <location filename="../txvmbuttonsframe.cpp" line="2024"/>
         <source></source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="2182"/>
+        <location filename="../txvmbuttonsframe.cpp" line="2209"/>
         <source>TX On</source>
         <translation>TX Actif</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="2189"/>
+        <location filename="../txvmbuttonsframe.cpp" line="2216"/>
         <source>TX Off</source>
         <translation>TX Éteint</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="2200"/>
+        <location filename="../txvmbuttonsframe.cpp" line="2227"/>
         <source>PTT Enabled</source>
         <translation>PTT activé</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="2206"/>
+        <location filename="../txvmbuttonsframe.cpp" line="2233"/>
         <source>PTT Disabled</source>
         <translation>PTT Désactivé</translation>
     </message>
@@ -6544,12 +6544,12 @@ Veuillez modifier ou supprimer</translation>
 <context>
     <name>TxVoiceMemButton</name>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="2534"/>
+        <location filename="../txvmbuttonsframe.cpp" line="2562"/>
         <source>&amp;New</source>
         <translation>&amp;Nouveau</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="2535"/>
+        <location filename="../txvmbuttonsframe.cpp" line="2563"/>
         <source>&amp;Edit</source>
         <translation>&amp;Modifier</translation>
     </message>
@@ -6752,13 +6752,18 @@ Inclure le &quot;CQ&quot; ainsi que le type</translation>
         <translation type="vanished">Mauvais bande</translation>
     </message>
     <message>
-        <location filename="../WsjtxFrame.cpp" line="914"/>
-        <location filename="../WsjtxFrame.cpp" line="918"/>
+        <location filename="../WsjtxFrame.cpp" line="402"/>
+        <source>Call/grid does not match contest (%1/%2 %3/%4</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../WsjtxFrame.cpp" line="921"/>
+        <location filename="../WsjtxFrame.cpp" line="925"/>
         <source>WSJT-X recording Files</source>
         <translation>Fichiers d&apos;enregistrement WSJT-X</translation>
     </message>
     <message>
-        <location filename="../WsjtxFrame.cpp" line="915"/>
+        <location filename="../WsjtxFrame.cpp" line="922"/>
         <source>All Files</source>
         <translation>Tous les fichiers</translation>
     </message>
