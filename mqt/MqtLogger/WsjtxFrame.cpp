@@ -397,15 +397,15 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
         return;
     }
 
-    if (de_call != ct->mycall.getFullCall() || de_grid != ct->myloc.getLoc().left(4))
+    if (de_call != ct->mycall.getFullCall() || de_grid != ct->myloc.getLoc())
     {
         QString mess = tr("Call/grid does not match contest (%1/%2 %3/%4")
-                           .arg(de_call, de_grid, ct->mycall.getFullCall(), ct->myloc.getLoc().left(4));
+                           .arg(de_call, de_grid, ct->mycall.getFullCall(), ct->myloc.getLoc());
         ui->bandErrorLabel->setText(HtmlFontColour(Qt::red) + mess);
         wtrace(mess);
     }
     wtrace(QString("WsjtxFrame::update_status dx_call %1 dx_grid %2 transmitting %3 decoding %4 tx_enabled %5 tx_message %6")
-              .arg(dx_call).arg(dx_grid).arg(transmitting).arg(decoding).arg(tx_enabled).arg(tx_message));
+              .arg(dx_call, dx_grid).arg(transmitting).arg(decoding).arg(tx_enabled).arg(tx_message));
 
 
     id_ = id;
@@ -659,7 +659,7 @@ void WsjtxFrame::decode_added (bool is_new, QString const& id, QTime time
     }
     else
     {
-        wtrace(QString("WsjtxFrame::decode_added - %1 new message <%2> stage %3 points %4 snr %5").arg(time.toString("HH:mm:ss")).arg(message).arg(dc.getMStage()).arg(dc.points).arg(dc.snr));
+        wtrace(QString("WsjtxFrame::decode_added - %1 new message <%2> stage %3 points %4 snr %5").arg(time.toString("HH:mm:ss"), message, dc.getMStage()).arg(dc.points).arg(dc.snr));
         messages.push_back(dc);
     }
 
