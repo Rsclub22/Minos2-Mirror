@@ -46,8 +46,8 @@ public:
     QSharedPointer<KeyerSettings> keyerSettings;
 
     // Get/Set mode
-    ContainerMode getMode() const { return currentMode; }
-    void setMode(ContainerMode mode);
+    ContainerMode getContainerMode() const { return currentContainerMode; }
+    void setContainerMode(ContainerMode mode);
 
     // Get the active frame (works in both modes)
     DMButtonFrame* getActiveFrame() const;
@@ -90,11 +90,13 @@ public:
 signals:
 
     // **************** review this group of signals.. they go from buttonframe to tslf direct
+
+    void activeKeyerChanged();
     void pttStatus(bool state);
     void sendFreqControl(Frequency freq);
     void sendWpmToPcCwkeyer(int wpm);
     void sendModeToRadio(const QString &mode);
-    void modeChanged(ContainerMode newMode);
+    void containerModeChanged(ContainerMode newMode);
 
     void selectedRadioChanged();
     void isRadioConnectedChanged(bool connected);
@@ -168,7 +170,7 @@ private:
     KeyerTab *activeTab;
 
     // Current mode
-    ContainerMode currentMode;
+    ContainerMode currentContainerMode;
 
     // Contest reference
     LoggerContestLog *currentContest;
@@ -227,6 +229,10 @@ public:
     {
         return currentContest;
     }
+
+
+    QString getActiveKeyerType() const { return activeKeyerType; }
+    void setActiveKeyerType(const QString &type) { activeKeyerType = type; }
 
     void setSelectedRadio(PubSubName selRadio){ selectedRadio = selRadio; }
     PubSubName getSelectedRadio(){ return selectedRadio; }
@@ -572,7 +578,7 @@ public:
 private:
 
     LoggerContestLog* currentContest = nullptr;
-
+     QString activeKeyerType;
     // radio settings
 
     PubSubName selectedRadio;

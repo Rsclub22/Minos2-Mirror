@@ -185,6 +185,7 @@ private slots:
 
     void onCwMacroTextProcessed(const QString &cwTextSent);
 
+    void onActiveKeyerChanged();
     void onContestChanged();
     void onSelectedRadioChanged();
     void onPttEnabledChanged();
@@ -207,6 +208,9 @@ private slots:
 
 
 
+
+
+
 private:
     Ui::DMButtonFrame *ui;
     LoggerContestLog *ct = nullptr;
@@ -225,7 +229,8 @@ private:
     //Keys fkeys;
     KeyerMap allKeyConfigs;
 
-    bool fixedMode =false;
+    bool fixedMode =false;      // false: Standalone mode with visible combo box
+                                // true: Tab mode with hidden combo box, fixed keyer type
     QString fixedKeyerType;
 
     QString dataSender;

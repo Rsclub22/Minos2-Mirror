@@ -99,6 +99,7 @@ DMButtonFrame::DMButtonFrame(DMKeyerContainer* keyerContainer_, QWidget *parent)
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::DMMess, this, &DMButtonFrame::DMMess);
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::modeChange, this, &DMButtonFrame::onModeChange);
 
+    connect(keyerContainer, &DMKeyerContainer::activeKeyerChanged, this, &DMButtonFrame::onActiveKeyerChanged);
     connect(keyerContainer, &DMKeyerContainer::contestChanged, this, &DMButtonFrame::onContestChanged);
     connect(keyerContainer, &DMKeyerContainer::selectedRadioChanged, this, &DMButtonFrame::onSelectedRadioChanged);
     connect(keyerContainer, &DMKeyerContainer::isRadioConnectedChanged, this, &DMButtonFrame::onIsRadioConnectedChanged);
@@ -1697,6 +1698,17 @@ void DMButtonFrame::setLogItButtonVisible(bool visible)
     ui->logitButton->setVisible(visible);
 }
 
+void DMButtonFrame::onActiveKeyerChanged()
+{
+    QString activeKeyer = keyerSettings->getActiveKeyerType();
+    if (getCurrentKeyerType() == activeKeyer)
+    {
+        // Enable/disable widgets based on is Active
+        setFrameStateForKeyer(activeKeyer);
+    }
+
+
+}
 
 void DMButtonFrame::onContestChanged()
 {

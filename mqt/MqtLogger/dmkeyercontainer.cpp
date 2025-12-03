@@ -54,7 +54,7 @@ DMKeyerContainer::DMKeyerContainer(QWidget *parent, ContainerMode mode)
     , tabbedWidget(nullptr)
     , tabWidget(nullptr)
     , activeTab(nullptr)
-    , currentMode(StandaloneMode)
+    , currentContainerMode(StandaloneMode)
     , currentContest(nullptr)
     , keyerSettings(new KeyerSettings)
 {
@@ -110,7 +110,7 @@ DMKeyerContainer::DMKeyerContainer(QWidget *parent, ContainerMode mode)
             this, &DMKeyerContainer::onTabCloseRequested);
 
     // Set initial mode
-    setMode(mode);
+    setContainerMode(mode);
 }
 
 DMKeyerContainer::~DMKeyerContainer()
@@ -118,22 +118,26 @@ DMKeyerContainer::~DMKeyerContainer()
 
 }
 
-void DMKeyerContainer::setMode(ContainerMode mode)
+void DMKeyerContainer::setContainerMode(ContainerMode mode)
 {
-    if (mode == currentMode) {
+    if (mode == currentContainerMode)
+    {
         return;
     }
 
-    currentMode = mode;
+   currentContainerMode = mode;
 
-    if (mode == StandaloneMode) {
+    if (mode == StandaloneMode)
+    {
         switchToStandaloneMode();
-    } else {
+    }
+    else
+    {
         switchToTabbedMode();
     }
 
     updateModeButton();
-    emit modeChanged(mode);
+    emit containerModeChanged(mode);
 }
 
 void DMKeyerContainer::switchToStandaloneMode()
@@ -141,9 +145,11 @@ void DMKeyerContainer::switchToStandaloneMode()
     stackedWidget->setCurrentWidget(standaloneFrame);
     addKeyerButton->setVisible(false);
 
-    // Transfer state from active tab if exists
-    if (activeTab && activeTab->getFrame()) {
-        // Could optionally transfer settings here
+    QString keyerType = standaloneFrame->getCurrentKeyerType();
+    if (keyerType != keyerSettings->getActiveKeyerType())
+    {
+        keyerSettings->setActiveKeyerType(keyerType);
+        emit activeKeyerChanged();
     }
 }
 
@@ -153,9 +159,11 @@ void DMKeyerContainer::switchToTabbedMode()
     addKeyerButton->setVisible(true);
 
     // If no tabs exist, create one with the current keyer from standalone
-    if (tabWidget->count() == 0) {
+    if (tabWidget->count() == 0)
+    {
         QString currentKeyer = standaloneFrame->getCurrentKeyerType();
-        if (!currentKeyer.isEmpty()) {
+        if (!currentKeyer.isEmpty())
+        {
             addKeyerTab(currentKeyer);
         }
     }
@@ -163,10 +171,13 @@ void DMKeyerContainer::switchToTabbedMode()
 
 void DMKeyerContainer::updateModeButton()
 {
-    if (currentMode == StandaloneMode) {
+    if (currentContainerMode == StandaloneMode)
+    {
         modeToggleButton->setText(tr("Switch to Tabs"));
         modeToggleButton->setIcon(QIcon(":/icons/tabs.png")); // Optional
-    } else {
+    }
+    else
+    {
         modeToggleButton->setText(tr("Switch to Single"));
         modeToggleButton->setIcon(QIcon(":/icons/single.png")); // Optional
     }
@@ -174,10 +185,13 @@ void DMKeyerContainer::updateModeButton()
 
 void DMKeyerContainer::onModeToggleClicked()
 {
-    if (currentMode == StandaloneMode) {
-        setMode(TabbedMode);
-    } else {
-        setMode(StandaloneMode);
+    if (currentContainerMode == StandaloneMode)
+    {
+        setContainerMode(TabbedMode);
+    }
+    else
+    {
+        setContainerMode(StandaloneMode);
     }
 
     // Save preference
@@ -185,16 +199,20 @@ void DMKeyerContainer::onModeToggleClicked()
                        VOICEKEYER_COMMON_PARAMS_FILENAME;
     QSettings config(fileName, QSettings::IniFormat);
     config.beginGroup(VOICEKEYER_COMMON_PARAMS_GROUPNAME);
-    config.setValue("ContainerMode", currentMode == TabbedMode ? "Tabbed" : "Standalone");
+    config.setValue("ContainerMode", currentContainerMode == TabbedMode ? "Tabbed" : "Standalone");
     config.endGroup();
 }
 
 DMButtonFrame* DMKeyerContainer::getActiveFrame() const
 {
-    if (currentMode == StandaloneMode) {
+    if (currentContainerMode == StandaloneMode)
+    {
         return standaloneFrame;
-    } else {
-        if (activeTab) {
+    }
+    else
+    {
+        if (activeTab)
+        {
             return activeTab->getFrame();
         }
         return nullptr;
@@ -203,16 +221,19 @@ DMButtonFrame* DMKeyerContainer::getActiveFrame() const
 
 void DMKeyerContainer::addKeyerTab(const QString &keyerType)
 {
-    if (currentMode != TabbedMode) {
+    if (currentContainerMode != TabbedMode)
+    {
         return;
     }
 
-    if (keyerType.isEmpty()) {
+    if (keyerType.isEmpty())
+    {
         return;
     }
 
     // Check if already in use
-    if (isKeyerTypeInUse(keyerType)) {
+    if (isKeyerTypeInUse(keyerType))
+    {
         QMessageBox::information(this, tr("Keyer Already Open"),
                                  tr("This keyer type is already open in another tab."));
         return;
@@ -220,7 +241,8 @@ void DMKeyerContainer::addKeyerTab(const QString &keyerType)
 
     // Create new keyer tab
     KeyerTab *newTab = createKeyerTab(keyerType);
-    if (!newTab) {
+    if (!newTab)
+    {
         return;
     }
 
@@ -235,7 +257,8 @@ void DMKeyerContainer::addKeyerTab(const QString &keyerType)
     keyerTypesInUse[keyerType] = newTab;
 
     // If this is the first tab, make it active
-    if (tabWidget->count() == 1) {
+    if (tabWidget->count() == 1)
+    {
         updateActiveTab(newTab);
     }
 
@@ -244,14 +267,16 @@ void DMKeyerContainer::addKeyerTab(const QString &keyerType)
 
 void DMKeyerContainer::onAddKeyerClicked()
 {
-    if (currentMode != TabbedMode) {
+    if (currentContainerMode != TabbedMode)
+    {
         return;
     }
 
     // Get available keyer types
     QStringList availableTypes = getAvailableKeyerTypes();
 
-    if (availableTypes.isEmpty()) {
+    if (availableTypes.isEmpty())
+    {
         QMessageBox::information(this, tr("No Keyers Available"),
                                  tr("All available keyer types are already in use."));
         return;
@@ -269,7 +294,8 @@ void DMKeyerContainer::onAddKeyerClicked()
         &ok
         );
 
-    if (!ok || selectedType.isEmpty()) {
+    if (!ok || selectedType.isEmpty())
+    {
         return;
     }
 
@@ -278,11 +304,13 @@ void DMKeyerContainer::onAddKeyerClicked()
 
 void DMKeyerContainer::onTabChanged(int index)
 {
-    if (currentMode != TabbedMode) {
+    if (currentContainerMode != TabbedMode)
+    {
         return;
     }
 
-    if (index < 0 || index >= tabWidget->count()) {
+    if (index < 0 || index >= tabWidget->count())
+    {
         updateActiveTab(nullptr);
         return;
     }
@@ -293,21 +321,25 @@ void DMKeyerContainer::onTabChanged(int index)
 
 void DMKeyerContainer::onTabCloseRequested(int index)
 {
-    if (currentMode != TabbedMode) {
+    if (currentContainerMode != TabbedMode)
+    {
         return;
     }
 
-    if (index < 0 || index >= tabWidget->count()) {
+    if (index < 0 || index >= tabWidget->count())
+    {
         return;
     }
 
     KeyerTab *tab = qobject_cast<KeyerTab*>(tabWidget->widget(index));
-    if (!tab) {
+    if (!tab)
+    {
         return;
     }
 
     // Don't allow closing the last tab
-    if (tabWidget->count() == 1) {
+    if (tabWidget->count() == 1)
+    {
         QMessageBox::information(this, tr("Cannot Close"),
                                  tr("Cannot close the last keyer tab. Switch to single mode instead."));
         return;
@@ -321,7 +353,8 @@ void DMKeyerContainer::onTabCloseRequested(int index)
         QMessageBox::Yes | QMessageBox::No
         );
 
-    if (reply != QMessageBox::Yes) {
+    if (reply != QMessageBox::Yes)
+    {
         return;
     }
 
@@ -329,7 +362,8 @@ void DMKeyerContainer::onTabCloseRequested(int index)
     keyerTypesInUse.remove(tab->getKeyerType());
 
     // If this was active, clear it
-    if (tab == activeTab) {
+    if (tab == activeTab)
+    {
         activeTab = nullptr;
     }
 
@@ -339,28 +373,31 @@ void DMKeyerContainer::onTabCloseRequested(int index)
 
     // Update active to current tab
     int currentIndex = tabWidget->currentIndex();
-    if (currentIndex >= 0) {
-        KeyerTab *newActiveTab = qobject_cast<KeyerTab*>(
-            tabWidget->widget(currentIndex));
+    if (currentIndex >= 0)
+    {
+        KeyerTab *newActiveTab = qobject_cast<KeyerTab*>(tabWidget->widget(currentIndex));
         updateActiveTab(newActiveTab);
     }
 }
 
 void DMKeyerContainer::removeCurrentTab()
 {
-    if (currentMode != TabbedMode) {
+    if (currentContainerMode != TabbedMode)
+    {
         return;
     }
 
     int currentIndex = tabWidget->currentIndex();
-    if (currentIndex >= 0) {
+    if (currentIndex >= 0)
+    {
         onTabCloseRequested(currentIndex);
     }
 }
 
 int DMKeyerContainer::getTabCount() const
 {
-    if (currentMode == TabbedMode) {
+    if (currentContainerMode == TabbedMode)
+    {
         return tabWidget->count();
     }
     return 0;
@@ -370,7 +407,8 @@ KeyerTab* DMKeyerContainer::createKeyerTab(const QString &keyerType)
 {
     KeyerTab *tab = new KeyerTab(keyerType, this);
 
-    if (tab->getFrame()) {
+    if (tab->getFrame())
+    {
         setupFrameConnections(tab->getFrame());
     }
 
@@ -379,14 +417,22 @@ KeyerTab* DMKeyerContainer::createKeyerTab(const QString &keyerType)
 
 void DMKeyerContainer::updateActiveTab(KeyerTab *newActiveTab)
 {
-    if (activeTab) {
+    if (activeTab)
+    {
         activeTab->setActive(false);
     }
 
     activeTab = newActiveTab;
 
-    if (activeTab) {
+    if (activeTab)
+    {
         activeTab->setActive(true);
+        QString keyerType = activeTab->getKeyerType();
+        if (keyerType != keyerSettings->getActiveKeyerType())
+        {
+            keyerSettings->setActiveKeyerType(keyerType);
+            emit activeKeyerChanged();
+        }
     }
 }
 
@@ -409,12 +455,14 @@ QStringList DMKeyerContainer::getAvailableKeyerTypes() const
     for (auto it = keyers->constBegin(); it != keyers->constEnd(); ++it) {
         const QString &keyerName = it.key();
 
-        if (keyerName.isEmpty()) {
+        if (keyerName.isEmpty())
+        {
             continue;
         }
 
         // Skip if already in use
-        if (isKeyerTypeInUse(keyerName)) {
+        if (isKeyerTypeInUse(keyerName))
+        {
             continue;
         }
 
