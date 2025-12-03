@@ -58,14 +58,6 @@ TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
 }
 TSingleLogFrame::~TSingleLogFrame()
 {
-    //***********************************************
-    if (dmKeyerContainer)
-    {
-        dmKeyerContainer->setParent(nullptr);
-        delete dmKeyerContainer;
-        dmKeyerContainer = nullptr;
-    }
-
     delete ui;
 
     ui = nullptr;
@@ -391,7 +383,7 @@ void TSingleLogFrame::createScreenComponents()
     qsoMapFrame->setFrameShadow(QFrame::Raised);
 
     qsoMapFrame->setVisible(false);
-/*
+    /*
     dmButtonFrame = new DMButtonFrame(this);
     dmButtonFrame->setObjectName(QStringLiteral("DMButtonFrame"));
     dmButtonFrame->setFrameShape(QFrame::StyledPanel);
@@ -407,7 +399,6 @@ void TSingleLogFrame::createScreenComponents()
 
 
 }
-
 void TSingleLogFrame::clearScreenLayout(bool clearAllTabs)
 {
     // clear down the screen elements, but don't delete them (except for the aux frames) - they will be used to rebuild the screen
@@ -426,7 +417,6 @@ void TSingleLogFrame::clearScreenLayout(bool clearAllTabs)
         msg = "null contest";
         traceMsg("clearScreenLayout starts for " + msg);
     }
-
 
     QSOListFrame->setContest(nullptr);
     FKHRigControlFrame->setContest(nullptr);
@@ -449,7 +439,7 @@ void TSingleLogFrame::clearScreenLayout(bool clearAllTabs)
     clusterControlFrame->setContest(nullptr);
     bandmapControlFrame->setContest(nullptr);
     qsoMapFrame->setContest(nullptr, false, false, false, false, false, QString(), QString(), false);
-
+    dmKeyerContainer->setContest(nullptr);
 
     setBandmapLoaded(false);
     setQrzDisplayFrameLoaded(false);
@@ -465,12 +455,9 @@ void TSingleLogFrame::clearScreenLayout(bool clearAllTabs)
     bandmapControlFrame->setParent(this);
     bandmapControlFrame->hide();
 
-    dmKeyerContainer->setParent(this);
-    dmKeyerContainer->hide();
-
     if (LogContainer->isLoggerClosing())
     {
-        // nothing here
+        // do nothing more...
     }
     else
     {
@@ -528,7 +515,8 @@ void TSingleLogFrame::clearScreenLayout(bool clearAllTabs)
         qsoMapFrame->setParent(this);
         qsoMapFrame->hide();
 
-
+        dmKeyerContainer->setParent(this);
+        dmKeyerContainer->hide();
 
         if (clearAllTabs)
         {
@@ -630,14 +618,14 @@ void TSingleLogFrame::buildRow(ContestPage *cp, SCRow &scrow, int &auxInstance, 
 
             QScrollArea *elementScrollArea = nullptr;
             if (type != sctLog
-                    && type != sctThisMatch
-                    && type != sctOtherMatch
-                    && type != sctArchiveMatch
-                    && type != sctSplit
-                    && type != sctCluster
-                    && type != sctWsjtx
-                    && type != sctBandmap
-                    )
+                && type != sctThisMatch
+                && type != sctOtherMatch
+                && type != sctArchiveMatch
+                && type != sctSplit
+                && type != sctCluster
+                && type != sctWsjtx
+                && type != sctBandmap
+                )
             {
                 elementScrollArea = new QScrollArea();
                 elementScrollArea->setWidgetResizable(true);
@@ -652,202 +640,202 @@ void TSingleLogFrame::buildRow(ContestPage *cp, SCRow &scrow, int &auxInstance, 
 
             switch (type)
             {
-                case sctNone:
-                case sctMainScreen:
-                case sctScreen:
-                {
-                    break;
-                }
-                case sctAux:
-                {
-                    StackedInfoFrame *f = new StackedInfoFrame(elementScrollArea, auxInstance++, this);
+            case sctNone:
+            case sctMainScreen:
+            case sctScreen:
+            {
+                break;
+            }
+            case sctAux:
+            {
+                StackedInfoFrame *f = new StackedInfoFrame(elementScrollArea, auxInstance++, this);
 
-                    f->setCurrentFrameType(StackedInfoFrame::getTrAuxTypeString(scele.auxType));
-                    elementScrollArea->setWidget(f);
-                    f->setContest(ct);
-                    f->setVisible(true);
-                    break;
-                }
-                case sctLog:
-                {
-                    QSOListFrame->setParent(hs);
-                    hs->addWidget(QSOListFrame);
-                    QSOListFrame->setContest(ct);
-                    QSOListFrame->setVisible(true);
-                    break;
-                }
-                case sctRigControl:
-                {
-                    elementScrollArea->setWidget(FKHRigControlFrame);
-                    // don't set contest here
-                    break;
-                }
-                case sctRunButtons:
-                {
-                    elementScrollArea->setWidget(runButtonsFrame);
-                    // don't set contest here
-//                    runButtonsFrame->setContest(ct);
-                    break;
-                }
-                case sctBandSwitch:
-                {
-                    elementScrollArea->setWidget(bandSwitchFrame);
-                    bandSwitchFrame->setContest(ct);
-                    break;
-                }
-                case sctRotControl:
-                {
-                    elementScrollArea->setWidget(FKHRotControlFrame);
-                    // don't set contest here
-                    break;
-                }
-                case sctSkyScanControl:
-                {
-                    elementScrollArea->setWidget(skyScanControlFrame);
-                    // don't set contest here
-                    break;
-                }
-                case sctRotSkyScanPresets:
-                {
-                    elementScrollArea->setWidget(FKHRotSkyScanPresetsFrame);
-                    break;
-                }
-                case sctRotCompassDisplay:
-                {
-                    elementScrollArea->setWidget(FKHRotCompassFrame);
-                    break;
-                }
-                case sctQrzDisplay:
-                {
-                    elementScrollArea->setWidget(qrzDisplayFrame);
-                    qrzDisplayFrame->setContest(ct);
-                    setQrzDisplayFrameLoaded(true);
-                    break;
-                }
-                case sctRotPresets:
-                {
-                    elementScrollArea->setWidget(rotPresets);
-                    rotPresets->setContest(ct);
-                    break;
-                }
-                case sctQSOEdit:
-                {
-                    elementScrollArea->setWidget(GJVQSOLogFrame);
-                    GJVQSOLogFrame->setContest(ct);
-                    GJVQSOLogFrame->setVisible(true);
-                    break;
-                }
-                case sctNextQSODetails:
-                {
-                    elementScrollArea->setWidget(CribSheet);
-                    CribSheet->setVisible(true);
-                    onShowCribBand();
-                    break;
-                }
-                case sctThisMatch:
-                {
-                    hs->addWidget(thisMatchFrame);
-                    thisMatchFrame->setVisible(true);
-                    thisMatchFrame->setContest(ct);
-                    break;
-                }
-                case sctOtherMatch:
-                {
-                    hs->addWidget(otherMatchFrame);
-                    otherMatchFrame->setVisible(true);
-                    otherMatchFrame->setContest(ct);
-                    break;
-                }
-                case sctArchiveMatch:
-                {
-                    hs->addWidget(archiveMatchFrame);
-                    archiveMatchFrame->setVisible(true);
-                    archiveMatchFrame->setContest(ct);
-                    break;
-                }
-                case sctChat:
-                {
-                    elementScrollArea->setWidget(chatFrame);
-                    // chatFrame doesn't have a setContest
-                    //chatFrame->setContest(ct);
-                    chatFrame->setVisible(true);
-                    break;
-                }
-                case sctCluster:
-                {
-                    hs->addWidget(clusterControlFrame);
-                    clusterControlFrame->setVisible(true);
-                    clusterControlFrame->setContest(ct);
-                    break;
+                f->setCurrentFrameType(StackedInfoFrame::getTrAuxTypeString(scele.auxType));
+                elementScrollArea->setWidget(f);
+                f->setContest(ct);
+                f->setVisible(true);
+                break;
+            }
+            case sctLog:
+            {
+                QSOListFrame->setParent(hs);
+                hs->addWidget(QSOListFrame);
+                QSOListFrame->setContest(ct);
+                QSOListFrame->setVisible(true);
+                break;
+            }
+            case sctRigControl:
+            {
+                elementScrollArea->setWidget(FKHRigControlFrame);
+                // don't set contest here
+                break;
+            }
+            case sctRunButtons:
+            {
+                elementScrollArea->setWidget(runButtonsFrame);
+                // don't set contest here
+                //                    runButtonsFrame->setContest(ct);
+                break;
+            }
+            case sctBandSwitch:
+            {
+                elementScrollArea->setWidget(bandSwitchFrame);
+                bandSwitchFrame->setContest(ct);
+                break;
+            }
+            case sctRotControl:
+            {
+                elementScrollArea->setWidget(FKHRotControlFrame);
+                // don't set contest here
+                break;
+            }
+            case sctSkyScanControl:
+            {
+                elementScrollArea->setWidget(skyScanControlFrame);
+                // don't set contest here
+                break;
+            }
+            case sctRotSkyScanPresets:
+            {
+                elementScrollArea->setWidget(FKHRotSkyScanPresetsFrame);
+                break;
+            }
+            case sctRotCompassDisplay:
+            {
+                elementScrollArea->setWidget(FKHRotCompassFrame);
+                break;
+            }
+            case sctQrzDisplay:
+            {
+                elementScrollArea->setWidget(qrzDisplayFrame);
+                qrzDisplayFrame->setContest(ct);
+                setQrzDisplayFrameLoaded(true);
+                break;
+            }
+            case sctRotPresets:
+            {
+                elementScrollArea->setWidget(rotPresets);
+                rotPresets->setContest(ct);
+                break;
+            }
+            case sctQSOEdit:
+            {
+                elementScrollArea->setWidget(GJVQSOLogFrame);
+                GJVQSOLogFrame->setContest(ct);
+                GJVQSOLogFrame->setVisible(true);
+                break;
+            }
+            case sctNextQSODetails:
+            {
+                elementScrollArea->setWidget(CribSheet);
+                CribSheet->setVisible(true);
+                onShowCribBand();
+                break;
+            }
+            case sctThisMatch:
+            {
+                hs->addWidget(thisMatchFrame);
+                thisMatchFrame->setVisible(true);
+                thisMatchFrame->setContest(ct);
+                break;
+            }
+            case sctOtherMatch:
+            {
+                hs->addWidget(otherMatchFrame);
+                otherMatchFrame->setVisible(true);
+                otherMatchFrame->setContest(ct);
+                break;
+            }
+            case sctArchiveMatch:
+            {
+                hs->addWidget(archiveMatchFrame);
+                archiveMatchFrame->setVisible(true);
+                archiveMatchFrame->setContest(ct);
+                break;
+            }
+            case sctChat:
+            {
+                elementScrollArea->setWidget(chatFrame);
+                // chatFrame doesn't have a setContest
+                //chatFrame->setContest(ct);
+                chatFrame->setVisible(true);
+                break;
+            }
+            case sctCluster:
+            {
+                hs->addWidget(clusterControlFrame);
+                clusterControlFrame->setVisible(true);
+                clusterControlFrame->setContest(ct);
+                break;
 
-                }
-                case sctBandmap:
+            }
+            case sctBandmap:
+            {
+                hs->addWidget(bandmapControlFrame);
+                bandmapControlFrame->setVisible(true);
+                setBandmapLoaded(true);
+                break;
+
+            }
+            case sctWsjtx:
+            {
+                hs->addWidget(wsjtxFrame);
+                wsjtxFrame->setVisible(true);
+
+                // don't set contest here
+                break;
+            }
+            case sctQsoMap:
+            {
+                elementScrollArea->setWidget(qsoMapFrame);
+                qsoMapFrame->setVisible(true);
+
+                bool grid = false;
+                if (ct->locatorMandatoryField.getValue())
                 {
-                    hs->addWidget(bandmapControlFrame);
-                    bandmapControlFrame->setVisible(true);
-                    setBandmapLoaded(true);
-                    break;
-
+                    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpShowQSOMapGrid, grid );
                 }
-                case sctWsjtx:
+                bool lines;
+                TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpShowQSOMapLines, lines );
+
+                bool spots;
+                TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpMapShowCluster, spots );
+
+                bool showLoc = true;
+                TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpShowMapLoc, showLoc );
+                QString tl;
+                TContestApp::getContestApp() ->loggerBundle.getStringProfile( elpShowMapTLLoc, tl );
+                QString br;
+                TContestApp::getContestApp() ->loggerBundle.getStringProfile( elpShowMapBRLoc, br );
+                bool showNav = true;
+                TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpShowMapNav, showNav );
+
+                qsoMapFrame->setContest(ct, false, grid, lines, spots, showLoc, tl, br, showNav);
+                break;
+            }
+            case sctDMButtons:
+            {
+                elementScrollArea->setWidget(dmKeyerContainer);
+                dmKeyerContainer->setVisible(true);
+                // don't set contest here
+                break;
+            }
+            case sctSplit:
+            {
+                MinosSplitter *vs = new MinosSplitter();
+                vs->setObjectName("splitRow" + QString::number(cp->rowSplitters.size()) + "splitter");
+                vs->setOrientation(Qt::Vertical);
+                vs->setChildrenCollapsible(false);
+                cp->rowSplitters.push_back(vs);
+
+                for (auto &srow: scele.rows)
                 {
-                    hs->addWidget(wsjtxFrame);
-                    wsjtxFrame->setVisible(true);
-
-                    // don't set contest here
-                    break;
+                    buildRow(cp, srow, auxInstance, vs);
                 }
-                case sctQsoMap:
-                {
-                    elementScrollArea->setWidget(qsoMapFrame);
-                    qsoMapFrame->setVisible(true);
 
-                    bool grid = false;
-                    if (ct->locatorMandatoryField.getValue())
-                    {
-                        TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpShowQSOMapGrid, grid );
-                    }
-                    bool lines;
-                    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpShowQSOMapLines, lines );
-
-                    bool spots;
-                    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpMapShowCluster, spots );
-
-                    bool showLoc = true;
-                    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpShowMapLoc, showLoc );
-                    QString tl;
-                    TContestApp::getContestApp() ->loggerBundle.getStringProfile( elpShowMapTLLoc, tl );
-                    QString br;
-                    TContestApp::getContestApp() ->loggerBundle.getStringProfile( elpShowMapBRLoc, br );
-                    bool showNav = true;
-                    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpShowMapNav, showNav );
-
-                    qsoMapFrame->setContest(ct, false, grid, lines, spots, showLoc, tl, br, showNav);
-                    break;
-                }
-                case sctDMButtons:
-                {
-                    elementScrollArea->setWidget(dmKeyerContainer);
-                    dmKeyerContainer->setVisible(true);
-                    // don't set contest here
-                    break;
-                }
-                case sctSplit:
-                {
-                    MinosSplitter *vs = new MinosSplitter();
-                    vs->setObjectName("splitRow" + QString::number(cp->rowSplitters.size()) + "splitter");
-                    vs->setOrientation(Qt::Vertical);
-                    vs->setChildrenCollapsible(false);
-                    cp->rowSplitters.push_back(vs);
-
-                    for (auto &srow: scele.rows)
-                    {
-                        buildRow(cp, srow, auxInstance, vs);
-                    }
-
-                    hs->addWidget(vs);
-                    break;
-                }
+                hs->addWidget(vs);
+                break;
+            }
             }
         }
         splitterParent->addWidget(hs);
@@ -868,7 +856,7 @@ void TSingleLogFrame::buildScreen(SCScreen &s, int t, int &auxInstance)
         for (int i = 0; i <= t; i++)
         {
             if (LogContainer->contestPageControls.count() <= i
-               || LogContainer->contestPageControls[i] == nullptr)
+                || LogContainer->contestPageControls[i] == nullptr)
             {
                 ContestPageControl *cpc = new ContestPageControl();
 
@@ -998,7 +986,7 @@ void TSingleLogFrame::doSendEntry(QString /*expName*/)
     LoggerContestLog * ct = dynamic_cast<LoggerContestLog *>( contest );
     if ( !ct )
     {
-       return;
+        return;
     }
     QString cname = ct->VHFContestName.getValue();
     QString club = ct->entrant.getValue();
@@ -1051,7 +1039,7 @@ void TSingleLogFrame::doSendEntry(QString /*expName*/)
 
     target.replace(" ", "+");    // replaces in-situ
 
-//    trace("Working version is          https://www.rsgbcc.org/cgi-bin/vhfentertest.pl?year=2022&Contest=70MHz+UKAC&Band=17+Nov&Req=Date&Section=AO&Category=&Club=Parallel+Lines+CG&this=NEXT");
+    //    trace("Working version is          https://www.rsgbcc.org/cgi-bin/vhfentertest.pl?year=2022&Contest=70MHz+UKAC&Band=17+Nov&Req=Date&Section=AO&Category=&Club=Parallel+Lines+CG&this=NEXT");
 
     trace("About to open URL for entry " + target);
     bool openRet = QDesktopServices::openUrl(QUrl(target));
@@ -1062,43 +1050,43 @@ void TSingleLogFrame::doSendEntry(QString /*expName*/)
 }
 QString TSingleLogFrame::makeEntry( bool saveMinos, bool sendEntry )
 {
-   LoggerContestLog * ct = dynamic_cast<LoggerContestLog *>( contest );
-   if ( !ct )
-   {
-      return "";
-   }
+    LoggerContestLog * ct = dynamic_cast<LoggerContestLog *>( contest );
+    if ( !ct )
+    {
+        return "";
+    }
 
-   TEntryOptionsForm EntryDlg( this, QSharedPointer<ContestDetailsTransferObject>(), ct, saveMinos, sendEntry  );
-   if ( saveMinos )
-   {
-      EntryDlg.setWindowTitle(tr("Save imported log as a .minos file"));
-   }
-   if ( EntryDlg.exec() == QDialog::Accepted )
-   {
-      ct->commonSave( false );
-      QString expName = EntryDlg.doFileSave( );
-      if (sendEntry)
-      {
-          doSendEntry(expName);
-      }
-      return expName;
-   }
-   return "";
+    TEntryOptionsForm EntryDlg( this, QSharedPointer<ContestDetailsTransferObject>(), ct, saveMinos, sendEntry  );
+    if ( saveMinos )
+    {
+        EntryDlg.setWindowTitle(tr("Save imported log as a .minos file"));
+    }
+    if ( EntryDlg.exec() == QDialog::Accepted )
+    {
+        ct->commonSave( false );
+        QString expName = EntryDlg.doFileSave( );
+        if (sendEntry)
+        {
+            doSendEntry(expName);
+        }
+        return expName;
+    }
+    return "";
 }
 
 void TSingleLogFrame::closeContest()
 {
     if ( TContestApp::getContestApp() )
     {
-       if (contest)
-       {
+        if (contest)
+        {
             RPCPubSub::publish( rpcConstants::monitorLogCategory, contest->publishedName, QString::number( 0 ), psRevoked );
-       }
+        }
 
-       clearScreenLayout(false);
-       TContestApp::getContestApp() ->closeFile( contest );
+        clearScreenLayout(false);
+        TContestApp::getContestApp() ->closeFile( contest );
 
-       contest = nullptr;
+        contest = nullptr;
     }
 }
 
@@ -1144,8 +1132,8 @@ void TSingleLogFrame::on_ContestPageChanged ()
     if ( this != LogContainer->getCurrentLogFrame() )
     {
 
-       GJVQSOLogFrame->savePartial();  // we kill it on (re) entry, so not needed
-       return ;
+        GJVQSOLogFrame->savePartial();  // we kill it on (re) entry, so not needed
+        return ;
     }
 
     LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( getContest() );
@@ -1257,10 +1245,10 @@ void TSingleLogFrame::NextContactDetailsTimerTimer( )
         if ( contest->isReadOnly() )
         {
             NextContactDetailsLabel->setText( "<b><center><nobr><p><big><h1>"
-                                                  + contest->mycall.getFullCall()
-                                                  + locBuff
-                                                  + qthBuff
-                                              );
+                                             + contest->mycall.getFullCall()
+                                             + locBuff
+                                             + qthBuff
+                                             );
         }
         else
         {
@@ -1270,44 +1258,44 @@ void TSingleLogFrame::NextContactDetailsTimerTimer( )
                 snBuff = "<br>" + QString("%1").arg( contest->maxSerial + 1, 3, 10, QChar('0') );
             }
             NextContactDetailsLabel->setText( "<b><center><nobr><p><big><h1>"
-                                                  + contest->mycall.getFullCall()
-                                                  + snBuff
-                                                  + locBuff
-                                                  + qthBuff
-                                              );
+                                             + contest->mycall.getFullCall()
+                                             + snBuff
+                                             + locBuff
+                                             + qthBuff
+                                             );
         }
     }
 }
 void TSingleLogFrame::PublishTimerTimer(  )
 {
-   LoggerContestLog * ct = dynamic_cast<LoggerContestLog *>( contest );
-   if ( ct && ct->isMinosFile() && !ct->isReadOnly())
-   {
-       // We also need to publish if the times have changed
-       // although this is really a dev problem!
+    LoggerContestLog * ct = dynamic_cast<LoggerContestLog *>( contest );
+    if ( ct && ct->isMinosFile() && !ct->isReadOnly())
+    {
+        // We also need to publish if the times have changed
+        // although this is really a dev problem!
 
-       // BUT this looks like it should work
+        // BUT this looks like it should work
 
-      int stanzaCount = contest->getCtStanzaCount();
-      if ( lastStanzaCount != stanzaCount )
-      {
-         // publish this contest details - what to use?
-         // category LoggerContestLog
-         // name filename(?)
-         // value stanzaCount
-          QString name = contest->name.getValue();
-          QString band = contest->contestBands.getValue();
+        int stanzaCount = contest->getCtStanzaCount();
+        if ( lastStanzaCount != stanzaCount )
+        {
+            // publish this contest details - what to use?
+            // category LoggerContestLog
+            // name filename(?)
+            // value stanzaCount
+            QString name = contest->name.getValue();
+            QString band = contest->contestBands.getValue();
 
-          // cell is stanzacount;[band] name;start time;end time
-          name.replace(';', ':');
-          QString tstart = contest->DTGStart.getValue();
-          QString tend = contest->DTGEnd.getValue();
-          QString cell = QString::number( stanzaCount ) + ";[" + band + "] " + name + ";" + tstart + ";" + tend;
+            // cell is stanzacount;[band] name;start time;end time
+            name.replace(';', ':');
+            QString tstart = contest->DTGStart.getValue();
+            QString tend = contest->DTGEnd.getValue();
+            QString cell = QString::number( stanzaCount ) + ";[" + band + "] " + name + ";" + tstart + ";" + tend;
 
-         RPCPubSub::publish( rpcConstants::monitorLogCategory, contest->publishedName, cell, psPublished );
-         lastStanzaCount = stanzaCount;
-      }
-   }
+            RPCPubSub::publish( rpcConstants::monitorLogCategory, contest->publishedName, cell, psPublished );
+            lastStanzaCount = stanzaCount;
+        }
+    }
 }
 void TSingleLogFrame::HideTimerTimer(  )
 {
@@ -1317,7 +1305,7 @@ void TSingleLogFrame::HideTimerTimer(  )
 
 void TSingleLogFrame::updateQSODisplay()
 {
-   GJVQSOLogFrame->updateQSODisplay();
+    GJVQSOLogFrame->updateQSODisplay();
 }
 
 void TSingleLogFrame::onOtherMatchTreeFocused(QObject *, bool in, QFocusEvent * )
@@ -1355,58 +1343,58 @@ void TSingleLogFrame::onArchiveTreeFocused(QObject *, bool in, QFocusEvent * )
 }
 void TSingleLogFrame::on_MatchStarting(BaseContestLog *ct)
 {
-      // clear down match trees
+    // clear down match trees
     if (contest == ct)
     {
-      xferTree = nullptr;
+        xferTree = nullptr;
 
-      thisMatchFrame->treeClickIndex = QModelIndex();
-      otherMatchFrame->treeClickIndex = QModelIndex();
-      archiveMatchFrame->treeClickIndex = QModelIndex();
+        thisMatchFrame->treeClickIndex = QModelIndex();
+        otherMatchFrame->treeClickIndex = QModelIndex();
+        archiveMatchFrame->treeClickIndex = QModelIndex();
 
-      GJVQSOLogFrame->setXferEnabled(false, contest, "Logger");
+        GJVQSOLogFrame->setXferEnabled(false, contest, "Logger");
     }
 }
 
 MatchTreeItem * TSingleLogFrame::getXferItem()
 {
-   // transfer from current match
+    // transfer from current match
 
-   // copy relevant parts of match contact to screen contact
+    // copy relevant parts of match contact to screen contact
     if ( thisMatchFrame->treeClickIndex.isValid() && ( xferTree == nullptr ||  thisMatchFrame == xferTree ) )
     {
-       MatchTreeItem * MatchTreeIndex = static_cast< MatchTreeItem * >(thisMatchFrame->treeClickIndex.internalPointer());
+        MatchTreeItem * MatchTreeIndex = static_cast< MatchTreeItem * >(thisMatchFrame->treeClickIndex.internalPointer());
 
-       return MatchTreeIndex;
+        return MatchTreeIndex;
 
     }
-   if ( archiveMatchFrame->treeClickIndex.isValid() && ( xferTree == nullptr ||  archiveMatchFrame == xferTree ) )
-   {
-      MatchTreeItem * MatchTreeIndex = static_cast< MatchTreeItem * >(archiveMatchFrame->treeClickIndex.internalPointer());
+    if ( archiveMatchFrame->treeClickIndex.isValid() && ( xferTree == nullptr ||  archiveMatchFrame == xferTree ) )
+    {
+        MatchTreeItem * MatchTreeIndex = static_cast< MatchTreeItem * >(archiveMatchFrame->treeClickIndex.internalPointer());
 
-      return MatchTreeIndex;
+        return MatchTreeIndex;
 
-   }
-   else
-   {
-      if ( otherMatchFrame->treeClickIndex.isValid() && ( xferTree == nullptr || otherMatchFrame == xferTree) )
-      {
-         MatchTreeItem * MatchTreeIndex = static_cast< MatchTreeItem * > (otherMatchFrame->treeClickIndex.internalPointer());
+    }
+    else
+    {
+        if ( otherMatchFrame->treeClickIndex.isValid() && ( xferTree == nullptr || otherMatchFrame == xferTree) )
+        {
+            MatchTreeItem * MatchTreeIndex = static_cast< MatchTreeItem * > (otherMatchFrame->treeClickIndex.internalPointer());
 
-         return  MatchTreeIndex;
-      }
-   }
-   return nullptr;
+            return  MatchTreeIndex;
+        }
+    }
+    return nullptr;
 }
 void TSingleLogFrame::on_XferPressed(BaseContestLog *c, QString basename)
 {
-   // transfer from current match
-   if (!contest || contest->isReadOnly() || c != contest || basename != "Logger" )
-      return ;
+    // transfer from current match
+    if (!contest || contest->isReadOnly() || c != contest || basename != "Logger" )
+        return ;
 
-   MatchTreeItem *mi = getXferItem();
+    MatchTreeItem *mi = getXferItem();
 
-   transferDetails(mi);
+    transferDetails(mi);
 }
 void TSingleLogFrame::MatchTreeSelected(MatchType m, BaseContestLog *c, QString basename)
 {
@@ -1434,30 +1422,30 @@ void TSingleLogFrame::transferDetails(MatchTreeItem *MatchTreeIndex )
 {
     if ( !contest || !MatchTreeIndex  )
     {
-       return ;
+        return ;
     }
-   // needs to be transferred into QSOLogFrame.cpp
-   QSharedPointer<MatchContact> mc = MatchTreeIndex->getMatchContact();
-   BaseMatchContest *mct = MatchTreeIndex->getMatchContest();
+    // needs to be transferred into QSOLogFrame.cpp
+    QSharedPointer<MatchContact> mc = MatchTreeIndex->getMatchContact();
+    BaseMatchContest *mct = MatchTreeIndex->getMatchContest();
 
-   if (mct && mc)
-   {
-       CheckableContact *bct = mc->getBaseContact();
-       if (bct)
-       {
-           const BaseContestLog *mcl = mc->getContactLog();
-           GJVQSOLogFrame->transferDetails( bct, mcl );
-       }
-       else
-       {
-           ListContact *lct = mc->getListContact();
-           if (lct)
-           {
-               ContactList *matct = mc->getContactList();
-               GJVQSOLogFrame->transferDetails( lct, matct );
-           }
-       }
-   }
+    if (mct && mc)
+    {
+        CheckableContact *bct = mc->getBaseContact();
+        if (bct)
+        {
+            const BaseContestLog *mcl = mc->getContactLog();
+            GJVQSOLogFrame->transferDetails( bct, mcl );
+        }
+        else
+        {
+            ListContact *lct = mc->getListContact();
+            if (lct)
+            {
+                ContactList *matct = mc->getContactList();
+                GJVQSOLogFrame->transferDetails( lct, matct );
+            }
+        }
+    }
 }
 
 void TSingleLogFrame::dxSpotToLog(memoryData::memData m )
@@ -1501,7 +1489,7 @@ void TSingleLogFrame::transferDetails(memoryData::memData &m )
 {
     if ( !contest  )
     {
-       return ;
+        return ;
     }
 
     GJVQSOLogFrame->transferDetails( m.callsign, m.locator, m.exchange, m.fromBandmapOrMemory );
@@ -1520,23 +1508,23 @@ void TSingleLogFrame::getCurrentDetails(memoryData::memData &m)
 
 void TSingleLogFrame::EditContact( CheckableContact *cct, bool nextUnfilled )
 {
-   TQSOEditDlg qdlg( this, nextUnfilled );
-   qdlg.setContest(contest);
-   qdlg.setFirstContact( cct );
+    TQSOEditDlg qdlg( this, nextUnfilled );
+    qdlg.setContest(contest);
+    qdlg.setFirstContact( cct );
 
-   trace(QString("TSingleLogFrame::EditContact %1").arg(cct->cs.getFullCall()));
+    trace(QString("TSingleLogFrame::EditContact %1").arg(cct->cs.getFullCall()));
 
-   qdlg.exec();
+    qdlg.exec();
 
-   trace(QString("TSingleLogFrame::EditContact finished %1").arg(cct->cs.getFullCall()));
+    trace(QString("TSingleLogFrame::EditContact finished %1").arg(cct->cs.getFullCall()));
 
-   contest->scanContest();  // as edit contact can change things mid-contest
-   updateTrees();
+    contest->scanContest();  // as edit contact can change things mid-contest
+    updateTrees();
 
 
-   GJVQSOLogFrame->refreshOps();
-   refreshMults();
-   GJVQSOLogFrame->startNextEntry();
+    GJVQSOLogFrame->refreshOps();
+    refreshMults();
+    GJVQSOLogFrame->startNextEntry();
 
 }
 //---------------------------------------------------------------------------
@@ -1564,15 +1552,15 @@ void TSingleLogFrame::on_MakeEntry(BaseContestLog *ct, bool e)
 {
     if (ct == contest)
     {
-       makeEntry( false, e );
+        makeEntry( false, e );
     }
 }
 void TSingleLogFrame::on_AfterLogContact( BaseContestLog *ct)
 {
-      if (ct == contest)
-      {
-         NextContactDetailsTimerTimer( );   // so that the details get updated
-      }
+    if (ct == contest)
+    {
+        NextContactDetailsTimerTimer( );   // so that the details get updated
+    }
 }
 void TSingleLogFrame::refreshMults()
 {
@@ -1583,31 +1571,31 @@ void TSingleLogFrame::refreshMults()
 void TSingleLogFrame::updateTrees()
 {
     QSOListFrame->refreshModel();
-   refreshMults();
+    refreshMults();
 }
 bool TSingleLogFrame::getStanza( unsigned int stanza, QString &stanzaData )
 {
-   return contest->getStanza( stanza, stanzaData );
+    return contest->getStanza( stanza, stanzaData );
 }
 void TSingleLogFrame::goNextUnfilled()
 {
-   QSharedPointer<BaseContact> nuc = contest->findNextUnfilledContact( );
-   if ( nuc )
-   {
-       trace("Goto next unfiled");
-       EditContact(nuc.data(), true);
-   }
-   else
-   {
-      MinosParameters::getMinosParameters() ->mshowMessage( tr("No unfilled contacts") );
-   }
+    QSharedPointer<BaseContact> nuc = contest->findNextUnfilledContact( );
+    if ( nuc )
+    {
+        trace("Goto next unfiled");
+        EditContact(nuc.data(), true);
+    }
+    else
+    {
+        MinosParameters::getMinosParameters() ->mshowMessage( tr("No unfilled contacts") );
+    }
 
 }
 void TSingleLogFrame::on_NextUnfilled(BaseContestLog *ct)
 {
     if (ct == contest)
     {
-       goNextUnfilled();
+        goNextUnfilled();
     }
 }
 
@@ -1616,10 +1604,10 @@ void TSingleLogFrame::goSerial( )
     static int serial = 0;
     do
     {
-       if ( serial == -1 )
-          serial = 0;
-       if ( !enquireDialog( this, tr("Please give serial wanted"), serial ) )
-          return ;
+        if ( serial == -1 )
+            serial = 0;
+        if ( !enquireDialog( this, tr("Please give serial wanted"), serial ) )
+            return ;
     }
     while ( serial == -1 );
 
@@ -1628,26 +1616,26 @@ void TSingleLogFrame::goSerial( )
     {
         bool ok;
         int s = c.wt->serials.getValue().toInt(&ok );
-       if ( ok && serial == s )
-       {
-          cfu = c.wt;
-          break;
-       }
+        if ( ok && serial == s )
+        {
+            cfu = c.wt;
+            break;
+        }
     }
 
     if ( cfu )
     {
-       EditContact( cfu.data(), false );
+        EditContact( cfu.data(), false );
     }
     else
-       MinosParameters::getMinosParameters() ->mshowMessage( tr("Serial number %1 not found").arg(serial) );
+        MinosParameters::getMinosParameters() ->mshowMessage( tr("Serial number %1 not found").arg(serial) );
 }
 
 void TSingleLogFrame::on_GoToSerial(BaseContestLog *ct)
 {
     if (ct == contest)
     {
-       goSerial();
+        goSerial();
     }
 }
 //---------------------------------------------------------------------------
@@ -1686,12 +1674,12 @@ void TSingleLogFrame::on_SetMemory(BaseContestLog *c, QString call, QString loc)
         RigMemDialog memDialog(this);
         memDialog.setLogData(&logData, n, ct);
         memDialog.setWindowTitle(QString("M%1 - Write").arg(QString::number(n + 1)));
-       if ( memDialog.exec() == QDialog::Accepted)
-       {
-           ct->saveRigMemory(n, logData);
+        if ( memDialog.exec() == QDialog::Accepted)
+        {
+            ct->saveRigMemory(n, logData);
 
-           MinosLoggerEvents::SendUpdateMemories(ct);
-       }
+            MinosLoggerEvents::SendUpdateMemories(ct);
+        }
     }
 }
 
@@ -1796,12 +1784,12 @@ void TSingleLogFrame::sendKeyerStop()
 
 void TSingleLogFrame::setBandmapLoaded(bool loaded)
 {
-   bandMapLoaded = loaded;
+    bandMapLoaded = loaded;
 }
 
 bool TSingleLogFrame::isBandMapLoaded()
 {
-   return bandMapLoaded;
+    return bandMapLoaded;
 }
 
 //---------------------------------------------------------------------------
@@ -1810,7 +1798,7 @@ bool TSingleLogFrame::isBandMapLoaded()
 
 void TSingleLogFrame::on_setClusterTXSpotEnableState(QString state)
 {
-   bool txEnableState = false;
+    bool txEnableState = false;
     if (state == SPOT_TX_ON)
     {
         txEnableState = true;
@@ -2278,7 +2266,7 @@ void TSingleLogFrame::sendSelectRadio(const QString &radName, const QString &ban
             // make sure log frame has correct name for radio
             if (radName != GJVQSOLogFrame->getRadioName())
             {
-               GJVQSOLogFrame->setRadioName(radName);
+                GJVQSOLogFrame->setRadioName(radName);
             }
 
             LogContainer->sendDM->invalidateRigCache(ct->radioName.getValue());
@@ -2423,8 +2411,8 @@ void TSingleLogFrame::on_cwCcwCmdEnable(bool s)
 {
     if (this == LogContainer->getCurrentLogFrame())
     {
-       FKHRotControlFrame->setCwCcwCmdEnable(s);
-       FKHRotControlFrame->setCwCcwCmdEnable(s);
+        FKHRotControlFrame->setCwCcwCmdEnable(s);
+        FKHRotControlFrame->setCwCcwCmdEnable(s);
     }
 }
 
@@ -2455,7 +2443,7 @@ void TSingleLogFrame::sendSkyScanFrameButtonStateToRotator(SkyScanButtonState bu
 {
     if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
     {
-       LogContainer->sendDM->sendSkyScanControlPanelButtonState(this, buttonState);
+        LogContainer->sendDM->sendSkyScanControlPanelButtonState(this, buttonState);
     }
 }
 
@@ -2600,7 +2588,7 @@ void TSingleLogFrame::onQrzInfoToLog(QString callsign, QString qraLocator, QStri
 }
 void TSingleLogFrame::setQrzDisplayFrameLoaded(bool loaded)
 {
-   GJVQSOLogFrame->setqrzDisplayFrameLoaded(loaded);
+    GJVQSOLogFrame->setqrzDisplayFrameLoaded(loaded);
 }
 
 //---------------------- PcCwKeyer ------------------------------------------
@@ -2639,5 +2627,5 @@ void TSingleLogFrame::onPcCwKeyerCurrentWpm(QString wpm)
 void TSingleLogFrame::traceMsg(QString msg)
 {
 
-     trace(QString("[TSingleLogFrame] %1").arg(msg));
+    trace(QString("[TSingleLogFrame] %1").arg(msg));
 }
