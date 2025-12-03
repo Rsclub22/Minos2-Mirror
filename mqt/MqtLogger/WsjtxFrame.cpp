@@ -397,6 +397,13 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
         return;
     }
 
+    if (de_call != ct->mycall.getFullCall() || de_grid != ct->myloc.getLoc().left(4))
+    {
+        QString mess = tr("Call/grid does not match contest (%1/%2 %3/%4")
+                           .arg(de_call, de_grid, ct->mycall.getFullCall(), ct->myloc.getLoc().left(4));
+        ui->bandErrorLabel->setText(HtmlFontColour(Qt::red) + mess);
+        wtrace(mess);
+    }
     wtrace(QString("WsjtxFrame::update_status dx_call %1 dx_grid %2 transmitting %3 decoding %4 tx_enabled %5 tx_message %6")
               .arg(dx_call).arg(dx_grid).arg(transmitting).arg(decoding).arg(tx_enabled).arg(tx_message));
 
