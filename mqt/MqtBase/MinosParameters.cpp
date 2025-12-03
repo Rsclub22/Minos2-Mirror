@@ -43,6 +43,10 @@ void MinosParametersAdapter::getDisplayColumnWidth( const QString &/*key*/, int 
 void MinosParametersAdapter::setDisplayColumnWidth( const QString &/*key*/, int /*val*/ )
 {
 }
+void MinosParametersAdapter::getBoolDisplayProfile( int /*enumkey*/, bool &value, bool def )
+{
+    value = def;
+}
 void MinosParametersAdapter::getBoolDisplayProfile( int /*enumkey*/, bool &value )
 {
    value = true;
@@ -140,4 +144,8 @@ int MinosParametersAdapter::MinosParametersAdapter::getListSlotCount()
 ContactList *MinosParametersAdapter::getListSlot(int)
 {
     return nullptr;
+}
+bool MinosParametersAdapter::isLogger()
+{
+    return false;
 }

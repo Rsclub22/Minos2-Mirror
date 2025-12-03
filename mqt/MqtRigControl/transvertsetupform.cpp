@@ -253,7 +253,7 @@ void TransVertSetupForm::transVertSwNumSel()
     QString numSel = ui->transVertSwNum->text().trimmed();
     if (numSel != radioData->transVertSettings.value(bandName)->transSwitchNum)
     {
-        QRegularExpression re = QRegularExpression(anchoredPattern("\\d*"));    // a digit (\d), zero or more times (*)
+        static QRegularExpression re = QRegularExpression(anchoredPattern("\\d*"));    // a digit (\d), zero or more times (*)
         QRegularExpressionMatch rem = re.match(numSel);
         if (rem.hasMatch())
         {

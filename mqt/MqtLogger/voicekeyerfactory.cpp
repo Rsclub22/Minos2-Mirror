@@ -18,6 +18,7 @@
 #include "voicekeyerfactory.h"
 #include "rigcontrolvoicememorykeyer.h"
 #include "rigcontrolcwmessagekeyer.h"
+#include "pccwmessagekeyer.h"
 #include "InternalVoiceMemoryKeyer.h"
 #include "ExternalMqtKeyer.h"
 #include "tlogcontainer.h"
@@ -29,6 +30,7 @@ VoiceKeyerFactory::VoiceKeyerFactory(QObject *parent) : QObject(parent)
 {
     RigControlVoiceMemoryKeyer::registerVoiceKeyer(&vmKeyersList);
     RigControlCwMessageKeyer::registerVoiceKeyer(&vmKeyersList);
+    PcCWMessageKeyer::registerVoiceKeyer(&vmKeyersList);
     InternalVoiceMemoryKeyer::registerVoiceKeyer(&vmKeyersList);
     ExternalMqtKeyer::registerVoiceKeyer(&vmKeyersList);
 }
@@ -54,6 +56,10 @@ VoiceKeyerBase* VoiceKeyerFactory::createVoiceKeyer(int vmKeyerId)
     else if (vmKeyerId == VoiceKeyerId::CW_RigControl)
     {
         return new RigControlCwMessageKeyer(this);
+    }
+    else if (vmKeyerId == VoiceKeyerId::PcCwKeyer)
+    {
+        return new PcCWMessageKeyer(this);
     }
     else if (vmKeyerId == VoiceKeyerId::InternalVoiceKeyer)
     {

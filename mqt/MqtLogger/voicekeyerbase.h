@@ -26,6 +26,7 @@ class BaseContestLog;
 const int REPEAT_DUR_MIN = 0;
 const int REPEAT_DUR_MAX = 180; // secs
 
+enum CW_KEYER_TYPE {KEYER_NONE, RIG, PC_CwKeyer, WINKEYER};
 
 class VoiceKeyerParams
 {
@@ -76,6 +77,9 @@ public:
     void setSAndPState(const bool sAndPState_) {sAndPState = sAndPState_;}
     bool getSAndPState() const {return sAndPState;}
 
+    void setCwKeyerType(CW_KEYER_TYPE type){cwKeyerType = type;}
+    CW_KEYER_TYPE getCwKeyerType(){return cwKeyerType;}
+
     QSharedPointer<VoiceKeyerBase> getVkBase() const {return vkBase;}
     void setVkBase(QSharedPointer<VoiceKeyerBase> value){vkBase = value;}
 
@@ -95,6 +99,8 @@ private:
     bool vmRepeatFlag = false;
     int vmRepeatPauseDur = -1;
     int vmButtonNum = -1;
+    CW_KEYER_TYPE cwKeyerType = CW_KEYER_TYPE::KEYER_NONE;
+
     bool sAndPState = true; // S&P = true, Run = false
 };
 
@@ -120,6 +126,7 @@ public:
 
     virtual void sendCwMsg(VoiceKeyerParams &vmParams) = 0;
     virtual void stopCwMsg() = 0;
+    virtual void sendCwFreeTextMsg(QString message) = 0;
     virtual void setCwMemType(int cwMemType) = 0;
     virtual bool getSetCwModeAndRestoreFlag() = 0;
 
@@ -131,6 +138,7 @@ public:
 
     virtual void setPttOnOff(bool onOff) = 0;
     virtual int getSelectedEomType() = 0;
+    virtual void setSelectedEomType(int eomType) = 0;
 
     virtual int setup(VoiceKeyerFactory *voiceKeyerFactory, int &maxNumButtons, int &numButtons, QString selectedRadioName) = 0;
     virtual void setRadioParams(int radioMaxNumButtons, QString selectedRadioName, serialCommonData::MINOS_PTT_TYPES pttType_, bool pttEnabled_) = 0;
@@ -159,6 +167,8 @@ signals:
 
     void vmVoiceKeyPressed(int msgNum);
     void vmVoiceKeyStopPressed();
+
+    void cwMacroExpandedText(const QString &text);
 
     void internalVoiceMemoryKeyerPlayState(bool onOff);
 

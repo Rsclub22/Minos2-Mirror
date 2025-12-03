@@ -19,6 +19,7 @@ SUBDIRS += \
     MqtKSTClient \
     MqtLogger \
     MqtMonitor \
+    MqtPcCwKeyer \
     MqtQrzServer \
     MqtRigControl \
     MqtRigRecorder \
@@ -38,9 +39,10 @@ MqtKeyer.depends = MqtUtils TinyXML XMPPLib MqtBase KeyerBase
 MqtKeyerProxy.depends = MqtUtils TinyXML XMPPLib MqtBase KeyerBase
 mqtKeyerTest.depends = MqtUtils TinyXML XMPPLib MqtBase KeyerBase
 MqtRigRecorder.depends = MqtUtils TinyXML XMPPLib MqtBase KeyerBase
-MqtKSTClient.depends = MqtUtils TinyXML XMPPLib MqtBase
+MqtKSTClient.depends = MqtUtils TinyXML XMPPLib MqtBase KeyerBase
 MqtLogger.depends = MqtUtils TinyXML XMPPLib MqtBase KeyerBase
 MqtMonitor.depends = MqtUtils TinyXML XMPPLib MqtBase
+MqtPcCwKeyer.depends = MqtUtils TinyXML XMPPLib MqtBase
 MqtQrzServer.depends = MqtUtils TinyXML XMPPLib MqtBase
 MqtRigControl.depends = MqtUtils TinyXML XMPPLib MqtBase
 MqtRigSync.depends = MqtUtils TinyXML XMPPLib MqtBase

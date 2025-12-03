@@ -31,6 +31,11 @@ public:
     QString locator;
     UpperCaseValidator locValidator;
 
+    bool meepNotifyLogger;
+    bool meepPlaySound;
+    QString meepSoundFile;
+    int meepVolume = 50;
+
     int maxDistance;
 
     bool ASActive;
@@ -51,6 +56,12 @@ private slots:
     void on_cancelButton_clicked();
 
     void on_OKButton_clicked();
+
+    void on_meepBrowse_clicked();
+
+    void on_testButton_clicked();
+
+    void on_volumeSpinBox_valueChanged(int arg1);
 
 private:
     Ui::KSTConfigure *ui;

@@ -3,7 +3,7 @@
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //                      CW Message Keyer
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2021
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2025
 //
 //
 //
@@ -46,6 +46,7 @@ public:
 
     virtual void sendCwMsg(VoiceKeyerParams &vmParams) override;
     virtual void stopCwMsg() override;
+    virtual void sendCwFreeTextMsg(QString message) override;
     virtual void setCwMemType(int cwMemType) override;
     bool getSetCwModeAndRestoreFlag() override;
 
@@ -53,6 +54,7 @@ public:
 
     virtual void setPttOnOff(bool onOff) override;
     virtual int getSelectedEomType() override;
+     virtual void setSelectedEomType(int eomType)override{Q_UNUSED(eomType)};
 
     virtual bool readVmButtonParams(int buttonNum, VoiceKeyerParams &vmParams) override;
     virtual void saveVmButtonParams(const VoiceKeyerParams &vmParams) override;
@@ -67,7 +69,7 @@ public:
 
 
     void setUseCATPttForEom(bool usePttForEom_);
-    void setSelectedEomType(int selectedEomType_);
+
 
 
 private:
@@ -89,6 +91,7 @@ private:
 
     void getRadioCommonData(int &selectedEomType, int &userNumberButtons, int radioMaxNumButtons);
     QString parseMacrosInMessage(TSingleLogFrame *tslf, QString mess);
+    void logMessage(QString msg);
 };
 
 

@@ -123,7 +123,8 @@ void KPMainWindow::fillPortsInfo(QComboBox* comportSel)
 
     }
 
-}void KPMainWindow::CloseTimerTimer()
+}
+void KPMainWindow::CloseTimerTimer()
 {
     static bool closed = false;
     if ( !closed )

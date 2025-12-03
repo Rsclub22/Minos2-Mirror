@@ -25,6 +25,7 @@ void VoiceKeyerParams::clear()
     vmRepeatPauseDur = 0;
     vmButtonNum = -1;   // None
     sAndPState = true;
+    cwKeyerType = CW_KEYER_TYPE::KEYER_NONE;
 }
 
 VoiceKeyerParams& VoiceKeyerParams::operator = (const VoiceKeyerParams& vkp)
@@ -42,6 +43,7 @@ VoiceKeyerParams& VoiceKeyerParams::operator = (const VoiceKeyerParams& vkp)
     vmRepeatPauseDur = vkp.vmRepeatPauseDur;
     vmButtonNum = vkp.vmButtonNum;
     sAndPState = vkp.sAndPState;
+    cwKeyerType = vkp.cwKeyerType;
     return *this;
 }
 
@@ -64,7 +66,3 @@ VoiceKeyerBase::~VoiceKeyerBase()
 {
 
 }
-
-
-
-

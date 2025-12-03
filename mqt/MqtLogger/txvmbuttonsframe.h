@@ -4,12 +4,14 @@
 #include <QShortcut>
 #include <QGroupBox>
 #include <QKeyEvent>
+#include <QGridLayout>
 
 #include "PubSubName.h"
 #include "radiodetails.h"
 #include "voicekeyerbase.h"
 #include "voicekeyerfactory.h"
 #include "rigcontrolcommonconstants.h"
+#include "cwspeedcontrol.h"
 
 class QToolButton;
 class QMenu;
@@ -22,7 +24,6 @@ class TxVmButtonsFrame;
 using namespace voiceKeyerCommon;
 
 class TxVmButtonsFrame;
-
 
 
 class TxVoiceMemButton: public QObject
@@ -90,7 +91,7 @@ public:
     bool getRigVoiceKeyerSupportStopFlag(PubSubName psn);
     void setRigCwKeyerSupportStopFlag(bool supportStopCmd, PubSubName psn);
     bool getRigCwKeyerSupportStopFlag(PubSubName psn);
-    void setPttState(bool state);
+    void setRadioPttState(bool state);
     void setRigModel(QString rigModel, PubSubName psn);
 
     void setSelectedRadio(PubSubName selectedRadio);
@@ -100,10 +101,17 @@ public:
     void setMode(const QString m);
     void setContest(BaseContestLog *);
     void logRadioSettingsChanged(QSharedPointer<RadioSettingsDialogChangeFlag> logRadioSettingsFlags);
+    void setPcCwKeyerComport(QString comportStr);
+    void setPcCwKeyerConnectionState(QString stateStr);
+    void setPcCwKeyerErrorMsg(QString errorMsg);
+    void setPcCwKeyerPttEnabled(QString enabled);
+    void setPcCwKeyerTxOnState(QString state);
+    void setPcCwKeyerCurrentWpm(QString wpm);
 signals:
 
     void pttStatus(bool);
     void sendRadioMode(QString m);
+    void sendWpmToPcCwkeyer(int wpm);
 
 private:
     Ui::TxVmButtonsFrame *ui;
@@ -119,10 +127,14 @@ private:
     QShortcut *stopButtonShortcut;
     QString voiceKeyerType;
 
+    QGridLayout *gridLayout = nullptr;
 
-    QTimer* msgDurTimer;
-    QTimer* repeatPauseTimer;
+
+    QTimer* msgDurTimer = nullptr;
+    QTimer* repeatPauseTimer = nullptr;
     int buttonNumSent ;
+
+    bool messagePlaying = false;
 
     int selectedEomType = voiceKeyerCommon::VoiceCwKeyerEomTypes::Eom_None;
 
@@ -139,15 +151,15 @@ private:
     bool pttState;
     bool sAndPState = true;
 
-
+    CwSpeedControl *cwSpeedSlider = nullptr;
 
     bool notifyComboChange = true;
-    void initTxVmButtonFrame();
+
 
 
 
     void setRunButtonText(const int buttonNumber, const QString name);
-    void setVoiceNumMemButtonsVisible(int);
+    //void setVoiceNumMemButtonsVisible(int);
     void clearButtonLabels();
     void startVMMsg(int buttonNumber);
     void createKeyer(QString voiceKeyerName);
@@ -190,6 +202,31 @@ private:
     void logMessage(QString msg);
 
     bool isVoiceMode();
+    void setAvailIndicatorOnOffForPcCwKeyer();
+    bool isPcCwKeyerLoaded();
+    bool isPcCwKeyerConnected();
+
+
+    bool eventFilter(QObject *obj, QEvent *event);
+
+    void initCwTextEntryBox(QString radioManufacturer, QString fileName);
+    void createButtonsForKeyer(int numButtons);
+    void clearButtons();
+    void createButtonsForKeyer(int numButtons, int columns);
+    void setCwEntryBoxVisible(bool visible);
+    void setMessagePlayingFlag(bool playing);
+    bool isMessagePlaying();
+    void setCwMessagePlayingVisible(bool visible);
+    void clearCwMessagePlayingDisplay();
+    void displayCwMessagePlaying(const QString msg);
+    void restoreRadioMode();
+    void setCwFreeTextIndicatorOnOff(bool on);
+    void setCwFreeTextIndicatorVisible(bool visible);
+
+    bool checkRadioAndKeyerState();
+    void showTemporaryErrorMessage(const QString &msg, int timeoutMs, const QColor &colour = QColorConstants::Svg::red);
+
+    void setButtonsJustification(bool leftJustify);
 private slots:
 
     void onVoiceKeyerSelect(int idx);
@@ -207,6 +244,12 @@ private slots:
     void onExtConnectTimer();
     void onInternalVoiceMemoryPlayState(bool playing);
     void sandPChanged(bool s);
+
+    void onCwEntryReturnPressed();
+    void setRadioParams();
+    void onCwMacroTextProcessed(const QString &cwTextSent);
 };
+
+
 
 #endif // TXVMBUTTONSFRAME_H

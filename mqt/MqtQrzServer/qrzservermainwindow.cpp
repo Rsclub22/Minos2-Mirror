@@ -61,6 +61,7 @@ QrzServerMainWindow::QrzServerMainWindow(QWidget *parent)
 
     logonCallsign = config.value("logonCallsign", "").toString();
     password = config.value("password", "").toString();
+    cacheAge = config.value("cacheAge").toInt();
 
     if (logonCallsign.isEmpty() && password.isEmpty())
     {
@@ -224,6 +225,16 @@ bool QrzServerMainWindow::askDBCallsignData(QString callsign)
 
     if (cs.realCall == qrzCallsignData.getCallsign())
     {
+        QString dbt = qrzCallsignData.getDBDate();
+        QDateTime dbd = QDateTime::fromString(dbt, "yyyy-MM-dd HH:mm:ss");
+        trace(QString("<%1> <%2>").arg(dbt, dbd.toString("yyyy-MM-dd HH:mm:ss")));
+        if (cacheAge && dbd.date().addMonths(cacheAge) <= QDate::currentDate())
+        {
+            QString mess = QString("%1 on DB older than %2 months; re-enquiring from QRZ").arg(callsign).arg(cacheAge);
+            addTextToLogWindow(mess);
+            trace(mess);
+            return false;
+        }
         qrzCallsignData.setDataSource("DB|" + qrzCallsignData.getDataSource());
         dbRequests++;
         callsignDataReceived();
@@ -607,6 +618,7 @@ void QrzServerMainWindow::onConfigure()
 
     conf.logCallsign = logonCallsign;
     conf.logPassword = password;
+    conf.cacheAge = cacheAge;
 
     int ret = conf.exec();
     if (ret == QDialog::Accepted)
@@ -616,6 +628,13 @@ void QrzServerMainWindow::onConfigure()
 
         QString fileName = getDirectoryLocation(dlConfiguration) + "/QRZServer.ini";
         QSettings config(fileName, QSettings::IniFormat);
+
+        cacheAge = conf.cacheAge;
+
+        if (cacheAge != config.value("cacheAge"))
+        {
+            config.setValue("cacheAge", cacheAge);
+        }
 
         if (conf.logCallsign.trimmed() != config.value("logonCallsign", "").toString())
         {

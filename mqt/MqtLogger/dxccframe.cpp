@@ -232,9 +232,19 @@ QVariant DXCCGridModel::data( const QModelIndex &index, int role ) const
 
     if (ct)
     {
+        if (role == Qt::ToolTipRole)
+        {
+            QSharedPointer<CountryEntry> ce = MultLists::getMultLists() ->getCountryList()[index.row()];
+            QString bp = ce->getBasePrefix();
+            QString disp = MultLists::getMultLists() ->getCtryListText( bp, ectCall, ct, band );
+            QString cont = ce->getContinent();
+            disp = disp + "(" + cont + ")";
+            return disp;
+        }
         if (role == Qt::DisplayRole)
         {
-            QString bp = MultLists::getMultLists() ->getCountryList()[index.row()]->getBasePrefix();
+            QSharedPointer<CountryEntry> ce = MultLists::getMultLists() ->getCountryList()[index.row()];
+            QString bp = ce->getBasePrefix();
             int ic = index.column();
             QString disp = MultLists::getMultLists() ->getCtryListText( bp, CountryTreeColumns[ ic].fieldId, ct, band );
             return disp.trimmed();

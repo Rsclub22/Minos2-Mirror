@@ -3,7 +3,7 @@
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //                      Rotator Control
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016-2020
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016-2025
 //
 //
 // Hamlib Library
@@ -15,6 +15,7 @@
 #include <QCheckBox>
 #include <QMessageBox>
 #include <QInputDialog>
+#include <QFile>
 
 #include "regsettings.h"
 #include "MShowMessageDlg.h"
@@ -75,7 +76,15 @@ void RotSetupDialog::initSetup()
         // check version again
         version = settings.value("Version/version", QString()).toString();
 
-        if (version != "2")
+        if (version == "2")
+        {
+           updateAvailAntennasToVersion3();
+        }
+
+        // check version again
+        version = settings.value("Version/version", QString()).toString();
+
+        if (version != "3")
         {
             mShowMessage(tr("The Rotator configuration files in %1 are from an old incompatible version of Minos.\n\n"
                             "Please delete them and set up the rotators again").arg(ANTENNA_PATH_LOGGER()), parentWidget());
@@ -101,12 +110,12 @@ void RotSetupDialog::initSetup()
             availAntData[i]->rotatorCWEndStop = rotCap.getMaxRot();
             availAntData[i]->rotatorCCWEndStop = rotCap.getMinRot();
 
-            bool overrunState = availAntData[i]->overRunFlag;   // save as it is changed in setEndStopType
-            antennaTab[i]->setEndStopType(availAntData[i], availAntData[i]->rotatorCCWEndStop, availAntData[i]->rotatorCWEndStop);
-            availAntData[i]->overRunFlag = overrunState;  //restore
-            antennaTab[i]->setOverlapEndStop(availAntData[i], overrunState);
 
-            loadSettingsToTab(i);
+            antennaTab[i]->getRotatorType(availAntData[i], availAntData[i]->rotatorCCWEndStop, availAntData[i]->rotatorCWEndStop);
+            availAntData[i]->overLapFlag = availAntData[i]->overLapFlag;
+            antennaTab[i]->setEndStopType(availAntData[i], availAntData[i]->rotatorCCWEndStop, availAntData[i]->rotatorCWEndStop);
+
+            loadSettingsToTab(rotCap, i);
         }
         chkloadflg = false;
     }
@@ -142,10 +151,10 @@ void RotSetupDialog::addTab(int tabNum, QString tabName)
 
 
 
-void RotSetupDialog::loadSettingsToTab(int tabNum)
+void RotSetupDialog::loadSettingsToTab(RotCapabilities &rotCap, int tabNum)
 {
 
-    RotCapabilities rotCap = rotatorFactory->supported_rotators()->value(availAntData[tabNum]->rotatorModel);
+    //RotCapabilities rotCap = rotatorFactory->supported_rotators()->value(availAntData[tabNum]->rotatorModel);
 
     ui->antennaTab->setTabText(tabNum, availAntData[tabNum]->antennaName);
 
@@ -156,7 +165,7 @@ void RotSetupDialog::loadSettingsToTab(int tabNum)
         antennaTab[tabNum]->pollIntervalVisible(true);
         //antennaTab[tabNum]->setCheckStop(availAntData[tabNum]->southStopType);
 
-        antennaTab[tabNum]->setCheckOverrun(availAntData[tabNum]->overRunFlag);
+        antennaTab[tabNum]->setCheckOverLap(availAntData[tabNum]->overLapFlag);
         antennaTab[tabNum]->setSimCW_CCWcmdChecked(availAntData[tabNum]->simCwCcwCmd);
 
         // set southstop visible if rotator is 0 - 360
@@ -176,12 +185,15 @@ void RotSetupDialog::loadSettingsToTab(int tabNum)
                antennaTab[tabNum]->setSStopButtons(availAntData[tabNum]->southStopType);
            }
 
-           antennaTab[tabNum]->setOverRunFlagVisible(false);
+           antennaTab[tabNum]->setOverLapFlagVisible(false);
         }
-        else if (availAntData[tabNum]->rotType == ROT_0_450)
+        else if (availAntData[tabNum]->rotType == ROT_NEG180_450)
         {
-           antennaTab[tabNum]->setOverRunFlagVisible(true);
-           if ((availAntData[tabNum]->endStopType == ROT_0_360 || availAntData[tabNum]->endStopType == ROT_180_180) && !availAntData[tabNum]->overRunFlag  )
+           antennaTab[tabNum]->setOverLapFlagVisible(true);
+           if ((availAntData[tabNum]->endStopType == ROT_0_360
+                || availAntData[tabNum]->endStopType == ROT_0_450
+                ||availAntData[tabNum]->endStopType == ROT_NEG179_180)
+               && !availAntData[tabNum]->overLapFlag  )
            {
 
                antennaTab[tabNum]->sStopButtonsVisible(true);
@@ -195,10 +207,10 @@ void RotSetupDialog::loadSettingsToTab(int tabNum)
         else
         {
            antennaTab[tabNum]->sStopButtonsVisible(false);
-           antennaTab[tabNum]->setOverRunFlagVisible(false);
+           antennaTab[tabNum]->setOverLapFlagVisible(false);
         }
 
-        antennaTab[tabNum]->setCheckOverrun(availAntData[tabNum]->overRunFlag);
+        //antennaTab[tabNum]->setCheckOverLap(availAntData[tabNum]->overLapFlag);
         antennaTab[tabNum]->setAntennaOffset(QString::number(availAntData[tabNum]->antennaOffset));
         antennaTab[tabNum]->antennaOffSetVisible(true);
         //antennaTab[tabNum]->setComport(availAntData[tabNum]->comport);
@@ -271,7 +283,11 @@ void RotSetupDialog::loadSettingsToTab(int tabNum)
             antennaTab[tabNum]->setCompassDialChkBoxVisible(false);
         }
 
-
+        if (rotCap.getAllowSkyScan())
+        {
+            antennaTab[tabNum]->setSkyScanTabChkBoxVisible(true);
+            antennaTab[tabNum]->checkSkyScanChkBox(availAntData[tabNum]->showSkyScanFlag);
+        }
 
     }
     else
@@ -279,7 +295,7 @@ void RotSetupDialog::loadSettingsToTab(int tabNum)
         // no rotator model selected, hide elements on tab
         antennaTab[tabNum]->setRotatorModel(availAntData[tabNum]->rotatorModel);
         antennaTab[tabNum]->networkDataEntryVisible(false);
-        antennaTab[tabNum]->setOverRunFlagVisible(false);
+        antennaTab[tabNum]->setOverLapFlagVisible(false);
         antennaTab[tabNum]->sStopButtonsVisible(false);
         antennaTab[tabNum]->setSStopButtons(S_STOPOFF);
         antennaTab[tabNum]->pollIntervalVisible(false);
@@ -287,6 +303,7 @@ void RotSetupDialog::loadSettingsToTab(int tabNum)
         antennaTab[tabNum]->serialDataEntryVisible(false);
         antennaTab[tabNum]->setSimCW_CCWcmdVisible(false);
         antennaTab[tabNum]->setCompassDialChkBoxVisible(false);
+        antennaTab[tabNum]->setSkyScanTabChkBoxVisible(false);
 
     }
 
@@ -362,7 +379,7 @@ void RotSetupDialog::cancelButtonPushed()
         availAntData.clear();
         antennaTab.clear();
         ui->antennaTab->clear();
-        initSetup();
+        initSetup();       // reload old settings
     }
 
     doCloseEvent();
@@ -395,6 +412,7 @@ void RotSetupDialog::saveSettings()
                 config.beginGroup(savedAntNames[i]);        // entry no longer exists
                 config.remove("");      // remove all keys for this group
                 config.endGroup();
+                antennaNameChg = true;
             }
         }
     }
@@ -426,7 +444,7 @@ void RotSetupDialog::saveSettings()
             config.setValue("supportCwCcwCmd", availAntData[i]->supportCwCcwCmd);
             config.setValue("rotatorPollInterval", availAntData[i]->pollInterval);
             config.setValue("simulateCwCCw", availAntData[i]->simCwCcwCmd);
-            config.setValue("overRun", availAntData[i]->overRunFlag);
+            config.setValue("overLap", availAntData[i]->overLapFlag);
             config.setValue("southStopType", availAntData[i]->southStopType);
             config.setValue("antennaOffset", availAntData[i]->antennaOffset);
             config.setValue("portType", availAntData[i]->portType);
@@ -442,6 +460,7 @@ void RotSetupDialog::saveSettings()
             config.setValue("netAddress", availAntData[i]->networkAdd);
             config.setValue("netPort", availAntData[i]->networkPort);
             config.setValue("showCompassDial", availAntData[i]->showCompassDialFlag);
+            config.setValue("showSkyScan", availAntData[i]->showSkyScanFlag);
             config.setValue("nearStopTolerance", availAntData[i]->nearStopTolerance);
             config.endGroup();
             antennaTab[i]->setAntennaValueChanged(false);
@@ -481,7 +500,7 @@ void RotSetupDialog::getAvailAntenna(int antNum, QSettings& config)
     availAntData[antNum]->pollInterval = config.value("rotatorPollInterval", ROT_DEFAULT_POLLINTERVAL).toString();
     availAntData[antNum]->supportCwCcwCmd = config.value("supportCwCcwCmd", false).toBool();
     availAntData[antNum]->simCwCcwCmd = config.value("simulateCwCCw", true).toBool();
-    availAntData[antNum]->overRunFlag = config.value("overRun", false).toBool();
+    availAntData[antNum]->overLapFlag = config.value("overLap", false).toBool();
     availAntData[antNum]->southStopType = static_cast<southStop> (config.value("southStopType", southStop::S_STOPOFF).toInt());
     availAntData[antNum]->antennaOffset = config.value("antennaOffset", "").toInt();
     availAntData[antNum]->portType = (config.value("portType", RotCapConstants::PortType::none).toInt());
@@ -497,7 +516,9 @@ void RotSetupDialog::getAvailAntenna(int antNum, QSettings& config)
     availAntData[antNum]->networkPort = config.value("netPort", "").toString();
     availAntData[antNum]->advancedCommsFlag = config.value("advancedComms", false).toBool();
     availAntData[antNum]->showCompassDialFlag = config.value("showCompassDial",true).toBool();
+    availAntData[antNum]->showSkyScanFlag = config.value("showSkyScan", false).toBool();
     availAntData[antNum]->nearStopTolerance = config.value("nearStopTolerance", 0).toInt();
+
 
     config.endGroup();
 
@@ -676,13 +697,63 @@ void RotSetupDialog::removeAntenna()
     antennaTab.removeAt(currentIndex);
     numAvailAntennas--;
 
+    // Delete Skyscan Presets
 
-    //emit antennaTabChanged();
+    QString fileName = ANTENNA_PATH_LOGGER() + FILENAME_SKYSCAN_PRESETS;
+
+    if (QFile::exists(fileName))
+    {
+        QSettings config(fileName, QSettings::IniFormat);
+        // get number of presets for this antenna
+        int presetCount = countSkyScanPresets(config, currentName);
+        for (int i = 0; i < presetCount; i++)
+        {
+            deleteSkyScanPreset(config, currentName, i);
+        }
+    }
 
 
 
 }
 
+
+void RotSetupDialog::deleteSkyScanPreset(QSettings &config, const QString& antennaName, int n)
+{
+
+
+    const QString prefix = QString("%1_%2%3").arg(antennaName).arg(SKYSCAN_PRESET).arg(n);
+
+    const QStringList groups = config.childGroups();
+    for (const QString& group : groups)
+    {
+        if (group == prefix)
+        {
+           config.beginGroup(group);
+            config.remove("");  // Remove all keys in this group
+            config.endGroup();
+        }
+    }
+    config.sync();
+}
+
+
+int RotSetupDialog::countSkyScanPresets(QSettings &config, const QString& antennaName)
+{
+
+    // Matches e.g., Dummy_SkyScanPreset0, Dummy_SkyScanPreset1, etc.
+    QRegularExpression pattern("^" + QRegularExpression::escape(antennaName) + "SKYSCAN_PRESET" + "\\d+$");
+
+    int count = 0;
+    const QStringList groups = config.childGroups();
+    for (const QString& group : groups)
+    {
+        if (pattern.match(group).hasMatch())
+        {
+            ++count;
+        }
+    }
+    return count;
+}
 
 void RotSetupDialog::editAntennaName()
 {
@@ -772,4 +843,30 @@ void RotSetupDialog::updateAvailAntennasToVersion2()
     settings.setValue("Version/version", "2");
 }
 
+void RotSetupDialog::updateAvailAntennasToVersion3()
+{
+    QString fileName = ANTENNA_PATH_LOGGER() + FILENAME_AVAIL_ANTENNAS;
+    QSettings settings(fileName, QSettings::IniFormat);
 
+    bool overlapState = false;
+
+    for (int i = 0; i < numAvailAntennas; i++)
+    {
+
+        settings.beginGroup(availAntennas[i]);
+
+        // update settings
+        if (settings.contains("overRun"))
+        {
+            overlapState = settings.value("overRun", false).toBool();
+            settings.remove("overRun");
+            settings.setValue("overLap", overlapState);
+        }
+
+        settings.endGroup();
+
+
+    }
+
+    settings.setValue("Version/version", "3");
+}

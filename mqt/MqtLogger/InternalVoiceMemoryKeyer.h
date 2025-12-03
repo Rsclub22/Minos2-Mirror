@@ -20,6 +20,7 @@ public:
     virtual void stopMsg(VoiceKeyerParams *vkParam) override;
 
     void sendCwMsg(VoiceKeyerParams &vmParams) override {Q_UNUSED(vmParams)};
+    void sendCwFreeTextMsg(QString message) override {Q_UNUSED(message)};
     virtual void stopCwMsg() override {};
     virtual void setCwMemType(int cwMemType) override {Q_UNUSED(cwMemType)};
     virtual bool getSetCwModeAndRestoreFlag() override {return false;};
@@ -37,7 +38,7 @@ public:
     virtual void saveVmButtonParams(const VoiceKeyerParams &vmParams) override;
     virtual void setPttOnOff(bool onOff) override;
     virtual int getSelectedEomType() override {return voiceKeyerCommon::VoiceCwKeyerEomTypes::InternalSoundCardVoiceKeyer;};
-
+    virtual void setSelectedEomType(int eomType)override{Q_UNUSED(eomType)};
 
     virtual int setup(VoiceKeyerFactory *voiceKeyerFactory, int &maxNumButtons, int &numButtons, QString selectedRadioName) override;
     virtual void setRadioParams(int radioMaxNumButtons, QString selectedRadioName, serialCommonData::MINOS_PTT_TYPES pttType_, bool pttEnabled_) override{Q_UNUSED(radioMaxNumButtons) Q_UNUSED(selectedRadioName) Q_UNUSED(pttType_) Q_UNUSED(pttEnabled_)};

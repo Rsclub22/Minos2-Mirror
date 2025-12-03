@@ -140,7 +140,8 @@ static void deleteDrvStruct (LPASIODRVSTRUCT lpdrv)
 			iasio = (IASIO *)lpdrv->asiodrv;
 			iasio->Release();
 		}
-		delete lpdrv;
+		//delete lpdrv;
+    delete[] lpdrv; // correction from Axel Holzinger
 	}
 }
 
@@ -166,7 +167,6 @@ AsioDriverList::AsioDriverList ()
 	LPASIODRVSTRUCT	pdl;
 	LONG 			cr;
 	DWORD			index = 0;
-	BOOL			fin = FALSE;
 
 	numdrv		= 0;
 	lpdrvlist	= 0;
@@ -184,7 +184,6 @@ AsioDriverList::AsioDriverList ()
 #endif
 			lpdrvlist = newDrvStruct (hkEnum,keyname,0,lpdrvlist);
 		}
-		else fin = TRUE;
 	}
 	if (hkEnum) RegCloseKey(hkEnum);
 
@@ -194,14 +193,18 @@ AsioDriverList::AsioDriverList ()
 		pdl = pdl->next;
 	}
 
-	if (numdrv) CoInitialize(0);	// initialize COM
+	coInitialized_ = false;
+	if (numdrv)	{
+		HRESULT hr = CoInitialize(0);	// initialize COM
+		if( !FAILED( hr ) ) coInitialized_ = true;
+	}
 }
 
 AsioDriverList::~AsioDriverList ()
 {
 	if (numdrv) {
 		deleteDrvStruct(lpdrvlist);
-		CoUninitialize();
+		if( coInitialized_ ) CoUninitialize(); // balanced call.
 	}
 }
 

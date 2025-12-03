@@ -34,39 +34,39 @@
         <translation>Configurer</translation>
     </message>
     <message>
-        <location filename="../dmmainwindow.cpp" line="74"/>
+        <location filename="../dmmainwindow.cpp" line="76"/>
         <source>Default Device</source>
         <translation>Appareil par défaut</translation>
     </message>
     <message>
-        <location filename="../dmmainwindow.cpp" line="158"/>
-        <location filename="../dmmainwindow.cpp" line="188"/>
-        <location filename="../dmmainwindow.cpp" line="349"/>
+        <location filename="../dmmainwindow.cpp" line="160"/>
+        <location filename="../dmmainwindow.cpp" line="190"/>
+        <location filename="../dmmainwindow.cpp" line="363"/>
         <source>Start All Engines</source>
         <translation>Démarrer tous modules de traitement</translation>
     </message>
     <message>
-        <location filename="../dmmainwindow.cpp" line="300"/>
+        <location filename="../dmmainwindow.cpp" line="302"/>
         <source>Any changes will only be actioned when you stop and restart the engines.</source>
         <translation>Arrêter et redémarrer les modules de traitement pour appliquer les modifications.</translation>
     </message>
     <message>
-        <location filename="../dmmainwindow.cpp" line="328"/>
+        <location filename="../dmmainwindow.cpp" line="342"/>
         <source>Stop All Engines</source>
         <translation>Arrêter tous modules de traitement</translation>
     </message>
     <message>
-        <location filename="../dmmainwindow.cpp" line="375"/>
+        <location filename="../dmmainwindow.cpp" line="389"/>
         <source>No DataMode sender configured</source>
         <translation>Aucun expéditeur DataMode configuré</translation>
     </message>
     <message>
-        <location filename="../dmmainwindow.cpp" line="431"/>
+        <location filename="../dmmainwindow.cpp" line="445"/>
         <source>INI (*.ini);;All Files (*.*)</source>
         <translation>INI (*.ini);;Tous les fichiers (*.*)</translation>
     </message>
     <message>
-        <location filename="../dmmainwindow.cpp" line="435"/>
+        <location filename="../dmmainwindow.cpp" line="449"/>
         <source>Datamodes Configuration file</source>
         <translation>Fichier de configuration des modes de données</translation>
     </message>

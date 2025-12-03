@@ -57,7 +57,7 @@ class DupContact
 };
 typedef QMap < MapWrapper<DupContact>, MapWrapper<DupContact> > DupList;
 typedef DupList::iterator DupIterator;
-//typedef DupList::const_iterator ConstDupIterator;
+typedef DupList::const_iterator ConstDupIterator;
 extern uint qHash(const DupContact &dup);
 class dupsheet
 {
@@ -72,6 +72,7 @@ class dupsheet
       bool checkCurDup(BaseContestLog *contest, unsigned long nctseq, unsigned long valpseq, bool insert );
       bool checkCurDup(CheckableContact *nct, unsigned long valpseq, bool insert );
       bool isCurDup(CheckableContact *nct ) const;
+      CheckableContact *haveWorked(CheckableContact *nct ) const;
       void clearCurDup();
       void clear();
       CheckableContact *getCurDup();
@@ -127,6 +128,7 @@ class BaseContestLog: public BaseLogList
       BaseContestLog();
       BaseContestLog(bool hf);
       virtual ~BaseContestLog();
+      CheckableContact *haveWorked(CheckableContact *nct );
 
       int getCtStanzaCount()
       {
@@ -453,9 +455,10 @@ class BaseContestLog: public BaseLogList
       QString  scanContact(QSharedPointer<BaseContact> nct, QDateTime contestStart, QDateTime contestEnd);
       
       void addToContestList(QSharedPointer<BaseContact> rct);
-      void checkSpotWorked(const Callsign &mcs, const QString &locator, const Frequency &freq, bool *callWorked, bool *locatorWorked);
+      void checkSpotWorked(const Callsign &mcs, const QString &locator, const QString &exch, const QString &mode, const Frequency &freq, bool *callWorked, bool *locatorWorked, bool *exchWorked);
       void calcDistanceBearing(const QString &_locator, double *distance, int *bearing);
       QString getLocForCall(const Callsign &mcs);
+      QString getExchForCall(const Callsign &mcs);
   protected:
       unsigned long nextBlock = 1;
    int ct_stanzaCount = 0;
@@ -467,6 +470,10 @@ class BaseContestLog: public BaseLogList
    virtual bool minosSaveFile( bool /*newfile*/ )
    {
       return false;
+   }
+   virtual void initOnSetHF()
+   {
+       locatorMandatoryField.setValue(!isHF());
    }
    short sdummy = 0;        // improve padding on Windows
    int idummy = 0;          // improve padding on Windows

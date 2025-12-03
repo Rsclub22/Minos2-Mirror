@@ -195,7 +195,15 @@ void MMTTYFrame::onSetSpeeds(QString b, QString r)
 
 void MMTTYFrame::onRigModeFreq(QString, Frequency)
 {
+    // MMTTY and 2Tone only do RTTY
 
+    int markf = engineWindow->getRttyOffset();
+
+    if (markf > 0)
+    {
+        ::PostMessage(mttyHWnd, uMSG_MMTTY, RXM_SETMARK, markf);
+        ::PostMessage(mttyHWnd, uMSG_MMTTY, RXM_SETSPACE, markf + RttyMSGap);
+    }
 }
 void MMTTYFrame::sendCharacters(const QString &sendData, int markf)
 {
@@ -210,7 +218,7 @@ void MMTTYFrame::sendCharacters(const QString &sendData, int markf)
         if (markf > 0)
         {
             ::PostMessage(mttyHWnd, uMSG_MMTTY, RXM_SETMARK, markf);
-            ::PostMessage(mttyHWnd, uMSG_MMTTY, RXM_SETSPACE, markf + 170);
+            ::PostMessage(mttyHWnd, uMSG_MMTTY, RXM_SETSPACE, markf + RttyMSGap);
         }
         ::PostMessage(mttyHWnd, uMSG_MMTTY, RXM_PTT, 2);
         for(auto c:sendData)

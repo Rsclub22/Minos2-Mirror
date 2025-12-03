@@ -4,6 +4,7 @@
 #include "kstmainwindow.h"
 #include "cutils.h"
 #include "remotelogs.h"
+#include "MTrace.h"
 
 // kst2me sort by
 // new before old
@@ -31,7 +32,7 @@ qHashRet KstUser::qHash() const
 
     // BUT hash just gives a bucket to be scanned, and THEN equality should be used
 
-    return ::qHash(call.getFullCall().arg(chat));
+    return ::qHash(QString("%1 %2").arg(call.getFullCall()).arg(chat));
 }
 bool KstUserCompare (QSharedPointer<KstUser> i, QSharedPointer<KstUser> j)
 {
@@ -91,17 +92,20 @@ void KstCallGridModel::appendRow(QSharedPointer<KstUser> call)
 {
     beginInsertRows(QModelIndex(), rawCount() , rawCount());
     callVector->push_back(call);
+    trace(QString("Appending to callVector %1").arg(call->call.getFullCall()));
     endInsertRows();
 }
 void KstCallGridModel::insertRow( int row, QSharedPointer<KstUser> call)
 {
     beginInsertRows(QModelIndex(), row , row);
     callVector->insert(row, call);
+    trace(QString("Adding to callVector %1").arg(callVector->at(row)->call.getFullCall()));
     endInsertRows();
 }
 void KstCallGridModel::removeRow(int _row)
 {
     beginRemoveRows(QModelIndex(), _row, _row);
+    trace(QString("Removing from callVector %1").arg(callVector->at(_row)->call.getFullCall()));
     callVector->removeAt(_row);
     endRemoveRows();
 }

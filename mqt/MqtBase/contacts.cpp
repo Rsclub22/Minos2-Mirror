@@ -27,6 +27,14 @@ CheckableContact::CheckableContact(const CheckableContact &ct) : QObject()
 
 CheckableContact &CheckableContact::operator =(const CheckableContact &){return *this;}
 
+CheckableContact::CheckableContact(BaseContestLog *ct, const Callsign &cs, const QString &band, const QString &pmode):
+    cs(cs),
+    band(band),
+    contest(ct)
+{
+    mode.setInitialValue(pmode);
+}
+
 MinosFrequencyItem<Frequency> CheckableContact::getFrequency() const
 {
     return freq;

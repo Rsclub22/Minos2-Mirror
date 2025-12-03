@@ -140,6 +140,14 @@ bool TxVmRigSetupDialog::getSetCwModeAndRestoreState()
     return ui->switchToCw->isChecked();
 }
 
+void TxVmRigSetupDialog::setButtonWidgetsVisible(bool visible)
+{
+    ui->maxAvailButtonsTitle->setVisible(visible);
+    ui->numButtons->setVisible(visible);
+    ui->nunButtonsLbl->setVisible(visible);
+
+}
+
 void TxVmRigSetupDialog::onNumButtonsValueChanged(int num)
 {
     numButtons = num;

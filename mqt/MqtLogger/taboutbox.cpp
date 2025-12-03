@@ -129,7 +129,7 @@ TAboutBox::TAboutBox(QWidget *parent, bool onStartup) :
     {
         trmess = "";
     }
-    QString welcomeText = QString("%1<br><h1>%2 ") + STRINGVERSION  + " " + PRERELEASETYPE + " " + SecondInstall::getSecondInstallText() + "</h1>"
+    QString welcomeText = QString("<h2>%1<br><h1>%2 ") + STRINGVERSION  + " " + PRERELEASETYPE + " " + SecondInstall::getSecondInstallText() + "</h1>"
                                    "<br>%3"
                                    "<br><a href=\"http://minos.sourceforge.net/\">http://minos.sourceforge.net</a>"
                                    "<br><br>%4"

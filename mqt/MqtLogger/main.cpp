@@ -64,8 +64,6 @@ int main(int argc, char *argv[])
         }
 #endif
 
-        //a.setStyle("fusion");
-
         TLogContainer *w = new TLogContainer();
         w->connect(&a, &SingleApplication::argsReceived, w, &TLogContainer::onArgsReceived);
 

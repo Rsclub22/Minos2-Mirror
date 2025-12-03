@@ -89,32 +89,32 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kpmainwindow.cpp" line="228"/>
+        <location filename="../kpmainwindow.cpp" line="229"/>
         <source>Alsa Control Files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kpmainwindow.cpp" line="229"/>
+        <location filename="../kpmainwindow.cpp" line="230"/>
         <source>All Files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kpmainwindow.cpp" line="232"/>
+        <location filename="../kpmainwindow.cpp" line="233"/>
         <source>File for mixer setup</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kpmainwindow.cpp" line="280"/>
+        <location filename="../kpmainwindow.cpp" line="281"/>
         <source>Restart to set output to %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kpmainwindow.cpp" line="295"/>
+        <location filename="../kpmainwindow.cpp" line="296"/>
         <source>Restarting as host/port/rate has changed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kpmainwindow.cpp" line="356"/>
+        <location filename="../kpmainwindow.cpp" line="357"/>
         <source>Open COM port %1 failed: %2</source>
         <translation type="unfinished"></translation>
     </message>

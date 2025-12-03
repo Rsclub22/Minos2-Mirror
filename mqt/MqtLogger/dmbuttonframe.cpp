@@ -15,6 +15,7 @@
 #include "MinosParameters.h"
 
 #include "MinosRPC.h"
+#include "SendRPCDM.h"
 #include "fileutils.h"
 #include "tlogcontainer.h"
 #include "tsinglelogframe.h"
@@ -74,11 +75,17 @@ DMButtonFrame::DMButtonFrame(QWidget *parent) :
     ui->fkeysetCombo->addItem(currentName);
 
     fkeyFileChanged();
+
+
 }
 
 DMButtonFrame::~DMButtonFrame()
 {
     delete ui;
+}
+void DMButtonFrame::setFreq(Frequency freq)
+{
+    curFreq = freq;
 }
 void DMButtonFrame::DMMess(AnalysePubSubNotify an)
 {
@@ -97,9 +104,15 @@ void DMButtonFrame::DMMess(AnalysePubSubNotify an)
 
 void DMButtonFrame::onModeChange(QString mode)
 {
-    curMode = mode;
-    MinosRPC *rpc = MinosRPC::getMinosRPC();
-    rpc->publish( rpcConstants::DMCat, rpcConstants::DMMode, mode, psPublished );
+    TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
+    if (tslf)
+    {
+        curMode = mode;
+        MinosRPC *rpc = MinosRPC::getMinosRPC();
+        rpc->publish( rpcConstants::DMCat, rpcConstants::DMMode, mode, psPublished );
+
+        emit sendFreqControl(curFreq);
+    }
 }
 void DMButtonFrame::fkeyFileChanged()
 {
@@ -131,6 +144,10 @@ void DMButtonFrame::setContest(BaseContestLog *c)
 }
 bool  DMButtonFrame::isDataMode()
 {
+    if (curMode.isEmpty())
+    {
+        curMode = ct->currentMode.getValue();
+    }
     return  curMode == PSK
            || curMode == RY;
 

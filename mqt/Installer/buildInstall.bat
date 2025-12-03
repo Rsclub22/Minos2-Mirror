@@ -15,7 +15,7 @@ set QtTools=C:\Qt\Tools\mingw810_32\bin
 set QtKit=C:\Qt\5.15.2\mingw81_32\bin
 set QtOpenSSL="C:\Qt\Tools\OpenSSL\Win_x86\bin"
 set QtLicenses="C:\Qt\Licenses"
-set HamlibPath="C:\Projects\hamlib-w32-4.6.2"
+set HamlibPath="C:\Projects\hamlib-w32-4.7"
 set MMVARIPath="C:\Ham\MMVARI"
 
 if exist %QtKit% goto kitInstalled
@@ -72,7 +72,7 @@ mkdir Logs
 mkdir Bin
 mkdir Docs
 
-for %%j in (MqtAppStarter MqtChat MqtCluster MqtDataModes MqtKSTClient MqtLogger MqtMonitor MqtQrzServer MqtRigControl MqtRigRecorder MqtRigSync MqtRotator MqtServer) do (
+for %%j in (MqtAppStarter MqtChat MqtCluster MqtDataModes MqtKSTClient MqtLogger MqtMonitor MqtPcCwKeyer MqtQrzServer MqtRigControl MqtRigRecorder MqtRigSync MqtRotator MqtServer MqtWinkeyer) do (
 copy %MROOT%\%builddir%\%%j\release\%%j.exe Bin
 )
 
@@ -99,22 +99,22 @@ cd Configuration
 
 call powershell.exe "& {Invoke-WebRequest https://www.country-files.com/cty/cty.dat -Outfile cty.dat}"
 call powershell.exe "& {Invoke-WebRequest https://www.rsgbcc.org/cgi-bin/vhfenter.pl?afsdownload=y -Outfile clublist.txt}"
-call powershell.exe "& {Invoke-WebRequest https://www.rsgbcc.org/vhf/vhfcontests24.xml -Outfile vhfcontests24.xml}"
+call powershell.exe "& {Invoke-WebRequest https://www.rsgbcc.org/vhf/vhfcontests26.xml -Outfile vhfcontests26.xml}"
 call powershell.exe "& {Invoke-WebRequest https://www.rsgbcc.org/vhf/vhfcontests25.xml -Outfile vhfcontests25.xml}"
 
-call powershell.exe "& {Invoke-WebRequest http://www.rsgbcc.org/vhf/hfcontests24.xml -Outfile hfcontests24.xml}"
+call powershell.exe "& {Invoke-WebRequest http://www.rsgbcc.org/vhf/hfcontests26.xml -Outfile hfcontests26.xml}"
 call powershell.exe "& {Invoke-WebRequest http://www.rsgbcc.org/vhf/hfcontests25.xml -Outfile hfcontests25.xml}"
 
-call powershell.exe "& {Invoke-WebRequest http://microwave.rsgbcc.org/microcontests24.xml -Outfile microcontests24.xml}"
+call powershell.exe "& {Invoke-WebRequest http://microwave.rsgbcc.org/microcontests26.xml -Outfile microcontests26.xml}"
 call powershell.exe "& {Invoke-WebRequest http://microwave.rsgbcc.org/microcontests25.xml -Outfile microcontests25.xml}"
 
-call powershell.exe "& {Invoke-WebRequest http://bartg.rsgbcc.org/bartgcontests24.xml -Outfile bartgcontests24.xml}"
+call powershell.exe "& {Invoke-WebRequest http://bartg.rsgbcc.org/bartgcontests26.xml -Outfile bartgcontests26.xml}"
 call powershell.exe "& {Invoke-WebRequest http://bartg.rsgbcc.org/bartgcontests25.xml -Outfile bartgcontests25.xml}"
 
 
 cd ../Bin
 
-for %%j in (MqtAppStarter MqtChat MqtCluster MqtDataModes MqtKSTClient MqtQrzServer MqtRigControl MqtRigRecorder MqtRigSync MqtRotator MqtServer) do (
+for %%j in (MqtAppStarter MqtChat MqtCluster MqtDataModes MqtKSTClient MqtPcCwKeyer MqtQrzServer MqtRigControl MqtRigRecorder MqtRigSync MqtRotator MqtServer MqtWinkeyer) do (
 windeployqt.exe %%j.exe
 )
 for %%j in ( MqtLogger MqtMonitor) do (
@@ -125,7 +125,7 @@ REM bin\translations now exists... we can build our translations
 
 @ECHO OFF
 for %%i in (en_GB fr_FR) do (
-  for %%j in (MqtAppStarter MqtChat MqtCluster MqtDataModes MqtKSTClient MqtLogger MqtMonitor MqtQrzServer MqtRigControl MqtRigRecorder MqtRigSync MqtRotator MqtServer) do (
+  for %%j in (MqtAppStarter MqtChat MqtCluster MqtDataModes MqtKSTClient MqtLogger MqtMonitor MqtPcCwKeyer MqtQrzServer MqtRigControl MqtRigRecorder MqtRigSync MqtRotator MqtServer MqtWinkeyer) do (
   lconvert -verbose -o translations\%%j_%%i.qm ^
   %MROOT%\%builddir%\MqtUtils\release\minos_%%i.qm ^
   %MROOT%\%builddir%\TinyXML\release\minos_%%i.qm ^

@@ -15,14 +15,11 @@ signals:
     void bandmapResize(QSize);
     void leftMouseButtonPressed(QPoint);
     void mouseDoubleClicked(QPoint);
-    void nextSpot(bool, bool);
-    void scrollMap(bool);
 
 protected:
     void resizeEvent(QResizeEvent *) override;
     void mousePressEvent(QMouseEvent *event) override;
     void mouseDoubleClickEvent(QMouseEvent *event) override;
-    void keyPressEvent(QKeyEvent *event) override;
 private slots:
 
 };

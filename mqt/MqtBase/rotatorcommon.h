@@ -3,7 +3,7 @@
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //                      Rotator Control
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2018
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2018 - 2025
 //
 //
 //
@@ -12,9 +12,13 @@
 #ifndef ROTATORCOMMON_H
 #define ROTATORCOMMON_H
 
+#include "qtoolbutton.h"
 #include "rigcontrolcommonconstants.h"
 #include <QCoreApplication>
+#include <QLabel>
 #include "serialCommonData.h"
+
+
 class RotPresetData
 {
     Q_DECLARE_TR_FUNCTIONS(RotPresetData)
@@ -32,6 +36,9 @@ static const char * presetButtonLabels[4];
 };
 
 
+
+
+inline const QString SKYSCAN_PRESET = "_SkyScanPreset";
 
 const QChar SHORTLOCATOR_IDENTIFIER = '#'; // add to bearing to identify that it has been calculated from short locator.
                                            // Used in bearing sent from memory and clusterframe.
@@ -92,10 +99,13 @@ inline const QStringList presetMenuShortCutKeys = {
                                                         ROTATE_PRESET_MENU9, ROTATE_PRESET_MENU0
                                              };
 
+const int COMPASS_MAX540 = 540;
+const int COMPASS_MAX450 = 450;
 const int COMPASS_MAX360 = 360;
 const int COMPASS_MAX359 = 359; // Green Heron Rotator
 const int COMPASS_HALF = 180;
 const int COMPASS_NEG_HALF = -180;
+const int COMPASS_NEG_179 = -179;  // hamlib doesn't support -180
 const int COMPASS_MIN0 = 0;
 const int COMPASS_ERROR = 999;
 
@@ -130,27 +140,115 @@ QString ANTENNA_PATH_LOGGER();
 QString ANTENNA_PATH_LOCAL();
 inline const QString FILENAME_AVAIL_ANTENNAS = "AvailAntenna.ini";
 inline const QString FILENAME_CURRENT_ANTENNA = "CurrentAntenna.ini";
+inline const QString FILENAME_SKYSCAN_PRESETS = "SkyScanPresets.ini";
+
 
 // Rotator Types
-// ROT_180_180 is ROT_0_360 set to southstop.
-enum endStop {ROT_NEG180_180, ROT_0_360, ROT_0_450, ROT_NEG180_540, ROT_180_180};
-inline const QStringList endStopNames = (QStringList() << "ROT_NEG180_180" << "ROT_0_360" << "ROT_0_450" << "ROT_NEG180_540" << "ROT_180_180");
+// ROT_180_180 is ROT_0_360 set to southstop.** Replaced by ROT_NEG179_180
+// Hamlib Yaesu protocol now supports ROT_NEG180_450, but will not be used with this full range here
+// it will be used to set max and min rotations as follows:-
+// ROT_NEG179_180 for a Compass Sensor set for south stop.
+// ROT_0_360 rotator with no overlap, north stop
+// ROT_0_450 rotator with overlap, north stop
+// hamlib Gs232 ROT_NEG180_540 rotator
+// For south stop
+// send -181 to -1 hamlib converts to 181 to 359 to send to rotator
+// if rotator sends -181 to -1 hamlib returns the negative number
+// the rotator only works with -181 to 180 on the rotator - ie a 360 degree rotator
+// sending -180 is converted to 180 so dependent on controller will send the rotator all the way
+// round to 180.
+// sending receiving 0 - 450 works as normal.
+
+enum endStop {ROT_NEG179_180, ROT_0_360, ROT_0_450, ROT_NEG180_540, ROT_NEG180_450};
+inline const QStringList endStopNames = (QStringList() << "ROT_NEG179_180" << "ROT_0_360" << "ROT_0_450" << "ROT_NEG180_540" << "ROT_NEG180_450");
 
 // Defines the South Stop Types
 // S_STOPINV when a rotator is mounted inverted normal N Stop is now S Stop. Feedback is South 0 Degrees through 360 at South
-//S_STOPCOMP when a rotator is mounted with a south stop, but the sensor is a compass. Rotator will rotate 180 degrees to 180, rotator type ROT_180_180
-enum southStop {S_STOPOFF, S_STOPINV, S_STOPCOMP};
-const QStringList southStopNames = (QStringList() << "S_StopOff" << "S_StopInv" << "S_StopComp");
+// S_STOPCOMP when a rotator is mounted with a south stop, but the sensor is a compass.
+enum southStop {S_STOPOFF, S_STOPINV, S_STOP_COMPASS_SENSOR};
+inline const QStringList southStopNames = (QStringList() << "S_StopOff" << "S_StopInv" << "S_StopComp");
 // Overlap Status
 
 enum overlapStat { NO_OVERLAP, NEG_OVERLAP, POS_OVERLAP};
+
+
+// SkyScan Default Values
+inline const int MIN_SKYSCAN_STEP_DEGREES = 5;
+inline const int MAX_SKYSCAN_STEP_DEGREES = 45;
+inline const int DEFAULT_SKYSCAN_STEP_INTERVAL_DEGREES = 5;
+inline const int DEFAULT_SKYSCAN_STEP_VALUE = 5;
+inline const int MIN_SKYSCAN_PAUSE_MINS = 1;
+inline const int MAX_SKYSCAN_PAUSE_MINS = 45;
+inline const int DEFAULT_SKYSCAN_PAUSE_TIME_INTERVAL = 1;
+inline const int DEFAULT_SKYSCAN_PAUSE_TIME_VALUE = 1;
 
 // Pushbutton Styles
 
 inline const QString BUTTON_ON_STYLE = QString("background-color: Sandybrown ; border-style: outset; border-width: 1px; border-color: black; min-width: 5em; padding: 3px;\n");
 inline const QString BUTTON_OFF_STYLE = QString("background-color: Gainsboro ; border-style: outset; border-width: 1px; border-color: black; min-width: 5em; padding: 3px;\n");
 
+// SkyScan Rotation Direction Indicators
+
+inline const QString SKYSCAN_DIRECTION_INDICATOR_ON = R"(
+    QToolButton {
+        background-color: orange;
+        border: 1px solid black;
+        border-radius: 4px;
+        padding: 4px;
+        color: black;
+    }
+    QToolButton:hover,
+    QToolButton:pressed,
+    QToolButton:checked {
+        background-color: orange;
+    }
+)";
+
+inline const QString SKYSCAN_DIRECTION_INDICATOR_OFF = R"(
+    QToolButton {
+        background-color: none;
+        border: 1px solid black;
+        border-radius: 4px;
+        padding: 4px;
+        color: black;
+    }
+    QToolButton:hover,
+    QToolButton:pressed,
+    QToolButton:checked {
+        background-color: none;
+    }
+)";
+
+
+
 extern const QStringList presetButtonLabels;
+
+enum skyScanBearingStates {ROT_STOPPED, ROT_REACHED_TARGET, ROT_NEAR_TARGET, ROT_MOVING, ROT_STOPPED_MOVING};
+inline const QStringList bearingStateTxt = {"ROT_STOPPED", "ROT_REACHED_TARGET", "ROT_NEAR_TARGET", "ROT_MOVING", "ROT_STOPPED_MOVING"};
+
+QString getBearingStateTxt(skyScanBearingStates state);
+
+QString convertBearingToString(int bearing);
+int adjustOverlapBearingToCompassBearing(int value);
+
+class RotFrameData;
+void displayCompassBearingWithOverlap(const QString newBearing, RotFrameData &rotFrameData, QLabel* displayLabel);
+
+void setSkyScanDirectionIndOnOff(QToolButton *indicator, bool state);
+
+bool isEasternBearing(int bearing);
+bool isWesternBearing(int bearing);
+
+
+struct skyScanRotatorDisplayLabels
+{
+    QLabel *minAzimuthLabel;
+    QLabel *maxAzimuthLabel;
+    QLabel *antennaOffsetLabel;
+    QLabel *rotatorStopLabel;
+    QLabel *southStopDisplayLabel;
+};
+
 
 class srotParams
 {
@@ -178,12 +276,13 @@ public:
       dest.min_elevation = srce->min_elevation;
       dest.max_elevation = srce->max_elevation;
       dest.southStopType = srce->southStopType;
-      dest.overRunFlag = srce->overRunFlag;
+      dest.overLapFlag = srce->overLapFlag;
       dest.supportCwCcwCmd = srce->supportCwCcwCmd;
       dest.simCwCcwCmd = srce->simCwCcwCmd;
       dest.antennaOffset = srce->antennaOffset;
       dest.moving = srce->moving;
       dest.showCompassDialFlag = srce->showCompassDialFlag;
+      dest.showSkyScanFlag = srce->showSkyScanFlag;
       dest.portType = srce->portType;
       dest.advancedCommsFlag = srce->advancedCommsFlag;
       dest.networkAdd = srce->networkAdd;
@@ -225,14 +324,15 @@ public:
   int min_elevation = 0;
   int max_elevation = 0;
   southStop southStopType = S_STOPOFF;
-  bool overRunFlag = false;
+  bool overLapFlag = false;
   bool supportCwCcwCmd = true;
   bool simCwCcwCmd = false;
   int antennaOffset = 0;
   bool moving = false;
-  bool showCompassDialFlag;
+  bool showCompassDialFlag = true;
+  bool showSkyScanFlag = false;
   int portType = 0;
-  bool advancedCommsFlag;
+  bool advancedCommsFlag = false ;
   QString networkAdd;
   QString networkPort;
   //int maxBaudRate = 0;
@@ -250,6 +350,352 @@ public:
 
 
 };
+
+class SkyScanButtonState
+{
+
+public:
+
+    SkyScanButtonState();
+
+
+    int getState();
+    void clear();
+    void setState(int state_);  // this is used when passing state to logger
+
+    void setStart(bool value);
+    void setPause(bool value);
+    void setStop(bool value);
+    void setForward(bool value);
+    void setReverse(bool value);
+
+    bool isStart() const;
+    bool isPause() const;
+    bool isStop() const;
+    bool isForward() const;
+    bool isReverse() const;
+
+    QString getButtonStateToString();
+private:
+
+    void setButtonState(int bit, bool value);
+    bool getButtonState(int bit) const;
+
+
+    static constexpr int START_BIT = 0;
+    static constexpr int PAUSE_BIT = 1;
+    static constexpr int STOP_BIT = 2;
+    static constexpr int FORWARD_BIT = 3;
+    static constexpr int REVERSE_BIT = 4;
+
+    int state = 0; // Holds all button states as bits
+
+};
+
+class SkyScanData
+{
+
+public:
+
+    SkyScanData(){}
+
+    void clear()
+    {
+        number = 0;
+        presetName.clear();
+        presetNameDirty = false;
+        antennaName.clear();
+        endStopType = endStop::ROT_0_360;
+        southStopType= southStop::S_STOPOFF;
+
+        skyScanStepDegreesValue = DEFAULT_SKYSCAN_STEP_VALUE;
+        stepToolButtonMin= MIN_SKYSCAN_STEP_DEGREES;
+        stepToolButtonMax = MAX_SKYSCAN_STEP_DEGREES;
+        stepToolButtonStepInterval = DEFAULT_SKYSCAN_STEP_INTERVAL_DEGREES;
+        skyScanStepDegreesValueIsDirty = false;
+
+        skyScanPauseTimeValue = DEFAULT_SKYSCAN_PAUSE_TIME_VALUE;
+        pauseToolButtonMin = MIN_SKYSCAN_PAUSE_MINS;
+        pauseToolButtonMax = MAX_SKYSCAN_PAUSE_MINS;
+        pauseToolButtonStepInterval = DEFAULT_SKYSCAN_PAUSE_TIME_INTERVAL;
+        skyScanPauseTimeValueIsDirty = false;
+
+        rotatorMinAzimuth = COMPASS_MIN0;
+        rotatorMaxAzimath= COMPASS_MAX360;
+        antennaOffset = 0;
+        skyScanStartBearing = COMPASS_MIN0;     // skyScan is rotator bearing, antenna bearing may apply offset
+        skyScanStartBearingIsDirty = false;
+        skyScanEndBearing = COMPASS_MIN0;
+        skyScanEndBearingIsDirty = false;
+        createdFromNew = false;
+    }
+
+
+    int getNumber(){return number;}
+    void setNumber(int num){number = num;}
+
+    QString getPresetName(){return presetName;}
+    void setPresetName(QString name_){presetName = name_;}
+    void setPresetNameIsDirty(bool dirty){presetNameDirty = dirty;}
+    bool isPresetNameDirty(){return presetNameDirty;}
+
+    QString getAntennaName(){return antennaName;}
+    void setAntennaName(QString antennaName_){antennaName = antennaName_;}
+
+    endStop getEndStopType(){return endStopType;}
+    void setEndStopType(endStop endStopType_){endStopType = endStopType_;}
+
+    southStop getSouthStopType(){return southStopType;}
+    void setSouthStopType(southStop southStopType_){southStopType = southStopType_;}
+
+    int getSkyScanStepDegreesValue(){return skyScanStepDegreesValue;}
+    void setSkyScanStepDegreesValue(int skyScanStepDegreesValue_){skyScanStepDegreesValue = skyScanStepDegreesValue_;}
+    void setSkyScanStepDegreesValueIsDirty(bool dirty){skyScanStepDegreesValueIsDirty = dirty;}
+    bool isSkyScanStepDegreesValueDirty(){return skyScanStepDegreesValueIsDirty;}
+
+    int getStepToolButtonMin(){return stepToolButtonMin;}
+    void setStepToolButtonMin(int stepToolButtonMin_){stepToolButtonMin = stepToolButtonMin_;}
+
+    int getStepToolButtonMax(){return stepToolButtonMax;};
+    void setStepToolButtonMax(int stepToolButtonMax_){stepToolButtonMax = stepToolButtonMax_;}
+
+    int getStepToolButtonStepInterval(){return stepToolButtonStepInterval;};
+    void setStepToolButtonStepInterval(int stepToolButtonStepInterval_){stepToolButtonStepInterval = stepToolButtonStepInterval_;}
+
+    int getSkyScanPauseTimeValue(){return skyScanPauseTimeValue;};
+    void setSkyScanPauseTimeValue(int skyScanPauseTimeValue_){skyScanPauseTimeValue = skyScanPauseTimeValue_;}
+    void setSkyScanPauseTimeValueDirty(bool dirty){skyScanPauseTimeValueIsDirty = dirty;}
+    bool isSkyScanPauseTimeValueDirty(){return skyScanPauseTimeValueIsDirty;}
+
+    int getPauseToolButtonMin(){return pauseToolButtonMin;};
+    void setPauseToolButtonMin(int pauseToolButtonMin_){pauseToolButtonMin = pauseToolButtonMin_;}
+
+    int getPauseToolButtonMax(){return pauseToolButtonMax;};
+    void setPauseToolButtonMax(int pauseToolButtonMax_){pauseToolButtonMax = pauseToolButtonMax_;}
+
+    int getPauseToolButtonStepInterval(){return pauseToolButtonStepInterval;};
+    void setPauseToolButtonStepInterval(int pauseToolButtonStepInterval_){pauseToolButtonStepInterval = pauseToolButtonStepInterval_;}
+
+    int getRotatorMinAzimuth(){return rotatorMinAzimuth;};
+    void setRotatorMinAzimuth(int rotatorMinAzimuth_ ){rotatorMinAzimuth = rotatorMinAzimuth_;}
+
+    int getRotatorMaxAzimuth(){return rotatorMaxAzimath;};
+    void setRotatorMaxAzimuth(int rotatorMaxAzimuth_ ){rotatorMaxAzimath = rotatorMaxAzimuth_;}
+
+    int getAntennaOffset(){return antennaOffset;};
+    void setAntennaOffset(int antennaOffset_){antennaOffset = antennaOffset_;}
+
+    int getSkyScanStartBearing(){return skyScanStartBearing;};
+    void setSkyScanStartBearing(int skyScanStartBearing_){skyScanStartBearing = skyScanStartBearing_;}
+    void setSkyScanStartBearingIsDirty(bool dirty){skyScanStartBearingIsDirty = dirty;}
+    bool isSkyScanStartBearingIsDirty(){return skyScanStartBearingIsDirty;}
+
+    int getSkyScanEndBearing(){return skyScanEndBearing;};
+    void setSkyScanEndBearing(int skyScanEndBearing_){skyScanEndBearing = skyScanEndBearing_;}
+    void setSkyScanEndBearingIsDirty(bool dirty){skyScanEndBearingIsDirty =dirty;}
+    bool isSkyScanEndBearingDirty(){return skyScanEndBearingIsDirty;}
+
+    bool hasBeenCreatedFromNew(){return createdFromNew;}
+    void setCreatedFromNew(bool createdFromNew_){createdFromNew = createdFromNew_;}
+
+    bool areSettingsDirty(){return isPresetNameDirty() || isSkyScanStepDegreesValueDirty() || isSkyScanPauseTimeValueDirty()
+                                     || isSkyScanStartBearingIsDirty() || isSkyScanEndBearingDirty();}
+
+    void clearDirty()
+    {
+        presetNameDirty = false;
+        skyScanStepDegreesValueIsDirty = false;
+        skyScanStepDegreesValueIsDirty = false;
+        skyScanPauseTimeValueIsDirty = false;
+        skyScanEndBearingIsDirty = false;
+    }
+
+    SkyScanData copy() const {
+        SkyScanData c;
+        c.setNumber(number);
+        c.setPresetName(presetName);
+        c.setAntennaName(antennaName);
+        c.setEndStopType(endStopType);
+        c.setSkyScanStepDegreesValue(skyScanStepDegreesValue);
+        c.setSkyScanStepDegreesValueIsDirty(skyScanStepDegreesValueIsDirty);
+        c.setStepToolButtonMin(stepToolButtonMin);
+        c.setStepToolButtonMax(stepToolButtonMax);
+        c.setStepToolButtonStepInterval(stepToolButtonStepInterval);
+        c.setSkyScanPauseTimeValue(skyScanPauseTimeValue);
+        c.setSkyScanPauseTimeValueDirty(skyScanPauseTimeValueIsDirty);
+        c.setPauseToolButtonMin(pauseToolButtonMin);
+        c.setPauseToolButtonMax(pauseToolButtonMax);
+        c.setPauseToolButtonStepInterval(pauseToolButtonStepInterval);
+        c.setRotatorMinAzimuth(rotatorMinAzimuth);
+        c.setRotatorMaxAzimuth(rotatorMaxAzimath);
+        c.setAntennaOffset(antennaOffset);
+        c.setSkyScanStartBearing(skyScanStartBearing);
+        c.setSkyScanStartBearingIsDirty(skyScanStartBearingIsDirty);
+        c.setSkyScanEndBearing(skyScanEndBearing);
+        c.setSkyScanEndBearingIsDirty(skyScanEndBearingIsDirty);
+        c.setCreatedFromNew(createdFromNew);
+        return c;
+    }
+
+
+private:
+
+    int number = 0;
+    QString presetName;
+    bool presetNameDirty = false;
+    QString antennaName;
+    endStop endStopType = endStop::ROT_0_360;
+    southStop southStopType= southStop::S_STOPOFF;
+    int skyScanStepDegreesValue = DEFAULT_SKYSCAN_STEP_VALUE;
+    int stepToolButtonMin= MIN_SKYSCAN_STEP_DEGREES;
+    int stepToolButtonMax = MAX_SKYSCAN_STEP_DEGREES;
+    int stepToolButtonStepInterval = DEFAULT_SKYSCAN_STEP_INTERVAL_DEGREES;
+    bool skyScanStepDegreesValueIsDirty = false;
+    int skyScanPauseTimeValue = DEFAULT_SKYSCAN_PAUSE_TIME_VALUE;
+    int pauseToolButtonMin = MIN_SKYSCAN_PAUSE_MINS;
+    int pauseToolButtonMax = MAX_SKYSCAN_PAUSE_MINS;
+    int pauseToolButtonStepInterval = DEFAULT_SKYSCAN_PAUSE_TIME_INTERVAL;
+    bool skyScanPauseTimeValueIsDirty = false;
+    int rotatorMinAzimuth = COMPASS_MIN0;
+    int rotatorMaxAzimath= COMPASS_MAX360;
+    int antennaOffset = 0;
+    int skyScanStartBearing = COMPASS_MIN0;
+    bool skyScanStartBearingIsDirty = false;
+    int skyScanEndBearing = COMPASS_MIN0;
+    bool skyScanEndBearingIsDirty = false;
+    bool createdFromNew = false;
+
+
+
+};
+
+
+class RotFrameData
+{
+
+
+public:
+
+    RotFrameData()
+    {
+        clearRotatorMovingFlags();
+    }
+
+    int getRotatorMinAzimuth(){return minAzimuth;}
+    void setRotatorMinAzimuth(int minAzimuth_){minAzimuth = minAzimuth_;}
+
+    int getRotatorMaxAzimuth(){return maxAzimuth;}
+    void setRotatorMaxAzimuth(int maxAzimuth_){maxAzimuth = maxAzimuth_;}
+
+
+
+    int getAntennaBearing(){return antennaBearing;}
+    void setAntennaBearing(int antennaBearing_){antennaBearing = antennaBearing_;}
+
+    int getRotatorBearing(){return rotatorBearing;}
+    void setRotatorBearing(int rotatorBearing_){rotatorBearing = rotatorBearing_;}
+
+    bool getMoving(){return moving;}
+    void setMoving(bool moving_){moving = moving_;}
+
+    bool getMovingCW(){return movingCW;}
+    void setMovingCW(bool movingCW_){movingCW = movingCW_;}
+
+    bool getMovingCCW(){return movingCCW;}
+    void setMovingCCW(bool movingCCW_){movingCCW = movingCCW_;}
+
+    bool getRotLeftButtonStatus(){return rot_left_button_status;}
+    void setRotLeftButtonStatus(bool rot_left_button_status_){rot_left_button_status = rot_left_button_status_;}
+
+    bool getRotRightButtonStatus(){return rot_right_button_status;}
+    void setRotRightButtonStatus(bool rot_right_button_status_){rot_right_button_status = rot_right_button_status_;}
+
+    bool getRotConnected(){return rotConnected;}
+    void setRotConnected(bool rotConnected_){rotConnected = rotConnected_;}
+
+    bool getSupportCwCcwCmd(){return supportCwCcwCmd;}
+    void SetSupportCwCcwCmd(bool supportCwCcwCmd_){supportCwCcwCmd = supportCwCcwCmd_;}
+
+    bool getSupportStopCommand(){return supportStopCommand;}
+    void setSupportStopCommand(bool supportStopCommand_){supportStopCommand = supportStopCommand_;}
+
+    bool getRotError(){return rotError;}
+    void setRotError(bool rotError_){rotError = rotError_;}
+
+    QString getLastConnectStat(){return lastConnectStat;}
+    void setLastConnectStat(QString lastConnectStat_){lastConnectStat = lastConnectStat_;}
+
+    QString getLastStatus(){return lastStatus;}
+    void setLastStatus(QString lastStatus_){lastStatus = lastStatus_;}
+
+    QString getAntennaName(){return antennaName;}
+    void setAntennaName(QString antennaName_){antennaName = antennaName_;}
+
+    QString getFrameName(){return frameName;}
+    void setFrameName(QString frameName_){frameName = frameName_;}
+
+    int getAntennaOffset(){return antennaOffset;}
+    void setAntennaOffset(int antennaOffset_){antennaOffset = antennaOffset_;}
+
+    int getSkyScanStartBearing(){return skyScanStartBearing;}
+    void setSkyScanStartBearing(int skyScanStartBearing_){skyScanStartBearing = skyScanStartBearing_;}
+
+    int getSkyScanEndBearing(){return skyScanEndBearing;}
+    void setSkyScanEndBearing(int skyScanEndBearing_){skyScanEndBearing = skyScanEndBearing_;}
+
+    endStop getEndStopType(){return  endStopType;}
+    void setEndStopType(endStop endStopType_){ endStopType =  endStopType_;}
+
+    southStop getSouthStopType(){return southStopType;}
+    void setSouthStopType(southStop southStopType_){southStopType = southStopType_;}
+
+    void clearRotatorMovingFlags()
+    {
+        moving = false;
+        movingCCW = false;
+        movingCW = false;
+        rot_left_button_status = false;
+        rot_right_button_status = false;
+        //rotConnected = false;
+        //rotError = false;
+    }
+
+private:
+
+
+    int maxAzimuth = 0;
+    int minAzimuth = 0;
+    int antennaBearing = 0;
+    int rotatorBearing = 0;
+    bool moving = false;
+    bool movingCW = false;
+    bool movingCCW = false;
+    bool rot_left_button_status;
+    bool rot_right_button_status;
+    bool rotConnected = false;
+    bool supportCwCcwCmd = true;
+    bool supportStopCommand = true;
+    bool rotError = false;
+
+    QString lastConnectStat;
+    QString lastStatus;
+
+
+
+    QString antennaName;
+    QString frameName;
+
+
+    int antennaOffset = 0;
+    int skyScanStartBearing = 0;
+    int skyScanEndBearing = 0;
+    endStop endStopType = ROT_0_360;
+    southStop southStopType = southStop::S_STOPOFF;
+
+
+
+};
+
 
 
 

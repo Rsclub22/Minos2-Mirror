@@ -43,7 +43,7 @@ if [ $retVal -ne 0 ]; then
     exit $retVal
 fi
 
-  for j in TinyXML XMPPLib KeyerBase MqtBase MqtUtils MqtAppStarter MqtChat MqtCluster MqtControl MqtDataModes MqtKeyer MqtKeyerProxy MqtKSTClient MqtLogger MqtMonitor MqtQrzServer MqtRigControl MqtRigSync MqtRigRecorder MqtRotator MqtServer
+  for j in TinyXML XMPPLib KeyerBase MqtBase MqtUtils MqtAppStarter MqtChat MqtCluster MqtControl MqtDataModes MqtKeyer MqtKeyerProxy MqtKSTClient MqtLogger MqtMonitor MqtPcCwKeyer MqtQrzServer MqtRigControl MqtRigSync MqtRigRecorder MqtRotator MqtServer MqtWinkeyer
   do
     lrelease -verbose ../../mqt/${j}/${j}.pro
     if [ ! -d ${j}/translations ]; then
@@ -71,7 +71,7 @@ mkdir Docs
 
 for i in en_GB fr_FR
 do
-  for j in MqtAppStarter MqtChat MqtCluster MqtControl MqtDataModes MqtKeyer MqtKeyerProxy MqtKSTClient MqtLogger MqtMonitor MqtQrzServer MqtRigControl MqtRigSync MqtRigRecorder MqtRotator MqtServer
+  for j in MqtAppStarter MqtChat MqtCluster MqtControl MqtDataModes MqtKeyer MqtKeyerProxy MqtKSTClient MqtLogger MqtMonitor MqtPcCwKeyer MqtQrzServer MqtRigControl MqtRigSync MqtRigRecorder MqtRotator MqtServer MqtWinkeyer
   do
     lconvert -verbose -o Bin/translations/${j}_${i}.qm \
     $DIR/$BUILDDIR/MqtUtils/translations/minos_${i}.qm \
@@ -84,7 +84,7 @@ do
 done
 cp /usr/share/qt5/translations/qt*.qm Bin/translations
 
-  for j in MqtAppStarter MqtChat MqtCluster MqtControl MqtDataModes MqtKeyer MqtKeyerProxy MqtKSTClient MqtLogger MqtMonitor MqtQrzServer MqtRigControl MqtRigSync MqtRigRecorder MqtRotator MqtServer
+  for j in MqtAppStarter MqtChat MqtCluster MqtControl MqtDataModes MqtKeyer MqtKeyerProxy MqtKSTClient MqtLogger MqtMonitor MqtPcCwKeyer MqtQrzServer MqtRigControl MqtRigSync MqtRigRecorder MqtRotator MqtServer MqtWinkeyer
   do
     cp $DIR/$BUILDDIR/${j}/${j} Bin
   done
@@ -106,16 +106,16 @@ wget https://www.country-files.com/cty/cty.dat -O cty.dat
 wget https://www.rsgbcc.org/cgi-bin/vhfenter.pl?afsdownload=y -O clublist.txt
 
 wget https://www.rsgbcc.org/vhf/vhfcontests25.xml -O vhfcontests25.xml
-wget https://www.rsgbcc.org/vhf/vhfcontests24.xml -O vhfcontests24.xml
+wget https://www.rsgbcc.org/vhf/vhfcontests26.xml -O vhfcontests26.xml
 
 wget https://www.rsgbcc.org/vhf/hfcontests25.xml -O hfcontests25.xml
-wget https://www.rsgbcc.org/vhf/hfcontests24.xml -O hfcontests24.xml
+wget https://www.rsgbcc.org/vhf/hfcontests26.xml -O hfcontests26.xml
 
 wget https://microwave.rsgbcc.org/microcontests25.xml -O microcontests25.xml
-wget https://microwave.rsgbcc.org/microcontests24.xml -O microcontests24.xml
+wget https://microwave.rsgbcc.org/microcontests26.xml -O microcontests26.xml
 
 wget https://microwave.rsgbcc.org/bartgcontests25.xml -O bartgcontests25.xml
-wget https://microwave.rsgbcc.org/bartgcontests24.xml -O bartgcontests24.xml
+wget https://microwave.rsgbcc.org/bartgcontests26.xml -O bartgcontests26.xml
 
 cd ..
 

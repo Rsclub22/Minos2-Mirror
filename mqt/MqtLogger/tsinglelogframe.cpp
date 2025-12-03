@@ -12,6 +12,7 @@
 #include "dmbuttonframe.h"
 #include "fileutils.h"
 #include "qheaderview.h"
+#include "rotatorskyscanframe.h"
 #include "tqsoeditdlg.h"
 #include "tentryoptionsform.h"
 
@@ -38,6 +39,7 @@
 #include "bandmapclientframe.h"
 #include "ContestPageControl.h"
 #include "MTrace.h"
+
 
 #include "tsinglelogframe.h"
 #include "ui_tsinglelogframe.h"
@@ -121,6 +123,7 @@ void TSingleLogFrame::buildFrame(int slotNo)
     connect(FKHRigControlFrame, &RigControlFrame::ritStatus, this, &TSingleLogFrame::sendRadioRitStatus);
     connect(FKHRigControlFrame, &RigControlFrame::sendModeToControl, this, &TSingleLogFrame::sendRadioMode);
     connect(GJVQSOLogFrame, &QSOLogFrame::sendModeControl, this , &TSingleLogFrame::sendRadioMode);
+    connect(dmButtonFrame, &DMButtonFrame::sendFreqControl, this, &TSingleLogFrame::sendRadioFreq);
 
     // Rotator updates
     // From rotator controller
@@ -128,11 +131,23 @@ void TSingleLogFrame::buildFrame(int slotNo)
 
     // To rotator controller
     connect(FKHRotControlFrame, &RotControlFrame::sendRotator, this, &TSingleLogFrame::sendRotator);
-    connect(rotPresets, &RotPresets::sendRotatorPreset, this, &TSingleLogFrame::sendRotatorPreset);
     connect(FKHRotControlFrame, &RotControlFrame::selectRotator, this, &TSingleLogFrame::sendSelectRotator);
     connect(FKHRotControlFrame, &RotControlFrame::selectRotator, rotPresets, &RotPresets::selectRotator);
-    connect(rotPresets, &RotPresets::presetTurn, this, &TSingleLogFrame::presetTurn);
     connect(FKHRotControlFrame, &RotControlFrame::rotatorConnected, this, &TSingleLogFrame::on_rotatorConnected);
+
+    connect(FKHRotCompassFrame, &RotatorCompassFrame::sendRotator, this, &TSingleLogFrame::sendRotator);
+    connect(FKHRotCompassFrame, &RotatorCompassFrame::selectRotator, this, &TSingleLogFrame::sendSelectRotator);
+    connect(FKHRotCompassFrame, &RotatorCompassFrame::selectRotator, rotPresets, &RotPresets::selectRotator);
+    connect(FKHRotCompassFrame, &RotatorCompassFrame::rotatorConnected, this, &TSingleLogFrame::on_rotatorConnected);
+
+    connect(FKHRotSkyScanPresetsFrame, &skyScanPresetsFrame::recallSkyScanPreset, this, &TSingleLogFrame::sendSkyScanPresetNumberToRotator);
+
+
+    connect(rotPresets, &RotPresets::presetTurn, this, &TSingleLogFrame::presetTurn);
+    connect(rotPresets, &RotPresets::sendRotatorPreset, this, &TSingleLogFrame::sendRotatorPreset);
+
+
+    connect(skyScanControlFrame, &RotatorSkyScanFrame::sendSkyScanButtonState, this, &TSingleLogFrame::sendSkyScanFrameButtonStateToRotator);
 
     // from cluster frame
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::DxSpotToLog, this, &TSingleLogFrame::dxSpotToLog);
@@ -145,6 +160,14 @@ void TSingleLogFrame::buildFrame(int slotNo)
     // from cluster server
     connect(LogContainer->sendDM, &TSendDM::setClusterState, this, &TSingleLogFrame::on_clusterServerState);
     connect(LogContainer->sendDM, &TSendDM::setClusterTXSpotEnableState, this, &TSingleLogFrame::on_setClusterTXSpotEnableState);
+
+    // from PcCwKeyer
+    connect(LogContainer->sendDM, &TSendDM::pcCwKeyerComport, this, &TSingleLogFrame::onPcCwKeyerComport);
+    connect(LogContainer->sendDM, &TSendDM::pcCwKeyerConnectionState, this, &TSingleLogFrame::onPcCwKeyerConnectionState);
+    connect(LogContainer->sendDM, &TSendDM::pcCwKeyerErrorMsg, this, &TSingleLogFrame::onPcCwKeyerErrorMsg);
+    connect(LogContainer->sendDM, &TSendDM::pcCwKeyerPttEnabled, this, &TSingleLogFrame::onPcCwKeyerPttEnabled);
+    connect(LogContainer->sendDM, &TSendDM::pcCwKeyerTxOn, this, &TSingleLogFrame::onPcCwKeyerTxOn);
+    connect(LogContainer->sendDM, &TSendDM::pcCwKeyerCurrentWpm, this, &TSingleLogFrame::onPcCwKeyerCurrentWpm);
 
 
     // to bandmap
@@ -159,6 +182,7 @@ void TSingleLogFrame::buildFrame(int slotNo)
 
     // from tx Voice Memory Panel
     connect(txVmButtonsFrame, &TxVmButtonsFrame::sendRadioMode, this, &TSingleLogFrame::sendRadioMode);
+    connect(txVmButtonsFrame, &TxVmButtonsFrame::sendWpmToPcCwkeyer, this, &TSingleLogFrame::sendPcKeyerCwWpm);
 
     connect(FKHRigControlFrame, &RigControlFrame::radioIsConnected, this, &TSingleLogFrame::sendBandmapRadioIsConnected);
     connect(FKHRigControlFrame, &RigControlFrame::radioHasError, this, &TSingleLogFrame::sendBandmapRadioHasError);
@@ -210,23 +234,25 @@ void TSingleLogFrame::createScreenComponents()
     txVmButtonsFrame->setObjectName(QStringLiteral("txVmButtonsFrame"));
     txVmButtonsFrame->setVisible(false);
 
-    bandSwitchFrame = new BandSwitchFrame(this);
-    bandSwitchFrame->setObjectName(QStringLiteral("bandSwitchFrame"));
-    bandSwitchFrame->setVisible(false);
-
     FKHRigControlFrame = new RigControlFrame(this);
     FKHRigControlFrame->setObjectName(QStringLiteral("FKHRigControlFrame"));
     FKHRigControlFrame->setFrameShape(QFrame::StyledPanel);
     FKHRigControlFrame->setFrameShadow(QFrame::Raised);
-
     FKHRigControlFrame->setVisible(false);
 
+    bandSwitchFrame = new BandSwitchFrame(this);
+    bandSwitchFrame->setObjectName(QStringLiteral("bandSwitchFrame"));
+    bandSwitchFrame->setVisible(false);
     bandSwitchFrame->setRigControl(FKHRigControlFrame);
 
     runButtonsFrame = new RunButtonsFrame(this);
     runButtonsFrame->setObjectName(QStringLiteral("runButtonsFrame"));
     runButtonsFrame->setVisible(false);
     runButtonsFrame->setRigControl(FKHRigControlFrame);
+
+    FKHRotCompassFrame = new RotatorCompassFrame(this);
+    FKHRotCompassFrame->setObjectName(QStringLiteral("FKHRotCompassFrame"));
+    FKHRotCompassFrame->setVisible(false);
 
     qrzDisplayFrame = new QrzDisplayFrame(this);
     qrzDisplayFrame->setObjectName(QStringLiteral("qrzDisplayFrame"));
@@ -240,6 +266,17 @@ void TSingleLogFrame::createScreenComponents()
     FKHRotControlFrame->setFrameShadow(QFrame::Raised);
 
     FKHRotControlFrame->setVisible(false);
+
+    skyScanControlFrame = new RotatorSkyScanFrame(this);
+    skyScanControlFrame->setObjectName(QStringLiteral("FKHSkyScanControlFrame"));
+    skyScanControlFrame->setFrameShape(QFrame::StyledPanel);
+    skyScanControlFrame->setFrameShadow(QFrame::Raised);
+
+    skyScanControlFrame->setVisible(false);
+
+    FKHRotSkyScanPresetsFrame = new skyScanPresetsFrame(this);
+    FKHRotSkyScanPresetsFrame->setObjectName(QStringLiteral("FKHRotSkyScanPresetsFrame"));
+    FKHRotSkyScanPresetsFrame->setVisible(false);
 
     clusterControlFrame = new ClusterClientFrame(this);
     clusterControlFrame->setObjectName(QStringLiteral("ClusterControlFrame"));
@@ -383,6 +420,9 @@ void TSingleLogFrame::clearScreenLayout(bool clearAllTabs)
     bandSwitchFrame->setContest(nullptr);
     txVmButtonsFrame->setContest(nullptr);
     FKHRotControlFrame->setContest(nullptr);
+    FKHRotCompassFrame->setContest(nullptr);
+    skyScanControlFrame->setContest(nullptr);
+    FKHRotSkyScanPresetsFrame->setVisible(false);
     rotPresets->setContest(nullptr);
     // CribSheet
     // NextContactDetailsLabel
@@ -435,6 +475,15 @@ void TSingleLogFrame::clearScreenLayout(bool clearAllTabs)
 
         FKHRotControlFrame->setParent(this);
         FKHRotControlFrame->hide();
+
+        skyScanControlFrame->setParent(this);
+        skyScanControlFrame->hide();
+
+        FKHRotCompassFrame->setParent(this);
+        FKHRotCompassFrame->hide();
+
+        FKHRotSkyScanPresetsFrame->setParent(this);
+        FKHRotSkyScanPresetsFrame->hide();
 
         rotPresets->setParent(this);
         rotPresets->hide();
@@ -647,6 +696,22 @@ void TSingleLogFrame::buildRow(ContestPage *cp, SCRow &scrow, int &auxInstance, 
                 {
                     elementScrollArea->setWidget(FKHRotControlFrame);
                     // don't set contest here
+                    break;
+                }
+                case sctSkyScanControl:
+                {
+                    elementScrollArea->setWidget(skyScanControlFrame);
+                    // don't set contest here
+                    break;
+                }
+                case sctRotSkyScanPresets:
+                {
+                    elementScrollArea->setWidget(FKHRotSkyScanPresetsFrame);
+                    break;
+                }
+                case sctRotCompassDisplay:
+                {
+                    elementScrollArea->setWidget(FKHRotCompassFrame);
                     break;
                 }
                 case sctQrzDisplay:
@@ -895,6 +960,8 @@ void TSingleLogFrame::buildScreenLayout(int slotNo)
     wsjtxFrame->setContest(ct);
     FKHRigControlFrame->setContest(ct);
     FKHRotControlFrame->setContest(ct);
+    FKHRotCompassFrame->setContest(ct);
+    skyScanControlFrame->setContest(ct);
     dmButtonFrame->setContest(ct);
     txVmButtonsFrame->setContest(ct);
     bandmapControlFrame->setContest(ct);
@@ -1113,6 +1180,8 @@ void TSingleLogFrame::on_ContestPageChanged ()
 
     FKHRigControlFrame->on_ContestPageChanged();
     FKHRotControlFrame->on_ContestPageChanged();
+    FKHRotCompassFrame->on_ContestPageChanged();
+    skyScanControlFrame->on_ContestPageChanged();
 
     updateQSODisplay();
 
@@ -1764,6 +1833,8 @@ void TSingleLogFrame::checkConnections()
             FKHRigControlFrame->checkConnection();
         if (FKHRotControlFrame)
             FKHRotControlFrame->checkConnection();
+        if (FKHRotCompassFrame)
+            FKHRotCompassFrame->checkConnection();
     }
 }
 //---------------------------------------------------------------------------
@@ -1833,6 +1904,7 @@ void TSingleLogFrame::updateFreq(Frequency f)
     runButtonsFrame->setFreq(f);
     GJVQSOLogFrame->setFreq(f);
     bandmapControlFrame->setFreq(f);
+    dmButtonFrame->setFreq(f);
 
     MinosLoggerEvents::SendRigFreqChanged(f, contest);
 }
@@ -1959,7 +2031,7 @@ void TSingleLogFrame::on_SetPttState(bool state)
 {
     if ( this == LogContainer->getCurrentLogFrame() )
     {
-        txVmButtonsFrame->setPttState(state);
+        txVmButtonsFrame->setRadioPttState(state);
     }
 }
 void TSingleLogFrame::setCallPlaceholder(QString call)
@@ -2063,6 +2135,33 @@ void TSingleLogFrame::sendRigTxCwMessage(QString msg)
         LogContainer->sendDM->sendRigTxCwMessage(this, msg);
     }
 }
+
+void TSingleLogFrame::sendPcKeyerTxCwMessage(QString msg)
+{
+    if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
+    {
+        LogContainer->sendDM->sendPcKeyerTxCwMessage(msg);
+    }
+}
+
+void TSingleLogFrame::sendPcKeyerTxCwStop(QString msg)
+{
+    if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
+    {
+        LogContainer->sendDM->sendPcKeyerTxCwStop(msg);
+    }
+}
+
+
+void TSingleLogFrame::sendPcKeyerCwWpm(int wpm)
+{
+    if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
+    {
+        LogContainer->sendDM->sendPcKeyerCwWpm(wpm);
+    }
+}
+
+
 
 void TSingleLogFrame::sendRadioFreq(Frequency freq)
 {
@@ -2245,7 +2344,12 @@ bool TSingleLogFrame::getRadioReadOnlyFlag()
 
 void TSingleLogFrame::on_RotatorList()
 {
+
     FKHRotControlFrame->setRotatorList();
+    FKHRotCompassFrame->setRotatorList();
+
+
+
 }
 
 void TSingleLogFrame::on_RotatorPresetList(QString s)
@@ -2258,6 +2362,7 @@ void TSingleLogFrame::on_RotatorStatus(QString s)
     if ( this == LogContainer->getCurrentLogFrame() )
     {
         FKHRotControlFrame->setRotatorState(s);
+        FKHRotCompassFrame->setRotatorState(s);
     }
 }
 
@@ -2266,8 +2371,11 @@ void TSingleLogFrame::on_RotatorBearing(QString s)
     if ( this == LogContainer->getCurrentLogFrame() )
     {
         FKHRotControlFrame->setRotatorBearing(s);
+        FKHRotCompassFrame->setRotatorBearing(s);
+        FKHRotCompassFrame->setRotatorCompassBearing(s);
         bandmapControlFrame->setRotatorBearing(s);
         GJVQSOLogFrame->setRotatorBearing(s);
+        skyScanControlFrame->setRotatorBearing(s);
     }
 }
 
@@ -2281,6 +2389,7 @@ void TSingleLogFrame::on_RotatorMaxAzimuth(int s)
     if ( this == LogContainer->getCurrentLogFrame() )
     {
         FKHRotControlFrame->setRotatorMaxAzimuth(s);
+        FKHRotCompassFrame->setRotatorMaxAzimuth(s);
     }
 }
 
@@ -2289,6 +2398,7 @@ void TSingleLogFrame::on_RotatorMinAzimuth(int s)
     if ( this == LogContainer->getCurrentLogFrame() )
     {
         FKHRotControlFrame->setRotatorMinAzimuth(s);
+        FKHRotCompassFrame->setRotatorMinAzimuth(s);
     }
 }
 
@@ -2297,7 +2407,13 @@ void TSingleLogFrame::on_SupportStopCommand(bool state)
     if (this == LogContainer->getCurrentLogFrame())
     {
         FKHRotControlFrame->setSupportStopCommandFlag(state);
+        FKHRotCompassFrame->setSupportStopCommandFlag(state);
     }
+}
+
+void TSingleLogFrame::on_RotatorStopSouthStopOffset(QString data)
+{
+    FKHRotCompassFrame->setRotatorSouthStopOffset(data);
 }
 
 void TSingleLogFrame::on_cwCcwCmdEnable(bool s)
@@ -2305,14 +2421,42 @@ void TSingleLogFrame::on_cwCcwCmdEnable(bool s)
     if (this == LogContainer->getCurrentLogFrame())
     {
        FKHRotControlFrame->setCwCcwCmdEnable(s);
+       FKHRotControlFrame->setCwCcwCmdEnable(s);
     }
 }
+
 
 void TSingleLogFrame::sendRotator(rpcConstants::RotateDirection direction, int angle )
 {
     if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
-        LogContainer->sendDM->sendRotator(this, direction, angle);
+    {    if (!skyScanButtonState.isStart())  // don't send if skyscan is started
+        {
+
+            LogContainer->sendDM->sendRotator(this, direction, angle);
+        }
+        else
+        {
+            trace(QString("skyScan in operation - stop rotator bearing commands from logger"));
+        }
+    }
+
 }
+
+void TSingleLogFrame::sendSkyScanPresetNumberToRotator(int buttonNumber)
+{
+    if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
+        LogContainer->sendDM->sendRotatorSkyScanPresetNumberToRotator(this, buttonNumber);
+}
+
+void TSingleLogFrame::sendSkyScanFrameButtonStateToRotator(SkyScanButtonState buttonState)
+{
+    if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
+    {
+       LogContainer->sendDM->sendSkyScanControlPanelButtonState(this, buttonState);
+    }
+}
+
+
 
 void TSingleLogFrame::sendRotatorPreset(QString s )
 {
@@ -2326,6 +2470,109 @@ void TSingleLogFrame::presetTurn(QString b)
         FKHRotControlFrame->presetTurn(b);
 }
 
+void TSingleLogFrame::on_RotatorSkyScanPresetList(QString skyScanPresetList)
+{
+    FKHRotSkyScanPresetsFrame->setPresetList(skyScanPresetList);
+}
+
+
+
+void TSingleLogFrame::on_skyScanVisible(bool state)
+{
+    if (this == LogContainer->getCurrentLogFrame())
+    {
+        skyScanControlFrame->setSkyScanVisible(state);
+        FKHRotCompassFrame->setSkyScanVisible(state);
+        FKHRotSkyScanPresetsFrame->setSkyCanVisible(state);
+    }
+}
+
+void TSingleLogFrame::on_skyScanStartBearing(int startBearing)
+{
+    if (this == LogContainer->getCurrentLogFrame())
+    {
+        skyScanControlFrame->setSkyScanStartBearing(startBearing);
+
+    }
+}
+
+void TSingleLogFrame::on_skyScanEndBearing(int endBearing)
+{
+    if (this == LogContainer->getCurrentLogFrame())
+    {
+        skyScanControlFrame->setSkyScanEndBearing(endBearing);
+    }
+}
+
+void TSingleLogFrame::on_skyScanRotatorStartBearing(int rotatorStartBearing)
+{
+    if (this == LogContainer->getCurrentLogFrame())
+    {
+
+        FKHRotCompassFrame->setSkyScanRotatorStartBearing(rotatorStartBearing);
+    }
+}
+
+void TSingleLogFrame::on_skyScanRotatorEndBearing(int rotatorEndBearing)
+{
+    if (this == LogContainer->getCurrentLogFrame())
+    {
+
+        FKHRotCompassFrame->setSkyScanRotatorEndBearing(rotatorEndBearing);
+    }
+}
+
+
+void TSingleLogFrame::on_SkyScanNextStep(QString nextStep)
+{
+    if (this == LogContainer->getCurrentLogFrame())
+    {
+        skyScanControlFrame->setSkyScanNextStep(nextStep);
+    }
+}
+
+
+void TSingleLogFrame::on_SkyScanCountDown(QString countDown)
+{
+    if (this == LogContainer->getCurrentLogFrame())
+    {
+        skyScanControlFrame->setSkyScanCountDown(countDown);
+    }
+}
+
+void TSingleLogFrame::on_SkyScanButtonState(int state)
+{
+    if (this == LogContainer->getCurrentLogFrame())
+    {
+        skyScanControlFrame->setSkyScanButtonState(state);
+        skyScanButtonState.setState(state);
+        if (skyScanButtonState.isStart())
+        {
+            // started disable rotPresets and rotator Frames
+            FKHRotControlFrame->skyScanStartedSetFrameDisabled(true);
+            FKHRotCompassFrame->skyScanStartedSetFrameDisabled(true);
+            rotPresets->skyScanStartedSetFrameDisabled(true);
+
+        }
+        else
+        {
+            FKHRotControlFrame->skyScanStartedSetFrameDisabled(false);
+            FKHRotCompassFrame->skyScanStartedSetFrameDisabled(false);
+            rotPresets->skyScanStartedSetFrameDisabled(false);
+        }
+    }
+}
+
+void TSingleLogFrame::on_SkyScanReverseScan(bool state)
+{
+    if (this == LogContainer->getCurrentLogFrame())
+    {
+        skyScanControlFrame->setSkyScanReverseScan(state);
+    }
+}
+
+
+
 //---------------------------KST------------------------------------
 void TSingleLogFrame::xferFromKST(QString call, QString loc, QString freq)
 {
@@ -2335,6 +2582,12 @@ void TSingleLogFrame::xferFromKST(QString call, QString loc, QString freq)
 #ifdef Q_OS_WIN
     MinosConfigEvents::sendStealFocus();
 #endif
+}
+
+void TSingleLogFrame::xferMeepFromKST(QString call)
+{
+    GJVQSOLogFrame->xferMeepFromKST(call);
+
 }
 
 //--------------- QRZ Display ---------------------------------------
@@ -2353,7 +2606,38 @@ void TSingleLogFrame::setQrzDisplayFrameLoaded(bool loaded)
    GJVQSOLogFrame->setqrzDisplayFrameLoaded(loaded);
 }
 
-//---------------------------------------------------------------------------
+//---------------------- PcCwKeyer ------------------------------------------
+
+
+void TSingleLogFrame::onPcCwKeyerComport(QString comportStr)
+{
+    txVmButtonsFrame->setPcCwKeyerComport(comportStr);
+}
+
+void TSingleLogFrame::onPcCwKeyerConnectionState(QString stateStr)
+{
+    txVmButtonsFrame->setPcCwKeyerConnectionState(stateStr);
+}
+
+void TSingleLogFrame::onPcCwKeyerErrorMsg(QString errorMsg)
+{
+    txVmButtonsFrame->setPcCwKeyerErrorMsg(errorMsg);
+}
+
+void TSingleLogFrame::onPcCwKeyerPttEnabled(QString enabled)
+{
+    txVmButtonsFrame->setPcCwKeyerPttEnabled(enabled);
+}
+
+void TSingleLogFrame::onPcCwKeyerTxOn(QString state)
+{
+    txVmButtonsFrame->setPcCwKeyerTxOnState(state);
+}
+
+void TSingleLogFrame::onPcCwKeyerCurrentWpm(QString wpm)
+{
+    txVmButtonsFrame->setPcCwKeyerCurrentWpm(wpm);
+}
 
 void TSingleLogFrame::traceMsg(QString msg)
 {

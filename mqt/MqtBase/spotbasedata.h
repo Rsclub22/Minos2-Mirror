@@ -191,6 +191,7 @@ public:
 
     int getRecNo() const {return recno;}
     void setRecNo(int value) {recno = value;}
+    bool spotMatchesDxCallsignFreqAndTime(const QSharedPointer<ClusterSpotData> &other, int freqTolerance = 200, int timeToleranceMins = 10) const;
 private:
 
     int recno = -1;  // for spots DB
@@ -231,6 +232,7 @@ private:
     bool isSelected = false;
     bandmapSpotType::SPOT_TYPE spotType = bandmapSpotType::SPOT_TYPE::NONE;
 };
+Q_DECLARE_METATYPE(ClusterSpotData *)
 
 extern QSharedPointer<ClusterSpotData> stringToDxSpot(QString spot, BaseContestLog *ct, qlonglong &timeToLive);
 

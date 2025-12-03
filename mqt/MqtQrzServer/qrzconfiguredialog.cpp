@@ -38,6 +38,7 @@ int QrzConfigureDialog::exec()
 {
     ui->logonCallsignLineEdit->setText(logCallsign);
     ui->qrzPasswordLineEdit->setText(logPassword);
+    ui->cacheAge->setValue(cacheAge);
 
     return QDialog::exec();
 }
@@ -53,6 +54,7 @@ void QrzConfigureDialog::on_OKButton_clicked()
 {
     logCallsign = ui->logonCallsignLineEdit->text().trimmed();
     logPassword = ui->qrzPasswordLineEdit->text().trimmed();
+    cacheAge = ui->cacheAge->value();
 
     accept();
 }

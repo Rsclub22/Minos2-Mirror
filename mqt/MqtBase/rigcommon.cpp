@@ -88,7 +88,7 @@ VFO strToVfo(QString vfo)
 }
 
 
-
+/*
 void fillPortsInfo(QComboBox* comportSel)
 {
 
@@ -123,6 +123,65 @@ void fillPortsInfo(QComboBox* comportSel)
 
     }
 
+}
+*/
+
+
+void fillPortsInfo(QComboBox* comportSel)
+{
+    comportSel->clear();
+    comportSel->addItem("");  // Add blank entry
+
+    QString description;
+    QString manufacturer;
+    QString serialNumber;
+
+
+    QList<QPair<QString, QStringList>> portEntries;
+
+    // Collect all port info into a list
+    const auto ports = QSerialPortInfo::availablePorts();
+    for (const QSerialPortInfo &info : ports)
+    {
+        QStringList list;
+        description = info.description();
+        manufacturer = info.manufacturer();
+#if QT_VERSION > QT_VERSION_CHECK(5, 3, 0)
+        serialNumber = info.serialNumber();
+#endif
+        list << info.portName()
+             << (!description.isEmpty() ? description : blankString)
+             << (!manufacturer.isEmpty() ? manufacturer : blankString)
+             << (!serialNumber.isEmpty() ? serialNumber : blankString)
+             << info.systemLocation()
+             << (info.vendorIdentifier() ? QString::number(info.vendorIdentifier(), 16) : blankString)
+             << (info.productIdentifier() ? QString::number(info.productIdentifier(), 16) : blankString);
+
+        portEntries.append({info.portName(), list});
+    }
+
+#if defined Q_OS_WIN32
+    // Sort using numeric part of COM port name
+    std::sort(portEntries.begin(), portEntries.end(), [](const QPair<QString, QStringList> &a, const QPair<QString, QStringList> &b)
+    {
+        static QRegularExpression re("COM(\\d+)");
+        QRegularExpressionMatch ma = re.match(a.first);
+        QRegularExpressionMatch mb = re.match(b.first);
+
+        int na = ma.hasMatch() ? ma.captured(1).toInt() : 0;
+        int nb = mb.hasMatch() ? mb.captured(1).toInt() : 0;
+
+        return na < nb;
+    });
+#endif
+
+
+
+    // Add sorted items to the combobox
+    for (const auto &pair : portEntries)
+    {
+        comportSel->addItem(pair.first, pair.second);
+    }
 }
 
 
@@ -194,7 +253,9 @@ void scatParams::clear()
     rigCtldNetworkPort.clear();
     mgmMode = hamlibData::USB;
     rttyMode = hamlibData::LSB;
+    rttyOffset = RTTY_MARK_OFFSET;
     pskMode = hamlibData::USB;
+    pskOffset = PSK_OFFSET;
     antSwitchAvail = false;
     ritSupported = false;
 
@@ -249,7 +310,9 @@ bool scatParams::compareEqual(QSharedPointer <scatParams> radParams)
         rigCtldNetworkPort == radParams->rigCtldNetworkPort &&
         mgmMode == radParams->mgmMode &&
         rttyMode == radParams->rttyMode &&
+        rttyOffset == radParams->rttyOffset &&
         pskMode == radParams->pskMode &&
+        pskOffset == radParams->pskOffset &&
         antSwitchAvail == radParams->antSwitchAvail &&
         ritSupported == radParams->ritSupported &&
 
@@ -309,7 +372,9 @@ bool scatParams::compareNotEqual(const QSharedPointer<scatParams> radParams)
             rigCtldNetworkPort != radParams->rigCtldNetworkPort ||
             mgmMode != radParams->mgmMode ||
             rttyMode != radParams->rttyMode ||
+            rttyOffset != radParams->rttyOffset ||
             pskMode != radParams->pskMode ||
+            pskOffset != radParams->pskOffset ||
             antSwitchAvail != radParams->antSwitchAvail ||
             ritSupported != radParams->ritSupported ||
 
@@ -407,7 +472,9 @@ void scatParams::scatParamsCopy(const QSharedPointer<scatParams> srce)
     rigCtldNetworkPort = srce->rigCtldNetworkPort;
     mgmMode = srce->mgmMode;
     rttyMode = srce->rttyMode;
+    rttyOffset = srce->rttyOffset;
     pskMode = srce->pskMode;
+    pskOffset = srce->pskOffset;
     antSwitchAvail = srce->antSwitchAvail;
     ritSupported = srce->ritSupported;
 

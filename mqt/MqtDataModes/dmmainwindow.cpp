@@ -16,6 +16,8 @@
 
 #include "QtUtils.h"
 
+#include "WindowsAppId.h"
+#include "SecondInstall.h"
 #include "delayedaction.h"
 #include "regsettings.h"
 #include "AppStartup.h"
@@ -307,6 +309,7 @@ void DMMainWindow::on_startButton_clicked()
     if (engines.empty())
     {
         // start all configured engines
+        int instance = 0;
         for(const auto &e:EngineWindow::enginesList)
         {
             if (EngineConfigure::getEngineEnabled(e))
@@ -319,7 +322,18 @@ void DMMainWindow::on_startButton_clicked()
                 ew->selectEngine(e);
                 engines.push_back(ew);
 
+
+                int subinst = 0;
+                subinst = instance;
+
+                // the string shoud be formed from "CompanyName.ProductName.SubProduct.VersionInformation"
+                // cf https://docs.microsoft.com/en-us/windows/win32/shell/appids
+
+                setWinAppId(this, SecondInstall::getOrgName() + QString(".MqtDataModesr.SubScreen%1").arg(subinst) );
+
                 ew->show();
+
+                instance++;
             }
         }
         emit setSpeeds(EngineConfigure::getSpeed("BPSK"), EngineConfigure::getSpeed("RTTY"));

@@ -587,6 +587,7 @@ void QSOMapFrame::showContact(const BaseContestLog *c, const QSharedPointer<Base
         callInfo << (drawLine?"true":"false");
         emit callSig(callInfo);
 
+        // WHY mark spots as deleted? NB this is the qsomaps spot queue, NOT the bandmap one
         for( auto const &s: QASCONST(spotQueue))
         {
             if (s->getDxCall() == lct->cs)

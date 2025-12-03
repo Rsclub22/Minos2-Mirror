@@ -342,7 +342,7 @@ void TCalendarForm::FormShow ( )
 }
 void TCalendarForm::downloadFiles()
 {
-    TCalendarDownload dl;
+    TCalendarDownload dl(this);
     dl.exec();
 }
 //---------------------------------------------------------------------------

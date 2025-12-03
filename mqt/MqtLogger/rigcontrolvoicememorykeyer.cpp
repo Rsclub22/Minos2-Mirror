@@ -51,10 +51,6 @@ void RigControlVoiceMemoryKeyer::setPttOnOff(bool onOff)
     Q_UNUSED(onOff)
 }
 
-void RigControlVoiceMemoryKeyer::setSelectedEomType(int selectedEomType_)
-{
-    selectedEomType = selectedEomType_;
-}
 
 
 int RigControlVoiceMemoryKeyer::getSelectedEomType()

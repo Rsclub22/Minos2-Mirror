@@ -92,6 +92,8 @@ class TContestApp : public MinosParameters
       }
       virtual void getDisplayColumnWidth( const QString &key, int &val, int def ) override;
       virtual void setDisplayColumnWidth( const QString &key, int val ) override;
+      virtual void getBoolDisplayProfile(int enumkey, bool &value, bool def) override;
+
       virtual void getBoolDisplayProfile( int enumkey, bool &value ) override;
       virtual void setBoolDisplayProfile( int enumkey, bool value ) override;
       virtual void getIntDisplayProfile(int enumkey, int &value) override;
@@ -117,6 +119,7 @@ class TContestApp : public MinosParameters
       virtual BaseContestLog *getContestSlot(int) override;
       virtual int getListSlotCount() override;
       virtual ContactList *getListSlot(int) override;
+      virtual bool isLogger() override;
 
 
       TContestApp();

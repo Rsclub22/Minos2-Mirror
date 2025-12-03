@@ -87,7 +87,6 @@ public:
     void setPttState(const bool state);
     void setPttOnOff(const bool on);
 
-
     QStringList getSelectedLoggers();
     Frequency getRadioFreq();
     void setLogBand(QString band);

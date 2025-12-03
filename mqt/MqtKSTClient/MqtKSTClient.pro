@@ -1,4 +1,5 @@
 include($$PWD/../mqt.pri)
+include($$PWD/../keyerbase.pri)
 include($$PWD/../mqtapplibs.pri)
 
 QT       += core gui network

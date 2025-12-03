@@ -19,44 +19,44 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="937"/>
+        <location filename="../ConfigFile.cpp" line="938"/>
         <source>More than one server is defined and enabled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="946"/>
+        <location filename="../ConfigFile.cpp" line="947"/>
         <source>A local server is required.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="961"/>
+        <location filename="../ConfigFile.cpp" line="962"/>
         <source> contains bad characters [ and/or ]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="976"/>
+        <location filename="../ConfigFile.cpp" line="977"/>
         <source> appears more than once (names are not case sensitive)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="1015"/>
+        <location filename="../ConfigFile.cpp" line="1016"/>
         <source>%1 requires a local %2
 
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="1028"/>
+        <location filename="../ConfigFile.cpp" line="1029"/>
         <source> Inferred Executable path does not exist or is not executable:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="1036"/>
+        <location filename="../ConfigFile.cpp" line="1037"/>
         <source> Executable path does not exist or is not executable:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="1042"/>
+        <location filename="../ConfigFile.cpp" line="1043"/>
         <source> Working directory is not valid - no Configuration/MinosConfig.json
 
 </source>

@@ -263,18 +263,10 @@ void ClusterMainWindow::doStartup()
     dxSpotView->setColumnHidden(COMMENT_COL_NUM, false);
 
     // hide these columns
+    dxSpotView->setColumnHidden(RXTIME_COL_NUM, true);  // used for sorting
     dxSpotView->setColumnHidden(DXBRG_COL_NUM, true);
-    dxSpotView->setColumnHidden(DXSPOT_TO_MEMORY_FLAG_COL_NUM, true);
-    dxSpotView->setColumnHidden(DXSPOT_CALL_WORKED_COL_NUM, true);
-    dxSpotView->setColumnHidden(DXLOC_WORKED_COL_NUM, true);
     dxSpotView->setColumnHidden(DXDIST_COL_NUM, true);
-    dxSpotView->setColumnHidden(RXTIME_COL_NUM, true);
-    dxSpotView->setColumnHidden(DXSPOT_PROP_MODE_COL_NUM, true);
-    dxSpotView->setColumnHidden(DXBANDSTR_COL_NUM, true);
-    dxSpotView->setColumnHidden(DATE_COL_NUM, true);
-    dxSpotView->setColumnHidden(DXLOC_FROM_NODE_FLAG_COL_NUM, true);
-    dxSpotView->setColumnHidden(DATE_TIME_COL_NUM, true);
-    dxSpotView->setColumnHidden(DXCLUSTER_SHOW_SPOT_TYPE, true);
+    dxSpotView->setColumnHidden(SPOTTER_LOC_COL_NUM, true);
 
 
 
@@ -367,6 +359,8 @@ void ClusterMainWindow::doStartup()
     purgeTimer = new QTimer(this);
     connect (purgeTimer, &QTimer::timeout, this, &ClusterMainWindow::purgeSpots);
     purgeTimer->start(PURGE_TIME);
+
+
 }
 
 void ClusterMainWindow::clusterListChanged()
@@ -587,7 +581,7 @@ void ClusterMainWindow::connectToNode(const QString &nodeName)
 void ClusterMainWindow::connectToHost(QString hostName)
 {
 
-    //currentNodeName = nodeName;
+    //currentNoBName = nodeName;
 
     if (setupCluster->doesClusterNameExist(hostName))
     {
@@ -1017,6 +1011,28 @@ void ClusterMainWindow::processNewSpot(QSharedPointer<ClusterSpotData> newSpot)
                                                                  setupCluster->getTimeToLive());
     trace(msg);
 
+    // is this a repeat spot
+    if (setupCluster->getRemoveRepeatSpotFilterFlag())
+    {
+        trace(QString("ProcessNewSpot: Repeat Spot Check On. Checking if this is repeat spot"));
+
+        purgeOldRepeatSpots(repeatCheckSpotsList, setupCluster->getRemoveRepeatSpotsWithinTime());
+
+        trace(QString("ProcessNewSpot: check if %1 is a repeat spot").arg(newSpot->getDxCallStr()));
+        if (checkForRepeatSpot(repeatCheckSpotsList, newSpot))
+        {
+            trace(QString("ProcessNewSpot: %1 is a repeat spot, discard").arg(newSpot->getDxCallStr()));
+            return;
+        }
+        else
+        {
+            trace(QString("ProcessNewSpot: %1 is not a repeat spot, keep").arg(newSpot->getDxCallStr()));
+            repeatCheckSpotsList.append(newSpot);  // save spot for further checks
+        }
+
+
+    }
+
 
     // is spot older than time to live time
     int timeToLive = setupCluster->getTimeToLive().toInt() * 60;
@@ -1293,6 +1309,22 @@ bool ClusterMainWindow::checkShowDxMsg(const QString txt, QSharedPointer<Cluster
 
 }
 
+bool ClusterMainWindow::checkForRepeatSpot(const QVector<QSharedPointer<ClusterSpotData>> &spots,
+                       const QSharedPointer<ClusterSpotData> &newSpot)
+{
+    for (const auto &spot : spots)
+    {
+        if (spot->spotMatchesDxCallsignFreqAndTime(newSpot, setupCluster->getRemoveRepeatSpotsFreqDelta(), setupCluster->getRemoveRepeatSpotsWithinTime()))
+        {
+            return true;
+        }
+
+
+    }
+    return false;
+}
+
+
 
 
 void ClusterMainWindow::onResendSpotToClients(int frameId, QString loggerUuid, QString cmd, QString bandMask)
@@ -1349,7 +1381,8 @@ void ClusterMainWindow::resendAllSpotsToClients(ResendSpotCommand cmd)
     {
         for (int row = 0; row < dxSpotDataModel->rowCount(); row ++)
         {
-            QString bandMask = dxSpotDataModel->data(dxSpotDataModel->index(row, DXBANDSTR_COL_NUM), DataStoredRole).toString();
+            QSharedPointer<ClusterSpotData> pSpot = dxSpotDataModel->getSpotData(row);
+            QString bandMask = pSpot->getBand();
             QString bandType = getBandType(bandMask);
             if (bandType == NO_BANDTYPE)
             {
@@ -1516,6 +1549,32 @@ void ClusterMainWindow::onHandleSpotsInQueues()
 
 
 }
+
+void ClusterMainWindow::purgeOldRepeatSpots(QVector<QSharedPointer<ClusterSpotData>> &spotsList, int timeToleranceMins)
+{
+    trace(QString("Purge spots from repeatSpot list older than %1 min").arg(QString::number(timeToleranceMins)));
+
+    int listInitalSize = spotsList.size();
+
+    QDateTime now = QDateTime::currentDateTimeUtc();
+    int thresholdSecs = timeToleranceMins * 60;
+
+    for (int i = spotsList.size() - 1; i >= 0; --i)
+    {
+        QDateTime spotTime = spotsList[i]->getSpotDateTime().toUTC();  // ensure UTC for correct comparison
+        if (spotTime.secsTo(now) > thresholdSecs)
+        {
+            spotsList.removeAt(i);
+        }
+    }
+
+    int listSizeAfterRemoval = spotsList.size();
+    int numberPurged = listInitalSize - listSizeAfterRemoval;
+    trace(QString("Repeat Spot list start size = %1, list size after purge = %2, number of spots purged = %3").arg(QString::number(listInitalSize)).arg(QString::number(listSizeAfterRemoval).arg(QString::number(numberPurged))));
+}
+
+
+
 
 
 
@@ -2943,7 +3002,7 @@ void ClusterMainWindow::handleStatusTimer()
 {
     static QString oldStatusMsg;
     static int oldServerListCount = 0;
-
+    //qDebug() << "cluster server count = " << clusterRpc->getServerListCount();
 
     if (oldServerListCount != clusterRpc->getServerListCount())
     {
@@ -3014,8 +3073,9 @@ bool DxSpotSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelInd
 
     if (traceDebugFlag)
     {
+        QSharedPointer<ClusterSpotData> pSpot = dynamic_cast<DxSpotDataModel *>(sourceModel())->getSpotData(sourceRow);
         trace(QString("filterAcceptsRow: callsign = %1, matchBand = %2")
-            .arg(sourceModel()->data(sourceModel()->index(sourceRow, DXSPOT_CALL_COL_NUM), DataStoredRole).toString(),
+            .arg(pSpot->getDxCallStr(),
             match_band ? "True" : "False"));
    }
     return match_band;
@@ -3023,8 +3083,9 @@ bool DxSpotSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelInd
 
 bool DxSpotSortFilterProxyModel::matchBand(int sourceRow) const
 {
+    QSharedPointer<ClusterSpotData> pSpot = dynamic_cast<DxSpotDataModel *>(sourceModel())->getSpotData(sourceRow);
 
-    QString band = sourceModel()->data(sourceModel()->index(sourceRow, DXBANDSTR_COL_NUM), DataStoredRole).toString();
+    QString band = pSpot->getBand();
     if (traceDebugFlag)
     {
         trace(QString("matchBand: band = %1").arg(band));
@@ -3080,10 +3141,12 @@ void ClusterMainWindow::purgeSpots()
            int idx = dxSpotDataModel->rowCount() - 1;
            while (idx >= 0 && dxSpotDataModel->rowCount() > 0)
            {
-               if (spotTimedOut(dxSpotDataModel->data(dxSpotDataModel->index(idx, RXTIME_COL_NUM), DataStoredRole).toLongLong(), setupCluster->getTimeToLive().toLongLong() * 60))
+               QSharedPointer<ClusterSpotData> pSpot = dxSpotDataModel->getSpotData(idx);
+
+               if (spotTimedOut(pSpot->getRxTime(), setupCluster->getTimeToLive().toLongLong() * 60))
                {
                    dxSpotDataModel->removeRows(idx, 1, QModelIndex());
-                   trace(QString("purged spot = %1").arg(dxSpotDataModel->data(dxSpotDataModel->index(idx, DXSPOT_CALL_COL_NUM), DataStoredRole).toString()));
+                   trace(QString("purged spot = %1").arg(pSpot->getDxCallStr()));
                }
                idx--;
            }

@@ -18,7 +18,6 @@
 
 #include "WsjtxDecodesModel.hpp"
 #include "WsjtxServer.h"
-#include "WsjtxConfigureCQ.h"
 
 #include "WsjtxFrame.h"
 #include "ui_WsjtxFrame.h"
@@ -39,16 +38,12 @@ WsjtxFrame::WsjtxFrame(TSingleLogFrame *parent) :
     ui->decodes_table_view_->horizontalHeader()->setSectionsMovable(true);
     connect( ui->decodes_table_view_->horizontalHeader(), &QHeaderView::customContextMenuRequested, this, &WsjtxFrame::ondecodes_table_view__customContextMenuRequested );
 
-    ui->splitter->setStretchFactor(0, 2);
+    ui->splitter->setStretchFactor(0, 10);
     ui->splitter->setStretchFactor(1, 1);
     remove_client(QString());    // kill off the ratshit
     TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpWSJTX1TestEnabled, showTest );
     ui->testButton->setVisible(showTest);
     ui->replayButton->setVisible(showTest);
-
-    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpWSJTX1AutoEnabled, autoEnabled );
-    ui->autoSelectReplyFrame->setVisible(autoEnabled);
-    ui->blFrame->setVisible(autoEnabled);
 
     int lcf;
     TContestApp::getContestApp() ->getIntDisplayProfile(edpListCompression, lcf);
@@ -83,26 +78,10 @@ WsjtxFrame::WsjtxFrame(TSingleLogFrame *parent) :
     ui->decodes_table_view_->verticalHeader ()->hide ();
 
     ui->decodes_table_view_->hideColumn (dcId);
-//    ui->decodes_table_view_->hideColumn (dcDT);
-//    ui->decodes_table_view_->hideColumn (dcDF);
     ui->decodes_table_view_->hideColumn (dcMd);
     ui->decodes_table_view_->hideColumn (dcConfidence);
     ui->decodes_table_view_->hideColumn (dcLive);
     ui->decodes_table_view_->hideColumn (dcSeq);
-//    //ui->decodes_table_view_->hideColumn (dcPoints);
-//    //ui->decodes_table_view_->hideColumn (dcBearing);
-//    ui->decodes_table_view_->hideColumn (dcDistance);
-//    //ui->decodes_table_view_->hideColumn (dcFromCall);
-//    //ui->decodes_table_view_->hideColumn (dcFromGrid);
-//    //ui->decodes_table_view_->hideColumn (dcToCall);
-//    ui->decodes_table_view_->hideColumn (dcToGrid);
-
-
-    if (autoEnabled)
-        ui->decodes_table_view_->showColumn (dcBest);
-    else
-        ui->decodes_table_view_->hideColumn (dcBest);
-
 
     connect (WsjtxServer::getWsjtxServer(), &WsjtxServer::do_log_ADIF, this, &WsjtxFrame::log_ADIF);
     connect (WsjtxServer::getWsjtxServer(), &WsjtxServer::do_add_client, this, &WsjtxFrame::add_client);
@@ -130,32 +109,13 @@ WsjtxFrame::WsjtxFrame(TSingleLogFrame *parent) :
     restoreSplitters();
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::doSplitterChanges, this, &WsjtxFrame::on_doSplitterChanges);
 
-    getCQStrings();
-
-    blackList =    QSharedPointer<QVector <QSharedPointer<BlCall> > >( new QVector<QSharedPointer<BlCall> > );
-
-    blModel.setCallVector(blackList);
-    BLDelegate = QSharedPointer<HtmlDelegate>( new HtmlDelegate("BLDelegate", 1.0, 1.0)) ;
-    blModel.delegate = BLDelegate;
-
-    blFilterModel.setSourceModel(&blModel);
-    ui->blackListView->setModel(&blFilterModel);
-
     int ls = 2;
     int cml = 2;
     int cmt = 0;
     int cmr = 2;
     int cmb = 0;
 
-//    TContestApp::getContestApp() ->getIntDisplayProfile(edpls, ls);
-//    TContestApp::getContestApp() ->getIntDisplayProfile(edpcml, cml);
-//    TContestApp::getContestApp() ->getIntDisplayProfile(edpcmt, cmt);
-//    TContestApp::getContestApp() ->getIntDisplayProfile(edpcmr, cmr);
-//    TContestApp::getContestApp() ->getIntDisplayProfile(edpcmb, cmb);
-
-    adjustMargins(ui->blFrame->layout(), ls, cml, cmt, cmr, cmb);
     adjustMargins(ui->wframe->layout(), ls, cml, cmt, cmr, cmb);
-    removeFrameBoxes(ui->blFrame->layout());
     removeFrameBoxes(ui->wframe->layout());
 }
 WsjtxFrame::~WsjtxFrame()
@@ -163,29 +123,16 @@ WsjtxFrame::~WsjtxFrame()
     delete ui;
     delete decodes_model_;
 }
-void WsjtxFrame::getCQStrings()
-{
-    QString testCQ;
-    QString nontestCQ;
-
-    TContestApp::getContestApp() ->loggerBundle.getStringProfile( elpWSJTX1TestCQ, testCQ );
-    TContestApp::getContestApp() ->loggerBundle.getStringProfile( elpWSJTX1NonTestCQ, nontestCQ );
-
-
-    CSVToStringList(testCQ, testCQCalls);
-    CSVToStringList(nontestCQ, nonTestCQCalls);
-}
 void WsjtxFrame::on_halt_tx_button__clicked()
 {
     wtrace("WsjtxFrame::on_halt_tx_button__clicked do_halt_tx");
-    ui->replyto_label->setText("");
+    //ui->replyto_label->setText("");
     WsjtxServer::getWsjtxServer()->do_halt_tx(id_, false);
 }
 
 void WsjtxFrame::on_auto_off_button__clicked()
 {
     wtrace("WsjtxFrame::on_auto_off_button__clicked disable tx clicked");
-    ui->replyto_label->setText("");
     WsjtxServer::getWsjtxServer()->do_halt_tx(id_, true);
 }
 void WsjtxFrame::on_clearDecodesButton_clicked()
@@ -244,7 +191,6 @@ void WsjtxFrame::log_ADIF(QString const& id, QByteArray const& ADIF)
 
     wtrace("WsjtxFrame::log_ADIF " + QString(ADIF));
 
-    ui->replyto_label->setText("");
     int spoint = ct->ctList.count();
 
     // we will try to log the ADIF to ALL open contests; it will fail if the date/time or requency are wrong
@@ -300,548 +246,15 @@ void WsjtxFrame::remove_client (QString const& /*id*/)
     ui->specialOpMode->clear();
     ui->mode_label_->clear();
     ui->bandErrorLabel->clear();
-    ui->replyto_label->clear();
     id_.clear();
 }
-bool WsjtxFrame::goodCQCall(decodeMessage &dc)
-{
-    bool inTest = false;
-    switch (special_op_mode)
-    {
-    case 1:
-    case 2:
-        inTest = true;
-        break;
-
-    default:
-        break;
-    }
-    if (inTest)
-    {
-        if (!testCQCalls.contains(dc.CQCall))
-        {
-            wtrace(QString("WsjtxFrame::goodCQCall inTest %1 wrong CQ call").arg(dc.message));
-            return false;
-        }
-    }
-    else
-    {
-        if (!nonTestCQCalls.contains(dc.CQCall))
-        {
-            wtrace(QString("WsjtxFrame::goodCQCall not inTest %1 wrong CQ call").arg(dc.message));
-            return false;
-        }
-
-    }
-    return true;
-}
-void WsjtxFrame::getBestCQ73CallingMe()
-{
-    wtrace(QString("WsjtxFrame::getBestCQ73CallingMe"));
-
-    PointBonusMultSnr bestCQPoints;
-    PointBonusMultSnr bestToMePoints;
-
-    for (int i = decodeStartSize; i < decodeEndSize; i++)
-    {
-        decodeMessage &dc = messages[i];
-        if (dc.oldmsg)
-            continue;
-        if (dc.decodeInd[0] == '?')
-            continue;
-
-        wtrace(QString("WsjtxFrame::getBestCQ73CallingMe Checking %1 stage %2 tocall %3 fromcall %4")
-                  .arg(messages[i].message
-                  ,dc.getMStage()
-                  ,dc.toCall.getFullCall()
-                  ,dc.fromCall.getFullCall()));
-
-        if (dc.points <= 0)    // e.g. duplicate
-            continue;
-
-        PointBonusMultSnr pbv(dc);
-        bool toMyCall = (dc.toCall == decoder.getMyCall());
-        QString dcFromCall = dc.fromCall.getFullCall();
-
-        BlCall test;
-        test.call = dcFromCall;
-        test.band = ct->currentBand.getValue();
-
-        if (blackListContains(test))
-        {
-            wtrace("WsjtxFrame::getBestCQ73CallingMe blacklisted");
-            continue;
-        }
-        bool select73 = ui->RR73select->isChecked();
-        if ((dc.mstage == emsCQ || ((dc.mstage == emsRRR || dc.mstage == ems73) && select73)) && !toMyCall )
-        {
-            if (dc.mstage == emsCQ && !goodCQCall(dc))
-            {
-                // e.g. CQ DX in a contest
-                wtrace("WsjtxFrame::getBestCQ73CallingMe - not good CQ");
-                continue;
-            }
-            if ( dc.snr >= minsnr
-                && dc.points > minpoints
-                && pbv > bestCQPoints
-                )
-            {
-                wtrace(QString("WsjtxFrame::getBestCQ73CallingMe CQ Candidate %1").arg(messages[i].message));
-                bestCQOffset = i;
-                bestCQPoints = pbv;
-            }
-            else
-            {
-                wtrace(QString("WsjtxFrame::getBestCQ73CallingMe NOT best CQ %1").arg(messages[i].message));
-            }
-        }
-        else if ((dc.mstage == emsGrid || dc.mstage == emsDb || dc.mstage == emsDbGrid) && toMyCall)
-        {
-            if ( dc.snr >= minsnr
-                && dc.points > minpoints
-                && pbv > bestToMePoints
-                )
-            {
-                wtrace(QString("WsjtxFrame::getBestCQ73CallingMe tome Candidate %1").arg(messages[i].message));
-                bestToMeOffset = i;
-                bestToMePoints = pbv;
-            }
-            else
-            {
-                wtrace(QString("WsjtxFrame::getBestCQ73CallingMe NOT best to me %1").arg(messages[i].message));
-            }
-        }
-        else
-        {
-            wtrace(QString("WsjtxFrame::getBestCQ73CallingMe NOT Candidate %1").arg(messages[i].message));
-        }
-    }
-    // we should prefer responses to me over CQ/RRR/73 calls
-    if (bestToMeOffset >= 0)
-    {
-        bestOffset = bestToMeOffset;
-        wtrace(QString("WsjtxFrame::getBestCQ73CallingMe best to me %1").arg(messages[bestToMeOffset].message));
-    }
-    else if (bestCQOffset >= 0)
-    {
-        bestOffset = bestCQOffset;
-        wtrace(QString("WsjtxFrame::getBestCQ73CallingMe best CQ %1").arg(messages[bestCQOffset].message));
-    }
-}
-bool WsjtxFrame::areAnyToMe()
-{
-    wtrace(QString("WsjtxFrame::getBestToMe"));
-
-    for (int i = decodeStartSize; i < decodeEndSize; i++)
-    {
-        decodeMessage &dc = messages[i];
-        if (dc.oldmsg)
-            continue;
-        if (dc.decodeInd[0] == '?')
-            continue;   // potentially bad decode
-
-        wtrace(QString("WsjtxFrame::getBestToMe Checking against lastTx %1 stage %2 tocall %3 fromcall %4 callingCall %5 workingCall %6")
-                  .arg(dc.message).arg(dc.getMStage())
-                  .arg(dc.toCall.getFullCall())
-                  .arg(dc.fromCall.getFullCall())
-                  .arg(callingCall)
-                  .arg(workingCall)
-              );
-
-        // if we are calling CQ or RR73 or 73, and we are toCall, we have a set of candidates
-        // for best work these before lookng for others
-
-        //  WSJT-X filters this message and only
-        // acts upon it  if the message exactly describes  a prior decode
-        // and that decode  is a CQ or QRZ message.
-
-        PointBonusMultSnr pbv(dc);
-        bool toMyCall = (dc.toCall == decoder.getMyCall());
-        QString dcFromCall = dc.fromCall.getFullCall();
-
-        BlCall test;
-        test.call = dcFromCall;
-        test.band = ct->currentBand.getValue();
-
-        if (blackListContains(test))
-        {
-            wtrace("WsjtxFrame::getBestToMe() blacklisted");
-            continue;
-        }
-
-        if (toMyCall)
-        {
-            wtrace("WsjtxFrame::getBestToMe() toMyCall");
-            if (dcFromCall == workingCall || dcFromCall == callingCall)
-            {
-                wtrace("WsjtxFrame::getBestToMe (dcFromCall == workingCall || dcFromCall == callingCall)");
-                // this is best, and WSJT-X should automatically respond
-                // so long as autoseq is set in WSJT-X
-
-                ui->decodes_table_view_->scrollToBottom ();
-                return true;
-            }
-            else
-            {
-                wtrace("WsjtxFrame::getBestToMe ignore");
-                // ignore it - random caller with us in mid QSO
-                continue;
-            }
-        }
-        else
-        {
-            wtrace("WsjtxFrame::getBestToMe Not toMyCall");
-        }
-    }
-    return false;
-}
-bool WsjtxFrame::checkThemPresent()
-{
-    // check if the station we are trying to work is active
-    // either calling someone else of being called by someone else
-    // which would imply that they have swapped time periods
-
-    for (int i = decodeStartSize; i < decodeEndSize; i++)
-    {
-        decodeMessage &dc = messages[i];
-        if (dc.oldmsg)
-            continue;
-        if (dc.decodeInd[0] == '?')
-            continue;   // potentially bad decode
-
-        wtrace(QString("WsjtxFrame::checkThemPresent Checking against lastTx %1 stage %2 tocall %3 fromcall %4 callingCall %5 workingCall %6")
-                  .arg(dc.message).arg(dc.getMStage())
-                  .arg(dc.toCall.getFullCall())
-                  .arg(dc.fromCall.getFullCall())
-                  .arg(callingCall)
-                  .arg(workingCall)
-              );
-        QString dcFromCall = dc.fromCall.getFullCall();
-        if (dcFromCall == callingCall || dcFromCall == workingCall)
-        {
-            wtrace(QString("WsjtxFrame::checkThemPresent (dcFromCall == callingCall || dcFromCall == workingCall)"));
-            return true;
-        }
-    }
-    return false;
-}
-bool WsjtxFrame::checkTheirCall()
-{
-    wtrace(QString("WsjtxFrame::checkTheirCall"));
-    for (int i = decodeStartSize; i < decodeEndSize; i++)
-    {
-        decodeMessage &dc = messages[i];
-        if (dc.oldmsg)
-            continue;
-        if (dc.decodeInd[0] == '?')
-            continue;   // potentially bad decode
-
-        wtrace(QString("WsjtxFrame::checkTheirCall Checking against lastTx %1 stage %2 tocall %3 fromcall %4 callingCall %5 workingCall %6")
-                  .arg(dc.message).arg(dc.getMStage())
-                  .arg(dc.toCall.getFullCall())
-                  .arg(dc.fromCall.getFullCall())
-                  .arg(callingCall)
-                  .arg(workingCall)
-              );
-        bool toMyCall = (dc.toCall == decoder.getMyCall());
-        QString dcFromCall = dc.fromCall.getFullCall();
-        bool cq = (dc.mstage == emsCQ);
-
-        if (!toMyCall)
-        {
-            wtrace("WsjtxFrame::checkTheirCall !toMyCall");
-            if (!cq && (dcFromCall == callingCall || dcFromCall == workingCall))
-            {
-                // we are trying to work them, and they aren't working us
-                // - still CQ, or working someone else
-
-                // If they are calling CQ and we are "grid" we can carry on calling them
-                // don't kill tx unless there is a better option - using the general best search
-
-                // bestOffset should already be -1 unless there is someone else calling us
-                // in which case we will switch to them
-
-                wtrace(QString("WsjtxFrame::checkTheirCall (lasttx) stop response, look again"));
-                on_halt_tx_button__clicked();          // kill the automatic sequencing
-                qsoState = NoQSOWaiting;
-                wtrace("WsjtxFrame::checkTheirCall() Transition to NoQSOWaiting");
-
-                return false;
-            }
-            if (cq && dcFromCall == callingCall)
-            {
-                return true;
-            }
-        }
-        else
-        {
-            wtrace(QString("WsjtxFrame::checkThemPresent toMyCall, ignore"));
-            return true;
-        }
-    }
-    wtrace(QString("WsjtxFrame::checkTheirCall returns false"));
-
-    return false;
-}
-
-void WsjtxFrame::markBest()
-{
-    wtrace("WsjtxFrame::markBest");
-    if (bestOffset >= 0)
-    {
-        for (int i = decodeStartSize; i < decodeEndSize; i++)
-        {
-            decodeMessage &dc = messages[i];
-            dc.best = (i == bestOffset);
-        }
-        wtrace("WsjtxFrame::markBest best decode is " + messages[bestOffset].message);
-    }
-}
-QString WsjtxFrame::getStateText(QSOStates s)
-{
-    QString t;
-    switch(s)
-    {
-    case NoQSOWaiting:
-        t = "NoQSOWaiting";
-        break;
-    case NoQSOCallingCQ:
-        t = "NoQSOCallingCQ";
-        break;
-    case NoQSOCallingThem:
-        t ="NoQSOCallingThem";
-        break;
-    case InQSO:
-        t = "InQSO";
-        break;
-    }
-    return t;
-}
-void WsjtxFrame::doResponse(QSOStates nstate, bool cq, int offset)
-{
-    wtrace("WsjtxFrame::doResponse");
-
-    if ( offset >= 0)
-    {
-        wtrace("WsjtxFrame::doResponse auto replying to " + messages[offset].message);
-        messages[offset].autoresp = true;
-        reply(messages[offset]);
-
-        qsoState = nstate;
-        wtrace("WsjtxFrame::doResponse Transition to " + getStateText(nstate));
-
-        // we are assuming that autoseq is enabled, call 1st isn't
-        // but we can't enforce either
-        // things may be messy if we are not set this way
-    }
-    else if (cq)
-    {
-        // If we can, start calling CQ
-        startCQ();
-    }
-}
-
-void WsjtxFrame::process_NoQSOWaiting(bool freeStanding)
-{
-    // Not calling CQ, not in QSO - look for the best CQ, or someone calling us
-    // out of the blue
-
-    // iterate over the latest decodes, and select the best
-
-    // currTxStage will be emsNone
-
-    wtrace("WsjtxFrame::process_NoQSOWaiting()");
-    if (freeStanding)
-    {
-        wtrace("WsjtxFrame::process_NoQSOWaiting() freeStanding - ignore");
-        return;
-    }
-
-    getBestCQ73CallingMe();
-}
-void WsjtxFrame::process_NoQSOCallingCQ(bool freeStanding)
-{
-    // Not in QSO, calling CQ
-    // look for the best reply to our CQ, if none, look for the best CQ to call
-
-    wtrace("WsjtxFrame::process_NoQSOCallingCQ()");
-
-    if (freeStanding)
-    {
-        wtrace("WsjtxFrame::process_NoQSOCallingCQ() freeStanding - ignore");
-    }
-
-    // iterate over the latest decodes, and select the best
-
-    // first, look at messages against our transmit status
-    // NB we go to emsNone when (!transmitting && !tx_enabled)
-    // which when rr73/73 has been sent, at end of
-    // update_status()
-
-    if (areAnyToMe())
-    {
-        qsoState = InQSO;
-    }
-    else
-    {
-        // we don't already have a best
-        getBestCQ73CallingMe();
-        if (bestOffset >= 0)
-        {
-            qsoState = NoQSOCallingThem;
-        }
-    }
-}
-void WsjtxFrame::process_NoQSOCallingThem(bool freeStanding)
-{
-    // We have replied to a CQ, and are wanting them to come back to us
-    // If they reply, let auto sequence proceed
-    // if no reply, look for best calling us, or best CQ
-
-    wtrace("WsjtxFrame::process_NoQSOCallingThem()");
-    if (freeStanding)
-    {
-        wtrace("WsjtxFrame::process_NoQSOCallingThem() freeStanding - ignore");
-        return;
-    }
-
-    if (!checkTheirCall() && checkThemPresent())
-    {
-        wtrace("WsjtxFrame::process_NoQSOCallingThem() !checkTheirCall() && checkThemPresent()");
-        // we have cancelled as they are CQ or working someone else
-        // state is NoQSOWaiting
-        // if they aren't in evidence, keep trying
-        attempts = 0;
-        getBestCQ73CallingMe();
-    }
-    else
-    {
-        wtrace("WsjtxFrame::process_NoQSOCallingThem() !(!checkThemPresent() && checkThemPresent())");
-        if (areAnyToMe())
-        {
-            wtrace("WsjtxFrame::process_NoQSOCallingThem() getBestToMe()");
-            attempts = 0;
-            qsoState = InQSO;
-            wtrace("WsjtxFrame::process_NoQSOCallingThem()Transition to InQSO");
-        }
-        else
-        {
-            // present, try 3 times and give up
-            attempts++;
-            wtrace(QString("WsjtxFrame::process_NoQSOCallingThem() !getBestToMe() attempts %1)").arg(attempts));
-
-            if (attempts > 3)
-            {
-                attempts = 0;
-
-                wtrace(QString("WsjtxFrame::process_NoQSOCallingThem() Add %1 to blacklist after 3 attempts").arg(dxCall));
-                on_addBlackListButton_clicked();
-                getBestCQ73CallingMe();
-            }
-        }
-    }
-}
-void WsjtxFrame::process_InQSO(bool freeStanding)
-{
-    // In QSO - we are past the call/1st response
-    // if they are working us, let autoseq proceed
-    // Check for them working someone else
-    // Check for too many repeats, may need to blacklist them
-
-    wtrace("WsjtxFrame::process_InQSO()");
-    if (freeStanding)
-    {
-        wtrace("WsjtxFrame::process_InQSO() freeStanding - ignore");
-        return;
-    }
-
-    if (!checkTheirCall() && checkThemPresent())
-    {
-        wtrace("WsjtxFrame::process_InQSO() !checkTheirCall() && checkThemPresent()");
-        // we have cancelled as they are CQ or working someone else
-        // state is NoQSOWaiting
-        // if they aren't in evidence, keep trying
-        attempts = 0;
-        getBestCQ73CallingMe();
-    }
-    else
-    {
-        wtrace("WsjtxFrame::process_InQSOm() !(!checkThemPresent() && checkThemPresent())");
-        if (areAnyToMe()) // hopefully they are now calling me
-        {
-            wtrace("WsjtxFrame::process_InQSO() getBestToMe()");
-            // let autosequence do its job
-            attempts = 0;
-        }
-        else
-        {
-            // present, try 3 times and give up
-            attempts++;
-            wtrace(QString("WsjtxFrame::process_InQSO() !getBestToMe() attempts %1").arg(attempts));
-
-            if (attempts > 3)
-            {
-                attempts = 0;
-
-                wtrace(QString("WsjtxFrame::process_InQSO() Add %1 to blacklist after 3 attempts").arg(dxCall));
-                on_addBlackListButton_clicked();
-                getBestCQ73CallingMe();
-            }
-        }
-    }
-}
-
-void WsjtxFrame::process_decodes(bool freeStanding)
+void WsjtxFrame::process_decodes(bool /*freeStanding*/)
 {
     if (!bandOK)
     {
         wtrace(QString("WsjtxFrame::process_decodes band not OK"));
         return;
     }
-
-    bestOffset = -1;
-    bestPoints.clear();
-    bestCQOffset = -1;
-    bestToMeOffset = -1;
-
-    if (ui->semiAutocb->isChecked())
-    {
-        decodeEndSize = messages.size();
-        minpoints = ui->minPointsSpinner->value();
-        if (!ui->minPointsCheckBox->isChecked())
-            minpoints = 0;
-        minsnr =  ui->snrSpinner->value();
-        if (!ui->snrCheckBox->isChecked())
-            minsnr = -100;
-        wtrace(QString("WsjtxFrame::process_decodes Checking decodes start %1 end %2 minPoints %3 minSnr %4")
-                  .arg(decodeStartSize)
-                  .arg(decodeEndSize)
-                  .arg(minpoints)
-                  .arg(minsnr));
-
-        if (decodeEndSize > decodeStartSize)
-        {
-            switch (qsoState)
-            {
-            case NoQSOWaiting:
-                process_NoQSOWaiting(freeStanding);
-                break;
-            case NoQSOCallingCQ:
-                process_NoQSOCallingCQ(freeStanding);
-                break;
-            case NoQSOCallingThem:
-                process_NoQSOCallingThem(freeStanding);
-                break;
-            case InQSO:
-                process_InQSO(freeStanding);
-                break;
-            }
-            markBest();
-            decodeStartSize = messages.size();
-            emit decodes_model_->dataChanged(decodes_model_->index(decodeStartSize, dcBest), decodes_model_->index(decodeEndSize, dcBest));
-        }
-    }
-
     ui->decodes_table_view_->scrollToBottom ();
 }
 decodeMessage *WsjtxFrame::parse_tx_message(QString atline, bool fromScrape)
@@ -923,7 +336,6 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
     // protected contests aren't interesting
     if (!ct || ct->isReadOnly())
     {
-        ui->qsoStateLabel->clear();
         return;
     }
 
@@ -982,10 +394,16 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
     {
         wtrace(QString("WsjtxFrame::update_status: band not OK, freq is %1").arg(Frequency(df).traceStr()));
         // don't continue
-        ui->qsoStateLabel->setText(tr("Wrong band"));
         return;
     }
 
+    if (de_call != ct->mycall.getFullCall() || de_grid != ct->myloc.getLoc().left(4))
+    {
+        QString mess = tr("Call/grid does not match contest (%1/%2 %3/%4")
+                           .arg(de_call, de_grid, ct->mycall.getFullCall(), ct->myloc.getLoc().left(4));
+        ui->bandErrorLabel->setText(HtmlFontColour(Qt::red) + mess);
+        wtrace(mess);
+    }
     wtrace(QString("WsjtxFrame::update_status dx_call %1 dx_grid %2 transmitting %3 decoding %4 tx_enabled %5 tx_message %6")
               .arg(dx_call).arg(dx_grid).arg(transmitting).arg(decoding).arg(tx_enabled).arg(tx_message));
 
@@ -1054,7 +472,6 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
             // CQ DX K1ABC FN42
             // CQ TEST G4ABC/P IO91
 
-            qsoState = NoQSOCallingCQ;
             wtrace("WsjtxFrame::update_status Transition to NoQSOCallingCQ");
             break;
         case ems73:
@@ -1062,7 +479,6 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
             // repliable to "from"
             // K1ABC G0XYZ 73
             // G4ABC/P PA9XYZ 73
-            qsoState = NoQSOWaiting;
             wtrace("WsjtxFrame::update_status ems73 Transition to NoQSOWaiting");
             break;
         case emsFree:
@@ -1074,7 +490,6 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
             // K1ABC G0XYZ IO91
             // G4ABC/P PA9XYZ JO22
             callingCall = dx_call;
-            qsoState = NoQSOCallingThem;
             wtrace("WsjtxFrame::update_status Transition to NoQSOCallingThem");
             break;
 
@@ -1083,7 +498,7 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
             // on HF we alwasy miss out grid
             //G0XYZ K1ABC –19
             //PA9XYZ 590003 IO91NP
-            qsoState = NoQSOCallingThem;
+            //qsoState = NoQSOCallingThem;
             wtrace("WsjtxFrame::update_status Transition to NoQSOCallingThem");
             workingCall = dx_call;
             break;
@@ -1098,11 +513,10 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
             workingCall = dx_call;
             break;
         case emsRRR:
-            // repliable to "from"
+            // reply-able to "from"
             // G0XYZ K1ABC RR73
             // PA9XYZ G4ABC/P RR73
             workingCall = dx_call;
-            qsoState = NoQSOWaiting;
             wtrace("WsjtxFrame::update_status emsRRR Transition to NoQSOWaiting");
             break;
         }
@@ -1180,10 +594,6 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
         wtrace("WsjtxFrame::update_status process_decodes as leaving inDecode");
         process_decodes(false);
     }
-
-    // Diagnostic display of current qso state
-
-    ui->qsoStateLabel->setText(getStateText(qsoState));
 }
 
 void WsjtxFrame::decode_added (bool is_new, QString const& id, QTime time
@@ -1270,19 +680,9 @@ void WsjtxFrame::decodes_cleared (QString const& client_id)
     id_ = client_id;
     decodes_model_->clear();
 }
-void WsjtxFrame::startCQ()
-{
-    // temporary solution
-
-    wtrace("WsjtxFrame::startCQ() Transition to NoQSOWaiting");
-    qsoState = NoQSOWaiting;
-
-    // And we need to send F1 to WSJT-X
-}
 void WsjtxFrame::reply(decodeMessage &dc)
 {
     WsjtxServer::getWsjtxServer()->reply(dc.id, dc.time, dc.snr, dc.delta_time, dc.delta_frequency, dc.mode, dc.message, dc.low_confidence,  QApplication::keyboardModifiers () >> 24);
-    ui->replyto_label->setText("WsjtxFrame::reply Replying to: " + dc.message);
 }
 void WsjtxFrame::do_reply (QModelIndex index)
 {
@@ -1298,10 +698,9 @@ void WsjtxFrame::do_reply (QModelIndex index)
 
 
 }
-
 void WsjtxFrame::on_testButton_clicked()
 {
-// A collection of messages that we have at som time wanted to test
+// A collection of messages that we have at som etime wanted to test
 
 //    void WsjtxServer::update_status (QString const& id, Frequency f, QString const& mode, QString const& dx_call
 //                                      , QString const& report, QString const& tx_mode, bool tx_enabled
@@ -1431,15 +830,6 @@ void WsjtxFrame::on_doSplitterChanges(BaseContestLog *b)
         restoreSplitters();
     }
 }
-void WsjtxFrame::on_configCQButton_clicked()
-{
-    WsjtxConfigureCQ wccq(this);
-
-    wccq.exec();
-
-    getCQStrings();
-}
-
 void WsjtxFrame::on_decodes_table_view__clicked(const QModelIndex &index)
 {
     // How do we say "use from call"?
@@ -1625,222 +1015,3 @@ void WsjtxFrame::on_doColumnChanges(BaseContestLog * b)
         restoreWSJTXTableColumns();
     }
 }
-
-void WsjtxFrame::on_addBlackListButton_clicked()
-{
-    // add current call being "worked" to blacklist
-
-    QSharedPointer<BlCall> bc(new BlCall);
-    bc->call = dxCall;
-    if (!bc->call.isEmpty())
-    {
-        bc->band = ct->currentBand.getValue();
-        blModel.appendRow(bc);
-        on_halt_tx_button__clicked();
-
-        qsoState = NoQSOWaiting;
-        wtrace("WsjtxFrame::on_addBlackListButton_clicked Transition to NoQSOWaiting");
-
-        showBlackList();
-    }
-}
-
-
-void WsjtxFrame::on_removeBlackListButton_clicked()
-{
-    // remove selected call from blacklist
-    QModelIndexList mil = ui->blackListView->selectionModel()->selectedRows();
-
-    for(auto &mi: mil)
-    {
-        QModelIndex m = blFilterModel.mapToSource(mi);
-        int r = m.row();
-
-        if (r >= 0)
-        {
-            blModel.removeRow(r);
-        }
-    }
-}
-
-void WsjtxFrame::showBlackList()
-{
-    ui->blackListView->update();    // not right!
-}
-
-bool WsjtxFrame::blackListContains(const BlCall &bl)
-{
-    for(const auto &b:QASCONST(*blackList))
-    {
-        if (*b == bl)
-        {
-            return true;
-        }
-    }
-    return false;
-}
-BlModel::BlModel(){}
-
-BlModel::~BlModel()
-{}
-
-void BlModel::setCallVector(QSharedPointer<QVector<QSharedPointer<BlCall> > > &pcallVector)
-{
-    beginResetModel();
-    callVector = pcallVector;
-    endResetModel();
-}
-
-QVariant BlModel::data(const QModelIndex &index, int role) const
-{
-    if (role == Qt::DisplayRole)
-    {
-        return callVector->at(index.row())->call;
-    }
-    return QVariant();
-}
-
-QVariant BlModel::headerData(int /*section*/, Qt::Orientation orientation, int role) const
-{
-    if (role == Qt::DisplayRole && orientation == Qt::Horizontal)
-    {
-        return tr("Call");
-    }
-    return QVariant();
-}
-
-QModelIndex BlModel::parent(const QModelIndex &/*index*/) const
-{
-    return QModelIndex();
-}
-
-QModelIndex BlModel::index(int row, int column, const QModelIndex &parent) const
-{
-    if (!callVector)
-        return QModelIndex();
-
-    if ( row < 0 || row >= rowCount() || ( parent.isValid() && parent.column() != 0 ) )
-        return QModelIndex();
-
-    return createIndex( row, column, nullptr );
-
-}
-
-int BlModel::rowCount(const QModelIndex &/*parent*/) const
-{
-    if (!callVector)
-        return 0;
-    return callVector->count();
-}
-
-int BlModel::columnCount(const QModelIndex &/*parent*/) const
-{
-    return 1;
-}
-
-void BlModel::appendRow(QSharedPointer<BlCall> call)
-{
-    beginInsertRows(QModelIndex(), rowCount() , rowCount());
-    callVector->push_back(call);
-    endInsertRows();
-}
-
-void BlModel::insertRow(int row, QSharedPointer<BlCall> call)
-{
-    beginInsertRows(QModelIndex(), row , row);
-    callVector->insert(row, call);
-    endInsertRows();
-}
-
-void BlModel::reset()
-{
-    beginResetModel();
-    callVector->clear();
-    endResetModel();
-}
-
-void BlModel::removeRow(int _row)
-{
-    beginRemoveRows(QModelIndex(), _row, _row);
-    callVector->removeAt(_row);
-    endRemoveRows();
-}
-
-void BlModel::setFilterString(QString f)
-{
-    filterString = f;
-}
-
-
-bool BlGridSortFilterModel::filterAcceptsRow(int sourceRow, const QModelIndex &/*sourceParent*/) const
-{
-    BlModel *cgm = dynamic_cast<BlModel *>(sourceModel());
-    if (!cgm || sourceRow >= cgm->rowCount())
-        return false;
-
-    QSharedPointer<BlCall> call = cgm->callVector->at(sourceRow);
-    if (filterString.isEmpty() || call->band == filterString)
-    {
-        return true;
-    }
-    return false;
-}
-
-void BlGridSortFilterModel::setFilterString(QString f)
-{
-    BlModel *cgm = dynamic_cast<BlModel *>(sourceModel());
-    if (cgm)
-        cgm->setFilterString(f);
-
-    filterString = f;
-    invalidateFilter();
-}
-
-void WsjtxFrame::on_resetButton_clicked()
-{
-    on_halt_tx_button__clicked();          // kill the automatic sequencing
-    qsoState = NoQSOWaiting;
-    wtrace("WsjtxFrame::on_resetButton_clicked() Transition to NoQSOWaiting");
-}
-
-
-void WsjtxFrame::on_semiAutoButton_clicked()
-{
-    // we want the best for the current phase
-    // NoQSOWaiting         reply to best CQ call
-    // NoQSOCallingCQ       best response to us - don't look at CQ calls
-    // NoQSOCallingThem     should be disabled
-    // InQSO                should be disabled
-
-    switch (qsoState)
-    {
-    case NoQSOWaiting:
-        doResponse(NoQSOCallingThem, false, bestOffset);
-        break;
-    case NoQSOCallingCQ:
-        if (bestToMeOffset > -1)
-        {
-            doResponse(InQSO, false, bestToMeOffset);
-        }
-        break;
-    case NoQSOCallingThem:
-        doResponse(NoQSOCallingThem, false, bestCQOffset);
-        break;
-    case InQSO:
-        doResponse(InQSO, false, bestToMeOffset);
-        break;
-    }
-}
-
-
-void WsjtxFrame::on_semiAutocb_toggled(bool c)
-{
-    if (!c)
-    {
-        wtrace("WsjtxFrame semi-auto off");
-    }
-    else
-    {
-        wtrace("WsjtxFrame semi-auto on");
-    }}
-

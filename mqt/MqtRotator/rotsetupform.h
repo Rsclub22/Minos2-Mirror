@@ -3,7 +3,7 @@
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //                      Rig Control
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2018
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2018 - 2025
 //
 //
 //
@@ -89,12 +89,12 @@ public:
     void sStopButtonsVisible(bool visible);
     void setSStopButtons(southStop stopType);
 
-    bool getCheckOverrun();
-    void setCheckOverrun(bool s);
+    bool getCheckOverLap();
+    void setCheckOverLap(bool s);
 
     QString getAntennaOffset();
     void setAntennaOffset(QString o);
-    void setOverRunFlagVisible(bool s);
+    void setOverLapFlagVisible(bool s);
 
     void serialDataEntryVisible(bool v);
     void networkDataEntryVisible(bool v);
@@ -114,9 +114,9 @@ public:
 
 
     void setupRotatorModel(QString rotatorModel);
-
+    bool getRotatorType(srotParams *antennaData, int minRot, int maxRot);
     bool setEndStopType(srotParams *antennaData, int minRot, int maxRot);
-    void setOverlapEndStop(srotParams *antennaData, bool overrunState);
+    void setOverlapEndStop(srotParams *antennaData, bool overLapState);
 
     void setAdvancedCommsFlag(bool state);
     void advancedSerialDataEntryVisible(bool v);
@@ -130,6 +130,13 @@ public:
 
     void setCompassDialChkBoxVisible(bool s);
     void checkCompassDialChkBox(bool checked);
+
+    void setSkyScanTabChkBoxVisible(bool s);
+    void checkSkyScanChkBox(bool checked);
+
+
+
+
 
 
 public slots:
@@ -167,6 +174,7 @@ private slots:
 
     void onAdvancedCommsSelected(bool selected);
     void onCompasDialVisibleChecked(bool selected);
+    void onSkyScanTabVisibleChecked(bool selected);
 
 private:
     Ui::rotSetupForm *ui;
@@ -191,6 +199,7 @@ private:
     void fillParityBitsInfo();
     void fillHandShakeInfo();
     void fillForceLinesInfo();
+
 
 
 

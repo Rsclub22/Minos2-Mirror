@@ -22,7 +22,7 @@
 
 #include "serialCommonData.h"
 #include "cutils.h"
-#include "hamlib/rig.h"
+//#include "hamlib/rig.h"
 
 #include "minosNetUtils.h"
 #include "BandList.h"
@@ -120,9 +120,24 @@ RigSetupForm::RigSetupForm(RigFactory* rigFactory_, QSharedPointer<scatParams> _
     connect(ui->removeTransvert, &QPushButton::clicked, this, &RigSetupForm::removeTransVerter);
     connect(ui->changeBand, &QPushButton::clicked, this, &RigSetupForm::changeBand);
 
+    connect(ui->RTTYOffsetEdit, &QLineEdit::editingFinished, this, &RigSetupForm::rttyOffsetSelected);
+    connect(ui->PSKOffsetEdit, &QLineEdit::editingFinished, this, &RigSetupForm::pskOffsetSelected);
+
 }
 
+void RigSetupForm::rttyOffsetSelected()
+{
+    QString val = ui->RTTYOffsetEdit->text().trimmed();
+    int ival = val.toInt();
+    radioData->rttyOffset = ival;
+}
 
+void RigSetupForm::pskOffsetSelected()
+{
+    QString val = ui->PSKOffsetEdit->text().trimmed();
+    int ival = val.toInt();
+    radioData->pskOffset = ival;
+}
 RigSetupForm::~RigSetupForm()
 {
     delete ui;
@@ -975,7 +990,14 @@ void RigSetupForm::setRttyMode(QString p)
 {
     ui->rttyBox->setCurrentText(p);
 }
-
+void RigSetupForm::setRttyOffset(int c)
+{
+    ui->RTTYOffsetEdit->setText(QString::number(c));
+}
+int RigSetupForm::getRttyOffset() const
+{
+    return ui->RTTYOffsetEdit->text().toInt();
+}
 /************************* PSK Mode *********************************/
 void RigSetupForm::pskModeSelected()
 {
@@ -993,6 +1015,14 @@ QString RigSetupForm::getPskMode() const
 void RigSetupForm::setPskMode(QString p)
 {
     ui->pskBox->setCurrentText(p);
+}
+void RigSetupForm::setPskOffset(int c)
+{
+    ui->PSKOffsetEdit->setText(QString::number(c));
+}
+int RigSetupForm::getPskOffset() const
+{
+    return ui->PSKOffsetEdit->text().toInt();
 }
 
 /************************* MGM Mode *********************************/
@@ -1366,7 +1396,9 @@ void RigSetupForm::setEnableRigDataEntry(bool enable)
     ui->pollInterval->setEnabled(enable);
     ui->mgmBox->setEnabled(enable);
     ui->rttyBox->setEnabled(enable);
+    ui->RTTYOffsetEdit->setEnabled(enable);
     ui->pskBox->setEnabled(enable);
+    ui->PSKOffsetEdit->setEnabled(enable);
     ui->enableTransVert->setEnabled(enable);
 
 }

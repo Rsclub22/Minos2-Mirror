@@ -1,4 +1,4 @@
-VERSION=2.7.1.999
+VERSION=2.7.3000.0000
 DEFINES += STRINGVERSION=\\\"$$VERSION\\\"
 DEFINES += PRERELEASETYPE=\\\"Pre-Beta\\\"
 #DEFINES += PRERELEASETYPE=\\\"Beta\\\"
@@ -78,5 +78,9 @@ TRANSLATIONS *= translations/minos_en_GB.ts \
 #                translations/minos_nl.ts \
 #                translations/minos_no.ts \
 #                translations/minos_sv.ts \
+
+HEADERS +=
+
+SOURCES +=
 
 

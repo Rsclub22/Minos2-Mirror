@@ -17,19 +17,31 @@ AntennaState::AntennaState(QString s)
 }
 bool AntennaState::isDirty() const
 {
-    return (_selected.isDirty() || _status.isDirty() || _bearing.isDirty());
+    return (_selected.isDirty()
+            || _status.isDirty()
+            || _bearing.isDirty()
+            || _skyScanNextStep.isDirty()
+            || _skyScanCountDown.isDirty()
+            || _skyScanButtonState.isDirty()
+            || _skyScanReverseScan.isDirty());
 }
 void AntennaState::clearDirty()
 {
     _selected.clearDirty();
     _status.clearDirty();
     _bearing.clearDirty();
+    _skyScanCountDown.clearDirty();
+    _skyScanButtonState.clearDirty();
+    _skyScanReverseScan.clearDirty();
 }
 void AntennaState::setDirty()
 {
     _selected.setDirty();
     _status.setDirty();
     _bearing.setDirty();
+    _skyScanCountDown.setDirty();
+    _skyScanButtonState.setDirty();
+    _skyScanReverseScan.setDirty();
 }
 
 QString AntennaState::pack() const
@@ -39,6 +51,10 @@ QString AntennaState::pack() const
     jv.insert(rpcConstants::selected, _selected.pack());
     jv.insert(rpcConstants::rotatorStatus, status().getValue());
     jv.insert(rpcConstants::rotatorBearing, bearing().getValue());
+    jv.insert(rpcConstants::skyScanNextStep, skyScanNextStep().getValue());
+    jv.insert(rpcConstants::skyScanCountDown, skyScanCountDown().getValue());
+    jv.insert(rpcConstants::skyScanButtonState, skyScanButtonState().getValue());
+    jv.insert(rpcConstants::skyScanReverseScan, skyScanReverseScan().getValue());
 
     QJsonDocument json(jv);
 
@@ -56,6 +72,10 @@ void AntennaState::unpack(QString s)
         _selected.unpack(selobj);
         _bearing.setValue(json.object().value(rpcConstants::rotatorBearing).toString());
         _status.setValue(json.object().value(rpcConstants::rotatorStatus).toString());
+        _skyScanNextStep.setValue(json.object().value(rpcConstants::skyScanNextStep).toString());
+        _skyScanCountDown.setValue(json.object().value(rpcConstants::skyScanCountDown).toString());
+        _skyScanButtonState.setValue(json.object().value(rpcConstants::skyScanButtonState).toInt());
+        _skyScanReverseScan.setValue(json.object().value(rpcConstants::skyScanReverseScan).toBool());
     }
     else
     {
@@ -97,4 +117,38 @@ QStringList AntennaState::getSelectedLoggers()
 {
     return _selected.getSelectedLoggers();
 }
+MinosStringItem<QString> AntennaState::skyScanNextStep() const
+{
+    return _skyScanNextStep;
+}
+MinosStringItem<QString> AntennaState::skyScanCountDown() const
+{
+    return _skyScanCountDown;
+}
+MinosItem<int> AntennaState::skyScanButtonState() const
+{
+    return _skyScanButtonState;
+}
+MinosItem<bool> AntennaState::skyScanReverseScan() const
+{
+    return _skyScanReverseScan;
+}
+
+void AntennaState::setSkyScanNextStep(const QString &skyScanNextStep)
+{
+    _skyScanNextStep.setValue(skyScanNextStep);
+}
+void AntennaState::setSkyScanCountDown(const QString &skyScanCountDown)
+{
+    _skyScanCountDown.setValue(skyScanCountDown);
+}
+void AntennaState::setSkyScanButtonState(int state)
+{
+    _skyScanButtonState.setValue(state);
+}
+void AntennaState::setSkyScanReverseScan(bool reverseScan)
+{
+    _skyScanReverseScan.setValue(reverseScan);
+}
+
 

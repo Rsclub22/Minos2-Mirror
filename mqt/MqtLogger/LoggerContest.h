@@ -226,6 +226,8 @@ protected:
       QSharedPointer<BaseContact> addContactBetween(QSharedPointer<BaseContact> prior, QSharedPointer<BaseContact> next , dtg ctTime);
 
       void checkAgeProtection();
+  protected:
+      virtual void initOnSetHF() override;
 };
 
 #endif

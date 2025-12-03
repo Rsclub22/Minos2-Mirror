@@ -20,6 +20,7 @@ class RotatorCache
     QMap<PubSubName, AntennaDetail> rotDetails;
     QMap<PubSubName, AntennaState> rotStates;
     QMap<PubSubName, MinosStringItem<QString> > rotPresets;
+    QMap<PubSubName, MinosStringItem<QString> > rotSkyScanPresets;
     QVector<PubSubName> rotList;
     void publishState( );
     void publishDetails( );
@@ -34,6 +35,7 @@ public:
         publishState();
         publishDetails();
         publishPresets();
+        publishSkyScanPresets();
     }
 
 
@@ -78,6 +80,24 @@ public:
 
     void rotatorPresetsClearDirty();
     void setSupportStopCommand(const PubSubName &name, bool state);
+    void setEndStopSouthStopOffset(const PubSubName &name, QString data);
+    void setSkyScanVisible(const PubSubName &name, const bool visible);
+    void setSkyScanStartBearing(const PubSubName &name, const int startBearing);
+    void setSkyScanEndBearing(const PubSubName &name, const int endBearing);
+    void setSkyScanNextStep(const PubSubName &name, QString bearing);
+    void setSkyScanCountDown(const PubSubName &name, QString countDown);
+    void setSkyScanButtonState(const PubSubName &name, int state);
+    void setSkyScanReverseScan(const PubSubName &name, bool state);
+    void setSkyScanRotatorStartBearing(const PubSubName &name, const int rotatorStartBearing);
+    void setSkyScanRotatorEndBearing(const PubSubName &name, const int rotatorEndBearing);
+
+    void setRotatorSkyScanPresets(const PubSubName &name, const QString &p);
+    void publishSkyScanPresets();
+    QString getRotatorSkyScanPresets(const PubSubName &name);
+    bool rotatorSkyScanPresetsIsDirty(const PubSubName &name);
+    void rotatorSkyScanPresetsClearDirty();
+    QString getSkyScanPresetsString(const PubSubName &name) const;
+    void setSkyScanPresetsString(const AnalysePubSubNotify &an);
 };
 
 #endif // ROTATORCACHE_H

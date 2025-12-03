@@ -154,6 +154,7 @@ private:
     QRZDB *qdb = nullptr;
     QString logonCallsign;
     QString password;
+    int cacheAge = 0;
 
     QVector<QrzServerMessage> qrzRequestQueue;
     QrzServerMessage requestedStation;

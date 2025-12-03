@@ -70,6 +70,8 @@ public:
     void transferDetails(QString cs, const QString loc, QString exchange, const bool fromBandmapOrMemory );
 
     void xferFromKST(QString call, QString loc);
+    void xferMeepFromKST(QString call);
+    QDateTime kstMeepTime;
     void logTabChanged();
 
     void modeSentFromRig(QString mode);
@@ -304,6 +306,8 @@ private:
     void doBandmapSaveFreq(bool PbClicked);
 
     bool isRunMode();
+    void setTxReadOnly(bool isNotEdit);
+    
 signals:
     void QSOFrameCancelled();
     void sendBandMap( Frequency freq, QString call, QString utc, QString loc, QString qth );

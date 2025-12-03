@@ -3,7 +3,7 @@
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //                      Rotator Control
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2018
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2018 - 2025
 //
 //
 //
@@ -36,6 +36,7 @@ public:
     void setText(QString t);
 
     QString getText();
+    void disableMenu();
 signals:
 
     void presetShortCutRecall();

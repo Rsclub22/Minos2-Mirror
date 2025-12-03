@@ -89,6 +89,7 @@ Source: "*"; DestDir: "{app}"; Flags: recursesubdirs createallsubdirs replacesam
 Type: files; Name: "{app}\Bin\MqtControl.exe"
 Type: files; Name: "{app}\Bin\MqtKeyer.exe"
 Type: files; Name: "{app}\Bin\MqtKeyerProxy.exe"
+Type: files; Name: "{app}\Bin\MqtWinkeyer.exe"
 Type: files; Name: "{app}\Configuration\MinosKeyer.ini"
 Type: files; Name: "{app}\Configuration\MinosControl.ini"
 

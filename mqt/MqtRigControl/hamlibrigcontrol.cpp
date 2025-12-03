@@ -75,9 +75,16 @@ int register_callback(rig_model_t rig_model, void *callback_data)
 
 
     RIG *myRig = nullptr;
-    if (rig_model != 2057)
+
+    if (rig_model != 2057)      // temp fix because QRP Labs radio is still beta and causes crashes in hamlib 4.6.1 Jan 2025
+    {
         myRig = rig_init(rig_model);
+    }
+
+
     bool myRigOk = (myRig) ? true : false;
+
+
 
 
 
@@ -107,7 +114,6 @@ int register_callback(rig_model_t rig_model, void *callback_data)
         default:
         {}
     }
-
 
     bool supportGetVfo = rig_get_function_ptr(rig_model, RIG_FUNCTION_GET_VFO) ? true:false;
     bool supportSetVfo = rig_get_function_ptr(rig_model, RIG_FUNCTION_SET_VFO) ? true:false;

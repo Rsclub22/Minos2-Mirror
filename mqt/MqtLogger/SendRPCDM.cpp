@@ -3,7 +3,7 @@
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //
-// COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2008
+// COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2025
 //
 /////////////////////////////////////////////////////////////////////////////
 
@@ -92,6 +92,7 @@ void TSendDM::getRouterAppCatMap()
             routerAppCatMap[rpcConstants::rotatorDetailCategory].push_back(i);
             routerAppCatMap[rpcConstants::rotatorStateCategory].push_back(i);
             routerAppCatMap[rpcConstants::rotatorPresetsCategory].push_back(i);
+            routerAppCatMap[rpcConstants::rotatorSkyScanPresetsCategory].push_back(i);
         }
         else if (i->appType == "Server")
         {
@@ -110,6 +111,13 @@ void TSendDM::getRouterAppCatMap()
         {
             routerAppCatMap[rpcConstants::DMCat].push_back(i);
         }
+        else if (i->appType == "PcDtrCwKeyer")
+        {
+            routerAppCatMap[rpcConstants::pcCwKeyerApp].push_back(i);
+            routerAppCatMap[rpcConstants::pcCwKeyerCategory].push_back(i);
+
+        }
+
     }
     rpc->setRouterAppCatMap(routerAppCatMap);
 }
@@ -360,6 +368,59 @@ void TSendDM::sendRotatorSelection(const PubSubName &s, const QString &uuid)
     rpc.queueCall( s );
 }
 
+
+
+
+void TSendDM::sendSkyScanControlPanelButtonState(TSingleLogFrame *tslf, SkyScanButtonState buttonState)
+{
+    traceMsg(QString("Send SkyScan Control Button State - Start = %1, Stop = %2").arg(buttonState.isStop() ? "On" :"Off", buttonState.isStop() ? "On" : "Off"));
+    RPCGeneralClient rpc(rpcConstants::rotatorMethod);
+    QSharedPointer<RPCParam>st(new RPCParamStruct);
+
+    st->addMember( loggerUuid, rpcConstants::loggerUuid );
+
+    st->addMember( tslf->getContest()->uuid, rpcConstants::selected );
+    st->addMember( buttonState.getState(), rpcConstants::skyScanButtonState );
+    rpc.getCallArgs() ->addParam( st );
+
+    PubSubName rotSelected = rotatorCache.getSelected(loggerUuid);
+    rpc.queueCall( rotSelected );
+
+}
+
+void TSendDM::sendRotatorSkyScanPresetNumberToRotator(TSingleLogFrame *tslf, int buttonNumber)
+{
+    traceMsg(QString("Send SkyScan Preset Button Number = %1").arg(buttonNumber));
+    RPCGeneralClient rpc(rpcConstants::rotatorMethod);
+    QSharedPointer<RPCParam>st(new RPCParamStruct);
+
+    st->addMember( loggerUuid, rpcConstants::loggerUuid );
+
+    st->addMember( tslf->getContest()->uuid, rpcConstants::selected );
+    st->addMember( buttonNumber, rpcConstants::skyScanPresetNumber );
+    rpc.getCallArgs() ->addParam( st );
+
+    PubSubName rotSelected = rotatorCache.getSelected(loggerUuid);
+    rpc.queueCall( rotSelected );
+
+
+}
+
+
+
+void TSendDM::sendRotatorPreset(QString s)
+{
+    RPCGeneralClient rpc(rpcConstants::rotatorMethod);
+    QSharedPointer<RPCParam>st(new RPCParamStruct);
+
+    st->addMember( loggerUuid, rpcConstants::loggerUuid );
+    st->addMember( s, rpcConstants::rotPreset );
+    rpc.getCallArgs() ->addParam( st );
+
+    PubSubName rotSelected = rotatorCache.getSelected(loggerUuid);
+    rpc.queueCall( rotSelected );
+}
+
 void TSendDM::changeRigSelectionTo(const PubSubName &name, const QString &band, const Frequency &freq, const QString &mode, const QString &uuid)
 {
     // we should de-select the cached uuid on all rig apps
@@ -485,6 +546,49 @@ void TSendDM::sendRigTxCwMessage(TSingleLogFrame *tslf, const QString &msg)
     rpc.queueCall( rigSelected );
 }
 
+void TSendDM::sendPcKeyerTxCwMessage(const QString &msg)
+{
+    if (!pcCwKeyerApp.isEmpty())
+    {
+        RPCGeneralClient rpc(rpcConstants::pcCwKeyerMethod);
+        QSharedPointer<RPCParam>st(new RPCParamStruct);
+        st->addMember( rpcConstants::cwMessageToPcCwKeyer, rpcConstants::paramName );
+        st->addMember(msg, rpcConstants::pcCwKeyerCwMessage);
+        rpc.getCallArgs() ->addParam( st );
+        rpc.queueCall( pcCwKeyerApp );
+    }
+}
+
+
+void TSendDM::sendPcKeyerTxCwStop(const QString &msg)
+{
+    if (!pcCwKeyerApp.isEmpty())
+    {
+        RPCGeneralClient rpc(rpcConstants::pcCwKeyerMethod);
+        QSharedPointer<RPCParam>st(new RPCParamStruct);
+        st->addMember( rpcConstants::cwStopToPcCwKeyer, rpcConstants::paramName );
+        st->addMember(msg, rpcConstants::pcCwKeyerStopMsg);
+        rpc.getCallArgs() ->addParam( st );
+        rpc.queueCall( pcCwKeyerApp );
+    }
+}
+
+
+void TSendDM::sendPcKeyerCwWpm(const int &wpm)
+{
+    if (!pcCwKeyerApp.isEmpty())
+    {
+        RPCGeneralClient rpc(rpcConstants::pcCwKeyerMethod);
+        QSharedPointer<RPCParam>st(new RPCParamStruct);
+        st->addMember( rpcConstants::cwWpmToPcCwKeyer, rpcConstants::paramName );
+        st->addMember(wpm, rpcConstants::pcCwKeyerWpm);
+        rpc.getCallArgs() ->addParam( st );
+        rpc.queueCall( pcCwKeyerApp );
+    }
+}
+
+
+
 
 void TSendDM::sendRigControlMode(TSingleLogFrame *tslf,const QString &mode)
 {
@@ -573,18 +677,6 @@ void TSendDM::sendRigControlPttOnOff(TSingleLogFrame *tslf, const bool &onOff)
 
 
 
-void TSendDM::sendRotatorPreset(QString s)
-{
-    RPCGeneralClient rpc(rpcConstants::rotatorMethod);
-    QSharedPointer<RPCParam>st(new RPCParamStruct);
-
-    st->addMember( loggerUuid, rpcConstants::loggerUuid );
-    st->addMember( s, rpcConstants::rotPreset );
-    rpc.getCallArgs() ->addParam( st );
-
-    PubSubName rotSelected = rotatorCache.getSelected(loggerUuid);
-    rpc.queueCall( rotSelected );
-}
 
 
 //---------------------------------------------------------------------------
@@ -804,6 +896,7 @@ void TSendDM::notifyRotChanges()
         QString selStateUuid = selState.getSelectedContest(loggerUuid).getValue();
         AntennaDetail &selDetail = rotatorCache.getDetails(rotSelected);
         QString selDetailUuid = selState.getSelectedContest(loggerUuid).getValue();
+
         if (!selStateUuid.isEmpty())
         {
             QVector<TSingleLogFrame *> frames = LogContainer->getLogFrames();
@@ -829,6 +922,28 @@ void TSendDM::notifyRotChanges()
                         traceMsg(QString("Rotator set status = %1, uuid = %2").arg(selState.status().getValue(), selStateUuid));
                         tslf->on_RotatorStatus(selState.status().getValue());
                     }
+                    if (selState.skyScanNextStep().isDirty())
+                    {
+                        traceMsg(QString("Skyscan nextStep = %1, uuid = %2").arg(selState.skyScanNextStep().getValue(), selStateUuid));
+                        tslf->on_SkyScanNextStep(selState.skyScanNextStep().getValue());
+                    }
+                    if (selState.skyScanCountDown().isDirty())
+                    {
+                        traceMsg(QString("Skyscan countdown = %1, uuid = %2").arg(selState.skyScanCountDown().getValue(),selStateUuid));
+                        tslf->on_SkyScanCountDown(selState.skyScanCountDown().getValue());
+                    }
+                    if (selState.skyScanButtonState().isDirty())
+                    {
+                        traceMsg(QString("SkyScan button state = %1, uuid = %2").arg(QString::number(selState.skyScanButtonState().getValue()), selStateUuid));
+                        tslf->on_SkyScanButtonState(selState.skyScanButtonState().getValue());
+                    }
+                    if (selState.skyScanReverseScan().isDirty())
+                    {
+                        traceMsg(QString("SkyScan reversescan state = %1, uuid = %2").arg(selState.skyScanReverseScan().getValue() ? "True" : "False", selStateUuid));
+                        tslf->on_SkyScanReverseScan(selState.skyScanReverseScan().getValue());
+                    }
+
+
                     selState.clearDirty();
                 }
                 if (selDetailUuid == frameUuid)
@@ -854,6 +969,38 @@ void TSendDM::notifyRotChanges()
                         traceMsg(QString("Rotator set supportStopCommand = %1, uuid = %2").arg(selDetail.supportStopCommand().getValue() ? "True" :"False", selStateUuid));
                         tslf->on_SupportStopCommand(selDetail.supportStopCommand().getValue());
                     }
+                    if (selDetail.rotatorStopSouthStopOffset().isDirty())
+                    {
+                        traceMsg(QString("Rotator rotatorStopSouthStopOffset = %1, uuid = %2").arg(selDetail.rotatorStopSouthStopOffset().getValue(), selStateUuid));
+                        tslf->on_RotatorStopSouthStopOffset(selDetail.rotatorStopSouthStopOffset().getValue());
+                    }
+                    if (selDetail.skyScanVisible().isDirty())
+                    {
+                        traceMsg(QString("SkyScan tab visible = %1, uuid = %2").arg(selDetail.skyScanVisible().getValue() ? "True" : "False", selStateUuid));
+                        tslf->on_skyScanVisible(selDetail.skyScanVisible().getValue());
+                    }
+                    if (selDetail.skyScanStartBearing().isDirty())
+                    {
+                        traceMsg(QString("SkyScan Start Bearing = %1, uuid = %2").arg(selDetail.skyScanStartBearing().getValue()).arg(selStateUuid));
+                        tslf->on_skyScanStartBearing(selDetail.skyScanStartBearing().getValue());
+                    }
+                    if (selDetail.skyScanEndBearing().isDirty())
+                    {
+                        traceMsg(QString("SkyScan End Bearing = %1, uuid = %2").arg(selDetail.skyScanEndBearing().getValue()).arg(selStateUuid));
+                        tslf->on_skyScanEndBearing(selDetail.skyScanEndBearing().getValue());
+                    }
+                    if (selDetail.skyScanRotatorStartBearing().isDirty())
+                    {
+                        traceMsg(QString("SkyScan Rotator Start Bearing = %1, uuid = %2").arg(selDetail.skyScanRotatorStartBearing().getValue()).arg(selStateUuid));
+                        tslf->on_skyScanRotatorStartBearing(selDetail.skyScanRotatorStartBearing().getValue());
+                    }
+                    if (selDetail.skyScanRotatorEndBearing().isDirty())
+                    {
+                        traceMsg(QString("SkyScan Rotator End Bearing = %1, uuid = %2").arg(selDetail.skyScanRotatorEndBearing().getValue()).arg(selStateUuid));
+                        tslf->on_skyScanRotatorEndBearing(selDetail.skyScanRotatorEndBearing().getValue());
+                    }
+
+
                     selDetail.clearDirty();
 
                 }
@@ -862,8 +1009,17 @@ void TSendDM::notifyRotChanges()
                     traceMsg(QString("Rotator set presets = %1 - %2").arg(rotatorCache.getRotatorPresets(rotSelected), selStateUuid));
                     tslf->on_RotatorPresetList(rotatorCache.getRotatorPresets(rotSelected));
                 }
+                if (rotatorCache.rotatorSkyScanPresetsIsDirty(rotSelected))
+                {
+                    traceMsg(QString("Rotator set skyscan presets = %1 - %2").arg(rotatorCache.getRotatorSkyScanPresets(rotSelected), selStateUuid));
+                    tslf->on_RotatorSkyScanPresetList(rotatorCache.getRotatorSkyScanPresets(rotSelected));
+                }
+
+                rotatorCache.rotatorPresetsClearDirty();
+                rotatorCache.rotatorSkyScanPresetsClearDirty();
             }
-            rotatorCache.rotatorPresetsClearDirty();
+
+
         }
     }
 }
@@ -897,6 +1053,10 @@ void TSendDM::on_notify( AnalysePubSubNotify an, const QString /*from*/ )
             else if ( an.getCategory() == rpcConstants::rotatorPresetsCategory )
             {
                 rotatorCache.setPresetsString(an);
+            }
+            else if (an.getCategory() == rpcConstants::rotatorSkyScanPresetsCategory)
+            {
+                rotatorCache.setSkyScanPresetsString(an);
             }
             else if ( an.getCategory() == rpcConstants::rigControlCategory && an.getKey() == rpcConstants::rigControlRadioList )
             {
@@ -1016,7 +1176,61 @@ void TSendDM::on_notify( AnalysePubSubNotify an, const QString /*from*/ )
             emit setClusterTXSpotEnableState(an.getValue());
         }
 
+
+        if (an.getCategory() == rpcConstants::pcCwKeyerCategory)
+        {
+            trace(QString("message from pcCwKeyer - %1, %2, %3").arg(an.getKey(), an.getKey(), an.getValue()));
+            if (an.getKey() == rpcConstants::pcCwKeyerReport)
+            {
+                if (pcCwKeyerApp.isEmpty())
+                {
+                    pcCwKeyerApp = PubSubName(an);
+                }
+
+                pcCwKeyerLoaded = true;
+
+                QStringList stateMsgList = an.getValue().split("<>", Qt::KeepEmptyParts);
+                trace(QString("PcCwKeyer Report = %1").arg(an.getValue()));
+                if (stateMsgList.count() == 3)
+                {
+                    emit pcCwKeyerComport(stateMsgList[0]);
+                    if (stateMsgList[1] == "Open")
+                    {
+                        pcCwKeyerConnected = true;
+                    }
+                    else
+                    {
+                        pcCwKeyerConnected = false;
+
+                    }
+                    emit pcCwKeyerConnectionState(stateMsgList[1]);
+                    emit pcCwKeyerErrorMsg(stateMsgList[2]);
+                }
+            }
+            else if (an.getKey() == rpcConstants::pcCwKeyerPttEnabled)
+            {
+
+                QString pttEnabled = an.getValue();
+                trace(QString("PcCwKeyer ptt enabled: %1").arg(an.getValue()));
+                emit pcCwKeyerPttEnabled(pttEnabled);
+            }
+            else if (an.getKey() == rpcConstants::pcCwKeyerTxOn)
+            {
+                QString txOn;
+                txOn = an.getValue();
+                trace(QString("PcCwKeyer Tx state: %1").arg(an.getValue()));
+                emit pcCwKeyerTxOn(txOn);
+            }
+            else if (an.getKey() == rpcConstants::pcCwWpmToLog)
+            {
+                QString wpmFromPcCwKeyer;
+                wpmFromPcCwKeyer = an.getValue();
+                trace(QString("PcCwKeyer Wpm from keyer = %1").arg(wpmFromPcCwKeyer));
+                emit pcCwKeyerCurrentWpm(wpmFromPcCwKeyer);
+            }
+        }
     }
+
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
     if (tslf)
         tslf->checkConnections();
@@ -1028,6 +1242,8 @@ void TSendDM::routerClosed()
     clusterServerLoaded = false;
     clusterConnected = false;
     emit setClusterState((tr("Disconnected")) + "<>Disconnected");
+
+    pcCwKeyerLoaded = false;
 
     radioLoaded = false;
     rigCache.setStateDisconnected();
@@ -1196,6 +1412,23 @@ void TSendDM::on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, const QSt
             if ( lf )
             {
                 lf->xferFromKST(call, loc, freq);
+            }
+        }
+        else if (call == rpcConstants::KSTTransferMeep)
+        {
+            QSharedPointer<RPCParam> kstCall;
+            bool callOK = args->getStructArgMember( 0, rpcConstants::KSTTransferCall, kstCall );
+
+            if (callOK)
+            {
+                QString call;
+                kstCall->getString(call);
+
+                TSingleLogFrame * lf = LogContainer->getCurrentLogFrame();
+                if ( lf )
+                {
+                    lf->xferMeepFromKST(call);
+                }
             }
         }
     }

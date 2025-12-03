@@ -22,16 +22,16 @@ SOURCES += \
     rotatorbase.cpp \
     rotatorfactory.cpp \
     rotcapabilities.cpp \
-    skyscandialog.cpp \
     rotatormainwindow.cpp \
-    minoscompass.cpp \
     main.cpp \
     logdialog.cpp \
     rotatorlog.cpp \
     rotatorRpc.cpp \
     rotsetupform.cpp \
     addantennadialog.cpp \
-    rotsetupdialog.cpp
+    rotsetupdialog.cpp \
+    skyscancontrol.cpp \
+    skyscanpresetsdialog.cpp
 
 HEADERS  += \
     hamlibRotcontrol.h \
@@ -39,24 +39,24 @@ HEADERS  += \
     rotatorbase.h \
     rotatorfactory.h \
     rotcapabilities.h \
-    skyscandialog.h \
     rotatormainwindow.h \
-    minoscompass.h \
     logdialog.h \
     rotatorlog.h \
     rotatorRpc.h \
     rotsetupform.h \
     addantennadialog.h \
-    rotsetupdialog.h
+    rotsetupdialog.h \
+    skyscancontrol.h \
+    skyscanpresetsdialog.h
 
 FORMS    += \
     pstconfigdialog.ui \
-    skyscandialog.ui \
     logdialog.ui \
     rotatormainwindow.ui \
     rotsetupform.ui \
     addantennadialog.ui \
-    rotsetupdialog.ui
+    rotsetupdialog.ui \
+    skyscanpresetsdialog.ui
 
 win32:{HEADERS +=     pstRotControl.h
 SOURCES += pstRotControl.cpp

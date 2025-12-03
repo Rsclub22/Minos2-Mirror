@@ -70,7 +70,6 @@ SOURCES += \
     StackedInfoFrame.cpp \
     TClockFrame.cpp \
     TSessionManager.cpp \
-    WsjtxConfigureCQ.cpp \
     adifmanager.cpp \
     bandmapdatamodel.cpp \
     bandmapgraphicspanel.cpp \
@@ -93,6 +92,7 @@ SOURCES += \
     managebandmapspotsdb.cpp \
     n1mmbroadcast.cpp \
     n1mmbroadcastconfig.cpp \
+    pccwmessagekeyer.cpp \
     qrzdisplayframe.cpp \
     qsologframe.cpp \
     qsotableframe.cpp \
@@ -103,9 +103,12 @@ SOURCES += \
     rigcontrolvoicememorykeyer.cpp \
     rigmemdialog.cpp \
     ritlineedit.cpp \
+    rotatorcompassframe.cpp \
+    rotatorskyscanframe.cpp \
     rotcontrolframe.cpp \
     runbuttondialog.cpp \
     runbuttonsframe.cpp \
+    skyscanpresetsframe.cpp \
     taboutbox.cpp \
     tbundleframe.cpp \
     tcalendardownload.cpp \
@@ -175,7 +178,6 @@ HEADERS  += \
     StackedInfoFrame.h \
     TClockFrame.h \
     TSessionManager.h \
-    WsjtxConfigureCQ.h \
     adifmanager.h \
     bandmapdatamodel.h \
     bandmapgraphicspanel.h \
@@ -197,6 +199,7 @@ HEADERS  += \
     managebandmapspotsdb.h \
     n1mmbroadcast.h \
     n1mmbroadcastconfig.h \
+    pccwmessagekeyer.h \
     printfile.h \
     qrzdisplayframe.h \
     qsologframe.h \
@@ -208,9 +211,12 @@ HEADERS  += \
     rigcontrolvoicememorykeyer.h \
     rigmemdialog.h \
     ritlineedit.h \
+    rotatorcompassframe.h \
+    rotatorskyscanframe.h \
     rotcontrolframe.h \
     runbuttondialog.h \
     runbuttonsframe.h \
+    skyscanpresetsframe.h \
     taboutbox.h \
     tbundleframe.h \
     tcalendardownload.h \
@@ -255,8 +261,8 @@ FORMS    += \
     ContestPageControl.ui \
     DisplayOptions.ui \
     OptionsDialog.ui \
+    RotPresets.ui \
     ScreenConfigScreen.ui \
-    WsjtxConfigureCQ.ui \
     checkupdates.ui \
     contestdetails.ui \
     defdirsdlg.ui \
@@ -277,8 +283,9 @@ FORMS    += \
     rigcontrolframe.ui \
     rigmemdialog.ui \
     RigMemoryFrame.ui \
+    rotatorcompassframe.ui \
+    rotatorskyscanframe.ui \
     rotcontrolframe.ui \
-    RotPresets.ui \
     runbuttondialog.ui \
     ScreenConfig.ui \
     ScreenConfigElement.ui \
@@ -286,6 +293,7 @@ FORMS    += \
     ScreenConfigRow.ui \
     StackedInfoFrame.ui \
     runbuttonsframe.ui \
+    skyscanpresetsframe.ui \
     taboutbox.ui \
     tbundleframe.ui \
     tcalendardownload.ui \

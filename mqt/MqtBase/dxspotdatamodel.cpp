@@ -12,8 +12,8 @@
 
 #include "clustercommon.h"
 #include "cutils.h"
-#include "rigutils.h"
 #include "htmldelegate.h"
+#include "rigutils.h"
 #include "dxspotdatamodel.h"
 
 DxSpotDataModel::DxSpotDataModel(QObject *parent)
@@ -37,14 +37,10 @@ QVariant DxSpotDataModel::headerData(int section, Qt::Orientation orientation, i
             switch (section) {
                 case TIME_COL_NUM:
                     return tr("UTC");
-                case DATE_COL_NUM:
-                    return tr("Date");
                 case FREQ_COL_NUM:
                     return tr("Freq");
                 case DXSPOT_CALL_COL_NUM:
                     return tr("Dx");
-                case DXSPOT_CALL_WORKED_COL_NUM:
-                    return tr("Wkd");
                 case DXSPOT_MODE_COL_NUM:
                     return tr("Mode");
                 case DXLOC_COL_NUM:
@@ -53,18 +49,12 @@ QVariant DxSpotDataModel::headerData(int section, Qt::Orientation orientation, i
                     return tr("Dist");
                 case DXBRG_COL_NUM:
                     return tr("Brg");
-                case DXLOC_WORKED_COL_NUM:
-                    return tr("Wkd");
                 case SPOTTER_CALL_COL_NUM:
                     return tr("Spotter");
                 case SPOTTER_LOC_COL_NUM:
                     return tr("Loc");
                 case COMMENT_COL_NUM:
                     return tr("Comment");
-                case DXSPOT_TO_MEMORY_FLAG_COL_NUM:
-                    return tr("Spot to Mem Flag");
-                case DXSPOT_PROP_MODE_COL_NUM:
-                    return tr("Prop Mode");
                 default:
                 return QVariant();
             }
@@ -165,11 +155,11 @@ QVariant DxSpotDataModel::data(const QModelIndex &index, int role) const
         QString d;
         switch (col)
         {
+            case RXTIME_COL_NUM:
+                d = QString::number(dxSpot->getRxTime());
+                break;
             case TIME_COL_NUM:
                 d = dxSpot->getSpotTime();
-            break;
-            case DATE_COL_NUM:
-                d = dxSpot->getSpotDate();
             break;
             case FREQ_COL_NUM:
                 d = removeHundredHzAndHzDigits(dxSpot->getFreq().convertFreqStrDisp());
@@ -183,6 +173,9 @@ QVariant DxSpotDataModel::data(const QModelIndex &index, int role) const
 
                 d = d + dxSpot->getDxCallStr();
             break;
+            case DXSPOT_MODE_COL_NUM:
+                d = dxSpot->getMode();
+                break;
             case DXLOC_COL_NUM:
                 if (dxSpot->getDxLocatorWorked())
                 {
@@ -215,187 +208,16 @@ QVariant DxSpotDataModel::data(const QModelIndex &index, int role) const
             case COMMENT_COL_NUM:
                 d = escapeXML(dxSpot->getSpotComment());
             break;
-            case RXTIME_COL_NUM:
-                d = QString::number(dxSpot->getRxTime());
-            break;
-            case DXSPOT_MODE_COL_NUM:
-                d = dxSpot->getMode();
-            break;
-            case DXSPOT_PROP_MODE_COL_NUM:
-                d = dxSpot->getDxPropMode();
-            break;
-            case DXBANDSTR_COL_NUM:
-                d = dxSpot->getBand();
-            break;
-            case DXLOC_FROM_NODE_FLAG_COL_NUM:
-                d = QChar(static_cast<int>(dxSpot->getDxLocatorIsFromNode()));
-            break;
-            case DXCLUSTER_SHOW_SPOT_TYPE:
-                d = dxSpot->isShowSpotType()?clusterSpotType::SHOW_DXSPOT_TYPE:clusterSpotType::DXSPOT_TYPE;
-            break;
             default:
                 d = "";
         }
         return d;
     }
 
-    if (role == DataStoredRole)
-    {
-
-        QSharedPointer<ClusterSpotData> dxSpot = dxSpotData.at(index.row());
-
-        QVariant d;
-        switch (col)
-        {
-            case TIME_COL_NUM:
-                d = dxSpot->getSpotTime();
-            break;
-            case DATE_COL_NUM:
-                d = dxSpot->getSpotDate();
-            break;
-            case FREQ_COL_NUM:
-                d.setValue(dxSpot->getFreq());
-            break;
-            case DXSPOT_CALL_COL_NUM:
-                d = dxSpot->getDxCallStr();
-            break;
-            case DXLOC_COL_NUM:
-                d = dxSpot->getDxLocator();
-            break;
-            case DXDIST_COL_NUM:
-                d = dxSpot->getDxDist();
-            break;
-            case DXBRG_COL_NUM:
-                d = dxSpot->getDxBrg();
-            break;
-            case SPOTTER_CALL_COL_NUM:
-                d = dxSpot->getSpotterCallStr();
-            break;
-            case SPOTTER_LOC_COL_NUM:
-                d = dxSpot->getSpotterLocator();
-            break;
-            case COMMENT_COL_NUM:
-                d = dxSpot->getSpotComment();
-            break;
-            case DXSPOT_CALL_WORKED_COL_NUM:
-                d = dxSpot->getDxCallWorked();
-            break;
-            case DXLOC_WORKED_COL_NUM:
-                d = dxSpot->getDxLocatorWorked();
-            break;
-            case DXSPOT_TO_MEMORY_FLAG_COL_NUM:
-                d = dxSpot->getSentToMemory();
-            break;
-            case RXTIME_COL_NUM:
-                d = dxSpot->getRxTime();
-            break;
-            case DXSPOT_MODE_COL_NUM:
-                d = dxSpot->getMode();
-            break;
-            case DXSPOT_PROP_MODE_COL_NUM:
-                d = dxSpot->getDxPropMode();
-            break;
-            case DXBANDSTR_COL_NUM:
-                d = dxSpot->getBand();
-            break;
-            case DXCLUSTER_SHOW_SPOT_TYPE:
-                d = dxSpot->isShowSpotType()?clusterSpotType::SHOW_DXSPOT_TYPE:clusterSpotType::DXSPOT_TYPE;
-            break;
-
-
-        }
-
-        return d;
-    }
-
     return QVariant();
 }
 
-
-bool DxSpotDataModel::setData(const QModelIndex & index, const QVariant & value, int role)
-{
-
-    int row = index.row();
-    int col = index.column();
-
-    if (index.isValid() && role == DataStoredRole)
-    {
-
-        QSharedPointer<ClusterSpotData> dxSpot = dxSpotData.value(row);
-
-        switch (col)
-        {
-            case TIME_COL_NUM :
-                dxSpot->setSpotTime(value.toString());
-            break;
-            case DATE_COL_NUM:
-                dxSpot->setSpotDate(value.toString());
-            break;
-            case FREQ_COL_NUM:
-                dxSpot->setFreq(qvariant_cast<Frequency>(value));
-            break;
-            case DXSPOT_CALL_COL_NUM:
-                dxSpot->setDxCall(value.toString());
-            break;
-            case DXSPOT_CALL_WORKED_COL_NUM:
-                dxSpot->setDxCallWorked(value.toBool());
-            break;
-            case DXLOC_COL_NUM:
-                dxSpot->setDxLocator(value.toString());
-            break;
-            case DXDIST_COL_NUM:
-                dxSpot->setDxDist(value.toString());
-            break;
-            case DXBRG_COL_NUM:
-                dxSpot->setDxBrg(value.toString());
-            break;
-            case DXLOC_WORKED_COL_NUM:
-                dxSpot->setDxLocatorWorked(value.toBool());
-            break;
-            case SPOTTER_CALL_COL_NUM:
-                dxSpot->setSpotterCall(value.toString());
-                break;
-            case SPOTTER_LOC_COL_NUM:
-                dxSpot->setSpotterLocator(value.toString());
-                break;
-            case COMMENT_COL_NUM:
-                dxSpot->setSpotComment(value.toString());
-                break;
-            case DXSPOT_TO_MEMORY_FLAG_COL_NUM:
-                dxSpot->setSentToMemory(value.toBool());
-            break;
-            case DXSPOT_MODE_COL_NUM:
-                dxSpot->setMode(value.toString());
-            break;
-            case DXSPOT_PROP_MODE_COL_NUM:
-                dxSpot->setDxPropMode(value.toString());
-            break;
-            case DXBANDSTR_COL_NUM:
-                dxSpot->setBand(value.toString());
-            break;
-            case DXCLUSTER_SHOW_SPOT_TYPE:
-                dxSpot->setShowSpotType(value.toBool());
-            break;
-            default:
-                return false;
-
-        }
-
-
-        // dxSpotData.replace(row, dxSpot); // not needed
-        emit dataChanged(index, index);
-
-
-            return true;
-    }
-
-
-        return false;
-}
-
-
-
-// NOTE! This needs modification of the for loop and rowData to trully support multiple rows!!
+// NOTE! This needs modification of the for loop and rowData to truly support multiple rows!!
 bool DxSpotDataModel::insertRows(int row, int count, const QModelIndex &index)
 {
     Q_UNUSED(index)

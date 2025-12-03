@@ -157,7 +157,7 @@ void RunButtonsFrame::setRunButtonActive(int buttonNumber)
     }
     else
     {
-        trace(QString("setRunButtonActive returnFrequency set %1 to %2").arg(buttonNumber).arg(curFreq));
+        trace(QString("setRunButtonActive returnFrequency set %1 to %2").arg(buttonNumber).arg(curFreq.traceStr()));
         runButtonMap[buttonNumber]->returnFrequency = curFreq;
     }
     trace(QString("setRunButtonActive returnFrequency clear other"));
@@ -180,7 +180,7 @@ void RunButtonsFrame::setRunFreq(int buttonNumber)
     qint64 offset = oldfreq - rigControl->getCurFreq();
     if (std::abs(offset) > 1000)
     {
-        trace(QString("setRunFreq returnFrequency set %1 to %2").arg(buttonNumber).arg(oldfreq));
+        trace(QString("setRunFreq returnFrequency set %1 to %2").arg(buttonNumber).arg(oldfreq.traceStr()));
         runButtonMap[buttonNumber]->returnFrequency = oldfreq;
         trace(QString("setRunFreq returnFrequency clear other"));
         runButtonMap[otherButton(buttonNumber)]->returnFrequency.clear();

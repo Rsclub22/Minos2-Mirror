@@ -121,9 +121,11 @@ protected:
     CheckableContact( const CheckableContact & ct);
     CheckableContact(BaseContestLog * contest, dtg time_now );
     CheckableContact& operator =(const CheckableContact &);;
-    virtual ~CheckableContact(){};
 
 public:
+    CheckableContact(BaseContestLog *ct, const Callsign &cs, const QString &band, const QString &mode);
+    virtual ~CheckableContact(){};
+
     MinosFrequencyItem<Frequency> freq;
 
     void setLogSequence( unsigned long ul )

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>356</width>
-    <height>376</height>
+    <width>377</width>
+    <height>390</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -89,6 +89,81 @@
           <string>Use QRZ to obtain QRA Locators</string>
          </property>
         </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="removeRepeatSpotsCheckBox">
+         <property name="text">
+          <string>Remove Repeat Spots</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_9">
+         <item>
+          <widget class="QLabel" name="repeatSpotFreqDeltaLabel">
+           <property name="text">
+            <string>Repeat Spot Freq. Delta Hz</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="repeatSpotFreqDeltaLineEdit"/>
+         </item>
+         <item>
+          <widget class="QLabel" name="repeatSpotRangeLabel">
+           <property name="text">
+            <string>100 - 750 Hz</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_2">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_8">
+         <item>
+          <widget class="QLabel" name="repeatSpotTimeLabel">
+           <property name="text">
+            <string>Repeat Spot Within Time</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="repeatSpotWithinTimeLineEdit"/>
+         </item>
+         <item>
+          <widget class="QLabel" name="repeatSpotFreqDeltaRangeLabel">
+           <property name="text">
+            <string>0 - 30 Min</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_3">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
        </item>
        <item>
         <spacer name="verticalSpacer_2">

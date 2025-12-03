@@ -3,13 +3,12 @@
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //                      Rotator Control
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2018
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2018 - 2025
 //
 //
 //
 /////////////////////////////////////////////////////////////////////////////
 
-#include "rotatorcommon.h"
 #include "presetbutton.h"
 
 
@@ -38,8 +37,15 @@ PresetButton::PresetButton(QToolButton *b, int num, QShortcut* key, QShortcut* s
     presetMenu->addAction(clearAction);
     presetButton->setMenu(presetMenu);
 
-    connect(shortKey, &QShortcut::activated, this, &PresetButton::memoryRecallShortCutSelected);
-    connect(shiftShortKey, &QShortcut::activated, this, &PresetButton::memoryShiftShortCutSelected);
+    if (shortKey)   // pass Nullptr if shortcut not needed
+    {
+        connect(shortKey, &QShortcut::activated, this, &PresetButton::memoryRecallShortCutSelected);
+    }
+    if (shiftShortKey)
+    {
+        connect(shiftShortKey, &QShortcut::activated, this, &PresetButton::memoryShiftShortCutSelected);
+    }
+
     connect(presetButton, &QToolButton::clicked, this, &PresetButton::readActionSelected);
     connect( readAction, &QAction::triggered, this, &PresetButton::readActionSelected);
     connect( writeAction, &QAction::triggered, this, &PresetButton::writeActionSelected);
@@ -106,4 +112,10 @@ void PresetButton::setText(QString t)
 QString PresetButton::getText()
 {
     return presetButton->text();
+}
+
+void PresetButton::disableMenu()
+{
+    presetButton->setMenu(nullptr);
+    presetButton->setPopupMode(QToolButton::DelayedPopup);
 }

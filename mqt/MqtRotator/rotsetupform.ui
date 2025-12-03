@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>935</width>
-    <height>236</height>
+    <width>1093</width>
+    <height>238</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -279,7 +279,7 @@
           <item>
            <widget class="QRadioButton" name="compassBut">
             <property name="text">
-             <string>S-Stop  180-180</string>
+             <string>S-Stop  -180-180</string>
             </property>
            </widget>
           </item>
@@ -298,7 +298,7 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_5">
        <item>
-        <widget class="QCheckBox" name="chkOverrun">
+        <widget class="QCheckBox" name="chkOverLap">
          <property name="text">
           <string>Overlap</string>
          </property>
@@ -341,6 +341,13 @@
           <widget class="QCheckBox" name="showCompDialChkBox">
            <property name="text">
             <string>Show Compass Dial</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="showSkyScanChkBox">
+           <property name="text">
+            <string>Show SkyScan</string>
            </property>
           </widget>
          </item>

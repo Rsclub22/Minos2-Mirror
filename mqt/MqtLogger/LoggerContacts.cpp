@@ -471,6 +471,10 @@ QSO:  3799 PH 1999-03-06 0712 HC8N           59 700    N5KO           59 CA     
     if (lcl->exchangeRequired.getValue())
     {
         QString extra = sentExchange.getValue();
+        if (extra.isEmpty())
+        {
+            extra = contest->location.getValue();
+        }
         outstr += getCabrilloField(extra, 6);
     }
 

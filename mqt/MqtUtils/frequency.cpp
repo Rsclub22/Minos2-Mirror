@@ -170,39 +170,6 @@ QString Frequency::removeTrailingZeroes(QString sfreq)
     return sfreq;
 }
 
-Frequency Frequency::toMark(const QString &mode) const
-{
-    // convert carrier freq to mark freq
-    Frequency mfreq = *this;
-
-    if (mode.compare( RY, Qt::CaseInsensitive ) == 0)
-    {
-        mfreq = mfreq - Frequency(RTTY_MARK_OFFSET);
-    }
-    if (mode.compare( PSK, Qt::CaseInsensitive ) == 0)
-    {
-        mfreq = mfreq + Frequency(BPSK_OFFSET);
-    }
-    return mfreq;
-}
-
-Frequency Frequency::toCarrier(const QString &mode) const
-{
-    // convert mark freq to carrier freq
-    Frequency mfreq = *this;
-
-    if (mode.compare( RY, Qt::CaseInsensitive ) == 0)
-    {
-        mfreq = mfreq + Frequency(RTTY_MARK_OFFSET);
-    }
-    if (mode.compare( PSK, Qt::CaseInsensitive ) == 0)
-    {
-        mfreq = mfreq - Frequency(BPSK_OFFSET);
-    }
-    return mfreq;
-}
-
-
 ShortFreq & ShortFreq::operator= (const ShortFreq &fr)
 {
     sf = fr.sf;

@@ -15,6 +15,7 @@
 #include "MTrace.h"
 #include "RPCCommandConstants.h"
 #include "SecondInstall.h"
+#include "delayedaction.h"
 #include "regsettings.h"
 #include "tinyxml.h"
 #include "TinyUtils.h"
@@ -237,6 +238,7 @@ void TZConf::onReadyRead()
         if (dgs.size() > 0)
         {
             processZConfString(dgs, host, sendBeaconResponse);
+
         }
     }
 }
@@ -261,7 +263,7 @@ QVector<Router *>::iterator findIp( const QHostAddress &h )
    for ( QVector<Router *>::iterator i = routerList.begin(); i != routerList.end(); i++ )
    {
        quint32 a = (*i)->host.toIPv4Address();
-       trace(QString("findIP comparing %1 with %2").arg(ha).arg(a));
+       trace(QString("findIP comparing %1(%2) with %3(%4)").arg(ha).arg(h.toString()).arg(a).arg((*i)->host.toString()));
       if (ha == a)
       {
          return i;
@@ -330,6 +332,34 @@ void TZConf::readRouterListFile()
 // ONLY trouble is... clients will now address their servers by UUID!
 // when they have subscribed to stations.
 
+void TZConf::addToRouterList(MinosRouterListener *msl, const QString &name, const QHostAddress &host, const QString &uuid, quint16 PortAsNumber)
+{
+    Router *sss = new Router( uuid, host, name, PortAsNumber );
+    if ( name == getZConf()->getName() )
+    {
+        sss->local = true;
+        routerList.push_back( sss );
+    }
+    else
+    {
+        getZConf()->sendMessage(); // make sure they get zconf before serversetfromid
+        routerList.push_back( sss );
+
+        delayedAction(getZConf(), [=](){
+
+            MinosRouterConnection *msc = msl->findConnection(host);
+            if (!msc)
+            {
+                MinosRouterConnection *msc = new MinosRouterConnection(true);
+                msc->strace(QString("Creating MinosRouterConnection zcPublishServer for %1 host %2 ").arg(name, host.toString()));
+                msc->setClientRouter(sss->station);
+                msc->mConnect(sss);
+                msl->addListenerSlot(msc);
+            }
+     }, 100);
+    }
+}
+
 Router *TZConf::zcPublishRouter(const QString &uuid, const QString &name,
                                 const QHostAddress &host, quint16 PortAsNumber )
 {
@@ -354,20 +384,7 @@ Router *TZConf::zcPublishRouter(const QString &uuid, const QString &name,
     if (s == routerList.end())
     {
         trace("Station " + name + " not found");
-        Router *sss = new Router( uuid, host, name, PortAsNumber );
-        if ( name == getZConf()->getName() )
-        {
-            sss->local = true;
-        }
-        else
-        {
-            MinosRouterConnection *msc = new MinosRouterConnection(true);
-            msc->strace(QString("Creating MinosRouterConnection zcPublishServer for %1 host %2 ").arg(name, host.toString()));
-            msc->setClientRouter(sss->station);
-            msc->mConnect(sss);
-            msl->addListenerSlot(msc);
-        }
-        routerList.push_back( sss );
+        addToRouterList(msl, name, host, uuid, PortAsNumber);
         s = findStation(name);
     }
     if ( (*s)->local )
@@ -482,13 +499,20 @@ bool UDPSocket::sendMessage(const QString &mess )
 {
     QByteArray packet = mess.toUtf8();
 
-    qint64 res = qus->writeDatagram(packet.data(), packet.length(), qua.broadcast(), UPNP_PORT);
+    qint64 res = qus->writeDatagram(packet.data(), packet.length(), /*QHostAddress::Broadcast*/qua.broadcast(), UPNP_PORT);
 
     QString err = "No error";
     if (res < 0)
         err = qus->errorString();
     trace("send datagram on " + ifaceName + " result " + err
           + " : " + mess);
+    if (res < 0)
+    {
+        // if we can't send messages, at least see our own
+        QDateTime now =  QDateTime::currentDateTime();
+        QHostAddress local =  QHostAddress::LocalHost;
+        TZConf::getZConf()->processZConfString(mess,local ,now);
+    }
 
     return true;
 }

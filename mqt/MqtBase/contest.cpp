@@ -68,6 +68,12 @@ BaseContestLog::BaseContestLog(bool hf)
 BaseContestLog::~BaseContestLog()
 {
 }
+
+CheckableContact *BaseContestLog::haveWorked(CheckableContact *nct)
+{
+    CheckableContact *cc = DupSheet.haveWorked(nct);
+    return cc;
+}
 void BaseContestLog::setVersion(QString v)
 {
     appVersion.setValue(v);
@@ -1492,6 +1498,21 @@ bool dupsheet::isCurDup(CheckableContact *nct ) const
    }
    return cd;
 }
+
+CheckableContact *dupsheet::haveWorked(CheckableContact *nct) const
+{
+    if ( nct->cs.getValRes() == CS_OK )
+    {
+        QSharedPointer<DupContact> test(new DupContact(nct) );
+
+        ConstDupIterator c = dupList.find(test);
+        if ( c!= dupList.end() )
+        {
+            return c->wt->dct;
+        }
+    }
+    return nullptr;
+}
 void dupsheet::clearCurDup()
 {
    curdup.reset();
@@ -1534,7 +1555,7 @@ void BaseContestLog::processMinosStanza( const QString &methodName, MinosTestImp
       mt->getStructArgMemberValue( "hf", hfContest);
       if (isHF() != isHfContest)
       {
-          locatorMandatoryField.setValue(!isHF());
+          initOnSetHF();
       }
 
       if (currentBand.getValue() == allHF)
@@ -2075,10 +2096,13 @@ QSharedPointer<BandInfo> BaseContestLog::checkBandChange(Frequency targetFreq, F
     }
     return nb;
 }
-void BaseContestLog::checkSpotWorked(const Callsign &mcs, const QString &locator, const Frequency &freq, bool* callWorked, bool* locatorWorked)
+void BaseContestLog::checkSpotWorked(const Callsign &mcs, const QString &locator, const QString &exch,
+                                     const QString &mode, const Frequency &freq, bool* callWorked, bool* locatorWorked,
+                                     bool *exchWorked)
 {
     bool callfound = false;
     bool locfound = false;
+    bool exchFound = false;
     if (!isReadOnly())
     {
         for ( LogIterator i = ctList.begin(); i != ctList.end(); i++ )
@@ -2087,17 +2111,16 @@ void BaseContestLog::checkSpotWorked(const Callsign &mcs, const QString &locator
             {
                 continue;
             }
-
-            if (isHF())
+            QSharedPointer<BandInfo> bandChanged = checkBandChange(freq, (*i).wt->getFrequency().getValue().str());
+            if (bandChanged)
             {
-                QSharedPointer<BandInfo> bandChanged = checkBandChange(freq, (*i).wt->getFrequency().getValue().str());
-                if (bandChanged)
-                {
-                    // i.e. freq isn't same band as the searched QSO
-                    continue;
-                }
+                // i.e. freq isn't same band as the searched QSO
+                continue;
             }
-            if (!callfound)
+
+            CheckableContact test(this, mcs, (*i).wt->band, mode);
+            CheckableContact *cc = haveWorked(&test);
+            if (cc)
             {
                 if ((*i).wt->cs == mcs)
                 {
@@ -2115,10 +2138,18 @@ void BaseContestLog::checkSpotWorked(const Callsign &mcs, const QString &locator
                     locfound = true;
                 }
             }
-
-            if (callfound && locfound)
+            if (!exchFound && !exch.isEmpty())
             {
-                return;
+                if ((*i).wt->extraText == exch)
+                {
+                    *exchWorked = true;
+                    exchFound = true;
+                }
+            }
+
+            if (callfound && locfound && exchFound)
+            {
+                break;
             }
         }
     }
@@ -2135,6 +2166,22 @@ QString BaseContestLog::getLocForCall(const Callsign &mcs)
         if ((*i).wt->cs == mcs)
         {
             return (*i).wt->loc.getLoc();
+        }
+    }
+    return QString();
+}
+QString BaseContestLog::getExchForCall(const Callsign &mcs)
+{
+    for ( LogIterator i = ctList.begin(); i != ctList.end(); i++ )
+    {
+        if ((*i).wt->notValidContact() )
+        {
+            continue;
+        }
+
+        if ((*i).wt->cs == mcs)
+        {
+            return (*i).wt->extraText.getValue();
         }
     }
     return QString();

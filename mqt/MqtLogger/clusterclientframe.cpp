@@ -273,6 +273,7 @@ void ClusterClientFrame::setupDXSpotView()
     spotVerticalHeader->setSectionResizeMode(QHeaderView::Interactive);
 
     // show these columns
+
     dxSpotView->setColumnHidden(TIME_COL_NUM, false);
     dxSpotView->setColumnHidden(FREQ_COL_NUM, false);
     dxSpotView->setColumnHidden(DXSPOT_CALL_COL_NUM, false);
@@ -285,16 +286,7 @@ void ClusterClientFrame::setupDXSpotView()
     dxSpotView->setColumnHidden(COMMENT_COL_NUM, false);
 
     // hide these columns
-    dxSpotView->setColumnHidden(DXSPOT_CALL_WORKED_COL_NUM, true);
-    dxSpotView->setColumnHidden(DXLOC_WORKED_COL_NUM, true);
-    dxSpotView->setColumnHidden(DXLOC_FROM_NODE_FLAG_COL_NUM, true);
-    dxSpotView->setColumnHidden(DXSPOT_TO_MEMORY_FLAG_COL_NUM, true);
-    dxSpotView->setColumnHidden(RXTIME_COL_NUM, true);
-    //dxSpotView->setColumnHidden(DXSPOT_MODE_COL_NUM, true);
-    dxSpotView->setColumnHidden(DXSPOT_PROP_MODE_COL_NUM, true);
-    dxSpotView->setColumnHidden(DATE_COL_NUM, true);
-    dxSpotView->setColumnHidden(DXBANDSTR_COL_NUM, true);
-    dxSpotView->setColumnHidden(DXCLUSTER_SHOW_SPOT_TYPE, true);
+    dxSpotView->setColumnHidden(RXTIME_COL_NUM, true);  // used for sorting
 }
 
 
@@ -339,23 +331,10 @@ void ClusterClientFrame::setupSearchSpotView()
     searchView->setColumnHidden(SPOTTER_LOC_COL_NUM, false);
     searchView->setColumnHidden(COMMENT_COL_NUM, false);
 
-
     // hide these columns
-    searchView->setColumnHidden(DXSPOT_CALL_WORKED_COL_NUM, true);
-    searchView->setColumnHidden(DXLOC_WORKED_COL_NUM, true);
-    searchView->setColumnHidden(DXLOC_FROM_NODE_FLAG_COL_NUM, true);
-    searchView->setColumnHidden(DXSPOT_TO_MEMORY_FLAG_COL_NUM, true);
     searchView->setColumnHidden(RXTIME_COL_NUM, true);
-    //searchView->setColumnHidden(DXSPOT_MODE_COL_NUM, true);
-    searchView->setColumnHidden(DXSPOT_PROP_MODE_COL_NUM, true);
-    searchView->setColumnHidden(DATE_COL_NUM, true);
-    searchView->setColumnHidden(DXBANDSTR_COL_NUM, true);
-    searchView->setColumnHidden(DXCLUSTER_SHOW_SPOT_TYPE, true);
 
 }
-
-
-
 
 void ClusterClientFrame::setupCallsignSpotView()
 {
@@ -378,11 +357,9 @@ void ClusterClientFrame::setupCallsignSpotView()
     callSignView->verticalHeader()->setDefaultSectionSize(10);
     callSignView->verticalHeader()->setMinimumSectionSize(10);
 
-
     QHeaderView *callSignVerticalHeader = callSignView->verticalHeader();
     connect(callSignView, &QTableView::clicked, this, &ClusterClientFrame::onCallsignSpotViewClicked);
     connect(callSignVerticalHeader, &QHeaderView::sectionClicked, this, &ClusterClientFrame::onCallsignSpotVertHeaderClicked);
-
 
     restoreCallsignViewColumns();
     callSignView->horizontalHeader()->setStretchLastSection(true);
@@ -402,22 +379,8 @@ void ClusterClientFrame::setupCallsignSpotView()
     callSignView->setColumnHidden(SPOTTER_LOC_COL_NUM, false);
     callSignView->setColumnHidden(COMMENT_COL_NUM, false);
 
-
-
     // hide these columns
-    callSignView->setColumnHidden(DXSPOT_CALL_WORKED_COL_NUM, true);
-    callSignView->setColumnHidden(DXLOC_WORKED_COL_NUM, true);
-    callSignView->setColumnHidden(DXLOC_FROM_NODE_FLAG_COL_NUM, true);
-    callSignView->setColumnHidden(DXSPOT_TO_MEMORY_FLAG_COL_NUM, true);
     callSignView->setColumnHidden(RXTIME_COL_NUM, true);
-    //callSignView->setColumnHidden(DXSPOT_MODE_COL_NUM, true);
-    callSignView->setColumnHidden(DXSPOT_PROP_MODE_COL_NUM, true);
-    callSignView->setColumnHidden(DATE_COL_NUM, true);
-    callSignView->setColumnHidden(DXBANDSTR_COL_NUM, true);
-    callSignView->setColumnHidden(DXCLUSTER_SHOW_SPOT_TYPE, true);
-
-
-
 }
 
 void ClusterClientFrame::setupLocatorSpotView()
@@ -464,19 +427,8 @@ void ClusterClientFrame::setupLocatorSpotView()
     locatorView->setColumnHidden(SPOTTER_LOC_COL_NUM, false);
     locatorView->setColumnHidden(COMMENT_COL_NUM, false);
 
-
-
-
     // hide these columns
-    locatorView->setColumnHidden(DXSPOT_CALL_WORKED_COL_NUM, true);
-    locatorView->setColumnHidden(DXLOC_WORKED_COL_NUM, true);
-    locatorView->setColumnHidden(DXLOC_FROM_NODE_FLAG_COL_NUM, true);
-    locatorView->setColumnHidden(DXSPOT_TO_MEMORY_FLAG_COL_NUM, true);
     locatorView->setColumnHidden(RXTIME_COL_NUM, true);
-    locatorView->setColumnHidden(DXSPOT_PROP_MODE_COL_NUM, true);
-    locatorView->setColumnHidden(DATE_COL_NUM, true);
-    locatorView->setColumnHidden(DXBANDSTR_COL_NUM, true);
-    locatorView->setColumnHidden(DXCLUSTER_SHOW_SPOT_TYPE, true);
 }
 
 
@@ -555,10 +507,14 @@ void ClusterClientFrame::onSpotTabChanged(int index)
 
 void ClusterClientFrame::handleClickedItems(DxSpotSortFilterProxyModel* spotProxyModel, const QModelIndex &index)
 {
+    QModelIndex sIndex = spotProxyModel->mapToSource(index);
+    QSharedPointer<ClusterSpotData> pSpot = (dynamic_cast<DxSpotDataModel *>(spotProxyModel->sourceModel())->getSpotData(sIndex.row()));
+    Frequency f = pSpot->getFreq();
+
     if (index.column() == FREQ_COL_NUM)
     {
-        Frequency freq = qvariant_cast<Frequency>(spotProxyModel->data(index, DataStoredRole));
-        sendFreqToRig(freq.toCarrier(contestModeStr));
+        Frequency freq = pSpot->getFreq();
+        sendFreqToRig(freq);
 
     }
     else if (index.column() == DXSPOT_CALL_COL_NUM )
@@ -569,8 +525,8 @@ void ClusterClientFrame::handleClickedItems(DxSpotSortFilterProxyModel* spotProx
     }
     else if (index.column() == DXBRG_COL_NUM)
     {
-        QString brg = spotProxyModel->data(index, DataStoredRole).toString();
-        QString loc = spotProxyModel->data(spotProxyModel->index(index.row(), DXLOC_COL_NUM), DataStoredRole).toString();
+        QString brg = pSpot->getDxBrg();
+        QString loc = pSpot->getDxLocator();
         if (!brg.isEmpty())
         {
             if (loc.size() < 6)
@@ -758,49 +714,6 @@ bool ClusterClientFrame::checkspotExists(QSharedPointer<ClusterSpotData> spotDat
         }
     }
 
-
-    return false;
-}
-
-
-
-bool ClusterClientFrame::checkDbRowForMatch(QString incomingVal, int row, const int colNum)
-{
-    if (incomingVal == dxSpotDataModel->data(dxSpotDataModel->index(row, colNum,  QModelIndex()), DataStoredRole).toString())
-    {
-        return true;
-    }
-
-    return false;
-}
-
-bool ClusterClientFrame::checkDbRowForMatch(bool incomingVal, int row, const int colNum)
-{
-    if (incomingVal == dxSpotDataModel->data(dxSpotDataModel->index(row, colNum,  QModelIndex()), DataStoredRole).toBool())
-    {
-        return true;
-    }
-
-    return false;
-}
-
-bool ClusterClientFrame::checkDbRowForMatch(Frequency incomingVal, int row, const int colNum)
-{
-
-    if (incomingVal == qvariant_cast<Frequency>(dxSpotDataModel->data(dxSpotDataModel->index(row, colNum,  QModelIndex()), DataStoredRole)))
-    {
-        return true;
-    }
-
-    return false;
-}
-
-bool ClusterClientFrame::checkDbRowForMatch(qint64 incomingVal, int row, const int colNum)
-{
-    if (incomingVal == dxSpotDataModel->data(dxSpotDataModel->index(row, colNum,  QModelIndex()), DataStoredRole).toLongLong())
-    {
-        return true;
-    }
 
     return false;
 }
@@ -1041,9 +954,11 @@ void ClusterClientFrame::purgeSpots()
            int idx = dxSpotDataModel->rowCount() - 1;
            while (idx >= 0 && dxSpotDataModel->rowCount() > 0)
            {
-               if (spotTimedOut(dxSpotDataModel->data(dxSpotDataModel->index(idx, RXTIME_COL_NUM), DataStoredRole).toLongLong(), timeToLive))
+               QSharedPointer<ClusterSpotData> pSpot = (dxSpotDataModel->getSpotData(idx));
+
+               if (spotTimedOut(pSpot->getRxTime(), timeToLive))
                {
-                   traceMsg(QString("purged spot = %1, count %2").arg(dxSpotDataModel->data(dxSpotDataModel->index(idx, DXSPOT_CALL_COL_NUM), DataStoredRole).toString()).arg(dxSpotDataModel->rowCount()));
+                   traceMsg(QString("purged spot = %1, count %2").arg(pSpot->getDxCall().getFullCall()).arg(dxSpotDataModel->rowCount()));
                    dxSpotDataModel->removeRows(idx, 1, QModelIndex());
                }
                idx--;
@@ -1075,8 +990,9 @@ void ClusterClientFrame::on_freqActionSelected()
     {
         if (filterProxyModelList[curTab]->rowCount() > 0)
         {
-            int currentRow = spotViewList[curTab]->currentIndex().row();
-            Frequency freq = qvariant_cast<Frequency>(filterProxyModelList[curTab]->data(filterProxyModelList[curTab]->index(currentRow, FREQ_COL_NUM), DataStoredRole));
+            QModelIndex sIndex = dxSpotProxyModel->mapToSource(spotViewList[curTab]->currentIndex());
+            QSharedPointer<ClusterSpotData> pSpot = (dynamic_cast<DxSpotDataModel *>(dxSpotProxyModel->sourceModel())->getSpotData(sIndex.row()));
+            Frequency freq = pSpot->getFreq();
             sendFreqToRig(freq);
         }
     }
@@ -1092,11 +1008,12 @@ void ClusterClientFrame::bearingActionSelected()
     {
         if (filterProxyModelList[curTab]->rowCount() > 0)
         {
-            int currentRow = spotViewList[curTab]->currentIndex().row();
-            QString brg = filterProxyModelList[curTab]->data(filterProxyModelList[curTab]->index(currentRow, DXBRG_COL_NUM), DataStoredRole).toString();
+            QModelIndex sIndex = dxSpotProxyModel->mapToSource(spotViewList[curTab]->currentIndex());
+            QSharedPointer<ClusterSpotData> pSpot = (dynamic_cast<DxSpotDataModel *>(dxSpotProxyModel->sourceModel())->getSpotData(sIndex.row()));
+            QString brg = pSpot->getDxBrg();
             if (!brg.isEmpty())
             {
-                QString loc = filterProxyModelList[curTab]->data(filterProxyModelList[curTab]->index(currentRow, DXLOC_COL_NUM), DataStoredRole).toString();
+                QString loc = pSpot->getDxLocator();
                 if (loc.size() < 6)
                 {
                     brg = brg.append(SHORTLOCATOR_IDENTIFIER);
@@ -1150,30 +1067,37 @@ void ClusterClientFrame::sendSpotToMemory(DxSpotSortFilterProxyModel* spotProxyM
     memoryData::memData spotData = getSpotDataToMemoryVariable(spotProxyModel, row);
 
     MinosLoggerEvents::SendSpotToMemory(ct, spotData);
-    spotProxyModel->setData(spotProxyModel->index(row, DXSPOT_TO_MEMORY_FLAG_COL_NUM), true, DataStoredRole);
+    QModelIndex sIndex = spotProxyModel->mapToSource(spotProxyModel->index(row, 0));
+    QSharedPointer<ClusterSpotData> pSpot = (dynamic_cast<DxSpotDataModel *>(dxSpotProxyModel->sourceModel())->getSpotData(sIndex.row()));
+
+    pSpot->setSentToMemory(true);
 
 }
 
 memoryData::memData ClusterClientFrame::getSpotDataToMemoryVariable(DxSpotSortFilterProxyModel* spotProxyModel, int row)
 {
     memoryData::memData spotData;
-    spotData.callsign = spotProxyModel->data(spotProxyModel->index(row, DXSPOT_CALL_COL_NUM), DataStoredRole).toString();
-    spotData.time = spotProxyModel->data(spotProxyModel->index(row, TIME_COL_NUM), DataStoredRole).toString();
-    spotData.freq = qvariant_cast<Frequency>(spotProxyModel->data(spotProxyModel->index(row, FREQ_COL_NUM), DataStoredRole));
+
+    QModelIndex sIndex = spotProxyModel->mapToSource(spotProxyModel->index(row, 0));
+    QSharedPointer<ClusterSpotData> pSpot = (dynamic_cast<DxSpotDataModel *>(spotProxyModel->sourceModel())->getSpotData(sIndex.row()));
+
+    spotData.callsign = pSpot->getDxCallStr();
+    spotData.time = pSpot->getSpotTime();
+    spotData.freq = pSpot->getFreq();
 
     spotData.mode = memDefData::DEFAULT_MODE;
 
     bool showDerivedLocFlag;
     TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpShowDerivedLoc, showDerivedLocFlag );
 
-    if (showDerivedLocFlag || !spotProxyModel->data(spotProxyModel->index(row, DXLOC_FROM_NODE_FLAG_COL_NUM), DataStoredRole).toBool())
+    if (showDerivedLocFlag || !pSpot->getDxLocatorIsFromNode())
     {
-        spotData.locator = spotProxyModel->data(spotProxyModel->index(row, DXLOC_COL_NUM), DataStoredRole).toString();
+        spotData.locator = pSpot->getDxLocator();
     }
 
-    spotData.bearing = spotProxyModel->data(spotProxyModel->index(row, DXBRG_COL_NUM), DataStoredRole).toString().toInt();
+    spotData.bearing = pSpot->getDxBrg().toInt();
     spotData.fromBandmapOrMemory = true;
-    spotData.dxLocFromNode = spotProxyModel->data(spotProxyModel->index(row, DXLOC_FROM_NODE_FLAG_COL_NUM), DataStoredRole).toBool();
+    spotData.dxLocFromNode = pSpot->getDxLocatorIsFromNode();
     return spotData;
 }
 
@@ -1267,24 +1191,26 @@ void ClusterClientFrame::on_AfterLogContact( BaseContestLog *c, QSharedPointer<B
 
           for (int spotNumber = 0; spotNumber < dxSpotDataModel->rowCount(); spotNumber++)
           {
-              QString bandMask = dxSpotDataModel->data(dxSpotDataModel->index(spotNumber, DXBANDSTR_COL_NUM,  QModelIndex()), DataStoredRole).toString();
+              QSharedPointer<ClusterSpotData> pSpot = dxSpotDataModel->getSpotData(spotNumber);
+
+              QString bandMask = pSpot->getBand();
               if (bandMask == contestBandStr)
               {
-              QString callsign = dxSpotDataModel->data(dxSpotDataModel->index(spotNumber, DXSPOT_CALL_COL_NUM,  QModelIndex()), DataStoredRole).toString();
+                QString callsign = pSpot->getDxCallStr();
 
               if (lct->cs.realCall == callsign)
               {
-                  dxSpotDataModel->setData(dxSpotDataModel->index(spotNumber, DXSPOT_CALL_WORKED_COL_NUM,  QModelIndex()), true, DataStoredRole);
-                  worked = true;
+                    pSpot->setDxCallWorked(true);
+                    worked = true;
               }
 
 
 
-              QString locator = dxSpotDataModel->data(dxSpotDataModel->index(spotNumber, DXLOC_COL_NUM,  QModelIndex()), DataStoredRole).toString();
+              QString locator = pSpot->getDxLocator();
 
               if (lct->loc.getLoc().mid(0,4) == locator.mid(0, 4) )
               {
-                  dxSpotDataModel->setData(dxSpotDataModel->index(spotNumber, DXLOC_WORKED_COL_NUM,  QModelIndex()), true, DataStoredRole);
+                  pSpot->setDxLocatorWorked(true);
                   worked = true;
               }
 
@@ -1435,7 +1361,9 @@ int ClusterClientFrame::getNumberSpotsIndicator(const QDateTime& _lastTime, DxSp
         qlonglong lastTime = _lastTime.toMSecsSinceEpoch() / 1000;
         for (int i =0; i < _spotProxyModel->rowCount(); i++)
         {
-            spotTime = _spotProxyModel->data(_spotProxyModel->index(i, RXTIME_COL_NUM), DataStoredRole).toLongLong();
+            QSharedPointer<ClusterSpotData> pSpot = (dynamic_cast<DxSpotDataModel *>(_spotProxyModel->sourceModel())->getSpotData(i));
+
+            spotTime = pSpot ->getRxTime();
             if (spotTime > lastTime)
             {
                 spotCount++;
@@ -1651,11 +1579,7 @@ bool ClusterClientFrame::event(QEvent *event)
 static void setTextToLabel(QLabel *label, QString text1, QString col, QString text2)
 {
     QFontMetrics metrix(label->font());
-#if QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
-    int width1 = metrix.horizontalAdvance(text1);
-#else
-    int width1 = metrix.width(text1);
-#endif
+    int width1 = metrix.boundingRect(text1).width();
 
     int width = label->width() - width1 - 2;
     QString clippedText;
@@ -1736,8 +1660,10 @@ bool DxSpotSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelInd
     bool matchFlag = match_band && match_distance && match_mode && match_WorkedLoc && match_WorkedCallsign;
     if (traceDebugFlag)
     {
+        QSharedPointer<ClusterSpotData> pSpot = (dynamic_cast<DxSpotDataModel *>(sourceModel())->getSpotData(sourceRow));
+
         trace(QString("[ClusterClientFrame] filter - callsign = %1, matchBand = %2, matchDistance = %3, matchmode = %4, matchWorkedLoc = %5, matchWorkedCallsign = %6, matchFlag = %7")
-            .arg(sourceModel()->data(sourceModel()->index(sourceRow, DXSPOT_CALL_COL_NUM), DataStoredRole).toString(),
+            .arg(pSpot->getDxCallStr(),
             match_band ? "True" : "False",
             match_distance ? "True" : "False",
             match_mode ? "True" : "False",
@@ -1751,7 +1677,8 @@ bool DxSpotSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelInd
 
 bool DxSpotSortFilterProxyModel::matchBand(int sourceRow) const
 {
-    QString band = sourceModel()->data(sourceModel()->index(sourceRow, DXBANDSTR_COL_NUM), DataStoredRole).toString();
+    QSharedPointer<ClusterSpotData> pSpot = (dynamic_cast<DxSpotDataModel *>(sourceModel())->getSpotData(sourceRow));
+    QString band = pSpot->getBand();
 
     return filterSettings->getBandFilter(band);
 
@@ -1761,33 +1688,32 @@ bool DxSpotSortFilterProxyModel::matchBand(int sourceRow) const
 bool DxSpotSortFilterProxyModel::matchDistance(int sourceRow) const
 {
     bool ok = false;
-    QString band = sourceModel()->data(sourceModel()->index(sourceRow, DXBANDSTR_COL_NUM), DataStoredRole).toString();
+    QSharedPointer<ClusterSpotData> pSpot = (dynamic_cast<DxSpotDataModel *>(sourceModel())->getSpotData(sourceRow));
+
+    QString band = pSpot->getBand();
 
     if (!filterSettings->getIgnoreDistanceFlag(band))
     {
+        QString distanceStr = pSpot->getDxDist();
+        if (distanceStr.isEmpty() && filterSettings->getIgnoreEmptyDistanceFlag(band))
+        {
+            return false;
+        }
 
-
-            QString distanceStr = sourceModel()->data(sourceModel()->index(sourceRow, DXDIST_COL_NUM), DataStoredRole).toString();
-            if (distanceStr.isEmpty() && filterSettings->getIgnoreEmptyDistanceFlag(band))
-            {
-                return false;
-            }
-
-            int distance = distanceStr.toInt(&ok);
-            if (ok)
-            {
-                return filterSettings->testDistance(distance, band, lessGreaterThanDistanceFlag);
-            }
+        int distance = distanceStr.toInt(&ok);
+        if (ok)
+        {
+            return filterSettings->testDistance(distance, band, lessGreaterThanDistanceFlag);
+        }
      }
-
-
     return true;
-
 }
 
 bool DxSpotSortFilterProxyModel::matchMode(int sourceRow) const
 {
-    QString mode = sourceModel()->data(sourceModel()->index(sourceRow, DXSPOT_MODE_COL_NUM), DataStoredRole).toString();
+    QSharedPointer<ClusterSpotData> pSpot = (dynamic_cast<DxSpotDataModel *>(sourceModel())->getSpotData(sourceRow));
+
+    QString mode = pSpot->getMode();
 
     return filterSettings->getModeFilter(mode);
 
@@ -1798,7 +1724,9 @@ bool DxSpotSortFilterProxyModel::matchWorkedLoc(int sourceRow) const
 {
     if (unWorkedLocFlag)
     {
-        return !sourceModel()->data(sourceModel()->index(sourceRow, DXLOC_WORKED_COL_NUM), DataStoredRole).toBool();
+        QSharedPointer<ClusterSpotData> pSpot = (dynamic_cast<DxSpotDataModel *>(sourceModel())->getSpotData(sourceRow));
+
+        return !pSpot->getDxLocatorWorked();
     }
     else
     {
@@ -1811,7 +1739,9 @@ bool DxSpotSortFilterProxyModel::matchWorkedCallsign(int sourceRow) const
 {
     if (unWorkedCallsignFlag)
     {
-        return !sourceModel()->data(sourceModel()->index(sourceRow, DXSPOT_CALL_WORKED_COL_NUM), DataStoredRole).toBool();
+        QSharedPointer<ClusterSpotData> pSpot = (dynamic_cast<DxSpotDataModel *>(sourceModel())->getSpotData(sourceRow));
+
+        return !pSpot->getDxCallWorked();
     }
     else
     {
@@ -1841,9 +1771,11 @@ bool SearchSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelInd
 {
     if (!searchParameter.isEmpty() && matchBand(sourceRow) && matchMode(sourceRow))
     {
+        QSharedPointer<ClusterSpotData> pSpot = (dynamic_cast<DxSpotDataModel *>(sourceModel())->getSpotData(sourceRow));
+
         if (searchParameter.contains(SEARCH_LOC_EXP))
         {
-            QString loc = sourceModel()->data(sourceModel()->index(sourceRow, DXLOC_COL_NUM), DataStoredRole).toString().mid(0,4);
+            QString loc = pSpot->getDxLocator();
             if (loc.contains(searchParameter, Qt::CaseInsensitive))
             {
                 return true;
@@ -1851,10 +1783,7 @@ bool SearchSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelInd
         }
         else
         {
-            Callsign spotCall;
-            spotCall.setFullCall(sourceModel()->data(sourceModel()->index(sourceRow, DXSPOT_CALL_COL_NUM), DataStoredRole).toString());
-
-            if (spotCall.realCall.contains(searchParameter, Qt::CaseInsensitive))
+            if (pSpot->getDxCall().realCall.contains(searchParameter, Qt::CaseInsensitive))
             {
                 return true;
             }
@@ -1874,12 +1803,11 @@ bool CallsignSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelI
     {
         if (matchBand(sourceRow)  && matchMode(sourceRow))
         {
-            Callsign spotCall;
-            spotCall.setFullCall(sourceModel()->data(sourceModel()->index(sourceRow, DXSPOT_CALL_COL_NUM), DataStoredRole).toString());
+            QSharedPointer<ClusterSpotData> pSpot = (dynamic_cast<DxSpotDataModel *>(sourceModel())->getSpotData(sourceRow));
 
             for (auto &str: filterSettings->unpackFilterList(filterSettings->callsignFilterList))
             {
-                if (spotCall.realCall.contains(str, Qt::CaseInsensitive))
+                if (pSpot->getDxCall().realCall.contains(str, Qt::CaseInsensitive))
                 {
                     return true;
                 }
@@ -1898,8 +1826,9 @@ bool LocatorSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIn
     {
         if (matchBand(sourceRow)  && matchMode(sourceRow))
         {
-            QModelIndex index = sourceModel()->index(sourceRow, DXLOC_COL_NUM);
-            QString locator = sourceModel()->data(index, DataStoredRole).toString().mid(0,4);
+            QSharedPointer<ClusterSpotData> pSpot = (dynamic_cast<DxSpotDataModel *>(sourceModel())->getSpotData(sourceRow));
+
+            QString locator = pSpot->getDxLocator().mid(0,4);
             if (locator != "")
             {
                 if (filterSettings->unpackFilterList(filterSettings->locatorFilterList).contains(locator))

@@ -257,12 +257,12 @@ int IPSystem::tryOutput()
                 nbytes = bc->write(nm);
                 if (nbytes == 0)
                 {
-                    qDebug() << bc->errorString() + " - No data sent\n";
+                    //qDebug() << bc->errorString() + " - No data sent\n";
                     return 0;
                 }
                 else if (nbytes < 0)
                 {
-                    qDebug() << "Write failed " + bc->errorString() + "\n";
+                    //qDebug() << "Write failed " + bc->errorString() + "\n";
                     return -1;  // will kill the thread
                 }
 

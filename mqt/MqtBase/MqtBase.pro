@@ -23,6 +23,8 @@ CONFIG += staticlib
 INCLUDEPATH += ../MqtUtils
 INCLUDEPATH += ../TinyXML
 INCLUDEPATH += ../XMPPLib
+INCLUDEPATH += ../MqtLogger
+
 
 SOURCES += \
     AntennaDetail.cpp \
@@ -54,6 +56,8 @@ SOURCES += \
     contest.cpp \
     cutils.cpp \
     DisplayContestContact.cpp \
+    cwrigkeyervalidator.cpp \
+    cwspeedcontrol.cpp \
     dmkeyseditdlg.cpp \
     dtg.cpp \
     enqdlg.cpp \
@@ -74,6 +78,7 @@ SOURCES += \
     locator.cpp \
     managehamlib.cpp \
     minosNetUtils.cpp \
+    minoscompass.cpp \
     minoscustomtab.cpp \
     minositem.cpp \
     minoskeyboard.cpp \
@@ -103,6 +108,7 @@ SOURCES += \
     rigcontrolcommonconstants.cpp \
     rigutils.cpp \
     RotatorCache.cpp \
+    rotControlFrameBase.cpp \
     rotatorcommon.cpp \
     rotpresetdialog.cpp \
     ScreenContact.cpp \
@@ -110,6 +116,7 @@ SOURCES += \
     serialdata.cpp \
     serialtvswitch.cpp \
     spotbasedata.cpp \
+    toolbuttonupdown.cpp \
     validators.cpp \
     dxspotdatamodel.cpp \
     qttelnet.cpp \
@@ -154,6 +161,8 @@ HEADERS += \
     contest.h \
     cutils.h \
     DisplayContestContact.h \
+    cwrigkeyervalidator.h \
+    cwspeedcontrol.h \
     dmFKeydef.h \
     dmkeyseditdlg.h \
     dtg.h \
@@ -176,6 +185,7 @@ HEADERS += \
     locator.h \
     managehamlib.h \
     minosNetUtils.h \
+    minoscompass.h \
     minoscustomtab.h \
     minositem.h \
     minoskeyboard.h \
@@ -207,6 +217,7 @@ HEADERS += \
     RigState.h \
     rigutils.h \
     RotatorCache.h \
+    rotControlFrameBase.h \
     rotatorcommon.h \
     rotpresetdialog.h \
     ScreenContact.h \
@@ -215,6 +226,7 @@ HEADERS += \
     serialdata.h \
     serialtvswitch.h \
     spotbasedata.h \
+    toolbuttonupdown.h \
     validators.h \
     voicekeyerCommonConstants.h \
     waitcursor.h \

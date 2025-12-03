@@ -3,7 +3,7 @@
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //                      Rotator Control
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2024
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2025
 //
 // Interprocess Control Logic
 // COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2008
@@ -24,13 +24,19 @@
 #include <QPushButton>
 #include <QShortcut>
 #include <QTimer>
+#include <QRegularExpression>
+#include <QRegularExpressionValidator>
 
 #include "CommandReader.h"
+#include "qlineedit.h"
+#include "qspinbox.h"
 #include "rotatorRpc.h"
 #include "rotatorbase.h"
 #include "rotatorfactory.h"
 #include "rotatorcommon.h"
 #include "presetbutton.h"
+#include "skyscancontrol.h"
+#include "toolbuttonupdown.h"
 
 #define NUM_PRESETS 10
 #define OFF false
@@ -53,6 +59,17 @@ namespace Ui {
 class RotatorMainWindow;
 }
 
+
+class CustomSpinBox : public QSpinBox {
+public:
+    using QSpinBox::QSpinBox; // Inherit constructors
+
+    void setReadOnlyLineEdit(bool readOnly) {
+        lineEdit()->setReadOnly(readOnly);
+    }
+};
+
+
 class RotatorMainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -65,6 +82,16 @@ public:
     void initActionsConnections();
 
     const QString version = "2.20";
+
+    int northCalcTarget(int targetBearing, int currentRotatorBearing);
+    int calcRotZero360(int targetBearing);
+    int calcRotNeg180_180(int targetBearing);
+    int calclRot_0_450_Neg180_540(int targetBearing, int currentRotatorBearing);
+
+
+    void setSkyScanCCWIndicatorOnOff(bool state);
+    void setSkyScanCWIndicatorOnOff(bool state);
+
 
 signals:
 
@@ -83,6 +110,13 @@ signals:
     void displayActualBearing(QString);
     void presetRotateTo();
 
+    void sendRotationStatusToSkyScan(int bearing, skyScanBearingStates brgState);
+    void sendSkyScanStartBearingToCompassDial(int bearing);
+    void sendSkyScanEndBearingToCompassDial(int bearing);
+    void sendRotatorEndStopTypeToCompassDial(int endStopType);
+    void sendRotatorSouthStopTypeToCompassDial(int southStopType);
+    void sendAntennaOffsetToCompassDial(int antennaOffset);
+
 
 
 private:
@@ -98,6 +132,7 @@ private:
 
     bool testMode = false;
     QString liveAntenna;
+    int oldBearing = COMPASS_ERROR;
 
     QTimer LogTimer;
     QTimer RotateTimer;
@@ -155,6 +190,21 @@ private:
 
     bool hamlibOk = false;
 
+    QSharedPointer<SkyScanControl> skyScanControl;
+    QSharedPointer<SkyScanButtonState> skyScanButtonState;
+    QSharedPointer<SkyScanButtonState> loggerSkyScanButtonState;
+
+
+    //bool skyScanVisible = false;
+    bool skyScanActive = false;
+    bool saveSkyScanOnClose = false;
+
+
+    SkyScanData activeData;
+
+    QList<QSharedPointer<PresetButton>> skyScanPresetButton;
+    QVector<QSharedPointer<SkyScanData>> skyScanPresetDataList;
+
 
 
     int openRotator();
@@ -183,6 +233,7 @@ private:
     void rotatorError(int errorCode, QString cmd);
 
     void rotatorActive();
+    //void saveSkyScanEnableSetting(QString currentAntennaName);
 
 
 public slots:
@@ -266,9 +317,42 @@ private slots:
 
     void on_rotTabs_currentChanged(int index);
 
+    void skyScanStopPbPressed();
+    void skyScanStartPbPressed();
+
+
+    void skyScanSettingsOnCloseChkBoxChanged();
+
+
+    void skyScanPausePbPressed();
+
+    void skyScanRotateTo(int bearing);
+    void displaySkyScanNextStepBearing(int bearing);
+    void displaySkyScanPauseIntervalCount(int count);
+
+    void skyScanStepDegreesSpinBoxValueChanged(int value);
+    void skyScanPauseTimeSpinBoxValueChanged(int value);
+
+
+
+    void skyScanStartBearingToolbuttonValueChanged(int value);
+    void skyScanEndBearingToolbuttonValueChanged(int value);
+    void onSetSkyScanButtonStateFromLogger(int buttonState);
+    void skyScanPresetRead(int buttonNumber);
+    void skyScanPresetEdit(int buttonNumber);
+    void skyScanPresetClear(int buttonNumber);
+    void showSkyScanPresetMenu(int buttonNumber);
+    void skyScanPresetWrite(int buttonNumber);
+
+
+
+
+    void onSetSkyScanPresetButtonFromLogger(int buttonNumber);
+    void onSkyScanStepDegreeSpinBoxChanged();
+    void onSkyScanPauseTimeSpinBoxChanged();
 private:
     void rotateTo(int bearing);
-    int northCalcTarget(int targetBearing);
+    //int northCalcTarget(int targetBearing);
 
 
 
@@ -284,9 +368,9 @@ private:
     void stop_button_on();
     void stop_button_off();
     void dispRawRotBearing(int);
-    int calcRotZero360(int targetBearing);
-    int calcRotNeg180_180(int targetBearing);
-    int calclRot_0_450_Neg180_540(int targetBearing);
+    //int calcRotZero360(int targetBearing);
+    //int calcRotNeg180_180(int targetBearing);
+    //int calclRot_0_450_Neg180_540(int targetBearing);
     void dumpRotatorToTraceLog();
     void writeWindowTitle(QString appName);
     void readTraceLogFlag();
@@ -299,6 +383,77 @@ private:
     void setCompassDialVisible(bool visible);
     void setTestMode(bool test);
 
+    //void setSkyScanEnableChkBoxEnabled(bool enabled);
+    void saveSkyScanSettings(QString currentAntennaName, SkyScanData &activeData);
+    void readSkyScanSettings(QString currentAntennaName, SkyScanData &activeData);
+    void setSkyScanComponentsEnabled(bool enabled);
+    void closeSkyScan(QString currentAntennaName);
+    void openSkyScan(QString currentAntennaName);
+    void setSkyScanEndBrgLineEditValidator();
+    void setSkyScanStartBrgLineEditValidator();
+    //bool readSkyScanEnableSetting(QString currentAntennaName);
+    void readSkyScanCommonSettings(SkyScanData &activeData);
+    void dumpSkyScanSettingsToTraceLog(SkyScanData &activeData);
+    void setSkyScanGroupBoxEnabled(bool enabled);
+    bool isSkyScanTabVisible();
+    void setTargetTabEnabled(bool enabled);
+    void setPresetsGroupBoxEnabled(bool enabled);
+    void setSkyScanSpinBoxesEnabled(bool enabled);
+    void setSkyScanToolButtonUpDownEnabled(bool enabled);
+    void stopSkyScan();
+    void setSkyScanStartButtonColour(QString style);
+    void setSkyScanStopButtonColour(QString style);
+
+
+
+    void initialiseSpinBox(CustomSpinBox *spinBox, int min, int max, int interval, int initialValue, bool readOnly);
+    void saveSkyScanCommonSettings(SkyScanData &activeData);
+    //void initialiseSkyScannerSpinners();
+
+    void initialiseToolButtonUpDown(ToolButtonUpDown *toolButtonUpDown, int min, int max, int interval, int initialValue, enum southStop southStopType );
+    void setSkyScanStartBearingToolButtonUpDown(SkyScanData &activeData);
+    void setSkyScanEndBearingToolButtonUpDown(SkyScanData &activeData);
+
+    void setRotatorMainWindowTabVisible(int tabNum, bool state);
+    void setSkyScanStartButtonState(bool state);
+    void setSkyScanStopButtonState(bool state);
+    void setSkyScanPauseButtonState(bool state);
+    void sendSkyScanButtonStateToTraceLog();
+    void sendSkyScanStartBearingToLogger(int bearing);
+    void sendSkyScanEndBearingToLogger(int bearing);
+
+    void sendSkyScanTabVisibleToLogger(bool state);
+    void sendSkyScanNextStepToLogger(QString nextStepBearing);
+    void sendSkyScanCountDownToLogger(QString countDown);
+    void sendSkyScanButtonStateToLogger(int state);
+    void setSkyScanPauseButtonColour(QString style);
+
+    void sendRotator_EndStopType_OffSet_SouthStop_ToLogger(endStop endStopType, southStop southStop, int offset);
+
+    void setSkyScanTabVisible(bool visible);
+    void clearSkyScanDisplayCompassDial();
+
+
+    void showTab(QTabWidget *tabWidget, QWidget *tabContent, const QString &tabLabel);
+    void hideTab(QTabWidget *tabWidget, QWidget *tabContent);
+    bool isTabVisible(QTabWidget *tabWidget, QWidget *tabContent);
+    void checkScanStartEndInRotatorRange();
+
+    int calcAntennaBearing(int bearing);
+    void initSkyScanPresetButtons();
+    void loadSkyScanPresets(QString currentAntennaName);
+    void saveSkyScanPreset(SkyScanData &curData, int buttonNumber);
+    void updateSkyScanDisplay(SkyScanData &activeData);
+    void setActivePresetDisplay(const QString presetName);
+    void clearActivePresetDisplay();
+    void setSkyScanPresetIndicationOnOff(int buttonNumber, bool state);
+    void clearAllSkyScanPresetButtonsIndicators(int count);
+
+    void sendSkyScanRotatorStartBearingToLogger(int rotatorStartBearing);
+    void sendSkyScanRotatorEndBearingToLogger(int rotatorEndBearing);
+    void sendSkyScanPresetListLogger();
+    void updateOffsetDisplay(const int offset);
+    void setSkyScanPresetsGroupBoxEnabled(bool enabled);
 };
 
 #endif // ROTATORMAINWINDOW_H

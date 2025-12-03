@@ -242,165 +242,167 @@ int DisplayContestContact::checkContact(bool adddup)
     newBonus = 0;
 
     double dist = getContactScore();    // calculated in CheckableContact
-   bool dupContact = (cs.getValRes() == ERR_DUPCS);    // calculated in CheckableContact
+    bool dupContact = (cs.getValRes() == ERR_DUPCS);    // calculated in CheckableContact
 
-   BaseContestLog * clp = contest;
+    BaseContestLog * clp = contest;
 
-   if ( districtMult && districtMult->country1)
-   {
-      clp->addDistrictWorked(band, districtMult->districtCode);
-      int n = clp->getDistrictsWorked(band, districtMult->districtCode);
-      if ( n <= districtMult->country1->districtLimit() )
-      {
-         clp->ndistrict[band]++;
-         if ( clp->districtMult.getValue() )
-         {
-            multCount++;
-         }
-         newDistrict = true;
-         if (contest->usesBonus.getValue())
-         {
-             distBonus = contest->getDistBonus(districtMult->districtCode);
-             if (distBonus > 0)
-             {
-                 clp->bonus[band] += distBonus;
-                 newBonus++;
-             }
-         }
-      }
-  }
+    if ( districtMult && districtMult->country1)
+    {
+        clp->addDistrictWorked(band, districtMult->districtCode);
+        int n = clp->getDistrictsWorked(band, districtMult->districtCode);
+        if ( n <= districtMult->country1->districtLimit() )
+        {
+            clp->ndistrict[band]++;
+            if ( clp->districtMult.getValue() )
+            {
+                multCount++;
+            }
+            newDistrict = true;
+            if (contest->usesBonus.getValue())
+            {
+                distBonus = contest->getDistBonus(districtMult->districtCode);
+                if (distBonus > 0)
+                {
+                    clp->bonus[band] += distBonus;
+                    newBonus++;
+                }
+            }
+        }
+    }
 
-   if ( ctryMult)
-   {
-       clp->addCountryWorked(band, ctryMult->getBasePrefix());
-       int n = clp->getCountriesWorked(band, ctryMult->getBasePrefix());
-       if ( n == 1 )
-       {
+    if ( ctryMult)
+    {
+        clp->addCountryWorked(band, ctryMult->getBasePrefix());
+        int n = clp->getCountriesWorked(band, ctryMult->getBasePrefix());
+        if ( n == 1 )
+        {
             clp->nctry[band]++;   // DXCC mults
             if ( clp->countryMult.getValue() )
             {
-              multCount++;
+                multCount++;
             }
             newCtry = true;
             if (contest->usesBonus.getValue())
             {
-              countryBonus = contest->getCountryBonus(ctryMult->getBasePrefix());
-              if (countryBonus > 0)
-              {
-                  clp->bonus[band] += countryBonus;
-                  newBonus++;
-              }
+                countryBonus = contest->getCountryBonus(ctryMult->getBasePrefix());
+                if (countryBonus > 0)
+                {
+                    clp->bonus[band] += countryBonus;
+                    newBonus++;
+                }
             }
-       }
-   }
+        }
+    }
 
-   if ( !notValidContact() )
-   {
-       if (!clp->locatorMandatoryField.getValue())
-       {
+    if ( !notValidContact() )
+    {
+        if (!clp->locatorMandatoryField.getValue())
+        {
             dist = 1;
-       }
-       else if (contest->MGMContestRules.getValue())
-       {
-           int brg;
+        }
+        else if (contest->MGMContestRules.getValue())
+        {
+            int brg;
             dist = clp->CalcCentres ( loc.getLoc(), brg );
             if ( almost_equal(dist, 1.0, 2))
                 dist = 50;  // MGM same square == 50 points
-       }
-       else if ( loc.getLoc().size() == 4 && clp->allowLoc4.getValue() )
-       {
-          dist = clp->CalcNearest( loc.getLoc() ); // deal with 4 char locs
-       }
-       contactScore.setValue( static_cast<int>(dist) );
-   }
+        }
+        else if ( loc.getLoc().size() == 4 && clp->allowLoc4.getValue() )
+        {
+            dist = clp->CalcNearest( loc.getLoc() ); // deal with 4 char locs
+        }
+        contactScore.setValue( static_cast<int>(dist) );
+    }
 
-   if (!dupContact)
-   {
-       if (!clp->locatorMandatoryField.getValue() || contactScore.getValue() >= 0 )   		// don't add -1 scores in, but DO add zero km
-          // as it is 1 point.
-       {
-          int cscore = contactScore.getValue();
-          switch ( clp->scoreMode.getValue() )
-          {
-             case PPKM:
-                {
-                   if ( contactFlags.getValue() & XBAND )
-                   {
-                      cscore = ( cscore + 1 ) / 2;
-                   }
-                   if (!dupContact)
-                        clp->contestScore += cscore;
-                }
-                break;
-
-             case PPQSO:
-                if ( cscore > 0 && !dupContact)
-                   clp->contestScore++;
-                break;
-
-          }
-       }
-
-      // now look at the locator list
-      QString letters;
-      QString numbers;
-
-      QString sloc = loc.getLoc().mid(0, 4);
-
-      letters = sloc.left(2);
-      numbers = sloc.mid(2, 2);
-
-      LocSquare *ls = nullptr;
-
-      for ( auto const &i: QASCONST(clp->locs[band].llist) )
-      {
-          LocSquare *locsq = i.wt.data();
-          if ( strnicmp ( locsq ->loc, letters, 2 ) == 0 )
-          {
-              ls = locsq;
-              break;
-          }
-
-      }
-
-      if ( !ls )
-      {
-         if (letters.size() >= 2 && letters[ 0 ].isLetter() && letters[ 1 ].isLetter() )
-         {
-            ls = new LocSquare ( letters );
-            MapWrapper<LocSquare> wls(ls);
-            if (!clp->locs[band].llist.contains(wls))
-                clp->locs[band].llist.insert ( wls, wls );
-         }
-      }
-
-      int oldMultCount = multCount;
-      if ( ls )
-      {
-         LocCount * npt = ls->map ( numbers );
-         if ( npt && npt->locCount == 0 )
-         {
-            if (clp->usesBonus.getValue())
+    if (!dupContact)
+    {
+        if (!clp->locatorMandatoryField.getValue() || contactScore.getValue() >= 0 )   		// don't add -1 scores in, but DO add zero km
+        // as it is 1 point.
+        {
+            int cscore = contactScore.getValue();
+            switch ( clp->scoreMode.getValue() )
             {
-              locBonus = clp->getSquareBonus(sloc);
+            case PPKM:
+            {
+                if ( contactFlags.getValue() & XBAND )
+                {
+                    cscore = ( cscore + 1 ) / 2;
+                }
+                if (!dupContact)
+                    clp->contestScore += cscore;
+            }
+            break;
 
-               if (locBonus > 0)
-               {
-                  clp->bonus[band] += locBonus;
-                  newBonus++;
-               }
+            case PPQSO:
+                if ( cscore > 0 && !dupContact)
+                    clp->contestScore++;
+                break;
+
+            }
+        }
+
+        // now look at the locator list
+        QString letters;
+        QString numbers;
+
+        QString sloc = loc.getLoc().mid(0, 4);
+
+        letters = sloc.left(2);
+        numbers = sloc.mid(2, 2);
+
+        LocSquare *ls = nullptr;
+
+        for ( auto const &i: QASCONST(clp->locs[band].llist) )
+        {
+            LocSquare *locsq = i.wt.data();
+            if ( strnicmp ( locsq ->loc, letters, 2 ) == 0 )
+            {
+                ls = locsq;
+                break;
             }
 
-            clp->nlocs[band] += 1;
-            multCount += clp->loc_multiplier;
-            newLoc = true;
+        }
 
-            npt->locCount++;
-         }
-      }
-      locMultCount = multCount - oldMultCount;
-   }
-   return checkret;
+        if ( !ls )
+        {
+            if (letters.size() >= 2 && letters[ 0 ].isLetter() && letters[ 1 ].isLetter() )
+            {
+                ls = new LocSquare ( letters );
+                MapWrapper<LocSquare> wls(ls);
+                if (!clp->locs[band].llist.contains(wls))
+                    clp->locs[band].llist.insert ( wls, wls );
+            }
+        }
+
+        int oldMultCount = multCount;
+        if ( ls )
+        {
+            LocCount * npt = ls->map ( numbers );
+            if ( npt)
+            {
+                if (npt->locCount == 0 )
+                {
+                    if (clp->usesBonus.getValue())
+                    {
+                        locBonus = clp->getSquareBonus(sloc);
+
+                        if (locBonus > 0)
+                        {
+                            clp->bonus[band] += locBonus;
+                            newBonus++;
+                        }
+                    }
+
+                    clp->nlocs[band] += 1;
+                    multCount += clp->loc_multiplier;
+                    newLoc = true;
+                }
+                npt->locCount++;
+            }
+        }
+        locMultCount = multCount - oldMultCount;
+    }
+    return checkret;
 }
 
 QString DisplayContestContact::getField( int ACol, const BaseContestLog *const curcon ) const

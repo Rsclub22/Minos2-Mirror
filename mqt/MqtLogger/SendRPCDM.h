@@ -13,6 +13,7 @@
 #include "RigCache.h"
 #include "RotatorCache.h"
 #include "clustercommon.h"
+#include "rotatorcommon.h"
 
 //---------------------------------------------------------------------------
 class MinosRPCObj;
@@ -32,9 +33,12 @@ class TSendDM : public QObject
       bool clusterServerLoaded = false;
       bool clusterConnected = false;
 
+      bool pcCwKeyerLoaded = false;
+      bool pcCwKeyerConnected = false;
 
       PubSubName keyerApp;
       PubSubName clusterApp;
+      PubSubName pcCwKeyerApp;
 
       QString loggerUuid;
 
@@ -90,6 +94,10 @@ class TSendDM : public QObject
       void sendRigStopTxVoiceMessage(TSingleLogFrame *tslf, const QString &msg);
       void sendRigTxCwMessage(TSingleLogFrame *tslf, const QString &msg);
 
+      void sendPcKeyerTxCwMessage(const QString &msg);
+      void sendPcKeyerTxCwStop(const QString &msg);
+
+
       void sendRigControlMode(TSingleLogFrame *tslf, const QString &mode);
       void sendRigControlVolumeLevel(TSingleLogFrame *tslf, int level);
       void sendRigControlPassBandState(TSingleLogFrame *tslf,const int state);
@@ -134,8 +142,22 @@ class TSendDM : public QObject
       {
           return clusterConnected;
       }
+      bool isPcCWkeyerLoaded()
+      {
+          return pcCwKeyerLoaded;
+      }
+      bool isPcCwKeyerConnected()
+      {
+          return pcCwKeyerConnected;
+      }
 
-private slots:
+
+      void sendSkyScanControlPanelButtonState(TSingleLogFrame *tslf, const SkyScanButtonState state);
+      void sendRotatorSkyScanPresetNumberToRotator(TSingleLogFrame *tslf, int buttonNumber);
+
+      void sendPcKeyerCwWpm(const int &wpm);
+
+  private slots:
       void on_routerCall( bool err, QSharedPointer<MinosRPCObj>mro, const QString from );
       void on_notify(AnalysePubSubNotify an, const QString from );
 
@@ -153,6 +175,13 @@ private slots:
 
       void keyerConfig(QString, QString);
       void keyerReport(QString);
+
+      void pcCwKeyerComport(QString);
+      void pcCwKeyerConnectionState(QString);
+      void pcCwKeyerErrorMsg(QString);
+      void pcCwKeyerPttEnabled(QString);
+      void pcCwKeyerTxOn(QString);
+      void pcCwKeyerCurrentWpm(QString);
 
 };
 #endif

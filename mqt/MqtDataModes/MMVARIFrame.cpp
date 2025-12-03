@@ -268,8 +268,34 @@ void MMVARIFrame::onSendCharacters(QString data, int markfreq)
 
 void MMVARIFrame::onRigModeFreq(QString mode, Frequency f)
 {
-    mmview->setDwFreqHz(f.toInt64());  // tranciever frequency
-    sendMode(mode);
+    trace(QString("MMVARIFrame::onRigModeFreq entry mode %1 freq %2").arg(mode, f.traceStr()));
+
+    if (!mode.isEmpty())
+    {
+        sendMode(mode);
+    }
+
+    if (!f.isClear())
+    {
+        // MMVARI wants the genuine rig frequency
+        if (mode == RY)
+        {
+            int rttyOffset = engineWindow->getRttyOffset();
+            f = f + Frequency(rttyOffset);  // back to Rig frequency
+            mmview->setDwFreqHz(f.toInt64());  // tranciever frequency
+            mmvari->setWTxCarrier(rttyOffset + RttyMSGap/2);
+            mmvari->setWRxCarrier(0, rttyOffset + RttyMSGap/2);
+        }
+        else if (mode == PSK)
+        {
+            int pskOffset = engineWindow->getPSKOffset();
+            f = f - Frequency(pskOffset);
+            mmview->setDwFreqHz(f.toInt64());  // tranciever frequency
+            mmvari->setWTxCarrier(pskOffset);
+            mmvari->setWRxCarrier(0, pskOffset);
+        }
+        trace(QString("MMVARIFrame::onRigModeFreq exit freq %1 RTTYMSGap %2").arg(f.traceStr(), Frequency(RttyMSGap).traceStr()));
+    }
 
 }
 void MMVARIFrame::sendCharacters(const QString &sendData, int mf)
@@ -305,8 +331,8 @@ void MMVARIFrame::sendCharacters(const QString &sendData, int mf)
         {
             if (mf > 0)
             {
-                mmvari->setWTxCarrier(mf + 170/2);
-                mmvari->setWRxCarrier(0, mf + 170/2);
+                mmvari->setWTxCarrier(mf + RttyMSGap/2);
+                mmvari->setWRxCarrier(0, mf + RttyMSGap/2);
             }
         }
         mmvari->setBAddStartCR(true);

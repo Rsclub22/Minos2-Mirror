@@ -48,67 +48,66 @@ int audioCallback( void *outputBuffer, void *inputBuffer,
     RtAudioSoundSystem *qss = static_cast<RtAudioSoundSystem *>(userData);
     return qss->audioCallback(outputBuffer, inputBuffer, nFrames, streamTime, status);
 }
+void errorCallback( RtAudioErrorType /*type*/, const std::string &errorText)
+{
+    trace(QString("RTAudio error callback: ") + errorText.c_str());
+}
 //==============================================================================
 RtAudioSoundSystem::RtAudioSoundSystem()
 {
-    try
-    {
-       audio = new RtAudio();
+   audio = new RtAudio(RtAudio::UNSPECIFIED, &errorCallback);
 
-       unsigned int defInput = audio->getDefaultInputDevice();
-       unsigned int defOutput = audio->getDefaultOutputDevice();
-       unsigned int devices = audio->getDeviceCount();
-       RtAudio::DeviceInfo info;
-       for ( unsigned int i=0; i<devices; i++ ) {
-         info = audio->getDeviceInfo( i );
-         if ( info.probed == true ) {
-           trace( "device = "  + QString::number(i) +  " " + info.name.c_str());
-           trace( "Maximum output channels = " + QString::number(info.outputChannels) + " Maximum input channels = " + QString::number(info.inputChannels));
-         }
-         QString buff("Sample rates: ");
-         for (auto r:info.sampleRates)
-         {
-             QString pref;
-             if (r == info.preferredSampleRate)
-             {
-                 pref = "**";
-             }
-             buff += pref + QString::number(r) + pref + " ";
-         }
-         trace(buff);
 
-         if (i == defInput)
-         {
-             trace("(Default input)");
-             defaultInput = info.name.c_str();
-         }
-         if (i == defOutput)
-         {
-             trace("(Default output)");
-             defaultOutput = info.name.c_str();
-         }
-         if (info.inputChannels)
-         {
-             inputDevices.append(info.name.c_str());
-         }
-         if (info.outputChannels)
-         {
-             outputDevices.append(info.name.c_str());
-         }
-         deviceIds[QString(info.name.c_str())] = i;
-         inChannels[info.name.c_str()] = info.inputChannels;
-         outChannels[info.name.c_str()] = info.outputChannels;
-         trace( QString(info.name.c_str()) + " output channels = "
-               + QString::number(outChannels[info.name.c_str()])
-               + " input channels = " + QString::number(inChannels[info.name.c_str()]));
-       }
-    }
-    catch (RtAudioError &error)
-    {
-       // Handle the exception here
-       trace(error.getMessage().c_str());
-       audio = nullptr;
-    }
+   std::vector<unsigned int> devices = audio->getDeviceIds();
+   //trace(QString("Found %1 device(s)").arg(devices.size()));
+
+   unsigned int defInput = audio->getDefaultInputDevice();
+   unsigned int defOutput = audio->getDefaultOutputDevice();
+
+   for (unsigned int i=0; i<devices.size(); i++)
+   {
+       RtAudio::DeviceInfo info = audio->getDeviceInfo( devices[i] );
+
+
+     //   trace( "device = "  + QString::number(i) +  " " + info.name.c_str());
+     //   trace( "Maximum output channels = " + QString::number(info.outputChannels) + " Maximum input channels = " + QString::number(info.inputChannels));
+     // QString buff("Sample rates: ");
+     // for (auto r:info.sampleRates)
+     // {
+     //     QString pref;
+     //     if (r == info.preferredSampleRate)
+     //     {
+     //         pref = "**";
+     //     }
+     //     buff += pref + QString::number(r) + pref + " ";
+     // }
+     // trace(buff);
+
+     if (i == defInput)
+     {
+         //trace("(Default input)");
+         defaultInput = info.name.c_str();
+     }
+     if (i == defOutput)
+     {
+         //trace("(Default output)");
+         defaultOutput = info.name.c_str();
+     }
+     if (info.inputChannels)
+     {
+         inputDevices.append(info.name.c_str());
+     }
+     if (info.outputChannels)
+     {
+         outputDevices.append(info.name.c_str());
+     }
+     deviceIds[QString(info.name.c_str())] = devices[i];
+     inChannels[info.name.c_str()] = info.inputChannels;
+     outChannels[info.name.c_str()] = info.outputChannels;
+     // trace( QString(info.name.c_str()) + " output channels = "
+     //       + QString::number(outChannels[info.name.c_str()])
+     //       + " input channels = " + QString::number(inChannels[info.name.c_str()]));
+   }
 }
 RtAudioSoundSystem::~RtAudioSoundSystem()
 {
@@ -127,19 +126,17 @@ RtAudioSoundSystem::~RtAudioSoundSystem()
        replayfilter2 = nullptr;
     }
 }
-void errorCallback( RtAudioError::Type /*type*/, const std::string &errorText)
-{
-    trace(QString("RTAudio error callback: ") + errorText.c_str());
-}
 bool RtAudioSoundSystem::initialise( QString ind, QString outd, QString host, QString port  )
 {
     if (!audio)
     {
-        audio = new RtAudio();
+        audio = new RtAudio(RtAudio::UNSPECIFIED, &errorCallback);
     }
 
     curInDev = ind;
     curOutDev = outd;
+
+    trace(QString("RtAudioSoundSystem::initialise ind %1 outd %2").arg(ind, outd));
 
     bool oip = false;
     RtAudio::StreamParameters outParams;
@@ -178,19 +175,16 @@ bool RtAudioSoundSystem::initialise( QString ind, QString outd, QString host, QS
     soptions.priority = 0;
     soptions.streamName = "";
 
-    try
+     RtAudioErrorType err = audio->openStream(oip?nullptr:&outParams,
+                  iip?nullptr:&inParams,
+                  RTAUDIO_SINT16, sampleRate,
+                  &bufferFrames, ::audioCallback,
+                  static_cast<void *>(this),
+                  &soptions
+                  );
+    if(err != RTAUDIO_NO_ERROR)
     {
-        audio->openStream(oip?nullptr:&outParams,
-                      iip?nullptr:&inParams,
-                      RTAUDIO_SINT16, sampleRate,
-                      &bufferFrames, ::audioCallback,
-                      static_cast<void *>(this),
-                      &soptions,
-                      &errorCallback
-                      );
-    } catch (RtAudioError &error)
-    {
-        trace(error.getMessage().c_str());
+        trace(QString(audio->getErrorText().c_str()));
         return false;
     }
 

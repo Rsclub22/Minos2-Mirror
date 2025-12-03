@@ -38,7 +38,9 @@ public:
 
     void sendCwMsg(VoiceKeyerParams &vmParams) override {Q_UNUSED(vmParams)};
     void stopCwMsg() override {};
+
     void setCwMemType(int cwMemType) override {Q_UNUSED(cwMemType)};
+    void sendCwFreeTextMsg(QString message) override {Q_UNUSED(message)};
     bool getSetCwModeAndRestoreFlag() override {return false;};
 
     virtual bool hasRecord() override {return false;}
@@ -50,6 +52,7 @@ public:
     //int getKeyerState(int &state) override;
     void setPttOnOff(bool onOff) override;
     int getSelectedEomType() override;
+    virtual void setSelectedEomType(int eomType)override{Q_UNUSED(eomType)};
 
     bool readVmButtonParams(int buttonNum, VoiceKeyerParams &vmParams) override;
     void saveVmButtonParams(const VoiceKeyerParams &vmParams) override;
@@ -59,7 +62,7 @@ public:
     virtual int editButton(VoiceKeyerParams* vmData, QString title) override;
 
 
-    void setSelectedEomType(int selectedEomType_);
+
 
     virtual void setContest(BaseContestLog *c) override {Q_UNUSED(c)};
 

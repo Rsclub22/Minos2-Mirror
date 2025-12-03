@@ -58,6 +58,7 @@ static const QString clusterBandmask ("ClusterBandmask");
 static const QString clusterFrameId ("ClusterFrameId");
 static const QString clusterReconnect ("ClusterReconnect");
 
+
 // QRZ Server
 static const QString qrzServerApp  ("qrzServerApp");
 static const QString qrzDisplayApp ("qrzDisplayApp");
@@ -137,6 +138,20 @@ static const QString winkeyerApp           ("mqtWinKeyer");
 static const QString winkeyerDisplayApp    ("winkeyerDisplayApp");
 
 
+// PcCwKeyer
+static const QString pcCwKeyerApp       ("mqtPcCwKeyer");
+static const QString pcCwKeyerMethod     ("Minos:PcCwKeyer");
+static const QString cwMessageToPcCwKeyer ("cwMessageToPcCwKeyer");
+static const QString cwStopToPcCwKeyer ("cwStopToPcCwKeyer");
+static const QString pcCwKeyerCwMessage ("pcCwKeyerCwMessage");
+static const QString pcCwKeyerStopMsg ("pcCwKeyerStopMsg");
+static const QString pcCwKeyerCategory    ("PcCwKeyerCategory");
+static const QString pcCwKeyerReport      ("PcCwKeyerReport");
+static const QString pcCwKeyerPttEnabled ("pcCwKeyerPttEnabled");
+static const QString pcCwKeyerTxOn ("pcCwKeyerTxOn");
+static const QString cwWpmToPcCwKeyer ("cwWpmToPcCwKeyer");
+static const QString pcCwKeyerWpm   ("pcCwKeyerWpm");
+static const QString pcCwWpmToLog  ("pcCwWpmToLog");
 
 // Control
 static const QString controlApp         ("mqtControl");
@@ -169,17 +184,34 @@ static const QString RotatorCategory    ("Rotator");
 static const QString rotatorDetailCategory    ("RotatorDetail");
 static const QString rotatorStateCategory    ("RotatorState");
 static const QString rotatorPresetsCategory ("RotatorPresets");
+static const QString rotatorSkyScanPresetsCategory ("RotatorSkyScanPresets");
 static const QString rotatorStatus       ("RotStatus");
 static const QString rotatorBearing     ("Bearing");
 static const QString rotatorList        ("rotList");
 static const QString rotPreset  ("RotPreset");
 static const QString rotPresetList  ("RotPresetList");
+static const QString rotSkyScanPresetList ("RotSkyScanPreset");
 static const QString rotCwCcwCmdEnable ("RotCwCcwCmdEnable");
 
 static const QString rotatorSelectAntennaName ("SelectAntennaName");
 static const QString rotatorMaxAzimuth  ("MaxAzimuth");
 static const QString rotatorMinAzimuth  ("MinAzimuth");
 static const QString supportStopCommand ("SupportStopCommand");
+static const QString rotatorStopSouthStopOffsetData ("StopSouthStopOffsetData");
+// SkyScan
+
+
+
+static const QString skyScanVisible ("SkyScanVisible");
+static const QString skyScanStartBearing ("SkyScanStartBearing");
+static const QString skyScanEndBearing ("SkyScanEndBearing");
+static const QString skyScanNextStep ("SkyScanNextStep");
+static const QString skyScanCountDown ("SkyScanCountDown");
+static const QString skyScanButtonState ("SkyScanButtonState");
+static const QString skyScanPresetNumber ("SkyScanPresetNumbe");
+static const QString skyScanReverseScan ("SkyScanReverseScan");
+static const QString skyScanRotatorStartBearimg ("SkyScanRotatorStartBearing");
+static const QString skyScanRotatorEndBearimg ("SkyScanRotatorEndBearing");
 
 // Rig Control
 static const QString rigControlApp         ("mqtRigControl");
@@ -219,6 +251,8 @@ static const QString rigPttEnabled ("PttEnabled");
 static const QString rigPttType ("PttType");
 static const QString rigPttState  ("PttState");
 static const QString rigPttOnOff ("PttOnOff");
+static const QString rigRttyOffset ("RttyOffset");
+static const QString rigPSKOffset ("PSKOffset");
 static const QString rigVoiceMemAvail ("VoiceMemAvail");
 static const QString rigNumberVoiceMessages ("NumberOfVoiceMessages");
 static const QString rigCwMemType ("CwMemType");
@@ -229,6 +263,7 @@ static const QString rigRigModel ("rigRigModel");
 // KSTClient
 static const QString KSTClientApp           ("mqtKSTClient");
 static const QString KSTTransfer            ("KSTXfer");
+static const QString KSTTransferMeep        ("KSTXferMeep");
 static const QString KSTTransferCall        ("KSTXferCall");
 static const QString KSTTransferLocator     ("KSTXferLoc");
 static const QString KSTTransferFrequency   ("KSTXferQRG");
