@@ -185,7 +185,7 @@ class KeyerTab : public QWidget
     Q_OBJECT
 
 public:
-    explicit KeyerTab(const QString &keyerType, DMKeyerContainer* keyerContainer,
+    explicit KeyerTab(const QString &keyerType, DMKeyerContainer *keyerContainer,
                       QWidget *parent = nullptr);
     ~KeyerTab();
 
@@ -219,11 +219,11 @@ public:
 
 
 
-    void setContest(const QSharedPointer<BaseContestLog>& contest)
+    void setContest(LoggerContestLog* contest)
     {
         currentContest = contest;
     }
-    QSharedPointer<BaseContestLog> getContest() const
+    LoggerContestLog* getContest() const
     {
         return currentContest;
     }
@@ -571,7 +571,7 @@ public:
 
 private:
 
-     QSharedPointer<BaseContestLog> currentContest;
+    LoggerContestLog* currentContest = nullptr;
 
     // radio settings
 

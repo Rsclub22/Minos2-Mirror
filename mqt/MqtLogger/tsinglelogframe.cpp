@@ -58,6 +58,14 @@ TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
 }
 TSingleLogFrame::~TSingleLogFrame()
 {
+    //***********************************************
+    if (dmKeyerContainer)
+    {
+        dmKeyerContainer->setParent(nullptr);
+        delete dmKeyerContainer;
+        dmKeyerContainer = nullptr;
+    }
+
     delete ui;
 
     ui = nullptr;
@@ -399,6 +407,7 @@ void TSingleLogFrame::createScreenComponents()
 
 
 }
+
 void TSingleLogFrame::clearScreenLayout(bool clearAllTabs)
 {
     // clear down the screen elements, but don't delete them (except for the aux frames) - they will be used to rebuild the screen
@@ -417,6 +426,7 @@ void TSingleLogFrame::clearScreenLayout(bool clearAllTabs)
         msg = "null contest";
         traceMsg("clearScreenLayout starts for " + msg);
     }
+
 
     QSOListFrame->setContest(nullptr);
     FKHRigControlFrame->setContest(nullptr);
@@ -439,7 +449,7 @@ void TSingleLogFrame::clearScreenLayout(bool clearAllTabs)
     clusterControlFrame->setContest(nullptr);
     bandmapControlFrame->setContest(nullptr);
     qsoMapFrame->setContest(nullptr, false, false, false, false, false, QString(), QString(), false);
-    dmKeyerContainer->setContest(nullptr);
+
 
     setBandmapLoaded(false);
     setQrzDisplayFrameLoaded(false);
@@ -455,9 +465,12 @@ void TSingleLogFrame::clearScreenLayout(bool clearAllTabs)
     bandmapControlFrame->setParent(this);
     bandmapControlFrame->hide();
 
+    dmKeyerContainer->setParent(this);
+    dmKeyerContainer->hide();
+
     if (LogContainer->isLoggerClosing())
     {
-        // do nothing more...
+        // nothing here
     }
     else
     {
@@ -515,8 +528,7 @@ void TSingleLogFrame::clearScreenLayout(bool clearAllTabs)
         qsoMapFrame->setParent(this);
         qsoMapFrame->hide();
 
-        dmKeyerContainer->setParent(this);
-        dmKeyerContainer->hide();
+
 
         if (clearAllTabs)
         {

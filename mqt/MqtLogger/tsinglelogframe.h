@@ -2,7 +2,7 @@
 #define TSINGLELOGFRAME_H
 
 #include "ContestPage.h"
-#include "dmbuttonframe.h"
+//#include "dmbuttonframe.h"
 #include "rigmemcommondata.h"
 #include "qsotableframe.h"
 #include "MatchTreeFrame.h"
@@ -80,7 +80,7 @@ public:
     QSOMapFrame *qsoMapFrame = nullptr;
 
     //DMButtonFrame *dmButtonFrame = nullptr;
-    DMKeyerContainer *dmKeyerContainer;
+    DMKeyerContainer *dmKeyerContainer = nullptr;
 
     void buildRow(ContestPage *cp, SCRow &scrow, int &auxInstance, MinosSplitter *splitterParent);
 

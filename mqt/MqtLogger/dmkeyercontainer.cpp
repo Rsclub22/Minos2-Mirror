@@ -12,7 +12,7 @@
 //=============================================================================
 
 KeyerTab::KeyerTab(const QString &keyerType_,
-                   DMKeyerContainer* keyerContainer,
+                   DMKeyerContainer *keyerContainer,
                    QWidget *parent)
     : QWidget(parent)
     , keyerType(keyerType_)
@@ -34,6 +34,7 @@ KeyerTab::KeyerTab(const QString &keyerType_,
 KeyerTab::~KeyerTab()
 {
     // buttonFrame deleted by Qt parent-child relationship
+
 }
 
 void KeyerTab::setActive(bool active_)
@@ -114,6 +115,7 @@ DMKeyerContainer::DMKeyerContainer(QWidget *parent, ContainerMode mode)
 
 DMKeyerContainer::~DMKeyerContainer()
 {
+
 }
 
 void DMKeyerContainer::setMode(ContainerMode mode)
@@ -443,12 +445,12 @@ void DMKeyerContainer::setupFrameConnections(DMButtonFrame *frame)
 
 void DMKeyerContainer::setContest(BaseContestLog *contest)
 {
-    QSharedPointer<LoggerContestLog> ct;
+    LoggerContestLog* ct = nullptr;
 
     if (contest)
     {
         // Only wrap if contest is a LoggerContestLog
-        ct = QSharedPointer<LoggerContestLog>(dynamic_cast<LoggerContestLog*>(contest));
+        ct = dynamic_cast<LoggerContestLog*>(contest);
         if (!ct)
         {
             qWarning() << "setContest: contest is not a LoggerContestLog";

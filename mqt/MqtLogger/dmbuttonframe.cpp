@@ -31,6 +31,8 @@
 #include "cwrigkeyervalidator.h"
 #include "dmkeyercontainer.h"
 
+#include <QThread>
+
 
 
 #include "dmbuttonframe.h"
@@ -47,6 +49,32 @@ inline const QStringList vmButtonShortCutKeys = {
     "Shift+F9", "Shift+F10",
     "Shift+F11", "Shift+F12",
 };
+
+// Defines the layout of the Keyer Ui
+struct UiElementCfg
+{
+    bool showCwEntryBox;
+    bool showTxStatus;
+    bool showKeyerIndicators;
+    bool showPttIndicators;
+    bool showStopButton;
+    bool showRadioLabel;
+    bool showPip;
+    bool showAvailIndicator;
+    bool showRepeatIndicator;
+    bool showCwSpeedSlider;
+};
+
+std::map<TxKeyerId, UiElementCfg> keyerUiMap = {
+//                          CwEntryBox  TxStatus    KeyIndicator    PTTIndicator    StopBtn RadioLbl    Pip     AvailInd    RepeatInd   CwSpeedSlider
+    { TxKeyerId::None,           { false,   false,      false,          false,          false,  false,      false,  false,      false,      false } },
+    { TxKeyerId::RigControl,     { false,   true,       true,           true,           true,   true,       false,   true,       true,      false } },
+    { TxKeyerId::CW_RigControl,  { true,    true,       true,           true,           true,   true,       false,   true,       true,      false } },
+    { TxKeyerId::PcCwKeyer,      { true,    true,       true,           true,           true,   false,      false,   true,       true,      true } },
+    { TxKeyerId::InternalVoiceKeyer, { false, true,     true,           true,           true,   false,      false,   true,       true,      false } },
+    // Add other keyers as needed
+};
+
 
 inline const QString DIGIMODE = "DigitalMode";
 
@@ -109,6 +137,8 @@ DMButtonFrame::DMButtonFrame(DMKeyerContainer* keyerContainer_, QWidget *parent)
     connect(extKeyerConnectTimer, &QTimer::timeout, this, &DMButtonFrame::onExtConnectTimer);
     connect(LogContainer->sendDM, &TSendDM::keyerReport, this, &DMButtonFrame::onExtConnectTimer);
 
+    creatCwSlider();
+
     QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + VOICEKEYER_COMMON_PARAMS_FILENAME;
     QSettings config(fileName, QSettings::IniFormat);
     config.beginGroup(VOICEKEYER_COMMON_PARAMS_GROUPNAME);
@@ -169,7 +199,16 @@ DMButtonFrame::DMButtonFrame(DMKeyerContainer* keyerContainer_, QWidget *parent)
 
 DMButtonFrame::~DMButtonFrame()
 {
+
+    if (keyerContainer)
+    {
+        disconnect(keyerContainer, nullptr, this, nullptr);
+        keyerContainer = nullptr;
+    }
+
     delete ui;
+
+
 }
 
 
@@ -437,7 +476,8 @@ void DMButtonFrame::onTxKeyerSelect(int idx)
         {
             createKeyer(txKeyerName);   // don't create a keyer when in Digimode
         }
-        setFrameState(txKeyerName);
+        //setFrameState(txKeyerName);
+        setFrameStateForKeyer(txKeyerName);
     });
 
 
@@ -458,6 +498,136 @@ void  DMButtonFrame::onCwMacroTextProcessed(const QString &cwTextSent)
     }
 
 }
+
+
+
+void DMButtonFrame::setFrameStateForKeyer(QString txKeyerName)
+{
+    if (!ct) return;
+
+    TxKeyerId txKeyerId;
+
+    if (txKeyerName.isEmpty())
+    {
+        txKeyerId =TxKeyerId::None;
+    }
+    else
+    {
+        txKeyerId = txKeyerNameToId(txKeyerName);
+    }
+
+
+
+    // Clear UI elements first
+    clearAll_Ui_Elements();
+    ui->noExtKeyerLabel->clear();
+    clearErrorMessage();
+
+
+    switch (txKeyerId)
+    {
+    case TxKeyerId::RigControl:
+        currentName = ct->rigControlCurrentFKeySetContest.getValue();
+        fkeyFileName = TX_KEYER_PATH().append(rigControlKeyerConfigFilename);
+        break;
+    case TxKeyerId::CW_RigControl:
+        currentName = ct->cwRigControlCurrentFKeySetContest.getValue();
+        fkeyFileName = TX_KEYER_PATH().append(cwRigControlKeyerConfigFilename);
+        break;
+    case TxKeyerId::PcCwKeyer:
+        currentName = ct->pcCwKeyerCurrentFKeySetContest.getValue();
+        fkeyFileName = TX_KEYER_PATH().append(pcCwKeyerKeyerConfigFilename);
+        break;
+    case TxKeyerId::InternalVoiceKeyer:
+        currentName = ct->internalVoiceKeyerCurrentFKeySetContest.getValue();
+        fkeyFileName = TX_KEYER_PATH().append(InternalKeyerConfigFilename);
+        break;
+    case TxKeyerId::None:
+    default:
+        txKeyParamList.clear();
+        currentName.clear();
+        return;     // exit.....
+        break;
+    }
+
+    // Load the keyer configuration file
+    readSingleKeyerFile(fkeyFileName, selectedKeyerCap.getKeyerType());
+
+    // Apply the UI config map
+    if (!keyerUiMap.count(txKeyerId)) return;
+    const UiElementCfg &cfg = keyerUiMap[txKeyerId];
+
+    setCWEntryElementsVisible(cfg.showCwEntryBox);
+    setTXStatusVisible(cfg.showTxStatus);
+    setKeyerIndicatorGroupBoxVisible(cfg.showKeyerIndicators);
+    setPttIndicatorGroupBoxVisible(cfg.showPttIndicators);
+
+    ui->stopButton->setVisible(cfg.showStopButton);
+    ui->selectedRadioLabel->setVisible(cfg.showRadioLabel);
+    ui->pipCb->setVisible(cfg.showPip);
+
+    setAvailIndicatorVisible(cfg.showAvailIndicator);
+    setRepeatIndicatorVisible(cfg.showRepeatIndicator);
+
+    // Handle CW speed slider dynamically
+    if (cfg.showCwSpeedSlider)
+    {
+        qDebug() << "show" << "cwSpeedSlider=" << cwSpeedSlider
+                 << "parent=" << cwSpeedSlider->parentWidget()
+                 << "visible=" << cwSpeedSlider->isVisible()
+                 << "this=" << this
+                 << "setFrameStateForKeyer() thread=" << QThread::currentThread()
+                 << "GUI thread=" << qApp->thread();
+
+        cwSpeedSlider->show();
+    }
+    else
+    {
+        qDebug() << "hide" << "cwSpeedSlider=" << cwSpeedSlider
+                 << "parent=" << cwSpeedSlider->parentWidget()
+                 << "visible=" << cwSpeedSlider->isVisible()
+                 << "this=" << this
+                 << "setFrameStateForKeyer() thread=" << QThread::currentThread()
+                 << "GUI thread=" << qApp->thread();
+        cwSpeedSlider->hide();
+    }
+
+    // Radio & keyer setup
+    txKeyer->setContest(ct);
+    txKeyer->setRadioParams(
+        keyerSettings->getNumVoiceMessages(keyerSettings->getSelectedRadio()),
+        keyerSettings->getSelectedRadio().getLocalName(),
+        keyerSettings->getPttType(keyerSettings->getSelectedRadio()),
+        keyerSettings->getPttEnabled(keyerSettings->getSelectedRadio())
+        );
+
+    txKeyer->txKeyerInit(txKeyer->numButtons);
+
+    setPttTypeLabelsVisible(true);
+    setPttTypeText(keyerSettings->getPttType(keyerSettings->getSelectedRadio()));
+    setPttEnabledIndicatorOnOff(keyerSettings->getPttEnabled(keyerSettings->getSelectedRadio()));
+
+    setEomTypeLabelsVisible(true);
+    setEomLabelText(txKeyer->getSelectedEomType());
+
+    setMessagePlayingFlag(cfg.showCwEntryBox);
+    setCwMessagePlayingVisible(cfg.showCwEntryBox);
+
+    setLogItButtonVisible(true);
+
+    // Optional: initialize CW text entry if applicable
+    if (cfg.showCwEntryBox)
+    {
+        initCwTextEntryBox(
+            getCwRadioManufacturer(keyerSettings->getCwMemType(keyerSettings->getSelectedRadio())),
+            CWKEYER_RADIO_COMMON_PARAMS_FILENAME
+            );
+    }
+
+    displayButtons();
+}
+
+
 
 
 void DMButtonFrame::setFrameState(QString txKeyerName)
@@ -574,8 +744,7 @@ void DMButtonFrame::set_None_FrameState()
 void DMButtonFrame::clearAll_Ui_Elements()
 {
     clearButtonLabels();
-    setCwEntryBoxVisible(false);
-
+    setCWEntryElementsVisible(false);
 
     setAvailIndicatorVisible(false);
     setRepeatIndicatorVisible(false);
@@ -592,11 +761,26 @@ void DMButtonFrame::clearAll_Ui_Elements()
     setCwMessagePlayingVisible(false);
     setMessagePlayingFlag(false);
     clearErrorMessage();
+    cwSpeedSlider->hide();
 
-    if (cwSpeedSlider)
-    {
-        cwSpeedSlider->hide();
-    }
+}
+
+void DMButtonFrame::creatCwSlider()
+{
+    cwSpeedSlider = new CwSpeedControl(ui->cwSpeedSliderFrame);
+    ui->cwSpeedSliderHorizontalLayout->addWidget(cwSpeedSlider);
+
+    cwSpeedSlider->setSpeedRange(
+        TxKeyerCommon::PC_CW_KEYER_MIN_WPM,
+        TxKeyerCommon::PC_CW_KEYER_MAX_WPM
+        );
+
+
+    connect(cwSpeedSlider, &CwSpeedControl::cwSpeedChanged, this,
+            [this](int wpm){ emit sendWpmToPcCwkeyer(wpm); });
+
+
+    cwSpeedSlider->hide();
 }
 
 void DMButtonFrame::set_rigControl_FrameState()
@@ -886,7 +1070,7 @@ void DMButtonFrame::set_pcCwKeyer_FrameState()
     setCwMessagePlayingVisible(true);
 
     ui->stopButton->setVisible(true);
-
+/*
     if (!cwSpeedSlider) // check already added to frame
     {
 
@@ -903,7 +1087,7 @@ void DMButtonFrame::set_pcCwKeyer_FrameState()
         cwSpeedSlider->show();
 
     }
-
+*/
 
     initCwTextEntryBox(getCwRadioManufacturer(keyerSettings->getCwMemType(keyerSettings->getSelectedRadio())), CWKEYER_RADIO_COMMON_PARAMS_FILENAME);
 
@@ -1009,7 +1193,7 @@ void DMButtonFrame::DMButtonFrame::updateFrameState()
 {
     if (!ui->txKeyerSelect->currentText().isEmpty())
     {
-       setFrameState(ui->txKeyerSelect->currentText());
+       setFrameStateForKeyer(ui->txKeyerSelect->currentText());
     }
 
 
@@ -1525,7 +1709,7 @@ void DMButtonFrame::onContestChanged()
         return;
     }
 
-    ct = dynamic_cast<LoggerContestLog *>(contest.data());
+    ct = dynamic_cast<LoggerContestLog *>(contest);
     if (!ct) {
         qWarning() << "Contest is not a LoggerContestLog";
         return;
@@ -1813,6 +1997,13 @@ int DMButtonFrame::getCwMemType(PubSubName psn)
 
 }
 */
+
+
+void DMButtonFrame::setCWEntryElementsVisible(bool visible)
+{
+    setCwEntryBoxVisible(visible);
+    setCwFreeTextIndicatorVisible(visible);
+}
 
 void DMButtonFrame::setCwEntryBoxVisible(bool visible)
 {
@@ -2230,7 +2421,7 @@ void DMButtonFrame::initKeyerSettings()
     }
 
     // Safe dynamic cast from QSharedPointer
-    ct = dynamic_cast<LoggerContestLog *>(contest.data());
+    ct = dynamic_cast<LoggerContestLog *>(contest);
     if (!ct) {
         qWarning() << "initKeyerSettings: contest is not a LoggerContestLog";
         return;

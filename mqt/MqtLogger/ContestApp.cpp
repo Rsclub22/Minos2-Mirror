@@ -550,7 +550,6 @@ ContactList * TContestApp::openListFile(const QString &fn, int slotno )
 }
 void TContestApp::closeFile(BaseContestLog * contest)
 {
-   if ( contest )
    {
       removeContest( contest );
       delete contest;

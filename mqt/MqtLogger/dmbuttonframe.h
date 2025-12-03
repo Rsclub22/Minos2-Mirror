@@ -60,6 +60,11 @@ inline const QStringList checkContestRadioErrorCodeStr = {"OK",
                                             "Radio name is empty",
                                             "ContestName is empty"};
 
+
+
+
+
+
 struct ValidationResult {
     bool isValid = true;
     QStringList errors;
@@ -380,6 +385,9 @@ private:
 
 
     void initKeyerSettings();
+    void setFrameStateForKeyer(QString keyerType);
+    void setCWEntryElementsVisible(bool visible);
+    void creatCwSlider();
 };
 
 #endif // DMBUTTONFRAME_H
