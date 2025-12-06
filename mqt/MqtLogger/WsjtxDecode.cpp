@@ -128,6 +128,7 @@ bool decodeMessage::checkAsContact()
     Frequency f = cc->getTxFreqBand(Frequency(), cb);
     scc.setFrequency( f, cb);
 
+    scc.cs.setValRes(CS_OK);    // force a recheck
     scc.checkScreenContact();
     csret = scc.cs.getValRes();
     if (scc.QSOValid)

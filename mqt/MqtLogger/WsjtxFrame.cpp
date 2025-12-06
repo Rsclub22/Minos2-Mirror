@@ -711,9 +711,9 @@ void WsjtxFrame::on_testButton_clicked()
 //                                     , QString const& configuration_name, QString const& tx_message)
 
 
-            update_status ("test", Frequency(144174000), "FT8", "","0", "FT8", false, false, true, 0, 0
-                                    , "G0GJV", "IO91", "JO01"
-                                    , false, "", false, 0, 0, 0, "", "");
+            // update_status ("test", Frequency(144174000), "FT8", "","0", "FT8", false, false, true, 0, 0
+            //                         , "G0GJV", "IO91", "JO01"
+            //                         , false, "", false, 0, 0, 0, "", "");
 
 
 //void WsjtxFrame::decode_added (bool is_new, QString const& id, QTime time
