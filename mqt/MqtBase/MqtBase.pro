@@ -57,16 +57,19 @@ SOURCES += \
     contest.cpp \
     cutils.cpp \
     DisplayContestContact.cpp \
+    cwentrywidget.cpp \
     cwrigkeyervalidator.cpp \
     cwspeedcontrol.cpp \
     dmbuttoneditaddradiodialog.cpp \
     dmkeyseditdlg.cpp \
     dtg.cpp \
     enqdlg.cpp \
+    fkeybuttonwidget.cpp \
     freqmodebandplan.cpp \
     gjvparams.cpp \
     htmldelegate.cpp \
     indicatorpushbutton.cpp \
+    keyerindicatorswidget.cpp \
     latlong.cpp \
     list.cpp \
     ListContact.cpp \
@@ -97,6 +100,7 @@ SOURCES += \
     MultsImpl.cpp \
     presetbutton.cpp \
     profiles.cpp \
+    pttindicatorwidget.cpp \
     qlogtabwidget.cpp \
     qmlcpplink.cpp \
     qrzServerCommon.cpp \
@@ -163,6 +167,7 @@ HEADERS += \
     contest.h \
     cutils.h \
     DisplayContestContact.h \
+    cwentrywidget.h \
     cwrigkeyervalidator.h \
     cwspeedcontrol.h \
     dmFKeydef.h \
@@ -170,11 +175,13 @@ HEADERS += \
     dmkeyseditdlg.h \
     dtg.h \
     enqdlg.h \
+    fkeybuttonwidget.h \
     focuswatcher.h \
     freqmodebandplan.h \
     gjvparams.h \
     htmldelegate.h \
     indicatorpushbutton.h \
+    keyerindicatorswidget.h \
     latlong.h \
     list.h \
     ListContact.h \
@@ -206,6 +213,7 @@ HEADERS += \
     ProfileEnums.h \
     presetbutton.h \
     profiles.h \
+    pttindicatorwidget.h \
     qlogtabwidget.h \
     qmlcpplink.h \
     qsogridmodel.h \
