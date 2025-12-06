@@ -5,6 +5,7 @@
 #include <QInputDialog>
 #include <QMessageBox>
 #include <QSettings>
+#include <QTabBar>
 #include "MTrace.h"
 
 //=============================================================================
@@ -73,6 +74,7 @@ DMKeyerContainer::DMKeyerContainer(QWidget *parent, ContainerMode mode)
     addKeyerButton = new QPushButton(tr("Add Keyer"), this);
     addKeyerButton->setToolTip(tr("Add a new keyer tab"));
     toolbarLayout->addWidget(addKeyerButton);
+    addKeyerButton->setVisible(false);
 
     toolbarLayout->addStretch();
 
@@ -423,6 +425,12 @@ void DMKeyerContainer::updateActiveTab(KeyerTab *newActiveTab)
     }
 
     activeTab = newActiveTab;
+
+    int newIndex = tabWidget->indexOf(activeTab);
+    if (newIndex >= 0)
+    {
+        tabWidget->tabBar()->setTabTextColor(newIndex, Qt::red);
+    }
 
     if (activeTab)
     {
