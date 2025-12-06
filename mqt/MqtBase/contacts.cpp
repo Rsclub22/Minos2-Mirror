@@ -113,7 +113,7 @@ int CheckableContact::checkContact(bool adddup)
     // having mapped any synonyms to their parents and
     // saved the pointers.
 
-    int checkret = 0;
+    int checkret = ERR_0;
 
     // calc the bearing and score anyway; otherwise dups get a bearing of -1
 
@@ -124,7 +124,7 @@ int CheckableContact::checkContact(bool adddup)
 
 
     if ( contactFlags.getValue() & NON_SCORING )
-        return checkret;
+        return checkret;    // which will be 0
 
     QSOValid = false;             // initially, anyway
 
@@ -133,8 +133,9 @@ int CheckableContact::checkContact(bool adddup)
         checkret = ERR_13;
 
     // AND it has been dup checked
-    if ( !checkret )
+    if ( checkret == ERR_0)
     {
+
         unsigned long valp = contest->validationPoint;
         if ( contest->DupSheet.checkCurDup( this, valp, adddup ) )
         {
