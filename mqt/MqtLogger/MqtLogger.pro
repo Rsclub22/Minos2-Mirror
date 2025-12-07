@@ -130,9 +130,13 @@ SOURCES += \
     clusterclientfilterdialog.cpp \
     clusterclientframe.cpp \
     txKeyerFactory.cpp \
+    txKeyerVoiceRigcontrolForm.cpp \
     txKeyerbase.cpp \
     txVmExternalButtonDialog.cpp \
     txVmInternalSetupDialog.cpp \
+    txkeyercwdtrform.cpp \
+    txkeyercwrigcontrolform.cpp \
+    txkeyernoneform.cpp \
     txvminternalbuttondialog.cpp \
     txvmrigbuttondialog.cpp \
     txvmrigsetupdialog.cpp \
@@ -240,9 +244,13 @@ HEADERS  += \
     clusterclientfilterdialog.h \
     clusterclientframe.h \
     txKeyerFactory.h \
+    txKeyerVoiceRigcontrolForm.h \
     txKeyerbase.h \
     txVmExternalButtonDialog.h \
     txVmInternalSetupDialog.h \
+    txkeyercwdtrform.h \
+    txkeyercwrigcontrolform.h \
+    txkeyernoneform.h \
     txvminternalbuttondialog.h \
     txvmrigbuttondialog.h \
     txvmrigsetupdialog.h \
@@ -323,8 +331,12 @@ FORMS    += \
     WsjtxConfigure.ui \
     bandmapclientframe.ui \
     Clusterbandmapconfigure.ui \
+    txKeyerVoiceRigcontrolForm.ui \
     txVmExternalButtonDialog.ui \
     txVmInternalSetupDialog.ui \
+    txkeyercwdtrform.ui \
+    txkeyercwrigcontrolform.ui \
+    txkeyernoneform.ui \
     txvminternalbuttondialog.ui \
     txvmrigbuttondialog.ui \
     txvmrigsetupdialog.ui

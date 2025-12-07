@@ -5,6 +5,7 @@
 #include <QFrame>
 #include <QMap>
 #include <QVector>
+#include <QStackedWidget>
 
 #include "dmFKeydef.h"
 #include "frequency.h"
@@ -16,6 +17,11 @@
 #include "rigcontrolcommonconstants.h"
 #include "cwspeedcontrol.h"
 #include "txkeyerCommonConstants.h"
+
+#include "txkeyernoneform.h"
+#include "txkeyervoicerigcontrolform.h"
+#include "txkeyercwrigcontrolform.h"
+#include "txkeyercwdtrform.h"
 
 
 class QPushButton;
@@ -226,6 +232,8 @@ private:
     TxKeyerCapabilities selectedKeyerCap;
     QSharedPointer<KeyerSettings> keyerSettings;
 
+
+
     //Keys fkeys;
     KeyerMap allKeyConfigs;
 
@@ -237,6 +245,16 @@ private:
     QString curMode;
 
     DMKeyerContainer* keyerContainer;
+
+    QStackedWidget *keyerFormsStack;
+    TxKeyerNoneForm *noneForm;
+    TxVoiceRigControlForm *voiceRigControlForm;
+    TxKeyerCwRigControlForm *cwRigControlForm;
+    TxKeyerCwDtrForm *cwDtrForm;
+
+    void createKeyerForms();
+    void connectFormSignals();
+    void switchToKeyerForm(const QString &keyerType);
 
     QSharedPointer<TxKeyerBase> txKeyer;
     TxKeyerFactory* txKeyerFactory;
@@ -393,6 +411,8 @@ private:
     void setFrameStateForKeyer(QString keyerType);
     void setCWEntryElementsVisible(bool visible);
     void creatCwSlider();
+    void buildFkeyButtons(int count);
+    void clearFkeyLayout();
 };
 
 #endif // DMBUTTONFRAME_H
