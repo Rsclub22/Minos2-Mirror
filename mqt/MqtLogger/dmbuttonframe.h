@@ -254,7 +254,7 @@ private:
 
     void createKeyerForms();
     void connectFormSignals();
-    void switchToKeyerForm(const QString &keyerType);
+
 
     QSharedPointer<TxKeyerBase> txKeyer;
     TxKeyerFactory* txKeyerFactory;

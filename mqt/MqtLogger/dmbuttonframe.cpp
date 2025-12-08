@@ -141,7 +141,7 @@ DMButtonFrame::DMButtonFrame(DMKeyerContainer* keyerContainer_, QWidget *parent)
     connect(extKeyerConnectTimer, &QTimer::timeout, this, &DMButtonFrame::onExtConnectTimer);
     connect(LogContainer->sendDM, &TSendDM::keyerReport, this, &DMButtonFrame::onExtConnectTimer);
 
-    creatCwSlider();
+
 
     QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + VOICEKEYER_COMMON_PARAMS_FILENAME;
     QSettings config(fileName, QSettings::IniFormat);
@@ -149,7 +149,7 @@ DMButtonFrame::DMButtonFrame(DMKeyerContainer* keyerContainer_, QWidget *parent)
 
     QString txKeyerName = config.value("KeyerName").toString();
 
-    connect(ui->txKeyerSetupPb, &QPushButton::clicked, this, &DMButtonFrame::onTxKeyerSetupClicked);
+    //connect(ui->txKeyerSetupPb, &QPushButton::clicked, this, &DMButtonFrame::onTxKeyerSetupClicked);
 
     txKeyerFactory->populateComboKeyerList(ui->txKeyerSelect, txKeyerName);
 
@@ -565,8 +565,8 @@ void DMButtonFrame::createKeyerForms()
     // Add forms to stacked widget
     keyerFormsStack->addWidget(noneForm);           // Index 0
     keyerFormsStack->addWidget(voiceRigControlForm); // Index 1
-    //keyerFormsStack->addWidget(cwRigControlForm);    // Index 2
-    //keyerFormsStack->addWidget(cwDtrForm);           // Index 3
+    keyerFormsStack->addWidget(cwRigControlForm);    // Index 2
+    keyerFormsStack->addWidget(cwDtrForm);           // Index 3
 
     // Add stacked widget to your main layout
     // IMPORTANT: You need to have a layout in your .ui file where this will go
@@ -577,7 +577,7 @@ void DMButtonFrame::createKeyerForms()
     connectFormSignals();
 
     // Start with none form visible
-    //keyerFormsStack->setCurrentWidget(noneForm);
+    keyerFormsStack->setCurrentWidget(noneForm);
 
     qDebug() << "Stacked widget created with" << keyerFormsStack->count() << "forms";
 }
@@ -599,45 +599,6 @@ void DMButtonFrame::connectFormSignals()
         qDebug() << "None form created";
 }
 
-void DMButtonFrame::switchToKeyerForm(const QString &keyerType)
-{
-    qDebug() << "Switching to keyer form:" << keyerType;
-
-    TxKeyerId keyerId = txKeyerNameToId(keyerType);
-
-    switch (keyerId)
-    {
-    case TxKeyerId::None:
-        qDebug() << "  -> Showing None form";
-        keyerFormsStack->setCurrentWidget(noneForm);
-        break;
-
-    case TxKeyerId::RigControl:
-        qDebug() << "  -> Showing Voice Rig Control form";
-        keyerFormsStack->setCurrentWidget(voiceRigControlForm);
-        break;
-
-    case TxKeyerId::CW_RigControl:
-        qDebug() << "  -> Showing CW Rig Control form";
-        keyerFormsStack->setCurrentWidget(cwRigControlForm);
-        break;
-
-    case TxKeyerId::PcCwKeyer:
-        qDebug() << "  -> Showing CW DTR form";
-        keyerFormsStack->setCurrentWidget(cwDtrForm);
-        break;
-
-    case TxKeyerId::InternalVoiceKeyer:
-    case TxKeyerId::DigitalModes:
-    case TxKeyerId::ExternalMqtKeyer:
-    default:
-        qDebug() << "  -> Showing None form (default)";
-        keyerFormsStack->setCurrentWidget(noneForm);
-        break;
-    }
-
-    qDebug() << "  Current widget index:" << keyerFormsStack->currentIndex();
-}
 
 
 
@@ -647,14 +608,17 @@ void DMButtonFrame::setFrameStateForKeyer(QString txKeyerName)
 
     TxKeyerId txKeyerId;
 
-    if (txKeyerName.isEmpty())
-    {
-        txKeyerId =TxKeyerId::None;
-    }
-    else
-    {
+    //if (txKeyerName.isEmpty())
+    //{
+    //    txKeyerId =TxKeyerId::None;
+    //    logMessage(QString("setFrameState =  None"));
+    //    keyerFormsStack->setCurrentWidget(noneForm);
+    //}
+    //else
+    //{
+        // empty will give txKeyerId = None
         txKeyerId = txKeyerNameToId(txKeyerName);
-    }
+    //}
 
 
 
@@ -667,22 +631,31 @@ void DMButtonFrame::setFrameStateForKeyer(QString txKeyerName)
     switch (txKeyerId)
     {
     case TxKeyerId::RigControl:
+        logMessage(QString("setFrameState =  Voice RigControl"));
         currentName = ct->rigControlCurrentFKeySetContest.getValue();
         fkeyFileName = TX_KEYER_PATH().append(rigControlKeyerConfigFilename);
+        keyerFormsStack->setCurrentWidget(voiceRigControlForm);
         break;
     case TxKeyerId::CW_RigControl:
+        logMessage(QString("setFrameState =  CW RigControl"));
         currentName = ct->cwRigControlCurrentFKeySetContest.getValue();
         fkeyFileName = TX_KEYER_PATH().append(cwRigControlKeyerConfigFilename);
+        keyerFormsStack->setCurrentWidget(cwRigControlForm);
         break;
     case TxKeyerId::PcCwKeyer:
+        logMessage(QString("setFrameState =  CW DTR Keyer"));
         currentName = ct->pcCwKeyerCurrentFKeySetContest.getValue();
         fkeyFileName = TX_KEYER_PATH().append(pcCwKeyerKeyerConfigFilename);
+        keyerFormsStack->setCurrentWidget(cwDtrForm);
         break;
     case TxKeyerId::InternalVoiceKeyer:
         currentName = ct->internalVoiceKeyerCurrentFKeySetContest.getValue();
         fkeyFileName = TX_KEYER_PATH().append(InternalKeyerConfigFilename);
         break;
     case TxKeyerId::None:
+        logMessage(QString("setFrameState =  None"));
+        keyerFormsStack->setCurrentWidget(noneForm);
+        break;
     default:
         txKeyParamList.clear();
         currentName.clear();
@@ -890,7 +863,7 @@ void DMButtonFrame::clearAll_Ui_Elements()
     setCwMessagePlayingVisible(false);
     setMessagePlayingFlag(false);
     clearErrorMessage();
-    cwSpeedSlider->hide();
+    //cwSpeedSlider->hide();
 
 }
 
