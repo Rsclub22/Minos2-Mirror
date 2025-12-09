@@ -58,6 +58,31 @@ const int CW_FREE_TEXT_BUTTON_NUMBER = 13;
 
 const int ERROR_MSG_TIMEOUT_DURATION = 20000;
 
+
+// Defines the layout of the Button Frame Ui
+struct UiElementCfg
+{
+    bool showStopButton;
+    bool showChooseFileBtn;
+    bool showConfigEditBtn;
+    bool showContestSel;
+    bool showRadioLabel;
+    bool showLogItBtn;
+    bool showWipeBtn;
+  ;
+};
+
+std::map<TxKeyerId, UiElementCfg> keyerUiMap = {
+    //                          StopBtn     ChooseFile  Config  Contest RadioLbl    LogIt       Wipe
+    { TxKeyerId::None,           { false,   false,      false,  false,  false,      false,      false } },
+    { TxKeyerId::RigControl,     { false,   true,       true,   true,   true,       true,       false } },
+    { TxKeyerId::CW_RigControl,  { true,    true,       true,   true,   true,       true,       false } },
+    { TxKeyerId::PcCwKeyer,      { true,    true,       true,   true,   true,       false,      false } },
+    { TxKeyerId::InternalVoiceKeyer, { false, true,     true,   true,   true,       false,      false } },
+    // Add other keyers as needed
+};
+
+
 DMButtonFrame::DMButtonFrame(TxKeyerFactory *txKeyerFactory_, DMKeyerContainer* keyerContainer_, QWidget *parent) :
     QFrame(parent),
     ui(new Ui::DMButtonFrame),
