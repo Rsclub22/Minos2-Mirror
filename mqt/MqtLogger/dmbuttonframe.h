@@ -91,7 +91,7 @@ class DMButtonFrame : public QFrame
     Q_OBJECT
 
 public:
-    explicit DMButtonFrame(DMKeyerContainer* keyerContainer_, QWidget *parent = nullptr);
+    explicit DMButtonFrame(TxKeyerFactory *txKeyerFactory_, DMKeyerContainer* keyerContainer_, QWidget *parent = nullptr);
     ~DMButtonFrame();
 
     void setContest(BaseContestLog *);
@@ -171,7 +171,7 @@ private slots:
 
     // txVmButtonFrame
 
-    void onTxKeyerSelect(int idx);
+    void onTxKeyerSelectChanged();
     //void onTxKeyerSetupClicked();
     void onRepeatPauseTimerTimeout();
     void onMsgDurTimerTimeout();
@@ -286,8 +286,6 @@ private:
     QMap<QString, QString> radioMap; // map radio name to path
     QStringList listOfRadios;       // full path and radio name
     QStringList listOfRadioSupportKeyer;
-
-    CwSpeedControl *cwSpeedSlider = nullptr;
 
     bool notifyComboChange = true;
     bool ignoreFkComboSignal = false;

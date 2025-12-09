@@ -15,18 +15,7 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_4">
-     <item>
-      <widget class="QLabel" name="keyerSelectLabel">
-       <property name="text">
-        <string>Keyer Type:</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QComboBox" name="txKeyerSelect"/>
-     </item>
-    </layout>
+    <layout class="QHBoxLayout" name="toolbarLayout"/>
    </item>
    <item>
     <layout class="QVBoxLayout" name="mainContentLayout"/>

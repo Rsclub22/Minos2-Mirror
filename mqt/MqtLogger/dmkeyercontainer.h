@@ -6,6 +6,7 @@
 #include <QWidget>
 #include <QTabWidget>
 #include <QPushButton>
+#include <QComboBox>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QStackedWidget>
@@ -26,6 +27,11 @@ class RadioSettingsDialogChangeFlag;
 class KeyerTab;
 class KeyerSettings;
 
+enum ContainerMode {
+    StandaloneMode,  // Single DMButtonFrame with combo box (original behavior)
+    TabbedMode       // Multiple tabs, each with one keyer type
+};
+
 //=============================================================================
 // Main container that can switch between standalone and tabbed modes
 //=============================================================================
@@ -34,23 +40,11 @@ class DMKeyerContainer : public QWidget
     Q_OBJECT
 
 public:
-    enum ContainerMode {
-        StandaloneMode,  // Single DMButtonFrame with combo box (original behavior)
-        TabbedMode       // Multiple tabs, each with one keyer type
-    };
 
-    explicit DMKeyerContainer(QWidget *parent = nullptr,
-                              ContainerMode mode = StandaloneMode);
+    explicit DMKeyerContainer(QWidget *parent = nullptr);
     ~DMKeyerContainer();
 
     QSharedPointer<KeyerSettings> keyerSettings;
-
-    // Get/Set mode
-    ContainerMode getContainerMode() const { return currentContainerMode; }
-    void setContainerMode(ContainerMode mode);
-
-    // Get the active frame (works in both modes)
-    DMButtonFrame* getActiveFrame() const;
 
     // Contest and radio settings (forwarded to active or all frames)
     void setContest(BaseContestLog *contest);
@@ -89,7 +83,8 @@ public:
 
 signals:
 
-    // **************** review this group of signals.. they go from buttonframe to tslf direct
+
+    void keyerSelectChanged();
 
     void activeKeyerChanged();
     void pttStatus(bool state);
@@ -131,6 +126,7 @@ private slots:
     void onTabCloseRequested(int index);
     void onModeToggleClicked();
 
+    void onKeyerSelectChanged();
 private:
     // Mode switching
     void switchToStandaloneMode();
@@ -150,6 +146,7 @@ private:
     QHBoxLayout *toolbarLayout;
     QPushButton *addKeyerButton;
     QPushButton *modeToggleButton;
+    QComboBox *txKeyerSelect;
     QStackedWidget *stackedWidget;
 
     // Standalone mode widget
@@ -169,12 +166,10 @@ private:
     // Active tab (tabbed mode only)
     KeyerTab *activeTab;
 
-    // Current mode
-    ContainerMode currentContainerMode;
-
     // Contest reference
     LoggerContestLog *currentContest;
     void logMessage(QString msg);
+    void setContainerMode(ContainerMode mode);
 };
 
 
@@ -187,7 +182,7 @@ class KeyerTab : public QWidget
     Q_OBJECT
 
 public:
-    explicit KeyerTab(const QString &keyerType, DMKeyerContainer *keyerContainer,
+    explicit KeyerTab(const QString &keyerType, TxKeyerFactory *txKeyerFactory, DMKeyerContainer *keyerContainer,
                       QWidget *parent = nullptr);
     ~KeyerTab();
 
@@ -231,8 +226,18 @@ public:
     }
 
 
-    QString getActiveKeyerType() const { return activeKeyerType; }
-    void setActiveKeyerType(const QString &type) { activeKeyerType = type; }
+
+    ContainerMode getCurrentContainerMode() const { return currentContainerMode; }
+    void setCurrentContainerMode(ContainerMode mode){ currentContainerMode = mode;};
+
+    TxKeyerId getCurrentKeyerId() const { return currentKeyerId; }
+    void setCurrentKeyerId(TxKeyerId id) {
+        qDebug() << "set activeKeyerId " << static_cast<int>(id);
+        currentKeyerId = id;
+    }
+
+    QString getCurrentKeyerType()const {return currentKeyerType;}
+    void setCurrentKeyerType(const QString keyerType){ currentKeyerType = keyerType; }
 
     void setSelectedRadio(PubSubName selRadio){ selectedRadio = selRadio; }
     PubSubName getSelectedRadio(){ return selectedRadio; }
@@ -578,7 +583,10 @@ public:
 private:
 
     LoggerContestLog* currentContest = nullptr;
-     QString activeKeyerType;
+    ContainerMode currentContainerMode = ContainerMode::StandaloneMode;
+    TxKeyerId currentKeyerId = TxKeyerId::None;
+    QString currentKeyerType = txKeyerNames[TxKeyerId::None];
+
     // radio settings
 
     PubSubName selectedRadio;
