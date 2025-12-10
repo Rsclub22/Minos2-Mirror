@@ -79,13 +79,13 @@ void TxKeyerCwDtrForm::clearEOMLabelText()
     ui->KeyIndicators->clearEOMLabelText();
 }
 
-void TxKeyerCwDtrForm::setPttEnabledIndicator(const bool on)
+void TxKeyerCwDtrForm::setPttEnabledIndicatorOnOff(const bool on)
 {
     ui->PttIndicators->setPttEnabledIndicator(on);
 }
 
 
-void TxKeyerCwDtrForm::setTxStatusIndicator(const bool on)
+void TxKeyerCwDtrForm::setTxStatusIndicatorOnOff(const bool on)
 {
     ui->PttIndicators->setTxStatusIndicator(on);
 }
@@ -105,17 +105,23 @@ void TxKeyerCwDtrForm::setStoredMessagePlayingDisplay(const QString msg)
     ui->storedMessagePlayingDisplay->setText(msg);
 }
 
-void TxKeyerCwDtrForm::clearStoredMessagePlayingDisplay(const QString msg)
+void TxKeyerCwDtrForm::clearStoredMessagePlayingDisplay()
 {
     ui->storedMessagePlayingDisplay->clear();
 }
 
 void TxKeyerCwDtrForm::setErrorMessageDisplayText(const QString errormsg)
 {
-    ui->errorMessageDisplay->setText(errormsg);
+    ui->keyerErrorMessageDisplay->setErrorMessage(errormsg);
 }
 
 void TxKeyerCwDtrForm::clearErrorMessageDisplayText()
 {
-    ui->errorMessageDisplay->clear();
+    ui->keyerErrorMessageDisplay->clearErrorMessage();
+}
+
+
+void TxKeyerCwDtrForm::showTemporaryErrorMessage(const QString &msg, int timeoutMs, const QColor &colour)
+{
+    ui->keyerErrorMessageDisplay->showTemporaryErrorMessage(msg, timeoutMs, colour);
 }

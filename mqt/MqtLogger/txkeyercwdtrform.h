@@ -27,18 +27,19 @@ public:
     void clearEOMLabelText();
 
 
-    void setPttEnabledIndicator(const bool on);
-    void setTxStatusIndicator(const bool on);
+    void setPttEnabledIndicatorOnOff(const bool on);
+    void setTxStatusIndicatorOnOff(const bool on);
     void setPttTypeText(const QString text);
     void clearPttTypeText();
     void setStoredMessagePlayingDisplay(const QString msg);
 
-    void clearStoredMessagePlayingDisplay(const QString msg);
+    void clearStoredMessagePlayingDisplay();
 
     void setErrorMessageDisplayText(const QString errormsg);
     void clearErrorMessageDisplayText();
 
 
+    void showTemporaryErrorMessage(const QString &msg, int timeoutMs, const QColor &colour);
 signals:
 
     void sendWpmToPcCwkeyer(int wpm);

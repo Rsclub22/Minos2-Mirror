@@ -69,6 +69,7 @@ SOURCES += \
     gjvparams.cpp \
     htmldelegate.cpp \
     indicatorpushbutton.cpp \
+    keyererrormessagewidget.cpp \
     keyerindicatorswidget.cpp \
     latlong.cpp \
     list.cpp \
@@ -181,6 +182,7 @@ HEADERS += \
     gjvparams.h \
     htmldelegate.h \
     indicatorpushbutton.h \
+    keyererrormessagewidget.h \
     keyerindicatorswidget.h \
     latlong.h \
     list.h \

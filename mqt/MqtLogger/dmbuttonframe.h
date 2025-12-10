@@ -100,8 +100,8 @@ public:
     //void parseFKeyFile(QString sfname);
     void setFreq(Frequency f);
 
-    void setFixedKeyerType(const QString &keyerType);
-    QString getCurrentKeyerType() const;
+    void setFixedKeyerName(const QString &keyerName);
+    QString getCurrentKeyerName() const;
 
     // tvVmButtonFrame
 
@@ -334,13 +334,14 @@ private:
 
     void setPttTypeLabelsVisible(bool visible);
     void setPttTypeText(serialCommonData::MINOS_PTT_TYPES pttType);
+     void setPttEnabledIndicatorOnOff(bool on);
 
-    void setPttEnabledIndicatorOnOff(bool on);
+
     void setEomTypeLabelsVisible(bool visible);
     void setEomLabelText(int selectedEomType);
-    void setErrorMessageVisible(bool visible);
-    void setKeyerIndicatorGroupBoxVisible(bool visible);
-    void setPttIndicatorGroupBoxVisible(bool visible);
+
+
+
 
     void logMessage(QString msg);
 
@@ -356,7 +357,7 @@ private:
     void createButtonsForKeyer(int numButtons);
     void clearButtons();
     void createButtonsForKeyer(int numButtons, int columns);
-    void setCwEntryBoxVisible(bool visible);
+
     void setMessagePlayingFlag(bool playing);
     bool isMessagePlaying();
     void setCwMessagePlayingVisible(bool visible);
@@ -388,7 +389,7 @@ private:
     void displayErrorMessage(QString msg);
     void clearErrorMessage();
     void checkRadioExists(QString radioName, int &errorCode);
-    void clearAll_Ui_Elements();
+
     void setupRigControl_Ui_Elements();
     void displayButtons();
     void setupCw_RigControl_Ui_Elements();
@@ -400,17 +401,19 @@ private:
     void checkSavedContestExists(int &errorCode);
     bool checkContestAndRadioAvailable(int &errorCode);
     void setCwFreeTextIndicatorOnOff(bool on);
-    void setCwFreeTextIndicatorVisible(bool visible);
-    void showTemporaryErrorMessage(const QString &msg, int timeoutMs, const QColor &colour = QColorConstants::Svg::red);
+
     bool checkRadioAndKeyerState();
 
 
     void initKeyerSettings();
     void setFrameStateForKeyer(QString keyerType);
-    void setCWEntryElementsVisible(bool visible);
+
     void creatCwSlider();
     void buildFkeyButtons(int count);
     void clearFkeyLayout();
+    QString getEomText(int selectedEomType);
+    void showTemporaryErrorMessage(const QString &msg, int timeoutMs, const QColor &colour = Qt::red);
+
 };
 
 #endif // DMBUTTONFRAME_H

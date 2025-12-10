@@ -27,7 +27,7 @@ class RadioSettingsDialogChangeFlag;
 class KeyerTab;
 class KeyerSettings;
 
-enum ContainerMode {
+enum ContainerViewMode {
     StandaloneMode,  // Single DMButtonFrame with combo box (original behavior)
     TabbedMode       // Multiple tabs, each with one keyer type
 };
@@ -91,7 +91,7 @@ signals:
     void sendFreqControl(Frequency freq);
     void sendWpmToPcCwkeyer(int wpm);
     void sendModeToRadio(const QString &mode);
-    void containerModeChanged(ContainerMode newMode);
+    void containerModeChanged(ContainerViewMode newMode);
 
     void selectedRadioChanged();
     void isRadioConnectedChanged(bool connected);
@@ -131,14 +131,14 @@ private:
     // Mode switching
     void switchToStandaloneMode();
     void switchToTabbedMode();
-    void updateModeButton();
+    void updateViewModeButton();
 
     // Tab management helpers
     KeyerTab* createKeyerTab(const QString &keyerType);
     void updateActiveTab(KeyerTab *newActiveTab);
     bool isKeyerTypeInUse(const QString &keyerType) const;
     QString getUniqueTabName(const QString &keyerType) const;
-    QStringList getAvailableKeyerTypes() const;
+    QStringList getAvailableKeyerNames() const;
     void setupFrameConnections(DMButtonFrame *frame);
 
     // UI components
@@ -169,7 +169,7 @@ private:
     // Contest reference
     LoggerContestLog *currentContest;
     void logMessage(QString msg);
-    void setContainerMode(ContainerMode mode);
+    void setContainerViewMode(ContainerViewMode mode);
 };
 
 
@@ -227,8 +227,8 @@ public:
 
 
 
-    ContainerMode getCurrentContainerMode() const { return currentContainerMode; }
-    void setCurrentContainerMode(ContainerMode mode){ currentContainerMode = mode;};
+    ContainerViewMode getCurrentContainerViewMode() const { return currentContainerViewMode; }
+    void setCurrentContainerMode(ContainerViewMode mode){ currentContainerViewMode = mode;};
 
     TxKeyerId getCurrentKeyerId() const { return currentKeyerId; }
     void setCurrentKeyerId(TxKeyerId id) {
@@ -236,8 +236,8 @@ public:
         currentKeyerId = id;
     }
 
-    QString getCurrentKeyerType()const {return currentKeyerType;}
-    void setCurrentKeyerType(const QString keyerType){ currentKeyerType = keyerType; }
+    QString getCurrentKeyerName()const {return currentKeyerName;}
+    void setCurrentKeyerName(const QString keyerName){ currentKeyerName = keyerName; }
 
     void setSelectedRadio(PubSubName selRadio){ selectedRadio = selRadio; }
     PubSubName getSelectedRadio(){ return selectedRadio; }
@@ -583,9 +583,9 @@ public:
 private:
 
     LoggerContestLog* currentContest = nullptr;
-    ContainerMode currentContainerMode = ContainerMode::StandaloneMode;
+    ContainerViewMode currentContainerViewMode = ContainerViewMode::StandaloneMode;
     TxKeyerId currentKeyerId = TxKeyerId::None;
-    QString currentKeyerType = txKeyerNames[TxKeyerId::None];
+    QString currentKeyerName = txKeyerNames[TxKeyerId::None];
 
     // radio settings
 
