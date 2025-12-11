@@ -30,6 +30,7 @@ enum BonusTypes {
     btNone,
     btB4,
     btB6,
+    btB8,
     btNAC
 };
 
@@ -60,7 +61,8 @@ ContestDetails::ContestDetails(QWidget *parent) :
 
     ui->BonusComboBox->addItem(tr("None"));
     ui->BonusComboBox->addItem(tr("UKAC Bonuses (B4)"));
-    ui->BonusComboBox->addItem(tr("AFS Bonuses (B6)"));
+    ui->BonusComboBox->addItem(tr("DXCC/Loc/District Bonuses (B6)"));
+    ui->BonusComboBox->addItem(tr("DXCC/Loc Bonuses (B8)"));
     ui->BonusComboBox->addItem(tr("NAC Bonuses"));
 
     for ( int i = 0; i < 24; i++ )
@@ -486,6 +488,8 @@ void ContestDetails::setDetails(  )
            ui->BonusComboBox->setCurrentIndex(btB4);
        else if (bonusType == "B6")
            ui->BonusComboBox->setCurrentIndex(btB6);
+       else if (bonusType == "B8")
+           ui->BonusComboBox->setCurrentIndex(btB8);
        else if (bonusType == "NAC")
            ui->BonusComboBox->setCurrentIndex(btNAC);
        else
@@ -1048,6 +1052,8 @@ void ContestDetails::setDetails( const IndividualContest &ic )
        QString bonusType = contestTransferObject->bonusType.getValue();
        if (bonusType == "B6")
             ui->BonusComboBox->setCurrentIndex(btB6);
+       if (bonusType == "B8")
+           ui->BonusComboBox->setCurrentIndex(btB8);
        if (bonusType == "B4")
             ui->BonusComboBox->setCurrentIndex(btB4);
    }

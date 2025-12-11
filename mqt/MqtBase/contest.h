@@ -495,6 +495,7 @@ class ContestScore
       char brbonus2;
 
       QString name;
+      bool usesDistricts;
       bool usesBonus;
       QString bonusType;
 
