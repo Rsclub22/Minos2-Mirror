@@ -6,6 +6,11 @@
 #include <QMap>
 #include <QVector>
 #include <QStackedWidget>
+#include <QVBoxLayout>
+#include <QGridLayout>
+#include <QHBoxLayout>
+#include <QLabel>
+#include <QComboBox>
 
 #include "dmFKeydef.h"
 #include "frequency.h"
@@ -15,16 +20,16 @@
 #include "txKeyerbase.h"
 #include "txkeyerfactory.h"
 #include "rigcontrolcommonconstants.h"
-#include "cwspeedcontrol.h"
 #include "txkeyerCommonConstants.h"
 
 #include "txkeyernoneform.h"
 #include "txkeyervoicerigcontrolform.h"
 #include "txkeyercwrigcontrolform.h"
 #include "txkeyercwdtrform.h"
+#include "txkeyerdigitalmodesform.h"
 
 
-class QPushButton;
+
 class QFileSystemWatcher;
 class LoggerContestLog;
 class BaseContestLog;
@@ -32,16 +37,16 @@ class RigControlFrame;
 class KeyerSettings;
 class DMKeyerContainer;
 
-namespace Ui {
-class DMButtonFrame;
-}
+//namespace Ui {
+//class DMButtonFrame;
+//}
 
 inline const QString rigControlKeyerConfigFilename = "/rigControl/rigControl.json";
 inline const QString cwRigControlKeyerConfigFilename = "/cwRigControl/cwRigControl.json";
-inline const QString pcCwKeyerKeyerConfigFilename = "pcCwKeyer/pcCwKeyer.json";
-inline const QString digitalModesConfigFilename = "DigitalModes/DigitalModes.json";
-inline const QString InternalKeyerConfigFilename = "Internal/internal.json";
-inline const QString ExternalKeyerConfigFilename = "Enternal/external.json";
+inline const QString pcCwKeyerKeyerConfigFilename = "/pcCwKeyer/pcCwKeyer.json";
+inline const QString digitalModesConfigFilename = "/DigitalModes/DigitalModes.json";
+inline const QString InternalKeyerConfigFilename = "/Internal/internal.json";
+inline const QString ExternalKeyerConfigFilename = "/Enternal/external.json";
 
 
 
@@ -218,7 +223,7 @@ private slots:
 
 
 private:
-    Ui::DMButtonFrame *ui;
+//    Ui::DMButtonFrame *ui;
     LoggerContestLog *ct = nullptr;
     Frequency curFreq;
     QString fkeyFileName;
@@ -246,11 +251,24 @@ private:
 
     DMKeyerContainer* keyerContainer;
 
+
+    QVBoxLayout *mainContentLayout; // this is where the stackedwidget forms go
+    QGridLayout *FkeyGridLayout;
+    QHBoxLayout *mainPushButtonsLayout;
+    QPushButton *stopButton;
+    QPushButton *chooseButton;
+    QPushButton *configEditButton;
+    QComboBox *fkeysetCombo;
+    QLabel  *selectedRadioLabel;
+    QPushButton *logitButton;
+    QPushButton *wipeButton;
+
     QStackedWidget *keyerFormsStack;
     TxKeyerNoneForm *noneForm;
     TxVoiceRigControlForm *voiceRigControlForm;
     TxKeyerCwRigControlForm *cwRigControlForm;
     TxKeyerCwDtrForm *cwDtrForm;
+    TxKeyerDigitalModesForm *digitalModesForm;
 
     void createKeyerForms();
     void connectFormSignals();
@@ -414,6 +432,7 @@ private:
     QString getEomText(int selectedEomType);
     void showTemporaryErrorMessage(const QString &msg, int timeoutMs, const QColor &colour = Qt::red);
 
+    void selectKeyerUiForm(QWidget *uiForm);
 };
 
 #endif // DMBUTTONFRAME_H

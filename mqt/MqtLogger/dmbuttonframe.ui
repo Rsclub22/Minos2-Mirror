@@ -6,25 +6,58 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>648</width>
-    <height>365</height>
+    <width>634</width>
+    <height>422</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
   </property>
   <property name="windowTitle">
    <string/>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
    <item>
-    <layout class="QHBoxLayout" name="toolbarLayout"/>
+    <layout class="QHBoxLayout" name="toolbarLayout">
+     <property name="sizeConstraint">
+      <enum>QLayout::SetFixedSize</enum>
+     </property>
+    </layout>
    </item>
    <item>
-    <layout class="QVBoxLayout" name="mainContentLayout"/>
+    <layout class="QVBoxLayout" name="mainContentLayout">
+     <property name="sizeConstraint">
+      <enum>QLayout::SetMinimumSize</enum>
+     </property>
+    </layout>
    </item>
    <item>
-    <layout class="QGridLayout" name="FkeyGridLayout"/>
+    <layout class="QGridLayout" name="FkeyGridLayout">
+     <property name="sizeConstraint">
+      <enum>QLayout::SetMinimumSize</enum>
+     </property>
+    </layout>
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <property name="sizeConstraint">
+      <enum>QLayout::SetFixedSize</enum>
+     </property>
      <item>
       <widget class="QPushButton" name="stopButton">
        <property name="text">
@@ -49,7 +82,7 @@
      <item>
       <widget class="QComboBox" name="fkeysetCombo">
        <property name="sizeAdjustPolicy">
-        <enum>QComboBox::SizeAdjustPolicy::AdjustToContents</enum>
+        <enum>QComboBox::AdjustToContents</enum>
        </property>
       </widget>
      </item>
@@ -63,7 +96,7 @@
      <item>
       <spacer name="horizontalSpacer_2">
        <property name="orientation">
-        <enum>Qt::Orientation::Horizontal</enum>
+        <enum>Qt::Horizontal</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>
@@ -83,7 +116,7 @@
      <item>
       <spacer name="horizontalSpacer">
        <property name="orientation">
-        <enum>Qt::Orientation::Horizontal</enum>
+        <enum>Qt::Horizontal</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>

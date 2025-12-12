@@ -15,6 +15,10 @@ public:
 
     KeyerIndicatorsWidget(QWidget *parent = nullptr);
 
+    QSize sizeHint() const override;
+    QSize minimumSizeHint() const override;
+
+
     void setKeyerAvailableIndicatorOnOff(bool on);
     void setRepeatIndicatorOnOff(bool on);
     void setEOMLabelText(const QString text);

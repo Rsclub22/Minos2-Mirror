@@ -86,6 +86,7 @@ DMKeyerContainer::DMKeyerContainer(QWidget *parent)
 
     // Create stacked widget to hold both modes
     stackedWidget = new QStackedWidget(this);
+    stackedWidget->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Maximum);
     mainLayout->addWidget(stackedWidget);
 
     // Create standalone mode widget
@@ -108,7 +109,10 @@ DMKeyerContainer::DMKeyerContainer(QWidget *parent)
     // Connections
     connect(modeToggleButton, &QPushButton::clicked, this, &DMKeyerContainer::onModeToggleClicked);
     connect(addKeyerButton, &QPushButton::clicked, this, &DMKeyerContainer::onAddKeyerClicked);
-    connect(txKeyerSelect, &QComboBox::currentIndexChanged, this, &DMKeyerContainer::onKeyerSelectChanged);
+    connect(txKeyerSelect,
+            QOverload<int>::of(&QComboBox::currentIndexChanged),
+            this,
+            &DMKeyerContainer::onKeyerSelectChanged);
     connect(tabWidget, &QTabWidget::currentChanged, this, &DMKeyerContainer::onTabChanged);
     connect(tabWidget, &QTabWidget::tabCloseRequested, this, &DMKeyerContainer::onTabCloseRequested);
 
@@ -134,7 +138,7 @@ DMKeyerContainer::DMKeyerContainer(QWidget *parent)
     switchToStandaloneMode();
     updateViewModeButton();
 
-    onKeyerSelectChanged();
+    initialKeyerSelection();
 
 }
 
@@ -143,7 +147,13 @@ DMKeyerContainer::~DMKeyerContainer()
 
 }
 
-void DMKeyerContainer::onKeyerSelectChanged()
+
+void DMKeyerContainer::initialKeyerSelection()
+{
+    emit keyerSelectChanged();
+}
+
+void DMKeyerContainer::onKeyerSelectChanged(int) // ignoring index
 {
 
     QString keyerName = txKeyerSelect->currentText();

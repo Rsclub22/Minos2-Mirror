@@ -14,6 +14,10 @@ public:
 
     KeyerErrorMessageWidget(QWidget *parent = nullptr);
 
+    QSize sizeHint() const override;
+    QSize minimumSizeHint() const override;
+
+
 
     void setErrorMessage(const QString errorMsg);
     void clearErrorMessage();

@@ -136,6 +136,7 @@ SOURCES += \
     txVmInternalSetupDialog.cpp \
     txkeyercwdtrform.cpp \
     txkeyercwrigcontrolform.cpp \
+    txkeyerdigitalmodesform.cpp \
     txkeyernoneform.cpp \
     txvminternalbuttondialog.cpp \
     txvmrigbuttondialog.cpp \
@@ -250,6 +251,7 @@ HEADERS  += \
     txVmInternalSetupDialog.h \
     txkeyercwdtrform.h \
     txkeyercwrigcontrolform.h \
+    txkeyerdigitalmodesform.h \
     txkeyernoneform.h \
     txvminternalbuttondialog.h \
     txvmrigbuttondialog.h \
@@ -331,11 +333,10 @@ FORMS    += \
     WsjtxConfigure.ui \
     bandmapclientframe.ui \
     Clusterbandmapconfigure.ui \
-    txKeyerVoiceRigcontrolForm.ui \
     txVmExternalButtonDialog.ui \
     txVmInternalSetupDialog.ui \
-    txkeyercwdtrform.ui \
     txkeyercwrigcontrolform.ui \
+    txkeyerdigitalmodesform.ui \
     txkeyernoneform.ui \
     txvminternalbuttondialog.ui \
     txvmrigbuttondialog.ui \

@@ -126,7 +126,7 @@ private slots:
     void onTabCloseRequested(int index);
     void onModeToggleClicked();
 
-    void onKeyerSelectChanged();
+    void onKeyerSelectChanged(int index);
 private:
     // Mode switching
     void switchToStandaloneMode();
@@ -170,6 +170,7 @@ private:
     LoggerContestLog *currentContest;
     void logMessage(QString msg);
     void setContainerViewMode(ContainerViewMode mode);
+    void initialKeyerSelection();
 };
 
 

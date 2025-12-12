@@ -2,11 +2,14 @@
 #define TXKEYERCWDTRFORM_H
 
 #include <QWidget>
+#include <QHBoxLayout>
+#include "cwentrywidget.h"
+#include "keyerindicatorswidget.h"
+#include "pttindicatorwidget.h"
+#include "keyererrormessagewidget.h"
 #include "cwspeedcontrol.h"
 
-namespace Ui {
-class TxKeyerCwDtrForm;
-}
+
 
 class TxKeyerCwDtrForm : public QWidget
 {
@@ -46,11 +49,27 @@ signals:
     void cwEntryReturnPressed();
 
 private:
-    Ui::TxKeyerCwDtrForm *ui;
 
+    QHBoxLayout *indicatorLayout;
+    KeyerIndicatorsWidget *keyerIndicatorsWidget;
+    PttIndicatorWidget *pttIndicatorWidget;
+
+    QHBoxLayout *keyerErrorMessageLayout;
+    KeyerErrorMessageWidget *keyerErrorMessageDisplay;
+
+
+    QHBoxLayout *cwSliderLayout;
     CwSpeedControl *cwSpeedSlider = nullptr;
 
-    void createCwSlider();
+    QHBoxLayout *cwMessagePlayingLayout;
+    QLabel *cwMessagePlayingLabel;
+    QLabel *cwMessagePlayingDisplay;
+
+
+    QHBoxLayout *cwEntryLayout;
+    CwEntryWidget *cwEntry;
+
+
 
 };
 

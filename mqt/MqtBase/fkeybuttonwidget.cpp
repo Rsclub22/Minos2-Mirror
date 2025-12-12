@@ -1,3 +1,4 @@
+#include <QVariant>
 #include "fkeybuttonwidget.h"
 
 FKeyButtonWidget::FKeyButtonWidget(QWidget *parent)

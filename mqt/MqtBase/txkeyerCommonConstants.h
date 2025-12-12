@@ -76,6 +76,7 @@ namespace TxKeyerCommon
         Timer,
         InternalSoundCardVoiceKeyer,
         DTRKeyerTXStatus,
+        DTRKeyerPttStatus,
         WinKeyerTXStatus
     };
 

@@ -15,6 +15,10 @@ class PttIndicatorWidget : public QFrame
 public:
     PttIndicatorWidget(QWidget *parent = nullptr);
 
+    QSize sizeHint() const override;
+    QSize minimumSizeHint() const override;
+
+
     void setPttEnabledIndicator(const bool on);
     void setTxStatusIndicator(const bool on);
     void setPttTypeText(const QString text);

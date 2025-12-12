@@ -12,11 +12,15 @@ CwSpeedControl::CwSpeedControl(QWidget *parent)
 
     speedLabel = new QLabel("CW Speed: 20 WPM");
 
+
     connect(slider, &QSlider::valueChanged, this, &CwSpeedControl::onSpeedChanged);
 
-    auto *layout = new QVBoxLayout;
+    auto *layout = new QHBoxLayout;
+    layout->setContentsMargins(0, 0, 0, 0);
+    layout->setSpacing(2);
     layout->addWidget(speedLabel);
     layout->addWidget(slider);
+    layout->addStretch();
     setLayout(layout);
 }
 

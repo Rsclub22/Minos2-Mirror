@@ -5,19 +5,31 @@ KeyerErrorMessageWidget::KeyerErrorMessageWidget(QWidget *parent)
     :QFrame(parent)
 {
 
-    layout = new QHBoxLayout(this);
+    layout = new QHBoxLayout();
     layout->setContentsMargins(2, 2, 2, 2);
     layout->setSpacing(2);
 
-    QLabel *errorLabelText = new QLabel();
-    errorLabelText->setText("Error: ");
+    QLabel *errorLabelText = new QLabel("Error: ");
 
     errorText = new QLabel();
 
+    layout->addWidget(errorLabelText);
+    layout->addWidget(errorText);
 
-
+    setLayout(layout);
 
 }
+
+QSize KeyerErrorMessageWidget::sizeHint() const
+{
+    return QSize(150, 40); // reasonable for 3 small controls
+}
+
+QSize KeyerErrorMessageWidget::minimumSizeHint() const
+{
+    return QSize(80, 25);
+}
+
 
 
 void KeyerErrorMessageWidget::setErrorMessage(const QString errorMsg)

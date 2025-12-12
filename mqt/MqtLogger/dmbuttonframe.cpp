@@ -36,7 +36,7 @@
 
 
 #include "dmbuttonframe.h"
-#include "ui_dmbuttonframe.h"
+//#include "ui_dmbuttonframe.h"
 
 using namespace TxKeyerCommon;
 
@@ -85,14 +85,100 @@ std::map<TxKeyerId, UiElementCfg> keyerUiMap = {
 
 DMButtonFrame::DMButtonFrame(TxKeyerFactory *txKeyerFactory_, DMKeyerContainer* keyerContainer_, QWidget *parent) :
     QFrame(parent),
-    ui(new Ui::DMButtonFrame),
+//    ui(new Ui::DMButtonFrame),
     fixedMode(false),
     txKeyerFactory(txKeyerFactory_),
     keyerContainer(keyerContainer_)
 {
-    ui->setupUi(this);
+//    ui->setupUi(this);
 
-    createKeyerForms();         // using stackedwidget
+    // create ui for this frame
+
+
+    QVBoxLayout *frameLayout = new QVBoxLayout(this);
+    frameLayout->setContentsMargins(0, 0, 0, 0);
+    frameLayout->setSpacing(2);
+
+    // we create the stackedwidgets for mainContentLayout
+
+    keyerFormsStack = new QStackedWidget(this);
+    keyerFormsStack->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum);
+
+
+    // Create all the keyer forms
+    noneForm = new TxKeyerNoneForm(this);
+    voiceRigControlForm = new TxVoiceRigControlForm(this);
+    voiceRigControlForm->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+    cwRigControlForm = new TxKeyerCwRigControlForm(this);
+    cwRigControlForm->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+    cwDtrForm = new TxKeyerCwDtrForm(this);
+    cwDtrForm->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+    digitalModesForm = new TxKeyerDigitalModesForm();
+    digitalModesForm->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+    // Add forms to stacked widget
+    keyerFormsStack->addWidget(noneForm);           // Index 0
+    keyerFormsStack->addWidget(voiceRigControlForm); // Index 1
+    keyerFormsStack->addWidget(cwRigControlForm);    // Index 2
+    keyerFormsStack->addWidget(cwDtrForm);           // Index 3
+    keyerFormsStack->addWidget(digitalModesForm);    // index 4
+
+    keyerFormsStack->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum);
+
+
+
+
+    mainContentLayout = new QVBoxLayout();
+    mainContentLayout->addWidget(keyerFormsStack);
+
+    FkeyGridLayout = new QGridLayout();
+
+    mainPushButtonsLayout = new QHBoxLayout();
+    mainPushButtonsLayout->setSpacing(6);
+    mainPushButtonsLayout->setContentsMargins(2, 2, 2, 2);
+
+
+    stopButton = new QPushButton(tr("Stop"));
+    stopButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+
+    chooseButton = new QPushButton(tr("Choose File"));
+    chooseButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+
+    configEditButton = new QPushButton(tr("Config/Edit"));
+    configEditButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+
+    fkeysetCombo = new QComboBox;
+    fkeysetCombo->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
+
+    selectedRadioLabel = new QLabel();
+    selectedRadioLabel->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
+
+    logitButton = new QPushButton(tr("Log it"));
+    logitButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+
+    wipeButton = new QPushButton(tr("Wipe"));
+    wipeButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+
+    mainPushButtonsLayout->addWidget(stopButton);
+    mainPushButtonsLayout->addWidget(chooseButton);
+    mainPushButtonsLayout->addWidget(configEditButton);
+    mainPushButtonsLayout->addWidget(fkeysetCombo);
+    mainPushButtonsLayout->addWidget(selectedRadioLabel);
+    mainPushButtonsLayout->addStretch();
+    mainPushButtonsLayout->addWidget(logitButton);
+    mainPushButtonsLayout->addStretch();
+    mainPushButtonsLayout->addWidget(wipeButton);
+
+    frameLayout->addLayout(mainContentLayout, 0);
+    frameLayout->addLayout(FkeyGridLayout, 0);
+    frameLayout->addLayout(mainPushButtonsLayout, 0);
+
+
+
+
 
     keyerSettings = keyerContainer->keyerSettings;
 
@@ -124,6 +210,12 @@ DMButtonFrame::DMButtonFrame(TxKeyerFactory *txKeyerFactory_, DMKeyerContainer* 
     connect(keyerContainer, &DMKeyerContainer::pcCwKeyerTxOnStateChanged, this, &DMButtonFrame::onPcCwKeyerTxOnStateChanged);
     connect(keyerContainer, &DMKeyerContainer::pcCwKeyerCurrentWpmChanged, this, &DMButtonFrame::onPcCwKeyerCurrentWpmChanged);
     connect(keyerContainer, &DMKeyerContainer::loggerRadioSettingsChanged, this, &DMButtonFrame::onLoggerRadioSettingsChanged);
+
+    // Connect signals from forms
+    connectFormSignals();
+
+    // Start with none form visible
+    selectKeyerUiForm(noneForm);
 
 
     TContestApp::getContestApp() ->loggerBundle.getStringProfile( elpDigiFunctionKeyFile, fkeyFileName );
@@ -214,16 +306,15 @@ DMButtonFrame::~DMButtonFrame()
         keyerContainer = nullptr;
     }
 
-    delete ui;
+//    delete ui;
 
 
 }
 
 
 void DMButtonFrame::clearFkeyLayout()
-{
-    QLayoutItem *child;
-    while ((child = ui->FkeyGridLayout->takeAt(0)) != nullptr)
+{    QLayoutItem *child;
+    while ((child = FkeyGridLayout->takeAt(0)) != nullptr)
     {
         if (child->widget())
             child->widget()->deleteLater();
@@ -254,7 +345,7 @@ void DMButtonFrame::buildFkeyButtons(int count)
         fButtons << b;
 
         // Add to grid
-        ui->FkeyGridLayout->addWidget(b, row, col);
+        FkeyGridLayout->addWidget(b, row, col);
 
         col++;
         if (col >= perRow) {
@@ -576,7 +667,7 @@ void  DMButtonFrame::onCwMacroTextProcessed(const QString &cwTextSent)
 
 }
 
-
+/*
 void DMButtonFrame::createKeyerForms()
 {
 
@@ -585,27 +676,35 @@ void DMButtonFrame::createKeyerForms()
     // Create all the keyer forms
     noneForm = new TxKeyerNoneForm(this);
     voiceRigControlForm = new TxVoiceRigControlForm(this);
+    voiceRigControlForm->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+
     cwRigControlForm = new TxKeyerCwRigControlForm(this);
     cwDtrForm = new TxKeyerCwDtrForm(this);
+    digitalModesForm = new TxKeyerDigitalModesForm();
 
     // Add forms to stacked widget
     keyerFormsStack->addWidget(noneForm);           // Index 0
     keyerFormsStack->addWidget(voiceRigControlForm); // Index 1
     keyerFormsStack->addWidget(cwRigControlForm);    // Index 2
     keyerFormsStack->addWidget(cwDtrForm);           // Index 3
+    keyerFormsStack->addWidget(digitalModesForm);    // index 4
 
-    // Add stacked widget to your main layout
-    ui->mainContentLayout->addWidget(keyerFormsStack);
+    keyerFormsStack->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+    keyerFormsStack->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+
+    ui->mainContentLayout->addWidget(keyerFormsStack); // no stretch
 
     // Connect signals from forms
     connectFormSignals();
 
     // Start with none form visible
-    keyerFormsStack->setCurrentWidget(noneForm);
+    selectKeyerUiForm(noneForm);
+
 
     qDebug() << "Stacked widget created with" << keyerFormsStack->count() << "forms";
 }
-
+*/
 void DMButtonFrame::connectFormSignals()
 {
     // For now, just add debug output when forms are created
@@ -625,7 +724,6 @@ void DMButtonFrame::connectFormSignals()
 
 
 
-
 void DMButtonFrame::setFrameStateForKeyer(QString txKeyerName)
 {
     if (!ct) return;
@@ -637,17 +735,17 @@ void DMButtonFrame::setFrameStateForKeyer(QString txKeyerName)
     switch (txKeyerId)
     {
     case TxKeyerId::RigControl:
+
         logMessage(QString("setFrameState =  Voice RigControl"));
-        currentName = ct->rigControlCurrentFKeySetContest.getValue();
-        fkeyFileName = TX_KEYER_PATH().append(rigControlKeyerConfigFilename);
-        keyerFormsStack->setCurrentWidget(voiceRigControlForm);
+        set_rigControl_FrameState();
         break;
+
     case TxKeyerId::CW_RigControl:
+
         logMessage(QString("setFrameState =  CW RigControl"));
-        currentName = ct->cwRigControlCurrentFKeySetContest.getValue();
-        fkeyFileName = TX_KEYER_PATH().append(cwRigControlKeyerConfigFilename);
-        keyerFormsStack->setCurrentWidget(cwRigControlForm);
+        set_cwRigControl_FrameState();
         break;
+
     case TxKeyerId::PcCwKeyer:
 
         logMessage(QString("setFrameState =  CW DTR Keyer"));
@@ -658,13 +756,23 @@ void DMButtonFrame::setFrameStateForKeyer(QString txKeyerName)
         currentName = ct->internalVoiceKeyerCurrentFKeySetContest.getValue();
         fkeyFileName = TX_KEYER_PATH().append(InternalKeyerConfigFilename);
         break;
-    case TxKeyerId::None:
-        logMessage(QString("setFrameState =  None"));
-        keyerFormsStack->setCurrentWidget(noneForm);
+
+    case TxKeyerId::DigitalModes:
+
+        logMessage(QString("setFrameState =  Digtal Modes"));
+        set_DigiMode_FrameState();
         break;
+
+    case TxKeyerId::None:
+
+        logMessage(QString("setFrameState =  None"));
+        set_None_FrameState();
+        break;
+
     default:
         txKeyParamList.clear();
         currentName.clear();
+        set_None_FrameState();
         return;     // exit.....
         break;
     }
@@ -785,12 +893,18 @@ void DMButtonFrame::setFrameState(QString txKeyerName)
     }
 }*/
 
+void DMButtonFrame::selectKeyerUiForm(QWidget *uiForm)
+{
+    keyerFormsStack->setCurrentWidget(uiForm);
+    keyerFormsStack->setMinimumHeight(uiForm->sizeHint().height());
+    keyerFormsStack->updateGeometry();
+}
 
 void DMButtonFrame::set_DigiMode_FrameState()
 {
     txKeyParamList.clear();
     selectedKeyerCap.getKeyerType() = txKeyerTypes[TxKeyerId::DigitalModes];
-
+    selectKeyerUiForm(digitalModesForm);
     clearButtonLabels();
 
 
@@ -827,7 +941,7 @@ void DMButtonFrame::set_None_FrameState()
 
      selectedKeyerCap.getKeyerType() = txKeyerTypes[TxKeyerId::None];
 
-
+    selectKeyerUiForm(noneForm);
 
 }
 
@@ -854,17 +968,21 @@ void DMButtonFrame::creatCwSlider()
 
 void DMButtonFrame::set_rigControl_FrameState()
 {
-
-
-
-    // ui->noExtKeyerLabel->clear();
-
     if (!ct)
     {
         return;
     }
 
     currentName = ct->rigControlCurrentFKeySetContest.getValue();
+    fkeyFileName = TX_KEYER_PATH().append(rigControlKeyerConfigFilename);
+    selectKeyerUiForm(voiceRigControlForm);
+
+
+    // ui->noExtKeyerLabel->clear();
+
+
+
+
 
     logMessage(QString("set_rigControl_framestate - current contest = %1").arg(currentName));
 
@@ -939,7 +1057,7 @@ void DMButtonFrame::setupRigControl_Ui_Elements()
         setAvailIndicatorVisible(false);
     }
 
-    setRepeatIndicatorVisible(selectedKeyerCap.getHasMessageRepeat());
+    //setRepeatIndicatorVisible(selectedKeyerCap.getHasMessageRepeat());
 
     // ui->stopButton->setVisible(true);
 
@@ -979,6 +1097,9 @@ void DMButtonFrame::set_cwRigControl_FrameState()
     {
         return;
     }
+
+    selectKeyerUiForm(cwRigControlForm);
+
 
     currentName = ct->cwRigControlCurrentFKeySetContest.getValue();
 
@@ -1097,7 +1218,8 @@ void DMButtonFrame::set_pcCwKeyer_FrameState()
 
     readSingleKeyerFile(fkeyFileName, selectedKeyerCap.getKeyerType());  // also populates FkSetCombo
 
-    keyerFormsStack->setCurrentWidget(cwDtrForm);
+    selectKeyerUiForm(cwDtrForm);
+
 
     setAvailIndicatorOnOffForPcCwKeyer();
 
@@ -2052,15 +2174,11 @@ void DMButtonFrame::setAvailIndicatorVisible(bool visible)
 
 void DMButtonFrame:: setAvailIndicatorOnOffForPcCwKeyer()
 {
+    bool keyerAvail = isPcCwKeyerLoaded() && isPcCwKeyerConnected();
+    logMessage(QString("PcCwKeyer is available = %1").arg(keyerAvail ? "true":"False"));
 
-    if (isPcCwKeyerLoaded() && isPcCwKeyerConnected())
-    {
-        cwDtrForm->setKeyerAvailableIndicatorOnOff(true);
-    }
-    else
-    {
-        cwDtrForm->setKeyerAvailableIndicatorOnOff(false);
-    }
+    cwDtrForm->setKeyerAvailableIndicatorOnOff(keyerAvail);
+
 }
 
 
@@ -3649,14 +3767,18 @@ void DMButtonFrame::onPcCwKeyerConnectionStateChanged()
     logMessage(QString("PcCwKeyerConnection state = %1").arg(stateStr));
     if (txKeyer && selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::PcCwKeyer])
     {
-        if (stateStr == "Open")
+        // we read the PcCwKeyerLoaded and PcCwKeyerConnectedFlags in SendDm
+
+        setAvailIndicatorOnOffForPcCwKeyer();
+
+        /*if (stateStr == "Open")
         {
             setAvailIndicatorOnOff(true);
         }
         else
         {
             setAvailIndicatorOnOff(false);
-        }
+        }*/
     }
 }
 void DMButtonFrame::onPcCwKeyerErrorMsgChanged()

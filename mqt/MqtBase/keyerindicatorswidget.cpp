@@ -6,46 +6,68 @@ KeyerIndicatorsWidget::KeyerIndicatorsWidget(QWidget *parent)
 {
     indicatorGrpBox = new QGroupBox("Keyer", this);
 
-    layout = new QHBoxLayout(this);
+    layout = new QHBoxLayout();
     layout->setContentsMargins(2, 2, 2, 2);
-    layout->setSpacing(2);
+    layout->setSpacing(6);
+
+    auto makeVLine = [this]() {
+        QFrame *l = new QFrame(this);
+        l->setFrameShape(QFrame::VLine);
+        l->setFrameShadow(QFrame::Sunken);
+        return l;
+    };
 
 
-    QLabel *availLbl = new QLabel();
-    availLbl->setText("Avail");
+    QLabel *availLbl = new QLabel("Avail");
     keyerAvailIndicator = new QPushButton();
     keyerAvailIndicator->setMaximumSize(16, 16);
     keyerAvailIndicator->setIconSize(QSize(16, 16));
+    keyerAvailIndicator->setStyleSheet(STATUS_INDICATOR_DISCONNECT_STYLE);
 
-    QLabel *repeatLbl = new QLabel();
-    repeatLbl->setText("Repeat");
+    QLabel *repeatLbl = new QLabel("Repeat");
     repeatIndicator = new QPushButton();
     repeatIndicator->setMaximumSize(16, 16);
     repeatIndicator->setIconSize(QSize(16, 16));
+    repeatIndicator->setStyleSheet(STATUS_INDICATOR_DISCONNECT_STYLE);
 
-    QLabel *eomLbl = new QLabel();
-    eomLbl->setText("EOM: ");
+    QLabel *eomLbl = new QLabel("EOM: ");
     eomText = new QLabel();
-
-    QFrame *vLine = new QFrame(this);
-    vLine->setFrameShape(QFrame::VLine);
-    vLine->setFrameShadow(QFrame::Sunken);
-
 
     layout->addWidget(availLbl);
     layout->addWidget(keyerAvailIndicator);
 
-    layout->addWidget(vLine);
+    layout->addWidget(makeVLine());
 
     layout->addWidget(repeatLbl);
     layout->addWidget(repeatIndicator);
 
-    layout->addWidget(vLine);
+    layout->addWidget(makeVLine());
+
     layout->addWidget(eomLbl);
     layout->addWidget(eomText);
 
+
     indicatorGrpBox->setLayout(layout);
+
+    // this helps to apply a layout when promoted..
+    auto *outerLayout = new QHBoxLayout(this);
+    outerLayout->setContentsMargins(0, 0, 0, 0);
+    outerLayout->addWidget(indicatorGrpBox);
+
 }
+
+QSize KeyerIndicatorsWidget::sizeHint() const
+{
+    return QSize(50, 50);
+}
+
+QSize KeyerIndicatorsWidget::minimumSizeHint() const
+{
+    return QSize(20, 20);
+}
+
+
+
 
 void KeyerIndicatorsWidget::setKeyerAvailableIndicatorOnOff(bool on)
 {

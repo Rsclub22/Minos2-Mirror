@@ -1,3 +1,4 @@
+#include <QDebug>
 #include "txkeyercwdtrform.h"
 #include "ui_txkeyercwdtrform.h"
 #include "cwspeedcontrol.h"
@@ -6,41 +7,97 @@
 
 TxKeyerCwDtrForm::TxKeyerCwDtrForm(QWidget *parent)
     : QWidget(parent)
-    , ui(new Ui::TxKeyerCwDtrForm)
+//    , ui(new Ui::TxKeyerCwDtrForm)
 {
-    ui->setupUi(this);
+//    ui->setupUi(this);
 
-    createCwSlider();
-    ui->cwSliderLayout->addWidget(cwSpeedSlider);
+    // create cw dtr keyer ui
 
-    connect(ui->cwEntry, &CwEntryWidget::cwEntryReturnPressed, this,
+    indicatorLayout = new QHBoxLayout();
+    indicatorLayout->setContentsMargins(2, 0, 0, 2);
+    indicatorLayout->setSpacing(6);
+
+    keyerIndicatorsWidget = new KeyerIndicatorsWidget();
+    pttIndicatorWidget = new PttIndicatorWidget();
+
+    keyerIndicatorsWidget->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum);
+    keyerIndicatorsWidget->setMaximumHeight(keyerIndicatorsWidget->sizeHint().height());
+
+    pttIndicatorWidget->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum);
+    pttIndicatorWidget->setMaximumHeight(pttIndicatorWidget->sizeHint().height());
+
+
+    indicatorLayout->addWidget(keyerIndicatorsWidget);
+    indicatorLayout->addWidget(pttIndicatorWidget);
+    indicatorLayout->addStretch();
+
+    keyerErrorMessageLayout = new QHBoxLayout();
+    keyerErrorMessageLayout->setContentsMargins(2, 0, 0, 2);
+    keyerErrorMessageLayout->setSpacing(6);
+
+    keyerErrorMessageDisplay = new KeyerErrorMessageWidget();
+    keyerErrorMessageDisplay->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+    keyerErrorMessageDisplay->setMaximumHeight(keyerErrorMessageDisplay->sizeHint().height());
+
+    keyerErrorMessageLayout->addWidget(keyerErrorMessageDisplay);
+
+    cwSliderLayout = new QHBoxLayout();
+    cwSpeedSlider = new CwSpeedControl();
+    cwSpeedSlider->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+    cwSpeedSlider->setMaximumHeight(cwSpeedSlider->sizeHint().height());
+
+    cwSliderLayout->addWidget(cwSpeedSlider);
+
+    cwMessagePlayingLayout = new QHBoxLayout();
+    cwMessagePlayingLabel = new QLabel(tr("Stored Message Playing: "));
+    cwMessagePlayingLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+    cwMessagePlayingLabel->setMaximumHeight(cwMessagePlayingLabel->sizeHint().height());
+
+    cwMessagePlayingDisplay = new QLabel();
+    cwMessagePlayingDisplay->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+    cwMessagePlayingDisplay->setMaximumHeight(cwMessagePlayingDisplay->sizeHint().height());
+
+    cwMessagePlayingLayout->addWidget(cwMessagePlayingLabel);
+    cwMessagePlayingLayout->addWidget(cwMessagePlayingDisplay);
+
+    cwEntryLayout = new QHBoxLayout();
+    cwEntry = new CwEntryWidget();
+    cwEntry->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+    cwEntry->setMaximumHeight(cwEntry->sizeHint().height());
+
+    cwEntryLayout->addWidget(cwEntry);
+
+    QVBoxLayout *mainLayout = new QVBoxLayout(this);
+    mainLayout->setContentsMargins(0, 0, 0, 0);
+    mainLayout->setSpacing(2);
+    mainLayout->addLayout(indicatorLayout);
+    mainLayout->addLayout(keyerErrorMessageLayout);
+    mainLayout->addLayout(cwSliderLayout);
+    mainLayout->addLayout(cwMessagePlayingLayout);
+    mainLayout->addLayout(cwEntryLayout);
+
+    setLayout(mainLayout);
+
+
+
+    connect(cwEntry, &CwEntryWidget::cwEntryReturnPressed, this,
              [this](){ emit cwEntryReturnPressed(); });
-}
-
-TxKeyerCwDtrForm::~TxKeyerCwDtrForm()
-{
-    delete ui;
-}
-
-
-void TxKeyerCwDtrForm::createCwSlider()
-{
-    cwSpeedSlider = new CwSpeedControl(this);
-    //ui->cwSpeedSliderHorizontalLayout->addWidget(cwSpeedSlider);
-
-    cwSpeedSlider->setSpeedRange(
-         TxKeyerCommon::PC_CW_KEYER_MIN_WPM,
-         TxKeyerCommon::PC_CW_KEYER_MAX_WPM
-        );
-
 
     connect(cwSpeedSlider, &CwSpeedControl::cwSpeedChanged, this,
             [this](int wpm){ emit sendWpmToPcCwkeyer(wpm); });
 
-
-
+    qDebug() << "Form:" << this->objectName()
+             << "sizeHint =" << this->sizeHint()
+             << "minSizeHint =" << this->minimumSizeHint();
 
 }
+
+TxKeyerCwDtrForm::~TxKeyerCwDtrForm()
+{
+
+}
+
+
 
 void TxKeyerCwDtrForm::setCwSliderValue(int value)
 {
@@ -50,78 +107,78 @@ void TxKeyerCwDtrForm::setCwSliderValue(int value)
 
 QString TxKeyerCwDtrForm::getCwEntryText()
 {
-    return ui->cwEntry->getCwEntryText();
+    return cwEntry->getCwEntryText();
 }
 
 void TxKeyerCwDtrForm::setCwFreeTextIndicatorOnOff(bool on)
 {
-    ui->cwEntry->setCwFreeTextIndicatorOnOff(on);
+    cwEntry->setCwFreeTextIndicatorOnOff(on);
 }
 
 
 void TxKeyerCwDtrForm::setKeyerAvailableIndicatorOnOff(bool on)
 {
-    ui->KeyIndicators->setKeyerAvailableIndicatorOnOff(on);
+    keyerIndicatorsWidget->setKeyerAvailableIndicatorOnOff(on);
 }
 
 void TxKeyerCwDtrForm::setRepeatIndicatorOnOff(bool on)
 {
-    ui->KeyIndicators->setRepeatIndicatorOnOff(on);
+    keyerIndicatorsWidget->setRepeatIndicatorOnOff(on);
 }
 
 void TxKeyerCwDtrForm::setEOMLabelText(const QString text)
 {
-    ui->KeyIndicators->setEOMLabelText(text);
+    keyerIndicatorsWidget->setEOMLabelText(text);
 }
 
 void TxKeyerCwDtrForm::clearEOMLabelText()
 {
-    ui->KeyIndicators->clearEOMLabelText();
+    keyerIndicatorsWidget->clearEOMLabelText();
 }
 
 void TxKeyerCwDtrForm::setPttEnabledIndicatorOnOff(const bool on)
 {
-    ui->PttIndicators->setPttEnabledIndicator(on);
+    pttIndicatorWidget->setPttEnabledIndicator(on);
 }
 
 
 void TxKeyerCwDtrForm::setTxStatusIndicatorOnOff(const bool on)
 {
-    ui->PttIndicators->setTxStatusIndicator(on);
+    pttIndicatorWidget->setTxStatusIndicator(on);
 }
 
 void TxKeyerCwDtrForm::setPttTypeText(const QString text)
 {
-    ui->PttIndicators->setPttTypeText(text);
+    pttIndicatorWidget->setPttTypeText(text);
 }
 
 void TxKeyerCwDtrForm::clearPttTypeText()
 {
-    ui->PttIndicators->clearPttTypeText();
+    pttIndicatorWidget->clearPttTypeText();
 }
 
 void TxKeyerCwDtrForm::setStoredMessagePlayingDisplay(const QString msg)
 {
-    ui->storedMessagePlayingDisplay->setText(msg);
+    cwMessagePlayingDisplay->setText(msg);
 }
 
 void TxKeyerCwDtrForm::clearStoredMessagePlayingDisplay()
 {
-    ui->storedMessagePlayingDisplay->clear();
+    cwMessagePlayingDisplay->clear();
 }
 
 void TxKeyerCwDtrForm::setErrorMessageDisplayText(const QString errormsg)
 {
-    ui->keyerErrorMessageDisplay->setErrorMessage(errormsg);
+    keyerErrorMessageDisplay->setErrorMessage(errormsg);
 }
 
 void TxKeyerCwDtrForm::clearErrorMessageDisplayText()
 {
-    ui->keyerErrorMessageDisplay->clearErrorMessage();
+    keyerErrorMessageDisplay->clearErrorMessage();
 }
 
 
 void TxKeyerCwDtrForm::showTemporaryErrorMessage(const QString &msg, int timeoutMs, const QColor &colour)
 {
-    ui->keyerErrorMessageDisplay->showTemporaryErrorMessage(msg, timeoutMs, colour);
+    keyerErrorMessageDisplay->showTemporaryErrorMessage(msg, timeoutMs, colour);
 }
