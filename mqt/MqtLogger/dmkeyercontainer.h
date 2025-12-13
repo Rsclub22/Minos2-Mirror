@@ -81,6 +81,9 @@ public:
     void removeCurrentTab();
     int getTabCount() const;
 
+    void setErrorMessageDisplayText(const QString errormsg);
+    void clearErrorMessageDisplayText();
+    void showTemporaryErrorMessage(const QString &msg, int timeoutMs, const QColor &colour);
 signals:
 
 
@@ -148,6 +151,10 @@ private:
     QPushButton *modeToggleButton;
     QComboBox *txKeyerSelect;
     QStackedWidget *stackedWidget;
+
+    QHBoxLayout *keyerErrorMessageLayout;
+    KeyerErrorMessageWidget *keyerErrorMessageDisplay;
+
 
     // Standalone mode widget
     DMButtonFrame *standaloneFrame;

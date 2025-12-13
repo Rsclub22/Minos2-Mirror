@@ -1,43 +1,30 @@
 #include <QDebug>
 #include "txKeyerVoiceRigcontrolForm.h"
+#include "keyerWidgetFactory.h"
 
 
 TxVoiceRigControlForm::TxVoiceRigControlForm(QWidget *parent)
     : QWidget(parent)
 {
 
+    // create ui
 
-    indicatorLayout = new QHBoxLayout();
-    indicatorLayout->setContentsMargins(2, 0, 0, 2);
-    indicatorLayout->setSpacing(6);
-
-    keyerIndicatorsWidget = new KeyerIndicatorsWidget();
-    pttIndicatorWidget = new PttIndicatorWidget();
-
-    keyerIndicatorsWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
-    keyerIndicatorsWidget->setMaximumHeight(keyerIndicatorsWidget->sizeHint().height());
-
-    pttIndicatorWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
-    pttIndicatorWidget->setMaximumHeight(keyerIndicatorsWidget->sizeHint().height());
-
-    QSpacerItem *hSpacer = new QSpacerItem(20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+    indicators = KeyerWidgetFactory::createIndicators(this);
+    indicatorLayout = KeyerWidgetFactory::createRowLayout(this);
+    indicatorLayout->addWidget(indicators.keyerIndicators);
+    indicatorLayout->addWidget(indicators.pttIndicator);
+    indicatorLayout->addStretch();
 
 
-    indicatorLayout->addWidget(keyerIndicatorsWidget, 1);   //stretch 1
-    indicatorLayout->addWidget(pttIndicatorWidget, 1);
-    indicatorLayout->addSpacerItem(hSpacer);
+    //keyerErrorMessageDisplay = KeyerWidgetFactory::createErrorMessage(this);
+    //keyerErrorMessageLayout = KeyerWidgetFactory::createRowLayout(this);
+    //keyerErrorMessageLayout->addWidget(keyerErrorMessageDisplay);
 
-    errorMessageLayout = new QHBoxLayout();
-    keyerErrorMessageWidget = new KeyerErrorMessageWidget();
-    keyerErrorMessageWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-    keyerErrorMessageWidget->setMaximumHeight(keyerErrorMessageWidget->sizeHint().height());
-    errorMessageLayout->addWidget(keyerErrorMessageWidget);
 
-    QVBoxLayout *mainLayout = new QVBoxLayout(this);
-    mainLayout->setContentsMargins(0, 0, 0, 0);
-    mainLayout->setSpacing(2);
+
+    QVBoxLayout *mainLayout = KeyerWidgetFactory::createMainLayout(this);
     mainLayout->addLayout(indicatorLayout);
-    mainLayout->addLayout(errorMessageLayout);
+    //mainLayout->addLayout(keyerErrorMessageLayout);
 
     setLayout(mainLayout);
 
@@ -58,59 +45,60 @@ TxVoiceRigControlForm::~TxVoiceRigControlForm()
 
 void TxVoiceRigControlForm::setKeyerAvailableIndicatorOnOff(bool on)
 {
-    keyerIndicatorsWidget->setKeyerAvailableIndicatorOnOff(on);
+    indicators.keyerIndicators->setKeyerAvailableIndicatorOnOff(on);
 }
 
 void TxVoiceRigControlForm::setRepeatIndicatorOnOff(bool on)
 {
-    keyerIndicatorsWidget->setRepeatIndicatorOnOff(on);
+    indicators.keyerIndicators->setRepeatIndicatorOnOff(on);
 }
 
 void TxVoiceRigControlForm::setEOMLabelText(const QString text)
 {
-    keyerIndicatorsWidget->setEOMLabelText(text);
+    indicators.keyerIndicators->setEOMLabelText(text);
 }
 
 void TxVoiceRigControlForm::clearEOMLabelText()
 {
-    keyerIndicatorsWidget->clearEOMLabelText();
+    indicators.keyerIndicators->clearEOMLabelText();
 }
 
 void TxVoiceRigControlForm::setPttEnabledIndicatorOnOff(const bool on)
 {
-    pttIndicatorWidget->setPttEnabledIndicator(on);
+    indicators.pttIndicator->setPttEnabledIndicator(on);
 }
 
 
 void TxVoiceRigControlForm::setTxStatusIndicatorOnOff(const bool on)
 {
-    pttIndicatorWidget->setTxStatusIndicator(on);
+    indicators.pttIndicator->setTxStatusIndicator(on);
 }
 
 void TxVoiceRigControlForm::setPttTypeText(const QString text)
 {
-    pttIndicatorWidget->setPttTypeText(text);
+    indicators.pttIndicator->setPttTypeText(text);
 }
 
 void TxVoiceRigControlForm::clearPttTypeText()
 {
-    pttIndicatorWidget->clearPttTypeText();
+    indicators.pttIndicator->clearPttTypeText();
 }
 
-
+/*
 void TxVoiceRigControlForm::setErrorMessageDisplayText(const QString errormsg)
 {
-    keyerErrorMessageWidget->setErrorMessage(errormsg);
+    keyerErrorMessageDisplay->setErrorMessage(errormsg);
 }
 
 void TxVoiceRigControlForm::clearErrorMessageDisplayText()
 {
-    keyerErrorMessageWidget->clearErrorMessage();
+    keyerErrorMessageDisplay->clearErrorMessage();
 }
 
 
 void TxVoiceRigControlForm::showTemporaryErrorMessage(const QString &msg, int timeoutMs, const QColor &colour)
 {
-    keyerErrorMessageWidget->showTemporaryErrorMessage(msg, timeoutMs, colour);
+   keyerErrorMessageDisplay->showTemporaryErrorMessage(msg, timeoutMs, colour);
 }
 
+*/

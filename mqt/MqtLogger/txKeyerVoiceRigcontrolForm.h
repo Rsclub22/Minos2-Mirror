@@ -5,9 +5,10 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 
-#include "keyerindicatorswidget.h"
-#include "pttindicatorwidget.h"
+
 #include "keyererrormessagewidget.h"
+#include "keyerWidgetFactory.h"
+
 
 class TxVoiceRigControlForm : public QWidget
 {
@@ -25,9 +26,9 @@ public:
     void setTxStatusIndicatorOnOff(const bool on);
     void setPttTypeText(const QString text);
     void clearPttTypeText();
-    void setErrorMessageDisplayText(const QString errormsg);
-    void clearErrorMessageDisplayText();
-    void showTemporaryErrorMessage(const QString &msg, int timeoutMs, const QColor &colour);
+    //void setErrorMessageDisplayText(const QString errormsg);
+    //void clearErrorMessageDisplayText();
+    //void showTemporaryErrorMessage(const QString &msg, int timeoutMs, const QColor &colour);
 
 private:
 
@@ -36,11 +37,11 @@ private:
 
     QHBoxLayout *indicatorLayout;
 
-    KeyerIndicatorsWidget *keyerIndicatorsWidget;
-    PttIndicatorWidget *pttIndicatorWidget;
+    KeyerIndicators indicators;
 
-    QHBoxLayout *keyerErrorMessageLayout;
-    KeyerErrorMessageWidget *keyerErrorMessageWidget;
+    //QHBoxLayout *keyerErrorMessageLayout;
+    //KeyerErrorMessageWidget *keyerErrorMessageDisplay;
+
 
 };
 

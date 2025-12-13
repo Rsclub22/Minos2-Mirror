@@ -4,10 +4,8 @@
 #include <QWidget>
 #include <QHBoxLayout>
 #include "cwentrywidget.h"
-#include "keyerindicatorswidget.h"
-#include "pttindicatorwidget.h"
-#include "keyererrormessagewidget.h"
-#include "cwspeedcontrol.h"
+#include "keyerWidgetFactory.h"
+
 
 
 
@@ -38,11 +36,11 @@ public:
 
     void clearStoredMessagePlayingDisplay();
 
-    void setErrorMessageDisplayText(const QString errormsg);
-    void clearErrorMessageDisplayText();
+//    void setErrorMessageDisplayText(const QString errormsg);
+//    void clearErrorMessageDisplayText();
 
 
-    void showTemporaryErrorMessage(const QString &msg, int timeoutMs, const QColor &colour);
+//    void showTemporaryErrorMessage(const QString &msg, int timeoutMs, const QColor &colour);
 signals:
 
     void sendWpmToPcCwkeyer(int wpm);
@@ -51,19 +49,17 @@ signals:
 private:
 
     QHBoxLayout *indicatorLayout;
-    KeyerIndicatorsWidget *keyerIndicatorsWidget;
-    PttIndicatorWidget *pttIndicatorWidget;
+    KeyerIndicators indicators;
 
-    QHBoxLayout *keyerErrorMessageLayout;
-    KeyerErrorMessageWidget *keyerErrorMessageDisplay;
+    //QHBoxLayout *keyerErrorMessageLayout;
+    //KeyerErrorMessageWidget *keyerErrorMessageDisplay;
 
 
     QHBoxLayout *cwSliderLayout;
     CwSpeedControl *cwSpeedSlider = nullptr;
 
-    QHBoxLayout *cwMessagePlayingLayout;
-    QLabel *cwMessagePlayingLabel;
-    QLabel *cwMessagePlayingDisplay;
+
+    CwMessagePlayingRow cwMessagePlayingRow;
 
 
     QHBoxLayout *cwEntryLayout;

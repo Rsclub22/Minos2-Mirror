@@ -20,12 +20,12 @@ struct CwMessagePlayingRow {
     QLabel* display;
 };
 
+
+
 // Factory functions to create commonly used widgets
 namespace KeyerWidgetFactory {
 
 KeyerIndicators createIndicators(QWidget* parent = nullptr);
-
-
 
 
 KeyerErrorMessageWidget* createErrorMessage(QWidget* parent = nullptr);
@@ -36,7 +36,9 @@ CwEntryWidget* createCwEntry(QWidget* parent = nullptr);
 
 CwMessagePlayingRow createCwMessagePlayingRow(QWidget* parent = nullptr);
 
-QHBoxLayout* createRowLayout(int left=2, int top=0, int right=0, int bottom=2, int spacing=6);
+QHBoxLayout* createRowLayout(QWidget* parent = nullptr, int left=2, int top=0, int right=0, int bottom=2, int spacing=6);
+
+QVBoxLayout* createMainLayout(QWidget* parent = nullptr, int left = 0, int top = 0, int right = 0, int bottom = 0, int spacing= 2);
 
 }
 

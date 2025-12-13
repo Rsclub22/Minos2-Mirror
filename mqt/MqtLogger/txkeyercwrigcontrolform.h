@@ -2,11 +2,9 @@
 #define TXKEYERCWRIGCONTROLFORM_H
 
 #include <QWidget>
-#include "cwspeedcontrol.h"
-
-namespace Ui {
-class TxKeyerCwRigControlForm;
-}
+#include "cwentrywidget.h"
+#include "keyererrormessagewidget.h"
+#include "keyerWidgetFactory.h"
 
 class TxKeyerCwRigControlForm : public QWidget
 {
@@ -42,15 +40,26 @@ public:
     void showTemporaryErrorMessage(const QString &msg, int timeoutMs, const QColor &colour);
 signals:
 
-    void sendWpmToPcCwkeyer(int wpm);
+
     void cwEntryReturnPressed();
 
 private:
-    Ui::TxKeyerCwRigControlForm *ui;
 
-    CwSpeedControl *cwSpeedSlider = nullptr;
+    QHBoxLayout *indicatorLayout;
+    KeyerIndicators indicators;
 
-    void createCwSlider();
+
+    //QHBoxLayout *keyerErrorMessageLayout;
+    //KeyerErrorMessageWidget *keyerErrorMessageDisplay;
+
+
+    CwMessagePlayingRow cwMessagePlayingRow;
+
+
+    QHBoxLayout *cwEntryLayout;
+    CwEntryWidget *cwEntry;
+
+
 };
 
 #endif // TXKEYERCWRIGCONTROLFORM_H

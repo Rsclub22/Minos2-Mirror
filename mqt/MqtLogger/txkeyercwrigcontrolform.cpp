@@ -1,19 +1,39 @@
 #include <QDebug>
 #include "txkeyercwrigcontrolform.h"
-#include "ui_txkeyercwrigcontrolform.h"
-#include "txkeyerCommonConstants.h"
+
+
 
 TxKeyerCwRigControlForm::TxKeyerCwRigControlForm(QWidget *parent)
     : QWidget(parent)
-    , ui(new Ui::TxKeyerCwRigControlForm)
 {
-    ui->setupUi(this);
 
-    createCwSlider();
-    ui->cwSliderLayout->addWidget(cwSpeedSlider);
 
-    connect(ui->cwEntry, &CwEntryWidget::cwEntryReturnPressed, this,
-            [this](){ emit cwEntryReturnPressed(); });
+    // create ui
+
+    indicators = KeyerWidgetFactory::createIndicators(this);
+    indicatorLayout = KeyerWidgetFactory::createRowLayout();
+    indicatorLayout->addWidget(indicators.keyerIndicators);
+    indicatorLayout->addWidget(indicators.pttIndicator);
+    indicatorLayout->addStretch();
+
+    //keyerErrorMessageDisplay = KeyerWidgetFactory::createErrorMessage(this);
+    //keyerErrorMessageLayout = KeyerWidgetFactory::createRowLayout();
+    //keyerErrorMessageLayout->addWidget(keyerErrorMessageDisplay);
+
+    cwMessagePlayingRow = KeyerWidgetFactory::createCwMessagePlayingRow(this);
+
+
+    cwEntry = KeyerWidgetFactory::createCwEntry(this);
+    cwEntryLayout = KeyerWidgetFactory::createRowLayout();
+    cwEntryLayout->addWidget(cwEntry);
+
+    QVBoxLayout *mainLayout = KeyerWidgetFactory::createMainLayout(this);
+    mainLayout->addLayout(indicatorLayout);
+    //mainLayout->addLayout(keyerErrorMessageLayout);
+    mainLayout->addLayout(cwMessagePlayingRow.layout);
+    mainLayout->addLayout(cwEntryLayout);
+
+    setLayout(mainLayout);
 
     qDebug() << "Form:" << this->objectName()
              << "sizeHint =" << this->sizeHint()
@@ -23,109 +43,87 @@ TxKeyerCwRigControlForm::TxKeyerCwRigControlForm(QWidget *parent)
 
 TxKeyerCwRigControlForm::~TxKeyerCwRigControlForm()
 {
-    delete ui;
-}
-
-
-void TxKeyerCwRigControlForm::createCwSlider()
-{
-    cwSpeedSlider = new CwSpeedControl(this);
-    //ui->cwSpeedSliderHorizontalLayout->addWidget(cwSpeedSlider);
-
-    cwSpeedSlider->setSpeedRange(
-        TxKeyerCommon::PC_CW_KEYER_MIN_WPM,
-        TxKeyerCommon::PC_CW_KEYER_MAX_WPM
-        );
-
-
-    connect(cwSpeedSlider, &CwSpeedControl::cwSpeedChanged, this,
-            [this](int wpm){ emit sendWpmToPcCwkeyer(wpm); });
-
-
-
 
 }
 
-void TxKeyerCwRigControlForm::setCwSliderValue(int value)
-{
-    cwSpeedSlider->setValue(value);
-}
+
 
 
 QString TxKeyerCwRigControlForm::getCwEntryText()
 {
-    return ui->cwEntry->getCwEntryText();
+    return cwEntry->getCwEntryText();
 }
 
 void TxKeyerCwRigControlForm::setCwFreeTextIndicatorOnOff(bool on)
 {
-    ui->cwEntry->setCwFreeTextIndicatorOnOff(on);
+    cwEntry->setCwFreeTextIndicatorOnOff(on);
 }
 
 
 void TxKeyerCwRigControlForm::setKeyerAvailableIndicatorOnOff(bool on)
 {
-    ui->KeyIndicators->setKeyerAvailableIndicatorOnOff(on);
+    indicators.keyerIndicators->setKeyerAvailableIndicatorOnOff(on);
 }
 
 void TxKeyerCwRigControlForm::setRepeatIndicatorOnOff(bool on)
 {
-    ui->KeyIndicators->setRepeatIndicatorOnOff(on);
+    indicators.keyerIndicators->setRepeatIndicatorOnOff(on);
 }
 
 void TxKeyerCwRigControlForm::setEOMLabelText(const QString text)
 {
-    ui->KeyIndicators->setEOMLabelText(text);
+    indicators.keyerIndicators->setEOMLabelText(text);
 }
 
 void TxKeyerCwRigControlForm::clearEOMLabelText()
 {
-    ui->KeyIndicators->clearEOMLabelText();
+    indicators.keyerIndicators->clearEOMLabelText();
 }
 
 void TxKeyerCwRigControlForm::setPttEnabledIndicatorOnOff(const bool on)
 {
-    ui->PttIndicators->setPttEnabledIndicator(on);
+    indicators.pttIndicator->setPttEnabledIndicator(on);
 }
 
 
 void TxKeyerCwRigControlForm::setTxStatusIndicatorOnOff(const bool on)
 {
-    ui->PttIndicators->setTxStatusIndicator(on);
+    indicators.pttIndicator->setTxStatusIndicator(on);
 }
 
 void TxKeyerCwRigControlForm::setPttTypeText(const QString text)
 {
-    ui->PttIndicators->setPttTypeText(text);
+    indicators.pttIndicator->setPttTypeText(text);
 }
 
 void TxKeyerCwRigControlForm::clearPttTypeText()
 {
-    ui->PttIndicators->clearPttTypeText();
+    indicators.pttIndicator->clearPttTypeText();
 }
 
 void TxKeyerCwRigControlForm::setStoredMessagePlayingDisplay(const QString msg)
 {
-    ui->storedMessagePlayingDisplay->setText(msg);
+    cwMessagePlayingRow.display->setText(msg);
 }
 
 void TxKeyerCwRigControlForm::clearStoredMessagePlayingDisplay()
 {
-    ui->storedMessagePlayingDisplay->clear();
+    cwMessagePlayingRow.display->clear();
 }
-
+/*
 void TxKeyerCwRigControlForm::setErrorMessageDisplayText(const QString errormsg)
 {
-    ui->keyerErrorMessageDisplay->setErrorMessage(errormsg);
+    keyerErrorMessageDisplay->setErrorMessage(errormsg);
 }
 
 void TxKeyerCwRigControlForm::clearErrorMessageDisplayText()
 {
-    ui->keyerErrorMessageDisplay->clearErrorMessage();
+    keyerErrorMessageDisplay->clearErrorMessage();
 }
 
 
 void TxKeyerCwRigControlForm::showTemporaryErrorMessage(const QString &msg, int timeoutMs, const QColor &colour)
 {
-    ui->keyerErrorMessageDisplay->showTemporaryErrorMessage(msg, timeoutMs, colour);
+    keyerErrorMessageDisplay->showTemporaryErrorMessage(msg, timeoutMs, colour);
 }
+*/

@@ -335,9 +335,6 @@ FORMS    += \
     Clusterbandmapconfigure.ui \
     txVmExternalButtonDialog.ui \
     txVmInternalSetupDialog.ui \
-    txkeyercwrigcontrolform.ui \
-    txkeyerdigitalmodesform.ui \
-    txkeyernoneform.ui \
     txvminternalbuttondialog.ui \
     txvmrigbuttondialog.ui \
     txvmrigsetupdialog.ui

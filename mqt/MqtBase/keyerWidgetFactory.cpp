@@ -62,6 +62,10 @@ QVBoxLayout* createMainLayout(QWidget* parent, int left, int top, int right, int
     return layout;
 }
 
+
+
+
+
 CwMessagePlayingRow createCwMessagePlayingRow(QWidget* parent)
 {
     CwMessagePlayingRow row;

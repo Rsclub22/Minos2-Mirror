@@ -3,9 +3,6 @@
 
 #include <QWidget>
 
-namespace Ui {
-class TxKeyerDigitalModesForm;
-}
 
 class TxKeyerDigitalModesForm : public QWidget
 {
@@ -16,7 +13,7 @@ public:
     ~TxKeyerDigitalModesForm();
 
 private:
-    Ui::TxKeyerDigitalModesForm *ui;
+
 };
 
 #endif // TXKEYERDIGITALMODESFORM_H

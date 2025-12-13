@@ -102,7 +102,7 @@ DMButtonFrame::DMButtonFrame(TxKeyerFactory *txKeyerFactory_, DMKeyerContainer* 
     // we create the stackedwidgets for mainContentLayout
 
     keyerFormsStack = new QStackedWidget(this);
-    keyerFormsStack->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum);
+    keyerFormsStack->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
 
     // Create all the keyer forms
@@ -126,7 +126,7 @@ DMButtonFrame::DMButtonFrame(TxKeyerFactory *txKeyerFactory_, DMKeyerContainer* 
     keyerFormsStack->addWidget(cwDtrForm);           // Index 3
     keyerFormsStack->addWidget(digitalModesForm);    // index 4
 
-    keyerFormsStack->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum);
+
 
 
 
@@ -172,9 +172,9 @@ DMButtonFrame::DMButtonFrame(TxKeyerFactory *txKeyerFactory_, DMKeyerContainer* 
     mainPushButtonsLayout->addStretch();
     mainPushButtonsLayout->addWidget(wipeButton);
 
-    frameLayout->addLayout(mainContentLayout, 0);
-    frameLayout->addLayout(FkeyGridLayout, 0);
-    frameLayout->addLayout(mainPushButtonsLayout, 0);
+    frameLayout->addLayout(mainContentLayout);
+    frameLayout->addLayout(FkeyGridLayout);
+    frameLayout->addLayout(mainPushButtonsLayout);
 
 
 
@@ -767,6 +767,7 @@ void DMButtonFrame::setFrameStateForKeyer(QString txKeyerName)
 
         logMessage(QString("setFrameState =  None"));
         set_None_FrameState();
+        return;
         break;
 
     default:
@@ -2306,7 +2307,6 @@ void DMButtonFrame::showTemporaryErrorMessage(const QString &msg, int timeoutMs,
     case TxKeyerId::CW_RigControl:
         break;
     case TxKeyerId::PcCwKeyer:
-        cwDtrForm->showTemporaryErrorMessage(msg, timeoutMs, colour);
         break;
     }
 
@@ -2327,7 +2327,6 @@ void DMButtonFrame::displayErrorMessage(QString msg)
     case TxKeyerId::CW_RigControl:
         break;
     case TxKeyerId::PcCwKeyer:
-        cwDtrForm->setErrorMessageDisplayText(msg);
         break;
     }
 }
@@ -2345,7 +2344,7 @@ void DMButtonFrame::clearErrorMessage()
     case TxKeyerId::CW_RigControl:
         break;
     case TxKeyerId::PcCwKeyer:
-        cwDtrForm->clearErrorMessageDisplayText();
+
         break;
     }
 

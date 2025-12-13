@@ -33,9 +33,7 @@ void KeyerErrorMessageWidget::setErrorMessage(const QString errorMsg)
 
 void KeyerErrorMessageWidget::clearErrorMessage()
 {
-    Q_ASSERT(errorText);
-    Q_ASSERT(!errorText->parent() || errorText->parent() == this);
-    errorText->clear();
+   errorText->clear();
 }
 
 

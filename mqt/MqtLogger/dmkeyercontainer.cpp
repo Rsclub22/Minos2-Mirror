@@ -80,6 +80,9 @@ DMKeyerContainer::DMKeyerContainer(QWidget *parent)
     toolbarLayout->addWidget(addKeyerButton);
     addKeyerButton->setVisible(false);
 
+    keyerErrorMessageDisplay = KeyerWidgetFactory::createErrorMessage(this);
+    toolbarLayout->addWidget(keyerErrorMessageDisplay);
+
     toolbarLayout->addStretch();
 
     mainLayout->addLayout(toolbarLayout);
@@ -834,6 +837,24 @@ void DMKeyerContainer::logRadioSettingsChanged(QSharedPointer<RadioSettingsDialo
 
 
 }
+
+
+void DMKeyerContainer::setErrorMessageDisplayText(const QString errormsg)
+{
+    keyerErrorMessageDisplay->setErrorMessage(errormsg);
+}
+
+void DMKeyerContainer::clearErrorMessageDisplayText()
+{
+    keyerErrorMessageDisplay->clearErrorMessage();
+}
+
+
+void DMKeyerContainer::showTemporaryErrorMessage(const QString &msg, int timeoutMs, const QColor &colour)
+{
+    keyerErrorMessageDisplay->showTemporaryErrorMessage(msg, timeoutMs, colour);
+}
+
 
 
 void DMKeyerContainer::logMessage(QString msg)
