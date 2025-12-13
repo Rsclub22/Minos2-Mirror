@@ -49,22 +49,14 @@ PttIndicatorWidget::PttIndicatorWidget(QWidget *parent)
 
     pttGrpBox->setLayout(layout);
 
-    // this helps to apply a layout when promoted..
+
     auto *outerLayout = new QHBoxLayout(this);
     outerLayout->setContentsMargins(0, 0, 0, 0);
     outerLayout->addWidget(pttGrpBox);
+    outerLayout->addStretch();
 
 }
 
-QSize PttIndicatorWidget::sizeHint() const
-{
-    return QSize(50, 50);
-}
-
-QSize PttIndicatorWidget::minimumSizeHint() const
-{
-    return QSize(20, 20);
-}
 
 
 

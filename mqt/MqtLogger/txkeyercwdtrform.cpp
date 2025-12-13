@@ -1,70 +1,40 @@
 #include <QDebug>
 #include "txkeyercwdtrform.h"
-#include "ui_txkeyercwdtrform.h"
+//#include "ui_txkeyercwdtrform.h"
 #include "cwspeedcontrol.h"
 #include "txkeyerCommonConstants.h"
 #include "cwentrywidget.h"
+#include "keyerWidgetFactory.h"
 
 TxKeyerCwDtrForm::TxKeyerCwDtrForm(QWidget *parent)
     : QWidget(parent)
-//    , ui(new Ui::TxKeyerCwDtrForm)
 {
-//    ui->setupUi(this);
+
 
     // create cw dtr keyer ui
 
-    indicatorLayout = new QHBoxLayout();
-    indicatorLayout->setContentsMargins(2, 0, 0, 2);
-    indicatorLayout->setSpacing(6);
-
-    keyerIndicatorsWidget = new KeyerIndicatorsWidget();
-    pttIndicatorWidget = new PttIndicatorWidget();
-
-    keyerIndicatorsWidget->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum);
-    keyerIndicatorsWidget->setMaximumHeight(keyerIndicatorsWidget->sizeHint().height());
-
-    pttIndicatorWidget->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum);
-    pttIndicatorWidget->setMaximumHeight(pttIndicatorWidget->sizeHint().height());
-
-
-    indicatorLayout->addWidget(keyerIndicatorsWidget);
-    indicatorLayout->addWidget(pttIndicatorWidget);
+    auto indicators = KeyerWidgetFactory::createIndicators(this);
+    indicatorLayout = KeyerWidgetFactory::createRowLayout();
+    indicatorLayout->addWidget(indicators.keyerIndicators);
+    indicatorLayout->addWidget(indicators.pttIndicator);
     indicatorLayout->addStretch();
 
-    keyerErrorMessageLayout = new QHBoxLayout();
-    keyerErrorMessageLayout->setContentsMargins(2, 0, 0, 2);
-    keyerErrorMessageLayout->setSpacing(6);
+    auto errorMessageDisplay = KeyerWidgetFactory::createErrorMessage(this);
+    keyerErrorMessageLayout = KeyerWidgetFactory::createRowLayout();
+    keyerErrorMessageLayout->addWidget(errorMessageDisplay);
 
-    keyerErrorMessageDisplay = new KeyerErrorMessageWidget();
-    keyerErrorMessageDisplay->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
-    keyerErrorMessageDisplay->setMaximumHeight(keyerErrorMessageDisplay->sizeHint().height());
 
-    keyerErrorMessageLayout->addWidget(keyerErrorMessageDisplay);
-
-    cwSliderLayout = new QHBoxLayout();
-    cwSpeedSlider = new CwSpeedControl();
-    cwSpeedSlider->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
-    cwSpeedSlider->setMaximumHeight(cwSpeedSlider->sizeHint().height());
-
+    auto cwSpeedSlider = KeyerWidgetFactory::createCwSpeedControl(this);
+    cwSliderLayout = KeyerWidgetFactory::createRowLayout();
     cwSliderLayout->addWidget(cwSpeedSlider);
 
-    cwMessagePlayingLayout = new QHBoxLayout();
-    cwMessagePlayingLabel = new QLabel(tr("Stored Message Playing: "));
-    cwMessagePlayingLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
-    cwMessagePlayingLabel->setMaximumHeight(cwMessagePlayingLabel->sizeHint().height());
+    auto cwMessageRow = KeyerWidgetFactory::createCwMessagePlayingRow(this);
+    cwMessagePlayingLayout = cwMessageRow.layout;
+    cwMessagePlayingLabel = cwMessageRow.label;
+    cwMessagePlayingDisplay = cwMessageRow.display;
 
-    cwMessagePlayingDisplay = new QLabel();
-    cwMessagePlayingDisplay->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
-    cwMessagePlayingDisplay->setMaximumHeight(cwMessagePlayingDisplay->sizeHint().height());
-
-    cwMessagePlayingLayout->addWidget(cwMessagePlayingLabel);
-    cwMessagePlayingLayout->addWidget(cwMessagePlayingDisplay);
-
-    cwEntryLayout = new QHBoxLayout();
-    cwEntry = new CwEntryWidget();
-    cwEntry->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
-    cwEntry->setMaximumHeight(cwEntry->sizeHint().height());
-
+    auto cwEntry = KeyerWidgetFactory::createCwEntry(this);
+    cwEntryLayout = KeyerWidgetFactory::createRowLayout();
     cwEntryLayout->addWidget(cwEntry);
 
     QVBoxLayout *mainLayout = new QVBoxLayout(this);

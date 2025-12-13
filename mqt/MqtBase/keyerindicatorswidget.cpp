@@ -49,21 +49,12 @@ KeyerIndicatorsWidget::KeyerIndicatorsWidget(QWidget *parent)
 
     indicatorGrpBox->setLayout(layout);
 
-    // this helps to apply a layout when promoted..
+
     auto *outerLayout = new QHBoxLayout(this);
     outerLayout->setContentsMargins(0, 0, 0, 0);
     outerLayout->addWidget(indicatorGrpBox);
+    outerLayout->addStretch();
 
-}
-
-QSize KeyerIndicatorsWidget::sizeHint() const
-{
-    return QSize(50, 50);
-}
-
-QSize KeyerIndicatorsWidget::minimumSizeHint() const
-{
-    return QSize(20, 20);
 }
 
 

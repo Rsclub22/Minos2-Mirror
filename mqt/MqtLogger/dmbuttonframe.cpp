@@ -1205,7 +1205,7 @@ void DMButtonFrame::setupCw_RigControl_Ui_Elements()
 void DMButtonFrame::set_pcCwKeyer_FrameState()
 {
     // ui->noExtKeyerLabel->clear();
-    clearErrorMessage();
+
 
     if (!ct)
     {
@@ -1219,6 +1219,8 @@ void DMButtonFrame::set_pcCwKeyer_FrameState()
     readSingleKeyerFile(fkeyFileName, selectedKeyerCap.getKeyerType());  // also populates FkSetCombo
 
     selectKeyerUiForm(cwDtrForm);
+
+    clearErrorMessage();
 
 
     setAvailIndicatorOnOffForPcCwKeyer();

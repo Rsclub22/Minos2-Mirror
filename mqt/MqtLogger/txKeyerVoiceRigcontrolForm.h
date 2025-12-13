@@ -39,7 +39,7 @@ private:
     KeyerIndicatorsWidget *keyerIndicatorsWidget;
     PttIndicatorWidget *pttIndicatorWidget;
 
-    QHBoxLayout *errorMessageLayout;
+    QHBoxLayout *keyerErrorMessageLayout;
     KeyerErrorMessageWidget *keyerErrorMessageWidget;
 
 };

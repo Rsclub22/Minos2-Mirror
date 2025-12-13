@@ -14,8 +14,7 @@ public:
 
     KeyerErrorMessageWidget(QWidget *parent = nullptr);
 
-    QSize sizeHint() const override;
-    QSize minimumSizeHint() const override;
+
 
 
 

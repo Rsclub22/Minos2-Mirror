@@ -1,5 +1,5 @@
 #include "keyererrormessagewidget.h"
-#include <Qtimer>
+#include <QTimer>
 
 KeyerErrorMessageWidget::KeyerErrorMessageWidget(QWidget *parent)
     :QFrame(parent)
@@ -15,20 +15,13 @@ KeyerErrorMessageWidget::KeyerErrorMessageWidget(QWidget *parent)
 
     layout->addWidget(errorLabelText);
     layout->addWidget(errorText);
+    layout->addStretch();
 
     setLayout(layout);
 
 }
 
-QSize KeyerErrorMessageWidget::sizeHint() const
-{
-    return QSize(150, 40); // reasonable for 3 small controls
-}
 
-QSize KeyerErrorMessageWidget::minimumSizeHint() const
-{
-    return QSize(80, 25);
-}
 
 
 
@@ -40,6 +33,8 @@ void KeyerErrorMessageWidget::setErrorMessage(const QString errorMsg)
 
 void KeyerErrorMessageWidget::clearErrorMessage()
 {
+    Q_ASSERT(errorText);
+    Q_ASSERT(!errorText->parent() || errorText->parent() == this);
     errorText->clear();
 }
 
