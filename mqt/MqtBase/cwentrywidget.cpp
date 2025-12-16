@@ -45,6 +45,10 @@ QString CwEntryWidget::getCwEntryText()
     return cwEntry->text();
 }
 
+void CwEntryWidget::selectAllText()
+{
+    cwEntry->selectAll();
+}
 
 void CwEntryWidget::setCwFreeTextIndicatorOnOff(bool on)
 {
@@ -59,6 +63,8 @@ void CwEntryWidget::setCwFreeTextIndicatorOnOff(bool on)
         cwPlayingIndicator->setToolTip(tr("No CW FreeText Playing"));
     }
 }
+
+
 
 void CwEntryWidget::setValidator(const QString validChars, const int maxNumChars)
 {

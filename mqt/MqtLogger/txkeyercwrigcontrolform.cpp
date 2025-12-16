@@ -54,6 +54,11 @@ QString TxKeyerCwRigControlForm::getCwEntryText()
     return cwEntry->getCwEntryText();
 }
 
+void TxKeyerCwRigControlForm::selectAllText()
+{
+    cwEntry->selectAllText();
+}
+
 void TxKeyerCwRigControlForm::setCwFreeTextIndicatorOnOff(bool on)
 {
     cwEntry->setCwFreeTextIndicatorOnOff(on);

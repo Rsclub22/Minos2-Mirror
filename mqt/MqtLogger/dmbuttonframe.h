@@ -50,26 +50,29 @@ inline const QString ExternalKeyerConfigFilename = "/Enternal/external.json";
 
 
 
-const int CHECK_RAD_CONT_CONTEST_OK = 0;
-const int CHECK_RAD_CONT_CONTEST_MISSING = 1;
-const int CHECK_RAD_CONT_RADIO_MISSING = 2;
-const int CHECK_RAD_CONT_KEYER_MISING = 3;
-const int CHECK_RAD_CONT_RADIO_NAME_EMPTY = 4;
-const int CHECK_RAD_CONT_CONTEST_NAME_EMPTY = 5;
+inline const int CHECK_RAD_CONT_CONTEST_OK = 0;
+inline const int CHECK_RAD_CONT_CONTEST_MISSING = 1;
+inline const int CHECK_RAD_CONT_RADIO_MISSING = 2;
+inline const int CHECK_RAD_CONT_KEYER_MISING = 3;
+inline const int CHECK_RAD_CONT_RADIO_NAME_EMPTY = 4;
+inline const int CHECK_RAD_CONT_CONTEST_NAME_EMPTY = 5;
+inline const int  CHECK_RAD_CONT_RADIO_IS_NOT_CONNECTED = 6;
 
 inline const QList<int> checkContestRadioErrorCodes = {CHECK_RAD_CONT_CONTEST_OK,
                                           CHECK_RAD_CONT_CONTEST_MISSING,
                                           CHECK_RAD_CONT_RADIO_MISSING,
                                           CHECK_RAD_CONT_KEYER_MISING,
                                           CHECK_RAD_CONT_RADIO_NAME_EMPTY,
-                                          CHECK_RAD_CONT_CONTEST_NAME_EMPTY};
+                                          CHECK_RAD_CONT_CONTEST_NAME_EMPTY,
+                                          CHECK_RAD_CONT_RADIO_IS_NOT_CONNECTED};
 
 inline const QStringList checkContestRadioErrorCodeStr = {"OK",
                                              "Contest %1 has not been defined, please add the contest, selecting Default contest",
                                             "Radio name %1 has not been defined, for this contest %2, please add the radio",
                                             "KeyerType %1 does not exist in json file",
                                             "Radio name is empty",
-                                            "ContestName is empty"};
+                                            "ContestName is empty",
+                                            "Radio is disconnected"};
 
 
 
@@ -426,7 +429,7 @@ private:
     void initKeyerSettings();
     void setFrameStateForKeyer(QString keyerType);
 
-    void creatCwSlider();
+
     void buildFkeyButtons(int count);
     void clearFkeyLayout();
     QString getEomText(int selectedEomType);

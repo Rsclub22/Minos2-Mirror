@@ -20,6 +20,7 @@ public:
     void setCwFreeTextIndicatorOnOff(bool on);
     void setValidator(const QString validChars, const int maxNumChars);
 
+    void selectAllText();
 signals:
 
     void cwEntryReturnPressed();

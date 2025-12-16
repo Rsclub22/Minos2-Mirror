@@ -41,6 +41,7 @@ public:
 
 
 //    void showTemporaryErrorMessage(const QString &msg, int timeoutMs, const QColor &colour);
+    void selectAllText();
 signals:
 
     void sendWpmToPcCwkeyer(int wpm);
