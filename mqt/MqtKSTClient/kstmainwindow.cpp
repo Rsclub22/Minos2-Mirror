@@ -793,7 +793,7 @@ void KSTMainWindow::analyseKstMessage(QString atj) {
             sendKST(sdone);
             recName = sl[6];
             recLoc = sl[8];
-            kstCallModel.locator = recLoc;
+            kstCallModel.locator = recLoc;  //set from LOGSTAT after LOGINC
         } else {
             // messageRx: LOGSTAT|101|Unknown user "XX0GJV".|
             // messageRx: LOGSTAT|114|Wrong password!|
@@ -1019,7 +1019,7 @@ void KSTMainWindow::analyseKstMessage(QString atj) {
                 "MSG|" + QString::number(activeChat) + "|0|/SETLOC " + myLoc + "|0|";
             sendKST(msg);
             recLoc = myLoc;
-            kstCallModel.locator = myLoc;
+            kstCallModel.locator = myLoc;   // change loc with /SETLOC
             for (auto const &l : QASCONST(*callVector)) {
                 l->distance = -1;
             }
@@ -1566,7 +1566,7 @@ void KSTMainWindow::doLoginChanges()
     {
         if (kstChatSelection.count())
         {
-            kstCallModel.locator = myLoc;
+            kstCallModel.locator = myLoc;   // set from config
             if (autoConnect)
             {
                 if (kstclient->state() != QAbstractSocket::ConnectedState

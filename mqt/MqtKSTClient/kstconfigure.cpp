@@ -15,8 +15,8 @@ KSTConfigure::KSTConfigure(QWidget *parent) :
 {
     ui->setupUi(this);
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
-    ui->portFrame->setVisible(false);
-    ui->serverFrame->setVisible(false);
+    ui->portFrame->setVisible(true);
+    ui->serverFrame->setVisible(true);
 
     ui->callsignEdit->setValidator(&userValidator);
     ui->locatorEdit->setValidator(&locValidator);
