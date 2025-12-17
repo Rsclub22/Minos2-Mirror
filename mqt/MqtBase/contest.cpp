@@ -2265,14 +2265,14 @@ QString ContestScore::disp()
         if  (usesDistricts)
         {
              buff = tr( "Score: %1 Qsos; %2 pts;%3%4 countries%5;%6%7 districts%8; %9%10 locators %13 = %14" )
-                .arg(nqsos).arg(contestScore).arg(brcc1).arg(nctry).arg(brcc2).arg(brcc3).arg(ndistrict)
-                .arg(brcc4).arg(brloc1).arg(nlocs).arg(brloc2)
+                .arg(nqsos).arg(contestScore).arg(brcc1).arg(nctry).arg(brcc2, brcc3).arg(ndistrict)
+                .arg(brcc4, brloc1).arg(nlocs).arg(brloc2)
                 .arg(totalScore );
         }
         else
         {
             buff = tr( "Score: %1 Qsos; %2 pts;%3%4 countries%5;%6%7 locators %8 = %9" )
-            .arg(nqsos).arg(contestScore).arg(brcc1).arg(nctry).arg(brcc2).arg(brloc1).arg(nlocs).arg(brloc2)
+            .arg(nqsos).arg(contestScore).arg(brcc1).arg(nctry).arg(brcc2, brloc1).arg(nlocs).arg(brloc2)
                 .arg(totalScore );
         }
     }
