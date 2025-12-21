@@ -280,7 +280,8 @@ private:
     QSharedPointer<TxKeyerBase> txKeyer;
     TxKeyerFactory* txKeyerFactory;
 
-    QList<TxKeyerParams> txKeyParamList;
+    //QList<TxKeyerParams> txKeyParamList;
+    QMap<QString, QVector<TxKeyerParams>> txKeyParamMap;
 
     QTimer *extKeyerConnectTimer = nullptr;
     //QList<QShortcut *> shortCutKeyList;

@@ -1,4 +1,4 @@
-#include <QString>
+ #include <QString>
 #include <QJsonDocument>
 #include <QJsonParseError>
 #include <QJsonObject>
@@ -515,25 +515,26 @@ void DMButtonFrame::createKeyer(QString voiceKeyerName)
                     //createButtonsForKeyer(numButtons, columns);
                 }
 
+                QList<TxKeyerParams> &txKeyParamList = txKeyParamMap[selectedKeyerCap.getKeyerType()];
                 txKeyParamList.clear();
-
 
                 buttonNumSent = NO_TXKEYER_BUTTON_SELECTED;
 
-                txKeyer->txKeyerInit(txKeyer->numButtons);
+
 
                 for (int i = 0; i < fButtons.count(); i++)
                 {
-                    TxKeyerParams vmData;
-                    if (vmData.getType().isEmpty())
+                    TxKeyerParams txKeyerData;
+                    if (txKeyerData.getType().isEmpty())
                     {
-                        vmData.setType(selectedKeyerCap.getKeyerType());
+                        txKeyerData.setType(selectedKeyerCap.getKeyerType());
                     }
 
-                    //vmData.setRigModel(getRigModel(selectedRadio));
-                    // ******************** txKeyer->readVmButtonParams(i, vmData);
-                    txKeyParamList.append(vmData);
-                    // *********************** setRunButtonText(i, vmData.getVmName());
+                    if (selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::CW_RigControl])
+                    vmData.setRigModel(getRigModel(selectedRadio));
+                    txKeyer->readVmButtonParams(i, txKeyerData);
+                    txKeyParamList.append(txKeyerData);
+                    setRunButtonText(i, txKeyerData.getKeyerName());
 
                 }
             }
