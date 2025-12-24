@@ -1008,13 +1008,13 @@ Le mode calculé est %2</translation>
     </message>
     <message>
         <location filename="../contestdetails.ui" line="84"/>
-        <location filename="../contestdetails.cpp" line="1734"/>
+        <location filename="../contestdetails.cpp" line="1740"/>
         <source>HF Calendar</source>
         <translation>Calendrier HF</translation>
     </message>
     <message>
         <location filename="../contestdetails.ui" line="91"/>
-        <location filename="../contestdetails.cpp" line="1738"/>
+        <location filename="../contestdetails.cpp" line="1744"/>
         <source>VHF Calendar</source>
         <translation>Calendrier VHF</translation>
     </message>
@@ -1025,13 +1025,13 @@ Le mode calculé est %2</translation>
     </message>
     <message>
         <location filename="../contestdetails.ui" line="105"/>
-        <location filename="../contestdetails.cpp" line="1748"/>
+        <location filename="../contestdetails.cpp" line="1754"/>
         <source>UKSMG Calendar</source>
         <translation>Calendrier UKSMG</translation>
     </message>
     <message>
         <location filename="../contestdetails.ui" line="112"/>
-        <location filename="../contestdetails.cpp" line="1754"/>
+        <location filename="../contestdetails.cpp" line="1760"/>
         <source>BARTG Calendar</source>
         <translation>Calendrier BARTG</translation>
     </message>
@@ -1243,74 +1243,84 @@ Comptabiliser entre Locators de 4 caractères</translation>
         <translation>Annuler</translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="53"/>
+        <location filename="../contestdetails.cpp" line="54"/>
         <source>No Exchange Required</source>
         <translation>Aucun échange requis</translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="54"/>
+        <location filename="../contestdetails.cpp" line="55"/>
         <source>PostCode Multipliers</source>
         <translation>Multiplicateurs des codes postaux</translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="56"/>
+        <location filename="../contestdetails.cpp" line="57"/>
         <source>Other Exchange Multiplier</source>
         <translation>Autre multiplicateur d&apos;échange</translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="58"/>
+        <location filename="../contestdetails.cpp" line="59"/>
         <source>Exchange Required (no multiplier)</source>
         <translation>Échange requis (pas de multiplicateur)</translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="59"/>
+        <location filename="../contestdetails.cpp" line="60"/>
         <source>Asymmetric (TX S/N, RX exchange), Multiplier</source>
         <translation>Asymétrique (TX S/N, échange RX) multiplicateur [context???Complicated HF contests]</translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="61"/>
+        <location filename="../contestdetails.cpp" line="62"/>
         <source>None</source>
         <translation>Aucun</translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="62"/>
+        <location filename="../contestdetails.cpp" line="63"/>
         <source>UKAC Bonuses (B4)</source>
         <translation>Bonus UKAC (B4)</translation>
     </message>
     <message>
         <location filename="../contestdetails.cpp" line="64"/>
+        <source>DXCC/Loc/District Bonuses (B6)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../contestdetails.cpp" line="65"/>
+        <source>DXCC/Loc Bonuses (B8)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../contestdetails.cpp" line="66"/>
         <source>NAC Bonuses</source>
         <translation>Bonus NAC</translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="148"/>
+        <location filename="../contestdetails.cpp" line="150"/>
         <source>QTH</source>
         <translation>QTH</translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="149"/>
+        <location filename="../contestdetails.cpp" line="151"/>
         <source>Station</source>
         <translation>Station</translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="150"/>
+        <location filename="../contestdetails.cpp" line="152"/>
         <source>Entry</source>
         <translation>Entrée</translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="199"/>
-        <location filename="../contestdetails.cpp" line="1522"/>
+        <location filename="../contestdetails.cpp" line="201"/>
+        <location filename="../contestdetails.cpp" line="1528"/>
         <source>(None)</source>
         <translation>(Aucun)</translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="329"/>
-        <location filename="../contestdetails.cpp" line="727"/>
+        <location filename="../contestdetails.cpp" line="331"/>
+        <location filename="../contestdetails.cpp" line="731"/>
         <source>Details of Contest Entry - %1</source>
         <translation>Détails de l&apos;entrée du Concours - %1</translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="1630"/>
+        <location filename="../contestdetails.cpp" line="1636"/>
         <source>This contest will be marked as protected.
 This is a permanent change that may be temporarily overridden.
 Please confirm this change by pressing &quot;Yes&quot;.</source>
@@ -1319,7 +1329,7 @@ Il s&amp;apos;agit d&amp;apos;un changement permanent qui peut être temporairem
 Veuillez confirmer cette modification en appuyant sur &amp;quot;Oui&amp;quot;.</translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="1678"/>
+        <location filename="../contestdetails.cpp" line="1684"/>
         <source>These settings are groups of settings that can be applied to a contest all in one go.
 
 There are four basic groups: - 
@@ -1362,47 +1372,46 @@ Déplacez-vous entre les composants d&amp;apos;un groupe à l&amp;apos;aide de l
 </translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="46"/>
+        <location filename="../contestdetails.cpp" line="47"/>
         <source>All HF</source>
         <translation>Toutes HF</translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="55"/>
+        <location filename="../contestdetails.cpp" line="56"/>
         <source>PostCode Bonuses</source>
         <translation>Bonus code postal</translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="57"/>
+        <location filename="../contestdetails.cpp" line="58"/>
         <source>Exchange Multiplier (may be &quot;-&quot;)</source>
         <translation>Multiplicateur d&apos;échange (peut être &quot;-&quot;) [???e.g. UKSMG book number]</translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="63"/>
         <source>AFS Bonuses (B6)</source>
-        <translation>Bonuses AFS (B6)</translation>
+        <translation type="vanished">Bonuses AFS (B6)</translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="720"/>
+        <location filename="../contestdetails.cpp" line="724"/>
         <source>Band %1 is set as unwanted.</source>
         <translation>Bande %1 définir comme non désiré.</translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="1291"/>
+        <location filename="../contestdetails.cpp" line="1297"/>
         <source>Contest end is before contest start</source>
         <translation>Fin du concours avant début du concours</translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="1742"/>
+        <location filename="../contestdetails.cpp" line="1748"/>
         <source>Microwave Calendar</source>
         <translation>Calendrier Microonde</translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="1810"/>
+        <location filename="../contestdetails.cpp" line="1816"/>
         <source>Are you sure you want to protect this contest?</source>
         <translation>Voulez-vous vraiment protéger ce Concours?</translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="1817"/>
+        <location filename="../contestdetails.cpp" line="1823"/>
         <source>Are you sure you want to disable protection for this contest?</source>
         <translation>Voulez-vous vraiment désactiver la protection pour ce Concours?</translation>
     </message>

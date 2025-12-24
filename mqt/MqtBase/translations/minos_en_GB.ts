@@ -103,32 +103,32 @@
 <context>
     <name>BaseContact</name>
     <message>
-        <location filename="../contacts.cpp" line="442"/>
+        <location filename="../contacts.cpp" line="443"/>
         <source>DELETED</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contacts.cpp" line="457"/>
+        <location filename="../contacts.cpp" line="458"/>
         <source>MAN</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contacts.cpp" line="460"/>
+        <location filename="../contacts.cpp" line="461"/>
         <source>DEL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contacts.cpp" line="463"/>
+        <location filename="../contacts.cpp" line="464"/>
         <source>N/S</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contacts.cpp" line="468"/>
+        <location filename="../contacts.cpp" line="469"/>
         <source>DUP</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contacts.cpp" line="514"/>
+        <location filename="../contacts.cpp" line="515"/>
         <source>MHz</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1164,23 +1164,28 @@
 <context>
     <name>ContestScore</name>
     <message>
-        <location filename="../contest.cpp" line="2212"/>
+        <location filename="../contest.cpp" line="2241"/>
         <source>Score: %1 Qsos; %2 pts; (%3 countries); %4 locs; bonuses %5(%6) = %7</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contest.cpp" line="2220"/>
+        <location filename="../contest.cpp" line="2249"/>
         <source>Score: %1 Qsos; %2 pts; %3 countries; %4 districts; %5 locs; bonuses %6(%7) = %8</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contest.cpp" line="2228"/>
+        <location filename="../contest.cpp" line="2257"/>
         <source>Score: %1 Qsos; %2 pts; %3%4 countries%5; bonuses %6(%7) = %8</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contest.cpp" line="2236"/>
+        <location filename="../contest.cpp" line="2267"/>
         <source>Score: %1 Qsos; %2 pts;%3%4 countries%5;%6%7 districts%8; %9%10 locators %13 = %14</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../contest.cpp" line="2274"/>
+        <source>Score: %1 Qsos; %2 pts;%3%4 countries%5;%6%7 locators %8 = %9</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
