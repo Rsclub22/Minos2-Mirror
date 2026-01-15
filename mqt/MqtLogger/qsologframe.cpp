@@ -2844,12 +2844,17 @@ void QSOLogFrame::on_tabSandP()
     }
     ui->tabSandPframe->setVisible(tabSandPstate);
 
+    trace(QString("QSOLogFrame::on_tabSandP tabSandPstate %1 runButtonOnFlag %2 radioOffRunFreq %3")
+              .arg(tabSandPstate).arg(runButtonOnFlag).arg(radioOffRunFreq));
+
     if (!tabSandPstate || isRunMode())
     {
+        trace(" ui->callRb->setChecked(true)");
         ui->callRb->setChecked(true);
     }
     else
     {
+        trace("ui->SandPrb->setChecked(true)");
         ui->SandPrb->setChecked(true);
     }
     setPlaceholders(QStringList());
