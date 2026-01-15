@@ -9,6 +9,7 @@
 #include "MatchThread.h"
 #include "BandList.h"
 #include "cutils.h"
+#include "delayedaction.h"
 #include "dmbuttonframe.h"
 #include "fileutils.h"
 #include "qheaderview.h"
@@ -43,6 +44,8 @@
 
 #include "tsinglelogframe.h"
 #include "ui_tsinglelogframe.h"
+
+bool TSingleLogFrame::inApplyScreenLayout = false;
 
 TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
     ContestPage(parent, contest),
@@ -206,7 +209,7 @@ void TSingleLogFrame::createScreenComponents()
 {
     // create component frames, parentless
 
-    traceMsg("createScreenComponents");
+    traceMsg("createScreenComponents start");
 
 
     QSOListFrame = new QSOTableFrame(this);
@@ -394,6 +397,7 @@ void TSingleLogFrame::createScreenComponents()
     dmButtonFrame->setFrameShadow(QFrame::Raised);
 
     dmButtonFrame->setVisible(false);
+    traceMsg("createScreenComponents end");
 }
 void TSingleLogFrame::clearScreenLayout(bool clearAllTabs)
 {
@@ -553,6 +557,8 @@ void TSingleLogFrame::clearScreenLayout(bool clearAllTabs)
 }
 void TSingleLogFrame::applyScreenLayout()
 {
+    inApplyScreenLayout = true;
+
     LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( getContest() );
     if (!ct)
         return;
@@ -565,6 +571,11 @@ void TSingleLogFrame::applyScreenLayout()
     buildScreenLayout(slotNo);
 
     updateTrees();  //in apply screen layout
+
+    delayedAction(this,  [=](){
+        inApplyScreenLayout = false;
+    }
+    );
 }
 
 QString TSingleLogFrame::getCurScreenLayout() const

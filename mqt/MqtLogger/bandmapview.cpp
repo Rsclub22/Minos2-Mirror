@@ -183,17 +183,24 @@ int BandmapView::getViewPortEndYCoordOnScene()
 }
 void BandmapView::doBandmapUpdate()
 {
-    if (!getSuppressUpdate())
+    if (!TSingleLogFrame::inApplyScreenLayout)
     {
-        if (updateRequired)
-        {
-            dial->update();
 
-            // delay the spots until any dial update has happened
-            delayedAction(this, [=](){
-                drawBandMapSpots();
+        if (!getSuppressUpdate())
+        {
+            if (updateRequired)
+            {
+                dial->update();
+
+                // delay the spots until any dial update has happened
+                trace("Request delayed drawBandMapSpots()");
+                delayedAction(this, [=](){
+                    trace("Execute delayed drawBandMapSpots()");
+
+                    drawBandMapSpots();
+                }
+                );
             }
-            );
         }
     }
 }
@@ -677,6 +684,10 @@ void BandmapView::drawBandMapSpots()
     }
     TContestApp *ta = TContestApp::getContestApp();
     if (!ta)
+    {
+        return;
+    }
+    if (TSingleLogFrame::inApplyScreenLayout)
     {
         return;
     }

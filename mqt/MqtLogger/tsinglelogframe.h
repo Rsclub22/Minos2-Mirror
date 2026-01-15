@@ -45,6 +45,8 @@ public:
     explicit TSingleLogFrame(QWidget *parent, BaseContestLog *contest);
     virtual ~TSingleLogFrame();
 
+    static bool inApplyScreenLayout;
+
     QSOTableFrame *QSOListFrame = nullptr;
     RigControlFrame *FKHRigControlFrame = nullptr;
     RunButtonsFrame *runButtonsFrame = nullptr;
