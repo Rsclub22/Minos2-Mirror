@@ -212,33 +212,33 @@ Unworked</source>
 <context>
     <name>BandmapView</name>
     <message>
-        <location filename="../bandmapview.cpp" line="1035"/>
+        <location filename="../bandmapview.cpp" line="1046"/>
         <source>%1%2CQ Frequency @ .%3%4%5</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1069"/>
+        <location filename="../bandmapview.cpp" line="1080"/>
         <source>New</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1224"/>
+        <location filename="../bandmapview.cpp" line="1235"/>
         <source>CQ Frequency = %1
 The mode is %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1253"/>
+        <location filename="../bandmapview.cpp" line="1264"/>
         <source>The computed mode is</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1256"/>
+        <location filename="../bandmapview.cpp" line="1267"/>
         <source>The mode is</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1263"/>
+        <location filename="../bandmapview.cpp" line="1274"/>
         <source>%1 - %2, %3, %4, %5 [%6 %7 @ %8] 
 %9 %10
 %11
@@ -2824,54 +2824,54 @@ No          - Discard changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="3015"/>
+        <location filename="../qsologframe.cpp" line="3020"/>
         <source>Change mode to CW?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="3018"/>
-        <location filename="../qsologframe.cpp" line="3029"/>
-        <location filename="../qsologframe.cpp" line="3038"/>
+        <location filename="../qsologframe.cpp" line="3023"/>
+        <location filename="../qsologframe.cpp" line="3034"/>
+        <location filename="../qsologframe.cpp" line="3043"/>
         <source>Please check the signal reports, and log the contact</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="3026"/>
+        <location filename="../qsologframe.cpp" line="3031"/>
         <source>Change mode to PH?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="3035"/>
+        <location filename="../qsologframe.cpp" line="3040"/>
         <source>Change mode to USB?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="3082"/>
+        <location filename="../qsologframe.cpp" line="3087"/>
         <source>Spot Last Logged (%1) </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="3153"/>
+        <location filename="../qsologframe.cpp" line="3158"/>
         <source>&quot;Serial sent&quot; is too high - please confirm that this is correct?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="3155"/>
+        <location filename="../qsologframe.cpp" line="3160"/>
         <source>Do you want to enter the missing contacts later?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="3388"/>
+        <location filename="../qsologframe.cpp" line="3393"/>
         <source>Meep from %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="3573"/>
+        <location filename="../qsologframe.cpp" line="3578"/>
         <source>Start of QSOs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="3608"/>
+        <location filename="../qsologframe.cpp" line="3613"/>
         <source>End of QSOs</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5757,27 +5757,27 @@ Please confirm this action by pressing &quot;Yes&quot;.</source>
 <context>
     <name>TSingleLogFrame</name>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1058"/>
+        <location filename="../tsinglelogframe.cpp" line="1069"/>
         <source>Failed to open %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1072"/>
+        <location filename="../tsinglelogframe.cpp" line="1083"/>
         <source>Save imported log as a .minos file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1600"/>
+        <location filename="../tsinglelogframe.cpp" line="1611"/>
         <source>No unfilled contacts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1619"/>
+        <location filename="../tsinglelogframe.cpp" line="1630"/>
         <source>Please give serial wanted</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1641"/>
+        <location filename="../tsinglelogframe.cpp" line="1652"/>
         <source>Serial number %1 not found</source>
         <translation type="unfinished"></translation>
     </message>
