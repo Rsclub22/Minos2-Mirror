@@ -277,6 +277,8 @@ void RunButtonsFrame::runButActivated(int buttonNumber)
         }
         else if (runButtonOnNum == buttonNumber)
         {
+            chkRunFreq();
+
             if(radioOffRunFreq)
             {
                 // a run button is active; but we are not on a run frequency
