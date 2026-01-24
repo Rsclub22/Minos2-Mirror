@@ -1441,7 +1441,7 @@ void BandmapClientFrame::addRemoveCQSpot(QSharedPointer<ClusterSpotData>  spot)
     }
     else
     {
-        trace(QString("BandmapView::bandmapUpdate() addRemoveCQSpot - add at ").arg(spot->getFreq().traceStr()));
+        trace(QString("BandmapView::bandmapUpdate() addRemoveCQSpot - add at %1").arg(spot->getFreq().traceStr()));
 
         qint64 logTime = spot->getSpotDateTime().toMSecsSinceEpoch() / 1000;
         QString logTimeStr = spot->getSpotDateTime().time().toString("HH:mm");
