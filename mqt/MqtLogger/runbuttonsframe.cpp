@@ -100,7 +100,7 @@ void RunButtonsFrame::setFreq(Frequency freq)
         if (bandChanged)
         {
             // we need to switch the run button mapping
-            trace(QString("runButtonsFrame band changed"));
+            trace(QString("RunButtonsFrame::setFreq runButtonsFrame band changed"));
             runButOffActionSelected(RUN_BUTTON_1_ON);
             runButOffActionSelected(RUN_BUTTON_2_ON);
             runButtonMap[RUN_BUTTON_1_ON]->returnFrequency.clear();
@@ -113,7 +113,7 @@ void RunButtonsFrame::setFreq(Frequency freq)
 
         if (!chkRadioFreqOnRunFreq())
         {
-            trace(QString("returnFrequency clear both"));
+            trace(QString("RunButtonsFrame::setFreq returnFrequency clear both"));
             runButtonMap[RUN_BUTTON_1_ON]->returnFrequency.clear();
             runButtonMap[RUN_BUTTON_2_ON]->returnFrequency.clear();
         }
@@ -152,15 +152,15 @@ void RunButtonsFrame::setRunButtonActive(int buttonNumber)
 
     if (std::abs(offset) < 1000)
     {
-        trace(QString("returnFrequency clear %1").arg(buttonNumber));
+        trace(QString(" RunButtonsFrame::setRunButtonActive returnFrequency clear %1").arg(buttonNumber));
         runButtonMap[buttonNumber]->returnFrequency.clear();
     }
     else
     {
-        trace(QString("setRunButtonActive returnFrequency set %1 to %2").arg(buttonNumber).arg(curFreq.traceStr()));
+        trace(QString(" RunButtonsFrame::setRunButtonActive returnFrequency set %1 to %2").arg(buttonNumber).arg(curFreq.traceStr()));
         runButtonMap[buttonNumber]->returnFrequency = curFreq;
     }
-    trace(QString("setRunButtonActive returnFrequency clear other"));
+    trace(QString(" RunButtonsFrame::setRunButtonActive returnFrequency clear other"));
     runButtonMap[otherButton(buttonNumber)]->returnFrequency.clear();
 
     runButReadActSel(buttonNumber);
@@ -180,14 +180,14 @@ void RunButtonsFrame::setRunFreq(int buttonNumber)
     qint64 offset = oldfreq - rigControl->getCurFreq();
     if (std::abs(offset) > 1000)
     {
-        trace(QString("setRunFreq returnFrequency set %1 to %2").arg(buttonNumber).arg(oldfreq.traceStr()));
+        trace(QString("RunButtonsFrame::setRunFreq returnFrequency set %1 to %2").arg(buttonNumber).arg(oldfreq.traceStr()));
         runButtonMap[buttonNumber]->returnFrequency = oldfreq;
-        trace(QString("setRunFreq returnFrequency clear other"));
+        trace(QString("RunButtonsFrame::setRunFreq returnFrequency clear other"));
         runButtonMap[otherButton(buttonNumber)]->returnFrequency.clear();
     }
     else
     {
-        trace(QString("setRunFreq returnFrequency clear both"));
+        trace(QString("RunButtonsFrame::setRunFreq returnFrequency clear both"));
         runButtonMap[RUN_BUTTON_1_ON]->returnFrequency.clear();
         runButtonMap[RUN_BUTTON_2_ON]->returnFrequency.clear();
     }
@@ -212,7 +212,7 @@ void RunButtonsFrame::runModeOff(int buttonNumber)
     if (!rfreq.isClear())
     {
         // go to restore freq
-        trace(QString("runModeOff returnFrequency clear both"));
+        trace(QString("RunButtonsFrame::runModeOff returnFrequency clear both"));
         runButtonMap[buttonNumber]->returnFrequency.clear();
         runButtonMap[otherButton(buttonNumber)]->returnFrequency.clear();
         setRunButtonText(buttonNumber);
@@ -235,7 +235,7 @@ void RunButtonsFrame::runModeOff(int buttonNumber)
 
 void RunButtonsFrame::switchRunButton(int buttonNumber)
 {
-    trace(QString("switchRunButton returnFrequency clear both"));
+    trace(QString("RunButtonsFrame::switchRunButton returnFrequency clear both"));
     runButtonMap[RUN_BUTTON_1_ON]->returnFrequency.clear();
     runButtonMap[RUN_BUTTON_2_ON]->returnFrequency.clear();
 
@@ -305,7 +305,7 @@ void RunButtonsFrame::runButActivated(int buttonNumber)
 }
 void RunButtonsFrame::runButReadActSel(int buttonNumber)
 {
-    trace(QString("Run Button Read Selected = %1").arg(QString::number(buttonNumber + 1)));
+    trace(QString("RunButtonsFrame::runButReadActSel Run Button Read Selected = %1").arg(QString::number(buttonNumber + 1)));
     memoryData::memData m = getRunMemoryData(buttonNumber);
     if (LogContainer->sendDM->isRadioLoaded())
     {
@@ -349,7 +349,7 @@ void RunButtonsFrame::runButReadActSel(int buttonNumber)
 
 void RunButtonsFrame::runButWriteActSel(int buttonNumber)
 {
-    trace(QString("Run Button Write Selected = %1").arg(QString::number(buttonNumber + 1)));
+    trace(QString("RunButtonsFrame::runButWriteActSel Run Button Write Selected = %1").arg(QString::number(buttonNumber + 1)));
     memoryData::memData runData;
     runData.callsign = tr("Run") + QString::number(buttonNumber + 1);
     runData.freq = rigControl->getCurFreq();
@@ -378,7 +378,7 @@ void RunButtonsFrame::runButEditActSel(int buttonNumber)
 {
     memoryData::memData runData = getRunMemoryData(buttonNumber);
 
-    trace(QString("Run Button Edit Selected = %1").arg(QString::number(buttonNumber + 1)));
+    trace(QString("RunButtonsFrame::runButEditActSel Run Button Edit Selected = %1").arg(QString::number(buttonNumber + 1)));
     RunButtonDialog runDialog(this);
     runDialog.setWindowTitle(tr("Run %1 - Edit").arg(QString::number(buttonNumber + 1)));
     runDialog.setLogData(&runData, buttonNumber, ct);
@@ -392,7 +392,7 @@ void RunButtonsFrame::runButEditActSel(int buttonNumber)
 
 void RunButtonsFrame::runButClearActSel(int buttonNumber)
 {
-    trace(QString("Run Button Clear Selected = %1").arg(QString::number(buttonNumber + 1)));
+    trace(QString("RunButtonsFrame::runButClearActSel Run Button Clear Selected = %1").arg(QString::number(buttonNumber + 1)));
 
     memoryData::memData mr = getRunMemoryData(buttonNumber);
 
