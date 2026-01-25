@@ -366,6 +366,7 @@ void RunButtonsFrame::runButWriteActSel(int buttonNumber)
     runDialog.setLogData(&runData, buttonNumber, ct);
     if (runDialog.exec() == QDialog::Accepted)
     {
+        trace(QString("RunButtonsFrame::runButWriteActSel frequency returned = %1").arg(runData.freq.traceStr()));
         setRunMemoryData(buttonNumber, runData);
         runButtonUpdate(buttonNumber);
         runButActivated(buttonNumber);  // simulate button press
