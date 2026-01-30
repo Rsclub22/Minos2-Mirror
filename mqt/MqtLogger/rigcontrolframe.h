@@ -41,6 +41,7 @@ class RigControlFrame : public QFrame
 {
     Q_OBJECT
     friend class RunButtonsFrame;
+    friend class RunmodeController;
     friend class BandSwitchFrame;
 public:
     explicit RigControlFrame(TSingleLogFrame *parent);

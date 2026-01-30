@@ -14,6 +14,10 @@ class RunButtonsFrame;
 class QToolButton;
 class QMenu;
 
+const int NO_RUN_BUTTON_ON = -1;
+const int RUN_BUTTON_1_ON = 0;
+const int RUN_BUTTON_2_ON = 1;
+
 class RunMemoryButton : public QObject
 {
     Q_OBJECT
@@ -60,6 +64,41 @@ private:
     static QKeySequence runButShiftShortCut[];
 
 };
+class RunmodeController : public QObject
+{
+    Q_OBJECT
+
+public:
+    explicit RunmodeController();
+    ~RunmodeController();
+
+    void linkRunButtonFrame(RunButtonsFrame *prbf)
+    {
+        rbf = prbf;
+    }
+    void chkRunFreq();
+    bool chkRadioFreqOnRunFreq();
+    void setFreq(Frequency freq);
+    void setRunModeOff();
+    void setRunMode(int buttonNumber, memoryData::memData m);
+
+    RunButtonsFrame *rbf = nullptr;
+    QTimer *chkRunFreqTimer = nullptr;
+
+    RigControlFrame *rigControl = nullptr;
+
+    Frequency curRadioFreq;
+
+    int runButtonOnNum = NO_RUN_BUTTON_ON;
+
+    bool radioOffRunFreq = true;
+
+    Frequency curRunFreq;
+    QString curRunMode;
+
+public slots:
+    void on_radioFreqCheckTimer();
+};
 
 class RunButtonsFrame : public QGroupBox
 {
@@ -93,33 +132,21 @@ private:
     LoggerContestLog *ct = nullptr;
     RigControlFrame *rigControl = nullptr;
 
-    Frequency curRadioFreq;
-
-    int runButtonOnNum;
-
-    bool radioOffRunFreq = false;
-
-    bool oldRadioOffRunFreq = false;  // used by on_ChkRunFreq()
-
-    Frequency curRunFreq;
-    QString curRunMode;
-    QTimer *chkRunFreqTimer;
+    RunmodeController rmc;
 
     void initRunMemoryButton();
     void loadRunButtonLabels();
-    memoryData::memData getRunMemoryData(int memoryNumber);
-    void setRunMemoryData(int memoryNumber, memoryData::memData m);
-    void clearRunMemoryData(int memoryNumber, memoryData::memData m);
-    bool chkRadioFreqOnRunFreq();
+    memoryData::memData getCtRunMemoryData(int memoryNumber);
+    void setCtRunMemoryData(int memoryNumber, memoryData::memData m);
+    void clearCtRunMemoryData(int memoryNumber, memoryData::memData m);
     int otherButton(int buttonNumber);
 
-    void chkRunFreq();
     void setRunButtonsFrameTitle();
     bool getRadioReadOnlyFlag();
 
+    void sandPChanged(bool s);
 private slots:
     void runButActivated(int buttonNumber);
-    void on_radioFreqCheckTimer();
     void setFreqDisplay(Frequency, bool);
     void radioIsConnected(bool on);
 public slots:

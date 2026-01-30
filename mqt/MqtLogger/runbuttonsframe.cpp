@@ -16,10 +16,6 @@ const char * RUN_BUTTON_ON_FREQ_STYLE = "background-color: orange ; color:black 
 const char * RUN_BUTTON_OFF_FREQ_STYLE = "background-color: yellow ; color:black ; border-style: outset; border-width: 1px; border-color: black;\n";
 const char * RUN_BUTTON_OFF_STYLE = "background-color: Gainsboro ; color:black ; border-style: outset; border-width: 1px; border-color: black;\n";
 
-const int NO_RUN_BUTTON_ON = -1;
-const int RUN_BUTTON_1_ON = 0;
-const int RUN_BUTTON_2_ON = 1;
-
 const int CHECK_RUN_FREQ_POLLTIME = 1000;
 
 QKeySequence RunMemoryButton::runButShortCut[] {
@@ -33,20 +29,137 @@ QKeySequence RunMemoryButton::runButShiftShortCut[] {
     QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_BracketRight)
 
 };
+RunmodeController::RunmodeController()
+{
+    chkRunFreqTimer = new QTimer(this);
+    connect(chkRunFreqTimer, &QTimer::timeout, this, &RunmodeController::on_radioFreqCheckTimer);
 
+    chkRunFreqTimer->start(CHECK_RUN_FREQ_POLLTIME);    // usually once a second
+
+}
+RunmodeController::~RunmodeController()
+{}
+
+void RunmodeController::on_radioFreqCheckTimer()
+{
+    // should be a "belt and braces" check on frequency
+    // moved from run frequency
+
+    if (rigControl)
+    {
+        curRadioFreq = rigControl->getCurFreq();
+        chkRunFreq();
+    }
+}
+void RunmodeController::setFreq(Frequency freq)
+{
+    // either freq from rig control,
+    // or from a pre-emptive response to our sending a new frequency
+
+    curRadioFreq = freq;
+
+    chkRunFreq();
+}
+
+void RunmodeController::chkRunFreq()
+{
+    if (runButtonOnNum >= 0)
+    {
+        // if current freq is sufficiently far from the run freq, turn run off
+        // we should probably ose the band map frequency offset rules
+
+        if (!curRunFreq.isClear())
+        {
+            bool oldRadioOffRunFreq = radioOffRunFreq;
+
+            radioOffRunFreq = !chkRadioFreqOnRunFreq();
+
+            if (radioOffRunFreq)
+            {
+                rbf->runButtonMap[runButtonOnNum]->showRunToolButtonOffFreq();
+            }
+            else
+            {
+                rbf->runButtonMap[runButtonOnNum]->showRunToolButtonOnFreq();
+            }
+
+           if (oldRadioOffRunFreq!= radioOffRunFreq)
+            {
+                TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
+                tslf->sendRunOffFreqFlag(curRunFreq, radioOffRunFreq);
+            }
+        }
+    }
+}
+bool RunmodeController::chkRadioFreqOnRunFreq()
+{
+    qint64 curRunF = curRunFreq;
+    qint64 curF = curRadioFreq;
+
+    if (curRunF != 0)
+    {
+        if ((curF >= (curRunF - RUN_TOLERANCE)) && (curF <= (curRunF + RUN_TOLERANCE)))
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+void RunmodeController::setRunModeOff()
+{
+    runButtonOnNum = NO_RUN_BUTTON_ON;
+
+    chkRunFreqTimer->setInterval(CHECK_RUN_FREQ_POLLTIME);  // restart check timer
+
+    TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
+    tslf->sendRunOnFlag(curRunFreq, curRunMode, false);
+}
+
+void RunmodeController::setRunMode(int buttonNumber, memoryData::memData m)
+{
+    runButtonOnNum = buttonNumber;
+
+    rigControl->clearFreqInputFocus();
+    if (m.freq != rigControl->getCurFreq())
+    {
+        rigControl->sendRigFreq(m.freq);
+        // pre-empt us being told; if it doesn't happen, we will get told later
+        setFreq(m.freq);
+
+    }
+
+    curRunFreq = m.freq;
+    curRunMode = m.mode;
+
+    if (m.mode != rigControl->curMode)
+    {
+        rigControl->sendModeToRadio(m.mode);
+    }
+    bool rit;
+    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpCQRit, rit );
+    if (rit)
+    {
+        rigControl->ritButtonOn();
+    }
+    TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
+    tslf->sendRunOnFlag(curRunFreq, curRunMode, true);
+}
+
+//=========================================================================
 RunButtonsFrame::RunButtonsFrame(QWidget *parent) :
     QGroupBox(parent),
-    ui(new Ui::RunButtonsFrame),
-    runButtonOnNum(NO_RUN_BUTTON_ON)
+    ui(new Ui::RunButtonsFrame)
 {
     ui->setupUi(this);
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::SandPChanged, this, &RunButtonsFrame::sandPChanged);
+
+    rmc.linkRunButtonFrame(this);
 
     initRunMemoryButton();
 
     setRunButtonsFrameTitle();
 
-    chkRunFreqTimer = new QTimer(this);
-    connect(chkRunFreqTimer, &QTimer::timeout, this, &RunButtonsFrame::on_radioFreqCheckTimer);
 }
 
 RunButtonsFrame::~RunButtonsFrame()
@@ -68,10 +181,31 @@ void RunButtonsFrame::setContest(BaseContestLog *c)
         loadRunButtonLabels();
     }
 }
-
+void RunButtonsFrame::sandPChanged(bool s)
+{
+    if (!s)
+    {
+        rmc.radioOffRunFreq =  true;
+        setCallFreq();
+    }
+    if (rmc.runButtonOnNum > NO_RUN_BUTTON_ON)
+    {
+        // manual switch to/from run mode
+        if (s)  // switch to S&P
+        {
+            runButtonMap[rmc.runButtonOnNum]->returnFrequency.clear();
+            runModeOff(rmc.runButtonOnNum);
+        }
+        else
+        {
+            setRunButtonActive(rmc.runButtonOnNum);
+        }
+    }
+}
 void RunButtonsFrame::setRigControl(RigControlFrame *rc)
 {
     rigControl = rc;
+    rmc.rigControl = rc;
     // This shouldn't need to be a unique connection
     connect(rc, &RigControlFrame::setFreqDisplay, this, &RunButtonsFrame::setFreqDisplay, Qt::UniqueConnection);
     connect(rc, &RigControlFrame::radioIsConnected, this, &RunButtonsFrame::radioIsConnected);
@@ -96,7 +230,7 @@ void RunButtonsFrame::setFreq(Frequency freq)
 {
     if (ct)
     {
-        QSharedPointer<BandInfo> bandChanged = ct->checkBandChange(freq, curRadioFreq);
+        QSharedPointer<BandInfo> bandChanged = ct->checkBandChange(freq, rmc.curRadioFreq);
         if (bandChanged)
         {
             // we need to switch the run button mapping
@@ -106,12 +240,9 @@ void RunButtonsFrame::setFreq(Frequency freq)
             runButtonMap[RUN_BUTTON_1_ON]->returnFrequency.clear();
             runButtonMap[RUN_BUTTON_2_ON]->returnFrequency.clear();
         }
+        rmc.setFreq(freq);
 
-        curRadioFreq = freq;
-        // rig frequency changed signal
-        chkRunFreq();
-
-        if (!chkRadioFreqOnRunFreq())
+        if (!rmc.chkRadioFreqOnRunFreq())
         {
             trace(QString("RunButtonsFrame::setFreq returnFrequency clear both"));
             runButtonMap[RUN_BUTTON_1_ON]->returnFrequency.clear();
@@ -121,7 +252,6 @@ void RunButtonsFrame::setFreq(Frequency freq)
         setRunButtonText(RUN_BUTTON_2_ON);
     }
 }
-//********************** Run Buttons *******************************
 
 void RunButtonsFrame::initRunMemoryButton()
 {
@@ -145,7 +275,7 @@ void RunButtonsFrame::setRunButtonActive(int buttonNumber)
 
     // first, save the current frequency so we can return to it
 
-    memoryData::memData m = getRunMemoryData(buttonNumber);
+    memoryData::memData m = getCtRunMemoryData(buttonNumber);
     Frequency curFreq = rigControl->getCurFreq();
 
     qint64 offset = curFreq - m.freq;
@@ -193,44 +323,40 @@ void RunButtonsFrame::setRunFreq(int buttonNumber)
     }
 
     runButtonMap[buttonNumber]->showButtonOnOff(true);
-    oldRadioOffRunFreq = false;
-    runButtonOnNum = buttonNumber;
 
-    chkRunFreqTimer->setInterval(CHECK_RUN_FREQ_POLLTIME);
-    chkRunFreqTimer->start();
-
-    TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
-    tslf->sendRunOnFlag(curRunFreq, curRunMode, true);
+    rmc.setRunMode(buttonNumber, getCtRunMemoryData(buttonNumber)
+);
 }
 
 void RunButtonsFrame::runModeOff(int buttonNumber)
 {
     // on run freq - return to prior frequency
 
-    Frequency rfreq = runButtonMap[buttonNumber]->returnFrequency;
-
-    if (!rfreq.isClear())
+    if (buttonNumber > NO_RUN_BUTTON_ON)
     {
-        // go to restore freq
+        Frequency rfreq = runButtonMap[buttonNumber]->returnFrequency;
+
         trace(QString("RunButtonsFrame::runModeOff returnFrequency clear both"));
         runButtonMap[buttonNumber]->returnFrequency.clear();
+        setRunButtonText(buttonNumber);
+
         runButtonMap[otherButton(buttonNumber)]->returnFrequency.clear();
         setRunButtonText(buttonNumber);
 
+        if (!rfreq.isClear())
+        {
+            // go to restore freq
 
-        rigControl->sendRigFreq( rfreq);
-        curRadioFreq = rfreq;
-        chkRunFreq();
-        chkRunFreqTimer->setInterval(CHECK_RUN_FREQ_POLLTIME);  // reset the interval
+            rigControl->sendRigFreq( rfreq);
+            rmc.setFreq(rfreq);
 
-        // on run Freq, gone to restore freq
-       // runButtonMap[buttonNumber]->showButtonOnOff(true);
+            rmc.chkRunFreqTimer->setInterval(CHECK_RUN_FREQ_POLLTIME);  // reset the interval
+        }
+        else
+        {
+            runButOffActionSelected(buttonNumber);
+        }
     }
-    else
-    {
-        runButOffActionSelected(buttonNumber);
-    }
-
 }
 
 void RunButtonsFrame::switchRunButton(int buttonNumber)
@@ -249,19 +375,15 @@ void RunButtonsFrame::switchRunButton(int buttonNumber)
     setRunButtonText(RUN_BUTTON_1_ON);
     setRunButtonText(RUN_BUTTON_2_ON);
 
-    chkRunFreqTimer->start(CHECK_RUN_FREQ_POLLTIME);
-    runButtonOnNum = buttonNumber;
-    TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
-    tslf->sendRunOnFlag(curRunFreq, curRunMode, true);
-
-    chkRunFreq();
+    rmc.setRunMode(buttonNumber, getCtRunMemoryData(buttonNumber)
+);
 }
 
 void RunButtonsFrame::runButActivated(int buttonNumber)
 {
     // button pressed starts here
     trace(QString("RunButtonsFrame::runButActivated buttonNumber %1 radioOffRunFreq %2 runButtonOnNum %3")
-          .arg(buttonNumber).arg(radioOffRunFreq).arg(runButtonOnNum));
+          .arg(buttonNumber).arg(rmc.radioOffRunFreq).arg(rmc.runButtonOnNum));
 
     if (buttonNumber != RUN_BUTTON_1_ON && buttonNumber != RUN_BUTTON_2_ON)
         return;
@@ -270,14 +392,14 @@ void RunButtonsFrame::runButActivated(int buttonNumber)
     {
         // "*" in the text means that no frequency has been set (yet)
         // no freq set - press has no effect
-        if (runButtonOnNum == NO_RUN_BUTTON_ON)
+        if (rmc.runButtonOnNum == NO_RUN_BUTTON_ON)
         {
             // neither run button active
             setRunFreq(buttonNumber);
         }
-        else if (runButtonOnNum == buttonNumber)
+        else if (rmc.runButtonOnNum == buttonNumber)
         {
-            if(radioOffRunFreq)
+            if(rmc.radioOffRunFreq)
             {
                 // a run button is active; but we are not on a run frequency
                 // select run freq for this button
@@ -300,43 +422,18 @@ void RunButtonsFrame::runButActivated(int buttonNumber)
         // not set - go to "new" action
         runButWriteActSel(buttonNumber);
     }
-    chkRunFreq();
+    rmc.chkRunFreq();
 
 }
 void RunButtonsFrame::runButReadActSel(int buttonNumber)
 {
     trace(QString("RunButtonsFrame::runButReadActSel Run Button Read Selected = %1").arg(QString::number(buttonNumber + 1)));
-    memoryData::memData m = getRunMemoryData(buttonNumber);
+    memoryData::memData m = getCtRunMemoryData(buttonNumber);
     if (LogContainer->sendDM->isRadioLoaded())
     {
         if (rigControl->radioConnected && !rigControl->radioError)
         {
-            rigControl->clearFreqInputFocus();
-            if (m.freq != rigControl->getCurFreq())
-            {
-                rigControl->sendRigFreq(m.freq);
-                 // pre-empt us being told; if it doesn't happen, we will get told later
-                curRadioFreq = m.freq;
-                TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
-                tslf->sCurFreq = m.freq;
-                chkRunFreqTimer->setInterval(CHECK_RUN_FREQ_POLLTIME);  // reset the interval
-
-            }
-
-            curRunFreq = m.freq;
-            curRunMode = m.mode;
-
-            if (m.mode != rigControl->curMode)
-            {
-                rigControl->sendModeToRadio(m.mode);
-            }
-            bool rit;
-            TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpCQRit, rit );
-            if (rit)
-            {
-                rigControl->ritButtonOn();
-            }
-
+            rmc.setRunMode(buttonNumber, m);
         }
         else if (!rigControl->radioConnected && rigControl->radioName.trimmed().isEmpty())
         {
@@ -367,7 +464,7 @@ void RunButtonsFrame::runButWriteActSel(int buttonNumber)
     if (runDialog.exec() == QDialog::Accepted)
     {
         trace(QString("RunButtonsFrame::runButWriteActSel frequency returned = %1").arg(runData.freq.traceStr()));
-        setRunMemoryData(buttonNumber, runData);
+        setCtRunMemoryData(buttonNumber, runData);
         runButtonUpdate(buttonNumber);
         runButActivated(buttonNumber);  // simulate button press
 
@@ -377,7 +474,7 @@ void RunButtonsFrame::runButWriteActSel(int buttonNumber)
 
 void RunButtonsFrame::runButEditActSel(int buttonNumber)
 {
-    memoryData::memData runData = getRunMemoryData(buttonNumber);
+    memoryData::memData runData = getCtRunMemoryData(buttonNumber);
 
     trace(QString("RunButtonsFrame::runButEditActSel Run Button Edit Selected = %1").arg(QString::number(buttonNumber + 1)));
     RunButtonDialog runDialog(this);
@@ -386,7 +483,7 @@ void RunButtonsFrame::runButEditActSel(int buttonNumber)
 
     if (runDialog.exec() == QDialog::Accepted)
     {
-        setRunMemoryData(buttonNumber, runData);
+        setCtRunMemoryData(buttonNumber, runData);
         runButtonUpdate(buttonNumber);
     }
 }
@@ -395,9 +492,11 @@ void RunButtonsFrame::runButClearActSel(int buttonNumber)
 {
     trace(QString("RunButtonsFrame::runButClearActSel Run Button Clear Selected = %1").arg(QString::number(buttonNumber + 1)));
 
-    memoryData::memData mr = getRunMemoryData(buttonNumber);
+    runButOffActionSelected(buttonNumber);
 
-    clearRunMemoryData(buttonNumber, mr);
+    memoryData::memData mr = getCtRunMemoryData(buttonNumber);
+
+    clearCtRunMemoryData(buttonNumber, mr);
     runButtonMap[buttonNumber]->returnFrequency.clear();
     runButtonUpdate(buttonNumber);
 }
@@ -405,14 +504,10 @@ void RunButtonsFrame::runButClearActSel(int buttonNumber)
 
 void RunButtonsFrame::runButOffActionSelected(int buttonNumber)
 {
-    if (buttonNumber == runButtonOnNum)
+    if (buttonNumber == rmc.runButtonOnNum)
     {
         runButtonMap[buttonNumber]->showButtonOnOff(false);
-        runButtonOnNum = NO_RUN_BUTTON_ON;
-        chkRunFreqTimer->stop();
-
-        TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
-        tslf->sendRunOnFlag(curRunFreq, curRunMode, false);
+        rmc.setRunModeOff();
     }
 
 }
@@ -426,7 +521,7 @@ void RunButtonsFrame::loadRunButtonLabels()
 
 void RunButtonsFrame::setRunButtonText(int buttonNumber)
 {
-    memoryData::memData m = getRunMemoryData(buttonNumber);
+    memoryData::memData m = getCtRunMemoryData(buttonNumber);
     QString sc = ((buttonNumber == 0)?QString(" [ "):QString( " ] "));
 
     QString runText = "R" + QString::number(buttonNumber + 1) + "(" + sc + ") " + "." + m.freq.extractKhz() + "   ";
@@ -447,32 +542,15 @@ void RunButtonsFrame::runButtonUpdate(int buttonNumber)
 {
     setRunButtonText(buttonNumber);
 
-    if (buttonNumber == runButtonOnNum)
+    if (buttonNumber == rmc.runButtonOnNum)
     {
         if (runButtonMap[buttonNumber]->memButton->text().contains(QChar('*')))
         {
-            // cleared the active run freq - turn run off
-            runButtonMap[buttonNumber]->showButtonOnOff(false);
-            runButtonOnNum = NO_RUN_BUTTON_ON;
-            chkRunFreqTimer->stop();
-            TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
-            tslf->sendRunOnFlag(curRunFreq, curRunMode, false);
+            rmc.setRunModeOff();
         }
         else
         {
-            // update run freq
-            memoryData::memData m = getRunMemoryData(buttonNumber);
-            if (m.freq != rigControl->getCurFreq())
-            {
-                rigControl->sendRigFreq(m.freq);
-                // pre-empt us being told; if it doesn't happen, we will get told later
-                curRadioFreq = m.freq;
-                chkRunFreqTimer->setInterval(CHECK_RUN_FREQ_POLLTIME);  // reset the interval
-            }
-            curRunFreq = m.freq;
-            curRunMode = m.mode;
-            TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
-            tslf->sendRunOnFlag(curRunFreq, curRunMode, true);
+            rmc.setRunMode(buttonNumber, getCtRunMemoryData(buttonNumber));
         }
     }
 
@@ -489,62 +567,12 @@ void RunButtonsFrame::setFreqDisplay(Frequency f, bool legalFreq)
         {
            freqCol = HtmlFontColour(Qt::red);
         }
-
-
     }
     ui->freqDisplay->setText(freqCol + f.convertFreqStrDisp());
 }
 
-void RunButtonsFrame::on_radioFreqCheckTimer()
-{
-    curRadioFreq = rigControl->getCurFreq();
-    chkRunFreq();
-}
-void RunButtonsFrame::chkRunFreq()
-{
-    if (runButtonOnNum >= 0)
-    {
-        if (!curRunFreq.isClear())
-        {
-            radioOffRunFreq = !chkRadioFreqOnRunFreq();
 
-            if (radioOffRunFreq)
-            {
-                runButtonMap[runButtonOnNum]->showRunToolButtonOffFreq();
-            }
-            else
-            {
-                runButtonMap[runButtonOnNum]->showRunToolButtonOnFreq();
-            }
-
-            if (oldRadioOffRunFreq != radioOffRunFreq)
-            {
-                oldRadioOffRunFreq = radioOffRunFreq;
-
-                TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
-                tslf->sendRunOffFreqFlag(curRunFreq, radioOffRunFreq);
-            }
-        }
-    }
-}
-
-bool RunButtonsFrame::chkRadioFreqOnRunFreq()
-{
-    qint64 curRunF = curRunFreq;
-    qint64 curF = curRadioFreq;
-
-    if (curRunF != 0)
-    {
-        if ((curF >= (curRunF - RUN_TOLERANCE)) && (curF <= (curRunF + RUN_TOLERANCE)))
-        {
-            return true;
-        }
-    }
-
-    return false;
-}
-
-memoryData::memData RunButtonsFrame::getRunMemoryData(int memoryNumber)
+memoryData::memData RunButtonsFrame::getCtRunMemoryData(int memoryNumber)
 {
     memoryData::memData m;
 
@@ -559,24 +587,28 @@ memoryData::memData RunButtonsFrame::getRunMemoryData(int memoryNumber)
 
     return m;
 }
-void RunButtonsFrame::clearRunMemoryData(int memoryNumber, memoryData::memData m)
+void RunButtonsFrame::clearCtRunMemoryData(int memoryNumber, memoryData::memData m)
 {
     ct->clearRunMemory(memoryNumber, m);
 
 }
-void RunButtonsFrame::setRunMemoryData(int memoryNumber, memoryData::memData m)
+void RunButtonsFrame::setCtRunMemoryData(int memoryNumber, memoryData::memData m)
 {
     ct->saveRunMemory(memoryNumber, m);
 
 }
 void RunButtonsFrame::setCallFreq()
 {
+    // triggered by clicking "run" radiobutton in QSOLogFrame
+    // Intended to set run button at current frequency/mode
+    // It chooses an unused button, or defaults to button 1
+
     // "*" in the text means that no frequency has been set (yet)
     // so choose the first with "*", or else button 1
 
-    if (!chkRunFreqTimer->isActive() || radioOffRunFreq)
+    if (rmc.radioOffRunFreq)
     {
-        int buttonNumber = runButtonOnNum;
+        int buttonNumber = rmc.runButtonOnNum;
         if (runButtonMap[RUN_BUTTON_1_ON]->memButton->text().contains(QChar('*')))
         {
             buttonNumber = RUN_BUTTON_1_ON;
@@ -602,7 +634,7 @@ void RunButtonsFrame::setCallFreq()
 
         // load run data into run memory
 
-        setRunMemoryData(buttonNumber, runData);
+        setCtRunMemoryData(buttonNumber, runData);
         runButtonUpdate(buttonNumber);
         runButActivated(buttonNumber);  // simulate button press
 

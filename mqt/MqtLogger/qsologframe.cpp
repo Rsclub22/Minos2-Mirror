@@ -2847,6 +2847,9 @@ void QSOLogFrame::on_tabSandP()
     trace(QString("QSOLogFrame::on_tabSandP tabSandPstate %1 runButtonOnFlag %2 radioOffRunFreq %3")
               .arg(tabSandPstate).arg(runButtonOnFlag).arg(radioOffRunFreq));
 
+    bool rm = runButtonOnFlag && !radioOffRunFreq;  // diagnostic
+    Q_UNUSED(rm)
+
     if (!tabSandPstate || isRunMode())
     {
         trace(" ui->callRb->setChecked(true)");
@@ -4160,6 +4163,8 @@ void QSOLogFrame::setRunOnFlag(bool runModeOn)
 
 void QSOLogFrame::setRunOffFreqFlag(bool offRunFreq)
 {
+
+    trace(QString("QSOLogFrame::setRunOffFreqFlag %1 radioOffRunFreq %2").arg(offRunFreq).arg(radioOffRunFreq));
     if (radioOffRunFreq != offRunFreq)
     {
 
@@ -4252,27 +4257,29 @@ void QSOLogFrame::on_callRb_clicked()
     // Make sure we have a call frequency
 
     frameHasFocusForced = true;
-    if (ui->callRb->isChecked())
-    {
-        //If it was clicked, then it should always by lit!
-        trace("SOLogFrame::on_callRb_clicked ui->callRb->isChecked() true");
-    }
-    else
-    {
-        trace("SOLogFrame::on_callRb_clicked ui->callRb->isChecked() false");
-    }
-    TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
-    if (tslf && tslf->runButtonsFrame)
-    {
-        tslf->runButtonsFrame->setCallFreq();
-    }
+    // if (ui->callRb->isChecked())
+    // {
+    //     //If it was clicked, then it should always by lit!
+    //     trace("SOLogFrame::on_callRb_clicked ui->callRb->isChecked() true");
+    // }
+    // else
+    // {
+    //     trace("SOLogFrame::on_callRb_clicked ui->callRb->isChecked() false");
+    // }
+    // TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
+    // if (tslf && tslf->runButtonsFrame)
+    // {
+    //     tslf->runButtonsFrame->setCallFreq();
+    // }
 
     MinosLoggerEvents::SendSandPChanged(getSandP());
     frameHasFocusForced = false;
 }
 void QSOLogFrame::on_SandPrb_clicked()
 {
+    frameHasFocusForced = true;
     MinosLoggerEvents::SendSandPChanged(getSandP());
+    frameHasFocusForced = false;
 }
 bool QSOLogFrame::readTuneAddBandMapSetting(QString mode)
 {
