@@ -692,7 +692,8 @@ void QSOLogFrame::setContest(BaseContestLog *pcontest)
 
     refreshOps();
     MinosLoggerEvents::SendReportOverstrike(overstrike, contest);
-    MinosLoggerEvents::SendSandPChanged(getSandP());
+    if (!edit)
+        MinosLoggerEvents::SendSandPChanged(getSandP());
 
 }
 void QSOLogFrame::initialise()
