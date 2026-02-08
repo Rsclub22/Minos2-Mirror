@@ -536,6 +536,9 @@ void RunButtonsFrame::setRunButtonText(int buttonNumber)
     runButtonMap[buttonNumber]->memButton->setText(runText + restoreText);
 
     runButtonMap[buttonNumber]->memButton->setToolTip(tTipStr);
+
+    runButtonMap[buttonNumber]->memButton->repaint();
+
 }
 
 void RunButtonsFrame::runButtonUpdate(int buttonNumber)

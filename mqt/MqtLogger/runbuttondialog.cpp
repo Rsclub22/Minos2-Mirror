@@ -37,6 +37,7 @@ RunButtonDialog::RunButtonDialog(QWidget *parent) :
     ui->freqLineEdit->setFocus();
     // validate the input
     connect(ui->freqLineEdit, &QLineEdit::editingFinished, this, &RunButtonDialog::onFreqEditFinish);
+    trace("RunButtonDialog start");
 
 }
 
@@ -48,17 +49,21 @@ void RunButtonDialog::doCloseEvent()
 }
 void RunButtonDialog::reject()
 {
+    trace("RunButtonDialog reject");
     doCloseEvent();
     QDialog::reject();
 }
 void RunButtonDialog::accept()
 {
+    trace("RunButtonDialog accept");
     doCloseEvent();
     QDialog::accept();
 }
 
 RunButtonDialog::~RunButtonDialog()
 {
+    trace("RunButtonDialog end");
+
     delete ui;
 }
 
