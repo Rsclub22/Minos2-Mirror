@@ -88,9 +88,9 @@ void MinosLoggerEvents::SendClearContestInFrame(BaseContestLog *c)
     emit mle.clearContestInFrame(c);
 }
 //---------------------------------------------------------------------------
-void MinosLoggerEvents::SendTabSandP()
+void MinosLoggerEvents::SendTabSandP(BaseContestLog *c)
 {
-    emit mle.tabSandP();
+    emit mle.tabSandP(c);
 }
 //---------------------------------------------------------------------------
 void MinosLoggerEvents::SendShowAuxHeaders()
@@ -117,9 +117,9 @@ void MinosLoggerEvents::SendFKey(BaseContestLog *c, int event, int mfreq)
     emit mle.fKey(c, event, mfreq);
 }
 
-void MinosLoggerEvents::SendSandPChanged(bool s)
+void MinosLoggerEvents::SendSandPChanged(BaseContestLog *c, bool s)
 {
-    emit mle.SandPChanged(s);
+    emit mle.SandPChanged(c, s);
 }
 void MinosLoggerEvents::SendDMMess(AnalysePubSubNotify an)
 {

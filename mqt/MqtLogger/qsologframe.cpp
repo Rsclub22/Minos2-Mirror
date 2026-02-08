@@ -256,7 +256,7 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
     addToBandmapTuneEnabled[PH] = addToBandmapTuneEnabled["PHONE"];
     addToBandmapTuneEnabled[hamlibData::FM] = addToBandmapTuneEnabled["PHONE"];
 
-    on_tabSandP();  // show (or not) the Call/S&P choice
+    on_tabSandP(contest);  // show (or not) the Call/S&P choice
     on_ShowOperators();
     on_QSOMargins();
     checkQRZClusterBandmapShowing();
@@ -664,7 +664,7 @@ void QSOLogFrame::setAsEdit(bool s, QString b)
     {
         edit = true;
         ui->GJVCancelButton->setText(tr("Return to Log"));
-        on_tabSandP();
+        on_tabSandP(contest);
         setTxReadOnly(false);
         ui->SerTxFrame->getTextEditEdit()->setFocusPolicy(Qt::StrongFocus);
     }
@@ -693,7 +693,7 @@ void QSOLogFrame::setContest(BaseContestLog *pcontest)
     refreshOps();
     MinosLoggerEvents::SendReportOverstrike(overstrike, contest);
     if (!edit)
-        MinosLoggerEvents::SendSandPChanged(getSandP());
+        MinosLoggerEvents::SendSandPChanged(contest, getSandP());
 
 }
 void QSOLogFrame::initialise()
@@ -2834,8 +2834,12 @@ bool QSOLogFrame::isRunMode()
 {
     return runButtonOnFlag && !radioOffRunFreq;
 }
-void QSOLogFrame::on_tabSandP()
+void QSOLogFrame::on_tabSandP(BaseContestLog *c)
 {
+    if (contest != c)
+    {
+        return;
+    }
     bool tabSandPstate;
     TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpTabforSandP, tabSandPstate );
 
@@ -4159,7 +4163,7 @@ void QSOLogFrame::setRunOnFlag(bool runModeOn)
         setClusterSendSpotControlsState();
 
     }
-    on_tabSandP();  // show (or not) the Call/S&P choiceon_
+    on_tabSandP(contest);  // show (or not) the Call/S&P choiceon_
 }
 
 void QSOLogFrame::setRunOffFreqFlag(bool offRunFreq)
@@ -4174,7 +4178,7 @@ void QSOLogFrame::setRunOffFreqFlag(bool offRunFreq)
         setClusterSendSpotControlsState();
 
     }
-    on_tabSandP();  // show (or not) the Call/S&P choice
+    on_tabSandP(contest);  // show (or not) the Call/S&P choice
 }
 
 
@@ -4273,13 +4277,13 @@ void QSOLogFrame::on_callRb_clicked()
     //     tslf->runButtonsFrame->setCallFreq();
     // }
 
-    MinosLoggerEvents::SendSandPChanged(getSandP());
+    MinosLoggerEvents::SendSandPChanged(contest, getSandP());
     frameHasFocusForced = false;
 }
 void QSOLogFrame::on_SandPrb_clicked()
 {
     frameHasFocusForced = true;
-    MinosLoggerEvents::SendSandPChanged(getSandP());
+    MinosLoggerEvents::SendSandPChanged(contest, getSandP());
     frameHasFocusForced = false;
 }
 bool QSOLogFrame::readTuneAddBandMapSetting(QString mode)

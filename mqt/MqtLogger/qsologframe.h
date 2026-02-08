@@ -342,7 +342,7 @@ private slots:
     void on_AfterTabFocusIn(QLineEdit *tle);
     void on_ValidateError (int mess_no );
     void on_ShowOperators();
-    void on_tabSandP();
+    void on_tabSandP(BaseContestLog *c);
     void on_FontChanged();
     void on_QSOMargins();
 

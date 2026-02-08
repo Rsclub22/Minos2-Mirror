@@ -2281,9 +2281,9 @@ void TxVmButtonsFrame::setEomLabelText(int selectedEomType)
 }
 
 
-void TxVmButtonsFrame::sandPChanged(bool s)
+void TxVmButtonsFrame::sandPChanged(BaseContestLog *c, bool s)
 {
-    if (txVoiceKeyer)
+    if (ct == c && txVoiceKeyer)
     {
 
         if (s != sAndPState)

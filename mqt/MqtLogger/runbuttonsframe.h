@@ -144,7 +144,7 @@ private:
     void setRunButtonsFrameTitle();
     bool getRadioReadOnlyFlag();
 
-    void sandPChanged(bool s);
+    void sandPChanged(BaseContestLog *c, bool s);
 private slots:
     void runButActivated(int buttonNumber);
     void setFreqDisplay(Frequency, bool);

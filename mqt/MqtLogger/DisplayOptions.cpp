@@ -180,7 +180,8 @@ void DisplayOptions::finalise()
     AutoFill.finalise();
     if (TabforSandP.finalise())
     {
-        MinosLoggerEvents::SendTabSandP();
+        BaseContestLog * ct = TContestApp::getContestApp() ->getCurrentContest();
+        MinosLoggerEvents::SendTabSandP(ct);
     }
     if (SeparateIcons.finalise())
     {

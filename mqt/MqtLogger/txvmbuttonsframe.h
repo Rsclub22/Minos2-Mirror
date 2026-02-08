@@ -243,7 +243,7 @@ private slots:
     void on_pipCb_stateChanged(int arg1);
     void onExtConnectTimer();
     void onInternalVoiceMemoryPlayState(bool playing);
-    void sandPChanged(bool s);
+    void sandPChanged(BaseContestLog *, bool s);
 
     void onCwEntryReturnPressed();
     void setRadioParams();

@@ -176,9 +176,12 @@ bool  DMButtonFrame::isDataMode()
     }
 }
 
-void DMButtonFrame::sandPChanged(bool s)
+void DMButtonFrame::sandPChanged(BaseContestLog *c, bool s)
 {
-    showFButtons(s);
+    if (ct == c)
+    {
+        showFButtons(s);
+    }
 }
 void DMButtonFrame::showFButtons(bool s)
 {

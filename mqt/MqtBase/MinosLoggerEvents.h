@@ -59,7 +59,7 @@ signals:
    void TimerDistribution();
    void AfterTabFocusIn(QLineEdit *tle);
    void clearContestInFrame(BaseContestLog *);
-   void tabSandP();
+   void tabSandP(BaseContestLog *);
    void MainRaised();
    void QSOMargins();
    void showAuxHeaders();
@@ -105,7 +105,7 @@ signals:
    void wsjtxDatagram(int instance, QByteArray *);
    void callsignLookup(BaseContestLog *l, QString c);
    void ResendSpotsFromClusterCommand(resendFrameId, QString, QString, QString);
-   void SandPChanged(bool);
+   void SandPChanged(BaseContestLog *, bool);
    void DMMess(AnalysePubSubNotify);
    void broadcastSpots(QSharedPointer<ClusterSpotData>, bool delSpot);
    void modeChange(QString);
@@ -127,7 +127,7 @@ public:
    static void SendMakeEntry(BaseContestLog *, bool e);
    static void SendNextUnfilled(BaseContestLog *);
    static void SendClearContestInFrame(BaseContestLog *);
-   static void SendTabSandP();
+   static void SendTabSandP(BaseContestLog *);
    static void SendMainRaised();
    static void SendQSOMargins();
 
@@ -184,7 +184,7 @@ public:
     static void SendRedrawQSOMap(bool grid, bool lines, bool cluster, bool showloc, QString tl, QString br, bool showNav);
 
     static void SendFKey(BaseContestLog *c, int event, int mfreq);
-    static void SendSandPChanged(bool);
+    static void SendSandPChanged(BaseContestLog *c, bool);
     static void SendDMMess(AnalysePubSubNotify);
     static void SendBroadcastSpot(QSharedPointer<ClusterSpotData>, bool delSpot = false);
     static void SendModeChange(QString);
