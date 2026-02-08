@@ -612,6 +612,8 @@ void RunButtonsFrame::setCallFreq()
     if (rmc.radioOffRunFreq)
     {
         int buttonNumber = rmc.runButtonOnNum;
+
+        trace(QString("unButtonsFrame::setCallFreq b1 text %1 b2 text %2").arg(runButtonMap[RUN_BUTTON_1_ON]->memButton->text(), runButtonMap[RUN_BUTTON_2_ON]->memButton->text()));
         if (runButtonMap[RUN_BUTTON_1_ON]->memButton->text().contains(QChar('*')))
         {
             buttonNumber = RUN_BUTTON_1_ON;
