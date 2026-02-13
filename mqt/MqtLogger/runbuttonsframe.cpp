@@ -5,6 +5,7 @@
 #include "tlogcontainer.h"
 #include "tsinglelogframe.h"
 #include "SendRPCDM.h"
+#include "MinosLoggerEvents.h"
 #include "MTrace.h"
 
 #include "runbuttonsframe.h"
@@ -152,7 +153,6 @@ RunButtonsFrame::RunButtonsFrame(QWidget *parent) :
     ui(new Ui::RunButtonsFrame)
 {
     ui->setupUi(this);
-    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::SandPChanged, this, &RunButtonsFrame::sandPChanged);
 
     rmc.linkRunButtonFrame(this);
 
@@ -160,6 +160,7 @@ RunButtonsFrame::RunButtonsFrame(QWidget *parent) :
 
     setRunButtonsFrameTitle();
 
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::SandPClicked, this, &RunButtonsFrame::sandPClicked);
 }
 
 RunButtonsFrame::~RunButtonsFrame()
@@ -181,21 +182,25 @@ void RunButtonsFrame::setContest(BaseContestLog *c)
         loadRunButtonLabels();
     }
 }
-void RunButtonsFrame::sandPChanged(BaseContestLog *c, bool s)
+void RunButtonsFrame::sandPClicked(BaseContestLog *c, bool sandp)
 {
+    // Call/S&P radio buttons clicked
     if (ct != c)
     {
         return;
     }
-    if (!s)
+    if (sandp)
     {
         rmc.radioOffRunFreq =  true;
+    }
+    else
+    {
         setCallFreq();
     }
     if (rmc.runButtonOnNum > NO_RUN_BUTTON_ON)
     {
         // manual switch to/from run mode
-        if (s)  // switch to S&P
+        if (sandp)  // switch to S&P
         {
             runButtonMap[rmc.runButtonOnNum]->returnFrequency.clear();
             runModeOff(rmc.runButtonOnNum);
@@ -541,7 +546,7 @@ void RunButtonsFrame::setRunButtonText(int buttonNumber)
 
     runButtonMap[buttonNumber]->memButton->setToolTip(tTipStr);
 
-    runButtonMap[buttonNumber]->memButton->repaint();
+    //runButtonMap[buttonNumber]->memButton->repaint();
 
 }
 

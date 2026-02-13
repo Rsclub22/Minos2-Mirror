@@ -36,7 +36,7 @@ signals:
     void sendFreqControl(Frequency f);
 private slots:
     void fKey(BaseContestLog *c, int key, int carr);
-    void sandPChanged(BaseContestLog *c, bool);
+    void sandPChanged(BaseContestLog *c, bool sandp);
     void fButtonClicked();
     void on_stopButton_clicked();
 
@@ -69,7 +69,7 @@ private:
     QString dataSender;
     QString curMode;
 
-    void showFButtons(bool s);
+    void showFButtons(bool sandp);
     QString getFKeysString() const;
     bool parseFKeyString(QString s);
     bool parseFKeyArray(QJsonArray s, QString keyset);

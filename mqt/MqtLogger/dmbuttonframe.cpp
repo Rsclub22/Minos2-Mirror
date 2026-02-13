@@ -176,14 +176,14 @@ bool  DMButtonFrame::isDataMode()
     }
 }
 
-void DMButtonFrame::sandPChanged(BaseContestLog *c, bool s)
+void DMButtonFrame::sandPChanged(BaseContestLog *c, bool sandp)
 {
     if (ct == c)
     {
-        showFButtons(s);
+        showFButtons(sandp);
     }
 }
-void DMButtonFrame::showFButtons(bool s)
+void DMButtonFrame::showFButtons(bool sandp)
 {
     ui->FButtonFrame->setEnabled(false);
     MinosRPC *rpc = MinosRPC::getMinosRPC();
@@ -192,7 +192,7 @@ void DMButtonFrame::showFButtons(bool s)
     {
         for (int i = 0; i < 12; i++)
         {
-            QString keytop = QString("F%1: %2").arg(i + 1).arg(fkeys[currentName][i + (s?12:0)].ktop);
+            QString keytop = QString("F%1: %2").arg(i + 1).arg(fkeys[currentName][i + (sandp?12:0)].ktop);
 
             fButtons[i]->setText(keytop);
         }

@@ -117,9 +117,17 @@ void MinosLoggerEvents::SendFKey(BaseContestLog *c, int event, int mfreq)
     emit mle.fKey(c, event, mfreq);
 }
 
-void MinosLoggerEvents::SendSandPChanged(BaseContestLog *c, bool s)
+void MinosLoggerEvents::SendRunButtonPressed(BaseContestLog *c, bool s)
 {
-    emit mle.SandPChanged(c, s);
+    emit mle.RunButtonPressed(c, s);
+}
+void MinosLoggerEvents::SendSandPClicked(BaseContestLog *c, bool sandp)
+{
+    emit mle.SandPClicked(c, sandp);
+}
+void MinosLoggerEvents::SendSandPChanged(BaseContestLog *c, bool sandp)
+{
+    emit mle.SandPChanged(c, sandp);
 }
 void MinosLoggerEvents::SendDMMess(AnalysePubSubNotify an)
 {

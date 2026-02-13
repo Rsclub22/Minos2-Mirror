@@ -2533,7 +2533,7 @@ to</source>
     </message>
     <message>
         <location filename="../qsologframe.ui" line="171"/>
-        <location filename="../qsologframe.cpp" line="842"/>
+        <location filename="../qsologframe.cpp" line="844"/>
         <source>Catch-up (Post Entry)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2664,7 +2664,7 @@ to</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2632"/>
+        <location filename="../qsologframe.cpp" line="2634"/>
         <source>No QSO entry field focussed!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2796,12 +2796,12 @@ to</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="851"/>
+        <location filename="../qsologframe.cpp" line="853"/>
         <source>End Catch-up</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2358"/>
+        <location filename="../qsologframe.cpp" line="2360"/>
         <source>This Contact has changed: Shall I log the changes?
 
 Yes         - Log as shown
@@ -2809,69 +2809,69 @@ No          - Discard changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2611"/>
+        <location filename="../qsologframe.cpp" line="2613"/>
         <source>Read Only</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2615"/>
+        <location filename="../qsologframe.cpp" line="2617"/>
         <source>Protected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2619"/>
+        <location filename="../qsologframe.cpp" line="2621"/>
         <source>Protected by age of contest</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="3028"/>
+        <location filename="../qsologframe.cpp" line="3036"/>
         <source>Change mode to CW?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="3031"/>
-        <location filename="../qsologframe.cpp" line="3042"/>
-        <location filename="../qsologframe.cpp" line="3051"/>
+        <location filename="../qsologframe.cpp" line="3039"/>
+        <location filename="../qsologframe.cpp" line="3050"/>
+        <location filename="../qsologframe.cpp" line="3059"/>
         <source>Please check the signal reports, and log the contact</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="3039"/>
+        <location filename="../qsologframe.cpp" line="3047"/>
         <source>Change mode to PH?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="3048"/>
+        <location filename="../qsologframe.cpp" line="3056"/>
         <source>Change mode to USB?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="3095"/>
+        <location filename="../qsologframe.cpp" line="3103"/>
         <source>Spot Last Logged (%1) </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="3166"/>
+        <location filename="../qsologframe.cpp" line="3174"/>
         <source>&quot;Serial sent&quot; is too high - please confirm that this is correct?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="3168"/>
+        <location filename="../qsologframe.cpp" line="3176"/>
         <source>Do you want to enter the missing contacts later?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="3401"/>
+        <location filename="../qsologframe.cpp" line="3409"/>
         <source>Meep from %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="3586"/>
+        <location filename="../qsologframe.cpp" line="3594"/>
         <source>Start of QSOs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="3621"/>
+        <location filename="../qsologframe.cpp" line="3629"/>
         <source>End of QSOs</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3743,48 +3743,48 @@ No          - Discard changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="223"/>
+        <location filename="../runbuttonsframe.cpp" line="228"/>
         <source>Connected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="229"/>
+        <location filename="../runbuttonsframe.cpp" line="234"/>
         <source>Disconnected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="455"/>
-        <location filename="../runbuttonsframe.cpp" line="639"/>
+        <location filename="../runbuttonsframe.cpp" line="460"/>
+        <location filename="../runbuttonsframe.cpp" line="644"/>
         <source>Run</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="485"/>
+        <location filename="../runbuttonsframe.cpp" line="490"/>
         <source>Run %1 - Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="537"/>
+        <location filename="../runbuttonsframe.cpp" line="542"/>
         <source>Restore .%1    </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="538"/>
+        <location filename="../runbuttonsframe.cpp" line="543"/>
         <source>Restore freq: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="532"/>
+        <location filename="../runbuttonsframe.cpp" line="537"/>
         <source>Freq: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="466"/>
+        <location filename="../runbuttonsframe.cpp" line="471"/>
         <source>Run %1 - Set</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="533"/>
+        <location filename="../runbuttonsframe.cpp" line="538"/>
         <source>Mode: </source>
         <translation type="unfinished"></translation>
     </message>
@@ -3792,17 +3792,17 @@ No          - Discard changes</source>
 <context>
     <name>RunMemoryButton</name>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="706"/>
+        <location filename="../runbuttonsframe.cpp" line="711"/>
         <source>&amp;Off</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="715"/>
+        <location filename="../runbuttonsframe.cpp" line="720"/>
         <source>&amp;Set</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="723"/>
+        <location filename="../runbuttonsframe.cpp" line="728"/>
         <source>&amp;Clear</source>
         <translation type="unfinished"></translation>
     </message>

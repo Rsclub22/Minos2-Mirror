@@ -693,7 +693,9 @@ void QSOLogFrame::setContest(BaseContestLog *pcontest)
     refreshOps();
     MinosLoggerEvents::SendReportOverstrike(overstrike, contest);
     if (!edit)
-        MinosLoggerEvents::SendSandPChanged(contest, getSandP());
+    {
+        MinosLoggerEvents::SendSandPClicked(contest, getSandP());
+    }
 
 }
 void QSOLogFrame::initialise()
@@ -2858,12 +2860,18 @@ void QSOLogFrame::on_tabSandP(BaseContestLog *c)
     if (!tabSandPstate || isRunMode())
     {
         trace(" ui->callRb->setChecked(true)");
-        ui->callRb->setChecked(true);
+        if (!ui->callRb->isChecked())
+        {
+            ui->callRb->setChecked(true);
+        }
     }
     else
     {
         trace("ui->SandPrb->setChecked(true)");
-        ui->SandPrb->setChecked(true);
+        if (!ui->SandPrb->isChecked())
+        {
+            ui->SandPrb->setChecked(true);
+        }
     }
     setPlaceholders(QStringList());
     trace(QString("QSOLogFrame::on_tabSandP state %1 runButtonOnFlag %2 radioOffRunFreq %3")
@@ -4164,6 +4172,7 @@ void QSOLogFrame::setRunOnFlag(bool runModeOn)
 
     }
     on_tabSandP(contest);  // show (or not) the Call/S&P choiceon_
+    MinosLoggerEvents::SendSandPChanged(contest, !runModeOn);
 }
 
 void QSOLogFrame::setRunOffFreqFlag(bool offRunFreq)
@@ -4262,28 +4271,13 @@ void QSOLogFrame::on_callRb_clicked()
     // Make sure we have a call frequency
 
     frameHasFocusForced = true;
-    // if (ui->callRb->isChecked())
-    // {
-    //     //If it was clicked, then it should always by lit!
-    //     trace("SOLogFrame::on_callRb_clicked ui->callRb->isChecked() true");
-    // }
-    // else
-    // {
-    //     trace("SOLogFrame::on_callRb_clicked ui->callRb->isChecked() false");
-    // }
-    // TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
-    // if (tslf && tslf->runButtonsFrame)
-    // {
-    //     tslf->runButtonsFrame->setCallFreq();
-    // }
-
-    MinosLoggerEvents::SendSandPChanged(contest, getSandP());
+    MinosLoggerEvents::SendSandPClicked(contest, false);
     frameHasFocusForced = false;
 }
 void QSOLogFrame::on_SandPrb_clicked()
 {
     frameHasFocusForced = true;
-    MinosLoggerEvents::SendSandPChanged(contest, getSandP());
+    MinosLoggerEvents::SendSandPClicked(contest, true);
     frameHasFocusForced = false;
 }
 bool QSOLogFrame::readTuneAddBandMapSetting(QString mode)

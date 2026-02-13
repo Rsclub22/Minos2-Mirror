@@ -105,7 +105,9 @@ signals:
    void wsjtxDatagram(int instance, QByteArray *);
    void callsignLookup(BaseContestLog *l, QString c);
    void ResendSpotsFromClusterCommand(resendFrameId, QString, QString, QString);
+   void SandPClicked(BaseContestLog *, bool);
    void SandPChanged(BaseContestLog *, bool);
+   void RunButtonPressed(BaseContestLog *, bool);
    void DMMess(AnalysePubSubNotify);
    void broadcastSpots(QSharedPointer<ClusterSpotData>, bool delSpot);
    void modeChange(QString);
@@ -184,7 +186,9 @@ public:
     static void SendRedrawQSOMap(bool grid, bool lines, bool cluster, bool showloc, QString tl, QString br, bool showNav);
 
     static void SendFKey(BaseContestLog *c, int event, int mfreq);
-    static void SendSandPChanged(BaseContestLog *c, bool);
+    static void SendSandPClicked(BaseContestLog *c, bool sandp);
+    static void SendSandPChanged(BaseContestLog *c, bool sandp);
+    static void SendRunButtonPressed(BaseContestLog *c, bool);
     static void SendDMMess(AnalysePubSubNotify);
     static void SendBroadcastSpot(QSharedPointer<ClusterSpotData>, bool delSpot = false);
     static void SendModeChange(QString);
