@@ -4188,6 +4188,7 @@ void QSOLogFrame::setRunOffFreqFlag(bool offRunFreq)
 
     }
     on_tabSandP(contest);  // show (or not) the Call/S&P choice
+    MinosLoggerEvents::SendSandPChanged(contest, offRunFreq);
 }
 
 
