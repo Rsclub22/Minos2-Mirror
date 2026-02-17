@@ -112,7 +112,7 @@ Non-contest bands
     <Mode type='FM' flow='432500' fclow1='432500' fchigh1='432994' fhigh='432994'/>
 </Band>
 <Band type='MWave' flow='1240000'   fhigh='1325000'   unit='K' wlen='23cm'   UK='1296 MHz' Reg1Test='1,3 GHz' ADIF='23cm'   Cabrillo='1.2G'  Colour='purple'
-        bandmapLow='1296000' bandmapHigh='1296400'>
+        bandmapLow='1296000' bandmapHigh='1296400' BandFreq='1296000'>
     <Mode type='CW' flow='1296000' fclow1='1296000' fchigh1='1296150' fhigh='1296150'/>
     <Mode type='USB' flow='1296150' fclow1='1296150' fchigh1='1296400' fhigh='1296400'/>
     <Mode type='MGM' flow='1296150' fclow1='1296150' fchigh1='1296400' fhigh='1296400'/>
