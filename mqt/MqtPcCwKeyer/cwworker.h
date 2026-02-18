@@ -37,6 +37,8 @@ public:
 
     void setSerialPort(QSerialPort *port);
 
+    void setInverKeyDownFlag(const bool invertKeyDownFlag);
+
 signals:
     void finished();
 
@@ -45,6 +47,8 @@ private:
     QMutex mutex;
     bool running = false;
     QSerialPort *serial = nullptr;
+    bool invertDtrKeyDown = false;
+    void setKeyOutput(bool keyDown);
 };
 
 #endif // CWWORKER_H

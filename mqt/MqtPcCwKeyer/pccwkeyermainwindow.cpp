@@ -167,6 +167,11 @@ void PcCwKeyerMainWindow::readSettings()
     trace(QString("readSettings postTxDelayMs = %1").arg(QString::number(postTxDelayMs)));
     pttEnabled = config.value("pttEnabled", false).toBool();
     trace(QString("readSettings pttEnabled = %1").arg(pttEnabled ? "True" : "False"));
+    invertDtrState = config.value("invertDtrState", false).toBool();
+    trace(QString("readSettings invertDtrState = %1").arg(invertDtrState ? "True" : "False"));
+    invertPttState = config.value("invertPttState", false).toBool();
+    trace(QString("readSettings invertPttState = %1").arg(invertPttState ? "True" : "False"));
+
 
 }
 
@@ -188,8 +193,12 @@ void PcCwKeyerMainWindow::loadSettingsToMainWindow()
     ui->preTxDelayValueDisplayLabel->setText(QString::number(preTxDelayMs));
     ui->postTxDelayValueLabel->setText(QString::number(postTxDelayMs));
     ui->enablePTTCheckbox->setChecked(pttEnabled);
+    ui->invertPttLineCheckBox->setEnabled(pttEnabled);
 
-    enableTXDelayObjects(pttEnabled);
+    ui->invertDtrKeyerStateCheckBox->setChecked(invertDtrState);
+    ui->invertPttLineCheckBox->setChecked(invertPttState);
+
+    enablePTTObjects(pttEnabled);
 
 
 }
@@ -230,6 +239,18 @@ void PcCwKeyerMainWindow::savePttEnabled()
     config.setValue("pttEnabled", pttEnabled);
 }
 
+void PcCwKeyerMainWindow::saveInvertedDtrStateFlag()
+{
+    QSettings config(PC_CW_KEYER_SETTINGS_FILE(), QSettings::IniFormat);
+    config.setValue("invertDtrState", invertDtrState);
+}
+
+void PcCwKeyerMainWindow::saveInvertedPttStateFlag()
+{
+    QSettings config(PC_CW_KEYER_SETTINGS_FILE(), QSettings::IniFormat);
+    config.setValue("invertPttState", invertPttState);
+}
+
 void PcCwKeyerMainWindow::saveAllSettings()
 {
     saveWpmSetting();
@@ -237,10 +258,14 @@ void PcCwKeyerMainWindow::saveAllSettings()
     savePreTxDelay();
     savePostTxDelay();
     savePttEnabled();
+    saveInvertedDtrStateFlag();
+    saveInvertedPttStateFlag();
 }
 
-void PcCwKeyerMainWindow::enableTXDelayObjects(bool enable)
+void PcCwKeyerMainWindow::enablePTTObjects(bool enable)
 {
+    ui->invertPttLineCheckBox->setEnabled(enable);
+
     ui->preTxDelayLineEdit->setEnabled(enable);
     ui->preTxDelayTitleLabel->setEnabled(enable);
     ui->preTxDelayValueDisplayLabel->setEnabled(enable);
@@ -275,10 +300,10 @@ void PcCwKeyerMainWindow::setConnections()
         onTextInputFinished(text);
     });
 
-
+    connect(ui->invertDtrKeyerStateCheckBox, &QCheckBox::clicked, this, &PcCwKeyerMainWindow::onInvertDtrStateClicked);
+    connect(ui->invertPttLineCheckBox, &QCheckBox::clicked, this, &PcCwKeyerMainWindow::onInvertPttStateClicked);
 
 }
-
 
 
 
@@ -411,10 +436,30 @@ void PcCwKeyerMainWindow::onEnablePTT(bool checked)
     if (checked != pttEnabled)
     {
         pttEnabled = checked;
+        ui->invertPttLineCheckBox->setEnabled(checked);
         savePttEnabled();
-        enableTXDelayObjects(checked);
+        enablePTTObjects(checked);
         pcCwKeyerRpc->publishPttEnable(checked);
 
+    }
+}
+
+void PcCwKeyerMainWindow::onInvertDtrStateClicked(bool checked)
+{
+    if (checked != invertDtrState)
+    {
+        invertDtrState = checked;
+        saveInvertedDtrStateFlag();
+        cwKeyer->setInverKeyDownFlag(invertDtrState);
+    }
+}
+void PcCwKeyerMainWindow::onInvertPttStateClicked(bool checked)
+{
+    if (checked != invertPttState)
+    {
+        invertPttState = checked;
+        saveInvertedPttStateFlag();
+        cwKeyer->setInverPttDownFlag(invertPttState);
     }
 }
 
@@ -436,6 +481,9 @@ void PcCwKeyerMainWindow::openCwKeyer()
         connect(cwKeyer, &PcCwKeyer::serialPortError, this, &PcCwKeyerMainWindow::handleSerialPortError);
 
         cwKeyer->setPostTxDelayMs(postTxDelayMs);
+        cwKeyer->setWPM(wpm);
+        cwKeyer->setInverKeyDownFlag(invertDtrState);
+        cwKeyer->setInverPttDownFlag(invertPttState);
     }
 
 

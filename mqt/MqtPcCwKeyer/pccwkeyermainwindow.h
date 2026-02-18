@@ -70,6 +70,9 @@ private:
 
     bool pttEnabled = false;
 
+    bool invertDtrState = false;
+    bool invertPttState = false;
+
     QTimer* statusTimer;
 
     PcCwKeyerRpc* pcCwKeyerRpc;
@@ -98,7 +101,7 @@ private:
     void keyPressEvent(QKeyEvent *event);
     void closeEvent(QCloseEvent *event);
     void readSettings();
-    void enableTXDelayObjects(bool enable);
+    void enablePTTObjects(bool enable);
     void saveAllSettings();
     void saveWpmSetting();
     void savePreTxDelay();
@@ -116,6 +119,10 @@ private:
     void setTXStatusVisible(bool visible);
     void setPttStatusIndicatorOnOff(bool on);
     void sendInitialStatusToLogger();
+    void saveInvertedDtrStateFlag();
+    void saveInvertedPttStateFlag();
+
+
 private slots:
 
     void onComportSelected();
@@ -137,6 +144,8 @@ private slots:
 
 
     void cwWpmFromLogger(int newWpm);
+    void onInvertDtrStateClicked(bool checked);
+    void onInvertPttStateClicked(bool checked);
 };
 #endif // PCCWKEYERMAINWINDOW_H
 
