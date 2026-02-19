@@ -3,7 +3,7 @@
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //                      Pc Serial Port DTR CW Keyer Worker
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2025
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2025 - 2026
 //
 //
 //
@@ -17,6 +17,7 @@
 #include <QtConcurrent/QtConcurrentRun>
 #include <QThread>
 #include <QElapsedTimer>
+#include "cwworker.h"
 
 #ifdef Q_OS_WIN
 #include <windows.h>

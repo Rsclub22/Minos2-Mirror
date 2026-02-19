@@ -750,8 +750,11 @@ void DMButtonFrame::setFrameStateForKeyer(QString txKeyerName)
         break;
 
     default:
+
+
         txKeyParamList.clear();
-        currentName.clear();
+
+    currentName.clear();
         set_None_FrameState();
         return;     // exit.....
         break;
@@ -883,6 +886,7 @@ void DMButtonFrame::selectKeyerUiForm(QWidget *uiForm)
 void DMButtonFrame::set_DigiMode_FrameState()
 {
     txKeyParamList.clear();
+
     selectedKeyerCap.getKeyerType() = txKeyerTypes[TxKeyerId::DigitalModes];
     selectKeyerUiForm(digitalModesForm);
     clearButtonLabels();
@@ -911,6 +915,8 @@ void DMButtonFrame::set_None_FrameState()
 
 
     clearButtonLabels();
+
+
     txKeyParamList.clear();
 
     if ( selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::ExternalMqtKeyer])
