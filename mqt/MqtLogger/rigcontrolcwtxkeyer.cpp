@@ -43,12 +43,11 @@ RigControlCwTxKeyer::~RigControlCwTxKeyer()
 
 void RigControlCwTxKeyer::registerTxKeyer(TxKeyerFactory::TxKeyers* vmKeyersList)
 {
-    QString keyerName = txKeyerNames[TxKeyerId::CW_RigControl];
+    QString keyerName = getTxKeyerDisplayName(TxKeyerId::CW_RigControl);
 
     TxKeyerCapabilities voiceMemCap;
 
-    voiceMemCap.setVmIdNum(TxKeyerId::CW_RigControl);
-    voiceMemCap.setKeyerType(txKeyerTypes[TxKeyerId::CW_RigControl]);
+    voiceMemCap.setTxKeyerId(TxKeyerId::CW_RigControl);
     voiceMemCap.setKeyerName(keyerName);
     voiceMemCap.setNumVoiceKeys(8);
     voiceMemCap.setsupportSerial(false);

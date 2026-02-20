@@ -22,12 +22,11 @@ RigControlVoiceTxKeyer::~RigControlVoiceTxKeyer()
 
 void RigControlVoiceTxKeyer::registerTxKeyer(TxKeyerFactory::TxKeyers* vmKeyersList)
 {
-    QString keyerName = txKeyerNames[TxKeyerId::RigControl];
+    QString keyerName = getTxKeyerDisplayName(TxKeyerId::RigControl);
 
     TxKeyerCapabilities voiceMemCap;
 
-    voiceMemCap.setVmIdNum(RigControl);
-    voiceMemCap.setKeyerType(txKeyerTypes[RigControl]);
+    voiceMemCap.setTxKeyerId(TxKeyerId::RigControl);
     voiceMemCap.setKeyerName(keyerName);
     voiceMemCap.setNumVoiceKeys(8);
     voiceMemCap.setsupportSerial(false);

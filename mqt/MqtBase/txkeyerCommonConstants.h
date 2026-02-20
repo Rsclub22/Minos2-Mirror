@@ -46,7 +46,7 @@ namespace TxKeyerCommon
     const int EDIT_DLG_COL7 = 7;
 
 
-    enum TxKeyerId
+    enum class TxKeyerId
     {
         None = 0,
         RigControl,
@@ -62,35 +62,49 @@ namespace TxKeyerCommon
 
 
 
-    inline const QString NONE_KEYER_NAME = "";
-    inline const QString VOICE_RIGCONTROL_KEYER_NAME = "Voice RigControl";
-    inline const QString CW_RIGCONTOL_KEYER_NAME = "CW RigControl";
-    inline const QString SERIAL_CONTROL_KEYER_NAME = "SerialControl";
-    inline const QString PC_DTR_CW_KEYER_NAME = "PcCwKeyer";
-    inline const QString DIGITAL_MODES_KEYER_NAME = "Digital Modes";
-    inline const QString INTERNAL_VOICE_KEYER_NAME = "Internal";
-    inline const QString MQT_KEYER_NAME = "mqtKeyer";
-    inline const QString WINKEYER_NAME = "WinKeyer";
 
-    // these two lists should match the TXKeyerId order
+    QString getTxKeyerDisplayName(TxKeyerId id)
+    {
+        switch (id)
+        {
 
-    // this is used in the dropdown selection and intended to be more human readable.
-    inline const QStringList txKeyerNames = {NONE_KEYER_NAME,
-                                             VOICE_RIGCONTROL_KEYER_NAME,
-                                             CW_RIGCONTOL_KEYER_NAME,
-                                             SERIAL_CONTROL_KEYER_NAME,
-                                             PC_DTR_CW_KEYER_NAME,
-                                             DIGITAL_MODES_KEYER_NAME,
-                                             INTERNAL_VOICE_KEYER_NAME,
-                                             MQT_KEYER_NAME,
-                                             WINKEYER_NAME};
+            case TxKeyerId::RigControl:         return "Voice RigControl";
+            case TxKeyerId::CW_RigControl:      return "CW RigControl";
+            case TxKeyerId::SerialControl:      return "SerialControl";
+            case TxKeyerId::PcCwKeyer:          return "PcCwKeyer";
+            case TxKeyerId::DigitalModes:       return "Digital Modes";
+            case TxKeyerId::InternalVoiceKeyer: return "Internal";
+            case TxKeyerId::ExternalMqtKeyer:   return "mqtKeyer";
+            case TxKeyerId::WinKeyer:           return "WinKeyer";
+            default:                            return "";
+        }
+    }
+
+    // for filenames
+    QString getTxKeyerTypes(TxKeyerId id)
+    {
+        switch (id)
+        {
+
+            case TxKeyerId::RigControl:         return "Voice RigControl";
+            case TxKeyerId::CW_RigControl:      return "CW RigControl";
+            case TxKeyerId::SerialControl:      return "SerialControl";
+            case TxKeyerId::PcCwKeyer:          return "PcCwKeyer";
+            case TxKeyerId::DigitalModes:       return "Digital Modes";
+            case TxKeyerId::InternalVoiceKeyer: return "Internal";
+            case TxKeyerId::ExternalMqtKeyer:   return "mqtKeyer";
+            case TxKeyerId::WinKeyer:           return "WinKeyer";
+            default:                            return "";
+        }
+    }
 
 
-    inline const QStringList txKeyerTypes = { "None", "rigControl", "cwRigControl",
-                                           "SerialControl", "pcCwKeyer", "DigitalMode",
-                                           "Internal", "ExternalMqtKeyer", "WinKeyer" };
 
-    enum KeyerEomTypes
+
+
+
+
+    enum class KeyerEomTypes
     {
         Eom_None = 0,
         CAT,

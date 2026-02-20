@@ -40,12 +40,11 @@ PcCWMessageKeyer::~PcCWMessageKeyer()
 
 void PcCWMessageKeyer::registerTxKeyer(TxKeyerFactory::TxKeyers* vmKeyersList)
 {
-    QString keyerName = txKeyerNames[TxKeyerId::PcCwKeyer];
+    QString keyerName = getTxKeyerDisplayName(TxKeyerId::PcCwKeyer);
 
     TxKeyerCapabilities voiceMemCap;
 
-    voiceMemCap.setVmIdNum(TxKeyerId::PcCwKeyer);
-    voiceMemCap.setKeyerType(txKeyerTypes[TxKeyerId::PcCwKeyer]);
+    voiceMemCap.setTxKeyerId(TxKeyerId::PcCwKeyer);
     voiceMemCap.setKeyerName(keyerName);
     voiceMemCap.setNumVoiceKeys(12);
     voiceMemCap.setsupportSerial(false);

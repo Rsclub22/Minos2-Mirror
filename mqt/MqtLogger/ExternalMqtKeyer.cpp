@@ -23,12 +23,11 @@ ExternalMqtKeyer::~ExternalMqtKeyer()
 
 void ExternalMqtKeyer::registerTxKeyer(TxKeyerFactory::TxKeyers* vmKeyersList)
 {
-   // QString keyerName = "ExternalMqtKeyer";
+    QString keyerName = getTxKeyerDisplayName(TxKeyerId::ExternalMqtKeyer);
 
     TxKeyerCapabilities voiceMemCap;
 
-    voiceMemCap.setVmIdNum(TxKeyerId::ExternalMqtKeyer);
-    voiceMemCap.setKeyerType(txKeyerTypes[TxKeyerId::ExternalMqtKeyer]);
+    voiceMemCap.setTxKeyerId(TxKeyerId::ExternalMqtKeyer);
     voiceMemCap.setKeyerName(keyerName);
     voiceMemCap.setNumVoiceKeys(KEYERKEYS);
     voiceMemCap.setsupportSerial(false);

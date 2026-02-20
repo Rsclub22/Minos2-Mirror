@@ -24,12 +24,11 @@ InternalVoiceTxKeyer::~InternalVoiceTxKeyer()
 }
 void InternalVoiceTxKeyer::registerTxKeyer(TxKeyerFactory::TxKeyers* vmKeyersList)
 {
-    QString keyerName = txKeyerNames[TxKeyerId::InternalVoiceKeyer];
+    QString keyerName = getTxKeyerDisplayName(TxKeyerId::InternalVoiceKeyer);
 
     TxKeyerCapabilities voiceMemCap;
 
-    voiceMemCap.setVmIdNum(TxKeyerId::InternalVoiceKeyer);
-    voiceMemCap.setKeyerType(txKeyerTypes[TxKeyerId::InternalVoiceKeyer]);
+    voiceMemCap.setTxKeyerId(TxKeyerId::InternalVoiceKeyer);
     voiceMemCap.setKeyerName(keyerName);
     voiceMemCap.setsupportSerial(false);
     voiceMemCap.setUseCatPTTForEom(false);

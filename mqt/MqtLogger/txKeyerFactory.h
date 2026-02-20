@@ -3,7 +3,7 @@
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //                      TX Keyer
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2025
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2026
 //
 //
 //
@@ -18,6 +18,9 @@
 #include <QMap>
 #include <QModelIndex>
 #include "txKeyerbase.h"
+#include "txkeyerCommonConstants.h"
+
+
 
 
 
@@ -33,15 +36,12 @@ public:
     QString getKeyerName(){return keyerName;}
     void setKeyerName(const QString keyerName_){keyerName = keyerName_;}
 
-    QString getKeyerType(){return keyerType;}
-    void setKeyerType(const QString keyerType_){keyerType = keyerType_;}
-
     int getNumVoiceKeys(){return numVoiceKeys;}
     void setNumVoiceKeys(const int numVoiceKeys_){numVoiceKeys = numVoiceKeys_;}
 
 
-    int getVmIdNum(){return txKeyerIdNum;}
-    void setVmIdNum(const int txKeyerIdNum_){txKeyerIdNum = txKeyerIdNum_;}
+    TxKeyerCommon::TxKeyerId getTxKeyerIdNum(){return txKeyerId;}
+    void setTxKeyerId(const TxKeyerCommon::TxKeyerId txKeyerId_){txKeyerId = txKeyerId_;}
 
     bool getSupportRepeatMsg(){return supportRepeatMsg;}
     void setSupportRepeatMsg(const bool supportRepeatMsg_){supportRepeatMsg = supportRepeatMsg_;}
@@ -73,9 +73,8 @@ public:
 
     void clear()
     {
-        txKeyerIdNum = 0;
+        txKeyerId = TxKeyerCommon::TxKeyerId::None;
         keyerName.clear();
-        keyerType.clear();
         numVoiceKeys = 0;
         supportRepeatMsg = false;
         supportSerial = false;
@@ -92,9 +91,8 @@ public:
 
 private:
 
-   int txKeyerIdNum;
+   TxKeyerCommon::TxKeyerId txKeyerId;
    QString keyerName;
-   QString keyerType;
    int numVoiceKeys;
    bool supportRepeatMsg =false;
    bool supportSerial = false;
@@ -131,6 +129,7 @@ signals:
 
 private:
     TxKeyers txKeyersList;
+
 
     QModelIndex extInd;
 

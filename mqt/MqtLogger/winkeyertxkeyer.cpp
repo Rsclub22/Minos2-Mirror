@@ -34,12 +34,11 @@ WinKeyerTxKeyer::~WinKeyerTxKeyer()
 
 void WinKeyerTxKeyer::registerTxKeyer(TxKeyerFactory::TxKeyers* vmKeyersList)
 {
-    QString keyerName = txKeyerNames[TxKeyerId::WinKeyer];
+    QString keyerName = getTxKeyerDisplayName(TxKeyerId::WinKeyer);
 
     TxKeyerCapabilities voiceMemCap;
 
-    voiceMemCap.setVmIdNum(TxKeyerId::WinKeyer);
-    voiceMemCap.setKeyerType(txKeyerTypes[TxKeyerId::WinKeyer]);
+    voiceMemCap.setTxKeyerId(TxKeyerId::WinKeyer);
     voiceMemCap.setKeyerName(keyerName);
     voiceMemCap.setNumVoiceKeys(12);
     voiceMemCap.setsupportSerial(false);
