@@ -12,10 +12,10 @@ using namespace TxKeyerCommon;
 
 // defines fields saved to KeyVal json file
 inline const QMap<TxKeyerId, QSet<QString>> keyerFieldMap = {
-    { CW_RigControl, { "key", "label", "message", "messageDuration", "messageDurationEnable", "repeatDuration", "repeatEnable"}},
-    { RigControl, { "key", "label", "messageDuration", "messageDurationEnable", "repeatDuration", "repeatEnable", "rigVoiceMemNum"}},
-    { PcCwKeyer, { "key", "label", "message", "messageDuration", "messageDurationEnable", "repeatDuration", "repeatEnable"}},
-    { DigitalModes, { "key", "label", "message"}}
+    { TxKeyerId::CW_RigControl, { "key", "label", "message", "messageDuration", "messageDurationEnable", "repeatDuration", "repeatEnable"}},
+    { TxKeyerId::RigControl, { "key", "label", "messageDuration", "messageDurationEnable", "repeatDuration", "repeatEnable", "rigVoiceMemNum"}},
+    { TxKeyerId::PcCwKeyer, { "key", "label", "message", "messageDuration", "messageDurationEnable", "repeatDuration", "repeatEnable"}},
+    { TxKeyerId::DigitalModes, { "key", "label", "message"}}
 };
 
 class KeyVal {

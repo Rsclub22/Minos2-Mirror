@@ -118,7 +118,7 @@ void TxVmExternalButtonDialog::on_buttonBox_accepted()
     }
 
     QString name = ui->txVmNameEdit->text();
-    vmData->setKeyerName(name);
+    vmData->setButtonName(name);
     vmData->setKeyerRepeatPauseDur(repeatPauseDur_);
 //    vmData->setVmDuration(messageDur_);
     vmData->setKeyerRepeatFlag(ui->repeatChkBox->isChecked());
@@ -137,7 +137,7 @@ void TxVmExternalButtonDialog::setVmData(TxKeyerParams *vmData_)
     txvmbd = this;
     vmData = vmData_;
     ui->txVmTypeLbl->setText(vmData->getType());
-    ui->txVmNameEdit->setText(vmData->getKeyerName());
+    ui->txVmNameEdit->setText(vmData->getbuttonName());
     ui->repeatChkBox->setChecked(vmData->getKeyerRepeatFlag());
     ui->repeatPauseDur->setText(QString::number(vmData->getKeyerRepeatPauseDur()));
 }

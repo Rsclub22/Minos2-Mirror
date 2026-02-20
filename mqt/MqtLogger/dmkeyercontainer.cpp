@@ -133,7 +133,7 @@ DMKeyerContainer::DMKeyerContainer(QWidget *parent)
     txKeyerFactory->populateComboKeyerList(txKeyerSelect, keyerSettings->getCurrentKeyerName());
 
     // we add digi modes to list, though it will not act as keyer
-    txKeyerSelect->addItem(txKeyerNames[DigitalModes]);
+    txKeyerSelect->addItem(getTxKeyerDisplayName(TxKeyerId::DigitalModes));
 
     txKeyerSelect->blockSignals(false);
 

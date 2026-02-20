@@ -49,7 +49,7 @@ TxKeyerFactory::TxKeyers* TxKeyerFactory::supportedTxKeyers()
 }
 
 
-TxKeyerBase* TxKeyerFactory::createTxKeyer(int txKeyerId)
+TxKeyerBase* TxKeyerFactory::createTxKeyer(TxKeyerId txKeyerId)
 {
     if (txKeyerId == TxKeyerId::RigControl)
     {        

@@ -86,7 +86,7 @@ void TxVmRigSetupDialog::setPttEomGroupBoxVisible(bool visible)
 }
 
 
-void TxVmRigSetupDialog::setEomRadioButtons(int eomType)
+void TxVmRigSetupDialog::setEomRadioButtons(TxKeyerCommon::KeyerEomTypes eomType)
 {
     if (eomType == TxKeyerCommon::KeyerEomTypes::CAT)
     {
@@ -106,9 +106,9 @@ void TxVmRigSetupDialog::setEomRadioButtons(int eomType)
 }
 
 
-int TxVmRigSetupDialog::getSelectedEomType()
+TxKeyerCommon::KeyerEomTypes TxVmRigSetupDialog::getSelectedEomType()
 {
-    int selectedType = TxKeyerCommon::KeyerEomTypes::Eom_None;
+    TxKeyerCommon::KeyerEomTypes selectedType = TxKeyerCommon::KeyerEomTypes::Eom_None;
     if (ui->catEomRb->isChecked())
     {
         selectedType = TxKeyerCommon::KeyerEomTypes::CAT;

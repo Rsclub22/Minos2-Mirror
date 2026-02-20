@@ -72,7 +72,7 @@ void TxVmInternalButtonDialog::setVmData(TxKeyerParams* vmData_)
     txvmbd = this;
     vmData = vmData_;
     ui->txVmTypeLbl->setText(vmData->getType());
-    ui->txVmNameEdit->setText(vmData->getKeyerName());
+    ui->txVmNameEdit->setText(vmData->getbuttonName());
     ui->txVmRepeatChkBox->setChecked(vmData->getKeyerRepeatFlag());
     ui->txVmRepeatPauseDur->setText(QString::number(vmData->getKeyerRepeatPauseDur()));
     ui->txVmMessageDur->setText(QString::number(vmData->getKeyerDuration()));
@@ -132,7 +132,7 @@ void TxVmInternalButtonDialog::on_okButtonCicked()
     }
 
     QString name = ui->txVmNameEdit->text();
-    vmData->setKeyerName(name);
+    vmData->setButtonName(name);
     vmData->setKeyerRepeatPauseDur(repeatPauseDur_);
     vmData->setKeyerDuration(messageDur_);
     vmData->setKeyerRepeatFlag(ui->txVmRepeatChkBox->isChecked());

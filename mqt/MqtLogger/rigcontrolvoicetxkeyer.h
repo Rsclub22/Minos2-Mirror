@@ -54,8 +54,8 @@ public:
 
     //int getKeyerState(int &state) override;
     void setPttOnOff(bool onOff) override;
-    int getSelectedEomType() override;
-    virtual void setSelectedEomType(int eomType)override{Q_UNUSED(eomType)};
+    TxKeyerCommon::KeyerEomTypes getSelectedEomType() override;
+    virtual void setSelectedEomType(TxKeyerCommon::KeyerEomTypes eomType)override{Q_UNUSED(eomType)};
 
     bool readTxKeyerButtonParams(int buttonNum, TxKeyerParams &txKeyerParams) override;
     void saveTxKeyerButtonParams(const TxKeyerParams &txKeyerParams) override;
@@ -75,7 +75,7 @@ signals:
 
 private:
 
-    int selectedEomType = TxKeyerCommon::KeyerEomTypes::Eom_None;
+    TxKeyerCommon::KeyerEomTypes selectedEomType = TxKeyerCommon::KeyerEomTypes::Eom_None;
     serialCommonData::MINOS_PTT_TYPES pttType = serialCommonData::MINOS_PTT_TYPES::PTT_TYPE_NONE;
     bool pttEnabled = false;
 
@@ -87,7 +87,7 @@ private:
     QString selectedRadioName;
 
 
-    void getRadioCommonData(int &usePttForEom, int &userNumberButtons, int radioMaxNumButtons);
+    void getRadioCommonData(TxKeyerCommon::KeyerEomTypes &usePttForEom, int &userNumberButtons, int radioMaxNumButtons);
 };
 
 #endif // RIGCONTROLVOICETXKEYER_H

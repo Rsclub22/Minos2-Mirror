@@ -52,7 +52,7 @@ void RigControlVoiceTxKeyer::setPttOnOff(bool onOff)
 
 
 
-int RigControlVoiceTxKeyer::getSelectedEomType()
+TxKeyerCommon::KeyerEomTypes RigControlVoiceTxKeyer::getSelectedEomType()
 {
     return selectedEomType;
 }
@@ -155,10 +155,10 @@ int RigControlVoiceTxKeyer::setup(TxKeyerFactory *voiceKeyerFactory, int &maxNum
 
     TxVmRigSetupDialog txVmSetupDialog(voiceCap, maxNumButtons, numButtons, tslf->dmKeyerContainer);
 
-    QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + VOICE_KEYER_BASE_FILE_NAME + txKeyerTypes[TxKeyerId::RigControl] + ".ini";
+    QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + VOICE_KEYER_BASE_FILE_NAME + getTxKeyerTypeFromTxKeyerId(TxKeyerId::RigControl) + ".ini";
     QSettings config(fileName, QSettings::IniFormat);
 
-    fileName = TX_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + txKeyerTypes[TxKeyerId::RigControl] + ".ini";
+    fileName = TX_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + getTxKeyerTypeFromTxKeyerId(TxKeyerId::RigControl) + ".ini";
     QSettings buttonConfig(fileName, QSettings::IniFormat);
 
 
@@ -190,14 +190,19 @@ int RigControlVoiceTxKeyer::setup(TxKeyerFactory *voiceKeyerFactory, int &maxNum
             if (readSaveVoiceCWMemoryButtonByRadioNameFromIni(TxKeyerId::RigControl))
             {
                 buttonConfig.beginGroup(selectedRadioName.replace('/', '_'));
-                txVmSetupDialog.setEomRadioButtons(buttonConfig.value("endOfMessageType", TxKeyerCommon::KeyerEomTypes::Eom_None).toInt());
+                TxKeyerCommon::KeyerEomTypes eom = static_cast<TxKeyerCommon::KeyerEomTypes>(buttonConfig.value("endOfMessageType",
+                                             static_cast<int>(TxKeyerCommon::KeyerEomTypes::Eom_None)).toInt());
 
+                txVmSetupDialog.setEomRadioButtons(eom);
                 buttonConfig.endGroup();
             }
             else
             {
                 config.beginGroup(allRadiosGrpName);
-                txVmSetupDialog.setEomRadioButtons(buttonConfig.value("endOfMessageType", TxKeyerCommon::KeyerEomTypes::Eom_None).toInt());
+                TxKeyerCommon::KeyerEomTypes eom = static_cast<TxKeyerCommon::KeyerEomTypes>(buttonConfig.value("endOfMessageType",
+                                                                                                                static_cast<int>(TxKeyerCommon::KeyerEomTypes::Eom_None)).toInt());
+
+                txVmSetupDialog.setEomRadioButtons(eom);
                 buttonConfig.endGroup();
             }
         }
@@ -230,7 +235,7 @@ int RigControlVoiceTxKeyer::setup(TxKeyerFactory *voiceKeyerFactory, int &maxNum
         }
 
         buttonConfig.setValue("NumButtons", numButtons);
-        buttonConfig.setValue("endOfMessageType", txVmSetupDialog.getSelectedEomType());
+        buttonConfig.setValue("endOfMessageType", static_cast<int>(txVmSetupDialog.getSelectedEomType()));
         buttonConfig.endGroup();
 
         selectedEomType = txVmSetupDialog.getSelectedEomType();
@@ -250,11 +255,11 @@ void RigControlVoiceTxKeyer::setRadioParams(int radioMaxNumButtons_, QString sel
 }
 
 
-void RigControlVoiceTxKeyer::getRadioCommonData(int &selectedEomType, int &userNumberButtons, int radioMaxNumButtons)
+void RigControlVoiceTxKeyer::getRadioCommonData(TxKeyerCommon::KeyerEomTypes &selectedEomType, int &userNumberButtons, int radioMaxNumButtons)
 {
     int numButtons = 0;
 
-    QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + VOICE_KEYER_BASE_FILE_NAME + txKeyerTypes[TxKeyerId::RigControl] + ".ini";
+    QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + VOICE_KEYER_BASE_FILE_NAME + getTxKeyerTypeFromTxKeyerId(TxKeyerId::RigControl) + ".ini";
     QSettings readCommonConfig(fileName, QSettings::IniFormat);
 
     QString groupName;
@@ -267,12 +272,12 @@ void RigControlVoiceTxKeyer::getRadioCommonData(int &selectedEomType, int &userN
         groupName = ALL_RADIOS_GROUP_NAME;
     }
 
-    fileName = TX_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + txKeyerTypes[TxKeyerId::RigControl] + ".ini";
+    fileName = TX_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + getTxKeyerTypeFromTxKeyerId(TxKeyerId::RigControl) + ".ini";
     QSettings config(fileName, QSettings::IniFormat);
 
     config.beginGroup(groupName);
     numButtons = config.value("NumButtons", -1).toInt();
-    selectedEomType = config.value("endOfMessageType", TxKeyerCommon::KeyerEomTypes::Eom_None).toInt();
+    selectedEomType = static_cast<TxKeyerCommon::KeyerEomTypes>(config.value("endOfMessageType", static_cast<int>(TxKeyerCommon::KeyerEomTypes::Eom_None)).toInt());
     config.endGroup();
 
     if (numButtons == -1)   // no user button number saved

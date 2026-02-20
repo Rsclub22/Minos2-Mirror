@@ -29,7 +29,7 @@ public:
     void setCwMessageLineEditVisible(bool visible);
     void setSerialMessageTextBoxVisible(bool visible);
     void setVmTypeAndRadioModelLabel(QString mfg);
-    void setDialogForEomType(int eomType);
+    void setDialogForEomType(TxKeyerCommon::KeyerEomTypes eomType);
 
 
     void setRadioNameLbl(QString radioName);

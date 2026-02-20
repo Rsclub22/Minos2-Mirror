@@ -63,45 +63,72 @@ namespace TxKeyerCommon
 
 
 
-    QString getTxKeyerDisplayName(TxKeyerId id)
-    {
-        switch (id)
-        {
+    inline const QMap<TxKeyerId, QString> txKeyerDisplayNameMap = {
+        {TxKeyerId::RigControl, "Voice RigControl"},
+        {TxKeyerId::CW_RigControl, "CW RigControl"},
+        {TxKeyerId::SerialControl, "SerialControl"},
+        {TxKeyerId::PcCwKeyer, "PcCwKeyer"},
+        {TxKeyerId::DigitalModes, "Digital Modes"},
+        {TxKeyerId::InternalVoiceKeyer, "Internal"},
+        {TxKeyerId::ExternalMqtKeyer, "mqtKeyer"},
+        {TxKeyerId::WinKeyer, "WinKeyer"},
+        {TxKeyerId::None, ""}
+    };
 
-            case TxKeyerId::RigControl:         return "Voice RigControl";
-            case TxKeyerId::CW_RigControl:      return "CW RigControl";
-            case TxKeyerId::SerialControl:      return "SerialControl";
-            case TxKeyerId::PcCwKeyer:          return "PcCwKeyer";
-            case TxKeyerId::DigitalModes:       return "Digital Modes";
-            case TxKeyerId::InternalVoiceKeyer: return "Internal";
-            case TxKeyerId::ExternalMqtKeyer:   return "mqtKeyer";
-            case TxKeyerId::WinKeyer:           return "WinKeyer";
-            default:                            return "";
-        }
+    inline QString getTxKeyerDisplayName(TxKeyerId id)
+    {
+        return txKeyerDisplayNameMap.value(id, "");
     }
 
-    // for filenames
-    QString getTxKeyerTypes(TxKeyerId id)
+    inline TxKeyerId getTxKeyerIdFromDisplayName(const QString &name)
     {
-        switch (id)
-        {
-
-            case TxKeyerId::RigControl:         return "Voice RigControl";
-            case TxKeyerId::CW_RigControl:      return "CW RigControl";
-            case TxKeyerId::SerialControl:      return "SerialControl";
-            case TxKeyerId::PcCwKeyer:          return "PcCwKeyer";
-            case TxKeyerId::DigitalModes:       return "Digital Modes";
-            case TxKeyerId::InternalVoiceKeyer: return "Internal";
-            case TxKeyerId::ExternalMqtKeyer:   return "mqtKeyer";
-            case TxKeyerId::WinKeyer:           return "WinKeyer";
-            default:                            return "";
-        }
+        auto it = txKeyerDisplayNameMap.key(name, TxKeyerId::None);
+        return it;
     }
 
+    // for filenames and json files
 
+    struct TxKeyerMap
+    {
+        static const QMap<TxKeyerId, QString> idToString()
+        {
+            static const QMap<TxKeyerId, QString> map = {
+                {TxKeyerId::RigControl, "rigControl"},
+                {TxKeyerId::CW_RigControl, "cwRigControl"},
+                {TxKeyerId::SerialControl, "SerialControl"},
+                {TxKeyerId::PcCwKeyer, "pcCwKeyer"},
+                {TxKeyerId::DigitalModes, "DigitalMode"},
+                {TxKeyerId::InternalVoiceKeyer, "Internal"},
+                {TxKeyerId::ExternalMqtKeyer, "ExternalMqtKeyer"},
+                {TxKeyerId::WinKeyer, "WinKeyer"},
+                {TxKeyerId::None, "None"}
+            };
+            return map;
+        }
 
+        static const QMap<QString, TxKeyerId> stringToId()
+        {
+            static QMap<QString, TxKeyerId> map;
+            if (map.isEmpty())
+            {
+                for (auto it = idToString().cbegin(); it != idToString().cend(); ++it)
+                {
+                    map[it.value()] = it.key();
+                }
+            }
+            return map;
+        }
+    };
 
+    inline QString getTxKeyerTypeFromTxKeyerId(TxKeyerId id)
+    {
+        return TxKeyerMap::idToString().value(id, "None");
+    }
 
+    inline TxKeyerId txKeyerIdFromTxKeyerTypeString(const QString &str)
+    {
+        return TxKeyerMap::stringToId().value(str, TxKeyerId::None);
+    }
 
 
     enum class KeyerEomTypes

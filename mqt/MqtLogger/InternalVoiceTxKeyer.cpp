@@ -68,7 +68,7 @@ void InternalVoiceTxKeyer::txKeyerInit(int &numButtons)
     {
         int msgLen = SoundSystemDriver::getSbDriver() ->getMessageLen(i);
 
-       QString inifileName = TX_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + txKeyerTypes[TxKeyerId::InternalVoiceKeyer] + ".ini";
+       QString inifileName = TX_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + getTxKeyerTypeFromTxKeyerId(TxKeyerId::InternalVoiceKeyer) + ".ini";
         QSettings config(inifileName, QSettings::IniFormat);
         config.beginGroup("button" + QString::number(i));
 
@@ -196,7 +196,7 @@ int InternalVoiceTxKeyer::setup(TxKeyerFactory *txKeyerFactory, int &maxNumButto
     if (ret == QDialog::Accepted)
     {
         numButtons = txvmSetup.getNumButtons();
-        QString fileName = TX_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + txKeyerTypes[TxKeyerId::RigControl] + ".ini";
+        QString fileName = TX_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + getTxKeyerTypeFromTxKeyerId(TxKeyerId::RigControl) + ".ini";
         QSettings config(fileName, QSettings::IniFormat);
         config.setValue("Common/NumButtons", numButtons);
     }

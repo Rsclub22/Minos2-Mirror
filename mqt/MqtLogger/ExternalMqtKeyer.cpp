@@ -10,7 +10,7 @@
 
 using namespace TxKeyerCommon;
 
-/*static*/ QString ExternalMqtKeyer::keyerName = txKeyerNames[TxKeyerId::ExternalMqtKeyer];
+/*static*/ QString ExternalMqtKeyer::keyerName = getTxKeyerDisplayName(TxKeyerId::ExternalMqtKeyer);
 
 
 ExternalMqtKeyer::ExternalMqtKeyer(QObject *parent) : TxKeyerBase(parent)

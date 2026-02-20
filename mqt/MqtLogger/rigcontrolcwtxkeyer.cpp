@@ -73,7 +73,7 @@ void RigControlCwTxKeyer::setPttOnOff(bool onOff)
     Q_UNUSED(onOff)
 }
 
-int RigControlCwTxKeyer::getSelectedEomType()
+TxKeyerCommon::KeyerEomTypes RigControlCwTxKeyer::getSelectedEomType()
 {
     return selectedEomType;
 }
@@ -91,11 +91,11 @@ void RigControlCwTxKeyer::txKeyerInit(int &numButtons)
 }
 
 
-void RigControlCwTxKeyer::getRadioCommonData(int &selectedEomType, int &userNumberButtons, int radioMaxNumButtons)
+void RigControlCwTxKeyer::getRadioCommonData(TxKeyerCommon::KeyerEomTypes &selectedEomType, int &userNumberButtons, int radioMaxNumButtons)
 {
     int numButtons = 0;
 
-    QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + VOICE_KEYER_BASE_FILE_NAME + txKeyerTypes[TxKeyerId::CW_RigControl] + ".ini";
+    QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + VOICE_KEYER_BASE_FILE_NAME + getTxKeyerTypeFromTxKeyerId(TxKeyerId::CW_RigControl) + ".ini";
     QSettings readCommonConfig(fileName, QSettings::IniFormat);
 
     QString groupName;
@@ -108,12 +108,12 @@ void RigControlCwTxKeyer::getRadioCommonData(int &selectedEomType, int &userNumb
         groupName = ALL_RADIOS_GROUP_NAME;
     }
 
-    fileName = TX_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + txKeyerTypes[TxKeyerId::CW_RigControl] + ".ini";
+    fileName = TX_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + getTxKeyerTypeFromTxKeyerId(TxKeyerId::CW_RigControl) + ".ini";
     QSettings config(fileName, QSettings::IniFormat);
 
     config.beginGroup(groupName);
     numButtons = config.value("NumButtons", -1).toInt();
-    selectedEomType = config.value("endOfMessageType", KeyerEomTypes::Eom_None).toInt();
+    selectedEomType = static_cast<TxKeyerCommon::KeyerEomTypes>(config.value("endOfMessageType", static_cast<int>(KeyerEomTypes::Eom_None)).toInt());
     setCwModeAndRestoreCurrentMode = config.value("SwitchToCwMode", true).toBool();
     config.endGroup();
 
@@ -481,10 +481,10 @@ int RigControlCwTxKeyer::setup(TxKeyerFactory *txKeyerFactory, int &maxNumButton
 
     TxVmRigSetupDialog txVmSetupDialog(voiceCap, maxNumButtons, numButtons, tslf->dmKeyerContainer);
 
-    QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + VOICE_KEYER_BASE_FILE_NAME + txKeyerTypes[TxKeyerId::CW_RigControl] + ".ini";
+    QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + VOICE_KEYER_BASE_FILE_NAME + getTxKeyerTypeFromTxKeyerId(TxKeyerId::CW_RigControl) + ".ini";
     QSettings config(fileName, QSettings::IniFormat);
 
-    fileName = TX_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + txKeyerTypes[TxKeyerId::CW_RigControl] + ".ini";
+    fileName = TX_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + getTxKeyerTypeFromTxKeyerId(TxKeyerId::CW_RigControl) + ".ini";
     QSettings buttonConfig(fileName, QSettings::IniFormat);
 
 
@@ -511,14 +511,14 @@ int RigControlCwTxKeyer::setup(TxKeyerFactory *txKeyerFactory, int &maxNumButton
         if (readSaveVoiceCWMemoryButtonByRadioNameFromIni(TxKeyerId::CW_RigControl))
         {
             buttonConfig.beginGroup(selectedRadioName.replace('/', '_'));
-            txVmSetupDialog.setEomRadioButtons(buttonConfig.value("endOfMessageType", KeyerEomTypes::CAT).toInt());
+            txVmSetupDialog.setEomRadioButtons(static_cast<TxKeyerCommon::KeyerEomTypes>(buttonConfig.value("endOfMessageType", static_cast<int>(KeyerEomTypes::CAT)).toInt()));
 
             buttonConfig.endGroup();
         }
         else
         {
             config.beginGroup(allRadiosGrpName);
-            txVmSetupDialog.setEomRadioButtons(buttonConfig.value("endOfMessageType", KeyerEomTypes::CAT).toInt());
+            txVmSetupDialog.setEomRadioButtons(static_cast<TxKeyerCommon::KeyerEomTypes>(buttonConfig.value("endOfMessageType", static_cast<int>(KeyerEomTypes::CAT)).toInt()));
             buttonConfig.endGroup();
         }
 
@@ -583,7 +583,7 @@ int RigControlCwTxKeyer::setup(TxKeyerFactory *txKeyerFactory, int &maxNumButton
 
 
         buttonConfig.setValue("NumButtons", numButtons);
-        buttonConfig.setValue("endOfMessageType", txVmSetupDialog.getSelectedEomType());
+        buttonConfig.setValue("endOfMessageType", static_cast<int>(txVmSetupDialog.getSelectedEomType()));
         buttonConfig.setValue("SwitchToCwMode", txVmSetupDialog.getSetCwModeAndRestoreState());
         buttonConfig.endGroup();
 

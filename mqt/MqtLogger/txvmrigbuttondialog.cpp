@@ -166,7 +166,7 @@ void TxVmRigButtonDialog::setVmTypeAndRadioModelLabel(QString radioModel)
 void TxVmRigButtonDialog::setVmData(TxKeyerParams* vmData_)
 {
     vmData = vmData_;
-    ui->txVmNameEdit->setText(vmData->getKeyerName());
+    ui->txVmNameEdit->setText(vmData->getbuttonName());
     ui->txCwMessageLineEdit->setText(vmData->getKeyerCwMessage());
     ui->txVmRepeatChkBox->setChecked(vmData->getKeyerRepeatFlag());
     ui->txVmRepeatPauseDur->setText(QString::number(vmData->getKeyerRepeatPauseDur()));
@@ -192,7 +192,7 @@ void TxVmRigButtonDialog::on_txSerialMessageEditingFinshed()
 
 }
 
-void TxVmRigButtonDialog::setDialogForEomType(int eomType)
+void TxVmRigButtonDialog::setDialogForEomType(TxKeyerCommon::KeyerEomTypes eomType)
 {
     if (eomType == TxKeyerCommon::KeyerEomTypes::Timer)
     {
@@ -319,7 +319,7 @@ void TxVmRigButtonDialog::on_okButtonClicked()
 
 
     QString name = ui->txVmNameEdit->text();
-    vmData->setKeyerName(name);
+    vmData->setButtonName(name);
     vmData->setKeyerCwMessage(ui->txCwMessageLineEdit->text());
     vmData->setKeyerRepeatPauseDur(repeatPauseDur_);
     vmData->setKeyerDuration(messageDur_);

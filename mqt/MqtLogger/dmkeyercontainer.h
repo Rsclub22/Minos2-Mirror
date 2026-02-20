@@ -593,7 +593,7 @@ private:
     LoggerContestLog* currentContest = nullptr;
     ContainerViewMode currentContainerViewMode = ContainerViewMode::StandaloneMode;
     TxKeyerId currentKeyerId = TxKeyerId::None;
-    QString currentKeyerName = txKeyerNames[TxKeyerId::None];
+    QString currentKeyerName = getTxKeyerDisplayName(TxKeyerId::None);
 
     // radio settings
 

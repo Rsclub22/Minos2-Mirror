@@ -40,7 +40,7 @@ public:
     void setNumVoiceKeys(const int numVoiceKeys_){numVoiceKeys = numVoiceKeys_;}
 
 
-    TxKeyerCommon::TxKeyerId getTxKeyerIdNum(){return txKeyerId;}
+    TxKeyerCommon::TxKeyerId getTxKeyerId(){return txKeyerId;}
     void setTxKeyerId(const TxKeyerCommon::TxKeyerId txKeyerId_){txKeyerId = txKeyerId_;}
 
     bool getSupportRepeatMsg(){return supportRepeatMsg;}
@@ -118,7 +118,7 @@ public:
     explicit TxKeyerFactory(QObject *parent = nullptr);
     ~TxKeyerFactory();
 
-    TxKeyerBase* createTxKeyer(int vmKeyerId);
+    TxKeyerBase* createTxKeyer(TxKeyerCommon::TxKeyerId txKeyerId);
 
 
     void populateComboKeyerList(QComboBox *comBox, QString txKeyerName);

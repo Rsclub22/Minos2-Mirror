@@ -58,12 +58,12 @@ void WinKeyerTxKeyer::registerTxKeyer(TxKeyerFactory::TxKeyers* vmKeyersList)
 }
 
 
-void WinKeyerTxKeyer::setSelectedEomType(int selectedEomType_)
+void WinKeyerTxKeyer::setSelectedEomType(TxKeyerCommon::KeyerEomTypes selectedEomType_)
 {
     selectedEomType = selectedEomType_;
 }
 
-int WinKeyerTxKeyer::getSelectedEomType()
+TxKeyerCommon::KeyerEomTypes WinKeyerTxKeyer::getSelectedEomType()
 {
     return selectedEomType;
 }
@@ -98,21 +98,21 @@ void WinKeyerTxKeyer::saveTxKeyerButtonParams(const TxKeyerParams &txKeyerParams
 }
 
 
-void WinKeyerTxKeyer::getRadioCommonData(int &selectedEomType, int &userNumberButtons, int radioMaxNumButtons)
+void WinKeyerTxKeyer::getRadioCommonData(TxKeyerCommon::KeyerEomTypes &selectedEomType, int &userNumberButtons, int radioMaxNumButtons)
 {
     int numButtons = 0;
 
-    QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + VOICE_KEYER_BASE_FILE_NAME + txKeyerTypes[TxKeyerId::PcCwKeyer] + ".ini";
+    QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + VOICE_KEYER_BASE_FILE_NAME + getTxKeyerTypeFromTxKeyerId(TxKeyerId::PcCwKeyer) + ".ini";
     QSettings readCommonConfig(fileName, QSettings::IniFormat);
 
     QString groupName = ALL_RADIOS_GROUP_NAME;
 
-    fileName = TX_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + txKeyerTypes[TxKeyerId::CW_RigControl] + ".ini";
+    fileName = TX_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + getTxKeyerTypeFromTxKeyerId(TxKeyerId::CW_RigControl) + ".ini";
     QSettings config(fileName, QSettings::IniFormat);
 
     config.beginGroup(groupName);
     numButtons = config.value("NumButtons", -1).toInt();
-    selectedEomType = config.value("endOfMessageType", TxKeyerCommon::KeyerEomTypes::Eom_None).toInt();
+    selectedEomType = static_cast<TxKeyerCommon::KeyerEomTypes>(config.value("endOfMessageType", static_cast<int>(TxKeyerCommon::KeyerEomTypes::Eom_None)).toInt());
     setCwModeAndRestoreCurrentMode = config.value("SwitchToCwMode", true).toBool();
     config.endGroup();
 
@@ -127,17 +127,17 @@ void WinKeyerTxKeyer::getRadioCommonData(int &selectedEomType, int &userNumberBu
 // we don't change these parameters through Setup
 void WinKeyerTxKeyer::saveFixedRadioCommonData()
 {
-    QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + VOICE_KEYER_BASE_FILE_NAME + txKeyerTypes[TxKeyerId::PcCwKeyer] + ".ini";
+    QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + VOICE_KEYER_BASE_FILE_NAME + getTxKeyerTypeFromTxKeyerId(TxKeyerId::PcCwKeyer) + ".ini";
     QSettings readCommonConfig(fileName, QSettings::IniFormat);
 
     QString groupName = ALL_RADIOS_GROUP_NAME;
 
-    fileName = TX_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + txKeyerTypes[TxKeyerId::CW_RigControl] + ".ini";
+    fileName = TX_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + getTxKeyerTypeFromTxKeyerId(TxKeyerId::CW_RigControl) + ".ini";
     QSettings config(fileName, QSettings::IniFormat);
 
     config.beginGroup(groupName);
     config.setValue("NumButtons", PC_CW_KEYER_MAXIMUM_BUTTONS);
-    config.setValue("endOfMessageType", TxKeyerCommon::KeyerEomTypes::DTRKeyerTXStatus);
+    config.setValue("endOfMessageType", static_cast<int>(TxKeyerCommon::KeyerEomTypes::DTRKeyerTXStatus));
     config.endGroup();
 
 
@@ -358,10 +358,10 @@ int WinKeyerTxKeyer::setup(TxKeyerFactory *txKeyerFactory, int &maxNumButtons, i
 
     TxVmRigSetupDialog txVmSetupDialog(voiceCap, maxNumButtons, numButtons, tslf->dmKeyerContainer);
 
-    QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + VOICE_KEYER_BASE_FILE_NAME + txKeyerTypes[TxKeyerId::PcCwKeyer] + ".ini";
+    QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + VOICE_KEYER_BASE_FILE_NAME + getTxKeyerTypeFromTxKeyerId(TxKeyerId::PcCwKeyer) + ".ini";
     QSettings config(fileName, QSettings::IniFormat);
 
-    fileName = TX_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + txKeyerTypes[TxKeyerId::PcCwKeyer] + ".ini";
+    fileName = TX_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + getTxKeyerTypeFromTxKeyerId(TxKeyerId::PcCwKeyer) + ".ini";
     QSettings buttonConfig(fileName, QSettings::IniFormat);
 
 

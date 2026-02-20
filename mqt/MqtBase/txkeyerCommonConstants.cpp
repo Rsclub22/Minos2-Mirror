@@ -39,7 +39,7 @@ QString TXKEYER_COMMON_PARAMS_PATH()
 
 bool readSaveVoiceCWMemoryButtonByRadioNameFromIni(TxKeyerId id)
 {
-    QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + VOICE_KEYER_BASE_FILE_NAME + txKeyerTypes[id] + ".ini";
+    QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + VOICE_KEYER_BASE_FILE_NAME + getTxKeyerTypeFromTxKeyerId(id) + ".ini";
     QSettings readConfig(fileName, QSettings::IniFormat);
 
     return readConfig.value("Common/SaveButtonByRadioName", false).toBool();
@@ -48,7 +48,7 @@ bool readSaveVoiceCWMemoryButtonByRadioNameFromIni(TxKeyerId id)
 
 void writeSaveVoiceCWMemoryButtonByRadioNameToIni(bool data, TxKeyerId id)
 {
-    QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + VOICE_KEYER_BASE_FILE_NAME + txKeyerTypes[id] + ".ini";
+    QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + VOICE_KEYER_BASE_FILE_NAME + getTxKeyerTypeFromTxKeyerId(id) + ".ini";
     QSettings config(fileName, QSettings::IniFormat);
 
     config.setValue("Common/SaveButtonByRadioName", data);
@@ -59,7 +59,7 @@ void writeSaveVoiceCWMemoryButtonByRadioNameToIni(bool data, TxKeyerId id)
 void getListOfRadioNamesForMemoryButtons(QStringList &radioNames, TxKeyerId id)
 {
 
-    QString fileName = VOICE_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + txKeyerTypes[id] + ".ini";
+    QString fileName = VOICE_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + getTxKeyerTypeFromTxKeyerId(id) + ".ini";
     QSettings config(fileName, QSettings::IniFormat);
 
     QStringList voiceMemoryKeys = config.childGroups();

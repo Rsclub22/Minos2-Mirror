@@ -47,8 +47,8 @@ public:
     virtual bool hasRecord() override {return false;}
 
     virtual void setPttOnOff(bool onOff) override;
-    virtual int getSelectedEomType() override;
-    virtual void setSelectedEomType(int eomType) override;
+    virtual TxKeyerCommon::KeyerEomTypes getSelectedEomType() override;
+    virtual void setSelectedEomType(TxKeyerCommon::KeyerEomTypes eomType) override;
 
     virtual bool readTxKeyerButtonParams(int buttonNum, TxKeyerParams &txKeyerParams) override;
     virtual void saveTxKeyerButtonParams(const TxKeyerParams &txkeyerParams) override;
@@ -72,7 +72,7 @@ private:
     LoggerContestLog *ct = nullptr;
 
     int cwMemType;
-    int selectedEomType = TxKeyerCommon::KeyerEomTypes::Eom_None;
+    TxKeyerCommon::KeyerEomTypes selectedEomType = TxKeyerCommon::KeyerEomTypes::Eom_None;
     serialCommonData::MINOS_PTT_TYPES pttType = serialCommonData::MINOS_PTT_TYPES::PTT_TYPE_NONE;
     bool pttEnabled = false;
     bool setCwModeAndRestoreCurrentMode = true;
@@ -86,7 +86,7 @@ private:
 
 
 
-    void getRadioCommonData(int &selectedEomType, int &userNumberButtons, int radioMaxNumButtons);
+    void getRadioCommonData(TxKeyerCommon::KeyerEomTypes &selectedEomType, int &userNumberButtons, int radioMaxNumButtons);
 
     QString parseMacrosInMessage(TSingleLogFrame *tslf, QString mess);
 

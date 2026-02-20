@@ -40,8 +40,8 @@ public:
     virtual bool readTxKeyerButtonParams(int buttonNum, TxKeyerParams &txKeyerParams) override;
     virtual void saveTxKeyerButtonParams(const TxKeyerParams &txKeyerParams) override;
     virtual void setPttOnOff(bool onOff) override;
-    virtual int getSelectedEomType() override {return TxKeyerCommon::KeyerEomTypes::InternalSoundCardVoiceKeyer;};
-    virtual void setSelectedEomType(int eomType)override{Q_UNUSED(eomType)};
+    virtual TxKeyerCommon::KeyerEomTypes getSelectedEomType() override {return TxKeyerCommon::KeyerEomTypes::InternalSoundCardVoiceKeyer;};
+    virtual void setSelectedEomType(TxKeyerCommon::KeyerEomTypes eomType)override{Q_UNUSED(eomType)};
 
     virtual int setup(TxKeyerFactory *voiceKeyerFactory, int &maxNumButtons, int &numButtons, QString selectedRadioName) override;
     virtual void setRadioParams(int radioMaxNumButtons, QString selectedRadioName, serialCommonData::MINOS_PTT_TYPES pttType_, bool pttEnabled_) override{Q_UNUSED(radioMaxNumButtons) Q_UNUSED(selectedRadioName) Q_UNUSED(pttType_) Q_UNUSED(pttEnabled_)};
@@ -56,7 +56,7 @@ private slots:
 
 private:
 
-    int selectedEomType = TxKeyerCommon::KeyerEomTypes::Eom_None;
+    TxKeyerCommon::KeyerEomTypes selectedEomType = TxKeyerCommon::KeyerEomTypes::Eom_None;
     serialCommonData::MINOS_PTT_TYPES pttType = serialCommonData::MINOS_PTT_TYPES::PTT_TYPE_NONE;
     bool pttEnabled = false;
 

@@ -232,7 +232,7 @@ private:
     QString fkeyFileName;
     QFileSystemWatcher *qfsw = nullptr;
     QStringList nameList;
-    QString currentName = "Default";
+    QString currentKeyerContestName = "Default";
 
 
     QVector<QPushButton *> fButtons;
@@ -280,19 +280,8 @@ private:
     QSharedPointer<TxKeyerBase> txKeyer;
     TxKeyerFactory* txKeyerFactory;
 
-    //QList<TxKeyerParams> txKeyParamList;
-    QMap<QString, QVector<TxKeyerParams>> txKeyParamMap =
-    {
-        {VOICE_RIGCONTROL_KEYER_NAME, {} },
-        {CW_RIGCONTOL_KEYER_NAME, {} },
-        {SERIAL_CONTROL_KEYER_NAME, {} },
-        {PC_DTR_CW_KEYER_NAME, {} },
-        {DIGITAL_MODES_KEYER_NAME, {} },
-        {INTERNAL_VOICE_KEYER_NAME, {} },
-        {MQT_KEYER_NAME, {} },
-        {WINKEYER_NAME, {} }
 
-    };
+    QMap<TxKeyerId, QVector<TxKeyerParams>> txKeyParamMap;
 
 
     QTimer *extKeyerConnectTimer = nullptr;
@@ -306,7 +295,7 @@ private:
 
     bool messagePlaying = false;
 
-    int selectedEomType = TxKeyerCommon::KeyerEomTypes::Eom_None;
+    TxKeyerCommon::KeyerEomTypes selectedEomType = TxKeyerCommon::KeyerEomTypes::Eom_None;
 
     QMap<PubSubName, RadioDetails> allRadioDetails;
 
@@ -372,7 +361,7 @@ private:
 
 
     void setEomTypeLabelsVisible(bool visible);
-    void setEomLabelText(int selectedEomType);
+    void setEomLabelText(TxKeyerCommon::KeyerEomTypes selectedEomType);
 
 
 
@@ -427,11 +416,10 @@ private:
     void setupRigControl_Ui_Elements();
     void displayButtons();
     void setupCw_RigControl_Ui_Elements();
-    bool writeSingleKeyerFile(const QString &filePath, const QString &keyerType, TxKeyerId keyerId);
-    bool readSingleKeyerFile(const QString &filePath, const QString &keyerType);
+    bool writeSingleKeyerFile(const QString &filePath, TxKeyerId keyerId);
+    bool readSingleKeyerFile(const QString &filePath, const TxKeyerId &txKeyerId);
     QString parseFKeyMessage(QString mess);
-    TxKeyerId txKeyerNameToId(const QString &name);
-    void populateFksetCombo(QString txKeyerType, QString currentName, bool &contestNameOk);
+    void populateFksetCombo(TxKeyerId txKeyerId, QString currentKeyerContestName, bool &contestNameOk);
     void checkSavedContestExists(int &errorCode);
     bool checkContestAndRadioAvailable(int &errorCode);
     void setCwFreeTextIndicatorOnOff(bool on);
@@ -445,7 +433,7 @@ private:
 
     void buildFkeyButtons(int count);
     void clearFkeyLayout();
-    QString getEomText(int selectedEomType);
+    QString getEomText(TxKeyerCommon::KeyerEomTypes selectedEomType);
     void showTemporaryErrorMessage(const QString &msg, int timeoutMs, const QColor &colour = Qt::red);
 
     void selectKeyerUiForm(QWidget *uiForm);

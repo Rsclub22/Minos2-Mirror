@@ -17,6 +17,7 @@
 #include <QObject>
 #include <QSharedPointer>
 #include "serialCommonData.h"
+#include "txkeyerCommonConstants.h"
 
 class TxKeyerBase;
 class TxKeyerFactory;
@@ -51,8 +52,8 @@ public:
     void setSelRadioName(const QString selRadioName_){selRadioName = selRadioName_;}
 
 
-    QString getKeyerName() const {return keyerName;}
-    void setKeyerName(const QString keyerName_){keyerName = keyerName_.trimmed();}
+    QString  getbuttonName() const {return buttonName;}
+    void setButtonName(const QString buttonName_){buttonName = buttonName_;}
 
     QString getKeyerCwMessage() const {return keyerCwMessage;}
     void setKeyerCwMessage(const QString msg){keyerCwMessage = msg;}
@@ -94,7 +95,7 @@ private:
     QSharedPointer<TxKeyerBase> vkBase;
     QString selRadioName;
     QString rigModel;
-    QString keyerName;
+    QString buttonName;
     QString keyerCwMessage;
     int rigVoiceMemNum = 0;
     int keyerDuration = 0;
@@ -139,8 +140,8 @@ public:
     virtual void saveTxKeyerButtonParams(const TxKeyerParams &vmParams ) = 0;
 
     virtual void setPttOnOff(bool onOff) = 0;
-    virtual int getSelectedEomType() = 0;
-    virtual void setSelectedEomType(int eomType) = 0;
+    virtual TxKeyerCommon::KeyerEomTypes getSelectedEomType() = 0;
+    virtual void setSelectedEomType(TxKeyerCommon::KeyerEomTypes eomType) = 0;
 
     virtual int setup(TxKeyerFactory *txKeyerFactory, int &maxNumButtons, int &numButtons, QString selectedRadioName) = 0;
     virtual void setRadioParams(int radioMaxNumButtons, QString selectedRadioName, serialCommonData::MINOS_PTT_TYPES pttType_, bool pttEnabled_) = 0;

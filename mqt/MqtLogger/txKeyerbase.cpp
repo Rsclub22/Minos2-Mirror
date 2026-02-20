@@ -18,7 +18,7 @@ TxKeyerParams::TxKeyerParams()
 void TxKeyerParams::clear()
 {
     type.clear();
-    keyerName.clear();
+    buttonName.clear();
     keyerCwMessage.clear();
     keyerRepeatFlag = false;
     keyerDuration = 0;
@@ -32,7 +32,7 @@ TxKeyerParams& TxKeyerParams::operator = (const TxKeyerParams& vkp)
 {
     type = vkp.type;
     selRadioName = vkp.selRadioName;
-    keyerName = vkp.keyerName;
+    buttonName = vkp.buttonName;
 
     vkBase = vkp.vkBase;
     

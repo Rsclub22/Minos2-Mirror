@@ -53,7 +53,7 @@ DMKeysEditDlg::DMKeysEditDlg(QWidget *parent, const DMKeysEditDlgConfig &config_
 
     minosSelectedRadioName = config.minosSelectedRadio;
 
-    if (config.txKeyerType == txKeyerTypes[TxKeyerId::DigitalModes])
+    if (config.txKeyerCap.getTxKeyerId() == TxKeyerId::DigitalModes)
     {
         ui->txKeyerCommonConfigPb->setVisible(false);
 
@@ -81,7 +81,8 @@ DMKeysEditDlg::DMKeysEditDlg(QWidget *parent, const DMKeysEditDlgConfig &config_
     radioListSelectedName = minosSelectedRadioLocalName;
 
 
-    if (config.txKeyerType == txKeyerTypes[TxKeyerId::RigControl] || config.txKeyerType == txKeyerTypes[TxKeyerId::CW_RigControl])
+    if (config.txKeyerCap.getTxKeyerId() == TxKeyerId::RigControl ||
+        config.txKeyerCap.getTxKeyerId() == TxKeyerId::CW_RigControl)
     {
         RadioList = new QListWidget(this);
         ui->settingsSplitter->insertWidget(1, RadioList);
@@ -102,9 +103,9 @@ DMKeysEditDlg::DMKeysEditDlg(QWidget *parent, const DMKeysEditDlgConfig &config_
     ui->upButton->setEnabled(false);
     ui->downButton->setEnabled(false);
 
-    if (config.txKeyerType == txKeyerTypes[TxKeyerId::PcCwKeyer]
-        || config.txKeyerType == txKeyerTypes[TxKeyerId::CW_RigControl]
-        || config.txKeyerType == txKeyerTypes[TxKeyerId::DigitalModes])
+    if (config.txKeyerCap.getTxKeyerId() == TxKeyerId::PcCwKeyer
+        || config.txKeyerCap.getTxKeyerId() == TxKeyerId::CW_RigControl
+        || config.txKeyerCap.getTxKeyerId() == TxKeyerId::DigitalModes)
     {
         QString keySubs =
             tr("* My callsign\n\
@@ -404,12 +405,12 @@ void DMKeysEditDlg::setupTableRow(int row, KeyVal &kData)
     ui->OptionsTable->setCellWidget(row, EDIT_DLG_COL7, wrapBtn);
 
     connect(recBtn, &QToolButton::clicked, this, [this, kPtr]() {
-        if (config.txKeyerType == txKeyerTypes[TxKeyerId::InternalVoiceKeyer])
+        if (config.txKeyerCap.getTxKeyerId() == TxKeyerId::InternalVoiceKeyer)
         {
             TxVmInternalButtonDialog dlg(this);
             dlg.exec();
         }
-        else if (config.txKeyerType == txKeyerTypes[TxKeyerId::ExternalMqtKeyer])
+        else if (config.txKeyerCap.getTxKeyerId() == TxKeyerId::ExternalMqtKeyer)
         {
             // handle external keyer
         }
@@ -453,7 +454,7 @@ void DMKeysEditDlg::setupTableColumns()
     ui->OptionsTable->setColumnWidth(EDIT_DLG_COL6, 50);
     ui->OptionsTable->setColumnWidth(EDIT_DLG_COL7, 50);
 
-    if (config.txKeyerType == txKeyerTypes[TxKeyerId::DigitalModes])
+    if (config.txKeyerCap.getTxKeyerId() == TxKeyerId::DigitalModes)
     {
         ui->OptionsTable->setColumnHidden(EDIT_DLG_COL2, true);
         ui->OptionsTable->setColumnHidden(EDIT_DLG_COL3, true);
@@ -465,25 +466,26 @@ void DMKeysEditDlg::setupTableColumns()
 
     // Hide Unwanted colums for keyer Type
 
-    if (config.txKeyerType == txKeyerTypes[TxKeyerId::RigControl])
+    if (config.txKeyerCap.getTxKeyerId() == TxKeyerId::RigControl)
     {
         ui->OptionsTable->setColumnHidden(EDIT_DLG_COL1, true);
         ui->OptionsTable->setColumnHidden(EDIT_DLG_COL7, true);
     }
 
-    if (config.txKeyerType == txKeyerTypes[TxKeyerId::CW_RigControl] || config.txKeyerType == txKeyerTypes[TxKeyerId::PcCwKeyer])
+    if (config.txKeyerCap.getTxKeyerId() == TxKeyerId::CW_RigControl
+        || config.txKeyerCap.getTxKeyerId() == TxKeyerId::PcCwKeyer)
     {
         ui->OptionsTable->setColumnHidden(EDIT_DLG_COL2, true);
         ui->OptionsTable->setColumnHidden(EDIT_DLG_COL7, true);
     }
 
-    if (config.txKeyerType == txKeyerTypes[TxKeyerId::InternalVoiceKeyer])
+    if (config.txKeyerCap.getTxKeyerId() == TxKeyerId::InternalVoiceKeyer)
     {
         ui->OptionsTable->setColumnHidden(EDIT_DLG_COL1, true);
         ui->OptionsTable->setColumnHidden(EDIT_DLG_COL2, true);
     }
 
-    if (config.txKeyerType == txKeyerTypes[TxKeyerId::ExternalMqtKeyer])
+    if (config.txKeyerCap.getTxKeyerId() == TxKeyerId::ExternalMqtKeyer)
     {
         ui->OptionsTable->setColumnHidden(EDIT_DLG_COL1, true);
         ui->OptionsTable->setColumnHidden(EDIT_DLG_COL2, true);
@@ -1015,11 +1017,11 @@ void DMKeysEditDlg::on_addRadioButton_clicked()
     DmButtonEditAddRadioDialog* addRadioDialog = new DmButtonEditAddRadioDialog(config.listOfRadios);
 
     QString titleText;
-    if (config.txKeyerType == txKeyerTypes[TxKeyerId::RigControl])
+    if (config.txKeyerCap.getTxKeyerId() == TxKeyerId::RigControl)
     {
         titleText = tr(" supporting Voice Keyer");
     }
-    else if (config.txKeyerType == txKeyerTypes[TxKeyerId::CW_RigControl])
+    else if (config.txKeyerCap.getTxKeyerId() == TxKeyerId::CW_RigControl)
     {
        titleText = tr(" supporting CW Keyer");
     }
@@ -1502,14 +1504,14 @@ void DMKeysEditDlg::onTxKeyerCommonConfigPbClicked()
 
 
 
-    if (config.txKeyerType != txKeyerTypes[TxKeyerId::None])
+    if (config.txKeyerCap.getTxKeyerId() != TxKeyerId::None)
     {
         int oldnb = config.txKeyer->numButtons;
 
 
         int maxNumOfVoiceMessages = MAXIMUM_BUTTONS;
 
-        if (config.txKeyerType == txKeyerTypes[TxKeyerId::RigControl])
+        if (config.txKeyerCap.getTxKeyerId() == TxKeyerId::RigControl)
         {
             //maxNumOfVoiceMessages = getNumVoiceMessages(selectedRadio);
             maxNumOfVoiceMessages = 8;   /// temp for test ***********************************************

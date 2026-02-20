@@ -373,7 +373,7 @@ void DMButtonFrame::setPttTypeText(serialCommonData::MINOS_PTT_TYPES pttType)
 
     QString eomText = serialCommonData::pttTypeStr[static_cast<int>(pttType)];
 
-    TxKeyerId txKeyerId = txKeyerNameToId(getCurrentKeyerName());
+    TxKeyerId txKeyerId = getTxKeyerIdFromDisplayName(getCurrentKeyerName());
 
     switch(txKeyerId)
     {
@@ -386,25 +386,28 @@ void DMButtonFrame::setPttTypeText(serialCommonData::MINOS_PTT_TYPES pttType)
         case TxKeyerId::PcCwKeyer:
             cwDtrForm->setEOMLabelText(eomText);
             break;
+        default: return;
     }
 
 }
 
 void DMButtonFrame::setPttEnabledIndicatorOnOff(bool on)
 {
-    TxKeyerId txKeyerId = txKeyerNameToId(getCurrentKeyerName());
+    TxKeyerId txKeyerId = getTxKeyerIdFromDisplayName(getCurrentKeyerName());
 
     switch(txKeyerId)
     {
-    case TxKeyerId::None:
-        break;
-    case TxKeyerId::RigControl:
-        break;
-    case TxKeyerId::CW_RigControl:
-        break;
-    case TxKeyerId::PcCwKeyer:
-        cwDtrForm->setPttEnabledIndicatorOnOff(on);
-        break;
+        case TxKeyerId::None:
+            break;
+        case TxKeyerId::RigControl:
+            break;
+        case TxKeyerId::CW_RigControl:
+            break;
+        case TxKeyerId::PcCwKeyer:
+            cwDtrForm->setPttEnabledIndicatorOnOff(on);
+            break;
+        default: return;
+
     }
 }
 
@@ -457,15 +460,15 @@ void DMButtonFrame::onTxKeyerSetupClicked()
 // also PcCwKeyer
 void DMButtonFrame::setRadioParams()
 {
-    if (selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::CW_RigControl])
+    if (selectedKeyerCap.getTxKeyerId() == TxKeyerId::CW_RigControl)
     {
         txKeyer->setRadioParams(MAXIMUM_BUTTONS, keyerSettings->getSelectedRadio().getLocalName(), keyerSettings->getPttType(keyerSettings->getSelectedRadio()), keyerSettings->getPttEnabled(keyerSettings->getSelectedRadio()));
     }
-    else if (selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::RigControl])
+    else if (selectedKeyerCap.getTxKeyerId() == TxKeyerId::RigControl)
     {
         txKeyer->setRadioParams(keyerSettings->getNumVoiceMessages(keyerSettings->getSelectedRadio()), keyerSettings->getSelectedRadio().getLocalName(), keyerSettings->getPttType(keyerSettings->getSelectedRadio()), keyerSettings->getPttEnabled(keyerSettings->getSelectedRadio()));
     }
-    else if (selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::PcCwKeyer])
+    else if (selectedKeyerCap.getTxKeyerId() == TxKeyerId::PcCwKeyer)
     {
         txKeyer->setRadioParams(PC_CW_KEYER_MAXIMUM_BUTTONS, keyerSettings->getSelectedRadio().getLocalName(), serialCommonData::MINOS_PTT_TYPES::PTT_TYPE_NONE, false);
     }
@@ -480,9 +483,9 @@ void DMButtonFrame::createKeyer(QString voiceKeyerName)
         selectedKeyerCap = txKeyerFactory->supportedTxKeyers()->value(voiceKeyerName);
 
 
-        if ( selectedKeyerCap.getKeyerType() != txKeyerTypes[TxKeyerId::None])
+        if ( selectedKeyerCap.getTxKeyerId() != TxKeyerId::None)
         {
-            txKeyer = QSharedPointer<TxKeyerBase>(txKeyerFactory->createTxKeyer(selectedKeyerCap.getVmIdNum()));
+            txKeyer = QSharedPointer<TxKeyerBase>(txKeyerFactory->createTxKeyer(selectedKeyerCap.getTxKeyerId()));
             if (txKeyer)
             {
                 logMessage(QString("Voice Keyer type selected = %1").arg(selectedKeyerCap.getKeyerName()));
@@ -498,16 +501,16 @@ void DMButtonFrame::createKeyer(QString voiceKeyerName)
                 txKeyer->txKeyerInit(txKeyer->numButtons);
 
                 // create the buttons
-                if (selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::CW_RigControl]
-                    || selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::RigControl]
-                    || selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::InternalVoiceKeyer])
+                if (selectedKeyerCap.getTxKeyerId() == TxKeyerId::CW_RigControl
+                    || selectedKeyerCap.getTxKeyerId() == TxKeyerId::RigControl
+                    || selectedKeyerCap.getTxKeyerId() == TxKeyerId::InternalVoiceKeyer)
                 {
 
                     //int columns = 4;
                     buildFkeyButtons(txKeyer->numButtons);
                     //createButtonsForKeyer(txKeyer->numButtons, columns);
                 }
-                else if (selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::PcCwKeyer])
+                else if (selectedKeyerCap.getTxKeyerId() == TxKeyerId::PcCwKeyer)
                 {
                     buildFkeyButtons(12);    // fixed at 12 for now
                     //int numButtons = 12;    // fixed at 12!
@@ -515,8 +518,7 @@ void DMButtonFrame::createKeyer(QString voiceKeyerName)
                     //createButtonsForKeyer(numButtons, columns);
                 }
 
-                //QList<TxKeyerParams> &txKeyParamList = txKeyParamMap[selectedKeyerCap.getKeyerType()];
-                txKeyParamMap[voiceKeyerName].clear();
+                txKeyParamMap[selectedKeyerCap.getTxKeyerId()].clear();
 
                 buttonNumSent = NO_TXKEYER_BUTTON_SELECTED;
 
@@ -525,20 +527,18 @@ void DMButtonFrame::createKeyer(QString voiceKeyerName)
                 for (int i = 0; i < fButtons.count(); i++)
                 {
                     TxKeyerParams txKeyerData;
-                    if (txKeyerData.getType().isEmpty())
+                    //txKeyerData.setTxKeyerId(selectedKeyerCap.getTxKeyerId());
+
+
+                    if (selectedKeyerCap.getTxKeyerId() == TxKeyerId::CW_RigControl
+                        || selectedKeyerCap.getTxKeyerId() == TxKeyerId::RigControl)
                     {
-                        txKeyerData.setType(selectedKeyerCap.getKeyerType());
+                        txKeyerData.setRigModel(keyerSettings->getSelectedRadio().getLocalName());
                     }
 
-                    //if (selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::CW_RigControl]
-                    //    || selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::RigControl])
-                    //{
-                    //    txKeyerData.setRigModel(getRigModel(selectedRadio));
-                    //}
-
                     txKeyer->readTxKeyerButtonParams(i, txKeyerData);
-                    txKeyParamMap[voiceKeyerName].append(txKeyerData);
-                    // ************************************************************** setRunButtonText(i, txKeyerData.getKeyerName());
+                    txKeyParamMap[selectedKeyerCap.getTxKeyerId()].append(txKeyerData);
+                    // ******************************************* setRunButtonText(i, txKeyerData.getKeyerName());
 
                 }
             }
@@ -601,26 +601,26 @@ void DMButtonFrame::onTxKeyerSelectChanged()
     QString txKeyerName = keyerSettings->getCurrentKeyerName();
     logMessage(QString("onVoiceKeyerSelect - keyer select name = %1").arg(keyerSettings->getCurrentKeyerName()));
 
-
+    TxKeyerId txKeyerId = getTxKeyerIdFromDisplayName(txKeyerName);
 
     txKeyer.clear();
     selectedKeyerCap.clear();
 
-    if (txKeyerNameToId(txKeyerName) != DigitalModes)
+    if (txKeyerId == TxKeyerId::DigitalModes)
     {
         // flag we are in Digital Mode
-         selectedKeyerCap.getKeyerType() = txKeyerTypes[TxKeyerId::DigitalModes];
+         selectedKeyerCap.setTxKeyerId(TxKeyerId::DigitalModes);
 
     }
     else
     {
         selectedKeyerCap = txKeyerFactory->supportedTxKeyers()->value(txKeyerName);
-
+        selectedKeyerCap.setTxKeyerId(txKeyerId);
     }
 
 
     delayedAction(this, [=]{
-        if (txKeyerName != DIGIMODE)
+        if (txKeyerId != TxKeyerId::DigitalModes)
         {
             createKeyer(txKeyerName);   // don't create a keyer when in Digimode
         }
@@ -711,9 +711,9 @@ void DMButtonFrame::setFrameStateForKeyer(QString txKeyerName)
 {
     if (!ct) return;
 
-    TxKeyerId txKeyerId;
+    TxKeyerId txKeyerId = getTxKeyerIdFromDisplayName(txKeyerName);
 
-    txKeyerId = txKeyerNameToId(txKeyerName);
+
 
     switch (txKeyerId)
     {
@@ -736,7 +736,7 @@ void DMButtonFrame::setFrameStateForKeyer(QString txKeyerName)
         break;
 
     case TxKeyerId::InternalVoiceKeyer:
-        currentName = ct->internalVoiceKeyerCurrentFKeySetContest.getValue();
+        currentKeyerContestName = ct->internalVoiceKeyerCurrentFKeySetContest.getValue();
         fkeyFileName = TX_KEYER_PATH().append(InternalKeyerConfigFilename);
         break;
 
@@ -758,14 +758,14 @@ void DMButtonFrame::setFrameStateForKeyer(QString txKeyerName)
 
         //txKeyParamList.clear();
 
-    currentName.clear();
+    currentKeyerContestName.clear();
         set_None_FrameState();
         return;     // exit.....
         break;
     }
 
     // Load the keyer configuration file
-    readSingleKeyerFile(fkeyFileName, selectedKeyerCap.getKeyerType());
+    readSingleKeyerFile(fkeyFileName, selectedKeyerCap.getTxKeyerId());
 
     // Apply the UI config map
     //if (!keyerUiMap.count(txKeyerId)) return;
@@ -889,9 +889,9 @@ void DMButtonFrame::selectKeyerUiForm(QWidget *uiForm)
 
 void DMButtonFrame::set_DigiMode_FrameState()
 {
-    txKeyParamMap[DIGITAL_MODES_KEYER_NAME].clear();
+    txKeyParamMap[TxKeyerId::DigitalModes].clear();
 
-    selectedKeyerCap.getKeyerType() = txKeyerTypes[TxKeyerId::DigitalModes];
+    selectedKeyerCap.setTxKeyerId(TxKeyerId::DigitalModes);
     selectKeyerUiForm(digitalModesForm);
     clearButtonLabels();
 
@@ -901,13 +901,13 @@ void DMButtonFrame::set_DigiMode_FrameState()
         return;
     }
 
-    currentName = ct->digitalModesCurrentFKeySetContest.getValue();
-    bool currentNameOk = false;
-    populateFksetCombo(selectedKeyerCap.getKeyerType(), currentName, currentNameOk);
+    currentKeyerContestName = ct->digitalModesCurrentFKeySetContest.getValue();
+    bool currentCurrentContestNameOk = false;
+    populateFksetCombo(selectedKeyerCap.getTxKeyerId(), currentKeyerContestName, currentCurrentContestNameOk);
 
-    if (!currentNameOk)
+    if (!currentCurrentContestNameOk)
     {
-        currentName = KEYER_DEFAULT_CONTEST;  // current contest name is not in the list
+        currentKeyerContestName = KEYER_DEFAULT_CONTEST;  // current contest name is not in the list
     }
 
     fkeyFileChanged();
@@ -923,13 +923,13 @@ void DMButtonFrame::set_None_FrameState()
 
     //txKeyParamList.clear();
 
-    if ( selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::ExternalMqtKeyer])
+    if ( selectedKeyerCap.getTxKeyerId() == TxKeyerId::ExternalMqtKeyer)
     {
         // ui->noExtKeyerLabel->setText(HtmlFontColour(Qt::red) +  tr("To use the external keyer mqtKeyer must be running and connected"));
 
     }
 
-     selectedKeyerCap.getKeyerType() = txKeyerTypes[TxKeyerId::None];
+     selectedKeyerCap.setTxKeyerId(TxKeyerId::None);
 
     selectKeyerUiForm(noneForm);
 
@@ -944,7 +944,7 @@ void DMButtonFrame::set_rigControl_FrameState()
         return;
     }
 
-    currentName = ct->rigControlCurrentFKeySetContest.getValue();
+    currentKeyerContestName = ct->rigControlCurrentFKeySetContest.getValue();
     fkeyFileName = TX_KEYER_PATH().append(rigControlKeyerConfigFilename);
     selectKeyerUiForm(voiceRigControlForm);
 
@@ -955,18 +955,18 @@ void DMButtonFrame::set_rigControl_FrameState()
 
 
 
-    logMessage(QString("set_rigControl_framestate - current contest = %1").arg(currentName));
+    logMessage(QString("set_rigControl_framestate - current contest = %1").arg(currentKeyerContestName));
 
     fkeyFileName = TX_KEYER_PATH().append(rigControlKeyerConfigFilename);
 
-    readSingleKeyerFile(fkeyFileName, selectedKeyerCap.getKeyerType());  // also populates FkSetCombo
+    readSingleKeyerFile(fkeyFileName, selectedKeyerCap.getTxKeyerId());  // also populates FkSetCombo
 
     //parseFKeyFile(fkeyFileName);
 
 
     //populateFksetCombo(txKeyerName, currentName);
 
-    logMessage(QString("Set RigControl Frame State for Contest Name %1, Radio %2").arg(currentName, keyerSettings->getSelectedRadio().key()));
+    logMessage(QString("Set RigControl Frame State for Contest Name %1, Radio %2").arg(currentKeyerContestName, keyerSettings->getSelectedRadio().key()));
 
     int checkContestRadioErrorCode = CHECK_RAD_CONT_CONTEST_OK;
     if (!checkContestAndRadioAvailable(checkContestRadioErrorCode))    // check keyer, contest and radio if applicable have been retrieved from json file
@@ -974,8 +974,8 @@ void DMButtonFrame::set_rigControl_FrameState()
         // error
         if (checkContestRadioErrorCode == CHECK_RAD_CONT_CONTEST_MISSING)
         {
-            logMessage(QString("Contest %1 is missing set default").arg(currentName));
-            currentName = KEYER_DEFAULT_CONTEST;
+            logMessage(QString("Contest %1 is missing set default").arg(currentKeyerContestName));
+            currentKeyerContestName = KEYER_DEFAULT_CONTEST;
         }
         else if (checkContestRadioErrorCode == CHECK_RAD_CONT_RADIO_MISSING)
         {
@@ -985,12 +985,12 @@ void DMButtonFrame::set_rigControl_FrameState()
         }
         else if (checkContestRadioErrorCode == CHECK_RAD_CONT_KEYER_MISING)
         {
-            logMessage(QString("set rigControl frame state - keyerType missing %1").arg(selectedKeyerCap.getKeyerType()));
+            logMessage(QString("set rigControl frame state - keyerType missing %1").arg(getTxKeyerTypeFromTxKeyerId(selectedKeyerCap.getTxKeyerId())));
             return;
         }
     }
 
-    logMessage(QString("Contest %1 Exists").arg(currentName));
+    logMessage(QString("Contest %1 Exists").arg(currentKeyerContestName));
     clearErrorMessage();
     setupRigControl_Ui_Elements();
     //    populateRadioNameCombo(currentName);
@@ -1072,14 +1072,14 @@ void DMButtonFrame::set_cwRigControl_FrameState()
     selectKeyerUiForm(cwRigControlForm);
 
 
-    currentName = ct->cwRigControlCurrentFKeySetContest.getValue();
+    currentKeyerContestName = ct->cwRigControlCurrentFKeySetContest.getValue();
 
     fkeyFileName = TX_KEYER_PATH().append(cwRigControlKeyerConfigFilename);
-    readSingleKeyerFile(fkeyFileName, selectedKeyerCap.getKeyerType());  // also populates FkSetCombo
+    readSingleKeyerFile(fkeyFileName, selectedKeyerCap.getTxKeyerId());  // also populates FkSetCombo
 
     //parseFKeyFile(fkeyFileName);    // also populates FkSetCombo
 
-    logMessage(QString("Set Cw RigControl Frame State for Contest Name %1, Radio %2").arg(currentName, keyerSettings->getSelectedRadio().key()));
+    logMessage(QString("Set Cw RigControl Frame State for Contest Name %1, Radio %2").arg(currentKeyerContestName, keyerSettings->getSelectedRadio().key()));
 
     int checkContestRadioErrorCode = CHECK_RAD_CONT_CONTEST_OK;
     if (!checkContestAndRadioAvailable(checkContestRadioErrorCode))    // check keyer, contest and radio if applicable have been retrieved from json file
@@ -1087,8 +1087,8 @@ void DMButtonFrame::set_cwRigControl_FrameState()
         // error
         if (checkContestRadioErrorCode == CHECK_RAD_CONT_CONTEST_MISSING)
         {
-            logMessage(QString("Contest %1 is missing set default").arg(currentName));
-            currentName = KEYER_DEFAULT_CONTEST;
+            logMessage(QString("Contest %1 is missing set default").arg(currentKeyerContestName));
+            currentKeyerContestName = KEYER_DEFAULT_CONTEST;
         }
         else if (checkContestRadioErrorCode == CHECK_RAD_CONT_RADIO_MISSING)
         {
@@ -1098,7 +1098,7 @@ void DMButtonFrame::set_cwRigControl_FrameState()
         }
         else if (checkContestRadioErrorCode == CHECK_RAD_CONT_KEYER_MISING)
         {
-            logMessage(QString("set cw_rigControl frame state - keyerType missing %1").arg(selectedKeyerCap.getKeyerType()));
+            logMessage(QString("set cw_rigControl frame state - keyerType missing %1").arg(getTxKeyerTypeFromTxKeyerId(selectedKeyerCap.getTxKeyerId())));
             return;
         }
     }
@@ -1183,11 +1183,11 @@ void DMButtonFrame::set_pcCwKeyer_FrameState()
         return;
     }
 
-    currentName = ct->pcCwKeyerCurrentFKeySetContest.getValue();
+    currentKeyerContestName = ct->pcCwKeyerCurrentFKeySetContest.getValue();
 
     fkeyFileName = TX_KEYER_PATH().append(pcCwKeyerKeyerConfigFilename);
 
-    readSingleKeyerFile(fkeyFileName, selectedKeyerCap.getKeyerType());  // also populates FkSetCombo
+    readSingleKeyerFile(fkeyFileName, selectedKeyerCap.getTxKeyerId());  // also populates FkSetCombo
 
     selectKeyerUiForm(cwDtrForm);
 
@@ -1224,11 +1224,11 @@ void DMButtonFrame::set_Internal_FrameState()
     clearErrorMessage();
 
 
-    currentName = ct->internalVoiceKeyerCurrentFKeySetContest.getValue();
+    currentKeyerContestName = ct->internalVoiceKeyerCurrentFKeySetContest.getValue();
 
     fkeyFileName = TX_KEYER_PATH().append(InternalKeyerConfigFilename);
 
-    readSingleKeyerFile(fkeyFileName, selectedKeyerCap.getKeyerType());  // also populates FkSetCombo
+    readSingleKeyerFile(fkeyFileName, selectedKeyerCap.getTxKeyerId());  // also populates FkSetCombo
 
 
     //ui->txKeyerSetupPb->setVisible(txKeyerCap.getSetupButton());
@@ -1282,14 +1282,14 @@ void DMButtonFrame::set_External_FrameState()
     clearErrorMessage();
     // ui->selectedRadioLabel->setVisible(false);
 
-     currentName = ct->externalVoiceKeyerCurrentFKeySetContest.getValue();
+     currentKeyerContestName = ct->externalVoiceKeyerCurrentFKeySetContest.getValue();
 
-     bool currentNameOk = false;
-     populateFksetCombo(selectedKeyerCap.getKeyerType(), currentName, currentNameOk);
+     bool currentKeyerContestNameOk = false;
+     populateFksetCombo(selectedKeyerCap.getTxKeyerId(), currentKeyerContestName, currentKeyerContestNameOk);
 
-     if (!currentNameOk)
+     if (!currentKeyerContestNameOk)
      {
-         currentName = KEYER_DEFAULT_CONTEST; // current contest name is not in the list
+        currentKeyerContestName = KEYER_DEFAULT_CONTEST; // current contest name is not in the list
      }
 
 
@@ -1413,7 +1413,7 @@ void DMButtonFrame::onCwEntryReturnPressed()
 
         QString message;
 
-        if ( selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::CW_RigControl])
+        if ( selectedKeyerCap.getTxKeyerId() == TxKeyerId::CW_RigControl)
         {
             message = cwRigControlForm->getCwEntryText().trimmed();
             if (!message.isEmpty())
@@ -1426,7 +1426,7 @@ void DMButtonFrame::onCwEntryReturnPressed()
             }
 
         }
-        else if (selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::PcCwKeyer])
+        else if (selectedKeyerCap.getTxKeyerId() == TxKeyerId::PcCwKeyer)
         {
            message = cwDtrForm->getCwEntryText().trimmed();
            if (!message.isEmpty())
@@ -1442,7 +1442,7 @@ void DMButtonFrame::onCwEntryReturnPressed()
 
 
 
-        if (selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::CW_RigControl])
+        if (selectedKeyerCap.getTxKeyerId() == TxKeyerId::CW_RigControl)
         {
 
             buttonNumSent = CW_FREE_TEXT_BUTTON_NUMBER;
@@ -1471,21 +1471,23 @@ void DMButtonFrame::onCwEntryReturnPressed()
 bool DMButtonFrame::checkRadioAndKeyerState()
 {
 
-    if (selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::RigControl] && !keyerSettings->isVoiceMemAvail(keyerSettings->getSelectedRadio()))
+    if (selectedKeyerCap.getTxKeyerId() == TxKeyerId::RigControl &&
+        !keyerSettings->isVoiceMemAvail(keyerSettings->getSelectedRadio()))
     {
         QString msg = tr("rigControl Voice Selected, but not available for this radio");
         logMessage(QString(msg));
         showTemporaryErrorMessage(msg, ERROR_MSG_TIMEOUT_DURATION);
         return false;
     }
-    else if (selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::CW_RigControl] && !keyerSettings->isCwMemTypeAvail(keyerSettings->getSelectedRadio()))
+    else if (selectedKeyerCap.getTxKeyerId() == TxKeyerId::CW_RigControl &&
+             !keyerSettings->isCwMemTypeAvail(keyerSettings->getSelectedRadio()))
     {
         QString msg = tr("rigControl CW Keyer selected, but not available for this radio");
         logMessage(QString(msg));
         showTemporaryErrorMessage(msg, ERROR_MSG_TIMEOUT_DURATION);
         return false;
     }
-    else if (selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::PcCwKeyer] && !isPcCwKeyerLoaded())
+    else if (selectedKeyerCap.getTxKeyerId() == TxKeyerId::PcCwKeyer && !isPcCwKeyerLoaded())
     {
         QString msg = tr("PC CW DTR Server is not available.");
         logMessage(QString(msg));
@@ -1503,7 +1505,7 @@ bool DMButtonFrame::checkRadioAndKeyerState()
     }
 
 
-    if (selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::RigControl])
+    if (selectedKeyerCap.getTxKeyerId() == TxKeyerId::RigControl)
     {
         if(!isVoiceMode())
         {
@@ -1536,14 +1538,14 @@ void DMButtonFrame::startKeyerMsg(int key)
 
     TxKeyerParams vmData;
 
-    if (( selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::CW_RigControl]
-         ||  selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::RigControl]
-         ||  selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::PcCwKeyer])
+    if (( selectedKeyerCap.getTxKeyerId() == TxKeyerId::CW_RigControl
+         ||  selectedKeyerCap.getTxKeyerId() == TxKeyerId::RigControl
+         ||  selectedKeyerCap.getTxKeyerId() == TxKeyerId::PcCwKeyer)
         && !keyerSettings->getSelectedRadio().key().isEmpty())
     {
 
         QString rigKey;
-        if ( selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::PcCwKeyer])
+        if ( selectedKeyerCap.getTxKeyerId() == TxKeyerId::PcCwKeyer)
         {
             rigKey = KEYER_NO_RADIO;    // pcCWKeyer has noRadio in the macro definitions
         }
@@ -1557,10 +1559,10 @@ void DMButtonFrame::startKeyerMsg(int key)
 
 
 
-        auto &contestMap = allKeyConfigs[selectedKeyerCap.getKeyerType()];
-        if (contestMap.contains(currentName) && contestMap[currentName].contains(rigKey))
+        auto &contestMap = allKeyConfigs[getTxKeyerTypeFromTxKeyerId(selectedKeyerCap.getTxKeyerId())];
+        if (contestMap.contains(currentKeyerContestName) && contestMap[currentKeyerContestName].contains(rigKey))
         {
-            const ContestSection &section = contestMap[currentName][rigKey];
+            const ContestSection &section = contestMap[currentKeyerContestName][rigKey];
 
             const int runCount = section.run.size();
             const int spCount = section.sp.size();
@@ -1591,14 +1593,14 @@ void DMButtonFrame::startKeyerMsg(int key)
     }
 
 
-    vmData.setType( selectedKeyerCap.getKeyerType());
+    vmData.setType(getTxKeyerTypeFromTxKeyerId(selectedKeyerCap.getTxKeyerId()));
 
     setRepeatIndicatorOnOff(vmData.getKeyerRepeatFlag());
 
 
 
-    if ( selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::CW_RigControl]
-        ||  selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::PcCwKeyer])
+    if ( selectedKeyerCap.getTxKeyerId() == TxKeyerId::CW_RigControl
+        ||  selectedKeyerCap.getTxKeyerId() == TxKeyerId::PcCwKeyer)
     {
         if (vmData.getKeyerCwMessage().isEmpty())
         {
@@ -1616,7 +1618,7 @@ void DMButtonFrame::startKeyerMsg(int key)
             || keyerSettings->getCwMemType(keyerSettings->getSelectedRadio()) == hamlibData::CW_MEMORY_TYPES::OPENHPSDR
             || keyerSettings->getCwMemType(keyerSettings->getSelectedRadio()) == hamlibData::CW_MEMORY_TYPES::QRPLABS
             || keyerSettings->getCwMemType(keyerSettings->getSelectedRadio()) == hamlibData::CW_MEMORY_TYPES::THETIS
-            ||  selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::PcCwKeyer])
+            ||  selectedKeyerCap.getTxKeyerId() == TxKeyerId::PcCwKeyer)
         {
             if (curMode != rigcommon::convertModeToQString(MODE::CW) && txKeyer->getSetCwModeAndRestoreFlag())
             {
@@ -1863,15 +1865,15 @@ void DMButtonFrame::onLoggerRadioSettingsChanged()
 {
 
 
-    if (selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::CW_RigControl]
-        || selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::PcCwKeyer]
-        || selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::RigControl]
-        || selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::InternalVoiceKeyer])
+    if (selectedKeyerCap.getTxKeyerId() == TxKeyerId::CW_RigControl
+        || selectedKeyerCap.getTxKeyerId() == TxKeyerId::PcCwKeyer
+        || selectedKeyerCap.getTxKeyerId() == TxKeyerId::RigControl
+        || selectedKeyerCap.getTxKeyerId() == TxKeyerId::InternalVoiceKeyer)
     {
 
         setRadioParams();
 
-        if (selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::PcCwKeyer])
+        if (selectedKeyerCap.getTxKeyerId() == TxKeyerId::PcCwKeyer)
         {
             setEomTypeLabelsVisible(false);
 
@@ -1904,13 +1906,12 @@ void DMButtonFrame::onIsRadioConnectedChanged(bool connected)
 void DMButtonFrame::onSelectedRadioChanged()
 {
 
-    if (selectedKeyerCap.getKeyerType().isEmpty() || selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::PcCwKeyer])
+    if (selectedKeyerCap.getTxKeyerId() == TxKeyerId::None ||
+        selectedKeyerCap.getTxKeyerId() == TxKeyerId::PcCwKeyer)
     {
         // ignore as we don't want to update framestate
         return;
     }
-
-    keyerSettings->getSelectedRadio();
 
     updateFrameState();
 
@@ -1919,7 +1920,8 @@ void DMButtonFrame::onSelectedRadioChanged()
 void DMButtonFrame::onPttEnabledChanged()
 {
 
-    if ( selectedKeyerCap.getKeyerType().isEmpty() ||  selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::PcCwKeyer])
+    if ( selectedKeyerCap.getTxKeyerId() == TxKeyerId::None ||
+        selectedKeyerCap.getTxKeyerId() == TxKeyerId::PcCwKeyer)
     {
         // ignore as we don't want to update framestate
         return;
@@ -1935,7 +1937,8 @@ void DMButtonFrame::onPttTypeChanged()
 {
     int type = static_cast<int>(keyerSettings->getPttType(keyerSettings->getSelectedRadio()));
 
-    if ( selectedKeyerCap.getKeyerType().isEmpty() ||  selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::PcCwKeyer])
+    if ( selectedKeyerCap.getTxKeyerId() == TxKeyerId::None ||
+        selectedKeyerCap.getTxKeyerId() == TxKeyerId::PcCwKeyer)
     {
         // ignore as we don't want to update framestate
         return;
@@ -1951,7 +1954,8 @@ void DMButtonFrame::onVoiceMemAvailChanged()
 {
     bool avail = keyerSettings->isVoiceMemAvail(keyerSettings->getSelectedRadio());
 
-    if ( selectedKeyerCap.getKeyerType().isEmpty() ||  selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::PcCwKeyer])
+    if ( selectedKeyerCap.getTxKeyerId() == TxKeyerId::None ||
+        selectedKeyerCap.getTxKeyerId() == TxKeyerId::PcCwKeyer)
     {
         // ignore as we don't want to update framestate
         return;
@@ -1960,7 +1964,7 @@ void DMButtonFrame::onVoiceMemAvailChanged()
 
 
 
-    if ( selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::RigControl])
+    if ( selectedKeyerCap.getTxKeyerId() == TxKeyerId::RigControl)
     {
          updateFrameState();
     }
@@ -1977,14 +1981,14 @@ void DMButtonFrame::getVoiceCwMemSupportedRadios(const QStringList &listOfRadios
     {
         PubSubName radName(radio);
 
-        if ( selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::RigControl])
+        if ( selectedKeyerCap.getTxKeyerId() == TxKeyerId::RigControl)
         {
             if(keyerSettings->isVoiceMemAvail(radName))
             {
                 listOfRadioSupportKeyer.append(radio);
             }
         }
-        else if ( selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::CW_RigControl])
+        else if ( selectedKeyerCap.getTxKeyerId() == TxKeyerId::CW_RigControl)
         {
             if(keyerSettings->isCwMemTypeAvail(radName))
             {
@@ -2003,7 +2007,7 @@ void DMButtonFrame::onNumVoiceMessagesChanged()
 
     logMessage(QString("setNumVoiceMessages = %1, radio = %2").arg(QString::number(numMsgs), keyerSettings->getSelectedRadio().getLocalName()));
 
-    if ( selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::RigControl])
+    if ( selectedKeyerCap.getTxKeyerId() == TxKeyerId::RigControl)
     {
         updateFrameState(  );
     }
@@ -2016,7 +2020,8 @@ void DMButtonFrame::onRigVoiceKeyerSupportStopFlagChanged()
 {
     bool supportStopCmd = keyerSettings->getRigVoiceKeyerSupportStopFlag(keyerSettings->getSelectedRadio());
 
-    if ( selectedKeyerCap.getKeyerType().isEmpty() ||  selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::PcCwKeyer])
+    if ( selectedKeyerCap.getTxKeyerId() == TxKeyerId::None ||
+        selectedKeyerCap.getTxKeyerId() == TxKeyerId::PcCwKeyer)
     {
         // ignore as we don't want to update framestate
         return;
@@ -2025,7 +2030,7 @@ void DMButtonFrame::onRigVoiceKeyerSupportStopFlagChanged()
     logMessage(QString("setRigVoiceKeyerSupportStopFlag = %1, radio = %2").arg(supportStopCmd ? "Yes" : "No").arg(keyerSettings->getSelectedRadio().getLocalName()));
 
 
-    if ( selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::RigControl])
+    if ( selectedKeyerCap.getTxKeyerId() == TxKeyerId::RigControl)
     {
         updateFrameState();
     }
@@ -2042,7 +2047,7 @@ void DMButtonFrame::onRigCwKeyerSupportStopFlagChanged()
 
     bool supportStopCmd = keyerSettings->getRigCwKeyerSupportStopFlag(keyerSettings->getSelectedRadio());
 
-    if ( selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::PcCwKeyer])
+    if ( selectedKeyerCap.getTxKeyerId() == TxKeyerId::PcCwKeyer)
     {
         // ignore as we don't want to update framestate
         return;
@@ -2050,7 +2055,7 @@ void DMButtonFrame::onRigCwKeyerSupportStopFlagChanged()
 
     logMessage(QString("setRigCwKeyerSupportStopFlag = %1, radio = %2").arg(supportStopCmd ? "Yes" : "No").arg(keyerSettings->getSelectedRadio().getLocalName()));
 
-    if ( selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::CW_RigControl])
+    if ( selectedKeyerCap.getTxKeyerId() == TxKeyerId::CW_RigControl)
     {
         updateFrameState();
     }
@@ -2065,7 +2070,8 @@ void DMButtonFrame::onRigModelChanged()
 
     QString rigModel = keyerSettings->getRigModel(keyerSettings->getSelectedRadio());    logMessage(QString("setRigModel = %1, radio = %2").arg(rigModel, keyerSettings->getSelectedRadio().getLocalName()));
 
-    if ( selectedKeyerCap.getKeyerType().isEmpty() || selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::PcCwKeyer])
+    if ( selectedKeyerCap.getTxKeyerId() == TxKeyerId::None ||
+        selectedKeyerCap.getTxKeyerId() == TxKeyerId::PcCwKeyer)
     {
         // ignore as we don't want to update framestate
         return;
@@ -2112,7 +2118,7 @@ void DMButtonFrame::onCwMemTypeChanged()
 
     logMessage(QString("setCwMemType = %1, radio = %2").arg(cwMemType).arg(keyerSettings->getSelectedRadio().getLocalName()));
 
-    if (!selectedKeyerCap.getKeyerType().isEmpty() || selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::CW_RigControl])
+    if (selectedKeyerCap.getTxKeyerId() == TxKeyerId::CW_RigControl)
     {
         updateFrameState();
     }
@@ -2142,7 +2148,7 @@ int DMButtonFrame::getCwMemType(PubSubName psn)
 
 void DMButtonFrame::setCwFreeTextIndicatorOnOff(bool on)
 {
-    TxKeyerId txKeyerId = txKeyerNameToId(getCurrentKeyerName());
+    TxKeyerId txKeyerId = getTxKeyerIdFromDisplayName(getCurrentKeyerName());
 
     if (txKeyerId == TxKeyerId::CW_RigControl)
     {
@@ -2207,11 +2213,11 @@ void DMButtonFrame::setAvailIndicatorOnOff(bool on)
 
     }
 
-    if ( selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::RigControl])
+    if ( selectedKeyerCap.getTxKeyerId() == TxKeyerId::RigControl)
     {
         // ui->availIndicator->setToolTip(tr("Rig Voice Keyer Available"));
     }
-    else if ( selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::CW_RigControl])
+    else if ( selectedKeyerCap.getTxKeyerId() == TxKeyerId::CW_RigControl)
     {
         // ui->availIndicator->setToolTip(tr("Rig CW Messages Available"));
     }
@@ -2223,13 +2229,14 @@ void DMButtonFrame::setAvailIndicatorOnOff(bool on)
 
 void DMButtonFrame::setAvailIndicatorForRadioOnOff(PubSubName radName)
 {
-    if ( selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::CW_RigControl] || selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::RigControl])
+    if ( selectedKeyerCap.getTxKeyerId() == TxKeyerId::CW_RigControl ||
+        selectedKeyerCap.getTxKeyerId() == TxKeyerId::RigControl)
     {
-        if ( selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::CW_RigControl])
+        if ( selectedKeyerCap.getTxKeyerId() == TxKeyerId::CW_RigControl)
         {
             setAvailIndicatorOnOff(keyerSettings->isCwMemTypeAvail(radName));
         }
-        else if ( selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::RigControl])
+        else if ( selectedKeyerCap.getTxKeyerId() == TxKeyerId::RigControl)
         {
             setAvailIndicatorOnOff(keyerSettings->isVoiceMemAvail(radName));
         }
@@ -2306,7 +2313,7 @@ void DMButtonFrame::onPttStateChanged()
 {
     bool state = keyerSettings->getPttState();
 
-    if (selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::PcCwKeyer])
+    if (selectedKeyerCap.getTxKeyerId() == TxKeyerId::PcCwKeyer)
     {
         // ignore as we don't want to update framestate
         return;
@@ -2367,29 +2374,30 @@ void DMButtonFrame::setEomTypeLabelsVisible(bool visible)
     // ui->eomText->setVisible(visible);
 }
 
-void DMButtonFrame::setEomLabelText(int selectedEomType)
+void DMButtonFrame::setEomLabelText(TxKeyerCommon::KeyerEomTypes selectedEomType)
 {
     QString eomTypeText = getEomText(selectedEomType);
 
-    TxKeyerId txKeyerId = txKeyerNameToId(getCurrentKeyerName());
+    TxKeyerId txKeyerId = getTxKeyerIdFromDisplayName(getCurrentKeyerName());
 
     switch(txKeyerId)
     {
-    case TxKeyerId::None:
-        break;
-    case TxKeyerId::RigControl:
-        break;
-    case TxKeyerId::CW_RigControl:
-        break;
-    case TxKeyerId::PcCwKeyer:
-        cwDtrForm->setEOMLabelText(eomTypeText);
-        break;
+        case TxKeyerId::None:
+            break;
+        case TxKeyerId::RigControl:
+            break;
+        case TxKeyerId::CW_RigControl:
+            break;
+        case TxKeyerId::PcCwKeyer:
+            cwDtrForm->setEOMLabelText(eomTypeText);
+            break;
+        default: return;
     }
 
 
 }
 
-QString DMButtonFrame::getEomText(int selectedEomType)
+QString DMButtonFrame::getEomText(TxKeyerCommon::KeyerEomTypes selectedEomType)
 {
     if (selectedEomType == TxKeyerCommon::KeyerEomTypes::CAT)
     {
@@ -2481,7 +2489,7 @@ void DMButtonFrame::onModeChange(QString mode)
 
 void DMButtonFrame::fkeyFileChanged()
 {
-    readSingleKeyerFile(fkeyFileName, selectedKeyerCap.getKeyerType());
+    readSingleKeyerFile(fkeyFileName, selectedKeyerCap.getTxKeyerId());
     //parseFKeyFile(fkeyFileName);
 
     displayButtons();
@@ -2562,7 +2570,7 @@ bool  DMButtonFrame::isDataMode()
 
     if (c && c == ct)
     {
-        if (isDataMode() &&  selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::DigitalModes])
+        if (isDataMode() &&  selectedKeyerCap.getTxKeyerId() == TxKeyerId::DigitalModes)
         {
             // digital mode isn't a keyer..
             actionDigitalModeKeyPress(key, carr);
@@ -2596,10 +2604,10 @@ void DMButtonFrame::actionDigitalModeKeyPress(int key, int carr)
 
             QString rigKey = KEYER_NO_RADIO;
 
-            auto &contestMap = allKeyConfigs[selectedKeyerCap.getKeyerType()];
-            if (contestMap.contains(currentName) && contestMap[currentName].contains(rigKey))
+            auto &contestMap = allKeyConfigs[getTxKeyerTypeFromTxKeyerId(selectedKeyerCap.getTxKeyerId())];
+            if (contestMap.contains(currentKeyerContestName) && contestMap[currentKeyerContestName].contains(rigKey))
             {
-                const ContestSection &section = contestMap[currentName][rigKey];
+                const ContestSection &section = contestMap[currentKeyerContestName][rigKey];
 
                 int index = key - Qt::Key_F1;
                 KeyVal mess;
@@ -2646,15 +2654,16 @@ void DMButtonFrame::showFButtons(bool s)
     MinosRPC *rpc = MinosRPC::getMinosRPC();
 
     QString rigKey = KEYER_NO_RADIO;
-    if ( selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::RigControl] || selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::CW_RigControl])
+    if ( selectedKeyerCap.getTxKeyerId() == TxKeyerId::RigControl ||
+        selectedKeyerCap.getTxKeyerId() == TxKeyerId::CW_RigControl)
     {
         rigKey = keyerSettings->getSelectedRadio().key();
     }
 
-    auto &contestMap = allKeyConfigs[selectedKeyerCap.getKeyerType()];
-    if (contestMap.contains(currentName) && contestMap[currentName].contains(rigKey))
+    auto &contestMap = allKeyConfigs[getTxKeyerTypeFromTxKeyerId(selectedKeyerCap.getTxKeyerId())];
+    if (contestMap.contains(currentKeyerContestName) && contestMap[currentKeyerContestName].contains(rigKey))
     {
-        const ContestSection &section = contestMap[currentName][rigKey];
+        const ContestSection &section = contestMap[currentKeyerContestName][rigKey];
 
         const KeySet &keysToShow = s ? section.sp : section.run;
 
@@ -2728,7 +2737,7 @@ void DMButtonFrame::showFButtons(bool s)
 */
 
 
-void DMButtonFrame::populateFksetCombo(QString txKeyerType, QString currentName, bool &contestNameOk)
+void DMButtonFrame::populateFksetCombo(TxKeyerId txKeyerId, QString currentKeyerContestName, bool &contestNameOk)
 {
     ignoreFkComboSignal = true;
     contestNameOk = false;
@@ -2736,12 +2745,12 @@ void DMButtonFrame::populateFksetCombo(QString txKeyerType, QString currentName,
     nameList.clear();
     fkeysetCombo->clear();
 
-    nameList = getContestNamesForKeyerType(txKeyerType);
+    nameList = getContestNamesForKeyerType(getTxKeyerTypeFromTxKeyerId(txKeyerId));
     fkeysetCombo->addItems(nameList);
 
-    if (nameList.contains(currentName))
+    if (nameList.contains(currentKeyerContestName))
     {
-       fkeysetCombo->setCurrentText(currentName);
+       fkeysetCombo->setCurrentText(currentKeyerContestName);
        contestNameOk = true;
     }
 
@@ -2802,10 +2811,10 @@ QStringList DMButtonFrame::getRadioNamesForSelectedContestName(const QString &co
     QStringList radioList;
 
     // Check if the contest exists for this keyer type
-    if (!allKeyConfigs.contains(selectedKeyerCap.getKeyerType()))
+    if (!allKeyConfigs.contains(getTxKeyerTypeFromTxKeyerId(selectedKeyerCap.getTxKeyerId())))
         return radioList;
 
-    auto &contestMap = allKeyConfigs[selectedKeyerCap.getKeyerType()];
+    auto &contestMap = allKeyConfigs[getTxKeyerTypeFromTxKeyerId(selectedKeyerCap.getTxKeyerId())];
 
     if (!contestMap.contains(contestName))
         return radioList;
@@ -2961,10 +2970,12 @@ QString DMButtonFrame::parseFKeyMessage(QString mess)
 }
 
 
-bool DMButtonFrame::readSingleKeyerFile(const QString &filePath, const QString &keyerType)
+bool DMButtonFrame::readSingleKeyerFile(const QString &filePath, const TxKeyerId &txKeyerId)
 {
 
     KeyerMap tempKeyConfigs;
+
+    QString keyerType = getTxKeyerTypeFromTxKeyerId(txKeyerId);
 
     QFile file(filePath);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
@@ -3051,11 +3062,11 @@ bool DMButtonFrame::readSingleKeyerFile(const QString &filePath, const QString &
     allKeyConfigs = tempKeyConfigs;
 
     bool currentNameOk = false;
-    populateFksetCombo(selectedKeyerCap.getKeyerType(), currentName, currentNameOk);
+    populateFksetCombo(selectedKeyerCap.getTxKeyerId(), currentKeyerContestName, currentNameOk);
     if (!currentNameOk)
     {
-        currentName = KEYER_DEFAULT_CONTEST;
-        ct->rigControlCurrentFKeySetContest.setValue(currentName);  // save back the contest name
+        currentKeyerContestName = KEYER_DEFAULT_CONTEST;
+        ct->rigControlCurrentFKeySetContest.setValue(currentKeyerContestName);  // save back the contest name
         ct->commonSave(false);
 
     }
@@ -3065,8 +3076,10 @@ bool DMButtonFrame::readSingleKeyerFile(const QString &filePath, const QString &
 
 
 
-bool DMButtonFrame::writeSingleKeyerFile(const QString &filePath, const QString &keyerType, TxKeyerId keyerId)
+bool DMButtonFrame::writeSingleKeyerFile(const QString &filePath, TxKeyerId keyerId)
 {
+    QString keyerType = getTxKeyerTypeFromTxKeyerId(keyerId);
+
     if (!allKeyConfigs.contains(keyerType))
     {
 
@@ -3119,15 +3132,6 @@ bool DMButtonFrame::writeSingleKeyerFile(const QString &filePath, const QString 
 }
 
 
-TxKeyerId DMButtonFrame::txKeyerNameToId(const QString &name)
-{
-    for (int i = 0; i < txKeyerNames.size(); ++i)
-    {
-        if (txKeyerNames[i] == name)
-            return static_cast<TxKeyerId>(i);
-    }
-    return TxKeyerId::None; // fallback
-}
 
 
 
@@ -3233,7 +3237,8 @@ bool DMButtonFrame::checkContestAndRadioAvailable(int &errorCode)
 
     if (contestErrorCode == CHECK_RAD_CONT_CONTEST_OK)
     {
-        if ( selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::RigControl]  || selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::CW_RigControl])
+        if ( selectedKeyerCap.getTxKeyerId() == TxKeyerId::RigControl  ||
+            selectedKeyerCap.getTxKeyerId() == TxKeyerId::CW_RigControl)
         {
             checkRadioExists(keyerSettings->getSelectedRadio().key(), radioErrorCode);
             if (radioErrorCode == CHECK_RAD_CONT_CONTEST_OK)
@@ -3248,17 +3253,17 @@ bool DMButtonFrame::checkContestAndRadioAvailable(int &errorCode)
                 switch (radioErrorCode) {
                 case  CHECK_RAD_CONT_CONTEST_MISSING:
                     errorMsg = QObject::tr(checkContestRadioErrorCodeStr[CHECK_RAD_CONT_CONTEST_MISSING].toUtf8().constData())
-                                   .arg(currentName, selectedKeyerCap.getKeyerType());
+                                   .arg(currentKeyerContestName, getTxKeyerTypeFromTxKeyerId(selectedKeyerCap.getTxKeyerId()));
                     break;
 
                 case CHECK_RAD_CONT_RADIO_MISSING:
                     errorMsg = QObject::tr(checkContestRadioErrorCodeStr[CHECK_RAD_CONT_RADIO_MISSING].toUtf8().constData())
-                                   .arg(keyerSettings->getSelectedRadio().key(), currentName);
+                                   .arg(keyerSettings->getSelectedRadio().key(), currentKeyerContestName);
                     break;
 
                 case CHECK_RAD_CONT_KEYER_MISING:
                     errorMsg = QObject::tr(checkContestRadioErrorCodeStr[CHECK_RAD_CONT_KEYER_MISING].toUtf8().constData())
-                                   .arg(selectedKeyerCap.getKeyerType());
+                                   .arg(getTxKeyerTypeFromTxKeyerId(selectedKeyerCap.getTxKeyerId()));
                     break;
 
 
@@ -3297,17 +3302,17 @@ bool DMButtonFrame::checkContestAndRadioAvailable(int &errorCode)
 
         case  CHECK_RAD_CONT_CONTEST_MISSING:
             errorMsg = QObject::tr(checkContestRadioErrorCodeStr[CHECK_RAD_CONT_CONTEST_MISSING].toUtf8().constData())
-                           .arg(currentName, selectedKeyerCap.getKeyerType());
+                           .arg(currentKeyerContestName, getTxKeyerTypeFromTxKeyerId(selectedKeyerCap.getTxKeyerId()));
             break;
 
         case  CHECK_RAD_CONT_KEYER_MISING:
             errorMsg = QObject::tr(checkContestRadioErrorCodeStr[CHECK_RAD_CONT_KEYER_MISING].toUtf8().constData())
-                           .arg(selectedKeyerCap.getKeyerType());
+                           .arg(getTxKeyerTypeFromTxKeyerId(selectedKeyerCap.getTxKeyerId()));
             break;
 
         case  CHECK_RAD_CONT_CONTEST_NAME_EMPTY:
             errorMsg = QObject::tr(checkContestRadioErrorCodeStr[CHECK_RAD_CONT_CONTEST_NAME_EMPTY].toUtf8().constData())
-                           .arg(currentName, selectedKeyerCap.getKeyerType());
+                           .arg(currentKeyerContestName, getTxKeyerTypeFromTxKeyerId(selectedKeyerCap.getTxKeyerId()));
             break;
 
         default:
@@ -3328,21 +3333,21 @@ bool DMButtonFrame::checkContestAndRadioAvailable(int &errorCode)
 void DMButtonFrame::checkSavedContestExists(int &errorCode)
 {
 
-    if (currentName.isEmpty())
+    if (currentKeyerContestName.isEmpty())
     {
         logMessage("checkSaveContestExists - contest name is empty");
         errorCode = CHECK_RAD_CONT_CONTEST_NAME_EMPTY;
         return;
     }
 
-    if (allKeyConfigs.contains(selectedKeyerCap.getKeyerType()))
+    if (allKeyConfigs.contains(getTxKeyerTypeFromTxKeyerId(selectedKeyerCap.getTxKeyerId())))
     {
-        const ContestMap &contestMap = allKeyConfigs.value(selectedKeyerCap.getKeyerType());
+        const ContestMap &contestMap = allKeyConfigs.value(getTxKeyerTypeFromTxKeyerId(selectedKeyerCap.getTxKeyerId()));
 
         QStringList contests = contestMap.keys();
-        if (contests.contains(currentName))
+        if (contests.contains(currentKeyerContestName))
         {
-            logMessage(QString("checkSaveContestExists - contest name %1 exists in json file for this keyerType %2").arg(currentName, selectedKeyerCap.getKeyerType()));
+            logMessage(QString("checkSaveContestExists - contest name %1 exists in json file for this keyerType %2").arg(currentKeyerContestName, getTxKeyerTypeFromTxKeyerId(selectedKeyerCap.getTxKeyerId())));
             errorCode = CHECK_RAD_CONT_CONTEST_OK;
             return;
         }
@@ -3350,7 +3355,7 @@ void DMButtonFrame::checkSavedContestExists(int &errorCode)
         {
 
             errorCode = CHECK_RAD_CONT_CONTEST_MISSING;
-            logMessage(QString("checkSaveContestExists - contest name %1 does not exist in json file for this keyerType %2").arg(currentName, selectedKeyerCap.getKeyerType()));
+            logMessage(QString("checkSaveContestExists - contest name %1 does not exist in json file for this keyerType %2").arg(currentKeyerContestName, getTxKeyerTypeFromTxKeyerId(selectedKeyerCap.getTxKeyerId())));
             return;
 
         }
@@ -3359,7 +3364,7 @@ void DMButtonFrame::checkSavedContestExists(int &errorCode)
     }
     else
     {
-        logMessage(QString("checkSaveContestExists - keyerType %1 does not exist in json file").arg(selectedKeyerCap.getKeyerType()));
+        logMessage(QString("checkSaveContestExists - keyerType %1 does not exist in json file").arg(getTxKeyerTypeFromTxKeyerId(selectedKeyerCap.getTxKeyerId())));
         errorCode  = CHECK_RAD_CONT_KEYER_MISING;
         return;
     }
@@ -3382,23 +3387,23 @@ void DMButtonFrame::checkRadioExists(QString radioName, int &errorCode)
         return;
     }
 
-    if (allKeyConfigs.contains(selectedKeyerCap.getKeyerType()))
+    if (allKeyConfigs.contains(getTxKeyerTypeFromTxKeyerId(selectedKeyerCap.getTxKeyerId())))
     {
-        const ContestMap &contestMap = allKeyConfigs.value(selectedKeyerCap.getKeyerType());
+        const ContestMap &contestMap = allKeyConfigs.value(getTxKeyerTypeFromTxKeyerId(selectedKeyerCap.getTxKeyerId()));
 
-        if (contestMap.contains(currentName))
+        if (contestMap.contains(currentKeyerContestName))
         {
-            const RigMap &rigMap = contestMap.value(currentName);
+            const RigMap &rigMap = contestMap.value(currentKeyerContestName);
 
             if (rigMap.contains(radioName))
             {
-                logMessage(QString("checkRadioExists - radio name %1 exists in json file for this  for this contest name %2 and keyerType %3").arg(radioName, selectedKeyerCap.getKeyerType()));
+                logMessage(QString("checkRadioExists - radio name %1 exists in json file for this  for this contest name %2 and keyerType %3").arg(radioName, getTxKeyerTypeFromTxKeyerId(selectedKeyerCap.getTxKeyerId())));
                 errorCode = CHECK_RAD_CONT_CONTEST_OK;
                 return;
             }
             else
             {
-                logMessage(QString("checkRadioExists - radio name %1 does not exist in json file for this contest name %2 and keyerType %3").arg(radioName, currentName, selectedKeyerCap.getKeyerType()));
+                logMessage(QString("checkRadioExists - radio name %1 does not exist in json file for this contest name %2 and keyerType %3").arg(radioName, currentKeyerContestName, getTxKeyerTypeFromTxKeyerId(selectedKeyerCap.getTxKeyerId())));
                 errorCode = CHECK_RAD_CONT_RADIO_MISSING;
                 return;
             }
@@ -3407,14 +3412,14 @@ void DMButtonFrame::checkRadioExists(QString radioName, int &errorCode)
         }
         else
         {
-            logMessage(QString("checkRadioExists - contest name %2 does not exist for this keyerType %2").arg(currentName, selectedKeyerCap.getKeyerType()));
+            logMessage(QString("checkRadioExists - current contest name %2 does not exist for this keyerType %2").arg(currentKeyerContestName, getTxKeyerTypeFromTxKeyerId(selectedKeyerCap.getTxKeyerId())));
             errorCode =  CHECK_RAD_CONT_CONTEST_MISSING;
             return;
         }
     }
     else
     {
-        logMessage(QString("checkRadioExists - contest name %2 does not exist for this keyerType does not exist in json file %1").arg(selectedKeyerCap.getKeyerType()));
+        logMessage(QString("checkRadioExists - contest name %2 does not exist for this keyerType does not exist in json file %1").arg(getTxKeyerTypeFromTxKeyerId(selectedKeyerCap.getTxKeyerId())));
         errorCode = CHECK_RAD_CONT_KEYER_MISING;
 
 
@@ -3427,19 +3432,19 @@ void DMButtonFrame::checkRadioExists(QString radioName, int &errorCode)
 
 void DMButtonFrame::on_stopButton_clicked()
 {
-    if (selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::None])
+    if (selectedKeyerCap.getTxKeyerId() == TxKeyerId::None)
     {
         return;
     }
-    else if (selectedKeyerCap.getKeyerType() != txKeyerTypes[TxKeyerId::DigitalModes])
+    else if (selectedKeyerCap.getTxKeyerId() != TxKeyerId::DigitalModes)
     {
 
         logMessage("Digimode - send stop transmission to sender app");
         RPCGeneralClient rpc(rpcConstants::DMStopTransmit);
         rpc.queueCall( dataSender );
     }
-    else if (selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::CW_RigControl]
-        || selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::PcCwKeyer])
+    else if (selectedKeyerCap.getTxKeyerId() == TxKeyerId::CW_RigControl
+        || selectedKeyerCap.getTxKeyerId() == TxKeyerId::PcCwKeyer)
     {
         txKeyer->stopCwMsg();
 
@@ -3483,7 +3488,8 @@ void DMButtonFrame::on_configEditButton_clicked()
     KeyerMap nfk = allKeyConfigs;
 
 
-    if (selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::RigControl] || selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::CW_RigControl])
+    if (selectedKeyerCap.getTxKeyerId() == TxKeyerId::RigControl ||
+        selectedKeyerCap.getTxKeyerId() == TxKeyerId::CW_RigControl)
     {
 
         listOfRadios = LogContainer->sendDM->rigs();
@@ -3502,10 +3508,10 @@ void DMButtonFrame::on_configEditButton_clicked()
     DMKeysEditDlgConfig editDlgConfig(nfk, selectedKeyerCap, radioMap, listOfRadioSupportKeyer);
 
     editDlgConfig.fKeyFileName = fkeyFileName;
-    editDlgConfig.minosSelectedContestName = currentName;
+    editDlgConfig.minosSelectedContestName = currentKeyerContestName;
     editDlgConfig.txKeyerFactory = txKeyerFactory;
     editDlgConfig.txKeyer = txKeyer;
-    editDlgConfig.txKeyerType = selectedKeyerCap.getKeyerType();
+    editDlgConfig.txKeyerType = getTxKeyerTypeFromTxKeyerId(selectedKeyerCap.getTxKeyerId());
     editDlgConfig.minosSelectedRadio = keyerSettings->getSelectedRadio();
 
     DMKeysEditDlg jed(this, editDlgConfig);
@@ -3514,7 +3520,7 @@ void DMButtonFrame::on_configEditButton_clicked()
     {
         allKeyConfigs = nfk;
         // and we have to regenerate the JSON file
-        writeSingleKeyerFile(fkeyFileName, selectedKeyerCap.getKeyerType(), txKeyerNameToId(selectedKeyerCap.getKeyerName()));
+        writeSingleKeyerFile(fkeyFileName, selectedKeyerCap.getTxKeyerId());
         updateFrameState();
     }
 }
@@ -3599,37 +3605,37 @@ void DMButtonFrame::on_fkeysetCombo_textActivated(const QString &arg1)
     if (ignoreFkComboSignal)
         return;
 
-    currentName = arg1;
+    currentKeyerContestName = arg1;
 
-    if (selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::RigControl])
+    if (selectedKeyerCap.getTxKeyerId() == TxKeyerId::RigControl)
     {
-        ct->rigControlCurrentFKeySetContest.setValue(currentName);
-
-    }
-    else  if (selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::CW_RigControl])
-    {
-        ct->cwRigControlCurrentFKeySetContest.setValue(currentName);
+        ct->rigControlCurrentFKeySetContest.setValue(currentKeyerContestName);
 
     }
-    else  if (selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::SerialControl])
+    else  if (selectedKeyerCap.getTxKeyerId() == TxKeyerId::CW_RigControl)
     {
-        ct->serialControlCurrentFKeySetContest.setValue(currentName);
+        ct->cwRigControlCurrentFKeySetContest.setValue(currentKeyerContestName);
+
     }
-    else  if (selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::PcCwKeyer])
+    else  if (selectedKeyerCap.getTxKeyerId() == TxKeyerId::SerialControl)
     {
-        ct->pcCwKeyerCurrentFKeySetContest.setValue(currentName);
+        ct->serialControlCurrentFKeySetContest.setValue(currentKeyerContestName);
     }
-    else  if (selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::DigitalModes])
+    else  if (selectedKeyerCap.getTxKeyerId() == TxKeyerId::PcCwKeyer)
     {
-        ct->digitalModesCurrentFKeySetContest.setValue(currentName);
+        ct->pcCwKeyerCurrentFKeySetContest.setValue(currentKeyerContestName);
     }
-    else  if (selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::InternalVoiceKeyer])
+    else  if (selectedKeyerCap.getTxKeyerId() == TxKeyerId::DigitalModes)
     {
-        ct->internalVoiceKeyerCurrentFKeySetContest.setValue(currentName);
+        ct->digitalModesCurrentFKeySetContest.setValue(currentKeyerContestName);
     }
-    else  if (selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::ExternalMqtKeyer])
+    else  if (selectedKeyerCap.getTxKeyerId() == TxKeyerId::InternalVoiceKeyer)
     {
-        ct->externalVoiceKeyerCurrentFKeySetContest.setValue(currentName);
+        ct->internalVoiceKeyerCurrentFKeySetContest.setValue(currentKeyerContestName);
+    }
+    else  if (selectedKeyerCap.getTxKeyerId() == TxKeyerId::ExternalMqtKeyer)
+    {
+        ct->externalVoiceKeyerCurrentFKeySetContest.setValue(currentKeyerContestName);
     }
 
     ct->commonSave(false);
@@ -3716,7 +3722,7 @@ void DMButtonFrame::onPcCwKeyerComportChanged()
 {
     QString comportStr = keyerSettings->getPcCwKeyerComport();
 
-    if (txKeyer && selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::PcCwKeyer])
+    if (txKeyer && selectedKeyerCap.getTxKeyerId() == TxKeyerId::PcCwKeyer)
     {
 
     }
@@ -3726,7 +3732,7 @@ void DMButtonFrame::onPcCwKeyerConnectionStateChanged()
     QString stateStr = keyerSettings->getPcCwKeyerConnectionState();
 
     logMessage(QString("PcCwKeyerConnection state = %1").arg(stateStr));
-    if (txKeyer && selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::PcCwKeyer])
+    if (txKeyer && selectedKeyerCap.getTxKeyerId() == TxKeyerId::PcCwKeyer)
     {
         // we read the PcCwKeyerLoaded and PcCwKeyerConnectedFlags in SendDm
 
@@ -3747,7 +3753,7 @@ void DMButtonFrame::onPcCwKeyerErrorMsgChanged()
     QString errorMsg = keyerSettings->getPcCwKeyerErrorMessage();
 
     logMessage(QString("PcCwKeyerConnection error message = %1").arg(errorMsg));
-    if (txKeyer && selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::PcCwKeyer])
+    if (txKeyer && selectedKeyerCap.getTxKeyerId() == TxKeyerId::PcCwKeyer)
     {
 
     }
@@ -3758,7 +3764,7 @@ void DMButtonFrame::onPcCwKeyerPttEnabledChanged()
 
     logMessage(QString("PcCwKeyer Ptt enabled = %1").arg(enabled));
 
-    if (txKeyer && selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::PcCwKeyer])
+    if (txKeyer && selectedKeyerCap.getTxKeyerId() == TxKeyerId::PcCwKeyer)
     {
         if (enabled == "On")
         {
@@ -3777,7 +3783,7 @@ void DMButtonFrame::onPcCwKeyerTxOnStateChanged()
 
     logMessage(QString("TX State received = %1").arg(state));
 
-    if (txKeyer && selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::PcCwKeyer])
+    if (txKeyer && selectedKeyerCap.getTxKeyerId() == TxKeyerId::PcCwKeyer)
     {
         if (state == "On")
         {
@@ -3803,7 +3809,7 @@ void DMButtonFrame::onPcCwKeyerCurrentWpmChanged()
         return;
     }
 
-    if (txKeyer && selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::PcCwKeyer])
+    if (txKeyer && selectedKeyerCap.getTxKeyerId() == TxKeyerId::PcCwKeyer)
     {
 
         cwDtrForm->setCwSliderValue(wpm.toInt()); // this will not emit and send back to keyer

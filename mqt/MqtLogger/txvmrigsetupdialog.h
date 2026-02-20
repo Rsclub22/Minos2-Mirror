@@ -31,8 +31,8 @@ public:
     void setMaxNumOfButtonsLabel(int maxNumButtons);
 
     void setPttEomGroupBoxVisible(bool visible);
-    void setEomRadioButtons(int eomType);
-    int getSelectedEomType();
+    void setEomRadioButtons(TxKeyerCommon::KeyerEomTypes eomType);
+    TxKeyerCommon::KeyerEomTypes getSelectedEomType();
 
 
     void setButtonWidgetsVisible(bool visible);
