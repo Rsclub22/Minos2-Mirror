@@ -515,8 +515,8 @@ void DMButtonFrame::createKeyer(QString voiceKeyerName)
                     //createButtonsForKeyer(numButtons, columns);
                 }
 
-                QList<TxKeyerParams> &txKeyParamList = txKeyParamMap[selectedKeyerCap.getKeyerType()];
-                txKeyParamList.clear();
+                //QList<TxKeyerParams> &txKeyParamList = txKeyParamMap[selectedKeyerCap.getKeyerType()];
+                txKeyParamMap[voiceKeyerName].clear();
 
                 buttonNumSent = NO_TXKEYER_BUTTON_SELECTED;
 
@@ -530,11 +530,15 @@ void DMButtonFrame::createKeyer(QString voiceKeyerName)
                         txKeyerData.setType(selectedKeyerCap.getKeyerType());
                     }
 
-                    if (selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::CW_RigControl])
-                    vmData.setRigModel(getRigModel(selectedRadio));
-                    txKeyer->readVmButtonParams(i, txKeyerData);
-                    txKeyParamList.append(txKeyerData);
-                    setRunButtonText(i, txKeyerData.getKeyerName());
+                    //if (selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::CW_RigControl]
+                    //    || selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::RigControl])
+                    //{
+                    //    txKeyerData.setRigModel(getRigModel(selectedRadio));
+                    //}
+
+                    txKeyer->readTxKeyerButtonParams(i, txKeyerData);
+                    txKeyParamMap[voiceKeyerName].append(txKeyerData);
+                    // ************************************************************** setRunButtonText(i, txKeyerData.getKeyerName());
 
                 }
             }
@@ -752,7 +756,7 @@ void DMButtonFrame::setFrameStateForKeyer(QString txKeyerName)
     default:
 
 
-        txKeyParamList.clear();
+        //txKeyParamList.clear();
 
     currentName.clear();
         set_None_FrameState();
@@ -885,7 +889,7 @@ void DMButtonFrame::selectKeyerUiForm(QWidget *uiForm)
 
 void DMButtonFrame::set_DigiMode_FrameState()
 {
-    txKeyParamList.clear();
+    txKeyParamMap[DIGITAL_MODES_KEYER_NAME].clear();
 
     selectedKeyerCap.getKeyerType() = txKeyerTypes[TxKeyerId::DigitalModes];
     selectKeyerUiForm(digitalModesForm);
@@ -917,7 +921,7 @@ void DMButtonFrame::set_None_FrameState()
     clearButtonLabels();
 
 
-    txKeyParamList.clear();
+    //txKeyParamList.clear();
 
     if ( selectedKeyerCap.getKeyerType() == txKeyerTypes[TxKeyerId::ExternalMqtKeyer])
     {

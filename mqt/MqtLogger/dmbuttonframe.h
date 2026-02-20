@@ -281,7 +281,19 @@ private:
     TxKeyerFactory* txKeyerFactory;
 
     //QList<TxKeyerParams> txKeyParamList;
-    QMap<QString, QVector<TxKeyerParams>> txKeyParamMap;
+    QMap<QString, QVector<TxKeyerParams>> txKeyParamMap =
+    {
+        {VOICE_RIGCONTROL_KEYER_NAME, {} },
+        {CW_RIGCONTOL_KEYER_NAME, {} },
+        {SERIAL_CONTROL_KEYER_NAME, {} },
+        {PC_DTR_CW_KEYER_NAME, {} },
+        {DIGITAL_MODES_KEYER_NAME, {} },
+        {INTERNAL_VOICE_KEYER_NAME, {} },
+        {MQT_KEYER_NAME, {} },
+        {WINKEYER_NAME, {} }
+
+    };
+
 
     QTimer *extKeyerConnectTimer = nullptr;
     //QList<QShortcut *> shortCutKeyList;

@@ -125,10 +125,10 @@ void InternalVoiceTxKeyer::doRecording(TxKeyerParams * vkParam)
 }
 
 
-/*
-bool InternalVoiceTxKeyer::readVmButtonParams(int buttonNum, TxKeyerParams &vmParams)
+
+bool InternalVoiceTxKeyer::readTxKeyerButtonParams(int buttonNum, TxKeyerParams &txKeyerParams)
 {
-    QString fileName = TX_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + vmParams.getType() + ".ini";
+ /*   QString fileName = TX_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + vmParams.getType() + ".ini";
     QSettings config(fileName, QSettings::IniFormat);
     config.beginGroup("button" + QString::number(buttonNum));
 
@@ -139,14 +139,14 @@ bool InternalVoiceTxKeyer::readVmButtonParams(int buttonNum, TxKeyerParams &vmPa
     vmParams.setKeyerRepeatPauseDur(config.value("repeatPauseDuration", 0).toInt());
     vmParams.setKeyerButtonNum(config.value("buttonNum", buttonNum).toInt());
     config.endGroup();
-
+*/
     return true;
 }
 
-void InternalVoiceTxKeyer::saveVmButtonParams(const TxKeyerParams &vmParams_)
+void InternalVoiceTxKeyer::saveTxKeyerButtonParams(const TxKeyerParams &txKeyerParams_)
 {
-    TxKeyerParams vmParams = vmParams_;
-
+    TxKeyerParams txKeyerParams = txKeyerParams_;
+/*
     QString fileName = TX_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + vmParams.getType() + ".ini";
     QSettings config(fileName, QSettings::IniFormat);
     config.beginGroup("button" + QString::number(vmParams.getKeyerButtonNum()));
@@ -157,9 +157,9 @@ void InternalVoiceTxKeyer::saveVmButtonParams(const TxKeyerParams &vmParams_)
     config.setValue("messageDuration", vmParams.getKeyerDuration());
     config.setValue("repeatPauseDuration", vmParams.getKeyerRepeatPauseDur());
     config.setValue("buttonNum", vmParams.getKeyerButtonNum());
-    config.endGroup();
+    config.endGroup();*/
 }
-*/
+
 
 void InternalVoiceTxKeyer::setPttOnOff(bool onOff)
 {

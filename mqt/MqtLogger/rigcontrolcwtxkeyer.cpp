@@ -383,10 +383,10 @@ void RigControlCwTxKeyer::stopCwMsg()
 }
 
 
-/*
-bool RigControlCwTxKeyer::readVmButtonParams(int buttonNum, TxKeyerParams &vmParams)
-{
 
+bool RigControlCwTxKeyer::readTxKeyerButtonParams(int buttonNum, TxKeyerParams &txKeyerParams)
+{
+/*
 
 
     bool saveByRadioName = readSaveVoiceCWMemoryButtonByRadioNameFromIni(TxKeyerId::CW_RigControl);
@@ -426,15 +426,15 @@ bool RigControlCwTxKeyer::readVmButtonParams(int buttonNum, TxKeyerParams &vmPar
     vmParams.setKeyerRepeatPauseDur(config.value(newKey + "/repeatPauseDuration", 0).toInt());
     vmParams.setKeyerButtonNum(config.value(newKey + "/buttonNum", buttonNum).toInt());
     config.endGroup();
-
+*/
     return true;
 }
 
 
-void RigControlCwTxKeyer::saveVmButtonParams(const TxKeyerParams &vmParams_ )
+void RigControlCwTxKeyer::saveTxKeyerButtonParams(const TxKeyerParams &txKeyerParams_ )
 {
-    TxKeyerParams vmParams = vmParams_;
-
+    TxKeyerParams txKeyerParams = txKeyerParams_;
+/*
     bool saveByRadioName = readSaveVoiceCWMemoryButtonByRadioNameFromIni(TxKeyerId::CW_RigControl);
 
     QString runStateTxt;
@@ -469,9 +469,9 @@ void RigControlCwTxKeyer::saveVmButtonParams(const TxKeyerParams &vmParams_ )
     config.setValue(newKey + "/repeatPauseDuration", vmParams.getKeyerRepeatPauseDur());
     config.setValue(newKey + "/buttonNum", vmParams.getKeyerButtonNum());
     config.endGroup();
-
-}
 */
+}
+
 
 int RigControlCwTxKeyer::setup(TxKeyerFactory *txKeyerFactory, int &maxNumButtons, int &numButtons, QString selectedRadioName)
 {

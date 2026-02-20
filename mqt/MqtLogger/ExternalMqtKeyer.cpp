@@ -75,22 +75,22 @@ void ExternalMqtKeyer::doRecording(TxKeyerParams *vkParam)
 }
 
 
-/*
-bool ExternalMqtKeyer::readVmButtonParams(int buttonNum, TxKeyerParams &vmParams)
+
+bool ExternalMqtKeyer::readTxKeyerButtonParams(int buttonNum, TxKeyerParams &TxKeyerParams)
 {
-    // This info should have come from the external keyer
+/*    // This info should have come from the external keyer
     vmParams.setKeyerRepeatFlag(remoteConfig.kjj[buttonNum].autoRepeat);
     vmParams.setKeyerRepeatPauseDur(remoteConfig.kjj[buttonNum].autoRepeatDelay);
     vmParams.setKeyerName(remoteConfig.kjj[buttonNum].CQName);
     vmParams.setKeyerDuration(remoteConfig.kjj[buttonNum].CQLength);
     vmParams.setKeyerButtonNum(buttonNum);
-
+*/
     return true;
 }
-void ExternalMqtKeyer::saveVmButtonParams(const TxKeyerParams &vmParams_ )
+void ExternalMqtKeyer::saveTxKeyerButtonParams(const TxKeyerParams &txKeyerParams_ )
 {
     // We should send this config to the external keyer
-
+/*
     trace("ExternalMqtKeyer::saveVmButtonParams");
     int buttonNum = vmParams_.getKeyerButtonNum();
     KeyerKeyJson &kkj = remoteConfig.kjj[buttonNum];
@@ -103,9 +103,9 @@ void ExternalMqtKeyer::saveVmButtonParams(const TxKeyerParams &vmParams_ )
 
     QString config = remoteConfig.makeConfig(QJsonDocument::Compact, false, false);
     LogContainer->sendDM->publishKeyerConfig(config);
-
-}
 */
+}
+
 void ExternalMqtKeyer::setPttOnOff(bool onOff)
 {
     Q_UNUSED(onOff)

@@ -140,6 +140,14 @@ void PcCWMessageKeyer::saveFixedRadioCommonData()
 
 }
 
+bool PcCWMessageKeyer::readTxKeyerButtonParams(int buttonNum, TxKeyerParams &txKeyerParams)
+{
+    return true;
+}
+void PcCWMessageKeyer::saveTxKeyerButtonParams(const TxKeyerParams &txKeyerParams)
+{
+
+}
 
 void PcCWMessageKeyer::sendCwMsg(TxKeyerParams &vmData)
 {

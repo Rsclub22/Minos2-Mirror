@@ -83,10 +83,10 @@ void RigControlVoiceTxKeyer::stopMsg(TxKeyerParams &vkParams)
 }
 
 
-/*
-bool RigControlVoiceTxKeyer::readVmButtonParams(int buttonNum, TxKeyerParams &vmParams)
-{
 
+bool RigControlVoiceTxKeyer::readTxKeyerButtonParams(int buttonNum, TxKeyerParams &txKeyerParams)
+{
+/*
     bool saveByRadioName = readSaveVoiceCWMemoryButtonByRadioNameFromIni(TxKeyerId::RigControl);
 
 
@@ -112,15 +112,15 @@ bool RigControlVoiceTxKeyer::readVmButtonParams(int buttonNum, TxKeyerParams &vm
     vmParams.setKeyerRepeatPauseDur(config.value(newKey + "/repeatPauseDuration", 0).toInt());
     vmParams.setKeyerButtonNum(config.value(newKey + "/buttonNum", buttonNum).toInt());
     config.endGroup();
-
+*/
     return true;
 }
 
 
-void RigControlVoiceTxKeyer::saveVmButtonParams(const TxKeyerParams &vmParams_ )
+void RigControlVoiceTxKeyer::saveTxKeyerButtonParams(const TxKeyerParams &txKeyerParams_ )
 {
-    TxKeyerParams vmParams = vmParams_;
-
+    TxKeyerParams txKeyerParams = txKeyerParams_;
+/*
     bool saveByRadioName = readSaveVoiceCWMemoryButtonByRadioNameFromIni(TxKeyerId::RigControl);
 
     QString fileName = TX_KEYER_PATH() + VOICE_KEYER_BASE_FILE_NAME + vmParams.getType() + ".ini";
@@ -144,10 +144,10 @@ void RigControlVoiceTxKeyer::saveVmButtonParams(const TxKeyerParams &vmParams_ )
     config.setValue(newKey + "/buttonNum", vmParams.getKeyerButtonNum());
     config.endGroup();
 
-
+*/
 
 }
-*/
+
 
 int RigControlVoiceTxKeyer::setup(TxKeyerFactory *voiceKeyerFactory, int &maxNumButtons, int &numButtons, QString selectedRadioName)
 {

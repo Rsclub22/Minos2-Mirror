@@ -89,6 +89,16 @@ void WinKeyerTxKeyer::txKeyerInit(int &numButtons)
 
 }
 
+bool WinKeyerTxKeyer::readTxKeyerButtonParams(int buttonNum, TxKeyerParams &txKeyerParams)
+{
+    return true;
+}
+void WinKeyerTxKeyer::saveTxKeyerButtonParams(const TxKeyerParams &txKeyerParams)
+{
+
+}
+
+
 void WinKeyerTxKeyer::getRadioCommonData(int &selectedEomType, int &userNumberButtons, int radioMaxNumButtons)
 {
     int numButtons = 0;

@@ -60,9 +60,30 @@ namespace TxKeyerCommon
 
     };
 
+
+
+    inline const QString NONE_KEYER_NAME = "";
+    inline const QString VOICE_RIGCONTROL_KEYER_NAME = "Voice RigControl";
+    inline const QString CW_RIGCONTOL_KEYER_NAME = "CW RigControl";
+    inline const QString SERIAL_CONTROL_KEYER_NAME = "SerialControl";
+    inline const QString PC_DTR_CW_KEYER_NAME = "PcCwKeyer";
+    inline const QString DIGITAL_MODES_KEYER_NAME = "Digital Modes";
+    inline const QString INTERNAL_VOICE_KEYER_NAME = "Internal";
+    inline const QString MQT_KEYER_NAME = "mqtKeyer";
+    inline const QString WINKEYER_NAME = "WinKeyer";
+
     // these two lists should match the TXKeyerId order
 
-    inline const QStringList txKeyerNames = {"", "Voice RigControl", "CW RigControl", "SerialControl", "PcCwKeyer", "Digital Modes", "Internal", "mqtKeyer", "WinKeyer"};
+    // this is used in the dropdown selection and intended to be more human readable.
+    inline const QStringList txKeyerNames = {NONE_KEYER_NAME,
+                                             VOICE_RIGCONTROL_KEYER_NAME,
+                                             CW_RIGCONTOL_KEYER_NAME,
+                                             SERIAL_CONTROL_KEYER_NAME,
+                                             PC_DTR_CW_KEYER_NAME,
+                                             DIGITAL_MODES_KEYER_NAME,
+                                             INTERNAL_VOICE_KEYER_NAME,
+                                             MQT_KEYER_NAME,
+                                             WINKEYER_NAME};
 
 
     inline const QStringList txKeyerTypes = { "None", "rigControl", "cwRigControl",

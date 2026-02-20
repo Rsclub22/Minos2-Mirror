@@ -54,10 +54,10 @@ public:
 
     virtual void setPttOnOff(bool onOff) override;
     virtual int getSelectedEomType() override;
-     virtual void setSelectedEomType(int eomType)override{Q_UNUSED(eomType)};
+    virtual void setSelectedEomType(int eomType)override{Q_UNUSED(eomType)};
 
-    //virtual bool readVmButtonParams(int buttonNum, TxKeyerParams &vmParams) override;
-   // virtual void saveVmButtonParams(const TxKeyerParams &vmParams) override;
+    virtual bool readTxKeyerButtonParams(int buttonNum, TxKeyerParams &txKeyerParams) override;
+    virtual void saveTxKeyerButtonParams(const TxKeyerParams &txkeyerParams) override;
 
     virtual int setup(TxKeyerFactory *voiceKeyerFactory, int &maxNumButtons, int &numButtons, QString selectedRadioName) override;
     virtual void setRadioParams(int radioMaxNumButtons, QString selectedRadioName, serialCommonData::MINOS_PTT_TYPES pttType_, bool pttEnabled_) override;

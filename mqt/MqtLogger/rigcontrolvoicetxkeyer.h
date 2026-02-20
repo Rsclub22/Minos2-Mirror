@@ -57,8 +57,8 @@ public:
     int getSelectedEomType() override;
     virtual void setSelectedEomType(int eomType)override{Q_UNUSED(eomType)};
 
-    //bool readVmButtonParams(int buttonNum, TxKeyerParams &vmParams) override;
-    //void saveVmButtonParams(const TxKeyerParams &vmParams) override;
+    bool readTxKeyerButtonParams(int buttonNum, TxKeyerParams &txKeyerParams) override;
+    void saveTxKeyerButtonParams(const TxKeyerParams &txKeyerParams) override;
 
     virtual int setup(TxKeyerFactory *voiceKeyerFactory, int &maxNumButtons, int &numButtons, QString selectedRadioName) override;
 

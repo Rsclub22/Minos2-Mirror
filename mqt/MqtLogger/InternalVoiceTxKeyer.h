@@ -37,8 +37,8 @@ public:
     //    return false;
     //}
 
-    //virtual bool readVmButtonParams(int buttonNum, TxKeyerParams &vmParams) override;
-    //virtual void saveVmButtonParams(const TxKeyerParams &vmParams) override;
+    virtual bool readTxKeyerButtonParams(int buttonNum, TxKeyerParams &txKeyerParams) override;
+    virtual void saveTxKeyerButtonParams(const TxKeyerParams &txKeyerParams) override;
     virtual void setPttOnOff(bool onOff) override;
     virtual int getSelectedEomType() override {return TxKeyerCommon::KeyerEomTypes::InternalSoundCardVoiceKeyer;};
     virtual void setSelectedEomType(int eomType)override{Q_UNUSED(eomType)};

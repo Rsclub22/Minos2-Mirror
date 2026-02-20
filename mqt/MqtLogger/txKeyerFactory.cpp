@@ -3,7 +3,7 @@
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //                      Tx Keyer Factory
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2025
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2026
 //
 //
 //
@@ -14,7 +14,6 @@
 #include <QComboBox>
 #include <QStandardItemModel>
 #include <QListView>
-#include "AppStartup.h"
 #include "txKeyerFactory.h"
 #include "txkeyerCommonConstants.h"
 #include "rigcontrolvoicetxkeyer.h"
