@@ -111,6 +111,7 @@ QString decodeMessage::getMStage() const
 
 bool decodeMessage::checkAsContact()
 {
+    bool ret = false;
     BaseContestLog * cc = MinosParameters::getMinosParameters() ->getCurrentContest();
     if (!cc)
         return false;
@@ -130,7 +131,7 @@ bool decodeMessage::checkAsContact()
 
     scc.cs.setValRes(CS_OK);    // force a recheck
     scc.checkScreenContact();
-    csret = scc.cs.getValRes();
+    fromCsret = scc.cs.getValRes();
     if (scc.QSOValid)
     {
         points = scc.contactScore.getValue();
@@ -145,10 +146,23 @@ bool decodeMessage::checkAsContact()
         bonus += scc.distBonus;
         bonus += scc.countryBonus;
 
-        return true;
-    }
+        ret = true;
 
-    return false;
+    }
+    else
+    {
+        ret = false;
+    }
+    scc.initialise(cc, false);
+    scc.cs = toCall;
+    scc.loc = toGrid;
+    scc.cs.setValRes(CS_OK);    // force a recheck
+    scc.timeOn = dtg(true);
+    scc.timeOff = dtg(true);
+    scc.setFrequency( f, cb);
+    scc.checkScreenContact();
+    toCsret = scc.cs.getValRes();
+    return ret;
 }
 void decodeMessage::validate()
 {

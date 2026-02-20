@@ -311,7 +311,7 @@ QVariant DecodesModel::data (QModelIndex const& pindex, int role) const
                 return "";
             }
 
-            if (msg.csret == ERR_DUPCS)
+            if (msg.fromCsret == ERR_DUPCS)
             {
                 return "(wkd)";
             }
@@ -351,24 +351,49 @@ QVariant DecodesModel::data (QModelIndex const& pindex, int role) const
             {
                 return "";
             }
-            if (msg.csret == ERR_DUPCS)
+            if (msg.fromCsret == ERR_DUPCS)
             {
                 return "";
             }
             return QString::number(msg.bearing);
 
         case dcFromCall:
+        {
             if (msg.txrx == eTX)
                 return "";
-            return msg.fromCall.getFullCall();
+
+            QString call = msg.fromCall.getFullCall();
+
+            bool worked = msg.fromCsret == ERR_DUPCS;
+            QString col;
+            if (worked)
+            {
+                col = HtmlFontColour(Qt::gray);
+                call = col + call + HtmlFontColour(Qt::black);
+            }
+            return call;
+        }
+
+
         case dcFromGrid:
             if (msg.txrx == eTX)
                 return "";
             return msg.fromGrid.getLoc();
         case dcToCall:
+        {
             if (msg.txrx == eTX)
                 return "";
-            return msg.toCall.getFullCall();
+
+            QString call = msg.toCall.getFullCall();
+            bool worked = msg.toCsret == ERR_DUPCS;
+            QString col;
+            if (worked)
+            {
+                col = HtmlFontColour(Qt::gray);
+                call = col + call + HtmlFontColour(Qt::black);
+            }
+            return call;
+        }
         case dcToGrid:
             if (msg.txrx == eTX)
                 return "";

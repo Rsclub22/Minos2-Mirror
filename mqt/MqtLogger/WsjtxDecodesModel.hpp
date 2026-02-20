@@ -24,6 +24,7 @@ public:
     Qt::AlignmentFlag alignment;
 };
 }
+class BaseContestLog;
 class DecodesModel
   : public QAbstractItemModel
 {
@@ -35,32 +36,31 @@ private:
     QString confidence_string (bool low_confidence) const;
     QString live_string (bool off_air) const;
 
-  QString client_id_;
-  QString call_;
-  QRegularExpression base_call_re_;
-  int rx_df_;
+    QString client_id_;
+    QString call_;
+    QRegularExpression base_call_re_;
+    int rx_df_;
 
 public:
-  QSharedPointer<HtmlDelegate> delegate;
-  QVector<decodeMessage> *messages = nullptr;
-  explicit DecodesModel ();
+    QSharedPointer<HtmlDelegate> delegate;
+    QVector<decodeMessage> *messages = nullptr;
+    explicit DecodesModel ();
 
-  Q_SLOT void add_decode ();
+    Q_SLOT void add_decode ();
 
-  void de_call (QString const&);
-  void rx_df (int);
-  QVariant data (QModelIndex const& proxy_index, int role = Qt::DisplayRole) const override;
-  virtual QVariant headerData (int section, Qt::Orientation orientation,
+    void de_call (QString const&);
+    void rx_df (int);
+    QVariant data (QModelIndex const& proxy_index, int role = Qt::DisplayRole) const override;
+    virtual QVariant headerData (int section, Qt::Orientation orientation,
                                int role = Qt::DisplayRole) const override;
-  QModelIndex index( int row, int column,
+    QModelIndex index( int row, int column,
                      const QModelIndex &parent = QModelIndex() ) const Q_DECL_OVERRIDE;
-  QModelIndex parent( const QModelIndex &index ) const Q_DECL_OVERRIDE;
+    QModelIndex parent( const QModelIndex &index ) const Q_DECL_OVERRIDE;
 
-  int rowCount( const QModelIndex &parent = QModelIndex() ) const Q_DECL_OVERRIDE;
-  int columnCount( const QModelIndex &parent = QModelIndex() ) const Q_DECL_OVERRIDE;
+    int rowCount( const QModelIndex &parent = QModelIndex() ) const Q_DECL_OVERRIDE;
+    int columnCount( const QModelIndex &parent = QModelIndex() ) const Q_DECL_OVERRIDE;
 
-  void clear();
-
+    void clear();
 };
 
 #endif
