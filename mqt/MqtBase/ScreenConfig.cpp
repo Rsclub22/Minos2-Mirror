@@ -1,8 +1,9 @@
 #include <QScrollBar>
 #include <QScrollArea>
+#include "QtUtils.h"
 #include "regsettings.h"
-#include "ContestApp.h"
-#include "tlogcontainer.h"
+//#include "../MqtLogger/ContestApp.h"
+//#include "../MqtLogger/tlogcontainer.h"
 #include "baseconstants.h"
 #include "ScreenConfigFile.h"
 #include "ScreenConfigElement.h"
@@ -172,8 +173,7 @@ void ScreenConfig::on_applyButton_clicked()
     // write it back, or the screen redraw doesn't work
     scf.dumpFile();
 
-    LogContainer->selectLayout(curConfigName);
-    LogContainer->selectSession(TContestApp::getContestApp()->currSession);
+    emit screenConfigApply(curConfigName);
 }
 
 void ScreenConfig::on_cancelButton_clicked()

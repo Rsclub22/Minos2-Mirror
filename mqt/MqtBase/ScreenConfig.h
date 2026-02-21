@@ -58,6 +58,10 @@ private:
     ScreenConfigScreen *buildScreen(SCScreen &s, int pos);
 
     void checkScreens();
+
+signals:
+    void  screenConfigApply(QString curConfigName);
+
 };
 
 extern ScreenConfig *screenConfigDialog;

@@ -54,6 +54,7 @@ private slots:
 
     void on_protectedButton_clicked();
 
+    void onScreenConfigApply(QString curConfigName);
 private:
     Ui::ScreenConfigManager *ui;
     bool suppressItemSelect = false;
@@ -67,6 +68,8 @@ private:
 
     void doCloseEvent();
     bool getNewName(QString &Value);
+signals:
+    void  screenConfigApply(QString curConfigName);
 };
 
 #endif // SCREENCONFIGMANAGER_H

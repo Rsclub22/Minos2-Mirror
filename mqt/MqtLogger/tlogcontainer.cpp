@@ -327,6 +327,7 @@ TLogContainer::~TLogContainer()
     MinosRPCObj::clearRPCObjects();
     ScreenConfigFile::getScreenConfigFile(this).configs.clear();
 }
+
 bool TLogContainer::eventFilter(QObject *obj, QEvent *event)
 {
     if (event->type() == QEvent::ToolTip && obj == sblabel1)
@@ -1526,8 +1527,15 @@ void TLogContainer::menuLogsActionExecute(bool)
 void TLogContainer::doScreenConfigAction()
 {
     ScreenConfigManager sc(this);
+    connect(&sc, &ScreenConfigManager::screenConfigApply, this, &TLogContainer::onScreenConfigApply);
+
     sc.exec();
     updateLayoutsMenu();
+}
+void TLogContainer::onScreenConfigApply(QString curConfigName)
+{
+    selectLayout(curConfigName);
+    selectSession(TContestApp::getContestApp()->currSession);
 }
 void TLogContainer::ManageAppConfigsActionExecute()
 {

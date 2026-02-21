@@ -111,6 +111,12 @@ SOURCES += \
     rotControlFrameBase.cpp \
     rotatorcommon.cpp \
     rotpresetdialog.cpp \
+    ScreenConfig.cpp \
+    ScreenConfigElement.cpp \
+    ScreenConfigFile.cpp \
+    ScreenConfigManager.cpp \
+    ScreenConfigRow.cpp \
+    ScreenConfigScreen.cpp \
     ScreenContact.cpp \
     StartConfig.cpp \
     serialdata.cpp \
@@ -220,6 +226,12 @@ HEADERS += \
     rotControlFrameBase.h \
     rotatorcommon.h \
     rotpresetdialog.h \
+    ScreenConfig.h \
+    ScreenConfigElement.h \
+    ScreenConfigFile.h \
+    ScreenConfigManager.h \
+    ScreenConfigRow.h \
+    ScreenConfigScreen.h \
     ScreenContact.h \
     StartConfig.h \
     serialCommonData.h \
@@ -252,6 +264,11 @@ FORMS += \
     ChatFrame.ui \
     ConfigElementFrame.ui \
     MatchTreeFrame.ui \
+    ScreenConfig.ui \
+    ScreenConfigElement.ui \
+    ScreenConfigManager.ui \
+    ScreenConfigRow.ui \
+    ScreenConfigScreen.ui \
     StartConfigManager.ui \
     StatisticsDisplay.ui \
     bandmapclientfilterdialog.ui \

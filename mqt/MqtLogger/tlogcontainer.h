@@ -251,6 +251,7 @@ private slots:
     void ManageHamlibActionExecute();
     void on_manageSpotsDatabaseActionSelected();
     void on_downloadFilesActionSelected();
+    void onScreenConfigApply(QString curConfigName);
 public slots:
     void onArgsReceived(QString conarg);
     void ListOpenActionExecute();

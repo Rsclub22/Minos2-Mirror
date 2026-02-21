@@ -248,7 +248,12 @@ void ScreenConfigManager::on_renameButton_clicked()
 void ScreenConfigManager::on_editButton_clicked()
 {
     ScreenConfig sc(this, scf, curConfigName);
+    connect(&sc, &ScreenConfig::screenConfigApply, this, &ScreenConfigManager::onScreenConfigApply);
     sc.exec();
+}
+void ScreenConfigManager::onScreenConfigApply(QString curConfigName)
+{
+    emit screenConfigApply(curConfigName);
 }
 
 void ScreenConfigManager::on_OKButton_clicked()
