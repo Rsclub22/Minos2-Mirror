@@ -273,6 +273,7 @@ private:
     TxKeyerCwDtrForm *cwDtrForm;
     TxKeyerDigitalModesForm *digitalModesForm;
 
+
     void createKeyerForms();
     void connectFormSignals();
 
@@ -281,7 +282,7 @@ private:
     TxKeyerFactory* txKeyerFactory;
 
 
-    QMap<TxKeyerId, QVector<TxKeyerParams>> txKeyParamMap;
+    QMap<TxKeyerCommon::TxKeyerId, QVector<TxKeyerParams>> txKeyParamMap;
 
 
     QTimer *extKeyerConnectTimer = nullptr;
@@ -437,6 +438,8 @@ private:
     void showTemporaryErrorMessage(const QString &msg, int timeoutMs, const QColor &colour = Qt::red);
 
     void selectKeyerUiForm(QWidget *uiForm);
+
+    TxKeyerCommonSettings loadTxKeyerCommonSettings();
 };
 
 #endif // DMBUTTONFRAME_H

@@ -55,7 +55,7 @@ void txVmInternalSetupDialog::accept()
 void txVmInternalSetupDialog::initSetup()
 {
 
-    ui->numButtons->setRange(MININUM_BUTTONS, maxNumButtons);
+    ui->numButtons->setRange(MINIMUM_BUTTONS, maxNumButtons);
     ui->numButtons->setValue(numButtons);
 
     if (voiceCap.getSupportSerial())

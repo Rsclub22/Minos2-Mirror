@@ -23,7 +23,7 @@ namespace TxKeyerCommon
     const int PC_CW_KEYER_MIN_WPM = 5;
     const int PC_CW_KEYER_MAX_WPM = 40;
     const int MAXIMUM_BUTTONS = 8;
-    const int MININUM_BUTTONS = 2;
+    const int MINIMUM_BUTTONS = 2;
 /*
     const char * TXKEYER_BUTTON_ON_STYLE =
         "background-color: orange;"
@@ -142,6 +142,29 @@ namespace TxKeyerCommon
         WinKeyerTXStatus
     };
 
+    enum class KeyerViewMode
+    {
+        Standalone,
+        Tabbed
+    };
+
+    struct TxKeyerCommonSettings
+    {
+        KeyerViewMode viewMode = KeyerViewMode::Standalone;
+
+        QString standaloneKeyerName;
+
+        QStringList tabbedKeyersName;
+
+        int activeTab = 0;
+    };
+
+    TxKeyerCommonSettings loadTxKeyerCommonSettings();
+    void saveTxKeyerCommonSettings(const TxKeyerCommonSettings &settings);
+
+
+
+
     inline const QString VOICEKEYER_COMMON_KEY = "commonParams";
 
     //inline const QString VOICE_KEYER_PATH = "./Configuration/VoiceKeyer/";
@@ -177,6 +200,12 @@ QString VOICEKEYER_COMMON_PARAMS_PATH();
 QString TX_KEYER_PATH();
 QString TXKEYER_COMMON_PARAMS_PATH();
 
+inline const QString TX_KEYER_COMMONPARAMS_KEY = "commonParams";
+inline const QString TX_KEYER_COMMON_PARAMS_FILENAME = "txKeyerCommonParams.ini";
+inline const QString TX_KEYER_COMMON_PARAMS_GROUPNAME = TX_KEYER_COMMONPARAMS_KEY;
+
+
+
 bool readSaveVoiceCWMemoryButtonByRadioNameFromIni(TxKeyerCommon::TxKeyerId id);
 void writeSaveVoiceCWMemoryButtonByRadioNameToIni(bool data, TxKeyerCommon::TxKeyerId id);
 void getListOfRadioNamesForMemoryButtons(QStringList &radioNames, TxKeyerCommon::TxKeyerId id);
@@ -189,6 +218,7 @@ bool getRigCWMessageStoredInRadioFlag(bool &storedInRadio, QString radioMfg, con
 bool getRigCWKeyerMaxMessageLength(QString filePath, int &messageLength, QString radioMfg, const QString filename);
 
 QString getCwRadioManufacturer(int cwMemType);
+
 
 
 

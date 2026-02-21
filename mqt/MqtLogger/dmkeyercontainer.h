@@ -45,6 +45,8 @@ public:
     ~DMKeyerContainer();
 
     QSharedPointer<KeyerSettings> keyerSettings;
+    TxKeyerCommon::TxKeyerCommonSettings txKeyerCommonSettings;
+
 
     // Contest and radio settings (forwarded to active or all frames)
     void setContest(BaseContestLog *contest);

@@ -33,7 +33,7 @@ QString TX_KEYER_PATH()
 
 QString TXKEYER_COMMON_PARAMS_PATH()
 {
-    return VOICE_KEYER_PATH() + "CommonParams/";
+    return TX_KEYER_PATH() + "CommonParams/";
 }
 
 
@@ -282,6 +282,46 @@ QString getCwRadioManufacturer(int cwMemType)
     }
 
     return type;
+}
+
+TxKeyerCommonSettings TxKeyerCommon::loadTxKeyerCommonSettings()
+{
+    TxKeyerCommonSettings settings;
+
+    QString fileName =
+        TXKEYER_COMMON_PARAMS_PATH() +
+        TX_KEYER_COMMON_PARAMS_FILENAME;
+
+    QSettings config(fileName, QSettings::IniFormat);
+
+    config.beginGroup(TX_KEYER_COMMON_PARAMS_GROUPNAME);
+
+    QString viewModeStr = config.value("ViewMode","Standalone").toString();
+
+    settings.viewMode = (viewModeStr == "Tabbed") ? KeyerViewMode::Tabbed : KeyerViewMode::Standalone;
+    settings.standaloneKeyerName = config.value("StandaloneKeyerName", "").toString();
+    settings.tabbedKeyersName = config.value("TabbedKeyers", QStringList()).toStringList();
+    settings.activeTab = config.value("ActiveTab", 0).toInt();
+
+    config.endGroup();
+
+    return settings;
+}
+
+void TxKeyerCommon::saveTxKeyerCommonSettings(const TxKeyerCommonSettings &settings)
+{
+    QString fileName =
+        TXKEYER_COMMON_PARAMS_PATH() +
+        TX_KEYER_COMMON_PARAMS_FILENAME;
+
+    QSettings config(fileName, QSettings::IniFormat);
+
+    config.beginGroup(TX_KEYER_COMMON_PARAMS_GROUPNAME);
+    config.setValue("ViewMode", settings.viewMode == KeyerViewMode::Tabbed ? "Tabbed" : "Standalone");
+    config.setValue("StandaloneKeyer", settings.standaloneKeyerName);
+    config.setValue("TabbedKeyers", settings.tabbedKeyersName);
+    config.setValue("ActiveTab", settings.activeTab);
+    config.endGroup();
 }
 
 

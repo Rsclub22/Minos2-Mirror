@@ -44,7 +44,7 @@ private:
 
     TxKeyerCapabilities voiceCap;
 
-    int numButtons = MININUM_BUTTONS;
+    int numButtons = MINIMUM_BUTTONS;
     int maxNumButtons = MAXIMUM_BUTTONS;
 
     void initSetup();

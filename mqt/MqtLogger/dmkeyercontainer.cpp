@@ -120,28 +120,64 @@ DMKeyerContainer::DMKeyerContainer(QWidget *parent)
     connect(tabWidget, &QTabWidget::tabCloseRequested, this, &DMKeyerContainer::onTabCloseRequested);
 
 
-    txKeyerSelect->blockSignals(true);  // Prevent signals during setup
+    // get saved keyerstate and names
+    txKeyerCommonSettings = TxKeyerCommon::loadTxKeyerCommonSettings();
 
-    // get saved keyerType
-    QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + VOICEKEYER_COMMON_PARAMS_FILENAME;
-    QSettings config(fileName, QSettings::IniFormat);
-    config.beginGroup(VOICEKEYER_COMMON_PARAMS_GROUPNAME);
+    if(txKeyerCommonSettings.viewMode == KeyerViewMode::Standalone)
+    {
+        QSignalBlocker blocker(txKeyerSelect);
 
-    keyerSettings->setCurrentKeyerName(config.value("KeyerName").toString());
+        txKeyerFactory->populateComboKeyerList(txKeyerSelect, keyerSettings->getCurrentKeyerName());
 
-    txKeyerSelect->blockSignals(true);  // Prevent signals during setup
-    txKeyerFactory->populateComboKeyerList(txKeyerSelect, keyerSettings->getCurrentKeyerName());
+        // we add digi modes to list, though it will not act as keyer
+        txKeyerSelect->addItem(getTxKeyerDisplayName(TxKeyerId::DigitalModes));
 
-    // we add digi modes to list, though it will not act as keyer
-    txKeyerSelect->addItem(getTxKeyerDisplayName(TxKeyerId::DigitalModes));
 
-    txKeyerSelect->blockSignals(false);
+        switchToStandaloneMode();
 
-    // Initial mode is standalone
-    switchToStandaloneMode();
-    updateViewModeButton();
+        keyerSettings->setCurrentKeyerName(txKeyerCommonSettings.standaloneKeyerName);
 
-    initialKeyerSelection();
+        int index = txKeyerSelect->findText(txKeyerCommonSettings.standaloneKeyerName);
+        if (index >= 0)
+        {
+            txKeyerSelect->setCurrentIndex(index);
+        }
+        else
+        {
+           txKeyerSelect->setCurrentIndex(0);
+        }
+        updateViewModeButton();
+
+        initialKeyerSelection();
+    }
+    else
+    {
+        if(txKeyerCommonSettings.viewMode == KeyerViewMode::Tabbed &&
+            txKeyerCommonSettings.tabbedKeyersName.isEmpty())
+        {
+            // fallback
+            txKeyerCommonSettings.viewMode = KeyerViewMode::Standalone;
+        }
+        else
+        {
+            QSignalBlocker blocker(tabWidget);
+
+            switchToTabbedMode();
+
+            for(const QString &name : txKeyerCommonSettings.tabbedKeyersName)
+            {
+                addKeyerTab(name);
+            }
+
+            tabWidget->setCurrentIndex(txKeyerCommonSettings.activeTab);
+
+            updateViewModeButton();
+        }
+
+
+    }
+
+
 
 }
 

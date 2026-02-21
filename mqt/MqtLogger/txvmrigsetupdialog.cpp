@@ -50,7 +50,7 @@ void TxVmRigSetupDialog::accept()
 void TxVmRigSetupDialog::initSetup()
 {
 
-    ui->numButtons->setRange(MININUM_BUTTONS, maxNumButtons);
+    ui->numButtons->setRange(MINIMUM_BUTTONS, maxNumButtons);
     ui->numButtons->setValue(numButtons);
 
     if (voiceCap.getSupportSerial())
@@ -157,7 +157,7 @@ void TxVmRigSetupDialog::onNumButtonsValueChanged(int num)
 void TxVmRigSetupDialog::setMaxNumOfButtons(int maxNumButtons)
 {
 
-    ui->numButtons->setRange(MININUM_BUTTONS, maxNumButtons);
+    ui->numButtons->setRange(MINIMUM_BUTTONS, maxNumButtons);
 }
 
 
