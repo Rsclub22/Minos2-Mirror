@@ -112,10 +112,7 @@ DMKeyerContainer::DMKeyerContainer(QWidget *parent)
     // Connections
     connect(modeToggleButton, &QPushButton::clicked, this, &DMKeyerContainer::onModeToggleClicked);
     connect(addKeyerButton, &QPushButton::clicked, this, &DMKeyerContainer::onAddKeyerClicked);
-    connect(txKeyerSelect,
-            QOverload<int>::of(&QComboBox::currentIndexChanged),
-            this,
-            &DMKeyerContainer::onKeyerSelectChanged);
+    connect(txKeyerSelect, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &DMKeyerContainer::onKeyerSelectChanged);
     connect(tabWidget, &QTabWidget::currentChanged, this, &DMKeyerContainer::onTabChanged);
     connect(tabWidget, &QTabWidget::tabCloseRequested, this, &DMKeyerContainer::onTabCloseRequested);
 
@@ -138,14 +135,8 @@ DMKeyerContainer::DMKeyerContainer(QWidget *parent)
         keyerSettings->setCurrentKeyerName(txKeyerCommonSettings.standaloneKeyerName);
 
         int index = txKeyerSelect->findText(txKeyerCommonSettings.standaloneKeyerName);
-        if (index >= 0)
-        {
-            txKeyerSelect->setCurrentIndex(index);
-        }
-        else
-        {
-           txKeyerSelect->setCurrentIndex(0);
-        }
+        txKeyerSelect->setCurrentIndex(index >= 0 ? index : 0);
+
         updateViewModeButton();
 
         initialKeyerSelection();
@@ -153,10 +144,11 @@ DMKeyerContainer::DMKeyerContainer(QWidget *parent)
     else
     {
         if(txKeyerCommonSettings.viewMode == KeyerViewMode::Tabbed &&
-            txKeyerCommonSettings.tabbedKeyersName.isEmpty())
+            txKeyerCommonSettings.tabbedKeyerNames.isEmpty())
         {
             // fallback
             txKeyerCommonSettings.viewMode = KeyerViewMode::Standalone;
+            saveTxKeyerCommonSettings(txKeyerCommonSettings);
         }
         else
         {
@@ -164,12 +156,19 @@ DMKeyerContainer::DMKeyerContainer(QWidget *parent)
 
             switchToTabbedMode();
 
-            for(const QString &name : txKeyerCommonSettings.tabbedKeyersName)
+            for(const QString &name : txKeyerCommonSettings.tabbedKeyerNames)
             {
                 addKeyerTab(name);
             }
 
-            tabWidget->setCurrentIndex(txKeyerCommonSettings.activeTab);
+            int index = txKeyerCommonSettings.activeTab;
+
+            if (index < 0 || index >= tabWidget->count())
+            {
+                index = 0;
+            }
+
+            tabWidget->setCurrentIndex(index);
 
             updateViewModeButton();
         }
@@ -199,16 +198,11 @@ void DMKeyerContainer::onKeyerSelectChanged(int) // ignoring index
     if (keyerSettings->getCurrentKeyerName() != keyerName)
     {
 
-        keyerSettings->setCurrentKeyerName(keyerName);
+        txKeyerCommonSettings.standaloneKeyerName = keyerName;
 
         // save new keyertype
-        QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + VOICEKEYER_COMMON_PARAMS_FILENAME;
-        QSettings config(fileName, QSettings::IniFormat);
-        config.beginGroup(VOICEKEYER_COMMON_PARAMS_GROUPNAME);
+        saveTxKeyerCommonSettings(txKeyerCommonSettings);
 
-        config.setValue("KeyerName", keyerName);
-
-        config.endGroup();
 
 
         emit keyerSelectChanged();
@@ -217,16 +211,18 @@ void DMKeyerContainer::onKeyerSelectChanged(int) // ignoring index
 }
 
 
-void DMKeyerContainer::setContainerViewMode(ContainerViewMode mode)
+void DMKeyerContainer::setContainerViewMode(const KeyerViewMode &viewMode)
 {
-    if (mode == keyerSettings->getCurrentContainerViewMode())
+    if (viewMode == txKeyerCommonSettings.viewMode)
     {
         return;
     }
 
-    keyerSettings->setCurrentContainerMode(mode);
+    txKeyerCommonSettings.viewMode = viewMode;
 
-    if (mode == StandaloneMode)
+    saveTxKeyerCommonSettings(txKeyerCommonSettings);
+
+    if (viewMode == KeyerViewMode::Standalone)
     {
         switchToStandaloneMode();
     }
@@ -236,7 +232,7 @@ void DMKeyerContainer::setContainerViewMode(ContainerViewMode mode)
     }
 
     updateViewModeButton();
-    emit containerModeChanged(mode);
+    emit containerModeChanged(viewMode);
 }
 
 void DMKeyerContainer::switchToStandaloneMode()
@@ -272,7 +268,7 @@ void DMKeyerContainer::switchToTabbedMode()
 
 void DMKeyerContainer::updateViewModeButton()
 {
-    if (keyerSettings->getCurrentContainerViewMode() == StandaloneMode)
+    if (txKeyerCommonSettings.viewMode == KeyerViewMode::Standalone)
     {
         modeToggleButton->setText(tr("Switch to Tabs"));
         modeToggleButton->setIcon(QIcon(":/icons/tabs.png")); // Optional
@@ -286,29 +282,30 @@ void DMKeyerContainer::updateViewModeButton()
 
 void DMKeyerContainer::onModeToggleClicked()
 {
-    if (keyerSettings->getCurrentContainerViewMode() == StandaloneMode)
-    {
-        setContainerViewMode(TabbedMode);
-    }
-    else
-    {
-        setContainerViewMode(StandaloneMode);
-    }
+    KeyerViewMode newViewMode = KeyerViewMode::Standalone;
 
-    // Save preference
-    QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() +
-                       VOICEKEYER_COMMON_PARAMS_FILENAME;
-    QSettings config(fileName, QSettings::IniFormat);
-    config.beginGroup(VOICEKEYER_COMMON_PARAMS_GROUPNAME);
-    config.setValue("ContainerMode", keyerSettings->getCurrentContainerViewMode() == TabbedMode ? "Tabbed" : "Standalone");
-    config.endGroup();
+    if (txKeyerCommonSettings.viewMode == KeyerViewMode::Standalone)
+    {
+        if (txKeyerCommonSettings.standaloneKeyerName.isEmpty())
+        {
+            return; // don't switch to Tabbed mode if no keyer is selected
+        }
+
+        newViewMode = KeyerViewMode::Tabbed;
+    }
+    //else
+    //{
+    //    txKeyerCommonSettings.viewMode = KeyerViewMode::Standalone;
+    //}
+
+    setContainerViewMode(newViewMode); // save setting in this function
 }
 
 
 
 void DMKeyerContainer::addKeyerTab(const QString &keyerType)
 {
-    if (keyerSettings->getCurrentContainerViewMode() != TabbedMode)
+    if (txKeyerCommonSettings.viewMode != KeyerViewMode::Tabbed)
     {
         return;
     }
@@ -343,6 +340,10 @@ void DMKeyerContainer::addKeyerTab(const QString &keyerType)
     // Track this keyer type
     keyerTypesInUse[keyerType] = newTab;
 
+    txKeyerCommonSettings.tabbedKeyerNames.append(keyerType);
+
+    saveTxKeyerCommonSettings(txKeyerCommonSettings);
+
     // If this is the first tab, make it active
     if (tabWidget->count() == 1)
     {
@@ -350,11 +351,12 @@ void DMKeyerContainer::addKeyerTab(const QString &keyerType)
     }
 
 
+
 }
 
 void DMKeyerContainer::onAddKeyerClicked()
 {
-    if (keyerSettings->getCurrentContainerViewMode() != TabbedMode)
+    if (txKeyerCommonSettings.viewMode != KeyerViewMode::Tabbed)
     {
         return;
     }
@@ -391,10 +393,13 @@ void DMKeyerContainer::onAddKeyerClicked()
 
 void DMKeyerContainer::onTabChanged(int index)
 {
-    if (keyerSettings->getCurrentContainerViewMode() != TabbedMode)
+    if (txKeyerCommonSettings.viewMode != KeyerViewMode::Tabbed)
     {
         return;
     }
+
+    txKeyerCommonSettings.activeTab = index;
+    saveTxKeyerCommonSettings(txKeyerCommonSettings);
 
     if (index < 0 || index >= tabWidget->count())
     {
@@ -408,7 +413,7 @@ void DMKeyerContainer::onTabChanged(int index)
 
 void DMKeyerContainer::onTabCloseRequested(int index)
 {
-    if (keyerSettings->getCurrentContainerViewMode() != TabbedMode)
+    if (txKeyerCommonSettings.viewMode != KeyerViewMode::Tabbed)
     {
         return;
     }
@@ -447,6 +452,7 @@ void DMKeyerContainer::onTabCloseRequested(int index)
 
     // Remove from tracking
     keyerTypesInUse.remove(tab->getKeyerType());
+    txKeyerCommonSettings.tabbedKeyerNames.removeOne(tab->getKeyerType());
 
     // If this was active, clear it
     if (tab == activeTab)
@@ -465,11 +471,15 @@ void DMKeyerContainer::onTabCloseRequested(int index)
         KeyerTab *newActiveTab = qobject_cast<KeyerTab*>(tabWidget->widget(currentIndex));
         updateActiveTab(newActiveTab);
     }
+
+    saveTxKeyerCommonSettings(txKeyerCommonSettings);
+
+
 }
 
 void DMKeyerContainer::removeCurrentTab()
 {
-    if (keyerSettings->getCurrentContainerViewMode() != TabbedMode)
+    if (txKeyerCommonSettings.viewMode != KeyerViewMode::Tabbed)
     {
         return;
     }
@@ -483,7 +493,7 @@ void DMKeyerContainer::removeCurrentTab()
 
 int DMKeyerContainer::getTabCount() const
 {
-    if (keyerSettings->getCurrentContainerViewMode() == TabbedMode)
+    if (txKeyerCommonSettings.viewMode == KeyerViewMode::Tabbed)
     {
         return tabWidget->count();
     }

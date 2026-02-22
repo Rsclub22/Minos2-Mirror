@@ -300,7 +300,7 @@ TxKeyerCommonSettings TxKeyerCommon::loadTxKeyerCommonSettings()
 
     settings.viewMode = (viewModeStr == "Tabbed") ? KeyerViewMode::Tabbed : KeyerViewMode::Standalone;
     settings.standaloneKeyerName = config.value("StandaloneKeyerName", "").toString();
-    settings.tabbedKeyersName = config.value("TabbedKeyers", QStringList()).toStringList();
+    settings.tabbedKeyerNames = config.value("TabbedKeyers", QStringList()).toStringList();
     settings.activeTab = config.value("ActiveTab", 0).toInt();
 
     config.endGroup();
@@ -319,7 +319,16 @@ void TxKeyerCommon::saveTxKeyerCommonSettings(const TxKeyerCommonSettings &setti
     config.beginGroup(TX_KEYER_COMMON_PARAMS_GROUPNAME);
     config.setValue("ViewMode", settings.viewMode == KeyerViewMode::Tabbed ? "Tabbed" : "Standalone");
     config.setValue("StandaloneKeyer", settings.standaloneKeyerName);
-    config.setValue("TabbedKeyers", settings.tabbedKeyersName);
+
+    if (!settings.tabbedKeyerNames.isEmpty()) // dont save an empty list to prevent writing @invalid
+    {
+        config.setValue("TabbedKeyers", settings.tabbedKeyerNames);
+    }
+    else
+    {
+        config.remove("TabbedKeyers"); // ensures no @Invalid() in INI
+    }
+
     config.setValue("ActiveTab", settings.activeTab);
     config.endGroup();
 }

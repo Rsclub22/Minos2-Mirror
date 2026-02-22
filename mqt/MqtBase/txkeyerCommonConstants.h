@@ -154,7 +154,7 @@ namespace TxKeyerCommon
 
         QString standaloneKeyerName;
 
-        QStringList tabbedKeyersName;
+        QStringList tabbedKeyerNames = QStringList();
 
         int activeTab = 0;
     };

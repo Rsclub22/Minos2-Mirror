@@ -27,10 +27,10 @@ class RadioSettingsDialogChangeFlag;
 class KeyerTab;
 class KeyerSettings;
 
-enum ContainerViewMode {
-    StandaloneMode,  // Single DMButtonFrame with combo box (original behavior)
-    TabbedMode       // Multiple tabs, each with one keyer type
-};
+//enum ContainerViewMode {
+//    StandaloneMode,  // Single DMButtonFrame with combo box (original behavior)
+//    TabbedMode       // Multiple tabs, each with one keyer type
+//};
 
 //=============================================================================
 // Main container that can switch between standalone and tabbed modes
@@ -96,7 +96,7 @@ signals:
     void sendFreqControl(Frequency freq);
     void sendWpmToPcCwkeyer(int wpm);
     void sendModeToRadio(const QString &mode);
-    void containerModeChanged(ContainerViewMode newMode);
+    void containerModeChanged(TxKeyerCommon::KeyerViewMode newMode);
 
     void selectedRadioChanged();
     void isRadioConnectedChanged(bool connected);
@@ -178,7 +178,7 @@ private:
     // Contest reference
     LoggerContestLog *currentContest;
     void logMessage(QString msg);
-    void setContainerViewMode(ContainerViewMode mode);
+    void setContainerViewMode(const KeyerViewMode &viewMode);
     void initialKeyerSelection();
 };
 
@@ -236,9 +236,6 @@ public:
     }
 
 
-
-    ContainerViewMode getCurrentContainerViewMode() const { return currentContainerViewMode; }
-    void setCurrentContainerMode(ContainerViewMode mode){ currentContainerViewMode = mode;};
 
     TxKeyerId getCurrentKeyerId() const { return currentKeyerId; }
     void setCurrentKeyerId(TxKeyerId id) {
@@ -593,7 +590,6 @@ public:
 private:
 
     LoggerContestLog* currentContest = nullptr;
-    ContainerViewMode currentContainerViewMode = ContainerViewMode::StandaloneMode;
     TxKeyerId currentKeyerId = TxKeyerId::None;
     QString currentKeyerName = getTxKeyerDisplayName(TxKeyerId::None);
 
