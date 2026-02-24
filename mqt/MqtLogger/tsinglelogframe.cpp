@@ -8,6 +8,8 @@
 #include "ContestApp.h"
 #include "MatchThread.h"
 #include "BandList.h"
+#include "ScreenConfigManager.h"
+#include "StackedInfoFrame.h"
 #include "cutils.h"
 #include "delayedaction.h"
 #include "dmbuttonframe.h"
@@ -664,7 +666,7 @@ void TSingleLogFrame::buildRow(ContestPage *cp, SCRow &scrow, int &auxInstance, 
                 {
                     StackedInfoFrame *f = new StackedInfoFrame(elementScrollArea, auxInstance++, this);
 
-                    f->setCurrentFrameType(StackedInfoFrame::getTrAuxTypeString(scele.auxType));
+                    f->setCurrentFrameType(AuxTypeOption::getTrAuxTypeString(scele.auxType));
                     elementScrollArea->setWidget(f);
                     f->setContest(ct);
                     f->setVisible(true);
@@ -1043,19 +1045,15 @@ void TSingleLogFrame::doSendEntry(QString /*expName*/)
                              "year=%2&"
                              "Contest=%3&"
                              "Band=%4&"
-                             "Req=Date&"
-                             "Section=%5&"
-                             "Category=%6&"
-                             "Club=%7&"
+                             "Req=Date&")
+                     .arg(site, year, cname, band)
+                     + QString(
+                             "Section=%1&"
+                             "Category=%2&"
+                             "Club=%3&"
                              "this=NEXT"
                              )
-                         .arg(site)
-                         .arg(year)
-                         .arg(cname)
-                         .arg(band)
-                         .arg(section)
-                         .arg(category)
-                         .arg(club)
+                         .arg(section, category, club)
         ;
 
     target.replace(" ", "+");    // replaces in-situ

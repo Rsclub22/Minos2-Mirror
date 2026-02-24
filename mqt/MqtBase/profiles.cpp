@@ -11,15 +11,8 @@
 #include "clustercommon.h"
 #include "profiles.h"
 
-//#include "ScreenConfigFile.h"
-QString defaultLayoutName()
-{
-    return QCoreApplication::translate("Default Screen Config", "default");
-}
-QString defaultProtectedLayoutName()
-{
-    return QCoreApplication::translate("Default Protected Screen Config", "protected");
-}
+#include "ScreenConfigManager.h"
+
 QString defaultSessionName()
 {
     return QCoreApplication::translate("Default Contest Set", "Default Set");

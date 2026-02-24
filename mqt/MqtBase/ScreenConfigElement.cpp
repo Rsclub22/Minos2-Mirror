@@ -1,5 +1,6 @@
 #include <QStandardItemModel>
 #include <QListView>
+#include <QSortFilterProxyModel>
 
 #include "QtUtils.h"
 #include "MMessageDialog.h"
@@ -11,36 +12,12 @@
 #include "ScreenConfigElement.h"
 #include "ui_ScreenConfigElement.h"
 
-QVector <SCTypeOption> ScreenConfigElement::scoptions =
+QVector <SCTypeOption> ScreenConfigElement::scoptions;
+
+void ScreenConfigElement::setScreenOptions(QVector <SCTypeOption> &sco)
 {
-    {sctMainScreen, QT_TR_NOOP("mainscreen"), QT_TR_NOOP("Main Screen")},
-    {sctScreen, QT_TR_NOOP("screen"), QT_TR_NOOP("Secondary Screen")},
-    {sctAux, QT_TR_NOOP("Auxiliary"), QT_TR_NOOP("Auxiliary Display")},
-    {sctChat, QT_TR_NOOP("Chat Display"), QT_TR_NOOP("Chat Display")},
-    {sctCluster, QT_TR_NOOP("Cluster Display"), QT_TR_NOOP("Cluster Display")},
-    {sctLog, QT_TR_NOOP("Log List"), QT_TR_NOOP("QSO Log List")},
-    {sctNextQSODetails, QT_TR_NOOP("Next QSO Details"), QT_TR_NOOP("Next QSO details")},
-    {sctQSOEdit, QT_TR_NOOP("QSO Edit"), QT_TR_NOOP("QSO Edit")},
-    {sctRigControl, QT_TR_NOOP("Rig Control"), QT_TR_NOOP("Rig Control")},
-    {sctBandSwitch, QT_TR_NOOP("HF Band Switching"), QT_TR_NOOP("HF Band Switching")},
-    {sctRunButtons, QT_TR_NOOP("Call Freq Buttons"), QT_TR_NOOP("Run Freq Buttons")},
-    {sctRotControl, QT_TR_NOOP("Rotator Control"), QT_TR_NOOP("Rotator Control")},
-    {sctSkyScanControl, QT_TR_NOOP("SkyScan Control"), QT_TR_NOOP("SkyScan Control")},
-    {sctRotCompassDisplay, QT_TR_NOOP("Rotator Compass Display"), QT_TR_NOOP("Rotator Compass Display")},
-    {sctRotPresets, QT_TR_NOOP("Rotator Presets"), QT_TR_NOOP("Rotator Presets")},
-    {sctRotSkyScanPresets, QT_TR_NOOP("SkyScan Presets"), QT_TR_NOOP("SkyScan Presets")},
-    {sctThisMatch, QT_TR_NOOP("This Contest Match"), QT_TR_NOOP("This Contest Matches")},
-    {sctOtherMatch, QT_TR_NOOP("Other Contest Match"), QT_TR_NOOP("Other Contest Matches") },
-    {sctArchiveMatch, QT_TR_NOOP("Archive Match"), QT_TR_NOOP("Archive List Matches") },
-    {sctWsjtx, QT_TR_NOOP("WSJT-X Connector"), QT_TR_NOOP("WSJT-X Connector") },
-    {sctBandmap, QT_TR_NOOP("Bandmap Display"), QT_TR_NOOP("Bandmap Display")},
-    {sctSplit, QT_TR_NOOP("HSplit"), QT_TR_NOOP("Horizontally split element")},
-    {sctTxVmButtons, QT_TR_NOOP("Keyer"), QT_TR_NOOP("Keyer")},
-    {sctQrzDisplay, QT_TR_NOOP("QRZ Display"), QT_TR_NOOP("QRZ Display")},
-    {sctQsoMap, QT_TR_NOOP("QSO Map"), QT_TR_NOOP("QSO Map")},
-    {sctDMButtons, QT_TR_NOOP("Data Modes Buttons"), QT_TR_NOOP("Data Modes Buttons")},
-    {sctNone, QT_TR_NOOP("None"), QT_TR_NOOP("Not in use")}
-};
+    scoptions = sco;
+}
 SCType ScreenConfigElement::getScreenType(QString s)
 {
     for(auto const  &opt: QASCONST(scoptions))
@@ -145,9 +122,9 @@ ScreenConfigElement::ScreenConfigElement(ScreenConfigRow *parentrow, ScreenConfi
     qobject_cast<QListView *>(ui->elementTypeCombo->view())->setRowHidden(pind.row(), true);
 
     i = 0;
-    for(auto const &opt: QASCONST(StackedInfoFrame::auxoptions))
+    for(auto const &opt: QASCONST(AuxTypeOption::auxoptions))
     {
-        QString s = StackedInfoFrame::getTrAuxTypeString(opt.type);
+        QString s = AuxTypeOption::getTrAuxTypeString(opt.type);
         ui->auxTypeCombo->addItem(s, opt.type);
         ui->auxTypeCombo->setItemData( i++, tr(opt.hint), Qt::ToolTipRole );
     }
@@ -180,14 +157,14 @@ SCType ScreenConfigElement::getType() const
     return static_cast<SCType>(t);
 }
 
-void ScreenConfigElement::setAuxType(AuxEntries ae)
+void ScreenConfigElement::setAuxType(AuxEntryType ae)
 {
-    ui->auxTypeCombo->setCurrentText(StackedInfoFrame::getTrAuxTypeString(ae));
+    ui->auxTypeCombo->setCurrentText(AuxTypeOption::getTrAuxTypeString(ae));
 }
-AuxEntries ScreenConfigElement::getAuxType() const
+AuxEntryType ScreenConfigElement::getAuxType() const
 {
     int t = ui->auxTypeCombo->itemData(ui->auxTypeCombo->currentIndex()).toInt();
-    return static_cast<AuxEntries>(t);
+    return static_cast<AuxEntryType>(t);
 }
 
 void ScreenConfigElement::on_elementTypeCombo_activated(int /*arg1*/)
@@ -247,7 +224,7 @@ void ScreenConfigElement::on_splitAboveButton_clicked()
     trace("ScreenConfigElement::on_splitAboveButton_clicked");
 
     SCType t = getType();
-    AuxEntries aux = getAuxType();
+    AuxEntryType aux = getAuxType();
     setIsSplitElement(true);
     setType(sctSplit);
 
@@ -274,7 +251,7 @@ void ScreenConfigElement::on_splitBelowButton_clicked()
     // and replace "this" with the new one
 
     SCType t = getType();
-    AuxEntries aux = getAuxType();
+    AuxEntryType aux = getAuxType();
     setIsSplitElement(true);
 
     ScreenConfigRow *baseRow = new ScreenConfigRow(this);

@@ -12,6 +12,7 @@
 #include "kstplanesmodel.h"
 #include "cutils.h"
 #include "airscoutlink.h"
+#include "kstscreenoptions.h"
 
 
 QT_BEGIN_NAMESPACE
@@ -30,7 +31,8 @@ class QPushButton;
 class KSTMainWindow : public QMainWindow
 {
     Q_OBJECT
-
+private:
+    KSTScreenOptions kstScreenOptions;
     QTimer CloseTimer;
     QTimer userCallTimer;
 
@@ -285,6 +287,11 @@ private slots:
 
     void on_messageTable_doubleClicked(const QModelIndex &index);
 
+    void on_layoutButton_clicked();
+
+    void onScreenConfigApply(QString curConfigName);
+    void onSetDefaultName(QString def);
+    void onSetProtectedName(QString prot);
 private:
     Ui::KSTMainWindow *ui;
     QSharedPointer<CommandReader> commandReader = QSharedPointer<CommandReader>(new CommandReader(this));

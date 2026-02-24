@@ -8,6 +8,7 @@
 #include "locTreeFrame.h"
 #include "locframe.h"
 #include "tstatsdispframe.h"
+#include "auxentries.h"
 
 namespace Ui {
 class StackedInfoFrame;
@@ -15,39 +16,17 @@ class StackedInfoFrame;
 extern bool showWorked;
 extern bool showUnworked ;
 
-enum AuxEntries {
-    aeClock,
-    aeDXCC,
-    aeDistrict,
-    aeMemories,
-    aeLocatorMap,
-    aeLocatorTree,
-    aeStats
-};
-class AuxTypeOption
-{
-public:
-    AuxEntries type;
-    const char * s;
-    const char * hint;
-};
-
 class StackedInfoFrame : public QFrame
 {
     Q_OBJECT
 
 public:
-    static QVector <AuxTypeOption> auxoptions;
     TSingleLogFrame *tslf;
 
     explicit StackedInfoFrame(QWidget *parent, int instance, TSingleLogFrame *t);
     ~StackedInfoFrame();
 
     void setCurrentFrameType(QString);
-
-    static AuxEntries getAuxEntryType(QString s);
-    static const char *getRawAuxTypeString(AuxEntries t);
-    static QString getTrAuxTypeString(AuxEntries t);
 
 private:
     Ui::StackedInfoFrame *ui;

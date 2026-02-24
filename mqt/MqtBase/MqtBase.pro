@@ -38,6 +38,7 @@ SOURCES += \
     MonitoredLog.cpp \
     StartConfigManager.cpp \
     StatisticsDisplay.cpp \
+    auxentries.cpp \
     bandmapclientfilterdialog.cpp \
     bandmapcommon.cpp \
     bandmapmarkerdetails.cpp \
@@ -119,6 +120,7 @@ SOURCES += \
     ScreenConfigScreen.cpp \
     ScreenContact.cpp \
     StartConfig.cpp \
+    screenconfigtypes.cpp \
     serialdata.cpp \
     serialtvswitch.cpp \
     spotbasedata.cpp \
@@ -149,6 +151,7 @@ HEADERS += \
     MonitoredLog.h \
     StartConfigManager.h \
     StatisticsDisplay.h \
+    auxentries.h \
     bandmapclientfilterdialog.h \
     bandmapmarkerdetails.h \
     CacheSelection.h \
@@ -234,6 +237,7 @@ HEADERS += \
     ScreenConfigScreen.h \
     ScreenContact.h \
     StartConfig.h \
+    screenconfigtypes.h \
     serialCommonData.h \
     serialdata.h \
     serialtvswitch.h \

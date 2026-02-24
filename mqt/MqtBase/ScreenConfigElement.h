@@ -1,9 +1,12 @@
 #ifndef SCREENCONFIGELEMENT_H
 #define SCREENCONFIGELEMENT_H
 
-#include "StackedInfoFrame.h"
+#include <QSharedPointer>
+#include <QFrame>
+//#include "StackedInfoFrame.h"
 #include "ScreenConfigFile.h"
 #include "ScreenConfig.h"
+#include "auxentries.h"
 
 class ScreenConfigScreen;
 class ScreenConfigRow;
@@ -22,7 +25,7 @@ class ScreenConfigElement;
 class ScreenConfigElement : public QFrame
 {
     Q_OBJECT
-    static QVector <SCTypeOption> scoptions;
+    static  QVector <SCTypeOption> scoptions;
 public:
     Ui::ScreenConfigElement *ui;
     QVBoxLayout *vbl = nullptr;
@@ -33,8 +36,8 @@ public:
     void setType(SCType);
     SCType getType() const;
 
-    void setAuxType(AuxEntries);
-    AuxEntries getAuxType() const;
+    void setAuxType(AuxEntryType);
+    AuxEntryType getAuxType() const;
 
     bool getIsSplitElement() const;
     void setIsSplitElement(bool value);
@@ -49,6 +52,7 @@ public:
     static QString getTrScreenHint(SCType s);
     static const char *getRawScreenTypeString(SCType t);
     static const char *getRawScreenHint(SCType t);
+    static void setScreenOptions(QVector<SCTypeOption> &sco);
 private slots:
     void on_elementTypeCombo_activated(int arg1);
 

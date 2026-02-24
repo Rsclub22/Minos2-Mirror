@@ -22,6 +22,7 @@ SOURCES += \
     kstmessagegridmodel.cpp \
     kstmonitoredlogs.cpp \
     kstplanesmodel.cpp \
+    kstscreenoptions.cpp \
     main.cpp \
     kstmainwindow.cpp
 
@@ -34,7 +35,8 @@ HEADERS += \
     kstmainwindow.h \
     kstmessagegridmodel.h \
     kstmonitoredlogs.h \
-    kstplanesmodel.h
+    kstplanesmodel.h \
+    kstscreenoptions.h
 
 FORMS += \
     changename.ui \

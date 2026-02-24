@@ -1,17 +1,24 @@
-#include "regsettings.h"
-#include "ContestApp.h"
-#include "tsinglelogframe.h"
-#include "tlogcontainer.h"
-#include "enqdlg.h"
+#include <QSettings>
 
+#include "QtUtils.h"
+#include "regsettings.h"
+#include "enqdlg.h"
+#include "MinosParameters.h"
 #include "ScreenConfig.h"
 #include "ScreenConfigManager.h"
 #include "ui_ScreenConfigManager.h"
 
 const char * ScreenConfigManager::defLayoutText = QT_TR_NOOP("(default)");
 const char * ScreenConfigManager::protectedLayoutText = QT_TR_NOOP("(protected)");
-
-ScreenConfigManager::ScreenConfigManager(QWidget *parent) :
+QString defaultLayoutName()
+{
+    return QCoreApplication::translate("Default Screen Config", "default");
+}
+QString defaultProtectedLayoutName()
+{
+    return QCoreApplication::translate("Default Protected Screen Config", "protected");
+}
+ScreenConfigManager::ScreenConfigManager(QWidget *parent, QString ccname, QString def, QString prot) :
     QDialog(parent),
     ui(new Ui::ScreenConfigManager),
     scf(ScreenConfigFile::getScreenConfigFile(parent))
@@ -26,14 +33,9 @@ ScreenConfigManager::ScreenConfigManager(QWidget *parent) :
 
 
     scf.loadFile(this);
-    curConfigName = defaultLayoutName();
-
-    TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
-    if (tslf)
-        curConfigName = tslf->getCurScreenLayout();
-
-    MinosParameters::getMinosParameters() -> getStringDisplayProfile( edpDefaultLayout, defaultConfigName );
-    MinosParameters::getMinosParameters() -> getStringDisplayProfile( edpProtectedLayout, protectedConfigName );
+    curConfigName = ccname;
+    defaultConfigName = def;
+    protectedConfigName = prot;
 }
 int ScreenConfigManager::exec()
 {
@@ -259,8 +261,8 @@ void ScreenConfigManager::onScreenConfigApply(QString curConfigName)
 void ScreenConfigManager::on_OKButton_clicked()
 {
     on_applyButton_clicked();
-    MinosParameters::getMinosParameters() -> setStringDisplayProfile( edpDefaultLayout, defaultConfigName );
-    MinosParameters::getMinosParameters() -> setStringDisplayProfile( edpProtectedLayout, protectedConfigName );
+    emit setDefaultName(defaultConfigName);
+    emit setProtectedName(protectedConfigName);
     close();
 }
 
@@ -269,8 +271,7 @@ void ScreenConfigManager::on_applyButton_clicked()
     // write it back, or the screen redraw doesn't work
     scf.dumpFile();
 
-    LogContainer->selectLayout(curConfigName);
-    LogContainer->selectSession(TContestApp::getContestApp()->currSession);
+    emit screenConfigApply(curConfigName);
 }
 
 void ScreenConfigManager::on_cancelButton_clicked()
@@ -281,13 +282,13 @@ void ScreenConfigManager::on_cancelButton_clicked()
 void ScreenConfigManager::on_makeDefaultButton_clicked()
 {
     defaultConfigName = curConfigName;
-    MinosParameters::getMinosParameters() -> setStringDisplayProfile( edpDefaultLayout, curConfigName );
+    emit setDefaultName(defaultConfigName);
     showDetails();
 }
 
 void ScreenConfigManager::on_protectedButton_clicked()
 {
     protectedConfigName = curConfigName;
-    MinosParameters::getMinosParameters() -> setStringDisplayProfile( edpProtectedLayout, curConfigName );
+    emit setProtectedName(protectedConfigName);
     showDetails();
 }

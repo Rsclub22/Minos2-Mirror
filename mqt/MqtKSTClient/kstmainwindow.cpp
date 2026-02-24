@@ -5,6 +5,7 @@
 
 #include "QtUtils.h"
 #include "RPCCommandConstants.h"
+#include "ScreenConfigManager.h"
 #include "regsettings.h"
 #include "AppStartup.h"
 #include "MShowMessageDlg.h"
@@ -1261,10 +1262,10 @@ void KSTMainWindow::showPlanes(QSharedPointer<KstUser> user)
     }
     else
     {
-        QString l = QString("%1\n%2 at %3\nto %4 at %5")
-                .arg(user->lastCalcTime)
-                .arg(user->fromCall).arg(user->fromLoc)
-                .arg(user->toCall).arg(user->toLoc);
+        QString l = QString("%1\n%2 at %3\n")
+                        .arg(user->lastCalcTime, user->fromCall, user->fromLoc)
+                  + QString("to %1 at %2")
+                        .arg(user->toCall, user->toLoc);
 
         ui->planeslabel->setText(l);
     }
@@ -2331,3 +2332,30 @@ void KSTMainWindow::on_messageTable_doubleClicked(const QModelIndex &index)
     }
 }
 
+void KSTMainWindow::on_layoutButton_clicked()
+{
+    QString cur;
+    QString def;
+    QString prot;
+
+    ScreenConfigManager sc(this, cur, def, prot);
+    connect(&sc, &ScreenConfigManager::screenConfigApply, this, &KSTMainWindow::onScreenConfigApply);
+    connect(&sc, &ScreenConfigManager::setDefaultName, this, &KSTMainWindow::onSetDefaultName);
+    connect(&sc, &ScreenConfigManager::setProtectedName, this, &KSTMainWindow::onSetProtectedName);
+
+    sc.exec();
+    //updateLayoutsMenu();
+
+}
+
+void KSTMainWindow::onScreenConfigApply(QString curConfigName)
+{
+    //selectLayout(curConfigName);
+    //selectSession(TContestApp::getContestApp()->currSession);
+}
+void KSTMainWindow::onSetDefaultName(QString def)
+{
+}
+void KSTMainWindow::onSetProtectedName(QString prot)
+{
+}

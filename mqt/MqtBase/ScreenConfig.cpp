@@ -1,5 +1,6 @@
 #include <QScrollBar>
 #include <QScrollArea>
+#include <QSettings>
 #include "QtUtils.h"
 #include "regsettings.h"
 //#include "../MqtLogger/ContestApp.h"

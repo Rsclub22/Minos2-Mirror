@@ -1526,8 +1526,17 @@ void TLogContainer::menuLogsActionExecute(bool)
 
 void TLogContainer::doScreenConfigAction()
 {
-    ScreenConfigManager sc(this);
+    QString cur = defaultLayoutName();
+    QString def;
+    QString prot;
+
+    MinosParameters::getMinosParameters() -> getStringDisplayProfile( edpDefaultLayout, def );
+    MinosParameters::getMinosParameters() -> getStringDisplayProfile( edpProtectedLayout, prot );
+
+    ScreenConfigManager sc(this, cur, def, prot);
     connect(&sc, &ScreenConfigManager::screenConfigApply, this, &TLogContainer::onScreenConfigApply);
+    connect(&sc, &ScreenConfigManager::setDefaultName, this, &TLogContainer::onSetDefaultName);
+    connect(&sc, &ScreenConfigManager::setProtectedName, this, &TLogContainer::onSetProtectedName);
 
     sc.exec();
     updateLayoutsMenu();
@@ -1537,6 +1546,15 @@ void TLogContainer::onScreenConfigApply(QString curConfigName)
     selectLayout(curConfigName);
     selectSession(TContestApp::getContestApp()->currSession);
 }
+void TLogContainer::onSetDefaultName(QString def)
+{
+    MinosParameters::getMinosParameters() -> setStringDisplayProfile( edpDefaultLayout, def );
+}
+void TLogContainer::onSetProtectedName(QString prot)
+{
+    MinosParameters::getMinosParameters() -> setStringDisplayProfile( edpProtectedLayout, prot );
+}
+
 void TLogContainer::ManageAppConfigsActionExecute()
 {
     StartConfigManager manageApps( this, true);   // when managing sets, include autostart

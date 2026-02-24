@@ -770,6 +770,13 @@ when user selected</string>
           </widget>
          </item>
          <item>
+          <widget class="QPushButton" name="layoutButton">
+           <property name="text">
+            <string>Layout</string>
+           </property>
+          </widget>
+         </item>
+         <item>
           <widget class="QPushButton" name="logsButton">
            <property name="text">
             <string>Logs</string>
@@ -846,7 +853,7 @@ when user selected</string>
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="callStringButtonGroup"/>
   <buttongroup name="activeChatGroup"/>
+  <buttongroup name="callStringButtonGroup"/>
  </buttongroups>
 </ui>

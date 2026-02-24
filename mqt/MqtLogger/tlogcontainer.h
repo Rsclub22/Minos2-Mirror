@@ -5,6 +5,7 @@
 #include <QMainWindow>
 #include <QMenu>
 #include <QTimer>
+#include "loggerscreenoptions.h"
 #include "n1mmbroadcast.h"
 #include "rigcontrolcommonconstants.h"
 #include "serialtvswitch.h"
@@ -40,6 +41,7 @@ public:
     explicit TLogContainer(QWidget *parent = nullptr);
     ~TLogContainer() override;
 
+    LoggerScreenOptions loggerScreenOptions;
     TSendDM *sendDM;
     N1MMBroadcast *n1mmBroadcast = nullptr;
 
@@ -252,6 +254,8 @@ private slots:
     void on_manageSpotsDatabaseActionSelected();
     void on_downloadFilesActionSelected();
     void onScreenConfigApply(QString curConfigName);
+    void onSetDefaultName(QString def);
+    void onSetProtectedName(QString prot);
 public slots:
     void onArgsReceived(QString conarg);
     void ListOpenActionExecute();

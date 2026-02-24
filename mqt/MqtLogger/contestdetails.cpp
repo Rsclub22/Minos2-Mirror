@@ -1,4 +1,5 @@
 #include "AppStartup.h"
+#include "ScreenConfigManager.h"
 #include "regsettings.h"
 #include "LoggerContest.h"
 #include "Calendar.h"
@@ -535,8 +536,9 @@ void ContestDetails::setDetails(  )
 
    QString curConfigName = contestTransferObject->screenLayout.getValue();
    if (curConfigName.isEmpty())
+   {
        curConfigName = defaultLayoutName();
-
+   }
    int j = 0;
    int crow = 0;
 

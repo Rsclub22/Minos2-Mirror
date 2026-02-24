@@ -81,6 +81,7 @@ SOURCES += \
     freqlineedit.cpp \
     locTreeFrame.cpp \
     locframe.cpp \
+    loggerscreenoptions.cpp \
     main.cpp \
     manageadifdialog.cpp \
     managebandmapspotsdb.cpp \
@@ -183,6 +184,7 @@ HEADERS  += \
     freqlineedit.h \
     locTreeFrame.h \
     locframe.h \
+    loggerscreenoptions.h \
     manageadifdialog.h \
     managebandmapspotsdb.h \
     n1mmbroadcast.h \
