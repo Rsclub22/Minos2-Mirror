@@ -997,10 +997,23 @@ void TxVmButtonsFrame::clearButtonLabels()
 void TxVmButtonsFrame::editActionSelected(int buttonNumber)
 {
     if((voiceKeyerType == keyerTypes[VoiceKeyerId::RigControl] && !isVoiceMemAvail(selectedRadio))
-        || (voiceKeyerType == keyerTypes[VoiceKeyerId::RigControl] && !isPcCwKeyerLoaded())
+        || (voiceKeyerType == keyerTypes[VoiceKeyerId::PcCwKeyer] && !isPcCwKeyerLoaded())
         || (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl] && !isCwMemTypeAvail(selectedRadio)))
     {
-        logMessage(QString("editActionSelected - rigControl voice or cw Keyer Selected, but not available for this radio or no keyer selected"));
+        if (voiceKeyerType == keyerTypes[VoiceKeyerId::RigControl])
+        {
+            logMessage(QString("editActionSelected - voice rigcontrol - selectedRadio = %1, voiceMemAvail = %2").arg(selectedRadio.getLocalName()).arg(isVoiceMemAvail(selectedRadio) ? "True" : "False"));
+        }
+        else if ((voiceKeyerType == keyerTypes[VoiceKeyerId::PcCwKeyer]))
+        {
+            logMessage(QString("editActionSelected - pcCwKeyer - isPcCwKeyerLoaded = %1").arg(isPcCwKeyerLoaded() ? "True" : "False"));
+        }
+        else if ((voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl]))
+        {
+            logMessage(QString("editActionSelected - cwRigControl - selectedRadio = %1, isCwMemTypeAvail = %2").arg(selectedRadio.getLocalName()).arg(isCwMemTypeAvail(selectedRadio) ? "True" : "False"));
+        }
+
+
         return;
     }
 

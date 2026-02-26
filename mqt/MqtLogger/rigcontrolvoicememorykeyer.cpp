@@ -189,14 +189,14 @@ int RigControlVoiceMemoryKeyer::setup(VoiceKeyerFactory *voiceKeyerFactory, int 
             if (readSaveVoiceCWMemoryButtonByRadioNameFromIni(VoiceKeyerId::RigControl))
             {
                 buttonConfig.beginGroup(selectedRadioName.replace('/', '_'));
-                txVmSetupDialog.setEomRadioButtons(buttonConfig.value("endOfMessageType", voiceKeyerCommon::VoiceCwKeyerEomTypes::Eom_None).toInt());
+                txVmSetupDialog.setEomRadioButtons(buttonConfig.value("endOfMessageType", voiceKeyerCommon::VoiceCwKeyerEomTypes::CAT).toInt());
 
                 buttonConfig.endGroup();
             }
             else
             {
                 config.beginGroup(allRadiosGrpName);
-                txVmSetupDialog.setEomRadioButtons(buttonConfig.value("endOfMessageType", voiceKeyerCommon::VoiceCwKeyerEomTypes::Eom_None).toInt());
+                txVmSetupDialog.setEomRadioButtons(buttonConfig.value("endOfMessageType", voiceKeyerCommon::VoiceCwKeyerEomTypes::CAT).toInt());
                 buttonConfig.endGroup();
             }
         }
