@@ -9,10 +9,12 @@
 #include "CommandReader.h"
 #include "kstcallgridmodel.h"
 #include "kstmessagegridmodel.h"
+#include "kstpage.h"
 #include "kstplanesmodel.h"
 #include "cutils.h"
 #include "airscoutlink.h"
 #include "kstscreenoptions.h"
+#include "minossplitter.h"
 
 
 QT_BEGIN_NAMESPACE
@@ -123,6 +125,9 @@ private:
 
 //    RemoteLogs *remoteLogs = nullptr;
 
+    void buildScreenLayout(int slotNo);
+    void clearScreenLayout(bool clearAllTabs);
+    void buildScreen(SCScreen &s, int t, int &auxInstance);
 
     void closeEvent(QCloseEvent *event) override;
 
@@ -179,6 +184,14 @@ public:
     int getASPort() const;
 
     int getASTimeout() const;
+
+    void createScreenComponents();
+
+
+    void buildRow(KSTPage *cp, SCRow &scrow, int &auxInstance, MinosSplitter *splitterParent);
+    void applyScreenLayout();
+    QString getCurScreenLayout() const;
+    void setCurScreenLayout(const QString &value);
 
 private slots:
     void CloseTimerTimer();

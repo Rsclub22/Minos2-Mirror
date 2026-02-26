@@ -137,6 +137,11 @@ ScreenConfigElement::ScreenConfigElement(ScreenConfigRow *parentrow, ScreenConfi
     ui->auxTypeCombo->setModel(proxy);
     // sort
     ui->auxTypeCombo->model()->sort(0); // Column 0
+
+    if (getType() != sctAux)
+    {
+        ui->auxTypeCombo->setVisible(false);
+    }
 }
 
 ScreenConfigElement::~ScreenConfigElement()

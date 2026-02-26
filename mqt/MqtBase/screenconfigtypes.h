@@ -31,7 +31,16 @@ enum SCType
     sctQrzDisplay,
     sctQsoMap,
     sctDMButtons,
-    sctNone
+    sctNone,
+
+    sctkChats,
+    sctkCallList,
+    sctkAirScout,
+    sctkMessageList,
+    sctkMeepList,
+    sctkActiveChat,
+    sctkSendMeep,
+    sctkButtons
 };
 
 class ScreenConfigTypes

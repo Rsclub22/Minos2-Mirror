@@ -102,6 +102,11 @@ void ScreenConfigManager::checkEnabled()
 
     enable = (curConfigName != defaultProtectedLayoutName());
     ui->makeDefaultButton->setEnabled(enable);
+
+    if (protectedConfigName.isEmpty())
+    {
+        ui->protectedButton->setVisible(false);
+    }
 }
 void ScreenConfigManager::doCloseEvent()
 {

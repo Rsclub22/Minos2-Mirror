@@ -83,6 +83,9 @@ public:
     DMButtonFrame *dmButtonFrame = nullptr;
 
     void buildRow(ContestPage *cp, SCRow &scrow, int &auxInstance, MinosSplitter *splitterParent);
+    void applyScreenLayout();
+    QString getCurScreenLayout() const;
+    void setCurScreenLayout(const QString &value);
 
     void startNextEntry();
     void goSerial( );
@@ -127,10 +130,6 @@ public:
     void getCurrentDetails(memoryData::memData &m);
 
     void checkConnections();
-
-    void applyScreenLayout();
-    QString getCurScreenLayout() const;
-    void setCurScreenLayout(const QString &value);
 
     void on_SetTransVertOffset(double offset, PubSubName psn);
     void on_SetTransVertSwitch(int switchNum, PubSubName psn);
@@ -233,13 +232,13 @@ private:
 
     void buildScreenLayout(int slotNo);
     void clearScreenLayout(bool clearAllTabs);
+    void buildScreen(SCScreen &s, int t, int &auxInstance);
 
     void setClusterLoaded(bool loaded);
     void setBandmapLoaded(bool loaded);
 
     void traceMsg(QString msg);
     void updateFreq(Frequency f);
-    void buildScreen(SCScreen &s, int t, int &auxInstance);
 
     void setQrzDisplayFrameLoaded(bool loaded);
     void doSendEntry(QString expName);
