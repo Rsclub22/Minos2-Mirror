@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>sendMeepFrame</class>
+        <widget class="QFrame" name="sendMeepFrame">
+         <property name="frameShape">
+          <enum>QFrame::Shape::Box</enum>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_6" stretch="1,1,4,0">
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_3">
+            <item>
+             <widget class="QPushButton" name="genmsgButton">
+              <property name="text">
+               <string>General message</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="meepButton">
+              <property name="text">
+               <string>Meep</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_5">
+            <item>
+             <widget class="QLabel" name="label_5">
+              <property name="text">
+               <string>Callsign</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="callEdit">
+              <property name="clearButtonEnabled">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_6">
+            <item>
+             <widget class="QLabel" name="label_4">
+              <property name="text">
+               <string>Message</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="msgEdit">
+              <property name="clearButtonEnabled">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="QPushButton" name="clearMessageButton">
+            <property name="text">
+             <string>Clear message</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+
+ <resources/>
+ <connections/>
+</ui>

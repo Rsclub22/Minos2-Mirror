@@ -28,7 +28,7 @@
      <number>0</number>
     </property>
     <item>
-     <widget class="QFrame" name="frame1">
+     <widget class="QFrame" name="loginsFrame">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
         <horstretch>0</horstretch>
@@ -577,7 +577,7 @@ when user selected</string>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_8">
        <item>
-        <widget class="QFrame" name="frame_3">
+        <widget class="QFrame" name="activeChatFrame">
          <property name="toolTip">
           <string>Chat to which messages will be sent</string>
          </property>
@@ -691,7 +691,7 @@ when user selected</string>
         </widget>
        </item>
        <item>
-        <widget class="QFrame" name="messageFrame">
+        <widget class="QFrame" name="sendMeepFrame">
          <property name="frameShape">
           <enum>QFrame::Shape::Box</enum>
          </property>
@@ -761,70 +761,72 @@ when user selected</string>
         </widget>
        </item>
        <item>
-        <layout class="QHBoxLayout" name="horizontalLayout">
-         <item>
-          <widget class="QPushButton" name="configureButton">
-           <property name="text">
-            <string>Configure</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="layoutButton">
-           <property name="text">
-            <string>Layout</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="logsButton">
-           <property name="text">
-            <string>Logs</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="clearButton">
-           <property name="text">
-            <string>Clear Messages</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <spacer name="horizontalSpacer">
-           <property name="orientation">
-            <enum>Qt::Orientation::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
-          <widget class="QPushButton" name="awayButton">
-           <property name="text">
-            <string>-</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="connectButton">
-           <property name="text">
-            <string>Connect</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="closeButton">
-           <property name="text">
-            <string>Close</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
+        <widget class="QFrame" name="buttonsFrame">
+         <layout class="QHBoxLayout" name="horizontalLayout">
+          <item>
+           <widget class="QPushButton" name="configureButton">
+            <property name="text">
+             <string>Configure</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="layoutButton">
+            <property name="text">
+             <string>Layout</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="logsButton">
+            <property name="text">
+             <string>Logs</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="clearButton">
+            <property name="text">
+             <string>Clear Messages</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer">
+            <property name="orientation">
+             <enum>Qt::Orientation::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QPushButton" name="awayButton">
+            <property name="text">
+             <string>-</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="connectButton">
+            <property name="text">
+             <string>Connect</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="closeButton">
+            <property name="text">
+             <string>Close</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
        </item>
       </layout>
      </widget>
