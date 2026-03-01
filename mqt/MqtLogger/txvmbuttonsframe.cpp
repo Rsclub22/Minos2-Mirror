@@ -2331,7 +2331,9 @@ void TxVmButtonsFrame::fKey(BaseContestLog *c, int key, int /*carrier*/)
 {
     // FKey event received by log frame (or ctrl/FKey)
 
-    if (c && ct == c && isVoiceMode())
+    if (c && ct == c && (isVoiceMode() ||
+        voiceKeyerType == keyerTypes[VoiceKeyerId::PcCwKeyer] ||
+        voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl]))
     {
         int mem = key - Qt::Key_F1;
         if (mem > 10)
@@ -2347,23 +2349,7 @@ void TxVmButtonsFrame::fKey(BaseContestLog *c, int key, int /*carrier*/)
             readActionSelected(mem);
         }
     }
-    else if (c && ct == c && voiceKeyerType == keyerTypes[VoiceKeyerId::PcCwKeyer])
-    {
-        // for test...
-        int mem = key - Qt::Key_F1;
-        if (mem > 10)
-        {
 
-        }
-        else if (mem == 10)
-        {
-            onVmStopClicked();
-        }
-        else
-        {
-            readActionSelected(mem);
-        }
-    }
 }
 
 void TxVmButtonsFrame::setMode(const QString m)
@@ -2540,8 +2526,10 @@ bool TxVmButtonsFrame::eventFilter(QObject *obj, QEvent *event)
         // -- Handle Escape globally --
         if (keyEvent->key() == Qt::Key_Escape)
         {
+            logMessage("ESC keypressed - txVmButtonFrame");
             if (isMessagePlaying())
             {
+                logMessage("ESC keypressed - txVmButtonFrame, message playing stop!");
                 onVmStopClicked();
                 return true;                // consume Esc
             }
