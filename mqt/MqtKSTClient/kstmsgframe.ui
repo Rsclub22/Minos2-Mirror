@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>msgFrame</class>
-           <widget class="QFrame" name="msgFrame">
+ <class>KSTMsgFrame</class>
+           <widget class="QFrame" name="KSTMsgFrame">
            <layout class="QVBoxLayout" name="verticalLayout_2">
             <item>
              <layout class="QHBoxLayout" name="horizontalLayout_3">

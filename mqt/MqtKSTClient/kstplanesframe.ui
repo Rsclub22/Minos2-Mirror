@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>planesFrame</class>
-          <widget class="QFrame" name="planesFrame">
+ <class>KSTPlanesFrame</class>
+          <widget class="QFrame" name="KSTPlanesFrame">
            <layout class="QHBoxLayout" name="horizontalLayout_8" stretch="3,1">
             <property name="leftMargin">
              <number>0</number>

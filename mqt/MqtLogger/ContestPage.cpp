@@ -20,13 +20,13 @@ ContestPage::ContestPage(QWidget *parent, BaseContestLog *ct) :
 
     ui->setupUi(this);
 
-    singleLogFrameSplitter = new MinosSplitter();
+    logPageSplitter = new MinosSplitter();
 
-    singleLogFrameSplitter->setObjectName(QStringLiteral("singleLogFrameSplitter"));
-    singleLogFrameSplitter->setOrientation(Qt::Vertical);
-    singleLogFrameSplitter->setChildrenCollapsible(false);
+    logPageSplitter->setObjectName(QStringLiteral("singleLogFrameSplitter"));
+    logPageSplitter->setOrientation(Qt::Vertical);
+    logPageSplitter->setChildrenCollapsible(false);
 
-    connect(singleLogFrameSplitter, &MinosSplitter::splitterMoved, this, &ContestPage::onSplitterMoved);
+    connect(logPageSplitter, &MinosSplitter::splitterMoved, this, &ContestPage::onSplitterMoved);
 
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::SplittersChanged, this, &ContestPage::onSplittersChanged);
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::doSplitterChanges, this, &ContestPage::on_doSplitterChanges);
@@ -50,7 +50,7 @@ void ContestPage::buildScreen(TSingleLogFrame *tslfp, SCScreen &s, int &auxInsta
     tslf = tslfp;
     for (auto &r: s.baseElement->rows)
     {
-        tslf->buildRow(this, r, auxInstance, singleLogFrameSplitter);
+        tslf->buildRow(this, r, auxInstance, logPageSplitter);
     }
     // set frame to Vertical Layout, insert LogFrameSplitter
     if (!verticalLayout)
@@ -59,7 +59,7 @@ void ContestPage::buildScreen(TSingleLogFrame *tslfp, SCScreen &s, int &auxInsta
         verticalLayout->setSpacing(0);
         verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
         verticalLayout->setContentsMargins(0, 0, 0, 0);
-        verticalLayout->addWidget(singleLogFrameSplitter);
+        verticalLayout->addWidget(logPageSplitter);
         setLayout(verticalLayout);
     }
 
@@ -67,9 +67,9 @@ void ContestPage::buildScreen(TSingleLogFrame *tslfp, SCScreen &s, int &auxInsta
 
     // and force matters that may have been saved
 
-    for (int i = 0; i < singleLogFrameSplitter->count(); i++)
+    for (int i = 0; i < logPageSplitter->count(); i++)
     {
-        singleLogFrameSplitter->setStretchFactor(i, 0);
+        logPageSplitter->setStretchFactor(i, 0);
     }
     for (int i = 0; i < rowSplitters.count(); i++)
     {
@@ -95,17 +95,17 @@ void ContestPage::buildScreen(TSingleLogFrame *tslfp, SCScreen &s, int &auxInsta
 
 void ContestPage::clearScreen()
 {
-    QWidget *s = singleLogFrameSplitter->widget(0);
+    QWidget *s = logPageSplitter->widget(0);
     while (s)
     {
         s->setParent(nullptr);
         delete(s);
-        s = singleLogFrameSplitter->widget(0);
+        s = logPageSplitter->widget(0);
     }
     rowSplitters.clear();
     if (tslf != this)
     {
-        singleLogFrameSplitter = nullptr;
+        logPageSplitter = nullptr;
         delete(verticalLayout);
         verticalLayout = nullptr;
     }
@@ -113,11 +113,11 @@ void ContestPage::clearScreen()
 
 bool ContestPage::hasElements()
 {
-    return singleLogFrameSplitter->count() > 0;
+    return logPageSplitter->count() > 0;
 }
 void ContestPage::getSplitters()
 {
-    if (!singleLogFrameSplitter)
+    if (!logPageSplitter)
     {
         return;
     }
@@ -126,12 +126,12 @@ void ContestPage::getSplitters()
 
     QString name = QString("Splitters/%1/state/%2/%3").arg("singleLogFrameSplitter", tslf->getCurScreenLayout()).arg(pageNo);
     state = settings.getSettings().value(name).toByteArray();
-    singleLogFrameSplitter->restoreState(state);
+    logPageSplitter->restoreState(state);
 
     // and reset some of the saved state
 
-    singleLogFrameSplitter->setChildrenCollapsible(true);
-    singleLogFrameSplitter->setHandleWidth(splitterHandleWidth);
+    logPageSplitter->setChildrenCollapsible(true);
+    logPageSplitter->setHandleWidth(splitterHandleWidth);
 
     for(auto const &s: QASCONST(rowSplitters))
     {
@@ -149,7 +149,7 @@ void ContestPage::onSplittersChanged()
 }
 void ContestPage::onSplitterMoved(int /*pos*/, int /*index*/)
 {
-    QByteArray state = singleLogFrameSplitter->saveState();
+    QByteArray state = logPageSplitter->saveState();
     RegSettings settings;
     QString name = QString("Splitters/%1/state/%2/%3").arg("singleLogFrameSplitter", tslf->getCurScreenLayout()).arg(pageNo);
     settings.getSettings().setValue(name, state);

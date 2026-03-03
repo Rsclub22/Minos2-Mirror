@@ -69,7 +69,7 @@ private:
     Ui::ContestPage *ui;
     bool splittersChanged;
     int splitterHandleWidth;
-    MinosSplitter *singleLogFrameSplitter = nullptr;
+    MinosSplitter *logPageSplitter = nullptr;
 
 
     TSingleLogFrame *tslf = nullptr;

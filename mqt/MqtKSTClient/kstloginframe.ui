@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>loginFrame</class>
-     <widget class="QFrame" name="loginFrame">
+ <class>KSTLoginFrame</class>
+     <widget class="QFrame" name="KSTLoginFrame">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
         <horstretch>0</horstretch>

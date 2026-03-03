@@ -6,6 +6,7 @@
 #include "QtUtils.h"
 #include "RPCCommandConstants.h"
 #include "ScreenConfigManager.h"
+#include "kstmainframe.h"
 #include "regsettings.h"
 #include "AppStartup.h"
 #include "MShowMessageDlg.h"
@@ -378,7 +379,17 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     ui->msgFrame->setMinimumHeight(10);
     ui->tomeFrame->setMinimumHeight(10);
 
+    mainFrame = new KSTMainFrame(ui->centralwidget);
+    ui->centralwidget->layout()->addWidget(mainFrame);
+    mainFrame->createScreenComponents();
+    mainFrame->setCurScreenLayout("default");
+    mainFrame->applyScreenLayout();
+
     on_FontChanged();
+
+    ui->kstFrame->setVisible(false);
+    ui->actFrame->setVisible(false);
+    ui->loginsFrame->setVisible(false);
 }
 
 KSTMainWindow::~KSTMainWindow()
@@ -2347,15 +2358,24 @@ void KSTMainWindow::on_layoutButton_clicked()
     //updateLayoutsMenu();
 
 }
+void KSTMainWindow::selectLayout(QString layout)
+{
+    if (mainFrame)
+    {
+        mainFrame->setCurScreenLayout(layout);
+        mainFrame->applyScreenLayout();
+ //       updateLayoutsMenu();
+    }
+}
 
 void KSTMainWindow::onScreenConfigApply(QString curConfigName)
 {
-    //selectLayout(curConfigName);
-    //selectSession(TContestApp::getContestApp()->currSession);
+    selectLayout(curConfigName);
 }
 void KSTMainWindow::onSetDefaultName(QString def)
 {
 }
-void KSTMainWindow::onSetProtectedName(QString prot)
+void KSTMainWindow::onSetProtectedName(QString /*prot*/)
 {
+    // no protected ;ayout for KST
 }

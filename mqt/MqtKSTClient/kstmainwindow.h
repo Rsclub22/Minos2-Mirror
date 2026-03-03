@@ -22,6 +22,7 @@ namespace Ui { class KSTMainWindow; }
 QT_END_NAMESPACE
 
 class KSTMonitoredLogs;
+class KSTMainFrame;
 
 extern QStringList services;
 
@@ -146,9 +147,12 @@ private:
 public:
     KSTMainWindow(QWidget *parent = nullptr);
     ~KSTMainWindow() override;
+
+    KSTMainFrame *mainFrame = nullptr;
     QString iniName;
     QString TNServerName;
     QString TNServerPort;
+
 
     virtual void resizeEvent(QResizeEvent *event) override;
     virtual void moveEvent(QMoveEvent *event) override;
@@ -193,6 +197,7 @@ public:
     QString getCurScreenLayout() const;
     void setCurScreenLayout(const QString &value);
 
+    void selectLayout(QString layout);
 private slots:
     void CloseTimerTimer();
 

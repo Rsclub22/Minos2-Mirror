@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>tomeFrame</class>
-          <widget class="QFrame" name="tomeFrame">
+ <class>KSTTomeFrame</class>
+          <widget class="QFrame" name="KSTTomeFrame">
            <layout class="QVBoxLayout" name="verticalLayout_4">
             <item>
              <layout class="QHBoxLayout" name="horizontalLayout_5">

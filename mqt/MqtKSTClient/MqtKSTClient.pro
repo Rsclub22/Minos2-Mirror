@@ -15,57 +15,63 @@ win32:LIBS += -lWs2_32
 
 SOURCES += \
     KSTMinosParameters.cpp \
-    activechatsframe.cpp \
     airscoutlink.cpp \
-    buttonsframe.cpp \
-    callsframe.cpp \
     changename.cpp \
+    kstactivechatsframe.cpp \
+    kstbuttonsframe.cpp \
     kstcallgridmodel.cpp \
+    kstcallsframe.cpp \
     kstconfigure.cpp \
+    kstloginframe.cpp \
+    kstmainframe.cpp \
     kstmessagegridmodel.cpp \
     kstmonitoredlogs.cpp \
+    kstmsgframe.cpp \
     kstpage.cpp \
+    kstpageframe.cpp \
+    kstplanesframe.cpp \
     kstplanesmodel.cpp \
     kstscreenoptions.cpp \
-    loginframe.cpp \
+    kstsendmeepframe.cpp \
+    ksttomeframe.cpp \
     main.cpp \
-    kstmainwindow.cpp \
-    msgframe.cpp \
-    planesframe.cpp \
-    sendmeepframe.cpp \
-    tomeframe.cpp
+    kstmainwindow.cpp
 
 HEADERS += \
     KSTMinosParameters.h \
-    activechatsframe.h \
     airscoutlink.h \
-    buttonsframe.h \
-    callsframe.h \
     changename.h \
+    kstactivechatsframe.h \
+    kstbuttonsframe.h \
     kstcallgridmodel.h \
+    kstcallsframe.h \
     kstconfigure.h \
+    kstloginframe.h \
+    kstmainframe.h \
     kstmainwindow.h \
     kstmessagegridmodel.h \
     kstmonitoredlogs.h \
+    kstmsgframe.h \
     kstpage.h \
+    kstpageframe.h \
+    kstplanesframe.h \
     kstplanesmodel.h \
     kstscreenoptions.h \
-    loginframe.h \
-    msgframe.h \
-    planesframe.h \
-    sendmeepframe.h \
-    tomeframe.h
+    kstsendmeepframe.h \
+    ksttomeframe.h
 
 FORMS += \
-    activechatsframe.ui \
-    buttonsframe.ui \
-    callsframe.ui \
     changename.ui \
+    kstactivechatsframe.ui \
+    kstbuttonsframe.ui \
+    kstcallsframe.ui \
     kstconfigure.ui \
+    kstloginframe.ui \
+    kstmainframe.ui \
     kstmainwindow.ui \
     kstmonitoredlogs.ui \
-    loginframe.ui \
-    msgframe.ui \
-    planesframe.ui \
-    sendmeepframe.ui \
-    tomeframe.ui
+    kstmsgframe.ui \
+    kstpageframe.ui \
+    kstplanesframe.ui \
+    kstsendmeepframe.ui \
+    ksttomeframe.ui

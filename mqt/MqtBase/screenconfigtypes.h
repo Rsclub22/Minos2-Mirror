@@ -33,12 +33,12 @@ enum SCType
     sctDMButtons,
     sctNone,
 
-    sctkChats,
+    sctkLogins,
     sctkCallList,
     sctkAirScout,
     sctkMessageList,
     sctkMeepList,
-    sctkActiveChat,
+    sctkActiveChats,
     sctkSendMeep,
     sctkButtons
 };

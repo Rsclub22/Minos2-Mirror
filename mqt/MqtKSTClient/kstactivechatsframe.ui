@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>activeChatsFrame</class>
+ <class>KSTActiveChatsFrame</class>
 
-        <widget class="QFrame" name="activeChatFrame">
+        <widget class="QFrame" name="KSTActiveChatsFrame">
          <property name="toolTip">
           <string>Chat to which messages will be sent</string>
          </property>

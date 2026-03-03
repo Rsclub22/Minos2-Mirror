@@ -20,12 +20,12 @@ QVector <SCTypeOption> KSTScreenOptions::kstScreenOptions =
         {sctScreen, QT_TR_NOOP("screen"), QT_TR_NOOP("Secondary Screen")},
         {sctSplit, QT_TR_NOOP("HSplit"), QT_TR_NOOP("Horizontally split element")},
 
-        {sctkChats, QT_TR_NOOP("Chats"), QT_TR_NOOP("Active chats")},
+        {sctkLogins, QT_TR_NOOP("Chats"), QT_TR_NOOP("Chats logged in")},
         {sctkCallList, QT_TR_NOOP("Call List"), QT_TR_NOOP("Active Callsigns")},
         {sctkAirScout, QT_TR_NOOP("AirScout"), QT_TR_NOOP("AirScout")},
         {sctkMessageList, QT_TR_NOOP("Messages"), QT_TR_NOOP("Messages")},
         {sctkMeepList, QT_TR_NOOP("Meeps"), QT_TR_NOOP("Messages to me")},
-        {sctkActiveChat, QT_TR_NOOP("Current Chat"), QT_TR_NOOP("Current Active Chat")},
+        {sctkActiveChats, QT_TR_NOOP("Current Chat"), QT_TR_NOOP("Current Active Chat")},
         {sctkSendMeep, QT_TR_NOOP("SendMeep"), QT_TR_NOOP("Sending Meeps")},
         {sctkButtons, QT_TR_NOOP("Buttons"), QT_TR_NOOP("Buttons")},
 
@@ -40,14 +40,14 @@ KSTScreenOptions::KSTScreenOptions()
 
     QString def = defaultConfig
                       .arg(defaultLayoutName())
-                      .arg(ScreenConfigElement::getRawScreenTypeString(sctkChats))
+                      .arg(ScreenConfigElement::getRawScreenTypeString(sctkLogins))
                       .arg(ScreenConfigElement::getRawScreenTypeString(sctkCallList))
                       .arg(ScreenConfigElement::getRawScreenTypeString(sctkAirScout))
                       .arg(ScreenConfigElement::getRawScreenTypeString(sctSplit))
                       .arg(ScreenConfigElement::getRawScreenTypeString(sctkMessageList))
                       .arg(ScreenConfigElement::getRawScreenTypeString(sctkMeepList))
                       .arg(ScreenConfigElement::getRawScreenTypeString(sctSplit))
-                      .arg(ScreenConfigElement::getRawScreenTypeString(sctkActiveChat))
+                      .arg(ScreenConfigElement::getRawScreenTypeString(sctkActiveChats))
                       .arg(ScreenConfigElement::getRawScreenTypeString(sctkSendMeep))
                       .arg(ScreenConfigElement::getRawScreenTypeString(sctkButtons));
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>callsFrame</class>
-           <widget class="QFrame" name="callsFrame">
+ <class>KSTCallsFrame</class>
+           <widget class="QFrame" name="KSTCallsFrame">
            <property name="frameShape">
             <enum>QFrame::Shape::NoFrame</enum>
            </property>
