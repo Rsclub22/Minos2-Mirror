@@ -12,6 +12,7 @@
 #include "tlogcontainer.h"
 #include "SendRPCDM.h"
 #include "ScreenConfigFile.h"
+#include "MTrace.h"
 
 #include "contestdetails.h"
 #include "ui_contestdetails.h"
@@ -723,7 +724,9 @@ void ContestDetails::setBandBoxes(QString bandStr, QString bandsList)
     {
         if (bandOK && bi && !bi->enabled)
         {
-            MinosParameters::getMinosParameters()->mshowMessage(tr("Band %1 is set as unwanted.").arg(bandStr));
+            QString msg = tr("Band %1 is set as unwanted.").arg(bandStr);
+            trace(msg);
+            MinosParameters::getMinosParameters()->mshowMessage(msg);
         }
         ui->BandComboBox->setCurrentText(bandStr);
     }

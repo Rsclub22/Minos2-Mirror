@@ -2115,12 +2115,6 @@ QSharedPointer<BandInfo> BaseContestLog::checkBandChange(Frequency targetFreq, F
         QSharedPointer<BandInfo>  b1;
         bool b1Ok = bl.findBand(targetFreq, b1);
 
-        if (b1Ok && b1 && !b1->enabled)
-        {
-            MinosParameters::getMinosParameters()->mshowMessage(tr("Band %1 is set as unwanted.").arg(b1->name()));
-        }
-
-
         QSharedPointer<BandInfo>  b2;
         /*bool b2Ok =*/ bl.findBand(refFreq, b2);
 

@@ -215,6 +215,7 @@ void TSingleLogFrame::createScreenComponents()
 
 
     QSOListFrame = new QSOTableFrame(this);
+    QSOListFrame->setObjectName(QStringLiteral("QSOListFrame"));
     QSOListFrame->setFocusPolicy(Qt::ClickFocus);
     QSOListFrame->setFrameShape(QFrame::NoFrame);
     QSOListFrame->setFrameShadow(QFrame::Plain);
@@ -858,6 +859,9 @@ void TSingleLogFrame::buildRow(ContestPage *cp, SCRow &scrow, int &auxInstance, 
                     hs->addWidget(vs);
                     break;
                 }
+
+                default:
+                    break;
             }
         }
         splitterParent->addWidget(hs);
@@ -1891,6 +1895,12 @@ void TSingleLogFrame::on_SetFreq(Frequency f)
         QSharedPointer<BandInfo>  bandChanged = contest->checkBandChange(f, sCurFreq);
         if (bandChanged)
         {
+            if (!bandChanged->enabled)
+            {
+                QString msg = tr("Band %1 is set as unwanted.").arg(bandChanged->name());
+                trace(msg);
+                MinosParameters::getMinosParameters()->mshowMessage(msg);
+            }
             contest->setCurrentBand(bandChanged->uk);
             FKHRigControlFrame->setContestBand(bandChanged->uk);
             MinosLoggerEvents::SendContestBandChanged(contest);
