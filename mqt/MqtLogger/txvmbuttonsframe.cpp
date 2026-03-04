@@ -2527,7 +2527,7 @@ bool TxVmButtonsFrame::eventFilter(QObject *obj, QEvent *event)
         if (keyEvent->key() == Qt::Key_Escape)
         {
             logMessage("ESC keypressed - txVmButtonFrame");
-            if (isMessagePlaying())
+            if (isMessagePlaying() && !readDisableESCKeyerStopFromIni()) // stop message if ESC key pressed, message playing  and ESC not disabled
             {
                 logMessage("ESC keypressed - txVmButtonFrame, message playing stop!");
                 onVmStopClicked();

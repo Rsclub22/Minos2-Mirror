@@ -261,6 +261,7 @@ void RadioSettingDialog::initialise()
     //===========================================================================================================
     ui->enableBandSwChkBox->setChecked(readEnableBandSwitchFromIni());
 
+    ui->disableESCKeyKeyerChkBox->setChecked(readDisableESCKeyerStopFromIni());
 
     // handle Voice and CW Save Memory Buttons by Name Checkboxes
     ui->saveVoiceMemoryButtonByRadioName->setChecked(readSaveVoiceCWMemoryButtonByRadioNameFromIni(VoiceKeyerId::RigControl));
@@ -623,7 +624,10 @@ void RadioSettingDialog::onRadioReadOnlyCheckBoxClicked()
     }
 }
 
-
+//void RadioSettingDialog::onDisableEscKeyerCheckBoxChanged()
+//{
+//    writeDisableESCKeyerStopToIni(ui->disableESCKeyKeyerChkBox->isChecked());
+//}
 
 void RadioSettingDialog::onSaveVoiceMemoryButtonByRadioNameChkBoxClicked()
 {
@@ -731,6 +735,7 @@ void RadioSettingDialog::saveSettings()
     saveBandSwComport();
     saveBandSwData();
     saveBandSwCheckBoxes();
+    saveDisableEscKeyStopingKeyer();
     saveVoiceMemoryButtonByRadioNameCheckBox();
     saveCwMemoryButtonByRadioNameCheckBox();
 }
@@ -784,6 +789,14 @@ void RadioSettingDialog::saveBandSwCheckBoxes()
     if (readSerialComportBandSwitchFromIni() != ui->bandSwCombo->currentText())
     {
         writeEnableSerialBandSwitchDataToIni(ui->enableSerialBandSwChkBox->isChecked());
+    }
+}
+
+void RadioSettingDialog::saveDisableEscKeyStopingKeyer()
+{
+    if (readDisableESCKeyerStopFromIni() != ui->disableESCKeyKeyerChkBox->isChecked())
+    {
+        writeDisableESCKeyerStopToIni(ui->disableESCKeyKeyerChkBox->isChecked());
     }
 }
 

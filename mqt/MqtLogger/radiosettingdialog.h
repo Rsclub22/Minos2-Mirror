@@ -87,6 +87,7 @@ private slots:
     void onDeleteVoiceMemoryButtonRadiosPushButtonClicked();
     void onDeleteCwMemoryButtonRadiosPushButtonClicked();
     void onRadioReadOnlyCheckBoxClicked();
+    //void onDisableEscKeyerCheckBoxChanged();
 private:
     Ui::RadioSettingDialog *ui;
 
@@ -156,6 +157,7 @@ private:
     void writeContestChangeRestoreContestModeSavedSettingFlag(const bool state);
     void writeContestChangeIgnorePreviousFreqFlagSavedSettingFlag(const bool state);
     void writeIgnorePresetFreqFlagSavedSettingFlag(const bool state);
+    void saveDisableEscKeyStopingKeyer();
 };
 
 #endif // RADIOSETTINGDIALOG_H
