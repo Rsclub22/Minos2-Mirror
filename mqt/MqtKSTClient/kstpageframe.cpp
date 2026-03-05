@@ -1,10 +1,10 @@
 #include <QVBoxLayout>
 #include <QSettings>
 
-#include "MinosLoggerEvents.h"
 #include "kstpageframe.h"
 #include "QtUtils.h"
 #include "kstmainframe.h"
+#include "kstmainwindow.h"
 #include "minossplitter.h"
 #include "regsettings.h"
 #include "ui_kstpageframe.h"
@@ -28,16 +28,22 @@ KSTPageFrame::KSTPageFrame(QWidget *parent)
     kstPageSplitter->setOrientation(Qt::Vertical);
     kstPageSplitter->setChildrenCollapsible(false);
 
-    // connect(singleLogFrameSplitter, &MinosSplitter::splitterMoved, this, &ContestPage::onSplitterMoved);
+    setContextMenuPolicy( Qt::CustomContextMenu );
+    connect(this, &KSTPageFrame::customContextMenuRequested, this, &KSTPageFrame::onCustomContextMenuRequested);
 
-    // connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::SplittersChanged, this, &ContestPage::onSplittersChanged);
-    // connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::doSplitterChanges, this, &ContestPage::on_doSplitterChanges);
 }
 
 KSTPageFrame::~KSTPageFrame()
 {
     delete ui;
 }
+void KSTPageFrame::onCustomContextMenuRequested(const QPoint &pos)
+{
+    QPoint globalPos = mapToGlobal( pos );
+
+    mainWindow->TabPopup.popup( globalPos );
+}
+
 void KSTPageFrame::buildScreen(KSTMainFrame *tslfp, SCScreen &s)
 {
     pageName = s.name;
@@ -153,7 +159,6 @@ void KSTPageFrame::onSplitterMoved(int /*pos*/, int /*index*/)
         state = s->saveState();
         QString name = QString("Splitters/%1/state/%2/%3").arg(s->objectName(), tslf->getCurScreenLayout()).arg(pageNo);
         settings.getSettings().setValue(name, state);
-        MinosLoggerEvents::SendSplittersChanged();
     }
 }
 void KSTPageFrame::on_doSplitterChanges()

@@ -35,6 +35,8 @@ public:
     void applyScreenLayout();
     void setCurScreenLayout(const QString &value);
 
+    void on_FontChanged();
+
     QVector<KSTPageFrame *> pages;
 
     KSTActiveChatsFrame *kstActiveChatsFrame = nullptr;
@@ -53,7 +55,7 @@ private:
     void traceMsg(QString msg);
 
     void buildScreenLayout();
-    void clearScreenLayout(bool clearAllTabs);
+    void clearScreenLayout(bool clearAllPages);
     void buildScreen(SCScreen &s, int t);
 
 

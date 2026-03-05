@@ -1,59 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>KSTTomeFrame</class>
-          <widget class="QFrame" name="KSTTomeFrame">
-           <layout class="QVBoxLayout" name="verticalLayout_4">
-            <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_5">
-              <item>
-               <widget class="QCheckBox" name="includeMeCb">
-                <property name="text">
-                 <string notr="true">Including my call</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLineEdit" name="toMeFilter">
-                <property name="toolTip">
-                 <string>Look for any of these strings (space separated) in messages</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QToolButton" name="clearMeepFiltersButton">
-                <property name="text">
-                 <string>X</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QCheckBox" name="showReadcb">
-                <property name="text">
-                 <string>Show read (ticked) messages</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-            <item>
-             <widget class="MinosTableView" name="meepTable">
-              <property name="alternatingRowColors">
-               <bool>true</bool>
-              </property>
-              <property name="selectionMode">
-               <enum>QAbstractItemView::SelectionMode::SingleSelection</enum>
-              </property>
-              <property name="selectionBehavior">
-               <enum>QAbstractItemView::SelectionBehavior::SelectRows</enum>
-              </property>
-              <property name="verticalScrollMode">
-               <enum>QAbstractItemView::ScrollMode::ScrollPerPixel</enum>
-              </property>
-              <property name="cornerButtonEnabled">
-               <bool>false</bool>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </widget>
+ <widget class="QFrame" name="KSTTomeFrame">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>524</width>
+    <height>160</height>
+   </rect>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_4">
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_5">
+     <item>
+      <widget class="QCheckBox" name="includeMeCb">
+       <property name="text">
+        <string notr="true">Including my call</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="toMeFilter">
+       <property name="toolTip">
+        <string>Look for any of these strings (space separated) in messages</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="clearMeepFiltersButton">
+       <property name="text">
+        <string>X</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="showReadcb">
+       <property name="text">
+        <string>Show read (ticked) messages</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="MinosTableView" name="meepTable" native="true">
+     <property name="alternatingRowColors" stdset="0">
+      <bool>true</bool>
+     </property>
+     <property name="cornerButtonEnabled" stdset="0">
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>MinosTableView</class>
+   <extends>QWidget</extends>
+   <header>minostableview.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
 </ui>

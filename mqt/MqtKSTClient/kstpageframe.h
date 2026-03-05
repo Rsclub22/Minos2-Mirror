@@ -47,6 +47,7 @@ private slots:
     void onSplitterMoved(int, int);
     void on_doSplitterChanges();
 
+    void onCustomContextMenuRequested(const QPoint &pos);
 };
 
 #endif // KSTPAGEFRAME_H

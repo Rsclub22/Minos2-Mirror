@@ -27,7 +27,6 @@ SOURCES += \
     kstmessagegridmodel.cpp \
     kstmonitoredlogs.cpp \
     kstmsgframe.cpp \
-    kstpage.cpp \
     kstpageframe.cpp \
     kstplanesframe.cpp \
     kstplanesmodel.cpp \
@@ -52,7 +51,6 @@ HEADERS += \
     kstmessagegridmodel.h \
     kstmonitoredlogs.h \
     kstmsgframe.h \
-    kstpage.h \
     kstpageframe.h \
     kstplanesframe.h \
     kstplanesmodel.h \

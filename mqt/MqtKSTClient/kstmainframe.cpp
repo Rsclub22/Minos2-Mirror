@@ -8,6 +8,7 @@
 #include "kstbuttonsframe.h"
 #include "kstcallsframe.h"
 #include "kstloginframe.h"
+#include "kstmainwindow.h"
 #include "kstmsgframe.h"
 #include "kstplanesframe.h"
 #include "kstsendmeepframe.h"
@@ -91,7 +92,7 @@ void KSTMainFrame::createScreenComponents()
 
     traceMsg("createScreenComponents end");
 }
-void KSTMainFrame::clearScreenLayout(bool clearAllTabs)
+void KSTMainFrame::clearScreenLayout(bool clearAllPages)
 {
     // clear down the screen elements
 
@@ -99,48 +100,40 @@ void KSTMainFrame::clearScreenLayout(bool clearAllTabs)
 
     traceMsg("clearScreenLayout starts ");
 
-// and now detach the panes from the contestpage windows
 
-    if (/*LogContainer->isLoggerClosing()*/ false)
+    kstActiveChatsFrame->setParent(this);
+    kstActiveChatsFrame->hide();
+    kstButtonsFrame->setParent(this);
+    kstButtonsFrame->hide();
+    kstCallsFrame->setParent(this);
+    kstCallsFrame->hide();
+    kstLoginFrame->setParent(this);
+    kstLoginFrame->hide();
+
+    kstMsgFrame->setParent(this);
+    kstMsgFrame->hide();
+    kstPlanesFrame->setParent(this);
+    kstPlanesFrame->hide();
+    kstSendMeepFrame->setParent(this);
+    kstSendMeepFrame->hide();
+    kstTomeFrame->setParent(this);
+    kstTomeFrame->hide();
+
+    if (clearAllPages)
     {
-        // do nothing more...
-    }
-    else
-    {
-        kstActiveChatsFrame->setParent(this);
-        kstActiveChatsFrame->hide();
-        kstButtonsFrame->setParent(this);
-        kstButtonsFrame->hide();
-        kstCallsFrame->setParent(this);
-        kstCallsFrame->hide();
-        kstLoginFrame->setParent(this);
-        kstLoginFrame->hide();
-
-        kstMsgFrame->setParent(this);
-        kstMsgFrame->hide();
-        kstPlanesFrame->setParent(this);
-        kstPlanesFrame->hide();
-        kstSendMeepFrame->setParent(this);
-        kstSendMeepFrame->hide();
-        kstTomeFrame->setParent(this);
-        kstTomeFrame->hide();
-
-        if (clearAllTabs)
+        for (auto cpc = pages.begin(); cpc != pages.end(); cpc++)
         {
-            for (auto cpc = pages.begin(); cpc != pages.end(); cpc++)
+            if (*cpc == nullptr)
             {
-                if (*cpc == nullptr)
-                {
-                    continue;
-                }
-                (*cpc)->clearScreen();
-                if ((*cpc) != this)
-                {
-                    (*cpc)->deleteLater();
-                }
+                continue;
             }
-            pages.clear();
+            (*cpc)->clearScreen();
+            if ((*cpc) != this)
+            {
+                (*cpc)->deleteLater();
+            }
         }
+        pages.clear();
     }
     suppressSaveHeaders = false;
     traceMsg("clearScreenLayout complete");
@@ -153,6 +146,7 @@ void KSTMainFrame::applyScreenLayout()
 
     clearScreenLayout(true);
     buildScreenLayout();
+    mainWindow->setContentsMargins(0, 0, 0, 0);
 
     delayedAction(this,  [=](){
         inApplyScreenLayout = false;
@@ -169,6 +163,18 @@ void KSTMainFrame::setCurScreenLayout(const QString &value)
 {
     trace(QString("setCurScreenLayout %1").arg(value));
     curScreenLayout = value;
+}
+
+void KSTMainFrame::on_FontChanged()
+{
+    kstActiveChatsFrame->on_FontChanged();
+    kstButtonsFrame->on_FontChanged();
+    kstCallsFrame->on_FontChanged();
+    kstLoginFrame->on_FontChanged();
+    kstMsgFrame->on_FontChanged();
+    kstPlanesFrame->on_FontChanged();
+    kstSendMeepFrame->on_FontChanged();
+    kstTomeFrame->on_FontChanged();
 }
 void KSTMainFrame::buildRow(KSTPageFrame *cp, SCRow &scrow, MinosSplitter *splitterParent)
 {
