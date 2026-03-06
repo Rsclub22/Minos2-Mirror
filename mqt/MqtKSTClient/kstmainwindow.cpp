@@ -20,10 +20,8 @@
 #include "kstmonitoredlogs.h"
 #include "mults.h"
 #include "MinosRPC.h"
-#include "MinosLoggerEvents.h"
 #include "kstmainwindow.h"
 #include "remotelogs.h"
-//#include "MinosParameters.h"
 #include "soundplayer.h"
 #include "ui_kstmainwindow.h"
 
@@ -292,9 +290,6 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
 
     connect(ui->CSTable->selectionModel(),&QItemSelectionModel::selectionChanged,
             this, &KSTMainWindow::onCSTableSelectionChanged);
-
-    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::FontChanged, this, &KSTMainWindow::on_FontChanged, Qt::QueuedConnection);
-
 
     kstclient = new QTcpSocket(this);
 
@@ -1261,10 +1256,10 @@ void KSTMainWindow::showPlanes(QSharedPointer<KstUser> user)
     }
     else
     {
-        QString l = QString("%1\n%2 at %3\nto %4 at %5")
-                .arg(user->lastCalcTime)
-                .arg(user->fromCall).arg(user->fromLoc)
-                .arg(user->toCall).arg(user->toLoc);
+        QString l = QString("%1\n%2 at %3\n")
+                        .arg(user->lastCalcTime, user->fromCall, user->fromLoc)
+                    + QString("to %1 at %2")
+                        .arg(user->toCall, user->toLoc);
 
         ui->planeslabel->setText(l);
     }

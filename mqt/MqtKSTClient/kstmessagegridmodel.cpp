@@ -1,6 +1,5 @@
 #include <QApplication>
 #include "QtUtils.h"
-//#include "MinosLoggerEvents.h"
 #include "kstmainwindow.h"
 #include "kstmessagegridmodel.h"
 #include "remotelogs.h"
