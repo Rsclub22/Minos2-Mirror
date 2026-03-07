@@ -520,8 +520,17 @@ void setAppFont()
     if ( qfont != QVariant() )
     {
         QApplication::setFont( qfont.value<QFont>() );
+#if (!defined( Q_OS_WIN) || (QT_VERSION > QT_VERSION_CHECK(6, 0, 0)))
+        // as timings are different under linux, and Qt 6!
+        for ( auto const &widget: QApplication::allWidgets() )
+        {
+            widget->setFont(qfont.value<QFont>());
+            widget->update();
+        }
+#endif
     }
 }
+
 void setAppFont(QString fs)
 {
     if (fs.startsWith("Font "))
@@ -533,8 +542,8 @@ void setAppFont(QString fs)
     {
         trace(QString("Setting font to %1").arg(fs));
         QApplication::setFont( f );
-#ifndef Q_OS_WIN
-// as timings are different under linux
+#if (!defined( Q_OS_WIN) || (QT_VERSION > QT_VERSION_CHECK(6, 0, 0)))
+// as timings are different under linux, and Qt 6!
         for ( auto const &widget: QApplication::allWidgets() )
         {
             widget->setFont(f);
