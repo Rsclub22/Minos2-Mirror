@@ -229,7 +229,7 @@ void AirScoutLink::onReadyRead()
             if (args[2] == '"' + mainWindow->getASMyName() + '"' && args[1] =='"' + mainWindow->getASServerName() + '"' && args[0] == "ASNEAREST:")
             {
                 assetPathInProgress = false;
-                trace ("assetPathInProgress = false;");
+                //trace ("assetPathInProgress = false;");
                 if (args[3].startsWith("\""))
                 {
                     args[3].remove(0, 1);
@@ -399,11 +399,11 @@ void AirScoutLink::askNearest(int row)
                 + user->call.realCall + "," + user->loc /*+ "\""*/;
         sendMessage("ASSETPATH", getpath);
         assetPathInProgress = true;
-        trace ("assetPathInProgress = true;");
+        //trace ("assetPathInProgress = true;");
     }
     else
     {
-        trace ("assetPathInProgress = false;");
+        //trace ("assetPathInProgress = false;");
         assetPathInProgress = false;
     }
 }

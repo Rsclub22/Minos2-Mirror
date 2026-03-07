@@ -22,12 +22,6 @@ KSTPageFrame::KSTPageFrame(QWidget *parent)
 
     ui->setupUi(this);
 
-    kstPageSplitter = new MinosSplitter();
-
-    kstPageSplitter->setObjectName(QStringLiteral("singleLogFrameSplitter"));
-    kstPageSplitter->setOrientation(Qt::Vertical);
-    kstPageSplitter->setChildrenCollapsible(false);
-
     setContextMenuPolicy( Qt::CustomContextMenu );
     connect(this, &KSTPageFrame::customContextMenuRequested, this, &KSTPageFrame::onCustomContextMenuRequested);
 
@@ -41,11 +35,17 @@ void KSTPageFrame::onCustomContextMenuRequested(const QPoint &pos)
 {
     QPoint globalPos = mapToGlobal( pos );
 
-    mainWindow->TabPopup.popup( globalPos );
+    mainWindow->kstPopup.popup( globalPos );
 }
 
 void KSTPageFrame::buildScreen(KSTMainFrame *tslfp, SCScreen &s)
 {
+    kstPageSplitter = new MinosSplitter();
+
+    kstPageSplitter->setObjectName(QStringLiteral("singleLogFrameSplitter"));
+    kstPageSplitter->setOrientation(Qt::Vertical);
+    kstPageSplitter->setChildrenCollapsible(false);
+
     pageName = s.name;
     tslf = tslfp;
     for (auto &r: s.baseElement->rows)
@@ -95,19 +95,22 @@ void KSTPageFrame::buildScreen(KSTMainFrame *tslfp, SCScreen &s)
 
 void KSTPageFrame::clearScreen()
 {
-    QWidget *s = kstPageSplitter->widget(0);
-    while (s)
+    if (kstPageSplitter)
     {
-        s->setParent(nullptr);
-        delete(s);
-        s = kstPageSplitter->widget(0);
-    }
-    rowSplitters.clear();
-    if (tslf != this)
-    {
-        kstPageSplitter = nullptr;
-        delete(verticalLayout);
-        verticalLayout = nullptr;
+        QWidget *s = kstPageSplitter->widget(0);
+        while (s)
+        {
+            s->setParent(nullptr);
+            delete(s);
+            s = kstPageSplitter->widget(0);
+        }
+        rowSplitters.clear();
+        if (tslf != this)
+        {
+            kstPageSplitter = nullptr;
+            delete(verticalLayout);
+            verticalLayout = nullptr;
+        }
     }
 }
 

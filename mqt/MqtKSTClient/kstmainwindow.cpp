@@ -51,6 +51,7 @@ const char traceEndChar= '!';
 //==========================================================================================
 void KSTMainWindow::getSettings(QSettings &settings)
 {
+    curScreenLayout = settings.value("screenLayout", "default").toString().trimmed();
     KSTserverName = settings.value("hostname", "www.on4kst.info").toString().trimmed();
     KSTserverPort = settings.value("port", "23001").toString().trimmed();
     TNServerName = settings.value("tnhostname", "www.on4kst.info").toString();
@@ -78,6 +79,8 @@ void KSTMainWindow::getSettings(QSettings &settings)
     setActiveChat(settings.value("active", "0").toInt());
     autoConnect = settings.value("autoConnect", false).toBool();
     myLoc = settings.value("locator", "").toString();
+
+
 
 }
 
@@ -212,7 +215,7 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     connect(ml, &KSTMonitoredLogs::logStarted, this, &KSTMainWindow::onLogStarted);
     connect(ml, &KSTMonitoredLogs::logClosed, this, &KSTMainWindow::onLogClosed);
 
-    mainFrame->setCurScreenLayout("default");
+    mainFrame->setCurScreenLayout(curScreenLayout);
     mainFrame->applyScreenLayout();
 
     on_FontChanged();
@@ -220,13 +223,13 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     asl = QSharedPointer<AirScoutLink>(new AirScoutLink());
     connect(asl.data(), &AirScoutLink::acChanged, mainFrame->kstPlanesFrame, &KSTPlanesFrame::acChanged);
 
-    configureAction = newAction(QT_TR_NOOP("Configure"), &TabPopup, &KSTMainWindow::do_configureButton_clicked);
-    layoutAction = newAction(QT_TR_NOOP("Manage Layout"), &TabPopup, &KSTMainWindow::do_layoutButton_clicked);
-    logsAction = newAction(QT_TR_NOOP("Show Logs"), &TabPopup, &KSTMainWindow::do_logsButton_clicked);
-    clearMessagesAction = newAction(QT_TR_NOOP("Clear Messages"), &TabPopup, &KSTMainWindow::do_clearLogsButton_clicked);
-    awayAction = newAction(QT_TR_NOOP(""), &TabPopup, &KSTMainWindow::do_awayButton_clicked);
-    connectAction = newAction(QT_TR_NOOP("Connect"), &TabPopup, &KSTMainWindow::do_connectButton_clicked);
-    closeAction = newAction(QT_TR_NOOP("Close"), &TabPopup, &KSTMainWindow::do_closeButton_clicked);
+    configureAction = newAction(QT_TR_NOOP("Configure"), &kstPopup, &KSTMainWindow::do_configureButton_clicked);
+    layoutAction = newAction(QT_TR_NOOP("Manage Layout"), &kstPopup, &KSTMainWindow::do_layoutButton_clicked);
+    logsAction = newAction(QT_TR_NOOP("Show Logs"), &kstPopup, &KSTMainWindow::do_logsButton_clicked);
+    clearMessagesAction = newAction(QT_TR_NOOP("Clear Messages"), &kstPopup, &KSTMainWindow::do_clearLogsButton_clicked);
+    awayAction = newAction(QT_TR_NOOP(""), &kstPopup, &KSTMainWindow::do_awayButton_clicked);
+    connectAction = newAction(QT_TR_NOOP("Connect"), &kstPopup, &KSTMainWindow::do_connectButton_clicked);
+    closeAction = newAction(QT_TR_NOOP("Close"), &kstPopup, &KSTMainWindow::do_closeButton_clicked);
 }
 
 KSTMainWindow::~KSTMainWindow()
@@ -1439,6 +1442,12 @@ void KSTMainWindow::do_layoutButton_clicked()
 }
 void KSTMainWindow::selectLayout(QString layout)
 {
+    curScreenLayout = layout;
+
+    QSettings settings(iniName, QSettings::IniFormat);
+
+    settings.setValue("screenLayout", curScreenLayout);
+
     if (mainFrame)
     {
         mainFrame->setCurScreenLayout(layout);

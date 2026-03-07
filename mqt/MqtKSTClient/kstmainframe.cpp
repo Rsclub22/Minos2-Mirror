@@ -135,6 +135,7 @@ void KSTMainFrame::clearScreenLayout(bool clearAllPages)
         }
         pages.clear();
     }
+    clearScreen();
     suppressSaveHeaders = false;
     traceMsg("clearScreenLayout complete");
 }
@@ -313,15 +314,14 @@ void KSTMainFrame::buildScreenLayout()
 
     ScreenConfigFile &scf = ScreenConfigFile::getScreenConfigFile(this);
 
-    QString curConfigName;
-    if (curConfigName.isEmpty() || !scf.configs.contains(curConfigName))
+    if (curScreenLayout.isEmpty() || !scf.configs.contains(curScreenLayout))
     {
-        curConfigName = defaultLayoutName();
+        curScreenLayout = defaultLayoutName();
     }
-    traceMsg("buildScreenLayout to layout " + curConfigName);
-    setCurScreenLayout(curConfigName);
+    traceMsg("buildScreenLayout to layout " + curScreenLayout);
+    setCurScreenLayout(curScreenLayout);
 
-    SC sc = scf.configs[curConfigName];
+    SC sc = scf.configs[curScreenLayout];
 
     // build the pages
     int t = 0;

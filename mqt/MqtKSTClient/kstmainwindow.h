@@ -70,9 +70,7 @@ private:
     int ASPort = 9872;
     int ASTimeout = 10;
 
-    void buildScreenLayout(int slotNo);
-    void clearScreenLayout(bool clearAllTabs);
-    void buildScreen(SCScreen &s, int t, int &auxInstance);
+    QString curScreenLayout = "default";
 
     void closeEvent(QCloseEvent *event) override;
 
@@ -88,7 +86,7 @@ public:
     ~KSTMainWindow() override;
     QStringList routerList();
     bool started = false;
-    QMenu TabPopup;
+    QMenu kstPopup;
     QAction *layoutAction = nullptr;
     QAction *logsAction = nullptr;
     QAction *configureAction = nullptr;
