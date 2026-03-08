@@ -1526,7 +1526,10 @@ void TLogContainer::menuLogsActionExecute(bool)
 
 void TLogContainer::doScreenConfigAction()
 {
-    QString cur = defaultLayoutName();
+    QWidget *tw = ui->contestPageControl->currentWidget();
+    TSingleLogFrame *f = dynamic_cast<TSingleLogFrame *>( tw );
+
+    QString cur = f->getCurScreenLayout();
     QString def;
     QString prot;
 

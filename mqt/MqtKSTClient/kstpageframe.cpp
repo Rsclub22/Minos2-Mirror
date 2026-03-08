@@ -38,7 +38,7 @@ void KSTPageFrame::onCustomContextMenuRequested(const QPoint &pos)
     mainWindow->kstPopup.popup( globalPos );
 }
 
-void KSTPageFrame::buildScreen(KSTMainFrame *tslfp, SCScreen &s)
+void KSTPageFrame::buildScreen(KSTMainFrame *mainPage, SCScreen &s)
 {
     kstPageSplitter = new MinosSplitter();
 
@@ -47,10 +47,10 @@ void KSTPageFrame::buildScreen(KSTMainFrame *tslfp, SCScreen &s)
     kstPageSplitter->setChildrenCollapsible(false);
 
     pageName = s.name;
-    tslf = tslfp;
+    kstMainPage = mainPage;
     for (auto &r: s.baseElement->rows)
     {
-        tslf->buildRow(this, r, kstPageSplitter);
+        kstMainPage->buildRow(this, r, kstPageSplitter);
     }
     // set frame to Vertical Layout, insert LogFrameSplitter
     if (!verticalLayout)
@@ -105,7 +105,7 @@ void KSTPageFrame::clearScreen()
             s = kstPageSplitter->widget(0);
         }
         rowSplitters.clear();
-        if (tslf != this)
+        if (kstMainPage != this)
         {
             kstPageSplitter = nullptr;
             delete(verticalLayout);
@@ -127,7 +127,7 @@ void KSTPageFrame::getSplitters()
     RegSettings settings;
     QByteArray state;
 
-    QString name = QString("Splitters/%1/state/%2/%3").arg("singleLogFrameSplitter", tslf->getCurScreenLayout()).arg(pageNo);
+    QString name = QString("Splitters/%1/state/%2/%3").arg("singleLogFrameSplitter", kstMainPage->getCurScreenLayout()).arg(pageNo);
     state = settings.getSettings().value(name).toByteArray();
     kstPageSplitter->restoreState(state);
 
@@ -139,7 +139,7 @@ void KSTPageFrame::getSplitters()
     for(auto const &s: QASCONST(rowSplitters))
     {
         QByteArray sstate;
-        QString name = QString("Splitters/%1/state/%2/%3").arg(s->objectName(), tslf->getCurScreenLayout()).arg(pageNo);
+        QString name = QString("Splitters/%1/state/%2/%3").arg(s->objectName(), kstMainPage->getCurScreenLayout()).arg(pageNo);
         sstate = settings.getSettings().value(name, sstate).toByteArray();
         s->restoreState(sstate);
         s->setHandleWidth(splitterHandleWidth);
@@ -154,13 +154,13 @@ void KSTPageFrame::onSplitterMoved(int /*pos*/, int /*index*/)
 {
     QByteArray state = kstPageSplitter->saveState();
     RegSettings settings;
-    QString name = QString("Splitters/%1/state/%2/%3").arg("singleLogFrameSplitter", tslf->getCurScreenLayout()).arg(pageNo);
+    QString name = QString("Splitters/%1/state/%2/%3").arg("singleLogFrameSplitter", kstMainPage->getCurScreenLayout()).arg(pageNo);
     settings.getSettings().setValue(name, state);
 
     for(auto const &s: QASCONST(rowSplitters))
     {
         state = s->saveState();
-        QString name = QString("Splitters/%1/state/%2/%3").arg(s->objectName(), tslf->getCurScreenLayout()).arg(pageNo);
+        QString name = QString("Splitters/%1/state/%2/%3").arg(s->objectName(), kstMainPage->getCurScreenLayout()).arg(pageNo);
         settings.getSettings().setValue(name, state);
     }
 }

@@ -1427,8 +1427,8 @@ void KSTMainWindow::testTimeout()
 }
 void KSTMainWindow::do_layoutButton_clicked()
 {
-    QString cur;
-    QString def;
+    QString cur = curScreenLayout;
+    QString def = defaultLayoutName();
     QString prot;
 
     ScreenConfigManager sc(this, cur, def, prot);

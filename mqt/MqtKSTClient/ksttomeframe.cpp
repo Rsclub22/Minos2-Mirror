@@ -151,11 +151,8 @@ void KSTTomeFrame::on_toMeFilter_textChanged(const QString &/*arg1*/)
 }
 void KSTTomeFrame::setMeepFilters()
 {
-    ui->includeMeCb->setText(tr("Including %1").arg(mainWindow->myCallsign.getFullCall()));
-    ui->includeMeCb->setChecked(true);
-
     kstMeepGridSortFilterModel->setMyCsFilterString(mainWindow->myCallsign.getFullCall());
-    ui->toMeFilter->clear();
+
     if (ui->includeMeCb->isChecked())
     {
         kstMeepGridSortFilterModel->setMyCsFilterString(mainWindow->myCallsign.getFullCall());
@@ -179,6 +176,8 @@ void KSTTomeFrame::on_clearMeepFiltersButton_clicked()
 }
 void KSTTomeFrame::setConnected(bool c)
 {
+    ui->includeMeCb->setText(tr("Including %1").arg(mainWindow->myCallsign.getFullCall()));
+
     ui->includeMeCb->setChecked(c);
     ui->includeMeCb->setText(QString());
     kstMeepGridSortFilterModel->setMyCsFilterString(QString());

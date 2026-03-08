@@ -39,7 +39,7 @@ private:
     MinosSplitter *kstPageSplitter = nullptr;
 
 
-    KSTMainFrame *tslf = nullptr;
+    KSTMainFrame *kstMainPage = nullptr;
     void getSplitters();
 
 private slots:
