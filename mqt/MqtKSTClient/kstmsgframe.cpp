@@ -6,7 +6,6 @@
 #include "kstactivechatsframe.h"
 #include "kstcallsframe.h"
 #include "kstmainwindow.h"
-#include "kstmainframe.h"
 #include "kstmessagegridmodel.h"
 #include "kstmsgframe.h"
 #include "kstsendmeepframe.h"
@@ -160,8 +159,8 @@ void KSTMsgFrame::on_messageTable_clicked(const QModelIndex &index)
         call = line->otherCall;
     }
 
-    mainWindow->mainFrame->kstSendMeepFrame->setNameFromCall(call, line->chat);
-    mainWindow->mainFrame->kstActiveChatsFrame->setActive(line->chat);
+    mainWindow->kstSendMeepFrame->setNameFromCall(call, line->chat);
+    mainWindow->kstActiveChatsFrame->setActive(line->chat);
 
     QString t = line->message;
     ui->bodyLabel->setText(t);
@@ -180,7 +179,7 @@ void KSTMsgFrame::on_messageTable_doubleClicked(const QModelIndex &index)
         {
             call = line->otherCall;
         }
-        mainWindow->mainFrame->kstCallsFrame->setFilter(call);
+        mainWindow->kstCallsFrame->setFilter(call);
     }
 }
 void KSTMsgFrame::on_clearSelectedMessage_clicked()

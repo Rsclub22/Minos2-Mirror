@@ -6,7 +6,6 @@
 #include "delayedaction.h"
 #include "kstactivechatsframe.h"
 #include "kstcallsframe.h"
-#include "kstmainframe.h"
 #include "kstmainwindow.h"
 #include "kstmessagegridmodel.h"
 #include "kstsendmeepframe.h"
@@ -119,8 +118,8 @@ void KSTTomeFrame::on_meepTable_clicked(const QModelIndex &index)
         {
             call = line->otherCall;
         }
-        mainWindow->mainFrame->kstSendMeepFrame->setNameFromCall(call, line->chat);
-        mainWindow->mainFrame->kstActiveChatsFrame->setActive(line->chat);
+        mainWindow->kstSendMeepFrame->setNameFromCall(call, line->chat);
+        mainWindow->kstActiveChatsFrame->setActive(line->chat);
     }
 }
 
@@ -136,7 +135,7 @@ void KSTTomeFrame::on_meepTable_doubleClicked(const QModelIndex &index)
         {
             call = line->otherCall;
         }
-        mainWindow->mainFrame->kstCallsFrame->setFilter(call);
+        mainWindow->kstCallsFrame->setFilter(call);
     }
 }
 void KSTTomeFrame::on_includeMeCb_stateChanged(int /*arg1*/)
@@ -176,10 +175,10 @@ void KSTTomeFrame::on_clearMeepFiltersButton_clicked()
 }
 void KSTTomeFrame::setConnected(bool c)
 {
-    ui->includeMeCb->setText(tr("Including %1").arg(mainWindow->myCallsign.getFullCall()));
+    ui->includeMeCb->setText(c?tr("Including %1").arg(mainWindow->myCallsign.getFullCall()):tr("my call"));
 
     ui->includeMeCb->setChecked(c);
-    ui->includeMeCb->setText(QString());
+    //ui->includeMeCb->setText(QString());
     kstMeepGridSortFilterModel->setMyCsFilterString(QString());
 }
 

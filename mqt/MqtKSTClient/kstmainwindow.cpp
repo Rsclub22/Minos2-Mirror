@@ -2,6 +2,7 @@
 #include <QSettings>
 #include <QKeyEvent>
 #include <QFileDialog>
+#include <QScrollArea>
 
 #include "QtUtils.h"
 #include "RPCCommandConstants.h"
@@ -10,10 +11,10 @@
 #include "kstbuttonsframe.h"
 #include "kstcallsframe.h"
 #include "kstloginframe.h"
-#include "kstmainframe.h"
 #include "kstmsgframe.h"
 #include "kstplanesframe.h"
 #include "ksttomeframe.h"
+#include "minossplitter.h"
 #include "regsettings.h"
 #include "AppStartup.h"
 #include "MShowMessageDlg.h"
@@ -43,6 +44,7 @@ QStringList services =
 };
 
 KSTMainWindow *mainWindow = nullptr;;
+bool KSTMainWindow::inApplyScreenLayout = false;
 
 const char *traceStart = "*-*_*";
 const char *traceEnd= "_**_";
@@ -118,14 +120,19 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
             doConfiguration(true);
         }
     }
-    mainFrame = new KSTMainFrame(ui->centralwidget);
-    ui->centralwidget->layout()->addWidget(mainFrame);
+    {
+        RegSettings rsettings;
 
-    mainFrame->createScreenComponents();
+        QByteArray geometry = rsettings.getSettings().value("geometry/Main").toByteArray();
+        if (geometry.size() > 0)
+            restoreGeometry(geometry);
+    }
+    createScreenComponents();
+    selectLayout(curScreenLayout);
 
     QStringList selections = chatSelection.split(":");
 
-    mainFrame->kstLoginFrame->setLogins(selections);
+    kstLoginFrame->setLogins(selections);
 
     for (auto const &i: QASCONST(selections))
     {
@@ -137,23 +144,16 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     }
     std::sort(kstChatSelection.begin(), kstChatSelection.end());
 
-    mainFrame->kstActiveChatsFrame->setActive(getActiveChat());
+    kstActiveChatsFrame->setActive(getActiveChat());
 
-    mainFrame->kstLoginFrame->setLoginTexts(services);
-    mainFrame->kstActiveChatsFrame->setLoginTexts(services);
+    kstLoginFrame->setLoginTexts(services);
+    kstActiveChatsFrame->setLoginTexts(services);
 
-    mainFrame->kstActiveChatsFrame->checkActive();
+    kstActiveChatsFrame->checkActive();
 
-    mainFrame->kstCallsFrame->setServices(services);
+    kstCallsFrame->setServices(services);
 
-    mainFrame->kstMsgFrame->setServices(services);
-    {
-        RegSettings rsettings;
-
-        QByteArray geometry = rsettings.getSettings().value("geometry/Main").toByteArray();
-        if (geometry.size() > 0)
-            restoreGeometry(geometry);
-    }
+    kstMsgFrame->setServices(services);
 
     createCloseEvent();
     connect(&CloseTimer, &QTimer::timeout, this, &KSTMainWindow::CloseTimerTimer);
@@ -165,20 +165,20 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     kstMessageModel.setChatVector(messageVector);
     kstMessageFilterModel.setSourceModel(&kstMessageModel);
 
-    mainFrame->kstMsgFrame->setModel(kstMessageModel, kstMessageFilterModel);
+    kstMsgFrame->setModel(kstMessageModel, kstMessageFilterModel);
 
     kstMeepFilterModel.setSourceModel(&kstMessageModel);
 
-    mainFrame->kstTomeFrame->setModel(kstMeepFilterModel);
+    kstTomeFrame->setModel(kstMeepFilterModel);
 
     kstCallModel.setCallVector(callVector);
 
     kstCallFilterModel.setSourceModel(&kstCallModel);
 
-    mainFrame->kstCallsFrame->setModel(callVector, kstCallModel, kstCallFilterModel);
+    kstCallsFrame->setModel(callVector, kstCallModel, kstCallFilterModel);
 
     kstPlanesFilterModel.setSourceModel(&kstPlanesModel);
-    mainFrame->kstPlanesFrame->setModel(kstPlanesModel, kstPlanesFilterModel);
+    kstPlanesFrame->setModel(kstPlanesModel, kstPlanesFilterModel);
 
     QVector<Aircraft> qva;
     kstPlanesModel.setPlanesVector(qva);
@@ -194,7 +194,7 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
 #endif
     connect(kstclient, &QTcpSocket::readyRead, this, &KSTMainWindow::onReadyRead);
 
-    mainFrame->kstPlanesFrame->setVisible(ASActive);
+    kstPlanesFrame->setVisible(ASActive);
 
     while ( myCallsign.getValRes() != CS_OK)
     {
@@ -206,7 +206,7 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     if (autoConnect)
         doLoginChanges();
 
-    mainFrame->kstLoginFrame->do_logincb_stateChanged();
+    kstLoginFrame->do_logincb_stateChanged();
 
     ml = new KSTMonitoredLogs();
     connect(RemoteLogs::getRemoteLogs(), &RemoteLogs::newMonitoredLog, this, &KSTMainWindow::onNewLog);
@@ -215,13 +215,12 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     connect(ml, &KSTMonitoredLogs::logStarted, this, &KSTMainWindow::onLogStarted);
     connect(ml, &KSTMonitoredLogs::logClosed, this, &KSTMainWindow::onLogClosed);
 
-    mainFrame->setCurScreenLayout(curScreenLayout);
-    mainFrame->applyScreenLayout();
+
 
     on_FontChanged();
 
     asl = QSharedPointer<AirScoutLink>(new AirScoutLink());
-    connect(asl.data(), &AirScoutLink::acChanged, mainFrame->kstPlanesFrame, &KSTPlanesFrame::acChanged);
+    connect(asl.data(), &AirScoutLink::acChanged, kstPlanesFrame, &KSTPlanesFrame::acChanged);
 
     configureAction = newAction(QT_TR_NOOP("Configure"), &kstPopup, &KSTMainWindow::do_configureButton_clicked);
     layoutAction = newAction(QT_TR_NOOP("Manage Layout"), &kstPopup, &KSTMainWindow::do_layoutButton_clicked);
@@ -239,7 +238,14 @@ KSTMainWindow::~KSTMainWindow()
 }
 void KSTMainWindow::on_FontChanged()
 {
-    mainFrame->on_FontChanged();
+    kstActiveChatsFrame->on_FontChanged();
+    kstButtonsFrame->on_FontChanged();
+    kstCallsFrame->on_FontChanged();
+    kstLoginFrame->on_FontChanged();
+    kstMsgFrame->on_FontChanged();
+    kstPlanesFrame->on_FontChanged();
+    kstSendMeepFrame->on_FontChanged();
+    kstTomeFrame->on_FontChanged();
 }
 void KSTMainWindow::resizeEvent(QResizeEvent * event)
 {
@@ -276,12 +282,14 @@ void KSTMainWindow::closeEvent(QCloseEvent *event)
         do_connectButton_clicked();
     }
 
-    RegSettings settings;
-    settings.getSettings().setValue("geometry/Main", saveGeometry());
+ //   RegSettings settings;
+ //   settings.getSettings().setValue("geometry/Main", saveGeometry());
     trace("KSTMainWindow Closing");
 
     delete ml;
     ml =nullptr;
+
+    clearScreenLayout();
 
     QWidget::closeEvent(event);
 }
@@ -298,6 +306,292 @@ void KSTMainWindow::CloseTimerTimer(  )
       }
    }
    RemoteLogs::getRemoteLogs()->testAutoStart();
+}
+void KSTMainWindow::createScreenComponents()
+{
+    // create component frames, parentless
+
+    trace("createScreenComponents start");
+
+    kstActiveChatsFrame = new KSTActiveChatsFrame(this);
+    kstActiveChatsFrame->setObjectName(QStringLiteral("KSTActiveChatsFrame"));
+    kstActiveChatsFrame->setFrameShape(QFrame::StyledPanel);
+    kstActiveChatsFrame->setFrameShadow(QFrame::Raised);
+    kstActiveChatsFrame->setVisible(false);
+
+    kstButtonsFrame = new KSTButtonsFrame(this);
+    kstButtonsFrame->setObjectName(QStringLiteral("KSTButtonsFrame"));
+    kstButtonsFrame->setFrameShape(QFrame::StyledPanel);
+    kstButtonsFrame->setFrameShadow(QFrame::Raised);
+    kstButtonsFrame->setVisible(false);
+
+    kstCallsFrame = new KSTCallsFrame(this);
+    kstCallsFrame->setObjectName(QStringLiteral("KSTCallsFrame"));
+    kstCallsFrame->setFrameShape(QFrame::StyledPanel);
+    kstCallsFrame->setFrameShadow(QFrame::Raised);
+    kstCallsFrame->setVisible(false);
+
+    kstLoginFrame = new KSTLoginFrame(this);
+    kstLoginFrame->setObjectName(QStringLiteral("KSTLoginFrame"));
+    kstLoginFrame->setFrameShape(QFrame::StyledPanel);
+    kstLoginFrame->setFrameShadow(QFrame::Raised);
+    kstLoginFrame->setVisible(false);
+
+    kstMsgFrame = new KSTMsgFrame(this);
+    kstMsgFrame->setObjectName(QStringLiteral("KSTMsgFrame"));
+    kstMsgFrame->setFrameShape(QFrame::StyledPanel);
+    kstMsgFrame->setFrameShadow(QFrame::Raised);
+    kstMsgFrame->setVisible(false);
+
+    kstPlanesFrame = new KSTPlanesFrame(this);
+    kstPlanesFrame->setObjectName(QStringLiteral("KSTPlanesFrame"));
+    kstPlanesFrame->setFrameShape(QFrame::StyledPanel);
+    kstPlanesFrame->setFrameShadow(QFrame::Raised);
+    kstPlanesFrame->setVisible(false);
+
+    kstSendMeepFrame = new KSTSendMeepFrame(this);
+    kstSendMeepFrame->setObjectName(QStringLiteral("KSTSendMeepFrame"));
+    kstSendMeepFrame->setFrameShape(QFrame::StyledPanel);
+    kstSendMeepFrame->setFrameShadow(QFrame::Raised);
+    kstSendMeepFrame->setVisible(false);
+
+    kstTomeFrame = new KSTTomeFrame(this);
+    kstTomeFrame->setObjectName(QStringLiteral("KSTTomeFrame"));
+    kstTomeFrame->setFrameShape(QFrame::StyledPanel);
+    kstTomeFrame->setFrameShadow(QFrame::Raised);
+    kstTomeFrame->setVisible(false);
+
+    trace("createScreenComponents end");
+}
+void KSTMainWindow::clearScreenLayout()
+{
+    // clear down the screen elements
+
+    suppressSaveHeaders = true; // stop cutils saving headers
+
+    trace("clearScreenLayout starts ");
+
+
+    kstActiveChatsFrame->setParent(this);
+    kstActiveChatsFrame->hide();
+    kstButtonsFrame->setParent(this);
+    kstButtonsFrame->hide();
+    kstCallsFrame->setParent(this);
+    kstCallsFrame->hide();
+    kstLoginFrame->setParent(this);
+    kstLoginFrame->hide();
+
+    kstMsgFrame->setParent(this);
+    kstMsgFrame->hide();
+    kstPlanesFrame->setParent(this);
+    kstPlanesFrame->hide();
+    kstSendMeepFrame->setParent(this);
+    kstSendMeepFrame->hide();
+    kstTomeFrame->setParent(this);
+    kstTomeFrame->hide();
+
+    for (auto cpc = pages.begin(); cpc != pages.end(); cpc++)
+    {
+        if (*cpc == nullptr)
+        {
+            continue;
+        }
+ //       (*cpc)->clearScreen();
+  //      (*cpc)->deleteLater();
+        delete *cpc;
+        *cpc = nullptr;
+    }
+    pages.clear();
+
+
+    suppressSaveHeaders = false;
+    trace("clearScreenLayout complete");
+}
+void KSTMainWindow::applyScreenLayout()
+{
+    inApplyScreenLayout = true;
+
+    trace("applyScreenLayout start");
+
+    clearScreenLayout();
+    buildScreenLayout();
+    mainWindow->setContentsMargins(0, 0, 0, 0);
+
+    delayedAction(this,  [=](){
+        inApplyScreenLayout = false;
+    }
+                  );
+}
+
+QString KSTMainWindow::getCurScreenLayout() const
+{
+    return curScreenLayout;
+}
+
+void KSTMainWindow::setCurScreenLayout(const QString &value)
+{
+    trace(QString("setCurScreenLayout %1").arg(value));
+    curScreenLayout = value;
+}
+
+void KSTMainWindow::buildRow(KSTPageFrame *cp, SCRow &scrow, MinosSplitter *splitterParent)
+{
+    // This builds the dependant ContestPage (including the one we derive from)
+    if (scrow.elements.count())
+    {
+        // insert horizontal splitter in splitterParent
+        MinosSplitter *hs = new MinosSplitter();
+        hs->setObjectName("row" + QString::number(cp->rowSplitters.size()) + "splitter");
+        hs->setOrientation(Qt::Horizontal);
+        hs->setChildrenCollapsible(false);
+
+        // we want this in the contest page...
+        cp->rowSplitters.push_back(hs);
+
+        for (auto &scele: scrow.elements)
+        {
+            //SCElement scele = scrow.elements[srele];
+            SCType type = scele.type;
+            if (type == sctNone)
+                continue;
+
+            QScrollArea *elementScrollArea = nullptr;
+            if (type == sctkActiveChats ||
+                type == sctkLogins ||
+                type == sctkSendMeep ||
+                type == sctkButtons
+                )
+            {
+                elementScrollArea = new QScrollArea();
+                elementScrollArea->setWidgetResizable(true);
+                elementScrollArea->setFocusPolicy(Qt::NoFocus);
+                elementScrollArea->setFrameStyle(QStyleOptionFrame::None);
+                elementScrollArea->setFrameShadow(QFrame::Plain);
+
+                hs->addWidget(elementScrollArea);
+            }
+
+            // insert correct widget type in horizontal splitter
+
+            switch (type)
+            {
+            case sctNone:
+            case sctMainScreen:
+            case sctScreen:
+            {
+                break;
+            }
+
+            case sctkActiveChats:
+                elementScrollArea->setWidget(kstActiveChatsFrame);
+                break;
+
+            case sctkCallList:
+                hs->addWidget(kstCallsFrame);
+                kstCallsFrame->setVisible(true);
+                break;
+
+            case sctkAirScout:
+                hs->addWidget(kstPlanesFrame);
+                kstPlanesFrame->setVisible(true);
+                break;
+
+            case sctkMessageList:
+                hs->addWidget(kstMsgFrame);
+                kstMsgFrame->setVisible(true);
+                break;
+
+            case sctkMeepList:
+                hs->addWidget(kstTomeFrame);
+                kstTomeFrame->setVisible(true);
+                break;
+
+            case sctkLogins:
+                elementScrollArea->setWidget(kstLoginFrame);
+                break;
+
+            case sctkSendMeep:
+                elementScrollArea->setWidget(kstSendMeepFrame);
+                break;
+
+            case sctkButtons:
+                elementScrollArea->setWidget(kstButtonsFrame);
+                break;
+
+            case sctSplit:
+            {
+                MinosSplitter *vs = new MinosSplitter();
+                vs->setObjectName("splitRow" + QString::number(cp->rowSplitters.size()) + "splitter");
+                vs->setOrientation(Qt::Vertical);
+                vs->setChildrenCollapsible(false);
+                cp->rowSplitters.push_back(vs);
+
+                for (auto &srow: scele.rows)
+                {
+                    buildRow(cp, srow, vs);
+                }
+
+                hs->addWidget(vs);
+                break;
+            }
+            default:
+                break;
+            }
+        }
+        splitterParent->addWidget(hs);
+    }
+
+}
+void KSTMainWindow::buildScreen(SCScreen &s, int t)
+{
+    // we need to add this contest page to the relevant contestPageControl
+    // as a new tab
+
+    // How do we make sure that ALL contests are in ALL page controls, even when
+    // they have no such screen?
+
+    KSTPageFrame *cp = new KSTPageFrame(nullptr, t);
+    QString n = QString("kstpage%1").arg(t);
+    cp->setObjectName(n);
+    pages.push_back(cp);
+    if (t == 0)
+    {
+        ui->centralwidget->layout()->addWidget(cp);
+    }
+    else
+    {
+        cp->setWindowFlags(/*Qt::Tool |*/ Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowMinMaxButtonsHint);
+        cp->setAttribute(Qt::WA_ShowWithoutActivating);
+        cp->show();
+    }
+
+    cp->pageNo = t;
+    cp->buildScreen(s);
+
+}
+void KSTMainWindow::buildScreenLayout()
+{
+    suppressSaveHeaders = true; // stop cutils saving headers
+
+    ScreenConfigFile &scf = ScreenConfigFile::getScreenConfigFile(this);
+
+    if (curScreenLayout.isEmpty() || !scf.configs.contains(curScreenLayout))
+    {
+        curScreenLayout = defaultLayoutName();
+    }
+    trace("buildScreenLayout to layout " + curScreenLayout);
+    setCurScreenLayout(curScreenLayout);
+
+    SC sc = scf.configs[curScreenLayout];
+
+    // build the pages
+    int t = 0;
+    for (auto &s: sc.baseElement->screens)
+    {
+        buildScreen(s, t++);
+    }
+
+    suppressSaveHeaders = false;
 }
 
 void KSTMainWindow::onNewLog(QSharedPointer<MonitoredLog> ml)
@@ -334,7 +628,7 @@ void KSTMainWindow::onLogClosed(QSharedPointer<MonitoredLog> /*ml*/)
 }
 void KSTMainWindow::userCallTimerTimer()
 {
-    if (asl && mainWindow->mainFrame->kstActiveChatsFrame->getASActive() && callVectorChanged && callVector)
+    if (asl && kstActiveChatsFrame->getASActive() && callVectorChanged && callVector)
     {
         asl->usersChanged(callVector);
         callVectorChanged = false;
@@ -365,8 +659,10 @@ void KSTMainWindow::connected()
 {
     trace("connection to ON4KST established");
 
-    mainFrame->kstButtonsFrame->setConnected(true);
-    mainFrame->kstTomeFrame->setMeepFilters();
+    kstTomeFrame->setConnected(true);
+
+    kstButtonsFrame->setConnected(true);
+    kstTomeFrame->setMeepFilters();
     connectAction->setText(tr("Disconnect"));
 }
 
@@ -374,8 +670,8 @@ void KSTMainWindow::connected()
 void KSTMainWindow::clearConnection()
 {
 
-    mainFrame->kstTomeFrame->setConnected(false);
-    mainFrame->kstButtonsFrame->setConnected(false);
+    kstTomeFrame->setConnected(false);
+    kstButtonsFrame->setConnected(false);
     kstconnected = false;
     kstLoggedIn.clear();
     connectAction->setText(tr("Connect"));
@@ -669,9 +965,9 @@ void KSTMainWindow::analyseKstMessage(QString atj) {
 
     } else if (sl[0] == "CE") {
         // end of CR frames
-        mainFrame->kstMsgFrame->scrollMesToBottom();
+        kstMsgFrame->scrollMesToBottom();
 
-        mainFrame->kstTomeFrame->scrollMeepToBottom();
+        kstTomeFrame->scrollMeepToBottom();
     } else if (sl[0] == "CH") {
         // message frame after login
         // CH|chat id|date|callsign|firstname|destination|msg|highlight|
@@ -702,8 +998,8 @@ void KSTMainWindow::analyseKstMessage(QString atj) {
 
         addMessage(kst);
 
-        mainFrame->kstMsgFrame->scrollMesToBottom();
-        mainFrame->kstTomeFrame->scrollMeepToBottom();
+        kstMsgFrame->scrollMesToBottom();
+        kstTomeFrame->scrollMeepToBottom();
 
         if (kst->otherCall == myCallsign) {
             QApplication::alert(this, 10000); // 10 sec alert
@@ -810,9 +1106,9 @@ void KSTMainWindow::analyseKstMessage(QString atj) {
         kstCallFilterModel.invalidate();
         kstMessageFilterModel.invalidate();
 
-        mainFrame->kstMsgFrame->scrollMesToBottom();
+        kstMsgFrame->scrollMesToBottom();
 
-        mainFrame->kstTomeFrame->scrollMeepToBottom();
+        kstTomeFrame->scrollMeepToBottom();
 
         if (!firstName.isEmpty() && recName != firstName) {
             // setnam isn't valid, and not likely to be
@@ -995,7 +1291,7 @@ void KSTMainWindow::analyseKstMessage(QString atj) {
 }
 void KSTMainWindow::checkAwayButton()
 {
-    mainFrame->kstButtonsFrame->checkAwayButton();
+    kstButtonsFrame->checkAwayButton();
 
     QSharedPointer<KstUser> user = mainWindow->getUser(KstUser(mainWindow->myCallsign, mainWindow->getActiveChat()));
     if (user)
@@ -1124,12 +1420,12 @@ bool KSTMainWindow::doConfiguration(bool showForm)
             kstCallFilterModel.invalidate();
             kstMessageFilterModel.invalidate();
 
-            if (mainWindow->mainFrame->kstActiveChatsFrame->getASActive())
+            if (kstActiveChatsFrame->getASActive())
             {
                 asl.reset();
 
                 asl = QSharedPointer<AirScoutLink>(new AirScoutLink());
-                connect(asl.data(), &AirScoutLink::acChanged, mainFrame->kstPlanesFrame, &KSTPlanesFrame::acChanged);
+                connect(asl.data(), &AirScoutLink::acChanged, kstPlanesFrame, &KSTPlanesFrame::acChanged);
             }
             if  (kstconnected)
             {
@@ -1264,7 +1560,7 @@ void KSTMainWindow::doLoginChanges()
         }
     }
 
-    mainFrame->kstActiveChatsFrame->checkActive();
+    kstActiveChatsFrame->checkActive();
 }
 
 void KSTMainWindow::do_awayButton_clicked()
@@ -1437,7 +1733,6 @@ void KSTMainWindow::do_layoutButton_clicked()
     connect(&sc, &ScreenConfigManager::setProtectedName, this, &KSTMainWindow::onSetProtectedName);
 
     sc.exec();
-    //updateLayoutsMenu();
 
 }
 void KSTMainWindow::selectLayout(QString layout)
@@ -1448,12 +1743,10 @@ void KSTMainWindow::selectLayout(QString layout)
 
     settings.setValue("screenLayout", curScreenLayout);
 
-    if (mainFrame)
-    {
-        mainFrame->setCurScreenLayout(layout);
-        mainFrame->applyScreenLayout();
- //       updateLayoutsMenu();
-    }
+    clearScreenLayout();
+
+    setCurScreenLayout(layout);
+    applyScreenLayout();
 }
 
 void KSTMainWindow::onScreenConfigApply(QString curConfigName)

@@ -7,12 +7,21 @@
 #include <QCheckBox>
 #include <QTimer>
 #include "CommandReader.h"
+#include "kstactivechatsframe.h"
+#include "kstbuttonsframe.h"
 #include "kstcallgridmodel.h"
+#include "kstcallsframe.h"
+#include "kstloginframe.h"
 #include "kstmessagegridmodel.h"
+#include "kstmsgframe.h"
+#include "kstpageframe.h"
+#include "kstplanesframe.h"
 #include "kstplanesmodel.h"
 #include "cutils.h"
 #include "airscoutlink.h"
 #include "kstscreenoptions.h"
+#include "kstsendmeepframe.h"
+#include "ksttomeframe.h"
 #include "qmenu.h"
 
 
@@ -21,7 +30,6 @@ namespace Ui { class KSTMainWindow; }
 QT_END_NAMESPACE
 
 class KSTMonitoredLogs;
-class KSTMainFrame;
 
 extern QStringList services;
 
@@ -34,6 +42,8 @@ class KSTMainWindow : public QMainWindow
 {
     Q_OBJECT
 private:
+    static bool inApplyScreenLayout;
+
     KSTScreenOptions kstScreenOptions;
     QTimer CloseTimer;
     QTimer userCallTimer;
@@ -85,6 +95,18 @@ public:
     KSTMainWindow(QWidget *parent = nullptr);
     ~KSTMainWindow() override;
     QStringList routerList();
+
+    QVector<KSTPageFrame *> pages;
+
+    KSTActiveChatsFrame *kstActiveChatsFrame = nullptr;
+    KSTButtonsFrame *kstButtonsFrame = nullptr;
+    KSTCallsFrame *kstCallsFrame = nullptr;
+    KSTLoginFrame *kstLoginFrame = nullptr;
+    KSTMsgFrame *kstMsgFrame = nullptr;
+    KSTPlanesFrame *kstPlanesFrame = nullptr;
+    KSTSendMeepFrame *kstSendMeepFrame = nullptr;
+    KSTTomeFrame *kstTomeFrame = nullptr;
+
     bool started = false;
     QMenu kstPopup;
     QAction *layoutAction = nullptr;
@@ -112,7 +134,6 @@ public:
     QSharedPointer<AirScoutLink> asl;
     UpperCaseValidator ucValidator;
 
-    KSTMainFrame *mainFrame = nullptr;
     QString iniName;
     QString TNServerName;
     QString TNServerPort;
@@ -170,6 +191,8 @@ public:
 
     void createScreenComponents();
     void applyScreenLayout();
+    void buildRow(KSTPageFrame *cp, SCRow &scrow, MinosSplitter *splitterParent);
+
     QString getCurScreenLayout() const;
     void setCurScreenLayout(const QString &value);
 
@@ -188,6 +211,9 @@ public:
     void do_clearLogsButton_clicked();
     void checkAwayButton();
 
+    void clearScreenLayout();
+    void buildScreenLayout();
+    void buildScreen(SCScreen &s, int t);
 private slots:
     void CloseTimerTimer();
 

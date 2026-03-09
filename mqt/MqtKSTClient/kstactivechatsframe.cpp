@@ -1,6 +1,5 @@
 #include "QtUtils.h"
 #include "kstcallsframe.h"
-#include "kstmainframe.h"
 
 #include "kstactivechatsframe.h"
 
@@ -15,6 +14,7 @@ KSTActiveChatsFrame::KSTActiveChatsFrame(QWidget *parent)
     ui->setupUi(this);
 
     ui->ASActivecb->setChecked(mainWindow->getASActive());
+    on_ASActivecb_stateChanged(mainWindow->getASActive());
 
 }
 
@@ -100,14 +100,14 @@ void KSTActiveChatsFrame::setASBands(QVector<const char *> ASBandStrings)
         // in kstActiveChatsFrame
         ui->asBandCombo->addItem(AirScoutLink::tr(s));
     }
-    ui->asBandCombo->setCurrentIndex(mainWindow->mainFrame->kstActiveChatsFrame->getASActiveBand());
+    ui->asBandCombo->setCurrentIndex(mainWindow->kstActiveChatsFrame->getASActiveBand());
 }
 
 void KSTActiveChatsFrame::on_ASActivecb_stateChanged(int state)
 {
         if (mainWindow->started)
         {
-            if (mainWindow->asl && mainWindow->mainFrame->kstActiveChatsFrame->getASActive())
+            if (mainWindow->asl && mainWindow->kstActiveChatsFrame->getASActive())
             {
                 for (auto const &kstuser: QASCONST(*mainWindow->callVector))
                 {
@@ -125,9 +125,9 @@ void KSTActiveChatsFrame::on_ASActivecb_stateChanged(int state)
 
             settings.setValue("ASActive", state != 0);
 
-            mainWindow->mainFrame->kstPlanesFrame->setVisible(state != 0);
+            mainWindow->kstPlanesFrame->setVisible(state != 0);
 
-            mainWindow->mainFrame->kstCallsFrame->showAircout(state);
+            mainWindow->kstCallsFrame->showAircout(state);
         }
 }
 void KSTActiveChatsFrame::on_asBandCombo_currentIndexChanged(int band)

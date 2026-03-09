@@ -1,7 +1,6 @@
 #include "kstloginframe.h"
 #include "QtUtils.h"
 #include "kstactivechatsframe.h"
-#include "kstmainframe.h"
 #include "kstmainwindow.h"
 #include "ui_kstloginframe.h"
 
@@ -66,15 +65,15 @@ void KSTLoginFrame::logincb_stateChanged(int /*arg1*/)
     QVector<int> v;
     QVector<int> a;
 
-    mainWindow->mainFrame->kstActiveChatsFrame->resetVectors(ui->login1cb, 1, s, v, a);
-    mainWindow->mainFrame->kstActiveChatsFrame->resetVectors(ui->login2cb, 2, s, v, a);
-    mainWindow->mainFrame->kstActiveChatsFrame->resetVectors(ui->login3cb, 3, s, v, a);
-    mainWindow->mainFrame->kstActiveChatsFrame->resetVectors(ui->login4cb, 4, s, v, a);
+    mainWindow->kstActiveChatsFrame->resetVectors(ui->login1cb, 1, s, v, a);
+    mainWindow->kstActiveChatsFrame->resetVectors(ui->login2cb, 2, s, v, a);
+    mainWindow->kstActiveChatsFrame->resetVectors(ui->login3cb, 3, s, v, a);
+    mainWindow->kstActiveChatsFrame->resetVectors(ui->login4cb, 4, s, v, a);
 
     mainWindow->kstChatSelection = v;
     if (a.count())
     {
-        mainWindow->mainFrame->kstActiveChatsFrame->setActive(a[0]);
+        mainWindow->kstActiveChatsFrame->setActive(a[0]);
     }
     mainWindow->doLoginChanges();
     QSettings settings(mainWindow->iniName, QSettings::IniFormat);

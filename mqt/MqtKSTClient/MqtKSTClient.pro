@@ -11,7 +11,7 @@ TEMPLATE = app
 win32:RC_ICONS += ../MinosKST.ico
 macx:ICON=../MinosKST.icns
 
-win32:LIBS += -lWs2_32
+win32{ LIBS += -lWs2_32 -lUser32 -lole32 -luuid -lshlwapi}
 
 SOURCES += \
     KSTMinosParameters.cpp \
@@ -23,7 +23,6 @@ SOURCES += \
     kstcallsframe.cpp \
     kstconfigure.cpp \
     kstloginframe.cpp \
-    kstmainframe.cpp \
     kstmessagegridmodel.cpp \
     kstmonitoredlogs.cpp \
     kstmsgframe.cpp \
@@ -46,7 +45,6 @@ HEADERS += \
     kstcallsframe.h \
     kstconfigure.h \
     kstloginframe.h \
-    kstmainframe.h \
     kstmainwindow.h \
     kstmessagegridmodel.h \
     kstmonitoredlogs.h \
@@ -65,7 +63,6 @@ FORMS += \
     kstcallsframe.ui \
     kstconfigure.ui \
     kstloginframe.ui \
-    kstmainframe.ui \
     kstmainwindow.ui \
     kstmonitoredlogs.ui \
     kstmsgframe.ui \

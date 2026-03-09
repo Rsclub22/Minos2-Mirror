@@ -7,7 +7,6 @@
 #include "kstactivechatsframe.h"
 #include "kstcallgridmodel.h"
 #include "kstmainwindow.h"
-#include "kstmainframe.h"
 #include "kstmsgframe.h"
 #include "kstplanesframe.h"
 #include "regsettings.h"
@@ -156,7 +155,7 @@ void KSTCallsFrame::onCSTableSelectionChanged(const QItemSelection &/*selected*/
             mselstring += user->call.getFullCall();
         }
     }
-    mainWindow->mainFrame->kstMsgFrame->setFilter(mselstring);
+    mainWindow->kstMsgFrame->setFilter(mselstring);
     if (mil.count() == 1)
     {
         QModelIndex m = kstCallFilterModel->mapToSource(mil[0]);
@@ -174,19 +173,19 @@ void KSTCallsFrame::onCSTableSelectionChanged(const QItemSelection &/*selected*/
                 // and why the rest of it?
                 // messages
 
-                mainWindow->mainFrame->kstSendMeepFrame->setNameFromCall(user->call, user->chat);    //send meep, msgEdit "Hi Fred"
+                mainWindow->kstSendMeepFrame->setNameFromCall(user->call, user->chat);    //send meep, msgEdit "Hi Fred"
 
-                mainWindow->mainFrame->kstActiveChatsFrame->setActive(user->chat);
-                mainWindow->mainFrame->kstMsgFrame->setActive(user->chat);
+                mainWindow->kstActiveChatsFrame->setActive(user->chat);
+                mainWindow->kstMsgFrame->setActive(user->chat);
             }
             // Planes
-            mainWindow->mainFrame->kstPlanesFrame->showPlanes(user);
+            mainWindow->kstPlanesFrame->showPlanes(user);
             ui->loggerXferButton->setDefault(true);
         }
     }
     else if (mil.count() == 0)
     {
-        mainWindow->mainFrame->kstMsgFrame->on_clearMessageFilter_clicked();
+        mainWindow->kstMsgFrame->on_clearMessageFilter_clicked();
     }
 }
 void KSTCallsFrame::acChanged(QSharedPointer<KstUser> user)
@@ -243,9 +242,9 @@ void KSTCallsFrame::on_clearUserFilter_clicked()
     ui->CSChatFilter->setCurrentIndex(0);
     ui->CSFilter->clear();
     ui->CSTable->clearSelection();
-    mainWindow->mainFrame->kstMsgFrame->on_clearMessageFilter_clicked();
+    mainWindow->kstMsgFrame->on_clearMessageFilter_clicked();
     ui->CSFilter->setFocus();
-    mainWindow->mainFrame->kstSendMeepFrame->on_clearMessageButton_clicked();
+    mainWindow->kstSendMeepFrame->on_clearMessageButton_clicked();
 }
 void KSTCallsFrame::on_awayCallscb_stateChanged(int)
 {

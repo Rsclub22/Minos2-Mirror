@@ -6,7 +6,6 @@
 #include "kstcallgridmodel.h"
 #include "kstcallsframe.h"
 #include "kstmainwindow.h"
-#include "kstmainframe.h"
 #include "kstmsgframe.h"
 #include "regsettings.h"
 #include "ui_kstplanesframe.h"
@@ -17,7 +16,7 @@ KSTPlanesFrame::KSTPlanesFrame(QWidget *parent)
 {
     ui->setupUi(this);
 
-    mainWindow->mainFrame->kstActiveChatsFrame->setASBands(AirScoutLink::ASBandStrings);
+    mainWindow->kstActiveChatsFrame->setASBands(AirScoutLink::ASBandStrings);
     ui->planesView->installEventFilter(this);
     installEventFilter(this);   // so we pick up return, and implement the default button
 }
@@ -87,7 +86,7 @@ void KSTPlanesFrame::showPlanes(QSharedPointer<KstUser> user)
 }
 void KSTPlanesFrame::acChanged(QSharedPointer<KstUser> user)
 {
-    mainWindow->mainFrame->kstCallsFrame->acChanged(user);
+    mainWindow->kstCallsFrame->acChanged(user);
 
     if (user == planeActive)
     {
@@ -100,5 +99,5 @@ void KSTPlanesFrame::on_showInAS_clicked()
 }
 void KSTPlanesFrame::on_showMPath_clicked()
 {
-    mainWindow->mainFrame->kstMsgFrame->showAirscoutPath();
+    mainWindow->kstMsgFrame->showAirscoutPath();
 }

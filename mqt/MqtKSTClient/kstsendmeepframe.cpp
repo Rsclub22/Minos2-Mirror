@@ -4,7 +4,6 @@
 #include "kstcallgridmodel.h"
 #include "kstcallsframe.h"
 #include "kstmainwindow.h"
-#include "kstmainframe.h"
 #include "kstmsgframe.h"
 
 #include "kstsendmeepframe.h"
@@ -85,7 +84,7 @@ void KSTSendMeepFrame::on_clearMessageButton_clicked()
 {
     ui->callEdit->clear();
     ui->msgEdit->clear();
-    mainWindow->mainFrame->kstMsgFrame->setFocus();
+    mainWindow->kstMsgFrame->setFocus();
 }
 void KSTSendMeepFrame::on_genmsgButton_clicked()
 {
@@ -123,7 +122,7 @@ void KSTSendMeepFrame::on_msgEdit_textChanged(const QString &/*arg1*/)
 }
 void KSTSendMeepFrame::setDefaultButton(QPushButton *d)
 {
-    mainWindow->mainFrame->kstCallsFrame->setDefaultButton(false);
+    mainWindow->kstCallsFrame->setDefaultButton(false);
     if (d)
     {
         ui->meepButton->setDefault(false);

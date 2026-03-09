@@ -20,6 +20,8 @@ QVector <SCTypeOption> KSTScreenOptions::kstScreenOptions =
         {sctScreen, QT_TR_NOOP("screen"), QT_TR_NOOP("Secondary Screen")},
         {sctSplit, QT_TR_NOOP("HSplit"), QT_TR_NOOP("Horizontally split element")},
 
+    {sctNone, QT_TR_NOOP("None"), QT_TR_NOOP("Not in use")},
+
         {sctkLogins, QT_TR_NOOP("Chats"), QT_TR_NOOP("Chats logged in")},
         {sctkCallList, QT_TR_NOOP("Call List"), QT_TR_NOOP("Active Callsigns")},
         {sctkAirScout, QT_TR_NOOP("AirScout"), QT_TR_NOOP("AirScout")},
@@ -27,9 +29,8 @@ QVector <SCTypeOption> KSTScreenOptions::kstScreenOptions =
         {sctkMeepList, QT_TR_NOOP("Meeps"), QT_TR_NOOP("Messages to me")},
         {sctkActiveChats, QT_TR_NOOP("Current Chat"), QT_TR_NOOP("Current Active Chat")},
         {sctkSendMeep, QT_TR_NOOP("SendMeep"), QT_TR_NOOP("Sending Meeps")},
-        {sctkButtons, QT_TR_NOOP("Buttons"), QT_TR_NOOP("Buttons")},
+        {sctkButtons, QT_TR_NOOP("Buttons"), QT_TR_NOOP("Buttons")}
 
-        {sctNone, QT_TR_NOOP("None"), QT_TR_NOOP("Not in use")}
 };
 
 

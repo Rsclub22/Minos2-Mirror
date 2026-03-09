@@ -9,7 +9,6 @@ class KSTPageFrame;
 }
 class QVBoxLayout;
 class MinosSplitter;
-class KSTMainFrame;
 
 class KSTPageFrame : public QFrame
 {
@@ -23,14 +22,14 @@ protected:
     QVBoxLayout *verticalLayout = nullptr;
 
 public:
-    explicit KSTPageFrame(QWidget *parent);
+    explicit KSTPageFrame(QWidget *parent, int pno);
     virtual ~KSTPageFrame();
 
     int pageNo = -1;
     QString pageName;
     QVector <MinosSplitter *> rowSplitters;
 
-    void buildScreen(KSTMainFrame *tslf, SCScreen &s);
+    void buildScreen(SCScreen &s);
     void clearScreen();
     bool hasElements();
 private:
@@ -38,10 +37,10 @@ private:
     int splitterHandleWidth;
     MinosSplitter *kstPageSplitter = nullptr;
 
-
-    KSTMainFrame *kstMainPage = nullptr;
     void getSplitters();
-
+    virtual void resizeEvent(QResizeEvent *event) override;
+    virtual void moveEvent(QMoveEvent *event) override;
+    virtual void changeEvent( QEvent* e ) override;
 private slots:
     void onSplittersChanged();
     void onSplitterMoved(int, int);

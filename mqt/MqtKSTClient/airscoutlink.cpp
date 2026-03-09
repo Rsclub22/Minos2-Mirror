@@ -3,7 +3,6 @@
 #include "delayedaction.h"
 
 #include "kstactivechatsframe.h"
-#include "kstmainframe.h"
 #include "kstmainwindow.h"
 
 // frequencies are in 100 hz unit
@@ -53,7 +52,7 @@ AirScoutLink::~AirScoutLink()
 }
 void AirScoutLink::onTimeout()
 {
-    if (mainWindow && mainWindow->mainFrame->kstActiveChatsFrame->getASActive())
+    if (mainWindow && mainWindow->kstActiveChatsFrame->getASActive())
     {
         //QDateTime now = QDateTime::currentDateTime();
         //QDateTime timeoutTime = lastASSEnd.addSecs(mainWindow->getASTimeout());
@@ -305,7 +304,7 @@ void AirScoutLink::onReadyRead()
 
 void AirScoutLink::usersChanged(QSharedPointer<QVector<QSharedPointer<KstUser> > > callVector)
 {
-    if (mainWindow->mainFrame->kstActiveChatsFrame->getASActive())
+    if (mainWindow->kstActiveChatsFrame->getASActive())
     {
         watchList.clear();
         for(auto const &user: QASCONST(*callVector))
@@ -326,7 +325,7 @@ void AirScoutLink::usersChanged(QSharedPointer<QVector<QSharedPointer<KstUser> >
         std::sort(watchList.begin(), watchList.end(), WatchCompare);
         watchList.erase( std::unique( watchList.begin(), watchList.end(), WatchEquals ), watchList.end() );
 
-        QString watchFreq = bandFreqStrings[mainWindow->mainFrame->kstActiveChatsFrame->getASActiveBand()];        // band
+        QString watchFreq = bandFreqStrings[mainWindow->kstActiveChatsFrame->getASActiveBand()];        // band
 
         if (watchList.count() > 0)
         {
@@ -355,7 +354,7 @@ void AirScoutLink::asSelected(QSharedPointer<KstUser> user)
 {
     if (user)
     {
-        QString watchFreq = bandFreqStrings[mainWindow->mainFrame->kstActiveChatsFrame->getASActiveBand()];        // band
+        QString watchFreq = bandFreqStrings[mainWindow->kstActiveChatsFrame->getASActiveBand()];        // band
         QString getpath = /*"\""  +*/ watchFreq + ","
                 + mainWindow->getMyCallsign().getFullCall() + "," + mainWindow->getMyLoc() + ","
                 + user->call.realCall + "," + user->loc /*+ "\""*/;
@@ -372,7 +371,7 @@ void AirScoutLink::asShowPath(QSharedPointer<KstUser> user, QSharedPointer<KstUs
 {
     if (user && other)
     {
-        QString watchFreq = bandFreqStrings[mainWindow->mainFrame->kstActiveChatsFrame->getASActiveBand()];        // band
+        QString watchFreq = bandFreqStrings[mainWindow->kstActiveChatsFrame->getASActiveBand()];        // band
         QString getpath = /*"\""  +*/ watchFreq + ","
                 + user->call.realCall+ "," + user->loc + ","
                 + other->call.realCall + "," + other->loc /*+ "\""*/;
@@ -385,13 +384,13 @@ void AirScoutLink::askNearest(int row)
     if (assetPathInProgress)
         return;
 
-    if (mainWindow && mainWindow->mainFrame->kstActiveChatsFrame->getASActive() && watchList.size())
+    if (mainWindow && mainWindow->kstActiveChatsFrame->getASActive() && watchList.size())
     {
         if ((row < 0) || (++row > watchList.size() - 1))
         {
             row = 0;
         }
-        QString watchFreq = bandFreqStrings[mainWindow->mainFrame->kstActiveChatsFrame->getASActiveBand()];        // band
+        QString watchFreq = bandFreqStrings[mainWindow->kstActiveChatsFrame->getASActiveBand()];        // band
 
         QSharedPointer<KstUser> user = watchList[row];
         QString getpath = /*"\""  +*/ watchFreq + ","
