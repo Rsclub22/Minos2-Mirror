@@ -39,6 +39,7 @@ enum SCType
     sctkMessageList,
     sctkMeepList,
     sctkActiveChats,
+    sctkASActive,
     sctkSendMeep,
     sctkButtons
 };

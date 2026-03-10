@@ -8,6 +8,7 @@
 #include <QTimer>
 #include "CommandReader.h"
 #include "kstactivechatsframe.h"
+#include "kstasactiveframe.h"
 #include "kstbuttonsframe.h"
 #include "kstcallgridmodel.h"
 #include "kstcallsframe.h"
@@ -99,6 +100,7 @@ public:
     QVector<KSTPageFrame *> pages;
 
     KSTActiveChatsFrame *kstActiveChatsFrame = nullptr;
+    KSTASActiveFrame *kstASActiveFrame = nullptr;
     KSTButtonsFrame *kstButtonsFrame = nullptr;
     KSTCallsFrame *kstCallsFrame = nullptr;
     KSTLoginFrame *kstLoginFrame = nullptr;
@@ -107,6 +109,7 @@ public:
     KSTSendMeepFrame *kstSendMeepFrame = nullptr;
     KSTTomeFrame *kstTomeFrame = nullptr;
 
+    bool splitIcons = false;
     bool started = false;
     QMenu kstPopup;
     QAction *layoutAction = nullptr;
@@ -116,6 +119,10 @@ public:
     QAction *connectAction = nullptr;
     QAction *closeAction = nullptr;
     QAction *awayAction = nullptr;
+
+#ifdef Q_OS_WIN
+    QAction *splitIconsAction = nullptr;
+#endif
 
     QSharedPointer<QVector <QSharedPointer<KstMessageLine> > > messageVector;
     QSharedPointer<QVector<QSharedPointer<KstUser> > > callVector;
@@ -209,6 +216,8 @@ public:
     void do_logsButton_clicked();
     void do_closeButton_clicked();
     void do_clearLogsButton_clicked();
+    void do_splitIcons(bool);
+    void do_ASActive(bool);
     void checkAwayButton();
 
     void clearScreenLayout();

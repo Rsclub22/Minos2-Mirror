@@ -82,7 +82,7 @@ void KSTMainWindow::getSettings(QSettings &settings)
     autoConnect = settings.value("autoConnect", false).toBool();
     myLoc = settings.value("locator", "").toString();
 
-
+    splitIcons = settings.value("splitIcons", false).toBool();
 
 }
 
@@ -228,6 +228,11 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     clearMessagesAction = newAction(QT_TR_NOOP("Clear Messages"), &kstPopup, &KSTMainWindow::do_clearLogsButton_clicked);
     awayAction = newAction(QT_TR_NOOP(""), &kstPopup, &KSTMainWindow::do_awayButton_clicked);
     connectAction = newAction(QT_TR_NOOP("Connect"), &kstPopup, &KSTMainWindow::do_connectButton_clicked);
+
+#ifdef Q_OS_WIN
+    splitIconsAction = newCheckableAction(QT_TR_NOOP("Split Icons"), &kstPopup, &KSTMainWindow::do_splitIcons);
+    do_splitIcons(true);
+#endif
     closeAction = newAction(QT_TR_NOOP("Close"), &kstPopup, &KSTMainWindow::do_closeButton_clicked);
 }
 
@@ -239,6 +244,7 @@ KSTMainWindow::~KSTMainWindow()
 void KSTMainWindow::on_FontChanged()
 {
     kstActiveChatsFrame->on_FontChanged();
+    kstASActiveFrame->on_FontChanged();
     kstButtonsFrame->on_FontChanged();
     kstCallsFrame->on_FontChanged();
     kstLoginFrame->on_FontChanged();
@@ -319,6 +325,12 @@ void KSTMainWindow::createScreenComponents()
     kstActiveChatsFrame->setFrameShadow(QFrame::Raised);
     kstActiveChatsFrame->setVisible(false);
 
+    kstASActiveFrame= new KSTASActiveFrame(this);
+    kstASActiveFrame->setObjectName(QStringLiteral("KSTASActiveFrame"));
+    kstASActiveFrame->setFrameShape(QFrame::StyledPanel);
+    kstASActiveFrame->setFrameShadow(QFrame::Raised);
+    kstASActiveFrame->setVisible(false);
+
     kstButtonsFrame = new KSTButtonsFrame(this);
     kstButtonsFrame->setObjectName(QStringLiteral("KSTButtonsFrame"));
     kstButtonsFrame->setFrameShape(QFrame::StyledPanel);
@@ -374,6 +386,8 @@ void KSTMainWindow::clearScreenLayout()
 
     kstActiveChatsFrame->setParent(this);
     kstActiveChatsFrame->hide();
+    kstASActiveFrame->setParent(this);
+    kstASActiveFrame->hide();
     kstButtonsFrame->setParent(this);
     kstButtonsFrame->hide();
     kstCallsFrame->setParent(this);
@@ -457,6 +471,7 @@ void KSTMainWindow::buildRow(KSTPageFrame *cp, SCRow &scrow, MinosSplitter *spli
 
             QScrollArea *elementScrollArea = nullptr;
             if (type == sctkActiveChats ||
+                type == sctkASActive ||
                 type == sctkLogins ||
                 type == sctkSendMeep ||
                 type == sctkButtons
@@ -484,6 +499,10 @@ void KSTMainWindow::buildRow(KSTPageFrame *cp, SCRow &scrow, MinosSplitter *spli
 
             case sctkActiveChats:
                 elementScrollArea->setWidget(kstActiveChatsFrame);
+                break;
+
+            case sctkASActive:
+                elementScrollArea->setWidget(kstASActiveFrame);
                 break;
 
             case sctkCallList:
@@ -628,7 +647,7 @@ void KSTMainWindow::onLogClosed(QSharedPointer<MonitoredLog> /*ml*/)
 }
 void KSTMainWindow::userCallTimerTimer()
 {
-    if (asl && kstActiveChatsFrame->getASActive() && callVectorChanged && callVector)
+    if (asl && kstASActiveFrame->getASActive() && callVectorChanged && callVector)
     {
         asl->usersChanged(callVector);
         callVectorChanged = false;
@@ -1420,7 +1439,7 @@ bool KSTMainWindow::doConfiguration(bool showForm)
             kstCallFilterModel.invalidate();
             kstMessageFilterModel.invalidate();
 
-            if (kstActiveChatsFrame->getASActive())
+            if (kstASActiveFrame->getASActive())
             {
                 asl.reset();
 
@@ -1774,6 +1793,30 @@ void KSTMainWindow::do_clearLogsButton_clicked()
     }
     kstCallFilterModel.invalidate();
 
+}
+
+#ifdef Q_OS_WIN
+void KSTMainWindow::do_splitIcons(bool)
+{
+    splitIcons = splitIconsAction->isChecked();
+    QSettings settings(iniName, QSettings::IniFormat);
+
+    settings.setValue("splitIcons", splitIcons);
+    selectLayout(curScreenLayout);
+}
+#endif
+
+void KSTMainWindow::do_ASActive(bool s)
+{
+    if (started && kstASActiveFrame)
+    {
+        ASActive = s;
+        kstASActiveFrame->setASActive(ASActive);
+
+        QSettings settings(iniName, QSettings::IniFormat);
+
+        settings.setValue("ASActive", ASActive);
+    }
 }
 QMenu *KSTMainWindow::newMenu(QMenu *m, const char *text)
 {

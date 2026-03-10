@@ -1,10 +1,7 @@
-#include "QtUtils.h"
-#include "kstcallsframe.h"
+#include "kstmainwindow.h"
 
 #include "kstactivechatsframe.h"
 
-#include "kstmainwindow.h"
-#include "kstplanesframe.h"
 #include "ui_kstactivechatsframe.h"
 
 KSTActiveChatsFrame::KSTActiveChatsFrame(QWidget *parent)
@@ -13,8 +10,6 @@ KSTActiveChatsFrame::KSTActiveChatsFrame(QWidget *parent)
 {
     ui->setupUi(this);
 
-    ui->ASActivecb->setChecked(mainWindow->getASActive());
-    on_ASActivecb_stateChanged(mainWindow->getASActive());
 
 }
 
@@ -93,76 +88,6 @@ void KSTActiveChatsFrame::activerb_clicked()
     mainWindow->checkAwayButton();
 }
 
-void KSTActiveChatsFrame::setASBands(QVector<const char *> ASBandStrings)
-{
-    for(auto const &s: QASCONST(ASBandStrings))
-    {
-        // in kstActiveChatsFrame
-        ui->asBandCombo->addItem(AirScoutLink::tr(s));
-    }
-    ui->asBandCombo->setCurrentIndex(mainWindow->kstActiveChatsFrame->getASActiveBand());
-}
-
-void KSTActiveChatsFrame::on_ASActivecb_stateChanged(int state)
-{
-        if (mainWindow->started)
-        {
-            if (mainWindow->asl && mainWindow->kstActiveChatsFrame->getASActive())
-            {
-                for (auto const &kstuser: QASCONST(*mainWindow->callVector))
-                {
-                    kstuser->planes.clear();
-                    kstuser->planeResponseSeen = false;
-                }
-                mainWindow->callVectorChanged = true;
-                emit mainWindow->kstCallModel.dataChanged(mainWindow->kstCallModel.index(0, ecscAirscout), mainWindow->kstCallModel.index(mainWindow->callVector->size(), ecscAirscout));
-
-                mainWindow->asl->clearWatchList();
-                mainWindow->userCallTimerTimer();
-            }
-
-            QSettings settings(mainWindow->iniName, QSettings::IniFormat);
-
-            settings.setValue("ASActive", state != 0);
-
-            mainWindow->kstPlanesFrame->setVisible(state != 0);
-
-            mainWindow->kstCallsFrame->showAircout(state);
-        }
-}
-void KSTActiveChatsFrame::on_asBandCombo_currentIndexChanged(int band)
-{
-    if (mainWindow->started)
-    {
-        if (mainWindow->asl && getASActive())
-        {
-            for (auto const &kstuser: QASCONST(*mainWindow->callVector))
-            {
-                kstuser->planes.clear();
-                kstuser->planeResponseSeen = false;
-            }
-            mainWindow->callVectorChanged = true;
-            emit mainWindow->kstCallModel.dataChanged(mainWindow->kstCallModel.index(0, ecscAirscout), mainWindow->kstCallModel.index(mainWindow->callVector->size(), ecscAirscout));
-
-            mainWindow->userCallTimerTimer();
-        }
-        QSettings settings(mainWindow->iniName, QSettings::IniFormat);
-
-        settings.setValue("ASActiveBand", band);
-    }
-}
-
-bool KSTActiveChatsFrame::getASActive() const
-{
-    bool ret = ui->ASActivecb->isChecked();
-    return ret;
-}
-
-ASBand KSTActiveChatsFrame::getASActiveBand() const
-{
-    ASBand b = static_cast<ASBand>(ui->asBandCombo->currentIndex());
-    return b;
-}
 
 void KSTActiveChatsFrame::resetVectors(QCheckBox *cb, int c, QStringList &s, QVector<int> &v, QVector<int> &a)
 {

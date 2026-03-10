@@ -41,8 +41,7 @@ KSTPageFrame::KSTPageFrame(QWidget *parent, int pno)
             restoreGeometry(geometry);
         }
     }
-    bool sep = true;
-//    TContestApp::getContestApp() ->getBoolDisplayProfile( edpSeparateIcons, sep );
+    bool sep = mainWindow->splitIcons;
 
     int subinst = 0;
     if (sep)

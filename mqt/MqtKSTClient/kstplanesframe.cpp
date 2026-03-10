@@ -2,9 +2,9 @@
 
 #include "kstplanesframe.h"
 #include "htmldelegate.h"
-#include "kstactivechatsframe.h"
 #include "kstcallgridmodel.h"
 #include "kstcallsframe.h"
+#include "kstasactiveframe.h"
 #include "kstmainwindow.h"
 #include "kstmsgframe.h"
 #include "regsettings.h"
@@ -16,7 +16,7 @@ KSTPlanesFrame::KSTPlanesFrame(QWidget *parent)
 {
     ui->setupUi(this);
 
-    mainWindow->kstActiveChatsFrame->setASBands(AirScoutLink::ASBandStrings);
+    mainWindow->kstASActiveFrame->setASBands(AirScoutLink::ASBandStrings);
     ui->planesView->installEventFilter(this);
     installEventFilter(this);   // so we pick up return, and implement the default button
 }
