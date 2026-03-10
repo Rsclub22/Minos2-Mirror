@@ -430,6 +430,14 @@ void KstCallGridSortFilterModel::setInactiveFilter(bool value)
     invalidateFilter();
 }
 
+    void KstCallGridSortFilterModel::setWorkedFilter(bool value)
+{
+    KstCallGridModel *cgm = dynamic_cast<KstCallGridModel *>(sourceModel());
+    if (cgm)
+        cgm->setInactiveFilter(value);
+    workedFilter = value;
+    invalidateFilter();
+}
 void KstCallGridSortFilterModel::setStringDXCC(bool dxcc)
 {
     filterDxcc = dxcc;
@@ -453,6 +461,12 @@ bool KstCallGridSortFilterModel::filterAcceptsRow(int sourceRow, const QModelInd
         return false;
     }
     if (inactiveFilter && call->messageCount == 0)
+    {
+        return false;
+    }
+    bool worked = RemoteLogs::getRemoteLogs()->hasWorked(call->call, "", "");
+
+    if (workedFilter && worked)
     {
         return false;
     }

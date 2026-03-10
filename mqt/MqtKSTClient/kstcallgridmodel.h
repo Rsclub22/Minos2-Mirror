@@ -103,6 +103,7 @@ class KstCallGridSortFilterModel: public QSortFilterProxyModel
     int chatFilter = 0;
     bool awayFilter = false;
     bool inactiveFilter = false;
+    bool workedFilter = false;
     bool filterDxcc = false;
     bool isFiltered() const
     {
@@ -118,6 +119,7 @@ public:
 
     void setAwayFilter(bool value);
     void setInactiveFilter(bool value);
+    void setWorkedFilter(bool value);
 protected:
     bool lessThan(const QModelIndex &left, const QModelIndex &right) const override;
 };

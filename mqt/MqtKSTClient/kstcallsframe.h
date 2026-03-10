@@ -50,6 +50,8 @@ private slots:
     void on_awayCallscb_stateChanged(int);
     void on_inactiveCallscb_stateChanged(int);
     void on_maxDistanceEdit_editingFinished();
+    void on_workedCallscb_stateChanged(int);
+
 private:
     Ui::KSTCallsFrame *ui;
 };

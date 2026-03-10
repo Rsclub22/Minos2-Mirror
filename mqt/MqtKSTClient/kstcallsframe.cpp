@@ -262,6 +262,15 @@ void KSTCallsFrame::on_inactiveCallscb_stateChanged(int)
         kstCallFilterModel->setInactiveFilter(ui->inactiveCallscb->isChecked());
     }
 }
+
+void KSTCallsFrame::on_workedCallscb_stateChanged(int)
+{
+    if (mainWindow->started)
+    {
+        kstCallFilterModel->setWorkedFilter(ui->workedCallscb->isChecked());
+    }
+}
+
 void KSTCallsFrame::on_maxDistanceEdit_editingFinished()
 {
     mainWindow->setMaxDistance( ui->maxDistanceEdit->text().toInt());
@@ -294,3 +303,5 @@ bool KSTCallsFrame::eventFilter(QObject *obj, QEvent *event)
 
     return false;    // pass the event on
 }
+
+
