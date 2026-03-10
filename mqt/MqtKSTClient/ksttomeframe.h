@@ -36,6 +36,8 @@ private slots:
     void on_clearMeepFiltersButton_clicked();
     void on_showReadcb_stateChanged(int);
     void on_meepTable_clicked(const QModelIndex &index);
+    void on_toFromMecb_stateChanged(int arg1);
+
 private:
     Ui::KSTTomeFrame *ui;
 };

@@ -142,7 +142,10 @@ void KSTTomeFrame::on_includeMeCb_stateChanged(int /*arg1*/)
 {
     setMeepFilters();
 }
-
+void KSTTomeFrame::on_toFromMecb_stateChanged(int arg1)
+{
+    setMeepFilters();
+}
 
 void KSTTomeFrame::on_toMeFilter_textChanged(const QString &/*arg1*/)
 {
@@ -160,6 +163,7 @@ void KSTTomeFrame::setMeepFilters()
     {
         kstMeepGridSortFilterModel->setMyCsFilterString(QString());
     }
+    kstMeepGridSortFilterModel->setToFromFilter(ui->toFromMecb->isChecked());
     kstMeepGridSortFilterModel->setFilterString(ui->toMeFilter->text().trimmed());
 
     scrollMeepToBottom();
@@ -181,4 +185,3 @@ void KSTTomeFrame::setConnected(bool c)
     //ui->includeMeCb->setText(QString());
     kstMeepGridSortFilterModel->setMyCsFilterString(QString());
 }
-
