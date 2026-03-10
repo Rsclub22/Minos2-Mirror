@@ -111,6 +111,7 @@ public:
 
     bool splitIcons = false;
     bool started = false;
+
     QMenu kstPopup;
     QAction *layoutAction = nullptr;
     QAction *logsAction = nullptr;
@@ -119,6 +120,16 @@ public:
     QAction *connectAction = nullptr;
     QAction *closeAction = nullptr;
     QAction *awayAction = nullptr;
+
+    QAction *kstActiveChatsAction = nullptr;
+    QAction *kstASActiveAction = nullptr;
+    QAction *kstButtonsAction = nullptr;
+    QAction *kstCallsAction = nullptr;
+    QAction *kstLoginAction = nullptr;
+    QAction *kstMsgAction = nullptr;
+    QAction *kstPlanesAction = nullptr;
+    QAction *kstSendMeepAction = nullptr;
+    QAction *kstTomeAction = nullptr;
 
 #ifdef Q_OS_WIN
     QAction *splitIconsAction = nullptr;
@@ -245,11 +256,12 @@ private slots:
     void onSetDefaultName(QString def);
     void onSetProtectedName(QString prot);
 
+    void do_dialog_clicked();
 private:
     Ui::KSTMainWindow *ui;
     QSharedPointer<CommandReader> commandReader = QSharedPointer<CommandReader>(new CommandReader(this));
 
-    KSTMonitoredLogs* ml = nullptr;
+    KSTMonitoredLogs* monitoredLogs = nullptr;
 
     QString chatSelection;
 

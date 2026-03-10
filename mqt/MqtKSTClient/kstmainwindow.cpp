@@ -3,10 +3,16 @@
 #include <QKeyEvent>
 #include <QFileDialog>
 #include <QScrollArea>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QtWidgets/QSpacerItem>
+#include <QPushButton>
 
 #include "QtUtils.h"
+#include "SecondInstall.h"
 #include "RPCCommandConstants.h"
 #include "ScreenConfigManager.h"
+#include "WindowsAppId.h"
 #include "kstactivechatsframe.h"
 #include "kstbuttonsframe.h"
 #include "kstcallsframe.h"
@@ -94,6 +100,7 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     mainWindow = this;
+    setWinAppId(this, SecondInstall::getOrgName() + QString(".MqtKstClient.SubScreen%1").arg(0) );
 
     /*MinosRPC *rpc =*/ MinosRPC::getMinosRPC(getAppStartupName(), true);
 
@@ -127,6 +134,53 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
         if (geometry.size() > 0)
             restoreGeometry(geometry);
     }
+    asl = QSharedPointer<AirScoutLink>(new AirScoutLink());
+    connect(asl.data(), &AirScoutLink::acChanged, kstPlanesFrame, &KSTPlanesFrame::acChanged);
+
+    configureAction = newAction(QT_TR_NOOP("Configure"), &kstPopup, &KSTMainWindow::do_configureButton_clicked);
+    layoutAction = newAction(QT_TR_NOOP("Manage Layout"), &kstPopup, &KSTMainWindow::do_layoutButton_clicked);
+    logsAction = newAction(QT_TR_NOOP("Show Logs"), &kstPopup, &KSTMainWindow::do_logsButton_clicked);
+    clearMessagesAction = newAction(QT_TR_NOOP("Clear Messages"), &kstPopup, &KSTMainWindow::do_clearLogsButton_clicked);
+    awayAction = newAction(QT_TR_NOOP("(set away)"), &kstPopup, &KSTMainWindow::do_awayButton_clicked);
+    connectAction = newAction(QT_TR_NOOP("Connect"), &kstPopup, &KSTMainWindow::do_connectButton_clicked);
+
+#ifdef Q_OS_WIN
+    splitIconsAction = newCheckableAction(QT_TR_NOOP("Split Icons"), &kstPopup, &KSTMainWindow::do_splitIcons);
+#endif
+
+    kstPopup.addSeparator();
+
+    kstLoginAction = newAction(QT_TR_NOOP("Chats Login"), &kstPopup, &KSTMainWindow::do_dialog_clicked);
+    kstLoginAction->setData(sctkLogins);
+
+    kstActiveChatsAction = newAction(QT_TR_NOOP("Active Chats"), &kstPopup, &KSTMainWindow::do_dialog_clicked);
+    kstActiveChatsAction->setData(sctkActiveChats);
+
+    kstCallsAction = newAction(QT_TR_NOOP("Active Calls"), &kstPopup, &KSTMainWindow::do_dialog_clicked);
+    kstCallsAction->setData(sctkCallList);
+
+    kstMsgAction = newAction(QT_TR_NOOP("Messages"), &kstPopup, &KSTMainWindow::do_dialog_clicked);
+    kstMsgAction->setData(sctkMessageList);
+
+    kstTomeAction = newAction(QT_TR_NOOP("Messages To Me"), &kstPopup, &KSTMainWindow::do_dialog_clicked);
+    kstTomeAction->setData(sctkMeepList);
+
+    kstSendMeepAction = newAction(QT_TR_NOOP("Send Meep"), &kstPopup, &KSTMainWindow::do_dialog_clicked);
+    kstSendMeepAction->setData(sctkSendMeep);
+
+    kstButtonsAction = newAction(QT_TR_NOOP("Buttons"), &kstPopup, &KSTMainWindow::do_dialog_clicked);
+    kstButtonsAction->setData(sctkButtons);
+
+    kstASActiveAction = newAction(QT_TR_NOOP("AirScout Activation"), &kstPopup, &KSTMainWindow::do_dialog_clicked);
+    kstASActiveAction->setData(sctkASActive);
+
+    kstPlanesAction = newAction(QT_TR_NOOP("AirScout"), &kstPopup, &KSTMainWindow::do_dialog_clicked);
+    kstPlanesAction->setData(sctkAirScout);
+
+    kstPopup.addSeparator();
+
+    closeAction = newAction(QT_TR_NOOP("Close"), &kstPopup, &KSTMainWindow::do_closeButton_clicked);
+
     createScreenComponents();
     selectLayout(curScreenLayout);
 
@@ -208,32 +262,18 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
 
     kstLoginFrame->do_logincb_stateChanged();
 
-    ml = new KSTMonitoredLogs();
+    monitoredLogs = new KSTMonitoredLogs();
     connect(RemoteLogs::getRemoteLogs(), &RemoteLogs::newMonitoredLog, this, &KSTMainWindow::onNewLog);
     connect(RemoteLogs::getRemoteLogs(), &RemoteLogs::currentLogChanged, this, &KSTMainWindow::onLogChanged);
 
-    connect(ml, &KSTMonitoredLogs::logStarted, this, &KSTMainWindow::onLogStarted);
-    connect(ml, &KSTMonitoredLogs::logClosed, this, &KSTMainWindow::onLogClosed);
-
-
+    connect(monitoredLogs, &KSTMonitoredLogs::logStarted, this, &KSTMainWindow::onLogStarted);
+    connect(monitoredLogs, &KSTMonitoredLogs::logClosed, this, &KSTMainWindow::onLogClosed);
 
     on_FontChanged();
 
-    asl = QSharedPointer<AirScoutLink>(new AirScoutLink());
-    connect(asl.data(), &AirScoutLink::acChanged, kstPlanesFrame, &KSTPlanesFrame::acChanged);
-
-    configureAction = newAction(QT_TR_NOOP("Configure"), &kstPopup, &KSTMainWindow::do_configureButton_clicked);
-    layoutAction = newAction(QT_TR_NOOP("Manage Layout"), &kstPopup, &KSTMainWindow::do_layoutButton_clicked);
-    logsAction = newAction(QT_TR_NOOP("Show Logs"), &kstPopup, &KSTMainWindow::do_logsButton_clicked);
-    clearMessagesAction = newAction(QT_TR_NOOP("Clear Messages"), &kstPopup, &KSTMainWindow::do_clearLogsButton_clicked);
-    awayAction = newAction(QT_TR_NOOP(""), &kstPopup, &KSTMainWindow::do_awayButton_clicked);
-    connectAction = newAction(QT_TR_NOOP("Connect"), &kstPopup, &KSTMainWindow::do_connectButton_clicked);
-
 #ifdef Q_OS_WIN
-    splitIconsAction = newCheckableAction(QT_TR_NOOP("Split Icons"), &kstPopup, &KSTMainWindow::do_splitIcons);
     do_splitIcons(true);
 #endif
-    closeAction = newAction(QT_TR_NOOP("Close"), &kstPopup, &KSTMainWindow::do_closeButton_clicked);
 }
 
 KSTMainWindow::~KSTMainWindow()
@@ -292,8 +332,8 @@ void KSTMainWindow::closeEvent(QCloseEvent *event)
  //   settings.getSettings().setValue("geometry/Main", saveGeometry());
     trace("KSTMainWindow Closing");
 
-    delete ml;
-    ml =nullptr;
+    delete monitoredLogs;
+    monitoredLogs =nullptr;
 
     clearScreenLayout();
 
@@ -612,7 +652,78 @@ void KSTMainWindow::buildScreenLayout()
 
     suppressSaveHeaders = false;
 }
+void KSTMainWindow::do_dialog_clicked()
+{
+    QAction *action = qobject_cast<QAction *>(sender());
+    if (action && action->data() != QVariant())
+    {
+        int tag = action->data().toInt();
+        QFrame *actionFrame = nullptr;
+        switch(tag)
+        {
+        case sctkLogins:
+            actionFrame = kstLoginFrame;
+            break;
+        case sctkCallList:
+            actionFrame = kstCallsFrame;
+            break;
+        case sctkAirScout:
+            actionFrame = kstPlanesFrame;
+            break;
+        case sctkMessageList:
+            actionFrame = kstMsgFrame;
+            break;
+        case sctkMeepList:
+            actionFrame = kstTomeFrame;
+            break;
+        case sctkActiveChats:
+            actionFrame = kstActiveChatsFrame;
+            break;
+        case sctkASActive:
+            actionFrame = kstASActiveFrame;
+            break;
+        case sctkSendMeep:
+            actionFrame = kstSendMeepFrame;
+            break;
+        case sctkButtons:
+            actionFrame = kstButtonsFrame;
+            break;
+        }
 
+        if (actionFrame)
+        {
+            // create a dialog containing the desired frame
+            // making it temporarily usable
+            QDialog *actDialog = new QDialog(this);
+            QVBoxLayout *vb = new QVBoxLayout(actDialog);
+            vb->addWidget( actionFrame);
+
+            QFrame *line = new QFrame(actDialog);
+            line->setObjectName("line");
+            line->setFrameShape(QFrame::Shape::HLine);
+            line->setFrameShadow(QFrame::Shadow::Sunken);
+            vb->addWidget(line);
+
+            QHBoxLayout *hb = new QHBoxLayout(actDialog);
+            QSpacerItem *horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Minimum);
+
+            hb->addItem(horizontalSpacer);
+            QPushButton *closeButton = new QPushButton(tr("Exit"), actDialog);
+            hb->addWidget(closeButton);
+            vb->addItem(hb);
+            actionFrame->setVisible(true);
+
+            connect(closeButton, &QPushButton::clicked, [=]()
+                    {actDialog->close();});
+
+            actDialog->exec();
+            actionFrame->setParent(this);
+            actionFrame->setVisible(false);
+            monitoredLogs->hide();
+
+        }
+    }
+}
 void KSTMainWindow::onNewLog(QSharedPointer<MonitoredLog> ml)
 {
     connect(ml.data(), &MonitoredLog::newStanzas, this, &KSTMainWindow::onNewStanzas, Qt::QueuedConnection);
@@ -1612,7 +1723,8 @@ QSharedPointer<KstUser> KSTMainWindow::getUser(const KstUser &test)
 
 void KSTMainWindow::do_logsButton_clicked()
 {
-    ml->show();
+    monitoredLogs->show();
+    monitoredLogs->raise();
 }
 
 QStringList KSTMainWindow::routerList()
@@ -1766,6 +1878,18 @@ void KSTMainWindow::selectLayout(QString layout)
 
     setCurScreenLayout(layout);
     applyScreenLayout();
+
+    delayedAction(this, [=]{
+    kstActiveChatsAction->setEnabled( !kstActiveChatsFrame->isVisible());
+    kstASActiveAction->setEnabled( !kstASActiveFrame->isVisible());
+    kstButtonsAction->setEnabled(!kstButtonsFrame->isVisible());
+    kstCallsAction->setEnabled(!kstCallsFrame->isVisible());
+    kstLoginAction->setEnabled(!kstLoginFrame->isVisible());
+    kstMsgAction->setEnabled(!kstMsgFrame->isVisible());
+    kstPlanesAction->setEnabled(!kstPlanesFrame->isVisible());
+    kstSendMeepAction->setEnabled(!kstSendMeepFrame->isVisible());
+    kstTomeAction->setEnabled(!kstTomeFrame->isVisible());
+    });
 }
 
 void KSTMainWindow::onScreenConfigApply(QString curConfigName)

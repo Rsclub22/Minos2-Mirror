@@ -25,6 +25,7 @@ KSTPageFrame::KSTPageFrame(QWidget *parent, int pno)
 #endif
 
     ui->setupUi(this);
+    setWindowFlags(windowFlags() & ~(Qt::WindowContextHelpButtonHint | Qt::WindowCloseButtonHint));
 
     setContextMenuPolicy( Qt::CustomContextMenu );
     connect(this, &KSTPageFrame::customContextMenuRequested, this, &KSTPageFrame::onCustomContextMenuRequested);
@@ -116,6 +117,7 @@ void KSTPageFrame::buildScreen(SCScreen &s)
     }
 
     onSplitterMoved(-1, -1);
+    setWindowTitle(mainWindow->windowTitle() + " : " + s.name);
 }
 
 void KSTPageFrame::clearScreen()
