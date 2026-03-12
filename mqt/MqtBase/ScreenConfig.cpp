@@ -80,7 +80,7 @@ ScreenConfigScreen *ScreenConfig::buildScreen(SCScreen &s, int pos)
 
     if (s.baseElement)
     {
-        scr->buildRows(s.baseElement->rows, scr->baseElement, scr->vbl);
+        scr->buildRows(s.baseElement->rows, scr->baseElement, scr->vmsplit);
     }
 
     if (pos == -1)

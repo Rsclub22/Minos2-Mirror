@@ -10,6 +10,7 @@
 #include "MTrace.h"
 #include "cutils.h"
 #include "ScreenConfigElement.h"
+#include "minossplitter.h"
 #include "ui_ScreenConfigElement.h"
 
 QVector <SCTypeOption> ScreenConfigElement::scoptions;
@@ -63,6 +64,13 @@ void ScreenConfigElement::setIsSplitElement(bool value)
     ui->splitFrame->setVisible(!value);
     ui->elementTypeCombo->setVisible(!value);
     ui->auxTypeCombo->setVisible(!value);
+
+    if (!vmsplit)
+    {
+        vmsplit = new MinosSplitter(nullptr);
+        vmsplit->setOrientation(Qt::Vertical);
+        eleSplitter->addWidget(vmsplit);
+    }
 }
 
 ScreenConfigElement::ScreenConfigElement(ScreenConfigRow *parentrow, ScreenConfigScreen *sc) :
@@ -71,16 +79,28 @@ ScreenConfigElement::ScreenConfigElement(ScreenConfigRow *parentrow, ScreenConfi
   , parentRow(parentrow)
   , parentDialog(sc)
 {
+    static int rollingTag = 0;
+
+    tag = rollingTag++;
+
     ui->setupUi(this);
 
     // colours from https://www.december.com/html/spec/colorsvg.html
-    setStyleSheet("#ScreenConfigElement { border: 2px solid darkmagenta; }");
+    //setStyleSheet("#ScreenConfigElement { border: 2px solid darkmagenta; }");
 
     if (parentDialog)
-        vbl = parentDialog->vbl;
+    {
+        vmsplit = parentDialog->vmsplit;
+    }
     else
     {
-        vbl = ui->eleRowsVbl;
+        eleSplitter = new MinosSplitter(nullptr);
+        eleSplitter->setOrientation(Qt::Horizontal);
+        eleSplitter->addWidget(ui->cframe);
+        layout()->addWidget(eleSplitter);
+
+        eleSplitter->setStretchFactor(0, 0);
+        eleSplitter->setStretchFactor(1, 100);
     }
 
     ui->elementTypeCombo->clear();
@@ -142,6 +162,7 @@ ScreenConfigElement::ScreenConfigElement(ScreenConfigRow *parentrow, ScreenConfi
     {
         ui->auxTypeCombo->setVisible(false);
     }
+    adjustMargins(layout(), 0, 0, 0, 0, 0);
 }
 
 ScreenConfigElement::~ScreenConfigElement()
@@ -234,11 +255,11 @@ void ScreenConfigElement::on_splitAboveButton_clicked()
     setType(sctSplit);
 
     ScreenConfigRow *baseRow = new ScreenConfigRow(this);
-    vbl->insertWidget( 0, baseRow);
+    vmsplit->insertWidget( 0, baseRow);
     baseRow->addLeft(nullptr );
 
     ScreenConfigRow *newRow = new ScreenConfigRow(this);
-    vbl->insertWidget( 1, newRow);
+    vmsplit->insertWidget( 1, newRow);
     ScreenConfigElement *e = newRow->addLeft(nullptr);
 
     e->setType(t);
@@ -260,12 +281,12 @@ void ScreenConfigElement::on_splitBelowButton_clicked()
     setIsSplitElement(true);
 
     ScreenConfigRow *baseRow = new ScreenConfigRow(this);
-    vbl->insertWidget( 0, baseRow);
+    vmsplit->insertWidget( 0, baseRow);
     ScreenConfigElement *e = baseRow->addLeft(nullptr );
 
 
     ScreenConfigRow *newRow = new ScreenConfigRow(this);
-    vbl->insertWidget( 1, newRow);
+    vmsplit->insertWidget( 1, newRow);
     newRow->addLeft(nullptr);
 
     e->setType(t);
@@ -274,16 +295,22 @@ void ScreenConfigElement::on_splitBelowButton_clicked()
 void ScreenConfigElement::addRowBefore(ScreenConfigRow *r)
 {
     int pos = 0;
-    for (int i = 0; i < vbl->count(); i++)
+    if (!vmsplit)
     {
-        if (vbl->itemAt(i)->widget() == r)
+        vmsplit = new MinosSplitter(nullptr);
+        vmsplit->setOrientation(Qt::Vertical);
+        eleSplitter->addWidget(vmsplit);
+    }
+    for (int i = 0; i < vmsplit->count(); i++)
+    {
+        if (vmsplit->widget(i) == r)
         {
             pos = i;
             break;
         }
     }
     ScreenConfigRow *baseRow = new ScreenConfigRow(this);
-    vbl->insertWidget( pos, baseRow);
+    vmsplit->insertWidget( pos, baseRow);
     baseRow->addLeft(nullptr);
 
     screenConfigDialog->curScreen->checkAddButtons();
@@ -292,26 +319,31 @@ void ScreenConfigElement::addRowBefore(ScreenConfigRow *r)
 void ScreenConfigElement::removeRow(ScreenConfigRow *r)
 {
     int pos = 0;
-    int vct = vbl->count();
+    if (!vmsplit)
+    {
+        vmsplit = new MinosSplitter(nullptr);
+        vmsplit->setOrientation(Qt::Vertical);
+        eleSplitter->addWidget(vmsplit);
+    }
+
+    int vct = vmsplit->count();
     for (int i = 0; i < vct; i++)
     {
-        if (vbl->itemAt(i)->widget() == r)
+        if (vmsplit->widget(i)  == r)
         {
             pos = i;
             break;
         }
     }
-    QLayoutItem *taken = vbl->takeAt(pos);
+    QObject *taken = vmsplit->widget(pos) ;
     if (taken)
     {
-        // From the source, I don't think the deleting the layout item deletes the widget
-        taken->widget()->deleteLater();
         delete taken;
     }
 
     else if (getIsSplitElement())
     {
-        if (vbl->count() == 0)
+        if (vmsplit->count() == 0)
         {
             parentRow->remove(this);
         }
@@ -324,9 +356,16 @@ void ScreenConfigElement::addRowAfter(ScreenConfigRow *r)
 {
     int pos = 0;
     int offset = 0;
-    for (int i = 0; i < vbl->count(); i++)
+    if (!vmsplit)
     {
-        if (vbl->itemAt(i)->widget() == r)
+        vmsplit = new MinosSplitter(nullptr);
+        vmsplit->setOrientation(Qt::Vertical);
+        eleSplitter->addWidget(vmsplit);
+    }
+
+    for (int i = 0; i < vmsplit->count(); i++)
+    {
+        if (vmsplit->widget(i)  == r)
         {
             pos = i;
             offset = 1;
@@ -334,7 +373,7 @@ void ScreenConfigElement::addRowAfter(ScreenConfigRow *r)
         }
     }
     ScreenConfigRow *baseRow = new ScreenConfigRow(this);
-    vbl->insertWidget( pos + offset, baseRow);
+    vmsplit->insertWidget( pos + offset, baseRow);
     baseRow->addLeft(nullptr);
 
     screenConfigDialog->curScreen->checkAddButtons();

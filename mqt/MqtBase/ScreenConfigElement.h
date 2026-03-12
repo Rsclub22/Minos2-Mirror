@@ -10,6 +10,8 @@
 
 class ScreenConfigScreen;
 class ScreenConfigRow;
+class MinosSplitter;
+
 class SCTypeOption
 {
 public:
@@ -27,9 +29,11 @@ class ScreenConfigElement : public QFrame
     Q_OBJECT
     static  QVector <SCTypeOption> scoptions;
 public:
-    Ui::ScreenConfigElement *ui;
-    QVBoxLayout *vbl = nullptr;
+    int tag = 0;
 
+    Ui::ScreenConfigElement *ui;
+    MinosSplitter *vmsplit = nullptr;
+    MinosSplitter *eleSplitter = nullptr;
     explicit ScreenConfigElement(ScreenConfigRow *parentrow, ScreenConfigScreen *sc = nullptr);
     ~ScreenConfigElement();
 

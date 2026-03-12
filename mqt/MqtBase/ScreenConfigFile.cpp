@@ -143,6 +143,7 @@ void ScreenConfigFile::readFile(QString f, QWidget *parent)
     trace("Using default protectected configuration");
     parseConfigString(protectedConfig);
 
+
     bool retval = false;
 
     QFile jf(f);
@@ -162,6 +163,11 @@ void ScreenConfigFile::readFile(QString f, QWidget *parent)
 }
 bool ScreenConfigFile::parseConfigString(QString s)
 {
+    if (s.isEmpty())
+    {
+        trace("Config string is empty");
+        return false;
+    }
     QJsonParseError err;
     QJsonDocument json = QJsonDocument::fromJson(s.toUtf8(), &err);
     if (!err.error)

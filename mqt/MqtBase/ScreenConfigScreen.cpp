@@ -7,6 +7,7 @@
 #include "MTrace.h"
 
 #include "ScreenConfigScreen.h"
+#include "minossplitter.h"
 #include "ui_ScreenConfigScreen.h"
 
 ScreenConfigScreen::ScreenConfigScreen(ScreenConfig *parentc) :
@@ -16,11 +17,16 @@ ScreenConfigScreen::ScreenConfigScreen(ScreenConfig *parentc) :
 {
     ui->setupUi(this);
 
-    vbl = new QVBoxLayout(ui->scrollAreaWidgetContents);
-    vbl->setContentsMargins(1, 1, 1, 1);
+    QVBoxLayout *vbl = new QVBoxLayout(ui->scrollAreaWidgetContents);
+    vmsplit = new MinosSplitter(ui->scrollAreaWidgetContents);
+    vmsplit->setOrientation(Qt::Vertical);
+    vbl->addWidget(vmsplit);
+    vmsplit->setContentsMargins(0, 0, 0, 0);
     ui->scrollAreaWidgetContents->setLayout(vbl);
 
     baseElement = new ScreenConfigElement(nullptr, this);
+
+    setContentsMargins(0, 0, 0, 0);
 
 }
 
@@ -43,18 +49,18 @@ bool ScreenConfigScreen::checkRowOk(const ScreenConfigRow *row, ScreenConfigElem
     SCType etype = e->getType();
     if (row)
     {
-        for (int j = 0; j < row->hbl->count(); j++)
+        for (int j = 0; j < row->hmsplit->count(); j++)
         {
-            const QWidget *w = row->hbl->itemAt(j)->widget();
+            const QObject *w = row->hmsplit->widget(j);
             const ScreenConfigElement *ele = dynamic_cast<const ScreenConfigElement *>(w);
             if (ele && ele != e)
             {
                 SCType type = ele->getType();
-                if (ele->getIsSplitElement())
+                if (ele->getIsSplitElement() && ele->vmsplit)
                 {
-                    for (int i = 0; i < ele->vbl->count(); i++)
+                    for (int i = 0; i < ele->vmsplit->count(); i++)
                     {
-                        ScreenConfigRow *r = dynamic_cast<ScreenConfigRow *>(ele->vbl->itemAt(i)->widget());
+                        ScreenConfigRow *r = dynamic_cast<ScreenConfigRow *>(ele->vmsplit->widget(i));
                         if (!checkRowOk(r, e, auxCount))
                             return false;
                     }
@@ -82,9 +88,9 @@ bool ScreenConfigScreen::checkOk(ScreenConfigElement *e)
 }
 bool ScreenConfigScreen::checkScreenOk(ScreenConfigElement *e, int auxCount)
 {
-    for (int i = 0; i < vbl->count(); i++)
+    for (int i = 0; i < vmsplit->count(); i++)
     {
-        const QWidget *w = vbl->itemAt(i)->widget();
+        const QObject *w = vmsplit->widget(i);
         const ScreenConfigRow *row = dynamic_cast<const ScreenConfigRow *>(w);
         if (!checkRowOk(row, e, auxCount))
             return false;
@@ -92,13 +98,12 @@ bool ScreenConfigScreen::checkScreenOk(ScreenConfigElement *e, int auxCount)
     }
     return true;
 }
-void ScreenConfigScreen::buildRows(QVector<SCRow> rows, ScreenConfigElement *bele, QVBoxLayout *vbl)
+void ScreenConfigScreen::buildRows(QVector<SCRow> rows, ScreenConfigElement *bele, MinosSplitter *vmsplit)
 {
     for (int j = 0; j < rows.count(); j++)
     {
-        //QWidget *w = parentWidget();
         ScreenConfigRow *baseRow = new ScreenConfigRow(bele);
-        vbl->insertWidget( j, baseRow);
+        vmsplit->addWidget(baseRow);
        for (int k = 0; k < rows[j].elements.count(); k++)
        {
            ScreenConfigElement *e = new ScreenConfigElement(baseRow);
@@ -111,10 +116,10 @@ void ScreenConfigScreen::buildRows(QVector<SCRow> rows, ScreenConfigElement *bel
            else if (sctype == sctSplit)
            {
                e->setIsSplitElement(true);
-               QVBoxLayout *v = e->vbl;
+               MinosSplitter *v = e->vmsplit;
                buildRows(rows[j].elements[k].rows, e, v);
            }
-           baseRow->hbl->insertWidget(k, e);
+           baseRow->hmsplit->insertWidget(k, e);
        }
     }
 }
@@ -122,11 +127,11 @@ void ScreenConfigScreen::procRow(ScreenConfigRow *row, SCRow &scrow)
 {
     if (row != nullptr)
     {
-        int eleCt = row->hbl->count();
+        int eleCt = row->hmsplit->count();
         for (int j = 0; j < eleCt; j++)
         {
-            QWidget *w = row->hbl->itemAt(j)->widget();
-            ScreenConfigElement *ele = dynamic_cast<ScreenConfigElement *>(w);
+            const QObject *w = row->hmsplit->widget(j);
+            const ScreenConfigElement *ele = dynamic_cast<const ScreenConfigElement *>(w);
             if (ele)
             {
                 SCElement scele;
@@ -134,10 +139,10 @@ void ScreenConfigScreen::procRow(ScreenConfigRow *row, SCRow &scrow)
                 {
                     scele.type = sctSplit;
 
-                    int vCt = ele->vbl->count();
+                    int vCt = ele->vmsplit->count();
                     for (int i = 0; i < vCt; i++)
                     {
-                        ScreenConfigRow *r = dynamic_cast<ScreenConfigRow *>(ele->vbl->itemAt(i)->widget());
+                        ScreenConfigRow *r = dynamic_cast<ScreenConfigRow *>(ele->vmsplit->widget(i));
                         if (r != nullptr)
                         {
                             SCRow scr;
@@ -159,10 +164,10 @@ void ScreenConfigScreen::procRow(ScreenConfigRow *row, SCRow &scrow)
 void ScreenConfigScreen::getConfig(SCScreen &sc)
 {
     name = ui->screenNameEdit->text();
-    int vCt = vbl->count();
+    int vCt = vmsplit->count();
     for (int i = 0; i < vCt; i++)
     {
-        QWidget *w = vbl->itemAt(i)->widget();
+        QObject *w = vmsplit->widget(i);
         ScreenConfigRow *row = dynamic_cast<ScreenConfigRow *>(w);
         if (row)
         {
@@ -186,19 +191,19 @@ void ScreenConfigScreen::procRowSel(ScreenConfigRow *row, QVector<ScreenConfigRo
             return;
         }
 
-        int eleCt = row->hbl->count();
+        int eleCt = row->hmsplit->count();
         for (int j = 0; j < eleCt; j++)
         {
-            QWidget *w = row->hbl->itemAt(j)->widget();
-            ScreenConfigElement *ele = dynamic_cast<ScreenConfigElement *>(w);
+            const QObject *w = row->hmsplit->widget(j);
+            const ScreenConfigElement *ele = dynamic_cast<const ScreenConfigElement *>(w);
             if (ele)
             {
                 if (ele->getIsSplitElement())
                 {
-                    int vCt = ele->vbl->count();
+                    int vCt = ele->vmsplit->count();
                     for (int i = 0; i < vCt; i++)
                     {
-                        ScreenConfigRow *r = dynamic_cast<ScreenConfigRow *>(ele->vbl->itemAt(i)->widget());
+                        ScreenConfigRow *r = dynamic_cast<ScreenConfigRow *>(ele->vmsplit->widget(i));
                         if (r != nullptr)
                         {
                             procRowSel(r, sel);
@@ -213,10 +218,10 @@ QVector<ScreenConfigRow *> ScreenConfigScreen::getSelected()
 {
     QVector<ScreenConfigRow *> sel;
 
-    int vCt = vbl->count();
+    int vCt = vmsplit->count();
     for (int i = 0; i < vCt; i++)
     {
-        QWidget *w = vbl->itemAt(i)->widget();
+        QObject *w = vmsplit->widget(i);
         ScreenConfigRow *row = dynamic_cast<ScreenConfigRow *>(w);
         if (row)
         {
@@ -238,13 +243,13 @@ QVector<ScreenConfigRow *> ScreenConfigScreen::getSelected()
 void ScreenConfigScreen::on_addRowButton_clicked()
 {
     trace("ScreenConfig::on_addRowButton_clicked()");
-    QLayoutItem *last = nullptr;
-    QWidget *wlast = nullptr;
+    QObject *last = nullptr;
+    QObject *wlast = nullptr;
 
-    if (vbl->count())
+    if (vmsplit->count())
     {
-        last = vbl->itemAt(vbl->count() - 1);
-        wlast = last->widget();
+        last = vmsplit->widget(vmsplit->count() - 1);
+        wlast = last;
     }
 
     baseElement->addRowAfter(dynamic_cast<ScreenConfigRow *>(wlast));
@@ -252,22 +257,51 @@ void ScreenConfigScreen::on_addRowButton_clicked()
 }
 void ScreenConfigScreen::checkAddButtons()
 {
-    ui->addRowButton->setVisible(vbl->count() == 0);
-    ui->addColumnLeftButton->setVisible(vbl->count() != 0);
-    ui->addColumnRightButton->setVisible(vbl->count() != 0);
+    ui->addRowButton->setVisible(vmsplit->count() == 0);
+    ui->addColumnLeftButton->setVisible(vmsplit->count() != 0);
+    ui->addColumnRightButton->setVisible(vmsplit->count() != 0);
 }
+// ScreenConfigRow *ScreenConfigScreen::combineRows(ScreenConfigElement * e, int top, int bottom)
+// {
+//     QWidget *qli = e->vbl->itemAt(top)->widget();
+//     ScreenConfigRow *scr = dynamic_cast<ScreenConfigRow *>(qli);
 
+//     scr->parentElement->addRowBefore(scr);
+//     ScreenConfigRow *newRow = dynamic_cast<ScreenConfigRow *>(scr->parentElement->vbl->itemAt(top)->widget());
+
+//     //new row needs a split element, to which we add our old rows
+
+//     QWidget *w = newRow->hbl->itemAt(0)->widget();
+//     ScreenConfigElement *split = dynamic_cast<ScreenConfigElement *>(w);
+//     split->setIsSplitElement(true);
+//     split->setType(sctSplit);
+
+//     for (int i = top + 1; i <= bottom + 1; i++) // +1 as we added a new row before top
+//     {
+//         // keep taking the top of the old, and put it back at the bottom of the new
+//         QLayoutItem *l = e->vbl->takeAt(top + 1);
+
+//         split->vbl->addItem(l);
+//         // reset the parentage, or it all displays in the wrong place
+//         l->widget()->setParent(split);
+//         ScreenConfigRow *newscr = dynamic_cast<ScreenConfigRow *>(l->widget());
+//         newscr->parentElement = split;
+//     }
+//     return  newRow;
+// }
 ScreenConfigRow *ScreenConfigScreen::combineRows(ScreenConfigElement * e, int top, int bottom)
 {
-    QWidget *qli = e->vbl->itemAt(top)->widget();
+    //combine multiple rows into rows in single element, so we can add column before/after
+
+    QObject *qli = e->vmsplit->widget(top);
     ScreenConfigRow *scr = dynamic_cast<ScreenConfigRow *>(qli);
 
     scr->parentElement->addRowBefore(scr);
-    ScreenConfigRow *newRow = dynamic_cast<ScreenConfigRow *>(scr->parentElement->vbl->itemAt(top)->widget());
+    ScreenConfigRow *newRow = dynamic_cast<ScreenConfigRow *>(scr->parentElement->vmsplit->widget(top));
 
     //new row needs a split element, to which we add our old rows
 
-    QWidget *w = newRow->hbl->itemAt(0)->widget();
+    QObject *w = newRow->hmsplit->widget(0);
     ScreenConfigElement *split = dynamic_cast<ScreenConfigElement *>(w);
     split->setIsSplitElement(true);
     split->setType(sctSplit);
@@ -275,12 +309,13 @@ ScreenConfigRow *ScreenConfigScreen::combineRows(ScreenConfigElement * e, int to
     for (int i = top + 1; i <= bottom + 1; i++) // +1 as we added a new row before top
     {
         // keep taking the top of the old, and put it back at the bottom of the new
-        QLayoutItem *l = e->vbl->takeAt(top + 1);
-
-        split->vbl->addItem(l);
+        QObject *l = e->vmsplit->widget(top+ 1);
+        l->setParent(nullptr);
+        QWidget *w = dynamic_cast<QWidget *>(l);
+        split->vmsplit->addWidget(w);
         // reset the parentage, or it all displays in the wrong place
-        l->widget()->setParent(split);
-        ScreenConfigRow *newscr = dynamic_cast<ScreenConfigRow *>(l->widget());
+        //l->setParent(split);
+        ScreenConfigRow *newscr = dynamic_cast<ScreenConfigRow *>(l);
         newscr->parentElement = split;
     }
     return  newRow;
@@ -300,11 +335,11 @@ void ScreenConfigScreen::addColumnRight(ScreenConfigElement * e, int top, int bo
 int ScreenConfigScreen::getTopRow(ScreenConfigElement * e)
 {
 
-    int vCt = e->vbl->count();
+    int vCt = e->vmsplit->count();
 
     for (int i = 0; i < vCt; i++)
     {
-        QWidget *w = e->vbl->itemAt(i)->widget();
+        QObject *w = e->vmsplit->widget(i);
         ScreenConfigRow *row = dynamic_cast<ScreenConfigRow *>(w);
         if (row && row->selected)
         {
@@ -316,11 +351,11 @@ int ScreenConfigScreen::getTopRow(ScreenConfigElement * e)
 
 int ScreenConfigScreen::getBottomRow(ScreenConfigElement * e)
 {
-    int vCt = e->vbl->count();
+    int vCt = e->vmsplit->count();
 
     for (int i = vCt - 1; i >= 0; i--)
     {
-        QWidget *w = e->vbl->itemAt(i)->widget();
+        QObject *w = e->vmsplit->widget(i);
         ScreenConfigRow *row = dynamic_cast<ScreenConfigRow *>(w);
         if (row && row->selected)
         {
@@ -348,10 +383,10 @@ void ScreenConfigScreen::on_addColumnRightButton_clicked()
     }
     else
     {
-        int vCt = e->vbl->count();
+        int vCt = e->vmsplit->count();
         for (int i = 0; i < vCt; i++)
         {
-            QWidget *w = e->vbl->itemAt(i)->widget();
+            QObject *w = e->vmsplit->widget(i);
             ScreenConfigRow *row = dynamic_cast<ScreenConfigRow *>(w);
             if (row && row->selected)
             {
@@ -380,10 +415,10 @@ void ScreenConfigScreen::on_addColumnLeftButton_clicked()
     }
     else
     {
-        int vCt = e->vbl->count();
+        int vCt = e->vmsplit->count();
         for (int i = 0; i < vCt; i++)
         {
-            QWidget *w = e->vbl->itemAt(i)->widget();
+            QObject *w = e->vmsplit->widget(i);
             ScreenConfigRow *row = dynamic_cast<ScreenConfigRow *>(w);
             if (row && row->selected)
             {
