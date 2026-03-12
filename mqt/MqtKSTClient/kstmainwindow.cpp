@@ -146,6 +146,8 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
 
 #ifdef Q_OS_WIN
     splitIconsAction = newCheckableAction(QT_TR_NOOP("Split Icons"), &kstPopup, &KSTMainWindow::do_splitIcons);
+
+    splitIconsAction->setChecked(splitIcons);
 #endif
 
     kstPopup.addSeparator();
@@ -270,10 +272,6 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     connect(monitoredLogs, &KSTMonitoredLogs::logClosed, this, &KSTMainWindow::onLogClosed);
 
     on_FontChanged();
-
-#ifdef Q_OS_WIN
-    do_splitIcons(true);
-#endif
 }
 
 KSTMainWindow::~KSTMainWindow()
