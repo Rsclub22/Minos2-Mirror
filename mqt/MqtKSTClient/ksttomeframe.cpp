@@ -142,7 +142,7 @@ void KSTTomeFrame::on_includeMeCb_stateChanged(int /*arg1*/)
 {
     setMeepFilters();
 }
-void KSTTomeFrame::on_toFromMecb_stateChanged(int arg1)
+void KSTTomeFrame::on_toFromMecb_stateChanged(int /*arg1*/)
 {
     setMeepFilters();
 }
