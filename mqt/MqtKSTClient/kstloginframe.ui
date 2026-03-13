@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>305</width>
-    <height>108</height>
+    <height>84</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -34,22 +34,6 @@
         <string>Log In</string>
        </property>
       </widget>
-     </item>
-     <item>
-      <spacer name="horizontalSpacer_5">
-       <property name="orientation">
-        <enum>Qt::Orientation::Horizontal</enum>
-       </property>
-       <property name="sizeType">
-        <enum>QSizePolicy::Policy::Preferred</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
      </item>
      <item>
       <widget class="QCheckBox" name="login1cb">
@@ -92,13 +76,6 @@
        </property>
       </spacer>
      </item>
-     <item>
-      <widget class="QPushButton" name="KSTTestButton">
-       <property name="text">
-        <string>Test</string>
-       </property>
-      </widget>
-     </item>
     </layout>
    </item>
    <item>
@@ -106,25 +83,9 @@
      <item>
       <widget class="QLabel" name="label_8">
        <property name="text">
-        <string>Active chat</string>
+        <string>Active</string>
        </property>
       </widget>
-     </item>
-     <item>
-      <spacer name="horizontalSpacer_7">
-       <property name="orientation">
-        <enum>Qt::Orientation::Horizontal</enum>
-       </property>
-       <property name="sizeType">
-        <enum>QSizePolicy::Policy::Preferred</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
      </item>
      <item>
       <widget class="QRadioButton" name="active1rb">
@@ -186,7 +147,4 @@
  </widget>
  <resources/>
  <connections/>
- <buttongroups>
-  <buttongroup name="activeChatGroup"/>
- </buttongroups>
- </ui>
+</ui>

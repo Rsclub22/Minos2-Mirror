@@ -119,6 +119,7 @@ public:
     QAction *connectAction = nullptr;
     QAction *closeAction = nullptr;
     QAction *awayAction = nullptr;
+    QAction *testAction = nullptr;
 
     QAction *kstASActiveAction = nullptr;
     QAction *kstButtonsAction = nullptr;

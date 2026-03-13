@@ -1,7 +1,7 @@
-#include "kstloginframe.h"
 #include "QtUtils.h"
-#include "KSTLoginFrame.h"
 #include "kstmainwindow.h"
+
+#include "kstloginframe.h"
 #include "ui_kstloginframe.h"
 
 KSTLoginFrame::KSTLoginFrame(QWidget *parent)
@@ -181,7 +181,7 @@ void KSTLoginFrame::resetVectors(QCheckBox *cb, int c, QStringList &s, QVector<i
         v.append(c);
         if (rb)
         {
-            rb->setVisible(true);
+            rb->setEnabled(true);
         }
         setActive(c);
         a.append(c);
@@ -191,7 +191,7 @@ void KSTLoginFrame::resetVectors(QCheckBox *cb, int c, QStringList &s, QVector<i
         // selected -> not selected
         if (rb)
         {
-            rb->setVisible(false);
+            rb->setEnabled(false);
         }
     }
     else if (mainWindow->kstChatSelection.contains(c))
@@ -203,7 +203,7 @@ void KSTLoginFrame::resetVectors(QCheckBox *cb, int c, QStringList &s, QVector<i
     {
         if (rb)
         {
-            rb->setVisible(false);
+            rb->setEnabled(false);
         }
     }
     mainWindow->checkAwayButton();

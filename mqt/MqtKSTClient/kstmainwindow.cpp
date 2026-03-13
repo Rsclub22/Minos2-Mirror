@@ -143,6 +143,7 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     awayAction = newAction(QT_TR_NOOP("(set away)"), &kstPopup, &KSTMainWindow::do_awayButton_clicked);
     connectAction = newAction(QT_TR_NOOP("Connect"), &kstPopup, &KSTMainWindow::do_connectButton_clicked);
 
+    testAction = newAction(QT_TR_NOOP("Test"), &kstPopup, &KSTMainWindow::do_KSTTestButton_clicked);
 #ifdef Q_OS_WIN
     splitIconsAction = newCheckableAction(QT_TR_NOOP("Split Icons"), &kstPopup, &KSTMainWindow::do_splitIcons);
 

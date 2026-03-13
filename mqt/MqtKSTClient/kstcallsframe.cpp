@@ -167,12 +167,8 @@ void KSTCallsFrame::onCSTableSelectionChanged(const QItemSelection &/*selected*/
             // probably implement as a signal via mainForm, picked up
             // by those interested
 
-            if (!ui->noSetCallcb->isChecked())  //planes
+            if (!ui->noSetCallcb->isChecked())
             {
-                // Why is the cb in "planes", should be in "calls"
-                // and why the rest of it?
-                // messages
-
                 mainWindow->kstSendMeepFrame->setNameFromCall(user->call, user->chat);    //send meep, msgEdit "Hi Fred"
 
                 mainWindow->kstLoginFrame->setActive(user->chat);

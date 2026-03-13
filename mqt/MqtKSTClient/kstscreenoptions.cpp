@@ -3,10 +3,9 @@
 
 QString KSTScreenOptions::defaultConfig =
     "[{\"name\": \"%1\","
-    "\"rows\": [[{\"type\": \"%2\"}],"
-    "[{\"rows\": [[{\"type\": \"%3\"}],[{\"type\": \"%4\"}]],\"type\": \"%5\"},"
-    "{\"rows\": [[{\"type\": \"%6\"}],[{\"type\": \"%7\"}]],\"type\": \"%8\"}],"
-    "[{\"type\": \"%9\"}],"
+    "\"rows\":[[{\"type\": \"%2\"},{\"type\": \"%3\"}],"
+    "[{\"rows\": [[{\"type\": \"%4\"}],[{\"type\": \"%5\"}]],\"type\": \"%6\"},"
+    "{\"rows\": [[{\"type\": \"%7\"}],[{\"type\": \"%8\"}]],\"type\": \"%9\"}],"
     "[{\"type\": \"%10\"}],"
     "[{\"type\": \"%11\"}]"
     "]}]";
@@ -41,14 +40,13 @@ KSTScreenOptions::KSTScreenOptions()
     QString def = defaultConfig
                       .arg(defaultLayoutName())
                       .arg(ScreenConfigElement::getRawScreenTypeString(sctkLogins))
+                      .arg(ScreenConfigElement::getRawScreenTypeString(sctkASActive))
                       .arg(ScreenConfigElement::getRawScreenTypeString(sctkCallList))
                       .arg(ScreenConfigElement::getRawScreenTypeString(sctkAirScout))
                       .arg(ScreenConfigElement::getRawScreenTypeString(sctSplit))
                       .arg(ScreenConfigElement::getRawScreenTypeString(sctkMessageList))
                       .arg(ScreenConfigElement::getRawScreenTypeString(sctkMeepList))
                       .arg(ScreenConfigElement::getRawScreenTypeString(sctSplit))
-//                      .arg(ScreenConfigElement::getRawScreenTypeString(sctkActiveChats))
-                      .arg(ScreenConfigElement::getRawScreenTypeString(sctkASActive))
                       .arg(ScreenConfigElement::getRawScreenTypeString(sctkSendMeep))
                       .arg(ScreenConfigElement::getRawScreenTypeString(sctkButtons));
 

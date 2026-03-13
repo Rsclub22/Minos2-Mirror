@@ -66,9 +66,26 @@ void KSTSendMeepFrame::setNameFromCall(const Callsign &call, int activeChat)
 
     if (user)
     {
-        QStringList name = user->name.split(' ');
+        QString msgText;
+        QString hi = tr("Hi");
+        switch(sal)
+        {
+        case esNone:
+            break;
 
-        ui->msgEdit->setText("Hi " + name[0] + " ");
+        case esHi:
+            msgText = hi + " ";
+            break;
+
+        case esHiName:
+        {
+            QStringList name = user->name.split(' ');
+            msgText = hi + " " + name[0] + " ";
+            break;
+        }
+        }
+
+        ui->msgEdit->setText(msgText);
 
         ui->callEdit->setText(user->call.getFullCall());
     }
@@ -141,5 +158,41 @@ void KSTSendMeepFrame::setDefaultButton(QPushButton *d)
             ui->genmsgButton->setDefault(false);
             ui->meepButton->setDefault(true);
         }
+}
+
+
+void KSTSendMeepFrame::on_salNonerb_clicked()
+{
+    bool s = ui->salNonerb->isChecked();
+    if (s)
+    {
+        sal = esNone;
+        QSettings settings(mainWindow->iniName, QSettings::IniFormat);
+        settings.setValue("Salutation", sal);
+    }
+}
+
+
+void KSTSendMeepFrame::on_salHirb_clicked()
+{
+    bool s = ui->salHirb->isChecked();
+    if (s)
+    {
+        sal = esHi;
+        QSettings settings(mainWindow->iniName, QSettings::IniFormat);
+        settings.setValue("Salutation", sal);
+    }
+}
+
+
+void KSTSendMeepFrame::on_salHiNamerb_clicked()
+{
+    bool s = ui->salHiNamerb->isChecked();
+    if (s)
+    {
+        sal = esHiName;
+        QSettings settings(mainWindow->iniName, QSettings::IniFormat);
+        settings.setValue("Salutation", sal);
+    }
 }
 
