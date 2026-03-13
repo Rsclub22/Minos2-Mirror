@@ -6,9 +6,9 @@ QString KSTScreenOptions::defaultConfig =
     "\"rows\": [[{\"type\": \"%2\"}],"
     "[{\"rows\": [[{\"type\": \"%3\"}],[{\"type\": \"%4\"}]],\"type\": \"%5\"},"
     "{\"rows\": [[{\"type\": \"%6\"}],[{\"type\": \"%7\"}]],\"type\": \"%8\"}],"
-    "[{\"type\": \"%9\"},{\"type\": \"%10\"}],"
-    "[{\"type\": \"%11\"}],"
-    "[{\"type\": \"%12\"}]"
+    "[{\"type\": \"%9\"}],"
+    "[{\"type\": \"%10\"}],"
+    "[{\"type\": \"%11\"}]"
     "]}]";
 
 
@@ -28,10 +28,8 @@ QVector <SCTypeOption> KSTScreenOptions::kstScreenOptions =
         {sctkASActive, QT_TR_NOOP("AirScout Activation"), QT_TR_NOOP("AirScout Activation")},
         {sctkMessageList, QT_TR_NOOP("Messages"), QT_TR_NOOP("Messages")},
         {sctkMeepList, QT_TR_NOOP("Meeps"), QT_TR_NOOP("Messages to me")},
-        {sctkActiveChats, QT_TR_NOOP("Current Chat"), QT_TR_NOOP("Current Active Chat")},
         {sctkSendMeep, QT_TR_NOOP("SendMeep"), QT_TR_NOOP("Sending Meeps")},
         {sctkButtons, QT_TR_NOOP("Buttons"), QT_TR_NOOP("Buttons")}
-
 };
 
 
@@ -49,7 +47,7 @@ KSTScreenOptions::KSTScreenOptions()
                       .arg(ScreenConfigElement::getRawScreenTypeString(sctkMessageList))
                       .arg(ScreenConfigElement::getRawScreenTypeString(sctkMeepList))
                       .arg(ScreenConfigElement::getRawScreenTypeString(sctSplit))
-                      .arg(ScreenConfigElement::getRawScreenTypeString(sctkActiveChats))
+//                      .arg(ScreenConfigElement::getRawScreenTypeString(sctkActiveChats))
                       .arg(ScreenConfigElement::getRawScreenTypeString(sctkASActive))
                       .arg(ScreenConfigElement::getRawScreenTypeString(sctkSendMeep))
                       .arg(ScreenConfigElement::getRawScreenTypeString(sctkButtons));

@@ -4,7 +4,6 @@
 
 #include "ksttomeframe.h"
 #include "delayedaction.h"
-#include "kstactivechatsframe.h"
 #include "kstcallsframe.h"
 #include "kstmainwindow.h"
 #include "kstmessagegridmodel.h"
@@ -119,7 +118,7 @@ void KSTTomeFrame::on_meepTable_clicked(const QModelIndex &index)
             call = line->otherCall;
         }
         mainWindow->kstSendMeepFrame->setNameFromCall(call, line->chat);
-        mainWindow->kstActiveChatsFrame->setActive(line->chat);
+        mainWindow->kstLoginFrame->setActive(line->chat);
     }
 }
 

@@ -3,7 +3,6 @@
 #include <QKeyEvent>
 
 #include "delayedaction.h"
-#include "kstactivechatsframe.h"
 #include "kstcallsframe.h"
 #include "kstmainwindow.h"
 #include "kstmessagegridmodel.h"
@@ -160,7 +159,7 @@ void KSTMsgFrame::on_messageTable_clicked(const QModelIndex &index)
     }
 
     mainWindow->kstSendMeepFrame->setNameFromCall(call, line->chat);
-    mainWindow->kstActiveChatsFrame->setActive(line->chat);
+    mainWindow->kstLoginFrame->setActive(line->chat);
 
     QString t = line->message;
     ui->bodyLabel->setText(t);

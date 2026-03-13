@@ -4,7 +4,7 @@
 #include "MinosRPC.h"
 #include "QtUtils.h"
 #include "RPCCommandConstants.h"
-#include "kstactivechatsframe.h"
+
 #include "kstcallgridmodel.h"
 #include "kstmainwindow.h"
 #include "kstmsgframe.h"
@@ -175,7 +175,7 @@ void KSTCallsFrame::onCSTableSelectionChanged(const QItemSelection &/*selected*/
 
                 mainWindow->kstSendMeepFrame->setNameFromCall(user->call, user->chat);    //send meep, msgEdit "Hi Fred"
 
-                mainWindow->kstActiveChatsFrame->setActive(user->chat);
+                mainWindow->kstLoginFrame->setActive(user->chat);
                 mainWindow->kstMsgFrame->setActive(user->chat);
             }
             // Planes

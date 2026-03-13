@@ -13,7 +13,6 @@
 #include "RPCCommandConstants.h"
 #include "ScreenConfigManager.h"
 #include "WindowsAppId.h"
-#include "kstactivechatsframe.h"
 #include "kstbuttonsframe.h"
 #include "kstcallsframe.h"
 #include "kstloginframe.h"
@@ -155,9 +154,6 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     kstLoginAction = newAction(QT_TR_NOOP("Chats Login"), &kstPopup, &KSTMainWindow::do_dialog_clicked);
     kstLoginAction->setData(sctkLogins);
 
-    kstActiveChatsAction = newAction(QT_TR_NOOP("Active Chats"), &kstPopup, &KSTMainWindow::do_dialog_clicked);
-    kstActiveChatsAction->setData(sctkActiveChats);
-
     kstCallsAction = newAction(QT_TR_NOOP("Active Calls"), &kstPopup, &KSTMainWindow::do_dialog_clicked);
     kstCallsAction->setData(sctkCallList);
 
@@ -200,12 +196,11 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     }
     std::sort(kstChatSelection.begin(), kstChatSelection.end());
 
-    kstActiveChatsFrame->setActive(getActiveChat());
+    kstLoginFrame->setActive(getActiveChat());
 
     kstLoginFrame->setLoginTexts(services);
-    kstActiveChatsFrame->setLoginTexts(services);
 
-    kstActiveChatsFrame->checkActive();
+    kstLoginFrame->checkActive();
 
     kstCallsFrame->setServices(services);
 
@@ -281,7 +276,6 @@ KSTMainWindow::~KSTMainWindow()
 }
 void KSTMainWindow::on_FontChanged()
 {
-    kstActiveChatsFrame->on_FontChanged();
     kstASActiveFrame->on_FontChanged();
     kstButtonsFrame->on_FontChanged();
     kstCallsFrame->on_FontChanged();
@@ -357,12 +351,6 @@ void KSTMainWindow::createScreenComponents()
 
     trace("createScreenComponents start");
 
-    kstActiveChatsFrame = new KSTActiveChatsFrame(this);
-    kstActiveChatsFrame->setObjectName(QStringLiteral("KSTActiveChatsFrame"));
-    kstActiveChatsFrame->setFrameShape(QFrame::StyledPanel);
-    kstActiveChatsFrame->setFrameShadow(QFrame::Raised);
-    kstActiveChatsFrame->setVisible(false);
-
     kstASActiveFrame= new KSTASActiveFrame(this);
     kstASActiveFrame->setObjectName(QStringLiteral("KSTASActiveFrame"));
     kstASActiveFrame->setFrameShape(QFrame::StyledPanel);
@@ -422,8 +410,6 @@ void KSTMainWindow::clearScreenLayout()
     trace("clearScreenLayout starts ");
 
 
-    kstActiveChatsFrame->setParent(this);
-    kstActiveChatsFrame->hide();
     kstASActiveFrame->setParent(this);
     kstASActiveFrame->hide();
     kstButtonsFrame->setParent(this);
@@ -508,8 +494,7 @@ void KSTMainWindow::buildRow(KSTPageFrame *cp, SCRow &scrow, MinosSplitter *spli
                 continue;
 
             QScrollArea *elementScrollArea = nullptr;
-            if (type == sctkActiveChats ||
-                type == sctkASActive ||
+            if (type == sctkASActive ||
                 type == sctkLogins ||
                 type == sctkSendMeep ||
                 type == sctkButtons
@@ -534,10 +519,6 @@ void KSTMainWindow::buildRow(KSTPageFrame *cp, SCRow &scrow, MinosSplitter *spli
             {
                 break;
             }
-
-            case sctkActiveChats:
-                elementScrollArea->setWidget(kstActiveChatsFrame);
-                break;
 
             case sctkASActive:
                 elementScrollArea->setWidget(kstASActiveFrame);
@@ -673,9 +654,6 @@ void KSTMainWindow::do_dialog_clicked()
             break;
         case sctkMeepList:
             actionFrame = kstTomeFrame;
-            break;
-        case sctkActiveChats:
-            actionFrame = kstActiveChatsFrame;
             break;
         case sctkASActive:
             actionFrame = kstASActiveFrame;
@@ -1688,7 +1666,7 @@ void KSTMainWindow::doLoginChanges()
         }
     }
 
-    kstActiveChatsFrame->checkActive();
+    kstLoginFrame->checkActive();
 }
 
 void KSTMainWindow::do_awayButton_clicked()
@@ -1878,8 +1856,6 @@ void KSTMainWindow::selectLayout(QString layout)
     applyScreenLayout();
 
     delayedAction(this, [=]{
-    kstActiveChatsAction->setEnabled( !kstActiveChatsFrame->isVisible());
-    kstASActiveAction->setEnabled( !kstASActiveFrame->isVisible());
     kstButtonsAction->setEnabled(!kstButtonsFrame->isVisible());
     kstCallsAction->setEnabled(!kstCallsFrame->isVisible());
     kstLoginAction->setEnabled(!kstLoginFrame->isVisible());

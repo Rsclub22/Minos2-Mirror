@@ -7,7 +7,7 @@
 #include <QCheckBox>
 #include <QTimer>
 #include "CommandReader.h"
-#include "kstactivechatsframe.h"
+
 #include "kstasactiveframe.h"
 #include "kstbuttonsframe.h"
 #include "kstcallgridmodel.h"
@@ -99,7 +99,6 @@ public:
 
     QVector<KSTPageFrame *> pages;
 
-    KSTActiveChatsFrame *kstActiveChatsFrame = nullptr;
     KSTASActiveFrame *kstASActiveFrame = nullptr;
     KSTButtonsFrame *kstButtonsFrame = nullptr;
     KSTCallsFrame *kstCallsFrame = nullptr;
@@ -121,7 +120,6 @@ public:
     QAction *closeAction = nullptr;
     QAction *awayAction = nullptr;
 
-    QAction *kstActiveChatsAction = nullptr;
     QAction *kstASActiveAction = nullptr;
     QAction *kstButtonsAction = nullptr;
     QAction *kstCallsAction = nullptr;

@@ -2,6 +2,7 @@
 #define KSTLOGINFRAME_H
 
 #include <QFrame>
+#include <QCheckBox>
 
 namespace Ui {
 class KSTLoginFrame;
@@ -20,8 +21,12 @@ public:
     void setLogins(QStringList selections);
     void setLoginTexts(QStringList services);
     void do_logincb_stateChanged();
+    void setActive(int chat);
+    void checkActive();
+    void resetVectors(QCheckBox *cb, int c, QStringList &s, QVector<int> &v, QVector<int> &a);
 
 private slots:
+    void activerb_clicked();
     void logincb_stateChanged(int);
     void on_KSTTestButton_clicked();
 

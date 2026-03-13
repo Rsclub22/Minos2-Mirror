@@ -17,7 +17,6 @@ SOURCES += \
     KSTMinosParameters.cpp \
     airscoutlink.cpp \
     changename.cpp \
-    kstactivechatsframe.cpp \
     kstasactiveframe.cpp \
     kstbuttonsframe.cpp \
     kstcallgridmodel.cpp \
@@ -40,7 +39,6 @@ HEADERS += \
     KSTMinosParameters.h \
     airscoutlink.h \
     changename.h \
-    kstactivechatsframe.h \
     kstasactiveframe.h \
     kstbuttonsframe.h \
     kstcallgridmodel.h \
@@ -60,7 +58,6 @@ HEADERS += \
 
 FORMS += \
     changename.ui \
-    kstactivechatsframe.ui \
     kstasactiveframe.ui \
     kstbuttonsframe.ui \
     kstcallsframe.ui \

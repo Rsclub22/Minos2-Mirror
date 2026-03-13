@@ -2,7 +2,6 @@
 #include "airscoutlink.h"
 #include "delayedaction.h"
 
-#include "kstactivechatsframe.h"
 #include "kstmainwindow.h"
 
 // frequencies are in 100 hz unit
