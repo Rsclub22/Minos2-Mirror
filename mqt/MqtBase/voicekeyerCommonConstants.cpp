@@ -16,6 +16,22 @@ QString VOICEKEYER_COMMON_PARAMS_PATH()
     return VOICE_KEYER_PATH() + "CommonParams/";
 }
 
+bool readDisableESCKeyerStopFromIni()
+{
+    QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + VOICEKEYER_COMMON_PARAMS_FILENAME;
+    QSettings readConfig(fileName, QSettings::IniFormat);
+
+    return readConfig.value("Common/DisableEscToStopKeyer", false).toBool();
+}
+
+void writeDisableESCKeyerStopToIni(bool disable)
+{
+    QString fileName = VOICEKEYER_COMMON_PARAMS_PATH() + VOICEKEYER_COMMON_PARAMS_FILENAME;
+    QSettings config(fileName, QSettings::IniFormat);
+
+    config.setValue("Common/DisableEscToStopKeyer", disable);
+}
+
 
 bool readSaveVoiceCWMemoryButtonByRadioNameFromIni(VoiceKeyerId id)
 {

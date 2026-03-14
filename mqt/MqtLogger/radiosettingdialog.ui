@@ -29,142 +29,134 @@
       <attribute name="title">
        <string>Radio General Settings</string>
       </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_7">
-       <item>
-        <layout class="QVBoxLayout" name="verticalLayout_4">
-         <item>
-          <layout class="QVBoxLayout" name="verticalLayout_9">
-           <item>
-            <widget class="QCheckBox" name="radioReadOnlyCheckBox">
-             <property name="text">
-              <string>Read Only</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QGroupBox" name="radioWriteSettingsGroupBox">
-             <property name="title">
-              <string>Radio Write Settings</string>
-             </property>
-             <layout class="QVBoxLayout" name="verticalLayout_13">
-              <item>
-               <widget class="QCheckBox" name="contestStartIgnorePresetFreqChkBox">
-                <property name="text">
-                 <string>Contest Start - Ignore Preset Frequency</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QCheckBox" name="contestChangeIgnorePreviousFreqChkBox">
-                <property name="text">
-                 <string>Contest Change - Ignore Previous Frequency</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QCheckBox" name="constestChangeRestoreContestModeChkBox">
-                <property name="text">
-                 <string>Contest Change - Restore Contest Mode</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QCheckBox" name="CQRitChkBox">
-                <property name="text">
-                 <string>Set RIT when calling CQ (radio permitting)</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </widget>
-           </item>
-          </layout>
-         </item>
-         <item>
-          <widget class="QCheckBox" name="turnOffColourRadioFreqDialChkBox">
-           <property name="text">
-            <string>Turn Off Operating Frequency Colour in Radio Freq Dial</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <layout class="QHBoxLayout" name="horizontalLayout_5">
-           <item>
-            <widget class="QCheckBox" name="saveVoiceMemoryButtonByRadioName">
-             <property name="text">
-              <string>Voice Memory Buttons - Save by Radio Name</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="deleteVoiceMemoryButtonRadiosPushButton">
-             <property name="text">
-              <string>Delete Voice Memory Button Radios</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <spacer name="horizontalSpacer_6">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>40</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-          </layout>
-         </item>
-         <item>
-          <layout class="QHBoxLayout" name="horizontalLayout_6">
-           <item>
-            <widget class="QCheckBox" name="saveCWMemoryButtonByRadioName">
-             <property name="text">
-              <string>CW Memory Buttons - Save by Radio Name</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="deleteCWMemoryButtonRadiosPushButton">
-             <property name="text">
-              <string>Delete CW Memory Button Radios</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <spacer name="horizontalSpacer_7">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>40</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-          </layout>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <spacer name="verticalSpacer">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>358</width>
-           <height>18</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-      </layout>
+      <widget class="QWidget" name="">
+       <layout class="QVBoxLayout" name="verticalLayout_4">
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_9">
+          <item>
+           <widget class="QCheckBox" name="radioReadOnlyCheckBox">
+            <property name="text">
+             <string>Read Only</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QGroupBox" name="radioWriteSettingsGroupBox">
+            <property name="title">
+             <string>Radio Write Settings</string>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_13">
+             <item>
+              <widget class="QCheckBox" name="contestStartIgnorePresetFreqChkBox">
+               <property name="text">
+                <string>Contest Start - Ignore Preset Frequency</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QCheckBox" name="contestChangeIgnorePreviousFreqChkBox">
+               <property name="text">
+                <string>Contest Change - Ignore Previous Frequency</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QCheckBox" name="constestChangeRestoreContestModeChkBox">
+               <property name="text">
+                <string>Contest Change - Restore Contest Mode</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QCheckBox" name="CQRitChkBox">
+               <property name="text">
+                <string>Set RIT when calling CQ (radio permitting)</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="turnOffColourRadioFreqDialChkBox">
+          <property name="text">
+           <string>Turn Off Operating Frequency Colour in Radio Freq Dial</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="disableESCKeyKeyerChkBox">
+          <property name="text">
+           <string>Disable ESC Stopping Keyer Message</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_5">
+          <item>
+           <widget class="QCheckBox" name="saveVoiceMemoryButtonByRadioName">
+            <property name="text">
+             <string>Voice Memory Buttons - Save by Radio Name</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="deleteVoiceMemoryButtonRadiosPushButton">
+            <property name="text">
+             <string>Delete Voice Memory Button Radios</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_6">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_6">
+          <item>
+           <widget class="QCheckBox" name="saveCWMemoryButtonByRadioName">
+            <property name="text">
+             <string>CW Memory Buttons - Save by Radio Name</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="deleteCWMemoryButtonRadiosPushButton">
+            <property name="text">
+             <string>Delete CW Memory Button Radios</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_7">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
      </widget>
      <widget class="QWidget" name="radioFreqPresetsTab">
       <property name="autoFillBackground">
