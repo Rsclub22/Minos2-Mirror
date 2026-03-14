@@ -6,6 +6,7 @@
 #include "RPCCommandConstants.h"
 
 #include "kstcallgridmodel.h"
+#include "kstloginframe.h"
 #include "kstmainwindow.h"
 #include "kstmsgframe.h"
 #include "kstplanesframe.h"
@@ -27,71 +28,16 @@ KSTCallsFrame::KSTCallsFrame(QWidget *parent)
     ui->maxDistanceEdit->setText(QString::number(mainWindow->getMaxDistance()));
     ui->maxDistanceEdit->setValidator(new QIntValidator(0, 0xffff, this));
 
-}
+    kstCallModel.setCallVector(mainWindow->callVector);
 
-KSTCallsFrame::~KSTCallsFrame()
-{
-    delete ui;
-}
-void KSTCallsFrame::showAircout(bool s)
-{
-    if(s)
-    {
-        ui->CSTable->showColumn(ecscAirscout);
-    }
-    else
-    {
-        ui->CSTable->hideColumn(ecscAirscout);
-    }
-}
-void KSTCallsFrame::on_FontChanged()
-{
+    kstCallFilterModel.setSourceModel(&kstCallModel);
 
-}
-void KSTCallsFrame::on_CSFilter_textChanged(const QString &arg1)
-{
-    kstCallFilterModel->setFilterString(arg1.toUpper());
-}
-void KSTCallsFrame::on_stringRb_clicked()
-{
-    kstCallFilterModel->setStringDXCC(ui->countryRb->isChecked());
-    kstCallFilterModel->invalidate();
-}
-
-void KSTCallsFrame::on_CSChatFilter_currentIndexChanged(int index)
-{
-    if (mainWindow->started)
-    {
-        int CSChatFilter = index;
-
-        kstCallFilterModel->setChatFilter(CSChatFilter);
-
-        QSettings settings(mainWindow->iniName, QSettings::IniFormat);
-        settings.setValue("CSChatFilter", QString::number(CSChatFilter));
-    }
-}
-void KSTCallsFrame::on_countryRb_clicked()
-{
-    kstCallFilterModel->setStringDXCC(ui->countryRb->isChecked());
-    kstCallFilterModel->invalidate();
-}
-void KSTCallsFrame::setServices(QStringList services)
-{
-    ui->CSChatFilter->addItem(tr("Active"));
-    ui->CSChatFilter->addItems(services);
-    ui->CSChatFilter->setCurrentIndex(0);
-}
-void KSTCallsFrame::setModel(QSharedPointer<QVector<QSharedPointer<KstUser> > > pcallVector, KstCallGridModel &pkstCallModel, KstCallGridSortFilterModel &pkstCallFilterModel)
-{
-    callVector = pcallVector;
-    kstCallModel = &pkstCallModel;
-    kstCallFilterModel = &pkstCallFilterModel;
-    ui->CSTable ->setModel(kstCallFilterModel);
+    ui->CSTable ->setModel(&kstCallFilterModel);
     ui->CSTable->horizontalHeader()->setStretchLastSection(true);
 
     CSDelegate = QSharedPointer<HtmlDelegate>( new HtmlDelegate("CSDelegate", 1.0, 1.0)) ;
     ui->CSTable->setItemDelegate(CSDelegate.data());
-    kstCallModel->delegate = CSDelegate;
+    kstCallModel.delegate = CSDelegate;
 
     QHeaderView *verticalHeader = ui->CSTable->verticalHeader();
     verticalHeader->setVisible(false);
@@ -119,6 +65,59 @@ void KSTCallsFrame::setModel(QSharedPointer<QVector<QSharedPointer<KstUser> > > 
             this, &KSTCallsFrame::onCSTableSelectionChanged);
 
 }
+
+KSTCallsFrame::~KSTCallsFrame()
+{
+    delete ui;
+}
+void KSTCallsFrame::showAircout(bool s)
+{
+    if(s)
+    {
+        ui->CSTable->showColumn(ecscAirscout);
+    }
+    else
+    {
+        ui->CSTable->hideColumn(ecscAirscout);
+    }
+}
+void KSTCallsFrame::on_FontChanged()
+{
+
+}
+void KSTCallsFrame::on_CSFilter_textChanged(const QString &arg1)
+{
+    kstCallFilterModel.setFilterString(arg1.toUpper());
+}
+void KSTCallsFrame::on_stringRb_clicked()
+{
+    kstCallFilterModel.setStringDXCC(ui->countryRb->isChecked());
+    kstCallFilterModel.invalidate();
+}
+
+void KSTCallsFrame::on_CSChatFilter_currentIndexChanged(int index)
+{
+    if (mainWindow->started)
+    {
+        int CSChatFilter = index;
+
+        kstCallFilterModel.setChatFilter(CSChatFilter);
+
+        QSettings settings(mainWindow->iniName, QSettings::IniFormat);
+        settings.setValue("CSChatFilter", QString::number(CSChatFilter));
+    }
+}
+void KSTCallsFrame::on_countryRb_clicked()
+{
+    kstCallFilterModel.setStringDXCC(ui->countryRb->isChecked());
+    kstCallFilterModel.invalidate();
+}
+void KSTCallsFrame::setServices(QStringList services)
+{
+    ui->CSChatFilter->addItem(tr("Active"));
+    ui->CSChatFilter->addItems(services);
+    ui->CSChatFilter->setCurrentIndex(0);
+}
 void KSTCallsFrame::on_sectionResized(int, int, int)
 {
     RegSettings settings;
@@ -143,11 +142,11 @@ void KSTCallsFrame::onCSTableSelectionChanged(const QItemSelection &/*selected*/
     QString mselstring;
     for(auto &mi: mil)
     {
-        QModelIndex m = kstCallFilterModel->mapToSource(mi);
+        QModelIndex m = kstCallFilterModel.mapToSource(mi);
         int r = m.row();
-        if (r >= 0 && r < callVector->size())
+        if (r >= 0 && r < mainWindow->callVector->size())
         {
-            QSharedPointer<KstUser> user = callVector->at(r);
+            QSharedPointer<KstUser> user = mainWindow->callVector->at(r);
             if (!mselstring.isEmpty())
             {
                 mselstring += " ";
@@ -158,11 +157,11 @@ void KSTCallsFrame::onCSTableSelectionChanged(const QItemSelection &/*selected*/
     mainWindow->kstMsgFrame->setFilter(mselstring);
     if (mil.count() == 1)
     {
-        QModelIndex m = kstCallFilterModel->mapToSource(mil[0]);
+        QModelIndex m = kstCallFilterModel.mapToSource(mil[0]);
         int r = m.row();
-        if (r >= 0 && r < callVector->size())
+        if (r >= 0 && r < mainWindow->callVector->size())
         {
-            QSharedPointer<KstUser> user = callVector->at(r);
+            QSharedPointer<KstUser> user = mainWindow->callVector->at(r);
 
             // probably implement as a signal via mainForm, picked up
             // by those interested
@@ -186,8 +185,8 @@ void KSTCallsFrame::onCSTableSelectionChanged(const QItemSelection &/*selected*/
 }
 void KSTCallsFrame::acChanged(QSharedPointer<KstUser> user)
 {
-    int row = callVector->indexOf(user);
-    emit kstCallModel->dataChanged(kstCallModel->index(row, ecscAirscout), kstCallModel->index(row, ecscAirscout));
+    int row = mainWindow->callVector->indexOf(user);
+    emit kstCallModel.dataChanged(kstCallModel.index(row, ecscAirscout), kstCallModel.index(row, ecscAirscout));
 }
 void KSTCallsFrame::setDefaultButton(bool s)
 {
@@ -209,9 +208,9 @@ void KSTCallsFrame::on_loggerXferButton_clicked()
     {
 
         auto &mi = mil[0];
-        QModelIndex m = kstCallFilterModel->mapToSource(mi);
+        QModelIndex m = kstCallFilterModel.mapToSource(mi);
         int r = m.row();
-        QSharedPointer<KstUser> user = callVector->at(r);
+        QSharedPointer<KstUser> user = mainWindow->callVector->at(r);
         QString call = user->call.getFullCall();
         QString loc = user->loc;
 
@@ -246,7 +245,7 @@ void KSTCallsFrame::on_awayCallscb_stateChanged(int)
 {
     if (mainWindow->started)
     {
-        kstCallFilterModel->setAwayFilter(ui->awayCallscb->isChecked());
+        kstCallFilterModel.setAwayFilter(ui->awayCallscb->isChecked());
     }
 }
 
@@ -255,7 +254,7 @@ void KSTCallsFrame::on_inactiveCallscb_stateChanged(int)
 {
     if (mainWindow->started)
     {
-        kstCallFilterModel->setInactiveFilter(ui->inactiveCallscb->isChecked());
+        kstCallFilterModel.setInactiveFilter(ui->inactiveCallscb->isChecked());
     }
 }
 
@@ -263,7 +262,7 @@ void KSTCallsFrame::on_workedCallscb_stateChanged(int)
 {
     if (mainWindow->started)
     {
-        kstCallFilterModel->setWorkedFilter(ui->workedCallscb->isChecked());
+        kstCallFilterModel.setWorkedFilter(ui->workedCallscb->isChecked());
     }
 }
 
@@ -273,8 +272,8 @@ void KSTCallsFrame::on_maxDistanceEdit_editingFinished()
     QSettings settings(mainWindow->iniName, QSettings::IniFormat);
     settings.setValue("maxDistance", mainWindow->getMaxDistance());
 
-    kstCallFilterModel->invalidate();
-    mainWindow->kstMessageFilterModel.invalidate();
+    kstCallFilterModel.invalidate();
+    mainWindow->kstMsgFrame->kstMessageFilterModel.invalidate();
 }
 bool KSTCallsFrame::eventFilter(QObject *obj, QEvent *event)
 {

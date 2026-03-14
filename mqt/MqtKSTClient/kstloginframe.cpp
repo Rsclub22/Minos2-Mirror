@@ -106,16 +106,20 @@ void KSTLoginFrame::setActive(int chat)
         switch(chat)
         {
         case 1:
-            ui->active1rb->setChecked(true);
+            if (ui->active1rb)  // kill spurious clang warning
+                ui->active1rb->setChecked(true);
             break;
         case 2:
-            ui->active2rb->setChecked(true);
+            if (ui->active2rb)  // kill spurious clang warning
+                ui->active2rb->setChecked(true);
             break;
         case 3:
-            ui->active3rb->setChecked(true);
+            if (ui->active3rb)  // kill spurious clang warning
+                ui->active3rb->setChecked(true);
             break;
         case 4:
-            ui->active4rb->setChecked(true);
+            if (ui->active4rb)  // kill spurious clang warning
+                ui->active4rb->setChecked(true);
             break;
         }
         mainWindow->setActiveChat(chat);

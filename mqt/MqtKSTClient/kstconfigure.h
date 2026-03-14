@@ -52,7 +52,6 @@ public Q_SLOTS:
 
 private slots:
 
-
     void on_cancelButton_clicked();
 
     void on_OKButton_clicked();

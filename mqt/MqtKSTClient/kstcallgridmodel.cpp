@@ -181,7 +181,6 @@ QVariant KstCallGridModel::data( const QModelIndex &index, int role ) const
             if (crec->recent)
                 call = "*" + call + "*";
 
-            //return QString("%1 %2").arg(call).arg(crec->messageCount);
             return call;
         }
 

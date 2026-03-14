@@ -4,32 +4,11 @@
 #include <QAbstractItemModel>
 #include <QSortFilterProxyModel>
 #include <QDateTime>
-#include "callsign.h"
 #include "htmldelegate.h"
 
 enum ChatColumns {eccChat = 0, eccDTG, eccCall, eccName, eccOther, eccText, eccMaxColumn};
 
-class KstMessageLine
-{
-public:
-    bool markedRead = false;
-    int sequence = -1;
-    int chat = -1;
-    QDateTime dtg;
-    QString fullLine;
-    Callsign call;
-    int distance = -1;
-    QString name;
-    Callsign otherCall;
-    int otherDistance = -1;
-    QString message;
-
-    KstMessageLine(){}
-    ~KstMessageLine(){}
-
-};
-bool compMessages ( QSharedPointer<KstMessageLine> q1, const QSharedPointer<KstMessageLine> q2 );
-
+class KstMessageLine;
 class KstMessageGridModel: public QAbstractItemModel
 {
     Q_OBJECT

@@ -95,8 +95,6 @@ void KSTConfigure::on_OKButton_clicked()
     if (hostname.isEmpty() || port.isEmpty() ||username.isEmpty() ||password.isEmpty())
         return;
 
-
-
     accept();
 }
 
@@ -126,9 +124,7 @@ void KSTConfigure::on_meepBrowse_clicked()
         meepSoundFile = fname;
         ui->meepSound->setText(fname);
     }
-
 }
-
 
 void KSTConfigure::on_testButton_clicked()
 {
@@ -144,9 +140,7 @@ void KSTConfigure::on_testButton_clicked()
         trace(QString("%1 doesn't exist").arg(fname));
 
     }
-
 }
-
 
 void KSTConfigure::on_volumeSpinBox_valueChanged(int arg1)
 {

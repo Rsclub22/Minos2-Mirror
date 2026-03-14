@@ -4,11 +4,14 @@
 
 #include "delayedaction.h"
 #include "kstcallsframe.h"
+#include "kstloginframe.h"
 #include "kstmainwindow.h"
 #include "kstmessagegridmodel.h"
-#include "kstmsgframe.h"
 #include "kstsendmeepframe.h"
+#include "ksttomeframe.h"
 #include "regsettings.h"
+
+#include "kstmsgframe.h"
 #include "ui_kstmsgframe.h"
 
 KSTMsgFrame::KSTMsgFrame(QWidget *parent)
@@ -23,6 +26,26 @@ KSTMsgFrame::KSTMsgFrame(QWidget *parent)
     installEventFilter(this);
 
     ui->messageFilter->setFocus();
+    ui->messageTable->horizontalHeader()->setStretchLastSection(true);
+
+    messageDelegate = QSharedPointer<HtmlDelegate>( new HtmlDelegate("messageDelegate", 1.0, 1.0)) ;
+    ui->messageTable->setItemDelegate(messageDelegate.data());
+
+    kstMessageModel.delegate = messageDelegate;
+    ui->messageTable->setModel(&kstMessageFilterModel);
+
+    QHeaderView *verticalHeader = ui->messageTable->verticalHeader();
+    verticalHeader->setVisible(false);
+    verticalHeader->setMinimumSectionSize(10);
+    verticalHeader->setDefaultSectionSize(10);
+    verticalHeader->setSectionResizeMode(QHeaderView::Fixed);
+
+    RegSettings rsettings;
+    QByteArray state = rsettings.getSettings().value("messageTable/state").toByteArray();
+    ui->messageTable->horizontalHeader()->restoreState(state);
+
+    connect( ui->messageTable->horizontalHeader(), &QHeaderView::sectionResized,
+            this, &KSTMsgFrame::on_sectionResized, Qt::UniqueConnection);
 
 }
 
@@ -36,35 +59,6 @@ void KSTMsgFrame::setServices(QStringList services)
     ui->messageChatFilter->addItem(tr("Active"));
     ui->messageChatFilter->addItems(services);
     ui->messageChatFilter->setCurrentIndex(0);
-
-}
-void KSTMsgFrame::setModel(KstMessageGridModel &pkstMessageModel, KstMessageGridSortFilterModel &pkstMessageGridSortFilterModel)
-{
-    kstMessageModel = &pkstMessageModel;
-    kstMessageFilterModel = &pkstMessageGridSortFilterModel;
-
-    ui->messageTable->setModel(kstMessageFilterModel);
-    ui->messageTable->horizontalHeader()->setStretchLastSection(true);
-
-    messageDelegate = QSharedPointer<HtmlDelegate>( new HtmlDelegate("messageDelegate", 1.0, 1.0)) ;
-    ui->messageTable->setItemDelegate(messageDelegate.data());
-
-    kstMessageModel->delegate = messageDelegate;
-
-    QHeaderView *verticalHeader = ui->messageTable->verticalHeader();
-    verticalHeader->setVisible(false);
-    verticalHeader->setMinimumSectionSize(10);
-    verticalHeader->setDefaultSectionSize(10);
-    //    verticalHeader->setSectionResizeMode(QHeaderView::ResizeToContents);
-    verticalHeader->setSectionResizeMode(QHeaderView::Fixed);
-
-    RegSettings rsettings;
-    QByteArray state = rsettings.getSettings().value("messageTable/state").toByteArray();
-    ui->messageTable->horizontalHeader()->restoreState(state);
-
-    connect( ui->messageTable->horizontalHeader(), &QHeaderView::sectionResized,
-            this, &KSTMsgFrame::on_sectionResized, Qt::UniqueConnection);
-
 }
 void KSTMsgFrame::on_sectionResized(int, int, int)
 {
@@ -99,7 +93,7 @@ void KSTMsgFrame::on_clearMessageFilter_clicked()
     ui->messageChatFilter->setCurrentIndex(0);
     ui->messageFilter->clear();
 
-    mainWindow->kstMeepFilterModel.invalidate();    // try to get rid of the colouring in the meep table
+    mainWindow->kstTomeFrame->kstMeepFilterModel.invalidate();    // try to get rid of the colouring in the meep table
 
     scrollMesToBottom();
 }
@@ -109,7 +103,7 @@ void KSTMsgFrame::scrollMesToBottom()
     {
         delayedAction(this, [=]()
                       {
-                          QModelIndex mesIndex = kstMessageFilterModel->index(kstMessageFilterModel->rowCount() - 1, 0);
+                          QModelIndex mesIndex = kstMessageFilterModel.index(kstMessageFilterModel.rowCount() - 1, 0);
                           if (mesIndex.isValid())
                           {
                               ui->messageTable->scrollTo(mesIndex, QAbstractItemView::PositionAtBottom);
@@ -121,13 +115,11 @@ void KSTMsgFrame::scrollMesToBottom()
 void KSTMsgFrame::setFilter(QString s)
 {
     ui->messageFilter->setText(s);
-
 }
 
 void KSTMsgFrame::setActive(int chat)
 {
     ui->messageChatFilter->setCurrentIndex(chat);
-
 }
 void KSTMsgFrame::setFocus()
 {
@@ -139,7 +131,7 @@ void KSTMsgFrame::on_messageChatFilter_currentIndexChanged(int index)
     {
         int messageChatFilter = index;
 
-        kstMessageFilterModel->setChatFilter(messageChatFilter);
+        kstMessageFilterModel.setChatFilter(messageChatFilter);
 
         QSettings settings(mainWindow->iniName, QSettings::IniFormat);
         settings.setValue("messageChatFilter", QString::number(messageChatFilter));
@@ -147,7 +139,7 @@ void KSTMsgFrame::on_messageChatFilter_currentIndexChanged(int index)
 }
 void KSTMsgFrame::on_messageTable_clicked(const QModelIndex &index)
 {
-    QModelIndex sourceIndex = kstMessageFilterModel->mapToSource(index);
+    QModelIndex sourceIndex = kstMessageFilterModel.mapToSource(index);
     int row = sourceIndex.row();
     if (row >= mainWindow->messageVector->size())
         return;
@@ -165,12 +157,11 @@ void KSTMsgFrame::on_messageTable_clicked(const QModelIndex &index)
     ui->bodyLabel->setText(t);
 }
 
-
 void KSTMsgFrame::on_messageTable_doubleClicked(const QModelIndex &index)
 {
     if (index.isValid())
     {
-        QModelIndex sourceIndex = kstMessageFilterModel->mapToSource(index);
+        QModelIndex sourceIndex = kstMessageFilterModel.mapToSource(index);
         int row = sourceIndex.row();
         QSharedPointer<KstMessageLine> line = mainWindow->messageVector->at(row);
         Callsign call = line->call;
@@ -187,7 +178,7 @@ void KSTMsgFrame::on_clearSelectedMessage_clicked()
 }
 void KSTMsgFrame::on_messageFilter_textChanged(const QString &arg1)
 {
-    kstMessageFilterModel->setFilterString(arg1.toUpper());
+    kstMessageFilterModel.setFilterString(arg1.toUpper());
     scrollMesToBottom();
 }
 
@@ -197,16 +188,16 @@ bool KSTMsgFrame::eventFilter(QObject *obj, QEvent *event)
     {
         if (event->type() == QEvent::Enter)
         {
-            QModelIndex mesIndex = kstMessageFilterModel->index(kstMessageModel->rowCount() - 1, 0);
+            QModelIndex mesIndex = kstMessageFilterModel.index(kstMessageModel.rowCount() - 1, 0);
             mouseInMessages = true;
-            kstMessageFilterModel->setMousePausePoint(mesIndex.row());
+            kstMessageFilterModel.setMousePausePoint(mesIndex.row());
             ui->messageTable->update();
             ui->pauseLabel->setText(HtmlFontColour(Qt::red) + tr("Message updates paused"));
         }
         else if (event->type() == QEvent::Leave)
         {
             mouseInMessages = false;
-            kstMessageFilterModel->setMousePausePoint(-1);
+            kstMessageFilterModel.setMousePausePoint(-1);
             ui->messageTable->update();
             ui->pauseLabel->clear();
             scrollMesToBottom();
@@ -222,14 +213,13 @@ bool KSTMsgFrame::eventFilter(QObject *obj, QEvent *event)
                 }
             }
         }
-
     }
     return false;
 }
 void KSTMsgFrame::showAirscoutPath()
 {
     QModelIndex index = ui->messageTable->currentIndex();
-    QModelIndex sourceIndex = kstMessageFilterModel->mapToSource(index);
+    QModelIndex sourceIndex = kstMessageFilterModel.mapToSource(index);
     int row = sourceIndex.row();
     if (row < 0 || row >= mainWindow->messageVector->size())
         return;

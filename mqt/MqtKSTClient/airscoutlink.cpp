@@ -2,6 +2,7 @@
 #include "airscoutlink.h"
 #include "delayedaction.h"
 
+#include "kstasactiveframe.h"
 #include "kstmainwindow.h"
 
 // frequencies are in 100 hz unit
@@ -53,13 +54,9 @@ void AirScoutLink::onTimeout()
 {
     if (mainWindow && mainWindow->kstASActiveFrame->getASActive())
     {
-        //QDateTime now = QDateTime::currentDateTime();
-        //QDateTime timeoutTime = lastASSEnd.addSecs(mainWindow->getASTimeout());
-        {
-            // send again...
-            assetPathInProgress = false;
-            askNearest(-1);
-        }
+        // send again...
+        assetPathInProgress = false;
+        askNearest(-1);
     }
 }
 bool ASUserCompare (QSharedPointer<KstUser> i, QSharedPointer<KstUser> j)

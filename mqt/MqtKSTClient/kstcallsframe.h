@@ -14,13 +14,13 @@ class KSTCallsFrame : public QFrame
     Q_OBJECT
 
     QSharedPointer<HtmlDelegate> CSDelegate;
-    KstCallGridModel *kstCallModel = nullptr;
-    KstCallGridSortFilterModel *kstCallFilterModel = nullptr;
-    QSharedPointer<QVector<QSharedPointer<KstUser> > > callVector;
 
     virtual bool eventFilter(QObject *obj, QEvent *event) override;
 
 public:
+    KstCallGridModel kstCallModel;
+    KstCallGridSortFilterModel kstCallFilterModel;
+
     explicit KSTCallsFrame(QWidget *parent = nullptr);
     ~KSTCallsFrame();
 
@@ -28,9 +28,6 @@ public:
 
     void setServices(QStringList services);
 
-    void setModel(QSharedPointer<QVector<QSharedPointer<KstUser> > > callVector,
-        KstCallGridModel &kstCallModel,
-        KstCallGridSortFilterModel &kstCallFilterModel);
     void acChanged(QSharedPointer<KstUser> user);
     void setDefaultButton(bool s);
     void setFilter(Callsign &c);

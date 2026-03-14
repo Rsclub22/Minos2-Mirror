@@ -1,7 +1,6 @@
 #include <QKeyEvent>
 
 #include "callsign.h"
-#include "kstcallgridmodel.h"
 #include "kstcallsframe.h"
 #include "kstmainwindow.h"
 #include "kstmsgframe.h"
@@ -18,6 +17,23 @@ KSTSendMeepFrame::KSTSendMeepFrame(QWidget *parent)
     ui->callEdit->installEventFilter(this);
     ui->msgEdit->installEventFilter(this);
     ui->genmsgButton->setDefault(true);
+
+    QSettings settings(mainWindow->iniName, QSettings::IniFormat);
+    sal = static_cast<Salutation>(settings.value("Salutation", esHiName).toInt());
+
+    switch (sal)
+    {
+    case esNone:
+        ui->salNonerb->setChecked(true);
+        break;
+    case esHi:
+        ui->salHirb->setChecked(true);
+        break;
+    case esHiName:
+        ui->salHiNamerb->setChecked(true);
+        break;
+    }
+
 }
 
 KSTSendMeepFrame::~KSTSendMeepFrame()
@@ -160,7 +176,6 @@ void KSTSendMeepFrame::setDefaultButton(QPushButton *d)
         }
 }
 
-
 void KSTSendMeepFrame::on_salNonerb_clicked()
 {
     bool s = ui->salNonerb->isChecked();
@@ -172,7 +187,6 @@ void KSTSendMeepFrame::on_salNonerb_clicked()
     }
 }
 
-
 void KSTSendMeepFrame::on_salHirb_clicked()
 {
     bool s = ui->salHirb->isChecked();
@@ -183,7 +197,6 @@ void KSTSendMeepFrame::on_salHirb_clicked()
         settings.setValue("Salutation", sal);
     }
 }
-
 
 void KSTSendMeepFrame::on_salHiNamerb_clicked()
 {

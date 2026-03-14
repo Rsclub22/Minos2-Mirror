@@ -12,17 +12,16 @@ class KSTTomeFrame : public QFrame
 {
     Q_OBJECT
 
-    KstMeepGridSortFilterModel *kstMeepGridSortFilterModel = nullptr;
     QSharedPointer<HtmlDelegate> meepDelegate;
     virtual bool eventFilter(QObject *obj, QEvent *event) override;
 
 public:
+    KstMeepGridSortFilterModel kstMeepFilterModel;
+
     explicit KSTTomeFrame(QWidget *parent = nullptr);
     ~KSTTomeFrame();
 
     void on_FontChanged();
-
-    void setModel(KstMeepGridSortFilterModel &kstMeepGridSortFilterModel);
 
     void scrollMeepToBottom();
     void setMeepFilters();

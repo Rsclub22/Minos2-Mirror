@@ -14,19 +14,16 @@ class KSTPlanesFrame : public QFrame
 {
     Q_OBJECT
 
- //   virtual bool eventFilter(QObject *obj, QEvent *event) override;
-
     QSharedPointer<HtmlDelegate> PlanesDelegate;
     QSharedPointer<KstUser> planeActive;
-    KstPlanesModel *kstPlanesModel = nullptr;
 public:
+    KstPlanesModel kstPlanesModel;
+    KstPlanesGridSortFilterModel kstPlanesFilterModel;
+
     explicit KSTPlanesFrame(QWidget *parent = nullptr);
     ~KSTPlanesFrame();
 
     void on_FontChanged();
-
-    void setModel(KstPlanesModel &kstPlanesModel, KstPlanesGridSortFilterModel &kstPlanesFilterModel);
-
 
     void showPlanes(QSharedPointer<KstUser> user);
 private slots:

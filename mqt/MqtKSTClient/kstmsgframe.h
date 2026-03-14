@@ -14,20 +14,20 @@ class KSTMsgFrame : public QFrame
     Q_OBJECT
 
     QSharedPointer<HtmlDelegate> messageDelegate;
-    KstMessageGridModel *kstMessageModel = nullptr;
-    KstMessageGridSortFilterModel *kstMessageFilterModel = nullptr;
 
     bool mouseInMessages = false;
 
     virtual bool eventFilter(QObject *obj, QEvent *event) override;
 public:
+    KstMessageGridModel kstMessageModel;
+    KstMessageGridSortFilterModel kstMessageFilterModel;
+
     explicit KSTMsgFrame(QWidget *parent = nullptr);
     ~KSTMsgFrame();
 
     void on_FontChanged();
 
     void setServices(QStringList services);
-    void setModel(KstMessageGridModel &kstMessageModel, KstMessageGridSortFilterModel &kstMessageFilterModel);
     void scrollMesToBottom();
     void setFilter(QString s);
     void setActive(int chat);

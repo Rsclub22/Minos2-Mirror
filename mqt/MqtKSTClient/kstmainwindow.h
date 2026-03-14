@@ -6,24 +6,15 @@
 #include <QRadioButton>
 #include <QCheckBox>
 #include <QTimer>
-#include "CommandReader.h"
+#include <QFile>
+#include <QMenu>
 
-#include "kstasactiveframe.h"
-#include "kstbuttonsframe.h"
-#include "kstcallgridmodel.h"
-#include "kstcallsframe.h"
-#include "kstloginframe.h"
-#include "kstmessagegridmodel.h"
-#include "kstmsgframe.h"
-#include "kstpageframe.h"
-#include "kstplanesframe.h"
-#include "kstplanesmodel.h"
+#include "CommandReader.h"
 #include "cutils.h"
+#include "callsign.h"
+
 #include "airscoutlink.h"
 #include "kstscreenoptions.h"
-#include "kstsendmeepframe.h"
-#include "ksttomeframe.h"
-#include "qmenu.h"
 
 
 QT_BEGIN_NAMESPACE
@@ -31,6 +22,16 @@ namespace Ui { class KSTMainWindow; }
 QT_END_NAMESPACE
 
 class KSTMonitoredLogs;
+class KSTPageFrame;
+
+class KSTASActiveFrame ;
+class KSTButtonsFrame;
+class KSTCallsFrame;
+class KSTLoginFrame;
+class KSTMsgFrame;
+class KSTPlanesFrame;
+class KSTSendMeepFrame;
+class KSTTomeFrame ;
 
 extern QStringList services;
 
@@ -38,6 +39,61 @@ extern QStringList services;
 class MonitoredLog;
 class QPushButton;
 
+class KstUser
+{
+public:
+    int chat;
+    Callsign call;
+    QString loc;
+    QString name;
+    QString prefix;
+    QString country;
+    QString dxcc;
+    bool away = false;
+    bool recent = false;
+    int distance = -1;
+    int bearing = -1;
+    int messageCount = 0;
+
+    QString lastCalcTime;
+    QString fromCall;
+    QString fromLoc;
+    QString toCall;
+    QString toLoc;
+    QVector<Aircraft> planes;
+    bool planeResponseSeen = false;
+
+    KstUser()
+    {}
+    KstUser(const Callsign &c, int achat):call(c),chat(achat)
+    {}
+
+    bool operator< ( const KstUser& rhs ) const;
+    bool operator== ( const KstUser& rhs ) const;
+
+    qHashRet qHash() const;
+};
+extern bool KstUserCompare (QSharedPointer<KstUser> i, QSharedPointer<KstUser> j);
+
+class KstMessageLine
+{
+public:
+    bool markedRead = false;
+    int sequence = -1;
+    int chat = -1;
+    QDateTime dtg;
+    QString fullLine;
+    Callsign call;
+    int distance = -1;
+    QString name;
+    Callsign otherCall;
+    int otherDistance = -1;
+    QString message;
+
+    KstMessageLine(){}
+    ~KstMessageLine(){}
+};
+extern bool compMessages ( QSharedPointer<KstMessageLine> q1, const QSharedPointer<KstMessageLine> q2 );
 
 class KSTMainWindow : public QMainWindow
 {
@@ -48,16 +104,13 @@ private:
     KSTScreenOptions kstScreenOptions;
     QTimer CloseTimer;
     QTimer userCallTimer;
+    QTimer KSTTestTimer;
 
     bool inTestMsg = false;
 
-    QTimer KSTTestTimer;
     QSharedPointer<QFile> KSTexpFile;
     QFile KSTImportFile;
     QTextStream KSTImportStream;
-
-    KstPlanesModel kstPlanesModel;
-    KstPlanesGridSortFilterModel kstPlanesFilterModel;
 
     QTcpSocket* kstclient;
 
@@ -89,7 +142,7 @@ private:
     void analyseKstMessage(QString atj);
     void reconnect();
     void connectToHost();
-    void setNameFromCall(const Callsign &call);
+//    void setNameFromCall(const Callsign &call);
     bool doConfiguration(bool showForm);
 
 public:
@@ -139,14 +192,6 @@ public:
     bool callVectorChanged = false;
 
     QMap<KstUser /*key*/, QSharedPointer<KstUser> > callMap;
-
-    KstMessageGridModel kstMessageModel;
-    KstMessageGridSortFilterModel kstMessageFilterModel;
-
-    KstMeepGridSortFilterModel kstMeepFilterModel;
-
-    KstCallGridModel kstCallModel;
-    KstCallGridSortFilterModel kstCallFilterModel;
 
     QSharedPointer<AirScoutLink> asl;
     UpperCaseValidator ucValidator;
@@ -215,13 +260,14 @@ public:
 
     void selectLayout(QString layout);
 
+    void userCallTimerTimer();
+    void sendKST(QString msg);
+    void doLoginChanges();
+
     void do_connectButton_clicked();
     void do_configureButton_clicked();
     void do_awayButton_clicked();
     void do_layoutButton_clicked();
-    void sendKST(QString msg);
-    void userCallTimerTimer();
-    void doLoginChanges();
     void do_KSTTestButton_clicked();
     void do_logsButton_clicked();
     void do_closeButton_clicked();

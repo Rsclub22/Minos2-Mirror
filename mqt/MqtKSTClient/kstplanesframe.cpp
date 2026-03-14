@@ -2,7 +2,6 @@
 
 #include "kstplanesframe.h"
 #include "htmldelegate.h"
-#include "kstcallgridmodel.h"
 #include "kstcallsframe.h"
 #include "kstasactiveframe.h"
 #include "kstmainwindow.h"
@@ -19,22 +18,13 @@ KSTPlanesFrame::KSTPlanesFrame(QWidget *parent)
     mainWindow->kstASActiveFrame->setASBands(AirScoutLink::ASBandStrings);
     ui->planesView->installEventFilter(this);
     installEventFilter(this);   // so we pick up return, and implement the default button
-}
 
-KSTPlanesFrame::~KSTPlanesFrame()
-{
-    delete ui;
-}
+    kstPlanesFilterModel.setSourceModel(&kstPlanesModel);
 
-void KSTPlanesFrame::on_FontChanged()
-{
+    QVector<Aircraft> qva;
+    kstPlanesModel.setPlanesVector(qva);
 
-}
-
-void KSTPlanesFrame::setModel(KstPlanesModel &pkstPlanesModel, KstPlanesGridSortFilterModel &pkstPlanesFilterModel)
-{
-    kstPlanesModel = &pkstPlanesModel;
-    ui->planesView->setModel(&pkstPlanesFilterModel);
+    ui->planesView->setModel(&kstPlanesFilterModel);
 
     PlanesDelegate = QSharedPointer<HtmlDelegate>( new HtmlDelegate("PlanesDelegate", 1.0, 1.0)) ;
     ui->planesView->setItemDelegate(PlanesDelegate.data());
@@ -48,6 +38,16 @@ void KSTPlanesFrame::setModel(KstPlanesModel &pkstPlanesModel, KstPlanesGridSort
 
     connect( ui->planesView->horizontalHeader(), &QHeaderView::sectionResized,
             this, &KSTPlanesFrame::on_sectionResized, Qt::UniqueConnection);
+}
+
+KSTPlanesFrame::~KSTPlanesFrame()
+{
+    delete ui;
+}
+
+void KSTPlanesFrame::on_FontChanged()
+{
+
 }
 
 void KSTPlanesFrame::on_sectionResized(int, int, int)
@@ -81,7 +81,7 @@ void KSTPlanesFrame::showPlanes(QSharedPointer<KstUser> user)
 
         ui->planeslabel->setText(l);
     }
-    kstPlanesModel->setPlanesVector(user->planes);
+    kstPlanesModel.setPlanesVector(user->planes);
 
 }
 void KSTPlanesFrame::acChanged(QSharedPointer<KstUser> user)

@@ -2,13 +2,16 @@
 #include <QSettings>
 #include <QKeyEvent>
 
-#include "ksttomeframe.h"
 #include "delayedaction.h"
+#include "kstmsgframe.h"
 #include "kstcallsframe.h"
+#include "kstloginframe.h"
 #include "kstmainwindow.h"
 #include "kstmessagegridmodel.h"
 #include "kstsendmeepframe.h"
 #include "regsettings.h"
+
+#include "ksttomeframe.h"
 #include "ui_ksttomeframe.h"
 
 KSTTomeFrame::KSTTomeFrame(QWidget *parent)
@@ -16,17 +19,8 @@ KSTTomeFrame::KSTTomeFrame(QWidget *parent)
     , ui(new Ui::KSTTomeFrame)
 {
     ui->setupUi(this);
-}
 
-KSTTomeFrame::~KSTTomeFrame()
-{
-    delete ui;
-}
-
-void KSTTomeFrame::setModel(KstMeepGridSortFilterModel &pkstMeepGridSortFilterModel)
-{
-    kstMeepGridSortFilterModel = &pkstMeepGridSortFilterModel;
-    ui->meepTable->setModel(kstMeepGridSortFilterModel);
+    ui->meepTable->setModel(&kstMeepFilterModel);
     ui->meepTable->horizontalHeader()->setStretchLastSection(true);
 
     meepDelegate = QSharedPointer<HtmlDelegate>( new HtmlDelegate("meepDelegate", 1.0, 1.0)) ;
@@ -36,9 +30,7 @@ void KSTTomeFrame::setModel(KstMeepGridSortFilterModel &pkstMeepGridSortFilterMo
     verticalHeader->setVisible(false);
     verticalHeader->setMinimumSectionSize(10);
     verticalHeader->setDefaultSectionSize(10);
-    //verticalHeader->setSectionResizeMode(QHeaderView::ResizeToContents);
     verticalHeader->setSectionResizeMode(QHeaderView::Fixed);
-
 
     RegSettings rsettings;
     QByteArray state = rsettings.getSettings().value("meepTable/state").toByteArray();
@@ -47,7 +39,15 @@ void KSTTomeFrame::setModel(KstMeepGridSortFilterModel &pkstMeepGridSortFilterMo
     connect( ui->meepTable->horizontalHeader(), &QHeaderView::sectionResized,
             this, &KSTTomeFrame::on_sectionResized, Qt::UniqueConnection);
 
+    kstMeepFilterModel.setSourceModel(&mainWindow->kstMsgFrame->kstMessageModel);
+
 }
+
+KSTTomeFrame::~KSTTomeFrame()
+{
+    delete ui;
+}
+
 void KSTTomeFrame::on_sectionResized(int, int, int)
 {
     RegSettings settings;
@@ -77,7 +77,7 @@ void KSTTomeFrame::on_FontChanged()
 }
 void KSTTomeFrame::on_showReadcb_stateChanged(int /*arg1*/)
 {
-    kstMeepGridSortFilterModel->setShowRead(ui->showReadcb->isChecked());
+    kstMeepFilterModel.setShowRead(ui->showReadcb->isChecked());
 }
 bool KSTTomeFrame::eventFilter(QObject *obj, QEvent *event)
 {
@@ -99,7 +99,7 @@ void KSTTomeFrame::scrollMeepToBottom()
 {
     delayedAction(this, [=]()
                   {
-                      QModelIndex meepIndex = kstMeepGridSortFilterModel->index(kstMeepGridSortFilterModel->rowCount() - 1, 0);
+                      QModelIndex meepIndex = kstMeepFilterModel.index(kstMeepFilterModel.rowCount() - 1, 0);
                       if (meepIndex.isValid())
                       {
                           ui->meepTable->scrollTo(meepIndex, QAbstractItemView::PositionAtBottom);
@@ -110,7 +110,7 @@ void KSTTomeFrame::on_meepTable_clicked(const QModelIndex &index)
 {
     if (index.isValid())
     {
-        QModelIndex sourceIndex = kstMeepGridSortFilterModel->mapToSource(index);
+        QModelIndex sourceIndex = kstMeepFilterModel.mapToSource(index);
         QSharedPointer<KstMessageLine> line = mainWindow->messageVector->at(sourceIndex.row());
         Callsign call = line->call;
         if (call == mainWindow->myCallsign)
@@ -126,7 +126,7 @@ void KSTTomeFrame::on_meepTable_doubleClicked(const QModelIndex &index)
 {
     if (index.isValid())
     {
-        QModelIndex sourceIndex = kstMeepGridSortFilterModel->mapToSource(index);
+        QModelIndex sourceIndex = kstMeepFilterModel.mapToSource(index);
         int row = sourceIndex.row();
         QSharedPointer<KstMessageLine> line = mainWindow->messageVector->at(row);
         Callsign call = line->call;
@@ -152,23 +152,21 @@ void KSTTomeFrame::on_toMeFilter_textChanged(const QString &/*arg1*/)
 }
 void KSTTomeFrame::setMeepFilters()
 {
-    kstMeepGridSortFilterModel->setMyCsFilterString(mainWindow->myCallsign.getFullCall());
+    kstMeepFilterModel.setMyCsFilterString(mainWindow->myCallsign.getFullCall());
 
     if (ui->includeMeCb->isChecked())
     {
-        kstMeepGridSortFilterModel->setMyCsFilterString(mainWindow->myCallsign.getFullCall());
+        kstMeepFilterModel.setMyCsFilterString(mainWindow->myCallsign.getFullCall());
     }
     else
     {
-        kstMeepGridSortFilterModel->setMyCsFilterString(QString());
+        kstMeepFilterModel.setMyCsFilterString(QString());
     }
-    kstMeepGridSortFilterModel->setToFromFilter(ui->toFromMecb->isChecked());
-    kstMeepGridSortFilterModel->setFilterString(ui->toMeFilter->text().trimmed());
+    kstMeepFilterModel.setToFromFilter(ui->toFromMecb->isChecked());
+    kstMeepFilterModel.setFilterString(ui->toMeFilter->text().trimmed());
 
     scrollMeepToBottom();
 }
-
-
 
 void KSTTomeFrame::on_clearMeepFiltersButton_clicked()
 {
@@ -182,5 +180,5 @@ void KSTTomeFrame::setConnected(bool c)
 
     ui->includeMeCb->setChecked(c);
     //ui->includeMeCb->setText(QString());
-    kstMeepGridSortFilterModel->setMyCsFilterString(QString());
+    kstMeepFilterModel.setMyCsFilterString(QString());
 }

@@ -5,7 +5,7 @@
 #include <QScrollArea>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
-#include <QtWidgets/QSpacerItem>
+#include <QSpacerItem>
 #include <QPushButton>
 
 #include "QtUtils.h"
@@ -13,12 +13,9 @@
 #include "RPCCommandConstants.h"
 #include "ScreenConfigManager.h"
 #include "WindowsAppId.h"
-#include "kstbuttonsframe.h"
-#include "kstcallsframe.h"
-#include "kstloginframe.h"
-#include "kstmsgframe.h"
-#include "kstplanesframe.h"
-#include "ksttomeframe.h"
+#include "kstasactiveframe.h"
+#include "kstpageframe.h"
+#include "kstsendmeepframe.h"
 #include "minossplitter.h"
 #include "regsettings.h"
 #include "AppStartup.h"
@@ -26,18 +23,25 @@
 #include "MonitoredLog.h"
 #include "callsign.h"
 #include "fileutils.h"
-#include "kstconfigure.h"
-#include "airscoutlink.h"
 #include "delayedaction.h"
-#include "changename.h"
-#include "LogEvents.h"
-#include "kstmonitoredlogs.h"
 #include "mults.h"
 #include "MinosRPC.h"
-#include "kstmainwindow.h"
 #include "remotelogs.h"
-//#include "MinosParameters.h"
 #include "soundplayer.h"
+#include "LogEvents.h"
+
+#include "kstbuttonsframe.h"
+#include "kstcallsframe.h"
+#include "kstloginframe.h"
+#include "kstmsgframe.h"
+#include "kstplanesframe.h"
+#include "ksttomeframe.h"
+#include "kstconfigure.h"
+#include "airscoutlink.h"
+#include "changename.h"
+#include "kstmonitoredlogs.h"
+
+#include "kstmainwindow.h"
 #include "ui_kstmainwindow.h"
 
 QStringList services =
@@ -214,26 +218,9 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     connect(&userCallTimer, &QTimer::timeout, this, &KSTMainWindow::userCallTimerTimer);
     userCallTimer.start(5000);
 
-    kstMessageModel.setChatVector(messageVector);
-    kstMessageFilterModel.setSourceModel(&kstMessageModel);
+    kstMsgFrame->kstMessageModel.setChatVector(messageVector);
+    kstMsgFrame->kstMessageFilterModel.setSourceModel(&kstMsgFrame->kstMessageModel);
 
-    kstMsgFrame->setModel(kstMessageModel, kstMessageFilterModel);
-
-    kstMeepFilterModel.setSourceModel(&kstMessageModel);
-
-    kstTomeFrame->setModel(kstMeepFilterModel);
-
-    kstCallModel.setCallVector(callVector);
-
-    kstCallFilterModel.setSourceModel(&kstCallModel);
-
-    kstCallsFrame->setModel(callVector, kstCallModel, kstCallFilterModel);
-
-    kstPlanesFilterModel.setSourceModel(&kstPlanesModel);
-    kstPlanesFrame->setModel(kstPlanesModel, kstPlanesFilterModel);
-
-    QVector<Aircraft> qva;
-    kstPlanesModel.setPlanesVector(qva);
 
     kstclient = new QTcpSocket(this);
 
@@ -321,8 +308,6 @@ void KSTMainWindow::closeEvent(QCloseEvent *event)
         do_connectButton_clicked();
     }
 
- //   RegSettings settings;
- //   settings.getSettings().setValue("geometry/Main", saveGeometry());
     trace("KSTMainWindow Closing");
 
     delete monitoredLogs;
@@ -410,7 +395,6 @@ void KSTMainWindow::clearScreenLayout()
 
     trace("clearScreenLayout starts ");
 
-
     kstASActiveFrame->setParent(this);
     kstASActiveFrame->hide();
     kstButtonsFrame->setParent(this);
@@ -435,13 +419,10 @@ void KSTMainWindow::clearScreenLayout()
         {
             continue;
         }
- //       (*cpc)->clearScreen();
-  //      (*cpc)->deleteLater();
         delete *cpc;
         *cpc = nullptr;
     }
     pages.clear();
-
 
     suppressSaveHeaders = false;
     trace("clearScreenLayout complete");
@@ -459,7 +440,7 @@ void KSTMainWindow::applyScreenLayout()
     delayedAction(this,  [=](){
         inApplyScreenLayout = false;
     }
-                  );
+     );
 }
 
 QString KSTMainWindow::getCurScreenLayout() const
@@ -599,7 +580,7 @@ void KSTMainWindow::buildScreen(SCScreen &s, int t)
     }
     else
     {
-        cp->setWindowFlags(/*Qt::Tool |*/ Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowMinMaxButtonsHint);
+        cp->setWindowFlags( Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowMinMaxButtonsHint);
         cp->setAttribute(Qt::WA_ShowWithoutActivating);
         cp->show();
     }
@@ -697,7 +678,6 @@ void KSTMainWindow::do_dialog_clicked()
             actionFrame->setParent(this);
             actionFrame->setVisible(false);
             monitoredLogs->hide();
-
         }
     }
 }
@@ -707,31 +687,31 @@ void KSTMainWindow::onNewLog(QSharedPointer<MonitoredLog> ml)
 }
 void KSTMainWindow::onLogChanged(QSharedPointer<MonitoredLog> /*ml*/)
 {
-    kstMessageFilterModel.invalidate();
-    kstMeepFilterModel.invalidate();
-    kstCallFilterModel.invalidate();
-    kstPlanesFilterModel.invalidate();
+    kstMsgFrame->kstMessageFilterModel.invalidate();
+    kstTomeFrame->kstMeepFilterModel.invalidate();
+    kstCallsFrame->kstCallFilterModel.invalidate();
+    kstPlanesFrame->kstPlanesFilterModel.invalidate();
 }
 void KSTMainWindow::onNewStanzas()
 {
-    kstMessageFilterModel.invalidate();
-    kstMeepFilterModel.invalidate();
-    kstCallFilterModel.invalidate();
-    kstPlanesFilterModel.invalidate();
+    kstMsgFrame->kstMessageFilterModel.invalidate();
+    kstTomeFrame->kstMeepFilterModel.invalidate();
+    kstCallsFrame->kstCallFilterModel.invalidate();
+    kstPlanesFrame->kstPlanesFilterModel.invalidate();
 }
 void KSTMainWindow::onLogStarted(QSharedPointer<MonitoredLog> /*ml*/)
 {
-    kstMessageFilterModel.invalidate();
-    kstMeepFilterModel.invalidate();
-    kstCallFilterModel.invalidate();
-    kstPlanesFilterModel.invalidate();
+    kstMsgFrame->kstMessageFilterModel.invalidate();
+    kstTomeFrame->kstMeepFilterModel.invalidate();
+    kstCallsFrame->kstCallFilterModel.invalidate();
+    kstPlanesFrame->kstPlanesFilterModel.invalidate();
 }
 void KSTMainWindow::onLogClosed(QSharedPointer<MonitoredLog> /*ml*/)
 {
-    kstMessageFilterModel.invalidate();
-    kstMeepFilterModel.invalidate();
-    kstCallFilterModel.invalidate();
-    kstPlanesFilterModel.invalidate();
+    kstMsgFrame->kstMessageFilterModel.invalidate();
+    kstTomeFrame->kstMeepFilterModel.invalidate();
+    kstCallsFrame->kstCallFilterModel.invalidate();
+    kstPlanesFrame->kstPlanesFilterModel.invalidate();
 }
 void KSTMainWindow::userCallTimerTimer()
 {
@@ -776,7 +756,6 @@ void KSTMainWindow::connected()
 
 void KSTMainWindow::clearConnection()
 {
-
     kstTomeFrame->setConnected(false);
     kstButtonsFrame->setConnected(false);
     kstconnected = false;
@@ -921,7 +900,7 @@ void KSTMainWindow::sendKST(QString msg)
 void KSTMainWindow::addMessage(QSharedPointer<KstMessageLine> kst)
 {
     // Add to the counts of messages per user
-    kstMessageModel.appendLastRow(kst);
+    kstMsgFrame->kstMessageModel.appendLastRow(kst);
     Callsign userName = kst->call;
     QSharedPointer<KstUser> user = getUser(KstUser(userName, kst->chat));
     if (user)
@@ -1021,7 +1000,7 @@ void KSTMainWindow::analyseKstMessage(QString atj) {
             sendKST(sdone);
             recName = sl[6];
             recLoc = sl[8];
-            kstCallModel.locator = recLoc;  //set from LOGSTAT after LOGINC
+            kstCallsFrame->kstCallModel.locator = recLoc;  //set from LOGSTAT after LOGINC
         } else {
             // messageRx: LOGSTAT|101|Unknown user "XX0GJV".|
             // messageRx: LOGSTAT|114|Wrong password!|
@@ -1147,9 +1126,9 @@ void KSTMainWindow::analyseKstMessage(QString atj) {
             if (l->call.getFullCall() == sl[2]) {
                 l->loc = sl[3];
                 l->distance = -1; // force recalc
-                emit kstCallModel.dataChanged(
-                    kstCallModel.index(row, 0),
-                    kstCallModel.index(row, kstCallModel.columnCount() - 1));
+                emit kstCallsFrame->kstCallModel.dataChanged(
+                    kstCallsFrame->kstCallModel.index(row, 0),
+                    kstCallsFrame->kstCallModel.index(row, kstCallsFrame->kstCallModel.columnCount() - 1));
             }
             row++;
         }
@@ -1207,11 +1186,11 @@ void KSTMainWindow::analyseKstMessage(QString atj) {
         //    UE|chat id|nb registered users|
         //    UE|2|4777|
 
-        kstCallModel.setCallVector(callVector);
-        kstMessageModel.setChatVector(messageVector);
+        kstCallsFrame->kstCallModel.setCallVector(callVector);
+        kstMsgFrame->kstMessageModel.setChatVector(messageVector);
 
-        kstCallFilterModel.invalidate();
-        kstMessageFilterModel.invalidate();
+        kstCallsFrame->kstCallFilterModel.invalidate();
+        kstMsgFrame->kstMessageFilterModel.invalidate();
 
         kstMsgFrame->scrollMesToBottom();
 
@@ -1225,10 +1204,10 @@ void KSTMainWindow::analyseKstMessage(QString atj) {
             kstclient->disconnectFromHost();
             kstLoggedIn.clear();
 
-            kstCallModel.reset();
+            kstCallsFrame->kstCallModel.reset();
             callVector->clear();
             callMap.clear();
-            kstMessageModel.reset();
+            kstMsgFrame->kstMessageModel.reset();
             messageVector->clear();
 
             ChangeName cn;
@@ -1247,11 +1226,11 @@ void KSTMainWindow::analyseKstMessage(QString atj) {
                 "MSG|" + QString::number(getActiveChat()) + "|0|/SETLOC " + myLoc + "|0|";
             sendKST(msg);
             recLoc = myLoc;
-            kstCallModel.locator = myLoc;   // change loc with /SETLOC
+            kstCallsFrame->kstCallModel.locator = myLoc;   // change loc with /SETLOC
             for (auto const &l : QASCONST(*callVector)) {
                 l->distance = -1;
             }
-            kstCallFilterModel.invalidate();
+            kstCallsFrame->kstCallFilterModel.invalidate();
         }
 
     }
@@ -1279,9 +1258,9 @@ void KSTMainWindow::analyseKstMessage(QString atj) {
             l->data()->away = test->away;
             l->data()->recent = test->recent;
             int row = l - callVector->constBegin();
-            emit kstCallModel.dataChanged(
-                kstCallModel.index(row, 0),
-                kstCallModel.index(row, kstCallModel.columnCount() - 1));
+            emit kstCallsFrame->kstCallModel.dataChanged(
+                kstCallsFrame->kstCallModel.index(row, 0),
+                kstCallsFrame->kstCallModel.index(row, kstCallsFrame->kstCallModel.columnCount() - 1));
         }
     }
 
@@ -1313,9 +1292,9 @@ void KSTMainWindow::analyseKstMessage(QString atj) {
             l->data()->recent = test->recent;
             l->data()->distance = -1; // force recalc
             int row = l - callVector->constBegin();
-            emit kstCallModel.dataChanged(
-                kstCallModel.index(row, 0),
-                kstCallModel.index(row, kstCallModel.columnCount() - 1));
+            emit kstCallsFrame->kstCallModel.dataChanged(
+                kstCallsFrame->kstCallModel.index(row, 0),
+                kstCallsFrame->kstCallModel.index(row, kstCallsFrame->kstCallModel.columnCount() - 1));
         }
 
     }
@@ -1338,7 +1317,7 @@ void KSTMainWindow::analyseKstMessage(QString atj) {
             // is one short as we have already removed it from the vector
             int row = l - callVector->constBegin();
 
-            kstCallModel.removeRow(row);
+            kstCallsFrame->kstCallModel.removeRow(row);
             callVectorChanged = true;
             callMap.remove(*test.data());
         }
@@ -1374,7 +1353,7 @@ void KSTMainWindow::analyseKstMessage(QString atj) {
             int row = (std::lower_bound(callVector->begin(), callVector->end(), test,
                                         KstUserCompare) -
                        callVector->begin());
-            kstCallModel.insertRow(row, test);
+            kstCallsFrame->kstCallModel.insertRow(row, test);
             callVectorChanged = true;
 
             // NB callMap and callVector are different!
@@ -1388,10 +1367,10 @@ void KSTMainWindow::analyseKstMessage(QString atj) {
         // link check
         sendKST("\r\n");
         std::sort(messageVector->begin(), messageVector->end(), &compMessages);
-        emit kstMessageModel.dataChanged(
-            kstMessageModel.index(0, 0),
-            kstMessageModel.index(kstMessageModel.rowCount() - 1,
-                                  kstMessageModel.columnCount() - 1));
+        emit kstMsgFrame->kstMessageModel.dataChanged(
+            kstMsgFrame->kstMessageModel.index(0, 0),
+            kstMsgFrame->kstMessageModel.index(kstMsgFrame->kstMessageModel.rowCount() - 1,
+                                  kstMsgFrame->kstMessageModel.columnCount() - 1));
     }
 
     checkAwayButton();
@@ -1524,8 +1503,8 @@ bool KSTMainWindow::doConfiguration(bool showForm)
             {
                 l->distance = -1;
             }
-            kstCallFilterModel.invalidate();
-            kstMessageFilterModel.invalidate();
+            kstCallsFrame->kstCallFilterModel.invalidate();
+            kstMsgFrame->kstMessageFilterModel.invalidate();
 
             if (kstASActiveFrame->getASActive())
             {
@@ -1624,7 +1603,7 @@ void KSTMainWindow::doLoginChanges()
         {
             kstclient->disconnectFromHost();
             kstLoggedIn.clear();
-            kstCallModel.reset();
+            kstCallsFrame->kstCallModel.reset();
             callVector->clear();
             callMap.clear();
         }
@@ -1633,7 +1612,7 @@ void KSTMainWindow::doLoginChanges()
     {
         if (kstChatSelection.count())
         {
-            kstCallModel.locator = myLoc;   // set from config
+            kstCallsFrame->kstCallModel.locator = myLoc;   // set from config
             if (autoConnect)
             {
                 if (kstclient->state() != QAbstractSocket::ConnectedState
@@ -1658,7 +1637,7 @@ void KSTMainWindow::doLoginChanges()
                 newCallVector->push_back(i);
             }
         }
-        kstCallModel.setCallVector(newCallVector);
+        kstCallsFrame->kstCallModel.setCallVector(newCallVector);
         callVector = newCallVector;
         callMap.clear();
         for(auto const &i: QASCONST(*callVector))
@@ -1885,12 +1864,12 @@ void KSTMainWindow::do_closeButton_clicked()
 }
 void KSTMainWindow::do_clearLogsButton_clicked()
 {
-    kstMessageModel.reset();
+    kstMsgFrame->kstMessageModel.reset();
     for (auto const &l: QASCONST(*callVector))
     {
         l->messageCount = 0;
     }
-    kstCallFilterModel.invalidate();
+    kstCallsFrame->kstCallFilterModel.invalidate();
 
 }
 

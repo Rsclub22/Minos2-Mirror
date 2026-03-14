@@ -1,6 +1,8 @@
 #include "QtUtils.h"
+#include "kstcallsframe.h"
 #include "kstmainwindow.h"
 #include "kstasactiveframe.h"
+#include "kstplanesframe.h"
 #include "ui_kstasactiveframe.h"
 
 KSTASActiveFrame::KSTASActiveFrame(QWidget *parent)
@@ -26,7 +28,6 @@ void KSTASActiveFrame::setASBands(QVector<const char *> ASBandStrings)
 {
     for(auto const &s: QASCONST(ASBandStrings))
     {
-        // in kstActiveChatsFrame
         ui->asBandCombo->addItem(AirScoutLink::tr(s));
     }
     ui->asBandCombo->setCurrentIndex(getASActiveBand());
@@ -45,7 +46,9 @@ void KSTASActiveFrame::on_ASActivecb_stateChanged(int state)
                 kstuser->planeResponseSeen = false;
             }
             mainWindow->callVectorChanged = true;
-            emit mainWindow->kstCallModel.dataChanged(mainWindow->kstCallModel.index(0, ecscAirscout), mainWindow->kstCallModel.index(mainWindow->callVector->size(), ecscAirscout));
+            emit mainWindow->kstCallsFrame->kstCallModel.dataChanged(
+                mainWindow->kstCallsFrame->kstCallModel.index(0, ecscAirscout)
+                , mainWindow->kstCallsFrame->kstCallModel.index(mainWindow->callVector->size(), ecscAirscout));
 
             mainWindow->asl->clearWatchList();
             mainWindow->userCallTimerTimer();
@@ -72,7 +75,8 @@ void KSTASActiveFrame::do_asBandCombo_currentIndexChanged(int band)
                 kstuser->planeResponseSeen = false;
             }
             mainWindow->callVectorChanged = true;
-            emit mainWindow->kstCallModel.dataChanged(mainWindow->kstCallModel.index(0, ecscAirscout), mainWindow->kstCallModel.index(mainWindow->callVector->size(), ecscAirscout));
+            emit mainWindow->kstCallsFrame->kstCallModel.dataChanged(mainWindow->kstCallsFrame->kstCallModel.index(0, ecscAirscout),
+                        mainWindow->kstCallsFrame->kstCallModel.index(mainWindow->callVector->size(), ecscAirscout));
 
             mainWindow->userCallTimerTimer();
         }
