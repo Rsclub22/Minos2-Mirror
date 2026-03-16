@@ -1838,13 +1838,14 @@ void KSTMainWindow::selectLayout(QString layout)
     applyScreenLayout();
 
     delayedAction(this, [=]{
-    kstButtonsAction->setEnabled(!kstButtonsFrame->isVisible());
-    kstCallsAction->setEnabled(!kstCallsFrame->isVisible());
-    kstLoginAction->setEnabled(!kstLoginFrame->isVisible());
-    kstMsgAction->setEnabled(!kstMsgFrame->isVisible());
-    kstPlanesAction->setEnabled(!kstPlanesFrame->isVisible());
-    kstSendMeepAction->setEnabled(!kstSendMeepFrame->isVisible());
-    kstTomeAction->setEnabled(!kstTomeFrame->isVisible());
+    kstButtonsAction->setEnabled(kstButtonsFrame->parent() == this);
+    kstCallsAction->setEnabled(kstCallsFrame->parent() == this);
+    kstLoginAction->setEnabled(kstLoginFrame->parent() == this);
+    kstMsgAction->setEnabled(kstMsgFrame->parent() == this);
+    kstASActiveAction->setEnabled(kstASActiveFrame->parent() == this);
+    kstPlanesAction->setEnabled(kstPlanesFrame->parent() == this);
+    kstSendMeepAction->setEnabled(kstSendMeepFrame->parent() == this);
+    kstTomeAction->setEnabled(kstTomeFrame->parent() == this);
     });
 }
 
