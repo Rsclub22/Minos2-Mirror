@@ -10,6 +10,7 @@
 
 #include "QtUtils.h"
 #include "SecondInstall.h"
+#include "CommandReader.h"
 #include "RPCCommandConstants.h"
 #include "ScreenConfigManager.h"
 #include "WindowsAppId.h"
@@ -255,6 +256,7 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     connect(monitoredLogs, &KSTMonitoredLogs::logClosed, this, &KSTMainWindow::onLogClosed);
 
     on_FontChanged();
+    connect(commandReader.data(), &CommandReader::fontChanged, this, &KSTMainWindow::on_FontChanged);
 }
 
 KSTMainWindow::~KSTMainWindow()
