@@ -53,6 +53,11 @@ public:
     static int getEnginePTTL(QSettings &settings, QString engine);
     static int getEnginePTTL(QString engine);
     static void setEnginePTT(QSettings &settings,QString engine, int l);
+
+    static int getTxLevel(QSettings &settings, QString engine);
+    static int getTxLevel(QString engine);
+    static void setTxLevel(QSettings &settings, QString engine, int level);
+    static void setTxLevel(QString engine, int level);
 private slots:
     bool check();
 
