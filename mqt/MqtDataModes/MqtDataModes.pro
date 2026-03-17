@@ -11,6 +11,18 @@ TEMPLATE = app
 win32:RC_ICONS += ../MinosDataModes.ico
 macx:ICON=../MinosDataModes.icns
 
+win32{
+# Copy MMVARI OCX to build directory, or it doesn't get found
+  CONFIG(debug, debug|release) {
+       DESTDIR_DLL = $$OUT_PWD/debug
+  } else {
+       DESTDIR_DLL = $$OUT_PWD/release
+  }
+  MMVARI_OCX = C:/Ham/MMVARI/MMVARI.ocx
+
+ QMAKE_POST_LINK += $$quote($$QMAKE_COPY $$shell_path($$MMVARI_OCX) $$shell_path($$DESTDIR_DLL)$$escape_expand(\\n\\t))
+}
+
 SOURCES += \
     DMMinosParameters.cpp \
     FLDigiFrame.cpp \
