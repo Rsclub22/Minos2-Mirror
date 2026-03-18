@@ -142,7 +142,7 @@ Non-contest bands
 </Band>
 <Band type='MWave' flow='75500'  fhigh='81000'  unit='M' wlen='4mm'    UK='76 GHz'   Reg1Test='76 GHz'  ADIF='4mm'    Cabrillo='76G'   Colour='purple'>
 </Band>
-<Band type='MWave' flow='122250' fhigh='123000' unit='M' wlen='2.5mm'  UK='120 GHz'  Reg1Test='120 GHz' ADIF='2.5mm'  Cabrillo='120G'  Colour='navy'>
+<Band type='MWave' flow='122250' fhigh='123000' unit='M' wlen='2.5mm'  UK='122 GHz'  Reg1Test='122 GHz' ADIF='2.5mm'  Cabrillo='122G'  Colour='navy'>
 </Band>
 <Band type='MWave' flow='134'    fhigh='141'    unit='G' wlen='2mm'    UK='134 GHz'  Reg1Test='134 GHz' ADIF='2mm'    Cabrillo='134G'  Colour='black'>
 </Band>
