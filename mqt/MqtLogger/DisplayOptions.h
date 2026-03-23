@@ -40,6 +40,7 @@ private:
     ConfigurationOption ShowQSOMapGrid;
     ConfigurationOption ShowQSOMapLines;
     ConfigurationOption ShowQSOMapShowLoc;
+    ConfigurationOption ShowQSOMapShowCalls;
     ConfigurationOption ShowQSOMapTLLoc;
     ConfigurationOption ShowQSOMapBRLoc;
     ConfigurationOption ShowQSOMapShowNav;

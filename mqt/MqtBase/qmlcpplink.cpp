@@ -1,3 +1,4 @@
+#include "MTrace.h"
 #include "contest.h"
 #include "latlong.h"
 #include "qmlcpplink.h"
@@ -20,4 +21,9 @@ QString QmlCppLink::locator(double lat, double longi) const
     /*int ret =*/ geotoloc( lat, longi, loc );
 
     return loc.left(6);
+}
+
+void QmlCppLink::qmltrace(QString m) const
+{
+    trace(QString("QMLTrace ") + m);
 }

@@ -168,7 +168,7 @@
                 </layout>
                </item>
                <item>
-                <widget class="QFrame" name="">
+                <widget class="QFrame" name="frame">
                  <layout class="QHBoxLayout" name="horizontalLayout_5">
                   <item>
                    <widget class="QCheckBox" name="mapShowSpots">
@@ -181,6 +181,13 @@
                    <widget class="QCheckBox" name="showLocs">
                     <property name="text">
                      <string>Show Locs</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QCheckBox" name="showCalls">
+                    <property name="text">
+                     <string>Show Callsigns</string>
                     </property>
                    </widget>
                   </item>

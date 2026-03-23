@@ -67,7 +67,7 @@ signals:
    void bandMapLimitsChanged();
    void fKey(BaseContestLog *c, int e, int carr);
    void redrawQSOMap(bool grid, bool lines, bool cluster,
-                     bool showLoc, QString tl, QString br, bool showNav);
+                     bool showLoc, bool showCalls, QString tl, QString br, bool showNav);
 
    void BrgStrToRot(QString);
    void FreqToRig(Frequency);
@@ -183,7 +183,7 @@ public:
     static void SendShowCribBand();
     static void sendBandmapLimitsChanged();
 
-    static void SendRedrawQSOMap(bool grid, bool lines, bool cluster, bool showloc, QString tl, QString br, bool showNav);
+    static void SendRedrawQSOMap(bool grid, bool lines, bool cluster, bool showloc, bool showCalls, QString tl, QString br, bool showNav);
 
     static void SendFKey(BaseContestLog *c, int event, int mfreq);
     static void SendSandPClicked(BaseContestLog *c, bool sandp);

@@ -103,9 +103,11 @@ void MinosLoggerEvents::SendShowCribBand()
 }
 void MinosLoggerEvents::SendRedrawQSOMap(bool grid, bool lines
                                          , bool cluster
-                                         , bool showloc, QString tl, QString br, bool showNav)
+                                         , bool showloc
+                                         , bool showCalls
+                                         , QString tl, QString br, bool showNav)
 {
-    emit mle.redrawQSOMap(grid, lines, cluster, showloc, tl, br, showNav);
+    emit mle.redrawQSOMap(grid, lines, cluster, showloc, showCalls, tl, br, showNav);
 }
 void MinosLoggerEvents::sendBandmapLimitsChanged()
 {

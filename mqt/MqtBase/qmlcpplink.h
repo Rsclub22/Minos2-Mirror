@@ -14,6 +14,7 @@ public:
     QmlCppLink(BaseContestLog *c);
     QmlCppLink(const QmlCppLink &l);
     Q_INVOKABLE QString locator(double lat, double longi) const;
+    Q_INVOKABLE void qmltrace(QString) const;
 };
 
 Q_DECLARE_METATYPE(QmlCppLink)

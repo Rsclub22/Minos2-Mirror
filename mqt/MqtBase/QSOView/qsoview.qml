@@ -3,6 +3,7 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 import QtPositioning 5.15
 import QtLocation 5.15
+import QtQuick.Controls.Fusion 2.15
 
 Frame {
 
@@ -15,6 +16,7 @@ Frame {
     property bool showLines: false
 
     property bool showLocs: true
+    property bool showCalls: true
     property int locTLLat: 0
     property int locTLLon: 0
     property int locBRLat: 0
@@ -190,12 +192,13 @@ Frame {
     {
         if (showGrid)
         {
+            QmlCppLink.qmltrace("drawGrid")
             // If we don't do it in chunks, the whole thing
             // can get cropped
 
             drawLatitude(-85, 85, -180, -90)
-            drawLatitude(-85, 85, -90, /*-0.000001*/0)
-            drawLatitude(-85, 85, /*0.000001*/0, 90)
+            drawLatitude(-85, 85, -90, 0)
+            drawLatitude(-85, 85, 0, 90)
             drawLatitude(-85, 85, 90, 180)
 
             drawLongitude(-85, 85, -180, -90)
@@ -203,9 +206,6 @@ Frame {
             drawLongitude(-85, 85, 0, 90)
             drawLongitude(-85, 85, 90, 180)
 
-            // for (var latPos = -84; latPos < 85; latPos += 1 )
-            // {
-            //     for (var lonPos = -180; lonPos < 180; lonPos += 2)
             if (showLocs)
             {
                 for (var latPos = locBRLat; latPos < locTLLat; latPos += 1 )
@@ -221,6 +221,30 @@ Frame {
         }
     }
 
+    function drawCallsign(lat, lon, call)
+    {
+        var cmqra = Qt.createQmlObject(
+'import QtQuick 2.15
+import QtLocation 5.15
+
+MapQuickItem {
+    id: qraItem
+sourceItem: Text {
+        id: qraText
+        text: ""
+        color: "red"
+
+        font.pointSize: 10
+
+}
+}', mapOfEurope);
+
+        cmqra.sourceItem.text = call;
+        let p = QtPositioning.coordinate(lat, lon)
+        cmqra.coordinate = p;
+        mapOfEurope.addMapItem(cmqra);
+
+    }
     function drawQRA(lat, lon)
     {
         var cmqra = Qt.createQmlObject(
@@ -273,7 +297,7 @@ MapPolyline
         }
     }
     mapOfEurope.addMapItem(cmlat)
-    }
+}
     function drawLongitude(minlat, maxlat, minlong, maxlong)
     {
         var cmlong = Qt.createQmlObject(
@@ -332,6 +356,11 @@ MapPolyline
         //Can we determine if this will overlap anything, and then offset it?
 
         mapOfEurope.addMapItem(cm)
+
+        if (showCalls)
+        {
+            drawCallsign(coord.latitude, coord.longitude, callsign)
+        }
 
     }
     function addSpot(coord, callsign, loc)
@@ -463,6 +492,10 @@ MapPolyline
     function setShowLocs(sl)
     {
         showLocs = sl;
+    }
+    function setShowCalls(sl)
+    {
+        showCalls = sl;
     }
     function setShowNav(sn)
     {
