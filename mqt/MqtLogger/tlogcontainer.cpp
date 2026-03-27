@@ -311,6 +311,7 @@ TLogContainer::TLogContainer(QWidget *parent) :
 TLogContainer::~TLogContainer()
 {
     setAppClosing();
+
     delete ui;
     delete sendDM;
     delete MinosConfig::getMinosConfig();
@@ -326,6 +327,18 @@ TLogContainer::~TLogContainer()
     }
     MinosRPCObj::clearRPCObjects();
     ScreenConfigFile::getScreenConfigFile(this).configs.clear();
+    for(auto cpc: QASCONST(contestPageControls))
+    {
+        if (cpc && cpc->getInstance() > 0)
+        {
+            cpc->close();
+        }
+        delete cpc;
+        cpc = nullptr;
+    }
+
+    delete serialTVSw;
+    delete n1mmBroadcast;
 }
 
 bool TLogContainer::eventFilter(QObject *obj, QEvent *event)
@@ -501,6 +514,10 @@ void TLogContainer::closeEvent(QCloseEvent *event)
 
     TContestApp::getContestApp() ->writeContestList();
     TContestApp::getContestApp() ->suppressWritePreload = true;
+
+    // close all current slots, but don't write preload
+    CloseAllActionExecute();
+
     TContestApp::getContestApp() ->clearPreloadComplete();
 
     CloseAllActionExecute();
@@ -520,6 +537,8 @@ void TLogContainer::closeEvent(QCloseEvent *event)
     // but they may need to close cleanly
     MinosConfig::getMinosConfig() ->forceStop();
     trace("closeEvent:Apps closed");
+
+    delete statusBar();
     closeContestApp();
 
     QWidget::closeEvent(event);
@@ -1315,9 +1334,8 @@ void TLogContainer::CloseAllActionExecute()
     }
     closeSlot(0, true);
     on_contestPageControl_currentChanged(-1);
-    for (int i = 0; i < LogContainer->contestPageControls.count(); i++)
+    for(auto cpc: QASCONST(contestPageControls))
     {
-        ContestPageControl * &cpc = LogContainer->contestPageControls[i];
         if (cpc && cpc->getInstance() > 0)
         {
             cpc->close();
@@ -1805,7 +1823,7 @@ void TLogContainer::closeSlot(int t, bool addToMRU)
             TMatchThread::InitialiseMatchThread();
           }
 
-          for(auto cpc: QASCONST(LogContainer->contestPageControls))
+          for(auto cpc: QASCONST(contestPageControls))
           {
               // This deletes TSingleLogFrame first, along
               // with all of the screen components
@@ -2473,7 +2491,7 @@ void TLogContainer::stealFocus()
        if (doSteal)
            {
         // Bring window(s) to top
-        for(auto cpc: QASCONST(LogContainer->contestPageControls))
+        for(auto cpc: QASCONST(contestPageControls))
         {
             // it would be nice to end with the primary pane...
             if (cpc)
