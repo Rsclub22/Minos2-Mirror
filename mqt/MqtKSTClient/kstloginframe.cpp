@@ -5,7 +5,7 @@
 #include "ui_kstloginframe.h"
 
 KSTLoginFrame::KSTLoginFrame(QWidget *parent)
-    : QFrame(parent)
+    : MinosPanel(parent)
     , ui(new Ui::KSTLoginFrame)
 {
     ui->setupUi(this);
@@ -87,11 +87,6 @@ void KSTLoginFrame::logincb_stateChanged(int /*arg1*/)
     mainWindow->doLoginChanges();
     QSettings settings(mainWindow->iniName, QSettings::IniFormat);
     settings.setValue("service", s.join(":"));
-}
-
-void KSTLoginFrame::on_KSTTestButton_clicked()
-{
-    mainWindow->do_KSTTestButton_clicked();
 }
 
 void KSTLoginFrame::do_logincb_stateChanged()

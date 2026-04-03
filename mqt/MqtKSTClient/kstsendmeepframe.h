@@ -2,6 +2,7 @@
 #define KSTSENDMEEPFRAME_H
 
 #include "callsign.h"
+#include "minospanel.h"
 #include <QFrame>
 
 class QPushButton;
@@ -10,7 +11,7 @@ class KSTSendMeepFrame;
 }
 
 enum Salutation {esNone, esHi, esHiName};
-class KSTSendMeepFrame : public QFrame
+class KSTSendMeepFrame : public MinosPanel
 {
     Q_OBJECT
     virtual bool eventFilter(QObject *obj, QEvent *event) override;

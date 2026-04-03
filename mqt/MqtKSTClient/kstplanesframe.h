@@ -5,12 +5,13 @@
 
 #include "htmldelegate.h"
 #include "kstplanesmodel.h"
+#include "minospanel.h"
 
 namespace Ui {
 class KSTPlanesFrame;
 }
 
-class KSTPlanesFrame : public QFrame
+class KSTPlanesFrame : public MinosPanel
 {
     Q_OBJECT
 

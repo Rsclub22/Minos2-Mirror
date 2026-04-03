@@ -4,12 +4,13 @@
 #include <QFrame>
 
 #include "kstcallgridmodel.h"
+#include "minospanel.h"
 
 namespace Ui {
 class KSTCallsFrame;
 }
 
-class KSTCallsFrame : public QFrame
+class KSTCallsFrame : public MinosPanel
 {
     Q_OBJECT
 

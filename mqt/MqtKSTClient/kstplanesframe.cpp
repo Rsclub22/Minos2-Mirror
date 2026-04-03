@@ -10,7 +10,7 @@
 #include "ui_kstplanesframe.h"
 
 KSTPlanesFrame::KSTPlanesFrame(QWidget *parent)
-    : QFrame(parent)
+    : MinosPanel(parent)
     , ui(new Ui::KSTPlanesFrame)
 {
     ui->setupUi(this);

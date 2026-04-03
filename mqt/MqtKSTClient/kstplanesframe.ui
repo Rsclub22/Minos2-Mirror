@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>KSTPlanesFrame</class>
- <widget class="QFrame" name="KSTPlanesFrame">
+ <widget class="MinosPanel" name="KSTPlanesFrame">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -75,6 +75,14 @@ Path in AirScout</string>
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>MinosPanel</class>
+   <extends>QFrame</extends>
+   <header>minospanel.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

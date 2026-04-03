@@ -1,6 +1,7 @@
 #ifndef KSTLOGINFRAME_H
 #define KSTLOGINFRAME_H
 
+#include "minospanel.h"
 #include <QFrame>
 #include <QCheckBox>
 
@@ -8,7 +9,7 @@ namespace Ui {
 class KSTLoginFrame;
 }
 
-class KSTLoginFrame : public QFrame
+class KSTLoginFrame : public MinosPanel
 {
     Q_OBJECT
 
@@ -28,7 +29,6 @@ public:
 private slots:
     void activerb_clicked();
     void logincb_stateChanged(int);
-    void on_KSTTestButton_clicked();
 
 private:
     Ui::KSTLoginFrame *ui;

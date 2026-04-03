@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>KSTMsgFrame</class>
-           <widget class="QFrame" name="KSTMsgFrame">
+           <widget class="MinosPanel" name="KSTMsgFrame">
            <layout class="QVBoxLayout" name="verticalLayout_2">
             <item>
              <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -102,6 +102,14 @@
             </item>
            </layout>
           </widget>
- <resources/>
+          <customwidgets>
+           <customwidget>
+            <class>MinosPanel</class>
+            <extends>QFrame</extends>
+            <header>minospanel.h</header>
+            <container>1</container>
+           </customwidget>
+          </customwidgets>
+          <resources/>
  <connections/>
 </ui>

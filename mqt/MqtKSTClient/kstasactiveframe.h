@@ -4,12 +4,13 @@
 #include <QFrame>
 
 #include "airscoutlink.h"
+#include "minospanel.h"
 
 namespace Ui {
 class KSTASActiveFrame;
 }
 
-class KSTASActiveFrame : public QFrame
+class KSTASActiveFrame : public MinosPanel
 {
     Q_OBJECT
 

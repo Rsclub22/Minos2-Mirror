@@ -2,6 +2,7 @@
 #include <QDesktopServices>
 #include <QLabel>
 
+#include "AppStartup.h"
 #include "MShowMessageDlg.h"
 #include "MinosLoggerEvents.h"
 
@@ -574,6 +575,9 @@ void TSingleLogFrame::applyScreenLayout()
     buildScreenLayout(slotNo);
 
     updateTrees();  //in apply screen layout
+
+    QFont font = QApplication::font();
+    appStart.emitFontChanged(font);
 
     delayedAction(this,  [=](){
         inApplyScreenLayout = false;

@@ -9,7 +9,7 @@
 #include "ui_kstsendmeepframe.h"
 
 KSTSendMeepFrame::KSTSendMeepFrame(QWidget *parent)
-    : QFrame(parent)
+    : MinosPanel(parent)
     , ui(new Ui::KSTSendMeepFrame)
 {
     ui->setupUi(this);

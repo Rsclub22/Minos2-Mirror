@@ -138,8 +138,6 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
         if (geometry.size() > 0)
             restoreGeometry(geometry);
     }
-    asl = QSharedPointer<AirScoutLink>(new AirScoutLink());
-    connect(asl.data(), &AirScoutLink::acChanged, kstPlanesFrame, &KSTPlanesFrame::acChanged);
 
     configureAction = newAction(QT_TR_NOOP("Configure"), &kstPopup, &KSTMainWindow::do_configureButton_clicked);
     layoutAction = newAction(QT_TR_NOOP("Manage Layout"), &kstPopup, &KSTMainWindow::do_layoutButton_clicked);
@@ -186,6 +184,11 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     closeAction = newAction(QT_TR_NOOP("Close"), &kstPopup, &KSTMainWindow::do_closeButton_clicked);
 
     createScreenComponents();
+
+    // this has to wait until the components are created
+    asl = QSharedPointer<AirScoutLink>(new AirScoutLink());
+    connect(asl.data(), &AirScoutLink::acChanged, kstPlanesFrame, &KSTPlanesFrame::acChanged);
+
     selectLayout(curScreenLayout);
 
     QStringList selections = chatSelection.split(":");
@@ -1836,6 +1839,9 @@ void KSTMainWindow::selectLayout(QString layout)
 
     setCurScreenLayout(layout);
     applyScreenLayout();
+
+    QFont font = QApplication::font();
+    appStart.emitFontChanged(font);
 
     delayedAction(this, [=]{
     kstButtonsAction->setEnabled(kstButtonsFrame->parent() == this);

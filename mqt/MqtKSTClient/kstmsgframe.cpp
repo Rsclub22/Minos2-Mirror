@@ -15,7 +15,7 @@
 #include "ui_kstmsgframe.h"
 
 KSTMsgFrame::KSTMsgFrame(QWidget *parent)
-    : QFrame(parent)
+    : MinosPanel(parent)
     , ui(new Ui::KSTMsgFrame)
 {
     ui->setupUi(this);

@@ -6,7 +6,7 @@
 #include "ui_kstasactiveframe.h"
 
 KSTASActiveFrame::KSTASActiveFrame(QWidget *parent)
-    : QFrame(parent)
+    : MinosPanel(parent)
     , ui(new Ui::KSTASActiveFrame)
 {
     ui->setupUi(this);

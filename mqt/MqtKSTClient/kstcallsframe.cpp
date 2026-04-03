@@ -15,7 +15,7 @@
 #include "ui_kstcallsframe.h"
 
 KSTCallsFrame::KSTCallsFrame(QWidget *parent)
-    : QFrame(parent)
+    : MinosPanel(parent)
     , ui(new Ui::KSTCallsFrame)
 {
     ui->setupUi(this);

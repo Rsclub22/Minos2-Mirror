@@ -10,6 +10,7 @@
 #include <QSettings>
 #include <QStandardPaths>
 #include <QDir>
+#include <QDirIterator>
 #include <QStyle>
 #ifdef Q_OS_WIN
 #include <windows.h>
@@ -17,6 +18,7 @@
 #ifdef Q_OS_UNIX
 #include <unistd.h>
 #endif
+
 #include "regsettings.h"
 #include "fileutils.h"
 #include "MTrace.h"
@@ -24,7 +26,8 @@
 
 #include "AppStartup.h"
 #include "frequency.h"
-#include "qdiriterator.h"
+
+AppStart appStart;
 
 static bool appClosing = false;
 static QString appStartupName;
@@ -524,10 +527,12 @@ void setAppFont()
         // as timings are different under linux, and Qt 6!
         for ( auto const &widget: QApplication::allWidgets() )
         {
+
             widget->setFont(qfont.value<QFont>());
             widget->update();
         }
 #endif
+        appStart.emitFontChanged(qfont.value<QFont>());
     }
 }
 
@@ -550,6 +555,7 @@ void setAppFont(QString fs)
             widget->update();
         }
 #endif
+        appStart.emitFontChanged(f);
     }
     else
     {
@@ -759,4 +765,9 @@ QString getDirectoryLocation(DirectoryLocation dl, QString runDir /* = "."*/)
     }
     //trace(QString("%1: %2").arg(dltype, dirLoc));
     return dirLoc;
+}
+
+void AppStart::emitFontChanged(QFont font)
+{
+    emit fontChanged(font);
 }

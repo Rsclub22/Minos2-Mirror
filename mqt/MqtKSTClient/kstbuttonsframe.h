@@ -1,13 +1,14 @@
 #ifndef KSTBUTTONSFRAME_H
 #define KSTBUTTONSFRAME_H
 
+#include "minospanel.h"
 #include <QFrame>
 
 namespace Ui {
 class KSTButtonsFrame;
 }
 
-class KSTButtonsFrame : public QFrame
+class KSTButtonsFrame : public MinosPanel
 {
     Q_OBJECT
 

@@ -28,6 +28,7 @@ SOURCES += \
     MTrace.cpp \
     LogEvents.cpp \
     frequency.cpp \
+    minospanel.cpp \
     regsettings.cpp \
     singleapplication.cpp \
     INIFile.cpp \
@@ -49,6 +50,7 @@ HEADERS += \
     MTrace.h \
     LogEvents.h \
     frequency.h \
+    minospanel.h \
     regsettings.h \
     singleapplication.h \
     INIFile.h \

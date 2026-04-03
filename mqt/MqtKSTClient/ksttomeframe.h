@@ -2,13 +2,14 @@
 #define KSTTOMEFRAME_H
 
 #include "kstmessagegridmodel.h"
+#include "minospanel.h"
 #include <QFrame>
 
 namespace Ui {
 class KSTTomeFrame;
 }
 
-class KSTTomeFrame : public QFrame
+class KSTTomeFrame : public MinosPanel
 {
     Q_OBJECT
 

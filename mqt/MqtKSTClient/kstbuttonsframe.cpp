@@ -1,10 +1,9 @@
 #include "kstmainwindow.h"
 #include "kstbuttonsframe.h"
-#include "kstcallgridmodel.h"
 #include "ui_kstbuttonsframe.h"
 
 KSTButtonsFrame::KSTButtonsFrame(QWidget *parent)
-    : QFrame(parent)
+    : MinosPanel(parent)
     , ui(new Ui::KSTButtonsFrame)
 {
     ui->setupUi(this);

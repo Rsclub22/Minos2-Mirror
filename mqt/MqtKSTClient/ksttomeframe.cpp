@@ -15,7 +15,7 @@
 #include "ui_ksttomeframe.h"
 
 KSTTomeFrame::KSTTomeFrame(QWidget *parent)
-    : QFrame(parent)
+    : MinosPanel(parent)
     , ui(new Ui::KSTTomeFrame)
 {
     ui->setupUi(this);

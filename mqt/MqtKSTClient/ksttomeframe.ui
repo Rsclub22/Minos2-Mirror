@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>KSTTomeFrame</class>
- <widget class="QFrame" name="KSTTomeFrame">
+ <widget class="MinosPanel" name="KSTTomeFrame">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -67,6 +67,12 @@
   </layout>
  </widget>
  <customwidgets>
+ <customwidget>
+  <class>MinosPanel</class>
+  <extends>QFrame</extends>
+  <header>minospanel.h</header>
+  <container>1</container>
+ </customwidget>
   <customwidget>
    <class>MinosTableView</class>
    <extends>QWidget</extends>
