@@ -74,7 +74,7 @@ void ScreenConfigElement::setIsSplitElement(bool value)
 }
 
 ScreenConfigElement::ScreenConfigElement(ScreenConfigRow *parentrow, ScreenConfigScreen *sc) :
-    QFrame(nullptr)
+    QScrollArea(nullptr)
   , ui(new Ui::ScreenConfigElement)
   , parentRow(parentrow)
   , parentDialog(sc)
@@ -97,7 +97,7 @@ ScreenConfigElement::ScreenConfigElement(ScreenConfigRow *parentrow, ScreenConfi
         eleSplitter = new MinosSplitter(nullptr);
         eleSplitter->setOrientation(Qt::Horizontal);
         eleSplitter->addWidget(ui->cframe);
-        layout()->addWidget(eleSplitter);
+        /*layout()->*/setWidget(eleSplitter);
 
         eleSplitter->setStretchFactor(0, 0);
         eleSplitter->setStretchFactor(1, 100);

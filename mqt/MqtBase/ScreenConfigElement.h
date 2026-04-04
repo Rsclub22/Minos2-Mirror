@@ -2,7 +2,7 @@
 #define SCREENCONFIGELEMENT_H
 
 #include <QSharedPointer>
-#include <QFrame>
+#include <QScrollArea>
 //#include "StackedInfoFrame.h"
 #include "ScreenConfigFile.h"
 #include "ScreenConfig.h"
@@ -24,7 +24,7 @@ namespace Ui {
 class ScreenConfigElement;
 }
 
-class ScreenConfigElement : public QFrame
+class ScreenConfigElement : public QScrollArea
 {
     Q_OBJECT
     static  QVector <SCTypeOption> scoptions;
