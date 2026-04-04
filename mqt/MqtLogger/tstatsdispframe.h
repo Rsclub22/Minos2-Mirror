@@ -1,6 +1,7 @@
 #ifndef TSTATSDISPFRAME_H
 #define TSTATSDISPFRAME_H
 
+#include "minospanel.h"
 #include <QFrame>
 #include <QDateTime>
 
@@ -10,7 +11,7 @@ namespace Ui {
 class TStatsDispFrame;
 }
 
-class TStatsDispFrame : public QFrame
+class TStatsDispFrame : public MinosPanel
 {
     Q_OBJECT
 

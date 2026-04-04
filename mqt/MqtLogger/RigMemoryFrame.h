@@ -9,6 +9,7 @@
 
 #include "GridColumn.h"
 #include "htmldelegate.h"
+#include "minospanel.h"
 #include "rigmemcommondata.h"
 
 class BaseContestLog;
@@ -67,7 +68,7 @@ public:
     QString text;
     QColor colour = Qt::black;
 };
-class RigMemoryFrame : public QFrame
+class RigMemoryFrame : public MinosPanel
 {
     Q_OBJECT
 

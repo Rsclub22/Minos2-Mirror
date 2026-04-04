@@ -8,6 +8,8 @@ class HtmlDelegate;
 
 class BaseContestLog;
 
+class MinosPanel;
+
 enum eLogGridCols {egDate,
                     egTime,
                     egBand,
@@ -26,6 +28,7 @@ class QSOGridModel: public QAbstractItemModel
     Q_OBJECT
 protected:
     BaseContestLog *contest = nullptr;
+    MinosPanel *minosPanel = nullptr;
 public:
     static QVector<GridColumn> QSOTreeColumns;
 
@@ -36,6 +39,7 @@ public:
 
     void reset();
     void setContest( BaseContestLog * pcontest );
+    void setPanel( MinosPanel *mp);
     QVariant data( const QModelIndex &index, int role ) const Q_DECL_OVERRIDE;
     QVariant headerData( int section, Qt::Orientation orientation,
                         int role = Qt::DisplayRole ) const Q_DECL_OVERRIDE;

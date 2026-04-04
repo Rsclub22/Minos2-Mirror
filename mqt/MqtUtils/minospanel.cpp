@@ -8,16 +8,23 @@ MinosPanel::MinosPanel(QWidget *parent ) : QFrame(parent)
 {
     connect(&appStart, &AppStart::fontChanged, this, &MinosPanel::onSetFont);
 }
-void MinosPanel::onSetFont(QFont qfont)
+
+void MinosPanel::setPanelFont()
 {
-    QFont panelFont = qfont;
-    int fontSize = panelFont.pointSize();
-    panelFont.setPointSize((fontSize * fontsize)/100.0);
+    panelFont = QApplication::font();
+    int pfontSize = panelFont.pointSize();
+    int newSize = (pfontSize * fontsize)/100.0;
+    panelFont.setPointSize(newSize);
     setFont( panelFont );   // WHICH SHOULD PROPAGATE - but doesn't
 
-    for ( auto const &widget: QApplication::allWidgets() )
+    QList<QWidget *> widgets = findChildren<QWidget *>();
+    foreach(QWidget *w, widgets)
     {
-        widget->setFont(panelFont);
-        widget->update();
+        w->setFont(panelFont);
+        w->update();
     }
+ }
+void MinosPanel::onSetFont()
+{
+    setPanelFont();
 }

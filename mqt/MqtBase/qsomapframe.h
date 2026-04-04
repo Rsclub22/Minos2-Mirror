@@ -6,6 +6,7 @@
 
 #include "clustercommon.h"
 #include "contacts.h"
+#include "minospanel.h"
 
 class BaseContestLog;
 class QTimer;
@@ -15,7 +16,7 @@ namespace Ui {
 class QSOMapFrame;
 }
 
-class QSOMapFrame : public QFrame
+class QSOMapFrame : public MinosPanel
 {
     Q_OBJECT
 

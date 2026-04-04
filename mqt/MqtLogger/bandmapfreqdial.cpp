@@ -55,8 +55,9 @@ double BandmapFreqDial::getHzPixelStepR() const
     return ps;
 }
 
-void BandmapFreqDial::onFontChanged(QFont /*cf*/)
+void BandmapFreqDial::onFontChanged(QFont cf)
 {
+    panelFont = cf;
     newFreqTextWidth = calcFreqWidth(currentFreq);
 
     update();
@@ -142,14 +143,14 @@ int BandmapFreqDial::getCurWidth()
 int BandmapFreqDial::calcFreqWidth(const Frequency &freq)
 {
     //calc dial width
-    QFont cf = QApplication::font();
+    QFont cf = panelFont;
     QFontMetrics fm(cf);
     return fm.boundingRect(convertFreqDialDisplay(freq)).width();
 }
 
 int BandmapFreqDial::getFontHeight() const
 {
-    QFont cf = QApplication::font();
+    QFont cf = panelFont;
     QFontMetrics fm(cf);
     return fm.height();
 }

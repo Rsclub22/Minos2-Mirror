@@ -13,7 +13,7 @@ bool showWorked = false;
 bool showUnworked = false;
 
 StackedInfoFrame::StackedInfoFrame(QWidget *parent, int instance, TSingleLogFrame *t) :
-    QFrame(parent),
+    MinosPanel(parent),
     tslf(t),
     ui(new Ui::StackedInfoFrame),
     stackInstance(instance)

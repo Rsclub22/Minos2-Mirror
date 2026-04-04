@@ -13,7 +13,7 @@ LocTreeFrame::LocTreeFrame(QWidget *parent) :
 
     int lcf;
     TContestApp::getContestApp() ->getIntDisplayProfile(edpListCompression, lcf);
-    delegate = QSharedPointer<HtmlDelegate> (new HtmlDelegate("LocTreeFramw", 1.0, lcf/100.0));
+    delegate = QSharedPointer<HtmlDelegate> (new HtmlDelegate("LocTreeFramw", 1.0, lcf/100.0, this));
     ui->LocTree->setItemDelegate(delegate.data());
 }
 LocTreeFrame::~LocTreeFrame()

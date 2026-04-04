@@ -3,6 +3,7 @@
 #include "contest.h"
 #include "GridColumn.h"
 #include "htmldelegate.h"
+#include "minospanel.h"
 #include "qsogridmodel.h"
 
 
@@ -29,7 +30,7 @@ QVector<GridColumn> QSOGridModel::QSOTreeColumns =
 
 };
 
-QSOGridModel::QSOGridModel():contest(nullptr)
+QSOGridModel::QSOGridModel()
 {}
 QSOGridModel::~QSOGridModel()
 {}
@@ -42,6 +43,11 @@ void QSOGridModel::reset()
 void QSOGridModel::setContest(BaseContestLog * pcontest )
 {
     contest = pcontest;
+}
+
+void QSOGridModel::setPanel(MinosPanel *mp)
+{
+    minosPanel = mp;
 }
 QVariant QSOGridModel::data( const QModelIndex &index, int role ) const
 {
@@ -58,6 +64,16 @@ QVariant QSOGridModel::data( const QModelIndex &index, int role ) const
     if (!ct)
         return QVariant();
 
+    if (role == Qt::FontRole)
+    {
+        if (minosPanel)
+        {
+            QFont f = minosPanel->font();
+            QString sf = f.toString();
+            return f;
+        }
+        return QVariant();
+    }
     if (role == Qt::BackgroundRole)
     {
         if ( ct->contactFlags.getValue() & FORCE_LOG )

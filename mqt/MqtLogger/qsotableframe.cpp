@@ -12,7 +12,7 @@
 #include "ui_qsotableframe.h"
 
 QSOTableFrame::QSOTableFrame(QWidget *parent)
-    : QFrame(parent)
+    : MinosPanel(parent)
     , ui(new Ui::QSOTableFrame)
 {
     ui->setupUi(this);
@@ -46,14 +46,12 @@ QSOTableFrame::QSOTableFrame(QWidget *parent)
     int lcf;
     TContestApp::getContestApp() ->getIntDisplayProfile(edpListCompression, lcf);
 //    delegate = QSharedPointer<HtmlDelegate>(new HtmlDelegate(1.0, lcf/100.0));
-    delegate = QSharedPointer<HtmlDelegate>(new HtmlDelegate("QSOTableFrame", 1.0, lcf/100.0));
+    delegate = QSharedPointer<HtmlDelegate>(new HtmlDelegate("QSOTableFrame", 1.0, lcf/100.0, this));
 
     qsoModel.delegate = delegate;
+    qsoModel.setPanel(this);
 
     QSOTable->setItemDelegate( delegate.data() );
-    QSize ms = delegate->docSize("XX");
-    QSOTable->verticalHeader()->setDefaultSectionSize(ms.height() );
-    QSOTable->verticalHeader()->setMinimumSectionSize(10);
 
     QSOTable->setModel(&qsoModel);
 
@@ -94,14 +92,22 @@ void QSOTableFrame::buildFrame()
 
     restoreQSOTableColumns();
 
+    setPanelFont();
+
+    QSOTable->setFont(panelFont);
     QSOTable->setItemDelegate( delegate.data() );
-    QSize ms = delegate->docSize("XX");
-    QSOTable->verticalHeader()->setDefaultSectionSize(ms.height());
-    QSOTable->verticalHeader()->setMinimumSectionSize(10);
 
     QSOTable->verticalHeader()->setSectionResizeMode(QHeaderView::Interactive);
 
 }
+void QSOTableFrame::setPanelFont()
+{
+    MinosPanel::setPanelFont();
+
+    QSize ms = delegate->docSize("XX");
+    QSOTable->verticalHeader()->setDefaultSectionSize(ms.height());
+    QSOTable->verticalHeader()->setMinimumSectionSize(10);}
+
 void QSOTableFrame::QSOTreeSelectContact( QSharedPointer<BaseContact> lct )
 {
     if (lct)

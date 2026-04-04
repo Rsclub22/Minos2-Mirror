@@ -4,7 +4,7 @@
 #include "MTrace.h"
 
 skyScanPresetsFrame::skyScanPresetsFrame(QWidget *parent)
-    : QFrame(parent)
+    : MinosPanel(parent)
     , ui(new Ui::skyScanPresetsFrame)
 {
     ui->setupUi(this);

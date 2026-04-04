@@ -10,6 +10,7 @@
 #include "WsjtxDecode.h"
 #include "WsjtxDecodesModel.hpp"
 #include "WsjtxMessageServer.hpp"
+#include "minospanel.h"
 
 class BaseContestLog;
 class TSingleLogFrame;
@@ -66,7 +67,7 @@ public:
     }
 };
 
-class WsjtxFrame : public QFrame
+class WsjtxFrame : public MinosPanel
 {
     Q_OBJECT
 

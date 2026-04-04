@@ -82,6 +82,8 @@ void TSingleLogFrame::buildFrame(int slotNo)
 
     buildScreenLayout(slotNo);
 
+    appStart.emitFontChanged();
+
     OtherMatchTreeFW = new FocusWatcher(otherMatchFrame->getTreeView());
     connect(OtherMatchTreeFW, &FocusWatcher::focusChanged, this, &TSingleLogFrame::onOtherMatchTreeFocused);
     ArchiveMatchTreeFW = new FocusWatcher(archiveMatchFrame->getTreeView());
@@ -576,8 +578,7 @@ void TSingleLogFrame::applyScreenLayout()
 
     updateTrees();  //in apply screen layout
 
-    QFont font = QApplication::font();
-    appStart.emitFontChanged(font);
+    appStart.emitFontChanged();
 
     delayedAction(this,  [=](){
         inApplyScreenLayout = false;

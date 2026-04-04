@@ -7,7 +7,7 @@
 #include "ui_ContestPage.h"
 
 ContestPage::ContestPage(QWidget *parent, BaseContestLog *ct) :
-    QFrame(parent),
+    MinosPanel(parent),
     contest(ct),
     ui(new Ui::ContestPage),
   splittersChanged(false)

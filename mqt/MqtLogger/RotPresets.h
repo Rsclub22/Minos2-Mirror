@@ -5,6 +5,7 @@
 #include <QGroupBox>
 #include <QShortcut>
 #include "MinosLoggerEvents.h"
+#include "minospanel.h"
 #include "rotatorcommon.h"
 #include "presetbutton.h"
 
@@ -13,7 +14,7 @@ class RotPresets;
 }
 
 
-class RotPresets : public QFrame
+class RotPresets : public MinosPanel
 {
     Q_OBJECT
 

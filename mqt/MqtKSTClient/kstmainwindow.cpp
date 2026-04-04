@@ -1840,8 +1840,7 @@ void KSTMainWindow::selectLayout(QString layout)
     setCurScreenLayout(layout);
     applyScreenLayout();
 
-    QFont font = QApplication::font();
-    appStart.emitFontChanged(font);
+    appStart.emitFontChanged();
 
     delayedAction(this, [=]{
     kstButtonsAction->setEnabled(kstButtonsFrame->parent() == this);

@@ -28,7 +28,7 @@ static void wtrace(QString m)
     trace(m);
 }
 WsjtxFrame::WsjtxFrame(TSingleLogFrame *parent) :
-    QFrame(parent)
+    MinosPanel(parent)
     , ui(new Ui::WsjtxFrame)
     , tslf(parent)
   , decodes_model_ {new DecodesModel()}
@@ -47,7 +47,7 @@ WsjtxFrame::WsjtxFrame(TSingleLogFrame *parent) :
 
     int lcf;
     TContestApp::getContestApp() ->getIntDisplayProfile(edpListCompression, lcf);
-    delegate = QSharedPointer<HtmlDelegate> (new HtmlDelegate("WsjtxFrame", 1.0, lcf/100.0));
+    delegate = QSharedPointer<HtmlDelegate> (new HtmlDelegate("WsjtxFrame", 1.0, lcf/100.0, this));
     ui->decodes_table_view_->setItemDelegate( delegate.data());
 
 

@@ -105,7 +105,7 @@ void MonitoringFrame::initialise( BaseContestLog * pcontest )
    ui->QSOTable->horizontalHeader() ->setSectionsMovable( true );
    ui->QSOTable->horizontalHeader()->setContextMenuPolicy( Qt::CustomContextMenu );
 
-   QSharedPointer<HtmlDelegate> delegate( new HtmlDelegate("MonitoringFrame",1.0, 1.0));
+   QSharedPointer<HtmlDelegate> delegate( new HtmlDelegate("MonitoringFrame",1.0, 1.0, this));
    qsoModel.delegate = delegate;
    
    qsoModel.setContest(contest);

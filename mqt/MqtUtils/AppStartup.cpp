@@ -532,7 +532,7 @@ void setAppFont()
             widget->update();
         }
 #endif
-        appStart.emitFontChanged(qfont.value<QFont>());
+        appStart.emitFontChanged();
     }
 }
 
@@ -555,7 +555,7 @@ void setAppFont(QString fs)
             widget->update();
         }
 #endif
-        appStart.emitFontChanged(f);
+        appStart.emitFontChanged();
     }
     else
     {
@@ -767,7 +767,7 @@ QString getDirectoryLocation(DirectoryLocation dl, QString runDir /* = "."*/)
     return dirLoc;
 }
 
-void AppStart::emitFontChanged(QFont font)
+void AppStart::emitFontChanged()
 {
-    emit fontChanged(font);
+    emit fontChanged();
 }

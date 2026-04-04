@@ -5,7 +5,7 @@
 #include "ui_BandSwitchFrame.h"
 
 BandSwitchFrame::BandSwitchFrame(QWidget *parent) :
-    QFrame(parent),
+    MinosPanel(parent),
     ui(new Ui::BandSwitchFrame)
 {
     ui->setupUi(this);

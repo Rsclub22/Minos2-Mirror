@@ -21,6 +21,7 @@
 #include <QComboBox>
 #include <QGroupBox>
 #include "RPCCommandConstants.h"
+#include "minospanel.h"
 #include "rigmemcommondata.h"
 #include "MinosLoggerEvents.h"
 #include "bearinglineedit.h"
@@ -31,7 +32,7 @@
 
 
 
-class RotControlFrameBase : public QFrame
+class RotControlFrameBase : public MinosPanel
 {
     Q_OBJECT
 

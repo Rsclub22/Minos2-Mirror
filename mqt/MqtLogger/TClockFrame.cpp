@@ -6,7 +6,7 @@
 #include "ui_TClockFrame.h"
 
 TClockFrame::TClockFrame(QWidget *parent) :
-    QFrame(parent)
+    MinosPanel(parent)
    ,  ui(new Ui::TClockFrame)
    , contest(nullptr)
 {

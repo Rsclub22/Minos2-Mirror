@@ -730,8 +730,8 @@ void setHeaderColumns(QString hLine, QHeaderView *hdr)
     }
     hdr->setSortIndicator(sort, static_cast<Qt::SortOrder>(sortOrder));
 
-    QFont cf = QApplication::font();
-    hdr->setFont(cf);
+    //QFont cf = QApplication::font();
+    //hdr->setFont(cf);
 
 }
 void restoreHeaderColumns(QString fileName, QString tableName, QString layoutName, QHeaderView *hdr)

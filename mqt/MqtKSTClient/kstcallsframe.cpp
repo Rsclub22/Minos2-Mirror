@@ -35,7 +35,7 @@ KSTCallsFrame::KSTCallsFrame(QWidget *parent)
     ui->CSTable ->setModel(&kstCallFilterModel);
     ui->CSTable->horizontalHeader()->setStretchLastSection(true);
 
-    CSDelegate = QSharedPointer<HtmlDelegate>( new HtmlDelegate("CSDelegate", 1.0, 1.0)) ;
+    CSDelegate = QSharedPointer<HtmlDelegate>( new HtmlDelegate("CSDelegate", 1.0, 1.0, this)) ;
     ui->CSTable->setItemDelegate(CSDelegate.data());
     kstCallModel.delegate = CSDelegate;
 

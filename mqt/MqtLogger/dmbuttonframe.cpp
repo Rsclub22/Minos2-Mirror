@@ -26,7 +26,7 @@
 #include "ui_dmbuttonframe.h"
 
 DMButtonFrame::DMButtonFrame(QWidget *parent) :
-    QFrame(parent),
+    MinosPanel(parent),
     ui(new Ui::DMButtonFrame)
 {
     ui->setupUi(this);

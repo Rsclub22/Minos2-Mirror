@@ -23,7 +23,7 @@ KSTTomeFrame::KSTTomeFrame(QWidget *parent)
     ui->meepTable->setModel(&kstMeepFilterModel);
     ui->meepTable->horizontalHeader()->setStretchLastSection(true);
 
-    meepDelegate = QSharedPointer<HtmlDelegate>( new HtmlDelegate("meepDelegate", 1.0, 1.0)) ;
+    meepDelegate = QSharedPointer<HtmlDelegate>( new HtmlDelegate("meepDelegate", 1.0, 1.0, this)) ;
     ui->meepTable->setItemDelegate(meepDelegate.data());
 
     QHeaderView *verticalHeader = ui->meepTable->verticalHeader();

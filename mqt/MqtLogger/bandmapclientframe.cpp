@@ -27,7 +27,7 @@
 #include "ui_bandmapclientframe.h"
 
 BandmapClientFrame::BandmapClientFrame(QWidget *parent):
-    QFrame(parent),
+    MinosPanel(parent),
     ui(new Ui::BandmapClientFrame)
 {
 
@@ -321,7 +321,7 @@ void BandmapClientFrame::on_waitClusterServerLoadedTimeout()
 
 void BandmapClientFrame::on_FontChanged()
 {
-    QFont cf = QApplication::font();
+    QFont cf = panelFont;
     bandmapView->onFontChanged(cf);
 }
 

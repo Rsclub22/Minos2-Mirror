@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>RigControlFrame</class>
- <widget class="QFrame" name="RigControlFrame">
+ <widget class="MinosPanel" name="RigControlFrame">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -381,6 +381,12 @@
    <extends>QSlider</extends>
    <header>volumeslider.h</header>
   </customwidget>
+   <customwidget>
+    <class>MinosPanel</class>
+    <extends>QFrame</extends>
+    <header>minospanel.h</header>
+    <container>1</container>
+   </customwidget>
  </customwidgets>
  <resources/>
  <connections/>

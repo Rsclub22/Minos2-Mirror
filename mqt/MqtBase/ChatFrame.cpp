@@ -8,7 +8,7 @@
 #include "ui_ChatFrame.h"
 
 ChatFrame::ChatFrame(QWidget *parent) :
-    QFrame(parent),
+    MinosPanel(parent),
     ui(new Ui::ChatFrame)
 {
     ui->setupUi(this);
@@ -29,7 +29,7 @@ ChatFrame::~ChatFrame()
 
 void ChatFrame::on_FontChanged()
 {
-    QFont cf = QApplication::font();
+    QFont cf = panelFont;
     ui->StationList->setFont(cf);
 }
 

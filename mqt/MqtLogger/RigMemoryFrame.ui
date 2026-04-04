@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>RigMemoryFrame</class>
- <widget class="QFrame" name="RigMemoryFrame">
+ <widget class="MinosPanel" name="RigMemoryFrame">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -123,6 +123,12 @@
    <extends>QTableView</extends>
    <header>minostablewidget.h</header>
   </customwidget>
+   <customwidget>
+    <class>MinosPanel</class>
+    <extends>QFrame</extends>
+    <header>minospanel.h</header>
+    <container>1</container>
+   </customwidget>
  </customwidgets>
  <resources/>
  <connections/>

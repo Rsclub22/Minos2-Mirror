@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>QrzDisplayFrame</class>
- <widget class="QFrame" name="QrzDisplayFrame">
+ <widget class="MinosPanel" name="QrzDisplayFrame">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -625,6 +625,12 @@
    <extends>QLabel</extends>
    <header location="global">minosqlabel.h</header>
   </customwidget>
+   <customwidget>
+    <class>MinosPanel</class>
+    <extends>QFrame</extends>
+    <header>minospanel.h</header>
+    <container>1</container>
+   </customwidget>
  </customwidgets>
  <resources/>
  <connections/>

@@ -22,6 +22,7 @@
 #include "dxspotdatamodel.h"
 #include "clustercommon.h"
 #include "cutils.h"
+#include "minospanel.h"
 #include "rigmemcommondata.h"
 
 
@@ -132,7 +133,7 @@ public:
 class MouseInObject;
 
 
-class ClusterClientFrame : public QFrame
+class ClusterClientFrame : public MinosPanel
 {
     Q_OBJECT
 

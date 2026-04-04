@@ -28,7 +28,7 @@ KSTMsgFrame::KSTMsgFrame(QWidget *parent)
     ui->messageFilter->setFocus();
     ui->messageTable->horizontalHeader()->setStretchLastSection(true);
 
-    messageDelegate = QSharedPointer<HtmlDelegate>( new HtmlDelegate("messageDelegate", 1.0, 1.0)) ;
+    messageDelegate = QSharedPointer<HtmlDelegate>( new HtmlDelegate("messageDelegate", 1.0, 1.0, this)) ;
     ui->messageTable->setItemDelegate(messageDelegate.data());
 
     kstMessageModel.delegate = messageDelegate;

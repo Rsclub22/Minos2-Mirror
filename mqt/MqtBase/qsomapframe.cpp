@@ -34,7 +34,7 @@ extern QSharedPointer<QQmlApplicationEngine> appQmlEngine;
 #include "ui_qsomapframe.h"
 
 QSOMapFrame::QSOMapFrame(QWidget *parent) :
-    QFrame(parent),
+    MinosPanel(parent),
     ui(new Ui::QSOMapFrame)
 {
 #ifdef INC_MAP

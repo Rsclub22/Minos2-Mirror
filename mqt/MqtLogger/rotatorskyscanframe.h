@@ -19,6 +19,7 @@
 #include <QFrame>
 #include <QObject>
 #include <QToolButton>
+#include "minospanel.h"
 #include "rotatorcommon.h"
 
 #include "MinosLoggerEvents.h"
@@ -32,7 +33,7 @@ class RotatorSkyScanFrame;
 
 
 
-class RotatorSkyScanFrame : public QFrame
+class RotatorSkyScanFrame : public MinosPanel
 {
     Q_OBJECT
     LoggerContestLog *ct = nullptr;

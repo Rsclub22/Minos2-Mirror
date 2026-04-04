@@ -8,7 +8,6 @@
 #include "locTreeFrame.h"
 #include "locframe.h"
 #include "tstatsdispframe.h"
-#include "auxentries.h"
 
 namespace Ui {
 class StackedInfoFrame;
@@ -16,7 +15,7 @@ class StackedInfoFrame;
 extern bool showWorked;
 extern bool showUnworked ;
 
-class StackedInfoFrame : public QFrame
+class StackedInfoFrame : public MinosPanel
 {
     Q_OBJECT
 

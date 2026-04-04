@@ -14,7 +14,7 @@
 const int PINGTIMER_DURATION = 10000;
 
 QrzDisplayFrame::QrzDisplayFrame(QWidget *parent) :
-    QFrame(parent),
+    MinosPanel(parent),
     ui(new Ui::QrzDisplayFrame),
     receivedServerPing(false )
 {

@@ -76,7 +76,7 @@ void MatchTreeFrame::initialise()
     if (lcf == 0)
         lcf = 100;
 
-    delegate = QSharedPointer<HtmlDelegate> (new HtmlDelegate("MatchTreeFrame", 1.0, lcf/100.0) );
+    delegate = QSharedPointer<HtmlDelegate> (new HtmlDelegate("MatchTreeFrame", 1.0, lcf/100.0, this) );
     setItemDelegate( delegate.data() );
     setUniformRowHeights(true);
 

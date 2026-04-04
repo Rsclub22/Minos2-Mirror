@@ -26,7 +26,7 @@ KSTPlanesFrame::KSTPlanesFrame(QWidget *parent)
 
     ui->planesView->setModel(&kstPlanesFilterModel);
 
-    PlanesDelegate = QSharedPointer<HtmlDelegate>( new HtmlDelegate("PlanesDelegate", 1.0, 1.0)) ;
+    PlanesDelegate = QSharedPointer<HtmlDelegate>( new HtmlDelegate("PlanesDelegate", 1.0, 1.0, this)) ;
     ui->planesView->setItemDelegate(PlanesDelegate.data());
 
     QHeaderView *verticalHeader = ui->planesView->verticalHeader();

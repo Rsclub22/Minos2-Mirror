@@ -103,6 +103,8 @@ private:
     QGraphicsScene *bandmapScene;
     BandmapGraphicsPanel* bandmapGraphicsView;
 
+    QFont panelFont;
+
     BandmapFreqDial *dial = nullptr;
     Frequency curFreq;
     QString curMode;

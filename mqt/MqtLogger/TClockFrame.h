@@ -1,6 +1,7 @@
 #ifndef TCLOCKFRAME_H
 #define TCLOCKFRAME_H
 
+#include "minospanel.h"
 #include <QFrame>
 
 class BaseContestLog;
@@ -9,7 +10,7 @@ namespace Ui {
 class TClockFrame;
 }
 
-class TClockFrame : public QFrame
+class TClockFrame : public MinosPanel
 {
     Q_OBJECT
 

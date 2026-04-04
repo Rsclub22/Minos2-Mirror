@@ -5,10 +5,8 @@
 #include "rotpresetdialog.h"
 #include "ui_RotPresets.h"
 
-
-
 RotPresets::RotPresets(QWidget *parent) :
-    QFrame(parent),
+    MinosPanel(parent),
 
     ui(new Ui::RotPresets)
 {

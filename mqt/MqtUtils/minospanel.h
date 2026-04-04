@@ -9,9 +9,12 @@ class MinosPanel : public QFrame
 public:
     explicit MinosPanel(QWidget *parent = nullptr);
 
+    virtual void setPanelFont();
+
     int fontsize = 100;
+    QFont panelFont;
 private slots:
-    void onSetFont(QFont);
+    void onSetFont();
 };
 
 #endif // MINOSPANEL_H

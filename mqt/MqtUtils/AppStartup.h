@@ -43,10 +43,10 @@ class AppStart:public QObject
     Q_OBJECT
 public:
     AppStart(){}
-    void emitFontChanged(QFont);
+    void emitFontChanged();
 
 signals:
-    void fontChanged(QFont);
+    void fontChanged();
 };
 
 extern AppStart appStart;

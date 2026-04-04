@@ -3,6 +3,7 @@
 
 #include <QFrame>
 #include "XMPPRPCObj.h"
+#include "minospanel.h"
 #include "qrzServerCommon.h"
 
 
@@ -14,7 +15,7 @@ class QrzDisplayServerRpc;
 class BaseContestLog;
 
 
-class QrzDisplayFrame : public QFrame
+class QrzDisplayFrame : public MinosPanel
 {
     Q_OBJECT
 

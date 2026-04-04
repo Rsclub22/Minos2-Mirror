@@ -1,6 +1,7 @@
 #ifndef BANDSWITCHFRAME_H
 #define BANDSWITCHFRAME_H
 
+#include "minospanel.h"
 #include "rigcontrolframe.h"
 
 namespace Ui {
@@ -9,7 +10,7 @@ class BandSwitchFrame;
 
 class BandSelButtons;
 
-class BandSwitchFrame : public QFrame
+class BandSwitchFrame : public MinosPanel
 {
     Q_OBJECT
 

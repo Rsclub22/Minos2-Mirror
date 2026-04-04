@@ -29,7 +29,8 @@
 #include "htmldelegate.h"
 
 
-HtmlDelegate::HtmlDelegate(const QString &t, qreal wmult, qreal hmult):table(t), wmult(wmult), hmult(hmult)
+HtmlDelegate::HtmlDelegate(const QString &t, qreal wmult, qreal hmult, QWidget *widg)
+    :table(t), wmult(wmult), hmult(hmult), widget(widg)
 {
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::listCompressionChanged,
             this, &HtmlDelegate::onListCompressionChanged);
@@ -44,7 +45,8 @@ void HtmlDelegate::onListCompressionChanged(qreal h)
 }
 void HtmlDelegate::paint( QPainter *painter, const QStyleOptionViewItem &poption, const QModelIndex &index ) const
 {
-    //return QStyledItemDelegate::paint(painter, poption, index);
+    //return QStyledItemDelegate::paint(painter, poption, index);   // this would work!
+
     QStyleOptionViewItem option = poption; // kill const
 
     if (!index.isValid())
@@ -57,6 +59,7 @@ void HtmlDelegate::paint( QPainter *painter, const QStyleOptionViewItem &poption
 
     QTextDocument doc;
     doc.setHtml( option.text );
+    doc.setDefaultFont(painter->font());    // finally! gets the font right
 
     // Painting item without text - gives highlighting etc
     option.text = QString();
@@ -84,6 +87,7 @@ void HtmlDelegate::paint( QPainter *painter, const QStyleOptionViewItem &poption
     painter->save();
     painter->translate( textRect.topLeft() );
     painter->setClipRect( oldRect.translated( -oldRect.topLeft() ) );
+
     doc.documentLayout() ->draw( painter, ctx );
     painter->restore();
 }
@@ -102,6 +106,10 @@ QSize HtmlDelegate::docSize(QString text) const
     QTextDocument doc;
     doc.setHtml( text );
     doc.setTextWidth( -1 );
+    if(widget)
+    {
+        doc.setDefaultFont(widget->font());
+    }
     return QSize( static_cast<int>(doc.idealWidth() * wmult), static_cast<int>(doc.size().height() * hmult) );
 }
 

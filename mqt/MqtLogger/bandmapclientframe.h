@@ -27,6 +27,7 @@
 #include "checkoperatingfreq.h"
 #include "cutils.h"
 #include "bandmapspotdb.h"
+#include "minospanel.h"
 
 
 
@@ -37,7 +38,7 @@ namespace Ui {
 
 class BMP_MouseInObject;
 
-class BandmapClientFrame : public QFrame
+class BandmapClientFrame : public MinosPanel
 {
     Q_OBJECT
 
