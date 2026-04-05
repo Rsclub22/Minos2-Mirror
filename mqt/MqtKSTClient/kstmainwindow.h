@@ -101,6 +101,9 @@ class KSTMainWindow : public QMainWindow
 private:
     static bool inApplyScreenLayout;
 
+    bool inStartup = true;
+    bool inClosedown = false;
+
     KSTScreenOptions kstScreenOptions;
     QTimer CloseTimer;
     QTimer userCallTimer;

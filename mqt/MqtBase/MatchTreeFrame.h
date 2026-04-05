@@ -9,6 +9,7 @@
 #include "GridColumn.h"
 #include "contest.h"
 #include "MatchCollection.h"
+#include "minospanel.h"
 
 namespace Ui {
 class MatchTreeFrame;
@@ -88,7 +89,7 @@ public:
     int columnCount( const QModelIndex &parent = QModelIndex() ) const Q_DECL_OVERRIDE;
 };
 
-class MatchTreeFrame : public QTreeView
+class MatchTreeFrame : public MinosPanel
 {
     Q_OBJECT
     Ui::MatchTreeFrame *ui;

@@ -43,8 +43,11 @@ public:
     void setAuxType(AuxEntryType);
     AuxEntryType getAuxType() const;
 
-    bool getIsSplitElement() const;
     void setIsSplitElement(bool value);
+    bool getIsSplitElement() const;
+
+    void setFontSize(int);
+    int  getFontSize() const;
 
     void addRowBefore(ScreenConfigRow *r);
     void removeRow(ScreenConfigRow *r);
@@ -70,6 +73,7 @@ private slots:
 
     void on_splitBelowButton_clicked();
 
+    void resetFont();
 private:
     ScreenConfigRow *parentRow = nullptr;
     ScreenConfigScreen *parentDialog = nullptr;

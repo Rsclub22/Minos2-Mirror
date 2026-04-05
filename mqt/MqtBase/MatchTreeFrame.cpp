@@ -58,43 +58,43 @@ QVector<GridColumn>  QSOMatchGridModel::ArchiveMatchTreeColumns =
 //---------------------------------------------------------------------------
 
 MatchTreeFrame::MatchTreeFrame(QWidget *parent) :
-    QTreeView(parent),
+    MinosPanel(parent),
     ui(new Ui::MatchTreeFrame),
     contest(nullptr)
 {
     ui->setupUi(this);
 
-    setUniformRowHeights(true);
+    ui->MatchTreeView->setUniformRowHeights(true);
 
 }
 void MatchTreeFrame::initialise()
 {
-    setModel(getMatchModel());
-    header()->setSectionResizeMode(QHeaderView::Interactive);
+    ui->MatchTreeView->setModel(getMatchModel());
+    ui->MatchTreeView->header()->setSectionResizeMode(QHeaderView::Interactive);
     int lcf;
     MinosParameters::getMinosParameters() ->getIntDisplayProfile(edpListCompression, lcf);
     if (lcf == 0)
         lcf = 100;
 
     delegate = QSharedPointer<HtmlDelegate> (new HtmlDelegate("MatchTreeFrame", 1.0, lcf/100.0, this) );
-    setItemDelegate( delegate.data() );
-    setUniformRowHeights(true);
+    ui->MatchTreeView->setItemDelegate( delegate.data() );
+    ui->MatchTreeView->setUniformRowHeights(true);
 
-    createColumnsMenu(columnsMenu, header(), this,
+    createColumnsMenu(columnsMenu, ui->MatchTreeView->header(), this,
               [=]{
                     viewColumn();
               });
 
 
-    connect( header(), &QHeaderView::sectionResized, this, &MatchTreeFrame::on_sectionResized);
-    connect( header(), &QHeaderView::sectionMoved, this, &MatchTreeFrame::onSectionMoved);
+    connect( ui->MatchTreeView->header(), &QHeaderView::sectionResized, this, &MatchTreeFrame::on_sectionResized);
+    connect( ui->MatchTreeView->header(), &QHeaderView::sectionMoved, this, &MatchTreeFrame::onSectionMoved);
 
-    header()->setContextMenuPolicy( Qt::CustomContextMenu );
-    connect( header(), &QHeaderView::customContextMenuRequested, this, &MatchTreeFrame::onMatch_customContextMenuRequested );
+    ui->MatchTreeView->header()->setContextMenuPolicy( Qt::CustomContextMenu );
+    connect( ui->MatchTreeView->header(), &QHeaderView::customContextMenuRequested, this, &MatchTreeFrame::onMatch_customContextMenuRequested );
 
     connect(this, &MatchTreeFrame::matchTreeClicked, this, &MatchTreeFrame::afterMatchTreeClicked, Qt::QueuedConnection);
 
-    connect(selectionModel(), &QItemSelectionModel::selectionChanged,
+    connect(ui->MatchTreeView->selectionModel(), &QItemSelectionModel::selectionChanged,
             this, &MatchTreeFrame::on_MatchTreeSelectionChanged, Qt::UniqueConnection);
 
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::MatchTreeSelected,
@@ -108,7 +108,7 @@ MatchTreeFrame::~MatchTreeFrame()
 }
 QTreeView *MatchTreeFrame::getTreeView()
 {
-    return this;
+    return ui->MatchTreeView;
 }
 
 
@@ -167,7 +167,7 @@ void MatchTreeFrame::doCustomContextMenuRequested()
 void MatchTreeFrame::onMatch_customContextMenuRequested(const QPoint &pos)
 {
     QPoint globalPos = this->mapToGlobal( pos );
-    popupColumnsMenu(columnsMenu, globalPos, header());
+    popupColumnsMenu(columnsMenu, globalPos, ui->MatchTreeView->header());
 }
 void MatchTreeFrame::viewColumn()
 {
@@ -179,12 +179,12 @@ void MatchTreeFrame::viewColumn()
         if (col >= 0)
         {
             bool check = act->isChecked();
-            this->header()->setSectionHidden(col, !check);
+            ui->MatchTreeView->header()->setSectionHidden(col, !check);
         }
         else
         {
             QString fname(getDirectoryLocation(dlConfiguration) + "/" + baseName + "TableHeaders.ini");
-            resetHeaderColumns(fname, "QSOTable", curScreenLayout, this->header());
+            resetHeaderColumns(fname, "QSOTable", curScreenLayout, ui->MatchTreeView->header());
 
             MinosLoggerEvents::SendColumnsChanged();
         }
@@ -198,7 +198,7 @@ void MatchTreeFrame::saveHeaderLayout()
     {
         QString treeName = getTreeName();
         QString fname(getDirectoryLocation(dlConfiguration) + "/" + baseName + "TableHeaders.ini");
-        saveHeaderColumns(fname, treeName, curScreenLayout, header());
+        saveHeaderColumns(fname, treeName, curScreenLayout, ui->MatchTreeView->header());
 
         MinosLoggerEvents::SendColumnsChanged();
     }
@@ -218,7 +218,7 @@ void MatchTreeFrame::restoreColumns()
     inRestoreColumns = true;
     QString treeName = getTreeName();
     QString fname(getDirectoryLocation(dlConfiguration) + "/" + baseName + "TableHeaders.ini");
-    restoreHeaderColumns(fname, treeName, curScreenLayout, header());
+    restoreHeaderColumns(fname, treeName, curScreenLayout, ui->MatchTreeView->header());
 
     inRestoreColumns = false;
 }

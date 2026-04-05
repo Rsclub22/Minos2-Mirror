@@ -138,6 +138,14 @@ void QSOMapFrame::onContestBandChanged(BaseContestLog *c)
         doRedraw(ct, bdrawGrid, bdrawLines, drawSpots, showLoc, showCall, locTL, locBR, showNav);
     }
 }
+void QSOMapFrame::setPanelFont()
+{
+    MinosPanel::setPanelFont();
+
+    int fs = panelFont.pointSize();
+    emit setFontSize(fs);
+    doRedraw(ct, bdrawGrid, bdrawLines, drawSpots, showLoc, showCall, locTL, locBR, showNav);
+}
 void QSOMapFrame::startMap()
 {
 #ifdef INC_MAP
@@ -214,6 +222,7 @@ void QSOMapFrame::startMap()
         connect(this, SIGNAL(showLocsTL(QVariant)), qmlObj, SLOT(setShowLocsTL(QVariant)), Qt::UniqueConnection);
         connect(this, SIGNAL(showLocsBR(QVariant)), qmlObj, SLOT(setShowLocsBR(QVariant)), Qt::UniqueConnection);
         connect(this, SIGNAL(showNavb(QVariant)), qmlObj, SLOT(setShowNav(QVariant)), Qt::UniqueConnection);
+        connect(this, SIGNAL(setFontSize(QVariant)), qmlObj, SLOT(setFontSize(QVariant)), Qt::UniqueConnection);
 
         connect(this, SIGNAL(clearAll()), qmlObj, SLOT(clearAll()), Qt::UniqueConnection);
 
@@ -355,6 +364,9 @@ void QSOMapFrame::doRedraw(const BaseContestLog *ctest, bool grid, bool lines, b
 
     showCall = sc;
     emit showCallsb(showCall);
+
+    int fs = panelFont.pointSize();
+    emit setFontSize(fs);
 
     locTL = tl;
 

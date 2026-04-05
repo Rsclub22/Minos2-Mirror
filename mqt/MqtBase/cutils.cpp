@@ -533,11 +533,33 @@ void adjustMargins(QLayout *layout, int ls, int cml, int cmt, int cmr, int cmb)
                             adjustMargins(s->widget(j)->layout(), ls, cml, cmt, cmr, cmb);
                         }
                     }
-                    QScrollArea *sa = dynamic_cast<QScrollArea *>(w);
-                    if (sa)
+                    else
                     {
-                        w = sa->widget();
-                        adjustMargins(w->layout(), ls, cml, cmt, cmr, cmb);
+                        QScrollArea *sa = dynamic_cast<QScrollArea *>(w);
+                        if (sa)
+                        {
+                            w = sa->widget();
+                            adjustMargins(w->layout(), ls, cml, cmt, cmr, cmb);
+                        }
+                        else
+                        {
+                            QTabWidget *tw = dynamic_cast<QTabWidget *>(w);
+                            if (tw)
+                            {
+                                adjustMargins(tw->layout(), ls, cml, cmt, cmr, cmb);
+                            }
+                            else
+                            {
+                                QList<QWidget *> widgets = w->findChildren<QWidget *>();
+                                if (widgets.count())
+                                {
+                                    // put breakpoint here to trap more widget types
+                                    int a = 0;
+                                    a++;
+                                    Q_UNUSED(a)
+                                }
+                            }
+                        }
                     }
                 }
             }

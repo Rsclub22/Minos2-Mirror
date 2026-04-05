@@ -106,7 +106,8 @@ void QSOTableFrame::setPanelFont()
 
     QSize ms = delegate->docSize("XX");
     QSOTable->verticalHeader()->setDefaultSectionSize(ms.height());
-    QSOTable->verticalHeader()->setMinimumSectionSize(10);}
+    QSOTable->verticalHeader()->setMinimumSectionSize(10);
+}
 
 void QSOTableFrame::QSOTreeSelectContact( QSharedPointer<BaseContact> lct )
 {

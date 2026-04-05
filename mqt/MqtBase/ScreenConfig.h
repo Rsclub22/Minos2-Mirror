@@ -46,6 +46,8 @@ private slots:
 
     void on_removeScreenButton_clicked();
 
+    void on_resetFontButton_clicked();
+
 private:
     Ui::ScreenConfig *ui;
 
@@ -62,6 +64,7 @@ private:
 signals:
     void  screenConfigApply(QString curConfigName);
 
+    void resetFont();
 };
 
 extern ScreenConfig *screenConfigDialog;

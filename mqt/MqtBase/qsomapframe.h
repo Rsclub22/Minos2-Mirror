@@ -61,6 +61,7 @@ private:
     void stopMap();
     void doRedraw(const BaseContestLog *c, bool grid, bool lines, bool spots, bool sl, bool showCalls, QString tl, QString br, bool sn);
     void drawSpot(QSharedPointer<ClusterSpotData>);
+    virtual void setPanelFont() override;
 
     void showContact(const BaseContestLog *c, const QSharedPointer<BaseContact> lct);
     bool checkSpotInTable(QSharedPointer<ClusterSpotData> spot);
@@ -81,6 +82,7 @@ signals:
     void showLocsTL(QVariant tl);
     void showLocsBR(QVariant br);
     void showNavb(QVariant sn);
+    void setFontSize(QVariant sn);
     void showCallsb(QVariant sc);
     void clearAll();
 

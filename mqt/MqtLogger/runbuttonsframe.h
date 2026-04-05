@@ -2,7 +2,7 @@
 #define RUNBUTTONSFRAME_H
 
 #include <QShortcut>
-#include <QGroupBox>
+#include "minospanel.h"
 
 #include "rigcontrolframe.h"
 
@@ -100,7 +100,7 @@ public slots:
     void on_radioFreqCheckTimer();
 };
 
-class RunButtonsFrame : public QGroupBox
+class RunButtonsFrame : public MinosPanel
 {
     Q_OBJECT
 

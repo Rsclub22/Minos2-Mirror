@@ -60,7 +60,7 @@ public:
 
     RotPresets *rotPresets = nullptr;
 
-    QFrame *CribSheet= nullptr;
+    MinosPanel *CribSheet= nullptr;
     MinosSplitter *cribSplitter = nullptr;
     QLabel *NextContactDetailsLabel = nullptr;
     QLabel *CurrentBandLabel = nullptr;

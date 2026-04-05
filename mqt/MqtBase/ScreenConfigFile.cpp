@@ -128,6 +128,12 @@ void ScreenConfigFile::procRows(QVector<SCRow> &elerows, QJsonArray &rows)
             {
                 scele.auxType = aeClock;
             }
+            int eleSize = ele.value("fontSize").toInt();
+            if (eleSize == 0)
+            {
+                eleSize = 100;
+            }
+            scele.fontSize = eleSize;
             scrow.elements.push_back(scele);
         }
         elerows.push_back(scrow);
@@ -235,6 +241,7 @@ void ScreenConfigFile::writeTypetoRow(SCElement &e, QJsonArray &scrow)
     {
         scele.insert("auxtype", AuxTypeOption::getRawAuxTypeString(e.auxType));
     }
+    scele.insert("fontSize", e.fontSize);
     scrow.append(scele);
 }
 void ScreenConfigFile::getScreenConfig(const SCScreen &scb, QJsonObject &scr)

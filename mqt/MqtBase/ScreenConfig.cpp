@@ -2,6 +2,7 @@
 #include <QScrollArea>
 #include <QSettings>
 #include "QtUtils.h"
+#include "cutils.h"
 #include "regsettings.h"
 //#include "../MqtLogger/ContestApp.h"
 //#include "../MqtLogger/tlogcontainer.h"
@@ -37,6 +38,7 @@ ScreenConfig::ScreenConfig(QWidget *parent, ScreenConfigFile &scfp, QString curC
     SC sc = scf.configs[curConfigName];
 
     curScreen = buildScreens(sc);
+    adjustMargins(layout(), 0, 0, 0, 0, 0); // don't think this works!
 
     if (curScreen)
     {
@@ -246,5 +248,11 @@ void ScreenConfig::on_screenTabs_currentChanged(int index)
 void ScreenConfig::setScreenName(ScreenConfigScreen *scr)
 {
     ui->screenTabs->setTabText(ui->screenTabs->currentIndex(), scr->name);
+}
+
+
+void ScreenConfig::on_resetFontButton_clicked()
+{
+    emit resetFont();
 }
 

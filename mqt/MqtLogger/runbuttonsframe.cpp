@@ -149,7 +149,7 @@ void RunmodeController::setRunMode(int buttonNumber, memoryData::memData m)
 
 //=========================================================================
 RunButtonsFrame::RunButtonsFrame(QWidget *parent) :
-    QGroupBox(parent),
+    MinosPanel(parent),
     ui(new Ui::RunButtonsFrame)
 {
     ui->setupUi(this);
@@ -669,11 +669,11 @@ void RunButtonsFrame::setRunButtonsFrameTitle()
 {
     if (getRadioReadOnlyFlag())
     {
-        setTitle("Run Frequencies - Read Only");
+        ui->title->setText("Run Frequencies - Read Only");
     }
     else
     {
-        setTitle("Run Frequencies");
+        ui->title->setText("Run Frequencies");
     }
 
 }

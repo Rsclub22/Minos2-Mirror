@@ -42,7 +42,7 @@ const QStringList vmButtonShortCutKeys = {
 
 
 TxVmButtonsFrame::TxVmButtonsFrame(QWidget *parent) :
-    QGroupBox(parent),
+    MinosPanel(parent),
     ui(new Ui::TxVmButtonsFrame),
     buttonNumSent(NO_VM_BUTTON_ON),
     radioConnected(false),
@@ -862,7 +862,7 @@ void TxVmButtonsFrame::initCwTextEntryBox(QString radioManufacturer, QString fil
     if (getRigCWKeyerMacroCharacter(cwMacroCharList, radioManufacturer, CWKEYER_RADIO_COMMON_PARAMS_FILENAME))
     {
         cwMacroCharOk = true;
-        trace(QString("[TxVmButtonsFrame] Retrieved CW Macro Chars %1 for manufacturer %2").arg(cwMacroCharList).arg(radioManufacturer));
+        trace(QString("[TxVmButtonsFrame] Retrieved CW Macro Chars %1 for manufacturer %2").arg(cwMacroCharList, radioManufacturer));
     }
     else
     {
@@ -878,12 +878,12 @@ void TxVmButtonsFrame::initCwTextEntryBox(QString radioManufacturer, QString fil
         if (cwMacroCharOk)
         {
             validCharCwList = validCharCwList.append(cwMacroCharList);
-            trace(QString("[TxButtons Frame] Supported CW Chars and Macro chars %1 for manufacturer %2").arg(validCharCwList).arg(radioManufacturer));
+            trace(QString("[TxButtons Frame] Supported CW Chars and Macro chars %1 for manufacturer %2").arg(validCharCwList, radioManufacturer));
         }
         else
         {
 
-            trace(QString("[TxVmButtonsFrame] Supported CW Chars with no Macro chars %1 for manufacturer %2").arg(validCharCwList).arg(radioManufacturer));
+            trace(QString("[TxVmButtonsFrame] Supported CW Chars with no Macro chars %1 for manufacturer %2").arg(validCharCwList, radioManufacturer));
         }
 
     }
@@ -1002,7 +1002,7 @@ void TxVmButtonsFrame::editActionSelected(int buttonNumber)
     {
         if (voiceKeyerType == keyerTypes[VoiceKeyerId::RigControl])
         {
-            logMessage(QString("editActionSelected - voice rigcontrol - selectedRadio = %1, voiceMemAvail = %2").arg(selectedRadio.getLocalName()).arg(isVoiceMemAvail(selectedRadio) ? "True" : "False"));
+            logMessage(QString("editActionSelected - voice rigcontrol - selectedRadio = %1, voiceMemAvail = %2").arg(selectedRadio.getLocalName(), isVoiceMemAvail(selectedRadio) ? "True" : "False"));
         }
         else if ((voiceKeyerType == keyerTypes[VoiceKeyerId::PcCwKeyer]))
         {

@@ -74,7 +74,7 @@ void MatchThisFrame::on_MatchTreeFrame_doubleClicked(const QModelIndex &index)
                 setCurrentModel(true);
 
 
-                QItemSelectionModel *ism = selectionModel();
+                QItemSelectionModel *ism = getTreeView()->selectionModel();
                 QItemSelection selected = ism-> selection();
 
                 MinosLoggerEvents::SendMatchTreeSelected(ThisMatch, contest, baseName, selected);

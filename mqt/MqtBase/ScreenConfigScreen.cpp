@@ -109,6 +109,7 @@ void ScreenConfigScreen::buildRows(QVector<SCRow> rows, ScreenConfigElement *bel
            ScreenConfigElement *e = new ScreenConfigElement(baseRow);
            SCType sctype = rows[j].elements[k].type;
            e->setType(sctype);
+           e->setFontSize(rows[j].elements[k].fontSize);
            if (sctype == sctAux)
            {
                e->setAuxType(rows[j].elements[k].auxType);
@@ -155,6 +156,7 @@ void ScreenConfigScreen::procRow(ScreenConfigRow *row, SCRow &scrow)
                 {
                     scele.type = ele->getType();
                     scele.auxType = ele->getAuxType();
+                    scele.fontSize = ele->getFontSize();
                 }
                 scrow.elements.append(scele);
             }
@@ -435,3 +437,4 @@ void ScreenConfigScreen::on_screenNameEdit_textEdited(const QString &arg1)
     name = arg1;
     parentElement->setScreenName(this);
 }
+

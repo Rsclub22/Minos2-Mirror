@@ -100,6 +100,8 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::KSTMainWindow)
 {
+    inStartup = true;
+
     ui->setupUi(this);
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
@@ -260,6 +262,7 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
 
     on_FontChanged();
     connect(commandReader.data(), &CommandReader::fontChanged, this, &KSTMainWindow::on_FontChanged);
+    inStartup = false;
 }
 
 KSTMainWindow::~KSTMainWindow()
@@ -280,28 +283,38 @@ void KSTMainWindow::on_FontChanged()
 }
 void KSTMainWindow::resizeEvent(QResizeEvent * event)
 {
-    RegSettings settings;
-    settings.getSettings().setValue("geometry/Main", saveGeometry());
+    if (!inStartup && !inClosedown)
+    {
+        RegSettings settings;
+        settings.getSettings().setValue("geometry/Main", saveGeometry());
+    }
     QWidget::resizeEvent(event);
 }
 void KSTMainWindow::moveEvent(QMoveEvent * event)
 {
-    RegSettings settings;
-    settings.getSettings().setValue("geometry/Main", saveGeometry());
+    if (!inStartup && !inClosedown)
+    {
+        RegSettings settings;
+        settings.getSettings().setValue("geometry/Main", saveGeometry());
+    }
     QWidget::moveEvent(event);
 }
 void KSTMainWindow::changeEvent( QEvent* e )
 {
     if( e->type() == QEvent::WindowStateChange )
     {
-        RegSettings settings;
-        settings.getSettings().setValue("geometry/Main", saveGeometry());
+        if (!inStartup && !inClosedown)
+        {
+            RegSettings settings;
+            settings.getSettings().setValue("geometry/Main", saveGeometry());
+        }
     }
 }
 
 
 void KSTMainWindow::closeEvent(QCloseEvent *event)
 {
+    inClosedown = true;
     trace("KSTMainWindow::closeEvent");
 
     userCallTimer.stop();
@@ -509,38 +522,46 @@ void KSTMainWindow::buildRow(KSTPageFrame *cp, SCRow &scrow, MinosSplitter *spli
 
             case sctkASActive:
                 elementScrollArea->setWidget(kstASActiveFrame);
+                kstASActiveFrame->fontsize = scele.fontSize;
                 break;
 
             case sctkCallList:
                 hs->addWidget(kstCallsFrame);
+                kstCallsFrame->fontsize = scele.fontSize;
                 kstCallsFrame->setVisible(true);
                 break;
 
             case sctkAirScout:
                 hs->addWidget(kstPlanesFrame);
+                kstPlanesFrame->fontsize = scele.fontSize;
                 kstPlanesFrame->setVisible(true);
                 break;
 
             case sctkMessageList:
                 hs->addWidget(kstMsgFrame);
+                kstMsgFrame->fontsize = scele.fontSize;
                 kstMsgFrame->setVisible(true);
                 break;
 
             case sctkMeepList:
                 hs->addWidget(kstTomeFrame);
+                kstTomeFrame->fontsize = scele.fontSize;
                 kstTomeFrame->setVisible(true);
                 break;
 
             case sctkLogins:
                 elementScrollArea->setWidget(kstLoginFrame);
+                kstLoginFrame->fontsize = scele.fontSize;
                 break;
 
             case sctkSendMeep:
                 elementScrollArea->setWidget(kstSendMeepFrame);
+                kstSendMeepFrame->fontsize = scele.fontSize;
                 break;
 
             case sctkButtons:
                 elementScrollArea->setWidget(kstButtonsFrame);
+                kstButtonsFrame->fontsize = scele.fontSize;
                 break;
 
             case sctSplit:

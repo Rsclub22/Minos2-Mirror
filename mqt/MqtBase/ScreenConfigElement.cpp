@@ -58,12 +58,23 @@ bool ScreenConfigElement::getIsSplitElement() const
     return isSplitElement;
 }
 
+void ScreenConfigElement::setFontSize(int f)
+{
+    ui->fontSize->setValue(f);
+}
+
+int ScreenConfigElement::getFontSize() const
+{
+    return ui->fontSize->value();
+}
+
 void ScreenConfigElement::setIsSplitElement(bool value)
 {
     isSplitElement = value;
     ui->splitFrame->setVisible(!value);
     ui->elementTypeCombo->setVisible(!value);
     ui->auxTypeCombo->setVisible(!value);
+    ui->fontSizeFrame->setVisible(!value);
 
     if (!vmsplit)
     {
@@ -85,6 +96,7 @@ ScreenConfigElement::ScreenConfigElement(ScreenConfigRow *parentrow, ScreenConfi
 
     ui->setupUi(this);
 
+    connect(screenConfigDialog, &ScreenConfig::resetFont, this, &ScreenConfigElement::resetFont);
     // colours from https://www.december.com/html/spec/colorsvg.html
     //setStyleSheet("#ScreenConfigElement { border: 2px solid darkmagenta; }");
 
@@ -169,7 +181,10 @@ ScreenConfigElement::~ScreenConfigElement()
 {
     delete ui;
 }
-
+void ScreenConfigElement::resetFont()
+{
+    setFontSize(100);
+}
 void ScreenConfigElement::setType(SCType t)
 {
     QString s = getTrScreenHint(t);

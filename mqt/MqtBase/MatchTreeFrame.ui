@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>MatchTreeFrame</class>
- <widget class="QTreeView" name="MatchTreeFrame">
+ <widget class="MinosPanel" name="MatchTreeFrame">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -10,37 +10,66 @@
     <height>192</height>
    </rect>
   </property>
-  <property name="focusPolicy">
-   <enum>Qt::ClickFocus</enum>
-  </property>
-  <property name="autoFillBackground">
-   <bool>true</bool>
-  </property>
-  <property name="frameShape">
-   <enum>QFrame::NoFrame</enum>
-  </property>
-  <property name="frameShadow">
-   <enum>QFrame::Plain</enum>
-  </property>
-  <property name="midLineWidth">
-   <number>1</number>
-  </property>
-  <property name="horizontalScrollBarPolicy">
-   <enum>Qt::ScrollBarAsNeeded</enum>
-  </property>
-  <property name="sizeAdjustPolicy">
-   <enum>QAbstractScrollArea::AdjustIgnored</enum>
-  </property>
-  <property name="editTriggers">
-   <set>QAbstractItemView::NoEditTriggers</set>
-  </property>
-  <property name="alternatingRowColors">
-   <bool>true</bool>
-  </property>
-  <attribute name="headerDefaultSectionSize">
-   <number>150</number>
-  </attribute>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <item>
+    <widget class="QTreeView" name="MatchTreeView">
+     <property name="focusPolicy">
+      <enum>Qt::ClickFocus</enum>
+     </property>
+     <property name="autoFillBackground">
+      <bool>true</bool>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::NoFrame</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Plain</enum>
+     </property>
+     <property name="midLineWidth">
+      <number>1</number>
+     </property>
+     <property name="horizontalScrollBarPolicy">
+      <enum>Qt::ScrollBarAsNeeded</enum>
+     </property>
+     <property name="sizeAdjustPolicy">
+      <enum>QAbstractScrollArea::AdjustIgnored</enum>
+     </property>
+     <property name="editTriggers">
+      <set>QAbstractItemView::NoEditTriggers</set>
+     </property>
+     <property name="alternatingRowColors">
+      <bool>true</bool>
+     </property>
+     <attribute name="headerDefaultSectionSize">
+      <number>150</number>
+     </attribute>
+    </widget>
+   </item>
+  </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>MinosPanel</class>
+   <extends>QFrame</extends>
+   <header>minospanel.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

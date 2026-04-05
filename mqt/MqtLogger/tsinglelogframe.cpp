@@ -308,7 +308,7 @@ void TSingleLogFrame::createScreenComponents()
     rotPresets->setObjectName(QStringLiteral("rotPresets"));
     rotPresets->setVisible(false);
 
-    CribSheet = new QFrame(this);
+    CribSheet = new MinosPanel(this);
 
     CribSheet->setObjectName(QStringLiteral("CribSheet"));
 
@@ -675,6 +675,7 @@ void TSingleLogFrame::buildRow(ContestPage *cp, SCRow &scrow, int &auxInstance, 
                     f->setCurrentFrameType(AuxTypeOption::getTrAuxTypeString(scele.auxType));
                     elementScrollArea->setWidget(f);
                     f->setContest(ct);
+                    f->fontsize = scele.fontSize;
                     f->setVisible(true);
                     break;
                 }
@@ -683,12 +684,14 @@ void TSingleLogFrame::buildRow(ContestPage *cp, SCRow &scrow, int &auxInstance, 
                     QSOListFrame->setParent(hs);
                     hs->addWidget(QSOListFrame);
                     QSOListFrame->setContest(ct);
+                    QSOListFrame->fontsize = scele.fontSize;
                     QSOListFrame->setVisible(true);
                     break;
                 }
                 case sctRigControl:
                 {
                     elementScrollArea->setWidget(FKHRigControlFrame);
+                    FKHRigControlFrame->fontsize = scele.fontSize;
                     // don't set contest here
                     break;
                 }
@@ -696,6 +699,7 @@ void TSingleLogFrame::buildRow(ContestPage *cp, SCRow &scrow, int &auxInstance, 
                 {
                     elementScrollArea->setWidget(runButtonsFrame);
                     // don't set contest here
+                    runButtonsFrame->fontsize = scele.fontSize;
 //                    runButtonsFrame->setContest(ct);
                     break;
                 }
@@ -703,39 +707,46 @@ void TSingleLogFrame::buildRow(ContestPage *cp, SCRow &scrow, int &auxInstance, 
                 {
                     elementScrollArea->setWidget(bandSwitchFrame);
                     bandSwitchFrame->setContest(ct);
+                    bandSwitchFrame->fontsize = scele.fontSize;
                     break;
                 }
                 case sctTxVmButtons:
                 {
                     elementScrollArea->setWidget(txVmButtonsFrame);
                     // don't set contest here
+                    txVmButtonsFrame->fontsize = scele.fontSize;
                     break;
                 }
                 case sctRotControl:
                 {
                     elementScrollArea->setWidget(FKHRotControlFrame);
                     // don't set contest here
+                    FKHRotControlFrame->fontsize = scele.fontSize;
                     break;
                 }
                 case sctSkyScanControl:
                 {
                     elementScrollArea->setWidget(skyScanControlFrame);
                     // don't set contest here
+                    skyScanControlFrame->fontsize = scele.fontSize;
                     break;
                 }
                 case sctRotSkyScanPresets:
                 {
                     elementScrollArea->setWidget(FKHRotSkyScanPresetsFrame);
+                    FKHRotSkyScanPresetsFrame->fontsize = scele.fontSize;
                     break;
                 }
                 case sctRotCompassDisplay:
                 {
                     elementScrollArea->setWidget(FKHRotCompassFrame);
+                    FKHRotCompassFrame->fontsize = scele.fontSize;
                     break;
                 }
                 case sctQrzDisplay:
                 {
                     elementScrollArea->setWidget(qrzDisplayFrame);
+                    qrzDisplayFrame->fontsize = scele.fontSize;
                     qrzDisplayFrame->setContest(ct);
                     setQrzDisplayFrameLoaded(true);
                     break;
@@ -743,12 +754,14 @@ void TSingleLogFrame::buildRow(ContestPage *cp, SCRow &scrow, int &auxInstance, 
                 case sctRotPresets:
                 {
                     elementScrollArea->setWidget(rotPresets);
+                    rotPresets->fontsize = scele.fontSize;
                     rotPresets->setContest(ct);
                     break;
                 }
                 case sctQSOEdit:
                 {
                     elementScrollArea->setWidget(GJVQSOLogFrame);
+                    GJVQSOLogFrame->fontsize = scele.fontSize;
                     GJVQSOLogFrame->setContest(ct);
                     GJVQSOLogFrame->setVisible(true);
                     break;
@@ -756,6 +769,7 @@ void TSingleLogFrame::buildRow(ContestPage *cp, SCRow &scrow, int &auxInstance, 
                 case sctNextQSODetails:
                 {
                     elementScrollArea->setWidget(CribSheet);
+                    CribSheet->fontsize = scele.fontSize;
                     CribSheet->setVisible(true);
                     onShowCribBand();
                     break;
@@ -763,6 +777,7 @@ void TSingleLogFrame::buildRow(ContestPage *cp, SCRow &scrow, int &auxInstance, 
                 case sctThisMatch:
                 {
                     hs->addWidget(thisMatchFrame);
+                    thisMatchFrame->fontsize = scele.fontSize;
                     thisMatchFrame->setVisible(true);
                     thisMatchFrame->setContest(ct);
                     break;
@@ -770,6 +785,7 @@ void TSingleLogFrame::buildRow(ContestPage *cp, SCRow &scrow, int &auxInstance, 
                 case sctOtherMatch:
                 {
                     hs->addWidget(otherMatchFrame);
+                    otherMatchFrame->fontsize = scele.fontSize;
                     otherMatchFrame->setVisible(true);
                     otherMatchFrame->setContest(ct);
                     break;
@@ -777,6 +793,7 @@ void TSingleLogFrame::buildRow(ContestPage *cp, SCRow &scrow, int &auxInstance, 
                 case sctArchiveMatch:
                 {
                     hs->addWidget(archiveMatchFrame);
+                    archiveMatchFrame->fontsize = scele.fontSize;
                     archiveMatchFrame->setVisible(true);
                     archiveMatchFrame->setContest(ct);
                     break;
@@ -784,6 +801,7 @@ void TSingleLogFrame::buildRow(ContestPage *cp, SCRow &scrow, int &auxInstance, 
                 case sctChat:
                 {
                     elementScrollArea->setWidget(chatFrame);
+                    chatFrame->fontsize = scele.fontSize;
                     // chatFrame doesn't have a setContest
                     //chatFrame->setContest(ct);
                     chatFrame->setVisible(true);
@@ -792,6 +810,7 @@ void TSingleLogFrame::buildRow(ContestPage *cp, SCRow &scrow, int &auxInstance, 
                 case sctCluster:
                 {
                     hs->addWidget(clusterControlFrame);
+                    clusterControlFrame->fontsize = scele.fontSize;
                     clusterControlFrame->setVisible(true);
                     clusterControlFrame->setContest(ct);
                     break;
@@ -800,6 +819,7 @@ void TSingleLogFrame::buildRow(ContestPage *cp, SCRow &scrow, int &auxInstance, 
                 case sctBandmap:
                 {
                     hs->addWidget(bandmapControlFrame);
+                    bandmapControlFrame->fontsize = scele.fontSize;
                     bandmapControlFrame->setVisible(true);
                     setBandmapLoaded(true);
                     break;
@@ -808,6 +828,7 @@ void TSingleLogFrame::buildRow(ContestPage *cp, SCRow &scrow, int &auxInstance, 
                 case sctWsjtx:
                 {
                     hs->addWidget(wsjtxFrame);
+                    wsjtxFrame->fontsize = scele.fontSize;
                     wsjtxFrame->setVisible(true);
 
                     // don't set contest here
@@ -816,6 +837,7 @@ void TSingleLogFrame::buildRow(ContestPage *cp, SCRow &scrow, int &auxInstance, 
                 case sctQsoMap:
                 {
                     elementScrollArea->setWidget(qsoMapFrame);
+                    qsoMapFrame->fontsize = scele.fontSize;
                     qsoMapFrame->setVisible(true);
 
                     bool grid = false;
@@ -846,6 +868,7 @@ void TSingleLogFrame::buildRow(ContestPage *cp, SCRow &scrow, int &auxInstance, 
                 case sctDMButtons:
                 {
                     elementScrollArea->setWidget(dmButtonFrame);
+                    dmButtonFrame->fontsize = scele.fontSize;
                     dmButtonFrame->setVisible(true);
                     // don't set contest here
                     break;

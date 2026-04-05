@@ -22,6 +22,7 @@ Frame {
     property int locBRLat: 0
     property int locBRLon: 0
     property bool showNav: true
+    property int fontSize: 10
 
     property string homeLat: "0.0"
     property string homeLon: "0.0"
@@ -232,15 +233,11 @@ MapQuickItem {
 sourceItem: Text {
         id: qraText
         text: ""
-
-
-        font.pointSize: 10
-
 }
 }', mapOfEurope);
 
         cmqra.sourceItem.color=colour
-
+        cmqra.sourceItem.font.pointSize = fontSize
         cmqra.sourceItem.text = call;
         let p = QtPositioning.coordinate(lat, lon)
         cmqra.coordinate = p;
@@ -518,6 +515,11 @@ MapPolyline
     {
         locBRLat = parseInt(br[0], 10)
         locBRLon = parseInt(br[1], 10)
+    }
+
+    function setFontSize(fs)
+    {
+        fontSize = fs;
     }
 
     function clearAll()

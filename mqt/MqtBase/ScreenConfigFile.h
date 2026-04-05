@@ -37,6 +37,7 @@ class SCElement
 public:
     SCType type = sctNone;
     AuxEntryType auxType = aeClock;
+    int fontSize = 100;
     QVector<SCRow> rows;
     QVector<SCScreen> screens;
 };

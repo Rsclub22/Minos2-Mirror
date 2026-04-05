@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>671</width>
-    <height>300</height>
+    <width>787</width>
+    <height>431</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -77,6 +77,19 @@
       </widget>
      </item>
      <item>
+      <spacer name="horizontalSpacer_6">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
       <widget class="QPushButton" name="addScreenAfterButton">
        <property name="text">
         <string>Add Screen After</string>
@@ -100,6 +113,26 @@
       <widget class="QPushButton" name="removeScreenButton">
        <property name="text">
         <string>Remove Screen</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="resetFontButton">
+       <property name="text">
+        <string>Reset Font Size</string>
        </property>
       </widget>
      </item>
