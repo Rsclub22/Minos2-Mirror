@@ -50,17 +50,16 @@ void MatchOtherFrame::on_ReplaceOtherLogList( SharedMatchCollection matchCollect
     if (b == baseName && contest && contest == MinosParameters::getMinosParameters() ->getCurrentContest())
         showOtherMatchQSOs( matchCollection );
 }
-void MatchOtherFrame::on_MatchTreeFrame_doubleClicked(const QModelIndex &/*index*/)
+void MatchOtherFrame::doDoubleClick(const QModelIndex &/*index*/)
 {
-    // needs to be a MinosLogEvent, including Log/Edit
     MinosLoggerEvents::SendXferPressed(contest, baseName);
 }
-void MatchOtherFrame::on_MatchTreeSelectionChanged(const QItemSelection &selected, const QItemSelection &)
+void MatchOtherFrame::doMatchTreeSelectionChanged(const QItemSelection &selected, const QItemSelection &)
 {
     MinosLoggerEvents::SendMatchTreeSelected(OtherMatch, contest, baseName, selected);
 }
 
-void MatchOtherFrame::afterMatchTreeClicked()
+void MatchOtherFrame::doAfterMatchTreeClicked()
 {
     if ( treeClickIndex.isValid() )
     {
@@ -77,7 +76,7 @@ void MatchOtherFrame::afterMatchTreeClicked()
     }
 }
 
-void MatchOtherFrame::MatchTreeSelected(MatchType m, BaseContestLog *c, QString b, const QItemSelection &selected)
+void MatchOtherFrame::doMatchTreeSelected(MatchType m, BaseContestLog *c, QString b, const QItemSelection &selected)
 {
     if (contest == c && b == baseName)
     {

@@ -53,7 +53,7 @@ void MatchArchiveFrame::on_ReplaceListList( SharedMatchCollection matchCollectio
 }
 
 
-void MatchArchiveFrame::afterMatchTreeClicked()
+void MatchArchiveFrame::doAfterMatchTreeClicked()
 {
     if ( treeClickIndex.isValid() )
     {
@@ -68,18 +68,18 @@ void MatchArchiveFrame::afterMatchTreeClicked()
         }
     }
 }
-void MatchArchiveFrame::on_MatchTreeFrame_doubleClicked(const QModelIndex &/*index*/)
+void MatchArchiveFrame::doDoubleClick(const QModelIndex &/*index*/)
 {
     MinosLoggerEvents::SendXferPressed(contest, baseName);
 }
 
-void MatchArchiveFrame::on_MatchTreeSelectionChanged(const QItemSelection &selected, const QItemSelection &)
+void MatchArchiveFrame::doMatchTreeSelectionChanged(const QItemSelection &selected, const QItemSelection &)
 {
     MinosLoggerEvents::SendMatchTreeSelected(ArchiveMatch, contest, baseName, selected);
 }
 
 
-void MatchArchiveFrame::MatchTreeSelected(MatchType m, BaseContestLog *c, QString b, const QItemSelection &selected)
+void MatchArchiveFrame::doMatchTreeSelected(MatchType m, BaseContestLog *c, QString b, const QItemSelection &selected)
 {
     if (contest == c && b == baseName)
     {

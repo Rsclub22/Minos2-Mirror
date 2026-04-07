@@ -28,16 +28,13 @@ public:
     {
         return ThisMatch;
     }
+    virtual void doDoubleClick(const QModelIndex &index) override;
+    virtual void doMatchTreeSelectionChanged(const QItemSelection &, const QItemSelection &) override;
+    virtual void doAfterMatchTreeClicked() override;
+    virtual void doMatchTreeSelected(MatchType mt, BaseContestLog *l, QString s, const QItemSelection &is) override;
 
 private slots:
-    virtual void on_MatchTreeSelectionChanged(const QItemSelection &, const QItemSelection &) override;
-
-    virtual void on_MatchTreeFrame_doubleClicked(const QModelIndex &index) override;
-
-    virtual void MatchTreeSelected(MatchType m, BaseContestLog *c, QString basename, const QItemSelection &selected) override;
-
     void on_ReplaceThisLogList(SharedMatchCollection matchCollection, BaseContestLog *, QString b);
-    void afterMatchTreeClicked() override;
 };
 
 #endif // MATCHTHISFRAME_H

@@ -129,22 +129,27 @@ protected:
     virtual void showOtherMatchQSOs( SharedMatchCollection /*matchCollection*/ ){}
     virtual void showMatchList(SharedMatchCollection /*matchCollection*/ ){}
 
+    virtual void doDoubleClick(const QModelIndex &index) = 0;
+    virtual void doMatchTreeSelectionChanged(const QItemSelection &, const QItemSelection &) = 0;
+    virtual void doAfterMatchTreeClicked() = 0;
+    virtual void doMatchTreeSelected(MatchType mt, BaseContestLog *l, QString s, const QItemSelection &is) = 0;
+
 private slots:
-    virtual void on_MatchTreeSelectionChanged(const QItemSelection &, const QItemSelection &){}
+    void on_MatchTreeSelectionChanged(const QItemSelection &, const QItemSelection &);
 
-    virtual void on_MatchTreeFrame_doubleClicked(const QModelIndex &){}
+    void on_MatchTreeView_clicked(const QModelIndex &);
 
-    virtual void on_MatchTreeFrame_clicked(const QModelIndex &);
+    void afterMatchTreeClicked();
 
-    virtual void afterMatchTreeClicked(){}
-
-    virtual void MatchTreeSelected(MatchType, BaseContestLog *, QString, const QItemSelection &){}
+    void MatchTreeSelected(MatchType, BaseContestLog *, QString, const QItemSelection &);
 
     void on_sectionResized(int, int, int);
 
     void on_doColumnChanges(BaseContestLog*);
     void onMatch_customContextMenuRequested(const QPoint &pos);
     void onSectionMoved(int, int, int);
+    void on_MatchTreeView_doubleClicked(const QModelIndex &index);
+
 signals:
     void editContact(CheckableContact *bct, bool nc);
 

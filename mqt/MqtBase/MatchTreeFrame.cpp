@@ -230,10 +230,29 @@ void MatchTreeFrame::on_doColumnChanges(BaseContestLog *b)
         restoreColumns();
     }
 }
-void MatchTreeFrame::on_MatchTreeFrame_clicked(const QModelIndex &)
+void MatchTreeFrame::on_MatchTreeView_clicked(const QModelIndex &)
 {
     emit matchTreeClicked();
 }
+
+void MatchTreeFrame::on_MatchTreeSelectionChanged(const QItemSelection &isb, const QItemSelection &isa)
+{
+    doMatchTreeSelectionChanged(isb, isa);
+}
+void MatchTreeFrame::afterMatchTreeClicked()
+{
+    doAfterMatchTreeClicked();
+}
+void MatchTreeFrame::on_MatchTreeView_doubleClicked(const QModelIndex &index)
+{
+    doDoubleClick(index);
+}
+void MatchTreeFrame::MatchTreeSelected(MatchType mt, BaseContestLog *l, QString s, const QItemSelection &is)
+{
+    doMatchTreeSelected(mt, l, s, is);
+}
+
+
 
 //=============================================================================
 
@@ -626,4 +645,6 @@ int QSOMatchGridModel::columnCount( const QModelIndex &/*parent*/ ) const
     }
     return cols;
 }
+
+
 
