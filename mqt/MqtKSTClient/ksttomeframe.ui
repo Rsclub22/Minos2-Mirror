@@ -76,7 +76,7 @@
   <customwidget>
    <class>MinosTableView</class>
    <extends>QWidget</extends>
-   <header>minostableview.h</header>
+   <header>MinosTableView.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
