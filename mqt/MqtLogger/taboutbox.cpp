@@ -2,6 +2,7 @@
 #include <QUrl>
 #include <QFontDialog>
 #include <QFont>
+#include "AppStartup.h"
 #include "MTrace.h"
 #include "regsettings.h"
 #include "MShowMessageDlg.h"
@@ -344,14 +345,15 @@ void TAboutBox::on_fontButton_clicked()
     {
         QApplication::setFont( nf );
 
-        for ( auto &widget: QApplication::allWidgets() )
-        {
-            widget->setFont(nf);
-            widget->update();
-        }
+        // for ( auto &widget: QApplication::allWidgets() )
+        // {
+        //     widget->setFont(nf);
+        //     widget->update();
+        // }
 
         RegSettings settings;
         settings.getSettings().setValue( "font", font() );
+        appStart.emitFontChanged();
 
         MinosLoggerEvents::SendFontChanged();
     }

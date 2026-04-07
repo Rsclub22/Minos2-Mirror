@@ -393,14 +393,15 @@ void DisplayOptions::doFontChange()
         bool routerRunning = checkRouterReady();
         QApplication::setFont( nf );
 
-        for ( auto &widget: QApplication::allWidgets() )
-        {
-            widget->setFont(nf);
-            widget->update();
-        }
+        // for ( auto &widget: QApplication::allWidgets() )
+        // {
+        //     widget->setFont(nf);
+        //     widget->update();
+        // }
 
         RegSettings settings;
         settings.getSettings().setValue( "font", font() );
+        appStart.emitFontChanged();
 
         MinosLoggerEvents::SendFontChanged();
         if (routerRunning)
