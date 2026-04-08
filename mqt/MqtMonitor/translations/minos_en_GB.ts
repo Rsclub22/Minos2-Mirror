@@ -59,17 +59,22 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MonitorMain.ui" line="206"/>
+        <location filename="../MonitorMain.ui" line="190"/>
+        <source>Show Callsigns</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../MonitorMain.ui" line="213"/>
         <source>Top Left Labelled Locator</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MonitorMain.ui" line="233"/>
+        <location filename="../MonitorMain.ui" line="240"/>
         <source>Bottom Right Labelled Locator</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MonitorMain.ui" line="260"/>
+        <location filename="../MonitorMain.ui" line="267"/>
         <source>NB Showing Labelled Locators can make the display very slow, so restrict the area as much as possible.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -83,7 +88,7 @@
     <name>MonitoringFrame</name>
     <message>
         <location filename="../MonitoringFrame.ui" line="62"/>
-        <location filename="../MonitoringFrame.cpp" line="209"/>
+        <location filename="../MonitoringFrame.cpp" line="210"/>
         <source>Show Map</source>
         <translation type="unfinished"></translation>
     </message>

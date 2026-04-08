@@ -55,6 +55,7 @@
     </message>
     <message>
         <location filename="../VKMixer.cpp" line="20"/>
+        <location filename="../VKMixer.cpp" line="20"/>
         <source>none</source>
         <translation>aucun</translation>
     </message>
