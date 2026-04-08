@@ -177,16 +177,19 @@ void KSTPageFrame::onSplittersChanged()
 }
 void KSTPageFrame::onSplitterMoved(int /*pos*/, int /*index*/)
 {
-    QByteArray state = kstPageSplitter->saveState();
-    RegSettings settings;
-    QString name = QString("Splitters/%1/state/%2/%3").arg("singleLogFrameSplitter", mainWindow->getCurScreenLayout()).arg(pageNo);
-    settings.getSettings().setValue(name, state);
-
-    for(auto const &s: QASCONST(rowSplitters))
+    if (!mainWindow->inStartup && !mainWindow->inClosedown)
     {
-        state = s->saveState();
-        QString name = QString("Splitters/%1/state/%2/%3").arg(s->objectName(), mainWindow->getCurScreenLayout()).arg(pageNo);
+        QByteArray state = kstPageSplitter->saveState();
+        RegSettings settings;
+        QString name = QString("Splitters/%1/state/%2/%3").arg("singleLogFrameSplitter", mainWindow->getCurScreenLayout()).arg(pageNo);
         settings.getSettings().setValue(name, state);
+
+        for(auto const &s: QASCONST(rowSplitters))
+        {
+            state = s->saveState();
+            QString name = QString("Splitters/%1/state/%2/%3").arg(s->objectName(), mainWindow->getCurScreenLayout()).arg(pageNo);
+            settings.getSettings().setValue(name, state);
+        }
     }
 }
 void KSTPageFrame::on_doSplitterChanges()
@@ -195,7 +198,7 @@ void KSTPageFrame::on_doSplitterChanges()
 }
 void KSTPageFrame::moveEvent(QMoveEvent *event)
 {
-    if (pageNo > 0)
+    if (pageNo > 0 && !mainWindow->inStartup && !mainWindow->inClosedown)
     {
         RegSettings settings;
         settings.getSettings().setValue(QString("screen%1/geometry").arg(pageNo), saveGeometry());
@@ -204,7 +207,7 @@ void KSTPageFrame::moveEvent(QMoveEvent *event)
 }
 void KSTPageFrame::resizeEvent(QResizeEvent * event)
 {
-    if (pageNo > 0)
+    if (pageNo > 0 && !mainWindow->inStartup && !mainWindow->inClosedown)
     {
         RegSettings settings;
         settings.getSettings().setValue(QString("screen%1/geometry").arg(pageNo), saveGeometry());
@@ -215,7 +218,7 @@ void KSTPageFrame::changeEvent( QEvent* e )
 {
     if( e->type() == QEvent::WindowStateChange )
     {
-        if (pageNo > 0)
+        if (pageNo > 0 && !mainWindow->inStartup && !mainWindow->inClosedown)
         {
             RegSettings settings;
             settings.getSettings().setValue(QString("screen%1/geometry").arg(pageNo), saveGeometry());
