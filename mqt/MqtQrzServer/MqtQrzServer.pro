@@ -16,19 +16,23 @@ mac:ICON=../MinosQRZ.icns
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    callsignservice.cpp \
     main.cpp \
     qrzconfiguredialog.cpp \
     qrzdb.cpp \
     qrzservermainwindow.cpp \
     qrzserverminosparameters.cpp \
-    qrzserverrpc.cpp
+    qrzserverrpc.cpp \
+    qrzservice.cpp
 
 HEADERS += \
+    callsignservice.h \
     qrzconfiguredialog.h \
     qrzdb.h \
     qrzservermainwindow.h \
     qrzserverminosparameters.h \
-    qrzserverrpc.h
+    qrzserverrpc.h \
+    qrzservice.h
 
 FORMS += \
     qrzconfiguredialog.ui \

@@ -28,6 +28,7 @@
 #include "LogEvents.h"
 #include "MTrace.h"
 #include "callsign.h"
+#include "qrzservice.h"
 
 #include "qrzconfiguredialog.h"
 #include "ui_qrzservermainwindow.h"
@@ -40,6 +41,8 @@
 const char * QRZURL = "https://xmldata.qrz.com/xml/current/?";
 const char * AGENT = "Minos";
 const char * NONSUBCRIBER = "non-subscriber";
+
+QRZService* qrzService;
 
 QrzServerMainWindow::QrzServerMainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -119,6 +122,8 @@ QrzServerMainWindow::QrzServerMainWindow(QWidget *parent)
     qdb = new QRZDB(this);
 
     dbRecords = qdb->getRecordCount();
+
+    qrzService = new QRZService(this);
 
 }
 
