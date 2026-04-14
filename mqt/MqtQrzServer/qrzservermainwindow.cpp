@@ -123,7 +123,14 @@ QrzServerMainWindow::QrzServerMainWindow(QWidget *parent)
 
     dbRecords = qdb->getRecordCount();
 
-    callsignService = new QRZService(this);
+    callsignService = new QRZService(qdb);
+    connect(callsignService,
+            &QRZService::lookupNetworkRequested,
+            this,
+            [this](const QString& call)
+            {
+                askCallsignData(call);
+            });
 
 }
 

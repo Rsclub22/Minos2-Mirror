@@ -27,6 +27,7 @@ SOURCES += \
 
 HEADERS += \
     callsignservice.h \
+    icallsignnetwork.h \
     qrzconfiguredialog.h \
     qrzdb.h \
     qrzservermainwindow.h \

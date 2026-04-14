@@ -3,8 +3,9 @@
 #include "qrzservice.h"
 #include "qrzservermainwindow.h"
 
-QRZService::QRZService(QrzServerMainWindow* owner)
-    : m_owner(owner)
+QRZService::QRZService(QRZDB* db, QObject* parent)
+    : QObject(parent)
+    , m_db(db)
 {
 }
 
@@ -23,19 +24,22 @@ bool QRZService::login()
 bool QRZService::lookupCallsign(const QString& call,
                                 QrzCallsignData& result)
 {
-    // STEP 1: try DB first (reuse existing logic)
-    if (m_owner->askDBCallsignData(call))
+    // --------------------------
+    // DB LOOKUP (service owns DB)
+    // --------------------------
+    if (m_db && m_db->getRecord(call) .getCallsign() == call)
     {
-        result = m_owner->qrzCallsignData;
+        result = m_db->getRecord(call);
         return true;
     }
 
-    // STEP 2: fallback to QRZ network
-    m_owner->askCallsignData(call);
+    // --------------------------
+    // NETWORK FALLBACK
+    // --------------------------
+    // Service should NOT call UI
+    // So we emit a request OR call a network layer (next step)
 
-    // NOTE:
-    // result will be filled later by existing async flow
-    // we preserve behaviour exactly as before
+    emit lookupNetworkRequested(call);  // OR callback style
 
     return false;
 }
