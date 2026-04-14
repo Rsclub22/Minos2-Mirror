@@ -267,6 +267,25 @@ qint16 SecondInstall::getRouterPort()
     return 7778;
 #endif
 }
+qint16 SecondInstall::getUPNPPort()
+{
+    switch(installation)
+    {
+    case 1:
+        return 9999;
+        break;
+    case 2:
+        return 9998;
+        break;
+    default:
+        break;
+    }
+#if defined SECONDINSTALL
+    return 9998;
+#else
+    return 9999;
+#endif
+}
 QString SecondInstall::getLineMapFileName()
 {
     switch(installation)

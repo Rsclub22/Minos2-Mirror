@@ -485,6 +485,10 @@ void appStartup(const QString &pappName)
     QCommandLineOption languageOption({"l", "lang"}, "language", "languageName", "");
     parser.addOption(languageOption);
 
+    QStringList s12 = {"1", "2"};
+    QCommandLineOption secondOption(s12);
+    parser.addOption(secondOption);
+
     QStringList args = QCoreApplication::arguments();
     trace("Arguments " + args.join("|"));
 

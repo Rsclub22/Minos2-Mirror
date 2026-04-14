@@ -107,7 +107,11 @@ void TZConf::startZConf(const QString &name)
     localName = name.trimmed();
 
     // set up the receiver
-    readSocket.bind(UPNP_PORT);
+    bool bindRes = readSocket.bind(SecondInstall::getUPNPPort());
+    if (!bindRes)
+    {
+        trace("Bind failed");
+    }
     connect(&readSocket, &QUdpSocket::readyRead, this, &TZConf::onReadyRead, Qt::ConnectionType(Qt::QueuedConnection | Qt::UniqueConnection));
 
     // Get network interfaces list
@@ -499,7 +503,7 @@ bool UDPSocket::sendMessage(const QString &mess )
 {
     QByteArray packet = mess.toUtf8();
 
-    qint64 res = qus->writeDatagram(packet.data(), packet.length(), /*QHostAddress::Broadcast*/qua.broadcast(), UPNP_PORT);
+    qint64 res = qus->writeDatagram(packet.data(), packet.length(), /*QHostAddress::Broadcast*/qua.broadcast(), SecondInstall::getUPNPPort());
 
     QString err = "No error";
     if (res < 0)

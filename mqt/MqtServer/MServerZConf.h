@@ -26,7 +26,6 @@
 #include <QNetworkInterface>
 #include <QDateTime>
 
-#define UPNP_PORT 9999
 class MinosRouterListener;
 //---------------------------------------------------------------------------
 class Router
