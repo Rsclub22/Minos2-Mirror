@@ -29,6 +29,7 @@
 #include "MTrace.h"
 #include "callsign.h"
 #include "qrzservice.h"
+#include "qrzcqservice.h"
 
 #include "qrzconfiguredialog.h"
 #include "ui_qrzservermainwindow.h"
@@ -123,9 +124,39 @@ QrzServerMainWindow::QrzServerMainWindow(QWidget *parent)
 
     dbRecords = qdb->getRecordCount();
 
+    // select the callsign service
+
+    QString service_fileName = getDirectoryLocation(dlConfiguration) + "/QRZServer.ini";
+    QSettings service_config(service_fileName, QSettings::IniFormat);
+
+    QString provider = service_config.value("provider", "QRZ").toString().toUpper();
+
+    callsignService = nullptr;
+
+    if (provider == "QRZ")
+    {
+        callsignService = new QRZService(qdb, this);
+    }
+    else if (provider == "QRZCQ")
+    {
+        callsignService = new QRZCQService(qdb, this);
+    }
+    else
+    {
+        trace("Unknown provider, defaulting to QRZ");
+        callsignService = new QRZService(qdb, this);
+    }
+
     callsignService = new QRZService(qdb);
+
     connect(callsignService,
-            &QRZService::lookupNetworkRequested,
+            &CallsignService::loginRequest,
+            this,
+            &QrzServerMainWindow::sendUrl);
+
+
+    connect(callsignService,
+            &CallsignService::lookupNetworkRequested,
             this,
             [this](const QString& call)
             {
@@ -208,6 +239,20 @@ void QrzServerMainWindow::quit()
 
 void QrzServerMainWindow::logon()
 {
+    if (!callsignService)
+        return;
+
+    if (logonCallsign.isEmpty() || password.isEmpty())
+    {
+        onConfigure();
+    }
+
+    callsignService->login(logonCallsign, password);
+}
+
+/*
+void QrzServerMainWindow::logon()
+{
     if (qrzServerStateFlags.getAskCallsignFlag() || qrzServerStateFlags.getAskLogonFlag())
     {
         return;
@@ -227,6 +272,7 @@ void QrzServerMainWindow::logon()
     addTextToLogWindow(tr("Logging on to QRZ.com with callsign: %1").arg(logonCallsign));
     sendUrl(logonQrz);
 }
+*/
 
 bool QrzServerMainWindow::askDBCallsignData(QString callsign)
 {

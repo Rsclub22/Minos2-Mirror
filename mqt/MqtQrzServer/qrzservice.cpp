@@ -4,7 +4,7 @@
 #include "qrzservermainwindow.h"
 
 QRZService::QRZService(QRZDB* db, QObject* parent)
-    : QObject(parent)
+    : CallsignService(parent)
     , m_db(db)
 {
 }
@@ -14,10 +14,29 @@ QString QRZService::name() const
     return "QRZ";
 }
 
-bool QRZService::login()
+void QRZService::login(const QString& user_, const QString& password_)
 {
-    // still handled by MainWindow for now
-    return true;
+    if (loginInProgress)
+        return;
+
+    loginInProgress = true;
+
+    user = user_.trimmed();
+    password = password_.trimmed();
+
+    if (user.isEmpty() || password.isEmpty())
+    {
+        emit loginFailed("Missing credentials");
+        loginInProgress = false;
+        return;
+    }
+
+    QString url = QString("https://xmldata.qrz.com/xml/current/?")
+                  + "username=" + user
+                  + ";password=" + password
+                  + ";agent=Minos";
+
+    emit loginRequest(url);
 }
 
 /*

@@ -19,6 +19,7 @@ SOURCES += \
     callsignservice.cpp \
     main.cpp \
     qrzconfiguredialog.cpp \
+    qrzcqservice.cpp \
     qrzdb.cpp \
     qrzservermainwindow.cpp \
     qrzserverminosparameters.cpp \
@@ -29,6 +30,7 @@ HEADERS += \
     callsignservice.h \
     icallsignnetwork.h \
     qrzconfiguredialog.h \
+    qrzcqservice.h \
     qrzdb.h \
     qrzservermainwindow.h \
     qrzserverminosparameters.h \

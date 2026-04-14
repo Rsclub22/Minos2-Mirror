@@ -163,7 +163,7 @@ private:
     QVector<QrzServerMessage> qrzRequestQueue;
     QrzServerMessage requestedStation;
 
-    QRZService* callsignService = nullptr;
+    CallsignService* callsignService = nullptr;
 
     int parseTest();
 

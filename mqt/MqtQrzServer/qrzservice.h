@@ -8,7 +8,7 @@
 
 class QrzServerMainWindow;
 
-class QRZService : public QObject, public CallsignService
+class QRZService : public CallsignService
 {
     Q_OBJECT
 
@@ -17,15 +17,18 @@ public:
 
     QString name() const override;
 
-    bool login() override;
+    void login(const QString& user, const QString& password) override;
     bool lookupCallsign(const QString& call, QrzCallsignData& result) override;
 
-signals:
 
-    void lookupNetworkRequested(const QString& call);
 
 private:
     QRZDB* m_db;
+
+    bool loginInProgress = false;
+    QString user;
+    QString password;
+
 };
 
 #endif // QRZSERVICE_H
