@@ -25,6 +25,7 @@
 
 #include "CommandReader.h"
 #include "qrzServerCommon.h"
+#include "CallsignService.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class QrzServerMainWindow; }
@@ -64,6 +65,8 @@ private:
     QString message;
     QString key;
     QString subExp;
+
+
 
 };
 
@@ -158,6 +161,8 @@ private:
 
     QVector<QrzServerMessage> qrzRequestQueue;
     QrzServerMessage requestedStation;
+
+    CallsignService* callsignService = nullptr;
 
     int parseTest();
 
