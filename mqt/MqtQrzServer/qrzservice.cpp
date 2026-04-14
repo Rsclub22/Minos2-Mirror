@@ -15,15 +15,27 @@ QString QRZService::name() const
 
 bool QRZService::login()
 {
-    // TEMP: just call existing MainWindow logic
+    // still handled by MainWindow for now
     return true;
 }
+
 
 bool QRZService::lookupCallsign(const QString& call,
                                 QrzCallsignData& result)
 {
-    // TEMP: DO NOT CHANGE BEHAVIOUR YET
-    // we will wire this properly in Step 2
+    // STEP 1: try DB first (reuse existing logic)
+    if (m_owner->askDBCallsignData(call))
+    {
+        result = m_owner->qrzCallsignData;
+        return true;
+    }
+
+    // STEP 2: fallback to QRZ network
+    m_owner->askCallsignData(call);
+
+    // NOTE:
+    // result will be filled later by existing async flow
+    // we preserve behaviour exactly as before
 
     return false;
 }

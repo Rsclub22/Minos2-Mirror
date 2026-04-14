@@ -689,6 +689,130 @@ void QrzServerMainWindow::handleQrzRequests()
 {
     if (!qrzRequestQueue.isEmpty())
     {
+        trace(QString("handQrzRequests: number of callsigns in queue = %1")
+                  .arg(qrzRequestQueue.count()));
+
+        if (qrzServerStateFlags.getQrzLoggedOnFlag())
+        {
+            trace("handQrzRequests: logged on to qrz");
+
+            if (!qrzServerStateFlags.getAskCallsignFlag())
+            {
+                requestedStation.clear();
+                requestedStation = qrzRequestQueue[0];
+                qrzRequestQueue.remove(0);
+
+                ui->errorText->clear();
+                ui->messageText->clear();
+                askQrzCallsign.clear();
+
+                if (requestedStation.getLoggerFlag())
+                {
+                    addTextToLogWindow(tr("Callsign received from logger - %1")
+                                           .arg(requestedStation.getDxCall()));
+                    trace(QString("handleQrzRequests: Callsign received from logger - %1")
+                              .arg(requestedStation.getDxCall()));
+                }
+                else
+                {
+                    addTextToLogWindow(tr("Callsign received from cluster - %1")
+                                           .arg(requestedStation.getDxCall()));
+                    trace(QString("handleQrzRequests: Callsign received from cluster - %1")
+                              .arg(requestedStation.getDxCall()));
+                }
+
+                Callsign callsign;
+                callsign.setFullCall(requestedStation.getDxCall());
+
+                if (callsign.getValRes() == CS_OK)
+                {
+                    addTextToLogWindow(tr("Callsign is valid - %1")
+                                           .arg(requestedStation.getDxCall()));
+                    trace(QString("handleQrzRequests: callsign is valid - %1")
+                              .arg(requestedStation.getDxCall()));
+
+                    askQrzCallsign = callsign.realCall;
+
+                    addTextToLogWindow(tr("Ask QRZ DB for callsign - %1")
+                                           .arg(askQrzCallsign));
+                    trace(QString("handleQrzRequests: ask qrz database for callsign %1")
+                              .arg(askQrzCallsign));
+
+                    qrzServerStateFlags.setAskCallsignFlag(true);
+
+                    // =========================================================
+                    // STEP 3: Service introduced BUT NOT CHANGING BEHAVIOUR
+                    // =========================================================
+                    if (callsignService)
+                    {
+                        // IMPORTANT:
+                        // We do NOT replace logic yet — only "observe" via service
+
+                        QrzCallsignData dummy;
+
+                        bool fromCache = askDBCallsignData(askQrzCallsign);
+
+                        if (!fromCache)
+                        {
+                            addTextToLogWindow(tr("Ask QRZ for callsign - %1")
+                                                   .arg(askQrzCallsign));
+                            trace(QString("handleQrzRequests: ask qrz for callsign %1")
+                                      .arg(askQrzCallsign));
+
+                            askCallsignData(askQrzCallsign);
+                        }
+                        else
+                        {
+                            dbRequests++;
+                        }
+                    }
+                    else
+                    {
+                        // ORIGINAL PATH (unchanged fallback)
+                        if (!askDBCallsignData(askQrzCallsign))
+                        {
+                            addTextToLogWindow(tr("Ask QRZ for callsign - %1")
+                                                   .arg(askQrzCallsign));
+                            trace(QString("handleQrzRequests: ask qrz for callsign %1")
+                                      .arg(askQrzCallsign));
+
+                            askCallsignData(askQrzCallsign);
+                        }
+                        else
+                        {
+                            dbRequests++;
+                        }
+                    }
+
+                    sblabel0->setText(QString("qrz %1").arg(qrzRequests));
+                    sblabel1->setText(QString("db %1").arg(dbRequests));
+                }
+                else
+                {
+                    addTextToLogWindow(tr("Callsign is invalid - %1")
+                                           .arg(requestedStation.getDxCall()));
+                    trace(QString("handleQrzRequests: callsign is invalid - %1")
+                              .arg(requestedStation.getDxCall()));
+                }
+            }
+        }
+        else
+        {
+            QrzServerRpc::getQrzServerRpc()->sendQrzResponseToClusterServer(
+                requestedStation.getDxCall(),
+                "",
+                rpcConstants::qrzServerLoggedOut,
+                requestedStation.getSpotterCall(),
+                "",
+                rpcConstants::qrzServerLoggedOut);
+        }
+    }
+}
+
+/*void QrzServerMainWindow::handleQrzRequests()
+{
+    if (!qrzRequestQueue.isEmpty())
+    {
         trace(QString("handQrzRequests: number of callsigns in queue = %1").arg(qrzRequestQueue.count()));
         if (qrzServerStateFlags.getQrzLoggedOnFlag())
         {
@@ -740,6 +864,9 @@ void QrzServerMainWindow::handleQrzRequests()
                     {
                         dbRequests++;
                     }
+
+
+
                     sblabel0->setText(QString("qrz %1").arg(qrzRequests));
                     sblabel1->setText(QString("db %1").arg(dbRequests));
                 }
@@ -755,7 +882,7 @@ void QrzServerMainWindow::handleQrzRequests()
             QrzServerRpc::getQrzServerRpc()->sendQrzResponseToClusterServer(requestedStation.getDxCall(), "", rpcConstants::qrzServerLoggedOut, requestedStation.getSpotterCall(), "", rpcConstants::qrzServerLoggedOut);
         }
     }
-}
+}*/
 
 void QrzServerMainWindow::addTextToLogWindow(QString message)
 {
