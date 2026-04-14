@@ -20,7 +20,7 @@ bool QRZService::login()
     return true;
 }
 
-
+/*
 bool QRZService::lookupCallsign(const QString& call,
                                 QrzCallsignData& result)
 {
@@ -41,5 +41,21 @@ bool QRZService::lookupCallsign(const QString& call,
 
     emit lookupNetworkRequested(call);  // OR callback style
 
+    return false;
+}
+*/
+
+bool QRZService::lookupCallsign(const QString& call,
+                                QrzCallsignData& result)
+{
+    QrzCallsignData data = m_db->getRecord(call);
+
+    if (!data.getCallsign().isEmpty())
+    {
+        result = data;
+        return true;
+    }
+
+    emit lookupNetworkRequested(call);
     return false;
 }
