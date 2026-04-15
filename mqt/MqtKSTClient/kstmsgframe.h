@@ -44,6 +44,7 @@ private slots:
     void on_messageTable_clicked(const QModelIndex &index);
     void on_clearSelectedMessage_clicked();
     void on_messageFilter_textChanged(const QString &arg1);
+    void onListCompressionChanged(qreal);
 private:
     Ui::KSTMsgFrame *ui;
 };

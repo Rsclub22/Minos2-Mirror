@@ -332,11 +332,6 @@ void MinosLoggerEvents::SendMatchTreeSelected(MatchType m, BaseContestLog *c, QS
     emit mle.MatchTreeSelected(m, c, basename, selected);
 }
 //---------------------------------------------------------------------------
-void MinosLoggerEvents::SendListCompressionChanged(qreal hmult)
-{
-    emit mle.listCompressionChanged(hmult);
-}
-//---------------------------------------------------------------------------
 
 void MinosLoggerEvents::SendAfterQSOSaved(BaseContestLog *c, QSharedPointer<BaseContact> tct)
 {

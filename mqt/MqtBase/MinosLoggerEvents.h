@@ -99,7 +99,6 @@ signals:
    void MatchTreeSelected(MatchType m, BaseContestLog *c, QString basename, QItemSelection selected);
 
    void FontChanged();
-   void listCompressionChanged(qreal hmult);
 
    void afterQSOSaved(BaseContestLog *c, QSharedPointer<BaseContact> tct);
    void wsjtxDatagram(int instance, QByteArray *);
@@ -171,7 +170,6 @@ public:
     static void SendXferEnabled(bool s, BaseContestLog *c, QString basename);
     static void SendXferPressed(BaseContestLog *c, QString basename);
     static void SendMatchTreeSelected(MatchType m, BaseContestLog *c, QString basename, QItemSelection selected);
-    static void SendListCompressionChanged(qreal hmult);
 
     static void SendAfterQSOSaved(BaseContestLog *c, QSharedPointer<BaseContact> tct);
     static void SendWsjtxDatagram(int instance, QByteArray *);

@@ -50,6 +50,7 @@ private slots:
     void on_maxDistanceEdit_editingFinished();
     void on_workedCallscb_stateChanged(int);
 
+    void onListCompressionChanged(qreal);
 private:
     Ui::KSTCallsFrame *ui;
 };

@@ -134,6 +134,8 @@ private:
     int ASPort = 9872;
     int ASTimeout = 10;
 
+    int lcf = 100;
+
     QString curScreenLayout = "default";
 
     void closeEvent(QCloseEvent *event) override;
@@ -281,6 +283,9 @@ public:
     void clearScreenLayout();
     void buildScreenLayout();
     void buildScreen(SCScreen &s, int t);
+    int getLcf() const;
+    void setLcf(int newLcf);
+
 private slots:
     void CloseTimerTimer();
 

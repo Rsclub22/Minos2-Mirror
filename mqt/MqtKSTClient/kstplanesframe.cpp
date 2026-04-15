@@ -1,6 +1,7 @@
 #include <QSharedPointer>
 
 #include "kstplanesframe.h"
+#include "AppStartup.h"
 #include "htmldelegate.h"
 #include "kstcallsframe.h"
 #include "kstasactiveframe.h"
@@ -26,8 +27,9 @@ KSTPlanesFrame::KSTPlanesFrame(QWidget *parent)
 
     ui->planesView->setModel(&kstPlanesFilterModel);
 
-    PlanesDelegate = QSharedPointer<HtmlDelegate>( new HtmlDelegate("PlanesDelegate", 1.0, 1.0, this)) ;
+    PlanesDelegate = QSharedPointer<HtmlDelegate>( new HtmlDelegate("PlanesDelegate", 1.0, mainWindow->getLcf()/100.0, this)) ;
     ui->planesView->setItemDelegate(PlanesDelegate.data());
+    kstPlanesModel.delegate = PlanesDelegate;
 
     QHeaderView *verticalHeader = ui->planesView->verticalHeader();
     verticalHeader->setVisible(false);
@@ -38,13 +40,18 @@ KSTPlanesFrame::KSTPlanesFrame(QWidget *parent)
 
     connect( ui->planesView->horizontalHeader(), &QHeaderView::sectionResized,
             this, &KSTPlanesFrame::on_sectionResized, Qt::UniqueConnection);
+    connect(&appStart, &AppStart::listCompressionChanged,
+            this, &KSTPlanesFrame::onListCompressionChanged, Qt::QueuedConnection);
 }
 
 KSTPlanesFrame::~KSTPlanesFrame()
 {
     delete ui;
 }
-
+void KSTPlanesFrame::onListCompressionChanged(qreal)
+{
+    kstPlanesFilterModel.invalidate();
+}
 void KSTPlanesFrame::on_FontChanged()
 {
 

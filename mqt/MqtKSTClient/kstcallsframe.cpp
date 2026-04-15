@@ -1,6 +1,7 @@
 #include <QKeyEvent>
 
 #include "kstcallsframe.h"
+#include "AppStartup.h"
 #include "MinosRPC.h"
 #include "QtUtils.h"
 #include "RPCCommandConstants.h"
@@ -35,7 +36,7 @@ KSTCallsFrame::KSTCallsFrame(QWidget *parent)
     ui->CSTable ->setModel(&kstCallFilterModel);
     ui->CSTable->horizontalHeader()->setStretchLastSection(true);
 
-    CSDelegate = QSharedPointer<HtmlDelegate>( new HtmlDelegate("CSDelegate", 1.0, 1.0, this)) ;
+    CSDelegate = QSharedPointer<HtmlDelegate>( new HtmlDelegate("CSDelegate", 1.0, mainWindow->getLcf()/100.0, this)) ;
     ui->CSTable->setItemDelegate(CSDelegate.data());
     kstCallModel.delegate = CSDelegate;
 
@@ -64,11 +65,17 @@ KSTCallsFrame::KSTCallsFrame(QWidget *parent)
     connect(ui->CSTable->selectionModel(),&QItemSelectionModel::selectionChanged,
             this, &KSTCallsFrame::onCSTableSelectionChanged);
 
+    connect(&appStart, &AppStart::listCompressionChanged,
+            this, &KSTCallsFrame::onListCompressionChanged, Qt::QueuedConnection);
 }
 
 KSTCallsFrame::~KSTCallsFrame()
 {
     delete ui;
+}
+void KSTCallsFrame::onListCompressionChanged(qreal)
+{
+    kstCallFilterModel.invalidate();
 }
 void KSTCallsFrame::showAircout(bool s)
 {

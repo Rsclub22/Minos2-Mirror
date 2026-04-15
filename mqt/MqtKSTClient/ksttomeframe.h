@@ -38,6 +38,7 @@ private slots:
     void on_meepTable_clicked(const QModelIndex &index);
     void on_toFromMecb_stateChanged(int arg1);
 
+    void onListCompressionChanged(qreal);
 private:
     Ui::KSTTomeFrame *ui;
 };

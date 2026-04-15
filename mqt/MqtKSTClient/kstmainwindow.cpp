@@ -93,6 +93,7 @@ void KSTMainWindow::getSettings(QSettings &settings)
     myLoc = settings.value("locator", "").toString();
 
     splitIcons = settings.value("splitIcons", false).toBool();
+    lcf = settings.value("lcf", 100).toInt();
 
 }
 
@@ -311,6 +312,16 @@ void KSTMainWindow::changeEvent( QEvent* e )
     }
 }
 
+
+int KSTMainWindow::getLcf() const
+{
+    return lcf;
+}
+
+void KSTMainWindow::setLcf(int newLcf)
+{
+    lcf = newLcf;
+}
 
 void KSTMainWindow::closeEvent(QCloseEvent *event)
 {
@@ -1464,6 +1475,7 @@ bool KSTMainWindow::doConfiguration(bool showForm)
     conf.tnservername = TNServerName;
     conf.tnserverport = TNServerPort;
 
+    conf.lcf = lcf;
 
     int ret = QDialog::Accepted;
     if (showForm)
@@ -1497,6 +1509,15 @@ bool KSTMainWindow::doConfiguration(bool showForm)
         ASTimeout = conf.ASTimeout;
 
         QSettings settings(iniName, QSettings::IniFormat);
+
+        bool doRebuild = false;
+        if (conf.lcf != lcf)
+        {
+            lcf = conf.lcf;
+            settings.setValue("lcf", lcf);
+            // and we need to trigger a rebuild
+            doRebuild = true;
+        }
 
         settings.setValue("hostname", KSTserverName);
         settings.setValue("port", KSTserverPort);
@@ -1543,6 +1564,10 @@ bool KSTMainWindow::doConfiguration(bool showForm)
             {
                 reconnect();
             }
+        }
+        if (doRebuild)
+        {
+            appStart.emitListCompressionChanged(lcf/100.0);
         }
         return true;
     }

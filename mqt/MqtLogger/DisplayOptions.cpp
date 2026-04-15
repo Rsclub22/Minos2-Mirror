@@ -287,7 +287,7 @@ void DisplayOptions::finalise()
     {
         TContestApp::getContestApp() ->setIntDisplayProfile(edpListCompression, nlcf);
         TContestApp::getContestApp() ->displayBundle.flushProfile();
-        MinosLoggerEvents::SendListCompressionChanged(nlcf/100.0);
+        appStart.emitListCompressionChanged(nlcf/100.0);
         doSelectSession = true;
     }
 

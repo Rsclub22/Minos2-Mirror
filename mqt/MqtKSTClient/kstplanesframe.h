@@ -32,6 +32,7 @@ private slots:
     void on_sectionMoved(int, int, int);
     void on_showInAS_clicked();
     void on_showMPath_clicked();
+    void onListCompressionChanged(qreal);
 public slots:
     void acChanged(QSharedPointer<KstUser> user);
 private:

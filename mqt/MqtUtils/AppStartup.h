@@ -45,8 +45,10 @@ public:
     AppStart(){}
     void emitFontChanged();
 
+    void emitListCompressionChanged(qreal hmult);
 signals:
     void fontChanged();
+    void listCompressionChanged(qreal hmult);
 };
 
 extern AppStart appStart;

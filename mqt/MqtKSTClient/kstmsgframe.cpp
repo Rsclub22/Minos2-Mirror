@@ -2,6 +2,7 @@
 #include <QSettings>
 #include <QKeyEvent>
 
+#include "AppStartup.h"
 #include "delayedaction.h"
 #include "kstcallsframe.h"
 #include "kstloginframe.h"
@@ -28,10 +29,10 @@ KSTMsgFrame::KSTMsgFrame(QWidget *parent)
     ui->messageFilter->setFocus();
     ui->messageTable->horizontalHeader()->setStretchLastSection(true);
 
-    messageDelegate = QSharedPointer<HtmlDelegate>( new HtmlDelegate("messageDelegate", 1.0, 1.0, this)) ;
+    messageDelegate = QSharedPointer<HtmlDelegate>( new HtmlDelegate("messageDelegate", 1.0, mainWindow->getLcf()/100.0, this)) ;
     ui->messageTable->setItemDelegate(messageDelegate.data());
-
     kstMessageModel.delegate = messageDelegate;
+
     ui->messageTable->setModel(&kstMessageFilterModel);
 
     QHeaderView *verticalHeader = ui->messageTable->verticalHeader();
@@ -47,13 +48,20 @@ KSTMsgFrame::KSTMsgFrame(QWidget *parent)
     connect( ui->messageTable->horizontalHeader(), &QHeaderView::sectionResized,
             this, &KSTMsgFrame::on_sectionResized, Qt::UniqueConnection);
 
+    connect(&appStart, &AppStart::listCompressionChanged,
+            this, &KSTMsgFrame::onListCompressionChanged, Qt::QueuedConnection);
 }
 
 KSTMsgFrame::~KSTMsgFrame()
 {
     delete ui;
 }
-
+void KSTMsgFrame::onListCompressionChanged(qreal)
+{
+    QHeaderView *verticalHeader = ui->messageTable->verticalHeader();
+    verticalHeader->setDefaultSectionSize(messageDelegate->docSize("Memxx").height());
+    kstMessageFilterModel.invalidate();
+}
 void KSTMsgFrame::setServices(QStringList services)
 {
     ui->messageChatFilter->addItem(tr("Active"));

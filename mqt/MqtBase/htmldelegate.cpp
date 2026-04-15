@@ -24,6 +24,7 @@
 #include <QAbstractTextDocumentLayout>
 #include <QPainter>
 
+#include "AppStartup.h"
 #include "MinosLoggerEvents.h"
 
 #include "htmldelegate.h"
@@ -32,7 +33,7 @@
 HtmlDelegate::HtmlDelegate(const QString &t, qreal wmult, qreal hmult, QWidget *widg)
     :table(t), wmult(wmult), hmult(hmult), widget(widg)
 {
-    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::listCompressionChanged,
+    connect(&appStart, &AppStart::listCompressionChanged,
             this, &HtmlDelegate::onListCompressionChanged);
 
 }

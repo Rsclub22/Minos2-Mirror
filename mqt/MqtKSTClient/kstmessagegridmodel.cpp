@@ -189,6 +189,15 @@ QVariant KstMessageGridModel::headerData( int section, Qt::Orientation orientati
         }
         return cell;
     }
+    else if (orientation == Qt::Vertical && role == Qt::SizeHintRole)
+    {
+        if (delegate)
+        {
+            QString s = "Memxx";
+            QSize r = delegate->docSize(s);
+            return r;
+        }
+    }
     return QVariant();
 }
 int KstMessageGridModel::columnCount( const QModelIndex & /*parent*/ ) const

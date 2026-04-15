@@ -775,3 +775,7 @@ void AppStart::emitFontChanged()
 {
     emit fontChanged();
 }
+void AppStart::emitListCompressionChanged(qreal hmult)
+{
+    emit listCompressionChanged(hmult);
+}

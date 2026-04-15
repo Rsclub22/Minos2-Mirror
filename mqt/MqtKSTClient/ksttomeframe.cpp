@@ -2,6 +2,7 @@
 #include <QSettings>
 #include <QKeyEvent>
 
+#include "AppStartup.h"
 #include "delayedaction.h"
 #include "kstmsgframe.h"
 #include "kstcallsframe.h"
@@ -23,7 +24,7 @@ KSTTomeFrame::KSTTomeFrame(QWidget *parent)
     ui->meepTable->setModel(&kstMeepFilterModel);
     ui->meepTable->horizontalHeader()->setStretchLastSection(true);
 
-    meepDelegate = QSharedPointer<HtmlDelegate>( new HtmlDelegate("meepDelegate", 1.0, 1.0, this)) ;
+    meepDelegate = QSharedPointer<HtmlDelegate>( new HtmlDelegate("meepDelegate", 1.0, mainWindow->getLcf()/100.0, this)) ;
     ui->meepTable->setItemDelegate(meepDelegate.data());
 
     QHeaderView *verticalHeader = ui->meepTable->verticalHeader();
@@ -41,13 +42,20 @@ KSTTomeFrame::KSTTomeFrame(QWidget *parent)
 
     kstMeepFilterModel.setSourceModel(&mainWindow->kstMsgFrame->kstMessageModel);
 
+    connect(&appStart, &AppStart::listCompressionChanged,
+            this, &KSTTomeFrame::onListCompressionChanged, Qt::QueuedConnection);
 }
 
 KSTTomeFrame::~KSTTomeFrame()
 {
     delete ui;
 }
-
+void KSTTomeFrame::onListCompressionChanged(qreal)
+{
+    QHeaderView *verticalHeader = ui->meepTable->verticalHeader();
+    verticalHeader->setDefaultSectionSize(meepDelegate->docSize("Memxx").height());
+    kstMeepFilterModel.invalidate();
+}
 void KSTTomeFrame::on_sectionResized(int, int, int)
 {
     RegSettings settings;
