@@ -15,7 +15,7 @@ set QtTools=C:\Qt\Tools\mingw810_32\bin
 set QtKit=C:\Qt\5.15.2\mingw81_32\bin
 set QtOpenSSL="C:\Qt\Tools\OpenSSL\Win_x86\bin"
 set QtLicenses="C:\Qt\Licenses"
-set HamlibPath="C:\Projects\hamlib-w32-4.7.0"
+set HamlibPath="C:\Projects\hamlib-w32-4.7.1"
 set MMVARIPath="C:\Ham\MMVARI"
 
 if exist %QtKit% goto kitInstalled
