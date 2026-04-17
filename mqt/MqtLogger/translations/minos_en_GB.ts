@@ -2284,12 +2284,10 @@ Double click on an edge square to extend the area of the map.</source>
     </message>
     <message>
         <location filename="../loggerscreenoptions.cpp" line="9"/>
-        <location filename="../loggerscreenoptions.cpp" line="9"/>
         <source>Chat Display</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../loggerscreenoptions.cpp" line="10"/>
         <location filename="../loggerscreenoptions.cpp" line="10"/>
         <source>Cluster Display</source>
         <translation type="unfinished"></translation>
@@ -2316,18 +2314,15 @@ Double click on an edge square to extend the area of the map.</source>
     </message>
     <message>
         <location filename="../loggerscreenoptions.cpp" line="13"/>
-        <location filename="../loggerscreenoptions.cpp" line="13"/>
         <source>QSO Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../loggerscreenoptions.cpp" line="14"/>
-        <location filename="../loggerscreenoptions.cpp" line="14"/>
         <source>Rig Control</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../loggerscreenoptions.cpp" line="15"/>
         <location filename="../loggerscreenoptions.cpp" line="15"/>
         <source>HF Band Switching</source>
         <translation type="unfinished"></translation>
@@ -2344,30 +2339,25 @@ Double click on an edge square to extend the area of the map.</source>
     </message>
     <message>
         <location filename="../loggerscreenoptions.cpp" line="17"/>
-        <location filename="../loggerscreenoptions.cpp" line="17"/>
         <source>Rotator Control</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../loggerscreenoptions.cpp" line="18"/>
         <location filename="../loggerscreenoptions.cpp" line="18"/>
         <source>SkyScan Control</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../loggerscreenoptions.cpp" line="19"/>
-        <location filename="../loggerscreenoptions.cpp" line="19"/>
         <source>Rotator Compass Display</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../loggerscreenoptions.cpp" line="20"/>
-        <location filename="../loggerscreenoptions.cpp" line="20"/>
         <source>Rotator Presets</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../loggerscreenoptions.cpp" line="21"/>
         <location filename="../loggerscreenoptions.cpp" line="21"/>
         <source>SkyScan Presets</source>
         <translation type="unfinished"></translation>
@@ -2404,12 +2394,10 @@ Double click on an edge square to extend the area of the map.</source>
     </message>
     <message>
         <location filename="../loggerscreenoptions.cpp" line="25"/>
-        <location filename="../loggerscreenoptions.cpp" line="25"/>
         <source>WSJT-X Connector</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../loggerscreenoptions.cpp" line="26"/>
         <location filename="../loggerscreenoptions.cpp" line="26"/>
         <source>Bandmap Display</source>
         <translation type="unfinished"></translation>
@@ -2426,24 +2414,20 @@ Double click on an edge square to extend the area of the map.</source>
     </message>
     <message>
         <location filename="../loggerscreenoptions.cpp" line="28"/>
-        <location filename="../loggerscreenoptions.cpp" line="28"/>
         <source>Keyer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../loggerscreenoptions.cpp" line="29"/>
         <location filename="../loggerscreenoptions.cpp" line="29"/>
         <source>QRZ Display</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../loggerscreenoptions.cpp" line="30"/>
-        <location filename="../loggerscreenoptions.cpp" line="30"/>
         <source>QSO Map</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../loggerscreenoptions.cpp" line="31"/>
         <location filename="../loggerscreenoptions.cpp" line="31"/>
         <source>Data Modes Buttons</source>
         <translation type="unfinished"></translation>

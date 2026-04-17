@@ -2350,12 +2350,10 @@ Double-cliquer sur un carré d&apos;arête pour étendre la zone de la carte.</t
     </message>
     <message>
         <location filename="../loggerscreenoptions.cpp" line="9"/>
-        <location filename="../loggerscreenoptions.cpp" line="9"/>
         <source>Chat Display</source>
         <translation type="unfinished">Affichage du Chat</translation>
     </message>
     <message>
-        <location filename="../loggerscreenoptions.cpp" line="10"/>
         <location filename="../loggerscreenoptions.cpp" line="10"/>
         <source>Cluster Display</source>
         <translation type="unfinished">Affichage du cluster</translation>
@@ -2382,18 +2380,15 @@ Double-cliquer sur un carré d&apos;arête pour étendre la zone de la carte.</t
     </message>
     <message>
         <location filename="../loggerscreenoptions.cpp" line="13"/>
-        <location filename="../loggerscreenoptions.cpp" line="13"/>
         <source>QSO Edit</source>
         <translation type="unfinished">Entrée/modification de QSO</translation>
     </message>
     <message>
         <location filename="../loggerscreenoptions.cpp" line="14"/>
-        <location filename="../loggerscreenoptions.cpp" line="14"/>
         <source>Rig Control</source>
         <translation type="unfinished">Contrôle de l&apos;appareil</translation>
     </message>
     <message>
-        <location filename="../loggerscreenoptions.cpp" line="15"/>
         <location filename="../loggerscreenoptions.cpp" line="15"/>
         <source>HF Band Switching</source>
         <translation type="unfinished">Commutation de bande HF</translation>
@@ -2410,30 +2405,25 @@ Double-cliquer sur un carré d&apos;arête pour étendre la zone de la carte.</t
     </message>
     <message>
         <location filename="../loggerscreenoptions.cpp" line="17"/>
-        <location filename="../loggerscreenoptions.cpp" line="17"/>
         <source>Rotator Control</source>
         <translation type="unfinished">Contrôle du rotateur</translation>
     </message>
     <message>
-        <location filename="../loggerscreenoptions.cpp" line="18"/>
         <location filename="../loggerscreenoptions.cpp" line="18"/>
         <source>SkyScan Control</source>
         <translation type="unfinished">Contrôle du SkyScan</translation>
     </message>
     <message>
         <location filename="../loggerscreenoptions.cpp" line="19"/>
-        <location filename="../loggerscreenoptions.cpp" line="19"/>
         <source>Rotator Compass Display</source>
         <translation type="unfinished">Affichage du Compas de rotateur</translation>
     </message>
     <message>
         <location filename="../loggerscreenoptions.cpp" line="20"/>
-        <location filename="../loggerscreenoptions.cpp" line="20"/>
         <source>Rotator Presets</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../loggerscreenoptions.cpp" line="21"/>
         <location filename="../loggerscreenoptions.cpp" line="21"/>
         <source>SkyScan Presets</source>
         <translation type="unfinished">Préconfigurations du SkyScan</translation>
@@ -2470,12 +2460,10 @@ Double-cliquer sur un carré d&apos;arête pour étendre la zone de la carte.</t
     </message>
     <message>
         <location filename="../loggerscreenoptions.cpp" line="25"/>
-        <location filename="../loggerscreenoptions.cpp" line="25"/>
         <source>WSJT-X Connector</source>
         <translation type="unfinished">Connexion WSJT-X</translation>
     </message>
     <message>
-        <location filename="../loggerscreenoptions.cpp" line="26"/>
         <location filename="../loggerscreenoptions.cpp" line="26"/>
         <source>Bandmap Display</source>
         <translation type="unfinished">Afficher Bandmap</translation>
@@ -2492,24 +2480,20 @@ Double-cliquer sur un carré d&apos;arête pour étendre la zone de la carte.</t
     </message>
     <message>
         <location filename="../loggerscreenoptions.cpp" line="28"/>
-        <location filename="../loggerscreenoptions.cpp" line="28"/>
         <source>Keyer</source>
         <translation type="unfinished">Keyer</translation>
     </message>
     <message>
-        <location filename="../loggerscreenoptions.cpp" line="29"/>
         <location filename="../loggerscreenoptions.cpp" line="29"/>
         <source>QRZ Display</source>
         <translation type="unfinished">Affichage du QRZ</translation>
     </message>
     <message>
         <location filename="../loggerscreenoptions.cpp" line="30"/>
-        <location filename="../loggerscreenoptions.cpp" line="30"/>
         <source>QSO Map</source>
         <translation type="unfinished">Carte QSO</translation>
     </message>
     <message>
-        <location filename="../loggerscreenoptions.cpp" line="31"/>
         <location filename="../loggerscreenoptions.cpp" line="31"/>
         <source>Data Modes Buttons</source>
         <translation type="unfinished">Boutons Data [???] The type of panel containing data mode F key buttons??</translation>

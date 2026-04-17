@@ -5,42 +5,35 @@
     <name>AuxTypeOption</name>
     <message>
         <location filename="../auxentries.cpp" line="5"/>
-        <location filename="../auxentries.cpp" line="5"/>
         <source>Clock</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../auxentries.cpp" line="6"/>
         <location filename="../auxentries.cpp" line="6"/>
         <source>DXCC</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../auxentries.cpp" line="7"/>
-        <location filename="../auxentries.cpp" line="7"/>
         <source>District</source>
         <translation type="unfinished">District</translation>
     </message>
     <message>
-        <location filename="../auxentries.cpp" line="8"/>
         <location filename="../auxentries.cpp" line="8"/>
         <source>Memories</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../auxentries.cpp" line="9"/>
-        <location filename="../auxentries.cpp" line="9"/>
         <source>Locator Map</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../auxentries.cpp" line="10"/>
-        <location filename="../auxentries.cpp" line="10"/>
         <source>Locator Tree</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../auxentries.cpp" line="11"/>
         <location filename="../auxentries.cpp" line="11"/>
         <source>Stats</source>
         <translation type="unfinished"></translation>
@@ -325,48 +318,40 @@
     </message>
     <message>
         <location filename="../profiles.cpp" line="56"/>
-        <location filename="../profiles.cpp" line="56"/>
         <source>WSJTX Path to record incoming UDP</source>
         <translation>WSJTX Chemin pour enregistrer UDP entrants</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="77"/>
         <location filename="../profiles.cpp" line="77"/>
         <source>UDP Contacts Enabled</source>
         <translation>UDP: Contacts activés</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="93"/>
-        <location filename="../profiles.cpp" line="93"/>
         <source>WSJTX re-broadcast Enabled</source>
         <translation>WSJTX: Rediffusion activée</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="89"/>
         <location filename="../profiles.cpp" line="89"/>
         <source>UDP ADIF Enabled</source>
         <translation>UDP ADIF activé</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="78"/>
-        <location filename="../profiles.cpp" line="78"/>
         <source>UDP Contacts Address</source>
         <translation>UDP: Adresse pour les Contacts</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="79"/>
         <location filename="../profiles.cpp" line="79"/>
         <source>UDP Contacts Port</source>
         <translation>UDP: Port pour les Contacts</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="90"/>
-        <location filename="../profiles.cpp" line="90"/>
         <source>UDP ADIF Address</source>
         <translation>UDP: Adresse pour ADIF</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="91"/>
         <location filename="../profiles.cpp" line="91"/>
         <source>UDP ADIF Port</source>
         <translation>UDP ADIF numéro de port</translation>
@@ -383,7 +368,6 @@
     </message>
     <message>
         <location filename="../profiles.cpp" line="44"/>
-        <location filename="../profiles.cpp" line="44"/>
         <source>Digi Function Keys file</source>
         <translation>Fichier de Touches de Fonction Digi</translation>
     </message>
@@ -399,18 +383,15 @@
     </message>
     <message>
         <location filename="../profiles.cpp" line="57"/>
-        <location filename="../profiles.cpp" line="57"/>
         <source>WSJTX 1 Enabled</source>
         <translation>WSJTX 1 activé</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="58"/>
-        <location filename="../profiles.cpp" line="58"/>
         <source>WSJTX 1 Port</source>
         <translation>WSJTX: Port 1</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="59"/>
         <location filename="../profiles.cpp" line="59"/>
         <source>WSJTX 1 Group Address</source>
         <translation>WSJTX: Adresse du groupe 1</translation>
@@ -421,132 +402,110 @@
     </message>
     <message>
         <location filename="../profiles.cpp" line="60"/>
-        <location filename="../profiles.cpp" line="60"/>
         <source>WSJTX 1 Test Enabled</source>
         <translation>WSJTX 1 Test activé</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="62"/>
         <location filename="../profiles.cpp" line="62"/>
         <source>CQ types in test mode</source>
         <translation>Types de CQ en mode test</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="63"/>
-        <location filename="../profiles.cpp" line="63"/>
         <source>CQ types in ordinary mode</source>
         <translation>Types de CQ en mode ordinaire</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="65"/>
         <location filename="../profiles.cpp" line="65"/>
         <source>WSJTX 2 Enabled</source>
         <translation>WSJTX 2 activé</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="66"/>
-        <location filename="../profiles.cpp" line="66"/>
         <source>WSJTX 2 Port</source>
         <translation>WSJTX: Port 2</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="67"/>
         <location filename="../profiles.cpp" line="67"/>
         <source>WSJTX 2 Group Address</source>
         <translation>WSJTX: Adresse du groupe 2</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="69"/>
-        <location filename="../profiles.cpp" line="69"/>
         <source>WSJTX 3 Enabled</source>
         <translation>WSJTX 3 activé</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="70"/>
         <location filename="../profiles.cpp" line="70"/>
         <source>WSJTX 3 Port</source>
         <translation>WSJTX: Port 3</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="71"/>
-        <location filename="../profiles.cpp" line="71"/>
         <source>WSJTX 3 Group Address</source>
         <translation>WSJTX: Adresse du groupe 3</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="73"/>
         <location filename="../profiles.cpp" line="73"/>
         <source>WSJTX 4 Enabled</source>
         <translation>WSJTX 4 activé</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="74"/>
-        <location filename="../profiles.cpp" line="74"/>
         <source>WSJTX 4 Port</source>
         <translation>WSJTX: Port 4</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="75"/>
         <location filename="../profiles.cpp" line="75"/>
         <source>WSJTX 4 Group Address</source>
         <translation>WSJTX: Adresse du groupe 4</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="81"/>
-        <location filename="../profiles.cpp" line="81"/>
         <source>UDP External QSO Info Enabled</source>
         <translation>UDP&#xa0;:Iinformations sur les QSO externes activées</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="82"/>
         <location filename="../profiles.cpp" line="82"/>
         <source>UDP External QSO Info Address</source>
         <translation>UDP&#xa0;: Adresse d&apos;informations QSO externe</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="83"/>
-        <location filename="../profiles.cpp" line="83"/>
         <source>UDP External QSO Info Port</source>
         <translation>UDP&#xa0;: Port d&apos;informations QSO externe</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="85"/>
         <location filename="../profiles.cpp" line="85"/>
         <source>UDP External Spots Enabled</source>
         <translation>UDP: Spots externes activés</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="86"/>
-        <location filename="../profiles.cpp" line="86"/>
         <source>UDP External Spots Address</source>
         <translation>UDP&#xa0;: Adresse des spots externes</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="87"/>
         <location filename="../profiles.cpp" line="87"/>
         <source>UDP External Spots Port</source>
         <translation>UDP&#xa0;: Port pour Spots externes</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="94"/>
-        <location filename="../profiles.cpp" line="94"/>
         <source>WSJTX re-broadcast Address</source>
         <translation>WSJTX: Adresse de rediffusion</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="95"/>
         <location filename="../profiles.cpp" line="95"/>
         <source>WSJTX re-broadcast Port</source>
         <translation>WSJTX: Port de rediffusion</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="98"/>
-        <location filename="../profiles.cpp" line="98"/>
         <source>PDF documentation file</source>
         <translation>Fichier de documentation PDF (En anglais)</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="100"/>
         <location filename="../profiles.cpp" line="100"/>
         <source>Auto set Readability to 5</source>
         <translation>Régler le rapport de signal sur 5 automatiquement</translation>
@@ -563,102 +522,85 @@
     </message>
     <message>
         <location filename="../profiles.cpp" line="102"/>
-        <location filename="../profiles.cpp" line="102"/>
         <source>Show Operating Time</source>
         <translation>Afficher le temps de fonctionnement</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="104"/>
         <location filename="../profiles.cpp" line="104"/>
         <source>Locator Map Centering</source>
         <translation>Centrage de la carte de Locator</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="106"/>
-        <location filename="../profiles.cpp" line="106"/>
         <source>Change Tab order for S&amp;P</source>
         <translation>Modifier l&apos;ordre des tabulations pour S&amp;P</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="107"/>
         <location filename="../profiles.cpp" line="107"/>
         <source>Protect contests by age</source>
         <translation>Protéger les concours par l&apos;âge</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="108"/>
-        <location filename="../profiles.cpp" line="108"/>
         <source>Days after which contests are protected</source>
         <translation>Définir le nombre de jours après lequel protéger les concours (-1 pour toujours)</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="109"/>
         <location filename="../profiles.cpp" line="109"/>
         <source>Old style of band map</source>
         <translation>Ancienne mise en page Bandmap</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="110"/>
-        <location filename="../profiles.cpp" line="110"/>
         <source>Show Auxiliary Headers</source>
         <translation>Afficher les en-têtes auxiliaires</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="112"/>
         <location filename="../profiles.cpp" line="112"/>
         <source>Show Next QSO Band</source>
         <translation>Afficher la prochaine bande QSO</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="114"/>
-        <location filename="../profiles.cpp" line="114"/>
         <source>Show QSO Map Grid</source>
         <translation>Afficher la grille de la carte QSO</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="115"/>
         <location filename="../profiles.cpp" line="115"/>
         <source>Show QSO Map Lines</source>
         <translation>Afficher les lignes de la carte QSO</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="117"/>
-        <location filename="../profiles.cpp" line="117"/>
         <source>Show QSO Map Locators</source>
         <translation>Afficher Locators de QSO Map</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="118"/>
         <location filename="../profiles.cpp" line="118"/>
         <source>Show QSO Map Callsigns</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="119"/>
-        <location filename="../profiles.cpp" line="119"/>
         <source>Show QSO Map Locators Top Left</source>
         <translation>Locators en haut à gauche de QSO Map</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="120"/>
         <location filename="../profiles.cpp" line="120"/>
         <source>Show QSO Map Locators Bottom Right</source>
         <translation>Locators en bas a droite de QSO Map</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="121"/>
-        <location filename="../profiles.cpp" line="121"/>
         <source>Show QSO Map Navigation Buttons</source>
         <translation>Afficher boutons de navigation de QSO Map</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="123"/>
-        <location filename="../profiles.cpp" line="123"/>
         <source>Show Cluster spots on map</source>
         <translation>Afficher les spots du cluster sur la carte</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="124"/>
         <location filename="../profiles.cpp" line="124"/>
         <source>Limit Cluster spot distance on map</source>
         <translatorcomment>Limiter la distance du Spot sur la carte Cluster </translatorcomment>
@@ -666,114 +608,95 @@
     </message>
     <message>
         <location filename="../profiles.cpp" line="126"/>
-        <location filename="../profiles.cpp" line="126"/>
         <source>Add to Bandmap tuning CW enabled</source>
         <translation>Ajouter au Bandmap CW réglage activé</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="127"/>
         <location filename="../profiles.cpp" line="127"/>
         <source>Add to Bandmap tuning Data enabled</source>
         <translation>Ajouter au Bandmap Données réglage activé</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="128"/>
-        <location filename="../profiles.cpp" line="128"/>
         <source>Add to Bandmap tuning Phone enabled</source>
         <translation>Ajouter au Bandmap Voix réglage activé</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="129"/>
         <location filename="../profiles.cpp" line="129"/>
         <source>Add to Bandmap tuning tolerance CW</source>
         <translation>Tolérance de réglage pour CW Ajouter à la Bandmap</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="130"/>
-        <location filename="../profiles.cpp" line="130"/>
         <source>Add to Bandmap tuning tolerance Phone</source>
         <translation>Tolérance de réglage pour Voix Ajouter à la Bandmap</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="131"/>
         <location filename="../profiles.cpp" line="131"/>
         <source>Add to Bandmap tuning tolerance Data</source>
         <translation>Tolérance de réglage pour Donnees Ajouter à la Bandmap</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="133"/>
-        <location filename="../profiles.cpp" line="133"/>
         <source>Disable Bandmap when not shown</source>
         <translation>Désactiver Bandmap lorsqu&apos;elle n&apos;est pas affichée</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="134"/>
         <location filename="../profiles.cpp" line="134"/>
         <source>Disable adding logged Calls to bandmap</source>
         <translation>Désactiver l&apos;addition d&apos;appels enregistrés à Bandmap</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="135"/>
-        <location filename="../profiles.cpp" line="135"/>
         <source>Disable setting placeholders from current frequency on bandmap</source>
         <translation>Désactiver la configuration des espaces réservés Bandmap à partir de la fréquence actuelle</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="136"/>
         <location filename="../profiles.cpp" line="136"/>
         <source>Bandmap High Frequency At Top</source>
         <translation>Bandmap haute fréquence en haut</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="138"/>
-        <location filename="../profiles.cpp" line="138"/>
         <source>RIT on CQ</source>
         <translation>CQ avec RIT</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="140"/>
         <location filename="../profiles.cpp" line="140"/>
         <source>Radio Dial - Turn Off Operating Colour</source>
         <translation>Cadran radio - Désactiver la couleur de fonctionnement</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="142"/>
-        <location filename="../profiles.cpp" line="142"/>
         <source>Contest - Radio Read Only</source>
         <translation>[**********************************]</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="143"/>
         <location filename="../profiles.cpp" line="143"/>
         <source>Contest Start - Ignore Preset Frequency</source>
         <translation>Début du concours - Ignorer la fréquence prédéfinie</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="144"/>
-        <location filename="../profiles.cpp" line="144"/>
         <source>Contest Change - Ignore Previous Frequency</source>
         <translation>Changement de concours - Ignorer la fréquence précédente</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="145"/>
         <location filename="../profiles.cpp" line="145"/>
         <source>Contest Change - Restore Contest Mode</source>
         <translation>Changement de concours - Restaurer la mode de concours</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="146"/>
-        <location filename="../profiles.cpp" line="146"/>
         <source>Bandmap Turn Off Operating Freq Colour Strip</source>
         <translation>Désactiver la bande de couleur de fréquence</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="147"/>
-        <location filename="../profiles.cpp" line="147"/>
         <source>Bandmap Delay when mouse in frame</source>
         <translation>Retard de Bandmap lorsque le curseur est dans le cadre</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="148"/>
         <location filename="../profiles.cpp" line="148"/>
         <source>Bandmap show derived loc</source>
         <translation>Bandmap afficher la Locator dérivée</translation>
@@ -788,24 +711,20 @@
     </message>
     <message>
         <location filename="../profiles.cpp" line="152"/>
-        <location filename="../profiles.cpp" line="152"/>
         <source>Auto QRZ HF callsigns</source>
         <translation>Indicatifs d&apos;appel automatiques QRZ HF</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="153"/>
         <location filename="../profiles.cpp" line="153"/>
         <source>Auto QRZ VHF callsigns</source>
         <translation>Indicatifs d&apos;appel automatiques QRZ VHF</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="154"/>
-        <location filename="../profiles.cpp" line="154"/>
         <source>Auto QRZ HF WSJT-X callsigns</source>
         <translation>Indicatifs d&apos;appel automatiques QRZ WSJT-X HF</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="155"/>
         <location filename="../profiles.cpp" line="155"/>
         <source>Auto QRZ VHF WSJT-X callsigns</source>
         <translation>Indicatifs d&apos;appel automatiques QRZ WSJT-X VHF</translation>
@@ -960,12 +879,10 @@
     </message>
     <message>
         <location filename="../profiles.cpp" line="215"/>
-        <location filename="../profiles.cpp" line="215"/>
         <source>Locator</source>
         <translation>Locator</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="216"/>
         <location filename="../profiles.cpp" line="216"/>
         <source>District Exchange</source>
         <translation>Échange de district</translation>
@@ -1012,12 +929,10 @@
     </message>
     <message>
         <location filename="../profiles.cpp" line="221"/>
-        <location filename="../profiles.cpp" line="221"/>
         <source>ITU Zone</source>
         <translation>Zone ITU</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="222"/>
         <location filename="../profiles.cpp" line="222"/>
         <source>CQ Zone</source>
         <translation>Zone CQ</translation>
@@ -1034,30 +949,25 @@
     </message>
     <message>
         <location filename="../profiles.cpp" line="226"/>
-        <location filename="../profiles.cpp" line="226"/>
         <source>Transmit Equipment</source>
         <translation>Détails de l&apos;émetteur</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="227"/>
         <location filename="../profiles.cpp" line="227"/>
         <source>Receive Equipment</source>
         <translation>Détails du récepteur</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="228"/>
-        <location filename="../profiles.cpp" line="228"/>
         <source>Antenna details</source>
         <translation>Détails de l&apos;antenne</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="229"/>
-        <location filename="../profiles.cpp" line="229"/>
         <source>Antenna Height AGL (metres)</source>
         <translation>Hauteur au-dessus du sol de l&apos;antenne</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="230"/>
         <location filename="../profiles.cpp" line="230"/>
         <source>Amount to offset antenna bearings</source>
         <translatorcomment>DUPE??</translatorcomment>
@@ -1065,13 +975,11 @@
     </message>
     <message>
         <location filename="../profiles.cpp" line="231"/>
-        <location filename="../profiles.cpp" line="231"/>
         <source>Radio in Rig Control</source>
         <translatorcomment>In settings editor for station details</translatorcomment>
         <translation>Radio dans RigControl</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="232"/>
         <location filename="../profiles.cpp" line="232"/>
         <source>Rotator in Rotator Control</source>
         <translation>Rotateur dans Rotator Control</translation>
